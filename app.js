@@ -307,6 +307,11 @@ const ARTIST_GENRE_HINT_OVERRIDES = {
     en: "Prog Dark / zenonesque",
     es: "Prog Dark / zenonesque"
   },
+  "vermont br": {
+    pt: "Progressive Psy",
+    en: "Progressive Psy",
+    es: "Progressive Psy"
+  },
   vallak: {
     pt: "Dark experimental / slambient",
     en: "Dark experimental / slambient",
@@ -2791,7 +2796,7 @@ const STYLE_ARTIST_SEEDS = {
     "Faders"
   ],
   psy_comercial: ["Skazi", "Paranormal Attack", "Sesto Sento", "Mandragora", "Claudinho Brasil", "Vini Vici", "Blastoyz", "Vegas"],
-  progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Perfect Stranger", "Nerso", "Morten Granau"],
+  progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Perfect Stranger", "Nerso", "Morten Granau", "Vermont (BR)"],
   hi_tech: [...HITECH_ARTIST_ROSTER],
   dark_progressive: [
     "Vermont",
@@ -2918,6 +2923,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "captain hook": ["progressive_psy"],
   "liquid soul": ["progressive_psy"],
   "perfect stranger": ["progressive_psy"],
+  "vermont br": ["progressive_psy"],
   "via axis": ["goa_trance"],
   "vermont": ["dark_progressive"],
   "d-nox": ["dark_progressive"],
@@ -3032,7 +3038,8 @@ const STYLE_ARTIST_BLOCKLIST = {
     "vini vici",
     "blastoyz",
     "mandragora",
-    "skazi"
+    "skazi",
+    "vermont br"
   ],
   slambient: [
     "astrix",
