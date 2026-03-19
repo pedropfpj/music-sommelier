@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#150a12"/>
+  <g fill="none" stroke="#ff6c81" stroke-width="3" stroke-opacity="0.75">
+    <path d="M80 740 L260 520 L420 700 L590 470 L760 690 L980 380"/>
+    <path d="M80 820 L230 620 L390 790 L550 610 L740 820 L980 520"/>
+  </g>
+  <rect x="680" y="120" width="300" height="300" fill="#ff6c81" fill-opacity="0.12" stroke="#ff6c81" stroke-opacity="0.65"/>
+  <text x="80" y="130" fill="#ffd6dd" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="200" fill="#ff7b91" font-family="Arial, sans-serif" font-size="74" font-weight="700">HARD TECHNO</text>
+  <text x="80" y="258" fill="#e6b8c2" font-family="Arial, sans-serif" font-size="28">Raw Kick / Tension / Rush</text>
+</svg>

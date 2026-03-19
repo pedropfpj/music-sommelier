@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t d">
+  <title id="t">Viajante Organico</title>
+  <desc id="d">Avatar de espirito musical com folha organica e fluxo animado.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#09152b"/>
+      <stop offset="100%" stop-color="#1f3c2c"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#69f4ff"/>
+      <stop offset="100%" stop-color="#8eff85"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0%" stop-color="#9bff90" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#9bff90" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="76" fill="url(#bg)"/>
+  <rect x="70" y="70" width="884" height="884" rx="54" fill="none" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="104" y="104" width="816" height="816" rx="42" fill="none" stroke="#a6ffb6" stroke-opacity="0.24" stroke-width="2" stroke-dasharray="18 12"/>
+  <circle cx="512" cy="492" r="280" fill="url(#halo)"/>
+  <circle cx="512" cy="492" r="214" fill="#0f2234" stroke="#92ff9f" stroke-opacity="0.9" stroke-width="6"/>
+
+  <g transform-origin="512 512" fill="none">
+    <animateTransform attributeName="transform" type="rotate" values="-4 512 512;4 512 512;-4 512 512" dur="5.8s" repeatCount="indefinite"/>
+    <path d="M512 350 C620 356 686 428 668 532 C652 626 580 680 512 688 C444 680 372 626 356 532 C338 428 404 356 512 350 Z" fill="#b7ff9c" fill-opacity="0.2" stroke="#68f3ff" stroke-width="4"/>
+    <path d="M512 388 L512 650" stroke="#d6ffe2" stroke-width="5" stroke-linecap="round"/>
+    <path d="M512 462 C560 448 598 420 626 380" stroke="#d6ffe2" stroke-opacity="0.8" stroke-width="4"/>
+    <path d="M512 510 C560 502 604 472 640 430" stroke="#d6ffe2" stroke-opacity="0.65" stroke-width="3"/>
+    <path d="M512 462 C464 448 426 420 398 380" stroke="#d6ffe2" stroke-opacity="0.8" stroke-width="4"/>
+    <path d="M512 510 C464 502 420 472 384 430" stroke="#d6ffe2" stroke-opacity="0.65" stroke-width="3"/>
+  </g>
+
+  <g fill="none" stroke="#8bf0c6" stroke-opacity="0.65" stroke-width="3">
+    <path d="M314 580 C404 548 620 548 710 580">
+      <animate attributeName="d" values="M314 580 C404 548 620 548 710 580;M314 592 C404 560 620 560 710 592;M314 580 C404 548 620 548 710 580" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <text x="512" y="745" fill="#e4ffe8" font-family="Arial, sans-serif" font-size="96" font-weight="800" text-anchor="middle">VO</text>
+</svg>

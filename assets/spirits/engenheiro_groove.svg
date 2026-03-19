@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t d">
+  <title id="t">Engenheiro do Groove</title>
+  <desc id="d">Avatar de espirito musical com equalizador animado.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071321"/>
+      <stop offset="100%" stop-color="#214126"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#58ffd8"/>
+      <stop offset="100%" stop-color="#96ff79"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0%" stop-color="#6effbe" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#6effbe" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="76" fill="url(#bg)"/>
+  <rect x="70" y="70" width="884" height="884" rx="54" fill="none" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="104" y="104" width="816" height="816" rx="42" fill="none" stroke="#a9ffbf" stroke-opacity="0.26" stroke-width="2" stroke-dasharray="18 12"/>
+  <circle cx="512" cy="492" r="280" fill="url(#halo)"/>
+  <circle cx="512" cy="492" r="214" fill="#08222d" stroke="#7bffc7" stroke-opacity="0.85" stroke-width="6"/>
+
+  <rect x="350" y="366" width="324" height="268" rx="34" fill="#10283a" stroke="#7cf0c7" stroke-width="5"/>
+  <g fill="#92ffb6">
+    <rect x="388" y="442" width="36" height="150" rx="12">
+      <animate attributeName="height" values="86;170;102;154;86" dur="2.2s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="506;422;490;438;506" dur="2.2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="448" y="442" width="36" height="130" rx="12">
+      <animate attributeName="height" values="142;90;168;118;142" dur="1.8s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="450;502;424;474;450" dur="1.8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="508" y="442" width="36" height="176" rx="12">
+      <animate attributeName="height" values="176;110;150;92;176" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="416;482;442;500;416" dur="2.4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="568" y="442" width="36" height="122" rx="12">
+      <animate attributeName="height" values="122;168;98;146;122" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="470;424;494;446;470" dur="2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <text x="512" y="745" fill="#dcffe7" font-family="Arial, sans-serif" font-size="96" font-weight="800" text-anchor="middle">EG</text>
+</svg>

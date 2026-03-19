@@ -1,0 +1,14 @@
+PROMPT PRONTO (cole no Codex):
+
+Leia os arquivos:
+- data/psytrance_db_v14.jsonl
+- data/psycore_db_v14.jsonl
+
+Implemente um loader para JSONL (linha a linha) e integre no app como banco local.
+Regras:
+- Não invente dados fora do arquivo.
+- Use `subgenre` como classificação principal.
+- Crie busca case-insensitive por `name` e `id` (parcial).
+- Crie funções: getArtistByName, searchArtists, listBySubgenre.
+- Atualize a UI de busca e a tela do artista para usar: bio.pt, bio.origin, bio.notableTracks, bio.recentReleases.
+- Se algo estiver vazio, mantenha vazio (não preencher com suposições).

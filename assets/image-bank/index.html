@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SONIC SEARCH Image Bank</title>
+    <style>
+      :root {
+        --bg: #080d1c;
+        --card: #101a33;
+        --line: #294777;
+        --ink: #e9f3ff;
+        --muted: #9db6dc;
+        --accent: #5de9ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 10% 0%, #13325a 0%, transparent 35%), var(--bg);
+      }
+      .wrap {
+        width: min(1100px, 92%);
+        margin: 24px auto 48px;
+        display: grid;
+        gap: 18px;
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(16, 26, 51, 0.9);
+        padding: 14px;
+      }
+      h1, h2, p { margin: 0; }
+      h1 { font-size: 32px; margin-bottom: 6px; }
+      p { color: var(--muted); }
+      h2 { font-size: 20px; margin-bottom: 10px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #0b142a;
+      }
+      .item img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+        background: #060c1a;
+      }
+      .social .item img { aspect-ratio: 1200 / 630; }
+      .meta {
+        padding: 10px;
+        display: grid;
+        gap: 8px;
+      }
+      .meta strong { font-size: 14px; }
+      .links { display: flex; gap: 8px; flex-wrap: wrap; }
+      .links a {
+        font-size: 13px;
+        color: #051629;
+        text-decoration: none;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+      .links a.secondary {
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--line);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="panel">
+        <h1>SONIC SEARCH Image Bank</h1>
+        <p>Galeria pronta para revisar e compartilhar com amigos.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Logos</h2>
+        <div class="grid">
+          <article class="item">
+            <img src="logos/neonpulse-logo-mark.svg" alt="Logo Mark" />
+            <div class="meta">
+              <strong>Logo Mark (1:1)</strong>
+              <div class="links">
+                <a href="logos/neonpulse-logo-mark.svg" target="_blank">Abrir</a>
+              </div>
+            </div>
+          </article>
+          <article class="item">
+            <img src="logos/neonpulse-logo-horizontal.svg" alt="Logo Horizontal" />
+            <div class="meta">
+              <strong>Logo Horizontal</strong>
+              <div class="links">
+                <a href="logos/neonpulse-logo-horizontal.svg" target="_blank">Abrir</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Covers</h2>
+        <div class="grid">
+          <article class="item"><img src="covers/dark_psy.svg" alt="Dark Psy" /><div class="meta"><strong>Dark Psy</strong><div class="links"><a href="covers/dark_psy.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/full_on.svg" alt="Full-On" /><div class="meta"><strong>Full-On</strong><div class="links"><a href="covers/full_on.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/psycore.svg" alt="Psycore" /><div class="meta"><strong>Psycore</strong><div class="links"><a href="covers/psycore.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/slambient.svg" alt="Slambient" /><div class="meta"><strong>Slambient</strong><div class="links"><a href="covers/slambient.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/techno.svg" alt="Techno" /><div class="meta"><strong>Techno</strong><div class="links"><a href="covers/techno.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/hard_techno.svg" alt="Hard Techno" /><div class="meta"><strong>Hard Techno</strong><div class="links"><a href="covers/hard_techno.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/house.svg" alt="House" /><div class="meta"><strong>House</strong><div class="links"><a href="covers/house.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="covers/drum_and_bass.svg" alt="Drum and Bass" /><div class="meta"><strong>Drum and Bass</strong><div class="links"><a href="covers/drum_and_bass.svg" target="_blank">Abrir</a></div></div></article>
+        </div>
+      </section>
+
+      <section class="panel social">
+        <h2>Cards Sociais</h2>
+        <div class="grid">
+          <article class="item"><img src="social/share_card_1.svg" alt="Share card 1" /><div class="meta"><strong>Share Card 1</strong><div class="links"><a href="social/share_card_1.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="social/share_card_2.svg" alt="Share card 2" /><div class="meta"><strong>Share Card 2</strong><div class="links"><a href="social/share_card_2.svg" target="_blank">Abrir</a></div></div></article>
+          <article class="item"><img src="social/share_card_3.svg" alt="Share card 3" /><div class="meta"><strong>Share Card 3</strong><div class="links"><a href="social/share_card_3.svg" target="_blank">Abrir</a></div></div></article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Arquivos Úteis</h2>
+        <div class="links">
+          <a href="manifest.json" target="_blank">Manifest JSON</a>
+          <a href="README.md" target="_blank" class="secondary">README do pacote</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

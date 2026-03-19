@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t d">
+  <title id="t">Arquiteto Hipnotico</title>
+  <desc id="d">Avatar de espirito musical com robo techno animado.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08112b"/>
+      <stop offset="100%" stop-color="#31193f"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#59e6ff"/>
+      <stop offset="100%" stop-color="#ffa468"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0%" stop-color="#71c1ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#71c1ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="visor" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#79f2ff"/>
+      <stop offset="100%" stop-color="#b4c8ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="76" fill="url(#bg)"/>
+  <rect x="70" y="70" width="884" height="884" rx="54" fill="none" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="104" y="104" width="816" height="816" rx="42" fill="none" stroke="#ffc189" stroke-opacity="0.24" stroke-width="2" stroke-dasharray="18 12"/>
+  <circle cx="512" cy="492" r="280" fill="url(#halo)"/>
+  <circle cx="512" cy="492" r="214" fill="#0f1f3a" stroke="#72d7ff" stroke-opacity="0.9" stroke-width="6"/>
+
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 0 -8; 0 0" dur="3.2s" repeatCount="indefinite"/>
+    <rect x="378" y="372" width="268" height="238" rx="42" fill="#15294d" stroke="#7addff" stroke-width="6"/>
+    <rect x="432" y="322" width="160" height="48" rx="22" fill="#112747" stroke="#76cbff" stroke-width="5"/>
+    <line x1="512" y1="322" x2="512" y2="286" stroke="#7fe9ff" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="512" cy="270" r="14" fill="#9ef6ff">
+      <animate attributeName="r" values="12;16;12" dur="1.2s" repeatCount="indefinite"/>
+    </circle>
+    <rect x="418" y="448" width="188" height="64" rx="24" fill="url(#visor)" opacity="0.85"/>
+    <rect x="428" y="474" width="168" height="8" rx="4" fill="#f6f9ff" opacity="0.92">
+      <animate attributeName="x" values="428;560;428" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="width" values="42;18;42" dur="2.4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="434" y="538" width="156" height="10" rx="5" fill="#ffd2a8" opacity="0.9"/>
+    <rect x="454" y="560" width="116" height="8" rx="4" fill="#ffd2a8" opacity="0.8"/>
+  </g>
+
+  <g opacity="0.5" stroke="#87d6ff" fill="none" transform-origin="512 492">
+    <animateTransform attributeName="transform" type="rotate" from="0 512 492" to="360 512 492" dur="14s" repeatCount="indefinite"/>
+    <ellipse cx="512" cy="492" rx="238" ry="138"/>
+    <ellipse cx="512" cy="492" rx="138" ry="238"/>
+  </g>
+
+  <text x="512" y="745" fill="#f4e5d2" font-family="Arial, sans-serif" font-size="96" font-weight="800" text-anchor="middle">AH</text>
+</svg>

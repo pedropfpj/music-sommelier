@@ -1,0 +1,146 @@
+{
+  "version": 2,
+  "generated_at": "2026-02-11",
+  "project": "SONIC SEARCH",
+  "description": "Pacote visual inicial para app e compartilhamento social.",
+  "recommended_social_size": "1200x630",
+  "covers": [
+    {
+      "id": "dark_psy",
+      "file": "covers/dark_psy.svg",
+      "style": "dark_psy",
+      "tags": [
+        "psy",
+        "dark",
+        "night"
+      ],
+      "caption": "Dark psy para noites hipnoticas",
+      "png_file": "png/covers/dark_psy.png"
+    },
+    {
+      "id": "full_on",
+      "file": "covers/full_on.svg",
+      "style": "full_on",
+      "tags": [
+        "psy",
+        "festival",
+        "peak"
+      ],
+      "caption": "Full-On de pico para energia alta",
+      "png_file": "png/covers/full_on.png"
+    },
+    {
+      "id": "psycore",
+      "file": "covers/psycore.svg",
+      "style": "psycore",
+      "tags": [
+        "psy",
+        "extreme",
+        "high_bpm"
+      ],
+      "caption": "Psycore para momentos extremos",
+      "png_file": "png/covers/psycore.png"
+    },
+    {
+      "id": "slambient",
+      "file": "covers/slambient.svg",
+      "style": "slambient",
+      "tags": [
+        "ambient",
+        "slow",
+        "recovery"
+      ],
+      "caption": "Slambient para desacelerar",
+      "png_file": "png/covers/slambient.png"
+    },
+    {
+      "id": "techno",
+      "file": "covers/techno.svg",
+      "style": "techno",
+      "tags": [
+        "warehouse",
+        "hypnotic"
+      ],
+      "caption": "Techno linear e hipnotico",
+      "png_file": "png/covers/techno.png"
+    },
+    {
+      "id": "hard_techno",
+      "file": "covers/hard_techno.svg",
+      "style": "hard_techno",
+      "tags": [
+        "hard",
+        "industrial",
+        "peak"
+      ],
+      "caption": "Hard techno de impacto",
+      "png_file": "png/covers/hard_techno.png"
+    },
+    {
+      "id": "house",
+      "file": "covers/house.svg",
+      "style": "house",
+      "tags": [
+        "groove",
+        "club"
+      ],
+      "caption": "House para groove e pista",
+      "png_file": "png/covers/house.png"
+    },
+    {
+      "id": "drum_and_bass",
+      "file": "covers/drum_and_bass.svg",
+      "style": "drum_and_bass",
+      "tags": [
+        "breaks",
+        "bass"
+      ],
+      "caption": "DnB para alta movimentacao",
+      "png_file": "png/covers/drum_and_bass.png"
+    }
+  ],
+  "social": [
+    {
+      "id": "share_card_1",
+      "file": "social/share_card_1.svg",
+      "aspect": "1200x630",
+      "use_case": "novo som descoberto",
+      "png_file": "png/social/share_card_1.png"
+    },
+    {
+      "id": "share_card_2",
+      "file": "social/share_card_2.svg",
+      "aspect": "1200x630",
+      "use_case": "novo artista no radar",
+      "png_file": "png/social/share_card_2.png"
+    },
+    {
+      "id": "share_card_3",
+      "file": "social/share_card_3.svg",
+      "aspect": "1200x630",
+      "use_case": "compartilhar set do dia",
+      "png_file": "png/social/share_card_3.png"
+    }
+  ],
+  "logos": [
+    {
+      "id": "logo_mark",
+      "file": "logos/neonpulse-logo-mark.svg",
+      "aspect": "1:1",
+      "use_case": "avatar, app icon",
+      "png_file": "png/logos/neonpulse-logo-mark.png"
+    },
+    {
+      "id": "logo_horizontal",
+      "file": "logos/neonpulse-logo-horizontal.svg",
+      "aspect": "1200x320",
+      "use_case": "hero, header",
+      "png_file": "png/logos/neonpulse-logo-horizontal.png"
+    }
+  ],
+  "png_exports": {
+    "covers_dir": "png/covers",
+    "social_dir": "png/social",
+    "logos_dir": "png/logos"
+  }
+}

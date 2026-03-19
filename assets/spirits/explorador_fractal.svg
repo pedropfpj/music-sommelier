@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t d">
+  <title id="t">Explorador Fractal</title>
+  <desc id="d">Avatar de espirito musical com geometrias fractais animadas.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#061228"/>
+      <stop offset="100%" stop-color="#232a54"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#60f4ff"/>
+      <stop offset="100%" stop-color="#9c9bff"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0%" stop-color="#86a9ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#86a9ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="76" fill="url(#bg)"/>
+  <rect x="70" y="70" width="884" height="884" rx="54" fill="none" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="104" y="104" width="816" height="816" rx="42" fill="none" stroke="#aeb8ff" stroke-opacity="0.25" stroke-width="2" stroke-dasharray="18 12"/>
+  <circle cx="512" cy="492" r="280" fill="url(#halo)"/>
+  <circle cx="512" cy="492" r="214" fill="#0f1c40" stroke="#7fbcff" stroke-opacity="0.9" stroke-width="6"/>
+
+  <g transform-origin="512 492" fill="none" stroke="#66f3ff" stroke-width="4">
+    <animateTransform attributeName="transform" type="rotate" from="0 512 492" to="360 512 492" dur="10s" repeatCount="indefinite"/>
+    <polygon points="512,332 662,592 362,592"/>
+  </g>
+  <g transform-origin="512 492" fill="none" stroke="#b4c6ff" stroke-width="3.5">
+    <animateTransform attributeName="transform" type="rotate" from="360 512 492" to="0 512 492" dur="7s" repeatCount="indefinite"/>
+    <polygon points="512,386 616,566 408,566"/>
+  </g>
+  <g transform-origin="512 492" fill="none" stroke="#dce8ff" stroke-width="3">
+    <animateTransform attributeName="transform" type="rotate" from="0 512 492" to="360 512 492" dur="5s" repeatCount="indefinite"/>
+    <polygon points="512,432 576,542 448,542"/>
+  </g>
+
+  <text x="512" y="745" fill="#e2ecff" font-family="Arial, sans-serif" font-size="96" font-weight="800" text-anchor="middle">EF</text>
+</svg>

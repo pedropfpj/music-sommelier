@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#081221"/>
+  <g fill="none" stroke="#71ffb6" stroke-width="3" stroke-opacity="0.7">
+    <path d="M80 760 Q240 580 410 760 T760 760 T1020 700"/>
+    <path d="M80 820 Q240 640 410 820 T760 820 T1020 760"/>
+  </g>
+  <g fill="#71ffb6" fill-opacity="0.2">
+    <rect x="700" y="140" width="40" height="260"/>
+    <rect x="760" y="180" width="40" height="220"/>
+    <rect x="820" y="120" width="40" height="280"/>
+    <rect x="880" y="210" width="40" height="190"/>
+  </g>
+  <text x="80" y="130" fill="#d6ffe9" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="200" fill="#7effbc" font-family="Arial, sans-serif" font-size="74" font-weight="700">DRUM AND BASS</text>
+  <text x="80" y="258" fill="#bbe9d2" font-family="Arial, sans-serif" font-size="28">Breaks / Bassline / Momentum</text>
+</svg>

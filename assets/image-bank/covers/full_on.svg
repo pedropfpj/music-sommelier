@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a142b"/>
+      <stop offset="50%" stop-color="#10335b"/>
+      <stop offset="100%" stop-color="#1b5488"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <g stroke="#71f8d3" stroke-width="3" stroke-opacity="0.65" fill="none">
+    <path d="M90 820 L240 660 L360 760 L540 520 L720 690 L920 360"/>
+    <path d="M90 880 L220 740 L340 830 L530 580 L690 740 L980 470"/>
+  </g>
+  <circle cx="860" cy="220" r="150" fill="#78ffdc" fill-opacity="0.15" stroke="#78ffdc" stroke-opacity="0.65"/>
+  <text x="80" y="130" fill="#d7fff4" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="200" fill="#9efee0" font-family="Arial, sans-serif" font-size="74" font-weight="700">FULL-ON</text>
+  <text x="80" y="258" fill="#b8d7f3" font-family="Arial, sans-serif" font-size="28">Peak Drive / Open Air / Lift</text>
+</svg>

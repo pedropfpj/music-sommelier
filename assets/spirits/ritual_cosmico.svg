@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="t d">
+  <title id="t">Ritual Cosmico</title>
+  <desc id="d">Avatar de espirito musical com mandala cosmica animada.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071325"/>
+      <stop offset="100%" stop-color="#22164a"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#53ffe4"/>
+      <stop offset="100%" stop-color="#74a6ff"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0%" stop-color="#53ffe4" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#53ffe4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="76" fill="url(#bg)"/>
+  <rect x="70" y="70" width="884" height="884" rx="54" fill="none" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="104" y="104" width="816" height="816" rx="42" fill="none" stroke="#8bd7ff" stroke-opacity="0.28" stroke-width="2" stroke-dasharray="18 12"/>
+  <circle cx="512" cy="492" r="280" fill="url(#halo)"/>
+  <circle cx="512" cy="492" r="214" fill="#081a33" stroke="#59ffe7" stroke-opacity="0.85" stroke-width="6"/>
+
+  <g transform-origin="512 492" fill="none">
+    <animateTransform attributeName="transform" type="rotate" from="0 512 492" to="360 512 492" dur="18s" repeatCount="indefinite"/>
+    <circle cx="512" cy="492" r="144" stroke="#86c7ff" stroke-width="4"/>
+    <circle cx="512" cy="492" r="92" stroke="#53ffe4" stroke-width="3" stroke-dasharray="16 10"/>
+    <path d="M512 314 L560 420 L676 432 L586 506 L612 620 L512 560 L412 620 L438 506 L348 432 L464 420 Z" stroke="#9aefff" stroke-width="4"/>
+  </g>
+  <g transform-origin="512 492" fill="#b7f8ff">
+    <animateTransform attributeName="transform" type="rotate" from="360 512 492" to="0 512 492" dur="9s" repeatCount="indefinite"/>
+    <circle cx="512" cy="332" r="10"/>
+    <circle cx="656" cy="492" r="8"/>
+    <circle cx="512" cy="652" r="10"/>
+    <circle cx="368" cy="492" r="8"/>
+  </g>
+
+  <text x="512" y="745" fill="#d7f6ff" font-family="Arial, sans-serif" font-size="96" font-weight="800" text-anchor="middle">RC</text>
+</svg>

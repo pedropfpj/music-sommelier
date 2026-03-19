@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#0b0f1d"/>
+  <g stroke="#5de9ff" stroke-opacity="0.4" fill="none">
+    <rect x="120" y="120" width="840" height="840" stroke-width="2"/>
+    <rect x="180" y="180" width="720" height="720" stroke-width="2"/>
+    <rect x="240" y="240" width="600" height="600" stroke-width="2"/>
+  </g>
+  <g fill="#5de9ff" fill-opacity="0.2">
+    <circle cx="540" cy="540" r="180"/>
+    <circle cx="540" cy="540" r="90"/>
+  </g>
+  <text x="80" y="130" fill="#d8f8ff" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="200" fill="#6fefff" font-family="Arial, sans-serif" font-size="74" font-weight="700">TECHNO</text>
+  <text x="80" y="258" fill="#a4bdd8" font-family="Arial, sans-serif" font-size="28">Warehouse / Hypnosis / Pulse</text>
+</svg>

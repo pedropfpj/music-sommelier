@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#101a34"/>
+      <stop offset="100%" stop-color="#1e3d70"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#hbg)"/>
+  <g fill="none" stroke="#ffd88a" stroke-width="3" stroke-opacity="0.7">
+    <path d="M120 700 C230 620, 350 780, 470 700 S740 620, 960 700"/>
+    <path d="M120 760 C230 680, 350 840, 470 760 S740 680, 960 760"/>
+  </g>
+  <circle cx="850" cy="250" r="140" fill="#ffd88a" fill-opacity="0.2"/>
+  <text x="80" y="130" fill="#fff0c8" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="200" fill="#ffd88a" font-family="Arial, sans-serif" font-size="74" font-weight="700">HOUSE</text>
+  <text x="80" y="258" fill="#e8d5ac" font-family="Arial, sans-serif" font-size="28">Groove / Club / Soul</text>
+</svg>

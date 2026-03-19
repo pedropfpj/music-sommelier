@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SONIC SEARCH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20260312d" />
+  </head>
+  <body>
+    <div class="floating-sonic-layer" aria-hidden="true">
+      <span class="sonic-note note-a">♪</span>
+      <span class="sonic-note note-b">♫</span>
+      <span class="sonic-note note-c">♬</span>
+      <span class="sonic-note note-d">♪</span>
+      <span class="sonic-note note-e">♫</span>
+      <span class="sonic-note note-f">♩</span>
+      <span class="sonic-note note-g">♭</span>
+      <span class="sonic-note note-h">♯</span>
+      <span class="sonic-note note-i">♬</span>
+      <span class="sonic-note note-j">♪</span>
+      <span class="sonic-note note-k">♫</span>
+      <span class="sonic-note note-l">♩</span>
+      <span class="sonic-note note-m">☠</span>
+      <span class="sonic-note note-n">☠</span>
+      <span class="sonic-note note-o">🔊</span>
+      <span class="sonic-note note-p">🔉</span>
+      <span class="sonic-note note-q">🎚</span>
+      <span class="sonic-note note-r">🎛</span>
+      <span class="sonic-note note-s sonic-note-eq">▁▃▅▇</span>
+      <span class="sonic-note note-t sonic-note-eq">█▆▃▁</span>
+      <span class="sonic-note note-u">⚡</span>
+      <span class="sonic-note note-v">☣</span>
+      <span class="sonic-note note-w">⛓</span>
+      <span class="sonic-note note-x">◉</span>
+      <span class="sonic-orb orb-a"></span>
+      <span class="sonic-orb orb-b"></span>
+      <span class="sonic-orb orb-c"></span>
+      <span class="sonic-orb orb-d"></span>
+      <span class="sonic-orb orb-e"></span>
+      <span class="sonic-orb orb-f"></span>
+      <span class="sonic-orb orb-g"></span>
+      <span class="sonic-orb orb-h"></span>
+      <span class="sonic-beam beam-a"></span>
+      <span class="sonic-beam beam-b"></span>
+      <span class="sonic-beam beam-c"></span>
+      <span class="sonic-beam beam-d"></span>
+      <span class="sonic-shard shard-a"></span>
+      <span class="sonic-shard shard-b"></span>
+      <span class="sonic-shard shard-c"></span>
+      <span class="sonic-shard shard-d"></span>
+      <span class="sonic-pulse pulse-a"></span>
+      <span class="sonic-pulse pulse-b"></span>
+      <span class="sonic-pulse pulse-c"></span>
+      <span class="sonic-speaker speaker-a"></span>
+      <span class="sonic-speaker speaker-b"></span>
+      <span class="sonic-speaker speaker-c"></span>
+      <div id="genreFxLayer" class="genre-fx-layer"></div>
+    </div>
+    <button id="audioToggleBtn" class="audio-toggle" type="button" aria-pressed="true">
+      <span class="audio-toggle-bars" aria-hidden="true">
+        <span class="audio-toggle-bar"></span>
+        <span class="audio-toggle-bar"></span>
+        <span class="audio-toggle-bar"></span>
+      </span>
+      <span id="audioToggleLabel">Som ligado</span>
+    </button>
+    <div id="toast" class="toast hidden" aria-live="polite"></div>
+    <section id="searchOverlay" class="search-overlay hidden" aria-live="polite" aria-busy="true">
+      <div class="search-card">
+        <div class="search-icon" aria-hidden="true"></div>
+        <h4 id="searchTitle">Buscando recomendação</h4>
+        <p id="searchStatusText">Analisando filtros e procurando a melhor faixa...</p>
+        <div class="search-progress-track">
+          <span id="searchProgressFill" class="search-progress-fill"></span>
+        </div>
+      </div>
+    </section>
+    <section id="quizChallengeBubble" class="quiz-bubble hidden" aria-live="polite">
+      <p id="quizBubbleText">Desafio Sonic Quiz disponível.</p>
+      <div class="quiz-bubble-actions">
+        <button id="quizStartBtn" class="primary" type="button">Aceitar desafio</button>
+        <button id="quizLaterBtn" type="button">Depois</button>
+      </div>
+    </section>
+    <section id="quizOverlay" class="quiz-overlay hidden" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="quiz-card">
+        <p id="quizKicker" class="quiz-kicker">Sonic Quiz IA</p>
+        <h4 id="quizTitle">Desafio de subgênero</h4>
+        <p id="quizMeta" class="muted">Pergunta 1/5</p>
+        <div class="quiz-progress-track">
+          <span id="quizProgressFill" class="quiz-progress-fill"></span>
+        </div>
+        <p id="quizQuestionText" class="quiz-question">Preparando desafio...</p>
+        <div id="quizOptions" class="quiz-options"></div>
+        <p id="quizFeedbackText" class="quiz-feedback muted"></p>
+        <div class="cta-row quiz-actions">
+          <button id="quizSubmitBtn" class="primary" type="button">Confirmar resposta</button>
+          <button id="quizNextBtn" class="primary hidden" type="button">Próxima</button>
+          <button id="quizRetryBtn" class="secondary hidden" type="button">Novo quiz</button>
+          <button id="quizCloseBtn" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+    <section id="introScreen" class="welcome-screen intro-screen" tabindex="0">
+      <div class="welcome-card intro-card">
+        <div class="intro-grid">
+          <div class="intro-visual" aria-hidden="true">
+            <div class="intro-logo-system">
+              <span class="intro-ring ring-a"></span>
+              <span class="intro-ring ring-b"></span>
+              <span class="intro-ring ring-c"></span>
+              <span class="intro-spark spark-a">*</span>
+              <span class="intro-spark spark-b">*</span>
+              <span class="intro-spark spark-c">*</span>
+              <span class="intro-glyph glyph-a">♪</span>
+              <span class="intro-glyph glyph-b">♬</span>
+              <span class="intro-glyph glyph-c">⚡</span>
+              <span class="intro-glyph glyph-d">◈</span>
+              <div class="intro-logo-wrap">
+                <img class="intro-logo-mark" src="assets/image-bank/logos/neonpulse-logo-mark.svg?v=20260223a" alt="" />
+              </div>
+            </div>
+            <div class="intro-symbol-cloud" aria-hidden="true">
+              <span class="intro-symbol sym-a">☠</span>
+              <span class="intro-symbol sym-b">🔊</span>
+              <span class="intro-symbol sym-c">🎚</span>
+              <span class="intro-symbol sym-d">♫</span>
+              <span class="intro-symbol sym-e">⚡</span>
+              <span class="intro-symbol sym-f">♬</span>
+              <span class="intro-symbol sym-g">⬡</span>
+              <span class="intro-symbol sym-h">✧</span>
+              <span class="intro-symbol sym-i">🎛</span>
+              <span class="intro-symbol sym-j intro-symbol-eq">▁▃▅▇</span>
+              <span class="intro-symbol sym-k intro-symbol-eq">█▆▃▁</span>
+              <span class="intro-symbol sym-l">◉</span>
+            </div>
+            <div class="intro-eq" aria-hidden="true">
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="languageScreen" class="welcome-screen hidden">
+      <div class="welcome-card language-card">
+        <div class="brand-wrap">
+          <div class="brand-logo-wrap" aria-hidden="true">
+            <img class="brand-logo" src="assets/image-bank/logos/neonpulse-logo-horizontal.svg?v=20260223a" alt="" />
+          </div>
+          <p id="langKicker" class="brand-kicker">Escolha seu idioma</p>
+          <h1 id="langTitle">Selecione o idioma</h1>
+          <p id="langDesc">Escolha o idioma para toda a experiência do app.</p>
+          <p id="langSlogan" class="app-slogan">Nós amamos música</p>
+        </div>
+        <div class="lang-actions">
+          <button class="large lang-btn" data-lang="pt">Português (BR)</button>
+          <button class="large lang-btn" data-lang="en">English</button>
+          <button class="large lang-btn" data-lang="es">Español</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="authScreen" class="welcome-screen hidden">
+      <div class="welcome-card auth-card">
+        <div class="brand-wrap">
+          <div class="brand-logo-wrap" aria-hidden="true">
+            <img class="brand-logo" src="assets/image-bank/logos/neonpulse-logo-horizontal.svg?v=20260223a" alt="" />
+          </div>
+          <p id="authKicker" class="brand-kicker">Carregar usuário</p>
+          <h1 id="authTitle">Entre para carregar seu perfil</h1>
+          <p id="authDesc">Faça login para continuar com seu perfil salvo ou continue sem login.</p>
+        </div>
+        <div class="auth-grid">
+          <label for="authUsername" id="authUsernameLabel">Usuário</label>
+          <input id="authUsername" type="text" autocomplete="username" placeholder="Digite seu usuário" />
+
+          <label for="authPassword" id="authPasswordLabel">Senha</label>
+          <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
+        </div>
+        <div class="cta-row">
+          <button id="authLoginBtn" class="primary">Entrar</button>
+          <button id="authGuestBtn">Continuar sem login</button>
+        </div>
+        <p id="authFeedback" class="muted auth-feedback"></p>
+      </div>
+    </section>
+
+    <section id="welcomeScreen" class="welcome-screen hidden">
+      <div class="welcome-card">
+        <div class="brand-wrap">
+          <div class="brand-logo-wrap" aria-hidden="true">
+            <img class="brand-logo" src="assets/image-bank/logos/neonpulse-logo-horizontal.svg?v=20260223a" alt="" />
+          </div>
+          <p id="welcomeKicker" class="brand-kicker">Electronic music curation</p>
+          <h1 id="welcomeTitle">SONIC SEARCH</h1>
+          <p id="welcomeDesc">
+            Seu sommelier de música eletrônica para rave, treino, foco ou viagem.
+            Escolha seu estilo e receba faixa + artista novo para descobrir.
+          </p>
+          <p id="welcomeSlogan" class="app-slogan">Nós amamos música</p>
+          <p id="welcomeMission" class="app-mission">
+            Nossa missão: achar tracks memoráveis para você que você não acharia sem o Sonic Search.
+          </p>
+        </div>
+        <div class="cta-row welcome-start-actions">
+          <button id="startBtn" class="primary large">Iniciar experiência</button>
+          <button id="startSurpriseBtn" class="large">Surpreenda-me</button>
+        </div>
+        <div id="quickSurprisePanel" class="quick-surprise-panel hidden">
+          <p id="quickSurpriseTitle" class="quick-surprise-title">Modo Surpreenda-me</p>
+          <p id="quickSurpriseHint" class="muted quick-surprise-hint">
+            Conte seu subgênero principal e alguns artistas que já conhece para eu focar em novidades.
+          </p>
+          <div class="quick-surprise-grid">
+            <div class="field">
+              <label id="quickSurpriseStyleLabel" for="quickSurpriseStyle">Subgênero que você mais ouve</label>
+              <select id="quickSurpriseStyle" size="1">
+                <option value="">Escolha o subgênero</option>
+              </select>
+            </div>
+            <div class="field">
+              <label id="quickSurpriseKnownLabel" for="quickSurpriseKnownArtists">Artistas que você já conhece</label>
+              <textarea id="quickSurpriseKnownArtists" rows="2" placeholder="Ex.: Astrix, Charlotte de Witte, Alok"></textarea>
+            </div>
+            <div class="field">
+              <label id="quickSurpriseKnownTracksLabel" for="quickSurpriseKnownTracks">Músicas que você já conhece</label>
+              <textarea id="quickSurpriseKnownTracks" rows="2" placeholder="Ex.: Poison Turtle, Hit N Run"></textarea>
+            </div>
+          </div>
+          <div class="cta-row">
+            <button id="quickSurpriseRunBtn" class="primary" type="button">Gerar surpresa focada</button>
+            <button id="quickSurpriseCancelBtn" class="secondary" type="button">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main id="appContent" class="app-shell hidden">
+      <header class="hero panel">
+        <div class="hero-brand">
+          <div class="logo-core mini" aria-hidden="true"><span>SS</span></div>
+          <div>
+            <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
+            <h2 id="heroTitle">Curadoria de eletrônica, com descoberta real</h2>
+          </div>
+        </div>
+        <p id="heroDesc" class="muted">
+          Inclui psytrance (forest/dark/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house,
+          drum and bass e outros subgêneros importantes para não deixar nada de fora.
+        </p>
+        <p id="heroSlogan" class="app-slogan hero-slogan">Nós amamos música</p>
+        <p id="heroMission" class="app-mission hero-mission">
+          Nossa missão: achar tracks memoráveis para você que você não acharia sem o Sonic Search.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="preferencias-title">
+        <h3 id="preferencias-title">1) Monte seu perfil sonoro</h3>
+
+        <div class="fields-grid">
+          <div class="field style-field">
+            <label for="style">Subgênero principal</label>
+            <select id="style" size="1">
+              <option value="">Escolha o subgênero</option>
+              <optgroup label="Psytrance / Trance">
+                <option value="psytrance">Psytrance</option>
+                <option value="forest_psy">Forest Psy</option>
+                <option value="dark_psy">Dark Psy</option>
+                <option value="dark_experimental">Dark Experimental</option>
+                <option value="psycore">Psycore</option>
+                <option value="full_on">Full-On</option>
+                <option value="full_on_night">Full-On Night</option>
+                <option value="full_on_morning">Full-On Morning</option>
+                <option value="psy_comercial">Psy Comercial / Chacotas</option>
+                <option value="progressive_psy">Progressive Psy</option>
+                <option value="slambient">Slambient</option>
+                <option value="hi_tech">Hi-Tech</option>
+                <option value="dark_progressive">Dark Progressive</option>
+                <option value="goa_trance">Goa Trance</option>
+                <option value="trance_uplifting">Uplifting Trance</option>
+              </optgroup>
+              <optgroup label="Techno">
+                <option value="techno">Techno</option>
+                <option value="acid_techno">Acid Techno</option>
+                <option value="hard_techno">Hard Techno</option>
+                <option value="minimal_techno">Minimal Techno</option>
+                <option value="melodic_techno">Melodic Techno</option>
+                <option value="industrial_techno">Industrial Techno</option>
+                <option value="peak_time_techno">Peak Time Techno</option>
+              </optgroup>
+              <optgroup label="House">
+                <option value="house">House</option>
+                <option value="deep_house">Deep House</option>
+                <option value="tech_house">Tech House</option>
+                <option value="progressive_house">Progressive House</option>
+                <option value="afro_house">Afro House</option>
+                <option value="organic_house">Organic House</option>
+                <option value="bass_house">Bass House</option>
+                <option value="electro_house">Electro House</option>
+              </optgroup>
+              <optgroup label="Drum and Bass / Bass Music">
+                <option value="drum_and_bass">Drum and Bass</option>
+                <option value="liquid_dnb">Liquid DnB</option>
+                <option value="neurofunk">Neurofunk</option>
+                <option value="jump_up">Jump Up</option>
+                <option value="jungle">Jungle</option>
+                <option value="breakbeat">Breakbeat</option>
+                <option value="uk_garage">UK Garage</option>
+                <option value="future_garage">Future Garage</option>
+                <option value="dubstep">Dubstep</option>
+              </optgroup>
+              <optgroup label="Outros eletrônicos relevantes">
+                <option value="downtempo">Downtempo</option>
+                <option value="ambient">Ambient</option>
+                <option value="idm">IDM</option>
+                <option value="electro">Electro</option>
+                <option value="hardstyle">Hardstyle</option>
+              </optgroup>
+            </select>
+            <aside id="styleInfoBubble" class="style-info-bubble hidden" aria-live="polite">
+              <button id="styleInfoCloseBtn" class="style-info-close" type="button" aria-label="Fechar balão do subgênero">×</button>
+              <p id="styleInfoTitle" class="style-info-title">Leitura rápida do subgênero</p>
+              <p id="styleInfoBpm" class="style-info-bpm"></p>
+              <p id="styleInfoSummary" class="style-info-summary"></p>
+              <p id="styleInfoTip" class="style-info-tip muted"></p>
+            </aside>
+          </div>
+
+          <div class="field">
+            <label for="context">Contexto</label>
+            <select id="context" size="1">
+              <option value="">Escolha o contexto</option>
+              <option value="warmup">Warm-up</option>
+              <option value="peak">Peak time</option>
+              <option value="after">After / downshift</option>
+              <option value="foco">Foco / trabalho</option>
+              <option value="treino">Treino</option>
+              <option value="estrada">Estrada / viagem</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="energy">Energia</label>
+            <select id="energy" size="1">
+              <option value="">Escolha a energia</option>
+              <option value="low">Baixa</option>
+              <option value="mid">Média</option>
+              <option value="high">Alta</option>
+              <option value="extreme">Extrema</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="bpm">Faixa de BPM</label>
+            <select id="bpm" size="1">
+              <option value="">Sem preferência</option>
+              <option value="110-124">110-124</option>
+              <option value="124-132">124-132</option>
+              <option value="132-145">132-145</option>
+              <option value="145-155">145-155</option>
+              <option value="155-175">155-175</option>
+              <option value="175+">175+</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="vocals">Preferência de vocal</label>
+            <select id="vocals" size="1">
+              <option value="">Livre</option>
+              <option value="instrumental">Instrumental</option>
+              <option value="light_vocals">Vocais leves</option>
+              <option value="vocal">Vocal forte</option>
+            </select>
+          </div>
+
+          <div class="field checkbox">
+            <label for="discoveryMode">Modo descoberta</label>
+            <div class="checkline">
+              <input id="discoveryMode" type="checkbox" checked />
+              <span>Quero artista novo fora do meu radar</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="knownArtists">Artistas que você já conhece (separe por vírgula)</label>
+          <textarea id="knownArtists" rows="2" placeholder="Ex.: Astrix, Charlotte de Witte, Alok"></textarea>
+        </div>
+
+        <div class="weights-panel">
+          <h4>Prioridade dos filtros</h4>
+          <div class="weights-grid">
+            <label class="weight-item" for="weightStyle">
+              <span>Estilo <strong id="weightStyleValue">3</strong></span>
+              <input id="weightStyle" type="range" min="0" max="5" step="1" value="3" />
+            </label>
+            <label class="weight-item" for="weightContext">
+              <span>Contexto <strong id="weightContextValue">2</strong></span>
+              <input id="weightContext" type="range" min="0" max="5" step="1" value="2" />
+            </label>
+            <label class="weight-item" for="weightEnergy">
+              <span>Energia <strong id="weightEnergyValue">2</strong></span>
+              <input id="weightEnergy" type="range" min="0" max="5" step="1" value="2" />
+            </label>
+            <label class="weight-item" for="weightBpm">
+              <span>BPM <strong id="weightBpmValue">1</strong></span>
+              <input id="weightBpm" type="range" min="0" max="5" step="1" value="1" />
+            </label>
+            <label class="weight-item" for="weightVocals">
+              <span>Vocal <strong id="weightVocalsValue">1</strong></span>
+              <input id="weightVocals" type="range" min="0" max="5" step="1" value="1" />
+            </label>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <button id="recommendBtn" class="primary">Gerar recomendação</button>
+          <button id="rerollBtn" class="secondary" disabled>Nova sugestão no mesmo perfil</button>
+          <button id="newArtistsBtn">Buscar artistas novos (< 2 anos)</button>
+          <button id="surpriseBtn">Surpreender</button>
+          <button id="clearFiltersBtn">Limpar filtros</button>
+          <button id="resetAppBtn" class="danger">Novo usuário (reset total)</button>
+        </div>
+        <div id="newArtistsPanel" class="new-artists-panel hidden" aria-live="polite">
+          <h4 id="newArtistsTitle">Artistas novos no subgênero</h4>
+          <p id="newArtistsStatus" class="muted"></p>
+          <ul id="newArtistsList" class="new-artists-list"></ul>
+        </div>
+      </section>
+
+      <section id="resultPanel" class="panel hidden" aria-live="polite">
+        <h3>2) Faixa principal</h3>
+        <article id="primaryTrackCard" class="result-card main-track">
+          <p class="chip" id="matchReason"></p>
+          <p id="generatedBadge" class="generated-badge">Gerada agora</p>
+          <h4 id="songTitle" class="track-title-animated"></h4>
+          <p id="artistLine" class="meta-line artist-line"><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
+          <p id="bpmLine" class="meta-line bpm-line"><span id="styleName"></span> <span>•</span> <span id="bpmInfo"></span> <span>•</span> <span id="energyInfo"></span></p>
+          <p class="meta-line"><span id="releaseInfo"></span> <span>•</span> <span id="durationInfo"></span> <span>•</span> <span id="keyInfo"></span></p>
+          <p class="meta-line muted"><span id="catalogInfo"></span></p>
+          <p id="songVibe" class="muted"></p>
+          <p id="listeningNarrative" class="listening-narrative hidden"></p>
+          <div class="listen-links">
+            <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
+            <a id="youtubeLink" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
+            <a id="soundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
+          </div>
+          <div id="previewPanel" class="preview-panel hidden">
+            <p id="previewStatus" class="muted">Buscando preview da faixa...</p>
+            <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
+            <div id="youtubePreviewWrap" class="youtube-preview hidden">
+              <iframe
+                id="youtubePreviewFrame"
+                class="youtube-preview-frame"
+                title="Preview YouTube"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div id="youtubePreviewActions" class="youtube-preview-actions hidden">
+              <button id="youtubePreviewToggleBtn" class="secondary" type="button">Abrir player no app</button>
+              <button id="youtubePreviewRetryBtn" class="secondary hidden" type="button">Tentar outro vídeo</button>
+            </div>
+            <div id="listeningPrompt" class="known-prompt hidden">
+              <p>Está gostando do que está escutando?</p>
+              <div class="feedback-buttons">
+                <button id="previewLikeBtn">Sim, curti</button>
+                <button id="previewDislikeBtn" class="secondary">Não, troca agora</button>
+              </div>
+            </div>
+          </div>
+          <div id="knownArtistPrompt" class="known-prompt hidden">
+            <p>Você já conhecia este artista?</p>
+            <div class="feedback-buttons">
+              <button id="knownYesBtn">Sim, já conhecia</button>
+              <button id="knownNoBtn" class="secondary">Não, novidade para mim</button>
+            </div>
+            <div id="noveltyEnjoyPrompt" class="hidden">
+              <p class="muted">Legal, novidade desbloqueada. Você gostou dessa faixa?</p>
+              <div class="feedback-buttons">
+                <button id="noveltyLikedBtn">Gostei sim</button>
+                <button id="noveltyNotYetBtn">Ainda não</button>
+              </div>
+            </div>
+          </div>
+          <div id="recentListenersPanel" class="listeners-panel hidden">
+            <p class="listeners-title">Quem ouviu essa música recentemente</p>
+            <p id="listenersSubtitle" class="muted listeners-subtitle"></p>
+            <ul id="recentListenersList" class="listeners-list"></ul>
+          </div>
+          <div id="topListenersPanel" class="listeners-panel top-listeners-panel hidden">
+            <p id="topListenersTitle" class="listeners-title">Top listeners da comunidade</p>
+            <p id="topListenersSubtitle" class="muted listeners-subtitle"></p>
+            <ol id="topListenersList" class="top-listeners-list"></ol>
+          </div>
+          <div id="trackAiPanel" class="track-ai-panel hidden">
+            <div class="track-ai-head">
+              <p id="trackAiTitle" class="track-ai-title">Radar IA da faixa</p>
+              <button id="trackAiRefreshBtn" class="secondary" type="button">Atualizar leitura</button>
+            </div>
+            <p id="trackAiText" class="track-ai-text muted"></p>
+            <p id="trackAiMeta" class="track-ai-meta muted"></p>
+          </div>
+        </article>
+
+        <article id="suggestionQueueCard" class="result-card suggestion-queue hidden">
+          <div class="queue-head">
+            <p id="suggestionQueueTitle" class="queue-title">Fila inteligente: 3 sugestões</p>
+            <p id="suggestionQueueHint" class="muted">Troque na hora sem mudar seus filtros.</p>
+          </div>
+          <div id="suggestionQueueList" class="suggestion-queue-list"></div>
+        </article>
+
+        <article id="discoveryCard" class="result-card discovery hidden">
+          <p class="chip alt">Descoberta sugerida</p>
+          <h4 id="discoveryArtistName"></h4>
+          <p id="discoveryMeta" class="meta-line"></p>
+          <p id="discoveryBio" class="muted"></p>
+          <div class="listen-links">
+            <a id="discoverySpotifyLink" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
+            <a id="discoveryYoutubeLink" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
+            <a id="discoverySoundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
+          </div>
+        </article>
+
+        <div class="feedback-grid">
+          <h3>3) Feedback</h3>
+          <div class="rating-panel">
+            <div class="rating-head">
+              <p id="ratingTitle" class="rating-title">Avalie esta recomendação</p>
+              <p id="ratingCelebration" class="rating-celebration">Celebração ativa</p>
+            </div>
+            <div id="starRating" class="star-rating" role="radiogroup" aria-label="Avaliação em estrelas">
+              <button id="starBtn1" class="star-btn" data-stars="1" aria-label="1 estrela" aria-checked="false" role="radio" type="button">★</button>
+              <button id="starBtn2" class="star-btn" data-stars="2" aria-label="2 estrelas" aria-checked="false" role="radio" type="button">★</button>
+              <button id="starBtn3" class="star-btn" data-stars="3" aria-label="3 estrelas" aria-checked="false" role="radio" type="button">★</button>
+              <button id="starBtn4" class="star-btn" data-stars="4" aria-label="4 estrelas" aria-checked="false" role="radio" type="button">★</button>
+              <button id="starBtn5" class="star-btn" data-stars="5" aria-label="5 estrelas" aria-checked="false" role="radio" type="button">★</button>
+            </div>
+            <p id="ratingHint" class="muted">1 estrela = gostei pouco • 5 estrelas = gostei muito</p>
+          </div>
+          <div class="feedback-buttons">
+            <button id="likeSongBtn">Gostei da faixa</button>
+            <button id="likeArtistBtn">Gostei do artista</button>
+            <button id="blockArtistBtn" class="danger">Não recomendar este artista</button>
+            <button id="likeDiscoveryBtn">Curti a descoberta</button>
+            <button id="knewDiscoveryBtn">Já conhecia</button>
+            <button id="skipBtn" class="danger">Não combinou</button>
+            <button id="adaptiveSurpriseBtn" class="primary">Surpreenda por perfil</button>
+            <button id="moreInfoBtn" class="secondary">Mais sobre artista/label</button>
+          </div>
+          <p id="feedbackMessage" class="feedback-message"></p>
+        </div>
+      </section>
+
+      <section id="detailsPanel" class="panel hidden">
+        <h3>4) Detalhes de artista e gravadora</h3>
+        <div class="details-grid">
+          <article id="artistDetailsCard" class="details-card">
+            <h4>Artista</h4>
+            <p id="artistBio"></p>
+            <div id="artistSocialsPanel" class="artist-socials hidden">
+              <p id="artistSocialsTitle" class="socials-title">Redes do artista</p>
+              <p id="artistSocialsHint" class="muted socials-hint">Links por busca do nome do artista nas plataformas.</p>
+              <div id="artistSocialLinks" class="artist-social-links"></div>
+            </div>
+          </article>
+          <article id="labelDetailsCard" class="details-card">
+            <h4>Gravadora</h4>
+            <p id="labelBio"></p>
+          </article>
+        </div>
+      </section>
+
+      <section id="eventsPanel" class="panel hidden">
+        <h3>5) Próximos eventos do artista curtido</h3>
+        <p id="eventsIntro" class="muted">Curta um artista para carregar agenda de shows.</p>
+        <div id="eventsCalendar" class="events-calendar"></div>
+        <ul id="eventsList" class="events-list"></ul>
+      </section>
+
+      <section id="spiritPanel" class="panel spirit-panel hidden" aria-live="polite">
+        <h3 id="spiritPanelTitle">6) Seu espírito musical</h3>
+        <p id="spiritIntro" class="muted">Ao completar 10 likes, seu espírito musical será revelado.</p>
+        <article id="spiritCard" class="spirit-card hidden">
+          <div class="spirit-avatar-wrap">
+            <img id="spiritImage" class="spirit-avatar" src="" alt="" loading="lazy" />
+          </div>
+          <div class="spirit-copy">
+            <p id="spiritBadge" class="chip alt">Espírito desbloqueado</p>
+            <h4 id="spiritName" class="spirit-name"></h4>
+            <p id="spiritArchetype" class="spirit-archetype"></p>
+            <p id="spiritDescription" class="spirit-description"></p>
+            <div id="spiritSpotlightPanel" class="spirit-spotlight hidden">
+              <p id="spiritSpotlightTitle" class="spirit-visual-title">Faixa do espírito</p>
+              <p id="spiritSpotlightHint" class="muted spirit-visual-hint">A faixa que mais combina com seu perfil aparece aqui.</p>
+              <p id="spiritSpotlightTrack" class="spirit-spotlight-track"></p>
+              <p id="spiritSpotlightMeta" class="spirit-spotlight-meta"></p>
+              <div class="spirit-spotlight-actions">
+                <a id="spiritSpotlightSpotify" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
+                <a id="spiritSpotlightYoutube" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
+                <a id="spiritSpotlightSoundcloud" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
+              </div>
+            </div>
+            <div id="spiritVisualPanel" class="spirit-visual hidden">
+              <p id="spiritVisualTitle" class="spirit-visual-title">Modo visual do espírito</p>
+              <p id="spiritVisualHint" class="muted spirit-visual-hint">Loop de ambientação audiovisual alinhado ao seu perfil.</p>
+              <div class="spirit-video-shell">
+                <div id="spiritAmbientVisual" class="spirit-ambient" aria-hidden="true">
+                  <span class="spirit-ambient-glow"></span>
+                  <span class="spirit-ambient-ring ring-a"></span>
+                  <span class="spirit-ambient-ring ring-b"></span>
+                  <span class="spirit-ambient-ring ring-c"></span>
+                  <span class="spirit-ambient-grid"></span>
+                </div>
+              </div>
+              <p id="spiritVisualPresetName" class="muted spirit-visual-hint"></p>
+              <a id="spiritVisualYoutubeLink" class="listen-btn youtube-btn spirit-video-link" href="#" target="_blank" rel="noopener noreferrer">Abrir no YouTube</a>
+            </div>
+            <div id="spiritCollectiblePanel" class="spirit-collectible hidden">
+              <div class="spirit-collectible-header">
+                <p id="spiritCollectibleTitle" class="spirit-visual-title">Colecionável do espírito</p>
+                <span id="spiritRankBadge" class="chip alt">Espírito desbloqueado</span>
+              </div>
+              <p id="spiritCollectibleHint" class="muted spirit-visual-hint">Ao alcançar marcos de likes, você desbloqueia uma arte personalizada.</p>
+              <div class="spirit-collectible-grid">
+                <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
+                <div class="spirit-collectible-meta">
+                  <p id="spiritCollectibleMilestone" class="spirit-collectible-milestone"></p>
+                  <p id="spiritCollectibleProgress" class="muted"></p>
+                  <p id="spiritCollectibleDetails" class="spirit-collectible-details muted"></p>
+                  <div class="spirit-collectible-actions">
+                    <a id="spiritCollectibleDownload" class="listen-btn" href="#" download>Baixar imagem</a>
+                    <button id="spiritCollectibleShareInstagramBtn" class="instagram-share-btn" type="button">Compartilhar no Story</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p id="spiritProgress" class="muted spirit-progress"></p>
+          </div>
+        </article>
+      </section>
+
+      <section id="summaryPanel" class="panel">
+        <h3 id="summaryPanelTitle">7) Resumo de perfil</h3>
+        <p id="statsLine" class="muted">Nenhum feedback ainda.</p>
+        <div class="profile-stats-grid">
+          <article class="profile-stat-card metric">
+            <p id="summaryStatusLabel" class="summary-kicker">Status do perfil</p>
+            <p id="summaryProfileStatus" class="summary-value">Novo</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryKnownCountLabel" class="summary-kicker">Artistas conhecidos</p>
+            <p id="summaryKnownCount" class="summary-value">0</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryDiscoveredCountLabel" class="summary-kicker">Artistas conhecidos no app</p>
+            <p id="summaryDiscoveredCount" class="summary-value">0</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryLikedCountLabel" class="summary-kicker">Artistas que curte</p>
+            <p id="summaryLikedArtistsCount" class="summary-value">0</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryDislikedCountLabel" class="summary-kicker">Artistas que não curte</p>
+            <p id="summaryDislikedArtistsCount" class="summary-value">0</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryFavoriteStyleLabel" class="summary-kicker">Gênero favorito</p>
+            <p id="summaryFavoriteStyle" class="summary-value">Sem dados</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryAchievementLabel" class="summary-kicker">Conquista 5 estrelas</p>
+            <p id="summaryAchievementText" class="summary-value achievement-value">Ainda sem conquistas de 5 estrelas.</p>
+          </article>
+          <article id="quizHubCard" class="profile-stat-card wide quiz-hub-card">
+            <div class="quiz-hub-head">
+              <h4 id="quizHubTitle">Desafios de conhecimento</h4>
+              <span id="quizHubBadge" class="chip alt">Evolução rápida</span>
+            </div>
+            <p id="quizHubHint" class="muted">Ignorou o balão de desafio? Ele fica salvo aqui para você evoluir pelo conhecimento quando quiser.</p>
+            <div id="quizHubList" class="quiz-hub-list"></div>
+            <p id="quizHubProgress" class="muted quiz-hub-progress">Nenhum desafio desbloqueado ainda.</p>
+          </article>
+          <article class="profile-stat-card wide">
+            <h4 id="summaryFiveStarTracksTitle">Faixas avaliadas com 5 estrelas</h4>
+            <div id="summaryFiveStarTracks" class="summary-tags"></div>
+          </article>
+          <article class="profile-stat-card wide">
+            <h4 id="summaryKnownArtistsTitle">Artistas que você conhece</h4>
+            <div id="summaryKnownArtists" class="summary-tags"></div>
+          </article>
+          <article class="profile-stat-card wide">
+            <h4 id="summaryLikedArtistsTitle">Artistas que você curte</h4>
+            <div id="summaryLikedArtists" class="summary-tags"></div>
+          </article>
+          <article class="profile-stat-card wide">
+            <h4 id="summaryDislikedArtistsTitle">Artistas que você não curte</h4>
+            <div id="summaryDislikedArtists" class="summary-tags"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer id="signatureBar" class="signature-bar" aria-label="Créditos do projeto">
+      <div class="signature-track" aria-hidden="true">
+        <span class="signature-pill">CBK Labs - By Pedro Freire</span>
+        <span class="signature-divider">•</span>
+        <span class="signature-pill">Crazy Brazilian Kid Labs</span>
+        <span class="signature-divider">•</span>
+        <span class="signature-pill">Electronic Music Sommelier Platform</span>
+        <span class="signature-divider">•</span>
+      </div>
+      <div class="signature-track clone" aria-hidden="true">
+        <span class="signature-pill">CBK Labs - By Pedro Freire</span>
+        <span class="signature-divider">•</span>
+        <span class="signature-pill">Crazy Brazilian Kid Labs</span>
+        <span class="signature-divider">•</span>
+        <span class="signature-pill">Electronic Music Sommelier Platform</span>
+        <span class="signature-divider">•</span>
+      </div>
+    </footer>
+
+    <script src="app.js?v=20260312d"></script>
+  </body>
+</html>

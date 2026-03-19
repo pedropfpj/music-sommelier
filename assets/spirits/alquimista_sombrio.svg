@@ -1,0 +1,46 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="52%" y1="70%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080d24" />
+      <stop offset="50%" stop-color="#4d95ff" stop-opacity="0.36" />
+      <stop offset="100%" stop-color="#7f4cff" stop-opacity="0.26" />
+    </linearGradient>
+    <radialGradient id="halo" cx="68%" cy="55%" r="55%">
+      <stop offset="0%" stop-color="#6affde" stop-opacity="0.58" />
+      <stop offset="100%" stop-color="#6affde" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="readabilityScrim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#010813" stop-opacity="0" />
+      <stop offset="54%" stop-color="#010813" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#010813" stop-opacity="0.78" />
+    </linearGradient>
+    <linearGradient id="textPanel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06172f" stop-opacity="0.78" />
+      <stop offset="100%" stop-color="#0b2348" stop-opacity="0.62" />
+    </linearGradient>
+    <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#010712" flood-opacity="0.72" />
+    </filter>
+  </defs>
+  
+  <rect width="1080" height="1080" fill="url(#bg)" />
+  
+  <rect width="1080" height="1080" fill="url(#readabilityScrim)" />
+  <rect x="48" y="48" width="984" height="984" rx="46" fill="none" stroke="#6affde" stroke-opacity="0.4" stroke-width="4" />
+  <circle cx="540" cy="390" r="268" fill="url(#halo)" />
+  <circle cx="540" cy="390" r="174" fill="none" stroke="#6affde" stroke-opacity="0.62" stroke-width="5" />
+  <circle cx="540" cy="390" r="106" fill="none" stroke="#7f4cff" stroke-opacity="0.4" stroke-width="3" />
+  <g transform="rotate(80 540 390)">
+    <path d="M540 176 L614 262 L540 348 L466 262 Z" fill="none" stroke="#6affde" stroke-opacity="0.34" stroke-width="3" />
+    <path d="M540 432 L596 492 L540 552 L484 492 Z" fill="none" stroke="#4d95ff" stroke-opacity="0.24" stroke-width="3" />
+  </g>
+  <rect x="116" y="612" width="848" height="368" rx="34" fill="url(#textPanel)" stroke="#6affde" stroke-opacity="0.34" stroke-width="2.6" />
+  <text x="540" y="692" fill="#f7fcff" font-size="76" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">Alquimista Sombrio</text>
+  <text x="540" y="748" fill="#d5edff" font-size="38" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">Arquitetura de sombra</text>
+  <text x="540" y="800" fill="#b7dbff" font-size="30" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">Slambient • Dark Experimental</text>
+  <text x="540" y="858" fill="#b2ffe4" font-size="34" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">Espírito desbloqueado</text>
+  <text x="540" y="910" fill="#e2f1ff" font-size="30" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">10 likes | 10 total</text>
+  <text x="540" y="956" fill="#d8e8ff" font-size="22" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">Você está curtindo dark psy, slambient e camadas densas com</text>
+  <text x="540" y="990" fill="#d8e8ff" font-size="22" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">atmosfera ritual e pressão contínua. Seu traço é profundida...</text>
+</svg>

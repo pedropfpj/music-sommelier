@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sonic Search mark">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050b1c"/>
+      <stop offset="56%" stop-color="#0a1633"/>
+      <stop offset="100%" stop-color="#151f45"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="0.34" cy="0.28" r="0.72">
+      <stop offset="0%" stop-color="#8ffff0"/>
+      <stop offset="44%" stop-color="#5fceff"/>
+      <stop offset="100%" stop-color="#101a3d"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#73ffe2"/>
+      <stop offset="48%" stop-color="#6bc6ff"/>
+      <stop offset="100%" stop-color="#9a7cff"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a5ffe8"/>
+      <stop offset="62%" stop-color="#68c4ff"/>
+      <stop offset="100%" stop-color="#7d83ff"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="118" fill="url(#bg)"/>
+  <rect x="18" y="18" width="476" height="476" rx="102" fill="none" stroke="#69cbff" stroke-opacity="0.35"/>
+  <circle cx="256" cy="256" r="172" fill="none" stroke="url(#ring)" stroke-width="4" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="142" fill="#0b1634" stroke="#8ad8ff" stroke-opacity="0.34" stroke-width="2"/>
+  <circle cx="256" cy="256" r="116" fill="url(#orb)" filter="url(#glow)"/>
+  <text x="256" y="276" text-anchor="middle" fill="#051223" font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="110" font-weight="900" letter-spacing="2">SS</text>
+
+  <g transform="translate(190 328)">
+    <rect x="0" y="30" width="14" height="24" rx="7" fill="url(#bar)"/>
+    <rect x="22" y="17" width="14" height="37" rx="7" fill="url(#bar)"/>
+    <rect x="44" y="5" width="14" height="49" rx="7" fill="url(#bar)"/>
+    <rect x="66" y="16" width="14" height="38" rx="7" fill="url(#bar)"/>
+    <rect x="88" y="0" width="14" height="54" rx="7" fill="url(#bar)"/>
+    <rect x="110" y="20" width="14" height="34" rx="7" fill="url(#bar)"/>
+  </g>
+</svg>

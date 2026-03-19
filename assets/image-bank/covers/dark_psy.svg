@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05030e"/>
+      <stop offset="55%" stop-color="#1a0f2e"/>
+      <stop offset="100%" stop-color="#2b1038"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="0.78" cy="0.18" r="0.62">
+      <stop offset="0%" stop-color="#76f6ff" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#0d2340" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#orb)"/>
+  <circle cx="300" cy="760" r="220" fill="#10091d" stroke="#45f0ff" stroke-opacity="0.5" stroke-width="3"/>
+  <circle cx="300" cy="760" r="140" fill="none" stroke="#ff4ce1" stroke-opacity="0.5" stroke-width="2"/>
+  <path d="M120 880 C220 780, 380 860, 520 690 S820 540, 980 700" fill="none" stroke="#62f0ff" stroke-width="4" stroke-opacity="0.65"/>
+  <text x="80" y="130" fill="#b6f8ff" font-family="Arial, sans-serif" font-size="42" font-weight="700">NEONPULSE</text>
+  <text x="80" y="190" fill="#f4a8ff" font-family="Arial, sans-serif" font-size="72" font-weight="700">DARK PSY</text>
+  <text x="80" y="248" fill="#7da1c5" font-family="Arial, sans-serif" font-size="28">Hypnotic / Shadow / Ritual</text>
+</svg>
