@@ -4785,6 +4785,12 @@ function isLikelyGeneratedTrackTitle(value) {
     "sleep",
     "meditation"
   ].reduce((count, term) => (normalized.includes(term) ? count + 1 : count), 0);
+  const tokens = normalized.split(" ").filter(Boolean);
+  if (tokens.length >= 2) {
+    const genreRepeatRoots = new Set(["techno", "tecno", "trance", "house", "electro", "psy", "goa", "hitech"]);
+    const root = tokens[0];
+    if (genreRepeatRoots.has(root) && tokens.every((token) => token === root)) return true;
+  }
 
   if (/^(psy|psytrance|psy trance|trance|techno|house|electro|electronic|edm|dnb|drum and bass|dubstep|forest psy|dark psy|hitech|hi tech|psycore|goa trance|progressive psy)$/.test(normalized)) return true;
   if (/^(ambient|ambient electronic|electronic ambient|chill out|chillout|ambient chill|ambient relax|sleep ambient|meditation ambient)$/.test(normalized)) return true;
@@ -5074,10 +5080,8 @@ function hasTechnoFamilyIntegrityConflict(style, trackLike = {}) {
   const labelHasSignal = textHasTechnoRequiredSignalsForStyle(style, trackLike.label || "");
   if (labelHasSignal) return false;
 
-  // Em fontes não-iTunes aceitamos sinal forte no título para não matar cobertura.
-  const songHasSignal = textHasTechnoRequiredSignalsForStyle(style, trackLike.song || "");
-  if (songHasSignal && !sourceCompact.includes("itunes")) return false;
-
+  // Não aceitar apenas "sinal no título" para techno; isso gera falso positivo
+  // como "Techno Techno" em faixas fora do gênero.
   return true;
 }
 
