@@ -1964,7 +1964,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v9";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v10";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v11";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
