@@ -4611,7 +4611,7 @@ function hasSuspiciousDynamicText(value) {
 function hasGenreKeywordEntity(value) {
   const normalized = normalize(value || "").replace(/\s+/g, " ").trim();
   if (!normalized) return false;
-  return /\b(psytrance|psy|trance|techno|house|electro|bass|dnb|dubstep|forest|dark|hitech|psycore|edm|ambient|downtempo|chill\s*out|chillout)\b/.test(normalized);
+  return /\b(psytrance|psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|edm|ambient|downtempo|chill\s*out|chillout)\b/.test(normalized);
 }
 
 function hasAllowedMixTerm(title) {
@@ -4692,13 +4692,14 @@ function isGenericAutoEntityName(value) {
   const rawLower = String(value || "").toLowerCase();
   if (!normalized) return true;
   const wordCount = normalized.split(" ").filter(Boolean).length;
-  const hasGenreTerm = /(psy|trance|techno|house|electro|bass|dnb|dubstep|forest|dark|hitech|psycore|ambient|downtempo|chill\s*out|chillout)/.test(normalized);
+  const hasGenreTerm = /(psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|ambient|downtempo|chill\s*out|chillout)/.test(normalized);
   const hasChannelTerm = /(music|mix|playlist|radio|channel|official|sets?)/.test(normalized);
-  const pureGenreName = /^(psy trance|psytrance|darkpsy|forest psy|dark psy|techno|house|electro|bass music)$/.test(normalized);
+  const pureGenreName = /^(psy trance|psytrance|darkpsy|forest psy|dark psy|techno|tecno|house|electro|bass music)$/.test(normalized);
   if (/\[\s*(psy|psytrance|trance|techno|house|electro|bass|dnb|dubstep|hitech|psycore|edm)\s*\]/.test(rawLower)) return true;
   if (pureGenreName) return true;
   if (hasGenreTerm && hasChannelTerm) return true;
   if (wordCount <= 3 && hasGenreTerm && /(music|records|label|official)/.test(normalized)) return true;
+  if (wordCount <= 6 && hasGenreTerm && /\b(dj|musica|electronica|eletronica|baile|dance)\b/.test(normalized)) return true;
   if (normalized === "psy trance music") return true;
   return false;
 }
@@ -4740,7 +4741,7 @@ function isLikelyChannelStyleArtistName(value) {
   if (!normalized) return true;
   const words = normalized.split(" ").filter(Boolean);
   const hasGenre = hasGenreKeywordEntity(normalized);
-  const hasChannelTone = /\b(rave|party|club|music|beats|vibes|mix|playlist|radio|channel|official|zone|nightlife|chill|relax|sleep|meditation)\b/.test(normalized);
+  const hasChannelTone = /\b(rave|party|club|music|musica|beats|vibes|mix|playlist|radio|channel|official|zone|nightlife|chill|relax|sleep|meditation|dj|electronica|eletronica|baile|dance)\b/.test(normalized);
   const hasCommaList = /[,;|]/.test(raw);
   const hasYear = /\b(19|20)\d{2}\b/.test(raw);
   if (hasCommaList && hasChannelTone) return true;
@@ -4798,6 +4799,8 @@ function isLikelyGeneratedTrackTitle(value) {
   if (normalized.length >= 86 && promoTermCount >= 2) return true;
   if (normalized.includes("radio version") && (promoTermCount >= 2 || genreTermCount >= 1)) return true;
   if (/\b(para|for)\b/.test(normalized) && hasSuspiciousDynamicText(normalized)) return true;
+  if (/^(techno|tecno|house|trance|electro|eletronica|electronica)\s*\(([^)]*(musica|music|electronic|electronica|eletronica|baile|dance)[^)]*)\)$/.test(normalized)) return true;
+  if (/^(techno|tecno|house|trance|electro|eletronica|electronica)\b/.test(normalized) && /\b(musica|music|electronic|electronica|eletronica|baile|dance)\b/.test(normalized) && tokenCount >= 3) return true;
   return false;
 }
 
