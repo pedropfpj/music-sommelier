@@ -48,6 +48,7 @@ const STYLE_TO_FAMILY = {
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
   dark_psy: "dark psy psytrance",
+  dark_progressive: "prog dark dark progressive zenonesque psy",
   psycore: "psycore darkpsy hitech psytrance",
   tech_house: "tech house",
   full_on: "full on psytrance",
@@ -143,6 +144,7 @@ const VIBE_THEME_CONFIG = {
 const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
+  "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
   "data/codex_dataset_pack_v14/artists.json",
   "data/codex_dataset_pack_v14/artists.csv",
   "data/codex_dataset_pack_v14/recent_artist_signals.json",
@@ -172,6 +174,56 @@ const LOCAL_TRACK_SEED_BOOST = [
   { style: "neurofunk", artist: "Noisia", song: "Collider", label: "Vision", bpmExact: 174 },
   { style: "ambient", artist: "Biosphere", song: "Poa Alpina", label: "Apollo", bpmExact: 90 },
   { style: "idm", artist: "Floating Points", song: "Anasickmodular", label: "Ninja Tune", bpmExact: 123 },
+  {
+    style: "dark_progressive",
+    artist: "Dividuum",
+    song: "Cold Fusion",
+    label: "Zenon Records",
+    bpmExact: 136,
+    releaseDate: "2026-01-29",
+    artistGenre: "Prog Dark / Zenonesque",
+    artistProfileHint: "Projeto associado ao eixo prog dark da Zenon, com assinatura hipnótica e sombria."
+  },
+  {
+    style: "dark_progressive",
+    artist: "Evil Oil Man",
+    song: "Cable Guy",
+    label: "Zenon Records",
+    bpmExact: 136,
+    releaseDate: "2025-12-12",
+    artistGenre: "Prog Dark / Zenonesque",
+    artistProfileHint: "Nome de referência no eixo dark prog com narrativas psicodélicas de longo curso."
+  },
+  {
+    style: "dark_progressive",
+    artist: "AIRI",
+    song: "Starship",
+    label: "Zenon Records",
+    bpmExact: 136,
+    releaseDate: "2026-02-19",
+    artistGenre: "Prog Dark / Zenonesque",
+    artistProfileHint: "Artista em destaque recente na curadoria dark progressive da Zenon."
+  },
+  {
+    style: "dark_progressive",
+    artist: "Molecc",
+    song: "Bizarradique",
+    label: "Zenon Records",
+    bpmExact: 136,
+    releaseDate: "2025-10-03",
+    artistGenre: "Prog Dark / Zenonesque",
+    artistProfileHint: "Projeto com groove quebrado e atmosfera obscura dentro do recorte prog dark."
+  },
+  {
+    style: "dark_progressive",
+    artist: "Elberg",
+    song: "Flamencore",
+    label: "Zenon Records",
+    bpmExact: 137,
+    releaseDate: "2025-11-14",
+    artistGenre: "Prog Dark / Zenonesque",
+    artistProfileHint: "Projeto dark progressive com texturas orgânicas e assinatura zenonesque."
+  },
   {
     style: "slambient",
     artist: "VallaK",
@@ -230,6 +282,31 @@ const LOCAL_TRACK_SEED_BOOST = [
 ];
 
 const ARTIST_GENRE_HINT_OVERRIDES = {
+  "evil oil man": {
+    pt: "Prog Dark / zenonesque",
+    en: "Prog Dark / zenonesque",
+    es: "Prog Dark / zenonesque"
+  },
+  dividuum: {
+    pt: "Prog Dark / zenonesque",
+    en: "Prog Dark / zenonesque",
+    es: "Prog Dark / zenonesque"
+  },
+  airi: {
+    pt: "Prog Dark / zenonesque",
+    en: "Prog Dark / zenonesque",
+    es: "Prog Dark / zenonesque"
+  },
+  molecc: {
+    pt: "Prog Dark / zenonesque",
+    en: "Prog Dark / zenonesque",
+    es: "Prog Dark / zenonesque"
+  },
+  elberg: {
+    pt: "Prog Dark / zenonesque",
+    en: "Prog Dark / zenonesque",
+    es: "Prog Dark / zenonesque"
+  },
   vallak: {
     pt: "Dark experimental / slambient",
     en: "Dark experimental / slambient",
@@ -271,6 +348,10 @@ const DATASET_STYLE_ALIASES = {
   darkpsy: "dark_psy",
   darkpsytrance: "dark_psy",
   progdark: "dark_progressive",
+  darkprog: "dark_progressive",
+  prog_dark: "dark_progressive",
+  dark_prog: "dark_progressive",
+  progressivedark: "dark_progressive",
   zenonesque: "dark_progressive",
   progdarkzenonesque: "dark_progressive",
   darkexperimental: "dark_experimental",
@@ -1458,6 +1539,17 @@ const discoveryCatalog = [
   { name: "Technical Hitch", style: "hi_tech", bio: "Nome forte do hi-tech psicodélico de festival.", spotifyUrl: "https://open.spotify.com/search/Technical+Hitch", youtubeUrl: "https://www.youtube.com/results?search_query=Technical+Hitch+hitech" },
   { name: "Crazy Astronaut", style: "hi_tech", bio: "Hi-tech com abordagem caótica e extrema.", spotifyUrl: "https://open.spotify.com/search/Crazy+Astronaut+hitech", youtubeUrl: "https://www.youtube.com/results?search_query=Crazy+Astronaut+hitech+psy" },
   { name: "D-Nox", style: "dark_progressive", bio: "Grooves progressivos mais escuros.", spotifyUrl: "https://open.spotify.com/search/D-Nox", youtubeUrl: "https://www.youtube.com/results?search_query=D-Nox" },
+  { name: "Vermont", style: "dark_progressive", bio: "Prog dark hipnótico com assinatura zenonesque e narrativa profunda.", spotifyUrl: "https://open.spotify.com/search/Vermont+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Vermont+dark+progressive+zenonesque" },
+  { name: "Sensient", style: "dark_progressive", bio: "Referência no eixo zenonesque com design sonoro detalhado.", spotifyUrl: "https://open.spotify.com/search/Sensient+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Sensient+dark+progressive+zenonesque" },
+  { name: "Hypogeo", style: "dark_progressive", bio: "Dark progressive de atmosfera ritualística e progressão contínua.", spotifyUrl: "https://open.spotify.com/search/Hypogeo+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Hypogeo+dark+progressive" },
+  { name: "Grouch", style: "dark_progressive", bio: "Groove psicodélico profundo no recorte prog dark.", spotifyUrl: "https://open.spotify.com/search/Grouch+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Grouch+dark+progressive+zenonesque" },
+  { name: "Merkaba", style: "dark_progressive", bio: "Projeto conhecido pela interseção entre psychedelic e dark progressive.", spotifyUrl: "https://open.spotify.com/search/Merkaba+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Merkaba+dark+progressive" },
+  { name: "Evil Oil Man", style: "dark_progressive", bio: "Artista com lançamentos recentes e estética psy-tech de perfil sombrio.", spotifyUrl: "https://open.spotify.com/search/Evil+Oil+Man+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Evil+Oil+Man+zenon+dark+progressive" },
+  { name: "Dividuum", style: "dark_progressive", bio: "Projeto recente no eixo prog dark com timbres tensos e foco em pista.", spotifyUrl: "https://open.spotify.com/search/Dividuum+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Dividuum+dark+progressive+zenon" },
+  { name: "AIRI", style: "dark_progressive", bio: "Nome novo com material recente na linha PROG DARK / Zenonesque.", spotifyUrl: "https://open.spotify.com/search/AIRI+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=AIRI+dark+progressive+zenon" },
+  { name: "Molecc", style: "dark_progressive", bio: "Projeto de dark progressive com pegada groove seca e psicodélica.", spotifyUrl: "https://open.spotify.com/search/Molecc+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Molecc+dark+progressive+zenonesque" },
+  { name: "Elberg", style: "dark_progressive", bio: "Dark prog de recorte orgânico, associado ao eixo Zenon.", spotifyUrl: "https://open.spotify.com/search/Elberg+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Elberg+dark+progressive+zenon" },
+  { name: "Doonz", style: "dark_progressive", bio: "Projeto com direcionamento dark progressive e lançamentos recentes.", spotifyUrl: "https://open.spotify.com/search/Doonz+dark+progressive", youtubeUrl: "https://www.youtube.com/results?search_query=Doonz+dark+progressive+zenon" },
   { name: "Maceo Plex", style: "techno", bio: "Techno e house com forte identidade autoral.", spotifyUrl: "https://open.spotify.com/search/Maceo%20Plex", youtubeUrl: "https://www.youtube.com/results?search_query=Maceo+Plex" },
   { name: "999999999", style: "acid_techno", bio: "Acid techno cru, rapido e intenso.", spotifyUrl: "https://open.spotify.com/search/999999999", youtubeUrl: "https://www.youtube.com/results?search_query=999999999+acid+techno" },
   { name: "DYEN", style: "hard_techno", bio: "Hard techno sombrio para peak time.", spotifyUrl: "https://open.spotify.com/search/DYEN", youtubeUrl: "https://www.youtube.com/results?search_query=DYEN" },
@@ -2053,7 +2145,7 @@ const STYLE_INFO_PT = {
   full_on_morning: "Leitura mais melodica e aberta do Full-On, com harmonias luminosas e clima de amanhecer.",
   progressive_psy: "Psy progressivo com groove linear, poucas quebras e evolucao gradual para longos sets.",
   hi_tech: "Psy de altissima velocidade, glitchs rapidos e muita pressao ritmica, comum em picos de energia.",
-  dark_progressive: "Mistura progressivo com assinatura dark: andamento controlado e atmosfera mais tensa.",
+  dark_progressive: "PROG DARK (dark progressive/zenonesque): groove psicodelico hipnotico, timbres sombrios e progressao de longa duração.",
   goa_trance: "Raiz melodica do psy/trance, com linhas acidas, arpejos classicos e pegada psicodelica vintage.",
   psy_comercial: "Psy com formula mais radio/festival mainstream, hooks mais simples e refrões diretos.",
   trance_uplifting: "Trance melodico com breakdown emocional e retornos energeticos, foco em euforia.",
@@ -2700,7 +2792,32 @@ const STYLE_ARTIST_SEEDS = {
   psy_comercial: ["Skazi", "Paranormal Attack", "Sesto Sento", "Mandragora", "Claudinho Brasil", "Vini Vici", "Blastoyz", "Vegas"],
   progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Perfect Stranger", "Nerso", "Morten Granau"],
   hi_tech: [...HITECH_ARTIST_ROSTER],
-  dark_progressive: ["Vermont", "D-Nox", "Sensient", "E-Clip", "Kromagon", "Hypogeo", "Unseen Dimensions", "Slip Hypnotic"],
+  dark_progressive: [
+    "Vermont",
+    "D-Nox",
+    "Sensient",
+    "E-Clip",
+    "Kromagon",
+    "Hypogeo",
+    "Unseen Dimensions",
+    "Slip Hypnotic",
+    "Grouch",
+    "Merkaba",
+    "Sumiruna",
+    "Evil Oil Man",
+    "Molecc",
+    "Dividuum",
+    "Doonz",
+    "AIRI",
+    "Elberg",
+    "Ambler",
+    "Sourone",
+    "Hybrid",
+    "Gumnut",
+    "ETN",
+    "Hellquist",
+    "Paracozm"
+  ],
   goa_trance: ["Astrix", "Hallucinogen", "Goasia", "Man With No Name", "Filteria", "Khetzal", "Electric Universe", "X-Dream"],
   trance_uplifting: ["Armin van Buuren", "Aly & Fila", "Above & Beyond", "Giuseppe Ottaviani", "Craig Connelly", "Ferry Corsten", "Paul van Dyk", "John O'Callaghan"],
   techno: ["ANNA", "Charlotte de Witte", "Amelie Lens", "Enrico Sangiuliano", "Adam Beyer", "Maceo Plex", "Sama Abdulhadi", "FJAAK"],
@@ -2800,6 +2917,27 @@ const ARTIST_STYLE_OVERRIDES = {
   "captain hook": ["progressive_psy"],
   "liquid soul": ["progressive_psy"],
   "perfect stranger": ["progressive_psy"],
+  "vermont": ["dark_progressive"],
+  "d-nox": ["dark_progressive"],
+  "sensient": ["dark_progressive"],
+  "e-clip": ["dark_progressive"],
+  "kromagon": ["dark_progressive"],
+  "hypogeo": ["dark_progressive"],
+  "unseen dimensions": ["dark_progressive"],
+  "slip hypnotic": ["dark_progressive"],
+  "grouch": ["dark_progressive"],
+  "merkaba": ["dark_progressive"],
+  "sumiruna": ["dark_progressive"],
+  "evil oil man": ["dark_progressive"],
+  "molecc": ["dark_progressive"],
+  "dividuum": ["dark_progressive"],
+  "doonz": ["dark_progressive"],
+  "airi": ["dark_progressive"],
+  "elberg": ["dark_progressive"],
+  "ambler": ["dark_progressive"],
+  "sourone": ["dark_progressive"],
+  "hybrid": ["dark_progressive"],
+  "gumnut": ["dark_progressive"],
   "dubdogz": ["tech_house", "house"],
   "audio syntax": ["dark_experimental"],
   "audiosyntax": ["dark_experimental"],
@@ -7691,6 +7829,7 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Outros eletrônicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
+        dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
@@ -7708,6 +7847,7 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Other relevant electronic styles"],
       styleSpecial: {
         psy_comercial: "Commercial Psy / Chacotas",
+        dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
@@ -7725,6 +7865,7 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Otros estilos electrónicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
+        dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"

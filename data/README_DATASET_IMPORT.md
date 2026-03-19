@@ -8,6 +8,7 @@ O app tenta importar automaticamente estes arquivos (se existirem):
 
 - `tracks.json`
 - `tracks.csv`
+- `prog_dark_tracks.csv`
 - `artists.json`
 - `artists.csv`
 - `data/psytrance_db_v14.jsonl`

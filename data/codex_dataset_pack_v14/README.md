@@ -3,6 +3,7 @@
 ## Conteúdo
 - data/psytrance_db_v14.jsonl (891 artistas)
 - data/psycore_db_v14.jsonl (psycore auditado)
+- prog_dark_tracks.csv (seed dedicado de PROG DARK / dark progressive)
 - AGENTS.md (instruções que o Codex lê automaticamente)
 - CODEX_PROMPT.txt (prompt pronto)
 
