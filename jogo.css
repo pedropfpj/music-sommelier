@@ -1,0 +1,258 @@
+:root {
+  --bg-0: #050b14;
+  --bg-1: #071a2a;
+  --bg-2: #0f2e3f;
+  --text: #edf8ff;
+  --muted: #93b8cc;
+  --cyan: #36f8d4;
+  --orange: #ff914d;
+  --line: rgba(170, 225, 255, 0.2);
+  --panel: rgba(5, 20, 31, 0.72);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 18% 14%, rgba(54, 248, 212, 0.24), transparent 32%),
+    radial-gradient(circle at 82% 20%, rgba(255, 145, 77, 0.2), transparent 34%),
+    radial-gradient(circle at 50% 92%, rgba(103, 190, 230, 0.2), transparent 40%),
+    linear-gradient(150deg, var(--bg-0), var(--bg-1) 48%, var(--bg-2));
+  overflow: hidden;
+}
+
+.game-shell {
+  width: min(1100px, 96vw);
+  margin: 1.2rem auto;
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.hud {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.hud-block {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.95rem;
+  padding: 0.65rem 0.75rem;
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 0.15rem;
+}
+
+.hud-label {
+  color: var(--muted);
+  font-size: 0.73rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hud strong {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+  font-weight: 800;
+}
+
+#gravityValue {
+  color: #a8ffef;
+}
+
+.canvas-wrap {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba(176, 228, 255, 0.28);
+  box-shadow:
+    0 24px 40px rgba(3, 14, 25, 0.42),
+    inset 0 0 0 1px rgba(190, 235, 255, 0.1);
+}
+
+.canvas-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(circle at 25% 40%, rgba(54, 248, 212, 0.18), transparent 30%),
+    radial-gradient(circle at 74% 66%, rgba(255, 145, 77, 0.18), transparent 33%);
+  animation: auraPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: min(68vh, 640px);
+  display: block;
+  touch-action: manipulation;
+  background:
+    radial-gradient(circle at 16% 16%, rgba(72, 156, 184, 0.24), transparent 38%),
+    linear-gradient(180deg, rgba(4, 14, 21, 0.9), rgba(5, 24, 34, 0.84));
+}
+
+.flash-text {
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  transform: translateX(-50%) scale(0.95);
+  z-index: 4;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1rem, 2.6vw, 1.8rem);
+  color: #d8fff8;
+  text-shadow: 0 0 24px rgba(54, 248, 212, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flash-text.show {
+  animation: flashReveal 620ms ease;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 10, 18, 0.64);
+  backdrop-filter: blur(8px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  width: min(590px, 92vw);
+  background:
+    radial-gradient(circle at 16% 24%, rgba(54, 248, 212, 0.2), transparent 35%),
+    radial-gradient(circle at 88% 72%, rgba(255, 145, 77, 0.16), transparent 32%),
+    rgba(4, 18, 31, 0.86);
+  border: 1px solid rgba(181, 232, 255, 0.36);
+  border-radius: 1.15rem;
+  padding: 1.3rem;
+  display: grid;
+  gap: 0.8rem;
+  box-shadow: 0 20px 36px rgba(2, 10, 18, 0.5);
+}
+
+.kicker {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+h1 {
+  font-size: clamp(2rem, 4.7vw, 3.2rem);
+}
+
+h2 {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+}
+
+.description {
+  color: #e5f4ff;
+  line-height: 1.42;
+}
+
+.tips {
+  display: grid;
+  gap: 0.4rem;
+  color: #c7e6f8;
+  font-size: 0.97rem;
+}
+
+button {
+  border: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  font-size: 1.03rem;
+  letter-spacing: 0.02em;
+  color: #08141f;
+  background: linear-gradient(120deg, var(--cyan), #64ffd9);
+  padding: 0.76rem 1rem;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 180ms ease;
+  box-shadow: 0 12px 28px rgba(54, 248, 212, 0.28);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.controls {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@keyframes auraPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08) translateY(-1%);
+  }
+}
+
+@keyframes flashReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.92);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px) scale(1.04);
+  }
+}
+
+@media (max-width: 760px) {
+  .game-shell {
+    width: 96vw;
+    margin: 0.7rem auto;
+  }
+
+  .hud {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #gameCanvas {
+    height: min(63vh, 520px);
+  }
+
+  .controls {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

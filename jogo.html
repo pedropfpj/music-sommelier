@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gravity Tap Arena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="jogo.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="hud">
+        <div class="hud-block">
+          <span class="hud-label">Score</span>
+          <strong id="scoreValue">0</strong>
+        </div>
+        <div class="hud-block">
+          <span class="hud-label">Onda</span>
+          <strong id="waveValue">1</strong>
+        </div>
+        <div class="hud-block">
+          <span class="hud-label">Gravidade</span>
+          <strong id="gravityValue">Baixo</strong>
+        </div>
+        <div class="hud-block">
+          <span class="hud-label">Recorde</span>
+          <strong id="bestValue">0</strong>
+        </div>
+      </header>
+
+      <section class="canvas-wrap">
+        <canvas id="gameCanvas" aria-label="Gravity Tap Arena jogo"></canvas>
+        <div id="flashText" class="flash-text"></div>
+      </section>
+
+      <section id="menuOverlay" class="overlay">
+        <div class="overlay-card">
+          <p class="kicker">Jogo rápido e diferente</p>
+          <h1>Gravity Tap Arena</h1>
+          <p class="description">
+            Sobreviva em uma arena onde só existe um comando:
+            <strong>Space</strong> ou <strong>toque</strong> para inverter a gravidade.
+          </p>
+          <div class="tips">
+            <p>1. Você é puxado para cima ou para baixo o tempo todo.</p>
+            <p>2. Desvie de estilhaços e feixes que ativam em ondas.</p>
+            <p>3. Quase-colisões rendem bônus de score.</p>
+          </div>
+          <button id="startBtn" type="button">Começar agora</button>
+        </div>
+      </section>
+
+      <section id="gameOverOverlay" class="overlay hidden">
+        <div class="overlay-card">
+          <p class="kicker">Fim de rodada</p>
+          <h2>Arena comprometida</h2>
+          <p id="resultText" class="description">Seu score: 0</p>
+          <button id="restartBtn" type="button">Jogar de novo</button>
+        </div>
+      </section>
+
+      <footer class="controls">
+        <span>Controles: Space, clique ou toque</span>
+      </footer>
+    </main>
+
+    <script src="jogo.js"></script>
+  </body>
+</html>
