@@ -1552,6 +1552,7 @@ const discoveryCatalog = [
   { name: "Atwork", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/search/Atwork+freeform+psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Atwork+freeform+psytrance" },
   { name: "At Work", style: "freeform", bio: "Variação de grafia para buscar o projeto Atwork no eixo freeform psy.", spotifyUrl: "https://open.spotify.com/search/At%20Work%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
   { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
+  { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/search/Fractal%20Cowboys%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
   { name: "Fagin's Reject", style: "hi_tech", bio: "Hi-tech de alta densidade ritmica.", spotifyUrl: "https://open.spotify.com/search/Fagins%20Reject", youtubeUrl: "https://www.youtube.com/results?search_query=Fagins+Reject" },
   { name: "Audiophatik", style: "hi_tech", bio: "Hi-tech de alta rotação com design sonoro intenso.", spotifyUrl: "https://open.spotify.com/search/Audiophatik+hitech", youtubeUrl: "https://www.youtube.com/results?search_query=Audiophatik+hitech+psy" },
   { name: "Technical Hitch", style: "hi_tech", bio: "Nome forte do hi-tech psicodélico de festival.", spotifyUrl: "https://open.spotify.com/search/Technical+Hitch", youtubeUrl: "https://www.youtube.com/results?search_query=Technical+Hitch+hitech" },
@@ -2793,7 +2794,7 @@ const STYLE_ARTIST_SEEDS = {
     "VvV"
   ],
   psycore: [...PSYCORE_ARTIST_ROSTER],
-  freeform: ["Atwork", "At Work", "Hongos Longos"],
+  freeform: ["Atwork", "At Work", "Hongos Longos", "Fractal Cowboys"],
   full_on: [
     "Avalon",
     "Tristan",
@@ -2992,6 +2993,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "atwork": ["freeform"],
   "at work": ["freeform"],
   "hongos longos": ["freeform"],
+  "fractal cowboys": ["freeform"],
   "cindervomit": ["slambient", "psycore"],
   "endless knot collective": ["slambient"],
   "phyllorum": ["slambient"],
