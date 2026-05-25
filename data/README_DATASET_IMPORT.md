@@ -37,6 +37,8 @@ O app tenta importar automaticamente estes arquivos (se existirem):
 - `country` / `city`
 - `artist_bio`
 
+Aliases como `freeform`, `freeform psy`, `freeform psytrance`, `suomi` e `suomisaundi` sao normalizados para o subgenero `freeform` dentro de psytrance.
+
 ## Colunas recomendadas (artists)
 
 - `artist` (ou `name`)

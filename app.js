@@ -4,6 +4,7 @@ const STYLE_TO_FAMILY = {
   dark_psy: "psytrance",
   dark_experimental: "psytrance",
   psycore: "psytrance",
+  freeform: "psytrance",
   full_on: "psytrance",
   full_on_night: "psytrance",
   full_on_morning: "psytrance",
@@ -50,6 +51,7 @@ const STYLE_SEARCH_TERMS = {
   dark_psy: "dark psy psytrance",
   dark_progressive: "prog dark dark progressive zenonesque psy",
   psycore: "psycore darkpsy hitech psytrance",
+  freeform: "freeform psytrance suomisaundi",
   tech_house: "tech house",
   full_on: "full on psytrance",
   full_on_night: "full on night psytrance",
@@ -71,6 +73,7 @@ const STYLE_TO_VIBE_THEME = {
   dark_experimental: "dark",
   dark_progressive: "dark",
   psycore: "dark",
+  freeform: "psy",
   full_on_night: "dark",
   slambient: "dark",
   techno: "techno",
@@ -363,6 +366,13 @@ const DATASET_STYLE_ALIASES = {
   experimentaldark: "dark_experimental",
   psycore: "psycore",
   psy_core: "psycore",
+  freeform: "freeform",
+  freeformpsy: "freeform",
+  freeformpsytrance: "freeform",
+  freeformtrance: "freeform",
+  free_form: "freeform",
+  suomi: "freeform",
+  suomisaundi: "freeform",
   fullon: "full_on",
   fullonnight: "full_on_night",
   fullonmorning: "full_on_morning",
@@ -1539,6 +1549,9 @@ const discoveryCatalog = [
   { name: "Eliah", style: "dark_experimental", bio: "Dark experimental técnico com desenho sonoro detalhado.", spotifyUrl: "https://open.spotify.com/search/Eliah+dark+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Eliah+dark+experimental" },
   { name: "Saturnin", style: "dark_experimental", bio: "Paisagens obscuras e abordagem experimental voltada para pista.", spotifyUrl: "https://open.spotify.com/search/Saturnin+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Saturnin+dark+psy" },
   { name: "Xcursion", style: "dark_experimental", bio: "Dark experimental com acento cerebral e estrutura mutante.", spotifyUrl: "https://open.spotify.com/search/Xcursion+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Xcursion+dark+experimental" },
+  { name: "Atwork", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/search/Atwork+freeform+psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Atwork+freeform+psytrance" },
+  { name: "At Work", style: "freeform", bio: "Variação de grafia para buscar o projeto Atwork no eixo freeform psy.", spotifyUrl: "https://open.spotify.com/search/At%20Work%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
+  { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
   { name: "Fagin's Reject", style: "hi_tech", bio: "Hi-tech de alta densidade ritmica.", spotifyUrl: "https://open.spotify.com/search/Fagins%20Reject", youtubeUrl: "https://www.youtube.com/results?search_query=Fagins+Reject" },
   { name: "Audiophatik", style: "hi_tech", bio: "Hi-tech de alta rotação com design sonoro intenso.", spotifyUrl: "https://open.spotify.com/search/Audiophatik+hitech", youtubeUrl: "https://www.youtube.com/results?search_query=Audiophatik+hitech+psy" },
   { name: "Technical Hitch", style: "hi_tech", bio: "Nome forte do hi-tech psicodélico de festival.", spotifyUrl: "https://open.spotify.com/search/Technical+Hitch", youtubeUrl: "https://www.youtube.com/results?search_query=Technical+Hitch+hitech" },
@@ -2064,7 +2077,9 @@ const STYLE_COVERAGE_OVERRIDES = {
   slambient: { artists: 8, labels: 1, tracks: 14 },
   dark_experimental: { artists: 12, labels: 10, tracks: 24 },
   // Psycore depende fortemente de hidratação por artistas seed; não exige muitos labels para destravar recomendação.
-  psycore: { artists: 8, labels: 0, tracks: 10 }
+  psycore: { artists: 8, labels: 0, tracks: 10 },
+  // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
+  freeform: { artists: 2, labels: 0, tracks: 6 }
 };
 const COVERAGE_MAX_PASSES = 5;
 const FAST_COVERAGE_MAX_PASSES = 2;
@@ -2112,6 +2127,7 @@ const STYLE_BPM_RULES = {
   dark_psy: { min: 154, max: 175 },
   dark_experimental: { min: 152, max: 172 },
   psycore: { min: 175, max: 220 },
+  freeform: { min: 138, max: 156 },
   full_on: { min: 142, max: 150 },
   full_on_night: { min: 146, max: 154 },
   full_on_morning: { min: 142, max: 149 },
@@ -2159,6 +2175,7 @@ const STYLE_INFO_PT = {
   dark_psy: "Sonoridade mais sombria e agressiva, com design de som cortante e narrativa noturna.",
   dark_experimental: "Cruza dark psy com texturas experimentais, arranjos menos previsiveis e timbres abstratos.",
   psycore: "Subestilo extremo do psy, com muita densidade ritmica, recortes secos e altissima intensidade.",
+  freeform: "Psytrance livre e experimental, com estruturas menos previsiveis, groove mutante e humor psicodelico underground.",
   full_on: "Full-On classico de pista: groove reto, drops claros e leads melodicos para energia constante.",
   full_on_night: "Leitura mais noturna do Full-On, geralmente mais pesada, seca e focada em impacto de madrugada.",
   full_on_morning: "Leitura mais melodica e aberta do Full-On, com harmonias luminosas e clima de amanhecer.",
@@ -2776,6 +2793,7 @@ const STYLE_ARTIST_SEEDS = {
     "VvV"
   ],
   psycore: [...PSYCORE_ARTIST_ROSTER],
+  freeform: ["Atwork", "At Work", "Hongos Longos"],
   full_on: [
     "Avalon",
     "Tristan",
@@ -2971,6 +2989,9 @@ const ARTIST_STYLE_OVERRIDES = {
   "audio syntax": ["dark_experimental"],
   "audiosyntax": ["dark_experimental"],
   "sectio aurea": ["dark_experimental"],
+  "atwork": ["freeform"],
+  "at work": ["freeform"],
+  "hongos longos": ["freeform"],
   "cindervomit": ["slambient", "psycore"],
   "endless knot collective": ["slambient"],
   "phyllorum": ["slambient"],
@@ -6861,7 +6882,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
-    heroDesc: "Inclui psytrance (forest/dark/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
+    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
     recommendBtn: "Gerar recomendação",
     rerollBtn: "Nova sugestão no mesmo perfil",
     surpriseBtn: "Surpreender",
@@ -7145,7 +7166,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
-    heroDesc: "Includes psytrance (forest/dark/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass, and other key subgenres.",
+    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass, and other key subgenres.",
     recommendBtn: "Generate recommendation",
     rerollBtn: "New suggestion with same profile",
     surpriseBtn: "Surprise me",
@@ -7429,7 +7450,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
     heroTitle: "Curaduría electrónica con descubrimiento real",
-    heroDesc: "Incluye psytrance (forest/dark/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass y otros subgéneros clave.",
+    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass y otros subgéneros clave.",
     recommendBtn: "Generar recomendación",
     rerollBtn: "Nueva sugerencia en el mismo perfil",
     surpriseBtn: "Sorprenderme",
@@ -7909,6 +7930,7 @@ function localizeOptionLabels() {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
+        freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
@@ -7927,6 +7949,7 @@ function localizeOptionLabels() {
         psy_comercial: "Commercial Psy / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
+        freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
@@ -7945,6 +7968,7 @@ function localizeOptionLabels() {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
+        freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
@@ -16891,10 +16915,10 @@ async function loadEventsForArtist(artist) {
 const TASTE_TUNE_STYLES = {
   heavier: ["hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
   melodic: ["melodic_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
-  underground: ["forest_psy", "dark_experimental", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
+  underground: ["freeform", "forest_psy", "dark_experimental", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
   faster: ["hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
   familiar: ["tech_house", "house", "melodic_techno", "full_on", "drum_and_bass", "progressive_house"],
-  weirder: ["idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
+  weirder: ["freeform", "idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
 };
 
 function tuneLabel(mode = "") {
