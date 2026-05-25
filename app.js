@@ -1722,6 +1722,10 @@ const introQuote = document.getElementById("introQuote");
 const introContinueBtn = document.getElementById("introContinueBtn");
 const audioToggleBtn = document.getElementById("audioToggleBtn");
 const audioToggleLabel = document.getElementById("audioToggleLabel");
+const audioVolumeControl = document.getElementById("audioVolumeControl");
+const audioVolumeLabel = document.getElementById("audioVolumeLabel");
+const audioVolumeSlider = document.getElementById("audioVolumeSlider");
+const audioVolumeValue = document.getElementById("audioVolumeValue");
 const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
 const authScreen = document.getElementById("authScreen");
@@ -2024,6 +2028,7 @@ let introAmbientArpTimer = 0;
 let audioUnavailable = false;
 let audioUnlocked = false;
 let audioEnabled = true;
+let audioVolume = 0.8;
 let openingStingPlayed = false;
 let openingStingPending = false;
 let searchAudioPulseTimer = 0;
@@ -2052,6 +2057,7 @@ const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v11";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
+const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const AUDIO_GAIN_PROFILE = {
   masterTarget: 1.68,
   fxBusGain: 1.18,
@@ -6952,6 +6958,7 @@ const I18N = {
     audioOn: "Som ligado",
     audioOff: "Som desligado",
     audioActivateHint: "Toque na tela para liberar audio no navegador.",
+    volumeLabel: "Volume",
     langKicker: "Escolha seu idioma",
     langTitle: "Selecione o idioma",
     langDesc: "Escolha o idioma para toda a experiência do app.",
@@ -7236,6 +7243,7 @@ const I18N = {
     audioOn: "Sound on",
     audioOff: "Sound off",
     audioActivateHint: "Tap the screen once to unlock browser audio.",
+    volumeLabel: "Volume",
     langKicker: "Choose your language",
     langTitle: "Select your language",
     langDesc: "Choose the language for the full app experience.",
@@ -7520,6 +7528,7 @@ const I18N = {
     audioOn: "Sonido activo",
     audioOff: "Sonido inactivo",
     audioActivateHint: "Toca la pantalla una vez para habilitar audio en el navegador.",
+    volumeLabel: "Volumen",
     langKicker: "Elige tu idioma",
     langTitle: "Selecciona tu idioma",
     langDesc: "Elige el idioma para toda la experiencia de la app.",
@@ -8698,14 +8707,63 @@ function persistAudioPreference(enabled) {
   }
 }
 
+function readStoredAudioVolume() {
+  try {
+    const stored = Number(localStorage.getItem(AUDIO_VOLUME_STORAGE_KEY));
+    if (Number.isFinite(stored)) return Math.max(0, Math.min(1, stored));
+  } catch (_err) {
+    // ignore storage failures
+  }
+  return 0.8;
+}
+
+function persistAudioVolume(volume) {
+  try {
+    localStorage.setItem(AUDIO_VOLUME_STORAGE_KEY, String(Math.max(0, Math.min(1, volume))));
+  } catch (_err) {
+    // ignore storage failures
+  }
+}
+
+function audioVolumePercent() {
+  return Math.round(Math.max(0, Math.min(1, audioVolume)) * 100);
+}
+
 function syncPreviewAudioState() {
   if (!trackPreview) return;
-  const shouldMute = !audioEnabled || audioUnavailable;
+  const shouldMute = !audioEnabled || audioUnavailable || audioVolume <= 0.001;
   trackPreview.muted = shouldMute;
-  if (shouldMute) return;
-  if (!Number.isFinite(trackPreview.volume) || trackPreview.volume <= 0.05) {
-    trackPreview.volume = 1;
+  if (!shouldMute) {
+    trackPreview.volume = Math.max(0, Math.min(1, audioVolume));
   }
+}
+
+function applyAudioMasterVolume({ immediate = false } = {}) {
+  if (!audioMasterGain || !audioContext) return;
+  const now = audioContext.currentTime;
+  const target = audioEnabled && !audioUnavailable && audioVolume > 0.001
+    ? AUDIO_GAIN_PROFILE.masterTarget * Math.max(0, Math.min(1, audioVolume))
+    : 0.0001;
+  audioMasterGain.gain.cancelScheduledValues(now);
+  if (immediate) {
+    audioMasterGain.gain.setValueAtTime(target, now);
+  } else {
+    audioMasterGain.gain.setTargetAtTime(target, now, 0.06);
+  }
+}
+
+function updateAudioVolumeUi() {
+  const percent = audioVolumePercent();
+  const volumeText = t("volumeLabel");
+  if (audioVolumeSlider) {
+    audioVolumeSlider.value = String(percent);
+    audioVolumeSlider.setAttribute("aria-valuenow", String(percent));
+    audioVolumeSlider.setAttribute("aria-label", `${volumeText} ${percent}%`);
+    audioVolumeSlider.title = `${volumeText}: ${percent}%`;
+  }
+  if (audioVolumeLabel) audioVolumeLabel.textContent = volumeText;
+  if (audioVolumeValue) audioVolumeValue.textContent = `${percent}%`;
+  if (audioVolumeControl) audioVolumeControl.classList.toggle("muted", percent === 0 || !audioEnabled || audioUnavailable);
 }
 
 function updateAudioToggleUi() {
@@ -8718,7 +8776,21 @@ function updateAudioToggleUi() {
   if (audioToggleLabel) {
     audioToggleLabel.textContent = active ? t("audioOn") : t("audioOff");
   }
+  updateAudioVolumeUi();
   syncPreviewAudioState();
+}
+
+function setAudioVolume(nextVolume, { persist = true, fromUser = false } = {}) {
+  const normalizedVolume = Number(nextVolume);
+  audioVolume = Math.max(0, Math.min(1, Number.isFinite(normalizedVolume) ? normalizedVolume : 0.8));
+  if (persist) persistAudioVolume(audioVolume);
+  updateAudioVolumeUi();
+  syncPreviewAudioState();
+  if (fromUser && audioEnabled && audioVolume > 0.001) {
+    audioUnlocked = true;
+  }
+  if (audioEnabled && audioVolume > 0.001) ensureAudioReady();
+  applyAudioMasterVolume({ immediate: false });
 }
 
 function preAppScreensVisible() {
@@ -8789,7 +8861,7 @@ function ensureAudioReady() {
   try {
     const now = audioContext.currentTime;
     audioMasterGain.gain.cancelScheduledValues(now);
-    audioMasterGain.gain.setTargetAtTime(AUDIO_GAIN_PROFILE.masterTarget, now, 0.08);
+    audioMasterGain.gain.setTargetAtTime(AUDIO_GAIN_PROFILE.masterTarget * Math.max(0, Math.min(1, audioVolume)), now, 0.08);
     if (audioContext.state === "suspended") {
       void audioContext.resume().catch(() => {});
     }
@@ -9293,9 +9365,7 @@ function setAudioEnabled(nextEnabled, { persist = true, fromUser = false } = {})
     clearIntroAmbientArp();
     stopSearchAudioPulse();
     if (audioMasterGain && audioContext) {
-      const now = audioContext.currentTime;
-      audioMasterGain.gain.cancelScheduledValues(now);
-      audioMasterGain.gain.setTargetAtTime(0.0001, now, 0.05);
+      applyAudioMasterVolume({ immediate: false });
     }
   }
   updateAudioToggleUi();
@@ -9333,6 +9403,7 @@ function registerAudioUnlockGestures() {
 
 function bootstrapAudio() {
   audioEnabled = readStoredAudioPreference();
+  audioVolume = readStoredAudioVolume();
   updateAudioToggleUi();
   registerAudioUnlockGestures();
   if (audioEnabled && initAudioEngine() && audioContext) {
@@ -9672,7 +9743,8 @@ function hasDedicatedClickSfxControl(el) {
     quizSubmitBtn,
     quizNextBtn,
     quizRetryBtn,
-    quizCloseBtn
+    quizCloseBtn,
+    audioVolumeSlider
   ];
   return controls.includes(el);
 }
@@ -17474,6 +17546,15 @@ function bindPreferenceAutosave() {
 
 bind(audioToggleBtn, "click", () => {
   setAudioEnabled(!audioEnabled, { persist: true, fromUser: true });
+});
+
+bind(audioVolumeSlider, "input", () => {
+  const percent = Number(audioVolumeSlider?.value);
+  setAudioVolume(Number.isFinite(percent) ? percent / 100 : audioVolume, { persist: true, fromUser: true });
+});
+
+bind(audioVolumeSlider, "change", () => {
+  playUiSfx("tap");
 });
 
 bind(introContinueBtn, "click", () => {

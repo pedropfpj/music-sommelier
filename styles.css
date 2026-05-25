@@ -190,6 +190,52 @@ p {
   opacity: 0.42;
 }
 
+.audio-volume-control {
+  position: fixed;
+  top: 0.9rem;
+  right: 9.9rem;
+  z-index: 14;
+  display: grid;
+  grid-template-columns: auto minmax(96px, 138px) 3.2rem;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid rgba(121, 211, 255, 0.36);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 12% 16%, rgba(109, 255, 208, 0.15), transparent 42%),
+    linear-gradient(145deg, rgba(6, 14, 33, 0.88), rgba(11, 21, 49, 0.8));
+  color: #dff5ff;
+  box-shadow: 0 12px 28px rgba(3, 11, 29, 0.35), inset 0 0 0 1px rgba(142, 207, 255, 0.07);
+}
+
+.audio-volume-control label,
+.audio-volume-control span {
+  font-family: "Syne", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.audio-volume-control span {
+  color: var(--cyan);
+  text-align: right;
+}
+
+.audio-volume-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--cyan);
+  cursor: pointer;
+}
+
+.audio-volume-control.muted {
+  opacity: 0.74;
+}
+
 .floating-sonic-layer {
   position: fixed;
   inset: 0;
@@ -3696,6 +3742,20 @@ input[type="range"] {
     right: 0.64rem;
     font-size: 0.66rem;
     padding: 0.4rem 0.6rem;
+  }
+
+  .audio-volume-control {
+    top: 3.25rem;
+    right: 0.64rem;
+    grid-template-columns: auto minmax(86px, 1fr) 2.8rem;
+    width: min(92vw, 280px);
+    min-height: 36px;
+    padding: 0.36rem 0.54rem;
+  }
+
+  .audio-volume-control label,
+  .audio-volume-control span {
+    font-size: 0.62rem;
   }
 
   .language-card {
