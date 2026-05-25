@@ -17204,7 +17204,7 @@ bind(startBtn, "click", () => {
 });
 
 bind(startSurpriseBtn, "click", () => {
-  openQuickSurprisePanel();
+  enterAppFromWelcome({ surprise: true });
 });
 
 bind(quickSurpriseCancelBtn, "click", () => {
