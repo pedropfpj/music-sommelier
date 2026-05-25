@@ -50,7 +50,8 @@ App web estiloso e funcional para curadoria de musica eletronica.
 - Techno: techno, acid techno, hard techno, minimal techno, melodic techno, industrial, peak time
 - House: house, deep house, tech house, progressive house, afro house, organic house, bass house, electro house
 - DnB/Bass: drum and bass, liquid dnb, neurofunk, jump up, jungle, breakbeat, uk garage, future garage, dubstep
-- Outros: downtempo, ambient, idm, electro, hardstyle, uplifting trance
+- Hard Dance / Hardcore: gabber, hardstyle
+- Outros: downtempo, ambient, idm, electro, uplifting trance
 
 ## Como executar
 

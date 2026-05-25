@@ -43,6 +43,7 @@ const STYLE_TO_FAMILY = {
   slambient: "psytrance",
   idm: "leftfield",
   electro: "leftfield",
+  gabber: "hard_dance",
   hardstyle: "hard_dance"
 };
 
@@ -65,7 +66,8 @@ const STYLE_SEARCH_TERMS = {
   industrial_techno: "industrial techno",
   peak_time_techno: "peak time techno",
   minimal_techno: "minimal techno",
-  melodic_techno: "melodic techno"
+  melodic_techno: "melodic techno",
+  gabber: "gabber hardcore techno"
 };
 
 const STYLE_TO_VIBE_THEME = {
@@ -113,6 +115,7 @@ const STYLE_TO_VIBE_THEME = {
   idm: "leftfield",
   electro: "leftfield",
   trance_uplifting: "trance",
+  gabber: "hard",
   hardstyle: "hard"
 };
 
@@ -373,6 +376,11 @@ const DATASET_STYLE_ALIASES = {
   free_form: "freeform",
   suomi: "freeform",
   suomisaundi: "freeform",
+  gabber: "gabber",
+  gabba: "gabber",
+  hardcore: "gabber",
+  hardcoretechno: "gabber",
+  hardcoregabber: "gabber",
   fullon: "full_on",
   fullonnight: "full_on_night",
   fullonmorning: "full_on_morning",
@@ -1502,6 +1510,38 @@ const catalog = [
     labelBio: "Warp e pilar historico para artistas de vanguarda sonora."
   },
   {
+    style: "gabber",
+    song: "Braincracking",
+    artist: "Neophyte",
+    label: "Rotterdam Records",
+    bpm: "175+",
+    energy: "extreme",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Gabber classico com kick agressivo, andamento alto e energia crua de hardcore.",
+    spotifyUrl: "https://open.spotify.com/search/Neophyte%20Braincracking",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Neophyte+Braincracking",
+    beatportUrl: "https://www.beatport.com/search?q=Neophyte%20Braincracking",
+    artistBio: "Neophyte e um nome historico do gabber/hardcore holandes.",
+    labelBio: "Rotterdam Records e uma referencia do hardcore/gabber dos anos 90."
+  },
+  {
+    style: "gabber",
+    song: "Raise Your Fist",
+    artist: "Angerfist",
+    label: "Masters of Hardcore",
+    bpm: "175+",
+    energy: "extreme",
+    vocals: "vocal",
+    context: ["peak", "treino"],
+    vibe: "Hardcore/gabber moderno com kick frontal, vocal de impacto e pressao de festival.",
+    spotifyUrl: "https://open.spotify.com/search/Angerfist%20Raise%20Your%20Fist",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Angerfist+Raise+Your+Fist",
+    beatportUrl: "https://www.beatport.com/search?q=Angerfist%20Raise%20Your%20Fist",
+    artistBio: "Angerfist e uma das figuras mais conhecidas do hardcore/gabber contemporaneo.",
+    labelBio: "Masters of Hardcore e uma plataforma central do hardcore internacional."
+  },
+  {
     style: "hardstyle",
     song: "Imaginary",
     artist: "Brennan Heart",
@@ -1553,6 +1593,22 @@ const discoveryCatalog = [
   { name: "At Work", style: "freeform", bio: "Variação de grafia para buscar o projeto Atwork no eixo freeform psy.", spotifyUrl: "https://open.spotify.com/search/At%20Work%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
   { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
   { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/search/Fractal%20Cowboys%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
+  { name: "Angerfist", style: "gabber", bio: "Hardcore/gabber de alta energia, kicks agressivos e vocal de impacto.", spotifyUrl: "https://open.spotify.com/search/Angerfist+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Angerfist+gabber+hardcore" },
+  { name: "Neophyte", style: "gabber", bio: "Referencia historica do gabber e hardcore holandes.", spotifyUrl: "https://open.spotify.com/search/Neophyte+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Neophyte+gabber" },
+  { name: "Rotterdam Terror Corps", style: "gabber", bio: "Ato classico de Rotterdam ligado ao som gabber/hardcore mais frontal.", spotifyUrl: "https://open.spotify.com/search/Rotterdam%20Terror%20Corps", youtubeUrl: "https://www.youtube.com/results?search_query=Rotterdam+Terror+Corps+gabber" },
+  { name: "DJ Paul Elstak", style: "gabber", bio: "Pioneiro do hardcore/gabber holandes e figura importante da cena de Rotterdam.", spotifyUrl: "https://open.spotify.com/search/DJ%20Paul%20Elstak", youtubeUrl: "https://www.youtube.com/results?search_query=DJ+Paul+Elstak+gabber" },
+  { name: "The Stunned Guys", style: "gabber", bio: "Projeto italiano essencial para a ponte entre hardcore e gabber europeu.", spotifyUrl: "https://open.spotify.com/search/The%20Stunned%20Guys", youtubeUrl: "https://www.youtube.com/results?search_query=The+Stunned+Guys+gabber" },
+  { name: "DJ Mad Dog", style: "gabber", bio: "Hardcore/gabber italiano com presença forte em pistas e festivais.", spotifyUrl: "https://open.spotify.com/search/DJ%20Mad%20Dog%20gabber", youtubeUrl: "https://www.youtube.com/results?search_query=DJ+Mad+Dog+gabber" },
+  { name: "Korsakoff", style: "gabber", bio: "Hardcore/gabber com recorte melódico e energia de arena.", spotifyUrl: "https://open.spotify.com/search/Korsakoff+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Korsakoff+gabber" },
+  { name: "Promo", style: "gabber", bio: "Hardcore/gabber de pegada seca, pesada e orientada a pista.", spotifyUrl: "https://open.spotify.com/search/Promo+gabber+hardcore", youtubeUrl: "https://www.youtube.com/results?search_query=Promo+gabber+hardcore" },
+  { name: "Nosferatu", style: "gabber", bio: "Hardcore/gabber sombrio com kicks densos e arranjos de alto impacto.", spotifyUrl: "https://open.spotify.com/search/Nosferatu+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Nosferatu+gabber" },
+  { name: "Evil Activities", style: "gabber", bio: "Hardcore/gabber de festival com energia agressiva e memoravel.", spotifyUrl: "https://open.spotify.com/search/Evil%20Activities%20gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Evil+Activities+gabber" },
+  { name: "Tha Playah", style: "gabber", bio: "Hardcore/gabber moderno com peso e dinamica de peak time.", spotifyUrl: "https://open.spotify.com/search/Tha%20Playah%20gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Tha+Playah+gabber" },
+  { name: "Ophidian", style: "gabber", bio: "Hardcore sofisticado no eixo gabber, com atmosfera escura e desenho sonoro detalhado.", spotifyUrl: "https://open.spotify.com/search/Ophidian+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Ophidian+gabber" },
+  { name: "Drokz", style: "gabber", bio: "Nome extremo do hardcore/gabber, ligado a sons mais rapidos e brutos.", spotifyUrl: "https://open.spotify.com/search/Drokz+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Drokz+gabber" },
+  { name: "Lenny Dee", style: "gabber", bio: "Pioneiro do hardcore techno com conexao direta ao universo gabber.", spotifyUrl: "https://open.spotify.com/search/Lenny%20Dee%20gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Lenny+Dee+gabber" },
+  { name: "DJ Buzz Fuzz", style: "gabber", bio: "Figura classica do gabber/hardcore holandes e da cultura Thunderdome.", spotifyUrl: "https://open.spotify.com/search/DJ%20Buzz%20Fuzz%20gabber", youtubeUrl: "https://www.youtube.com/results?search_query=DJ+Buzz+Fuzz+gabber" },
+  { name: "Tommyknocker", style: "gabber", bio: "Hardcore/gabber italiano com kicks fortes e estética direta de pista.", spotifyUrl: "https://open.spotify.com/search/Tommyknocker+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Tommyknocker+gabber" },
   { name: "Fagin's Reject", style: "hi_tech", bio: "Hi-tech de alta densidade ritmica.", spotifyUrl: "https://open.spotify.com/search/Fagins%20Reject", youtubeUrl: "https://www.youtube.com/results?search_query=Fagins+Reject" },
   { name: "Audiophatik", style: "hi_tech", bio: "Hi-tech de alta rotação com design sonoro intenso.", spotifyUrl: "https://open.spotify.com/search/Audiophatik+hitech", youtubeUrl: "https://www.youtube.com/results?search_query=Audiophatik+hitech+psy" },
   { name: "Technical Hitch", style: "hi_tech", bio: "Nome forte do hi-tech psicodélico de festival.", spotifyUrl: "https://open.spotify.com/search/Technical+Hitch", youtubeUrl: "https://www.youtube.com/results?search_query=Technical+Hitch+hitech" },
@@ -2080,7 +2136,8 @@ const STYLE_COVERAGE_OVERRIDES = {
   // Psycore depende fortemente de hidratação por artistas seed; não exige muitos labels para destravar recomendação.
   psycore: { artists: 8, labels: 0, tracks: 10 },
   // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
-  freeform: { artists: 2, labels: 0, tracks: 6 }
+  freeform: { artists: 2, labels: 0, tracks: 6 },
+  gabber: { artists: 10, labels: 0, tracks: 16 }
 };
 const COVERAGE_MAX_PASSES = 5;
 const FAST_COVERAGE_MAX_PASSES = 2;
@@ -2167,6 +2224,7 @@ const STYLE_BPM_RULES = {
   slambient: { min: 155, max: 185 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
+  gabber: { min: 160, max: 220 },
   hardstyle: { min: 148, max: 160 }
 };
 
@@ -2215,6 +2273,7 @@ const STYLE_INFO_PT = {
   slambient: "Intersecao de ambient com psy escuro: drones, textura ritualistica e andamento hipnotico.",
   idm: "Eletronica experimental orientada a detalhe ritmico, estrutura complexa e escuta ativa.",
   electro: "Batidas secas e sintese retro-futurista com influencia de electro-funk e robotica.",
+  gabber: "Hardcore techno extremo, com kicks distorcidos, BPM alto e energia bruta de rave.",
   hardstyle: "Kick distorcido, leads antemicos e energia de hard dance para momentos de explosao."
 };
 
@@ -2923,6 +2982,26 @@ const STYLE_ARTIST_SEEDS = {
   slambient: [...SLAMBIENT_ARTIST_ROSTER],
   idm: ["Aphex Twin", "Autechre", "Boards of Canada", "Squarepusher", "Floating Points", "Plaid", "Clark", "Mike Paradinas"],
   electro: ["Drexciya", "Aux 88", "DJ Stingray", "The Hacker", "Jensen Interceptor", "Kraftwerk", "Helena Hauff", "Cybotron"],
+  gabber: [
+    "Angerfist",
+    "Neophyte",
+    "Rotterdam Terror Corps",
+    "DJ Paul Elstak",
+    "The Stunned Guys",
+    "DJ Mad Dog",
+    "Korsakoff",
+    "Promo",
+    "Nosferatu",
+    "Evil Activities",
+    "Tha Playah",
+    "Ophidian",
+    "Drokz",
+    "Lenny Dee",
+    "DJ Buzz Fuzz",
+    "Tommyknocker",
+    "Bass-D",
+    "Art of Fighters"
+  ],
   hardstyle: ["Brennan Heart", "Headhunterz", "Wildstylez", "Sub Zero Project", "D-Block & S-te-Fan", "Coone", "Da Tweekaz", "Ran-D"]
 };
 
@@ -2994,6 +3073,24 @@ const ARTIST_STYLE_OVERRIDES = {
   "at work": ["freeform"],
   "hongos longos": ["freeform"],
   "fractal cowboys": ["freeform"],
+  "angerfist": ["gabber"],
+  "neophyte": ["gabber"],
+  "rotterdam terror corps": ["gabber"],
+  "dj paul elstak": ["gabber"],
+  "the stunned guys": ["gabber"],
+  "dj mad dog": ["gabber"],
+  "korsakoff": ["gabber"],
+  "promo": ["gabber"],
+  "nosferatu": ["gabber"],
+  "evil activities": ["gabber"],
+  "tha playah": ["gabber"],
+  "ophidian": ["gabber"],
+  "drokz": ["gabber"],
+  "lenny dee": ["gabber"],
+  "dj buzz fuzz": ["gabber"],
+  "tommyknocker": ["gabber"],
+  "bass-d": ["gabber"],
+  "art of fighters": ["gabber"],
   "cindervomit": ["slambient", "psycore"],
   "endless knot collective": ["slambient"],
   "phyllorum": ["slambient"],
@@ -4660,7 +4757,7 @@ function hasSuspiciousDynamicText(value) {
 function hasGenreKeywordEntity(value) {
   const normalized = normalize(value || "").replace(/\s+/g, " ").trim();
   if (!normalized) return false;
-  return /\b(psytrance|psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|edm|ambient|downtempo|chill\s*out|chillout)\b/.test(normalized);
+  return /\b(psytrance|psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|gabber|gabba|hardcore|edm|ambient|downtempo|chill\s*out|chillout)\b/.test(normalized);
 }
 
 function hasAllowedMixTerm(title) {
@@ -4690,6 +4787,9 @@ function isLikelyGenreDescriptorEntity(value) {
     "fullon",
     "hitech",
     "psycore",
+    "gabber",
+    "gabba",
+    "hardcore",
     "goa",
     "uplifting",
     "progressive",
@@ -4741,10 +4841,10 @@ function isGenericAutoEntityName(value) {
   const rawLower = String(value || "").toLowerCase();
   if (!normalized) return true;
   const wordCount = normalized.split(" ").filter(Boolean).length;
-  const hasGenreTerm = /(psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|ambient|downtempo|chill\s*out|chillout)/.test(normalized);
+  const hasGenreTerm = /(psy|trance|techno|tecno|house|electro|eletronica|electronica|electronic|bass|dnb|dubstep|forest|dark|hitech|psycore|gabber|gabba|hardcore|ambient|downtempo|chill\s*out|chillout)/.test(normalized);
   const hasChannelTerm = /(music|mix|playlist|radio|channel|official|sets?)/.test(normalized);
-  const pureGenreName = /^(psy trance|psytrance|darkpsy|forest psy|dark psy|techno|tecno|house|electro|bass music)$/.test(normalized);
-  if (/\[\s*(psy|psytrance|trance|techno|house|electro|bass|dnb|dubstep|hitech|psycore|edm)\s*\]/.test(rawLower)) return true;
+  const pureGenreName = /^(psy trance|psytrance|darkpsy|forest psy|dark psy|techno|tecno|house|electro|bass music|gabber|gabba|hardcore techno)$/.test(normalized);
+  if (/\[\s*(psy|psytrance|trance|techno|house|electro|bass|dnb|dubstep|hitech|psycore|gabber|gabba|hardcore|edm)\s*\]/.test(rawLower)) return true;
   if (pureGenreName) return true;
   if (hasGenreTerm && hasChannelTerm) return true;
   if (wordCount <= 3 && hasGenreTerm && /(music|records|label|official)/.test(normalized)) return true;
@@ -4776,6 +4876,9 @@ function isGenreAliasArtistName(value) {
     "minimal",
     "melodic",
     "hardstyle",
+    "gabber",
+    "gabba",
+    "hardcore",
     "drum"
   ]);
   const firstToken = tokens[0];
@@ -6884,7 +6987,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
-    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
+    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
     recommendBtn: "Gerar recomendação",
     rerollBtn: "Nova sugestão no mesmo perfil",
     surpriseBtn: "Surpreender",
@@ -7168,7 +7271,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
-    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass, and other key subgenres.",
+    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass, and other key subgenres.",
     recommendBtn: "Generate recommendation",
     rerollBtn: "New suggestion with same profile",
     surpriseBtn: "Surprise me",
@@ -7452,7 +7555,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
     heroTitle: "Curaduría electrónica con descubrimiento real",
-    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), house, drum and bass y otros subgéneros clave.",
+    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass y otros subgéneros clave.",
     recommendBtn: "Generar recomendación",
     rerollBtn: "Nueva sugerencia en el mismo perfil",
     surpriseBtn: "Sorprenderme",
@@ -7927,7 +8030,7 @@ function localizeOptionLabels() {
       energyFirst: "Escolha a energia",
       bpmFirst: "Sem preferência",
       vocalsFirst: "Livre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Outros eletrônicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Outros eletrônicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
@@ -7946,7 +8049,7 @@ function localizeOptionLabels() {
       energyFirst: "Choose energy",
       bpmFirst: "No preference",
       vocalsFirst: "Any",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Other relevant electronic styles"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Other relevant electronic styles"],
       styleSpecial: {
         psy_comercial: "Commercial Psy / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
@@ -7965,7 +8068,7 @@ function localizeOptionLabels() {
       energyFirst: "Elige energía",
       bpmFirst: "Sin preferencia",
       vocalsFirst: "Libre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Otros estilos electrónicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Otros estilos electrónicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
@@ -16915,10 +17018,10 @@ async function loadEventsForArtist(artist) {
 }
 
 const TASTE_TUNE_STYLES = {
-  heavier: ["hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
+  heavier: ["gabber", "hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
   melodic: ["melodic_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
   underground: ["freeform", "forest_psy", "dark_experimental", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
-  faster: ["hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
+  faster: ["gabber", "hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
   familiar: ["tech_house", "house", "melodic_techno", "full_on", "drum_and_bass", "progressive_house"],
   weirder: ["freeform", "idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
 };
