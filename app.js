@@ -1716,7 +1716,6 @@ const knownArtistsEl = document.getElementById("knownArtists");
 const discoveryModeEl = document.getElementById("discoveryMode");
 const recommendBtn = document.getElementById("recommendBtn");
 const rerollBtn = document.getElementById("rerollBtn");
-const newArtistsBtn = document.getElementById("newArtistsBtn");
 const surpriseBtn = document.getElementById("surpriseBtn");
 const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 const resetAppBtn = document.getElementById("resetAppBtn");
@@ -8117,7 +8116,6 @@ function applyLanguage() {
   setText("#heroMission", t("appMission"));
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
-  setText("#newArtistsBtn", t("newArtistsBtn"));
   setText("#surpriseBtn", t("surpriseBtn"));
   setText("#adaptiveSurpriseBtn", t("adaptiveSurpriseBtn"));
   setText("#clearFiltersBtn", t("clearFiltersBtn"));
@@ -8521,6 +8519,16 @@ function persistAudioPreference(enabled) {
   }
 }
 
+function syncPreviewAudioState() {
+  if (!trackPreview) return;
+  const shouldMute = !audioEnabled || audioUnavailable;
+  trackPreview.muted = shouldMute;
+  if (shouldMute) return;
+  if (!Number.isFinite(trackPreview.volume) || trackPreview.volume <= 0.05) {
+    trackPreview.volume = 1;
+  }
+}
+
 function updateAudioToggleUi() {
   const active = Boolean(audioEnabled && !audioUnavailable);
   if (audioToggleBtn) {
@@ -8531,6 +8539,7 @@ function updateAudioToggleUi() {
   if (audioToggleLabel) {
     audioToggleLabel.textContent = active ? t("audioOn") : t("audioOff");
   }
+  syncPreviewAudioState();
 }
 
 function preAppScreensVisible() {
@@ -14929,10 +14938,7 @@ async function renderPreview(track) {
     });
 
     try {
-      trackPreview.muted = false;
-      if (!Number.isFinite(trackPreview.volume) || trackPreview.volume <= 0.05) {
-        trackPreview.volume = 1;
-      }
+      syncPreviewAudioState();
       trackPreview.currentTime = 0;
       await trackPreview.play();
       const previewLoadedMessage =
@@ -17445,8 +17451,6 @@ bind(clearFiltersBtn, "click", () => {
 });
 
 bind(resetAppBtn, "click", resetAppAsNewUser);
-
-bind(newArtistsBtn, "click", searchNewArtistsByStyle);
 
 bind(knownYesBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
