@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260319b" />
+    <link rel="stylesheet" href="styles.css?v=20260525d" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -439,7 +439,7 @@
       </section>
 
       <section id="resultPanel" class="panel hidden" aria-live="polite">
-        <h3>2) Faixa principal</h3>
+        <h3>Sua recomendação</h3>
         <article id="primaryTrackCard" class="result-card main-track">
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
@@ -523,6 +523,21 @@
           <div id="suggestionQueueList" class="suggestion-queue-list"></div>
         </article>
 
+        <article id="tasteTuningCard" class="result-card taste-tuning-card">
+          <div class="taste-tuning-head">
+            <p id="tasteTuningTitle" class="taste-tuning-title">Ajuste seu gosto</p>
+            <p id="tasteTuningHint" class="muted">Refine a próxima recomendação por sensação, sem mexer em filtros técnicos.</p>
+          </div>
+          <div id="tasteTuningActions" class="taste-tuning-actions" aria-label="Ajustes rápidos de gosto">
+            <button class="taste-tune-btn" type="button" data-tune="heavier">Mais pesado</button>
+            <button class="taste-tune-btn" type="button" data-tune="melodic">Mais melódico</button>
+            <button class="taste-tune-btn" type="button" data-tune="underground">Mais underground</button>
+            <button class="taste-tune-btn" type="button" data-tune="faster">Mais rápido</button>
+            <button class="taste-tune-btn" type="button" data-tune="familiar">Mais conhecido</button>
+            <button class="taste-tune-btn" type="button" data-tune="weirder">Mais estranho</button>
+          </div>
+        </article>
+
         <article id="discoveryCard" class="result-card discovery hidden">
           <p class="chip alt">Descoberta sugerida</p>
           <h4 id="discoveryArtistName"></h4>
@@ -536,7 +551,7 @@
         </article>
 
         <div class="feedback-grid">
-          <h3>3) Feedback</h3>
+          <h3>Ensine o app</h3>
           <div class="rating-panel">
             <div class="rating-head">
               <p id="ratingTitle" class="rating-title">Avalie esta recomendação</p>
@@ -565,8 +580,9 @@
         </div>
       </section>
 
-      <section id="detailsPanel" class="panel hidden">
-        <h3>4) Detalhes de artista e gravadora</h3>
+      <section id="detailsPanel" class="panel artist-hub-panel hidden">
+        <h3>Hub do artista</h3>
+        <p id="artistHubIntro" class="muted artist-hub-intro">Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.</p>
         <div class="details-grid">
           <article id="artistDetailsCard" class="details-card">
             <h4>Artista</h4>
@@ -584,15 +600,15 @@
         </div>
       </section>
 
-      <section id="eventsPanel" class="panel hidden">
-        <h3>5) Próximos eventos do artista curtido</h3>
+      <section id="eventsPanel" class="panel events-hub-panel hidden">
+        <h3>Agenda do artista</h3>
         <p id="eventsIntro" class="muted">Curta um artista para carregar agenda de shows.</p>
         <div id="eventsCalendar" class="events-calendar"></div>
         <ul id="eventsList" class="events-list"></ul>
       </section>
 
       <section id="spiritPanel" class="panel spirit-panel hidden" aria-live="polite">
-        <h3 id="spiritPanelTitle">6) Seu espírito musical</h3>
+        <h3 id="spiritPanelTitle">Seu espírito musical</h3>
         <p id="spiritIntro" class="muted">Ao completar 10 likes, seu espírito musical será revelado.</p>
         <article id="spiritCard" class="spirit-card hidden">
           <div class="spirit-avatar-wrap">
@@ -654,7 +670,7 @@
       </section>
 
       <section id="summaryPanel" class="panel">
-        <h3 id="summaryPanelTitle">7) Resumo de perfil</h3>
+        <h3 id="summaryPanelTitle">Mapa do seu gosto</h3>
         <p id="statsLine" class="muted">Nenhum feedback ainda.</p>
         <div class="profile-stats-grid">
           <article class="profile-stat-card metric">
@@ -729,6 +745,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260525c"></script>
+    <script src="app.js?v=20260525d"></script>
   </body>
 </html>

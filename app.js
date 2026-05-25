@@ -1792,6 +1792,10 @@ const suggestionQueueCard = document.getElementById("suggestionQueueCard");
 const suggestionQueueTitle = document.getElementById("suggestionQueueTitle");
 const suggestionQueueHint = document.getElementById("suggestionQueueHint");
 const suggestionQueueList = document.getElementById("suggestionQueueList");
+const tasteTuningCard = document.getElementById("tasteTuningCard");
+const tasteTuningTitle = document.getElementById("tasteTuningTitle");
+const tasteTuningHint = document.getElementById("tasteTuningHint");
+const tasteTuningActions = document.getElementById("tasteTuningActions");
 
 const discoveryArtistName = document.getElementById("discoveryArtistName");
 const discoveryMeta = document.getElementById("discoveryMeta");
@@ -1801,6 +1805,7 @@ const discoveryYoutubeLink = document.getElementById("discoveryYoutubeLink");
 const discoverySoundcloudLink = document.getElementById("discoverySoundcloudLink");
 
 const feedbackMessage = document.getElementById("feedbackMessage");
+const artistHubIntro = document.getElementById("artistHubIntro");
 const artistBio = document.getElementById("artistBio");
 const labelBio = document.getElementById("labelBio");
 const artistSocialsPanel = document.getElementById("artistSocialsPanel");
@@ -6904,6 +6909,18 @@ const I18N = {
     queueNext: "Próxima",
     queueUse: "Tocar esta",
     queueActivated: "Fila ativa: agora tocando {song}.",
+    tasteTuningTitle: "Ajuste seu gosto",
+    tasteTuningHint: "Refine a próxima recomendação por sensação, sem mexer em filtros técnicos.",
+    tasteTuneHeavier: "Mais pesado",
+    tasteTuneMelodic: "Mais melódico",
+    tasteTuneUnderground: "Mais underground",
+    tasteTuneFaster: "Mais rápido",
+    tasteTuneFamiliar: "Mais conhecido",
+    tasteTuneWeirder: "Mais estranho",
+    tasteTuneRunning: "Ajustando curadoria: {label}.",
+    tasteTuneGenerated: "Ajuste aplicado: {label}. Agora estou testando uma nova direção para o seu gosto.",
+    tasteTuneFallback: "Não achei uma opção boa nesse ajuste agora. Mantive sua recomendação atual.",
+    artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
     trackAiTitle: "Radar IA da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
@@ -6911,7 +6928,7 @@ const I18N = {
     trackAiLocalSource: "Leitura local baseada em subgênero, BPM, energia e contexto.",
     trackAiFallback: "Essa faixa está alinhada ao seu perfil: combine o groove com seu momento e avalie em estrelas para refinar ainda mais.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
-    summaryPanelTitle: "7) Resumo de perfil",
+    summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
     summaryDiscoveredCountLabel: "Artistas conhecidos no app",
@@ -7035,7 +7052,7 @@ const I18N = {
     catalogFallbackToast: "Cobertura parcial neste subgênero. Vou recomendar com o catálogo local disponível.",
     catalogFallbackUsingLocal: "Cobertura parcial em {style} ({tracks} faixas / {artists} artistas). Recomendação gerada com o catálogo local enquanto continuo expandindo.",
     catalogFallbackSearching: "Cobertura parcial em {style}. Buscando artistas novos com o catálogo disponível...",
-    spiritPanelTitle: "6) Seu espírito musical",
+    spiritPanelTitle: "Seu espírito musical",
     spiritIntro: "A cada 10 músicas curtidas, seu espírito musical é revisado.",
     spiritBadge: "Espírito desbloqueado",
     spiritAvatarAlt: "Avatar do espírito {name}",
@@ -7176,6 +7193,18 @@ const I18N = {
     queueNext: "Next",
     queueUse: "Play this",
     queueActivated: "Queue active: now playing {song}.",
+    tasteTuningTitle: "Tune your taste",
+    tasteTuningHint: "Refine the next recommendation by feel, without technical filters.",
+    tasteTuneHeavier: "Heavier",
+    tasteTuneMelodic: "More melodic",
+    tasteTuneUnderground: "More underground",
+    tasteTuneFaster: "Faster",
+    tasteTuneFamiliar: "More familiar",
+    tasteTuneWeirder: "Weirder",
+    tasteTuneRunning: "Tuning curation: {label}.",
+    tasteTuneGenerated: "Tune applied: {label}. Now testing a new direction for your taste.",
+    tasteTuneFallback: "I could not find a strong option for that tune right now. Kept your current recommendation.",
+    artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
     trackAiTitle: "Track AI radar",
     trackAiRefreshBtn: "Refresh insight",
     trackAiLoading: "Analyzing your current track and preparing a quick read...",
@@ -7183,7 +7212,7 @@ const I18N = {
     trackAiLocalSource: "Local insight based on subgenre, BPM, energy, and context.",
     trackAiFallback: "This track matches your profile. Pair the groove with your current moment and rate it to refine curation.",
     trackAiUpdatedToast: "AI insight updated.",
-    summaryPanelTitle: "7) Profile summary",
+    summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
     summaryDiscoveredCountLabel: "Artists discovered in app",
@@ -7307,7 +7336,7 @@ const I18N = {
     catalogFallbackToast: "Partial coverage in this subgenre. I will recommend using the available local catalog.",
     catalogFallbackUsingLocal: "Partial coverage in {style} ({tracks} tracks / {artists} artists). Recommendation generated from the local catalog while expansion continues.",
     catalogFallbackSearching: "Partial coverage in {style}. Searching new artists with the available catalog...",
-    spiritPanelTitle: "6) Your musical spirit",
+    spiritPanelTitle: "Your musical spirit",
     spiritIntro: "Every 10 liked songs, your musical spirit is reviewed.",
     spiritBadge: "Spirit unlocked",
     spiritAvatarAlt: "Spirit avatar {name}",
@@ -7448,6 +7477,18 @@ const I18N = {
     queueNext: "Siguiente",
     queueUse: "Reproducir esta",
     queueActivated: "Fila activa: ahora suena {song}.",
+    tasteTuningTitle: "Ajusta tu gusto",
+    tasteTuningHint: "Refina la próxima recomendación por sensación, sin tocar filtros técnicos.",
+    tasteTuneHeavier: "Más pesado",
+    tasteTuneMelodic: "Más melódico",
+    tasteTuneUnderground: "Más underground",
+    tasteTuneFaster: "Más rápido",
+    tasteTuneFamiliar: "Más conocido",
+    tasteTuneWeirder: "Más extraño",
+    tasteTuneRunning: "Ajustando curaduría: {label}.",
+    tasteTuneGenerated: "Ajuste aplicado: {label}. Ahora pruebo una nueva dirección para tu gusto.",
+    tasteTuneFallback: "No encontré una buena opción para ese ajuste ahora. Mantuve tu recomendación actual.",
+    artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
     trackAiTitle: "Radar IA de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
@@ -7455,7 +7496,7 @@ const I18N = {
     trackAiLocalSource: "Lectura local basada en subgénero, BPM, energía y contexto.",
     trackAiFallback: "Esta pista encaja con tu perfil. Combina el groove con tu momento y valórala para refinar la curaduría.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
-    summaryPanelTitle: "7) Resumen de perfil",
+    summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
     summaryDiscoveredCountLabel: "Artistas conocidos en la app",
@@ -7579,7 +7620,7 @@ const I18N = {
     catalogFallbackToast: "Cobertura parcial en este subgénero. Recomendaré usando el catálogo local disponible.",
     catalogFallbackUsingLocal: "Cobertura parcial en {style} ({tracks} pistas / {artists} artistas). Recomendación generada con el catálogo local mientras sigo ampliándolo.",
     catalogFallbackSearching: "Cobertura parcial en {style}. Buscando artistas nuevos con el catálogo disponible...",
-    spiritPanelTitle: "6) Tu espíritu musical",
+    spiritPanelTitle: "Tu espíritu musical",
     spiritIntro: "Cada 10 canciones con like, tu espíritu musical se revisa.",
     spiritBadge: "Espíritu desbloqueado",
     spiritAvatarAlt: "Avatar del espíritu {name}",
@@ -7971,13 +8012,13 @@ function applyLanguage() {
       knownArtists: "Artistas que você já conhece (separe por vírgula)",
       knownArtistsPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Prioridade dos filtros",
-      resultTitle: "2) Faixa principal",
+      resultTitle: "Sua recomendação",
       listenersTitle: "Quem ouviu essa música recentemente",
-      feedbackTitle: "3) Feedback",
-      detailsTitle: "4) Detalhes de artista e gravadora",
+      feedbackTitle: "Ensine o app",
+      detailsTitle: "Hub do artista",
       artistTitle: "Artista",
       labelTitle: "Gravadora",
-      eventsTitle: "5) Próximos eventos do artista curtido",
+      eventsTitle: "Agenda do artista",
       summaryTitle: "7) Resumo de perfil",
       defaultStats: "Nenhum feedback ainda.",
       knownPrompt: "Você já conhecia este artista?",
@@ -8009,13 +8050,13 @@ function applyLanguage() {
       knownArtists: "Artists you already know (comma-separated)",
       knownArtistsPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Filter priority",
-      resultTitle: "2) Main track",
+      resultTitle: "Your recommendation",
       listenersTitle: "Who listened to this track recently",
-      feedbackTitle: "3) Feedback",
-      detailsTitle: "4) Artist and label details",
+      feedbackTitle: "Teach the app",
+      detailsTitle: "Artist hub",
       artistTitle: "Artist",
       labelTitle: "Label",
-      eventsTitle: "5) Upcoming events for liked artist",
+      eventsTitle: "Artist agenda",
       summaryTitle: "7) Profile summary",
       defaultStats: "No feedback yet.",
       knownPrompt: "Did you already know this artist?",
@@ -8047,13 +8088,13 @@ function applyLanguage() {
       knownArtists: "Artistas que ya conoces (separados por coma)",
       knownArtistsPlaceholder: "Ej.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Prioridad de filtros",
-      resultTitle: "2) Pista principal",
+      resultTitle: "Tu recomendación",
       listenersTitle: "Quién escuchó esta pista recientemente",
-      feedbackTitle: "3) Feedback",
-      detailsTitle: "4) Detalles de artista y sello",
+      feedbackTitle: "Enséñale a la app",
+      detailsTitle: "Hub del artista",
       artistTitle: "Artista",
       labelTitle: "Sello",
-      eventsTitle: "5) Próximos eventos del artista que te gustó",
+      eventsTitle: "Agenda del artista",
       summaryTitle: "7) Resumen de perfil",
       defaultStats: "Sin feedback todavía.",
       knownPrompt: "¿Ya conocías este artista?",
@@ -8199,10 +8240,19 @@ function applyLanguage() {
   setText("#summaryDislikedArtistsTitle", t("summaryDislikedArtistsTitle"));
   setText("#suggestionQueueTitle", t("suggestionQueueTitle"));
   setText("#suggestionQueueHint", t("suggestionQueueHint"));
+  setText("#tasteTuningTitle", t("tasteTuningTitle"));
+  setText("#tasteTuningHint", t("tasteTuningHint"));
+  setText("[data-tune='heavier']", t("tasteTuneHeavier"));
+  setText("[data-tune='melodic']", t("tasteTuneMelodic"));
+  setText("[data-tune='underground']", t("tasteTuneUnderground"));
+  setText("[data-tune='faster']", t("tasteTuneFaster"));
+  setText("[data-tune='familiar']", t("tasteTuneFamiliar"));
+  setText("[data-tune='weirder']", t("tasteTuneWeirder"));
   setText("#ratingTitle", t("ratingTitle"));
   setText("#ratingCelebration", t("ratingCelebration"));
   setText("#trackAiTitle", t("trackAiTitle"));
   setText("#trackAiRefreshBtn", t("trackAiRefreshBtn"));
+  setText("#artistHubIntro", t("artistHubIntro"));
   if (starRating) starRating.setAttribute("aria-label", t("ratingAriaGroup"));
   starButtons.forEach((button, index) => {
     button.setAttribute("aria-label", starAriaLabel(index + 1));
@@ -16838,6 +16888,108 @@ async function loadEventsForArtist(artist) {
   renderEventsPanel(artist, events, source);
 }
 
+const TASTE_TUNE_STYLES = {
+  heavier: ["hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
+  melodic: ["melodic_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
+  underground: ["forest_psy", "dark_experimental", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
+  faster: ["hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
+  familiar: ["tech_house", "house", "melodic_techno", "full_on", "drum_and_bass", "progressive_house"],
+  weirder: ["idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
+};
+
+function tuneLabel(mode = "") {
+  const key = {
+    heavier: "tasteTuneHeavier",
+    melodic: "tasteTuneMelodic",
+    underground: "tasteTuneUnderground",
+    faster: "tasteTuneFaster",
+    familiar: "tasteTuneFamiliar",
+    weirder: "tasteTuneWeirder"
+  }[mode];
+  return key ? t(key) : "";
+}
+
+function pickTasteTuneStyle(mode = "", baseStyle = "") {
+  const selectable = new Set(getAllSelectableStyles());
+  const preferred = TASTE_TUNE_STYLES[mode] || [];
+  const withCatalogSignal = preferred.filter((style) =>
+    selectable.has(style) &&
+    catalog.some((track) => track?.style === style && track?.artist && track?.song)
+  );
+  const pool = withCatalogSignal.length ? withCatalogSignal : preferred.filter((style) => selectable.has(style));
+  const baseKey = normalize(baseStyle || "");
+  const freshPool = pool.filter((style) => normalize(style) !== baseKey);
+  return pickRandomTrack(freshPool) || pickRandomTrack(pool) || baseStyle || "";
+}
+
+function prefsForTasteTune(mode = "") {
+  const baseStyle = currentRecommendation?.style || styleEl?.value || lastPrefs?.style || "";
+  const style = pickTasteTuneStyle(mode, baseStyle);
+  const presets = {
+    heavier: { context: "peak", energy: "extreme", bpm: style === "hard_techno" ? "145-155" : "155-175", vocals: "" },
+    melodic: { context: "estrada", energy: "mid", bpm: "", vocals: "light_vocals" },
+    underground: { context: "after", energy: "high", bpm: "", vocals: "instrumental" },
+    faster: { context: "treino", energy: "extreme", bpm: style === "hi_tech" || style === "psycore" ? "175+" : "155-175", vocals: "" },
+    familiar: { context: "peak", energy: "mid", bpm: "", vocals: "" },
+    weirder: { context: "foco", energy: "high", bpm: "", vocals: "instrumental" }
+  };
+  return {
+    style,
+    ...(presets[mode] || { context: "", energy: "", bpm: "", vocals: "" })
+  };
+}
+
+async function runTasteTune(mode = "") {
+  if (recommendationRunBusy) return false;
+  const label = tuneLabel(mode);
+  const prefs = prefsForTasteTune(mode);
+  if (!prefs.style) return runSurpriseRecommendation();
+
+  if (styleEl) styleEl.value = prefs.style;
+  if (contextEl) contextEl.value = prefs.context;
+  if (energyEl) energyEl.value = prefs.energy;
+  if (bpmEl) bpmEl.value = prefs.bpm;
+  if (vocalsEl) vocalsEl.value = prefs.vocals;
+  if (discoveryModeEl) discoveryModeEl.checked = true;
+  styleInfoDismissed = false;
+  renderStyleInfoBubble(prefs.style, { reveal: true });
+  applyGenreVibeTheme(prefs.style, { force: true });
+
+  if (feedbackMessage && label) {
+    feedbackMessage.textContent = t("tasteTuneRunning", { label });
+  }
+
+  const previousTrack = currentRecommendation;
+  const generated = await generateRecommendationWithOverlay(prefs, {
+    resetRejected: false,
+    avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
+    avoidArtistName: previousTrack?.artist || "",
+    allowKnownFallback: mode === "familiar"
+  });
+
+  if (!generated) {
+    playUiSfx("error");
+    const fallback = t("tasteTuneFallback");
+    if (feedbackMessage) feedbackMessage.textContent = fallback;
+    showToast(fallback);
+    return false;
+  }
+
+  lastPrefs = prefs;
+  if (rerollBtn) rerollBtn.disabled = false;
+  if (eventsPanel) eventsPanel.classList.add("hidden");
+  if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+  if (eventsCalendar) eventsCalendar.innerHTML = "";
+  if (eventsList) eventsList.innerHTML = "";
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  const message = t("tasteTuneGenerated", { label });
+  if (feedbackMessage) feedbackMessage.textContent = message;
+  showToast(message);
+  savePreferences();
+  return true;
+}
+
 async function runRecommendation() {
   if (recommendationRunBusy) return;
   playUiSfx("search-start");
@@ -17284,6 +17436,11 @@ bind(suggestionQueueList, "click", async (event) => {
   if (!target) return;
   const index = Number(target.dataset.queueIndex || -1);
   await activateSuggestionQueueIndex(index);
+});
+bind(tasteTuningActions, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("button[data-tune]") : null;
+  if (!target) return;
+  await runTasteTune(String(target.dataset.tune || ""));
 });
 bind(quizStartBtn, "click", () => {
   startQuizFromChallenge();

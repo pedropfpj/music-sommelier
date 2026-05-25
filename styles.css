@@ -2154,6 +2154,46 @@ input[type="range"] {
     linear-gradient(162deg, rgba(7, 15, 32, 0.9), rgba(8, 17, 38, 0.84));
 }
 
+.taste-tuning-card {
+  border-color: rgba(112, 255, 218, 0.34);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(104, 255, 218, 0.12), transparent 46%),
+    linear-gradient(162deg, rgba(7, 15, 32, 0.88), rgba(8, 17, 38, 0.78));
+}
+
+.taste-tuning-head {
+  display: grid;
+  gap: 0.14rem;
+}
+
+.taste-tuning-title {
+  margin: 0;
+  color: #e7fbff;
+  font-weight: 800;
+}
+
+.taste-tuning-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.taste-tune-btn {
+  min-width: 0;
+  min-height: 42px;
+  padding: 0.58rem 0.68rem;
+  border-radius: 11px;
+  border-color: rgba(151, 205, 255, 0.34);
+  background: rgba(8, 17, 35, 0.72);
+  color: #e9f7ff;
+  font-size: 0.9rem;
+}
+
+.taste-tune-btn:hover {
+  border-color: rgba(110, 255, 220, 0.72);
+  background: rgba(12, 33, 48, 0.9);
+}
+
 .queue-head {
   display: grid;
   gap: 0.12rem;
@@ -2344,6 +2384,12 @@ input[type="range"] {
   margin-top: 0.85rem;
   display: grid;
   gap: 0.6rem;
+  border-top: 1px solid rgba(141, 173, 214, 0.22);
+  padding-top: 0.75rem;
+}
+
+.feedback-grid > h3 {
+  margin: 0;
 }
 
 .rating-panel {
@@ -2432,6 +2478,10 @@ input[type="range"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.feedback-buttons button {
+  min-height: 40px;
 }
 
 .feedback-message {
@@ -2783,6 +2833,19 @@ input[type="range"] {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.artist-hub-panel,
+.events-hub-panel {
+  border-color: rgba(125, 224, 255, 0.28);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(110, 255, 220, 0.08), transparent 44%),
+    rgba(8, 15, 33, 0.82);
+}
+
+.artist-hub-intro {
+  max-width: 64ch;
+  margin-top: -0.25rem;
+}
+
 .details-grid article {
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -2794,6 +2857,10 @@ input[type="range"] {
 
 .details-card {
   transition: transform 240ms ease, box-shadow 260ms ease, border-color 260ms ease, background-color 260ms ease;
+}
+
+.details-card h4 {
+  margin: 0;
 }
 
 .details-panel-reveal .details-card {
@@ -3683,6 +3750,7 @@ input[type="range"] {
   .fields-grid,
   .details-grid,
   .weights-grid,
+  .taste-tuning-actions,
   .spirit-card {
     grid-template-columns: 1fr;
   }
