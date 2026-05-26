@@ -192,8 +192,8 @@ p {
 
 .audio-volume-control {
   position: fixed;
+  top: 3.25rem;
   right: 0.9rem;
-  bottom: calc(var(--signature-bar-height, 36px) + 0.84rem);
   z-index: 9;
   display: grid;
   grid-template-columns: auto minmax(92px, 126px) 3rem;
@@ -208,6 +208,19 @@ p {
     linear-gradient(145deg, rgba(6, 14, 33, 0.88), rgba(11, 21, 49, 0.8));
   color: #dff5ff;
   box-shadow: 0 10px 24px rgba(3, 11, 29, 0.3), inset 0 0 0 1px rgba(142, 207, 255, 0.07);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.98);
+  transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.audio-toggle:hover + .audio-volume-control,
+.audio-toggle:focus-visible + .audio-volume-control,
+.audio-volume-control:hover,
+.audio-volume-control:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 .audio-volume-control label,
@@ -3995,9 +4008,8 @@ input[type="range"] {
   }
 
   .audio-volume-control {
-    top: auto;
+    top: 3.25rem;
     right: 0.64rem;
-    bottom: calc(var(--signature-bar-height, 46px) + 0.68rem);
     grid-template-columns: auto minmax(86px, 1fr) 2.8rem;
     width: min(92vw, 280px);
     min-height: 36px;

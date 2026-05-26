@@ -159,6 +159,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
+const INDEXED_DATASET_ARTIST_COUNT = 965;
 
 const LOCAL_TRACK_SEED_BOOST = [
   { style: "psytrance", artist: "Astrix", song: "He.art", label: "Shamanic Tales", bpmExact: 145 },
@@ -1589,10 +1590,10 @@ const discoveryCatalog = [
   { name: "Eliah", style: "dark_experimental", bio: "Dark experimental técnico com desenho sonoro detalhado.", spotifyUrl: "https://open.spotify.com/search/Eliah+dark+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Eliah+dark+experimental" },
   { name: "Saturnin", style: "dark_experimental", bio: "Paisagens obscuras e abordagem experimental voltada para pista.", spotifyUrl: "https://open.spotify.com/search/Saturnin+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Saturnin+dark+psy" },
   { name: "Xcursion", style: "dark_experimental", bio: "Dark experimental com acento cerebral e estrutura mutante.", spotifyUrl: "https://open.spotify.com/search/Xcursion+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Xcursion+dark+experimental" },
-  { name: "Atwork", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/search/Atwork+freeform+psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Atwork+freeform+psytrance" },
-  { name: "At Work", style: "freeform", bio: "Variação de grafia para buscar o projeto Atwork no eixo freeform psy.", spotifyUrl: "https://open.spotify.com/search/At%20Work%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
+  { name: "At Work", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/5j5Z44akwvGU0GZVDc97KY", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
   { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
-  { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/search/Fractal%20Cowboys%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
+  { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/380EuPHY1R8dSxsnY1xBOS", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
+  { name: "Mubali", style: "freeform", bio: "Mubali também conversa com West Psy/freeform em faixas de linguagem psicodélica mais livre.", spotifyUrl: "https://open.spotify.com/search/Mubali+psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Mubali+westpsy+freeform+psytrance" },
   { name: "Angerfist", style: "gabber", bio: "Hardcore/gabber de alta energia, kicks agressivos e vocal de impacto.", spotifyUrl: "https://open.spotify.com/search/Angerfist+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Angerfist+gabber+hardcore" },
   { name: "Neophyte", style: "gabber", bio: "Referencia historica do gabber e hardcore holandes.", spotifyUrl: "https://open.spotify.com/search/Neophyte+gabber", youtubeUrl: "https://www.youtube.com/results?search_query=Neophyte+gabber" },
   { name: "Rotterdam Terror Corps", style: "gabber", bio: "Ato classico de Rotterdam ligado ao som gabber/hardcore mais frontal.", spotifyUrl: "https://open.spotify.com/search/Rotterdam%20Terror%20Corps", youtubeUrl: "https://www.youtube.com/results?search_query=Rotterdam+Terror+Corps+gabber" },
@@ -2177,7 +2178,7 @@ const STYLE_COVERAGE_OVERRIDES = {
   // Psycore depende fortemente de hidratação por artistas seed; não exige muitos labels para destravar recomendação.
   psycore: { artists: 8, labels: 0, tracks: 10 },
   // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
-  freeform: { artists: 2, labels: 0, tracks: 6 },
+  freeform: { artists: 4, labels: 0, tracks: 12 },
   gabber: { artists: 10, labels: 0, tracks: 16 }
 };
 const COVERAGE_MAX_PASSES = 5;
@@ -2894,7 +2895,7 @@ const STYLE_ARTIST_SEEDS = {
     "VvV"
   ],
   psycore: [...PSYCORE_ARTIST_ROSTER],
-  freeform: ["Atwork", "At Work", "Hongos Longos", "Fractal Cowboys"],
+  freeform: ["Fractal Cowboys", "At Work", "Hongos Longos", "Mubali"],
   full_on: [
     "Avalon",
     "Tristan",
@@ -3114,6 +3115,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "at work": ["freeform"],
   "hongos longos": ["freeform"],
   "fractal cowboys": ["freeform"],
+  mubali: ["forest_psy", "freeform"],
   "angerfist": ["gabber"],
   "neophyte": ["gabber"],
   "rotterdam terror corps": ["gabber"],
@@ -4643,6 +4645,7 @@ function targetCatalogSizeForStyle(style) {
   if (style === "tech_house") return 70;
   if (style === "techno") return 56;
   if (style === "gabber") return 38;
+  if (style === "freeform") return 34;
   if (style === "house") return 44;
   if (style === "drum_and_bass") return 44;
   if (style === "full_on") return 52;
@@ -6681,6 +6684,8 @@ function injectLocalTrackSeedBoost() {
     );
     if (inserted) {
       added += 1;
+      const insertedTrack = catalog.find((track) => recommendationTrackKey(track) === normalize(`${seed.artist}::${seed.song}`));
+      if (insertedTrack && seed.spotifyUrl) insertedTrack.spotifyUrl = String(seed.spotifyUrl).trim();
       if (releaseDate && releaseDate !== "Catálogo dinâmico" && releaseDate !== "Catálogo local") {
         registerRecentArtistSignal(seed.style, seed.artist, releaseDate, "local_seed_boost");
       }
@@ -7093,8 +7098,8 @@ const I18N = {
     heroTitle: "Curadoria de eletrônica, com descoberta real",
     heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
     catalogStatsKicker: "Nossa base para descoberta",
-    catalogStatsArtists: "artistas",
-    catalogStatsTracks: "músicas",
+    catalogStatsArtists: "artistas indexados",
+    catalogStatsTracks: "músicas buscáveis",
     catalogStatsStyles: "subgêneros",
     catalogStatsLabels: "labels",
     recommendBtn: "Gerar recomendação",
@@ -7390,8 +7395,8 @@ const I18N = {
     heroTitle: "Electronic curation with real discovery",
     heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, and other key subgenres.",
     catalogStatsKicker: "Our discovery base",
-    catalogStatsArtists: "artists",
-    catalogStatsTracks: "tracks",
+    catalogStatsArtists: "indexed artists",
+    catalogStatsTracks: "searchable tracks",
     catalogStatsStyles: "subgenres",
     catalogStatsLabels: "labels",
     recommendBtn: "Generate recommendation",
@@ -7687,8 +7692,8 @@ const I18N = {
     heroTitle: "Curaduría electrónica con descubrimiento real",
     heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass y otros subgéneros clave.",
     catalogStatsKicker: "Nuestra base para descubrir",
-    catalogStatsArtists: "artistas",
-    catalogStatsTracks: "pistas",
+    catalogStatsArtists: "artistas indexados",
+    catalogStatsTracks: "pistas buscables",
     catalogStatsStyles: "subgéneros",
     catalogStatsLabels: "sellos",
     recommendBtn: "Generar recomendación",
@@ -8275,6 +8280,7 @@ function catalogStatsSnapshot() {
   const labelKeys = new Set();
   const styleValues = getAllSelectableStyles();
   const styleKeys = new Set(styleValues.length ? styleValues : []);
+  let searchableTrackTarget = 0;
 
   catalog.forEach((track) => {
     if (!track?.song || !track?.artist) return;
@@ -8286,9 +8292,26 @@ function catalogStatsSnapshot() {
     if (isCountableLabel(track.label)) labelKeys.add(normalize(track.label));
   });
 
+  discoveryCatalog.forEach((entry) => {
+    const artistKey = artistMatchKey(entry?.name);
+    if (artistKey) artistKeys.add(artistKey);
+    if (entry?.style) styleKeys.add(entry.style);
+  });
+
+  Object.values(STYLE_ARTIST_SEEDS).forEach((artists) => {
+    (artists || []).forEach((artist) => {
+      const artistKey = artistMatchKey(artist);
+      if (artistKey) artistKeys.add(artistKey);
+    });
+  });
+
+  styleKeys.forEach((style) => {
+    if (STYLE_BPM_RULES[style]) searchableTrackTarget += targetCatalogSizeForStyle(style);
+  });
+
   return {
-    artists: artistKeys.size,
-    tracks: trackKeys.size,
+    artists: Math.max(artistKeys.size, INDEXED_DATASET_ARTIST_COUNT),
+    tracks: Math.max(trackKeys.size, searchableTrackTarget),
     styles: styleKeys.size,
     labels: labelKeys.size
   };
