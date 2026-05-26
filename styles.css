@@ -2561,6 +2561,13 @@ input[type="range"] {
   font-weight: 700;
 }
 
+.bandcamp-btn {
+  background: #1da0c3;
+  border-color: #1da0c3;
+  color: #03131a;
+  font-weight: 700;
+}
+
 .celebrate {
   animation: celebrate-glow 580ms ease;
 }

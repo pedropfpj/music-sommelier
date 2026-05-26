@@ -285,6 +285,137 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistCountry: "Brazil",
     artistGenre: "Psytrance",
     artistProfileHint: "Projeto brasileiro emergente com releases recentes em plataformas abertas."
+  },
+  {
+    style: "dark_experimental",
+    artist: "AnkouDead",
+    song: "Daydream",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://ankoudead.bandcamp.com/",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto citado na curadoria Naturaiz/Bandcamp, com recorte psicodelico experimental e underground."
+  },
+  {
+    style: "dark_experimental",
+    artist: "AnkouDead",
+    song: "Poeira de Estrela",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://ankoudead.bandcamp.com/",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto citado na curadoria Naturaiz/Bandcamp, com recorte psicodelico experimental e underground."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Bardo",
+    song: "Recitativos",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/music",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Artista ligado ao catalogo Naturaiz, com linguagem experimental e psicodelica."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Nala",
+    song: "Ona",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/nala-onatun",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto presente no catalogo Naturaiz com faixa publicada no Bandcamp."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Nala",
+    song: "Ibukun",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/nala-onatun",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto presente no catalogo Naturaiz com faixa publicada no Bandcamp."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Mirror Me",
+    song: "Hardcore Worship",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/music",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Nome indicado para a curadoria Naturaiz/Bandcamp no eixo dark experimental."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Enigmachina",
+    song: "Uneven Parts",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/music",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto da orbita Naturaiz/Bandcamp com estetica experimental e pista quebrada."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Enigmachina",
+    song: "Fierce Pierce",
+    label: "Naturaiz Records",
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/music",
+    artistGenre: "Naturaiz / Bandcamp / Dark experimental",
+    artistProfileHint: "Projeto da orbita Naturaiz/Bandcamp com estetica experimental e pista quebrada."
+  },
+  {
+    style: "psycore",
+    artist: "Vutt'un",
+    song: "Confundentur",
+    label: "Naturaiz Records",
+    bpmExact: 180,
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
+    bandcampTrackUrl: "https://naturaizrecords.bandcamp.com/track/vuttun-confundentur-180",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-confundentur-180",
+    artistCountry: "Brazil",
+    artistGenre: "Naturaiz / Psycore",
+    artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
+  },
+  {
+    style: "psycore",
+    artist: "Vutt'un",
+    song: "Fabula",
+    label: "Naturaiz Records",
+    bpmExact: 198,
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-fabula-198",
+    artistCountry: "Brazil",
+    artistGenre: "Naturaiz / Psycore",
+    artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
+  },
+  {
+    style: "psycore",
+    artist: "Vutt'un",
+    song: "In Anima",
+    label: "Naturaiz Records",
+    bpmExact: 210,
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-in-anima-210",
+    artistCountry: "Brazil",
+    artistGenre: "Naturaiz / Psycore",
+    artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Hyperekplexia",
+    song: "Rotting in Hell",
+    label: "Naturaiz Records",
+    bpmExact: 168,
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/natura-z-records-vol-1",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/hyperekplexia-rotting-in-hell-168bpm",
+    artistGenre: "Naturaiz / Dark experimental",
+    artistProfileHint: "Nome presente em recortes extremos do catalogo independente, com faixa de BPM confirmada em fonte de catalogo."
+  },
+  {
+    style: "psycore",
+    artist: "Sectio Aurea",
+    song: "Gato Murr",
+    label: "Naturaiz Records",
+    bpmExact: 200,
+    bandcampUrl: "https://naturaizrecords.bandcamp.com/album/natura-z-records-vol-1",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/sectio-aurea-gato-murr-200bpm",
+    artistGenre: "Naturaiz / Psycore",
+    artistProfileHint: "Artista do eixo dark experimental/psycore com material de alta velocidade em catalogos independentes."
   }
 ];
 
@@ -1590,6 +1721,18 @@ const discoveryCatalog = [
   { name: "Eliah", style: "dark_experimental", bio: "Dark experimental técnico com desenho sonoro detalhado.", spotifyUrl: "https://open.spotify.com/search/Eliah+dark+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Eliah+dark+experimental" },
   { name: "Saturnin", style: "dark_experimental", bio: "Paisagens obscuras e abordagem experimental voltada para pista.", spotifyUrl: "https://open.spotify.com/search/Saturnin+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Saturnin+dark+psy" },
   { name: "Xcursion", style: "dark_experimental", bio: "Dark experimental com acento cerebral e estrutura mutante.", spotifyUrl: "https://open.spotify.com/search/Xcursion+psy", youtubeUrl: "https://www.youtube.com/results?search_query=Xcursion+dark+experimental" },
+  { name: "AnkouDead", style: "dark_experimental", bio: "Naturaiz/Bandcamp com dark experimental psicodelico e assinatura underground.", spotifyUrl: "https://open.spotify.com/search/AnkouDead", youtubeUrl: "https://www.youtube.com/results?search_query=AnkouDead+psytrance", bandcampUrl: "https://ankoudead.bandcamp.com/" },
+  { name: "Bardo", style: "dark_experimental", bio: "Nome do catalogo Naturaiz/Bandcamp para descoberta dark experimental.", spotifyUrl: "https://open.spotify.com/search/Bardo+Naturaiz", youtubeUrl: "https://www.youtube.com/results?search_query=Bardo+Naturaiz+Bandcamp", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
+  { name: "Jiazihu", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Jiazihu", youtubeUrl: "https://www.youtube.com/results?search_query=Jiazihu+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Jiazihu%20Naturaiz" },
+  { name: "Saadhuk", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Saadhuk", youtubeUrl: "https://www.youtube.com/results?search_query=Saadhuk+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Saadhuk%20Naturaiz" },
+  { name: "The Anti Priest", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/The%20Anti%20Priest", youtubeUrl: "https://www.youtube.com/results?search_query=The+Anti+Priest+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=The%20Anti%20Priest%20Naturaiz" },
+  { name: "Enigmachina", style: "dark_experimental", bio: "Projeto da orbita Naturaiz/Bandcamp com estetica experimental e pista quebrada.", spotifyUrl: "https://open.spotify.com/search/Enigmachina", youtubeUrl: "https://www.youtube.com/results?search_query=Enigmachina+Naturaiz", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
+  { name: "Undermorph", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Undermorph", youtubeUrl: "https://www.youtube.com/results?search_query=Undermorph+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Undermorph%20Naturaiz" },
+  { name: "Mirror Me", style: "dark_experimental", bio: "Nome ligado ao recorte Naturaiz/Bandcamp de dark experimental e psy underground.", spotifyUrl: "https://open.spotify.com/search/Mirror%20Me%20Naturaiz", youtubeUrl: "https://www.youtube.com/results?search_query=Mirror+Me+Naturaiz", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
+  { name: "Nala", style: "dark_experimental", bio: "Projeto presente no catalogo Naturaiz com faixas publicadas no Bandcamp.", spotifyUrl: "https://open.spotify.com/search/Nala+Onatun", youtubeUrl: "https://www.youtube.com/results?search_query=Nala+Onatun+Naturaiz", bandcampUrl: "https://naturaizrecords.bandcamp.com/album/nala-onatun" },
+  { name: "Nallun", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Nallun", youtubeUrl: "https://www.youtube.com/results?search_query=Nallun+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Nallun%20Naturaiz" },
+  { name: "Alumbra", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Alumbra+Naturaiz", youtubeUrl: "https://www.youtube.com/results?search_query=Alumbra+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Alumbra%20Naturaiz" },
+  { name: "Hyperekplexia", style: "dark_experimental", bio: "Dark experimental extremo associado a catalogos independentes de alta intensidade.", spotifyUrl: "https://open.spotify.com/search/Hyperekplexia", youtubeUrl: "https://www.youtube.com/results?search_query=Hyperekplexia+dark+psy", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
   { name: "At Work", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/5j5Z44akwvGU0GZVDc97KY", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
   { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
   { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/380EuPHY1R8dSxsnY1xBOS", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
@@ -1862,6 +2005,7 @@ const listeningNarrative = document.getElementById("listeningNarrative");
 const spotifyLink = document.getElementById("spotifyLink");
 const youtubeLink = document.getElementById("youtubeLink");
 const soundcloudLink = document.getElementById("soundcloudLink");
+const bandcampLink = document.getElementById("bandcampLink");
 const primaryTrackCard = document.getElementById("primaryTrackCard");
 const generatedBadge = document.getElementById("generatedBadge");
 const knownArtistPrompt = document.getElementById("knownArtistPrompt");
@@ -2871,6 +3015,22 @@ const SLAMBIENT_ARTIST_ROSTER = [
   "Akephalos"
 ];
 
+const NATURAIZ_BANDCAMP_ARTISTS = [
+  "AnkouDead",
+  "Bardo",
+  "Jiazihu",
+  "Saadhuk",
+  "The Anti Priest",
+  "Enigmachina",
+  "Undermorph",
+  "Mirror Me",
+  "Nala",
+  "Nallun",
+  "Alumbra"
+];
+
+const NATURAIZ_FAST_ARTISTS = ["Vutt'un", "Sectio Aurea", "Hyperekplexia"];
+
 const STYLE_ARTIST_SEEDS = {
   psytrance: ["Astrix", "Avalon", "Vini Vici", "Blastoyz", "Electric Universe", "Tristan", "Mad Maxx", "Outsiders"],
   forest_psy: ["Atriohm", "Derango", "Arjuna", "Farebi Jalebi", "Mubali", "Ajja", "Krapul", "Psykovsky"],
@@ -2892,9 +3052,11 @@ const STYLE_ARTIST_SEEDS = {
     "VallaK",
     "Vutt'un",
     "Vuga",
-    "VvV"
+    "VvV",
+    ...NATURAIZ_BANDCAMP_ARTISTS,
+    ...NATURAIZ_FAST_ARTISTS
   ],
-  psycore: [...PSYCORE_ARTIST_ROSTER],
+  psycore: [...PSYCORE_ARTIST_ROSTER, ...NATURAIZ_FAST_ARTISTS],
   freeform: ["Fractal Cowboys", "At Work", "Hongos Longos", "Mubali"],
   full_on: [
     "Avalon",
@@ -3110,7 +3272,21 @@ const ARTIST_STYLE_OVERRIDES = {
   "dubdogz": ["tech_house", "house"],
   "audio syntax": ["dark_experimental"],
   "audiosyntax": ["dark_experimental"],
-  "sectio aurea": ["dark_experimental"],
+  "sectio aurea": ["dark_experimental", "psycore"],
+  "ankoudead": ["dark_experimental"],
+  "ankou dead": ["dark_experimental"],
+  "bardo": ["dark_experimental"],
+  "jiazihu": ["dark_experimental"],
+  "saadhuk": ["dark_experimental"],
+  "the anti priest": ["dark_experimental"],
+  "anti priest": ["dark_experimental"],
+  "enigmachina": ["dark_experimental"],
+  "undermorph": ["dark_experimental"],
+  "mirror me": ["dark_experimental"],
+  "nala": ["dark_experimental"],
+  "nallun": ["dark_experimental"],
+  "alumbra": ["dark_experimental"],
+  "hyperekplexia": ["dark_experimental", "psycore"],
   "atwork": ["freeform"],
   "at work": ["freeform"],
   "hongos longos": ["freeform"],
@@ -3143,7 +3319,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "akuma": ["slambient"],
   "akephalos": ["slambient"],
   "vallak": ["slambient", "dark_experimental", "psycore"],
-  "vuttun": ["slambient", "dark_experimental"],
+  "vuttun": ["slambient", "dark_experimental", "psycore"],
   "vuga": ["slambient", "dark_experimental", "psycore"],
   "vvv": ["slambient", "dark_experimental"],
   "critical frequency": ["psytrance"],
@@ -3805,6 +3981,11 @@ const LABEL_EXTENDED_PROFILES = {
     pt: "Solid Grooves consolidou uma identidade forte no tech house contemporâneo, com foco em groove de clube, baixa latência de pista e seleção artística consistente.",
     en: "Solid Grooves built a strong identity in contemporary tech house, focused on club groove, immediate dancefloor response, and consistent artist curation.",
     es: "Solid Grooves consolidó una identidad fuerte en el tech house contemporáneo, enfocada en groove de club, respuesta inmediata de pista y curaduría artística consistente."
+  },
+  "naturaiz records": {
+    pt: "Naturaiz Records aparece no Bandcamp como selo/curadoria independente para psicodelia experimental, com foco em artistas underground e lançamentos fora do circuito óbvio.",
+    en: "Naturaiz Records appears on Bandcamp as an independent label/curation hub for experimental psychedelia, focused on underground artists and less obvious releases.",
+    es: "Naturaiz Records aparece en Bandcamp como sello/curaduría independiente de psicodelia experimental, con foco en artistas underground y lanzamientos menos obvios."
   }
 };
 
@@ -6287,7 +6468,7 @@ function buildCatalogGenreAudit({ sampleLimit = 80 } = {}) {
 
     const hasAudioPreview = Boolean(normalizePreviewUrl(track.previewUrl));
     const hasYoutubePath = Boolean(buildYouTubeEmbedUrl(track, { autoplay: false }));
-    const hasExternalPath = Boolean(buildSpotifyTrackLink(track) || buildYouTubeTrackLink(track) || buildSoundCloudTrackLink(track));
+    const hasExternalPath = Boolean(buildSpotifyTrackLink(track) || buildYouTubeTrackLink(track) || buildSoundCloudTrackLink(track) || buildBandcampTrackLink(track));
     if (!hasAudioPreview && !hasYoutubePath && !hasExternalPath) {
       registerIssue(track, "no_preview_or_external_path", "No audio preview, no YouTube embed, and no external fallback link.");
     }
@@ -6585,7 +6766,10 @@ function addDynamicTrackToCatalog({
   source = "dynamic",
   artistCountry = "",
   artistGenre = "",
-  artistProfileHint = ""
+  artistProfileHint = "",
+  bandcampUrl = "",
+  bandcampTrackUrl = "",
+  soundcloudTrackUrl = ""
 }, existingKeys) {
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
@@ -6627,11 +6811,13 @@ function addDynamicTrackToCatalog({
     bpmExact: bpmNumber || undefined,
     energy: energyFromBpm(bpmNumber || fallbackBpm),
     vocals: "instrumental",
-    context: ["peak", "treino", "estrada", "after", "foco", "warmup"],
+    context: ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
     vibe: `Faixa descoberta automaticamente para ${styleLabelByValue(style)}.`,
     spotifyUrl: `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
     youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artistName} ${songName}`)}`,
-    soundcloudTrackUrl: `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`,
+    soundcloudTrackUrl: String(soundcloudTrackUrl || "").trim() || `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`,
+    bandcampUrl: String(bandcampUrl || "").trim(),
+    bandcampTrackUrl: String(bandcampTrackUrl || "").trim(),
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
     youtubeTrackUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
     previewUrl: normalizedPreview,
@@ -6678,7 +6864,10 @@ function injectLocalTrackSeedBoost() {
         source: "dataset_local_seed_boost",
         artistCountry: String(seed.artistCountry || "").trim(),
         artistGenre: String(seed.artistGenre || "").trim(),
-        artistProfileHint: String(seed.artistProfileHint || "").trim() || "Seed local curado para ampliar cobertura e rotação de artistas."
+        artistProfileHint: String(seed.artistProfileHint || "").trim() || "Seed local curado para ampliar cobertura e rotação de artistas.",
+        bandcampUrl: String(seed.bandcampUrl || "").trim(),
+        bandcampTrackUrl: String(seed.bandcampTrackUrl || "").trim(),
+        soundcloudTrackUrl: String(seed.soundcloudTrackUrl || "").trim()
       },
       existingKeys
     );
@@ -6686,6 +6875,9 @@ function injectLocalTrackSeedBoost() {
       added += 1;
       const insertedTrack = catalog.find((track) => recommendationTrackKey(track) === normalize(`${seed.artist}::${seed.song}`));
       if (insertedTrack && seed.spotifyUrl) insertedTrack.spotifyUrl = String(seed.spotifyUrl).trim();
+      if (insertedTrack && seed.bandcampUrl) insertedTrack.bandcampUrl = String(seed.bandcampUrl).trim();
+      if (insertedTrack && seed.bandcampTrackUrl) insertedTrack.bandcampTrackUrl = String(seed.bandcampTrackUrl).trim();
+      if (insertedTrack && seed.soundcloudTrackUrl) insertedTrack.soundcloudTrackUrl = String(seed.soundcloudTrackUrl).trim();
       if (releaseDate && releaseDate !== "Catálogo dinâmico" && releaseDate !== "Catálogo local") {
         registerRecentArtistSignal(seed.style, seed.artist, releaseDate, "local_seed_boost");
       }
@@ -7222,6 +7414,7 @@ const I18N = {
     spotifyUnverified: "Link do Spotify não verificado: abrindo busca aproximada para esta faixa.",
     youtubeUnverified: "Link do YouTube ainda não verificado para evitar abrir faixa errada.",
     soundcloudUnverified: "Link do SoundCloud ainda não verificado para evitar abrir faixa errada.",
+    bandcampUnverified: "Link do Bandcamp abre uma busca segura por artista/faixa.",
     toastError: "Ops, deu um erro nesta ação. Já vou melhorar isso.",
     feedbackError: "Ocorreu um erro ao processar a ação. Tente novamente.",
     toastButtonFallback: "Ação registrada. Esse botão já está clicável.",
@@ -7519,6 +7712,7 @@ const I18N = {
     spotifyUnverified: "Spotify link is not fully verified yet: opening an approximate search for this track.",
     youtubeUnverified: "YouTube link not verified yet to avoid opening the wrong track.",
     soundcloudUnverified: "SoundCloud link not verified yet to avoid opening the wrong track.",
+    bandcampUnverified: "Bandcamp link opens a safe artist/track search.",
     toastError: "Something went wrong in this action. I will improve this.",
     feedbackError: "An error happened while processing this action. Please try again.",
     toastButtonFallback: "Action recorded. This button is clickable.",
@@ -7816,6 +8010,7 @@ const I18N = {
     spotifyUnverified: "Enlace de Spotify no verificado: se abrirá una búsqueda aproximada para esta pista.",
     youtubeUnverified: "Enlace de YouTube aún no verificado para evitar abrir la pista equivocada.",
     soundcloudUnverified: "Enlace de SoundCloud aún no verificado para evitar abrir la pista equivocada.",
+    bandcampUnverified: "El enlace de Bandcamp abre una búsqueda segura por artista/pista.",
     toastError: "Ocurrió un error en esta acción. Ya lo voy a mejorar.",
     feedbackError: "Ocurrió un error al procesar esta acción. Intenta nuevamente.",
     toastButtonFallback: "Acción registrada. Este botón ya es clicable.",
@@ -8160,9 +8355,9 @@ function energyLabelByValue(energyValue) {
 
 function contextLabelByValue(contextValue) {
   const labels = {
-    pt: { warmup: "warmup", peak: "peak", after: "after", foco: "foco", treino: "treino", estrada: "estrada" },
-    en: { warmup: "warm-up", peak: "peak time", after: "after", foco: "focus", treino: "workout", estrada: "road trip" },
-    es: { warmup: "calentamiento", peak: "hora pico", after: "after", foco: "foco", treino: "entrenamiento", estrada: "viaje" }
+    pt: { warmup: "warmup", peak: "peak", after: "after", foco: "foco profundo", trabalho: "trabalho criativo", treino: "academia / treino", estrada: "estrada" },
+    en: { warmup: "warm-up", peak: "peak time", after: "after", foco: "deep focus", trabalho: "creative work", treino: "gym / workout", estrada: "road trip" },
+    es: { warmup: "calentamiento", peak: "hora pico", after: "after", foco: "foco profundo", trabalho: "trabajo creativo", treino: "gimnasio / entrenamiento", estrada: "viaje" }
   };
   return (labels[currentLanguage] || labels.pt)[contextValue] || contextValue || t("freeContext");
 }
@@ -8186,7 +8381,7 @@ function localizeOptionLabels() {
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
-      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Foco / trabalho", treino: "Treino", estrada: "Estrada / viagem" },
+      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Foco profundo", trabalho: "Trabalho criativo", treino: "Academia / treino", estrada: "Estrada / viagem" },
       energy: { low: "Baixa", mid: "Média", high: "Alta", extreme: "Extrema" },
       vocals: { instrumental: "Instrumental", light_vocals: "Vocais leves", vocal: "Vocal forte" }
     },
@@ -8205,7 +8400,7 @@ function localizeOptionLabels() {
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
-      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Focus / work", treino: "Workout", estrada: "Road / travel" },
+      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Deep focus", trabalho: "Creative work", treino: "Gym / workout", estrada: "Road / travel" },
       energy: { low: "Low", mid: "Mid", high: "High", extreme: "Extreme" },
       vocals: { instrumental: "Instrumental", light_vocals: "Light vocals", vocal: "Strong vocals" }
     },
@@ -8224,7 +8419,7 @@ function localizeOptionLabels() {
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning"
       },
-      context: { warmup: "Calentamiento", peak: "Hora pico", after: "After / bajada", foco: "Foco / trabajo", treino: "Entrenamiento", estrada: "Ruta / viaje" },
+      context: { warmup: "Calentamiento", peak: "Hora pico", after: "After / bajada", foco: "Foco profundo", trabalho: "Trabajo creativo", treino: "Gimnasio / entrenamiento", estrada: "Ruta / viaje" },
       energy: { low: "Baja", mid: "Media", high: "Alta", extreme: "Extrema" },
       vocals: { instrumental: "Instrumental", light_vocals: "Voces ligeras", vocal: "Vocal fuerte" }
     }
@@ -8545,6 +8740,7 @@ function applyLanguage() {
   setText("#spotifyLink", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
   setText("#youtubeLink", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
   setText("#soundcloudLink", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
+  setText("#bandcampLink", currentLanguage === "en" ? "Listen on Bandcamp" : currentLanguage === "es" ? "Escuchar en Bandcamp" : "Ouvir no Bandcamp");
   if (youtubePreviewFrame) {
     youtubePreviewFrame.title = currentLanguage === "en" ? "YouTube preview player" : currentLanguage === "es" ? "Player de preview YouTube" : "Player de preview YouTube";
   }
@@ -11494,6 +11690,17 @@ function buildSoundCloudTrackLink(track) {
   return `https://soundcloud.com/search?q=${encodeURIComponent(strictQuery)}`;
 }
 
+function buildBandcampTrackLink(track) {
+  if (track.bandcampTrackUrl) return track.bandcampTrackUrl;
+  if (track.bandcampUrl) return track.bandcampUrl;
+  const artist = String(track?.artist || "").trim();
+  const song = String(track?.song || "").trim();
+  const label = String(track?.label || "").trim();
+  const genericLabel = /catalog|catálogo|curated|dinâmico|dinamico/i.test(label);
+  const query = [artist, song, label && !genericLabel ? label : ""].filter(Boolean).join(" ");
+  return `https://bandcamp.com/search?q=${encodeURIComponent(query || "electronic music")}`;
+}
+
 function buildArtistSocialProfiles(artistName) {
   const artist = String(artistName || "").trim();
   if (!artist) return [];
@@ -11871,6 +12078,12 @@ function soundCloudLinkTrusted(track) {
   if (track.soundcloudVerified === true) return true;
   if (track.soundcloudTrackUrl || track.soundcloudUrl) return true;
   return Boolean(buildSoundCloudTrackLink(track));
+}
+
+function bandcampLinkTrusted(track) {
+  if (!track) return false;
+  if (track.bandcampTrackUrl || track.bandcampUrl) return true;
+  return false;
 }
 
 function localizedArtistNarrativeFallback(track) {
@@ -12300,6 +12513,7 @@ function availableExternalPlatforms() {
   if (spotifyLink?.getAttribute("aria-disabled") !== "true") platforms.push("Spotify");
   if (youtubeLink?.getAttribute("aria-disabled") !== "true") platforms.push("YouTube");
   if (soundcloudLink?.getAttribute("aria-disabled") !== "true") platforms.push("SoundCloud");
+  if (bandcampLink?.getAttribute("aria-disabled") !== "true") platforms.push("Bandcamp");
   return platforms;
 }
 
@@ -14887,6 +15101,78 @@ function bpmIntentStyleBoost(track, prefs = {}) {
   return 0;
 }
 
+function contextStyleBoost(track, prefs = {}) {
+  const context = String(prefs?.context || "");
+  if (!context || prefs?.style) return 0;
+
+  const style = String(track?.style || "");
+  const energy = String(track?.energy || "");
+  const focusStyles = new Set([
+    "techno",
+    "minimal_techno",
+    "melodic_techno",
+    "deep_house",
+    "organic_house",
+    "future_garage",
+    "liquid_dnb",
+    "ambient",
+    "idm",
+    "downtempo"
+  ]);
+  const focusPenaltyStyles = new Set([
+    "psytrance",
+    "full_on",
+    "full_on_night",
+    "full_on_morning",
+    "psy_comercial",
+    "hi_tech",
+    "psycore",
+    "dark_psy",
+    "dark_experimental",
+    "gabber",
+    "hardstyle",
+    "hard_techno",
+    "industrial_techno",
+    "peak_time_techno"
+  ]);
+
+  if (context === "foco" || context === "trabalho") {
+    let boost = 0;
+    if (focusStyles.has(style)) boost += context === "foco" ? 5.2 : 4.2;
+    if (["techno", "minimal_techno", "melodic_techno"].includes(style)) boost += context === "foco" ? 1.8 : 1.2;
+    if (style === "tech_house" && context === "trabalho") boost += 1.1;
+    if (energy === "low") boost += context === "foco" ? 1.6 : 0.7;
+    if (energy === "mid") boost += 1.1;
+    if (energy === "high") boost -= context === "foco" ? 1.4 : 0.3;
+    if (energy === "extreme") boost -= 4.2;
+    if (focusPenaltyStyles.has(style)) boost -= context === "foco" ? 5.8 : 4.6;
+    return boost;
+  }
+
+  if (context === "treino") {
+    const workoutStyles = new Set([
+      "tech_house",
+      "techno",
+      "peak_time_techno",
+      "hard_techno",
+      "industrial_techno",
+      "drum_and_bass",
+      "neurofunk",
+      "jump_up",
+      "bass_house",
+      "electro_house",
+      "gabber",
+      "hardstyle"
+    ]);
+    let boost = workoutStyles.has(style) ? 4.4 : 0;
+    if (["high", "extreme"].includes(energy)) boost += 1.4;
+    if (["ambient", "downtempo", "organic_house", "deep_house", "future_garage"].includes(style)) boost -= 3.2;
+    return boost;
+  }
+
+  return 0;
+}
+
 function recommendationScore(track, prefs) {
   const weights = getWeights();
   let score = 0;
@@ -14898,6 +15184,7 @@ function recommendationScore(track, prefs) {
     if (track.style === prefs.style) score += 3 * weights.style;
   }
   if (prefs.context && track.context.includes(prefs.context)) score += 1.5 * weights.context;
+  score += contextStyleBoost(track, prefs);
   if (prefs.energy && track.energy === prefs.energy) score += 1.7 * weights.energy;
   if (prefs.bpm && track.bpm === prefs.bpm) score += 1.3 * weights.bpm;
   if (prefs.vocals && track.vocals === prefs.vocals) score += 1.2 * weights.vocals;
@@ -15490,6 +15777,13 @@ function renderRecommendation(track, prefs) {
     href: soundcloudHref,
     enabled: soundcloudEnabled,
     title: soundcloudEnabled ? "" : t("soundcloudUnverified")
+  });
+  const bandcampHref = buildBandcampTrackLink(track);
+  const bandcampEnabled = bandcampLinkTrusted(track);
+  setListenLinkState(bandcampLink, {
+    href: bandcampHref,
+    enabled: bandcampEnabled,
+    title: bandcampEnabled ? "" : t("bandcampUnverified")
   });
   if (knownArtistPrompt) knownArtistPrompt.classList.remove("hidden");
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
