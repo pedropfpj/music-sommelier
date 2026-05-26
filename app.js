@@ -2052,7 +2052,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v10";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v11";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v11";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -3216,6 +3216,21 @@ const STYLE_ARTIST_BLOCKLIST = {
 
 const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "psycore",
+  "psytrance",
+  "forest_psy",
+  "freeform",
+  "techno",
+  "tech_house",
+  "house",
+  "deep_house",
+  "bass_house",
+  "electro_house",
+  "drum_and_bass",
+  "liquid_dnb",
+  "neurofunk",
+  "jump_up",
+  "jungle",
+  "gabber",
   "hi_tech",
   "dark_experimental",
   "slambient",
@@ -4771,6 +4786,19 @@ function hasAllowedMixTerm(title) {
   return /\b(original mix|extended mix|club mix|dub mix|radio edit|remix|vip mix|original version)\b/.test(normalized);
 }
 
+function isLikelyDjMixOrSetTitle(value) {
+  const normalized = normalize(value || "").replace(/\s+/g, " ").trim();
+  if (!normalized) return true;
+  const compact = normalized.replace(/[\s_-]+/g, " ");
+  if (/\b(dj\s*)?(set|mix|session)\s*(ao vivo|live|full|completo|complete|continuous|recorded|recording)\b/.test(compact)) return true;
+  if (/\b(full|complete|continuous|seamless|megamix|mixtape)\s+(dj\s*)?(set|mix|session)\b/.test(compact)) return true;
+  if (/\b(live|boiler room|essential mix|radio show|podcast|aftermovie|festival set|club set|opening set|closing set)\b/.test(compact)) return true;
+  if (/\b\d+\s*(h|hr|hrs|hour|hours|min|minutes)\s+(dj\s*)?(set|mix|session)\b/.test(compact)) return true;
+  if (/\b(set|mix|session)\s+#?\d{1,4}\b/.test(compact)) return true;
+  if (/\b(best of|top\s*\d+|playlist|compilation|album mix|mixed by|mixado por)\b/.test(compact)) return true;
+  return false;
+}
+
 function isLikelyGenreDescriptorEntity(value) {
   const normalized = normalize(value || "").replace(/\s+/g, " ").trim();
   if (!normalized) return true;
@@ -4956,6 +4984,7 @@ function isLikelyGeneratedTrackTitle(value) {
   if (/\[\s*(psy|psytrance|trance|techno|house|electro|bass|dnb|dubstep|hitech|psycore|edm)\s*\]/.test(rawLower)) return true;
   if (/\((psy|psytrance|trance|techno|house|edm|fullon|full on|rave|club).*\)/.test(raw)) return true;
   if (/\(([^)]*(festival|hits|radio|rave dj|electronic dance music)[^)]*)\)/.test(raw)) return true;
+  if (isLikelyDjMixOrSetTitle(raw)) return true;
   if (/\b(psy|techno|house)\s*(music|mix)\b/.test(normalized)) return true;
   if (/\b(chill\s*out|chillout|nightlife|music zone|good energy club)\b/.test(normalized) && tokenCount >= 3) return true;
   if (tokenCount >= 10 && promoTermCount >= 3 && genreTermCount >= 1) return true;
@@ -5148,10 +5177,12 @@ function isLikelyCompilationEntry({ song = "", artist = "", label = "", duration
   if (isGenreAliasArtistName(artistRaw)) return true;
   if (isLikelyChannelStyleArtistName(artistRaw)) return true;
   if (isLikelyGeneratedTrackTitle(songRaw)) return true;
+  if (isLikelyDjMixOrSetTitle(songRaw)) return true;
+  if (isLikelyDjMixOrSetTitle(artistRaw)) return true;
   if (labelRaw && isGenericAutoEntityName(labelRaw)) return true;
   if (labelRaw && isLikelyGenreDescriptorEntity(labelRaw)) return true;
 
-  if (Number(durationSec) >= 900) return true;
+  if (Number(durationSec) >= 720) return true;
 
   const songSuspicious = hasSuspiciousDynamicText(songRaw);
   if (songSuspicious && !hasAllowedMixTerm(songRaw)) return true;
@@ -5584,7 +5615,8 @@ function dedupeCatalogByTrackKey() {
     if (track?.existenceVerified === true) score += 3;
     if (track?.spotifyVerified === true) score += 2;
     if (track?.youtubeVerified === true) score += 1.5;
-    if (Number.isFinite(Number(track?.bpmExact)) && Number(track?.bpmExact) > 0) score += 1.2;
+    if (hasReliableBpmForTrack(track)) score += 3.2;
+    else if (isDynamicSource(track?.source)) score -= 3.5;
     if (String(track?.source || "").includes("dataset")) score += 0.5;
     return score;
   };
@@ -6298,6 +6330,9 @@ function isTrackEligibleForRecommendation(track) {
   const bpmValue = Number(track.bpmExact);
   if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return false;
   if (isDynamicSource(track.source)) {
+    if (requiresExactBpmForDynamic(track.style, track.source) && !hasReliableBpmForTrack(track)) {
+      return false;
+    }
     if (requiresSeedAnchorForDynamicStyle(track.style) && !artistSeedAnchoredForStyle(track.style, track.artist)) {
       return false;
     }
@@ -12126,6 +12161,8 @@ function resolvePredictedSpiritTrack(spirit) {
       if (track.previewUrl) score += 1.05;
       if (track.existenceVerified === true) score += 0.62;
       if (track.existenceVerified === false) score -= 4.8;
+      if (hasReliableBpmForTrack(track)) score += 1.35;
+      else score -= isDynamicSource(track.source) ? 3.2 : 1.1;
       if (currentKey && currentKey === key) score -= 1.3;
 
       return { track, score };
@@ -14530,6 +14567,8 @@ function recommendationScore(track, prefs) {
   score -= previewPenaltyForTrack(track);
   if (track.existenceVerified === false) score -= 1000;
   if (track.existenceVerified === true) score += 0.8;
+  if (hasReliableBpmForTrack(track)) score += 2.4;
+  else score -= isDynamicSource(track.source) ? 8.5 : 2.2;
   score += bpmIntentStyleBoost(track, prefs);
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
@@ -16683,9 +16722,11 @@ async function generateRecommendationFromPrefs(
     const keyOf = (track) => recommendationTrackKey(track);
     const pickPool = (pool) => pickRandomTrack(pool.filter((track) => trackAllowedInSession(track) && !excludedTrackKeys.has(keyOf(track))));
 
+    const withReliableBpm = stylePool.filter((track) => track.existenceVerified !== false && hasReliableBpmForTrack(track));
+    const withReliableBpmAndPreview = withReliableBpm.filter((track) => Boolean(track.previewUrl));
     const withPreview = stylePool.filter((track) => track.existenceVerified !== false && Boolean(track.previewUrl));
     const verified = stylePool.filter((track) => track.existenceVerified !== false);
-    const candidate = pickPool(withPreview) || pickPool(verified) || pickPool(stylePool);
+    const candidate = pickPool(withReliableBpmAndPreview) || pickPool(withReliableBpm) || pickPool(withPreview) || pickPool(verified) || pickPool(stylePool);
     if (!candidate) return false;
 
     currentRecommendation = candidate;
