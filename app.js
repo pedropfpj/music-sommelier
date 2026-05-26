@@ -2010,6 +2010,8 @@ let trackPreviewIssueSignals = new Map();
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
+const SUGGESTION_QUEUE_TARGET = 5;
+const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
 let trackInsightCache = new Map();
 let currentTrackInsightTrackKey = "";
 let styleInfoDismissed = false;
@@ -4613,7 +4615,11 @@ function requiresExactBpmForDynamic(style, source = "") {
 }
 
 function targetCatalogSizeForStyle(style) {
-  if (style === "tech_house") return 60;
+  if (style === "tech_house") return 70;
+  if (style === "techno") return 56;
+  if (style === "gabber") return 38;
+  if (style === "house") return 44;
+  if (style === "drum_and_bass") return 44;
   if (style === "full_on") return 52;
   if (style === "full_on_night" || style === "full_on_morning") return 46;
   if (style === "psy_comercial") return 48;
@@ -4622,8 +4628,8 @@ function targetCatalogSizeForStyle(style) {
   if (style === "dark_experimental") return 40;
   if (style === "psycore") return 18;
   if (style === "slambient") return 24;
-  if (style === "psytrance" || style === "progressive_psy") return 40;
-  return 30;
+  if (style === "psytrance" || style === "progressive_psy") return 44;
+  return 36;
 }
 
 function getRecentTrackHistory(style) {
@@ -6677,6 +6683,7 @@ async function hydrateCatalogForStyle(style) {
   const existingKeys = new Set(catalog.map((t) => normalize(`${t.artist}::${t.song}`)));
   const seedCap = style === "psycore" ? 48 : STRICT_DYNAMIC_BPM_STYLES.has(style) ? 12 : 24;
   const skipBroadStyleHydration = NO_BROAD_STYLE_HYDRATION_STYLES.has(style);
+  const allowItunesHydration = !requiresExactBpmForDynamic(style, "itunes_dynamic");
   const selectedSeeds = selectHydrationArtists(style, seeds, Math.min(seedCap, seeds.length));
 
   for (const artist of selectedSeeds) {
@@ -6704,36 +6711,38 @@ async function hydrateCatalogForStyle(style) {
     if (stats.trackCount >= targetSize) break;
   }
 
-  // Segunda fonte: iTunes Search para aumentar variedade e preview.
-  for (const artist of selectedSeeds) {
-    const rows = await fetchItunesTracksByStyle(style, artist);
-    for (const row of rows) {
-      addDynamicTrackToCatalog({
-        style,
-        song: row.trackName,
-        artist: row.artistName,
-        label: row.collectionName || row.artistName || "Catálogo dinâmico",
-        bpmExact: 0,
-        previewUrl: row.previewUrl || "",
-        releaseDate: row.releaseDate ? String(row.releaseDate).slice(0, 10) : "Catálogo dinâmico",
-        durationSec: Math.round((Number(row.trackTimeMillis) || 0) / 1000),
-        artistCountry: "",
-        artistGenre: row.primaryGenreName || "",
-        artistProfileHint: row.collectionName || "",
-        source: "itunes_dynamic"
-      }, existingKeys);
+  // Segunda fonte: iTunes Search para estilos que aceitam preview sem BPM exato.
+  if (allowItunesHydration) {
+    for (const artist of selectedSeeds) {
+      const rows = await fetchItunesTracksByStyle(style, artist);
+      for (const row of rows) {
+        addDynamicTrackToCatalog({
+          style,
+          song: row.trackName,
+          artist: row.artistName,
+          label: row.collectionName || row.artistName || "Catálogo dinâmico",
+          bpmExact: 0,
+          previewUrl: row.previewUrl || "",
+          releaseDate: row.releaseDate ? String(row.releaseDate).slice(0, 10) : "Catálogo dinâmico",
+          durationSec: Math.round((Number(row.trackTimeMillis) || 0) / 1000),
+          artistCountry: "",
+          artistGenre: row.primaryGenreName || "",
+          artistProfileHint: row.collectionName || "",
+          source: "itunes_dynamic"
+        }, existingKeys);
 
+        const stats = stylePoolStats(style);
+        if (stats.trackCount >= targetSize) break;
+      }
       const stats = stylePoolStats(style);
       if (stats.trackCount >= targetSize) break;
     }
-    const stats = stylePoolStats(style);
-    if (stats.trackCount >= targetSize) break;
   }
 
   let stats = stylePoolStats(style);
 
   // Fallback por artista puro: usa base local de artistas quando o termo de estilo falha.
-  if (stats.trackCount < targetSize) {
+  if (allowItunesHydration && stats.trackCount < targetSize) {
     for (const artist of selectedSeeds) {
       const rows = await fetchItunesTracksByArtist(artist, style);
       for (const row of rows) {
@@ -6762,6 +6771,7 @@ async function hydrateCatalogForStyle(style) {
   // Busca genérica por estilo para atingir cobertura mínima (20 artistas + 20 faixas).
   if (
     !skipBroadStyleHydration &&
+    allowItunesHydration &&
     (stats.trackCount < MIN_TRACKS_PER_STYLE || stats.artistCount < MIN_ARTISTS_PER_STYLE) &&
     familyOf(style) !== "techno"
   ) {
@@ -6830,7 +6840,16 @@ async function hydrateCatalogUntilCoverage(style, maxPasses = COVERAGE_MAX_PASSE
 async function warmupCatalogInBackground() {
   if (catalogWarmupRunning) return;
   catalogWarmupRunning = true;
-  const styles = getAllSelectableStyles();
+  const selectedStyle = styleEl?.value || "";
+  const selectedFamily = familyOf(selectedStyle);
+  const allStyles = getAllSelectableStyles();
+  const styles = [
+    selectedStyle,
+    ...allStyles.filter((style) => selectedFamily && familyOf(style) === selectedFamily),
+    ...allStyles
+  ].filter(Boolean)
+    .filter((style, index, list) => list.indexOf(style) === index)
+    .slice(0, BACKGROUND_WARMUP_STYLE_LIMIT);
 
   for (const style of styles) {
     const stats = await hydrateCatalogUntilCoverage(style, 2);
@@ -7089,8 +7108,8 @@ const I18N = {
     ratingSavedHint: "Você avaliou com {stars} estrelas.",
     ratingSavedFeedback: "Avaliação registrada: {stars} estrelas para {song}.",
     ratingSavedToast: "Avaliação salva: {stars} estrelas.",
-    suggestionQueueTitle: "Fila inteligente: 3 sugestões",
-    suggestionQueueHint: "Troque na hora sem mudar seus filtros.",
+    suggestionQueueTitle: "Fila rápida: 5 sugestões",
+    suggestionQueueHint: "Mais opções sem reprocessar seus filtros.",
     queueNow: "Agora",
     queueNext: "Próxima",
     queueUse: "Tocar esta",
@@ -7378,8 +7397,8 @@ const I18N = {
     ratingSavedHint: "You rated this track with {stars} stars.",
     ratingSavedFeedback: "Rating saved: {stars} stars for {song}.",
     ratingSavedToast: "Rating saved: {stars} stars.",
-    suggestionQueueTitle: "Smart queue: 3 suggestions",
-    suggestionQueueHint: "Switch instantly without changing your filters.",
+    suggestionQueueTitle: "Fast queue: 5 suggestions",
+    suggestionQueueHint: "More options without reprocessing your filters.",
     queueNow: "Now",
     queueNext: "Next",
     queueUse: "Play this",
@@ -7667,8 +7686,8 @@ const I18N = {
     ratingSavedHint: "Has valorado esta pista con {stars} estrellas.",
     ratingSavedFeedback: "Valoración guardada: {stars} estrellas para {song}.",
     ratingSavedToast: "Valoración guardada: {stars} estrellas.",
-    suggestionQueueTitle: "Fila inteligente: 3 sugerencias",
-    suggestionQueueHint: "Cambia al instante sin modificar tus filtros.",
+    suggestionQueueTitle: "Fila rápida: 5 sugerencias",
+    suggestionQueueHint: "Más opciones sin reprocesar tus filtros.",
     queueNow: "Ahora",
     queueNext: "Siguiente",
     queueUse: "Reproducir esta",
@@ -14763,7 +14782,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
   const anchorArtistKey = normalize(anchorTrack?.artist || "");
   const fillFromScored = (entries, { diversify = false } = {}) => {
     entries.forEach((entry) => {
-      if (queue.length >= 3) return;
+      if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
       if (!entry?.track) return;
       if (diversify && anchorArtistKey && normalize(entry.track.artist) === anchorArtistKey && queue.length === 1) {
         return;
@@ -14772,20 +14791,24 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     });
   };
 
-  fillFromScored(scoredUnknown, { diversify: true });
-  if (queue.length < 3) fillFromScored(scoredUnknown);
+  const scoredReliableUnknown = scoredUnknown.filter((entry) => hasReliableBpmForTrack(entry.track));
+  fillFromScored(scoredReliableUnknown, { diversify: true });
+  if (queue.length < SUGGESTION_QUEUE_TARGET) fillFromScored(scoredUnknown, { diversify: true });
+  if (queue.length < SUGGESTION_QUEUE_TARGET) fillFromScored(scoredUnknown);
 
-  if (queue.length < 3) {
+  if (queue.length < SUGGESTION_QUEUE_TARGET) {
     const scoredFallback = eligible
       .map((track) => ({ track, score: recommendationScore(track, prefs) }))
       .sort((a, b) => b.score - a.score);
+    const scoredReliableFallback = scoredFallback.filter((entry) => hasReliableBpmForTrack(entry.track));
+    fillFromScored(scoredReliableFallback, { diversify: true });
     scoredFallback.forEach((entry) => {
-      if (queue.length >= 3) return;
+      if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
       maybeAdd(entry.track);
     });
   }
 
-  return queue.slice(0, 3);
+  return queue.slice(0, SUGGESTION_QUEUE_TARGET);
 }
 
 function recommendationMetaLine(track) {
