@@ -1920,6 +1920,79 @@ input[type="range"] {
   animation: chip-pop 640ms ease;
 }
 
+.artist-visual-card {
+  margin: 0.65rem 0 0.35rem;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  max-width: min(100%, 620px);
+  padding: 0.55rem;
+  border: 1px solid rgba(123, 233, 255, 0.34);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.18), transparent 48%),
+    linear-gradient(135deg, rgba(5, 13, 31, 0.76), rgba(10, 25, 52, 0.58));
+  box-shadow: inset 0 0 0 1px rgba(145, 221, 255, 0.06);
+}
+
+.artist-photo-frame {
+  position: relative;
+  width: 92px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(141, 232, 255, 0.44);
+  background:
+    radial-gradient(circle at 28% 22%, rgba(111, 255, 219, 0.55), transparent 42%),
+    linear-gradient(145deg, rgba(32, 77, 119, 0.92), rgba(32, 24, 84, 0.84));
+  display: grid;
+  place-items: center;
+}
+
+.artist-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.artist-photo-fallback {
+  font-family: "Syne", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #061529;
+  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.2);
+}
+
+.artist-visual-card figcaption {
+  min-width: 0;
+  display: grid;
+  gap: 0.14rem;
+}
+
+.artist-visual-card figcaption span {
+  color: var(--cyan);
+  font-family: "Syne", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.artist-visual-card figcaption strong {
+  color: #f2f7ff;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.15rem, 3.6vw, 1.95rem);
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+
+.artist-visual-card figcaption small {
+  color: #bfd4f4;
+  font-size: 0.78rem;
+}
+
 .chip.alt {
   background: #9bffb7;
 }
@@ -3756,6 +3829,20 @@ input[type="range"] {
   .audio-volume-control label,
   .audio-volume-control span {
     font-size: 0.62rem;
+  }
+
+  .artist-visual-card {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+
+  .artist-photo-frame {
+    width: 72px;
+    border-radius: 10px;
+  }
+
+  .artist-photo-fallback {
+    font-size: 1.1rem;
   }
 
   .language-card {

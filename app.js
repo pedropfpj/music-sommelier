@@ -1818,6 +1818,12 @@ const artistLine = document.getElementById("artistLine");
 const bpmLine = document.getElementById("bpmLine");
 const artistName = document.getElementById("artistName");
 const labelName = document.getElementById("labelName");
+const artistVisualCard = document.getElementById("artistVisualCard");
+const artistPhoto = document.getElementById("artistPhoto");
+const artistPhotoFallback = document.getElementById("artistPhotoFallback");
+const artistPhotoKicker = document.getElementById("artistPhotoKicker");
+const artistPhotoName = document.getElementById("artistPhotoName");
+const artistPhotoSource = document.getElementById("artistPhotoSource");
 const styleName = document.getElementById("styleName");
 const bpmInfo = document.getElementById("bpmInfo");
 const energyInfo = document.getElementById("energyInfo");
@@ -1988,6 +1994,7 @@ let searchProgressValue = 0;
 let youtubePreviewSearchAttempt = 0;
 let youtubePreviewTrackKey = "";
 let bioAnimationToken = 0;
+let artistImageRequestToken = 0;
 let listeningNarrativeToken = 0;
 let spiritAnimationToken = 0;
 let currentSpiritId = "";
@@ -2123,6 +2130,7 @@ const DEFAULT_WEIGHTS = {
   vocals: 1
 };
 const artistApiProfileCache = new Map();
+const artistImageCache = new Map();
 const recentArtistSignals = new Map();
 
 const MIN_TRACKS_PER_STYLE = 20;
@@ -6900,6 +6908,16 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       track.youtubeVerified = true;
       track.previewConfidence = best.score;
       track.artistProfileHint = track.artistProfileHint || deezerMatch?.album?.title || "";
+      const deezerArtistImage = String(
+        deezerMatch?.artist?.picture_xl ||
+        deezerMatch?.artist?.picture_big ||
+        deezerMatch?.artist?.picture_medium ||
+        ""
+      ).trim();
+      if (deezerArtistImage) {
+        track.artistImageUrl = deezerArtistImage;
+        track.artistImageSource = "Deezer";
+      }
       promotePreviewCandidate(track, deezerMatch.preview || "");
       track.spotifyTrackUrl = buildSpotifyTrackLink(track);
       track.youtubeTrackUrl = buildYouTubeTrackLink(track);
@@ -7157,6 +7175,10 @@ const I18N = {
     genericVibe: "Faixa recomendada para o perfil {style}.",
     genericArtistBio: "{artist} aparece com destaque no subgênero {style}.",
     genericLabelBio: "{label} participa de lançamentos relevantes no subgênero {style}.",
+    artistVisualKicker: "Artista",
+    artistImageLoading: "Buscando foto do artista...",
+    artistImageLoaded: "Foto real do artista",
+    artistImageFallback: "Foto não encontrada; exibindo identidade do artista.",
     artistSocialsTitle: "Redes do artista",
     artistSocialsHint: "Links por busca do nome do artista nas plataformas.",
     warmupCatalogToast: "Catálogo ampliado em background para todos os subgêneros.",
@@ -7442,6 +7464,10 @@ const I18N = {
     genericVibe: "Track recommended for the {style} profile.",
     genericArtistBio: "{artist} is highlighted in the {style} subgenre.",
     genericLabelBio: "{label} appears in relevant releases for {style}.",
+    artistVisualKicker: "Artist",
+    artistImageLoading: "Searching artist photo...",
+    artistImageLoaded: "Real artist photo",
+    artistImageFallback: "Photo not found; showing artist identity.",
     artistSocialsTitle: "Artist social links",
     artistSocialsHint: "Links open platform search by artist name.",
     warmupCatalogToast: "Catalog expanded in the background for all subgenres.",
@@ -7727,6 +7753,10 @@ const I18N = {
     genericVibe: "Pista recomendada para el perfil {style}.",
     genericArtistBio: "{artist} aparece como destacado en el subgénero {style}.",
     genericLabelBio: "{label} participa de lanzamientos relevantes en {style}.",
+    artistVisualKicker: "Artista",
+    artistImageLoading: "Buscando foto del artista...",
+    artistImageLoaded: "Foto real del artista",
+    artistImageFallback: "Foto no encontrada; mostrando identidad del artista.",
     artistSocialsTitle: "Redes del artista",
     artistSocialsHint: "Los links abren búsqueda por nombre del artista en cada plataforma.",
     warmupCatalogToast: "Catálogo ampliado en segundo plano para todos los subgéneros.",
@@ -8646,6 +8676,14 @@ function resetSessionUiState() {
   if (labelBio) labelBio.textContent = "";
   if (artistSocialsPanel) artistSocialsPanel.classList.add("hidden");
   if (artistSocialLinks) artistSocialLinks.innerHTML = "";
+  if (artistVisualCard) artistVisualCard.classList.add("hidden");
+  if (artistPhoto) {
+    artistPhoto.classList.add("hidden");
+    artistPhoto.removeAttribute("src");
+    artistPhoto.alt = "";
+  }
+  if (artistPhotoName) artistPhotoName.textContent = "";
+  if (artistPhotoSource) artistPhotoSource.textContent = "";
   if (spiritPanel) spiritPanel.classList.add("hidden");
   if (spiritSpotlightPanel) spiritSpotlightPanel.classList.add("hidden");
   if (spiritSpotlightHint) spiritSpotlightHint.textContent = t("spiritSpotlightHintPredicted");
@@ -11332,6 +11370,93 @@ function buildArtistSocialProfiles(artistName) {
       url: `https://bandcamp.com/search?q=${query}`
     }
   ];
+}
+
+function artistInitials(name = "") {
+  const tokens = String(name || "")
+    .replace(/[^\p{L}\p{N}\s&-]/gu, " ")
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter(Boolean)
+    .filter((token) => !["dj", "mc", "the"].includes(normalize(token)));
+  const picked = tokens.slice(0, 2);
+  const initials = picked.map((token) => token[0] || "").join("").toUpperCase();
+  return initials || "SS";
+}
+
+function renderArtistVisualFallback(track, sourceText = "") {
+  const artist = String(track?.artist || "").trim();
+  if (!artistVisualCard || !artist) return;
+  artistVisualCard.classList.remove("hidden");
+  if (artistPhotoName) artistPhotoName.textContent = artist;
+  if (artistPhotoKicker) artistPhotoKicker.textContent = t("artistVisualKicker");
+  if (artistPhotoSource) artistPhotoSource.textContent = sourceText || t("artistImageLoading");
+  if (artistPhotoFallback) artistPhotoFallback.textContent = artistInitials(artist);
+  if (artistPhoto) {
+    artistPhoto.classList.add("hidden");
+    artistPhoto.removeAttribute("src");
+    artistPhoto.alt = "";
+  }
+}
+
+function applyArtistPhoto(track, imageUrl = "", source = "") {
+  const artist = String(track?.artist || "").trim();
+  const url = String(imageUrl || "").trim();
+  if (!artistVisualCard || !artist) return false;
+  if (!url) {
+    renderArtistVisualFallback(track, t("artistImageFallback"));
+    return false;
+  }
+  artistVisualCard.classList.remove("hidden");
+  if (artistPhotoName) artistPhotoName.textContent = artist;
+  if (artistPhotoKicker) artistPhotoKicker.textContent = t("artistVisualKicker");
+  if (artistPhotoSource) artistPhotoSource.textContent = source ? `${t("artistImageLoaded")} - ${source}` : t("artistImageLoaded");
+  if (artistPhotoFallback) artistPhotoFallback.textContent = artistInitials(artist);
+  if (artistPhoto) {
+    artistPhoto.src = url;
+    artistPhoto.alt = artist;
+    artistPhoto.classList.remove("hidden");
+  }
+  track.artistImageUrl = url;
+  track.artistImageSource = source || "Deezer";
+  return true;
+}
+
+async function fetchArtistImageFromDeezer(artistName = "") {
+  const artist = sanitizeArtistLookupName(artistName);
+  const key = normalize(artist);
+  if (!key) return null;
+  if (artistImageCache.has(key)) return artistImageCache.get(key);
+  try {
+    const data = await deezerJsonp(`https://api.deezer.com/search/artist?q=${encodeURIComponent(artist)}&limit=8`);
+    const rows = Array.isArray(data?.data) ? data.data : [];
+    const best = rows.find((row) => isArtistMatch(row?.name || "", artist));
+    const imageUrl = String(best?.picture_xl || best?.picture_big || best?.picture_medium || "").trim();
+    const result = imageUrl ? { imageUrl, source: "Deezer" } : null;
+    artistImageCache.set(key, result);
+    return result;
+  } catch (_err) {
+    artistImageCache.set(key, null);
+    return null;
+  }
+}
+
+async function hydrateArtistVisual(track) {
+  const artist = String(track?.artist || "").trim();
+  if (!artist) return;
+  const requestToken = (artistImageRequestToken += 1);
+  if (track.artistImageUrl) {
+    applyArtistPhoto(track, track.artistImageUrl, track.artistImageSource || "Catálogo");
+    return;
+  }
+  const result = await fetchArtistImageFromDeezer(artist);
+  if (requestToken !== artistImageRequestToken) return;
+  if (!currentRecommendation || !isArtistMatch(currentRecommendation.artist, artist)) return;
+  if (result?.imageUrl) {
+    applyArtistPhoto(track, result.imageUrl, result.source);
+  } else {
+    renderArtistVisualFallback(track, t("artistImageFallback"));
+  }
 }
 
 function renderArtistSocialLinks(track) {
@@ -15111,6 +15236,8 @@ function renderRecommendation(track, prefs) {
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: styleLabelByValue(track.style) });
+  renderArtistVisualFallback(track);
+  void hydrateArtistVisual(track);
   void revealListeningNarrative(track, prefs);
 
   if (matchReason) {
@@ -17596,6 +17723,10 @@ bind(audioVolumeSlider, "input", () => {
 
 bind(audioVolumeSlider, "change", () => {
   playUiSfx("tap");
+});
+
+bind(artistPhoto, "error", () => {
+  if (currentRecommendation) renderArtistVisualFallback(currentRecommendation, t("artistImageFallback"));
 });
 
 bind(introContinueBtn, "click", () => {
