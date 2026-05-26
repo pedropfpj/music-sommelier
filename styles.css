@@ -3206,6 +3206,12 @@ input[type="range"] {
   color: #7bf4d9;
 }
 
+.event-source {
+  width: fit-content;
+  color: #91b9e8;
+  font-size: 0.72rem;
+}
+
 .events-list {
   margin: 0.75rem 0 0;
   padding: 0;

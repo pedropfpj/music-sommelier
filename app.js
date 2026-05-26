@@ -1690,6 +1690,18 @@ const TRACK_METADATA = {
 };
 
 const FALLBACK_EVENTS = {
+  "michael bibi": [
+    {
+      datetime: "2026-11-28T00:00:00",
+      dateOnly: true,
+      venue: "One Life Sao Paulo - Arena Pinheiros",
+      city: "Sao Paulo",
+      country: "BR",
+      url: "https://wegoout.com.br/eventos/michael-bibi-one-life",
+      sourceName: "We Go Out",
+      sourceUrl: "https://wegoout.com.br/eventos/michael-bibi-one-life"
+    }
+  ],
   astrix: [
     { datetime: "2026-04-11T23:30:00", venue: "Universo Paralello Warmup", city: "Sao Paulo", country: "BR", url: "https://www.songkick.com/search?query=Astrix" },
     { datetime: "2026-05-30T22:00:00", venue: "Psy Valley Open Air", city: "Lisbon", country: "PT", url: "https://www.songkick.com/search?query=Astrix" }
@@ -14647,8 +14659,26 @@ function formatEventDate(isoDate) {
   });
 }
 
+function formatEventDisplayDate(event) {
+  if (!event?.datetime) return "";
+  const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es-ES" : "en-US";
+  const date = new Date(event.datetime);
+  if (event.dateOnly) {
+    return date.toLocaleDateString(locale, {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  }
+  return formatEventDate(event.datetime);
+}
+
 function getFallbackEvents(artist) {
-  return FALLBACK_EVENTS[normalize(artist)] || [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return (FALLBACK_EVENTS[normalize(artist)] || [])
+    .filter((event) => event?.datetime && new Date(event.datetime) >= today)
+    .sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
 }
 
 async function fetchUpcomingEvents(artist) {
@@ -14666,10 +14696,13 @@ async function fetchUpcomingEvents(artist) {
       .filter((item) => item.datetime && new Date(item.datetime) >= now)
       .map((item) => ({
         datetime: item.datetime,
+        dateOnly: false,
         venue: item.venue?.name || "Venue a confirmar",
         city: item.venue?.city || "Cidade a confirmar",
         country: item.venue?.country || "",
-        url: item.url || ""
+        url: item.url || "",
+        sourceName: "Bandsintown",
+        sourceUrl: item.url || ""
       }))
       .sort((a, b) => new Date(a.datetime) - new Date(b.datetime))
       .slice(0, 10);
@@ -14704,13 +14737,19 @@ function renderEventsPanel(artist, events, source) {
     card.className = "event-date-card";
 
     const title = document.createElement("strong");
-    title.textContent = formatEventDate(event.datetime);
+    title.textContent = formatEventDisplayDate(event);
     const place = document.createElement("span");
     place.textContent = `${event.city}${event.country ? `, ${event.country}` : ""}`;
     const venue = document.createElement("span");
     venue.textContent = event.venue;
 
     card.append(title, place, venue);
+    if (event.sourceName) {
+      const source = document.createElement("small");
+      source.className = "event-source";
+      source.textContent = event.sourceName;
+      card.appendChild(source);
+    }
     eventsCalendar.appendChild(card);
   });
 
@@ -14719,10 +14758,17 @@ function renderEventsPanel(artist, events, source) {
     item.className = "event-item";
 
     const date = document.createElement("strong");
-    date.textContent = formatEventDate(event.datetime);
+    date.textContent = formatEventDisplayDate(event);
     const details = document.createElement("span");
     details.textContent = `${event.venue} - ${event.city}${event.country ? `, ${event.country}` : ""}`;
     item.append(date, details);
+
+    if (event.sourceName) {
+      const source = document.createElement("small");
+      source.className = "event-source";
+      source.textContent = event.sourceName;
+      item.appendChild(source);
+    }
 
     if (event.url) {
       const link = document.createElement("a");
