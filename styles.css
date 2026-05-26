@@ -192,11 +192,11 @@ p {
 
 .audio-volume-control {
   position: fixed;
-  top: 0.9rem;
-  right: 9.9rem;
-  z-index: 14;
+  right: 0.9rem;
+  bottom: calc(var(--signature-bar-height, 36px) + 0.84rem);
+  z-index: 9;
   display: grid;
-  grid-template-columns: auto minmax(96px, 138px) 3.2rem;
+  grid-template-columns: auto minmax(92px, 126px) 3rem;
   align-items: center;
   gap: 0.5rem;
   min-height: 40px;
@@ -207,7 +207,7 @@ p {
     radial-gradient(circle at 12% 16%, rgba(109, 255, 208, 0.15), transparent 42%),
     linear-gradient(145deg, rgba(6, 14, 33, 0.88), rgba(11, 21, 49, 0.8));
   color: #dff5ff;
-  box-shadow: 0 12px 28px rgba(3, 11, 29, 0.35), inset 0 0 0 1px rgba(142, 207, 255, 0.07);
+  box-shadow: 0 10px 24px rgba(3, 11, 29, 0.3), inset 0 0 0 1px rgba(142, 207, 255, 0.07);
 }
 
 .audio-volume-control label,
@@ -3132,6 +3132,46 @@ input[type="range"] {
   padding-top: 0.6rem;
 }
 
+.discogs-artist-panel {
+  margin-top: 0.62rem;
+  border: 1px solid rgba(155, 206, 255, 0.32);
+  border-radius: 10px;
+  padding: 0.64rem;
+  display: grid;
+  gap: 0.32rem;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.1), transparent 46%),
+    rgba(7, 14, 31, 0.72);
+}
+
+.discogs-title {
+  margin: 0;
+  color: #e8f6ff;
+  font-weight: 800;
+}
+
+.discogs-hint {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.discogs-link {
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid rgba(155, 206, 255, 0.52);
+  color: #d8efff;
+  text-decoration: none;
+  padding: 0.32rem 0.78rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  background: rgba(9, 18, 37, 0.94);
+}
+
+.discogs-link:hover {
+  border-color: rgba(110, 255, 220, 0.82);
+  background: rgba(11, 30, 45, 0.96);
+}
+
 .socials-title {
   margin: 0;
   font-size: 0.9rem;
@@ -3955,8 +3995,9 @@ input[type="range"] {
   }
 
   .audio-volume-control {
-    top: 3.25rem;
+    top: auto;
     right: 0.64rem;
+    bottom: calc(var(--signature-bar-height, 46px) + 0.68rem);
     grid-template-columns: auto minmax(86px, 1fr) 2.8rem;
     width: min(92vw, 280px);
     min-height: 36px;

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260526h" />
+    <link rel="stylesheet" href="styles.css?v=20260526i" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -632,6 +632,11 @@
           <article id="artistDetailsCard" class="details-card">
             <h4>Artista</h4>
             <p id="artistBio"></p>
+            <div id="discogsArtistPanel" class="discogs-artist-panel hidden">
+              <p id="discogsArtistTitle" class="discogs-title">Bio completa no Discogs</p>
+              <p id="discogsArtistHint" class="muted discogs-hint">Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.</p>
+              <a id="discogsArtistLink" class="discogs-link" href="#" target="_blank" rel="noopener noreferrer">Buscar artista no Discogs</a>
+            </div>
             <div id="artistSocialsPanel" class="artist-socials hidden">
               <p id="artistSocialsTitle" class="socials-title">Redes do artista</p>
               <p id="artistSocialsHint" class="muted socials-hint">Links por busca do nome do artista nas plataformas.</p>
@@ -790,6 +795,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260526h"></script>
+    <script src="app.js?v=20260526i"></script>
   </body>
 </html>

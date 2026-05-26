@@ -1845,6 +1845,10 @@ const artistPhotoFallback = document.getElementById("artistPhotoFallback");
 const artistPhotoKicker = document.getElementById("artistPhotoKicker");
 const artistPhotoName = document.getElementById("artistPhotoName");
 const artistPhotoSource = document.getElementById("artistPhotoSource");
+const discogsArtistPanel = document.getElementById("discogsArtistPanel");
+const discogsArtistTitle = document.getElementById("discogsArtistTitle");
+const discogsArtistHint = document.getElementById("discogsArtistHint");
+const discogsArtistLink = document.getElementById("discogsArtistLink");
 const styleName = document.getElementById("styleName");
 const bpmInfo = document.getElementById("bpmInfo");
 const energyInfo = document.getElementById("energyInfo");
@@ -7152,6 +7156,9 @@ const I18N = {
     tasteTuneGenerated: "Ajuste aplicado: {label}. Agora estou testando uma nova direção para o seu gosto.",
     tasteTuneFallback: "Não achei uma opção boa nesse ajuste agora. Mantive sua recomendação atual.",
     artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
+    discogsArtistTitle: "Bio completa no Discogs",
+    discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
+    discogsArtistLink: "Buscar artista no Discogs",
     trackAiTitle: "Radar IA da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
@@ -7446,6 +7453,9 @@ const I18N = {
     tasteTuneGenerated: "Tune applied: {label}. Now testing a new direction for your taste.",
     tasteTuneFallback: "I could not find a strong option for that tune right now. Kept your current recommendation.",
     artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
+    discogsArtistTitle: "Full bio on Discogs",
+    discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
+    discogsArtistLink: "Find artist on Discogs",
     trackAiTitle: "Track AI radar",
     trackAiRefreshBtn: "Refresh insight",
     trackAiLoading: "Analyzing your current track and preparing a quick read...",
@@ -7740,6 +7750,9 @@ const I18N = {
     tasteTuneGenerated: "Ajuste aplicado: {label}. Ahora pruebo una nueva dirección para tu gusto.",
     tasteTuneFallback: "No encontré una buena opción para ese ajuste ahora. Mantuve tu recomendación actual.",
     artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
+    discogsArtistTitle: "Bio completa en Discogs",
+    discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
+    discogsArtistLink: "Buscar artista en Discogs",
     trackAiTitle: "Radar IA de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
@@ -8542,6 +8555,9 @@ function applyLanguage() {
   setText("#detailsPanel article:last-child h4", labels.labelTitle || "");
   setText("#artistSocialsTitle", t("artistSocialsTitle"));
   setText("#artistSocialsHint", t("artistSocialsHint"));
+  setText("#discogsArtistTitle", t("discogsArtistTitle"));
+  setText("#discogsArtistHint", t("discogsArtistHint"));
+  setText("#discogsArtistLink", t("discogsArtistLink"));
   setText("#eventsPanel > h3", labels.eventsTitle || "");
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
   setText("#summaryStatusLabel", t("summaryStatusLabel"));
@@ -11484,8 +11500,17 @@ function buildArtistSocialProfiles(artistName) {
     {
       platform: "Bandcamp",
       url: `https://bandcamp.com/search?q=${query}`
+    },
+    {
+      platform: "Discogs",
+      url: buildDiscogsArtistSearchUrl(artist)
     }
   ];
+}
+
+function buildDiscogsArtistSearchUrl(artistName) {
+  const artist = String(artistName || "").trim();
+  return `https://www.discogs.com/search/?q=${encodeURIComponent(artist)}&type=artist`;
 }
 
 function artistInitials(name = "") {
@@ -11603,6 +11628,22 @@ function renderArtistSocialLinks(track) {
     artistSocialLinks.appendChild(link);
   });
   artistSocialsPanel.classList.remove("hidden");
+}
+
+function renderDiscogsArtistPanel(track) {
+  if (!discogsArtistPanel || !discogsArtistLink) return;
+  const artist = String(track?.artist || "").trim();
+  if (!artist) {
+    discogsArtistPanel.classList.add("hidden");
+    discogsArtistLink.href = "#";
+    return;
+  }
+  if (discogsArtistTitle) discogsArtistTitle.textContent = t("discogsArtistTitle");
+  if (discogsArtistHint) discogsArtistHint.textContent = t("discogsArtistHint");
+  discogsArtistLink.href = buildDiscogsArtistSearchUrl(artist);
+  discogsArtistLink.textContent = t("discogsArtistLink");
+  discogsArtistLink.title = `${t("discogsArtistLink")} - ${artist}`;
+  discogsArtistPanel.classList.remove("hidden");
 }
 
 function isStrictLinkStyle(style) {
@@ -15442,6 +15483,7 @@ function renderRecommendation(track, prefs) {
     artistBio.textContent = detailedArtistBio(track);
     void hydrateArtistBioFromApis(track);
   }
+  renderDiscogsArtistPanel(track);
   renderArtistSocialLinks(track);
   if (labelBio) {
     labelBio.textContent = detailedLabelBio(track);
