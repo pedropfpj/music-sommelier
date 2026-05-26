@@ -1741,6 +1741,15 @@ const authGuestBtn = document.getElementById("authGuestBtn");
 const authFeedback = document.getElementById("authFeedback");
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
+const catalogStatsKicker = document.getElementById("catalogStatsKicker");
+const catalogArtistsCount = document.getElementById("catalogArtistsCount");
+const catalogTracksCount = document.getElementById("catalogTracksCount");
+const catalogStylesCount = document.getElementById("catalogStylesCount");
+const catalogLabelsCount = document.getElementById("catalogLabelsCount");
+const catalogArtistsLabel = document.getElementById("catalogArtistsLabel");
+const catalogTracksLabel = document.getElementById("catalogTracksLabel");
+const catalogStylesLabel = document.getElementById("catalogStylesLabel");
+const catalogLabelsLabel = document.getElementById("catalogLabelsLabel");
 const quickSurprisePanel = document.getElementById("quickSurprisePanel");
 const quickSurpriseTitle = document.getElementById("quickSurpriseTitle");
 const quickSurpriseHint = document.getElementById("quickSurpriseHint");
@@ -7067,6 +7076,11 @@ const I18N = {
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
     heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
+    catalogStatsKicker: "Nossa base para descoberta",
+    catalogStatsArtists: "artistas",
+    catalogStatsTracks: "músicas",
+    catalogStatsStyles: "subgêneros",
+    catalogStatsLabels: "labels",
     recommendBtn: "Gerar recomendação",
     rerollBtn: "Nova sugestão no mesmo perfil",
     surpriseBtn: "Surpreender",
@@ -7356,6 +7370,11 @@ const I18N = {
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
     heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, and other key subgenres.",
+    catalogStatsKicker: "Our discovery base",
+    catalogStatsArtists: "artists",
+    catalogStatsTracks: "tracks",
+    catalogStatsStyles: "subgenres",
+    catalogStatsLabels: "labels",
     recommendBtn: "Generate recommendation",
     rerollBtn: "New suggestion with same profile",
     surpriseBtn: "Surprise me",
@@ -7645,6 +7664,11 @@ const I18N = {
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
     heroTitle: "Curaduría electrónica con descubrimiento real",
     heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass y otros subgéneros clave.",
+    catalogStatsKicker: "Nuestra base para descubrir",
+    catalogStatsArtists: "artistas",
+    catalogStatsTracks: "pistas",
+    catalogStatsStyles: "subgéneros",
+    catalogStatsLabels: "sellos",
     recommendBtn: "Generar recomendación",
     rerollBtn: "Nueva sugerencia en el mismo perfil",
     surpriseBtn: "Sorprenderme",
@@ -8201,6 +8225,64 @@ function setText(selector, text) {
   if (el) el.textContent = text;
 }
 
+function currentLocale() {
+  if (currentLanguage === "en") return "en-US";
+  if (currentLanguage === "es") return "es-ES";
+  return "pt-BR";
+}
+
+function formatCatalogCount(value) {
+  return new Intl.NumberFormat(currentLocale()).format(Math.max(0, Number(value) || 0));
+}
+
+function isCountableLabel(label) {
+  const key = normalize(label || "");
+  if (!key) return false;
+  if (key === normalize("Catálogo dinâmico") || key === normalize("Dynamic catalog")) return false;
+  if (key === normalize("Catálogo local") || key === normalize("Curated catalog")) return false;
+  if (key === normalize("Catalogo") || key === normalize("Catalog")) return false;
+  return true;
+}
+
+function catalogStatsSnapshot() {
+  const trackKeys = new Set();
+  const artistKeys = new Set();
+  const labelKeys = new Set();
+  const styleValues = getAllSelectableStyles();
+  const styleKeys = new Set(styleValues.length ? styleValues : []);
+
+  catalog.forEach((track) => {
+    if (!track?.song || !track?.artist) return;
+    const trackKey = recommendationTrackKey(track);
+    const artistKey = artistMatchKey(track.artist);
+    if (trackKey) trackKeys.add(trackKey);
+    if (artistKey) artistKeys.add(artistKey);
+    if (track.style) styleKeys.add(track.style);
+    if (isCountableLabel(track.label)) labelKeys.add(normalize(track.label));
+  });
+
+  return {
+    artists: artistKeys.size,
+    tracks: trackKeys.size,
+    styles: styleKeys.size,
+    labels: labelKeys.size
+  };
+}
+
+function updateCatalogStatsHero() {
+  if (!catalogArtistsCount || !catalogTracksCount || !catalogStylesCount || !catalogLabelsCount) return;
+  const stats = catalogStatsSnapshot();
+  if (catalogStatsKicker) catalogStatsKicker.textContent = t("catalogStatsKicker");
+  catalogArtistsCount.textContent = formatCatalogCount(stats.artists);
+  catalogTracksCount.textContent = formatCatalogCount(stats.tracks);
+  catalogStylesCount.textContent = formatCatalogCount(stats.styles);
+  catalogLabelsCount.textContent = formatCatalogCount(stats.labels);
+  if (catalogArtistsLabel) catalogArtistsLabel.textContent = t("catalogStatsArtists");
+  if (catalogTracksLabel) catalogTracksLabel.textContent = t("catalogStatsTracks");
+  if (catalogStylesLabel) catalogStylesLabel.textContent = t("catalogStatsStyles");
+  if (catalogLabelsLabel) catalogLabelsLabel.textContent = t("catalogStatsLabels");
+}
+
 function syncLanguageButtons() {
   languageButtons.forEach((button) => {
     const isActive = button.dataset.lang === currentLanguage;
@@ -8377,6 +8459,7 @@ function applyLanguage() {
   setText("#heroDesc", t("heroDesc"));
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
+  updateCatalogStatsHero();
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
   setText("#surpriseBtn", t("surpriseBtn"));
@@ -10202,6 +10285,7 @@ function saveDynamicCatalogCache() {
   } catch (_err) {
     // ignore storage/cache failures
   }
+  updateCatalogStatsHero();
 }
 
 function loadDynamicCatalogCache() {
@@ -10237,6 +10321,7 @@ function loadDynamicCatalogCache() {
       catalog.push(track);
     });
     dedupeCatalogByTrackKey();
+    updateCatalogStatsHero();
   } catch (_err) {
     // ignore broken cache
   }
