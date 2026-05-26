@@ -1956,6 +1956,7 @@ const discoveryModeEl = document.getElementById("discoveryMode");
 const recommendBtn = document.getElementById("recommendBtn");
 const rerollBtn = document.getElementById("rerollBtn");
 const surpriseBtn = document.getElementById("surpriseBtn");
+const floatingSurpriseBtn = document.getElementById("floatingSurpriseBtn");
 const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 const resetAppBtn = document.getElementById("resetAppBtn");
 
@@ -8706,6 +8707,8 @@ function applyLanguage() {
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
   setText("#surpriseBtn", t("surpriseBtn"));
+  setText("#floatingSurpriseBtn", t("startSurpriseBtn"));
+  if (floatingSurpriseBtn) floatingSurpriseBtn.setAttribute("aria-label", t("startSurpriseBtn"));
   setText("#adaptiveSurpriseBtn", t("adaptiveSurpriseBtn"));
   setText("#clearFiltersBtn", t("clearFiltersBtn"));
   setText("#resetAppBtn", t("resetAppBtn"));
@@ -9221,6 +9224,13 @@ function preAppScreensVisible() {
   const authVisible = authScreen && !authScreen.classList.contains("hidden");
   const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
   return Boolean(introVisible || languageVisible || authVisible || welcomeVisible);
+}
+
+function syncFloatingSurpriseButton() {
+  if (!floatingSurpriseBtn) return;
+  const appVisible = appContent && !appContent.classList.contains("hidden");
+  const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
+  floatingSurpriseBtn.classList.toggle("hidden", !(appVisible || welcomeVisible));
 }
 
 function createAudioNoiseBuffer(ctx, duration = 1.8) {
@@ -9916,6 +9926,7 @@ function showLanguageScreen() {
   if (authScreen) authScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (languageScreen) languageScreen.classList.remove("hidden");
+  syncFloatingSurpriseButton();
 
   const preferredButton = Array.from(languageButtons).find((button) => button.dataset.lang === currentLanguage) || languageButtons[0];
   if (preferredButton) preferredButton.focus();
@@ -9936,6 +9947,7 @@ function showIntroScreen() {
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (introScreen) introScreen.focus();
+  syncFloatingSurpriseButton();
 
   startIntroQuoteLoop();
   clearIntroAutoAdvance();
@@ -9956,6 +9968,7 @@ function showAuthScreen() {
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (authScreen) authScreen.classList.remove("hidden");
+  syncFloatingSurpriseButton();
 
   const storedUser = readStoredUserSession();
   if (authUsername) authUsername.value = storedUser?.username || "";
@@ -9969,6 +9982,7 @@ function showAuthScreen() {
 function continueFromAuthToWelcome() {
   if (authScreen) authScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.remove("hidden");
+  syncFloatingSurpriseButton();
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
   if (quickSurprisePanel) quickSurprisePanel.classList.add("hidden");
@@ -10065,6 +10079,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
+  syncFloatingSurpriseButton();
   if (styleEl) styleEl.focus();
   refreshAmbientForUiState();
   playUiSfx("confirm");
@@ -10148,6 +10163,7 @@ function hasDedicatedClickSfxControl(el) {
     recommendBtn,
     rerollBtn,
     surpriseBtn,
+    floatingSurpriseBtn,
     knownYesBtn,
     knownNoBtn,
     previewLikeBtn,
@@ -10274,7 +10290,7 @@ async function withSearchOverlay(initialMessage, worker) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -18252,6 +18268,15 @@ bind(startBtn, "click", () => {
 
 bind(startSurpriseBtn, "click", () => {
   enterAppFromWelcome({ surprise: true });
+});
+
+bind(floatingSurpriseBtn, "click", async () => {
+  const appVisible = appContent && !appContent.classList.contains("hidden");
+  if (!appVisible) {
+    enterAppFromWelcome({ surprise: true });
+    return;
+  }
+  await runSurpriseRecommendation();
 });
 
 bind(quickSurpriseCancelBtn, "click", () => {
