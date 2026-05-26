@@ -1393,6 +1393,23 @@ body[data-vibe-theme="hard"] {
   width: 52px;
 }
 
+.hero-logo-wrap {
+  width: clamp(142px, 18vw, 230px);
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 0.18rem 0;
+}
+
+.hero-logo-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 86px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 22px rgba(49, 236, 223, 0.18));
+}
+
 .brand-kicker {
   color: #77d9ff;
   text-transform: uppercase;
@@ -1476,7 +1493,7 @@ body[data-vibe-theme="hard"] {
 .hero-brand {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
 }
 
 .fields-grid {
@@ -3865,6 +3882,18 @@ input[type="range"] {
 
   .app-slogan {
     font-size: 0.8rem;
+  }
+
+  .hero-brand {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .hero-logo-wrap {
+    width: min(74vw, 210px);
+    min-height: 48px;
+    justify-items: start;
   }
 
   .app-mission {
