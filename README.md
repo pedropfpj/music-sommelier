@@ -47,10 +47,10 @@ App web estiloso e funcional para curadoria de musica eletronica.
 ## Subgeneros incluidos
 
 - Psytrance: psytrance, forest, dark, freeform psy, full-on, full on night, full on morning, progressive psy, hi-tech, dark progressive (PROG DARK / zenonesque), goa
-- Techno: techno, acid techno, hard techno, minimal techno, melodic techno, industrial, peak time
+- Techno: techno, acid techno, hard techno, gabber, minimal techno, melodic techno, industrial, peak time
 - House: house, deep house, tech house, progressive house, afro house, organic house, bass house, electro house
 - DnB/Bass: drum and bass, liquid dnb, neurofunk, jump up, jungle, breakbeat, uk garage, future garage, dubstep
-- Hard Dance / Hardcore: gabber, hardstyle
+- Hard Dance: hardstyle
 - Outros: downtempo, ambient, idm, electro, uplifting trance
 
 ## Como executar

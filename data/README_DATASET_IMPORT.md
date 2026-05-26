@@ -38,7 +38,7 @@ O app tenta importar automaticamente estes arquivos (se existirem):
 - `artist_bio`
 
 Aliases como `freeform`, `freeform psy`, `freeform psytrance`, `suomi` e `suomisaundi` sao normalizados para o subgenero `freeform` dentro de psytrance.
-Aliases como `gabber`, `gabba` e `hardcore techno` sao normalizados para o subgenero `gabber` dentro de hard dance/hardcore.
+Aliases como `gabber`, `gabba` e `hardcore techno` sao normalizados para o subgenero `gabber` dentro de techno.
 
 ## Colunas recomendadas (artists)
 

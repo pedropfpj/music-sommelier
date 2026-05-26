@@ -43,7 +43,7 @@ const STYLE_TO_FAMILY = {
   slambient: "psytrance",
   idm: "leftfield",
   electro: "leftfield",
-  gabber: "hard_dance",
+  gabber: "techno",
   hardstyle: "hard_dance"
 };
 
@@ -6994,7 +6994,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
-    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
+    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
     recommendBtn: "Gerar recomendação",
     rerollBtn: "Nova sugestão no mesmo perfil",
     surpriseBtn: "Surpreender",
@@ -7279,7 +7279,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
-    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass, and other key subgenres.",
+    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, and other key subgenres.",
     recommendBtn: "Generate recommendation",
     rerollBtn: "New suggestion with same profile",
     surpriseBtn: "Surprise me",
@@ -7564,7 +7564,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
     heroTitle: "Curaduría electrónica con descubrimiento real",
-    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal), hard dance/gabber, house, drum and bass y otros subgéneros clave.",
+    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass y otros subgéneros clave.",
     recommendBtn: "Generar recomendación",
     rerollBtn: "Nueva sugerencia en el mismo perfil",
     surpriseBtn: "Sorprenderme",
@@ -8039,7 +8039,7 @@ function localizeOptionLabels() {
       energyFirst: "Escolha a energia",
       bpmFirst: "Sem preferência",
       vocalsFirst: "Livre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Outros eletrônicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Outros eletrônicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
@@ -8058,7 +8058,7 @@ function localizeOptionLabels() {
       energyFirst: "Choose energy",
       bpmFirst: "No preference",
       vocalsFirst: "Any",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Other relevant electronic styles"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Other relevant electronic styles"],
       styleSpecial: {
         psy_comercial: "Commercial Psy / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
@@ -8077,7 +8077,7 @@ function localizeOptionLabels() {
       energyFirst: "Elige energía",
       bpmFirst: "Sin preferencia",
       vocalsFirst: "Libre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance / Hardcore", "Otros estilos electrónicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Otros estilos electrónicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         dark_progressive: "PROG DARK / Dark Progressive",
