@@ -40,9 +40,11 @@ const STYLE_TO_FAMILY = {
   dubstep: "bass_music",
   downtempo: "leftfield",
   ambient: "leftfield",
+  chillout: "leftfield",
   slambient: "psytrance",
   idm: "leftfield",
   electro: "leftfield",
+  brazilian_funk: "bass_music",
   gabber: "techno",
   hardstyle: "hard_dance"
 };
@@ -67,7 +69,9 @@ const STYLE_SEARCH_TERMS = {
   peak_time_techno: "peak time techno",
   minimal_techno: "minimal techno",
   melodic_techno: "melodic techno",
-  gabber: "gabber hardcore techno"
+  gabber: "gabber hardcore techno",
+  chillout: "chillout downtempo lounge",
+  brazilian_funk: "brazilian funk funk carioca baile funk"
 };
 
 const STYLE_TO_VIBE_THEME = {
@@ -112,8 +116,10 @@ const STYLE_TO_VIBE_THEME = {
   dubstep: "bass",
   ambient: "ambient",
   downtempo: "ambient",
+  chillout: "ambient",
   idm: "leftfield",
   electro: "leftfield",
+  brazilian_funk: "bass",
   trance_uplifting: "trance",
   gabber: "hard",
   hardstyle: "hard"
@@ -181,6 +187,184 @@ const LOCAL_TRACK_SEED_BOOST = [
   { style: "neurofunk", artist: "Noisia", song: "Collider", label: "Vision", bpmExact: 174 },
   { style: "ambient", artist: "Biosphere", song: "Poa Alpina", label: "Apollo", bpmExact: 90 },
   { style: "idm", artist: "Floating Points", song: "Anasickmodular", label: "Ninja Tune", bpmExact: 123 },
+  {
+    style: "freeform",
+    artist: "Fractal Cowboys",
+    song: "Chiwen",
+    label: "Manic Dragon Records",
+    bpmExact: 148,
+    spotifyUrl: "https://open.spotify.com/intl-pt/artist/380EuPHY1R8dSxsnY1xBOS",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Seed curado para manter Fractal Cowboys no recorte correto de Freeform Psy."
+  },
+  {
+    style: "freeform",
+    artist: "At Work",
+    song: "Lunar Odyssey",
+    label: "Random Records SOS",
+    releaseDate: "2024-11-11",
+    durationSec: 388,
+    spotifyUrl: "https://open.spotify.com/intl-pt/artist/5j5Z44akwvGU0GZVDc97KY",
+    bandcampTrackUrl: "https://randomrecords.bandcamp.com/track/lunar-odyssey",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Seed curado para priorizar At Work no recorte underground de Freeform Psy."
+  },
+  {
+    style: "freeform",
+    artist: "At Work",
+    song: "Carrapatosounds",
+    label: "Random Records SOS",
+    bpmExact: 152,
+    releaseDate: "2024-11-11",
+    durationSec: 561,
+    spotifyUrl: "https://open.spotify.com/intl-pt/artist/5j5Z44akwvGU0GZVDc97KY",
+    bandcampTrackUrl: "https://randomrecords.bandcamp.com/track/carrapatosounds",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Seed curado para aumentar a rotação de At Work em Freeform Psy."
+  },
+  {
+    style: "freeform",
+    artist: "Hongos Longos",
+    song: "Azul",
+    label: "Random Records",
+    releaseDate: "2020-10-15",
+    bandcampTrackUrl: "https://randomrecords.bandcamp.com/track/azul",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Seed curado para manter Hongos Longos no eixo correto de Freeform Psy."
+  },
+  {
+    style: "freeform",
+    artist: "Hongos Longos",
+    song: "Xinforimpola",
+    label: "Random Records",
+    bpmExact: 145,
+    releaseDate: "2019-09-09",
+    durationSec: 548,
+    bandcampTrackUrl: "https://hongoslongos.bandcamp.com/track/xinforimpola",
+    soundcloudTrackUrl: "https://soundcloud.com/random_records/hongos-longos-xinforimpola",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Seed curado para ampliar a rotação de Hongos Longos em Freeform Psy."
+  },
+  {
+    style: "freeform",
+    artist: "Hongos Longos x At Work",
+    song: "Chiquinina Gonzacida",
+    label: "Random Records SOS",
+    releaseDate: "2024-12-12",
+    durationSec: 412,
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Collab curada para reforçar a interseção Hongos Longos + At Work no mesmo recorte."
+  },
+  {
+    style: "freeform",
+    artist: "Mubali",
+    song: "180 WestPsy Fall 2021 V1",
+    label: "Mubali SoundCloud",
+    bpmExact: 180,
+    spotifyUrl: "https://open.spotify.com/search/Mubali%20psytrance",
+    soundcloudTrackUrl: "https://soundcloud.com/mubali/180-westpsy-fall-2021-v1",
+    artistGenre: "Freeform Psy / West Psy",
+    artistProfileHint: "Mubali separado aqui para tracks de West Psy/freeform, sem misturar com as faixas forest."
+  },
+  {
+    style: "forest_psy",
+    artist: "Mubali",
+    song: "The Midnight Zone",
+    label: "Parvati Records",
+    bpmExact: 147,
+    spotifyUrl: "https://open.spotify.com/search/Mubali%20forest%20psytrance",
+    beatportUrl: "https://www.beatport.com/search?q=Mubali%20The%20Midnight%20Zone",
+    artistGenre: "Forest Psy",
+    artistProfileHint: "Mubali tambem tem recorte forest; esta seed mantém a separação por faixa/estilo."
+  },
+  {
+    style: "downtempo",
+    artist: "Bonobo",
+    song: "Kiara",
+    label: "Ninja Tune",
+    artistGenre: "Downtempo / Electronica",
+    artistProfileHint: "Downtempo instrumental com groove orgânico para foco e viagem."
+  },
+  {
+    style: "downtempo",
+    artist: "Nightmares on Wax",
+    song: "Les Nuits",
+    label: "Warp Records",
+    artistGenre: "Downtempo / Chillout",
+    artistProfileHint: "Downtempo caloroso, lento e espaçoso para after e foco leve."
+  },
+  {
+    style: "downtempo",
+    artist: "Zero 7",
+    song: "In The Waiting Line",
+    label: "Ultimate Dilemma",
+    artistGenre: "Downtempo / Chillout",
+    artistProfileHint: "Faixa vocal suave para escuta desacelerada e descoberta chill."
+  },
+  {
+    style: "ambient",
+    artist: "Loscil",
+    song: "Endless Falls",
+    label: "Kranky",
+    artistGenre: "Ambient",
+    artistProfileHint: "Ambient profundo, textural e lento para concentração sem pressão de pista."
+  },
+  {
+    style: "ambient",
+    artist: "Carbon Based Lifeforms",
+    song: "Photosynthesis",
+    label: "Ultimae",
+    artistGenre: "Ambient / Psybient",
+    artistProfileHint: "Paisagem eletrônica espacial com pulsação baixa e camadas expansivas."
+  },
+  {
+    style: "chillout",
+    artist: "Moby",
+    song: "Porcelain",
+    label: "Mute",
+    artistGenre: "Chillout / Downtempo",
+    artistProfileHint: "Chillout melódico e acessível para respiro, estrada e after leve."
+  },
+  {
+    style: "chillout",
+    artist: "Air",
+    song: "La femme d'argent",
+    label: "Source",
+    artistGenre: "Chillout / Lounge",
+    artistProfileHint: "Chillout francês de andamento baixo, groove macio e textura cinematográfica."
+  },
+  {
+    style: "chillout",
+    artist: "Kruder & Dorfmeister",
+    song: "High Noon",
+    label: "G-Stone",
+    artistGenre: "Chillout / Downtempo",
+    artistProfileHint: "Som lounge/downtempo para transição suave e escuta prolongada."
+  },
+  {
+    style: "brazilian_funk",
+    artist: "DJ Marlboro",
+    song: "Rap do Silva",
+    label: "Furacao 2000",
+    artistGenre: "Brazilian Funk / Funk Carioca",
+    artistProfileHint: "Referência histórica do funk carioca, com groove direto de baile."
+  },
+  {
+    style: "brazilian_funk",
+    artist: "Deize Tigrona",
+    song: "Injecao",
+    label: "Man Recordings",
+    artistGenre: "Brazilian Funk / Funk Carioca",
+    artistProfileHint: "Vocal de impacto e estética de baile funk brasileira."
+  },
+  {
+    style: "brazilian_funk",
+    artist: "Tati Quebra Barraco",
+    song: "Boladona",
+    label: "Furacao 2000",
+    artistGenre: "Brazilian Funk / Funk Carioca",
+    artistProfileHint: "Funk carioca clássico, direto e vocal."
+  },
   {
     style: "dark_progressive",
     artist: "Dividuum",
@@ -526,8 +710,15 @@ const DATASET_STYLE_ALIASES = {
   psychill: "ambient",
   psybient: "ambient",
   psychillpsybient: "ambient",
-  chillout: "downtempo",
-  chilloutdowntempo: "downtempo",
+  chill: "chillout",
+  chillout: "chillout",
+  chilloutdowntempo: "chillout",
+  lounge: "chillout",
+  brazilianfunk: "brazilian_funk",
+  brazilian_funk: "brazilian_funk",
+  funkbrasileiro: "brazilian_funk",
+  funkcarioca: "brazilian_funk",
+  bailefunk: "brazilian_funk",
   psycomercial: "psy_comercial",
   psycommercial: "psy_comercial",
   chacota: "psy_comercial",
@@ -1317,7 +1508,7 @@ const catalog = [
     song: "An Ending (Ascent)",
     artist: "Brian Eno",
     label: "EG",
-    bpm: "110-124",
+    bpm: "60-110",
     energy: "low",
     vocals: "instrumental",
     context: ["after", "foco"],
@@ -1807,6 +1998,12 @@ const discoveryCatalog = [
   { name: "Floating Points", style: "idm", bio: "IDM/jazz eletronico para escuta de detalhe.", spotifyUrl: "https://open.spotify.com/search/Floating%20Points", youtubeUrl: "https://www.youtube.com/results?search_query=Floating+Points" },
   { name: "Biosphere", style: "ambient", bio: "Ambient gelido e contemplativo.", spotifyUrl: "https://open.spotify.com/search/Biosphere", youtubeUrl: "https://www.youtube.com/results?search_query=Biosphere+ambient" },
   { name: "Carbon Based Lifeforms", style: "ambient", bio: "Ambient/downtempo com paisagens espaciais e progressao lenta.", spotifyUrl: "https://open.spotify.com/search/Carbon%20Based%20Lifeforms", youtubeUrl: "https://www.youtube.com/results?search_query=Carbon+Based+Lifeforms+ambient" },
+  { name: "Bonobo", style: "downtempo", bio: "Downtempo/electronica com groove organico, baixo quente e arranjos detalhados.", spotifyUrl: "https://open.spotify.com/search/Bonobo", youtubeUrl: "https://www.youtube.com/results?search_query=Bonobo+downtempo" },
+  { name: "Nightmares on Wax", style: "downtempo", bio: "Downtempo, trip-hop e chillout com assinatura calorosa de longo curso.", spotifyUrl: "https://open.spotify.com/search/Nightmares%20on%20Wax", youtubeUrl: "https://www.youtube.com/results?search_query=Nightmares+on+Wax+downtempo" },
+  { name: "Air", style: "chillout", bio: "Chillout/lounge frances com melodias suaves, synths analogicos e clima cinematografico.", spotifyUrl: "https://open.spotify.com/search/Air%20La%20femme%20d'argent", youtubeUrl: "https://www.youtube.com/results?search_query=Air+La+femme+d'argent" },
+  { name: "Moby", style: "chillout", bio: "Chillout e downtempo melodico, muito usado em contextos de respiro, estrada e after.", spotifyUrl: "https://open.spotify.com/search/Moby%20Porcelain", youtubeUrl: "https://www.youtube.com/results?search_query=Moby+Porcelain" },
+  { name: "DJ Marlboro", style: "brazilian_funk", bio: "Figura historica do funk carioca, essencial para entender a linguagem de baile.", spotifyUrl: "https://open.spotify.com/search/DJ%20Marlboro", youtubeUrl: "https://www.youtube.com/results?search_query=DJ+Marlboro+funk+carioca" },
+  { name: "Deize Tigrona", style: "brazilian_funk", bio: "Nome marcante do funk carioca com vocal direto, cru e de pista.", spotifyUrl: "https://open.spotify.com/search/Deize%20Tigrona", youtubeUrl: "https://www.youtube.com/results?search_query=Deize+Tigrona+funk" },
   { name: "Cindervomit", style: "slambient", bio: "Projeto associado a The Endless Knot, com slambient escuro e acelerado.", spotifyUrl: "https://open.spotify.com/search/Cindervomit", youtubeUrl: "https://www.youtube.com/results?search_query=Cindervomit+the+endless+knot" },
   { name: "Endless Knot Collective", style: "slambient", bio: "Curadoria de sonoridades hibridas do nucleo The Endless Knot.", spotifyUrl: "https://open.spotify.com/search/The%20Endless%20Knot", youtubeUrl: "https://www.youtube.com/results?search_query=The+Endless+Knot+collective" },
   { name: "Phyllorum", style: "slambient", bio: "Projeto do selo The Endless Knot com slambient acelerado e sombrio.", spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Endless%20Knot", youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Endless+Knot" },
@@ -2002,6 +2199,9 @@ const durationInfo = document.getElementById("durationInfo");
 const keyInfo = document.getElementById("keyInfo");
 const catalogInfo = document.getElementById("catalogInfo");
 const songVibe = document.getElementById("songVibe");
+const genreGuidePanel = document.getElementById("genreGuidePanel");
+const genreGuideTitle = document.getElementById("genreGuideTitle");
+const genreGuideText = document.getElementById("genreGuideText");
 const listeningNarrative = document.getElementById("listeningNarrative");
 const spotifyLink = document.getElementById("spotifyLink");
 const youtubeLink = document.getElementById("youtubeLink");
@@ -2189,6 +2389,7 @@ let styleInfoDismissed = false;
 let recommendationBlockedByKnown = false;
 let recommendationRunBusy = false;
 let recommendationStyleFallbackInfo = null;
+let recommendationBpmFallbackInfo = false;
 let activeVibeTheme = "";
 let currentAuthUser = null;
 let externalDatasetImportStarted = false;
@@ -2324,6 +2525,10 @@ const STYLE_COVERAGE_OVERRIDES = {
   psycore: { artists: 8, labels: 0, tracks: 10 },
   // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
   freeform: { artists: 4, labels: 0, tracks: 12 },
+  ambient: { artists: 12, labels: 6, tracks: 24 },
+  downtempo: { artists: 12, labels: 6, tracks: 24 },
+  chillout: { artists: 10, labels: 4, tracks: 20 },
+  brazilian_funk: { artists: 10, labels: 4, tracks: 20 },
   gabber: { artists: 10, labels: 0, tracks: 16 }
 };
 const COVERAGE_MAX_PASSES = 5;
@@ -2372,7 +2577,7 @@ const STYLE_BPM_RULES = {
   dark_psy: { min: 154, max: 175 },
   dark_experimental: { min: 152, max: 172 },
   psycore: { min: 175, max: 220 },
-  freeform: { min: 138, max: 156 },
+  freeform: { min: 138, max: 180 },
   full_on: { min: 142, max: 150 },
   full_on_night: { min: 146, max: 154 },
   full_on_morning: { min: 142, max: 149 },
@@ -2408,9 +2613,11 @@ const STYLE_BPM_RULES = {
   dubstep: { min: 138, max: 150 },
   downtempo: { min: 90, max: 115 },
   ambient: { min: 60, max: 110 },
+  chillout: { min: 80, max: 112 },
   slambient: { min: 155, max: 185 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
+  brazilian_funk: { min: 125, max: 150 },
   gabber: { min: 160, max: 220 },
   hardstyle: { min: 148, max: 160 }
 };
@@ -2421,7 +2628,7 @@ const STYLE_INFO_PT = {
   dark_psy: "Sonoridade mais sombria e agressiva, com design de som cortante e narrativa noturna.",
   dark_experimental: "Cruza dark psy com texturas experimentais, arranjos menos previsiveis e timbres abstratos.",
   psycore: "Subestilo extremo do psy, com muita densidade ritmica, recortes secos e altissima intensidade.",
-  freeform: "Psytrance livre e experimental, com estruturas menos previsiveis, groove mutante e humor psicodelico underground.",
+  freeform: "Psytrance livre/West Psy, com estruturas menos previsiveis, groove mutante e BPM que pode ir do experimental organico ao rapido.",
   full_on: "Full-On classico de pista: groove reto, drops claros e leads melodicos para energia constante.",
   full_on_night: "Leitura mais noturna do Full-On, geralmente mais pesada, seca e focada em impacto de madrugada.",
   full_on_morning: "Leitura mais melodica e aberta do Full-On, com harmonias luminosas e clima de amanhecer.",
@@ -2457,9 +2664,11 @@ const STYLE_INFO_PT = {
   dubstep: "Ritmo quebrado com half-time e bass de grande impacto, comum em drops dramaticos.",
   downtempo: "Andamento mais baixo para escuta focada em textura, ambiencia e fluidez.",
   ambient: "Musica de espaco sonoro, pouca percussao e foco em paisagem e atmosfera.",
+  chillout: "Eletronica relaxada de lounge/after, com andamento baixo, textura suave e foco em respiro.",
   slambient: "Intersecao de ambient com psy escuro: drones, textura ritualistica e andamento hipnotico.",
   idm: "Eletronica experimental orientada a detalhe ritmico, estrutura complexa e escuta ativa.",
   electro: "Batidas secas e sintese retro-futurista com influencia de electro-funk e robotica.",
+  brazilian_funk: "Funk brasileiro/carioca de baile: tamborzao, 808, vocal de impacto e groove direto.",
   gabber: "Hardcore techno extremo, com kicks distorcidos, BPM alto e energia bruta de rave.",
   hardstyle: "Kick distorcido, leads antemicos e energia de hard dance para momentos de explosao."
 };
@@ -3058,7 +3267,24 @@ const STYLE_ARTIST_SEEDS = {
     ...NATURAIZ_FAST_ARTISTS
   ],
   psycore: [...PSYCORE_ARTIST_ROSTER, ...NATURAIZ_FAST_ARTISTS],
-  freeform: ["Fractal Cowboys", "At Work", "Hongos Longos", "Mubali"],
+  freeform: [
+    "Fractal Cowboys",
+    "At Work",
+    "Atwork",
+    "Hongos Longos",
+    "Mubali",
+    "Texas Faggott",
+    "Squaremeat",
+    "Haltya",
+    "Pelinpala",
+    "Salakavala",
+    "Flying Scorpions",
+    "Luomuhappo",
+    "Mandalavandalz",
+    "Outolintu",
+    "James Reipas",
+    "Troll Scientists"
+  ],
   full_on: [
     "Avalon",
     "Tristan",
@@ -3068,7 +3294,6 @@ const STYLE_ARTIST_SEEDS = {
     "Raja Ram",
     "Sesto Sento",
     "1200 Micrograms",
-    "Faders",
     "GMS",
     "Dickster",
     "Volcano"
@@ -3078,9 +3303,12 @@ const STYLE_ARTIST_SEEDS = {
     "Dickster",
     "Sonic Species",
     "GMS",
-    "Faders",
     "Volcano",
-    "Mad Maxx"
+    "Mad Maxx",
+    "Virtual Light",
+    "Ital",
+    "Braincell",
+    "Circuit Breakers"
   ],
   full_on_morning: [
     "Avalon",
@@ -3089,7 +3317,11 @@ const STYLE_ARTIST_SEEDS = {
     "Raja Ram",
     "1200 Micrograms",
     "Mad Maxx",
-    "Faders"
+    "Faders",
+    "Digicult",
+    "Talamasca",
+    "Laughing Buddha",
+    "Outsiders"
   ],
   psy_comercial: ["Skazi", "Paranormal Attack", "Sesto Sento", "Mandragora", "Claudinho Brasil", "Vini Vici", "Blastoyz", "Vegas"],
   progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Perfect Stranger", "Nerso", "Morten Granau", "Vermont (BR)"],
@@ -3182,11 +3414,13 @@ const STYLE_ARTIST_SEEDS = {
   uk_garage: ["Interplanetary Criminal", "Conducta", "MJ Cole", "El-B", "DJ EZ", "Disclosure", "Oppidan", "Y U QT"],
   future_garage: ["Burial", "Synkro", "Phaeleh", "Sorrow", "Clubroot", "Vacant", "Kiasmos", "Direct"],
   dubstep: ["Skrillex", "Benga", "Skream", "Digital Mystikz", "Saka", "Ganja White Night", "Mala", "Caspa"],
-  downtempo: ["Thievery Corporation", "Bonobo", "Tycho", "Emancipator", "Nightmares on Wax", "Blockhead", "Kruder & Dorfmeister", "Zero 7"],
-  ambient: ["Brian Eno", "Biosphere", "Loscil", "Rival Consoles", "Nils Frahm", "Aphex Twin", "A Winged Victory for the Sullen", "Stars of the Lid"],
+  downtempo: ["Thievery Corporation", "Bonobo", "Tycho", "Emancipator", "Nightmares on Wax", "Blockhead", "Kruder & Dorfmeister", "Zero 7", "Air", "Morcheeba", "Lemon Jelly", "Boards of Canada", "DJ Shadow", "Moby"],
+  ambient: ["Brian Eno", "Biosphere", "Loscil", "Rival Consoles", "Nils Frahm", "Aphex Twin", "A Winged Victory for the Sullen", "Stars of the Lid", "Carbon Based Lifeforms", "Solar Fields", "Aes Dana", "Hammock", "Max Richter", "Tim Hecker"],
+  chillout: ["Moby", "Air", "Morcheeba", "Lemongrass", "Blank & Jones", "Nightmares on Wax", "Thievery Corporation", "Zero 7", "Groove Armada", "Kruder & Dorfmeister"],
   slambient: [...SLAMBIENT_ARTIST_ROSTER],
   idm: ["Aphex Twin", "Autechre", "Boards of Canada", "Squarepusher", "Floating Points", "Plaid", "Clark", "Mike Paradinas"],
   electro: ["Drexciya", "Aux 88", "DJ Stingray", "The Hacker", "Jensen Interceptor", "Kraftwerk", "Helena Hauff", "Cybotron"],
+  brazilian_funk: ["DJ Marlboro", "DJ K", "DJ Rennan da Penha", "Deize Tigrona", "Tati Quebra Barraco", "Valesca Popozuda", "MC Bin Laden", "MC Carol", "MC Cabelinho", "Bonde do Tigrao"],
   gabber: [
     "Angerfist",
     "Neophyte",
@@ -3211,9 +3445,28 @@ const STYLE_ARTIST_SEEDS = {
 };
 
 const SLAMBIENT_CORE_ARTISTS = [...SLAMBIENT_ARTIST_ROSTER];
+const FREEFORM_CORE_ARTISTS = [
+  "Fractal Cowboys",
+  "At Work",
+  "Atwork",
+  "Hongos Longos",
+  "Mubali",
+  "Texas Faggott",
+  "Squaremeat",
+  "Haltya",
+  "Pelinpala",
+  "Salakavala",
+  "Flying Scorpions",
+  "Luomuhappo",
+  "Mandalavandalz",
+  "Outolintu",
+  "James Reipas",
+  "Troll Scientists"
+];
 
 const STYLE_STRICT_WHITELISTS = {
-  slambient: SLAMBIENT_CORE_ARTISTS
+  slambient: SLAMBIENT_CORE_ARTISTS,
+  freeform: FREEFORM_CORE_ARTISTS
 };
 
 const ARTIST_STYLE_OVERRIDES = {
@@ -3235,6 +3488,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "gms": ["full_on", "full_on_night", "full_on_morning"],
   "avalon": ["full_on", "full_on_night", "full_on_morning"],
   "tristan": ["full_on", "full_on_night", "full_on_morning"],
+  "faders": ["full_on_morning"],
   "earthspace": ["full_on"],
   "space tribe": ["full_on"],
   "spacetribe": ["full_on"],
@@ -3293,6 +3547,17 @@ const ARTIST_STYLE_OVERRIDES = {
   "hongos longos": ["freeform"],
   "fractal cowboys": ["freeform"],
   mubali: ["forest_psy", "freeform"],
+  "texas faggott": ["freeform"],
+  squaremeat: ["freeform"],
+  haltya: ["freeform"],
+  pelinpala: ["freeform"],
+  salakavala: ["freeform"],
+  "flying scorpions": ["freeform"],
+  luomuhappo: ["freeform"],
+  mandalavandalz: ["freeform"],
+  outolintu: ["freeform"],
+  "james reipas": ["freeform"],
+  "troll scientists": ["freeform"],
   "angerfist": ["gabber"],
   "neophyte": ["gabber"],
   "rotterdam terror corps": ["gabber"],
@@ -3326,7 +3591,30 @@ const ARTIST_STYLE_OVERRIDES = {
   "critical frequency": ["psytrance"],
   "critical frequency live": ["psytrance"],
   "solar fields": ["ambient"],
-  "carbon based lifeforms": ["ambient", "downtempo"]
+  "carbon based lifeforms": ["ambient", "downtempo"],
+  "moby": ["chillout", "downtempo"],
+  "air": ["chillout", "downtempo"],
+  "morcheeba": ["chillout", "downtempo"],
+  "lemongrass": ["chillout"],
+  "blank & jones": ["chillout"],
+  "nightmares on wax": ["downtempo", "chillout"],
+  "thievery corporation": ["downtempo", "chillout"],
+  "zero 7": ["downtempo", "chillout"],
+  "bonobo": ["downtempo"],
+  "tycho": ["downtempo"],
+  "emancipator": ["downtempo"],
+  "loscil": ["ambient"],
+  "brian eno": ["ambient"],
+  "dj marlboro": ["brazilian_funk"],
+  "dj k": ["brazilian_funk"],
+  "dj rennan da penha": ["brazilian_funk"],
+  "deize tigrona": ["brazilian_funk"],
+  "tati quebra barraco": ["brazilian_funk"],
+  "valesca popozuda": ["brazilian_funk"],
+  "mc bin laden": ["brazilian_funk"],
+  "mc carol": ["brazilian_funk"],
+  "mc cabelinho": ["brazilian_funk"],
+  "bonde do tigrao": ["brazilian_funk"]
 };
 
 const ARTIST_CANONICAL_ORIGINS = {
@@ -3402,6 +3690,7 @@ const STYLE_ARTIST_BLOCKLIST = {
     "skazi",
     "vermont br"
   ],
+  freeform: ["faders", "band of gypsys reincarnation", "electric angelland"],
   slambient: [
     "astrix",
     "avalon",
@@ -3456,11 +3745,11 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "full_on_night",
   "full_on_morning"
 ]);
-const STRICT_FAMILY_SEED_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "acid_techno", "hard_techno", "industrial_techno", "full_on", "full_on_night", "full_on_morning"]);
-const STRICT_ARTIST_MATCH_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
-const LOCK_SEED_FROM_CATALOG_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
+const STRICT_FAMILY_SEED_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "industrial_techno", "full_on", "full_on_night", "full_on_morning"]);
+const STRICT_ARTIST_MATCH_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
+const LOCK_SEED_FROM_CATALOG_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
 const NO_CROSS_STYLE_FALLBACK_STYLES = new Set(["psycore"]);
-const NO_BROAD_STYLE_HYDRATION_STYLES = new Set(["ambient", "downtempo"]);
+const NO_BROAD_STYLE_HYDRATION_STYLES = new Set(["ambient", "downtempo", "chillout"]);
 const TECHNO_CROSSOVER_FORBIDDEN_TERMS = [
   "trap",
   "hip hop",
@@ -3495,8 +3784,15 @@ const BASS_REQUIRED_SIGNAL_TERMS = {
   jungle: ["jungle", "drum and bass", "dnb", "amen"],
   breakbeat: ["breakbeat", "breaks"],
   uk_garage: ["uk garage", "garage", "2 step", "2step"],
-  future_garage: ["future garage", "garage"]
+  future_garage: ["future garage", "garage"],
+  brazilian_funk: ["brazilian funk", "funk carioca", "baile funk", "funk brasileiro"]
 };
+const LOW_TEMPO_SIGNAL_TERMS = {
+  ambient: ["ambient", "drone", "soundscape", "psybient", "space music", "new age"],
+  downtempo: ["downtempo", "trip hop", "trip-hop", "chill", "lounge", "electronica", "leftfield"],
+  chillout: ["chillout", "chill out", "lounge", "downtempo", "balearic", "afterhours"]
+};
+const CURATED_PRIORITY_STYLES = new Set(["freeform", "ambient", "downtempo", "chillout", "brazilian_funk"]);
 const PSYTRANCE_REQUIRED_SIGNAL_TERMS = [
   "psytrance",
   "psy trance",
@@ -3813,9 +4109,10 @@ const STYLE_SEED_BACKFILL = {
   slambient: [...SLAMBIENT_ARTIST_ROSTER],
   psycore: [...PSYCORE_ARTIST_ROSTER],
   hi_tech: [...HITECH_ARTIST_ROSTER],
-  full_on: ["Mad Maxx", "Space Tribe", "Avalon", "Tristan", "Earthspace", "Sonic Species", "GMS", "Faders", "Raja Ram"],
-  full_on_night: ["Burn In Noise", "Dickster", "Sonic Species", "GMS", "Volcano", "Mad Maxx", "Faders"],
-  full_on_morning: ["Avalon", "Tristan", "Electric Universe", "Raja Ram", "1200 Micrograms", "Mad Maxx", "Faders"],
+  freeform: ["Fractal Cowboys", "At Work", "Atwork", "Hongos Longos", "Mubali", "Texas Faggott", "Squaremeat", "Haltya", "Pelinpala", "Salakavala", "Flying Scorpions", "Luomuhappo", "Mandalavandalz", "Outolintu", "James Reipas", "Troll Scientists"],
+  full_on: ["Mad Maxx", "Space Tribe", "Avalon", "Tristan", "Earthspace", "Sonic Species", "GMS", "Raja Ram"],
+  full_on_night: ["Burn In Noise", "Dickster", "Sonic Species", "GMS", "Volcano", "Mad Maxx", "Virtual Light", "Ital", "Braincell", "Circuit Breakers"],
+  full_on_morning: ["Avalon", "Tristan", "Electric Universe", "Raja Ram", "1200 Micrograms", "Mad Maxx", "Faders", "Digicult", "Talamasca", "Laughing Buddha", "Outsiders"],
   hard_techno: ["Alignment", "DYEN", "Sara Landry", "I Hate Models", "Kobosil", "SPFDJ", "Shlomo", "Charlie Sparks", "Nico Moreno", "Airod", "Trym", "Fantasm", "6EJOU", "Onlynumbers", "CLTX", "Basswell", "Klangkuenstler", "Brutalismus 3000"],
   tech_house: ["Mochakk", "Marco Carola", "Hot Since 82", "Green Velvet", "Mason Collective", "Loco Dice", "Dom Dolla"],
   techno: ["ANNA", "Charlotte de Witte", "Amelie Lens", "Adam Beyer", "Enrico Sangiuliano", "Maceo Plex", "Sama Abdulhadi"]
@@ -3837,7 +4134,6 @@ const FAMILY_SEED_FALLBACK = {
     "Outsiders",
     "Sonic Species",
     "GMS",
-    "Faders",
     "Mad Maxx",
     "Psykovsky",
     "Kindzadza",
@@ -4051,7 +4347,8 @@ function mapBpmToRange(exactBpm) {
   if (exactBpm >= 145) return "145-155";
   if (exactBpm >= 132) return "132-145";
   if (exactBpm >= 124) return "124-132";
-  return "110-124";
+  if (exactBpm >= 110) return "110-124";
+  return "60-110";
 }
 
 function parseBpmRangeValue(value) {
@@ -4788,6 +5085,14 @@ async function hydrateExternalDatasetPackInBackground() {
   return externalDatasetImportPromise;
 }
 
+function trackBpmRangeOverlapsPreference(track, selectedBpm = "") {
+  const selectedRange = parseBpmRangeValue(selectedBpm);
+  if (!selectedRange || !track) return false;
+  if (trackMatchesBpmPreference(track, selectedBpm)) return true;
+  const trackRange = parseBpmRangeValue(track.bpm || "") || parseBpmRangeValue(styleBpmRangeCompact(track.style));
+  return bpmRangesOverlap(trackRange, selectedRange);
+}
+
 function trackMatchesBpmPreference(track, selectedBpm = "") {
   const selectedRange = parseBpmRangeValue(selectedBpm);
   if (!selectedRange) return true;
@@ -5466,6 +5771,14 @@ function textHasBassRequiredSignalsForStyle(style, rawText = "") {
   return terms.some((term) => text.includes(normalize(term)));
 }
 
+function textHasLowTempoRequiredSignalsForStyle(style, rawText = "") {
+  const terms = LOW_TEMPO_SIGNAL_TERMS[style] || [];
+  if (!terms.length) return false;
+  const text = normalize(rawText || "");
+  if (!text) return false;
+  return terms.some((term) => text.includes(normalize(term)));
+}
+
 function textHasPsytranceRequiredSignal(rawText = "") {
   const text = normalize(rawText || "");
   if (!text) return false;
@@ -5526,6 +5839,29 @@ function hasBassFamilyIntegrityConflict(style, trackLike = {}) {
   return true;
 }
 
+function hasLowTempoIntegrityConflict(style, trackLike = {}) {
+  if (!LOW_TEMPO_SIGNAL_TERMS[style] || !trackLike) return false;
+
+  const sourceRaw = String(trackLike.source || "").trim();
+  const sourceCompact = normalize(sourceRaw).replace(/[\s_]+/g, "");
+  if (!isDynamicSource(sourceRaw)) return false;
+
+  // Seeds/datasets locais sao curados; a regra abaixo mira falsos positivos de APIs gerais.
+  if (sourceCompact.includes("dataset")) return false;
+
+  const signalText = [
+    trackLike.artistGenre,
+    trackLike.label,
+    trackLike.song,
+    trackLike.artistProfileHint,
+    trackLike.vibe
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return !textHasLowTempoRequiredSignalsForStyle(style, signalText);
+}
+
 function hasPsytranceIntegrityConflict(style, trackLike = {}) {
   if (style !== "psytrance" || !trackLike) return false;
 
@@ -5569,6 +5905,7 @@ function hasTrackStyleSignalConflict(style, trackLike = {}) {
   if (textHasForbiddenSignalsForStyle(style, merged)) return true;
   if (hasTechnoFamilyIntegrityConflict(style, trackLike)) return true;
   if (hasBassFamilyIntegrityConflict(style, trackLike)) return true;
+  if (hasLowTempoIntegrityConflict(style, trackLike)) return true;
   if (hasPsytranceIntegrityConflict(style, trackLike)) return true;
   return false;
 }
@@ -5745,6 +6082,23 @@ function isTrustedSlambientCatalogTrack(track) {
   if (!artistAllowedForStyle("slambient", track.artist)) return false;
   if (!labelAllowedForStyle("slambient", track.label)) return false;
   return true;
+}
+
+function isTrustedCuratedCatalogTrack(track) {
+  if (!track) return false;
+  if (isTrustedSlambientCatalogTrack(track)) return true;
+  const source = normalize(track.source || "");
+  const curatedLocalSeed = source.includes("datasetlocal") || source.includes("dataset local") || source.includes("dataset_local_seed_boost");
+  if (!curatedLocalSeed) return false;
+  if (!artistAllowedForStyle(track.style, track.artist)) return false;
+  return ["freeform", "ambient", "downtempo", "chillout", "brazilian_funk"].includes(track.style);
+}
+
+function curatedCatalogPriorityScore(track) {
+  if (!track || !CURATED_PRIORITY_STYLES.has(track.style)) return 0;
+  if (isTrustedCuratedCatalogTrack(track)) return 6.2;
+  if (!isDynamicSource(track.source)) return 4.6;
+  return 0;
 }
 
 function normalizeTrustedSlambientCatalog() {
@@ -6546,8 +6900,8 @@ function isTrackEligibleForRecommendation(track) {
   if (!track.style || !track.artist || !track.song) return false;
   if (isLikelyChannelStyleArtistName(track.artist)) return false;
   if (isLikelyGeneratedTrackTitle(track.song)) return false;
-  const trustedSlambient = isTrustedSlambientCatalogTrack(track);
-  if (track.existenceVerified === false && !trustedSlambient) return false;
+  const trustedCurated = isTrustedCuratedCatalogTrack(track);
+  if (track.existenceVerified === false && !trustedCurated) return false;
   if (!artistAllowedForStyle(track.style, track.artist)) return false;
   if (!labelAllowedForStyle(track.style, track.label)) return false;
   if (hasTrackStyleSignalConflict(track.style, track)) return false;
@@ -7092,19 +7446,20 @@ async function warmupCatalogInBackground() {
 async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   if (!track) return;
   const trustedSlambient = isTrustedSlambientCatalogTrack(track);
+  const trustedCurated = isTrustedCuratedCatalogTrack(track);
   if (trustedSlambient) normalizeTrustedSlambientCatalog();
   const currentPreview = normalizePreviewUrl(track.previewUrl);
   if (currentPreview) {
     track.previewUrl = currentPreview;
     registerPreviewCandidate(track, currentPreview);
   }
-  if (currentPreview && track.existenceVerified !== false && !forceLookup && (trustedSlambient || track.previewLookupAttempted)) {
+  if (currentPreview && track.existenceVerified !== false && !forceLookup && (trustedCurated || track.previewLookupAttempted)) {
     track.existenceVerified = true;
     track.previewChecked = true;
     track.previewMissing = false;
     return;
   }
-  if (track.previewChecked && track.existenceVerified !== undefined && !forceLookup && (trustedSlambient || track.previewLookupAttempted)) return;
+  if (track.previewChecked && track.existenceVerified !== undefined && !forceLookup && (trustedCurated || track.previewLookupAttempted)) return;
 
   let foundEvidence = Boolean(currentPreview);
   const strictStyle = hasStrictWhitelist(track.style) || STRICT_ARTIST_MATCH_STYLES.has(track.style);
@@ -7230,11 +7585,11 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     // sem fallback adicional
   }
 
-  if (!foundEvidence && !trustedSlambient) {
+  if (!foundEvidence && !trustedCurated) {
     track.existenceVerified = false;
   }
   if (track.existenceVerified === undefined) {
-    track.existenceVerified = trustedSlambient ? true : foundEvidence;
+    track.existenceVerified = trustedCurated ? true : foundEvidence;
   }
   const previewCandidates = previewCandidatesForTrack(track);
   track.previewUrl = previewCandidates[0] || "";
@@ -7276,6 +7631,7 @@ const I18N = {
     welcomeDesc: "Seu sommelier de música eletrônica para rave, treino, foco ou viagem. Escolha seu estilo e receba faixa + artista novo para descobrir.",
     startBtn: "Iniciar experiência",
     startSurpriseBtn: "Surpreenda-me",
+    floatingSurpriseBtn: "Surpresa",
     quickSurpriseTitle: "Surpreenda-me com novidade real",
     quickSurpriseHint: "Me diga o subgênero que você mais ouve, artistas e músicas que já conhece para eu buscar algo realmente novo.",
     quickSurpriseStyleLabel: "Subgênero que você mais ouve",
@@ -7289,7 +7645,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
-    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass e outros subgêneros importantes para não deixar nada de fora.",
+    heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk e outros subgêneros importantes para não deixar nada de fora.",
     catalogStatsKicker: "Nossa base para descoberta",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "músicas buscáveis",
@@ -7327,6 +7683,9 @@ const I18N = {
     styleInfoSource: "Referências: guias de gênero (Wikipedia e Beatportal) + curadoria Sonic Search.",
     styleInfoFallback: "Subgênero com fronteiras flexíveis. A curadoria cruza estética, contexto e BPM para reduzir recomendações fora do estilo.",
     styleInfoCloseAria: "Fechar balão do subgênero",
+    genreGuideTitle: "Sobre o subgênero",
+    genreGuideText: "{style}: {summary} Faixa típica: {bpm}. Use isso como leitura rápida para entender por que essa faixa entrou no seu perfil.",
+    bpmFallbackRelaxed: "Essa faixa usa a faixa típica de BPM do subgênero para manter novas opções sem inventar BPM exato.",
     defaultStats: "Nenhum feedback ainda.",
     stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Conheceu no app: {discoveredInApp} | Avaliações: {ratingCount} | Média: {ratingAvg}",
     ratingTitle: "Avalie esta recomendação",
@@ -7574,6 +7933,7 @@ const I18N = {
     welcomeDesc: "Your electronic music sommelier for rave, workout, focus, or travel. Pick your style and get a track + a new artist to discover.",
     startBtn: "Start experience",
     startSurpriseBtn: "Surprise me now",
+    floatingSurpriseBtn: "Surprise",
     quickSurpriseTitle: "Surprise me with real discovery",
     quickSurpriseHint: "Tell me your main subgenre, artists, and tracks you already know so I can target something truly new.",
     quickSurpriseStyleLabel: "Subgenre you listen to most",
@@ -7587,7 +7947,7 @@ const I18N = {
     quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
-    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, and other key subgenres.",
+    heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk, and other key subgenres.",
     catalogStatsKicker: "Our discovery base",
     catalogStatsArtists: "indexed artists",
     catalogStatsTracks: "searchable tracks",
@@ -7625,6 +7985,9 @@ const I18N = {
     styleInfoSource: "References: genre guides (Wikipedia and Beatportal) + Sonic Search curation.",
     styleInfoFallback: "Subgenre with flexible boundaries. Curation combines aesthetics, context, and BPM to reduce mismatched recommendations.",
     styleInfoCloseAria: "Close subgenre bubble",
+    genreGuideTitle: "About the subgenre",
+    genreGuideText: "{style}: {summary} Typical range: {bpm}. Use this as a quick read on why this track fits your profile.",
+    bpmFallbackRelaxed: "This track uses the subgenre's typical BPM range to keep new options flowing without inventing an exact BPM.",
     defaultStats: "No feedback yet.",
     stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Discovered in app: {discoveredInApp} | Ratings: {ratingCount} | Avg: {ratingAvg}",
     ratingTitle: "Rate this recommendation",
@@ -7885,7 +8248,8 @@ const I18N = {
     quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
     heroTitle: "Curaduría electrónica con descubrimiento real",
-    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass y otros subgéneros clave.",
+    heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk y otros subgéneros clave.",
+    floatingSurpriseBtn: "Sorpresa",
     catalogStatsKicker: "Nuestra base para descubrir",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "pistas buscables",
@@ -7923,6 +8287,9 @@ const I18N = {
     styleInfoSource: "Referencias: guías de género (Wikipedia y Beatportal) + curaduría Sonic Search.",
     styleInfoFallback: "Subgénero con fronteras flexibles. La curaduría cruza estética, contexto y BPM para reducir recomendaciones fuera de estilo.",
     styleInfoCloseAria: "Cerrar burbuja del subgénero",
+    genreGuideTitle: "Sobre el subgénero",
+    genreGuideText: "{style}: {summary} Rango típico: {bpm}. Úsalo como lectura rápida para entender por qué esta pista entra en tu perfil.",
+    bpmFallbackRelaxed: "Esta pista usa el rango típico de BPM del subgénero para mantener opciones nuevas sin inventar BPM exacto.",
     defaultStats: "Sin feedback todavía.",
     stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Conocidos en la app: {discoveredInApp} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
     ratingTitle: "Evalúa esta recomendación",
@@ -8380,7 +8747,9 @@ function localizeOptionLabels() {
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
-        full_on_morning: "Full-On Morning"
+        full_on_morning: "Full-On Morning",
+        chillout: "Chillout",
+        brazilian_funk: "Brazilian Funk"
       },
       context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Foco profundo", trabalho: "Trabalho criativo", treino: "Academia / treino", estrada: "Estrada / viagem" },
       energy: { low: "Baixa", mid: "Média", high: "Alta", extreme: "Extrema" },
@@ -8399,7 +8768,9 @@ function localizeOptionLabels() {
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
-        full_on_morning: "Full-On Morning"
+        full_on_morning: "Full-On Morning",
+        chillout: "Chillout",
+        brazilian_funk: "Brazilian Funk"
       },
       context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Deep focus", trabalho: "Creative work", treino: "Gym / workout", estrada: "Road / travel" },
       energy: { low: "Low", mid: "Mid", high: "High", extreme: "Extreme" },
@@ -8418,7 +8789,9 @@ function localizeOptionLabels() {
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
-        full_on_morning: "Full-On Morning"
+        full_on_morning: "Full-On Morning",
+        chillout: "Chillout",
+        brazilian_funk: "Brazilian Funk"
       },
       context: { warmup: "Calentamiento", peak: "Hora pico", after: "After / bajada", foco: "Foco profundo", trabalho: "Trabajo creativo", treino: "Gimnasio / entrenamiento", estrada: "Ruta / viaje" },
       energy: { low: "Baja", mid: "Media", high: "Alta", extreme: "Extrema" },
@@ -8707,7 +9080,7 @@ function applyLanguage() {
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
   setText("#surpriseBtn", t("surpriseBtn"));
-  setText("#floatingSurpriseBtn", t("startSurpriseBtn"));
+  setText("#floatingSurpriseBtn", t("floatingSurpriseBtn"));
   if (floatingSurpriseBtn) floatingSurpriseBtn.setAttribute("aria-label", t("startSurpriseBtn"));
   setText("#adaptiveSurpriseBtn", t("adaptiveSurpriseBtn"));
   setText("#clearFiltersBtn", t("clearFiltersBtn"));
@@ -8832,6 +9205,8 @@ function applyLanguage() {
   setText("#skipBtn", labels.btnSkip || "");
   setText("#moreInfoBtn", labels.btnMoreInfo || "");
   if (generatedBadge) generatedBadge.textContent = t("generatedNow");
+  if (genreGuideTitle) genreGuideTitle.textContent = t("genreGuideTitle");
+  renderGenreGuide(currentRecommendation);
   if (eventsIntro && (!currentRecommendation || eventsPanel?.classList.contains("hidden"))) eventsIntro.textContent = t("eventsPrompt");
   if (topListenersSubtitle && (!currentRecommendation || topListenersPanel?.classList.contains("hidden"))) {
     topListenersSubtitle.textContent = t("topListenersSubtitle", { style: styleLabelByValue(styleEl?.value || "") });
@@ -8932,6 +9307,7 @@ function resetSessionStateInMemory() {
   lastRejectedTrackKey = "";
   recommendationBlockedByKnown = false;
   recommendationStyleFallbackInfo = null;
+  recommendationBpmFallbackInfo = false;
   lastPrefs = null;
   currentRecommendation = null;
   currentDiscovery = null;
@@ -11203,6 +11579,18 @@ function applyStyleFallbackMessage({ setFeedback = true } = {}) {
   return message;
 }
 
+function recommendationBpmFallbackMessage() {
+  return recommendationBpmFallbackInfo ? t("bpmFallbackRelaxed") : "";
+}
+
+function applyBpmFallbackMessage({ setFeedback = true } = {}) {
+  const message = recommendationBpmFallbackMessage();
+  if (!message) return "";
+  if (setFeedback && feedbackMessage) feedbackMessage.textContent = message;
+  showToast(message);
+  return message;
+}
+
 function unseenTrackCandidatesForStyle(
   style,
   prefs = {},
@@ -11214,7 +11602,7 @@ function unseenTrackCandidatesForStyle(
   return catalog.filter((track) => {
     if (!track || track.style !== style) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm) && !trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
     const artistKey = artistMatchKey(track.artist);
     if (!artistKey || artistSetHasMatch(blockedArtists, track.artist)) return false;
     const trackKey = recommendationTrackKey(track);
@@ -11664,6 +12052,32 @@ function resolveBpmDisplay(track) {
 
 function formatBpmLine(track) {
   return resolveBpmDisplay(track).lineText;
+}
+
+function genreGuideSummary(track) {
+  const style = track?.style || "";
+  if (!style) return "";
+  const styleLabel = styleLabelByValue(style);
+  const summary = styleInfoSummaryByLanguage(style);
+  const bpmRange = styleBpmRangeCompact(style) || resolveBpmDisplay(track).range || t("bpmUnverifiedLabel");
+  return t("genreGuideText", {
+    style: styleLabel,
+    summary,
+    bpm: bpmRange
+  });
+}
+
+function renderGenreGuide(track) {
+  if (!genreGuidePanel || !genreGuideText) return;
+  const text = genreGuideSummary(track);
+  if (!track || !text) {
+    genreGuidePanel.classList.add("hidden");
+    genreGuideText.textContent = "";
+    return;
+  }
+  genreGuidePanel.classList.remove("hidden");
+  if (genreGuideTitle) genreGuideTitle.textContent = t("genreGuideTitle");
+  genreGuideText.textContent = text;
 }
 
 function buildSpotifyTrackLink(track) {
@@ -15089,6 +15503,7 @@ function bpmIntentStyleBoost(track, prefs = {}) {
   if (selectedRange.max <= 124) {
     const chillStyles = new Set([
       "ambient",
+      "chillout",
       "downtempo",
       "organic_house",
       "deep_house",
@@ -15132,6 +15547,7 @@ function contextStyleBoost(track, prefs = {}) {
     "future_garage",
     "liquid_dnb",
     "ambient",
+    "chillout",
     "idm",
     "downtempo"
   ]);
@@ -15177,12 +15593,13 @@ function contextStyleBoost(track, prefs = {}) {
       "jump_up",
       "bass_house",
       "electro_house",
+      "brazilian_funk",
       "gabber",
       "hardstyle"
     ]);
     let boost = workoutStyles.has(style) ? 4.4 : 0;
     if (["high", "extreme"].includes(energy)) boost += 1.4;
-    if (["ambient", "downtempo", "organic_house", "deep_house", "future_garage"].includes(style)) boost -= 3.2;
+    if (["ambient", "downtempo", "chillout", "organic_house", "deep_house", "future_garage"].includes(style)) boost -= 3.2;
     return boost;
   }
 
@@ -15211,12 +15628,25 @@ function recommendationScore(track, prefs) {
   if (track.existenceVerified === true) score += 0.8;
   if (hasReliableBpmForTrack(track)) score += 2.4;
   else score -= isDynamicSource(track.source) ? 8.5 : 2.2;
+  score += curatedCatalogPriorityScore(track);
   score += bpmIntentStyleBoost(track, prefs);
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
   score += getAdaptiveScore(track);
   score += Math.random() * 0.35;
 
+  return score;
+}
+
+function bpmFallbackScore(track, prefs = {}) {
+  const relaxedPrefs = { ...prefs, bpm: "" };
+  let score = recommendationScore(track, relaxedPrefs);
+  if (prefs.bpm && trackMatchesBpmPreference(track, prefs.bpm)) score += 7;
+  else if (prefs.bpm && trackBpmRangeOverlapsPreference(track, prefs.bpm)) score += 2.2;
+  if (prefs.energy && track.energy === prefs.energy) score += 1.6;
+  if (prefs.vocals && track.vocals === prefs.vocals) score += 1.1;
+  if (track.previewUrl) score += 0.8;
+  if (hasReliableBpmForTrack(track)) score += 1.4;
   return score;
 }
 
@@ -15251,10 +15681,14 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
   const seenArtistKeys = new Set();
   const queue = [];
 
-  const maybeAdd = (track, { ignoreKnown = false } = {}) => {
+  const maybeAdd = (track, { ignoreKnown = false, allowEstimatedBpm = false, allowSameArtist = false } = {}) => {
     if (!track) return false;
     if (prefs.style && track.style !== prefs.style) return false;
-    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+    const bpmMatches =
+      !prefs.bpm ||
+      trackMatchesBpmPreference(track, prefs.bpm) ||
+      (allowEstimatedBpm && trackBpmRangeOverlapsPreference(track, prefs.bpm));
+    if (!bpmMatches) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     const artistKey = artistMatchKey(track.artist);
     const trackKey = recommendationTrackKey(track);
@@ -15262,7 +15696,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     if (!ignoreKnown && artistSetHasMatch(knownUnion, track.artist)) return false;
     if (!ignoreKnown && trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles)) return false;
     if (seenKeys.has(trackKey)) return false;
-    if (seenArtistKeys.has(artistKey)) return false;
+    if (!allowSameArtist && seenArtistKeys.has(artistKey)) return false;
     seenKeys.add(trackKey);
     seenArtistKeys.add(artistKey);
     queue.push(track);
@@ -15303,6 +15737,25 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     scoredFallback.forEach((entry) => {
       if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
       maybeAdd(entry.track);
+    });
+  }
+
+  if (prefs.bpm && queue.length < SUGGESTION_QUEUE_TARGET) {
+    const estimatedEligible = catalog.filter((track) => {
+      if (!isTrackEligibleForRecommendation(track)) return false;
+      if (prefs.style && track.style !== prefs.style) return false;
+      return trackBpmRangeOverlapsPreference(track, prefs.bpm);
+    });
+    const estimatedScored = estimatedEligible
+      .map((track) => ({ track, score: bpmFallbackScore(track, prefs) }))
+      .sort((a, b) => b.score - a.score);
+    estimatedScored.forEach((entry) => {
+      if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
+      maybeAdd(entry.track, { allowEstimatedBpm: true });
+    });
+    estimatedScored.forEach((entry) => {
+      if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
+      maybeAdd(entry.track, { ignoreKnown: true, allowEstimatedBpm: true, allowSameArtist: true });
     });
   }
 
@@ -15757,6 +16210,7 @@ function renderRecommendation(track, prefs) {
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: styleLabelByValue(track.style) });
+  renderGenreGuide(track);
   renderArtistVisualFallback(track);
   void hydrateArtistVisual(track);
   void revealListeningNarrative(track, prefs);
@@ -17191,7 +17645,9 @@ async function generateRecommendationFromPrefs(
 ) {
   recommendationBlockedByKnown = false;
   recommendationStyleFallbackInfo = null;
+  recommendationBpmFallbackInfo = false;
   let usedKnownFallback = false;
+  let usedBpmRangeFallback = false;
   if (resetRejected) rejectedArtists = new Set();
   if (!externalDatasetImportDone) {
     await hydrateExternalDatasetPackInBackground();
@@ -17391,6 +17847,53 @@ async function generateRecommendationFromPrefs(
     return true;
   };
 
+  const bpmOkForRecommendation = (track) =>
+    !prefs.bpm ||
+    trackMatchesBpmPreference(track, prefs.bpm) ||
+    (usedBpmRangeFallback && trackBpmRangeOverlapsPreference(track, prefs.bpm));
+
+  const tryBpmFallbackRecommendation = () => {
+    if (!prefs.bpm) return false;
+    const selectedRange = parseBpmRangeValue(prefs.bpm);
+    if (!selectedRange) return false;
+    const scopedPool = catalog.filter((track) => {
+      if (!isTrackEligibleForRecommendation(track)) return false;
+      if (prefs.style && track.style !== prefs.style) return false;
+      if (!trackAllowedInSession(track)) return false;
+      if (!trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
+      return true;
+    });
+    if (!scopedPool.length) return false;
+
+    const avoidArtistKey = artistMatchKey(avoidArtistName || "");
+    const exactPool = scopedPool.filter((track) => trackMatchesBpmPreference(track, prefs.bpm));
+    const estimatedPool = scopedPool.filter((track) => !trackMatchesBpmPreference(track, prefs.bpm));
+    const pickBest = (pool = []) => {
+      if (!pool.length) return null;
+      const scored = pool
+        .map((track) => ({ track, score: bpmFallbackScore(track, prefs) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, Math.min(14, pool.length));
+      return scored.length ? pickRandomTrack(scored.map((entry) => entry.track)) : null;
+    };
+    const pools = [
+      exactPool.filter((track) => !artistSetHasMatch(sessionExcludedArtists, track.artist)),
+      exactPool.filter((track) => !avoidArtistKey || artistMatchKey(track.artist) !== avoidArtistKey),
+      exactPool,
+      estimatedPool.filter((track) => !artistSetHasMatch(sessionExcludedArtists, track.artist)),
+      estimatedPool.filter((track) => !avoidArtistKey || artistMatchKey(track.artist) !== avoidArtistKey),
+      estimatedPool
+    ];
+    const candidate = pools.map((pool) => pickBest(pool)).find(Boolean);
+    if (!candidate) return false;
+    currentRecommendation = candidate;
+    usedKnownFallback = true;
+    usedBpmRangeFallback = !trackMatchesBpmPreference(candidate, prefs.bpm);
+    recommendationBpmFallbackInfo = usedBpmRangeFallback;
+    recommendationBlockedByKnown = false;
+    return true;
+  };
+
   currentRecommendation = pickRecommendation(
     prefs,
     sessionExcludedArtists,
@@ -17418,7 +17921,7 @@ async function generateRecommendationFromPrefs(
     currentRecommendation = pickRandomTrack(styleFallback) || pickRandomTrack(globalFallback) || null;
   }
   if (!currentRecommendation) {
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentDiscovery = null;
       return false;
@@ -17464,7 +17967,7 @@ async function generateRecommendationFromPrefs(
     }
     if (currentRecommendation && normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`) === normalizedAvoidTrack) {
       currentRecommendation = null;
-      await tryCrossStyleFallbackRecommendation();
+      if (!tryBpmFallbackRecommendation()) await tryCrossStyleFallbackRecommendation();
     }
   }
 
@@ -17481,7 +17984,7 @@ async function generateRecommendationFromPrefs(
     if (strictPool.length > 0) {
       currentRecommendation = strictPool[Math.floor(Math.random() * strictPool.length)];
     } else {
-      if (!(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
+      if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
         markRecommendationBlockedByKnown();
         currentDiscovery = null;
         return false;
@@ -17509,7 +18012,7 @@ async function generateRecommendationFromPrefs(
       apiValidationAttempts += 1;
     }
     if (!currentRecommendation) {
-      if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+      if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
         markRecommendationBlockedByKnown();
         currentDiscovery = null;
         return false;
@@ -17519,7 +18022,7 @@ async function generateRecommendationFromPrefs(
   // Segurança final de consistência: não renderiza faixa de estilo diferente.
   if (prefs.style && currentRecommendation && currentRecommendation.style !== prefs.style) {
     currentRecommendation = null;
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentDiscovery = null;
       return false;
@@ -17569,7 +18072,7 @@ async function generateRecommendationFromPrefs(
     currentRecommendation = null;
   }
   if (!currentRecommendation) {
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       recommendationBlockedByKnown = false;
       currentDiscovery = null;
       return false;
@@ -17588,15 +18091,15 @@ async function generateRecommendationFromPrefs(
     )
   ) {
     currentRecommendation = null;
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentDiscovery = null;
       return false;
     }
   }
-  if (prefs.bpm && currentRecommendation && !trackMatchesBpmPreference(currentRecommendation, prefs.bpm)) {
+  if (prefs.bpm && currentRecommendation && !bpmOkForRecommendation(currentRecommendation)) {
     currentRecommendation = null;
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentDiscovery = null;
       return false;
@@ -17607,7 +18110,7 @@ async function generateRecommendationFromPrefs(
     !finalArtistKey ||
     (!usedKnownFallback && artistSetHasMatch(sessionExcludedArtists, currentRecommendation.artist))
   ) {
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentRecommendation = null;
       currentDiscovery = null;
@@ -17616,7 +18119,7 @@ async function generateRecommendationFromPrefs(
   }
   if (currentRecommendation && !trackAllowedInSession(currentRecommendation)) {
     currentRecommendation = null;
-    if (!(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
       currentDiscovery = null;
       return false;
@@ -17664,7 +18167,7 @@ async function generateRecommendationFromPrefs(
     currentDiscovery = null;
     return false;
   }
-  if (prefs.bpm && !trackMatchesBpmPreference(recommendationSnapshot, prefs.bpm)) {
+  if (prefs.bpm && !bpmOkForRecommendation(recommendationSnapshot)) {
     markRecommendationBlockedByKnown();
     currentRecommendation = null;
     currentDiscovery = null;
@@ -17682,6 +18185,7 @@ async function generateRecommendationFromPrefs(
   renderRecommendation(recommendationSnapshot, prefs);
   renderDiscovery(discoverySnapshot);
   await renderPreview(recommendationSnapshot);
+  applyBpmFallbackMessage({ setFeedback: false });
   if (
     prefs.style &&
     (
@@ -17694,7 +18198,7 @@ async function generateRecommendationFromPrefs(
     currentDiscovery = null;
     return false;
   }
-  if (prefs.bpm && !trackMatchesBpmPreference(recommendationSnapshot, prefs.bpm)) {
+  if (prefs.bpm && !bpmOkForRecommendation(recommendationSnapshot)) {
     markRecommendationBlockedByKnown();
     currentRecommendation = null;
     currentDiscovery = null;
@@ -17984,10 +18488,13 @@ async function runRecommendation() {
     lastPrefs = prefs;
     if (rerollBtn) rerollBtn.disabled = false;
     const styleFallbackMessage = applyStyleFallbackMessage({ setFeedback: false });
+    const bpmFallbackMessage = applyBpmFallbackMessage({ setFeedback: false });
     if (feedbackMessage) {
       const hasAnyPreference = Object.values(prefs).some(Boolean);
       if (styleFallbackMessage) {
         feedbackMessage.textContent = styleFallbackMessage;
+      } else if (bpmFallbackMessage) {
+        feedbackMessage.textContent = bpmFallbackMessage;
       } else if (usedCoverageFallback && fallbackSnapshot) {
         feedbackMessage.textContent = t("catalogFallbackUsingLocal", {
           style: fallbackSnapshot.style,
@@ -18498,8 +19005,11 @@ bind(rerollBtn, "click", async () => {
       ? normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`)
       : "";
     const fallbackMessage = applyStyleFallbackMessage({ setFeedback: false });
+    const bpmFallbackMessage = applyBpmFallbackMessage({ setFeedback: false });
     if (fallbackMessage) {
       feedbackMessage.textContent = fallbackMessage;
+    } else if (bpmFallbackMessage) {
+      feedbackMessage.textContent = bpmFallbackMessage;
     } else {
       feedbackMessage.textContent =
         previousTrackKey && newTrackKey && previousTrackKey === newTrackKey
@@ -18593,7 +19103,7 @@ bind(knownYesBtn, "click", async () => {
     return;
   }
 
-  const knownSwapFallback = applyStyleFallbackMessage({ setFeedback: false });
+  const knownSwapFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
     feedbackMessage.textContent = knownSwapFallback || t("swappedUnknown");
   }
@@ -18666,7 +19176,7 @@ bind(previewDislikeBtn, "click", async () => {
     showToast(recommendationFailureMessage());
     return;
   }
-  const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false });
+  const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   const reasonMessage = feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swappedNow");
   if (feedbackMessage) feedbackMessage.textContent = previewDislikeFallback || reasonMessage;
   playUiSfx("dislike");
@@ -18719,7 +19229,7 @@ bind(noveltyNotYetBtn, "click", async () => {
     showToast(recommendationFailureMessage());
     return;
   }
-  const noveltyNotYetFallback = applyStyleFallbackMessage({ setFeedback: false });
+  const noveltyNotYetFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
     feedbackMessage.textContent = noveltyNotYetFallback || (feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("refinedAfterNo"));
   }
@@ -18795,7 +19305,7 @@ bind(blockArtistBtn, "click", async () => {
     showToast(recommendationFailureMessage());
     return;
   }
-  const blockArtistFallback = applyStyleFallbackMessage({ setFeedback: false });
+  const blockArtistFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) feedbackMessage.textContent = blockArtistFallback || `${blockedMessage} ${t("swappedNow")}`;
 });
 
@@ -18846,7 +19356,7 @@ bind(skipBtn, "click", async () => {
     showToast(recommendationFailureMessage());
     return;
   }
-  const skipFallback = applyStyleFallbackMessage({ setFeedback: false });
+  const skipFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
     feedbackMessage.textContent = skipFallback || (feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("skipAdjusted"));
   }

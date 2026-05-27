@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260526l" />
+    <link rel="stylesheet" href="styles.css?v=20260527c" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -75,7 +75,7 @@
       <span id="audioVolumeValue">80%</span>
     </div>
     <button id="floatingSurpriseBtn" class="floating-surprise-btn hidden" type="button" aria-label="Surpreenda-me com uma faixa nova">
-      Surpreenda-me
+      Surpresa
     </button>
     <div id="toast" class="toast hidden" aria-live="polite"></div>
     <section id="searchOverlay" class="search-overlay hidden" aria-live="polite" aria-busy="true">
@@ -269,7 +269,7 @@
         </div>
         <p id="heroDesc" class="muted">
           Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal),
-          house, drum and bass e outros subgêneros importantes para não deixar nada de fora.
+          house, drum and bass, chillout, Brazilian Funk e outros subgêneros importantes para não deixar nada de fora.
         </p>
         <p id="heroSlogan" class="app-slogan hero-slogan">Nós amamos música</p>
         <p id="heroMission" class="app-mission hero-mission">
@@ -351,6 +351,7 @@
                 <option value="jump_up">Jump Up</option>
                 <option value="jungle">Jungle</option>
                 <option value="breakbeat">Breakbeat</option>
+                <option value="brazilian_funk">Brazilian Funk</option>
                 <option value="uk_garage">UK Garage</option>
                 <option value="future_garage">Future Garage</option>
                 <option value="dubstep">Dubstep</option>
@@ -361,6 +362,7 @@
               <optgroup label="Outros eletrônicos relevantes">
                 <option value="downtempo">Downtempo</option>
                 <option value="ambient">Ambient</option>
+                <option value="chillout">Chillout</option>
                 <option value="idm">IDM</option>
                 <option value="electro">Electro</option>
               </optgroup>
@@ -403,6 +405,7 @@
             <label for="bpm">Faixa de BPM</label>
             <select id="bpm" size="1">
               <option value="">Sem preferência</option>
+              <option value="60-110">60-110</option>
               <option value="110-124">110-124</option>
               <option value="124-132">124-132</option>
               <option value="132-145">132-145</option>
@@ -498,6 +501,10 @@
           <p class="meta-line"><span id="releaseInfo"></span> <span>•</span> <span id="durationInfo"></span> <span>•</span> <span id="keyInfo"></span></p>
           <p class="meta-line muted"><span id="catalogInfo"></span></p>
           <p id="songVibe" class="muted"></p>
+          <div id="genreGuidePanel" class="genre-guide-panel hidden">
+            <p id="genreGuideTitle" class="genre-guide-title">Sobre o subgênero</p>
+            <p id="genreGuideText" class="genre-guide-text muted"></p>
+          </div>
           <p id="listeningNarrative" class="listening-narrative hidden"></p>
           <div class="listen-links">
             <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
@@ -800,6 +807,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260526l"></script>
+    <script src="app.js?v=20260527c"></script>
   </body>
 </html>
