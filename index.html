@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260527c" />
+    <link rel="stylesheet" href="styles.css?v=20260528b" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -80,11 +80,36 @@
     <div id="toast" class="toast hidden" aria-live="polite"></div>
     <section id="searchOverlay" class="search-overlay hidden" aria-live="polite" aria-busy="true">
       <div class="search-card">
-        <div class="search-icon" aria-hidden="true"></div>
-        <h4 id="searchTitle">Buscando recomendação</h4>
-        <p id="searchStatusText">Analisando filtros e procurando a melhor faixa...</p>
+        <div class="search-visual" aria-hidden="true">
+          <div class="search-icon"></div>
+          <div class="search-rings">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="search-wave">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="search-copy">
+          <p id="searchStageLabel" class="search-stage-label">Etapa 1 de 4</p>
+          <h4 id="searchTitle">Buscando recomendação</h4>
+          <p id="searchStatusText">Analisando filtros e procurando a melhor faixa...</p>
+        </div>
         <div class="search-progress-track">
           <span id="searchProgressFill" class="search-progress-fill"></span>
+        </div>
+        <div class="search-stage-list" aria-hidden="true">
+          <span data-search-stage="1" class="active">Perfil</span>
+          <span data-search-stage="2">Catálogo</span>
+          <span data-search-stage="3">Match</span>
+          <span data-search-stage="4">Final</span>
         </div>
       </div>
     </section>
@@ -177,6 +202,50 @@
           <button class="large lang-btn" data-lang="pt">Português (BR)</button>
           <button class="large lang-btn" data-lang="en">English</button>
           <button class="large lang-btn" data-lang="es">Español</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="usageGuideScreen" class="welcome-screen hidden" tabindex="-1">
+      <div class="welcome-card usage-guide-card">
+        <div class="brand-wrap">
+          <div class="brand-logo-wrap" aria-hidden="true">
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260525h" alt="" />
+          </div>
+          <p id="usageGuideKicker" class="brand-kicker">Guia rápido</p>
+          <h1 id="usageGuideTitle">Como aproveitar melhor o Sonic Search</h1>
+          <p id="usageGuideDesc">Use o app como um sommelier: diga o momento, ajuste o gosto e responda ao que tocar.</p>
+        </div>
+
+        <div class="usage-guide-grid" aria-label="Dicas para usar melhor o Sonic Search">
+          <article class="usage-guide-item">
+            <span class="usage-guide-number">01</span>
+            <h2 id="usageGuideStep1Title">Comece pelo momento</h2>
+            <p id="usageGuideStep1Text">Escolha Foco, Trabalho, Treino, After ou Peak para o app montar um ponto de partida musical.</p>
+          </article>
+          <article class="usage-guide-item">
+            <span class="usage-guide-number">02</span>
+            <h2 id="usageGuideStep2Title">Diga quem você já conhece</h2>
+            <p id="usageGuideStep2Text">Adicione artistas conhecidos para evitar recomendações óbvias e abrir espaço para descoberta real.</p>
+          </article>
+          <article class="usage-guide-item">
+            <span class="usage-guide-number">03</span>
+            <h2 id="usageGuideStep3Title">Use o feedback</h2>
+            <p id="usageGuideStep3Text">Curta, pule ou marque “já conhecia”. Cada resposta ajuda o perfil a ficar mais certeiro.</p>
+          </article>
+          <article class="usage-guide-item">
+            <span class="usage-guide-number">04</span>
+            <h2 id="usageGuideStep4Title">Refine sem medo</h2>
+            <p id="usageGuideStep4Text">Ajuste energia, BPM, vocal e prioridades quando quiser uma busca mais precisa.</p>
+          </article>
+        </div>
+
+        <div class="usage-guide-note">
+          <p id="usageGuideNote">Dica: se quiser novidade rápida, use Surpreender. Se quiser precisão, preencha estilo e artistas conhecidos.</p>
+        </div>
+
+        <div class="cta-row usage-guide-actions">
+          <button id="usageGuideContinueBtn" class="primary">Continuar</button>
         </div>
       </div>
     </section>
@@ -298,8 +367,22 @@
         </div>
       </header>
 
-      <section class="panel" aria-labelledby="preferencias-title">
-        <h3 id="preferencias-title">1) Monte seu perfil sonoro</h3>
+      <section class="panel preference-panel" aria-labelledby="preferencias-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Busca guiada</p>
+            <h3 id="preferencias-title">1) Monte seu perfil sonoro</h3>
+          </div>
+          <p class="section-hint muted">Escolha um atalho ou refine manualmente.</p>
+        </div>
+
+        <div id="smartPresetBar" class="smart-presets" aria-label="Atalhos de recomendação">
+          <button id="presetFocusBtn" class="smart-preset-btn" type="button" data-preset="focus" aria-pressed="false">Foco</button>
+          <button id="presetWorkBtn" class="smart-preset-btn" type="button" data-preset="work" aria-pressed="false">Trabalho</button>
+          <button id="presetWorkoutBtn" class="smart-preset-btn" type="button" data-preset="workout" aria-pressed="false">Treino</button>
+          <button id="presetAfterBtn" class="smart-preset-btn" type="button" data-preset="after" aria-pressed="false">After</button>
+          <button id="presetPeakBtn" class="smart-preset-btn" type="button" data-preset="peak" aria-pressed="false">Peak</button>
+        </div>
 
         <div class="fields-grid">
           <div class="field style-field">
@@ -439,38 +522,42 @@
           <textarea id="knownArtists" rows="2" placeholder="Ex.: Astrix, Charlotte de Witte, Alok"></textarea>
         </div>
 
-        <div class="weights-panel">
-          <h4>Prioridade dos filtros</h4>
-          <div class="weights-grid">
-            <label class="weight-item" for="weightStyle">
-              <span>Estilo <strong id="weightStyleValue">3</strong></span>
-              <input id="weightStyle" type="range" min="0" max="5" step="1" value="3" />
-            </label>
-            <label class="weight-item" for="weightContext">
-              <span>Contexto <strong id="weightContextValue">2</strong></span>
-              <input id="weightContext" type="range" min="0" max="5" step="1" value="2" />
-            </label>
-            <label class="weight-item" for="weightEnergy">
-              <span>Energia <strong id="weightEnergyValue">2</strong></span>
-              <input id="weightEnergy" type="range" min="0" max="5" step="1" value="2" />
-            </label>
-            <label class="weight-item" for="weightBpm">
-              <span>BPM <strong id="weightBpmValue">1</strong></span>
-              <input id="weightBpm" type="range" min="0" max="5" step="1" value="1" />
-            </label>
-            <label class="weight-item" for="weightVocals">
-              <span>Vocal <strong id="weightVocalsValue">1</strong></span>
-              <input id="weightVocals" type="range" min="0" max="5" step="1" value="1" />
-            </label>
+        <details class="advanced-filters">
+          <summary id="advancedFiltersSummary">Ajuste fino de prioridade</summary>
+          <div class="weights-panel">
+            <div class="weights-grid">
+              <label class="weight-item" for="weightStyle">
+                <span>Estilo <strong id="weightStyleValue">3</strong></span>
+                <input id="weightStyle" type="range" min="0" max="5" step="1" value="3" />
+              </label>
+              <label class="weight-item" for="weightContext">
+                <span>Contexto <strong id="weightContextValue">2</strong></span>
+                <input id="weightContext" type="range" min="0" max="5" step="1" value="2" />
+              </label>
+              <label class="weight-item" for="weightEnergy">
+                <span>Energia <strong id="weightEnergyValue">2</strong></span>
+                <input id="weightEnergy" type="range" min="0" max="5" step="1" value="2" />
+              </label>
+              <label class="weight-item" for="weightBpm">
+                <span>BPM <strong id="weightBpmValue">1</strong></span>
+                <input id="weightBpm" type="range" min="0" max="5" step="1" value="1" />
+              </label>
+              <label class="weight-item" for="weightVocals">
+                <span>Vocal <strong id="weightVocalsValue">1</strong></span>
+                <input id="weightVocals" type="range" min="0" max="5" step="1" value="1" />
+              </label>
+            </div>
+            <div class="advanced-actions">
+              <button id="resetAppBtn" class="danger" type="button">Novo usuário (reset total)</button>
+            </div>
           </div>
-        </div>
+        </details>
 
-        <div class="cta-row">
+        <div class="cta-row recommendation-actions">
           <button id="recommendBtn" class="primary">Gerar recomendação</button>
           <button id="rerollBtn" class="secondary" disabled>Nova sugestão no mesmo perfil</button>
           <button id="surpriseBtn">Surpreender</button>
           <button id="clearFiltersBtn">Limpar filtros</button>
-          <button id="resetAppBtn" class="danger">Novo usuário (reset total)</button>
         </div>
         <div id="newArtistsPanel" class="new-artists-panel hidden" aria-live="polite">
           <h4 id="newArtistsTitle">Artistas novos no subgênero</h4>
@@ -662,6 +749,63 @@
         </div>
       </section>
 
+      <section id="voiceLabPanel" class="panel voice-lab-panel" aria-labelledby="voiceLabTitle">
+        <div class="voice-lab-head">
+          <div>
+            <p id="voiceLabKicker" class="section-kicker">Brincadeira sonora</p>
+            <h3 id="voiceLabTitle">Modifique sua voz</h3>
+          </div>
+          <p id="voiceLabHint" class="section-hint muted">Grave uma frase e teste vozes robóticas, engraçadas, de telefone e alienígenas.</p>
+        </div>
+
+        <div class="voice-lab-grid">
+          <div class="voice-recorder-card">
+            <div class="voice-visual" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p id="voiceStatus" class="voice-status">Pronto para gravar.</p>
+            <div class="voice-meter" aria-hidden="true">
+              <span id="voiceTimerBar"></span>
+            </div>
+            <div class="voice-controls">
+              <button id="voiceRecordBtn" class="primary" type="button">Gravar voz</button>
+              <button id="voiceStopBtn" class="danger" type="button" disabled>Parar</button>
+              <button id="voicePlayBtn" type="button" disabled>Ouvir efeito</button>
+              <button id="voiceResetBtn" class="secondary" type="button" disabled>Limpar</button>
+            </div>
+            <audio id="voicePlayback" class="auto-audio hidden" controls preload="none"></audio>
+            <a id="voiceDownloadBtn" class="listen-btn voice-download hidden" href="#" download="sonic-search-voz.webm">Baixar gravação</a>
+          </div>
+
+          <div class="voice-effects-card">
+            <p id="voiceEffectsTitle" class="voice-effects-title">Escolha o efeito</p>
+            <div id="voiceEffectButtons" class="voice-effect-grid" role="radiogroup" aria-label="Efeitos de voz">
+              <button class="voice-effect-btn active" type="button" data-voice-effect="robot" aria-pressed="true">Robô</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="chipmunk" aria-pressed="false">Engraçada</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="telephone" aria-pressed="false">Telefone</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="alien" aria-pressed="false">Alienígena</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="deep" aria-pressed="false">Voz grave</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="echo" aria-pressed="false">Eco espacial</button>
+            </div>
+            <div class="voice-mini-card">
+              <div>
+                <p id="voiceMiniTitle" class="voice-effects-title">Fale e vira música</p>
+                <p id="voiceMiniHint" class="muted voice-mini-hint">Transforme sua voz em uma mini track com kick, bass e hats.</p>
+              </div>
+              <div class="voice-mini-controls">
+                <button id="voiceMiniPlayBtn" class="primary" type="button" disabled>Criar mini música</button>
+                <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar música</button>
+              </div>
+              <p id="voiceMiniStatus" class="muted voice-mini-status">Grave sua voz para liberar o mini beat.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="eventsPanel" class="panel events-hub-panel hidden">
         <h3>Agenda do artista</h3>
         <p id="eventsIntro" class="muted">Curta um artista para carregar agenda de shows.</p>
@@ -672,6 +816,17 @@
       <section id="spiritPanel" class="panel spirit-panel hidden" aria-live="polite">
         <h3 id="spiritPanelTitle">Seu espírito musical</h3>
         <p id="spiritIntro" class="muted">Ao completar 10 likes, seu espírito musical será revelado.</p>
+        <div id="spiritInsightPanel" class="spirit-insight-panel">
+          <div class="spirit-insight-head">
+            <p id="spiritInsightTitle" class="spirit-visual-title">Calibração do espírito</p>
+            <span id="spiritInsightStatus" class="chip alt">Em formação</span>
+          </div>
+          <div class="spirit-progress-track" aria-hidden="true">
+            <span id="spiritProgressFill"></span>
+          </div>
+          <p id="spiritInsightText" class="muted spirit-visual-hint">Curta músicas para o app revelar seu arquétipo musical.</p>
+          <div id="spiritSignalList" class="spirit-signal-list"></div>
+        </div>
         <article id="spiritCard" class="spirit-card hidden">
           <div class="spirit-avatar-wrap">
             <img id="spiritImage" class="spirit-avatar" src="" alt="" loading="lazy" />
@@ -807,6 +962,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260527c"></script>
+    <script src="app.js?v=20260528b"></script>
   </body>
 </html>

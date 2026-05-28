@@ -2081,6 +2081,8 @@ const audioVolumeSlider = document.getElementById("audioVolumeSlider");
 const audioVolumeValue = document.getElementById("audioVolumeValue");
 const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
+const usageGuideScreen = document.getElementById("usageGuideScreen");
+const usageGuideContinueBtn = document.getElementById("usageGuideContinueBtn");
 const authScreen = document.getElementById("authScreen");
 const authKicker = document.getElementById("authKicker");
 const authTitle = document.getElementById("authTitle");
@@ -2117,8 +2119,28 @@ const quickSurpriseCancelBtn = document.getElementById("quickSurpriseCancelBtn")
 const toastEl = document.getElementById("toast");
 const searchOverlay = document.getElementById("searchOverlay");
 const searchTitle = document.getElementById("searchTitle");
+const searchStageLabel = document.getElementById("searchStageLabel");
 const searchStatusText = document.getElementById("searchStatusText");
 const searchProgressFill = document.getElementById("searchProgressFill");
+const voiceLabPanel = document.getElementById("voiceLabPanel");
+const voiceLabKicker = document.getElementById("voiceLabKicker");
+const voiceLabTitle = document.getElementById("voiceLabTitle");
+const voiceLabHint = document.getElementById("voiceLabHint");
+const voiceStatus = document.getElementById("voiceStatus");
+const voiceTimerBar = document.getElementById("voiceTimerBar");
+const voiceRecordBtn = document.getElementById("voiceRecordBtn");
+const voiceStopBtn = document.getElementById("voiceStopBtn");
+const voicePlayBtn = document.getElementById("voicePlayBtn");
+const voiceResetBtn = document.getElementById("voiceResetBtn");
+const voicePlayback = document.getElementById("voicePlayback");
+const voiceDownloadBtn = document.getElementById("voiceDownloadBtn");
+const voiceEffectsTitle = document.getElementById("voiceEffectsTitle");
+const voiceEffectButtons = document.getElementById("voiceEffectButtons");
+const voiceMiniTitle = document.getElementById("voiceMiniTitle");
+const voiceMiniHint = document.getElementById("voiceMiniHint");
+const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
+const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
+const voiceMiniStatus = document.getElementById("voiceMiniStatus");
 const quizChallengeBubble = document.getElementById("quizChallengeBubble");
 const quizBubbleText = document.getElementById("quizBubbleText");
 const quizStartBtn = document.getElementById("quizStartBtn");
@@ -2148,6 +2170,7 @@ const styleInfoTitle = document.getElementById("styleInfoTitle");
 const styleInfoBpm = document.getElementById("styleInfoBpm");
 const styleInfoSummary = document.getElementById("styleInfoSummary");
 const styleInfoTip = document.getElementById("styleInfoTip");
+const smartPresetBar = document.getElementById("smartPresetBar");
 const knownArtistsEl = document.getElementById("knownArtists");
 const discoveryModeEl = document.getElementById("discoveryMode");
 const recommendBtn = document.getElementById("recommendBtn");
@@ -2293,6 +2316,12 @@ const spiritName = document.getElementById("spiritName");
 const spiritArchetype = document.getElementById("spiritArchetype");
 const spiritDescription = document.getElementById("spiritDescription");
 const spiritProgress = document.getElementById("spiritProgress");
+const spiritInsightPanel = document.getElementById("spiritInsightPanel");
+const spiritInsightTitle = document.getElementById("spiritInsightTitle");
+const spiritInsightStatus = document.getElementById("spiritInsightStatus");
+const spiritInsightText = document.getElementById("spiritInsightText");
+const spiritProgressFill = document.getElementById("spiritProgressFill");
+const spiritSignalList = document.getElementById("spiritSignalList");
 const spiritVisualPanel = document.getElementById("spiritVisualPanel");
 const spiritVisualTitle = document.getElementById("spiritVisualTitle");
 const spiritVisualHint = document.getElementById("spiritVisualHint");
@@ -2349,6 +2378,7 @@ let knownArtistsMemory = new Set();
 let knownTrackTitlesMemory = new Set();
 let discoveredArtistsInApp = new Set();
 let seenArtistsMemory = new Set();
+let seenTrackKeysMemory = new Set();
 let blockedArtistsMemory = new Set();
 let rejectedArtists = new Set();
 let dynamicCatalogByStyle = new Map();
@@ -2410,9 +2440,22 @@ let audioUnavailable = false;
 let audioUnlocked = false;
 let audioEnabled = true;
 let audioVolume = 0.8;
+let audioVolumePanelCloseTimer = 0;
 let openingStingPlayed = false;
 let openingStingPending = false;
 let searchAudioPulseTimer = 0;
+let voiceRecorder = null;
+let voiceRecordingStream = null;
+let voiceRecordingChunks = [];
+let voiceRecordingBlob = null;
+let voiceRecordingUrl = "";
+let voiceRecordingStartedAt = 0;
+let voiceRecordingTimer = 0;
+let selectedVoiceEffect = "robot";
+let activeVoiceSource = null;
+let voiceMiniTrackNodes = [];
+let voiceMiniTrackTimers = [];
+let voiceMiniTrackPlaying = false;
 let quizOfferTimer = 0;
 let quizPendingChallenge = null;
 let quizSession = null;
@@ -2502,6 +2545,14 @@ const DEFAULT_WEIGHTS = {
   energy: 2,
   bpm: 1,
   vocals: 1
+};
+
+const SMART_PRESETS = {
+  focus: { style: "minimal_techno", context: "foco", energy: "mid", bpm: "124-132", vocals: "instrumental" },
+  work: { style: "techno", context: "trabalho", energy: "mid", bpm: "124-132", vocals: "instrumental" },
+  workout: { style: "techno", context: "treino", energy: "high", bpm: "132-145", vocals: "" },
+  after: { style: "chillout", context: "after", energy: "low", bpm: "60-110", vocals: "" },
+  peak: { style: "peak_time_techno", context: "peak", energy: "high", bpm: "132-145", vocals: "instrumental" }
 };
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
@@ -7614,6 +7665,19 @@ const I18N = {
     langDesc: "Escolha o idioma para toda a experiência do app.",
     appSlogan: "Nós amamos música",
     appMission: "Nossa missão: achar tracks memoráveis para você que você não acharia sem o Sonic Search.",
+    usageGuideKicker: "Guia rápido",
+    usageGuideTitle: "Como aproveitar melhor o Sonic Search",
+    usageGuideDesc: "Use o app como um sommelier: diga o momento, ajuste o gosto e responda ao que tocar.",
+    usageGuideStep1Title: "Comece pelo momento",
+    usageGuideStep1Text: "Escolha Foco, Trabalho, Treino, After ou Peak para o app montar um ponto de partida musical.",
+    usageGuideStep2Title: "Diga quem você já conhece",
+    usageGuideStep2Text: "Adicione artistas conhecidos para evitar recomendações óbvias e abrir espaço para descoberta real.",
+    usageGuideStep3Title: "Use o feedback",
+    usageGuideStep3Text: "Curta, pule ou marque “já conhecia”. Cada resposta ajuda o perfil a ficar mais certeiro.",
+    usageGuideStep4Title: "Refine sem medo",
+    usageGuideStep4Text: "Ajuste energia, BPM, vocal e prioridades quando quiser uma busca mais precisa.",
+    usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
+    usageGuideContinueBtn: "Continuar",
     authKicker: "Carregar usuário",
     authTitle: "Entre para carregar seu perfil",
     authDesc: "Faça login para continuar com seu perfil salvo ou continue sem login.",
@@ -7651,7 +7715,16 @@ const I18N = {
     catalogStatsTracks: "músicas buscáveis",
     catalogStatsStyles: "subgêneros",
     catalogStatsLabels: "labels",
+    sectionKicker: "Busca guiada",
+    sectionHint: "Escolha um atalho ou refine manualmente.",
+    presetFocus: "Foco",
+    presetWork: "Trabalho",
+    presetWorkout: "Treino",
+    presetAfter: "After",
+    presetPeak: "Peak",
+    advancedFiltersSummary: "Ajuste fino de prioridade",
     recommendBtn: "Gerar recomendação",
+    recommendBtnBusy: "Gerando...",
     rerollBtn: "Nova sugestão no mesmo perfil",
     surpriseBtn: "Surpreender",
     adaptiveSurpriseBtn: "Surpreenda por perfil",
@@ -7723,6 +7796,36 @@ const I18N = {
     trackAiLocalSource: "Leitura local baseada em subgênero, BPM, energia e contexto.",
     trackAiFallback: "Essa faixa está alinhada ao seu perfil: combine o groove com seu momento e avalie em estrelas para refinar ainda mais.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
+    voiceLabKicker: "Brincadeira sonora",
+    voiceLabTitle: "Modifique sua voz",
+    voiceLabHint: "Grave uma frase e teste vozes robóticas, engraçadas, de telefone e alienígenas.",
+    voiceEffectsTitle: "Escolha o efeito",
+    voiceEffectRobot: "Robô",
+    voiceEffectChipmunk: "Engraçada",
+    voiceEffectTelephone: "Telefone",
+    voiceEffectAlien: "Alienígena",
+    voiceEffectDeep: "Voz grave",
+    voiceEffectEcho: "Eco espacial",
+    voiceRecordBtn: "Gravar voz",
+    voiceStopBtn: "Parar",
+    voicePlayBtn: "Ouvir efeito",
+    voiceResetBtn: "Limpar",
+    voiceDownloadBtn: "Baixar gravação",
+    voiceReady: "Pronto para gravar.",
+    voiceRecording: "Gravando... {seconds}s",
+    voiceRecorded: "Gravação pronta. Escolha um efeito e aperte ouvir.",
+    voiceNeedRecording: "Grave sua voz primeiro.",
+    voiceMicUnsupported: "Seu navegador não liberou gravação de voz aqui.",
+    voiceMicDenied: "Não consegui acessar o microfone. Verifique a permissão do navegador.",
+    voicePlaying: "Tocando com efeito: {effect}.",
+    voiceCleared: "Gravação apagada.",
+    voiceMiniTitle: "Fale e vira música",
+    voiceMiniHint: "Transforme sua voz em uma mini track com kick, bass e hats.",
+    voiceMiniPlayBtn: "Criar mini música",
+    voiceMiniStopBtn: "Parar música",
+    voiceMiniReady: "Grave sua voz para liberar o mini beat.",
+    voiceMiniPlaying: "Mini música tocando: voz picotada, kick, bass e hats.",
+    voiceMiniDone: "Mini música finalizada. Grave outra frase ou toque de novo.",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -7835,10 +7938,11 @@ const I18N = {
     toastSkipAdjusted: "Fechado. Ajustei sua recomendação com base no seu feedback.",
     catalogUpdateProgress: "Atualizando catálogo {style}: {tracks} faixas / {artists} artistas.",
     searchOverlayTitle: "Buscando recomendação",
-    searchOverlayPreparing: "Analisando filtros e preparando busca...",
-    searchOverlayCatalog: "Buscando e validando músicas do catálogo...",
-    searchOverlayGenerating: "Gerando melhor match para seu perfil...",
-    searchOverlayFinishing: "Finalizando recomendação...",
+    searchOverlayStage: "Etapa {current} de {total}",
+    searchOverlayPreparing: "Lendo intenção, energia, BPM e artistas conhecidos...",
+    searchOverlayCatalog: "Varrendo catálogo e checando faixas confiáveis...",
+    searchOverlayGenerating: "Cruzando perfil, subgênero e descoberta nova...",
+    searchOverlayFinishing: "Polindo o match e preparando a escuta...",
     newArtistsBtn: "Buscar artistas novos (< 2 anos)",
     newArtistsTitle: "Artistas novos no subgênero",
     newArtistsSelectStyle: "Escolha um subgênero para buscar artistas novos.",
@@ -7864,6 +7968,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisão concluída: seu espírito permanece {name}.",
     spiritReviewStayedToast: "Revisão concluída: espírito mantido em {name}.",
     spiritReviewShiftedToast: "Revisão concluída: espírito atualizado para {name}.",
+    spiritInsightTitle: "Calibração do espírito",
+    spiritInsightLockedStatus: "Em formação",
+    spiritInsightUnlockedStatus: "Ativo",
+    spiritInsightLockedText: "Curta mais {remaining} músicas para revelar seu arquétipo. Estou lendo estilo, energia e feedback.",
+    spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
+    spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
+    spiritInsightSignalScore: "{label}: sinal {score}",
     spiritVisualTitle: "Modo visual do espírito",
     spiritVisualHint: "Loop de ambientação audiovisual alinhado ao seu perfil atual.",
     spiritSpotlightTitle: "Faixa do espírito",
@@ -7916,6 +8027,19 @@ const I18N = {
     langDesc: "Choose the language for the full app experience.",
     appSlogan: "We love music",
     appMission: "Our mission: find memorable tracks for you that you likely would not find without Sonic Search.",
+    usageGuideKicker: "Quick guide",
+    usageGuideTitle: "How to get more from Sonic Search",
+    usageGuideDesc: "Use the app like a sommelier: tell it the moment, tune your taste, and react to what plays.",
+    usageGuideStep1Title: "Start with the moment",
+    usageGuideStep1Text: "Pick Focus, Work, Workout, After, or Peak so the app can set a musical starting point.",
+    usageGuideStep2Title: "Say who you know",
+    usageGuideStep2Text: "Add known artists to avoid obvious picks and make room for real discovery.",
+    usageGuideStep3Title: "Use feedback",
+    usageGuideStep3Text: "Like, skip, or mark “already knew it”. Each response makes your profile sharper.",
+    usageGuideStep4Title: "Fine-tune freely",
+    usageGuideStep4Text: "Adjust energy, BPM, vocals, and priorities whenever you want a more precise search.",
+    usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
+    usageGuideContinueBtn: "Continue",
     authKicker: "Load user",
     authTitle: "Sign in to load your profile",
     authDesc: "Log in to continue with your saved profile or continue without login.",
@@ -7953,7 +8077,16 @@ const I18N = {
     catalogStatsTracks: "searchable tracks",
     catalogStatsStyles: "subgenres",
     catalogStatsLabels: "labels",
+    sectionKicker: "Guided search",
+    sectionHint: "Pick a shortcut or refine manually.",
+    presetFocus: "Focus",
+    presetWork: "Work",
+    presetWorkout: "Workout",
+    presetAfter: "After",
+    presetPeak: "Peak",
+    advancedFiltersSummary: "Fine-tune priorities",
     recommendBtn: "Generate recommendation",
+    recommendBtnBusy: "Generating...",
     rerollBtn: "New suggestion with same profile",
     surpriseBtn: "Surprise me",
     adaptiveSurpriseBtn: "Profile surprise",
@@ -8025,6 +8158,36 @@ const I18N = {
     trackAiLocalSource: "Local insight based on subgenre, BPM, energy, and context.",
     trackAiFallback: "This track matches your profile. Pair the groove with your current moment and rate it to refine curation.",
     trackAiUpdatedToast: "AI insight updated.",
+    voiceLabKicker: "Sound playground",
+    voiceLabTitle: "Modify your voice",
+    voiceLabHint: "Record a phrase and try robotic, funny, telephone, and alien voices.",
+    voiceEffectsTitle: "Choose effect",
+    voiceEffectRobot: "Robot",
+    voiceEffectChipmunk: "Funny",
+    voiceEffectTelephone: "Telephone",
+    voiceEffectAlien: "Alien",
+    voiceEffectDeep: "Deep voice",
+    voiceEffectEcho: "Space echo",
+    voiceRecordBtn: "Record voice",
+    voiceStopBtn: "Stop",
+    voicePlayBtn: "Play effect",
+    voiceResetBtn: "Clear",
+    voiceDownloadBtn: "Download recording",
+    voiceReady: "Ready to record.",
+    voiceRecording: "Recording... {seconds}s",
+    voiceRecorded: "Recording ready. Choose an effect and press play.",
+    voiceNeedRecording: "Record your voice first.",
+    voiceMicUnsupported: "Your browser did not enable voice recording here.",
+    voiceMicDenied: "I could not access the microphone. Check browser permission.",
+    voicePlaying: "Playing with effect: {effect}.",
+    voiceCleared: "Recording cleared.",
+    voiceMiniTitle: "Speak it into music",
+    voiceMiniHint: "Turn your voice into a mini track with kick, bass, and hats.",
+    voiceMiniPlayBtn: "Create mini music",
+    voiceMiniStopBtn: "Stop music",
+    voiceMiniReady: "Record your voice to unlock the mini beat.",
+    voiceMiniPlaying: "Mini music playing: chopped voice, kick, bass, and hats.",
+    voiceMiniDone: "Mini music finished. Record another phrase or play it again.",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -8137,10 +8300,11 @@ const I18N = {
     toastSkipAdjusted: "Done. Recommendation adjusted from your feedback.",
     catalogUpdateProgress: "Updating catalog {style}: {tracks} tracks / {artists} artists.",
     searchOverlayTitle: "Searching recommendation",
-    searchOverlayPreparing: "Analyzing filters and preparing search...",
-    searchOverlayCatalog: "Searching and validating tracks in catalog...",
-    searchOverlayGenerating: "Generating the best match for your profile...",
-    searchOverlayFinishing: "Finalizing recommendation...",
+    searchOverlayStage: "Step {current} of {total}",
+    searchOverlayPreparing: "Reading intent, energy, BPM, and known artists...",
+    searchOverlayCatalog: "Scanning catalog and checking reliable tracks...",
+    searchOverlayGenerating: "Matching profile, subgenre, and new discovery...",
+    searchOverlayFinishing: "Polishing the match and preparing playback...",
     newArtistsBtn: "Find new artists (< 2 years)",
     newArtistsTitle: "New artists in this subgenre",
     newArtistsSelectStyle: "Choose a subgenre to search for new artists.",
@@ -8166,6 +8330,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Review complete: your spirit remains {name}.",
     spiritReviewStayedToast: "Review complete: spirit stays as {name}.",
     spiritReviewShiftedToast: "Review complete: spirit updated to {name}.",
+    spiritInsightTitle: "Spirit calibration",
+    spiritInsightLockedStatus: "Forming",
+    spiritInsightUnlockedStatus: "Active",
+    spiritInsightLockedText: "{remaining} more song likes to reveal your archetype. I am reading style, energy, and feedback.",
+    spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
+    spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
+    spiritInsightSignalScore: "{label}: signal {score}",
     spiritVisualTitle: "Spirit visual mode",
     spiritVisualHint: "Audiovisual ambience loop aligned with your current profile.",
     spiritSpotlightTitle: "Spirit track",
@@ -8218,6 +8389,19 @@ const I18N = {
     langDesc: "Elige el idioma para toda la experiencia de la app.",
     appSlogan: "Amamos la música",
     appMission: "Nuestra misión: encontrar tracks memorables para ti que probablemente no encontrarías sin Sonic Search.",
+    usageGuideKicker: "Guía rápida",
+    usageGuideTitle: "Cómo aprovechar mejor Sonic Search",
+    usageGuideDesc: "Usa la app como un sommelier: indica el momento, ajusta tu gusto y responde a lo que suena.",
+    usageGuideStep1Title: "Empieza por el momento",
+    usageGuideStep1Text: "Elige Foco, Trabajo, Entreno, After o Peak para que la app cree un punto de partida musical.",
+    usageGuideStep2Title: "Di a quién ya conoces",
+    usageGuideStep2Text: "Agrega artistas conocidos para evitar recomendaciones obvias y abrir espacio a descubrimiento real.",
+    usageGuideStep3Title: "Usa el feedback",
+    usageGuideStep3Text: "Marca me gusta, salta o indica “ya conocía”. Cada respuesta afina tu perfil.",
+    usageGuideStep4Title: "Refina sin miedo",
+    usageGuideStep4Text: "Ajusta energía, BPM, vocales y prioridades cuando quieras una búsqueda más precisa.",
+    usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
+    usageGuideContinueBtn: "Continuar",
     authKicker: "Cargar usuario",
     authTitle: "Inicia sesión para cargar tu perfil",
     authDesc: "Inicia sesión para continuar con tu perfil guardado o continúa sin login.",
@@ -8255,7 +8439,16 @@ const I18N = {
     catalogStatsTracks: "pistas buscables",
     catalogStatsStyles: "subgéneros",
     catalogStatsLabels: "sellos",
+    sectionKicker: "Búsqueda guiada",
+    sectionHint: "Elige un atajo o refina manualmente.",
+    presetFocus: "Foco",
+    presetWork: "Trabajo",
+    presetWorkout: "Entreno",
+    presetAfter: "After",
+    presetPeak: "Peak",
+    advancedFiltersSummary: "Ajuste fino de prioridad",
     recommendBtn: "Generar recomendación",
+    recommendBtnBusy: "Generando...",
     rerollBtn: "Nueva sugerencia en el mismo perfil",
     surpriseBtn: "Sorprenderme",
     adaptiveSurpriseBtn: "Sorpresa por perfil",
@@ -8327,6 +8520,36 @@ const I18N = {
     trackAiLocalSource: "Lectura local basada en subgénero, BPM, energía y contexto.",
     trackAiFallback: "Esta pista encaja con tu perfil. Combina el groove con tu momento y valórala para refinar la curaduría.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
+    voiceLabKicker: "Juego sonoro",
+    voiceLabTitle: "Modifica tu voz",
+    voiceLabHint: "Graba una frase y prueba voces robóticas, graciosas, de teléfono y alienígenas.",
+    voiceEffectsTitle: "Elige el efecto",
+    voiceEffectRobot: "Robot",
+    voiceEffectChipmunk: "Graciosa",
+    voiceEffectTelephone: "Teléfono",
+    voiceEffectAlien: "Alienígena",
+    voiceEffectDeep: "Voz grave",
+    voiceEffectEcho: "Eco espacial",
+    voiceRecordBtn: "Grabar voz",
+    voiceStopBtn: "Parar",
+    voicePlayBtn: "Oír efecto",
+    voiceResetBtn: "Limpiar",
+    voiceDownloadBtn: "Descargar grabación",
+    voiceReady: "Listo para grabar.",
+    voiceRecording: "Grabando... {seconds}s",
+    voiceRecorded: "Grabación lista. Elige un efecto y pulsa oír.",
+    voiceNeedRecording: "Graba tu voz primero.",
+    voiceMicUnsupported: "Tu navegador no habilitó grabación de voz aquí.",
+    voiceMicDenied: "No pude acceder al micrófono. Revisa el permiso del navegador.",
+    voicePlaying: "Sonando con efecto: {effect}.",
+    voiceCleared: "Grabación borrada.",
+    voiceMiniTitle: "Habla y se vuelve música",
+    voiceMiniHint: "Convierte tu voz en una mini pista con kick, bass y hats.",
+    voiceMiniPlayBtn: "Crear mini música",
+    voiceMiniStopBtn: "Parar música",
+    voiceMiniReady: "Graba tu voz para liberar el mini beat.",
+    voiceMiniPlaying: "Mini música sonando: voz cortada, kick, bass y hats.",
+    voiceMiniDone: "Mini música finalizada. Graba otra frase o reprodúcela de nuevo.",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -8439,10 +8662,11 @@ const I18N = {
     toastSkipAdjusted: "Perfecto. Ajusté tu recomendación según tu feedback.",
     catalogUpdateProgress: "Actualizando catálogo {style}: {tracks} pistas / {artists} artistas.",
     searchOverlayTitle: "Buscando recomendación",
-    searchOverlayPreparing: "Analizando filtros y preparando búsqueda...",
-    searchOverlayCatalog: "Buscando y validando pistas del catálogo...",
-    searchOverlayGenerating: "Generando el mejor match para tu perfil...",
-    searchOverlayFinishing: "Finalizando recomendación...",
+    searchOverlayStage: "Etapa {current} de {total}",
+    searchOverlayPreparing: "Leyendo intención, energía, BPM y artistas conocidos...",
+    searchOverlayCatalog: "Escaneando catálogo y validando pistas confiables...",
+    searchOverlayGenerating: "Cruzando perfil, subgénero y descubrimiento nuevo...",
+    searchOverlayFinishing: "Puliendo el match y preparando la escucha...",
     newArtistsBtn: "Buscar artistas nuevos (< 2 años)",
     newArtistsTitle: "Artistas nuevos en el subgénero",
     newArtistsSelectStyle: "Elige un subgénero para buscar artistas nuevos.",
@@ -8468,6 +8692,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisión completa: tu espíritu permanece {name}.",
     spiritReviewStayedToast: "Revisión completa: el espíritu se mantiene en {name}.",
     spiritReviewShiftedToast: "Revisión completa: espíritu actualizado a {name}.",
+    spiritInsightTitle: "Calibración del espíritu",
+    spiritInsightLockedStatus: "En formación",
+    spiritInsightUnlockedStatus: "Activo",
+    spiritInsightLockedText: "Faltan {remaining} likes de pistas para revelar tu arquetipo. Estoy leyendo estilo, energía y feedback.",
+    spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
+    spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
+    spiritInsightSignalScore: "{label}: señal {score}",
     spiritVisualTitle: "Modo visual del espíritu",
     spiritVisualHint: "Loop de ambientación audiovisual alineado con tu perfil actual.",
     spiritSpotlightTitle: "Pista del espíritu",
@@ -9047,6 +9278,19 @@ function applyLanguage() {
   setText("#langTitle", t("langTitle"));
   setText("#langDesc", t("langDesc"));
   setText("#langSlogan", t("appSlogan"));
+  setText("#usageGuideKicker", t("usageGuideKicker"));
+  setText("#usageGuideTitle", t("usageGuideTitle"));
+  setText("#usageGuideDesc", t("usageGuideDesc"));
+  setText("#usageGuideStep1Title", t("usageGuideStep1Title"));
+  setText("#usageGuideStep1Text", t("usageGuideStep1Text"));
+  setText("#usageGuideStep2Title", t("usageGuideStep2Title"));
+  setText("#usageGuideStep2Text", t("usageGuideStep2Text"));
+  setText("#usageGuideStep3Title", t("usageGuideStep3Title"));
+  setText("#usageGuideStep3Text", t("usageGuideStep3Text"));
+  setText("#usageGuideStep4Title", t("usageGuideStep4Title"));
+  setText("#usageGuideStep4Text", t("usageGuideStep4Text"));
+  setText("#usageGuideNote", t("usageGuideNote"));
+  setText("#usageGuideContinueBtn", t("usageGuideContinueBtn"));
   setText("#authKicker", t("authKicker"));
   setText("#authTitle", t("authTitle"));
   setText("#authDesc", t("authDesc"));
@@ -9077,6 +9321,14 @@ function applyLanguage() {
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   updateCatalogStatsHero();
+  setText(".section-kicker", t("sectionKicker"));
+  setText(".section-hint", t("sectionHint"));
+  setText("#presetFocusBtn", t("presetFocus"));
+  setText("#presetWorkBtn", t("presetWork"));
+  setText("#presetWorkoutBtn", t("presetWorkout"));
+  setText("#presetAfterBtn", t("presetAfter"));
+  setText("#presetPeakBtn", t("presetPeak"));
+  setText("#advancedFiltersSummary", t("advancedFiltersSummary"));
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
   setText("#surpriseBtn", t("surpriseBtn"));
@@ -9091,6 +9343,7 @@ function applyLanguage() {
   setText("#spiritBadge", t("spiritBadge"));
   setText("#spiritVisualTitle", t("spiritVisualTitle"));
   setText("#spiritVisualHint", t("spiritVisualHint"));
+  setText("#spiritInsightTitle", t("spiritInsightTitle"));
   setText("#spiritSpotlightTitle", t("spiritSpotlightTitle"));
   setText("#spiritSpotlightHint", t("spiritSpotlightHintPredicted"));
   setText("#spiritVisualPresetName", t("spiritVisualPreset", { preset: "Neon Pulse" }));
@@ -9105,6 +9358,7 @@ function applyLanguage() {
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
   setText("#spiritRankBadge", t("spiritRankUnlocked"));
   setText("#searchTitle", t("searchOverlayTitle"));
+  setText("#searchStageLabel", t("searchOverlayStage", { current: searchStageFromProgress(searchProgressValue || 7), total: 4 }));
   setText("#searchStatusText", t("searchOverlayPreparing"));
   setText("#quizKicker", q("overlayKicker"));
   setText("#quizStartBtn", q("startBtn"));
@@ -9180,6 +9434,31 @@ function applyLanguage() {
   setText("#ratingCelebration", t("ratingCelebration"));
   setText("#trackAiTitle", t("trackAiTitle"));
   setText("#trackAiRefreshBtn", t("trackAiRefreshBtn"));
+  setText("#voiceLabKicker", t("voiceLabKicker"));
+  setText("#voiceLabTitle", t("voiceLabTitle"));
+  setText("#voiceLabHint", t("voiceLabHint"));
+  setText("#voiceEffectsTitle", t("voiceEffectsTitle"));
+  setText("[data-voice-effect='robot']", t("voiceEffectRobot"));
+  setText("[data-voice-effect='chipmunk']", t("voiceEffectChipmunk"));
+  setText("[data-voice-effect='telephone']", t("voiceEffectTelephone"));
+  setText("[data-voice-effect='alien']", t("voiceEffectAlien"));
+  setText("[data-voice-effect='deep']", t("voiceEffectDeep"));
+  setText("[data-voice-effect='echo']", t("voiceEffectEcho"));
+  setText("#voiceRecordBtn", t("voiceRecordBtn"));
+  setText("#voiceStopBtn", t("voiceStopBtn"));
+  setText("#voicePlayBtn", t("voicePlayBtn"));
+  setText("#voiceResetBtn", t("voiceResetBtn"));
+  setText("#voiceDownloadBtn", t("voiceDownloadBtn"));
+  setText("#voiceMiniTitle", t("voiceMiniTitle"));
+  setText("#voiceMiniHint", t("voiceMiniHint"));
+  setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
+  setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
+  if (voiceMiniStatus && !voiceRecordingBlob && !voiceMiniTrackPlaying) {
+    voiceMiniStatus.textContent = t("voiceMiniReady");
+  }
+  if (voiceStatus && !voiceRecordingBlob && (!voiceRecorder || voiceRecorder.state !== "recording")) {
+    voiceStatus.textContent = t("voiceReady");
+  }
   setText("#artistHubIntro", t("artistHubIntro"));
   if (starRating) starRating.setAttribute("aria-label", t("ratingAriaGroup"));
   starButtons.forEach((button, index) => {
@@ -9567,6 +9846,22 @@ function updateAudioVolumeUi() {
   if (audioVolumeControl) audioVolumeControl.classList.toggle("muted", percent === 0 || !audioEnabled || audioUnavailable);
 }
 
+function setAudioVolumePanelOpen(isOpen) {
+  window.clearTimeout(audioVolumePanelCloseTimer);
+  audioVolumePanelCloseTimer = 0;
+  audioToggleBtn?.classList.toggle("audio-volume-open", Boolean(isOpen));
+  audioVolumeControl?.classList.toggle("open", Boolean(isOpen));
+}
+
+function scheduleAudioVolumePanelClose(delay = 700) {
+  window.clearTimeout(audioVolumePanelCloseTimer);
+  audioVolumePanelCloseTimer = window.setTimeout(() => {
+    const hasFocus = audioVolumeControl?.contains(document.activeElement) || audioToggleBtn === document.activeElement;
+    const isDragging = audioVolumeControl?.classList.contains("is-adjusting");
+    if (!hasFocus && !isDragging) setAudioVolumePanelOpen(false);
+  }, delay);
+}
+
 function updateAudioToggleUi() {
   const active = Boolean(audioEnabled && !audioUnavailable);
   if (audioToggleBtn) {
@@ -9597,16 +9892,18 @@ function setAudioVolume(nextVolume, { persist = true, fromUser = false } = {}) {
 function preAppScreensVisible() {
   const introVisible = introScreen && !introScreen.classList.contains("hidden");
   const languageVisible = languageScreen && !languageScreen.classList.contains("hidden");
+  const usageGuideVisible = usageGuideScreen && !usageGuideScreen.classList.contains("hidden");
   const authVisible = authScreen && !authScreen.classList.contains("hidden");
   const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
-  return Boolean(introVisible || languageVisible || authVisible || welcomeVisible);
+  return Boolean(introVisible || languageVisible || usageGuideVisible || authVisible || welcomeVisible);
 }
 
 function syncFloatingSurpriseButton() {
   if (!floatingSurpriseBtn) return;
   const appVisible = appContent && !appContent.classList.contains("hidden");
   const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
-  floatingSurpriseBtn.classList.toggle("hidden", !(appVisible || welcomeVisible));
+  const compactApp = appVisible && window.matchMedia?.("(max-width: 700px)")?.matches;
+  floatingSurpriseBtn.classList.toggle("hidden", !(welcomeVisible || (appVisible && !compactApp)));
 }
 
 function createAudioNoiseBuffer(ctx, duration = 1.8) {
@@ -9950,21 +10247,121 @@ function startSearchAudioPulse() {
   searchAudioPulseTimer = window.setInterval(() => {
     if (!audioEnabled || audioUnavailable || !audioUnlocked) return;
     if (!searchOverlay || searchOverlay.classList.contains("hidden")) return;
-    const base = pulseStep % 2 === 0 ? 176 : 196;
-    spawnUiTone({ frequency: base * 0.5, slideTo: base * 0.42, duration: 0.28, volume: 0.072, type: "sine", pan: -0.1, filterFrequency: 380 });
-    spawnUiTone({ frequency: base, slideTo: base - 18, duration: 0.28, volume: 0.09, type: "triangle", pan: -0.16, filterFrequency: 820 });
-    spawnUiTone({ frequency: base * 1.5, slideTo: base * 1.32, duration: 0.26, volume: 0.078, type: "sine", when: 0.08, pan: 0.12, filterFrequency: 1200 });
-    if (pulseStep % 2 === 0) {
-      spawnUiTransient({ duration: 0.1, volume: 0.024, when: 0.02, pan: 0.05, highpass: 620, lowpass: 3200 });
+    const stage = Number(searchOverlay.dataset.searchStage || 1);
+    const rootByStage = [0, 82.41, 92.5, 98, 110];
+    const root = rootByStage[stage] || 92.5;
+    const beat = pulseStep % 4;
+    const accent = beat === 0;
+    spawnTechnoKick({
+      frequency: root * (accent ? 0.72 : 0.66),
+      volume: accent ? 0.16 : 0.118,
+      click: true
+    });
+    spawnUiTone({
+      frequency: root,
+      slideTo: root * 0.985,
+      duration: 0.28,
+      volume: accent ? 0.045 : 0.034,
+      type: "sawtooth",
+      pan: -0.08,
+      filterFrequency: 540 + stage * 90
+    });
+    if (beat === 1 || beat === 3) {
+      spawnTechnoHat({ volume: 0.022 + stage * 0.002, pan: beat === 1 ? 0.18 : -0.16 });
+    }
+    if (accent || stage >= 3) {
+      spawnUiTone({
+        frequency: root * (stage >= 3 ? 2.5 : 2),
+        slideTo: root * (stage >= 3 ? 2.62 : 2.08),
+        duration: 0.12,
+        volume: accent ? 0.03 : 0.022,
+        type: "triangle",
+        when: 0.045,
+        pan: 0.22,
+        filterFrequency: 2200 + stage * 180
+      });
     }
     pulseStep += 1;
-  }, 700);
+  }, 470);
 }
 
 function stopSearchAudioPulse() {
   if (!searchAudioPulseTimer) return;
   window.clearInterval(searchAudioPulseTimer);
   searchAudioPulseTimer = 0;
+}
+
+function spawnTechnoKick({
+  when = 0,
+  volume = 0.18,
+  frequency = 58,
+  pan = 0,
+  click = true
+} = {}) {
+  if (!ensureAudioReady() || !audioContext || !audioFxGain) return;
+
+  const ctx = audioContext;
+  const start = ctx.currentTime + Math.max(0, when);
+  const end = start + 0.34;
+
+  const osc = ctx.createOscillator();
+  const subGain = ctx.createGain();
+  const bodyFilter = ctx.createBiquadFilter();
+  bodyFilter.type = "lowpass";
+  bodyFilter.frequency.value = 360;
+  bodyFilter.Q.value = 0.78;
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(Math.max(44, frequency * 2.7), start);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(38, frequency), start + 0.055);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(34, frequency * 0.72), end);
+
+  const scaledVolume = Math.min(AUDIO_GAIN_PROFILE.uiToneMax, Math.max(0.0002, volume * AUDIO_GAIN_PROFILE.uiToneBoost));
+  subGain.gain.setValueAtTime(0.0001, start);
+  subGain.gain.exponentialRampToValueAtTime(scaledVolume, start + 0.006);
+  subGain.gain.exponentialRampToValueAtTime(Math.max(0.0002, scaledVolume * 0.32), start + 0.06);
+  subGain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+  osc.connect(bodyFilter);
+  bodyFilter.connect(subGain);
+
+  if (typeof ctx.createStereoPanner === "function") {
+    const panner = ctx.createStereoPanner();
+    panner.pan.value = Math.max(-1, Math.min(1, pan));
+    subGain.connect(panner);
+    panner.connect(audioFxGain);
+  } else {
+    subGain.connect(audioFxGain);
+  }
+
+  osc.start(start);
+  osc.stop(end + 0.02);
+
+  if (click) {
+    spawnUiTransient({
+      duration: 0.035,
+      volume: volume * 0.18,
+      when,
+      pan,
+      highpass: 1850,
+      lowpass: 6200
+    });
+  }
+}
+
+function spawnTechnoHat({
+  when = 0,
+  volume = 0.026,
+  pan = 0.18
+} = {}) {
+  spawnUiTransient({
+    duration: 0.055,
+    volume,
+    when,
+    pan,
+    highpass: 5200,
+    lowpass: 9200
+  });
 }
 
 function spawnUiTone({
@@ -10106,21 +10503,24 @@ function playUiSfx(type = "tap") {
   }
 
   if (type === "search-start") {
-    duckIntroAmbientForFx(0.58, 0.18);
-    spawnUiTone({ frequency: 152, slideTo: 102, duration: 0.24, volume: 0.106, type: "sine", pan: -0.06, filterFrequency: 540 });
-    spawnUiTone({ frequency: 250, slideTo: 210, duration: 0.24, volume: 0.11, type: "triangle", pan: -0.18, filterFrequency: 820 });
-    spawnUiTone({ frequency: 310, slideTo: 270, duration: 0.26, volume: 0.098, type: "triangle", when: 0.06, pan: 0.2, filterFrequency: 880 });
-    spawnUiTransient({ duration: 0.12, volume: 0.038, when: 0.01, pan: 0.08, highpass: 720, lowpass: 4200 });
+    duckIntroAmbientForFx(0.52, 0.2);
+    spawnTechnoKick({ frequency: 54, volume: 0.19, click: true });
+    spawnTechnoKick({ frequency: 58, volume: 0.13, when: 0.23, click: false });
+    spawnTechnoHat({ when: 0.12, volume: 0.03, pan: 0.22 });
+    spawnUiTone({ frequency: 98, slideTo: 130.81, duration: 0.28, volume: 0.074, type: "sawtooth", pan: -0.08, filterFrequency: 520 });
+    spawnUiTone({ frequency: 196, slideTo: 261.63, duration: 0.2, volume: 0.052, type: "triangle", when: 0.08, pan: 0.14, filterFrequency: 1200 });
+    spawnUiTone({ frequency: 523.25, slideTo: 659.25, duration: 0.16, volume: 0.034, type: "sine", when: 0.16, pan: 0.24, filterFrequency: 2800 });
     return;
   }
 
   if (type === "search-done") {
-    duckIntroAmbientForFx(0.56, 0.2);
-    spawnUiTone({ frequency: 261.63, slideTo: 392, duration: 0.18, volume: 0.108, type: "triangle", pan: -0.08, filterFrequency: 1280 });
-    spawnUiTone({ frequency: 392, slideTo: 524, duration: 0.18, volume: 0.116, type: "triangle", pan: -0.2, filterFrequency: 1700 });
-    spawnUiTone({ frequency: 523.25, slideTo: 659.25, duration: 0.2, volume: 0.11, type: "sine", when: 0.04, pan: 0.16, filterFrequency: 2100 });
-    spawnUiTone({ frequency: 783.99, slideTo: 987.77, duration: 0.22, volume: 0.086, type: "sine", when: 0.09, pan: 0.26, filterFrequency: 2800 });
-    spawnUiTransient({ duration: 0.14, volume: 0.036, when: 0.05, pan: 0.14, highpass: 820, lowpass: 4600 });
+    duckIntroAmbientForFx(0.54, 0.2);
+    spawnTechnoKick({ frequency: 58, volume: 0.15, click: true });
+    spawnTechnoHat({ when: 0.08, volume: 0.026, pan: -0.18 });
+    spawnTechnoHat({ when: 0.18, volume: 0.022, pan: 0.2 });
+    spawnUiTone({ frequency: 220, slideTo: 329.63, duration: 0.16, volume: 0.066, type: "triangle", pan: -0.12, filterFrequency: 1100 });
+    spawnUiTone({ frequency: 329.63, slideTo: 440, duration: 0.16, volume: 0.07, type: "triangle", when: 0.035, pan: 0.06, filterFrequency: 1500 });
+    spawnUiTone({ frequency: 659.25, slideTo: 880, duration: 0.2, volume: 0.05, type: "sine", when: 0.09, pan: 0.2, filterFrequency: 2800 });
     return;
   }
 
@@ -10300,6 +10700,7 @@ function showLanguageScreen() {
   if (introScreen) introScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (languageScreen) languageScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
@@ -10319,6 +10720,7 @@ function showIntroScreen() {
 
   if (introScreen) introScreen.classList.remove("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
@@ -10334,6 +10736,24 @@ function showIntroScreen() {
   requestOpeningSting();
 }
 
+function showUsageGuideScreen() {
+  clearIntroAutoAdvance();
+  stopIntroQuoteLoop();
+  hideQuizChallengeBubble({ clearPending: false });
+  closeQuizOverlay({ skipSnooze: true });
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (appContent) appContent.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.remove("hidden");
+  syncFloatingSurpriseButton();
+  if (usageGuideScreen) usageGuideScreen.focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: "auto" });
+  refreshAmbientForUiState();
+  playUiSfx("confirm");
+}
+
 function showAuthScreen() {
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
@@ -10341,6 +10761,7 @@ function showAuthScreen() {
   closeQuizOverlay({ skipSnooze: true });
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (authScreen) authScreen.classList.remove("hidden");
@@ -10357,6 +10778,7 @@ function showAuthScreen() {
 
 function continueFromAuthToWelcome() {
   if (authScreen) authScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
   hideQuizChallengeBubble({ clearPending: false });
@@ -10437,6 +10859,7 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   if (eventsList) eventsList.innerHTML = "";
   if (detailsPanel) detailsPanel.classList.add("hidden");
   if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
 
   const focusMessage = t("quickSurpriseGenerated", {
     style: styleLabelByValue(selectedStyle)
@@ -10451,6 +10874,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   closeQuickSurprisePanel();
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
@@ -10606,15 +11030,458 @@ function showToast(message) {
 }
 showToast.timer = 0;
 
+function voiceEffectLabel(effect = selectedVoiceEffect) {
+  const labels = {
+    robot: t("voiceEffectRobot"),
+    chipmunk: t("voiceEffectChipmunk"),
+    telephone: t("voiceEffectTelephone"),
+    alien: t("voiceEffectAlien"),
+    deep: t("voiceEffectDeep"),
+    echo: t("voiceEffectEcho")
+  };
+  return labels[effect] || labels.robot;
+}
+
+function setVoiceStatus(message) {
+  if (voiceStatus) voiceStatus.textContent = message;
+}
+
+function updateVoiceLabUi() {
+  const isRecording = voiceRecorder && voiceRecorder.state === "recording";
+  const hasRecording = Boolean(voiceRecordingBlob);
+  voiceLabPanel?.classList.toggle("is-recording", Boolean(isRecording));
+  voiceLabPanel?.classList.toggle("is-mini-playing", Boolean(voiceMiniTrackPlaying));
+  if (voiceRecordBtn) voiceRecordBtn.disabled = Boolean(isRecording);
+  if (voiceStopBtn) voiceStopBtn.disabled = !isRecording;
+  if (voicePlayBtn) voicePlayBtn.disabled = isRecording || !hasRecording;
+  if (voiceResetBtn) voiceResetBtn.disabled = isRecording || !hasRecording;
+  if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = isRecording || !hasRecording || voiceMiniTrackPlaying;
+  if (voiceMiniStopBtn) voiceMiniStopBtn.disabled = !voiceMiniTrackPlaying;
+  voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
+  voicePlayback?.classList.toggle("hidden", !hasRecording);
+  if (voiceMiniStatus && !hasRecording && !voiceMiniTrackPlaying) voiceMiniStatus.textContent = t("voiceMiniReady");
+}
+
+function supportedVoiceRecorderMimeType() {
+  if (typeof window.MediaRecorder !== "function" || typeof window.MediaRecorder.isTypeSupported !== "function") return "";
+  return ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find((type) => window.MediaRecorder.isTypeSupported(type)) || "";
+}
+
+function stopVoiceRecordingStream() {
+  if (!voiceRecordingStream) return;
+  voiceRecordingStream.getTracks().forEach((track) => track.stop());
+  voiceRecordingStream = null;
+}
+
+function clearVoiceRecordingTimer() {
+  window.clearInterval(voiceRecordingTimer);
+  voiceRecordingTimer = 0;
+}
+
+function updateVoiceRecordingTimer() {
+  const elapsed = Math.max(0, Math.floor((Date.now() - voiceRecordingStartedAt) / 1000));
+  setVoiceStatus(t("voiceRecording", { seconds: elapsed }));
+  if (voiceTimerBar) voiceTimerBar.style.width = `${Math.min(100, (elapsed / 20) * 100)}%`;
+  if (elapsed >= 20) stopVoiceRecording();
+}
+
+function resetVoiceRecording() {
+  stopActiveVoicePlayback();
+  stopVoiceMiniTrack({ silent: true });
+  clearVoiceRecordingTimer();
+  stopVoiceRecordingStream();
+  if (voiceRecorder && voiceRecorder.state === "recording") {
+    try {
+      voiceRecorder.stop();
+    } catch (_err) {
+      // ignore stale recorder state
+    }
+  }
+  voiceRecorder = null;
+  voiceRecordingChunks = [];
+  voiceRecordingBlob = null;
+  if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
+  voiceRecordingUrl = "";
+  if (voicePlayback) {
+    voicePlayback.removeAttribute("src");
+    voicePlayback.load();
+  }
+  if (voiceDownloadBtn) voiceDownloadBtn.href = "#";
+  if (voiceTimerBar) voiceTimerBar.style.width = "0%";
+  setVoiceStatus(t("voiceCleared"));
+  updateVoiceLabUi();
+}
+
+function finishVoiceRecording() {
+  clearVoiceRecordingTimer();
+  stopVoiceRecordingStream();
+  const mimeType = voiceRecordingChunks[0]?.type || "audio/webm";
+  voiceRecordingBlob = new Blob(voiceRecordingChunks, { type: mimeType });
+  voiceRecordingChunks = [];
+  if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
+  voiceRecordingUrl = URL.createObjectURL(voiceRecordingBlob);
+  if (voicePlayback) {
+    voicePlayback.src = voiceRecordingUrl;
+    voicePlayback.load();
+  }
+  if (voiceDownloadBtn) {
+    voiceDownloadBtn.href = voiceRecordingUrl;
+    voiceDownloadBtn.download = mimeType.includes("mp4") ? "sonic-search-voz.m4a" : "sonic-search-voz.webm";
+  }
+  if (voiceTimerBar) voiceTimerBar.style.width = "100%";
+  setVoiceStatus(t("voiceRecorded"));
+  updateVoiceLabUi();
+}
+
+async function startVoiceRecording() {
+  if (!navigator.mediaDevices?.getUserMedia || typeof window.MediaRecorder !== "function") {
+    setVoiceStatus(t("voiceMicUnsupported"));
+    showToast(t("voiceMicUnsupported"));
+    return;
+  }
+  resetVoiceRecording();
+  try {
+    voiceRecordingStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }
+    });
+    const mimeType = supportedVoiceRecorderMimeType();
+    voiceRecorder = mimeType
+      ? new window.MediaRecorder(voiceRecordingStream, { mimeType })
+      : new window.MediaRecorder(voiceRecordingStream);
+    voiceRecordingChunks = [];
+    voiceRecorder.addEventListener("dataavailable", (event) => {
+      if (event.data && event.data.size > 0) voiceRecordingChunks.push(event.data);
+    });
+    voiceRecorder.addEventListener("stop", finishVoiceRecording, { once: true });
+    voiceRecordingStartedAt = Date.now();
+    voiceRecorder.start();
+    updateVoiceRecordingTimer();
+    voiceRecordingTimer = window.setInterval(updateVoiceRecordingTimer, 250);
+    updateVoiceLabUi();
+  } catch (_err) {
+    stopVoiceRecordingStream();
+    setVoiceStatus(t("voiceMicDenied"));
+    showToast(t("voiceMicDenied"));
+    updateVoiceLabUi();
+  }
+}
+
+function stopVoiceRecording() {
+  if (!voiceRecorder || voiceRecorder.state !== "recording") return;
+  voiceRecorder.stop();
+  clearVoiceRecordingTimer();
+  updateVoiceLabUi();
+}
+
+function stopActiveVoicePlayback() {
+  if (!activeVoiceSource) return;
+  try {
+    activeVoiceSource.stop();
+  } catch (_err) {
+    // ignore already-stopped source
+  }
+  activeVoiceSource = null;
+}
+
+function trackVoiceMiniNode(node) {
+  if (!node) return node;
+  voiceMiniTrackNodes.push(node);
+  return node;
+}
+
+function stopVoiceMiniTrack({ silent = false } = {}) {
+  voiceMiniTrackTimers.forEach((timer) => window.clearTimeout(timer));
+  voiceMiniTrackTimers = [];
+  voiceMiniTrackNodes.forEach((node) => {
+    try {
+      if (typeof node.stop === "function") node.stop();
+    } catch (_err) {
+      // ignore already-stopped mini music node
+    }
+    try {
+      if (typeof node.disconnect === "function") node.disconnect();
+    } catch (_err) {
+      // ignore disconnected node
+    }
+  });
+  voiceMiniTrackNodes = [];
+  voiceMiniTrackPlaying = false;
+  if (!silent && voiceMiniStatus) voiceMiniStatus.textContent = voiceRecordingBlob ? t("voiceMiniDone") : t("voiceMiniReady");
+  updateVoiceLabUi();
+}
+
+function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
+  const notes = [49, 49, 55, 65.41, 55, 49, 73.42, 55];
+  for (let i = 0; i * beat < duration; i += 1) {
+    const time = start + i * beat;
+    const osc = trackVoiceMiniNode(ctx.createOscillator());
+    const gain = trackVoiceMiniNode(ctx.createGain());
+    const filter = ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 420;
+    filter.Q.value = 0.9;
+    osc.type = i % 4 === 0 ? "sawtooth" : "square";
+    osc.frequency.value = notes[i % notes.length];
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(0.105 * Math.max(0.25, audioVolume), time + 0.018);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.72);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(destination);
+    osc.start(time);
+    osc.stop(time + beat * 0.82);
+  }
+}
+
+function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
+  const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
+  const sliceDuration = Math.min(0.42, Math.max(0.16, beat * 0.72));
+  const offsets = [0, 0.2, 0.42, 0.64, 0.12, 0.5, 0.76, 0.3];
+  for (let i = 0; i * beat * 2 < duration; i += 1) {
+    const time = start + i * beat * 2 + (i % 2 ? beat * 0.18 : 0);
+    const source = trackVoiceMiniNode(ctx.createBufferSource());
+    const chopGain = trackVoiceMiniNode(ctx.createGain());
+    source.buffer = voiceBuffer;
+    source.playbackRate.value = i % 3 === 0 ? 1.24 : i % 3 === 1 ? 0.92 : 1.08;
+    const availableOffset = Math.max(0, safeDuration - sliceDuration);
+    const offset = availableOffset * offsets[i % offsets.length];
+    chopGain.gain.setValueAtTime(0.0001, time);
+    chopGain.gain.exponentialRampToValueAtTime(0.24 * Math.max(0.2, audioVolume), time + 0.018);
+    chopGain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
+    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, chopGain);
+    chopGain.connect(destination);
+    source.start(time, offset, Math.min(sliceDuration, safeDuration));
+    source.stop(time + sliceDuration + 0.04);
+  }
+}
+
+async function playVoiceMiniTrack() {
+  if (!voiceRecordingBlob) {
+    setVoiceStatus(t("voiceNeedRecording"));
+    showToast(t("voiceNeedRecording"));
+    return;
+  }
+  if (!initAudioEngine() || !audioContext) {
+    setVoiceStatus(t("voiceMicUnsupported"));
+    return;
+  }
+  stopActiveVoicePlayback();
+  stopVoiceMiniTrack({ silent: true });
+  audioUnlocked = true;
+  await audioContext.resume().catch(() => {});
+
+  const ctx = audioContext;
+  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
+  const voiceBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+  const master = trackVoiceMiniNode(ctx.createGain());
+  const compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -18;
+  compressor.knee.value = 18;
+  compressor.ratio.value = 4.5;
+  compressor.attack.value = 0.004;
+  compressor.release.value = 0.18;
+  master.gain.value = 0.84;
+  master.connect(compressor);
+  compressor.connect(ctx.destination);
+
+  const bpm = 128;
+  const beat = 60 / bpm;
+  const duration = 16;
+  const start = ctx.currentTime + 0.09;
+  voiceMiniTrackPlaying = true;
+  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPlaying");
+  setVoiceStatus(t("voiceMiniPlaying"));
+  updateVoiceLabUi();
+
+  for (let i = 0; i * beat < duration; i += 1) {
+    const when = start - ctx.currentTime + i * beat;
+    spawnTechnoKick({ when, volume: i % 4 === 0 ? 0.18 : 0.13, frequency: 54, click: i % 4 === 0 });
+    if (i % 2 === 1) spawnTechnoHat({ when: when + beat * 0.5, volume: 0.032, pan: i % 4 === 1 ? 0.22 : -0.18 });
+    if (i % 4 === 2) spawnTechnoHat({ when: when + beat * 0.25, volume: 0.018, pan: 0.08 });
+  }
+
+  scheduleVoiceMiniBass(ctx, master, start, beat, duration);
+  scheduleVoiceMiniChops(ctx, voiceBuffer, master, start, beat, duration);
+  voiceMiniTrackTimers.push(window.setTimeout(() => {
+    stopVoiceMiniTrack({ silent: true });
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniDone");
+    if (voiceRecordingBlob) setVoiceStatus(t("voiceRecorded"));
+    updateVoiceLabUi();
+  }, Math.ceil((duration + 0.8) * 1000)));
+}
+
+function connectVoiceEffectGraph(ctx, source, effect, output) {
+  const filter = ctx.createBiquadFilter();
+  const delay = ctx.createDelay(1.2);
+  const feedback = ctx.createGain();
+  const wet = ctx.createGain();
+  const dry = ctx.createGain();
+
+  if (effect === "chipmunk") {
+    source.playbackRate.value = 1.55;
+    filter.type = "highpass";
+    filter.frequency.value = 420;
+    source.connect(filter);
+    filter.connect(output);
+    return;
+  }
+
+  if (effect === "deep") {
+    source.playbackRate.value = 0.72;
+    filter.type = "lowpass";
+    filter.frequency.value = 1800;
+    source.connect(filter);
+    filter.connect(output);
+    return;
+  }
+
+  if (effect === "telephone") {
+    const highpass = ctx.createBiquadFilter();
+    const lowpass = ctx.createBiquadFilter();
+    highpass.type = "highpass";
+    highpass.frequency.value = 620;
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 2500;
+    source.connect(highpass);
+    highpass.connect(lowpass);
+    lowpass.connect(output);
+    return;
+  }
+
+  if (effect === "alien") {
+    source.playbackRate.value = 1.18;
+    filter.type = "bandpass";
+    filter.frequency.value = 880;
+    filter.Q.value = 5.8;
+    delay.delayTime.value = 0.08;
+    feedback.gain.value = 0.28;
+    wet.gain.value = 0.42;
+    dry.gain.value = 0.78;
+    source.connect(filter);
+    filter.connect(dry);
+    filter.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    dry.connect(output);
+    wet.connect(output);
+    return;
+  }
+
+  if (effect === "echo") {
+    delay.delayTime.value = 0.23;
+    feedback.gain.value = 0.38;
+    wet.gain.value = 0.48;
+    dry.gain.value = 0.82;
+    source.connect(dry);
+    source.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    dry.connect(output);
+    wet.connect(output);
+    return;
+  }
+
+  const modulatedGain = ctx.createGain();
+  const oscillator = ctx.createOscillator();
+  const depth = ctx.createGain();
+  filter.type = "bandpass";
+  filter.frequency.value = 1050;
+  filter.Q.value = 8;
+  oscillator.type = "square";
+  oscillator.frequency.value = 38;
+  depth.gain.value = 0.22;
+  modulatedGain.gain.value = 0.72;
+  oscillator.connect(depth);
+  depth.connect(modulatedGain.gain);
+  source.connect(modulatedGain);
+  modulatedGain.connect(filter);
+  filter.connect(output);
+  oscillator.start();
+  source.addEventListener("ended", () => {
+    try {
+      oscillator.stop();
+    } catch (_err) {
+      // oscillator may already be stopped
+    }
+  }, { once: true });
+}
+
+async function playVoiceEffect() {
+  if (!voiceRecordingBlob) {
+    setVoiceStatus(t("voiceNeedRecording"));
+    showToast(t("voiceNeedRecording"));
+    return;
+  }
+  if (!initAudioEngine() || !audioContext) {
+    setVoiceStatus(t("voiceMicUnsupported"));
+    return;
+  }
+  stopActiveVoicePlayback();
+  stopVoiceMiniTrack({ silent: true });
+  audioUnlocked = true;
+  await audioContext.resume().catch(() => {});
+  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
+  const decoded = await audioContext.decodeAudioData(arrayBuffer.slice(0));
+  const source = audioContext.createBufferSource();
+  const output = audioContext.createGain();
+  source.buffer = decoded;
+  output.gain.value = Math.max(0.05, Math.min(1, audioVolume || 0.8)) * 0.96;
+  output.connect(audioContext.destination);
+  connectVoiceEffectGraph(audioContext, source, selectedVoiceEffect, output);
+  activeVoiceSource = source;
+  setVoiceStatus(t("voicePlaying", { effect: voiceEffectLabel(selectedVoiceEffect) }));
+  source.addEventListener("ended", () => {
+    if (activeVoiceSource === source) activeVoiceSource = null;
+    if (voiceRecordingBlob) setVoiceStatus(t("voiceRecorded"));
+  }, { once: true });
+  source.start();
+}
+
+function setVoiceEffect(effect) {
+  selectedVoiceEffect = effect || "robot";
+  voiceEffectButtons?.querySelectorAll("button[data-voice-effect]").forEach((button) => {
+    const active = button.dataset.voiceEffect === selectedVoiceEffect;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
 function setSearchProgress(percent) {
   if (!searchProgressFill) return;
   const clamped = Math.max(4, Math.min(100, Number(percent) || 4));
   searchProgressValue = Math.max(searchProgressValue, clamped);
   searchProgressFill.style.width = `${searchProgressValue}%`;
+  syncSearchStage(searchProgressValue);
 }
 
 function setSearchMessage(message) {
   if (searchStatusText) searchStatusText.textContent = message;
+}
+
+function searchStageFromProgress(progress = 0) {
+  if (progress >= 86) return 4;
+  if (progress >= 58) return 3;
+  if (progress >= 24) return 2;
+  return 1;
+}
+
+function syncSearchStage(progress = searchProgressValue) {
+  const stage = searchStageFromProgress(progress);
+  if (searchOverlay) searchOverlay.dataset.searchStage = String(stage);
+  if (searchStageLabel) searchStageLabel.textContent = t("searchOverlayStage", { current: stage, total: 4 });
+  if (searchOverlay) {
+    searchOverlay.querySelectorAll("[data-search-stage]").forEach((item) => {
+      const itemStage = Number(item.getAttribute("data-search-stage") || 0);
+      item.classList.toggle("active", itemStage === stage);
+      item.classList.toggle("complete", itemStage < stage);
+    });
+  }
 }
 
 function beginSearchOverlay(message = "") {
@@ -10628,6 +11495,7 @@ function beginSearchOverlay(message = "") {
   if (searchTitle) searchTitle.textContent = t("searchOverlayTitle");
   searchProgressValue = 7;
   setSearchProgress(searchProgressValue);
+  syncSearchStage(searchProgressValue);
   if (message) setSearchMessage(message);
 
   window.clearInterval(searchProgressTimer);
@@ -10665,15 +11533,39 @@ async function withSearchOverlay(initialMessage, worker) {
   }
 }
 
+function scrollResultPanelIntoView({ force = false } = {}) {
+  if (!resultPanel || resultPanel.classList.contains("hidden")) return;
+  const rect = resultPanel.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  const alreadyComfortable = rect.top >= 72 && rect.top < Math.max(180, viewportHeight * 0.58);
+  if (!force && alreadyComfortable) return;
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  resultPanel.scrollIntoView({
+    behavior: reducedMotion ? "auto" : "smooth",
+    block: "start"
+  });
+}
+
 function recommendationTriggerButtons() {
   return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
+  document.body.classList.toggle("is-recommending", Boolean(isBusy));
+  if (appContent) appContent.setAttribute("aria-busy", isBusy ? "true" : "false");
+  if (recommendBtn) {
+    recommendBtn.textContent = isBusy ? t("recommendBtnBusy") : t("recommendBtn");
+    recommendBtn.classList.toggle("is-loading", Boolean(isBusy));
+  }
   recommendationTriggerButtons().forEach((button) => {
     if (!button) return;
     button.disabled = Boolean(isBusy);
   });
+  if (smartPresetBar) {
+    smartPresetBar.querySelectorAll("button[data-preset]").forEach((button) => {
+      button.disabled = Boolean(isBusy);
+    });
+  }
   if (trackAiRefreshBtn) {
     trackAiRefreshBtn.disabled = Boolean(isBusy) || !currentRecommendation;
   }
@@ -10723,6 +11615,36 @@ function updateWeightLabels() {
   if (weightEnergyValueEl && weightEnergyEl) weightEnergyValueEl.textContent = weightEnergyEl.value;
   if (weightBpmValueEl && weightBpmEl) weightBpmValueEl.textContent = weightBpmEl.value;
   if (weightVocalsValueEl && weightVocalsEl) weightVocalsValueEl.textContent = weightVocalsEl.value;
+}
+
+function updateControlValue(control, value = "") {
+  if (!control) return;
+  control.value = value;
+  control.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function setActiveSmartPreset(presetName = "") {
+  if (!smartPresetBar) return;
+  smartPresetBar.querySelectorAll("[data-preset]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.preset === presetName);
+    button.setAttribute("aria-pressed", button.dataset.preset === presetName ? "true" : "false");
+  });
+}
+
+async function applySmartPreset(presetName = "") {
+  if (recommendationRunBusy) return;
+  const preset = SMART_PRESETS[presetName];
+  if (!preset) return;
+
+  updateControlValue(styleEl, preset.style);
+  updateControlValue(contextEl, preset.context);
+  updateControlValue(energyEl, preset.energy);
+  updateControlValue(bpmEl, preset.bpm);
+  updateControlValue(vocalsEl, preset.vocals);
+  setActiveSmartPreset(presetName);
+  if (discoveryModeEl) discoveryModeEl.checked = true;
+  savePreferences();
+  await runRecommendation();
 }
 
 function mapEntriesForStorage(mapRef, maxEntries = PROGRESS_MAP_LIMIT) {
@@ -10803,6 +11725,7 @@ function saveProgress() {
       blockedArtists: setValuesForStorage(blockedArtistsMemory),
       discoveredArtistsInApp: setValuesForStorage(discoveredArtistsInApp),
       seenArtistsMemory: setValuesForStorage(seenArtistsMemory),
+      seenTrackKeysMemory: setValuesForStorage(seenTrackKeysMemory),
       knownTrackTitlesMemory: setValuesForStorage(knownTrackTitlesMemory),
       trackRatings: mapEntriesForStorage(trackRatings),
       trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
@@ -10842,6 +11765,7 @@ function loadProgress() {
   blockedArtistsMemory = new Set();
   discoveredArtistsInApp = new Set();
   seenArtistsMemory = new Set();
+  seenTrackKeysMemory = new Set();
   knownTrackTitlesMemory = new Set();
   trackRatings = new Map();
   trackRatingSignals = new Map();
@@ -10886,6 +11810,7 @@ function loadProgress() {
         hydrateSetFromStorage(blockedArtistsMemory, parsed?.blockedArtists);
         hydrateSetFromStorage(discoveredArtistsInApp, parsed?.discoveredArtistsInApp);
         hydrateSetFromStorage(seenArtistsMemory, parsed?.seenArtistsMemory);
+        hydrateSetFromStorage(seenTrackKeysMemory, parsed?.seenTrackKeysMemory);
         hydrateSetFromStorage(knownTrackTitlesMemory, parsed?.knownTrackTitlesMemory);
         compactArtistIdentitySet(blockedArtistsMemory);
         compactArtistIdentitySet(discoveredArtistsInApp);
@@ -11036,6 +11961,7 @@ function clearFilters() {
   knownArtistsMemory = new Set();
   knownTrackTitlesMemory = new Set();
   rejectedArtists = new Set();
+  seenTrackKeysMemory = new Set();
   recommendationMemory = new Set();
   recommendationMemoryQueue = [];
   recentTrackHistoryByStyle = new Map();
@@ -11050,6 +11976,7 @@ function clearFilters() {
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   styleInfoDismissed = false;
+  setActiveSmartPreset("");
   if (styleInfoBubble) styleInfoBubble.classList.add("hidden");
   renderSuggestionQueue(null);
   renderTrackInsightPanel(null);
@@ -11213,19 +12140,28 @@ function pickSurpriseTrackFromAnotherGenre(
   const baseArtistKey = artistMatchKey(baseTrack?.artist || "");
   const baseStyleKey = normalize(baseTrack?.style || "");
   const baseFamily = familyOf(baseTrack?.style || "");
+  const blockedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
   const styleIsDifferent = (track) =>
     !requireDifferentStyle || !baseStyleKey || normalize(track?.style || "") !== baseStyleKey;
 
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles);
   const eligible = catalog.filter(
-    (track) => isTrackEligibleForRecommendation(track) && styleIsDifferent(track) && trackAllowed(track)
+    (track) =>
+      isTrackEligibleForRecommendation(track) &&
+      styleIsDifferent(track) &&
+      !artistSetHasMatch(blockedArtists, track.artist) &&
+      trackAllowed(track)
   );
   const emergencyPool = catalog.filter(
-    (track) => track?.style && track?.artist && track?.song && styleIsDifferent(track) && trackAllowed(track)
+    (track) =>
+      track?.style &&
+      track?.artist &&
+      track?.song &&
+      styleIsDifferent(track) &&
+      !artistSetHasMatch(blockedArtists, track.artist) &&
+      trackAllowed(track)
   );
   if (!eligible.length) return pickRandomTrack(emergencyPool);
-
-  const blockedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
 
   // Regra principal: com faixa atual tocando, surpresa deve sair para outro gênero/família.
   const crossGenrePool =
@@ -11275,7 +12211,10 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   const baseStyleKey = normalize(baseTrack?.style || "");
   const baseTrackKey = trackKeyOf(baseTrack);
   const baseFamily = familyOf(baseTrack?.style || "");
-  const knownTrackSignals = buildGlobalTrackExclusionSet();
+  const blockedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
+  const knownTrackSignals = buildGlobalTrackExclusionSet(
+    [...recommendationMemory, baseTrackKey].filter(Boolean)
+  );
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
   let exactBpmFallbackTrack = null;
 
@@ -11285,6 +12224,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!key || triedTrackKeys.has(key)) return null;
     if (baseTrackKey && key === baseTrackKey) return null;
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return null;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return null;
     if (!trackAllowed(track)) return null;
     triedTrackKeys.add(key);
     await resolvePreviewForTrack(track);
@@ -11345,6 +12285,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (trackKeyOf(track) === trackKeyOf(baseTrack)) return false;
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
     if (baseFamily && familyOf(track.style) === baseFamily) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
@@ -11354,6 +12295,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (trackKeyOf(track) === trackKeyOf(baseTrack)) return false;
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
@@ -11377,7 +12319,9 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
   const baseStyleKey = normalize(baseTrack?.style || "");
   const baseFamily = familyOf(baseTrack?.style || "");
   const blockedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
-  const knownTrackSignals = buildGlobalTrackExclusionSet();
+  const knownTrackSignals = buildGlobalTrackExclusionSet(
+    [...recommendationMemory, baseTrackKey].filter(Boolean)
+  );
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
   const triedTrackKeys = new Set();
 
@@ -11463,6 +12407,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!differentStyle(track)) return false;
     if (baseTrackKey && recommendationTrackKey(track) === baseTrackKey) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
@@ -11532,6 +12477,10 @@ function buildGlobalTrackExclusionSet(extraTrackKeys = [], extraTrackTitles = []
     parseKnownTrackTitles(String(trackTitleLike || "")).forEach((trackTitle) => knownTitles.add(trackTitle));
   });
   const keySet = collectTrackKeysByKnownTitles(knownTitles);
+  seenTrackKeysMemory.forEach((trackKey) => {
+    const key = normalize(trackKey || "");
+    if (key) keySet.add(key);
+  });
   (Array.isArray(extraTrackKeys) ? extraTrackKeys : [extraTrackKeys])
     .map((trackKey) => normalize(trackKey || ""))
     .filter(Boolean)
@@ -14870,6 +15819,108 @@ function resolveMusicalSpirit() {
   return best || fallbackSpirit;
 }
 
+function spiritReviewProgress(likedSongs = totalLikedSongs()) {
+  const current = Math.max(0, Number(likedSongs) || 0);
+  if (current < SPIRIT_UNLOCK_TARGET) {
+    return {
+      current,
+      target: SPIRIT_UNLOCK_TARGET,
+      remaining: Math.max(0, SPIRIT_UNLOCK_TARGET - current),
+      percent: Math.max(4, Math.min(100, (current / SPIRIT_UNLOCK_TARGET) * 100))
+    };
+  }
+  const checkpoint = spiritReviewCheckpointFromSongLikes(current);
+  const nextTarget = checkpoint + SPIRIT_UNLOCK_TARGET;
+  return {
+    current,
+    target: nextTarget,
+    remaining: Math.max(0, nextTarget - current),
+    percent: Math.max(8, Math.min(100, ((current - checkpoint) / SPIRIT_UNLOCK_TARGET) * 100))
+  };
+}
+
+function spiritInsightSignals(spirit, limit = 3) {
+  const selectedStyle = styleEl?.value || lastPrefs?.style || currentRecommendation?.style || "";
+  const entries = Object.entries(spirit?.styleWeights || {}).map(([style, weight]) => {
+    const styleSignal = Math.max(0, Number(spiritSignalForStyle(style)) || 0);
+    const selectedBoost = selectedStyle === style ? Number(weight) * 0.9 : 0;
+    const currentBoost = currentRecommendation?.style === style ? Number(weight) * 0.7 : 0;
+    const discoveryBoost = currentDiscovery?.style === style ? Number(weight) * 0.45 : 0;
+    return {
+      style,
+      label: styleLabelByValue(style),
+      score: styleSignal * Number(weight || 0) + selectedBoost + currentBoost + discoveryBoost
+    };
+  });
+  const ranked = entries
+    .filter((entry) => entry.label)
+    .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
+  const positive = ranked.filter((entry) => entry.score > 0);
+  return (positive.length ? positive : ranked).slice(0, limit);
+}
+
+function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
+  if (!spiritInsightPanel) return;
+  const likedSongs = totalLikedSongs();
+  const progress = spiritReviewProgress(likedSongs);
+  const selectedSpirit = spirit || resolveMusicalSpirit();
+  const spiritText = localizedSpiritCopy(selectedSpirit) || {};
+  const signals = spiritInsightSignals(selectedSpirit, 3);
+  const maxScore = Math.max(1, ...signals.map((entry) => Number(entry.score) || 0));
+  const signalLabels = signals
+    .filter((entry) => Number(entry.score) > 0)
+    .map((entry) => entry.label)
+    .slice(0, 2);
+  const fallbackSignalLabels = spiritTopStyles(selectedSpirit, 2);
+  const signalText = signalLabels.length
+    ? signalLabels.join(" + ")
+    : fallbackSignalLabels.length
+      ? fallbackSignalLabels.join(" + ")
+      : t("spiritInsightNoSignals");
+
+  spiritInsightPanel.classList.toggle("locked", !unlocked);
+  if (spiritInsightTitle) spiritInsightTitle.textContent = t("spiritInsightTitle");
+  if (spiritInsightStatus) {
+    spiritInsightStatus.textContent = unlocked ? t("spiritInsightUnlockedStatus") : t("spiritInsightLockedStatus");
+  }
+  if (spiritProgressFill) {
+    spiritProgressFill.style.width = `${progress.percent}%`;
+  }
+  if (spiritInsightText) {
+    spiritInsightText.textContent = unlocked
+      ? t("spiritInsightUnlockedText", {
+          name: spiritText?.name || selectedSpirit?.id || "Sonic Spirit",
+          signals: signalText,
+          remaining: progress.remaining || SPIRIT_UNLOCK_TARGET
+        })
+      : t("spiritInsightLockedText", { remaining: progress.remaining });
+  }
+  if (!spiritSignalList) return;
+  spiritSignalList.innerHTML = "";
+  if (!signals.length) {
+    const empty = document.createElement("p");
+    empty.className = "muted spirit-signal-empty";
+    empty.textContent = t("spiritInsightNoSignals");
+    spiritSignalList.appendChild(empty);
+    return;
+  }
+  signals.forEach((entry) => {
+    const item = document.createElement("div");
+    item.className = "spirit-signal-item";
+    const label = document.createElement("span");
+    label.textContent = entry.label;
+    const meter = document.createElement("i");
+    meter.style.width = `${Math.max(8, Math.min(100, (Number(entry.score) / maxScore) * 100))}%`;
+    const value = document.createElement("strong");
+    value.textContent = t("spiritInsightSignalScore", {
+      label: entry.label,
+      score: Math.max(0, Number(entry.score) || 0).toFixed(1)
+    });
+    item.append(label, meter, value);
+    spiritSignalList.appendChild(item);
+  });
+}
+
 function updateSpiritProgressText() {
   if (!spiritProgress) return;
   const likedSongs = totalLikedSongs();
@@ -14920,8 +15971,9 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   if (!spiritPanel || !spiritCard || !spiritImage || !spiritName || !spiritArchetype || !spiritDescription) return;
   const likedSongs = totalLikedSongs();
   if (likedSongs < SPIRIT_UNLOCK_TARGET) {
-    spiritPanel.classList.add("hidden");
+    spiritPanel.classList.remove("hidden");
     spiritPanel.classList.remove("unlock-pulse");
+    spiritCard.classList.add("hidden");
     currentSpiritId = "";
     spiritLastReviewedSongLikes = 0;
     spiritUnlocked = false;
@@ -14930,6 +15982,8 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     clearSpiritVisual();
     if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
+    updateSpiritProgressText();
+    renderSpiritInsight(resolveMusicalSpirit(), { unlocked: false });
     return;
   }
 
@@ -14974,6 +16028,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
         ? "Arquetipo calibrando"
         : "Arquétipo em calibração");
   updateSpiritProgressText();
+  renderSpiritInsight(selectedSpirit, { unlocked: true });
   renderSpiritVisual(selectedSpirit, {
     autoplay: wasHidden || changedSpirit || forceAnimation,
     forceReload: wasHidden || changedSpirit
@@ -15833,6 +16888,10 @@ function registerRecommendationDelivery(track, prefs) {
   if (!track || !prefs) return;
   registerSeenArtist(track.artist);
   const trackKey = `${track.artist}::${track.song}`;
+  const normalizedTrackKey = recommendationTrackKey(track) || normalize(trackKey);
+  const normalizedTrackTitle = normalizeTitle(track.song || "");
+  if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
+  if (normalizedTrackTitle) knownTrackTitlesMemory.add(normalizedTrackTitle);
   registerGlobalRecommendation(trackKey);
   if (prefs.style && track?.style === prefs.style) {
     const styleTracks = catalog.filter((item) => item.style === prefs.style);
@@ -15842,6 +16901,7 @@ function registerRecommendationDelivery(track, prefs) {
     registerRecentTrack(prefs.style, trackKey, stylePoolSize);
     registerServedArtist(prefs.style, track.artist, styleArtistPoolSize || stylePoolSize);
   }
+  saveProgress();
 }
 
 function supportsTrackInsightApi() {
@@ -16405,11 +17465,15 @@ function renderDiscovery(discovery) {
         ? discovery.bio
         : t("genericArtistBio", { artist: discovery.name, style: styleLabelByValue(discovery.style) });
   }
-  if (discoverySpotifyLink) discoverySpotifyLink.href = discovery.spotifyUrl;
-  if (discoveryYoutubeLink) discoveryYoutubeLink.href = discovery.youtubeUrl;
+  const discoveryQuery = `${discovery.name} ${styleLabelByValue(discovery.style)}`.trim();
+  if (discoverySpotifyLink) {
+    discoverySpotifyLink.href = discovery.spotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(discoveryQuery)}`;
+  }
+  if (discoveryYoutubeLink) {
+    discoveryYoutubeLink.href = discovery.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(discoveryQuery)}`;
+  }
   if (discoverySoundcloudLink) {
-    const query = `${discovery.name} ${styleLabelByValue(discovery.style)}`;
-    discoverySoundcloudLink.href = `https://soundcloud.com/search?q=${encodeURIComponent(query)}`;
+    discoverySoundcloudLink.href = discovery.soundcloudUrl || `https://soundcloud.com/search?q=${encodeURIComponent(discoveryQuery)}`;
   }
 }
 
@@ -18269,6 +19333,7 @@ async function activateSuggestionQueueIndex(index) {
     if (eventsList) eventsList.innerHTML = "";
     if (detailsPanel) detailsPanel.classList.add("hidden");
     if (resultPanel) resultPanel.classList.remove("hidden");
+    scrollResultPanelIntoView();
     if (feedbackMessage) feedbackMessage.textContent = t("queueActivated", { song: selectedTrack.song });
     playUiSfx("swap");
     savePreferences();
@@ -18385,6 +19450,7 @@ async function runTasteTune(mode = "") {
   if (eventsList) eventsList.innerHTML = "";
   if (detailsPanel) detailsPanel.classList.add("hidden");
   if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
   const message = t("tasteTuneGenerated", { label });
   if (feedbackMessage) feedbackMessage.textContent = message;
   showToast(message);
@@ -18513,6 +19579,7 @@ async function runRecommendation() {
     if (eventsList) eventsList.innerHTML = "";
     if (detailsPanel) detailsPanel.classList.add("hidden");
     if (resultPanel) resultPanel.classList.remove("hidden");
+    scrollResultPanelIntoView();
     playUiSfx("search-done");
   } finally {
     recommendationRunBusy = false;
@@ -18592,6 +19659,7 @@ async function runSurpriseRecommendation() {
     if (eventsList) eventsList.innerHTML = "";
     if (detailsPanel) detailsPanel.classList.add("hidden");
     if (resultPanel) resultPanel.classList.remove("hidden");
+    scrollResultPanelIntoView();
 
     const fromStyle = previousTrack ? styleLabelByValue(previousTrack.style) : t("freeStyle");
     const toStyle = styleLabelByValue(surpriseTrack.style);
@@ -18692,6 +19760,7 @@ async function runAdaptiveSurpriseRecommendation() {
   if (eventsList) eventsList.innerHTML = "";
   if (detailsPanel) detailsPanel.classList.add("hidden");
   if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
 
   const fromStyle = previousTrack ? styleLabelByValue(previousTrack.style) : t("freeStyle");
   const toStyle = styleLabelByValue(finalStyle);
@@ -18726,6 +19795,7 @@ function bindPreferenceAutosave() {
       suggestionQueueContextKey = "";
       renderSuggestionQueue(null);
       if (control === knownArtistsEl) updateStats();
+      if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
@@ -18739,6 +19809,7 @@ function bindPreferenceAutosave() {
       suggestionQueueContextKey = "";
       renderSuggestionQueue(null);
       if (control === knownArtistsEl) updateStats();
+      if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
@@ -18750,16 +19821,81 @@ function bindPreferenceAutosave() {
 
 bind(audioToggleBtn, "click", () => {
   setAudioEnabled(!audioEnabled, { persist: true, fromUser: true });
+  setAudioVolumePanelOpen(true);
+  scheduleAudioVolumePanelClose(2200);
+});
+
+bind(audioToggleBtn, "mouseenter", () => {
+  setAudioVolumePanelOpen(true);
+});
+
+bind(audioToggleBtn, "mouseleave", () => {
+  scheduleAudioVolumePanelClose(850);
+});
+
+bind(audioToggleBtn, "focus", () => {
+  setAudioVolumePanelOpen(true);
+});
+
+bind(audioToggleBtn, "blur", () => {
+  scheduleAudioVolumePanelClose(850);
+});
+
+bind(audioVolumeControl, "mouseenter", () => {
+  setAudioVolumePanelOpen(true);
+});
+
+bind(audioVolumeControl, "mouseleave", () => {
+  scheduleAudioVolumePanelClose(850);
+});
+
+bind(audioVolumeControl, "focusin", () => {
+  setAudioVolumePanelOpen(true);
+});
+
+bind(audioVolumeControl, "focusout", () => {
+  scheduleAudioVolumePanelClose(850);
+});
+
+bind(audioVolumeSlider, "pointerdown", () => {
+  audioVolumeControl?.classList.add("is-adjusting");
+  setAudioVolumePanelOpen(true);
+});
+
+bind(audioVolumeSlider, "pointerup", () => {
+  audioVolumeControl?.classList.remove("is-adjusting");
+  scheduleAudioVolumePanelClose(1100);
+});
+
+bind(audioVolumeSlider, "pointercancel", () => {
+  audioVolumeControl?.classList.remove("is-adjusting");
+  scheduleAudioVolumePanelClose(500);
 });
 
 bind(audioVolumeSlider, "input", () => {
   const percent = Number(audioVolumeSlider?.value);
+  setAudioVolumePanelOpen(true);
   setAudioVolume(Number.isFinite(percent) ? percent / 100 : audioVolume, { persist: true, fromUser: true });
 });
 
 bind(audioVolumeSlider, "change", () => {
   playUiSfx("tap");
 });
+
+bind(voiceRecordBtn, "click", startVoiceRecording);
+bind(voiceStopBtn, "click", stopVoiceRecording);
+bind(voicePlayBtn, "click", playVoiceEffect);
+bind(voiceResetBtn, "click", resetVoiceRecording);
+bind(voiceMiniPlayBtn, "click", playVoiceMiniTrack);
+bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
+bind(voiceEffectButtons, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("button[data-voice-effect]") : null;
+  if (!target) return;
+  setVoiceEffect(String(target.dataset.voiceEffect || "robot"));
+  if (voiceRecordingBlob) return playVoiceEffect();
+});
+
+window.addEventListener("resize", syncFloatingSurpriseButton);
 
 bind(artistPhoto, "error", () => {
   if (currentRecommendation) renderArtistVisualFallback(currentRecommendation, t("artistImageFallback"));
@@ -18813,10 +19949,11 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    showAuthScreen();
+    showUsageGuideScreen();
   });
 });
 
+bind(usageGuideContinueBtn, "click", showAuthScreen);
 bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
 bind(styleInfoCloseBtn, "click", () => {
@@ -18864,6 +20001,16 @@ bind(suggestionQueueList, "click", async (event) => {
   const index = Number(target.dataset.queueIndex || -1);
   await activateSuggestionQueueIndex(index);
 });
+bind(smartPresetBar, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("button[data-preset]") : null;
+  if (!target) return;
+  await applySmartPreset(String(target.dataset.preset || ""));
+});
+if (smartPresetBar) {
+  smartPresetBar.querySelectorAll("button[data-preset]").forEach((button) => {
+    button.dataset.bound = "1";
+  });
+}
 bind(tasteTuningActions, "click", async (event) => {
   const target = event.target instanceof Element ? event.target.closest("button[data-tune]") : null;
   if (!target) return;
@@ -18999,6 +20146,7 @@ bind(rerollBtn, "click", async () => {
   if (eventsList) eventsList.innerHTML = "";
   if (detailsPanel) detailsPanel.classList.add("hidden");
   if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
 
   if (feedbackMessage) {
     const newTrackKey = currentRecommendation
