@@ -9902,8 +9902,7 @@ function syncFloatingSurpriseButton() {
   if (!floatingSurpriseBtn) return;
   const appVisible = appContent && !appContent.classList.contains("hidden");
   const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
-  const compactApp = appVisible && window.matchMedia?.("(max-width: 700px)")?.matches;
-  floatingSurpriseBtn.classList.toggle("hidden", !(welcomeVisible || (appVisible && !compactApp)));
+  floatingSurpriseBtn.classList.toggle("hidden", !(welcomeVisible || appVisible));
 }
 
 function createAudioNoiseBuffer(ctx, duration = 1.8) {
