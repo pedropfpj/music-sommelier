@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260601j" />
+    <link rel="stylesheet" href="styles.css?v=20260601k" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -589,6 +589,10 @@
           <p class="meta-line"><span id="releaseInfo"></span> <span>•</span> <span id="durationInfo"></span> <span>•</span> <span id="keyInfo"></span></p>
           <p class="meta-line muted"><span id="catalogInfo"></span></p>
           <p id="songVibe" class="muted"></p>
+          <div id="recommendationWhyPanel" class="recommendation-why-panel">
+            <p id="recommendationWhyTitle" class="recommendation-why-title">Por que apareceu</p>
+            <div id="recommendationWhyList" class="recommendation-why-list"></div>
+          </div>
           <div id="genreGuidePanel" class="genre-guide-panel hidden">
             <p id="genreGuideTitle" class="genre-guide-title">Sobre o subgênero</p>
             <p id="genreGuideText" class="genre-guide-text muted"></p>
@@ -666,6 +670,18 @@
             <p id="suggestionQueueHint" class="muted">Mais opções sem reprocessar seus filtros.</p>
           </div>
           <div id="suggestionQueueList" class="suggestion-queue-list"></div>
+        </article>
+
+        <article id="djModeCard" class="result-card dj-mode-card">
+          <div class="dj-mode-head">
+            <div>
+              <p id="djModeTitle" class="queue-title">Modo DJ</p>
+              <p id="djModeHint" class="muted">Monte uma jornada rápida com warm-up, subida, peak e fechamento.</p>
+            </div>
+            <button id="djModeGenerateBtn" class="primary" type="button">Criar jornada</button>
+          </div>
+          <div id="djModeList" class="dj-mode-list"></div>
+          <p id="djModeStatus" class="muted dj-mode-status">Gere uma recomendação ou escolha um estilo para criar uma jornada.</p>
         </article>
 
         <article id="tasteTuningCard" class="result-card taste-tuning-card">
@@ -800,6 +816,12 @@
               <div class="voice-mini-controls">
                 <button id="voiceMiniPlayBtn" class="primary" type="button" disabled>Criar mini música</button>
                 <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar música</button>
+              </div>
+              <div class="voice-daw-pad-grid" aria-label="Mini DAW">
+                <button id="voicePadKickBtn" class="voice-daw-pad" type="button">Kick</button>
+                <button id="voicePadBassBtn" class="voice-daw-pad" type="button">Bass</button>
+                <button id="voicePadHatBtn" class="voice-daw-pad" type="button">Hat</button>
+                <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" disabled>Voz</button>
               </div>
               <p id="voiceMiniStatus" class="muted voice-mini-status">Grave sua voz para liberar o mini beat.</p>
             </div>
@@ -963,6 +985,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260601j"></script>
+    <script src="app.js?v=20260601k"></script>
   </body>
 </html>

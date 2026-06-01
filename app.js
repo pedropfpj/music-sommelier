@@ -2958,6 +2958,10 @@ const voiceMiniHint = document.getElementById("voiceMiniHint");
 const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
 const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
 const voiceMiniStatus = document.getElementById("voiceMiniStatus");
+const voicePadKickBtn = document.getElementById("voicePadKickBtn");
+const voicePadBassBtn = document.getElementById("voicePadBassBtn");
+const voicePadHatBtn = document.getElementById("voicePadHatBtn");
+const voicePadVoiceBtn = document.getElementById("voicePadVoiceBtn");
 const quizChallengeBubble = document.getElementById("quizChallengeBubble");
 const quizBubbleText = document.getElementById("quizBubbleText");
 const quizStartBtn = document.getElementById("quizStartBtn");
@@ -3041,6 +3045,9 @@ const durationInfo = document.getElementById("durationInfo");
 const keyInfo = document.getElementById("keyInfo");
 const catalogInfo = document.getElementById("catalogInfo");
 const songVibe = document.getElementById("songVibe");
+const recommendationWhyPanel = document.getElementById("recommendationWhyPanel");
+const recommendationWhyTitle = document.getElementById("recommendationWhyTitle");
+const recommendationWhyList = document.getElementById("recommendationWhyList");
 const genreGuidePanel = document.getElementById("genreGuidePanel");
 const genreGuideTitle = document.getElementById("genreGuideTitle");
 const genreGuideText = document.getElementById("genreGuideText");
@@ -3085,6 +3092,12 @@ const suggestionQueueCard = document.getElementById("suggestionQueueCard");
 const suggestionQueueTitle = document.getElementById("suggestionQueueTitle");
 const suggestionQueueHint = document.getElementById("suggestionQueueHint");
 const suggestionQueueList = document.getElementById("suggestionQueueList");
+const djModeCard = document.getElementById("djModeCard");
+const djModeTitle = document.getElementById("djModeTitle");
+const djModeHint = document.getElementById("djModeHint");
+const djModeGenerateBtn = document.getElementById("djModeGenerateBtn");
+const djModeList = document.getElementById("djModeList");
+const djModeStatus = document.getElementById("djModeStatus");
 const tasteTuningCard = document.getElementById("tasteTuningCard");
 const tasteTuningTitle = document.getElementById("tasteTuningTitle");
 const tasteTuningHint = document.getElementById("tasteTuningHint");
@@ -8616,6 +8629,28 @@ const I18N = {
     tasteTuneRunning: "Ajustando curadoria: {label}.",
     tasteTuneGenerated: "Ajuste aplicado: {label}. Agora estou testando uma nova direção para o seu gosto.",
     tasteTuneFallback: "Não achei uma opção boa nesse ajuste agora. Mantive sua recomendação atual.",
+    recommendationWhyTitle: "Por que apareceu",
+    recommendationWhyStyle: "Estilo: {style}",
+    recommendationWhyBpm: "Pulso: {bpm}",
+    recommendationWhyNovelty: "Novidade: {status}",
+    recommendationWhyKnown: "artista conhecido",
+    recommendationWhyNew: "fora do seu radar",
+    recommendationWhyOrigin: "Origem: {origin}",
+    djModeTitle: "Modo DJ",
+    djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
+    djModeGenerateBtn: "Criar jornada",
+    djModeStatusReady: "Gere uma recomendação ou escolha um estilo para criar uma jornada.",
+    djModeStatusGenerated: "Jornada pronta para {style}.",
+    djModeStepWarmup: "Warm-up",
+    djModeStepBuild: "Subida",
+    djModeStepPeak: "Peak",
+    djModeStepCurve: "Variação",
+    djModeStepClose: "Fechamento",
+    voicePadKick: "Kick",
+    voicePadBass: "Bass",
+    voicePadHat: "Hat",
+    voicePadVoice: "Voz",
+    voiceMiniPadHint: "Pad acionado: {pad}.",
     artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
@@ -8983,6 +9018,28 @@ const I18N = {
     tasteTuneRunning: "Tuning curation: {label}.",
     tasteTuneGenerated: "Tune applied: {label}. Now testing a new direction for your taste.",
     tasteTuneFallback: "I could not find a strong option for that tune right now. Kept your current recommendation.",
+    recommendationWhyTitle: "Why this track",
+    recommendationWhyStyle: "Style: {style}",
+    recommendationWhyBpm: "Pulse: {bpm}",
+    recommendationWhyNovelty: "Novelty: {status}",
+    recommendationWhyKnown: "known artist",
+    recommendationWhyNew: "outside your radar",
+    recommendationWhyOrigin: "Origin: {origin}",
+    djModeTitle: "DJ Mode",
+    djModeHint: "5-track journey: open, build, peak, twist, close.",
+    djModeGenerateBtn: "Create journey",
+    djModeStatusReady: "Generate a recommendation or choose a style to create a journey.",
+    djModeStatusGenerated: "Journey ready for {style}.",
+    djModeStepWarmup: "Warm-up",
+    djModeStepBuild: "Build",
+    djModeStepPeak: "Peak",
+    djModeStepCurve: "Twist",
+    djModeStepClose: "Close",
+    voicePadKick: "Kick",
+    voicePadBass: "Bass",
+    voicePadHat: "Hat",
+    voicePadVoice: "Voice",
+    voiceMiniPadHint: "Pad triggered: {pad}.",
     artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
@@ -9350,6 +9407,28 @@ const I18N = {
     tasteTuneRunning: "Ajustando curaduría: {label}.",
     tasteTuneGenerated: "Ajuste aplicado: {label}. Ahora pruebo una nueva dirección para tu gusto.",
     tasteTuneFallback: "No encontré una buena opción para ese ajuste ahora. Mantuve tu recomendación actual.",
+    recommendationWhyTitle: "Por qué apareció",
+    recommendationWhyStyle: "Estilo: {style}",
+    recommendationWhyBpm: "Pulso: {bpm}",
+    recommendationWhyNovelty: "Novedad: {status}",
+    recommendationWhyKnown: "artista conocido",
+    recommendationWhyNew: "fuera de tu radar",
+    recommendationWhyOrigin: "Origen: {origin}",
+    djModeTitle: "Modo DJ",
+    djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
+    djModeGenerateBtn: "Crear viaje",
+    djModeStatusReady: "Genera una recomendación o elige un estilo para crear un viaje.",
+    djModeStatusGenerated: "Viaje listo para {style}.",
+    djModeStepWarmup: "Warm-up",
+    djModeStepBuild: "Subida",
+    djModeStepPeak: "Peak",
+    djModeStepCurve: "Variación",
+    djModeStepClose: "Cierre",
+    voicePadKick: "Kick",
+    voicePadBass: "Bass",
+    voicePadHat: "Hat",
+    voicePadVoice: "Voz",
+    voiceMiniPadHint: "Pad accionado: {pad}.",
     artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
@@ -10303,6 +10382,11 @@ function applyLanguage() {
   if (quizHubProgress && !quizPendingChallenge) quizHubProgress.textContent = t("quizHubProgressEmpty");
   setText("#suggestionQueueTitle", t("suggestionQueueTitle"));
   setText("#suggestionQueueHint", t("suggestionQueueHint"));
+  setText("#recommendationWhyTitle", t("recommendationWhyTitle"));
+  setText("#djModeTitle", t("djModeTitle"));
+  setText("#djModeHint", t("djModeHint"));
+  setText("#djModeGenerateBtn", t("djModeGenerateBtn"));
+  if (djModeStatus && !djModeList?.children.length) djModeStatus.textContent = t("djModeStatusReady");
   setText("#tasteTuningTitle", t("tasteTuningTitle"));
   setText("#tasteTuningHint", t("tasteTuningHint"));
   setText("[data-tune='heavier']", t("tasteTuneHeavier"));
@@ -10334,6 +10418,10 @@ function applyLanguage() {
   setText("#voiceMiniHint", t("voiceMiniHint"));
   setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
   setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
+  setText("#voicePadKickBtn", t("voicePadKick"));
+  setText("#voicePadBassBtn", t("voicePadBass"));
+  setText("#voicePadHatBtn", t("voicePadHat"));
+  setText("#voicePadVoiceBtn", t("voicePadVoice"));
   if (voiceMiniStatus && !voiceRecordingBlob && !voiceMiniTrackPlaying) {
     voiceMiniStatus.textContent = t("voiceMiniReady");
   }
@@ -11993,6 +12081,7 @@ function updateVoiceLabUi() {
   if (voiceResetBtn) voiceResetBtn.disabled = isRecording || !hasRecording;
   if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = isRecording || !hasRecording || voiceMiniTrackPlaying;
   if (voiceMiniStopBtn) voiceMiniStopBtn.disabled = !voiceMiniTrackPlaying;
+  if (voicePadVoiceBtn) voicePadVoiceBtn.disabled = isRecording || !hasRecording;
   voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
   voicePlayback?.classList.toggle("hidden", !hasRecording);
   if (voiceMiniStatus && !hasRecording && !voiceMiniTrackPlaying) voiceMiniStatus.textContent = t("voiceMiniReady");
@@ -12359,6 +12448,56 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
     source.start(time, offset, Math.min(sliceDuration, safeDuration));
     source.stop(time + sliceDuration + 0.04);
   }
+}
+
+function createVoicePadBus(ctx) {
+  const master = trackVoiceMiniNode(ctx.createGain());
+  const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
+  compressor.threshold.value = -22;
+  compressor.knee.value = 14;
+  compressor.ratio.value = 5;
+  compressor.attack.value = 0.004;
+  compressor.release.value = 0.14;
+  master.gain.value = Math.max(0.55, Math.min(1, audioVolume || 0.82));
+  master.connect(compressor);
+  compressor.connect(ctx.destination);
+  return master;
+}
+
+async function triggerVoiceDawPad(kind = "kick") {
+  if (!initAudioEngine() || !audioContext) return;
+  audioUnlocked = true;
+  await audioContext.resume().catch(() => {});
+  const ctx = audioContext;
+  const bus = createVoicePadBus(ctx);
+  const now = ctx.currentTime + 0.035;
+  const beat = 60 / 128;
+  if (kind === "kick") {
+    scheduleVoiceMiniKick(ctx, bus, now, { accent: true });
+  } else if (kind === "bass") {
+    scheduleVoiceMiniBass(ctx, bus, now, beat, beat);
+  } else if (kind === "hat") {
+    scheduleVoiceMiniHat(ctx, bus, now, { open: true, pan: 0.18 });
+  } else if (kind === "voice") {
+    if (!voiceRecordingBlob) {
+      setVoiceStatus(t("voiceNeedRecording"));
+      showToast(t("voiceNeedRecording"));
+      return;
+    }
+    const voiceBuffer = await getNormalizedVoiceBuffer(ctx);
+    if (!voiceBuffer) return;
+    const source = trackVoiceMiniNode(ctx.createBufferSource());
+    const gain = trackVoiceMiniNode(ctx.createGain());
+    source.buffer = voiceBuffer;
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.58 * Math.max(0.35, audioVolume || 0.8), now + 0.018);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + Math.min(0.7, voiceBuffer.duration));
+    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
+    gain.connect(bus);
+    source.start(now, 0, Math.min(0.66, voiceBuffer.duration));
+    source.stop(now + Math.min(0.72, voiceBuffer.duration + 0.04));
+  }
+  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadHint", { pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`) });
 }
 
 async function playVoiceMiniTrack() {
@@ -18095,6 +18234,95 @@ function renderSuggestionQueue(prefs = lastPrefs) {
   });
 }
 
+function renderRecommendationWhy(track, prefs = lastPrefs) {
+  if (!recommendationWhyPanel || !recommendationWhyList) return;
+  if (!track) {
+    recommendationWhyPanel.classList.add("hidden");
+    recommendationWhyList.innerHTML = "";
+    return;
+  }
+  recommendationWhyPanel.classList.remove("hidden");
+  if (recommendationWhyTitle) recommendationWhyTitle.textContent = t("recommendationWhyTitle");
+  recommendationWhyList.innerHTML = "";
+
+  const bpmData = resolveBpmDisplay(track);
+  const origin = artistOriginSignalForTrack(track);
+  const originLabel = formatArtistOriginLabel(origin);
+  const knownUnion = buildGlobalArtistExclusionSet();
+  const chips = [
+    t("recommendationWhyStyle", { style: styleLabelByValue(track.style || prefs?.style || "") }),
+    t("recommendationWhyBpm", { bpm: bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel") }),
+    t("recommendationWhyNovelty", {
+      status: artistSetHasMatch(knownUnion, track.artist) ? t("recommendationWhyKnown") : t("recommendationWhyNew")
+    })
+  ];
+  if (originLabel) chips.push(t("recommendationWhyOrigin", { origin: originLabel }));
+
+  chips.forEach((text) => {
+    const chip = document.createElement("span");
+    chip.className = "recommendation-why-chip";
+    chip.textContent = text;
+    recommendationWhyList.appendChild(chip);
+  });
+}
+
+function prefsFromControls() {
+  return {
+    style: styleEl?.value || currentRecommendation?.style || "",
+    context: contextEl?.value || "",
+    energy: energyEl?.value || "",
+    bpm: bpmEl?.value || "",
+    vocals: vocalsEl?.value || ""
+  };
+}
+
+function djJourneyStepLabel(index) {
+  return [
+    t("djModeStepWarmup"),
+    t("djModeStepBuild"),
+    t("djModeStepPeak"),
+    t("djModeStepCurve"),
+    t("djModeStepClose")
+  ][index] || `${t("queueNext")} ${index + 1}`;
+}
+
+function renderDjModeJourney(tracks = [], prefs = lastPrefs || prefsFromControls()) {
+  if (!djModeList || !djModeStatus) return;
+  djModeList.innerHTML = "";
+  if (!tracks.length) {
+    djModeStatus.textContent = t("djModeStatusReady");
+    return;
+  }
+  tracks.slice(0, 5).forEach((track, index) => {
+    const item = document.createElement("article");
+    item.className = "dj-step";
+    const step = document.createElement("span");
+    step.className = "dj-step-label";
+    step.textContent = djJourneyStepLabel(index);
+    const name = document.createElement("p");
+    name.className = "dj-step-track";
+    name.textContent = `${track.song} • ${track.artist}`;
+    const meta = document.createElement("p");
+    meta.className = "dj-step-meta";
+    meta.textContent = recommendationMetaLine(track);
+    item.append(step, name, meta);
+    djModeList.appendChild(item);
+  });
+  djModeStatus.textContent = t("djModeStatusGenerated", {
+    style: styleLabelByValue(prefs?.style || tracks[0]?.style || "")
+  });
+}
+
+function generateDjModeJourney() {
+  const prefs = lastPrefs || prefsFromControls();
+  if (!prefs.style && currentRecommendation?.style) prefs.style = currentRecommendation.style;
+  if (!prefs.style && styleEl?.value) prefs.style = styleEl.value;
+  const baseTrack = currentRecommendation?.style === prefs.style ? currentRecommendation : null;
+  const tracks = buildSuggestionQueueFromPrefs(prefs, baseTrack).slice(0, 5);
+  renderDjModeJourney(tracks, prefs);
+  playUiSfx("confirm");
+}
+
 function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommendation) {
   if (!prefs || !anchorTrack) {
     suggestionQueueTracks = [];
@@ -18494,6 +18722,7 @@ function renderRecommendation(track, prefs) {
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: styleLabelByValue(track.style) });
+  renderRecommendationWhy(track, prefs);
   renderGenreGuide(track);
   renderArtistVisualFallback(track);
   void hydrateArtistVisual(track);
@@ -21774,6 +22003,12 @@ bind(moreInfoBtn, "click", () => {
     detailsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 });
+
+bind(djModeGenerateBtn, "click", generateDjModeJourney);
+bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
+bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
+bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
+bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
 
 syncDiscoveryFromSeeds();
 loadDynamicCatalogCache();

@@ -2302,6 +2302,39 @@ input[type="range"] {
   margin-top: 0.15rem;
 }
 
+.recommendation-why-panel {
+  display: grid;
+  gap: 0.4rem;
+  border: 1px solid rgba(126, 214, 255, 0.22);
+  border-radius: 10px;
+  padding: 0.56rem;
+  background: rgba(5, 14, 31, 0.62);
+}
+
+.recommendation-why-title {
+  margin: 0;
+  color: #7df1ff;
+  font-family: "Syne", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.recommendation-why-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.recommendation-why-chip {
+  border: 1px solid rgba(126, 214, 255, 0.26);
+  border-radius: 999px;
+  padding: 0.28rem 0.54rem;
+  color: #dcecff;
+  background: rgba(12, 26, 55, 0.72);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .track-title-animated {
   color: #f4fbff;
   background: linear-gradient(90deg, #f4fbff 0%, #89eeff 30%, #f4fbff 55%, #a6bcff 78%, #f4fbff 100%);
@@ -2982,6 +3015,28 @@ input[type="range"] {
   min-height: 42px;
 }
 
+.voice-daw-pad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.voice-daw-pad {
+  min-height: 48px;
+  border-color: rgba(100, 255, 209, 0.34);
+  background: linear-gradient(145deg, rgba(12, 32, 55, 0.88), rgba(8, 15, 33, 0.84));
+  color: #ecfbff;
+  font-family: "Syne", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.voice-daw-pad:active {
+  transform: translateY(1px) scale(0.98);
+  border-color: rgba(126, 255, 219, 0.88);
+  box-shadow: 0 0 22px rgba(93, 233, 255, 0.22);
+}
+
 .voice-lab-panel.is-mini-playing .voice-visual {
   border-color: rgba(100, 255, 209, 0.58);
   box-shadow: 0 0 0 1px rgba(100, 255, 209, 0.12), inset 0 0 28px rgba(100, 255, 209, 0.08);
@@ -2995,6 +3050,60 @@ input[type="range"] {
 .queue-head {
   display: grid;
   gap: 0.12rem;
+}
+
+.dj-mode-card {
+  border-color: rgba(155, 255, 183, 0.32);
+}
+
+.dj-mode-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.dj-mode-list {
+  display: grid;
+  gap: 0.48rem;
+}
+
+.dj-step {
+  display: grid;
+  grid-template-columns: 6.8rem minmax(0, 1fr);
+  gap: 0.28rem 0.58rem;
+  align-items: center;
+  border: 1px solid rgba(126, 214, 255, 0.18);
+  border-radius: 10px;
+  padding: 0.54rem;
+  background: rgba(5, 14, 31, 0.58);
+}
+
+.dj-step-label {
+  grid-row: span 2;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.22rem 0.54rem;
+  color: #062030;
+  background: linear-gradient(90deg, #9bffb7, #74e9ff);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.dj-step-track,
+.dj-step-meta,
+.dj-mode-status {
+  margin: 0;
+}
+
+.dj-step-track {
+  color: #f2f8ff;
+  font-weight: 800;
+}
+
+.dj-step-meta {
+  color: #aebee1;
+  font-size: 0.86rem;
 }
 
 .queue-title {
@@ -5111,8 +5220,34 @@ input[type="range"] {
 
   .voice-effect-grid,
   .voice-controls,
-  .voice-mini-controls {
+  .voice-mini-controls,
+  .voice-daw-pad-grid {
     grid-template-columns: 1fr;
+  }
+
+  .voice-daw-pad-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dj-mode-head {
+    display: grid;
+  }
+
+  .dj-step {
+    grid-template-columns: 1fr;
+  }
+
+  .dj-step-label {
+    grid-row: auto;
+  }
+
+  #catalogInfo,
+  #songVibe,
+  #listeningNarrative,
+  #tasteTuningHint,
+  #suggestionQueueHint,
+  #djModeHint {
+    display: none;
   }
 
   .profile-stats-grid {
