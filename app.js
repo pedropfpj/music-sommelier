@@ -3117,6 +3117,7 @@ const summaryFiveStarTracks = document.getElementById("summaryFiveStarTracks");
 const summaryKnownArtists = document.getElementById("summaryKnownArtists");
 const summaryLikedArtists = document.getElementById("summaryLikedArtists");
 const summaryDislikedArtists = document.getElementById("summaryDislikedArtists");
+const quizHubProgress = document.getElementById("quizHubProgress");
 const eventsPanel = document.getElementById("eventsPanel");
 const eventsIntro = document.getElementById("eventsIntro");
 const eventsCalendar = document.getElementById("eventsCalendar");
@@ -8678,6 +8679,10 @@ const I18N = {
     summaryKnownArtistsTitle: "Artistas que você conhece",
     summaryLikedArtistsTitle: "Artistas que você curte",
     summaryDislikedArtistsTitle: "Artistas que você não curte",
+    quizHubTitle: "Desafios de conhecimento",
+    quizHubBadge: "Evolução rápida",
+    quizHubHint: "Ignorou o balão de desafio? Ele fica salvo aqui para você evoluir pelo conhecimento quando quiser.",
+    quizHubProgressEmpty: "Nenhum desafio desbloqueado ainda.",
     summaryNoData: "Sem dados",
     summaryStatusNew: "Novo",
     summaryStatusExploring: "Explorando",
@@ -9041,6 +9046,10 @@ const I18N = {
     summaryKnownArtistsTitle: "Artists you already know",
     summaryLikedArtistsTitle: "Artists you like",
     summaryDislikedArtistsTitle: "Artists you don't like",
+    quizHubTitle: "Knowledge challenges",
+    quizHubBadge: "Fast evolution",
+    quizHubHint: "Skipped the challenge bubble? It stays saved here so you can build knowledge whenever you want.",
+    quizHubProgressEmpty: "No challenge unlocked yet.",
     summaryNoData: "No data",
     summaryStatusNew: "New",
     summaryStatusExploring: "Exploring",
@@ -9404,6 +9413,10 @@ const I18N = {
     summaryKnownArtistsTitle: "Artistas que ya conoces",
     summaryLikedArtistsTitle: "Artistas que te gustan",
     summaryDislikedArtistsTitle: "Artistas que no te gustan",
+    quizHubTitle: "Desafíos de conocimiento",
+    quizHubBadge: "Evolución rápida",
+    quizHubHint: "¿Ignoraste el aviso de desafío? Queda guardado aquí para que evoluciones tu conocimiento cuando quieras.",
+    quizHubProgressEmpty: "Aún no hay desafíos desbloqueados.",
     summaryNoData: "Sin datos",
     summaryStatusNew: "Nuevo",
     summaryStatusExploring: "Explorando",
@@ -10284,6 +10297,10 @@ function applyLanguage() {
   setText("#summaryKnownArtistsTitle", t("summaryKnownArtistsTitle"));
   setText("#summaryLikedArtistsTitle", t("summaryLikedArtistsTitle"));
   setText("#summaryDislikedArtistsTitle", t("summaryDislikedArtistsTitle"));
+  setText("#quizHubTitle", t("quizHubTitle"));
+  setText("#quizHubBadge", t("quizHubBadge"));
+  setText("#quizHubHint", t("quizHubHint"));
+  if (quizHubProgress && !quizPendingChallenge) quizHubProgress.textContent = t("quizHubProgressEmpty");
   setText("#suggestionQueueTitle", t("suggestionQueueTitle"));
   setText("#suggestionQueueHint", t("suggestionQueueHint"));
   setText("#tasteTuningTitle", t("tasteTuningTitle"));
@@ -18698,11 +18715,29 @@ function formatSummaryArtistName(value) {
     .join(" ");
 }
 
+function validSummaryArtistName(value) {
+  const raw = String(value || "").replace(/\s+/g, " ").trim();
+  if (raw.length < 2) return false;
+  if (!/\p{L}|\p{N}/u.test(raw)) return false;
+  const normalizedValue = normalize(raw);
+  if (!normalizedValue || normalizedValue.length < 2) return false;
+  if (/^(o|a|e|de|da|do|the|and|x|vs|feat|ft|with)$/i.test(normalizedValue)) return false;
+  return true;
+}
+
 function topArtistsFromMap(mapRef, limit = 10) {
   return [...mapRef.entries()]
+    .filter(([artist]) => validSummaryArtistName(artist))
     .sort((a, b) => b[1] - a[1])
     .slice(0, limit)
     .map(([artist]) => formatSummaryArtistName(artist));
+}
+
+function pruneInvalidArtistSignals(mapRef) {
+  if (!mapRef?.size) return;
+  [...mapRef.keys()].forEach((artist) => {
+    if (!validSummaryArtistName(artist)) mapRef.delete(artist);
+  });
 }
 
 function knownArtistsForSummary(limit = 12) {
@@ -19865,6 +19900,8 @@ function fiveStarTracksForSummary(limit = 12) {
 
 function updateStats() {
   recalculateRatingStats();
+  pruneInvalidArtistSignals(adaptiveModel.likedArtists);
+  pruneInvalidArtistSignals(adaptiveModel.dislikedArtists);
   const typedKnown = parseKnownArtists(knownArtistsEl ? knownArtistsEl.value : "");
   const knownUnion = new Set([...typedKnown, ...knownArtistsMemory]);
   const likedArtistsTop = topArtistsFromMap(adaptiveModel.likedArtists);
