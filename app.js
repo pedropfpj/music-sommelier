@@ -11685,7 +11685,7 @@ function showAuthScreen() {
   playUiSfx("confirm");
 }
 
-function continueFromAuthToWelcome() {
+function continueFromAuthToWelcome({ showGuide = false } = {}) {
   if (authScreen) authScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.remove("hidden");
@@ -11701,6 +11701,10 @@ function continueFromAuthToWelcome() {
     quickSurpriseKnownTracksEl.value = "";
   }
   syncQuickSurpriseStyleOptions();
+  if (showGuide) {
+    showUsageGuideScreen({ returnTo: "welcome" });
+    return;
+  }
   refreshAmbientForUiState();
   playUiSfx("confirm");
 }
@@ -11831,20 +11835,22 @@ function loginWithCredentials() {
     return;
   }
 
+  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   const session = { mode: "login", username };
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authLoggedAs", { user: username }));
-  continueFromAuthToWelcome();
+  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
 function continueWithoutLogin() {
+  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   const session = { mode: "guest", username: "" };
   clearSessionProfileData(session);
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authGuestReady"));
-  continueFromAuthToWelcome();
+  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
 function syncDiscoveryFromSeeds() {
@@ -20867,11 +20873,7 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    if (hasUsageGuideAcknowledged()) {
-      showAuthScreen();
-    } else {
-      showUsageGuideScreen({ returnTo: "auth" });
-    }
+    showAuthScreen();
   });
 });
 
