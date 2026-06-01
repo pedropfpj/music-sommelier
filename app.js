@@ -3267,6 +3267,8 @@ let voiceRecordingStream = null;
 let voiceRecordingChunks = [];
 let voiceRecordingBlob = null;
 let voiceRecordingUrl = "";
+let voiceRecordingNormalizedBuffer = null;
+let voiceRecordingNormalizedSampleRate = 0;
 let voiceRecordingStartedAt = 0;
 let voiceRecordingTimer = 0;
 let selectedVoiceEffect = "robot";
@@ -8650,7 +8652,7 @@ const I18N = {
     voiceMiniPlayBtn: "Criar mini música",
     voiceMiniStopBtn: "Parar música",
     voiceMiniReady: "Grave sua voz para liberar o mini beat.",
-    voiceMiniPlaying: "Mini música tocando: voz picotada, kick, bass e hats.",
+    voiceMiniPlaying: "Mini música tocando: voz em destaque, kick, bass e hats.",
     voiceMiniDone: "Mini música finalizada. Grave outra frase ou toque de novo.",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
@@ -9013,7 +9015,7 @@ const I18N = {
     voiceMiniPlayBtn: "Create mini music",
     voiceMiniStopBtn: "Stop music",
     voiceMiniReady: "Record your voice to unlock the mini beat.",
-    voiceMiniPlaying: "Mini music playing: chopped voice, kick, bass, and hats.",
+    voiceMiniPlaying: "Mini music playing: featured voice, kick, bass, and hats.",
     voiceMiniDone: "Mini music finished. Record another phrase or play it again.",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
@@ -9376,7 +9378,7 @@ const I18N = {
     voiceMiniPlayBtn: "Crear mini música",
     voiceMiniStopBtn: "Parar música",
     voiceMiniReady: "Graba tu voz para liberar el mini beat.",
-    voiceMiniPlaying: "Mini música sonando: voz cortada, kick, bass y hats.",
+    voiceMiniPlaying: "Mini música sonando: voz destacada, kick, bass y hats.",
     voiceMiniDone: "Mini música finalizada. Graba otra frase o reprodúcela de nuevo.",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
@@ -12015,6 +12017,8 @@ function resetVoiceRecording() {
   voiceRecorder = null;
   voiceRecordingChunks = [];
   voiceRecordingBlob = null;
+  voiceRecordingNormalizedBuffer = null;
+  voiceRecordingNormalizedSampleRate = 0;
   if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
   voiceRecordingUrl = "";
   if (voicePlayback) {
@@ -12033,6 +12037,8 @@ function finishVoiceRecording() {
   const mimeType = voiceRecordingChunks[0]?.type || "audio/webm";
   voiceRecordingBlob = new Blob(voiceRecordingChunks, { type: mimeType });
   voiceRecordingChunks = [];
+  voiceRecordingNormalizedBuffer = null;
+  voiceRecordingNormalizedSampleRate = 0;
   if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
   voiceRecordingUrl = URL.createObjectURL(voiceRecordingBlob);
   if (voicePlayback) {
@@ -12058,8 +12064,9 @@ async function startVoiceRecording() {
   try {
     voiceRecordingStream = await navigator.mediaDevices.getUserMedia({
       audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
+        channelCount: 1,
+        echoCancellation: false,
+        noiseSuppression: false,
         autoGainControl: true
       }
     });
@@ -12108,6 +12115,46 @@ function trackVoiceMiniNode(node) {
   return node;
 }
 
+async function getNormalizedVoiceBuffer(ctx) {
+  if (!voiceRecordingBlob) return null;
+  if (voiceRecordingNormalizedBuffer && voiceRecordingNormalizedSampleRate === ctx.sampleRate) {
+    return voiceRecordingNormalizedBuffer;
+  }
+  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
+  const decoded = await ctx.decodeAudioData(arrayBuffer.slice(0));
+  const normalized = ctx.createBuffer(decoded.numberOfChannels, decoded.length, decoded.sampleRate);
+  let peak = 0;
+  for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
+    const data = decoded.getChannelData(channel);
+    for (let i = 0; i < data.length; i += 1) {
+      peak = Math.max(peak, Math.abs(data[i]));
+    }
+  }
+  const boost = peak > 0.0001 ? Math.min(4.8, 0.92 / peak) : 1;
+  for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
+    const source = decoded.getChannelData(channel);
+    const target = normalized.getChannelData(channel);
+    for (let i = 0; i < source.length; i += 1) {
+      target[i] = Math.max(-1, Math.min(1, source[i] * boost));
+    }
+  }
+  voiceRecordingNormalizedBuffer = normalized;
+  voiceRecordingNormalizedSampleRate = ctx.sampleRate;
+  return normalized;
+}
+
+function connectMiniNode(ctx, node, destination, pan = 0) {
+  if (typeof ctx.createStereoPanner === "function") {
+    const panner = trackVoiceMiniNode(ctx.createStereoPanner());
+    panner.pan.value = Math.max(-0.85, Math.min(0.85, pan));
+    node.connect(panner);
+    panner.connect(destination);
+    return panner;
+  }
+  node.connect(destination);
+  return node;
+}
+
 function stopVoiceMiniTrack({ silent = false } = {}) {
   voiceMiniTrackTimers.forEach((timer) => window.clearTimeout(timer));
   voiceMiniTrackTimers = [];
@@ -12129,46 +12176,167 @@ function stopVoiceMiniTrack({ silent = false } = {}) {
   updateVoiceLabUi();
 }
 
-function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
-  const notes = [49, 49, 55, 65.41, 55, 49, 73.42, 55];
+function createMiniNoiseBuffer(ctx, duration = 0.12) {
+  const length = Math.max(1, Math.floor(ctx.sampleRate * duration));
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i += 1) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+  }
+  return buffer;
+}
+
+function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) {
+  const end = time + 0.42;
+  const osc = trackVoiceMiniNode(ctx.createOscillator());
+  const bodyGain = trackVoiceMiniNode(ctx.createGain());
+  const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const click = trackVoiceMiniNode(ctx.createBufferSource());
+  const clickGain = trackVoiceMiniNode(ctx.createGain());
+  const clickFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const level = (accent ? 0.78 : 0.62) * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(148, time);
+  osc.frequency.exponentialRampToValueAtTime(54, time + 0.055);
+  osc.frequency.exponentialRampToValueAtTime(38, end);
+  bodyFilter.type = "lowpass";
+  bodyFilter.frequency.value = 420;
+  bodyFilter.Q.value = 0.75;
+  bodyGain.gain.setValueAtTime(0.0001, time);
+  bodyGain.gain.exponentialRampToValueAtTime(level, time + 0.006);
+  bodyGain.gain.exponentialRampToValueAtTime(level * 0.28, time + 0.075);
+  bodyGain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+  click.buffer = createMiniNoiseBuffer(ctx, 0.04);
+  clickFilter.type = "highpass";
+  clickFilter.frequency.value = 2200;
+  clickGain.gain.setValueAtTime(0.0001, time);
+  clickGain.gain.exponentialRampToValueAtTime(level * 0.13, time + 0.004);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.032);
+
+  osc.connect(bodyFilter);
+  bodyFilter.connect(bodyGain);
+  bodyGain.connect(destination);
+  click.connect(clickFilter);
+  clickFilter.connect(clickGain);
+  clickGain.connect(destination);
+  osc.start(time);
+  osc.stop(end + 0.02);
+  click.start(time);
+  click.stop(time + 0.05);
+}
+
+function scheduleVoiceMiniHat(ctx, destination, time, { open = false, pan = 0 } = {}) {
+  const duration = open ? 0.18 : 0.055;
+  const source = trackVoiceMiniNode(ctx.createBufferSource());
+  const gain = trackVoiceMiniNode(ctx.createGain());
+  const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const lowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const level = (open ? 0.18 : 0.09) * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+
+  source.buffer = createMiniNoiseBuffer(ctx, duration);
+  highpass.type = "highpass";
+  highpass.frequency.value = open ? 4600 : 5600;
+  lowpass.type = "lowpass";
+  lowpass.frequency.value = open ? 11500 : 9800;
+  gain.gain.setValueAtTime(0.0001, time);
+  gain.gain.exponentialRampToValueAtTime(level, time + 0.004);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+  source.connect(highpass);
+  highpass.connect(lowpass);
+  lowpass.connect(gain);
+  connectMiniNode(ctx, gain, destination, pan);
+  source.start(time);
+  source.stop(time + duration + 0.02);
+}
+
+function scheduleVoiceMiniDrums(ctx, destination, start, beat, duration) {
   for (let i = 0; i * beat < duration; i += 1) {
     const time = start + i * beat;
-    const osc = trackVoiceMiniNode(ctx.createOscillator());
+    scheduleVoiceMiniKick(ctx, destination, time, { accent: i % 8 === 0 });
+    scheduleVoiceMiniHat(ctx, destination, time + beat * 0.5, { open: true, pan: i % 2 ? -0.2 : 0.22 });
+    scheduleVoiceMiniHat(ctx, destination, time + beat * 0.25, { pan: i % 4 === 0 ? -0.16 : 0.12 });
+    if (i % 2 === 1) scheduleVoiceMiniHat(ctx, destination, time + beat * 0.75, { pan: 0.18 });
+  }
+}
+
+function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
+  const notes = [49, 49, 55, 49, 65.41, 55, 73.42, 55];
+  for (let i = 0; i * beat < duration; i += 1) {
+    const time = start + i * beat;
+    const note = notes[i % notes.length];
+    const sub = trackVoiceMiniNode(ctx.createOscillator());
+    const grit = trackVoiceMiniNode(ctx.createOscillator());
     const gain = trackVoiceMiniNode(ctx.createGain());
-    const filter = ctx.createBiquadFilter();
+    const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
+    const subGain = trackVoiceMiniNode(ctx.createGain());
+    const gritGain = trackVoiceMiniNode(ctx.createGain());
+    const level = 0.22 * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+
     filter.type = "lowpass";
-    filter.frequency.value = 420;
-    filter.Q.value = 0.9;
-    osc.type = i % 4 === 0 ? "sawtooth" : "square";
-    osc.frequency.value = notes[i % notes.length];
+    filter.frequency.setValueAtTime(i % 4 === 0 ? 320 : 240, time);
+    filter.frequency.exponentialRampToValueAtTime(130, time + beat * 0.62);
+    filter.Q.value = 1.15;
+    sub.type = "sine";
+    grit.type = i % 3 === 0 ? "sawtooth" : "square";
+    sub.frequency.value = note;
+    grit.frequency.value = note * 2;
+    subGain.gain.value = 0.88;
+    gritGain.gain.value = 0.18;
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime(0.105 * Math.max(0.25, audioVolume), time + 0.018);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.72);
-    osc.connect(filter);
+    gain.gain.exponentialRampToValueAtTime(level, time + 0.016);
+    gain.gain.exponentialRampToValueAtTime(level * 0.34, time + beat * 0.34);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.82);
+    sub.connect(subGain);
+    grit.connect(gritGain);
+    subGain.connect(filter);
+    gritGain.connect(filter);
     filter.connect(gain);
     gain.connect(destination);
-    osc.start(time);
-    osc.stop(time + beat * 0.82);
+    sub.start(time);
+    grit.start(time);
+    sub.stop(time + beat * 0.88);
+    grit.stop(time + beat * 0.88);
   }
 }
 
 function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
   const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
-  const sliceDuration = Math.min(0.42, Math.max(0.16, beat * 0.72));
-  const offsets = [0, 0.2, 0.42, 0.64, 0.12, 0.5, 0.76, 0.3];
-  for (let i = 0; i * beat * 2 < duration; i += 1) {
-    const time = start + i * beat * 2 + (i % 2 ? beat * 0.18 : 0);
+  const phraseDuration = Math.min(safeDuration, beat * 3.25);
+  const voiceBus = trackVoiceMiniNode(ctx.createGain());
+  voiceBus.gain.value = 1.18;
+  voiceBus.connect(destination);
+
+  const phrase = trackVoiceMiniNode(ctx.createBufferSource());
+  const phraseGain = trackVoiceMiniNode(ctx.createGain());
+  phrase.buffer = voiceBuffer;
+  phraseGain.gain.setValueAtTime(0.0001, start);
+  phraseGain.gain.exponentialRampToValueAtTime(0.46 * Math.max(0.35, audioVolume || 0.8), start + 0.06);
+  phraseGain.gain.setValueAtTime(0.42 * Math.max(0.35, audioVolume || 0.8), start + phraseDuration * 0.78);
+  phraseGain.gain.exponentialRampToValueAtTime(0.0001, start + phraseDuration);
+  connectVoiceEffectGraph(ctx, phrase, selectedVoiceEffect, phraseGain);
+  phraseGain.connect(voiceBus);
+  phrase.start(start, 0, phraseDuration);
+  phrase.stop(start + phraseDuration + 0.04);
+
+  const sliceDuration = Math.min(0.34, Math.max(0.14, beat * 0.56));
+  const offsets = [0, 0.18, 0.46, 0.68, 0.08, 0.58, 0.82, 0.3, 0.72, 0.12, 0.52, 0.38];
+  for (let i = 0; i * beat < duration; i += 1) {
+    const time = start + beat * 4 + i * beat * 0.5;
+    if (time >= start + duration - sliceDuration) break;
     const source = trackVoiceMiniNode(ctx.createBufferSource());
     const chopGain = trackVoiceMiniNode(ctx.createGain());
     source.buffer = voiceBuffer;
-    source.playbackRate.value = i % 3 === 0 ? 1.24 : i % 3 === 1 ? 0.92 : 1.08;
+    source.playbackRate.value = i % 5 === 0 ? 1.18 : i % 4 === 0 ? 0.92 : 1.04;
     const availableOffset = Math.max(0, safeDuration - sliceDuration);
     const offset = availableOffset * offsets[i % offsets.length];
+    const accent = i % 4 === 0 ? 0.62 : 0.38;
     chopGain.gain.setValueAtTime(0.0001, time);
-    chopGain.gain.exponentialRampToValueAtTime(0.24 * Math.max(0.2, audioVolume), time + 0.018);
+    chopGain.gain.exponentialRampToValueAtTime(accent * Math.max(0.35, audioVolume || 0.8), time + 0.014);
     chopGain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, chopGain);
-    chopGain.connect(destination);
+    connectMiniNode(ctx, chopGain, voiceBus, i % 2 ? -0.24 : 0.2);
     source.start(time, offset, Math.min(sliceDuration, safeDuration));
     source.stop(time + sliceDuration + 0.04);
   }
@@ -12190,16 +12358,16 @@ async function playVoiceMiniTrack() {
   await audioContext.resume().catch(() => {});
 
   const ctx = audioContext;
-  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
-  const voiceBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+  const voiceBuffer = await getNormalizedVoiceBuffer(ctx);
+  if (!voiceBuffer) return;
   const master = trackVoiceMiniNode(ctx.createGain());
-  const compressor = ctx.createDynamicsCompressor();
-  compressor.threshold.value = -18;
-  compressor.knee.value = 18;
-  compressor.ratio.value = 4.5;
-  compressor.attack.value = 0.004;
-  compressor.release.value = 0.18;
-  master.gain.value = 0.84;
+  const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
+  compressor.threshold.value = -24;
+  compressor.knee.value = 16;
+  compressor.ratio.value = 7.5;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.16;
+  master.gain.value = Math.max(0.7, Math.min(1.12, audioVolume || 0.86));
   master.connect(compressor);
   compressor.connect(ctx.destination);
 
@@ -12212,13 +12380,7 @@ async function playVoiceMiniTrack() {
   setVoiceStatus(t("voiceMiniPlaying"));
   updateVoiceLabUi();
 
-  for (let i = 0; i * beat < duration; i += 1) {
-    const when = start - ctx.currentTime + i * beat;
-    spawnTechnoKick({ when, volume: i % 4 === 0 ? 0.18 : 0.13, frequency: 54, click: i % 4 === 0 });
-    if (i % 2 === 1) spawnTechnoHat({ when: when + beat * 0.5, volume: 0.032, pan: i % 4 === 1 ? 0.22 : -0.18 });
-    if (i % 4 === 2) spawnTechnoHat({ when: when + beat * 0.25, volume: 0.018, pan: 0.08 });
-  }
-
+  scheduleVoiceMiniDrums(ctx, master, start, beat, duration);
   scheduleVoiceMiniBass(ctx, master, start, beat, duration);
   scheduleVoiceMiniChops(ctx, voiceBuffer, master, start, beat, duration);
   voiceMiniTrackTimers.push(window.setTimeout(() => {
@@ -12341,8 +12503,8 @@ async function playVoiceEffect() {
   stopVoiceMiniTrack({ silent: true });
   audioUnlocked = true;
   await audioContext.resume().catch(() => {});
-  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
-  const decoded = await audioContext.decodeAudioData(arrayBuffer.slice(0));
+  const decoded = await getNormalizedVoiceBuffer(audioContext);
+  if (!decoded) return;
   const source = audioContext.createBufferSource();
   const output = audioContext.createGain();
   source.buffer = decoded;
