@@ -18712,6 +18712,7 @@ async function generateRecommendationFromPrefs(
   recommendationBpmFallbackInfo = false;
   let usedKnownFallback = false;
   let usedBpmRangeFallback = false;
+  const selectedStyleAtRequest = String(prefs?.style || "").trim();
   if (resetRejected) rejectedArtists = new Set();
   if (!externalDatasetImportDone) {
     await hydrateExternalDatasetPackInBackground();
@@ -18748,7 +18749,9 @@ async function generateRecommendationFromPrefs(
   const sessionExcludedArtists = buildGlobalArtistExclusionSet();
   if (avoidArtistName) addArtistKeysToSet(sessionExcludedArtists, avoidArtistName);
   const trackAllowedInSession = (track) => !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  const isStyleFallbackLocked = () => NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
+  // If the user explicitly selected a style, recommendations must stay in it.
+  const isStyleFallbackLocked = () =>
+    Boolean(selectedStyleAtRequest) || NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
 
   const hasEligibleInCurrentScope = () =>
     catalog.some(
