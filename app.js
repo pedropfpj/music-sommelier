@@ -1879,6 +1879,822 @@ const catalog = [
     beatportUrl: "https://www.beatport.com/search?q=Brennan%20Heart%20Imaginary",
     artistBio: "Brennan Heart e um nome de referencia no hardstyle melodico.",
     labelBio: "I AM HARDSTYLE fortaleceu a cena hard dance internacional."
+  },
+  {
+    style: "freeform",
+    song: "Back To Mad",
+    artist: "Texas Faggott",
+    label: "Exogenic Records",
+    bpm: "145-155",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "after"],
+    vibe: "Freeform/suomisaundi com estrutura torta, humor psicodelico e groove imprevisivel.",
+    spotifyUrl: "https://open.spotify.com/search/Texas%20Faggott%20Back%20To%20Mad",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Texas+Faggott+Back+To+Mad",
+    beatportUrl: "https://www.beatport.com/search?q=Texas%20Faggott%20Back%20To%20Mad",
+    artistBio: "Texas Faggott e um nome cult ligado ao freeform/suomisaundi, com linguagem psicodelica irreverente.",
+    labelBio: "Exogenic Records marcou a cena finlandesa de psytrance livre e experimental."
+  },
+  {
+    style: "freeform",
+    song: "Jungle Boogie",
+    artist: "Squaremeat",
+    label: "Exogenic Records",
+    bpm: "145-155",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "after"],
+    vibe: "Psytrance livre, elastico e brincalhao, com timbres organicos e viradas inesperadas.",
+    spotifyUrl: "https://open.spotify.com/search/Squaremeat%20Jungle%20Boogie",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Squaremeat+Jungle+Boogie",
+    beatportUrl: "https://www.beatport.com/search?q=Squaremeat%20Jungle%20Boogie",
+    artistBio: "Squaremeat representa a vertente finlandesa mais solta do psytrance, muito ligada ao freeform.",
+    labelBio: "Exogenic Records documenta parte importante dessa escola psicodelica experimental."
+  },
+  {
+    style: "trance_uplifting",
+    song: "We Control The Sunlight",
+    artist: "Aly & Fila feat. Jwaydan",
+    label: "Future Sound of Egypt",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "estrada"],
+    vibe: "Uplifting trance com breakdown emocional, vocal forte e retorno euforico.",
+    spotifyUrl: "https://open.spotify.com/search/Aly%20Fila%20Jwaydan%20We%20Control%20The%20Sunlight",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Aly+Fila+Jwaydan+We+Control+The+Sunlight",
+    beatportUrl: "https://www.beatport.com/search?q=Aly%20Fila%20We%20Control%20The%20Sunlight",
+    artistBio: "Aly & Fila sao referencias globais do uplifting trance moderno.",
+    labelBio: "Future Sound of Egypt e uma das plataformas centrais do trance melodico."
+  },
+  {
+    style: "trance_uplifting",
+    song: "An Angel's Love",
+    artist: "Alex M.O.R.P.H. feat. Sylvia Tosun",
+    label: "A State of Trance",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "estrada"],
+    vibe: "Trance melodico e vocal com construcao luminosa e pico emocional.",
+    spotifyUrl: "https://open.spotify.com/search/Alex%20MORPH%20Sylvia%20Tosun%20An%20Angel%27s%20Love",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Alex+MORPH+Sylvia+Tosun+An+Angel%27s+Love",
+    beatportUrl: "https://www.beatport.com/search?q=Alex%20M.O.R.P.H.%20An%20Angel%27s%20Love",
+    artistBio: "Alex M.O.R.P.H. e associado ao trance e uplifting trance de grande escala.",
+    labelBio: "A State of Trance consolidou muitos lancamentos melodicos da cena."
+  },
+  {
+    style: "industrial_techno",
+    song: "Look What Your Love Has Done To Me",
+    artist: "Perc",
+    label: "Perc Trax",
+    bpm: "132-145",
+    energy: "extreme",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Industrial techno bruto, metalico e frontal, com impacto fisico de pista.",
+    spotifyUrl: "https://open.spotify.com/search/Perc%20Look%20What%20Your%20Love%20Has%20Done%20To%20Me",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Perc+Look+What+Your+Love+Has+Done+To+Me",
+    beatportUrl: "https://www.beatport.com/search?q=Perc%20Look%20What%20Your%20Love%20Has%20Done%20To%20Me",
+    artistBio: "Perc e um dos nomes fortes do techno industrial, com estetica abrasiva e direta.",
+    labelBio: "Perc Trax e referencia para techno industrial e experimental de pista."
+  },
+  {
+    style: "industrial_techno",
+    song: "Gegen",
+    artist: "Paula Temple",
+    label: "R&S Records",
+    bpm: "145-155",
+    energy: "extreme",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Techno industrial tenso, rapido e pesado, com design sonoro cortante.",
+    spotifyUrl: "https://open.spotify.com/search/Paula%20Temple%20Gegen",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Paula+Temple+Gegen",
+    beatportUrl: "https://www.beatport.com/search?q=Paula%20Temple%20Gegen",
+    artistBio: "Paula Temple e reconhecida por techno intenso, industrial e de alta pressao.",
+    labelBio: "R&S Records tem historico amplo em eletronica de vanguarda e club music."
+  },
+  {
+    style: "peak_time_techno",
+    song: "Your Mind",
+    artist: "Adam Beyer & Bart Skils",
+    label: "Drumcode",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Peak time techno direto, hipnotico e expansivo, pronto para horario de pico.",
+    spotifyUrl: "https://open.spotify.com/search/Adam%20Beyer%20Bart%20Skils%20Your%20Mind",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Adam+Beyer+Bart+Skils+Your+Mind",
+    beatportUrl: "https://www.beatport.com/search?q=Adam%20Beyer%20Bart%20Skils%20Your%20Mind",
+    artistBio: "Adam Beyer e Bart Skils sao nomes centrais do techno de pista contemporaneo.",
+    labelBio: "Drumcode e uma das labels mais conhecidas do peak time techno."
+  },
+  {
+    style: "peak_time_techno",
+    song: "Cryptic Speech",
+    artist: "UMEK",
+    label: "1605",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Techno de pico com groove robusto, tensao crescente e ataque de festival.",
+    spotifyUrl: "https://open.spotify.com/search/UMEK%20Cryptic%20Speech",
+    youtubeUrl: "https://www.youtube.com/results?search_query=UMEK+Cryptic+Speech",
+    beatportUrl: "https://www.beatport.com/search?q=UMEK%20Cryptic%20Speech",
+    artistBio: "UMEK e referencia em techno de pista com producao precisa e energia alta.",
+    labelBio: "1605 e uma assinatura recorrente no techno moderno orientado a clubes."
+  },
+  {
+    style: "organic_house",
+    song: "Lingala",
+    artist: "Lee Burridge & Lost Desert",
+    label: "All Day I Dream",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["warmup", "after"],
+    vibe: "Organic house fluido, percussivo e emocional, com atmosfera de sunset.",
+    spotifyUrl: "https://open.spotify.com/search/Lee%20Burridge%20Lost%20Desert%20Lingala",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Lee+Burridge+Lost+Desert+Lingala",
+    beatportUrl: "https://www.beatport.com/search?q=Lee%20Burridge%20Lost%20Desert%20Lingala",
+    artistBio: "Lee Burridge e Lost Desert sao ligados a uma abordagem organica e melodica do house.",
+    labelBio: "All Day I Dream e referencia de organic/deep house contemplativo."
+  },
+  {
+    style: "organic_house",
+    song: "Desert Night",
+    artist: "Sabo & Goldcap",
+    label: "Sol Selectas",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["warmup", "after", "estrada"],
+    vibe: "House organico com percussao ritual, baixo quente e clima desertico.",
+    spotifyUrl: "https://open.spotify.com/search/Sabo%20Goldcap%20Desert%20Night",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Sabo+Goldcap+Desert+Night",
+    beatportUrl: "https://www.beatport.com/search?q=Sabo%20Goldcap%20Desert%20Night",
+    artistBio: "Sabo e Goldcap dialogam com organic house, downtempo club e sonoridades globais.",
+    labelBio: "Sol Selectas e associada a grooves organicos, desert house e percussao global."
+  },
+  {
+    style: "bass_house",
+    song: "Feel The Volume",
+    artist: "Jauz",
+    label: "Mad Decent",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Bass house com subgrave elastico, drop direto e energia de festival.",
+    spotifyUrl: "https://open.spotify.com/search/Jauz%20Feel%20The%20Volume",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Jauz+Feel+The+Volume",
+    beatportUrl: "https://www.beatport.com/search?q=Jauz%20Feel%20The%20Volume",
+    artistBio: "Jauz ajudou a popularizar o bass house em escala de festival.",
+    labelBio: "Mad Decent transita por bass music, club e eletronica de alto impacto."
+  },
+  {
+    style: "bass_house",
+    song: "HOT DRUM",
+    artist: "JOYRYDE",
+    label: "OWSLA",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Bass house agressivo, com groove de carro, percussao seca e drop pesado.",
+    spotifyUrl: "https://open.spotify.com/search/JOYRYDE%20HOT%20DRUM",
+    youtubeUrl: "https://www.youtube.com/results?search_query=JOYRYDE+HOT+DRUM",
+    beatportUrl: "https://www.beatport.com/search?q=JOYRYDE%20HOT%20DRUM",
+    artistBio: "JOYRYDE e conhecido por bass house nervoso, swing pesado e estetica automotiva.",
+    labelBio: "OWSLA publicou muita musica de bass e club voltada a impacto."
+  },
+  {
+    style: "electro_house",
+    song: "Illmerica",
+    artist: "Wolfgang Gartner",
+    label: "Ultra",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Electro house maximalista, com synths serrados, groove preciso e drop energico.",
+    spotifyUrl: "https://open.spotify.com/search/Wolfgang%20Gartner%20Illmerica",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Wolfgang+Gartner+Illmerica",
+    beatportUrl: "https://www.beatport.com/search?q=Wolfgang%20Gartner%20Illmerica",
+    artistBio: "Wolfgang Gartner e referencia do electro house tecnico e cheio de edicoes.",
+    labelBio: "Ultra ajudou a levar o electro house para o circuito global de festivais."
+  },
+  {
+    style: "electro_house",
+    song: "One Click Headshot",
+    artist: "Feed Me",
+    label: "mau5trap",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Electro house pesado e serrilhado, com design agressivo e energia gamer-rave.",
+    spotifyUrl: "https://open.spotify.com/search/Feed%20Me%20One%20Click%20Headshot",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Feed+Me+One+Click+Headshot",
+    beatportUrl: "https://www.beatport.com/search?q=Feed%20Me%20One%20Click%20Headshot",
+    artistBio: "Feed Me conecta electro house, dubstep e bass music com producao muito detalhada.",
+    labelBio: "mau5trap foi importante para electro/progressive e derivados de club."
+  },
+  {
+    style: "jump_up",
+    song: "Mr Happy",
+    artist: "DJ Hazard & D Minds",
+    label: "Ganja Records",
+    bpm: "175+",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Jump up direto, com bassline saltada e resposta imediata de pista.",
+    spotifyUrl: "https://open.spotify.com/search/DJ%20Hazard%20D%20Minds%20Mr%20Happy",
+    youtubeUrl: "https://www.youtube.com/results?search_query=DJ+Hazard+D+Minds+Mr+Happy",
+    beatportUrl: "https://www.beatport.com/search?q=DJ%20Hazard%20D%20Minds%20Mr%20Happy",
+    artistBio: "DJ Hazard e D Minds sao nomes ligados ao jump up drum and bass de alta resposta.",
+    labelBio: "Ganja Records e reconhecida no drum and bass britanico."
+  },
+  {
+    style: "jump_up",
+    song: "Tour",
+    artist: "Macky Gee",
+    label: "Down 2 Earth Musik",
+    bpm: "175+",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Jump up moderno, simples e explosivo, com bassline memoravel para pista grande.",
+    spotifyUrl: "https://open.spotify.com/search/Macky%20Gee%20Tour",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Macky+Gee+Tour",
+    beatportUrl: "https://www.beatport.com/search?q=Macky%20Gee%20Tour",
+    artistBio: "Macky Gee e uma figura popular do jump up contemporaneo.",
+    labelBio: "Down 2 Earth Musik aparece no circuito de DnB pesado e direto."
+  },
+  {
+    style: "breakbeat",
+    song: "Scram",
+    artist: "Plump DJs",
+    label: "Finger Lickin' Records",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Breakbeat de club, com bateria quebrada, baixo cheio e energia elastica.",
+    spotifyUrl: "https://open.spotify.com/search/Plump%20DJs%20Scram",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Plump+DJs+Scram",
+    beatportUrl: "https://www.beatport.com/search?q=Plump%20DJs%20Scram",
+    artistBio: "Plump DJs sao referencias do nu skool breaks e breakbeat de pista.",
+    labelBio: "Finger Lickin' Records foi uma casa importante para breaks britanico."
+  },
+  {
+    style: "breakbeat",
+    song: "Still Here",
+    artist: "Stanton Warriors",
+    label: "Punks",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Breakbeat moderno com groove quebrado, baixo firme e pegada club.",
+    spotifyUrl: "https://open.spotify.com/search/Stanton%20Warriors%20Still%20Here",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Stanton+Warriors+Still+Here",
+    beatportUrl: "https://www.beatport.com/search?q=Stanton%20Warriors%20Still%20Here",
+    artistBio: "Stanton Warriors sao pilares do breakbeat/garage-breaks do Reino Unido.",
+    labelBio: "Punks e uma plataforma ligada a breaks e bass music."
+  },
+  {
+    style: "brazilian_funk",
+    song: "Ta Tranquilo Ta Favoravel",
+    artist: "MC Bin Laden",
+    label: "KondZilla",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "treino"],
+    vibe: "Funk brasileiro direto, vocal marcante e batida de baile com impacto imediato.",
+    spotifyUrl: "https://open.spotify.com/search/MC%20Bin%20Laden%20Ta%20Tranquilo%20Ta%20Favoravel",
+    youtubeUrl: "https://www.youtube.com/results?search_query=MC+Bin+Laden+Ta+Tranquilo+Ta+Favoravel",
+    beatportUrl: "https://www.beatport.com/search?q=MC%20Bin%20Laden",
+    artistBio: "MC Bin Laden e um nome conhecido do funk brasileiro de grande circulacao.",
+    labelBio: "KondZilla ajudou a levar o funk brasileiro a enorme alcance digital."
+  },
+  {
+    style: "brazilian_funk",
+    song: "Ela E do Tipo",
+    artist: "Kevin O Chris",
+    label: "Som Livre",
+    bpm: "124-132",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "peak"],
+    vibe: "Funk carioca melodico, vocal forte e groove de baile com pegada pop.",
+    spotifyUrl: "https://open.spotify.com/search/Kevin%20O%20Chris%20Ela%20E%20do%20Tipo",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Kevin+O+Chris+Ela+E+do+Tipo",
+    beatportUrl: "https://www.beatport.com/search?q=Kevin%20O%20Chris",
+    artistBio: "Kevin O Chris e uma das vozes mais fortes do funk carioca contemporaneo.",
+    labelBio: "Som Livre distribui muitos lancamentos populares brasileiros."
+  },
+  {
+    style: "future_garage",
+    song: "Archangel",
+    artist: "Burial",
+    label: "Hyperdub",
+    bpm: "130-140",
+    energy: "low",
+    vocals: "light_vocals",
+    context: ["after", "foco", "estrada"],
+    vibe: "Future garage fantasmagorico, com vocal chops, textura urbana e batida quebrada.",
+    spotifyUrl: "https://open.spotify.com/search/Burial%20Archangel",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Burial+Archangel",
+    beatportUrl: "https://www.beatport.com/search?q=Burial%20Archangel",
+    artistBio: "Burial e referencia essencial do future garage e da eletronica atmosferica britanica.",
+    labelBio: "Hyperdub e uma label central para dubstep, garage futuro e bass experimental."
+  },
+  {
+    style: "future_garage",
+    song: "Mourner",
+    artist: "Sorrow",
+    label: "Monstercat",
+    bpm: "130-140",
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["after", "foco"],
+    vibe: "Future garage emotivo, com pads espacados, drums quebrados e clima introspectivo.",
+    spotifyUrl: "https://open.spotify.com/search/Sorrow%20Mourner",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Sorrow+Mourner+future+garage",
+    beatportUrl: "https://www.beatport.com/search?q=Sorrow%20Mourner",
+    artistBio: "Sorrow e associado a future garage melodico e textural.",
+    labelBio: "Monstercat abriga lancamentos de eletronica melodica, bass e garage hibrido."
+  },
+  {
+    style: "chillout",
+    song: "Destiny",
+    artist: "Zero 7",
+    label: "Ultimate Dilemma",
+    bpm: "60-110",
+    energy: "low",
+    vocals: "vocal",
+    context: ["after", "foco", "estrada"],
+    vibe: "Chillout elegante, vocal suave e andamento relaxado para respiro pos-pista.",
+    spotifyUrl: "https://open.spotify.com/search/Zero%207%20Destiny",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Zero+7+Destiny",
+    beatportUrl: "https://www.beatport.com/search?q=Zero%207%20Destiny",
+    artistBio: "Zero 7 e referencia de downtempo/chillout com forte sensibilidade melodica.",
+    labelBio: "Ultimate Dilemma publicou parte importante do chillout britanico dos anos 2000."
+  },
+  {
+    style: "chillout",
+    song: "Lebanese Blonde",
+    artist: "Thievery Corporation",
+    label: "ESL Music",
+    bpm: "60-110",
+    energy: "low",
+    vocals: "vocal",
+    context: ["after", "foco", "estrada"],
+    vibe: "Chillout lounge com dub, sitar e atmosfera relaxada de fim de noite.",
+    spotifyUrl: "https://open.spotify.com/search/Thievery%20Corporation%20Lebanese%20Blonde",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Thievery+Corporation+Lebanese+Blonde",
+    beatportUrl: "https://www.beatport.com/search?q=Thievery%20Corporation%20Lebanese%20Blonde",
+    artistBio: "Thievery Corporation e um projeto historico de downtempo, dub e lounge eletronico.",
+    labelBio: "ESL Music e associada a grooves downtempo, dub e world lounge."
+  },
+  {
+    style: "electro",
+    song: "Clear",
+    artist: "Cybotron",
+    label: "Fantasy",
+    bpm: "120-132",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["warmup", "peak"],
+    vibe: "Electro classico, seco e futurista, com groove robotico e baixo sintetico.",
+    spotifyUrl: "https://open.spotify.com/search/Cybotron%20Clear",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Cybotron+Clear",
+    beatportUrl: "https://www.beatport.com/search?q=Cybotron%20Clear",
+    artistBio: "Cybotron e uma referencia fundacional do electro e da eletronica de Detroit.",
+    labelBio: "Fantasy aparece ligada a lancamentos historicos de funk, electro e dance."
+  },
+  {
+    style: "electro",
+    song: "Planet Rock",
+    artist: "Afrika Bambaataa & The Soulsonic Force",
+    label: "Tommy Boy",
+    bpm: "120-132",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "peak"],
+    vibe: "Electro-funk seminal com bateria robotica, vocoder e DNA de pista old-school.",
+    spotifyUrl: "https://open.spotify.com/search/Afrika%20Bambaataa%20Soulsonic%20Force%20Planet%20Rock",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Afrika+Bambaataa+Soulsonic+Force+Planet+Rock",
+    beatportUrl: "https://www.beatport.com/search?q=Afrika%20Bambaataa%20Planet%20Rock",
+    artistBio: "Afrika Bambaataa & The Soulsonic Force ajudaram a definir o electro-funk.",
+    labelBio: "Tommy Boy foi importante para hip-hop, electro e dance music urbana."
+  },
+  {
+    style: "psytrance",
+    song: "Presence",
+    artist: "Ace Ventura",
+    label: "Iboga Records",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "estrada"],
+    vibe: "Psytrance progressivo e hipnotico, com baixo elastico e expansao gradual.",
+    spotifyUrl: "https://open.spotify.com/search/Ace%20Ventura%20Presence",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Ace+Ventura+Presence",
+    beatportUrl: "https://www.beatport.com/search?q=Ace%20Ventura%20Presence",
+    artistBio: "Ace Ventura e uma referencia no psytrance/progressive psy moderno.",
+    labelBio: "Iboga Records e uma label central para progressive psy e psytrance melodico."
+  },
+  {
+    style: "forest_psy",
+    song: "Bebopper",
+    artist: "Ajja",
+    label: "Peak Records",
+    bpm: "145-155",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "after"],
+    vibe: "Forest psy organico, cheio de microdetalhes e atmosfera de floresta psicodelica.",
+    spotifyUrl: "https://open.spotify.com/search/Ajja%20Bebopper",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Ajja+Bebopper",
+    beatportUrl: "https://www.beatport.com/search?q=Ajja%20Bebopper",
+    artistBio: "Ajja e muito respeitado no forest/psytrance por producao detalhista e organica.",
+    labelBio: "Peak Records tem ligacao forte com psytrance underground e forest."
+  },
+  {
+    style: "full_on_night",
+    song: "Dizzy Drops",
+    artist: "Dickster",
+    label: "Nano Records",
+    bpm: "145-155",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "after"],
+    vibe: "Full-on noturno com groove denso, leads secos e drive de madrugada.",
+    spotifyUrl: "https://open.spotify.com/search/Dickster%20Dizzy%20Drops",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Dickster+Dizzy+Drops",
+    beatportUrl: "https://www.beatport.com/search?q=Dickster%20Dizzy%20Drops",
+    artistBio: "Dickster e um nome respeitado no full-on psicodelico com pegada noturna.",
+    labelBio: "Nano Records aparece como casa recorrente do full-on moderno."
+  },
+  {
+    style: "progressive_psy",
+    song: "Devotion",
+    artist: "Liquid Soul",
+    label: "Iboga Records",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "estrada"],
+    vibe: "Progressive psy melodico, limpo e expansivo, com clima de festival.",
+    spotifyUrl: "https://open.spotify.com/search/Liquid%20Soul%20Devotion",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Liquid+Soul+Devotion",
+    beatportUrl: "https://www.beatport.com/search?q=Liquid%20Soul%20Devotion",
+    artistBio: "Liquid Soul e uma das referencias globais de progressive psytrance.",
+    labelBio: "Iboga Records e fundamental no progressive psy internacional."
+  },
+  {
+    style: "goa_trance",
+    song: "Mahadeva",
+    artist: "Astral Projection",
+    label: "Trust In Trance",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "estrada"],
+    vibe: "Goa trance classico com arpejos acidos, melodia intensa e construcao hipnotica.",
+    spotifyUrl: "https://open.spotify.com/search/Astral%20Projection%20Mahadeva",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Astral+Projection+Mahadeva",
+    beatportUrl: "https://www.beatport.com/search?q=Astral%20Projection%20Mahadeva",
+    artistBio: "Astral Projection e um dos nomes essenciais da historia do Goa trance.",
+    labelBio: "Trust In Trance marcou a formacao do trance psicodelico israelense."
+  },
+  {
+    style: "techno",
+    song: "The Bells",
+    artist: "Jeff Mills",
+    label: "Purpose Maker",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Techno classico e minimalista, com loop memoravel e pressao de pista.",
+    spotifyUrl: "https://open.spotify.com/search/Jeff%20Mills%20The%20Bells",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Jeff+Mills+The+Bells",
+    beatportUrl: "https://www.beatport.com/search?q=Jeff%20Mills%20The%20Bells",
+    artistBio: "Jeff Mills e um pilar do techno de Detroit e da cultura rave global.",
+    labelBio: "Purpose Maker e parte do universo autoral de Jeff Mills."
+  },
+  {
+    style: "acid_techno",
+    song: "Higher State of Consciousness",
+    artist: "Josh Wink",
+    label: "Strictly Rhythm",
+    bpm: "132-145",
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Acid techno/acid house com linha 303 icônica e energia crescente.",
+    spotifyUrl: "https://open.spotify.com/search/Josh%20Wink%20Higher%20State%20of%20Consciousness",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Josh+Wink+Higher+State+of+Consciousness",
+    beatportUrl: "https://www.beatport.com/search?q=Josh%20Wink%20Higher%20State%20of%20Consciousness",
+    artistBio: "Josh Wink e uma referencia do acid em contexto techno/house.",
+    labelBio: "Strictly Rhythm e historica na house music e no club sound dos anos 90."
+  },
+  {
+    style: "hard_techno",
+    song: "Weltschmerz",
+    artist: "Klangkuenstler",
+    label: "Outworld",
+    bpm: "145-155",
+    energy: "extreme",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Hard techno moderno, rapido, sombrio e com kick de alto impacto.",
+    spotifyUrl: "https://open.spotify.com/search/Klangkuenstler%20Weltschmerz",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Klangkuenstler+Weltschmerz",
+    beatportUrl: "https://www.beatport.com/search?q=Klangkuenstler%20Weltschmerz",
+    artistBio: "Klangkuenstler e um nome forte da nova onda hard techno.",
+    labelBio: "Outworld representa uma estetica hard techno intensa e contemporanea."
+  },
+  {
+    style: "minimal_techno",
+    song: "Spastik",
+    artist: "Plastikman",
+    label: "Plus 8",
+    bpm: "124-132",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["warmup", "foco"],
+    vibe: "Minimal techno classico, percussivo e hipnotico, com poucos elementos em tensao constante.",
+    spotifyUrl: "https://open.spotify.com/search/Plastikman%20Spastik",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Plastikman+Spastik",
+    beatportUrl: "https://www.beatport.com/search?q=Plastikman%20Spastik",
+    artistBio: "Plastikman e o alias de Richie Hawtin, figura essencial do minimal techno.",
+    labelBio: "Plus 8 e uma label historica no techno minimal e acido."
+  },
+  {
+    style: "melodic_techno",
+    song: "Return To Oz - ARTBAT Remix",
+    artist: "Monolink",
+    label: "Embassy One",
+    bpm: "124-132",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "estrada"],
+    vibe: "Melodic techno emocional com vocal, crescendo dramatico e drop amplo.",
+    spotifyUrl: "https://open.spotify.com/search/Monolink%20Return%20To%20Oz%20ARTBAT%20Remix",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Monolink+Return+To+Oz+ARTBAT+Remix",
+    beatportUrl: "https://www.beatport.com/search?q=Monolink%20Return%20To%20Oz%20ARTBAT%20Remix",
+    artistBio: "Monolink e ARTBAT sao nomes fortes no encontro entre vocal, melodia e techno.",
+    labelBio: "Embassy One publicou trabalhos no eixo melodic house/techno."
+  },
+  {
+    style: "house",
+    song: "Your Love",
+    artist: "Frankie Knuckles",
+    label: "Trax Records",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "after"],
+    vibe: "House classico, quente e emocional, com groove simples e profundo.",
+    spotifyUrl: "https://open.spotify.com/search/Frankie%20Knuckles%20Your%20Love",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Frankie+Knuckles+Your+Love",
+    beatportUrl: "https://www.beatport.com/search?q=Frankie%20Knuckles%20Your%20Love",
+    artistBio: "Frankie Knuckles e uma figura fundamental na origem da house music.",
+    labelBio: "Trax Records e uma das labels historicas da house de Chicago."
+  },
+  {
+    style: "deep_house",
+    song: "What They Say",
+    artist: "Maya Jane Coles",
+    label: "Real Tone Records",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "after"],
+    vibe: "Deep house moderno com vocal hipnotico, baixo macio e groove noturno.",
+    spotifyUrl: "https://open.spotify.com/search/Maya%20Jane%20Coles%20What%20They%20Say",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Maya+Jane+Coles+What+They+Say",
+    beatportUrl: "https://www.beatport.com/search?q=Maya%20Jane%20Coles%20What%20They%20Say",
+    artistBio: "Maya Jane Coles e uma referencia contemporanea do deep house.",
+    labelBio: "Real Tone Records tem catalogo ligado a house profunda e club sofisticado."
+  },
+  {
+    style: "progressive_house",
+    song: "Strobe",
+    artist: "deadmau5",
+    label: "mau5trap",
+    bpm: "124-132",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["estrada", "foco", "peak"],
+    vibe: "Progressive house expansivo, longo e emocional, com construcao gradual.",
+    spotifyUrl: "https://open.spotify.com/search/deadmau5%20Strobe",
+    youtubeUrl: "https://www.youtube.com/results?search_query=deadmau5+Strobe",
+    beatportUrl: "https://www.beatport.com/search?q=deadmau5%20Strobe",
+    artistBio: "deadmau5 e uma referencia do progressive house e da producao eletronica autoral.",
+    labelBio: "mau5trap e uma plataforma importante para progressive, electro e melodic."
+  },
+  {
+    style: "afro_house",
+    song: "Drive",
+    artist: "Black Coffee & David Guetta feat. Delilah Montagu",
+    label: "Ultra",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "estrada"],
+    vibe: "Afro house melodico com vocal pop, percussao elegante e baixo quente.",
+    spotifyUrl: "https://open.spotify.com/search/Black%20Coffee%20David%20Guetta%20Drive%20Delilah%20Montagu",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Black+Coffee+David+Guetta+Drive+Delilah+Montagu",
+    beatportUrl: "https://www.beatport.com/search?q=Black%20Coffee%20David%20Guetta%20Drive",
+    artistBio: "Black Coffee e uma das grandes referencias globais do afro house.",
+    labelBio: "Ultra conecta house, afro house e eletronica de alcance internacional."
+  },
+  {
+    style: "drum_and_bass",
+    song: "Tarantula",
+    artist: "Pendulum",
+    label: "Breakbeat Kaos",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "treino"],
+    vibe: "Drum and bass pesado, vocal marcante e baixo agressivo de pista.",
+    spotifyUrl: "https://open.spotify.com/search/Pendulum%20Tarantula",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Pendulum+Tarantula",
+    beatportUrl: "https://www.beatport.com/search?q=Pendulum%20Tarantula",
+    artistBio: "Pendulum ajudou a levar drum and bass a um publico amplo com energia de banda e rave.",
+    labelBio: "Breakbeat Kaos marcou a cena DnB dos anos 2000."
+  },
+  {
+    style: "liquid_dnb",
+    song: "I Refuse",
+    artist: "Netsky",
+    label: "Hospital Records",
+    bpm: "155-175",
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["estrada", "foco"],
+    vibe: "Liquid DnB melodico, fluido e emotivo, com breaks limpos.",
+    spotifyUrl: "https://open.spotify.com/search/Netsky%20I%20Refuse",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Netsky+I+Refuse",
+    beatportUrl: "https://www.beatport.com/search?q=Netsky%20I%20Refuse",
+    artistBio: "Netsky e um nome muito conhecido do liquid drum and bass melodico.",
+    labelBio: "Hospital Records e uma das labels essenciais do liquid DnB."
+  },
+  {
+    style: "neurofunk",
+    song: "Stigma",
+    artist: "Noisia",
+    label: "Vision Recordings",
+    bpm: "175+",
+    energy: "extreme",
+    vocals: "instrumental",
+    context: ["peak", "treino"],
+    vibe: "Neurofunk tecnico, sombrio e cheio de bass design cirurgico.",
+    spotifyUrl: "https://open.spotify.com/search/Noisia%20Stigma",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Noisia+Stigma",
+    beatportUrl: "https://www.beatport.com/search?q=Noisia%20Stigma",
+    artistBio: "Noisia e uma referencia absoluta de design sonoro no neurofunk.",
+    labelBio: "Vision Recordings concentra parte da linguagem neuro/bass mais tecnica."
+  },
+  {
+    style: "jungle",
+    song: "Incredible",
+    artist: "M-Beat feat. General Levy",
+    label: "Renk Records",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "vocal",
+    context: ["peak", "treino"],
+    vibe: "Jungle classico com vocal ragga, breaks picotados e subgrave de soundsystem.",
+    spotifyUrl: "https://open.spotify.com/search/M-Beat%20General%20Levy%20Incredible",
+    youtubeUrl: "https://www.youtube.com/results?search_query=M-Beat+General+Levy+Incredible",
+    beatportUrl: "https://www.beatport.com/search?q=M-Beat%20General%20Levy%20Incredible",
+    artistBio: "M-Beat e General Levy sao nomes historicos na ponte jungle/ragga.",
+    labelBio: "Renk Records aparece ligada a jungle, ragga e breakbeat hardcore."
+  },
+  {
+    style: "uk_garage",
+    song: "Sincere",
+    artist: "MJ Cole",
+    label: "Talkin' Loud",
+    bpm: "124-132",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "after"],
+    vibe: "UK garage sofisticado, com swing, vocal soulful e baixo elastico.",
+    spotifyUrl: "https://open.spotify.com/search/MJ%20Cole%20Sincere",
+    youtubeUrl: "https://www.youtube.com/results?search_query=MJ+Cole+Sincere",
+    beatportUrl: "https://www.beatport.com/search?q=MJ%20Cole%20Sincere",
+    artistBio: "MJ Cole e uma figura fundamental do UK garage melodico.",
+    labelBio: "Talkin' Loud foi importante para jazz, soul, broken beat e garage."
+  },
+  {
+    style: "dubstep",
+    song: "Midnight Request Line",
+    artist: "Skream",
+    label: "Tempa",
+    bpm: "132-145",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["after", "peak"],
+    vibe: "Dubstep seminal, espacoso e subgrave, com melodia minimal e clima noturno.",
+    spotifyUrl: "https://open.spotify.com/search/Skream%20Midnight%20Request%20Line",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Skream+Midnight+Request+Line",
+    beatportUrl: "https://www.beatport.com/search?q=Skream%20Midnight%20Request%20Line",
+    artistBio: "Skream e uma das figuras centrais do dubstep britanico original.",
+    labelBio: "Tempa e historica na formacao do dubstep de Londres."
+  },
+  {
+    style: "hardstyle",
+    song: "Dragonborn",
+    artist: "Headhunterz",
+    label: "Scantraxx",
+    bpm: "145-155",
+    energy: "extreme",
+    vocals: "light_vocals",
+    context: ["peak", "treino"],
+    vibe: "Hardstyle melodico e antemico, com kick distorcido e energia de festival.",
+    spotifyUrl: "https://open.spotify.com/search/Headhunterz%20Dragonborn",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Headhunterz+Dragonborn",
+    beatportUrl: "https://www.beatport.com/search?q=Headhunterz%20Dragonborn",
+    artistBio: "Headhunterz e um dos nomes mais importantes do hardstyle moderno.",
+    labelBio: "Scantraxx e uma label historica no hardstyle."
+  },
+  {
+    style: "downtempo",
+    song: "Kiara",
+    artist: "Bonobo",
+    label: "Ninja Tune",
+    bpm: "110-124",
+    energy: "low",
+    vocals: "instrumental",
+    context: ["after", "foco", "estrada"],
+    vibe: "Downtempo organico, com cordas, groove quebrado e atmosfera cinematografica.",
+    spotifyUrl: "https://open.spotify.com/search/Bonobo%20Kiara",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Bonobo+Kiara",
+    beatportUrl: "https://www.beatport.com/search?q=Bonobo%20Kiara",
+    artistBio: "Bonobo e uma referencia de downtempo e eletronica organica.",
+    labelBio: "Ninja Tune e uma label essencial para downtempo, trip-hop e eletronica autoral."
+  },
+  {
+    style: "idm",
+    song: "Xtal",
+    artist: "Aphex Twin",
+    label: "R&S Records",
+    bpm: "110-124",
+    energy: "low",
+    vocals: "light_vocals",
+    context: ["foco", "after"],
+    vibe: "IDM/ambient techno delicado, com textura cristalina e ritmo contemplativo.",
+    spotifyUrl: "https://open.spotify.com/search/Aphex%20Twin%20Xtal",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Aphex+Twin+Xtal",
+    beatportUrl: "https://www.beatport.com/search?q=Aphex%20Twin%20Xtal",
+    artistBio: "Aphex Twin e uma figura essencial da IDM e da eletronica experimental.",
+    labelBio: "R&S Records publicou obras historicas de techno, ambient techno e IDM."
+  },
+  {
+    style: "house",
+    song: "Move Your Body",
+    artist: "Marshall Jefferson",
+    label: "Trax Records",
+    bpm: "120-132",
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "peak"],
+    vibe: "House classico de Chicago, piano marcante e vocal celebratorio de pista.",
+    spotifyUrl: "https://open.spotify.com/search/Marshall%20Jefferson%20Move%20Your%20Body",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Marshall+Jefferson+Move+Your+Body",
+    beatportUrl: "https://www.beatport.com/search?q=Marshall%20Jefferson%20Move%20Your%20Body",
+    artistBio: "Marshall Jefferson e uma figura historica da house music de Chicago.",
+    labelBio: "Trax Records e uma das labels fundacionais da house."
+  },
+  {
+    style: "idm",
+    song: "Bike",
+    artist: "Autechre",
+    label: "Warp Records",
+    bpm: "110-124",
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["foco", "after"],
+    vibe: "IDM de arquitetura ritmica precisa, timbres abstratos e escuta ativa.",
+    spotifyUrl: "https://open.spotify.com/search/Autechre%20Bike",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Autechre+Bike",
+    beatportUrl: "https://www.beatport.com/search?q=Autechre%20Bike",
+    artistBio: "Autechre e um dos projetos mais importantes da IDM e da eletronica abstrata.",
+    labelBio: "Warp Records e uma casa historica para IDM, ambient techno e experimental."
   }
 ];
 
@@ -9048,6 +9864,37 @@ function localizeOptionLabels() {
   Array.from(styleEl.querySelectorAll("optgroup")).forEach((group, index) => {
     if (labels.styleGroups?.[index]) group.label = labels.styleGroups[index];
   });
+  updateBpmOptionsForSelectedStyle({ resetInvalid: false });
+}
+
+function updateBpmOptionsForSelectedStyle({ resetInvalid = true } = {}) {
+  if (!styleEl || !bpmEl) return false;
+  const selectedStyle = String(styleEl.value || "").trim();
+  const styleRule = selectedStyle ? STYLE_BPM_RULES[selectedStyle] : null;
+  let resetApplied = false;
+
+  Array.from(bpmEl.options).forEach((option) => {
+    if (!option.value || !styleRule) {
+      option.disabled = false;
+      option.removeAttribute("title");
+      return;
+    }
+
+    const bpmRange = parseBpmRangeValue(option.value);
+    const allowed = !bpmRange || bpmRangesOverlap(styleRule, bpmRange);
+    option.disabled = !allowed;
+    if (allowed) {
+      option.removeAttribute("title");
+    } else {
+      option.title = `${styleLabelByValue(selectedStyle)} costuma ficar fora desta faixa.`;
+    }
+    if (!allowed && option.selected && resetInvalid) {
+      bpmEl.value = "";
+      resetApplied = true;
+    }
+  });
+
+  return resetApplied;
 }
 
 function setText(selector, text) {
@@ -11939,6 +12786,7 @@ function loadPreferences() {
   } catch (_e) {
     // ignore parsing failures
   }
+  updateBpmOptionsForSelectedStyle();
 }
 
 function clearFilters() {
@@ -11967,6 +12815,7 @@ function clearFilters() {
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
   recommendationStyleFallbackInfo = null;
+  updateBpmOptionsForSelectedStyle();
   suggestionQueueTracks = [];
   suggestionQueueContextKey = "";
   trackInsightCache = new Map();
@@ -19799,6 +20648,8 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
+        const bpmWasReset = updateBpmOptionsForSelectedStyle();
+        if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
         applyGenreVibeTheme(styleEl?.value || "", { force: true });
@@ -19813,6 +20664,8 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
+        const bpmWasReset = updateBpmOptionsForSelectedStyle();
+        if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
         applyGenreVibeTheme(styleEl?.value || "", { force: true });
