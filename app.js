@@ -600,6 +600,636 @@ const LOCAL_TRACK_SEED_BOOST = [
     soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/sectio-aurea-gato-murr-200bpm",
     artistGenre: "Naturaiz / Psycore",
     artistProfileHint: "Artista do eixo dark experimental/psycore com material de alta velocidade em catalogos independentes."
+  },
+  {
+    style: "techno",
+    artist: "Amelie Lens",
+    song: "Hypnotized",
+    label: "Lenske",
+    bpmExact: 132,
+    artistCountry: "Belgium",
+    artistGenre: "Techno",
+    artistProfileHint: "Techno moderno de pista com pressao direta e assinatura belga."
+  },
+  {
+    style: "techno",
+    artist: "Charlotte de Witte",
+    song: "Selected",
+    label: "KNTXT",
+    bpmExact: 132,
+    artistCountry: "Belgium",
+    artistGenre: "Techno",
+    artistProfileHint: "Techno hipnotico e direto para horarios de alta energia."
+  },
+  {
+    style: "techno",
+    artist: "Adam Beyer",
+    song: "Your Mind",
+    label: "Drumcode",
+    bpmExact: 128,
+    artistCountry: "Sweden",
+    artistGenre: "Techno",
+    artistProfileHint: "Referencia de techno peak-time com groove firme e leitura acessivel de pista."
+  },
+  {
+    style: "techno",
+    artist: "UMEK",
+    song: "Vibrancy",
+    label: "1605",
+    bpmExact: 130,
+    artistCountry: "Slovenia",
+    artistGenre: "Techno",
+    artistProfileHint: "Techno funcional com baixo forte e estrutura de pista."
+  },
+  {
+    style: "acid_techno",
+    artist: "Regal",
+    song: "Acid Is The Answer",
+    label: "Involve Records",
+    bpmExact: 133,
+    artistCountry: "Spain",
+    artistGenre: "Acid Techno",
+    artistProfileHint: "Acid techno com linha 303 evidente e tensao de club."
+  },
+  {
+    style: "acid_techno",
+    artist: "Emmanuel Top",
+    song: "Acid Phase",
+    label: "Attack Records",
+    bpmExact: 132,
+    artistCountry: "France",
+    artistGenre: "Acid Techno",
+    artistProfileHint: "Classico acid com estrutura hipnotica e timbre 303 marcante."
+  },
+  {
+    style: "hard_techno",
+    artist: "999999999",
+    song: "X0004000X",
+    label: "NineTimesNine",
+    bpmExact: 145,
+    artistCountry: "Italy",
+    artistGenre: "Hard Techno / Acid",
+    artistProfileHint: "Hard techno acido de alta pressao para energia extrema."
+  },
+  {
+    style: "hard_techno",
+    artist: "Sara Landry",
+    song: "Queen Of The Banshees",
+    label: "HEKATE",
+    bpmExact: 150,
+    artistCountry: "United States",
+    artistGenre: "Hard Techno",
+    artistProfileHint: "Hard techno contemporaneo com impacto industrial e vocal dramatico."
+  },
+  {
+    style: "minimal_techno",
+    artist: "Robert Hood",
+    song: "Minus",
+    label: "M-Plant",
+    bpmExact: 128,
+    artistCountry: "United States",
+    artistGenre: "Minimal Techno",
+    artistProfileHint: "Minimal techno essencial, seco e repetitivo no melhor sentido."
+  },
+  {
+    style: "minimal_techno",
+    artist: "Ricardo Villalobos",
+    song: "Easy Lee",
+    label: "Playhouse",
+    bpmExact: 126,
+    artistCountry: "Chile",
+    artistGenre: "Minimal Techno",
+    artistProfileHint: "Minimal longo, elastico e microdetalhado para escuta profunda."
+  },
+  {
+    style: "melodic_techno",
+    artist: "Stephan Bodzin",
+    song: "Singularity",
+    label: "Herzblut Recordings",
+    bpmExact: 124,
+    artistCountry: "Germany",
+    artistGenre: "Melodic Techno",
+    artistProfileHint: "Melodic techno com sintetizadores emotivos e construcao cinematica."
+  },
+  {
+    style: "melodic_techno",
+    artist: "Tale Of Us",
+    song: "Another Earth",
+    label: "M_nus",
+    bpmExact: 124,
+    artistCountry: "Italy",
+    artistGenre: "Melodic Techno",
+    artistProfileHint: "Melodic techno atmosferico com progressao emocional."
+  },
+  {
+    style: "industrial_techno",
+    artist: "Perc",
+    song: "Look What Your Love Has Done To Me",
+    label: "Perc Trax",
+    bpmExact: 130,
+    artistCountry: "United Kingdom",
+    artistGenre: "Industrial Techno",
+    artistProfileHint: "Techno industrial abrasivo, metalico e direto."
+  },
+  {
+    style: "peak_time_techno",
+    artist: "Space 92",
+    song: "The Door",
+    label: "Filth On Acid",
+    bpmExact: 132,
+    artistCountry: "France",
+    artistGenre: "Peak Time Techno",
+    artistProfileHint: "Peak-time techno melodico com baixo forte e leitura de festival."
+  },
+  {
+    style: "house",
+    artist: "Marshall Jefferson",
+    song: "Move Your Body",
+    label: "Trax Records",
+    bpmExact: 122,
+    artistCountry: "United States",
+    artistGenre: "House",
+    artistProfileHint: "House classico de Chicago com piano e energia fundacional."
+  },
+  {
+    style: "house",
+    artist: "Kerri Chandler",
+    song: "Rain",
+    label: "Nite Grooves",
+    bpmExact: 124,
+    artistCountry: "United States",
+    artistGenre: "House",
+    artistProfileHint: "House profundo com groove organico e assinatura de pista classica."
+  },
+  {
+    style: "deep_house",
+    artist: "Moodymann",
+    song: "Shades Of Jae",
+    label: "KDJ",
+    bpmExact: 120,
+    artistCountry: "United States",
+    artistGenre: "Deep House",
+    artistProfileHint: "Deep house de Detroit com soul, textura e swing cru."
+  },
+  {
+    style: "deep_house",
+    artist: "Larry Heard",
+    song: "Can You Feel It",
+    label: "Trax Records",
+    bpmExact: 122,
+    artistCountry: "United States",
+    artistGenre: "Deep House",
+    artistProfileHint: "Pilar do deep house com atmosfera emotiva e groove minimal."
+  },
+  {
+    style: "tech_house",
+    artist: "Green Velvet",
+    song: "Bigger Than Prince",
+    label: "Relief",
+    bpmExact: 124,
+    artistCountry: "United States",
+    artistGenre: "Tech House",
+    artistProfileHint: "Tech house vocal e percussivo com assinatura irreverente."
+  },
+  {
+    style: "tech_house",
+    artist: "FISHER",
+    song: "Losing It",
+    label: "Catch & Release",
+    bpmExact: 125,
+    artistCountry: "Australia",
+    artistGenre: "Tech House",
+    artistProfileHint: "Tech house acessivel e explosivo para pista grande."
+  },
+  {
+    style: "progressive_house",
+    artist: "Eric Prydz",
+    song: "Opus",
+    label: "Pryda Recordings",
+    bpmExact: 126,
+    artistCountry: "Sweden",
+    artistGenre: "Progressive House",
+    artistProfileHint: "Progressive house com construcao longa e payoff melodico."
+  },
+  {
+    style: "afro_house",
+    artist: "Black Coffee",
+    song: "Turn Me On",
+    label: "Ultra Music",
+    bpmExact: 122,
+    artistCountry: "South Africa",
+    artistGenre: "Afro House",
+    artistProfileHint: "Afro house elegante com percussao organica e vocal marcante."
+  },
+  {
+    style: "organic_house",
+    artist: "Satori",
+    song: "Umama",
+    label: "Crosstown Rebels",
+    bpmExact: 116,
+    artistCountry: "Netherlands",
+    artistGenre: "Organic House",
+    artistProfileHint: "Organic house com elementos globais, textura ritual e groove suave."
+  },
+  {
+    style: "bass_house",
+    artist: "Jauz",
+    song: "Feel The Volume",
+    label: "Mad Decent",
+    bpmExact: 126,
+    artistCountry: "United States",
+    artistGenre: "Bass House",
+    artistProfileHint: "Bass house com baixo agressivo e drop direto."
+  },
+  {
+    style: "electro_house",
+    artist: "Wolfgang Gartner",
+    song: "Illmerica",
+    label: "Ultra Records",
+    bpmExact: 128,
+    artistCountry: "United States",
+    artistGenre: "Electro House",
+    artistProfileHint: "Electro house maximalista com sintetizadores cortantes."
+  },
+  {
+    style: "drum_and_bass",
+    artist: "Andy C",
+    song: "Heartbeat Loud",
+    label: "Atlantic",
+    bpmExact: 174,
+    artistCountry: "United Kingdom",
+    artistGenre: "Drum and Bass",
+    artistProfileHint: "Drum and bass de pista com energia direta e vocal memoravel."
+  },
+  {
+    style: "drum_and_bass",
+    artist: "Dimension",
+    song: "Generator",
+    label: "Dimension",
+    bpmExact: 174,
+    artistCountry: "United Kingdom",
+    artistGenre: "Drum and Bass",
+    artistProfileHint: "Drum and bass moderno, limpo e potente para peak time."
+  },
+  {
+    style: "liquid_dnb",
+    artist: "High Contrast",
+    song: "If We Ever",
+    label: "Hospital Records",
+    bpmExact: 174,
+    artistCountry: "United Kingdom",
+    artistGenre: "Liquid Drum and Bass",
+    artistProfileHint: "Liquid DnB melodico com vocal e energia emotiva."
+  },
+  {
+    style: "liquid_dnb",
+    artist: "LSB",
+    song: "The View",
+    label: "Soul:r",
+    bpmExact: 174,
+    artistCountry: "United Kingdom",
+    artistGenre: "Liquid Drum and Bass",
+    artistProfileHint: "Liquid DnB profundo, soul e muito fluido."
+  },
+  {
+    style: "neurofunk",
+    artist: "Black Sun Empire",
+    song: "Arrakis",
+    label: "Black Sun Empire",
+    bpmExact: 174,
+    artistCountry: "Netherlands",
+    artistGenre: "Neurofunk",
+    artistProfileHint: "Neurofunk classico com baixo escuro e engenharia precisa."
+  },
+  {
+    style: "neurofunk",
+    artist: "Mefjus",
+    song: "Sleazebag",
+    label: "Critical Music",
+    bpmExact: 174,
+    artistCountry: "Austria",
+    artistGenre: "Neurofunk",
+    artistProfileHint: "Neurofunk tecnico, seco e agressivo."
+  },
+  {
+    style: "jump_up",
+    artist: "DJ Hazard",
+    song: "Mr Happy",
+    label: "Ganja Records",
+    bpmExact: 174,
+    artistCountry: "United Kingdom",
+    artistGenre: "Jump Up",
+    artistProfileHint: "Jump up direto, reconhecivel e altamente responsivo na pista."
+  },
+  {
+    style: "jungle",
+    artist: "Shy FX",
+    song: "Original Nuttah",
+    label: "SOUR",
+    bpmExact: 164,
+    artistCountry: "United Kingdom",
+    artistGenre: "Jungle",
+    artistProfileHint: "Jungle classico com vocal ragga e energia historica."
+  },
+  {
+    style: "breakbeat",
+    artist: "The Prodigy",
+    song: "No Good",
+    label: "XL Recordings",
+    bpmExact: 145,
+    artistCountry: "United Kingdom",
+    artistGenre: "Breakbeat / Rave",
+    artistProfileHint: "Breakbeat/rave classico com energia explosiva e vocal marcante."
+  },
+  {
+    style: "uk_garage",
+    artist: "MJ Cole",
+    song: "Sincere",
+    label: "Talkin' Loud",
+    bpmExact: 130,
+    artistCountry: "United Kingdom",
+    artistGenre: "UK Garage",
+    artistProfileHint: "UK garage melodico com swing refinado."
+  },
+  {
+    style: "future_garage",
+    artist: "Burial",
+    song: "Archangel",
+    label: "Hyperdub",
+    bpmExact: 135,
+    artistCountry: "United Kingdom",
+    artistGenre: "Future Garage",
+    artistProfileHint: "Future garage atmosferico, urbano e emocional."
+  },
+  {
+    style: "dubstep",
+    artist: "Skream",
+    song: "Midnight Request Line",
+    label: "Tempa",
+    bpmExact: 140,
+    artistCountry: "United Kingdom",
+    artistGenre: "Dubstep",
+    artistProfileHint: "Dubstep seminal com subgrave e espaco minimal."
+  },
+  {
+    style: "hardstyle",
+    artist: "Headhunterz",
+    song: "Dragonborn",
+    label: "Scantraxx",
+    bpmExact: 150,
+    artistCountry: "Netherlands",
+    artistGenre: "Hardstyle",
+    artistProfileHint: "Hardstyle melodico com kick forte e clima epico."
+  },
+  {
+    style: "gabber",
+    artist: "Angerfist",
+    song: "Raise Your Fist",
+    label: "Masters of Hardcore",
+    bpmExact: 175,
+    artistCountry: "Netherlands",
+    artistGenre: "Gabber / Hardcore",
+    artistProfileHint: "Hardcore/gabber direto com kick distorcido e energia extrema."
+  },
+  {
+    style: "psytrance",
+    artist: "Electric Universe",
+    song: "The Prayer",
+    label: "Dacru Records",
+    bpmExact: 145,
+    artistCountry: "Germany",
+    artistGenre: "Psytrance",
+    artistProfileHint: "Psytrance melodico e expansivo com energia de festival."
+  },
+  {
+    style: "psytrance",
+    artist: "Tristan",
+    song: "Time and Space",
+    label: "Nano Records",
+    bpmExact: 145,
+    artistCountry: "United Kingdom",
+    artistGenre: "Psytrance",
+    artistProfileHint: "Psytrance classico de pista com groove organico e alta fluidez."
+  },
+  {
+    style: "forest_psy",
+    artist: "Derango",
+    song: "Secret Surroundings",
+    label: "Inpsyde Media",
+    bpmExact: 150,
+    artistCountry: "Sweden",
+    artistGenre: "Forest Psy",
+    artistProfileHint: "Forest psy escuro, organico e psicodelico."
+  },
+  {
+    style: "forest_psy",
+    artist: "Arjuna",
+    song: "Primal Contact",
+    label: "Parvati Records",
+    bpmExact: 148,
+    artistCountry: "Italy",
+    artistGenre: "Forest Psy",
+    artistProfileHint: "Forest psy denso com narrativa noturna e percussao seca."
+  },
+  {
+    style: "dark_psy",
+    artist: "Orestis",
+    song: "Recursive Consciousness",
+    label: "Sonic Loom",
+    bpmExact: 156,
+    artistCountry: "Greece",
+    artistGenre: "Dark Psy",
+    artistProfileHint: "Dark psy profundo com desenho sonoro sombrio."
+  },
+  {
+    style: "dark_psy",
+    artist: "Psykovsky",
+    song: "Hellove Ja Wohl Yo",
+    label: "Tantrumm Records",
+    bpmExact: 158,
+    artistCountry: "Russia",
+    artistGenre: "Dark Psy",
+    artistProfileHint: "Dark psy complexo e altamente psicodelico."
+  },
+  {
+    style: "full_on",
+    artist: "Burn In Noise",
+    song: "Transparent",
+    label: "Nano Records",
+    bpmExact: 145,
+    artistCountry: "Brazil",
+    artistGenre: "Full-On",
+    artistProfileHint: "Full-on brasileiro com groove solar e energia de pista."
+  },
+  {
+    style: "full_on_night",
+    artist: "Mad Maxx",
+    song: "The Afterworld",
+    label: "United Beats Records",
+    bpmExact: 146,
+    artistCountry: "United States",
+    artistGenre: "Full-On Night",
+    artistProfileHint: "Full-on night com baixo forte e atmosfera mais sombria."
+  },
+  {
+    style: "full_on_morning",
+    artist: "Digicult",
+    song: "Star Travel",
+    label: "Dacru Records",
+    bpmExact: 144,
+    artistCountry: "Belgium",
+    artistGenre: "Full-On Morning",
+    artistProfileHint: "Full-on morning melodico, limpo e otimista."
+  },
+  {
+    style: "progressive_psy",
+    artist: "Liquid Soul",
+    song: "Devotion",
+    label: "Iboga Records",
+    bpmExact: 138,
+    artistCountry: "Switzerland",
+    artistGenre: "Progressive Psy",
+    artistProfileHint: "Progressive psy com groove hipnotico e acabamento de festival."
+  },
+  {
+    style: "progressive_psy",
+    artist: "Ace Ventura",
+    song: "Presence",
+    label: "Iboga Records",
+    bpmExact: 138,
+    artistCountry: "Israel",
+    artistGenre: "Progressive Psy",
+    artistProfileHint: "Progressive psy elastico com assinatura israelense."
+  },
+  {
+    style: "hi_tech",
+    artist: "Cosmo",
+    song: "Freedom",
+    label: "Noise Poison Records",
+    bpmExact: 178,
+    artistCountry: "Slovakia",
+    artistGenre: "Hi-Tech",
+    artistProfileHint: "Hi-tech veloz, digital e psicodelico."
+  },
+  {
+    style: "hi_tech",
+    artist: "Kashyyyk",
+    song: "Tree of Life",
+    label: "Kamino Records",
+    bpmExact: 180,
+    artistCountry: "Mexico",
+    artistGenre: "Hi-Tech",
+    artistProfileHint: "Hi-tech intenso com linguagem futurista e energia extrema."
+  },
+  {
+    style: "goa_trance",
+    artist: "Hallucinogen",
+    song: "LSD",
+    label: "Dragonfly Records",
+    bpmExact: 145,
+    artistCountry: "United Kingdom",
+    artistGenre: "Goa Trance",
+    artistProfileHint: "Goa trance seminal com linhas acidas e narrativa psicodelica."
+  },
+  {
+    style: "goa_trance",
+    artist: "Man With No Name",
+    song: "Teleport",
+    label: "Perfecto Fluoro",
+    bpmExact: 145,
+    artistCountry: "United Kingdom",
+    artistGenre: "Goa Trance",
+    artistProfileHint: "Goa trance classico com melodia cosmica e energia old school."
+  },
+  {
+    style: "trance_uplifting",
+    artist: "Aly & Fila",
+    song: "We Control The Sunlight",
+    label: "Future Sound of Egypt",
+    bpmExact: 138,
+    artistCountry: "Egypt",
+    artistGenre: "Uplifting Trance",
+    artistProfileHint: "Uplifting trance emotivo com break grande e final euforico."
+  },
+  {
+    style: "trance_uplifting",
+    artist: "Gouryella",
+    song: "Anahera",
+    label: "Flashover Recordings",
+    bpmExact: 138,
+    artistCountry: "Netherlands",
+    artistGenre: "Uplifting Trance",
+    artistProfileHint: "Uplifting trance melodico com assinatura classica e expansiva."
+  },
+  {
+    style: "downtempo",
+    artist: "Thievery Corporation",
+    song: "Lebanese Blonde",
+    label: "Eighteenth Street Lounge",
+    bpmExact: 92,
+    artistCountry: "United States",
+    artistGenre: "Downtempo",
+    artistProfileHint: "Downtempo lounge com groove suave e textura global."
+  },
+  {
+    style: "downtempo",
+    artist: "Tycho",
+    song: "Awake",
+    label: "Ghostly International",
+    bpmExact: 88,
+    artistCountry: "United States",
+    artistGenre: "Downtempo",
+    artistProfileHint: "Downtempo instrumental, luminoso e organico."
+  },
+  {
+    style: "ambient",
+    artist: "Brian Eno",
+    song: "An Ending (Ascent)",
+    label: "EG",
+    bpmExact: 72,
+    artistCountry: "United Kingdom",
+    artistGenre: "Ambient",
+    artistProfileHint: "Ambient classico, contemplativo e cinematografico."
+  },
+  {
+    style: "ambient",
+    artist: "Aphex Twin",
+    song: "#3",
+    label: "Warp",
+    bpmExact: 85,
+    artistCountry: "Ireland",
+    artistGenre: "Ambient",
+    artistProfileHint: "Ambient eletronico minimal e emocional."
+  },
+  {
+    style: "chillout",
+    artist: "Massive Attack",
+    song: "Teardrop",
+    label: "Virgin",
+    bpmExact: 78,
+    artistCountry: "United Kingdom",
+    artistGenre: "Chillout / Trip Hop",
+    artistProfileHint: "Chillout/trip hop com vocal marcante e atmosfera profunda."
+  },
+  {
+    style: "idm",
+    artist: "Autechre",
+    song: "Bike",
+    label: "Warp",
+    bpmExact: 116,
+    artistCountry: "United Kingdom",
+    artistGenre: "IDM",
+    artistProfileHint: "IDM com desenho ritmico abstrato e textura experimental."
+  },
+  {
+    style: "electro",
+    artist: "Drexciya",
+    song: "Black Sea",
+    label: "Underground Resistance",
+    bpmExact: 129,
+    artistCountry: "United States",
+    artistGenre: "Electro",
+    artistProfileHint: "Electro de Detroit com baixo aquatico e imaginario futurista."
   }
 ];
 
