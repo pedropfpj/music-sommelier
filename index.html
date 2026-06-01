@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260601h" />
+    <link rel="stylesheet" href="styles.css?v=20260601i" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -579,12 +579,12 @@
             </div>
             <figcaption>
               <span id="artistPhotoKicker">Artista</span>
-              <strong id="artistPhotoName"></strong>
+              <strong class="artist-photo-name-wrap"><span id="artistPhotoFlag" class="artist-origin-flag hidden" aria-hidden="true"></span><span id="artistPhotoName"></span></strong>
               <small id="artistPhotoSource"></small>
             </figcaption>
           </figure>
           <h4 id="songTitle" class="track-title-animated"></h4>
-          <p id="artistLine" class="meta-line artist-line"><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
+          <p id="artistLine" class="meta-line artist-line"><span id="artistOriginFlag" class="artist-origin-flag hidden" aria-hidden="true"></span><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
           <p id="bpmLine" class="meta-line bpm-line"><span id="styleName"></span> <span>•</span> <span id="bpmInfo"></span> <span>•</span> <span id="energyInfo"></span></p>
           <p class="meta-line"><span id="releaseInfo"></span> <span>•</span> <span id="durationInfo"></span> <span>•</span> <span id="keyInfo"></span></p>
           <p class="meta-line muted"><span id="catalogInfo"></span></p>
@@ -963,6 +963,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260601h"></script>
+    <script src="app.js?v=20260601i"></script>
   </body>
 </html>

@@ -3026,7 +3026,9 @@ const artistPhoto = document.getElementById("artistPhoto");
 const artistPhotoFallback = document.getElementById("artistPhotoFallback");
 const artistPhotoKicker = document.getElementById("artistPhotoKicker");
 const artistPhotoName = document.getElementById("artistPhotoName");
+const artistPhotoFlag = document.getElementById("artistPhotoFlag");
 const artistPhotoSource = document.getElementById("artistPhotoSource");
+const artistOriginFlag = document.getElementById("artistOriginFlag");
 const discogsArtistPanel = document.getElementById("discogsArtistPanel");
 const discogsArtistTitle = document.getElementById("discogsArtistTitle");
 const discogsArtistHint = document.getElementById("discogsArtistHint");
@@ -14213,11 +14215,133 @@ function artistInitials(name = "") {
   return initials || "SS";
 }
 
+const COUNTRY_CODE_BY_NAME = {
+  argentina: "AR",
+  australia: "AU",
+  austria: "AT",
+  belgium: "BE",
+  brazil: "BR",
+  brasil: "BR",
+  canada: "CA",
+  chile: "CL",
+  colombia: "CO",
+  denmark: "DK",
+  finland: "FI",
+  france: "FR",
+  germany: "DE",
+  alemanha: "DE",
+  greece: "GR",
+  india: "IN",
+  ireland: "IE",
+  israel: "IL",
+  italy: "IT",
+  italia: "IT",
+  japan: "JP",
+  japao: "JP",
+  japón: "JP",
+  mexico: "MX",
+  méxico: "MX",
+  netherlands: "NL",
+  norway: "NO",
+  poland: "PL",
+  portugal: "PT",
+  romania: "RO",
+  russia: "RU",
+  "russian federation": "RU",
+  serbia: "RS",
+  spain: "ES",
+  españa: "ES",
+  espanha: "ES",
+  sweden: "SE",
+  switzerland: "CH",
+  turkey: "TR",
+  ukraine: "UA",
+  "united kingdom": "GB",
+  uk: "GB",
+  england: "GB",
+  "united states": "US",
+  "united states of america": "US",
+  usa: "US"
+};
+
+function countryCodeToFlagEmoji(countryCode = "") {
+  const code = String(countryCode || "").trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(code)) return "";
+  return code
+    .split("")
+    .map((letter) => String.fromCodePoint(127397 + letter.charCodeAt(0)))
+    .join("");
+}
+
+function countryNameToCode(countryName = "") {
+  const raw = String(countryName || "").trim();
+  if (!raw) return "";
+  if (/^[A-Za-z]{2}$/.test(raw)) return raw.toUpperCase();
+  const key = normalize(raw);
+  if (COUNTRY_CODE_BY_NAME[key]) return COUNTRY_CODE_BY_NAME[key];
+  if (typeof Intl !== "undefined" && typeof Intl.DisplayNames === "function") {
+    const languages = [currentLanguage === "pt" ? "pt-BR" : currentLanguage || "en", "en", "pt-BR", "es"];
+    for (const language of languages) {
+      try {
+        const displayNames = new Intl.DisplayNames([language], { type: "region" });
+        for (let code = 65; code <= 90; code += 1) {
+          for (let code2 = 65; code2 <= 90; code2 += 1) {
+            const candidate = String.fromCharCode(code, code2);
+            if (normalize(displayNames.of(candidate) || "") === key) return candidate;
+          }
+        }
+      } catch (_err) {
+        // Intl.DisplayNames is best-effort for country names.
+      }
+    }
+  }
+  return "";
+}
+
+function artistOriginSignalForTrack(track) {
+  const artist = String(track?.artist || "").trim();
+  const canonical = canonicalOriginForArtist(artist);
+  const apiOrCatalogCountry = String(canonical?.country || track?.artistCountry || "").trim();
+  const apiOrCatalogArea = String(canonical?.area || track?.artistArea || "").trim();
+  if (apiOrCatalogCountry) return { country: apiOrCatalogCountry, area: apiOrCatalogArea };
+  if (track?.style === "brazilian_funk") return { country: "Brazil", area: "" };
+  return quizOriginSignalForArtist(artist);
+}
+
+function formatArtistOriginLabel(origin) {
+  const country = String(origin?.country || "").trim();
+  const area = String(origin?.area || "").trim();
+  if (area && country) return `${area}, ${country}`;
+  return area || country;
+}
+
+function updateArtistOriginFlags(track) {
+  const origin = artistOriginSignalForTrack(track);
+  const country = String(origin?.country || "").trim();
+  const flag = countryCodeToFlagEmoji(countryNameToCode(country));
+  const label = formatArtistOriginLabel(origin);
+  [artistOriginFlag, artistPhotoFlag].forEach((element) => {
+    if (!element) return;
+    if (!flag) {
+      element.textContent = "";
+      element.classList.add("hidden");
+      element.removeAttribute("title");
+      element.removeAttribute("aria-label");
+      return;
+    }
+    element.textContent = flag;
+    element.classList.remove("hidden");
+    element.title = label || country;
+    element.setAttribute("aria-label", label ? `${label}` : country);
+  });
+}
+
 function renderArtistVisualFallback(track, sourceText = "") {
   const artist = String(track?.artist || "").trim();
   if (!artistVisualCard || !artist) return;
   artistVisualCard.classList.remove("hidden");
   if (artistPhotoName) artistPhotoName.textContent = artist;
+  updateArtistOriginFlags(track);
   if (artistPhotoKicker) artistPhotoKicker.textContent = t("artistVisualKicker");
   if (artistPhotoSource) artistPhotoSource.textContent = sourceText || t("artistImageLoading");
   if (artistPhotoFallback) artistPhotoFallback.textContent = artistInitials(artist);
@@ -14238,6 +14362,7 @@ function applyArtistPhoto(track, imageUrl = "", source = "") {
   }
   artistVisualCard.classList.remove("hidden");
   if (artistPhotoName) artistPhotoName.textContent = artist;
+  updateArtistOriginFlags(track);
   if (artistPhotoKicker) artistPhotoKicker.textContent = t("artistVisualKicker");
   if (artistPhotoSource) artistPhotoSource.textContent = source ? `${t("artistImageLoaded")} - ${source}` : t("artistImageLoaded");
   if (artistPhotoFallback) artistPhotoFallback.textContent = artistInitials(artist);
@@ -14878,11 +15003,13 @@ async function hydrateArtistBioFromApis(track) {
   if (!activeTrackKey || activeTrackKey !== trackKey) return;
 
   if (profile.country) track.artistCountry = profile.country;
+  if (profile.area) track.artistArea = profile.area;
   if (profile.genre && !track.artistGenre) track.artistGenre = profile.genre;
   if (profile.disambiguation && !track.artistProfileHint) track.artistProfileHint = profile.disambiguation;
   if (!track.artistGenre) {
     track.artistGenre = localizedArtistGenreHint(track.artist, track.style) || "";
   }
+  updateArtistOriginFlags(track);
 
   const enriched = buildArtistBioFromApiProfile(track, profile);
   if (enriched) artistBio.textContent = enriched;
@@ -18340,6 +18467,7 @@ function renderRecommendation(track, prefs) {
 
   if (songTitle) songTitle.textContent = track.song;
   if (artistName) artistName.textContent = track.artist;
+  updateArtistOriginFlags(track);
   if (labelName) labelName.textContent = displayLabel;
   if (styleName) styleName.textContent = styleLabelByValue(track.style);
   if (bpmInfo) bpmInfo.textContent = formatBpmLine(track);

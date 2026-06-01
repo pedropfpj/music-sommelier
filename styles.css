@@ -2421,6 +2421,35 @@ input[type="range"] {
   overflow-wrap: anywhere;
 }
 
+.artist-photo-name-wrap,
+.artist-line {
+  align-items: center;
+}
+
+.artist-photo-name-wrap {
+  display: inline-flex;
+  gap: 0.44rem;
+  min-width: 0;
+}
+
+.artist-origin-flag {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 1.72em;
+  height: 1.72em;
+  border: 1px solid rgba(125, 241, 255, 0.36);
+  border-radius: 999px;
+  background: rgba(9, 22, 48, 0.78);
+  box-shadow: 0 0 18px rgba(93, 226, 255, 0.2);
+  font-size: 0.76em;
+  line-height: 1;
+}
+
+.artist-origin-flag.hidden {
+  display: none;
+}
+
 .artist-visual-card figcaption small {
   color: #bfd4f4;
   font-size: 0.78rem;
