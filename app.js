@@ -2899,6 +2899,7 @@ const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
 const usageGuideScreen = document.getElementById("usageGuideScreen");
 const usageGuideContinueBtn = document.getElementById("usageGuideContinueBtn");
+const showUsageGuideBtn = document.getElementById("showUsageGuideBtn");
 const authScreen = document.getElementById("authScreen");
 const authKicker = document.getElementById("authKicker");
 const authTitle = document.getElementById("authTitle");
@@ -3245,6 +3246,7 @@ let introQuoteTimer = 0;
 let introQuoteIndex = 0;
 let introAutoAdvanceTimer = 0;
 let introDismissed = false;
+let usageGuideReturnTarget = "auth";
 let audioContext = null;
 let audioMasterGain = null;
 let audioMusicGain = null;
@@ -3296,6 +3298,7 @@ const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v11";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
+const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const AUDIO_GAIN_PROFILE = {
@@ -8499,7 +8502,8 @@ const I18N = {
     usageGuideStep4Title: "Refine sem medo",
     usageGuideStep4Text: "Ajuste energia, BPM, vocal e prioridades quando quiser uma busca mais precisa.",
     usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
-    usageGuideContinueBtn: "Continuar",
+    usageGuideContinueBtn: "Entendido",
+    showUsageGuideBtn: "Como usar",
     authKicker: "Carregar usuário",
     authTitle: "Entre para carregar seu perfil",
     authDesc: "Faça login para continuar com seu perfil salvo ou continue sem login.",
@@ -8861,7 +8865,8 @@ const I18N = {
     usageGuideStep4Title: "Fine-tune freely",
     usageGuideStep4Text: "Adjust energy, BPM, vocals, and priorities whenever you want a more precise search.",
     usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
-    usageGuideContinueBtn: "Continue",
+    usageGuideContinueBtn: "Got it",
+    showUsageGuideBtn: "How to use",
     authKicker: "Load user",
     authTitle: "Sign in to load your profile",
     authDesc: "Log in to continue with your saved profile or continue without login.",
@@ -9223,7 +9228,8 @@ const I18N = {
     usageGuideStep4Title: "Refina sin miedo",
     usageGuideStep4Text: "Ajusta energía, BPM, vocales y prioridades cuando quieras una búsqueda más precisa.",
     usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
-    usageGuideContinueBtn: "Continuar",
+    usageGuideContinueBtn: "Entendido",
+    showUsageGuideBtn: "Cómo usar",
     authKicker: "Cargar usuario",
     authTitle: "Inicia sesión para cargar tu perfil",
     authDesc: "Inicia sesión para continuar con tu perfil guardado o continúa sin login.",
@@ -10144,6 +10150,7 @@ function applyLanguage() {
   setText("#usageGuideStep4Text", t("usageGuideStep4Text"));
   setText("#usageGuideNote", t("usageGuideNote"));
   setText("#usageGuideContinueBtn", t("usageGuideContinueBtn"));
+  setText("#showUsageGuideBtn", t("showUsageGuideBtn"));
   setText("#authKicker", t("authKicker"));
   setText("#authTitle", t("authTitle"));
   setText("#authDesc", t("authDesc"));
@@ -10411,6 +10418,34 @@ function clearSessionProfileData(session) {
     if (preferenceKey) localStorage.removeItem(preferenceKey);
     if (progressKey) localStorage.removeItem(progressKey);
     if (collectibleKey) localStorage.removeItem(collectibleKey);
+  } catch (_err) {
+    // ignore storage failures
+  }
+}
+
+function hasUsageGuideAcknowledged() {
+  try {
+    if (localStorage.getItem(USAGE_GUIDE_ACK_STORAGE_KEY) === "yes") return true;
+    if (localStorage.getItem(USER_SESSION_STORAGE_KEY)) return true;
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index) || "";
+      if (
+        key.startsWith(`${STORAGE_KEY}:`) ||
+        key.startsWith(`${PROGRESS_STORAGE_KEY}:`) ||
+        key.startsWith(`${SPIRIT_COLLECTIBLE_STORAGE_KEY}:`)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  } catch (_err) {
+    return false;
+  }
+}
+
+function markUsageGuideAcknowledged() {
+  try {
+    localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
   } catch (_err) {
     // ignore storage failures
   }
@@ -11588,7 +11623,8 @@ function showIntroScreen() {
   requestOpeningSting();
 }
 
-function showUsageGuideScreen() {
+function showUsageGuideScreen({ returnTo = "auth" } = {}) {
+  usageGuideReturnTarget = returnTo;
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: false });
@@ -11604,6 +11640,27 @@ function showUsageGuideScreen() {
   window.scrollTo({ top: 0, behavior: "auto" });
   refreshAmbientForUiState();
   playUiSfx("confirm");
+}
+
+function continueFromUsageGuide() {
+  markUsageGuideAcknowledged();
+  if (usageGuideReturnTarget === "app") {
+    if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+    if (appContent) appContent.classList.remove("hidden");
+    syncFloatingSurpriseButton();
+    refreshAmbientForUiState();
+    if (showUsageGuideBtn) showUsageGuideBtn.focus();
+    return;
+  }
+  if (usageGuideReturnTarget === "welcome") {
+    if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+    if (welcomeScreen) welcomeScreen.classList.remove("hidden");
+    syncFloatingSurpriseButton();
+    refreshAmbientForUiState();
+    if (startBtn) startBtn.focus();
+    return;
+  }
+  showAuthScreen();
 }
 
 function showAuthScreen() {
@@ -20810,11 +20867,16 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    showUsageGuideScreen();
+    if (hasUsageGuideAcknowledged()) {
+      showAuthScreen();
+    } else {
+      showUsageGuideScreen({ returnTo: "auth" });
+    }
   });
 });
 
-bind(usageGuideContinueBtn, "click", showAuthScreen);
+bind(usageGuideContinueBtn, "click", continueFromUsageGuide);
+bind(showUsageGuideBtn, "click", () => showUsageGuideScreen({ returnTo: "app" }));
 bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
 bind(styleInfoCloseBtn, "click", () => {
