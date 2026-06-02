@@ -127,7 +127,7 @@ const DAILY_NEWS_FALLBACK_ITEMS = [
 
 const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
   {
-    style: "dark_experimental",
+    style: "dark_psy",
     artist: "Vutt'un",
     song: "Confundentur",
     label: "Naturaiz Records / SoundCloud",
@@ -151,7 +151,7 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
     labelBio: "Naturaiz Records ajuda a completar a leitura de artistas extremos com faixas publicadas em redes abertas."
   },
   {
-    style: "dark_experimental",
+    style: "dark_psy",
     artist: "Sectio Aurea",
     song: "Gato Murr",
     label: "Naturaiz Records / SoundCloud",
@@ -385,7 +385,7 @@ const LOCAL_TRACK_SEED_BOOST = [
   { style: "full_on", artist: "Sonic Species", song: "Rush", label: "Nano Records", bpmExact: 146 },
   { style: "full_on_morning", artist: "Avalon", song: "The Journey", label: "Nano Records", bpmExact: 144 },
   { style: "progressive_psy", artist: "Captain Hook", song: "Bungee Jump", label: "Iboga Records", bpmExact: 138 },
-  { style: "dark_experimental", artist: "Audiosyntax", song: "Shadow Protocol", label: "Catálogo curado", bpmExact: 160 },
+  { style: "dark_psy", artist: "Audiosyntax", song: "Shadow Protocol", label: "Catálogo curado", bpmExact: 160 },
   { style: "hi_tech", artist: "Technical Hitch", song: "Mama India", label: "Sangoma Records", bpmExact: 178 },
   { style: "techno", artist: "ANNA", song: "Hidden Beauties", label: "Drumcode", bpmExact: 131 },
   { style: "hard_techno", artist: "DYEN", song: "Pacemaker", label: "KNTXT", bpmExact: 147 },
@@ -649,7 +649,7 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistProfileHint: "Projeto recente com presença em plataformas abertas e estética sombria."
   },
   {
-    style: "dark_experimental",
+    style: "slambient",
     artist: "Vuga",
     song: "M72",
     label: "The Endless Knot",
@@ -660,7 +660,7 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistProfileHint: "Projeto emergente com recorte dark e desenho sonoro de alta intensidade."
   },
   {
-    style: "dark_experimental",
+    style: "slambient",
     artist: "VvV",
     song: "VvV",
     label: "The Endless Knot",
@@ -791,14 +791,14 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
   },
   {
-    style: "dark_experimental",
+    style: "dark_psy",
     artist: "Hyperekplexia",
     song: "Rotting in Hell",
     label: "Naturaiz Records",
     bpmExact: 168,
     bandcampUrl: "https://naturaizrecords.bandcamp.com/album/natura-z-records-vol-1",
     soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/hyperekplexia-rotting-in-hell-168bpm",
-    artistGenre: "Naturaiz / Dark experimental",
+    artistGenre: "Naturaiz / Dark Psy experimental",
     artistProfileHint: "Nome presente em recortes extremos do catalogo independente, com faixa de BPM confirmada em fonte de catalogo."
   },
   {
@@ -1820,7 +1820,7 @@ const catalog = [
     labelBio: "Kamino impulsiona projetos de psy acelerado para nichos especializados."
   },
   {
-    style: "dark_experimental",
+    style: "dark_psy",
     song: "Syntaxxxers",
     artist: "Audiosyntax",
     label: "Quintessence Records",
@@ -1829,15 +1829,15 @@ const catalog = [
     energy: "high",
     vocals: "instrumental",
     context: ["peak", "after", "foco"],
-    vibe: "Dark experimental com recortes psicoativos e arquitetura sonora não linear.",
+    vibe: "Dark psy experimental com recortes psicoativos e arquitetura sonora não linear.",
     spotifyUrl: "https://open.spotify.com/search/Audiosyntax%20Syntaxxxers",
     youtubeUrl: "https://www.youtube.com/results?search_query=Audiosyntax+Syntaxxxers",
     beatportUrl: "https://www.beatport.com/search?q=Audiosyntax%20Syntaxxxers",
-    artistBio: "Audiosyntax aparece com estética dark experimental em construções densas e imprevisíveis.",
-    labelBio: "Quintessence Records publica material psicodélico avançado de linha mais experimental."
+    artistBio: "Audiosyntax aparece com estética dark psy experimental em construções densas e imprevisíveis.",
+    labelBio: "Quintessence Records publica material psicodélico avançado de linha sombria e experimental."
   },
   {
-    style: "dark_experimental",
+    style: "dark_psy",
     song: "Axiom Mutation",
     artist: "Sectio Aurea",
     label: "Dark Prisma",
@@ -3580,7 +3580,7 @@ const discoveryCatalog = [
   { name: "Nala", style: "dark_experimental", bio: "Projeto presente no catalogo Naturaiz com faixas publicadas no Bandcamp.", spotifyUrl: "https://open.spotify.com/search/Nala+Onatun", youtubeUrl: "https://www.youtube.com/results?search_query=Nala+Onatun+Naturaiz", bandcampUrl: "https://naturaizrecords.bandcamp.com/album/nala-onatun" },
   { name: "Nallun", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Nallun", youtubeUrl: "https://www.youtube.com/results?search_query=Nallun+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Nallun%20Naturaiz" },
   { name: "Alumbra", style: "dark_experimental", bio: "Artista indicado para busca Bandcamp/Naturaiz dentro do eixo experimental.", spotifyUrl: "https://open.spotify.com/search/Alumbra+Naturaiz", youtubeUrl: "https://www.youtube.com/results?search_query=Alumbra+Naturaiz", bandcampUrl: "https://bandcamp.com/search?q=Alumbra%20Naturaiz" },
-  { name: "Hyperekplexia", style: "dark_experimental", bio: "Dark experimental extremo associado a catalogos independentes de alta intensidade.", spotifyUrl: "https://open.spotify.com/search/Hyperekplexia", youtubeUrl: "https://www.youtube.com/results?search_query=Hyperekplexia+dark+psy", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
+  { name: "Hyperekplexia", style: "dark_psy", bio: "Dark psy experimental associado a catalogos independentes de alta intensidade.", spotifyUrl: "https://open.spotify.com/search/Hyperekplexia", youtubeUrl: "https://www.youtube.com/results?search_query=Hyperekplexia+dark+psy", bandcampUrl: "https://naturaizrecords.bandcamp.com/music" },
   { name: "At Work", style: "freeform", bio: "Freeform psytrance com estética psicodélica mais livre, orgânica e menos previsível.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/5j5Z44akwvGU0GZVDc97KY", youtubeUrl: "https://www.youtube.com/results?search_query=At+Work+freeform+psytrance" },
   { name: "Hongos Longos", style: "freeform", bio: "Projeto associado ao freeform psytrance, com humor psicodélico, groove mutante e textura underground.", spotifyUrl: "https://open.spotify.com/search/Hongos%20Longos%20freeform%20psytrance", youtubeUrl: "https://www.youtube.com/results?search_query=Hongos+Longos+freeform+psytrance" },
   { name: "Fractal Cowboys", style: "freeform", bio: "Freeform psytrance com pegada psicodélica, orgânica e pouco óbvia, ideal para descoberta underground.", spotifyUrl: "https://open.spotify.com/intl-pt/artist/380EuPHY1R8dSxsnY1xBOS", youtubeUrl: "https://www.youtube.com/results?search_query=Fractal+Cowboys+freeform+psytrance" },
