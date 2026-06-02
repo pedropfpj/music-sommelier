@@ -4153,6 +4153,16 @@ let activeVoiceSource = null;
 let voiceMiniTrackNodes = [];
 let voiceMiniTrackTimers = [];
 let voiceMiniTrackPlaying = false;
+let voiceMiniTrackScheduler = 0;
+let voiceMiniNextBarTime = 0;
+let voiceMiniBarIndex = 0;
+let voiceMiniVoiceBuffer = null;
+let voiceMiniPadState = {
+  kick: false,
+  bass: false,
+  hat: false,
+  voice: false
+};
 let quizOfferTimer = 0;
 let quizPendingChallenge = null;
 let quizSession = null;
@@ -9564,6 +9574,8 @@ const I18N = {
     voicePadHat: "Hat",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad acionado: {pad}.",
+    voiceMiniPadLoopOn: "Loop ligado: {pad}. Toque outros pads para montar a música.",
+    voiceMiniPadLoopOff: "Loop desligado: {pad}.",
     artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
@@ -9604,9 +9616,9 @@ const I18N = {
     voiceMiniHint: "Transforme sua voz em uma mini track com kick, bass e hats.",
     voiceMiniPlayBtn: "Criar mini música",
     voiceMiniStopBtn: "Parar música",
-    voiceMiniReady: "Grave sua voz para liberar o mini beat.",
-    voiceMiniPlaying: "Mini música tocando: voz em destaque, kick, bass e hats.",
-    voiceMiniDone: "Mini música finalizada. Grave outra frase ou toque de novo.",
+    voiceMiniReady: "Toque Kick, Bass ou Hat para começar. Grave sua voz para liberar a camada Voz.",
+    voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat e Voz no tempo.",
+    voiceMiniDone: "Mini música parada. Toque Criar ou um pad para começar de novo.",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -9978,6 +9990,8 @@ const I18N = {
     voicePadHat: "Hat",
     voicePadVoice: "Voice",
     voiceMiniPadHint: "Pad triggered: {pad}.",
+    voiceMiniPadLoopOn: "Loop on: {pad}. Tap other pads to build the track.",
+    voiceMiniPadLoopOff: "Loop off: {pad}.",
     artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
@@ -10018,9 +10032,9 @@ const I18N = {
     voiceMiniHint: "Turn your voice into a mini track with kick, bass, and hats.",
     voiceMiniPlayBtn: "Create mini music",
     voiceMiniStopBtn: "Stop music",
-    voiceMiniReady: "Record your voice to unlock the mini beat.",
-    voiceMiniPlaying: "Mini music playing: featured voice, kick, bass, and hats.",
-    voiceMiniDone: "Mini music finished. Record another phrase or play it again.",
+    voiceMiniReady: "Tap Kick, Bass, or Hat to start. Record your voice to unlock the Voice layer.",
+    voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, and Voice on/off in tempo.",
+    voiceMiniDone: "Mini music stopped. Tap Create or a pad to start again.",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -10392,6 +10406,8 @@ const I18N = {
     voicePadHat: "Hat",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad accionado: {pad}.",
+    voiceMiniPadLoopOn: "Loop activado: {pad}. Toca otros pads para montar la música.",
+    voiceMiniPadLoopOff: "Loop desactivado: {pad}.",
     artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
@@ -10432,9 +10448,9 @@ const I18N = {
     voiceMiniHint: "Convierte tu voz en una mini pista con kick, bass y hats.",
     voiceMiniPlayBtn: "Crear mini música",
     voiceMiniStopBtn: "Parar música",
-    voiceMiniReady: "Graba tu voz para liberar el mini beat.",
-    voiceMiniPlaying: "Mini música sonando: voz destacada, kick, bass y hats.",
-    voiceMiniDone: "Mini música finalizada. Graba otra frase o reprodúcela de nuevo.",
+    voiceMiniReady: "Toca Kick, Bass o Hat para empezar. Graba tu voz para liberar la capa Voz.",
+    voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat y Voz a tempo.",
+    voiceMiniDone: "Mini música parada. Toca Crear o un pad para empezar otra vez.",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -13063,12 +13079,28 @@ function updateVoiceLabUi() {
   if (voiceStopBtn) voiceStopBtn.disabled = !isRecording;
   if (voicePlayBtn) voicePlayBtn.disabled = isRecording || !hasRecording;
   if (voiceResetBtn) voiceResetBtn.disabled = isRecording || !hasRecording;
-  if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = isRecording || !hasRecording || voiceMiniTrackPlaying;
+  if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = Boolean(isRecording) || voiceMiniTrackPlaying;
   if (voiceMiniStopBtn) voiceMiniStopBtn.disabled = !voiceMiniTrackPlaying;
   if (voicePadVoiceBtn) voicePadVoiceBtn.disabled = isRecording || !hasRecording;
+  syncVoicePadButtons();
   voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
   voicePlayback?.classList.toggle("hidden", !hasRecording);
   if (voiceMiniStatus && !hasRecording && !voiceMiniTrackPlaying) voiceMiniStatus.textContent = t("voiceMiniReady");
+}
+
+function syncVoicePadButtons() {
+  const buttons = {
+    kick: voicePadKickBtn,
+    bass: voicePadBassBtn,
+    hat: voicePadHatBtn,
+    voice: voicePadVoiceBtn
+  };
+  Object.entries(buttons).forEach(([kind, button]) => {
+    if (!button) return;
+    const active = Boolean(voiceMiniPadState[kind]);
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
 }
 
 function supportedVoiceRecorderMimeType() {
@@ -13222,7 +13254,7 @@ async function getNormalizedVoiceBuffer(ctx) {
       peak = Math.max(peak, Math.abs(data[i]));
     }
   }
-  const boost = peak > 0.0001 ? Math.min(4.8, 0.92 / peak) : 1;
+  const boost = peak > 0.0001 ? Math.min(7.2, 0.98 / peak) : 1;
   for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
     const source = decoded.getChannelData(channel);
     const target = normalized.getChannelData(channel);
@@ -13248,6 +13280,8 @@ function connectMiniNode(ctx, node, destination, pan = 0) {
 }
 
 function stopVoiceMiniTrack({ silent = false } = {}) {
+  window.clearInterval(voiceMiniTrackScheduler);
+  voiceMiniTrackScheduler = 0;
   voiceMiniTrackTimers.forEach((timer) => window.clearTimeout(timer));
   voiceMiniTrackTimers = [];
   voiceMiniTrackNodes.forEach((node) => {
@@ -13264,6 +13298,15 @@ function stopVoiceMiniTrack({ silent = false } = {}) {
   });
   voiceMiniTrackNodes = [];
   voiceMiniTrackPlaying = false;
+  voiceMiniVoiceBuffer = null;
+  voiceMiniNextBarTime = 0;
+  voiceMiniBarIndex = 0;
+  voiceMiniPadState = {
+    kick: false,
+    bass: false,
+    hat: false,
+    voice: false
+  };
   if (!silent && voiceMiniStatus) voiceMiniStatus.textContent = voiceRecordingBlob ? t("voiceMiniDone") : t("voiceMiniReady");
   updateVoiceLabUi();
 }
@@ -13286,7 +13329,7 @@ function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) 
   const click = trackVoiceMiniNode(ctx.createBufferSource());
   const clickGain = trackVoiceMiniNode(ctx.createGain());
   const clickFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (accent ? 0.78 : 0.62) * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+  const level = (accent ? 1.05 : 0.84) * Math.max(0.45, Math.min(1.2, audioVolume || 0.9));
 
   osc.type = "sine";
   osc.frequency.setValueAtTime(148, time);
@@ -13304,7 +13347,7 @@ function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) 
   clickFilter.type = "highpass";
   clickFilter.frequency.value = 2200;
   clickGain.gain.setValueAtTime(0.0001, time);
-  clickGain.gain.exponentialRampToValueAtTime(level * 0.13, time + 0.004);
+  clickGain.gain.exponentialRampToValueAtTime(level * 0.16, time + 0.004);
   clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.032);
 
   osc.connect(bodyFilter);
@@ -13325,7 +13368,7 @@ function scheduleVoiceMiniHat(ctx, destination, time, { open = false, pan = 0 } 
   const gain = trackVoiceMiniNode(ctx.createGain());
   const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const lowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (open ? 0.18 : 0.09) * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+  const level = (open ? 0.26 : 0.15) * Math.max(0.45, Math.min(1.2, audioVolume || 0.9));
 
   source.buffer = createMiniNoiseBuffer(ctx, duration);
   highpass.type = "highpass";
@@ -13353,6 +13396,24 @@ function scheduleVoiceMiniDrums(ctx, destination, start, beat, duration) {
   }
 }
 
+function scheduleVoiceMiniKickLoop(ctx, destination, start, beat, barIndex = 0) {
+  for (let step = 0; step < 4; step += 1) {
+    scheduleVoiceMiniKick(ctx, destination, start + step * beat, { accent: step === 0 && barIndex % 4 === 0 });
+  }
+}
+
+function scheduleVoiceMiniHatLoop(ctx, destination, start, beat, barIndex = 0) {
+  for (let step = 0; step < 8; step += 1) {
+    const time = start + step * beat * 0.5;
+    const open = step % 2 === 1;
+    const pan = step % 4 === 1 ? -0.22 : step % 4 === 3 ? 0.22 : 0;
+    scheduleVoiceMiniHat(ctx, destination, time, { open, pan });
+  }
+  if (barIndex % 2 === 1) {
+    scheduleVoiceMiniHat(ctx, destination, start + beat * 3.75, { open: true, pan: 0.18 });
+  }
+}
+
 function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
   const notes = [49, 49, 55, 49, 65.41, 55, 73.42, 55];
   for (let i = 0; i * beat < duration; i += 1) {
@@ -13364,7 +13425,7 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
     const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
     const subGain = trackVoiceMiniNode(ctx.createGain());
     const gritGain = trackVoiceMiniNode(ctx.createGain());
-    const level = 0.22 * Math.max(0.35, Math.min(1.1, audioVolume || 0.8));
+    const level = 0.34 * Math.max(0.45, Math.min(1.2, audioVolume || 0.9));
 
     filter.type = "lowpass";
     filter.frequency.setValueAtTime(i % 4 === 0 ? 320 : 240, time);
@@ -13393,19 +13454,61 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
   }
 }
 
+function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) {
+  const notes = barIndex % 4 === 3
+    ? [49, 55, 65.41, 73.42]
+    : [49, 49, 55, 49];
+  for (let step = 0; step < 4; step += 1) {
+    const time = start + step * beat;
+    const note = notes[step % notes.length];
+    const sub = trackVoiceMiniNode(ctx.createOscillator());
+    const grit = trackVoiceMiniNode(ctx.createOscillator());
+    const gain = trackVoiceMiniNode(ctx.createGain());
+    const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
+    const subGain = trackVoiceMiniNode(ctx.createGain());
+    const gritGain = trackVoiceMiniNode(ctx.createGain());
+    const level = (step === 0 ? 0.38 : 0.3) * Math.max(0.45, Math.min(1.2, audioVolume || 0.9));
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(step === 0 ? 360 : 270, time);
+    filter.frequency.exponentialRampToValueAtTime(120, time + beat * 0.74);
+    filter.Q.value = 1.25;
+    sub.type = "sine";
+    grit.type = step % 3 === 0 ? "sawtooth" : "square";
+    sub.frequency.value = note;
+    grit.frequency.value = note * 2;
+    subGain.gain.value = 0.92;
+    gritGain.gain.value = 0.2;
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(level, time + 0.014);
+    gain.gain.exponentialRampToValueAtTime(level * 0.34, time + beat * 0.38);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.88);
+    sub.connect(subGain);
+    grit.connect(gritGain);
+    subGain.connect(filter);
+    gritGain.connect(filter);
+    filter.connect(gain);
+    gain.connect(destination);
+    sub.start(time);
+    grit.start(time);
+    sub.stop(time + beat * 0.92);
+    grit.stop(time + beat * 0.92);
+  }
+}
+
 function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
   const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
   const phraseDuration = Math.min(safeDuration, beat * 3.25);
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  voiceBus.gain.value = 1.18;
+  voiceBus.gain.value = 1.38;
   voiceBus.connect(destination);
 
   const phrase = trackVoiceMiniNode(ctx.createBufferSource());
   const phraseGain = trackVoiceMiniNode(ctx.createGain());
   phrase.buffer = voiceBuffer;
   phraseGain.gain.setValueAtTime(0.0001, start);
-  phraseGain.gain.exponentialRampToValueAtTime(0.46 * Math.max(0.35, audioVolume || 0.8), start + 0.06);
-  phraseGain.gain.setValueAtTime(0.42 * Math.max(0.35, audioVolume || 0.8), start + phraseDuration * 0.78);
+  phraseGain.gain.exponentialRampToValueAtTime(0.72 * Math.max(0.45, audioVolume || 0.9), start + 0.06);
+  phraseGain.gain.setValueAtTime(0.62 * Math.max(0.45, audioVolume || 0.9), start + phraseDuration * 0.78);
   phraseGain.gain.exponentialRampToValueAtTime(0.0001, start + phraseDuration);
   connectVoiceEffectGraph(ctx, phrase, selectedVoiceEffect, phraseGain);
   phraseGain.connect(voiceBus);
@@ -13423,9 +13526,9 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
     source.playbackRate.value = i % 5 === 0 ? 1.18 : i % 4 === 0 ? 0.92 : 1.04;
     const availableOffset = Math.max(0, safeDuration - sliceDuration);
     const offset = availableOffset * offsets[i % offsets.length];
-    const accent = i % 4 === 0 ? 0.62 : 0.38;
+    const accent = i % 4 === 0 ? 0.82 : 0.54;
     chopGain.gain.setValueAtTime(0.0001, time);
-    chopGain.gain.exponentialRampToValueAtTime(accent * Math.max(0.35, audioVolume || 0.8), time + 0.014);
+    chopGain.gain.exponentialRampToValueAtTime(accent * Math.max(0.45, audioVolume || 0.9), time + 0.014);
     chopGain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, chopGain);
     connectMiniNode(ctx, chopGain, voiceBus, i % 2 ? -0.24 : 0.2);
@@ -13434,21 +13537,121 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
   }
 }
 
+function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, barIndex = 0) {
+  if (!voiceBuffer) return;
+  const safeDuration = Math.max(0.1, Number(voiceBuffer.duration) || 0.1);
+  const sliceDuration = Math.min(0.34, Math.max(0.14, beat * 0.56));
+  const offsets = [0, 0.24, 0.52, 0.08, 0.68, 0.36, 0.78, 0.14];
+  for (let step = 0; step < 4; step += 1) {
+    const time = start + (step + 0.08) * beat;
+    const source = trackVoiceMiniNode(ctx.createBufferSource());
+    const gain = trackVoiceMiniNode(ctx.createGain());
+    const availableOffset = Math.max(0, safeDuration - sliceDuration);
+    const offset = availableOffset * offsets[(barIndex + step) % offsets.length];
+    source.buffer = voiceBuffer;
+    source.playbackRate.value = step === 0 ? 1.08 : step === 2 ? 0.94 : 1.02;
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime((step === 0 ? 0.74 : 0.48) * Math.max(0.45, audioVolume || 0.9), time + 0.014);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
+    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
+    connectMiniNode(ctx, gain, destination, step % 2 ? -0.18 : 0.18);
+    source.start(time, offset, Math.min(sliceDuration, safeDuration));
+    source.stop(time + sliceDuration + 0.04);
+  }
+}
+
 function createVoicePadBus(ctx) {
   const master = trackVoiceMiniNode(ctx.createGain());
   const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
-  compressor.threshold.value = -22;
+  compressor.threshold.value = -20;
   compressor.knee.value = 14;
-  compressor.ratio.value = 5;
+  compressor.ratio.value = 4.5;
   compressor.attack.value = 0.004;
   compressor.release.value = 0.14;
-  master.gain.value = Math.max(0.55, Math.min(1, audioVolume || 0.82));
+  master.gain.value = Math.max(0.75, Math.min(1.25, audioVolume || 0.9));
   master.connect(compressor);
   compressor.connect(ctx.destination);
   return master;
 }
 
+async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
+  if (!initAudioEngine() || !audioContext) return;
+  audioUnlocked = true;
+  await audioContext.resume().catch(() => {});
+  if (requireVoice && !voiceRecordingBlob) {
+    setVoiceStatus(t("voiceNeedRecording"));
+    showToast(t("voiceNeedRecording"));
+    return;
+  }
+  if (voiceRecordingBlob && !voiceMiniVoiceBuffer) {
+    voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
+  }
+  if (voiceMiniTrackPlaying) return;
+  const ctx = audioContext;
+  const master = trackVoiceMiniNode(ctx.createGain());
+  const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
+  compressor.threshold.value = -22;
+  compressor.knee.value = 16;
+  compressor.ratio.value = 5.5;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.16;
+  master.gain.value = Math.max(0.86, Math.min(1.26, audioVolume || 0.92));
+  master.connect(compressor);
+  compressor.connect(ctx.destination);
+
+  const beat = 60 / 128;
+  voiceMiniNextBarTime = ctx.currentTime + 0.08;
+  voiceMiniBarIndex = 0;
+  voiceMiniTrackPlaying = true;
+  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPlaying");
+  setVoiceStatus(t("voiceMiniPlaying"));
+  updateVoiceLabUi();
+
+  const scheduleAhead = () => {
+    if (!voiceMiniTrackPlaying) return;
+    const lookAhead = 0.42;
+    while (voiceMiniNextBarTime < ctx.currentTime + lookAhead) {
+      if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+      if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+      if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+      if (voiceMiniPadState.voice && voiceMiniVoiceBuffer) {
+        scheduleVoiceMiniVoiceLoop(ctx, voiceMiniVoiceBuffer, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+      }
+      voiceMiniNextBarTime += beat * 4;
+      voiceMiniBarIndex += 1;
+    }
+  };
+
+  scheduleAhead();
+  voiceMiniTrackScheduler = window.setInterval(scheduleAhead, 120);
+}
+
 async function triggerVoiceDawPad(kind = "kick") {
+  if (kind === "voice" && !voiceRecordingBlob) {
+    setVoiceStatus(t("voiceNeedRecording"));
+    showToast(t("voiceNeedRecording"));
+    return;
+  }
+  voiceMiniPadState[kind] = !voiceMiniPadState[kind];
+  if (kind === "voice" && voiceMiniPadState.voice && audioContext) {
+    voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
+  }
+  syncVoicePadButtons();
+  if (!Object.values(voiceMiniPadState).some(Boolean)) {
+    stopVoiceMiniTrack();
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadLoopOff", {
+      pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`)
+    });
+    return;
+  }
+  await ensureVoiceMiniLoop({ requireVoice: kind === "voice" && voiceMiniPadState.voice });
+  if (voiceMiniStatus) {
+    const padLabel = t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`);
+    voiceMiniStatus.textContent = t(voiceMiniPadState[kind] ? "voiceMiniPadLoopOn" : "voiceMiniPadLoopOff", { pad: padLabel });
+  }
+}
+
+async function previewVoiceDawPad(kind = "kick") {
   if (!initAudioEngine() || !audioContext) return;
   audioUnlocked = true;
   await audioContext.resume().catch(() => {});
@@ -13485,11 +13688,6 @@ async function triggerVoiceDawPad(kind = "kick") {
 }
 
 async function playVoiceMiniTrack() {
-  if (!voiceRecordingBlob) {
-    setVoiceStatus(t("voiceNeedRecording"));
-    showToast(t("voiceNeedRecording"));
-    return;
-  }
   if (!initAudioEngine() || !audioContext) {
     setVoiceStatus(t("voiceMicUnsupported"));
     return;
@@ -13499,38 +13697,12 @@ async function playVoiceMiniTrack() {
   audioUnlocked = true;
   await audioContext.resume().catch(() => {});
 
-  const ctx = audioContext;
-  const voiceBuffer = await getNormalizedVoiceBuffer(ctx);
-  if (!voiceBuffer) return;
-  const master = trackVoiceMiniNode(ctx.createGain());
-  const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
-  compressor.threshold.value = -24;
-  compressor.knee.value = 16;
-  compressor.ratio.value = 7.5;
-  compressor.attack.value = 0.003;
-  compressor.release.value = 0.16;
-  master.gain.value = Math.max(0.7, Math.min(1.12, audioVolume || 0.86));
-  master.connect(compressor);
-  compressor.connect(ctx.destination);
-
-  const bpm = 128;
-  const beat = 60 / bpm;
-  const duration = 16;
-  const start = ctx.currentTime + 0.09;
-  voiceMiniTrackPlaying = true;
-  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPlaying");
-  setVoiceStatus(t("voiceMiniPlaying"));
-  updateVoiceLabUi();
-
-  scheduleVoiceMiniDrums(ctx, master, start, beat, duration);
-  scheduleVoiceMiniBass(ctx, master, start, beat, duration);
-  scheduleVoiceMiniChops(ctx, voiceBuffer, master, start, beat, duration);
-  voiceMiniTrackTimers.push(window.setTimeout(() => {
-    stopVoiceMiniTrack({ silent: true });
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniDone");
-    if (voiceRecordingBlob) setVoiceStatus(t("voiceRecorded"));
-    updateVoiceLabUi();
-  }, Math.ceil((duration + 0.8) * 1000)));
+  voiceMiniPadState.kick = true;
+  voiceMiniPadState.bass = true;
+  voiceMiniPadState.hat = true;
+  voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
+  syncVoicePadButtons();
+  await ensureVoiceMiniLoop();
 }
 
 function connectVoiceEffectGraph(ctx, source, effect, output) {

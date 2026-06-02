@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260602h" />
+    <link rel="stylesheet" href="styles.css?v=20260602i" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -846,10 +846,10 @@
                 <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar música</button>
               </div>
               <div class="voice-daw-pad-grid" aria-label="Mini DAW">
-                <button id="voicePadKickBtn" class="voice-daw-pad" type="button">Kick</button>
-                <button id="voicePadBassBtn" class="voice-daw-pad" type="button">Bass</button>
-                <button id="voicePadHatBtn" class="voice-daw-pad" type="button">Hat</button>
-                <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" disabled>Voz</button>
+                <button id="voicePadKickBtn" class="voice-daw-pad" type="button" aria-pressed="false">Kick</button>
+                <button id="voicePadBassBtn" class="voice-daw-pad" type="button" aria-pressed="false">Bass</button>
+                <button id="voicePadHatBtn" class="voice-daw-pad" type="button" aria-pressed="false">Hat</button>
+                <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" aria-pressed="false" disabled>Voz</button>
               </div>
               <p id="voiceMiniStatus" class="muted voice-mini-status">Grave sua voz para liberar o mini beat.</p>
             </div>
@@ -1030,6 +1030,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260602h"></script>
+    <script src="app.js?v=20260602i"></script>
   </body>
 </html>

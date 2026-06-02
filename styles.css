@@ -3212,6 +3212,14 @@ input[type="range"] {
   font-weight: 800;
 }
 
+.voice-daw-pad.active,
+.voice-daw-pad[aria-pressed="true"] {
+  border-color: rgba(100, 255, 209, 0.88);
+  color: #061124;
+  background: linear-gradient(110deg, #6effdc, #7cb2ff);
+  box-shadow: 0 0 0 1px rgba(100, 255, 209, 0.18), 0 12px 30px rgba(73, 217, 255, 0.2);
+}
+
 .voice-daw-pad:active {
   transform: translateY(1px) scale(0.98);
   border-color: rgba(126, 255, 219, 0.88);
