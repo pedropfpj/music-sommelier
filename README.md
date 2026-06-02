@@ -43,6 +43,23 @@ App web estiloso e funcional para curadoria de musica eletronica.
 - busca atingir no minimo 20 faixas e 20 artistas no estilo selecionado quando ha dados disponiveis
 - faz warmup em background para tentar elevar cobertura de todos os subgeneros (20+ faixas/artistas por estilo quando as APIs retornam dados)
 - tenta enriquecer faixa com preview e BPM real (quando a fonte fornece)
+- pode usar IA via backend serverless da Vercel para leitura da faixa, bio honesta de artista e arte personalizada do Espirito Musical
+
+## IA opcional
+
+O app funciona sem IA, mas em deploy Vercel pode usar endpoints em `/api` para melhorar a experiencia sem expor chave no frontend.
+
+Configure as variaveis de ambiente:
+
+- `OPENAI_API_KEY`: chave da API no backend
+- `OPENAI_TEXT_MODEL`: modelo de texto opcional, padrao `gpt-5-mini`
+- `OPENAI_IMAGE_MODEL`: modelo de imagem opcional, padrao `gpt-image-1-mini`
+
+Endpoints incluidos:
+
+- `/api/track-insight`: gera leitura curta da faixa em JSON
+- `/api/artist-bio`: refina a bio com base nos metadados e fontes conhecidas, sem inventar fatos
+- `/api/spirit-image`: gera arte personalizada para o Espirito Musical
 
 ## Subgeneros incluidos
 

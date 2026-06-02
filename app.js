@@ -3963,6 +3963,7 @@ const discoverySoundcloudLink = document.getElementById("discoverySoundcloudLink
 const feedbackMessage = document.getElementById("feedbackMessage");
 const artistHubIntro = document.getElementById("artistHubIntro");
 const artistBio = document.getElementById("artistBio");
+const artistBioAiMeta = document.getElementById("artistBioAiMeta");
 const labelBio = document.getElementById("labelBio");
 const artistSocialsPanel = document.getElementById("artistSocialsPanel");
 const artistSocialsTitle = document.getElementById("artistSocialsTitle");
@@ -9567,6 +9568,8 @@ const I18N = {
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
     discogsArtistLink: "Buscar artista no Discogs",
+    artistBioAiSource: "Bio refinada por IA com base em: {sources}.",
+    artistBioAiFallbackSource: "catálogo e fontes abertas",
     trackAiTitle: "Radar IA da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
@@ -9979,6 +9982,8 @@ const I18N = {
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
     discogsArtistLink: "Find artist on Discogs",
+    artistBioAiSource: "AI-refined bio based on: {sources}.",
+    artistBioAiFallbackSource: "catalog and open sources",
     trackAiTitle: "Track AI radar",
     trackAiRefreshBtn: "Refresh insight",
     trackAiLoading: "Analyzing your current track and preparing a quick read...",
@@ -10391,6 +10396,8 @@ const I18N = {
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
     discogsArtistLink: "Buscar artista en Discogs",
+    artistBioAiSource: "Bio refinada por IA con base en: {sources}.",
+    artistBioAiFallbackSource: "catálogo y fuentes abiertas",
     trackAiTitle: "Radar IA de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
@@ -11650,6 +11657,10 @@ function resetSessionUiState() {
   if (newArtistsStatus) newArtistsStatus.textContent = "";
   if (newArtistsList) newArtistsList.innerHTML = "";
   if (artistBio) artistBio.textContent = "";
+  if (artistBioAiMeta) {
+    artistBioAiMeta.textContent = "";
+    artistBioAiMeta.classList.add("hidden");
+  }
   if (labelBio) labelBio.textContent = "";
   if (artistSocialsPanel) artistSocialsPanel.classList.add("hidden");
   if (artistSocialLinks) artistSocialLinks.innerHTML = "";
@@ -15896,6 +15907,87 @@ function detailedArtistBio(track) {
   return localizedArtistNarrativeFallback(track);
 }
 
+function supportsArtistBioApi() {
+  return Boolean(resolveAiEndpoint("NEONPULSE_ARTIST_BIO_URL", "/api/artist-bio"));
+}
+
+function artistBioApiSourceCandidates(track) {
+  const artist = encodeURIComponent(sanitizeArtistLookupName(track?.artist || ""));
+  const candidates = [
+    { name: "MusicBrainz", url: artist ? `https://musicbrainz.org/search?query=${artist}&type=artist` : "" },
+    { name: "Discogs", url: artist ? `https://www.discogs.com/search/?q=${artist}&type=artist` : "" },
+    { name: "SoundCloud", url: artist ? `https://soundcloud.com/search?q=${artist}` : "" },
+    { name: "YouTube", url: artist ? `https://www.youtube.com/results?search_query=${artist}` : "" }
+  ];
+  if (track?.spotifyUrl) candidates.push({ name: "Spotify", url: track.spotifyUrl });
+  if (track?.bandcampUrl || track?.bandcampTrackUrl) candidates.push({ name: "Bandcamp", url: track.bandcampTrackUrl || track.bandcampUrl });
+  return candidates.filter((source) => source.name);
+}
+
+function buildArtistBioAiPayload(track) {
+  const bpmData = resolveBpmDisplay(track || {});
+  const origin = artistOriginSignalForTrack(track);
+  const originLabel = origin
+    ? [origin.area, origin.country].filter(Boolean).join(", ")
+    : "";
+  return {
+    language: currentLanguage,
+    track: {
+      artist: track?.artist || "",
+      song: track?.song || "",
+      style: track?.style || "",
+      styleLabel: styleLabelByValue(track?.style || ""),
+      label: sanitizeLabel(track?.label || "", track?.artist || "", track?.song || ""),
+      bpm: bpmData.aiText || "",
+      energy: energyLabelByValue(track?.energy || ""),
+      origin: originLabel,
+      genre: track?.artistGenre || localizedArtistGenreHint(track?.artist || "", track?.style || "") || "",
+      currentBio: artistBio?.textContent || detailedArtistBio(track),
+      profileHint: track?.artistProfileHint || track?.vibe || ""
+    },
+    sources: artistBioApiSourceCandidates(track)
+  };
+}
+
+async function requestArtistBioFromApi(track) {
+  const endpoint = resolveAiEndpoint("NEONPULSE_ARTIST_BIO_URL", "/api/artist-bio");
+  if (!endpoint || !track) return null;
+  const token = String(window?.NEONPULSE_ARTIST_BIO_TOKEN || "").trim();
+  const headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  let timeoutId = 0;
+  try {
+    if (controller) timeoutId = window.setTimeout(() => controller.abort(), 9000);
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(buildArtistBioAiPayload(track)),
+      signal: controller?.signal
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const bio = String(payload?.bio || "").trim();
+    if (!bio) return null;
+    return {
+      bio: bio.slice(0, 900),
+      sourceSummary: String(payload?.sourceSummary || "").trim(),
+      sources: Array.isArray(payload?.sources) ? payload.sources : [],
+      confidence: String(payload?.confidence || "").trim(),
+      origin: String(payload?.origin || "").trim(),
+      genre: String(payload?.genre || "").trim()
+    };
+  } catch (_error) {
+    return null;
+  } finally {
+    if (timeoutId) window.clearTimeout(timeoutId);
+  }
+}
+
 function sanitizeArtistLookupName(artistName) {
   return String(artistName || "")
     .replace(/\([^)]*\)/g, " ")
@@ -16389,6 +16481,34 @@ async function hydrateArtistBioFromApis(track) {
 
   const enriched = buildArtistBioFromApiProfile(track, profile);
   if (enriched) artistBio.textContent = enriched;
+}
+
+async function hydrateArtistBioFromAi(track) {
+  if (!track || !artistBio || !supportsArtistBioApi()) return;
+  const trackKey = normalize(`${track.artist}::${track.song}`);
+  const aiBio = await requestArtistBioFromApi(track);
+  if (!aiBio?.bio) return;
+
+  const activeTrackKey = normalize(`${currentRecommendation?.artist || ""}::${currentRecommendation?.song || ""}`);
+  if (!activeTrackKey || activeTrackKey !== trackKey) return;
+
+  artistBio.textContent = aiBio.bio;
+  if (aiBio.origin && !track.artistCountry && !track.artistArea) {
+    track.artistArea = aiBio.origin;
+  }
+  if (aiBio.genre && !track.artistGenre) track.artistGenre = aiBio.genre;
+  updateArtistOriginFlags(track);
+
+  if (artistBioAiMeta) {
+    const sourceNames = (aiBio.sources || [])
+      .map((source) => String(source?.name || "").trim())
+      .filter(Boolean)
+      .slice(0, 4);
+    artistBioAiMeta.textContent = t("artistBioAiSource", {
+      sources: sourceNames.length ? sourceNames.join(", ") : t("artistBioAiFallbackSource")
+    });
+    artistBioAiMeta.classList.remove("hidden");
+  }
 }
 
 function shouldRejectPsycoreByApi(profile) {
@@ -18007,10 +18127,6 @@ async function shareSpiritCollectibleToInstagram() {
   }
 }
 
-function supportsAiCollectibleApi() {
-  return Boolean(String(window?.NEONPULSE_IMAGE_API_URL || "").trim());
-}
-
 function escapeSvgText(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -18018,6 +18134,20 @@ function escapeSvgText(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function canUseRelativeApiEndpoint() {
+  return ["http:", "https:"].includes(String(window?.location?.protocol || ""));
+}
+
+function resolveAiEndpoint(globalName, fallbackPath) {
+  const configured = String(window?.[globalName] || "").trim();
+  if (configured) return configured;
+  return canUseRelativeApiEndpoint() ? fallbackPath : "";
+}
+
+function supportsAiCollectibleApi() {
+  return Boolean(resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image"));
 }
 
 function normalizeInlineText(value = "") {
@@ -18117,7 +18247,7 @@ function collectibleVariationToken() {
 }
 
 async function requestSpiritCollectibleFromApi(payload) {
-  const endpoint = String(window?.NEONPULSE_IMAGE_API_URL || "").trim();
+  const endpoint = resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image");
   if (!endpoint) return "";
   const token = String(window?.NEONPULSE_IMAGE_API_TOKEN || "").trim();
 
@@ -19659,7 +19789,7 @@ function registerRecommendationDelivery(track, prefs) {
 }
 
 function supportsTrackInsightApi() {
-  return Boolean(String(window?.NEONPULSE_TRACK_AI_URL || "").trim());
+  return Boolean(resolveAiEndpoint("NEONPULSE_TRACK_AI_URL", "/api/track-insight"));
 }
 
 function trackInsightCacheKey(track, prefs = lastPrefs) {
@@ -19754,7 +19884,7 @@ async function revealListeningNarrative(track, prefs = {}) {
 }
 
 async function requestTrackInsightFromApi(track, prefs = {}) {
-  const endpoint = String(window?.NEONPULSE_TRACK_AI_URL || "").trim();
+  const endpoint = resolveAiEndpoint("NEONPULSE_TRACK_AI_URL", "/api/track-insight");
   if (!endpoint) return "";
   const token = String(window?.NEONPULSE_TRACK_AI_TOKEN || "").trim();
   const headers = {
@@ -20085,7 +20215,12 @@ function renderRecommendation(track, prefs) {
 
   if (artistBio) {
     artistBio.textContent = detailedArtistBio(track);
+    if (artistBioAiMeta) {
+      artistBioAiMeta.textContent = "";
+      artistBioAiMeta.classList.add("hidden");
+    }
     void hydrateArtistBioFromApis(track);
+    void hydrateArtistBioFromAi(track);
   }
   renderDiscogsArtistPanel(track);
   renderArtistSocialLinks(track);

@@ -4258,6 +4258,12 @@ input[type="range"] {
   animation: bio-cursor 820ms steps(1, end) infinite;
 }
 
+.artist-ai-meta {
+  margin: 12px 0 0;
+  font-size: clamp(0.78rem, 0.76rem + 0.22vw, 0.95rem);
+  color: var(--muted-strong);
+}
+
 .events-calendar {
   margin-top: 0.7rem;
   display: grid;
