@@ -3196,6 +3196,34 @@ input[type="range"] {
   min-height: 42px;
 }
 
+.voice-bpm-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.3rem 0.7rem;
+  align-items: center;
+  padding: 0.58rem 0.68rem;
+  border: 1px solid rgba(126, 214, 255, 0.22);
+  border-radius: 10px;
+  background: rgba(2, 8, 20, 0.5);
+}
+
+.voice-bpm-control span {
+  color: #bfdbff;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.voice-bpm-control strong {
+  color: #8ff6e5;
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.voice-bpm-control input {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 .voice-daw-pad-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

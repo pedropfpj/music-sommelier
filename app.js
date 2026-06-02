@@ -3807,6 +3807,9 @@ const voiceMiniTitle = document.getElementById("voiceMiniTitle");
 const voiceMiniHint = document.getElementById("voiceMiniHint");
 const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
 const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
+const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
+const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
+const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
 const voiceMiniStatus = document.getElementById("voiceMiniStatus");
 const voicePadKickBtn = document.getElementById("voicePadKickBtn");
 const voicePadBassBtn = document.getElementById("voicePadBassBtn");
@@ -4157,6 +4160,7 @@ let voiceMiniTrackScheduler = 0;
 let voiceMiniNextBarTime = 0;
 let voiceMiniBarIndex = 0;
 let voiceMiniVoiceBuffer = null;
+let voiceMiniBpm = 128;
 let voiceMiniPadState = {
   kick: false,
   bass: false,
@@ -9616,6 +9620,9 @@ const I18N = {
     voiceMiniHint: "Transforme sua voz em uma mini track com kick, bass e hats.",
     voiceMiniPlayBtn: "Criar mini música",
     voiceMiniStopBtn: "Parar música",
+    voiceMiniBpmLabel: "Velocidade",
+    voiceMiniBpmValue: "{bpm} BPM",
+    voiceMiniBpmChanged: "BPM ajustado para {bpm}. O próximo compasso entra nessa velocidade.",
     voiceMiniReady: "Toque Kick, Bass ou Hat para começar. Grave sua voz para liberar a camada Voz.",
     voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat e Voz no tempo.",
     voiceMiniDone: "Mini música parada. Toque Criar ou um pad para começar de novo.",
@@ -10032,6 +10039,9 @@ const I18N = {
     voiceMiniHint: "Turn your voice into a mini track with kick, bass, and hats.",
     voiceMiniPlayBtn: "Create mini music",
     voiceMiniStopBtn: "Stop music",
+    voiceMiniBpmLabel: "Speed",
+    voiceMiniBpmValue: "{bpm} BPM",
+    voiceMiniBpmChanged: "BPM set to {bpm}. The next bar follows this speed.",
     voiceMiniReady: "Tap Kick, Bass, or Hat to start. Record your voice to unlock the Voice layer.",
     voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, and Voice on/off in tempo.",
     voiceMiniDone: "Mini music stopped. Tap Create or a pad to start again.",
@@ -10448,6 +10458,9 @@ const I18N = {
     voiceMiniHint: "Convierte tu voz en una mini pista con kick, bass y hats.",
     voiceMiniPlayBtn: "Crear mini música",
     voiceMiniStopBtn: "Parar música",
+    voiceMiniBpmLabel: "Velocidad",
+    voiceMiniBpmValue: "{bpm} BPM",
+    voiceMiniBpmChanged: "BPM ajustado a {bpm}. El próximo compás entra con esa velocidad.",
     voiceMiniReady: "Toca Kick, Bass o Hat para empezar. Graba tu voz para liberar la capa Voz.",
     voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat y Voz a tempo.",
     voiceMiniDone: "Mini música parada. Toca Crear o un pad para empezar otra vez.",
@@ -11414,6 +11427,8 @@ function applyLanguage() {
   setText("#voiceMiniHint", t("voiceMiniHint"));
   setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
   setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
+  setText("#voiceMiniBpmLabel", t("voiceMiniBpmLabel"));
+  if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
   setText("#voicePadKickBtn", t("voicePadKick"));
   setText("#voicePadBassBtn", t("voicePadBass"));
   setText("#voicePadHatBtn", t("voicePadHat"));
@@ -13070,6 +13085,24 @@ function setVoiceStatus(message) {
   if (voiceStatus) voiceStatus.textContent = message;
 }
 
+function clampVoiceMiniBpm(value) {
+  return Math.max(90, Math.min(180, Math.round(Number(value) || 128)));
+}
+
+function voiceMiniBeatDuration() {
+  return 60 / clampVoiceMiniBpm(voiceMiniBpm);
+}
+
+function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
+  voiceMiniBpm = clampVoiceMiniBpm(value);
+  if (voiceMiniBpmSlider) {
+    voiceMiniBpmSlider.value = String(voiceMiniBpm);
+    voiceMiniBpmSlider.setAttribute("aria-valuenow", String(voiceMiniBpm));
+  }
+  if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
+  if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniBpmChanged", { bpm: voiceMiniBpm });
+}
+
 function updateVoiceLabUi() {
   const isRecording = voiceRecorder && voiceRecorder.state === "recording";
   const hasRecording = Boolean(voiceRecordingBlob);
@@ -13599,7 +13632,6 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
   master.connect(compressor);
   compressor.connect(ctx.destination);
 
-  const beat = 60 / 128;
   voiceMiniNextBarTime = ctx.currentTime + 0.08;
   voiceMiniBarIndex = 0;
   voiceMiniTrackPlaying = true;
@@ -13611,13 +13643,14 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
     if (!voiceMiniTrackPlaying) return;
     const lookAhead = 0.42;
     while (voiceMiniNextBarTime < ctx.currentTime + lookAhead) {
-      if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
-      if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
-      if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+      const barBeat = voiceMiniBeatDuration();
+      if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
+      if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
+      if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       if (voiceMiniPadState.voice && voiceMiniVoiceBuffer) {
-        scheduleVoiceMiniVoiceLoop(ctx, voiceMiniVoiceBuffer, master, voiceMiniNextBarTime, beat, voiceMiniBarIndex);
+        scheduleVoiceMiniVoiceLoop(ctx, voiceMiniVoiceBuffer, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       }
-      voiceMiniNextBarTime += beat * 4;
+      voiceMiniNextBarTime += barBeat * 4;
       voiceMiniBarIndex += 1;
     }
   };
@@ -13658,7 +13691,7 @@ async function previewVoiceDawPad(kind = "kick") {
   const ctx = audioContext;
   const bus = createVoicePadBus(ctx);
   const now = ctx.currentTime + 0.035;
-  const beat = 60 / 128;
+  const beat = voiceMiniBeatDuration();
   if (kind === "kick") {
     scheduleVoiceMiniKick(ctx, bus, now, { accent: true });
   } else if (kind === "bass") {
@@ -22979,6 +23012,10 @@ bind(voicePlayBtn, "click", playVoiceEffect);
 bind(voiceResetBtn, "click", resetVoiceRecording);
 bind(voiceMiniPlayBtn, "click", playVoiceMiniTrack);
 bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
+bind(voiceMiniBpmSlider, "input", (event) => {
+  const target = event.target instanceof HTMLInputElement ? event.target : null;
+  updateVoiceMiniBpm(target?.value || voiceMiniBpm, { announce: Boolean(voiceMiniTrackPlaying) });
+});
 bind(voiceEffectButtons, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("button[data-voice-effect]") : null;
   if (!target) return;
