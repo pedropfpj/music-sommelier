@@ -4454,6 +4454,44 @@ input[type="range"] {
   animation: spirit-cursor 820ms steps(1, end) infinite;
 }
 
+.spirit-lore-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.spirit-lore-card {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+  padding: 0.62rem;
+  border: 1px solid rgba(123, 221, 255, 0.24);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(12, 33, 58, 0.74), rgba(4, 12, 28, 0.84)),
+    rgba(5, 14, 31, 0.76);
+}
+
+.spirit-lore-kicker {
+  color: #8ff6e5;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.spirit-lore-card strong {
+  color: #f2fbff;
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+
+.spirit-lore-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.34;
+}
+
 .spirit-progress {
   color: #9ad2ff;
   font-weight: 600;
@@ -5467,6 +5505,10 @@ input[type="range"] {
   }
 
   .spirit-signal-list {
+    grid-template-columns: 1fr;
+  }
+
+  .spirit-lore-panel {
     grid-template-columns: 1fr;
   }
 

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260602e" />
+    <link rel="stylesheet" href="styles.css?v=20260602f" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -886,6 +886,23 @@
             <h4 id="spiritName" class="spirit-name"></h4>
             <p id="spiritArchetype" class="spirit-archetype"></p>
             <p id="spiritDescription" class="spirit-description"></p>
+            <div id="spiritLorePanel" class="spirit-lore-panel">
+              <article class="spirit-lore-card">
+                <span id="spiritLoreSignatureKicker" class="spirit-lore-kicker">Assinatura</span>
+                <strong id="spiritLoreSignatureTitle"></strong>
+                <p id="spiritLoreSignatureText" class="muted"></p>
+              </article>
+              <article class="spirit-lore-card">
+                <span id="spiritLoreWhyKicker" class="spirit-lore-kicker">Por que atrai</span>
+                <strong id="spiritLoreWhyTitle"></strong>
+                <p id="spiritLoreWhyText" class="muted"></p>
+              </article>
+              <article class="spirit-lore-card">
+                <span id="spiritLoreNextKicker" class="spirit-lore-kicker">Próxima busca</span>
+                <strong id="spiritLoreNextTitle"></strong>
+                <p id="spiritLoreNextText" class="muted"></p>
+              </article>
+            </div>
             <div id="spiritSpotlightPanel" class="spirit-spotlight hidden">
               <p id="spiritSpotlightTitle" class="spirit-visual-title">Faixa do espírito</p>
               <p id="spiritSpotlightHint" class="muted spirit-visual-hint">A faixa que mais combina com seu perfil aparece aqui.</p>
@@ -1012,6 +1029,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260602e"></script>
+    <script src="app.js?v=20260602f"></script>
   </body>
 </html>

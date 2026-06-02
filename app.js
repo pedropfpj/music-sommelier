@@ -3998,6 +3998,16 @@ const spiritImage = document.getElementById("spiritImage");
 const spiritName = document.getElementById("spiritName");
 const spiritArchetype = document.getElementById("spiritArchetype");
 const spiritDescription = document.getElementById("spiritDescription");
+const spiritLorePanel = document.getElementById("spiritLorePanel");
+const spiritLoreSignatureKicker = document.getElementById("spiritLoreSignatureKicker");
+const spiritLoreSignatureTitle = document.getElementById("spiritLoreSignatureTitle");
+const spiritLoreSignatureText = document.getElementById("spiritLoreSignatureText");
+const spiritLoreWhyKicker = document.getElementById("spiritLoreWhyKicker");
+const spiritLoreWhyTitle = document.getElementById("spiritLoreWhyTitle");
+const spiritLoreWhyText = document.getElementById("spiritLoreWhyText");
+const spiritLoreNextKicker = document.getElementById("spiritLoreNextKicker");
+const spiritLoreNextTitle = document.getElementById("spiritLoreNextTitle");
+const spiritLoreNextText = document.getElementById("spiritLoreNextText");
 const spiritProgress = document.getElementById("spiritProgress");
 const spiritInsightPanel = document.getElementById("spiritInsightPanel");
 const spiritInsightTitle = document.getElementById("spiritInsightTitle");
@@ -9747,6 +9757,12 @@ const I18N = {
     spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
     spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
     spiritInsightSignalScore: "{label}: sinal {score}",
+    spiritLoreSignatureKicker: "Assinatura",
+    spiritLoreWhyKicker: "Por que atrai",
+    spiritLoreNextKicker: "Próxima busca",
+    spiritLoreSignatureTitle: "Seu DNA sonoro",
+    spiritLoreWhyTitle: "O que esse som entrega",
+    spiritLoreNextTitle: "Como explorar melhor",
     spiritVisualTitle: "Modo visual do espírito",
     spiritVisualHint: "Loop de ambientação audiovisual alinhado ao seu perfil atual.",
     spiritSpotlightTitle: "Faixa do espírito",
@@ -10153,6 +10169,12 @@ const I18N = {
     spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
     spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
     spiritInsightSignalScore: "{label}: signal {score}",
+    spiritLoreSignatureKicker: "Signature",
+    spiritLoreWhyKicker: "Why it pulls you in",
+    spiritLoreNextKicker: "Next search",
+    spiritLoreSignatureTitle: "Your sonic DNA",
+    spiritLoreWhyTitle: "What this sound gives you",
+    spiritLoreNextTitle: "How to explore it",
     spiritVisualTitle: "Spirit visual mode",
     spiritVisualHint: "Audiovisual ambience loop aligned with your current profile.",
     spiritSpotlightTitle: "Spirit track",
@@ -10559,6 +10581,12 @@ const I18N = {
     spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
     spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
     spiritInsightSignalScore: "{label}: señal {score}",
+    spiritLoreSignatureKicker: "Firma",
+    spiritLoreWhyKicker: "Por qué atrae",
+    spiritLoreNextKicker: "Próxima búsqueda",
+    spiritLoreSignatureTitle: "Tu ADN sonoro",
+    spiritLoreWhyTitle: "Qué entrega este sonido",
+    spiritLoreNextTitle: "Cómo explorarlo mejor",
     spiritVisualTitle: "Modo visual del espíritu",
     spiritVisualHint: "Loop de ambientación audiovisual alineado con tu perfil actual.",
     spiritSpotlightTitle: "Pista del espíritu",
@@ -17071,6 +17099,86 @@ function resolveSpiritNarrativeProfile(spirit) {
   };
 }
 
+function spiritStyleAppealText(styleKey = "") {
+  const label = styleKey ? styleLabelByValue(styleKey) : t("freeStyle");
+  const family = familyOf(styleKey);
+  const familyCopy = {
+    pt: {
+      psytrance: "As pessoas costumam gostar porque cria transe, senso de ritual e uma sensação de viagem mental em camadas.",
+      techno: "As pessoas gostam pela repetição inteligente, pela tensão física do kick e pela sensação de foco contínuo na pista.",
+      house: "Atrai pelo groove humano, pelo balanço social e pela sensação de movimento sem esforço.",
+      dnb: "Funciona pela velocidade, pela bateria quebrada e pelo contraste entre pressão e fluidez.",
+      bass_music: "Chama atenção pelo impacto do subgrave, pelos drops e pela energia corporal imediata.",
+      leftfield: "Atrai quem gosta de textura, detalhe e surpresa, com menos fórmula e mais exploração sonora.",
+      hard_dance: "Entrega catarse direta: kick forte, euforia e descarga de energia."
+    },
+    en: {
+      psytrance: "People often love it because it creates trance, ritual focus, and a layered mental journey.",
+      techno: "It pulls people in through intelligent repetition, physical kick pressure, and continuous dancefloor focus.",
+      house: "It works through human groove, social swing, and effortless movement.",
+      dnb: "It hits through speed, broken drums, and the contrast between pressure and flow.",
+      bass_music: "It grabs attention with sub-bass impact, drops, and immediate body energy.",
+      leftfield: "It attracts listeners who want texture, detail, surprise, and less predictable forms.",
+      hard_dance: "It delivers direct catharsis: strong kicks, euphoria, and energy release."
+    },
+    es: {
+      psytrance: "Suele gustar porque crea trance, enfoque ritual y un viaje mental por capas.",
+      techno: "Atrae por la repetición inteligente, la presión física del kick y el foco continuo en pista.",
+      house: "Funciona por el groove humano, el swing social y el movimiento sin esfuerzo.",
+      dnb: "Impacta por la velocidad, las baterías rotas y el contraste entre presión y fluidez.",
+      bass_music: "Llama por el subgrave, los drops y la energía corporal inmediata.",
+      leftfield: "Atrae a quien busca textura, detalle, sorpresa y formas menos previsibles.",
+      hard_dance: "Entrega catarsis directa: kick fuerte, euforia y descarga de energía."
+    }
+  };
+  return `${label}: ${(familyCopy[currentLanguage] || familyCopy.pt)[family] || (familyCopy[currentLanguage] || familyCopy.pt).leftfield}`;
+}
+
+function buildSpiritLorePayload(spirit, spiritText = {}) {
+  const profile = resolveSpiritNarrativeProfile(spirit);
+  const topStyles = profile.topStyles.length ? profile.topStyles : spiritTopStyles(spirit, 3);
+  const topStyleKeys = spiritTopStyleKeys(spirit, 3);
+  const dominantKey = profile.dominantStyleKey || topStyleKeys[0] || "";
+  const topStylesLine = topStyles.join(" • ");
+  const styleInfo = dominantKey ? styleInfoSummaryByLanguage(dominantKey) : "";
+  const appeal = spiritStyleAppealText(dominantKey);
+  const nextStyles = topStyles.slice(0, 2).join(" + ") || profile.dominantStyle;
+
+  if (currentLanguage === "en") {
+    return {
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""}`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
+      nextText: normalizeInlineText(`Ask for ${nextStyles}, then tune energy and BPM. The best results come when you like or skip tracks so the profile learns your edge.`)
+    };
+  }
+  if (currentLanguage === "es") {
+    return {
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""}`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
+      nextText: normalizeInlineText(`Pide ${nextStyles}, luego ajusta energía y BPM. Los mejores resultados aparecen cuando das like o saltas pistas para que el perfil aprenda tu límite.`)
+    };
+  }
+  return {
+    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""}`),
+    whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
+    nextText: normalizeInlineText(`Peça ${nextStyles}, depois ajuste energia e BPM. Os melhores resultados aparecem quando você curte ou pula faixas para o perfil aprender seu limite.`)
+  };
+}
+
+function renderSpiritLore(spirit, spiritText = {}) {
+  if (!spiritLorePanel) return;
+  const payload = buildSpiritLorePayload(spirit, spiritText);
+  if (spiritLoreSignatureKicker) spiritLoreSignatureKicker.textContent = t("spiritLoreSignatureKicker");
+  if (spiritLoreWhyKicker) spiritLoreWhyKicker.textContent = t("spiritLoreWhyKicker");
+  if (spiritLoreNextKicker) spiritLoreNextKicker.textContent = t("spiritLoreNextKicker");
+  if (spiritLoreSignatureTitle) spiritLoreSignatureTitle.textContent = t("spiritLoreSignatureTitle");
+  if (spiritLoreWhyTitle) spiritLoreWhyTitle.textContent = t("spiritLoreWhyTitle");
+  if (spiritLoreNextTitle) spiritLoreNextTitle.textContent = t("spiritLoreNextTitle");
+  if (spiritLoreSignatureText) spiritLoreSignatureText.textContent = payload.signatureText;
+  if (spiritLoreWhyText) spiritLoreWhyText.textContent = payload.whyText;
+  if (spiritLoreNextText) spiritLoreNextText.textContent = payload.nextText;
+}
+
 function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   const baseDescription = normalizeInlineText(spiritText?.description || "");
   if (baseDescription) return baseDescription;
@@ -17996,12 +18104,12 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes) {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   if (currentLanguage === "en") {
-    return `Create a cinematic abstract portrait card for the musical archetype "${spiritText.name}" (${spiritText.archetype}). Neon electronic style, layered gradients, geometric sigils, premium collectible card look, no real people, no logos, high detail. Milestone: ${milestoneLikes} likes reached out of ${likes}. Dominant styles: ${styleSignals}.`;
+    return `Create a unique premium abstract artwork for a music discovery app user. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual language: cinematic neon electronic, layered light, geometric sigils, sonic waveforms, club/rave energy, collectible card cover quality, high detail, clean composition, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea una tarjeta retrato abstracta y cinematográfica para el arquetipo musical "${spiritText.name}" (${spiritText.archetype}). Estilo electrónico neón, gradientes en capas, sigilos geométricos, look de carta coleccionable premium, sin personas reales, sin logos, alto detalle. Hito: ${milestoneLikes} likes alcanzados de ${likes}. Estilos dominantes: ${styleSignals}.`;
+    return `Crea una obra abstracta premium y única para un usuario de una app de descubrimiento musical. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Lenguaje visual: electrónica neón cinematográfica, luces en capas, sigilos geométricos, ondas sonoras, energía club/rave, calidad de portada coleccionable, alto detalle, composición limpia, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
   }
-  return `Crie uma carta retrato abstrata e cinematográfica para o arquétipo musical "${spiritText.name}" (${spiritText.archetype}). Estilo eletrônico neon, gradientes em camadas, sigilos geométricos, visual premium de card colecionável, sem pessoas reais, sem logos, alto detalhamento. Marco: ${milestoneLikes} likes atingidos de ${likes}. Estilos dominantes: ${styleSignals}.`;
+  return `Crie uma arte abstrata premium e única para um usuário de app de descoberta musical. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Linguagem visual: eletrônico neon cinematográfico, luzes em camadas, sigilos geométricos, ondas sonoras, energia club/rave, qualidade de capa colecionável, alto detalhamento, composição limpa, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
 }
 
 function collectibleVariationToken() {
@@ -18534,6 +18642,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     spiritAnimationToken += 1;
     clearSpiritSpotlight();
     clearSpiritVisual();
+    if (spiritLorePanel) spiritLorePanel.classList.add("hidden");
     if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
     updateSpiritProgressText();
@@ -18583,6 +18692,8 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
         : "Arquétipo em calibração");
   updateSpiritProgressText();
   renderSpiritInsight(selectedSpirit, { unlocked: true });
+  if (spiritLorePanel) spiritLorePanel.classList.remove("hidden");
+  renderSpiritLore(selectedSpirit, spiritText);
   renderSpiritVisual(selectedSpirit, {
     autoplay: wasHidden || changedSpirit || forceAnimation,
     forceReload: wasHidden || changedSpirit
