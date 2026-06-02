@@ -4437,6 +4437,49 @@ const STYLE_INFO_PT = {
   hardstyle: "Kick distorcido, leads antemicos e energia de hard dance para momentos de explosao."
 };
 
+const STYLE_HUMAN_INFO = {
+  pt: {
+    psytrance: "Pensa numa viagem de pista: a batida fica te puxando para frente, os synths parecem conversar com a cabeça e tudo vai crescendo aos poucos. As pessoas curtem porque dá aquela sensação de transe coletivo, como se a música abrisse espaço para dançar por muito tempo sem perder o fio.",
+    forest_psy: "Forest psy soa como entrar numa mata à noite: percussões orgânicas, sons estranhos surgindo dos cantos e uma energia mais ritualística. Quem gosta costuma procurar imersão, não só drop.",
+    dark_psy: "Dark psy é o lado mais noturno e intenso do psytrance. Ele troca brilho por tensão, texturas sombrias e uma pista mais profunda, boa para quem gosta de som pesado sem virar fórmula óbvia.",
+    dark_experimental: "Dark experimental é quando o psytrance fica mais livre, rápido e imprevisível. A graça está nos detalhes tortos, nas viradas inesperadas e naquela sensação de laboratório psicodélico em alta velocidade.",
+    psycore: "Psycore é para pico extremo: muito rápido, denso e físico. Não tenta ser fácil; tenta te jogar numa parede de ritmo, textura e adrenalina.",
+    freeform: "Freeform psy é psicodelia solta, com menos regra de estrutura. Pode soar brincalhão, estranho, orgânico ou acelerado, e atrai quem gosta de surpresa dentro da pista.",
+    full_on: "Full-on é psytrance direto para dançar: bassline clara, leads marcantes e energia constante. É aquele som que funciona bem quando a pista quer crescer junto.",
+    full_on_night: "Full-on night mantém a pegada dançante do full-on, mas com clima mais escuro e pressão de madrugada. É mais seco, mais pesado e menos ensolarado.",
+    full_on_morning: "Full-on morning abre mais melodia e luz. É o psytrance para quando a pista respira, amanhece e a energia fica grande sem ficar sombria.",
+    progressive_psy: "Progressive psy é menos correria e mais hipnose. A música avança em camadas, com groove firme, bom para quem gosta de entrar no som sem muitos sustos.",
+    hi_tech: "Hi-tech é psicodelia em velocidade alta, cheia de cortes, glitches e pressão. Atrai quem gosta de caos controlado e energia quase atlética na pista.",
+    dark_progressive: "Dark progressive, ou zenonesque, é um psy progressivo mais sombrio e profundo. O groove é seco, hipnótico e cheio de pequenos detalhes que vão prendendo aos poucos.",
+    goa_trance: "Goa trance é a raiz mais melódica e ácida do psy. Tem arpejos, linhas viajantes e uma sensação vintage de rave psicodélica.",
+    psy_comercial: "Psy comercial é mais imediato: refrões, drops fáceis de reconhecer e energia de festival. Funciona para quem quer impacto rápido e menos viagem abstrata.",
+    techno: "Techno é repetição com intenção. A beleza está no pulso, nas pequenas mudanças e na sensação de máquina viva que segura a pista sem precisar explicar demais.",
+    hard_techno: "Hard techno é direto no corpo: kick forte, velocidade e tensão. É para momentos em que a pista quer força e impacto.",
+    tech_house: "Tech house junta o balanço do house com a secura do techno. É groove limpo, bassline grudenta e aquela vontade de mexer a cabeça sem pensar muito.",
+    drum_and_bass: "Drum and bass é velocidade com baixo profundo. Os breaks correm, o grave segura tudo e a energia fica elétrica.",
+    liquid_dnb: "Liquid DnB é o lado mais emocional do drum and bass. Continua rápido, mas traz melodia, leveza e uma sensação mais bonita de movimento.",
+    neurofunk: "Neurofunk é drum and bass técnico, sombrio e futurista. O baixo parece esculpido, cheio de tensão, para quem gosta de detalhe e peso.",
+    ambient: "Ambient é música para entrar num espaço, não necessariamente para seguir uma batida. É textura, clima e imaginação.",
+    slambient: "Slambient mistura ambient escuro com psicodelia profunda. Pode soar como um ritual lento ou uma névoa pesada, feito para imersão."
+  },
+  en: {
+    psytrance: "Think of a long dancefloor trip: the beat keeps pulling forward, the synths feel mental, and the track grows layer by layer. People love it because it creates a shared trance feeling without needing a simple chorus.",
+    dark_experimental: "Dark experimental is psytrance becoming faster, stranger, and less predictable. The magic is in the odd details, sudden turns, and high-speed psychedelic laboratory feel.",
+    techno: "Techno is repetition with intention. Its beauty is in the pulse, the small changes, and the feeling of a living machine holding the room together.",
+    tech_house: "Tech house mixes house swing with techno dryness: clean groove, sticky bassline, and an easy body-first club feeling.",
+    drum_and_bass: "Drum and bass is speed with deep low-end. The breaks rush forward, the bass anchors everything, and the energy feels electric.",
+    ambient: "Ambient is music you enter like a space, not always a beat you follow. It is texture, mood, and imagination."
+  },
+  es: {
+    psytrance: "Imagina un viaje largo de pista: el beat empuja hacia delante, los synths trabajan la cabeza y todo crece por capas. Gusta porque crea una sensación de trance colectivo sin necesitar un estribillo simple.",
+    dark_experimental: "Dark experimental es psytrance más rápido, extraño e imprevisible. La gracia está en los detalles torcidos, los giros raros y esa sensación de laboratorio psicodélico.",
+    techno: "Techno es repetición con intención. Su belleza está en el pulso, los pequeños cambios y la sensación de una máquina viva sosteniendo la pista.",
+    tech_house: "Tech house mezcla el swing del house con la sequedad del techno: groove limpio, bajo pegajoso y sensación club directa.",
+    drum_and_bass: "Drum and bass es velocidad con grave profundo. Los breaks corren, el bajo sostiene todo y la energía se siente eléctrica.",
+    ambient: "Ambient es música para entrar en un espacio, no necesariamente para seguir un beat. Es textura, clima e imaginación."
+  }
+};
+
 const STYLE_FAMILY_INFO = {
   pt: {
     psytrance: "Linha psicodelica orientada a trance, com foco em progressao hipnotica e narrativa de pista.",
@@ -5411,6 +5454,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Brazil",
     area: "",
     disambiguation: "Necropsycho e um projeto brasileiro associado ao dark psy e a vertentes experimentais intensas."
+  },
+  "animalien": {
+    country: "Mexico",
+    area: "Tepoztlán",
+    disambiguation: "Animalien e um projeto mexicano ligado ao psytrance, com uma assinatura psicodélica de pista e energia de festival."
   },
   "evil oil man": {
     country: "United Kingdom",
@@ -9639,7 +9687,7 @@ const I18N = {
     styleInfoFallback: "Subgênero com fronteiras flexíveis. A curadoria cruza estética, contexto e BPM para reduzir recomendações fora do estilo.",
     styleInfoCloseAria: "Fechar balão do subgênero",
     genreGuideTitle: "Sobre o subgênero",
-    genreGuideText: "{style}: {summary} Faixa típica: {bpm}. Use isso como leitura rápida para entender por que essa faixa entrou no seu perfil.",
+    genreGuideText: "{style}: {summary}",
     bpmFallbackRelaxed: "Essa faixa usa a faixa típica de BPM do subgênero para manter novas opções sem inventar BPM exato.",
     defaultStats: "Nenhum feedback ainda.",
     stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Conheceu no app: {discoveredInApp} | Avaliações: {ratingCount} | Média: {ratingAvg}",
@@ -10060,7 +10108,7 @@ const I18N = {
     styleInfoFallback: "Subgenre with flexible boundaries. Curation combines aesthetics, context, and BPM to reduce mismatched recommendations.",
     styleInfoCloseAria: "Close subgenre bubble",
     genreGuideTitle: "About the subgenre",
-    genreGuideText: "{style}: {summary} Typical range: {bpm}. Use this as a quick read on why this track fits your profile.",
+    genreGuideText: "{style}: {summary}",
     bpmFallbackRelaxed: "This track uses the subgenre's typical BPM range to keep new options flowing without inventing an exact BPM.",
     defaultStats: "No feedback yet.",
     stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Discovered in app: {discoveredInApp} | Ratings: {ratingCount} | Avg: {ratingAvg}",
@@ -10481,7 +10529,7 @@ const I18N = {
     styleInfoFallback: "Subgénero con fronteras flexibles. La curaduría cruza estética, contexto y BPM para reducir recomendaciones fuera de estilo.",
     styleInfoCloseAria: "Cerrar burbuja del subgénero",
     genreGuideTitle: "Sobre el subgénero",
-    genreGuideText: "{style}: {summary} Rango típico: {bpm}. Úsalo como lectura rápida para entender por qué esta pista entra en tu perfil.",
+    genreGuideText: "{style}: {summary}",
     bpmFallbackRelaxed: "Esta pista usa el rango típico de BPM del subgénero para mantener opciones nuevas sin inventar BPM exacto.",
     defaultStats: "Sin feedback todavía.",
     stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Conocidos en la app: {discoveredInApp} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
@@ -10947,6 +10995,10 @@ function styleLabelByValue(styleValue) {
 
 function styleInfoSummaryByLanguage(style) {
   if (!style) return "";
+  const humanInfo = STYLE_HUMAN_INFO[currentLanguage] || STYLE_HUMAN_INFO.pt;
+  const humanFallback = STYLE_HUMAN_INFO.pt;
+  if (humanInfo[style]) return humanInfo[style];
+  if (humanFallback[style]) return humanFallback[style];
   if (currentLanguage === "pt" && STYLE_INFO_PT[style]) return STYLE_INFO_PT[style];
 
   const family = familyOf(style);
@@ -15771,6 +15823,34 @@ const COUNTRY_CODE_BY_NAME = {
   usa: "US"
 };
 
+const COUNTRY_BY_ORIGIN_AREA = {
+  tepoztlan: "Mexico",
+  "tepoztlán": "Mexico",
+  "mexico city": "Mexico",
+  "ciudad de mexico": "Mexico",
+  "ciudad de méxico": "Mexico",
+  london: "United Kingdom",
+  lisboa: "Portugal",
+  lisbon: "Portugal",
+  berlin: "Germany",
+  amsterdam: "Netherlands",
+  rotterdam: "Netherlands",
+  sao_paulo: "Brazil",
+  "sao paulo": "Brazil",
+  "são paulo": "Brazil",
+  rio_de_janeiro: "Brazil",
+  "rio de janeiro": "Brazil",
+  tel_aviv: "Israel",
+  "tel aviv": "Israel",
+  melbourne: "Australia",
+  bristol: "United Kingdom",
+  chicago: "United States",
+  detroit: "United States",
+  "los angeles": "United States",
+  paris: "France",
+  barcelona: "Spain"
+};
+
 function countryCodeToFlagEmoji(countryCode = "") {
   const code = String(countryCode || "").trim().toUpperCase();
   if (!/^[A-Z]{2}$/.test(code)) return "";
@@ -15823,7 +15903,8 @@ function parseOriginText(originText = "") {
     }
   }
   if (countryNameToCode(raw)) return { country: raw, area: "" };
-  return { country: "", area: raw };
+  const inferredCountry = COUNTRY_BY_ORIGIN_AREA[normalize(raw)] || "";
+  return { country: inferredCountry, area: raw };
 }
 
 function artistOriginSignalForTrack(track) {
@@ -15833,6 +15914,7 @@ function artistOriginSignalForTrack(track) {
   const apiOrCatalogCountry = String(canonical?.country || track?.artistCountry || parsedTrackArea.country || "").trim();
   const apiOrCatalogArea = String(canonical?.area || (track?.artistCountry ? track?.artistArea : parsedTrackArea.area) || "").trim();
   if (apiOrCatalogCountry) return { country: apiOrCatalogCountry, area: apiOrCatalogArea };
+  if (parsedTrackArea.area && parsedTrackArea.country) return parsedTrackArea;
   if (track?.style === "brazilian_funk") return { country: "Brazil", area: "" };
   return quizOriginSignalForArtist(artist);
 }
@@ -16207,36 +16289,39 @@ function localizedArtistNarrativeFallback(track) {
   };
   const style = styleLabelByValue(safeTrack.style);
   const label = sanitizeLabel(safeTrack.label, safeTrack.artist, safeTrack.song);
-  const meta = getTrackMetadata(safeTrack);
-  const releaseDate = formatReleaseDateForLanguage(meta.releaseDate);
   const bpmData = resolveBpmDisplay(safeTrack);
-  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.range ? `${t("bpmEstimatedRange", { range: bpmData.range })}` : t("bpmUnverifiedLabel");
+  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : "";
   const origin = artistOriginSignalForTrack(track);
   const originLabel = formatArtistOriginLabel(origin);
   const canonical = canonicalOriginForArtist(safeTrack.artist);
-  const sourceLabel = String(track?.source || "catalogo_local")
-    .replace(/_/g, " ")
-    .toUpperCase();
   const genre = String(track?.artistGenre || localizedArtistGenreHint(safeTrack.artist, safeTrack.style) || "").trim();
   const hint = String(track?.artistProfileHint || "").trim();
   const styleSummary = styleInfoSummaryByLanguage(safeTrack.style);
   const identity = canonical?.disambiguation || hint;
+  const energy = energyLabelByValue(track?.energy || "");
+  const knownLabel = isUnknownLabel(label);
   if (currentLanguage === "en") {
-    const originCopy = originLabel ? `Origin: ${originLabel}. ` : "";
-    const genreCopy = genre ? `Genre signal: ${genre}. ` : "";
+    const originCopy = originLabel ? `, from ${originLabel},` : "";
+    const labelCopy = knownLabel ? "" : ` The label connection here is ${label}.`;
+    const genreCopy = genre ? ` It also carries a ${genre} signal.` : "";
+    const bpmCopy = bpmCue ? ` around ${bpmCue}` : "";
     const identityCopy = identity ? `${identity} ` : "";
-    return `${identityCopy}${safeTrack.artist} appears here through "${safeTrack.song}", a ${style} recommendation tied to ${label}. ${originCopy}${genreCopy}The sound points to ${styleSummary.toLowerCase()} Pulse reference: ${bpmCue}; release/context: ${releaseDate}. Source: ${sourceLabel}.`.trim();
+    return `${identityCopy}${safeTrack.artist}${originCopy} comes up through "${safeTrack.song}" as a ${style} pick with ${energy || "focused"} energy${bpmCopy}. In plain words: ${styleSummary} ${genreCopy}${labelCopy} If this one clicks, open a few more tracks from the artist before deciding; this kind of sound reveals itself over time.`.trim();
   }
   if (currentLanguage === "es") {
-    const originCopy = originLabel ? `Origen: ${originLabel}. ` : "";
-    const genreCopy = genre ? `Señal de género: ${genre}. ` : "";
+    const originCopy = originLabel ? `, desde ${originLabel},` : "";
+    const labelCopy = knownLabel ? "" : ` La conexión de sello aquí es ${label}.`;
+    const genreCopy = genre ? ` También trae una señal de ${genre}.` : "";
+    const bpmCopy = bpmCue ? ` cerca de ${bpmCue}` : "";
     const identityCopy = identity ? `${identity} ` : "";
-    return `${identityCopy}${safeTrack.artist} aparece aquí con "${safeTrack.song}", una recomendación de ${style} vinculada a ${label}. ${originCopy}${genreCopy}El sonido apunta a ${styleSummary.toLowerCase()} Pulso de referencia: ${bpmCue}; lanzamiento/contexto: ${releaseDate}. Fuente: ${sourceLabel}.`.trim();
+    return `${identityCopy}${safeTrack.artist}${originCopy} aparece con "${safeTrack.song}" como una recomendación de ${style} con energía ${energy || "enfocada"}${bpmCopy}. En palabras simples: ${styleSummary} ${genreCopy}${labelCopy} Si te conecta, escucha algunas pistas más del artista; este tipo de sonido se entiende mejor con continuidad.`.trim();
   }
-  const countryCopy = originLabel ? `Origem: ${originLabel}. ` : "";
-  const genreCopy = genre ? `Sinal de gênero: ${genre}. ` : "";
+  const countryCopy = originLabel ? `, vindo de ${originLabel},` : "";
+  const genreCopy = genre ? ` Também carrega um sinal de ${genre}.` : "";
+  const labelCopy = knownLabel ? "" : ` A conexão de selo aqui é ${label}.`;
+  const bpmCopy = bpmCue ? ` perto de ${bpmCue}` : "";
   const identityCopy = identity ? `${identity} ` : "";
-  return `${identityCopy}${safeTrack.artist} aparece aqui com "${safeTrack.song}", uma recomendação de ${style} ligada ao selo ${label}. ${countryCopy}${genreCopy}A sonoridade aponta para ${styleSummary.toLowerCase()} Pulso de referência: ${bpmCue}; lançamento/contexto: ${releaseDate}. Fonte: ${sourceLabel}.`.trim();
+  return `${identityCopy}${safeTrack.artist}${countryCopy} aparece com "${safeTrack.song}" como uma recomendação de ${style} com energia ${energy || "focada"}${bpmCopy}. Falando como pessoa: ${styleSummary} ${genreCopy}${labelCopy} Se essa faixa bater, vale abrir mais algumas do artista antes de decidir; esse tipo de som se revela melhor em sequência.`.trim();
 }
 
 function detailedArtistBio(track) {
@@ -16745,45 +16830,41 @@ function buildArtistBioFromApiProfile(track, profile) {
       ? `${profile.area}, ${profile.country}`
       : profile.area || profile.country;
   const bpmData = resolveBpmDisplay(track || {});
-  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.range ? `${t("bpmEstimatedRange", { range: bpmData.range })}` : t("bpmUnverifiedLabel");
-  const sources = (profile.sources || []).join(", ");
+  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : "";
   const summaryRaw = String(profile.wikiSummary || "").replace(/\s+/g, " ").trim();
   const disambiguationRaw = String(profile.disambiguation || "").trim();
   const summary = textMatchesCurrentBioLanguage(summaryRaw) ? summaryRaw : "";
   const disambiguation = textMatchesCurrentBioLanguage(disambiguationRaw) ? disambiguationRaw : "";
   const genreSignal = String(profile.genre || track?.artistGenre || localizedArtistGenreHint(artist, track?.style || "") || "").trim();
+  const styleSummary = styleInfoSummaryByLanguage(track?.style || "");
+  const energy = energyLabelByValue(track?.energy || "");
+  const sourceSummary = summary ? truncateByWordBoundary(summary, 210) : "";
 
   if (currentLanguage === "en") {
-    const leadLine = song ? `${artist} is featured in ${style} with "${song}". ` : `${artist} is featured in ${style}. `;
-    const originLine = origin ? `Origin: ${origin}. ` : "";
-    const genreLine = genreSignal ? `Genre signal: ${genreSignal}. ` : "";
-    const contextLine = disambiguation ? `Context: ${disambiguation}. ` : "";
-    const lifeLine = profile.lifeStartYear ? `Active since around ${profile.lifeStartYear}. ` : "";
-    const bpmLine = `Pulse reference: ${bpmCue}. `;
-    const summaryLine = summary ? `${summary} ` : "";
-    const sourceLine = sources ? `Sources: ${sources}.` : "";
-    return `${leadLine}${originLine}${genreLine}${contextLine}${lifeLine}${bpmLine}${summaryLine}${sourceLine}`.trim();
+    const originLine = origin ? `, from ${origin},` : "";
+    const songLine = song ? ` "${song}" is the entry point here:` : "";
+    const bpmLine = bpmCue ? ` around ${bpmCue}` : "";
+    const contextLine = disambiguation ? ` ${disambiguation}` : "";
+    const genreLine = genreSignal ? ` It leans into ${genreSignal}.` : "";
+    const summaryLine = sourceSummary ? ` Extra context: ${sourceSummary}` : "";
+    return `${artist}${originLine}${songLine} a ${style} recommendation with ${energy || "focused"} energy${bpmLine}. ${contextLine} In human terms, ${styleSummary} ${genreLine}${summaryLine}`.trim();
   }
   if (currentLanguage === "es") {
-    const leadLine = song ? `${artist} aparece en el eje ${style} con "${song}". ` : `${artist} aparece en el eje ${style}. `;
-    const originLine = origin ? `Origen: ${origin}. ` : "";
-    const genreLine = genreSignal ? `Señal de género: ${genreSignal}. ` : "";
-    const contextLine = disambiguation ? `Contexto: ${disambiguation}. ` : "";
-    const lifeLine = profile.lifeStartYear ? `Activo desde alrededor de ${profile.lifeStartYear}. ` : "";
-    const bpmLine = `Pulso de referencia: ${bpmCue}. `;
-    const summaryLine = summary ? `${summary} ` : "";
-    const sourceLine = sources ? `Fuentes: ${sources}.` : "";
-    return `${leadLine}${originLine}${genreLine}${contextLine}${lifeLine}${bpmLine}${summaryLine}${sourceLine}`.trim();
+    const originLine = origin ? `, desde ${origin},` : "";
+    const songLine = song ? ` "${song}" es la puerta de entrada:` : "";
+    const bpmLine = bpmCue ? ` cerca de ${bpmCue}` : "";
+    const contextLine = disambiguation ? ` ${disambiguation}` : "";
+    const genreLine = genreSignal ? ` Se acerca a ${genreSignal}.` : "";
+    const summaryLine = sourceSummary ? ` Contexto extra: ${sourceSummary}` : "";
+    return `${artist}${originLine}${songLine} una recomendación de ${style} con energía ${energy || "enfocada"}${bpmLine}. ${contextLine} En palabras humanas, ${styleSummary} ${genreLine}${summaryLine}`.trim();
   }
-  const leadLine = song ? `${artist} aparece no eixo ${style} com "${song}". ` : `${artist} aparece no eixo ${style}. `;
-  const originLine = origin ? `Origem: ${origin}. ` : "";
-  const genreLine = genreSignal ? `Sinal de gênero: ${genreSignal}. ` : "";
-  const contextLine = disambiguation ? `Contexto: ${disambiguation}. ` : "";
-  const lifeLine = profile.lifeStartYear ? `Ativo desde aproximadamente ${profile.lifeStartYear}. ` : "";
-  const bpmLine = `Pulso de referência: ${bpmCue}. `;
-  const summaryLine = summary ? `${summary} ` : "";
-  const sourceLine = sources ? `Fontes: ${sources}.` : "";
-  return `${leadLine}${originLine}${genreLine}${contextLine}${lifeLine}${bpmLine}${summaryLine}${sourceLine}`.trim();
+  const originLine = origin ? `, vindo de ${origin},` : "";
+  const songLine = song ? ` "${song}" é a porta de entrada aqui:` : "";
+  const bpmLine = bpmCue ? ` perto de ${bpmCue}` : "";
+  const contextLine = disambiguation ? ` ${disambiguation}` : "";
+  const genreLine = genreSignal ? ` Ele conversa com ${genreSignal}.` : "";
+  const summaryLine = sourceSummary ? ` Contexto extra: ${sourceSummary}` : "";
+  return `${artist}${originLine}${songLine} uma recomendação de ${style} com energia ${energy || "focada"}${bpmLine}. ${contextLine} Em linguagem humana, ${styleSummary} ${genreLine}${summaryLine}`.trim();
 }
 
 async function fetchArtistApiProfile(artistName, preferredLanguage = currentLanguage) {
@@ -16903,9 +16984,9 @@ function buildDynamicLabelSummary(styleValue, labelName) {
   const style = styleLabelByValue(styleValue);
   const cleanLabel = sanitizeLabel(labelName, "", "");
   if (isUnknownLabel(cleanLabel)) {
-    return `Selo ainda não confirmado para esta faixa. Curadoria aplicada no eixo ${style}, com checagem de subgênero, BPM e consistência entre artista/título para reduzir cruzamentos incorretos.`;
+    return `Ainda não encontrei um selo confiável para esta faixa. Ela entrou pelo encaixe musical com ${style}; para aprofundar, vale abrir Discogs, SoundCloud ou Bandcamp do artista.`;
   }
-  return `${cleanLabel} aparece nesta recomendação do eixo ${style}. A seleção considera coerência de subgênero, faixa de BPM e metadados de artista/faixa antes de liberar a sugestão.`;
+  return `${cleanLabel} aparece aqui como parte do contexto desta faixa em ${style}. Use o selo como pista para explorar artistas parecidos e entender a cena em volta do som.`;
 }
 
 function localizedLabelNarrativeFallback(track) {
@@ -16914,20 +16995,20 @@ function localizedLabelNarrativeFallback(track) {
   const style = styleLabelByValue(track.style);
   if (currentLanguage === "en") {
     if (isUnknownLabel(rawLabel)) {
-      return `Label profile: not confirmed for this track yet. Curation for the ${style} axis was validated by subgenre fit, BPM range, and artist/title consistency before recommendation.`;
+      return `I do not have a trusted label for this track yet. It was selected because it fits the ${style} feeling; for deeper context, open the artist on Discogs, SoundCloud, or Bandcamp.`;
     }
-    return `Label profile: ${label} appears in the ${style} axis with dancefloor-oriented releases. This recommendation is filtered by subgenre fit, BPM range, and artist/title metadata consistency to avoid mismatched suggestions.`;
+    return `${label} gives useful context around this ${style} recommendation. Treat the label as a path to nearby artists, releases, and scene references.`;
   }
   if (currentLanguage === "es") {
     if (isUnknownLabel(rawLabel)) {
-      return `Perfil del sello: aún no confirmado para este track. La curaduría del eje ${style} fue validada por ajuste de subgénero, rango de BPM y coherencia entre artista/título antes de recomendar.`;
+      return `Todavía no tengo un sello confiable para este track. Entró porque encaja musicalmente con ${style}; para más contexto, abre Discogs, SoundCloud o Bandcamp del artista.`;
     }
-    return `Perfil del sello: ${label} aparece en el eje ${style} con lanzamientos orientados a pista. Esta recomendación se filtra por ajuste de subgénero, rango de BPM y coherencia de metadatos artista/título para evitar cruces incorrectos.`;
+    return `${label} ayuda a entender el contexto de esta recomendación de ${style}. Úsalo como camino para encontrar artistas, releases y referencias cercanas.`;
   }
   if (isUnknownLabel(rawLabel)) {
-    return `Perfil da gravadora: ainda não confirmada para esta faixa. A curadoria no eixo ${style} foi validada por encaixe de subgênero, faixa de BPM e consistência entre artista/título antes da recomendação.`;
+    return `Ainda não tenho uma gravadora confiável para esta faixa. Ela entrou porque combina musicalmente com ${style}; para mais contexto, abra o artista no Discogs, SoundCloud ou Bandcamp.`;
   }
-  return `Perfil da gravadora: ${label} aparece no eixo ${style} com lançamentos voltados para pista. Esta recomendação passa por filtro de subgênero, faixa de BPM e consistência de metadados artista/faixa para reduzir sugestões fora do estilo.`;
+  return `${label} ajuda a entender o contexto desta recomendação de ${style}. Use a gravadora como caminho para achar artistas próximos, releases e referências da mesma cena.`;
 }
 
 function detailedLabelBio(track) {
