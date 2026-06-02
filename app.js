@@ -67,6 +67,11 @@ const DAILY_NEWS_SOURCES = [
     name: "Dancing Astronaut",
     homepage: "https://dancingastronaut.com/",
     feed: "https://dancingastronaut.com/feed/"
+  },
+  {
+    name: "EDM Identity",
+    homepage: "https://edmidentity.com/",
+    feed: "https://edmidentity.com/feed/"
   }
 ];
 const DAILY_NEWS_FALLBACK_ITEMS = [
@@ -9425,6 +9430,7 @@ const I18N = {
     dailyNewsCacheStatus: "Mostrando última atualização salva • {date}",
     dailyNewsFallbackStatus: "Fontes externas indisponíveis agora. Mostrando atalhos confiáveis.",
     dailyNewsFreshLabel: "recente",
+    dailyNewsSourcePrefix: "Fonte",
     dailyNewsSourceFallback: "Fonte",
     dailyNewsUntitled: "Notícia sem título",
     dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
@@ -9830,6 +9836,7 @@ const I18N = {
     dailyNewsCacheStatus: "Showing last saved update • {date}",
     dailyNewsFallbackStatus: "External sources are unavailable right now. Showing trusted shortcuts.",
     dailyNewsFreshLabel: "recent",
+    dailyNewsSourcePrefix: "Source",
     dailyNewsSourceFallback: "Source",
     dailyNewsUntitled: "Untitled news",
     dailyNewsNoSummary: "Open the story to read the full details.",
@@ -10235,6 +10242,7 @@ const I18N = {
     dailyNewsCacheStatus: "Mostrando última actualización guardada • {date}",
     dailyNewsFallbackStatus: "Fuentes externas no disponibles ahora. Mostrando accesos confiables.",
     dailyNewsFreshLabel: "reciente",
+    dailyNewsSourcePrefix: "Fuente",
     dailyNewsSourceFallback: "Fuente",
     dailyNewsUntitled: "Noticia sin título",
     dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
@@ -15963,6 +15971,7 @@ function parseDailyNewsRss(xmlText = "", source = {}) {
     return {
       title,
       source: source.name || t("dailyNewsSourceFallback"),
+      sourceUrl: source.homepage || String(rawLink || "#").trim(),
       url: String(rawLink || source.homepage || "#").trim(),
       publishedAt: String(publishedAt || "").trim(),
       summary: summary.slice(0, 180)
@@ -16042,7 +16051,21 @@ function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, f
 
     const meta = document.createElement("p");
     meta.className = "daily-news-meta";
-    meta.textContent = `${item.source || t("dailyNewsSourceFallback")} • ${dailyNewsDateLabel(item.publishedAt || updatedAt)}`;
+
+    const sourceAnchor = document.createElement("a");
+    sourceAnchor.className = "daily-news-source-link";
+    sourceAnchor.href = item.sourceUrl || item.url || "#";
+    sourceAnchor.target = "_blank";
+    sourceAnchor.rel = "noopener noreferrer";
+    sourceAnchor.textContent = item.source || t("dailyNewsSourceFallback");
+
+    const sourceLabel = document.createElement("span");
+    sourceLabel.textContent = `${t("dailyNewsSourcePrefix")}: `;
+
+    const dateLabel = document.createElement("span");
+    dateLabel.textContent = ` • ${dailyNewsDateLabel(item.publishedAt || updatedAt)}`;
+
+    meta.append(sourceLabel, sourceAnchor, dateLabel);
 
     const title = document.createElement("a");
     title.className = "daily-news-link";
@@ -23154,7 +23177,9 @@ bind(dailyNewsRefreshBtn, "click", () => {
 bind(appTabBar, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
   if (!target) return;
-  setActiveAppTab(String(target.getAttribute("data-app-tab-target") || "discover"));
+  const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
+  setActiveAppTab(nextTab);
+  if (nextTab === "news") void refreshDailyNews({ silent: false });
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));

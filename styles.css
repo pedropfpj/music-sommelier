@@ -1874,6 +1874,17 @@ body[data-vibe-theme="hard"] {
   text-transform: uppercase;
 }
 
+.daily-news-source-link {
+  color: #8ff6e5;
+  text-decoration: none;
+}
+
+.daily-news-source-link:hover {
+  color: #f2fbff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .daily-news-link {
   color: #f2fbff;
   font-family: "Syne", sans-serif;
