@@ -4041,6 +4041,7 @@ const spiritCollectibleImage = document.getElementById("spiritCollectibleImage")
 const spiritCollectibleMilestone = document.getElementById("spiritCollectibleMilestone");
 const spiritCollectibleProgress = document.getElementById("spiritCollectibleProgress");
 const spiritCollectibleDetails = document.getElementById("spiritCollectibleDetails");
+const spiritCollectibleRegenerateBtn = document.getElementById("spiritCollectibleRegenerateBtn");
 const spiritCollectibleDownload = document.getElementById("spiritCollectibleDownload");
 const spiritCollectibleShareInstagramBtn = document.getElementById("spiritCollectibleShareInstagramBtn");
 const spiritRankBadge = document.getElementById("spiritRankBadge");
@@ -4189,7 +4190,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v11";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v12";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
@@ -9908,12 +9909,13 @@ const I18N = {
     spiritVideoTitle: "Visual do espírito musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Colecionável do espírito",
-    spiritCollectibleHintLocal: "Ao alcançar marcos de likes, você desbloqueia uma arte personalizada.",
-    spiritCollectibleHintApi: "API de imagem conectada: arte personalizada com IA habilitada.",
+    spiritCollectibleHintLocal: "Prévia local ativa. Configure a IA para cada usuário receber uma arte única gerada sob demanda.",
+    spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para o seu perfil musical.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
     spiritCollectibleAlt: "Colecionável de {spirit} no marco de {milestone} likes",
+    spiritCollectibleRegenerate: "Gerar nova arte",
     spiritCollectibleDownload: "Baixar imagem",
     spiritCollectibleShareInstagram: "Compartilhar no Story",
     spiritCollectibleSharePreparing: "Preparando Story...",
@@ -9925,9 +9927,9 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | Curte {liked} artistas | Conheceu no app {discovered} | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
-    spiritCollectibleGeneratedLocal: "Arte desbloqueada com render procedural local.",
-    spiritCollectibleGeneratedApi: "Arte desbloqueada com geração por IA.",
-    spiritCollectibleError: "Não consegui gerar com API agora. Usei render local para não travar.",
+    spiritCollectibleGeneratedLocal: "Prévia local refeita. Ative a chave da IA para gerar arte final única.",
+    spiritCollectibleGeneratedApi: "Nova arte por IA criada para o seu espírito.",
+    spiritCollectibleError: "IA de imagem ainda sem resposta. Mostrando uma prévia local bonita até configurar a chave.",
     spiritRankUnlocked: "Espírito desbloqueado",
     spiritRankNovice: "Sommelier iniciante",
     spiritRankResident: "Sommelier residente",
@@ -10328,12 +10330,13 @@ const I18N = {
     spiritVideoTitle: "Musical spirit visual",
     spiritVisualPreset: "Visual preset: {preset}",
     spiritCollectibleTitle: "Spirit collectible",
-    spiritCollectibleHintLocal: "Each like milestone unlocks a personalized artwork.",
-    spiritCollectibleHintApi: "Image API connected: AI-generated personalized artwork enabled.",
+    spiritCollectibleHintLocal: "Local preview is active. Connect AI so each user gets unique artwork on demand.",
+    spiritCollectibleHintApi: "Image AI connected: this artwork was generated for your music profile.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
     spiritCollectibleAlt: "{spirit} collectible at {milestone} likes milestone",
+    spiritCollectibleRegenerate: "Generate new art",
     spiritCollectibleDownload: "Download image",
     spiritCollectibleShareInstagram: "Share to Story",
     spiritCollectibleSharePreparing: "Preparing Story...",
@@ -10345,9 +10348,9 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | Likes {liked} artists | Discovered in app {discovered} | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
-    spiritCollectibleGeneratedLocal: "Artwork unlocked with local procedural render.",
-    spiritCollectibleGeneratedApi: "Artwork unlocked with AI generation.",
-    spiritCollectibleError: "Could not generate via API right now. Local render was used.",
+    spiritCollectibleGeneratedLocal: "Local preview regenerated. Enable the AI key to create final unique art.",
+    spiritCollectibleGeneratedApi: "New AI artwork created for your spirit.",
+    spiritCollectibleError: "Image AI did not respond yet. Showing a polished local preview until the key is configured.",
     spiritRankUnlocked: "Spirit unlocked",
     spiritRankNovice: "Novice music sommelier",
     spiritRankResident: "Resident music sommelier",
@@ -10748,12 +10751,13 @@ const I18N = {
     spiritVideoTitle: "Visual del espíritu musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Coleccionable del espíritu",
-    spiritCollectibleHintLocal: "Al alcanzar hitos de likes, desbloqueas una obra personalizada.",
-    spiritCollectibleHintApi: "API de imagen conectada: generación personalizada con IA habilitada.",
+    spiritCollectibleHintLocal: "Vista previa local activa. Conecta la IA para que cada usuario reciba una obra única bajo demanda.",
+    spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para tu perfil musical.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
     spiritCollectibleAlt: "Coleccionable de {spirit} en el hito de {milestone} likes",
+    spiritCollectibleRegenerate: "Generar nueva obra",
     spiritCollectibleDownload: "Descargar imagen",
     spiritCollectibleShareInstagram: "Compartir en Story",
     spiritCollectibleSharePreparing: "Preparando Story...",
@@ -10765,9 +10769,9 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Estado {status} | Te gustan {liked} artistas | Conociste en la app {discovered} | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
-    spiritCollectibleGeneratedLocal: "Obra desbloqueada con render procedural local.",
-    spiritCollectibleGeneratedApi: "Obra desbloqueada con generación IA.",
-    spiritCollectibleError: "No pude generar por API ahora. Usé render local para no bloquear.",
+    spiritCollectibleGeneratedLocal: "Vista previa local regenerada. Activa la clave de IA para crear la obra final única.",
+    spiritCollectibleGeneratedApi: "Nueva obra con IA creada para tu espíritu.",
+    spiritCollectibleError: "La IA de imagen aún no respondió. Mostrando una vista previa local cuidada hasta configurar la clave.",
     spiritRankUnlocked: "Espíritu desbloqueado",
     spiritRankNovice: "Sommelier musical inicial",
     spiritRankResident: "Sommelier musical residente",
@@ -11432,6 +11436,7 @@ function applyLanguage() {
   setText("#spiritSpotlightSoundcloud", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
   setText("#spiritCollectibleTitle", t("spiritCollectibleTitle"));
   setText("#spiritCollectibleHint", supportsAiCollectibleApi() ? t("spiritCollectibleHintApi") : t("spiritCollectibleHintLocal"));
+  setText("#spiritCollectibleRegenerateBtn", t("spiritCollectibleRegenerate"));
   setText("#spiritCollectibleDownload", t("spiritCollectibleDownload"));
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
   setText("#spiritRankBadge", t("spiritRankUnlocked"));
@@ -11828,6 +11833,10 @@ function resetSessionUiState() {
   if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
   if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
   if (spiritCollectibleDownload) spiritCollectibleDownload.setAttribute("href", "#");
+  if (spiritCollectibleRegenerateBtn) {
+    spiritCollectibleRegenerateBtn.disabled = true;
+    spiritCollectibleRegenerateBtn.textContent = t("spiritCollectibleRegenerate");
+  }
   if (spiritCollectibleShareInstagramBtn) {
     spiritCollectibleShareInstagramBtn.disabled = true;
     spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
@@ -17724,20 +17733,15 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneLikes) {
   const profile = resolveSpiritNarrativeProfile(spirit);
   const rankLabel = t(resolveSpiritRank(likes).current.key);
-  const topStylesLine = profile.topStyles.join(" • ");
-  const snapshot = spiritShareProfileSnapshot();
-  const liked = Math.max(0, Number(snapshot?.likedArtists) || 0);
-  const discovered = Math.max(0, Number(snapshot?.discoveredInApp) || 0);
-  const known = Math.max(0, Number(snapshot?.knownArtists) || 0);
+  const topStylesLine = profile.topStyles.slice(0, 3).join(" • ");
+  const bpmLine = profile.bpmText ? `BPM ${profile.bpmText}` : "";
   if (currentLanguage === "pt") {
     return normalizeInlineText(
       [
-        spiritText?.name || "",
-        spiritText?.archetype ? `Personalidade musical: ${spiritText.archetype}` : "",
-        topStylesLine ? `Assinatura sonora: ${topStylesLine}` : "",
-        profile.bpmText ? `Faixa de BPM: ${profile.bpmText}` : "",
-        `Status: conheceu no app ${discovered} • conhece ${known} no total • curte ${liked}`,
-        `${rankLabel} • ${milestoneLikes} likes | ${likes} total`
+        spiritText?.archetype ? `Arquétipo: ${spiritText.archetype}` : "",
+        topStylesLine ? `Assinatura: ${topStylesLine}` : "",
+        bpmLine,
+        `${rankLabel} no marco de ${milestoneLikes} likes.`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -17746,12 +17750,10 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        spiritText?.name || "",
-        spiritText?.archetype || "",
-        topStylesLine || "",
-        profile.bpmText || "",
-        `Status: discovered in app ${discovered} • known total ${known} • liked ${liked}`,
-        `${rankLabel} • ${milestoneLikes} likes | ${likes} total`
+        spiritText?.archetype ? `Archetype: ${spiritText.archetype}` : "",
+        topStylesLine ? `Signature: ${topStylesLine}` : "",
+        bpmLine,
+        `${rankLabel} at ${milestoneLikes} likes.`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -17760,12 +17762,10 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        spiritText?.name || "",
-        spiritText?.archetype || "",
-        topStylesLine || "",
-        profile.bpmText || "",
-        `Estado: descubrió en app ${discovered} • conoce ${known} total • likes ${liked}`,
-        `${rankLabel} • ${milestoneLikes} likes | ${likes} total`
+        spiritText?.archetype ? `Arquetipo: ${spiritText.archetype}` : "",
+        topStylesLine ? `Firma: ${topStylesLine}` : "",
+        bpmLine,
+        `${rankLabel} en el hito de ${milestoneLikes} likes.`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -17773,12 +17773,10 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   }
   return normalizeInlineText(
     [
-      spiritText?.name || "",
       spiritText?.archetype || "",
       topStylesLine,
-      profile.bpmText || "",
-      `Status: app ${discovered} • known ${known} • liked ${liked}`,
-      `${rankLabel} • ${milestoneLikes} likes | ${likes} total`
+      bpmLine,
+      `${rankLabel} • ${milestoneLikes} likes`
     ]
       .filter(Boolean)
       .join(" • ")
@@ -18640,19 +18638,19 @@ function buildLocalSpiritCollectibleImage(
 ) {
   const theme = spiritVisualTheme(spirit);
   const rank = t(resolveSpiritRank(likes).current.key);
-  const titleLines = splitIntoSvgLines(spiritText?.name || "Sonic Spirit", 24, 2);
-  const topStyles = spiritTopStyles(spirit, 2).join(" • ");
-  const topStyleLines = splitIntoSvgLines(topStyles, 46, 1);
+  const spiritTitle = spiritText?.name || "Sonic Spirit";
+  const titleLines = splitIntoSvgLines(spiritTitle, 22, 2);
+  const topStyles = spiritTopStyles(spirit, 3).join(" • ");
+  const topStyleLines = splitIntoSvgLines(topStyles, 44, 2);
   const subtitle = spiritText?.archetype || "";
-  const subtitleLines = splitIntoSvgLines(subtitle, 34, 2);
-  const conciseDescription = truncateByWordBoundary(buildSpiritCollectibleCopy(spirit, spiritText), 210);
-  const descriptionLines = splitIntoSvgLines(conciseDescription, 56, 2);
-  const statusSnapshot = snapshot || spiritShareProfileSnapshot();
-  const statusLine = splitIntoSvgLines(buildSpiritCollectibleStatusCompact(statusSnapshot), 58, 1);
+  const subtitleLines = splitIntoSvgLines(subtitle, 32, 2);
+  const conciseDescription = truncateByWordBoundary(buildSpiritCollectibleCopy(spirit, spiritText), 130);
+  const descriptionLines = splitIntoSvgLines(conciseDescription, 44, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
   const safeSpiritImage = String(spiritImageDataUrl || "").trim();
   const hasSpiritImage = /^data:image\//i.test(safeSpiritImage);
+  const spiritInitial = escapeSvgText(spiritTitle.trim().slice(0, 1).toUpperCase() || "S");
   const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}`);
   const accentX = 24 + (seed % 52);
   const accentY = 18 + ((seed >> 3) % 58);
@@ -18718,20 +18716,21 @@ function buildLocalSpiritCollectibleImage(
   ${
     hasSpiritImage
       ? `<image href="${escapeSvgText(safeSpiritImage)}" x="236" y="136" width="608" height="448" preserveAspectRatio="xMidYMid meet" clip-path="url(#spiritClip)" filter="url(#spiritGlow)" />`
-      : `<text x="540" y="390" fill="#dff7ff" font-size="180" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">☠</text>`
+      : `<g filter="url(#spiritGlow)">
+          <circle cx="540" cy="360" r="118" fill="${escapeSvgText(theme.a)}" fill-opacity="0.18" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.5" stroke-width="4" />
+          <path d="M540 220 L676 360 L540 500 L404 360 Z" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.5" stroke-width="5" />
+          <text x="540" y="402" fill="#dff7ff" font-size="142" font-family="Syne, Arial, sans-serif" font-weight="700" text-anchor="middle">${spiritInitial}</text>
+        </g>`
   }
   <rect x="116" y="612" width="848" height="368" rx="34" fill="url(#textPanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="2.6" />
   <g clip-path="url(#spiritTextClip)">
-    <text x="540" y="690" fill="#f7fcff" font-size="62" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
-    <text x="540" y="736" fill="#f7fcff" font-size="62" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[1] || "")}</text>
-    <text x="540" y="776" fill="#d5edff" font-size="32" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || "")}</text>
-    <text x="540" y="810" fill="#d5edff" font-size="32" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[1] || "")}</text>
-    <text x="540" y="842" fill="#b7dbff" font-size="24" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || "")}</text>
-    <text x="540" y="878" fill="#b2ffe4" font-size="30" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(rank)}</text>
-    <text x="540" y="914" fill="#e2f1ff" font-size="27" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(`${milestoneLikes} likes | ${likes} total`)}</text>
-    <text x="540" y="938" fill="#cbe2ff" font-size="18" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(statusLine[0] || "")}</text>
-    <text x="540" y="960" fill="#d8e8ff" font-size="19" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(descriptionLines[0] || "")}</text>
-    <text x="540" y="978" fill="#d8e8ff" font-size="19" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(descriptionLines[1] || "")}</text>
+    <text x="540" y="700" fill="#f7fcff" font-size="70" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
+    <text x="540" y="762" fill="#f7fcff" font-size="70" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[1] || "")}</text>
+    <text x="540" y="818" fill="#d5edff" font-size="34" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || "")}</text>
+    <text x="540" y="856" fill="#b7dbff" font-size="26" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || "")}</text>
+    <text x="540" y="888" fill="#b7dbff" font-size="26" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[1] || "")}</text>
+    <text x="540" y="926" fill="#b2ffe4" font-size="31" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(rank)} • ${escapeSvgText(`${milestoneLikes} likes`)}</text>
+    <text x="540" y="960" fill="#d8e8ff" font-size="21" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(descriptionLines[0] || "")}</text>
   </g>
 </svg>`;
 
@@ -18796,6 +18795,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   if (likes < SPIRIT_UNLOCK_TARGET) {
     spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
+    if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
     return;
   }
@@ -18809,6 +18809,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
     spiritCollectibleBusy = true;
     const variation = forceRegenerate ? collectibleVariationToken() : "";
+    if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
     try {
@@ -18828,6 +18829,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   if (!collectible?.imageUrl) {
     spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
+    if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
     return;
   }
@@ -18880,6 +18882,10 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     spiritCollectibleDownload.textContent = t("spiritCollectibleDownload");
     spiritCollectibleDownload.href = collectible.imageUrl;
     spiritCollectibleDownload.setAttribute("download", downloadFilename);
+  }
+  if (spiritCollectibleRegenerateBtn) {
+    spiritCollectibleRegenerateBtn.textContent = t("spiritCollectibleRegenerate");
+    spiritCollectibleRegenerateBtn.disabled = false;
   }
   if (spiritCollectibleShareInstagramBtn) {
     spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
@@ -23255,6 +23261,15 @@ bind(spiritCollectibleDownload, "click", (event) => {
   if (!downloaded) {
     showToast(t("spiritCollectibleShareNoAsset"));
   }
+});
+bind(spiritCollectibleRegenerateBtn, "click", async () => {
+  const spirit = spiritById(currentSpiritId || "");
+  if (!spirit) {
+    showToast(t("spiritCollectibleShareNoAsset"));
+    return;
+  }
+  const spiritText = localizedSpiritCopy(spirit) || {};
+  await ensureSpiritCollectible(spirit, spiritText, { forceRegenerate: true });
 });
 bind(spiritCollectibleShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram();
