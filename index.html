@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260602a" />
+    <link rel="stylesheet" href="styles.css?v=20260602b" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -368,7 +368,14 @@
         <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
       </header>
 
-      <section id="dailyNewsPanel" class="panel daily-news-panel" aria-labelledby="dailyNewsTitle">
+      <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
+        <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true">Descobrir</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">News</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
+      </nav>
+
+      <section id="dailyNewsPanel" class="panel daily-news-panel app-tab-panel" data-app-tab="news" aria-labelledby="dailyNewsTitle">
         <div class="section-head daily-news-head">
           <div>
             <p id="dailyNewsKicker" class="section-kicker">Daily News</p>
@@ -388,7 +395,7 @@
         </div>
       </section>
 
-      <section class="panel preference-panel" aria-labelledby="preferencias-title">
+      <section class="panel preference-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="preferencias-title">
         <div class="section-head">
           <div>
             <p id="preferenceSectionKicker" class="section-kicker">Busca guiada</p>
@@ -587,7 +594,7 @@
         </div>
       </section>
 
-      <section id="resultPanel" class="panel hidden" aria-live="polite">
+      <section id="resultPanel" class="panel hidden app-tab-panel active" data-app-tab="discover" aria-live="polite">
         <h3>Sua recomendação</h3>
         <article id="primaryTrackCard" class="result-card main-track">
           <p class="chip" id="matchReason"></p>
@@ -761,7 +768,7 @@
         </div>
       </section>
 
-      <section id="detailsPanel" class="panel artist-hub-panel hidden">
+      <section id="detailsPanel" class="panel artist-hub-panel hidden app-tab-panel active" data-app-tab="discover">
         <h3>Hub do artista</h3>
         <p id="artistHubIntro" class="muted artist-hub-intro">Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.</p>
         <div class="details-grid">
@@ -786,7 +793,7 @@
         </div>
       </section>
 
-      <section id="voiceLabPanel" class="panel voice-lab-panel" aria-labelledby="voiceLabTitle">
+      <section id="voiceLabPanel" class="panel voice-lab-panel app-tab-panel" data-app-tab="studio" aria-labelledby="voiceLabTitle">
         <div class="voice-lab-head">
           <div>
             <p id="voiceLabKicker" class="section-kicker">Brincadeira sonora</p>
@@ -849,14 +856,14 @@
         </div>
       </section>
 
-      <section id="eventsPanel" class="panel events-hub-panel hidden">
+      <section id="eventsPanel" class="panel events-hub-panel hidden app-tab-panel" data-app-tab="profile">
         <h3>Agenda do artista</h3>
         <p id="eventsIntro" class="muted">Curta um artista para carregar agenda de shows.</p>
         <div id="eventsCalendar" class="events-calendar"></div>
         <ul id="eventsList" class="events-list"></ul>
       </section>
 
-      <section id="spiritPanel" class="panel spirit-panel hidden" aria-live="polite">
+      <section id="spiritPanel" class="panel spirit-panel hidden app-tab-panel" data-app-tab="profile" aria-live="polite">
         <h3 id="spiritPanelTitle">Seu espírito musical</h3>
         <p id="spiritIntro" class="muted">Ao completar 10 likes, seu espírito musical será revelado.</p>
         <div id="spiritInsightPanel" class="spirit-insight-panel">
@@ -929,7 +936,7 @@
         </article>
       </section>
 
-      <section id="summaryPanel" class="panel">
+      <section id="summaryPanel" class="panel app-tab-panel" data-app-tab="profile">
         <h3 id="summaryPanelTitle">Mapa do seu gosto</h3>
         <p id="statsLine" class="muted">Nenhum feedback ainda.</p>
         <div class="profile-stats-grid">
@@ -1005,6 +1012,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260602a"></script>
+    <script src="app.js?v=20260602b"></script>
   </body>
 </html>

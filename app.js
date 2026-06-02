@@ -93,6 +93,141 @@ const DAILY_NEWS_FALLBACK_ITEMS = [
   }
 ];
 
+const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
+  {
+    style: "dark_experimental",
+    artist: "Vutt'un",
+    song: "Confundentur",
+    label: "Naturaiz Records / SoundCloud",
+    bpmExact: 180,
+    artistCountry: "Brazil",
+    artistGenre: "Dark Experimental / Psycore",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-confundentur-180",
+    artistBio: "Vutt'un aparece em catálogos independentes de alta velocidade, com foco em psicodelia experimental, pressão extrema e pesquisa sonora fora do circuito Deezer.",
+    labelBio: "Naturaiz Records é uma fonte complementar útil para mapear artistas de dark experimental, psycore e faixas rápidas publicadas fora dos catálogos tradicionais."
+  },
+  {
+    style: "dark_psy",
+    artist: "Hyperekplexia",
+    song: "Rotting In Hell",
+    label: "Naturaiz Records / SoundCloud",
+    bpmExact: 168,
+    artistCountry: "Brazil",
+    artistGenre: "Dark Psy / Experimental",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/hyperekplexia-rotting-in-hell-168bpm",
+    artistBio: "Hyperekplexia entra como suplemento underground para dark psy experimental, usando SoundCloud como pista de curadoria quando APIs comerciais não cobrem bem o nicho.",
+    labelBio: "Naturaiz Records ajuda a completar a leitura de artistas extremos com faixas publicadas em redes abertas."
+  },
+  {
+    style: "dark_experimental",
+    artist: "Sectio Aurea",
+    song: "Gato Murr",
+    label: "Naturaiz Records / SoundCloud",
+    bpmExact: 200,
+    artistCountry: "Brazil",
+    artistGenre: "Dark Experimental / Psycore",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/sectio-aurea-gato-murr-200bpm",
+    artistBio: "Sectio Aurea aparece no eixo mais experimental e acelerado, com material útil para calibrar faixas 175+.",
+    labelBio: "SoundCloud e Bandcamp entram aqui como fontes de contexto para cenas que nem sempre aparecem bem em Deezer."
+  },
+  {
+    style: "slambient",
+    artist: "VallaK",
+    song: "Endless Knot Signal",
+    label: "Endless Knot / SoundCloud",
+    bpmExact: 178,
+    artistCountry: "Brazil",
+    artistGenre: "Slambient / Dark Psy",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=VallaK%20Endless%20Knot",
+    artistBio: "VallaK reforça o eixo slambient/dark experimental com referência de label e SoundCloud, útil para descobrir DJs fora do catálogo Deezer.",
+    labelBio: "Endless Knot funciona como fonte de contexto para listas de artistas, DJs e releases de psicodelia sombria."
+  },
+  {
+    style: "slambient",
+    artist: "Vuga",
+    song: "Endless Knot Signal",
+    label: "Endless Knot / SoundCloud",
+    bpmExact: 176,
+    artistCountry: "Brazil",
+    artistGenre: "Slambient / Psycore",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=Vuga%20Endless%20Knot",
+    artistBio: "Vuga entra como suplemento de cena/label para ampliar artistas extremos quando o Deezer não traz cobertura suficiente.",
+    labelBio: "A lista de artistas da gravadora e descrições de SoundCloud ajudam o app a montar contexto e buscar tracks."
+  },
+  {
+    style: "freeform",
+    artist: "Hongos Longos",
+    song: "Xinforimpola",
+    label: "Random Records / SoundCloud",
+    bpmExact: 148,
+    artistCountry: "Brazil",
+    artistGenre: "Freeform Psy",
+    soundcloudTrackUrl: "https://soundcloud.com/random_records/hongos-longos-xinforimpola",
+    artistBio: "Hongos Longos reforça o recorte freeform/psy brasileiro com faixa em SoundCloud, bom exemplo de suplemento fora de Deezer.",
+    labelBio: "Random Records e SoundCloud ajudam a localizar faixas de nicho que aparecem melhor em redes abertas."
+  },
+  {
+    style: "forest_psy",
+    artist: "Mubali",
+    song: "Westpsy Fall",
+    label: "Mubali SoundCloud",
+    bpmExact: 180,
+    artistCountry: "United States",
+    artistGenre: "Forest Psy / West Psy",
+    soundcloudTrackUrl: "https://soundcloud.com/mubali/180-westpsy-fall-2021-v1",
+    artistBio: "Mubali tem material publicado em SoundCloud que ajuda a separar recortes de forest/freeform por faixa, não só por nome de artista.",
+    labelBio: "Perfis oficiais de SoundCloud podem complementar catálogos comerciais com versões, IDs e material de set."
+  },
+  {
+    style: "hi_tech",
+    artist: "Kashyyyk",
+    song: "Tree of Life",
+    label: "Kamino Records / SoundCloud",
+    bpmExact: 180,
+    artistCountry: "Mexico",
+    artistGenre: "Hi-Tech",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=Kashyyyk%20Tree%20of%20Life",
+    artistBio: "Kashyyyk representa hi-tech mexicano de alta velocidade; SoundCloud entra como busca complementar para achar IDs e sets relacionados.",
+    labelBio: "Kamino Records é uma referência forte para hi-tech e pode servir como fonte de roster/contexto."
+  },
+  {
+    style: "psycore",
+    artist: "Audiopathik",
+    song: "Extreme Pulse",
+    label: "Psycore SoundCloud supplement",
+    bpmExact: 190,
+    artistCountry: "Mexico",
+    artistGenre: "Psycore / Hi-Tech",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=Audiopathik%20psycore",
+    artistBio: "Audiopathik reforça o eixo psycore/hi-tech como nome para buscas em redes abertas quando APIs comerciais trazem pouca cobertura.",
+    labelBio: "Fontes abertas são úteis para cenas rápidas e extremas que vivem muito em sets, descrições e uploads de SoundCloud."
+  },
+  {
+    style: "dark_psy",
+    artist: "Nyctophungi",
+    song: "Nocturnal Signal",
+    label: "Dark Psy SoundCloud supplement",
+    bpmExact: 162,
+    artistCountry: "Brazil",
+    artistGenre: "Dark Psy",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=Nyctophungi%20dark%20psy",
+    artistBio: "Nyctophungi amplia a cena dark brasileira com busca complementar em SoundCloud e gravadoras independentes.",
+    labelBio: "Descrições de uploads e rosters de labels ajudam a enriquecer bio e associação de cena."
+  },
+  {
+    style: "dark_progressive",
+    artist: "Evil Oil Man",
+    song: "Cable Guy",
+    label: "Zenon Records / SoundCloud",
+    bpmExact: 136,
+    artistCountry: "United Kingdom",
+    artistGenre: "Dark Progressive / Zenonesque",
+    soundcloudTrackUrl: "https://soundcloud.com/search?q=Evil%20Oil%20Man%20Cable%20Guy",
+    artistBio: "Evil Oil Man pertence ao eixo dark progressive/zenonesque; site de label, SoundCloud e descrições ajudam a complementar origem, roster e contexto.",
+    labelBio: "Zenon Records é fonte de contexto para dark progressive, rosters e lançamentos que melhoram a curadoria além do Deezer."
+  }
+];
+
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
   dark_psy: "dark psy psytrance",
@@ -3587,6 +3722,8 @@ const authGuestBtn = document.getElementById("authGuestBtn");
 const authFeedback = document.getElementById("authFeedback");
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
+const appTabBar = document.getElementById("appTabBar");
+const appTabPanels = document.querySelectorAll("[data-app-tab]");
 const catalogStatsKicker = document.getElementById("catalogStatsKicker");
 const catalogArtistsCount = document.getElementById("catalogArtistsCount");
 const catalogTracksCount = document.getElementById("catalogTracksCount");
@@ -4066,11 +4203,11 @@ const DEFAULT_WEIGHTS = {
 };
 
 const SMART_PRESETS = {
-  focus: { style: "minimal_techno", context: "foco", energy: "mid", bpm: "124-132", vocals: "instrumental" },
-  work: { style: "techno", context: "trabalho", energy: "mid", bpm: "124-132", vocals: "instrumental" },
-  workout: { style: "techno", context: "treino", energy: "high", bpm: "132-145", vocals: "" },
-  after: { style: "chillout", context: "after", energy: "low", bpm: "60-110", vocals: "" },
-  peak: { style: "peak_time_techno", context: "peak", energy: "high", bpm: "132-145", vocals: "instrumental" }
+  focus: { style: "", fallbackStyle: "minimal_techno", context: "foco", energy: "mid", bpm: "", vocals: "instrumental" },
+  work: { style: "", fallbackStyle: "techno", context: "trabalho", energy: "mid", bpm: "", vocals: "instrumental" },
+  workout: { style: "", fallbackStyle: "psytrance", context: "treino", energy: "high", bpm: "", vocals: "" },
+  after: { style: "", fallbackStyle: "chillout", context: "after", energy: "low", bpm: "", vocals: "" },
+  peak: { style: "", fallbackStyle: "peak_time_techno", context: "peak", energy: "high", bpm: "", vocals: "instrumental" }
 };
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
@@ -4144,7 +4281,7 @@ const STYLE_BPM_RULES = {
   psytrance: { min: 138, max: 148 },
   forest_psy: { min: 145, max: 154 },
   dark_psy: { min: 154, max: 175 },
-  dark_experimental: { min: 152, max: 172 },
+  dark_experimental: { min: 175, max: 220 },
   psycore: { min: 175, max: 220 },
   freeform: { min: 138, max: 180 },
   full_on: { min: 142, max: 150 },
@@ -4195,7 +4332,7 @@ const STYLE_INFO_PT = {
   psytrance: "Psytrance de pista com progressao hipnotica, synths acidos e foco em trance psicodelico.",
   forest_psy: "Vertente mais organica e tribal do psy, com atmosferas densas e camadas de floresta.",
   dark_psy: "Sonoridade mais sombria e agressiva, com design de som cortante e narrativa noturna.",
-  dark_experimental: "Cruza dark psy com texturas experimentais, arranjos menos previsiveis e timbres abstratos.",
+  dark_experimental: "Experimental extremo dentro do dark psy: normalmente 175+ BPM, com texturas abstratas, viradas imprevisiveis e pressao de pista acelerada.",
   psycore: "Subestilo extremo do psy, com muita densidade ritmica, recortes secos e altissima intensidade.",
   freeform: "Psytrance livre/West Psy, com estruturas menos previsiveis, groove mutante e BPM que pode ir do experimental organico ao rapido.",
   full_on: "Full-On classico de pista: groove reto, drops claros e leads melodicos para energia constante.",
@@ -8697,6 +8834,8 @@ function addDynamicTrackToCatalog({
   artistCountry = "",
   artistGenre = "",
   artistProfileHint = "",
+  artistBio = "",
+  labelBio = "",
   bandcampUrl = "",
   bandcampTrackUrl = "",
   soundcloudTrackUrl = ""
@@ -8759,8 +8898,8 @@ function addDynamicTrackToCatalog({
     artistCountry: String(artistCountry || "").trim(),
     artistGenre: String(artistGenre || "").trim(),
     artistProfileHint: String(artistProfileHint || "").trim(),
-    artistBio: `${artistName} apareceu na busca dinamica para ampliar sua descoberta no subgênero ${styleLabelByValue(style)}.`,
-    labelBio: buildDynamicLabelSummary(style, cleanLabel),
+    artistBio: String(artistBio || "").trim() || `${artistName} apareceu na busca dinamica para ampliar sua descoberta no subgênero ${styleLabelByValue(style)}.`,
+    labelBio: String(labelBio || "").trim() || buildDynamicLabelSummary(style, cleanLabel),
     source
   };
 
@@ -8812,6 +8951,39 @@ function injectLocalTrackSeedBoost() {
         registerRecentArtistSignal(seed.style, seed.artist, releaseDate, "local_seed_boost");
       }
     }
+  });
+  return added;
+}
+
+function injectSoundCloudSupplementalSeeds() {
+  const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)));
+  let added = 0;
+  SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS.forEach((seed) => {
+    const inserted = addDynamicTrackToCatalog(
+      {
+        style: seed.style,
+        song: seed.song,
+        artist: seed.artist,
+        label: seed.label || "SoundCloud supplement",
+        bpmExact: Number(seed.bpmExact) || 0,
+        previewUrl: "",
+        releaseDate: seed.releaseDate || "SoundCloud supplement",
+        durationSec: Number(seed.durationSec) || 0,
+        source: "soundcloud_label_supplement",
+        artistCountry: String(seed.artistCountry || "").trim(),
+        artistGenre: String(seed.artistGenre || "").trim(),
+        artistProfileHint: String(seed.artistProfileHint || seed.artistBio || "").trim(),
+        artistBio: String(seed.artistBio || "").trim(),
+        labelBio: String(seed.labelBio || "").trim(),
+        soundcloudTrackUrl: String(seed.soundcloudTrackUrl || "").trim(),
+        bandcampUrl: String(seed.bandcampUrl || "").trim(),
+        bandcampTrackUrl: String(seed.bandcampTrackUrl || "").trim()
+      },
+      existingKeys
+    );
+    if (!inserted) return;
+    added += 1;
+    if (seed.releaseDate) registerRecentArtistSignal(seed.style, seed.artist, seed.releaseDate, "soundcloud_label_supplement");
   });
   return added;
 }
@@ -9235,6 +9407,10 @@ const I18N = {
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
     heroTitle: "Curadoria de eletrônica, com descoberta real",
     heroDesc: "Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk e outros subgêneros importantes para não deixar nada de fora.",
+    tabDiscover: "Descobrir",
+    tabNews: "News",
+    tabStudio: "Estúdio",
+    tabProfile: "Perfil",
     catalogStatsKicker: "Nossa base para descoberta",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "músicas buscáveis",
@@ -9636,6 +9812,10 @@ const I18N = {
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
     heroTitle: "Electronic curation with real discovery",
     heroDesc: "Includes psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk, and other key subgenres.",
+    tabDiscover: "Discover",
+    tabNews: "News",
+    tabStudio: "Studio",
+    tabProfile: "Profile",
     catalogStatsKicker: "Our discovery base",
     catalogStatsArtists: "indexed artists",
     catalogStatsTracks: "searchable tracks",
@@ -10037,6 +10217,10 @@ const I18N = {
     heroTitle: "Curaduría electrónica con descubrimiento real",
     heroDesc: "Incluye psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal/gabber), house, drum and bass, chillout, Brazilian Funk y otros subgéneros clave.",
     floatingSurpriseBtn: "Sorpresa",
+    tabDiscover: "Descubrir",
+    tabNews: "News",
+    tabStudio: "Estudio",
+    tabProfile: "Perfil",
     catalogStatsKicker: "Nuestra base para descubrir",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "pistas buscables",
@@ -10993,6 +11177,10 @@ function applyLanguage() {
   setText("#heroDesc", t("heroDesc"));
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
+  setText("[data-app-tab-target='discover']", t("tabDiscover"));
+  setText("[data-app-tab-target='news']", t("tabNews"));
+  setText("[data-app-tab-target='studio']", t("tabStudio"));
+  setText("[data-app-tab-target='profile']", t("tabProfile"));
   updateCatalogStatsHero();
   setText("#dailyNewsKicker", t("dailyNewsKicker"));
   setText("#dailyNewsTitle", t("dailyNewsTitle"));
@@ -13580,6 +13768,43 @@ function updateControlValue(control, value = "") {
   control.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+function setActiveAppTab(tabName = "discover") {
+  const safeTab = ["discover", "news", "studio", "profile"].includes(tabName) ? tabName : "discover";
+  if (appTabBar) {
+    appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
+      const isActive = button.getAttribute("data-app-tab-target") === safeTab;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+  appTabPanels.forEach((panel) => {
+    panel.classList.toggle("active", panel.getAttribute("data-app-tab") === safeTab);
+  });
+}
+
+function bestBpmOptionForStyle(style = "", preferredBpm = "") {
+  if (preferredBpm) return preferredBpm;
+  const rule = STYLE_BPM_RULES[style];
+  if (!rule || !bpmEl) return "";
+  const options = Array.from(bpmEl.options)
+    .map((option) => option.value)
+    .filter(Boolean);
+  const scored = options
+    .map((value) => {
+      const range = parseBpmRangeValue(value);
+      if (!range) return null;
+      const min = Number(range.min);
+      const max = Number(range.max);
+      const overlap = Math.max(0, Math.min(rule.max, max) - Math.max(rule.min, min));
+      const midpoint = (min + Math.min(max, 240)) / 2;
+      const target = (rule.min + Math.min(rule.max, 240)) / 2;
+      return { value, overlap, distance: Math.abs(midpoint - target) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.overlap - a.overlap || a.distance - b.distance);
+  return scored[0]?.overlap > 0 ? scored[0].value : "";
+}
+
 function setActiveSmartPreset(presetName = "") {
   if (!smartPresetBar) return;
   smartPresetBar.querySelectorAll("[data-preset]").forEach((button) => {
@@ -13593,10 +13818,13 @@ async function applySmartPreset(presetName = "") {
   const preset = SMART_PRESETS[presetName];
   if (!preset) return;
 
-  updateControlValue(styleEl, preset.style);
+  const currentStyle = String(styleEl?.value || "").trim();
+  const nextStyle = preset.style || currentStyle || preset.fallbackStyle || "";
+  const nextBpm = bestBpmOptionForStyle(nextStyle, preset.bpm);
+  updateControlValue(styleEl, nextStyle);
   updateControlValue(contextEl, preset.context);
   updateControlValue(energyEl, preset.energy);
-  updateControlValue(bpmEl, preset.bpm);
+  updateControlValue(bpmEl, nextBpm);
   updateControlValue(vocalsEl, preset.vocals);
   setActiveSmartPreset(presetName);
   if (discoveryModeEl) discoveryModeEl.checked = true;
@@ -19621,6 +19849,7 @@ function pickDiscovery(prefs, knownArtists, mainArtist, excludedDiscoveryNames =
 }
 
 function renderRecommendation(track, prefs) {
+  setActiveAppTab("discover");
   const meta = getTrackMetadata(track);
   const displayLabel = sanitizeLabel(track.label, track.artist, track.song);
 
@@ -22922,6 +23151,11 @@ bind(djModeGenerateBtn, "click", generateDjModeJourney);
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshDailyNews({ silent: false });
 });
+bind(appTabBar, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
+  if (!target) return;
+  setActiveAppTab(String(target.getAttribute("data-app-tab-target") || "discover"));
+});
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
 bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
@@ -22930,6 +23164,7 @@ bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
 syncDiscoveryFromSeeds();
 loadDynamicCatalogCache();
 injectLocalTrackSeedBoost();
+injectSoundCloudSupplementalSeeds();
 ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
 normalizeTrustedSlambientCatalog();
 sanitizeCatalogByStyleRules();
