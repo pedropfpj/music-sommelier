@@ -5381,6 +5381,116 @@ const ARTIST_STYLE_OVERRIDES = {
 };
 
 const ARTIST_CANONICAL_ORIGINS = {
+  "astrix": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Astrix e um produtor israelense ligado ao psytrance e ao progressive psy de alcance global."
+  },
+  "ajja": {
+    country: "Switzerland",
+    area: "",
+    disambiguation: "Ajja e um produtor suiço associado ao forest psy e a uma psicodelia organica muito detalhada."
+  },
+  "tristan": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Tristan e um produtor britanico ligado ao full-on psicodelico e a cultura psytrance de festival."
+  },
+  "burn in noise": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Burn In Noise e um projeto brasileiro reconhecido no full-on por energia de pista e producao precisa."
+  },
+  "earthspace": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Earthspace e um produtor brasileiro ligado ao full-on moderno e a sonoridades psicodelicas de alta pressao."
+  },
+  "necropsycho": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Necropsycho e um projeto brasileiro associado ao dark psy e a vertentes experimentais intensas."
+  },
+  "evil oil man": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "Evil Oil Man e um produtor britanico associado ao eixo dark progressive/zenonesque e a grooves psicodelicos profundos."
+  },
+  "anna": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "ANNA e uma DJ e produtora brasileira consolidada no techno mundial."
+  },
+  "charlotte de witte": {
+    country: "Belgium",
+    area: "",
+    disambiguation: "Charlotte de Witte e uma DJ e produtora belga ligada ao techno de alta pressao."
+  },
+  "amelie lens": {
+    country: "Belgium",
+    area: "",
+    disambiguation: "Amelie Lens e uma DJ e produtora belga ligada ao techno contemporaneo."
+  },
+  "alignment": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Alignment e um produtor italiano associado a nova escola do hard techno europeu."
+  },
+  "fisher": {
+    country: "Australia",
+    area: "",
+    disambiguation: "FISHER e um produtor australiano conhecido pelo tech house de grande alcance em clubs e festivais."
+  },
+  "michael bibi": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "Michael Bibi e um DJ e produtor britanico ligado ao tech house moderno e a cultura club de Londres."
+  },
+  "pawsa": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "PAWSA e um produtor britanico associado ao tech house minimal, grooveado e focado em club."
+  },
+  "black coffee": {
+    country: "South Africa",
+    area: "",
+    disambiguation: "Black Coffee e um DJ e produtor sul-africano que levou o afro house para alcance global."
+  },
+  "sub focus": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Sub Focus e um produtor britanico central no drum and bass moderno."
+  },
+  "calibre": {
+    country: "United Kingdom",
+    area: "Northern Ireland",
+    disambiguation: "Calibre e um produtor da Irlanda do Norte conhecido por liquid drum and bass profundo e musical."
+  },
+  "noisia": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Noisia e um trio neerlandes reconhecido por design sonoro tecnico no neurofunk e bass music."
+  },
+  "skrillex": {
+    country: "United States",
+    area: "",
+    disambiguation: "Skrillex e um produtor norte-americano que redefiniu a linguagem do bass music no mainstream."
+  },
+  "bonobo": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Bonobo e um produtor britanico ligado a downtempo, electronica e arranjos organicos."
+  },
+  "aphex twin": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Aphex Twin e um produtor britanico essencial para IDM e eletronica experimental."
+  },
+  "brian eno": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Brian Eno e um artista britanico fundamental para a musica ambient."
+  },
   "gms": {
     country: "Israel",
     area: "",
@@ -9586,6 +9696,7 @@ const I18N = {
     discogsArtistLink: "Buscar artista no Discogs",
     artistBioAiSource: "Bio refinada por IA com base em: {sources}.",
     artistBioAiFallbackSource: "catálogo e fontes abertas",
+    artistBioLocalSource: "Leitura curada local. Para bio IA em tempo real, configure OPENAI_API_KEY.",
     trackAiTitle: "Radar IA da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
@@ -10005,6 +10116,7 @@ const I18N = {
     discogsArtistLink: "Find artist on Discogs",
     artistBioAiSource: "AI-refined bio based on: {sources}.",
     artistBioAiFallbackSource: "catalog and open sources",
+    artistBioLocalSource: "Local curated read. Configure OPENAI_API_KEY for real-time AI bios.",
     trackAiTitle: "Track AI radar",
     trackAiRefreshBtn: "Refresh insight",
     trackAiLoading: "Analyzing your current track and preparing a quick read...",
@@ -10424,6 +10536,7 @@ const I18N = {
     discogsArtistLink: "Buscar artista en Discogs",
     artistBioAiSource: "Bio refinada por IA con base en: {sources}.",
     artistBioAiFallbackSource: "catálogo y fuentes abiertas",
+    artistBioLocalSource: "Lectura curada local. Configura OPENAI_API_KEY para bios IA en tiempo real.",
     trackAiTitle: "Radar IA de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
@@ -15683,11 +15796,33 @@ function countryNameToCode(countryName = "") {
   return "";
 }
 
+function parseOriginText(originText = "") {
+  const raw = String(originText || "").replace(/[()]/g, ",").replace(/\s+/g, " ").trim();
+  if (!raw) return { country: "", area: "" };
+  const parts = raw
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const candidates = parts.length ? parts : [raw];
+  for (let index = candidates.length - 1; index >= 0; index -= 1) {
+    const candidate = candidates[index];
+    if (countryNameToCode(candidate)) {
+      return {
+        country: candidate,
+        area: candidates.slice(0, index).join(", ")
+      };
+    }
+  }
+  if (countryNameToCode(raw)) return { country: raw, area: "" };
+  return { country: "", area: raw };
+}
+
 function artistOriginSignalForTrack(track) {
   const artist = String(track?.artist || "").trim();
   const canonical = canonicalOriginForArtist(artist);
-  const apiOrCatalogCountry = String(canonical?.country || track?.artistCountry || "").trim();
-  const apiOrCatalogArea = String(canonical?.area || track?.artistArea || "").trim();
+  const parsedTrackArea = parseOriginText(track?.artistArea || "");
+  const apiOrCatalogCountry = String(canonical?.country || track?.artistCountry || parsedTrackArea.country || "").trim();
+  const apiOrCatalogArea = String(canonical?.area || (track?.artistCountry ? track?.artistArea : parsedTrackArea.area) || "").trim();
   if (apiOrCatalogCountry) return { country: apiOrCatalogCountry, area: apiOrCatalogArea };
   if (track?.style === "brazilian_funk") return { country: "Brazil", area: "" };
   return quizOriginSignalForArtist(artist);
@@ -16067,33 +16202,32 @@ function localizedArtistNarrativeFallback(track) {
   const releaseDate = formatReleaseDateForLanguage(meta.releaseDate);
   const bpmData = resolveBpmDisplay(safeTrack);
   const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.range ? `${t("bpmEstimatedRange", { range: bpmData.range })}` : t("bpmUnverifiedLabel");
+  const origin = artistOriginSignalForTrack(track);
+  const originLabel = formatArtistOriginLabel(origin);
+  const canonical = canonicalOriginForArtist(safeTrack.artist);
   const sourceLabel = String(track?.source || "catalogo_local")
     .replace(/_/g, " ")
     .toUpperCase();
-  const canonicalOrigin = canonicalOriginForArtist(safeTrack.artist);
-  const trackSource = normalize(track?.source || "");
-  const allowTrackCountrySignal = !trackSource.includes("itunes");
-  const countryRaw = String(canonicalOrigin?.country || (allowTrackCountrySignal ? track?.artistCountry : "") || "").trim();
-  const areaRaw = String(canonicalOrigin?.area || "").trim();
-  const countrySignal = areaRaw && countryRaw ? `${areaRaw} (${countryRaw})` : areaRaw || countryRaw;
   const genre = String(track?.artistGenre || localizedArtistGenreHint(safeTrack.artist, safeTrack.style) || "").trim();
   const hint = String(track?.artistProfileHint || "").trim();
+  const styleSummary = styleInfoSummaryByLanguage(safeTrack.style);
+  const identity = canonical?.disambiguation || hint;
   if (currentLanguage === "en") {
-    const originCopy = countrySignal ? `Origin cue: ${countrySignal}. ` : "";
-    const genreCopy = genre ? `Genre cue: ${genre}. ` : "";
-    const hintCopy = hint ? `Catalog clue: ${hint}. ` : "";
-    return `${safeTrack.artist} moves inside ${style} with "${safeTrack.song}" (${releaseDate}) linked to ${label}. ${originCopy}${genreCopy}Tempo cue: ${bpmCue}. Source: ${sourceLabel}. ${hintCopy}`.trim();
+    const originCopy = originLabel ? `Origin: ${originLabel}. ` : "";
+    const genreCopy = genre ? `Genre signal: ${genre}. ` : "";
+    const identityCopy = identity ? `${identity} ` : "";
+    return `${identityCopy}${safeTrack.artist} appears here through "${safeTrack.song}", a ${style} recommendation tied to ${label}. ${originCopy}${genreCopy}The sound points to ${styleSummary.toLowerCase()} Pulse reference: ${bpmCue}; release/context: ${releaseDate}. Source: ${sourceLabel}.`.trim();
   }
   if (currentLanguage === "es") {
-    const originCopy = countrySignal ? `Señal de origen: ${countrySignal}. ` : "";
+    const originCopy = originLabel ? `Origen: ${originLabel}. ` : "";
     const genreCopy = genre ? `Señal de género: ${genre}. ` : "";
-    const hintCopy = hint ? `Pista de catálogo: ${hint}. ` : "";
-    return `${safeTrack.artist} se mueve en ${style} con "${safeTrack.song}" (${releaseDate}) vinculada a ${label}. ${originCopy}${genreCopy}Pulso: ${bpmCue}. Fuente: ${sourceLabel}. ${hintCopy}`.trim();
+    const identityCopy = identity ? `${identity} ` : "";
+    return `${identityCopy}${safeTrack.artist} aparece aquí con "${safeTrack.song}", una recomendación de ${style} vinculada a ${label}. ${originCopy}${genreCopy}El sonido apunta a ${styleSummary.toLowerCase()} Pulso de referencia: ${bpmCue}; lanzamiento/contexto: ${releaseDate}. Fuente: ${sourceLabel}.`.trim();
   }
-  const countryCopy = countrySignal ? `Sinal de origem: ${countrySignal}. ` : "";
+  const countryCopy = originLabel ? `Origem: ${originLabel}. ` : "";
   const genreCopy = genre ? `Sinal de gênero: ${genre}. ` : "";
-  const hintCopy = hint ? `Pista de catálogo: ${hint}. ` : "";
-  return `${safeTrack.artist} navega pelo ${style} com "${safeTrack.song}" (${releaseDate}) ligado ao selo ${label}. ${countryCopy}${genreCopy}Pulso: ${bpmCue}. Fonte: ${sourceLabel}. ${hintCopy}`.trim();
+  const identityCopy = identity ? `${identity} ` : "";
+  return `${identityCopy}${safeTrack.artist} aparece aqui com "${safeTrack.song}", uma recomendação de ${style} ligada ao selo ${label}. ${countryCopy}${genreCopy}A sonoridade aponta para ${styleSummary.toLowerCase()} Pulso de referência: ${bpmCue}; lançamento/contexto: ${releaseDate}. Fonte: ${sourceLabel}.`.trim();
 }
 
 function detailedArtistBio(track) {
@@ -16699,7 +16833,13 @@ async function hydrateArtistBioFromAi(track) {
 
   artistBio.textContent = aiBio.bio;
   if (aiBio.origin && !track.artistCountry && !track.artistArea) {
-    track.artistArea = aiBio.origin;
+    const parsedOrigin = parseOriginText(aiBio.origin);
+    if (parsedOrigin.country) {
+      track.artistCountry = parsedOrigin.country;
+      track.artistArea = parsedOrigin.area;
+    } else {
+      track.artistArea = parsedOrigin.area || aiBio.origin;
+    }
   }
   if (aiBio.genre && !track.artistGenre) track.artistGenre = aiBio.genre;
   updateArtistOriginFlags(track);
@@ -20421,8 +20561,8 @@ function renderRecommendation(track, prefs) {
   if (artistBio) {
     artistBio.textContent = detailedArtistBio(track);
     if (artistBioAiMeta) {
-      artistBioAiMeta.textContent = "";
-      artistBioAiMeta.classList.add("hidden");
+      artistBioAiMeta.textContent = t("artistBioLocalSource");
+      artistBioAiMeta.classList.remove("hidden");
     }
     void hydrateArtistBioFromApis(track);
     void hydrateArtistBioFromAi(track);
