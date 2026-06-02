@@ -76,25 +76,52 @@ const DAILY_NEWS_SOURCES = [
 ];
 const DAILY_NEWS_FALLBACK_ITEMS = [
   {
-    title: "Novos lançamentos, line-ups e cultura club estão no radar diário",
-    source: "Sonic Search",
-    url: "https://edm.com/",
-    publishedAt: "",
-    summary: "Quando as fontes externas demoram ou bloqueiam CORS, o jornal mantém atalhos para publicações especializadas e tenta atualizar novamente."
+    title: "The Best Albums, EPs And Mixtapes Of The Year 2026 So Far",
+    source: "Mixmag",
+    sourceUrl: "https://mixmag.net/",
+    url: "https://mixmag.net/feature/best-dance-electronic-rap-albums-eps-mixtapes-2026",
+    publishedAt: "2026-05-12",
+    summary: "Mixmag mantém uma seleção atualizada de álbuns, EPs e mixtapes importantes de 2026."
   },
   {
-    title: "Acompanhe festivais, labels, DJs e tecnologia de pista em fontes especializadas",
-    source: "Sonic Search",
-    url: "https://mixmag.net/news",
-    publishedAt: "",
-    summary: "Use o Daily News como leitura rápida antes de pedir recomendações, buscar artistas ou montar uma jornada no Modo DJ."
+    title: "Brownies & Lemonade To Celebrate 5 Years Of DNBNL At Treasure Island",
+    source: "EDM Identity",
+    sourceUrl: "https://edmidentity.com/",
+    url: "https://edmidentity.com/2026/05/28/dnbnl-5-year-san-francisco/",
+    publishedAt: "2026-05-28",
+    summary: "Evento de drum and bass em São Francisco celebra cinco anos da marca DNBNL com curadoria bass."
   },
   {
-    title: "Radar global de música eletrônica pronto para atualizar",
-    source: "Sonic Search",
-    url: "https://dancingastronaut.com/",
-    publishedAt: "",
-    summary: "O app prioriza manchetes recentes e remove repetidas para manter o painel objetivo."
+    title: "&FRIENDS Festival Manila Unveils Stacked Lineup for 2026",
+    source: "EDM Identity",
+    sourceUrl: "https://edmidentity.com/",
+    url: "https://edmidentity.com/2026/05/13/andfriends-festival-manila-2026-lineup/",
+    publishedAt: "2026-05-13",
+    summary: "Festival em Manila anuncia lineup com nomes como Galantis, Porter Robinson, Subtronics e Yellow Claw."
+  },
+  {
+    title: "Burn Energy and Mixmag announce the Burn Energy Tour 2026",
+    source: "Mixmag",
+    sourceUrl: "https://mixmag.net/",
+    url: "https://mixmag.net/feature/burn-energy-and-mixmag-announce-the-burn-energy-tour-2026",
+    publishedAt: "2026-05-01",
+    summary: "Tour internacional passa por cenas underground na Europa e no Marrocos com artistas como TSHA e Nico Moreno."
+  },
+  {
+    title: "The EDM.com Class of 2026 Has Been Revealed",
+    source: "EDM.com",
+    sourceUrl: "https://edm.com/",
+    url: "https://edm.com/news/class-of-2026/",
+    publishedAt: "2026-02-19",
+    summary: "EDM.com apresenta artistas em ascensão que devem movimentar a cena eletrônica em 2026."
+  },
+  {
+    title: "Nominations Revealed, Fan Voting Opens for 2026 Electronic Dance Music Awards",
+    source: "EDM.com",
+    sourceUrl: "https://edm.com/",
+    url: "https://edm.com/news/edma-nominations-2026",
+    publishedAt: "2026-02-23",
+    summary: "EDMAs abre votação de fãs com nomes como Skrillex, REZZ e John Summit entre os indicados."
   }
 ];
 
@@ -9428,7 +9455,7 @@ const I18N = {
     dailyNewsLoading: "Carregando notícias...",
     dailyNewsLiveStatus: "Atualizado agora • {date}",
     dailyNewsCacheStatus: "Mostrando última atualização salva • {date}",
-    dailyNewsFallbackStatus: "Fontes externas indisponíveis agora. Mostrando atalhos confiáveis.",
+    dailyNewsFallbackStatus: "Mostrando notícias reais salvas de fontes confiáveis.",
     dailyNewsFreshLabel: "recente",
     dailyNewsSourcePrefix: "Fonte",
     dailyNewsSourceFallback: "Fonte",
@@ -9834,7 +9861,7 @@ const I18N = {
     dailyNewsLoading: "Loading news...",
     dailyNewsLiveStatus: "Updated now • {date}",
     dailyNewsCacheStatus: "Showing last saved update • {date}",
-    dailyNewsFallbackStatus: "External sources are unavailable right now. Showing trusted shortcuts.",
+    dailyNewsFallbackStatus: "Showing saved real stories from trusted sources.",
     dailyNewsFreshLabel: "recent",
     dailyNewsSourcePrefix: "Source",
     dailyNewsSourceFallback: "Source",
@@ -10240,7 +10267,7 @@ const I18N = {
     dailyNewsLoading: "Cargando noticias...",
     dailyNewsLiveStatus: "Actualizado ahora • {date}",
     dailyNewsCacheStatus: "Mostrando última actualización guardada • {date}",
-    dailyNewsFallbackStatus: "Fuentes externas no disponibles ahora. Mostrando accesos confiables.",
+    dailyNewsFallbackStatus: "Mostrando noticias reales guardadas de fuentes confiables.",
     dailyNewsFreshLabel: "reciente",
     dailyNewsSourcePrefix: "Fuente",
     dailyNewsSourceFallback: "Fuente",
@@ -11196,7 +11223,7 @@ function applyLanguage() {
   setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
   setText("#preferenceSectionKicker", t("sectionKicker"));
-  setText(".section-hint", t("sectionHint"));
+  setText("#preferenceSectionHint", t("sectionHint"));
   setText("#presetFocusBtn", t("presetFocus"));
   setText("#presetWorkBtn", t("presetWork"));
   setText("#presetWorkoutBtn", t("presetWorkout"));
