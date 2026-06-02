@@ -49,6 +49,50 @@ const STYLE_TO_FAMILY = {
   hardstyle: "hard_dance"
 };
 
+const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v1";
+const DAILY_NEWS_MAX_ITEMS = 6;
+const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
+const DAILY_NEWS_SOURCES = [
+  {
+    name: "EDM.com",
+    homepage: "https://edm.com/",
+    feed: "https://edm.com/.rss/full"
+  },
+  {
+    name: "Mixmag",
+    homepage: "https://mixmag.net/news",
+    feed: "https://mixmag.net/rss-category/news"
+  },
+  {
+    name: "Dancing Astronaut",
+    homepage: "https://dancingastronaut.com/",
+    feed: "https://dancingastronaut.com/feed/"
+  }
+];
+const DAILY_NEWS_FALLBACK_ITEMS = [
+  {
+    title: "Novos lançamentos, line-ups e cultura club estão no radar diário",
+    source: "Sonic Search",
+    url: "https://edm.com/",
+    publishedAt: "",
+    summary: "Quando as fontes externas demoram ou bloqueiam CORS, o jornal mantém atalhos para publicações especializadas e tenta atualizar novamente."
+  },
+  {
+    title: "Acompanhe festivais, labels, DJs e tecnologia de pista em fontes especializadas",
+    source: "Sonic Search",
+    url: "https://mixmag.net/news",
+    publishedAt: "",
+    summary: "Use o Daily News como leitura rápida antes de pedir recomendações, buscar artistas ou montar uma jornada no Modo DJ."
+  },
+  {
+    title: "Radar global de música eletrônica pronto para atualizar",
+    source: "Sonic Search",
+    url: "https://dancingastronaut.com/",
+    publishedAt: "",
+    summary: "O app prioriza manchetes recentes e remove repetidas para manter o painel objetivo."
+  }
+];
+
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
   dark_psy: "dark psy psytrance",
@@ -3552,6 +3596,13 @@ const catalogArtistsLabel = document.getElementById("catalogArtistsLabel");
 const catalogTracksLabel = document.getElementById("catalogTracksLabel");
 const catalogStylesLabel = document.getElementById("catalogStylesLabel");
 const catalogLabelsLabel = document.getElementById("catalogLabelsLabel");
+const dailyNewsPanel = document.getElementById("dailyNewsPanel");
+const dailyNewsKicker = document.getElementById("dailyNewsKicker");
+const dailyNewsTitle = document.getElementById("dailyNewsTitle");
+const dailyNewsIntro = document.getElementById("dailyNewsIntro");
+const dailyNewsRefreshBtn = document.getElementById("dailyNewsRefreshBtn");
+const dailyNewsStatus = document.getElementById("dailyNewsStatus");
+const dailyNewsList = document.getElementById("dailyNewsList");
 const quickSurprisePanel = document.getElementById("quickSurprisePanel");
 const quickSurpriseTitle = document.getElementById("quickSurpriseTitle");
 const quickSurpriseHint = document.getElementById("quickSurpriseHint");
@@ -9189,6 +9240,18 @@ const I18N = {
     catalogStatsTracks: "músicas buscáveis",
     catalogStatsStyles: "subgêneros",
     catalogStatsLabels: "labels",
+    dailyNewsKicker: "Daily News",
+    dailyNewsTitle: "Jornal de música eletrônica",
+    dailyNewsIntro: "Manchetes recentes do mundo da música eletrônica, reunidas de fontes especializadas.",
+    dailyNewsRefreshBtn: "Atualizar",
+    dailyNewsLoading: "Carregando notícias...",
+    dailyNewsLiveStatus: "Atualizado agora • {date}",
+    dailyNewsCacheStatus: "Mostrando última atualização salva • {date}",
+    dailyNewsFallbackStatus: "Fontes externas indisponíveis agora. Mostrando atalhos confiáveis.",
+    dailyNewsFreshLabel: "recente",
+    dailyNewsSourceFallback: "Fonte",
+    dailyNewsUntitled: "Notícia sem título",
+    dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
     sectionKicker: "Busca guiada",
     sectionHint: "Escolha um atalho ou refine manualmente.",
     presetFocus: "Foco",
@@ -9578,6 +9641,18 @@ const I18N = {
     catalogStatsTracks: "searchable tracks",
     catalogStatsStyles: "subgenres",
     catalogStatsLabels: "labels",
+    dailyNewsKicker: "Daily News",
+    dailyNewsTitle: "Electronic music journal",
+    dailyNewsIntro: "Recent headlines from the electronic music world, gathered from specialist sources.",
+    dailyNewsRefreshBtn: "Refresh",
+    dailyNewsLoading: "Loading news...",
+    dailyNewsLiveStatus: "Updated now • {date}",
+    dailyNewsCacheStatus: "Showing last saved update • {date}",
+    dailyNewsFallbackStatus: "External sources are unavailable right now. Showing trusted shortcuts.",
+    dailyNewsFreshLabel: "recent",
+    dailyNewsSourceFallback: "Source",
+    dailyNewsUntitled: "Untitled news",
+    dailyNewsNoSummary: "Open the story to read the full details.",
     sectionKicker: "Guided search",
     sectionHint: "Pick a shortcut or refine manually.",
     presetFocus: "Focus",
@@ -9967,6 +10042,18 @@ const I18N = {
     catalogStatsTracks: "pistas buscables",
     catalogStatsStyles: "subgéneros",
     catalogStatsLabels: "sellos",
+    dailyNewsKicker: "Daily News",
+    dailyNewsTitle: "Periódico de música electrónica",
+    dailyNewsIntro: "Titulares recientes del mundo de la música electrónica, reunidos desde fuentes especializadas.",
+    dailyNewsRefreshBtn: "Actualizar",
+    dailyNewsLoading: "Cargando noticias...",
+    dailyNewsLiveStatus: "Actualizado ahora • {date}",
+    dailyNewsCacheStatus: "Mostrando última actualización guardada • {date}",
+    dailyNewsFallbackStatus: "Fuentes externas no disponibles ahora. Mostrando accesos confiables.",
+    dailyNewsFreshLabel: "reciente",
+    dailyNewsSourceFallback: "Fuente",
+    dailyNewsUntitled: "Noticia sin título",
+    dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
     sectionKicker: "Búsqueda guiada",
     sectionHint: "Elige un atajo o refina manualmente.",
     presetFocus: "Foco",
@@ -10907,7 +10994,12 @@ function applyLanguage() {
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   updateCatalogStatsHero();
-  setText(".section-kicker", t("sectionKicker"));
+  setText("#dailyNewsKicker", t("dailyNewsKicker"));
+  setText("#dailyNewsTitle", t("dailyNewsTitle"));
+  setText("#dailyNewsIntro", t("dailyNewsIntro"));
+  setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
+  if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
+  setText("#preferenceSectionKicker", t("sectionKicker"));
   setText(".section-hint", t("sectionHint"));
   setText("#presetFocusBtn", t("presetFocus"));
   setText("#presetWorkBtn", t("presetWork"));
@@ -15582,6 +15674,198 @@ async function fetchJsonWithTimeout(endpoint, timeoutMs = 4200) {
     return null;
   } finally {
     if (timeoutId) window.clearTimeout(timeoutId);
+  }
+}
+
+async function fetchTextWithTimeout(endpoint, timeoutMs = DAILY_NEWS_FETCH_TIMEOUT_MS) {
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  let timeoutId = 0;
+  try {
+    if (controller) timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: { Accept: "application/rss+xml, application/xml, text/xml, text/plain" },
+      signal: controller?.signal
+    });
+    if (!response.ok) return "";
+    return await response.text();
+  } catch (_err) {
+    return "";
+  } finally {
+    if (timeoutId) window.clearTimeout(timeoutId);
+  }
+}
+
+function stripHtmlText(value = "") {
+  const text = String(value || "");
+  if (!text) return "";
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return (doc.body?.textContent || text).replace(/\s+/g, " ").trim();
+}
+
+function dailyNewsDateLabel(value = "") {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return t("dailyNewsFreshLabel");
+  return new Intl.DateTimeFormat(currentLocale(), {
+    day: "2-digit",
+    month: "short"
+  }).format(date);
+}
+
+function parseDailyNewsRss(xmlText = "", source = {}) {
+  if (!xmlText) return [];
+  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+  if (doc.querySelector("parsererror")) return [];
+  const nodes = Array.from(doc.querySelectorAll("item, entry")).slice(0, 8);
+  return nodes.map((node) => {
+    const linkEl = node.querySelector("link");
+    const rawLink = linkEl?.getAttribute("href") || linkEl?.textContent || source.homepage || "#";
+    const title = stripHtmlText(node.querySelector("title")?.textContent || "");
+    const summary = stripHtmlText(
+      node.querySelector("description")?.textContent ||
+      node.querySelector("summary")?.textContent ||
+      node.querySelector("content")?.textContent ||
+      ""
+    );
+    const publishedAt =
+      node.querySelector("pubDate")?.textContent ||
+      node.querySelector("published")?.textContent ||
+      node.querySelector("updated")?.textContent ||
+      "";
+    return {
+      title,
+      source: source.name || t("dailyNewsSourceFallback"),
+      url: String(rawLink || source.homepage || "#").trim(),
+      publishedAt: String(publishedAt || "").trim(),
+      summary: summary.slice(0, 180)
+    };
+  }).filter((item) => item.title && item.url);
+}
+
+function dailyNewsProxyUrls(feedUrl = "") {
+  const encoded = encodeURIComponent(feedUrl);
+  return [
+    feedUrl,
+    `https://api.allorigins.win/raw?url=${encoded}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encoded}`
+  ];
+}
+
+async function fetchDailyNewsSource(source) {
+  for (const endpoint of dailyNewsProxyUrls(source.feed)) {
+    const xml = await fetchTextWithTimeout(endpoint);
+    const items = parseDailyNewsRss(xml, source);
+    if (items.length) return items;
+  }
+  return [];
+}
+
+function normalizeNewsUrl(url = "") {
+  return String(url || "").split("?")[0].replace(/\/$/, "").toLowerCase();
+}
+
+function sortDailyNewsItems(items = []) {
+  return [...items].sort((a, b) => {
+    const aDate = new Date(a.publishedAt || 0).getTime() || 0;
+    const bDate = new Date(b.publishedAt || 0).getTime() || 0;
+    return bDate - aDate;
+  });
+}
+
+function compactDailyNewsItems(items = []) {
+  const seen = new Set();
+  return sortDailyNewsItems(items).filter((item) => {
+    const key = normalizeNewsUrl(item.url) || normalize(item.title);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, DAILY_NEWS_MAX_ITEMS);
+}
+
+function saveDailyNewsCache(items = []) {
+  try {
+    localStorage.setItem(DAILY_NEWS_CACHE_KEY, JSON.stringify({
+      updatedAt: new Date().toISOString(),
+      items: compactDailyNewsItems(items)
+    }));
+  } catch (_err) {
+    // Cache is optional; the panel still renders with live or fallback items.
+  }
+}
+
+function loadDailyNewsCache() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DAILY_NEWS_CACHE_KEY) || "{}");
+    if (!Array.isArray(parsed.items) || !parsed.items.length) return null;
+    return parsed;
+  } catch (_err) {
+    return null;
+  }
+}
+
+function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, fallback = false } = {}) {
+  if (!dailyNewsList || !dailyNewsStatus) return;
+  const visibleItems = compactDailyNewsItems(items.length ? items : DAILY_NEWS_FALLBACK_ITEMS);
+  dailyNewsList.innerHTML = "";
+
+  visibleItems.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "daily-news-card";
+
+    const meta = document.createElement("p");
+    meta.className = "daily-news-meta";
+    meta.textContent = `${item.source || t("dailyNewsSourceFallback")} • ${dailyNewsDateLabel(item.publishedAt || updatedAt)}`;
+
+    const title = document.createElement("a");
+    title.className = "daily-news-link";
+    title.href = item.url || "#";
+    title.target = "_blank";
+    title.rel = "noopener noreferrer";
+    title.textContent = item.title || t("dailyNewsUntitled");
+
+    const summary = document.createElement("p");
+    summary.className = "daily-news-summary muted";
+    summary.textContent = item.summary || t("dailyNewsNoSummary");
+
+    card.append(meta, title, summary);
+    dailyNewsList.appendChild(card);
+  });
+
+  const statusDate = updatedAt ? dailyNewsDateLabel(updatedAt) : dailyNewsDateLabel(new Date().toISOString());
+  if (fallback) dailyNewsStatus.textContent = t("dailyNewsFallbackStatus");
+  else if (fromCache) dailyNewsStatus.textContent = t("dailyNewsCacheStatus", { date: statusDate });
+  else dailyNewsStatus.textContent = t("dailyNewsLiveStatus", { date: statusDate });
+}
+
+async function refreshDailyNews({ silent = false } = {}) {
+  if (!dailyNewsPanel || !dailyNewsList || !dailyNewsStatus) return;
+  if (!silent) dailyNewsStatus.textContent = t("dailyNewsLoading");
+  if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = true;
+
+  const cache = loadDailyNewsCache();
+  if (cache?.items?.length && !dailyNewsList.children.length) {
+    renderDailyNewsItems(cache.items, { updatedAt: cache.updatedAt, fromCache: true });
+  }
+
+  try {
+    const batches = await Promise.all(DAILY_NEWS_SOURCES.map(fetchDailyNewsSource));
+    const items = compactDailyNewsItems(batches.flat());
+    if (items.length) {
+      saveDailyNewsCache(items);
+      renderDailyNewsItems(items, { updatedAt: new Date().toISOString() });
+      return;
+    }
+  } catch (_err) {
+    // Fall through to cache/fallback.
+  } finally {
+    if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
+  }
+
+  const latestCache = loadDailyNewsCache();
+  if (latestCache?.items?.length) {
+    renderDailyNewsItems(latestCache.items, { updatedAt: latestCache.updatedAt, fromCache: true });
+  } else {
+    renderDailyNewsItems(DAILY_NEWS_FALLBACK_ITEMS, { fallback: true });
   }
 }
 
@@ -22635,6 +22919,9 @@ bind(moreInfoBtn, "click", () => {
 });
 
 bind(djModeGenerateBtn, "click", generateDjModeJourney);
+bind(dailyNewsRefreshBtn, "click", () => {
+  void refreshDailyNews({ silent: false });
+});
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
 bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
@@ -22659,6 +22946,7 @@ window.neonpulseGenreAuditSummary = () => {
   return summary;
 };
 loadLanguage();
+void refreshDailyNews({ silent: true });
 bootstrapAudio();
 showIntroScreen();
 updateWeightLabels();
