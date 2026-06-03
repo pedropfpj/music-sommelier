@@ -127,7 +127,7 @@ const DAILY_NEWS_FALLBACK_ITEMS = [
 
 const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
   {
-    style: "dark_psy",
+    style: "psycore",
     artist: "Vutt'un",
     song: "Confundentur",
     label: "Naturaiz Records / SoundCloud",
@@ -151,7 +151,7 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
     labelBio: "Naturaiz Records ajuda a completar a leitura de artistas extremos com faixas publicadas em redes abertas."
   },
   {
-    style: "dark_psy",
+    style: "psycore",
     artist: "Sectio Aurea",
     song: "Gato Murr",
     label: "Naturaiz Records / SoundCloud",
@@ -199,7 +199,7 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
     labelBio: "Random Records e SoundCloud ajudam a localizar faixas de nicho que aparecem melhor em redes abertas."
   },
   {
-    style: "forest_psy",
+    style: "freeform",
     artist: "Mubali",
     song: "Westpsy Fall",
     label: "Mubali SoundCloud",
@@ -4356,7 +4356,7 @@ const STYLE_BPM_RULES = {
   hard_techno: { min: 145, max: 160 },
   minimal_techno: { min: 126, max: 132 },
   melodic_techno: { min: 122, max: 130 },
-  industrial_techno: { min: 138, max: 150 },
+  industrial_techno: { min: 130, max: 150 },
   peak_time_techno: { min: 132, max: 140 },
   house: { min: 122, max: 128 },
   deep_house: { min: 110, max: 124 },
@@ -4371,13 +4371,13 @@ const STYLE_BPM_RULES = {
   neurofunk: { min: 172, max: 178 },
   jump_up: { min: 172, max: 178 },
   jungle: { min: 160, max: 174 },
-  breakbeat: { min: 125, max: 140 },
+  breakbeat: { min: 125, max: 150 },
   uk_garage: { min: 128, max: 136 },
   future_garage: { min: 130, max: 140 },
   dubstep: { min: 138, max: 150 },
-  downtempo: { min: 90, max: 115 },
+  downtempo: { min: 80, max: 115 },
   ambient: { min: 60, max: 110 },
-  chillout: { min: 80, max: 112 },
+  chillout: { min: 70, max: 112 },
   slambient: { min: 155, max: 185 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
@@ -5484,6 +5484,126 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Italy",
     area: "",
     disambiguation: "Alignment e um produtor italiano associado a nova escola do hard techno europeu."
+  },
+  "999999999": {
+    country: "Italy",
+    area: "",
+    disambiguation: "999999999 e um projeto italiano ligado ao acid techno e ao hard techno de alta energia."
+  },
+  "ace ventura": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Ace Ventura e um produtor israelense conhecido por progressive psytrance de groove limpo e hipnotico."
+  },
+  "adam beyer": {
+    country: "Sweden",
+    area: "",
+    disambiguation: "Adam Beyer e um DJ e produtor sueco, fundador da Drumcode e nome central do techno moderno."
+  },
+  "afrika bambaataa & the soulsonic force": {
+    country: "United States",
+    area: "New York",
+    disambiguation: "Afrika Bambaataa & The Soulsonic Force marcaram a ponte entre electro, hip-hop e cultura club de Nova York."
+  },
+  "air": {
+    country: "France",
+    area: "",
+    disambiguation: "Air e um duo frances ligado ao chillout, downtempo e a uma electronica cinematografica e suave."
+  },
+  "alex m.o.r.p.h. feat. sylvia tosun": {
+    country: "Germany",
+    area: "",
+    disambiguation: "Alex M.O.R.P.H. e um produtor alemao ligado ao trance uplifting, aqui em faixa vocal com Sylvia Tosun."
+  },
+  "aly & fila": {
+    country: "Egypt",
+    area: "",
+    disambiguation: "Aly & Fila e um duo egipcio muito associado ao trance uplifting e a grandes momentos melodicos."
+  },
+  "aly & fila feat. jwaydan": {
+    country: "Egypt",
+    area: "",
+    disambiguation: "Aly & Fila aparecem aqui no eixo trance uplifting, com vocal de Jwaydan e energia melodica de festival."
+  },
+  "andy c": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Andy C e um DJ e produtor britanico essencial para drum and bass e cultura de sound system."
+  },
+  "angerfist": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Angerfist e um projeto neerlandes de hardcore/gabber conhecido por kicks agressivos e energia extrema."
+  },
+  "anyma": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Anyma e um projeto italiano ligado ao melodic techno audiovisual e a shows de grande impacto visual."
+  },
+  "arjuna": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Arjuna e um produtor italiano associado ao forest psy e a psicodelia organica de pista."
+  },
+  "astral projection": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Astral Projection e um duo israelense fundamental para goa trance e psytrance melodico."
+  },
+  "atriohm": {
+    country: "North Macedonia",
+    area: "",
+    disambiguation: "Atriohm e um produtor da Macedonia do Norte associado ao forest psy denso, organico e ritualistico."
+  },
+  "autechre": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Autechre e um duo britanico essencial para IDM, electronica abstrata e design ritmico experimental."
+  },
+  "avalon": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Avalon e um produtor britanico ligado ao full-on psytrance moderno, claro e funcional em pista."
+  },
+  "bicep": {
+    country: "United Kingdom",
+    area: "Northern Ireland",
+    disambiguation: "Bicep e um duo da Irlanda do Norte ligado a house, breakbeat e electronica emotiva de club."
+  },
+  "biosphere": {
+    country: "Norway",
+    area: "",
+    disambiguation: "Biosphere e um projeto noruegues essencial para ambient frio, espacial e contemplativo."
+  },
+  "black sun empire": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Black Sun Empire e um trio neerlandes associado ao neurofunk pesado e ao drum and bass tecnico."
+  },
+  "bou": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Bou e um produtor britanico de drum and bass conhecido por faixas diretas, subgrave forte e energia de pista."
+  },
+  "brennan heart": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Brennan Heart e um produtor neerlandes ligado ao hardstyle melodico e a grandes palcos de hard dance."
+  },
+  "burial": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "Burial e um produtor britanico associado a future garage, dubstep atmosferico e paisagens urbanas noturnas."
+  },
+  "captain hook": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Captain Hook e um produtor israelense conhecido por progressive psytrance profundo, grooveado e psicodelico."
+  },
+  "carbon based lifeforms": {
+    country: "Sweden",
+    area: "",
+    disambiguation: "Carbon Based Lifeforms e um duo sueco ligado a ambient e downtempo espacial, com textura organica e imersiva."
   },
   "fisher": {
     country: "Australia",
@@ -15785,6 +15905,7 @@ const COUNTRY_CODE_BY_NAME = {
   chile: "CL",
   colombia: "CO",
   denmark: "DK",
+  egypt: "EG",
   finland: "FI",
   france: "FR",
   germany: "DE",
@@ -15801,6 +15922,7 @@ const COUNTRY_CODE_BY_NAME = {
   mexico: "MX",
   méxico: "MX",
   netherlands: "NL",
+  "north macedonia": "MK",
   norway: "NO",
   poland: "PL",
   portugal: "PT",
@@ -15808,6 +15930,7 @@ const COUNTRY_CODE_BY_NAME = {
   russia: "RU",
   "russian federation": "RU",
   serbia: "RS",
+  "south africa": "ZA",
   spain: "ES",
   españa: "ES",
   espanha: "ES",

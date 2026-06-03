@@ -1,7 +1,7 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 02/06/2026, 19:04:11
-Status: ATENCAO
+Gerado em: 03/06/2026, 09:43:40
+Status: REVISAR
 
 ## Resumo
 
@@ -9,12 +9,12 @@ Status: ATENCAO
 - Artistas unicos: 246
 - Gravadoras/labels unicas: 146
 - Estilos com faixas: 48
-- Problemas criticos: 7
-- Avisos: 402
+- Problemas criticos: 0
+- Avisos: 381
 
 ## Leitura rapida
 
-- Primeiro resolva os itens criticos da tabela de problemas. Eles indicam erro que pode gerar recomendacao incorreta.
+- Nao ha itens criticos. Os avisos ajudam a enriquecer bio, links, bandeiras e cobertura.
 - Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas, artistas ou labels.
 - Quando os criticos zerarem, rode `node scripts/quality-audit.mjs --strict` antes de publicar.
 
@@ -31,15 +31,15 @@ Status: ATENCAO
 | Revisar | chillout | 6/20 | 6/10 | 6/4 | faltam 14 faixas, 4 artistas, 0 labels |
 | Revisar | dark_experimental | 8/24 | 23/12 | 1/10 | faltam 16 faixas, 0 artistas, 9 labels |
 | Revisar | dark_progressive | 7/24 | 21/8 | 2/6 | faltam 17 faixas, 0 artistas, 4 labels |
-| Revisar | dark_psy | 13/20 | 13/8 | 11/6 | faltam 7 faixas, 0 artistas, 0 labels |
+| Revisar | dark_psy | 11/20 | 12/8 | 11/6 | faltam 9 faixas, 0 artistas, 0 labels |
 | Revisar | deep_house | 4/20 | 4/8 | 4/6 | faltam 16 faixas, 4 artistas, 2 labels |
 | Revisar | downtempo | 7/24 | 5/12 | 6/6 | faltam 17 faixas, 7 artistas, 0 labels |
 | Revisar | drum_and_bass | 5/20 | 4/8 | 4/6 | faltam 15 faixas, 4 artistas, 2 labels |
 | Revisar | dubstep | 3/20 | 3/8 | 2/6 | faltam 17 faixas, 5 artistas, 4 labels |
 | Revisar | electro | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
 | Revisar | electro_house | 3/20 | 2/8 | 3/6 | faltam 17 faixas, 6 artistas, 3 labels |
-| Revisar | forest_psy | 7/20 | 5/8 | 4/6 | faltam 13 faixas, 3 artistas, 2 labels |
-| Revisar | freeform | 10/12 | 7/4 | 6/0 | faltam 2 faixas, 0 artistas, 0 labels |
+| Revisar | forest_psy | 6/20 | 5/8 | 3/6 | faltam 14 faixas, 3 artistas, 3 labels |
+| Revisar | freeform | 11/12 | 7/4 | 6/0 | faltam 1 faixas, 0 artistas, 0 labels |
 | Revisar | full_on | 6/28 | 7/12 | 2/8 | faltam 22 faixas, 5 artistas, 6 labels |
 | Revisar | full_on_morning | 4/24 | 3/10 | 2/8 | faltam 20 faixas, 7 artistas, 6 labels |
 | Revisar | full_on_night | 3/24 | 3/10 | 2/8 | faltam 21 faixas, 7 artistas, 6 labels |
@@ -63,7 +63,7 @@ Status: ATENCAO
 | Revisar | progressive_house | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
 | Revisar | progressive_psy | 5/24 | 3/8 | 1/8 | faltam 19 faixas, 5 artistas, 7 labels |
 | Revisar | psy_comercial | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
-| Revisar | psycore | 5/10 | 3/8 | 2/0 | faltam 5 faixas, 5 artistas, 0 labels |
+| Revisar | psycore | 7/10 | 3/8 | 3/0 | faltam 3 faixas, 5 artistas, 0 labels |
 | Revisar | psytrance | 6/20 | 5/8 | 6/6 | faltam 14 faixas, 3 artistas, 0 labels |
 | OK | slambient | 22/14 | 12/8 | 2/1 | Completo |
 | Revisar | tech_house | 9/20 | 10/8 | 6/6 | faltam 11 faixas, 0 artistas, 0 labels |
@@ -75,40 +75,25 @@ Status: ATENCAO
 
 | Severidade | Escopo | Problema | Detalhe |
 | --- | --- | --- | --- |
-| Critico | Massive Attack - Teardrop [chillout] | BPM 78 fora da faixa esperada (80-112). | LOCAL_TRACK_SEED_BOOST |
-| Critico | Mubali - Westpsy Fall [forest_psy] | BPM 180 fora da faixa esperada (145-154). | SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS |
-| Critico | Perc - Look What Your Love Has Done To Me [industrial_techno] | BPM 130 fora da faixa esperada (138-150). | LOCAL_TRACK_SEED_BOOST |
-| Critico | Sectio Aurea - Gato Murr [dark_psy] | BPM 200 fora da faixa esperada (154-175). | SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS |
-| Critico | The Prodigy - No Good [breakbeat] | BPM 145 fora da faixa esperada (125-140). | LOCAL_TRACK_SEED_BOOST |
-| Critico | Tycho - Awake [downtempo] | BPM 88 fora da faixa esperada (90-115). | LOCAL_TRACK_SEED_BOOST |
-| Critico | Vutt'un - Confundentur [dark_psy] | BPM 180 fora da faixa esperada (154-175). | SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS |
-| Aviso | 999999999 | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | 999999999 - X0004000X [hard_techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Ace Ventura | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Ace Ventura | Faixa duplicada no catalogo. | catalog:psytrance, LOCAL_TRACK_SEED_BOOST:progressive_psy |
 | Aviso | Ace Ventura - Presence [progressive_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | acid_techno | Cobertura abaixo do alvo. | faltam 16 faixas, 4 artistas, 2 labels |
 | Aviso | Adam Beyer - Your Mind [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Adam Beyer & Bart Skils | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Afrika Bambaataa & The Soulsonic Force | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | afro_house | Cobertura abaixo do alvo. | faltam 17 faixas, 5 artistas, 3 labels |
 | Aviso | Agodark | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Air | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Air - La femme d'argent [chillout] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Air - La femme d'argent [chillout] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | AIRI | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | AIRI - Starship [dark_progressive] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Akephalos | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Akuma | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Alex M.O.R.P.H. feat. Sylvia Tosun | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Alumbra | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Aly & Fila | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Aly & Fila - We Control The Sunlight [trance_uplifting] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Aly & Fila feat. Jwaydan | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | ambient | Cobertura abaixo do alvo. | faltam 17 faixas, 6 artistas, 0 labels |
 | Aviso | Amelie Lens - Hypnotized [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Andy C - Heartbeat Loud [drum_and_bass] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Angerfist | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Angerfist | Faixa duplicada no catalogo. | catalog:gabber, LOCAL_TRACK_SEED_BOOST:gabber |
 | Aviso | Angerfist - Raise Your Fist [gabber] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | AnkouDead | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
@@ -116,17 +101,14 @@ Status: ATENCAO
 | Aviso | AnkouDead - Poeira de Estrela [dark_experimental] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | ANNA - Hidden Beauties [techno] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | ANNA - Hidden Beauties [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Anyma | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Anyma - Explore Your Future [melodic_techno] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Anyma - Explore Your Future [melodic_techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Aphex Twin - #3 [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Arjuna - Primal Contact [forest_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Astral Projection | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Astrix - He.art [psytrance] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Astrix - He.art [psytrance] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | At Work | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | At Work - Lunar Odyssey [freeform] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Atriohm | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Atriohm - Takums [forest_psy] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Atriohm - Takums [forest_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Audio Syntax | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
@@ -135,26 +117,44 @@ Status: ATENCAO
 | Aviso | Audiosyntax | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Audiosyntax - Shadow Protocol [dark_psy] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Audiosyntax - Shadow Protocol [dark_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Autechre | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Autechre | Faixa duplicada no catalogo. | catalog:idm, LOCAL_TRACK_SEED_BOOST:idm |
 | Aviso | Autechre - Bike [idm] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Avalon | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Avalon | Faixa duplicada no catalogo. | catalog:full_on, catalog:full_on_morning |
 | Aviso | Avalon - The Journey [full_on_morning] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Avalon - The Journey [full_on_morning] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Bardo | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Bardo - Recitativos [dark_experimental] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | bass_house | Cobertura abaixo do alvo. | faltam 17 faixas, 6 artistas, 4 labels |
-| Aviso | Bicep | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Biosphere | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Black Coffee | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Black Coffee - Turn Me On [afro_house] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Black Coffee & David Guetta feat. Delilah Montagu | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Black Sun Empire - Arrakis [neurofunk] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Bonobo | Faixa duplicada no catalogo. | catalog:downtempo, LOCAL_TRACK_SEED_BOOST:downtempo |
 | Aviso | Bonobo - Kiara [downtempo] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Bonobo - Kiara [downtempo] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | brazilian_funk | Cobertura abaixo do alvo. | faltam 15 faixas, 5 artistas, 0 labels |
+| Aviso | breakbeat | Cobertura abaixo do alvo. | faltam 17 faixas, 4 artistas, 3 labels |
+| Aviso | Brian Eno | Faixa duplicada no catalogo. | catalog:ambient, LOCAL_TRACK_SEED_BOOST:ambient |
+| Aviso | Brian Eno - An Ending (Ascent) [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Burial | Faixa duplicada no catalogo. | catalog:future_garage, LOCAL_TRACK_SEED_BOOST:future_garage |
+| Aviso | Burial - Archangel [future_garage] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Burn In Noise | Faixa duplicada no catalogo. | catalog:full_on, catalog:full_on_night |
+| Aviso | Burn In Noise - Transparent [full_on] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Calibre - Even If [liquid_dnb] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Calibre - Even If [liquid_dnb] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Captain Hook - Bungee Jump [progressive_psy] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Captain Hook - Bungee Jump [progressive_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Carbon Based Lifeforms - Photosynthesis [ambient] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Carbon Based Lifeforms - Photosynthesis [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Charlotte de Witte - Selected [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Chase & Status | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | chillout | Cobertura abaixo do alvo. | faltam 14 faixas, 4 artistas, 0 labels |
+| Aviso | Chris Lake | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | Chris Stussy | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | Cindervomit | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | Claudinho Brasil | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | Cloonee | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 
 ## Como usar
 

@@ -237,7 +237,10 @@ function looksGeneric(value) {
 
 function findCountryForArtist(track, canonicalOrigins, countryByArea) {
   const artistKey = normalize(track.artist);
-  const canonical = canonicalOrigins[artistKey] || canonicalOrigins[track.artist] || null;
+  const canonicalByNormalizedKey = new Map(
+    Object.entries(canonicalOrigins || {}).map(([key, value]) => [normalize(key), value])
+  );
+  const canonical = canonicalOrigins[artistKey] || canonicalOrigins[track.artist] || canonicalByNormalizedKey.get(artistKey) || null;
   const direct =
     canonical?.country ||
     track.artistCountry ||
