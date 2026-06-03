@@ -11594,6 +11594,15 @@ function applyLanguage() {
   setText("#dailyNewsIntro", t("dailyNewsIntro"));
   setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
+  if (dailyNewsList?.children.length) {
+    const cache = loadDailyNewsCache();
+    const cachedItems = cache?.items?.length ? cache.items : DAILY_NEWS_FALLBACK_ITEMS;
+    void renderDailyNewsItems(cachedItems, {
+      updatedAt: cache?.updatedAt || "",
+      fromCache: Boolean(cache?.items?.length),
+      fallback: !cache?.items?.length
+    });
+  }
   setText("#preferenceSectionKicker", t("sectionKicker"));
   setText("#preferenceSectionHint", t("sectionHint"));
   setText("#presetFocusBtn", t("presetFocus"));
@@ -16959,6 +16968,14 @@ function fallbackLocalizeDailyNewsItems(items = [], language = dailyNewsTargetLa
   }));
 }
 
+function completeDailyNewsTranslations(items = [], language = dailyNewsTargetLanguage()) {
+  if (language === "en") return items;
+  return items.map((item) => {
+    if (item.translatedBy) return item;
+    return fallbackLocalizeDailyNewsItems([item], language)[0] || item;
+  });
+}
+
 async function requestDailyNewsTranslations(items = [], language = dailyNewsTargetLanguage()) {
   if (!items.length || language === "en") return items;
   const endpoint = resolveAiEndpoint("NEONPULSE_NEWS_TRANSLATE_API_URL", "/api/news-translate");
@@ -16984,9 +17001,10 @@ async function requestDailyNewsTranslations(items = [], language = dailyNewsTarg
 
   if (!missing.length) return output;
 
+  let timeoutId = 0;
   try {
     const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
-    const timeoutId = controller ? window.setTimeout(() => controller.abort(), 6500) : 0;
+    timeoutId = controller ? window.setTimeout(() => controller.abort(), 6500) : 0;
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -17000,7 +17018,6 @@ async function requestDailyNewsTranslations(items = [], language = dailyNewsTarg
       }),
       signal: controller?.signal
     });
-    if (timeoutId) window.clearTimeout(timeoutId);
     if (!response.ok) throw new Error("news-translate-unavailable");
     const payload = await response.json();
     const translated = Array.isArray(payload?.items) ? payload.items : [];
@@ -17024,9 +17041,11 @@ async function requestDailyNewsTranslations(items = [], language = dailyNewsTarg
       };
     });
     saveDailyNewsTranslationStore(store);
-    return fallbackLocalizeDailyNewsItems(output, language);
+    return completeDailyNewsTranslations(output, language);
   } catch (_err) {
     return fallbackLocalizeDailyNewsItems(output, language);
+  } finally {
+    if (timeoutId) window.clearTimeout(timeoutId);
   }
 }
 
