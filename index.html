@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260603g" />
+    <link rel="stylesheet" href="styles.css?v=20260603h" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -373,6 +373,7 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">News</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Apoiar</button>
       </nav>
 
       <section id="dailyNewsPanel" class="panel daily-news-panel app-tab-panel" data-app-tab="news" aria-labelledby="dailyNewsTitle">
@@ -393,6 +394,66 @@
           <a href="https://mixmag.net/news" target="_blank" rel="noopener noreferrer">Mixmag</a>
           <a href="https://dancingastronaut.com/" target="_blank" rel="noopener noreferrer">Dancing Astronaut</a>
         </div>
+      </section>
+
+      <section id="supportPanel" class="panel support-panel app-tab-panel" data-app-tab="support" aria-labelledby="supportTitle">
+        <div class="section-head support-head">
+          <div>
+            <p id="supportKicker" class="section-kicker">Apoie o projeto</p>
+            <h3 id="supportTitle">Ajude o Sonic Search a crescer</h3>
+          </div>
+          <span id="supportStatusBadge" class="chip alt">Tips</span>
+        </div>
+        <p id="supportIntro" class="section-hint muted support-intro">
+          Se o app te ajudou a descobrir uma track, você pode enviar uma tip para manter catálogo, IA e melhorias rodando.
+        </p>
+        <div class="support-amounts" aria-label="Valores rápidos para apoio">
+          <button class="support-amount-btn active" type="button" data-tip-amount="5">R$ 5</button>
+          <button class="support-amount-btn" type="button" data-tip-amount="10">R$ 10</button>
+          <button class="support-amount-btn" type="button" data-tip-amount="25">R$ 25</button>
+          <button class="support-amount-btn" type="button" data-tip-amount="50">R$ 50</button>
+          <label class="support-custom-amount">
+            <span id="supportCustomAmountLabel">Outro valor</span>
+            <input id="supportCustomAmount" type="number" min="1" step="1" inputmode="decimal" placeholder="R$" />
+          </label>
+        </div>
+        <div class="support-payment-grid">
+          <article class="support-payment-card">
+            <div class="support-payment-head">
+              <div>
+                <p id="supportPixKicker" class="section-kicker">Pix</p>
+                <h4 id="supportPixTitle">QR Code + copia e cola</h4>
+              </div>
+              <span id="supportPixStatus" class="support-payment-status">Aguardando chave</span>
+            </div>
+            <div class="support-qr-wrap">
+              <img id="supportPixQr" class="support-qr hidden" src="" alt="" loading="lazy" />
+              <div id="supportPixPlaceholder" class="support-qr-placeholder">PIX</div>
+            </div>
+            <p id="supportPixHint" class="muted support-payment-hint">Configure a chave Pix para ativar o QR Code real.</p>
+            <textarea id="supportPixPayload" class="support-copy-field" readonly rows="3" aria-label="Pix copia e cola"></textarea>
+            <button id="supportCopyPixBtn" class="secondary support-copy-btn" type="button">Copiar Pix</button>
+          </article>
+          <article class="support-payment-card">
+            <div class="support-payment-head">
+              <div>
+                <p id="supportCryptoKicker" class="section-kicker">Crypto</p>
+                <h4 id="supportCryptoTitle">Bitcoin / Lightning</h4>
+              </div>
+              <span id="supportCryptoStatus" class="support-payment-status">Opcional</span>
+            </div>
+            <div class="support-qr-wrap">
+              <img id="supportCryptoQr" class="support-qr hidden" src="" alt="" loading="lazy" />
+              <div id="supportCryptoPlaceholder" class="support-qr-placeholder">BTC</div>
+            </div>
+            <p id="supportCryptoHint" class="muted support-payment-hint">Configure um endereço Bitcoin ou Lightning para ativar tips em crypto.</p>
+            <textarea id="supportCryptoPayload" class="support-copy-field" readonly rows="3" aria-label="Endereço crypto para apoio"></textarea>
+            <button id="supportCopyCryptoBtn" class="secondary support-copy-btn" type="button">Copiar crypto</button>
+          </article>
+        </div>
+        <p id="supportLegalNote" class="muted support-legal-note">
+          Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.
+        </p>
       </section>
 
       <section class="panel preference-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="preferencias-title">
@@ -1041,6 +1102,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260603g"></script>
+    <script src="app.js?v=20260603h"></script>
   </body>
 </html>

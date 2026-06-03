@@ -53,6 +53,22 @@ const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v1";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v1";
 const DAILY_NEWS_MAX_ITEMS = 6;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
+const SUPPORT_PAYMENT_CONFIG = {
+  pix: {
+    key: "",
+    name: "PEDRO FREIRE",
+    city: "SAO PAULO",
+    description: "Sonic Search tip"
+  },
+  bitcoin: {
+    address: "",
+    lightning: ""
+  },
+  ...(typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG
+    ? window.SONIC_SEARCH_SUPPORT_CONFIG
+    : {})
+};
+const SUPPORT_DEFAULT_AMOUNT = 5;
 const DAILY_NEWS_SOURCES = [
   {
     name: "EDM.com",
@@ -3774,6 +3790,31 @@ const dailyNewsIntro = document.getElementById("dailyNewsIntro");
 const dailyNewsRefreshBtn = document.getElementById("dailyNewsRefreshBtn");
 const dailyNewsStatus = document.getElementById("dailyNewsStatus");
 const dailyNewsList = document.getElementById("dailyNewsList");
+const supportPanel = document.getElementById("supportPanel");
+const supportKicker = document.getElementById("supportKicker");
+const supportTitle = document.getElementById("supportTitle");
+const supportIntro = document.getElementById("supportIntro");
+const supportStatusBadge = document.getElementById("supportStatusBadge");
+const supportCustomAmountLabel = document.getElementById("supportCustomAmountLabel");
+const supportCustomAmount = document.getElementById("supportCustomAmount");
+const supportAmountButtons = document.querySelectorAll("[data-tip-amount]");
+const supportPixKicker = document.getElementById("supportPixKicker");
+const supportPixTitle = document.getElementById("supportPixTitle");
+const supportPixStatus = document.getElementById("supportPixStatus");
+const supportPixQr = document.getElementById("supportPixQr");
+const supportPixPlaceholder = document.getElementById("supportPixPlaceholder");
+const supportPixHint = document.getElementById("supportPixHint");
+const supportPixPayload = document.getElementById("supportPixPayload");
+const supportCopyPixBtn = document.getElementById("supportCopyPixBtn");
+const supportCryptoKicker = document.getElementById("supportCryptoKicker");
+const supportCryptoTitle = document.getElementById("supportCryptoTitle");
+const supportCryptoStatus = document.getElementById("supportCryptoStatus");
+const supportCryptoQr = document.getElementById("supportCryptoQr");
+const supportCryptoPlaceholder = document.getElementById("supportCryptoPlaceholder");
+const supportCryptoHint = document.getElementById("supportCryptoHint");
+const supportCryptoPayload = document.getElementById("supportCryptoPayload");
+const supportCopyCryptoBtn = document.getElementById("supportCopyCryptoBtn");
+const supportLegalNote = document.getElementById("supportLegalNote");
 const quickSurprisePanel = document.getElementById("quickSurprisePanel");
 const quickSurpriseTitle = document.getElementById("quickSurpriseTitle");
 const quickSurpriseHint = document.getElementById("quickSurpriseHint");
@@ -4097,6 +4138,7 @@ let searchProgressTimer = 0;
 let searchProgressValue = 0;
 let youtubePreviewSearchAttempt = 0;
 let youtubePreviewTrackKey = "";
+let supportTipAmount = SUPPORT_DEFAULT_AMOUNT;
 let bioAnimationToken = 0;
 let artistImageRequestToken = 0;
 let listeningNarrativeToken = 0;
@@ -9864,6 +9906,7 @@ const I18N = {
     tabNews: "News",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
+    tabSupport: "Apoiar",
     catalogStatsKicker: "Nossa base para descoberta",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "músicas buscáveis",
@@ -9882,6 +9925,28 @@ const I18N = {
     dailyNewsSourceFallback: "Fonte",
     dailyNewsUntitled: "Notícia sem título",
     dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
+    supportKicker: "Apoie o projeto",
+    supportTitle: "Ajude o Sonic Search a crescer",
+    supportIntro: "Se o app te ajudou a descobrir uma track, você pode enviar uma tip para manter catálogo, IA e melhorias rodando.",
+    supportBadge: "Tips",
+    supportCustomAmount: "Outro valor",
+    supportPixKicker: "Pix",
+    supportPixTitle: "QR Code + copia e cola",
+    supportPixReady: "Pix ativo",
+    supportPixMissing: "Aguardando chave",
+    supportPixHintReady: "Aponte a câmera para o QR ou copie o Pix copia e cola.",
+    supportPixHintMissing: "Configure sua chave Pix em SUPPORT_PAYMENT_CONFIG para ativar o QR Code real.",
+    supportCopyPix: "Copiar Pix",
+    supportCryptoKicker: "Crypto",
+    supportCryptoTitle: "Bitcoin / Lightning",
+    supportCryptoReady: "Crypto ativo",
+    supportCryptoMissing: "Opcional",
+    supportCryptoHintReady: "Use o QR ou copie o endereço para enviar uma tip em crypto.",
+    supportCryptoHintMissing: "Configure um endereço Bitcoin ou Lightning para ativar tips em crypto.",
+    supportCopyCrypto: "Copiar crypto",
+    supportCopied: "Copiado.",
+    supportMissingPayment: "Configure esse método de apoio antes de copiar.",
+    supportLegalNote: "Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.",
     sectionKicker: "Busca guiada",
     sectionHint: "Escolha um atalho ou refine manualmente.",
     presetFocus: "Foco",
@@ -10289,6 +10354,7 @@ const I18N = {
     tabNews: "News",
     tabStudio: "Studio",
     tabProfile: "Profile",
+    tabSupport: "Support",
     catalogStatsKicker: "Our discovery base",
     catalogStatsArtists: "indexed artists",
     catalogStatsTracks: "searchable tracks",
@@ -10307,6 +10373,28 @@ const I18N = {
     dailyNewsSourceFallback: "Source",
     dailyNewsUntitled: "Untitled news",
     dailyNewsNoSummary: "Open the story to read the full details.",
+    supportKicker: "Support the project",
+    supportTitle: "Help Sonic Search grow",
+    supportIntro: "If the app helped you discover a track, you can send a tip to keep catalog, AI, and improvements running.",
+    supportBadge: "Tips",
+    supportCustomAmount: "Custom amount",
+    supportPixKicker: "Pix",
+    supportPixTitle: "QR Code + copy-paste",
+    supportPixReady: "Pix active",
+    supportPixMissing: "Waiting for key",
+    supportPixHintReady: "Scan the QR or copy the Pix payment code.",
+    supportPixHintMissing: "Configure your Pix key in SUPPORT_PAYMENT_CONFIG to enable the real QR Code.",
+    supportCopyPix: "Copy Pix",
+    supportCryptoKicker: "Crypto",
+    supportCryptoTitle: "Bitcoin / Lightning",
+    supportCryptoReady: "Crypto active",
+    supportCryptoMissing: "Optional",
+    supportCryptoHintReady: "Use the QR or copy the address to send a crypto tip.",
+    supportCryptoHintMissing: "Configure a Bitcoin or Lightning address to enable crypto tips.",
+    supportCopyCrypto: "Copy crypto",
+    supportCopied: "Copied.",
+    supportMissingPayment: "Configure this support method before copying.",
+    supportLegalNote: "Tips are voluntary support for the project, not an investment or crypto purchase.",
     sectionKicker: "Guided search",
     sectionHint: "Pick a shortcut or refine manually.",
     presetFocus: "Focus",
@@ -10714,6 +10802,7 @@ const I18N = {
     tabNews: "News",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
+    tabSupport: "Apoyar",
     catalogStatsKicker: "Nuestra base para descubrir",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "pistas buscables",
@@ -10732,6 +10821,28 @@ const I18N = {
     dailyNewsSourceFallback: "Fuente",
     dailyNewsUntitled: "Noticia sin título",
     dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
+    supportKicker: "Apoya el proyecto",
+    supportTitle: "Ayuda a Sonic Search a crecer",
+    supportIntro: "Si la app te ayudó a descubrir una track, puedes enviar una tip para mantener catálogo, IA y mejoras funcionando.",
+    supportBadge: "Tips",
+    supportCustomAmount: "Otro valor",
+    supportPixKicker: "Pix",
+    supportPixTitle: "QR Code + copiar y pegar",
+    supportPixReady: "Pix activo",
+    supportPixMissing: "Esperando clave",
+    supportPixHintReady: "Escanea el QR o copia el código Pix.",
+    supportPixHintMissing: "Configura tu clave Pix en SUPPORT_PAYMENT_CONFIG para activar el QR Code real.",
+    supportCopyPix: "Copiar Pix",
+    supportCryptoKicker: "Crypto",
+    supportCryptoTitle: "Bitcoin / Lightning",
+    supportCryptoReady: "Crypto activo",
+    supportCryptoMissing: "Opcional",
+    supportCryptoHintReady: "Usa el QR o copia la dirección para enviar una tip en crypto.",
+    supportCryptoHintMissing: "Configura una dirección Bitcoin o Lightning para activar tips en crypto.",
+    supportCopyCrypto: "Copiar crypto",
+    supportCopied: "Copiado.",
+    supportMissingPayment: "Configura este método de apoyo antes de copiar.",
+    supportLegalNote: "Las tips son apoyo voluntario al proyecto, no inversión ni compra de cripto.",
     sectionKicker: "Búsqueda guiada",
     sectionHint: "Elige un atajo o refina manualmente.",
     presetFocus: "Foco",
@@ -11698,6 +11809,7 @@ function applyLanguage() {
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
+  setText("[data-app-tab-target='support']", t("tabSupport"));
   updateCatalogStatsHero();
   setText("#dailyNewsKicker", t("dailyNewsKicker"));
   setText("#dailyNewsTitle", t("dailyNewsTitle"));
@@ -11713,6 +11825,19 @@ function applyLanguage() {
       fallback: !cache?.items?.length
     });
   }
+  setText("#supportKicker", t("supportKicker"));
+  setText("#supportTitle", t("supportTitle"));
+  setText("#supportIntro", t("supportIntro"));
+  setText("#supportStatusBadge", t("supportBadge"));
+  setText("#supportCustomAmountLabel", t("supportCustomAmount"));
+  setText("#supportPixKicker", t("supportPixKicker"));
+  setText("#supportPixTitle", t("supportPixTitle"));
+  setText("#supportCopyPixBtn", t("supportCopyPix"));
+  setText("#supportCryptoKicker", t("supportCryptoKicker"));
+  setText("#supportCryptoTitle", t("supportCryptoTitle"));
+  setText("#supportCopyCryptoBtn", t("supportCopyCrypto"));
+  setText("#supportLegalNote", t("supportLegalNote"));
+  renderSupportPanel();
   setText("#preferenceSectionKicker", t("sectionKicker"));
   setText("#preferenceSectionHint", t("sectionHint"));
   setText("#presetFocusBtn", t("presetFocus"));
@@ -14581,8 +14706,148 @@ function updateControlValue(control, value = "") {
   control.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
+function emvField(id, value = "") {
+  const safeValue = String(value || "");
+  return `${id}${String(safeValue.length).padStart(2, "0")}${safeValue}`;
+}
+
+function crc16Ccitt(payload = "") {
+  let crc = 0xffff;
+  for (let index = 0; index < payload.length; index += 1) {
+    crc ^= payload.charCodeAt(index) << 8;
+    for (let bit = 0; bit < 8; bit += 1) {
+      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xffff;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function sanitizePixText(value = "", maxLength = 25) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9 ]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toUpperCase()
+    .slice(0, maxLength);
+}
+
+function activeSupportAmount() {
+  const customValue = Number(supportCustomAmount?.value || 0);
+  if (customValue > 0) return Math.max(1, Math.round(customValue * 100) / 100);
+  return Math.max(1, Number(supportTipAmount) || SUPPORT_DEFAULT_AMOUNT);
+}
+
+function buildPixPayload(amount = activeSupportAmount()) {
+  const pix = SUPPORT_PAYMENT_CONFIG.pix || {};
+  const key = String(pix.key || "").trim();
+  if (!key) return "";
+  const merchantAccount =
+    emvField("00", "br.gov.bcb.pix") +
+    emvField("01", key) +
+    (pix.description ? emvField("02", sanitizePixText(pix.description, 72)) : "");
+  const amountText = Number(amount) > 0 ? Number(amount).toFixed(2) : "";
+  const basePayload =
+    emvField("00", "01") +
+    emvField("26", merchantAccount) +
+    emvField("52", "0000") +
+    emvField("53", "986") +
+    (amountText ? emvField("54", amountText) : "") +
+    emvField("58", "BR") +
+    emvField("59", sanitizePixText(pix.name || "SONIC SEARCH", 25)) +
+    emvField("60", sanitizePixText(pix.city || "SAO PAULO", 15)) +
+    emvField("62", emvField("05", "***")) +
+    "6304";
+  return `${basePayload}${crc16Ccitt(basePayload)}`;
+}
+
+function buildCryptoPayload() {
+  const bitcoin = SUPPORT_PAYMENT_CONFIG.bitcoin || {};
+  const lightning = String(bitcoin.lightning || "").trim();
+  const address = String(bitcoin.address || "").trim();
+  if (lightning) return lightning;
+  if (!address) return "";
+  const brlNote = currentLanguage === "pt" ? "Tip Sonic Search" : "Sonic Search tip";
+  return `bitcoin:${address}?message=${encodeURIComponent(brlNote)}`;
+}
+
+function supportQrUrl(payload = "") {
+  const value = String(payload || "").trim();
+  if (!value) return "";
+  return `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=12&data=${encodeURIComponent(value)}`;
+}
+
+function setSupportQr(imageEl, placeholderEl, payload = "", alt = "") {
+  const qrUrl = supportQrUrl(payload);
+  if (imageEl) {
+    imageEl.classList.toggle("hidden", !qrUrl);
+    if (qrUrl) {
+      imageEl.src = qrUrl;
+      imageEl.alt = alt;
+    } else {
+      imageEl.removeAttribute("src");
+      imageEl.alt = "";
+    }
+  }
+  if (placeholderEl) placeholderEl.classList.toggle("hidden", Boolean(qrUrl));
+}
+
+function renderSupportPanel() {
+  if (!supportPanel) return;
+  const pixPayload = buildPixPayload();
+  const cryptoPayload = buildCryptoPayload();
+  const hasPix = Boolean(pixPayload);
+  const hasCrypto = Boolean(cryptoPayload);
+
+  if (supportPixStatus) supportPixStatus.textContent = hasPix ? t("supportPixReady") : t("supportPixMissing");
+  if (supportPixHint) supportPixHint.textContent = hasPix ? t("supportPixHintReady") : t("supportPixHintMissing");
+  if (supportPixPayload) {
+    supportPixPayload.value = pixPayload;
+    supportPixPayload.classList.toggle("hidden", !hasPix);
+  }
+  if (supportCopyPixBtn) supportCopyPixBtn.disabled = !hasPix;
+  setSupportQr(supportPixQr, supportPixPlaceholder, pixPayload, "QR Code Pix para apoiar o Sonic Search");
+
+  if (supportCryptoStatus) supportCryptoStatus.textContent = hasCrypto ? t("supportCryptoReady") : t("supportCryptoMissing");
+  if (supportCryptoHint) supportCryptoHint.textContent = hasCrypto ? t("supportCryptoHintReady") : t("supportCryptoHintMissing");
+  if (supportCryptoPayload) {
+    supportCryptoPayload.value = cryptoPayload;
+    supportCryptoPayload.classList.toggle("hidden", !hasCrypto);
+  }
+  if (supportCopyCryptoBtn) supportCopyCryptoBtn.disabled = !hasCrypto;
+  setSupportQr(supportCryptoQr, supportCryptoPlaceholder, cryptoPayload, "QR Code crypto para apoiar o Sonic Search");
+}
+
+async function copySupportText(value = "") {
+  const text = String(value || "").trim();
+  if (!text) {
+    showToast(t("supportMissingPayment"));
+    return;
+  }
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const fallback = document.createElement("textarea");
+      fallback.value = text;
+      fallback.setAttribute("readonly", "");
+      fallback.style.position = "fixed";
+      fallback.style.opacity = "0";
+      document.body.appendChild(fallback);
+      fallback.select();
+      document.execCommand("copy");
+      fallback.remove();
+    }
+    showToast(t("supportCopied"));
+  } catch (_err) {
+    showToast(t("supportMissingPayment"));
+  }
+}
+
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "news", "studio", "profile"].includes(tabName) ? tabName : "discover";
+  const safeTab = ["discover", "news", "studio", "profile", "support"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
@@ -23949,6 +24214,29 @@ bind(voiceEffectButtons, "click", (event) => {
   if (!target) return;
   setVoiceEffect(String(target.dataset.voiceEffect || "robot"));
   if (voiceRecordingBlob) return playVoiceEffect();
+});
+
+supportAmountButtons.forEach((button) => {
+  bind(button, "click", () => {
+    supportTipAmount = Number(button.getAttribute("data-tip-amount")) || SUPPORT_DEFAULT_AMOUNT;
+    if (supportCustomAmount) supportCustomAmount.value = "";
+    supportAmountButtons.forEach((item) => item.classList.toggle("active", item === button));
+    renderSupportPanel();
+    playUiSfx("tap");
+  });
+});
+
+bind(supportCustomAmount, "input", () => {
+  supportAmountButtons.forEach((item) => item.classList.remove("active"));
+  renderSupportPanel();
+});
+
+bind(supportCopyPixBtn, "click", () => {
+  copySupportText(supportPixPayload?.value || "");
+});
+
+bind(supportCopyCryptoBtn, "click", () => {
+  copySupportText(supportCryptoPayload?.value || "");
 });
 
 window.addEventListener("resize", syncFloatingSurpriseButton);

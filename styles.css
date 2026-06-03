@@ -1766,7 +1766,7 @@ body[data-vibe-theme="hard"] {
   top: calc(var(--signature-bar-height, 0px) + 0.62rem);
   z-index: 22;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.42rem;
   padding: 0.38rem;
   border: 1px solid rgba(125, 224, 255, 0.22);
@@ -1940,6 +1940,189 @@ body[data-vibe-theme="hard"] {
 .daily-news-sources a:hover {
   color: #071427;
   background: linear-gradient(110deg, #7bf4d9, #77d9ff);
+}
+
+.support-panel {
+  position: relative;
+  overflow: hidden;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.support-panel::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(135deg, rgba(123, 244, 217, 0.1), transparent 36%),
+    radial-gradient(circle at 86% 8%, rgba(255, 198, 123, 0.18), transparent 26%);
+}
+
+.support-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.support-head {
+  align-items: center;
+}
+
+.support-intro {
+  max-width: 52rem;
+  margin: -0.12rem 0 0.85rem;
+  text-align: left;
+  line-height: 1.45;
+}
+
+.support-amounts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(160px, 1.1fr);
+  gap: 0.52rem;
+  margin-bottom: 0.9rem;
+}
+
+.support-amount-btn,
+.support-custom-amount {
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid rgba(125, 224, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(5, 14, 31, 0.74);
+  color: #e9f4ff;
+  font-weight: 900;
+}
+
+.support-amount-btn.active {
+  color: #06172a;
+  border-color: rgba(124, 246, 223, 0.86);
+  background: linear-gradient(110deg, #7bf4d9, #77d9ff);
+}
+
+.support-custom-amount {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.46rem;
+  padding: 0.38rem 0.64rem;
+}
+
+.support-custom-amount span {
+  color: #b9cef0;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.support-custom-amount input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #f2fbff;
+  font: inherit;
+  font-weight: 900;
+  outline: 0;
+}
+
+.support-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.82rem;
+}
+
+.support-payment-card {
+  display: grid;
+  gap: 0.72rem;
+  padding: 1rem;
+  border: 1px solid rgba(125, 224, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(12, 33, 58, 0.72), rgba(3, 9, 23, 0.86)),
+    rgba(5, 14, 31, 0.78);
+}
+
+.support-payment-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.72rem;
+}
+
+.support-payment-head h4 {
+  margin: 0;
+  color: #f2fbff;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.22rem);
+}
+
+.support-payment-status {
+  flex: 0 0 auto;
+  padding: 0.28rem 0.52rem;
+  border: 1px solid rgba(123, 244, 217, 0.28);
+  border-radius: 999px;
+  color: #98ffe9;
+  background: rgba(6, 24, 36, 0.82);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.support-qr-wrap {
+  display: grid;
+  place-items: center;
+  min-height: 210px;
+  border: 1px solid rgba(125, 224, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(123, 244, 217, 0.08), rgba(119, 151, 255, 0.08)),
+    rgba(2, 7, 18, 0.72);
+}
+
+.support-qr {
+  width: min(210px, 68vw);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.support-qr-placeholder {
+  display: grid;
+  place-items: center;
+  width: min(210px, 68vw);
+  aspect-ratio: 1;
+  border: 1px dashed rgba(125, 224, 255, 0.38);
+  border-radius: 8px;
+  color: rgba(207, 232, 255, 0.5);
+  font-family: "Syne", sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.support-payment-hint {
+  min-height: 2.7em;
+  margin: 0;
+  text-align: left;
+  line-height: 1.35;
+}
+
+.support-copy-field {
+  width: 100%;
+  min-height: 76px;
+  resize: vertical;
+  border: 1px solid rgba(125, 224, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.66rem;
+  color: #d9e9ff;
+  background: rgba(2, 7, 18, 0.76);
+  font: 0.78rem/1.35 "Chakra Petch", monospace;
+}
+
+.support-copy-btn {
+  width: 100%;
+}
+
+.support-legal-note {
+  margin: 0.88rem 0 0;
+  font-size: 0.78rem;
+  text-align: left;
 }
 
 .section-head {
@@ -5307,6 +5490,32 @@ input[type="range"] {
   .app-tab-btn {
     min-height: 42px;
     font-size: 0.96rem;
+  }
+
+  .support-amounts,
+  .support-payment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .support-custom-amount {
+    grid-template-columns: 1fr;
+  }
+
+  .support-payment-card {
+    padding: 0.86rem;
+  }
+
+  .support-payment-head {
+    align-items: flex-start;
+  }
+
+  .support-qr-wrap {
+    min-height: 184px;
+  }
+
+  .support-qr,
+  .support-qr-placeholder {
+    width: min(184px, 64vw);
   }
 
   .welcome-screen {
