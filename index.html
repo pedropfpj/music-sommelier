@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260603h" />
+    <link rel="stylesheet" href="styles.css?v=20260603i" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -800,32 +800,55 @@
         </article>
 
         <div class="feedback-grid">
-          <h3>Ensine o app</h3>
-          <div class="rating-panel">
-            <div class="rating-head">
-              <p id="ratingTitle" class="rating-title">Avalie esta recomendação</p>
-              <p id="ratingCelebration" class="rating-celebration">Celebração ativa</p>
+          <div class="feedback-section-head">
+            <div>
+              <p id="feedbackKicker" class="section-kicker">Refinamento</p>
+              <h3 id="feedbackTitle">Ensine o app</h3>
             </div>
-            <div id="starRating" class="star-rating" role="radiogroup" aria-label="Avaliação em estrelas">
-              <button id="starBtn1" class="star-btn" data-stars="1" aria-label="1 estrela" aria-checked="false" role="radio" type="button">★</button>
-              <button id="starBtn2" class="star-btn" data-stars="2" aria-label="2 estrelas" aria-checked="false" role="radio" type="button">★</button>
-              <button id="starBtn3" class="star-btn" data-stars="3" aria-label="3 estrelas" aria-checked="false" role="radio" type="button">★</button>
-              <button id="starBtn4" class="star-btn" data-stars="4" aria-label="4 estrelas" aria-checked="false" role="radio" type="button">★</button>
-              <button id="starBtn5" class="star-btn" data-stars="5" aria-label="5 estrelas" aria-checked="false" role="radio" type="button">★</button>
+            <p id="feedbackHint" class="muted feedback-hint">Use sinais rápidos para a próxima recomendação ficar mais precisa.</p>
+          </div>
+          <div class="feedback-refinement-layout">
+            <div class="rating-panel">
+              <div class="rating-head">
+                <p id="ratingTitle" class="rating-title">Avalie esta recomendação</p>
+                <p id="ratingCelebration" class="rating-celebration">Celebração ativa</p>
+              </div>
+              <div id="starRating" class="star-rating" role="radiogroup" aria-label="Avaliação em estrelas">
+                <button id="starBtn1" class="star-btn" data-stars="1" aria-label="1 estrela" aria-checked="false" role="radio" type="button">★</button>
+                <button id="starBtn2" class="star-btn" data-stars="2" aria-label="2 estrelas" aria-checked="false" role="radio" type="button">★</button>
+                <button id="starBtn3" class="star-btn" data-stars="3" aria-label="3 estrelas" aria-checked="false" role="radio" type="button">★</button>
+                <button id="starBtn4" class="star-btn" data-stars="4" aria-label="4 estrelas" aria-checked="false" role="radio" type="button">★</button>
+                <button id="starBtn5" class="star-btn" data-stars="5" aria-label="5 estrelas" aria-checked="false" role="radio" type="button">★</button>
+              </div>
+              <p id="ratingHint" class="muted">1 estrela = gostei pouco • 5 estrelas = gostei muito</p>
             </div>
-            <p id="ratingHint" class="muted">1 estrela = gostei pouco • 5 estrelas = gostei muito</p>
+            <div class="feedback-actions-panel">
+              <div class="feedback-action-group">
+                <p id="feedbackLikeGroupTitle" class="feedback-group-title">Guardar sinal positivo</p>
+                <div class="feedback-buttons">
+                  <button id="likeSongBtn">Gostei da faixa</button>
+                  <button id="likeArtistBtn">Gostei do artista</button>
+                  <button id="likeDiscoveryBtn">Curti a descoberta</button>
+                </div>
+              </div>
+              <div class="feedback-action-group">
+                <p id="feedbackCorrectGroupTitle" class="feedback-group-title">Corrigir rota</p>
+                <div class="feedback-buttons">
+                  <button id="knewDiscoveryBtn">Já conhecia</button>
+                  <button id="skipBtn" class="danger">Não combinou</button>
+                  <button id="blockArtistBtn" class="danger">Não recomendar este artista</button>
+                </div>
+              </div>
+              <div class="feedback-action-group explore">
+                <p id="feedbackExploreGroupTitle" class="feedback-group-title">Próximo passo</p>
+                <div class="feedback-buttons">
+                  <button id="adaptiveSurpriseBtn" class="primary">Surpreenda por perfil</button>
+                  <button id="moreInfoBtn" class="secondary">Mais sobre artista/label</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="feedback-buttons">
-            <button id="likeSongBtn">Gostei da faixa</button>
-            <button id="likeArtistBtn">Gostei do artista</button>
-            <button id="blockArtistBtn" class="danger">Não recomendar este artista</button>
-            <button id="likeDiscoveryBtn">Curti a descoberta</button>
-            <button id="knewDiscoveryBtn">Já conhecia</button>
-            <button id="skipBtn" class="danger">Não combinou</button>
-            <button id="adaptiveSurpriseBtn" class="primary">Surpreenda por perfil</button>
-            <button id="moreInfoBtn" class="secondary">Mais sobre artista/label</button>
-          </div>
-          <p id="feedbackMessage" class="feedback-message"></p>
+          <p id="feedbackMessage" class="feedback-message" role="status" aria-live="polite"></p>
         </div>
       </section>
 
@@ -1102,6 +1125,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260603h"></script>
+    <script src="app.js?v=20260603i"></script>
   </body>
 </html>

@@ -9907,6 +9907,11 @@ const I18N = {
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
     tabSupport: "Apoiar",
+    feedbackKicker: "Refinamento",
+    feedbackHint: "Use sinais rápidos para a próxima recomendação ficar mais precisa.",
+    feedbackLikeGroupTitle: "Guardar sinal positivo",
+    feedbackCorrectGroupTitle: "Corrigir rota",
+    feedbackExploreGroupTitle: "Próximo passo",
     catalogStatsKicker: "Nossa base para descoberta",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "músicas buscáveis",
@@ -10172,8 +10177,8 @@ const I18N = {
     recommendationGenerated: "Recomendação gerada com base nas preferências que você selecionou.",
     exploratoryGenerated: "Sem filtros definidos: gerei uma recomendação exploratória.",
     styleExhaustedFallback: "Não encontrei artistas novos em {from} agora. Troquei para {to} para manter descoberta sem repetição.",
-    surpriseCrossGenreGenerated: "Surpresa ativa: saí de {from} e trouxe um artista de {to}.",
-    surpriseAdaptiveGenerated: "Surpresa por perfil: usando seus likes e dislikes, saí de {from} e trouxe uma faixa nova de {to}.",
+    surpriseCrossGenreGenerated: "Refino ativo: saí de {from} e abri uma rota nova em {to}.",
+    surpriseAdaptiveGenerated: "Refino por perfil: seus sinais apontaram uma nova rota em {to}, saindo de {from}.",
     surpriseAdaptiveNeedSignals: "Faça alguns likes/dislikes primeiro para eu aprender seu perfil e surpreender melhor.",
     rerollNoOption: "Não há outra faixa no catálogo para esse estilo específico no momento.",
     rerollGenerated: "Nova sugestão gerada com rotação de artista e faixa no mesmo perfil.",
@@ -10355,6 +10360,11 @@ const I18N = {
     tabStudio: "Studio",
     tabProfile: "Profile",
     tabSupport: "Support",
+    feedbackKicker: "Refinement",
+    feedbackHint: "Use quick signals so the next recommendation becomes more precise.",
+    feedbackLikeGroupTitle: "Save positive signal",
+    feedbackCorrectGroupTitle: "Correct route",
+    feedbackExploreGroupTitle: "Next step",
     catalogStatsKicker: "Our discovery base",
     catalogStatsArtists: "indexed artists",
     catalogStatsTracks: "searchable tracks",
@@ -10620,8 +10630,8 @@ const I18N = {
     recommendationGenerated: "Recommendation generated from your selected preferences.",
     exploratoryGenerated: "No filters selected: generated an exploratory recommendation.",
     styleExhaustedFallback: "I did not find new artists in {from} right now. I switched to {to} to keep discovery without repeats.",
-    surpriseCrossGenreGenerated: "Surprise mode on: moved from {from} and brought you an artist from {to}.",
-    surpriseAdaptiveGenerated: "Profile surprise: based on your likes/dislikes, I moved from {from} and brought a new track from {to}.",
+    surpriseCrossGenreGenerated: "Refinement active: moved from {from} and opened a new route in {to}.",
+    surpriseAdaptiveGenerated: "Profile refinement: your signals pointed to a new route in {to}, moving out of {from}.",
     surpriseAdaptiveNeedSignals: "Give me a few likes/dislikes first so I can learn your profile and surprise you better.",
     rerollNoOption: "No other track found for this exact style at the moment.",
     rerollGenerated: "New suggestion generated with artist/track rotation in the same profile.",
@@ -10803,6 +10813,11 @@ const I18N = {
     tabStudio: "Estudio",
     tabProfile: "Perfil",
     tabSupport: "Apoyar",
+    feedbackKicker: "Refinamiento",
+    feedbackHint: "Usa señales rápidas para que la próxima recomendación sea más precisa.",
+    feedbackLikeGroupTitle: "Guardar señal positiva",
+    feedbackCorrectGroupTitle: "Corregir ruta",
+    feedbackExploreGroupTitle: "Próximo paso",
     catalogStatsKicker: "Nuestra base para descubrir",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "pistas buscables",
@@ -11068,8 +11083,8 @@ const I18N = {
     recommendationGenerated: "Recomendación generada según tus preferencias seleccionadas.",
     exploratoryGenerated: "Sin filtros definidos: generé una recomendación exploratoria.",
     styleExhaustedFallback: "No encontré artistas nuevos en {from} por ahora. Cambié a {to} para mantener descubrimiento sin repeticiones.",
-    surpriseCrossGenreGenerated: "Sorpresa activa: salí de {from} y traje un artista de {to}.",
-    surpriseAdaptiveGenerated: "Sorpresa por perfil: usando tus likes/dislikes, salí de {from} y traje una pista nueva de {to}.",
+    surpriseCrossGenreGenerated: "Refinamiento activo: salí de {from} y abrí una ruta nueva en {to}.",
+    surpriseAdaptiveGenerated: "Refinamiento por perfil: tus señales apuntaron una nueva ruta en {to}, saliendo de {from}.",
     surpriseAdaptiveNeedSignals: "Dame algunos likes/dislikes primero para aprender tu perfil y sorprenderte mejor.",
     rerollNoOption: "No hay otra pista en el catálogo para este estilo específico ahora.",
     rerollGenerated: "Nueva sugerencia generada con rotación de artista y pista en el mismo perfil.",
@@ -11916,7 +11931,12 @@ function applyLanguage() {
   setText("#resultPanel > h3", labels.resultTitle || "");
   setText(".listeners-title", labels.listenersTitle || "");
   setText("#topListenersTitle", t("topListenersTitle"));
-  setText(".feedback-grid > h3", labels.feedbackTitle || "");
+  setText("#feedbackKicker", t("feedbackKicker"));
+  setText("#feedbackTitle", labels.feedbackTitle || "");
+  setText("#feedbackHint", t("feedbackHint"));
+  setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
+  setText("#feedbackCorrectGroupTitle", t("feedbackCorrectGroupTitle"));
+  setText("#feedbackExploreGroupTitle", t("feedbackExploreGroupTitle"));
   setText("#detailsPanel > h3", labels.detailsTitle || "");
   setText("#detailsPanel article:first-child h4", labels.artistTitle || "");
   setText("#detailsPanel article:last-child h4", labels.labelTitle || "");
