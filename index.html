@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260603b" />
+    <link rel="stylesheet" href="styles.css?v=20260603c" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -850,6 +850,11 @@
                 <strong id="voiceMiniBpmValue">128 BPM</strong>
                 <input id="voiceMiniBpmSlider" type="range" min="90" max="180" step="1" value="128" aria-valuemin="90" aria-valuemax="180" aria-valuenow="128" />
               </label>
+              <label class="voice-bpm-control voice-presence-control" for="voiceMiniVoiceLevelSlider">
+                <span id="voiceMiniVoiceLevelLabel">Presença da voz</span>
+                <strong id="voiceMiniVoiceLevelValue">125%</strong>
+                <input id="voiceMiniVoiceLevelSlider" type="range" min="80" max="180" step="5" value="125" aria-valuemin="80" aria-valuemax="180" aria-valuenow="125" />
+              </label>
               <div class="voice-daw-pad-grid" aria-label="Mini DAW">
                 <button id="voicePadKickBtn" class="voice-daw-pad" type="button" aria-pressed="false">Kick</button>
                 <button id="voicePadBassBtn" class="voice-daw-pad" type="button" aria-pressed="false">Bass</button>
@@ -1036,6 +1041,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260603b"></script>
+    <script src="app.js?v=20260603c"></script>
   </body>
 </html>

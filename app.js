@@ -3811,6 +3811,9 @@ const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
 const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
 const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
 const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
+const voiceMiniVoiceLevelLabel = document.getElementById("voiceMiniVoiceLevelLabel");
+const voiceMiniVoiceLevelValue = document.getElementById("voiceMiniVoiceLevelValue");
+const voiceMiniVoiceLevelSlider = document.getElementById("voiceMiniVoiceLevelSlider");
 const voiceMiniStatus = document.getElementById("voiceMiniStatus");
 const voicePadKickBtn = document.getElementById("voicePadKickBtn");
 const voicePadBassBtn = document.getElementById("voicePadBassBtn");
@@ -4163,6 +4166,7 @@ let voiceMiniNextBarTime = 0;
 let voiceMiniBarIndex = 0;
 let voiceMiniVoiceBuffer = null;
 let voiceMiniBpm = 128;
+let voiceMiniVoiceLevel = 125;
 let voiceMiniPadState = {
   kick: false,
   bass: false,
@@ -9904,6 +9908,9 @@ const I18N = {
     voiceMiniBpmLabel: "Velocidade",
     voiceMiniBpmValue: "{bpm} BPM",
     voiceMiniBpmChanged: "BPM ajustado para {bpm}. O próximo compasso entra nessa velocidade.",
+    voiceMiniVoiceLevelLabel: "Presença da voz",
+    voiceMiniVoiceLevelValue: "{level}%",
+    voiceMiniVoiceLevelChanged: "Voz em {level}%. O próximo compasso entra com essa presença.",
     voiceMiniReady: "Toque Kick, Bass ou Hat para começar. Grave sua voz para liberar a camada Voz.",
     voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat e Voz no tempo.",
     voiceMiniDone: "Mini música parada. Toque Criar ou um pad para começar de novo.",
@@ -10325,6 +10332,9 @@ const I18N = {
     voiceMiniBpmLabel: "Speed",
     voiceMiniBpmValue: "{bpm} BPM",
     voiceMiniBpmChanged: "BPM set to {bpm}. The next bar follows this speed.",
+    voiceMiniVoiceLevelLabel: "Voice presence",
+    voiceMiniVoiceLevelValue: "{level}%",
+    voiceMiniVoiceLevelChanged: "Voice at {level}%. The next bar uses this presence.",
     voiceMiniReady: "Tap Kick, Bass, or Hat to start. Record your voice to unlock the Voice layer.",
     voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, and Voice on/off in tempo.",
     voiceMiniDone: "Mini music stopped. Tap Create or a pad to start again.",
@@ -10746,6 +10756,9 @@ const I18N = {
     voiceMiniBpmLabel: "Velocidad",
     voiceMiniBpmValue: "{bpm} BPM",
     voiceMiniBpmChanged: "BPM ajustado a {bpm}. El próximo compás entra con esa velocidad.",
+    voiceMiniVoiceLevelLabel: "Presencia de voz",
+    voiceMiniVoiceLevelValue: "{level}%",
+    voiceMiniVoiceLevelChanged: "Voz al {level}%. El próximo compás entra con esa presencia.",
     voiceMiniReady: "Toca Kick, Bass o Hat para empezar. Graba tu voz para liberar la capa Voz.",
     voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat y Voz a tempo.",
     voiceMiniDone: "Mini música parada. Toca Crear o un pad para empezar otra vez.",
@@ -11720,6 +11733,10 @@ function applyLanguage() {
   setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
   setText("#voiceMiniBpmLabel", t("voiceMiniBpmLabel"));
   if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
+  setText("#voiceMiniVoiceLevelLabel", t("voiceMiniVoiceLevelLabel"));
+  if (voiceMiniVoiceLevelValue) {
+    voiceMiniVoiceLevelValue.textContent = t("voiceMiniVoiceLevelValue", { level: voiceMiniVoiceLevel });
+  }
   setText("#voicePadKickBtn", t("voicePadKick"));
   setText("#voicePadBassBtn", t("voicePadBass"));
   setText("#voicePadHatBtn", t("voicePadHat"));
@@ -13398,6 +13415,28 @@ function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
   if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniBpmChanged", { bpm: voiceMiniBpm });
 }
 
+function clampVoiceMiniVoiceLevel(value) {
+  return Math.max(80, Math.min(180, Math.round(Number(value) || 125)));
+}
+
+function voiceMiniVoiceLevelGain() {
+  return clampVoiceMiniVoiceLevel(voiceMiniVoiceLevel) / 100;
+}
+
+function updateVoiceMiniVoiceLevel(value = voiceMiniVoiceLevel, { announce = false } = {}) {
+  voiceMiniVoiceLevel = clampVoiceMiniVoiceLevel(value);
+  if (voiceMiniVoiceLevelSlider) {
+    voiceMiniVoiceLevelSlider.value = String(voiceMiniVoiceLevel);
+    voiceMiniVoiceLevelSlider.setAttribute("aria-valuenow", String(voiceMiniVoiceLevel));
+  }
+  if (voiceMiniVoiceLevelValue) {
+    voiceMiniVoiceLevelValue.textContent = t("voiceMiniVoiceLevelValue", { level: voiceMiniVoiceLevel });
+  }
+  if (announce && voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniVoiceLevelChanged", { level: voiceMiniVoiceLevel });
+  }
+}
+
 function updateVoiceLabUi() {
   const isRecording = voiceRecorder && voiceRecorder.state === "recording";
   const hasRecording = Boolean(voiceRecordingBlob);
@@ -13582,7 +13621,7 @@ async function getNormalizedVoiceBuffer(ctx) {
       peak = Math.max(peak, Math.abs(data[i]));
     }
   }
-  const boost = peak > 0.0001 ? Math.min(7.2, 0.98 / peak) : 1;
+  const boost = peak > 0.0001 ? Math.min(10, 1.08 / peak) : 1;
   for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
     const source = decoded.getChannelData(channel);
     const target = normalized.getChannelData(channel);
@@ -13826,18 +13865,19 @@ function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) 
 
 function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
   const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
-  const phraseDuration = Math.min(safeDuration, beat * 3.25);
+  const phraseDuration = Math.min(safeDuration, beat * 7.4);
+  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.58, Math.min(1.18, audioVolume || 0.92));
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  voiceBus.gain.value = 1.38;
+  voiceBus.gain.value = 1.62;
   voiceBus.connect(destination);
 
   const phrase = trackVoiceMiniNode(ctx.createBufferSource());
   const phraseGain = trackVoiceMiniNode(ctx.createGain());
   phrase.buffer = voiceBuffer;
   phraseGain.gain.setValueAtTime(0.0001, start);
-  phraseGain.gain.exponentialRampToValueAtTime(0.72 * Math.max(0.45, audioVolume || 0.9), start + 0.06);
-  phraseGain.gain.setValueAtTime(0.62 * Math.max(0.45, audioVolume || 0.9), start + phraseDuration * 0.78);
-  phraseGain.gain.exponentialRampToValueAtTime(0.0001, start + phraseDuration);
+  phraseGain.gain.linearRampToValueAtTime(0.92 * voicePresence, start + 0.04);
+  phraseGain.gain.setValueAtTime(0.84 * voicePresence, start + Math.max(0.05, phraseDuration - 0.14));
+  phraseGain.gain.linearRampToValueAtTime(0.0001, start + phraseDuration);
   connectVoiceEffectGraph(ctx, phrase, selectedVoiceEffect, phraseGain);
   phraseGain.connect(voiceBus);
   phrase.start(start, 0, phraseDuration);
@@ -13854,10 +13894,10 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
     source.playbackRate.value = i % 5 === 0 ? 1.18 : i % 4 === 0 ? 0.92 : 1.04;
     const availableOffset = Math.max(0, safeDuration - sliceDuration);
     const offset = availableOffset * offsets[i % offsets.length];
-    const accent = i % 4 === 0 ? 0.82 : 0.54;
+    const accent = i % 4 === 0 ? 0.56 : 0.34;
     chopGain.gain.setValueAtTime(0.0001, time);
-    chopGain.gain.exponentialRampToValueAtTime(accent * Math.max(0.45, audioVolume || 0.9), time + 0.014);
-    chopGain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
+    chopGain.gain.linearRampToValueAtTime(accent * voicePresence, time + 0.014);
+    chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, chopGain);
     connectMiniNode(ctx, chopGain, voiceBus, i % 2 ? -0.24 : 0.2);
     source.start(time, offset, Math.min(sliceDuration, safeDuration));
@@ -13868,23 +13908,53 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
 function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, barIndex = 0) {
   if (!voiceBuffer) return;
   const safeDuration = Math.max(0.1, Number(voiceBuffer.duration) || 0.1);
-  const sliceDuration = Math.min(0.34, Math.max(0.14, beat * 0.56));
-  const offsets = [0, 0.24, 0.52, 0.08, 0.68, 0.36, 0.78, 0.14];
-  for (let step = 0; step < 4; step += 1) {
-    const time = start + (step + 0.08) * beat;
-    const source = trackVoiceMiniNode(ctx.createBufferSource());
-    const gain = trackVoiceMiniNode(ctx.createGain());
-    const availableOffset = Math.max(0, safeDuration - sliceDuration);
-    const offset = availableOffset * offsets[(barIndex + step) % offsets.length];
-    source.buffer = voiceBuffer;
-    source.playbackRate.value = step === 0 ? 1.08 : step === 2 ? 0.94 : 1.02;
-    gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime((step === 0 ? 0.74 : 0.48) * Math.max(0.45, audioVolume || 0.9), time + 0.014);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + sliceDuration);
-    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
-    connectMiniNode(ctx, gain, destination, step % 2 ? -0.18 : 0.18);
-    source.start(time, offset, Math.min(sliceDuration, safeDuration));
-    source.stop(time + sliceDuration + 0.04);
+  const barDuration = beat * 4;
+  const phraseDuration = Math.min(safeDuration, Math.max(beat * 2.4, barDuration * 0.92));
+  const availableOffset = Math.max(0, safeDuration - phraseDuration);
+  const phraseOffset = availableOffset > 0 ? availableOffset * ((barIndex % 4) / 4) : 0;
+  const sourceDuration = Math.max(0.08, Math.min(phraseDuration, safeDuration - phraseOffset));
+  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.18, audioVolume || 0.92));
+  const voiceBus = trackVoiceMiniNode(ctx.createGain());
+  const source = trackVoiceMiniNode(ctx.createBufferSource());
+  const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const gain = trackVoiceMiniNode(ctx.createGain());
+
+  voiceBus.gain.value = 1.24;
+  bodyFilter.type = "highpass";
+  bodyFilter.frequency.value = 82;
+  bodyFilter.Q.value = 0.52;
+  source.buffer = voiceBuffer;
+  source.playbackRate.value = barIndex % 4 === 2 ? 1.02 : 1;
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.linearRampToValueAtTime(0.98 * voicePresence, start + 0.035);
+  gain.gain.setValueAtTime(0.9 * voicePresence, start + Math.max(0.05, sourceDuration - 0.16));
+  gain.gain.linearRampToValueAtTime(0.0001, start + sourceDuration);
+  connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, bodyFilter);
+  bodyFilter.connect(gain);
+  connectMiniNode(ctx, gain, voiceBus, barIndex % 2 ? -0.08 : 0.08);
+  voiceBus.connect(destination);
+  source.start(start, phraseOffset, sourceDuration);
+  source.stop(start + sourceDuration + 0.04);
+
+  if (safeDuration > beat * 0.7 && barIndex % 2 === 1) {
+    const sliceDuration = Math.min(0.38, Math.max(0.18, beat * 0.6));
+    const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
+    [2.55, 3.42].forEach((step, index) => {
+      const time = start + step * beat;
+      if (time + sliceDuration > start + barDuration) return;
+      const chop = trackVoiceMiniNode(ctx.createBufferSource());
+      const chopGain = trackVoiceMiniNode(ctx.createGain());
+      const offset = availableChopOffset * (index ? 0.62 : 0.18);
+      chop.buffer = voiceBuffer;
+      chop.playbackRate.value = index ? 0.96 : 1.06;
+      chopGain.gain.setValueAtTime(0.0001, time);
+      chopGain.gain.linearRampToValueAtTime(0.34 * voicePresence, time + 0.016);
+      chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
+      connectVoiceEffectGraph(ctx, chop, selectedVoiceEffect, chopGain);
+      connectMiniNode(ctx, chopGain, voiceBus, index ? -0.16 : 0.18);
+      chop.start(time, offset, Math.min(sliceDuration, safeDuration));
+      chop.stop(time + sliceDuration + 0.04);
+    });
   }
 }
 
@@ -14003,14 +14073,17 @@ async function previewVoiceDawPad(kind = "kick") {
     if (!voiceBuffer) return;
     const source = trackVoiceMiniNode(ctx.createBufferSource());
     const gain = trackVoiceMiniNode(ctx.createGain());
+    const previewDuration = Math.min(1.8, Math.max(0.12, voiceBuffer.duration));
+    const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.5, Math.min(1.18, audioVolume || 0.92));
     source.buffer = voiceBuffer;
     gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.58 * Math.max(0.35, audioVolume || 0.8), now + 0.018);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + Math.min(0.7, voiceBuffer.duration));
+    gain.gain.linearRampToValueAtTime(0.95 * voicePresence, now + 0.018);
+    gain.gain.setValueAtTime(0.82 * voicePresence, now + Math.max(0.04, previewDuration - 0.08));
+    gain.gain.linearRampToValueAtTime(0.0001, now + previewDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
     gain.connect(bus);
-    source.start(now, 0, Math.min(0.66, voiceBuffer.duration));
-    source.stop(now + Math.min(0.72, voiceBuffer.duration + 0.04));
+    source.start(now, 0, previewDuration);
+    source.stop(now + previewDuration + 0.04);
   }
   if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadHint", { pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`) });
 }
@@ -23366,6 +23439,10 @@ bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
 bind(voiceMiniBpmSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniBpm(target?.value || voiceMiniBpm, { announce: Boolean(voiceMiniTrackPlaying) });
+});
+bind(voiceMiniVoiceLevelSlider, "input", (event) => {
+  const target = event.target instanceof HTMLInputElement ? event.target : null;
+  updateVoiceMiniVoiceLevel(target?.value || voiceMiniVoiceLevel, { announce: Boolean(voiceMiniTrackPlaying) });
 });
 bind(voiceEffectButtons, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("button[data-voice-effect]") : null;

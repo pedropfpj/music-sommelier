@@ -3224,6 +3224,13 @@ input[type="range"] {
   width: 100%;
 }
 
+.voice-presence-control {
+  border-color: rgba(247, 167, 255, 0.26);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(247, 167, 255, 0.12), transparent 38%),
+    rgba(2, 8, 20, 0.5);
+}
+
 .voice-daw-pad-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
