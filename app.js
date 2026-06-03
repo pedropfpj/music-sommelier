@@ -50,6 +50,7 @@ const STYLE_TO_FAMILY = {
 };
 
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v1";
+const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v1";
 const DAILY_NEWS_MAX_ITEMS = 6;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
 const DAILY_NEWS_SOURCES = [
@@ -16863,9 +16864,181 @@ function loadDailyNewsCache() {
   }
 }
 
-function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, fallback = false } = {}) {
+function dailyNewsTargetLanguage() {
+  if (currentLanguage === "es") return "es";
+  if (currentLanguage === "en") return "en";
+  return "pt";
+}
+
+function dailyNewsTranslationKey(item = {}, language = dailyNewsTargetLanguage()) {
+  return `${language}::${normalizeNewsUrl(item.url) || normalize(item.title)}`;
+}
+
+function loadDailyNewsTranslationStore() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DAILY_NEWS_TRANSLATION_CACHE_KEY) || "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (_err) {
+    return {};
+  }
+}
+
+function saveDailyNewsTranslationStore(store) {
+  try {
+    localStorage.setItem(DAILY_NEWS_TRANSLATION_CACHE_KEY, JSON.stringify(store || {}));
+  } catch (_err) {
+    // Translation cache is optional.
+  }
+}
+
+function locallyTranslateDailyNewsText(text = "", language = dailyNewsTargetLanguage()) {
+  const original = normalizeInlineText(text);
+  if (!original || language === "en") return original;
+  const replacements = language === "es"
+    ? [
+        ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
+        ["electronic music", "música electrónica"],
+        ["dance music", "música dance"],
+        ["lineup", "cartel"],
+        ["line-up", "cartel"],
+        ["festival", "festival"],
+        ["festivals", "festivales"],
+        ["tour", "gira"],
+        ["album", "álbum"],
+        ["albums", "álbumes"],
+        ["EPs", "EPs"],
+        ["mixtapes", "mixtapes"],
+        ["announces", "anuncia"],
+        ["announce", "anuncia"],
+        ["reveals", "revela"],
+        ["revealed", "revelado"],
+        ["unveils", "presenta"],
+        ["shares", "comparte"],
+        ["new", "nuevo"],
+        ["best", "mejores"],
+        ["tickets", "entradas"],
+        ["fan voting", "votación de fans"]
+      ]
+    : [
+        ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
+        ["electronic music", "música eletrônica"],
+        ["dance music", "música dance"],
+        ["lineup", "lineup"],
+        ["line-up", "lineup"],
+        ["festival", "festival"],
+        ["festivals", "festivais"],
+        ["tour", "turnê"],
+        ["album", "álbum"],
+        ["albums", "álbuns"],
+        ["EPs", "EPs"],
+        ["mixtapes", "mixtapes"],
+        ["announces", "anuncia"],
+        ["announce", "anuncia"],
+        ["reveals", "revela"],
+        ["revealed", "revelado"],
+        ["unveils", "apresenta"],
+        ["shares", "compartilha"],
+        ["new", "novo"],
+        ["best", "melhores"],
+        ["tickets", "ingressos"],
+        ["fan voting", "votação dos fãs"]
+      ];
+  return replacements.reduce((acc, [from, to]) => {
+    const pattern = new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
+    return acc.replace(pattern, to);
+  }, original);
+}
+
+function fallbackLocalizeDailyNewsItems(items = [], language = dailyNewsTargetLanguage()) {
+  if (language === "en") return items;
+  return items.map((item) => ({
+    ...item,
+    title: locallyTranslateDailyNewsText(item.title, language) || item.title,
+    summary: locallyTranslateDailyNewsText(item.summary, language) || item.summary,
+    translatedBy: "local"
+  }));
+}
+
+async function requestDailyNewsTranslations(items = [], language = dailyNewsTargetLanguage()) {
+  if (!items.length || language === "en") return items;
+  const endpoint = resolveAiEndpoint("NEONPULSE_NEWS_TRANSLATE_API_URL", "/api/news-translate");
+  if (!endpoint) return fallbackLocalizeDailyNewsItems(items, language);
+
+  const store = loadDailyNewsTranslationStore();
+  const output = [...items];
+  const missing = [];
+  output.forEach((item, index) => {
+    const key = dailyNewsTranslationKey(item, language);
+    const cached = store[key];
+    if (cached?.title || cached?.summary) {
+      output[index] = {
+        ...item,
+        title: cached.title || item.title,
+        summary: cached.summary || item.summary,
+        translatedBy: cached.source || "cache"
+      };
+      return;
+    }
+    missing.push({ item, index, key });
+  });
+
+  if (!missing.length) return output;
+
+  try {
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timeoutId = controller ? window.setTimeout(() => controller.abort(), 6500) : 0;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        language,
+        items: missing.map(({ item }) => ({
+          title: item.title,
+          summary: item.summary,
+          source: item.source
+        }))
+      }),
+      signal: controller?.signal
+    });
+    if (timeoutId) window.clearTimeout(timeoutId);
+    if (!response.ok) throw new Error("news-translate-unavailable");
+    const payload = await response.json();
+    const translated = Array.isArray(payload?.items) ? payload.items : [];
+    translated.forEach((translation, translationIndex) => {
+      const target = missing[translationIndex];
+      if (!target) return;
+      const title = normalizeInlineText(translation?.title || "");
+      const summary = normalizeInlineText(translation?.summary || "");
+      if (!title && !summary) return;
+      output[target.index] = {
+        ...target.item,
+        title: title || target.item.title,
+        summary: summary || target.item.summary,
+        translatedBy: payload?.source || "api"
+      };
+      store[target.key] = {
+        title: title || target.item.title,
+        summary: summary || target.item.summary,
+        source: payload?.source || "api",
+        updatedAt: new Date().toISOString()
+      };
+    });
+    saveDailyNewsTranslationStore(store);
+    return fallbackLocalizeDailyNewsItems(output, language);
+  } catch (_err) {
+    return fallbackLocalizeDailyNewsItems(output, language);
+  }
+}
+
+async function localizeDailyNewsItems(items = []) {
+  const language = dailyNewsTargetLanguage();
+  if (language === "en") return items;
+  return requestDailyNewsTranslations(items, language);
+}
+
+async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, fallback = false } = {}) {
   if (!dailyNewsList || !dailyNewsStatus) return;
-  const visibleItems = compactDailyNewsItems(items.length ? items : DAILY_NEWS_FALLBACK_ITEMS);
+  const visibleItems = await localizeDailyNewsItems(compactDailyNewsItems(items.length ? items : DAILY_NEWS_FALLBACK_ITEMS));
   dailyNewsList.innerHTML = "";
 
   visibleItems.forEach((item) => {
@@ -16918,7 +17091,7 @@ async function refreshDailyNews({ silent = false } = {}) {
 
   const cache = loadDailyNewsCache();
   if (cache?.items?.length && !dailyNewsList.children.length) {
-    renderDailyNewsItems(cache.items, { updatedAt: cache.updatedAt, fromCache: true });
+    await renderDailyNewsItems(cache.items, { updatedAt: cache.updatedAt, fromCache: true });
   }
 
   try {
@@ -16926,7 +17099,7 @@ async function refreshDailyNews({ silent = false } = {}) {
     const items = compactDailyNewsItems(batches.flat());
     if (items.length) {
       saveDailyNewsCache(items);
-      renderDailyNewsItems(items, { updatedAt: new Date().toISOString() });
+      await renderDailyNewsItems(items, { updatedAt: new Date().toISOString() });
       return;
     }
   } catch (_err) {
@@ -16937,9 +17110,9 @@ async function refreshDailyNews({ silent = false } = {}) {
 
   const latestCache = loadDailyNewsCache();
   if (latestCache?.items?.length) {
-    renderDailyNewsItems(latestCache.items, { updatedAt: latestCache.updatedAt, fromCache: true });
+    await renderDailyNewsItems(latestCache.items, { updatedAt: latestCache.updatedAt, fromCache: true });
   } else {
-    renderDailyNewsItems(DAILY_NEWS_FALLBACK_ITEMS, { fallback: true });
+    await renderDailyNewsItems(DAILY_NEWS_FALLBACK_ITEMS, { fallback: true });
   }
 }
 
