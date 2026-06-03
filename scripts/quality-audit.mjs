@@ -243,12 +243,34 @@ function looksGeneric(value) {
   return GENERIC_SOURCE_PATTERNS.some((pattern) => pattern.test(String(value || "")));
 }
 
+function artistOriginLookupKeys(artistName = "") {
+  const raw = String(artistName || "").replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const direct = normalize(raw);
+  if (!direct) return [];
+  const keys = [direct];
+  [
+    /\s+(?:feat\.?|ft\.?|featuring)\s+/i,
+    /\s+(?:&|x|vs\.?|versus)\s+/i,
+    /\s*\+\s*/i,
+    /\s*,\s*/i
+  ].forEach((splitter) => {
+    const primary = raw.split(splitter)[0]?.trim();
+    const key = normalize(primary);
+    if (key && !keys.includes(key)) keys.push(key);
+  });
+  return keys;
+}
+
 function findCountryForArtist(track, canonicalOrigins, countryByArea) {
-  const artistKey = normalize(track.artist);
   const canonicalByNormalizedKey = new Map(
     Object.entries(canonicalOrigins || {}).map(([key, value]) => [normalize(key), value])
   );
-  const canonical = canonicalOrigins[artistKey] || canonicalOrigins[track.artist] || canonicalByNormalizedKey.get(artistKey) || null;
+  const canonical =
+    artistOriginLookupKeys(track.artist)
+      .map((key) => canonicalOrigins[key] || canonicalByNormalizedKey.get(key))
+      .find(Boolean) ||
+    canonicalOrigins[track.artist] ||
+    null;
   const direct =
     canonical?.country ||
     track.artistCountry ||

@@ -1,6 +1,6 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 03/06/2026, 13:08:22
+Gerado em: 03/06/2026, 17:11:45
 Status: REVISAR
 
 ## Resumo
@@ -11,7 +11,7 @@ Status: REVISAR
 - Estilos com faixas: 48
 - Artistas vindos de datasets externos: 1046
 - Problemas criticos: 0
-- Avisos: 401
+- Avisos: 390
 
 ## Leitura rapida
 
@@ -81,7 +81,6 @@ Status: REVISAR
 | Aviso | Ace Ventura - Presence [progressive_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | acid_techno | Cobertura abaixo do alvo. | faltam 16 faixas, 3 artistas, 2 labels |
 | Aviso | Adam Beyer - Your Mind [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Adam Beyer & Bart Skils | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | afro_house | Cobertura abaixo do alvo. | faltam 17 faixas, 3 artistas, 3 labels |
 | Aviso | Agodark | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Air - La femme d'argent [chillout] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
@@ -133,7 +132,6 @@ Status: REVISAR
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Black Coffee - Turn Me On [afro_house] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Black Coffee & David Guetta feat. Delilah Montagu | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Black Sun Empire - Arrakis [neurofunk] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Bonobo | Faixa duplicada no catalogo. | catalog:downtempo, LOCAL_TRACK_SEED_BOOST:downtempo |
 | Aviso | Bonobo - Kiara [downtempo] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
@@ -155,7 +153,9 @@ Status: REVISAR
 | Aviso | Chaosophy - Ch4osophy [slambient] | BPM ausente ou ilegivel. | data/codex_dataset_pack_v14/tracks.csv |
 | Aviso | Chaosophy - Ch4osophy [slambient] | Sem link externo verificavel. | data/codex_dataset_pack_v14/tracks.csv |
 | Aviso | Charlotte de Witte - Selected [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | Chase & Status | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | chillout | Cobertura abaixo do alvo. | faltam 14 faixas, 4 artistas, 0 labels |
+| Aviso | Cindervomit | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
+| Aviso | Claudinho Brasil | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 
 ## Como usar
 

@@ -5507,6 +5507,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     area: "",
     disambiguation: "Adam Beyer e um DJ e produtor sueco, fundador da Drumcode e nome central do techno moderno."
   },
+  "bart skils": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Bart Skils e um produtor neerlandes ligado ao techno de pista e ao catalogo Drumcode."
+  },
   "afrika bambaataa & the soulsonic force": {
     country: "United States",
     area: "New York",
@@ -5546,6 +5551,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Italy",
     area: "",
     disambiguation: "Anyma e um projeto italiano ligado ao melodic techno audiovisual e a shows de grande impacto visual."
+  },
+  "artbat": {
+    country: "Ukraine",
+    area: "",
+    disambiguation: "ARTBAT e um duo ucraniano ligado ao melodic techno de grande escala, com grooves tensos e melodias amplas."
   },
   "arjuna": {
     country: "Italy",
@@ -5612,10 +5622,65 @@ const ARTIST_CANONICAL_ORIGINS = {
     area: "",
     disambiguation: "Carbon Based Lifeforms e um duo sueco ligado a ambient e downtempo espacial, com textura organica e imersiva."
   },
+  "chris lake": {
+    country: "United Kingdom",
+    area: "Scotland",
+    disambiguation: "Chris Lake e um produtor britanico ligado ao house e tech house de pista grande, com basslines diretas e hooks fortes."
+  },
+  "chris stussy": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Chris Stussy e um DJ e produtor neerlandes associado ao house moderno, minimal/deep grooves e sonoridade club elegante."
+  },
+  "dax j": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Dax J e um DJ e produtor britanico associado ao techno rapido, cru e de alta pressao."
+  },
+  "enrico sangiuliano": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Enrico Sangiuliano e um produtor italiano ligado ao techno de pista grande, com linhas hipnoticas e producao precisa."
+  },
+  "fjaak": {
+    country: "Germany",
+    area: "Berlin",
+    disambiguation: "FJAAK e um projeto alemao ligado ao techno, breakbeat e energia crua de club berlinense."
+  },
   "fisher": {
     country: "Australia",
     area: "",
     disambiguation: "FISHER e um produtor australiano conhecido pelo tech house de grande alcance em clubs e festivais."
+  },
+  "hi-lo": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "HI-LO e um alias neerlandes voltado ao techno e peak-time, com foco em linhas acidas e impacto de festival."
+  },
+  "innellea": {
+    country: "Germany",
+    area: "",
+    disambiguation: "Innellea e um produtor alemao ligado ao melodic techno, com narrativa cinematografica e tensão progressiva."
+  },
+  "kobosil": {
+    country: "Germany",
+    area: "Berlin",
+    disambiguation: "Kobosil e um produtor alemao associado ao techno industrial, escuro e de alta intensidade."
+  },
+  "layton giordani": {
+    country: "United States",
+    area: "New York",
+    disambiguation: "Layton Giordani e um produtor norte-americano ligado ao techno moderno e ao eixo Drumcode/peak-time."
+  },
+  "maceo plex": {
+    country: "United States",
+    area: "",
+    disambiguation: "Maceo Plex e um produtor norte-americano associado a house, techno e melodias de club com identidade profunda."
+  },
+  "mind against": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Mind Against e um duo italiano ligado ao melodic techno, conhecido por atmosferas emocionais e grooves hipnoticos."
   },
   "michael bibi": {
     country: "United Kingdom",
@@ -5627,15 +5692,50 @@ const ARTIST_CANONICAL_ORIGINS = {
     area: "London",
     disambiguation: "PAWSA e um produtor britanico associado ao tech house minimal, grooveado e focado em club."
   },
+  "perc": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Perc e um produtor britanico associado ao techno industrial, texturas duras e estética underground."
+  },
+  "sama abdulhadi": {
+    country: "Palestine",
+    area: "",
+    disambiguation: "Sama Abdulhadi e uma DJ e produtora palestina reconhecida por sets de techno firmes e presença internacional."
+  },
+  "space 92": {
+    country: "France",
+    area: "",
+    disambiguation: "Space 92 e um produtor frances ligado ao peak-time techno, com linhas acidas e energia direta de festival."
+  },
+  "tale of us": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Tale Of Us e um duo italiano associado ao melodic techno e ao universo Afterlife."
+  },
+  "umek": {
+    country: "Slovenia",
+    area: "",
+    disambiguation: "UMEK e um produtor esloveno de longa carreira, ligado ao techno funcional e a grooves de pista."
+  },
   "black coffee": {
     country: "South Africa",
     area: "",
     disambiguation: "Black Coffee e um DJ e produtor sul-africano que levou o afro house para alcance global."
   },
+  "black coffee & david guetta feat. delilah montagu": {
+    country: "South Africa",
+    area: "",
+    disambiguation: "Nesta colaboracao, o sinal principal vem de Black Coffee: afro house sul-africano com alcance global, cruzando pista organica e formato mais amplo."
+  },
   "sub focus": {
     country: "United Kingdom",
     area: "",
     disambiguation: "Sub Focus e um produtor britanico central no drum and bass moderno."
+  },
+  "chase & status": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "Chase & Status e um duo britanico que conecta drum and bass, jungle, grime e bass music de grande pista."
   },
   "calibre": {
     country: "United Kingdom",
@@ -5646,6 +5746,16 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Netherlands",
     area: "",
     disambiguation: "Noisia e um trio neerlandes reconhecido por design sonoro tecnico no neurofunk e bass music."
+  },
+  "ed rush & optical": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Ed Rush & Optical sao uma dupla britanica essencial para o neurofunk e para o drum and bass mais tecnico e sombrio."
+  },
+  "skream": {
+    country: "United Kingdom",
+    area: "London",
+    disambiguation: "Skream e uma figura central do dubstep britanico original, com impacto direto na linguagem bass music de club."
   },
   "skrillex": {
     country: "United States",
@@ -16036,8 +16146,11 @@ const COUNTRY_CODE_BY_NAME = {
   colombia: "CO",
   denmark: "DK",
   egypt: "EG",
+  "egito": "EG",
   finland: "FI",
   france: "FR",
+  franca: "FR",
+  "frança": "FR",
   germany: "DE",
   alemanha: "DE",
   greece: "GR",
@@ -16052,8 +16165,15 @@ const COUNTRY_CODE_BY_NAME = {
   mexico: "MX",
   méxico: "MX",
   netherlands: "NL",
+  holanda: "NL",
+  "paises baixos": "NL",
+  "países baixos": "NL",
   "north macedonia": "MK",
+  "macedonia do norte": "MK",
+  "macedônia do norte": "MK",
   norway: "NO",
+  palestine: "PS",
+  palestina: "PS",
   poland: "PL",
   portugal: "PT",
   romania: "RO",
@@ -16061,19 +16181,32 @@ const COUNTRY_CODE_BY_NAME = {
   "russian federation": "RU",
   serbia: "RS",
   "south africa": "ZA",
+  "africa do sul": "ZA",
+  "áfrica do sul": "ZA",
   spain: "ES",
+  slovenia: "SI",
+  eslovenia: "SI",
+  eslovênia: "SI",
   españa: "ES",
   espanha: "ES",
   sweden: "SE",
+  suecia: "SE",
+  "suécia": "SE",
   switzerland: "CH",
+  suica: "CH",
+  "suíça": "CH",
   turkey: "TR",
   ukraine: "UA",
   "united kingdom": "GB",
+  "reino unido": "GB",
   uk: "GB",
   england: "GB",
+  inglaterra: "GB",
   "united states": "US",
   "united states of america": "US",
-  usa: "US"
+  usa: "US",
+  "estados unidos": "US",
+  eua: "US"
 };
 
 const COUNTRY_BY_ORIGIN_AREA = {
@@ -16491,10 +16624,34 @@ function showYouTubePreviewEmbed(track, { autoplay = false, attempt = 0 } = {}) 
   return true;
 }
 
+function artistOriginLookupKeys(artistName = "") {
+  const raw = String(artistName || "").replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const direct = normalize(raw);
+  if (!direct) return [];
+  const keys = [direct];
+  [
+    /\s+(?:feat\.?|ft\.?|featuring)\s+/i,
+    /\s+(?:&|x|vs\.?|versus)\s+/i,
+    /\s*\+\s*/i,
+    /\s*,\s*/i
+  ].forEach((splitter) => {
+    const primary = raw.split(splitter)[0]?.trim();
+    const key = normalize(primary);
+    if (key && !keys.includes(key)) keys.push(key);
+  });
+  return keys;
+}
+
 function canonicalOriginForArtist(artistName) {
-  const key = normalize(artistName || "");
-  if (!key) return null;
-  return ARTIST_CANONICAL_ORIGINS[key] || null;
+  const keys = artistOriginLookupKeys(artistName);
+  for (const key of keys) {
+    if (ARTIST_CANONICAL_ORIGINS[key]) return ARTIST_CANONICAL_ORIGINS[key];
+    const normalizedMatch = Object.entries(ARTIST_CANONICAL_ORIGINS).find(
+      ([originKey]) => normalize(originKey) === key
+    );
+    if (normalizedMatch) return normalizedMatch[1];
+  }
+  return null;
 }
 
 function applyCanonicalOriginToProfile(artistName, profile) {
