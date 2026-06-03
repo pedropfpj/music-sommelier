@@ -9914,6 +9914,7 @@ const I18N = {
     voiceMiniReady: "Toque Kick, Bass ou Hat para começar. Grave sua voz para liberar a camada Voz.",
     voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat e Voz no tempo.",
     voiceMiniDone: "Mini música parada. Toque Criar ou um pad para começar de novo.",
+    voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -10338,6 +10339,7 @@ const I18N = {
     voiceMiniReady: "Tap Kick, Bass, or Hat to start. Record your voice to unlock the Voice layer.",
     voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, and Voice on/off in tempo.",
     voiceMiniDone: "Mini music stopped. Tap Create or a pad to start again.",
+    voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -10762,6 +10764,7 @@ const I18N = {
     voiceMiniReady: "Toca Kick, Bass o Hat para empezar. Graba tu voz para liberar la capa Voz.",
     voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat y Voz a tempo.",
     voiceMiniDone: "Mini música parada. Toca Crear o un pad para empezar otra vez.",
+    voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -13972,19 +13975,41 @@ function createVoicePadBus(ctx) {
   return master;
 }
 
+async function resumeVoiceMiniAudioContext(ctx) {
+  if (!ctx || ctx.state === "closed") return false;
+  if (ctx.state !== "suspended") return true;
+  const timeout = new Promise((resolve) => {
+    window.setTimeout(() => resolve(false), 520);
+  });
+  const resumed = ctx.resume()
+    .then(() => true)
+    .catch(() => false);
+  await Promise.race([resumed, timeout]);
+  return ctx.state !== "suspended" && ctx.state !== "closed";
+}
+
 async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
-  if (!initAudioEngine() || !audioContext) return;
+  if (!initAudioEngine() || !audioContext) {
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
+    setVoiceStatus(t("voiceMiniAudioBlocked"));
+    return false;
+  }
   audioUnlocked = true;
-  await audioContext.resume().catch(() => {});
+  const audioReady = await resumeVoiceMiniAudioContext(audioContext);
+  if (!audioReady) {
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
+    setVoiceStatus(t("voiceMiniAudioBlocked"));
+    return false;
+  }
   if (requireVoice && !voiceRecordingBlob) {
     setVoiceStatus(t("voiceNeedRecording"));
     showToast(t("voiceNeedRecording"));
-    return;
+    return false;
   }
   if (voiceRecordingBlob && !voiceMiniVoiceBuffer) {
     voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
   }
-  if (voiceMiniTrackPlaying) return;
+  if (voiceMiniTrackPlaying) return true;
   const ctx = audioContext;
   const master = trackVoiceMiniNode(ctx.createGain());
   const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
@@ -14022,6 +14047,7 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
 
   scheduleAhead();
   voiceMiniTrackScheduler = window.setInterval(scheduleAhead, 120);
+  return true;
 }
 
 async function triggerVoiceDawPad(kind = "kick") {
@@ -14030,7 +14056,8 @@ async function triggerVoiceDawPad(kind = "kick") {
     showToast(t("voiceNeedRecording"));
     return;
   }
-  voiceMiniPadState[kind] = !voiceMiniPadState[kind];
+  const nextActive = !voiceMiniPadState[kind];
+  voiceMiniPadState[kind] = nextActive;
   if (kind === "voice" && voiceMiniPadState.voice && audioContext) {
     voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
   }
@@ -14042,7 +14069,15 @@ async function triggerVoiceDawPad(kind = "kick") {
     });
     return;
   }
-  await ensureVoiceMiniLoop({ requireVoice: kind === "voice" && voiceMiniPadState.voice });
+  const loopReady = await ensureVoiceMiniLoop({ requireVoice: kind === "voice" && voiceMiniPadState.voice });
+  if (!loopReady && nextActive) {
+    voiceMiniPadState[kind] = false;
+    syncVoicePadButtons();
+    if (!Object.values(voiceMiniPadState).some(Boolean)) stopVoiceMiniTrack({ silent: true });
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
+    showToast(t("voiceMiniAudioBlocked"));
+    return;
+  }
   if (voiceMiniStatus) {
     const padLabel = t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`);
     voiceMiniStatus.textContent = t(voiceMiniPadState[kind] ? "voiceMiniPadLoopOn" : "voiceMiniPadLoopOff", { pad: padLabel });
@@ -14103,7 +14138,15 @@ async function playVoiceMiniTrack() {
   voiceMiniPadState.hat = true;
   voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
   syncVoicePadButtons();
-  await ensureVoiceMiniLoop();
+  const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
+  if (!loopReady) {
+    voiceMiniPadState.kick = false;
+    voiceMiniPadState.bass = false;
+    voiceMiniPadState.hat = false;
+    voiceMiniPadState.voice = false;
+    syncVoicePadButtons();
+    updateVoiceLabUi();
+  }
 }
 
 function connectVoiceEffectGraph(ctx, source, effect, output) {
