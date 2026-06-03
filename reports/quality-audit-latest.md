@@ -1,16 +1,17 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 03/06/2026, 09:43:40
+Gerado em: 03/06/2026, 10:30:24
 Status: REVISAR
 
 ## Resumo
 
-- Faixas auditadas: 254
-- Artistas unicos: 246
+- Faixas auditadas: 264
+- Artistas unicos: 1208
 - Gravadoras/labels unicas: 146
 - Estilos com faixas: 48
+- Artistas vindos de datasets externos: 1046
 - Problemas criticos: 0
-- Avisos: 381
+- Avisos: 401
 
 ## Leitura rapida
 
@@ -22,54 +23,54 @@ Status: REVISAR
 
 | Status | Subgenero | Faixas | Artistas | Labels | Observacao |
 | --- | --- | --- | --- | --- | --- |
-| Revisar | acid_techno | 4/20 | 4/8 | 4/6 | faltam 16 faixas, 4 artistas, 2 labels |
-| Revisar | afro_house | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | ambient | 7/24 | 6/12 | 6/6 | faltam 17 faixas, 6 artistas, 0 labels |
-| Revisar | bass_house | 3/20 | 2/8 | 2/6 | faltam 17 faixas, 6 artistas, 4 labels |
-| Revisar | brazilian_funk | 5/20 | 5/10 | 4/4 | faltam 15 faixas, 5 artistas, 0 labels |
+| Revisar | acid_techno | 4/20 | 5/8 | 4/6 | faltam 16 faixas, 3 artistas, 2 labels |
+| Revisar | afro_house | 3/20 | 5/8 | 3/6 | faltam 17 faixas, 3 artistas, 3 labels |
+| Revisar | ambient | 7/24 | 88/12 | 6/6 | faltam 17 faixas, 0 artistas, 0 labels |
+| Revisar | bass_house | 3/20 | 4/8 | 2/6 | faltam 17 faixas, 4 artistas, 4 labels |
+| Revisar | brazilian_funk | 5/20 | 7/10 | 4/4 | faltam 15 faixas, 3 artistas, 0 labels |
 | Revisar | breakbeat | 3/20 | 4/8 | 3/6 | faltam 17 faixas, 4 artistas, 3 labels |
 | Revisar | chillout | 6/20 | 6/10 | 6/4 | faltam 14 faixas, 4 artistas, 0 labels |
-| Revisar | dark_experimental | 8/24 | 23/12 | 1/10 | faltam 16 faixas, 0 artistas, 9 labels |
-| Revisar | dark_progressive | 7/24 | 21/8 | 2/6 | faltam 17 faixas, 0 artistas, 4 labels |
-| Revisar | dark_psy | 11/20 | 12/8 | 11/6 | faltam 9 faixas, 0 artistas, 0 labels |
-| Revisar | deep_house | 4/20 | 4/8 | 4/6 | faltam 16 faixas, 4 artistas, 2 labels |
-| Revisar | downtempo | 7/24 | 5/12 | 6/6 | faltam 17 faixas, 7 artistas, 0 labels |
-| Revisar | drum_and_bass | 5/20 | 4/8 | 4/6 | faltam 15 faixas, 4 artistas, 2 labels |
-| Revisar | dubstep | 3/20 | 3/8 | 2/6 | faltam 17 faixas, 5 artistas, 4 labels |
-| Revisar | electro | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | electro_house | 3/20 | 2/8 | 3/6 | faltam 17 faixas, 6 artistas, 3 labels |
-| Revisar | forest_psy | 6/20 | 5/8 | 3/6 | faltam 14 faixas, 3 artistas, 3 labels |
-| Revisar | freeform | 11/12 | 7/4 | 6/0 | faltam 1 faixas, 0 artistas, 0 labels |
-| Revisar | full_on | 6/28 | 7/12 | 2/8 | faltam 22 faixas, 5 artistas, 6 labels |
-| Revisar | full_on_morning | 4/24 | 3/10 | 2/8 | faltam 20 faixas, 7 artistas, 6 labels |
-| Revisar | full_on_night | 3/24 | 3/10 | 2/8 | faltam 21 faixas, 7 artistas, 6 labels |
-| Revisar | future_garage | 3/20 | 2/8 | 2/6 | faltam 17 faixas, 6 artistas, 4 labels |
+| Revisar | dark_experimental | 8/24 | 28/12 | 1/10 | faltam 16 faixas, 0 artistas, 9 labels |
+| Revisar | dark_progressive | 7/24 | 69/8 | 2/6 | faltam 17 faixas, 0 artistas, 4 labels |
+| Revisar | dark_psy | 11/20 | 123/8 | 11/6 | faltam 9 faixas, 0 artistas, 0 labels |
+| Revisar | deep_house | 4/20 | 5/8 | 4/6 | faltam 16 faixas, 3 artistas, 2 labels |
+| Revisar | downtempo | 7/24 | 31/12 | 6/6 | faltam 17 faixas, 0 artistas, 0 labels |
+| Revisar | drum_and_bass | 5/20 | 7/8 | 4/6 | faltam 15 faixas, 1 artistas, 2 labels |
+| Revisar | dubstep | 3/20 | 5/8 | 2/6 | faltam 17 faixas, 3 artistas, 4 labels |
+| Revisar | electro | 3/20 | 4/8 | 3/6 | faltam 17 faixas, 4 artistas, 3 labels |
+| Revisar | electro_house | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
+| Revisar | forest_psy | 6/20 | 181/8 | 3/6 | faltam 14 faixas, 0 artistas, 3 labels |
+| Revisar | freeform | 11/12 | 9/4 | 6/0 | faltam 1 faixas, 0 artistas, 0 labels |
+| Revisar | full_on | 6/28 | 26/12 | 2/8 | faltam 22 faixas, 0 artistas, 6 labels |
+| Revisar | full_on_morning | 4/24 | 31/10 | 2/8 | faltam 20 faixas, 0 artistas, 6 labels |
+| Revisar | full_on_night | 3/24 | 5/10 | 2/8 | faltam 21 faixas, 5 artistas, 6 labels |
+| Revisar | future_garage | 3/20 | 4/8 | 2/6 | faltam 17 faixas, 4 artistas, 4 labels |
 | Revisar | gabber | 3/16 | 16/10 | 2/0 | faltam 13 faixas, 0 artistas, 0 labels |
-| Revisar | goa_trance | 4/20 | 5/8 | 4/6 | faltam 16 faixas, 3 artistas, 2 labels |
-| Revisar | hard_techno | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
-| Revisar | hardstyle | 3/20 | 2/8 | 2/6 | faltam 17 faixas, 6 artistas, 4 labels |
-| Revisar | hi_tech | 7/28 | 8/15 | 5/10 | faltam 21 faixas, 7 artistas, 5 labels |
-| Revisar | house | 6/20 | 4/8 | 2/6 | faltam 14 faixas, 4 artistas, 4 labels |
-| Revisar | idm | 5/20 | 3/8 | 4/6 | faltam 15 faixas, 5 artistas, 2 labels |
-| Revisar | industrial_techno | 3/20 | 2/8 | 2/6 | faltam 17 faixas, 6 artistas, 4 labels |
-| Revisar | jump_up | 3/20 | 4/8 | 2/6 | faltam 17 faixas, 4 artistas, 4 labels |
-| Revisar | jungle | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | liquid_dnb | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
-| Revisar | melodic_techno | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
-| Revisar | minimal_techno | 5/20 | 5/8 | 5/6 | faltam 15 faixas, 3 artistas, 1 labels |
-| Revisar | neurofunk | 5/20 | 4/8 | 5/6 | faltam 15 faixas, 4 artistas, 1 labels |
-| Revisar | organic_house | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | peak_time_techno | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | progressive_house | 3/20 | 3/8 | 3/6 | faltam 17 faixas, 5 artistas, 3 labels |
-| Revisar | progressive_psy | 5/24 | 3/8 | 1/8 | faltam 19 faixas, 5 artistas, 7 labels |
-| Revisar | psy_comercial | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
-| Revisar | psycore | 7/10 | 3/8 | 3/0 | faltam 3 faixas, 5 artistas, 0 labels |
-| Revisar | psytrance | 6/20 | 5/8 | 6/6 | faltam 14 faixas, 3 artistas, 0 labels |
-| OK | slambient | 22/14 | 12/8 | 2/1 | Completo |
-| Revisar | tech_house | 9/20 | 10/8 | 6/6 | faltam 11 faixas, 0 artistas, 0 labels |
-| Revisar | techno | 7/20 | 7/8 | 5/6 | faltam 13 faixas, 1 artistas, 1 labels |
-| Revisar | trance_uplifting | 4/20 | 4/8 | 3/6 | faltam 16 faixas, 4 artistas, 3 labels |
-| Revisar | uk_garage | 3/20 | 3/8 | 2/6 | faltam 17 faixas, 5 artistas, 4 labels |
+| Revisar | goa_trance | 4/20 | 7/8 | 4/6 | faltam 16 faixas, 1 artistas, 2 labels |
+| Revisar | hard_techno | 5/20 | 10/8 | 4/6 | faltam 15 faixas, 0 artistas, 2 labels |
+| Revisar | hardstyle | 3/20 | 3/8 | 2/6 | faltam 17 faixas, 5 artistas, 4 labels |
+| Revisar | hi_tech | 8/28 | 134/15 | 5/10 | faltam 20 faixas, 0 artistas, 5 labels |
+| Revisar | house | 6/20 | 6/8 | 2/6 | faltam 14 faixas, 2 artistas, 4 labels |
+| Revisar | idm | 5/20 | 5/8 | 4/6 | faltam 15 faixas, 3 artistas, 2 labels |
+| Revisar | industrial_techno | 3/20 | 4/8 | 2/6 | faltam 17 faixas, 4 artistas, 4 labels |
+| Revisar | jump_up | 3/20 | 6/8 | 2/6 | faltam 17 faixas, 2 artistas, 4 labels |
+| Revisar | jungle | 3/20 | 5/8 | 3/6 | faltam 17 faixas, 3 artistas, 3 labels |
+| Revisar | liquid_dnb | 5/20 | 6/8 | 4/6 | faltam 15 faixas, 2 artistas, 2 labels |
+| Revisar | melodic_techno | 5/20 | 7/8 | 4/6 | faltam 15 faixas, 1 artistas, 2 labels |
+| Revisar | minimal_techno | 5/20 | 6/8 | 5/6 | faltam 15 faixas, 2 artistas, 1 labels |
+| Revisar | neurofunk | 5/20 | 5/8 | 5/6 | faltam 15 faixas, 3 artistas, 1 labels |
+| Revisar | organic_house | 3/20 | 5/8 | 3/6 | faltam 17 faixas, 3 artistas, 3 labels |
+| Revisar | peak_time_techno | 3/20 | 4/8 | 3/6 | faltam 17 faixas, 4 artistas, 3 labels |
+| Revisar | progressive_house | 3/20 | 6/8 | 3/6 | faltam 17 faixas, 2 artistas, 3 labels |
+| Revisar | progressive_psy | 5/24 | 65/8 | 1/8 | faltam 19 faixas, 0 artistas, 7 labels |
+| Revisar | psy_comercial | 5/20 | 7/8 | 4/6 | faltam 15 faixas, 1 artistas, 2 labels |
+| Revisar | psycore | 9/10 | 114/8 | 3/0 | faltam 1 faixas, 0 artistas, 0 labels |
+| Revisar | psytrance | 6/20 | 13/8 | 6/6 | faltam 14 faixas, 0 artistas, 0 labels |
+| OK | slambient | 29/14 | 128/8 | 2/1 | Completo |
+| Revisar | tech_house | 9/20 | 14/8 | 6/6 | faltam 11 faixas, 0 artistas, 0 labels |
+| Revisar | techno | 7/20 | 15/8 | 5/6 | faltam 13 faixas, 0 artistas, 1 labels |
+| Revisar | trance_uplifting | 4/20 | 6/8 | 3/6 | faltam 16 faixas, 2 artistas, 3 labels |
+| Revisar | uk_garage | 3/20 | 4/8 | 2/6 | faltam 17 faixas, 4 artistas, 4 labels |
 
 ## Problemas principais
 
@@ -78,10 +79,10 @@ Status: REVISAR
 | Aviso | 999999999 - X0004000X [hard_techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Ace Ventura | Faixa duplicada no catalogo. | catalog:psytrance, LOCAL_TRACK_SEED_BOOST:progressive_psy |
 | Aviso | Ace Ventura - Presence [progressive_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | acid_techno | Cobertura abaixo do alvo. | faltam 16 faixas, 4 artistas, 2 labels |
+| Aviso | acid_techno | Cobertura abaixo do alvo. | faltam 16 faixas, 3 artistas, 2 labels |
 | Aviso | Adam Beyer - Your Mind [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Adam Beyer & Bart Skils | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | afro_house | Cobertura abaixo do alvo. | faltam 17 faixas, 5 artistas, 3 labels |
+| Aviso | afro_house | Cobertura abaixo do alvo. | faltam 17 faixas, 3 artistas, 3 labels |
 | Aviso | Agodark | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Air - La femme d'argent [chillout] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Air - La femme d'argent [chillout] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
@@ -91,7 +92,7 @@ Status: REVISAR
 | Aviso | Akuma | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Alumbra | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Aly & Fila - We Control The Sunlight [trance_uplifting] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | ambient | Cobertura abaixo do alvo. | faltam 17 faixas, 6 artistas, 0 labels |
+| Aviso | ambient | Cobertura abaixo do alvo. | faltam 17 faixas, 0 artistas, 0 labels |
 | Aviso | Amelie Lens - Hypnotized [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Andy C - Heartbeat Loud [drum_and_bass] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Angerfist | Faixa duplicada no catalogo. | catalog:gabber, LOCAL_TRACK_SEED_BOOST:gabber |
@@ -104,11 +105,15 @@ Status: REVISAR
 | Aviso | Anyma - Explore Your Future [melodic_techno] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Anyma - Explore Your Future [melodic_techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Aphex Twin - #3 [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Arcek - Tribal Core 210 230 Bpm [hi_tech] | BPM ausente ou ilegivel. | data/codex_dataset_pack_v14/tracks.csv |
+| Aviso | Arcek - Tribal Core 210 230 Bpm [hi_tech] | Sem link externo verificavel. | data/codex_dataset_pack_v14/tracks.csv |
 | Aviso | Arjuna - Primal Contact [forest_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Astrix - He.art [psytrance] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Astrix - He.art [psytrance] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | At Work | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | At Work - Lunar Odyssey [freeform] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Atmik Shastra - Destruction OF Nightmares FT Atmik Shastra X Prozektor 241bpm [slambient] | BPM ausente ou ilegivel. | data/codex_dataset_pack_v14/tracks.csv |
+| Aviso | Atmik Shastra - Destruction OF Nightmares FT Atmik Shastra X Prozektor 241bpm [slambient] | Sem link externo verificavel. | data/codex_dataset_pack_v14/tracks.csv |
 | Aviso | Atriohm - Takums [forest_psy] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Atriohm - Takums [forest_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Audio Syntax | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
@@ -124,7 +129,7 @@ Status: REVISAR
 | Aviso | Avalon - The Journey [full_on_morning] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Bardo | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 | Aviso | Bardo - Recitativos [dark_experimental] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | bass_house | Cobertura abaixo do alvo. | faltam 17 faixas, 6 artistas, 4 labels |
+| Aviso | bass_house | Cobertura abaixo do alvo. | faltam 17 faixas, 4 artistas, 4 labels |
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem bio ou pista editorial do artista. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Biosphere - Poa Alpina [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Black Coffee - Turn Me On [afro_house] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
@@ -133,7 +138,7 @@ Status: REVISAR
 | Aviso | Bonobo | Faixa duplicada no catalogo. | catalog:downtempo, LOCAL_TRACK_SEED_BOOST:downtempo |
 | Aviso | Bonobo - Kiara [downtempo] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Bonobo - Kiara [downtempo] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
-| Aviso | brazilian_funk | Cobertura abaixo do alvo. | faltam 15 faixas, 5 artistas, 0 labels |
+| Aviso | brazilian_funk | Cobertura abaixo do alvo. | faltam 15 faixas, 3 artistas, 0 labels |
 | Aviso | breakbeat | Cobertura abaixo do alvo. | faltam 17 faixas, 4 artistas, 3 labels |
 | Aviso | Brian Eno | Faixa duplicada no catalogo. | catalog:ambient, LOCAL_TRACK_SEED_BOOST:ambient |
 | Aviso | Brian Eno - An Ending (Ascent) [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
@@ -147,14 +152,10 @@ Status: REVISAR
 | Aviso | Captain Hook - Bungee Jump [progressive_psy] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Carbon Based Lifeforms - Photosynthesis [ambient] | BPM ausente ou ilegivel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Carbon Based Lifeforms - Photosynthesis [ambient] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
+| Aviso | Chaosophy - Ch4osophy [slambient] | BPM ausente ou ilegivel. | data/codex_dataset_pack_v14/tracks.csv |
+| Aviso | Chaosophy - Ch4osophy [slambient] | Sem link externo verificavel. | data/codex_dataset_pack_v14/tracks.csv |
 | Aviso | Charlotte de Witte - Selected [techno] | Sem link externo verificavel. | LOCAL_TRACK_SEED_BOOST |
 | Aviso | Chase & Status | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | chillout | Cobertura abaixo do alvo. | faltam 14 faixas, 4 artistas, 0 labels |
-| Aviso | Chris Lake | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Chris Stussy | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Cindervomit | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Claudinho Brasil | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
-| Aviso | Cloonee | Artista sem origem/bandeira confiavel. | Adicionar artistCountry ou origem canonica. |
 
 ## Como usar
 

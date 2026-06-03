@@ -1,0 +1,97 @@
+style,artist,country,city,artist_bio,source
+psytrance,Electric Universe,Germany,,"Electric Universe representa psytrance melodico e direto, com leads brilhantes e energia de festival.",artist_expansion_v1
+psytrance,Outsiders,Israel,,"Outsiders aparece no psytrance moderno com drive forte, linhas limpas e impacto de pista.",artist_expansion_v1
+forest_psy,Arjuna,Italy,,"Arjuna reforca o forest psy organico, com camadas densas e narrativa noturna de floresta.",artist_expansion_v1
+forest_psy,Farebi Jalebi,Australia,,"Farebi Jalebi conversa com forest e psytrance experimental, usando grooves tortos e textura psicodelica.",artist_expansion_v1
+dark_psy,Derango,Sweden,,"Derango e referencia cultuada do dark/forest psy, com psicodelia densa e linguagem pouco obvia.",artist_expansion_v1
+dark_psy,Psykovsky,Russia,,"Psykovsky e um nome extremo do dark psy, conhecido por arranjos longos, caoticos e altamente psicodelicos.",artist_expansion_v1
+dark_experimental,Parus,Russia,,"Parus entra no eixo dark experimental com estruturas intensas e clima abstrato de pista acelerada.",artist_expansion_v1
+dark_experimental,Osom,Russia,,"Osom reforca a ala experimental do dark psy russo, com energia extrema e narrativa sonora fragmentada.",artist_expansion_v1
+psycore,Will O Wisp,Greece,,"Will O Wisp e associado a sonoridades psycore e hi-tech, com velocidade alta e desenho sonoro agressivo.",artist_expansion_v1
+psycore,Kindzadza,Russia,,"Kindzadza tambem funciona como referencia para o lado mais extremo e tecnico do dark psy/psycore.",artist_expansion_v1
+freeform,Purosurpo,Finland,,"Purosurpo amplia o freeform/suomisaundi com humor psicodelico, groove solto e estruturas pouco previsiveis.",artist_expansion_v1
+freeform,Luomuhappo,Finland,,"Luomuhappo e um nome importante da escola suomisaundi/freeform, com criatividade psicodelica e irreverente.",artist_expansion_v1
+full_on,Dickster,United Kingdom,,"Dickster e referencia de full-on psicodelico com groove classico, linhas elasticas e alta funcionalidade em pista.",artist_expansion_v1
+full_on,Volcano,Israel,,"Volcano reforca o full-on moderno de festival, com energia clara e producao voltada para pista grande.",artist_expansion_v1
+full_on_night,Virtual Light,Canada,,"Virtual Light funciona bem no full-on noturno, com timbres acidos e psicodelia mais seca.",artist_expansion_v1
+full_on_night,Braincell,Switzerland,,"Braincell conecta full-on night e psytrance tecnico, com linhas intensas e progressao de madrugada.",artist_expansion_v1
+full_on_morning,Digicult,Belgium,,"Digicult traz full-on morning melodico, aberto e luminoso, com energia de amanhecer.",artist_expansion_v1
+full_on_morning,Tropical Bleyage,Serbia,,"Tropical Bleyage reforca o lado melodico e expansivo do full-on morning.",artist_expansion_v1
+progressive_psy,Neelix,Germany,,"Neelix representa progressive psy acessivel e grooveado, com melodias diretas e energia de festival.",artist_expansion_v1
+progressive_psy,Morten Granau,Denmark,,"Morten Granau entra no progressive psy melodico, limpo e muito funcional para pista.",artist_expansion_v1
+hi_tech,OxiDaksi,Israel,,"OxiDaksi reforca o hi-tech psicodelico com alta velocidade, glitches e impacto de pico.",artist_expansion_v1
+hi_tech,Ingrained Instincts,United Kingdom,,"Ingrained Instincts combina hi-tech e psytrance rapido com producao detalhada e pressao constante.",artist_expansion_v1
+dark_progressive,Tetrameth,Australia,,"Tetrameth e referencia do dark progressive/zenonesque, com groove hipnotico e texturas profundas.",artist_expansion_v1
+dark_progressive,Sumiruna,Australia,,"Sumiruna reforca o eixo zenonesque com progressao longa, baixo elastico e atmosfera sombria.",artist_expansion_v1
+goa_trance,Filteria,Sweden,,"Filteria atualiza o goa trance com linhas acidas, melodias intensas e energia classica.",artist_expansion_v1
+goa_trance,E-Mantra,Romania,,"E-Mantra transita pelo goa trance melodico e atmosferico, com narrativa psicodelica detalhada.",artist_expansion_v1
+psy_comercial,Vini Vici,Israel,,"Vini Vici representa o psytrance comercial de grande festival, com drops diretos e impacto mainstream.",artist_expansion_v1
+psy_comercial,Blastoyz,Israel,,"Blastoyz entra no psy comercial/festival, misturando psytrance com hooks grandes e producao moderna.",artist_expansion_v1
+trance_uplifting,Giuseppe Ottaviani,Italy,,"Giuseppe Ottaviani e referencia do trance uplifting, com melodias emocionais e energia euforica.",artist_expansion_v1
+trance_uplifting,John O'Callaghan,Ireland,,"John O'Callaghan reforca o uplifting trance com breakdowns fortes e retorno energetico.",artist_expansion_v1
+techno,Len Faki,Germany,,"Len Faki representa techno de pista com groove firme, tensao progressiva e impacto de club.",artist_expansion_v1
+techno,DVS1,United States,,"DVS1 e conhecido por techno profundo, hipnotico e muito focado em sound system.",artist_expansion_v1
+acid_techno,Regal,Spain,,"Regal reforca o acid techno moderno, com linhas 303 agressivas e energia seca.",artist_expansion_v1
+acid_techno,Thomas P. Heckmann,Germany,,"Thomas P. Heckmann e nome historico do acid e techno europeu, com timbres acidos classicos.",artist_expansion_v1
+hard_techno,Kobosil,Germany,,"Kobosil representa hard techno sombrio, industrializado e de alta pressao.",artist_expansion_v1
+hard_techno,Paula Temple,United Kingdom,,"Paula Temple reforca o hard/industrial techno com som fisico, denso e combativo.",artist_expansion_v1
+minimal_techno,Robert Hood,United States,,"Robert Hood e pilar do minimal techno, com repeticao precisa e groove essencial.",artist_expansion_v1
+minimal_techno,Daniel Bell,United States,,"Daniel Bell representa minimal techno de Detroit, seco, funcional e hipnotico.",artist_expansion_v1
+melodic_techno,Tale Of Us,Italy,,"Tale Of Us consolidou o melodic techno recente, com dramaturgia harmonica e estetica audiovisual.",artist_expansion_v1
+melodic_techno,Stephan Bodzin,Germany,,"Stephan Bodzin traz melodic techno de synths expressivos, tensao longa e assinatura emocional.",artist_expansion_v1
+industrial_techno,Ancient Methods,Germany,,"Ancient Methods reforca o industrial techno com estetica pesada, ritualistica e mecanica.",artist_expansion_v1
+industrial_techno,Rebekah,United Kingdom,,"Rebekah representa techno industrial direto, forte e orientado a impacto fisico.",artist_expansion_v1
+peak_time_techno,Space 92,France,,"Space 92 entra no peak-time techno melodico e potente, com drops grandes e energia de festival.",artist_expansion_v1
+peak_time_techno,Layton Giordani,United States,,"Layton Giordani reforca peak-time techno moderno com groove limpo e tensao progressiva.",artist_expansion_v1
+house,Masters At Work,United States,New York,"Masters At Work e fundamental para house, latin house e cultura club de Nova York.",artist_expansion_v1
+house,Kerri Chandler,United States,,"Kerri Chandler e referencia do house profundo, com baixo quente e alma de club.",artist_expansion_v1
+deep_house,Miguel Migs,United States,,"Miguel Migs reforca deep house musical, elegante e cheio de groove.",artist_expansion_v1
+deep_house,Maya Jane Coles,United Kingdom,,"Maya Jane Coles representa deep house moderno, com producao refinada e atmosfera club.",artist_expansion_v1
+tech_house,Jamie Jones,United Kingdom,,"Jamie Jones e nome central do tech house moderno, com groove minimal e cultura de club.",artist_expansion_v1
+tech_house,Hot Since 82,United Kingdom,,"Hot Since 82 reforca tech house e house de club com baixo forte e atmosfera noturna.",artist_expansion_v1
+progressive_house,Hernan Cattaneo,Argentina,,"Hernan Cattaneo e referencia mundial do progressive house, com sets longos, elegantes e narrativos.",artist_expansion_v1
+progressive_house,Sasha,United Kingdom,,"Sasha e figura historica do progressive house, conhecido por narrativa harmonica e mixes sofisticados.",artist_expansion_v1
+afro_house,Shimza,South Africa,,"Shimza reforca o afro house sul-africano com groove percussivo e energia de pista.",artist_expansion_v1
+afro_house,Da Capo,South Africa,,"Da Capo representa afro house profundo, melodico e muito conectado a textura percussiva.",artist_expansion_v1
+organic_house,Nicolas Jaar,Chile,,"Nicolas Jaar traz uma leitura organica e experimental do house, com espaco, silencio e textura.",artist_expansion_v1
+organic_house,Rodriguez Jr.,France,,"Rodriguez Jr. reforca organic/melodic house com arranjos emotivos e groove refinado.",artist_expansion_v1
+bass_house,AC Slater,United States,,"AC Slater e referencia em bass house/night bass, com baixo elastico e energia club.",artist_expansion_v1
+bass_house,Taiki Nulight,United Kingdom,,"Taiki Nulight reforca bass house com garage, subgrave e groove britanico.",artist_expansion_v1
+electro_house,Feed Me,United Kingdom,,"Feed Me representa electro house pesado e detalhado, com drops fortes e design sonoro colorido.",artist_expansion_v1
+electro_house,The M Machine,United States,,"The M Machine conecta electro house e electronica melodica com producao limpa e futurista.",artist_expansion_v1
+drum_and_bass,Goldie,United Kingdom,,"Goldie e figura essencial do drum and bass, ligado a Metalheadz e a narrativa sofisticada do genero.",artist_expansion_v1
+drum_and_bass,Friction,United Kingdom,,"Friction reforca drum and bass moderno, direto e muito funcional para pista.",artist_expansion_v1
+liquid_dnb,LTJ Bukem,United Kingdom,,"LTJ Bukem e pilar do liquid/intelligent drum and bass, com atmosfera jazzistica e espacial.",artist_expansion_v1
+liquid_dnb,High Contrast,United Kingdom,,"High Contrast representa liquid drum and bass melodico, cinematografico e acessivel.",artist_expansion_v1
+neurofunk,Mefjus,Austria,,"Mefjus reforca neurofunk tecnico, pesado e altamente detalhado.",artist_expansion_v1
+neurofunk,Phace,Germany,,"Phace representa neurofunk preciso, futurista e cheio de engenharia de baixo.",artist_expansion_v1
+jump_up,Hazard,United Kingdom,,"DJ Hazard e nome importante do jump up, com linhas de baixo marcantes e energia direta.",artist_expansion_v1
+jump_up,Annix,United Kingdom,,"Annix reforca jump up moderno com drops fortes e linguagem de club.",artist_expansion_v1
+jungle,Congo Natty,United Kingdom,,"Congo Natty e referencia do jungle, conectando bass culture, reggae e breakbeats acelerados.",artist_expansion_v1
+jungle,Tim Reaper,United Kingdom,,"Tim Reaper representa o jungle contemporaneo com respeito a breakbeats classicos e energia rave.",artist_expansion_v1
+breakbeat,Plump DJs,United Kingdom,,"Plump DJs sao referencia do breaks/breakbeat de pista, com groove quebrado e baixo forte.",artist_expansion_v1
+breakbeat,Stanton Warriors,United Kingdom,,"Stanton Warriors reforcam breakbeat club, com bateria quebrada e energia bass.",artist_expansion_v1
+uk_garage,MJ Cole,United Kingdom,,"MJ Cole e nome essencial do UK garage, com swing, vocal soulful e batida elastica.",artist_expansion_v1
+uk_garage,Conducta,United Kingdom,,"Conducta representa a nova fase do UK garage, com groove leve, swing e energia de club.",artist_expansion_v1
+future_garage,Joy Orbison,United Kingdom,,"Joy Orbison conecta future garage, bass e house britanico com atmosfera urbana e groove quebrado.",artist_expansion_v1
+future_garage,Mount Kimbie,United Kingdom,,"Mount Kimbie reforca future garage e post-dubstep com textura indie-eletronica.",artist_expansion_v1
+dubstep,Mala,United Kingdom,,"Mala e pilar do dubstep profundo, com subgrave meditativo e cultura de sound system.",artist_expansion_v1
+dubstep,Coki,United Kingdom,,"Coki reforca dubstep classico com wobble cru, peso fisico e energia de bass culture.",artist_expansion_v1
+downtempo,Emancipator,United States,,"Emancipator representa downtempo organico, melodico e cinematografico.",artist_expansion_v1
+downtempo,Blockhead,United States,,"Blockhead reforca downtempo instrumental com samples, groove lento e narrativa urbana.",artist_expansion_v1
+ambient,Loscil,Canada,,"Loscil e referencia de ambient minimalista, com camadas profundas e sensacao de espaco.",artist_expansion_v1
+ambient,A Winged Victory For The Sullen,United States,,"A Winged Victory For The Sullen conecta ambient, neoclassico e textura cinematografica.",artist_expansion_v1
+chillout,Zero 7,United Kingdom,,"Zero 7 representa chillout/downtempo suave, com vocais aereos e producao calorosa.",artist_expansion_v1
+chillout,Kruder & Dorfmeister,Austria,,"Kruder & Dorfmeister sao referencia de chillout, downtempo e dub elegante de lounge.",artist_expansion_v1
+slambient,Cindervomit,United States,,"Cindervomit reforca slambient e psicodelia extrema com textura densa e atmosfera profunda.",artist_expansion_v1
+slambient,Phyllorum,United States,,"Phyllorum amplia slambient com paisagens aceleradas, densas e experimentais.",artist_expansion_v1
+idm,Squarepusher,United Kingdom,,"Squarepusher e nome essencial do IDM, com virtuosismo ritmico, baixo complexo e programacao intensa.",artist_expansion_v1
+idm,Clark,United Kingdom,,"Clark representa IDM moderno com texturas quebradas, peso e sensibilidade melodica.",artist_expansion_v1
+electro,Drexciya,United States,Detroit,"Drexciya e entidade essencial do electro de Detroit, com baixo aquatico e imaginario futurista.",artist_expansion_v1
+electro,Aux 88,United States,Detroit,"Aux 88 reforca electro de Detroit com vocoder, groove mecanico e energia cyberfunk.",artist_expansion_v1
+brazilian_funk,DJ Polyvox,Brazil,Rio de Janeiro,"DJ Polyvox reforca funk carioca de baile com producao direta, percussao seca e energia de rua.",artist_expansion_v1
+brazilian_funk,DJ RD da NH,Brazil,Rio de Janeiro,"DJ RD da NH entra no funk brasileiro contemporaneo com batidas de baile e impacto viral.",artist_expansion_v1
+gabber,DJ Paul Elstak,Netherlands,Rotterdam,"DJ Paul Elstak e figura historica do gabber/hardcore holandes e da cultura de Rotterdam.",artist_expansion_v1
+gabber,Neophyte,Netherlands,Rotterdam,"Neophyte e referencia classica do gabber, com kicks fortes e heranca hardcore.",artist_expansion_v1
+hardstyle,Headhunterz,Netherlands,,"Headhunterz representa hardstyle melodico de grande festival, com kicks fortes e leads emotivos.",artist_expansion_v1
+hardstyle,Wildstylez,Netherlands,,"Wildstylez reforca hardstyle melodico, euforico e voltado a grandes palcos.",artist_expansion_v1

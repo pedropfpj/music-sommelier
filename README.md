@@ -71,6 +71,8 @@ node scripts/quality-audit.mjs
 
 O script verifica cobertura por subgenero, BPM fora da faixa, duplicatas, artistas sem origem/bandeira, links ausentes e possiveis placeholders. O relatorio atualizado fica em `reports/quality-audit-latest.md`.
 
+Para aumentar o catalogo em lote, adicione novos arquivos CSV em `data/` e inclua o caminho em `EXTERNAL_DATASET_FILES` no `app.js`. O primeiro lote proprio esta em `data/artist_expansion_seeds_v1.csv` e usa as colunas `style`, `artist`, `country`, `city`, `artist_bio` e `source`.
+
 Quando os problemas criticos estiverem zerados, use o modo estrito antes de commit/push:
 
 ```bash

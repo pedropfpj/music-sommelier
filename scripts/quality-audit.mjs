@@ -12,6 +12,7 @@ const reportPath = path.join(reportsDir, "quality-audit-latest.md");
 const strictMode = process.argv.includes("--strict");
 
 const BLOCKS = [
+  "EXTERNAL_DATASET_FILES",
   "SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS",
   "LOCAL_TRACK_SEED_BOOST",
   "catalog",
@@ -50,6 +51,13 @@ const LINK_FIELDS = [
   "bandcampTrackUrl",
   "beatportUrl"
 ];
+
+const DATASET_STYLE_FIELDS = ["style", "subgenre", "sub_genre", "genre", "primary_genre", "main_style"];
+const DATASET_ARTIST_FIELDS = ["artist", "artist_name", "name", "project", "dj", "act"];
+const DATASET_SONG_FIELDS = ["song", "track", "track_name", "title", "faixa", "music"];
+const DATASET_COUNTRY_FIELDS = ["country", "origin_country", "artist_country", "pais", "nacionalidade"];
+const DATASET_AREA_FIELDS = ["city", "origin_city", "state", "region", "area", "cidade"];
+const DATASET_BIO_FIELDS = ["artist_bio", "bio", "description", "about", "resumo"];
 
 function readAppSource() {
   if (!fs.existsSync(appPath)) {
@@ -281,6 +289,142 @@ function groupBy(items, callback) {
   return groups;
 }
 
+function parseDelimitedRows(text, delimiter = ",") {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let inQuotes = false;
+
+  const safeText = String(text || "").replace(/^\uFEFF/, "");
+  for (let index = 0; index < safeText.length; index += 1) {
+    const char = safeText[index];
+    const next = safeText[index + 1];
+    if (char === "\"") {
+      if (inQuotes && next === "\"") {
+        value += "\"";
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+    if (!inQuotes && char === delimiter) {
+      row.push(value);
+      value = "";
+      continue;
+    }
+    if (!inQuotes && (char === "\n" || char === "\r")) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(value);
+      if (row.some((cell) => String(cell || "").trim())) rows.push(row);
+      row = [];
+      value = "";
+      continue;
+    }
+    value += char;
+  }
+  row.push(value);
+  if (row.some((cell) => String(cell || "").trim())) rows.push(row);
+  return rows;
+}
+
+function parseCsvRecords(text) {
+  const safeText = String(text || "").replace(/^\uFEFF/, "");
+  if (!safeText.trim()) return [];
+  const firstLine = safeText.split(/\r?\n/).find((line) => String(line || "").trim()) || "";
+  const commaCount = (firstLine.match(/,/g) || []).length;
+  const semicolonCount = (firstLine.match(/;/g) || []).length;
+  const delimiter = semicolonCount > commaCount ? ";" : ",";
+  const rows = parseDelimitedRows(safeText, delimiter);
+  if (rows.length < 2) return [];
+  const headers = rows[0].map((header, index) => normalize(header) || `column_${index}`);
+  return rows
+    .slice(1)
+    .map((cells) => {
+      const row = {};
+      headers.forEach((header, index) => {
+        row[header] = String(cells[index] || "").trim();
+      });
+      return row;
+    })
+    .filter((row) => Object.values(row).some((value) => String(value || "").trim()));
+}
+
+function jsonRows(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (!payload || typeof payload !== "object") return [];
+  for (const key of ["rows", "artists", "tracks", "items", "data"]) {
+    if (Array.isArray(payload[key])) return payload[key];
+  }
+  return [];
+}
+
+function parseJsonlRecords(text) {
+  return String(text || "")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      try {
+        return JSON.parse(line);
+      } catch (_error) {
+        return null;
+      }
+    })
+    .filter((row) => row && typeof row === "object");
+}
+
+function fieldValue(row, fields) {
+  if (!row || typeof row !== "object") return "";
+  for (const field of fields) {
+    const direct = row[field];
+    if (direct !== undefined && direct !== null && String(direct).trim()) return String(direct).trim();
+    const normalizedField = normalize(field);
+    const foundKey = Object.keys(row).find((key) => normalize(key) === normalizedField);
+    if (foundKey && String(row[foundKey] || "").trim()) return String(row[foundKey]).trim();
+  }
+  return "";
+}
+
+function readExternalDatasetRows(files = []) {
+  const records = [];
+  for (const relativeFile of files) {
+    const filePath = path.join(rootDir, relativeFile);
+    if (!fs.existsSync(filePath)) continue;
+    const lower = relativeFile.toLowerCase();
+    const content = fs.readFileSync(filePath, "utf8");
+    let rows = [];
+    if (lower.endsWith(".csv")) rows = parseCsvRecords(content);
+    if (lower.endsWith(".json")) {
+      try {
+        rows = jsonRows(JSON.parse(content));
+      } catch (_error) {
+        rows = [];
+      }
+    }
+    if (lower.endsWith(".jsonl")) rows = parseJsonlRecords(content);
+    rows.forEach((row) => records.push({ ...row, auditSource: relativeFile, auditType: "externalArtistSeed" }));
+  }
+  return records;
+}
+
+function externalRecordToArtistSignal(record, knownStyles) {
+  const style = fieldValue(record, DATASET_STYLE_FIELDS);
+  const artist = fieldValue(record, DATASET_ARTIST_FIELDS);
+  if (!artist || !knownStyles.has(style)) return null;
+  return {
+    artist,
+    name: artist,
+    song: fieldValue(record, DATASET_SONG_FIELDS),
+    style,
+    artistCountry: fieldValue(record, DATASET_COUNTRY_FIELDS),
+    artistArea: fieldValue(record, DATASET_AREA_FIELDS),
+    artistBio: fieldValue(record, DATASET_BIO_FIELDS),
+    auditSource: record.auditSource || "external_dataset",
+    auditType: fieldValue(record, DATASET_SONG_FIELDS) ? "externalTrack" : "externalArtistSeed"
+  };
+}
+
 function uniqueCount(items, callback) {
   return new Set(items.map(callback).filter(Boolean)).size;
 }
@@ -301,6 +445,7 @@ function makeArtistSeedLabel(seed) {
 function auditCatalog(blocks) {
   const {
     SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS,
+    EXTERNAL_DATASET_FILES,
     LOCAL_TRACK_SEED_BOOST,
     catalog,
     discoveryCatalog,
@@ -331,13 +476,21 @@ function auditCatalog(blocks) {
   const artistSignals = allRecords.filter((record) => record.artist || record.name);
 
   const issues = [];
+  const knownStyles = new Set(Object.keys(STYLE_BPM_RULES));
+  const externalSignals = readExternalDatasetRows(EXTERNAL_DATASET_FILES)
+    .map((record) => externalRecordToArtistSignal(record, knownStyles))
+    .filter(Boolean);
+  allRecords.push(...externalSignals);
+  artistSignals.push(...externalSignals);
+  allTracks.push(...externalSignals.filter((record) => record.auditType === "externalTrack"));
+
   const styleGroups = groupBy(allTracks.filter((track) => track.style), (track) => track.style);
   const artistStyleGroups = groupBy(artistSignals.filter((record) => record.style), (record) => record.style);
-  const knownStyles = new Set(Object.keys(STYLE_BPM_RULES));
 
   allRecords.forEach((track) => {
-    if (track.auditType === "artistSeed") {
+    if (String(track.auditType || "").endsWith("Seed")) {
       const label = makeArtistSeedLabel(track);
+      const isExternalSeed = String(track.auditType || "").startsWith("external");
       if (!track.artist) {
         addIssue(issues, "critical", label, "Seed sem nome de artista.", track.auditSource);
       }
@@ -347,10 +500,10 @@ function auditCatalog(blocks) {
       if (looksGeneric(track.artist)) {
         addIssue(issues, "critical", label, "Artista parece generico ou placeholder.", track.auditSource);
       }
-      if (!track.artistBio && !track.artistProfileHint) {
+      if (!isExternalSeed && !track.artistBio && !track.artistProfileHint) {
         addIssue(issues, "warning", label, "Seed sem bio ou pista editorial do artista.", track.auditSource);
       }
-      if (!hasAnyLink(track)) {
+      if (!isExternalSeed && !hasAnyLink(track)) {
         addIssue(issues, "warning", label, "Seed sem link externo verificavel.", track.auditSource);
       }
       return;
@@ -413,9 +566,10 @@ function auditCatalog(blocks) {
   const artistGroups = groupBy(artistSignals.filter((track) => track.artist), artistId);
   for (const [key, tracks] of artistGroups) {
     const sample = tracks[0];
+    const hasCoreRecord = tracks.some((track) => !String(track.auditType || "").startsWith("external"));
     const country = findCountryForArtist(sample, ARTIST_CANONICAL_ORIGINS, COUNTRY_BY_ORIGIN_AREA);
     const flag = flagForCountry(country, COUNTRY_CODE_BY_NAME);
-    if (!flag) {
+    if (hasCoreRecord && !flag) {
       addIssue(
         issues,
         "warning",
@@ -466,7 +620,8 @@ function auditCatalog(blocks) {
     artists: uniqueCount(artistSignals, artistId),
     labels: uniqueCount(allTracks, labelId),
     styles: styleGroups.size,
-    sources: uniqueCount(allRecords, (track) => sourceName(track))
+    sources: uniqueCount(allRecords, (track) => sourceName(track)),
+    externalArtists: uniqueCount(externalSignals, artistId)
   };
 
   return {
@@ -526,6 +681,7 @@ function formatReport(result) {
     `- Artistas unicos: ${result.counts.artists}`,
     `- Gravadoras/labels unicas: ${result.counts.labels}`,
     `- Estilos com faixas: ${result.counts.styles}`,
+    `- Artistas vindos de datasets externos: ${result.counts.externalArtists}`,
     `- Problemas criticos: ${result.criticalCount}`,
     `- Avisos: ${result.warningCount}`,
     "",
