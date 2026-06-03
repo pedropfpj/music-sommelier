@@ -4196,6 +4196,7 @@ const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v12";
+const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
@@ -10086,8 +10087,8 @@ const I18N = {
     spiritVideoTitle: "Visual do espírito musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Colecionável do espírito",
-    spiritCollectibleHintLocal: "Prévia local ativa. Configure a IA para cada usuário receber uma arte única gerada sob demanda.",
-    spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para o seu perfil musical.",
+    spiritCollectibleHintLocal: "Arte única local ativa: cada usuário recebe uma variação própria. A IA pode refinar o acabamento final.",
+    spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para a assinatura musical deste usuário.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
@@ -10104,8 +10105,8 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | Curte {liked} artistas | Conheceu no app {discovered} | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
-    spiritCollectibleGeneratedLocal: "Prévia local refeita. Ative a chave da IA para gerar arte final única.",
-    spiritCollectibleGeneratedApi: "Nova arte por IA criada para o seu espírito.",
+    spiritCollectibleGeneratedLocal: "Nova variação única local criada para este usuário.",
+    spiritCollectibleGeneratedApi: "Nova arte por IA criada para este usuário.",
     spiritCollectibleError: "IA de imagem ainda sem resposta. Mostrando uma prévia local bonita até configurar a chave.",
     spiritRankUnlocked: "Espírito desbloqueado",
     spiritRankNovice: "Sommelier iniciante",
@@ -10511,8 +10512,8 @@ const I18N = {
     spiritVideoTitle: "Musical spirit visual",
     spiritVisualPreset: "Visual preset: {preset}",
     spiritCollectibleTitle: "Spirit collectible",
-    spiritCollectibleHintLocal: "Local preview is active. Connect AI so each user gets unique artwork on demand.",
-    spiritCollectibleHintApi: "Image AI connected: this artwork was generated for your music profile.",
+    spiritCollectibleHintLocal: "Unique local artwork is active: each user receives a personal variation. AI can refine the final finish.",
+    spiritCollectibleHintApi: "Image AI connected: this artwork was generated for this user's music signature.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
@@ -10529,8 +10530,8 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | Likes {liked} artists | Discovered in app {discovered} | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
-    spiritCollectibleGeneratedLocal: "Local preview regenerated. Enable the AI key to create final unique art.",
-    spiritCollectibleGeneratedApi: "New AI artwork created for your spirit.",
+    spiritCollectibleGeneratedLocal: "New unique local variation created for this user.",
+    spiritCollectibleGeneratedApi: "New AI artwork created for this user.",
     spiritCollectibleError: "Image AI did not respond yet. Showing a polished local preview until the key is configured.",
     spiritRankUnlocked: "Spirit unlocked",
     spiritRankNovice: "Novice music sommelier",
@@ -10936,8 +10937,8 @@ const I18N = {
     spiritVideoTitle: "Visual del espíritu musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Coleccionable del espíritu",
-    spiritCollectibleHintLocal: "Vista previa local activa. Conecta la IA para que cada usuario reciba una obra única bajo demanda.",
-    spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para tu perfil musical.",
+    spiritCollectibleHintLocal: "Arte local única activa: cada usuario recibe una variación propia. La IA puede refinar el acabado final.",
+    spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para la firma musical de este usuario.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
@@ -10954,8 +10955,8 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Estado {status} | Te gustan {liked} artistas | Conociste en la app {discovered} | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
-    spiritCollectibleGeneratedLocal: "Vista previa local regenerada. Activa la clave de IA para crear la obra final única.",
-    spiritCollectibleGeneratedApi: "Nueva obra con IA creada para tu espíritu.",
+    spiritCollectibleGeneratedLocal: "Nueva variación local única creada para este usuario.",
+    spiritCollectibleGeneratedApi: "Nueva obra con IA creada para este usuario.",
     spiritCollectibleError: "La IA de imagen aún no respondió. Mostrando una vista previa local cuidada hasta configurar la clave.",
     spiritRankUnlocked: "Espíritu desbloqueado",
     spiritRankNovice: "Sommelier musical inicial",
@@ -11845,10 +11846,12 @@ function clearSessionProfileData(session) {
   const preferenceKey = storageKeyForSession(STORAGE_KEY, session);
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY, session);
   const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY, session);
+  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY, session);
   try {
     if (preferenceKey) localStorage.removeItem(preferenceKey);
     if (progressKey) localStorage.removeItem(progressKey);
     if (collectibleKey) localStorage.removeItem(collectibleKey);
+    if (artSeedKey) localStorage.removeItem(artSeedKey);
   } catch (_err) {
     // ignore storage failures
   }
@@ -17591,6 +17594,74 @@ function spiritCollectibleStoreKey() {
   return storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
 }
 
+function spiritArtSeedStoreKey() {
+  return storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
+}
+
+function createSpiritArtSeed() {
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const values = new Uint32Array(2);
+    crypto.getRandomValues(values);
+    return Array.from(values).map((value) => value.toString(36)).join("-");
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function readOrCreateSpiritArtSeed() {
+  const key = spiritArtSeedStoreKey();
+  if (!key) return "local-guest";
+  try {
+    const existing = String(localStorage.getItem(key) || "").trim();
+    if (existing) return existing;
+    const created = createSpiritArtSeed();
+    localStorage.setItem(key, created);
+    return created;
+  } catch (_err) {
+    return sessionProfileKey() || "local-guest";
+  }
+}
+
+function topMapKeysForSignature(map, limit = 4) {
+  if (!map || typeof map.forEach !== "function") return [];
+  const entries = [];
+  map.forEach((value, key) => {
+    const normalizedKey = normalize(String(key || ""));
+    if (!normalizedKey) return;
+    entries.push([normalizedKey, Math.max(0, Number(value) || 0)]);
+  });
+  return entries
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([key, value]) => `${key}:${value.toFixed(2)}`);
+}
+
+function spiritCollectibleUserSignature() {
+  const profileKey = sessionProfileKey() || "guest:default";
+  const userSeed = readOrCreateSpiritArtSeed();
+  return hashString(`${profileKey}::${userSeed}`).toString(36);
+}
+
+function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
+  const styleSignals = spiritInsightSignals(spirit, 4)
+    .map((signal) => `${normalize(signal.label)}:${Number(signal.score || 0).toFixed(1)}`);
+  const typedKnown = parseKnownArtists(knownArtistsEl ? knownArtistsEl.value : "");
+  const knownUnion = new Set([...typedKnown, ...knownArtistsMemory]);
+  const raw = [
+    spiritCollectibleUserSignature(),
+    spirit?.id || "",
+    milestoneLikes,
+    selectedStyle || "",
+    currentRecommendation?.style || "",
+    currentDiscovery?.style || "",
+    totalPositiveLikes(),
+    topMapKeysForSignature(adaptiveModel?.likedStyles, 5).join("|"),
+    topMapKeysForSignature(adaptiveModel?.likedArtists, 5).join("|"),
+    [...knownUnion].map((artist) => normalize(artist)).sort().slice(0, 8).join("|"),
+    styleSignals.join("|")
+  ].join("::");
+  return hashString(raw).toString(36);
+}
+
 function readSpiritCollectibleStore() {
   const key = spiritCollectibleStoreKey();
   if (!key) return {};
@@ -18056,13 +18127,15 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   const rankLabel = t(resolveSpiritRank(likes).current.key);
   const topStylesLine = profile.topStyles.slice(0, 3).join(" • ");
   const bpmLine = profile.bpmText ? `BPM ${profile.bpmText}` : "";
+  const signatureLine = spiritCollectibleUserSignature().slice(0, 6).toUpperCase();
   if (currentLanguage === "pt") {
     return normalizeInlineText(
       [
         spiritText?.archetype ? `Arquétipo: ${spiritText.archetype}` : "",
         topStylesLine ? `Assinatura: ${topStylesLine}` : "",
         bpmLine,
-        `${rankLabel} no marco de ${milestoneLikes} likes.`
+        `${rankLabel} no marco de ${milestoneLikes} likes.`,
+        `Arte única: ${signatureLine}`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -18074,7 +18147,8 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
         spiritText?.archetype ? `Archetype: ${spiritText.archetype}` : "",
         topStylesLine ? `Signature: ${topStylesLine}` : "",
         bpmLine,
-        `${rankLabel} at ${milestoneLikes} likes.`
+        `${rankLabel} at ${milestoneLikes} likes.`,
+        `Unique art: ${signatureLine}`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -18086,7 +18160,8 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
         spiritText?.archetype ? `Arquetipo: ${spiritText.archetype}` : "",
         topStylesLine ? `Firma: ${topStylesLine}` : "",
         bpmLine,
-        `${rankLabel} en el hito de ${milestoneLikes} likes.`
+        `${rankLabel} en el hito de ${milestoneLikes} likes.`,
+        `Arte única: ${signatureLine}`
       ]
         .filter(Boolean)
         .join(" • ")
@@ -18895,15 +18970,15 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
   return lines.slice(0, maxLines);
 }
 
-function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes) {
+function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   if (currentLanguage === "en") {
-    return `Create a unique premium abstract artwork for a music discovery app user. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual language: cinematic neon electronic, layered light, geometric sigils, sonic waveforms, club/rave energy, collectible card cover quality, high detail, clean composition, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create a unique premium abstract artwork for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual language: cinematic neon electronic, layered light, geometric sigils, sonic waveforms, club/rave energy, collectible card cover quality, high detail, clean composition, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea una obra abstracta premium y única para un usuario de una app de descubrimiento musical. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Lenguaje visual: electrónica neón cinematográfica, luces en capas, sigilos geométricos, ondas sonoras, energía club/rave, calidad de portada coleccionable, alto detalle, composición limpia, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
+    return `Crea una obra abstracta premium y única para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Lenguaje visual: electrónica neón cinematográfica, luces en capas, sigilos geométricos, ondas sonoras, energía club/rave, calidad de portada coleccionable, alto detalle, composición limpia, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
   }
-  return `Crie uma arte abstrata premium e única para um usuário de app de descoberta musical. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Linguagem visual: eletrônico neon cinematográfico, luzes em camadas, sigilos geométricos, ondas sonoras, energia club/rave, qualidade de capa colecionável, alto detalhamento, composição limpa, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
+  return `Crie uma arte abstrata premium e única para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Linguagem visual: eletrônico neon cinematográfico, luzes em camadas, sigilos geométricos, ondas sonoras, energia club/rave, qualidade de capa colecionável, alto detalhamento, composição limpa, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
 }
 
 function collectibleVariationToken() {
@@ -18955,7 +19030,9 @@ function buildLocalSpiritCollectibleImage(
   variationToken = "",
   backgroundImageUrl = "",
   spiritImageDataUrl = "",
-  snapshot = null
+  snapshot = null,
+  userSignature = "",
+  profileSignature = ""
 ) {
   const theme = spiritVisualTheme(spirit);
   const rank = t(resolveSpiritRank(likes).current.key);
@@ -18972,12 +19049,28 @@ function buildLocalSpiritCollectibleImage(
   const safeSpiritImage = String(spiritImageDataUrl || "").trim();
   const hasSpiritImage = /^data:image\//i.test(safeSpiritImage);
   const spiritInitial = escapeSvgText(spiritTitle.trim().slice(0, 1).toUpperCase() || "S");
-  const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}`);
+  const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`);
   const accentX = 24 + (seed % 52);
   const accentY = 18 + ((seed >> 3) % 58);
   const accent2X = 54 + ((seed >> 7) % 38);
   const accent2Y = 42 + ((seed >> 11) % 42);
   const decoRotation = seed % 360;
+  const waveformBars = Array.from({ length: 34 }, (_, index) => {
+    const mixed = hashString(`${seed}::wave::${index}::${userSignature}`);
+    const height = 22 + (mixed % 118);
+    const x = 168 + index * 22;
+    const y = 548 - height / 2;
+    const opacity = 0.18 + ((mixed >> 4) % 32) / 100;
+    return `<rect x="${x}" y="${y.toFixed(1)}" width="8" height="${height}" rx="4" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+  const microStars = Array.from({ length: 18 }, (_, index) => {
+    const mixed = hashString(`${seed}::star::${index}::${profileSignature}`);
+    const x = 92 + (mixed % 896);
+    const y = 82 + ((mixed >> 6) % 486);
+    const radius = 1.6 + ((mixed >> 12) % 28) / 10;
+    const opacity = 0.18 + ((mixed >> 16) % 42) / 100;
+    return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${escapeSvgText(index % 3 === 0 ? theme.c : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -19027,7 +19120,9 @@ function buildLocalSpiritCollectibleImage(
   <rect width="1080" height="1080" fill="url(#readabilityScrim)" />
   <rect x="48" y="48" width="984" height="984" rx="46" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.4" stroke-width="4" />
   <circle cx="540" cy="390" r="268" fill="url(#halo)" />
+  <g opacity="0.9">${microStars}</g>
   <rect x="236" y="136" width="608" height="448" rx="36" fill="url(#spiritPanel)" stroke="url(#spiritPanelStroke)" stroke-width="3" />
+  <g>${waveformBars}</g>
   <g transform="rotate(${decoRotation} 540 360)">
     <path d="M540 176 L614 262 L540 348 L466 262 Z" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="3" />
     <path d="M540 432 L596 492 L540 552 L484 492 Z" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.24" stroke-width="3" />
@@ -19059,7 +19154,9 @@ function buildLocalSpiritCollectibleImage(
 }
 
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "" } = {}) {
-  const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes)} Variation seed: ${variationToken || "base"}.`;
+  const userSignature = spiritCollectibleUserSignature();
+  const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
+  const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature)} Variation seed: ${variationToken || userSignature}.`;
   const spiritAssetUrl = resolveRuntimeAssetUrl(spirit?.image || "");
   const { mime: spiritMime } = collectibleImageMeta(spiritAssetUrl);
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
@@ -19072,6 +19169,8 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     likes,
     milestoneLikes,
     variation: variationToken || "base",
+    userSignature,
+    profileSignature,
     language: currentLanguage
   });
   if (apiImage) {
@@ -19086,11 +19185,15 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
         variationToken,
         apiImageAsDataUrl,
         spiritImageDataUrl,
-        snapshot
+        snapshot,
+        userSignature,
+        profileSignature
       ),
       source: "api",
       createdAt: new Date().toISOString(),
-      prompt
+      prompt,
+      userSignature,
+      profileSignature
     };
   }
   return {
@@ -19102,11 +19205,15 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       variationToken,
       "",
       spiritImageDataUrl,
-      snapshot
+      snapshot,
+      userSignature,
+      profileSignature
     ),
     source: "local",
     createdAt: new Date().toISOString(),
-    prompt
+    prompt,
+    userSignature,
+    profileSignature
   };
 }
 
@@ -19123,7 +19230,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
 
   const milestone = collectibleMilestoneForLikes(likes);
   const rank = resolveSpiritRank(likes);
-  const slotKey = `${spirit.id}::${milestone.likes}`;
+  const userSignature = spiritCollectibleUserSignature();
+  const slotKey = `${spirit.id}::${milestone.likes}::${userSignature}`;
   const store = readSpiritCollectibleStore();
   let collectible = store[slotKey] || null;
 
