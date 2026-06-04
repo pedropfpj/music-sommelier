@@ -6,6 +6,8 @@ Coloque sua pasta exatamente aqui:
 
 O app tenta importar automaticamente estes arquivos (se existirem):
 
+- `../artist_expansion_seeds_v1.csv`
+- `../artist_expansion_seeds_v2.csv`
 - `tracks.json`
 - `tracks.csv`
 - `prog_dark_tracks.csv`

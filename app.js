@@ -395,6 +395,7 @@ const VIBE_THEME_CONFIG = {
 
 const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v1.csv",
+  "data/artist_expansion_seeds_v2.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -406,7 +407,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 1208;
+const INDEXED_DATASET_ARTIST_COUNT = 1479;
 
 const LOCAL_TRACK_SEED_BOOST = [
   { style: "psytrance", artist: "Astrix", song: "He.art", label: "Shamanic Tales", bpmExact: 145 },
