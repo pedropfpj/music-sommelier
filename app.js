@@ -53,7 +53,7 @@ const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v1";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v1";
 const DAILY_NEWS_MAX_ITEMS = 6;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
-const SUPPORT_PAYMENT_CONFIG = {
+const SUPPORT_DEFAULT_CONFIG = {
   pix: {
     key: "",
     name: "PEDRO FREIRE",
@@ -62,11 +62,23 @@ const SUPPORT_PAYMENT_CONFIG = {
   },
   bitcoin: {
     address: "",
-    lightning: ""
-  },
+    lightning: "",
+    uri: ""
+  }
+};
+const SUPPORT_PAYMENT_CONFIG = {
+  ...SUPPORT_DEFAULT_CONFIG,
   ...(typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG
     ? window.SONIC_SEARCH_SUPPORT_CONFIG
-    : {})
+    : {}),
+  pix: {
+    ...SUPPORT_DEFAULT_CONFIG.pix,
+    ...((typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG?.pix) || {})
+  },
+  bitcoin: {
+    ...SUPPORT_DEFAULT_CONFIG.bitcoin,
+    ...((typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG?.bitcoin) || {})
+  }
 };
 const SUPPORT_DEFAULT_AMOUNT = 5;
 const DAILY_NEWS_SOURCES = [
@@ -14764,10 +14776,11 @@ function buildPixPayload(amount = activeSupportAmount()) {
   const pix = SUPPORT_PAYMENT_CONFIG.pix || {};
   const key = String(pix.key || "").trim();
   if (!key) return "";
+  const description = sanitizePixText(pix.description || "Sonic Search tip", 36);
   const merchantAccount =
     emvField("00", "br.gov.bcb.pix") +
     emvField("01", key) +
-    (pix.description ? emvField("02", sanitizePixText(pix.description, 72)) : "");
+    (description ? emvField("02", description) : "");
   const amountText = Number(amount) > 0 ? Number(amount).toFixed(2) : "";
   const basePayload =
     emvField("00", "01") +
@@ -14785,6 +14798,8 @@ function buildPixPayload(amount = activeSupportAmount()) {
 
 function buildCryptoPayload() {
   const bitcoin = SUPPORT_PAYMENT_CONFIG.bitcoin || {};
+  const uri = String(bitcoin.uri || "").trim();
+  if (uri) return uri;
   const lightning = String(bitcoin.lightning || "").trim();
   const address = String(bitcoin.address || "").trim();
   if (lightning) return lightning;
