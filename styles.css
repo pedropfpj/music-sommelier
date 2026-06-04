@@ -3407,6 +3407,55 @@ input[type="range"] {
   width: 100%;
 }
 
+.voice-mini-mixer-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.44rem;
+}
+
+.voice-knob-control {
+  min-width: 0;
+  display: grid;
+  gap: 0.32rem;
+  justify-items: center;
+  padding: 0.58rem 0.48rem;
+  border: 1px solid rgba(126, 214, 255, 0.22);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(119, 215, 255, 0.12), transparent 48%),
+    rgba(2, 8, 20, 0.54);
+}
+
+.voice-knob-control span {
+  max-width: 100%;
+  overflow: hidden;
+  color: #bfdbff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.voice-knob-control strong {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(118, 244, 218, 0.38);
+  border-radius: 50%;
+  color: #8ff6e5;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(123, 255, 216, 0.2), transparent 52%),
+    rgba(3, 10, 22, 0.76);
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: inset 0 0 18px rgba(123, 255, 216, 0.08);
+}
+
+.voice-knob-control input {
+  width: 100%;
+}
+
 .voice-presence-control {
   border-color: rgba(247, 167, 255, 0.26);
   background:
@@ -3416,7 +3465,7 @@ input[type="range"] {
 
 .voice-daw-pad-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.42rem;
 }
 
@@ -5924,8 +5973,13 @@ input[type="range"] {
   .voice-effect-grid,
   .voice-controls,
   .voice-mini-controls,
+  .voice-mini-mixer-grid,
   .voice-daw-pad-grid {
     grid-template-columns: 1fr;
+  }
+
+  .voice-mini-mixer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .voice-daw-pad-grid {
