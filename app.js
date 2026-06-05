@@ -8865,10 +8865,11 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
   }
   showToast(t("ratingSavedToast", { stars: value }));
 
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(triggerEl || starRating || spiritBadge, {
     celebrate: false,
-    triggerEl: triggerEl || starRating || spiritBadge,
-    forceAnimation: value >= 4
+    forceAnimation: value >= 4,
+    animateBio: false,
+    loadEvents: false
   });
 }
 
@@ -20721,15 +20722,41 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
     try {
       collectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, { variationToken: variation });
-      if (collectible?.imageUrl) {
-        store[slotKey] = collectible;
-        saveSpiritCollectibleStore(store);
-      }
-      if (forceRegenerate && collectible?.imageUrl) {
-        showToast(collectible.source === "api" ? t("spiritCollectibleGeneratedApi") : t("spiritCollectibleGeneratedLocal"));
+    } catch (error) {
+      console.warn("Spirit collectible generation failed; using local fallback.", error);
+      try {
+        const profileSignature = spiritCollectibleProfileSignature(spirit, milestone.likes);
+        collectible = {
+          imageUrl: buildLocalSpiritCollectibleImage(
+            spirit,
+            spiritText,
+            likes,
+            milestone.likes,
+            variation,
+            "",
+            "",
+            spiritShareProfileSnapshot(),
+            userSignature,
+            profileSignature
+          ),
+          source: "local",
+          createdAt: new Date().toISOString(),
+          prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
+          userSignature,
+          profileSignature
+        };
+      } catch (fallbackError) {
+        console.warn("Spirit collectible local fallback failed.", fallbackError);
       }
     } finally {
       spiritCollectibleBusy = false;
+    }
+    if (collectible?.imageUrl) {
+      store[slotKey] = collectible;
+      saveSpiritCollectibleStore(store);
+    }
+    if (forceRegenerate && collectible?.imageUrl) {
+      showToast(collectible.source === "api" ? t("spiritCollectibleGeneratedApi") : t("spiritCollectibleGeneratedLocal"));
     }
   }
 
@@ -21089,7 +21116,13 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   });
   const spiritSpotlightPayload = resolveSpiritSpotlightTrack(selectedSpirit);
   const spotlightTrack = renderSpiritSpotlight(spiritSpotlightPayload);
-  const collectible = await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
+  let collectible = null;
+  try {
+    collectible = await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
+  } catch (error) {
+    console.warn("Spirit collectible unavailable; keeping avatar fallback.", error);
+    if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleHintLocal");
+  }
   if (collectible?.imageUrl) {
     setImageSourceWithFallback(spiritImage, collectible.imageUrl, selectedSpirit.image || SPIRIT_AVATAR_FALLBACK, {
       onFallback: () => {
@@ -21130,6 +21163,35 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     }
     if (feedbackMessage) feedbackMessage.textContent = t("spiritReviewStayedFeedback", { name: spiritText.name });
     showToast(t("spiritReviewStayedToast", { name: spiritText.name }));
+  }
+}
+
+async function runPositiveFeedbackFollowups(
+  triggerEl = null,
+  { celebrate = false, forceAnimation = true, animateBio = true, loadEvents = true, eventsArtist = "" } = {}
+) {
+  const targetArtist = loadEvents ? String(eventsArtist || currentRecommendation?.artist || "").trim() : "";
+  const followups = [
+    {
+      name: "musical-spirit",
+      run: () => renderMusicalSpirit({ celebrate, triggerEl, forceAnimation })
+    },
+    {
+      name: "artist-bio",
+      run: () => (animateBio ? revealArtistBioWithAnimation() : Promise.resolve())
+    },
+    {
+      name: "artist-events",
+      run: () => (targetArtist ? loadEventsForArtist(targetArtist) : Promise.resolve())
+    }
+  ];
+
+  for (const followup of followups) {
+    try {
+      await followup.run();
+    } catch (error) {
+      console.warn(`Positive feedback follow-up failed: ${followup.name}`, error);
+    }
   }
 }
 
@@ -25568,13 +25630,11 @@ bind(previewLikeBtn, "click", async () => {
   if (feedbackMessage) feedbackMessage.textContent = t("prioritizeSimilar");
   playUiSfx("like");
   showToast(t("toastShowMoreLikeThis"));
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(previewLikeBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
-    triggerEl: previewLikeBtn,
-    forceAnimation: true
+    forceAnimation: true,
+    eventsArtist: currentRecommendation.artist
   });
-  await revealArtistBioWithAnimation();
-  await loadEventsForArtist(currentRecommendation.artist);
 });
 
 bind(previewDislikeBtn, "click", async () => {
@@ -25622,13 +25682,11 @@ bind(noveltyLikedBtn, "click", async () => {
   playUiSfx("like");
   burstConfetti(noveltyLikedBtn);
   showToast(t("toastFavoritedDiscovery"));
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(noveltyLikedBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
-    triggerEl: noveltyLikedBtn,
-    forceAnimation: true
+    forceAnimation: true,
+    eventsArtist: currentRecommendation.artist
   });
-  await revealArtistBioWithAnimation();
-  await loadEventsForArtist(currentRecommendation.artist);
 });
 
 bind(noveltyNotYetBtn, "click", async () => {
@@ -25668,13 +25726,11 @@ bind(likeSongBtn, "click", async () => {
   burstConfetti(likeSongBtn, ["#6effdc", "#7de0ff", "#ffd07d"]);
   showToast(t("toastSongLiked"));
   updateStats();
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(likeSongBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
-    triggerEl: likeSongBtn,
-    forceAnimation: true
+    forceAnimation: true,
+    eventsArtist: currentRecommendation.artist
   });
-  await revealArtistBioWithAnimation();
-  await loadEventsForArtist(currentRecommendation.artist);
 });
 
 bind(likeArtistBtn, "click", async () => {
@@ -25687,13 +25743,11 @@ bind(likeArtistBtn, "click", async () => {
   playUiSfx("like");
   showToast(t("toastArtistSaved"));
   updateStats();
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(likeArtistBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
-    triggerEl: likeArtistBtn,
-    forceAnimation: true
+    forceAnimation: true,
+    eventsArtist: currentRecommendation.artist
   });
-  await revealArtistBioWithAnimation();
-  await loadEventsForArtist(currentRecommendation.artist);
 });
 
 bind(blockArtistBtn, "click", async () => {
@@ -25741,12 +25795,12 @@ bind(likeDiscoveryBtn, "click", async () => {
   burstConfetti(likeDiscoveryBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
   showToast(t("toastDiscoveryLiked"));
   updateStats();
-  await renderMusicalSpirit({
+  await runPositiveFeedbackFollowups(likeDiscoveryBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
-    triggerEl: likeDiscoveryBtn,
-    forceAnimation: true
+    forceAnimation: true,
+    animateBio: false,
+    eventsArtist: currentDiscovery.name
   });
-  await loadEventsForArtist(currentDiscovery.name);
 });
 
 bind(knewDiscoveryBtn, "click", () => {
