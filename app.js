@@ -3996,6 +3996,7 @@ const catalogInfo = document.getElementById("catalogInfo");
 const songVibe = document.getElementById("songVibe");
 const recommendationWhyPanel = document.getElementById("recommendationWhyPanel");
 const recommendationWhyTitle = document.getElementById("recommendationWhyTitle");
+const recommendationWhyText = document.getElementById("recommendationWhyText");
 const recommendationWhyList = document.getElementById("recommendationWhyList");
 const genreGuidePanel = document.getElementById("genreGuidePanel");
 const genreGuideTitle = document.getElementById("genreGuideTitle");
@@ -10173,6 +10174,9 @@ const I18N = {
     recommendationWhyNew: "fora do seu radar",
     recommendationWhyOrigin: "Origem: {origin}",
     recommendationWhyStrongFit: "Match forte: curadoria confiável",
+    recommendationWhyTextStrong: "Escolhi esta faixa porque ela encaixa em {style}, segura o pulso em {bpm} e tem energia {energy} sem fugir do que você pediu.",
+    recommendationWhyTextContext: "Ela combina com {context}: mantém a energia {energy}, conversa com {style} e ainda abre uma porta para uma descoberta menos óbvia.",
+    recommendationWhyTextDiscovery: "Aqui a ideia foi te tirar um pouco do previsível: {style}, {energy}, com sinal bom o suficiente para valer o teste.",
     djModeTitle: "Modo DJ",
     djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
     djModeGenerateBtn: "Criar jornada",
@@ -10647,6 +10651,9 @@ const I18N = {
     recommendationWhyNew: "outside your radar",
     recommendationWhyOrigin: "Origin: {origin}",
     recommendationWhyStrongFit: "Strong match: reliable curation",
+    recommendationWhyTextStrong: "I picked this because it fits {style}, keeps the pulse around {bpm}, and carries {energy} energy without drifting from your request.",
+    recommendationWhyTextContext: "It fits {context}: {energy} energy, a clear {style} direction, and still enough discovery to feel fresh.",
+    recommendationWhyTextDiscovery: "This one is meant to move you slightly outside the obvious: {style}, {energy}, with enough signal to be worth trying.",
     djModeTitle: "DJ Mode",
     djModeHint: "5-track journey: open, build, peak, twist, close.",
     djModeGenerateBtn: "Create journey",
@@ -11121,6 +11128,9 @@ const I18N = {
     recommendationWhyNew: "fuera de tu radar",
     recommendationWhyOrigin: "Origen: {origin}",
     recommendationWhyStrongFit: "Match fuerte: curaduría confiable",
+    recommendationWhyTextStrong: "Elegí esta pista porque encaja con {style}, sostiene el pulso en {bpm} y trae energía {energy} sin alejarse de lo que pediste.",
+    recommendationWhyTextContext: "Funciona para {context}: mantiene energía {energy}, conversa con {style} y abre una puerta a un descubrimiento menos obvio.",
+    recommendationWhyTextDiscovery: "La idea aquí es sacarte un poco de lo previsible: {style}, {energy}, con suficiente señal para probarla.",
     djModeTitle: "Modo DJ",
     djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
     djModeGenerateBtn: "Crear viaje",
@@ -22131,27 +22141,55 @@ function renderSuggestionQueue(prefs = lastPrefs) {
   });
 }
 
+function recommendationHasStrongFit(track) {
+  return (
+    hasReliableBpmForTrack(track) &&
+    (Boolean(track?.previewUrl) ||
+      trackHasDirectYouTubeVideo(track) ||
+      track?.existenceVerified === true ||
+      isTrustedCuratedCatalogTrack(track))
+  );
+}
+
+function recommendationHumanReason(track, prefs = lastPrefs) {
+  const bpmData = resolveBpmDisplay(track);
+  const bpm = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel");
+  const style = styleLabelByValue(track?.style || prefs?.style || "");
+  const energy = energyLabelByValue(track?.energy || prefs?.energy || "");
+  const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
+  const knownUnion = buildGlobalArtistExclusionSet();
+  const isKnown = artistSetHasMatch(knownUnion, track?.artist);
+  const templateKey = recommendationHasStrongFit(track)
+    ? "recommendationWhyTextStrong"
+    : context
+      ? "recommendationWhyTextContext"
+      : "recommendationWhyTextDiscovery";
+  const reason = t(templateKey, { style, bpm, energy, context });
+
+  if (isKnown) return reason;
+  if (currentLanguage === "en") return `${reason} I also kept it outside your usual radar.`;
+  if (currentLanguage === "es") return `${reason} También la mantuve fuera de tu radar habitual.`;
+  return `${reason} Também mantive fora do seu radar habitual.`;
+}
+
 function renderRecommendationWhy(track, prefs = lastPrefs) {
   if (!recommendationWhyPanel || !recommendationWhyList) return;
   if (!track) {
     recommendationWhyPanel.classList.add("hidden");
+    if (recommendationWhyText) recommendationWhyText.textContent = "";
     recommendationWhyList.innerHTML = "";
     return;
   }
   recommendationWhyPanel.classList.remove("hidden");
   if (recommendationWhyTitle) recommendationWhyTitle.textContent = t("recommendationWhyTitle");
+  if (recommendationWhyText) recommendationWhyText.textContent = recommendationHumanReason(track, prefs);
   recommendationWhyList.innerHTML = "";
 
   const bpmData = resolveBpmDisplay(track);
   const origin = artistOriginSignalForTrack(track);
   const originLabel = formatArtistOriginLabel(origin);
   const knownUnion = buildGlobalArtistExclusionSet();
-  const hasStrongFit =
-    hasReliableBpmForTrack(track) &&
-    (Boolean(track.previewUrl) ||
-      trackHasDirectYouTubeVideo(track) ||
-      track.existenceVerified === true ||
-      isTrustedCuratedCatalogTrack(track));
+  const hasStrongFit = recommendationHasStrongFit(track);
   const chips = [
     t("recommendationWhyStyle", { style: styleLabelByValue(track.style || prefs?.style || "") }),
     t("recommendationWhyBpm", { bpm: bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel") }),
