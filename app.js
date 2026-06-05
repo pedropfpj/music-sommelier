@@ -12364,6 +12364,32 @@ function storageKeyForSession(baseKey, session = currentAuthUser) {
   return `${baseKey}:${profileKey}`;
 }
 
+function uniqueStorageKeys(keys = []) {
+  return Array.from(new Set(keys.filter(Boolean)));
+}
+
+function storageFallbackKeys(baseKey, session = currentAuthUser) {
+  const keys = [storageKeyForSession(baseKey, session)];
+  if (baseKey) keys.push(baseKey);
+  if (normalizeUserSession(session).mode === "login") {
+    keys.push(storageKeyForSession(baseKey, { mode: "guest", username: "" }));
+  }
+  return uniqueStorageKeys(keys);
+}
+
+function readFirstStoredJson(keys = []) {
+  for (const key of uniqueStorageKeys(keys)) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      return { key, payload: JSON.parse(raw) };
+    } catch (_err) {
+      // Try the next storage key instead of losing the saved profile.
+    }
+  }
+  return { key: "", payload: null };
+}
+
 function clearSessionProfileData(session) {
   const preferenceKey = storageKeyForSession(STORAGE_KEY, session);
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY, session);
@@ -13632,6 +13658,14 @@ function showAuthScreen() {
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
+  const storedUser = readStoredUserSession();
+  if (storedUser?.mode === "login" && String(storedUser.username || "").trim()) {
+    activateUserSession(storedUser);
+    persistUserSession(storedUser);
+    continueFromAuthToWelcome({ showGuide: false });
+    return;
+  }
+
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
@@ -13640,7 +13674,6 @@ function showAuthScreen() {
   if (authScreen) authScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
 
-  const storedUser = readStoredUserSession();
   if (authUsername) authUsername.value = storedUser?.username || "";
   if (authPassword) authPassword.value = "";
   setAuthFeedback("");
@@ -13651,6 +13684,7 @@ function showAuthScreen() {
 
 function continueFromAuthToWelcome({ showGuide = false } = {}) {
   if (authScreen) authScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
@@ -13810,7 +13844,6 @@ function loginWithCredentials() {
 function continueWithoutLogin() {
   const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   const session = { mode: "guest", username: "" };
-  clearSessionProfileData(session);
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authGuestReady"));
@@ -15884,10 +15917,8 @@ function loadProgress() {
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
   try {
     if (progressKey) {
-      const raw = localStorage.getItem(progressKey);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-
+      const { payload: parsed } = readFirstStoredJson(storageFallbackKeys(PROGRESS_STORAGE_KEY));
+      if (parsed) {
         if (parsed?.stats && typeof parsed.stats === "object") {
           userStats.likedSongs = Math.max(0, Number(parsed.stats.likedSongs) || 0);
           userStats.likedArtists = Math.max(0, Number(parsed.stats.likedArtists) || 0);
@@ -16022,9 +16053,8 @@ function loadPreferences() {
   const preferencesKey = storageKeyForSession(STORAGE_KEY);
   try {
     if (preferencesKey) {
-      const raw = localStorage.getItem(preferencesKey);
-      if (raw) {
-        const parsed = JSON.parse(raw);
+      const { payload: parsed } = readFirstStoredJson(storageFallbackKeys(STORAGE_KEY));
+      if (parsed) {
 
         if (styleEl) styleEl.value = parsed.style || "";
         if (contextEl) contextEl.value = parsed.context || "";
