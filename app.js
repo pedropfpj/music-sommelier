@@ -4365,7 +4365,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v13";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v14";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -10419,7 +10419,7 @@ const I18N = {
     spiritLoreWhyTitle: "O que esse som entrega",
     spiritLoreNextTitle: "Como explorar melhor",
     spiritVisualTitle: "Modo visual do espírito",
-    spiritVisualHint: "Loop de ambientação audiovisual alinhado ao seu perfil atual.",
+    spiritVisualHint: "Entidade audiovisual viva, reagindo ao arquétipo e aos estilos que mais aparecem no seu perfil.",
     spiritSpotlightTitle: "Faixa do espírito",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
     spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
@@ -10430,7 +10430,7 @@ const I18N = {
     spiritVideoTitle: "Visual do espírito musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Colecionável do espírito",
-    spiritCollectibleHintLocal: "Arte única local ativa: cada usuário recebe uma variação própria. A IA pode refinar o acabamento final.",
+    spiritCollectibleHintLocal: "Arte pessoal ativa: cada usuário recebe uma entidade visual própria, gerada a partir do gosto musical.",
     spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para a assinatura musical deste usuário.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
@@ -10892,7 +10892,7 @@ const I18N = {
     spiritLoreWhyTitle: "What this sound gives you",
     spiritLoreNextTitle: "How to explore it",
     spiritVisualTitle: "Spirit visual mode",
-    spiritVisualHint: "Audiovisual ambience loop aligned with your current profile.",
+    spiritVisualHint: "A living audiovisual entity reacting to your archetype and strongest style signals.",
     spiritSpotlightTitle: "Spirit track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
     spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
@@ -10903,7 +10903,7 @@ const I18N = {
     spiritVideoTitle: "Musical spirit visual",
     spiritVisualPreset: "Visual preset: {preset}",
     spiritCollectibleTitle: "Spirit collectible",
-    spiritCollectibleHintLocal: "Unique local artwork is active: each user receives a personal variation. AI can refine the final finish.",
+    spiritCollectibleHintLocal: "Personal artwork is active: each user receives a visual entity generated from their music taste.",
     spiritCollectibleHintApi: "Image AI connected: this artwork was generated for this user's music signature.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
@@ -11365,7 +11365,7 @@ const I18N = {
     spiritLoreWhyTitle: "Qué entrega este sonido",
     spiritLoreNextTitle: "Cómo explorarlo mejor",
     spiritVisualTitle: "Modo visual del espíritu",
-    spiritVisualHint: "Loop de ambientación audiovisual alineado con tu perfil actual.",
+    spiritVisualHint: "Entidad audiovisual viva, reaccionando a tu arquetipo y a los estilos más fuertes de tu perfil.",
     spiritSpotlightTitle: "Pista del espíritu",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
     spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
@@ -11376,7 +11376,7 @@ const I18N = {
     spiritVideoTitle: "Visual del espíritu musical",
     spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Coleccionable del espíritu",
-    spiritCollectibleHintLocal: "Arte local única activa: cada usuario recibe una variación propia. La IA puede refinar el acabado final.",
+    spiritCollectibleHintLocal: "Arte personal activa: cada usuario recibe una entidad visual propia, generada a partir de su gusto musical.",
     spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para la firma musical de este usuario.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
@@ -19002,6 +19002,10 @@ function hexToRgba(hex, alpha = 1) {
 function applySpiritAmbientTheme(spirit) {
   if (!spiritAmbientVisual) return;
   const theme = spiritVisualTheme(spirit);
+  spiritAmbientVisual.style.setProperty("--spirit-a", theme.a);
+  spiritAmbientVisual.style.setProperty("--spirit-b", theme.b);
+  spiritAmbientVisual.style.setProperty("--spirit-c", theme.c);
+  spiritAmbientVisual.style.setProperty("--spirit-d", theme.d);
   spiritAmbientVisual.style.background = [
     `radial-gradient(circle at 20% 18%, ${hexToRgba(theme.a, 0.24)}, transparent 35%)`,
     `radial-gradient(circle at 85% 78%, ${hexToRgba(theme.c, 0.2)}, transparent 36%)`,
@@ -20481,16 +20485,16 @@ function buildLocalSpiritCollectibleImage(
   const theme = spiritVisualTheme(spirit);
   const rank = t(resolveSpiritRank(likes).current.key);
   const spiritTitle = spiritText?.name || "Sonic Spirit";
-  const titleLines = splitIntoSvgLines(spiritTitle, 22, 2);
+  const titleLines = splitIntoSvgLines(spiritTitle, 26, 2);
   const topStyles = spiritTopStyles(spirit, 3).join(" • ");
-  const topStyleLines = splitIntoSvgLines(topStyles, 44, 2);
+  const topStyleLines = splitIntoSvgLines(topStyles, 42, 1);
   const subtitle = spiritText?.archetype || "";
-  const subtitleLines = splitIntoSvgLines(subtitle, 32, 2);
+  const subtitleLines = splitIntoSvgLines(subtitle, 34, 1);
   const conciseDescription = truncateByWordBoundary(buildSpiritCollectibleCopy(spirit, spiritText), 130);
   const descriptionLines = splitIntoSvgLines(conciseDescription, 44, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
-  const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`);
+  const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`) >>> 0;
   const accentX = 24 + (seed % 52);
   const accentY = 18 + ((seed >> 3) % 58);
   const accent2X = 54 + ((seed >> 7) % 38);
@@ -20500,50 +20504,70 @@ function buildLocalSpiritCollectibleImage(
   const crownPoints = 5 + (seed % 3);
   const shoulderWidth = 270 + ((seed >> 4) % 90);
   const auraScale = 0.94 + ((seed >> 8) % 18) / 100;
-  const waveformBars = Array.from({ length: 42 }, (_, index) => {
-    const mixed = hashString(`${seed}::wave::${index}::${userSignature}`);
-    const height = 18 + (mixed % 116);
-    const x = 104 + index * 21;
-    const y = 648 - height / 2;
-    const opacity = 0.22 + ((mixed >> 4) % 40) / 100;
-    return `<rect x="${x}" y="${y.toFixed(1)}" width="7" height="${height}" rx="4" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+  const waveformBars = Array.from({ length: 48 }, (_, index) => {
+    const mixed = hashString(`${seed}::wave::${index}::${userSignature}`) >>> 0;
+    const height = 22 + (mixed % 148);
+    const x = 78 + index * 19;
+    const y = 806 - height / 2;
+    const opacity = 0.18 + ((mixed >> 4) % 36) / 100;
+    return `<rect x="${x}" y="${y.toFixed(1)}" width="8" height="${height}" rx="4" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
   }).join("");
-  const microStars = Array.from({ length: 36 }, (_, index) => {
-    const mixed = hashString(`${seed}::star::${index}::${profileSignature}`);
+  const microStars = Array.from({ length: 56 }, (_, index) => {
+    const mixed = hashString(`${seed}::star::${index}::${profileSignature}`) >>> 0;
     const x = 82 + (mixed % 916);
-    const y = 64 + ((mixed >> 6) % 664);
+    const y = 64 + ((mixed >> 6) % 820);
     const radius = 1.6 + ((mixed >> 12) % 28) / 10;
     const opacity = 0.16 + ((mixed >> 16) % 48) / 100;
     return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${escapeSvgText(index % 3 === 0 ? theme.c : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
   }).join("");
   const crown = Array.from({ length: crownPoints }, (_, index) => {
     const angle = -68 + (136 / Math.max(1, crownPoints - 1)) * index;
-    const length = 92 + (hashString(`${seed}::crown::${index}`) % 54);
+    const length = 92 + ((hashString(`${seed}::crown::${index}`) >>> 0) % 54);
     const rad = (angle * Math.PI) / 180;
     const x = 540 + Math.sin(rad) * length;
     const y = 224 - Math.cos(rad) * length * 0.62;
     return `<path d="M540 242 L${x.toFixed(1)} ${y.toFixed(1)}" stroke="${escapeSvgText(index % 2 ? theme.b : theme.a)}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.68" />`;
   }).join("");
   const constellation = Array.from({ length: 10 }, (_, index) => {
-    const mixed = hashString(`${seed}::node::${index}::${userSignature}`);
+    const mixed = hashString(`${seed}::node::${index}::${userSignature}`) >>> 0;
     const x = 250 + (mixed % 580);
-    const y = 148 + ((mixed >> 8) % 470);
+    const y = 148 + ((mixed >> 8) % 560);
     return `${index ? "L" : "M"}${x} ${y}`;
   }).join(" ");
+  const orbitDots = Array.from({ length: 18 }, (_, index) => {
+    const mixed = hashString(`${seed}::orbit::${index}::${profileSignature}`) >>> 0;
+    const angle = (index / 18) * Math.PI * 2 + ((mixed % 24) * Math.PI) / 180;
+    const radiusX = 246 + ((mixed >> 5) % 86);
+    const radiusY = 118 + ((mixed >> 10) % 64);
+    const x = 540 + Math.cos(angle) * radiusX;
+    const y = 426 + Math.sin(angle) * radiusY;
+    const size = 4 + ((mixed >> 15) % 9);
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${size}" fill="${escapeSvgText(index % 2 ? theme.a : theme.c)}" fill-opacity="0.48" />`;
+  }).join("");
+  const soundThreads = Array.from({ length: 7 }, (_, index) => {
+    const mixed = hashString(`${seed}::thread::${index}::${userSignature}`) >>> 0;
+    const y = 302 + index * 52 + ((mixed >> 3) % 28);
+    const curve = 42 + (mixed % 90);
+    return `<path d="M112 ${y} C${284 + curve} ${y - 88}, ${760 - curve} ${y + 92}, 968 ${y - 10}" fill="none" stroke="${escapeSvgText(index % 2 ? theme.b : theme.a)}" stroke-width="${1.4 + (index % 3) * 0.55}" stroke-opacity="${(0.12 + index * 0.025).toFixed(2)}" />`;
+  }).join("");
   const glyphRotation = (seed % 28) - 14;
   const entitySvg = `
-    <g transform="translate(${bodyLean} 0) scale(${auraScale} ${auraScale}) translate(${(1 - auraScale) * 540} ${(1 - auraScale) * 390})">
+    <g transform="translate(${bodyLean} 58) scale(${auraScale} ${auraScale}) translate(${(1 - auraScale) * 540} ${(1 - auraScale) * 430})">
       <path d="${constellation}" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-width="1.6" stroke-opacity="0.14" />
+      ${soundThreads}
       <g transform="rotate(${decoRotation} 540 382)">
         <ellipse cx="540" cy="382" rx="292" ry="116" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-opacity="0.34" />
         <ellipse cx="540" cy="382" rx="214" ry="318" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-width="3" stroke-opacity="0.22" />
       </g>
+      <g>${orbitDots}</g>
       <g filter="url(#entityGlow)">
         ${crown}
         <path d="M${540 - shoulderWidth / 2} 438 C430 338 472 272 540 272 C608 272 650 338 ${540 + shoulderWidth / 2} 438 C640 530 600 620 540 662 C480 620 440 530 ${540 - shoulderWidth / 2} 438 Z" fill="url(#bodyGrad)" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-opacity="0.62" />
         <path d="M540 296 C596 318 626 372 615 426 C588 390 562 374 540 374 C518 374 492 390 465 426 C454 372 484 318 540 296 Z" fill="url(#maskGrad)" stroke="#e9fbff" stroke-opacity="0.32" stroke-width="2.4" />
         <circle cx="540" cy="342" r="88" fill="none" stroke="${escapeSvgText(theme.c)}" stroke-width="3" stroke-opacity="0.42" />
         <circle cx="540" cy="342" r="38" fill="${escapeSvgText(theme.a)}" fill-opacity="0.2" stroke="#eaffff" stroke-width="2" stroke-opacity="0.48" />
+        <circle cx="512" cy="340" r="7" fill="#f7ffff" fill-opacity="0.72" />
+        <circle cx="568" cy="340" r="7" fill="#f7ffff" fill-opacity="0.72" />
         <path d="M472 454 C505 430 575 430 608 454" fill="none" stroke="#f2ffff" stroke-width="7" stroke-linecap="round" stroke-opacity="0.42" />
         <path d="M540 386 C512 450 512 540 540 630 C568 540 568 450 540 386 Z" fill="${escapeSvgText(theme.d)}" fill-opacity="0.42" stroke="${escapeSvgText(theme.a)}" stroke-width="3" stroke-opacity="0.42" />
         <path d="M356 456 C416 502 462 548 498 624 C428 596 368 542 300 472 Z" fill="${escapeSvgText(theme.b)}" fill-opacity="0.18" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.28" stroke-width="3" />
@@ -20603,30 +20627,30 @@ function buildLocalSpiritCollectibleImage(
       <feDropShadow dx="0" dy="0" stdDeviation="34" flood-color="${escapeSvgText(theme.c)}" flood-opacity="0.22" />
     </filter>
     <clipPath id="artClip">
-      <rect x="74" y="74" width="932" height="710" rx="54" />
+      <rect x="74" y="74" width="932" height="932" rx="54" />
     </clipPath>
     <clipPath id="spiritTextClip">
-      <rect x="104" y="826" width="872" height="186" rx="28" />
+      <rect x="122" y="842" width="836" height="116" rx="26" />
     </clipPath>
   </defs>
   <rect width="1080" height="1080" fill="url(#bg)" />
-  <circle cx="540" cy="386" r="390" fill="url(#halo)" />
+  <circle cx="540" cy="480" r="460" fill="url(#halo)" />
   <rect width="1080" height="1080" fill="url(#readabilityScrim)" />
   <rect x="48" y="48" width="984" height="984" rx="46" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.4" stroke-width="4" />
   <g opacity="0.9">${microStars}</g>
-  <rect x="74" y="74" width="932" height="710" rx="54" fill="url(#artPanel)" stroke="url(#panelStroke)" stroke-width="3" />
+  <rect x="74" y="74" width="932" height="932" rx="54" fill="url(#artPanel)" stroke="url(#panelStroke)" stroke-width="3" />
   <g clip-path="url(#artClip)">
-    ${hasBackgroundImage ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="74" y="74" width="932" height="710" preserveAspectRatio="xMidYMid slice" opacity="0.96" />` : entitySvg}
-    <rect x="74" y="74" width="932" height="710" fill="url(#readabilityScrim)" opacity="${hasBackgroundImage ? "0.2" : "0.1"}" />
-    <g opacity="${hasBackgroundImage ? "0.18" : "0.68"}">${waveformBars}</g>
+    ${hasBackgroundImage ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="74" y="74" width="932" height="932" preserveAspectRatio="xMidYMid slice" opacity="0.96" />` : entitySvg}
+    <rect x="74" y="74" width="932" height="932" fill="url(#readabilityScrim)" opacity="${hasBackgroundImage ? "0.18" : "0.04"}" />
+    <g opacity="${hasBackgroundImage ? "0.15" : "0.46"}">${waveformBars}</g>
   </g>
-  <rect x="92" y="812" width="896" height="216" rx="34" fill="url(#textPanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="2.6" />
+  <rect x="112" y="832" width="856" height="144" rx="30" fill="url(#textPanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.32" stroke-width="2.4" />
   <g clip-path="url(#spiritTextClip)">
-    <text x="540" y="884" fill="#f7fcff" font-size="60" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
-    <text x="540" y="938" fill="#f7fcff" font-size="60" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[1] || "")}</text>
-    <text x="540" y="974" fill="#b2ffe4" font-size="28" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || rank)}</text>
-    <text x="540" y="1004" fill="#b7dbff" font-size="22" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || descriptionLines[0] || "")}</text>
+    <text x="540" y="890" fill="#f7fcff" font-size="48" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
+    <text x="540" y="932" fill="#b2ffe4" font-size="25" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || rank)}</text>
+    <text x="540" y="960" fill="#b7dbff" font-size="20" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || descriptionLines[0] || "")}</text>
   </g>
+  <text x="82" y="1022" fill="${escapeSvgText(theme.a)}" font-size="21" font-family="Chakra Petch, Arial, sans-serif" font-weight="700" opacity="0.78">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(`${milestoneLikes}`)} LIKES</text>
 </svg>`;
 
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
