@@ -17416,8 +17416,18 @@ function artistOriginSignalForTrack(track) {
 function formatArtistOriginLabel(origin) {
   const country = String(origin?.country || "").trim();
   const area = String(origin?.area || "").trim();
-  if (area && country) return `${area}, ${country}`;
+  if (area && country && normalize(area) !== normalize(country)) return `${area}, ${country}`;
+  if (area && country) return country;
   return area || country;
+}
+
+function originCountryConsistentWithTrack(track, originText = "") {
+  const parsedOrigin = parseOriginText(originText);
+  const parsedCountryCode = countryNameToCode(parsedOrigin.country || "");
+  if (!parsedCountryCode) return true;
+  const displayedOrigin = artistOriginSignalForTrack(track);
+  const displayedCountryCode = countryNameToCode(displayedOrigin?.country || "");
+  return !displayedCountryCode || displayedCountryCode === parsedCountryCode;
 }
 
 function updateArtistOriginFlags(track) {
@@ -18556,10 +18566,7 @@ function buildArtistBioFromApiProfile(track, profile) {
   const artist = String(track?.artist || "").trim() || "Artista";
   const style = styleLabelByValue(track?.style || "house");
   const song = String(track?.song || "").trim();
-  const origin =
-    profile.area && profile.country && normalize(profile.area) !== normalize(profile.country)
-      ? `${profile.area}, ${profile.country}`
-      : profile.area || profile.country;
+  const origin = formatArtistOriginLabel(artistOriginSignalForTrack(track));
   const bpmData = resolveBpmDisplay(track || {});
   const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : "";
   const summaryRaw = String(profile.wikiSummary || "").replace(/\s+/g, " ").trim();
@@ -18649,6 +18656,7 @@ async function hydrateArtistBioFromAi(track) {
   if (!aiBio?.bio) return;
 
   if (!trackStillActive(track)) return;
+  if (aiBio.origin && !originCountryConsistentWithTrack(track, aiBio.origin)) return;
 
   artistBio.textContent = aiBio.bio;
   if (aiBio.origin && !track.artistCountry && !track.artistArea) {
