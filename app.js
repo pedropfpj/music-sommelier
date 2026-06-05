@@ -10172,6 +10172,7 @@ const I18N = {
     recommendationWhyKnown: "artista conhecido",
     recommendationWhyNew: "fora do seu radar",
     recommendationWhyOrigin: "Origem: {origin}",
+    recommendationWhyStrongFit: "Match forte: curadoria confiável",
     djModeTitle: "Modo DJ",
     djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
     djModeGenerateBtn: "Criar jornada",
@@ -10645,6 +10646,7 @@ const I18N = {
     recommendationWhyKnown: "known artist",
     recommendationWhyNew: "outside your radar",
     recommendationWhyOrigin: "Origin: {origin}",
+    recommendationWhyStrongFit: "Strong match: reliable curation",
     djModeTitle: "DJ Mode",
     djModeHint: "5-track journey: open, build, peak, twist, close.",
     djModeGenerateBtn: "Create journey",
@@ -11118,6 +11120,7 @@ const I18N = {
     recommendationWhyKnown: "artista conocido",
     recommendationWhyNew: "fuera de tu radar",
     recommendationWhyOrigin: "Origen: {origin}",
+    recommendationWhyStrongFit: "Match fuerte: curaduría confiable",
     djModeTitle: "Modo DJ",
     djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
     djModeGenerateBtn: "Crear viaje",
@@ -21808,6 +21811,74 @@ function contextStyleBoost(track, prefs = {}) {
   return 0;
 }
 
+function energyDistance(a = "", b = "") {
+  const order = { low: 0, mid: 1, high: 2, extreme: 3 };
+  const left = order[String(a || "")];
+  const right = order[String(b || "")];
+  if (!Number.isFinite(left) || !Number.isFinite(right)) return 0;
+  return Math.abs(left - right);
+}
+
+function contextAffinityScore(track, prefs = {}) {
+  const context = String(prefs?.context || "");
+  if (!context || !track) return 0;
+  let score = 0;
+  const trackContexts = Array.isArray(track.context) ? track.context : [];
+  if (trackContexts.includes(context)) score += 2.2;
+
+  const style = String(track.style || "");
+  const energy = String(track.energy || "");
+  const styleGroups = {
+    foco: new Set(["ambient", "downtempo", "chillout", "idm", "deep_house", "organic_house", "future_garage", "minimal_techno", "liquid_dnb"]),
+    trabalho: new Set(["techno", "minimal_techno", "melodic_techno", "deep_house", "organic_house", "future_garage", "liquid_dnb", "idm"]),
+    treino: new Set(["tech_house", "techno", "peak_time_techno", "hard_techno", "industrial_techno", "drum_and_bass", "neurofunk", "jump_up", "bass_house", "brazilian_funk"]),
+    after: new Set(["chillout", "downtempo", "ambient", "deep_house", "organic_house", "future_garage", "slambient", "dark_progressive"]),
+    peak: new Set(["tech_house", "techno", "peak_time_techno", "hard_techno", "psytrance", "full_on", "full_on_night", "drum_and_bass", "neurofunk"])
+  };
+  const group = styleGroups[context];
+  if (group?.has(style)) score += 1.8;
+
+  if ((context === "foco" || context === "trabalho") && energy === "extreme") score -= 3.4;
+  if (context === "foco" && energy === "high") score -= 1.2;
+  if ((context === "treino" || context === "peak") && ["high", "extreme"].includes(energy)) score += 1.2;
+  if (context === "after" && ["low", "mid"].includes(energy)) score += 1.1;
+  return score;
+}
+
+function recommendationQualityScore(track, prefs = {}) {
+  if (!track) return -1000000;
+  let score = 0;
+
+  if (isTrustedCuratedCatalogTrack(track)) score += 2.4;
+  else if (track.existenceVerified === true) score += 1.6;
+  else if (isDynamicSource(track.source)) score -= 3.2;
+
+  if (hasReliableBpmForTrack(track)) score += 2.6;
+  else score -= prefs.bpm ? 5.2 : 1.4;
+
+  if (prefs.bpm && trackMatchesBpmPreference(track, prefs.bpm)) score += 2.1;
+  if (prefs.style && track.style === prefs.style) score += 1.4;
+  if (prefs.context) score += contextAffinityScore(track, prefs);
+
+  if (prefs.energy) {
+    const distance = energyDistance(track.energy, prefs.energy);
+    score += Math.max(-2.4, 2.1 - distance * 1.25);
+  }
+
+  if (prefs.vocals && track.vocals === prefs.vocals) score += 1;
+  if (track.previewUrl) score += 2.1;
+  else if (trackHasReliableAudioPreview(track)) score += 1.15;
+  else if (track.previewChecked && track.previewMissing) score -= 1.8;
+
+  if (trackHasDirectYouTubeVideo(track)) score += 0.75;
+  if (track.spotifyVerified === true || track.spotifyTrackUrl) score += 0.5;
+  if (track.soundcloudVerified === true || track.soundcloudTrackUrl) score += 0.45;
+  if (track.bandcampTrackUrl || track.bandcampUrl) score += 0.35;
+  score -= previewPenaltyForTrack(track) * 0.65;
+
+  return score;
+}
+
 function recommendationScore(track, prefs) {
   const weights = getWeights();
   let score = 0;
@@ -21834,10 +21905,51 @@ function recommendationScore(track, prefs) {
   score += bpmIntentStyleBoost(track, prefs);
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
+  score += recommendationQualityScore(track, prefs);
   score += getAdaptiveScore(track);
-  score += Math.random() * 0.35;
+  score += Math.random() * 0.08;
 
   return score;
+}
+
+function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtistKey = "", maxWindow = 7, scoreBand = null } = {}) {
+  const valid = scored
+    .filter((entry) => entry?.track && Number.isFinite(entry.score) && entry.score > -999999)
+    .sort((a, b) => b.score - a.score);
+  if (!valid.length) return null;
+
+  const bestScore = valid[0].score;
+  const band = Number.isFinite(scoreBand) ? scoreBand : (prefs?.style ? 2.4 : 2);
+  const topWindow = valid
+    .filter((entry) => entry.score >= bestScore - band)
+    .slice(0, Math.max(1, Math.min(maxWindow, valid.length)));
+  const artistVaried = previousArtistKey
+    ? topWindow.filter((entry) => artistMatchKey(entry.track.artist) !== previousArtistKey)
+    : topWindow;
+  const selectionPool = artistVaried.length ? artistVaried : topWindow;
+  if (selectionPool.length === 1) return selectionPool[0].track;
+
+  const minScore = Math.min(...selectionPool.map((entry) => entry.score));
+  const weightedPool = selectionPool.map((entry, index) => ({
+    track: entry.track,
+    weight: Math.pow(Math.max(0.04, entry.score - minScore + 0.14), 1.55) / (1 + index * 0.16)
+  }));
+  const totalWeight = weightedPool.reduce((sum, entry) => sum + entry.weight, 0);
+  let randomCursor = Math.random() * totalWeight;
+  for (const item of weightedPool) {
+    randomCursor -= item.weight;
+    if (randomCursor <= 0) return item.track;
+  }
+  return weightedPool[0]?.track || null;
+}
+
+function pickBestRecommendationCandidate(pool = [], prefs = {}, options = {}) {
+  if (!Array.isArray(pool) || !pool.length) return null;
+  const scoreFn = typeof options.scoreFn === "function" ? options.scoreFn : recommendationScore;
+  const scored = pool
+    .map((track) => ({ track, score: scoreFn(track, prefs) }))
+    .sort((a, b) => b.score - a.score);
+  return pickFromScoredRecommendations(scored, prefs, options);
 }
 
 function bpmFallbackScore(track, prefs = {}) {
@@ -22034,6 +22146,12 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
   const origin = artistOriginSignalForTrack(track);
   const originLabel = formatArtistOriginLabel(origin);
   const knownUnion = buildGlobalArtistExclusionSet();
+  const hasStrongFit =
+    hasReliableBpmForTrack(track) &&
+    (Boolean(track.previewUrl) ||
+      trackHasDirectYouTubeVideo(track) ||
+      track.existenceVerified === true ||
+      isTrustedCuratedCatalogTrack(track));
   const chips = [
     t("recommendationWhyStyle", { style: styleLabelByValue(track.style || prefs?.style || "") }),
     t("recommendationWhyBpm", { bpm: bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel") }),
@@ -22042,6 +22160,7 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
     })
   ];
   if (originLabel) chips.push(t("recommendationWhyOrigin", { origin: originLabel }));
+  if (hasStrongFit) chips.push(t("recommendationWhyStrongFit"));
 
   chips.forEach((text) => {
     const chip = document.createElement("span");
@@ -22437,24 +22556,11 @@ function pickRecommendation(
     .map((track) => ({ track, score: recommendationScore(track, prefs) }))
     .sort((a, b) => b.score - a.score);
 
-  if (!scored.length) return null;
-  const topWindow = scored.slice(0, Math.min(14, scored.length));
-  const artistVaried = previousArtistKey
-    ? topWindow.filter((entry) => artistMatchKey(entry.track.artist) !== previousArtistKey)
-    : topWindow;
-  const selectionPool = artistVaried.length ? artistVaried : topWindow;
-  const minScore = Math.min(...selectionPool.map((entry) => entry.score));
-  const weightedPool = selectionPool.map((entry) => ({
-    track: entry.track,
-    weight: Math.max(0.06, entry.score - minScore + 0.08)
-  }));
-  const totalWeight = weightedPool.reduce((sum, entry) => sum + entry.weight, 0);
-  let randomCursor = Math.random() * totalWeight;
-  for (const item of weightedPool) {
-    randomCursor -= item.weight;
-    if (randomCursor <= 0) return item.track;
-  }
-  return weightedPool[0]?.track || null;
+  return pickFromScoredRecommendations(scored, prefs, {
+    previousArtistKey,
+    maxWindow: prefs.style ? 6 : 7,
+    scoreBand: prefs.style ? 2.2 : 1.8
+  });
 }
 
 function pickDiscovery(prefs, knownArtists, mainArtist, excludedDiscoveryNames = new Set()) {
@@ -24163,7 +24269,12 @@ async function generateRecommendationFromPrefs(
     if (!stylePool.length) return false;
 
     const keyOf = (track) => recommendationTrackKey(track);
-    const pickPool = (pool) => pickRandomTrack(pool.filter((track) => trackAllowedInSession(track) && !excludedTrackKeys.has(keyOf(track))));
+    const pickPool = (pool) =>
+      pickBestRecommendationCandidate(
+        pool.filter((track) => trackAllowedInSession(track) && !excludedTrackKeys.has(keyOf(track))),
+        prefs,
+        { maxWindow: 4, scoreBand: 1.4 }
+      );
 
     const withReliableBpm = stylePool.filter((track) => track.existenceVerified !== false && hasReliableBpmForTrack(track));
     const withReliableBpmAndPreview = withReliableBpm.filter((track) => Boolean(track.previewUrl));
@@ -24201,11 +24312,7 @@ async function generateRecommendationFromPrefs(
     const estimatedPool = scopedPool.filter((track) => !trackMatchesBpmPreference(track, prefs.bpm));
     const pickBest = (pool = []) => {
       if (!pool.length) return null;
-      const scored = pool
-        .map((track) => ({ track, score: bpmFallbackScore(track, prefs) }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, Math.min(14, pool.length));
-      return scored.length ? pickRandomTrack(scored.map((entry) => entry.track)) : null;
+      return pickBestRecommendationCandidate(pool, prefs, { scoreFn: bpmFallbackScore, maxWindow: 5, scoreBand: 1.8 });
     };
     const pools = [
       exactPool.filter((track) => !artistSetHasMatch(sessionExcludedArtists, track.artist)),
@@ -24249,7 +24356,10 @@ async function generateRecommendationFromPrefs(
             !excludedTrackKeys.has(recommendationTrackKey(track)) &&
             trackAllowedInSession(track)
         );
-    currentRecommendation = pickRandomTrack(styleFallback) || pickRandomTrack(globalFallback) || null;
+    currentRecommendation =
+      pickBestRecommendationCandidate(styleFallback, prefs, { maxWindow: 5, scoreBand: 1.6 }) ||
+      pickBestRecommendationCandidate(globalFallback, prefs, { maxWindow: 5, scoreBand: 1.6 }) ||
+      null;
   }
   if (!currentRecommendation) {
     if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
@@ -24293,7 +24403,9 @@ async function generateRecommendationFromPrefs(
           trackAllowedInSession(track)
       );
       if (fallbackPool.length) {
-        currentRecommendation = fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+        currentRecommendation =
+          pickBestRecommendationCandidate(fallbackPool, prefs, { maxWindow: 5, scoreBand: 1.6 }) ||
+          fallbackPool[0];
       }
     }
     if (currentRecommendation && normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`) === normalizedAvoidTrack) {
@@ -24313,7 +24425,9 @@ async function generateRecommendationFromPrefs(
           trackAllowedInSession(track)
     );
     if (strictPool.length > 0) {
-      currentRecommendation = strictPool[Math.floor(Math.random() * strictPool.length)];
+      currentRecommendation =
+        pickBestRecommendationCandidate(strictPool, prefs, { maxWindow: 5, scoreBand: 1.4 }) ||
+        strictPool[0];
     } else {
       if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryKnownFallbackRecommendation() && !tryEmergencyStyleRecommendation()) {
         markRecommendationBlockedByKnown();
