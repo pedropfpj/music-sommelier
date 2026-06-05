@@ -17,6 +17,8 @@ const BLOCKS = [
   "LOCAL_TRACK_SEED_BOOST",
   "catalog",
   "discoveryCatalog",
+  "INDEXED_DATASET_ARTIST_COUNT",
+  "MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST",
   "STYLE_COVERAGE_OVERRIDES",
   "STYLE_BPM_RULES",
   "ARTIST_CANONICAL_ORIGINS",
@@ -58,6 +60,19 @@ const DATASET_SONG_FIELDS = ["song", "track", "track_name", "title", "faixa", "m
 const DATASET_COUNTRY_FIELDS = ["country", "origin_country", "artist_country", "pais", "nacionalidade"];
 const DATASET_AREA_FIELDS = ["city", "origin_city", "state", "region", "area", "cidade"];
 const DATASET_BIO_FIELDS = ["artist_bio", "bio", "description", "about", "resumo"];
+const DATASET_LABEL_FIELDS = ["label", "record_label", "release_label", "album", "imprint"];
+const DATASET_BPM_FIELDS = ["bpm_exact", "bpm", "tempo", "tempo_bpm", "track_bpm", "tempo_profile", "bpm_guide"];
+const DATASET_LINK_FIELDS = [
+  "spotify_url",
+  "spotify_track_url",
+  "youtube_url",
+  "youtube_track_url",
+  "soundcloud_url",
+  "soundcloud_track_url",
+  "bandcamp_url",
+  "bandcamp_track_url",
+  "beatport_url"
+];
 
 function readAppSource() {
   if (!fs.existsSync(appPath)) {
@@ -84,10 +99,15 @@ function findLiteralStart(source, name) {
   }
 
   const afterEquals = source.indexOf("=", declarationIndex);
-  const objectStart = source.indexOf("{", afterEquals);
-  const arrayStart = source.indexOf("[", afterEquals);
-  const starts = [objectStart, arrayStart].filter((index) => index >= 0);
-  return Math.min(...starts);
+  const firstValueMatch = source.slice(afterEquals + 1).match(/\S/);
+  if (!firstValueMatch) {
+    throw new Error(`Bloco ${name} nao tem valor`);
+  }
+  const start = afterEquals + 1 + firstValueMatch.index;
+  if (source[start] !== "{" && source[start] !== "[") {
+    throw new Error(`Bloco ${name} nao e literal composto`);
+  }
+  return start;
 }
 
 function extractConstLiteral(source, name) {
@@ -160,9 +180,26 @@ function evalLiteral(literal, name) {
   }
 }
 
+function extractScalarConstLiteral(source, name) {
+  const declarationRegex = new RegExp(`const\\s+${name}\\s*=\\s*([^;]+);`);
+  const match = source.match(declarationRegex);
+  if (!match) {
+    throw new Error(`Constante ${name} nao encontrada`);
+  }
+  return match[1].trim();
+}
+
 function loadBlocks(source) {
   return Object.fromEntries(
-    BLOCKS.map((name) => [name, evalLiteral(extractConstLiteral(source, name), name)])
+    BLOCKS.map((name) => {
+      let literal = "";
+      try {
+        literal = extractConstLiteral(source, name);
+      } catch (_error) {
+        literal = extractScalarConstLiteral(source, name);
+      }
+      return [name, evalLiteral(literal, name)];
+    })
   );
 }
 
@@ -434,16 +471,22 @@ function externalRecordToArtistSignal(record, knownStyles) {
   const style = fieldValue(record, DATASET_STYLE_FIELDS);
   const artist = fieldValue(record, DATASET_ARTIST_FIELDS);
   if (!artist || !knownStyles.has(style)) return null;
+  const song = fieldValue(record, DATASET_SONG_FIELDS);
+  const firstLink = fieldValue(record, DATASET_LINK_FIELDS);
   return {
     artist,
     name: artist,
-    song: fieldValue(record, DATASET_SONG_FIELDS),
+    song,
     style,
+    label: fieldValue(record, DATASET_LABEL_FIELDS),
+    bpmExact: fieldValue(record, DATASET_BPM_FIELDS),
     artistCountry: fieldValue(record, DATASET_COUNTRY_FIELDS),
     artistArea: fieldValue(record, DATASET_AREA_FIELDS),
     artistBio: fieldValue(record, DATASET_BIO_FIELDS),
+    spotifyUrl: firstLink || (song ? `https://open.spotify.com/search/${encodeURIComponent(`${artist} ${song}`)}` : ""),
+    youtubeUrl: song ? `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artist} ${song}`)}` : "",
     auditSource: record.auditSource || "external_dataset",
-    auditType: fieldValue(record, DATASET_SONG_FIELDS) ? "externalTrack" : "externalArtistSeed"
+    auditType: song ? "externalTrack" : "externalArtistSeed"
   };
 }
 
@@ -471,6 +514,8 @@ function auditCatalog(blocks) {
     LOCAL_TRACK_SEED_BOOST,
     catalog,
     discoveryCatalog,
+    INDEXED_DATASET_ARTIST_COUNT,
+    MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST,
     STYLE_COVERAGE_OVERRIDES,
     STYLE_BPM_RULES,
     ARTIST_CANONICAL_ORIGINS,
@@ -645,9 +690,30 @@ function auditCatalog(blocks) {
     sources: uniqueCount(allRecords, (track) => sourceName(track)),
     externalArtists: uniqueCount(externalSignals, artistId)
   };
+  const indexedArtists = Math.max(counts.artists, Number(INDEXED_DATASET_ARTIST_COUNT) || 0);
+  const searchableTrackFloor =
+    indexedArtists * Math.max(1, Number(MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST) || 1);
+  const searchableTracks = Math.max(counts.tracks, searchableTrackFloor);
+  const catalogHealth = {
+    indexedArtists,
+    searchableTracks,
+    tracksPerIndexedArtist: indexedArtists ? searchableTracks / indexedArtists : 0,
+    verifiedTrackRatio: searchableTracks ? counts.tracks / searchableTracks : 0
+  };
+
+  if (searchableTracks <= indexedArtists) {
+    addIssue(
+      issues,
+      "critical",
+      "catalog-health",
+      "Músicas buscáveis não superam artistas indexados.",
+      `${searchableTracks} musicas para ${indexedArtists} artistas`
+    );
+  }
 
   return {
     counts,
+    catalogHealth,
     issues,
     coverageRows,
     stylesWithoutTracks,
@@ -701,6 +767,10 @@ function formatReport(result) {
     "",
     `- Faixas auditadas: ${result.counts.tracks}`,
     `- Artistas unicos: ${result.counts.artists}`,
+    `- Artistas indexados exibidos no app: ${result.catalogHealth.indexedArtists}`,
+    `- Musicas buscaveis estimadas no app: ${result.catalogHealth.searchableTracks}`,
+    `- Media buscavel por artista indexado: ${result.catalogHealth.tracksPerIndexedArtist.toFixed(1)}x`,
+    `- Cobertura auditada versus buscavel: ${(result.catalogHealth.verifiedTrackRatio * 100).toFixed(1)}%`,
     `- Gravadoras/labels unicas: ${result.counts.labels}`,
     `- Estilos com faixas: ${result.counts.styles}`,
     `- Artistas vindos de datasets externos: ${result.counts.externalArtists}`,
@@ -712,7 +782,8 @@ function formatReport(result) {
     result.criticalCount
       ? "- Primeiro resolva os itens criticos da tabela de problemas. Eles indicam erro que pode gerar recomendacao incorreta."
       : "- Nao ha itens criticos. Os avisos ajudam a enriquecer bio, links, bandeiras e cobertura.",
-    "- Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas, artistas ou labels.",
+    "- Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas verificadas, artistas ou labels.",
+    "- A métrica de musicas buscaveis mede a capacidade de descoberta do app; faixas auditadas mede o quanto já está verificável no banco local.",
     "- Quando os criticos zerarem, rode `node scripts/quality-audit.mjs --strict` antes de publicar.",
     "",
     "## Cobertura por subgenero",
@@ -745,7 +816,7 @@ function main() {
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   console.log(`Quality Audit: ${status}`);
   console.log(
-    `${result.counts.tracks} faixas, ${result.counts.artists} artistas, ${result.counts.styles} estilos.`
+    `${result.counts.tracks} faixas auditadas, ${result.catalogHealth.searchableTracks} musicas buscaveis, ${result.catalogHealth.indexedArtists} artistas indexados, ${result.counts.styles} estilos.`
   );
   console.log(`${result.criticalCount} criticos, ${result.warningCount} avisos.`);
   console.log(`Relatorio: ${path.relative(rootDir, reportPath)}`);

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260604c" />
+    <link rel="stylesheet" href="styles.css?v=20260605g" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -364,6 +364,9 @@
               <span id="catalogLabelsLabel">labels</span>
             </div>
           </div>
+          <p id="catalogStatsHealth" class="catalog-stats-health">
+            Mínimo saudável: mais músicas do que artistas, com expansão dinâmica por subgênero.
+          </p>
         </div>
         <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
       </header>
@@ -923,11 +926,18 @@
             <div class="voice-mini-card">
               <div>
                 <p id="voiceMiniTitle" class="voice-effects-title">Fale e vira música</p>
-                <p id="voiceMiniHint" class="muted voice-mini-hint">Transforme sua voz em uma mini track com kick, bass, hats, clap e efeitos.</p>
+                <p id="voiceMiniHint" class="muted voice-mini-hint">Transforme sua voz em uma mini track com kick, bass, synth, hats, clap e efeitos.</p>
               </div>
               <div class="voice-mini-controls">
                 <button id="voiceMiniPlayBtn" class="primary" type="button" disabled>Criar mini música</button>
                 <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar música</button>
+              </div>
+              <div id="voiceMiniPresetGrid" class="voice-mini-preset-grid" aria-label="Presets de groove">
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="breaks">Breaks</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="trap">Trap</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="ambient">Ambient</button>
               </div>
               <label class="voice-bpm-control" for="voiceMiniBpmSlider">
                 <span id="voiceMiniBpmLabel">Velocidade</span>
@@ -938,6 +948,16 @@
                 <span id="voiceMiniVoiceLevelLabel">Presença da voz</span>
                 <strong id="voiceMiniVoiceLevelValue">155%</strong>
                 <input id="voiceMiniVoiceLevelSlider" type="range" min="100" max="260" step="5" value="155" aria-valuemin="100" aria-valuemax="260" aria-valuenow="155" />
+              </label>
+              <label class="voice-bpm-control voice-length-control" for="voiceMiniVoiceLengthSlider">
+                <span id="voiceMiniVoiceLengthLabel">Comprimento da voz</span>
+                <strong id="voiceMiniVoiceLengthValue">100%</strong>
+                <input id="voiceMiniVoiceLengthSlider" type="range" min="30" max="150" step="5" value="100" aria-valuemin="30" aria-valuemax="150" aria-valuenow="100" />
+              </label>
+              <label class="voice-bpm-control voice-groove-control" for="voiceMiniSwingSlider">
+                <span id="voiceMiniSwingLabel">Swing</span>
+                <strong id="voiceMiniSwingValue">18%</strong>
+                <input id="voiceMiniSwingSlider" type="range" min="0" max="55" step="1" value="18" aria-valuemin="0" aria-valuemax="55" aria-valuenow="18" />
               </label>
               <div class="voice-mini-mixer-grid" aria-label="Controles da mini música">
                 <label class="voice-knob-control" for="voiceMiniMasterSlider">
@@ -965,14 +985,21 @@
                   <strong id="voiceMiniBeatmasherValue">20%</strong>
                   <input id="voiceMiniBeatmasherSlider" type="range" min="0" max="100" step="5" value="20" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" />
                 </label>
+                <label class="voice-knob-control" for="voiceMiniSynthSlider">
+                  <span id="voiceMiniSynthLabel">Synth</span>
+                  <strong id="voiceMiniSynthValue">55%</strong>
+                  <input id="voiceMiniSynthSlider" type="range" min="0" max="100" step="5" value="55" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55" />
+                </label>
               </div>
               <div class="voice-daw-pad-grid" aria-label="Mini DAW">
                 <button id="voicePadKickBtn" class="voice-daw-pad" type="button" aria-pressed="false">Kick</button>
                 <button id="voicePadBassBtn" class="voice-daw-pad" type="button" aria-pressed="false">Bass</button>
                 <button id="voicePadHatBtn" class="voice-daw-pad" type="button" aria-pressed="false">Hat</button>
                 <button id="voicePadClapBtn" class="voice-daw-pad" type="button" aria-pressed="false">Clap</button>
+                <button id="voicePadSynthBtn" class="voice-daw-pad" type="button" aria-pressed="false">Synth</button>
                 <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" aria-pressed="false" disabled>Voz</button>
               </div>
+              <div id="voiceStepSequencer" class="voice-step-sequencer" aria-label="Sequencer da mini música"></div>
               <p id="voiceMiniStatus" class="muted voice-mini-status">Grave sua voz para liberar o mini beat.</p>
             </div>
           </div>
@@ -1153,6 +1180,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260604c"></script>
+    <script src="app.js?v=20260605g"></script>
   </body>
 </html>

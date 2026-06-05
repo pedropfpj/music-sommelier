@@ -8,6 +8,13 @@ O app tenta importar automaticamente estes arquivos (se existirem):
 
 - `../artist_expansion_seeds_v1.csv`
 - `../artist_expansion_seeds_v2.csv`
+- `../artist_expansion_seeds_v3.csv`
+- `../artist_expansion_seeds_v4.csv`
+- `../artist_expansion_seeds_v5.csv`
+- `../artist_expansion_seeds_v6.csv`
+- `../verified_track_expansion_v1.csv`
+- `../verified_track_expansion_v2.csv`
+- `../verified_track_expansion_v3.csv`
 - `tracks.json`
 - `tracks.csv`
 - `prog_dark_tracks.csv`

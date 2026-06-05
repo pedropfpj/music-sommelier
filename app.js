@@ -396,6 +396,13 @@ const VIBE_THEME_CONFIG = {
 const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v1.csv",
   "data/artist_expansion_seeds_v2.csv",
+  "data/artist_expansion_seeds_v3.csv",
+  "data/artist_expansion_seeds_v4.csv",
+  "data/artist_expansion_seeds_v5.csv",
+  "data/artist_expansion_seeds_v6.csv",
+  "data/verified_track_expansion_v1.csv",
+  "data/verified_track_expansion_v2.csv",
+  "data/verified_track_expansion_v3.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -407,7 +414,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 1479;
+const INDEXED_DATASET_ARTIST_COUNT = 2450;
+const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 6;
 
 const LOCAL_TRACK_SEED_BOOST = [
   { style: "psytrance", artist: "Astrix", song: "He.art", label: "Shamanic Tales", bpmExact: 145 },
@@ -3788,6 +3796,7 @@ const appContent = document.getElementById("appContent");
 const appTabBar = document.getElementById("appTabBar");
 const appTabPanels = document.querySelectorAll("[data-app-tab]");
 const catalogStatsKicker = document.getElementById("catalogStatsKicker");
+const catalogStatsHealth = document.getElementById("catalogStatsHealth");
 const catalogArtistsCount = document.getElementById("catalogArtistsCount");
 const catalogTracksCount = document.getElementById("catalogTracksCount");
 const catalogStylesCount = document.getElementById("catalogStylesCount");
@@ -3869,6 +3878,12 @@ const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
 const voiceMiniVoiceLevelLabel = document.getElementById("voiceMiniVoiceLevelLabel");
 const voiceMiniVoiceLevelValue = document.getElementById("voiceMiniVoiceLevelValue");
 const voiceMiniVoiceLevelSlider = document.getElementById("voiceMiniVoiceLevelSlider");
+const voiceMiniVoiceLengthLabel = document.getElementById("voiceMiniVoiceLengthLabel");
+const voiceMiniVoiceLengthValue = document.getElementById("voiceMiniVoiceLengthValue");
+const voiceMiniVoiceLengthSlider = document.getElementById("voiceMiniVoiceLengthSlider");
+const voiceMiniSwingLabel = document.getElementById("voiceMiniSwingLabel");
+const voiceMiniSwingValue = document.getElementById("voiceMiniSwingValue");
+const voiceMiniSwingSlider = document.getElementById("voiceMiniSwingSlider");
 const voiceMiniMasterLabel = document.getElementById("voiceMiniMasterLabel");
 const voiceMiniMasterValue = document.getElementById("voiceMiniMasterValue");
 const voiceMiniMasterSlider = document.getElementById("voiceMiniMasterSlider");
@@ -3884,11 +3899,17 @@ const voiceMiniPhaserSlider = document.getElementById("voiceMiniPhaserSlider");
 const voiceMiniBeatmasherLabel = document.getElementById("voiceMiniBeatmasherLabel");
 const voiceMiniBeatmasherValue = document.getElementById("voiceMiniBeatmasherValue");
 const voiceMiniBeatmasherSlider = document.getElementById("voiceMiniBeatmasherSlider");
+const voiceMiniSynthLabel = document.getElementById("voiceMiniSynthLabel");
+const voiceMiniSynthValue = document.getElementById("voiceMiniSynthValue");
+const voiceMiniSynthSlider = document.getElementById("voiceMiniSynthSlider");
+const voiceMiniPresetGrid = document.getElementById("voiceMiniPresetGrid");
 const voiceMiniStatus = document.getElementById("voiceMiniStatus");
+const voiceStepSequencer = document.getElementById("voiceStepSequencer");
 const voicePadKickBtn = document.getElementById("voicePadKickBtn");
 const voicePadBassBtn = document.getElementById("voicePadBassBtn");
 const voicePadHatBtn = document.getElementById("voicePadHatBtn");
 const voicePadClapBtn = document.getElementById("voicePadClapBtn");
+const voicePadSynthBtn = document.getElementById("voicePadSynthBtn");
 const voicePadVoiceBtn = document.getElementById("voicePadVoiceBtn");
 const quizChallengeBubble = document.getElementById("quizChallengeBubble");
 const quizBubbleText = document.getElementById("quizBubbleText");
@@ -4240,18 +4261,88 @@ let voiceMiniVoiceBuffer = null;
 let voiceMiniOutputBus = null;
 let voiceMiniBpm = 128;
 let voiceMiniVoiceLevel = 155;
+let voiceMiniVoiceLength = 100;
+let voiceMiniSwingAmount = 18;
 let voiceMiniMasterLevel = 135;
 let voiceMiniDriveAmount = 35;
 let voiceMiniDelayAmount = 20;
 let voiceMiniPhaserAmount = 30;
 let voiceMiniBeatmasherAmount = 20;
+let voiceMiniSynthLevel = 55;
 let voiceMiniPadState = {
   kick: false,
   bass: false,
   hat: false,
   clap: false,
+  synth: false,
   voice: false
 };
+let voiceMiniActivePreset = "techno";
+const VOICE_MINI_PATTERN_KINDS = ["kick", "bass", "hat", "clap", "synth", "voice"];
+const VOICE_MINI_DEFAULT_PATTERN = {
+  kick: [1, 0, 1, 0, 1, 0, 1, 0],
+  bass: [1, 0, 0, 1, 1, 0, 0, 1],
+  hat: [1, 1, 1, 1, 1, 1, 1, 1],
+  clap: [0, 0, 1, 0, 0, 0, 1, 0],
+  synth: [1, 0, 0, 0, 1, 0, 0, 0],
+  voice: [1, 0, 0, 0, 1, 0, 0, 0]
+};
+const VOICE_MINI_PRESETS = {
+  techno: {
+    bpm: 132,
+    swing: 10,
+    pattern: VOICE_MINI_DEFAULT_PATTERN
+  },
+  breaks: {
+    bpm: 138,
+    swing: 24,
+    pattern: {
+      kick: [1, 0, 0, 1, 0, 1, 0, 0],
+      bass: [1, 0, 0, 0, 1, 0, 0, 1],
+      hat: [1, 0, 1, 1, 0, 1, 1, 0],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [0, 1, 0, 0, 0, 1, 0, 0],
+      voice: [1, 0, 0, 0, 0, 0, 1, 0]
+    }
+  },
+  trap: {
+    bpm: 150,
+    swing: 31,
+    pattern: {
+      kick: [1, 0, 0, 1, 0, 0, 0, 1],
+      bass: [1, 0, 0, 0, 1, 0, 0, 1],
+      hat: [1, 1, 1, 0, 1, 1, 0, 1],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [1, 0, 0, 0, 0, 0, 1, 0],
+      voice: [1, 0, 0, 0, 0, 0, 0, 0]
+    }
+  },
+  psy: {
+    bpm: 145,
+    swing: 6,
+    pattern: {
+      kick: [1, 0, 1, 0, 1, 0, 1, 0],
+      bass: [0, 1, 0, 1, 0, 1, 0, 1],
+      hat: [1, 1, 1, 1, 1, 1, 1, 1],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [1, 0, 1, 0, 0, 0, 1, 0],
+      voice: [1, 0, 0, 0, 1, 0, 0, 0]
+    }
+  },
+  ambient: {
+    bpm: 104,
+    swing: 18,
+    pattern: {
+      kick: [1, 0, 0, 0, 1, 0, 0, 0],
+      bass: [1, 0, 0, 0, 0, 0, 1, 0],
+      hat: [0, 0, 1, 0, 0, 0, 1, 0],
+      clap: [0, 0, 0, 0, 0, 0, 1, 0],
+      synth: [1, 0, 1, 0, 1, 0, 1, 0],
+      voice: [1, 0, 0, 0, 0, 0, 0, 0]
+    }
+  }
+};
+let voiceMiniPattern = cloneVoiceMiniPattern(VOICE_MINI_DEFAULT_PATTERN);
 let quizOfferTimer = 0;
 let quizPendingChallenge = null;
 let quizSession = null;
@@ -4274,7 +4365,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v12";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v13";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -4463,7 +4554,7 @@ const STYLE_BPM_RULES = {
   downtempo: { min: 80, max: 115 },
   ambient: { min: 60, max: 110 },
   chillout: { min: 70, max: 112 },
-  slambient: { min: 155, max: 185 },
+  slambient: { min: 155, max: 240 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
   brazilian_funk: { min: 125, max: 150 },
@@ -7366,22 +7457,36 @@ function requiresExactBpmForDynamic(style, source = "") {
 }
 
 function targetCatalogSizeForStyle(style) {
-  if (style === "tech_house") return 70;
-  if (style === "techno") return 56;
-  if (style === "gabber") return 38;
-  if (style === "freeform") return 34;
-  if (style === "house") return 44;
-  if (style === "drum_and_bass") return 44;
-  if (style === "full_on") return 52;
-  if (style === "full_on_night" || style === "full_on_morning") return 46;
-  if (style === "psy_comercial") return 48;
-  if (style === "hi_tech") return 44;
-  if (style === "dark_psy") return 44;
-  if (style === "dark_experimental") return 40;
-  if (style === "psycore") return 18;
-  if (style === "slambient") return 24;
-  if (style === "psytrance" || style === "progressive_psy") return 44;
-  return 36;
+  const boostedTargets = {
+    tech_house: 180,
+    techno: 160,
+    house: 150,
+    drum_and_bass: 150,
+    full_on: 150,
+    full_on_night: 132,
+    full_on_morning: 132,
+    psytrance: 140,
+    progressive_psy: 132,
+    dark_psy: 132,
+    dark_experimental: 120,
+    hi_tech: 132,
+    psy_comercial: 132,
+    forest_psy: 120,
+    dark_progressive: 120,
+    melodic_techno: 120,
+    hard_techno: 120,
+    acid_techno: 112,
+    deep_house: 112,
+    liquid_dnb: 112,
+    neurofunk: 112,
+    ambient: 112,
+    downtempo: 112,
+    freeform: 96,
+    psycore: 96,
+    slambient: 96,
+    gabber: 96
+  };
+  return boostedTargets[style] || 100;
 }
 
 function getRecentTrackHistory(style) {
@@ -9953,6 +10058,7 @@ const I18N = {
     catalogStatsTracks: "músicas buscáveis",
     catalogStatsStyles: "subgêneros",
     catalogStatsLabels: "labels",
+    catalogStatsHealth: "{ratio} músicas por artista indexado, combinando base auditada e expansão dinâmica por subgênero.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Jornal de música eletrônica",
     dailyNewsIntro: "Manchetes recentes do mundo da música eletrônica, reunidas de fontes especializadas.",
@@ -10079,9 +10185,10 @@ const I18N = {
     voicePadBass: "Bass",
     voicePadHat: "Hat",
     voicePadClap: "Clap",
+    voicePadSynth: "Synth",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad acionado: {pad}.",
-    voiceMiniPadLoopOn: "Loop ligado: {pad}. Toque outros pads para montar a música.",
+    voiceMiniPadLoopOn: "Loop ligado: {pad}. Entra no próximo compasso para manter a mini música no tempo.",
     voiceMiniPadLoopOff: "Loop desligado: {pad}.",
     artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
     discogsArtistTitle: "Bio completa no Discogs",
@@ -10121,7 +10228,7 @@ const I18N = {
     voicePlaying: "Tocando com efeito: {effect}.",
     voiceCleared: "Gravação apagada.",
     voiceMiniTitle: "Fale e vira música",
-    voiceMiniHint: "Transforme sua voz em uma mini track com kick, bass, hats, clap e efeitos.",
+    voiceMiniHint: "Transforme sua voz em uma mini track com kick, bass, synth, hats, clap e efeitos.",
     voiceMiniPlayBtn: "Criar mini música",
     voiceMiniStopBtn: "Parar música",
     voiceMiniBpmLabel: "Velocidade",
@@ -10130,17 +10237,27 @@ const I18N = {
     voiceMiniVoiceLevelLabel: "Presença da voz",
     voiceMiniVoiceLevelValue: "{level}%",
     voiceMiniVoiceLevelChanged: "Voz em {level}%. O próximo compasso entra com essa presença.",
+    voiceMiniVoiceLengthLabel: "Comprimento da voz",
+    voiceMiniSwingLabel: "Swing",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
     voiceMiniPhaserLabel: "Phaser",
     voiceMiniBeatmasherLabel: "Beatmasher",
+    voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
-    voiceMiniReady: "Toque Kick, Bass, Hat ou Clap para começar. Grave sua voz para liberar a camada Voz.",
-    voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat, Clap e Voz no tempo.",
+    voiceMiniReady: "Toque Kick, Bass, Hat, Clap ou Synth para começar. Grave sua voz para liberar a camada Voz.",
+    voiceMiniPlaying: "Mini música em loop: ligue/desligue Kick, Bass, Hat, Clap, Synth e Voz no tempo.",
     voiceMiniDone: "Mini música parada. Toque Criar ou um pad para começar de novo.",
     voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
+    voiceMiniStepChanged: "{pad} no passo {step}. O próximo compasso já segue esse desenho.",
+    voiceMiniPresetApplied: "Preset {preset} carregado. Toque Criar mini música ou mexa nos passos.",
+    voiceMiniPresetTechno: "Techno",
+    voiceMiniPresetBreaks: "Breaks",
+    voiceMiniPresetTrap: "Trap",
+    voiceMiniPresetPsy: "Psy",
+    voiceMiniPresetAmbient: "Ambient",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -10414,6 +10531,7 @@ const I18N = {
     catalogStatsTracks: "searchable tracks",
     catalogStatsStyles: "subgenres",
     catalogStatsLabels: "labels",
+    catalogStatsHealth: "{ratio} searchable tracks per indexed artist, combining audited data and dynamic subgenre expansion.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Electronic music journal",
     dailyNewsIntro: "Recent headlines from the electronic music world, gathered from specialist sources.",
@@ -10540,9 +10658,10 @@ const I18N = {
     voicePadBass: "Bass",
     voicePadHat: "Hat",
     voicePadClap: "Clap",
+    voicePadSynth: "Synth",
     voicePadVoice: "Voice",
     voiceMiniPadHint: "Pad triggered: {pad}.",
-    voiceMiniPadLoopOn: "Loop on: {pad}. Tap other pads to build the track.",
+    voiceMiniPadLoopOn: "Loop on: {pad}. It lands on the next bar to keep the mini track in time.",
     voiceMiniPadLoopOff: "Loop off: {pad}.",
     artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
     discogsArtistTitle: "Full bio on Discogs",
@@ -10582,7 +10701,7 @@ const I18N = {
     voicePlaying: "Playing with effect: {effect}.",
     voiceCleared: "Recording cleared.",
     voiceMiniTitle: "Speak it into music",
-    voiceMiniHint: "Turn your voice into a mini track with kick, bass, hats, clap, and effects.",
+    voiceMiniHint: "Turn your voice into a mini track with kick, bass, synth, hats, clap, and effects.",
     voiceMiniPlayBtn: "Create mini music",
     voiceMiniStopBtn: "Stop music",
     voiceMiniBpmLabel: "Speed",
@@ -10591,17 +10710,27 @@ const I18N = {
     voiceMiniVoiceLevelLabel: "Voice presence",
     voiceMiniVoiceLevelValue: "{level}%",
     voiceMiniVoiceLevelChanged: "Voice at {level}%. The next bar uses this presence.",
+    voiceMiniVoiceLengthLabel: "Voice length",
+    voiceMiniSwingLabel: "Swing",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
     voiceMiniPhaserLabel: "Phaser",
     voiceMiniBeatmasherLabel: "Beatmasher",
+    voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
-    voiceMiniReady: "Tap Kick, Bass, Hat, or Clap to start. Record your voice to unlock the Voice layer.",
-    voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, Clap, and Voice on/off in tempo.",
+    voiceMiniReady: "Tap Kick, Bass, Hat, Clap, or Synth to start. Record your voice to unlock the Voice layer.",
+    voiceMiniPlaying: "Mini music looping: switch Kick, Bass, Hat, Clap, Synth, and Voice on/off in tempo.",
     voiceMiniDone: "Mini music stopped. Tap Create or a pad to start again.",
     voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
+    voiceMiniStepChanged: "{pad} on step {step}. The next bar follows this pattern.",
+    voiceMiniPresetApplied: "{preset} preset loaded. Tap Create mini music or edit the steps.",
+    voiceMiniPresetTechno: "Techno",
+    voiceMiniPresetBreaks: "Breaks",
+    voiceMiniPresetTrap: "Trap",
+    voiceMiniPresetPsy: "Psy",
+    voiceMiniPresetAmbient: "Ambient",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -10875,6 +11004,7 @@ const I18N = {
     catalogStatsTracks: "pistas buscables",
     catalogStatsStyles: "subgéneros",
     catalogStatsLabels: "sellos",
+    catalogStatsHealth: "{ratio} pistas por artista indexado, combinando base auditada y expansión dinámica por subgénero.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Periódico de música electrónica",
     dailyNewsIntro: "Titulares recientes del mundo de la música electrónica, reunidos desde fuentes especializadas.",
@@ -11001,9 +11131,10 @@ const I18N = {
     voicePadBass: "Bass",
     voicePadHat: "Hat",
     voicePadClap: "Clap",
+    voicePadSynth: "Synth",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad accionado: {pad}.",
-    voiceMiniPadLoopOn: "Loop activado: {pad}. Toca otros pads para montar la música.",
+    voiceMiniPadLoopOn: "Loop activado: {pad}. Entra en el próximo compás para mantener la mini música a tempo.",
     voiceMiniPadLoopOff: "Loop desactivado: {pad}.",
     artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
     discogsArtistTitle: "Bio completa en Discogs",
@@ -11043,7 +11174,7 @@ const I18N = {
     voicePlaying: "Sonando con efecto: {effect}.",
     voiceCleared: "Grabación borrada.",
     voiceMiniTitle: "Habla y se vuelve música",
-    voiceMiniHint: "Convierte tu voz en una mini pista con kick, bass, hats, clap y efectos.",
+    voiceMiniHint: "Convierte tu voz en una mini pista con kick, bass, synth, hats, clap y efectos.",
     voiceMiniPlayBtn: "Crear mini música",
     voiceMiniStopBtn: "Parar música",
     voiceMiniBpmLabel: "Velocidad",
@@ -11052,17 +11183,27 @@ const I18N = {
     voiceMiniVoiceLevelLabel: "Presencia de voz",
     voiceMiniVoiceLevelValue: "{level}%",
     voiceMiniVoiceLevelChanged: "Voz al {level}%. El próximo compás entra con esa presencia.",
+    voiceMiniVoiceLengthLabel: "Duración de voz",
+    voiceMiniSwingLabel: "Swing",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
     voiceMiniPhaserLabel: "Phaser",
     voiceMiniBeatmasherLabel: "Beatmasher",
+    voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
-    voiceMiniReady: "Toca Kick, Bass, Hat o Clap para empezar. Graba tu voz para liberar la capa Voz.",
-    voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat, Clap y Voz a tempo.",
+    voiceMiniReady: "Toca Kick, Bass, Hat, Clap o Synth para empezar. Graba tu voz para liberar la capa Voz.",
+    voiceMiniPlaying: "Mini música en loop: activa/desactiva Kick, Bass, Hat, Clap, Synth y Voz a tempo.",
     voiceMiniDone: "Mini música parada. Toca Crear o un pad para empezar otra vez.",
     voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
+    voiceMiniStepChanged: "{pad} en el paso {step}. El próximo compás sigue ese patrón.",
+    voiceMiniPresetApplied: "Preset {preset} cargado. Toca Crear mini música o edita los pasos.",
+    voiceMiniPresetTechno: "Techno",
+    voiceMiniPresetBreaks: "Breaks",
+    voiceMiniPresetTrap: "Trap",
+    voiceMiniPresetPsy: "Psy",
+    voiceMiniPresetAmbient: "Ambient",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -11668,9 +11809,12 @@ function catalogStatsSnapshot() {
     if (STYLE_BPM_RULES[style]) searchableTrackTarget += targetCatalogSizeForStyle(style);
   });
 
+  const indexedArtistCount = Math.max(artistKeys.size, INDEXED_DATASET_ARTIST_COUNT);
+  const healthyTrackFloor = indexedArtistCount * MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST;
+
   return {
-    artists: Math.max(artistKeys.size, INDEXED_DATASET_ARTIST_COUNT),
-    tracks: Math.max(trackKeys.size, searchableTrackTarget),
+    artists: indexedArtistCount,
+    tracks: Math.max(trackKeys.size, searchableTrackTarget, healthyTrackFloor),
     styles: styleKeys.size,
     labels: labelKeys.size
   };
@@ -11684,6 +11828,16 @@ function updateCatalogStatsHero() {
   catalogTracksCount.textContent = formatCatalogCount(stats.tracks);
   catalogStylesCount.textContent = formatCatalogCount(stats.styles);
   catalogLabelsCount.textContent = formatCatalogCount(stats.labels);
+  if (catalogStatsHealth) {
+    const ratioLocale = currentLanguage === "en" ? "en-US" : currentLanguage === "es" ? "es-ES" : "pt-BR";
+    const ratio = stats.artists
+      ? (stats.tracks / stats.artists).toLocaleString(ratioLocale, {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        })
+      : "0";
+    catalogStatsHealth.textContent = t("catalogStatsHealth", { ratio });
+  }
   if (catalogArtistsLabel) catalogArtistsLabel.textContent = t("catalogStatsArtists");
   if (catalogTracksLabel) catalogTracksLabel.textContent = t("catalogStatsTracks");
   if (catalogStylesLabel) catalogStylesLabel.textContent = t("catalogStatsStyles");
@@ -12066,6 +12220,12 @@ function applyLanguage() {
   if (voiceMiniVoiceLevelValue) {
     voiceMiniVoiceLevelValue.textContent = t("voiceMiniVoiceLevelValue", { level: voiceMiniVoiceLevel });
   }
+  setText("#voiceMiniVoiceLengthLabel", t("voiceMiniVoiceLengthLabel"));
+  if (voiceMiniVoiceLengthValue) {
+    voiceMiniVoiceLengthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniVoiceLength });
+  }
+  setText("#voiceMiniSwingLabel", t("voiceMiniSwingLabel"));
+  if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
   setText("#voiceMiniMasterLabel", t("voiceMiniMasterLabel"));
   if (voiceMiniMasterValue) voiceMiniMasterValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniMasterLevel });
   setText("#voiceMiniDriveLabel", t("voiceMiniDriveLabel"));
@@ -12078,11 +12238,21 @@ function applyLanguage() {
   if (voiceMiniBeatmasherValue) {
     voiceMiniBeatmasherValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniBeatmasherAmount });
   }
+  setText("#voiceMiniSynthLabel", t("voiceMiniSynthLabel"));
+  if (voiceMiniSynthValue) voiceMiniSynthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSynthLevel });
+  setText("[data-voice-mini-preset='techno']", t("voiceMiniPresetTechno"));
+  setText("[data-voice-mini-preset='breaks']", t("voiceMiniPresetBreaks"));
+  setText("[data-voice-mini-preset='trap']", t("voiceMiniPresetTrap"));
+  setText("[data-voice-mini-preset='psy']", t("voiceMiniPresetPsy"));
+  setText("[data-voice-mini-preset='ambient']", t("voiceMiniPresetAmbient"));
+  syncVoiceMiniPresetButtons();
   setText("#voicePadKickBtn", t("voicePadKick"));
   setText("#voicePadBassBtn", t("voicePadBass"));
   setText("#voicePadHatBtn", t("voicePadHat"));
   setText("#voicePadClapBtn", t("voicePadClap"));
+  setText("#voicePadSynthBtn", t("voicePadSynth"));
   setText("#voicePadVoiceBtn", t("voicePadVoice"));
+  renderVoiceMiniSequencer();
   if (voiceMiniStatus && !voiceRecordingBlob && !voiceMiniTrackPlaying) {
     voiceMiniStatus.textContent = t("voiceMiniReady");
   }
@@ -13753,6 +13923,113 @@ function voiceMiniBeatDuration() {
   return 60 / clampVoiceMiniBpm(voiceMiniBpm);
 }
 
+function clampVoiceMiniSwing(value) {
+  return clampVoiceMiniPercent(value, 0, 55, 18);
+}
+
+function voiceMiniSwingOffset(beat) {
+  return beat * 0.5 * (clampVoiceMiniSwing(voiceMiniSwingAmount) / 100);
+}
+
+function voiceMiniStepTime(start, beat, step, subdivision = 1) {
+  const base = start + step * beat * subdivision;
+  return step % 2 === 1 ? base + voiceMiniSwingOffset(beat) : base;
+}
+
+function cloneVoiceMiniPattern(pattern = VOICE_MINI_DEFAULT_PATTERN) {
+  return VOICE_MINI_PATTERN_KINDS.reduce((copy, kind) => {
+    const source = Array.isArray(pattern?.[kind]) ? pattern[kind] : VOICE_MINI_DEFAULT_PATTERN[kind];
+    copy[kind] = Array.from({ length: 8 }, (_, index) => Number(source?.[index]) ? 1 : 0);
+    return copy;
+  }, {});
+}
+
+function voiceMiniPatternSteps(kind = "kick") {
+  if (!voiceMiniPattern || !Array.isArray(voiceMiniPattern[kind])) {
+    voiceMiniPattern = cloneVoiceMiniPattern();
+  }
+  return voiceMiniPattern[kind] || VOICE_MINI_DEFAULT_PATTERN[kind] || [];
+}
+
+function voiceMiniPatternActive(kind = "kick", step = 0) {
+  const steps = voiceMiniPatternSteps(kind);
+  return Boolean(steps[((Number(step) || 0) % 8 + 8) % 8]);
+}
+
+function voiceMiniStepBeatTime(start, beat, step = 0) {
+  return voiceMiniStepTime(start, beat, step, 0.5);
+}
+
+function renderVoiceMiniSequencer() {
+  if (!voiceStepSequencer) return;
+  const rows = VOICE_MINI_PATTERN_KINDS.map((kind) => {
+    const label = t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`);
+    const steps = voiceMiniPatternSteps(kind);
+    const buttons = steps.map((active, index) => `
+      <button class="voice-step-btn${active ? " active" : ""}" type="button" data-bound="1" data-voice-step-kind="${kind}" data-voice-step-index="${index}" aria-pressed="${active ? "true" : "false"}">
+        ${index + 1}
+      </button>
+    `).join("");
+    return `
+      <div class="voice-step-row" data-voice-step-row="${kind}">
+        <span>${label}</span>
+        <div class="voice-step-buttons">${buttons}</div>
+      </div>
+    `;
+  }).join("");
+  voiceStepSequencer.innerHTML = rows;
+}
+
+function syncVoiceMiniPresetButtons() {
+  if (!voiceMiniPresetGrid) return;
+  voiceMiniPresetGrid.querySelectorAll("[data-voice-mini-preset]").forEach((button) => {
+    const active = String(button.getAttribute("data-voice-mini-preset") || "") === voiceMiniActivePreset;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function toggleVoiceMiniStep(kind = "", step = 0) {
+  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
+  voiceMiniActivePreset = "";
+  const index = Math.max(0, Math.min(7, Math.round(Number(step) || 0)));
+  const steps = voiceMiniPatternSteps(kind);
+  steps[index] = steps[index] ? 0 : 1;
+  renderVoiceMiniSequencer();
+  syncVoiceMiniPresetButtons();
+  if (voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniStepChanged", {
+      pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`),
+      step: index + 1
+    });
+  }
+}
+
+function applyVoiceMiniPreset(presetName = "techno") {
+  const preset = VOICE_MINI_PRESETS[presetName] || VOICE_MINI_PRESETS.techno;
+  voiceMiniActivePreset = VOICE_MINI_PRESETS[presetName] ? presetName : "techno";
+  voiceMiniPattern = cloneVoiceMiniPattern(preset.pattern);
+  updateVoiceMiniBpm(preset.bpm, { announce: false });
+  updateVoiceMiniSwing(preset.swing, { announce: false });
+  renderVoiceMiniSequencer();
+  syncVoiceMiniPresetButtons();
+  voiceMiniPadState.kick = true;
+  voiceMiniPadState.bass = true;
+  voiceMiniPadState.hat = true;
+  voiceMiniPadState.clap = presetName !== "ambient";
+  voiceMiniPadState.synth = true;
+  voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
+  syncVoicePadButtons();
+  if (voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniPresetApplied", {
+      preset: t(`voiceMiniPreset${presetName.charAt(0).toUpperCase()}${presetName.slice(1)}`)
+    });
+  }
+  if (voiceMiniTrackPlaying) {
+    refreshVoiceMiniOutputBus();
+  }
+}
+
 function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
   voiceMiniBpm = clampVoiceMiniBpm(value);
   if (voiceMiniBpmSlider) {
@@ -13763,12 +14040,43 @@ function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
   if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniBpmChanged", { bpm: voiceMiniBpm });
 }
 
+function updateVoiceMiniSwing(value = voiceMiniSwingAmount, { announce = false } = {}) {
+  voiceMiniSwingAmount = clampVoiceMiniSwing(value);
+  if (voiceMiniSwingSlider) {
+    voiceMiniSwingSlider.value = String(voiceMiniSwingAmount);
+    voiceMiniSwingSlider.setAttribute("aria-valuenow", String(voiceMiniSwingAmount));
+  }
+  if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
+  if (announce && voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
+      control: t("voiceMiniSwingLabel"),
+      value: voiceMiniSwingAmount
+    });
+  }
+}
+
 function clampVoiceMiniVoiceLevel(value) {
   return clampVoiceMiniPercent(value, 100, 260, 155);
 }
 
 function voiceMiniVoiceLevelGain() {
   return clampVoiceMiniVoiceLevel(voiceMiniVoiceLevel) / 100;
+}
+
+function clampVoiceMiniVoiceLength(value) {
+  return clampVoiceMiniPercent(value, 30, 150, 100);
+}
+
+function voiceMiniVoiceLengthRatio() {
+  return clampVoiceMiniVoiceLength(voiceMiniVoiceLength) / 100;
+}
+
+function clampVoiceMiniSynthLevel(value) {
+  return clampVoiceMiniPercent(value, 0, 100, 55);
+}
+
+function voiceMiniSynthGain() {
+  return clampVoiceMiniSynthLevel(voiceMiniSynthLevel) / 100;
 }
 
 function refreshVoiceMiniOutputBus(ctx = audioContext) {
@@ -13780,19 +14088,19 @@ function refreshVoiceMiniOutputBus(ctx = audioContext) {
   const globalVolume = Math.max(0.72, Math.min(1.28, audioVolume || 0.92));
 
   if (voiceMiniOutputBus.post?.gain) {
-    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume, now, 0.035);
+    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * 1.08, now, 0.035);
   }
   if (voiceMiniOutputBus.shaper) {
     voiceMiniOutputBus.shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
   }
   if (voiceMiniOutputBus.delay?.delayTime) {
-    voiceMiniOutputBus.delay.delayTime.setTargetAtTime(0.16 + delayAmount * 0.18, now, 0.04);
+    voiceMiniOutputBus.delay.delayTime.setTargetAtTime(0.12 + delayAmount * 0.22, now, 0.04);
   }
   if (voiceMiniOutputBus.feedback?.gain) {
-    voiceMiniOutputBus.feedback.gain.setTargetAtTime(delayAmount * 0.34, now, 0.04);
+    voiceMiniOutputBus.feedback.gain.setTargetAtTime(delayAmount * 0.42, now, 0.04);
   }
   if (voiceMiniOutputBus.delayWet?.gain) {
-    voiceMiniOutputBus.delayWet.gain.setTargetAtTime(delayAmount * 0.34, now, 0.04);
+    voiceMiniOutputBus.delayWet.gain.setTargetAtTime(delayAmount * 0.38, now, 0.04);
   }
   if (voiceMiniOutputBus.phaser?.frequency) {
     voiceMiniOutputBus.phaser.frequency.setTargetAtTime(520 + phaserAmount * 920, now, 0.04);
@@ -13819,6 +14127,23 @@ function updateVoiceMiniVoiceLevel(value = voiceMiniVoiceLevel, { announce = fal
   }
   if (announce && voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniVoiceLevelChanged", { level: voiceMiniVoiceLevel });
+  }
+}
+
+function updateVoiceMiniVoiceLength(value = voiceMiniVoiceLength, { announce = false } = {}) {
+  voiceMiniVoiceLength = clampVoiceMiniVoiceLength(value);
+  if (voiceMiniVoiceLengthSlider) {
+    voiceMiniVoiceLengthSlider.value = String(voiceMiniVoiceLength);
+    voiceMiniVoiceLengthSlider.setAttribute("aria-valuenow", String(voiceMiniVoiceLength));
+  }
+  if (voiceMiniVoiceLengthValue) {
+    voiceMiniVoiceLengthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniVoiceLength });
+  }
+  if (announce && voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
+      control: t("voiceMiniVoiceLengthLabel"),
+      value: voiceMiniVoiceLength
+    });
   }
 }
 
@@ -13917,6 +14242,20 @@ function updateVoiceMiniBeatmasher(value = voiceMiniBeatmasherAmount, options = 
   });
 }
 
+function updateVoiceMiniSynth(value = voiceMiniSynthLevel, options = {}) {
+  updateVoiceMiniPercentControl({
+    value,
+    setter: (next) => { voiceMiniSynthLevel = next; },
+    slider: voiceMiniSynthSlider,
+    valueEl: voiceMiniSynthValue,
+    min: 0,
+    max: 100,
+    fallback: 55,
+    labelKey: "voiceMiniSynthLabel",
+    ...options
+  });
+}
+
 function updateVoiceLabUi() {
   const isRecording = voiceRecorder && voiceRecorder.state === "recording";
   const hasRecording = Boolean(voiceRecordingBlob);
@@ -13941,6 +14280,7 @@ function syncVoicePadButtons() {
     bass: voicePadBassBtn,
     hat: voicePadHatBtn,
     clap: voicePadClapBtn,
+    synth: voicePadSynthBtn,
     voice: voicePadVoiceBtn
   };
   Object.entries(buttons).forEach(([kind, button]) => {
@@ -14109,14 +14449,14 @@ async function getNormalizedVoiceBuffer(ctx) {
   }
   const rms = sampleCount > 0 ? Math.sqrt(sumSquares / sampleCount) : 0;
   const peakBoost = peak > 0.0001 ? 1.26 / peak : 1;
-  const rmsBoost = rms > 0.0001 ? 0.24 / rms : 1;
-  const boost = Math.max(1, Math.min(18, peakBoost, rmsBoost));
+  const rmsBoost = rms > 0.0001 ? 0.34 / rms : 1;
+  const boost = Math.max(1.25, Math.min(24, peakBoost, rmsBoost));
   for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
     const source = decoded.getChannelData(channel);
     const target = normalized.getChannelData(channel);
     for (let i = 0; i < source.length; i += 1) {
       const amplified = source[i] * boost;
-      target[i] = Math.tanh(amplified * 1.08);
+      target[i] = Math.tanh(amplified * 1.18);
     }
   }
   voiceRecordingNormalizedBuffer = normalized;
@@ -14164,6 +14504,7 @@ function stopVoiceMiniTrack({ silent = false } = {}) {
     bass: false,
     hat: false,
     clap: false,
+    synth: false,
     voice: false
   };
   if (!silent && voiceMiniStatus) voiceMiniStatus.textContent = voiceRecordingBlob ? t("voiceMiniDone") : t("voiceMiniReady");
@@ -14213,15 +14554,15 @@ function connectVoiceMiniOutputBus(ctx, { preview = false } = {}) {
   phaser.type = "allpass";
   phaser.frequency.value = 520 + phaserAmount * 920;
   phaser.Q.value = 3.5 + phaserAmount * 5;
-  delay.delayTime.value = 0.16 + delayAmount * 0.18;
-  feedback.gain.value = delayAmount * 0.34;
-  delayWet.gain.value = delayAmount * (preview ? 0.22 : 0.34);
-  compressor.threshold.value = preview ? -18 : -16;
-  compressor.knee.value = 16;
-  compressor.ratio.value = preview ? 3.2 : 3.8;
+  delay.delayTime.value = 0.12 + delayAmount * 0.22;
+  feedback.gain.value = delayAmount * 0.42;
+  delayWet.gain.value = delayAmount * (preview ? 0.26 : 0.38);
+  compressor.threshold.value = preview ? -20 : -18;
+  compressor.knee.value = 18;
+  compressor.ratio.value = preview ? 3.6 : 4.6;
   compressor.attack.value = 0.002;
-  compressor.release.value = 0.18;
-  post.gain.value = (preview ? 0.82 : 1) * masterAmount * globalVolume;
+  compressor.release.value = 0.16;
+  post.gain.value = (preview ? 0.9 : 1.08) * masterAmount * globalVolume;
 
   input.connect(master);
   master.connect(shaper);
@@ -14272,25 +14613,25 @@ function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) 
   const click = trackVoiceMiniNode(ctx.createBufferSource());
   const clickGain = trackVoiceMiniNode(ctx.createGain());
   const clickFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (accent ? 1.22 : 0.98) * Math.max(0.62, Math.min(1.3, audioVolume || 0.95));
+  const level = (accent ? 1.42 : 1.16) * Math.max(0.68, Math.min(1.38, audioVolume || 0.95));
 
   osc.type = "sine";
-  osc.frequency.setValueAtTime(148, time);
-  osc.frequency.exponentialRampToValueAtTime(54, time + 0.055);
-  osc.frequency.exponentialRampToValueAtTime(38, end);
+  osc.frequency.setValueAtTime(172, time);
+  osc.frequency.exponentialRampToValueAtTime(58, time + 0.048);
+  osc.frequency.exponentialRampToValueAtTime(36, end);
   bodyFilter.type = "lowpass";
-  bodyFilter.frequency.value = 420;
-  bodyFilter.Q.value = 0.75;
+  bodyFilter.frequency.value = 560;
+  bodyFilter.Q.value = 0.9;
   bodyGain.gain.setValueAtTime(0.0001, time);
   bodyGain.gain.exponentialRampToValueAtTime(level, time + 0.006);
-  bodyGain.gain.exponentialRampToValueAtTime(level * 0.28, time + 0.075);
+  bodyGain.gain.exponentialRampToValueAtTime(level * 0.36, time + 0.085);
   bodyGain.gain.exponentialRampToValueAtTime(0.0001, end);
 
   click.buffer = createMiniNoiseBuffer(ctx, 0.04);
   clickFilter.type = "highpass";
-  clickFilter.frequency.value = 2200;
+  clickFilter.frequency.value = 2600;
   clickGain.gain.setValueAtTime(0.0001, time);
-  clickGain.gain.exponentialRampToValueAtTime(level * 0.2, time + 0.004);
+  clickGain.gain.exponentialRampToValueAtTime(level * 0.25, time + 0.004);
   clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.032);
 
   osc.connect(bodyFilter);
@@ -14311,7 +14652,7 @@ function scheduleVoiceMiniHat(ctx, destination, time, { open = false, pan = 0 } 
   const gain = trackVoiceMiniNode(ctx.createGain());
   const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const lowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (open ? 0.34 : 0.2) * Math.max(0.55, Math.min(1.25, audioVolume || 0.95));
+  const level = (open ? 0.42 : 0.25) * Math.max(0.58, Math.min(1.3, audioVolume || 0.95));
 
   source.buffer = createMiniNoiseBuffer(ctx, duration);
   highpass.type = "highpass";
@@ -14335,7 +14676,7 @@ function scheduleVoiceMiniClap(ctx, destination, time, { accent = false, pan = 0
   const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const bandpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const duration = 0.145;
-  const level = (accent ? 0.48 : 0.36) * Math.max(0.58, Math.min(1.28, audioVolume || 0.95));
+  const level = (accent ? 0.58 : 0.43) * Math.max(0.62, Math.min(1.32, audioVolume || 0.95));
 
   source.buffer = createMiniNoiseBuffer(ctx, duration);
   highpass.type = "highpass";
@@ -14366,28 +14707,40 @@ function scheduleVoiceMiniDrums(ctx, destination, start, beat, duration) {
 }
 
 function scheduleVoiceMiniKickLoop(ctx, destination, start, beat, barIndex = 0) {
-  for (let step = 0; step < 4; step += 1) {
-    scheduleVoiceMiniKick(ctx, destination, start + step * beat, { accent: step === 0 && barIndex % 4 === 0 });
+  for (let step = 0; step < 8; step += 1) {
+    if (!voiceMiniPatternActive("kick", step)) continue;
+    scheduleVoiceMiniKick(ctx, destination, voiceMiniStepBeatTime(start, beat, step), {
+      accent: step === 0 && barIndex % 4 === 0
+    });
+  }
+  if (barIndex % 4 === 3 && voiceMiniPatternActive("kick", 7)) {
+    scheduleVoiceMiniKick(ctx, destination, start + beat * 3.5 + voiceMiniSwingOffset(beat) * 0.5, { accent: false });
   }
 }
 
 function scheduleVoiceMiniHatLoop(ctx, destination, start, beat, barIndex = 0) {
   for (let step = 0; step < 8; step += 1) {
-    const time = start + step * beat * 0.5;
-    const open = step % 2 === 1;
+    if (!voiceMiniPatternActive("hat", step)) continue;
+    const time = voiceMiniStepBeatTime(start, beat, step);
+    const open = step % 2 === 1 || (barIndex % 4 === 3 && step === 7);
     const pan = step % 4 === 1 ? -0.22 : step % 4 === 3 ? 0.22 : 0;
     scheduleVoiceMiniHat(ctx, destination, time, { open, pan });
   }
-  if (barIndex % 2 === 1) {
-    scheduleVoiceMiniHat(ctx, destination, start + beat * 3.75, { open: true, pan: 0.18 });
+  if (barIndex % 2 === 1 && voiceMiniPatternActive("hat", 7)) {
+    scheduleVoiceMiniHat(ctx, destination, start + beat * 3.75 + voiceMiniSwingOffset(beat) * 0.4, { open: true, pan: 0.18 });
   }
 }
 
 function scheduleVoiceMiniClapLoop(ctx, destination, start, beat, barIndex = 0) {
-  scheduleVoiceMiniClap(ctx, destination, start + beat, { accent: barIndex % 4 === 0, pan: -0.08 });
-  scheduleVoiceMiniClap(ctx, destination, start + beat * 3, { pan: 0.08 });
-  if (barIndex % 2 === 1) {
-    scheduleVoiceMiniClap(ctx, destination, start + beat * 3.5, { pan: 0.18 });
+  for (let step = 0; step < 8; step += 1) {
+    if (!voiceMiniPatternActive("clap", step)) continue;
+    scheduleVoiceMiniClap(ctx, destination, voiceMiniStepBeatTime(start, beat, step), {
+      accent: step === 2 && barIndex % 4 === 0,
+      pan: step % 4 === 2 ? -0.08 : 0.08
+    });
+  }
+  if (barIndex % 2 === 1 && voiceMiniPatternActive("clap", 7)) {
+    scheduleVoiceMiniClap(ctx, destination, start + beat * 3.5 + voiceMiniSwingOffset(beat) * 0.5, { pan: 0.18 });
   }
 }
 
@@ -14402,21 +14755,22 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
     const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
     const subGain = trackVoiceMiniNode(ctx.createGain());
     const gritGain = trackVoiceMiniNode(ctx.createGain());
-    const level = 0.46 * Math.max(0.58, Math.min(1.28, audioVolume || 0.95));
+    const level = 0.6 * Math.max(0.62, Math.min(1.34, audioVolume || 0.95));
 
     filter.type = "lowpass";
-    filter.frequency.setValueAtTime(i % 4 === 0 ? 320 : 240, time);
-    filter.frequency.exponentialRampToValueAtTime(130, time + beat * 0.62);
-    filter.Q.value = 1.15;
+    filter.frequency.setValueAtTime(i % 4 === 0 ? 480 : 310, time);
+    filter.frequency.exponentialRampToValueAtTime(145, time + beat * 0.68);
+    filter.Q.value = 1.45;
     sub.type = "sine";
     grit.type = i % 3 === 0 ? "sawtooth" : "square";
     sub.frequency.value = note;
     grit.frequency.value = note * 2;
     subGain.gain.value = 0.88;
-    gritGain.gain.value = 0.18;
+    gritGain.gain.value = 0.24;
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime(level, time + 0.016);
-    gain.gain.exponentialRampToValueAtTime(level * 0.34, time + beat * 0.34);
+    gain.gain.exponentialRampToValueAtTime(level * 0.72, time + 0.018);
+    gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.16);
+    gain.gain.exponentialRampToValueAtTime(level * 0.38, time + beat * 0.42);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.82);
     sub.connect(subGain);
     grit.connect(gritGain);
@@ -14431,45 +14785,122 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
   }
 }
 
+function scheduleVoiceMiniBassHit(ctx, destination, time, beat, note, { accent = false, step = 0 } = {}) {
+  const sub = trackVoiceMiniNode(ctx.createOscillator());
+  const grit = trackVoiceMiniNode(ctx.createOscillator());
+  const gain = trackVoiceMiniNode(ctx.createGain());
+  const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const subGain = trackVoiceMiniNode(ctx.createGain());
+  const gritGain = trackVoiceMiniNode(ctx.createGain());
+  const level = (accent ? 0.72 : 0.5) * Math.max(0.62, Math.min(1.34, audioVolume || 0.95));
+
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(accent ? 540 : 340, time);
+  filter.frequency.exponentialRampToValueAtTime(138, time + beat * 0.58);
+  filter.Q.value = 1.55;
+  sub.type = "sine";
+  grit.type = step % 3 === 0 ? "sawtooth" : "square";
+  sub.frequency.value = note;
+  grit.frequency.value = note * 2;
+  subGain.gain.value = 0.94;
+  gritGain.gain.value = 0.24;
+  gain.gain.setValueAtTime(0.0001, time);
+  gain.gain.exponentialRampToValueAtTime(level * 0.68, time + 0.014);
+  gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.12);
+  gain.gain.exponentialRampToValueAtTime(level * 0.28, time + beat * 0.34);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.54);
+  sub.connect(subGain);
+  grit.connect(gritGain);
+  subGain.connect(filter);
+  gritGain.connect(filter);
+  filter.connect(gain);
+  gain.connect(destination);
+  sub.start(time);
+  grit.start(time);
+  sub.stop(time + beat * 0.62);
+  grit.stop(time + beat * 0.62);
+}
+
 function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) {
   const notes = barIndex % 4 === 3
-    ? [49, 55, 65.41, 73.42]
-    : [49, 49, 55, 49];
-  for (let step = 0; step < 4; step += 1) {
-    const time = start + step * beat;
-    const note = notes[step % notes.length];
-    const sub = trackVoiceMiniNode(ctx.createOscillator());
-    const grit = trackVoiceMiniNode(ctx.createOscillator());
-    const gain = trackVoiceMiniNode(ctx.createGain());
-    const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
-    const subGain = trackVoiceMiniNode(ctx.createGain());
-    const gritGain = trackVoiceMiniNode(ctx.createGain());
-    const level = (step === 0 ? 0.52 : 0.4) * Math.max(0.58, Math.min(1.28, audioVolume || 0.95));
+    ? [49, 55, 49, 65.41, 49, 55, 73.42, 55]
+    : [49, 49, 55, 49, 49, 65.41, 55, 49];
+  for (let step = 0; step < 8; step += 1) {
+    if (!voiceMiniPatternActive("bass", step)) continue;
+    scheduleVoiceMiniBassHit(ctx, destination, voiceMiniStepBeatTime(start, beat, step), beat, notes[step % notes.length], {
+      accent: step === 0,
+      step
+    });
+  }
+}
 
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(step === 0 ? 360 : 270, time);
-    filter.frequency.exponentialRampToValueAtTime(120, time + beat * 0.74);
-    filter.Q.value = 1.25;
-    sub.type = "sine";
-    grit.type = step % 3 === 0 ? "sawtooth" : "square";
-    sub.frequency.value = note;
-    grit.frequency.value = note * 2;
-    subGain.gain.value = 0.92;
-    gritGain.gain.value = 0.2;
-    gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime(level, time + 0.014);
-    gain.gain.exponentialRampToValueAtTime(level * 0.34, time + beat * 0.38);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.88);
-    sub.connect(subGain);
-    grit.connect(gritGain);
-    subGain.connect(filter);
-    gritGain.connect(filter);
-    filter.connect(gain);
-    gain.connect(destination);
-    sub.start(time);
-    grit.start(time);
-    sub.stop(time + beat * 0.92);
-    grit.stop(time + beat * 0.92);
+function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { level = 0.44, pan = 0, detune = 0 } = {}) {
+  const osc = trackVoiceMiniNode(ctx.createOscillator());
+  const shimmer = trackVoiceMiniNode(ctx.createOscillator());
+  const gain = trackVoiceMiniNode(ctx.createGain());
+  const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const width = trackVoiceMiniNode(ctx.createGain());
+  const duration = Math.max(beat * 0.42, Math.min(beat * 1.72, beat * (1.08 + voiceMiniSynthGain() * 0.78)));
+  const synthAmount = voiceMiniSynthGain();
+  const globalLevel = Math.max(0.58, Math.min(1.28, audioVolume || 0.95));
+
+  osc.type = "sawtooth";
+  shimmer.type = "triangle";
+  osc.frequency.value = frequency;
+  shimmer.frequency.value = frequency * 2.005;
+  osc.detune.value = detune - 4;
+  shimmer.detune.value = detune + 7;
+  width.gain.value = 0.38;
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(720 + synthAmount * 2100, time);
+  filter.frequency.exponentialRampToValueAtTime(360 + synthAmount * 780, time + duration);
+  filter.Q.value = 2.6 + synthAmount * 5.4;
+  gain.gain.setValueAtTime(0.0001, time);
+  gain.gain.linearRampToValueAtTime(level * synthAmount * globalLevel, time + Math.min(0.08, beat * 0.18));
+  gain.gain.setValueAtTime(level * synthAmount * globalLevel * 0.82, time + Math.max(0.1, duration - 0.16));
+  gain.gain.linearRampToValueAtTime(0.0001, time + duration);
+
+  osc.connect(filter);
+  shimmer.connect(width);
+  width.connect(filter);
+  filter.connect(gain);
+  connectMiniNode(ctx, gain, destination, pan);
+  osc.start(time);
+  shimmer.start(time);
+  osc.stop(time + duration + 0.04);
+  shimmer.stop(time + duration + 0.04);
+}
+
+function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0) {
+  const synthAmount = voiceMiniSynthGain();
+  if (synthAmount <= 0.02) return;
+  const progressions = [
+    [220, 261.63, 329.63],
+    [196, 246.94, 329.63],
+    [164.81, 220, 261.63],
+    [196, 246.94, 293.66]
+  ];
+  const chord = progressions[barIndex % progressions.length];
+  const root = chord[0] / 2;
+  for (let step = 0; step < 8; step += 1) {
+    if (!voiceMiniPatternActive("synth", step)) continue;
+    const time = voiceMiniStepBeatTime(start, beat, step);
+    if (step % 4 === 0) {
+      chord.forEach((frequency, index) => {
+        scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, {
+          level: index === 0 ? 0.22 : 0.16,
+          pan: index === 1 ? -0.18 : index === 2 ? 0.2 : 0,
+          detune: index * 3
+        });
+      });
+    } else {
+      const note = step % 2 ? root * 3 : chord[(step + barIndex) % chord.length] * 1.5;
+      scheduleVoiceMiniSynthVoice(ctx, destination, time, note, beat, {
+        level: 0.16 + synthAmount * 0.08,
+        pan: step % 2 ? 0.22 : -0.18,
+        detune: step % 2 ? 6 : -6
+      });
+    }
   }
 }
 
@@ -14517,49 +14948,70 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
 
 function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, barIndex = 0) {
   if (!voiceBuffer) return;
+  const activeVoiceSteps = voiceMiniPatternSteps("voice")
+    .map((active, index) => active ? index : -1)
+    .filter((index) => index >= 0);
+  if (!activeVoiceSteps.length) return;
   const safeDuration = Math.max(0.1, Number(voiceBuffer.duration) || 0.1);
   const barDuration = beat * 4;
-  const phraseDuration = Math.min(safeDuration, Math.max(beat * 2.4, barDuration * 0.92));
+  const lengthRatio = voiceMiniVoiceLengthRatio();
+  const phraseBars = safeDuration * lengthRatio > barDuration * 1.08 ? 2 : 1;
+  const shouldPlayMainPhrase = phraseBars === 1 || barIndex % 2 === 0;
+  const phraseDuration = Math.min(
+    safeDuration,
+    Math.max(beat * 1.2, barDuration * (phraseBars === 2 ? 1.82 : 0.94) * lengthRatio)
+  );
   const availableOffset = Math.max(0, safeDuration - phraseDuration);
-  const phraseOffset = availableOffset > 0 ? availableOffset * ((barIndex % 4) / 4) : 0;
+  const phraseOffset = availableOffset > 0 ? availableOffset * ((Math.floor(barIndex / phraseBars) % 4) / 4) : 0;
   const sourceDuration = Math.max(0.08, Math.min(phraseDuration, safeDuration - phraseOffset));
-  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.84, Math.min(1.34, audioVolume || 0.96));
+  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.92, Math.min(1.48, audioVolume || 0.96));
   const beatmasherAmount = clampVoiceMiniPercent(voiceMiniBeatmasherAmount, 0, 100, 20) / 100;
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  const source = trackVoiceMiniNode(ctx.createBufferSource());
-  const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const gain = trackVoiceMiniNode(ctx.createGain());
+  const firstVoiceStep = activeVoiceSteps[0] || 0;
+  const phraseStart = voiceMiniStepBeatTime(start, beat, firstVoiceStep);
 
-  voiceBus.gain.value = 1.58;
-  bodyFilter.type = "highpass";
-  bodyFilter.frequency.value = 82;
-  bodyFilter.Q.value = 0.52;
-  source.buffer = voiceBuffer;
-  source.playbackRate.value = barIndex % 4 === 2 ? 1.02 : 1;
-  gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.linearRampToValueAtTime(1.08 * voicePresence, start + 0.03);
-  gain.gain.setValueAtTime(0.96 * voicePresence, start + Math.max(0.05, sourceDuration - 0.16));
-  gain.gain.linearRampToValueAtTime(0.0001, start + sourceDuration);
-  connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, bodyFilter);
-  bodyFilter.connect(gain);
-  connectMiniNode(ctx, gain, voiceBus, barIndex % 2 ? -0.08 : 0.08);
+  voiceBus.gain.value = 1.92;
   voiceBus.connect(destination);
-  source.start(start, phraseOffset, sourceDuration);
-  source.stop(start + sourceDuration + 0.04);
+  if (shouldPlayMainPhrase) {
+    const source = trackVoiceMiniNode(ctx.createBufferSource());
+    const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
+    const presenceFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
+    const gain = trackVoiceMiniNode(ctx.createGain());
 
-  if (safeDuration > beat * 0.7 && barIndex % 2 === 1) {
-    const sliceDuration = Math.min(0.38, Math.max(0.18, beat * 0.6));
+    bodyFilter.type = "highpass";
+    bodyFilter.frequency.value = 72;
+    bodyFilter.Q.value = 0.52;
+    presenceFilter.type = "peaking";
+    presenceFilter.frequency.value = 2800;
+    presenceFilter.Q.value = 1.1;
+    presenceFilter.gain.value = 3.8;
+    source.buffer = voiceBuffer;
+    source.playbackRate.value = barIndex % 4 === 2 ? 1.015 : 1;
+    gain.gain.setValueAtTime(0.0001, phraseStart);
+    gain.gain.linearRampToValueAtTime(1.24 * voicePresence, phraseStart + 0.028);
+    gain.gain.setValueAtTime(1.08 * voicePresence, phraseStart + Math.max(0.08, sourceDuration - 0.16));
+    gain.gain.linearRampToValueAtTime(0.0001, phraseStart + sourceDuration);
+    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, bodyFilter);
+    bodyFilter.connect(presenceFilter);
+    presenceFilter.connect(gain);
+    connectMiniNode(ctx, gain, voiceBus, barIndex % 2 ? -0.08 : 0.08);
+    source.start(phraseStart, phraseOffset, sourceDuration);
+    source.stop(phraseStart + sourceDuration + 0.05);
+  }
+
+  if (safeDuration > beat * 0.7 && barIndex % 2 === 1 && lengthRatio <= 1.25 && activeVoiceSteps.length > 1) {
+    const sliceDuration = Math.min(0.42, Math.max(0.12, beat * 0.6 * Math.max(0.72, lengthRatio)));
     const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
-    [2.55, 3.42].forEach((step, index) => {
-      const time = start + step * beat;
+    activeVoiceSteps.slice(1, 4).forEach((step, index) => {
+      const time = voiceMiniStepBeatTime(start, beat, step);
       if (time + sliceDuration > start + barDuration) return;
       const chop = trackVoiceMiniNode(ctx.createBufferSource());
       const chopGain = trackVoiceMiniNode(ctx.createGain());
-      const offset = availableChopOffset * (index ? 0.62 : 0.18);
+      const offset = availableChopOffset * ((index + 1) / Math.max(2, activeVoiceSteps.length));
       chop.buffer = voiceBuffer;
       chop.playbackRate.value = index ? 0.96 : 1.06;
       chopGain.gain.setValueAtTime(0.0001, time);
-      chopGain.gain.linearRampToValueAtTime(0.46 * voicePresence, time + 0.016);
+      chopGain.gain.linearRampToValueAtTime(0.58 * voicePresence, time + 0.016);
       chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
       connectVoiceEffectGraph(ctx, chop, selectedVoiceEffect, chopGain);
       connectMiniNode(ctx, chopGain, voiceBus, index ? -0.16 : 0.18);
@@ -14574,14 +15026,15 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
     const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
     const baseOffset = availableChopOffset * ((barIndex % 3) / 3);
     for (let i = 0; i < repeats; i += 1) {
-      const time = start + beat * (3.03 + i * 0.18);
+      const anchorStep = activeVoiceSteps[(i + 1) % activeVoiceSteps.length] || 7;
+      const time = voiceMiniStepBeatTime(start, beat, anchorStep) + beat * 0.05 * i;
       if (time + sliceDuration > start + barDuration) break;
       const mash = trackVoiceMiniNode(ctx.createBufferSource());
       const mashGain = trackVoiceMiniNode(ctx.createGain());
       mash.buffer = voiceBuffer;
       mash.playbackRate.value = 1 + beatmasherAmount * 0.28;
       mashGain.gain.setValueAtTime(0.0001, time);
-      mashGain.gain.linearRampToValueAtTime((0.24 + beatmasherAmount * 0.36) * voicePresence, time + 0.012);
+      mashGain.gain.linearRampToValueAtTime((0.3 + beatmasherAmount * 0.42) * voicePresence, time + 0.012);
       mashGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
       connectVoiceEffectGraph(ctx, mash, selectedVoiceEffect, mashGain);
       connectMiniNode(ctx, mashGain, voiceBus, i % 2 ? -0.22 : 0.22);
@@ -14649,6 +15102,7 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
       if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       if (voiceMiniPadState.clap) scheduleVoiceMiniClapLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
+      if (voiceMiniPadState.synth) scheduleVoiceMiniSynthLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       if (voiceMiniPadState.voice && voiceMiniVoiceBuffer) {
         scheduleVoiceMiniVoiceLoop(ctx, voiceMiniVoiceBuffer, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
       }
@@ -14712,6 +15166,8 @@ async function previewVoiceDawPad(kind = "kick") {
     scheduleVoiceMiniHat(ctx, bus, now, { open: true, pan: 0.18 });
   } else if (kind === "clap") {
     scheduleVoiceMiniClap(ctx, bus, now, { accent: true, pan: 0.08 });
+  } else if (kind === "synth") {
+    scheduleVoiceMiniSynthLoop(ctx, bus, now, beat, 0);
   } else if (kind === "voice") {
     if (!voiceRecordingBlob) {
       setVoiceStatus(t("voiceNeedRecording"));
@@ -14722,7 +15178,7 @@ async function previewVoiceDawPad(kind = "kick") {
     if (!voiceBuffer) return;
     const source = trackVoiceMiniNode(ctx.createBufferSource());
     const gain = trackVoiceMiniNode(ctx.createGain());
-    const previewDuration = Math.min(1.8, Math.max(0.12, voiceBuffer.duration));
+    const previewDuration = Math.min(2.6, Math.max(0.12, voiceBuffer.duration * voiceMiniVoiceLengthRatio()));
     const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.82, Math.min(1.32, audioVolume || 0.96));
     source.buffer = voiceBuffer;
     gain.gain.setValueAtTime(0.0001, now);
@@ -14751,6 +15207,7 @@ async function playVoiceMiniTrack() {
   voiceMiniPadState.bass = true;
   voiceMiniPadState.hat = true;
   voiceMiniPadState.clap = true;
+  voiceMiniPadState.synth = true;
   voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
   syncVoicePadButtons();
   const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
@@ -14759,6 +15216,7 @@ async function playVoiceMiniTrack() {
     voiceMiniPadState.bass = false;
     voiceMiniPadState.hat = false;
     voiceMiniPadState.clap = false;
+    voiceMiniPadState.synth = false;
     voiceMiniPadState.voice = false;
     syncVoicePadButtons();
     updateVoiceLabUi();
@@ -19958,12 +20416,12 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   if (currentLanguage === "en") {
-    return `Create a unique premium abstract artwork for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual language: cinematic neon electronic, layered light, geometric sigils, sonic waveforms, club/rave energy, collectible card cover quality, high detail, clean composition, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create a unique premium psychedelic-spiritual electronic music spirit for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Make one central cosmic musical entity/character, like a mystical sound guardian made of neon waveform energy, sacred geometry, synth light, bass pressure, and club/rave atmosphere. Clean collectible card cover quality, elegant composition, readable at small size, strong silhouette, cinematic neon, high detail, premium finish. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea una obra abstracta premium y única para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Lenguaje visual: electrónica neón cinematográfica, luces en capas, sigilos geométricos, ondas sonoras, energía club/rave, calidad de portada coleccionable, alto detalle, composición limpia, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
+    return `Crea un espíritu de música electrónica psicodélico-espiritual, premium y único para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Haz una entidad/personaje musical cósmico central, como un guardián místico hecho de ondas sonoras neón, geometría sagrada, luz de sintetizador, presión de bajo y atmósfera club/rave. Calidad de portada coleccionable, composición elegante, legible en tamaño pequeño, silueta fuerte, acabado premium. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
   }
-  return `Crie uma arte abstrata premium e única para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Linguagem visual: eletrônico neon cinematográfico, luzes em camadas, sigilos geométricos, ondas sonoras, energia club/rave, qualidade de capa colecionável, alto detalhamento, composição limpa, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
+  return `Crie um espírito de música eletrônica psicodélico-espiritual, premium e único para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Faça uma entidade/personagem musical cósmica central, como um guardião místico feito de ondas sonoras neon, geometria sagrada, luz de sintetizador, pressão de grave e atmosfera club/rave. Qualidade de capa colecionável, composição elegante, legível em tamanho pequeno, silhueta forte, acabamento premium. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
 }
 
 function collectibleVariationToken() {
@@ -20031,31 +20489,70 @@ function buildLocalSpiritCollectibleImage(
   const descriptionLines = splitIntoSvgLines(conciseDescription, 44, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
-  const safeSpiritImage = String(spiritImageDataUrl || "").trim();
-  const hasSpiritImage = /^data:image\//i.test(safeSpiritImage);
-  const spiritInitial = escapeSvgText(spiritTitle.trim().slice(0, 1).toUpperCase() || "S");
   const seed = hashString(`${spirit?.id || "spirit"}::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`);
   const accentX = 24 + (seed % 52);
   const accentY = 18 + ((seed >> 3) % 58);
   const accent2X = 54 + ((seed >> 7) % 38);
   const accent2Y = 42 + ((seed >> 11) % 42);
   const decoRotation = seed % 360;
-  const waveformBars = Array.from({ length: 34 }, (_, index) => {
+  const bodyLean = ((seed % 21) - 10) / 10;
+  const crownPoints = 5 + (seed % 3);
+  const shoulderWidth = 270 + ((seed >> 4) % 90);
+  const auraScale = 0.94 + ((seed >> 8) % 18) / 100;
+  const waveformBars = Array.from({ length: 42 }, (_, index) => {
     const mixed = hashString(`${seed}::wave::${index}::${userSignature}`);
-    const height = 22 + (mixed % 118);
-    const x = 168 + index * 22;
-    const y = 548 - height / 2;
-    const opacity = 0.18 + ((mixed >> 4) % 32) / 100;
-    return `<rect x="${x}" y="${y.toFixed(1)}" width="8" height="${height}" rx="4" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+    const height = 18 + (mixed % 116);
+    const x = 104 + index * 21;
+    const y = 648 - height / 2;
+    const opacity = 0.22 + ((mixed >> 4) % 40) / 100;
+    return `<rect x="${x}" y="${y.toFixed(1)}" width="7" height="${height}" rx="4" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
   }).join("");
-  const microStars = Array.from({ length: 18 }, (_, index) => {
+  const microStars = Array.from({ length: 36 }, (_, index) => {
     const mixed = hashString(`${seed}::star::${index}::${profileSignature}`);
-    const x = 92 + (mixed % 896);
-    const y = 82 + ((mixed >> 6) % 486);
+    const x = 82 + (mixed % 916);
+    const y = 64 + ((mixed >> 6) % 664);
     const radius = 1.6 + ((mixed >> 12) % 28) / 10;
-    const opacity = 0.18 + ((mixed >> 16) % 42) / 100;
+    const opacity = 0.16 + ((mixed >> 16) % 48) / 100;
     return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${escapeSvgText(index % 3 === 0 ? theme.c : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
   }).join("");
+  const crown = Array.from({ length: crownPoints }, (_, index) => {
+    const angle = -68 + (136 / Math.max(1, crownPoints - 1)) * index;
+    const length = 92 + (hashString(`${seed}::crown::${index}`) % 54);
+    const rad = (angle * Math.PI) / 180;
+    const x = 540 + Math.sin(rad) * length;
+    const y = 224 - Math.cos(rad) * length * 0.62;
+    return `<path d="M540 242 L${x.toFixed(1)} ${y.toFixed(1)}" stroke="${escapeSvgText(index % 2 ? theme.b : theme.a)}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.68" />`;
+  }).join("");
+  const constellation = Array.from({ length: 10 }, (_, index) => {
+    const mixed = hashString(`${seed}::node::${index}::${userSignature}`);
+    const x = 250 + (mixed % 580);
+    const y = 148 + ((mixed >> 8) % 470);
+    return `${index ? "L" : "M"}${x} ${y}`;
+  }).join(" ");
+  const glyphRotation = (seed % 28) - 14;
+  const entitySvg = `
+    <g transform="translate(${bodyLean} 0) scale(${auraScale} ${auraScale}) translate(${(1 - auraScale) * 540} ${(1 - auraScale) * 390})">
+      <path d="${constellation}" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-width="1.6" stroke-opacity="0.14" />
+      <g transform="rotate(${decoRotation} 540 382)">
+        <ellipse cx="540" cy="382" rx="292" ry="116" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-opacity="0.34" />
+        <ellipse cx="540" cy="382" rx="214" ry="318" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-width="3" stroke-opacity="0.22" />
+      </g>
+      <g filter="url(#entityGlow)">
+        ${crown}
+        <path d="M${540 - shoulderWidth / 2} 438 C430 338 472 272 540 272 C608 272 650 338 ${540 + shoulderWidth / 2} 438 C640 530 600 620 540 662 C480 620 440 530 ${540 - shoulderWidth / 2} 438 Z" fill="url(#bodyGrad)" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-opacity="0.62" />
+        <path d="M540 296 C596 318 626 372 615 426 C588 390 562 374 540 374 C518 374 492 390 465 426 C454 372 484 318 540 296 Z" fill="url(#maskGrad)" stroke="#e9fbff" stroke-opacity="0.32" stroke-width="2.4" />
+        <circle cx="540" cy="342" r="88" fill="none" stroke="${escapeSvgText(theme.c)}" stroke-width="3" stroke-opacity="0.42" />
+        <circle cx="540" cy="342" r="38" fill="${escapeSvgText(theme.a)}" fill-opacity="0.2" stroke="#eaffff" stroke-width="2" stroke-opacity="0.48" />
+        <path d="M472 454 C505 430 575 430 608 454" fill="none" stroke="#f2ffff" stroke-width="7" stroke-linecap="round" stroke-opacity="0.42" />
+        <path d="M540 386 C512 450 512 540 540 630 C568 540 568 450 540 386 Z" fill="${escapeSvgText(theme.d)}" fill-opacity="0.42" stroke="${escapeSvgText(theme.a)}" stroke-width="3" stroke-opacity="0.42" />
+        <path d="M356 456 C416 502 462 548 498 624 C428 596 368 542 300 472 Z" fill="${escapeSvgText(theme.b)}" fill-opacity="0.18" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.28" stroke-width="3" />
+        <path d="M724 456 C664 502 618 548 582 624 C652 596 712 542 780 472 Z" fill="${escapeSvgText(theme.c)}" fill-opacity="0.18" stroke="${escapeSvgText(theme.c)}" stroke-opacity="0.28" stroke-width="3" />
+      </g>
+      <g transform="rotate(${glyphRotation} 540 392)">
+        <path d="M540 176 L598 244 L540 312 L482 244 Z" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-width="3" stroke-opacity="0.44" />
+        <path d="M540 662 L608 726 L540 790 L472 726 Z" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-width="3" stroke-opacity="0.28" />
+      </g>
+    </g>`;
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -20075,63 +20572,59 @@ function buildLocalSpiritCollectibleImage(
       <stop offset="100%" stop-color="#010813" stop-opacity="0.78" />
     </linearGradient>
     <linearGradient id="textPanel" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#06172f" stop-opacity="0.78" />
-      <stop offset="100%" stop-color="#0b2348" stop-opacity="0.62" />
+      <stop offset="0%" stop-color="#050d20" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#101733" stop-opacity="0.76" />
     </linearGradient>
-    <linearGradient id="spiritPanel" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#071833" stop-opacity="0.9" />
-      <stop offset="100%" stop-color="#1f1140" stop-opacity="0.75" />
+    <linearGradient id="artPanel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#061631" stop-opacity="0.96" />
+      <stop offset="55%" stop-color="#0c1d42" stop-opacity="0.72" />
+      <stop offset="100%" stop-color="#25133e" stop-opacity="0.76" />
     </linearGradient>
-    <linearGradient id="spiritPanelStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="panelStroke" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.72" />
       <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.54" />
     </linearGradient>
+    <linearGradient id="bodyGrad" x1="22%" y1="8%" x2="86%" y2="92%">
+      <stop offset="0%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.92" />
+      <stop offset="52%" stop-color="${escapeSvgText(theme.b)}" stop-opacity="0.44" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.56" />
+    </linearGradient>
+    <radialGradient id="maskGrad" cx="50%" cy="42%" r="64%">
+      <stop offset="0%" stop-color="#f7ffff" stop-opacity="0.84" />
+      <stop offset="44%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.46" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.d)}" stop-opacity="0.18" />
+    </radialGradient>
     <filter id="textShadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#010712" flood-opacity="0.72" />
     </filter>
-    <filter id="spiritGlow" x="-25%" y="-25%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="${escapeSvgText(theme.a)}" flood-opacity="0.42" />
+    <filter id="entityGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="${escapeSvgText(theme.a)}" flood-opacity="0.52" />
+      <feDropShadow dx="0" dy="0" stdDeviation="34" flood-color="${escapeSvgText(theme.c)}" flood-opacity="0.22" />
     </filter>
-    <clipPath id="spiritClip">
-      <rect x="236" y="136" width="608" height="448" rx="36" />
+    <clipPath id="artClip">
+      <rect x="74" y="74" width="932" height="710" rx="54" />
     </clipPath>
     <clipPath id="spiritTextClip">
-      <rect x="120" y="620" width="840" height="364" rx="24" />
+      <rect x="104" y="826" width="872" height="186" rx="28" />
     </clipPath>
   </defs>
-  ${hasBackgroundImage ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="0" y="0" width="1080" height="1080" preserveAspectRatio="xMidYMid slice" opacity="0.22" />` : ""}
   <rect width="1080" height="1080" fill="url(#bg)" />
-  ${hasBackgroundImage ? `<rect width="1080" height="1080" fill="${escapeSvgText(theme.d)}" fill-opacity="0.56" />` : ""}
+  <circle cx="540" cy="386" r="390" fill="url(#halo)" />
   <rect width="1080" height="1080" fill="url(#readabilityScrim)" />
   <rect x="48" y="48" width="984" height="984" rx="46" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.4" stroke-width="4" />
-  <circle cx="540" cy="390" r="268" fill="url(#halo)" />
   <g opacity="0.9">${microStars}</g>
-  <rect x="236" y="136" width="608" height="448" rx="36" fill="url(#spiritPanel)" stroke="url(#spiritPanelStroke)" stroke-width="3" />
-  <g>${waveformBars}</g>
-  <g transform="rotate(${decoRotation} 540 360)">
-    <path d="M540 176 L614 262 L540 348 L466 262 Z" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="3" />
-    <path d="M540 432 L596 492 L540 552 L484 492 Z" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.24" stroke-width="3" />
+  <rect x="74" y="74" width="932" height="710" rx="54" fill="url(#artPanel)" stroke="url(#panelStroke)" stroke-width="3" />
+  <g clip-path="url(#artClip)">
+    ${hasBackgroundImage ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="74" y="74" width="932" height="710" preserveAspectRatio="xMidYMid slice" opacity="0.96" />` : entitySvg}
+    <rect x="74" y="74" width="932" height="710" fill="url(#readabilityScrim)" opacity="${hasBackgroundImage ? "0.2" : "0.1"}" />
+    <g opacity="${hasBackgroundImage ? "0.18" : "0.68"}">${waveformBars}</g>
   </g>
-  <circle cx="540" cy="360" r="182" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.46" stroke-width="4" />
-  <circle cx="540" cy="360" r="126" fill="none" stroke="${escapeSvgText(theme.c)}" stroke-opacity="0.34" stroke-width="3" />
-  ${
-    hasSpiritImage
-      ? `<image href="${escapeSvgText(safeSpiritImage)}" x="236" y="136" width="608" height="448" preserveAspectRatio="xMidYMid meet" clip-path="url(#spiritClip)" filter="url(#spiritGlow)" />`
-      : `<g filter="url(#spiritGlow)">
-          <circle cx="540" cy="360" r="118" fill="${escapeSvgText(theme.a)}" fill-opacity="0.18" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.5" stroke-width="4" />
-          <path d="M540 220 L676 360 L540 500 L404 360 Z" fill="none" stroke="${escapeSvgText(theme.b)}" stroke-opacity="0.5" stroke-width="5" />
-          <text x="540" y="402" fill="#dff7ff" font-size="142" font-family="Syne, Arial, sans-serif" font-weight="700" text-anchor="middle">${spiritInitial}</text>
-        </g>`
-  }
-  <rect x="116" y="612" width="848" height="368" rx="34" fill="url(#textPanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="2.6" />
+  <rect x="92" y="812" width="896" height="216" rx="34" fill="url(#textPanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.34" stroke-width="2.6" />
   <g clip-path="url(#spiritTextClip)">
-    <text x="540" y="700" fill="#f7fcff" font-size="70" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
-    <text x="540" y="762" fill="#f7fcff" font-size="70" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[1] || "")}</text>
-    <text x="540" y="818" fill="#d5edff" font-size="34" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || "")}</text>
-    <text x="540" y="856" fill="#b7dbff" font-size="26" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || "")}</text>
-    <text x="540" y="888" fill="#b7dbff" font-size="26" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[1] || "")}</text>
-    <text x="540" y="926" fill="#b2ffe4" font-size="31" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(rank)} • ${escapeSvgText(`${milestoneLikes} likes`)}</text>
-    <text x="540" y="960" fill="#d8e8ff" font-size="21" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(descriptionLines[0] || "")}</text>
+    <text x="540" y="884" fill="#f7fcff" font-size="60" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[0] || "")}</text>
+    <text x="540" y="938" fill="#f7fcff" font-size="60" font-weight="700" font-family="Syne, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(titleLines[1] || "")}</text>
+    <text x="540" y="974" fill="#b2ffe4" font-size="28" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(subtitleLines[0] || rank)}</text>
+    <text x="540" y="1004" fill="#b7dbff" font-size="22" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || descriptionLines[0] || "")}</text>
   </g>
 </svg>`;
 
@@ -20203,14 +20696,14 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
 }
 
 async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false } = {}) {
-  if (!spiritCollectiblePanel || !spiritCollectibleImage || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return;
+  if (!spiritCollectiblePanel || !spiritCollectibleImage || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return null;
   const likes = totalPositiveLikes();
   if (likes < SPIRIT_UNLOCK_TARGET) {
     spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
     if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
-    return;
+    return null;
   }
 
   const milestone = collectibleMilestoneForLikes(likes);
@@ -20245,7 +20738,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
     if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
-    return;
+    return null;
   }
 
   spiritCollectiblePanel.classList.remove("hidden");
@@ -20307,6 +20800,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     spiritCollectibleShareInstagramBtn.dataset.imageUrl = collectible.imageUrl;
     spiritCollectibleShareInstagramBtn.dataset.filename = shareFilename;
   }
+  return collectible;
 }
 
 function clearSpiritVisual() {
@@ -20595,7 +21089,14 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   });
   const spiritSpotlightPayload = resolveSpiritSpotlightTrack(selectedSpirit);
   const spotlightTrack = renderSpiritSpotlight(spiritSpotlightPayload);
-  await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
+  const collectible = await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
+  if (collectible?.imageUrl) {
+    setImageSourceWithFallback(spiritImage, collectible.imageUrl, selectedSpirit.image || SPIRIT_AVATAR_FALLBACK, {
+      onFallback: () => {
+        setImageSourceWithFallback(spiritImage, selectedSpirit.image, SPIRIT_AVATAR_FALLBACK);
+      }
+    });
+  }
   const spiritNarrative = buildSpiritPanelNarrative(selectedSpirit, spiritText);
 
   const mustAnimate = forceAnimation || wasHidden || changedSpirit || !spiritDescription.textContent.trim();
@@ -24572,6 +25073,19 @@ bind(voicePlayBtn, "click", playVoiceEffect);
 bind(voiceResetBtn, "click", resetVoiceRecording);
 bind(voiceMiniPlayBtn, "click", playVoiceMiniTrack);
 bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
+bind(voiceMiniPresetGrid, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-voice-mini-preset]") : null;
+  if (!target) return;
+  applyVoiceMiniPreset(String(target.getAttribute("data-voice-mini-preset") || "techno"));
+});
+bind(voiceStepSequencer, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-voice-step-kind][data-voice-step-index]") : null;
+  if (!target) return;
+  toggleVoiceMiniStep(
+    String(target.getAttribute("data-voice-step-kind") || ""),
+    Number(target.getAttribute("data-voice-step-index") || 0)
+  );
+});
 bind(voiceMiniBpmSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniBpm(target?.value || voiceMiniBpm, { announce: Boolean(voiceMiniTrackPlaying) });
@@ -24579,6 +25093,14 @@ bind(voiceMiniBpmSlider, "input", (event) => {
 bind(voiceMiniVoiceLevelSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniVoiceLevel(target?.value || voiceMiniVoiceLevel, { announce: Boolean(voiceMiniTrackPlaying) });
+});
+bind(voiceMiniVoiceLengthSlider, "input", (event) => {
+  const target = event.target instanceof HTMLInputElement ? event.target : null;
+  updateVoiceMiniVoiceLength(target?.value || voiceMiniVoiceLength, { announce: Boolean(voiceMiniTrackPlaying) });
+});
+bind(voiceMiniSwingSlider, "input", (event) => {
+  const target = event.target instanceof HTMLInputElement ? event.target : null;
+  updateVoiceMiniSwing(target?.value || voiceMiniSwingAmount, { announce: Boolean(voiceMiniTrackPlaying) });
 });
 bind(voiceMiniMasterSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
@@ -24599,6 +25121,10 @@ bind(voiceMiniPhaserSlider, "input", (event) => {
 bind(voiceMiniBeatmasherSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniBeatmasher(target?.value || voiceMiniBeatmasherAmount, { announce: Boolean(voiceMiniTrackPlaying) });
+});
+bind(voiceMiniSynthSlider, "input", (event) => {
+  const target = event.target instanceof HTMLInputElement ? event.target : null;
+  updateVoiceMiniSynth(target?.value || voiceMiniSynthLevel, { announce: Boolean(voiceMiniTrackPlaying) });
 });
 bind(voiceEffectButtons, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("button[data-voice-effect]") : null;
@@ -25283,6 +25809,7 @@ bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
 bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
 bind(voicePadClapBtn, "click", () => triggerVoiceDawPad("clap"));
+bind(voicePadSynthBtn, "click", () => triggerVoiceDawPad("synth"));
 bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
 
 syncDiscoveryFromSeeds();

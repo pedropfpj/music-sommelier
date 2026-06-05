@@ -12,7 +12,10 @@ module.exports = async function handler(req, res) {
 
   const safePrompt = [
     prompt,
-    "Square 1024x1024 collectible card artwork.",
+    "Square 1024x1024 premium collectible artwork.",
+    "The image must feature one central cosmic electronic music spirit/entity with a strong silhouette, mystical neon waveform energy, sacred geometry, synth light, and psychedelic club atmosphere.",
+    "Make it elegant, polished, readable at small card size, and visually distinct for the provided user signature.",
+    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter.",
     "No readable text, no logos, no real people, no celebrity likeness."
   ].join(" ");
 
@@ -20,7 +23,7 @@ module.exports = async function handler(req, res) {
     const result = await callOpenAiImage({
       prompt: safePrompt,
       size: "1024x1024",
-      quality: "medium"
+      quality: "high"
     });
     if (!result.ok) {
       sendJson(res, result.status || 500, result.payload);
