@@ -9519,7 +9519,7 @@ function addDynamicTrackToCatalog({
     energy: energyFromBpm(bpmNumber || fallbackBpm),
     vocals: "instrumental",
     context: ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
-    vibe: `Faixa descoberta automaticamente para ${styleLabelByValue(style)}.`,
+    vibe: `Garimpei esta faixa porque ela conversa bem com ${styleLabelByValue(style)} e pode abrir um caminho novo no seu gosto.`,
     spotifyUrl: `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
     youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artistName} ${songName}`)}`,
     soundcloudTrackUrl: String(soundcloudTrackUrl || "").trim() || `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`,
@@ -9536,7 +9536,7 @@ function addDynamicTrackToCatalog({
     artistCountry: String(artistCountry || "").trim(),
     artistGenre: String(artistGenre || "").trim(),
     artistProfileHint: String(artistProfileHint || "").trim(),
-    artistBio: String(artistBio || "").trim() || `${artistName} apareceu na busca dinamica para ampliar sua descoberta no subgênero ${styleLabelByValue(style)}.`,
+    artistBio: String(artistBio || "").trim() || `${artistName} entrou no radar como uma pista nova dentro de ${styleLabelByValue(style)}. Use esta faixa como porta de entrada e, se bater, vale ouvir mais do projeto.`,
     labelBio: String(labelBio || "").trim() || buildDynamicLabelSummary(style, cleanLabel),
     source
   };
@@ -10120,8 +10120,8 @@ const I18N = {
     bpm: "BPM",
     bpmRangeLabel: "faixa",
     bpmVerifiedLabel: "validado",
-    bpmApiMetadataLabel: "metadado de API",
-    bpmCatalogReferenceLabel: "referência de catálogo",
+    bpmApiMetadataLabel: "pulso detectado",
+    bpmCatalogReferenceLabel: "pulso de referência",
     bpmUnverifiedLabel: "BPM não verificado",
     bpmEstimatedRange: "estimativa {range}",
     energyPrefix: "Energia",
@@ -10133,12 +10133,12 @@ const I18N = {
     suggestedSubgenre: "Subgênero sugerido",
     styleInfoTitle: "Leitura rápida do subgênero",
     styleInfoBpmLabel: "Faixa típica",
-    styleInfoTip: "Use como referência: BPM e estética variam entre artistas, labels e época.",
-    styleInfoSource: "Referências: guias de gênero (Wikipedia e Beatportal) + curadoria Sonic Search.",
-    styleInfoFallback: "Subgênero com fronteiras flexíveis. A curadoria cruza estética, contexto e BPM para reduzir recomendações fora do estilo.",
+    styleInfoTip: "Use como uma bússola, não como regra fechada.",
+    styleInfoSource: "Cada cena muda conforme artista, label, época e pista.",
+    styleInfoFallback: "Esse subgênero tem bordas flexíveis. Eu olho a sensação da faixa, o pulso e o contexto para evitar escolhas fora do clima.",
     styleInfoCloseAria: "Fechar balão do subgênero",
     genreGuideTitle: "Sobre o subgênero",
-    genreGuideText: "{style}: {summary}",
+    genreGuideText: "Em poucas palavras: {summary}",
     bpmFallbackRelaxed: "Essa faixa usa a faixa típica de BPM do subgênero para manter novas opções sem inventar BPM exato.",
     defaultStats: "Nenhum feedback ainda.",
     stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Conheceu no app: {discoveredInApp} | Avaliações: {ratingCount} | Média: {ratingAvg}",
@@ -10167,16 +10167,16 @@ const I18N = {
     tasteTuneGenerated: "Ajuste aplicado: {label}. Agora estou testando uma nova direção para o seu gosto.",
     tasteTuneFallback: "Não achei uma opção boa nesse ajuste agora. Mantive sua recomendação atual.",
     recommendationWhyTitle: "Por que apareceu",
-    recommendationWhyStyle: "Estilo: {style}",
+    recommendationWhyStyle: "Vibe: {style}",
     recommendationWhyBpm: "Pulso: {bpm}",
-    recommendationWhyNovelty: "Novidade: {status}",
+    recommendationWhyNovelty: "Descoberta: {status}",
     recommendationWhyKnown: "artista conhecido",
-    recommendationWhyNew: "fora do seu radar",
-    recommendationWhyOrigin: "Origem: {origin}",
-    recommendationWhyStrongFit: "Match forte: curadoria confiável",
-    recommendationWhyTextStrong: "Escolhi esta faixa porque ela encaixa em {style}, segura o pulso em {bpm} e tem energia {energy} sem fugir do que você pediu.",
-    recommendationWhyTextContext: "Ela combina com {context}: mantém a energia {energy}, conversa com {style} e ainda abre uma porta para uma descoberta menos óbvia.",
-    recommendationWhyTextDiscovery: "Aqui a ideia foi te tirar um pouco do previsível: {style}, {energy}, com sinal bom o suficiente para valer o teste.",
+    recommendationWhyNew: "nova para você",
+    recommendationWhyOrigin: "Cena: {origin}",
+    recommendationWhyStrongFit: "Boa aposta: sinais fortes",
+    recommendationWhyTextStrong: "Escolhi essa porque ela tem cara de {style}: pulso firme em {bpm}, energia {energy} e aquela sensação de faixa que pode funcionar de verdade na escuta.",
+    recommendationWhyTextContext: "Para {context}, essa entra bem porque segura a energia {energy} sem ficar óbvia demais. Ela fica dentro de {style}, mas ainda abre uma porta nova.",
+    recommendationWhyTextDiscovery: "Aqui a ideia é te mostrar uma rota menos previsível: {style}, energia {energy}, e um sinal musical bom o bastante para merecer play.",
     djModeTitle: "Modo DJ",
     djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
     djModeGenerateBtn: "Criar jornada",
@@ -10196,19 +10196,19 @@ const I18N = {
     voiceMiniPadHint: "Pad acionado: {pad}.",
     voiceMiniPadLoopOn: "Loop ligado: {pad}. Entra no próximo compasso para manter a mini música no tempo.",
     voiceMiniPadLoopOff: "Loop desligado: {pad}.",
-    artistHubIntro: "Bio, gravadora e redes em um só lugar para você decidir se quer seguir explorando.",
+    artistHubIntro: "Um resumo rápido para entender quem é o artista, de onde vem o som e se vale seguir explorando.",
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
     discogsArtistLink: "Buscar artista no Discogs",
-    artistBioAiSource: "Bio refinada por IA com base em: {sources}.",
+    artistBioAiSource: "Bio refinada com apoio de IA e fontes: {sources}.",
     artistBioAiFallbackSource: "catálogo e fontes abertas",
-    artistBioLocalSource: "Leitura curada local. Para bio IA em tempo real, configure OPENAI_API_KEY.",
-    trackAiTitle: "Radar IA da faixa",
+    artistBioLocalSource: "Leitura rápida com os dados que já temos. Quando houver fonte melhor, o app refina automaticamente.",
+    trackAiTitle: "Leitura da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
     trackAiApiSource: "Leitura gerada por IA em tempo real.",
-    trackAiLocalSource: "Leitura local baseada em subgênero, BPM, energia e contexto.",
-    trackAiFallback: "Essa faixa está alinhada ao seu perfil: combine o groove com seu momento e avalie em estrelas para refinar ainda mais.",
+    trackAiLocalSource: "Leitura do Sonic Search baseada no som, no contexto e no seu histórico.",
+    trackAiFallback: "Essa faixa parece conversar com seu momento agora. Ouça o primeiro minuto e diga se bateu; essa resposta melhora muito as próximas escolhas.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
     voiceLabKicker: "Brincadeira sonora",
     voiceLabTitle: "Modifique sua voz",
@@ -10300,7 +10300,7 @@ const I18N = {
     summaryEmptyDisliked: "Ainda sem artistas marcados como não curtidos.",
     listenersSubtitle: "{count} ouvintes da comunidade nas últimas horas (feed local).",
     topListenersTitle: "Top listeners da comunidade",
-    topListenersSubtitle: "Ranking do eixo {style} nas últimas 24h (sinal local).",
+    topListenersSubtitle: "Quem mais ouviu {style} nas últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} pontos",
     topListenerPlays: "{plays} plays",
@@ -10392,7 +10392,7 @@ const I18N = {
     newArtistsFound: "Encontrei {count} artista(s) com lançamento em até 2 anos em {style}.",
     newArtistsNone: "Não foi encontrado nenhum artista novo neste subgênero nos últimos 24 meses.",
     newArtistsReleaseLabel: "Último lançamento",
-    newArtistsGenreLabel: "Eixo de gênero",
+    newArtistsGenreLabel: "Cena sonora",
     catalogInsufficient: "Catálogo insuficiente para {style}. Atual: {tracks}/{targetTracks} faixas, {artists}/{targetArtists} artistas, {labels}/{targetLabels} gravadoras.",
     catalogInsufficientToast: "Catálogo ainda insuficiente para recomendação confiável deste subgênero.",
     catalogFallbackToast: "Cobertura parcial neste subgênero. Vou recomendar com o catálogo local disponível.",
@@ -10597,8 +10597,8 @@ const I18N = {
     bpm: "BPM",
     bpmRangeLabel: "range",
     bpmVerifiedLabel: "verified",
-    bpmApiMetadataLabel: "API metadata",
-    bpmCatalogReferenceLabel: "catalog reference",
+    bpmApiMetadataLabel: "detected pulse",
+    bpmCatalogReferenceLabel: "reference pulse",
     bpmUnverifiedLabel: "BPM unverified",
     bpmEstimatedRange: "estimate {range}",
     energyPrefix: "Energy",
@@ -10610,12 +10610,12 @@ const I18N = {
     suggestedSubgenre: "Suggested subgenre",
     styleInfoTitle: "Subgenre quick guide",
     styleInfoBpmLabel: "Typical range",
-    styleInfoTip: "Use as reference: BPM and aesthetics vary across artists, labels, and eras.",
-    styleInfoSource: "References: genre guides (Wikipedia and Beatportal) + Sonic Search curation.",
-    styleInfoFallback: "Subgenre with flexible boundaries. Curation combines aesthetics, context, and BPM to reduce mismatched recommendations.",
+    styleInfoTip: "Use this as a compass, not a closed rule.",
+    styleInfoSource: "Each scene shifts with artist, label, era, and dancefloor.",
+    styleInfoFallback: "This subgenre has flexible edges. I read the feeling, pulse, and context to avoid picks that drift out of the mood.",
     styleInfoCloseAria: "Close subgenre bubble",
     genreGuideTitle: "About the subgenre",
-    genreGuideText: "{style}: {summary}",
+    genreGuideText: "In plain words: {summary}",
     bpmFallbackRelaxed: "This track uses the subgenre's typical BPM range to keep new options flowing without inventing an exact BPM.",
     defaultStats: "No feedback yet.",
     stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Discovered in app: {discoveredInApp} | Ratings: {ratingCount} | Avg: {ratingAvg}",
@@ -10644,16 +10644,16 @@ const I18N = {
     tasteTuneGenerated: "Tune applied: {label}. Now testing a new direction for your taste.",
     tasteTuneFallback: "I could not find a strong option for that tune right now. Kept your current recommendation.",
     recommendationWhyTitle: "Why this track",
-    recommendationWhyStyle: "Style: {style}",
+    recommendationWhyStyle: "Vibe: {style}",
     recommendationWhyBpm: "Pulse: {bpm}",
-    recommendationWhyNovelty: "Novelty: {status}",
+    recommendationWhyNovelty: "Discovery: {status}",
     recommendationWhyKnown: "known artist",
-    recommendationWhyNew: "outside your radar",
-    recommendationWhyOrigin: "Origin: {origin}",
-    recommendationWhyStrongFit: "Strong match: reliable curation",
-    recommendationWhyTextStrong: "I picked this because it fits {style}, keeps the pulse around {bpm}, and carries {energy} energy without drifting from your request.",
-    recommendationWhyTextContext: "It fits {context}: {energy} energy, a clear {style} direction, and still enough discovery to feel fresh.",
-    recommendationWhyTextDiscovery: "This one is meant to move you slightly outside the obvious: {style}, {energy}, with enough signal to be worth trying.",
+    recommendationWhyNew: "new to you",
+    recommendationWhyOrigin: "Scene: {origin}",
+    recommendationWhyStrongFit: "Good bet: strong signals",
+    recommendationWhyTextStrong: "I picked this because it feels like {style}: steady pulse around {bpm}, {energy} energy, and the kind of track that can actually land in a listening session.",
+    recommendationWhyTextContext: "For {context}, this works because it keeps {energy} energy without becoming too obvious. It stays in {style}, but still opens a fresh door.",
+    recommendationWhyTextDiscovery: "This is a less predictable route: {style}, {energy} energy, and enough musical signal to deserve a play.",
     djModeTitle: "DJ Mode",
     djModeHint: "5-track journey: open, build, peak, twist, close.",
     djModeGenerateBtn: "Create journey",
@@ -10673,19 +10673,19 @@ const I18N = {
     voiceMiniPadHint: "Pad triggered: {pad}.",
     voiceMiniPadLoopOn: "Loop on: {pad}. It lands on the next bar to keep the mini track in time.",
     voiceMiniPadLoopOff: "Loop off: {pad}.",
-    artistHubIntro: "Bio, label, and social links in one place so you can decide what to explore next.",
+    artistHubIntro: "A quick read on who the artist is, where the sound comes from, and whether it is worth exploring further.",
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
     discogsArtistLink: "Find artist on Discogs",
-    artistBioAiSource: "AI-refined bio based on: {sources}.",
+    artistBioAiSource: "Bio refined with AI support and sources: {sources}.",
     artistBioAiFallbackSource: "catalog and open sources",
-    artistBioLocalSource: "Local curated read. Configure OPENAI_API_KEY for real-time AI bios.",
-    trackAiTitle: "Track AI radar",
+    artistBioLocalSource: "Quick read from the data already available. When better sources appear, the app refines it automatically.",
+    trackAiTitle: "Track read",
     trackAiRefreshBtn: "Refresh insight",
     trackAiLoading: "Analyzing your current track and preparing a quick read...",
     trackAiApiSource: "Insight generated by real-time AI.",
-    trackAiLocalSource: "Local insight based on subgenre, BPM, energy, and context.",
-    trackAiFallback: "This track matches your profile. Pair the groove with your current moment and rate it to refine curation.",
+    trackAiLocalSource: "Sonic Search read based on the sound, context, and your history.",
+    trackAiFallback: "This track seems to fit your moment. Play the first minute and tell me if it lands; that feedback sharpens the next picks.",
     trackAiUpdatedToast: "AI insight updated.",
     voiceLabKicker: "Sound playground",
     voiceLabTitle: "Modify your voice",
@@ -10777,7 +10777,7 @@ const I18N = {
     summaryEmptyDisliked: "No disliked artists yet.",
     listenersSubtitle: "{count} community listeners in the last hours (local feed).",
     topListenersTitle: "Top community listeners",
-    topListenersSubtitle: "{style} ranking in the last 24h (local signal).",
+    topListenersSubtitle: "Who listened to {style} the most in the last 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} points",
     topListenerPlays: "{plays} plays",
@@ -11074,8 +11074,8 @@ const I18N = {
     bpm: "BPM",
     bpmRangeLabel: "rango",
     bpmVerifiedLabel: "verificado",
-    bpmApiMetadataLabel: "metadato de API",
-    bpmCatalogReferenceLabel: "referencia de catálogo",
+    bpmApiMetadataLabel: "pulso detectado",
+    bpmCatalogReferenceLabel: "pulso de referencia",
     bpmUnverifiedLabel: "BPM no verificado",
     bpmEstimatedRange: "estimado {range}",
     energyPrefix: "Energía",
@@ -11087,12 +11087,12 @@ const I18N = {
     suggestedSubgenre: "Subgénero sugerido",
     styleInfoTitle: "Guía rápida del subgénero",
     styleInfoBpmLabel: "Rango típico",
-    styleInfoTip: "Úsalo como referencia: BPM y estética varían entre artistas, sellos y épocas.",
-    styleInfoSource: "Referencias: guías de género (Wikipedia y Beatportal) + curaduría Sonic Search.",
-    styleInfoFallback: "Subgénero con fronteras flexibles. La curaduría cruza estética, contexto y BPM para reducir recomendaciones fuera de estilo.",
+    styleInfoTip: "Úsalo como brújula, no como regla cerrada.",
+    styleInfoSource: "Cada escena cambia según artista, sello, época y pista.",
+    styleInfoFallback: "Este subgénero tiene bordes flexibles. Leo la sensación, el pulso y el contexto para evitar elecciones fuera del clima.",
     styleInfoCloseAria: "Cerrar burbuja del subgénero",
     genreGuideTitle: "Sobre el subgénero",
-    genreGuideText: "{style}: {summary}",
+    genreGuideText: "En pocas palabras: {summary}",
     bpmFallbackRelaxed: "Esta pista usa el rango típico de BPM del subgénero para mantener opciones nuevas sin inventar BPM exacto.",
     defaultStats: "Sin feedback todavía.",
     stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Conocidos en la app: {discoveredInApp} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
@@ -11121,16 +11121,16 @@ const I18N = {
     tasteTuneGenerated: "Ajuste aplicado: {label}. Ahora pruebo una nueva dirección para tu gusto.",
     tasteTuneFallback: "No encontré una buena opción para ese ajuste ahora. Mantuve tu recomendación actual.",
     recommendationWhyTitle: "Por qué apareció",
-    recommendationWhyStyle: "Estilo: {style}",
+    recommendationWhyStyle: "Vibe: {style}",
     recommendationWhyBpm: "Pulso: {bpm}",
-    recommendationWhyNovelty: "Novedad: {status}",
+    recommendationWhyNovelty: "Descubrimiento: {status}",
     recommendationWhyKnown: "artista conocido",
-    recommendationWhyNew: "fuera de tu radar",
-    recommendationWhyOrigin: "Origen: {origin}",
-    recommendationWhyStrongFit: "Match fuerte: curaduría confiable",
-    recommendationWhyTextStrong: "Elegí esta pista porque encaja con {style}, sostiene el pulso en {bpm} y trae energía {energy} sin alejarse de lo que pediste.",
-    recommendationWhyTextContext: "Funciona para {context}: mantiene energía {energy}, conversa con {style} y abre una puerta a un descubrimiento menos obvio.",
-    recommendationWhyTextDiscovery: "La idea aquí es sacarte un poco de lo previsible: {style}, {energy}, con suficiente señal para probarla.",
+    recommendationWhyNew: "nuevo para ti",
+    recommendationWhyOrigin: "Escena: {origin}",
+    recommendationWhyStrongFit: "Buena apuesta: señales fuertes",
+    recommendationWhyTextStrong: "Elegí esta porque suena a {style}: pulso firme en {bpm}, energía {energy} y sensación de pista que puede funcionar de verdad.",
+    recommendationWhyTextContext: "Para {context}, entra bien porque mantiene energía {energy} sin volverse demasiado obvia. Se queda en {style}, pero abre una puerta nueva.",
+    recommendationWhyTextDiscovery: "Aquí la idea es mostrarte una ruta menos previsible: {style}, energía {energy}, y suficiente señal musical para darle play.",
     djModeTitle: "Modo DJ",
     djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
     djModeGenerateBtn: "Crear viaje",
@@ -11150,19 +11150,19 @@ const I18N = {
     voiceMiniPadHint: "Pad accionado: {pad}.",
     voiceMiniPadLoopOn: "Loop activado: {pad}. Entra en el próximo compás para mantener la mini música a tempo.",
     voiceMiniPadLoopOff: "Loop desactivado: {pad}.",
-    artistHubIntro: "Bio, sello y redes en un solo lugar para decidir qué seguir explorando.",
+    artistHubIntro: "Un resumen rápido para entender quién es el artista, de dónde viene el sonido y si vale seguir explorando.",
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
     discogsArtistLink: "Buscar artista en Discogs",
-    artistBioAiSource: "Bio refinada por IA con base en: {sources}.",
+    artistBioAiSource: "Bio refinada con apoyo de IA y fuentes: {sources}.",
     artistBioAiFallbackSource: "catálogo y fuentes abiertas",
-    artistBioLocalSource: "Lectura curada local. Configura OPENAI_API_KEY para bios IA en tiempo real.",
-    trackAiTitle: "Radar IA de la pista",
+    artistBioLocalSource: "Lectura rápida con los datos disponibles. Cuando haya mejores fuentes, el app la refina automáticamente.",
+    trackAiTitle: "Lectura de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
     trackAiApiSource: "Lectura generada por IA en tiempo real.",
-    trackAiLocalSource: "Lectura local basada en subgénero, BPM, energía y contexto.",
-    trackAiFallback: "Esta pista encaja con tu perfil. Combina el groove con tu momento y valórala para refinar la curaduría.",
+    trackAiLocalSource: "Lectura de Sonic Search basada en el sonido, el contexto y tu historial.",
+    trackAiFallback: "Esta pista parece conversar con tu momento. Escucha el primer minuto y dime si funcionó; esa respuesta mejora mucho las próximas elecciones.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
     voiceLabKicker: "Juego sonoro",
     voiceLabTitle: "Modifica tu voz",
@@ -11254,7 +11254,7 @@ const I18N = {
     summaryEmptyDisliked: "Aún no hay artistas marcados como no gustados.",
     listenersSubtitle: "{count} oyentes de la comunidad en las últimas horas (feed local).",
     topListenersTitle: "Top listeners de la comunidad",
-    topListenersSubtitle: "Ranking del eje {style} en las últimas 24h (señal local).",
+    topListenersSubtitle: "Quién más escuchó {style} en las últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} puntos",
     topListenerPlays: "{plays} reproducciones",
@@ -11458,7 +11458,7 @@ const QUIZ_TEXT = {
     questionBpmByStyle: "Qual faixa típica de BPM usamos como referência para {style}?",
     questionOrigin: "De onde é o projeto {artist}, segundo nossa base curada?",
     questionStyleForArtist: "No Sonic Search, qual subgênero inclui {artist} neste eixo?",
-    expArtistInStyle: "{artist} está no eixo {style} na curadoria Sonic Search.",
+    expArtistInStyle: "{artist} combina com a cena {style} na curadoria Sonic Search.",
     expTrackByArtist: "\"{song}\" aparece no catálogo associado a {artist}.",
     expArtistOfTrack: "\"{song}\" está associado a {artist} no catálogo atual.",
     expLabelByTrack: "No catálogo, \"{song}\" de {artist} está ligado a {label}.",
@@ -11628,7 +11628,7 @@ function renderStyleInfoBubble(style, { reveal = false } = {}) {
 
 function energyLabelByValue(energyValue) {
   const labels = {
-    pt: { low: "baixa", mid: "media", high: "alta", extreme: "extrema" },
+    pt: { low: "baixa", mid: "média", high: "alta", extreme: "extrema" },
     en: { low: "low", mid: "mid", high: "high", extreme: "extreme" },
     es: { low: "baja", mid: "media", high: "alta", extreme: "extrema" }
   };
@@ -17860,32 +17860,34 @@ function localizedArtistNarrativeFallback(track) {
   const knownLabel = isUnknownLabel(label);
   if (currentLanguage === "en") {
     const originCopy = originLabel ? `, from ${originLabel},` : "";
-    const labelCopy = knownLabel ? "" : ` The label connection here is ${label}.`;
-    const genreCopy = genre ? ` It also carries a ${genre} signal.` : "";
-    const bpmCopy = bpmCue ? ` around ${bpmCue}` : "";
+    const labelCopy = knownLabel ? "" : ` The label gives you a good next path if you want to dig deeper: ${label}.`;
+    const genreCopy = genre ? ` You can hear a ${genre} leaning in the way it moves.` : "";
+    const bpmCopy = bpmCue ? `, moving around ${bpmCue}` : "";
     const identityCopy = identity ? `${identity} ` : "";
-    return `${identityCopy}${safeTrack.artist}${originCopy} comes up through "${safeTrack.song}" as a ${style} pick with ${energy || "focused"} energy${bpmCopy}. In plain words: ${styleSummary} ${genreCopy}${labelCopy} If this one clicks, open a few more tracks from the artist before deciding; this kind of sound reveals itself over time.`.trim();
+    return `${identityCopy}${safeTrack.artist}${originCopy} enters through "${safeTrack.song}" with ${energy || "focused"} energy${bpmCopy}. What matters here is the feeling: ${styleSummary} ${genreCopy}${labelCopy} If it clicks, do not judge the project by one play only; this kind of sound opens up over a few tracks.`.trim();
   }
   if (currentLanguage === "es") {
     const originCopy = originLabel ? `, desde ${originLabel},` : "";
-    const labelCopy = knownLabel ? "" : ` La conexión de sello aquí es ${label}.`;
-    const genreCopy = genre ? ` También trae una señal de ${genre}.` : "";
-    const bpmCopy = bpmCue ? ` cerca de ${bpmCue}` : "";
+    const labelCopy = knownLabel ? "" : ` El sello también sirve como camino para seguir buscando: ${label}.`;
+    const genreCopy = genre ? ` Se nota una inclinación hacia ${genre}.` : "";
+    const bpmCopy = bpmCue ? `, cerca de ${bpmCue}` : "";
     const identityCopy = identity ? `${identity} ` : "";
-    return `${identityCopy}${safeTrack.artist}${originCopy} aparece con "${safeTrack.song}" como una recomendación de ${style} con energía ${energy || "enfocada"}${bpmCopy}. En palabras simples: ${styleSummary} ${genreCopy}${labelCopy} Si te conecta, escucha algunas pistas más del artista; este tipo de sonido se entiende mejor con continuidad.`.trim();
+    return `${identityCopy}${safeTrack.artist}${originCopy} entra por "${safeTrack.song}" con energía ${energy || "enfocada"}${bpmCopy}. Lo importante es la sensación: ${styleSummary} ${genreCopy}${labelCopy} Si te conecta, escucha algunas pistas más; este tipo de sonido se entiende mejor con continuidad.`.trim();
   }
   const countryCopy = originLabel ? `, vindo de ${originLabel},` : "";
-  const genreCopy = genre ? ` Também carrega um sinal de ${genre}.` : "";
-  const labelCopy = knownLabel ? "" : ` A conexão de selo aqui é ${label}.`;
-  const bpmCopy = bpmCue ? ` perto de ${bpmCue}` : "";
+  const genreCopy = genre ? ` Dá para sentir um pé em ${genre}.` : "";
+  const labelCopy = knownLabel ? "" : ` A gravadora também é uma boa trilha para continuar cavando: ${label}.`;
+  const bpmCopy = bpmCue ? `, girando perto de ${bpmCue}` : "";
   const identityCopy = identity ? `${identity} ` : "";
-  return `${identityCopy}${safeTrack.artist}${countryCopy} aparece com "${safeTrack.song}" como uma recomendação de ${style} com energia ${energy || "focada"}${bpmCopy}. Falando como pessoa: ${styleSummary} ${genreCopy}${labelCopy} Se essa faixa bater, vale abrir mais algumas do artista antes de decidir; esse tipo de som se revela melhor em sequência.`.trim();
+  return `${identityCopy}${safeTrack.artist}${countryCopy} entra aqui por "${safeTrack.song}" com energia ${energy || "focada"}${bpmCopy}. O ponto é a sensação: ${styleSummary} ${genreCopy}${labelCopy} Se essa faixa bater, escuta mais duas ou três antes de decidir; artista bom às vezes precisa de sequência para fazer sentido.`.trim();
 }
 
 function detailedArtistBio(track) {
   const key = normalize(track?.artist || "");
   const profile = ARTIST_EXTENDED_PROFILES[key];
-  if (profile) return profile[currentLanguage] || profile.pt || localizedArtistNarrativeFallback(track);
+  if (profile) {
+    return humanizeStructuredBioText(profile[currentLanguage] || profile.pt || localizedArtistNarrativeFallback(track), track);
+  }
 
   const sourceBio = String(track?.artistBio || "").trim();
   const normalizedSourceBio = normalize(sourceBio);
@@ -17893,7 +17895,7 @@ function detailedArtistBio(track) {
     normalizedSourceBio.includes("appears in the") ||
     normalizedSourceBio.includes("aparece como destacado");
   if (sourceBio && sourceBio.length > 80 && !isGenericDynamicBio) {
-    return `${sourceBio} ${localizedArtistNarrativeFallback(track)}`;
+    return `${humanizeStructuredBioText(sourceBio, track)} ${localizedArtistNarrativeFallback(track)}`.trim();
   }
   return localizedArtistNarrativeFallback(track);
 }
@@ -18610,29 +18612,29 @@ function buildArtistBioFromApiProfile(track, profile) {
 
   if (currentLanguage === "en") {
     const originLine = origin ? `, from ${origin},` : "";
-    const songLine = song ? ` "${song}" is the entry point here:` : "";
-    const bpmLine = bpmCue ? ` around ${bpmCue}` : "";
+    const songLine = song ? ` "${song}" is the first door into this project here:` : "";
+    const bpmLine = bpmCue ? `, moving around ${bpmCue}` : "";
     const contextLine = disambiguation ? ` ${disambiguation}` : "";
-    const genreLine = genreSignal ? ` It leans into ${genreSignal}.` : "";
-    const summaryLine = sourceSummary ? ` Extra context: ${sourceSummary}` : "";
-    return `${artist}${originLine}${songLine} a ${style} recommendation with ${energy || "focused"} energy${bpmLine}. ${contextLine} In human terms, ${styleSummary} ${genreLine}${summaryLine}`.trim();
+    const genreLine = genreSignal ? ` The sound leans toward ${genreSignal}.` : "";
+    const summaryLine = sourceSummary ? ` A useful note: ${sourceSummary}` : "";
+    return `${artist}${originLine}${songLine} ${energy || "focused"} energy${bpmLine}. ${contextLine} The reason it makes sense: ${styleSummary} ${genreLine}${summaryLine}`.trim();
   }
   if (currentLanguage === "es") {
     const originLine = origin ? `, desde ${origin},` : "";
-    const songLine = song ? ` "${song}" es la puerta de entrada:` : "";
-    const bpmLine = bpmCue ? ` cerca de ${bpmCue}` : "";
+    const songLine = song ? ` "${song}" es la primera puerta de entrada:` : "";
+    const bpmLine = bpmCue ? `, cerca de ${bpmCue}` : "";
     const contextLine = disambiguation ? ` ${disambiguation}` : "";
-    const genreLine = genreSignal ? ` Se acerca a ${genreSignal}.` : "";
-    const summaryLine = sourceSummary ? ` Contexto extra: ${sourceSummary}` : "";
-    return `${artist}${originLine}${songLine} una recomendación de ${style} con energía ${energy || "enfocada"}${bpmLine}. ${contextLine} En palabras humanas, ${styleSummary} ${genreLine}${summaryLine}`.trim();
+    const genreLine = genreSignal ? ` El sonido se acerca a ${genreSignal}.` : "";
+    const summaryLine = sourceSummary ? ` Un dato útil: ${sourceSummary}` : "";
+    return `${artist}${originLine}${songLine} energía ${energy || "enfocada"}${bpmLine}. ${contextLine} Por eso puede funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
   }
   const originLine = origin ? `, vindo de ${origin},` : "";
-  const songLine = song ? ` "${song}" é a porta de entrada aqui:` : "";
-  const bpmLine = bpmCue ? ` perto de ${bpmCue}` : "";
+  const songLine = song ? ` "${song}" é a primeira porta de entrada:` : "";
+  const bpmLine = bpmCue ? `, girando perto de ${bpmCue}` : "";
   const contextLine = disambiguation ? ` ${disambiguation}` : "";
-  const genreLine = genreSignal ? ` Ele conversa com ${genreSignal}.` : "";
-  const summaryLine = sourceSummary ? ` Contexto extra: ${sourceSummary}` : "";
-  return `${artist}${originLine}${songLine} uma recomendação de ${style} com energia ${energy || "focada"}${bpmLine}. ${contextLine} Em linguagem humana, ${styleSummary} ${genreLine}${summaryLine}`.trim();
+  const genreLine = genreSignal ? ` O som conversa com ${genreSignal}.` : "";
+  const summaryLine = sourceSummary ? ` Um detalhe útil: ${sourceSummary}` : "";
+  return `${artist}${originLine}${songLine} energia ${energy || "focada"}${bpmLine}. ${contextLine} Por isso pode funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
 }
 
 async function fetchArtistApiProfile(artistName, preferredLanguage = currentLanguage) {
@@ -18751,9 +18753,9 @@ function buildDynamicLabelSummary(styleValue, labelName) {
   const style = styleLabelByValue(styleValue);
   const cleanLabel = sanitizeLabel(labelName, "", "");
   if (isUnknownLabel(cleanLabel)) {
-    return `Ainda não encontrei um selo confiável para esta faixa. Ela entrou pelo encaixe musical com ${style}; para aprofundar, vale abrir Discogs, SoundCloud ou Bandcamp do artista.`;
+    return `Ainda não tenho uma gravadora confiável para esta faixa, mas o som encaixa bem em ${style}. Se você gostar, o melhor caminho é abrir Discogs, SoundCloud ou Bandcamp do artista e seguir os rastros da cena.`;
   }
-  return `${cleanLabel} aparece aqui como parte do contexto desta faixa em ${style}. Use o selo como pista para explorar artistas parecidos e entender a cena em volta do som.`;
+  return `${cleanLabel} ajuda a dar contexto para essa faixa em ${style}. Se a música bater, use a gravadora como uma trilha para achar artistas próximos, releases parecidos e um pouco da cena em volta.`;
 }
 
 function localizedLabelNarrativeFallback(track) {
@@ -18762,20 +18764,20 @@ function localizedLabelNarrativeFallback(track) {
   const style = styleLabelByValue(track.style);
   if (currentLanguage === "en") {
     if (isUnknownLabel(rawLabel)) {
-      return `I do not have a trusted label for this track yet. It was selected because it fits the ${style} feeling; for deeper context, open the artist on Discogs, SoundCloud, or Bandcamp.`;
+      return `I do not have a trusted label for this track yet, but the sound fits ${style}. If it clicks, open the artist on Discogs, SoundCloud, or Bandcamp and follow the scene trail from there.`;
     }
-    return `${label} gives useful context around this ${style} recommendation. Treat the label as a path to nearby artists, releases, and scene references.`;
+    return `${label} helps place this ${style} track in a scene. If the sound clicks, use the label as a path to nearby artists, releases, and better references.`;
   }
   if (currentLanguage === "es") {
     if (isUnknownLabel(rawLabel)) {
-      return `Todavía no tengo un sello confiable para este track. Entró porque encaja musicalmente con ${style}; para más contexto, abre Discogs, SoundCloud o Bandcamp del artista.`;
+      return `Todavía no tengo un sello confiable para este track, pero el sonido encaja con ${style}. Si te conecta, abre Discogs, SoundCloud o Bandcamp del artista y sigue el rastro de la escena.`;
     }
-    return `${label} ayuda a entender el contexto de esta recomendación de ${style}. Úsalo como camino para encontrar artistas, releases y referencias cercanas.`;
+    return `${label} ayuda a ubicar esta pista de ${style} dentro de una escena. Si el sonido te conecta, úsalo como camino para encontrar artistas y releases cercanos.`;
   }
   if (isUnknownLabel(rawLabel)) {
-    return `Ainda não tenho uma gravadora confiável para esta faixa. Ela entrou porque combina musicalmente com ${style}; para mais contexto, abra o artista no Discogs, SoundCloud ou Bandcamp.`;
+    return `Ainda não tenho uma gravadora confiável para esta faixa, mas o som combina com ${style}. Se bater, abre o artista no Discogs, SoundCloud ou Bandcamp e segue os rastros da cena.`;
   }
-  return `${label} ajuda a entender o contexto desta recomendação de ${style}. Use a gravadora como caminho para achar artistas próximos, releases e referências da mesma cena.`;
+  return `${label} ajuda a colocar essa faixa de ${style} dentro de uma cena. Se o som bater, use a gravadora como caminho para achar artistas próximos, releases e referências melhores.`;
 }
 
 function detailedLabelBio(track) {
@@ -18789,6 +18791,51 @@ function detailedLabelBio(track) {
     return sourceBio;
   }
   return localizedLabelNarrativeFallback(track);
+}
+
+function lowerFirstLetter(text = "") {
+  const value = String(text || "").trim();
+  if (!value) return "";
+  return `${value.charAt(0).toLowerCase()}${value.slice(1)}`;
+}
+
+function humanizeStructuredBioText(rawText = "", track = null) {
+  const text = normalizeInlineText(rawText);
+  if (!text) return "";
+  if (currentLanguage !== "pt") {
+    return text
+      .replace(/\bOrigin:\s*/gi, "")
+      .replace(/\bBackground:\s*/gi, "")
+      .replace(/\bProjects and collaborations:\s*/gi, "")
+      .trim();
+  }
+
+  const origin = text.match(/Origem:\s*(.*?)(?:\.\s*Background:|$)/i)?.[1]?.trim() || "";
+  const background = text.match(/Background:\s*(.*?)(?:\.\s*Projetos e colaborações:|$)/i)?.[1]?.trim() || "";
+  const projects = text.match(/Projetos e colaborações:\s*(.*)$/i)?.[1]?.trim() || "";
+  const artist = String(track?.artist || "").trim();
+  const parts = [];
+
+  if (origin && artist) {
+    parts.push(`${artist} vem de ${origin}.`);
+  } else if (origin) {
+    parts.push(`Vem de ${origin}.`);
+  }
+  if (background) {
+    parts.push(`No som, ${lowerFirstLetter(background)}.`);
+  }
+  if (projects) {
+    parts.push(`Na cena, ${lowerFirstLetter(projects)}.`);
+  }
+
+  if (parts.length) return parts.join(" ");
+
+  return text
+    .replace(/\bOrigem:\s*/gi, "")
+    .replace(/\bBackground:\s*/gi, "")
+    .replace(/\bProjetos e colaborações:\s*/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function availableExternalPlatforms() {
@@ -22234,9 +22281,9 @@ function recommendationHumanReason(track, prefs = lastPrefs) {
   const reason = t(templateKey, { style, bpm, energy, context });
 
   if (isKnown) return reason;
-  if (currentLanguage === "en") return `${reason} I also kept it outside your usual radar.`;
-  if (currentLanguage === "es") return `${reason} También la mantuve fuera de tu radar habitual.`;
-  return `${reason} Também mantive fora do seu radar habitual.`;
+  if (currentLanguage === "en") return `${reason} I also kept it away from the obvious names, so it can feel like an actual discovery.`;
+  if (currentLanguage === "es") return `${reason} También la mantuve lejos de los nombres obvios, para que se sienta como descubrimiento real.`;
+  return `${reason} Também deixei longe dos nomes óbvios, para parecer descoberta de verdade e não só mais do mesmo.`;
 }
 
 function renderRecommendationWhy(track, prefs = lastPrefs) {
@@ -22382,12 +22429,12 @@ function buildTrackInsightPrompt(track, prefs = {}) {
   const energy = energyLabelByValue(track.energy);
   const vibe = String(track.vibe || "").trim();
   if (currentLanguage === "en") {
-    return `Give a short DJ-style insight (2 sentences max) about this track for the listener. Track: "${track.song}" by ${track.artist}. Subgenre: ${style}. BPM status: ${bpmDescriptor}. Energy: ${energy}. Context: ${context}. Vibe: ${vibe}. Keep practical and immersive.`;
+    return `Write like a tasteful electronic music curator, not a technical report. Give a short, human DJ-style insight (2 sentences max) for the listener. Track: "${track.song}" by ${track.artist}. Subgenre: ${style}. Pulse: ${bpmDescriptor}. Energy: ${energy}. Context: ${context}. Vibe: ${vibe}. Explain the feeling and why it may work.`;
   }
   if (currentLanguage === "es") {
-    return `Da una lectura corta estilo DJ (máximo 2 frases) sobre esta pista para el oyente. Pista: "${track.song}" de ${track.artist}. Subgénero: ${style}. Estado de BPM: ${bpmDescriptor}. Energía: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Mantén un tono práctico e inmersivo.`;
+    return `Escribe como curador de música electrónica, no como informe técnico. Da una lectura corta estilo DJ (máximo 2 frases) para el oyente. Pista: "${track.song}" de ${track.artist}. Subgénero: ${style}. Pulso: ${bpmDescriptor}. Energía: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explica la sensación y por qué puede funcionar.`;
   }
-  return `Faça uma leitura curta estilo DJ (máximo 2 frases) sobre esta faixa para o ouvinte. Faixa: "${track.song}" de ${track.artist}. Subgênero: ${style}. Estado de BPM: ${bpmDescriptor}. Energia: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Seja prático e imersivo.`;
+  return `Escreva como um curador de música eletrônica, não como relatório técnico. Faça uma leitura curta estilo DJ (máximo 2 frases) para o ouvinte. Faixa: "${track.song}" de ${track.artist}. Subgênero: ${style}. Pulso: ${bpmDescriptor}. Energia: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explique a sensação e por que pode funcionar.`;
 }
 
 function localTrackInsight(track, prefs = {}) {
@@ -22396,14 +22443,18 @@ function localTrackInsight(track, prefs = {}) {
   const bpmValue = bpmData.aiText;
   const energy = energyLabelByValue(track.energy);
   const context = prefs.context ? contextLabelByValue(prefs.context) : t("freeContext");
-  const vibe = String(track.vibe || t("trackAiFallback"));
+  const rawVibe = String(track.vibe || t("trackAiFallback")).trim();
+  const normalizedVibe = normalize(rawVibe);
+  const vibe = normalizedVibe.includes("faixa descoberta automaticamente")
+    ? ""
+    : rawVibe;
   if (currentLanguage === "en") {
-    return `${track.song} keeps your profile in ${style} with ${energy.toLowerCase()} pressure around ${bpmValue}. Use it for ${context.toLowerCase()} and rate in stars so I can tune the next transitions with higher precision.`;
+    return `${track.song} feels like a ${style} lane with ${energy.toLowerCase()} pressure around ${bpmValue}. Try it as a mood check for ${context.toLowerCase()}: if the groove grabs you in the first minute, save it; if not, the next pick should move away from this texture.`;
   }
   if (currentLanguage === "es") {
-    return `${track.song} mantiene tu perfil en ${style} con presión ${energy.toLowerCase()} cerca de ${bpmValue}. Úsala para ${context.toLowerCase()} y valórala con estrellas para ajustar las próximas transiciones con más precisión.`;
+    return `${track.song} se siente dentro de ${style}, con presión ${energy.toLowerCase()} cerca de ${bpmValue}. Pruébala para ${context.toLowerCase()}: si el groove te agarra en el primer minuto, guárdala; si no, la próxima recomendación debe alejarse de esta textura.`;
   }
-  return `${track.song} mantém seu perfil em ${style} com pressão ${energy.toLowerCase()} perto de ${bpmValue}. Use no contexto ${context.toLowerCase()} e avalie em estrelas para eu ajustar as próximas transições com mais precisão. ${vibe}`;
+  return `${track.song} soa como uma boa entrada em ${style}, com pressão ${energy.toLowerCase()} perto de ${bpmValue}. Teste no clima de ${context.toLowerCase()}: se o groove te pegar no primeiro minuto, salva; se não bater, a próxima escolha deve fugir dessa textura. ${vibe}`.trim();
 }
 
 function buildListeningNarrative(track, prefs = {}) {
@@ -22416,12 +22467,12 @@ function buildListeningNarrative(track, prefs = {}) {
   const cue = genreSignal ? `${genreSignal} • ${style}` : style;
 
   if (currentLanguage === "en") {
-    return `Now playing: ${track.song} by ${track.artist}. Genre axis ${cue}, ${energy.toLowerCase()} energy around ${bpmData.aiText}, shaped for ${context.toLowerCase()}.`;
+    return `Now playing: ${track.song}, by ${track.artist}. This sits near ${cue}, with ${energy.toLowerCase()} energy around ${bpmData.aiText}; good for ${context.toLowerCase()} if you want that pulse to take over.`;
   }
   if (currentLanguage === "es") {
-    return `Ahora suena ${track.song} de ${track.artist}. Eje de género ${cue}, energía ${energy.toLowerCase()} cerca de ${bpmData.aiText}, pensado para ${context.toLowerCase()}.`;
+    return `Ahora suena ${track.song}, de ${track.artist}. Se mueve cerca de ${cue}, con energía ${energy.toLowerCase()} alrededor de ${bpmData.aiText}; va bien para ${context.toLowerCase()} si quieres que el pulso mande.`;
   }
-  return `Tocando agora: ${track.song}, de ${track.artist}. Eixo de gênero ${cue}, energia ${energy.toLowerCase()} perto de ${bpmData.aiText}, pensado para ${context.toLowerCase()}.`;
+  return `Tocando agora: ${track.song}, de ${track.artist}. Ela fica perto de ${cue}, com energia ${energy.toLowerCase()} em torno de ${bpmData.aiText}; boa para ${context.toLowerCase()} se você quer deixar o pulso tomar conta.`;
 }
 
 async function revealListeningNarrative(track, prefs = {}) {
