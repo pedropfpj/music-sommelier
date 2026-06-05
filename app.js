@@ -17858,6 +17858,37 @@ function detailedArtistBio(track) {
   return localizedArtistNarrativeFallback(track);
 }
 
+function activeRecommendationKey() {
+  return recommendationTrackKey(currentRecommendation);
+}
+
+function trackStillActive(track) {
+  const activeKey = activeRecommendationKey();
+  const trackKey = recommendationTrackKey(track);
+  return Boolean(activeKey && trackKey && activeKey === trackKey);
+}
+
+function renderArtistHub(track, { hydrate = true } = {}) {
+  if (!track) return;
+  if (detailsPanel) detailsPanel.dataset.trackKey = recommendationTrackKey(track);
+  if (artistBio) {
+    artistBio.textContent = detailedArtistBio(track);
+    if (artistBioAiMeta) {
+      artistBioAiMeta.textContent = t("artistBioLocalSource");
+      artistBioAiMeta.classList.remove("hidden");
+    }
+  }
+  renderDiscogsArtistPanel(track);
+  renderArtistSocialLinks(track);
+  if (labelBio) {
+    labelBio.textContent = detailedLabelBio(track);
+  }
+  if (hydrate && artistBio && trackStillActive(track)) {
+    void hydrateArtistBioFromApis(track);
+    void hydrateArtistBioFromAi(track);
+  }
+}
+
 function supportsArtistBioApi() {
   return Boolean(resolveAiEndpoint("NEONPULSE_ARTIST_BIO_URL", "/api/artist-bio"));
 }
@@ -18526,7 +18557,7 @@ function buildArtistBioFromApiProfile(track, profile) {
   const style = styleLabelByValue(track?.style || "house");
   const song = String(track?.song || "").trim();
   const origin =
-    profile.area && profile.country
+    profile.area && profile.country && normalize(profile.area) !== normalize(profile.country)
       ? `${profile.area}, ${profile.country}`
       : profile.area || profile.country;
   const bpmData = resolveBpmDisplay(track || {});
@@ -18592,12 +18623,11 @@ async function fetchArtistApiProfile(artistName, preferredLanguage = currentLang
 
 async function hydrateArtistBioFromApis(track) {
   if (!track || !artistBio) return;
-  const trackKey = normalize(`${track.artist}::${track.song}`);
+  if (!trackStillActive(track)) return;
   const profile = await fetchArtistApiProfile(track.artist);
   if (!profile) return;
 
-  const activeTrackKey = normalize(`${currentRecommendation?.artist || ""}::${currentRecommendation?.song || ""}`);
-  if (!activeTrackKey || activeTrackKey !== trackKey) return;
+  if (!trackStillActive(track)) return;
 
   if (profile.country) track.artistCountry = profile.country;
   if (profile.area) track.artistArea = profile.area;
@@ -18614,12 +18644,11 @@ async function hydrateArtistBioFromApis(track) {
 
 async function hydrateArtistBioFromAi(track) {
   if (!track || !artistBio || !supportsArtistBioApi()) return;
-  const trackKey = normalize(`${track.artist}::${track.song}`);
+  if (!trackStillActive(track)) return;
   const aiBio = await requestArtistBioFromApi(track);
   if (!aiBio?.bio) return;
 
-  const activeTrackKey = normalize(`${currentRecommendation?.artist || ""}::${currentRecommendation?.song || ""}`);
-  if (!activeTrackKey || activeTrackKey !== trackKey) return;
+  if (!trackStillActive(track)) return;
 
   artistBio.textContent = aiBio.bio;
   if (aiBio.origin && !track.artistCountry && !track.artistArea) {
@@ -22709,20 +22738,7 @@ function renderRecommendation(track, prefs) {
     primaryTrackCard.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  if (artistBio) {
-    artistBio.textContent = detailedArtistBio(track);
-    if (artistBioAiMeta) {
-      artistBioAiMeta.textContent = t("artistBioLocalSource");
-      artistBioAiMeta.classList.remove("hidden");
-    }
-    void hydrateArtistBioFromApis(track);
-    void hydrateArtistBioFromAi(track);
-  }
-  renderDiscogsArtistPanel(track);
-  renderArtistSocialLinks(track);
-  if (labelBio) {
-    labelBio.textContent = detailedLabelBio(track);
-  }
+  renderArtistHub(track);
   pulseLine(artistLine);
   pulseLine(bpmLine);
   renderRecentListeners(track);
@@ -26018,6 +26034,7 @@ bind(skipBtn, "click", async () => {
 
 bind(moreInfoBtn, "click", () => {
   if (!currentRecommendation) return;
+  renderArtistHub(currentRecommendation);
   if (detailsPanel) {
     detailsPanel.classList.remove("hidden");
     detailsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
