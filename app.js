@@ -4116,13 +4116,6 @@ const spiritInsightStatus = document.getElementById("spiritInsightStatus");
 const spiritInsightText = document.getElementById("spiritInsightText");
 const spiritProgressFill = document.getElementById("spiritProgressFill");
 const spiritSignalList = document.getElementById("spiritSignalList");
-const spiritVisualPanel = document.getElementById("spiritVisualPanel");
-const spiritVisualTitle = document.getElementById("spiritVisualTitle");
-const spiritVisualHint = document.getElementById("spiritVisualHint");
-const spiritVisualFrame = document.getElementById("spiritVisualFrame");
-const spiritAmbientVisual = document.getElementById("spiritAmbientVisual");
-const spiritVisualPresetName = document.getElementById("spiritVisualPresetName");
-const spiritVisualYoutubeLink = document.getElementById("spiritVisualYoutubeLink");
 const spiritSpotlightPanel = document.getElementById("spiritSpotlightPanel");
 const spiritSpotlightTitle = document.getElementById("spiritSpotlightTitle");
 const spiritSpotlightHint = document.getElementById("spiritSpotlightHint");
@@ -4196,7 +4189,6 @@ let listeningNarrativeToken = 0;
 let spiritAnimationToken = 0;
 let currentSpiritId = "";
 let spiritLastReviewedSongLikes = 0;
-let currentSpiritVisualQuery = "";
 let spiritUnlocked = false;
 let spiritSignalsByStyle = new Map();
 let spiritCollectibleBusy = false;
@@ -6409,17 +6401,6 @@ const MUSICAL_SPIRITS = [
     }
   }
 ];
-
-const SPIRIT_VISUAL_QUERIES = {
-  ritual_cosmico: "psytrance festival visualizer 4k",
-  alquimista_sombrio: "dark psy atmospheric visualizer",
-  acelerador_quantico: "hitech psytrance visualizer",
-  engenheiro_groove: "tech house club visualizer",
-  arquiteto_hipnotico: "hypnotic techno visualizer",
-  cacador_bass: "drum and bass neurofunk visualizer",
-  viajante_organico: "organic downtempo visualizer",
-  explorador_fractal: "idm electronic abstract visualizer"
-};
 
 const SPIRIT_VISUAL_THEMES = {
   ritual_cosmico: { a: "#6effdc", b: "#61bfff", c: "#9f7bff", d: "#0b1a34" },
@@ -10423,17 +10404,12 @@ const I18N = {
     spiritLoreSignatureTitle: "Seu DNA sonoro",
     spiritLoreWhyTitle: "O que esse som entrega",
     spiritLoreNextTitle: "Como explorar melhor",
-    spiritVisualTitle: "Modo visual do espírito",
-    spiritVisualHint: "Entidade audiovisual viva, reagindo ao arquétipo e aos estilos que mais aparecem no seu perfil.",
     spiritSpotlightTitle: "Faixa do espírito",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
     spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
     spiritSpotlightHintFallback: "Faixa escolhida para representar seu espírito neste momento.",
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
-    spiritVisualOpenYoutube: "Abrir no YouTube",
-    spiritVideoTitle: "Visual do espírito musical",
-    spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Colecionável do espírito",
     spiritCollectibleHintLocal: "Arte pessoal ativa: cada usuário recebe uma entidade visual própria, gerada a partir do gosto musical.",
     spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para a assinatura musical deste usuário.",
@@ -10900,17 +10876,12 @@ const I18N = {
     spiritLoreSignatureTitle: "Your sonic DNA",
     spiritLoreWhyTitle: "What this sound gives you",
     spiritLoreNextTitle: "How to explore it",
-    spiritVisualTitle: "Spirit visual mode",
-    spiritVisualHint: "A living audiovisual entity reacting to your archetype and strongest style signals.",
     spiritSpotlightTitle: "Spirit track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
     spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
     spiritSpotlightHintFallback: "Track selected to represent your spirit right now.",
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
-    spiritVisualOpenYoutube: "Open on YouTube",
-    spiritVideoTitle: "Musical spirit visual",
-    spiritVisualPreset: "Visual preset: {preset}",
     spiritCollectibleTitle: "Spirit collectible",
     spiritCollectibleHintLocal: "Personal artwork is active: each user receives a visual entity generated from their music taste.",
     spiritCollectibleHintApi: "Image AI connected: this artwork was generated for this user's music signature.",
@@ -11377,17 +11348,12 @@ const I18N = {
     spiritLoreSignatureTitle: "Tu ADN sonoro",
     spiritLoreWhyTitle: "Qué entrega este sonido",
     spiritLoreNextTitle: "Cómo explorarlo mejor",
-    spiritVisualTitle: "Modo visual del espíritu",
-    spiritVisualHint: "Entidad audiovisual viva, reaccionando a tu arquetipo y a los estilos más fuertes de tu perfil.",
     spiritSpotlightTitle: "Pista del espíritu",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
     spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
     spiritSpotlightHintFallback: "Pista seleccionada para representar tu espíritu ahora.",
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
-    spiritVisualOpenYoutube: "Abrir en YouTube",
-    spiritVideoTitle: "Visual del espíritu musical",
-    spiritVisualPreset: "Preset visual: {preset}",
     spiritCollectibleTitle: "Coleccionable del espíritu",
     spiritCollectibleHintLocal: "Arte personal activa: cada usuario recibe una entidad visual propia, generada a partir de su gusto musical.",
     spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para la firma musical de este usuario.",
@@ -12101,14 +12067,9 @@ function applyLanguage() {
   setText("#spiritPanelTitle", t("spiritPanelTitle"));
   setText("#spiritIntro", t("spiritIntro"));
   setText("#spiritBadge", t("spiritBadge"));
-  setText("#spiritVisualTitle", t("spiritVisualTitle"));
-  setText("#spiritVisualHint", t("spiritVisualHint"));
   setText("#spiritInsightTitle", t("spiritInsightTitle"));
   setText("#spiritSpotlightTitle", t("spiritSpotlightTitle"));
   setText("#spiritSpotlightHint", t("spiritSpotlightHintPredicted"));
-  setText("#spiritVisualPresetName", t("spiritVisualPreset", { preset: "Neon Pulse" }));
-  setText("#spiritVisualYoutubeLink", t("spiritVisualOpenYoutube"));
-  if (spiritVisualFrame) spiritVisualFrame.title = t("spiritVideoTitle");
   setText("#spiritSpotlightSpotify", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
   setText("#spiritSpotlightYoutube", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
   setText("#spiritSpotlightSoundcloud", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
@@ -12471,7 +12432,6 @@ function resetSessionStateInMemory() {
   spiritUnlocked = false;
   currentSpiritId = "";
   spiritLastReviewedSongLikes = 0;
-  currentSpiritVisualQuery = "";
   spiritCollectibleBusy = false;
   trackRatings = new Map();
   trackRatingSignals = new Map();
@@ -12587,7 +12547,6 @@ function resetSessionUiState() {
     spiritCollectibleShareInstagramBtn.removeAttribute("data-image-url");
     spiritCollectibleShareInstagramBtn.removeAttribute("data-filename");
   }
-  if (spiritVisualPresetName) spiritVisualPresetName.textContent = "";
   if (styleInfoBubble) styleInfoBubble.classList.add("hidden");
   renderTrackRating(null);
   applyGenreVibeTheme("", { force: true });
@@ -19091,19 +19050,6 @@ function renderSpiritSpotlight(payload) {
   return track;
 }
 
-function resolveSpiritVisualQuery(spirit) {
-  if (!spirit) return "";
-  const mapped = SPIRIT_VISUAL_QUERIES[spirit.id];
-  if (mapped) return mapped;
-  const topStyles = spiritTopStyles(spirit, 2);
-  if (!topStyles.length) return "electronic music visualizer";
-  return `${topStyles.join(" ")} visualizer`;
-}
-
-function buildYouTubeSearchUrl(query) {
-  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-}
-
 function spiritVisualTheme(spirit) {
   return SPIRIT_VISUAL_THEMES[spirit?.id] || {
     a: "#6effdc",
@@ -19111,44 +19057,6 @@ function spiritVisualTheme(spirit) {
     c: "#9f7bff",
     d: "#0b1a34"
   };
-}
-
-function hexToRgba(hex, alpha = 1) {
-  const value = String(hex || "").trim().replace("#", "");
-  const full = value.length === 3
-    ? value.split("").map((ch) => `${ch}${ch}`).join("")
-    : value.length === 6
-      ? value
-      : "6effdc";
-  const red = parseInt(full.slice(0, 2), 16);
-  const green = parseInt(full.slice(2, 4), 16);
-  const blue = parseInt(full.slice(4, 6), 16);
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-}
-
-function applySpiritAmbientTheme(spirit) {
-  if (!spiritAmbientVisual) return;
-  const theme = spiritVisualTheme(spirit);
-  spiritAmbientVisual.style.setProperty("--spirit-a", theme.a);
-  spiritAmbientVisual.style.setProperty("--spirit-b", theme.b);
-  spiritAmbientVisual.style.setProperty("--spirit-c", theme.c);
-  spiritAmbientVisual.style.setProperty("--spirit-d", theme.d);
-  spiritAmbientVisual.style.background = [
-    `radial-gradient(circle at 20% 18%, ${hexToRgba(theme.a, 0.24)}, transparent 35%)`,
-    `radial-gradient(circle at 85% 78%, ${hexToRgba(theme.c, 0.2)}, transparent 36%)`,
-    `linear-gradient(150deg, #020914, ${hexToRgba(theme.b, 0.2)} 56%, ${theme.d})`
-  ].join(", ");
-
-  const glow = spiritAmbientVisual.querySelector(".spirit-ambient-glow");
-  if (glow) {
-    glow.style.background = `radial-gradient(circle, ${hexToRgba(theme.a, 0.38)}, transparent 68%)`;
-  }
-
-  const rings = spiritAmbientVisual.querySelectorAll(".spirit-ambient-ring");
-  rings.forEach((ring, index) => {
-    const color = index === 0 ? theme.b : index === 1 ? theme.a : theme.c;
-    ring.style.borderColor = hexToRgba(color, index === 0 ? 0.35 : 0.28);
-  });
 }
 
 function resolveSpiritRank(likes = totalPositiveLikes()) {
@@ -20981,37 +20889,6 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   return collectible;
 }
 
-function clearSpiritVisual() {
-  if (spiritVisualPanel) spiritVisualPanel.classList.add("hidden");
-  if (spiritVisualFrame) spiritVisualFrame.src = "";
-  if (spiritVisualPresetName) spiritVisualPresetName.textContent = "";
-  currentSpiritVisualQuery = "";
-}
-
-function renderSpiritVisual(spirit, { autoplay = true, forceReload = false } = {}) {
-  if (!spiritVisualPanel || !spiritVisualYoutubeLink) return;
-  const query = resolveSpiritVisualQuery(spirit);
-  if (!query) {
-    clearSpiritVisual();
-    return;
-  }
-
-  spiritVisualPanel.classList.remove("hidden");
-  spiritVisualYoutubeLink.href = buildYouTubeSearchUrl(query);
-
-  const topStyles = spiritTopStyles(spirit, 2);
-  if (spiritVisualPresetName) {
-    spiritVisualPresetName.textContent = t("spiritVisualPreset", {
-      preset: topStyles.length ? topStyles.join(" • ") : "Neon Pulse"
-    });
-  }
-
-  if (forceReload || currentSpiritVisualQuery !== query || autoplay) {
-    applySpiritAmbientTheme(spirit);
-    currentSpiritVisualQuery = query;
-  }
-}
-
 function triggerSpiritUnlockPulse() {
   if (!spiritPanel) return;
   spiritPanel.classList.remove("unlock-pulse");
@@ -21208,7 +21085,6 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     spiritUnlocked = false;
     spiritAnimationToken += 1;
     clearSpiritSpotlight();
-    clearSpiritVisual();
     if (spiritLorePanel) spiritLorePanel.classList.add("hidden");
     if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
@@ -21261,10 +21137,6 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   renderSpiritInsight(selectedSpirit, { unlocked: true });
   if (spiritLorePanel) spiritLorePanel.classList.remove("hidden");
   renderSpiritLore(selectedSpirit, spiritText);
-  renderSpiritVisual(selectedSpirit, {
-    autoplay: wasHidden || changedSpirit || forceAnimation,
-    forceReload: wasHidden || changedSpirit
-  });
   const spiritSpotlightPayload = resolveSpiritSpotlightTrack(selectedSpirit);
   const spotlightTrack = renderSpiritSpotlight(spiritSpotlightPayload);
   let collectible = null;
