@@ -4038,6 +4038,23 @@ const trackAiTitle = document.getElementById("trackAiTitle");
 const trackAiRefreshBtn = document.getElementById("trackAiRefreshBtn");
 const trackAiText = document.getElementById("trackAiText");
 const trackAiMeta = document.getElementById("trackAiMeta");
+const swipeStartPanel = document.getElementById("swipeStartPanel");
+const swipeHeroKicker = document.getElementById("swipeHeroKicker");
+const swipeHeroTitle = document.getElementById("swipeHeroTitle");
+const swipeHeroHint = document.getElementById("swipeHeroHint");
+const topSwipeCard = document.getElementById("topSwipeCard");
+const topSwipeImage = document.getElementById("topSwipeImage");
+const topSwipeFallback = document.getElementById("topSwipeFallback");
+const topSwipeKicker = document.getElementById("topSwipeKicker");
+const topSwipeTitle = document.getElementById("topSwipeTitle");
+const topSwipeMeta = document.getElementById("topSwipeMeta");
+const topSwipeStyleChip = document.getElementById("topSwipeStyleChip");
+const topSwipeBpmChip = document.getElementById("topSwipeBpmChip");
+const topSwipeEnergyChip = document.getElementById("topSwipeEnergyChip");
+const topSwipePassBtn = document.getElementById("topSwipePassBtn");
+const topSwipeSurpriseBtn = document.getElementById("topSwipeSurpriseBtn");
+const topSwipeLikeBtn = document.getElementById("topSwipeLikeBtn");
+const topSwipeHint = document.getElementById("topSwipeHint");
 const suggestionQueueCard = document.getElementById("suggestionQueueCard");
 const suggestionQueueTitle = document.getElementById("suggestionQueueTitle");
 const suggestionQueueHint = document.getElementById("suggestionQueueHint");
@@ -10047,10 +10064,16 @@ const I18N = {
     tabSupport: "Apoiar",
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para a próxima recomendação ficar mais precisa.",
+    swipeHeroKicker: "Descoberta por swipe",
+    swipeHeroTitle: "Arraste como Tinder para ensinar seu gosto",
+    swipeHeroHint: "Direita curte e salva no perfil. Esquerda troca sem repetir artista/faixa.",
     swipeKicker: "Swipe da track",
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
+    topSwipeEmptyTitle: "Comece com uma descoberta",
+    topSwipeEmptyMeta: "Toque em Surpreender ou gere uma recomendação para abrir o primeiro card.",
+    topSwipeHint: "Arraste o card com o dedo: direita curte, esquerda troca.",
     primarySwipeHint: "Arraste este card: direita curte, esquerda troca.",
     swipeLike: "Curti",
     swipePass: "Trocar",
@@ -10528,10 +10551,16 @@ const I18N = {
     tabSupport: "Support",
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the next recommendation becomes more precise.",
+    swipeHeroKicker: "Swipe discovery",
+    swipeHeroTitle: "Swipe like Tinder to teach your taste",
+    swipeHeroHint: "Right likes and saves to your profile. Left swaps without repeating artist/track.",
     swipeKicker: "Track swipe",
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
+    topSwipeEmptyTitle: "Start with a discovery",
+    topSwipeEmptyMeta: "Tap Surprise or generate a recommendation to open the first card.",
+    topSwipeHint: "Drag the card with your finger: right to like, left to swap.",
     primarySwipeHint: "Drag this card: right to like, left to swap.",
     swipeLike: "Like",
     swipePass: "Swap",
@@ -11009,10 +11038,16 @@ const I18N = {
     tabSupport: "Apoyar",
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que la próxima recomendación sea más precisa.",
+    swipeHeroKicker: "Descubrimiento por swipe",
+    swipeHeroTitle: "Arrastra como Tinder para enseñar tu gusto",
+    swipeHeroHint: "Derecha guarda el me gusta. Izquierda cambia sin repetir artista/pista.",
     swipeKicker: "Swipe de la pista",
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
+    topSwipeEmptyTitle: "Empieza con un descubrimiento",
+    topSwipeEmptyMeta: "Toca Sorprender o genera una recomendación para abrir la primera tarjeta.",
+    topSwipeHint: "Arrastra la tarjeta con el dedo: derecha gusta, izquierda cambia.",
     primarySwipeHint: "Arrastra esta tarjeta: derecha gusta, izquierda cambia.",
     swipeLike: "Me gusta",
     swipePass: "Cambiar",
@@ -12164,9 +12199,16 @@ function applyLanguage() {
   setText("#feedbackKicker", t("feedbackKicker"));
   setText("#feedbackTitle", labels.feedbackTitle || "");
   setText("#feedbackHint", t("feedbackHint"));
+  setText("#swipeHeroKicker", t("swipeHeroKicker"));
+  setText("#swipeHeroTitle", t("swipeHeroTitle"));
+  setText("#swipeHeroHint", t("swipeHeroHint"));
+  setText("#topSwipeHint", t("topSwipeHint"));
   setText("#swipeKicker", t("swipeKicker"));
   setText("#swipeHint", t("swipeHint"));
   setText("#primarySwipeHint", t("primarySwipeHint"));
+  setText("#topSwipeLikeBtn", t("swipeLike"));
+  setText("#topSwipePassBtn", t("swipePass"));
+  setText("#topSwipeSurpriseBtn", t("surpriseBtn"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
@@ -13927,8 +13969,9 @@ function ensureAllButtonsHaveAction() {
   document.querySelectorAll("button").forEach((button) => {
     if (button.dataset.bound === "1") return;
     button.dataset.bound = "1";
-    button.addEventListener("click", () => {
-      showToast(t("toastButtonFallback"));
+    button.addEventListener("click", (event) => {
+      if (event.defaultPrevented || button.disabled) return;
+      playUiSfx("tap");
     });
   });
 }
@@ -15496,20 +15539,21 @@ async function withSearchOverlay(initialMessage, worker) {
 }
 
 function scrollResultPanelIntoView({ force = false } = {}) {
-  if (!resultPanel || resultPanel.classList.contains("hidden")) return;
-  const rect = resultPanel.getBoundingClientRect();
+  const targetPanel = swipeStartPanel || resultPanel;
+  if (!targetPanel) return;
+  const rect = targetPanel.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
   const alreadyComfortable = rect.top >= 72 && rect.top < Math.max(180, viewportHeight * 0.58);
   if (!force && alreadyComfortable) return;
   const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-  resultPanel.scrollIntoView({
+  targetPanel.scrollIntoView({
     behavior: reducedMotion ? "auto" : "smooth",
     block: "start"
   });
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -15523,6 +15567,13 @@ function setRecommendationRunBusy(isBusy) {
     if (!button) return;
     button.disabled = Boolean(isBusy);
   });
+  if (!isBusy) {
+    const hasTrack = Boolean(currentRecommendation);
+    if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = !hasTrack;
+    if (topSwipePassBtn) topSwipePassBtn.disabled = !hasTrack;
+    if (swipeLikeBtn) swipeLikeBtn.disabled = !hasTrack;
+    if (swipePassBtn) swipePassBtn.disabled = !hasTrack;
+  }
   if (smartPresetBar) {
     smartPresetBar.querySelectorAll("button[data-preset]").forEach((button) => {
       button.disabled = Boolean(isBusy);
@@ -17501,6 +17552,7 @@ function renderArtistVisualFallback(track, sourceText = "") {
     artistPhoto.removeAttribute("src");
     artistPhoto.alt = "";
   }
+  renderTopSwipeArtwork(track);
 }
 
 function applyArtistPhoto(track, imageUrl = "", source = "") {
@@ -17524,6 +17576,7 @@ function applyArtistPhoto(track, imageUrl = "", source = "") {
   }
   track.artistImageUrl = url;
   track.artistImageSource = source || "Deezer";
+  renderTopSwipeArtwork(track);
   return true;
 }
 
@@ -22682,13 +22735,33 @@ function resetSwipeElementPosition(element) {
 }
 
 function resetSwipeCardPosition() {
+  resetSwipeElementPosition(topSwipeCard);
   resetSwipeElementPosition(swipeTrackCard);
   resetSwipeElementPosition(primaryTrackCard);
 }
 
 function swipeAnimationElement(triggerEl) {
-  if (triggerEl === primaryTrackCard || triggerEl === swipeTrackCard) return triggerEl;
-  return swipeTrackCard || primaryTrackCard;
+  if (triggerEl === topSwipeCard || triggerEl === primaryTrackCard || triggerEl === swipeTrackCard) return triggerEl;
+  if (triggerEl === topSwipeLikeBtn || triggerEl === topSwipePassBtn) return topSwipeCard || swipeTrackCard || primaryTrackCard;
+  return topSwipeCard || swipeTrackCard || primaryTrackCard;
+}
+
+function renderTopSwipeArtwork(track) {
+  if (!topSwipeCard) return;
+  const hasTrack = Boolean(track);
+  const artist = String(track?.artist || "").trim();
+  const imageUrl = String(track?.artistImageUrl || track?.coverUrl || track?.imageUrl || "").trim();
+  if (topSwipeFallback) topSwipeFallback.textContent = artist ? artistInitials(artist) : "SS";
+  if (!topSwipeImage) return;
+  if (!hasTrack || !imageUrl) {
+    topSwipeImage.classList.add("hidden");
+    topSwipeImage.removeAttribute("src");
+    topSwipeImage.alt = "";
+    return;
+  }
+  topSwipeImage.src = imageUrl;
+  topSwipeImage.alt = artist || String(track?.song || "");
+  topSwipeImage.classList.remove("hidden");
 }
 
 function updateSwipeFeedbackCard(track) {
@@ -22699,10 +22772,24 @@ function updateSwipeFeedbackCard(track) {
   if (swipeFeedbackDeck) swipeFeedbackDeck.classList.toggle("is-empty", !hasTrack);
   if (swipeKicker) swipeKicker.textContent = t("swipeKicker");
   if (swipeHint) swipeHint.textContent = t("swipeHint");
+  if (topSwipeKicker) topSwipeKicker.textContent = t("swipeKicker");
+  if (topSwipeHint) topSwipeHint.textContent = t("topSwipeHint");
   if (primarySwipeHint) primarySwipeHint.textContent = t("primarySwipeHint");
+  if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
+  if (topSwipePassBtn) topSwipePassBtn.textContent = t("swipePass");
+  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = t("surpriseBtn");
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
+  if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
+  renderTopSwipeArtwork(track);
   if (!hasTrack) {
+    if (topSwipeTitle) topSwipeTitle.textContent = t("topSwipeEmptyTitle");
+    if (topSwipeMeta) topSwipeMeta.textContent = t("topSwipeEmptyMeta");
+    if (topSwipeStyleChip) topSwipeStyleChip.textContent = t("freeStyle");
+    if (topSwipeBpmChip) topSwipeBpmChip.textContent = t("bpm");
+    if (topSwipeEnergyChip) topSwipeEnergyChip.textContent = t("freeEnergy");
+    if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
+    if (topSwipePassBtn) topSwipePassBtn.disabled = true;
     if (swipeTrackTitle) swipeTrackTitle.textContent = t("swipeEmptyTitle");
     if (swipeTrackMeta) swipeTrackMeta.textContent = t("swipeEmptyMeta");
     if (swipeStyleChip) swipeStyleChip.textContent = t("freeStyle");
@@ -22716,6 +22803,15 @@ function updateSwipeFeedbackCard(track) {
   const style = styleLabelByValue(track.style);
   const bpm = formatBpmLine(track);
   const energy = energyLabelByValue(track.energy);
+  if (topSwipeTitle) topSwipeTitle.textContent = track.song || unknownTrackText;
+  if (topSwipeMeta) {
+    topSwipeMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
+  }
+  if (topSwipeStyleChip) topSwipeStyleChip.textContent = style;
+  if (topSwipeBpmChip) topSwipeBpmChip.textContent = bpm;
+  if (topSwipeEnergyChip) topSwipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
+  if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = false;
+  if (topSwipePassBtn) topSwipePassBtn.disabled = false;
   if (swipeTrackTitle) swipeTrackTitle.textContent = track.song || unknownTrackText;
   if (swipeTrackMeta) {
     swipeTrackMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
@@ -26135,12 +26231,44 @@ bind(swipePassBtn, "click", () => {
   void completeSwipeFeedback("pass", swipePassBtn);
 });
 
+bind(topSwipeLikeBtn, "click", () => {
+  void completeSwipeFeedback("like", topSwipeCard);
+});
+
+bind(topSwipePassBtn, "click", () => {
+  void completeSwipeFeedback("pass", topSwipeCard);
+});
+
+bind(topSwipeSurpriseBtn, "click", async () => {
+  await runSurpriseRecommendation();
+});
+
+bind(topSwipeCard, "pointerdown", (event) => {
+  beginSwipePointer(event, topSwipeCard);
+});
+
 bind(swipeTrackCard, "pointerdown", (event) => {
   beginSwipePointer(event, swipeTrackCard);
 });
 
 bind(primaryTrackCard, "pointerdown", (event) => {
   beginSwipePointer(event, primaryTrackCard);
+});
+
+bind(topSwipeCard, "pointermove", (event) => {
+  if (!swipeDragState || swipeDragState.pointerId !== event.pointerId) return;
+  const dx = event.clientX - swipeDragState.startX;
+  swipeDragState.dx = dx;
+  setSwipeDragVisual(dx);
+  maybeCompleteSwipeDuringDrag(dx);
+});
+
+bind(topSwipeCard, "pointerup", (event) => {
+  finishSwipePointer(event);
+});
+
+bind(topSwipeCard, "pointercancel", (event) => {
+  finishSwipePointer(event, true);
 });
 
 bind(swipeTrackCard, "pointermove", (event) => {
@@ -26359,6 +26487,7 @@ bootstrapAudio();
 showIntroScreen();
 updateWeightLabels();
 updateVoiceLabUi();
+updateSwipeFeedbackCard(currentRecommendation);
 bindPreferenceAutosave();
 ensureAllButtonsHaveAction();
 applyGenreVibeTheme("", { force: true });

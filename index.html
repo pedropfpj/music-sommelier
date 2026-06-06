@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260605u" />
+    <link rel="stylesheet" href="styles.css?v=20260606a" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -378,6 +378,42 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Apoiar</button>
       </nav>
+
+      <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
+        <div class="swipe-start-head">
+          <div>
+            <p id="swipeHeroKicker" class="section-kicker">Descoberta por swipe</p>
+            <h3 id="swipeHeroTitle">Arraste como Tinder para ensinar seu gosto</h3>
+          </div>
+          <p id="swipeHeroHint" class="section-hint muted">Direita curte e salva no perfil. Esquerda troca sem repetir artista/faixa.</p>
+        </div>
+        <div class="swipe-start-stage">
+          <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para avaliar a faixa">
+            <span class="swipe-stamp swipe-stamp-like">Curti</span>
+            <span class="swipe-stamp swipe-stamp-pass">Trocar</span>
+            <div class="swipe-hero-art" aria-hidden="true">
+              <img id="topSwipeImage" class="swipe-hero-image hidden" alt="" loading="lazy" />
+              <span id="topSwipeFallback" class="swipe-hero-fallback">SS</span>
+            </div>
+            <div class="swipe-hero-copy">
+              <p id="topSwipeKicker" class="swipe-kicker">Swipe da track</p>
+              <h4 id="topSwipeTitle">Comece com uma descoberta</h4>
+              <p id="topSwipeMeta" class="muted">Toque em Surpreender ou gere uma recomendação para abrir o primeiro card.</p>
+              <div class="swipe-track-signals">
+                <span id="topSwipeStyleChip">Estilo</span>
+                <span id="topSwipeBpmChip">BPM</span>
+                <span id="topSwipeEnergyChip">Energia</span>
+              </div>
+            </div>
+          </article>
+          <div class="swipe-hero-actions">
+            <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Trocar</button>
+            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpreender</button>
+            <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
+          </div>
+          <p id="topSwipeHint" class="muted swipe-hint">Arraste o card com o dedo: direita curte, esquerda troca.</p>
+        </div>
+      </section>
 
       <section id="dailyNewsPanel" class="panel daily-news-panel app-tab-panel" data-app-tab="news" aria-labelledby="dailyNewsTitle">
         <div class="section-head daily-news-head">
@@ -1188,6 +1224,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260605u"></script>
+    <script src="app.js?v=20260606a"></script>
   </body>
 </html>
