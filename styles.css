@@ -3240,8 +3240,9 @@ input[type="range"] {
 
 .voice-lab-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(280px, 1.05fr);
-  gap: 0.8rem;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(320px, 1.2fr);
+  gap: 0.88rem;
+  align-items: start;
 }
 
 .voice-recorder-card,
@@ -3256,6 +3257,7 @@ input[type="range"] {
 .voice-recorder-card {
   display: grid;
   gap: 0.72rem;
+  align-content: start;
 }
 
 .voice-visual {
@@ -3376,6 +3378,7 @@ input[type="range"] {
 }
 
 .voice-mini-card {
+  grid-column: 1 / -1;
   margin-top: 0.18rem;
   border: 1px solid rgba(126, 214, 255, 0.32);
   border-radius: 16px;
@@ -3385,7 +3388,9 @@ input[type="range"] {
     radial-gradient(circle at 100% 18%, rgba(247, 167, 255, 0.12), transparent 34%),
     linear-gradient(145deg, rgba(5, 14, 32, 0.92), rgba(4, 10, 25, 0.78));
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
   gap: 0.72rem;
+  align-items: start;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035), 0 18px 42px rgba(0, 10, 28, 0.2);
 }
 
@@ -3395,10 +3400,16 @@ input[type="range"] {
   line-height: 1.35;
 }
 
+.voice-mini-status {
+  grid-column: 1 / -1;
+}
+
 .voice-mini-controls {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 0.5rem;
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .voice-mini-controls button {
@@ -3409,6 +3420,7 @@ input[type="range"] {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.38rem;
+  grid-column: 1 / -1;
 }
 
 .voice-mini-preset-btn {
@@ -3468,10 +3480,15 @@ input[type="range"] {
   width: 100%;
 }
 
+.voice-mini-card > .voice-bpm-control {
+  grid-column: span 1;
+}
+
 .voice-mini-mixer-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.44rem;
+  grid-column: 1 / -1;
 }
 
 .voice-knob-control {
@@ -3550,6 +3567,7 @@ input[type="range"] {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.42rem;
+  grid-column: 1 / -1;
 }
 
 .voice-daw-pad {
@@ -3597,6 +3615,7 @@ input[type="range"] {
   background:
     radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.08), transparent 44%),
     rgba(2, 8, 20, 0.5);
+  grid-column: 1 / -1;
 }
 
 .voice-step-row {
@@ -3947,7 +3966,7 @@ input[type="range"] {
 .feedback-grid {
   margin-top: 0.85rem;
   display: grid;
-  gap: 0.72rem;
+  gap: 0.78rem;
   border-top: 1px solid rgba(141, 173, 214, 0.22);
   padding-top: 0.75rem;
 }
@@ -3971,9 +3990,170 @@ input[type="range"] {
 
 .feedback-refinement-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
-  gap: 0.75rem;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+  gap: 0.62rem;
   align-items: stretch;
+}
+
+.swipe-feedback-deck {
+  display: grid;
+  gap: 0.62rem;
+  padding: clamp(0.7rem, 1.3vw, 0.95rem);
+  border: 1px solid rgba(126, 214, 255, 0.24);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.12), transparent 36%),
+    radial-gradient(circle at 100% 100%, rgba(255, 157, 224, 0.1), transparent 38%),
+    rgba(3, 10, 25, 0.72);
+}
+
+.swipe-track-card {
+  --swipe-x: 0px;
+  --swipe-rotate: 0deg;
+  --swipe-like-opacity: 0;
+  --swipe-pass-opacity: 0;
+  position: relative;
+  min-height: 172px;
+  display: grid;
+  align-content: center;
+  gap: 0.48rem;
+  padding: clamp(1rem, 2.2vw, 1.35rem);
+  border: 1px solid rgba(139, 236, 255, 0.34);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(123, 255, 216, 0.14), transparent 42%),
+    linear-gradient(315deg, rgba(126, 178, 255, 0.16), rgba(10, 19, 42, 0.86)),
+    rgba(4, 11, 28, 0.92);
+  box-shadow: 0 20px 52px rgba(0, 8, 22, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  transform: translateX(var(--swipe-x)) rotate(var(--swipe-rotate));
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.swipe-track-card:active,
+.swipe-track-card.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.swipe-track-card.is-like {
+  border-color: rgba(110, 255, 220, 0.72);
+  box-shadow: 0 22px 58px rgba(70, 255, 211, 0.16), inset 0 0 0 1px rgba(110, 255, 220, 0.12);
+}
+
+.swipe-track-card.is-pass {
+  border-color: rgba(255, 143, 180, 0.72);
+  box-shadow: 0 22px 58px rgba(255, 108, 160, 0.16), inset 0 0 0 1px rgba(255, 143, 180, 0.12);
+}
+
+.swipe-track-card.is-accepted {
+  transform: translateX(120%) rotate(16deg);
+}
+
+.swipe-track-card.is-rejected {
+  transform: translateX(-120%) rotate(-16deg);
+}
+
+.swipe-kicker {
+  margin: 0;
+  color: #9fffea;
+  font-family: "Syne", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.swipe-track-card h4 {
+  margin: 0;
+  color: #f1fbff;
+  font-size: clamp(1.28rem, 3vw, 2.08rem);
+  line-height: 1.02;
+}
+
+.swipe-track-card .muted {
+  margin: 0;
+  max-width: 64ch;
+}
+
+.swipe-track-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.38rem;
+}
+
+.swipe-track-signals span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid rgba(141, 197, 255, 0.26);
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  color: #dcecff;
+  background: rgba(8, 17, 35, 0.78);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.swipe-stamp {
+  position: absolute;
+  top: 1rem;
+  z-index: 1;
+  border: 2px solid currentColor;
+  border-radius: 12px;
+  padding: 0.22rem 0.62rem;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.swipe-stamp-like {
+  right: 1rem;
+  color: #7bffd8;
+  opacity: var(--swipe-like-opacity);
+  transform: rotate(10deg);
+}
+
+.swipe-stamp-pass {
+  left: 1rem;
+  color: #ff93bc;
+  opacity: var(--swipe-pass-opacity);
+  transform: rotate(-10deg);
+}
+
+.swipe-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.58rem;
+}
+
+.swipe-action-btn {
+  min-height: 46px;
+  border-radius: 999px;
+  font-family: "Syne", sans-serif;
+  font-weight: 900;
+}
+
+.swipe-action-btn.pass {
+  border-color: rgba(255, 143, 180, 0.5);
+  color: #ffd6e4;
+  background: linear-gradient(135deg, rgba(80, 17, 42, 0.66), rgba(8, 15, 33, 0.86));
+}
+
+.swipe-action-btn.like {
+  border-color: rgba(110, 255, 220, 0.66);
+  color: #061124;
+  background: linear-gradient(110deg, #6effdc, #7cb2ff);
+}
+
+.swipe-hint {
+  margin: 0;
+  font-size: 0.88rem;
 }
 
 .rating-panel {
@@ -5762,6 +5942,18 @@ input[type="range"] {
     grid-template-columns: 1fr;
   }
 
+  .swipe-feedback-deck {
+    padding: 0.62rem;
+  }
+
+  .swipe-track-card {
+    min-height: 160px;
+  }
+
+  .swipe-actions {
+    grid-template-columns: 1fr;
+  }
+
   .feedback-buttons {
     grid-template-columns: 1fr;
   }
@@ -6095,29 +6287,56 @@ input[type="range"] {
     display: grid;
   }
 
-  .voice-effect-grid,
-  .voice-controls,
   .voice-mini-controls,
-  .voice-mini-preset-grid,
-  .voice-mini-mixer-grid,
-  .voice-daw-pad-grid {
+  .voice-mini-preset-grid {
     grid-template-columns: 1fr;
+  }
+
+  .voice-effect-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .voice-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .voice-controls button {
+    min-height: 48px;
+    border-radius: 16px;
+  }
+
+  .voice-mini-card {
+    grid-template-columns: 1fr;
+  }
+
+  .voice-mini-controls {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .voice-mini-card > .voice-bpm-control {
+    grid-column: 1;
   }
 
   .voice-mini-preset-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .voice-mini-mixer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .voice-daw-pad-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .voice-step-sequencer {
+    overflow-x: auto;
+    padding-bottom: 0.7rem;
   }
 
   .voice-step-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 3.4rem minmax(220px, 1fr);
     gap: 0.24rem;
   }
 

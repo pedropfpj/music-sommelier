@@ -4061,6 +4061,17 @@ const discoveryYoutubeLink = document.getElementById("discoveryYoutubeLink");
 const discoverySoundcloudLink = document.getElementById("discoverySoundcloudLink");
 
 const feedbackMessage = document.getElementById("feedbackMessage");
+const swipeFeedbackDeck = document.getElementById("swipeFeedbackDeck");
+const swipeTrackCard = document.getElementById("swipeTrackCard");
+const swipeKicker = document.getElementById("swipeKicker");
+const swipeTrackTitle = document.getElementById("swipeTrackTitle");
+const swipeTrackMeta = document.getElementById("swipeTrackMeta");
+const swipeStyleChip = document.getElementById("swipeStyleChip");
+const swipeBpmChip = document.getElementById("swipeBpmChip");
+const swipeEnergyChip = document.getElementById("swipeEnergyChip");
+const swipeLikeBtn = document.getElementById("swipeLikeBtn");
+const swipePassBtn = document.getElementById("swipePassBtn");
+const swipeHint = document.getElementById("swipeHint");
 const artistHubIntro = document.getElementById("artistHubIntro");
 const artistBio = document.getElementById("artistBio");
 const artistBioAiMeta = document.getElementById("artistBioAiMeta");
@@ -4196,6 +4207,8 @@ let trackRatings = new Map();
 let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
 let trackPreviewIssueSignals = new Map();
+let swipeFeedbackBusy = false;
+let swipeDragState = null;
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
@@ -10033,6 +10046,14 @@ const I18N = {
     tabSupport: "Apoiar",
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para a próxima recomendação ficar mais precisa.",
+    swipeKicker: "Swipe da track",
+    swipeEmptyTitle: "Gere uma recomendação",
+    swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
+    swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
+    swipeLike: "Curti",
+    swipePass: "Trocar",
+    swipeLikedNext: "Curti essa. Salvei o sinal e já trouxe outra faixa para continuar refinando.",
+    swipePassedNext: "Boa, removi essa rota e trouxe uma opção nova.",
     feedbackLikeGroupTitle: "Guardar sinal positivo",
     feedbackCorrectGroupTitle: "Corrigir rota",
     feedbackExploreGroupTitle: "Próximo passo",
@@ -10505,6 +10526,14 @@ const I18N = {
     tabSupport: "Support",
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the next recommendation becomes more precise.",
+    swipeKicker: "Track swipe",
+    swipeEmptyTitle: "Generate a recommendation",
+    swipeEmptyMeta: "Drag right if you like it or left if it missed.",
+    swipeHint: "Works with mouse or touch: drag the card and release.",
+    swipeLike: "Like",
+    swipePass: "Swap",
+    swipeLikedNext: "Liked. I saved the signal and brought another track to keep refining.",
+    swipePassedNext: "Good, I removed that route and brought a new option.",
     feedbackLikeGroupTitle: "Save positive signal",
     feedbackCorrectGroupTitle: "Correct route",
     feedbackExploreGroupTitle: "Next step",
@@ -10977,6 +11006,14 @@ const I18N = {
     tabSupport: "Apoyar",
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que la próxima recomendación sea más precisa.",
+    swipeKicker: "Swipe de la pista",
+    swipeEmptyTitle: "Genera una recomendación",
+    swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
+    swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
+    swipeLike: "Me gusta",
+    swipePass: "Cambiar",
+    swipeLikedNext: "Te gustó. Guardé la señal y traje otra pista para seguir refinando.",
+    swipePassedNext: "Bien, saqué esa ruta y traje una opción nueva.",
     feedbackLikeGroupTitle: "Guardar señal positiva",
     feedbackCorrectGroupTitle: "Corregir ruta",
     feedbackExploreGroupTitle: "Próximo paso",
@@ -12123,6 +12160,10 @@ function applyLanguage() {
   setText("#feedbackKicker", t("feedbackKicker"));
   setText("#feedbackTitle", labels.feedbackTitle || "");
   setText("#feedbackHint", t("feedbackHint"));
+  setText("#swipeKicker", t("swipeKicker"));
+  setText("#swipeHint", t("swipeHint"));
+  setText("#swipeLikeBtn", t("swipeLike"));
+  setText("#swipePassBtn", t("swipePass"));
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
   setText("#feedbackCorrectGroupTitle", t("feedbackCorrectGroupTitle"));
   setText("#feedbackExploreGroupTitle", t("feedbackExploreGroupTitle"));
@@ -12498,6 +12539,7 @@ function resetSessionUiState() {
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (feedbackMessage) feedbackMessage.textContent = "";
+  updateSwipeFeedbackCard(null);
   if (statsLine) statsLine.textContent = t("defaultStats");
   if (previewStatus) previewStatus.textContent = t("previewSearching");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
@@ -22625,6 +22667,163 @@ function pickDiscovery(prefs, knownArtists, mainArtist, excludedDiscoveryNames =
   return top[Math.floor(Math.random() * top.length)];
 }
 
+function resetSwipeCardPosition() {
+  if (!swipeTrackCard) return;
+  swipeTrackCard.classList.remove("is-dragging", "is-like", "is-pass", "is-accepted", "is-rejected");
+  swipeTrackCard.style.setProperty("--swipe-x", "0px");
+  swipeTrackCard.style.setProperty("--swipe-rotate", "0deg");
+  swipeTrackCard.style.setProperty("--swipe-like-opacity", "0");
+  swipeTrackCard.style.setProperty("--swipe-pass-opacity", "0");
+}
+
+function updateSwipeFeedbackCard(track) {
+  resetSwipeCardPosition();
+  const hasTrack = Boolean(track);
+  const unknownTrackText = currentLanguage === "en" ? "Untitled track" : currentLanguage === "es" ? "Pista sin titulo" : "Faixa sem titulo";
+  const unknownArtistText = currentLanguage === "en" ? "Unknown artist" : currentLanguage === "es" ? "Artista desconocido" : "Artista desconhecido";
+  if (swipeFeedbackDeck) swipeFeedbackDeck.classList.toggle("is-empty", !hasTrack);
+  if (swipeKicker) swipeKicker.textContent = t("swipeKicker");
+  if (swipeHint) swipeHint.textContent = t("swipeHint");
+  if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
+  if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
+  if (!hasTrack) {
+    if (swipeTrackTitle) swipeTrackTitle.textContent = t("swipeEmptyTitle");
+    if (swipeTrackMeta) swipeTrackMeta.textContent = t("swipeEmptyMeta");
+    if (swipeStyleChip) swipeStyleChip.textContent = t("freeStyle");
+    if (swipeBpmChip) swipeBpmChip.textContent = t("bpm");
+    if (swipeEnergyChip) swipeEnergyChip.textContent = t("freeEnergy");
+    if (swipeLikeBtn) swipeLikeBtn.disabled = true;
+    if (swipePassBtn) swipePassBtn.disabled = true;
+    return;
+  }
+
+  const style = styleLabelByValue(track.style);
+  const bpm = formatBpmLine(track);
+  const energy = energyLabelByValue(track.energy);
+  if (swipeTrackTitle) swipeTrackTitle.textContent = track.song || unknownTrackText;
+  if (swipeTrackMeta) {
+    swipeTrackMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
+  }
+  if (swipeStyleChip) swipeStyleChip.textContent = style;
+  if (swipeBpmChip) swipeBpmChip.textContent = bpm;
+  if (swipeEnergyChip) swipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
+  if (swipeLikeBtn) swipeLikeBtn.disabled = false;
+  if (swipePassBtn) swipePassBtn.disabled = false;
+}
+
+function setSwipeDragVisual(dx = 0) {
+  if (!swipeTrackCard) return;
+  const width = Math.max(1, swipeTrackCard.getBoundingClientRect().width || 1);
+  const progress = Math.max(-1, Math.min(1, dx / (width * 0.42)));
+  swipeTrackCard.style.setProperty("--swipe-x", `${dx}px`);
+  swipeTrackCard.style.setProperty("--swipe-rotate", `${progress * 9}deg`);
+  swipeTrackCard.style.setProperty("--swipe-like-opacity", String(Math.max(0, progress)));
+  swipeTrackCard.style.setProperty("--swipe-pass-opacity", String(Math.max(0, -progress)));
+  swipeTrackCard.classList.toggle("is-like", progress > 0.16);
+  swipeTrackCard.classList.toggle("is-pass", progress < -0.16);
+}
+
+async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "" } = {}) {
+  if (!lastPrefs) {
+    if (feedbackMessage && message) feedbackMessage.textContent = message;
+    return false;
+  }
+  const avoidTrackKey = likedTrack ? `${likedTrack.artist}::${likedTrack.song}` : "";
+  const generated = await generateRecommendationWithOverlay(lastPrefs, {
+    resetRejected: false,
+    avoidTrackKey,
+    avoidArtistName
+  });
+  if (!generated) {
+    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+    showToast(recommendationFailureMessage());
+    return false;
+  }
+  if (feedbackMessage && message) feedbackMessage.textContent = message;
+  return true;
+}
+
+async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
+  if (!currentRecommendation) return false;
+  const likedTrack = currentRecommendation;
+  userStats.likedSongs += 1;
+  registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
+  registerSpiritSignal(likedTrack.style, 1.25);
+  playUiSfx("like");
+  burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
+  showToast(t("toastSongLiked"));
+  updateStats();
+  await runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
+    celebrate: shouldCelebrateSpiritUnlockOnSongs(),
+    forceAnimation: true,
+    eventsArtist: likedTrack.artist
+  });
+  await advanceAfterSwipeFeedback({
+    likedTrack,
+    message: t("swipeLikedNext")
+  });
+  return true;
+}
+
+async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
+  if (!currentRecommendation || !lastPrefs) return false;
+  const rejectedTrack = currentRecommendation;
+  userStats.skipped += 1;
+  const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
+    source: "swipe_pass",
+    avoidRepeatArtist: true
+  });
+  lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
+  const generated = await advanceAfterSwipeFeedback({
+    likedTrack: rejectedTrack,
+    avoidArtistName: rejectedTrack.artist || "",
+    message: feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext")
+  });
+  playUiSfx("dislike");
+  if (generated) showToast(t("toastSwapped"));
+  updateStats();
+  return generated;
+}
+
+async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
+  if (swipeFeedbackBusy || !currentRecommendation || !swipeTrackCard) return;
+  swipeFeedbackBusy = true;
+  swipeTrackCard.classList.remove("is-dragging");
+  swipeTrackCard.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
+  if (swipeLikeBtn) swipeLikeBtn.disabled = true;
+  if (swipePassBtn) swipePassBtn.disabled = true;
+  await waitMs(180);
+  try {
+    if (direction === "like") await likeCurrentTrackFromSwipe(triggerEl);
+    else await passCurrentTrackFromSwipe(triggerEl);
+  } finally {
+    swipeFeedbackBusy = false;
+    updateSwipeFeedbackCard(currentRecommendation);
+  }
+}
+
+function finishSwipePointer(event, canceled = false) {
+  if (!swipeDragState || !swipeTrackCard) return;
+  const { pointerId, startX } = swipeDragState;
+  if (event && pointerId !== event.pointerId) return;
+  const dx = (event ? event.clientX : startX) - startX;
+  swipeTrackCard.classList.remove("is-dragging");
+  try {
+    swipeTrackCard.releasePointerCapture?.(pointerId);
+  } catch (_) {
+    // Pointer capture may already be released by the browser.
+  }
+  swipeDragState = null;
+
+  const cardWidth = swipeTrackCard.getBoundingClientRect().width || 320;
+  const threshold = Math.min(180, Math.max(88, cardWidth * 0.28));
+  if (!canceled && Math.abs(dx) >= threshold) {
+    void completeSwipeFeedback(dx > 0 ? "like" : "pass", swipeTrackCard);
+    return;
+  }
+  resetSwipeCardPosition();
+}
+
 function renderRecommendation(track, prefs) {
   setActiveAppTab("discover");
   const meta = getTrackMetadata(track);
@@ -22691,6 +22890,7 @@ function renderRecommendation(track, prefs) {
   if (knownArtistPrompt) knownArtistPrompt.classList.remove("hidden");
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   renderTrackRating(track);
+  updateSwipeFeedbackCard(track);
   if (generatedBadge) generatedBadge.textContent = t("generatedNow");
   if (primaryTrackCard) {
     primaryTrackCard.classList.remove("fresh");
@@ -25867,6 +26067,39 @@ bind(noveltyNotYetBtn, "click", async () => {
   if (!noveltyNotYetFallback) {
     showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastTryBetter"));
   }
+});
+
+bind(swipeLikeBtn, "click", () => {
+  void completeSwipeFeedback("like", swipeLikeBtn);
+});
+
+bind(swipePassBtn, "click", () => {
+  void completeSwipeFeedback("pass", swipePassBtn);
+});
+
+bind(swipeTrackCard, "pointerdown", (event) => {
+  if (!currentRecommendation || swipeFeedbackBusy || (typeof event.button === "number" && event.button > 0)) return;
+  swipeDragState = {
+    pointerId: event.pointerId,
+    startX: event.clientX
+  };
+  swipeTrackCard.classList.add("is-dragging");
+  swipeTrackCard.setPointerCapture?.(event.pointerId);
+});
+
+bind(swipeTrackCard, "pointermove", (event) => {
+  if (!swipeDragState || swipeDragState.pointerId !== event.pointerId) return;
+  const dx = event.clientX - swipeDragState.startX;
+  swipeDragState.dx = dx;
+  setSwipeDragVisual(dx);
+});
+
+bind(swipeTrackCard, "pointerup", (event) => {
+  finishSwipePointer(event);
+});
+
+bind(swipeTrackCard, "pointercancel", (event) => {
+  finishSwipePointer(event, true);
 });
 
 bind(likeSongBtn, "click", async () => {
