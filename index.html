@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260605s" />
+    <link rel="stylesheet" href="styles.css?v=20260605u" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -663,6 +663,8 @@
         <article id="primaryTrackCard" class="result-card main-track">
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
+          <span class="swipe-stamp primary-swipe-stamp swipe-stamp-like">Curti</span>
+          <span class="swipe-stamp primary-swipe-stamp swipe-stamp-pass">Trocar</span>
           <figure id="artistVisualCard" class="artist-visual-card">
             <div class="artist-photo-frame">
               <img id="artistPhoto" class="artist-photo hidden" alt="" loading="lazy" />
@@ -674,6 +676,7 @@
               <small id="artistPhotoSource"></small>
             </figcaption>
           </figure>
+          <p id="primarySwipeHint" class="primary-swipe-hint">Arraste este card: direita curte, esquerda troca.</p>
           <h4 id="songTitle" class="track-title-animated"></h4>
           <p id="artistLine" class="meta-line artist-line"><span id="artistOriginFlag" class="artist-origin-flag hidden" aria-hidden="true"></span><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
           <p id="bpmLine" class="meta-line bpm-line"><span id="styleName"></span> <span>•</span> <span id="bpmInfo"></span> <span>•</span> <span id="energyInfo"></span></p>
@@ -1185,6 +1188,6 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260605s"></script>
+    <script src="app.js?v=20260605u"></script>
   </body>
 </html>

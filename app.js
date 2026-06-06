@@ -4072,6 +4072,7 @@ const swipeEnergyChip = document.getElementById("swipeEnergyChip");
 const swipeLikeBtn = document.getElementById("swipeLikeBtn");
 const swipePassBtn = document.getElementById("swipePassBtn");
 const swipeHint = document.getElementById("swipeHint");
+const primarySwipeHint = document.getElementById("primarySwipeHint");
 const artistHubIntro = document.getElementById("artistHubIntro");
 const artistBio = document.getElementById("artistBio");
 const artistBioAiMeta = document.getElementById("artistBioAiMeta");
@@ -10050,6 +10051,7 @@ const I18N = {
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
+    primarySwipeHint: "Arraste este card: direita curte, esquerda troca.",
     swipeLike: "Curti",
     swipePass: "Trocar",
     swipeLikedNext: "Curti essa. Salvei o sinal e já trouxe outra faixa para continuar refinando.",
@@ -10530,6 +10532,7 @@ const I18N = {
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
+    primarySwipeHint: "Drag this card: right to like, left to swap.",
     swipeLike: "Like",
     swipePass: "Swap",
     swipeLikedNext: "Liked. I saved the signal and brought another track to keep refining.",
@@ -11010,6 +11013,7 @@ const I18N = {
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
+    primarySwipeHint: "Arrastra esta tarjeta: derecha gusta, izquierda cambia.",
     swipeLike: "Me gusta",
     swipePass: "Cambiar",
     swipeLikedNext: "Te gustó. Guardé la señal y traje otra pista para seguir refinando.",
@@ -12162,6 +12166,7 @@ function applyLanguage() {
   setText("#feedbackHint", t("feedbackHint"));
   setText("#swipeKicker", t("swipeKicker"));
   setText("#swipeHint", t("swipeHint"));
+  setText("#primarySwipeHint", t("primarySwipeHint"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
@@ -22667,13 +22672,23 @@ function pickDiscovery(prefs, knownArtists, mainArtist, excludedDiscoveryNames =
   return top[Math.floor(Math.random() * top.length)];
 }
 
+function resetSwipeElementPosition(element) {
+  if (!element) return;
+  element.classList.remove("is-dragging", "is-like", "is-pass", "is-accepted", "is-rejected");
+  element.style.setProperty("--swipe-x", "0px");
+  element.style.setProperty("--swipe-rotate", "0deg");
+  element.style.setProperty("--swipe-like-opacity", "0");
+  element.style.setProperty("--swipe-pass-opacity", "0");
+}
+
 function resetSwipeCardPosition() {
-  if (!swipeTrackCard) return;
-  swipeTrackCard.classList.remove("is-dragging", "is-like", "is-pass", "is-accepted", "is-rejected");
-  swipeTrackCard.style.setProperty("--swipe-x", "0px");
-  swipeTrackCard.style.setProperty("--swipe-rotate", "0deg");
-  swipeTrackCard.style.setProperty("--swipe-like-opacity", "0");
-  swipeTrackCard.style.setProperty("--swipe-pass-opacity", "0");
+  resetSwipeElementPosition(swipeTrackCard);
+  resetSwipeElementPosition(primaryTrackCard);
+}
+
+function swipeAnimationElement(triggerEl) {
+  if (triggerEl === primaryTrackCard || triggerEl === swipeTrackCard) return triggerEl;
+  return swipeTrackCard || primaryTrackCard;
 }
 
 function updateSwipeFeedbackCard(track) {
@@ -22684,6 +22699,7 @@ function updateSwipeFeedbackCard(track) {
   if (swipeFeedbackDeck) swipeFeedbackDeck.classList.toggle("is-empty", !hasTrack);
   if (swipeKicker) swipeKicker.textContent = t("swipeKicker");
   if (swipeHint) swipeHint.textContent = t("swipeHint");
+  if (primarySwipeHint) primarySwipeHint.textContent = t("primarySwipeHint");
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
   if (!hasTrack) {
@@ -22711,16 +22727,16 @@ function updateSwipeFeedbackCard(track) {
   if (swipePassBtn) swipePassBtn.disabled = false;
 }
 
-function setSwipeDragVisual(dx = 0) {
-  if (!swipeTrackCard) return;
-  const width = Math.max(1, swipeTrackCard.getBoundingClientRect().width || 1);
+function setSwipeDragVisual(dx = 0, element = swipeDragState?.element || swipeTrackCard) {
+  if (!element) return;
+  const width = Math.max(1, element.getBoundingClientRect().width || 1);
   const progress = Math.max(-1, Math.min(1, dx / (width * 0.42)));
-  swipeTrackCard.style.setProperty("--swipe-x", `${dx}px`);
-  swipeTrackCard.style.setProperty("--swipe-rotate", `${progress * 9}deg`);
-  swipeTrackCard.style.setProperty("--swipe-like-opacity", String(Math.max(0, progress)));
-  swipeTrackCard.style.setProperty("--swipe-pass-opacity", String(Math.max(0, -progress)));
-  swipeTrackCard.classList.toggle("is-like", progress > 0.16);
-  swipeTrackCard.classList.toggle("is-pass", progress < -0.16);
+  element.style.setProperty("--swipe-x", `${dx}px`);
+  element.style.setProperty("--swipe-rotate", `${progress * 9}deg`);
+  element.style.setProperty("--swipe-like-opacity", String(Math.max(0, progress)));
+  element.style.setProperty("--swipe-pass-opacity", String(Math.max(0, -progress)));
+  element.classList.toggle("is-like", progress > 0.16);
+  element.classList.toggle("is-pass", progress < -0.16);
 }
 
 async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "" } = {}) {
@@ -22786,10 +22802,11 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
 }
 
 async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
-  if (swipeFeedbackBusy || !currentRecommendation || !swipeTrackCard) return;
+  const animatedEl = swipeAnimationElement(triggerEl);
+  if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
   swipeFeedbackBusy = true;
-  swipeTrackCard.classList.remove("is-dragging");
-  swipeTrackCard.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
+  animatedEl.classList.remove("is-dragging");
+  animatedEl.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
   if (swipeLikeBtn) swipeLikeBtn.disabled = true;
   if (swipePassBtn) swipePassBtn.disabled = true;
   await waitMs(180);
@@ -22803,25 +22820,66 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
 }
 
 function finishSwipePointer(event, canceled = false) {
-  if (!swipeDragState || !swipeTrackCard) return;
-  const { pointerId, startX } = swipeDragState;
+  if (!swipeDragState) return;
+  const { element, pointerId, startX } = swipeDragState;
+  if (!element) return;
   if (event && pointerId !== event.pointerId) return;
   const dx = (event ? event.clientX : startX) - startX;
-  swipeTrackCard.classList.remove("is-dragging");
+  element.classList.remove("is-dragging");
   try {
-    swipeTrackCard.releasePointerCapture?.(pointerId);
+    element.releasePointerCapture?.(pointerId);
   } catch (_) {
     // Pointer capture may already be released by the browser.
   }
   swipeDragState = null;
 
-  const cardWidth = swipeTrackCard.getBoundingClientRect().width || 320;
+  const cardWidth = element.getBoundingClientRect().width || 320;
   const threshold = Math.min(180, Math.max(88, cardWidth * 0.28));
   if (!canceled && Math.abs(dx) >= threshold) {
-    void completeSwipeFeedback(dx > 0 ? "like" : "pass", swipeTrackCard);
+    void completeSwipeFeedback(dx > 0 ? "like" : "pass", element);
     return;
   }
   resetSwipeCardPosition();
+}
+
+function maybeCompleteSwipeDuringDrag(dx = 0) {
+  if (!swipeDragState?.element || swipeDragState.completed) return false;
+  const { element, pointerId } = swipeDragState;
+  const cardWidth = element.getBoundingClientRect().width || 320;
+  const threshold = Math.min(180, Math.max(88, cardWidth * 0.28));
+  if (Math.abs(dx) < threshold) return false;
+
+  swipeDragState.completed = true;
+  element.classList.remove("is-dragging");
+  try {
+    element.releasePointerCapture?.(pointerId);
+  } catch (_) {
+    // Pointer capture may already be released by the browser.
+  }
+  swipeDragState = null;
+  void completeSwipeFeedback(dx > 0 ? "like" : "pass", element);
+  return true;
+}
+
+function shouldIgnoreSwipePointerStart(event) {
+  const target = event?.target;
+  if (!target || typeof target.closest !== "function") return false;
+  return Boolean(
+    target.closest("a, button, input, select, textarea, audio, iframe, label, [contenteditable='true']")
+  );
+}
+
+function beginSwipePointer(event, element) {
+  if (!element || !currentRecommendation || swipeFeedbackBusy) return;
+  if (typeof event.button === "number" && event.button > 0) return;
+  if (shouldIgnoreSwipePointerStart(event)) return;
+  swipeDragState = {
+    element,
+    pointerId: event.pointerId,
+    startX: event.clientX
+  };
+  element.classList.add("is-dragging");
+  element.setPointerCapture?.(event.pointerId);
 }
 
 function renderRecommendation(track, prefs) {
@@ -26078,13 +26136,11 @@ bind(swipePassBtn, "click", () => {
 });
 
 bind(swipeTrackCard, "pointerdown", (event) => {
-  if (!currentRecommendation || swipeFeedbackBusy || (typeof event.button === "number" && event.button > 0)) return;
-  swipeDragState = {
-    pointerId: event.pointerId,
-    startX: event.clientX
-  };
-  swipeTrackCard.classList.add("is-dragging");
-  swipeTrackCard.setPointerCapture?.(event.pointerId);
+  beginSwipePointer(event, swipeTrackCard);
+});
+
+bind(primaryTrackCard, "pointerdown", (event) => {
+  beginSwipePointer(event, primaryTrackCard);
 });
 
 bind(swipeTrackCard, "pointermove", (event) => {
@@ -26092,6 +26148,7 @@ bind(swipeTrackCard, "pointermove", (event) => {
   const dx = event.clientX - swipeDragState.startX;
   swipeDragState.dx = dx;
   setSwipeDragVisual(dx);
+  maybeCompleteSwipeDuringDrag(dx);
 });
 
 bind(swipeTrackCard, "pointerup", (event) => {
@@ -26099,6 +26156,30 @@ bind(swipeTrackCard, "pointerup", (event) => {
 });
 
 bind(swipeTrackCard, "pointercancel", (event) => {
+  finishSwipePointer(event, true);
+});
+
+bind(primaryTrackCard, "pointermove", (event) => {
+  if (!swipeDragState || swipeDragState.pointerId !== event.pointerId) return;
+  const dx = event.clientX - swipeDragState.startX;
+  swipeDragState.dx = dx;
+  setSwipeDragVisual(dx);
+  maybeCompleteSwipeDuringDrag(dx);
+});
+
+bind(primaryTrackCard, "pointerup", (event) => {
+  finishSwipePointer(event);
+});
+
+bind(primaryTrackCard, "pointercancel", (event) => {
+  finishSwipePointer(event, true);
+});
+
+bind(window, "pointerup", (event) => {
+  finishSwipePointer(event);
+});
+
+bind(window, "pointercancel", (event) => {
   finishSwipePointer(event, true);
 });
 
