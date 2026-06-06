@@ -1,16 +1,16 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 05/06/2026, 21:40:03
+Gerado em: 05/06/2026, 21:53:48
 Status: REVISAR
 
 ## Resumo
 
 - Faixas auditadas: 577
 - Artistas unicos: 1991
-- Artistas indexados exibidos no app: 2450
-- Musicas buscaveis estimadas no app: 14700
-- Media buscavel por artista indexado: 6.0x
-- Cobertura auditada versus buscavel: 3.9%
+- Artistas indexados exibidos no app: 3200
+- Musicas buscaveis estimadas no app: 25600
+- Media buscavel por artista indexado: 8.0x
+- Cobertura auditada versus buscavel: 2.3%
 - Gravadoras/labels unicas: 282
 - Estilos com faixas: 48
 - Artistas vindos de datasets externos: 1926

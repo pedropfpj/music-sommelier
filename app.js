@@ -414,8 +414,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 2450;
-const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 6;
+const INDEXED_DATASET_ARTIST_COUNT = 3200;
+const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 8;
 
 const LOCAL_TRACK_SEED_BOOST = [
   { style: "psytrance", artist: "Astrix", song: "He.art", label: "Shamanic Tales", bpmExact: 145 },
@@ -4369,7 +4369,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v12";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v13";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v14";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
@@ -7453,35 +7453,35 @@ function requiresExactBpmForDynamic(style, source = "") {
 
 function targetCatalogSizeForStyle(style) {
   const boostedTargets = {
-    tech_house: 180,
-    techno: 160,
-    house: 150,
-    drum_and_bass: 150,
-    full_on: 150,
-    full_on_night: 132,
-    full_on_morning: 132,
-    psytrance: 140,
-    progressive_psy: 132,
-    dark_psy: 132,
-    dark_experimental: 120,
-    hi_tech: 132,
-    psy_comercial: 132,
-    forest_psy: 120,
-    dark_progressive: 120,
-    melodic_techno: 120,
-    hard_techno: 120,
-    acid_techno: 112,
-    deep_house: 112,
-    liquid_dnb: 112,
-    neurofunk: 112,
-    ambient: 112,
-    downtempo: 112,
-    freeform: 96,
-    psycore: 96,
-    slambient: 96,
-    gabber: 96
+    tech_house: 280,
+    techno: 260,
+    house: 240,
+    drum_and_bass: 240,
+    full_on: 230,
+    full_on_night: 210,
+    full_on_morning: 210,
+    psytrance: 230,
+    progressive_psy: 220,
+    dark_psy: 210,
+    dark_experimental: 190,
+    hi_tech: 210,
+    psy_comercial: 190,
+    forest_psy: 190,
+    dark_progressive: 190,
+    melodic_techno: 200,
+    hard_techno: 200,
+    acid_techno: 180,
+    deep_house: 180,
+    liquid_dnb: 180,
+    neurofunk: 180,
+    ambient: 170,
+    downtempo: 170,
+    freeform: 150,
+    psycore: 150,
+    slambient: 150,
+    gabber: 150
   };
-  return boostedTargets[style] || 100;
+  return boostedTargets[style] || 160;
 }
 
 function getRecentTrackHistory(style) {
