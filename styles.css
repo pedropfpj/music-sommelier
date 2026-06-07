@@ -8500,3 +8500,331 @@ iframe {
     overflow-x: clip;
   }
 }
+
+/* Studio quick flow */
+.voice-lab-panel {
+  overflow: hidden;
+}
+
+.voice-lab-head {
+  align-items: end;
+}
+
+.voice-lab-head .section-hint {
+  max-width: 39rem;
+}
+
+.voice-mini-card {
+  order: -1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.82rem;
+  border-radius: 14px;
+}
+
+.voice-mini-intro {
+  display: grid;
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.voice-mini-eyebrow,
+.voice-mini-section-title {
+  margin: 0;
+  color: #8ff6e5;
+  font-family: "Syne", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.voice-studio-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.48rem;
+  margin-top: 0.24rem;
+}
+
+.voice-studio-steps span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.44rem;
+  align-items: center;
+  padding: 0.54rem;
+  border: 1px solid rgba(126, 214, 255, 0.22);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.12), transparent 44%),
+    rgba(4, 13, 29, 0.62);
+}
+
+.voice-studio-steps strong {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(100, 255, 209, 0.48);
+  border-radius: 50%;
+  color: #061124;
+  background: linear-gradient(120deg, #6effdc, #7cb2ff);
+  font-family: "Syne", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.voice-studio-steps em {
+  min-width: 0;
+  color: #e7fbff;
+  font-size: 0.84rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.16;
+  overflow-wrap: anywhere;
+}
+
+.voice-mini-transport {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(280px, 1fr);
+  gap: 0.62rem;
+  align-items: center;
+  padding: 0.62rem;
+  border: 1px solid rgba(126, 214, 255, 0.2);
+  border-radius: 13px;
+  background:
+    linear-gradient(135deg, rgba(8, 25, 45, 0.82), rgba(3, 8, 19, 0.66));
+}
+
+.voice-mini-badge {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid rgba(100, 255, 209, 0.36);
+  border-radius: 999px;
+  color: #dffcff;
+  background: rgba(7, 25, 38, 0.72);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.voice-mini-transport .voice-mini-controls {
+  grid-column: auto;
+  grid-row: auto;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+}
+
+.voice-mini-controls #voiceMiniStopBtn {
+  border: 1px solid rgba(126, 214, 255, 0.24);
+  color: #dffcff;
+  background: rgba(6, 14, 31, 0.72);
+}
+
+.voice-mini-controls #voiceMiniStopBtn:disabled {
+  opacity: 1;
+  filter: none;
+  color: rgba(213, 231, 255, 0.46);
+  border-color: rgba(126, 214, 255, 0.16);
+  background: rgba(6, 14, 31, 0.42);
+}
+
+.voice-mini-section {
+  min-width: 0;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.voice-primary-bpm-control {
+  border-color: rgba(100, 255, 209, 0.32);
+  background:
+    linear-gradient(135deg, rgba(12, 36, 54, 0.78), rgba(3, 8, 19, 0.6));
+}
+
+.voice-advanced-panel {
+  min-width: 0;
+  border: 1px solid rgba(126, 214, 255, 0.2);
+  border-radius: 13px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(247, 167, 255, 0.08), transparent 42%),
+    rgba(2, 8, 20, 0.48);
+  overflow: hidden;
+}
+
+.voice-advanced-panel summary {
+  display: flex;
+  gap: 0.62rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0.7rem 0.82rem;
+  color: #e7fbff;
+  cursor: pointer;
+  font-weight: 900;
+  list-style: none;
+}
+
+.voice-advanced-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.voice-advanced-panel summary::after {
+  content: "+";
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(126, 214, 255, 0.26);
+  border-radius: 50%;
+  color: #8ff6e5;
+}
+
+.voice-advanced-panel[open] summary::after {
+  content: "-";
+}
+
+.voice-advanced-panel summary small {
+  min-width: 0;
+  color: #9fb6d8;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.voice-advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.56rem;
+  padding: 0 0.82rem 0.82rem;
+}
+
+.voice-advanced-grid > .voice-mini-mixer-grid,
+.voice-advanced-grid > .voice-step-sequencer {
+  grid-column: 1 / -1;
+}
+
+.voice-step-sequencer {
+  overflow-x: hidden;
+}
+
+.voice-step-buttons {
+  min-width: 0;
+}
+
+@media (max-width: 780px) {
+  .voice-lab-head {
+    gap: 0.5rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .voice-lab-head h3 {
+    font-size: clamp(1.36rem, 7vw, 2rem);
+    line-height: 1.05;
+  }
+
+  .voice-lab-grid {
+    gap: 0.72rem;
+  }
+
+  .voice-mini-card {
+    padding: 0.72rem;
+    border-radius: 12px;
+  }
+
+  .voice-studio-steps {
+    grid-template-columns: 1fr;
+    gap: 0.38rem;
+  }
+
+  .voice-studio-steps span {
+    padding: 0.46rem;
+  }
+
+  .voice-mini-transport {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.56rem;
+  }
+
+  .voice-mini-badge {
+    width: 100%;
+    text-align: center;
+  }
+
+  .voice-mini-transport .voice-mini-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .voice-mini-preset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .voice-mini-preset-btn[data-voice-mini-preset="ambient"] {
+    grid-column: 1 / -1;
+  }
+
+  .voice-daw-pad-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .voice-daw-pad {
+    min-height: 44px;
+    padding-inline: 0.2rem;
+    font-size: 0.78rem;
+  }
+
+  .voice-advanced-panel summary {
+    min-height: 46px;
+    padding: 0.62rem;
+  }
+
+  .voice-advanced-grid {
+    grid-template-columns: 1fr;
+    gap: 0.48rem;
+    padding: 0 0.62rem 0.62rem;
+  }
+
+  .voice-mini-mixer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .voice-knob-control strong {
+    width: 46px;
+    height: 46px;
+  }
+
+  .voice-step-sequencer {
+    overflow: visible;
+    padding: 0.46rem;
+  }
+
+  .voice-step-row {
+    grid-template-columns: 1fr;
+    gap: 0.24rem;
+  }
+
+  .voice-step-row > span {
+    white-space: normal;
+  }
+
+  .voice-step-buttons {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0.18rem;
+  }
+
+  .voice-step-btn {
+    min-height: 30px;
+    border-radius: 6px;
+    font-size: 0.64rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .voice-mini-mixer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .voice-step-btn {
+    font-size: 0.58rem;
+  }
+}
