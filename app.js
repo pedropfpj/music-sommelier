@@ -5048,15 +5048,15 @@ let voiceMiniBarIndex = 0;
 let voiceMiniVoiceBuffer = null;
 let voiceMiniOutputBus = null;
 let voiceMiniBpm = 128;
-let voiceMiniVoiceLevel = 155;
+let voiceMiniVoiceLevel = 120;
 let voiceMiniVoiceLength = 100;
-let voiceMiniSwingAmount = 18;
-let voiceMiniMasterLevel = 135;
-let voiceMiniDriveAmount = 35;
-let voiceMiniDelayAmount = 20;
-let voiceMiniPhaserAmount = 30;
-let voiceMiniBeatmasherAmount = 20;
-let voiceMiniSynthLevel = 55;
+let voiceMiniSwingAmount = 12;
+let voiceMiniMasterLevel = 112;
+let voiceMiniDriveAmount = 16;
+let voiceMiniDelayAmount = 14;
+let voiceMiniPhaserAmount = 18;
+let voiceMiniBeatmasherAmount = 8;
+let voiceMiniSynthLevel = 48;
 let voiceMiniPadState = {
   kick: false,
   bass: false,
@@ -5066,6 +5066,9 @@ let voiceMiniPadState = {
   voice: false
 };
 let voiceMiniActivePreset = "techno";
+const VOICE_MINI_START_LATENCY_SEC = 0.18;
+const VOICE_MINI_SCHEDULE_LOOKAHEAD_SEC = 0.24;
+const VOICE_MINI_SCHEDULE_INTERVAL_MS = 36;
 const VOICE_MINI_PATTERN_KINDS = ["kick", "bass", "hat", "clap", "synth", "voice"];
 const VOICE_MINI_DEFAULT_PATTERN = {
   kick: [1, 0, 1, 0, 1, 0, 1, 0],
@@ -5078,12 +5081,12 @@ const VOICE_MINI_DEFAULT_PATTERN = {
 const VOICE_MINI_PRESETS = {
   techno: {
     bpm: 132,
-    swing: 10,
+    swing: 8,
     pattern: VOICE_MINI_DEFAULT_PATTERN
   },
   breaks: {
     bpm: 138,
-    swing: 24,
+    swing: 14,
     pattern: {
       kick: [1, 0, 0, 1, 0, 1, 0, 0],
       bass: [1, 0, 0, 0, 1, 0, 0, 1],
@@ -5095,7 +5098,7 @@ const VOICE_MINI_PRESETS = {
   },
   trap: {
     bpm: 150,
-    swing: 31,
+    swing: 16,
     pattern: {
       kick: [1, 0, 0, 1, 0, 0, 0, 1],
       bass: [1, 0, 0, 0, 1, 0, 0, 1],
@@ -5107,7 +5110,7 @@ const VOICE_MINI_PRESETS = {
   },
   psy: {
     bpm: 145,
-    swing: 6,
+    swing: 4,
     pattern: {
       kick: [1, 0, 1, 0, 1, 0, 1, 0],
       bass: [0, 1, 0, 1, 0, 1, 0, 1],
@@ -5119,7 +5122,7 @@ const VOICE_MINI_PRESETS = {
   },
   ambient: {
     bpm: 104,
-    swing: 18,
+    swing: 10,
     pattern: {
       kick: [1, 0, 0, 0, 1, 0, 0, 0],
       bass: [1, 0, 0, 0, 0, 0, 1, 0],
@@ -11378,8 +11381,11 @@ const I18N = {
     voicePadSynth: "Synth",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad acionado: {pad}.",
-    voiceMiniPadLoopOn: "Loop ligado: {pad}. Entra no próximo compasso para manter a mini música no tempo.",
-    voiceMiniPadLoopOff: "Loop desligado: {pad}.",
+    voiceMiniPadLoopOn: "{pad} armado. Entra limpo no próximo compasso.",
+    voiceMiniPadLoopOff: "{pad} saiu do loop. O próximo compasso já vem sem essa camada.",
+    voiceMiniLayerOn: "Armado",
+    voiceMiniLayerOff: "Livre",
+    voiceMiniLayerDisabled: "Grave voz",
     artistHubIntro: "Uma leitura curta para entender quem é o artista, de onde vem o som e se vale continuar cavando.",
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
@@ -11457,10 +11463,10 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
     voiceMiniReady: "Pronto: escolha um clima ou toque em Gerar ideia.",
-    voiceMiniPlaying: "Mini música em loop. Ligue/desligue camadas ou grave voz para entrar por cima.",
+    voiceMiniPlaying: "Loop rodando no tempo. Toque nas camadas para armar ou remover no próximo compasso.",
     voiceMiniDone: "Loop parado. Toque a mini música ou um pad para começar de novo.",
     voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
-    voiceMiniStepChanged: "{pad} no passo {step}. O próximo compasso já segue esse desenho.",
+    voiceMiniStepChanged: "{pad} no passo {step}. O próximo compasso segue esse desenho.",
     voiceMiniPresetApplied: "Ideia {preset} pronta. Toque a mini música ou ajuste as camadas.",
     voiceMiniIdeaGenerated: "Ideia criada: {preset}, {bpm} BPM. Agora ajuste as camadas se quiser.",
     voiceMiniExportBusy: "Gerando arquivo...",
@@ -11951,8 +11957,11 @@ const I18N = {
     voicePadSynth: "Synth",
     voicePadVoice: "Voice",
     voiceMiniPadHint: "Pad triggered: {pad}.",
-    voiceMiniPadLoopOn: "Loop on: {pad}. It lands on the next bar to keep the mini track in time.",
-    voiceMiniPadLoopOff: "Loop off: {pad}.",
+    voiceMiniPadLoopOn: "{pad} armed. It lands cleanly on the next bar.",
+    voiceMiniPadLoopOff: "{pad} left the loop. The next bar plays without that layer.",
+    voiceMiniLayerOn: "Armed",
+    voiceMiniLayerOff: "Free",
+    voiceMiniLayerDisabled: "Record voice",
     artistHubIntro: "A short read on who the artist is, where the sound comes from, and whether it is worth digging deeper.",
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
@@ -12030,7 +12039,7 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
     voiceMiniReady: "Ready: pick a mood or tap Generate idea.",
-    voiceMiniPlaying: "Mini track looping. Toggle layers or record voice to add it on top.",
+    voiceMiniPlaying: "Loop locked in time. Tap layers to arm or remove them on the next bar.",
     voiceMiniDone: "Loop stopped. Play the mini track or tap a pad to start again.",
     voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
     voiceMiniStepChanged: "{pad} on step {step}. The next bar follows this pattern.",
@@ -12524,8 +12533,11 @@ const I18N = {
     voicePadSynth: "Synth",
     voicePadVoice: "Voz",
     voiceMiniPadHint: "Pad accionado: {pad}.",
-    voiceMiniPadLoopOn: "Loop activado: {pad}. Entra en el próximo compás para mantener la mini música a tempo.",
-    voiceMiniPadLoopOff: "Loop desactivado: {pad}.",
+    voiceMiniPadLoopOn: "{pad} armado. Entra limpio en el próximo compás.",
+    voiceMiniPadLoopOff: "{pad} salió del loop. El próximo compás va sin esa capa.",
+    voiceMiniLayerOn: "Armado",
+    voiceMiniLayerOff: "Libre",
+    voiceMiniLayerDisabled: "Graba voz",
     artistHubIntro: "Una lectura corta para entender quién es el artista, de dónde viene el sonido y si vale seguir cavando.",
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
@@ -12603,7 +12615,7 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
     voiceMiniReady: "Listo: elige un clima o toca Generar idea.",
-    voiceMiniPlaying: "Mini canción en loop. Activa/desactiva capas o graba voz para entrar encima.",
+    voiceMiniPlaying: "Loop corriendo a tempo. Toca capas para armarlas o quitarlas en el próximo compás.",
     voiceMiniDone: "Loop parado. Toca la mini canción o un pad para empezar otra vez.",
     voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
     voiceMiniStepChanged: "{pad} en el paso {step}. El próximo compás sigue ese patrón.",
@@ -15802,11 +15814,11 @@ function voiceMiniBeatDuration() {
 }
 
 function clampVoiceMiniSwing(value) {
-  return clampVoiceMiniPercent(value, 0, 55, 18);
+  return clampVoiceMiniPercent(value, 0, 35, 12);
 }
 
 function voiceMiniSwingOffset(beat) {
-  return beat * 0.5 * (clampVoiceMiniSwing(voiceMiniSwingAmount) / 100);
+  return beat * 0.34 * (clampVoiceMiniSwing(voiceMiniSwingAmount) / 100);
 }
 
 function voiceMiniStepTime(start, beat, step, subdivision = 1) {
@@ -15986,7 +15998,7 @@ function updateVoiceMiniSwing(value = voiceMiniSwingAmount, { announce = false }
 }
 
 function clampVoiceMiniVoiceLevel(value) {
-  return clampVoiceMiniPercent(value, 100, 260, 155);
+  return clampVoiceMiniPercent(value, 60, 180, 120);
 }
 
 function voiceMiniVoiceLevelGain() {
@@ -16002,7 +16014,7 @@ function voiceMiniVoiceLengthRatio() {
 }
 
 function clampVoiceMiniSynthLevel(value) {
-  return clampVoiceMiniPercent(value, 0, 100, 55);
+  return clampVoiceMiniPercent(value, 0, 100, 48);
 }
 
 function voiceMiniSynthGain() {
@@ -16014,35 +16026,35 @@ function refreshVoiceMiniOutputBus(ctx = audioContext) {
   const now = ctx.currentTime || 0;
   const phaserAmount = clampVoiceMiniPercent(voiceMiniPhaserAmount, 0, 80, 30) / 100;
   const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
-  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 80, 180, 135) / 100;
-  const globalVolume = Math.max(0.72, Math.min(1.28, audioVolume || 0.92));
+  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
+  const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
 
   if (voiceMiniOutputBus.post?.gain) {
-    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * 1.08, now, 0.035);
+    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * 0.82, now, 0.045);
   }
   if (voiceMiniOutputBus.shaper) {
     voiceMiniOutputBus.shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
   }
   if (voiceMiniOutputBus.delay?.delayTime) {
-    voiceMiniOutputBus.delay.delayTime.setTargetAtTime(0.12 + delayAmount * 0.22, now, 0.04);
+    voiceMiniOutputBus.delay.delayTime.setTargetAtTime(0.11 + delayAmount * 0.18, now, 0.04);
   }
   if (voiceMiniOutputBus.feedback?.gain) {
-    voiceMiniOutputBus.feedback.gain.setTargetAtTime(delayAmount * 0.42, now, 0.04);
+    voiceMiniOutputBus.feedback.gain.setTargetAtTime(delayAmount * 0.24, now, 0.04);
   }
   if (voiceMiniOutputBus.delayWet?.gain) {
-    voiceMiniOutputBus.delayWet.gain.setTargetAtTime(delayAmount * 0.38, now, 0.04);
+    voiceMiniOutputBus.delayWet.gain.setTargetAtTime(delayAmount * 0.2, now, 0.04);
   }
   if (voiceMiniOutputBus.phaser?.frequency) {
-    voiceMiniOutputBus.phaser.frequency.setTargetAtTime(520 + phaserAmount * 920, now, 0.04);
+    voiceMiniOutputBus.phaser.frequency.setTargetAtTime(430 + phaserAmount * 620, now, 0.04);
   }
   if (voiceMiniOutputBus.phaser?.Q) {
-    voiceMiniOutputBus.phaser.Q.setTargetAtTime(3.5 + phaserAmount * 5, now, 0.04);
+    voiceMiniOutputBus.phaser.Q.setTargetAtTime(1.6 + phaserAmount * 2.4, now, 0.04);
   }
   if (voiceMiniOutputBus.phaserDepth?.gain) {
-    voiceMiniOutputBus.phaserDepth.gain.setTargetAtTime(90 + phaserAmount * 620, now, 0.04);
+    voiceMiniOutputBus.phaserDepth.gain.setTargetAtTime(48 + phaserAmount * 360, now, 0.04);
   }
   if (voiceMiniOutputBus.phaserLfo?.frequency) {
-    voiceMiniOutputBus.phaserLfo.frequency.setTargetAtTime(0.18 + phaserAmount * 0.9, now, 0.04);
+    voiceMiniOutputBus.phaserLfo.frequency.setTargetAtTime(0.14 + phaserAmount * 0.54, now, 0.04);
   }
 }
 
@@ -16108,9 +16120,9 @@ function updateVoiceMiniMaster(value = voiceMiniMasterLevel, options = {}) {
     setter: (next) => { voiceMiniMasterLevel = next; },
     slider: voiceMiniMasterSlider,
     valueEl: voiceMiniMasterValue,
-    min: 80,
-    max: 180,
-    fallback: 135,
+    min: 70,
+    max: 150,
+    fallback: 112,
     labelKey: "voiceMiniMasterLabel",
     ...options
   });
@@ -16124,7 +16136,7 @@ function updateVoiceMiniDrive(value = voiceMiniDriveAmount, options = {}) {
     valueEl: voiceMiniDriveValue,
     min: 0,
     max: 100,
-    fallback: 35,
+    fallback: 16,
     labelKey: "voiceMiniDriveLabel",
     ...options
   });
@@ -16138,7 +16150,7 @@ function updateVoiceMiniDelay(value = voiceMiniDelayAmount, options = {}) {
     valueEl: voiceMiniDelayValue,
     min: 0,
     max: 80,
-    fallback: 20,
+    fallback: 14,
     labelKey: "voiceMiniDelayLabel",
     ...options
   });
@@ -16152,7 +16164,7 @@ function updateVoiceMiniPhaser(value = voiceMiniPhaserAmount, options = {}) {
     valueEl: voiceMiniPhaserValue,
     min: 0,
     max: 80,
-    fallback: 30,
+    fallback: 18,
     labelKey: "voiceMiniPhaserLabel",
     ...options
   });
@@ -16166,7 +16178,7 @@ function updateVoiceMiniBeatmasher(value = voiceMiniBeatmasherAmount, options = 
     valueEl: voiceMiniBeatmasherValue,
     min: 0,
     max: 100,
-    fallback: 20,
+    fallback: 8,
     labelKey: "voiceMiniBeatmasherLabel",
     ...options
   });
@@ -16180,7 +16192,7 @@ function updateVoiceMiniSynth(value = voiceMiniSynthLevel, options = {}) {
     valueEl: voiceMiniSynthValue,
     min: 0,
     max: 100,
-    fallback: 55,
+    fallback: 48,
     labelKey: "voiceMiniSynthLabel",
     ...options
   });
@@ -16218,8 +16230,14 @@ function syncVoicePadButtons() {
   Object.entries(buttons).forEach(([kind, button]) => {
     if (!button) return;
     const active = Boolean(voiceMiniPadState[kind]);
+    const label = voiceMiniLayerLabel(kind);
+    const stateLabel = button.disabled
+      ? t("voiceMiniLayerDisabled")
+      : active ? t("voiceMiniLayerOn") : t("voiceMiniLayerOff");
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.dataset.stateLabel = stateLabel;
+    button.setAttribute("aria-label", `${label}: ${stateLabel}`);
   });
   updateVoiceMiniRecipe();
 }
@@ -16385,15 +16403,15 @@ async function getNormalizedVoiceBuffer(ctx) {
     }
   }
   const rms = sampleCount > 0 ? Math.sqrt(sumSquares / sampleCount) : 0;
-  const peakBoost = peak > 0.0001 ? 1.26 / peak : 1;
-  const rmsBoost = rms > 0.0001 ? 0.34 / rms : 1;
-  const boost = Math.max(1.25, Math.min(24, peakBoost, rmsBoost));
+  const peakBoost = peak > 0.0001 ? 0.88 / peak : 1;
+  const rmsBoost = rms > 0.0001 ? 0.22 / rms : 1;
+  const boost = Math.max(1, Math.min(8, peakBoost, rmsBoost));
   for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
     const source = decoded.getChannelData(channel);
     const target = normalized.getChannelData(channel);
     for (let i = 0; i < source.length; i += 1) {
       const amplified = source[i] * boost;
-      target[i] = Math.tanh(amplified * 1.18);
+      target[i] = Math.tanh(amplified * 0.86);
     }
   }
   voiceRecordingNormalizedBuffer = normalized;
@@ -16453,8 +16471,12 @@ function createMiniNoiseBuffer(ctx, duration = 0.12) {
   const length = Math.max(1, Math.floor(ctx.sampleRate * duration));
   const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
   const data = buffer.getChannelData(0);
+  let previous = 0;
   for (let i = 0; i < length; i += 1) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+    const raw = Math.random() * 2 - 1;
+    previous = previous * 0.58 + raw * 0.42;
+    const envelope = Math.pow(1 - i / length, 1.55);
+    data[i] = previous * envelope;
   }
   return buffer;
 }
@@ -16463,10 +16485,10 @@ function createMiniDriveCurve(amount = 0) {
   const samples = 256;
   const curve = new Float32Array(samples);
   const normalizedAmount = clampVoiceMiniPercent(amount, 0, 100, 0) / 100;
-  const drive = 1 + normalizedAmount * 18;
+  const drive = 1 + normalizedAmount * 7.5;
   for (let i = 0; i < samples; i += 1) {
     const x = (i * 2) / (samples - 1) - 1;
-    curve[i] = normalizedAmount <= 0.01 ? x : Math.tanh(x * drive);
+    curve[i] = normalizedAmount <= 0.01 ? x : Math.tanh(x * drive) * (0.96 - normalizedAmount * 0.08);
   }
   return curve;
 }
@@ -16480,27 +16502,35 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
   const feedback = trackVoiceMiniNode(ctx.createGain());
   const delayWet = trackVoiceMiniNode(ctx.createGain());
   const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
+  const masterHighpass = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const masterLowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const post = trackVoiceMiniNode(ctx.createGain());
   const phaserAmount = clampVoiceMiniPercent(voiceMiniPhaserAmount, 0, 80, 30) / 100;
   const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
-  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 80, 180, 135) / 100;
-  const globalVolume = Math.max(0.72, Math.min(1.28, audioVolume || 0.92));
+  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
+  const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
 
-  input.gain.value = 1;
+  input.gain.value = preview ? 0.82 : 0.74;
   shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
   shaper.oversample = "4x";
   phaser.type = "allpass";
-  phaser.frequency.value = 520 + phaserAmount * 920;
-  phaser.Q.value = 3.5 + phaserAmount * 5;
-  delay.delayTime.value = 0.12 + delayAmount * 0.22;
-  feedback.gain.value = delayAmount * 0.42;
-  delayWet.gain.value = delayAmount * (preview ? 0.26 : 0.38);
-  compressor.threshold.value = preview ? -20 : -18;
-  compressor.knee.value = 18;
-  compressor.ratio.value = preview ? 3.6 : 4.6;
-  compressor.attack.value = 0.002;
-  compressor.release.value = 0.16;
-  post.gain.value = (preview ? 0.9 : 1.08) * masterAmount * globalVolume;
+  phaser.frequency.value = 430 + phaserAmount * 620;
+  phaser.Q.value = 1.6 + phaserAmount * 2.4;
+  delay.delayTime.value = 0.11 + delayAmount * 0.18;
+  feedback.gain.value = delayAmount * 0.24;
+  delayWet.gain.value = delayAmount * (preview ? 0.12 : 0.2);
+  compressor.threshold.value = preview ? -16 : -14;
+  compressor.knee.value = 20;
+  compressor.ratio.value = preview ? 2.2 : 2.8;
+  compressor.attack.value = 0.008;
+  compressor.release.value = 0.22;
+  masterHighpass.type = "highpass";
+  masterHighpass.frequency.value = 28;
+  masterHighpass.Q.value = 0.58;
+  masterLowpass.type = "lowpass";
+  masterLowpass.frequency.value = 14800;
+  masterLowpass.Q.value = 0.42;
+  post.gain.value = (preview ? 0.72 : 0.82) * masterAmount * globalVolume;
 
   input.connect(master);
   master.connect(shaper);
@@ -16511,7 +16541,9 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
   feedback.connect(delay);
   delay.connect(delayWet);
   delayWet.connect(compressor);
-  compressor.connect(post);
+  compressor.connect(masterHighpass);
+  masterHighpass.connect(masterLowpass);
+  masterLowpass.connect(post);
   post.connect(ctx.destination);
 
   const outputBus = {
@@ -16521,6 +16553,8 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
     delay,
     feedback,
     delayWet,
+    masterHighpass,
+    masterLowpass,
     post,
     phaserLfo: null,
     phaserDepth: null
@@ -16530,8 +16564,8 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
     const lfo = trackVoiceMiniNode(ctx.createOscillator());
     const depth = trackVoiceMiniNode(ctx.createGain());
     lfo.type = "sine";
-    lfo.frequency.value = 0.18 + phaserAmount * 0.9;
-    depth.gain.value = 90 + phaserAmount * 620;
+    lfo.frequency.value = 0.14 + phaserAmount * 0.54;
+    depth.gain.value = 48 + phaserAmount * 360;
     lfo.connect(depth);
     depth.connect(phaser.frequency);
     lfo.start();
@@ -16544,33 +16578,33 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
 }
 
 function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) {
-  const end = time + 0.42;
+  const end = time + 0.34;
   const osc = trackVoiceMiniNode(ctx.createOscillator());
   const bodyGain = trackVoiceMiniNode(ctx.createGain());
   const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
   const click = trackVoiceMiniNode(ctx.createBufferSource());
   const clickGain = trackVoiceMiniNode(ctx.createGain());
   const clickFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (accent ? 1.42 : 1.16) * Math.max(0.68, Math.min(1.38, audioVolume || 0.95));
+  const level = (accent ? 0.86 : 0.72) * Math.max(0.62, Math.min(1.08, audioVolume || 0.95));
 
   osc.type = "sine";
-  osc.frequency.setValueAtTime(172, time);
-  osc.frequency.exponentialRampToValueAtTime(58, time + 0.048);
-  osc.frequency.exponentialRampToValueAtTime(36, end);
+  osc.frequency.setValueAtTime(132, time);
+  osc.frequency.exponentialRampToValueAtTime(54, time + 0.054);
+  osc.frequency.exponentialRampToValueAtTime(42, end);
   bodyFilter.type = "lowpass";
-  bodyFilter.frequency.value = 560;
-  bodyFilter.Q.value = 0.9;
+  bodyFilter.frequency.value = 420;
+  bodyFilter.Q.value = 0.68;
   bodyGain.gain.setValueAtTime(0.0001, time);
   bodyGain.gain.exponentialRampToValueAtTime(level, time + 0.006);
-  bodyGain.gain.exponentialRampToValueAtTime(level * 0.36, time + 0.085);
+  bodyGain.gain.exponentialRampToValueAtTime(level * 0.34, time + 0.09);
   bodyGain.gain.exponentialRampToValueAtTime(0.0001, end);
 
-  click.buffer = createMiniNoiseBuffer(ctx, 0.04);
+  click.buffer = createMiniNoiseBuffer(ctx, 0.026);
   clickFilter.type = "highpass";
-  clickFilter.frequency.value = 2600;
+  clickFilter.frequency.value = 3800;
   clickGain.gain.setValueAtTime(0.0001, time);
-  clickGain.gain.exponentialRampToValueAtTime(level * 0.25, time + 0.004);
-  clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.032);
+  clickGain.gain.exponentialRampToValueAtTime(level * 0.12, time + 0.003);
+  clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.022);
 
   osc.connect(bodyFilter);
   bodyFilter.connect(bodyGain);
@@ -16585,18 +16619,18 @@ function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) 
 }
 
 function scheduleVoiceMiniHat(ctx, destination, time, { open = false, pan = 0 } = {}) {
-  const duration = open ? 0.18 : 0.055;
+  const duration = open ? 0.14 : 0.045;
   const source = trackVoiceMiniNode(ctx.createBufferSource());
   const gain = trackVoiceMiniNode(ctx.createGain());
   const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const lowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (open ? 0.42 : 0.25) * Math.max(0.58, Math.min(1.3, audioVolume || 0.95));
+  const level = (open ? 0.21 : 0.14) * Math.max(0.56, Math.min(1.08, audioVolume || 0.95));
 
   source.buffer = createMiniNoiseBuffer(ctx, duration);
   highpass.type = "highpass";
   highpass.frequency.value = open ? 4600 : 5600;
   lowpass.type = "lowpass";
-  lowpass.frequency.value = open ? 11500 : 9800;
+  lowpass.frequency.value = open ? 9800 : 8200;
   gain.gain.setValueAtTime(0.0001, time);
   gain.gain.exponentialRampToValueAtTime(level, time + 0.004);
   gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
@@ -16613,18 +16647,18 @@ function scheduleVoiceMiniClap(ctx, destination, time, { accent = false, pan = 0
   const gain = trackVoiceMiniNode(ctx.createGain());
   const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const bandpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const duration = 0.145;
-  const level = (accent ? 0.58 : 0.43) * Math.max(0.62, Math.min(1.32, audioVolume || 0.95));
+  const duration = 0.12;
+  const level = (accent ? 0.34 : 0.26) * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
 
   source.buffer = createMiniNoiseBuffer(ctx, duration);
   highpass.type = "highpass";
   highpass.frequency.value = 1100;
   bandpass.type = "bandpass";
-  bandpass.frequency.value = 1850;
-  bandpass.Q.value = 1.1;
+  bandpass.frequency.value = 1680;
+  bandpass.Q.value = 0.84;
   gain.gain.setValueAtTime(0.0001, time);
   gain.gain.exponentialRampToValueAtTime(level, time + 0.008);
-  gain.gain.exponentialRampToValueAtTime(level * 0.28, time + 0.055);
+  gain.gain.exponentialRampToValueAtTime(level * 0.24, time + 0.046);
   gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
   source.connect(highpass);
   highpass.connect(bandpass);
@@ -16651,9 +16685,6 @@ function scheduleVoiceMiniKickLoop(ctx, destination, start, beat, barIndex = 0) 
       accent: step === 0 && barIndex % 4 === 0
     });
   }
-  if (barIndex % 4 === 3 && voiceMiniPatternActive("kick", 7)) {
-    scheduleVoiceMiniKick(ctx, destination, start + beat * 3.5 + voiceMiniSwingOffset(beat) * 0.5, { accent: false });
-  }
 }
 
 function scheduleVoiceMiniHatLoop(ctx, destination, start, beat, barIndex = 0) {
@@ -16664,9 +16695,6 @@ function scheduleVoiceMiniHatLoop(ctx, destination, start, beat, barIndex = 0) {
     const pan = step % 4 === 1 ? -0.22 : step % 4 === 3 ? 0.22 : 0;
     scheduleVoiceMiniHat(ctx, destination, time, { open, pan });
   }
-  if (barIndex % 2 === 1 && voiceMiniPatternActive("hat", 7)) {
-    scheduleVoiceMiniHat(ctx, destination, start + beat * 3.75 + voiceMiniSwingOffset(beat) * 0.4, { open: true, pan: 0.18 });
-  }
 }
 
 function scheduleVoiceMiniClapLoop(ctx, destination, start, beat, barIndex = 0) {
@@ -16676,9 +16704,6 @@ function scheduleVoiceMiniClapLoop(ctx, destination, start, beat, barIndex = 0) 
       accent: step === 2 && barIndex % 4 === 0,
       pan: step % 4 === 2 ? -0.08 : 0.08
     });
-  }
-  if (barIndex % 2 === 1 && voiceMiniPatternActive("clap", 7)) {
-    scheduleVoiceMiniClap(ctx, destination, start + beat * 3.5 + voiceMiniSwingOffset(beat) * 0.5, { pan: 0.18 });
   }
 }
 
@@ -16693,23 +16718,23 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
     const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
     const subGain = trackVoiceMiniNode(ctx.createGain());
     const gritGain = trackVoiceMiniNode(ctx.createGain());
-    const level = 0.6 * Math.max(0.62, Math.min(1.34, audioVolume || 0.95));
+    const level = 0.34 * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
 
     filter.type = "lowpass";
-    filter.frequency.setValueAtTime(i % 4 === 0 ? 480 : 310, time);
-    filter.frequency.exponentialRampToValueAtTime(145, time + beat * 0.68);
-    filter.Q.value = 1.45;
+    filter.frequency.setValueAtTime(i % 4 === 0 ? 340 : 250, time);
+    filter.frequency.exponentialRampToValueAtTime(112, time + beat * 0.58);
+    filter.Q.value = 0.92;
     sub.type = "sine";
     grit.type = i % 3 === 0 ? "sawtooth" : "square";
     sub.frequency.value = note;
     grit.frequency.value = note * 2;
     subGain.gain.value = 0.88;
-    gritGain.gain.value = 0.24;
+    gritGain.gain.value = 0.12;
     gain.gain.setValueAtTime(0.0001, time);
     gain.gain.exponentialRampToValueAtTime(level * 0.72, time + 0.018);
-    gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.16);
-    gain.gain.exponentialRampToValueAtTime(level * 0.38, time + beat * 0.42);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.82);
+    gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.13);
+    gain.gain.exponentialRampToValueAtTime(level * 0.3, time + beat * 0.34);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.62);
     sub.connect(subGain);
     grit.connect(gritGain);
     subGain.connect(filter);
@@ -16718,8 +16743,8 @@ function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
     gain.connect(destination);
     sub.start(time);
     grit.start(time);
-    sub.stop(time + beat * 0.88);
-    grit.stop(time + beat * 0.88);
+    sub.stop(time + beat * 0.68);
+    grit.stop(time + beat * 0.68);
   }
 }
 
@@ -16730,23 +16755,23 @@ function scheduleVoiceMiniBassHit(ctx, destination, time, beat, note, { accent =
   const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
   const subGain = trackVoiceMiniNode(ctx.createGain());
   const gritGain = trackVoiceMiniNode(ctx.createGain());
-  const level = (accent ? 0.72 : 0.5) * Math.max(0.62, Math.min(1.34, audioVolume || 0.95));
+  const level = (accent ? 0.42 : 0.31) * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
 
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(accent ? 540 : 340, time);
-  filter.frequency.exponentialRampToValueAtTime(138, time + beat * 0.58);
-  filter.Q.value = 1.55;
+  filter.frequency.setValueAtTime(accent ? 380 : 260, time);
+  filter.frequency.exponentialRampToValueAtTime(112, time + beat * 0.48);
+  filter.Q.value = 0.98;
   sub.type = "sine";
   grit.type = step % 3 === 0 ? "sawtooth" : "square";
   sub.frequency.value = note;
   grit.frequency.value = note * 2;
   subGain.gain.value = 0.94;
-  gritGain.gain.value = 0.24;
+  gritGain.gain.value = 0.11;
   gain.gain.setValueAtTime(0.0001, time);
   gain.gain.exponentialRampToValueAtTime(level * 0.68, time + 0.014);
-  gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.12);
-  gain.gain.exponentialRampToValueAtTime(level * 0.28, time + beat * 0.34);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.54);
+  gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.1);
+  gain.gain.exponentialRampToValueAtTime(level * 0.28, time + beat * 0.3);
+  gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.48);
   sub.connect(subGain);
   grit.connect(gritGain);
   subGain.connect(filter);
@@ -16755,8 +16780,8 @@ function scheduleVoiceMiniBassHit(ctx, destination, time, beat, note, { accent =
   gain.connect(destination);
   sub.start(time);
   grit.start(time);
-  sub.stop(time + beat * 0.62);
-  grit.stop(time + beat * 0.62);
+  sub.stop(time + beat * 0.54);
+  grit.stop(time + beat * 0.54);
 }
 
 function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) {
@@ -16778,9 +16803,9 @@ function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { 
   const gain = trackVoiceMiniNode(ctx.createGain());
   const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
   const width = trackVoiceMiniNode(ctx.createGain());
-  const duration = Math.max(beat * 0.42, Math.min(beat * 1.72, beat * (1.08 + voiceMiniSynthGain() * 0.78)));
+  const duration = Math.max(beat * 0.34, Math.min(beat * 1.24, beat * (0.82 + voiceMiniSynthGain() * 0.46)));
   const synthAmount = voiceMiniSynthGain();
-  const globalLevel = Math.max(0.58, Math.min(1.28, audioVolume || 0.95));
+  const globalLevel = Math.max(0.54, Math.min(1.04, audioVolume || 0.95));
 
   osc.type = "sawtooth";
   shimmer.type = "triangle";
@@ -16788,11 +16813,11 @@ function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { 
   shimmer.frequency.value = frequency * 2.005;
   osc.detune.value = detune - 4;
   shimmer.detune.value = detune + 7;
-  width.gain.value = 0.38;
+  width.gain.value = 0.26;
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(720 + synthAmount * 2100, time);
-  filter.frequency.exponentialRampToValueAtTime(360 + synthAmount * 780, time + duration);
-  filter.Q.value = 2.6 + synthAmount * 5.4;
+  filter.frequency.setValueAtTime(620 + synthAmount * 1450, time);
+  filter.frequency.exponentialRampToValueAtTime(300 + synthAmount * 520, time + duration);
+  filter.Q.value = 1.05 + synthAmount * 2.2;
   gain.gain.setValueAtTime(0.0001, time);
   gain.gain.linearRampToValueAtTime(level * synthAmount * globalLevel, time + Math.min(0.08, beat * 0.18));
   gain.gain.setValueAtTime(level * synthAmount * globalLevel * 0.82, time + Math.max(0.1, duration - 0.16));
@@ -16826,7 +16851,7 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
     if (step % 4 === 0) {
       chord.forEach((frequency, index) => {
         scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, {
-          level: index === 0 ? 0.22 : 0.16,
+          level: index === 0 ? 0.14 : 0.1,
           pan: index === 1 ? -0.18 : index === 2 ? 0.2 : 0,
           detune: index * 3
         });
@@ -16834,7 +16859,7 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
     } else {
       const note = step % 2 ? root * 3 : chord[(step + barIndex) % chord.length] * 1.5;
       scheduleVoiceMiniSynthVoice(ctx, destination, time, note, beat, {
-        level: 0.16 + synthAmount * 0.08,
+        level: 0.1 + synthAmount * 0.05,
         pan: step % 2 ? 0.22 : -0.18,
         detune: step % 2 ? 6 : -6
       });
@@ -16845,17 +16870,17 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
 function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
   const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
   const phraseDuration = Math.min(safeDuration, beat * 7.4);
-  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.82, Math.min(1.32, audioVolume || 0.96));
+  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  voiceBus.gain.value = 1.86;
+  voiceBus.gain.value = 0.88;
   voiceBus.connect(destination);
 
   const phrase = trackVoiceMiniNode(ctx.createBufferSource());
   const phraseGain = trackVoiceMiniNode(ctx.createGain());
   phrase.buffer = voiceBuffer;
   phraseGain.gain.setValueAtTime(0.0001, start);
-  phraseGain.gain.linearRampToValueAtTime(1.04 * voicePresence, start + 0.035);
-  phraseGain.gain.setValueAtTime(0.98 * voicePresence, start + Math.max(0.05, phraseDuration - 0.14));
+  phraseGain.gain.linearRampToValueAtTime(0.74 * voicePresence, start + 0.035);
+  phraseGain.gain.setValueAtTime(0.66 * voicePresence, start + Math.max(0.05, phraseDuration - 0.14));
   phraseGain.gain.linearRampToValueAtTime(0.0001, start + phraseDuration);
   connectVoiceEffectGraph(ctx, phrase, selectedVoiceEffect, phraseGain);
   phraseGain.connect(voiceBus);
@@ -16873,7 +16898,7 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
     source.playbackRate.value = i % 5 === 0 ? 1.18 : i % 4 === 0 ? 0.92 : 1.04;
     const availableOffset = Math.max(0, safeDuration - sliceDuration);
     const offset = availableOffset * offsets[i % offsets.length];
-    const accent = i % 4 === 0 ? 0.66 : 0.42;
+    const accent = i % 4 === 0 ? 0.36 : 0.24;
     chopGain.gain.setValueAtTime(0.0001, time);
     chopGain.gain.linearRampToValueAtTime(accent * voicePresence, time + 0.014);
     chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
@@ -16902,13 +16927,13 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
   const availableOffset = Math.max(0, safeDuration - phraseDuration);
   const phraseOffset = availableOffset > 0 ? availableOffset * ((Math.floor(barIndex / phraseBars) % 4) / 4) : 0;
   const sourceDuration = Math.max(0.08, Math.min(phraseDuration, safeDuration - phraseOffset));
-  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.92, Math.min(1.48, audioVolume || 0.96));
+  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
   const beatmasherAmount = clampVoiceMiniPercent(voiceMiniBeatmasherAmount, 0, 100, 20) / 100;
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
   const firstVoiceStep = activeVoiceSteps[0] || 0;
   const phraseStart = voiceMiniStepBeatTime(start, beat, firstVoiceStep);
 
-  voiceBus.gain.value = 1.92;
+  voiceBus.gain.value = 0.86;
   voiceBus.connect(destination);
   if (shouldPlayMainPhrase) {
     const source = trackVoiceMiniNode(ctx.createBufferSource());
@@ -16922,12 +16947,12 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
     presenceFilter.type = "peaking";
     presenceFilter.frequency.value = 2800;
     presenceFilter.Q.value = 1.1;
-    presenceFilter.gain.value = 3.8;
+    presenceFilter.gain.value = 1.6;
     source.buffer = voiceBuffer;
     source.playbackRate.value = barIndex % 4 === 2 ? 1.015 : 1;
     gain.gain.setValueAtTime(0.0001, phraseStart);
-    gain.gain.linearRampToValueAtTime(1.24 * voicePresence, phraseStart + 0.028);
-    gain.gain.setValueAtTime(1.08 * voicePresence, phraseStart + Math.max(0.08, sourceDuration - 0.16));
+    gain.gain.linearRampToValueAtTime(0.72 * voicePresence, phraseStart + 0.035);
+    gain.gain.setValueAtTime(0.64 * voicePresence, phraseStart + Math.max(0.08, sourceDuration - 0.16));
     gain.gain.linearRampToValueAtTime(0.0001, phraseStart + sourceDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, bodyFilter);
     bodyFilter.connect(presenceFilter);
@@ -16949,7 +16974,7 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
       chop.buffer = voiceBuffer;
       chop.playbackRate.value = index ? 0.96 : 1.06;
       chopGain.gain.setValueAtTime(0.0001, time);
-      chopGain.gain.linearRampToValueAtTime(0.58 * voicePresence, time + 0.016);
+      chopGain.gain.linearRampToValueAtTime(0.32 * voicePresence, time + 0.018);
       chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
       connectVoiceEffectGraph(ctx, chop, selectedVoiceEffect, chopGain);
       connectMiniNode(ctx, chopGain, voiceBus, index ? -0.16 : 0.18);
@@ -16960,7 +16985,7 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
 
   if (safeDuration > beat * 0.35 && beatmasherAmount > 0.04) {
     const sliceDuration = Math.min(0.18, Math.max(0.07, beat * 0.28));
-    const repeats = beatmasherAmount > 0.66 ? 4 : beatmasherAmount > 0.32 ? 3 : 2;
+    const repeats = beatmasherAmount > 0.7 ? 3 : beatmasherAmount > 0.32 ? 2 : 1;
     const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
     const baseOffset = availableChopOffset * ((barIndex % 3) / 3);
     for (let i = 0; i < repeats; i += 1) {
@@ -16972,7 +16997,7 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
       mash.buffer = voiceBuffer;
       mash.playbackRate.value = 1 + beatmasherAmount * 0.28;
       mashGain.gain.setValueAtTime(0.0001, time);
-      mashGain.gain.linearRampToValueAtTime((0.3 + beatmasherAmount * 0.42) * voicePresence, time + 0.012);
+      mashGain.gain.linearRampToValueAtTime((0.16 + beatmasherAmount * 0.22) * voicePresence, time + 0.014);
       mashGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
       connectVoiceEffectGraph(ctx, mash, selectedVoiceEffect, mashGain);
       connectMiniNode(ctx, mashGain, voiceBus, i % 2 ? -0.22 : 0.22);
@@ -17024,7 +17049,7 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
   const ctx = audioContext;
   const master = connectVoiceMiniOutputBus(ctx);
 
-  voiceMiniNextBarTime = ctx.currentTime + 0.08;
+  voiceMiniNextBarTime = ctx.currentTime + VOICE_MINI_START_LATENCY_SEC;
   voiceMiniBarIndex = 0;
   voiceMiniTrackPlaying = true;
   if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPlaying");
@@ -17033,7 +17058,7 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
 
   const scheduleAhead = () => {
     if (!voiceMiniTrackPlaying) return;
-    const lookAhead = 0.42;
+    const lookAhead = VOICE_MINI_SCHEDULE_LOOKAHEAD_SEC;
     while (voiceMiniNextBarTime < ctx.currentTime + lookAhead) {
       const barBeat = voiceMiniBeatDuration();
       if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
@@ -17050,7 +17075,7 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
   };
 
   scheduleAhead();
-  voiceMiniTrackScheduler = window.setInterval(scheduleAhead, 120);
+  voiceMiniTrackScheduler = window.setInterval(scheduleAhead, VOICE_MINI_SCHEDULE_INTERVAL_MS);
   return true;
 }
 
@@ -17117,11 +17142,11 @@ async function previewVoiceDawPad(kind = "kick") {
     const source = trackVoiceMiniNode(ctx.createBufferSource());
     const gain = trackVoiceMiniNode(ctx.createGain());
     const previewDuration = Math.min(2.6, Math.max(0.12, voiceBuffer.duration * voiceMiniVoiceLengthRatio()));
-    const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.82, Math.min(1.32, audioVolume || 0.96));
+    const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
     source.buffer = voiceBuffer;
     gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.linearRampToValueAtTime(1.08 * voicePresence, now + 0.018);
-    gain.gain.setValueAtTime(0.96 * voicePresence, now + Math.max(0.04, previewDuration - 0.08));
+    gain.gain.linearRampToValueAtTime(0.74 * voicePresence, now + 0.02);
+    gain.gain.setValueAtTime(0.64 * voicePresence, now + Math.max(0.04, previewDuration - 0.08));
     gain.gain.linearRampToValueAtTime(0.0001, now + previewDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
     gain.connect(bus);
@@ -17152,14 +17177,14 @@ function ensureVoiceMiniAudiblePadState() {
 
 function applyVoiceMiniIdeaVariation(presetName = voiceMiniActivePreset) {
   const variations = {
-    techno: { drive: 38, delay: 18, phaser: 28, beatmasher: 16, synth: 50, master: 135 },
-    breaks: { drive: 30, delay: 24, phaser: 34, beatmasher: 28, synth: 58, master: 132 },
-    trap: { drive: 42, delay: 30, phaser: 22, beatmasher: 38, synth: 62, master: 130 },
-    psy: { drive: 48, delay: 16, phaser: 44, beatmasher: 20, synth: 54, master: 138 },
-    ambient: { drive: 18, delay: 42, phaser: 50, beatmasher: 10, synth: 76, master: 122 }
+    techno: { drive: 18, delay: 12, phaser: 16, beatmasher: 8, synth: 44, master: 112 },
+    breaks: { drive: 14, delay: 18, phaser: 20, beatmasher: 14, synth: 50, master: 110 },
+    trap: { drive: 20, delay: 20, phaser: 14, beatmasher: 18, synth: 54, master: 108 },
+    psy: { drive: 24, delay: 10, phaser: 24, beatmasher: 10, synth: 48, master: 114 },
+    ambient: { drive: 8, delay: 32, phaser: 34, beatmasher: 4, synth: 70, master: 104 }
   };
   const base = variations[presetName] || variations.techno;
-  const drift = () => Math.round((Math.random() - 0.5) * 14);
+  const drift = () => Math.round((Math.random() - 0.5) * 8);
   updateVoiceMiniDrive(base.drive + drift(), { announce: false });
   updateVoiceMiniDelay(base.delay + drift(), { announce: false });
   updateVoiceMiniPhaser(base.phaser + drift(), { announce: false });

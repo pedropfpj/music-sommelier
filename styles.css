@@ -3793,15 +3793,33 @@ input[type="range"] {
 }
 
 .voice-daw-pad {
-  min-height: 56px;
+  min-height: 68px;
+  display: grid;
+  align-content: center;
+  gap: 0.14rem;
+  padding: 0.74rem 0.36rem;
   border-color: rgba(100, 255, 209, 0.34);
   background:
     radial-gradient(circle at 50% 0%, rgba(120, 225, 255, 0.1), transparent 42%),
     linear-gradient(145deg, rgba(12, 32, 55, 0.88), rgba(8, 15, 33, 0.84));
   color: #ecfbff;
   font-family: "Syne", sans-serif;
-  font-size: 0.96rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.02;
+}
+
+.voice-daw-pad::after {
+  content: attr(data-state-label);
+  display: block;
+  color: #9fd5ff;
+  font-family: "Inter", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0.82;
 }
 
 .voice-daw-pad.active,
@@ -3817,9 +3835,19 @@ input[type="range"] {
     0 0 22px rgba(100, 255, 209, 0.22);
 }
 
+.voice-daw-pad.active::after,
+.voice-daw-pad[aria-pressed="true"]::after {
+  color: rgba(6, 17, 36, 0.72);
+  opacity: 1;
+}
+
+.voice-daw-pad:disabled::after {
+  color: rgba(213, 231, 255, 0.5);
+}
+
 .voice-lab-panel.is-mini-playing .voice-daw-pad.active,
 .voice-lab-panel.is-mini-playing .voice-daw-pad[aria-pressed="true"] {
-  animation: voice-pad-pulse 760ms ease-in-out infinite;
+  animation: voice-pad-pulse 920ms ease-in-out infinite;
 }
 
 .voice-daw-pad:active {
@@ -9326,9 +9354,13 @@ iframe {
   }
 
   .voice-daw-pad {
-    min-height: 52px;
+    min-height: 62px;
     padding-inline: 0.2rem;
-    font-size: 0.86rem;
+    font-size: 0.9rem;
+  }
+
+  .voice-daw-pad::after {
+    font-size: 0.58rem;
   }
 
   .voice-advanced-panel summary {
