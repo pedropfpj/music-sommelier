@@ -10967,11 +10967,11 @@ const I18N = {
     spiritCollectibleAlt: "Colecionável de {spirit} no marco de {milestone} likes",
     spiritCollectibleRegenerate: "Gerar nova arte",
     spiritCollectibleDownload: "Baixar imagem",
-    spiritCollectibleShareInstagram: "Compartilhar no Story",
-    spiritCollectibleSharePreparing: "Preparando Story...",
+    spiritCollectibleShareInstagram: "Story animado",
+    spiritCollectibleSharePreparing: "Gerando Story animado...",
     spiritCollectibleShareNoAsset: "Gere uma arte do espírito antes de compartilhar.",
     spiritCollectibleShareNativeDone: "Compartilhamento aberto. Escolha Instagram Stories na lista de apps.",
-    spiritCollectibleShareFallback: "Baixei a imagem. Abra o Instagram e publique no Story.",
+    spiritCollectibleShareFallback: "Baixei o Story pronto. Abra o Instagram e publique nos Stories.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
     spiritCollectibleShareCaption: "Meu espírito musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | Curte {liked} artistas | Conheceu no app {discovered} | Já conhecia {known}",
@@ -11511,11 +11511,11 @@ const I18N = {
     spiritCollectibleAlt: "{spirit} collectible at {milestone} likes milestone",
     spiritCollectibleRegenerate: "Generate new art",
     spiritCollectibleDownload: "Download image",
-    spiritCollectibleShareInstagram: "Share to Story",
-    spiritCollectibleSharePreparing: "Preparing Story...",
+    spiritCollectibleShareInstagram: "Animated Story",
+    spiritCollectibleSharePreparing: "Creating animated Story...",
     spiritCollectibleShareNoAsset: "Generate spirit artwork before sharing.",
     spiritCollectibleShareNativeDone: "Share sheet opened. Choose Instagram Stories in the app list.",
-    spiritCollectibleShareFallback: "Image downloaded. Open Instagram and post it to your Story.",
+    spiritCollectibleShareFallback: "Story file downloaded. Open Instagram and post it to your Story.",
     spiritCollectibleShareCanceled: "Share canceled.",
     spiritCollectibleShareCaption: "My musical spirit on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | Likes {liked} artists | Discovered in app {discovered} | Already knew {known}",
@@ -12055,11 +12055,11 @@ const I18N = {
     spiritCollectibleAlt: "Coleccionable de {spirit} en el hito de {milestone} likes",
     spiritCollectibleRegenerate: "Generar nueva obra",
     spiritCollectibleDownload: "Descargar imagen",
-    spiritCollectibleShareInstagram: "Compartir en Story",
-    spiritCollectibleSharePreparing: "Preparando Story...",
+    spiritCollectibleShareInstagram: "Story animado",
+    spiritCollectibleSharePreparing: "Creando Story animado...",
     spiritCollectibleShareNoAsset: "Genera una obra del espíritu antes de compartir.",
     spiritCollectibleShareNativeDone: "Compartir abierto. Elige Instagram Stories en la lista de apps.",
-    spiritCollectibleShareFallback: "Imagen descargada. Abre Instagram y publícala en tu Story.",
+    spiritCollectibleShareFallback: "Story listo descargado. Abre Instagram y publícalo en Stories.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
     spiritCollectibleShareCaption: "Mi espíritu musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Estado {status} | Te gustan {liked} artistas | Conociste en la app {discovered} | Ya conocías {known}",
@@ -20950,11 +20950,12 @@ function spiritCollectibleFilename(spiritId, milestoneLikes, imageUrl = "") {
   return `sonic-search-${normalizedSpirit}-${milestoneLikes}.${extension}`;
 }
 
-function spiritStoryFilename(baseFilename = "") {
+function spiritStoryFilename(baseFilename = "", extension = "png") {
   const baseNameWithoutExt = String(baseFilename || "")
     .trim()
     .replace(/\.[a-z0-9]+$/i, "") || "sonic-search-spirit";
-  return `${baseNameWithoutExt}-story-1080x1920.png`;
+  const safeExtension = String(extension || "png").replace(/[^a-z0-9]/gi, "").toLowerCase() || "png";
+  return `${baseNameWithoutExt}-story-1080x1920.${safeExtension}`;
 }
 
 function triggerSpiritCollectibleDownload(imageUrl, filename = "") {
@@ -20982,12 +20983,12 @@ async function spiritCollectibleBlobFromUrl(imageUrl, mimeHint = "") {
   const source = String(imageUrl || "").trim();
   if (!source) throw new Error("collectible-empty-url");
 
-  if (/^data:image\//i.test(source)) {
+  if (/^data:/i.test(source)) {
     const commaIndex = source.indexOf(",");
     if (commaIndex < 0) throw new Error("collectible-invalid-data-url");
     const meta = source.slice(5, commaIndex);
     const body = source.slice(commaIndex + 1);
-    const mime = String(meta.split(";")[0] || mimeHint || "image/png").toLowerCase();
+    const mime = String(meta.split(";")[0] || mimeHint || "application/octet-stream").toLowerCase();
     if (/;base64/i.test(meta)) {
       const raw = atob(body);
       const bytes = new Uint8Array(raw.length);
@@ -21667,10 +21668,11 @@ async function buildSpiritStoryShareVideo({
   if (!heroImage) return null;
 
   const mimeCandidates = [
+    "video/mp4;codecs=h264",
+    "video/mp4",
     "video/webm;codecs=vp9",
     "video/webm;codecs=vp8",
-    "video/webm",
-    "video/mp4"
+    "video/webm"
   ];
   let selectedMime = "";
   if (typeof window.MediaRecorder.isTypeSupported === "function") {
@@ -21973,6 +21975,33 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritImageSource, spiritMime);
   const { mime } = collectibleImageMeta(safeImageUrl);
   const sourceImageDataUrl = await collectibleImageAsDataUrl(safeImageUrl, mime);
+  const storyVideo = await buildSpiritStoryShareVideo({
+    baseImageDataUrl: sourceImageDataUrl || safeImageUrl,
+    spiritImageDataUrl,
+    spiritText,
+    snapshot,
+    likes,
+    milestoneLikes: milestone.likes,
+    detailsLine,
+    genreSummary
+  });
+  const shareCaption = t("spiritCollectibleShareCaption", {
+    spirit: spiritText?.name || t("spiritBadge")
+  });
+  const shareText = [shareCaption, detailsLine, genreSummary?.headline, genreSummary?.narrative, statusLine]
+    .filter(Boolean)
+    .join("\n");
+
+  if (storyVideo?.url && storyVideo?.mime) {
+    return {
+      storyAssetUrl: storyVideo.url,
+      storyAssetMime: storyVideo.mime,
+      filename: spiritStoryFilename(baseFilename, storyVideo.extension || "webm"),
+      shareText,
+      animated: true
+    };
+  }
+
   const storyImageUrl =
     buildSpiritStoryShareImage(
       sourceImageDataUrl || safeImageUrl,
@@ -22000,19 +22029,14 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}
       STORY_SHARE_HEIGHT
     );
   const storyAssetUrl = storyImagePng || fallbackPng || storyImageUrl;
-  const filename = spiritStoryFilename(baseFilename);
-  const shareCaption = t("spiritCollectibleShareCaption", {
-    spirit: spiritText?.name || t("spiritBadge")
-  });
-  const shareText = [shareCaption, detailsLine, genreSummary?.headline, genreSummary?.narrative, statusLine]
-    .filter(Boolean)
-    .join("\n");
+  const filename = spiritStoryFilename(baseFilename, "png");
 
   return {
     storyAssetUrl,
     storyAssetMime: "image/png",
     filename,
-    shareText
+    shareText,
+    animated: false
   };
 }
 
