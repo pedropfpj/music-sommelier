@@ -3204,7 +3204,9 @@ input[type="range"] {
   gap: 0.5rem;
 }
 
-.youtube-preview {
+.youtube-preview,
+.soundcloud-preview,
+.bandcamp-preview {
   width: 100%;
   border: 1px solid rgba(124, 221, 255, 0.32);
   border-radius: 12px;
@@ -3212,12 +3214,25 @@ input[type="range"] {
   background: rgba(2, 6, 16, 0.92);
 }
 
-.youtube-preview-frame {
+.youtube-preview-frame,
+.soundcloud-preview-frame,
+.bandcamp-preview-frame {
   width: 100%;
-  aspect-ratio: 16 / 9;
   border: 0;
   display: block;
   background: rgba(2, 6, 16, 0.92);
+}
+
+.youtube-preview-frame {
+  aspect-ratio: 16 / 9;
+}
+
+.soundcloud-preview-frame {
+  height: 166px;
+}
+
+.bandcamp-preview-frame {
+  height: 130px;
 }
 
 .youtube-preview-actions {
@@ -7972,6 +7987,39 @@ button:hover,
   animation: floating-surprise-in 220ms ease both;
 }
 
+#topSwipeSurpriseBtn,
+#swipeHeroSurpriseBtn,
+#surpriseBtn,
+#adaptiveSurpriseBtn {
+  min-height: 54px;
+  border: 1px solid rgba(126, 232, 198, 0.66);
+  color: #031523;
+  font-family: "Syne", sans-serif;
+  font-weight: 900;
+  letter-spacing: 0;
+  background:
+    linear-gradient(115deg, #3effcf 0%, #66d8ff 48%, #8a8cff 100%);
+  box-shadow:
+    0 16px 38px rgba(32, 227, 200, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+#topSwipeSurpriseBtn {
+  width: 100%;
+  font-size: clamp(1rem, 2.6vw, 1.28rem);
+}
+
+#swipeHeroSurpriseBtn {
+  box-shadow:
+    0 18px 44px rgba(32, 227, 200, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+#surpriseBtn,
+#adaptiveSurpriseBtn {
+  font-size: clamp(0.96rem, 1.8vw, 1.12rem);
+}
+
 @media (min-width: 981px) {
   #resultPanel:not(.hidden) + #detailsPanel:not(.hidden) {
     grid-column: 1 / -1;
@@ -9462,6 +9510,20 @@ iframe {
   line-height: 1.42;
 }
 
+.swipe-start-cta {
+  display: grid;
+  gap: 0.72rem;
+  align-self: end;
+}
+
+.swipe-hero-top-surprise {
+  width: 100%;
+  min-height: 58px;
+  border-radius: 8px;
+  font-size: clamp(1rem, 1.9vw, 1.18rem);
+  touch-action: manipulation;
+}
+
 .swipe-discovery-strip {
   display: grid;
   grid-template-columns: 1fr;
@@ -9676,6 +9738,18 @@ iframe {
 @media (max-width: 620px) {
   .swipe-start-panel {
     padding: 0.82rem;
+  }
+
+  .swipe-start-head {
+    grid-template-columns: 1fr;
+  }
+
+  .swipe-start-cta {
+    gap: 0.58rem;
+  }
+
+  .swipe-hero-top-surprise {
+    min-height: 56px;
   }
 
   .swipe-start-head h3 {

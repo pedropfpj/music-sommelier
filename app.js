@@ -928,7 +928,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     bpmExact: 180,
     bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
     bandcampTrackUrl: "https://naturaizrecords.bandcamp.com/track/vuttun-confundentur-180",
-    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-confundentur-180",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/vuttun-confundentur",
+    existenceVerified: true,
+    soundcloudVerified: true,
     artistCountry: "Brazil",
     artistGenre: "Naturaiz / Psycore",
     artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
@@ -940,7 +942,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     label: "Naturaiz Records",
     bpmExact: 198,
     bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
-    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-fabula-198",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/vuttun-fabula",
+    existenceVerified: true,
+    soundcloudVerified: true,
     artistCountry: "Brazil",
     artistGenre: "Naturaiz / Psycore",
     artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
@@ -952,7 +956,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     label: "Naturaiz Records",
     bpmExact: 210,
     bandcampUrl: "https://naturaizrecords.bandcamp.com/album/vuttun-voluptas-in-anima",
-    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/vuttun-in-anima-210",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/vuttun-in-anima",
+    existenceVerified: true,
+    soundcloudVerified: true,
     artistCountry: "Brazil",
     artistGenre: "Naturaiz / Psycore",
     artistProfileHint: "Projeto associado ao eixo experimental/psycore no catalogo Naturaiz."
@@ -975,7 +981,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     label: "Naturaiz Records",
     bpmExact: 200,
     bandcampUrl: "https://naturaizrecords.bandcamp.com/album/natura-z-records-vol-1",
-    soundcloudTrackUrl: "https://soundcloud.com/naturaizrecords/sectio-aurea-gato-murr-200bpm",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/sectio-aurea-gato-murr-200bpm",
+    existenceVerified: true,
+    soundcloudVerified: true,
     artistGenre: "Naturaiz / Psycore",
     artistProfileHint: "Artista do eixo dark experimental/psycore com material de alta velocidade em catalogos independentes."
   },
@@ -2551,56 +2559,65 @@ const catalog = [
   },
   {
     style: "slambient",
-    song: "Ash Chamber",
-    artist: "Cindervomit",
+    song: "Chasing fo blood",
+    artist: "Cindervomit X Phyllorum",
     label: "The Endless Knot",
     bpm: "155-175",
-    bpmExact: 168,
     energy: "high",
     vocals: "instrumental",
     context: ["peak", "foco", "after"],
-    vibe: "Slambient acelerado, sombrio e textural para transicoes intensas.",
-    spotifyUrl: "https://open.spotify.com/search/Cindervomit%20Ash%20Chamber",
-    youtubeUrl: "https://www.youtube.com/results?search_query=Cindervomit+Ash+Chamber",
+    vibe: "Slambient colaborativo, sombrio e textural, com pressao de pista e atmosfera ritualistica.",
+    spotifyUrl: "https://open.spotify.com/search/Cindervomit%20Phyllorum%20Chasing%20fo%20blood",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Cindervomit+Phyllorum+Chasing+fo+blood",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/chasing-fo-blood",
+    bandcampTrackId: "336874145",
+    existenceVerified: true,
     spotifyVerified: false,
-    beatportUrl: "https://www.beatport.com/search?q=Cindervomit%20Ash%20Chamber",
-    artistBio: "Cindervomit e um projeto de textura densa, explorando fronteiras entre ambient escuro e psicodelia extrema.",
+    beatportUrl: "https://www.beatport.com/search?q=Cindervomit%20Phyllorum%20Chasing%20fo%20blood",
+    artistBio: "Cindervomit e Phyllorum cruzam ambient escuro, psicodelia extrema e tensao ritmica em formato colaborativo.",
     labelBio: "The Endless Knot e uma curadoria voltada para sonoridades psicodelicas experimentais e extremas."
   },
   {
     style: "slambient",
-    song: "Knotted Horizons",
-    artist: "Endless Knot Collective",
+    song: "The Damned",
+    artist: "Cindervomit X Phyllorum",
     label: "The Endless Knot",
     bpm: "155-175",
-    bpmExact: 160,
     energy: "high",
     vocals: "instrumental",
     context: ["after", "foco", "estrada"],
-    vibe: "Camadas atmosfericas longas com drive ritmico moderado.",
-    spotifyUrl: "https://open.spotify.com/search/Endless%20Knot%20Collective%20Knotted%20Horizons",
-    youtubeUrl: "https://www.youtube.com/results?search_query=Endless+Knot+Collective+Knotted+Horizons",
+    vibe: "Ambiencia pesada com narrativa escura e pulso hipnotico para descoberta extrema.",
+    spotifyUrl: "https://open.spotify.com/search/Cindervomit%20Phyllorum%20The%20Damned",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Cindervomit+Phyllorum+The+Damned",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/the-damned",
+    bandcampTrackId: "3047238908",
+    existenceVerified: true,
     spotifyVerified: false,
-    beatportUrl: "https://www.beatport.com/search?q=Endless%20Knot%20Collective%20Knotted%20Horizons",
-    artistBio: "Endless Knot Collective representa faixas curatoriais com foco em paisagens sonoras profundas.",
+    beatportUrl: "https://www.beatport.com/search?q=Cindervomit%20Phyllorum%20The%20Damned",
+    artistBio: "A colaboracao Cindervomit X Phyllorum fica no limite entre slambient, dark experimental e psy extremo.",
     labelBio: "The Endless Knot conecta artistas de propostas hibridas entre dark ambient, psy e experimentacao."
   },
   {
     style: "slambient",
-    song: "Ritual Coil",
-    artist: "Phyllorum",
+    song: "The Mumific Scroll",
+    artist: "Cindervomit X Phyllorum",
     label: "The Endless Knot",
     bpm: "155-175",
-    bpmExact: 172,
     energy: "high",
     vocals: "instrumental",
     context: ["peak", "foco", "estrada"],
-    vibe: "Slambient de ataque ritmico com textura escura e progressao hipnotica.",
-    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Ritual%20Coil",
-    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Ritual+Coil",
+    vibe: "Textura ritualistica, clima sombrio e construcao densa para quem quer estudar o lado extremo.",
+    spotifyUrl: "https://open.spotify.com/search/Cindervomit%20Phyllorum%20The%20Mumific%20Scroll",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Cindervomit+Phyllorum+The+Mumific+Scroll",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/the-mumific-scroll",
+    bandcampTrackId: "196495012",
+    existenceVerified: true,
     spotifyVerified: false,
-    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20Ritual%20Coil",
-    artistBio: "Phyllorum explora slambient acelerado com recortes ritmicos e atmosfera densa.",
+    beatportUrl: "https://www.beatport.com/search?q=Cindervomit%20Phyllorum%20The%20Mumific%20Scroll",
+    artistBio: "Cindervomit X Phyllorum explora slambient acelerado com recortes ritmicos e atmosfera densa.",
     labelBio: "The Endless Knot foca em narrativas psicodelicas extremas dentro do espectro slambient."
   },
   {
@@ -4171,6 +4188,10 @@ const blockArtistBtn = document.getElementById("blockArtistBtn");
 const previewPanel = document.getElementById("previewPanel");
 const previewStatus = document.getElementById("previewStatus");
 const trackPreview = document.getElementById("trackPreview");
+const soundcloudPreviewWrap = document.getElementById("soundcloudPreviewWrap");
+const soundcloudPreviewFrame = document.getElementById("soundcloudPreviewFrame");
+const bandcampPreviewWrap = document.getElementById("bandcampPreviewWrap");
+const bandcampPreviewFrame = document.getElementById("bandcampPreviewFrame");
 const youtubePreviewWrap = document.getElementById("youtubePreviewWrap");
 const youtubePreviewFrame = document.getElementById("youtubePreviewFrame");
 const youtubePreviewActions = document.getElementById("youtubePreviewActions");
@@ -4199,6 +4220,7 @@ const swipeDeckKicker = document.getElementById("swipeDeckKicker");
 const swipeDeckTitle = document.getElementById("swipeDeckTitle");
 const swipeDeckHint = document.getElementById("swipeDeckHint");
 const swipeStyleRail = document.getElementById("swipeStyleRail");
+const swipeHeroSurpriseBtn = document.getElementById("swipeHeroSurpriseBtn");
 const topSwipeCard = document.getElementById("topSwipeCard");
 const topSwipeImage = document.getElementById("topSwipeImage");
 const topSwipeFallback = document.getElementById("topSwipeFallback");
@@ -8795,7 +8817,7 @@ function isTrustedCuratedCatalogTrack(track) {
   const curatedLocalSeed = source.includes("datasetlocal") || source.includes("dataset local") || source.includes("dataset_local_seed_boost");
   if (!curatedLocalSeed) return false;
   if (!artistAllowedForStyle(track.style, track.artist)) return false;
-  return ["freeform", "ambient", "downtempo", "chillout", "brazilian_funk"].includes(track.style);
+  return ["freeform", "ambient", "downtempo", "chillout", "brazilian_funk", "psycore"].includes(track.style);
 }
 
 function curatedCatalogPriorityScore(track) {
@@ -8813,13 +8835,14 @@ function normalizeTrustedSlambientCatalog() {
     track.existenceVerified = true;
     track.previewChecked = Boolean(track.previewUrl);
     track.previewMissing = !track.previewUrl;
-    track.spotifyVerified = true;
+    if (track.spotifyVerified === undefined) track.spotifyVerified = false;
     track.youtubeVerified = true;
-    if (track.soundcloudVerified === undefined) track.soundcloudVerified = true;
+    track.bandcampVerified = Boolean(track.bandcampTrackUrl || track.bandcampUrl);
+    if (track.soundcloudVerified === undefined) track.soundcloudVerified = trackHasDirectSoundCloudTrack(track);
     if (!track.spotifyTrackUrl) track.spotifyTrackUrl = buildSpotifyTrackLink(track);
     if (!track.youtubeTrackUrl) track.youtubeTrackUrl = buildYouTubeTrackLink(track);
     if (!track.soundcloudTrackUrl && !track.soundcloudUrl) {
-      track.soundcloudTrackUrl = buildSoundCloudTrackLink(track);
+      track.soundcloudUrl = buildSoundCloudTrackLink(track);
     }
   });
 }
@@ -9003,19 +9026,40 @@ function trackHasReliableAudioPreview(track) {
   return previewCandidatesForTrack(track).some((candidate) => Boolean(normalizePreviewUrl(candidate)));
 }
 
+function trackHasPlayablePreviewExperience(track) {
+  return (
+    trackHasReliableAudioPreview(track) ||
+    trackHasDirectYouTubeVideo(track) ||
+    trackHasDirectSoundCloudTrack(track) ||
+    trackHasEmbeddableBandcampTrack(track) ||
+    trackHasDirectBandcampTrack(track)
+  );
+}
+
 function inferNegativeFeedbackReason(track, { source = "skip" } = {}) {
   if (!track) return "taste_mismatch";
   const noReliableAudio =
-    !trackHasReliableAudioPreview(track) ||
-    Boolean(track.previewChecked && track.previewMissing);
-  const youtubeFallbackVisible =
+    !trackHasPlayablePreviewExperience(track) ||
+    Boolean(
+      track.previewChecked &&
+      track.previewMissing &&
+      !trackHasDirectSoundCloudTrack(track) &&
+      !trackHasDirectYouTubeVideo(track) &&
+      !trackHasEmbeddableBandcampTrack(track) &&
+      !trackHasDirectBandcampTrack(track)
+    );
+  const embeddedFallbackVisible =
     Boolean(trackPreview?.classList.contains("hidden")) &&
-    Boolean(youtubePreviewWrap && !youtubePreviewWrap.classList.contains("hidden"));
+    (
+      Boolean(youtubePreviewWrap && !youtubePreviewWrap.classList.contains("hidden")) ||
+      Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden")) ||
+      Boolean(bandcampPreviewWrap && !bandcampPreviewWrap.classList.contains("hidden"))
+    );
 
-  if (source === "preview_dislike" && (noReliableAudio || youtubeFallbackVisible)) {
+  if (source === "preview_dislike" && (noReliableAudio || embeddedFallbackVisible)) {
     return "preview_issue";
   }
-  if ((source === "novelty_not_yet" || source === "skip") && noReliableAudio && youtubeFallbackVisible) {
+  if ((source === "novelty_not_yet" || source === "skip") && noReliableAudio && embeddedFallbackVisible) {
     return "preview_issue";
   }
   return "taste_mismatch";
@@ -9031,7 +9075,7 @@ function previewPenaltyForTrack(track) {
   }
 
   const styleSignal = Number(previewReliabilityByStyle.get(normalize(track.style || "")) || 0);
-  if (!trackHasReliableAudioPreview(track) && styleSignal < 0) {
+  if (!trackHasPlayablePreviewExperience(track) && styleSignal < 0) {
     penalty += Math.min(1.7, Math.abs(styleSignal) * 0.34);
   }
   return penalty;
@@ -10577,10 +10621,10 @@ const I18N = {
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
-    topSwipeEmptyTitle: "Toque em Começar swipe",
+    topSwipeEmptyTitle: "Toque em Surpresa sonora",
     topSwipeEmptyMeta: "O primeiro card já vem de um subgênero diferente. Depois é só curtir ou trocar.",
     topSwipeHint: "No modo descoberta, cada swipe tenta abrir outro estilo, outro DJ e outra textura.",
-    swipeStartButton: "Começar swipe",
+    swipeStartButton: "Surpresa sonora",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
     quickKnownArtistQuestion: "{artist} já estava no seu radar?",
@@ -10656,7 +10700,7 @@ const I18N = {
     recommendBtn: "Encontrar faixa",
     recommendBtnBusy: "Buscando...",
     rerollBtn: "Outra no mesmo alvo",
-    surpriseBtn: "Surpreender",
+    surpriseBtn: "Surpresa",
     adaptiveSurpriseBtn: "Surpreenda por perfil",
     clearFiltersBtn: "Limpar filtros",
     resetAppBtn: "Novo usuário (reset total)",
@@ -10913,6 +10957,8 @@ const I18N = {
     previewYoutubeCloseInlineBtn: "Ocultar player",
     previewYoutubeRetryBtn: "Tentar outro vídeo",
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
+    previewSoundcloudFallback: "Preview em áudio aberto via SoundCloud. Se não iniciar sozinho, toque no player.",
+    previewBandcampFallback: "Preview aberto via Bandcamp com fonte validada. Se não iniciar sozinho, toque no player.",
     previewUnavailable: "Preview indisponível para esta faixa. Use Spotify/YouTube/SoundCloud e me diga se gostou.",
     previewUnavailableWithLinks: "Preview indisponível para esta faixa. Use {platforms} e me diga se gostou.",
     spotifyUnverified: "Link do Spotify não verificado: abrindo busca aproximada para esta faixa.",
@@ -11148,10 +11194,10 @@ const I18N = {
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
-    topSwipeEmptyTitle: "Tap Start swipe",
+    topSwipeEmptyTitle: "Tap Sound surprise",
     topSwipeEmptyMeta: "The first card already comes from a different subgenre. Then just like or swap.",
     topSwipeHint: "In discovery mode, each swipe tries to open another style, another DJ, and another texture.",
-    swipeStartButton: "Start swipe",
+    swipeStartButton: "Sound surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
     quickKnownArtistQuestion: "Was {artist} already on your radar?",
@@ -11484,6 +11530,8 @@ const I18N = {
     previewYoutubeCloseInlineBtn: "Hide player",
     previewYoutubeRetryBtn: "Try another video",
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
+    previewSoundcloudFallback: "Audio preview opened through SoundCloud. If it does not start by itself, tap the player.",
+    previewBandcampFallback: "Preview opened through a verified Bandcamp source. If it does not start by itself, tap the player.",
     previewUnavailable: "Preview unavailable for this track. Use Spotify/YouTube/SoundCloud and tell me if you liked it.",
     previewUnavailableWithLinks: "Preview unavailable for this track. Use {platforms} and tell me if you liked it.",
     spotifyUnverified: "Spotify link is not fully verified yet: opening an approximate search for this track.",
@@ -11719,10 +11767,10 @@ const I18N = {
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
-    topSwipeEmptyTitle: "Toca Empezar swipe",
+    topSwipeEmptyTitle: "Toca Sorpresa sonora",
     topSwipeEmptyMeta: "La primera carta ya viene de un subgénero distinto. Después solo dale me gusta o cambia.",
     topSwipeHint: "En modo descubrimiento, cada swipe intenta abrir otro estilo, otro DJ y otra textura.",
-    swipeStartButton: "Empezar swipe",
+    swipeStartButton: "Sorpresa sonora",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
     quickKnownArtistQuestion: "¿{artist} ya estaba en tu radar?",
@@ -12055,6 +12103,8 @@ const I18N = {
     previewYoutubeCloseInlineBtn: "Ocultar player",
     previewYoutubeRetryBtn: "Probar otro video",
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
+    previewSoundcloudFallback: "Preview de audio abierto vía SoundCloud. Si no empieza solo, toca el player.",
+    previewBandcampFallback: "Preview abierto vía Bandcamp con fuente validada. Si no empieza solo, toca el player.",
     previewUnavailable: "Preview no disponible para esta pista. Usa Spotify/YouTube/SoundCloud y dime si te gustó.",
     previewUnavailableWithLinks: "Preview no disponible para esta pista. Usa {platforms} y dime si te gustó.",
     spotifyUnverified: "Enlace de Spotify no verificado: se abrirá una búsqueda aproximada para esta pista.",
@@ -12958,6 +13008,7 @@ function applyLanguage() {
   setText("#swipeDeckKicker", t("swipeDeckKicker"));
   setText("#swipeDeckTitle", t("swipeDeckTitle"));
   setText("#swipeDeckHint", t("swipeDeckHint"));
+  setText("#swipeHeroSurpriseBtn", t("swipeStartButton"));
   renderSwipeStyleRail();
   setText("#topSwipeHint", t("topSwipeHint"));
   setText("#swipeKicker", t("swipeKicker"));
@@ -13450,6 +13501,8 @@ function resetSessionUiState() {
       // ignore playback reset failures
     }
   }
+  resetSoundCloudPreviewEmbed();
+  resetBandcampPreviewEmbed();
   resetYouTubePreviewEmbed();
 }
 
@@ -16949,7 +17002,7 @@ function scrollResultPanelIntoView({ force = false } = {}) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -19184,6 +19237,53 @@ function trackHasDirectYouTubeVideo(track) {
   );
 }
 
+function isDirectSoundCloudTrackUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+    if (!host.endsWith("soundcloud.com")) return false;
+    const parts = parsed.pathname
+      .split("/")
+      .map((part) => part.trim())
+      .filter(Boolean);
+    if (parts.length < 2) return false;
+    const blocked = new Set(["search", "discover", "you", "stream", "charts", "upload", "pages", "settings"]);
+    if (blocked.has(parts[0])) return false;
+    if (parts[0] === "sets") return false;
+    if (parts[1] === "sets") return false;
+    return true;
+  } catch (_err) {
+    return false;
+  }
+}
+
+function directSoundCloudTrackUrl(track) {
+  const candidates = [track?.soundcloudTrackUrl, track?.soundcloudUrl]
+    .map((url) => String(url || "").trim())
+    .filter(Boolean);
+  return candidates.find((url) => isDirectSoundCloudTrackUrl(url)) || "";
+}
+
+function trackHasDirectSoundCloudTrack(track) {
+  return Boolean(directSoundCloudTrackUrl(track));
+}
+
+function trackHasDirectBandcampTrack(track) {
+  return Boolean(String(track?.bandcampTrackUrl || track?.bandcampUrl || "").trim());
+}
+
+function bandcampTrackIdForEmbed(track) {
+  return String(track?.bandcampTrackId || "")
+    .replace(/[^\d]/g, "")
+    .trim();
+}
+
+function trackHasEmbeddableBandcampTrack(track) {
+  return Boolean(bandcampTrackIdForEmbed(track));
+}
+
 function youtubeSearchQueryVariants(track) {
   const artist = String(track?.artist || "").trim();
   const song = String(track?.song || "").trim();
@@ -19292,6 +19392,67 @@ function resetYouTubePreviewEmbed() {
     youtubePreviewFrame.removeAttribute("src");
   }
   setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
+}
+
+function buildSoundCloudEmbedUrl(track, { autoplay = false } = {}) {
+  const directUrl = directSoundCloudTrackUrl(track);
+  if (!directUrl) return "";
+  const params = new URLSearchParams({
+    url: directUrl,
+    color: "#66d8ff",
+    auto_play: autoplay ? "true" : "false",
+    hide_related: "true",
+    show_comments: "false",
+    show_user: "true",
+    show_reposts: "false",
+    show_teaser: "false",
+    visual: "false"
+  });
+  return `https://w.soundcloud.com/player/?${params.toString()}`;
+}
+
+function resetSoundCloudPreviewEmbed() {
+  if (!soundcloudPreviewWrap || !soundcloudPreviewFrame) return;
+  soundcloudPreviewWrap.classList.add("hidden");
+  if (soundcloudPreviewFrame.getAttribute("src")) {
+    soundcloudPreviewFrame.removeAttribute("src");
+  }
+}
+
+function showSoundCloudPreviewEmbed(track, { autoplay = false } = {}) {
+  if (!soundcloudPreviewWrap || !soundcloudPreviewFrame || !track) return false;
+  const embedUrl = buildSoundCloudEmbedUrl(track, { autoplay });
+  if (!embedUrl) return false;
+  if (soundcloudPreviewFrame.getAttribute("src") !== embedUrl) {
+    soundcloudPreviewFrame.setAttribute("src", embedUrl);
+  }
+  soundcloudPreviewWrap.classList.remove("hidden");
+  return true;
+}
+
+function buildBandcampEmbedUrl(track) {
+  const trackId = bandcampTrackIdForEmbed(track);
+  if (!trackId) return "";
+  return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/transparent=true/`;
+}
+
+function resetBandcampPreviewEmbed() {
+  if (!bandcampPreviewWrap || !bandcampPreviewFrame) return;
+  bandcampPreviewWrap.classList.add("hidden");
+  if (bandcampPreviewFrame.getAttribute("src")) {
+    bandcampPreviewFrame.removeAttribute("src");
+  }
+}
+
+function showBandcampPreviewEmbed(track) {
+  if (!bandcampPreviewWrap || !bandcampPreviewFrame || !track) return false;
+  const embedUrl = buildBandcampEmbedUrl(track);
+  if (!embedUrl) return false;
+  if (bandcampPreviewFrame.getAttribute("src") !== embedUrl) {
+    bandcampPreviewFrame.setAttribute("src", embedUrl);
+  }
+  bandcampPreviewWrap.classList.remove("hidden");
+  return true;
 }
 
 function showYouTubePreviewEmbed(track, { autoplay = false, attempt = 0 } = {}) {
@@ -24074,7 +24235,7 @@ function trackCatalogDepthScore(track) {
   }
   const uniqueTracks = new Set(byArtist.map((item) => recommendationTrackKey(item)).filter(Boolean)).size;
   const reliableTracks = byArtist.filter((item) => hasReliableBpmForTrack(item)).length;
-  const previewTracks = byArtist.filter((item) => trackHasReliableAudioPreview(item) || trackHasDirectYouTubeVideo(item)).length;
+  const previewTracks = byArtist.filter((item) => trackHasPlayablePreviewExperience(item)).length;
   const score = Math.min(1.8, uniqueTracks * 0.24) + Math.min(1.1, reliableTracks * 0.18) + Math.min(1.2, previewTracks * 0.22);
   artistDepthScoreCache.set(cacheKey, score);
   return score;
@@ -24163,9 +24324,12 @@ function recommendationPrecisionScore(track, prefs = {}) {
 
   if (trackHasReliableAudioPreview(track)) score += 1.8;
   else if (trackHasDirectYouTubeVideo(track)) score += 0.9;
+  else if (trackHasDirectSoundCloudTrack(track)) score += 0.82;
+  else if (trackHasEmbeddableBandcampTrack(track)) score += 0.78;
+  else if (trackHasDirectBandcampTrack(track)) score += 0.45;
   else score -= 0.9;
 
-  if (track.previewChecked && track.previewMissing) score -= 1.35;
+  if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 1.35;
   if (track.existenceVerified === true) score += 0.9;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 20;
   if (isTrustedCuratedCatalogTrack(track)) score += 1.45;
@@ -24272,9 +24436,14 @@ function recommendationQualityScore(track, prefs = {}) {
   if (prefs.vocals && track.vocals === prefs.vocals) score += 1;
   if (track.previewUrl) score += 2.1;
   else if (trackHasReliableAudioPreview(track)) score += 1.15;
-  else if (track.previewChecked && track.previewMissing) score -= 1.8;
+  else if (trackHasDirectSoundCloudTrack(track)) score += 0.95;
+  else if (trackHasEmbeddableBandcampTrack(track)) score += 0.9;
+  else if (trackHasDirectBandcampTrack(track)) score += 0.45;
+  else if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 1.8;
 
   if (trackHasDirectYouTubeVideo(track)) score += 0.75;
+  if (trackHasDirectSoundCloudTrack(track)) score += 0.72;
+  if (trackHasEmbeddableBandcampTrack(track)) score += 0.68;
   if (track.spotifyVerified === true || track.spotifyTrackUrl) score += 0.5;
   if (track.soundcloudVerified === true || track.soundcloudTrackUrl) score += 0.45;
   if (track.bandcampTrackUrl || track.bandcampUrl) score += 0.35;
@@ -24317,7 +24486,7 @@ function recommendationScore(track, prefs) {
     score += track.vocals === prefs.vocals ? 1.45 * weights.vocals : -0.75 * weights.vocals;
   }
   if (track.previewUrl) score += 1.1;
-  if (track.previewChecked && !track.previewUrl) score -= 0.95;
+  if (track.previewChecked && !track.previewUrl && !trackHasPlayablePreviewExperience(track)) score -= 0.95;
   score -= previewPenaltyForTrack(track);
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 1000;
   if (track.existenceVerified === true || isTrustedCuratedCatalogTrack(track)) score += 0.8;
@@ -24547,6 +24716,8 @@ function recommendationHasStrongFit(track) {
     hasReliableBpmForTrack(track) &&
     (Boolean(track?.previewUrl) ||
       trackHasDirectYouTubeVideo(track) ||
+      trackHasDirectSoundCloudTrack(track) ||
+      trackHasEmbeddableBandcampTrack(track) ||
       track?.existenceVerified === true ||
       isTrustedCuratedCatalogTrack(track))
   );
@@ -25048,7 +25219,7 @@ function discoveryArtistCatalogStats(discovery = {}) {
   const stats = {
     tracks: new Set(tracks.map((track) => recommendationTrackKey(track)).filter(Boolean)).size,
     reliableTracks: tracks.filter((track) => hasReliableBpmForTrack(track)).length,
-    previewTracks: tracks.filter((track) => trackHasReliableAudioPreview(track) || trackHasDirectYouTubeVideo(track)).length,
+    previewTracks: tracks.filter((track) => trackHasPlayablePreviewExperience(track)).length,
     verifiedTracks: tracks.filter((track) => track.existenceVerified === true).length,
     trustedTracks: tracks.filter((track) => isTrustedCuratedCatalogTrack(track) || !isDynamicSource(track.source)).length,
     recentSignal: newestSignal
@@ -25296,6 +25467,7 @@ function updateSwipeFeedbackCard(track) {
   if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
   if (topSwipePassBtn) topSwipePassBtn.textContent = t("swipePass");
   if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = t("swipeStartButton");
+  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = t("swipeStartButton");
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
@@ -25696,6 +25868,8 @@ async function renderPreview(track) {
   listeningPrompt.classList.add("hidden");
   previewStatus.textContent = t("previewSearching");
   resetTrackPreviewElement(trackPreview);
+  resetSoundCloudPreviewEmbed();
+  resetBandcampPreviewEmbed();
   resetYouTubePreviewEmbed();
   syncYouTubePreviewAttemptForTrack(track);
 
@@ -25776,21 +25950,33 @@ async function renderPreview(track) {
     trackPreview.classList.add("hidden");
     track.previewUrl = "";
     track.previewMissing = true;
-    const youtubeFallbackReady = showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt });
-    if (youtubeFallbackReady) {
-      setYouTubePreviewActionState({
-        visible: true,
-        canToggle: true,
-        canRetry: canRetryYoutube,
-        expanded: true
-      });
-      previewStatus.textContent = t("previewYoutubeFallback");
-    } else {
+    const soundcloudFallbackReady = showSoundCloudPreviewEmbed(track, { autoplay: false });
+    if (soundcloudFallbackReady) {
       setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
-      const platforms = availableExternalPlatforms();
-      previewStatus.textContent = platforms.length
-        ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
-        : t("previewUnavailable");
+      previewStatus.textContent = t("previewSoundcloudFallback");
+    } else {
+      const bandcampFallbackReady = showBandcampPreviewEmbed(track);
+      if (bandcampFallbackReady) {
+        setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
+        previewStatus.textContent = t("previewBandcampFallback");
+      } else {
+        const youtubeFallbackReady = showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt });
+        if (youtubeFallbackReady) {
+          setYouTubePreviewActionState({
+            visible: true,
+            canToggle: true,
+            canRetry: canRetryYoutube,
+            expanded: true
+          });
+          previewStatus.textContent = t("previewYoutubeFallback");
+        } else {
+          setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
+          const platforms = availableExternalPlatforms();
+          previewStatus.textContent = platforms.length
+            ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
+            : t("previewUnavailable");
+        }
+      }
     }
     listeningPrompt.classList.remove("hidden");
   }
@@ -28874,6 +29060,8 @@ bind(youtubePreviewToggleBtn, "click", () => {
 
   const hasAudioPreview = Boolean(trackPreview && !trackPreview.classList.contains("hidden"));
   const attempt = trackHasDirectYouTubeVideo(currentRecommendation) ? 0 : youtubePreviewSearchAttempt;
+  resetSoundCloudPreviewEmbed();
+  resetBandcampPreviewEmbed();
   const opened = showYouTubePreviewEmbed(currentRecommendation, { autoplay: !hasAudioPreview, attempt });
   setYouTubePreviewActionState({
     visible: true,
@@ -28899,6 +29087,8 @@ bind(youtubePreviewRetryBtn, "click", () => {
   youtubePreviewSearchAttempt = (youtubePreviewSearchAttempt + 1) % attemptCount;
 
   const hasAudioPreview = Boolean(trackPreview && !trackPreview.classList.contains("hidden"));
+  resetSoundCloudPreviewEmbed();
+  resetBandcampPreviewEmbed();
   const opened = showYouTubePreviewEmbed(currentRecommendation, {
     autoplay: !hasAudioPreview,
     attempt: youtubePreviewSearchAttempt
@@ -29314,6 +29504,10 @@ bind(topSwipePassBtn, "click", () => {
 });
 
 bind(topSwipeSurpriseBtn, "click", async () => {
+  await runSurpriseRecommendation();
+});
+
+bind(swipeHeroSurpriseBtn, "click", async () => {
   await runSurpriseRecommendation();
 });
 

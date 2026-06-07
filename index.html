@@ -379,7 +379,10 @@
             <p id="swipeHeroKicker" class="section-kicker">Descoberta por swipe</p>
             <h3 id="swipeHeroTitle">Ouça primeiro. Ensine depois.</h3>
           </div>
-          <p id="swipeHeroHint" class="section-hint muted">Curta, troque ou arraste. O gesto vira direção para a próxima faixa.</p>
+          <div class="swipe-start-cta">
+            <p id="swipeHeroHint" class="section-hint muted">Curta, troque ou arraste. O gesto vira direção para a próxima faixa.</p>
+            <button id="swipeHeroSurpriseBtn" class="primary swipe-hero-top-surprise" type="button">Surpresa sonora</button>
+          </div>
         </div>
         <div class="swipe-discovery-strip" aria-labelledby="swipeDeckTitle">
           <div class="swipe-discovery-copy">
@@ -410,7 +413,7 @@
           </article>
           <div class="swipe-hero-actions">
             <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Trocar</button>
-            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Começar swipe</button>
+            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa sonora</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
           </div>
           <div class="quick-known-panel hidden" data-quick-known-panel>
@@ -759,6 +762,24 @@
           <div id="previewPanel" class="preview-panel hidden">
             <p id="previewStatus" class="muted">Buscando preview da faixa...</p>
             <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
+            <div id="soundcloudPreviewWrap" class="soundcloud-preview hidden">
+              <iframe
+                id="soundcloudPreviewFrame"
+                class="soundcloud-preview-frame"
+                title="Preview SoundCloud"
+                loading="lazy"
+                allow="autoplay"
+              ></iframe>
+            </div>
+            <div id="bandcampPreviewWrap" class="bandcamp-preview hidden">
+              <iframe
+                id="bandcampPreviewFrame"
+                class="bandcamp-preview-frame"
+                title="Preview Bandcamp"
+                loading="lazy"
+                allow="autoplay"
+              ></iframe>
+            </div>
             <div id="youtubePreviewWrap" class="youtube-preview hidden">
               <iframe
                 id="youtubePreviewFrame"
@@ -1325,6 +1346,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607v"></script>
+    <script src="app.js?v=20260607y"></script>
   </body>
 </html>
