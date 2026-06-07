@@ -9472,3 +9472,114 @@ iframe {
     font-size: 0.78rem;
   }
 }
+
+/* Signature ticker */
+.signature-bar {
+  position: fixed;
+  left: 50%;
+  right: auto;
+  bottom: calc(0.72rem + env(safe-area-inset-bottom));
+  width: min(1120px, calc(100vw - 36px));
+  height: 34px;
+  min-height: 34px;
+  margin: 0;
+  transform: translateX(-50%);
+  justify-content: flex-start;
+  overflow: hidden;
+  border: 1px solid rgba(219, 209, 188, 0.14);
+  border-radius: 8px;
+  z-index: 60;
+}
+
+.signature-track {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: auto;
+  min-width: max-content;
+  max-width: none;
+  display: inline-flex;
+  justify-content: flex-start;
+  gap: 0.72rem;
+  overflow: visible;
+  padding-inline: 1.2rem;
+  white-space: nowrap;
+  transform: none;
+  animation: none;
+}
+
+.signature-track.clone {
+  display: none;
+}
+
+.signature-divider,
+.signature-track .signature-pill:nth-of-type(2) {
+  display: inline;
+}
+
+.signature-pill {
+  min-width: max-content;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .signature-bar {
+    bottom: calc(0.44rem + env(safe-area-inset-bottom));
+    width: calc(100vw - 14px);
+    max-width: calc(100vw - 14px);
+    height: 32px;
+    min-height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .signature-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate3d(0, -50%, 0);
+    animation: signature-marquee-primary 18s linear infinite;
+    will-change: transform;
+  }
+
+  .signature-track.clone {
+    display: inline-flex;
+    animation-name: signature-marquee-secondary;
+  }
+}
+
+@media (max-width: 620px) and (prefers-reduced-motion: no-preference) {
+  .signature-track {
+    gap: 0.58rem;
+    padding-inline: 0.86rem;
+    animation-duration: 14s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signature-bar {
+    justify-content: center;
+  }
+
+  .signature-track {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .signature-divider,
+  .signature-track .signature-pill:nth-of-type(2) {
+    display: none;
+  }
+
+  .signature-pill {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
