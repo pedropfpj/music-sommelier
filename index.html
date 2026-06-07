@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607p" />
+    <link rel="stylesheet" href="styles.css?v=20260607q" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -922,8 +922,9 @@
               </div>
               <div class="feedback-action-group">
                 <p id="feedbackCorrectGroupTitle" class="feedback-group-title">Corrigir rota</p>
-                <div class="feedback-buttons">
+                <div class="feedback-buttons correction-buttons">
                   <button id="knewDiscoveryBtn">Já conhecia</button>
+                  <button id="newDiscoveryBtn" class="positive">Novidade pra mim</button>
                   <button id="skipBtn" class="danger">Não combinou</button>
                   <button id="blockArtistBtn" class="danger">Não recomendar este artista</button>
                 </div>
@@ -1235,8 +1236,12 @@
             <p id="summaryKnownCount" class="summary-value">0</p>
           </article>
           <article class="profile-stat-card metric">
-            <p id="summaryDiscoveredCountLabel" class="summary-kicker">Artistas conhecidos no app</p>
+            <p id="summaryDiscoveredCountLabel" class="summary-kicker">Artistas descobertos no app</p>
             <p id="summaryDiscoveredCount" class="summary-value">0</p>
+          </article>
+          <article class="profile-stat-card metric">
+            <p id="summaryPresentedTracksLabel" class="summary-kicker">Músicas apresentadas</p>
+            <p id="summaryPresentedTracksCount" class="summary-value">0</p>
           </article>
           <article class="profile-stat-card metric">
             <p id="summaryLikedCountLabel" class="summary-kicker">Artistas que curte</p>
@@ -1315,6 +1320,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607r"></script>
+    <script src="app.js?v=20260607s"></script>
   </body>
 </html>

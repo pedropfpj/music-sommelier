@@ -4694,6 +4694,29 @@ input[type="range"] {
   white-space: normal;
 }
 
+.correction-buttons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.correction-buttons button {
+  min-height: 48px;
+}
+
+.correction-buttons .positive {
+  color: #06130f;
+  border-color: rgba(126, 232, 198, 0.78);
+  background: linear-gradient(105deg, #7ee8c6, #8ac7ff 72%, #ffd07d);
+  font-weight: 800;
+}
+
+.correction-buttons .danger {
+  grid-column: span 1;
+}
+
+.correction-buttons #blockArtistBtn {
+  grid-column: 1 / -1;
+}
+
 .feedback-actions-panel {
   display: grid;
   gap: 0.56rem;

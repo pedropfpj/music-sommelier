@@ -4256,6 +4256,7 @@ const summaryShareInstagramBtn = document.getElementById("summaryShareInstagramB
 const summaryProfileStatus = document.getElementById("summaryProfileStatus");
 const summaryKnownCount = document.getElementById("summaryKnownCount");
 const summaryDiscoveredCount = document.getElementById("summaryDiscoveredCount");
+const summaryPresentedTracksCount = document.getElementById("summaryPresentedTracksCount");
 const summaryLikedArtistsCount = document.getElementById("summaryLikedArtistsCount");
 const summaryDislikedArtistsCount = document.getElementById("summaryDislikedArtistsCount");
 const summaryFavoriteStyle = document.getElementById("summaryFavoriteStyle");
@@ -4327,6 +4328,7 @@ const likeSongBtn = document.getElementById("likeSongBtn");
 const likeArtistBtn = document.getElementById("likeArtistBtn");
 const likeDiscoveryBtn = document.getElementById("likeDiscoveryBtn");
 const knewDiscoveryBtn = document.getElementById("knewDiscoveryBtn");
+const newDiscoveryBtn = document.getElementById("newDiscoveryBtn");
 const skipBtn = document.getElementById("skipBtn");
 const adaptiveSurpriseBtn = document.getElementById("adaptiveSurpriseBtn");
 const moreInfoBtn = document.getElementById("moreInfoBtn");
@@ -10665,7 +10667,7 @@ const I18N = {
     genreGuideText: "Em poucas palavras: {summary}",
     bpmFallbackRelaxed: "Essa faixa usa a faixa típica de BPM do subgênero para manter novas opções sem inventar BPM exato.",
     defaultStats: "Nenhum feedback ainda.",
-    stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Conheceu no app: {discoveredInApp} | Avaliações: {ratingCount} | Média: {ratingAvg}",
+    stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Artistas descobertos: {discoveredInApp} | Músicas apresentadas: {tracksPresented} | Avaliações: {ratingCount} | Média: {ratingAvg}",
     ratingTitle: "Avalie esta recomendação",
     ratingHint: "1 estrela = gostei pouco • 5 estrelas = gostei muito",
     ratingAwaiting: "Toque para avaliar",
@@ -10823,7 +10825,8 @@ const I18N = {
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
-    summaryDiscoveredCountLabel: "Artistas conhecidos no app",
+    summaryDiscoveredCountLabel: "Artistas descobertos no app",
+    summaryPresentedTracksLabel: "Músicas apresentadas",
     summaryLikedCountLabel: "Artistas que curte",
     summaryDislikedCountLabel: "Artistas que não curte",
     summaryFavoriteStyleLabel: "Gênero favorito",
@@ -11018,7 +11021,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Baixei o Story pronto. Abra o Instagram e publique nos Stories.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
     spiritCollectibleShareCaption: "Meu espírito musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {liked} artistas | Já conhecia {known}",
+    spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {shown} apresentadas | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
     spiritCollectibleGeneratedLocal: "Nova variação única local criada para este usuário.",
@@ -11233,7 +11236,7 @@ const I18N = {
     genreGuideText: "In plain words: {summary}",
     bpmFallbackRelaxed: "This track uses the subgenre's typical BPM range to keep new options flowing without inventing an exact BPM.",
     defaultStats: "No feedback yet.",
-    stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Discovered in app: {discoveredInApp} | Ratings: {ratingCount} | Avg: {ratingAvg}",
+    stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Artists discovered: {discoveredInApp} | Tracks shown: {tracksPresented} | Ratings: {ratingCount} | Avg: {ratingAvg}",
     ratingTitle: "Rate this recommendation",
     ratingHint: "1 star = liked a little • 5 stars = loved it",
     ratingAwaiting: "Tap to rate",
@@ -11392,6 +11395,7 @@ const I18N = {
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
     summaryDiscoveredCountLabel: "Artists discovered in app",
+    summaryPresentedTracksLabel: "Tracks shown",
     summaryLikedCountLabel: "Artists you like",
     summaryDislikedCountLabel: "Artists you don't like",
     summaryFavoriteStyleLabel: "Favorite genre",
@@ -11586,7 +11590,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Story file downloaded. Open Instagram and post it to your Story.",
     spiritCollectibleShareCanceled: "Share canceled.",
     spiritCollectibleShareCaption: "My musical spirit on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {liked} artists | Already knew {known}",
+    spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {shown} shown | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratedLocal: "New unique local variation created for this user.",
@@ -11801,7 +11805,7 @@ const I18N = {
     genreGuideText: "En pocas palabras: {summary}",
     bpmFallbackRelaxed: "Esta pista usa el rango típico de BPM del subgénero para mantener opciones nuevas sin inventar BPM exacto.",
     defaultStats: "Sin feedback todavía.",
-    stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Conocidos en la app: {discoveredInApp} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
+    stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Artistas descubiertos: {discoveredInApp} | Pistas presentadas: {tracksPresented} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
     ratingTitle: "Evalúa esta recomendación",
     ratingHint: "1 estrella = me gustó poco • 5 estrellas = me encantó",
     ratingAwaiting: "Toca para valorar",
@@ -11959,7 +11963,8 @@ const I18N = {
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
-    summaryDiscoveredCountLabel: "Artistas conocidos en la app",
+    summaryDiscoveredCountLabel: "Artistas descubiertos en la app",
+    summaryPresentedTracksLabel: "Pistas presentadas",
     summaryLikedCountLabel: "Artistas que te gustan",
     summaryDislikedCountLabel: "Artistas que no te gustan",
     summaryFavoriteStyleLabel: "Género favorito",
@@ -12154,7 +12159,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Story listo descargado. Abre Instagram y publícalo en Stories.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
     spiritCollectibleShareCaption: "Mi espíritu musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {liked} artistas | Ya conocías {known}",
+    spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {shown} presentadas | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
     spiritCollectibleGeneratedLocal: "Nueva variación local única creada para este usuario.",
@@ -12664,6 +12669,7 @@ function applyLanguage() {
       btnBlockArtist: "Não recomendar este artista",
       btnLikeDiscovery: "Curti a descoberta",
       btnKnewDiscovery: "Já conhecia",
+      btnNewDiscovery: "Novidade pra mim",
       btnSkip: "Não combinou",
       btnMoreInfo: "Mais sobre artista/label"
     },
@@ -12702,6 +12708,7 @@ function applyLanguage() {
       btnBlockArtist: "Never recommend this artist",
       btnLikeDiscovery: "Liked discovery",
       btnKnewDiscovery: "Already knew",
+      btnNewDiscovery: "New to me",
       btnSkip: "Did not match",
       btnMoreInfo: "More about artist/label"
     },
@@ -12740,6 +12747,7 @@ function applyLanguage() {
       btnBlockArtist: "No recomendar este artista",
       btnLikeDiscovery: "Me gustó el descubrimiento",
       btnKnewDiscovery: "Ya conocía",
+      btnNewDiscovery: "Novedad para mí",
       btnSkip: "No combinó",
       btnMoreInfo: "Más sobre artista/sello"
     }
@@ -12949,6 +12957,7 @@ function applyLanguage() {
   setText("#summaryStatusLabel", t("summaryStatusLabel"));
   setText("#summaryKnownCountLabel", t("summaryKnownCountLabel"));
   setText("#summaryDiscoveredCountLabel", t("summaryDiscoveredCountLabel"));
+  setText("#summaryPresentedTracksLabel", t("summaryPresentedTracksLabel"));
   setText("#summaryLikedCountLabel", t("summaryLikedCountLabel"));
   setText("#summaryDislikedCountLabel", t("summaryDislikedCountLabel"));
   setText("#summaryFavoriteStyleLabel", t("summaryFavoriteStyleLabel"));
@@ -13083,6 +13092,7 @@ function applyLanguage() {
   setText("#blockArtistBtn", labels.btnBlockArtist || "");
   setText("#likeDiscoveryBtn", labels.btnLikeDiscovery || "");
   setText("#knewDiscoveryBtn", labels.btnKnewDiscovery || "");
+  setText("#newDiscoveryBtn", labels.btnNewDiscovery || "");
   setText("#skipBtn", labels.btnSkip || "");
   setText("#moreInfoBtn", labels.btnMoreInfo || "");
   if (generatedBadge) generatedBadge.textContent = t("generatedNow");
@@ -15034,6 +15044,7 @@ function hasDedicatedClickSfxControl(el) {
     likeArtistBtn,
     blockArtistBtn,
     likeDiscoveryBtn,
+    newDiscoveryBtn,
     skipBtn,
     adaptiveSurpriseBtn,
     quizStartBtn,
@@ -16904,7 +16915,7 @@ function scrollResultPanelIntoView({ force = false } = {}) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -21145,6 +21156,7 @@ function spiritShareProfileSnapshot() {
     likedSongs: Math.max(0, Number(userStats.likedSongs) || 0),
     likedArtists: Math.max(0, Number(adaptiveModel?.likedArtists?.size) || 0),
     discoveredInApp: Math.max(0, Number(discoveredArtistsInApp?.size) || 0),
+    tracksPresented: Math.max(0, Number(seenTrackKeysMemory?.size) || 0),
     knownArtists: Math.max(0, Number(knownUnion.size) || 0),
     ratingCount: Math.max(0, Number(userStats.ratingCount) || 0),
     ratingAverage: ratingAverageText(),
@@ -21158,6 +21170,7 @@ function buildSpiritShareStatusLine(snapshot) {
     songs: Math.max(0, Number(snapshot?.likedSongs) || 0),
     liked: Math.max(0, Number(snapshot?.likedArtists) || 0),
     discovered: Math.max(0, Number(snapshot?.discoveredInApp) || 0),
+    shown: Math.max(0, Number(snapshot?.tracksPresented) || 0),
     known: Math.max(0, Number(snapshot?.knownArtists) || 0)
   });
 }
@@ -27105,6 +27118,7 @@ function updateStats() {
       alreadyKnew: userStats.alreadyKnew,
       skipped: userStats.skipped,
       discoveredInApp: discoveredArtistsInApp.size,
+      tracksPresented: seenTrackKeysMemory.size,
       ratingCount: userStats.ratingCount,
       ratingAvg: ratingAverageText()
     });
@@ -27112,6 +27126,7 @@ function updateStats() {
   if (summaryProfileStatus) summaryProfileStatus.textContent = resolveProfileStatusLabel();
   if (summaryKnownCount) summaryKnownCount.textContent = String(knownUnion.size);
   if (summaryDiscoveredCount) summaryDiscoveredCount.textContent = String(discoveredArtistsInApp.size);
+  if (summaryPresentedTracksCount) summaryPresentedTracksCount.textContent = String(seenTrackKeysMemory.size);
   if (summaryLikedArtistsCount) summaryLikedArtistsCount.textContent = String(adaptiveModel.likedArtists.size);
   if (summaryDislikedArtistsCount) summaryDislikedArtistsCount.textContent = String(adaptiveModel.dislikedArtists.size);
   if (summaryFavoriteStyle) summaryFavoriteStyle.textContent = resolveFavoriteStyleLabel();
@@ -28827,6 +28842,36 @@ bind(clearFiltersBtn, "click", () => {
 
 bind(resetAppBtn, "click", resetAppAsNewUser);
 
+function currentStatusArtistName() {
+  return String(currentRecommendation?.artist || currentDiscovery?.name || "").trim();
+}
+
+function markArtistKnownStatus(artistName = "") {
+  const safeArtist = String(artistName || "").trim();
+  if (!safeArtist) return false;
+  const alreadyMarkedKnown = artistSetHasMatch(knownArtistsMemory, safeArtist);
+  addArtistIdentityToSet(knownArtistsMemory, safeArtist);
+  removeArtistIdentityFromSet(discoveredArtistsInApp, safeArtist);
+  syncKnownArtistsTextarea(safeArtist);
+  if (!alreadyMarkedKnown) userStats.alreadyKnew += 1;
+  saveProgress();
+  updateStats();
+  return true;
+}
+
+function handleCurrentArtistKnownFallback() {
+  const artistName = currentStatusArtistName();
+  if (!artistName) {
+    if (feedbackMessage) feedbackMessage.textContent = t("enableDiscoveryMode");
+    return false;
+  }
+  markArtistKnownStatus(artistName);
+  if (feedbackMessage) feedbackMessage.textContent = t("discoveryKnown");
+  showToast(t("toastDiscoveryKnown"));
+  syncQuickKnownDecision(currentRecommendation);
+  return true;
+}
+
 async function handleKnownArtistYes() {
   if (!currentRecommendation || !lastPrefs) return;
 
@@ -28838,6 +28883,7 @@ async function handleKnownArtistYes() {
   addArtistIdentityToSet(knownArtistsMemory, currentRecommendation.artist);
   if (knownTrackTitle) knownTrackTitlesMemory.add(knownTrackTitle);
   addArtistIdentityToSet(rejectedArtists, currentRecommendation.artist);
+  removeArtistIdentityFromSet(discoveredArtistsInApp, currentRecommendation.artist);
   if (!alreadyMarkedKnown) userStats.alreadyKnew += 1;
   syncKnownArtistsTextarea(currentRecommendation.artist);
   saveProgress();
@@ -28909,9 +28955,13 @@ async function handleKnownArtistYes() {
 }
 
 function handleKnownArtistNo(triggerEl = knownNoBtn) {
-  if (!currentRecommendation) return;
-  registerDiscoveredArtist(currentRecommendation.artist);
-  if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.remove("hidden");
+  const artistName = currentStatusArtistName();
+  if (!artistName) {
+    if (feedbackMessage) feedbackMessage.textContent = t("enableDiscoveryMode");
+    return;
+  }
+  registerDiscoveredArtist(artistName);
+  if (noveltyEnjoyPrompt && currentRecommendation) noveltyEnjoyPrompt.classList.remove("hidden");
   burstConfetti(triggerEl || knownNoBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
   if (feedbackMessage) {
     feedbackMessage.textContent = t("newArtistDetected");
@@ -29269,12 +29319,16 @@ bind(likeDiscoveryBtn, "click", async () => {
   });
 });
 
-bind(knewDiscoveryBtn, "click", () => {
-  if (!currentDiscovery) return;
-  userStats.alreadyKnew += 1;
-  if (feedbackMessage) feedbackMessage.textContent = t("discoveryKnown");
-  showToast(t("toastDiscoveryKnown"));
-  updateStats();
+bind(knewDiscoveryBtn, "click", async () => {
+  if (currentRecommendation && lastPrefs) {
+    await handleKnownArtistYes();
+    return;
+  }
+  handleCurrentArtistKnownFallback();
+});
+
+bind(newDiscoveryBtn, "click", () => {
+  handleKnownArtistNo(newDiscoveryBtn);
 });
 
 bind(skipBtn, "click", async () => {
