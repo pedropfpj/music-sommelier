@@ -4412,7 +4412,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v13";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v14";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v14";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
@@ -6221,6 +6221,44 @@ const STYLE_FORBIDDEN_SIGNAL_TERMS = {
     "chacotas"
   ]
 };
+const ARTIST_IDENTITY_COLLISION_RULES = [
+  {
+    artist: "Artful Dodger",
+    styles: ["uk_garage", "future_garage"],
+    hardWrongSignals: [
+      "honor among thieves",
+      "not enough",
+      "scream",
+      "dandelion",
+      "babes on broadway",
+      "rave on",
+      "complete columbia recordings",
+      "american band"
+    ],
+    softWrongSignals: [
+      "power pop",
+      "poprock",
+      "pop rock",
+      "classic rock",
+      "album rock",
+      "rock"
+    ],
+    allowedSignals: [
+      "uk garage",
+      "garage",
+      "2 step",
+      "2step",
+      "fagin",
+      "rewind",
+      "re rewind",
+      "movin too fast",
+      "please dont turn me on",
+      "woman trouble",
+      "it aint enough",
+      "craig david"
+    ]
+  }
+];
 const STYLE_REQUIRED_LABEL_TERMS = {
   slambient: ["endless knot"]
 };
@@ -8186,6 +8224,57 @@ function textHasForbiddenSignalsForStyle(style, rawText = "") {
   return forbiddenTerms.some((term) => text.includes(normalize(term)));
 }
 
+function normalizedTextHasIdentitySignal(rawText = "", rawSignal = "") {
+  const text = normalize(rawText || "");
+  const signal = normalize(rawSignal || "");
+  if (!text || !signal) return false;
+  if (!signal.includes(" ")) {
+    return new RegExp(`(^|\\s)${escapeRegex(signal)}($|\\s)`).test(text);
+  }
+  return text.includes(signal);
+}
+
+function textHasAnyIdentitySignal(rawText = "", signals = []) {
+  if (!Array.isArray(signals) || !signals.length) return false;
+  return signals.some((signal) => normalizedTextHasIdentitySignal(rawText, signal));
+}
+
+function hasArtistIdentityCollision(style, trackLike = {}) {
+  if (!style || !trackLike) return false;
+  const artistName = String(trackLike.artist || "").trim();
+  if (!artistName) return false;
+
+  const rule = ARTIST_IDENTITY_COLLISION_RULES.find((entry) => {
+    const styles = Array.isArray(entry.styles) ? entry.styles : [];
+    const styleMatches = !styles.length || styles.includes(style);
+    return styleMatches && isArtistMatch(artistName, entry.artist);
+  });
+  if (!rule) return false;
+
+  const identityText = [
+    trackLike.song,
+    trackLike.label,
+    trackLike.artistGenre,
+    trackLike.artistProfileHint,
+    trackLike.vibe,
+    trackLike.artistBio,
+    trackLike.labelBio,
+    trackLike.source
+  ]
+    .filter(Boolean)
+    .join(" ");
+  if (!identityText) return false;
+
+  const hasHardWrongSignal = textHasAnyIdentitySignal(identityText, rule.hardWrongSignals);
+  if (hasHardWrongSignal) return true;
+
+  const hasSoftWrongSignal = textHasAnyIdentitySignal(identityText, rule.softWrongSignals);
+  if (!hasSoftWrongSignal) return false;
+
+  const hasAllowedSignal = textHasAnyIdentitySignal(identityText, rule.allowedSignals);
+  return !hasAllowedSignal;
+}
+
 function textHasTechnoRequiredSignalsForStyle(style, rawText = "") {
   if (!style || familyOf(style) !== "techno") return false;
   const terms = TECHNO_REQUIRED_SIGNAL_TERMS[style] || TECHNO_REQUIRED_SIGNAL_TERMS.techno;
@@ -8336,6 +8425,7 @@ function hasTrackStyleSignalConflict(style, trackLike = {}) {
     .filter(Boolean)
     .join(" ");
   if (textHasForbiddenSignalsForStyle(style, merged)) return true;
+  if (hasArtistIdentityCollision(style, trackLike)) return true;
   if (hasTechnoFamilyIntegrityConflict(style, trackLike)) return true;
   if (hasBassFamilyIntegrityConflict(style, trackLike)) return true;
   if (hasLowTempoIntegrityConflict(style, trackLike)) return true;
@@ -9636,7 +9726,15 @@ function addDynamicTrackToCatalog({
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
   if (!artistName || !songName) return false;
-  if (hasTrackStyleSignalConflict(style, { artist: artistName, song: songName, label, artistGenre: artistGenre || "", source })) return false;
+  if (hasTrackStyleSignalConflict(style, {
+    artist: artistName,
+    song: songName,
+    label,
+    artistGenre: artistGenre || "",
+    artistProfileHint,
+    vibe: [artistBio, labelBio].filter(Boolean).join(" "),
+    source
+  })) return false;
   if (isLikelyChannelStyleArtistName(artistName)) return false;
   if (isLikelyGeneratedTrackTitle(songName)) return false;
   if (!artistAllowedForStyle(style, artistName)) return false;
@@ -16670,6 +16768,7 @@ function loadDynamicCatalogCache() {
       if (!STYLE_BPM_RULES[track.style]) return;
       if (!artistAllowedForStyle(track.style, track.artist)) return;
       if (!labelAllowedForStyle(track.style, track.label)) return;
+      if (hasTrackStyleSignalConflict(track.style, track)) return;
       const trackMeta = TRACK_METADATA[`${track.song}|${track.artist}`] || {};
       const durationSec = parseDurationTextToSeconds(trackMeta.duration);
       if (
