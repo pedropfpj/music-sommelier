@@ -3890,8 +3890,14 @@ const voiceEffectsTitle = document.getElementById("voiceEffectsTitle");
 const voiceEffectButtons = document.getElementById("voiceEffectButtons");
 const voiceMiniTitle = document.getElementById("voiceMiniTitle");
 const voiceMiniHint = document.getElementById("voiceMiniHint");
+const voiceMiniRandomBtn = document.getElementById("voiceMiniRandomBtn");
 const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
 const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
+const voiceMiniExportBtn = document.getElementById("voiceMiniExportBtn");
+const voiceMiniExportLink = document.getElementById("voiceMiniExportLink");
+const voiceMiniRecipeLabel = document.getElementById("voiceMiniRecipeLabel");
+const voiceMiniRecipeTitle = document.getElementById("voiceMiniRecipeTitle");
+const voiceMiniRecipeMeta = document.getElementById("voiceMiniRecipeMeta");
 const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
 const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
 const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
@@ -4316,8 +4322,11 @@ let voiceRecordingTimer = 0;
 let selectedVoiceEffect = "robot";
 let activeVoiceSource = null;
 let voiceMiniTrackNodes = [];
+let voiceMiniNodeBucket = null;
 let voiceMiniTrackTimers = [];
 let voiceMiniTrackPlaying = false;
+let voiceMiniRendering = false;
+let voiceMiniExportUrl = "";
 let voiceMiniTrackScheduler = 0;
 let voiceMiniNextBarTime = 0;
 let voiceMiniBarIndex = 0;
@@ -10583,8 +10592,8 @@ const I18N = {
     trackAiFallback: "Essa faixa parece conversar com seu momento agora. Ouça o primeiro minuto: se o corpo acompanhar, salva; se não, troca que eu ajusto a rota.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
     voiceLabKicker: "Estúdio rápido",
-    voiceLabTitle: "Crie uma mini música em segundos",
-    voiceLabHint: "Escolha uma vibe, toque a base e grave sua voz só se quiser colocar sua assinatura por cima.",
+    voiceLabTitle: "Monte uma mini música em segundos",
+    voiceLabHint: "Um fluxo simples para criar um loop eletrônico: escolha o clima, aperte play, ajuste camadas e salve a ideia.",
     voiceEffectsTitle: "Efeito da voz",
     voiceEffectRobot: "Robô",
     voiceEffectChipmunk: "Engraçada",
@@ -10605,17 +10614,25 @@ const I18N = {
     voiceMicDenied: "Não consegui acessar o microfone. Verifique a permissão do navegador.",
     voicePlaying: "Tocando com efeito: {effect}.",
     voiceCleared: "Gravação apagada.",
-    voiceMiniEyebrow: "Mini track instantânea",
-    voiceMiniTitle: "Comece pela base",
-    voiceMiniHint: "Não precisa gravar nada para começar. Toque a base, teste uma vibe e depois adicione voz se fizer sentido.",
-    voiceStudioStepOne: "Escolha a vibe",
-    voiceStudioStepTwo: "Toque a base",
-    voiceStudioStepThree: "Grave voz opcional",
-    voiceMiniNoVoiceBadge: "Funciona sem microfone",
-    voiceMiniPlayBtn: "Tocar base agora",
+    voiceMiniEyebrow: "Beat maker simples",
+    voiceMiniTitle: "Escolha uma vibe. Aperte play.",
+    voiceMiniHint: "A mini música nasce pronta para tocar. Depois você liga ou desliga camadas, mexe no BPM e baixa a ideia.",
+    voiceStudioStepOne: "Escolha o clima",
+    voiceStudioStepTwo: "Aperte play",
+    voiceStudioStepThree: "Ajuste camadas",
+    voiceMiniNoVoiceBadge: "Sem microfone e sem cadastro",
+    voiceMiniRandomBtn: "Gerar ideia",
+    voiceMiniPlayBtn: "Tocar mini música",
     voiceMiniStopBtn: "Parar loop",
-    voiceMiniPresetTitle: "Escolha uma vibe",
-    voiceMiniLayerTitle: "Camadas do loop",
+    voiceMiniExportBtn: "Baixar mini música",
+    voiceMiniPresetTitle: "Escolha o clima da ideia",
+    voiceMiniLayerTitle: "Ligue/desligue camadas",
+    voiceMiniRecipeLabel: "Receita atual",
+    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
+    voiceMiniRecipeMeta: "{layers} ativos.",
+    voiceMiniRecipeMetaEmpty: "Escolha uma ideia ou toque em Gerar ideia para começar com som.",
+    voiceMiniAnd: "e",
+    voiceMiniCustomPreset: "Desenho próprio",
     voiceMiniAdvancedTitle: "Ajustes avançados",
     voiceMiniAdvancedHint: "voz, mixer e sequencer",
     voiceMiniBpmLabel: "Velocidade",
@@ -10634,17 +10651,23 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
-    voiceMiniReady: "Pronto: escolha uma vibe e toque a base. A voz é opcional.",
-    voiceMiniPlaying: "Base em loop. Ligue/desligue camadas ou grave voz para entrar por cima.",
-    voiceMiniDone: "Loop parado. Toque a base ou um pad para começar de novo.",
+    voiceMiniReady: "Pronto: escolha um clima ou toque em Gerar ideia.",
+    voiceMiniPlaying: "Mini música em loop. Ligue/desligue camadas ou grave voz para entrar por cima.",
+    voiceMiniDone: "Loop parado. Toque a mini música ou um pad para começar de novo.",
     voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
     voiceMiniStepChanged: "{pad} no passo {step}. O próximo compasso já segue esse desenho.",
-    voiceMiniPresetApplied: "Preset {preset} pronto. Toque a base ou ajuste as camadas.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Breaks",
-    voiceMiniPresetTrap: "Trap",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Ambient",
+    voiceMiniPresetApplied: "Ideia {preset} pronta. Toque a mini música ou ajuste as camadas.",
+    voiceMiniIdeaGenerated: "Ideia criada: {preset}, {bpm} BPM. Agora ajuste as camadas se quiser.",
+    voiceMiniExportBusy: "Gerando arquivo...",
+    voiceMiniExportReady: "Arquivo pronto para baixar",
+    voiceMiniExportDone: "Mini música gerada em WAV.",
+    voiceMiniExportUnsupported: "Este navegador não consegue baixar a mini música aqui.",
+    voiceMiniExportFailed: "Não consegui gerar o arquivo agora. Tente de novo.",
+    voiceMiniPresetTechno: "Techno direto",
+    voiceMiniPresetBreaks: "Breaks elástico",
+    voiceMiniPresetTrap: "Trap mutante",
+    voiceMiniPresetPsy: "Psy ácido",
+    voiceMiniPresetAmbient: "Ambient pulsante",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -11108,8 +11131,8 @@ const I18N = {
     trackAiFallback: "This track seems to fit your moment. Play the first minute: if your body follows, save it; if not, swap and I will adjust the route.",
     trackAiUpdatedToast: "AI insight updated.",
     voiceLabKicker: "Quick studio",
-    voiceLabTitle: "Create a mini track in seconds",
-    voiceLabHint: "Pick a vibe, play the base, and record your voice only if you want to add your signature on top.",
+    voiceLabTitle: "Build a mini track in seconds",
+    voiceLabHint: "A simple flow for making an electronic loop: pick the mood, press play, adjust layers, and save the idea.",
     voiceEffectsTitle: "Voice effect",
     voiceEffectRobot: "Robot",
     voiceEffectChipmunk: "Funny",
@@ -11130,17 +11153,25 @@ const I18N = {
     voiceMicDenied: "I could not access the microphone. Check browser permission.",
     voicePlaying: "Playing with effect: {effect}.",
     voiceCleared: "Recording cleared.",
-    voiceMiniEyebrow: "Instant mini track",
-    voiceMiniTitle: "Start with the base",
-    voiceMiniHint: "No recording needed to begin. Play the base, test a vibe, then add voice if it makes sense.",
-    voiceStudioStepOne: "Pick a vibe",
-    voiceStudioStepTwo: "Play the base",
-    voiceStudioStepThree: "Record optional voice",
-    voiceMiniNoVoiceBadge: "Works without mic",
-    voiceMiniPlayBtn: "Play base now",
+    voiceMiniEyebrow: "Simple beat maker",
+    voiceMiniTitle: "Pick a vibe. Press play.",
+    voiceMiniHint: "The mini track starts ready to play. Then toggle layers, move the BPM, and download the idea.",
+    voiceStudioStepOne: "Pick the mood",
+    voiceStudioStepTwo: "Press play",
+    voiceStudioStepThree: "Adjust layers",
+    voiceMiniNoVoiceBadge: "No mic or signup needed",
+    voiceMiniRandomBtn: "Generate idea",
+    voiceMiniPlayBtn: "Play mini track",
     voiceMiniStopBtn: "Stop loop",
-    voiceMiniPresetTitle: "Pick a vibe",
-    voiceMiniLayerTitle: "Loop layers",
+    voiceMiniExportBtn: "Download mini track",
+    voiceMiniPresetTitle: "Pick the idea mood",
+    voiceMiniLayerTitle: "Toggle layers",
+    voiceMiniRecipeLabel: "Current recipe",
+    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
+    voiceMiniRecipeMeta: "{layers} active.",
+    voiceMiniRecipeMetaEmpty: "Pick an idea or tap Generate idea to start with sound.",
+    voiceMiniAnd: "and",
+    voiceMiniCustomPreset: "Custom pattern",
     voiceMiniAdvancedTitle: "Advanced tweaks",
     voiceMiniAdvancedHint: "voice, mixer, sequencer",
     voiceMiniBpmLabel: "Speed",
@@ -11159,17 +11190,23 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
-    voiceMiniReady: "Ready: pick a vibe and play the base. Voice is optional.",
-    voiceMiniPlaying: "Base looping. Toggle layers or record voice to add it on top.",
-    voiceMiniDone: "Loop stopped. Play the base or tap a pad to start again.",
+    voiceMiniReady: "Ready: pick a mood or tap Generate idea.",
+    voiceMiniPlaying: "Mini track looping. Toggle layers or record voice to add it on top.",
+    voiceMiniDone: "Loop stopped. Play the mini track or tap a pad to start again.",
     voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
     voiceMiniStepChanged: "{pad} on step {step}. The next bar follows this pattern.",
-    voiceMiniPresetApplied: "{preset} preset ready. Play the base or adjust the layers.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Breaks",
-    voiceMiniPresetTrap: "Trap",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Ambient",
+    voiceMiniPresetApplied: "{preset} idea ready. Play the mini track or adjust the layers.",
+    voiceMiniIdeaGenerated: "Idea created: {preset}, {bpm} BPM. Adjust the layers if you want.",
+    voiceMiniExportBusy: "Generating file...",
+    voiceMiniExportReady: "File ready to download",
+    voiceMiniExportDone: "Mini track generated as WAV.",
+    voiceMiniExportUnsupported: "This browser cannot download the mini track here.",
+    voiceMiniExportFailed: "I could not generate the file right now. Try again.",
+    voiceMiniPresetTechno: "Direct techno",
+    voiceMiniPresetBreaks: "Elastic breaks",
+    voiceMiniPresetTrap: "Mutant trap",
+    voiceMiniPresetPsy: "Acid psy",
+    voiceMiniPresetAmbient: "Pulsing ambient",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -11633,8 +11670,8 @@ const I18N = {
     trackAiFallback: "Esta pista parece conversar con tu momento. Escucha el primer minuto: si el cuerpo acompaña, guárdala; si no, cambia y ajusto la ruta.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
     voiceLabKicker: "Estudio rápido",
-    voiceLabTitle: "Crea una mini canción en segundos",
-    voiceLabHint: "Elige una vibe, toca la base y graba tu voz solo si quieres poner tu firma encima.",
+    voiceLabTitle: "Arma una mini canción en segundos",
+    voiceLabHint: "Un flujo simple para crear un loop electrónico: elige el clima, toca play, ajusta capas y guarda la idea.",
     voiceEffectsTitle: "Efecto de voz",
     voiceEffectRobot: "Robot",
     voiceEffectChipmunk: "Graciosa",
@@ -11655,17 +11692,25 @@ const I18N = {
     voiceMicDenied: "No pude acceder al micrófono. Revisa el permiso del navegador.",
     voicePlaying: "Sonando con efecto: {effect}.",
     voiceCleared: "Grabación borrada.",
-    voiceMiniEyebrow: "Mini track instantánea",
-    voiceMiniTitle: "Empieza por la base",
-    voiceMiniHint: "No necesitas grabar nada para empezar. Toca la base, prueba una vibe y luego añade voz si tiene sentido.",
-    voiceStudioStepOne: "Elige la vibe",
-    voiceStudioStepTwo: "Toca la base",
-    voiceStudioStepThree: "Graba voz opcional",
-    voiceMiniNoVoiceBadge: "Funciona sin micrófono",
-    voiceMiniPlayBtn: "Tocar base ahora",
+    voiceMiniEyebrow: "Beat maker simple",
+    voiceMiniTitle: "Elige una vibe. Toca play.",
+    voiceMiniHint: "La mini canción nace lista para sonar. Después activas capas, mueves el BPM y descargas la idea.",
+    voiceStudioStepOne: "Elige el clima",
+    voiceStudioStepTwo: "Toca play",
+    voiceStudioStepThree: "Ajusta capas",
+    voiceMiniNoVoiceBadge: "Sin micrófono ni registro",
+    voiceMiniRandomBtn: "Generar idea",
+    voiceMiniPlayBtn: "Tocar mini canción",
     voiceMiniStopBtn: "Parar loop",
-    voiceMiniPresetTitle: "Elige una vibe",
-    voiceMiniLayerTitle: "Capas del loop",
+    voiceMiniExportBtn: "Descargar mini canción",
+    voiceMiniPresetTitle: "Elige el clima de la idea",
+    voiceMiniLayerTitle: "Activa/desactiva capas",
+    voiceMiniRecipeLabel: "Receta actual",
+    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
+    voiceMiniRecipeMeta: "{layers} activos.",
+    voiceMiniRecipeMetaEmpty: "Elige una idea o toca Generar idea para empezar con sonido.",
+    voiceMiniAnd: "y",
+    voiceMiniCustomPreset: "Patrón propio",
     voiceMiniAdvancedTitle: "Ajustes avanzados",
     voiceMiniAdvancedHint: "voz, mixer y sequencer",
     voiceMiniBpmLabel: "Velocidad",
@@ -11684,17 +11729,23 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
-    voiceMiniReady: "Listo: elige una vibe y toca la base. La voz es opcional.",
-    voiceMiniPlaying: "Base en loop. Activa/desactiva capas o graba voz para entrar encima.",
-    voiceMiniDone: "Loop parado. Toca la base o un pad para empezar otra vez.",
+    voiceMiniReady: "Listo: elige un clima o toca Generar idea.",
+    voiceMiniPlaying: "Mini canción en loop. Activa/desactiva capas o graba voz para entrar encima.",
+    voiceMiniDone: "Loop parado. Toca la mini canción o un pad para empezar otra vez.",
     voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
     voiceMiniStepChanged: "{pad} en el paso {step}. El próximo compás sigue ese patrón.",
-    voiceMiniPresetApplied: "Preset {preset} listo. Toca la base o ajusta las capas.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Breaks",
-    voiceMiniPresetTrap: "Trap",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Ambient",
+    voiceMiniPresetApplied: "Idea {preset} lista. Toca la mini canción o ajusta las capas.",
+    voiceMiniIdeaGenerated: "Idea creada: {preset}, {bpm} BPM. Ajusta las capas si quieres.",
+    voiceMiniExportBusy: "Generando archivo...",
+    voiceMiniExportReady: "Archivo listo para descargar",
+    voiceMiniExportDone: "Mini canción generada en WAV.",
+    voiceMiniExportUnsupported: "Este navegador no puede descargar la mini canción aquí.",
+    voiceMiniExportFailed: "No pude generar el archivo ahora. Intenta de nuevo.",
+    voiceMiniPresetTechno: "Techno directo",
+    voiceMiniPresetBreaks: "Breaks elástico",
+    voiceMiniPresetTrap: "Trap mutante",
+    voiceMiniPresetPsy: "Psy ácido",
+    voiceMiniPresetAmbient: "Ambient pulsante",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -12722,10 +12773,14 @@ function applyLanguage() {
   setText("#voiceStudioStepTwo", t("voiceStudioStepTwo"));
   setText("#voiceStudioStepThree", t("voiceStudioStepThree"));
   setText("#voiceMiniNoVoiceBadge", t("voiceMiniNoVoiceBadge"));
+  setText("#voiceMiniRandomBtn", t("voiceMiniRandomBtn"));
   setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
   setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
+  setText("#voiceMiniExportBtn", voiceMiniRendering ? t("voiceMiniExportBusy") : t("voiceMiniExportBtn"));
+  setText("#voiceMiniExportLink", t("voiceMiniExportReady"));
   setText("#voiceMiniPresetTitle", t("voiceMiniPresetTitle"));
   setText("#voiceMiniLayerTitle", t("voiceMiniLayerTitle"));
+  setText("#voiceMiniRecipeLabel", t("voiceMiniRecipeLabel"));
   setText("#voiceMiniAdvancedTitle", t("voiceMiniAdvancedTitle"));
   setText("#voiceMiniAdvancedHint", t("voiceMiniAdvancedHint"));
   setText("#voiceMiniBpmLabel", t("voiceMiniBpmLabel"));
@@ -12760,6 +12815,7 @@ function applyLanguage() {
   setText("[data-voice-mini-preset='psy']", t("voiceMiniPresetPsy"));
   setText("[data-voice-mini-preset='ambient']", t("voiceMiniPresetAmbient"));
   syncVoiceMiniPresetButtons();
+  updateVoiceMiniRecipe();
   setText("#voicePadKickBtn", t("voicePadKick"));
   setText("#voicePadBassBtn", t("voicePadBass"));
   setText("#voicePadHatBtn", t("voicePadHat"));
@@ -14836,6 +14892,60 @@ function syncVoiceMiniPresetButtons() {
   });
 }
 
+function voiceMiniPresetDisplayLabel(presetName = voiceMiniActivePreset) {
+  const key = String(presetName || "techno");
+  const translationKey = `voiceMiniPreset${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+  const translated = t(translationKey);
+  return translated && translated !== translationKey ? translated : t("voiceMiniCustomPreset");
+}
+
+function voiceMiniLayerLabel(kind = "") {
+  const normalized = String(kind || "");
+  const key = `voicePad${normalized.charAt(0).toUpperCase()}${normalized.slice(1)}`;
+  const translated = t(key);
+  return translated && translated !== key ? translated : normalized;
+}
+
+function voiceMiniHumanList(items = []) {
+  const list = items.filter(Boolean);
+  if (!list.length) return "";
+  if (typeof Intl !== "undefined" && typeof Intl.ListFormat === "function") {
+    const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es" : "en";
+    return new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(list);
+  }
+  return list.length > 1 ? `${list.slice(0, -1).join(", ")} ${t("voiceMiniAnd")} ${list[list.length - 1]}` : list[0];
+}
+
+function voiceMiniActiveLayerLabels() {
+  return VOICE_MINI_PATTERN_KINDS
+    .filter((kind) => Boolean(voiceMiniPadState[kind]))
+    .map((kind) => voiceMiniLayerLabel(kind));
+}
+
+function syncVoiceMiniVisual() {
+  voiceLabPanel?.querySelectorAll("[data-voice-mini-layer]").forEach((item) => {
+    const kind = String(item.getAttribute("data-voice-mini-layer") || "");
+    item.classList.toggle("active", Boolean(voiceMiniPadState[kind]));
+  });
+}
+
+function updateVoiceMiniRecipe() {
+  if (voiceMiniRecipeLabel) voiceMiniRecipeLabel.textContent = t("voiceMiniRecipeLabel");
+  if (voiceMiniRecipeTitle) {
+    voiceMiniRecipeTitle.textContent = t("voiceMiniRecipeTitle", {
+      preset: voiceMiniPresetDisplayLabel(voiceMiniActivePreset),
+      bpm: voiceMiniBpm
+    });
+  }
+  if (voiceMiniRecipeMeta) {
+    const activeLayers = voiceMiniActiveLayerLabels();
+    voiceMiniRecipeMeta.textContent = activeLayers.length
+      ? t("voiceMiniRecipeMeta", { layers: voiceMiniHumanList(activeLayers) })
+      : t("voiceMiniRecipeMetaEmpty");
+  }
+  syncVoiceMiniVisual();
+}
+
 function toggleVoiceMiniStep(kind = "", step = 0) {
   if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
   voiceMiniActivePreset = "";
@@ -14844,6 +14954,7 @@ function toggleVoiceMiniStep(kind = "", step = 0) {
   steps[index] = steps[index] ? 0 : 1;
   renderVoiceMiniSequencer();
   syncVoiceMiniPresetButtons();
+  updateVoiceMiniRecipe();
   if (voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniStepChanged", {
       pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`),
@@ -14860,13 +14971,9 @@ function applyVoiceMiniPreset(presetName = "techno") {
   updateVoiceMiniSwing(preset.swing, { announce: false });
   renderVoiceMiniSequencer();
   syncVoiceMiniPresetButtons();
-  voiceMiniPadState.kick = true;
-  voiceMiniPadState.bass = true;
-  voiceMiniPadState.hat = true;
-  voiceMiniPadState.clap = presetName !== "ambient";
-  voiceMiniPadState.synth = true;
-  voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
+  voiceMiniPadState = voiceMiniBasePadState(presetName);
   syncVoicePadButtons();
+  updateVoiceMiniRecipe();
   if (voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniPresetApplied", {
       preset: t(`voiceMiniPreset${presetName.charAt(0).toUpperCase()}${presetName.slice(1)}`)
@@ -14884,6 +14991,7 @@ function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
     voiceMiniBpmSlider.setAttribute("aria-valuenow", String(voiceMiniBpm));
   }
   if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
+  updateVoiceMiniRecipe();
   if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniBpmChanged", { bpm: voiceMiniBpm });
 }
 
@@ -15112,13 +15220,15 @@ function updateVoiceLabUi() {
   if (voiceStopBtn) voiceStopBtn.disabled = !isRecording;
   if (voicePlayBtn) voicePlayBtn.disabled = isRecording || !hasRecording;
   if (voiceResetBtn) voiceResetBtn.disabled = isRecording || !hasRecording;
+  if (voiceMiniRandomBtn) voiceMiniRandomBtn.disabled = Boolean(isRecording) || voiceMiniRendering;
   if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = Boolean(isRecording) || voiceMiniTrackPlaying;
   if (voiceMiniStopBtn) voiceMiniStopBtn.disabled = !voiceMiniTrackPlaying;
+  if (voiceMiniExportBtn) voiceMiniExportBtn.disabled = Boolean(isRecording) || voiceMiniRendering;
   if (voicePadVoiceBtn) voicePadVoiceBtn.disabled = isRecording || !hasRecording;
   syncVoicePadButtons();
   voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
   voicePlayback?.classList.toggle("hidden", !hasRecording);
-  if (voiceMiniStatus && !hasRecording && !voiceMiniTrackPlaying) voiceMiniStatus.textContent = t("voiceMiniReady");
+  if (voiceMiniStatus && !voiceMiniStatus.textContent.trim()) voiceMiniStatus.textContent = t("voiceMiniReady");
 }
 
 function syncVoicePadButtons() {
@@ -15136,6 +15246,7 @@ function syncVoicePadButtons() {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
   });
+  updateVoiceMiniRecipe();
 }
 
 function supportedVoiceRecorderMimeType() {
@@ -15270,7 +15381,11 @@ function stopActiveVoicePlayback() {
 
 function trackVoiceMiniNode(node) {
   if (!node) return node;
-  voiceMiniTrackNodes.push(node);
+  if (Array.isArray(voiceMiniNodeBucket)) {
+    voiceMiniNodeBucket.push(node);
+  } else {
+    voiceMiniTrackNodes.push(node);
+  }
   return node;
 }
 
@@ -15354,6 +15469,7 @@ function stopVoiceMiniTrack({ silent = false } = {}) {
     synth: false,
     voice: false
   };
+  updateVoiceMiniRecipe();
   if (!silent && voiceMiniStatus) voiceMiniStatus.textContent = voiceRecordingBlob ? t("voiceMiniDone") : t("voiceMiniReady");
   updateVoiceLabUi();
 }
@@ -15380,7 +15496,7 @@ function createMiniDriveCurve(amount = 0) {
   return curve;
 }
 
-function connectVoiceMiniOutputBus(ctx, { preview = false } = {}) {
+function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } = {}) {
   const input = trackVoiceMiniNode(ctx.createGain());
   const master = trackVoiceMiniNode(ctx.createGain());
   const shaper = trackVoiceMiniNode(ctx.createWaveShaper());
@@ -15448,7 +15564,7 @@ function connectVoiceMiniOutputBus(ctx, { preview = false } = {}) {
     outputBus.phaserDepth = depth;
   }
 
-  if (!preview) voiceMiniOutputBus = outputBus;
+  if (assign) voiceMiniOutputBus = outputBus;
   return input;
 }
 
@@ -16040,6 +16156,202 @@ async function previewVoiceDawPad(kind = "kick") {
   if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadHint", { pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`) });
 }
 
+function voiceMiniBasePadState(presetName = voiceMiniActivePreset) {
+  const normalized = String(presetName || "techno");
+  return {
+    kick: true,
+    bass: true,
+    hat: true,
+    clap: normalized !== "ambient",
+    synth: true,
+    voice: Boolean(voiceRecordingBlob)
+  };
+}
+
+function ensureVoiceMiniAudiblePadState() {
+  const hasAudibleLayer = ["kick", "bass", "hat", "clap", "synth", "voice"].some((kind) => Boolean(voiceMiniPadState[kind]));
+  if (hasAudibleLayer) return;
+  voiceMiniPadState = voiceMiniBasePadState();
+  syncVoicePadButtons();
+}
+
+function applyVoiceMiniIdeaVariation(presetName = voiceMiniActivePreset) {
+  const variations = {
+    techno: { drive: 38, delay: 18, phaser: 28, beatmasher: 16, synth: 50, master: 135 },
+    breaks: { drive: 30, delay: 24, phaser: 34, beatmasher: 28, synth: 58, master: 132 },
+    trap: { drive: 42, delay: 30, phaser: 22, beatmasher: 38, synth: 62, master: 130 },
+    psy: { drive: 48, delay: 16, phaser: 44, beatmasher: 20, synth: 54, master: 138 },
+    ambient: { drive: 18, delay: 42, phaser: 50, beatmasher: 10, synth: 76, master: 122 }
+  };
+  const base = variations[presetName] || variations.techno;
+  const drift = () => Math.round((Math.random() - 0.5) * 14);
+  updateVoiceMiniDrive(base.drive + drift(), { announce: false });
+  updateVoiceMiniDelay(base.delay + drift(), { announce: false });
+  updateVoiceMiniPhaser(base.phaser + drift(), { announce: false });
+  updateVoiceMiniBeatmasher(base.beatmasher + drift(), { announce: false });
+  updateVoiceMiniSynth(base.synth + drift(), { announce: false });
+  updateVoiceMiniMaster(base.master + Math.round(drift() * 0.5), { announce: false });
+}
+
+async function generateVoiceMiniIdea() {
+  const presets = Object.keys(VOICE_MINI_PRESETS);
+  const currentIndex = Math.max(0, presets.indexOf(voiceMiniActivePreset));
+  const offset = 1 + Math.floor(Math.random() * Math.max(1, presets.length - 1));
+  const nextPreset = presets[(currentIndex + offset) % presets.length] || "techno";
+  const wasPlaying = voiceMiniTrackPlaying;
+  applyVoiceMiniPreset(nextPreset);
+  applyVoiceMiniIdeaVariation(nextPreset);
+  ensureVoiceMiniAudiblePadState();
+  if (voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniIdeaGenerated", {
+      preset: voiceMiniPresetDisplayLabel(nextPreset),
+      bpm: voiceMiniBpm
+    });
+  }
+  if (!wasPlaying) {
+    await playVoiceMiniTrack();
+  }
+}
+
+function cleanupVoiceMiniNodeBucket(bucket = []) {
+  bucket.forEach((node) => {
+    try {
+      if (typeof node.stop === "function") node.stop();
+    } catch (_err) {
+      // ignore already-rendered node
+    }
+    try {
+      if (typeof node.disconnect === "function") node.disconnect();
+    } catch (_err) {
+      // ignore disconnected node
+    }
+  });
+}
+
+async function withVoiceMiniNodeBucket(callback) {
+  const previousBucket = voiceMiniNodeBucket;
+  const bucket = [];
+  voiceMiniNodeBucket = bucket;
+  try {
+    return await callback(bucket);
+  } finally {
+    voiceMiniNodeBucket = previousBucket;
+    cleanupVoiceMiniNodeBucket(bucket);
+  }
+}
+
+function scheduleVoiceMiniArrangement(ctx, destination, start, beat, bars, voiceBuffer = null) {
+  for (let bar = 0; bar < bars; bar += 1) {
+    const barStart = start + beat * 4 * bar;
+    if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, destination, barStart, beat, bar);
+    if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, destination, barStart, beat, bar);
+    if (voiceMiniPadState.clap) scheduleVoiceMiniClapLoop(ctx, destination, barStart, beat, bar);
+    if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, destination, barStart, beat, bar);
+    if (voiceMiniPadState.synth) scheduleVoiceMiniSynthLoop(ctx, destination, barStart, beat, bar);
+    if (voiceMiniPadState.voice && voiceBuffer) {
+      scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, barStart, beat, bar);
+    }
+  }
+}
+
+function audioBufferToWavBlob(buffer) {
+  const channelCount = Math.min(2, Math.max(1, buffer.numberOfChannels || 1));
+  const sampleRate = buffer.sampleRate || 44100;
+  const bytesPerSample = 2;
+  const blockAlign = channelCount * bytesPerSample;
+  const dataSize = buffer.length * blockAlign;
+  const arrayBuffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(arrayBuffer);
+  const writeString = (offset, value) => {
+    for (let i = 0; i < value.length; i += 1) {
+      view.setUint8(offset + i, value.charCodeAt(i));
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, channelCount, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * blockAlign, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, 16, true);
+  writeString(36, "data");
+  view.setUint32(40, dataSize, true);
+
+  const channels = Array.from({ length: channelCount }, (_, index) => buffer.getChannelData(index));
+  let offset = 44;
+  for (let i = 0; i < buffer.length; i += 1) {
+    for (let channel = 0; channel < channelCount; channel += 1) {
+      const sample = Math.max(-1, Math.min(1, channels[channel][i] || 0));
+      view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
+      offset += bytesPerSample;
+    }
+  }
+
+  return new Blob([arrayBuffer], { type: "audio/wav" });
+}
+
+async function exportVoiceMiniTrack() {
+  const OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  if (!OfflineContext) {
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportUnsupported");
+    showToast(t("voiceMiniExportUnsupported"));
+    return;
+  }
+  if (voiceMiniRendering) return;
+  ensureVoiceMiniAudiblePadState();
+  voiceMiniRendering = true;
+  if (voiceMiniExportBtn) voiceMiniExportBtn.textContent = t("voiceMiniExportBusy");
+  if (voiceMiniExportLink) voiceMiniExportLink.classList.add("hidden");
+  updateVoiceLabUi();
+  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportBusy");
+
+  try {
+    const sampleRate = 44100;
+    const beat = voiceMiniBeatDuration();
+    const bars = 8;
+    const renderDuration = beat * 4 * bars + 1.2;
+    let voiceBuffer = null;
+    if (voiceMiniPadState.voice && voiceRecordingBlob) {
+      if (initAudioEngine() && audioContext) {
+        await resumeVoiceMiniAudioContext(audioContext);
+        voiceBuffer = await getNormalizedVoiceBuffer(audioContext);
+      }
+    }
+
+    const renderedBuffer = await withVoiceMiniNodeBucket(async () => {
+      const offlineCtx = new OfflineContext(2, Math.ceil(sampleRate * renderDuration), sampleRate);
+      const bus = connectVoiceMiniOutputBus(offlineCtx, { assign: false });
+      scheduleVoiceMiniArrangement(offlineCtx, bus, 0.08, beat, bars, voiceBuffer);
+      return offlineCtx.startRendering();
+    });
+    const wavBlob = audioBufferToWavBlob(renderedBuffer);
+    if (voiceMiniExportUrl) URL.revokeObjectURL(voiceMiniExportUrl);
+    voiceMiniExportUrl = URL.createObjectURL(wavBlob);
+    const filename = `sonic-search-${voiceMiniActivePreset || "mini"}-${voiceMiniBpm}bpm.wav`;
+    if (voiceMiniExportLink) {
+      voiceMiniExportLink.href = voiceMiniExportUrl;
+      voiceMiniExportLink.download = filename;
+      voiceMiniExportLink.textContent = t("voiceMiniExportReady");
+      voiceMiniExportLink.classList.remove("hidden");
+      voiceMiniExportLink.click();
+    }
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportDone");
+    showToast(t("voiceMiniExportDone"));
+  } catch (_err) {
+    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportFailed");
+    showToast(t("voiceMiniExportFailed"));
+  } finally {
+    voiceMiniRendering = false;
+    if (voiceMiniExportBtn) voiceMiniExportBtn.textContent = t("voiceMiniExportBtn");
+    updateVoiceLabUi();
+  }
+}
+
 async function playVoiceMiniTrack() {
   if (!initAudioEngine() || !audioContext) {
     setVoiceStatus(t("voiceMicUnsupported"));
@@ -16050,12 +16362,7 @@ async function playVoiceMiniTrack() {
   audioUnlocked = true;
   await audioContext.resume().catch(() => {});
 
-  voiceMiniPadState.kick = true;
-  voiceMiniPadState.bass = true;
-  voiceMiniPadState.hat = true;
-  voiceMiniPadState.clap = true;
-  voiceMiniPadState.synth = true;
-  voiceMiniPadState.voice = Boolean(voiceRecordingBlob);
+  voiceMiniPadState = voiceMiniBasePadState();
   syncVoicePadButtons();
   const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
   if (!loopReady) {
@@ -27126,6 +27433,8 @@ bind(voicePlayBtn, "click", playVoiceEffect);
 bind(voiceResetBtn, "click", resetVoiceRecording);
 bind(voiceMiniPlayBtn, "click", playVoiceMiniTrack);
 bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
+bind(voiceMiniRandomBtn, "click", generateVoiceMiniIdea);
+bind(voiceMiniExportBtn, "click", exportVoiceMiniTrack);
 bind(voiceMiniPresetGrid, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-voice-mini-preset]") : null;
   if (!target) return;
@@ -28018,6 +28327,7 @@ void refreshDailyNews({ silent: true, live: false });
 bootstrapAudio();
 showIntroScreen();
 updateWeightLabels();
+applyVoiceMiniPreset("techno");
 updateVoiceLabUi();
 updateSwipeFeedbackCard(currentRecommendation);
 renderSwipeStyleRail();

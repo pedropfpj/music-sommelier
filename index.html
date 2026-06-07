@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607g" />
+    <link rel="stylesheet" href="styles.css?v=20260607i" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -946,38 +946,55 @@
         <div class="voice-lab-head">
           <div>
             <p id="voiceLabKicker" class="section-kicker">Estúdio rápido</p>
-            <h3 id="voiceLabTitle">Crie uma mini música em segundos</h3>
+            <h3 id="voiceLabTitle">Monte uma mini música em segundos</h3>
           </div>
-          <p id="voiceLabHint" class="section-hint muted">Escolha uma vibe, toque a base e grave sua voz só se quiser colocar sua assinatura por cima.</p>
+          <p id="voiceLabHint" class="section-hint muted">Um fluxo simples para criar um loop eletrônico: escolha o clima, aperte play, ajuste camadas e salve a ideia.</p>
         </div>
 
         <div class="voice-lab-grid">
           <div class="voice-mini-card">
             <div class="voice-mini-intro">
-              <p id="voiceMiniEyebrow" class="voice-mini-eyebrow">Mini track instantânea</p>
-              <p id="voiceMiniTitle" class="voice-effects-title">Comece pela base</p>
-              <p id="voiceMiniHint" class="muted voice-mini-hint">Não precisa gravar nada para começar. Toque a base, teste uma vibe e depois adicione voz se fizer sentido.</p>
+              <p id="voiceMiniEyebrow" class="voice-mini-eyebrow">Beat maker simples</p>
+              <p id="voiceMiniTitle" class="voice-effects-title">Escolha uma vibe. Aperte play.</p>
+              <p id="voiceMiniHint" class="muted voice-mini-hint">A mini música nasce pronta para tocar. Depois você liga ou desliga camadas, mexe no BPM e baixa a ideia.</p>
               <div class="voice-studio-steps" aria-label="Fluxo rápido do estúdio">
-                <span><strong>1</strong><em id="voiceStudioStepOne">Escolha a vibe</em></span>
-                <span><strong>2</strong><em id="voiceStudioStepTwo">Toque a base</em></span>
-                <span><strong>3</strong><em id="voiceStudioStepThree">Grave voz opcional</em></span>
+                <span><strong>1</strong><em id="voiceStudioStepOne">Escolha o clima</em></span>
+                <span><strong>2</strong><em id="voiceStudioStepTwo">Aperte play</em></span>
+                <span><strong>3</strong><em id="voiceStudioStepThree">Ajuste camadas</em></span>
               </div>
             </div>
             <div class="voice-mini-transport">
-              <span id="voiceMiniNoVoiceBadge" class="voice-mini-badge">Funciona sem microfone</span>
+              <span id="voiceMiniNoVoiceBadge" class="voice-mini-badge">Sem microfone e sem cadastro</span>
               <div class="voice-mini-controls">
-                <button id="voiceMiniPlayBtn" class="primary" type="button">Tocar base agora</button>
+                <button id="voiceMiniRandomBtn" class="secondary voice-mini-idea-btn" type="button">Gerar ideia</button>
+                <button id="voiceMiniPlayBtn" class="primary" type="button">Tocar mini música</button>
                 <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar loop</button>
+                <button id="voiceMiniExportBtn" class="secondary voice-mini-export-btn" type="button">Baixar mini música</button>
+              </div>
+            </div>
+            <div class="voice-mini-live-board">
+              <div class="voice-mini-orbit" aria-hidden="true">
+                <span data-voice-mini-layer="kick">K</span>
+                <span data-voice-mini-layer="bass">B</span>
+                <span data-voice-mini-layer="hat">H</span>
+                <span data-voice-mini-layer="clap">C</span>
+                <span data-voice-mini-layer="synth">S</span>
+                <span data-voice-mini-layer="voice">V</span>
+              </div>
+              <div class="voice-mini-recipe">
+                <p id="voiceMiniRecipeLabel" class="voice-mini-recipe-label">Receita atual</p>
+                <strong id="voiceMiniRecipeTitle">Techno direto • 132 BPM</strong>
+                <p id="voiceMiniRecipeMeta" class="muted">Kick, Bass, Hat, Clap e Synth ativos.</p>
               </div>
             </div>
             <div class="voice-mini-section voice-mini-preset-section">
-              <p id="voiceMiniPresetTitle" class="voice-mini-section-title">Escolha uma vibe</p>
+              <p id="voiceMiniPresetTitle" class="voice-mini-section-title">Escolha o clima da ideia</p>
               <div id="voiceMiniPresetGrid" class="voice-mini-preset-grid" aria-label="Presets de groove">
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="breaks">Breaks</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="trap">Trap</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="ambient">Ambient</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno direto</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="breaks">Breaks elástico</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="trap">Trap mutante</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy ácido</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="ambient">Ambient pulsante</button>
               </div>
             </div>
             <label class="voice-bpm-control voice-primary-bpm-control" for="voiceMiniBpmSlider">
@@ -986,7 +1003,7 @@
               <input id="voiceMiniBpmSlider" type="range" min="90" max="180" step="1" value="128" aria-valuemin="90" aria-valuemax="180" aria-valuenow="128" />
             </label>
             <div class="voice-mini-section voice-mini-layer-section">
-              <p id="voiceMiniLayerTitle" class="voice-mini-section-title">Camadas do loop</p>
+              <p id="voiceMiniLayerTitle" class="voice-mini-section-title">Ligue/desligue camadas</p>
               <div class="voice-daw-pad-grid" aria-label="Mini DAW">
                 <button id="voicePadKickBtn" class="voice-daw-pad" type="button" aria-pressed="false">Kick</button>
                 <button id="voicePadBassBtn" class="voice-daw-pad" type="button" aria-pressed="false">Bass</button>
@@ -1052,7 +1069,8 @@
                 <div id="voiceStepSequencer" class="voice-step-sequencer" aria-label="Sequencer da mini música"></div>
               </div>
             </details>
-            <p id="voiceMiniStatus" class="muted voice-mini-status">Pronto: toque a base para começar.</p>
+            <p id="voiceMiniStatus" class="muted voice-mini-status">Pronto: escolha um clima ou toque em Gerar ideia.</p>
+            <a id="voiceMiniExportLink" class="listen-btn voice-mini-export-link hidden" href="#" download="sonic-search-mini-musica.wav">Arquivo pronto para baixar</a>
           </div>
 
           <div class="voice-recorder-card">
@@ -1257,6 +1275,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607h"></script>
+    <script src="app.js?v=20260607i"></script>
   </body>
 </html>
