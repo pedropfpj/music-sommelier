@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260606a" />
+    <link rel="stylesheet" href="styles.css?v=20260607b" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -60,19 +60,6 @@
       <span class="sonic-speaker speaker-b"></span>
       <span class="sonic-speaker speaker-c"></span>
       <div id="genreFxLayer" class="genre-fx-layer"></div>
-    </div>
-    <button id="audioToggleBtn" class="audio-toggle" type="button" aria-pressed="true">
-      <span class="audio-toggle-bars" aria-hidden="true">
-        <span class="audio-toggle-bar"></span>
-        <span class="audio-toggle-bar"></span>
-        <span class="audio-toggle-bar"></span>
-      </span>
-      <span id="audioToggleLabel">Som ligado</span>
-    </button>
-    <div id="audioVolumeControl" class="audio-volume-control">
-      <label id="audioVolumeLabel" for="audioVolumeSlider">Volume</label>
-      <input id="audioVolumeSlider" type="range" min="0" max="100" step="1" value="80" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" />
-      <span id="audioVolumeValue">80%</span>
     </div>
     <button id="floatingSurpriseBtn" class="floating-surprise-btn hidden" type="button" aria-label="Surpreenda-me com uma faixa nova">
       Surpresa
@@ -214,7 +201,7 @@
           </div>
           <p id="usageGuideKicker" class="brand-kicker">Guia rápido</p>
           <h1 id="usageGuideTitle">Como aproveitar melhor o Sonic Search</h1>
-          <p id="usageGuideDesc">Use o app como um sommelier: diga o momento, ajuste o gosto e responda ao que tocar.</p>
+          <p id="usageGuideDesc">Use o app como um amigo de pista: diga o clima, ouça a aposta e responda sem pensar demais.</p>
         </div>
 
         <div class="usage-guide-grid" aria-label="Dicas para usar melhor o Sonic Search">
@@ -226,12 +213,12 @@
           <article class="usage-guide-item">
             <span class="usage-guide-number">02</span>
             <h2 id="usageGuideStep2Title">Diga quem você já conhece</h2>
-            <p id="usageGuideStep2Text">Adicione artistas conhecidos para evitar recomendações óbvias e abrir espaço para descoberta real.</p>
+            <p id="usageGuideStep2Text">Adicione artistas conhecidos para o app sair do óbvio e procurar novidade de verdade.</p>
           </article>
           <article class="usage-guide-item">
             <span class="usage-guide-number">03</span>
             <h2 id="usageGuideStep3Title">Use o feedback</h2>
-            <p id="usageGuideStep3Text">Curta, pule ou marque “já conhecia”. Cada resposta ajuda o perfil a ficar mais certeiro.</p>
+            <p id="usageGuideStep3Text">Curta, troque ou marque “já conhecia”. Cada resposta vira um sinal de gosto, não só um clique.</p>
           </article>
           <article class="usage-guide-item">
             <span class="usage-guide-number">04</span>
@@ -271,6 +258,21 @@
           <button id="authLoginBtn" class="primary">Entrar</button>
           <button id="authGuestBtn">Continuar sem login</button>
         </div>
+        <div class="auth-divider">
+          <span id="authSocialDivider">ou entre com</span>
+        </div>
+        <div class="auth-social-grid" aria-label="Login social">
+          <div id="authGoogleNativeSlot" class="auth-google-native-slot hidden"></div>
+          <button id="authGoogleBtn" class="auth-social-btn google" type="button">
+            <span class="auth-provider-mark" aria-hidden="true">G</span>
+            <span id="authGoogleLabel">Continuar com Google</span>
+          </button>
+          <button id="authAppleBtn" class="auth-social-btn apple" type="button">
+            <span class="auth-provider-mark apple-mark" aria-hidden="true">A</span>
+            <span id="authAppleLabel">Continuar com Apple</span>
+          </button>
+        </div>
+        <p id="authProviderHint" class="muted auth-provider-hint">Use Google ou Apple para manter um perfil separado neste aparelho.</p>
         <p id="authFeedback" class="muted auth-feedback"></p>
       </div>
     </section>
@@ -289,7 +291,7 @@
           </p>
           <p id="welcomeSlogan" class="app-slogan">Nós amamos música</p>
           <p id="welcomeMission" class="app-mission">
-            Nossa missão: achar tracks memoráveis para você que você não acharia sem o Sonic Search.
+            Quanto mais você curte, pula ou diz que já conhecia, mais humano o radar fica.
           </p>
         </div>
         <div class="cta-row welcome-start-actions">
@@ -333,42 +335,34 @@
           </div>
           <div>
             <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
-            <h2 id="heroTitle">Curadoria de eletrônica, com descoberta real</h2>
+            <h2 id="heroTitle">Encontre uma faixa que combina com agora</h2>
           </div>
         </div>
         <p id="heroDesc" class="muted">
-          Inclui psytrance (forest/dark/freeform/dark experimental/full-on/prog/hitech), techno (acid/hard/minimal),
-          house, drum and bass, chillout, Brazilian Funk e outros subgêneros importantes para não deixar nada de fora.
+          Escolha o clima, o pulso e o quanto quer sair do óbvio. O Sonic Search cruza seu histórico com sinais de cena para sugerir música eletrônica com mais tato.
         </p>
         <p id="heroSlogan" class="app-slogan hero-slogan">Nós amamos música</p>
         <p id="heroMission" class="app-mission hero-mission">
-          Nossa missão: achar tracks memoráveis para você que você não acharia sem o Sonic Search.
+          Cada curti, troca e “já conhecia” ensina o radar a ouvir com você.
         </p>
-        <div class="catalog-stats" aria-label="Resumo do catálogo Sonic Search">
-          <p id="catalogStatsKicker" class="catalog-stats-kicker">Nossa base para descoberta</p>
-          <div class="catalog-stats-grid">
-            <div class="catalog-stat">
-              <strong id="catalogArtistsCount">0</strong>
-              <span id="catalogArtistsLabel">artistas indexados</span>
-            </div>
-            <div class="catalog-stat">
-              <strong id="catalogTracksCount">0</strong>
-              <span id="catalogTracksLabel">músicas buscáveis</span>
-            </div>
-            <div class="catalog-stat">
-              <strong id="catalogStylesCount">0</strong>
-              <span id="catalogStylesLabel">subgêneros</span>
-            </div>
-            <div class="catalog-stat">
-              <strong id="catalogLabelsCount">0</strong>
-              <span id="catalogLabelsLabel">labels</span>
+        <div class="hero-actions">
+          <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
+          <div class="audio-control-group">
+            <button id="audioToggleBtn" class="audio-toggle" type="button" aria-pressed="true">
+              <span class="audio-toggle-bars" aria-hidden="true">
+                <span class="audio-toggle-bar"></span>
+                <span class="audio-toggle-bar"></span>
+                <span class="audio-toggle-bar"></span>
+              </span>
+              <span id="audioToggleLabel">Som ligado</span>
+            </button>
+            <div id="audioVolumeControl" class="audio-volume-control">
+              <label id="audioVolumeLabel" for="audioVolumeSlider">Volume</label>
+              <input id="audioVolumeSlider" type="range" min="0" max="100" step="1" value="80" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" />
+              <span id="audioVolumeValue">80%</span>
             </div>
           </div>
-          <p id="catalogStatsHealth" class="catalog-stats-health">
-            Mínimo saudável: mais músicas do que artistas, com expansão dinâmica por subgênero.
-          </p>
         </div>
-        <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
       </header>
 
       <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
@@ -383,12 +377,12 @@
         <div class="swipe-start-head">
           <div>
             <p id="swipeHeroKicker" class="section-kicker">Descoberta por swipe</p>
-            <h3 id="swipeHeroTitle">Arraste como Tinder para ensinar seu gosto</h3>
+            <h3 id="swipeHeroTitle">Ouça primeiro. Ensine depois.</h3>
           </div>
-          <p id="swipeHeroHint" class="section-hint muted">Direita curte e salva no perfil. Esquerda troca sem repetir artista/faixa.</p>
+          <p id="swipeHeroHint" class="section-hint muted">Curta, troque ou arraste. O gesto vira direção para a próxima faixa.</p>
         </div>
         <div class="swipe-start-stage">
-          <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para avaliar a faixa">
+          <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para avaliar a faixa" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
             <span class="swipe-stamp swipe-stamp-like">Curti</span>
             <span class="swipe-stamp swipe-stamp-pass">Trocar</span>
             <div class="swipe-hero-art" aria-hidden="true">
@@ -398,7 +392,7 @@
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da track</p>
               <h4 id="topSwipeTitle">Comece com uma descoberta</h4>
-              <p id="topSwipeMeta" class="muted">Toque em Surpreender ou gere uma recomendação para abrir o primeiro card.</p>
+              <p id="topSwipeMeta" class="muted">Use Surpreender para cair direto no som, ou ajuste o alvo quando quiser precisão.</p>
               <div class="swipe-track-signals">
                 <span id="topSwipeStyleChip">Estilo</span>
                 <span id="topSwipeBpmChip">BPM</span>
@@ -411,7 +405,7 @@
             <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpreender</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
           </div>
-          <p id="topSwipeHint" class="muted swipe-hint">Arraste o card com o dedo: direita curte, esquerda troca.</p>
+          <p id="topSwipeHint" class="muted swipe-hint">Arraste, curta ou troque. Um gesto já melhora a próxima aposta.</p>
         </div>
       </section>
 
@@ -498,10 +492,10 @@
       <section class="panel preference-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="preferencias-title">
         <div class="section-head">
           <div>
-            <p id="preferenceSectionKicker" class="section-kicker">Busca guiada</p>
-            <h3 id="preferencias-title">1) Monte seu perfil sonoro</h3>
+            <p id="preferenceSectionKicker" class="section-kicker">Radar de gosto</p>
+            <h3 id="preferencias-title">Ajuste o alvo</h3>
           </div>
-          <p id="preferenceSectionHint" class="section-hint muted">Escolha um atalho ou refine manualmente.</p>
+          <p id="preferenceSectionHint" class="section-hint muted">Use atalhos quando quiser fluidez ou filtros quando quiser precisão.</p>
         </div>
 
         <div id="smartPresetBar" class="smart-presets" aria-label="Atalhos de recomendação">
@@ -682,7 +676,7 @@
         </details>
 
         <div class="cta-row recommendation-actions">
-          <button id="recommendBtn" class="primary">Gerar recomendação</button>
+          <button id="recommendBtn" class="primary">Encontrar faixa</button>
           <button id="rerollBtn" class="secondary" disabled>Nova sugestão no mesmo perfil</button>
           <button id="surpriseBtn">Surpreender</button>
           <button id="clearFiltersBtn">Limpar filtros</button>
@@ -696,7 +690,7 @@
 
       <section id="resultPanel" class="panel hidden app-tab-panel active" data-app-tab="discover" aria-live="polite">
         <h3>Sua recomendação</h3>
-        <article id="primaryTrackCard" class="result-card main-track">
+        <article id="primaryTrackCard" class="result-card main-track" role="group" aria-label="Arraste para avaliar a faixa" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
           <span class="swipe-stamp primary-swipe-stamp swipe-stamp-like">Curti</span>
@@ -848,10 +842,10 @@
               <p id="feedbackKicker" class="section-kicker">Refinamento</p>
               <h3 id="feedbackTitle">Ensine o app</h3>
             </div>
-            <p id="feedbackHint" class="muted feedback-hint">Use sinais rápidos para a próxima recomendação ficar mais precisa.</p>
+            <p id="feedbackHint" class="muted feedback-hint">Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.</p>
           </div>
           <div id="swipeFeedbackDeck" class="swipe-feedback-deck" aria-label="Avaliação por arraste">
-            <div id="swipeTrackCard" class="swipe-track-card" role="group" aria-label="Arraste para avaliar a faixa">
+            <div id="swipeTrackCard" class="swipe-track-card" role="group" aria-label="Arraste para avaliar a faixa" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
               <span class="swipe-stamp swipe-stamp-like">Curti</span>
               <span class="swipe-stamp swipe-stamp-pass">Trocar</span>
               <p id="swipeKicker" class="swipe-kicker">Swipe da track</p>
@@ -1224,6 +1218,13 @@
       </div>
     </footer>
 
-    <script src="app.js?v=20260606a"></script>
+    <script>
+      window.SONIC_SEARCH_AUTH_CONFIG = {
+        googleClientId: "",
+        appleClientId: "",
+        appleRedirectURI: ""
+      };
+    </script>
+    <script src="app.js?v=20260607b"></script>
   </body>
 </html>
