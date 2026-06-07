@@ -49,10 +49,12 @@ const STYLE_TO_FAMILY = {
   hardstyle: "hard_dance"
 };
 
-const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v1";
-const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v1";
-const DAILY_NEWS_MAX_ITEMS = 6;
+const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
+const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v2";
+const DAILY_NEWS_MAX_ITEMS = 8;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
+const DAILY_NEWS_MAX_AGE_DAYS = 45;
+const DAILY_NEWS_BRAZIL_MIN_ITEMS = 3;
 const SUPPORT_DEFAULT_CONFIG = {
   pix: {
     key: "",
@@ -95,74 +97,188 @@ const AUTH_PROVIDER_CONFIG = {
 const SUPPORT_DEFAULT_AMOUNT = 5;
 const DAILY_NEWS_SOURCES = [
   {
+    name: "Radar Brasil",
+    homepage: "https://news.google.com/search?q=m%C3%BAsica%20eletr%C3%B4nica%20Brasil",
+    feed: "https://news.google.com/rss/search?q=m%C3%BAsica%20eletr%C3%B4nica%20Brasil%20DJ%20festival%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR%3Apt-419",
+    region: "br",
+    kind: "search"
+  },
+  {
+    name: "Radar Festivais BR",
+    homepage: "https://news.google.com/search?q=festival%20m%C3%BAsica%20eletr%C3%B4nica%20Brasil",
+    feed: "https://news.google.com/rss/search?q=festival%20m%C3%BAsica%20eletr%C3%B4nica%20Brasil%20club%20DJ%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR%3Apt-419",
+    region: "br",
+    kind: "search"
+  },
+  {
+    name: "Alataj",
+    homepage: "https://alataj.com.br/",
+    feed: "https://alataj.com.br/feed/",
+    region: "br"
+  },
+  {
+    name: "House Mag",
+    homepage: "https://www.housemag.com.br/",
+    feed: "https://www.housemag.com.br/feed/",
+    region: "br"
+  },
+  {
+    name: "Mixmag Brasil",
+    homepage: "https://mixmag.com.br/",
+    feed: "https://mixmag.com.br/feed/",
+    region: "br"
+  },
+  {
+    name: "LiveToday",
+    homepage: "https://livetoday.com.br/",
+    feed: "https://livetoday.com.br/feed/",
+    region: "br"
+  },
+  {
     name: "EDM.com",
     homepage: "https://edm.com/",
-    feed: "https://edm.com/.rss/full"
+    feed: "https://edm.com/.rss/full",
+    region: "global"
   },
   {
     name: "Mixmag",
     homepage: "https://mixmag.net/news",
-    feed: "https://mixmag.net/rss-category/news"
+    feed: "https://mixmag.net/rss-category/news",
+    region: "global"
   },
   {
     name: "Dancing Astronaut",
     homepage: "https://dancingastronaut.com/",
-    feed: "https://dancingastronaut.com/feed/"
+    feed: "https://dancingastronaut.com/feed/",
+    region: "global"
   },
   {
     name: "EDM Identity",
     homepage: "https://edmidentity.com/",
-    feed: "https://edmidentity.com/feed/"
+    feed: "https://edmidentity.com/feed/",
+    region: "global"
+  },
+  {
+    name: "Radar Global",
+    homepage: "https://news.google.com/search?q=electronic%20music%20DJ%20festival",
+    feed: "https://news.google.com/rss/search?q=electronic%20music%20DJ%20festival%20techno%20house%20when%3A14d&hl=en-US&gl=US&ceid=US%3Aen",
+    region: "global",
+    kind: "search"
   }
 ];
-const DAILY_NEWS_FALLBACK_ITEMS = [
+const DAILY_NEWS_BRAZIL_SIGNALS = [
+  "brasil",
+  "brazil",
+  "brasileir",
+  "são paulo",
+  "sao paulo",
+  "rio de janeiro",
+  "florianópolis",
+  "florianopolis",
+  "curitiba",
+  "belo horizonte",
+  "brasília",
+  "brasilia",
+  "goiânia",
+  "goiania",
+  "recife",
+  "salvador",
+  "fortaleza",
+  "warung",
+  "greenvalley",
+  "green valley",
+  "d-edge",
+  "laroc",
+  "surreal",
+  "universo paralelo",
+  "tomorrowland brasil",
+  "só track boa",
+  "so track boa",
+  "alataj",
+  "house mag",
+  "mixmag brasil",
+  "livetoday"
+];
+const DAILY_NEWS_ELECTRONIC_SIGNALS = [
+  "música eletrônica",
+  "musica eletronica",
+  "electronic music",
+  "dance music",
+  "edm",
+  "dj",
+  "djs",
+  "festival",
+  "lineup",
+  "club",
+  "rave",
+  "techno",
+  "house",
+  "trance",
+  "psytrance",
+  "progressive",
+  "drum and bass",
+  "dnb",
+  "bass",
+  "dubstep",
+  "garage",
+  "jungle",
+  "label",
+  "track",
+  "ep",
+  "álbum",
+  "album",
+  "pista",
+  "boiler room"
+];
+const DAILY_NEWS_BR_SOURCE_NAMES = ["alataj", "house mag", "mixmag brasil", "livetoday", "radar brasil", "radar festivais br"];
+const DAILY_NEWS_FALLBACK_SOURCES = [
   {
-    title: "The Best Albums, EPs And Mixtapes Of The Year 2026 So Far",
+    title: "Abrir últimas notícias do Alataj",
+    source: "Alataj",
+    sourceUrl: "https://alataj.com.br/",
+    url: "https://alataj.com.br/",
+    region: "br",
+    summary: "Fonte brasileira dedicada a música eletrônica, clubes, artistas, lançamentos e cultura de pista."
+  },
+  {
+    title: "Abrir notícias da House Mag",
+    source: "House Mag",
+    sourceUrl: "https://www.housemag.com.br/",
+    url: "https://www.housemag.com.br/",
+    region: "br",
+    summary: "Cobertura brasileira de música eletrônica, DJs, festas, festivais e cena club."
+  },
+  {
+    title: "Abrir Mixmag Brasil",
+    source: "Mixmag Brasil",
+    sourceUrl: "https://mixmag.com.br/",
+    url: "https://mixmag.com.br/",
+    region: "br",
+    summary: "Recorte brasileiro de notícias, entrevistas, festivais e movimentos da música eletrônica."
+  },
+  {
+    title: "Abrir últimas do LiveToday",
+    source: "LiveToday",
+    sourceUrl: "https://livetoday.com.br/",
+    url: "https://livetoday.com.br/",
+    region: "br",
+    summary: "Fonte nacional para acompanhar agenda, cultura eletrônica, festas e festivais."
+  },
+  {
+    title: "Abrir notícias globais da Mixmag",
     source: "Mixmag",
-    sourceUrl: "https://mixmag.net/",
-    url: "https://mixmag.net/feature/best-dance-electronic-rap-albums-eps-mixtapes-2026",
-    publishedAt: "2026-05-12",
-    summary: "Mixmag mantém uma seleção atualizada de álbuns, EPs e mixtapes importantes de 2026."
+    sourceUrl: "https://mixmag.net/news",
+    url: "https://mixmag.net/news",
+    region: "global",
+    summary: "Panorama internacional de clubes, lançamentos, artistas, cenas locais e política da pista."
   },
   {
-    title: "Brownies & Lemonade To Celebrate 5 Years Of DNBNL At Treasure Island",
-    source: "EDM Identity",
-    sourceUrl: "https://edmidentity.com/",
-    url: "https://edmidentity.com/2026/05/28/dnbnl-5-year-san-francisco/",
-    publishedAt: "2026-05-28",
-    summary: "Evento de drum and bass em São Francisco celebra cinco anos da marca DNBNL com curadoria bass."
-  },
-  {
-    title: "&FRIENDS Festival Manila Unveils Stacked Lineup for 2026",
-    source: "EDM Identity",
-    sourceUrl: "https://edmidentity.com/",
-    url: "https://edmidentity.com/2026/05/13/andfriends-festival-manila-2026-lineup/",
-    publishedAt: "2026-05-13",
-    summary: "Festival em Manila anuncia lineup com nomes como Galantis, Porter Robinson, Subtronics e Yellow Claw."
-  },
-  {
-    title: "Burn Energy and Mixmag announce the Burn Energy Tour 2026",
-    source: "Mixmag",
-    sourceUrl: "https://mixmag.net/",
-    url: "https://mixmag.net/feature/burn-energy-and-mixmag-announce-the-burn-energy-tour-2026",
-    publishedAt: "2026-05-01",
-    summary: "Tour internacional passa por cenas underground na Europa e no Marrocos com artistas como TSHA e Nico Moreno."
-  },
-  {
-    title: "The EDM.com Class of 2026 Has Been Revealed",
+    title: "Abrir últimas da EDM.com",
     source: "EDM.com",
     sourceUrl: "https://edm.com/",
-    url: "https://edm.com/news/class-of-2026/",
-    publishedAt: "2026-02-19",
-    summary: "EDM.com apresenta artistas em ascensão que devem movimentar a cena eletrônica em 2026."
-  },
-  {
-    title: "Nominations Revealed, Fan Voting Opens for 2026 Electronic Dance Music Awards",
-    source: "EDM.com",
-    sourceUrl: "https://edm.com/",
-    url: "https://edm.com/news/edma-nominations-2026",
-    publishedAt: "2026-02-23",
-    summary: "EDMAs abre votação de fãs com nomes como Skrillex, REZZ e John Summit entre os indicados."
+    url: "https://edm.com/news",
+    region: "global",
+    summary: "Feed internacional de lançamentos, festivais, tecnologia e cultura EDM."
   }
 ];
 
@@ -10440,15 +10556,18 @@ const I18N = {
     catalogStatsHealth: "{ratio} músicas por artista indexado, combinando base auditada e expansão dinâmica por subgênero.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Jornal de música eletrônica",
-    dailyNewsIntro: "Manchetes recentes do mundo da música eletrônica, reunidas de fontes especializadas.",
+    dailyNewsIntro: "Radar recente da música eletrônica com prioridade para Brasil e complemento global de fontes especializadas.",
     dailyNewsRefreshBtn: "Atualizar",
     dailyNewsLoading: "Carregando notícias...",
     dailyNewsLiveStatus: "Atualizado agora • {date}",
     dailyNewsCacheStatus: "Mostrando última atualização salva • {date}",
-    dailyNewsFallbackStatus: "Mostrando notícias reais salvas de fontes confiáveis.",
+    dailyNewsFallbackStatus: "Busca ao vivo indisponível agora • abrindo atalhos para fontes confiáveis.",
     dailyNewsFreshLabel: "recente",
+    dailyNewsMarketBrazil: "Brasil",
+    dailyNewsMarketGlobal: "Global",
     dailyNewsSourcePrefix: "Fonte",
     dailyNewsSourceFallback: "Fonte",
+    dailyNewsSearchSummary: "Matéria recente de {source}. Abra a fonte para ler a cobertura completa.",
     dailyNewsUntitled: "Notícia sem título",
     dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
     supportKicker: "Apoie o projeto",
@@ -10981,15 +11100,18 @@ const I18N = {
     catalogStatsHealth: "{ratio} searchable tracks per indexed artist, combining audited data and dynamic subgenre expansion.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Electronic music journal",
-    dailyNewsIntro: "Recent headlines from the electronic music world, gathered from specialist sources.",
+    dailyNewsIntro: "A fresh electronic music radar prioritizing Brazil, with global context from specialist sources.",
     dailyNewsRefreshBtn: "Refresh",
     dailyNewsLoading: "Loading news...",
     dailyNewsLiveStatus: "Updated now • {date}",
     dailyNewsCacheStatus: "Showing last saved update • {date}",
-    dailyNewsFallbackStatus: "Showing saved real stories from trusted sources.",
+    dailyNewsFallbackStatus: "Live search unavailable now • showing trusted source shortcuts.",
     dailyNewsFreshLabel: "recent",
+    dailyNewsMarketBrazil: "Brazil",
+    dailyNewsMarketGlobal: "Global",
     dailyNewsSourcePrefix: "Source",
     dailyNewsSourceFallback: "Source",
+    dailyNewsSearchSummary: "Recent story from {source}. Open the source to read the full coverage.",
     dailyNewsUntitled: "Untitled news",
     dailyNewsNoSummary: "Open the story to read the full details.",
     supportKicker: "Support the project",
@@ -11522,15 +11644,18 @@ const I18N = {
     catalogStatsHealth: "{ratio} pistas por artista indexado, combinando base auditada y expansión dinámica por subgénero.",
     dailyNewsKicker: "Daily News",
     dailyNewsTitle: "Periódico de música electrónica",
-    dailyNewsIntro: "Titulares recientes del mundo de la música electrónica, reunidos desde fuentes especializadas.",
+    dailyNewsIntro: "Radar reciente de música electrónica con prioridad para Brasil y contexto global de fuentes especializadas.",
     dailyNewsRefreshBtn: "Actualizar",
     dailyNewsLoading: "Cargando noticias...",
     dailyNewsLiveStatus: "Actualizado ahora • {date}",
     dailyNewsCacheStatus: "Mostrando última actualización guardada • {date}",
-    dailyNewsFallbackStatus: "Mostrando noticias reales guardadas de fuentes confiables.",
+    dailyNewsFallbackStatus: "Búsqueda en vivo no disponible ahora • mostrando accesos a fuentes confiables.",
     dailyNewsFreshLabel: "reciente",
+    dailyNewsMarketBrazil: "Brasil",
+    dailyNewsMarketGlobal: "Global",
     dailyNewsSourcePrefix: "Fuente",
     dailyNewsSourceFallback: "Fuente",
+    dailyNewsSearchSummary: "Nota reciente de {source}. Abre la fuente para leer la cobertura completa.",
     dailyNewsUntitled: "Noticia sin título",
     dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
     supportKicker: "Apoya el proyecto",
@@ -12602,7 +12727,7 @@ function applyLanguage() {
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
   if (dailyNewsList?.children.length) {
     const cache = loadDailyNewsCache();
-    const cachedItems = cache?.items?.length ? cache.items : DAILY_NEWS_FALLBACK_ITEMS;
+    const cachedItems = cache?.items?.length ? cache.items : dailyNewsFallbackItems();
     void renderDailyNewsItems(cachedItems, {
       updatedAt: cache?.updatedAt || "",
       fromCache: Boolean(cache?.items?.length),
@@ -19464,6 +19589,77 @@ function dailyNewsDateLabel(value = "") {
   }).format(date);
 }
 
+function dailyNewsFallbackItems() {
+  const today = new Date().toISOString();
+  return DAILY_NEWS_FALLBACK_SOURCES.map((item) => ({
+    ...item,
+    publishedAt: today,
+    fallbackDirectory: true
+  }));
+}
+
+function dailyNewsTextBlob(item = {}) {
+  return [
+    item.title,
+    item.summary,
+    item.source,
+    item.sourceUrl,
+    item.url,
+    item.region
+  ].filter(Boolean).join(" ");
+}
+
+function dailyNewsAgeDays(item = {}) {
+  const value = item.publishedAt || "";
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return Number.POSITIVE_INFINITY;
+  return Math.max(0, (Date.now() - date.getTime()) / 86400000);
+}
+
+function dailyNewsHasSignal(item = {}, signals = []) {
+  return textHasAnyNormalizedSignal(dailyNewsTextBlob(item), signals);
+}
+
+function dailyNewsIsBrazilian(item = {}) {
+  const sourceKey = normalize(item.source || "");
+  if (item.region === "br") return true;
+  if (DAILY_NEWS_BR_SOURCE_NAMES.some((name) => sourceKey.includes(normalize(name)))) return true;
+  return dailyNewsHasSignal(item, DAILY_NEWS_BRAZIL_SIGNALS);
+}
+
+function dailyNewsIsElectronic(item = {}) {
+  return dailyNewsHasSignal(item, DAILY_NEWS_ELECTRONIC_SIGNALS);
+}
+
+function dailyNewsFreshnessScore(item = {}) {
+  const age = dailyNewsAgeDays(item);
+  if (!Number.isFinite(age)) return 10;
+  if (age <= 1) return 90;
+  if (age <= 7) return 76;
+  if (age <= 14) return 58;
+  if (age <= 30) return 36;
+  if (age <= DAILY_NEWS_MAX_AGE_DAYS) return 14;
+  return -160;
+}
+
+function dailyNewsSourceScore(item = {}) {
+  const source = normalize(item.source || "");
+  if (DAILY_NEWS_BR_SOURCE_NAMES.some((name) => source.includes(normalize(name)))) return 42;
+  if (source.includes("mixmag") || source.includes("edm.com") || source.includes("dancing astronaut") || source.includes("edm identity")) return 18;
+  return 8;
+}
+
+function dailyNewsScore(item = {}) {
+  let score = dailyNewsFreshnessScore(item) + dailyNewsSourceScore(item);
+  if (dailyNewsIsBrazilian(item)) score += 72;
+  if (dailyNewsIsElectronic(item)) score += 34;
+  if (item.kind === "search") score += 8;
+  if (item.fallbackDirectory) score -= 20;
+  const age = dailyNewsAgeDays(item);
+  if (Number.isFinite(age) && age > DAILY_NEWS_MAX_AGE_DAYS) score -= 240;
+  return score;
+}
+
 function parseDailyNewsRss(xmlText = "", source = {}) {
   if (!xmlText) return [];
   const doc = new DOMParser().parseFromString(xmlText, "application/xml");
@@ -19471,6 +19667,7 @@ function parseDailyNewsRss(xmlText = "", source = {}) {
   const nodes = Array.from(doc.querySelectorAll("item, entry")).slice(0, 8);
   return nodes.map((node) => {
     const linkEl = node.querySelector("link");
+    const sourceEl = node.querySelector("source");
     const rawLink = linkEl?.getAttribute("href") || linkEl?.textContent || source.homepage || "#";
     const title = stripHtmlText(node.querySelector("title")?.textContent || "");
     const summary = stripHtmlText(
@@ -19484,13 +19681,20 @@ function parseDailyNewsRss(xmlText = "", source = {}) {
       node.querySelector("published")?.textContent ||
       node.querySelector("updated")?.textContent ||
       "";
+    const itemSource = stripHtmlText(sourceEl?.textContent || "") || source.name || t("dailyNewsSourceFallback");
+    const itemSourceUrl = sourceEl?.getAttribute("url") || source.homepage || String(rawLink || "#").trim();
+    const cleanSummary = source.kind === "search"
+      ? t("dailyNewsSearchSummary", { source: itemSource })
+      : summary.slice(0, 220);
     return {
       title,
-      source: source.name || t("dailyNewsSourceFallback"),
-      sourceUrl: source.homepage || String(rawLink || "#").trim(),
+      source: itemSource,
+      sourceUrl: itemSourceUrl,
       url: String(rawLink || source.homepage || "#").trim(),
       publishedAt: String(publishedAt || "").trim(),
-      summary: summary.slice(0, 180)
+      summary: cleanSummary,
+      region: source.region || "",
+      kind: source.kind || "feed"
     };
   }).filter((item) => item.title && item.url);
 }
@@ -19498,11 +19702,56 @@ function parseDailyNewsRss(xmlText = "", source = {}) {
 function dailyNewsProxyUrls(feedUrl = "") {
   const encoded = encodeURIComponent(feedUrl);
   return [
-    `https://api.codetabs.com/v1/proxy?quest=${encoded}`
+    `https://api.codetabs.com/v1/proxy?quest=${encoded}`,
+    `https://api.allorigins.win/raw?url=${encoded}`
   ];
 }
 
-async function fetchDailyNewsSource(source) {
+function dailyNewsJsonProxyUrls(feedUrl = "") {
+  const encoded = encodeURIComponent(feedUrl);
+  return [
+    `https://api.rss2json.com/v1/api.json?rss_url=${encoded}`
+  ];
+}
+
+function dailyNewsSplitSourceFromTitle(title = "") {
+  const cleanTitle = stripHtmlText(title);
+  const parts = cleanTitle.split(" - ").map((part) => part.trim()).filter(Boolean);
+  if (parts.length < 2) return { title: cleanTitle, source: "" };
+  const source = parts.pop();
+  return {
+    title: parts.join(" - "),
+    source
+  };
+}
+
+function parseDailyNewsJson(payload = {}, source = {}) {
+  const items = Array.isArray(payload?.items) ? payload.items : [];
+  return items.map((item) => {
+    const splitTitle = dailyNewsSplitSourceFromTitle(item?.title || "");
+    const feedTitle = stripHtmlText(payload?.feed?.title || "");
+    const feedLooksLikeGoogle = normalize(feedTitle).includes("google");
+    const itemAuthor = stripHtmlText(item?.author || "");
+    const feedSource = itemAuthor || splitTitle.source || (!feedLooksLikeGoogle ? feedTitle : "") || source.name || "";
+    const itemSource = feedSource || source.name || t("dailyNewsSourceFallback");
+    const rawSummary = stripHtmlText(item?.description || item?.content || "");
+    const summary = source.kind === "search"
+      ? t("dailyNewsSearchSummary", { source: itemSource })
+      : rawSummary.slice(0, 220);
+    return {
+      title: splitTitle.title || stripHtmlText(item?.title || ""),
+      source: itemSource,
+      sourceUrl: payload?.feed?.link || source.homepage || item?.link || "#",
+      url: String(item?.link || source.homepage || "#").trim(),
+      publishedAt: String(item?.pubDate || item?.published || "").trim(),
+      summary,
+      region: source.region || "",
+      kind: source.kind || "feed"
+    };
+  }).filter((item) => item.title && item.url);
+}
+
+async function fetchDailyNewsSourceFromXml(source) {
   for (const endpoint of dailyNewsProxyUrls(source.feed)) {
     const xml = await fetchTextWithTimeout(endpoint);
     const items = parseDailyNewsRss(xml, source);
@@ -19511,12 +19760,33 @@ async function fetchDailyNewsSource(source) {
   return [];
 }
 
+async function fetchDailyNewsSourceFromJson(source) {
+  for (const endpoint of dailyNewsJsonProxyUrls(source.feed)) {
+    const payload = await fetchJsonWithTimeout(endpoint, DAILY_NEWS_FETCH_TIMEOUT_MS);
+    const items = parseDailyNewsJson(payload, source);
+    if (items.length) return items;
+  }
+  return [];
+}
+
+async function fetchDailyNewsSource(source) {
+  if (source.kind === "search") {
+    const jsonItems = await fetchDailyNewsSourceFromJson(source);
+    if (jsonItems.length) return jsonItems;
+  }
+  const xmlItems = await fetchDailyNewsSourceFromXml(source);
+  if (xmlItems.length) return xmlItems;
+  return source.kind === "search" ? [] : fetchDailyNewsSourceFromJson(source);
+}
+
 function normalizeNewsUrl(url = "") {
   return String(url || "").split("?")[0].replace(/\/$/, "").toLowerCase();
 }
 
 function sortDailyNewsItems(items = []) {
   return [...items].sort((a, b) => {
+    const scoreDiff = dailyNewsScore(b) - dailyNewsScore(a);
+    if (scoreDiff) return scoreDiff;
     const aDate = new Date(a.publishedAt || 0).getTime() || 0;
     const bDate = new Date(b.publishedAt || 0).getTime() || 0;
     return bDate - aDate;
@@ -19525,12 +19795,38 @@ function sortDailyNewsItems(items = []) {
 
 function compactDailyNewsItems(items = []) {
   const seen = new Set();
-  return sortDailyNewsItems(items).filter((item) => {
+  const freshRelevant = sortDailyNewsItems(items).filter((item) => {
+    const age = dailyNewsAgeDays(item);
+    if (!item.fallbackDirectory && Number.isFinite(age) && age > DAILY_NEWS_MAX_AGE_DAYS) return false;
+    if (!item.fallbackDirectory && !dailyNewsIsElectronic(item) && !dailyNewsIsBrazilian(item)) return false;
     const key = normalizeNewsUrl(item.url) || normalize(item.title);
     if (!key || seen.has(key)) return false;
     seen.add(key);
     return true;
-  }).slice(0, DAILY_NEWS_MAX_ITEMS);
+  });
+
+  const brazil = freshRelevant.filter(dailyNewsIsBrazilian);
+  const global = freshRelevant.filter((item) => !dailyNewsIsBrazilian(item));
+  const selected = [];
+  const addItem = (item) => {
+    if (!item) return;
+    const key = normalizeNewsUrl(item.url) || normalize(item.title);
+    if (selected.some((selectedItem) => (normalizeNewsUrl(selectedItem.url) || normalize(selectedItem.title)) === key)) return;
+    selected.push(item);
+  };
+
+  brazil.slice(0, DAILY_NEWS_BRAZIL_MIN_ITEMS).forEach(addItem);
+  let brazilIndex = DAILY_NEWS_BRAZIL_MIN_ITEMS;
+  let globalIndex = 0;
+  while (selected.length < DAILY_NEWS_MAX_ITEMS && (brazilIndex < brazil.length || globalIndex < global.length)) {
+    addItem(global[globalIndex]);
+    globalIndex += 1;
+    if (selected.length >= DAILY_NEWS_MAX_ITEMS) break;
+    addItem(brazil[brazilIndex]);
+    brazilIndex += 1;
+  }
+
+  return selected.length ? selected.slice(0, DAILY_NEWS_MAX_ITEMS) : sortDailyNewsItems(items).slice(0, DAILY_NEWS_MAX_ITEMS);
 }
 
 function saveDailyNewsCache(items = []) {
@@ -19643,7 +19939,7 @@ function fallbackLocalizeDailyNewsItems(items = [], language = dailyNewsTargetLa
   if (language === "en") return items;
   return items.map((item) => ({
     ...item,
-    title: locallyTranslateDailyNewsText(item.title, language) || item.title,
+    title: item.fallbackDirectory ? (locallyTranslateDailyNewsText(item.title, language) || item.title) : item.title,
     summary: locallyTranslateDailyNewsText(item.summary, language) || item.summary,
     translatedBy: "local"
   }));
@@ -19738,7 +20034,7 @@ async function localizeDailyNewsItems(items = []) {
 
 async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, fallback = false } = {}) {
   if (!dailyNewsList || !dailyNewsStatus) return;
-  const visibleItems = await localizeDailyNewsItems(compactDailyNewsItems(items.length ? items : DAILY_NEWS_FALLBACK_ITEMS));
+  const visibleItems = await localizeDailyNewsItems(compactDailyNewsItems(items.length ? items : dailyNewsFallbackItems()));
   dailyNewsList.innerHTML = "";
 
   visibleItems.forEach((item) => {
@@ -19761,7 +20057,12 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
     const dateLabel = document.createElement("span");
     dateLabel.textContent = ` • ${dailyNewsDateLabel(item.publishedAt || updatedAt)}`;
 
+    const marketBadge = document.createElement("span");
+    marketBadge.className = `daily-news-market ${dailyNewsIsBrazilian(item) ? "br" : "global"}`;
+    marketBadge.textContent = dailyNewsIsBrazilian(item) ? t("dailyNewsMarketBrazil") : t("dailyNewsMarketGlobal");
+
     meta.append(sourceLabel, sourceAnchor, dateLabel);
+    meta.appendChild(marketBadge);
 
     const title = document.createElement("a");
     title.className = "daily-news-link";
@@ -19796,14 +20097,33 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
 
   if (!live) {
     if (!cache?.items?.length && !dailyNewsList.children.length) {
-      await renderDailyNewsItems(DAILY_NEWS_FALLBACK_ITEMS, { fallback: true });
+      await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
     }
     if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
     return;
   }
 
   try {
-    const batches = await Promise.all(DAILY_NEWS_SOURCES.map(fetchDailyNewsSource));
+    const prioritySources = DAILY_NEWS_SOURCES.filter((source) => source.kind === "search");
+    const supportingSources = DAILY_NEWS_SOURCES.filter((source) => source.kind !== "search");
+    const priorityBatches = await Promise.all(prioritySources.map(fetchDailyNewsSource));
+    const priorityItems = compactDailyNewsItems(priorityBatches.flat());
+    if (priorityItems.length) {
+      saveDailyNewsCache(priorityItems);
+      await renderDailyNewsItems(priorityItems, { updatedAt: new Date().toISOString() });
+      if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
+      const supportingBatches = await Promise.all(supportingSources.map(fetchDailyNewsSource));
+      const mergedItems = compactDailyNewsItems([...priorityItems, ...supportingBatches.flat()]);
+      const prioritySignature = priorityItems.map((item) => normalizeNewsUrl(item.url) || normalize(item.title)).join("|");
+      const mergedSignature = mergedItems.map((item) => normalizeNewsUrl(item.url) || normalize(item.title)).join("|");
+      if (mergedItems.length && mergedSignature !== prioritySignature) {
+        saveDailyNewsCache(mergedItems);
+        await renderDailyNewsItems(mergedItems, { updatedAt: new Date().toISOString() });
+      }
+      return;
+    }
+
+    const batches = await Promise.all(supportingSources.map(fetchDailyNewsSource));
     const items = compactDailyNewsItems(batches.flat());
     if (items.length) {
       saveDailyNewsCache(items);
@@ -19820,7 +20140,7 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
   if (latestCache?.items?.length) {
     await renderDailyNewsItems(latestCache.items, { updatedAt: latestCache.updatedAt, fromCache: true });
   } else {
-    await renderDailyNewsItems(DAILY_NEWS_FALLBACK_ITEMS, { fallback: true });
+    await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
   }
 }
 

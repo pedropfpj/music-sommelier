@@ -1895,6 +1895,32 @@ body[data-vibe-theme="hard"] {
   letter-spacing: 0;
 }
 
+.daily-news-market {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  margin-left: 0.45rem;
+  padding: 0.16rem 0.48rem;
+  border: 1px solid rgba(125, 224, 255, 0.28);
+  border-radius: 999px;
+  color: #cfe7ff;
+  background: rgba(9, 20, 42, 0.72);
+  font-size: 0.68rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.daily-news-market.br {
+  border-color: rgba(126, 232, 198, 0.52);
+  color: #8ff6e5;
+  background: rgba(22, 79, 65, 0.32);
+}
+
+.daily-news-market.global {
+  border-color: rgba(138, 199, 255, 0.4);
+  color: #bfdbff;
+}
+
 .daily-news-source-link {
   color: #8ff6e5;
   text-decoration: none;
