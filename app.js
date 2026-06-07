@@ -4247,6 +4247,7 @@ const artistSocialsTitle = document.getElementById("artistSocialsTitle");
 const artistSocialsHint = document.getElementById("artistSocialsHint");
 const artistSocialLinks = document.getElementById("artistSocialLinks");
 const statsLine = document.getElementById("statsLine");
+const summaryShareInstagramBtn = document.getElementById("summaryShareInstagramBtn");
 const summaryProfileStatus = document.getElementById("summaryProfileStatus");
 const summaryKnownCount = document.getElementById("summaryKnownCount");
 const summaryDiscoveredCount = document.getElementById("summaryDiscoveredCount");
@@ -4368,6 +4369,7 @@ let bioAnimationToken = 0;
 let artistImageRequestToken = 0;
 let listeningNarrativeToken = 0;
 let spiritAnimationToken = 0;
+let spiritStoryShareBusy = false;
 let currentSpiritId = "";
 let spiritLastReviewedSongLikes = 0;
 let spiritUnlocked = false;
@@ -10822,6 +10824,10 @@ const I18N = {
     summaryAchievementTierD: "Lenda do espectro",
     summaryAchievementTierProgress: "Nível atual: {tier}. Faltam {remaining} faixas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nível máximo alcançado: {tier}.",
+    summaryShareStoryBtn: "Compartilhar status nos Stories",
+    summaryShareStoryTitle: "Meu status musical",
+    summaryShareStoryArchetype: "{status} • {style}",
+    summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
     summaryLikedTracksTitle: "Músicas curtidas",
     summaryLikedTracksHint: "Tudo que você curtir fica salvo aqui para ouvir depois.",
     summaryLikedTracksClear: "Limpar",
@@ -10999,7 +11005,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Baixei o Story pronto. Abra o Instagram e publique nos Stories.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
     spiritCollectibleShareCaption: "Meu espírito musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Status {status} | Curte {liked} artistas | Conheceu no app {discovered} | Já conhecia {known}",
+    spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {liked} artistas | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
     spiritCollectibleGeneratedLocal: "Nova variação única local criada para este usuário.",
@@ -11379,6 +11385,10 @@ const I18N = {
     summaryAchievementTierD: "Spectrum legend",
     summaryAchievementTierProgress: "Current tier: {tier}. {remaining} more 5★ tracks to reach {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Max tier reached: {tier}.",
+    summaryShareStoryBtn: "Share status to Stories",
+    summaryShareStoryTitle: "My music status",
+    summaryShareStoryArchetype: "{status} • {style}",
+    summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
     summaryLikedTracksTitle: "Liked tracks",
     summaryLikedTracksHint: "Everything you like is saved here so you can listen again later.",
     summaryLikedTracksClear: "Clear",
@@ -11556,7 +11566,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Story file downloaded. Open Instagram and post it to your Story.",
     spiritCollectibleShareCanceled: "Share canceled.",
     spiritCollectibleShareCaption: "My musical spirit on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Status {status} | Likes {liked} artists | Discovered in app {discovered} | Already knew {known}",
+    spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {liked} artists | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratedLocal: "New unique local variation created for this user.",
@@ -11936,6 +11946,10 @@ const I18N = {
     summaryAchievementTierD: "Leyenda del espectro",
     summaryAchievementTierProgress: "Nivel actual: {tier}. Faltan {remaining} pistas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nivel máximo alcanzado: {tier}.",
+    summaryShareStoryBtn: "Compartir estado en Stories",
+    summaryShareStoryTitle: "Mi estado musical",
+    summaryShareStoryArchetype: "{status} • {style}",
+    summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
     summaryLikedTracksTitle: "Pistas con like",
     summaryLikedTracksHint: "Todo lo que marques como me gusta queda guardado aquí para escuchar después.",
     summaryLikedTracksClear: "Limpiar",
@@ -12113,7 +12127,7 @@ const I18N = {
     spiritCollectibleShareFallback: "Story listo descargado. Abre Instagram y publícalo en Stories.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
     spiritCollectibleShareCaption: "Mi espíritu musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
-    spiritCollectibleShareStatusLine: "Estado {status} | Te gustan {liked} artistas | Conociste en la app {discovered} | Ya conocías {known}",
+    spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {liked} artistas | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
     spiritCollectibleGeneratedLocal: "Nueva variación local única creada para este usuario.",
@@ -12903,6 +12917,7 @@ function applyLanguage() {
   setText("#discogsArtistLink", t("discogsArtistLink"));
   setText("#eventsPanel > h3", labels.eventsTitle || "");
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
+  setText("#summaryShareInstagramBtn", t("summaryShareStoryBtn"));
   setText("#summaryStatusLabel", t("summaryStatusLabel"));
   setText("#summaryKnownCountLabel", t("summaryKnownCountLabel"));
   setText("#summaryDiscoveredCountLabel", t("summaryDiscoveredCountLabel"));
@@ -21098,19 +21113,64 @@ function spiritShareProfileSnapshot() {
   const knownUnion = new Set([...typedKnown, ...knownArtistsMemory]);
   return {
     status: resolveProfileStatusLabel(),
+    likedSongs: Math.max(0, Number(userStats.likedSongs) || 0),
     likedArtists: Math.max(0, Number(adaptiveModel?.likedArtists?.size) || 0),
     discoveredInApp: Math.max(0, Number(discoveredArtistsInApp?.size) || 0),
-    knownArtists: Math.max(0, Number(knownUnion.size) || 0)
+    knownArtists: Math.max(0, Number(knownUnion.size) || 0),
+    ratingCount: Math.max(0, Number(userStats.ratingCount) || 0),
+    ratingAverage: ratingAverageText(),
+    favoriteStyle: resolveFavoriteStyleLabel()
   };
 }
 
 function buildSpiritShareStatusLine(snapshot) {
   return t("spiritCollectibleShareStatusLine", {
     status: snapshot?.status || t("summaryStatusNew"),
+    songs: Math.max(0, Number(snapshot?.likedSongs) || 0),
     liked: Math.max(0, Number(snapshot?.likedArtists) || 0),
     discovered: Math.max(0, Number(snapshot?.discoveredInApp) || 0),
     known: Math.max(0, Number(snapshot?.knownArtists) || 0)
   });
+}
+
+function profileStoryStyleKey() {
+  const topLikedStyle = [...adaptiveModel.likedStyles.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .find(([, score]) => Number(score) > 0);
+  return String(topLikedStyle?.[0] || styleEl?.value || currentRecommendation?.style || "").trim();
+}
+
+function buildProfileStoryText(snapshot = spiritShareProfileSnapshot()) {
+  const style = snapshot?.favoriteStyle && snapshot.favoriteStyle !== t("summaryNoData")
+    ? snapshot.favoriteStyle
+    : t("freeStyle");
+  return {
+    name: t("summaryShareStoryTitle"),
+    archetype: t("summaryShareStoryArchetype", {
+      status: snapshot?.status || t("summaryStatusNew"),
+      style
+    })
+  };
+}
+
+function buildProfileStoryDetailsLine(snapshot = spiritShareProfileSnapshot()) {
+  return t("summaryShareStoryDetails", {
+    songs: Math.max(0, Number(snapshot?.likedSongs) || 0),
+    artists: Math.max(0, Number(snapshot?.likedArtists) || 0),
+    ratings: Math.max(0, Number(snapshot?.ratingCount) || 0),
+    average: snapshot?.ratingAverage || "0.0"
+  });
+}
+
+function buildProfileStoryGenreSummary() {
+  const styleKey = profileStoryStyleKey();
+  const styleLabel = styleKey ? styleLabelByValue(styleKey) : t("freeStyle");
+  const bpmText = storyBpmCompactText(styleKey);
+  return {
+    style: styleKey,
+    headline: normalizeInlineText([styleLabel, bpmText].filter(Boolean).join(" • ")),
+    narrative: storyGenreNarrativeByStyle(styleKey)
+  };
 }
 
 function buildSpiritCollectibleStatusCompact(snapshot) {
@@ -22023,13 +22083,15 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}
   const likes = totalPositiveLikes();
   const milestone = collectibleMilestoneForLikes(likes);
   const spirit = spiritById(currentSpiritId || "");
-  const spiritText = localizedSpiritCopy(spirit) || {};
-  const genreSummary = buildSpiritStoryGenreSummary(spirit);
-  const fallbackDetailsLine = buildSpiritShareDetailsLine(spirit, spiritText, likes, milestone.likes);
-  const detailsLine = normalizeInlineText(
-    spiritCollectibleDetails?.textContent || fallbackDetailsLine
-  );
   const snapshot = spiritShareProfileSnapshot();
+  const spiritText = localizedSpiritCopy(spirit) || buildProfileStoryText(snapshot);
+  const genreSummary = spirit ? buildSpiritStoryGenreSummary(spirit) : buildProfileStoryGenreSummary();
+  const fallbackDetailsLine = spirit
+    ? buildSpiritShareDetailsLine(spirit, spiritText, likes, milestone.likes)
+    : buildProfileStoryDetailsLine(snapshot);
+  const detailsLine = normalizeInlineText(
+    spirit ? spiritCollectibleDetails?.textContent || fallbackDetailsLine : fallbackDetailsLine
+  );
   const statusLine = buildSpiritShareStatusLine(snapshot);
   const spiritImageSource = resolveRuntimeAssetUrl(spirit?.image || "");
   const { mime: spiritMime } = collectibleImageMeta(spiritImageSource);
@@ -22101,38 +22163,102 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}
   };
 }
 
-async function shareSpiritCollectibleToInstagram() {
+function profileStoryFallbackImageUrl() {
+  return resolveRuntimeAssetUrl(SPIRIT_COLLECTIBLE_FALLBACK);
+}
+
+function resolveStoryShareImageUrl(preferredImageUrl = "") {
+  const candidates = [
+    preferredImageUrl,
+    spiritCollectibleShareInstagramBtn?.dataset.imageUrl,
+    spiritCollectibleImage?.getAttribute("src"),
+    spiritCollectibleDownload?.getAttribute("href"),
+    profileStoryFallbackImageUrl()
+  ];
+  for (const candidate of candidates) {
+    const value = String(candidate || "").trim();
+    if (value && value !== "#") return value;
+  }
+  return "";
+}
+
+function resolveStoryShareBaseFilename(imageUrl = "", preferredFilename = "") {
+  const safeFilename = String(preferredFilename || "").trim();
+  if (safeFilename) return safeFilename;
+  return String(
+    spiritCollectibleDownload?.getAttribute("download") ||
+      spiritCollectibleShareInstagramBtn?.dataset.filename ||
+      spiritCollectibleFilename(
+        currentSpiritId || "status",
+        collectibleMilestoneForLikes(totalPositiveLikes()).likes,
+        imageUrl
+      )
+  );
+}
+
+function resetStoryShareButtonLabel(button) {
+  if (!button) return;
+  button.textContent = button === summaryShareInstagramBtn
+    ? t("summaryShareStoryBtn")
+    : t("spiritCollectibleShareInstagram");
+}
+
+function restoreStoryShareButtons() {
+  if (summaryShareInstagramBtn) {
+    summaryShareInstagramBtn.disabled = false;
+    resetStoryShareButtonLabel(summaryShareInstagramBtn);
+  }
+  if (spiritCollectibleShareInstagramBtn) {
+    const collectibleImageUrl = String(
+      spiritCollectibleShareInstagramBtn.dataset.imageUrl ||
+        spiritCollectibleImage?.getAttribute("src") ||
+        spiritCollectibleDownload?.getAttribute("href") ||
+        ""
+    ).trim();
+    const hasCollectibleAsset = Boolean(
+      collectibleImageUrl && collectibleImageUrl !== "#"
+    );
+    spiritCollectibleShareInstagramBtn.disabled = !hasCollectibleAsset;
+    resetStoryShareButtonLabel(spiritCollectibleShareInstagramBtn);
+  }
+}
+
+async function shareSpiritCollectibleToInstagram({
+  triggerButton = spiritCollectibleShareInstagramBtn,
+  imageUrl = "",
+  baseFilename = ""
+} = {}) {
+  if (spiritStoryShareBusy) {
+    showToast(t("spiritCollectibleSharePreparing"));
+    return;
+  }
   if (spiritCollectibleBusy) {
     showToast(t("spiritCollectibleGenerating"));
     return;
   }
 
-  const imageUrl = String(
-    spiritCollectibleShareInstagramBtn?.dataset.imageUrl ||
-      spiritCollectibleImage?.getAttribute("src") ||
-      spiritCollectibleDownload?.getAttribute("href") ||
-      ""
-  ).trim();
+  const resolvedImageUrl = resolveStoryShareImageUrl(imageUrl);
 
-  if (!imageUrl || imageUrl === "#") {
+  if (!resolvedImageUrl || resolvedImageUrl === "#") {
     showToast(t("spiritCollectibleShareNoAsset"));
     return;
   }
 
-  const baseFilename = String(
-    spiritCollectibleDownload?.getAttribute("download") ||
-      spiritCollectibleShareInstagramBtn?.dataset.filename ||
-      spiritCollectibleFilename(currentSpiritId || "spirit", collectibleMilestoneForLikes(totalPositiveLikes()).likes, imageUrl)
-  );
-  const storyAsset = await prepareSpiritStoryAsset({ imageUrl, baseFilename });
+  const resolvedBaseFilename = resolveStoryShareBaseFilename(resolvedImageUrl, baseFilename);
+  spiritStoryShareBusy = true;
+  if (summaryShareInstagramBtn) summaryShareInstagramBtn.disabled = true;
+  if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
+  if (triggerButton) triggerButton.textContent = t("spiritCollectibleSharePreparing");
+
+  const storyAsset = await prepareSpiritStoryAsset({
+    imageUrl: resolvedImageUrl,
+    baseFilename: resolvedBaseFilename
+  });
   if (!storyAsset?.storyAssetUrl) {
     showToast(t("spiritCollectibleShareNoAsset"));
+    spiritStoryShareBusy = false;
+    restoreStoryShareButtons();
     return;
-  }
-
-  if (spiritCollectibleShareInstagramBtn) {
-    spiritCollectibleShareInstagramBtn.disabled = true;
-    spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleSharePreparing");
   }
 
   try {
@@ -22175,10 +22301,8 @@ async function shareSpiritCollectibleToInstagram() {
     triggerSpiritCollectibleDownload(storyAsset.storyAssetUrl, storyAsset.filename);
     showToast(t("spiritCollectibleShareFallback"));
   } finally {
-    if (spiritCollectibleShareInstagramBtn) {
-      spiritCollectibleShareInstagramBtn.disabled = false;
-      spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
-    }
+    spiritStoryShareBusy = false;
+    restoreStoryShareButtons();
   }
 }
 
@@ -28312,6 +28436,9 @@ bind(summaryLikedTracksList, "click", (event) => {
 });
 bind(summaryLikedTracksClearBtn, "click", () => {
   clearLikedTrackHistory();
+});
+bind(summaryShareInstagramBtn, "click", async () => {
+  await shareSpiritCollectibleToInstagram({ triggerButton: summaryShareInstagramBtn });
 });
 bind(authPassword, "keydown", (event) => {
   if (event.key !== "Enter") return;
