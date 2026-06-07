@@ -1885,7 +1885,312 @@ const DATASET_STYLE_ALIASES = {
   upliftingtrance: "trance_uplifting"
 };
 
+const CURATED_BANDCAMP_TRACK_EXPANSION = [
+  {
+    style: "psycore",
+    song: "Undercore (200)",
+    artist: "Astral Labyrinth Vs Zamurah",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 200,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/undercore-200-2",
+    bandcampTrackId: "1532207338"
+  },
+  {
+    style: "psycore",
+    song: "Flowing Thru (211)",
+    artist: "Affectum Infernum",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 211,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/flowing-thru-211",
+    bandcampTrackId: "2949734058"
+  },
+  {
+    style: "psycore",
+    song: "Mystery (210)",
+    artist: "Narcolepsy",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 210,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/mystery-210-2",
+    bandcampTrackId: "2667146970"
+  },
+  {
+    style: "psycore",
+    song: "Tzoumerka Horizons (215)",
+    artist: "Silverdaze",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 215,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/tzoumerka-horizons-215",
+    bandcampTrackId: "3777830821"
+  },
+  {
+    style: "psycore",
+    song: "The Language of Trees (220)",
+    artist: "Glitchy Jungle",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 220,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/the-language-of-trees-220",
+    bandcampTrackId: "1512483230"
+  },
+  {
+    style: "psycore",
+    song: "Suenos Profeticos (222)",
+    artist: "Espiritus",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 222,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/suen-os-profe-ticos-222",
+    bandcampTrackId: "2716800402"
+  },
+  {
+    style: "psycore",
+    song: "Harmony Of Dissonance (240)",
+    artist: "Blind-Ox",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 240,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/harmony-of-dissonance-240-2",
+    bandcampTrackId: "4204723413"
+  },
+  {
+    style: "psycore",
+    song: "Legion Of Ragnar (250)",
+    artist: "Kozmofreak",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 250,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/legion-of-ragnar-250",
+    bandcampTrackId: "2428358205"
+  },
+  {
+    style: "psycore",
+    song: "Noli Numeris (273)",
+    artist: "Vuga",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 273,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/noli-numeris-273",
+    bandcampTrackId: "932853074"
+  },
+  {
+    style: "psycore",
+    song: "Nolloodoo (280-300)",
+    artist: "Nala",
+    label: "Voodoo Hoodoo Records",
+    bpm: "280-300",
+    bpmExact: 290,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/voodoo-core-vol-2",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/nolloodoo-280-300",
+    bandcampTrackId: "400041976"
+  },
+  {
+    style: "slambient",
+    song: "Sucked To Unholy Crypt",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/sucked-to-unholy-crypt",
+    bandcampTrackId: "694061843"
+  },
+  {
+    style: "slambient",
+    song: "The Flames Guide Me (Warewolf Version)",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/the-flames-guide-me-warewolf-version",
+    bandcampTrackId: "2834659855"
+  },
+  {
+    style: "slambient",
+    song: "Sacred Death of Paraoh",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/sacred-death-of-paraoh",
+    bandcampTrackId: "906997967"
+  },
+  {
+    style: "slambient",
+    song: "Black Stramonium Tomb",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/black-stramonium-tomb",
+    bandcampTrackId: "3767117677"
+  },
+  {
+    style: "slambient",
+    song: "Close Encoounters Seventh Degree",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/close-encoounters-seventh-degree",
+    bandcampTrackId: "2839396970"
+  },
+  {
+    style: "slambient",
+    song: "Blood Of My Blood",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/blood-of-my-blood",
+    bandcampTrackId: "3840153951"
+  },
+  {
+    style: "slambient",
+    song: "Blood Vomit",
+    artist: "Cindervomit X Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/the-blood-egypt-knot",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/blood-vomit-2",
+    bandcampTrackId: "1648745616"
+  },
+  {
+    style: "slambient",
+    song: "Portals of Complex Consciousness",
+    artist: "Orcoro",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/orcoro-portals-of-complex-consciousness",
+    bandcampTrackId: "1139742140"
+  },
+  {
+    style: "slambient",
+    song: "Hypnosis",
+    artist: "Audionimus x CinderVOMIT",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/audionimus-x-cindervomit-hypnosis",
+    bandcampTrackId: "3809552836"
+  },
+  {
+    style: "slambient",
+    song: "Into Strange Woods",
+    artist: "Groovality",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/groovality-into-strange-woods",
+    bandcampTrackId: "2322698149"
+  },
+  {
+    style: "slambient",
+    song: "Masai Tribe",
+    artist: "Imaraka",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/imaraka-masai-tribe",
+    bandcampTrackId: "4147920346"
+  },
+  {
+    style: "slambient",
+    song: "The Katana of the Kamaskura Tribe",
+    artist: "Phyllorum",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/phyllorum-the-katana-of-the-kamaskura-tribe",
+    bandcampTrackId: "2001927694"
+  },
+  {
+    style: "slambient",
+    song: "Shadows in the Mirror",
+    artist: "Orcoro",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/orcoro-shadows-in-the-mirror",
+    bandcampTrackId: "3995250931"
+  },
+  {
+    style: "slambient",
+    song: "El, de Saltadilla",
+    artist: "Bahaael",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/bahaael-l-de-saltadilla",
+    bandcampTrackId: "3452487329"
+  },
+  {
+    style: "slambient",
+    song: "Almas Perdidas",
+    artist: "Clostridium Tetani",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/clostridium-tetani-almas-perdidas",
+    bandcampTrackId: "3738069572"
+  },
+  {
+    style: "slambient",
+    song: "Pasha Dume",
+    artist: "Peaking Gods x Orphism",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/peaking-gods-x-orphism-pasha-dume",
+    bandcampTrackId: "10605563"
+  },
+  {
+    style: "slambient",
+    song: "Lost SoulS on Earth",
+    artist: "Braio x Vinayaka",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/braio-x-vinayaka-lost-souls-on-earth",
+    bandcampTrackId: "3418315974"
+  },
+  {
+    style: "slambient",
+    song: "Portal Into The Void",
+    artist: "Groovality",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/groovality-portal-into-the-void",
+    bandcampTrackId: "927194303"
+  },
+  {
+    style: "slambient",
+    song: "The Endless Tribe",
+    artist: "CinderVOMIT",
+    label: "The Endless Knot",
+    bandcampUrl: "https://theendlessknot.bandcamp.com/album/tribe-002",
+    bandcampTrackUrl: "https://theendlessknot.bandcamp.com/track/cindervomit-the-endless-tribe",
+    bandcampTrackId: "2177926228"
+  }
+].map((track) => {
+  const bpmValue = Number(track.bpmExact) || 0;
+  const searchQuery = encodeURIComponent(`${track.artist} ${track.song}`);
+  const bpmLabel = track.bpm || (track.style === "psycore" ? `${bpmValue || 200} BPM` : "155-175");
+  const energy = track.energy || (track.style === "psycore" || bpmValue >= 175 ? "extreme" : "high");
+  const styleText = track.style === "psycore" ? "psycore extremo" : "slambient";
+  const labelText = track.label === "Voodoo Hoodoo Records"
+    ? "Voodoo Hoodoo Records tem catalogo Bandcamp marcado como psycore, darkpsy e experimental, com BPMs e player embutido."
+    : "The Endless Knot tem catalogo Bandcamp marcado como slambient, darkpsy e experimental, com foco em psicodelia extrema.";
+
+  return {
+    ...track,
+    bpm: bpmLabel,
+    energy,
+    vocals: track.vocals || "instrumental",
+    context: track.context || ["peak", "foco", "after", "estrada"],
+    vibe: track.vibe || `Faixa verificada no Bandcamp para ampliar o radar de ${styleText} com preview tocavel.`,
+    spotifyUrl: track.spotifyUrl || `https://open.spotify.com/search/${searchQuery}`,
+    youtubeUrl: track.youtubeUrl || `https://www.youtube.com/results?search_query=${searchQuery}`,
+    youtubeTrackUrl: track.youtubeTrackUrl || `https://www.youtube.com/results?search_query=${searchQuery}`,
+    beatportUrl: track.beatportUrl || `https://www.beatport.com/search?q=${searchQuery}`,
+    existenceVerified: true,
+    spotifyVerified: false,
+    artistGenre: track.artistGenre || `${track.label} / ${styleText}`,
+    artistProfileHint: track.artistProfileHint || `Fonte Bandcamp verificada para ${styleText}, com artista/trackId curados manualmente.`,
+    artistBio: track.artistBio || `${track.artist} entrou no radar por uma faixa tocavel de ${styleText}; use como porta de entrada para descobrir mais do mesmo eixo.`,
+    labelBio: track.labelBio || labelText,
+    source: "verified_bandcamp_curated"
+  };
+});
+
 const catalog = [
+  ...CURATED_BANDCAMP_TRACK_EXPANSION,
   {
     style: "psytrance",
     song: "Deep Jungle Walk",
@@ -5014,7 +5319,7 @@ const STYLE_BPM_RULES = {
   forest_psy: { min: 145, max: 154 },
   dark_psy: { min: 154, max: 175 },
   dark_experimental: { min: 175, max: 220 },
-  psycore: { min: 175, max: 230 },
+  psycore: { min: 175, max: 300 },
   freeform: { min: 138, max: 180 },
   full_on: { min: 142, max: 150 },
   full_on_night: { min: 146, max: 154 },
@@ -6043,7 +6348,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "enigmachina": ["dark_experimental"],
   "undermorph": ["dark_experimental"],
   "mirror me": ["dark_experimental"],
-  "nala": ["dark_experimental"],
+  "nala": ["dark_experimental", "psycore"],
   "nallun": ["dark_experimental"],
   "alumbra": ["dark_experimental"],
   "hyperekplexia": ["dark_experimental", "psycore"],
@@ -9008,7 +9313,7 @@ function isArtistMatch(candidateName, seedName) {
   const seedEscaped = escapeRegex(seed);
   const seedCanonicalEscaped = seedCanonical ? escapeRegex(seedCanonical) : "";
   // Regra rígida: seed deve ser o artista principal (inicio do nome), opcionalmente com collab/feat.
-  const collabSeparator = "&|and|e|feat|ft|x";
+  const collabSeparator = "&|and|e|feat|ft|x|vs";
   const mainArtistPattern = new RegExp(`^${seedEscaped}(?:\\s*(?:${collabSeparator})\\s+.+)?$`);
   if (!seedCanonicalEscaped) return mainArtistPattern.test(candidate);
   const mainArtistCanonicalPattern = new RegExp(`^${seedCanonicalEscaped}(?:\\s*(?:${collabSeparator})\\s+.+)?$`);
