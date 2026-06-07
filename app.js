@@ -5156,7 +5156,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v14";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v15";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -7295,6 +7295,241 @@ const SPIRIT_VISUAL_THEMES = {
   cacador_bass: { a: "#86f2ff", b: "#6895ff", c: "#ff8df8", d: "#0a1430" },
   viajante_organico: { a: "#8bf7d8", b: "#77b9ff", c: "#9debb3", d: "#082036" },
   explorador_fractal: { a: "#9be7ff", b: "#6e8fff", c: "#8d79ff", d: "#0a1638" }
+};
+
+const SPIRIT_MASCOT_VARIANTS = {
+  ritual_cosmico: [
+    {
+      motif: "star",
+      crown: "flame",
+      quote: {
+        pt: "Você transforma tensão em catarse e abre portais no drop.",
+        en: "You turn tension into catharsis and open portals on the drop.",
+        es: "Conviertes tensión en catarsis y abres portales en el drop."
+      }
+    },
+    {
+      motif: "mandala",
+      crown: "halo",
+      quote: {
+        pt: "Seu radar busca melodia, ritual e pista em estado de brilho.",
+        en: "Your radar seeks melody, ritual, and a floor in full glow.",
+        es: "Tu radar busca melodía, ritual y pista en pleno brillo."
+      }
+    },
+    {
+      motif: "comet",
+      crown: "spark",
+      quote: {
+        pt: "Você escuta como quem conduz uma cerimônia de energia.",
+        en: "You listen like someone conducting a ceremony of energy.",
+        es: "Escuchas como quien conduce una ceremonia de energía."
+      }
+    }
+  ],
+  alquimista_sombrio: [
+    {
+      motif: "moon",
+      crown: "hood",
+      quote: {
+        pt: "Você encontra beleza onde o grave fica escuro e profundo.",
+        en: "You find beauty where the low end turns dark and deep.",
+        es: "Encuentras belleza donde el grave se vuelve oscuro y profundo."
+      }
+    },
+    {
+      motif: "smoke",
+      crown: "flame",
+      quote: {
+        pt: "Seu gosto prefere textura, sombra e transe em camadas.",
+        en: "Your taste prefers texture, shadow, and layered trance.",
+        es: "Tu gusto prefiere textura, sombra y trance en capas."
+      }
+    },
+    {
+      motif: "crystal",
+      crown: "halo",
+      quote: {
+        pt: "Você cava atmosferas raras e deixa a noite falar baixo.",
+        en: "You dig rare atmospheres and let the night speak softly.",
+        es: "Cavas atmósferas raras y dejas que la noche hable bajo."
+      }
+    }
+  ],
+  acelerador_quantico: [
+    {
+      motif: "bolt",
+      crown: "spark",
+      quote: {
+        pt: "Você gosta quando a velocidade continua limpa e precisa.",
+        en: "You like speed when it stays clean and precise.",
+        es: "Te gusta la velocidad cuando sigue limpia y precisa."
+      }
+    },
+    {
+      motif: "atom",
+      crown: "halo",
+      quote: {
+        pt: "Seu ouvido pega microcortes antes do corpo perceber.",
+        en: "Your ear catches micro-cuts before the body notices.",
+        es: "Tu oído capta microcortes antes de que el cuerpo lo note."
+      }
+    },
+    {
+      motif: "comet",
+      crown: "flame",
+      quote: {
+        pt: "No caos rápido, você procura nitidez e impacto seco.",
+        en: "Inside fast chaos, you look for clarity and dry impact.",
+        es: "En el caos rápido, buscas nitidez e impacto seco."
+      }
+    }
+  ],
+  engenheiro_groove: [
+    {
+      motif: "eq",
+      crown: "halo",
+      quote: {
+        pt: "Você mede o prazer pelo swing que não quebra a fluidez.",
+        en: "You measure pleasure by swing that never breaks flow.",
+        es: "Mides el placer por el swing que nunca rompe el flujo."
+      }
+    },
+    {
+      motif: "disc",
+      crown: "spark",
+      quote: {
+        pt: "Seu ponto forte é groove redondo com grave no lugar.",
+        en: "Your strength is rounded groove with bass in place.",
+        es: "Tu fuerte es groove redondo con el grave en su sitio."
+      }
+    },
+    {
+      motif: "wave",
+      crown: "flame",
+      quote: {
+        pt: "Você deixa o corpo decidir quando o loop ficou certo.",
+        en: "You let the body decide when the loop feels right.",
+        es: "Dejas que el cuerpo decida cuándo el loop está bien."
+      }
+    }
+  ],
+  arquiteto_hipnotico: [
+    {
+      motif: "grid",
+      crown: "halo",
+      quote: {
+        pt: "Você constrói tensão com repetição e libera no ponto exato.",
+        en: "You build tension through repetition and release it on point.",
+        es: "Construyes tensión con repetición y liberas en el punto exacto."
+      }
+    },
+    {
+      motif: "visor",
+      crown: "spark",
+      quote: {
+        pt: "Seu espírito enxerga estrutura dentro da pressão.",
+        en: "Your spirit sees structure inside the pressure.",
+        es: "Tu espíritu ve estructura dentro de la presión."
+      }
+    },
+    {
+      motif: "acid",
+      crown: "flame",
+      quote: {
+        pt: "Você prefere hipnose quando cada camada evolui sem pressa.",
+        en: "You prefer hypnosis when every layer evolves patiently.",
+        es: "Prefieres hipnosis cuando cada capa evoluciona sin prisa."
+      }
+    }
+  ],
+  cacador_bass: [
+    {
+      motif: "speaker",
+      crown: "spark",
+      quote: {
+        pt: "Você sente a música primeiro no subgrave e depois no detalhe.",
+        en: "You feel music first in the sub-bass, then in the detail.",
+        es: "Sientes la música primero en el subgrave y luego en el detalle."
+      }
+    },
+    {
+      motif: "drop",
+      crown: "flame",
+      quote: {
+        pt: "Seu radar caça drops com peso, respiro e surpresa.",
+        en: "Your radar hunts drops with weight, breath, and surprise.",
+        es: "Tu radar caza drops con peso, respiro y sorpresa."
+      }
+    },
+    {
+      motif: "wave",
+      crown: "hood",
+      quote: {
+        pt: "Quando o sistema respira pressão, você sabe que achou.",
+        en: "When the system breathes pressure, you know you found it.",
+        es: "Cuando el sistema respira presión, sabes que lo encontraste."
+      }
+    }
+  ],
+  viajante_organico: [
+    {
+      motif: "leaf",
+      crown: "halo",
+      quote: {
+        pt: "Você busca espaço nas batidas e encontra calma no movimento.",
+        en: "You seek space in beats and find calm in movement.",
+        es: "Buscas espacio en los beats y encuentras calma en el movimiento."
+      }
+    },
+    {
+      motif: "drop",
+      crown: "flame",
+      quote: {
+        pt: "Seu gosto respira textura, calor e paisagens lentas.",
+        en: "Your taste breathes texture, warmth, and slow landscapes.",
+        es: "Tu gusto respira textura, calor y paisajes lentos."
+      }
+    },
+    {
+      motif: "moon",
+      crown: "spark",
+      quote: {
+        pt: "Você deixa a melodia caminhar até virar memória.",
+        en: "You let melody walk until it becomes memory.",
+        es: "Dejas que la melodía camine hasta volverse memoria."
+      }
+    }
+  ],
+  explorador_fractal: [
+    {
+      motif: "crystal",
+      crown: "spark",
+      quote: {
+        pt: "Você se anima quando a faixa surpreende sem perder sentido.",
+        en: "You light up when a track surprises without losing sense.",
+        es: "Te enciendes cuando una pista sorprende sin perder sentido."
+      }
+    },
+    {
+      motif: "grid",
+      crown: "halo",
+      quote: {
+        pt: "Seu espírito gosta de risco, microdetalhe e forma mutante.",
+        en: "Your spirit likes risk, micro-detail, and shifting form.",
+        es: "Tu espíritu ama riesgo, microdetalle y forma mutante."
+      }
+    },
+    {
+      motif: "atom",
+      crown: "flame",
+      quote: {
+        pt: "Você encontra beleza nos desvios que ainda dançam.",
+        en: "You find beauty in detours that still dance.",
+        es: "Encuentras belleza en desvíos que todavía bailan."
+      }
+    }
+  ]
 };
 
 const STYLE_SEED_BACKFILL = {
@@ -11665,13 +11900,13 @@ const I18N = {
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Colecionável do espírito",
-    spiritCollectibleHintLocal: "Arte pessoal ativa: cada usuário recebe uma entidade visual própria, gerada a partir do gosto musical.",
+    spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito tem variações de personagem, frase e status geradas pelo seu gosto musical.",
     spiritCollectibleHintApi: "IA de imagem conectada: esta arte foi gerada para a assinatura musical deste usuário.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
     spiritCollectibleAlt: "Colecionável de {spirit} no marco de {milestone} likes",
-    spiritCollectibleRegenerate: "Gerar nova arte",
+    spiritCollectibleRegenerate: "Gerar nova variação",
     spiritCollectibleDownload: "Baixar imagem",
     spiritCollectibleShareInstagram: "Compartilhar Story",
     spiritCollectibleSharePreparing: "Preparando Story...",
@@ -12241,13 +12476,13 @@ const I18N = {
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Spirit collectible",
-    spiritCollectibleHintLocal: "Personal artwork is active: each user receives a visual entity generated from their music taste.",
+    spiritCollectibleHintLocal: "Personal artwork is active: each spirit has character, quote, and status variations generated from your music taste.",
     spiritCollectibleHintApi: "Image AI connected: this artwork was generated for this user's music signature.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
     spiritCollectibleAlt: "{spirit} collectible at {milestone} likes milestone",
-    spiritCollectibleRegenerate: "Generate new art",
+    spiritCollectibleRegenerate: "Generate variation",
     spiritCollectibleDownload: "Download image",
     spiritCollectibleShareInstagram: "Share Story",
     spiritCollectibleSharePreparing: "Preparing Story...",
@@ -12817,13 +13052,13 @@ const I18N = {
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Coleccionable del espíritu",
-    spiritCollectibleHintLocal: "Arte personal activa: cada usuario recibe una entidad visual propia, generada a partir de su gusto musical.",
+    spiritCollectibleHintLocal: "Arte personal activa: cada espíritu tiene variaciones de personaje, frase y estado generadas por tu gusto musical.",
     spiritCollectibleHintApi: "IA de imagen conectada: esta obra fue generada para la firma musical de este usuario.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
     spiritCollectibleAlt: "Coleccionable de {spirit} en el hito de {milestone} likes",
-    spiritCollectibleRegenerate: "Generar nueva obra",
+    spiritCollectibleRegenerate: "Generar variación",
     spiritCollectibleDownload: "Descargar imagen",
     spiritCollectibleShareInstagram: "Compartir Story",
     spiritCollectibleSharePreparing: "Preparando Story...",
@@ -23387,12 +23622,176 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   if (currentLanguage === "en") {
-    return `Create a unique premium psychedelic-spiritual electronic music spirit for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Make one central cosmic musical entity/character, like a mystical sound guardian made of neon waveform energy, sacred geometry, synth light, bass pressure, and club/rave atmosphere. Clean collectible card cover quality, elegant composition, readable at small size, strong silhouette, cinematic neon, high detail, premium finish. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create a unique premium musical-spirit mascot card for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Make a cute but premium cosmic musical entity with headphones, expressive face, glowing body, music-note details, and one clear style-specific visual trait. It should feel like a collectible "your musical spirit" status image: central character, dark luminous background, elegant stats area, soft magic, readable at small size, cinematic neon, high detail, premium finish. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea un espíritu de música electrónica psicodélico-espiritual, premium y único para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Haz una entidad/personaje musical cósmico central, como un guardián místico hecho de ondas sonoras neón, geometría sagrada, luz de sintetizador, presión de bajo y atmósfera club/rave. Calidad de portada coleccionable, composición elegante, legible en tamaño pequeño, silueta fuerte, acabado premium. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
+    return `Crea una carta premium de mascota/espíritu musical para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Haz una entidad musical cósmica tierna pero premium, con audífonos, rostro expresivo, cuerpo luminoso, detalles de notas musicales y un rasgo visual claro del estilo. Debe sentirse como una imagen de status "tu espíritu musical": personaje central, fondo oscuro luminoso, área elegante de datos, magia suave, legible en tamaño pequeño, neón cinematográfico, alto detalle, acabado premium. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
   }
-  return `Crie um espírito de música eletrônica psicodélico-espiritual, premium e único para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Faça uma entidade/personagem musical cósmica central, como um guardião místico feito de ondas sonoras neon, geometria sagrada, luz de sintetizador, pressão de grave e atmosfera club/rave. Qualidade de capa colecionável, composição elegante, legível em tamanho pequeno, silhueta forte, acabamento premium. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
+  return `Crie um card premium de mascote/espírito musical para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Faça uma entidade musical cósmica fofa mas sofisticada, com fones de ouvido, rosto expressivo, corpo luminoso, detalhes de notas musicais e um traço visual claro do estilo. Deve parecer uma imagem de status "seu espírito musical": personagem central, fundo escuro luminoso, área elegante de estatísticas, magia suave, legível em tamanho pequeno, neon cinematográfico, alto detalhe, acabamento premium. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
+}
+
+function spiritMascotVariant(spirit, seed = 0) {
+  const variants = SPIRIT_MASCOT_VARIANTS[spirit?.id] || SPIRIT_MASCOT_VARIANTS.ritual_cosmico || [];
+  if (!variants.length) return { motif: "star", crown: "halo", quote: {} };
+  return variants[Math.abs(Number(seed) || 0) % variants.length] || variants[0];
+}
+
+function spiritMascotQuote(variant = {}, spiritText = {}) {
+  const quoted = variant?.quote?.[currentLanguage] || variant?.quote?.pt || "";
+  if (quoted) return quoted;
+  return truncateByWordBoundary(buildSpiritCollectibleCopy(null, spiritText), 92);
+}
+
+function spiritCollectibleCardLabels() {
+  if (currentLanguage === "en") {
+    return {
+      kicker: "YOUR MUSICAL SPIRIT",
+      spirit: "SPIRIT",
+      liked: "LIKED TRACKS",
+      songs: "tracks",
+      genre: "FAVORITE GENRE",
+      status: "PROFILE",
+      discovered: "discovered",
+      shown: "shown",
+      likes: "LIKES",
+      quoteOpen: "“",
+      quoteClose: "”"
+    };
+  }
+  if (currentLanguage === "es") {
+    return {
+      kicker: "TU ESPÍRITU MUSICAL",
+      spirit: "ESPÍRITU",
+      liked: "PISTAS CON LIKE",
+      songs: "pistas",
+      genre: "GÉNERO FAVORITO",
+      status: "PERFIL",
+      discovered: "descubiertos",
+      shown: "vistas",
+      likes: "LIKES",
+      quoteOpen: "“",
+      quoteClose: "”"
+    };
+  }
+  return {
+    kicker: "SEU ESPÍRITO MUSICAL",
+    spirit: "ESPÍRITO",
+    liked: "MÚSICAS CURTIDAS",
+    songs: "músicas",
+    genre: "GÊNERO FAVORITO",
+    status: "PERFIL",
+    discovered: "descobertas",
+    shown: "vistas",
+    likes: "LIKES",
+    quoteOpen: "“",
+    quoteClose: "”"
+  };
+}
+
+function spiritCardNumber(value = 0) {
+  const safe = Math.max(0, Number(value) || 0);
+  if (safe < 1000) return String(Math.round(safe));
+  const compact = safe >= 10000 ? Math.round(safe / 1000) : Math.round((safe / 1000) * 10) / 10;
+  return `${String(compact).replace(".", ",")}k`;
+}
+
+function spiritMotifSvg(motif = "star", x = 0, y = 0, scale = 1, theme = {}, opacity = 1) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const fill = `fill="${a}" fill-opacity="${(0.72 * opacity).toFixed(2)}"`;
+  const stroke = `stroke="${b}" stroke-opacity="${(0.74 * opacity).toFixed(2)}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"`;
+  const wrap = (body) => `<g transform="translate(${x} ${y}) scale(${scale})" opacity="${opacity}">${body}</g>`;
+
+  if (motif === "bolt") {
+    return wrap(`<path d="M46 0 L8 58 H42 L24 112 L92 38 H56 L78 0 Z" ${fill} stroke="${c}" stroke-width="4" stroke-linejoin="round" />`);
+  }
+  if (motif === "moon") {
+    return wrap(`<path d="M84 14 C50 22 28 52 32 82 C36 112 64 134 96 130 C74 116 63 94 68 70 C72 47 88 28 110 20 C102 14 93 12 84 14 Z" fill="${c}" fill-opacity="${(0.7 * opacity).toFixed(2)}" /><circle cx="62" cy="70" r="5" fill="#f5ffff" fill-opacity="0.8" />`);
+  }
+  if (motif === "speaker") {
+    return wrap(`<rect x="12" y="16" width="88" height="88" rx="18" fill="${c}" fill-opacity="0.36" ${stroke} /><circle cx="56" cy="60" r="29" fill="#061124" stroke="${a}" stroke-width="6" /><circle cx="56" cy="60" r="11" fill="#f7ffff" fill-opacity="0.88" /><path d="M104 36 C126 52 126 72 104 88" fill="none" ${stroke} />`);
+  }
+  if (motif === "leaf") {
+    return wrap(`<path d="M58 6 C118 20 130 84 66 126 C26 100 16 38 58 6 Z" fill="${a}" fill-opacity="0.46" ${stroke} /><path d="M58 26 C61 60 60 92 52 116" fill="none" stroke="#f5ffff" stroke-opacity="0.64" stroke-width="4" /><path d="M60 64 C82 58 98 45 110 26 M58 78 C38 72 28 58 20 40" fill="none" stroke="#f5ffff" stroke-opacity="0.42" stroke-width="3" />`);
+  }
+  if (motif === "eq") {
+    return wrap(`<g fill="${a}" fill-opacity="0.72">${[0, 1, 2, 3].map((i) => `<rect x="${18 + i * 22}" y="${28 + (i % 2) * 16}" width="13" height="${62 - (i % 2) * 18 + (i === 2 ? 22 : 0)}" rx="6" />`).join("")}</g><path d="M10 104 H116" ${stroke} />`);
+  }
+  if (motif === "disc") {
+    return wrap(`<circle cx="64" cy="64" r="52" fill="${c}" fill-opacity="0.26" ${stroke} /><circle cx="64" cy="64" r="19" fill="#071124" stroke="${a}" stroke-width="5" /><path d="M64 12 A52 52 0 0 1 114 64" fill="none" stroke="#f7ffff" stroke-opacity="0.36" stroke-width="5" />`);
+  }
+  if (motif === "wave" || motif === "smoke" || motif === "drop") {
+    const drop = motif === "drop" ? `<path d="M64 4 C104 48 116 78 96 106 C80 128 48 128 32 106 C12 78 24 48 64 4 Z" fill="${c}" fill-opacity="0.28" stroke="${a}" stroke-width="4" />` : "";
+    return wrap(`${drop}<path d="M8 70 C32 34 52 106 76 70 C96 40 106 58 122 28" fill="none" ${stroke} /><path d="M10 98 C34 70 54 120 82 92 C100 74 111 88 124 68" fill="none" stroke="${a}" stroke-opacity="0.32" stroke-width="4" stroke-linecap="round" />`);
+  }
+  if (motif === "grid" || motif === "visor") {
+    return wrap(`<rect x="12" y="22" width="104" height="76" rx="18" fill="${c}" fill-opacity="0.24" ${stroke} />${[0, 1, 2].map((i) => `<path d="M24 ${42 + i * 18} H104" stroke="${a}" stroke-opacity="${0.28 + i * 0.12}" stroke-width="4" />`).join("")}${motif === "visor" ? `<rect x="34" y="50" width="60" height="18" rx="9" fill="#f5ffff" fill-opacity="0.62" />` : ""}`);
+  }
+  if (motif === "acid") {
+    return wrap(`<path d="M20 88 C42 18 86 18 108 88 C88 112 40 112 20 88 Z" fill="${c}" fill-opacity="0.22" ${stroke} /><circle cx="48" cy="72" r="8" fill="${a}" /><circle cx="82" cy="72" r="8" fill="${a}" /><path d="M46 92 C58 100 74 100 86 92" fill="none" stroke="#f5ffff" stroke-width="5" stroke-linecap="round" />`);
+  }
+  if (motif === "crystal") {
+    return wrap(`<path d="M64 4 L112 48 L88 126 H40 L16 48 Z" fill="${b}" fill-opacity="0.28" ${stroke} /><path d="M64 4 L64 126 M16 48 H112 M40 126 L64 48 L88 126" fill="none" stroke="#f5ffff" stroke-opacity="0.28" stroke-width="3" />`);
+  }
+  if (motif === "atom") {
+    return wrap(`<circle cx="64" cy="64" r="9" fill="#f7ffff" /><ellipse cx="64" cy="64" rx="54" ry="18" fill="none" ${stroke} /><ellipse cx="64" cy="64" rx="54" ry="18" fill="none" ${stroke} transform="rotate(62 64 64)" /><ellipse cx="64" cy="64" rx="54" ry="18" fill="none" ${stroke} transform="rotate(-62 64 64)" />`);
+  }
+  if (motif === "mandala") {
+    return wrap(`<circle cx="64" cy="64" r="48" fill="none" ${stroke} />${[0, 1, 2, 3, 4, 5].map((i) => `<ellipse cx="64" cy="64" rx="16" ry="46" fill="none" stroke="${i % 2 ? a : c}" stroke-opacity="0.36" stroke-width="3" transform="rotate(${i * 30} 64 64)" />`).join("")}<circle cx="64" cy="64" r="12" fill="${a}" fill-opacity="0.7" />`);
+  }
+  if (motif === "comet") {
+    return wrap(`<path d="M14 86 C38 36 70 22 118 10 C88 40 80 76 92 112 C58 98 38 96 14 86 Z" fill="${c}" fill-opacity="0.28" ${stroke} /><circle cx="82" cy="54" r="20" fill="${a}" fill-opacity="0.72" />`);
+  }
+  return wrap(`<path d="M64 4 L80 44 L124 48 L90 76 L100 120 L64 96 L28 120 L38 76 L4 48 L48 44 Z" fill="${a}" fill-opacity="${(0.68 * opacity).toFixed(2)}" stroke="${c}" stroke-width="4" stroke-linejoin="round" />`);
+}
+
+function spiritMascotCrownSvg(crown = "halo", theme = {}) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  if (crown === "hood") {
+    return `<path d="M258 252 C296 126 474 88 590 166 C660 214 690 302 676 386 C620 314 556 282 468 282 C378 282 320 318 258 398 C244 344 246 294 258 252 Z" fill="${c}" fill-opacity="0.2" stroke="${a}" stroke-opacity="0.36" stroke-width="5" />`;
+  }
+  if (crown === "flame") {
+    return `<path d="M466 130 C520 184 550 230 532 286 C574 250 604 214 598 164 C666 230 674 326 618 390 C574 440 476 438 420 390 C360 332 384 232 466 130 Z" fill="${b}" fill-opacity="0.3" stroke="${a}" stroke-opacity="0.5" stroke-width="5" />`;
+  }
+  if (crown === "spark") {
+    return `<g fill="${a}" fill-opacity="0.78" stroke="${c}" stroke-opacity="0.42" stroke-width="3"><path d="M468 118 L488 176 L548 186 L496 216 L486 278 L458 222 L398 214 L452 184 Z" /><path d="M620 196 L630 226 L662 230 L634 246 L628 278 L614 248 L582 244 L610 226 Z" /></g>`;
+  }
+  return `<ellipse cx="500" cy="246" rx="220" ry="72" fill="none" stroke="${a}" stroke-width="5" stroke-opacity="0.42" /><ellipse cx="500" cy="246" rx="142" ry="42" fill="none" stroke="${b}" stroke-width="3" stroke-opacity="0.34" />`;
+}
+
+function buildSpiritMascotSvg(theme, variant, seed = 0) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const lean = ((seed % 17) - 8) * 0.55;
+  const eyeOffset = (seed % 3) - 1;
+  const mouth = seed % 4 === 0
+    ? "M454 492 C480 516 518 516 544 492"
+    : seed % 4 === 1
+      ? "M458 500 C482 506 518 506 542 500"
+      : "M462 490 C482 520 520 520 540 490";
+  const motif = spiritMotifSvg(variant?.motif || "star", 452, 548, 0.54, theme, 0.95);
+
+  return `
+    <g transform="translate(${lean} 0)" filter="url(#mascotGlow)">
+      ${spiritMascotCrownSvg(variant?.crown || "halo", theme)}
+      <path d="M300 624 C356 536 420 516 500 516 C580 516 646 536 704 624 C652 632 626 670 602 724 C556 688 520 680 500 774 C480 680 444 688 398 724 C374 670 350 632 300 624 Z" fill="url(#cloakGrad)" stroke="${b}" stroke-opacity="0.42" stroke-width="5" />
+      <path d="M334 412 C334 304 408 236 500 236 C592 236 666 304 666 412 C666 514 602 594 500 594 C398 594 334 514 334 412 Z" fill="url(#faceGrad)" stroke="#f4ffff" stroke-opacity="0.34" stroke-width="5" />
+      <path d="M350 408 C310 408 282 438 282 482 C282 526 312 558 354 558 L354 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" />
+      <path d="M650 408 C690 408 718 438 718 482 C718 526 688 558 646 558 L646 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" />
+      <path d="M292 416 C308 300 380 220 500 220 C620 220 692 300 708 416" fill="none" stroke="${b}" stroke-width="16" stroke-linecap="round" stroke-opacity="0.76" />
+      <circle cx="${455 + eyeOffset}" cy="430" r="24" fill="#07102b" />
+      <circle cx="${548 + eyeOffset}" cy="430" r="24" fill="#07102b" />
+      <circle cx="${464 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" />
+      <circle cx="${557 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" />
+      <path d="${mouth}" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" stroke-opacity="0.86" />
+      ${motif}
+      <path d="M392 598 C426 646 462 670 500 676 C538 670 574 646 608 598" fill="none" stroke="#f7ffff" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round" />
+      <path d="M500 584 C442 662 446 780 500 864 C554 780 558 662 500 584 Z" fill="${b}" fill-opacity="0.22" stroke="${a}" stroke-opacity="0.28" stroke-width="4" />
+    </g>`;
 }
 
 function collectibleVariationToken() {
@@ -23436,7 +23835,7 @@ async function requestSpiritCollectibleFromApi(payload) {
   }
 }
 
-function buildLocalSpiritCollectibleImage(
+function buildLocalSpiritCollectibleImageLegacy(
   spirit,
   spiritText,
   likes,
@@ -23617,6 +24016,187 @@ function buildLocalSpiritCollectibleImage(
     <text x="540" y="960" fill="#b7dbff" font-size="20" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" filter="url(#textShadow)">${escapeSvgText(topStyleLines[0] || descriptionLines[0] || "")}</text>
   </g>
   <text x="82" y="1022" fill="${escapeSvgText(theme.a)}" font-size="21" font-family="Chakra Petch, Arial, sans-serif" font-weight="700" opacity="0.78">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(`${milestoneLikes}`)} LIKES</text>
+</svg>`;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function buildLocalSpiritCollectibleImage(
+  spirit,
+  spiritText,
+  likes,
+  milestoneLikes,
+  variationToken = "",
+  backgroundImageUrl = "",
+  spiritImageDataUrl = "",
+  snapshot = null,
+  userSignature = "",
+  profileSignature = ""
+) {
+  const theme = spiritVisualTheme(spirit);
+  const labels = spiritCollectibleCardLabels();
+  const rank = t(resolveSpiritRank(likes).current.key);
+  const profile = snapshot || spiritShareProfileSnapshot();
+  const spiritTitle = normalizeInlineText(spiritText?.name || "Sonic Spirit");
+  const archetype = normalizeInlineText(spiritText?.archetype || rank);
+  const topStyles = spiritTopStyles(spirit, 3);
+  const favoriteGenre = normalizeInlineText(
+    profile?.favoriteStyle && profile.favoriteStyle !== t("summaryNoData")
+      ? profile.favoriteStyle
+      : topStyles[0] || archetype || rank
+  );
+  const styleChips = splitIntoSvgLines(topStyles.join(" • "), 28, 1)[0] || archetype;
+  const likedCount = spiritCardNumber(profile?.likedSongs || likes || milestoneLikes);
+  const shownCount = spiritCardNumber(profile?.tracksPresented || 0);
+  const discoveredCount = spiritCardNumber(profile?.discoveredInApp || 0);
+  const statusLine = normalizeInlineText(profile?.status || rank);
+  const seed = hashString(`${spirit?.id || "spirit"}::card::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`) >>> 0;
+  const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
+  const quote = spiritMascotQuote(variant, spiritText);
+  const titleLines = splitIntoSvgLines(spiritTitle, 19, 2);
+  const archetypeLines = splitIntoSvgLines(archetype, 24, 1);
+  const genreLines = splitIntoSvgLines(favoriteGenre, 15, 2);
+  const quoteLines = splitIntoSvgLines(quote, 44, 2);
+  const safeBackgroundImage = String(backgroundImageUrl || "").trim();
+  const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
+  const accentX = 14 + (seed % 34);
+  const accentY = 18 + ((seed >> 5) % 46);
+  const titleTracking = currentLanguage === "en" ? "8" : "7";
+  const microStars = Array.from({ length: 74 }, (_, index) => {
+    const mixed = hashString(`${seed}::spirit-card-star::${index}`) >>> 0;
+    const x = 56 + (mixed % 960);
+    const y = 68 + ((mixed >> 8) % 780);
+    const radius = 1.2 + ((mixed >> 16) % 24) / 10;
+    const opacity = 0.14 + ((mixed >> 20) % 42) / 100;
+    return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${escapeSvgText(index % 4 === 0 ? theme.c : theme.a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+  const musicNotes = Array.from({ length: 9 }, (_, index) => {
+    const mixed = hashString(`${seed}::spirit-card-note::${index}`) >>> 0;
+    const x = 110 + (mixed % 820);
+    const y = 156 + ((mixed >> 6) % 560);
+    const scale = 0.54 + ((mixed >> 14) % 42) / 100;
+    const opacity = 0.18 + ((mixed >> 20) % 34) / 100;
+    return `
+      <g transform="translate(${x} ${y}) scale(${scale.toFixed(2)}) rotate(${(mixed % 36) - 18})" opacity="${opacity.toFixed(2)}">
+        <path d="M22 0 V78 C12 72 0 78 0 92 C0 108 20 112 32 98 C40 90 42 78 42 66 V22 L86 12 V66 C76 60 64 66 64 80 C64 96 84 100 96 86 C104 78 106 66 106 54 V-10 Z" fill="${escapeSvgText(index % 2 ? theme.b : theme.c)}" />
+      </g>`;
+  }).join("");
+  const equalizer = Array.from({ length: 21 }, (_, index) => {
+    const mixed = hashString(`${seed}::eq::${index}`) >>> 0;
+    const height = 28 + (mixed % 154);
+    const x = 80 + index * 23;
+    const y = 802 - height;
+    return `<rect x="${x}" y="${y}" width="10" height="${height}" rx="5" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${(0.08 + (index % 5) * 0.035).toFixed(2)}" />`;
+  }).join("");
+  const mascotSvg = hasBackgroundImage
+    ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
+       <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
+    : buildSpiritMascotSvg(theme, variant, seed);
+
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="spiritCardBg" x1="${accentX}%" y1="${accentY}%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${escapeSvgText(theme.d)}" />
+      <stop offset="48%" stop-color="#101846" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.62" />
+    </linearGradient>
+    <radialGradient id="heroHalo" cx="39%" cy="44%" r="44%">
+      <stop offset="0%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.58" />
+      <stop offset="54%" stop-color="${escapeSvgText(theme.b)}" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.d)}" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="floorGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.48" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="faceGrad" x1="22%" y1="6%" x2="78%" y2="92%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.94" />
+      <stop offset="48%" stop-color="${escapeSvgText(theme.a)}" stop-opacity="0.72" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.68" />
+    </linearGradient>
+    <linearGradient id="cloakGrad" x1="18%" y1="4%" x2="88%" y2="96%">
+      <stop offset="0%" stop-color="${escapeSvgText(theme.d)}" stop-opacity="0.92" />
+      <stop offset="54%" stop-color="${escapeSvgText(theme.b)}" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.46" />
+    </linearGradient>
+    <linearGradient id="sidePanel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d28" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#0a0f2d" stop-opacity="0.58" />
+    </linearGradient>
+    <linearGradient id="quotePanel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.055" />
+      <stop offset="100%" stop-color="${escapeSvgText(theme.c)}" stop-opacity="0.12" />
+    </linearGradient>
+    <linearGradient id="mascotImageScrim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#030713" stop-opacity="0" />
+      <stop offset="100%" stop-color="#030713" stop-opacity="0.3" />
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#020511" flood-opacity="0.7" />
+    </filter>
+    <filter id="mascotGlow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="${escapeSvgText(theme.a)}" flood-opacity="0.5" />
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.38" />
+    </filter>
+    <clipPath id="mascotClip">
+      <rect x="94" y="144" width="612" height="612" rx="72" />
+    </clipPath>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#spiritCardBg)" />
+  <rect width="1080" height="1080" fill="#030617" opacity="0.28" />
+  <circle cx="408" cy="496" r="396" fill="url(#heroHalo)" />
+  <circle cx="482" cy="853" r="196" fill="url(#floorGlow)" opacity="0.58" />
+  <g opacity="0.72">${microStars}</g>
+  <g>${musicNotes}</g>
+  <g>${equalizer}</g>
+  <path d="M136 614 C260 292 520 184 792 214" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.12" stroke-width="4" />
+  <path d="M154 650 C340 330 620 288 884 404" fill="none" stroke="${escapeSvgText(theme.c)}" stroke-opacity="0.1" stroke-width="3" />
+  <text x="540" y="78" fill="#e9e7ff" fill-opacity="0.78" font-size="30" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" letter-spacing="${titleTracking}">${escapeSvgText(labels.kicker)}</text>
+  <circle cx="286" cy="68" r="5" fill="${escapeSvgText(theme.c)}" fill-opacity="0.8" />
+  <circle cx="794" cy="68" r="5" fill="${escapeSvgText(theme.c)}" fill-opacity="0.8" />
+
+  <g transform="translate(0 10)">
+    ${mascotSvg}
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="744" y="244" width="282" height="474" rx="32" fill="url(#sidePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.08" />
+    <g transform="translate(790 292)">
+      ${spiritMotifSvg("star", 0, 0, 0.42, theme, 0.94)}
+      <text x="0" y="114" fill="#e9e7ff" fill-opacity="0.72" font-size="25" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.7">${escapeSvgText(labels.liked)}</text>
+      <text x="0" y="180" fill="#ffffff" font-size="70" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(likedCount)}</text>
+      <text x="0" y="220" fill="#d6d3ef" fill-opacity="0.86" font-size="27" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(labels.songs)}</text>
+      <path d="M0 258 H222" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.14" stroke-width="2" />
+      ${spiritMotifSvg(variant?.motif || "star", 0, 292, 0.38, theme, 0.96)}
+      <text x="0" y="396" fill="#e9e7ff" fill-opacity="0.72" font-size="25" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.7">${escapeSvgText(labels.genre)}</text>
+      ${genreLines.map((line, index) => `<text x="0" y="${456 + index * 44}" fill="#ffffff" font-size="${genreLines.length > 1 ? 38 : 44}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+    </g>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="110" y="818" width="860" height="136" rx="38" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
+    <text x="310" y="884" fill="${escapeSvgText(theme.c)}" fill-opacity="0.72" font-size="58" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
+    ${quoteLines.map((line, index) => `<text x="540" y="${876 + index * 38}" fill="#f2f2ff" fill-opacity="0.86" font-size="26" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
+    <text x="770" y="914" fill="${escapeSvgText(theme.c)}" fill-opacity="0.72" font-size="58" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="96" y="112" width="506" height="128" rx="30" fill="#070b24" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
+    <text x="126" y="160" fill="${escapeSvgText(theme.a)}" font-size="22" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="2">${escapeSvgText(labels.spirit)}</text>
+    ${titleLines.map((line, index) => `<text x="126" y="${206 + index * 40}" fill="#ffffff" font-size="${titleLines.length > 1 ? 34 : 38}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+  </g>
+  <g transform="translate(96 724)">
+    <rect x="0" y="0" width="406" height="46" rx="23" fill="${escapeSvgText(theme.c)}" fill-opacity="0.2" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
+    <path d="M28 16 V30 M40 10 V36 M52 18 V28 M64 13 V33" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-linecap="round" opacity="0.86" />
+    <text x="88" y="31" fill="#e8e2ff" font-size="22" font-weight="700" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(styleChips)}</text>
+  </g>
+  <g transform="translate(744 744)">
+    <text x="0" y="0" fill="#cfd5ff" fill-opacity="0.68" font-size="19" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.4">${escapeSvgText(labels.status)}</text>
+    <text x="0" y="35" fill="#ffffff" fill-opacity="0.92" font-size="24" font-weight="800" font-family="Syne, Arial, sans-serif">${escapeSvgText(statusLine)}</text>
+    <text x="0" y="76" fill="#cfd5ff" fill-opacity="0.68" font-size="18" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(discoveredCount)} ${escapeSvgText(labels.discovered)} • ${escapeSvgText(shownCount)} ${escapeSvgText(labels.shown)}</text>
+  </g>
+  <text x="82" y="1016" fill="${escapeSvgText(theme.a)}" fill-opacity="0.74" font-size="20" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.5">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(String(milestoneLikes))} ${escapeSvgText(labels.likes)}</text>
 </svg>`;
 
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;

@@ -5987,16 +5987,19 @@ input[type="range"] {
 .spirit-collectible {
   grid-column: 1 / -1;
   margin-top: 0.35rem;
-  border: 1px solid rgba(123, 221, 255, 0.24);
-  border-left-color: rgba(139, 255, 222, 0.56);
-  border-radius: 18px;
+  border: 1px solid rgba(153, 226, 255, 0.3);
+  border-left-color: rgba(139, 255, 222, 0.62);
+  border-radius: 20px;
   padding: clamp(0.9rem, 1.8vw, 1.15rem);
   background:
-    radial-gradient(circle at 100% 0%, rgba(110, 255, 220, 0.15), transparent 36%),
-    radial-gradient(circle at 0% 100%, rgba(255, 138, 219, 0.1), transparent 36%),
-    linear-gradient(145deg, rgba(8, 24, 48, 0.82), rgba(4, 12, 28, 0.72));
+    radial-gradient(circle at 84% 8%, rgba(143, 120, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 0% 100%, rgba(110, 255, 220, 0.16), transparent 36%),
+    linear-gradient(145deg, rgba(8, 18, 45, 0.9), rgba(4, 8, 24, 0.78));
   display: grid;
   gap: 0.62rem;
+  box-shadow:
+    0 22px 58px rgba(0, 0, 0, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035);
 }
 
 .spirit-collectible-header {
@@ -6008,26 +6011,26 @@ input[type="range"] {
 
 .spirit-collectible-grid {
   display: grid;
-  grid-template-columns: minmax(240px, 0.78fr) minmax(0, 1.22fr);
+  grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
   gap: clamp(0.75rem, 1.6vw, 1rem);
   align-items: start;
 }
 
 .spirit-collectible-image {
   width: 100%;
-  max-width: 440px;
+  max-width: 520px;
   justify-self: center;
-  border-radius: 16px;
-  border: 1px solid rgba(151, 241, 255, 0.42);
+  border-radius: 20px;
+  border: 1px solid rgba(182, 231, 255, 0.44);
   background:
-    radial-gradient(circle at 50% 28%, rgba(126, 255, 224, 0.12), transparent 38%),
+    radial-gradient(circle at 50% 28%, rgba(126, 255, 224, 0.16), transparent 38%),
     rgba(4, 10, 24, 0.92);
   object-fit: contain;
   object-position: center;
   aspect-ratio: 1 / 1;
   box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.3),
-    0 0 42px rgba(98, 242, 255, 0.17);
+    0 24px 62px rgba(0, 0, 0, 0.34),
+    0 0 58px rgba(98, 242, 255, 0.2);
 }
 
 .spirit-collectible-meta {
