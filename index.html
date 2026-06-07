@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607e" />
+    <link rel="stylesheet" href="styles.css?v=20260607g" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -381,6 +381,14 @@
           </div>
           <p id="swipeHeroHint" class="section-hint muted">Curta, troque ou arraste. O gesto vira direção para a próxima faixa.</p>
         </div>
+        <div class="swipe-discovery-strip" aria-labelledby="swipeDeckTitle">
+          <div class="swipe-discovery-copy">
+            <p id="swipeDeckKicker" class="section-kicker">Varredura de gosto</p>
+            <h4 id="swipeDeckTitle">Passe por vários mundos sonoros</h4>
+            <p id="swipeDeckHint" class="muted">Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.</p>
+          </div>
+          <div id="swipeStyleRail" class="swipe-style-rail" aria-label="Rotas rápidas de descoberta"></div>
+        </div>
         <div class="swipe-start-stage">
           <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para avaliar a faixa" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
             <span class="swipe-stamp swipe-stamp-like">Curti</span>
@@ -402,7 +410,7 @@
           </article>
           <div class="swipe-hero-actions">
             <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Trocar</button>
-            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpreender</button>
+            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Começar swipe</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
           </div>
           <p id="topSwipeHint" class="muted swipe-hint">Arraste, curta ou troque. Um gesto já melhora a próxima aposta.</p>
@@ -1249,6 +1257,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607f"></script>
+    <script src="app.js?v=20260607g"></script>
   </body>
 </html>

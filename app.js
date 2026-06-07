@@ -4062,6 +4062,10 @@ const swipeStartPanel = document.getElementById("swipeStartPanel");
 const swipeHeroKicker = document.getElementById("swipeHeroKicker");
 const swipeHeroTitle = document.getElementById("swipeHeroTitle");
 const swipeHeroHint = document.getElementById("swipeHeroHint");
+const swipeDeckKicker = document.getElementById("swipeDeckKicker");
+const swipeDeckTitle = document.getElementById("swipeDeckTitle");
+const swipeDeckHint = document.getElementById("swipeDeckHint");
+const swipeStyleRail = document.getElementById("swipeStyleRail");
 const topSwipeCard = document.getElementById("topSwipeCard");
 const topSwipeImage = document.getElementById("topSwipeImage");
 const topSwipeFallback = document.getElementById("topSwipeFallback");
@@ -4251,6 +4255,17 @@ let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
 const SUGGESTION_QUEUE_TARGET = 5;
+const SWIPE_DISCOVERY_STYLE_DECK = [
+  "liquid_dnb",
+  "uk_garage",
+  "full_on_morning",
+  "hard_techno",
+  "afro_house",
+  "dark_experimental",
+  "ambient",
+  "future_garage",
+  "psycore"
+];
 const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
 let trackInsightCache = new Map();
 let currentTrackInsightTrackKey = "";
@@ -10047,6 +10062,56 @@ function getAllSelectableStyles() {
     .filter(Boolean);
 }
 
+function familyLabelByValue(family = "") {
+  const labels = {
+    psytrance: currentLanguage === "en" ? "psy" : currentLanguage === "es" ? "psy" : "psy",
+    trance: currentLanguage === "en" ? "trance" : currentLanguage === "es" ? "trance" : "trance",
+    techno: "techno",
+    house: "house",
+    dnb: "DnB",
+    bass_music: currentLanguage === "en" ? "bass" : currentLanguage === "es" ? "bass" : "bass",
+    leftfield: currentLanguage === "en" ? "leftfield" : currentLanguage === "es" ? "leftfield" : "leftfield",
+    hard_dance: currentLanguage === "en" ? "hard dance" : currentLanguage === "es" ? "hard dance" : "hard dance"
+  };
+  return labels[family] || family || "";
+}
+
+function styleBpmShortLabel(style = "") {
+  const rule = STYLE_BPM_RULES[style];
+  if (!rule) return t("bpm");
+  const min = Number(rule.min) || 0;
+  const max = Number(rule.max) || 0;
+  if (!min || !max) return t("bpm");
+  if (max >= 220) return `${min}+ BPM`;
+  return `${min}-${max} BPM`;
+}
+
+function renderSwipeStyleRail() {
+  if (!swipeStyleRail) return;
+  const availableStyles = new Set(getAllSelectableStyles());
+  const styles = SWIPE_DISCOVERY_STYLE_DECK.filter((style) => availableStyles.has(style));
+  swipeStyleRail.innerHTML = "";
+  swipeStyleRail.setAttribute("aria-label", t("swipeStyleRailAria"));
+
+  styles.forEach((style) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "swipe-style-pill";
+    button.dataset.swipeStyle = style;
+    button.setAttribute("aria-pressed", styleEl?.value === style ? "true" : "false");
+    if (styleEl?.value === style) button.classList.add("active");
+
+    const label = document.createElement("span");
+    label.textContent = styleLabelByValue(style);
+    const meta = document.createElement("small");
+    const familyLabel = familyLabelByValue(familyOf(style));
+    meta.textContent = [styleBpmShortLabel(style), familyLabel].filter(Boolean).join(" • ");
+
+    button.append(label, meta);
+    swipeStyleRail.appendChild(button);
+  });
+}
+
 async function hydrateCatalogUntilCoverage(style, maxPasses = COVERAGE_MAX_PASSES) {
   const coverage = await ensureStyleCoverageWithTimeout(style, maxPasses);
   return coverage.stats || styleCoverageStats(style);
@@ -10328,20 +10393,27 @@ const I18N = {
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.",
     swipeHeroKicker: "Descoberta por swipe",
-    swipeHeroTitle: "Ouça primeiro. Ensine depois.",
-    swipeHeroHint: "Curta, troque ou arraste. O gesto vira direção para a próxima faixa.",
+    swipeHeroTitle: "O Tinder de tracks e subgêneros.",
+    swipeHeroHint: "Passe por estilos e DJs diferentes. Curtiu, salva o sinal. Não bateu, troca e o radar aprende.",
+    swipeDeckKicker: "Varredura de gosto",
+    swipeDeckTitle: "Passe por vários mundos sonoros",
+    swipeDeckHint: "Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.",
+    swipeStyleRailAria: "Rotas rápidas de descoberta por subgênero",
     swipeKicker: "Swipe da track",
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
-    topSwipeEmptyTitle: "Comece por uma faixa",
-    topSwipeEmptyMeta: "Use Surpreender para cair direto no som, ou ajuste o alvo quando quiser precisão.",
-    topSwipeHint: "Arraste, curta ou troque. Um gesto já melhora a próxima aposta.",
+    topSwipeEmptyTitle: "Toque em Começar swipe",
+    topSwipeEmptyMeta: "O primeiro card já vem de um subgênero diferente. Depois é só curtir ou trocar.",
+    topSwipeHint: "No modo descoberta, cada swipe tenta abrir outro estilo, outro DJ e outra textura.",
+    swipeStartButton: "Começar swipe",
     primarySwipeHint: "Arraste, curta ou troque: o radar entende melhor quando você reage no momento.",
     swipeLike: "Curti",
     swipePass: "Trocar",
-    swipeLikedNext: "Curti essa. Salvei o sinal e já trouxe outra faixa para continuar refinando.",
-    swipePassedNext: "Boa, removi essa rota e trouxe uma opção nova.",
+    swipeLikedNext: "Curti essa. Salvei o sinal e puxei outro universo para comparar.",
+    swipePassedNext: "Boa, removi essa rota e puxei uma carta nova.",
+    swipeStyleDeckGenerated: "Carta aberta em {style}. Curta ou troque para eu calibrar seu mapa.",
+    swipeDeckNext: "Próxima carta: saí de {from} e trouxe {to}.",
     feedbackLikeGroupTitle: "Guardar sinal positivo",
     feedbackCorrectGroupTitle: "Corrigir rota",
     feedbackExploreGroupTitle: "Próximo passo",
@@ -10846,20 +10918,27 @@ const I18N = {
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the radar separates what lands, what tires you out, and what you already know.",
     swipeHeroKicker: "Swipe discovery",
-    swipeHeroTitle: "Listen first. Teach after.",
-    swipeHeroHint: "Like, swap, or drag. The gesture becomes direction for the next track.",
+    swipeHeroTitle: "The Tinder for tracks and subgenres.",
+    swipeHeroHint: "Move through different styles and DJs. Like what lands, swap what misses, and the radar learns.",
+    swipeDeckKicker: "Taste scan",
+    swipeDeckTitle: "Swipe through different sound worlds",
+    swipeDeckHint: "Pick a lane or start free. The deck mixes subgenres and DJs to learn your taste without a questionnaire.",
+    swipeStyleRailAria: "Quick subgenre discovery lanes",
     swipeKicker: "Track swipe",
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
-    topSwipeEmptyTitle: "Start with a track",
-    topSwipeEmptyMeta: "Use Surprise to jump straight into sound, or tune the target when you want precision.",
-    topSwipeHint: "Drag, like, or swap. One gesture already improves the next bet.",
+    topSwipeEmptyTitle: "Tap Start swipe",
+    topSwipeEmptyMeta: "The first card already comes from a different subgenre. Then just like or swap.",
+    topSwipeHint: "In discovery mode, each swipe tries to open another style, another DJ, and another texture.",
+    swipeStartButton: "Start swipe",
     primarySwipeHint: "Drag, like, or swap: the radar understands more when you react in the moment.",
     swipeLike: "Like",
     swipePass: "Swap",
-    swipeLikedNext: "Liked. I saved the signal and brought another track to keep refining.",
-    swipePassedNext: "Good, I removed that route and brought a new option.",
+    swipeLikedNext: "Liked. I saved the signal and pulled another world for comparison.",
+    swipePassedNext: "Good, I removed that route and pulled a new card.",
+    swipeStyleDeckGenerated: "Card opened in {style}. Like or swap so I can calibrate your map.",
+    swipeDeckNext: "Next card: moved from {from} into {to}.",
     feedbackLikeGroupTitle: "Save positive signal",
     feedbackCorrectGroupTitle: "Correct route",
     feedbackExploreGroupTitle: "Next step",
@@ -11364,20 +11443,27 @@ const I18N = {
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que el radar separe lo que conecta, lo que cansa y lo que ya conoces.",
     swipeHeroKicker: "Descubrimiento por swipe",
-    swipeHeroTitle: "Escucha primero. Enseña después.",
-    swipeHeroHint: "Dale me gusta, cambia o arrastra. El gesto se vuelve dirección para la próxima pista.",
+    swipeHeroTitle: "El Tinder de pistas y subgéneros.",
+    swipeHeroHint: "Pasa por estilos y DJs diferentes. Si conecta, guarda la señal. Si no, cambia y el radar aprende.",
+    swipeDeckKicker: "Escaneo de gusto",
+    swipeDeckTitle: "Desliza por varios mundos sonoros",
+    swipeDeckHint: "Elige una ruta o empieza libre. El deck mezcla subgéneros y DJs para entender tu gusto sin cuestionario.",
+    swipeStyleRailAria: "Rutas rápidas de descubrimiento por subgénero",
     swipeKicker: "Swipe de la pista",
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
-    topSwipeEmptyTitle: "Empieza con una pista",
-    topSwipeEmptyMeta: "Usa Sorprender para ir directo al sonido, o ajusta el objetivo cuando quieras precisión.",
-    topSwipeHint: "Arrastra, dale me gusta o cambia. Un gesto ya mejora la próxima apuesta.",
+    topSwipeEmptyTitle: "Toca Empezar swipe",
+    topSwipeEmptyMeta: "La primera carta ya viene de un subgénero distinto. Después solo dale me gusta o cambia.",
+    topSwipeHint: "En modo descubrimiento, cada swipe intenta abrir otro estilo, otro DJ y otra textura.",
+    swipeStartButton: "Empezar swipe",
     primarySwipeHint: "Arrastra, dale me gusta o cambia: el radar entiende más cuando reaccionas en el momento.",
     swipeLike: "Me gusta",
     swipePass: "Cambiar",
-    swipeLikedNext: "Te gustó. Guardé la señal y traje otra pista para seguir refinando.",
-    swipePassedNext: "Bien, saqué esa ruta y traje una opción nueva.",
+    swipeLikedNext: "Te gustó. Guardé la señal y traje otro mundo para comparar.",
+    swipePassedNext: "Bien, saqué esa ruta y traje una carta nueva.",
+    swipeStyleDeckGenerated: "Carta abierta en {style}. Dale me gusta o cambia para calibrar tu mapa.",
+    swipeDeckNext: "Próxima carta: salí de {from} y traje {to}.",
     feedbackLikeGroupTitle: "Guardar señal positiva",
     feedbackCorrectGroupTitle: "Corregir ruta",
     feedbackExploreGroupTitle: "Próximo paso",
@@ -12554,13 +12640,17 @@ function applyLanguage() {
   setText("#swipeHeroKicker", t("swipeHeroKicker"));
   setText("#swipeHeroTitle", t("swipeHeroTitle"));
   setText("#swipeHeroHint", t("swipeHeroHint"));
+  setText("#swipeDeckKicker", t("swipeDeckKicker"));
+  setText("#swipeDeckTitle", t("swipeDeckTitle"));
+  setText("#swipeDeckHint", t("swipeDeckHint"));
+  renderSwipeStyleRail();
   setText("#topSwipeHint", t("topSwipeHint"));
   setText("#swipeKicker", t("swipeKicker"));
   setText("#swipeHint", t("swipeHint"));
   setText("#primarySwipeHint", t("primarySwipeHint"));
   setText("#topSwipeLikeBtn", t("swipeLike"));
   setText("#topSwipePassBtn", t("swipePass"));
-  setText("#topSwipeSurpriseBtn", t("surpriseBtn"));
+  setText("#topSwipeSurpriseBtn", t("swipeStartButton"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
@@ -16237,6 +16327,11 @@ function setRecommendationRunBusy(isBusy) {
   }
   if (smartPresetBar) {
     smartPresetBar.querySelectorAll("button[data-preset]").forEach((button) => {
+      button.disabled = Boolean(isBusy);
+    });
+  }
+  if (swipeStyleRail) {
+    swipeStyleRail.querySelectorAll("button[data-swipe-style]").forEach((button) => {
       button.disabled = Boolean(isBusy);
     });
   }
@@ -24004,7 +24099,7 @@ function updateSwipeFeedbackCard(track) {
   if (primarySwipeHint) primarySwipeHint.textContent = t("primarySwipeHint");
   if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
   if (topSwipePassBtn) topSwipePassBtn.textContent = t("swipePass");
-  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = t("surpriseBtn");
+  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = t("swipeStartButton");
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
@@ -24104,6 +24199,19 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
   if (!lastPrefs) {
     if (feedbackMessage && message) feedbackMessage.textContent = message;
     return false;
+  }
+  const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false;
+  if (shouldExploreAcrossStyles) {
+    const fromStyle = styleLabelByValue(likedTrack?.style || currentRecommendation?.style || lastPrefs?.style || "");
+    const generatedAcrossStyles = await runSurpriseRecommendation();
+    if (generatedAcrossStyles) {
+      const toStyle = styleLabelByValue(currentRecommendation?.style || "");
+      const deckMessage = fromStyle && toStyle
+        ? t("swipeDeckNext", { from: fromStyle, to: toStyle })
+        : message;
+      if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
+      return true;
+    }
   }
   const avoidTrackKey = likedTrack ? `${likedTrack.artist}::${likedTrack.song}` : "";
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
@@ -24345,12 +24453,14 @@ function renderRecommendation(track, prefs) {
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   renderTrackRating(track);
   updateSwipeFeedbackCard(track);
+  renderSwipeStyleRail();
   if (generatedBadge) generatedBadge.textContent = t("generatedNow");
   if (primaryTrackCard) {
     primaryTrackCard.classList.remove("fresh");
     void primaryTrackCard.offsetWidth;
     primaryTrackCard.classList.add("fresh");
-    primaryTrackCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    const focusCard = topSwipeCard || primaryTrackCard;
+    focusCard.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   renderArtistHub(track);
@@ -26480,6 +26590,7 @@ async function runTasteTune(mode = "") {
   styleInfoDismissed = false;
   renderStyleInfoBubble(prefs.style, { reveal: true });
   applyGenreVibeTheme(prefs.style, { force: true });
+  renderSwipeStyleRail();
 
   if (feedbackMessage && label) {
     feedbackMessage.textContent = t("tasteTuneRunning", { label });
@@ -26511,6 +26622,65 @@ async function runTasteTune(mode = "") {
   if (resultPanel) resultPanel.classList.remove("hidden");
   scrollResultPanelIntoView();
   const message = t("tasteTuneGenerated", { label });
+  if (feedbackMessage) feedbackMessage.textContent = message;
+  showToast(message);
+  savePreferences();
+  return true;
+}
+
+async function runSwipeStyleRecommendation(style = "") {
+  const safeStyle = String(style || "").trim();
+  if (!safeStyle || !STYLE_BPM_RULES[safeStyle] || recommendationRunBusy) return false;
+
+  const prefs = {
+    style: safeStyle,
+    context: "",
+    energy: "",
+    bpm: "",
+    vocals: ""
+  };
+
+  if (styleEl) styleEl.value = prefs.style;
+  if (contextEl) contextEl.value = "";
+  if (energyEl) energyEl.value = "";
+  if (bpmEl) bpmEl.value = "";
+  if (vocalsEl) vocalsEl.value = "";
+  if (discoveryModeEl) discoveryModeEl.checked = true;
+  styleInfoDismissed = false;
+  renderStyleInfoBubble(prefs.style, { reveal: true });
+  applyGenreVibeTheme(prefs.style, { force: true });
+  renderSwipeStyleRail();
+
+  const previousTrack = currentRecommendation;
+  const generated = await generateRecommendationWithOverlay(
+    prefs,
+    {
+      resetRejected: false,
+      avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
+      avoidArtistName: previousTrack?.artist || "",
+      allowKnownFallback: false
+    },
+    "catalog"
+  );
+
+  if (!generated) {
+    const fallback = recommendationFailureMessage();
+    if (feedbackMessage) feedbackMessage.textContent = fallback;
+    showToast(fallback);
+    return false;
+  }
+
+  lastPrefs = prefs;
+  if (rerollBtn) rerollBtn.disabled = false;
+  if (eventsPanel) eventsPanel.classList.add("hidden");
+  if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+  if (eventsCalendar) eventsCalendar.innerHTML = "";
+  if (eventsList) eventsList.innerHTML = "";
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
+
+  const message = t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) });
   if (feedbackMessage) feedbackMessage.textContent = message;
   showToast(message);
   savePreferences();
@@ -26697,6 +26867,7 @@ async function runSurpriseRecommendation() {
     if (vocalsEl) vocalsEl.value = surprisePrefs.vocals;
     styleInfoDismissed = false;
     renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
+    renderSwipeStyleRail();
 
     currentRecommendation = surpriseTrack;
     currentDiscovery = discoveryModeEl.checked
@@ -26776,6 +26947,7 @@ async function runAdaptiveSurpriseRecommendation() {
   if (vocalsEl) vocalsEl.value = adaptivePrefs.vocals;
   styleInfoDismissed = false;
   renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
+  renderSwipeStyleRail();
 
   const generated = await generateRecommendationWithOverlay(
     adaptivePrefs,
@@ -26810,6 +26982,7 @@ async function runAdaptiveSurpriseRecommendation() {
   if (vocalsEl) vocalsEl.value = "";
   styleInfoDismissed = false;
   renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
+  renderSwipeStyleRail();
 
   lastPrefs = finalPrefs;
   if (rerollBtn) rerollBtn.disabled = false;
@@ -26861,6 +27034,7 @@ function bindPreferenceAutosave() {
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
         applyGenreVibeTheme(styleEl?.value || "", { force: true });
+        renderSwipeStyleRail();
       }
     });
     bind(control, "input", () => {
@@ -26877,6 +27051,7 @@ function bindPreferenceAutosave() {
         styleInfoDismissed = false;
         renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
         applyGenreVibeTheme(styleEl?.value || "", { force: true });
+        renderSwipeStyleRail();
       }
     });
   });
@@ -27592,6 +27767,13 @@ bind(topSwipeSurpriseBtn, "click", async () => {
   await runSurpriseRecommendation();
 });
 
+bind(swipeStyleRail, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-swipe-style]") : null;
+  if (!target) return;
+  const style = String(target.getAttribute("data-swipe-style") || "").trim();
+  await runSwipeStyleRecommendation(style);
+});
+
 bind(topSwipeCard, "pointerdown", (event) => {
   beginSwipePointer(event, topSwipeCard);
 });
@@ -27838,6 +28020,7 @@ showIntroScreen();
 updateWeightLabels();
 updateVoiceLabUi();
 updateSwipeFeedbackCard(currentRecommendation);
+renderSwipeStyleRail();
 bindPreferenceAutosave();
 ensureAllButtonsHaveAction();
 applyGenreVibeTheme("", { force: true });

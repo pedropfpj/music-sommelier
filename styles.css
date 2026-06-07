@@ -8918,3 +8918,406 @@ iframe {
     max-height: 58px;
   }
 }
+
+/* Swipe-first discovery */
+.swipe-start-panel {
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+.swipe-start-head {
+  align-items: start;
+}
+
+.swipe-start-head h3 {
+  max-width: 16ch;
+  font-size: clamp(1.85rem, 3.8vw, 3.05rem);
+  line-height: 0.96;
+}
+
+.swipe-start-head .section-hint {
+  max-width: 42ch;
+  font-size: clamp(1rem, 1.5vw, 1.14rem);
+  line-height: 1.42;
+}
+
+.swipe-discovery-strip {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.72rem, 1.8vw, 1rem);
+  align-items: stretch;
+  padding: clamp(0.76rem, 1.8vw, 1rem);
+  border: 1px solid rgba(126, 232, 198, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(120deg, rgba(126, 232, 198, 0.12), rgba(138, 199, 255, 0.05) 42%, rgba(255, 255, 255, 0.025)),
+    rgba(8, 13, 19, 0.66);
+}
+
+.swipe-discovery-copy {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.swipe-discovery-copy h4 {
+  margin: 0;
+  color: #f5fbff;
+  font-size: clamp(1.05rem, 2.1vw, 1.55rem);
+  line-height: 1.06;
+}
+
+.swipe-discovery-copy .muted {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.94rem;
+  line-height: 1.38;
+  display: none;
+}
+
+.swipe-style-rail {
+  display: flex;
+  grid-template-columns: none;
+  gap: 0.48rem;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.08rem;
+}
+
+.swipe-style-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.swipe-style-pill {
+  min-width: 0;
+  flex: 0 0 clamp(150px, 29%, 190px);
+  min-height: 68px;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.18rem;
+  border-radius: 8px;
+  padding: 0.62rem 0.68rem;
+  text-align: left;
+  touch-action: manipulation;
+  scroll-snap-align: start;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+    rgba(6, 12, 24, 0.82);
+  border-color: rgba(143, 210, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.swipe-style-pill span,
+.swipe-style-pill small {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.swipe-style-pill span {
+  color: #f3fbff;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(0.94rem, 1.45vw, 1.06rem);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.swipe-style-pill small {
+  color: #9fb5d8;
+  font-size: 0.76rem;
+  line-height: 1.18;
+}
+
+.swipe-style-pill:hover,
+.swipe-style-pill:focus-visible {
+  border-color: rgba(126, 232, 198, 0.64);
+  background:
+    linear-gradient(120deg, rgba(126, 232, 198, 0.2), rgba(138, 199, 255, 0.1)),
+    rgba(8, 15, 28, 0.9);
+}
+
+.swipe-style-pill.active,
+.swipe-style-pill[aria-pressed="true"] {
+  border-color: rgba(126, 232, 198, 0.9);
+  background: linear-gradient(110deg, #7ee8c6, #8ac7ff);
+  box-shadow: 0 12px 26px rgba(126, 232, 198, 0.14);
+}
+
+.swipe-style-pill.active span,
+.swipe-style-pill[aria-pressed="true"] span {
+  color: #06120f;
+}
+
+.swipe-style-pill.active small,
+.swipe-style-pill[aria-pressed="true"] small {
+  color: rgba(6, 18, 15, 0.72);
+}
+
+.swipe-start-stage {
+  width: min(100%, 960px);
+}
+
+.swipe-hero-card {
+  min-height: clamp(390px, 46vw, 520px);
+  border-radius: 12px;
+}
+
+.swipe-hero-copy h4 {
+  max-width: 13ch;
+}
+
+.swipe-hero-copy .muted {
+  font-size: clamp(1rem, 1.65vw, 1.15rem);
+  line-height: 1.36;
+}
+
+.swipe-track-signals span {
+  min-height: 36px;
+  font-size: 0.9rem;
+}
+
+.swipe-hero-actions {
+  gap: 0.62rem;
+}
+
+.swipe-hero-actions button,
+.swipe-action-btn {
+  min-height: 62px;
+  border-radius: 8px;
+  font-size: clamp(1rem, 1.7vw, 1.16rem);
+  touch-action: manipulation;
+}
+
+.swipe-hero-surprise {
+  font-size: clamp(1.06rem, 1.9vw, 1.24rem);
+}
+
+.preference-panel {
+  border-color: rgba(219, 209, 188, 0.13);
+  background: linear-gradient(180deg, rgba(16, 20, 27, 0.82), rgba(8, 11, 16, 0.76));
+}
+
+.preference-panel .section-head {
+  align-items: start;
+}
+
+.preference-panel .section-kicker {
+  color: rgba(126, 232, 198, 0.78);
+}
+
+@media (min-width: 1120px) {
+  .app-shell {
+    width: min(1120px, 92%);
+  }
+}
+
+@media (max-width: 860px) {
+  .swipe-discovery-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .swipe-style-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .swipe-start-panel {
+    padding: 0.82rem;
+  }
+
+  .swipe-start-head h3 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 10vw, 2.9rem);
+  }
+
+  .swipe-discovery-strip {
+    padding: 0.68rem;
+  }
+
+  .swipe-style-rail {
+    gap: 0.4rem;
+  }
+
+  .swipe-style-pill {
+    min-height: 66px;
+    padding: 0.58rem;
+  }
+
+  .swipe-hero-card {
+    min-height: 430px;
+    padding: 0.86rem;
+    gap: 0.76rem;
+  }
+
+  .swipe-hero-art {
+    width: min(52vw, 188px);
+  }
+
+  .swipe-hero-copy h4 {
+    font-size: clamp(2.05rem, 10.6vw, 3.05rem);
+    line-height: 0.96;
+  }
+
+  .swipe-hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .swipe-hero-actions button {
+    min-height: 58px;
+    width: 100%;
+  }
+
+  .swipe-hint {
+    font-size: 0.96rem;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 380px) {
+  .swipe-style-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .swipe-hero-card {
+    min-height: 410px;
+  }
+
+  .swipe-track-signals span {
+    width: 100%;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero.panel {
+    padding: 0.72rem;
+    gap: 0.48rem;
+    border-radius: 10px;
+  }
+
+  .hero-brand {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.52rem;
+    align-items: center;
+  }
+
+  .hero-logo-wrap {
+    width: clamp(104px, 31vw, 132px);
+    min-height: 38px;
+  }
+
+  .hero-logo-mark {
+    max-height: 50px;
+    transform: none;
+  }
+
+  .hero h2 {
+    max-width: 18ch;
+    font-size: clamp(1.28rem, 5.8vw, 1.72rem);
+    line-height: 1;
+  }
+
+  .hero #heroDesc,
+  .hero-slogan,
+  .hero-mission {
+    display: none;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    gap: 0.4rem;
+    align-items: stretch;
+  }
+
+  .hero-help-btn,
+  .audio-toggle {
+    min-height: 44px;
+    width: 100%;
+    justify-content: center;
+    font-size: 0.82rem;
+  }
+
+  .app-tab-bar {
+    position: static;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.18rem;
+    padding: 0.24rem;
+  }
+
+  .app-tab-btn {
+    grid-column: auto;
+    min-height: 46px;
+    padding: 0.28rem 0.18rem;
+    font-size: clamp(0.62rem, 2.55vw, 0.78rem);
+    line-height: 1.05;
+  }
+
+  .app-tab-btn:nth-child(5) {
+    grid-column: auto;
+  }
+
+  .swipe-discovery-strip {
+    gap: 0.56rem;
+  }
+
+  .swipe-discovery-copy h4 {
+    font-size: 1.04rem;
+  }
+
+  .swipe-discovery-copy .muted {
+    display: none;
+  }
+
+  .swipe-style-rail {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0.42rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.08rem;
+  }
+
+  .swipe-style-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swipe-style-pill {
+    flex: 0 0 min(62vw, 178px);
+    min-height: 64px;
+    scroll-snap-align: start;
+  }
+
+  .swipe-hero-card {
+    min-height: 386px;
+  }
+
+  .swipe-hero-actions {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.18fr) minmax(0, 0.92fr);
+    gap: 0.38rem;
+  }
+
+  .swipe-hero-actions button {
+    min-height: 56px;
+    padding-inline: 0.22rem;
+    font-size: clamp(0.78rem, 3.3vw, 0.98rem);
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 380px) {
+  .swipe-style-pill {
+    flex-basis: min(72vw, 188px);
+  }
+
+  .swipe-hero-actions button {
+    font-size: 0.78rem;
+  }
+}
