@@ -8828,3 +8828,62 @@ iframe {
     font-size: 0.58rem;
   }
 }
+
+/* Hero brand prominence */
+.hero-logo-wrap {
+  width: clamp(220px, 16vw, 320px);
+  min-height: 76px;
+  place-items: center;
+  overflow: visible;
+}
+
+.hero-logo-mark {
+  max-height: 104px;
+  transform: scale(1.1);
+  transform-origin: center;
+  filter: drop-shadow(0 12px 28px rgba(49, 236, 223, 0.2));
+}
+
+@media (min-width: 1181px) {
+  .hero-brand {
+    gap: 1.2rem;
+  }
+}
+
+@media (min-width: 781px) and (max-width: 1180px) {
+  .hero-logo-wrap {
+    width: clamp(190px, 24vw, 280px);
+    min-height: 68px;
+  }
+
+  .hero-logo-mark {
+    max-height: 92px;
+  }
+}
+
+@media (max-width: 780px) {
+  .hero-logo-wrap {
+    width: clamp(132px, 36vw, 180px);
+    min-height: 52px;
+  }
+
+  .hero-logo-mark {
+    max-height: 68px;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-brand {
+    gap: 0.62rem;
+  }
+
+  .hero-logo-wrap {
+    width: clamp(118px, 34vw, 146px);
+    min-height: 46px;
+  }
+
+  .hero-logo-mark {
+    max-height: 58px;
+  }
+}
