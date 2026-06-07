@@ -4621,6 +4621,10 @@ const SPIRIT_AVATAR_FALLBACK = "assets/image-bank/png/logos/neonpulse-logo-mark.
 const SPIRIT_COLLECTIBLE_FALLBACK = "assets/image-bank/png/social/share_card_1.png?v=20260223a";
 let currentLanguage = DEFAULT_LANGUAGE;
 let progressStorageReady = false;
+let spiritStoryPreparedAsset = null;
+let spiritStoryPreparedKey = "";
+let spiritStoryPreparePromise = null;
+let spiritStoryPrepareTimer = 0;
 const artistDepthScoreCache = new Map();
 const discoveryArtistStatsCache = new Map();
 
@@ -13312,6 +13316,11 @@ function resetSessionStateInMemory() {
   currentSpiritId = "";
   spiritLastReviewedSongLikes = 0;
   spiritCollectibleBusy = false;
+  spiritStoryPreparedAsset = null;
+  spiritStoryPreparedKey = "";
+  spiritStoryPreparePromise = null;
+  if (spiritStoryPrepareTimer) window.clearTimeout(spiritStoryPrepareTimer);
+  spiritStoryPrepareTimer = 0;
   trackRatings = new Map();
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
@@ -22296,7 +22305,89 @@ function restoreStoryShareButtons() {
   }
 }
 
-async function tryNativeStoryAssetShare(storyAsset) {
+function storyShareCacheKey(imageUrl = "", baseFilename = "") {
+  const imageSignature = String(hashString(String(imageUrl || ""))).trim();
+  return [
+    imageSignature,
+    String(baseFilename || ""),
+    currentLanguage,
+    currentSpiritId || "",
+    totalPositiveLikes(),
+    userStats.likedSongs,
+    userStats.likedArtists,
+    userStats.alreadyKnew,
+    userStats.skipped,
+    discoveredArtistsInApp.size,
+    seenTrackKeysMemory.size,
+    ratingAverageText()
+  ].join("::");
+}
+
+function isLikelyIosShareTarget() {
+  const ua = typeof navigator !== "undefined" ? String(navigator.userAgent || "") : "";
+  const platform = typeof navigator !== "undefined" ? String(navigator.platform || "") : "";
+  const touchMac = platform === "MacIntel" && typeof navigator !== "undefined" && Number(navigator.maxTouchPoints || 0) > 1;
+  return /iPad|iPhone|iPod/i.test(ua) || touchMac;
+}
+
+async function prepareStaticStoryShareAsset(imageUrl = "", baseFilename = "", cacheKey = "") {
+  const preparedKey = cacheKey || storyShareCacheKey(imageUrl, baseFilename);
+  if (spiritStoryPreparedAsset && spiritStoryPreparedKey === preparedKey) return spiritStoryPreparedAsset;
+  if (spiritStoryPreparePromise && spiritStoryPreparedKey === preparedKey) return spiritStoryPreparePromise;
+
+  spiritStoryPreparedKey = preparedKey;
+  spiritStoryPreparePromise = prepareSpiritStoryAsset({
+    imageUrl,
+    baseFilename,
+    preferStatic: true
+  })
+    .then(async (asset) => {
+      if (asset?.storyAssetUrl) {
+        try {
+          asset.preparedFile = await storyAssetFileFromPreparedAsset(asset);
+        } catch (error) {
+          console.warn("Story share file prewarm failed.", error);
+        }
+      }
+      if (spiritStoryPreparedKey === preparedKey) spiritStoryPreparedAsset = asset || null;
+      return asset || null;
+    })
+    .catch((error) => {
+      console.warn("Story share prewarm failed.", error);
+      if (spiritStoryPreparedKey === preparedKey) spiritStoryPreparedAsset = null;
+      return null;
+    })
+    .finally(() => {
+      if (spiritStoryPreparedKey === preparedKey) spiritStoryPreparePromise = null;
+    });
+
+  return spiritStoryPreparePromise;
+}
+
+function scheduleStorySharePrewarm(imageUrl = "", baseFilename = "", delay = 500) {
+  const resolvedImageUrl = resolveStoryShareImageUrl(imageUrl);
+  if (!resolvedImageUrl || resolvedImageUrl === "#") return;
+  const resolvedBaseFilename = resolveStoryShareBaseFilename(resolvedImageUrl, baseFilename);
+  const cacheKey = storyShareCacheKey(resolvedImageUrl, resolvedBaseFilename);
+  if (spiritStoryPreparedAsset && spiritStoryPreparedKey === cacheKey) return;
+  if (spiritStoryPrepareTimer) window.clearTimeout(spiritStoryPrepareTimer);
+  spiritStoryPrepareTimer = window.setTimeout(() => {
+    spiritStoryPrepareTimer = 0;
+    void prepareStaticStoryShareAsset(resolvedImageUrl, resolvedBaseFilename, cacheKey);
+  }, Math.max(0, Number(delay) || 0));
+}
+
+async function storyAssetFileFromPreparedAsset(storyAsset) {
+  if (storyAsset?.preparedFile) return storyAsset.preparedFile;
+  if (!storyAsset?.storyAssetUrl || typeof window.File !== "function") return null;
+  const blob = await spiritCollectibleBlobFromUrl(storyAsset.storyAssetUrl, storyAsset.storyAssetMime);
+  const fileType = blob.type || storyAsset.storyAssetMime || "image/png";
+  const file = new File([blob], storyAsset.filename, { type: fileType });
+  storyAsset.preparedFile = file;
+  return file;
+}
+
+async function tryNativeStoryAssetShare(storyAsset, { includeTextFallback = true } = {}) {
   if (!storyAsset?.storyAssetUrl) return false;
   const canUseNativeFileShare =
     typeof navigator !== "undefined" &&
@@ -22306,23 +22397,33 @@ async function tryNativeStoryAssetShare(storyAsset) {
   if (!canUseNativeFileShare) return false;
 
   try {
-    const blob = await spiritCollectibleBlobFromUrl(storyAsset.storyAssetUrl, storyAsset.storyAssetMime);
-    const fileType = blob.type || storyAsset.storyAssetMime || "image/png";
-    const file = new File([blob], storyAsset.filename, { type: fileType });
-    const sharePayload = {
-      title: "Sonic Search",
-      text: storyAsset.shareText,
-      files: [file]
-    };
+    let file = storyAsset.preparedFile || null;
+    if (!file) file = await storyAssetFileFromPreparedAsset(storyAsset);
+    if (!file) return false;
     const canShareFiles =
       typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] });
 
     if (!canShareFiles) return false;
 
-    await navigator.share(sharePayload);
+    // iOS Safari is much more reliable when file sharing uses the minimal payload.
+    await navigator.share({ files: [file] });
     return true;
   } catch (error) {
     if (error && error.name === "AbortError") throw error;
+    if (!includeTextFallback) return false;
+    try {
+      let file = storyAsset.preparedFile || null;
+      if (!file) file = await storyAssetFileFromPreparedAsset(storyAsset);
+      if (!file) return false;
+      await navigator.share({
+        title: "Sonic Search",
+        text: storyAsset.shareText,
+        files: [file]
+      });
+      return true;
+    } catch (fallbackError) {
+      if (fallbackError && fallbackError.name === "AbortError") throw fallbackError;
+    }
     return false;
   }
 }
@@ -22349,14 +22450,21 @@ async function shareSpiritCollectibleToInstagram({
   }
 
   const resolvedBaseFilename = resolveStoryShareBaseFilename(resolvedImageUrl, baseFilename);
+  const cacheKey = storyShareCacheKey(resolvedImageUrl, resolvedBaseFilename);
+  const preferredStaticAsset =
+    spiritStoryPreparedAsset && spiritStoryPreparedKey === cacheKey
+      ? spiritStoryPreparedAsset
+      : null;
   spiritStoryShareBusy = true;
   if (summaryShareInstagramBtn) summaryShareInstagramBtn.disabled = true;
   if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
   if (triggerButton) triggerButton.textContent = t("spiritCollectibleSharePreparing");
 
-  const storyAsset = await prepareSpiritStoryAsset({
+  const shouldPreferStatic = isLikelyIosShareTarget();
+  const storyAsset = preferredStaticAsset || await prepareSpiritStoryAsset({
     imageUrl: resolvedImageUrl,
-    baseFilename: resolvedBaseFilename
+    baseFilename: resolvedBaseFilename,
+    preferStatic: shouldPreferStatic
   });
   if (!storyAsset?.storyAssetUrl) {
     showToast(t("spiritCollectibleShareNoAsset"));
@@ -22366,15 +22474,11 @@ async function shareSpiritCollectibleToInstagram({
   }
 
   try {
-    let shared = await tryNativeStoryAssetShare(storyAsset);
+    let shared = await tryNativeStoryAssetShare(storyAsset, { includeTextFallback: !shouldPreferStatic });
 
     if (!shared && storyAsset.animated) {
-      const staticStoryAsset = await prepareSpiritStoryAsset({
-        imageUrl: resolvedImageUrl,
-        baseFilename: resolvedBaseFilename,
-        preferStatic: true
-      });
-      shared = await tryNativeStoryAssetShare(staticStoryAsset);
+      const staticStoryAsset = await prepareStaticStoryShareAsset(resolvedImageUrl, resolvedBaseFilename, cacheKey);
+      shared = await tryNativeStoryAssetShare(staticStoryAsset, { includeTextFallback: false });
     }
 
     if (shared) {
@@ -22382,6 +22486,7 @@ async function shareSpiritCollectibleToInstagram({
       return;
     }
 
+    scheduleStorySharePrewarm(resolvedImageUrl, resolvedBaseFilename, 0);
     showToast(t("spiritCollectibleShareFallback"));
   } catch (error) {
     const canceled = error && error.name === "AbortError";
@@ -22389,6 +22494,7 @@ async function shareSpiritCollectibleToInstagram({
       showToast(t("spiritCollectibleShareCanceled"));
       return;
     }
+    scheduleStorySharePrewarm(resolvedImageUrl, resolvedBaseFilename, 0);
     showToast(t("spiritCollectibleShareFallback"));
   } finally {
     spiritStoryShareBusy = false;
@@ -22941,6 +23047,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     spiritCollectibleShareInstagramBtn.dataset.imageUrl = collectible.imageUrl;
     spiritCollectibleShareInstagramBtn.dataset.filename = shareFilename;
   }
+  scheduleStorySharePrewarm(collectible.imageUrl, shareFilename, 350);
   return collectible;
 }
 
@@ -27187,6 +27294,7 @@ function updateStats() {
   updateSpiritProgressText();
   applyGenreVibeTheme();
   scheduleQuizChallengeEvaluation();
+  scheduleStorySharePrewarm(profileStoryFallbackImageUrl(), "", 900);
   saveProgress();
 }
 
