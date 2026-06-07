@@ -1612,6 +1612,11 @@ const LOCAL_TRACK_SEED_BOOST = [
 ];
 
 const ARTIST_GENRE_HINT_OVERRIDES = {
+  alok: {
+    pt: "Brazilian bass / dance-pop / electro house",
+    en: "Brazilian bass / dance-pop / electro house",
+    es: "Brazilian bass / dance-pop / electro house"
+  },
   "evil oil man": {
     pt: "Prog Dark / zenonesque",
     en: "Prog Dark / zenonesque",
@@ -4575,7 +4580,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v14";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v14";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
@@ -5730,6 +5735,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "kliment": ["dark_progressive"],
   "ryanosaurus": ["dark_progressive"],
   "shadow shaman": ["dark_progressive"],
+  "alok": ["electro_house", "bass_house", "house"],
   "dubdogz": ["tech_house", "house"],
   "audio syntax": ["dark_experimental"],
   "audiosyntax": ["dark_experimental"],
@@ -5903,6 +5909,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Netherlands",
     area: "",
     disambiguation: "Bart Skils e um produtor neerlandes ligado ao techno de pista e ao catalogo Drumcode."
+  },
+  "alok": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Alok e um DJ e produtor brasileiro ligado ao Brazilian bass, dance-pop e electro house de alcance global."
   },
   "afrika bambaataa & the soulsonic force": {
     country: "United States",
@@ -6187,6 +6198,7 @@ const ARTIST_CANONICAL_ORIGINS = {
 };
 
 const STYLE_ARTIST_BLOCKLIST = {
+  psy_comercial: ["alok"],
   full_on: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_night: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_morning: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
@@ -6271,6 +6283,7 @@ const STYLE_ARTIST_BLOCKLIST = {
 const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "psycore",
   "psytrance",
+  "psy_comercial",
   "forest_psy",
   "freeform",
   "techno",
@@ -8738,7 +8751,7 @@ function artistAllowedForStyle(style, artistName) {
 }
 
 function requiresSeedAnchorForDynamicStyle(style) {
-  return style === "forest_psy";
+  return style === "forest_psy" || style === "psy_comercial";
 }
 
 function artistSeedAnchoredForStyle(style, artistName) {
@@ -11020,11 +11033,11 @@ const I18N = {
     spiritCollectibleAlt: "Colecionável de {spirit} no marco de {milestone} likes",
     spiritCollectibleRegenerate: "Gerar nova arte",
     spiritCollectibleDownload: "Baixar imagem",
-    spiritCollectibleShareInstagram: "Story animado",
-    spiritCollectibleSharePreparing: "Gerando Story animado...",
+    spiritCollectibleShareInstagram: "Compartilhar Story",
+    spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Gere uma arte do espírito antes de compartilhar.",
     spiritCollectibleShareNativeDone: "Compartilhamento aberto. Escolha Instagram Stories na lista de apps.",
-    spiritCollectibleShareFallback: "Baixei o Story pronto. Abra o Instagram e publique nos Stories.",
+    spiritCollectibleShareFallback: "Não consegui abrir o compartilhamento nativo. Use Baixar imagem só se quiser publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
     spiritCollectibleShareCaption: "Meu espírito musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {shown} apresentadas | Já conhecia {known}",
@@ -11591,11 +11604,11 @@ const I18N = {
     spiritCollectibleAlt: "{spirit} collectible at {milestone} likes milestone",
     spiritCollectibleRegenerate: "Generate new art",
     spiritCollectibleDownload: "Download image",
-    spiritCollectibleShareInstagram: "Animated Story",
-    spiritCollectibleSharePreparing: "Creating animated Story...",
+    spiritCollectibleShareInstagram: "Share Story",
+    spiritCollectibleSharePreparing: "Preparing Story...",
     spiritCollectibleShareNoAsset: "Generate spirit artwork before sharing.",
     spiritCollectibleShareNativeDone: "Share sheet opened. Choose Instagram Stories in the app list.",
-    spiritCollectibleShareFallback: "Story file downloaded. Open Instagram and post it to your Story.",
+    spiritCollectibleShareFallback: "I could not open native sharing. Use Download image only if you want to post manually.",
     spiritCollectibleShareCanceled: "Share canceled.",
     spiritCollectibleShareCaption: "My musical spirit on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {shown} shown | Already knew {known}",
@@ -12162,11 +12175,11 @@ const I18N = {
     spiritCollectibleAlt: "Coleccionable de {spirit} en el hito de {milestone} likes",
     spiritCollectibleRegenerate: "Generar nueva obra",
     spiritCollectibleDownload: "Descargar imagen",
-    spiritCollectibleShareInstagram: "Story animado",
-    spiritCollectibleSharePreparing: "Creando Story animado...",
+    spiritCollectibleShareInstagram: "Compartir Story",
+    spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Genera una obra del espíritu antes de compartir.",
     spiritCollectibleShareNativeDone: "Compartir abierto. Elige Instagram Stories en la lista de apps.",
-    spiritCollectibleShareFallback: "Story listo descargado. Abre Instagram y publícalo en Stories.",
+    spiritCollectibleShareFallback: "No pude abrir el compartir nativo. Usa Descargar imagen solo si quieres publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
     spiritCollectibleShareCaption: "Mi espíritu musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {shown} presentadas | Ya conocías {known}",
@@ -22134,7 +22147,7 @@ async function buildSpiritStoryShareVideo({
   };
 }
 
-async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}) {
+async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "", preferStatic = false } = {}) {
   const safeImageUrl = String(imageUrl || "").trim();
   if (!safeImageUrl || safeImageUrl === "#") return null;
 
@@ -22156,16 +22169,18 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "" } = {}
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritImageSource, spiritMime);
   const { mime } = collectibleImageMeta(safeImageUrl);
   const sourceImageDataUrl = await collectibleImageAsDataUrl(safeImageUrl, mime);
-  const storyVideo = await buildSpiritStoryShareVideo({
-    baseImageDataUrl: sourceImageDataUrl || safeImageUrl,
-    spiritImageDataUrl,
-    spiritText,
-    snapshot,
-    likes,
-    milestoneLikes: milestone.likes,
-    detailsLine,
-    genreSummary
-  });
+  const storyVideo = preferStatic
+    ? null
+    : await buildSpiritStoryShareVideo({
+      baseImageDataUrl: sourceImageDataUrl || safeImageUrl,
+      spiritImageDataUrl,
+      spiritText,
+      snapshot,
+      likes,
+      milestoneLikes: milestone.likes,
+      detailsLine,
+      genreSummary
+    });
   const shareCaption = t("spiritCollectibleShareCaption", {
     spirit: spiritText?.name || t("spiritBadge")
   });
@@ -22281,6 +22296,37 @@ function restoreStoryShareButtons() {
   }
 }
 
+async function tryNativeStoryAssetShare(storyAsset) {
+  if (!storyAsset?.storyAssetUrl) return false;
+  const canUseNativeFileShare =
+    typeof navigator !== "undefined" &&
+    typeof navigator.share === "function" &&
+    typeof window.File === "function";
+
+  if (!canUseNativeFileShare) return false;
+
+  try {
+    const blob = await spiritCollectibleBlobFromUrl(storyAsset.storyAssetUrl, storyAsset.storyAssetMime);
+    const fileType = blob.type || storyAsset.storyAssetMime || "image/png";
+    const file = new File([blob], storyAsset.filename, { type: fileType });
+    const sharePayload = {
+      title: "Sonic Search",
+      text: storyAsset.shareText,
+      files: [file]
+    };
+    const canShareFiles =
+      typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] });
+
+    if (!canShareFiles) return false;
+
+    await navigator.share(sharePayload);
+    return true;
+  } catch (error) {
+    if (error && error.name === "AbortError") throw error;
+    return false;
+  }
+}
+
 async function shareSpiritCollectibleToInstagram({
   triggerButton = spiritCollectibleShareInstagramBtn,
   imageUrl = "",
@@ -22320,27 +22366,15 @@ async function shareSpiritCollectibleToInstagram({
   }
 
   try {
-    let shared = false;
-    const canUseNativeShare =
-      typeof navigator !== "undefined" &&
-      typeof navigator.share === "function" &&
-      typeof window.File === "function";
+    let shared = await tryNativeStoryAssetShare(storyAsset);
 
-    if (canUseNativeShare) {
-      const blob = await spiritCollectibleBlobFromUrl(storyAsset.storyAssetUrl, storyAsset.storyAssetMime);
-      const fileType = blob.type || storyAsset.storyAssetMime || "image/png";
-      const file = new File([blob], storyAsset.filename, { type: fileType });
-      const canShareFiles =
-        typeof navigator.canShare !== "function" || navigator.canShare({ files: [file] });
-
-      if (canShareFiles) {
-        await navigator.share({
-          title: "Sonic Search",
-          text: storyAsset.shareText,
-          files: [file]
-        });
-        shared = true;
-      }
+    if (!shared && storyAsset.animated) {
+      const staticStoryAsset = await prepareSpiritStoryAsset({
+        imageUrl: resolvedImageUrl,
+        baseFilename: resolvedBaseFilename,
+        preferStatic: true
+      });
+      shared = await tryNativeStoryAssetShare(staticStoryAsset);
     }
 
     if (shared) {
@@ -22348,7 +22382,6 @@ async function shareSpiritCollectibleToInstagram({
       return;
     }
 
-    triggerSpiritCollectibleDownload(storyAsset.storyAssetUrl, storyAsset.filename);
     showToast(t("spiritCollectibleShareFallback"));
   } catch (error) {
     const canceled = error && error.name === "AbortError";
@@ -22356,7 +22389,6 @@ async function shareSpiritCollectibleToInstagram({
       showToast(t("spiritCollectibleShareCanceled"));
       return;
     }
-    triggerSpiritCollectibleDownload(storyAsset.storyAssetUrl, storyAsset.filename);
     showToast(t("spiritCollectibleShareFallback"));
   } finally {
     spiritStoryShareBusy = false;
