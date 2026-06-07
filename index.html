@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607o" />
+    <link rel="stylesheet" href="styles.css?v=20260607p" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -412,6 +412,17 @@
             <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Trocar</button>
             <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Começar swipe</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
+          </div>
+          <div class="quick-known-panel hidden" data-quick-known-panel>
+            <div class="quick-known-copy">
+              <p class="quick-known-kicker" data-quick-known-kicker>Status rápido</p>
+              <p class="quick-known-question" data-quick-known-question>Este artista já estava no seu radar?</p>
+              <p class="quick-known-hint" data-quick-known-hint>Toque antes da próxima faixa para separar conhecido de descoberta real.</p>
+            </div>
+            <div class="quick-known-actions">
+              <button class="quick-known-btn known" type="button" data-quick-known-action="yes">Já conhecia</button>
+              <button class="quick-known-btn new" type="button" data-quick-known-action="no">Novidade pra mim</button>
+            </div>
           </div>
           <p id="topSwipeHint" class="muted swipe-hint">Arraste, curta ou troque. Um gesto já melhora a próxima aposta.</p>
         </div>
@@ -872,6 +883,17 @@
               <button id="swipePassBtn" class="swipe-action-btn pass" type="button" aria-label="Não curti, trocar faixa">Trocar</button>
               <button id="swipeLikeBtn" class="swipe-action-btn like" type="button" aria-label="Curti, salvar no perfil">Curti</button>
             </div>
+            <div class="quick-known-panel hidden" data-quick-known-panel>
+              <div class="quick-known-copy">
+                <p class="quick-known-kicker" data-quick-known-kicker>Status rápido</p>
+                <p class="quick-known-question" data-quick-known-question>Este artista já estava no seu radar?</p>
+                <p class="quick-known-hint" data-quick-known-hint>Toque antes da próxima faixa para separar conhecido de descoberta real.</p>
+              </div>
+              <div class="quick-known-actions">
+                <button class="quick-known-btn known" type="button" data-quick-known-action="yes">Já conhecia</button>
+                <button class="quick-known-btn new" type="button" data-quick-known-action="no">Novidade pra mim</button>
+              </div>
+            </div>
             <p id="swipeHint" class="muted swipe-hint">Também funciona com mouse ou dedo: arraste o card e solte.</p>
           </div>
           <div class="feedback-refinement-layout">
@@ -1293,6 +1315,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607q"></script>
+    <script src="app.js?v=20260607r"></script>
   </body>
 </html>

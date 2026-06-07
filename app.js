@@ -4203,6 +4203,11 @@ const topSwipePassBtn = document.getElementById("topSwipePassBtn");
 const topSwipeSurpriseBtn = document.getElementById("topSwipeSurpriseBtn");
 const topSwipeLikeBtn = document.getElementById("topSwipeLikeBtn");
 const topSwipeHint = document.getElementById("topSwipeHint");
+const quickKnownPanels = Array.from(document.querySelectorAll("[data-quick-known-panel]"));
+const quickKnownKickers = Array.from(document.querySelectorAll("[data-quick-known-kicker]"));
+const quickKnownQuestions = Array.from(document.querySelectorAll("[data-quick-known-question]"));
+const quickKnownHints = Array.from(document.querySelectorAll("[data-quick-known-hint]"));
+const quickKnownActionButtons = Array.from(document.querySelectorAll("[data-quick-known-action]"));
 const suggestionQueueCard = document.getElementById("suggestionQueueCard");
 const suggestionQueueTitle = document.getElementById("suggestionQueueTitle");
 const suggestionQueueHint = document.getElementById("suggestionQueueHint");
@@ -4358,6 +4363,7 @@ let recommendationMemoryQueue = [];
 let servedTrackCycleByStyle = new Map();
 let servedArtistCycleByStyle = new Map();
 let lastRejectedTrackKey = "";
+let pendingQuickKnownAdvance = null;
 let catalogWarmupRunning = false;
 let searchOverlayLocks = 0;
 let searchProgressTimer = 0;
@@ -10552,6 +10558,13 @@ const I18N = {
     topSwipeEmptyMeta: "O primeiro card já vem de um subgênero diferente. Depois é só curtir ou trocar.",
     topSwipeHint: "No modo descoberta, cada swipe tenta abrir outro estilo, outro DJ e outra textura.",
     swipeStartButton: "Começar swipe",
+    quickKnownKicker: "Status rápido",
+    quickKnownQuestion: "Este artista já estava no seu radar?",
+    quickKnownArtistQuestion: "{artist} já estava no seu radar?",
+    quickKnownHint: "Toque antes da próxima faixa para separar conhecido de descoberta real.",
+    quickKnownPendingNext: "Antes da próxima carta: {artist} já era conhecido ou é novidade?",
+    quickKnownYes: "Já conhecia",
+    quickKnownNo: "Novidade pra mim",
     primarySwipeHint: "Arraste, curta ou troque: o radar entende melhor quando você reage no momento.",
     swipeLike: "Curti",
     swipePass: "Trocar",
@@ -10913,7 +10926,7 @@ const I18N = {
     noUnknownOption: "Não achei outra opção desconhecida com esse perfil no catálogo local agora.",
     swappedUnknown: "Beleza. Troquei para outra sugestão parecida que você provavelmente ainda não conhece.",
     toastFoundNewArtist: "Perfeito. Busquei outro artista para você descobrir.",
-    newArtistDetected: "Top. Artista novo identificado. Avalie no preview logo abaixo para eu aprender seu gosto.",
+    newArtistDetected: "Top. Marquei como descoberta nova e salvei esse sinal no seu perfil.",
     toastNewDiscovery: "Que bom! Descoberta nova desbloqueada.",
     prioritizeSimilar: "Perfeito. Vou priorizar sons parecidos e abrir agenda do artista.",
     toastShowMoreLikeThis: "Que bom que gostou! Vou te mostrar mais nessa linha.",
@@ -11113,6 +11126,13 @@ const I18N = {
     topSwipeEmptyMeta: "The first card already comes from a different subgenre. Then just like or swap.",
     topSwipeHint: "In discovery mode, each swipe tries to open another style, another DJ, and another texture.",
     swipeStartButton: "Start swipe",
+    quickKnownKicker: "Quick status",
+    quickKnownQuestion: "Was this artist already on your radar?",
+    quickKnownArtistQuestion: "Was {artist} already on your radar?",
+    quickKnownHint: "Tap before the next track to separate known names from real discoveries.",
+    quickKnownPendingNext: "Before the next card: did you already know {artist}, or is it new?",
+    quickKnownYes: "Already knew",
+    quickKnownNo: "New to me",
     primarySwipeHint: "Drag, like, or swap: the radar understands more when you react in the moment.",
     swipeLike: "Like",
     swipePass: "Swap",
@@ -11474,7 +11494,7 @@ const I18N = {
     noUnknownOption: "I could not find another unknown option for this profile right now.",
     swappedUnknown: "Done. Switched to a similar suggestion you probably do not know yet.",
     toastFoundNewArtist: "Great. I searched another artist for you to discover.",
-    newArtistDetected: "Nice. New artist detected. Rate the preview below so I can learn your taste.",
+    newArtistDetected: "Nice. I marked this as a new discovery and saved the signal to your profile.",
     toastNewDiscovery: "Great! New discovery unlocked.",
     prioritizeSimilar: "Perfect. I will prioritize similar sounds and load artist events.",
     toastShowMoreLikeThis: "Great that you liked it. I will show more in this direction.",
@@ -11674,6 +11694,13 @@ const I18N = {
     topSwipeEmptyMeta: "La primera carta ya viene de un subgénero distinto. Después solo dale me gusta o cambia.",
     topSwipeHint: "En modo descubrimiento, cada swipe intenta abrir otro estilo, otro DJ y otra textura.",
     swipeStartButton: "Empezar swipe",
+    quickKnownKicker: "Estado rápido",
+    quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
+    quickKnownArtistQuestion: "¿{artist} ya estaba en tu radar?",
+    quickKnownHint: "Toca antes de la próxima pista para separar conocidos de descubrimientos reales.",
+    quickKnownPendingNext: "Antes de la próxima carta: ¿ya conocías a {artist} o es novedad?",
+    quickKnownYes: "Ya conocía",
+    quickKnownNo: "Novedad para mí",
     primarySwipeHint: "Arrastra, dale me gusta o cambia: el radar entiende más cuando reaccionas en el momento.",
     swipeLike: "Me gusta",
     swipePass: "Cambiar",
@@ -12035,7 +12062,7 @@ const I18N = {
     noUnknownOption: "No encontré otra opción desconocida para este perfil por ahora.",
     swappedUnknown: "Listo. Cambié a otra sugerencia similar que probablemente no conocías.",
     toastFoundNewArtist: "Perfecto. Busqué otro artista para que descubras.",
-    newArtistDetected: "Excelente. Artista nuevo detectado. Evalúa el preview para aprender tu gusto.",
+    newArtistDetected: "Excelente. Lo marqué como descubrimiento nuevo y guardé la señal en tu perfil.",
     toastNewDiscovery: "Qué bueno. Nuevo descubrimiento desbloqueado.",
     prioritizeSimilar: "Perfecto. Priorizaré sonidos parecidos y abriré eventos del artista.",
     toastShowMoreLikeThis: "Qué bueno que te gustó. Te mostraré más en esa línea.",
@@ -12904,6 +12931,7 @@ function applyLanguage() {
   setText("#topSwipeSurpriseBtn", t("swipeStartButton"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
+  syncQuickKnownDecision(currentRecommendation);
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
   setText("#feedbackCorrectGroupTitle", t("feedbackCorrectGroupTitle"));
   setText("#feedbackExploreGroupTitle", t("feedbackExploreGroupTitle"));
@@ -13314,6 +13342,7 @@ function resetSessionUiState() {
   }
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
+  pendingQuickKnownAdvance = null;
   if (feedbackMessage) feedbackMessage.textContent = "";
   updateSwipeFeedbackCard(null);
   if (statsLine) statsLine.textContent = t("defaultStats");
@@ -24991,6 +25020,100 @@ function renderTopSwipeArtwork(track) {
   topSwipeImage.classList.remove("hidden");
 }
 
+function quickKnownDecisionForTrack(track) {
+  const artist = String(track?.artist || "").trim();
+  if (!artist) return "";
+  if (artistSetHasMatch(knownArtistsMemory, artist)) return "yes";
+  if (artistSetHasMatch(discoveredArtistsInApp, artist)) return "no";
+  return "";
+}
+
+function quickKnownDisplayTrack(track = currentRecommendation) {
+  if (arguments.length > 0 && track === null) return pendingQuickKnownAdvance?.track || null;
+  return pendingQuickKnownAdvance?.track || track || currentRecommendation || null;
+}
+
+function syncQuickKnownDecision(track = currentRecommendation) {
+  const displayTrack = quickKnownDisplayTrack(track);
+  const hasTrack = Boolean(displayTrack?.artist);
+  const status = hasTrack ? quickKnownDecisionForTrack(displayTrack) : "";
+  const artist = hasTrack
+    ? formatSummaryArtistName(displayTrack.artist) || String(displayTrack.artist || "").trim()
+    : "";
+
+  quickKnownKickers.forEach((el) => {
+    el.textContent = t("quickKnownKicker");
+  });
+  quickKnownQuestions.forEach((el) => {
+    el.textContent = artist
+      ? t("quickKnownArtistQuestion", { artist })
+      : t("quickKnownQuestion");
+  });
+  quickKnownHints.forEach((el) => {
+    const fallbackArtist = currentLanguage === "en" ? "this artist" : currentLanguage === "es" ? "este artista" : "este artista";
+    el.textContent = pendingQuickKnownAdvance
+      ? t("quickKnownPendingNext", { artist: artist || fallbackArtist })
+      : t("quickKnownHint");
+  });
+  quickKnownPanels.forEach((panel) => {
+    panel.classList.toggle("hidden", !hasTrack);
+    panel.classList.toggle("is-pending", Boolean(hasTrack && pendingQuickKnownAdvance));
+    panel.classList.toggle("is-answered", Boolean(hasTrack && status));
+  });
+  quickKnownActionButtons.forEach((button) => {
+    const action = button.dataset.quickKnownAction || "";
+    button.textContent = action === "yes" ? t("quickKnownYes") : t("quickKnownNo");
+    button.disabled = !hasTrack || Boolean(status);
+    button.classList.toggle("active", Boolean(status && status === action));
+    button.setAttribute("aria-pressed", status && status === action ? "true" : "false");
+  });
+}
+
+function scrollQuickKnownPanelIntoView() {
+  const target = quickKnownPanels.find((panel) => panel && !panel.classList.contains("hidden"));
+  if (!target) return;
+  const rect = target.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  const fullyVisible = rect.top >= 84 && rect.bottom <= viewportHeight - 84;
+  if (fullyVisible) return;
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  window.setTimeout(() => {
+    target.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "center"
+    });
+  }, 60);
+}
+
+function stageQuickKnownAdvance({ track, likedTrack = null, avoidArtistName = "", message = "" } = {}) {
+  if (!track?.artist || quickKnownDecisionForTrack(track)) return false;
+  pendingQuickKnownAdvance = {
+    track,
+    likedTrack: likedTrack || track,
+    avoidArtistName,
+    message
+  };
+  if (feedbackMessage) {
+    const artist = formatSummaryArtistName(track.artist) || track.artist;
+    feedbackMessage.textContent = t("quickKnownPendingNext", { artist });
+  }
+  syncQuickKnownDecision(track);
+  scrollQuickKnownPanelIntoView();
+  return true;
+}
+
+async function continuePendingQuickKnownAdvance(pending = pendingQuickKnownAdvance) {
+  if (!pending) return false;
+  pendingQuickKnownAdvance = null;
+  syncQuickKnownDecision(currentRecommendation);
+  if (!lastPrefs) return false;
+  return advanceAfterSwipeFeedback({
+    likedTrack: pending.likedTrack || pending.track,
+    avoidArtistName: pending.avoidArtistName || "",
+    message: pending.message || ""
+  });
+}
+
 function updateSwipeFeedbackCard(track) {
   resetSwipeCardPosition();
   const hasTrack = Boolean(track);
@@ -25024,6 +25147,7 @@ function updateSwipeFeedbackCard(track) {
     if (swipeEnergyChip) swipeEnergyChip.textContent = t("freeEnergy");
     if (swipeLikeBtn) swipeLikeBtn.disabled = true;
     if (swipePassBtn) swipePassBtn.disabled = true;
+    syncQuickKnownDecision(null);
     return;
   }
 
@@ -25048,6 +25172,7 @@ function updateSwipeFeedbackCard(track) {
   if (swipeEnergyChip) swipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
   if (swipeLikeBtn) swipeLikeBtn.disabled = false;
   if (swipePassBtn) swipePassBtn.disabled = false;
+  syncQuickKnownDecision(track);
 }
 
 function swipeThresholds(element) {
@@ -25143,11 +25268,20 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
   showToast(t("toastSongLiked"));
   updateStats();
-  await runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
+  const followups = runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
     eventsArtist: likedTrack.artist
   });
+  if (stageQuickKnownAdvance({
+    track: likedTrack,
+    likedTrack,
+    message: t("swipeLikedNext")
+  })) {
+    void followups.catch(() => {});
+    return true;
+  }
+  await followups;
   await advanceAfterSwipeFeedback({
     likedTrack,
     message: t("swipeLikedNext")
@@ -25164,10 +25298,21 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
     avoidRepeatArtist: true
   });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
+  const reasonMessage = feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext");
+  if (stageQuickKnownAdvance({
+    track: rejectedTrack,
+    likedTrack: rejectedTrack,
+    avoidArtistName: rejectedTrack.artist || "",
+    message: reasonMessage
+  })) {
+    playUiSfx("dislike");
+    updateStats();
+    return true;
+  }
   const generated = await advanceAfterSwipeFeedback({
     likedTrack: rejectedTrack,
     avoidArtistName: rejectedTrack.artist || "",
-    message: feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext")
+    message: reasonMessage
   });
   playUiSfx("dislike");
   if (generated) showToast(t("toastSwapped"));
@@ -25293,6 +25438,7 @@ function beginSwipePointer(event, element) {
 
 function renderRecommendation(track, prefs) {
   setActiveAppTab("discover");
+  pendingQuickKnownAdvance = null;
   const meta = getTrackMetadata(track);
   const displayLabel = sanitizeLabel(track.label, track.artist, track.song);
 
@@ -28681,17 +28827,22 @@ bind(clearFiltersBtn, "click", () => {
 
 bind(resetAppBtn, "click", resetAppAsNewUser);
 
-bind(knownYesBtn, "click", async () => {
+async function handleKnownArtistYes() {
   if (!currentRecommendation || !lastPrefs) return;
 
   const artistKey = artistMatchKey(currentRecommendation.artist);
   const trackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
   const knownTrackTitle = normalizeTitle(currentRecommendation.song);
+  const alreadyMarkedKnown = artistSetHasMatch(knownArtistsMemory, currentRecommendation.artist);
+  pendingQuickKnownAdvance = null;
   addArtistIdentityToSet(knownArtistsMemory, currentRecommendation.artist);
   if (knownTrackTitle) knownTrackTitlesMemory.add(knownTrackTitle);
   addArtistIdentityToSet(rejectedArtists, currentRecommendation.artist);
+  if (!alreadyMarkedKnown) userStats.alreadyKnew += 1;
   syncKnownArtistsTextarea(currentRecommendation.artist);
   saveProgress();
+  syncQuickKnownDecision(currentRecommendation);
+  updateStats();
 
   let generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
@@ -28706,6 +28857,7 @@ bind(knownYesBtn, "click", async () => {
     if (resultPanel) resultPanel.classList.add("hidden");
     if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
     if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
+    syncQuickKnownDecision(null);
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
     showToast(recommendationFailureMessage());
     return;
@@ -28726,6 +28878,7 @@ bind(knownYesBtn, "click", async () => {
       if (resultPanel) resultPanel.classList.add("hidden");
       if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
       if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
+      syncQuickKnownDecision(null);
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
       return;
@@ -28738,6 +28891,7 @@ bind(knownYesBtn, "click", async () => {
     if (resultPanel) resultPanel.classList.add("hidden");
     if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
     if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
+    syncQuickKnownDecision(null);
     if (feedbackMessage) {
       feedbackMessage.textContent = t("noUnknownOption");
     }
@@ -28752,19 +28906,42 @@ bind(knownYesBtn, "click", async () => {
   playUiSfx("swap");
   if (!knownSwapFallback) showToast(t("toastFoundNewArtist"));
   savePreferences();
-});
+}
 
-bind(knownNoBtn, "click", () => {
+function handleKnownArtistNo(triggerEl = knownNoBtn) {
   if (!currentRecommendation) return;
   registerDiscoveredArtist(currentRecommendation.artist);
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.remove("hidden");
-  burstConfetti(knownNoBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
+  burstConfetti(triggerEl || knownNoBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
   if (feedbackMessage) {
     feedbackMessage.textContent = t("newArtistDetected");
   }
   playUiSfx("like");
   updateStats();
   showToast(t("toastNewDiscovery"));
+  const pending = pendingQuickKnownAdvance;
+  pendingQuickKnownAdvance = null;
+  syncQuickKnownDecision(currentRecommendation);
+  if (pending) void continuePendingQuickKnownAdvance(pending);
+}
+
+bind(knownYesBtn, "click", handleKnownArtistYes);
+bind(knownNoBtn, "click", () => {
+  handleKnownArtistNo(knownNoBtn);
+});
+
+quickKnownPanels.forEach((panel) => {
+  bind(panel, "click", async (event) => {
+    const target = event.target instanceof Element
+      ? event.target.closest("[data-quick-known-action]")
+      : null;
+    if (!target || target.disabled) return;
+    if (target.dataset.quickKnownAction === "yes") {
+      await handleKnownArtistYes();
+      return;
+    }
+    handleKnownArtistNo(target);
+  });
 });
 
 starButtons.forEach((button) => {
