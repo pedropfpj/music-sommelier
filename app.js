@@ -988,6 +988,124 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistProfileHint: "Artista do eixo dark experimental/psycore com material de alta velocidade em catalogos independentes."
   },
   {
+    style: "psycore",
+    artist: "Alpscore & Crone",
+    song: "Vitamin AlpsCrone",
+    label: "Naturaiz Records",
+    bpmExact: 200,
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/alpscore-crone-vitamin-alpscrone-200bpm",
+    existenceVerified: true,
+    soundcloudVerified: true,
+    artistGenre: "Naturaiz / Psycore / Hi-Tech",
+    artistProfileHint: "Colaboracao rapida publicada pela Naturaiz, com BPM declarado no titulo e sinal direto de psycore.",
+    artistBio: "Alpscore e Crone entram como rota extrema para quem quer velocidade, recorte seco e assinatura de pista underground.",
+    labelBio: "Naturaiz Records ajuda a mapear releases independentes de psycore e dark experimental fora dos catalogos comerciais."
+  },
+  {
+    style: "psycore",
+    artist: "Astral Labyrinth",
+    song: "Cortexus",
+    label: "Naturaiz Records",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/astral-labyrinth-cortexus",
+    existenceVerified: true,
+    soundcloudVerified: true,
+    artistGenre: "Naturaiz / Psycore / Darkpsy",
+    artistProfileHint: "Faixa publicada pela Naturaiz com sinal de darkpsy/psycore e foco em alta intensidade.",
+    artistBio: "Astral Labyrinth reforca o lado sombrio do psycore, com camadas densas e pressao constante.",
+    labelBio: "Naturaiz Records aparece como fonte complementar para artistas experimentais de alta velocidade."
+  },
+  {
+    style: "psycore",
+    artist: "Nall'um",
+    song: "Brasa e Reza",
+    label: "Naturaiz Records",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/brasa-e-reza-1",
+    existenceVerified: true,
+    soundcloudVerified: true,
+    artistCountry: "Brazil",
+    artistGenre: "Naturaiz / Psycore / Dark experimental",
+    artistProfileHint: "Projeto brasileiro em faixa publicada pela Naturaiz, util para ampliar variedade nacional no psycore.",
+    artistBio: "Nall'um traz uma leitura brasileira e ritualistica do eixo rapido, com textura escura e energia fisica.",
+    labelBio: "Naturaiz Records conecta recortes brasileiros de psycore, dark experimental e psicodelia extrema."
+  },
+  {
+    style: "psycore",
+    artist: "Nall'um",
+    song: "Pururuca dos Milagres",
+    label: "Naturaiz Records",
+    soundcloudTrackUrl: "https://soundcloud.com/naturaiz/pururuca-dos-milagres",
+    existenceVerified: true,
+    soundcloudVerified: true,
+    artistCountry: "Brazil",
+    artistGenre: "Naturaiz / Psycore / Dark experimental",
+    artistProfileHint: "Mais uma rota de Nall'um para evitar repeticao curta dentro do subgenero.",
+    artistBio: "Nall'um amplia o mapa psycore com linguagem brasileira, percussao nervosa e ambiencia subterranea.",
+    labelBio: "Naturaiz Records fortalece a descoberta de artistas nacionais fora do radar comercial."
+  },
+  {
+    style: "psycore",
+    artist: "ALPSCORE & INFRA",
+    song: "Contra Naturam (210)",
+    label: "Voodoo Hoodoo Records",
+    bpmExact: 210,
+    bandcampUrl: "https://voodoo-hoodoo.bandcamp.com/album/vital-prognosis",
+    bandcampTrackUrl: "https://voodoo-hoodoo.bandcamp.com/track/contra-naturam-210",
+    bandcampTrackId: "961878808",
+    existenceVerified: true,
+    spotifyVerified: false,
+    artistGenre: "Voodoo Hoodoo / Psycore",
+    artistProfileHint: "Bandcamp verificado com trackId embutido e BPM 210 declarado no titulo.",
+    artistBio: "ALPSCORE e INFRA entregam psycore de pico, com andamento extremo e desenho agressivo.",
+    labelBio: "Voodoo Hoodoo Records e um selo independente usado como fonte para faixas extremas e verificaveis no Bandcamp."
+  },
+  {
+    style: "psycore",
+    artist: "MINDPLAX feat. PSYKOVSKY",
+    song: "The Cut",
+    label: "MINDPLAX",
+    bandcampUrl: "https://mindplax.bandcamp.com/album/mindplax-nxtlv",
+    bandcampTrackUrl: "https://mindplax.bandcamp.com/track/the-cut",
+    bandcampTrackId: "2636110364",
+    existenceVerified: true,
+    spotifyVerified: false,
+    artistGenre: "Bandcamp / Psycore",
+    artistProfileHint: "Bandcamp verificado com tag de Psycore e player publico embutido.",
+    artistBio: "MINDPLAX com PSYKOVSKY aponta para uma rota tecnica, densa e psicodelica dentro do psycore.",
+    labelBio: "O catalogo MINDPLAX no Bandcamp fornece faixas extremas com dados de embed confiaveis."
+  },
+  {
+    style: "psycore",
+    artist: "MINDPLAX & SECTIO AUREA & NECROPSYCHO",
+    song: "Buon Appetito",
+    label: "MINDPLAX",
+    bandcampUrl: "https://mindplax.bandcamp.com/album/mindplax-nxtlv",
+    bandcampTrackUrl: "https://mindplax.bandcamp.com/track/buon-appetito",
+    bandcampTrackId: "2847185393",
+    existenceVerified: true,
+    spotifyVerified: false,
+    artistGenre: "Bandcamp / Psycore",
+    artistProfileHint: "Colaboracao com Sectio Aurea e Necropsycho em pagina Bandcamp marcada como Psycore.",
+    artistBio: "Esta collab funciona como ponte entre psycore tecnico e dark experimental pesado.",
+    labelBio: "O Bandcamp da MINDPLAX deixa o app abrir a faixa no player em vez de depender de busca generica."
+  },
+  {
+    style: "psycore",
+    artist: "Phyllorum",
+    song: "FuckinMindless 222bpm",
+    label: "PHYLLORUM",
+    bpmExact: 222,
+    bandcampUrl: "https://phyllorum.bandcamp.com/album/phyllorum-x-setu-ketu-x-nakba",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/fuckinmindless-222bpm",
+    bandcampTrackId: "1829354926",
+    existenceVerified: true,
+    spotifyVerified: false,
+    artistCountry: "Brazil",
+    artistGenre: "Phyllorum / Psycore / Slambient",
+    artistProfileHint: "Pagina Bandcamp verificada com tag Psycore/Slambient e BPM 222 declarado no titulo.",
+    artistBio: "Phyllorum entra como artista brasileiro de borda entre slambient e psycore, com velocidade extrema e textura ritual.",
+    labelBio: "PHYLLORUM publica material proprio com player Bandcamp e tags especificas de Psycore/Slambient."
+  },
+  {
     style: "techno",
     artist: "Amelie Lens",
     song: "Hypnotized",
@@ -2619,6 +2737,132 @@ const catalog = [
     beatportUrl: "https://www.beatport.com/search?q=Cindervomit%20Phyllorum%20The%20Mumific%20Scroll",
     artistBio: "Cindervomit X Phyllorum explora slambient acelerado com recortes ritmicos e atmosfera densa.",
     labelBio: "The Endless Knot foca em narrativas psicodelicas extremas dentro do espectro slambient."
+  },
+  {
+    style: "slambient",
+    song: "The legend of Mask",
+    artist: "Phyllorum",
+    label: "PHYLLORUM",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "foco", "estrada"],
+    vibe: "Slambient narrativo com ritmo crescente, clima de aventura escura e tensao de pista.",
+    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20The%20legend%20of%20Mask",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+The+legend+of+Mask",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/the-legend-of-mask",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/the-legend-of-mask",
+    bandcampTrackId: "3101608960",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20The%20legend%20of%20Mask",
+    artistBio: "Phyllorum assina slambient brasileiro com ambiencia ritual, ritmo rapido e narrativa conceitual.",
+    labelBio: "PHYLLORUM publica faixas proprias no Bandcamp com tag slambient e player embutido."
+  },
+  {
+    style: "slambient",
+    song: "Heavy Souls (Ultra Rare)",
+    artist: "Through Dimensions",
+    label: "PHYLLORUM",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["after", "foco", "peak"],
+    vibe: "Faixa longa, densa e imersiva para estudar a textura pesada do slambient.",
+    spotifyUrl: "https://open.spotify.com/search/Through%20Dimensions%20Heavy%20Souls",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Through+Dimensions+Heavy+Souls+slambient",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/thorugh-dimensions-heavy-souls-ultra-rare",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/thorugh-dimensions-heavy-souls-ultra-rare",
+    bandcampTrackId: "2995634857",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Through%20Dimensions%20Heavy%20Souls",
+    artistBio: "Through Dimensions amplia o mapa slambient com uma leitura mais longa, pesada e cinematicamente sombria.",
+    labelBio: "PHYLLORUM funciona como hub de publicacoes slambient e dark experimental com player Bandcamp."
+  },
+  {
+    style: "slambient",
+    song: "Ancient egypt gods",
+    artist: "Phyllorum",
+    label: "PHYLLORUM",
+    bpm: "175+",
+    energy: "extreme",
+    vocals: "instrumental",
+    context: ["peak", "treino", "foco"],
+    vibe: "Slambient acelerado com atmosfera antiga, cortes intensos e assinatura darkpsy.",
+    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Ancient%20egypt%20gods",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Ancient+egypt+gods",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/phyllorum-ancient-egypt-gods",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/phyllorum-ancient-egypt-gods",
+    bandcampTrackId: "1773757028",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20Ancient%20egypt%20gods",
+    artistBio: "Phyllorum cruza slambient, hi-tech e darkpsy em faixas de alta energia e textura ritual.",
+    labelBio: "PHYLLORUM tem material brasileiro verificado no Bandcamp com tags de slambient, psycore e darkpsy."
+  },
+  {
+    style: "slambient",
+    song: "Feelings of another incarnation",
+    artist: "Phyllorum",
+    label: "PHYLLORUM",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["after", "foco", "warmup"],
+    vibe: "Mais emotiva e imersiva, boa para entender o lado menos obvio e mais atmosferico do estilo.",
+    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Feelings%20of%20another%20incarnation",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Feelings+of+another+incarnation",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/feelings-of-another-incarnation",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/feelings-of-another-incarnation",
+    bandcampTrackId: "4136007372",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20Feelings%20of%20another%20incarnation",
+    artistBio: "Phyllorum tambem trabalha slambient em formato mais emocional, sem abandonar a densidade psicodelica.",
+    labelBio: "A pagina Bandcamp do artista confirma publicacao propria, tags de slambient e embed publico."
+  },
+  {
+    style: "slambient",
+    song: "Owgroly guardian of soul",
+    artist: "Phyllorum",
+    label: "PHYLLORUM",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["peak", "foco", "after"],
+    vibe: "Ritual escuro, faixa longa e desenho de frequencias para escuta profunda.",
+    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Owgroly%20guardian%20of%20soul",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Owgroly+guardian+of+soul",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/owgroly-guardian-of-soul",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/owgroly-guardian-of-soul",
+    bandcampTrackId: "592894978",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20Owgroly%20guardian%20of%20soul",
+    artistBio: "Phyllorum usa narrativas de frequencia e fantasia sombria para construir slambient de longa duracao.",
+    labelBio: "PHYLLORUM reforca a variedade brasileira do app com faixas autorais tocaveis via Bandcamp."
+  },
+  {
+    style: "slambient",
+    song: "Vorkvoov Sorcerer's Charms",
+    artist: "Phyllorum",
+    label: "PHYLLORUM",
+    bpm: "155-175",
+    energy: "high",
+    vocals: "instrumental",
+    context: ["after", "foco", "estrada"],
+    vibe: "Slambient de atmosfera magica, escura e psicodelica, com construcao longa.",
+    spotifyUrl: "https://open.spotify.com/search/Phyllorum%20Vorkvoov%20Sorcerer's%20Charms",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Phyllorum+Vorkvoov+Sorcerers+Charms",
+    bandcampUrl: "https://phyllorum.bandcamp.com/track/vorkvoov-sorcerers-charms",
+    bandcampTrackUrl: "https://phyllorum.bandcamp.com/track/vorkvoov-sorcerers-charms",
+    bandcampTrackId: "2192193806",
+    existenceVerified: true,
+    spotifyVerified: false,
+    beatportUrl: "https://www.beatport.com/search?q=Phyllorum%20Vorkvoov%20Sorcerers%20Charms",
+    artistBio: "Phyllorum cria uma rota slambient mais hipnotica e narrativa, boa para quem quer descobrir textura antes do drop.",
+    labelBio: "A publicacao no Bandcamp traz tag slambient, psycore e darkpsy, mantendo o app longe de recomendacao generica."
   },
   {
     style: "slambient",
@@ -4713,10 +4957,10 @@ const STYLE_COVERAGE_OVERRIDES = {
   progressive_psy: { artists: 8, labels: 8, tracks: 24 },
   psy_comercial: { artists: 8, labels: 6, tracks: 20 },
   hi_tech: { artists: 15, labels: 10, tracks: 28 },
-  slambient: { artists: 8, labels: 1, tracks: 14 },
+  slambient: { artists: 8, labels: 1, tracks: 20 },
   dark_experimental: { artists: 12, labels: 10, tracks: 24 },
   // Psycore depende fortemente de hidratação por artistas seed; não exige muitos labels para destravar recomendação.
-  psycore: { artists: 8, labels: 0, tracks: 10 },
+  psycore: { artists: 10, labels: 0, tracks: 18 },
   // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
   freeform: { artists: 4, labels: 0, tracks: 12 },
   ambient: { artists: 12, labels: 6, tracks: 24 },
@@ -4770,7 +5014,7 @@ const STYLE_BPM_RULES = {
   forest_psy: { min: 145, max: 154 },
   dark_psy: { min: 154, max: 175 },
   dark_experimental: { min: 175, max: 220 },
-  psycore: { min: 175, max: 220 },
+  psycore: { min: 175, max: 230 },
   freeform: { min: 138, max: 180 },
   full_on: { min: 142, max: 150 },
   full_on_night: { min: 146, max: 154 },
@@ -4955,6 +5199,9 @@ const PSYCORE_ARTIST_ROSTER = [
   "Aliendigena",
   "Aloa",
   "Analua aka Maga",
+  "Alpscore",
+  "Alpscore & Crone",
+  "ALPSCORE & INFRA",
   "Arkhos",
   "Aspa Syava",
   "Astral Labyrinth",
@@ -4971,6 +5218,7 @@ const PSYCORE_ARTIST_ROSTER = [
   "Cambioharmonia",
   "Chaostrophob",
   "Cindervomit",
+  "Crone",
   "Daash",
   "Daemon",
   "Dajjal",
@@ -4999,6 +5247,7 @@ const PSYCORE_ARTIST_ROSTER = [
   "Haemogoblin",
   "Holymania",
   "Hon'ne",
+  "Infra",
   "Jergowitch",
   "Kasatka",
   "Kambarang",
@@ -5024,16 +5273,22 @@ const PSYCORE_ARTIST_ROSTER = [
   "Mohina",
   "Mohinia",
   "Mukhtar",
+  "Mindplax",
+  "MINDPLAX & SECTIO AUREA & NECROPSYCHO",
   "Mythorlogic",
   "Nala",
+  "Nall'um",
+  "Nallum",
   "Narcolepsy",
   "Nazrael",
+  "Necropsycho",
   "Necronomicon",
   "Neormm",
   "Nephilim",
   "Osciloptix",
   "Otkun",
   "Ozocore",
+  "Phyllorum",
   "PILL MURRAY",
   "Plankton",
   "Poltergeist",
@@ -5449,6 +5704,7 @@ const SLAMBIENT_ARTIST_ROSTER = [
   "Underworld Architects",
   "Dazkulleghyrth",
   "Through Dimensions",
+  "Throug Dimensions",
   "Labreska",
   "NeuralKill",
   "Arundo",
@@ -5476,7 +5732,7 @@ const NATURAIZ_BANDCAMP_ARTISTS = [
   "Alumbra"
 ];
 
-const NATURAIZ_FAST_ARTISTS = ["Vutt'un", "Sectio Aurea", "Hyperekplexia"];
+const NATURAIZ_FAST_ARTISTS = ["Vutt'un", "Sectio Aurea", "Hyperekplexia", "Alpscore", "Alpscore & Crone", "Crone", "Astral Labyrinth", "Nall'um", "Nallum"];
 
 const STYLE_ARTIST_SEEDS = {
   psytrance: ["Astrix", "Avalon", "Vini Vici", "Blastoyz", "Electric Universe", "Tristan", "Mad Maxx", "Outsiders"],
@@ -5715,6 +5971,17 @@ const ARTIST_STYLE_OVERRIDES = {
   "dark elf": ["dark_psy", "psycore"],
   "arjuna": ["forest_psy", "dark_psy", "psycore"],
   "zik": ["psycore", "dark_psy"],
+  "alpscore": ["psycore", "hi_tech", "dark_psy"],
+  "alpscore crone": ["psycore", "hi_tech"],
+  "alpscore infra": ["psycore"],
+  "crone": ["psycore", "hi_tech"],
+  "infra": ["psycore"],
+  "mindplax": ["psycore"],
+  "mindplax feat psykovsky": ["psycore"],
+  "mindplax sectio aurea necropsycho": ["psycore"],
+  "nall'um": ["psycore", "dark_experimental"],
+  "nallum": ["psycore", "dark_experimental"],
+  "necropsycho": ["dark_psy", "psycore", "dark_experimental"],
   "technical hitch": ["hi_tech"],
   "maramba": ["hi_tech"],
   "audiophatik": ["hi_tech"],
@@ -5816,7 +6083,9 @@ const ARTIST_STYLE_OVERRIDES = {
   "art of fighters": ["gabber"],
   "cindervomit": ["slambient", "psycore"],
   "endless knot collective": ["slambient"],
-  "phyllorum": ["slambient"],
+  "phyllorum": ["slambient", "psycore"],
+  "through dimensions": ["slambient"],
+  "throug dimensions": ["slambient"],
   "indaco runa": ["slambient"],
   "agodark": ["slambient"],
   "audionimus": ["slambient"],
@@ -6463,7 +6732,7 @@ const ARTIST_IDENTITY_COLLISION_RULES = [
   }
 ];
 const STYLE_REQUIRED_LABEL_TERMS = {
-  slambient: ["endless knot"]
+  slambient: ["endless knot", "phyllorum"]
 };
 const SPIRIT_UNLOCK_TARGET = 10;
 const SPIRIT_RANK_TIERS = [
@@ -8739,9 +9008,10 @@ function isArtistMatch(candidateName, seedName) {
   const seedEscaped = escapeRegex(seed);
   const seedCanonicalEscaped = seedCanonical ? escapeRegex(seedCanonical) : "";
   // Regra rígida: seed deve ser o artista principal (inicio do nome), opcionalmente com collab/feat.
-  const mainArtistPattern = new RegExp(`^${seedEscaped}(?:\\s*(?:&|feat|ft|x)\\s+.+)?$`);
+  const collabSeparator = "&|and|e|feat|ft|x";
+  const mainArtistPattern = new RegExp(`^${seedEscaped}(?:\\s*(?:${collabSeparator})\\s+.+)?$`);
   if (!seedCanonicalEscaped) return mainArtistPattern.test(candidate);
-  const mainArtistCanonicalPattern = new RegExp(`^${seedCanonicalEscaped}(?:\\s*(?:&|feat|ft|x)\\s+.+)?$`);
+  const mainArtistCanonicalPattern = new RegExp(`^${seedCanonicalEscaped}(?:\\s*(?:${collabSeparator})\\s+.+)?$`);
   return mainArtistPattern.test(candidate) || mainArtistCanonicalPattern.test(candidateCanonical);
 }
 
@@ -8750,6 +9020,9 @@ function allowedStylesForArtist(artistName) {
   if (!normalizedArtist) return [];
   const exact = ARTIST_STYLE_OVERRIDES[normalizedArtist];
   if (exact?.length) return exact;
+  const canonicalArtist = canonicalArtistIdentity(artistName || "");
+  const canonicalExact = canonicalArtist ? ARTIST_STYLE_OVERRIDES[canonicalArtist] : null;
+  if (canonicalExact?.length) return canonicalExact;
   const aliasKey = Object.keys(ARTIST_STYLE_OVERRIDES).find((key) => isArtistMatch(normalizedArtist, key));
   return aliasKey ? ARTIST_STYLE_OVERRIDES[aliasKey] : [];
 }
@@ -9952,6 +10225,7 @@ function addDynamicTrackToCatalog({
   labelBio = "",
   bandcampUrl = "",
   bandcampTrackUrl = "",
+  bandcampTrackId = "",
   soundcloudTrackUrl = ""
 }, existingKeys) {
   const artistName = (artist || "").trim();
@@ -10009,6 +10283,7 @@ function addDynamicTrackToCatalog({
     soundcloudTrackUrl: String(soundcloudTrackUrl || "").trim() || `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`,
     bandcampUrl: String(bandcampUrl || "").trim(),
     bandcampTrackUrl: String(bandcampTrackUrl || "").trim(),
+    bandcampTrackId: String(bandcampTrackId || "").trim(),
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
     youtubeTrackUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
     previewUrl: normalizedPreview,
@@ -10056,8 +10331,11 @@ function injectLocalTrackSeedBoost() {
         artistCountry: String(seed.artistCountry || "").trim(),
         artistGenre: String(seed.artistGenre || "").trim(),
         artistProfileHint: String(seed.artistProfileHint || "").trim() || "Seed local curado para ampliar cobertura e rotação de artistas.",
+        artistBio: String(seed.artistBio || "").trim(),
+        labelBio: String(seed.labelBio || "").trim(),
         bandcampUrl: String(seed.bandcampUrl || "").trim(),
         bandcampTrackUrl: String(seed.bandcampTrackUrl || "").trim(),
+        bandcampTrackId: String(seed.bandcampTrackId || "").trim(),
         soundcloudTrackUrl: String(seed.soundcloudTrackUrl || "").trim()
       },
       existingKeys
@@ -10068,6 +10346,7 @@ function injectLocalTrackSeedBoost() {
       if (insertedTrack && seed.spotifyUrl) insertedTrack.spotifyUrl = String(seed.spotifyUrl).trim();
       if (insertedTrack && seed.bandcampUrl) insertedTrack.bandcampUrl = String(seed.bandcampUrl).trim();
       if (insertedTrack && seed.bandcampTrackUrl) insertedTrack.bandcampTrackUrl = String(seed.bandcampTrackUrl).trim();
+      if (insertedTrack && seed.bandcampTrackId) insertedTrack.bandcampTrackId = String(seed.bandcampTrackId).trim();
       if (insertedTrack && seed.soundcloudTrackUrl) insertedTrack.soundcloudTrackUrl = String(seed.soundcloudTrackUrl).trim();
       if (releaseDate && releaseDate !== "Catálogo dinâmico" && releaseDate !== "Catálogo local") {
         registerRecentArtistSignal(seed.style, seed.artist, releaseDate, "local_seed_boost");
