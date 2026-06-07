@@ -3787,6 +3787,8 @@ const audioVolumeControl = document.getElementById("audioVolumeControl");
 const audioVolumeLabel = document.getElementById("audioVolumeLabel");
 const audioVolumeSlider = document.getElementById("audioVolumeSlider");
 const audioVolumeValue = document.getElementById("audioVolumeValue");
+const audioControlGroup = audioToggleBtn?.closest(".audio-control-group");
+const audioActionsGroup = audioControlGroup?.parentElement;
 const heroLogoBtn = document.getElementById("heroLogoBtn");
 const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
@@ -4307,6 +4309,8 @@ let audioUnlocked = false;
 let audioEnabled = true;
 let audioVolume = 0.8;
 let audioVolumePanelCloseTimer = 0;
+let audioUnlockPromise = null;
+let audioGlobalUnlockAt = 0;
 let openingStingPlayed = false;
 let openingStingPending = false;
 let searchAudioPulseTimer = 0;
@@ -10329,6 +10333,8 @@ const I18N = {
     introContinueBtn: "Comecar agora",
     audioOn: "Som ligado",
     audioOff: "Som desligado",
+    audioStart: "Ativar som",
+    audioUnavailable: "Som indisponível",
     audioActivateHint: "Toque na tela para liberar audio no navegador.",
     volumeLabel: "Volume",
     langKicker: "Escolha seu idioma",
@@ -10868,6 +10874,8 @@ const I18N = {
     introContinueBtn: "Start now",
     audioOn: "Sound on",
     audioOff: "Sound off",
+    audioStart: "Start audio",
+    audioUnavailable: "Audio unavailable",
     audioActivateHint: "Tap the screen once to unlock browser audio.",
     volumeLabel: "Volume",
     langKicker: "Choose your language",
@@ -11407,6 +11415,8 @@ const I18N = {
     introContinueBtn: "Comenzar ahora",
     audioOn: "Sonido activo",
     audioOff: "Sonido inactivo",
+    audioStart: "Activar sonido",
+    audioUnavailable: "Sonido no disponible",
     audioActivateHint: "Toca la pantalla una vez para habilitar audio en el navegador.",
     volumeLabel: "Volumen",
     langKicker: "Elige tu idioma",
@@ -13515,7 +13525,9 @@ function persistAudioPreference(enabled) {
 
 function readStoredAudioVolume() {
   try {
-    const stored = Number(localStorage.getItem(AUDIO_VOLUME_STORAGE_KEY));
+    const raw = localStorage.getItem(AUDIO_VOLUME_STORAGE_KEY);
+    if (raw === null || raw === "") return 0.8;
+    const stored = Number(raw);
     if (Number.isFinite(stored)) return Math.max(0, Math.min(1, stored));
   } catch (_err) {
     // ignore storage failures
@@ -13577,6 +13589,8 @@ function setAudioVolumePanelOpen(isOpen) {
   audioVolumePanelCloseTimer = 0;
   audioToggleBtn?.classList.toggle("audio-volume-open", Boolean(isOpen));
   audioVolumeControl?.classList.toggle("open", Boolean(isOpen));
+  audioControlGroup?.classList.toggle("volume-open", Boolean(isOpen));
+  audioActionsGroup?.classList.toggle("volume-open", Boolean(isOpen));
 }
 
 function scheduleAudioVolumePanelClose(delay = 700) {
@@ -13589,14 +13603,30 @@ function scheduleAudioVolumePanelClose(delay = 700) {
 }
 
 function updateAudioToggleUi() {
-  const active = Boolean(audioEnabled && !audioUnavailable);
+  const pendingUnlock = Boolean(audioEnabled && !audioUnlocked && !audioUnavailable);
+  const active = Boolean(audioEnabled && audioUnlocked && !audioUnavailable);
+  const label = audioUnavailable
+    ? t("audioUnavailable")
+    : pendingUnlock
+      ? t("audioStart")
+      : audioEnabled
+        ? t("audioOn")
+        : t("audioOff");
   if (audioToggleBtn) {
-    audioToggleBtn.classList.toggle("muted", !active);
+    audioToggleBtn.classList.toggle("muted", !audioEnabled || audioUnavailable);
+    audioToggleBtn.classList.toggle("needs-unlock", pendingUnlock);
     audioToggleBtn.setAttribute("aria-pressed", active ? "true" : "false");
-    audioToggleBtn.title = active ? t("audioOn") : t("audioOff");
+    audioToggleBtn.dataset.audioState = audioUnavailable
+      ? "unavailable"
+      : pendingUnlock
+        ? "needs-unlock"
+        : audioEnabled
+          ? "on"
+          : "off";
+    audioToggleBtn.title = pendingUnlock ? t("audioActivateHint") : label;
   }
   if (audioToggleLabel) {
-    audioToggleLabel.textContent = active ? t("audioOn") : t("audioOff");
+    audioToggleLabel.textContent = label;
   }
   updateAudioVolumeUi();
   syncPreviewAudioState();
@@ -13609,7 +13639,7 @@ function setAudioVolume(nextVolume, { persist = true, fromUser = false } = {}) {
   updateAudioVolumeUi();
   syncPreviewAudioState();
   if (fromUser && audioEnabled && audioVolume > 0.001) {
-    audioUnlocked = true;
+    primeAudioFromUserGesture();
   }
   if (audioEnabled && audioVolume > 0.001) ensureAudioReady();
   applyAudioMasterVolume({ immediate: false });
@@ -13697,6 +13727,48 @@ function ensureAudioReady() {
     }
     return true;
   } catch (_err) {
+    return false;
+  }
+}
+
+function primeAudioFromUserGesture({ fromGlobal = false } = {}) {
+  if (!audioEnabled || audioUnavailable) return false;
+  if (fromGlobal) audioGlobalUnlockAt = performance.now();
+  audioUnlocked = true;
+  if (!initAudioEngine() || !audioContext) {
+    updateAudioToggleUi();
+    return false;
+  }
+
+  const finishUnlock = () => {
+    audioUnlocked = true;
+    applyAudioMasterVolume({ immediate: true });
+    updateAudioToggleUi();
+    refreshAmbientForUiState({ immediate: false });
+    if (openingStingPending || preAppScreensVisible()) requestOpeningSting();
+  };
+
+  try {
+    applyAudioMasterVolume({ immediate: true });
+    if (audioContext.state === "suspended" && typeof audioContext.resume === "function") {
+      if (!audioUnlockPromise) {
+        audioUnlockPromise = audioContext.resume()
+          .then(finishUnlock)
+          .catch(() => {
+            audioUnlocked = false;
+            updateAudioToggleUi();
+          })
+          .finally(() => {
+            audioUnlockPromise = null;
+          });
+      }
+    } else {
+      finishUnlock();
+    }
+    return true;
+  } catch (_err) {
+    audioUnlocked = false;
+    updateAudioToggleUi();
     return false;
   }
 }
@@ -14289,8 +14361,8 @@ function setAudioEnabled(nextEnabled, { persist = true, fromUser = false } = {})
   audioEnabled = Boolean(nextEnabled) && !audioUnavailable;
   if (persist) persistAudioPreference(audioEnabled);
   if (audioEnabled) {
-    if (fromUser) audioUnlocked = true;
-    ensureAudioReady();
+    if (fromUser) primeAudioFromUserGesture();
+    else ensureAudioReady();
     if (searchOverlay && !searchOverlay.classList.contains("hidden")) {
       startSearchAudioPulse();
     }
@@ -14311,15 +14383,22 @@ function setAudioEnabled(nextEnabled, { persist = true, fromUser = false } = {})
   }
 }
 
+function isAudioControlGesture(event) {
+  const path = typeof event?.composedPath === "function" ? event.composedPath() : [];
+  if (path.includes(audioToggleBtn) || path.includes(audioVolumeControl)) return true;
+  const target = event?.target;
+  return target instanceof Element && Boolean(target.closest("#audioToggleBtn, #audioVolumeControl"));
+}
+
 function unlockAudioFromGesture(event) {
   if (audioUnlocked) return;
+  if (isAudioControlGesture(event)) return;
   if (event?.type === "keydown") {
     const key = String(event?.key || "");
     if (!key) return;
   }
-  audioUnlocked = true;
   if (audioEnabled) {
-    ensureAudioReady();
+    primeAudioFromUserGesture({ fromGlobal: true });
     refreshAmbientForUiState({ immediate: false });
     if (openingStingPending || preAppScreensVisible()) requestOpeningSting();
   }
@@ -14344,16 +14423,6 @@ function bootstrapAudio() {
       audioUnlocked = true;
       refreshAmbientForUiState({ immediate: true });
       requestOpeningSting();
-    } else {
-      void audioContext.resume()
-        .then(() => {
-          audioUnlocked = true;
-          refreshAmbientForUiState({ immediate: true });
-          requestOpeningSting();
-        })
-        .catch(() => {
-          // browser denied autoplay without gesture
-        });
     }
   }
   refreshAmbientForUiState({ immediate: true });
@@ -27365,7 +27434,18 @@ function bindPreferenceAutosave() {
 }
 
 bind(audioToggleBtn, "click", () => {
-  setAudioEnabled(!audioEnabled, { persist: true, fromUser: true });
+  const visibleAudioState = audioToggleBtn?.dataset.audioState || "";
+  const recentlyUnlockedByGlobalTap = audioGlobalUnlockAt > 0 && performance.now() - audioGlobalUnlockAt < 900;
+  const needsActivation = !audioUnavailable && (
+    visibleAudioState === "needs-unlock" ||
+    visibleAudioState === "off" ||
+    !audioEnabled ||
+    !audioUnlocked ||
+    audioContext?.state === "suspended" ||
+    recentlyUnlockedByGlobalTap
+  );
+  if (recentlyUnlockedByGlobalTap) audioGlobalUnlockAt = 0;
+  setAudioEnabled(needsActivation, { persist: true, fromUser: true });
   setAudioVolumePanelOpen(true);
   scheduleAudioVolumePanelClose(2200);
 });

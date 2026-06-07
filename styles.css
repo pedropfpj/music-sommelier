@@ -9583,3 +9583,78 @@ iframe {
     text-overflow: ellipsis;
   }
 }
+
+/* iPhone audio controls */
+.audio-toggle.needs-unlock {
+  border-color: rgba(126, 232, 198, 0.72);
+  background:
+    radial-gradient(circle at 16% 20%, rgba(126, 232, 198, 0.24), transparent 44%),
+    linear-gradient(145deg, rgba(9, 30, 36, 0.94), rgba(11, 21, 49, 0.86));
+  box-shadow: 0 0 0 2px rgba(126, 232, 198, 0.08), inset 0 0 0 1px rgba(142, 207, 255, 0.1);
+}
+
+.audio-toggle.needs-unlock .audio-toggle-bar {
+  opacity: 1;
+  animation: audio-level-bounce 0.86s ease-in-out infinite;
+}
+
+.audio-toggle[data-audio-state="unavailable"] {
+  opacity: 0.7;
+}
+
+@media (max-width: 780px) {
+  .hero,
+  .hero.panel,
+  .hero-actions,
+  .audio-control-group {
+    overflow: visible;
+  }
+
+  .hero.panel {
+    contain: none;
+    content-visibility: visible;
+  }
+
+  .audio-control-group {
+    z-index: 30;
+  }
+
+  .hero-actions.volume-open {
+    padding-bottom: 5.4rem;
+  }
+
+  .hero-actions .audio-volume-control {
+    display: grid !important;
+    grid-template-columns: auto minmax(118px, 1fr) 2.8rem;
+    top: calc(100% + 0.44rem) !important;
+    right: 0 !important;
+    left: auto !important;
+    width: min(88vw, 342px);
+    max-width: calc(100vw - 28px);
+    min-height: 44px;
+    padding: 0.52rem 0.62rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px) scale(0.98);
+    z-index: 80;
+  }
+
+  .hero-actions .audio-toggle.audio-volume-open + .audio-volume-control,
+  .hero-actions .audio-volume-control.open,
+  .hero-actions .audio-volume-control:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .hero-actions .audio-volume-control input[type="range"] {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-actions .audio-volume-control {
+    grid-template-columns: 1fr minmax(116px, 1.4fr) auto;
+    width: calc(100vw - 28px);
+  }
+}
