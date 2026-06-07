@@ -5156,7 +5156,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v15";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v17";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -7287,14 +7287,14 @@ const MUSICAL_SPIRITS = [
 ];
 
 const SPIRIT_VISUAL_THEMES = {
-  ritual_cosmico: { a: "#6effdc", b: "#61bfff", c: "#9f7bff", d: "#0b1a34" },
-  alquimista_sombrio: { a: "#6affde", b: "#4d95ff", c: "#7f4cff", d: "#080d24" },
-  acelerador_quantico: { a: "#72fff4", b: "#4fc0ff", c: "#ffd778", d: "#07122a" },
-  engenheiro_groove: { a: "#84ffcf", b: "#66e0ff", c: "#4a7fff", d: "#061829" },
-  arquiteto_hipnotico: { a: "#6cecff", b: "#4f9dff", c: "#8ea9ff", d: "#08152f" },
-  cacador_bass: { a: "#86f2ff", b: "#6895ff", c: "#ff8df8", d: "#0a1430" },
-  viajante_organico: { a: "#8bf7d8", b: "#77b9ff", c: "#9debb3", d: "#082036" },
-  explorador_fractal: { a: "#9be7ff", b: "#6e8fff", c: "#8d79ff", d: "#0a1638" }
+  ritual_cosmico: { a: "#72f7ff", b: "#6f7dff", c: "#b86cff", d: "#091039" },
+  alquimista_sombrio: { a: "#8dffe9", b: "#6c4dff", c: "#d45cff", d: "#12071f" },
+  acelerador_quantico: { a: "#79fff2", b: "#f9f871", c: "#ff9b4a", d: "#071421" },
+  engenheiro_groove: { a: "#51f2a7", b: "#40d7ff", c: "#2f73ff", d: "#061829" },
+  arquiteto_hipnotico: { a: "#9feaff", b: "#93a7ff", c: "#d7e3ff", d: "#071226" },
+  cacador_bass: { a: "#ff6ec7", b: "#7f8cff", c: "#35f0ff", d: "#15061c" },
+  viajante_organico: { a: "#a3ff8b", b: "#f4d06f", c: "#51d0a6", d: "#082417" },
+  explorador_fractal: { a: "#ffb36b", b: "#75f4ff", c: "#9a7bff", d: "#10102c" }
 };
 
 const SPIRIT_MASCOT_VARIANTS = {
@@ -7530,6 +7530,89 @@ const SPIRIT_MASCOT_VARIANTS = {
       }
     }
   ]
+};
+
+const SPIRIT_MASCOT_TRAITS = {
+  ritual_cosmico: {
+    shape: "round",
+    face: "#f1fffb",
+    hair: "flame",
+    outfit: "robe",
+    accessory: "portalStaff",
+    eyes: "wonder",
+    mouth: "smile",
+    headphones: "classic"
+  },
+  alquimista_sombrio: {
+    shape: "mask",
+    face: "#dce7ff",
+    hair: "hood",
+    outfit: "cloak",
+    accessory: "crystalOrb",
+    eyes: "sleepy",
+    mouth: "calm",
+    headphones: "hidden"
+  },
+  acelerador_quantico: {
+    shape: "angular",
+    face: "#eefdf7",
+    hair: "spikes",
+    outfit: "speedSuit",
+    accessory: "dataBlade",
+    eyes: "focused",
+    mouth: "smirk",
+    headphones: "visor"
+  },
+  engenheiro_groove: {
+    shape: "round",
+    face: "#f7ffff",
+    hair: "goggles",
+    outfit: "techVest",
+    accessory: "mixPanel",
+    eyes: "bright",
+    mouth: "smile",
+    headphones: "studio"
+  },
+  arquiteto_hipnotico: {
+    shape: "square",
+    face: "#eaf6ff",
+    hair: "visor",
+    outfit: "structuredCoat",
+    accessory: "blueprint",
+    eyes: "line",
+    mouth: "flat",
+    headphones: "minimal"
+  },
+  cacador_bass: {
+    shape: "wide",
+    face: "#f3edff",
+    hair: "cap",
+    outfit: "bassJacket",
+    accessory: "speakerRig",
+    eyes: "intense",
+    mouth: "grin",
+    headphones: "bass"
+  },
+  viajante_organico: {
+    shape: "soft",
+    face: "#f2ffe9",
+    hair: "leaf",
+    outfit: "poncho",
+    accessory: "naturePad",
+    eyes: "soft",
+    mouth: "smile",
+    headphones: "soft"
+  },
+  explorador_fractal: {
+    shape: "diamond",
+    face: "#eef1ff",
+    hair: "fractal",
+    outfit: "patchwork",
+    accessory: "fractalCube",
+    eyes: "curious",
+    mouth: "open",
+    headphones: "antenna"
+  }
 };
 
 const STYLE_SEED_BACKFILL = {
@@ -23642,6 +23725,10 @@ function spiritMascotQuote(variant = {}, spiritText = {}) {
   return truncateByWordBoundary(buildSpiritCollectibleCopy(null, spiritText), 92);
 }
 
+function spiritMascotTraits(spirit) {
+  return SPIRIT_MASCOT_TRAITS[spirit?.id] || SPIRIT_MASCOT_TRAITS.ritual_cosmico;
+}
+
 function spiritCollectibleCardLabels() {
   if (currentLanguage === "en") {
     return {
@@ -23762,35 +23849,213 @@ function spiritMascotCrownSvg(crown = "halo", theme = {}) {
   return `<ellipse cx="500" cy="246" rx="220" ry="72" fill="none" stroke="${a}" stroke-width="5" stroke-opacity="0.42" /><ellipse cx="500" cy="246" rx="142" ry="42" fill="none" stroke="${b}" stroke-width="3" stroke-opacity="0.34" />`;
 }
 
-function buildSpiritMascotSvg(theme, variant, seed = 0) {
+function spiritMascotHeadPath(shape = "round") {
+  if (shape === "mask") return "M354 420 C354 322 424 264 500 264 C576 264 646 322 646 420 C646 510 586 582 500 582 C414 582 354 510 354 420 Z";
+  if (shape === "angular") return "M340 430 L384 304 L500 244 L616 304 L660 430 C650 532 590 602 500 602 C410 602 350 532 340 430 Z";
+  if (shape === "square") return "M360 332 C360 292 390 262 430 262 H570 C610 262 640 292 640 332 V492 C640 552 588 594 500 594 C412 594 360 552 360 492 Z";
+  if (shape === "wide") return "M318 424 C318 326 390 276 500 276 C610 276 682 326 682 424 C682 526 604 584 500 584 C396 584 318 526 318 424 Z";
+  if (shape === "soft") return "M346 420 C342 330 418 254 500 264 C582 254 658 330 654 420 C650 518 582 604 500 604 C418 604 350 518 346 420 Z";
+  if (shape === "diamond") return "M500 246 C586 286 650 348 650 424 C650 518 592 590 500 620 C408 590 350 518 350 424 C350 348 414 286 500 246 Z";
+  return "M334 412 C334 304 408 236 500 236 C592 236 666 304 666 412 C666 514 602 594 500 594 C398 594 334 514 334 412 Z";
+}
+
+function spiritMascotEyeSvg(type = "bright", seed = 0) {
+  const eyeOffset = (seed % 3) - 1;
+  if (type === "sleepy") {
+    return `<path d="M424 432 C442 420 464 420 482 432" fill="none" stroke="#07102b" stroke-width="9" stroke-linecap="round" /><path d="M518 432 C536 420 558 420 576 432" fill="none" stroke="#07102b" stroke-width="9" stroke-linecap="round" />`;
+  }
+  if (type === "focused") {
+    return `<path d="M422 414 L484 430" stroke="#07102b" stroke-width="9" stroke-linecap="round" /><path d="M578 414 L516 430" stroke="#07102b" stroke-width="9" stroke-linecap="round" /><circle cx="456" cy="438" r="16" fill="#07102b" /><circle cx="544" cy="438" r="16" fill="#07102b" />`;
+  }
+  if (type === "line") {
+    return `<rect x="412" y="420" width="62" height="13" rx="7" fill="#07102b" /><rect x="526" y="420" width="62" height="13" rx="7" fill="#07102b" />`;
+  }
+  if (type === "intense") {
+    return `<circle cx="${452 + eyeOffset}" cy="432" r="26" fill="#07102b" /><circle cx="${548 + eyeOffset}" cy="432" r="26" fill="#07102b" /><circle cx="${460 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.84" /><circle cx="${556 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.84" /><path d="M416 402 L482 414 M584 402 L518 414" stroke="#07102b" stroke-width="8" stroke-linecap="round" opacity="0.72" />`;
+  }
+  if (type === "soft") {
+    return `<ellipse cx="${456 + eyeOffset}" cy="432" rx="22" ry="26" fill="#07102b" /><ellipse cx="${548 + eyeOffset}" cy="432" rx="22" ry="26" fill="#07102b" /><circle cx="${464 + eyeOffset}" cy="420" r="9" fill="#ffffff" fill-opacity="0.8" /><circle cx="${556 + eyeOffset}" cy="420" r="9" fill="#ffffff" fill-opacity="0.8" />`;
+  }
+  if (type === "curious") {
+    return `<circle cx="${452 + eyeOffset}" cy="430" r="23" fill="#07102b" /><ellipse cx="${550 + eyeOffset}" cy="430" rx="28" ry="23" fill="#07102b" /><circle cx="${461 + eyeOffset}" cy="418" r="8" fill="#ffffff" fill-opacity="0.8" /><circle cx="${562 + eyeOffset}" cy="418" r="8" fill="#ffffff" fill-opacity="0.8" />`;
+  }
+  return `<circle cx="${455 + eyeOffset}" cy="430" r="24" fill="#07102b" /><circle cx="${548 + eyeOffset}" cy="430" r="24" fill="#07102b" /><circle cx="${464 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" /><circle cx="${557 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" />`;
+}
+
+function spiritMascotMouthSvg(type = "smile", seed = 0) {
+  if (type === "calm") return `<path d="M462 496 C486 508 514 508 538 496" fill="none" stroke="#07102b" stroke-width="7" stroke-linecap="round" stroke-opacity="0.68" />`;
+  if (type === "smirk") return `<path d="M462 500 C492 518 524 512 548 488" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" />`;
+  if (type === "flat") return `<path d="M460 500 H542" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" stroke-opacity="0.74" />`;
+  if (type === "grin") return `<path d="M448 486 C476 526 530 526 560 486" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" /><path d="M468 500 H540" stroke="#f7ffff" stroke-width="4" stroke-linecap="round" stroke-opacity="0.58" />`;
+  if (type === "open") return `<ellipse cx="500" cy="500" rx="24" ry="18" fill="#07102b" fill-opacity="0.82" />`;
+  const curve = seed % 2 ? "M462 490 C482 520 520 520 540 490" : "M454 492 C480 516 518 516 544 492";
+  return `<path d="${curve}" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" stroke-opacity="0.86" />`;
+}
+
+function spiritMascotHeadwearSvg(traits = {}, theme = {}) {
   const a = escapeSvgText(theme.a || "#6effdc");
   const b = escapeSvgText(theme.b || "#7cb2ff");
   const c = escapeSvgText(theme.c || "#9f7bff");
+  if (traits.hair === "hood") {
+    return `<path d="M300 410 C296 274 390 174 500 170 C610 174 704 274 700 410 C660 342 596 306 500 306 C404 306 340 342 300 410 Z" fill="${c}" fill-opacity="0.36" stroke="${a}" stroke-opacity="0.44" stroke-width="6" />`;
+  }
+  if (traits.hair === "flame") {
+    return `<path d="M452 166 C512 224 532 272 516 326 C562 294 590 242 582 178 C664 262 668 358 610 420 C568 466 482 466 438 420 C376 354 394 250 452 166 Z" fill="${b}" fill-opacity="0.42" stroke="${a}" stroke-opacity="0.62" stroke-width="6" />`;
+  }
+  if (traits.hair === "spikes") {
+    return `<path d="M348 344 L392 248 L438 320 L500 214 L562 320 L608 248 L652 344 C600 300 548 284 500 284 C452 284 400 300 348 344 Z" fill="${b}" fill-opacity="0.42" stroke="${a}" stroke-opacity="0.56" stroke-width="5" />`;
+  }
+  if (traits.hair === "goggles") {
+    return `<g><path d="M372 318 C426 276 574 276 628 318" fill="none" stroke="${b}" stroke-width="12" stroke-linecap="round" stroke-opacity="0.72" /><circle cx="452" cy="342" r="42" fill="${c}" fill-opacity="0.38" stroke="${a}" stroke-width="6" /><circle cx="548" cy="342" r="42" fill="${c}" fill-opacity="0.38" stroke="${a}" stroke-width="6" /><path d="M494 342 H506" stroke="${a}" stroke-width="7" stroke-linecap="round" /></g>`;
+  }
+  if (traits.hair === "visor") {
+    return `<path d="M356 336 C420 284 580 284 644 336 V386 C574 366 426 366 356 386 Z" fill="${c}" fill-opacity="0.36" stroke="${a}" stroke-opacity="0.5" stroke-width="5" /><rect x="402" y="354" width="196" height="34" rx="17" fill="${a}" fill-opacity="0.24" stroke="${b}" stroke-opacity="0.55" stroke-width="4" />`;
+  }
+  if (traits.hair === "cap") {
+    return `<path d="M342 342 C386 272 464 246 548 270 C620 292 658 346 672 398 C606 362 408 356 342 398 Z" fill="${c}" fill-opacity="0.42" stroke="${a}" stroke-opacity="0.44" stroke-width="5" /><path d="M584 350 C638 346 684 358 724 392" fill="none" stroke="${b}" stroke-width="12" stroke-linecap="round" stroke-opacity="0.54" />`;
+  }
+  if (traits.hair === "leaf") {
+    return `<path d="M500 196 C596 210 650 282 626 360 C572 336 520 328 500 328 C480 328 428 336 374 360 C350 282 404 210 500 196 Z" fill="${a}" fill-opacity="0.3" stroke="${b}" stroke-opacity="0.42" stroke-width="5" /><path d="M500 202 C492 264 496 310 500 342" stroke="#f7ffff" stroke-opacity="0.36" stroke-width="4" stroke-linecap="round" />`;
+  }
+  if (traits.hair === "fractal") {
+    return `<g fill="none" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.58"><path d="M500 210 L560 300 L500 348 L440 300 Z" /><path d="M398 300 L440 300 L420 246" /><path d="M602 300 L560 300 L580 246" /></g>`;
+  }
+  return "";
+}
+
+function spiritMascotHeadphonesSvg(type = "classic", theme = {}) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  if (type === "studio") {
+    return `<path d="M286 424 C302 294 386 210 500 210 C614 210 698 294 714 424" fill="none" stroke="${b}" stroke-width="18" stroke-linecap="round" stroke-opacity="0.76" /><g><rect x="282" y="412" width="82" height="128" rx="26" fill="${b}" fill-opacity="0.64" stroke="${a}" stroke-width="6" /><rect x="636" y="412" width="82" height="128" rx="26" fill="${b}" fill-opacity="0.64" stroke="${a}" stroke-width="6" /><path d="M310 508 V456 M326 508 V438 M342 508 V472 M658 508 V450 M674 508 V470 M690 508 V432" stroke="#f7ffff" stroke-opacity="0.54" stroke-width="5" stroke-linecap="round" /></g>`;
+  }
+  if (type === "hidden") {
+    return `<path d="M326 426 C300 434 282 462 282 500 C282 538 304 566 336 574" fill="none" stroke="${c}" stroke-opacity="0.48" stroke-width="16" stroke-linecap="round" /><path d="M674 426 C700 434 718 462 718 500 C718 538 696 566 664 574" fill="none" stroke="${c}" stroke-opacity="0.48" stroke-width="16" stroke-linecap="round" />`;
+  }
+  if (type === "visor" || type === "antenna") {
+    const antenna = type === "antenna" ? `<path d="M500 250 L500 204 M500 204 L536 170 M500 204 L464 170" stroke="${a}" stroke-width="6" stroke-linecap="round" opacity="0.7" />` : "";
+    return `${antenna}<path d="M304 414 C318 286 392 218 500 218 C608 218 682 286 696 414" fill="none" stroke="${b}" stroke-width="10" stroke-linecap="round" stroke-opacity="0.68" /><rect x="270" y="420" width="70" height="118" rx="24" fill="${c}" fill-opacity="0.58" stroke="${a}" stroke-width="5" /><rect x="660" y="420" width="70" height="118" rx="24" fill="${c}" fill-opacity="0.58" stroke="${a}" stroke-width="5" />`;
+  }
+  if (type === "bass") {
+    return `<path d="M284 422 C304 294 386 220 500 220 C614 220 696 294 716 422" fill="none" stroke="${b}" stroke-width="18" stroke-linecap="round" stroke-opacity="0.78" /><circle cx="312" cy="492" r="58" fill="${c}" fill-opacity="0.6" stroke="${a}" stroke-width="6" /><circle cx="688" cy="492" r="58" fill="${c}" fill-opacity="0.6" stroke="${a}" stroke-width="6" /><circle cx="312" cy="492" r="26" fill="#07102b" fill-opacity="0.62" /><circle cx="688" cy="492" r="26" fill="#07102b" fill-opacity="0.62" />`;
+  }
+  if (type === "minimal" || type === "soft") {
+    return `<path d="M314 418 C330 314 398 252 500 252 C602 252 670 314 686 418" fill="none" stroke="${b}" stroke-width="9" stroke-linecap="round" stroke-opacity="0.62" /><rect x="300" y="426" width="52" height="90" rx="22" fill="${c}" fill-opacity="0.48" stroke="${a}" stroke-width="4" /><rect x="648" y="426" width="52" height="90" rx="22" fill="${c}" fill-opacity="0.48" stroke="${a}" stroke-width="4" />`;
+  }
+  return `<path d="M292 416 C308 300 380 220 500 220 C620 220 692 300 708 416" fill="none" stroke="${b}" stroke-width="16" stroke-linecap="round" stroke-opacity="0.76" /><path d="M350 408 C310 408 282 438 282 482 C282 526 312 558 354 558 L354 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" /><path d="M650 408 C690 408 718 438 718 482 C718 526 688 558 646 558 L646 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" />`;
+}
+
+function spiritMascotOutfitSvg(outfit = "robe", theme = {}) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  if (outfit === "cloak") {
+    return `<path d="M272 640 C350 548 424 524 500 524 C576 524 650 548 728 640 C640 646 624 710 610 786 C570 744 530 720 500 846 C470 720 430 744 390 786 C376 710 360 646 272 640 Z" fill="${c}" fill-opacity="0.32" stroke="${a}" stroke-opacity="0.42" stroke-width="5" /><path d="M362 620 C414 672 458 706 500 720 C542 706 586 672 638 620" fill="none" stroke="#f7ffff" stroke-opacity="0.2" stroke-width="4" />`;
+  }
+  if (outfit === "speedSuit") {
+    return `<path d="M324 638 C380 564 436 534 500 534 C564 534 620 564 676 638 L612 806 L500 868 L388 806 Z" fill="${b}" fill-opacity="0.24" stroke="${a}" stroke-opacity="0.46" stroke-width="5" /><path d="M396 654 H604 M420 704 H580 M450 754 H550" stroke="${c}" stroke-width="8" stroke-linecap="round" stroke-opacity="0.54" />`;
+  }
+  if (outfit === "techVest") {
+    return `<path d="M304 642 C374 560 432 532 500 532 C568 532 626 560 696 642 C646 654 624 704 612 792 C560 746 522 732 500 846 C478 732 440 746 388 792 C376 704 354 654 304 642 Z" fill="#111a34" fill-opacity="0.78" stroke="${b}" stroke-opacity="0.42" stroke-width="5" /><g fill="${a}" fill-opacity="0.72">${[0, 1, 2, 3, 4].map((i) => `<rect x="${450 + i * 22}" y="${650 - (i % 2) * 14}" width="12" height="${42 + (i % 3) * 16}" rx="5" />`).join("")}</g>`;
+  }
+  if (outfit === "structuredCoat") {
+    return `<path d="M330 634 L430 540 H570 L670 634 L624 812 L500 858 L376 812 Z" fill="#101a39" fill-opacity="0.82" stroke="${a}" stroke-opacity="0.42" stroke-width="5" /><path d="M430 540 L500 858 L570 540 M376 668 H624" stroke="${b}" stroke-width="4" stroke-opacity="0.34" />`;
+  }
+  if (outfit === "bassJacket") {
+    return `<path d="M280 642 C354 562 426 528 500 528 C574 528 646 562 720 642 C660 660 638 724 622 808 C572 778 532 754 500 866 C468 754 428 778 378 808 C362 724 340 660 280 642 Z" fill="#160b2f" fill-opacity="0.86" stroke="${c}" stroke-opacity="0.54" stroke-width="5" /><circle cx="430" cy="684" r="24" fill="#07102b" stroke="${a}" stroke-width="5" /><circle cx="570" cy="684" r="24" fill="#07102b" stroke="${a}" stroke-width="5" />`;
+  }
+  if (outfit === "poncho") {
+    return `<path d="M306 630 C392 548 448 526 500 526 C552 526 608 548 694 630 C642 684 612 760 600 824 C548 792 516 762 500 866 C484 762 452 792 400 824 C388 760 358 684 306 630 Z" fill="${a}" fill-opacity="0.2" stroke="${b}" stroke-opacity="0.42" stroke-width="5" /><path d="M358 668 C432 696 568 696 642 668" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.5" />`;
+  }
+  if (outfit === "patchwork") {
+    return `<path d="M316 636 L418 538 L500 568 L582 538 L684 636 L628 818 L500 864 L372 818 Z" fill="${c}" fill-opacity="0.26" stroke="${a}" stroke-opacity="0.48" stroke-width="5" /><path d="M418 538 L500 864 M582 538 L500 864 M360 690 H640" stroke="${b}" stroke-opacity="0.36" stroke-width="4" /><path d="M420 622 L468 650 L426 686 Z M580 622 L532 650 L574 686 Z" fill="${a}" fill-opacity="0.38" />`;
+  }
+  return `<path d="M300 624 C356 536 420 516 500 516 C580 516 646 536 704 624 C652 632 626 670 602 724 C556 688 520 680 500 774 C480 680 444 688 398 724 C374 670 350 632 300 624 Z" fill="url(#cloakGrad)" stroke="${b}" stroke-opacity="0.42" stroke-width="5" />`;
+}
+
+function spiritMascotAccessorySvg(accessory = "", theme = {}) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  if (accessory === "portalStaff") {
+    return `<g transform="translate(208 522)"><path d="M42 22 V210" stroke="${a}" stroke-width="9" stroke-linecap="round" /><circle cx="42" cy="20" r="34" fill="none" stroke="${c}" stroke-width="6" /><path d="M42 -18 L54 12 L86 16 L60 36 L68 68 L42 50 L16 68 L24 36 L-2 16 L30 12 Z" fill="${a}" fill-opacity="0.52" /></g>`;
+  }
+  if (accessory === "crystalOrb") {
+    return `<g transform="translate(668 560)"><circle cx="54" cy="54" r="46" fill="${c}" fill-opacity="0.28" stroke="${a}" stroke-width="5" /><path d="M54 12 L88 54 L54 96 L20 54 Z" fill="${b}" fill-opacity="0.26" stroke="#f7ffff" stroke-opacity="0.28" stroke-width="3" /></g>`;
+  }
+  if (accessory === "dataBlade") {
+    return `<g transform="translate(654 538) rotate(-16)"><rect x="0" y="0" width="62" height="172" rx="24" fill="${b}" fill-opacity="0.22" stroke="${a}" stroke-width="5" /><path d="M18 28 H44 M18 58 H44 M18 88 H44" stroke="#f7ffff" stroke-opacity="0.48" stroke-width="5" stroke-linecap="round" /></g>`;
+  }
+  if (accessory === "mixPanel") {
+    return `<g transform="translate(188 568) rotate(-8)"><rect x="0" y="0" width="172" height="118" rx="22" fill="#061124" fill-opacity="0.7" stroke="${a}" stroke-width="5" /><path d="M26 84 V34 M66 84 V22 M106 84 V48 M146 84 V30" stroke="${b}" stroke-width="7" stroke-linecap="round" /><circle cx="26" cy="54" r="8" fill="${c}" /><circle cx="66" cy="40" r="8" fill="${c}" /><circle cx="106" cy="62" r="8" fill="${c}" /><circle cx="146" cy="48" r="8" fill="${c}" /></g>`;
+  }
+  if (accessory === "blueprint") {
+    return `<g transform="translate(646 560) rotate(7)"><rect x="0" y="0" width="164" height="120" rx="18" fill="#07142b" fill-opacity="0.72" stroke="${b}" stroke-width="5" /><path d="M24 34 H140 M24 62 H140 M24 90 H92 M108 90 H140" stroke="${a}" stroke-opacity="0.44" stroke-width="4" stroke-linecap="round" /></g>`;
+  }
+  if (accessory === "speakerRig") {
+    return `<g transform="translate(660 552)"><rect x="0" y="0" width="122" height="150" rx="24" fill="#08122c" fill-opacity="0.78" stroke="${c}" stroke-width="5" /><circle cx="61" cy="56" r="35" fill="#07102b" stroke="${a}" stroke-width="5" /><circle cx="61" cy="56" r="12" fill="#f7ffff" fill-opacity="0.74" /><circle cx="61" cy="114" r="18" fill="${b}" fill-opacity="0.38" stroke="${a}" stroke-width="4" /></g>`;
+  }
+  if (accessory === "naturePad") {
+    return `<g transform="translate(660 560)"><path d="M68 0 C126 18 132 84 70 126 C30 102 24 34 68 0 Z" fill="${a}" fill-opacity="0.28" stroke="${b}" stroke-width="5" /><path d="M68 22 C66 64 62 94 50 116" stroke="#f7ffff" stroke-opacity="0.42" stroke-width="4" stroke-linecap="round" /></g>`;
+  }
+  if (accessory === "fractalCube") {
+    return `<g transform="translate(660 548)"><path d="M62 0 L126 36 V108 L62 146 L0 108 V36 Z" fill="${c}" fill-opacity="0.22" stroke="${a}" stroke-width="5" /><path d="M62 0 V72 M0 36 L62 72 L126 36 M62 72 V146" fill="none" stroke="${b}" stroke-opacity="0.52" stroke-width="4" /></g>`;
+  }
+  return "";
+}
+
+function spiritMascotBaseSvg(traits = {}, theme = {}) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  if (traits.outfit === "cloak") {
+    return `<g opacity="0.9"><path d="M500 584 C438 656 428 746 500 860 C572 746 562 656 500 584 Z" fill="${c}" fill-opacity="0.22" stroke="${a}" stroke-opacity="0.18" stroke-width="4" /><path d="M370 746 C438 716 568 804 638 720" fill="none" stroke="${b}" stroke-width="8" stroke-linecap="round" stroke-opacity="0.22" /><path d="M356 812 C432 776 582 858 650 784" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" stroke-opacity="0.18" /></g>`;
+  }
+  if (traits.outfit === "speedSuit") {
+    return `<g><path d="M500 594 L554 780 L500 884 L446 780 Z" fill="${b}" fill-opacity="0.18" stroke="${a}" stroke-opacity="0.22" stroke-width="4" /><path d="M434 782 L328 864 M566 782 L672 864" stroke="${c}" stroke-width="10" stroke-linecap="round" stroke-opacity="0.34" /><path d="M404 820 L338 880 M596 820 L662 880" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.54" /></g>`;
+  }
+  if (traits.outfit === "techVest") {
+    return `<g><ellipse cx="500" cy="858" rx="198" ry="38" fill="${b}" fill-opacity="0.18" stroke="${a}" stroke-opacity="0.22" stroke-width="4" /><rect x="370" y="812" width="260" height="56" rx="28" fill="#071124" fill-opacity="0.62" stroke="${c}" stroke-opacity="0.42" stroke-width="4" /><path d="M414 842 H586 M456 822 V862 M500 822 V862 M544 822 V862" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.58" /></g>`;
+  }
+  if (traits.outfit === "structuredCoat") {
+    return `<g><path d="M500 594 L622 832 L500 892 L378 832 Z" fill="${c}" fill-opacity="0.12" stroke="${a}" stroke-opacity="0.24" stroke-width="4" /><path d="M500 594 V892 M404 780 H596 M430 720 H570" stroke="${b}" stroke-width="4" stroke-opacity="0.32" /></g>`;
+  }
+  if (traits.outfit === "bassJacket") {
+    return `<g><ellipse cx="500" cy="858" rx="236" ry="56" fill="${c}" fill-opacity="0.18" /><path d="M302 820 C378 770 450 790 500 852 C550 790 622 770 698 820" fill="none" stroke="${a}" stroke-width="10" stroke-linecap="round" stroke-opacity="0.32" /><path d="M254 864 C342 812 424 844 500 898 C576 844 658 812 746 864" fill="none" stroke="${b}" stroke-width="7" stroke-linecap="round" stroke-opacity="0.28" /></g>`;
+  }
+  if (traits.outfit === "poncho") {
+    return `<g><path d="M500 586 C442 692 450 782 500 884 C550 782 558 692 500 586 Z" fill="${a}" fill-opacity="0.16" stroke="${b}" stroke-opacity="0.22" stroke-width="4" /><path d="M396 832 C450 780 558 780 612 832" fill="none" stroke="${c}" stroke-width="8" stroke-linecap="round" stroke-opacity="0.36" /><path d="M368 782 C430 734 570 734 632 782" fill="none" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.38" /></g>`;
+  }
+  if (traits.outfit === "patchwork") {
+    return `<g><path d="M500 590 L602 710 L566 856 L500 900 L434 856 L398 710 Z" fill="${c}" fill-opacity="0.16" stroke="${a}" stroke-opacity="0.26" stroke-width="4" /><path d="M398 710 L500 760 L602 710 M434 856 L500 760 L566 856" fill="none" stroke="${b}" stroke-opacity="0.44" stroke-width="5" /><circle cx="500" cy="760" r="10" fill="${a}" fill-opacity="0.76" /></g>`;
+  }
+  return `<path d="M500 584 C442 662 446 780 500 864 C554 780 558 662 500 584 Z" fill="${b}" fill-opacity="0.22" stroke="${a}" stroke-opacity="0.28" stroke-width="4" />`;
+}
+
+function buildSpiritMascotSvg(theme, variant, seed = 0, spirit = null) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const traits = spiritMascotTraits(spirit);
+  const faceColor = escapeSvgText(traits.face || "#f1fffb");
   const lean = ((seed % 17) - 8) * 0.55;
-  const eyeOffset = (seed % 3) - 1;
-  const mouth = seed % 4 === 0
-    ? "M454 492 C480 516 518 516 544 492"
-    : seed % 4 === 1
-      ? "M458 500 C482 506 518 506 542 500"
-      : "M462 490 C482 520 520 520 540 490";
   const motif = spiritMotifSvg(variant?.motif || "star", 452, 548, 0.54, theme, 0.95);
 
   return `
     <g transform="translate(${lean} 0)" filter="url(#mascotGlow)">
       ${spiritMascotCrownSvg(variant?.crown || "halo", theme)}
-      <path d="M300 624 C356 536 420 516 500 516 C580 516 646 536 704 624 C652 632 626 670 602 724 C556 688 520 680 500 774 C480 680 444 688 398 724 C374 670 350 632 300 624 Z" fill="url(#cloakGrad)" stroke="${b}" stroke-opacity="0.42" stroke-width="5" />
-      <path d="M334 412 C334 304 408 236 500 236 C592 236 666 304 666 412 C666 514 602 594 500 594 C398 594 334 514 334 412 Z" fill="url(#faceGrad)" stroke="#f4ffff" stroke-opacity="0.34" stroke-width="5" />
-      <path d="M350 408 C310 408 282 438 282 482 C282 526 312 558 354 558 L354 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" />
-      <path d="M650 408 C690 408 718 438 718 482 C718 526 688 558 646 558 L646 476" fill="${c}" fill-opacity="0.62" stroke="${a}" stroke-opacity="0.42" stroke-width="5" />
-      <path d="M292 416 C308 300 380 220 500 220 C620 220 692 300 708 416" fill="none" stroke="${b}" stroke-width="16" stroke-linecap="round" stroke-opacity="0.76" />
-      <circle cx="${455 + eyeOffset}" cy="430" r="24" fill="#07102b" />
-      <circle cx="${548 + eyeOffset}" cy="430" r="24" fill="#07102b" />
-      <circle cx="${464 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" />
-      <circle cx="${557 + eyeOffset}" cy="420" r="8" fill="#ffffff" fill-opacity="0.76" />
-      <path d="${mouth}" fill="none" stroke="#07102b" stroke-width="8" stroke-linecap="round" stroke-opacity="0.86" />
+      ${spiritMascotHeadwearSvg(traits, theme)}
+      ${spiritMascotOutfitSvg(traits.outfit, theme)}
+      <path d="${spiritMascotHeadPath(traits.shape)}" fill="${faceColor}" fill-opacity="0.88" stroke="#f4ffff" stroke-opacity="0.34" stroke-width="5" />
+      <path d="${spiritMascotHeadPath(traits.shape)}" fill="url(#faceGrad)" fill-opacity="0.72" />
+      ${spiritMascotHeadphonesSvg(traits.headphones, theme)}
+      ${spiritMascotEyeSvg(traits.eyes, seed)}
+      ${spiritMascotMouthSvg(traits.mouth, seed)}
+      ${spiritMascotAccessorySvg(traits.accessory, theme)}
       ${motif}
       <path d="M392 598 C426 646 462 670 500 676 C538 670 574 646 608 598" fill="none" stroke="#f7ffff" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round" />
-      <path d="M500 584 C442 662 446 780 500 864 C554 780 558 662 500 584 Z" fill="${b}" fill-opacity="0.22" stroke="${a}" stroke-opacity="0.28" stroke-width="4" />
+      ${spiritMascotBaseSvg(traits, theme)}
     </g>`;
 }
 
@@ -24091,7 +24356,7 @@ function buildLocalSpiritCollectibleImage(
   const mascotSvg = hasBackgroundImage
     ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
        <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
-    : buildSpiritMascotSvg(theme, variant, seed);
+    : buildSpiritMascotSvg(theme, variant, seed, spirit);
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
