@@ -57,7 +57,7 @@ const DAILY_NEWS_MAX_AGE_DAYS = 45;
 const DAILY_NEWS_BRAZIL_MIN_ITEMS = 3;
 const SUPPORT_DEFAULT_CONFIG = {
   pix: {
-    key: "",
+    key: "4faa32c3-f275-401b-8b56-d9e1ea1501c8",
     name: "PEDRO FREIRE",
     city: "SAO PAULO",
     description: "Sonic Search tip"
@@ -3964,6 +3964,10 @@ const supportPixStatus = document.getElementById("supportPixStatus");
 const supportPixQr = document.getElementById("supportPixQr");
 const supportPixPlaceholder = document.getElementById("supportPixPlaceholder");
 const supportPixHint = document.getElementById("supportPixHint");
+const supportPixKeyRow = document.getElementById("supportPixKeyRow");
+const supportPixKeyLabel = document.getElementById("supportPixKeyLabel");
+const supportPixKeyValue = document.getElementById("supportPixKeyValue");
+const supportCopyPixKeyBtn = document.getElementById("supportCopyPixKeyBtn");
 const supportPixPayload = document.getElementById("supportPixPayload");
 const supportCopyPixBtn = document.getElementById("supportCopyPixBtn");
 const supportCryptoKicker = document.getElementById("supportCryptoKicker");
@@ -10608,9 +10612,11 @@ const I18N = {
     supportPixTitle: "QR Code + copia e cola",
     supportPixReady: "Pix ativo",
     supportPixMissing: "Aguardando chave",
-    supportPixHintReady: "Aponte a câmera para o QR ou copie o Pix copia e cola.",
+    supportPixHintReady: "Escolha o valor, copie o código Pix e cole no app do banco. A chave também fica visível como backup.",
     supportPixHintMissing: "Configure sua chave Pix em SUPPORT_PAYMENT_CONFIG para ativar o QR Code real.",
-    supportCopyPix: "Copiar Pix",
+    supportPixKeyLabel: "Chave Pix",
+    supportCopyPixKey: "Copiar chave",
+    supportCopyPix: "Copiar código Pix",
     supportCopying: "Copiando...",
     supportCryptoKicker: "Crypto",
     supportCryptoTitle: "Bitcoin / Lightning",
@@ -11177,9 +11183,11 @@ const I18N = {
     supportPixTitle: "QR Code + copy-paste",
     supportPixReady: "Pix active",
     supportPixMissing: "Waiting for key",
-    supportPixHintReady: "Scan the QR or copy the Pix payment code.",
+    supportPixHintReady: "Choose the amount, copy the Pix code, and paste it into your bank app. The key is also visible as backup.",
     supportPixHintMissing: "Configure your Pix key in SUPPORT_PAYMENT_CONFIG to enable the real QR Code.",
-    supportCopyPix: "Copy Pix",
+    supportPixKeyLabel: "Pix key",
+    supportCopyPixKey: "Copy key",
+    supportCopyPix: "Copy Pix code",
     supportCryptoKicker: "Crypto",
     supportCryptoTitle: "Bitcoin / Lightning",
     supportCryptoReady: "Crypto active",
@@ -11746,9 +11754,11 @@ const I18N = {
     supportPixTitle: "QR Code + copiar y pegar",
     supportPixReady: "Pix activo",
     supportPixMissing: "Esperando clave",
-    supportPixHintReady: "Escanea el QR o copia el código Pix.",
+    supportPixHintReady: "Elige el valor, copia el código Pix y pégalo en la app del banco. La clave también queda visible como respaldo.",
     supportPixHintMissing: "Configura tu clave Pix en SUPPORT_PAYMENT_CONFIG para activar el QR Code real.",
-    supportCopyPix: "Copiar Pix",
+    supportPixKeyLabel: "Clave Pix",
+    supportCopyPixKey: "Copiar clave",
+    supportCopyPix: "Copiar código Pix",
     supportCryptoKicker: "Crypto",
     supportCryptoTitle: "Bitcoin / Lightning",
     supportCryptoReady: "Crypto activo",
@@ -12841,6 +12851,8 @@ function applyLanguage() {
   setText("#supportCustomAmountLabel", t("supportCustomAmount"));
   setText("#supportPixKicker", t("supportPixKicker"));
   setText("#supportPixTitle", t("supportPixTitle"));
+  setText("#supportPixKeyLabel", t("supportPixKeyLabel"));
+  setText("#supportCopyPixKeyBtn", t("supportCopyPixKey"));
   setText("#supportCopyPixBtn", t("supportCopyPix"));
   setText("#supportCryptoKicker", t("supportCryptoKicker"));
   setText("#supportCryptoTitle", t("supportCryptoTitle"));
@@ -17096,6 +17108,7 @@ function setSupportQr(imageEl, placeholderEl, payload = "", alt = "") {
 
 function renderSupportPanel() {
   if (!supportPanel) return;
+  const pixKey = String(SUPPORT_PAYMENT_CONFIG.pix?.key || "").trim();
   const pixPayload = buildPixPayload();
   const cryptoPayload = buildCryptoPayload();
   const hasPix = Boolean(pixPayload);
@@ -17107,6 +17120,9 @@ function renderSupportPanel() {
     supportPixPayload.value = pixPayload;
     supportPixPayload.classList.toggle("hidden", !hasPix);
   }
+  if (supportPixKeyRow) supportPixKeyRow.classList.toggle("hidden", !pixKey);
+  if (supportPixKeyValue) supportPixKeyValue.textContent = pixKey;
+  if (supportCopyPixKeyBtn) supportCopyPixKeyBtn.disabled = !pixKey;
   if (supportCopyPixBtn) supportCopyPixBtn.disabled = !hasPix;
   setSupportQr(supportPixQr, supportPixPlaceholder, pixPayload, "QR Code Pix para apoiar o Sonic Search");
 
@@ -28515,6 +28531,10 @@ bind(supportCustomAmount, "input", () => {
 
 bind(supportCopyPixBtn, "click", () => {
   copySupportText(supportPixPayload?.value || "", supportCopyPixBtn);
+});
+
+bind(supportCopyPixKeyBtn, "click", () => {
+  copySupportText(SUPPORT_PAYMENT_CONFIG.pix?.key || supportPixKeyValue?.textContent || "", supportCopyPixKeyBtn);
 });
 
 bind(supportCopyCryptoBtn, "click", () => {

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607q" />
+    <link rel="stylesheet" href="styles.css?v=20260607r" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -486,6 +486,11 @@
               <div id="supportPixPlaceholder" class="support-qr-placeholder">PIX</div>
             </div>
             <p id="supportPixHint" class="muted support-payment-hint">Configure a chave Pix para ativar o QR Code real.</p>
+            <div id="supportPixKeyRow" class="support-pix-key-row hidden">
+              <span id="supportPixKeyLabel">Chave Pix</span>
+              <code id="supportPixKeyValue"></code>
+              <button id="supportCopyPixKeyBtn" class="secondary support-key-copy-btn" type="button">Copiar chave</button>
+            </div>
             <textarea id="supportPixPayload" class="support-copy-field" readonly rows="3" aria-label="Pix copia e cola"></textarea>
             <button id="supportCopyPixBtn" class="secondary support-copy-btn" type="button">Copiar Pix</button>
           </article>
@@ -1320,6 +1325,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607s"></script>
+    <script src="app.js?v=20260607t"></script>
   </body>
 </html>

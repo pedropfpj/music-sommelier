@@ -2144,6 +2144,41 @@ body[data-vibe-theme="hard"] {
   line-height: 1.35;
 }
 
+.support-pix-key-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(123, 244, 217, 0.22);
+  border-radius: 8px;
+  padding: 0.52rem;
+  background:
+    linear-gradient(135deg, rgba(123, 244, 217, 0.08), rgba(119, 151, 255, 0.06)),
+    rgba(2, 7, 18, 0.66);
+}
+
+.support-pix-key-row span {
+  color: #98ffe9;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.support-pix-key-row code {
+  min-width: 0;
+  color: #e8f6ff;
+  font: 0.78rem/1.25 "Chakra Petch", monospace;
+  overflow-wrap: anywhere;
+}
+
+.support-key-copy-btn {
+  min-height: 34px;
+  padding: 0.34rem 0.56rem;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
 .support-copy-field {
   width: 100%;
   min-height: 76px;
@@ -6653,6 +6688,15 @@ input[type="range"] {
 
   .support-payment-head {
     align-items: flex-start;
+  }
+
+  .support-pix-key-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .support-key-copy-btn {
+    width: 100%;
   }
 
   .support-qr-wrap {
