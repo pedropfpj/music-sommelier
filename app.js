@@ -4254,6 +4254,10 @@ const summaryLikedArtistsCount = document.getElementById("summaryLikedArtistsCou
 const summaryDislikedArtistsCount = document.getElementById("summaryDislikedArtistsCount");
 const summaryFavoriteStyle = document.getElementById("summaryFavoriteStyle");
 const summaryAchievementText = document.getElementById("summaryAchievementText");
+const summaryLikedTracksTitle = document.getElementById("summaryLikedTracksTitle");
+const summaryLikedTracksHint = document.getElementById("summaryLikedTracksHint");
+const summaryLikedTracksList = document.getElementById("summaryLikedTracksList");
+const summaryLikedTracksClearBtn = document.getElementById("summaryLikedTracksClearBtn");
 const summaryFiveStarTracks = document.getElementById("summaryFiveStarTracks");
 const summaryKnownArtists = document.getElementById("summaryKnownArtists");
 const summaryLikedArtists = document.getElementById("summaryLikedArtists");
@@ -4373,6 +4377,7 @@ let trackRatings = new Map();
 let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
 let trackPreviewIssueSignals = new Map();
+let likedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
 let previewReliabilityByStyle = new Map();
@@ -4577,6 +4582,7 @@ const AUDIO_GAIN_PROFILE = {
   uiToneMax: 0.42
 };
 const PROGRESS_MAP_LIMIT = 240;
+const LIKED_TRACK_HISTORY_LIMIT = 80;
 const DEFAULT_LANGUAGE = (() => {
   const language =
     typeof navigator !== "undefined"
@@ -9011,6 +9017,7 @@ function registerTrackFeedback(track, liked, options = {}) {
     removeArtistIdentityFromSet(rejectedArtists, track.artist);
     adjustTrackPreviewIssueSignal(track, options?.rewardPreview ? -0.95 : -0.45);
     adjustPreviewReliabilitySignal(track.style, options?.rewardPreview ? 0.16 : 0.07);
+    rememberLikedTrack(track, options?.source || "liked");
     saveProgress();
     return "liked";
   }
@@ -9237,6 +9244,11 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
   trackRatings.set(key, value);
   if (nextSignal === 0) trackRatingSignals.delete(key);
   else trackRatingSignals.set(key, nextSignal);
+  if (value >= 4) {
+    rememberLikedTrack(currentRecommendation, `rating_${value}`);
+  } else if (value <= 2) {
+    removeLikedTrackFromHistory(key, { silent: true, save: false, render: false });
+  }
 
   recalculateRatingStats();
   renderTrackRating(currentRecommendation);
@@ -10810,6 +10822,19 @@ const I18N = {
     summaryAchievementTierD: "Lenda do espectro",
     summaryAchievementTierProgress: "Nível atual: {tier}. Faltam {remaining} faixas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nível máximo alcançado: {tier}.",
+    summaryLikedTracksTitle: "Músicas curtidas",
+    summaryLikedTracksHint: "Tudo que você curtir fica salvo aqui para ouvir depois.",
+    summaryLikedTracksClear: "Limpar",
+    summaryLikedTracksEmpty: "Ainda não tem música curtida. Toque em Curti ou arraste para a direita para salvar aqui.",
+    summaryLikedTracksCleared: "Histórico de músicas curtidas limpo.",
+    summaryLikedTrackRemoved: "Música removida das curtidas.",
+    summaryLikedTrackOpenSpotify: "Spotify",
+    summaryLikedTrackOpenYoutube: "YouTube",
+    summaryLikedTrackOpenSoundcloud: "SoundCloud",
+    summaryLikedTrackSaved: "Salva no perfil",
+    summaryLikedTrackSavedAt: "Curtida em {date}",
+    summaryLikedTrackRemove: "Remover",
+    summaryLikedTrackRemoveAria: "Remover {song} de {artist} das músicas curtidas",
     summaryFiveStarTracksTitle: "Faixas que você marcou com 5 estrelas",
     summaryEmptyFiveStarTracks: "Avalie faixas com 5 estrelas para montar seu mapa de gosto.",
     summaryKnownArtistsTitle: "Artistas que você conhece",
@@ -11354,6 +11379,19 @@ const I18N = {
     summaryAchievementTierD: "Spectrum legend",
     summaryAchievementTierProgress: "Current tier: {tier}. {remaining} more 5★ tracks to reach {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Max tier reached: {tier}.",
+    summaryLikedTracksTitle: "Liked tracks",
+    summaryLikedTracksHint: "Everything you like is saved here so you can listen again later.",
+    summaryLikedTracksClear: "Clear",
+    summaryLikedTracksEmpty: "No liked tracks yet. Tap Like or swipe right to save one here.",
+    summaryLikedTracksCleared: "Liked track history cleared.",
+    summaryLikedTrackRemoved: "Track removed from liked tracks.",
+    summaryLikedTrackOpenSpotify: "Spotify",
+    summaryLikedTrackOpenYoutube: "YouTube",
+    summaryLikedTrackOpenSoundcloud: "SoundCloud",
+    summaryLikedTrackSaved: "Saved to profile",
+    summaryLikedTrackSavedAt: "Liked on {date}",
+    summaryLikedTrackRemove: "Remove",
+    summaryLikedTrackRemoveAria: "Remove {song} by {artist} from liked tracks",
     summaryFiveStarTracksTitle: "Tracks you rated 5 stars",
     summaryEmptyFiveStarTracks: "Rate tracks with 5 stars to build your taste map.",
     summaryKnownArtistsTitle: "Artists you already know",
@@ -11898,6 +11936,19 @@ const I18N = {
     summaryAchievementTierD: "Leyenda del espectro",
     summaryAchievementTierProgress: "Nivel actual: {tier}. Faltan {remaining} pistas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nivel máximo alcanzado: {tier}.",
+    summaryLikedTracksTitle: "Pistas con like",
+    summaryLikedTracksHint: "Todo lo que marques como me gusta queda guardado aquí para escuchar después.",
+    summaryLikedTracksClear: "Limpiar",
+    summaryLikedTracksEmpty: "Aún no hay pistas con like. Toca Me gusta o desliza a la derecha para guardarlas aquí.",
+    summaryLikedTracksCleared: "Historial de pistas con like limpio.",
+    summaryLikedTrackRemoved: "Pista eliminada de tus likes.",
+    summaryLikedTrackOpenSpotify: "Spotify",
+    summaryLikedTrackOpenYoutube: "YouTube",
+    summaryLikedTrackOpenSoundcloud: "SoundCloud",
+    summaryLikedTrackSaved: "Guardada en el perfil",
+    summaryLikedTrackSavedAt: "Like el {date}",
+    summaryLikedTrackRemove: "Eliminar",
+    summaryLikedTrackRemoveAria: "Eliminar {song} de {artist} de las pistas con like",
     summaryFiveStarTracksTitle: "Pistas valoradas con 5 estrellas",
     summaryEmptyFiveStarTracks: "Valora pistas con 5 estrellas para construir tu mapa de gusto.",
     summaryKnownArtistsTitle: "Artistas que ya conoces",
@@ -12859,6 +12910,9 @@ function applyLanguage() {
   setText("#summaryDislikedCountLabel", t("summaryDislikedCountLabel"));
   setText("#summaryFavoriteStyleLabel", t("summaryFavoriteStyleLabel"));
   setText("#summaryAchievementLabel", t("summaryAchievementLabel"));
+  setText("#summaryLikedTracksTitle", t("summaryLikedTracksTitle"));
+  setText("#summaryLikedTracksHint", t("summaryLikedTracksHint"));
+  setText("#summaryLikedTracksClearBtn", t("summaryLikedTracksClear"));
   setText("#summaryFiveStarTracksTitle", t("summaryFiveStarTracksTitle"));
   setText("#summaryKnownArtistsTitle", t("summaryKnownArtistsTitle"));
   setText("#summaryLikedArtistsTitle", t("summaryLikedArtistsTitle"));
@@ -13184,6 +13238,7 @@ function resetSessionStateInMemory() {
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
+  likedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   youtubePreviewSearchAttempt = 0;
@@ -17231,6 +17286,7 @@ function saveProgress() {
       trackRatings: mapEntriesForStorage(trackRatings),
       trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
       trackPreferenceSignals: mapEntriesForStorage(trackPreferenceSignals),
+      likedTrackHistory: sanitizeLikedTrackHistory(likedTrackHistory),
       trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
       previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
       quiz: {
@@ -17272,6 +17328,7 @@ function loadProgress() {
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
+  likedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
 
@@ -17319,6 +17376,7 @@ function loadProgress() {
         hydrateMapFromStorage(trackRatings, parsed?.trackRatings);
         hydrateMapFromStorage(trackRatingSignals, parsed?.trackRatingSignals);
         hydrateMapFromStorage(trackPreferenceSignals, parsed?.trackPreferenceSignals);
+        likedTrackHistory = sanitizeLikedTrackHistory(parsed?.likedTrackHistory);
         hydrateMapFromStorage(trackPreviewIssueSignals, parsed?.trackPreviewIssueSignals);
         hydrateMapFromStorage(previewReliabilityByStyle, parsed?.previewReliabilityByStyle);
         const quizProgress = parsed?.quiz || {};
@@ -17333,6 +17391,9 @@ function loadProgress() {
     progressStorageReady = true;
   }
 
+  if (!likedTrackHistory.length) {
+    likedTrackHistory = backfillLikedTrackHistoryFromSignals();
+  }
   recalculateRatingStats();
   updateStats();
   renderTrackRating(currentRecommendation);
@@ -26523,6 +26584,238 @@ function fiveStarTracksForSummary(limit = 12) {
   return result;
 }
 
+function safeExternalUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return "";
+    return parsed.href;
+  } catch (_err) {
+    return "";
+  }
+}
+
+function firstSafeExternalUrl(...values) {
+  for (const value of values) {
+    const url = safeExternalUrl(value);
+    if (url) return url;
+  }
+  return "";
+}
+
+function likedTrackKeyFromEntry(entry = {}) {
+  const storedKey = normalize(entry?.key || "");
+  if (storedKey) return storedKey;
+  return recommendationTrackKey(entry);
+}
+
+function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().toISOString()) {
+  if (!track) return null;
+  const key = likedTrackKeyFromEntry(track);
+  if (!key) return null;
+  const catalogTrack = trackFromRecommendationKey(key);
+  const base = { ...(catalogTrack || {}), ...(track || {}) };
+  const artist = normalizeInlineText(base.artist || "");
+  const song = normalizeInlineText(base.song || "");
+  if (!artist || !song) return null;
+  const normalizedTrack = {
+    ...base,
+    key,
+    artist,
+    song,
+    style: String(base.style || "").trim(),
+    bpm: base.bpm || "",
+    energy: normalizeInlineText(base.energy || ""),
+    label: normalizeInlineText(base.label || "")
+  };
+  const parsedDate = likedAt ? new Date(likedAt) : null;
+  return {
+    key,
+    artist,
+    song,
+    style: normalizedTrack.style,
+    bpm: normalizedTrack.bpm,
+    energy: normalizedTrack.energy,
+    label: normalizedTrack.label,
+    spotifyUrl: firstSafeExternalUrl(base.spotifyTrackUrl, base.spotifyUrl) || buildSpotifyTrackLink(normalizedTrack),
+    youtubeUrl: firstSafeExternalUrl(base.youtubeTrackUrl, base.youtubeUrl) || buildYouTubeTrackLink(normalizedTrack),
+    soundcloudUrl: firstSafeExternalUrl(base.soundcloudTrackUrl, base.soundcloudUrl) || buildSoundCloudTrackLink(normalizedTrack),
+    likedAt: parsedDate && !Number.isNaN(parsedDate.getTime()) ? parsedDate.toISOString() : "",
+    source: normalizeInlineText(source || "liked")
+  };
+}
+
+function sanitizeLikedTrackHistory(values = []) {
+  if (!Array.isArray(values)) return [];
+  const result = [];
+  const seen = new Set();
+  values.forEach((item) => {
+    const entry = likedTrackHistoryEntry(item, item?.source || "liked", item?.likedAt || "");
+    if (!entry || seen.has(entry.key)) return;
+    seen.add(entry.key);
+    result.push(entry);
+  });
+  return result.slice(0, LIKED_TRACK_HISTORY_LIMIT);
+}
+
+function backfillLikedTrackHistoryFromSignals(limit = LIKED_TRACK_HISTORY_LIMIT) {
+  const candidates = new Map();
+  const pushCandidate = (key, score, source) => {
+    const normalizedKey = normalize(key || "");
+    if (!normalizedKey) return;
+    const track = trackFromRecommendationKey(normalizedKey);
+    if (!track) return;
+    const current = candidates.get(normalizedKey);
+    const nextScore = Number(score) || 0;
+    if (current && current.score >= nextScore) return;
+    candidates.set(normalizedKey, { track, score: nextScore, source });
+  };
+
+  trackPreferenceSignals.forEach((signal, key) => {
+    const score = Number(signal) || 0;
+    if (score >= 0.55) pushCandidate(key, score * 3, "positive_signal");
+  });
+  trackRatings.forEach((stars, key) => {
+    const value = Math.round(Number(stars) || 0);
+    if (value >= 4) pushCandidate(key, value * 2.4, `rating_${value}`);
+  });
+  trackRatingSignals.forEach((signal, key) => {
+    const score = Number(signal) || 0;
+    if (score >= 0.55) pushCandidate(key, score * 3.4, "rating_signal");
+  });
+
+  return Array.from(candidates.values())
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((item) => likedTrackHistoryEntry(item.track, item.source, ""))
+    .filter(Boolean);
+}
+
+function rememberLikedTrack(track, source = "liked") {
+  const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
+  if (!entry) return;
+  likedTrackHistory = [
+    entry,
+    ...likedTrackHistory.filter((item) => likedTrackKeyFromEntry(item) !== entry.key)
+  ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
+  renderLikedTrackHistory();
+}
+
+function likedTrackDateLabel(value = "") {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return t("summaryLikedTrackSaved");
+  const formatted = new Intl.DateTimeFormat(currentLocale(), {
+    day: "2-digit",
+    month: "short"
+  }).format(date);
+  return t("summaryLikedTrackSavedAt", { date: formatted });
+}
+
+function likedTrackMetaParts(entry = {}) {
+  const track = { ...(trackFromRecommendationKey(entry.key) || {}), ...entry };
+  const parts = [];
+  const artist = formatSummaryArtistName(track.artist || "");
+  const style = styleLabelByValue(track.style || "");
+  const bpm = resolveBpmDisplay(track).range || "";
+  const energy = track.energy ? energyLabelByValue(track.energy) : "";
+  if (artist) parts.push(artist);
+  if (style) parts.push(style);
+  if (bpm) parts.push(bpm);
+  if (energy) parts.push(energy);
+  return parts;
+}
+
+function renderLikedTrackHistory() {
+  if (!summaryLikedTracksList) return;
+  summaryLikedTracksList.innerHTML = "";
+  if (summaryLikedTracksClearBtn) summaryLikedTracksClearBtn.disabled = likedTrackHistory.length <= 0;
+
+  if (!likedTrackHistory.length) {
+    const empty = document.createElement("p");
+    empty.className = "liked-track-empty muted";
+    empty.textContent = t("summaryLikedTracksEmpty");
+    summaryLikedTracksList.appendChild(empty);
+    return;
+  }
+
+  likedTrackHistory.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
+    const item = document.createElement("article");
+    item.className = "liked-track-item";
+
+    const body = document.createElement("div");
+    body.className = "liked-track-body";
+
+    const title = document.createElement("h5");
+    title.className = "liked-track-title";
+    title.textContent = formatSummaryTrackName(entry.song || "") || entry.song || t("summaryNoData");
+    body.appendChild(title);
+
+    const meta = document.createElement("p");
+    meta.className = "liked-track-meta";
+    meta.textContent = likedTrackMetaParts(entry).join(" • ");
+    body.appendChild(meta);
+
+    const saved = document.createElement("p");
+    saved.className = "liked-track-date";
+    saved.textContent = likedTrackDateLabel(entry.likedAt);
+    body.appendChild(saved);
+
+    const actions = document.createElement("div");
+    actions.className = "liked-track-actions";
+    [
+      { label: t("summaryLikedTrackOpenSpotify"), url: entry.spotifyUrl },
+      { label: t("summaryLikedTrackOpenYoutube"), url: entry.youtubeUrl },
+      { label: t("summaryLikedTrackOpenSoundcloud"), url: entry.soundcloudUrl }
+    ].forEach((linkData) => {
+      const url = safeExternalUrl(linkData.url);
+      if (!url) return;
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = linkData.label;
+      actions.appendChild(link);
+    });
+
+    const removeButton = document.createElement("button");
+    removeButton.className = "liked-track-remove";
+    removeButton.type = "button";
+    removeButton.dataset.likedTrackRemove = "1";
+    removeButton.dataset.likedTrackKey = entry.key;
+    removeButton.textContent = t("summaryLikedTrackRemove");
+    removeButton.setAttribute("aria-label", t("summaryLikedTrackRemoveAria", {
+      song: entry.song,
+      artist: entry.artist
+    }));
+    actions.appendChild(removeButton);
+
+    item.appendChild(body);
+    item.appendChild(actions);
+    summaryLikedTracksList.appendChild(item);
+  });
+}
+
+function removeLikedTrackFromHistory(trackKey = "", options = {}) {
+  const normalizedKey = normalize(trackKey || "");
+  if (!normalizedKey) return false;
+  const before = likedTrackHistory.length;
+  likedTrackHistory = likedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
+  if (likedTrackHistory.length === before) return false;
+  if (options.render !== false) renderLikedTrackHistory();
+  if (options.save !== false) saveProgress();
+  if (!options.silent) showToast(t("summaryLikedTrackRemoved"));
+  return true;
+}
+
+function clearLikedTrackHistory() {
+  if (!likedTrackHistory.length) return;
+  likedTrackHistory = [];
+  renderLikedTrackHistory();
+  saveProgress();
+  showToast(t("summaryLikedTracksCleared"));
+}
+
 function updateStats() {
   recalculateRatingStats();
   pruneInvalidArtistSignals(adaptiveModel.likedArtists);
@@ -26553,6 +26846,7 @@ function updateStats() {
   if (summaryDislikedArtistsCount) summaryDislikedArtistsCount.textContent = String(adaptiveModel.dislikedArtists.size);
   if (summaryFavoriteStyle) summaryFavoriteStyle.textContent = resolveFavoriteStyleLabel();
   if (summaryAchievementText) summaryAchievementText.textContent = resolveFiveStarAchievementText();
+  renderLikedTrackHistory();
   renderSummaryTags(summaryFiveStarTracks, fiveStarTracks, t("summaryEmptyFiveStarTracks"));
   renderSummaryTags(summaryKnownArtists, knownArtistsTop, t("summaryEmptyKnown"));
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
@@ -28009,6 +28303,15 @@ bind(authAppleBtn, "click", loginWithApple);
 bind(styleInfoCloseBtn, "click", () => {
   styleInfoDismissed = true;
   if (styleInfoBubble) styleInfoBubble.classList.add("hidden");
+});
+bind(summaryLikedTracksList, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-liked-track-remove]") : null;
+  if (!target) return;
+  event.preventDefault();
+  removeLikedTrackFromHistory(target.dataset.likedTrackKey || "");
+});
+bind(summaryLikedTracksClearBtn, "click", () => {
+  clearLikedTrackHistory();
 });
 bind(authPassword, "keydown", (event) => {
   if (event.key !== "Enter") return;
