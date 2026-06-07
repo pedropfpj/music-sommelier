@@ -8837,11 +8837,42 @@ iframe {
   overflow: visible;
 }
 
+.hero-logo-btn {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hero-logo-btn:hover {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.hero-logo-btn:focus-visible {
+  outline: 2px solid rgba(126, 232, 198, 0.86);
+  outline-offset: 6px;
+}
+
 .hero-logo-mark {
   max-height: 104px;
   transform: scale(1.1);
   transform-origin: center;
+  pointer-events: none;
+  transition: filter 180ms ease, transform 180ms ease;
   filter: drop-shadow(0 12px 28px rgba(49, 236, 223, 0.2));
+}
+
+.hero-logo-btn:hover .hero-logo-mark,
+.hero-logo-btn:focus-visible .hero-logo-mark {
+  transform: scale(1.14);
+  filter: drop-shadow(0 14px 34px rgba(49, 236, 223, 0.32));
 }
 
 @media (min-width: 1181px) {

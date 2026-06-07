@@ -3787,6 +3787,7 @@ const audioVolumeControl = document.getElementById("audioVolumeControl");
 const audioVolumeLabel = document.getElementById("audioVolumeLabel");
 const audioVolumeSlider = document.getElementById("audioVolumeSlider");
 const audioVolumeValue = document.getElementById("audioVolumeValue");
+const heroLogoBtn = document.getElementById("heroLogoBtn");
 const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
 const usageGuideScreen = document.getElementById("usageGuideScreen");
@@ -10217,6 +10218,8 @@ const I18N = {
     quickSurpriseCancelBtn: "Cancelar",
     quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
     quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
+    heroLogoLabel: "Voltar ao início",
+    heroLogoToast: "Voltei para Descobrir.",
     heroTitle: "Encontre uma faixa que combina com agora",
     heroDesc: "Escolha o clima, o pulso e o quanto quer sair do óbvio. O Sonic Search cruza seu histórico com sinais de cena para sugerir música eletrônica com mais tato.",
     tabDiscover: "Descobrir",
@@ -10733,6 +10736,8 @@ const I18N = {
     quickSurpriseCancelBtn: "Cancel",
     quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
     quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
+    heroLogoLabel: "Back to home",
+    heroLogoToast: "Back to Discover.",
     heroTitle: "Find a track that fits right now",
     heroDesc: "Choose the mood, pulse, and how far from obvious you want to go. Sonic Search blends your history with scene signals to suggest electronic music with more feel.",
     tabDiscover: "Discover",
@@ -11248,6 +11253,8 @@ const I18N = {
     quickSurpriseCancelBtn: "Cancelar",
     quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
     quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
+    heroLogoLabel: "Volver al inicio",
+    heroLogoToast: "Volví a Descubrir.",
     heroTitle: "Encuentra una pista que encaje ahora",
     heroDesc: "Elige el clima, el pulso y cuánto quieres alejarte de lo obvio. Sonic Search cruza tu historial con señales de escena para sugerir electrónica con más tacto.",
     floatingSurpriseBtn: "Sorpresa",
@@ -12329,6 +12336,10 @@ function applyLanguage() {
   setText("#quickSurpriseCancelBtn", t("quickSurpriseCancelBtn"));
   if (quickSurpriseKnownArtistsEl) quickSurpriseKnownArtistsEl.placeholder = t("quickSurpriseKnownPlaceholder");
   if (quickSurpriseKnownTracksEl) quickSurpriseKnownTracksEl.placeholder = t("quickSurpriseKnownTracksPlaceholder");
+  if (heroLogoBtn) {
+    heroLogoBtn.setAttribute("aria-label", t("heroLogoLabel"));
+    heroLogoBtn.title = t("heroLogoLabel");
+  }
   setText("#heroTitle", t("heroTitle"));
   setText("#heroDesc", t("heroDesc"));
   setText("#heroSlogan", t("appSlogan"));
@@ -16380,6 +16391,17 @@ function setActiveAppTab(tabName = "discover") {
   appTabPanels.forEach((panel) => {
     panel.classList.toggle("active", panel.getAttribute("data-app-tab") === safeTab);
   });
+}
+
+function handleHeroLogoClick() {
+  if (appContent?.classList.contains("hidden")) return;
+  setActiveAppTab("discover");
+  if (styleInfoBubble) styleInfoBubble.classList.add("hidden");
+  window.requestAnimationFrame(() => {
+    const top = Math.max(0, (appContent?.getBoundingClientRect().top || 0) + window.scrollY - 8);
+    window.scrollTo({ top, behavior: "smooth" });
+  });
+  showToast(t("heroLogoToast"));
 }
 
 function bestBpmOptionForStyle(style = "", preferredBpm = "") {
@@ -27676,6 +27698,7 @@ bind(djModeGenerateBtn, "click", generateDjModeJourney);
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshDailyNews({ silent: false });
 });
+bind(heroLogoBtn, "click", handleHeroLogoClick);
 bind(appTabBar, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
   if (!target) return;
