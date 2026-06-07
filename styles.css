@@ -9243,7 +9243,26 @@ iframe {
 
 @media (min-width: 1120px) {
   .app-shell {
-    width: min(1120px, 92%);
+    width: min(1200px, calc(100% - 96px));
+    column-gap: 0.96rem;
+  }
+
+  .swipe-start-panel[data-app-tab="discover"] {
+    grid-column: 1 / span 7;
+    justify-self: end;
+    width: min(100%, 690px);
+  }
+
+  .preference-panel[data-app-tab="discover"] {
+    grid-column: 8 / -1;
+    justify-self: start;
+    width: min(100%, 500px);
+    top: calc(var(--signature-bar-height) + 0.85rem);
+  }
+
+  .swipe-start-stage,
+  .swipe-discovery-strip {
+    margin-inline: auto;
   }
 }
 
