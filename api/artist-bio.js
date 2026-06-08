@@ -1,40 +1,4 @@
-const { callOpenAiJson, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
-
-const ARTIST_BIO_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["bio", "sourceSummary", "sources", "confidence", "origin", "genre"],
-  properties: {
-    bio: {
-      type: "string"
-    },
-    sourceSummary: {
-      type: "string"
-    },
-    sources: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["name", "url"],
-        properties: {
-          name: { type: "string" },
-          url: { type: "string" }
-        }
-      }
-    },
-    confidence: {
-      type: "string",
-      enum: ["high", "medium", "low"]
-    },
-    origin: {
-      type: "string"
-    },
-    genre: {
-      type: "string"
-    }
-  }
-};
+const { callOpenAiText, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 module.exports = async function handler(req, res) {
   if (!requireOpenAiPost(req, res, {
@@ -52,12 +16,18 @@ module.exports = async function handler(req, res) {
 
   const system = [
     "You are Sonic Search's artist bio assistant for an electronic music discovery app.",
-    "Return only valid JSON matching the schema.",
+    "Write in the requested language.",
+    "Return plain text only, with no markdown and no JSON.",
     "Use only provided metadata and listed source names/URLs. Never invent a real biography, country, label, alias, or scene detail.",
-    "Write like a concise electronic-music magazine bio: vivid, useful, and easy to understand.",
-    "Explain who the artist/project is when the data supports it, what sound they represent, why listeners may like it, and why this recommendation fits.",
-    "If metadata is weak, clearly frame it as a contextual reading based on catalog/style signals instead of pretending it is a verified biography.",
-    "Mention source names naturally in sourceSummary, not inside every sentence."
+    "If metadata is weak, clearly frame it as a sound/catalog reading, not as a verified biography.",
+    "Write like a concise electronic-music editor: vivid, useful, grounded, and easy to understand.",
+    "Structure the text naturally in one compact paragraph:",
+    "1) who/what the artist or project seems to be only when data supports it;",
+    "2) how the sound behaves inside the subgenre;",
+    "3) why this track entered the user's radar and what to listen for next.",
+    "If the artist might not strictly belong to the requested subgenre, say that the track is being read by sonic fit instead of forcing a genre claim.",
+    "Avoid filler, hype, fake certainty, and mythology unrelated to the music.",
+    "Keep it between 90 and 130 words."
   ].join(" ");
 
   const user = JSON.stringify({
@@ -73,7 +43,9 @@ module.exports = async function handler(req, res) {
       origin: trimText(track.origin, 120),
       genre: trimText(track.genre, 120),
       currentBio: trimText(track.currentBio, 900),
-      profileHint: trimText(track.profileHint, 500)
+      profileHint: trimText(track.profileHint, 500),
+      styleSummary: trimText(track.styleSummary, 700),
+      recommendationContext: trimText(track.recommendationContext, 300)
     },
     sources: knownSources.map((source) => ({
       name: trimText(source?.name, 60),
@@ -82,24 +54,28 @@ module.exports = async function handler(req, res) {
   });
 
   try {
-    const result = await callOpenAiJson({
-      schemaName: "artist_bio",
-      schema: ARTIST_BIO_SCHEMA,
+    const result = await callOpenAiText({
       system,
       user,
-      maxOutputTokens: 520
+      maxOutputTokens: 1400
     });
     if (!result.ok) {
       sendJson(res, result.status || 500, result.payload);
       return;
     }
+    const sources = knownSources.map((source) => ({
+      name: trimText(source?.name, 60),
+      url: trimText(source?.url, 240)
+    }));
     sendJson(res, 200, {
-      bio: trimText(result.payload.bio, 760),
-      sourceSummary: trimText(result.payload.sourceSummary, 180),
-      sources: Array.isArray(result.payload.sources) ? result.payload.sources : [],
-      confidence: result.payload.confidence || "low",
-      origin: trimText(result.payload.origin, 120),
-      genre: trimText(result.payload.genre, 120),
+      bio: trimText(result.payload.text, 900),
+      sourceSummary: sources.length
+        ? `Leitura cruzada com ${sources.slice(0, 3).map((source) => source.name).join(", ")} e sinais do catálogo.`
+        : "Leitura cruzada com sinais do catálogo.",
+      sources,
+      confidence: track.currentBio || track.origin || track.genre ? "medium" : "low",
+      origin: trimText(track.origin, 120),
+      genre: trimText(track.genre || track.styleLabel || track.style, 120),
       source: "openai"
     });
   } catch (error) {

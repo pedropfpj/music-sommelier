@@ -20901,6 +20901,8 @@ function buildArtistBioAiPayload(track) {
   const originLabel = origin
     ? [origin.area, origin.country].filter(Boolean).join(", ")
     : "";
+  const styleSummary = styleInfoSummaryByLanguage(track?.style || "");
+  const contextLabel = lastPrefs?.context ? contextLabelByValue(lastPrefs.context) : t("freeContext");
   return {
     language: currentLanguage,
     track: {
@@ -20914,7 +20916,9 @@ function buildArtistBioAiPayload(track) {
       origin: originLabel,
       genre: track?.artistGenre || localizedArtistGenreHint(track?.artist || "", track?.style || "") || "",
       currentBio: artistBio?.textContent || detailedArtistBio(track),
-      profileHint: track?.artistProfileHint || track?.vibe || ""
+      profileHint: track?.artistProfileHint || track?.vibe || "",
+      styleSummary,
+      recommendationContext: `${contextLabel}. ${buildListeningNarrative(track, lastPrefs || {})}`
     },
     sources: artistBioApiSourceCandidates(track)
   };
@@ -24187,13 +24191,19 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
+  const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
+  const visualHook = [
+    variant?.motif ? `motif: ${variant.motif}` : "",
+    variant?.crown ? `head detail: ${variant.crown}` : "",
+    spiritText?.archetype ? `personality: ${spiritText.archetype}` : ""
+  ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create a unique premium musical-spirit mascot card for one specific music discovery app user. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Make a cute but premium cosmic musical entity with headphones, expressive face, glowing body, music-note details, and one clear style-specific visual trait. It should feel like a collectible "your musical spirit" status image: central character, dark luminous background, elegant stats area, soft magic, readable at small size, cinematic neon, high detail, premium finish. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people, no logos, no readable text. Milestone: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one cute but premium cosmic musical entity with a distinct face, hair/head shape, outfit, headphones, glowing body, music-note details, and one clear style-specific prop. It must be different from other spirits: unique color mood, silhouette, expression, clothing, and energy aura. Dark luminous background, cinematic neon, soft magic, high detail, collectible finish, centered full-body character, readable at small size. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea una carta premium de mascota/espíritu musical para un usuario específico de una app de descubrimiento musical. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Haz una entidad musical cósmica tierna pero premium, con audífonos, rostro expresivo, cuerpo luminoso, detalles de notas musicales y un rasgo visual claro del estilo. Debe sentirse como una imagen de status "tu espíritu musical": personaje central, fondo oscuro luminoso, área elegante de datos, magia suave, legible en tamaño pequeño, neón cinematográfico, alto detalle, acabado premium. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales, sin logos, sin texto legible. Hito: ${milestoneLikes} likes alcanzados de ${likes}.`;
+    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz una entidad musical cósmica tierna pero premium, con rostro, cabello/forma de cabeza, ropa, audífonos, cuerpo luminoso, notas musicales y un prop claro del estilo. Debe ser distinta de otros espíritus: color, silueta, expresión, ropa y aura propios. Fondo oscuro luminoso, neón cinematográfico, magia suave, alto detalle, acabado coleccionable, personaje centrado de cuerpo entero, legible pequeño. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie um card premium de mascote/espírito musical para um usuário específico de app de descoberta musical. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Faça uma entidade musical cósmica fofa mas sofisticada, com fones de ouvido, rosto expressivo, corpo luminoso, detalhes de notas musicais e um traço visual claro do estilo. Deve parecer uma imagem de status "seu espírito musical": personagem central, fundo escuro luminoso, área elegante de estatísticas, magia suave, legível em tamanho pequeno, neon cinematográfico, alto detalhe, acabamento premium. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais, sem logos, sem texto legível. Marco: ${milestoneLikes} likes atingidos de ${likes}.`;
+  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça uma entidade musical cósmica fofa mas sofisticada, com rosto, cabelo/formato de cabeça, roupa, fones de ouvido, corpo luminoso, notas musicais e um objeto claro do estilo. Ela precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa e aura próprias. Fundo escuro luminoso, neon cinematográfico, magia suave, alto detalhe, acabamento colecionável, personagem central de corpo inteiro, legível em tamanho pequeno. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -26854,13 +26864,14 @@ function buildTrackInsightPrompt(track, prefs = {}) {
   const context = prefs.context ? contextLabelByValue(prefs.context) : t("freeContext");
   const energy = energyLabelByValue(track.energy);
   const vibe = String(track.vibe || "").trim();
+  const subgenreRead = styleInfoSummaryByLanguage(track.style);
   if (currentLanguage === "en") {
-    return `Write like a tasteful electronic music curator, not a technical report. Give a short, human DJ-style insight (2 sentences max) for the listener. Track: "${track.song}" by ${track.artist}. Subgenre: ${style}. Pulse: ${bpmDescriptor}. Energy: ${energy}. Context: ${context}. Vibe: ${vibe}. Explain the feeling and why it may work.`;
+    return `Write like a tasteful electronic music curator, not a technical report. Give a short, human DJ-style insight (2 sentences max) for the listener. Track: "${track.song}" by ${track.artist}. Subgenre: ${style}. Subgenre read: ${subgenreRead}. Pulse: ${bpmDescriptor}. Energy: ${energy}. Context: ${context}. Vibe: ${vibe}. Explain the physical/emotional feeling, why it was recommended, and one thing to listen for in the first minute.`;
   }
   if (currentLanguage === "es") {
-    return `Escribe como curador de música electrónica, no como informe técnico. Da una lectura corta estilo DJ (máximo 2 frases) para el oyente. Pista: "${track.song}" de ${track.artist}. Subgénero: ${style}. Pulso: ${bpmDescriptor}. Energía: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explica la sensación y por qué puede funcionar.`;
+    return `Escribe como curador de música electrónica, no como informe técnico. Da una lectura corta estilo DJ (máximo 2 frases) para el oyente. Pista: "${track.song}" de ${track.artist}. Subgénero: ${style}. Lectura del subgénero: ${subgenreRead}. Pulso: ${bpmDescriptor}. Energía: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explica la sensación física/emocional, por qué fue recomendada y una cosa para escuchar en el primer minuto.`;
   }
-  return `Escreva como um curador de música eletrônica, não como relatório técnico. Faça uma leitura curta estilo DJ (máximo 2 frases) para o ouvinte. Faixa: "${track.song}" de ${track.artist}. Subgênero: ${style}. Pulso: ${bpmDescriptor}. Energia: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explique a sensação e por que pode funcionar.`;
+  return `Escreva como um curador de música eletrônica, não como relatório técnico. Faça uma leitura curta estilo DJ (máximo 2 frases) para o ouvinte. Faixa: "${track.song}" de ${track.artist}. Subgênero: ${style}. Leitura do subgênero: ${subgenreRead}. Pulso: ${bpmDescriptor}. Energia: ${energy}. Contexto: ${context}. Vibe: ${vibe}. Explique a sensação física/emocional, por que foi recomendada e uma coisa para ouvir no primeiro minuto.`;
 }
 
 function localTrackInsight(track, prefs = {}) {

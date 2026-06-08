@@ -1,15 +1,4 @@
-const { callOpenAiJson, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
-
-const TRACK_INSIGHT_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["message"],
-  properties: {
-    message: {
-      type: "string"
-    }
-  }
-};
+const { callOpenAiText, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 module.exports = async function handler(req, res) {
   if (!requireOpenAiPost(req, res, {
@@ -28,9 +17,13 @@ module.exports = async function handler(req, res) {
 
   const system = [
     "You are Sonic Search's music discovery assistant.",
-    "Return only valid JSON matching the schema.",
-    "Write concise, practical, immersive insight for electronic music listeners.",
-    "Do not invent metadata. Use only the provided track, style, BPM, energy, context, and vibe."
+    "Write in the requested language.",
+    "Return plain text only, with no markdown and no JSON.",
+    "Write like a tasteful electronic music curator who actually listens.",
+    "Make the insight useful, human, and specific: feeling first, then why it fits the listener's current route.",
+    "Do not invent metadata, country, release history, or label facts. Use only the provided track, style, BPM, energy, context, and vibe.",
+    "Avoid generic praise such as 'boa energia' unless it is tied to a concrete listening cue.",
+    "Keep it to 2 short sentences."
   ].join(" ");
 
   const user = JSON.stringify({
@@ -48,19 +41,17 @@ module.exports = async function handler(req, res) {
   });
 
   try {
-    const result = await callOpenAiJson({
-      schemaName: "track_insight",
-      schema: TRACK_INSIGHT_SCHEMA,
+    const result = await callOpenAiText({
       system,
       user,
-      maxOutputTokens: 220
+      maxOutputTokens: 800
     });
     if (!result.ok) {
       sendJson(res, result.status || 500, result.payload);
       return;
     }
     sendJson(res, 200, {
-      message: trimText(result.payload.message, 420),
+      message: trimText(result.payload.text, 520),
       source: "openai"
     });
   } catch (error) {

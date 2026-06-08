@@ -14,6 +14,11 @@ function envInt(name, fallback, min = 0, max = 100000) {
   return Math.max(min, Math.min(max, parsed));
 }
 
+function envText(name, fallback = "") {
+  const raw = String(process.env[name] || "").trim();
+  return raw || fallback;
+}
+
 function allowedOrigins() {
   return String(process.env.SONIC_AI_ALLOWED_ORIGINS || "")
     .split(",")
@@ -181,41 +186,89 @@ function extractResponseText(payload) {
   return "";
 }
 
+function extractJsonFromText(text = "") {
+  const source = String(text || "").trim();
+  if (!source) return "";
+  if (source.startsWith("{") && source.endsWith("}")) return source;
+
+  const fenced = source.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    const fencedJson = fenced[1].trim();
+    if (fencedJson.startsWith("{") && fencedJson.endsWith("}")) return fencedJson;
+  }
+
+  const firstBrace = source.indexOf("{");
+  const lastBrace = source.lastIndexOf("}");
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    return source.slice(firstBrace, lastBrace + 1).trim();
+  }
+  return source;
+}
+
+function parseOpenAiJsonText(outputText = "") {
+  const jsonText = extractJsonFromText(outputText);
+  if (!jsonText) return null;
+  try {
+    return JSON.parse(jsonText);
+  } catch (_error) {
+    return null;
+  }
+}
+
+function modelSupportsReasoningOptions(model = "") {
+  return /^gpt-5(?:\.|$|-)/i.test(String(model || "").trim());
+}
+
+function responseIncompleteDetail(payload = {}) {
+  const status = String(payload?.status || "").trim();
+  const reason = String(payload?.incomplete_details?.reason || "").trim();
+  if (status === "incomplete" || reason) {
+    return [status || "incomplete", reason].filter(Boolean).join(": ");
+  }
+  return "";
+}
+
 async function callOpenAiJson({ schemaName, schema, system, user, maxOutputTokens = 500 }) {
   if (!hasOpenAiKey()) {
     return { ok: false, status: 503, payload: { error: "missing_openai_api_key" } };
   }
 
-  const model = String(process.env.OPENAI_TEXT_MODEL || "gpt-5-mini").trim();
-  const tokenCap = envInt("SONIC_AI_TEXT_MAX_OUTPUT_TOKENS", 650, 80, 1400);
+  const model = envText("OPENAI_TEXT_MODEL", "gpt-5-mini");
+  const tokenCap = envInt("SONIC_AI_TEXT_MAX_OUTPUT_TOKENS", 1400, 200, 3000);
+  const requestBody = {
+    model,
+    input: [
+      {
+        role: "system",
+        content: [{ type: "input_text", text: system }]
+      },
+      {
+        role: "user",
+        content: [{ type: "input_text", text: user }]
+      }
+    ],
+    text: {
+      format: {
+        type: "json_schema",
+        name: schemaName,
+        strict: true,
+        schema
+      }
+    },
+    max_output_tokens: Math.min(Math.max(200, Number(maxOutputTokens) || 500), tokenCap)
+  };
+  const reasoningEffort = envText("OPENAI_REASONING_EFFORT", modelSupportsReasoningOptions(model) ? "minimal" : "");
+  if (reasoningEffort) {
+    requestBody.reasoning = { effort: reasoningEffort };
+  }
+
   const response = await fetch(OPENAI_RESPONSES_URL, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      model,
-      input: [
-        {
-          role: "system",
-          content: [{ type: "input_text", text: system }]
-        },
-        {
-          role: "user",
-          content: [{ type: "input_text", text: user }]
-        }
-      ],
-      text: {
-        format: {
-          type: "json_schema",
-          name: schemaName,
-          strict: true,
-          schema
-        }
-      },
-      max_output_tokens: Math.min(Math.max(80, Number(maxOutputTokens) || 500), tokenCap)
-    })
+    body: JSON.stringify(requestBody)
   });
 
   const payload = await response.json().catch(() => ({}));
@@ -231,15 +284,92 @@ async function callOpenAiJson({ schemaName, schema, system, user, maxOutputToken
   }
 
   const outputText = extractResponseText(payload);
-  try {
-    return { ok: true, payload: JSON.parse(outputText) };
-  } catch (_error) {
+  const parsed = parseOpenAiJsonText(outputText);
+  if (parsed) {
+    return { ok: true, payload: parsed };
+  }
+
+  const incompleteDetail = responseIncompleteDetail(payload);
+  if (incompleteDetail) {
     return {
       ok: false,
       status: 502,
-      payload: { error: "invalid_openai_json" }
+      payload: {
+        error: "openai_incomplete_output",
+        detail: incompleteDetail
+      }
     };
   }
+
+  return {
+    ok: false,
+    status: 502,
+    payload: {
+      error: "invalid_openai_json",
+      detail: outputText ? "Structured response was not valid JSON." : "OpenAI returned no visible text output."
+    }
+  };
+}
+
+async function callOpenAiText({ system, user, maxOutputTokens = 500 }) {
+  if (!hasOpenAiKey()) {
+    return { ok: false, status: 503, payload: { error: "missing_openai_api_key" } };
+  }
+
+  const model = envText("OPENAI_TEXT_MODEL", "gpt-5-mini");
+  const tokenCap = envInt("SONIC_AI_TEXT_MAX_OUTPUT_TOKENS", 1400, 200, 3000);
+  const requestBody = {
+    model,
+    input: [
+      {
+        role: "system",
+        content: [{ type: "input_text", text: system }]
+      },
+      {
+        role: "user",
+        content: [{ type: "input_text", text: user }]
+      }
+    ],
+    max_output_tokens: Math.min(Math.max(200, Number(maxOutputTokens) || 500), tokenCap)
+  };
+  const reasoningEffort = envText("OPENAI_REASONING_EFFORT", modelSupportsReasoningOptions(model) ? "minimal" : "");
+  if (reasoningEffort) {
+    requestBody.reasoning = { effort: reasoningEffort };
+  }
+
+  const response = await fetch(OPENAI_RESPONSES_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestBody)
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      payload: {
+        error: "openai_request_failed",
+        detail: payload?.error?.message || response.statusText
+      }
+    };
+  }
+
+  const outputText = trimText(extractResponseText(payload), maxOutputTokens * 6);
+  if (outputText) return { ok: true, payload: { text: outputText } };
+
+  const incompleteDetail = responseIncompleteDetail(payload);
+  return {
+    ok: false,
+    status: 502,
+    payload: {
+      error: incompleteDetail ? "openai_incomplete_output" : "empty_openai_text",
+      detail: incompleteDetail || "OpenAI returned no visible text output."
+    }
+  };
 }
 
 async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" }) {
@@ -294,6 +424,7 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" 
 module.exports = {
   callOpenAiImage,
   callOpenAiJson,
+  callOpenAiText,
   enforceOpenAiDailyBudget,
   envFlag,
   parseBody,

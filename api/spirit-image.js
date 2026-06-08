@@ -122,11 +122,12 @@ module.exports = async function handler(req, res) {
 
   const safePrompt = [
     prompt,
-    "Square 1024x1024 premium collectible artwork.",
-    "The image must feature one central cosmic electronic music spirit/entity with a strong silhouette, mystical neon waveform energy, sacred geometry, synth light, and psychedelic club atmosphere.",
-    "Make it elegant, polished, readable at small card size, and visually distinct for the provided user signature.",
-    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter.",
-    "No readable text, no logos, no real people, no celebrity likeness."
+    "Square 1024x1024 premium collectible character artwork.",
+    "Generate only the central musical-spirit character illustration; the app will add all text, stats, frame, and UI later.",
+    "The image must feature one full-body cosmic electronic music spirit/entity with a strong silhouette, expressive face, distinctive head/hair shape, unique outfit, headphones, mystical neon waveform energy, synth light, and a dark club-atmosphere background.",
+    "Make it elegant, polished, readable at small card size, and visually distinct for the provided user signature: different color mood, outfit, expression, prop, and aura.",
+    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels.",
+    "No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
   ].join(" ");
 
   try {

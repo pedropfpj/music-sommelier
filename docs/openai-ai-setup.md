@@ -18,7 +18,8 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 - `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: `true` para exigir premium antes de gerar imagem. Mantenha `true` em produção.
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: `true` para exigir banco/Redis antes de gerar imagem. Use em produção para garantir uma imagem IA por usuário.
 - `SONIC_AI_ALLOWED_ORIGINS`: domínios permitidos, separados por vírgula. Exemplo: `https://music-sommelier1.vercel.app`.
-- `SONIC_AI_TEXT_MAX_OUTPUT_TOKENS`: teto de resposta de texto. Sugestão inicial: `650`.
+- `SONIC_AI_TEXT_MAX_OUTPUT_TOKENS`: teto de resposta de texto. Sugestão para GPT-5 mini em teste: `1400`.
+- `OPENAI_REASONING_EFFORT`: esforço de raciocínio para modelos GPT-5. Sugestão inicial: `minimal`.
 - `KV_REST_API_URL` e `KV_REST_API_TOKEN`: armazenamento durável da Vercel KV/Upstash para travar uma imagem IA por usuário.
 - `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`: alternativa equivalente se usar Upstash direto.
 
@@ -27,9 +28,9 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 No `index.html`, `window.SONIC_SEARCH_AI_CONFIG` controla o comportamento do app:
 
 - `textEnabled: true`: permite textos por IA quando a rota existe.
-- `dailyTextLimit: 10`: evita várias chamadas por usuário no mesmo dia.
-- `imageEnabled: false`: imagem IA fica desligada no front por padrão.
-- `premiumUnlocked: false`: imagem IA só deve ligar para usuário premium.
+- `dailyTextLimit: 25`: evita várias chamadas por usuário no mesmo dia.
+- `imageEnabled: true`: libera tentativa de imagem IA no front quando a rota da Vercel também estiver ligada.
+- `premiumUnlocked: true`: modo beta controlado. Em produção, isso deve vir de login/assinatura validada no backend.
 - `imageLimitPerProfile: 1`: uma imagem IA por perfil.
 - `allowImageRegeneration: false`: impede gastar outra imagem ao clicar em variação.
 
@@ -46,9 +47,10 @@ No `index.html`, `window.SONIC_SEARCH_AI_CONFIG` controla o comportamento do app
 
 3. Só depois teste imagem:
    - Defina `SONIC_AI_IMAGE_ENABLED=true`.
-   - Defina `SONIC_AI_IMAGE_DAILY_LIMIT=1` ou `3` durante testes.
+   - Defina `SONIC_AI_IMAGE_DAILY_LIMIT=1` durante testes.
+   - Defina `OPENAI_IMAGE_MODEL=gpt-image-1-mini`.
+   - Defina `OPENAI_IMAGE_QUALITY=medium`.
    - Configure `KV_REST_API_URL` e `KV_REST_API_TOKEN` se quiser garantir a trava mesmo após redeploy.
-   - No front, libere `imageEnabled` e `premiumUnlocked` apenas em ambiente controlado.
    - Mantenha `imageLimitPerProfile: 1`.
 
 4. Antes de liberar premium real:
