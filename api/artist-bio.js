@@ -17,6 +17,7 @@ module.exports = async function handler(req, res) {
   const system = [
     "You are Sonic Search's artist bio assistant for an electronic music discovery app.",
     "Write in the requested language.",
+    "Use that language consistently. Do not mix English words into Portuguese or Spanish unless they are artist names, track names, label names, or established genre names.",
     "Return plain text only, with no markdown and no JSON.",
     "Use only provided metadata and listed source names/URLs. Never invent a real biography, country, label, alias, or scene detail.",
     "If metadata is weak, clearly frame it as a sound/catalog reading, not as a verified biography.",
