@@ -1,9 +1,24 @@
-const { callOpenAiImage, parseBody, requirePost, sendJson, trimText } = require("./_openai");
+const { callOpenAiImage, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 module.exports = async function handler(req, res) {
-  if (!requirePost(req, res)) return;
+  if (!requireOpenAiPost(req, res, {
+    feature: "spirit-image",
+    enabledEnv: "SONIC_AI_IMAGE_ENABLED",
+    defaultEnabled: false,
+    dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
+    defaultDailyLimit: 3
+  })) return;
 
   const body = parseBody(req);
+  if (body.premiumUnlocked !== true) {
+    sendJson(res, 402, { error: "premium_required" });
+    return;
+  }
+  if (body.forceRegenerate === true || Number(body.imageGenerationIndex || 1) > 1) {
+    sendJson(res, 429, { error: "image_generation_limit_reached" });
+    return;
+  }
+
   const prompt = trimText(body.prompt, 3800);
   if (!prompt) {
     sendJson(res, 400, { error: "missing_prompt" });
@@ -23,7 +38,7 @@ module.exports = async function handler(req, res) {
     const result = await callOpenAiImage({
       prompt: safePrompt,
       size: "1024x1024",
-      quality: "high"
+      quality: "medium"
     });
     if (!result.ok) {
       sendJson(res, result.status || 500, result.payload);

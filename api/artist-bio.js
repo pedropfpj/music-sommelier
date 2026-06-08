@@ -1,4 +1,4 @@
-const { callOpenAiJson, parseBody, requirePost, sendJson, trimText } = require("./_openai");
+const { callOpenAiJson, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 const ARTIST_BIO_SCHEMA = {
   type: "object",
@@ -37,7 +37,13 @@ const ARTIST_BIO_SCHEMA = {
 };
 
 module.exports = async function handler(req, res) {
-  if (!requirePost(req, res)) return;
+  if (!requireOpenAiPost(req, res, {
+    feature: "artist-bio",
+    enabledEnv: "SONIC_AI_TEXT_ENABLED",
+    defaultEnabled: true,
+    dailyLimitEnv: "SONIC_AI_BIO_DAILY_LIMIT",
+    defaultDailyLimit: 18
+  })) return;
 
   const body = parseBody(req);
   const track = body.track || {};

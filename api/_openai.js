@@ -1,10 +1,43 @@
 const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
 const OPENAI_IMAGES_URL = "https://api.openai.com/v1/images/generations";
+const dailyBudget = new Map();
+
+function envFlag(name, fallback = false) {
+  const raw = String(process.env[name] || "").trim().toLowerCase();
+  if (!raw) return Boolean(fallback);
+  return ["1", "true", "yes", "on", "enabled"].includes(raw);
+}
+
+function envInt(name, fallback, min = 0, max = 100000) {
+  const parsed = Number.parseInt(String(process.env[name] || ""), 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(min, Math.min(max, parsed));
+}
+
+function allowedOrigins() {
+  return String(process.env.SONIC_AI_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
 
 function setCors(res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const origins = allowedOrigins();
+  const origin = String(res.req?.headers?.origin || "").trim();
+  if (!origins.length) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  } else if (origin && origins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
+function originAllowed(req) {
+  const origins = allowedOrigins();
+  if (!origins.length) return true;
+  const origin = String(req.headers?.origin || "").trim();
+  return Boolean(origin && origins.includes(origin));
 }
 
 function sendJson(res, statusCode, payload) {
@@ -23,11 +56,77 @@ function handleOptions(req, res) {
 }
 
 function requirePost(req, res) {
+  res.req = req;
   if (handleOptions(req, res)) return false;
   if (req.method !== "POST") {
     sendJson(res, 405, { error: "method_not_allowed" });
     return false;
   }
+  return true;
+}
+
+function bearerToken(req) {
+  const header = String(req.headers?.authorization || "");
+  const match = header.match(/^Bearer\s+(.+)$/i);
+  return match?.[1]?.trim() || "";
+}
+
+function requestClientId(req) {
+  const forwarded = String(req.headers?.["x-forwarded-for"] || "").split(",")[0].trim();
+  const realIp = String(req.headers?.["x-real-ip"] || "").trim();
+  const userAgent = String(req.headers?.["user-agent"] || "").slice(0, 90);
+  return `${forwarded || realIp || "unknown"}:${userAgent}`;
+}
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function enforceDailyBudget(req, feature, limit) {
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  if (!safeLimit) return { ok: true, remaining: null };
+  const key = `${todayKey()}:${feature}:${requestClientId(req)}`;
+  const current = Number(dailyBudget.get(key) || 0);
+  if (current >= safeLimit) return { ok: false, remaining: 0 };
+  dailyBudget.set(key, current + 1);
+  return { ok: true, remaining: safeLimit - current - 1 };
+}
+
+function requireOpenAiPost(req, res, {
+  feature = "text",
+  enabledEnv = "SONIC_AI_TEXT_ENABLED",
+  defaultEnabled = true,
+  dailyLimitEnv = "SONIC_AI_TEXT_DAILY_LIMIT",
+  defaultDailyLimit = 80
+} = {}) {
+  if (!requirePost(req, res)) return false;
+
+  if (!originAllowed(req)) {
+    sendJson(res, 403, { error: "origin_not_allowed" });
+    return false;
+  }
+
+  if (!envFlag(enabledEnv, defaultEnabled)) {
+    sendJson(res, 403, { error: "ai_feature_disabled", feature });
+    return false;
+  }
+
+  const serverToken = String(process.env.SONIC_AI_SERVER_TOKEN || "").trim();
+  if (serverToken && bearerToken(req) !== serverToken) {
+    sendJson(res, 401, { error: "invalid_ai_token" });
+    return false;
+  }
+
+  const budget = enforceDailyBudget(req, feature, envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000));
+  if (!budget.ok) {
+    sendJson(res, 429, { error: "daily_ai_limit_reached", feature });
+    return false;
+  }
+
+  if (budget.remaining !== null) {
+    res.setHeader("X-Sonic-AI-Remaining", String(budget.remaining));
+  }
+
   return true;
 }
 
@@ -71,6 +170,7 @@ async function callOpenAiJson({ schemaName, schema, system, user, maxOutputToken
   }
 
   const model = String(process.env.OPENAI_TEXT_MODEL || "gpt-5-mini").trim();
+  const tokenCap = envInt("SONIC_AI_TEXT_MAX_OUTPUT_TOKENS", 650, 80, 1400);
   const response = await fetch(OPENAI_RESPONSES_URL, {
     method: "POST",
     headers: {
@@ -97,7 +197,7 @@ async function callOpenAiJson({ schemaName, schema, system, user, maxOutputToken
           schema
         }
       },
-      max_output_tokens: maxOutputTokens
+      max_output_tokens: Math.min(Math.max(80, Number(maxOutputTokens) || 500), tokenCap)
     })
   });
 
@@ -131,6 +231,7 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" 
   }
 
   const model = String(process.env.OPENAI_IMAGE_MODEL || "gpt-image-1-mini").trim();
+  const safeQuality = String(process.env.OPENAI_IMAGE_QUALITY || quality || "medium").trim();
   const response = await fetch(OPENAI_IMAGES_URL, {
     method: "POST",
     headers: {
@@ -141,7 +242,7 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" 
       model,
       prompt: trimText(prompt, 3800),
       size,
-      quality,
+      quality: safeQuality,
       n: 1
     })
   });
@@ -176,7 +277,9 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" 
 module.exports = {
   callOpenAiImage,
   callOpenAiJson,
+  envFlag,
   parseBody,
+  requireOpenAiPost,
   requirePost,
   sendJson,
   trimText

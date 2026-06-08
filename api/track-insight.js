@@ -1,4 +1,4 @@
-const { callOpenAiJson, parseBody, requirePost, sendJson, trimText } = require("./_openai");
+const { callOpenAiJson, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 const TRACK_INSIGHT_SCHEMA = {
   type: "object",
@@ -12,7 +12,13 @@ const TRACK_INSIGHT_SCHEMA = {
 };
 
 module.exports = async function handler(req, res) {
-  if (!requirePost(req, res)) return;
+  if (!requireOpenAiPost(req, res, {
+    feature: "track-insight",
+    enabledEnv: "SONIC_AI_TEXT_ENABLED",
+    defaultEnabled: true,
+    dailyLimitEnv: "SONIC_AI_TRACK_DAILY_LIMIT",
+    defaultDailyLimit: 24
+  })) return;
 
   const body = parseBody(req);
   const track = body.track || {};
