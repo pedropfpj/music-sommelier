@@ -15,6 +15,8 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 - `SONIC_AI_BIO_DAILY_LIMIT`: limite diário leve para `/api/artist-bio`.
 - `SONIC_AI_NEWS_DAILY_LIMIT`: limite diário leve para `/api/news-translate`.
 - `SONIC_AI_IMAGE_DAILY_LIMIT`: limite diário leve para `/api/spirit-image`.
+- `SONIC_AI_IMAGE_MAX_PER_USER`: máximo de imagens IA por perfil. Use `1` em produção; `5` pode ser usado em beta fechado.
+- `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION`: `true` permite gerar novas versões da arte no beta, respeitando `SONIC_AI_IMAGE_MAX_PER_USER`.
 - `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: `true` para exigir premium antes de gerar imagem. Mantenha `true` em produção.
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: `true` para exigir banco/Redis antes de gerar imagem. Use em produção para garantir uma imagem IA por usuário.
 - `SONIC_AI_ALLOWED_ORIGINS`: domínios permitidos, separados por vírgula. Exemplo: `https://music-sommelier1.vercel.app`.
@@ -34,6 +36,9 @@ No `index.html`, `window.SONIC_SEARCH_AI_CONFIG` controla o comportamento do app
 - `imageLimitPerProfile: 1`: uma imagem IA por perfil.
 - `allowImageRegeneration: false`: impede gastar outra imagem ao clicar em variação.
 
+No beta fechado, enquanto apenas o dono do app está testando arte, use `imageLimitPerProfile: 5` e `allowImageRegeneration: true`.
+Antes de liberar para usuários reais, volte para `imageLimitPerProfile: 1` e `allowImageRegeneration: false`.
+
 ## Ordem segura para testar
 
 1. Ligue apenas texto:
@@ -47,7 +52,9 @@ No `index.html`, `window.SONIC_SEARCH_AI_CONFIG` controla o comportamento do app
 
 3. Só depois teste imagem:
    - Defina `SONIC_AI_IMAGE_ENABLED=true`.
-   - Defina `SONIC_AI_IMAGE_DAILY_LIMIT=1` durante testes.
+   - Defina `SONIC_AI_IMAGE_DAILY_LIMIT=5` durante beta fechado do dono, ou `1` para teste público.
+   - Defina `SONIC_AI_IMAGE_MAX_PER_USER=5` durante beta fechado do dono, ou `1` em produção.
+   - Defina `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION=true` somente durante beta fechado.
    - Defina `OPENAI_IMAGE_MODEL=gpt-image-1-mini`.
    - Defina `OPENAI_IMAGE_QUALITY=medium`.
    - Configure `KV_REST_API_URL` e `KV_REST_API_TOKEN` se quiser garantir a trava mesmo após redeploy.

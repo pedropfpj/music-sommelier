@@ -24043,8 +24043,9 @@ function hasApiSpiritImageForCurrentProfile() {
 
 function aiImageLimitReachedForProfile() {
   const limit = aiConfigInt("imageLimitPerProfile", AI_DEFAULT_CONFIG.imageLimitPerProfile, 0, 10);
+  const allowRegeneration = aiConfigFlag("allowImageRegeneration", false);
   if (!limit) return false;
-  return aiImageCallsForProfile() >= limit || hasApiSpiritImageForCurrentProfile();
+  return aiImageCallsForProfile() >= limit || (!allowRegeneration && hasApiSpiritImageForCurrentProfile());
 }
 
 function canRequestAiImage() {
@@ -24578,7 +24579,7 @@ async function requestSpiritCollectibleFromApi(payload) {
         ...payload,
         premiumUnlocked: aiPremiumUnlocked(),
         imageGenerationIndex: aiImageCallsForProfile() + 1,
-        forceRegenerate: false
+        forceRegenerate: payload.forceRegenerate === true
       }),
       signal: controller?.signal
     });
@@ -24971,7 +24972,7 @@ function buildLocalSpiritCollectibleImage(
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true } = {}) {
+async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
   const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature)} Variation seed: ${variationToken || userSignature}.`;
@@ -24988,6 +24989,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
         likes,
         milestoneLikes,
         variation: variationToken || "base",
+        forceRegenerate,
         userSignature,
         profileSignature,
         language: currentLanguage
@@ -25064,7 +25066,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     try {
       collectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
         variationToken: variation,
-        allowAi: !forceRegenerate
+        allowAi: !forceRegenerate || aiConfigFlag("allowImageRegeneration", false),
+        forceRegenerate
       });
     } catch (error) {
       console.warn("Spirit collectible generation failed; using local fallback.", error);

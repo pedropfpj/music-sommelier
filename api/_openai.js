@@ -427,6 +427,7 @@ module.exports = {
   callOpenAiText,
   enforceOpenAiDailyBudget,
   envFlag,
+  envInt,
   parseBody,
   requireOpenAiPost,
   requirePost,

@@ -2,6 +2,7 @@ const {
   callOpenAiImage,
   enforceOpenAiDailyBudget,
   envFlag,
+  envInt,
   parseBody,
   requireOpenAiPost,
   sendJson,
@@ -43,6 +44,8 @@ function storedImageResponse(record = {}, reused = true) {
     reused,
     uniquePerUser: true,
     generatedAt: record.generatedAt || "",
+    generationCount: Math.max(1, Number(record.generationCount) || 1),
+    betaRegeneration: Boolean(record.betaRegeneration),
     spiritId: record.spiritId || "",
     milestoneLikes: record.milestoneLikes || 0,
     store: record.store || ""
@@ -77,14 +80,38 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", false);
+  const maxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 5 : 1, 1, 20);
+  const requestedGeneration = Math.max(1, Number(body.imageGenerationIndex) || 1);
+  const forceRegenerate = body.forceRegenerate === true;
   const existing = await readJson(imageKey);
+  const existingGenerationCount = Math.max(
+    0,
+    Number(existing?.generationCount) ||
+      (existing?.imageBase64 || existing?.imageUrl ? 1 : 0)
+  );
+
   if (existing?.imageBase64 || existing?.imageUrl) {
-    sendJson(res, 200, storedImageResponse(existing, true));
-    return;
+    if (!allowBetaRegeneration || !forceRegenerate) {
+      sendJson(res, 200, storedImageResponse(existing, true));
+      return;
+    }
+    if (existingGenerationCount >= maxPerUser || requestedGeneration > maxPerUser) {
+      sendJson(res, 429, {
+        error: "image_generation_limit_reached",
+        maxPerUser,
+        generationCount: existingGenerationCount
+      });
+      return;
+    }
   }
 
-  if (body.forceRegenerate === true || Number(body.imageGenerationIndex || 1) > 1) {
-    sendJson(res, 429, { error: "image_generation_limit_reached" });
+  if (!existing && requestedGeneration > maxPerUser) {
+    sendJson(res, 429, {
+      error: "image_generation_limit_reached",
+      maxPerUser,
+      generationCount: 0
+    });
     return;
   }
 
@@ -147,6 +174,8 @@ module.exports = async function handler(req, res) {
       model: result.payload.model,
       source: "openai",
       generatedAt: new Date().toISOString(),
+      generationCount: existingGenerationCount + 1,
+      betaRegeneration: allowBetaRegeneration,
       spiritId: trimText(body.spiritId, 80),
       spiritName: trimText(body.spiritName, 160),
       milestoneLikes: Math.max(0, Number(body.milestoneLikes) || 0),
@@ -154,7 +183,7 @@ module.exports = async function handler(req, res) {
       language: trimText(body.language, 8),
       store: hasDurableStore() ? "durable" : "memory"
     };
-    const stored = await writeJson(imageKey, record, { onlyIfMissing: true });
+    const stored = await writeJson(imageKey, record, { onlyIfMissing: !allowBetaRegeneration });
     if (!stored) {
       const raceExisting = await readJson(imageKey);
       if (raceExisting?.imageBase64 || raceExisting?.imageUrl) {
