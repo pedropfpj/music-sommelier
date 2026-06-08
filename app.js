@@ -5285,7 +5285,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v19";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v20";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -24582,12 +24582,12 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
     spiritText?.archetype ? `personality: ${spiritText.archetype}` : ""
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one original, beautiful, person-inspired musical avatar with a defined expressive face, visible hair or headwear, stylish electronic-music outfit, headphones, shoulders or full body, and hands/gesture conducting neon waveform energy or a holographic mixer. It can feel mystical or cosmic, but it must read as a charismatic human-like avatar, not a ball, orb, logo, simple mascot, or abstract icon. It must be different from other spirits: unique color mood, silhouette, expression, clothing, prop, and energy aura. Dark luminous background, cinematic neon, high detail, collectible finish, centered character, readable at small card size. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, expressive eyes, natural face proportions, visible hairstyle or headwear, premium club/festival outfit, headphones, accessories, shoulders, torso, and hands. The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object connected to the music taste. Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim light, detailed fabric, jewelry, gloves or gesture, dramatic waveform halo, polished collectible character-card finish. It can feel mystical or cosmic, but it must look like a stylish human music persona, not a mascot, toy, floating head, chibi, emoji, ball, orb, logo, simple cartoon, flat vector, stick figure, or abstract icon. It must be different from other spirits: unique color mood, silhouette, expression, clothing, prop, and energy aura. Dark luminous background, cinematic neon, high detail, centered character, readable at small card size, close to a premium illustrated game/music character card. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz un avatar musical original, bonito e inspirado en una persona, con rostro expresivo definido, cabello o accesorio de cabeza visible, ropa electrónica con estilo, audífonos, hombros o cuerpo entero, y manos/gesto conduciendo ondas de neón o un mixer holográfico. Puede sentirse místico o cósmico, pero debe leerse como avatar humanoide carismático, no como bola, orbe, logo, mascota simple o icono abstracto. Debe ser distinto de otros espíritus: color, silueta, expresión, ropa, prop y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, acabado coleccionable, personaje centrado y legible pequeño. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz un retrato original de personaje humano adulto ficticio, de cintura para arriba o cuerpo entero, con anatomía humana creíble, rostro expresivo, proporciones naturales, mirada con intención, cabello o accesorio de cabeza visible, ropa premium de club/festival, audífonos, accesorios, hombros, torso y manos. El personaje debe conducir ondas de neón, tocar un mixer holográfico o interactuar con un objeto sonoro ligado al gusto musical. Dirección artística: pintura digital premium semi-realista, moda cyber-club de lujo, luz cinematográfica, telas detalladas, joyería, guantes o gesto, halo de waveform dramático y acabado coleccionable. Puede sentirse místico o cósmico, pero debe verse como una persona musical con estilo, no como mascota, juguete, cabeza flotante, chibi, emoji, bola, orbe, logo, caricatura simple, vector plano, muñeco infantil o icono abstracto. Debe ser distinto de otros espíritus: color, silueta, expresión, ropa, prop y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, personaje centrado y legible pequeño, cercano a una tarjeta premium de personaje musical. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça um avatar musical original, bonito e inspirado em uma pessoa, com rosto expressivo definido, cabelo ou adereço de cabeça visível, roupa de cena eletrônica estilosa, fones de ouvido, ombros ou corpo inteiro, e mãos/gesto conduzindo ondas neon ou um mixer holográfico. Pode ser místico ou cósmico, mas precisa parecer um avatar humanoide carismático, não uma bola, orbe, logo, mascote simples ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa, prop e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, acabamento colecionável, personagem centralizado e legível pequeno. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça um retrato original de personagem humano adulto fictício, meio corpo ou corpo inteiro, com anatomia humana crível, proporções naturais, rosto expressivo, olhar com intenção, cabelo ou adereço de cabeça visível, roupa premium de club/festival, fones de ouvido, acessórios, ombros, torso e mãos. O personagem deve conduzir ondas neon, tocar um mixer holográfico ou interagir com um objeto sonoro ligado ao gosto musical. Direção artística: pintura digital premium semi-realista, moda cyber-club de luxo, luz cinematográfica, tecido detalhado, joias, luvas ou gesto marcante, halo de waveform dramático e acabamento colecionável. Pode ser místico ou cósmico, mas precisa parecer uma pessoa musical estilosa, não mascote, brinquedo, cabeça flutuante, chibi, emoji, bola, orbe, logo, caricatura simples, vetor chapado, boneco infantil ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa, prop e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, personagem centralizado e legível pequeno, próximo de um card premium de personagem musical. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -24941,86 +24941,255 @@ function buildSpiritHumanAvatarSvg(theme, variant, seed = 0, spirit = null) {
   const b = escapeSvgText(theme.b || "#7cb2ff");
   const c = escapeSvgText(theme.c || "#9f7bff");
   const d = escapeSvgText(theme.d || "#071124");
-  const skinPalette = ["#f2c9aa", "#c8875d", "#8f5f43", "#f1dcc5", "#b8759d", "#d8c4ff"];
-  const hairPalette = ["#121826", "#342014", "#f2a84b", "#6d5dff", "#28d5c3", "#db75f2"];
-  const accentPalette = [a, b, c, "#ffb35c", "#f472b6", "#a7f3d0"];
-  const skin = escapeSvgText(skinPalette[seed % skinPalette.length]);
+  const profiles = {
+    ritual_cosmico: {
+      hair: "topknot",
+      jacket: "#17112d",
+      shirt: "#261442",
+      tool: "staff",
+      jewelry: "forehead",
+      glasses: false,
+      facialHair: "soft"
+    },
+    alquimista_sombrio: {
+      hair: "hood",
+      jacket: "#080912",
+      shirt: "#191428",
+      tool: "orb",
+      jewelry: "ring",
+      glasses: false,
+      facialHair: "shadow"
+    },
+    acelerador_quantico: {
+      hair: "spikes",
+      jacket: "#071827",
+      shirt: "#10253a",
+      tool: "dataBlade",
+      jewelry: "visor",
+      glasses: true,
+      facialHair: "sharp"
+    },
+    engenheiro_groove: {
+      hair: "locs",
+      jacket: "#0a1320",
+      shirt: "#151b2b",
+      tool: "mixer",
+      jewelry: "medallion",
+      glasses: true,
+      facialHair: "beard"
+    },
+    arquiteto_hipnotico: {
+      hair: "slick",
+      jacket: "#0b1020",
+      shirt: "#111827",
+      tool: "blueprint",
+      jewelry: "pin",
+      glasses: true,
+      facialHair: "clean"
+    },
+    cacador_bass: {
+      hair: "hood",
+      jacket: "#120719",
+      shirt: "#20102a",
+      tool: "speaker",
+      jewelry: "chain",
+      glasses: false,
+      facialHair: "stubble"
+    },
+    viajante_organico: {
+      hair: "waves",
+      jacket: "#102018",
+      shirt: "#1b2d20",
+      tool: "leafPad",
+      jewelry: "pendant",
+      glasses: false,
+      facialHair: "soft"
+    },
+    explorador_fractal: {
+      hair: "curls",
+      jacket: "#12142a",
+      shirt: "#1f1a3a",
+      tool: "fractalCube",
+      jewelry: "earring",
+      glasses: true,
+      facialHair: "clean"
+    }
+  };
+  const profile = profiles[spirit?.id] || profiles.ritual_cosmico;
+  const skinPalette = ["#f0c09f", "#c98558", "#8f5c43", "#efd8bf", "#b17462", "#d5b492"];
+  const hairPalette = ["#15121d", "#342014", "#4a2a1b", "#191d35", "#6345ff", "#252a3a"];
+  const skin = escapeSvgText(skinPalette[(seed + (spirit?.id || "").length) % skinPalette.length]);
   const hair = escapeSvgText(hairPalette[(seed >> 3) % hairPalette.length]);
-  const outfit = escapeSvgText(accentPalette[(seed >> 6) % accentPalette.length]);
-  const jacket = escapeSvgText((seed >> 9) % 2 ? "#071528" : d);
-  const lean = ((seed % 19) - 9) * 0.65;
-  const tilt = ((seed >> 4) % 13) - 6;
-  const smile = 442 + ((seed >> 7) % 15);
-  const glasses = seed % 3 === 0;
-  const locs = seed % 5 === 0;
-  const cap = seed % 4 === 0;
-  const motif = spiritMotifSvg(variant?.motif || "star", 585, 210, 0.36, theme, 0.92);
-  const hairStrands = Array.from({ length: locs ? 9 : 0 }, (_, index) => {
-    const x = 340 + index * 17;
-    const y = 240 + ((hashString(`${seed}::hair::${index}`) >>> 0) % 34);
-    const endX = x + ((index % 2 ? 18 : -14));
-    return `<path d="M${x} ${y} C${x - 8} ${y + 54}, ${endX} ${y + 92}, ${endX - 4} ${y + 132}" fill="none" stroke="${hair}" stroke-width="${index % 3 === 0 ? 8 : 6}" stroke-linecap="round" opacity="0.92" />`;
-  }).join("");
-  const waveform = Array.from({ length: 22 }, (_, index) => {
+  const jacket = escapeSvgText(profile.jacket || d);
+  const shirt = escapeSvgText(profile.shirt || "#111827");
+  const trim = escapeSvgText((seed >> 6) % 2 ? b : c);
+  const lean = ((seed % 15) - 7) * 0.55;
+  const tilt = ((seed >> 4) % 9) - 4;
+  const smile = 462 + ((seed >> 7) % 10);
+  const motif = spiritMotifSvg(variant?.motif || "star", 596, 198, 0.34, theme, 0.9);
+  const waveform = Array.from({ length: 24 }, (_, index) => {
     const mixed = hashString(`${seed}::human-wave::${index}`) >>> 0;
-    const height = 18 + (mixed % 76);
-    const x = 222 + index * 14;
-    const y = 690 - height / 2;
-    return `<rect x="${x}" y="${y.toFixed(1)}" width="7" height="${height}" rx="3.5" fill="${index % 2 ? b : a}" fill-opacity="${(0.34 + (index % 4) * 0.09).toFixed(2)}" />`;
+    const height = 18 + (mixed % 86);
+    const x = 206 + index * 15;
+    const y = 706 - height / 2;
+    return `<rect x="${x}" y="${y.toFixed(1)}" width="8" height="${height}" rx="4" fill="${index % 2 ? b : a}" fill-opacity="${(0.34 + (index % 4) * 0.08).toFixed(2)}" />`;
   }).join("");
-  const equalizer = Array.from({ length: 9 }, (_, index) => {
-    const height = 22 + ((hashString(`${seed}::human-eq::${index}`) >>> 0) % 84);
-    return `<rect x="${534 + index * 15}" y="${620 - height}" width="8" height="${height}" rx="4" fill="${index % 2 ? b : c}" fill-opacity="0.42" />`;
+  const equalizer = Array.from({ length: 13 }, (_, index) => {
+    const height = 26 + ((hashString(`${seed}::human-eq::${index}`) >>> 0) % 116);
+    return `<rect x="${532 + index * 13}" y="${656 - height}" width="8" height="${height}" rx="4" fill="${index % 2 ? b : c}" fill-opacity="0.38" />`;
   }).join("");
-  const brow = seed % 2 ? "M356 374 C368 366 382 366 394 374" : "M356 372 C370 368 382 368 394 372";
-  const hairShape = locs
-    ? hairStrands
-    : cap
-      ? `<path d="M310 306 C326 226 390 192 466 218 C512 236 536 278 530 320 C472 290 396 282 310 306 Z" fill="${hair}" opacity="0.92" /><path d="M322 292 C392 250 478 258 552 298" fill="none" stroke="${a}" stroke-width="9" stroke-linecap="round" opacity="0.62" />`
-      : `<path d="M305 332 C294 252 348 202 420 204 C494 206 548 260 530 344 C502 292 458 268 410 270 C360 272 326 296 305 332 Z" fill="${hair}" opacity="0.94" /><path d="M334 270 C368 226 446 216 500 268" fill="none" stroke="${outfit}" stroke-width="10" stroke-linecap="round" opacity="0.5" />`;
+  const locStrands = Array.from({ length: 13 }, (_, index) => {
+    const x = 326 + index * 15;
+    const y = 210 + ((hashString(`${seed}::loc::${index}`) >>> 0) % 34);
+    const bend = index % 2 ? 26 : -18;
+    return `<path d="M${x} ${y} C${x + bend} ${y + 62}, ${x - bend / 2} ${y + 120}, ${x + bend / 3} ${y + 176}" fill="none" stroke="${hair}" stroke-width="${index % 3 ? 8 : 10}" stroke-linecap="round" opacity="0.9" />`;
+  }).join("");
+  const curlDots = Array.from({ length: 16 }, (_, index) => {
+    const mixed = hashString(`${seed}::curl::${index}`) >>> 0;
+    const x = 304 + (mixed % 210);
+    const y = 196 + ((mixed >> 8) % 116);
+    const r = 18 + ((mixed >> 16) % 17);
+    return `<circle cx="${x}" cy="${y}" r="${r}" fill="${hair}" fill-opacity="0.94" stroke="${trim}" stroke-opacity="0.16" stroke-width="3" />`;
+  }).join("");
+  const hairSvg = (() => {
+    if (profile.hair === "hood") {
+      return `<path d="M244 350 C254 212 344 152 430 156 C538 162 610 246 596 382 C548 306 494 274 420 276 C340 278 292 310 244 394 Z" fill="${jacket}" stroke="${a}" stroke-opacity="0.34" stroke-width="5" />
+        <path d="M286 308 C330 216 448 194 540 278" fill="none" stroke="${trim}" stroke-width="8" stroke-linecap="round" opacity="0.46" />`;
+    }
+    if (profile.hair === "locs") {
+      return `<path d="M310 292 C330 194 418 164 500 216 C526 232 546 258 552 292 C478 252 390 248 310 292 Z" fill="${hair}" />
+        ${locStrands}`;
+    }
+    if (profile.hair === "topknot") {
+      return `<circle cx="424" cy="198" r="48" fill="${hair}" />
+        <path d="M300 318 C308 230 372 190 446 204 C514 216 548 264 540 332 C492 290 432 274 376 286 C342 294 316 306 300 318 Z" fill="${hair}" />
+        <path d="M342 224 C386 184 456 184 506 226" fill="none" stroke="${trim}" stroke-width="8" stroke-linecap="round" opacity="0.54" />`;
+    }
+    if (profile.hair === "spikes") {
+      return `<path d="M284 316 L326 214 L366 272 L414 180 L456 272 L526 204 L548 332 C474 280 368 274 284 316 Z" fill="${hair}" stroke="${trim}" stroke-opacity="0.28" stroke-width="4" />`;
+    }
+    if (profile.hair === "curls") {
+      return `<path d="M292 330 C288 246 356 186 432 188 C512 190 570 250 558 344 C506 286 364 286 292 330 Z" fill="${hair}" />${curlDots}`;
+    }
+    if (profile.hair === "waves") {
+      return `<path d="M286 326 C284 242 348 184 424 190 C502 196 564 252 552 346 C498 300 436 284 362 302 C330 310 306 318 286 326 Z" fill="${hair}" />
+        <path d="M306 270 C356 230 430 248 480 214 C508 196 532 198 552 212" fill="none" stroke="${trim}" stroke-width="7" stroke-linecap="round" opacity="0.52" />`;
+    }
+    return `<path d="M288 324 C286 242 346 188 424 192 C502 196 558 252 548 340 C500 296 438 276 370 292 C336 300 308 314 288 324 Z" fill="${hair}" />
+      <path d="M326 256 C374 220 456 224 514 270" fill="none" stroke="${trim}" stroke-width="8" stroke-linecap="round" opacity="0.48" />`;
+  })();
+  const eyewear = profile.glasses
+    ? `<g opacity="0.88">
+        <circle cx="370" cy="400" r="42" fill="${c}" fill-opacity="0.14" stroke="${trim}" stroke-width="5" />
+        <circle cx="480" cy="400" r="42" fill="${c}" fill-opacity="0.14" stroke="${trim}" stroke-width="5" />
+        <path d="M412 400 H438" stroke="${trim}" stroke-width="5" stroke-linecap="round" />
+      </g>`
+    : "";
+  const facialHair = profile.facialHair && profile.facialHair !== "clean"
+    ? `<path d="M370 466 C396 508 452 518 484 466 C466 548 388 548 370 466 Z" fill="#161016" fill-opacity="${profile.facialHair === "beard" ? "0.42" : "0.22"}" />
+       <path d="M390 454 C412 466 444 466 466 454" fill="none" stroke="#161016" stroke-width="7" stroke-linecap="round" opacity="0.4" />`
+    : "";
+  const jewelry = profile.jewelry === "forehead"
+    ? `<circle cx="424" cy="332" r="13" fill="${a}" stroke="#fff7d6" stroke-width="4" opacity="0.92" />`
+    : profile.jewelry === "visor"
+      ? `<path d="M334 376 H510" stroke="${a}" stroke-width="10" stroke-linecap="round" opacity="0.38" />`
+      : `<circle cx="424" cy="646" r="24" fill="${trim}" fill-opacity="0.64" stroke="#fff8df" stroke-opacity="0.56" stroke-width="5" />
+         <circle cx="424" cy="646" r="8" fill="#fff9d8" fill-opacity="0.94" />`;
+  const toolSvg = (() => {
+    if (profile.tool === "speaker") {
+      return `<g opacity="0.78">
+        <rect x="152" y="420" width="126" height="176" rx="30" fill="#070b20" stroke="${a}" stroke-opacity="0.26" stroke-width="4" />
+        <circle cx="215" cy="478" r="36" fill="${c}" fill-opacity="0.18" stroke="${b}" stroke-width="5" />
+        <circle cx="215" cy="548" r="20" fill="#050815" stroke="${a}" stroke-width="4" />
+        <path d="M568 426 C632 458 646 538 588 590" fill="none" stroke="${c}" stroke-opacity="0.28" stroke-width="8" stroke-linecap="round" />
+      </g>`;
+    }
+    if (profile.tool === "staff") {
+      return `<g opacity="0.9">
+        <path d="M222 430 V736" stroke="${a}" stroke-width="8" stroke-linecap="round" />
+        <circle cx="222" cy="410" r="34" fill="${c}" fill-opacity="0.24" stroke="${a}" stroke-width="6" />
+        <path d="M190 410 C214 374 244 374 268 410" fill="none" stroke="#fff7d6" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+      </g>`;
+    }
+    if (profile.tool === "blueprint") {
+      return `<g opacity="0.82">
+        <rect x="546" y="510" width="152" height="118" rx="22" fill="#071124" fill-opacity="0.66" stroke="${a}" stroke-width="4" />
+        <path d="M570 548 H674 M570 584 H642 M570 618 H686" stroke="${b}" stroke-width="4" stroke-linecap="round" opacity="0.55" />
+      </g>`;
+    }
+    if (profile.tool === "fractalCube") {
+      return `<g opacity="0.9">
+        <path d="M616 470 L690 512 L690 598 L616 640 L542 598 L542 512 Z" fill="${c}" fill-opacity="0.16" stroke="${a}" stroke-width="5" />
+        <path d="M616 470 V554 L690 598 M616 554 L542 598 M616 554 L690 512" fill="none" stroke="${b}" stroke-width="4" opacity="0.58" />
+      </g>`;
+    }
+    if (profile.tool === "leafPad") {
+      return `<g opacity="0.88">
+        <path d="M558 516 C642 520 688 584 636 658 C566 642 526 578 558 516 Z" fill="${a}" fill-opacity="0.18" stroke="${a}" stroke-width="5" />
+        <path d="M572 546 C598 584 612 618 624 650" fill="none" stroke="#f7ffe8" stroke-opacity="0.46" stroke-width="4" />
+      </g>`;
+    }
+    if (profile.tool === "dataBlade") {
+      return `<g opacity="0.86">
+        <path d="M586 454 L684 398 L628 556 Z" fill="${c}" fill-opacity="0.22" stroke="${a}" stroke-width="5" />
+        <path d="M606 468 L646 444" stroke="#f7ffff" stroke-width="4" stroke-linecap="round" opacity="0.54" />
+      </g>`;
+    }
+    if (profile.tool === "orb") {
+      return `<g opacity="0.88">
+        <circle cx="624" cy="520" r="58" fill="${c}" fill-opacity="0.16" stroke="${a}" stroke-width="5" />
+        <circle cx="624" cy="520" r="21" fill="#f7ffff" fill-opacity="0.34" />
+      </g>`;
+    }
+    return `<g opacity="0.86">
+      <rect x="198" y="650" width="426" height="126" rx="36" fill="#071124" fill-opacity="0.72" stroke="${a}" stroke-opacity="0.38" stroke-width="3" />
+      <path d="M222 714 C294 650 356 772 424 712 C496 650 544 734 600 694" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.6" />
+      ${waveform}
+    </g>`;
+  })();
 
   return `
-    <g transform="translate(${lean} 24)" filter="url(#mascotGlow)">
-      <ellipse cx="420" cy="828" rx="246" ry="48" fill="${a}" fill-opacity="0.16" />
-      <path d="M176 604 C264 516 344 506 420 586 C496 506 576 516 664 604 L600 812 C512 850 328 850 240 812 Z" fill="${jacket}" fill-opacity="0.94" stroke="${a}" stroke-opacity="0.36" stroke-width="4" />
-      <path d="M274 626 C324 590 374 592 420 652 C466 592 516 590 566 626 L532 808 C478 830 362 830 308 808 Z" fill="${outfit}" fill-opacity="0.22" stroke="${b}" stroke-opacity="0.34" stroke-width="3" />
-      <path d="M420 506 L464 612 L420 692 L376 612 Z" fill="${skin}" fill-opacity="0.84" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3" />
-      <path d="M420 620 V788 M346 700 H494 M372 746 H468" stroke="${a}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.62" />
-      <circle cx="420" cy="644" r="24" fill="${outfit}" fill-opacity="0.72" stroke="#fff8df" stroke-opacity="0.58" stroke-width="5" />
-      <circle cx="420" cy="644" r="9" fill="#fff9d8" fill-opacity="0.94" />
+    <g transform="translate(${lean} 18)" filter="url(#mascotGlow)">
+      <ellipse cx="418" cy="842" rx="278" ry="54" fill="${a}" fill-opacity="0.15" />
+      <path d="M138 588 C218 522 306 504 424 556 C542 504 630 522 710 588 L642 832 C544 876 304 876 206 832 Z" fill="${jacket}" fill-opacity="0.96" stroke="${a}" stroke-opacity="0.34" stroke-width="5" />
+      <path d="M278 594 C328 568 382 596 424 666 C466 596 520 568 570 594 L526 824 C474 848 374 848 322 824 Z" fill="${shirt}" fill-opacity="0.88" stroke="${trim}" stroke-opacity="0.26" stroke-width="3" />
+      <path d="M274 602 L362 644 L424 822 L486 644 L574 602" fill="none" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.28" />
+      <path d="M424 506 L468 614 L424 688 L380 614 Z" fill="${skin}" fill-opacity="0.88" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3" />
+      <path d="M424 632 V800 M350 704 H498 M374 756 H474" stroke="${a}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.52" />
+      ${jewelry}
       <g transform="rotate(${tilt} 420 384)">
-        <path d="M282 352 C288 282 334 230 410 224 C492 218 552 276 552 362 C552 456 496 520 420 520 C344 520 282 456 282 352 Z" fill="${skin}" stroke="#f8ffff" stroke-opacity="0.3" stroke-width="5" />
-        <path d="M282 352 C288 282 334 230 410 224 C492 218 552 276 552 362 C552 456 496 520 420 520 C344 520 282 456 282 352 Z" fill="url(#faceGrad)" fill-opacity="0.26" />
-        ${hairShape}
-        <path d="M264 368 C252 306 284 242 342 214" fill="none" stroke="${a}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.64" />
-        <path d="M576 368 C588 306 556 242 498 214" fill="none" stroke="${b}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.64" />
-        <rect x="236" y="330" width="58" height="118" rx="26" fill="#0a1026" stroke="${a}" stroke-width="7" />
-        <rect x="546" y="330" width="58" height="118" rx="26" fill="#0a1026" stroke="${b}" stroke-width="7" />
-        <circle cx="364" cy="392" r="13" fill="#071124" />
-        <circle cx="476" cy="392" r="13" fill="#071124" />
-        <circle cx="369" cy="386" r="4" fill="#ffffff" fill-opacity="0.86" />
-        <circle cx="481" cy="386" r="4" fill="#ffffff" fill-opacity="0.86" />
-        <path d="${brow}" fill="none" stroke="#071124" stroke-width="5" stroke-linecap="round" opacity="0.36" />
-        <path d="M448 374 C460 366 474 366 486 374" fill="none" stroke="#071124" stroke-width="5" stroke-linecap="round" opacity="0.36" />
-        ${glasses ? `<circle cx="364" cy="392" r="36" fill="none" stroke="${c}" stroke-width="5" stroke-opacity="0.72" /><circle cx="476" cy="392" r="36" fill="none" stroke="${c}" stroke-width="5" stroke-opacity="0.72" /><path d="M400 392 H440" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.72" />` : ""}
-        <path d="M420 402 C408 430 408 448 430 458" fill="none" stroke="#473022" stroke-width="4" stroke-linecap="round" opacity="0.38" />
-        <path d="M370 ${smile} C394 ${smile + 24} 448 ${smile + 24} 472 ${smile}" fill="none" stroke="#101827" stroke-width="7" stroke-linecap="round" opacity="0.74" />
+        <ellipse cx="302" cy="398" rx="22" ry="34" fill="${skin}" fill-opacity="0.84" />
+        <ellipse cx="538" cy="398" rx="22" ry="34" fill="${skin}" fill-opacity="0.84" />
+        <path d="M294 354 C300 270 350 214 420 212 C500 210 552 276 546 364 C540 474 490 548 420 548 C350 548 300 474 294 354 Z" fill="${skin}" stroke="#f8ffff" stroke-opacity="0.26" stroke-width="5" />
+        <path d="M294 354 C300 270 350 214 420 212 C500 210 552 276 546 364 C540 474 490 548 420 548 C350 548 300 474 294 354 Z" fill="url(#faceGrad)" fill-opacity="0.16" />
+        ${hairSvg}
+        <path d="M264 374 C252 300 288 232 348 202" fill="none" stroke="${a}" stroke-width="15" stroke-linecap="round" stroke-opacity="0.68" />
+        <path d="M576 374 C588 300 552 232 492 202" fill="none" stroke="${b}" stroke-width="15" stroke-linecap="round" stroke-opacity="0.68" />
+        <rect x="236" y="334" width="58" height="120" rx="24" fill="#0a1026" stroke="${a}" stroke-width="7" />
+        <rect x="546" y="334" width="58" height="120" rx="24" fill="#0a1026" stroke="${b}" stroke-width="7" />
+        <path d="M354 392 C372 378 394 378 414 392 C394 408 374 408 354 392 Z" fill="#f9fbff" fill-opacity="0.82" />
+        <path d="M448 392 C468 378 490 378 508 392 C490 408 468 408 448 392 Z" fill="#f9fbff" fill-opacity="0.82" />
+        <circle cx="386" cy="393" r="12" fill="#071124" />
+        <circle cx="476" cy="393" r="12" fill="#071124" />
+        <circle cx="390" cy="388" r="4" fill="#ffffff" fill-opacity="0.9" />
+        <circle cx="480" cy="388" r="4" fill="#ffffff" fill-opacity="0.9" />
+        <path d="M350 368 C372 356 398 356 418 368" fill="none" stroke="#101827" stroke-width="6" stroke-linecap="round" opacity="0.42" />
+        <path d="M444 368 C466 356 492 356 512 368" fill="none" stroke="#101827" stroke-width="6" stroke-linecap="round" opacity="0.42" />
+        ${eyewear}
+        <path d="M424 404 C408 434 410 454 432 466" fill="none" stroke="#4a2c22" stroke-width="5" stroke-linecap="round" opacity="0.38" />
+        <path d="M380 ${smile} C402 ${smile + 18} 446 ${smile + 18} 470 ${smile}" fill="none" stroke="#101827" stroke-width="7" stroke-linecap="round" opacity="0.74" />
+        ${facialHair}
       </g>
-      <path d="M292 666 C220 630 182 580 170 524" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
-      <path d="M548 654 C624 612 660 560 670 504" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
-      <circle cx="168" cy="516" r="19" fill="${skin}" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3" />
-      <circle cx="672" cy="498" r="19" fill="${skin}" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3" />
-      <g opacity="0.86">
-        <rect x="208" y="642" width="388" height="116" rx="34" fill="#071124" fill-opacity="0.68" stroke="${a}" stroke-opacity="0.38" stroke-width="3" />
-        <path d="M226 706 C294 646 356 758 420 704 C492 644 532 730 580 688" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.58" />
-        ${waveform}
-        <circle cx="548" cy="706" r="28" fill="${outfit}" fill-opacity="0.34" stroke="${a}" stroke-opacity="0.64" stroke-width="4" />
-      </g>
+      <path d="M306 666 C248 626 214 576 202 522" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
+      <path d="M538 658 C614 612 654 560 668 502" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
+      <path d="M188 512 C206 494 232 494 250 512 M208 500 V458 M228 506 L258 470" fill="none" stroke="${skin}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M664 498 C684 484 708 490 720 512 M678 492 L706 456 M690 506 L732 484" fill="none" stroke="${skin}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+      ${toolSvg}
       <g opacity="0.82">${equalizer}</g>
       ${motif}
-      <path d="M210 280 C332 130 550 120 688 278" fill="none" stroke="${a}" stroke-width="3" stroke-opacity="0.18" />
-      <path d="M184 334 C352 182 568 214 704 382" fill="none" stroke="${c}" stroke-width="2" stroke-opacity="0.16" />
-      <text x="616" y="722" fill="${a}" fill-opacity="0.62" font-size="42" font-weight="900" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText((spirit?.id || "SS").slice(0, 2).toUpperCase())}</text>
+      <path d="M202 270 C330 126 562 118 696 280" fill="none" stroke="${a}" stroke-width="3" stroke-opacity="0.18" />
+      <path d="M176 334 C350 178 578 214 720 384" fill="none" stroke="${c}" stroke-width="2" stroke-opacity="0.16" />
+      <circle cx="424" cy="646" r="76" fill="none" stroke="${a}" stroke-opacity="0.11" stroke-width="3" />
     </g>`;
 }
 

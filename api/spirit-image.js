@@ -151,10 +151,12 @@ module.exports = async function handler(req, res) {
     prompt,
     "Square 1024x1024 premium collectible character artwork.",
     "Generate only the central musical-spirit character illustration; the app will add all text, stats, frame, and UI later.",
-    "The image must feature one original human-like musical avatar/character, visible shoulders or full body, expressive face, distinctive hair or headwear, stylish club outfit, headphones, and hands/gesture conducting waveform energy or a holographic mixer.",
-    "It can feel mystical or cosmic, but it should read as a beautiful stylized person-inspired avatar, not an abstract ball, logo, mascot icon, orb, or plain symbol.",
-    "Make it elegant, polished, readable at small card size, and visually distinct for the provided user signature: different color mood, outfit, expression, prop, hairstyle, and aura.",
-    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels.",
+    "The image must feature one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, natural face proportions, expressive eyes, visible hairstyle or headwear, stylish club/festival outfit, headphones, accessories, torso, shoulders, and hands.",
+    "The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object tied to the music taste.",
+    "Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim lighting, detailed fabric, jewelry, gloves or a distinctive hand gesture, dramatic waveform halo, polished collectible character-card finish.",
+    "It can feel mystical or cosmic, but it must read as a premium human music persona, not a cute mascot, toy, chibi, emoji, floating head, abstract ball, logo, mascot icon, orb, flat vector, childish doll, or plain symbol.",
+    "Make it elegant, polished, high-detail, readable at small card size, and visually distinct for the provided user signature: different color mood, outfit, expression, prop, hairstyle, face, and aura.",
+    "Avoid generic abstract circles, avoid simple cartoon proportions, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels.",
     "No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
   ].join(" ");
 
