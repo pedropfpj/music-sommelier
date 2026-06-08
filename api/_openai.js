@@ -26,12 +26,25 @@ function allowedOrigins() {
     .filter(Boolean);
 }
 
+function originMatchesRequestHost(req) {
+  const origin = String(req?.headers?.origin || "").trim();
+  const host = String(req?.headers?.host || "").trim();
+  if (!origin || !host) return false;
+  try {
+    return new URL(origin).host === host;
+  } catch (_err) {
+    return false;
+  }
+}
+
 function setCors(res) {
   const origins = allowedOrigins();
   const origin = String(res.req?.headers?.origin || "").trim();
   if (!origins.length) {
     res.setHeader("Access-Control-Allow-Origin", "*");
   } else if (origin && origins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (originMatchesRequestHost(res.req)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -42,7 +55,7 @@ function originAllowed(req) {
   const origins = allowedOrigins();
   if (!origins.length) return true;
   const origin = String(req.headers?.origin || "").trim();
-  return Boolean(origin && origins.includes(origin));
+  return Boolean(origin && (origins.includes(origin) || originMatchesRequestHost(req)));
 }
 
 function sendJson(res, statusCode, payload) {

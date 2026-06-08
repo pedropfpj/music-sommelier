@@ -1209,6 +1209,26 @@
               <p id="spiritLoreNextText" class="muted"></p>
             </article>
           </div>
+          <div id="spiritCollectiblePanel" class="spirit-collectible hidden">
+            <div class="spirit-collectible-header">
+              <p id="spiritCollectibleTitle" class="spirit-visual-title">Arte única do espírito</p>
+              <span id="spiritRankBadge" class="chip alt">Espírito desbloqueado</span>
+            </div>
+            <p id="spiritCollectibleHint" class="muted spirit-visual-hint">Gere um card estático com sua arte e status para compartilhar nos Stories.</p>
+            <div class="spirit-collectible-grid">
+              <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
+              <div class="spirit-collectible-meta">
+                <p id="spiritCollectibleMilestone" class="spirit-collectible-milestone"></p>
+                <p id="spiritCollectibleProgress" class="muted"></p>
+                <p id="spiritCollectibleDetails" class="spirit-collectible-details muted"></p>
+                <div class="spirit-collectible-actions">
+                  <button id="spiritCollectibleRegenerateBtn" class="listen-btn" type="button">Gerar arte única IA</button>
+                  <a id="spiritCollectibleDownload" class="listen-btn" href="#" download>Baixar imagem</a>
+                  <button id="spiritCollectibleShareInstagramBtn" class="instagram-share-btn" type="button">Compartilhar card estático</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div id="spiritSpotlightPanel" class="spirit-spotlight hidden">
             <p id="spiritSpotlightTitle" class="spirit-visual-title">Faixa do espírito</p>
             <p id="spiritSpotlightHint" class="muted spirit-visual-hint">A faixa que mais combina com seu perfil aparece aqui.</p>
@@ -1218,26 +1238,6 @@
               <a id="spiritSpotlightSpotify" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
               <a id="spiritSpotlightYoutube" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
               <a id="spiritSpotlightSoundcloud" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
-            </div>
-          </div>
-          <div id="spiritCollectiblePanel" class="spirit-collectible hidden">
-            <div class="spirit-collectible-header">
-              <p id="spiritCollectibleTitle" class="spirit-visual-title">Colecionável do espírito</p>
-              <span id="spiritRankBadge" class="chip alt">Espírito desbloqueado</span>
-            </div>
-            <p id="spiritCollectibleHint" class="muted spirit-visual-hint">Ao alcançar marcos de likes, você desbloqueia uma arte personalizada.</p>
-            <div class="spirit-collectible-grid">
-              <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
-              <div class="spirit-collectible-meta">
-                <p id="spiritCollectibleMilestone" class="spirit-collectible-milestone"></p>
-                <p id="spiritCollectibleProgress" class="muted"></p>
-                <p id="spiritCollectibleDetails" class="spirit-collectible-details muted"></p>
-                <div class="spirit-collectible-actions">
-                  <button id="spiritCollectibleRegenerateBtn" class="listen-btn" type="button">Gerar nova arte</button>
-                  <a id="spiritCollectibleDownload" class="listen-btn" href="#" download>Baixar imagem</a>
-                  <button id="spiritCollectibleShareInstagramBtn" class="instagram-share-btn" type="button">Story animado</button>
-                </div>
-              </div>
             </div>
           </div>
           <p id="spiritProgress" class="muted spirit-progress"></p>
@@ -1375,6 +1375,6 @@
         allowImageRegeneration: true
       };
     </script>
-    <script src="app.js?v=20260608ai2"></script>
+    <script src="app.js?v=20260608ai3"></script>
   </body>
 </html>
