@@ -4833,6 +4833,13 @@ const artistSocialsHint = document.getElementById("artistSocialsHint");
 const artistSocialLinks = document.getElementById("artistSocialLinks");
 const statsLine = document.getElementById("statsLine");
 const summaryShareInstagramBtn = document.getElementById("summaryShareInstagramBtn");
+const profileBackupKicker = document.getElementById("profileBackupKicker");
+const profileBackupTitle = document.getElementById("profileBackupTitle");
+const profileBackupHint = document.getElementById("profileBackupHint");
+const profileBackupStatus = document.getElementById("profileBackupStatus");
+const profileBackupExportBtn = document.getElementById("profileBackupExportBtn");
+const profileBackupImportBtn = document.getElementById("profileBackupImportBtn");
+const profileBackupImportInput = document.getElementById("profileBackupImportInput");
 const summaryProfileStatus = document.getElementById("summaryProfileStatus");
 const summaryKnownCount = document.getElementById("summaryKnownCount");
 const summaryDiscoveredCount = document.getElementById("summaryDiscoveredCount");
@@ -5160,6 +5167,10 @@ const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v17";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
+const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
+const PROFILE_BACKUP_VERSION = 1;
+const PROFILE_BACKUP_MAX_BYTES = 2_000_000;
+const PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY = "neonpulse:profileBackup:lastExport:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const AUDIO_GAIN_PROFILE = {
@@ -11486,6 +11497,9 @@ const I18N = {
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
     authProviderGoogleReady: "Botão do Google carregado. Toque nele para continuar.",
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
+    authGoogleComingSoon: "Google em breve",
+    authAppleComingSoon: "Apple em breve",
+    authProviderHintLocalBackup: "Login social entra na fase de contas reais. Por enquanto, use o backup local para não perder curtidas e status.",
     welcomeKicker: "Curadoria de música eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Seu sommelier de música eletrônica para rave, treino, foco ou viagem. Escolha seu estilo e receba faixa + artista novo para descobrir.",
@@ -11819,6 +11833,18 @@ const I18N = {
     summaryShareStoryTitle: "Meu status musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
+    profileBackupKicker: "Proteção local",
+    profileBackupTitle: "Salvar seu perfil",
+    profileBackupHint: "Até a conta real chegar, baixe uma cópia das curtidas, status, artistas conhecidos e espírito musical deste aparelho.",
+    profileBackupStatusEmpty: "Nenhum sinal salvo ainda.",
+    profileBackupStatus: "{signals} sinais salvos neste aparelho • último backup: {date}",
+    profileBackupStatusNever: "nunca",
+    profileBackupExport: "Baixar backup",
+    profileBackupImport: "Restaurar backup",
+    profileBackupExported: "Backup do perfil baixado.",
+    profileBackupImported: "Backup restaurado neste aparelho.",
+    profileBackupInvalid: "Arquivo de backup inválido ou muito grande.",
+    profileBackupImportConfirm: "Restaurar este backup vai substituir o perfil local atual deste aparelho. Deseja continuar?",
     summaryLikedTracksTitle: "Músicas curtidas",
     summaryLikedTracksHint: "Tudo que você curtir fica salvo aqui para ouvir depois.",
     summaryLikedTracksClear: "Limpar",
@@ -12062,6 +12088,9 @@ const I18N = {
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
     authProviderGoogleReady: "Google button loaded. Tap it to continue.",
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
+    authGoogleComingSoon: "Google soon",
+    authAppleComingSoon: "Apple soon",
+    authProviderHintLocalBackup: "Social login is planned for the real accounts phase. For now, use local backup so likes and status are not lost.",
     welcomeKicker: "Electronic music curation",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Your electronic music sommelier for rave, workout, focus, or travel. Pick your style and get a track + a new artist to discover.",
@@ -12395,6 +12424,18 @@ const I18N = {
     summaryShareStoryTitle: "My music status",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
+    profileBackupKicker: "Local protection",
+    profileBackupTitle: "Save your profile",
+    profileBackupHint: "Until real accounts arrive, download a copy of likes, status, known artists, and musical spirit from this device.",
+    profileBackupStatusEmpty: "No saved signals yet.",
+    profileBackupStatus: "{signals} signals saved on this device • last backup: {date}",
+    profileBackupStatusNever: "never",
+    profileBackupExport: "Download backup",
+    profileBackupImport: "Restore backup",
+    profileBackupExported: "Profile backup downloaded.",
+    profileBackupImported: "Backup restored on this device.",
+    profileBackupInvalid: "Invalid or oversized backup file.",
+    profileBackupImportConfirm: "Restoring this backup will replace the current local profile on this device. Continue?",
     summaryLikedTracksTitle: "Liked tracks",
     summaryLikedTracksHint: "Everything you like is saved here so you can listen again later.",
     summaryLikedTracksClear: "Clear",
@@ -12638,6 +12679,9 @@ const I18N = {
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
     authProviderGoogleReady: "Botón de Google cargado. Tócalo para continuar.",
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
+    authGoogleComingSoon: "Google pronto",
+    authAppleComingSoon: "Apple pronto",
+    authProviderHintLocalBackup: "El login social entra en la fase de cuentas reales. Por ahora, usa el backup local para no perder likes ni estado.",
     welcomeKicker: "Curaduría de música electrónica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Tu sommelier de música electrónica para rave, entrenamiento, foco o viaje. Elige tu estilo y recibe una pista + artista nuevo.",
@@ -12971,6 +13015,18 @@ const I18N = {
     summaryShareStoryTitle: "Mi estado musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
+    profileBackupKicker: "Protección local",
+    profileBackupTitle: "Guardar tu perfil",
+    profileBackupHint: "Hasta que lleguen las cuentas reales, descarga una copia de likes, estado, artistas conocidos y espíritu musical de este dispositivo.",
+    profileBackupStatusEmpty: "Aún no hay señales guardadas.",
+    profileBackupStatus: "{signals} señales guardadas en este dispositivo • último backup: {date}",
+    profileBackupStatusNever: "nunca",
+    profileBackupExport: "Descargar backup",
+    profileBackupImport: "Restaurar backup",
+    profileBackupExported: "Backup del perfil descargado.",
+    profileBackupImported: "Backup restaurado en este dispositivo.",
+    profileBackupInvalid: "Archivo de backup inválido o demasiado grande.",
+    profileBackupImportConfirm: "Restaurar este backup reemplazará el perfil local actual de este dispositivo. ¿Continuar?",
     summaryLikedTracksTitle: "Pistas con like",
     summaryLikedTracksHint: "Todo lo que marques como me gusta queda guardado aquí para escuchar después.",
     summaryLikedTracksClear: "Limpiar",
@@ -13779,6 +13835,7 @@ function applyLanguage() {
   setText("#authGoogleLabel", t("authGoogleBtn"));
   setText("#authAppleLabel", t("authAppleBtn"));
   setText("#authProviderHint", t("authProviderHint"));
+  updateAuthProviderUi();
   if (authUsername) authUsername.placeholder = t("authUsernamePlaceholder");
   if (authPassword) authPassword.placeholder = t("authPasswordPlaceholder");
   setText("#welcomeKicker", t("welcomeKicker"));
@@ -13948,6 +14005,12 @@ function applyLanguage() {
   setText("#eventsPanel > h3", labels.eventsTitle || "");
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
   setText("#summaryShareInstagramBtn", t("summaryShareStoryBtn"));
+  setText("#profileBackupKicker", t("profileBackupKicker"));
+  setText("#profileBackupTitle", t("profileBackupTitle"));
+  setText("#profileBackupHint", t("profileBackupHint"));
+  setText("#profileBackupExportBtn", t("profileBackupExport"));
+  setText("#profileBackupImportBtn", t("profileBackupImport"));
+  updateProfileBackupStatus();
   setText("#summaryStatusLabel", t("summaryStatusLabel"));
   setText("#summaryKnownCountLabel", t("summaryKnownCountLabel"));
   setText("#summaryDiscoveredCountLabel", t("summaryDiscoveredCountLabel"));
@@ -14476,7 +14539,21 @@ function createAuthStateToken() {
 function setAuthProviderBusy(provider, isBusy) {
   const button = provider === "apple" ? authAppleBtn : authGoogleBtn;
   const label = provider === "apple" ? authAppleLabel : authGoogleLabel;
+  const configured = provider === "apple" ? Boolean(appleClientId()) : Boolean(googleClientId());
+  if (!configured) {
+    if (button) {
+      button.disabled = true;
+      button.classList.add("is-unconfigured");
+      button.title = t("authProviderConfigMissing", { provider: authProviderDisplayName(provider) });
+    }
+    if (label) label.textContent = t(provider === "apple" ? "authAppleComingSoon" : "authGoogleComingSoon");
+    return;
+  }
   if (button) button.disabled = isBusy;
+  if (button) {
+    button.classList.remove("is-unconfigured");
+    button.removeAttribute("title");
+  }
   if (!label) return;
   label.textContent = isBusy
     ? t("authProviderLoading", { provider: authProviderDisplayName(provider) })
@@ -14484,13 +14561,20 @@ function setAuthProviderBusy(provider, isBusy) {
 }
 
 function updateAuthProviderUi() {
+  const googleConfigured = Boolean(googleClientId());
+  const appleConfigured = Boolean(appleClientId());
   setAuthProviderBusy("google", googleAuthLoading);
   setAuthProviderBusy("apple", appleAuthLoading);
   if (authGoogleNativeSlot && !googleAuthReady) {
     authGoogleNativeSlot.classList.add("hidden");
     authGoogleNativeSlot.innerHTML = "";
   }
-  if (authGoogleBtn && !googleAuthReady) authGoogleBtn.classList.remove("hidden");
+  if (authGoogleBtn && (!googleAuthReady || !googleConfigured)) authGoogleBtn.classList.remove("hidden");
+  if (authProviderHint) {
+    authProviderHint.textContent = googleConfigured || appleConfigured
+      ? t("authProviderHint")
+      : t("authProviderHintLocalBackup");
+  }
 }
 
 function showAuthProviderConfigMissing(provider) {
@@ -18471,6 +18555,194 @@ function loadProgress() {
   updateStats();
   renderTrackRating(currentRecommendation);
   void renderMusicalSpirit({ celebrate: false, forceAnimation: false });
+}
+
+function safeReadJsonStorage(key) {
+  if (!key) return null;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (_err) {
+    return null;
+  }
+}
+
+function profileBackupLastExportKey() {
+  return storageKeyForSession(PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY) || PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY;
+}
+
+function profileBackupSignalCount() {
+  return Math.max(0,
+    (Number(userStats.likedSongs) || 0) +
+    (Number(userStats.likedArtists) || 0) +
+    (Number(userStats.likedDiscoveries) || 0) +
+    (Number(userStats.alreadyKnew) || 0) +
+    (Number(userStats.skipped) || 0) +
+    (Number(userStats.ratingCount) || 0) +
+    likedTrackHistory.length +
+    knownArtistsMemory.size +
+    discoveredArtistsInApp.size +
+    seenTrackKeysMemory.size
+  );
+}
+
+function formatBackupDate(value = "") {
+  if (!value) return t("profileBackupStatusNever");
+  try {
+    return new Intl.DateTimeFormat(currentLanguage === "en" ? "en-US" : currentLanguage === "es" ? "es-ES" : "pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(value));
+  } catch (_err) {
+    return t("profileBackupStatusNever");
+  }
+}
+
+function updateProfileBackupStatus() {
+  if (!profileBackupStatus) return;
+  const signals = profileBackupSignalCount();
+  if (!signals) {
+    profileBackupStatus.textContent = t("profileBackupStatusEmpty");
+    return;
+  }
+  let exportedAt = "";
+  try {
+    exportedAt = localStorage.getItem(profileBackupLastExportKey()) || "";
+  } catch (_err) {
+    exportedAt = "";
+  }
+  profileBackupStatus.textContent = t("profileBackupStatus", {
+    signals,
+    date: formatBackupDate(exportedAt)
+  });
+}
+
+function profileBackupFilename() {
+  const session = normalizeUserSession(currentAuthUser);
+  const userPart = normalize(session.username || session.email || session.mode || "perfil")
+    .replace(/[^a-z0-9-]+/g, "-")
+    .slice(0, 34) || "perfil";
+  const datePart = new Date().toISOString().slice(0, 10);
+  return `sonic-search-${userPart}-${datePart}.json`;
+}
+
+function buildProfileBackupPayload() {
+  savePreferences();
+  saveProgress();
+  const session = normalizeUserSession(currentAuthUser);
+  const preferencesKey = storageKeyForSession(STORAGE_KEY);
+  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
+  const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
+  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
+  const exportedAt = new Date().toISOString();
+  return {
+    app: PROFILE_BACKUP_APP_ID,
+    version: PROFILE_BACKUP_VERSION,
+    exportedAt,
+    profileKey: sessionProfileKey(session),
+    session: {
+      mode: session.mode,
+      username: session.username,
+      email: session.email,
+      provider: session.provider
+    },
+    data: {
+      preferences: safeReadJsonStorage(preferencesKey),
+      progress: safeReadJsonStorage(progressKey),
+      collectible: safeReadJsonStorage(collectibleKey),
+      artSeed: artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : "",
+      usageGuideAcknowledged: true
+    }
+  };
+}
+
+function exportProfileBackup() {
+  try {
+    const payload = buildProfileBackupPayload();
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = profileBackupFilename();
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt);
+    updateProfileBackupStatus();
+    showToast(t("profileBackupExported"));
+  } catch (_err) {
+    showToast(t("toastError"));
+  }
+}
+
+function validProfileBackupPayload(payload) {
+  return Boolean(
+    payload &&
+    payload.app === PROFILE_BACKUP_APP_ID &&
+    Number(payload.version) >= 1 &&
+    payload.data &&
+    typeof payload.data === "object"
+  );
+}
+
+function restoreProfileBackupPayload(payload) {
+  if (!validProfileBackupPayload(payload)) return false;
+  const preferencesKey = storageKeyForSession(STORAGE_KEY);
+  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
+  const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
+  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
+  const data = payload.data || {};
+  if (preferencesKey && data.preferences && typeof data.preferences === "object") {
+    localStorage.setItem(preferencesKey, JSON.stringify(data.preferences));
+  }
+  if (progressKey && data.progress && typeof data.progress === "object") {
+    localStorage.setItem(progressKey, JSON.stringify(data.progress));
+  }
+  if (collectibleKey && data.collectible && typeof data.collectible === "object") {
+    localStorage.setItem(collectibleKey, JSON.stringify(data.collectible));
+  }
+  if (artSeedKey && typeof data.artSeed === "string" && data.artSeed.trim()) {
+    localStorage.setItem(artSeedKey, data.artSeed.trim());
+  }
+  if (data.usageGuideAcknowledged) {
+    localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
+  }
+  if (payload.exportedAt) {
+    localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt);
+  }
+  activateUserSession(currentAuthUser);
+  updateProfileBackupStatus();
+  showToast(t("profileBackupImported"));
+  return true;
+}
+
+async function importProfileBackupFile(file) {
+  if (!file || Number(file.size) > PROFILE_BACKUP_MAX_BYTES) {
+    showToast(t("profileBackupInvalid"));
+    return;
+  }
+  try {
+    const text = await file.text();
+    if (text.length > PROFILE_BACKUP_MAX_BYTES) {
+      showToast(t("profileBackupInvalid"));
+      return;
+    }
+    const payload = JSON.parse(text);
+    if (!validProfileBackupPayload(payload)) {
+      showToast(t("profileBackupInvalid"));
+      return;
+    }
+    if (!window.confirm(t("profileBackupImportConfirm"))) return;
+    restoreProfileBackupPayload(payload);
+  } catch (_err) {
+    showToast(t("profileBackupInvalid"));
+  }
 }
 
 function saveDynamicCatalogCache() {
@@ -28931,6 +29203,7 @@ function updateStats() {
   renderSummaryTags(summaryKnownArtists, knownArtistsTop, t("summaryEmptyKnown"));
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
   renderSummaryTags(summaryDislikedArtists, dislikedArtistsTop, t("summaryEmptyDisliked"));
+  updateProfileBackupStatus();
   updateSpiritProgressText();
   applyGenreVibeTheme();
   scheduleQuizChallengeEvaluation();
@@ -30385,6 +30658,15 @@ bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
 bind(authGoogleBtn, "click", loginWithGoogle);
 bind(authAppleBtn, "click", loginWithApple);
+bind(profileBackupExportBtn, "click", exportProfileBackup);
+bind(profileBackupImportBtn, "click", () => {
+  if (profileBackupImportInput) profileBackupImportInput.click();
+});
+bind(profileBackupImportInput, "change", (event) => {
+  const file = event.target?.files?.[0] || null;
+  if (profileBackupImportInput) profileBackupImportInput.value = "";
+  void importProfileBackupFile(file);
+});
 bind(styleInfoCloseBtn, "click", () => {
   styleInfoDismissed = true;
   if (styleInfoBubble) styleInfoBubble.classList.add("hidden");

@@ -2456,6 +2456,11 @@ textarea {
   transform: none;
 }
 
+.auth-social-btn.is-unconfigured:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
 .auth-social-btn.google {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(61, 139, 255, 0.1)),
@@ -6329,6 +6334,57 @@ input[type="range"] {
   white-space: nowrap;
 }
 
+.profile-backup-card {
+  margin-top: 0.8rem;
+  border: 1px solid rgba(116, 239, 218, 0.28);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(116, 239, 218, 0.16), transparent 36%),
+    linear-gradient(135deg, rgba(8, 16, 33, 0.94), rgba(10, 14, 29, 0.88));
+  padding: 0.82rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.7fr);
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.profile-backup-card h4 {
+  margin: 0.16rem 0 0.24rem;
+  color: #f4fbff;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+}
+
+.profile-backup-actions {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: stretch;
+}
+
+.profile-backup-status {
+  margin: 0;
+  color: #b9c7d9;
+  font-size: 0.9rem;
+}
+
+.profile-backup-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.profile-backup-buttons .listen-btn {
+  min-height: 44px;
+  justify-content: center;
+  text-align: center;
+}
+
+.profile-backup-buttons .listen-btn.secondary {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(8, 16, 34, 0.88);
+  color: #eaf7ff !important;
+}
+
 .profile-stat-card {
   border: 1px solid rgba(134, 191, 255, 0.28);
   border-radius: 12px;
@@ -7138,6 +7194,14 @@ input[type="range"] {
 
   .profile-stats-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .profile-backup-card {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-backup-buttons {
+    grid-template-columns: 1fr;
   }
 
   .summary-panel-head {

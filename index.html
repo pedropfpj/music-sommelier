@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260607r" />
+    <link rel="stylesheet" href="styles.css?v=20260607s" />
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -1252,6 +1252,21 @@
           </div>
           <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
         </div>
+        <article id="profileBackupCard" class="profile-backup-card">
+          <div>
+            <p id="profileBackupKicker" class="summary-kicker">Proteção local</p>
+            <h4 id="profileBackupTitle">Salvar seu perfil</h4>
+            <p id="profileBackupHint" class="muted">Até a conta real chegar, baixe uma cópia das curtidas, status e espírito musical deste aparelho.</p>
+          </div>
+          <div class="profile-backup-actions">
+            <p id="profileBackupStatus" class="profile-backup-status muted">Nenhum backup gerado ainda.</p>
+            <div class="profile-backup-buttons">
+              <button id="profileBackupExportBtn" class="listen-btn" type="button">Baixar backup</button>
+              <button id="profileBackupImportBtn" class="listen-btn secondary" type="button">Restaurar backup</button>
+              <input id="profileBackupImportInput" class="hidden" type="file" accept="application/json,.json" />
+            </div>
+          </div>
+        </article>
         <div class="profile-stats-grid">
           <article class="profile-stat-card metric">
             <p id="summaryStatusLabel" class="summary-kicker">Status do perfil</p>
@@ -1346,6 +1361,6 @@
         appleRedirectURI: ""
       };
     </script>
-    <script src="app.js?v=20260607af"></script>
+    <script src="app.js?v=20260607ag"></script>
   </body>
 </html>
