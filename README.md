@@ -54,6 +54,10 @@ Configure as variaveis de ambiente:
 - `OPENAI_API_KEY`: chave da API no backend
 - `OPENAI_TEXT_MODEL`: modelo de texto opcional, padrao `gpt-5-mini`
 - `OPENAI_IMAGE_MODEL`: modelo de imagem opcional, padrao `gpt-image-1-mini`
+- `SONIC_AI_IMAGE_ENABLED`: libera a rota de imagem por IA
+- `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: exige premium antes de gerar imagem
+- `SONIC_AI_IMAGE_STORE_REQUIRED`: exige KV/Redis para garantir uma imagem IA por usuario em producao
+- `KV_REST_API_URL` / `KV_REST_API_TOKEN`: armazenamento duravel para nao gerar mais de uma imagem por usuario
 
 Endpoints incluidos:
 

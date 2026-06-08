@@ -92,12 +92,31 @@ function enforceDailyBudget(req, feature, limit) {
   return { ok: true, remaining: safeLimit - current - 1 };
 }
 
+function enforceOpenAiDailyBudget(req, res, {
+  feature = "text",
+  dailyLimitEnv = "SONIC_AI_TEXT_DAILY_LIMIT",
+  defaultDailyLimit = 80
+} = {}) {
+  const budget = enforceDailyBudget(req, feature, envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000));
+  if (!budget.ok) {
+    sendJson(res, 429, { error: "daily_ai_limit_reached", feature });
+    return false;
+  }
+
+  if (budget.remaining !== null) {
+    res.setHeader("X-Sonic-AI-Remaining", String(budget.remaining));
+  }
+
+  return true;
+}
+
 function requireOpenAiPost(req, res, {
   feature = "text",
   enabledEnv = "SONIC_AI_TEXT_ENABLED",
   defaultEnabled = true,
   dailyLimitEnv = "SONIC_AI_TEXT_DAILY_LIMIT",
-  defaultDailyLimit = 80
+  defaultDailyLimit = 80,
+  budgetOnStart = true
 } = {}) {
   if (!requirePost(req, res)) return false;
 
@@ -117,14 +136,12 @@ function requireOpenAiPost(req, res, {
     return false;
   }
 
-  const budget = enforceDailyBudget(req, feature, envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000));
-  if (!budget.ok) {
-    sendJson(res, 429, { error: "daily_ai_limit_reached", feature });
-    return false;
-  }
-
-  if (budget.remaining !== null) {
-    res.setHeader("X-Sonic-AI-Remaining", String(budget.remaining));
+  if (budgetOnStart) {
+    return enforceOpenAiDailyBudget(req, res, {
+      feature,
+      dailyLimitEnv,
+      defaultDailyLimit
+    });
   }
 
   return true;
@@ -277,6 +294,7 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" 
 module.exports = {
   callOpenAiImage,
   callOpenAiJson,
+  enforceOpenAiDailyBudget,
   envFlag,
   parseBody,
   requireOpenAiPost,
