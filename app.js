@@ -12030,6 +12030,7 @@ const I18N = {
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
+    spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
     spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito tem variações de personagem, frase e status geradas pelo seu gosto musical.",
     spiritCollectibleHintApi: "Arte premium por IA criada para este perfil. Use Gerar arte única para testar variações no beta.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Por enquanto, o app usa uma versão local bonita sem custo.",
@@ -12625,6 +12626,7 @@ const I18N = {
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
+    spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
     spiritCollectibleHintLocal: "Personal artwork is active: each spirit has character, quote, and status variations generated from your music taste.",
     spiritCollectibleHintApi: "Premium AI artwork created for this profile. Use Generate unique artwork to test beta variations.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. For now, the app uses a polished local version with no extra cost.",
@@ -13220,6 +13222,7 @@ const I18N = {
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
+    spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
     spiritCollectibleHintLocal: "Arte personal activa: cada espíritu tiene variaciones de personaje, frase y estado generadas por tu gusto musical.",
     spiritCollectibleHintApi: "Arte premium con IA creada para este perfil. Usa Generar arte único para probar variaciones beta.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Por ahora, la app usa una versión local cuidada sin coste extra.",
@@ -14486,9 +14489,17 @@ function resetSessionUiState() {
   setListenLinkState(spiritSpotlightYoutube, { href: "#", enabled: false, title: t("previewUnavailable") });
   setListenLinkState(spiritSpotlightSoundcloud, { href: "#", enabled: false, title: t("previewUnavailable") });
   if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
-  if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
+  if (spiritCollectibleImage) {
+    spiritCollectibleImage.removeAttribute("src");
+    spiritCollectibleImage.removeAttribute("data-asset-ready");
+  }
   if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
-  if (spiritCollectibleDownload) spiritCollectibleDownload.setAttribute("href", "#");
+  if (spiritCollectibleDownload) {
+    spiritCollectibleDownload.setAttribute("href", "#");
+    spiritCollectibleDownload.removeAttribute("download");
+    spiritCollectibleDownload.classList.add("disabled-link");
+    spiritCollectibleDownload.setAttribute("aria-disabled", "true");
+  }
   if (spiritCollectibleRegenerateBtn) {
     spiritCollectibleRegenerateBtn.disabled = true;
     spiritCollectibleRegenerateBtn.textContent = t("spiritCollectibleRegenerate");
@@ -22441,6 +22452,13 @@ function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
     .map((signal) => `${normalize(signal.label)}:${Number(signal.score || 0).toFixed(1)}`);
   const typedKnown = parseKnownArtists(knownArtistsEl ? knownArtistsEl.value : "");
   const knownUnion = new Set([...typedKnown, ...knownArtistsMemory]);
+  const selectedStyle = String(
+    styleEl?.value ||
+      lastPrefs?.style ||
+      currentRecommendation?.style ||
+      currentDiscovery?.style ||
+      ""
+  ).trim();
   const raw = [
     spiritCollectibleUserSignature(),
     spirit?.id || "",
@@ -23701,10 +23719,11 @@ function restoreStoryShareButtons() {
     resetStoryShareButtonLabel(summaryShareInstagramBtn);
   }
   if (spiritCollectibleShareInstagramBtn) {
+    const imageIsReady = spiritCollectibleImage?.dataset.assetReady === "true";
     const collectibleImageUrl = String(
       spiritCollectibleShareInstagramBtn.dataset.imageUrl ||
-        spiritCollectibleImage?.getAttribute("src") ||
         spiritCollectibleDownload?.getAttribute("href") ||
+        (imageIsReady ? spiritCollectibleImage?.getAttribute("src") : "") ||
         ""
     ).trim();
     const hasCollectibleAsset = Boolean(
@@ -25057,12 +25076,110 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const store = readSpiritCollectibleStore();
   let collectible = store[slotKey] || null;
 
+  const renderCollectibleState = (asset = collectible) => {
+    const hasImage = Boolean(asset?.imageUrl);
+    const imageUrl = hasImage ? asset.imageUrl : SPIRIT_COLLECTIBLE_FALLBACK;
+    const baseFilename = spiritCollectibleFilename(spirit.id, milestone.likes, imageUrl);
+    const shareFilename = spiritStoryFilename(baseFilename);
+
+    spiritCollectiblePanel.classList.remove("hidden");
+    if (spiritCollectibleTitle) spiritCollectibleTitle.textContent = t("spiritCollectibleTitle");
+    if (spiritCollectibleHint) {
+      if (spiritCollectibleBusy) {
+        spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+      } else if (!hasImage) {
+        spiritCollectibleHint.textContent = supportsAiCollectibleApi()
+          ? t("spiritCollectibleReadyToGenerate")
+          : t("spiritCollectibleHintLocal");
+      } else if (asset.source === "api") {
+        spiritCollectibleHint.textContent = t("spiritCollectibleHintApi");
+      } else if (aiImageEnabled() && !aiPremiumUnlocked()) {
+        spiritCollectibleHint.textContent = t("spiritCollectiblePremiumLocked");
+      } else {
+        spiritCollectibleHint.textContent = supportsAiCollectibleApi()
+          ? t("spiritCollectibleError")
+          : t("spiritCollectibleHintLocal");
+      }
+    }
+
+    setImageSourceWithFallback(
+      spiritCollectibleImage,
+      imageUrl,
+      SPIRIT_COLLECTIBLE_FALLBACK,
+      {
+        onFallback: () => {
+          if (hasImage && spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleError");
+        }
+      }
+    );
+    spiritCollectibleImage.dataset.assetReady = hasImage ? "true" : "false";
+    spiritCollectibleImage.alt = t("spiritCollectibleAlt", { spirit: spiritText?.name || spirit.id, milestone: milestone.likes });
+    spiritCollectibleMilestone.textContent = t("spiritCollectibleMilestone", { likes: milestone.likes });
+    spiritRankBadge.textContent = t(rank.current.key);
+
+    if (rank.next) {
+      spiritCollectibleProgress.textContent = t("spiritCollectibleNext", {
+        remaining: Math.max(0, rank.next.likes - likes),
+        rank: t(rank.next.key),
+        current: likes,
+        nextLikes: rank.next.likes
+      });
+    } else {
+      spiritCollectibleProgress.textContent = t("spiritCollectibleMaxRank", {
+        rank: t(rank.current.key),
+        likes
+      });
+    }
+
+    if (spiritCollectibleDetails) {
+      spiritCollectibleDetails.textContent = buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestone.likes);
+    }
+    if (spiritCollectibleDownload) {
+      spiritCollectibleDownload.textContent = t("spiritCollectibleDownload");
+      if (hasImage) {
+        spiritCollectibleDownload.href = asset.imageUrl;
+        spiritCollectibleDownload.setAttribute("download", baseFilename);
+        spiritCollectibleDownload.classList.remove("disabled-link");
+        spiritCollectibleDownload.removeAttribute("aria-disabled");
+      } else {
+        spiritCollectibleDownload.href = "#";
+        spiritCollectibleDownload.removeAttribute("download");
+        spiritCollectibleDownload.classList.add("disabled-link");
+        spiritCollectibleDownload.setAttribute("aria-disabled", "true");
+      }
+    }
+    if (spiritCollectibleRegenerateBtn) {
+      const aiImageLocked = hasImage && asset.source === "api" && !aiConfigFlag("allowImageRegeneration", false);
+      spiritCollectibleRegenerateBtn.textContent = spiritCollectibleBusy
+        ? t("spiritCollectibleGenerating")
+        : aiImageLocked
+          ? t("spiritCollectibleAiLimitUsed")
+          : t("spiritCollectibleRegenerate");
+      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || aiImageLocked;
+      if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
+      else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
+    }
+    if (spiritCollectibleShareInstagramBtn) {
+      spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
+      spiritCollectibleShareInstagramBtn.disabled = !hasImage;
+      if (hasImage) {
+        spiritCollectibleShareInstagramBtn.dataset.imageUrl = asset.imageUrl;
+        spiritCollectibleShareInstagramBtn.dataset.filename = shareFilename;
+      } else {
+        spiritCollectibleShareInstagramBtn.removeAttribute("data-image-url");
+        spiritCollectibleShareInstagramBtn.removeAttribute("data-filename");
+      }
+    }
+
+    return { hasImage, shareFilename };
+  };
+
+  renderCollectibleState(collectible);
+
   if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
     spiritCollectibleBusy = true;
     const variation = forceRegenerate ? collectibleVariationToken() : "";
-    if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
-    if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
-    if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+    renderCollectibleState(collectible);
     try {
       collectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
         variationToken: variation,
@@ -25107,79 +25224,12 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     }
   }
 
-  if (!collectible?.imageUrl) {
-    spiritCollectiblePanel.classList.add("hidden");
-    if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
-    if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
-    if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
+  const renderedState = renderCollectibleState(collectible);
+  if (!renderedState.hasImage) {
     return null;
   }
 
-  spiritCollectiblePanel.classList.remove("hidden");
-  if (spiritCollectibleTitle) spiritCollectibleTitle.textContent = t("spiritCollectibleTitle");
-  if (spiritCollectibleHint) {
-    if (collectible.source === "api") {
-      spiritCollectibleHint.textContent = t("spiritCollectibleHintApi");
-    } else if (aiImageEnabled() && !aiPremiumUnlocked()) {
-      spiritCollectibleHint.textContent = t("spiritCollectiblePremiumLocked");
-    } else {
-      spiritCollectibleHint.textContent = supportsAiCollectibleApi() ? t("spiritCollectibleError") : t("spiritCollectibleHintLocal");
-    }
-  }
-  setImageSourceWithFallback(
-    spiritCollectibleImage,
-    collectible.imageUrl,
-    SPIRIT_COLLECTIBLE_FALLBACK,
-    {
-      onFallback: () => {
-        if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleError");
-      }
-    }
-  );
-  spiritCollectibleImage.alt = t("spiritCollectibleAlt", { spirit: spiritText?.name || spirit.id, milestone: milestone.likes });
-  spiritCollectibleMilestone.textContent = t("spiritCollectibleMilestone", { likes: milestone.likes });
-  spiritRankBadge.textContent = t(rank.current.key);
-
-  if (rank.next) {
-    spiritCollectibleProgress.textContent = t("spiritCollectibleNext", {
-      remaining: Math.max(0, rank.next.likes - likes),
-      rank: t(rank.next.key),
-      current: likes,
-      nextLikes: rank.next.likes
-    });
-  } else {
-    spiritCollectibleProgress.textContent = t("spiritCollectibleMaxRank", {
-      rank: t(rank.current.key),
-      likes
-    });
-  }
-
-  if (spiritCollectibleDetails) {
-    spiritCollectibleDetails.textContent = buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestone.likes);
-  }
-
-  const baseFilename = spiritCollectibleFilename(spirit.id, milestone.likes, collectible.imageUrl);
-  const downloadFilename = baseFilename;
-  const shareFilename = spiritStoryFilename(baseFilename);
-  if (spiritCollectibleDownload) {
-    spiritCollectibleDownload.textContent = t("spiritCollectibleDownload");
-    spiritCollectibleDownload.href = collectible.imageUrl;
-    spiritCollectibleDownload.setAttribute("download", downloadFilename);
-  }
-  if (spiritCollectibleRegenerateBtn) {
-    const aiImageLocked = collectible.source === "api" && !aiConfigFlag("allowImageRegeneration", false);
-    spiritCollectibleRegenerateBtn.textContent = aiImageLocked
-      ? t("spiritCollectibleAiLimitUsed")
-      : t("spiritCollectibleRegenerate");
-    spiritCollectibleRegenerateBtn.disabled = aiImageLocked;
-  }
-  if (spiritCollectibleShareInstagramBtn) {
-    spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
-    spiritCollectibleShareInstagramBtn.disabled = false;
-    spiritCollectibleShareInstagramBtn.dataset.imageUrl = collectible.imageUrl;
-    spiritCollectibleShareInstagramBtn.dataset.filename = shareFilename;
-  }
-  scheduleStorySharePrewarm(collectible.imageUrl, shareFilename, 350);
+  scheduleStorySharePrewarm(collectible.imageUrl, renderedState.shareFilename, 350);
   return collectible;
 }
 
@@ -30960,13 +31010,14 @@ bind(authPassword, "keydown", (event) => {
 });
 bind(spiritCollectibleDownload, "click", (event) => {
   event.preventDefault();
+  const imageIsReady = spiritCollectibleImage?.dataset.assetReady === "true";
   const imageUrl = String(
     spiritCollectibleShareInstagramBtn?.dataset.imageUrl ||
-      spiritCollectibleImage?.getAttribute("src") ||
       spiritCollectibleDownload?.getAttribute("href") ||
+      (imageIsReady ? spiritCollectibleImage?.getAttribute("src") : "") ||
       ""
   ).trim();
-  if (!imageUrl || imageUrl === "#") {
+  if (!imageIsReady || !imageUrl || imageUrl === "#") {
     showToast(t("spiritCollectibleShareNoAsset"));
     return;
   }
