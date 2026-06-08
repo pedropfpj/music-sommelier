@@ -5285,7 +5285,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v18";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v19";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -7346,18 +7346,20 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Caçador de Bass",
         archetype: "Impacto de baixa frequência",
-        description: "Personalidade física e cirúrgica. Você prioriza subgrave com definição, transientes firmes e contraste dinâmico, buscando impacto sem mascarar os detalhes.",
-        cardDescription: "Impacto de baixa frequência: subgrave físico, transientes firmes e contraste dinâmico."
+        description: "Personalidade física e cirúrgica. Você procura subgraves fortes, bateria com ataque limpo e drops que batem no peito sem virar bagunça. Seu ouvido gosta de pressão, mas também percebe respiro, silêncio antes do impacto e detalhes de sound design que fazem o grave parecer maior.",
+        cardDescription: "Bass forte com controle: subgrave físico, bateria limpa e drops que respiram antes do impacto."
       },
       en: {
         name: "Bass Hunter",
         archetype: "Rhythmic impact",
-        description: "You hunt impact in dnb, neurofunk, and bass music through physical sub-bass, broken groove, and signature drop architecture. You notice drum design, silence-to-impact contrast, and mix weight at the exact threshold. Your instinct is making the sound system breathe pressure."
+        description: "You hunt impact in dnb, neurofunk, and bass music through strong sub-bass, clean drum attack, and drops that hit the chest without turning messy. You notice silence before impact, pressure that still breathes, and sound-design details that make the low end feel bigger.",
+        cardDescription: "Controlled bass pressure: physical sub, clean drums, and drops with breath before impact."
       },
       es: {
         name: "Cazador de Bass",
         archetype: "Impacto rítmico",
-        description: "Buscas impacto en dnb, neurofunk y bass music con subgrave físico, groove quebrado y drops con firma. Percibes diseño de batería, contraste entre silencio y golpe, y peso de mezcla en el punto justo. Tu instinto es hacer que el sound system respire presión."
+        description: "Buscas impacto en dnb, neurofunk y bass music con subgrave fuerte, batería limpia y drops que golpean el pecho sin volverse confusos. Percibes el silencio antes del golpe, la presión que respira y los detalles de diseño sonoro que hacen que el grave parezca más grande.",
+        cardDescription: "Bass fuerte con control: subgrave físico, batería limpia y drops con respiro antes del impacto."
       }
     }
   },
@@ -7583,27 +7585,27 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "speaker",
       crown: "spark",
       quote: {
-        pt: "Você sente a música primeiro no subgrave e depois no detalhe.",
-        en: "You feel music first in the sub-bass, then in the detail.",
-        es: "Sientes la música primero en el subgrave y luego en el detalle."
+        pt: "Você procura graves fortes, drops limpos e pressão que não embolam.",
+        en: "You chase strong lows, clean drops, and pressure that never muddies.",
+        es: "Buscas graves fuertes, drops limpios y presión que no se embarra."
       }
     },
     {
       motif: "drop",
       crown: "flame",
       quote: {
-        pt: "Seu radar caça drops com peso, respiro e surpresa.",
-        en: "Your radar hunts drops with weight, breath, and surprise.",
-        es: "Tu radar caza drops con peso, respiro y sorpresa."
+        pt: "Seu radar caça subgrave pesado, bateria precisa e impacto no peito.",
+        en: "Your radar hunts heavy sub, precise drums, and chest-level impact.",
+        es: "Tu radar caza subgrave pesado, batería precisa e impacto en el pecho."
       }
     },
     {
       motif: "wave",
       crown: "hood",
       quote: {
-        pt: "Quando o sistema respira pressão, você sabe que achou.",
-        en: "When the system breathes pressure, you know you found it.",
-        es: "Cuando el sistema respira presión, sabes que lo encontraste."
+        pt: "Quando o grave respira grande sem sujar a mix, você sabe que achou.",
+        en: "When the bass breathes big without muddying the mix, you know it.",
+        es: "Cuando el grave respira grande sin ensuciar la mezcla, lo sabes."
       }
     }
   ],
@@ -25295,7 +25297,7 @@ function buildLocalSpiritCollectibleImage(
   const titleLines = splitIntoSvgLines(spiritTitle, 19, 2);
   const archetypeLines = splitIntoSvgLines(archetype, 24, 1);
   const genreLines = splitIntoSvgLines(favoriteGenre, 15, 2);
-  const quoteLines = splitIntoSvgLines(quote, 44, 2);
+  const quoteLines = splitIntoSvgLines(quote, 39, 2);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
   const accentX = 14 + (seed % 34);
@@ -25413,12 +25415,12 @@ function buildLocalSpiritCollectibleImage(
     </g>
   </g>
 
-  <g filter="url(#softShadow)">
-    <rect x="110" y="818" width="860" height="136" rx="38" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
-    <text x="310" y="884" fill="${escapeSvgText(theme.c)}" fill-opacity="0.72" font-size="58" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
-    ${quoteLines.map((line, index) => `<text x="540" y="${876 + index * 38}" fill="#f2f2ff" fill-opacity="0.86" font-size="26" font-weight="600" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
-    <text x="770" y="914" fill="${escapeSvgText(theme.c)}" fill-opacity="0.72" font-size="58" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
-  </g>
+	  <g filter="url(#softShadow)">
+	    <rect x="110" y="818" width="860" height="136" rx="38" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
+	    <text x="164" y="868" fill="${escapeSvgText(theme.c)}" fill-opacity="0.42" font-size="48" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
+	    ${quoteLines.map((line, index) => `<text x="540" y="${872 + index * 38}" fill="#f2f2ff" fill-opacity="0.9" font-size="25" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
+	    <text x="916" y="928" fill="${escapeSvgText(theme.c)}" fill-opacity="0.42" font-size="48" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
+	  </g>
 
   <g filter="url(#softShadow)">
     <rect x="96" y="112" width="506" height="128" rx="30" fill="#070b24" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
