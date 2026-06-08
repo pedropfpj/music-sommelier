@@ -3707,6 +3707,32 @@ input[type="range"] {
   width: 100%;
 }
 
+.voice-select-control select {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(126, 214, 255, 0.26);
+  border-radius: 10px;
+  color: #f1fbff;
+  font: inherit;
+  font-weight: 800;
+  background:
+    linear-gradient(145deg, rgba(11, 28, 55, 0.96), rgba(5, 12, 28, 0.92));
+  padding: 0.54rem 0.62rem;
+  outline: none;
+}
+
+.voice-select-control option {
+  color: #061124;
+  background: #e9f7ff;
+}
+
+.voice-select-control strong {
+  max-width: 100%;
+  text-align: right;
+  white-space: normal;
+}
+
 .voice-mini-card > .voice-bpm-control {
   grid-column: span 1;
 }
@@ -6058,8 +6084,8 @@ input[type="range"] {
 }
 
 .spirit-collectible-actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
@@ -6068,6 +6094,9 @@ input[type="range"] {
   min-height: 42px;
   padding: 0.48rem 0.78rem;
   font-size: 0.84rem;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
 }
 
 .instagram-share-btn {
@@ -6101,6 +6130,16 @@ input[type="range"] {
 
   .spirit-collectible-image {
     max-width: min(100%, 420px);
+  }
+
+  .spirit-collectible-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .spirit-collectible-actions .listen-btn,
+  .spirit-collectible-actions .instagram-share-btn {
+    min-height: 48px;
+    font-size: 0.92rem;
   }
 }
 

@@ -1086,6 +1086,29 @@
                   <strong id="voiceMiniSwingValue">12%</strong>
                   <input id="voiceMiniSwingSlider" type="range" min="0" max="35" step="1" value="12" aria-valuemin="0" aria-valuemax="35" aria-valuenow="12" />
                 </label>
+                <label class="voice-bpm-control voice-select-control" for="voiceMiniSynthTypeSelect">
+                  <span id="voiceMiniSynthTypeLabel">Tipo de synth</span>
+                  <strong id="voiceMiniSynthTypeValue">Glow lead</strong>
+                  <select id="voiceMiniSynthTypeSelect">
+                    <option value="glow">Glow lead</option>
+                    <option value="acid">Acid line</option>
+                    <option value="pluck">Pluck limpo</option>
+                    <option value="pad">Pad aberto</option>
+                    <option value="stab">Stab de pista</option>
+                    <option value="sub">Sub macio</option>
+                  </select>
+                </label>
+                <label class="voice-bpm-control voice-select-control" for="voiceMiniGrooveModeSelect">
+                  <span id="voiceMiniGrooveModeLabel">Encaixe do groove</span>
+                  <strong id="voiceMiniGrooveModeValue">Swing natural</strong>
+                  <select id="voiceMiniGrooveModeSelect">
+                    <option value="swing">Swing natural</option>
+                    <option value="tight">Grid certinho</option>
+                    <option value="counter">Contratempo</option>
+                    <option value="late">Mais atrasado</option>
+                    <option value="floating">Flutuante</option>
+                  </select>
+                </label>
                 <div class="voice-mini-mixer-grid" aria-label="Controles da mini música">
                   <label class="voice-knob-control" for="voiceMiniMasterSlider">
                     <span id="voiceMiniMasterLabel">Master</span>
@@ -1156,6 +1179,9 @@
               <button class="voice-effect-btn" type="button" data-voice-effect="alien" aria-pressed="false">Alienígena</button>
               <button class="voice-effect-btn" type="button" data-voice-effect="deep" aria-pressed="false">Voz grave</button>
               <button class="voice-effect-btn" type="button" data-voice-effect="echo" aria-pressed="false">Eco espacial</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="vocoder" aria-pressed="false">Vocoder</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="wide" aria-pressed="false">Sala larga</button>
+              <button class="voice-effect-btn" type="button" data-voice-effect="tape" aria-pressed="false">Fita quente</button>
             </div>
           </div>
         </div>
@@ -1375,6 +1401,6 @@
         allowImageRegeneration: true
       };
     </script>
-    <script src="app.js?v=20260608ai4"></script>
+    <script src="app.js?v=20260608ai5"></script>
   </body>
 </html>

@@ -4618,6 +4618,12 @@ const voiceMiniVoiceLengthSlider = document.getElementById("voiceMiniVoiceLength
 const voiceMiniSwingLabel = document.getElementById("voiceMiniSwingLabel");
 const voiceMiniSwingValue = document.getElementById("voiceMiniSwingValue");
 const voiceMiniSwingSlider = document.getElementById("voiceMiniSwingSlider");
+const voiceMiniSynthTypeLabel = document.getElementById("voiceMiniSynthTypeLabel");
+const voiceMiniSynthTypeValue = document.getElementById("voiceMiniSynthTypeValue");
+const voiceMiniSynthTypeSelect = document.getElementById("voiceMiniSynthTypeSelect");
+const voiceMiniGrooveModeLabel = document.getElementById("voiceMiniGrooveModeLabel");
+const voiceMiniGrooveModeValue = document.getElementById("voiceMiniGrooveModeValue");
+const voiceMiniGrooveModeSelect = document.getElementById("voiceMiniGrooveModeSelect");
 const voiceMiniMasterLabel = document.getElementById("voiceMiniMasterLabel");
 const voiceMiniMasterValue = document.getElementById("voiceMiniMasterValue");
 const voiceMiniMasterSlider = document.getElementById("voiceMiniMasterSlider");
@@ -5075,6 +5081,8 @@ let voiceMiniBpm = 128;
 let voiceMiniVoiceLevel = 120;
 let voiceMiniVoiceLength = 100;
 let voiceMiniSwingAmount = 12;
+let voiceMiniSynthType = "glow";
+let voiceMiniGrooveMode = "swing";
 let voiceMiniMasterLevel = 112;
 let voiceMiniDriveAmount = 16;
 let voiceMiniDelayAmount = 14;
@@ -5102,15 +5110,106 @@ const VOICE_MINI_DEFAULT_PATTERN = {
   synth: [1, 0, 0, 0, 1, 0, 0, 0],
   voice: [1, 0, 0, 0, 1, 0, 0, 0]
 };
+const VOICE_MINI_SYNTH_TYPES = {
+  glow: {
+    labelKey: "voiceMiniSynthTypeGlow",
+    osc: "sawtooth",
+    shimmer: "triangle",
+    filter: "lowpass",
+    attack: 0.07,
+    release: 1,
+    cutoff: 680,
+    resonance: 1.4,
+    shimmerRatio: 2.005,
+    detune: 7,
+    width: 0.26
+  },
+  acid: {
+    labelKey: "voiceMiniSynthTypeAcid",
+    osc: "sawtooth",
+    shimmer: "square",
+    filter: "bandpass",
+    attack: 0.018,
+    release: 0.52,
+    cutoff: 920,
+    resonance: 5.2,
+    shimmerRatio: 1.995,
+    detune: 3,
+    width: 0.18
+  },
+  pluck: {
+    labelKey: "voiceMiniSynthTypePluck",
+    osc: "triangle",
+    shimmer: "sine",
+    filter: "lowpass",
+    attack: 0.012,
+    release: 0.38,
+    cutoff: 1320,
+    resonance: 1.6,
+    shimmerRatio: 2,
+    detune: 4,
+    width: 0.2
+  },
+  pad: {
+    labelKey: "voiceMiniSynthTypePad",
+    osc: "sine",
+    shimmer: "triangle",
+    filter: "lowpass",
+    attack: 0.18,
+    release: 1.5,
+    cutoff: 760,
+    resonance: 0.9,
+    shimmerRatio: 1.5,
+    detune: 11,
+    width: 0.34
+  },
+  stab: {
+    labelKey: "voiceMiniSynthTypeStab",
+    osc: "square",
+    shimmer: "sawtooth",
+    filter: "lowpass",
+    attack: 0.025,
+    release: 0.56,
+    cutoff: 1040,
+    resonance: 2.4,
+    shimmerRatio: 2.01,
+    detune: 5,
+    width: 0.22
+  },
+  sub: {
+    labelKey: "voiceMiniSynthTypeSub",
+    osc: "sine",
+    shimmer: "triangle",
+    filter: "lowpass",
+    attack: 0.02,
+    release: 0.72,
+    cutoff: 420,
+    resonance: 1.1,
+    shimmerRatio: 2,
+    detune: 2,
+    width: 0.1
+  }
+};
+const VOICE_MINI_GROOVE_MODES = {
+  swing: { labelKey: "voiceMiniGrooveModeSwing" },
+  tight: { labelKey: "voiceMiniGrooveModeTight" },
+  counter: { labelKey: "voiceMiniGrooveModeCounter" },
+  late: { labelKey: "voiceMiniGrooveModeLate" },
+  floating: { labelKey: "voiceMiniGrooveModeFloating" }
+};
 const VOICE_MINI_PRESETS = {
   techno: {
     bpm: 132,
     swing: 8,
+    synthType: "stab",
+    grooveMode: "tight",
     pattern: VOICE_MINI_DEFAULT_PATTERN
   },
   breaks: {
     bpm: 138,
     swing: 14,
+    synthType: "pluck",
+    grooveMode: "swing",
     pattern: {
       kick: [1, 0, 0, 1, 0, 1, 0, 0],
       bass: [1, 0, 0, 0, 1, 0, 0, 1],
@@ -5123,6 +5222,8 @@ const VOICE_MINI_PRESETS = {
   trap: {
     bpm: 150,
     swing: 16,
+    synthType: "sub",
+    grooveMode: "late",
     pattern: {
       kick: [1, 0, 0, 1, 0, 0, 0, 1],
       bass: [1, 0, 0, 0, 1, 0, 0, 1],
@@ -5135,6 +5236,8 @@ const VOICE_MINI_PRESETS = {
   psy: {
     bpm: 145,
     swing: 4,
+    synthType: "acid",
+    grooveMode: "counter",
     pattern: {
       kick: [1, 0, 1, 0, 1, 0, 1, 0],
       bass: [0, 1, 0, 1, 0, 1, 0, 1],
@@ -5147,6 +5250,8 @@ const VOICE_MINI_PRESETS = {
   ambient: {
     bpm: 104,
     swing: 10,
+    synthType: "pad",
+    grooveMode: "floating",
     pattern: {
       kick: [1, 0, 0, 0, 1, 0, 0, 0],
       bass: [1, 0, 0, 0, 0, 0, 1, 0],
@@ -5180,7 +5285,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v17";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v18";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -11763,6 +11868,12 @@ const I18N = {
     voiceEffectAlien: "Alienígena",
     voiceEffectDeep: "Voz grave",
     voiceEffectEcho: "Eco espacial",
+    voiceEffectVocoder: "Vocoder",
+    voiceEffectWide: "Sala amplia",
+    voiceEffectTape: "Cinta cálida",
+    voiceEffectVocoder: "Vocoder",
+    voiceEffectWide: "Sala larga",
+    voiceEffectTape: "Fita quente",
     voiceRecordBtn: "Gravar voz opcional",
     voiceStopBtn: "Parar",
     voicePlayBtn: "Ouvir efeito",
@@ -11805,6 +11916,19 @@ const I18N = {
     voiceMiniVoiceLevelChanged: "Voz em {level}%. O próximo compasso entra com essa presença.",
     voiceMiniVoiceLengthLabel: "Comprimento da voz",
     voiceMiniSwingLabel: "Swing",
+    voiceMiniSynthTypeLabel: "Tipo de synth",
+    voiceMiniSynthTypeGlow: "Glow lead",
+    voiceMiniSynthTypeAcid: "Acid line",
+    voiceMiniSynthTypePluck: "Pluck limpo",
+    voiceMiniSynthTypePad: "Pad aberto",
+    voiceMiniSynthTypeStab: "Stab de pista",
+    voiceMiniSynthTypeSub: "Sub macio",
+    voiceMiniGrooveModeLabel: "Encaixe do groove",
+    voiceMiniGrooveModeSwing: "Swing natural",
+    voiceMiniGrooveModeTight: "Grid certinho",
+    voiceMiniGrooveModeCounter: "Contratempo",
+    voiceMiniGrooveModeLate: "Mais atrasado",
+    voiceMiniGrooveModeFloating: "Flutuante",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
@@ -11813,6 +11937,7 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
+    voiceMiniSelectChanged: "{control}: {value}. O próximo compasso já entra assim.",
     voiceMiniReady: "Pronto: escolha um clima ou toque em Gerar ideia.",
     voiceMiniPlaying: "Loop rodando no tempo. Toque nas camadas para armar ou remover no próximo compasso.",
     voiceMiniDone: "Loop parado. Toque a mini música ou um pad para começar de novo.",
@@ -12041,6 +12166,9 @@ const I18N = {
     spiritCollectibleRegenerate: "Gerar arte única IA",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
     spiritCollectibleDownload: "Baixar imagem",
+    spiritCollectibleDownloadPreparing: "Preparando imagem...",
+    spiritCollectibleDownloadReady: "Imagem pronta. Escolha Salvar imagem, Arquivos ou compartilhe.",
+    spiritCollectibleDownloadFallback: "Imagem baixada. No celular, use Compartilhar se quiser enviar direto.",
     spiritCollectibleShareInstagram: "Compartilhar card estático",
     spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Gere uma arte do espírito antes de compartilhar.",
@@ -12359,6 +12487,9 @@ const I18N = {
     voiceEffectAlien: "Alien",
     voiceEffectDeep: "Deep voice",
     voiceEffectEcho: "Space echo",
+    voiceEffectVocoder: "Vocoder",
+    voiceEffectWide: "Wide room",
+    voiceEffectTape: "Warm tape",
     voiceRecordBtn: "Record optional voice",
     voiceStopBtn: "Stop",
     voicePlayBtn: "Play effect",
@@ -12401,6 +12532,19 @@ const I18N = {
     voiceMiniVoiceLevelChanged: "Voice at {level}%. The next bar uses this presence.",
     voiceMiniVoiceLengthLabel: "Voice length",
     voiceMiniSwingLabel: "Swing",
+    voiceMiniSynthTypeLabel: "Synth type",
+    voiceMiniSynthTypeGlow: "Glow lead",
+    voiceMiniSynthTypeAcid: "Acid line",
+    voiceMiniSynthTypePluck: "Clean pluck",
+    voiceMiniSynthTypePad: "Open pad",
+    voiceMiniSynthTypeStab: "Club stab",
+    voiceMiniSynthTypeSub: "Soft sub",
+    voiceMiniGrooveModeLabel: "Groove feel",
+    voiceMiniGrooveModeSwing: "Natural swing",
+    voiceMiniGrooveModeTight: "Locked grid",
+    voiceMiniGrooveModeCounter: "Offbeat",
+    voiceMiniGrooveModeLate: "Laid-back",
+    voiceMiniGrooveModeFloating: "Floating",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
@@ -12409,6 +12553,7 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
+    voiceMiniSelectChanged: "{control}: {value}. The next bar uses this feel.",
     voiceMiniReady: "Ready: pick a mood or tap Generate idea.",
     voiceMiniPlaying: "Loop locked in time. Tap layers to arm or remove them on the next bar.",
     voiceMiniDone: "Loop stopped. Play the mini track or tap a pad to start again.",
@@ -12637,6 +12782,9 @@ const I18N = {
     spiritCollectibleRegenerate: "Generate unique AI art",
     spiritCollectibleAiLimitUsed: "AI image already created",
     spiritCollectibleDownload: "Download image",
+    spiritCollectibleDownloadPreparing: "Preparing image...",
+    spiritCollectibleDownloadReady: "Image ready. Choose Save Image, Files, or share it.",
+    spiritCollectibleDownloadFallback: "Image downloaded. On mobile, use Share if you want to send it directly.",
     spiritCollectibleShareInstagram: "Share static card",
     spiritCollectibleSharePreparing: "Preparing Story...",
     spiritCollectibleShareNoAsset: "Generate spirit artwork before sharing.",
@@ -12997,6 +13145,19 @@ const I18N = {
     voiceMiniVoiceLevelChanged: "Voz al {level}%. El próximo compás entra con esa presencia.",
     voiceMiniVoiceLengthLabel: "Duración de voz",
     voiceMiniSwingLabel: "Swing",
+    voiceMiniSynthTypeLabel: "Tipo de synth",
+    voiceMiniSynthTypeGlow: "Glow lead",
+    voiceMiniSynthTypeAcid: "Acid line",
+    voiceMiniSynthTypePluck: "Pluck limpio",
+    voiceMiniSynthTypePad: "Pad abierto",
+    voiceMiniSynthTypeStab: "Stab de pista",
+    voiceMiniSynthTypeSub: "Sub suave",
+    voiceMiniGrooveModeLabel: "Encaje del groove",
+    voiceMiniGrooveModeSwing: "Swing natural",
+    voiceMiniGrooveModeTight: "Grid exacto",
+    voiceMiniGrooveModeCounter: "Contratiempo",
+    voiceMiniGrooveModeLate: "Más atrasado",
+    voiceMiniGrooveModeFloating: "Flotante",
     voiceMiniMasterLabel: "Master",
     voiceMiniDriveLabel: "Drive",
     voiceMiniDelayLabel: "Delay",
@@ -13005,6 +13166,7 @@ const I18N = {
     voiceMiniSynthLabel: "Synth",
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
+    voiceMiniSelectChanged: "{control}: {value}. El próximo compás entra así.",
     voiceMiniReady: "Listo: elige un clima o toca Generar idea.",
     voiceMiniPlaying: "Loop corriendo a tempo. Toca capas para armarlas o quitarlas en el próximo compás.",
     voiceMiniDone: "Loop parado. Toca la mini canción o un pad para empezar otra vez.",
@@ -13233,6 +13395,9 @@ const I18N = {
     spiritCollectibleRegenerate: "Generar arte único IA",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
     spiritCollectibleDownload: "Descargar imagen",
+    spiritCollectibleDownloadPreparing: "Preparando imagen...",
+    spiritCollectibleDownloadReady: "Imagen lista. Elige Guardar imagen, Archivos o compártela.",
+    spiritCollectibleDownloadFallback: "Imagen descargada. En móvil, usa Compartir si quieres enviarla directo.",
     spiritCollectibleShareInstagram: "Compartir card estático",
     spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Genera una obra del espíritu antes de compartir.",
@@ -14095,6 +14260,9 @@ function applyLanguage() {
   setText("[data-voice-effect='alien']", t("voiceEffectAlien"));
   setText("[data-voice-effect='deep']", t("voiceEffectDeep"));
   setText("[data-voice-effect='echo']", t("voiceEffectEcho"));
+  setText("[data-voice-effect='vocoder']", t("voiceEffectVocoder"));
+  setText("[data-voice-effect='wide']", t("voiceEffectWide"));
+  setText("[data-voice-effect='tape']", t("voiceEffectTape"));
   setText("#voiceRecordBtn", t("voiceRecordBtn"));
   setText("#voiceStopBtn", t("voiceStopBtn"));
   setText("#voicePlayBtn", t("voicePlayBtn"));
@@ -14129,6 +14297,10 @@ function applyLanguage() {
   }
   setText("#voiceMiniSwingLabel", t("voiceMiniSwingLabel"));
   if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
+  setText("#voiceMiniSynthTypeLabel", t("voiceMiniSynthTypeLabel"));
+  updateVoiceMiniSynthType(voiceMiniSynthType, { announce: false });
+  setText("#voiceMiniGrooveModeLabel", t("voiceMiniGrooveModeLabel"));
+  updateVoiceMiniGrooveMode(voiceMiniGrooveMode, { announce: false });
   setText("#voiceMiniMasterLabel", t("voiceMiniMasterLabel"));
   if (voiceMiniMasterValue) voiceMiniMasterValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniMasterLevel });
   setText("#voiceMiniDriveLabel", t("voiceMiniDriveLabel"));
@@ -16238,7 +16410,10 @@ function voiceEffectLabel(effect = selectedVoiceEffect) {
     telephone: t("voiceEffectTelephone"),
     alien: t("voiceEffectAlien"),
     deep: t("voiceEffectDeep"),
-    echo: t("voiceEffectEcho")
+    echo: t("voiceEffectEcho"),
+    vocoder: t("voiceEffectVocoder"),
+    wide: t("voiceEffectWide"),
+    tape: t("voiceEffectTape")
   };
   return labels[effect] || labels.robot;
 }
@@ -16267,9 +16442,32 @@ function voiceMiniSwingOffset(beat) {
   return beat * 0.34 * (clampVoiceMiniSwing(voiceMiniSwingAmount) / 100);
 }
 
+function voiceMiniGrooveOffset(beat, step = 0) {
+  const safeStep = Math.max(0, Math.round(Number(step) || 0));
+  const swing = voiceMiniSwingOffset(beat);
+  if (voiceMiniGrooveMode === "tight") return 0;
+  if (voiceMiniGrooveMode === "counter") {
+    const offbeat = safeStep % 2 === 1 ? swing + beat * 0.025 : 0;
+    const stepMod = safeStep % 8;
+    const pushPull = [2, 6].includes(stepMod)
+      ? beat * 0.018
+      : [3, 7].includes(stepMod)
+        ? -beat * 0.012
+        : 0;
+    return offbeat + pushPull;
+  }
+  if (voiceMiniGrooveMode === "late") {
+    return (safeStep % 2 === 1 ? swing : 0) + beat * 0.018;
+  }
+  if (voiceMiniGrooveMode === "floating") {
+    return Math.sin((safeStep + 1) * 0.9) * beat * 0.018 + (safeStep % 2 === 1 ? swing * 0.58 : 0);
+  }
+  return safeStep % 2 === 1 ? swing : 0;
+}
+
 function voiceMiniStepTime(start, beat, step, subdivision = 1) {
   const base = start + step * beat * subdivision;
-  return step % 2 === 1 ? base + voiceMiniSwingOffset(beat) : base;
+  return base + voiceMiniGrooveOffset(beat, step);
 }
 
 function cloneVoiceMiniPattern(pattern = VOICE_MINI_DEFAULT_PATTERN) {
@@ -16402,6 +16600,8 @@ function applyVoiceMiniPreset(presetName = "techno") {
   voiceMiniPattern = cloneVoiceMiniPattern(preset.pattern);
   updateVoiceMiniBpm(preset.bpm, { announce: false });
   updateVoiceMiniSwing(preset.swing, { announce: false });
+  updateVoiceMiniSynthType(preset.synthType || voiceMiniSynthType, { announce: false });
+  updateVoiceMiniGrooveMode(preset.grooveMode || voiceMiniGrooveMode, { announce: false });
   renderVoiceMiniSequencer();
   syncVoiceMiniPresetButtons();
   voiceMiniPadState = voiceMiniBasePadState(presetName);
@@ -16439,6 +16639,63 @@ function updateVoiceMiniSwing(value = voiceMiniSwingAmount, { announce = false }
     voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
       control: t("voiceMiniSwingLabel"),
       value: voiceMiniSwingAmount
+    });
+  }
+}
+
+function voiceMiniSynthProfile(type = voiceMiniSynthType) {
+  return VOICE_MINI_SYNTH_TYPES[String(type || "").trim()] || VOICE_MINI_SYNTH_TYPES.glow;
+}
+
+function voiceMiniSynthTypeLabelFor(type = voiceMiniSynthType) {
+  const profile = voiceMiniSynthProfile(type);
+  const translated = t(profile.labelKey);
+  return translated && translated !== profile.labelKey ? translated : t("voiceMiniSynthTypeGlow");
+}
+
+function syncVoiceMiniSynthTypeOptions() {
+  voiceMiniSynthTypeSelect?.querySelectorAll("option").forEach((option) => {
+    option.textContent = voiceMiniSynthTypeLabelFor(option.value);
+  });
+}
+
+function updateVoiceMiniSynthType(value = voiceMiniSynthType, { announce = false } = {}) {
+  const next = VOICE_MINI_SYNTH_TYPES[String(value || "").trim()] ? String(value).trim() : "glow";
+  voiceMiniSynthType = next;
+  syncVoiceMiniSynthTypeOptions();
+  if (voiceMiniSynthTypeSelect) voiceMiniSynthTypeSelect.value = next;
+  if (voiceMiniSynthTypeValue) voiceMiniSynthTypeValue.textContent = voiceMiniSynthTypeLabelFor(next);
+  if (announce && voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
+      control: t("voiceMiniSynthTypeLabel"),
+      value: voiceMiniSynthTypeLabelFor(next)
+    });
+  }
+  if (voiceMiniTrackPlaying) refreshVoiceMiniOutputBus();
+}
+
+function voiceMiniGrooveModeLabelFor(mode = voiceMiniGrooveMode) {
+  const profile = VOICE_MINI_GROOVE_MODES[String(mode || "").trim()] || VOICE_MINI_GROOVE_MODES.swing;
+  const translated = t(profile.labelKey);
+  return translated && translated !== profile.labelKey ? translated : t("voiceMiniGrooveModeSwing");
+}
+
+function syncVoiceMiniGrooveModeOptions() {
+  voiceMiniGrooveModeSelect?.querySelectorAll("option").forEach((option) => {
+    option.textContent = voiceMiniGrooveModeLabelFor(option.value);
+  });
+}
+
+function updateVoiceMiniGrooveMode(value = voiceMiniGrooveMode, { announce = false } = {}) {
+  const next = VOICE_MINI_GROOVE_MODES[String(value || "").trim()] ? String(value).trim() : "swing";
+  voiceMiniGrooveMode = next;
+  syncVoiceMiniGrooveModeOptions();
+  if (voiceMiniGrooveModeSelect) voiceMiniGrooveModeSelect.value = next;
+  if (voiceMiniGrooveModeValue) voiceMiniGrooveModeValue.textContent = voiceMiniGrooveModeLabelFor(next);
+  if (announce && voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
+      control: t("voiceMiniGrooveModeLabel"),
+      value: voiceMiniGrooveModeLabelFor(next)
     });
   }
 }
@@ -17244,29 +17501,35 @@ function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) 
 }
 
 function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { level = 0.44, pan = 0, detune = 0 } = {}) {
+  const profile = voiceMiniSynthProfile();
   const osc = trackVoiceMiniNode(ctx.createOscillator());
   const shimmer = trackVoiceMiniNode(ctx.createOscillator());
   const gain = trackVoiceMiniNode(ctx.createGain());
   const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
   const width = trackVoiceMiniNode(ctx.createGain());
-  const duration = Math.max(beat * 0.34, Math.min(beat * 1.24, beat * (0.82 + voiceMiniSynthGain() * 0.46)));
   const synthAmount = voiceMiniSynthGain();
+  const duration = Math.max(beat * 0.24, Math.min(beat * 1.6, beat * ((profile.release || 0.82) + synthAmount * 0.36)));
   const globalLevel = Math.max(0.54, Math.min(1.04, audioVolume || 0.95));
+  const baseCutoff = profile.cutoff || 680;
+  const openCutoff = baseCutoff + synthAmount * (voiceMiniSynthType === "acid" ? 1900 : 1450);
+  const closeCutoff = Math.max(90, baseCutoff * 0.38 + synthAmount * 360);
+  const attack = Math.min(profile.attack || 0.07, beat * 0.25);
+  const sustainPoint = Math.max(attack + 0.04, duration - Math.min(0.18, beat * 0.34));
 
-  osc.type = "sawtooth";
-  shimmer.type = "triangle";
+  osc.type = profile.osc || "sawtooth";
+  shimmer.type = profile.shimmer || "triangle";
   osc.frequency.value = frequency;
-  shimmer.frequency.value = frequency * 2.005;
-  osc.detune.value = detune - 4;
-  shimmer.detune.value = detune + 7;
-  width.gain.value = 0.26;
-  filter.type = "lowpass";
-  filter.frequency.setValueAtTime(620 + synthAmount * 1450, time);
-  filter.frequency.exponentialRampToValueAtTime(300 + synthAmount * 520, time + duration);
-  filter.Q.value = 1.05 + synthAmount * 2.2;
+  shimmer.frequency.value = frequency * (profile.shimmerRatio || 2.005);
+  osc.detune.value = detune - (profile.detune || 4);
+  shimmer.detune.value = detune + (profile.detune || 7);
+  width.gain.value = profile.width ?? 0.24;
+  filter.type = profile.filter || "lowpass";
+  filter.frequency.setValueAtTime(openCutoff, time);
+  filter.frequency.exponentialRampToValueAtTime(closeCutoff, time + duration);
+  filter.Q.value = (profile.resonance || 1.2) + synthAmount * (voiceMiniSynthType === "acid" ? 3.8 : 1.8);
   gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.linearRampToValueAtTime(level * synthAmount * globalLevel, time + Math.min(0.08, beat * 0.18));
-  gain.gain.setValueAtTime(level * synthAmount * globalLevel * 0.82, time + Math.max(0.1, duration - 0.16));
+  gain.gain.linearRampToValueAtTime(level * synthAmount * globalLevel, time + attack);
+  gain.gain.setValueAtTime(level * synthAmount * globalLevel * 0.82, time + sustainPoint);
   gain.gain.linearRampToValueAtTime(0.0001, time + duration);
 
   osc.connect(filter);
@@ -17283,6 +17546,7 @@ function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { 
 function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0) {
   const synthAmount = voiceMiniSynthGain();
   if (synthAmount <= 0.02) return;
+  const profile = voiceMiniSynthProfile();
   const progressions = [
     [220, 261.63, 329.63],
     [196, 246.94, 329.63],
@@ -17294,18 +17558,24 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
   for (let step = 0; step < 8; step += 1) {
     if (!voiceMiniPatternActive("synth", step)) continue;
     const time = voiceMiniStepBeatTime(start, beat, step);
-    if (step % 4 === 0) {
+    if (voiceMiniSynthType === "pad" || step % 4 === 0) {
+      if (voiceMiniSynthType === "pad" && ![0, 4].includes(step)) continue;
       chord.forEach((frequency, index) => {
         scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, {
-          level: index === 0 ? 0.14 : 0.1,
+          level: voiceMiniSynthType === "pad" ? (index === 0 ? 0.12 : 0.09) : (index === 0 ? 0.14 : 0.1),
           pan: index === 1 ? -0.18 : index === 2 ? 0.2 : 0,
-          detune: index * 3
+          detune: index * (profile.detune || 3)
         });
       });
     } else {
-      const note = step % 2 ? root * 3 : chord[(step + barIndex) % chord.length] * 1.5;
+      const acidLine = [root * 2, root * 3, chord[1] * 1.5, root * 2.5, chord[2], root * 3, chord[1] * 2, root * 4];
+      const note = voiceMiniSynthType === "acid"
+        ? acidLine[(step + barIndex) % acidLine.length]
+        : voiceMiniSynthType === "sub"
+          ? root * (step % 2 ? 1.5 : 1)
+          : step % 2 ? root * 3 : chord[(step + barIndex) % chord.length] * 1.5;
       scheduleVoiceMiniSynthVoice(ctx, destination, time, note, beat, {
-        level: 0.1 + synthAmount * 0.05,
+        level: voiceMiniSynthType === "sub" ? 0.16 : 0.1 + synthAmount * 0.05,
         pan: step % 2 ? 0.22 : -0.18,
         detune: step % 2 ? 6 : -6
       });
@@ -17888,6 +18158,65 @@ function connectVoiceEffectGraph(ctx, source, effect, output) {
     dry.gain.value = 0.82;
     source.connect(dry);
     source.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    dry.connect(output);
+    wet.connect(output);
+    return;
+  }
+
+  if (effect === "vocoder") {
+    source.playbackRate.value = 1.02;
+    filter.type = "bandpass";
+    filter.frequency.value = 960;
+    filter.Q.value = 7;
+    delay.delayTime.value = 0.045;
+    feedback.gain.value = 0.12;
+    wet.gain.value = 0.28;
+    dry.gain.value = 0.78;
+    source.connect(filter);
+    filter.connect(dry);
+    filter.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    dry.connect(output);
+    wet.connect(output);
+    return;
+  }
+
+  if (effect === "wide") {
+    filter.type = "highshelf";
+    filter.frequency.value = 2800;
+    filter.gain.value = 3.5;
+    delay.delayTime.value = 0.035;
+    feedback.gain.value = 0.08;
+    wet.gain.value = 0.24;
+    dry.gain.value = 0.9;
+    source.connect(filter);
+    filter.connect(dry);
+    filter.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    dry.connect(output);
+    wet.connect(output);
+    return;
+  }
+
+  if (effect === "tape") {
+    source.playbackRate.value = 0.94;
+    filter.type = "lowpass";
+    filter.frequency.value = 2900;
+    filter.Q.value = 0.7;
+    delay.delayTime.value = 0.12;
+    feedback.gain.value = 0.18;
+    wet.gain.value = 0.26;
+    dry.gain.value = 0.86;
+    source.connect(filter);
+    filter.connect(dry);
+    filter.connect(delay);
     delay.connect(feedback);
     feedback.connect(delay);
     delay.connect(wet);
@@ -22540,25 +22869,58 @@ function spiritStoryFilename(baseFilename = "", extension = "png") {
   return `${baseNameWithoutExt}-story-1080x1920.${safeExtension}`;
 }
 
-function triggerSpiritCollectibleDownload(imageUrl, filename = "") {
+async function triggerSpiritCollectibleDownload(imageUrl, filename = "") {
   const safeUrl = String(imageUrl || "").trim();
-  if (!safeUrl || safeUrl === "#") return false;
+  if (!safeUrl || safeUrl === "#") return "";
 
   if (spiritCollectibleDownload) {
     spiritCollectibleDownload.href = safeUrl;
     if (filename) spiritCollectibleDownload.setAttribute("download", filename);
   }
 
-  // Use a temporary anchor to avoid recursively firing the download button handler.
+  const baseName = (String(filename || "sonic-search-spirit.png")
+    .trim()
+    .replace(/\.[a-z0-9]+$/i, "") || "sonic-search-spirit")
+    .replace(/[^a-z0-9._-]+/gi, "-")
+    .replace(/^-+|-+$/g, "") || "sonic-search-spirit";
+  const pngFilename = `${baseName}.png`;
+  const renderedPng = await renderImageDataUrlToPng(safeUrl, 1080, 1080);
+  const assetUrl = renderedPng || safeUrl;
+  const blob = await spiritCollectibleBlobFromUrl(assetUrl, "image/png");
+  const fileType = blob.type && blob.type !== "image/svg+xml" ? blob.type : "image/png";
+  const shareFile = typeof File === "function"
+    ? new File([blob], pngFilename, { type: fileType })
+    : null;
+
+  if (
+    shareFile &&
+    typeof navigator !== "undefined" &&
+    typeof navigator.share === "function"
+  ) {
+    const canShareFiles = typeof navigator.canShare !== "function" || navigator.canShare({ files: [shareFile] });
+    if (canShareFiles) {
+      await navigator.share({
+        files: [shareFile],
+        title: "Sonic Search",
+        text: t("spiritCollectibleShareCaption", { spirit: "" }).replace(/:\s+\./, ".")
+      });
+      return "shared";
+    }
+  }
+
+  const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.href = safeUrl;
-  link.download = filename || "sonic-search-spirit.png";
+  link.href = objectUrl;
+  link.download = pngFilename;
   link.rel = "noopener";
   link.style.display = "none";
   document.body.appendChild(link);
   link.click();
   link.remove();
-  return true;
+  window.setTimeout(() => {
+    URL.revokeObjectURL(objectUrl);
+  }, 1500);
+  return "downloaded";
 }
 
 async function spiritCollectibleBlobFromUrl(imageUrl, mimeHint = "") {
@@ -22831,31 +23193,31 @@ function spiritStyleAppealText(styleKey = "") {
   const family = familyOf(styleKey);
   const familyCopy = {
     pt: {
-      psytrance: "As pessoas costumam gostar porque cria transe, senso de ritual e uma sensação de viagem mental em camadas.",
-      techno: "As pessoas gostam pela repetição inteligente, pela tensão física do kick e pela sensação de foco contínuo na pista.",
-      house: "Atrai pelo groove humano, pelo balanço social e pela sensação de movimento sem esforço.",
-      dnb: "Funciona pela velocidade, pela bateria quebrada e pelo contraste entre pressão e fluidez.",
-      bass_music: "Chama atenção pelo impacto do subgrave, pelos drops e pela energia corporal imediata.",
-      leftfield: "Atrai quem gosta de textura, detalhe e surpresa, com menos fórmula e mais exploração sonora.",
-      hard_dance: "Entrega catarse direta: kick forte, euforia e descarga de energia."
+      psytrance: "As pessoas costumam gostar porque cria transe, senso de ritual e uma viagem mental em camadas. O prazer vem da repetição que muda aos poucos: baixo hipnótico, pequenas viradas e tensão que abre espaço.",
+      techno: "As pessoas gostam pela repetição inteligente, pela pressão física do kick e pela sensação de foco contínuo. O detalhe está em como pouca coisa muda, mas cada mudança parece maior dentro da pista.",
+      house: "Atrai pelo groove humano, pelo balanço social e pela sensação de movimento sem esforço. É música que convida o corpo antes de pedir análise: swing, baixo redondo e calor de pista.",
+      dnb: "Funciona pela velocidade, pela bateria quebrada e pelo contraste entre pressão e fluidez. Quando acerta, parece correr sem perder controle: subgrave, respiro melódico e impulso constante.",
+      bass_music: "Chama atenção pelo impacto do subgrave, pelos drops e pela energia corporal imediata. É um gosto que procura textura física: peso, surpresa e aquela virada que muda o ar da sala.",
+      leftfield: "Atrai quem gosta de textura, detalhe e surpresa, com menos fórmula e mais exploração sonora. O valor está no estranho que faz sentido depois de alguns segundos.",
+      hard_dance: "Entrega catarse direta: kick forte, euforia e descarga de energia. Funciona quando o usuário quer intensidade sem pedir licença, com recompensa rápida e presença física."
     },
     en: {
-      psytrance: "People often love it because it creates trance, ritual focus, and a layered mental journey.",
-      techno: "It pulls people in through intelligent repetition, physical kick pressure, and continuous dancefloor focus.",
-      house: "It works through human groove, social swing, and effortless movement.",
-      dnb: "It hits through speed, broken drums, and the contrast between pressure and flow.",
-      bass_music: "It grabs attention with sub-bass impact, drops, and immediate body energy.",
-      leftfield: "It attracts listeners who want texture, detail, surprise, and less predictable forms.",
-      hard_dance: "It delivers direct catharsis: strong kicks, euphoria, and energy release."
+      psytrance: "People often love it because it creates trance, ritual focus, and a layered mental journey. The reward comes from repetition that slowly mutates: hypnotic bass, tiny turns, and tension that keeps opening space.",
+      techno: "It pulls people in through intelligent repetition, physical kick pressure, and continuous dancefloor focus. The detail is how small changes start feeling huge inside the groove.",
+      house: "It works through human groove, social swing, and effortless movement. It invites the body before it asks for analysis: round bass, warmth, and a social pulse.",
+      dnb: "It hits through speed, broken drums, and the contrast between pressure and flow. When it lands, it feels fast without losing control: sub weight, melodic air, and forward motion.",
+      bass_music: "It grabs attention with sub-bass impact, drops, and immediate body energy. This taste looks for physical texture: weight, surprise, and a turn that changes the room.",
+      leftfield: "It attracts listeners who want texture, detail, surprise, and less predictable forms. The value is in the strange thing that starts making sense after a few seconds.",
+      hard_dance: "It delivers direct catharsis: strong kicks, euphoria, and energy release. It works when intensity should arrive quickly and physically."
     },
     es: {
-      psytrance: "Suele gustar porque crea trance, enfoque ritual y un viaje mental por capas.",
-      techno: "Atrae por la repetición inteligente, la presión física del kick y el foco continuo en pista.",
-      house: "Funciona por el groove humano, el swing social y el movimiento sin esfuerzo.",
-      dnb: "Impacta por la velocidad, las baterías rotas y el contraste entre presión y fluidez.",
-      bass_music: "Llama por el subgrave, los drops y la energía corporal inmediata.",
-      leftfield: "Atrae a quien busca textura, detalle, sorpresa y formas menos previsibles.",
-      hard_dance: "Entrega catarsis directa: kick fuerte, euforia y descarga de energía."
+      psytrance: "Suele gustar porque crea trance, enfoque ritual y un viaje mental por capas. La recompensa viene de una repetición que muta poco a poco: bajo hipnótico, giros pequeños y tensión que abre espacio.",
+      techno: "Atrae por la repetición inteligente, la presión física del kick y el foco continuo en pista. El detalle está en cómo cambios mínimos empiezan a sentirse enormes dentro del groove.",
+      house: "Funciona por el groove humano, el swing social y el movimiento sin esfuerzo. Invita al cuerpo antes que al análisis: bajo redondo, calidez y pulso compartido.",
+      dnb: "Impacta por la velocidad, las baterías rotas y el contraste entre presión y fluidez. Cuando encaja, corre sin perder control: subgrave, aire melódico e impulso constante.",
+      bass_music: "Llama por el subgrave, los drops y la energía corporal inmediata. Este gusto busca textura física: peso, sorpresa y un giro que cambia la sala.",
+      leftfield: "Atrae a quien busca textura, detalle, sorpresa y formas menos previsibles. El valor está en lo extraño que empieza a tener sentido después de unos segundos.",
+      hard_dance: "Entrega catarsis directa: kick fuerte, euforia y descarga de energía. Funciona cuando la intensidad debe llegar rápido y sentirse en el cuerpo."
     }
   };
   return `${label}: ${(familyCopy[currentLanguage] || familyCopy.pt)[family] || (familyCopy[currentLanguage] || familyCopy.pt).leftfield}`;
@@ -22873,22 +23235,22 @@ function buildSpiritLorePayload(spirit, spiritText = {}) {
 
   if (currentLanguage === "en") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""}`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
-      nextText: normalizeInlineText(`Ask for ${nextStyles}, then tune energy and BPM. The best results come when you like or skip tracks so the profile learns your edge.`)
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""} Your map is not only a genre label: it shows how you respond to pressure, texture, repetition, and emotional payoff.`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo} In practice, this spirit tends to work when a track has a clear identity, evolves with intention, and gives either a physical reward or a mental image to follow.`),
+      nextText: normalizeInlineText(`Ask for ${nextStyles}, then tune energy and BPM. Mark “already knew it” and “new to me” whenever possible: that separates your repertoire from real discovery and makes the next bets sharper.`)
     };
   }
   if (currentLanguage === "es") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""}`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
-      nextText: normalizeInlineText(`Pide ${nextStyles}, luego ajusta energía y BPM. Los mejores resultados aparecen cuando das like o saltas pistas para que el perfil aprenda tu límite.`)
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Tu mapa no es solo una etiqueta de género: muestra cómo respondes a presión, textura, repetición y recompensa emocional.`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo} En la práctica, este espíritu funciona mejor cuando la pista tiene identidad clara, evoluciona con intención y entrega una recompensa física o una imagen mental para seguir.`),
+      nextText: normalizeInlineText(`Pide ${nextStyles}, luego ajusta energía y BPM. Marca “ya conocía” y “nuevo para mí” siempre que puedas: eso separa repertorio de descubrimiento real y afina las próximas apuestas.`)
     };
   }
   return {
-    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""}`),
-    whyText: normalizeInlineText(`${appeal} ${styleInfo}`),
-    nextText: normalizeInlineText(`Peça ${nextStyles}, depois ajuste energia e BPM. Os melhores resultados aparecem quando você curte ou pula faixas para o perfil aprender seu limite.`)
+    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Seu mapa não é só uma etiqueta de gênero: ele mostra como você responde a pressão, textura, repetição e recompensa emocional.`),
+    whyText: normalizeInlineText(`${appeal} ${styleInfo} Na prática, esse espírito tende a funcionar quando a faixa tem identidade clara, evolui com intenção e entrega uma recompensa física ou uma imagem mental para seguir.`),
+    nextText: normalizeInlineText(`Peça ${nextStyles}, depois ajuste energia e BPM. Marque “já conhecia” e “novidade para mim” sempre que puder: isso separa repertório de descoberta real e deixa as próximas apostas mais certeiras.`)
   };
 }
 
@@ -24218,12 +24580,12 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
     spiritText?.archetype ? `personality: ${spiritText.archetype}` : ""
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one cute but premium cosmic musical entity with a distinct face, hair/head shape, outfit, headphones, glowing body, music-note details, and one clear style-specific prop. It must be different from other spirits: unique color mood, silhouette, expression, clothing, and energy aura. Dark luminous background, cinematic neon, soft magic, high detail, collectible finish, centered full-body character, readable at small size. Avoid generic abstract circles, avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one original, beautiful, person-inspired musical avatar with a defined expressive face, visible hair or headwear, stylish electronic-music outfit, headphones, shoulders or full body, and hands/gesture conducting neon waveform energy or a holographic mixer. It can feel mystical or cosmic, but it must read as a charismatic human-like avatar, not a ball, orb, logo, simple mascot, or abstract icon. It must be different from other spirits: unique color mood, silhouette, expression, clothing, prop, and energy aura. Dark luminous background, cinematic neon, high detail, collectible finish, centered character, readable at small card size. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz una entidad musical cósmica tierna pero premium, con rostro, cabello/forma de cabeza, ropa, audífonos, cuerpo luminoso, notas musicales y un prop claro del estilo. Debe ser distinta de otros espíritus: color, silueta, expresión, ropa y aura propios. Fondo oscuro luminoso, neón cinematográfico, magia suave, alto detalle, acabado coleccionable, personaje centrado de cuerpo entero, legible pequeño. Evita círculos abstractos genéricos, evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz un avatar musical original, bonito e inspirado en una persona, con rostro expresivo definido, cabello o accesorio de cabeza visible, ropa electrónica con estilo, audífonos, hombros o cuerpo entero, y manos/gesto conduciendo ondas de neón o un mixer holográfico. Puede sentirse místico o cósmico, pero debe leerse como avatar humanoide carismático, no como bola, orbe, logo, mascota simple o icono abstracto. Debe ser distinto de otros espíritus: color, silueta, expresión, ropa, prop y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, acabado coleccionable, personaje centrado y legible pequeño. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça uma entidade musical cósmica fofa mas sofisticada, com rosto, cabelo/formato de cabeça, roupa, fones de ouvido, corpo luminoso, notas musicais e um objeto claro do estilo. Ela precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa e aura próprias. Fundo escuro luminoso, neon cinematográfico, magia suave, alto detalhe, acabamento colecionável, personagem central de corpo inteiro, legível em tamanho pequeno. Evite círculos abstratos genéricos, evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça um avatar musical original, bonito e inspirado em uma pessoa, com rosto expressivo definido, cabelo ou adereço de cabeça visível, roupa de cena eletrônica estilosa, fones de ouvido, ombros ou corpo inteiro, e mãos/gesto conduzindo ondas neon ou um mixer holográfico. Pode ser místico ou cósmico, mas precisa parecer um avatar humanoide carismático, não uma bola, orbe, logo, mascote simples ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa, prop e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, acabamento colecionável, personagem centralizado e legível pequeno. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -24572,6 +24934,94 @@ function buildSpiritMascotSvg(theme, variant, seed = 0, spirit = null) {
     </g>`;
 }
 
+function buildSpiritHumanAvatarSvg(theme, variant, seed = 0, spirit = null) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071124");
+  const skinPalette = ["#f2c9aa", "#c8875d", "#8f5f43", "#f1dcc5", "#b8759d", "#d8c4ff"];
+  const hairPalette = ["#121826", "#342014", "#f2a84b", "#6d5dff", "#28d5c3", "#db75f2"];
+  const accentPalette = [a, b, c, "#ffb35c", "#f472b6", "#a7f3d0"];
+  const skin = escapeSvgText(skinPalette[seed % skinPalette.length]);
+  const hair = escapeSvgText(hairPalette[(seed >> 3) % hairPalette.length]);
+  const outfit = escapeSvgText(accentPalette[(seed >> 6) % accentPalette.length]);
+  const jacket = escapeSvgText((seed >> 9) % 2 ? "#071528" : d);
+  const lean = ((seed % 19) - 9) * 0.65;
+  const tilt = ((seed >> 4) % 13) - 6;
+  const smile = 442 + ((seed >> 7) % 15);
+  const glasses = seed % 3 === 0;
+  const locs = seed % 5 === 0;
+  const cap = seed % 4 === 0;
+  const motif = spiritMotifSvg(variant?.motif || "star", 585, 210, 0.36, theme, 0.92);
+  const hairStrands = Array.from({ length: locs ? 9 : 0 }, (_, index) => {
+    const x = 340 + index * 17;
+    const y = 240 + ((hashString(`${seed}::hair::${index}`) >>> 0) % 34);
+    const endX = x + ((index % 2 ? 18 : -14));
+    return `<path d="M${x} ${y} C${x - 8} ${y + 54}, ${endX} ${y + 92}, ${endX - 4} ${y + 132}" fill="none" stroke="${hair}" stroke-width="${index % 3 === 0 ? 8 : 6}" stroke-linecap="round" opacity="0.92" />`;
+  }).join("");
+  const waveform = Array.from({ length: 22 }, (_, index) => {
+    const mixed = hashString(`${seed}::human-wave::${index}`) >>> 0;
+    const height = 18 + (mixed % 76);
+    const x = 222 + index * 14;
+    const y = 690 - height / 2;
+    return `<rect x="${x}" y="${y.toFixed(1)}" width="7" height="${height}" rx="3.5" fill="${index % 2 ? b : a}" fill-opacity="${(0.34 + (index % 4) * 0.09).toFixed(2)}" />`;
+  }).join("");
+  const equalizer = Array.from({ length: 9 }, (_, index) => {
+    const height = 22 + ((hashString(`${seed}::human-eq::${index}`) >>> 0) % 84);
+    return `<rect x="${534 + index * 15}" y="${620 - height}" width="8" height="${height}" rx="4" fill="${index % 2 ? b : c}" fill-opacity="0.42" />`;
+  }).join("");
+  const brow = seed % 2 ? "M356 374 C368 366 382 366 394 374" : "M356 372 C370 368 382 368 394 372";
+  const hairShape = locs
+    ? hairStrands
+    : cap
+      ? `<path d="M310 306 C326 226 390 192 466 218 C512 236 536 278 530 320 C472 290 396 282 310 306 Z" fill="${hair}" opacity="0.92" /><path d="M322 292 C392 250 478 258 552 298" fill="none" stroke="${a}" stroke-width="9" stroke-linecap="round" opacity="0.62" />`
+      : `<path d="M305 332 C294 252 348 202 420 204 C494 206 548 260 530 344 C502 292 458 268 410 270 C360 272 326 296 305 332 Z" fill="${hair}" opacity="0.94" /><path d="M334 270 C368 226 446 216 500 268" fill="none" stroke="${outfit}" stroke-width="10" stroke-linecap="round" opacity="0.5" />`;
+
+  return `
+    <g transform="translate(${lean} 24)" filter="url(#mascotGlow)">
+      <ellipse cx="420" cy="828" rx="246" ry="48" fill="${a}" fill-opacity="0.16" />
+      <path d="M176 604 C264 516 344 506 420 586 C496 506 576 516 664 604 L600 812 C512 850 328 850 240 812 Z" fill="${jacket}" fill-opacity="0.94" stroke="${a}" stroke-opacity="0.36" stroke-width="4" />
+      <path d="M274 626 C324 590 374 592 420 652 C466 592 516 590 566 626 L532 808 C478 830 362 830 308 808 Z" fill="${outfit}" fill-opacity="0.22" stroke="${b}" stroke-opacity="0.34" stroke-width="3" />
+      <path d="M420 506 L464 612 L420 692 L376 612 Z" fill="${skin}" fill-opacity="0.84" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3" />
+      <path d="M420 620 V788 M346 700 H494 M372 746 H468" stroke="${a}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.62" />
+      <circle cx="420" cy="644" r="24" fill="${outfit}" fill-opacity="0.72" stroke="#fff8df" stroke-opacity="0.58" stroke-width="5" />
+      <circle cx="420" cy="644" r="9" fill="#fff9d8" fill-opacity="0.94" />
+      <g transform="rotate(${tilt} 420 384)">
+        <path d="M282 352 C288 282 334 230 410 224 C492 218 552 276 552 362 C552 456 496 520 420 520 C344 520 282 456 282 352 Z" fill="${skin}" stroke="#f8ffff" stroke-opacity="0.3" stroke-width="5" />
+        <path d="M282 352 C288 282 334 230 410 224 C492 218 552 276 552 362 C552 456 496 520 420 520 C344 520 282 456 282 352 Z" fill="url(#faceGrad)" fill-opacity="0.26" />
+        ${hairShape}
+        <path d="M264 368 C252 306 284 242 342 214" fill="none" stroke="${a}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.64" />
+        <path d="M576 368 C588 306 556 242 498 214" fill="none" stroke="${b}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.64" />
+        <rect x="236" y="330" width="58" height="118" rx="26" fill="#0a1026" stroke="${a}" stroke-width="7" />
+        <rect x="546" y="330" width="58" height="118" rx="26" fill="#0a1026" stroke="${b}" stroke-width="7" />
+        <circle cx="364" cy="392" r="13" fill="#071124" />
+        <circle cx="476" cy="392" r="13" fill="#071124" />
+        <circle cx="369" cy="386" r="4" fill="#ffffff" fill-opacity="0.86" />
+        <circle cx="481" cy="386" r="4" fill="#ffffff" fill-opacity="0.86" />
+        <path d="${brow}" fill="none" stroke="#071124" stroke-width="5" stroke-linecap="round" opacity="0.36" />
+        <path d="M448 374 C460 366 474 366 486 374" fill="none" stroke="#071124" stroke-width="5" stroke-linecap="round" opacity="0.36" />
+        ${glasses ? `<circle cx="364" cy="392" r="36" fill="none" stroke="${c}" stroke-width="5" stroke-opacity="0.72" /><circle cx="476" cy="392" r="36" fill="none" stroke="${c}" stroke-width="5" stroke-opacity="0.72" /><path d="M400 392 H440" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.72" />` : ""}
+        <path d="M420 402 C408 430 408 448 430 458" fill="none" stroke="#473022" stroke-width="4" stroke-linecap="round" opacity="0.38" />
+        <path d="M370 ${smile} C394 ${smile + 24} 448 ${smile + 24} 472 ${smile}" fill="none" stroke="#101827" stroke-width="7" stroke-linecap="round" opacity="0.74" />
+      </g>
+      <path d="M292 666 C220 630 182 580 170 524" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
+      <path d="M548 654 C624 612 660 560 670 504" fill="none" stroke="${skin}" stroke-width="24" stroke-linecap="round" />
+      <circle cx="168" cy="516" r="19" fill="${skin}" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3" />
+      <circle cx="672" cy="498" r="19" fill="${skin}" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3" />
+      <g opacity="0.86">
+        <rect x="208" y="642" width="388" height="116" rx="34" fill="#071124" fill-opacity="0.68" stroke="${a}" stroke-opacity="0.38" stroke-width="3" />
+        <path d="M226 706 C294 646 356 758 420 704 C492 644 532 730 580 688" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.58" />
+        ${waveform}
+        <circle cx="548" cy="706" r="28" fill="${outfit}" fill-opacity="0.34" stroke="${a}" stroke-opacity="0.64" stroke-width="4" />
+      </g>
+      <g opacity="0.82">${equalizer}</g>
+      ${motif}
+      <path d="M210 280 C332 130 550 120 688 278" fill="none" stroke="${a}" stroke-width="3" stroke-opacity="0.18" />
+      <path d="M184 334 C352 182 568 214 704 382" fill="none" stroke="${c}" stroke-width="2" stroke-opacity="0.16" />
+      <text x="616" y="722" fill="${a}" fill-opacity="0.62" font-size="42" font-weight="900" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText((spirit?.id || "SS").slice(0, 2).toUpperCase())}</text>
+    </g>`;
+}
+
 function collectibleVariationToken() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -24880,7 +25330,7 @@ function buildLocalSpiritCollectibleImage(
   const mascotSvg = hasBackgroundImage
     ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
        <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
-    : buildSpiritMascotSvg(theme, variant, seed, spirit);
+    : buildSpiritHumanAvatarSvg(theme, variant, seed, spirit);
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -30856,6 +31306,14 @@ bind(voiceMiniSwingSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniSwing(target?.value || voiceMiniSwingAmount, { announce: Boolean(voiceMiniTrackPlaying) });
 });
+bind(voiceMiniSynthTypeSelect, "change", (event) => {
+  const target = event.target instanceof HTMLSelectElement ? event.target : null;
+  updateVoiceMiniSynthType(target?.value || voiceMiniSynthType, { announce: true });
+});
+bind(voiceMiniGrooveModeSelect, "change", (event) => {
+  const target = event.target instanceof HTMLSelectElement ? event.target : null;
+  updateVoiceMiniGrooveMode(target?.value || voiceMiniGrooveMode, { announce: true });
+});
 bind(voiceMiniMasterSlider, "input", (event) => {
   const target = event.target instanceof HTMLInputElement ? event.target : null;
   updateVoiceMiniMaster(target?.value || voiceMiniMasterLevel, { announce: Boolean(voiceMiniTrackPlaying) });
@@ -31008,7 +31466,7 @@ bind(authPassword, "keydown", (event) => {
   event.preventDefault();
   loginWithCredentials();
 });
-bind(spiritCollectibleDownload, "click", (event) => {
+bind(spiritCollectibleDownload, "click", async (event) => {
   event.preventDefault();
   const imageIsReady = spiritCollectibleImage?.dataset.assetReady === "true";
   const imageUrl = String(
@@ -31026,9 +31484,31 @@ bind(spiritCollectibleDownload, "click", (event) => {
       spiritCollectibleDownload?.getAttribute("download") ||
       spiritCollectibleFilename(currentSpiritId || "spirit", collectibleMilestoneForLikes(totalPositiveLikes()).likes, imageUrl)
   );
-  const downloaded = triggerSpiritCollectibleDownload(imageUrl, baseFilename);
-  if (!downloaded) {
-    showToast(t("spiritCollectibleShareNoAsset"));
+  const originalText = spiritCollectibleDownload?.textContent || t("spiritCollectibleDownload");
+  if (spiritCollectibleDownload) {
+    spiritCollectibleDownload.textContent = t("spiritCollectibleDownloadPreparing");
+    spiritCollectibleDownload.setAttribute("aria-busy", "true");
+  }
+  try {
+    const result = await triggerSpiritCollectibleDownload(imageUrl, baseFilename);
+    if (result === "shared") {
+      showToast(t("spiritCollectibleDownloadReady"));
+    } else if (result === "downloaded") {
+      showToast(t("spiritCollectibleDownloadFallback"));
+    } else {
+      showToast(t("spiritCollectibleShareNoAsset"));
+    }
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      showToast(t("spiritCollectibleShareCanceled"));
+    } else {
+      showToast(t("spiritCollectibleShareFallback"));
+    }
+  } finally {
+    if (spiritCollectibleDownload) {
+      spiritCollectibleDownload.textContent = originalText;
+      spiritCollectibleDownload.removeAttribute("aria-busy");
+    }
   }
 });
 bind(spiritCollectibleRegenerateBtn, "click", async () => {
