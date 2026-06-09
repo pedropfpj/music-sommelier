@@ -4507,6 +4507,7 @@ const authUsername = document.getElementById("authUsername");
 const authPassword = document.getElementById("authPassword");
 const authLoginBtn = document.getElementById("authLoginBtn");
 const authGuestBtn = document.getElementById("authGuestBtn");
+const authTestUserBtn = document.getElementById("authTestUserBtn");
 const authSocialDivider = document.getElementById("authSocialDivider");
 const authGoogleNativeSlot = document.getElementById("authGoogleNativeSlot");
 const authGoogleBtn = document.getElementById("authGoogleBtn");
@@ -11610,9 +11611,12 @@ const I18N = {
     authPasswordPlaceholder: "Digite sua senha",
     authLoginBtn: "Entrar",
     authGuestBtn: "Continuar sem login",
+    authTestUserBtn: "Testar novo usuário",
     authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Modo visitante ativado. Você pode usar o app sem login.",
+    authSavedProfileReady: "Perfil salvo encontrado para {user}. Entre para continuar nele ou teste como usuário novo.",
+    authTestUserReady: "Modo teste criado para {user}. Dados reais salvos não foram apagados.",
     authSocialDivider: "ou entre com",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
@@ -12183,6 +12187,7 @@ const I18N = {
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
     spiritCollectibleGeneratedLocal: "Nova variação única local criada para este usuário.",
     spiritCollectibleGeneratedApi: "Arte única por IA criada para este perfil.",
+    spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
     spiritCollectibleError: "IA de imagem ainda sem resposta. Mostrando uma prévia local bonita até configurar a chave.",
     spiritRankUnlocked: "Espírito desbloqueado",
     spiritRankNovice: "Sommelier iniciante",
@@ -12229,9 +12234,12 @@ const I18N = {
     authPasswordPlaceholder: "Enter your password",
     authLoginBtn: "Sign in",
     authGuestBtn: "Continue without login",
+    authTestUserBtn: "Test new user",
     authRequired: "Fill username and password to sign in, or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Guest mode enabled. You can use the app without login.",
+    authSavedProfileReady: "Saved profile found for {user}. Sign in to continue or test as a new user.",
+    authTestUserReady: "Test mode created for {user}. Your real saved data was not erased.",
     authSocialDivider: "or continue with",
     authGoogleBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
@@ -12799,6 +12807,7 @@ const I18N = {
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratedLocal: "New unique local variation created for this user.",
     spiritCollectibleGeneratedApi: "Unique AI artwork created for this profile.",
+    spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
     spiritCollectibleError: "Image AI did not respond yet. Showing a polished local preview until the key is configured.",
     spiritRankUnlocked: "Spirit unlocked",
     spiritRankNovice: "Novice music sommelier",
@@ -12845,9 +12854,12 @@ const I18N = {
     authPasswordPlaceholder: "Escribe tu contraseña",
     authLoginBtn: "Entrar",
     authGuestBtn: "Continuar sin login",
+    authTestUserBtn: "Probar usuario nuevo",
     authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Modo invitado activado. Puedes usar la app sin login.",
+    authSavedProfileReady: "Perfil guardado encontrado para {user}. Entra para continuar o prueba como usuario nuevo.",
+    authTestUserReady: "Modo prueba creado para {user}. Tus datos reales guardados no se borraron.",
     authSocialDivider: "o entra con",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
@@ -13412,6 +13424,7 @@ const I18N = {
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
     spiritCollectibleGeneratedLocal: "Nueva variación local única creada para este usuario.",
     spiritCollectibleGeneratedApi: "Arte único con IA creado para este perfil.",
+    spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
     spiritCollectibleError: "La IA de imagen aún no respondió. Mostrando una vista previa local cuidada hasta configurar la clave.",
     spiritRankUnlocked: "Espíritu desbloqueado",
     spiritRankNovice: "Sommelier musical inicial",
@@ -14032,6 +14045,7 @@ function applyLanguage() {
   setText("#authPasswordLabel", t("authPasswordLabel"));
   setText("#authLoginBtn", t("authLoginBtn"));
   setText("#authGuestBtn", t("authGuestBtn"));
+  setText("#authTestUserBtn", t("authTestUserBtn"));
   setText("#authSocialDivider", t("authSocialDivider"));
   setText("#authGoogleLabel", t("authGoogleBtn"));
   setText("#authAppleLabel", t("authAppleBtn"));
@@ -14410,7 +14424,7 @@ function loadLanguage() {
 
 function normalizeAuthMode(mode) {
   const value = String(mode || "").toLowerCase();
-  return ["login", "google", "apple"].includes(value) ? value : "guest";
+  return ["login", "google", "apple", "test"].includes(value) ? value : "guest";
 }
 
 function normalizeUserSession(session) {
@@ -14436,6 +14450,10 @@ function sessionProfileKey(session = currentAuthUser) {
         normalizedSession.username
     );
     return providerKey ? `${normalizedSession.mode}:${providerKey}` : "";
+  }
+  if (normalizedSession.mode === "test") {
+    const testKey = normalize(normalizedSession.providerId || normalizedSession.username);
+    return testKey ? `test:${testKey}` : `test:${Date.now().toString(36)}`;
   }
   return "guest:default";
 }
@@ -16113,13 +16131,6 @@ function showAuthScreen() {
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
   const storedUser = readStoredUserSession();
-  const storedProfileKey = storedUser ? sessionProfileKey(storedUser) : "";
-  if (storedUser?.mode !== "guest" && storedProfileKey) {
-    activateUserSession(storedUser);
-    persistUserSession(storedUser);
-    continueFromAuthToWelcome({ showGuide: false });
-    return;
-  }
 
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
@@ -16137,7 +16148,13 @@ function showAuthScreen() {
       // The manual Google button remains available if the native script fails to load.
     });
   }
-  setAuthFeedback("");
+  if (storedUser && storedUser.mode !== "guest") {
+    setAuthFeedback(t("authSavedProfileReady", {
+      user: storedUser.username || storedUser.email || t("summaryNoData")
+    }));
+  } else {
+    setAuthFeedback("");
+  }
   if (authUsername) authUsername.focus();
   refreshAmbientForUiState();
   playUiSfx("confirm");
@@ -16309,6 +16326,25 @@ function continueWithoutLogin() {
   persistUserSession(session);
   setAuthFeedback(t("authGuestReady"));
   continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+}
+
+function createTestUserSession() {
+  const timestamp = Date.now().toString(36);
+  const suffix = Math.random().toString(36).slice(2, 7);
+  const id = `test-${timestamp}-${suffix}`;
+  return {
+    mode: "test",
+    username: `Teste ${timestamp.slice(-4).toUpperCase()}`,
+    providerId: id
+  };
+}
+
+function testAsNewUser() {
+  const session = createTestUserSession();
+  activateUserSession(session);
+  persistUserSession(session);
+  setAuthFeedback(t("authTestUserReady", { user: session.username }));
+  continueFromAuthToWelcome({ showGuide: true });
 }
 
 function syncDiscoveryFromSeeds() {
@@ -24573,21 +24609,49 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
   return lines.slice(0, maxLines);
 }
 
+function spiritCharacterIdentity(spirit, profileSignature = "") {
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-identity`) >>> 0;
+  const genderPresentations = [
+    "masculine-presenting adult",
+    "feminine-presenting adult",
+    "androgynous adult",
+    "masculine-presenting adult",
+    "feminine-presenting adult"
+  ];
+  const identityBySpirit = {
+    ritual_cosmico: "visionary ceremonial performer with luminous festival robes, confident calm face, symbolic jewelry, and hands shaping a psychedelic trance halo",
+    alquimista_sombrio: "dark-techno alchemist with tailored black cyber-club coat, sharp eyes, metallic rings, and one hand controlling a shadowy waveform",
+    acelerador_quantico: "high-speed rave pilot with technical jacket, visor accents, athletic pose, and electric data trails around the hands",
+    engenheiro_groove: "groove engineer with elegant headphones, sculptural hair, precise hand gesture, luxury jacket, and holographic mixer light",
+    arquiteto_hipnotico: "hypnotic architect with clean tailored outfit, focused expression, geometric light blueprint, and poised conductor hands",
+    cacador_bass: "bass hunter with strong street-club silhouette, heavy jacket or tactical vest, intense eyes, hands feeling low-frequency pressure, and subwoofer energy waves",
+    viajante_organico: "organic sound traveler with natural textures, braided or flowing hair, earthy futuristic clothing, soft confident face, and botanical audio light",
+    explorador_fractal: "fractal explorer with experimental fashion, expressive gaze, asymmetric accessories, and floating micro-detail sound geometry"
+  };
+  return [
+    `Character identity: ${genderPresentations[seed % genderPresentations.length]}`,
+    identityBySpirit[spirit?.id] || identityBySpirit.engenheiro_groove,
+    "The character must look like a believable adult person with neck, shoulders, torso, arms and hands, not a mascot or simplified avatar"
+  ].join(". ");
+}
+
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
+  const characterIdentity = spiritCharacterIdentity(spirit, profileSignature);
+  const realisticGuardrail = "Non-negotiable human realism: render a believable adult human persona with neck, shoulders, torso, arms, hands, facial structure, hairstyle, clothing, accessories, and body presence. Do not render a mascot, cute creature, round emoji face, simplified doll, stick body, orb head, flat vector avatar, toy, childlike character, or abstract symbol. If any style direction conflicts with this, the realistic adult human persona rule wins.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `head detail: ${variant.crown}` : "",
     spiritText?.archetype ? `personality: ${spiritText.archetype}` : ""
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. Make one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, expressive eyes, natural face proportions, visible hairstyle or headwear, premium club/festival outfit, headphones, accessories, shoulders, torso, and hands. The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object connected to the music taste. Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim light, detailed fabric, jewelry, gloves or gesture, dramatic waveform halo, polished collectible character-card finish. It can feel mystical or cosmic, but it must look like a stylish human music persona, not a mascot, toy, floating head, chibi, emoji, ball, orb, logo, simple cartoon, flat vector, stick figure, or abstract icon. It must be different from other spirits: unique color mood, silhouette, expression, clothing, prop, and energy aura. Dark luminous background, cinematic neon, high detail, centered character, readable at small card size, close to a premium illustrated game/music character card. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Make one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, expressive eyes, natural face proportions, visible hairstyle or headwear, premium club/festival outfit, headphones, accessories, shoulders, torso, and hands. The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object connected to the music taste. Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim light, detailed fabric, jewelry, gloves or gesture, dramatic waveform halo, polished collectible character-card finish. It can feel mystical or cosmic, but it must look like a stylish human music persona, not a mascot, toy, floating head, chibi, emoji, ball, orb, logo, simple cartoon, flat vector, stick figure, or abstract icon. It must be different from other spirits: unique gender presentation, color mood, silhouette, expression, clothing, prop, hairstyle, face, and energy aura. Dark luminous background, cinematic neon, high detail, centered character, readable at small card size, close to a premium illustrated game/music character card. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. Haz un retrato original de personaje humano adulto ficticio, de cintura para arriba o cuerpo entero, con anatomía humana creíble, rostro expresivo, proporciones naturales, mirada con intención, cabello o accesorio de cabeza visible, ropa premium de club/festival, audífonos, accesorios, hombros, torso y manos. El personaje debe conducir ondas de neón, tocar un mixer holográfico o interactuar con un objeto sonoro ligado al gusto musical. Dirección artística: pintura digital premium semi-realista, moda cyber-club de lujo, luz cinematográfica, telas detalladas, joyería, guantes o gesto, halo de waveform dramático y acabado coleccionable. Puede sentirse místico o cósmico, pero debe verse como una persona musical con estilo, no como mascota, juguete, cabeza flotante, chibi, emoji, bola, orbe, logo, caricatura simple, vector plano, muñeco infantil o icono abstracto. Debe ser distinto de otros espíritus: color, silueta, expresión, ropa, prop y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, personaje centrado y legible pequeño, cercano a una tarjeta premium de personaje musical. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Haz un retrato original de personaje humano adulto ficticio, de cintura para arriba o cuerpo entero, con anatomía humana creíble, rostro expresivo, proporciones naturales, mirada con intención, cabello o accesorio de cabeza visible, ropa premium de club/festival, audífonos, accesorios, hombros, torso y manos. El personaje debe conducir ondas de neón, tocar un mixer holográfico o interactuar con un objeto sonoro ligado al gusto musical. Dirección artística: pintura digital premium semi-realista, moda cyber-club de lujo, luz cinematográfica, telas detalladas, joyería, guantes o gesto, halo de waveform dramático y acabado coleccionable. Puede sentirse místico o cósmico, pero debe verse como una persona musical con estilo, no como mascota, juguete, cabeza flotante, chibi, emoji, bola, orbe, logo, caricatura simple, vector plano, muñeco infantil o icono abstracto. Debe ser distinto de otros espíritus: presentación de género, color, silueta, expresión, ropa, prop, peinado, rostro y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, personaje centrado y legible pequeño, cercano a una tarjeta premium de personaje musical. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. Faça um retrato original de personagem humano adulto fictício, meio corpo ou corpo inteiro, com anatomia humana crível, proporções naturais, rosto expressivo, olhar com intenção, cabelo ou adereço de cabeça visível, roupa premium de club/festival, fones de ouvido, acessórios, ombros, torso e mãos. O personagem deve conduzir ondas neon, tocar um mixer holográfico ou interagir com um objeto sonoro ligado ao gosto musical. Direção artística: pintura digital premium semi-realista, moda cyber-club de luxo, luz cinematográfica, tecido detalhado, joias, luvas ou gesto marcante, halo de waveform dramático e acabamento colecionável. Pode ser místico ou cósmico, mas precisa parecer uma pessoa musical estilosa, não mascote, brinquedo, cabeça flutuante, chibi, emoji, bola, orbe, logo, caricatura simples, vetor chapado, boneco infantil ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: cor, silhueta, expressão, roupa, prop e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, personagem centralizado e legível pequeno, próximo de um card premium de personagem musical. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Faça um retrato original de personagem humano adulto fictício, meio corpo ou corpo inteiro, com anatomia humana crível, proporções naturais, rosto expressivo, olhar com intenção, cabelo ou adereço de cabeça visível, roupa premium de club/festival, fones de ouvido, acessórios, ombros, torso e mãos. O personagem deve conduzir ondas neon, tocar um mixer holográfico ou interagir com um objeto sonoro ligado ao gosto musical. Direção artística: pintura digital premium semi-realista, moda cyber-club de luxo, luz cinematográfica, tecido detalhado, joias, luvas ou gesto marcante, halo de waveform dramático e acabamento colecionável. Pode ser místico ou cósmico, mas precisa parecer uma pessoa musical estilosa, não mascote, brinquedo, cabeça flutuante, chibi, emoji, bola, orbe, logo, caricatura simples, vetor chapado, boneco infantil ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: apresentação masculina, feminina ou andrógina, cor, silhueta, expressão, roupa, prop, cabelo, rosto e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, personagem centralizado e legível pequeno, próximo de um card premium de personagem musical. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -25798,50 +25862,68 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   renderCollectibleState(collectible);
 
   if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
+    const previousCollectible = collectible?.imageUrl ? collectible : null;
+    let keptPreviousCollectible = false;
     spiritCollectibleBusy = true;
     const variation = forceRegenerate ? collectibleVariationToken() : "";
     renderCollectibleState(collectible);
     try {
-      collectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
+      const generatedCollectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
         variationToken: variation,
         allowAi: !forceRegenerate || aiConfigFlag("allowImageRegeneration", false),
         forceRegenerate
       });
+      const expectedAiRefresh = forceRegenerate && supportsAiCollectibleApi() && aiImageEnabled();
+      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl) {
+        collectible = previousCollectible;
+        keptPreviousCollectible = true;
+      } else {
+        collectible = generatedCollectible;
+      }
     } catch (error) {
-      console.warn("Spirit collectible generation failed; using local fallback.", error);
-      try {
-        const profileSignature = spiritCollectibleProfileSignature(spirit, milestone.likes);
-        collectible = {
-          imageUrl: buildLocalSpiritCollectibleImage(
-            spirit,
-            spiritText,
-            likes,
-            milestone.likes,
-            variation,
-            "",
-            "",
-            spiritShareProfileSnapshot(),
+      console.warn("Spirit collectible generation failed.", error);
+      if (previousCollectible?.imageUrl) {
+        collectible = previousCollectible;
+        keptPreviousCollectible = true;
+      } else {
+        try {
+          const profileSignature = spiritCollectibleProfileSignature(spirit, milestone.likes);
+          collectible = {
+            imageUrl: buildLocalSpiritCollectibleImage(
+              spirit,
+              spiritText,
+              likes,
+              milestone.likes,
+              variation,
+              "",
+              "",
+              spiritShareProfileSnapshot(),
+              userSignature,
+              profileSignature
+            ),
+            source: "local",
+            createdAt: new Date().toISOString(),
+            prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
             userSignature,
             profileSignature
-          ),
-          source: "local",
-          createdAt: new Date().toISOString(),
-          prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
-          userSignature,
-          profileSignature
-        };
-      } catch (fallbackError) {
-        console.warn("Spirit collectible local fallback failed.", fallbackError);
+          };
+        } catch (fallbackError) {
+          console.warn("Spirit collectible local fallback failed.", fallbackError);
+        }
       }
     } finally {
       spiritCollectibleBusy = false;
     }
-    if (collectible?.imageUrl) {
+    if (collectible?.imageUrl && !keptPreviousCollectible) {
       store[slotKey] = collectible;
       saveSpiritCollectibleStore(store);
     }
     if (forceRegenerate && collectible?.imageUrl) {
-      showToast(collectible.source === "api" ? t("spiritCollectibleGeneratedApi") : t("spiritCollectibleGeneratedLocal"));
+      if (keptPreviousCollectible) {
+        showToast(t("spiritCollectibleAiKeptPrevious"));
+      } else {
+        showToast(collectible.source === "api" ? t("spiritCollectibleGeneratedApi") : t("spiritCollectibleGeneratedLocal"));
+      }
     }
   }
 
@@ -31605,6 +31687,7 @@ bind(usageGuideContinueBtn, "click", continueFromUsageGuide);
 bind(showUsageGuideBtn, "click", () => showUsageGuideScreen({ returnTo: "app" }));
 bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
+bind(authTestUserBtn, "click", testAsNewUser);
 bind(authGoogleBtn, "click", loginWithGoogle);
 bind(authAppleBtn, "click", loginWithApple);
 bind(profileBackupExportBtn, "click", exportProfileBackup);

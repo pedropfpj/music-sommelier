@@ -151,12 +151,13 @@ module.exports = async function handler(req, res) {
     prompt,
     "Square 1024x1024 premium collectible character artwork.",
     "Generate only the central musical-spirit character illustration; the app will add all text, stats, frame, and UI later.",
-    "The image must feature one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, natural face proportions, expressive eyes, visible hairstyle or headwear, stylish club/festival outfit, headphones, accessories, torso, shoulders, and hands.",
+    "Non-negotiable: the image must feature one original fictional adult human persona, masculine-presenting, feminine-presenting, or androgynous depending on the supplied profile signature.",
+    "Render a realistic premium music character portrait, waist-up or full body, with believable human anatomy, neck, shoulders, torso, arms, hands, natural face proportions, expressive eyes, visible hairstyle or headwear, stylish club/festival outfit, headphones, accessories, and body presence.",
     "The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object tied to the music taste.",
     "Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim lighting, detailed fabric, jewelry, gloves or a distinctive hand gesture, dramatic waveform halo, polished collectible character-card finish.",
-    "It can feel mystical or cosmic, but it must read as a premium human music persona, not a cute mascot, toy, chibi, emoji, floating head, abstract ball, logo, mascot icon, orb, flat vector, childish doll, or plain symbol.",
+    "It can feel mystical or cosmic, but it must read as a premium human music persona, not a cute mascot, toy, chibi, emoji, floating head, abstract ball, logo, mascot icon, orb, flat vector, childish doll, simple cartoon, puppet, or plain symbol.",
     "Make it elegant, polished, high-detail, readable at small card size, and visually distinct for the provided user signature: different color mood, outfit, expression, prop, hairstyle, face, and aura.",
-    "Avoid generic abstract circles, avoid simple cartoon proportions, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels.",
+    "Avoid generic abstract circles, avoid simplified avatar proportions, avoid big round emoji heads, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels. If any instruction conflicts with realistic adult human character quality, the realistic adult human rule wins.",
     "No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
   ].join(" ");
 
