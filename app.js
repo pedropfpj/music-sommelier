@@ -26801,6 +26801,30 @@ function getFallbackEvents(artist) {
 }
 
 async function fetchUpcomingEvents(artist) {
+  const ticketmasterEndpoint = resolveMusicApiEndpoint("SONIC_TICKETMASTER_EVENTS_API_URL", "/api/ticketmaster-events");
+  if (ticketmasterEndpoint) {
+    try {
+      const response = await fetch(ticketmasterEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          artist,
+          size: 10
+        })
+      });
+      if (response.ok) {
+        const payload = await response.json();
+        const events = Array.isArray(payload?.events) ? payload.events : [];
+        if (events.length > 0) return { events, source: "ticketmaster" };
+      }
+    } catch (_error) {
+      // Ticketmaster e a fonte principal; se falhar, o app tenta as alternativas antigas.
+    }
+  }
+
   const endpoint = `https://rest.bandsintown.com/artists/${encodeURIComponent(artist)}/events?app_id=neonpulse_selector`;
 
   try {
@@ -26847,7 +26871,7 @@ function renderEventsPanel(artist, events, source) {
   }
 
   eventsIntro.textContent =
-    source === "bandsintown"
+    source !== "fallback"
       ? t("eventRealLoaded", { artist })
       : t("eventFallbackLoaded", { artist });
 
