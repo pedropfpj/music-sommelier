@@ -5388,6 +5388,7 @@ const SMART_PRESETS = {
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
 const recentArtistSignals = new Map();
+const soundCloudApiCache = new Map();
 
 const MIN_TRACKS_PER_STYLE = 20;
 const MIN_ARTISTS_PER_STYLE = 8;
@@ -9835,7 +9836,9 @@ function isDynamicSource(source) {
     normalizedSource.includes("dynamic") ||
     compactSource.includes("itunesstyle") ||
     compactSource.includes("deezerstyle") ||
-    compactSource.includes("dataset")
+    compactSource.includes("dataset") ||
+    compactSource.includes("soundcloudapi") ||
+    compactSource.includes("soundclouddynamic")
   );
 }
 
@@ -10972,6 +10975,109 @@ async function fetchItunesTracksByArtist(artist, style = "") {
   return Array.from(collected.values()).slice(0, 80);
 }
 
+function resolveMusicApiEndpoint(globalName, fallbackPath) {
+  const configured = String(window?.[globalName] || "").trim();
+  if (configured) return configured;
+  return canUseRelativeApiEndpoint() ? fallbackPath : "";
+}
+
+function soundCloudApiQueryTerms(style, artist = "") {
+  const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
+  const styleTokens = String(styleTerm || "")
+    .split(/\s+/)
+    .map((token) => String(token || "").trim())
+    .filter(Boolean);
+  const compactStyleTerm = styleTokens.slice(0, 3).join(" ") || styleLabelByValue(style);
+  const primaryToken = styleTokens[0] || styleLabelByValue(style);
+  const family = familyOf(style);
+  const familyTerm = family === "dnb"
+    ? "drum and bass"
+    : family === "psytrance"
+      ? "psytrance"
+      : family === "techno"
+        ? "techno"
+        : family === "house"
+          ? "house"
+          : family === "bass_music"
+            ? "bass music"
+            : "electronic";
+  const artistName = String(artist || "").trim();
+
+  const queries = artistName
+    ? [
+        `${artistName} ${compactStyleTerm}`,
+        `${artistName} ${familyTerm}`,
+        `${artistName} ${primaryToken}`
+      ]
+    : [
+        `${compactStyleTerm}`,
+        `${compactStyleTerm} ${familyTerm}`,
+        `${primaryToken} ${familyTerm}`
+      ];
+
+  return Array.from(
+    new Set(
+      queries
+        .map((query) => query.replace(/\s+/g, " ").trim())
+        .filter(Boolean)
+    )
+  ).slice(0, artistName ? 2 : 3);
+}
+
+async function fetchSoundCloudTracksByStyle(style, artist = "") {
+  const endpoint = resolveMusicApiEndpoint("SONIC_SOUNDCLOUD_SEARCH_API_URL", "/api/soundcloud-search");
+  if (!endpoint || !style) return [];
+
+  const cacheKey = `${style}::${normalize(artist || "generic")}`;
+  if (soundCloudApiCache.has(cacheKey)) return soundCloudApiCache.get(cacheKey);
+
+  const collected = new Map();
+  const queries = soundCloudApiQueryTerms(style, artist);
+  for (const query of queries) {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          style,
+          query,
+          limit: artist ? 12 : 24
+        })
+      });
+      if (!response.ok) break;
+      const payload = await response.json();
+      const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
+      rows
+        .filter((row) => row?.song && row?.artist && row?.soundcloudTrackUrl)
+        .filter((row) => !artist || isArtistMatch(row.artist, artist))
+        .filter(
+          (row) =>
+            !hasTrackStyleSignalConflict(style, {
+              artist: row.artist,
+              song: row.song,
+              label: row.label || "SoundCloud",
+              artistGenre: [row.genre, row.tags, STYLE_SEARCH_TERMS[style], styleLabelByValue(style)]
+                .filter(Boolean)
+                .join(" "),
+              artistProfileHint: row.description || "",
+              source: "soundcloud_api"
+            })
+        )
+        .forEach((row) => collected.set(String(row.soundcloudTrackUrl), row));
+    } catch (_err) {
+      // SoundCloud e uma fonte complementar; se falhar, o app segue com catalogo local/Deezer/iTunes.
+      break;
+    }
+  }
+
+  const tracks = Array.from(collected.values()).slice(0, artist ? 12 : 48);
+  soundCloudApiCache.set(cacheKey, tracks);
+  return tracks;
+}
+
 function addDynamicTrackToCatalog({
   style,
   song,
@@ -11153,6 +11259,29 @@ function injectSoundCloudSupplementalSeeds() {
   return added;
 }
 
+function addSoundCloudApiTrackToCatalog(row, style, existingKeys) {
+  if (!row || !style) return false;
+  return addDynamicTrackToCatalog({
+    style,
+    song: row.song,
+    artist: row.artist,
+    label: row.label || row.genre || "SoundCloud",
+    bpmExact: Number(row.bpmExact) || 0,
+    previewUrl: "",
+    releaseDate: row.releaseDate || "SoundCloud",
+    durationSec: Number(row.durationSec) || 0,
+    artistCountry: "",
+    artistGenre: [row.genre, row.tags, STYLE_SEARCH_TERMS[style], styleLabelByValue(style)]
+      .filter(Boolean)
+      .join(" • "),
+    artistProfileHint: row.description || row.tags || row.genre || "Faixa localizada via SoundCloud API.",
+    artistBio: row.description || "",
+    labelBio: row.label ? `${row.label} apareceu como sinal de origem nesta busca do SoundCloud.` : "",
+    soundcloudTrackUrl: row.soundcloudTrackUrl,
+    source: "soundcloud_api"
+  }, existingKeys);
+}
+
 async function hydrateCatalogForStyle(style) {
   if (!style) return;
   purgeDynamicMismatches(style);
@@ -11200,6 +11329,26 @@ async function hydrateCatalogForStyle(style) {
     if (stats.trackCount >= targetSize) break;
   }
 
+  let stats = stylePoolStats(style);
+
+  // SoundCloud API: fonte server-side para previews/links reais e cena underground.
+  // Usamos poucos artistas-semente para ganhar variedade sem gastar chamadas demais.
+  if (
+    stats.trackCount < Math.max(MIN_TRACKS_PER_STYLE, coverageTarget.tracks) ||
+    stats.artistCount < coverageTarget.artists ||
+    stats.labels < coverageTarget.labels
+  ) {
+    for (const artist of selectedSeeds.slice(0, 6)) {
+      const rows = await fetchSoundCloudTracksByStyle(style, artist);
+      for (const row of rows) {
+        addSoundCloudApiTrackToCatalog(row, style, existingKeys);
+        stats = stylePoolStats(style);
+        if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+      }
+      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+    }
+  }
+
   // Segunda fonte: iTunes Search para estilos que aceitam preview sem BPM exato.
   if (allowItunesHydration) {
     for (const artist of selectedSeeds) {
@@ -11228,7 +11377,7 @@ async function hydrateCatalogForStyle(style) {
     }
   }
 
-  let stats = stylePoolStats(style);
+  stats = stylePoolStats(style);
 
   // Fallback por artista puro: usa base local de artistas quando o termo de estilo falha.
   if (allowItunesHydration && stats.trackCount < targetSize) {
@@ -11307,6 +11456,16 @@ async function hydrateCatalogForStyle(style) {
 
       stats = stylePoolStats(style);
       if (stats.trackCount >= targetSize && stats.artistCount >= MIN_ARTISTS_PER_STYLE) break;
+    }
+  }
+
+  stats = stylePoolStats(style);
+  if (!skipBroadStyleHydration && (stats.trackCount < targetSize || stats.artistCount < coverageTarget.artists)) {
+    const soundCloudRows = await fetchSoundCloudTracksByStyle(style);
+    for (const row of soundCloudRows) {
+      addSoundCloudApiTrackToCatalog(row, style, existingKeys);
+      stats = stylePoolStats(style);
+      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
     }
   }
 
@@ -20275,7 +20434,7 @@ function resolveExactBpm(track) {
 function bpmSourceLabel(track) {
   const source = normalize(track?.source || "");
   if (!source) return t("bpmCatalogReferenceLabel");
-  if (source.includes("deezer") || source.includes("itunes") || source.includes("dynamic")) {
+  if (source.includes("deezer") || source.includes("itunes") || source.includes("soundcloud") || source.includes("dynamic")) {
     return t("bpmApiMetadataLabel");
   }
   return t("bpmCatalogReferenceLabel");
