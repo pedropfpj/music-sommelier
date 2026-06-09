@@ -6037,6 +6037,7 @@ input[type="range"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0.6rem;
 }
 
@@ -6085,7 +6086,7 @@ input[type="range"] {
 
 .spirit-collectible-actions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
   gap: 0.45rem;
 }
 
@@ -6096,7 +6097,10 @@ input[type="range"] {
   font-size: 0.84rem;
   justify-content: center;
   text-align: center;
+  line-height: 1.2;
   width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .instagram-share-btn {

@@ -25519,7 +25519,7 @@ function buildLocalSpiritCollectibleImage(
       ? profile.favoriteStyle
       : topStyles[0] || archetype || rank
   );
-  const styleChips = splitIntoSvgLines(topStyles.join(" • "), 28, 1)[0] || archetype;
+  const styleChips = splitIntoSvgLines(topStyles.join(" • "), 24, 1)[0] || archetype;
   const likedCount = spiritCardNumber(profile?.likedSongs || likes || milestoneLikes);
   const shownCount = spiritCardNumber(profile?.tracksPresented || 0);
   const discoveredCount = spiritCardNumber(profile?.discoveredInApp || 0);
@@ -25529,8 +25529,11 @@ function buildLocalSpiritCollectibleImage(
   const quote = spiritMascotQuote(variant, spiritText);
   const titleLines = splitIntoSvgLines(spiritTitle, 19, 2);
   const archetypeLines = splitIntoSvgLines(archetype, 24, 1);
-  const genreLines = splitIntoSvgLines(favoriteGenre, 15, 2);
-  const quoteLines = splitIntoSvgLines(quote, 39, 2);
+  const genreLines = splitIntoSvgLines(favoriteGenre, 12, 2);
+  const quoteLines = splitIntoSvgLines(quote, 31, 2);
+  const statusLines = splitIntoSvgLines(statusLine, 18, 1);
+  const profileStatsLine = `${discoveredCount} ${labels.discovered} • ${shownCount} ${labels.shown}`;
+  const profileStatsLines = splitIntoSvgLines(profileStatsLine, 25, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
   const accentX = 14 + (seed % 34);
@@ -25635,25 +25638,25 @@ function buildLocalSpiritCollectibleImage(
   </g>
 
   <g filter="url(#softShadow)">
-    <rect x="744" y="244" width="282" height="474" rx="32" fill="url(#sidePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.08" />
-    <g transform="translate(790 292)">
-      ${spiritMotifSvg("star", 0, 0, 0.42, theme, 0.94)}
-      <text x="0" y="114" fill="#e9e7ff" fill-opacity="0.72" font-size="25" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.7">${escapeSvgText(labels.liked)}</text>
-      <text x="0" y="180" fill="#ffffff" font-size="70" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(likedCount)}</text>
-      <text x="0" y="220" fill="#d6d3ef" fill-opacity="0.86" font-size="27" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(labels.songs)}</text>
-      <path d="M0 258 H222" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.14" stroke-width="2" />
-      ${spiritMotifSvg(variant?.motif || "star", 0, 292, 0.38, theme, 0.96)}
-      <text x="0" y="396" fill="#e9e7ff" fill-opacity="0.72" font-size="25" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.7">${escapeSvgText(labels.genre)}</text>
-      ${genreLines.map((line, index) => `<text x="0" y="${456 + index * 44}" fill="#ffffff" font-size="${genreLines.length > 1 ? 38 : 44}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+    <rect x="736" y="252" width="300" height="424" rx="34" fill="url(#sidePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
+    <g transform="translate(774 296)">
+      <g opacity="0.9">${spiritMotifSvg("star", 0, -4, 0.32, theme, 0.8)}</g>
+      <text x="0" y="90" fill="#e9e7ff" fill-opacity="0.74" font-size="21" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.35">${escapeSvgText(labels.liked)}</text>
+      <text x="0" y="154" fill="#ffffff" font-size="64" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(likedCount)}</text>
+      <text x="0" y="190" fill="#d6d3ef" fill-opacity="0.86" font-size="24" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(labels.songs)}</text>
+      <path d="M0 226 H224" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.16" stroke-width="2" />
+      <g opacity="0.22">${spiritMotifSvg(variant?.motif || "star", 170, 238, 0.28, theme, 0.9)}</g>
+      <text x="0" y="276" fill="#e9e7ff" fill-opacity="0.74" font-size="21" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.35">${escapeSvgText(labels.genre)}</text>
+      ${genreLines.map((line, index) => `<text x="0" y="${326 + index * 35}" fill="#ffffff" font-size="${genreLines.length > 1 ? 31 : 36}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
     </g>
   </g>
 
-	  <g filter="url(#softShadow)">
-	    <rect x="110" y="818" width="860" height="136" rx="38" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
-	    <text x="164" y="868" fill="${escapeSvgText(theme.c)}" fill-opacity="0.42" font-size="48" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
-	    ${quoteLines.map((line, index) => `<text x="540" y="${872 + index * 38}" fill="#f2f2ff" fill-opacity="0.9" font-size="25" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
-	    <text x="916" y="928" fill="${escapeSvgText(theme.c)}" fill-opacity="0.42" font-size="48" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
-	  </g>
+  <g filter="url(#softShadow)">
+    <rect x="124" y="824" width="832" height="132" rx="34" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
+    <text x="190" y="874" fill="${escapeSvgText(theme.c)}" fill-opacity="0.3" font-size="34" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
+    ${quoteLines.map((line, index) => `<text x="540" y="${878 + index * 34}" fill="#f2f2ff" fill-opacity="0.92" font-size="23" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
+    <text x="890" y="922" fill="${escapeSvgText(theme.c)}" fill-opacity="0.3" font-size="34" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
+  </g>
 
   <g filter="url(#softShadow)">
     <rect x="96" y="112" width="506" height="128" rx="30" fill="#070b24" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
@@ -25661,14 +25664,15 @@ function buildLocalSpiritCollectibleImage(
     ${titleLines.map((line, index) => `<text x="126" y="${206 + index * 40}" fill="#ffffff" font-size="${titleLines.length > 1 ? 34 : 38}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
   </g>
   <g transform="translate(96 724)">
-    <rect x="0" y="0" width="406" height="46" rx="23" fill="${escapeSvgText(theme.c)}" fill-opacity="0.2" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
+    <rect x="0" y="0" width="390" height="46" rx="23" fill="${escapeSvgText(theme.c)}" fill-opacity="0.2" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
     <path d="M28 16 V30 M40 10 V36 M52 18 V28 M64 13 V33" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-linecap="round" opacity="0.86" />
-    <text x="88" y="31" fill="#e8e2ff" font-size="22" font-weight="700" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(styleChips)}</text>
+    <text x="88" y="31" fill="#e8e2ff" font-size="20" font-weight="700" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(styleChips)}</text>
   </g>
-  <g transform="translate(744 744)">
-    <text x="0" y="0" fill="#cfd5ff" fill-opacity="0.68" font-size="19" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.4">${escapeSvgText(labels.status)}</text>
-    <text x="0" y="35" fill="#ffffff" fill-opacity="0.92" font-size="24" font-weight="800" font-family="Syne, Arial, sans-serif">${escapeSvgText(statusLine)}</text>
-    <text x="0" y="76" fill="#cfd5ff" fill-opacity="0.68" font-size="18" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(discoveredCount)} ${escapeSvgText(labels.discovered)} • ${escapeSvgText(shownCount)} ${escapeSvgText(labels.shown)}</text>
+  <g transform="translate(736 704)" filter="url(#softShadow)">
+    <rect x="0" y="0" width="300" height="92" rx="24" fill="#070b24" fill-opacity="0.32" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.12" />
+    <text x="28" y="30" fill="#cfd5ff" fill-opacity="0.68" font-size="17" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.25">${escapeSvgText(labels.status)}</text>
+    <text x="28" y="59" fill="#ffffff" fill-opacity="0.92" font-size="22" font-weight="800" font-family="Syne, Arial, sans-serif">${escapeSvgText(statusLines[0] || statusLine)}</text>
+    <text x="28" y="82" fill="#cfd5ff" fill-opacity="0.68" font-size="16" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(profileStatsLines[0] || profileStatsLine)}</text>
   </g>
   <text x="82" y="1016" fill="${escapeSvgText(theme.a)}" fill-opacity="0.74" font-size="20" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.5">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(String(milestoneLikes))} ${escapeSvgText(labels.likes)}</text>
 </svg>`;
