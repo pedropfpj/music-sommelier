@@ -5286,7 +5286,7 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v20";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v23";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -12173,7 +12173,7 @@ const I18N = {
     spiritPanelTitle: "Seu espírito musical",
     spiritIntro: "A cada 10 músicas curtidas, seu espírito musical é revisado.",
     spiritBadge: "Espírito desbloqueado",
-    spiritAvatarAlt: "Arte abstrata do espírito {name}",
+    spiritAvatarAlt: "Entidade humana realista do espírito {name}",
     spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para revelar seu espírito.",
     spiritProgressUnlocked: "Perfil consolidado com {current} músicas curtidas.",
     spiritUnlockedToast: "Espírito revelado: {name}",
@@ -12203,7 +12203,7 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito tem variações abstratas de sinal, frase e status geradas pelo seu gosto musical.",
+    spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito ganha uma entidade humana realista, frase e status gerados pelo seu gosto musical.",
     spiritCollectibleHintApi: "Arte premium por IA criada para este perfil. Use Gerar arte única para testar variações no beta.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Por enquanto, o app usa uma versão local bonita sem custo.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
@@ -12793,7 +12793,7 @@ const I18N = {
     spiritPanelTitle: "Your musical spirit",
     spiritIntro: "Every 10 liked songs, your musical spirit is reviewed.",
     spiritBadge: "Spirit unlocked",
-    spiritAvatarAlt: "Abstract spirit artwork {name}",
+    spiritAvatarAlt: "Realistic human spirit entity {name}",
     spiritProgressLocked: "Liked songs: {current}/{target}. {remaining} to reveal your spirit.",
     spiritProgressUnlocked: "Profile consolidated with {current} liked songs.",
     spiritUnlockedToast: "Spirit revealed: {name}",
@@ -12823,7 +12823,7 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "Personal artwork is active: each spirit has abstract signal, quote, and status variations generated from your music taste.",
+    spiritCollectibleHintLocal: "Personal artwork is active: each spirit gets a realistic human entity, quote, and status generated from your music taste.",
     spiritCollectibleHintApi: "Premium AI artwork created for this profile. Use Generate unique artwork to test beta variations.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. For now, the app uses a polished local version with no extra cost.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
@@ -13410,7 +13410,7 @@ const I18N = {
     spiritPanelTitle: "Tu espíritu musical",
     spiritIntro: "Cada 10 canciones con like, tu espíritu musical se revisa.",
     spiritBadge: "Espíritu desbloqueado",
-    spiritAvatarAlt: "Arte abstracto del espíritu {name}",
+    spiritAvatarAlt: "Entidad humana realista del espíritu {name}",
     spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para revelar tu espíritu.",
     spiritProgressUnlocked: "Perfil consolidado con {current} canciones con like.",
     spiritUnlockedToast: "Espíritu revelado: {name}",
@@ -13440,7 +13440,7 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Arte personal activa: cada espíritu tiene variaciones abstractas de señal, frase y estado generadas por tu gusto musical.",
+    spiritCollectibleHintLocal: "Arte personal activa: cada espíritu recibe una entidad humana realista, frase y estado generados por tu gusto musical.",
     spiritCollectibleHintApi: "Arte premium con IA creada para este perfil. Usa Generar arte único para probar variaciones beta.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Por ahora, la app usa una versión local cuidada sin coste extra.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
@@ -24651,47 +24651,47 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 }
 
 function spiritCharacterIdentity(spirit, profileSignature = "") {
-  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::signal-identity`) >>> 0;
-  const signalForms = [
-    "waveform sculpture",
-    "bass-pressure architecture",
-    "spectral light grid",
-    "modular signal field",
-    "equalizer constellation"
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-identity`) >>> 0;
+  const humanForms = [
+    "cinematic adult human spirit with a visible face and shoulders",
+    "realistic nocturnal oracle shaped by sub-bass light",
+    "fictional human entity emerging from club smoke and waveform halos",
+    "high-detail ritual performer with an ethereal sonic aura",
+    "dark electronic-music guide with expressive eyes and spectral styling"
   ];
   const identityBySpirit = {
-    ritual_cosmico: "psychedelic trance halo, mandala rings, harmonic laser arcs, and luminous ritual geometry",
-    alquimista_sombrio: "dark spectral vapor, sub-bass pressure, shadow grids, and metallic waveform chemistry",
-    acelerador_quantico: "high-speed data trails, sharp transient shards, quantum rings, and precision signal bursts",
-    engenheiro_groove: "clean groove grid, rounded bass pulses, swing markers, and holographic mixer light",
-    arquiteto_hipnotico: "hypnotic blueprint lines, repeating pressure corridors, acid curves, and architectural loops",
-    cacador_bass: "subwoofer pressure rings, heavy low-frequency waves, impact meters, and bass particle trails",
-    viajante_organico: "organic audio filaments, warm analog gradients, botanical signal paths, and breathing light",
-    explorador_fractal: "fractal nodes, asymmetric micro-detail, broken rhythm geometry, and experimental signal maps"
+    ritual_cosmico: "adult trance ritual entity, mandala halo, luminous skin, sacred club styling, harmonic laser arcs",
+    alquimista_sombrio: "adult shadow alchemist, dark spectral vapor, sub-bass pressure, metallic face light, deep ritual robe",
+    acelerador_quantico: "adult high-speed human entity, precision gaze, quantum light scars, sharp transient trails",
+    engenheiro_groove: "adult groove engineer entity, calm realistic face, holographic mixer glow, warm club atmosphere",
+    arquiteto_hipnotico: "adult hypnotic architect, focused eyes, acid-light blueprint tattoos, repeating pressure corridors",
+    cacador_bass: "adult bass hunter entity, intense face, heavy low-frequency aura, pressure-ring armor and neon shadows",
+    viajante_organico: "adult organic traveler, breathable human presence, analog skin tones, botanical signal filaments",
+    explorador_fractal: "adult fractal explorer, asymmetric light details, realistic portrait energy, broken-rhythm geometry"
   };
   return [
-    `Abstract signal identity: ${signalForms[seed % signalForms.length]}`,
+    `Realistic fictional adult human entity: ${humanForms[seed % humanForms.length]}`,
     identityBySpirit[spirit?.id] || identityBySpirit.engenheiro_groove,
-    "No person, face, body, mascot, avatar, portrait, creature, or humanoid element"
+    "Human presence is required: visible face, head, and shoulders or torso, cinematic realism, ethereal music-reactive aura. No cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, or readable text"
   ].join(". ");
 }
 
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
-  const abstractGuardrail = "Non-negotiable: do not render any person, face, head, eyes, mouth, body, hands, humanoid silhouette, avatar, mascot, cartoon figure, doll, portrait, DJ, character, creature, skull, emoji, robot, animal, or wearable outfit. The artwork must be a non-figurative sonic object: waveform sculpture, bass-pressure field, spectral architecture, light grid, equalizer geometry, signal particles, cables, speaker pressure rings, abstract energy and club-light atmosphere only.";
+  const humanEntityGuardrail = "Non-negotiable: render a fictional adult human-like musical spirit entity with visible face, head, shoulders, and cinematic presence. The figure must feel realistic, editorial, nocturnal, and music-reactive, not cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, or literal DJ. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
     spiritText?.archetype ? `archetype: ${spiritText.archetype}` : ""
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central non-figurative artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${abstractGuardrail} Make an original abstract electronic-music visual: a cinematic waveform totem, bass-frequency pressure map, spectral club architecture, luminous audio-reactive sculpture, modular synth signal field, or equalizer constellation. Use dark luminous background, precise neon geometry, layered particles, sub-bass rings, high-detail light refraction, and a polished collectible finish. It must feel premium, intense, musical, and unique to the profile, but never like an avatar or character. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central realistic human-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic portrait or upper-body figure with expressive human face, realistic skin/material lighting, dark club atmosphere, ritual/electronic styling, luminous waveform aura, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, intense, musical, underground, and unique to the profile, but never like a cute avatar. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración central no figurativa para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${abstractGuardrail} Haz un visual abstracto original de música electrónica: tótem de waveform cinematográfico, mapa de presión de bajo, arquitectura espectral de club, escultura audio-reactiva luminosa, campo de señal modular o constelación de ecualizador. Usa fondo oscuro luminoso, geometría neón precisa, partículas en capas, anillos de subgrave, refracción de luz detallada y acabado coleccionable premium. Debe sentirse musical, intenso y único para el perfil, pero nunca como avatar o personaje. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central de una entidad humana realista para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: retrato cinematográfico o figura de torso con rostro humano expresivo, iluminación realista de piel/material, atmósfera de club oscuro, estética ritual/electrónica, aura de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse underground, intenso, musical y único para el perfil, pero nunca como avatar simpático. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a arte central não figurativa para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${abstractGuardrail} Faça uma visualidade abstrata original de música eletrônica: totem de waveform cinematográfico, mapa de pressão de bass, arquitetura espectral de club, escultura luminosa audio-reativa, campo de sinal modular ou constelação de equalizador. Use fundo escuro luminoso, geometria neon precisa, partículas em camadas, anéis de subgrave, refração de luz detalhada e acabamento colecionável premium. Precisa parecer musical, intenso e único para o perfil, mas nunca um avatar ou personagem. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central de uma entidade humana realista para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: retrato cinematográfico ou figura de torso com rosto humano expressivo, iluminação realista de pele/material, atmosfera de club escuro, estética ritual/eletrônica, aura de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer underground, intenso, musical e único para o perfil, mas nunca um avatar fofinho. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -25389,6 +25389,134 @@ function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, p
     </g>`;
 }
 
+function buildSpiritRealisticEntitySvg(theme, variant, seed = 0, spirit = null, profileSignature = "") {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071421");
+  const dominantStyle = spiritTopStyleKeys(spirit, 1)[0] || "";
+  const family = familyOf(dominantStyle);
+  const profileSeed = hashString(`${seed}::real-human-entity::${profileSignature || "profile"}`) >>> 0;
+  const intense = /psycore|hi_tech|dark|forest|slambient|industrial|neuro|dnb|hard|jump|bass/i.test(`${dominantStyle} ${family}`);
+  const headX = 414 + ((profileSeed % 37) - 18);
+  const headY = 352 + (((profileSeed >> 5) % 27) - 13);
+  const lean = ((profileSeed >> 9) % 19) - 9;
+  const faceRx = 62 + ((profileSeed >> 13) % 18);
+  const faceRy = 88 + ((profileSeed >> 17) % 22);
+  const shoulderWidth = 350 + ((profileSeed >> 21) % 92);
+  const shoulderY = 560 + (((profileSeed >> 25) % 25) - 12);
+  const gazeShift = ((profileSeed >> 3) % 9) - 4;
+  const eyeY = headY - 10 + ((profileSeed >> 7) % 7);
+  const eyeDx = 30 + ((profileSeed >> 11) % 9);
+  const mouthY = headY + 58 + ((profileSeed >> 15) % 8);
+  const safeMotif = variant?.motif === "acid" ? "wave" : (variant?.motif || "star");
+  const hooded = variant?.crown === "hood" || /dark|forest|slambient|psy|ritual|hypnotic/i.test(`${dominantStyle} ${family} ${spirit?.id || ""}`);
+  const eyeOpacity = intense ? "0.96" : "0.78";
+  const shadowOpacity = intense ? "0.54" : "0.38";
+  const skinGradId = `entitySkinGrad${profileSeed}`;
+  const hairGradId = `entityHairGrad${profileSeed}`;
+  const irisGradId = `entityIrisGrad${profileSeed}`;
+
+  const auraRings = Array.from({ length: 7 }, (_, index) => {
+    const mixed = hashString(`${profileSeed}::human-aura::${index}`) >>> 0;
+    const rx = 116 + index * 37 + (mixed % 24);
+    const ry = 58 + index * 21 + ((mixed >> 4) % 16);
+    const rotate = -28 + index * 10 + (mixed % 9);
+    const opacity = 0.34 - index * 0.035;
+    return `<ellipse cx="${headX}" cy="${headY + 74}" rx="${rx}" ry="${ry}" fill="none" stroke="${index % 2 ? b : a}" stroke-width="${2.1 + (index % 3) * 0.72}" stroke-opacity="${Math.max(0.08, opacity).toFixed(2)}" transform="rotate(${rotate} ${headX} ${headY + 74})" />`;
+  }).join("");
+
+  const signalThreads = Array.from({ length: 10 }, (_, index) => {
+    const mixed = hashString(`${profileSeed}::human-thread::${index}::${profileSignature}`) >>> 0;
+    const y = 196 + index * 48 + ((mixed >> 5) % 26);
+    const lift = 62 + (mixed % 104);
+    const stroke = index % 3 === 0 ? c : (index % 2 ? b : a);
+    return `<path d="M82 ${y} C${220 + lift} ${y - 126}, ${562 - lift} ${y + 128}, 748 ${y - 16}" fill="none" stroke="${stroke}" stroke-width="${1.3 + (index % 4) * 0.58}" stroke-opacity="${(0.11 + index * 0.021).toFixed(2)}" stroke-linecap="round" />`;
+  }).join("");
+
+  const particles = Array.from({ length: 70 }, (_, index) => {
+    const mixed = hashString(`${profileSeed}::human-particle::${index}`) >>> 0;
+    const x = 106 + (mixed % 610);
+    const y = 132 + ((mixed >> 7) % 606);
+    const radius = 1.4 + ((mixed >> 16) % 34) / 10;
+    const opacity = 0.13 + ((mixed >> 21) % 46) / 100;
+    return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${index % 4 === 0 ? c : a}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+
+  const spectrum = Array.from({ length: 28 }, (_, index) => {
+    const mixed = hashString(`${profileSeed}::human-spectrum::${index}`) >>> 0;
+    const height = 34 + (mixed % (intense ? 188 : 138));
+    const x = 108 + index * 20;
+    const y = 752 - height;
+    const opacity = 0.14 + ((mixed >> 8) % 36) / 100;
+    return `<rect x="${x}" y="${y}" width="9" height="${height}" rx="5" fill="${index % 3 === 0 ? c : (index % 2 ? b : a)}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+
+  const leftEyeX = headX - eyeDx;
+  const rightEyeX = headX + eyeDx + gazeShift * 0.3;
+  const facePath = `M${headX} ${headY - faceRy} C${headX + faceRx * 0.82} ${headY - faceRy * 0.86}, ${headX + faceRx} ${headY - faceRy * 0.18}, ${headX + faceRx * 0.78} ${headY + faceRy * 0.52} C${headX + faceRx * 0.44} ${headY + faceRy * 1.08}, ${headX - faceRx * 0.44} ${headY + faceRy * 1.08}, ${headX - faceRx * 0.78} ${headY + faceRy * 0.52} C${headX - faceRx} ${headY - faceRy * 0.18}, ${headX - faceRx * 0.82} ${headY - faceRy * 0.86}, ${headX} ${headY - faceRy} Z`;
+  const hoodPath = hooded
+    ? `<path d="M${headX - 146} ${headY + 54} C${headX - 130} ${headY - 116}, ${headX - 48} ${headY - 194}, ${headX + 26} ${headY - 178} C${headX + 114} ${headY - 160}, ${headX + 166} ${headY - 42}, ${headX + 138} ${headY + 72} C${headX + 82} ${headY + 22}, ${headX + 42} ${headY + 2}, ${headX} ${headY + 1} C${headX - 46} ${headY + 2}, ${headX - 90} ${headY + 22}, ${headX - 146} ${headY + 54} Z" fill="url(#${hairGradId})" stroke="${a}" stroke-width="3.2" stroke-opacity="0.34" />
+       <path d="M${headX - 88} ${headY + 6} C${headX - 70} ${headY - 94}, ${headX - 26} ${headY - 126}, ${headX + 24} ${headY - 116} C${headX + 82} ${headY - 102}, ${headX + 104} ${headY - 38}, ${headX + 88} ${headY + 10}" fill="none" stroke="${c}" stroke-width="5" stroke-opacity="0.22" stroke-linecap="round" />`
+    : `<path d="M${headX - 108} ${headY + 4} C${headX - 96} ${headY - 116}, ${headX - 42} ${headY - 168}, ${headX + 22} ${headY - 160} C${headX + 108} ${headY - 150}, ${headX + 128} ${headY - 58}, ${headX + 98} ${headY + 36} C${headX + 58} ${headY - 14}, ${headX + 30} ${headY - 32}, ${headX - 12} ${headY - 34} C${headX - 58} ${headY - 32}, ${headX - 88} ${headY - 12}, ${headX - 108} ${headY + 4} Z" fill="url(#${hairGradId})" stroke="${c}" stroke-width="3" stroke-opacity="0.22" />`;
+
+  return `
+    <g filter="url(#mascotGlow)">
+      <defs>
+        <radialGradient id="${skinGradId}" cx="38%" cy="24%" r="82%">
+          <stop offset="0%" stop-color="#fff2df" stop-opacity="0.98" />
+          <stop offset="44%" stop-color="#b98b78" stop-opacity="0.94" />
+          <stop offset="76%" stop-color="${a}" stop-opacity="0.36" />
+          <stop offset="100%" stop-color="${c}" stop-opacity="0.5" />
+        </radialGradient>
+        <linearGradient id="${hairGradId}" x1="18%" y1="0%" x2="86%" y2="100%">
+          <stop offset="0%" stop-color="#050714" stop-opacity="0.98" />
+          <stop offset="54%" stop-color="${d}" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="${c}" stop-opacity="0.48" />
+        </linearGradient>
+        <radialGradient id="${irisGradId}" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.96" />
+          <stop offset="48%" stop-color="${a}" stop-opacity="0.92" />
+          <stop offset="100%" stop-color="${b}" stop-opacity="0.5" />
+        </radialGradient>
+      </defs>
+      <g clip-path="url(#mascotClip)">
+        <rect x="94" y="144" width="612" height="612" rx="72" fill="${d}" fill-opacity="0.34" stroke="${a}" stroke-opacity="0.18" stroke-width="3" />
+        <ellipse cx="${headX + 16}" cy="790" rx="284" ry="62" fill="${a}" fill-opacity="0.13" />
+        ${signalThreads}
+        <g transform="rotate(${(profileSeed % 34) - 17} ${headX} ${headY + 74})">${auraRings}</g>
+        ${particles}
+        <g transform="translate(${lean} 0)">
+          <path d="M${headX - shoulderWidth / 2} 748 C${headX - shoulderWidth / 2 + 20} ${shoulderY + 46}, ${headX - 118} ${shoulderY - 18}, ${headX - 40} ${shoulderY - 34} C${headX + 74} ${shoulderY - 58}, ${headX + shoulderWidth / 2 - 18} ${shoulderY + 42}, ${headX + shoulderWidth / 2} 748 Z" fill="url(#cloakGrad)" stroke="${b}" stroke-width="3.5" stroke-opacity="0.34" />
+          <path d="M${headX - 180} ${shoulderY + 78} C${headX - 94} ${shoulderY - 6}, ${headX + 82} ${shoulderY - 8}, ${headX + 174} ${shoulderY + 72}" fill="none" stroke="${a}" stroke-width="5" stroke-opacity="0.26" stroke-linecap="round" />
+          <path d="M${headX - 72} ${headY + faceRy * 0.82} C${headX - 62} ${headY + faceRy + 54}, ${headX + 64} ${headY + faceRy + 54}, ${headX + 74} ${headY + faceRy * 0.82} L${headX + 42} ${headY + faceRy + 110} C${headX + 14} ${headY + faceRy + 128}, ${headX - 16} ${headY + faceRy + 126}, ${headX - 44} ${headY + faceRy + 108} Z" fill="url(#${skinGradId})" fill-opacity="0.82" stroke="${a}" stroke-opacity="0.14" />
+          ${hoodPath}
+          <path d="M${headX - faceRx * 0.92} ${headY - 6} C${headX - faceRx * 1.16} ${headY + 6}, ${headX - faceRx * 1.08} ${headY + 50}, ${headX - faceRx * 0.76} ${headY + 54}" fill="url(#${skinGradId})" fill-opacity="0.52" />
+          <path d="M${headX + faceRx * 0.92} ${headY - 4} C${headX + faceRx * 1.16} ${headY + 8}, ${headX + faceRx * 1.08} ${headY + 50}, ${headX + faceRx * 0.76} ${headY + 54}" fill="url(#${skinGradId})" fill-opacity="0.42" />
+          <path d="${facePath}" fill="url(#${skinGradId})" stroke="#f5ffff" stroke-width="2.4" stroke-opacity="0.3" />
+          <path d="M${headX - faceRx * 0.72} ${headY - faceRy * 0.34} C${headX - faceRx * 0.26} ${headY - faceRy * 0.56}, ${headX + faceRx * 0.52} ${headY - faceRy * 0.42}, ${headX + faceRx * 0.76} ${headY + faceRy * 0.34}" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.13" stroke-linecap="round" />
+          <path d="M${headX + faceRx * 0.34} ${headY - faceRy * 0.54} C${headX + faceRx * 0.68} ${headY - faceRy * 0.1}, ${headX + faceRx * 0.52} ${headY + faceRy * 0.54}, ${headX + faceRx * 0.08} ${headY + faceRy * 0.9}" fill="${c}" fill-opacity="${(Number(shadowOpacity) * 0.34).toFixed(2)}" />
+          <path d="M${leftEyeX - 21} ${eyeY - 6} C${leftEyeX - 6} ${eyeY - 16}, ${leftEyeX + 12} ${eyeY - 16}, ${leftEyeX + 25} ${eyeY - 5}" fill="none" stroke="#07101e" stroke-width="5" stroke-linecap="round" opacity="0.42" />
+          <path d="M${rightEyeX - 23} ${eyeY - 5} C${rightEyeX - 8} ${eyeY - 16}, ${rightEyeX + 11} ${eyeY - 16}, ${rightEyeX + 25} ${eyeY - 4}" fill="none" stroke="#07101e" stroke-width="5" stroke-linecap="round" opacity="0.42" />
+          <ellipse cx="${leftEyeX + gazeShift}" cy="${eyeY + 9}" rx="18" ry="9" fill="#07101e" fill-opacity="0.66" />
+          <ellipse cx="${rightEyeX + gazeShift}" cy="${eyeY + 9}" rx="18" ry="9" fill="#07101e" fill-opacity="0.66" />
+          <ellipse cx="${leftEyeX + gazeShift}" cy="${eyeY + 9}" rx="8.5" ry="6.2" fill="url(#${irisGradId})" fill-opacity="${eyeOpacity}" />
+          <ellipse cx="${rightEyeX + gazeShift}" cy="${eyeY + 9}" rx="8.5" ry="6.2" fill="url(#${irisGradId})" fill-opacity="${eyeOpacity}" />
+          <circle cx="${leftEyeX + 4 + gazeShift}" cy="${eyeY + 6}" r="2.8" fill="#ffffff" fill-opacity="0.9" />
+          <circle cx="${rightEyeX + 4 + gazeShift}" cy="${eyeY + 6}" r="2.8" fill="#ffffff" fill-opacity="0.9" />
+          <path d="M${headX - 8} ${headY + 2} C${headX - 18} ${headY + 34}, ${headX - 12} ${headY + 54}, ${headX + 8} ${headY + 62}" fill="none" stroke="#2b1e24" stroke-width="4.2" stroke-opacity="0.32" stroke-linecap="round" />
+          <path d="M${headX - 12} ${headY + 64} C${headX - 2} ${headY + 70}, ${headX + 11} ${headY + 70}, ${headX + 21} ${headY + 63}" fill="none" stroke="#fff2df" stroke-width="2.4" stroke-opacity="0.18" stroke-linecap="round" />
+          <path d="M${headX - 36} ${mouthY} C${headX - 12} ${mouthY + 12}, ${headX + 16} ${mouthY + 12}, ${headX + 38} ${mouthY}" fill="none" stroke="#2a1520" stroke-width="4.6" stroke-opacity="0.52" stroke-linecap="round" />
+          <path d="M${headX - 22} ${mouthY + 7} C${headX - 4} ${mouthY + 14}, ${headX + 18} ${mouthY + 12}, ${headX + 30} ${mouthY + 5}" fill="none" stroke="#fff0df" stroke-width="2.2" stroke-opacity="0.16" stroke-linecap="round" />
+          <path d="M${headX} ${headY + faceRy + 48} C${headX - 24} ${headY + 140}, ${headX - 18} ${headY + 244}, ${headX + 4} ${headY + 328} C${headX + 32} ${headY + 242}, ${headX + 38} ${headY + 140}, ${headX} ${headY + faceRy + 48} Z" fill="${c}" fill-opacity="0.2" stroke="${a}" stroke-width="2.6" stroke-opacity="0.28" />
+        </g>
+        <g opacity="0.72">${spectrum}</g>
+        <g opacity="0.78">${spiritMotifSvg(safeMotif, 604, 190, 0.36, theme, 0.8)}</g>
+        <path d="M122 724 C242 660 356 778 488 706 C596 648 636 720 716 676" fill="none" stroke="${a}" stroke-opacity="0.36" stroke-width="5" stroke-linecap="round" />
+      </g>
+    </g>`;
+}
+
 function collectibleVariationToken() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -25700,7 +25828,7 @@ function buildLocalSpiritCollectibleImage(
   const mascotSvg = hasBackgroundImage
     ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
        <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
-    : buildSpiritAbstractSignalSvg(theme, variant, seed, spirit, profileSignature);
+    : buildSpiritRealisticEntitySvg(theme, variant, seed, spirit, profileSignature);
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">

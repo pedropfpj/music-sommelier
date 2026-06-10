@@ -16,7 +16,7 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v2";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v3";
 
 function spiritImageOwnerKey(body = {}) {
   const userIdentity = trimText(
@@ -149,13 +149,12 @@ module.exports = async function handler(req, res) {
 
   const safePrompt = [
     prompt,
-    "Square 1024x1024 premium non-figurative collectible artwork.",
-    "Generate only the central abstract musical-spirit artwork; the app will add all text, stats, frame, and UI later.",
-    "Non-negotiable: no people, no human persona, no face, no head, no eyes, no mouth, no body, no hands, no humanoid silhouette, no avatar, no mascot, no character, no portrait, no DJ, no robot, no creature, no skull, no animal, no emoji, no doll, no outfit, and no wearable accessories.",
-    "Render a premium abstract electronic-music object instead: waveform sculpture, bass-pressure field, spectral club architecture, luminous audio-reactive totem, modular synth signal field, equalizer constellation, speaker pressure rings, cables, particles, refraction, and neon geometry.",
-    "Art direction: cinematic dark club atmosphere, precise high-detail light, polished collectible finish, strong color identity, layered signal paths, sub-bass rings, audio spectrum bars, and musical intensity.",
-    "It can feel mystical or cosmic, but it must remain non-figurative and object/signal-based. If any instruction conflicts with the no-avatar rule, the no-avatar rule wins.",
-    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels. No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
+    "Square 1024x1024 premium collectible artwork centered on a fictional adult human-like musical spirit entity.",
+    "Generate only the central realistic human entity artwork; the app will add all text, stats, frame, and UI later.",
+    "The figure must have visible human presence: expressive face, head, shoulders or upper body, cinematic lighting, realistic skin/material detail, ritual or dark-club styling, luminous waveform aura, equalizer particles, sub-bass rings, and underground electronic-music intensity.",
+    "Strict style: realistic, cinematic, editorial, high-detail and music-reactive; not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic avatar, not a literal DJ photo.",
+    "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no logos, no watermarks, no readable text, no numbers, and no UI panels.",
+    "Avoid generic stock portraits, plain party photos, clutter, turntables as the main subject, and any cute avatar language. Make the entity feel dark, premium, personal, and sonically alive."
   ].join(" ");
 
   try {
