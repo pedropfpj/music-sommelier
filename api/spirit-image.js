@@ -151,10 +151,10 @@ module.exports = async function handler(req, res) {
     prompt,
     "Square 1024x1024 premium collectible artwork centered on a fictional adult human-like musical spirit entity.",
     "Generate only the central realistic human entity artwork; the app will add all text, stats, frame, and UI later.",
-    "The figure must have visible human presence: expressive face, head, shoulders or upper body, cinematic lighting, realistic skin/material detail, ritual or dark-club styling, luminous waveform aura, equalizer particles, sub-bass rings, and underground electronic-music intensity.",
-    "Strict style: realistic, cinematic, editorial, high-detail and music-reactive; not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic avatar, not a literal DJ photo.",
+    "The figure must have visible human presence: charismatic expressive face, warm believable eyes, head, shoulders or upper body, cinematic lighting, realistic skin/material detail, ritual or dark-club styling, luminous waveform aura, equalizer particles, sub-bass rings, and underground electronic-music intensity.",
+    "Strict style: realistic, cinematic, editorial, high-detail, emotionally magnetic, and music-reactive; not mask-like, not mannequin-like, not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic avatar, not a literal DJ photo.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no logos, no watermarks, no readable text, no numbers, and no UI panels.",
-    "Avoid generic stock portraits, plain party photos, clutter, turntables as the main subject, and any cute avatar language. Make the entity feel dark, premium, personal, and sonically alive."
+    "Avoid generic stock portraits, blank stares, plain party photos, clutter, turntables as the main subject, and any cute avatar language. Make the entity feel dark, premium, charismatic, personal, and sonically alive."
   ].join(" ");
 
   try {

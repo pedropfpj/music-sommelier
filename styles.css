@@ -6048,6 +6048,14 @@ input[type="range"] {
   align-items: start;
 }
 
+.spirit-collectible.awaiting-image .spirit-collectible-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.spirit-collectible.awaiting-image .spirit-collectible-meta {
+  max-width: 760px;
+}
+
 .spirit-collectible-image {
   width: 100%;
   max-width: 520px;
