@@ -16,7 +16,7 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v1";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v2";
 
 function spiritImageOwnerKey(body = {}) {
   const userIdentity = trimText(
@@ -149,16 +149,13 @@ module.exports = async function handler(req, res) {
 
   const safePrompt = [
     prompt,
-    "Square 1024x1024 premium collectible character artwork.",
-    "Generate only the central musical-spirit character illustration; the app will add all text, stats, frame, and UI later.",
-    "Non-negotiable: the image must feature one original fictional adult human persona, masculine-presenting, feminine-presenting, or androgynous depending on the supplied profile signature.",
-    "Render a realistic premium music character portrait, waist-up or full body, with believable human anatomy, neck, shoulders, torso, arms, hands, natural face proportions, expressive eyes, visible hairstyle or headwear, stylish club/festival outfit, headphones, accessories, and body presence.",
-    "The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object tied to the music taste.",
-    "Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim lighting, detailed fabric, jewelry, gloves or a distinctive hand gesture, dramatic waveform halo, polished collectible character-card finish.",
-    "It can feel mystical or cosmic, but it must read as a premium human music persona, not a cute mascot, toy, chibi, emoji, floating head, abstract ball, logo, mascot icon, orb, flat vector, childish doll, simple cartoon, puppet, or plain symbol.",
-    "Make it elegant, polished, high-detail, readable at small card size, and visually distinct for the provided user signature: different color mood, outfit, expression, prop, hairstyle, face, and aura.",
-    "Avoid generic abstract circles, avoid simplified avatar proportions, avoid big round emoji heads, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels. If any instruction conflicts with realistic adult human character quality, the realistic adult human rule wins.",
-    "No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
+    "Square 1024x1024 premium non-figurative collectible artwork.",
+    "Generate only the central abstract musical-spirit artwork; the app will add all text, stats, frame, and UI later.",
+    "Non-negotiable: no people, no human persona, no face, no head, no eyes, no mouth, no body, no hands, no humanoid silhouette, no avatar, no mascot, no character, no portrait, no DJ, no robot, no creature, no skull, no animal, no emoji, no doll, no outfit, and no wearable accessories.",
+    "Render a premium abstract electronic-music object instead: waveform sculpture, bass-pressure field, spectral club architecture, luminous audio-reactive totem, modular synth signal field, equalizer constellation, speaker pressure rings, cables, particles, refraction, and neon geometry.",
+    "Art direction: cinematic dark club atmosphere, precise high-detail light, polished collectible finish, strong color identity, layered signal paths, sub-bass rings, audio spectrum bars, and musical intensity.",
+    "It can feel mystical or cosmic, but it must remain non-figurative and object/signal-based. If any instruction conflicts with the no-avatar rule, the no-avatar rule wins.",
+    "Avoid generic abstract circles, avoid plain DJ or turntable imagery, avoid clutter, avoid UI panels. No readable text, no numbers, no logos, no watermarks, no real people, no celebrity likeness."
   ].join(" ");
 
   try {

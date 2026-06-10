@@ -12132,7 +12132,7 @@ const I18N = {
     spiritPanelTitle: "Seu espírito musical",
     spiritIntro: "A cada 10 músicas curtidas, seu espírito musical é revisado.",
     spiritBadge: "Espírito desbloqueado",
-    spiritAvatarAlt: "Avatar do espírito {name}",
+    spiritAvatarAlt: "Arte abstrata do espírito {name}",
     spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para revelar seu espírito.",
     spiritProgressUnlocked: "Perfil consolidado com {current} músicas curtidas.",
     spiritUnlockedToast: "Espírito revelado: {name}",
@@ -12162,7 +12162,7 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito tem variações de personagem, frase e status geradas pelo seu gosto musical.",
+    spiritCollectibleHintLocal: "Arte pessoal ativa: cada espírito tem variações abstratas de sinal, frase e status geradas pelo seu gosto musical.",
     spiritCollectibleHintApi: "Arte premium por IA criada para este perfil. Use Gerar arte única para testar variações no beta.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Por enquanto, o app usa uma versão local bonita sem custo.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
@@ -12752,7 +12752,7 @@ const I18N = {
     spiritPanelTitle: "Your musical spirit",
     spiritIntro: "Every 10 liked songs, your musical spirit is reviewed.",
     spiritBadge: "Spirit unlocked",
-    spiritAvatarAlt: "Spirit avatar {name}",
+    spiritAvatarAlt: "Abstract spirit artwork {name}",
     spiritProgressLocked: "Liked songs: {current}/{target}. {remaining} to reveal your spirit.",
     spiritProgressUnlocked: "Profile consolidated with {current} liked songs.",
     spiritUnlockedToast: "Spirit revealed: {name}",
@@ -12782,7 +12782,7 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "Personal artwork is active: each spirit has character, quote, and status variations generated from your music taste.",
+    spiritCollectibleHintLocal: "Personal artwork is active: each spirit has abstract signal, quote, and status variations generated from your music taste.",
     spiritCollectibleHintApi: "Premium AI artwork created for this profile. Use Generate unique artwork to test beta variations.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. For now, the app uses a polished local version with no extra cost.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
@@ -13369,7 +13369,7 @@ const I18N = {
     spiritPanelTitle: "Tu espíritu musical",
     spiritIntro: "Cada 10 canciones con like, tu espíritu musical se revisa.",
     spiritBadge: "Espíritu desbloqueado",
-    spiritAvatarAlt: "Avatar del espíritu {name}",
+    spiritAvatarAlt: "Arte abstracto del espíritu {name}",
     spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para revelar tu espíritu.",
     spiritProgressUnlocked: "Perfil consolidado con {current} canciones con like.",
     spiritUnlockedToast: "Espíritu revelado: {name}",
@@ -13399,7 +13399,7 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Arte personal activa: cada espíritu tiene variaciones de personaje, frase y estado generadas por tu gusto musical.",
+    spiritCollectibleHintLocal: "Arte personal activa: cada espíritu tiene variaciones abstractas de señal, frase y estado generadas por tu gusto musical.",
     spiritCollectibleHintApi: "Arte premium con IA creada para este perfil. Usa Generar arte único para probar variaciones beta.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Por ahora, la app usa una versión local cuidada sin coste extra.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
@@ -24610,48 +24610,47 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 }
 
 function spiritCharacterIdentity(spirit, profileSignature = "") {
-  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-identity`) >>> 0;
-  const genderPresentations = [
-    "masculine-presenting adult",
-    "feminine-presenting adult",
-    "androgynous adult",
-    "masculine-presenting adult",
-    "feminine-presenting adult"
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::signal-identity`) >>> 0;
+  const signalForms = [
+    "waveform sculpture",
+    "bass-pressure architecture",
+    "spectral light grid",
+    "modular signal field",
+    "equalizer constellation"
   ];
   const identityBySpirit = {
-    ritual_cosmico: "visionary ceremonial performer with luminous festival robes, confident calm face, symbolic jewelry, and hands shaping a psychedelic trance halo",
-    alquimista_sombrio: "dark-techno alchemist with tailored black cyber-club coat, sharp eyes, metallic rings, and one hand controlling a shadowy waveform",
-    acelerador_quantico: "high-speed rave pilot with technical jacket, visor accents, athletic pose, and electric data trails around the hands",
-    engenheiro_groove: "groove engineer with elegant headphones, sculptural hair, precise hand gesture, luxury jacket, and holographic mixer light",
-    arquiteto_hipnotico: "hypnotic architect with clean tailored outfit, focused expression, geometric light blueprint, and poised conductor hands",
-    cacador_bass: "bass hunter with strong street-club silhouette, heavy jacket or tactical vest, intense eyes, hands feeling low-frequency pressure, and subwoofer energy waves",
-    viajante_organico: "organic sound traveler with natural textures, braided or flowing hair, earthy futuristic clothing, soft confident face, and botanical audio light",
-    explorador_fractal: "fractal explorer with experimental fashion, expressive gaze, asymmetric accessories, and floating micro-detail sound geometry"
+    ritual_cosmico: "psychedelic trance halo, mandala rings, harmonic laser arcs, and luminous ritual geometry",
+    alquimista_sombrio: "dark spectral vapor, sub-bass pressure, shadow grids, and metallic waveform chemistry",
+    acelerador_quantico: "high-speed data trails, sharp transient shards, quantum rings, and precision signal bursts",
+    engenheiro_groove: "clean groove grid, rounded bass pulses, swing markers, and holographic mixer light",
+    arquiteto_hipnotico: "hypnotic blueprint lines, repeating pressure corridors, acid curves, and architectural loops",
+    cacador_bass: "subwoofer pressure rings, heavy low-frequency waves, impact meters, and bass particle trails",
+    viajante_organico: "organic audio filaments, warm analog gradients, botanical signal paths, and breathing light",
+    explorador_fractal: "fractal nodes, asymmetric micro-detail, broken rhythm geometry, and experimental signal maps"
   };
   return [
-    `Character identity: ${genderPresentations[seed % genderPresentations.length]}`,
+    `Abstract signal identity: ${signalForms[seed % signalForms.length]}`,
     identityBySpirit[spirit?.id] || identityBySpirit.engenheiro_groove,
-    "The character must look like a believable adult person with neck, shoulders, torso, arms and hands, not a mascot or simplified avatar"
+    "No person, face, body, mascot, avatar, portrait, creature, or humanoid element"
   ].join(". ");
 }
 
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
-  const characterIdentity = spiritCharacterIdentity(spirit, profileSignature);
-  const realisticGuardrail = "Non-negotiable human realism: render a believable adult human persona with neck, shoulders, torso, arms, hands, facial structure, hairstyle, clothing, accessories, and body presence. Do not render a mascot, cute creature, round emoji face, simplified doll, stick body, orb head, flat vector avatar, toy, childlike character, or abstract symbol. If any style direction conflicts with this, the realistic adult human persona rule wins.";
+  const abstractGuardrail = "Non-negotiable: do not render any person, face, head, eyes, mouth, body, hands, humanoid silhouette, avatar, mascot, cartoon figure, doll, portrait, DJ, character, creature, skull, emoji, robot, animal, or wearable outfit. The artwork must be a non-figurative sonic object: waveform sculpture, bass-pressure field, spectral architecture, light grid, equalizer geometry, signal particles, cables, speaker pressure rings, abstract energy and club-light atmosphere only.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
-    variant?.crown ? `head detail: ${variant.crown}` : "",
-    spiritText?.archetype ? `personality: ${spiritText.archetype}` : ""
+    variant?.crown ? `motion accent: ${variant.crown}` : "",
+    spiritText?.archetype ? `archetype: ${spiritText.archetype}` : ""
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central character artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Make one original fictional adult human character portrait, waist-up or full body, with believable human anatomy, expressive eyes, natural face proportions, visible hairstyle or headwear, premium club/festival outfit, headphones, accessories, shoulders, torso, and hands. The character should conduct neon waveform energy, touch a holographic mixer, or interact with a sound object connected to the music taste. Art direction: semi-realistic premium digital painting, luxury cyber-club fashion, cinematic rim light, detailed fabric, jewelry, gloves or gesture, dramatic waveform halo, polished collectible character-card finish. It can feel mystical or cosmic, but it must look like a stylish human music persona, not a mascot, toy, floating head, chibi, emoji, ball, orb, logo, simple cartoon, flat vector, stick figure, or abstract icon. It must be different from other spirits: unique gender presentation, color mood, silhouette, expression, clothing, prop, hairstyle, face, and energy aura. Dark luminous background, cinematic neon, high detail, centered character, readable at small card size, close to a premium illustrated game/music character card. Avoid plain DJ/turntable imagery, avoid clutter, no real people or celebrity likeness. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central non-figurative artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${abstractGuardrail} Make an original abstract electronic-music visual: a cinematic waveform totem, bass-frequency pressure map, spectral club architecture, luminous audio-reactive sculpture, modular synth signal field, or equalizer constellation. Use dark luminous background, precise neon geometry, layered particles, sub-bass rings, high-detail light refraction, and a polished collectible finish. It must feel premium, intense, musical, and unique to the profile, but never like an avatar or character. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración del personaje central para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Haz un retrato original de personaje humano adulto ficticio, de cintura para arriba o cuerpo entero, con anatomía humana creíble, rostro expresivo, proporciones naturales, mirada con intención, cabello o accesorio de cabeza visible, ropa premium de club/festival, audífonos, accesorios, hombros, torso y manos. El personaje debe conducir ondas de neón, tocar un mixer holográfico o interactuar con un objeto sonoro ligado al gusto musical. Dirección artística: pintura digital premium semi-realista, moda cyber-club de lujo, luz cinematográfica, telas detalladas, joyería, guantes o gesto, halo de waveform dramático y acabado coleccionable. Puede sentirse místico o cósmico, pero debe verse como una persona musical con estilo, no como mascota, juguete, cabeza flotante, chibi, emoji, bola, orbe, logo, caricatura simple, vector plano, muñeco infantil o icono abstracto. Debe ser distinto de otros espíritus: presentación de género, color, silueta, expresión, ropa, prop, peinado, rostro y aura propios. Fondo oscuro luminoso, neón cinematográfico, alto detalle, personaje centrado y legible pequeño, cercano a una tarjeta premium de personaje musical. Evita DJ/tornamesa simple, evita exceso de elementos, sin personas reales ni parecido con celebridades. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central no figurativa para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${abstractGuardrail} Haz un visual abstracto original de música electrónica: tótem de waveform cinematográfico, mapa de presión de bajo, arquitectura espectral de club, escultura audio-reactiva luminosa, campo de señal modular o constelación de ecualizador. Usa fondo oscuro luminoso, geometría neón precisa, partículas en capas, anillos de subgrave, refracción de luz detallada y acabado coleccionable premium. Debe sentirse musical, intenso y único para el perfil, pero nunca como avatar o personaje. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a ilustração do personagem central para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${characterIdentity}. ${realisticGuardrail} Faça um retrato original de personagem humano adulto fictício, meio corpo ou corpo inteiro, com anatomia humana crível, proporções naturais, rosto expressivo, olhar com intenção, cabelo ou adereço de cabeça visível, roupa premium de club/festival, fones de ouvido, acessórios, ombros, torso e mãos. O personagem deve conduzir ondas neon, tocar um mixer holográfico ou interagir com um objeto sonoro ligado ao gosto musical. Direção artística: pintura digital premium semi-realista, moda cyber-club de luxo, luz cinematográfica, tecido detalhado, joias, luvas ou gesto marcante, halo de waveform dramático e acabamento colecionável. Pode ser místico ou cósmico, mas precisa parecer uma pessoa musical estilosa, não mascote, brinquedo, cabeça flutuante, chibi, emoji, bola, orbe, logo, caricatura simples, vetor chapado, boneco infantil ou ícone abstrato. Ele precisa ser diferente dos outros espíritos: apresentação masculina, feminina ou andrógina, cor, silhueta, expressão, roupa, prop, cabelo, rosto e aura próprias. Fundo escuro luminoso, neon cinematográfico, alto detalhe, personagem centralizado e legível pequeno, próximo de um card premium de personagem musical. Evite DJ/toca-discos simples, evite poluição visual, sem pessoas reais ou semelhança com celebridades. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central não figurativa para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${abstractGuardrail} Faça uma visualidade abstrata original de música eletrônica: totem de waveform cinematográfico, mapa de pressão de bass, arquitetura espectral de club, escultura luminosa audio-reativa, campo de sinal modular ou constelação de equalizador. Use fundo escuro luminoso, geometria neon precisa, partículas em camadas, anéis de subgrave, refração de luz detalhada e acabamento colecionável premium. Precisa parecer musical, intenso e único para o perfil, mas nunca um avatar ou personagem. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -25257,6 +25256,98 @@ function buildSpiritHumanAvatarSvg(theme, variant, seed = 0, spirit = null) {
     </g>`;
 }
 
+function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, profileSignature = "") {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071421");
+  const dominantStyle = spiritTopStyleKeys(spirit, 1)[0] || "";
+  const family = familyOf(dominantStyle);
+  const centerX = 420 + ((seed % 25) - 12);
+  const centerY = 430 + (((seed >> 4) % 31) - 15);
+  const safeMotif = variant?.motif === "acid" ? "wave" : (variant?.motif || "star");
+  const tempoBias = /psycore|hi_tech|dnb|hard|jump/i.test(`${dominantStyle} ${family}`) ? 1.22 : 1;
+
+  const rings = Array.from({ length: 7 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-ring::${index}::${profileSignature}`) >>> 0;
+    const rx = 92 + index * 43 + (mixed % 18);
+    const ry = 48 + index * 25 + ((mixed >> 5) % 14);
+    const opacity = 0.28 - index * 0.026;
+    const rotate = -22 + index * 9 + (mixed % 7);
+    return `<ellipse cx="${centerX}" cy="${centerY}" rx="${rx}" ry="${ry}" fill="none" stroke="${index % 2 ? b : a}" stroke-width="${2.4 + (index % 3) * 0.7}" stroke-opacity="${Math.max(0.08, opacity).toFixed(2)}" transform="rotate(${rotate} ${centerX} ${centerY})" />`;
+  }).join("");
+
+  const spectrum = Array.from({ length: 34 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-spectrum::${index}::${profileSignature}`) >>> 0;
+    const height = Math.round((34 + (mixed % 178)) * tempoBias);
+    const x = 116 + index * 18;
+    const y = 706 - height;
+    const opacity = 0.22 + ((mixed >> 8) % 42) / 100;
+    const color = index % 3 === 0 ? c : (index % 2 ? b : a);
+    return `<rect x="${x}" y="${y}" width="8" height="${height}" rx="4" fill="${color}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+
+  const signalThreads = Array.from({ length: 11 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-thread::${index}::${profileSignature}`) >>> 0;
+    const y = 220 + index * 42 + ((mixed >> 4) % 24);
+    const lift = 62 + (mixed % 90);
+    const stroke = index % 2 ? b : a;
+    return `<path d="M96 ${y} C${240 + lift} ${y - 120}, ${558 - lift} ${y + 128}, 740 ${y - 18}" fill="none" stroke="${stroke}" stroke-width="${1.5 + (index % 4) * 0.62}" stroke-opacity="${(0.1 + index * 0.022).toFixed(2)}" stroke-linecap="round" />`;
+  }).join("");
+
+  const particles = Array.from({ length: 56 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-particle::${index}::${profileSignature}`) >>> 0;
+    const x = 108 + (mixed % 620);
+    const y = 128 + ((mixed >> 7) % 590);
+    const radius = 1.8 + ((mixed >> 15) % 32) / 10;
+    const opacity = 0.14 + ((mixed >> 20) % 48) / 100;
+    return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${index % 4 === 0 ? c : a}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+
+  const shards = Array.from({ length: 13 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-shard::${index}::${profileSignature}`) >>> 0;
+    const x = 128 + (mixed % 582);
+    const y = 142 + ((mixed >> 6) % 520);
+    const rotation = (mixed % 80) - 40;
+    const scale = 0.58 + ((mixed >> 14) % 52) / 100;
+    return `<path d="M0 -28 L18 0 L0 28 L-18 0 Z" fill="${index % 2 ? b : c}" fill-opacity="0.12" stroke="${index % 2 ? a : b}" stroke-opacity="0.36" stroke-width="3" transform="translate(${x} ${y}) rotate(${rotation}) scale(${scale.toFixed(2)})" />`;
+  }).join("");
+
+  const coreBars = Array.from({ length: 15 }, (_, index) => {
+    const mixed = hashString(`${seed}::abstract-core::${index}`) >>> 0;
+    const height = 54 + (mixed % 168);
+    const x = centerX - 112 + index * 16;
+    const y = centerY + 120 - height;
+    return `<rect x="${x}" y="${y}" width="9" height="${height}" rx="5" fill="${index % 2 ? b : a}" fill-opacity="${(0.44 + (index % 5) * 0.06).toFixed(2)}" />`;
+  }).join("");
+
+  return `
+    <g filter="url(#mascotGlow)">
+      <ellipse cx="${centerX}" cy="794" rx="310" ry="58" fill="${a}" fill-opacity="0.13" />
+      <rect x="126" y="150" width="620" height="604" rx="72" fill="${d}" fill-opacity="0.28" stroke="${a}" stroke-opacity="0.15" stroke-width="3" />
+      ${signalThreads}
+      ${particles}
+      ${shards}
+      <g transform="rotate(${(seed % 36) - 18} ${centerX} ${centerY})">
+        ${rings}
+        <circle cx="${centerX}" cy="${centerY}" r="196" fill="${a}" fill-opacity="0.045" />
+        <circle cx="${centerX}" cy="${centerY}" r="118" fill="${c}" fill-opacity="0.08" stroke="${b}" stroke-opacity="0.28" stroke-width="3" />
+        <path d="M${centerX - 206} ${centerY + 4} C${centerX - 124} ${centerY - 122}, ${centerX + 116} ${centerY + 136}, ${centerX + 218} ${centerY - 16}" fill="none" stroke="${c}" stroke-opacity="0.56" stroke-width="8" stroke-linecap="round" />
+        <path d="M${centerX - 226} ${centerY + 54} C${centerX - 112} ${centerY - 44}, ${centerX + 104} ${centerY + 94}, ${centerX + 232} ${centerY - 82}" fill="none" stroke="${a}" stroke-opacity="0.42" stroke-width="5" stroke-linecap="round" />
+      </g>
+      <g opacity="0.88">${coreBars}</g>
+      <g transform="translate(${centerX - 76} ${centerY - 80}) rotate(${(seed % 28) - 14})">
+        <path d="M76 0 L152 82 L76 164 L0 82 Z" fill="${c}" fill-opacity="0.2" stroke="${a}" stroke-width="5" stroke-opacity="0.72" />
+        <path d="M76 22 L128 82 L76 142 L24 82 Z" fill="${a}" fill-opacity="0.18" stroke="${b}" stroke-width="3" stroke-opacity="0.54" />
+        <circle cx="76" cy="82" r="22" fill="#f7ffff" fill-opacity="0.22" />
+      </g>
+      <g opacity="0.76">${spiritMotifSvg(safeMotif, 602, 184, 0.38, theme, 0.82)}</g>
+      <g opacity="0.74">${spectrum}</g>
+      <path d="M140 744 C250 680 356 790 468 722 C578 656 646 742 734 690" fill="none" stroke="${a}" stroke-opacity="0.38" stroke-width="5" stroke-linecap="round" />
+      <path d="M172 782 H700" stroke="${b}" stroke-opacity="0.22" stroke-width="3" stroke-linecap="round" />
+    </g>`;
+}
+
 function collectibleVariationToken() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -25568,7 +25659,7 @@ function buildLocalSpiritCollectibleImage(
   const mascotSvg = hasBackgroundImage
     ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
        <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
-    : buildSpiritHumanAvatarSvg(theme, variant, seed, spirit);
+    : buildSpiritAbstractSignalSvg(theme, variant, seed, spirit, profileSignature);
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -26194,7 +26285,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   try {
     collectible = await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
   } catch (error) {
-    console.warn("Spirit collectible unavailable; keeping avatar fallback.", error);
+    console.warn("Spirit collectible unavailable; keeping static artwork fallback.", error);
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleHintLocal");
   }
   if (collectible?.imageUrl) {
