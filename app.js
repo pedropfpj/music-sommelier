@@ -7052,7 +7052,48 @@ const STRICT_FAMILY_SEED_STYLES = new Set(["dark_progressive", "dark_psy", "dark
 const STRICT_ARTIST_MATCH_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
 const LOCK_SEED_FROM_CATALOG_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
 const NO_CROSS_STYLE_FALLBACK_STYLES = new Set(["psycore"]);
-const NO_BROAD_STYLE_HYDRATION_STYLES = new Set(["ambient", "downtempo", "chillout"]);
+const NO_BROAD_STYLE_HYDRATION_STYLES = new Set(["ambient", "downtempo", "chillout", "dark_psy", "dark_experimental", "psycore"]);
+const DARK_UNDERGROUND_DISCOVERY_STYLES = new Set(["dark_psy", "dark_experimental", "psycore"]);
+const UNDERGROUND_DISCOVERY_STYLES = new Set([
+  "dark_psy",
+  "dark_experimental",
+  "psycore",
+  "forest_psy",
+  "hi_tech",
+  "freeform",
+  "slambient"
+]);
+const UNDERGROUND_SOURCE_TERMS = [
+  "underground",
+  "bandcamp",
+  "soundcloud",
+  "independent",
+  "independente",
+  "naturaiz",
+  "voodoo hoodoo",
+  "phyllorum",
+  "parvati",
+  "sangoma",
+  "sonic loom",
+  "kamino",
+  "osom",
+  "zenon"
+];
+const DARK_UNDERGROUND_SIGNAL_TERMS = [
+  "psycore",
+  "darkpsy",
+  "dark psy",
+  "dark experimental",
+  "experimental",
+  "slambient",
+  "hi-tech",
+  "hitech",
+  "ritual",
+  "obscuro",
+  "sombrio",
+  "extreme",
+  "extremo"
+];
 const TECHNO_CROSSOVER_FORBIDDEN_TERMS = [
   "trap",
   "hip hop",
@@ -9814,7 +9855,7 @@ function artistAllowedForStyle(style, artistName) {
 }
 
 function requiresSeedAnchorForDynamicStyle(style) {
-  return style === "forest_psy" || style === "psy_comercial";
+  return style === "forest_psy" || style === "psy_comercial" || DARK_UNDERGROUND_DISCOVERY_STYLES.has(style);
 }
 
 function artistSeedAnchoredForStyle(style, artistName) {
@@ -20203,7 +20244,7 @@ async function searchNewArtistsByStyle() {
     update(48, t("newArtistsSearching"));
     const fromCatalog = collectNewArtistsFromCatalog(style, knownSet);
     update(72, t("newArtistsSearching"));
-    const fromItunes = await collectNewArtistsFromItunes(style, knownSet);
+    const fromItunes = darkUndergroundIntentStyle(style) ? [] : await collectNewArtistsFromItunes(style, knownSet);
     const fromSignals = collectNewArtistsFromSignals(style, knownSet);
     const combined = new Map();
     [...fromCatalog, ...fromItunes, ...fromSignals].forEach((item) => {
@@ -27022,6 +27063,96 @@ function trackSourceTrustScore(track) {
   return score;
 }
 
+function textHasAnySignal(text = "", terms = []) {
+  const normalizedText = normalize(text || "");
+  if (!normalizedText) return false;
+  return terms.some((term) => normalizedText.includes(normalize(term)));
+}
+
+function undergroundIntentStyle(style = "") {
+  return UNDERGROUND_DISCOVERY_STYLES.has(String(style || "").trim());
+}
+
+function darkUndergroundIntentStyle(style = "") {
+  return DARK_UNDERGROUND_DISCOVERY_STYLES.has(String(style || "").trim());
+}
+
+function trackUndergroundIntentScore(track, prefs = {}) {
+  if (!track) return 0;
+  prefs = normalizeRecommendationPrefs(prefs);
+  const style = prefs.style || track.style || "";
+  if (!undergroundIntentStyle(style)) return 0;
+
+  const source = normalize(track.source || "");
+  const bpmValue = Number(track.bpmExact);
+  const text = [
+    track.artist,
+    track.song,
+    track.label,
+    track.artistGenre,
+    track.artistProfileHint,
+    track.artistBio,
+    track.labelBio,
+    track.vibe,
+    track.source
+  ].filter(Boolean).join(" ");
+  const hasSceneSource = textHasAnySignal(text, UNDERGROUND_SOURCE_TERMS);
+  const hasDarkSignal = textHasAnySignal(text, DARK_UNDERGROUND_SIGNAL_TERMS);
+  const seedAnchored = artistSeedAnchoredForStyle(style, track.artist);
+  const trustedCurated = isTrustedCuratedCatalogTrack(track);
+  const dynamic = isDynamicSource(track.source);
+  let score = 0;
+
+  if (seedAnchored) score += darkUndergroundIntentStyle(style) ? 4.4 : 2.2;
+  if (trustedCurated) score += darkUndergroundIntentStyle(style) ? 4.8 : 2.6;
+  else if (!dynamic) score += 1.4;
+  if (source.includes("dataset") || source.includes("local_seed")) score += 2.8;
+  if (source.includes("soundcloud") || source.includes("supplement")) score += 1.8;
+  if (track.bandcampTrackUrl || track.bandcampUrl) score += 2.3;
+  if (trackHasDirectSoundCloudTrack(track)) score += 1.7;
+  if (trackHasEmbeddableBandcampTrack(track)) score += 1.1;
+  if (hasSceneSource) score += 1.9;
+  if (hasDarkSignal) score += darkUndergroundIntentStyle(style) ? 2.6 : 0.9;
+
+  if (style === "psycore") {
+    if (Number.isFinite(bpmValue) && bpmValue >= 200) score += 2.2;
+    else if (Number.isFinite(bpmValue) && bpmValue >= 180) score += 1.4;
+    else if (Number.isFinite(bpmValue) && bpmValue > 0 && bpmValue < 175) score -= 4.8;
+  }
+
+  if (style === "dark_psy") {
+    if (Number.isFinite(bpmValue) && bpmValue >= 154 && bpmValue <= 175) score += 1.35;
+    else if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(style, bpmValue)) score -= 3.2;
+  }
+
+  if (style === "dark_experimental") {
+    if (Number.isFinite(bpmValue) && bpmValue >= 175) score += 1.45;
+    if (hasDarkSignal) score += 0.9;
+  }
+
+  if (darkUndergroundIntentStyle(style)) {
+    const normalizedText = normalize(text);
+    const hasSpecificSignal = hasDarkSignal || seedAnchored;
+    if (normalizedText.includes("psytrance") && !hasSpecificSignal) score -= 5.5;
+    if ((source.includes("itunesstyle") || source.includes("deezerstyle")) && !trustedCurated) score -= 3.2;
+    if (dynamic && !seedAnchored && !trustedCurated) score -= 6.5;
+  }
+
+  return score;
+}
+
+function applyUndergroundIntentPoolFilter(pool = [], prefs = {}) {
+  prefs = normalizeRecommendationPrefs(prefs);
+  if (!darkUndergroundIntentStyle(prefs.style) || !Array.isArray(pool) || pool.length < 2) return pool;
+  const filtered = pool.filter((track) => trackUndergroundIntentScore(track, prefs) >= 2.5);
+  const originalArtists = new Set(pool.map((track) => artistMatchKey(track.artist)).filter(Boolean)).size;
+  const filteredArtists = new Set(filtered.map((track) => artistMatchKey(track.artist)).filter(Boolean)).size;
+  const minimumArtists = Math.min(4, Math.max(2, originalArtists));
+  if (filtered.length >= 3 && filteredArtists >= minimumArtists) return filtered;
+  if (filtered.length >= 2 && originalArtists <= 2) return filtered;
+  return pool;
+}
+
 function trackFreshnessScore(track, prefs = {}) {
   if (!track) return 0;
   const trackKey = recommendationTrackKey(track);
@@ -27155,6 +27286,7 @@ function recommendationPrecisionScore(track, prefs = {}) {
   else if (isDynamicSource(track.source)) score -= 0.8;
 
   score += clampScore(trackSourceTrustScore(track), -4, 5) * 0.7;
+  score += clampScore(trackUndergroundIntentScore(track, prefs), -8, 10) * 0.82;
   score += clampScore(trackFreshnessScore(track, prefs), -4, 4) * 0.55;
   score += clampScore(trackCatalogDepthScore(track), 0, 4) * 0.35;
   score += clampScore(personalTasteScore(track, prefs), -5, 5) * 0.85;
@@ -27268,6 +27400,7 @@ function recommendationQualityScore(track, prefs = {}) {
   if (track.bandcampTrackUrl || track.bandcampUrl) score += 0.35;
   score -= previewPenaltyForTrack(track) * 0.65;
   score += trackSourceTrustScore(track);
+  score += trackUndergroundIntentScore(track, prefs);
   score += trackFreshnessScore(track, prefs);
   score += trackCatalogDepthScore(track);
   score += trackReleaseFreshnessScore(track);
@@ -28018,6 +28151,7 @@ function pickRecommendation(
   if (finalPool.length) {
     finalPool = finalPool.filter((track) => trackAllowed(track));
   }
+  finalPool = applyUndergroundIntentPoolFilter(finalPool, prefs);
   if (!finalPool.length) return null;
 
   const scored = finalPool
@@ -30531,6 +30665,7 @@ async function generateRecommendationFromPrefs(
         return true;
       });
     }
+    stylePool = applyUndergroundIntentPoolFilter(stylePool, prefs);
     if (!stylePool.length) return false;
 
     const keyOf = (track) => recommendationTrackKey(track);
@@ -31013,7 +31148,7 @@ async function loadEventsForArtist(artist) {
 const TASTE_TUNE_STYLES = {
   heavier: ["gabber", "hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
   melodic: ["melodic_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
-  underground: ["freeform", "forest_psy", "dark_experimental", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
+  underground: ["dark_psy", "psycore", "dark_experimental", "forest_psy", "hi_tech", "freeform", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
   faster: ["gabber", "hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
   familiar: ["tech_house", "house", "melodic_techno", "full_on", "drum_and_bass", "progressive_house"],
   weirder: ["freeform", "idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
@@ -31050,7 +31185,12 @@ function prefsForTasteTune(mode = "") {
   const presets = {
     heavier: { context: "peak", energy: "extreme", bpm: style === "hard_techno" ? "145-155" : "155-175", vocals: "" },
     melodic: { context: "estrada", energy: "mid", bpm: "", vocals: "light_vocals" },
-    underground: { context: "after", energy: "high", bpm: "", vocals: "instrumental" },
+    underground: {
+      context: darkUndergroundIntentStyle(style) ? "peak" : "after",
+      energy: ["psycore", "hi_tech", "dark_experimental"].includes(style) ? "extreme" : "high",
+      bpm: ["psycore", "hi_tech", "dark_experimental"].includes(style) ? "175+" : "",
+      vocals: "instrumental"
+    },
     faster: { context: "treino", energy: "extreme", bpm: style === "hi_tech" || style === "psycore" ? "175+" : "155-175", vocals: "" },
     familiar: { context: "peak", energy: "mid", bpm: "", vocals: "" },
     weirder: { context: "foco", energy: "high", bpm: "", vocals: "instrumental" }
