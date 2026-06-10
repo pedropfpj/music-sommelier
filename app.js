@@ -5286,7 +5286,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v24";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v25";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v3";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -7287,6 +7288,254 @@ const MUSICAL_SPIRITS = [
     }
   },
   {
+    id: "oraculo_nevoa",
+    image: "assets/spirits/alquimista_sombrio.svg",
+    styleWeights: {
+      slambient: 4.8,
+      dark_experimental: 2.9,
+      dark_psy: 1.9,
+      psycore: 1.1,
+      ambient: 0.8
+    },
+    copy: {
+      pt: {
+        name: "Oraculo da Nevoa",
+        archetype: "Psicodelia ritual lenta",
+        description: "Seu gosto aponta para nevoa, textura e pressao escura. Voce prefere espirais profundas, drones densos e uma presenca quase ritual, como se a pista respirasse devagar antes de abrir outra camada.",
+        cardDescription: "Slambient com identidade propria: nevoa escura, pulso hipnotico e psicodelia em camadas."
+      },
+      en: {
+        name: "Mist Oracle",
+        archetype: "Slow ritual psychedelia",
+        description: "Your taste points toward fog, texture, and dark pressure. You favor deep spirals, dense drones, and a ritual presence, as if the floor breathes slowly before revealing another layer.",
+        cardDescription: "Slambient with its own identity: dark mist, hypnotic pulse, and layered psychedelia."
+      },
+      es: {
+        name: "Oraculo de Niebla",
+        archetype: "Psicodelia ritual lenta",
+        description: "Tu gusto apunta a niebla, textura y presion oscura. Prefieres espirales profundas, drones densos y una presencia ritual, como si la pista respirara lento antes de abrir otra capa.",
+        cardDescription: "Slambient con identidad propia: niebla oscura, pulso hipnotico y psicodelia en capas."
+      }
+    }
+  },
+  {
+    id: "feiticeiro_darkpsy",
+    image: "assets/spirits/alquimista_sombrio.svg",
+    styleWeights: {
+      dark_psy: 4.7,
+      forest_psy: 2.4,
+      dark_experimental: 2.1,
+      dark_progressive: 1.7,
+      slambient: 1.2
+    },
+    copy: {
+      pt: {
+        name: "Feiticeiro Dark Psy",
+        archetype: "Floresta noturna",
+        description: "Voce procura psicodelia sombria de verdade: criaturas sonoras, linhas tortas, subgrave de madrugada e narrativa de floresta fechada. O seu espirito nao e triste; ele e magnetico, estranho e ritualistico.",
+        cardDescription: "Dark psy: floresta fechada, criaturas sonoras e tensao psicodelica noturna."
+      },
+      en: {
+        name: "Dark Psy Sorcerer",
+        archetype: "Nocturnal forest",
+        description: "You search for real dark psychedelia: sonic creatures, crooked lines, late-night sub-bass, and closed-forest storytelling. Your spirit is not sad; it is magnetic, strange, and ritualistic.",
+        cardDescription: "Dark psy: closed forest, sonic creatures, and nocturnal psychedelic tension."
+      },
+      es: {
+        name: "Hechicero Dark Psy",
+        archetype: "Bosque nocturno",
+        description: "Buscas psicodelia oscura de verdad: criaturas sonoras, lineas torcidas, subgrave de madrugada y narrativa de bosque cerrado. Tu espiritu no es triste; es magnetico, raro y ritual.",
+        cardDescription: "Dark psy: bosque cerrado, criaturas sonoras y tension psicodelica nocturna."
+      }
+    }
+  },
+  {
+    id: "cirurgiao_psycore",
+    image: "assets/spirits/acelerador_quantico.svg",
+    styleWeights: {
+      psycore: 5,
+      hi_tech: 3.3,
+      dark_experimental: 1.6,
+      slambient: 0.9
+    },
+    copy: {
+      pt: {
+        name: "Cirurgiao Psycore",
+        archetype: "Precisao extrema",
+        description: "Voce gosta quando a velocidade vira engenharia: BPM extremo, recortes secos, impacto nervoso e clareza mesmo no caos. Esse espirito deve parecer afiado, quase clinico, mas com energia mutante de pista.",
+        cardDescription: "Psycore/hi-tech: alta velocidade, cortes cirurgicos e agressividade controlada."
+      },
+      en: {
+        name: "Psycore Surgeon",
+        archetype: "Extreme precision",
+        description: "You like it when speed becomes engineering: extreme BPM, dry edits, nervous impact, and clarity inside chaos. This spirit should feel sharp, almost clinical, but still mutating for the dancefloor.",
+        cardDescription: "Psycore/hi-tech: high speed, surgical cuts, and controlled aggression."
+      },
+      es: {
+        name: "Cirujano Psycore",
+        archetype: "Precision extrema",
+        description: "Te gusta cuando la velocidad se vuelve ingenieria: BPM extremo, cortes secos, impacto nervioso y claridad en el caos. Este espiritu debe sentirse afilado, casi clinico, pero mutante para la pista.",
+        cardDescription: "Psycore/hi-tech: velocidad alta, cortes quirurgicos y agresividad controlada."
+      }
+    }
+  },
+  {
+    id: "guardiao_fullon_noite",
+    image: "assets/spirits/ritual_cosmico.svg",
+    styleWeights: {
+      full_on_night: 4.7,
+      full_on: 2.7,
+      psytrance: 1.5,
+      dark_psy: 1.2,
+      goa_trance: 0.8
+    },
+    copy: {
+      pt: {
+        name: "Guardiao Full-On Night",
+        archetype: "Madrugada eletrica",
+        description: "Seu lado psy quer drive, brilho acido e energia noturna sem cair no dark absoluto. E um espirito de festival depois da meia-noite: olhar desperto, cores neon mais densas e corpo pronto para a virada.",
+        cardDescription: "Full-on night: drive de madrugada, acidez, neon denso e tensao de pista."
+      },
+      en: {
+        name: "Full-On Night Guardian",
+        archetype: "Electric midnight",
+        description: "Your psy side wants drive, acid glow, and late-night energy without going fully dark. This is a post-midnight festival spirit: alert eyes, denser neon colors, and a body ready for the switch.",
+        cardDescription: "Full-on night: midnight drive, acid lines, dense neon, and dancefloor tension."
+      },
+      es: {
+        name: "Guardian Full-On Night",
+        archetype: "Madrugada electrica",
+        description: "Tu lado psy quiere drive, brillo acido y energia nocturna sin caer en oscuridad total. Es un espiritu de festival despues de medianoche: mirada despierta, neon denso y cuerpo listo para el cambio.",
+        cardDescription: "Full-on night: drive de madrugada, acidez, neon denso y tension de pista."
+      }
+    }
+  },
+  {
+    id: "viajante_sunrise",
+    image: "assets/spirits/ritual_cosmico.svg",
+    styleWeights: {
+      full_on_morning: 4.8,
+      full_on: 2.6,
+      progressive_psy: 2.1,
+      goa_trance: 1.6,
+      trance_uplifting: 1.1
+    },
+    copy: {
+      pt: {
+        name: "Viajante Sunrise",
+        archetype: "Psicodelia solar",
+        description: "Voce responde a melodias abertas, basslines elasticas e aquele clima de manha em festival quando tudo fica mais leve. O espirito aqui deve ser colorido, otimista e psicodelico, sem perder o impulso de pista.",
+        cardDescription: "Full-on morning: luz, melodias abertas, elasticidade psy e energia de amanhecer."
+      },
+      en: {
+        name: "Sunrise Voyager",
+        archetype: "Solar psychedelia",
+        description: "You respond to open melodies, elastic basslines, and the festival-morning feeling when everything becomes lighter. This spirit should be colorful, optimistic, and psychedelic without losing dancefloor drive.",
+        cardDescription: "Full-on morning: light, open melodies, elastic psy flow, and sunrise energy."
+      },
+      es: {
+        name: "Viajero Sunrise",
+        archetype: "Psicodelia solar",
+        description: "Respondes a melodias abiertas, bajos elasticos y ese clima de manana de festival donde todo se vuelve mas liviano. Este espiritu debe ser colorido, optimista y psicodelico sin perder impulso de pista.",
+        cardDescription: "Full-on morning: luz, melodias abiertas, elasticidad psy y energia de amanecer."
+      }
+    }
+  },
+  {
+    id: "estilista_tech_house",
+    image: "assets/spirits/engenheiro_groove.svg",
+    styleWeights: {
+      tech_house: 5,
+      bass_house: 2.1,
+      house: 1.9,
+      electro_house: 1.5,
+      progressive_house: 0.9
+    },
+    copy: {
+      pt: {
+        name: "Estilista Tech House",
+        archetype: "Groove de club",
+        description: "Voce gosta de groove com postura: baixo seco, vocal picado, swing elegante e aquela energia de pista com oculos escuros, camiseta boa e movimento calculado. Nao e sombrio; e confiante, social e cheio de bounce.",
+        cardDescription: "Tech house: oculos escuros, groove seco, vocal picado e bounce de club."
+      },
+      en: {
+        name: "Tech House Stylist",
+        archetype: "Club groove",
+        description: "You like groove with posture: dry bass, chopped vocals, elegant swing, and that sunglasses-on dancefloor energy. It is not dark; it is confident, social, and full of bounce.",
+        cardDescription: "Tech house: sunglasses, dry groove, chopped vocals, and club bounce."
+      },
+      es: {
+        name: "Estilista Tech House",
+        archetype: "Groove de club",
+        description: "Te gusta el groove con postura: bajo seco, vocales cortadas, swing elegante y energia de pista con gafas oscuras. No es oscuro; es confiado, social y lleno de bounce.",
+        cardDescription: "Tech house: gafas oscuras, groove seco, vocal cortado y bounce de club."
+      }
+    }
+  },
+  {
+    id: "alma_house",
+    image: "assets/spirits/viajante_organico.svg",
+    styleWeights: {
+      house: 4.8,
+      deep_house: 3.4,
+      afro_house: 2.8,
+      organic_house: 2.2,
+      progressive_house: 1.4
+    },
+    copy: {
+      pt: {
+        name: "Alma House",
+        archetype: "Calor social",
+        description: "Seu espirito mora no groove humano: baixo redondo, palma, vocal quente e sensacao de comunidade. Ele deve parecer mais solar e elegante, menos tecnico, com alma de pista e sorriso de fim de tarde.",
+        cardDescription: "House/deep/afro: calor humano, vocal, swing e comunidade de pista."
+      },
+      en: {
+        name: "House Soul",
+        archetype: "Social warmth",
+        description: "Your spirit lives in human groove: rounded bass, claps, warm vocals, and a feeling of community. It should feel more solar and elegant than technical, with dancefloor soul and late-afternoon warmth.",
+        cardDescription: "House/deep/afro: human warmth, vocals, swing, and dancefloor community."
+      },
+      es: {
+        name: "Alma House",
+        archetype: "Calor social",
+        description: "Tu espiritu vive en el groove humano: bajo redondo, palmas, vocal calida y sensacion de comunidad. Debe sentirse mas solar y elegante que tecnico, con alma de pista.",
+        cardDescription: "House/deep/afro: calor humano, vocal, swing y comunidad de pista."
+      }
+    }
+  },
+  {
+    id: "operador_acido",
+    image: "assets/spirits/arquiteto_hipnotico.svg",
+    styleWeights: {
+      acid_techno: 4.3,
+      techno: 3.1,
+      peak_time_techno: 2.7,
+      hard_techno: 2.4,
+      industrial_techno: 2.2,
+      minimal_techno: 2.1
+    },
+    copy: {
+      pt: {
+        name: "Operador Acido",
+        archetype: "Maquina hipnotica",
+        description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e releases calculados. O espirito deve parecer mais maquina de clube do que personagem fofo.",
+        cardDescription: "Techno/acid: metal, repeticao, linhas acidas e controle hipnotico."
+      },
+      en: {
+        name: "Acid Operator",
+        archetype: "Hypnotic machine",
+        description: "You hear techno as pressure architecture: acid lines, functional repetition, metal, concrete, and calculated releases. This spirit should feel more like a club machine than a cute character.",
+        cardDescription: "Techno/acid: metal, repetition, acid lines, and hypnotic control."
+      },
+      es: {
+        name: "Operador Acido",
+        archetype: "Maquina hipnotica",
+        description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y releases calculados. Este espiritu debe sentirse mas maquina de club que personaje tierno.",
+        cardDescription: "Techno/acid: metal, repeticion, lineas acidas y control hipnotico."
+      }
+    }
+  },
+  {
     id: "acelerador_quantico",
     image: "assets/spirits/acelerador_quantico.svg",
     styleWeights: {
@@ -7468,12 +7717,135 @@ const MUSICAL_SPIRITS = [
 const SPIRIT_VISUAL_THEMES = {
   ritual_cosmico: { a: "#72f7ff", b: "#6f7dff", c: "#b86cff", d: "#091039" },
   alquimista_sombrio: { a: "#8dffe9", b: "#6c4dff", c: "#d45cff", d: "#12071f" },
+  oraculo_nevoa: { a: "#7fffe5", b: "#4b5dff", c: "#c96aff", d: "#070914" },
+  feiticeiro_darkpsy: { a: "#79ffd7", b: "#2016a8", c: "#ff4fd8", d: "#05030c" },
+  cirurgiao_psycore: { a: "#68fff0", b: "#fff75a", c: "#ff4b2f", d: "#040b12" },
+  guardiao_fullon_noite: { a: "#5fffea", b: "#5b5dff", c: "#ff5ee7", d: "#08051f" },
+  viajante_sunrise: { a: "#95fff3", b: "#ffcf5a", c: "#ff78bd", d: "#10143a" },
+  estilista_tech_house: { a: "#72ffb8", b: "#35d8ff", c: "#f0ff5f", d: "#06151f" },
+  alma_house: { a: "#ffe28a", b: "#ff7db7", c: "#7cffc2", d: "#151128" },
+  operador_acido: { a: "#baff38", b: "#8ad7ff", c: "#f2f4ff", d: "#071016" },
   acelerador_quantico: { a: "#79fff2", b: "#f9f871", c: "#ff9b4a", d: "#071421" },
   engenheiro_groove: { a: "#51f2a7", b: "#40d7ff", c: "#2f73ff", d: "#061829" },
   arquiteto_hipnotico: { a: "#9feaff", b: "#93a7ff", c: "#d7e3ff", d: "#071226" },
   cacador_bass: { a: "#ff6ec7", b: "#7f8cff", c: "#35f0ff", d: "#15061c" },
   viajante_organico: { a: "#a3ff8b", b: "#f4d06f", c: "#51d0a6", d: "#082417" },
   explorador_fractal: { a: "#ffb36b", b: "#75f4ff", c: "#9a7bff", d: "#10102c" }
+};
+
+const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
+  ritual_cosmico: {
+    identity: "charismatic adult cosmic trance shaman with a grounded human face, luminous skin highlights, and a calm ceremonial authority",
+    face: "open expressive eyes, kind half-smile, natural skin pores, soft asymmetry, confident direct gaze",
+    wardrobe: "festival ritual robe mixed with modern clubwear, bead-like light details, no costume mask",
+    aura: "mandala halo, harmonic laser arcs, goa-trance geometry, melodic psy light ribbons around the shoulders",
+    environment: "dark festival clearing with clean cyan, blue, and violet stage light"
+  },
+  alquimista_sombrio: {
+    identity: "adult shadow alchemist with a magnetic human face, nocturnal elegance, and underground ritual presence",
+    face: "deep-set believable eyes, subtle inviting smirk, textured skin, cheekbone shadow, intense but warm expression",
+    wardrobe: "obsidian coat, dark robe layers, metallic thread, smoky glass jewelry, no mask",
+    aura: "spectral vapor, sub-bass pressure rings, purple and aqua chemical glow, dense drone texture",
+    environment: "low-ceiling dark room, mist, wet reflections, cinematic side light"
+  },
+  oraculo_nevoa: {
+    identity: "adult mist oracle with a serene realistic face, slow psychedelic presence, and quiet emotional gravity",
+    face: "calm compassionate eyes, meditative micro-smile, natural eyelids and skin detail, face clearly visible through fog",
+    wardrobe: "translucent hooded fabric, layered dark-club textiles, soft reflective accents, no abstract mask",
+    aura: "fog spirals, slow waveform halos, pale green and violet particles, deep slambient pressure",
+    environment: "dim ritual chamber filled with breathable mist and low-frequency light"
+  },
+  feiticeiro_darkpsy: {
+    identity: "adult dark-psy forest sorcerer with a human, charismatic, slightly wild face and nocturnal confidence",
+    face: "alert eyes, magnetic grin, lived-in skin texture, expressive brow, human warmth inside the darkness",
+    wardrobe: "dark forest-club cloak, organic textile patterns, bioluminescent mycelium threads, no skull or creature design",
+    aura: "twisted forest geometry, shadowy psy spirals, nocturnal neon spores, bass pulses between trees",
+    environment: "closed forest rave at night, black-green depth, magenta flashes, ritual smoke"
+  },
+  cirurgiao_psycore: {
+    identity: "adult psycore surgeon entity with a precise human face, sharp charisma, and high-speed technical focus",
+    face: "piercing eyes, controlled confident smirk, realistic pores, clean facial structure, not cold or mannequin-like",
+    wardrobe: "futuristic clinical jacket fused with rave armor, reflective seams, light-cut gloves, no robot body",
+    aura: "surgical glitch trails, orange-yellow transient sparks, extreme BPM wave slices, sharp sub-bass grids",
+    environment: "dark hi-tech booth with strobing light cuts and controlled chaos"
+  },
+  guardiao_fullon_noite: {
+    identity: "adult full-on night guardian with a charismatic festival face, alert eyes, and electric midnight energy",
+    face: "awake playful eyes, confident smile, realistic skin, sweat-glow highlights, strong human presence",
+    wardrobe: "midnight festival jacket, acid-neon trim, layered psy accessories, face unobstructed",
+    aura: "dense neon arcs, acid lines, midnight drive trails, full-on energy waves around the torso",
+    environment: "post-midnight outdoor stage, dark blue air, violet laser haze, clean melodic tension"
+  },
+  viajante_sunrise: {
+    identity: "adult sunrise psy voyager with a warm human smile, optimistic charisma, and open melodic energy",
+    face: "bright eyes, genuine smile, golden skin light, approachable expression, natural facial detail",
+    wardrobe: "light festival layers, soft poncho textures, sunrise-colored accents, no cartoon styling",
+    aura: "gold and pink melodic ribbons, elastic bassline waves, morning psy mandala, airy particles",
+    environment: "festival sunrise horizon with soft haze and uplifting clean light"
+  },
+  estilista_tech_house: {
+    identity: "adult tech-house stylist with stylish human confidence, social charisma, and controlled club swagger",
+    face: "visible eyes through lightly tinted glasses or no glasses, relaxed smirk, realistic skin, expressive eyebrows",
+    wardrobe: "sharp black club shirt, tasteful jewelry, textured jacket, contemporary fashion, no mascot pose",
+    aura: "dry bass pulses, chopped vocal light fragments, clean groove loops, green-blue club reflections",
+    environment: "sleek intimate club corner with warm crowd energy and polished shadows"
+  },
+  alma_house: {
+    identity: "adult house-soul entity with a warm human face, soulful charisma, and community dancefloor glow",
+    face: "soft expressive eyes, generous smile, natural skin, emotionally open presence, believable warmth",
+    wardrobe: "elegant relaxed clubwear, amber fabric highlights, subtle retro soul details, no fantasy mask",
+    aura: "rounded bass waves, vocal warmth, claps as golden particles, pink and amber groove light",
+    environment: "late-afternoon indoor-outdoor dancefloor, warm haze, communal human energy"
+  },
+  operador_acido: {
+    identity: "adult acid operator with a focused human face, industrial confidence, and hypnotic machine-room attitude",
+    face: "eyes clearly visible behind transparent visor or bare face, focused expression, realistic stubble or skin texture",
+    wardrobe: "structured coat, acid-green reflective lines, concrete-tech materials, no robot or faceless helmet",
+    aura: "303 acid curves, grid corridors, lime waveform ribbons, metallic repetition patterns",
+    environment: "industrial club architecture with concrete, low smoke, and precise green light"
+  },
+  acelerador_quantico: {
+    identity: "adult quantum accelerator with a human face, fearless charisma, and ultra-fast hi-tech precision",
+    face: "intense bright eyes, kinetic smile or smirk, realistic skin, human emotion under extreme speed",
+    wardrobe: "speed-suit jacket, prismatic seams, transient-light accessories, no cyborg body",
+    aura: "quantum trails, atom-like arcs, micro-cut sparks, high-BPM orange and aqua light streaks",
+    environment: "dark kinetic chamber with motion blur, crisp highlights, and controlled hi-tech energy"
+  },
+  engenheiro_groove: {
+    identity: "adult groove engineer with a realistic friendly face, calm charisma, and refined rhythmic control",
+    face: "warm eyes, understated smile, natural face texture, relaxed confidence, human and approachable",
+    wardrobe: "studio-club vest, clean headphones around neck, tactile fabric, subtle green-blue glow",
+    aura: "holographic mixer lines, rounded bass loops, swing grid, precise but warm club atmosphere",
+    environment: "intimate studio-club hybrid with soft monitors and elegant low-end light"
+  },
+  arquiteto_hipnotico: {
+    identity: "adult hypnotic architect with a realistic focused face, elegant severity, and emotional engineering presence",
+    face: "steady eyes, composed mouth, realistic skin and eyelids, thoughtful intensity, not blank or mannequin-like",
+    wardrobe: "structured dark coat, blueprint-light tattoos, minimal techno tailoring, no faceless visor",
+    aura: "repeating pressure corridors, acid-blueprint lines, slow hypnotic loops, silver-blue stereo geometry",
+    environment: "large dark techno room with architectural light beams and patient tension"
+  },
+  cacador_bass: {
+    identity: "adult bass hunter with a human charismatic face, physical intensity, and confident low-frequency presence",
+    face: "sharp eyes, magnetic grin, realistic skin, expressive cheeks, approachable but powerful",
+    wardrobe: "heavy bass jacket, tactical club textures, headphones or pressure-ring collar, face never covered",
+    aura: "subwoofer rings, magenta-blue bass shockwaves, clean drum attack sparks, drop pressure halos",
+    environment: "dark bass room with huge speaker shadows and chest-level light pulses"
+  },
+  viajante_organico: {
+    identity: "adult organic voyager with a serene human face, earthy charisma, and analog warmth",
+    face: "soft eyes, gentle smile, natural skin tones, calm breathing presence, emotionally grounded",
+    wardrobe: "organic woven layers, botanical accents, analog fabric textures, no costume mask",
+    aura: "botanical signal filaments, warm downtempo waves, green-gold particles, slow evolving melody lines",
+    environment: "night garden dancefloor with warm lamps, plants, wood, and deep breathing space"
+  },
+  explorador_fractal: {
+    identity: "adult fractal explorer with a curious human face, playful intelligence, and experimental confidence",
+    face: "curious eyes, asymmetrical smile, realistic skin, lively expression, charismatic not weirdly abstract",
+    wardrobe: "patchwork technical jacket, iridescent geometric accents, frontier-club styling, face unobscured",
+    aura: "fractal cubes, broken-rhythm geometry, IDM micro-detail sparks, orange-cyan-violet asymmetry",
+    environment: "experimental club lab with clean shadows, glitch light, and dimensional depth"
+  }
 };
 
 const SPIRIT_MASCOT_VARIANTS = {
@@ -7532,6 +7904,238 @@ const SPIRIT_MASCOT_VARIANTS = {
         pt: "Você cava atmosferas raras e deixa a noite falar baixo.",
         en: "You dig rare atmospheres and let the night speak softly.",
         es: "Cavas atmósferas raras y dejas que la noche hable bajo."
+      }
+    }
+  ],
+  oraculo_nevoa: [
+    {
+      motif: "smoke",
+      crown: "hood",
+      quote: {
+        pt: "Voce deixa a nevoa subir ate o grave revelar outra camada.",
+        en: "You let the mist rise until the low end reveals another layer.",
+        es: "Dejas subir la niebla hasta que el grave revele otra capa."
+      }
+    },
+    {
+      motif: "crystal",
+      crown: "halo",
+      quote: {
+        pt: "Seu som favorito parece ritual lento em luz baixa.",
+        en: "Your favorite sound feels like a slow ritual in low light.",
+        es: "Tu sonido favorito parece un ritual lento en luz baja."
+      }
+    },
+    {
+      motif: "moon",
+      crown: "spark",
+      quote: {
+        pt: "Voce encontra movimento dentro da textura escura.",
+        en: "You find movement inside dark texture.",
+        es: "Encuentras movimiento dentro de la textura oscura."
+      }
+    }
+  ],
+  feiticeiro_darkpsy: [
+    {
+      motif: "mandala",
+      crown: "hood",
+      quote: {
+        pt: "Seu radar entra na floresta quando a pista fica estranha.",
+        en: "Your radar enters the forest when the floor gets strange.",
+        es: "Tu radar entra al bosque cuando la pista se pone rara."
+      }
+    },
+    {
+      motif: "moon",
+      crown: "flame",
+      quote: {
+        pt: "Voce gosta de psicodelia com sombra, bicho e ritual.",
+        en: "You like psychedelia with shadow, creatures, and ritual.",
+        es: "Te gusta la psicodelia con sombra, criaturas y ritual."
+      }
+    },
+    {
+      motif: "comet",
+      crown: "spark",
+      quote: {
+        pt: "No escuro, voce percebe detalhes que muita gente perde.",
+        en: "In darkness, you notice details many people miss.",
+        es: "En la oscuridad notas detalles que muchos pierden."
+      }
+    }
+  ],
+  cirurgiao_psycore: [
+    {
+      motif: "bolt",
+      crown: "spark",
+      quote: {
+        pt: "Voce gosta quando o caos corre rapido, mas nao perde corte.",
+        en: "You like chaos when it runs fast without losing sharpness.",
+        es: "Te gusta el caos rapido cuando no pierde filo."
+      }
+    },
+    {
+      motif: "atom",
+      crown: "flame",
+      quote: {
+        pt: "Seu ouvido mede milissegundos, impacto e precisao.",
+        en: "Your ear measures milliseconds, impact, and precision.",
+        es: "Tu oido mide milisegundos, impacto y precision."
+      }
+    },
+    {
+      motif: "acid",
+      crown: "halo",
+      quote: {
+        pt: "Velocidade extrema, mas com desenho limpo.",
+        en: "Extreme speed, but with clean design.",
+        es: "Velocidad extrema, pero con diseno limpio."
+      }
+    }
+  ],
+  guardiao_fullon_noite: [
+    {
+      motif: "acid",
+      crown: "flame",
+      quote: {
+        pt: "Voce acende a madrugada sem abandonar a melodia.",
+        en: "You light up the night without leaving melody behind.",
+        es: "Enciendes la madrugada sin abandonar la melodia."
+      }
+    },
+    {
+      motif: "comet",
+      crown: "spark",
+      quote: {
+        pt: "Seu psy fica melhor quando o neon pesa um pouco mais.",
+        en: "Your psy gets better when the neon feels a little heavier.",
+        es: "Tu psy mejora cuando el neon pesa un poco mas."
+      }
+    },
+    {
+      motif: "star",
+      crown: "hood",
+      quote: {
+        pt: "Drive noturno, olhar aceso e virada no momento certo.",
+        en: "Night drive, alert eyes, and a switch at the right moment.",
+        es: "Drive nocturno, mirada despierta y cambio en el punto justo."
+      }
+    }
+  ],
+  viajante_sunrise: [
+    {
+      motif: "star",
+      crown: "halo",
+      quote: {
+        pt: "Voce procura aquela luz de manha que abre o sorriso.",
+        en: "You search for morning light that opens a smile.",
+        es: "Buscas esa luz de manana que abre la sonrisa."
+      }
+    },
+    {
+      motif: "mandala",
+      crown: "spark",
+      quote: {
+        pt: "Seu psy e colorido, elastico e pronto para amanhecer.",
+        en: "Your psy is colorful, elastic, and ready for sunrise.",
+        es: "Tu psy es colorido, elastico y listo para amanecer."
+      }
+    },
+    {
+      motif: "comet",
+      crown: "flame",
+      quote: {
+        pt: "Voce sobe com melodia aberta e energia limpa.",
+        en: "You rise with open melody and clean energy.",
+        es: "Subes con melodia abierta y energia limpia."
+      }
+    }
+  ],
+  estilista_tech_house: [
+    {
+      motif: "disc",
+      crown: "halo",
+      quote: {
+        pt: "Voce reconhece o groove quando ele entra com postura.",
+        en: "You know the groove when it walks in with posture.",
+        es: "Reconoces el groove cuando entra con postura."
+      }
+    },
+    {
+      motif: "eq",
+      crown: "spark",
+      quote: {
+        pt: "Oculos escuros, baixo seco e swing que nao pede licenca.",
+        en: "Sunglasses, dry bass, and swing that does not ask permission.",
+        es: "Gafas oscuras, bajo seco y swing que no pide permiso."
+      }
+    },
+    {
+      motif: "wave",
+      crown: "flame",
+      quote: {
+        pt: "Seu corpo percebe o loop antes da cabeca decidir.",
+        en: "Your body catches the loop before the mind decides.",
+        es: "Tu cuerpo capta el loop antes de que decida la cabeza."
+      }
+    }
+  ],
+  alma_house: [
+    {
+      motif: "disc",
+      crown: "halo",
+      quote: {
+        pt: "Voce gosta quando a pista parece comunidade.",
+        en: "You like it when the floor feels like community.",
+        es: "Te gusta cuando la pista se siente comunidad."
+      }
+    },
+    {
+      motif: "wave",
+      crown: "spark",
+      quote: {
+        pt: "Baixo redondo, vocal quente e sorriso de fim de tarde.",
+        en: "Round bass, warm vocals, and a late-afternoon smile.",
+        es: "Bajo redondo, vocal calida y sonrisa de tarde."
+      }
+    },
+    {
+      motif: "leaf",
+      crown: "flame",
+      quote: {
+        pt: "Seu groove tem alma, ar e calor humano.",
+        en: "Your groove has soul, air, and human warmth.",
+        es: "Tu groove tiene alma, aire y calor humano."
+      }
+    }
+  ],
+  operador_acido: [
+    {
+      motif: "acid",
+      crown: "visor",
+      quote: {
+        pt: "Voce transforma repeticao em arquitetura de pressao.",
+        en: "You turn repetition into pressure architecture.",
+        es: "Conviertes repeticion en arquitectura de presion."
+      }
+    },
+    {
+      motif: "grid",
+      crown: "spark",
+      quote: {
+        pt: "Metal, filtro, concreto e release calculado.",
+        en: "Metal, filter, concrete, and calculated release.",
+        es: "Metal, filtro, concreto y release calculado."
+      }
+    },
+    {
+      motif: "visor",
+      crown: "halo",
+      quote: {
+        pt: "Sua pista ideal parece uma maquina respirando.",
+        en: "Your ideal floor sounds like a machine breathing.",
+        es: "Tu pista ideal suena como una maquina respirando."
       }
     }
   ],
@@ -7731,6 +8335,86 @@ const SPIRIT_MASCOT_TRAITS = {
     eyes: "sleepy",
     mouth: "calm",
     headphones: "hidden"
+  },
+  oraculo_nevoa: {
+    shape: "diamond",
+    face: "#dfe8ff",
+    hair: "hood",
+    outfit: "cloak",
+    accessory: "crystalOrb",
+    eyes: "sleepy",
+    mouth: "calm",
+    headphones: "hidden"
+  },
+  feiticeiro_darkpsy: {
+    shape: "mask",
+    face: "#d6fff2",
+    hair: "hood",
+    outfit: "cloak",
+    accessory: "portalStaff",
+    eyes: "intense",
+    mouth: "flat",
+    headphones: "hidden"
+  },
+  cirurgiao_psycore: {
+    shape: "angular",
+    face: "#eefdf7",
+    hair: "spikes",
+    outfit: "speedSuit",
+    accessory: "dataBlade",
+    eyes: "focused",
+    mouth: "smirk",
+    headphones: "visor"
+  },
+  guardiao_fullon_noite: {
+    shape: "round",
+    face: "#f1f7ff",
+    hair: "flame",
+    outfit: "robe",
+    accessory: "portalStaff",
+    eyes: "bright",
+    mouth: "smirk",
+    headphones: "classic"
+  },
+  viajante_sunrise: {
+    shape: "soft",
+    face: "#fff4df",
+    hair: "flame",
+    outfit: "poncho",
+    accessory: "naturePad",
+    eyes: "bright",
+    mouth: "smile",
+    headphones: "soft"
+  },
+  estilista_tech_house: {
+    shape: "wide",
+    face: "#f6fff4",
+    hair: "goggles",
+    outfit: "techVest",
+    accessory: "mixPanel",
+    eyes: "line",
+    mouth: "smirk",
+    headphones: "studio"
+  },
+  alma_house: {
+    shape: "soft",
+    face: "#fff1dc",
+    hair: "waves",
+    outfit: "poncho",
+    accessory: "mixPanel",
+    eyes: "soft",
+    mouth: "smile",
+    headphones: "soft"
+  },
+  operador_acido: {
+    shape: "square",
+    face: "#eafff1",
+    hair: "visor",
+    outfit: "structuredCoat",
+    accessory: "blueprint",
+    eyes: "line",
+    mouth: "flat",
+    headphones: "antenna"
   },
   acelerador_quantico: {
     shape: "angular",
@@ -12204,7 +12888,7 @@ const I18N = {
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
     spiritCollectibleHintLocal: "A entidade humana realista exige geração IA. Sem imagem pronta, não mostro avatar local genérico.",
-    spiritCollectibleHintApi: "Arte premium por IA criada para este perfil: entidade humana adulta, realista e carismática.",
+    spiritCollectibleHintApi: "Arte premium por IA criada para este perfil: entidade humana adulta, realista, carismática e com características do espírito.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
@@ -12227,7 +12911,7 @@ const I18N = {
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
     spiritCollectibleGeneratedLocal: "Geração IA indisponível. Mantive a arte pendente em vez de mostrar avatar local.",
-    spiritCollectibleGeneratedApi: "Arte única por IA criada para este perfil.",
+    spiritCollectibleGeneratedApi: "Arte única por IA criada com as características humanas do espírito.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
     spiritCollectibleError: "IA de imagem ainda sem resposta. Não vou mostrar avatar local; tente gerar novamente quando a IA estiver disponível.",
     spiritRankUnlocked: "Espírito desbloqueado",
@@ -12824,7 +13508,7 @@ const I18N = {
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
     spiritCollectibleHintLocal: "The realistic human entity requires AI generation. Without a ready image, no generic local avatar is shown.",
-    spiritCollectibleHintApi: "Premium AI artwork created for this profile: an adult, realistic, charismatic human entity.",
+    spiritCollectibleHintApi: "Premium AI artwork created for this profile: an adult, realistic, charismatic human entity with spirit-specific traits.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
@@ -12847,7 +13531,7 @@ const I18N = {
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratedLocal: "AI generation is unavailable. Artwork stays pending instead of showing a local avatar.",
-    spiritCollectibleGeneratedApi: "Unique AI artwork created for this profile.",
+    spiritCollectibleGeneratedApi: "Unique AI artwork created with the spirit\'s human traits.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
     spiritCollectibleError: "Image AI did not respond yet. I will not show a local avatar; try generating again when AI is available.",
     spiritRankUnlocked: "Spirit unlocked",
@@ -13441,7 +14125,7 @@ const I18N = {
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
     spiritCollectibleHintLocal: "La entidad humana realista requiere generación con IA. Sin imagen lista, no muestro un avatar local genérico.",
-    spiritCollectibleHintApi: "Arte premium con IA creada para este perfil: entidad humana adulta, realista y carismática.",
+    spiritCollectibleHintApi: "Arte premium con IA creada para este perfil: entidad humana adulta, realista, carismática y con rasgos del espíritu.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
@@ -13464,7 +14148,7 @@ const I18N = {
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
     spiritCollectibleGeneratedLocal: "La generación IA no está disponible. Mantengo el arte pendiente en vez de mostrar avatar local.",
-    spiritCollectibleGeneratedApi: "Arte único con IA creado para este perfil.",
+    spiritCollectibleGeneratedApi: "Arte único con IA creado con los rasgos humanos del espíritu.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
     spiritCollectibleError: "La IA de imagen aún no respondió. No mostraré un avatar local; intenta generar de nuevo cuando la IA esté disponible.",
     spiritRankUnlocked: "Espíritu desbloqueado",
@@ -24652,46 +25336,52 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
 
 function spiritCharacterIdentity(spirit, profileSignature = "") {
   const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-identity`) >>> 0;
+  const theme = spiritVisualTheme(spirit);
+  const direction = SPIRIT_HUMAN_ENTITY_DIRECTIONS[spirit?.id] || SPIRIT_HUMAN_ENTITY_DIRECTIONS.engenheiro_groove;
   const humanForms = [
-    "cinematic adult human spirit with a visible face and shoulders",
-    "realistic nocturnal oracle shaped by sub-bass light",
-    "fictional human entity emerging from club smoke and waveform halos",
-    "high-detail ritual performer with an ethereal sonic aura",
-    "dark electronic-music guide with expressive eyes and spectral styling"
+    "cinematic adult human portrait with visible face, neck, shoulders, and upper body",
+    "realistic adult personification of the listener's musical spirit, photographed like editorial cinema",
+    "fictional adult human entity emerging from club smoke and waveform halos",
+    "high-detail adult ritual performer with a believable human face and sonic aura",
+    "underground electronic-music guide with expressive eyes and realistic skin detail"
   ];
-  const identityBySpirit = {
-    ritual_cosmico: "adult trance ritual entity, mandala halo, luminous skin, sacred club styling, harmonic laser arcs",
-    alquimista_sombrio: "adult shadow alchemist, dark spectral vapor, sub-bass pressure, metallic face light, deep ritual robe",
-    acelerador_quantico: "adult high-speed human entity, precision gaze, quantum light scars, sharp transient trails",
-    engenheiro_groove: "adult groove engineer entity, calm realistic face, holographic mixer glow, warm club atmosphere",
-    arquiteto_hipnotico: "adult hypnotic architect, focused eyes, acid-light blueprint tattoos, repeating pressure corridors",
-    cacador_bass: "adult bass hunter entity, intense face, heavy low-frequency aura, pressure-ring armor and neon shadows",
-    viajante_organico: "adult organic traveler, breathable human presence, analog skin tones, botanical signal filaments",
-    explorador_fractal: "adult fractal explorer, asymmetric light details, realistic portrait energy, broken-rhythm geometry"
-  };
+  const expressionCues = [
+    "magnetic micro-smile",
+    "direct warm gaze",
+    "subtle confident smirk",
+    "inviting intense eyes",
+    "calm charismatic expression"
+  ];
   return [
-    `Realistic fictional adult human entity: ${humanForms[seed % humanForms.length]}`,
-    identityBySpirit[spirit?.id] || identityBySpirit.engenheiro_groove,
-    "Human presence is required: visible face, head, and shoulders or torso, cinematic realism, charismatic expression, warm believable eyes, confident personality, ethereal music-reactive aura. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, or readable text"
+    `Realistic fictional adult human entity format: ${humanForms[seed % humanForms.length]}`,
+    `Spirit identity: ${direction.identity}`,
+    `Face and charisma: ${direction.face}; expression cue: ${expressionCues[seed % expressionCues.length]}`,
+    `Wardrobe and material language: ${direction.wardrobe}`,
+    `Music-reactive aura: ${direction.aura}`,
+    `Scene: ${direction.environment}`,
+    `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
+    "Human presence is required: visible face, head, shoulders or torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, confident adult personality, and ethereal music-reactive aura. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
 function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
-  const humanEntityGuardrail = "Non-negotiable: render a fictional adult human musical-spirit entity with a believable face, warm expressive eyes, charismatic expression, head, shoulders, and cinematic presence. The figure must feel realistic, editorial, emotionally appealing, nocturnal, and music-reactive, not mask-like, mannequin-like, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, or literal DJ. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const entityDirection = spiritCharacterIdentity(spirit, profileSignature);
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity with a believable face, natural skin detail, warm expressive eyes, charismatic expression, head, shoulders, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
-    spiritText?.archetype ? `archetype: ${spiritText.archetype}` : ""
+    spiritText?.archetype ? `archetype: ${spiritText.archetype}` : "",
+    entityDirection
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central realistic human-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic portrait or upper-body figure with a charismatic human face, believable skin and material lighting, inviting but intense gaze, dark club atmosphere, ritual/electronic styling, luminous waveform aura, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, emotionally magnetic, musical, underground, and unique to the profile, never like a cute avatar or abstract icon. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central realistic human-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic portrait or upper-body figure with a charismatic human face, believable skin and material lighting, inviting but intense gaze, dark club atmosphere, ritual/electronic styling, luminous waveform aura, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, or generic fantasy character. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración central de una entidad humana realista para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: retrato cinematográfico o figura de torso con rostro humano carismático, piel y materiales con luz realista, mirada intensa y atractiva, atmósfera de club oscuro, estética ritual/electrónica, aura de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse magnética, underground, intensa, musical y única para el perfil, nunca como avatar simpático ni icono abstracto. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central de una entidad humana realista para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: retrato cinematográfico o figura de torso con rostro humano carismático, piel y materiales con luz realista, mirada intensa y atractiva, atmósfera de club oscuro, estética ritual/electrónica, aura de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, icono abstracto ni personaje genérico de fantasía. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a arte central de uma entidade humana realista para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: retrato cinematográfico ou figura de torso com rosto humano carismático, pele e materiais com luz realista, olhar intenso e atraente, atmosfera de club escuro, estética ritual/eletrônica, aura de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer magnético, underground, intenso, musical e único para o perfil, nunca um avatar fofinho nem ícone abstrato. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central de uma entidade humana realista para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: retrato cinematográfico ou figura de torso com rosto humano carismático, pele e materiais com luz realista, olhar intenso e atraente, atmosfera de club escuro, estética ritual/eletrônica, aura de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, ícone abstrato nem personagem genérico de fantasia. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -25815,6 +26505,7 @@ function buildLocalSpiritCollectibleImage(
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
+  const humanEntityBrief = spiritCharacterIdentity(spirit, profileSignature);
   const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature)} Variation seed: ${variationToken || userSignature}.`;
   const spiritAssetUrl = resolveRuntimeAssetUrl(spirit?.image || "");
   const { mime: spiritMime } = collectibleImageMeta(spiritAssetUrl);
@@ -25830,8 +26521,11 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
         milestoneLikes,
         variation: variationToken || "base",
         forceRegenerate,
+        promptVersion: SPIRIT_IMAGE_PROMPT_VERSION,
         userSignature,
         profileSignature,
+        humanEntityBrief,
+        dominantStyles: spiritTopStyles(spirit, 4).join(", "),
         language: currentLanguage
       })
     : "";

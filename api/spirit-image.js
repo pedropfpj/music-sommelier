@@ -16,7 +16,34 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v3";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v3";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v4";
+
+const SPIRIT_ENTITY_BRIEFS = {
+  ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
+  alquimista_sombrio: "adult shadow alchemist, magnetic human face, deep believable eyes, obsidian coat, spectral vapor, sub-bass pressure rings, dark ritual elegance, aqua and purple glow",
+  oraculo_nevoa: "adult mist oracle, serene realistic face, compassionate eyes, translucent hood, slow waveform halos, fog spirals, slambient darkness, calm charismatic presence",
+  feiticeiro_darkpsy: "adult dark-psy forest sorcerer, human charismatic face, alert wild eyes, magnetic grin, bioluminescent forest-club textiles, twisted psy spirals, nocturnal smoke",
+  cirurgiao_psycore: "adult psycore surgeon, precise realistic human face, sharp confident eyes, futuristic clinical rave jacket, glitch trails, high-BPM light cuts, controlled chaos",
+  guardiao_fullon_noite: "adult full-on night guardian, realistic festival face, awake playful eyes, confident smile, acid-neon midnight jacket, dense melodic neon arcs, post-midnight psy energy",
+  viajante_sunrise: "adult sunrise psy voyager, warm realistic smile, bright eyes, golden skin light, soft festival layers, pink and gold melodic ribbons, uplifting morning atmosphere",
+  estilista_tech_house: "adult tech-house stylist, stylish confident human face, visible eyes, relaxed smirk, sharp black clubwear, dry bass pulses, chopped vocal light fragments, social club charisma",
+  alma_house: "adult house-soul entity, warm expressive human face, generous smile, amber clubwear, rounded bass waves, vocal warmth, golden clap particles, community dancefloor glow",
+  operador_acido: "adult acid operator, focused realistic human face, visible eyes, structured industrial coat, acid-green reflective lines, 303 curves, hypnotic grid corridors, concrete club light",
+  acelerador_quantico: "adult quantum accelerator, fearless human face, intense bright eyes, kinetic smirk, prismatic speed-suit jacket, atom arcs, micro-cut sparks, ultra-fast hi-tech aura",
+  engenheiro_groove: "adult groove engineer, friendly realistic face, warm eyes, calm smile, studio-club vest, headphones around neck, holographic mixer lines, rounded bass loops",
+  arquiteto_hipnotico: "adult hypnotic architect, focused realistic face, steady eyes, structured dark coat, blueprint-light tattoos, repeating pressure corridors, acid techno geometry",
+  cacador_bass: "adult bass hunter, charismatic human face, sharp eyes, magnetic grin, heavy bass jacket, pressure-ring collar, subwoofer rings, magenta-blue drop shockwaves",
+  viajante_organico: "adult organic voyager, serene realistic human face, gentle smile, woven organic layers, botanical signal filaments, green-gold downtempo waves, analog warmth",
+  explorador_fractal: "adult fractal explorer, curious realistic human face, asymmetrical smile, patchwork technical jacket, fractal cubes, IDM micro-detail sparks, orange-cyan-violet geometry"
+};
+
+function spiritEntityBrief(body = {}) {
+  const bodyBrief = trimText(body.humanEntityBrief || body.spiritHumanBrief || "", 1400);
+  if (bodyBrief) return bodyBrief;
+  const spiritId = trimText(body.spiritId, 80);
+  return SPIRIT_ENTITY_BRIEFS[spiritId] || SPIRIT_ENTITY_BRIEFS.engenheiro_groove;
+}
 
 function spiritImageOwnerKey(body = {}) {
   const userIdentity = trimText(
@@ -28,7 +55,18 @@ function spiritImageOwnerKey(body = {}) {
     240
   );
   if (!userIdentity) return "";
-  return `${SPIRIT_IMAGE_STORE_PREFIX}:${hashStoreKey(userIdentity)}`;
+  const promptVersion = trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80);
+  const spiritId = trimText(body.spiritId, 80) || "spirit";
+  const milestoneLikes = Math.max(0, Number(body.milestoneLikes) || 0);
+  const profileSignature = trimText(body.profileSignature || "", 240);
+  const scope = [
+    promptVersion,
+    userIdentity,
+    spiritId,
+    milestoneLikes,
+    profileSignature || "profile"
+  ].join(":");
+  return `${SPIRIT_IMAGE_STORE_PREFIX}:${hashStoreKey(scope)}`;
 }
 
 function spiritImageLockKey(imageKey = "") {
@@ -48,6 +86,8 @@ function storedImageResponse(record = {}, reused = true) {
     betaRegeneration: Boolean(record.betaRegeneration),
     spiritId: record.spiritId || "",
     milestoneLikes: record.milestoneLikes || 0,
+    promptVersion: record.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION,
+    uniquePerSpirit: true,
     store: record.store || ""
   };
 }
@@ -115,7 +155,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const prompt = trimText(body.prompt, 3800);
+  const prompt = trimText(body.prompt, 2200);
   if (!prompt) {
     sendJson(res, 400, { error: "missing_prompt" });
     return;
@@ -147,21 +187,26 @@ module.exports = async function handler(req, res) {
     return;
   }
 
+  const humanEntityBrief = spiritEntityBrief(body);
+  const dominantStyles = trimText(body.dominantStyles, 220);
   const safePrompt = [
-    prompt,
-    "Square 1024x1024 premium collectible artwork centered on a fictional adult human-like musical spirit entity.",
-    "Generate only the central realistic human entity artwork; the app will add all text, stats, frame, and UI later.",
-    "The figure must have visible human presence: charismatic expressive face, warm believable eyes, head, shoulders or upper body, cinematic lighting, realistic skin/material detail, ritual or dark-club styling, luminous waveform aura, equalizer particles, sub-bass rings, and underground electronic-music intensity.",
-    "Strict style: realistic, cinematic, editorial, high-detail, emotionally magnetic, and music-reactive; not mask-like, not mannequin-like, not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic avatar, not a literal DJ photo.",
-    "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no logos, no watermarks, no readable text, no numbers, and no UI panels.",
-    "Avoid generic stock portraits, blank stares, plain party photos, clutter, turntables as the main subject, and any cute avatar language. Make the entity feel dark, premium, charismatic, personal, and sonically alive."
-  ].join(" ");
+    `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
+    "QUALITY GATE: produce a photorealistic, cinematic, editorial portrait or upper-body figure of a fictional adult human musical-spirit entity. It must read instantly as a charismatic real human presence, not as an avatar.",
+    `Spirit-specific human brief: ${humanEntityBrief}.`,
+    dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
+    "The app will add all text, stats, frame, and UI later. Generate only the central artwork; no typography, captions, numbers, logos, watermarks, borders, or UI panels.",
+    "The figure must have visible face, head, neck, shoulders or upper body; believable warm eyes; natural skin detail with pores and subtle asymmetry; expressive brow and mouth; cinematic lighting; realistic fabric/material detail; and a music-reactive aura tied to the spirit brief.",
+    "Strict negative style: not mask-like, not mannequin-like, not plastic, not blank stare, not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic fantasy character, not generic stock portrait, not a literal DJ photo.",
+    "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
+    "Make the entity feel premium, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
+    prompt
+  ].filter(Boolean).join(" ");
 
   try {
     const result = await callOpenAiImage({
       prompt: safePrompt,
       size: "1024x1024",
-      quality: "medium"
+      quality: "high"
     });
     if (!result.ok) {
       await deleteKey(lockKey);
@@ -179,6 +224,7 @@ module.exports = async function handler(req, res) {
       spiritId: trimText(body.spiritId, 80),
       spiritName: trimText(body.spiritName, 160),
       milestoneLikes: Math.max(0, Number(body.milestoneLikes) || 0),
+      promptVersion: trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80),
       profileSignature: trimText(body.profileSignature, 120),
       language: trimText(body.language, 8),
       store: hasDurableStore() ? "durable" : "memory"
