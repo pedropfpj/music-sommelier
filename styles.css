@@ -606,6 +606,7 @@ body[data-vibe-theme="hard"] {
 }
 
 .welcome-card {
+  box-sizing: border-box;
   width: 100%;
   max-width: 780px;
   width: min(780px, 100%);
@@ -4645,28 +4646,46 @@ input[type="range"] {
   top: 1rem;
   z-index: 1;
   border: 2px solid currentColor;
-  border-radius: 12px;
-  padding: 0.22rem 0.62rem;
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
   font-family: "Syne", sans-serif;
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-size: clamp(0.92rem, 2vw, 1.28rem);
   font-weight: 900;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
+  line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
+  background: rgba(4, 11, 28, 0.74);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(12px);
+  transition: opacity 120ms ease, transform 160ms ease, box-shadow 160ms ease;
   pointer-events: none;
 }
 
 .swipe-stamp-like {
   right: 1rem;
   color: #7bffd8;
-  opacity: var(--swipe-like-opacity);
+  opacity: var(--swipe-like-opacity, 0);
   transform: rotate(10deg);
 }
 
 .swipe-stamp-pass {
   left: 1rem;
   color: #ff93bc;
-  opacity: var(--swipe-pass-opacity);
+  opacity: var(--swipe-pass-opacity, 0);
   transform: rotate(-10deg);
+}
+
+.swipe-track-card.is-ready.is-like .swipe-stamp-like,
+.main-track.is-ready.is-like .swipe-stamp-like {
+  box-shadow: 0 16px 38px rgba(110, 255, 220, 0.24), 0 0 0 4px rgba(110, 255, 220, 0.1);
+  transform: rotate(8deg) scale(1.08);
+}
+
+.swipe-track-card.is-ready.is-pass .swipe-stamp-pass,
+.main-track.is-ready.is-pass .swipe-stamp-pass {
+  box-shadow: 0 16px 38px rgba(255, 143, 188, 0.24), 0 0 0 4px rgba(255, 143, 188, 0.1);
+  transform: rotate(-8deg) scale(1.08);
 }
 
 .primary-swipe-stamp {
@@ -4678,6 +4697,10 @@ input[type="range"] {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.58rem;
+}
+
+.correction-feedback-group {
+  display: none;
 }
 
 .swipe-action-btn {

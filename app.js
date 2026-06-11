@@ -663,7 +663,24 @@ const INDEXED_DATASET_ARTIST_COUNT = 3200;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 8;
 
 const LOCAL_TRACK_SEED_BOOST = [
-  { style: "psytrance", artist: "Astrix", song: "He.art", label: "Shamanic Tales", bpmExact: 145 },
+  {
+    style: "psytrance",
+    artist: "Astrix",
+    song: "He.art",
+    label: "Shamanic Tales",
+    bpmExact: 145,
+    artistGenre: "Psytrance / progressive psy / full-on",
+    artistProfileHint: "Astrix deve ficar no eixo psytrance/progressive/full-on; nao usar album como subgenero."
+  },
+  {
+    style: "psytrance",
+    artist: "Astrix",
+    song: "Poison",
+    label: "HOMmega Productions",
+    bpmExact: 145,
+    artistGenre: "Psytrance / progressive psy / full-on",
+    artistProfileHint: "Poison vem do recorte psytrance/full-on de Astrix; Artcore e album, nao subgenero."
+  },
   { style: "forest_psy", artist: "Atriohm", song: "Takums", label: "Parvati Records", bpmExact: 149 },
   { style: "dark_psy", artist: "Kindzadza", song: "Narcotic Influence", label: "Parvati Records", bpmExact: 158 },
   { style: "full_on", artist: "Sonic Species", song: "Rush", label: "Nano Records", bpmExact: 146 },
@@ -1860,6 +1877,21 @@ const ARTIST_GENRE_HINT_OVERRIDES = {
     en: "Brazilian bass / dance-pop / electro house",
     es: "Brazilian bass / dance-pop / electro house"
   },
+  "1200 micrograms": {
+    pt: "Psytrance / full-on / Goa trance",
+    en: "Psytrance / full-on / Goa trance",
+    es: "Psytrance / full-on / Goa trance"
+  },
+  astrix: {
+    pt: "Psytrance / progressive psy / full-on",
+    en: "Psytrance / progressive psy / full-on",
+    es: "Psytrance / progressive psy / full-on"
+  },
+  "alpha portal": {
+    pt: "Progressive psy / psytrance",
+    en: "Progressive psy / psytrance",
+    es: "Progressive psy / psytrance"
+  },
   "evil oil man": {
     pt: "Prog Dark / zenonesque",
     en: "Prog Dark / zenonesque",
@@ -1919,6 +1951,17 @@ const ARTIST_GENRE_HINT_OVERRIDES = {
     pt: "Psytrance (live)",
     en: "Psytrance (live)",
     es: "Psytrance (live)"
+  }
+};
+
+const ARTIST_RELEASE_LABEL_OVERRIDES = {
+  astrix: {
+    artcore: "HOMmega Productions",
+    "eye to eye": "HOMmega Productions",
+    "one step ahead": "HOMmega Productions",
+    "red means distortion": "HOMmega Productions",
+    "he art": "Shamanic Tales",
+    heart: "Shamanic Tales"
   }
 };
 
@@ -2369,6 +2412,8 @@ const catalog = [
     spotifyUrl: "https://open.spotify.com/search/Deep%20Jungle%20Walk%20Astrix",
     youtubeUrl: "https://www.youtube.com/results?search_query=Deep+Jungle+Walk+Astrix",
     beatportUrl: "https://www.beatport.com/search?q=Astrix%20Deep%20Jungle%20Walk",
+    artistGenre: "Psytrance / progressive psy / full-on",
+    artistProfileHint: "Astrix cruza psytrance, progressive psy e full-on; nao classificar como forest por BPM isolado.",
     artistBio: "Astrix e um dos nomes centrais do psytrance global, combinando linhas melodicas e energia de festival.",
     labelBio: "HOMmega ajudou a consolidar o psytrance israelense no circuito internacional."
   },
@@ -2667,6 +2712,8 @@ const catalog = [
     spotifyUrl: "https://open.spotify.com/search/Astrix%20Mahadeva",
     youtubeUrl: "https://www.youtube.com/results?search_query=Astrix+Mahadeva",
     beatportUrl: "https://www.beatport.com/search?q=Astrix%20Mahadeva",
+    artistGenre: "Psytrance / progressive psy / full-on",
+    artistProfileHint: "Astrix tambem conversa com goa/prog em faixas melodicas, sem virar forest psy por BPM.",
     artistBio: "No espectro goa/prog, Astrix uniu melodias memoraveis com impacto moderno.",
     labelBio: "TIP Records foi importante no desenvolvimento da cultura goa/trance."
   },
@@ -6640,7 +6687,7 @@ const STYLE_ARTIST_SEEDS = {
     "Outsiders"
   ],
   psy_comercial: ["Skazi", "Paranormal Attack", "Sesto Sento", "Mandragora", "Claudinho Brasil", "Vini Vici", "Blastoyz", "Vegas"],
-  progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Perfect Stranger", "Nerso", "Morten Granau", "Vermont (BR)"],
+  progressive_psy: ["Ace Ventura", "Captain Hook", "Liquid Soul", "Symbolic", "Astrix", "Alpha Portal", "Perfect Stranger", "Nerso", "Morten Granau", "Vermont (BR)"],
   hi_tech: [...HITECH_ARTIST_ROSTER],
   dark_progressive: [
     "Vermont",
@@ -6842,6 +6889,10 @@ const ARTIST_STYLE_OVERRIDES = {
   "fagins reject": ["hi_tech"],
   "faginsreject": ["hi_tech"],
   "oxidaksi": ["hi_tech"],
+  "1200 micrograms": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
+  "1200 mics": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
+  "astrix": ["psytrance", "progressive_psy", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
+  "alpha portal": ["psytrance", "progressive_psy"],
   "gms": ["full_on", "full_on_night", "full_on_morning"],
   "avalon": ["full_on", "full_on_night", "full_on_morning"],
   "tristan": ["full_on", "full_on_night", "full_on_morning"],
@@ -6977,11 +7028,18 @@ const ARTIST_STYLE_OVERRIDES = {
   "bonde do tigrao": ["brazilian_funk"]
 };
 
+const LOCKED_ARTIST_STYLE_OVERRIDES = new Set(["astrix", "alpha portal"]);
+
 const ARTIST_CANONICAL_ORIGINS = {
   "astrix": {
     country: "Israel",
     area: "",
-    disambiguation: "Astrix e um produtor israelense ligado ao psytrance e ao progressive psy de alcance global."
+    disambiguation: "Astrix e um produtor israelense ligado ao psytrance, progressive psy e full-on; Alpha Portal e o projeto/collab conhecido com Ace Ventura."
+  },
+  "alpha portal": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Alpha Portal e o projeto/collab de Astrix com Ace Ventura, ligado ao eixo progressive psy/psytrance."
   },
   "ajja": {
     country: "Switzerland",
@@ -7338,6 +7396,16 @@ const ARTIST_CANONICAL_ORIGINS = {
     area: "",
     disambiguation: "Growling Mad Scientists (GMS) e um duo de psytrance de Israel."
   },
+  "1200 micrograms": {
+    country: "Spain",
+    area: "Ibiza",
+    disambiguation: "1200 Micrograms e um projeto de psytrance/full-on formado em Ibiza em 1999 por Raja Ram, Riktam, Bansi e Chicago."
+  },
+  "1200 mics": {
+    country: "Spain",
+    area: "Ibiza",
+    disambiguation: "1200 Mics e a forma abreviada de 1200 Micrograms, projeto de psytrance/full-on formado em Ibiza em 1999."
+  },
   "paranormal attack": {
     country: "Portugal",
     area: "Lisboa",
@@ -7347,6 +7415,7 @@ const ARTIST_CANONICAL_ORIGINS = {
 
 const STYLE_ARTIST_BLOCKLIST = {
   psy_comercial: ["alok"],
+  forest_psy: ["astrix", "alpha portal"],
   full_on: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_night: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_morning: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
@@ -9108,6 +9177,16 @@ const FAMILY_SEED_FALLBACK = {
 };
 
 const ARTIST_EXTENDED_PROFILES = {
+  "1200 micrograms": {
+    pt: "Origem: Ibiza, Espanha; projeto formado em 1999 por Raja Ram, Riktam, Bansi e Chicago. Background: 1200 Micrograms e um superprojeto de psytrance/full-on ligado a familia TIP World, juntando a escola GMS com a psicodelia de Raja Ram e Chicago. Projetos e colaborações: a discografia passa por 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007) e Gramology EP (2010); faixas como Marijuana, Mescaline, LSD, DMT e Acid for Nothing ficaram como referencias memoraveis da cena.",
+    en: "Origin: Ibiza, Spain; project formed in 1999 by Raja Ram, Riktam, Bansi, and Chicago. Background: 1200 Micrograms is a psytrance/full-on superproject tied to the TIP World family, joining the GMS school with Raja Ram and Chicago's psychedelic identity. Projects and collaborations: the discography includes 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007), and Gramology EP (2010); tracks like Marijuana, Mescaline, LSD, DMT, and Acid for Nothing remain memorable scene references.",
+    es: "Origen: Ibiza, España; proyecto formado en 1999 por Raja Ram, Riktam, Bansi y Chicago. Background: 1200 Micrograms es un superproyecto de psytrance/full-on ligado a la familia TIP World, uniendo la escuela GMS con la psicodelia de Raja Ram y Chicago. Proyectos y colaboraciones: la discografía incluye 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007) y Gramology EP (2010); temas como Marijuana, Mescaline, LSD, DMT y Acid for Nothing quedaron como referencias memorables de la escena."
+  },
+  "1200 mics": {
+    pt: "Origem: Ibiza, Espanha; projeto formado em 1999 por Raja Ram, Riktam, Bansi e Chicago. Background: 1200 Mics e a forma abreviada de 1200 Micrograms, superprojeto de psytrance/full-on ligado a familia TIP World. Projetos e colaborações: a discografia passa por 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007) e Gramology EP (2010); faixas como Marijuana, Mescaline, LSD, DMT e Acid for Nothing ficaram como referencias memoraveis da cena.",
+    en: "Origin: Ibiza, Spain; project formed in 1999 by Raja Ram, Riktam, Bansi, and Chicago. Background: 1200 Mics is the shortened name for 1200 Micrograms, a psytrance/full-on superproject tied to the TIP World family. Projects and collaborations: the discography includes 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007), and Gramology EP (2010); tracks like Marijuana, Mescaline, LSD, DMT, and Acid for Nothing remain memorable scene references.",
+    es: "Origen: Ibiza, España; proyecto formado en 1999 por Raja Ram, Riktam, Bansi y Chicago. Background: 1200 Mics es la forma abreviada de 1200 Micrograms, superproyecto de psytrance/full-on ligado a la familia TIP World. Proyectos y colaboraciones: la discografía incluye 1200 Micrograms (2002), Heroes of the Imagination (2003), The Time Machine (2004), Live in Brazil (2005), 1200 Micrograms Remixed (2006), Magic Numbers (2007) y Gramology EP (2010); temas como Marijuana, Mescaline, LSD, DMT y Acid for Nothing quedaron como referencias memorables de la escena."
+  },
   cindervomit: {
     pt: "Origem: Brasil, circuito underground psicodélico. Background: Cindervomit desenvolve slambient acelerado com desenho sonoro sombrio, foco em textura e pressão de pista. Projetos e colaborações: atua em lançamentos ligados ao núcleo The Endless Knot e costuma aparecer em curadorias híbridas entre dark ambient, psycore e experimentação ritual.",
     en: "Origin: Brazil, underground psychedelic circuit. Background: Cindervomit develops high-speed slambient with dark sound design, textured layers, and dancefloor pressure. Projects and collaborations: appears in releases connected to The Endless Knot nucleus and in hybrid curation between dark ambient, psycore, and ritual experimentation.",
@@ -9863,6 +9942,7 @@ function upsertArtistOverridesFromDataset(style, artistName) {
   const artistKey = normalize(artistName || "");
   if (!style || !artistKey) return;
   if (!Array.isArray(ARTIST_STYLE_OVERRIDES[artistKey])) ARTIST_STYLE_OVERRIDES[artistKey] = [];
+  if (LOCKED_ARTIST_STYLE_OVERRIDES.has(artistKey) && !ARTIST_STYLE_OVERRIDES[artistKey].includes(style)) return;
   if (!ARTIST_STYLE_OVERRIDES[artistKey].includes(style)) ARTIST_STYLE_OVERRIDES[artistKey].push(style);
 }
 
@@ -10732,9 +10812,74 @@ function isLikelyCompilationEntry({ song = "", artist = "", label = "", duration
   return false;
 }
 
+function directArtistGenreHint(artistName = "") {
+  const key = artistMatchKey(artistName || "");
+  const direct = key ? ARTIST_GENRE_HINT_OVERRIDES[key] : null;
+  if (direct && typeof direct === "object") {
+    return String(direct[currentLanguage] || direct.pt || direct.en || direct.es || "").trim();
+  }
+  if (typeof direct === "string") return String(direct).trim();
+  return "";
+}
+
+function curatedReleaseLabelForArtist(rawLabel = "", artistName = "") {
+  const releaseKey = normalize(rawLabel || "");
+  if (!releaseKey) return "";
+  const artistKey = artistMatchKey(artistName || "");
+  const directMap = artistKey ? ARTIST_RELEASE_LABEL_OVERRIDES[artistKey] : null;
+  if (directMap?.[releaseKey]) return directMap[releaseKey];
+  const aliasKey = Object.keys(ARTIST_RELEASE_LABEL_OVERRIDES).find((key) => isArtistMatch(artistName, key));
+  return aliasKey ? ARTIST_RELEASE_LABEL_OVERRIDES[aliasKey]?.[releaseKey] || "" : "";
+}
+
+function isCuratedArtistReleaseTitle(rawValue = "", artistName = "") {
+  return Boolean(curatedReleaseLabelForArtist(rawValue, artistName));
+}
+
+function isGenericArtistGenreSignal(rawValue = "") {
+  const value = normalize(rawValue || "");
+  if (!value) return true;
+  return [
+    "electronic",
+    "electronica",
+    "dance",
+    "trance",
+    "psy",
+    "psytrance",
+    "psy trance",
+    "psychedelic trance"
+  ].includes(value);
+}
+
+function applyCuratedTrackMetadata(track) {
+  if (!track) return track;
+  const curatedGenre = directArtistGenreHint(track.artist);
+  if (curatedGenre) {
+    const rawGenre = String(track.artistGenre || "").trim();
+    if (
+      !rawGenre ||
+      isGenericArtistGenreSignal(rawGenre) ||
+      isCuratedArtistReleaseTitle(rawGenre, track.artist) ||
+      artistMatchKey(track.artist) === "astrix"
+    ) {
+      track.artistGenre = curatedGenre;
+    }
+  }
+
+  if (isCuratedArtistReleaseTitle(track.artistProfileHint, track.artist)) {
+    track.artistProfileHint = "";
+  }
+
+  const curatedLabel = curatedReleaseLabelForArtist(track.label, track.artist);
+  if (curatedLabel) track.label = curatedLabel;
+  return track;
+}
+
 function sanitizeLabel(label, artistName, songName) {
   const raw = String(label || "").trim();
   if (!raw) return "Catálogo dinâmico";
+  const curatedLabel = curatedReleaseLabelForArtist(raw, artistName);
+  if (curatedLabel) return curatedLabel;
   const clean = normalize(raw);
   if (!clean) return "Catálogo dinâmico";
   if (/^(psy|psytrance|psy trance|trance|techno|house|electro|electronic|edm|dnb|dubstep|hitech|hi tech|psycore)\s+(single|ep|album)$/.test(clean)) return "Catálogo dinâmico";
@@ -12065,6 +12210,7 @@ function resolveTrackDurationSeconds(track) {
 
 function isTrackEligibleForRecommendation(track) {
   if (!track) return false;
+  applyCuratedTrackMetadata(track);
   if (!track.style || !track.artist || !track.song) return false;
   if (isLikelyChannelStyleArtistName(track.artist)) return false;
   if (isLikelyGeneratedTrackTitle(track.song)) return false;
@@ -12403,6 +12549,16 @@ function addDynamicTrackToCatalog({
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
   if (!artistName || !songName) return false;
+  const curatedInput = applyCuratedTrackMetadata({
+    artist: artistName,
+    song: songName,
+    label,
+    artistGenre,
+    artistProfileHint
+  });
+  label = curatedInput.label || label;
+  artistGenre = curatedInput.artistGenre || artistGenre;
+  artistProfileHint = curatedInput.artistProfileHint || artistProfileHint;
   if (hasTrackStyleSignalConflict(style, {
     artist: artistName,
     song: songName,
@@ -13144,7 +13300,7 @@ const I18N = {
     quickKnownNo: "Novidade pra mim",
     primarySwipeHint: "Arraste, curta ou troque: o radar entende melhor quando você reage no momento.",
     swipeLike: "Curti",
-    swipePass: "Trocar",
+    swipePass: "Não curti",
     swipeLikedNext: "Curti essa. Salvei o sinal e puxei outro universo para comparar.",
     swipePassedNext: "Boa, removi essa rota e puxei uma carta nova.",
     swipeStyleDeckGenerated: "Carta aberta em {style}. Curta ou troque para eu calibrar seu mapa.",
@@ -13316,7 +13472,7 @@ const I18N = {
     discogsArtistOpen: "Abrir perfil no Discogs",
     artistBioAiSource: "Bio refinada com apoio de IA e fontes: {sources}.",
     artistBioAiFallbackSource: "catálogo e fontes abertas",
-    artistBioLocalSource: "Leitura rápida com os dados que já temos. Quando houver fonte melhor, o app refina automaticamente.",
+    artistBioLocalSource: "Bio local resumida: origem, identidade, catálogo e cena quando houver dados confiáveis.",
     trackAiTitle: "Leitura da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiRefreshBusy: "Atualizando...",
@@ -13770,7 +13926,7 @@ const I18N = {
     quickKnownNo: "New to me",
     primarySwipeHint: "Drag, like, or swap: the radar understands more when you react in the moment.",
     swipeLike: "Like",
-    swipePass: "Swap",
+    swipePass: "Not for me",
     swipeLikedNext: "Liked. I saved the signal and pulled another world for comparison.",
     swipePassedNext: "Good, I removed that route and pulled a new card.",
     swipeStyleDeckGenerated: "Card opened in {style}. Like or swap so I can calibrate your map.",
@@ -13942,7 +14098,7 @@ const I18N = {
     discogsArtistOpen: "Open Discogs profile",
     artistBioAiSource: "Bio refined with AI support and sources: {sources}.",
     artistBioAiFallbackSource: "catalog and open sources",
-    artistBioLocalSource: "Quick read from the data already available. When better sources appear, the app refines it automatically.",
+    artistBioLocalSource: "Local short bio: origin, identity, catalog, and scene when reliable data is available.",
     trackAiTitle: "Track read",
     trackAiRefreshBtn: "Refresh insight",
     trackAiRefreshBusy: "Refreshing...",
@@ -14393,7 +14549,7 @@ const I18N = {
     quickKnownNo: "Novedad para mí",
     primarySwipeHint: "Arrastra, dale me gusta o cambia: el radar entiende más cuando reaccionas en el momento.",
     swipeLike: "Me gusta",
-    swipePass: "Cambiar",
+    swipePass: "No me va",
     swipeLikedNext: "Te gustó. Guardé la señal y traje otro mundo para comparar.",
     swipePassedNext: "Bien, saqué esa ruta y traje una carta nueva.",
     swipeStyleDeckGenerated: "Carta abierta en {style}. Dale me gusta o cambia para calibrar tu mapa.",
@@ -14565,7 +14721,7 @@ const I18N = {
     discogsArtistOpen: "Abrir perfil en Discogs",
     artistBioAiSource: "Bio refinada con apoyo de IA y fuentes: {sources}.",
     artistBioAiFallbackSource: "catálogo y fuentes abiertas",
-    artistBioLocalSource: "Lectura rápida con los datos disponibles. Cuando haya mejores fuentes, el app la refina automáticamente.",
+    artistBioLocalSource: "Bio local resumida: origen, identidad, catálogo y escena cuando hay datos fiables.",
     trackAiTitle: "Lectura de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiRefreshBusy: "Actualizando...",
@@ -22863,6 +23019,37 @@ function bandcampLinkTrusted(track) {
   return false;
 }
 
+function isGenericArtistBioText(rawText = "") {
+  const text = normalize(rawText || "");
+  if (!text) return true;
+  return [
+    "apareceu na busca dinamica",
+    "appears in the",
+    "aparece como destacado",
+    "complete com origem",
+    "fill in origin",
+    "ver fontes",
+    "see sources",
+    "bpm guia",
+    "bpm guide",
+    "entrou no radar",
+    "pista nova dentro",
+    "use esta faixa",
+    "porta de entrada",
+    "garimpei esta faixa",
+    "faixa localizada via",
+    "catálogo dinâmico",
+    "catalogo dinamico"
+  ].some((signal) => text.includes(normalize(signal)));
+}
+
+function meaningfulArtistBioText(rawText = "", minLength = 36) {
+  const text = normalizeInlineText(rawText);
+  if (!text || text.length < minLength) return "";
+  if (isGenericArtistBioText(text)) return "";
+  return text;
+}
+
 function localizedArtistNarrativeFallback(track) {
   const safeTrack = {
     song: track?.song || "Track",
@@ -22872,48 +23059,44 @@ function localizedArtistNarrativeFallback(track) {
   };
   const style = styleLabelByValue(safeTrack.style);
   const label = sanitizeLabel(safeTrack.label, safeTrack.artist, safeTrack.song);
-  const bpmData = resolveBpmDisplay(safeTrack);
-  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : "";
   const origin = artistOriginSignalForTrack(track);
   const originLabel = formatArtistOriginLabel(origin);
   const canonical = canonicalOriginForArtist(safeTrack.artist);
   const genre = String(track?.artistGenre || localizedArtistGenreHint(safeTrack.artist, safeTrack.style) || "").trim();
   const hint = String(track?.artistProfileHint || "").trim();
   const styleSummary = styleInfoSummaryByLanguage(safeTrack.style);
-  const identity = canonical?.disambiguation || hint;
-  const energy = energyLabelByValue(track?.energy || "");
+  const identity = meaningfulArtistBioText(canonical?.disambiguation || "", 20) ||
+    meaningfulArtistBioText(hint, 36) ||
+    meaningfulArtistBioText(track?.artistBio || "", 45);
   const knownLabel = isUnknownLabel(label);
+  const genreOrStyle = genre || style;
+  const artistName = safeTrack.artist;
+  const songLine = safeTrack.song ? `"${safeTrack.song}"` : "";
   if (currentLanguage === "en") {
-    const originCopy = originLabel ? `, from ${originLabel},` : "";
-    const labelCopy = knownLabel ? "" : ` The label gives you a good next path if you want to dig deeper: ${label}.`;
-    const genreCopy = genre ? ` You can hear a ${genre} leaning in the way it moves.` : "";
-    const bpmCopy = bpmCue ? `, moving around ${bpmCue}` : "";
-    if (identity) {
-      const originSentence = originLabel ? ` Origin signal: ${originLabel}.` : "";
-      return `${identity}${originSentence} Here, "${safeTrack.song}" enters with ${energy || "focused"} energy${bpmCopy}. What matters here is the feeling: ${styleSummary} ${genreCopy}${labelCopy} If it clicks, do not judge the project by one play only; this kind of sound opens up over a few tracks.`.trim();
-    }
-    return `${safeTrack.artist}${originCopy} enters through "${safeTrack.song}" with ${energy || "focused"} energy${bpmCopy}. What matters here is the feeling: ${styleSummary} ${genreCopy}${labelCopy} If it clicks, do not judge the project by one play only; this kind of sound opens up over a few tracks.`.trim();
+    const identityLine = identity || `${artistName} is connected to ${genreOrStyle}.`;
+    const originLine = originLabel ? `Origin: ${originLabel}.` : "Origin: not confirmed in the local catalog yet.";
+    const catalogLine = knownLabel
+      ? "Albums, formation year, and festival history still need a reliable source before the app states them as facts."
+      : `Catalog trail: start with ${label}, then check Discogs or the artist links for albums, aliases, and live history.`;
+    const entryLine = songLine ? `Track entry here: ${songLine}.` : "";
+    return `${identityLine} ${originLine} Sound lane: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
   }
   if (currentLanguage === "es") {
-    const originCopy = originLabel ? `, desde ${originLabel},` : "";
-    const labelCopy = knownLabel ? "" : ` El sello también sirve como camino para seguir buscando: ${label}.`;
-    const genreCopy = genre ? ` Se nota una inclinación hacia ${genre}.` : "";
-    const bpmCopy = bpmCue ? `, cerca de ${bpmCue}` : "";
-    if (identity) {
-      const originSentence = originLabel ? ` Señal de origen: ${originLabel}.` : "";
-      return `${identity}${originSentence} Aquí, "${safeTrack.song}" entra con energía ${energy || "enfocada"}${bpmCopy}. Lo importante es la sensación: ${styleSummary} ${genreCopy}${labelCopy} Si te conecta, escucha algunas pistas más; este tipo de sonido se entiende mejor con continuidad.`.trim();
-    }
-    return `${safeTrack.artist}${originCopy} entra por "${safeTrack.song}" con energía ${energy || "enfocada"}${bpmCopy}. Lo importante es la sensación: ${styleSummary} ${genreCopy}${labelCopy} Si te conecta, escucha algunas pistas más; este tipo de sonido se entiende mejor con continuidad.`.trim();
+    const identityLine = identity || `${artistName} está conectado con ${genreOrStyle}.`;
+    const originLine = originLabel ? `Origen: ${originLabel}.` : "Origen: aún no confirmado en el catálogo local.";
+    const catalogLine = knownLabel
+      ? "Álbumes, año de formación e historial de festivales todavía necesitan una fuente fiable antes de aparecer como hechos."
+      : `Ruta de catálogo: empieza por ${label} y sigue en Discogs o en los enlaces del artista para álbumes, alias e historial en vivo.`;
+    const entryLine = songLine ? `Pista de entrada aquí: ${songLine}.` : "";
+    return `${identityLine} ${originLine} Línea sonora: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
   }
-  const countryCopy = originLabel ? `, vindo de ${originLabel},` : "";
-  const genreCopy = genre ? ` Dá para sentir um pé em ${genre}.` : "";
-  const labelCopy = knownLabel ? "" : ` A gravadora também é uma boa trilha para continuar cavando: ${label}.`;
-  const bpmCopy = bpmCue ? `, girando perto de ${bpmCue}` : "";
-  if (identity) {
-    const originSentence = originLabel ? ` Sinal de origem: ${originLabel}.` : "";
-    return `${identity}${originSentence} Aqui, "${safeTrack.song}" entra com energia ${energy || "focada"}${bpmCopy}. O ponto é a sensação: ${styleSummary} ${genreCopy}${labelCopy} Se essa faixa bater, escuta mais duas ou três antes de decidir; artista bom às vezes precisa de sequência para fazer sentido.`.trim();
-  }
-  return `${safeTrack.artist}${countryCopy} entra aqui por "${safeTrack.song}" com energia ${energy || "focada"}${bpmCopy}. O ponto é a sensação: ${styleSummary} ${genreCopy}${labelCopy} Se essa faixa bater, escuta mais duas ou três antes de decidir; artista bom às vezes precisa de sequência para fazer sentido.`.trim();
+  const identityLine = identity || `${artistName} e um nome/projeto ligado a ${genreOrStyle}.`;
+  const originLine = originLabel ? `Origem: ${originLabel}.` : "Origem: ainda nao confirmada no catalogo local.";
+  const catalogLine = knownLabel
+    ? "Albuns, ano de formacao e historico de festivais ainda precisam de fonte confiavel antes de aparecerem como fato."
+    : `Trilha de catalogo: comece pela gravadora ${label} e siga no Discogs ou nos links do artista para ver albuns, aliases e historico ao vivo.`;
+  const entryLine = songLine ? `Faixa de entrada aqui: ${songLine}.` : "";
+  return `${identityLine} ${originLine} Linha sonora: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
 }
 
 function detailedArtistBio(track) {
@@ -22924,16 +23107,7 @@ function detailedArtistBio(track) {
   }
 
   const sourceBio = String(track?.artistBio || "").trim();
-  const normalizedSourceBio = normalize(sourceBio);
-  const isGenericDynamicBio = normalizedSourceBio.includes("apareceu na busca dinamica") ||
-    normalizedSourceBio.includes("appears in the") ||
-    normalizedSourceBio.includes("aparece como destacado") ||
-    normalizedSourceBio.includes("complete com origem") ||
-    normalizedSourceBio.includes("fill in origin") ||
-    normalizedSourceBio.includes("ver fontes") ||
-    normalizedSourceBio.includes("see sources") ||
-    normalizedSourceBio.includes("bpm guia") ||
-    normalizedSourceBio.includes("bpm guide");
+  const isGenericDynamicBio = isGenericArtistBioText(sourceBio);
   if (sourceBio && sourceBio.length > 80 && !isGenericDynamicBio) {
     return `${humanizeStructuredBioText(sourceBio, track)} ${localizedArtistNarrativeFallback(track)}`.trim();
   }
@@ -23951,8 +24125,6 @@ function buildArtistBioFromApiProfile(track, profile) {
   const style = styleLabelByValue(track?.style || "house");
   const song = String(track?.song || "").trim();
   const origin = formatArtistOriginLabel(artistOriginSignalForTrack(track));
-  const bpmData = resolveBpmDisplay(track || {});
-  const bpmCue = bpmData.exact > 0 ? `${bpmData.exact} BPM` : "";
   const summaryRaw = String(profile.wikiSummary || "").replace(/\s+/g, " ").trim();
   const disambiguationRaw = String(profile.disambiguation || "").trim();
   const summary = textMatchesCurrentBioLanguage(summaryRaw) &&
@@ -23965,47 +24137,42 @@ function buildArtistBioFromApiProfile(track, profile) {
     ? disambiguationRaw
     : "";
   const genreSignal = String(profile.genre || track?.artistGenre || localizedArtistGenreHint(artist, track?.style || "") || "").trim();
-  const styleSummary = styleInfoSummaryByLanguage(track?.style || "");
-  const energy = energyLabelByValue(track?.energy || "");
-  const sourceSummary = summary ? truncateByWordBoundary(summary, 210) : "";
+  const sourceSummary = summary ? truncateByWordBoundary(summary, 260) : "";
+  const label = sanitizeLabel(track?.label || "", artist, song);
+  const knownLabel = !isUnknownLabel(label);
+  const startYear = String(profile.lifeStartYear || "").trim();
 
   if (currentLanguage === "en") {
-    const originLine = origin ? `, from ${origin},` : "";
-    const songLine = song ? ` "${song}" is the first door into this project here:` : "";
-    const bpmLine = bpmCue ? `, moving around ${bpmCue}` : "";
-    const contextLine = disambiguation ? ` ${disambiguation}` : "";
-    const genreLine = genreSignal ? ` The sound leans toward ${genreSignal}.` : "";
-    const summaryLine = sourceSummary ? ` A useful note: ${sourceSummary}` : "";
-    if (disambiguation) {
-      const originSentence = origin ? ` Origin signal: ${origin}.` : "";
-      return `${disambiguation}${originSentence} ${song ? `"${song}" enters here with` : "This recommendation carries"} ${energy || "focused"} energy${bpmLine}. The reason it makes sense: ${styleSummary} ${genreLine}${summaryLine}`.trim();
-    }
-    return `${artist}${originLine}${songLine} ${energy || "focused"} energy${bpmLine}. ${contextLine} The reason it makes sense: ${styleSummary} ${genreLine}${summaryLine}`.trim();
+    const identityLine = disambiguation || sourceSummary || `${artist} is an electronic artist/project connected to ${genreSignal || style}.`;
+    const originLine = origin ? `Origin: ${origin}.` : "";
+    const startLine = startYear ? `Project/career start: ${startYear}.` : "";
+    const catalogLine = knownLabel ? `Catalog trail: ${label}.` : "Albums and festival history still need a stronger source.";
+    const entryLine = song ? `Track entry here: "${song}".` : "";
+    return [identityLine, originLine, startLine, `Sound lane: ${genreSignal || style}.`, entryLine, catalogLine]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
   }
   if (currentLanguage === "es") {
-    const originLine = origin ? `, desde ${origin},` : "";
-    const songLine = song ? ` "${song}" es la primera puerta de entrada:` : "";
-    const bpmLine = bpmCue ? `, cerca de ${bpmCue}` : "";
-    const contextLine = disambiguation ? ` ${disambiguation}` : "";
-    const genreLine = genreSignal ? ` El sonido se acerca a ${genreSignal}.` : "";
-    const summaryLine = sourceSummary ? ` Un dato útil: ${sourceSummary}` : "";
-    if (disambiguation) {
-      const originSentence = origin ? ` Señal de origen: ${origin}.` : "";
-      return `${disambiguation}${originSentence} ${song ? `"${song}" entra aquí con` : "Esta recomendación trae"} energía ${energy || "enfocada"}${bpmLine}. Por eso puede funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
-    }
-    return `${artist}${originLine}${songLine} energía ${energy || "enfocada"}${bpmLine}. ${contextLine} Por eso puede funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
+    const identityLine = disambiguation || sourceSummary || `${artist} es un artista/proyecto electrónico conectado con ${genreSignal || style}.`;
+    const originLine = origin ? `Origen: ${origin}.` : "";
+    const startLine = startYear ? `Inicio del proyecto/carrera: ${startYear}.` : "";
+    const catalogLine = knownLabel ? `Ruta de catálogo: ${label}.` : "Álbumes e historial de festivales todavía necesitan una fuente más fuerte.";
+    const entryLine = song ? `Pista de entrada aquí: "${song}".` : "";
+    return [identityLine, originLine, startLine, `Línea sonora: ${genreSignal || style}.`, entryLine, catalogLine]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
   }
-  const originLine = origin ? `, vindo de ${origin},` : "";
-  const songLine = song ? ` "${song}" é a primeira porta de entrada:` : "";
-  const bpmLine = bpmCue ? `, girando perto de ${bpmCue}` : "";
-  const contextLine = disambiguation ? ` ${disambiguation}` : "";
-  const genreLine = genreSignal ? ` O som conversa com ${genreSignal}.` : "";
-  const summaryLine = sourceSummary ? ` Um detalhe útil: ${sourceSummary}` : "";
-  if (disambiguation) {
-    const originSentence = origin ? ` Sinal de origem: ${origin}.` : "";
-    return `${disambiguation}${originSentence} ${song ? `"${song}" entra aqui com` : "Esta recomendação traz"} energia ${energy || "focada"}${bpmLine}. Por isso pode funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
-  }
-  return `${artist}${originLine}${songLine} energia ${energy || "focada"}${bpmLine}. ${contextLine} Por isso pode funcionar: ${styleSummary} ${genreLine}${summaryLine}`.trim();
+  const identityLine = disambiguation || sourceSummary || `${artist} e um artista/projeto eletronico ligado a ${genreSignal || style}.`;
+  const originLine = origin ? `Origem: ${origin}.` : "";
+  const startLine = startYear ? `Inicio do projeto/carreira: ${startYear}.` : "";
+  const catalogLine = knownLabel ? `Trilha de catalogo: ${label}.` : "Albuns e historico de festivais ainda precisam de fonte mais forte.";
+  const entryLine = song ? `Faixa de entrada aqui: "${song}".` : "";
+  return [identityLine, originLine, startLine, `Linha sonora: ${genreSignal || style}.`, entryLine, catalogLine]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
 }
 
 async function fetchArtistApiProfile(artistName, preferredLanguage = currentLanguage) {
@@ -30334,6 +30501,8 @@ function stageQuickKnownAdvance({ track, likedTrack = null, avoidArtistName = ""
     const artist = formatSummaryArtistName(track.artist) || track.artist;
     feedbackMessage.textContent = t("quickKnownPendingNext", { artist });
   }
+  if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
+  if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   syncQuickKnownDecision(track);
   scrollQuickKnownPanelIntoView();
   return true;
@@ -30568,6 +30737,9 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   swipeFeedbackBusy = true;
   animatedEl.classList.remove("is-dragging");
   animatedEl.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
+  const decisionMessage = direction === "like" ? t("toastSongLiked") : t("swipePassedNext");
+  if (feedbackMessage && decisionMessage) feedbackMessage.textContent = decisionMessage;
+  if (direction === "pass" && decisionMessage) showToast(decisionMessage);
   if (swipeLikeBtn) swipeLikeBtn.disabled = true;
   if (swipePassBtn) swipePassBtn.disabled = true;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
@@ -30606,24 +30778,6 @@ function finishSwipePointer(event, canceled = false) {
   resetSwipeElementPosition(element);
 }
 
-function maybeCompleteSwipeDuringDrag(dx = 0, dy = 0) {
-  if (!swipeDragState?.element || swipeDragState.completed) return false;
-  const { element, pointerId } = swipeDragState;
-  const decision = swipeGestureDecision(element, dx, dy);
-  if (!decision.shouldHardCommit) return false;
-
-  swipeDragState.completed = true;
-  element.classList.remove("is-dragging");
-  try {
-    element.releasePointerCapture?.(pointerId);
-  } catch (_) {
-    // Pointer capture may already be released by the browser.
-  }
-  swipeDragState = null;
-  void completeSwipeFeedback(decision.direction, element);
-  return true;
-}
-
 function handleSwipePointerMove(event) {
   if (!swipeDragState || swipeDragState.pointerId !== event.pointerId) return;
   const dx = event.clientX - swipeDragState.startX;
@@ -30635,7 +30789,6 @@ function handleSwipePointerMove(event) {
     return;
   }
   setSwipeDragVisual(dx, swipeDragState.element, dy);
-  maybeCompleteSwipeDuringDrag(dx, dy);
 }
 
 function handleSwipeKeyboard(event, element) {
@@ -30679,6 +30832,7 @@ function beginSwipePointer(event, element) {
 }
 
 function renderRecommendation(track, prefs) {
+  track = applyCuratedTrackMetadata(track);
   setActiveAppTab("discover");
   pendingQuickKnownAdvance = null;
   const meta = getTrackMetadata(track);
