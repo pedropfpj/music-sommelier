@@ -212,8 +212,8 @@ async function fetchTicketmasterAttractionIds({ apiKey, query }) {
 }
 
 async function fetchBandsintownEventsForQuery({ query }) {
-  if (!featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)) return [];
-  const appId = envText("BANDSINTOWN_APP_ID", "neonpulse_selector");
+  const appId = envText("BANDSINTOWN_APP_ID", "");
+  if (!appId || !featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)) return [];
   const params = new URLSearchParams({ app_id: appId });
   const response = await fetch(`${BANDSINTOWN_EVENTS_URL}/${encodeURIComponent(query)}/events?${params.toString()}`, {
     headers: { Accept: "application/json" }

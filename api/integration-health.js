@@ -26,7 +26,8 @@ module.exports = async function handler(req, res) {
       },
       bandsintown: {
         configured: Boolean(process.env.BANDSINTOWN_APP_ID),
-        enabled: featureEnabled("SONIC_BANDSINTOWN_ENABLED", Boolean(process.env.BANDSINTOWN_APP_ID))
+        enabled: Boolean(process.env.BANDSINTOWN_APP_ID) &&
+          featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)
       }
     },
     endpoints: {
