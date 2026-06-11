@@ -137,7 +137,7 @@ function mergeEvents(...groups) {
 
 async function fetchTicketmasterEventsForQuery({ query, countryCode, size }) {
   const apiKey = envText("TICKETMASTER_API_KEY") || envText("TICKETMASTER_CONSUMER_KEY");
-  if (!apiKey) return [];
+  if (!apiKey || !featureEnabled("SONIC_TICKETMASTER_ENABLED", true)) return [];
 
   const baseParams = {
     apikey: apiKey,
@@ -266,7 +266,7 @@ module.exports = async function handler(req, res) {
   if (!requireMusicApi(req, res, {
     methods: ["GET", "POST"],
     feature: "artist-events",
-    enabledEnv: "SONIC_TICKETMASTER_ENABLED",
+    enabledEnv: "SONIC_ARTIST_EVENTS_ENABLED",
     defaultEnabled: false,
     dailyLimitEnv: "SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT",
     defaultDailyLimit: 80

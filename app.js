@@ -1882,6 +1882,11 @@ const ARTIST_GENRE_HINT_OVERRIDES = {
     en: "Psytrance / full-on / Goa trance",
     es: "Psytrance / full-on / Goa trance"
   },
+  blastoyz: {
+    pt: "Psytrance / full-on / progressive psy",
+    en: "Psytrance / full-on / progressive psy",
+    es: "Psytrance / full-on / progressive psy"
+  },
   astrix: {
     pt: "Psytrance / progressive psy / full-on",
     en: "Psytrance / progressive psy / full-on",
@@ -5228,6 +5233,7 @@ let swipeDragState = null;
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
+let swipeUserAnchoredStyle = "";
 const SUGGESTION_QUEUE_TARGET = 25;
 const SWIPE_DISCOVERY_STYLE_DECK = [
   "downtempo",
@@ -5249,6 +5255,9 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
   "future_garage",
   "psycore"
 ];
+const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
+const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
+const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
 const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
 let trackInsightCache = new Map();
 let currentTrackInsightTrackKey = "";
@@ -6891,6 +6900,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "oxidaksi": ["hi_tech"],
   "1200 micrograms": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
   "1200 mics": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
+  "blastoyz": ["psytrance", "full_on", "full_on_morning", "progressive_psy", "psy_comercial"],
   "astrix": ["psytrance", "progressive_psy", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
   "alpha portal": ["psytrance", "progressive_psy"],
   "gms": ["full_on", "full_on_night", "full_on_morning"],
@@ -7406,6 +7416,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     area: "Ibiza",
     disambiguation: "1200 Mics e a forma abreviada de 1200 Micrograms, projeto de psytrance/full-on formado em Ibiza em 1999."
   },
+  "blastoyz": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Blastoyz e o projeto do DJ/produtor israelense Kobi Nigreker, ligado a psytrance, full-on e progressive psy de festival."
+  },
   "paranormal attack": {
     country: "Portugal",
     area: "Lisboa",
@@ -7413,9 +7428,35 @@ const ARTIST_CANONICAL_ORIGINS = {
   }
 };
 
+const FOREST_PSY_ARTIST_BLOCKLIST = [
+  "astrix",
+  "alpha portal",
+  "blastoyz",
+  "vini vici",
+  "skazi",
+  "mandragora",
+  "sesto sento",
+  "paranormal attack",
+  "raja ram",
+  "1200 micrograms",
+  "1200 mics",
+  "gms",
+  "avalon",
+  "tristan",
+  "earthspace",
+  "sonic species",
+  "burn in noise",
+  "electric universe",
+  "mad maxx",
+  "outsiders",
+  "faders",
+  "vegas",
+  "claudinho brasil"
+];
+
 const STYLE_ARTIST_BLOCKLIST = {
   psy_comercial: ["alok"],
-  forest_psy: ["astrix", "alpha portal"],
+  forest_psy: FOREST_PSY_ARTIST_BLOCKLIST,
   full_on: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_night: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_morning: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
@@ -13289,7 +13330,7 @@ const I18N = {
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
     topSwipeEmptyTitle: "Toque em Surpresa sonora",
     topSwipeEmptyMeta: "O primeiro card já vem de um subgênero diferente. Depois é só curtir ou trocar.",
-    topSwipeHint: "No modo descoberta, cada swipe tenta abrir outro estilo, outro DJ e outra textura.",
+    topSwipeHint: "No modo descoberta, o deck começa variado e afina para a vertente que seus swipes sinalizam.",
     swipeStartButton: "Surpresa sonora",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
@@ -13301,10 +13342,12 @@ const I18N = {
     primarySwipeHint: "Arraste, curta ou troque: o radar entende melhor quando você reage no momento.",
     swipeLike: "Curti",
     swipePass: "Não curti",
-    swipeLikedNext: "Curti essa. Salvei o sinal e puxei outro universo para comparar.",
+    swipeLikedNext: "Curti essa. Salvei o sinal e vou afinar o radar se esse caminho repetir.",
     swipePassedNext: "Boa, removi essa rota e puxei uma carta nova.",
     swipeStyleDeckGenerated: "Carta aberta em {style}. Curta ou troque para eu calibrar seu mapa.",
     swipeDeckNext: "Próxima carta: saí de {from} e trouxe {to}.",
+    swipeAnchorNext: "Subgênero respeitado: mantendo {focus}. Próxima carta em {next}.",
+    swipeAffinityNext: "Radar afinou para {focus}. Próxima carta em {next}, dentro da mesma vertente ou uma vizinha próxima.",
     feedbackLikeGroupTitle: "Guardar sinal positivo",
     feedbackCorrectGroupTitle: "Corrigir rota",
     feedbackExploreGroupTitle: "Próximo passo",
@@ -13915,7 +13958,7 @@ const I18N = {
     swipeHint: "Works with mouse or touch: drag the card and release.",
     topSwipeEmptyTitle: "Tap Sound surprise",
     topSwipeEmptyMeta: "The first card already comes from a different subgenre. Then just like or swap.",
-    topSwipeHint: "In discovery mode, each swipe tries to open another style, another DJ, and another texture.",
+    topSwipeHint: "In discovery mode, the deck starts broad and then narrows toward the lane your swipes reveal.",
     swipeStartButton: "Sound surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
@@ -13927,10 +13970,12 @@ const I18N = {
     primarySwipeHint: "Drag, like, or swap: the radar understands more when you react in the moment.",
     swipeLike: "Like",
     swipePass: "Not for me",
-    swipeLikedNext: "Liked. I saved the signal and pulled another world for comparison.",
+    swipeLikedNext: "Liked. I saved the signal and will tighten the radar if this lane keeps repeating.",
     swipePassedNext: "Good, I removed that route and pulled a new card.",
     swipeStyleDeckGenerated: "Card opened in {style}. Like or swap so I can calibrate your map.",
     swipeDeckNext: "Next card: moved from {from} into {to}.",
+    swipeAnchorNext: "Subgenre respected: staying with {focus}. Next card in {next}.",
+    swipeAffinityNext: "Radar tuned toward {focus}. Next card in {next}, inside the same lane or a close neighbor.",
     feedbackLikeGroupTitle: "Save positive signal",
     feedbackCorrectGroupTitle: "Correct route",
     feedbackExploreGroupTitle: "Next step",
@@ -14538,7 +14583,7 @@ const I18N = {
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
     topSwipeEmptyTitle: "Toca Sorpresa sonora",
     topSwipeEmptyMeta: "La primera carta ya viene de un subgénero distinto. Después solo dale me gusta o cambia.",
-    topSwipeHint: "En modo descubrimiento, cada swipe intenta abrir otro estilo, otro DJ y otra textura.",
+    topSwipeHint: "En modo descubrimiento, el deck empieza amplio y luego se afina hacia la vertiente que revelan tus swipes.",
     swipeStartButton: "Sorpresa sonora",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
@@ -14550,10 +14595,12 @@ const I18N = {
     primarySwipeHint: "Arrastra, dale me gusta o cambia: el radar entiende más cuando reaccionas en el momento.",
     swipeLike: "Me gusta",
     swipePass: "No me va",
-    swipeLikedNext: "Te gustó. Guardé la señal y traje otro mundo para comparar.",
+    swipeLikedNext: "Te gustó. Guardé la señal y voy a afinar el radar si esta ruta se repite.",
     swipePassedNext: "Bien, saqué esa ruta y traje una carta nueva.",
     swipeStyleDeckGenerated: "Carta abierta en {style}. Dale me gusta o cambia para calibrar tu mapa.",
     swipeDeckNext: "Próxima carta: salí de {from} y traje {to}.",
+    swipeAnchorNext: "Subgénero respetado: mantengo {focus}. Próxima carta en {next}.",
+    swipeAffinityNext: "Radar afinado hacia {focus}. Próxima carta en {next}, dentro de la misma vertiente o una vecina cercana.",
     feedbackLikeGroupTitle: "Guardar señal positiva",
     feedbackCorrectGroupTitle: "Corregir ruta",
     feedbackExploreGroupTitle: "Próximo paso",
@@ -21088,6 +21135,7 @@ function clearFilters() {
   recentTrackHistoryByStyle = new Map();
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
+  swipeUserAnchoredStyle = "";
   recommendationStyleFallbackInfo = null;
   updateBpmOptionsForSelectedStyle();
   suggestionQueueTracks = [];
@@ -21161,6 +21209,151 @@ function styleStronglyDisliked(style = "") {
   const likeScore = Number(adaptiveModel.likedStyles.get(styleKey) || 0);
   const dislikeScore = Number(adaptiveModel.dislikedStyles.get(styleKey) || 0);
   return dislikeScore >= 1.6 && dislikeScore >= likeScore + 1.1;
+}
+
+function selectableSwipeStyle(style = "") {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (!cleanStyle || !STYLE_BPM_RULES[cleanStyle]) return "";
+  const selectable = getAllSelectableStyles();
+  if (selectable.length && !selectable.includes(cleanStyle)) return "";
+  return cleanStyle;
+}
+
+function explicitSwipeAnchorStyle() {
+  return selectableSwipeStyle(swipeUserAnchoredStyle);
+}
+
+function swipeStyleSignal(style = "") {
+  const styleKey = selectableSwipeStyle(style);
+  if (!styleKey) {
+    return { like: 0, dislike: 0, net: 0 };
+  }
+  const like = Number(adaptiveModel.likedStyles.get(styleKey) || 0);
+  const dislike = Number(adaptiveModel.dislikedStyles.get(styleKey) || 0);
+  return {
+    like,
+    dislike,
+    net: like * 1.18 - dislike * 0.92
+  };
+}
+
+function dominantSwipeAffinityStyle(sourceTrack = null) {
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const selectableStyles = getAllSelectableStyles();
+  const ranked = selectableStyles
+    .map((style) => {
+      const signal = swipeStyleSignal(style);
+      const sourceBoost = sourceStyle && style === sourceStyle ? 0.22 : 0;
+      return {
+        style,
+        ...signal,
+        score: signal.net + sourceBoost + familyPreferenceSignal(style) * 0.42
+      };
+    })
+    .filter((entry) => entry.style && entry.like > 0)
+    .sort((a, b) => b.score - a.score || b.like - a.like);
+
+  const top = ranked[0];
+  if (!top) return "";
+  const totalLikeScore = ranked.reduce((sum, entry) => sum + Math.max(0, entry.like), 0);
+  const sourceSignal = sourceStyle ? swipeStyleSignal(sourceStyle) : { like: 0, net: 0 };
+  const confident =
+    top.like >= SWIPE_AFFINITY_MIN_STYLE_LIKES ||
+    top.net >= SWIPE_AFFINITY_MIN_NET_SCORE ||
+    (sourceStyle && sourceSignal.like >= 1.8 && totalLikeScore >= 3);
+
+  return confident ? top.style : "";
+}
+
+function addSwipeCandidate(candidateMap, style = "", base = 0, reason = "") {
+  const cleanStyle = selectableSwipeStyle(style);
+  if (!cleanStyle) return;
+  const existing = candidateMap.get(cleanStyle) || {
+    style: cleanStyle,
+    base: 0,
+    reasons: new Set()
+  };
+  existing.base = Math.max(existing.base, base);
+  if (reason) existing.reasons.add(reason);
+  candidateMap.set(cleanStyle, existing);
+}
+
+function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {}) {
+  const explicitAnchor = explicitSwipeAnchorStyle();
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const focusStyle = explicitAnchor || dominantSwipeAffinityStyle(sourceTrack);
+  if (!focusStyle) return null;
+
+  const candidateMap = new Map();
+  const similarStyles = similarFallbackStylesFor(focusStyle);
+  const focusFamily = familyOf(focusStyle);
+  const focusSignal = swipeStyleSignal(focusStyle);
+
+  addSwipeCandidate(candidateMap, focusStyle, explicitAnchor ? 9.2 : 7.4, "focus");
+  if (sourceStyle && (positive || explicitAnchor)) {
+    addSwipeCandidate(candidateMap, sourceStyle, positive ? 4.2 : 1.4, "source");
+  }
+  similarStyles.forEach((style, index) => {
+    addSwipeCandidate(candidateMap, style, 5.4 - index * 0.38, "neighbor");
+  });
+  getAllSelectableStyles()
+    .filter((style) => style !== focusStyle && familyOf(style) === focusFamily)
+    .slice(0, 12)
+    .forEach((style) => {
+      addSwipeCandidate(candidateMap, style, 2.2, "family");
+    });
+
+  const ranked = Array.from(candidateMap.values())
+    .map((entry) => {
+      const signal = swipeStyleSignal(entry.style);
+      const coverage = typeof styleCoverageStats === "function" ? styleCoverageStats(entry.style) : {};
+      const tracks = Number(coverage.tracks ?? coverage.trackCount ?? 0) || 0;
+      const artists = Number(coverage.artists ?? coverage.artistCount ?? 0) || 0;
+      let score =
+        entry.base +
+        signal.net * 2.1 +
+        stylePreferenceSignal(entry.style) * 1.28 +
+        familyPreferenceSignal(entry.style) * 0.78 +
+        Math.min(tracks, 32) * 0.035 +
+        Math.min(artists, 22) * 0.075;
+
+      if (entry.style === focusStyle) score += explicitAnchor ? 2.2 : 1.2;
+      if (entry.style === sourceStyle) score += positive ? 1.2 : -4.8;
+      if (familyOf(entry.style) === focusFamily) score += 1.35;
+      if (styleStronglyDisliked(entry.style) && !(explicitAnchor && entry.style === focusStyle)) score -= 32;
+      if (!positive && !explicitAnchor && entry.style === sourceStyle) score -= 14;
+      if (explicitAnchor && !positive && entry.style === focusStyle && focusSignal.dislike > focusSignal.like + 2.4) {
+        score -= 4.6;
+      }
+
+      return {
+        ...entry,
+        score
+      };
+    })
+    .filter((entry) => Number.isFinite(entry.score) && entry.score > -20)
+    .sort((a, b) => b.score - a.score);
+
+  if (!ranked.length) return null;
+
+  const shouldPreferNeighbor =
+    (!explicitAnchor && positive && Math.random() < SWIPE_AFFINITY_NEIGHBOR_CHANCE) ||
+    (!explicitAnchor && !positive) ||
+    (explicitAnchor && !positive && focusSignal.dislike > focusSignal.like + 1.35);
+  if (shouldPreferNeighbor) {
+    const bestNeighborIndex = ranked.findIndex((entry) => entry.style !== focusStyle);
+    if (bestNeighborIndex > 0) {
+      const [neighbor] = ranked.splice(bestNeighborIndex, 1);
+      ranked.unshift(neighbor);
+    }
+  }
+
+  return {
+    focusStyle,
+    explicitAnchor: Boolean(explicitAnchor),
+    sourceStyle,
+    styles: ranked.map((entry) => entry.style)
+  };
 }
 
 function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
@@ -30489,13 +30682,14 @@ function scrollQuickKnownPanelIntoView() {
   }, 60);
 }
 
-function stageQuickKnownAdvance({ track, likedTrack = null, avoidArtistName = "", message = "" } = {}) {
+function stageQuickKnownAdvance({ track, likedTrack = null, avoidArtistName = "", message = "", positive = true } = {}) {
   if (!track?.artist || quickKnownDecisionForTrack(track)) return false;
   pendingQuickKnownAdvance = {
     track,
     likedTrack: likedTrack || track,
     avoidArtistName,
-    message
+    message,
+    positive
   };
   if (feedbackMessage) {
     const artist = formatSummaryArtistName(track.artist) || track.artist;
@@ -30516,7 +30710,8 @@ async function continuePendingQuickKnownAdvance(pending = pendingQuickKnownAdvan
   return advanceAfterSwipeFeedback({
     likedTrack: pending.likedTrack || pending.track,
     avoidArtistName: pending.avoidArtistName || "",
-    message: pending.message || ""
+    message: pending.message || "",
+    positive: pending.positive !== false
   });
 }
 
@@ -30635,15 +30830,108 @@ function setSwipeDragVisual(dx = 0, element = swipeDragState?.element || swipeTr
   element.classList.toggle("is-ready", decision.readiness >= 0.95);
 }
 
-async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "" } = {}) {
+function swipeAdaptiveNextMessage(plan, finalStyle = "", fallbackMessage = "") {
+  if (!plan?.focusStyle) return fallbackMessage;
+  const focus = styleLabelByValue(plan.focusStyle);
+  const next = styleLabelByValue(finalStyle || plan.styles?.[0] || plan.focusStyle);
+  if (plan.explicitAnchor) {
+    return t("swipeAnchorNext", { focus, next });
+  }
+  return t("swipeAffinityNext", { focus, next });
+}
+
+async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, avoidArtistName = "", message = "" } = {}) {
+  if (!lastPrefs) return null;
+  const plan = buildSwipeAdaptiveStylePlan({ sourceTrack, positive });
+  if (!plan) return null;
+
+  const avoidTrackKey = sourceTrack ? `${sourceTrack.artist}::${sourceTrack.song}` : "";
+  const avoidTrackTitles = sourceTrack?.song ? [sourceTrack.song] : [];
+  const basePrefs = normalizeRecommendationPrefs(lastPrefs);
+  const triedStyles = new Set();
+  const stylesToTry = plan.styles.slice(0, 5);
+
+  for (const style of stylesToTry) {
+    const cleanStyle = selectableSwipeStyle(style);
+    if (!cleanStyle || triedStyles.has(cleanStyle)) continue;
+    triedStyles.add(cleanStyle);
+    const nextPrefs = {
+      ...basePrefs,
+      style: cleanStyle
+    };
+
+    if (!plan.explicitAnchor && cleanStyle !== plan.focusStyle) {
+      nextPrefs.context = "";
+      nextPrefs.bpm = "";
+    }
+
+    const generated = await generateRecommendationWithOverlay(
+      nextPrefs,
+      {
+        resetRejected: false,
+        avoidTrackKey,
+        avoidTrackTitles,
+        avoidArtistName,
+        allowKnownFallback: false
+      },
+      "catalog"
+    );
+    if (!generated || !currentRecommendation) continue;
+
+    const finalStyle = selectableSwipeStyle(currentRecommendation.style || cleanStyle) || cleanStyle;
+    const finalPrefs = {
+      ...nextPrefs,
+      style: finalStyle
+    };
+
+    if (styleEl) styleEl.value = finalPrefs.style;
+    if (contextEl) contextEl.value = finalPrefs.context || "";
+    if (energyEl) energyEl.value = finalPrefs.energy || "";
+    if (bpmEl) bpmEl.value = finalPrefs.bpm || "";
+    if (vocalsEl) vocalsEl.value = finalPrefs.vocals || "";
+    styleInfoDismissed = false;
+    renderStyleInfoBubble(finalPrefs.style, { reveal: Boolean(finalPrefs.style) });
+    applyGenreVibeTheme(finalPrefs.style, { force: true });
+    renderSwipeStyleRail();
+
+    lastPrefs = finalPrefs;
+    if (rerollBtn) rerollBtn.disabled = false;
+    if (eventsPanel) eventsPanel.classList.add("hidden");
+    if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+    if (eventsCalendar) eventsCalendar.innerHTML = "";
+    if (eventsList) eventsList.innerHTML = "";
+    if (detailsPanel) detailsPanel.classList.add("hidden");
+    if (resultPanel) resultPanel.classList.remove("hidden");
+
+    const deckMessage = swipeAdaptiveNextMessage(plan, finalStyle, message);
+    if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
+    savePreferences();
+    return true;
+  }
+
+  return false;
+}
+
+async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "", positive = true } = {}) {
   if (!lastPrefs) {
     if (feedbackMessage && message) feedbackMessage.textContent = message;
     return false;
   }
   const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false;
+  const adaptiveResult = shouldExploreAcrossStyles
+    ? await generateAdaptiveSwipeNext({
+        sourceTrack: likedTrack,
+        positive,
+        avoidArtistName,
+        message
+      })
+    : null;
+  if (adaptiveResult === true) return true;
   if (shouldExploreAcrossStyles) {
     const fromStyle = styleLabelByValue(likedTrack?.style || currentRecommendation?.style || lastPrefs?.style || "");
-    const generatedAcrossStyles = await runSurpriseRecommendation();
+    const generatedAcrossStyles = adaptiveResult === null && !explicitSwipeAnchorStyle()
+      ? await runSurpriseRecommendation()
+      : false;
     if (generatedAcrossStyles) {
       const toStyle = styleLabelByValue(currentRecommendation?.style || "");
       const deckMessage = fromStyle && toStyle
@@ -30687,7 +30975,8 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   if (stageQuickKnownAdvance({
     track: likedTrack,
     likedTrack,
-    message: t("swipeLikedNext")
+    message: t("swipeLikedNext"),
+    positive: true
   })) {
     void followups.catch(() => {});
     return true;
@@ -30695,7 +30984,8 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   await followups;
   await advanceAfterSwipeFeedback({
     likedTrack,
-    message: t("swipeLikedNext")
+    message: t("swipeLikedNext"),
+    positive: true
   });
   return true;
 }
@@ -30714,7 +31004,8 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
     track: rejectedTrack,
     likedTrack: rejectedTrack,
     avoidArtistName: rejectedTrack.artist || "",
-    message: reasonMessage
+    message: reasonMessage,
+    positive: false
   })) {
     playUiSfx("dislike");
     updateStats();
@@ -30723,7 +31014,8 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   const generated = await advanceAfterSwipeFeedback({
     likedTrack: rejectedTrack,
     avoidArtistName: rejectedTrack.artist || "",
-    message: reasonMessage
+    message: reasonMessage,
+    positive: false
   });
   playUiSfx("dislike");
   if (generated) showToast(t("toastSwapped"));
@@ -33812,6 +34104,7 @@ async function runTasteTune(mode = "") {
     return false;
   }
 
+  swipeUserAnchoredStyle = "";
   lastPrefs = prefs;
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
@@ -33870,7 +34163,12 @@ async function runSwipeStyleRecommendation(style = "") {
     return false;
   }
 
-  lastPrefs = prefs;
+  swipeUserAnchoredStyle = currentRecommendation?.style || safeStyle;
+  const finalSwipeStylePrefs = {
+    ...prefs,
+    style: swipeUserAnchoredStyle
+  };
+  lastPrefs = finalSwipeStylePrefs;
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
@@ -33985,6 +34283,7 @@ async function runRecommendation() {
     }
     savePreferences();
 
+    swipeUserAnchoredStyle = prefs.style ? (currentRecommendation?.style || prefs.style) : "";
     lastPrefs = prefs;
     if (rerollBtn) rerollBtn.disabled = false;
     const styleFallbackMessage = applyStyleFallbackMessage({ setFeedback: false });
@@ -34028,6 +34327,7 @@ async function runSurpriseRecommendation() {
     showPremiumDiscoveryLimit();
     return false;
   }
+  swipeUserAnchoredStyle = "";
   playUiSfx("search-start");
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
@@ -34069,6 +34369,7 @@ async function runSurpriseRecommendation() {
       bpm: "",
       vocals: ""
     };
+    swipeUserAnchoredStyle = "";
 
     if (styleEl) styleEl.value = surprisePrefs.style;
     if (contextEl) contextEl.value = surprisePrefs.context;
@@ -34194,6 +34495,7 @@ async function runAdaptiveSurpriseRecommendation() {
   renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
   renderSwipeStyleRail();
 
+  swipeUserAnchoredStyle = "";
   lastPrefs = finalPrefs;
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
