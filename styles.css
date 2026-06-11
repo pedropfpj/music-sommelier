@@ -7638,7 +7638,15 @@ body::before {
 .preference-panel[data-app-tab="discover"] {
   grid-column: 8 / -1;
   position: sticky;
-  top: calc(var(--signature-bar-height) + 4.25rem);
+  --preference-panel-sticky-top: calc(var(--signature-bar-height) + 4.25rem);
+  top: var(--preference-panel-sticky-top);
+  z-index: 5;
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+  max-height: calc(100dvh - var(--preference-panel-sticky-top) - 1rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .panel {
@@ -7949,6 +7957,9 @@ button:focus-visible,
 
 .style-info-bubble {
   animation: style-bubble-in 180ms ease;
+  max-height: min(42dvh, 360px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .style-info-bubble::before {
@@ -8265,6 +8276,8 @@ button:hover,
   .preference-panel[data-app-tab="discover"] {
     position: relative;
     top: auto;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .hero {
@@ -9942,7 +9955,8 @@ iframe {
     grid-column: 8 / -1;
     justify-self: start;
     width: min(100%, 500px);
-    top: calc(var(--signature-bar-height) + 0.85rem);
+    --preference-panel-sticky-top: calc(var(--signature-bar-height) + 0.85rem);
+    top: var(--preference-panel-sticky-top);
   }
 
   .swipe-start-stage,
