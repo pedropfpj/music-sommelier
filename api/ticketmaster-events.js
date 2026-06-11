@@ -1,6 +1,7 @@
 const { envInt, envText, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
 
 const TICKETMASTER_EVENTS_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
+const TICKETMASTER_ATTRACTIONS_URL = "https://app.ticketmaster.com/discovery/v2/attractions.json";
 const BANDSINTOWN_EVENTS_URL = "https://rest.bandsintown.com/artists";
 
 function requestParam(req, body, name) {
@@ -50,6 +51,16 @@ function artistQueryVariants(artist) {
 
 function eventStartDate(event) {
   return event?.dates?.start?.dateTime || event?.dates?.start?.localDate || "";
+}
+
+function artistNameScore(candidate = "", query = "") {
+  const candidateNorm = normalizeForMatch(candidate);
+  const queryNorm = normalizeForMatch(query);
+  if (!candidateNorm || !queryNorm) return 0;
+  if (candidateNorm === queryNorm) return 10;
+  if (candidateNorm.includes(queryNorm) || queryNorm.includes(candidateNorm)) return 6;
+  const queryTokens = queryNorm.split(" ").filter(Boolean);
+  return queryTokens.reduce((score, token) => score + (candidateNorm.includes(token) ? 1 : 0), 0);
 }
 
 function eventTimeValue(event) {
@@ -128,16 +139,37 @@ async function fetchTicketmasterEventsForQuery({ query, countryCode, size }) {
   const apiKey = envText("TICKETMASTER_API_KEY") || envText("TICKETMASTER_CONSUMER_KEY");
   if (!apiKey) return [];
 
-  const params = new URLSearchParams({
+  const baseParams = {
     apikey: apiKey,
-    keyword: query,
     classificationName: "music",
     size: String(size),
     sort: "date,asc",
     locale: "*"
-  });
-  if (countryCode) params.set("countryCode", countryCode.toUpperCase());
+  };
 
+  const searchParams = new URLSearchParams({
+    ...baseParams,
+    keyword: query
+  });
+  if (countryCode) searchParams.set("countryCode", countryCode.toUpperCase());
+
+  const groups = [];
+  groups.push(await fetchTicketmasterEventRows(searchParams, query));
+
+  const attractionIds = await fetchTicketmasterAttractionIds({ apiKey, query });
+  for (const attractionId of attractionIds.slice(0, envInt("SONIC_TICKETMASTER_ATTRACTION_LIMIT", 2, 0, 5))) {
+    const attractionParams = new URLSearchParams({
+      ...baseParams,
+      attractionId
+    });
+    if (countryCode) attractionParams.set("countryCode", countryCode.toUpperCase());
+    groups.push(await fetchTicketmasterEventRows(attractionParams, query));
+  }
+
+  return mergeEvents(...groups);
+}
+
+async function fetchTicketmasterEventRows(params, query) {
   const response = await fetch(`${TICKETMASTER_EVENTS_URL}?${params.toString()}`, {
     headers: { Accept: "application/json" }
   });
@@ -153,6 +185,30 @@ async function fetchTicketmasterEventsForQuery({ query, countryCode, size }) {
   return (Array.isArray(rows) ? rows : [])
     .map((event) => normalizeTicketmasterEvent(event, query))
     .filter(Boolean);
+}
+
+async function fetchTicketmasterAttractionIds({ apiKey, query }) {
+  const params = new URLSearchParams({
+    apikey: apiKey,
+    keyword: query,
+    classificationName: "music",
+    size: "5",
+    locale: "*"
+  });
+  const response = await fetch(`${TICKETMASTER_ATTRACTIONS_URL}?${params.toString()}`, {
+    headers: { Accept: "application/json" }
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) return [];
+  const rows = payload?._embedded?.attractions;
+  return (Array.isArray(rows) ? rows : [])
+    .map((row) => ({
+      id: trimText(row?.id || "", 80),
+      score: artistNameScore(row?.name || "", query)
+    }))
+    .filter((row) => row.id && row.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((row) => row.id);
 }
 
 async function fetchBandsintownEventsForQuery({ query }) {

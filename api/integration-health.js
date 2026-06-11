@@ -25,8 +25,8 @@ module.exports = async function handler(req, res) {
         enabled: featureEnabled("SONIC_TICKETMASTER_ENABLED", false)
       },
       bandsintown: {
-        configured: true,
-        enabled: featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)
+        configured: Boolean(process.env.BANDSINTOWN_APP_ID),
+        enabled: featureEnabled("SONIC_BANDSINTOWN_ENABLED", Boolean(process.env.BANDSINTOWN_APP_ID))
       }
     },
     endpoints: {
