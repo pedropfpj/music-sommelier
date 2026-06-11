@@ -4,12 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SONIC SEARCH</title>
-    <link rel="icon" type="image/png" href="assets/image-bank/png/logos/sonic-search-logo-square.png?v=20260526e" />
-    <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square.png?v=20260526e" />
+    <link rel="icon" type="image/png" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20260607t" />
+    <style id="sonic-social-mvp-styles">
+      .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
+      .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
+      .social-connection-badge{display:inline-flex;align-items:center;justify-content:center;min-width:5.5rem;min-height:2rem;padding:.35rem .72rem;border:1px solid rgba(126,218,255,.36);border-radius:999px;color:#dff8ff;font-family:"Syne",sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;background:rgba(5,13,31,.68)}.social-connection-badge.connected{border-color:rgba(110,255,220,.68);color:#cafff3;box-shadow:0 0 18px rgba(83,255,216,.22)}
+      .social-auth-panel,.social-signed-panel,.social-feed-panel{border:1px solid rgba(134,190,255,.18);border-radius:8px;background:rgba(4,10,24,.42);padding:.9rem}.social-auth-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}.social-auth-grid label{display:grid;gap:.35rem;color:rgba(220,238,255,.86);font-size:.82rem;font-weight:700}.social-auth-grid input{width:100%;min-height:44px;border:1px solid rgba(126,205,255,.26);border-radius:8px;background:rgba(2,8,22,.72);color:#f4fbff;font:inherit;padding:.7rem .8rem;outline:none}.social-auth-grid input:focus{border-color:rgba(110,255,220,.68);box-shadow:0 0 0 3px rgba(110,255,220,.12)}.social-auth-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.85rem}.social-status{margin-top:.72rem}.social-status.error{color:#ffc5d1}.social-status.ok{color:#cafff3}
+      .social-signed-panel{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.35fr);gap:1rem;align-items:center}.social-signed-panel.hidden{display:none}.social-identity{justify-content:flex-start}.social-avatar{width:58px;height:58px;display:grid;place-items:center;border-radius:8px;color:#06152a;font-family:"Syne",sans-serif;font-weight:800;background:linear-gradient(135deg,#6effdc,#7de0ff 56%,#ff83ea);box-shadow:0 16px 34px rgba(78,227,255,.22)}.social-display-name{color:#f4fbff;font-family:"Syne",sans-serif;font-weight:800}.social-handle{color:rgba(179,214,255,.76)}
+      .social-metrics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}.social-metrics-grid div{min-height:76px;padding:.75rem;border:1px solid rgba(126,205,255,.2);border-radius:8px;background:rgba(8,17,40,.56)}.social-metrics-grid span{display:block;color:#f4fbff;font-family:"Syne",sans-serif;font-size:1.05rem;font-weight:800;line-height:1.1;overflow-wrap:anywhere}.social-metrics-grid p{margin:.35rem 0 0;color:rgba(190,216,255,.7);font-size:.78rem}.social-feed-list{display:grid;gap:.62rem;margin-top:.8rem}.social-feed-empty,.social-feed-item{margin:0;padding:.78rem .82rem;border:1px solid rgba(126,205,255,.16);border-radius:8px;background:rgba(2,8,22,.46)}.social-feed-item{display:grid;gap:.25rem}.social-feed-item strong{color:#f4fbff}.social-feed-item span{color:rgba(179,214,255,.72);font-size:.82rem}
+      @media (max-width:760px){.social-profile-head,.social-feed-head{align-items:flex-start;flex-direction:column}.social-auth-grid,.social-signed-panel,.social-metrics-grid{grid-template-columns:1fr}}
+    </style>
+    <style id="sonic-logo-upgrade-styles">
+      .brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(80vw,560px);max-width:560px;margin-inline:auto}.brand-logo{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(46,215,255,.2))}
+      .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px}.intro-logo-mark{display:block;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22))}
+      .hero-logo-wrap{width:clamp(300px,32vw,520px);min-height:132px;display:grid;place-items:center}.hero-logo-mark{display:block;width:100%;height:auto;max-height:176px;object-fit:contain;filter:drop-shadow(0 18px 34px rgba(35,210,255,.18))}
+      @media (min-width:1100px){.hero-brand{grid-template-columns:minmax(360px,520px) minmax(0,1fr);align-items:center}.hero-logo-wrap{justify-self:center}}
+      @media (max-width:760px){.welcome-screen{grid-template-columns:minmax(0,1fr)}.intro-card,.language-card,.auth-card,.usage-guide-card,#welcomeScreen .welcome-card{width:calc(100vw - 24px);max-width:calc(100vw - 24px)}.brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(66vw,260px)}.intro-logo-system{width:min(100%,360px)}.intro-logo-wrap{width:min(74vw,290px)}.hero-logo-wrap{width:min(74vw,280px);min-height:82px}.hero-logo-mark{max-height:104px}}
+    </style>
+    <style id="sonic-card-studio-polish">
+      .swipe-hero-art,.artist-photo-frame{position:relative;overflow:hidden}.swipe-preview-pulse{position:absolute;inset:auto 12% 11% 12%;height:34px;display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;pointer-events:none;opacity:0;transform:translateY(10px);transition:opacity .22s ease,transform .22s ease}.swipe-preview-pulse span{display:block;min-height:7px;border-radius:999px;background:linear-gradient(180deg,#8dfff0,#79d8ff);box-shadow:0 0 15px rgba(110,255,220,.34);animation:sonicWavePulse 950ms ease-in-out infinite;animation-delay:calc(var(--i,0)*68ms)}.swipe-preview-pulse span:nth-child(3n){background:linear-gradient(180deg,#b9a5ff,#79d8ff)}.swipe-track-card.is-preview-searching .swipe-preview-pulse,.swipe-track-card.is-preview-playing .swipe-preview-pulse,.swipe-track-card.is-preview-ready .swipe-preview-pulse,.main-track.is-preview-searching .swipe-preview-pulse,.main-track.is-preview-playing .swipe-preview-pulse,.main-track.is-preview-ready .swipe-preview-pulse{opacity:.96;transform:translateY(0)}.swipe-track-card.is-preview-ready .swipe-preview-pulse span,.main-track.is-preview-ready .swipe-preview-pulse span{animation-duration:1.45s;opacity:.72}.swipe-track-card.is-preview-playing .swipe-hero-art,.main-track.is-preview-playing .artist-photo-frame{box-shadow:0 0 0 1px rgba(126,255,231,.44),0 0 34px rgba(75,231,255,.28),inset 0 0 28px rgba(110,255,220,.08)}
+      @keyframes sonicWavePulse{0%,100%{height:8px;opacity:.58}42%{height:32px;opacity:1}72%{height:16px;opacity:.82}}
+      .swipe-status-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin:.72rem 0 .2rem}.swipe-status-badge{display:inline-flex;align-items:center;min-height:1.75rem;padding:.28rem .62rem;border:1px solid rgba(126,205,255,.24);border-radius:999px;background:rgba(3,10,25,.62);color:#dff8ff;font-size:.72rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase}.swipe-status-badge.good{border-color:rgba(110,255,220,.62);color:#c9fff2;background:rgba(29,116,98,.22)}.swipe-status-badge.fresh{border-color:rgba(125,224,255,.6);color:#d9f7ff}.swipe-status-badge.known{border-color:rgba(255,208,125,.52);color:#ffe4ae}.swipe-status-badge.explore{border-color:rgba(190,160,255,.55);color:#efe4ff}.swipe-status-badge.preview{border-color:rgba(117,205,255,.48);color:#d9f4ff}.swipe-status-badge.saved{border-color:rgba(144,255,175,.7);color:#d7ffe1;background:rgba(31,117,55,.2)}
+      .swipe-card-reason,.track-micro-reason{margin:.55rem 0 0;color:rgba(218,239,255,.78);font-size:.9rem;line-height:1.45}.track-status-badges{margin:.35rem 0 .7rem}.track-micro-reason{max-width:52rem;color:rgba(190,221,255,.8)}.main-track.is-saved,.swipe-track-card.is-saved{outline:1px solid rgba(144,255,175,.42);box-shadow:0 0 0 1px rgba(144,255,175,.16),0 22px 60px rgba(73,255,145,.08)}
+      .voice-layer-signature{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.5rem}.voice-layer-pill{display:inline-flex;align-items:center;min-height:1.65rem;padding:.24rem .56rem;border:1px solid rgba(126,205,255,.24);border-radius:999px;background:rgba(5,12,31,.62);color:#dff8ff;font-size:.72rem;font-weight:800;text-transform:uppercase}.voice-layer-pill.primary{border-color:rgba(110,255,220,.62);color:#cafff3;background:rgba(17,92,84,.28)}.voice-synth-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.55rem;margin-top:.78rem}.voice-synth-chip{min-height:64px;padding:.7rem;border:1px solid rgba(126,205,255,.22);border-radius:8px;background:linear-gradient(145deg,rgba(3,10,24,.8),rgba(12,24,54,.58));color:#eaf8ff;text-align:left;box-shadow:inset 0 0 0 1px rgba(151,219,255,.04)}.voice-synth-chip strong{display:block;font-family:"Syne",sans-serif;font-size:.9rem;line-height:1.1}.voice-synth-chip span{display:block;margin-top:.32rem;color:rgba(190,220,255,.7);font-size:.72rem}.voice-synth-chip.active{border-color:rgba(110,255,220,.64);box-shadow:0 0 24px rgba(92,255,222,.12),inset 0 0 0 1px rgba(110,255,220,.14)}
+      @media (max-width:760px){.swipe-preview-pulse{inset:auto 14% 9% 14%;height:28px}.swipe-status-badge{font-size:.66rem}.voice-synth-strip{grid-template-columns:1fr 1fr}.voice-synth-chip{min-height:56px}}
+    </style>
   </head>
   <body>
     <div class="floating-sonic-layer" aria-hidden="true">
@@ -142,7 +166,7 @@
               <span class="intro-glyph glyph-c">⚡</span>
               <span class="intro-glyph glyph-d">◈</span>
               <div class="intro-logo-wrap">
-                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260526g" alt="" />
+                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
               </div>
             </div>
             <div class="intro-symbol-cloud" aria-hidden="true">
@@ -178,7 +202,7 @@
       <div class="welcome-card language-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260525h" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
           <p id="langKicker" class="brand-kicker">Escolha seu idioma</p>
           <h1 id="langTitle">Selecione o idioma</h1>
@@ -197,7 +221,7 @@
       <div class="welcome-card usage-guide-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260525h" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
           <p id="usageGuideKicker" class="brand-kicker">Guia rápido</p>
           <h1 id="usageGuideTitle">Como aproveitar melhor o Sonic Search</h1>
@@ -241,7 +265,7 @@
       <div class="welcome-card auth-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260525h" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
           <p id="authKicker" class="brand-kicker">Carregar usuário</p>
           <h1 id="authTitle">Entre para carregar seu perfil</h1>
@@ -282,7 +306,7 @@
       <div class="welcome-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260525h" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
           <p id="welcomeKicker" class="brand-kicker">Electronic music curation</p>
           <h1 id="welcomeTitle">SONIC SEARCH</h1>
@@ -332,7 +356,7 @@
       <header class="hero panel">
         <div class="hero-brand">
           <button id="heroLogoBtn" class="hero-logo-wrap hero-logo-btn" type="button" aria-label="Voltar ao início" title="Voltar ao início">
-            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal.png?v=20260526e" alt="" />
+            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </button>
           <div>
             <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
@@ -400,11 +424,16 @@
             <div class="swipe-hero-art" aria-hidden="true">
               <img id="topSwipeImage" class="swipe-hero-image hidden" alt="" loading="lazy" />
               <span id="topSwipeFallback" class="swipe-hero-fallback">SS</span>
+              <div id="topSwipePulse" class="swipe-preview-pulse" aria-hidden="true">
+                <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span><span style="--i:9"></span><span style="--i:10"></span><span style="--i:11"></span>
+              </div>
             </div>
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da track</p>
               <h4 id="topSwipeTitle">Comece com uma descoberta</h4>
               <p id="topSwipeMeta" class="muted">Use Surpreender para cair direto no som, ou ajuste o alvo quando quiser precisão.</p>
+              <div id="topSwipeBadges" class="swipe-status-badges" aria-label="Sinais da recomendação"></div>
+              <p id="topSwipeReason" class="swipe-card-reason hidden"></p>
               <div class="swipe-track-signals">
                 <span id="topSwipeStyleChip">Estilo</span>
                 <span id="topSwipeBpmChip">BPM</span>
@@ -724,12 +753,16 @@
         <article id="primaryTrackCard" class="result-card main-track" role="group" aria-label="Arraste para avaliar a faixa" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
+          <div id="trackStatusBadges" class="swipe-status-badges track-status-badges" aria-label="Sinais da faixa"></div>
           <span class="swipe-stamp primary-swipe-stamp swipe-stamp-like">Curti</span>
           <span class="swipe-stamp primary-swipe-stamp swipe-stamp-pass">Trocar</span>
           <figure id="artistVisualCard" class="artist-visual-card">
             <div class="artist-photo-frame">
               <img id="artistPhoto" class="artist-photo hidden" alt="" loading="lazy" />
               <span id="artistPhotoFallback" class="artist-photo-fallback" aria-hidden="true">SS</span>
+              <div class="swipe-preview-pulse" aria-hidden="true">
+                <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span><span style="--i:9"></span><span style="--i:10"></span><span style="--i:11"></span>
+              </div>
             </div>
             <figcaption>
               <span id="artistPhotoKicker">Artista</span>
@@ -739,6 +772,7 @@
           </figure>
           <p id="primarySwipeHint" class="primary-swipe-hint">Arraste este card: direita curte, esquerda troca.</p>
           <h4 id="songTitle" class="track-title-animated"></h4>
+          <p id="trackMicroReason" class="track-micro-reason hidden"></p>
           <p id="artistLine" class="meta-line artist-line"><span id="artistOriginFlag" class="artist-origin-flag hidden" aria-hidden="true"></span><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
           <p id="bpmLine" class="meta-line bpm-line"><span id="styleName"></span> <span>•</span> <span id="bpmInfo"></span> <span>•</span> <span id="energyInfo"></span></p>
           <p class="meta-line"><span id="releaseInfo"></span> <span>•</span> <span id="durationInfo"></span> <span>•</span> <span id="keyInfo"></span></p>
@@ -1038,6 +1072,7 @@
                 <p id="voiceMiniRecipeLabel" class="voice-mini-recipe-label">Receita atual</p>
                 <strong id="voiceMiniRecipeTitle">Techno direto • 132 BPM</strong>
                 <p id="voiceMiniRecipeMeta" class="muted">Kick, Bass, Hat, Clap e Synth ativos.</p>
+                <div id="voiceMiniLayerSignature" class="voice-layer-signature" aria-label="Assinatura da receita"></div>
               </div>
             </div>
             <div class="voice-mini-section voice-mini-preset-section">
@@ -1065,6 +1100,7 @@
                 <button id="voicePadSynthBtn" class="voice-daw-pad" type="button" aria-pressed="false">Synth</button>
                 <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" aria-pressed="false" disabled>Voz</button>
               </div>
+              <div id="voiceMiniQuickSynthStrip" class="voice-synth-strip" aria-label="Camadas do synth"></div>
             </div>
             <details class="voice-advanced-panel">
               <summary>
@@ -1300,6 +1336,78 @@
             <input id="profileBackupImportInput" class="hidden" type="file" accept="application/json,.json" />
           </div>
         </article>
+        <article id="socialProfileCard" class="social-profile-card">
+          <div class="social-profile-head">
+            <div>
+              <p class="summary-kicker">Sonic Social Beta</p>
+              <h4>Perfil público e curtidas em comum</h4>
+              <p class="muted">Entre com uma conta social para salvar curtidas na nuvem, montar seu perfil público e preparar matches musicais com outros usuários.</p>
+            </div>
+            <span id="socialConnectionBadge" class="social-connection-badge">Local</span>
+          </div>
+
+          <div id="socialAuthPanel" class="social-auth-panel">
+            <div class="social-auth-grid">
+              <label>
+                <span>E-mail</span>
+                <input id="socialEmailInput" type="email" autocomplete="email" placeholder="voce@email.com" />
+              </label>
+              <label>
+                <span>Senha</span>
+                <input id="socialPasswordInput" type="password" autocomplete="current-password" placeholder="mínimo 6 caracteres" />
+              </label>
+              <label>
+                <span>@username</span>
+                <input id="socialUsernameInput" type="text" autocomplete="nickname" placeholder="pedropfpj" />
+              </label>
+              <label>
+                <span>Nome público</span>
+                <input id="socialDisplayNameInput" type="text" autocomplete="name" placeholder="Pedro Freire" />
+              </label>
+            </div>
+            <div class="social-auth-actions">
+              <button id="socialSignUpBtn" class="listen-btn" type="button">Criar perfil</button>
+              <button id="socialSignInBtn" class="listen-btn secondary" type="button">Entrar</button>
+              <button id="socialSignOutBtn" class="listen-btn secondary hidden" type="button">Sair</button>
+              <button id="socialSyncBtn" class="listen-btn soundcloud-btn" type="button">Sincronizar curtidas</button>
+            </div>
+            <p id="socialStatus" class="social-status muted">Conecte o Supabase para ativar perfis públicos, feed e curtidas em comum.</p>
+          </div>
+
+          <div id="socialSignedPanel" class="social-signed-panel hidden">
+            <div class="social-identity">
+              <div id="socialAvatar" class="social-avatar" aria-hidden="true">SS</div>
+              <div>
+                <p id="socialDisplayName" class="social-display-name">Sonic Listener</p>
+                <p id="socialHandle" class="social-handle">@local</p>
+              </div>
+            </div>
+            <div class="social-metrics-grid">
+              <div>
+                <span id="socialCloudLikesCount">0</span>
+                <p>curtidas na nuvem</p>
+              </div>
+              <div>
+                <span id="socialTopStyle">Sem dados</span>
+                <p>DNA dominante</p>
+              </div>
+              <div>
+                <span id="socialMatchHint">Pronto</span>
+                <p>match social</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-feed-panel">
+            <div class="social-feed-head">
+              <h5>Feed de atividade</h5>
+              <button id="socialRefreshFeedBtn" class="liked-track-remove" type="button">Atualizar</button>
+            </div>
+            <div id="socialFeedList" class="social-feed-list">
+              <p class="social-feed-empty muted">Quando o Supabase estiver ligado, curtidas e descobertas aparecem aqui como feed social.</p>
+            </div>
+          </div>
+        </article>
         <div class="profile-stats-grid">
           <article class="profile-stat-card metric">
             <p id="summaryStatusLabel" class="summary-kicker">Status do perfil</p>
@@ -1396,12 +1504,14 @@
       window.SONIC_SEARCH_AI_CONFIG = {
         textEnabled: true,
         imageEnabled: true,
-        premiumUnlocked: true,
+        premiumUnlocked: false,
         dailyTextLimit: 25,
+        dailyFreeDiscoveryLimit: 80,
         imageLimitPerProfile: 5,
+        premiumImageLimitPerProfile: 0,
         allowImageRegeneration: true
       };
     </script>
-    <script src="app.js?v=20260610human1"></script>
+    <script src="app.js?v=20260611premium1"></script>
   </body>
 </html>

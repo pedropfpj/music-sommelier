@@ -99,7 +99,9 @@ const AI_DEFAULT_CONFIG = {
   imageEnabled: false,
   premiumUnlocked: false,
   dailyTextLimit: 10,
-  imageLimitPerProfile: 1,
+  dailyFreeDiscoveryLimit: 80,
+  imageLimitPerProfile: 5,
+  premiumImageLimitPerProfile: 0,
   allowImageRegeneration: false,
   textCacheMaxEntries: 120
 };
@@ -543,6 +545,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v4.csv",
   "data/artist_expansion_seeds_v5.csv",
   "data/artist_expansion_seeds_v6.csv",
+  "data/artist_expansion_seeds_v7.csv",
   "data/verified_track_expansion_v1.csv",
   "data/verified_track_expansion_v2.csv",
   "data/verified_track_expansion_v3.csv",
@@ -4607,6 +4610,7 @@ const voiceMiniExportLink = document.getElementById("voiceMiniExportLink");
 const voiceMiniRecipeLabel = document.getElementById("voiceMiniRecipeLabel");
 const voiceMiniRecipeTitle = document.getElementById("voiceMiniRecipeTitle");
 const voiceMiniRecipeMeta = document.getElementById("voiceMiniRecipeMeta");
+const voiceMiniLayerSignature = document.getElementById("voiceMiniLayerSignature");
 const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
 const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
 const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
@@ -4652,6 +4656,7 @@ const voicePadHatBtn = document.getElementById("voicePadHatBtn");
 const voicePadClapBtn = document.getElementById("voicePadClapBtn");
 const voicePadSynthBtn = document.getElementById("voicePadSynthBtn");
 const voicePadVoiceBtn = document.getElementById("voicePadVoiceBtn");
+const voiceMiniQuickSynthStrip = document.getElementById("voiceMiniQuickSynthStrip");
 const quizChallengeBubble = document.getElementById("quizChallengeBubble");
 const quizBubbleText = document.getElementById("quizBubbleText");
 const quizStartBtn = document.getElementById("quizStartBtn");
@@ -4739,6 +4744,8 @@ const recommendationWhyPanel = document.getElementById("recommendationWhyPanel")
 const recommendationWhyTitle = document.getElementById("recommendationWhyTitle");
 const recommendationWhyText = document.getElementById("recommendationWhyText");
 const recommendationWhyList = document.getElementById("recommendationWhyList");
+const trackStatusBadges = document.getElementById("trackStatusBadges");
+const trackMicroReason = document.getElementById("trackMicroReason");
 const genreGuidePanel = document.getElementById("genreGuidePanel");
 const genreGuideTitle = document.getElementById("genreGuideTitle");
 const genreGuideText = document.getElementById("genreGuideText");
@@ -4801,6 +4808,8 @@ const topSwipeMeta = document.getElementById("topSwipeMeta");
 const topSwipeStyleChip = document.getElementById("topSwipeStyleChip");
 const topSwipeBpmChip = document.getElementById("topSwipeBpmChip");
 const topSwipeEnergyChip = document.getElementById("topSwipeEnergyChip");
+const topSwipeBadges = document.getElementById("topSwipeBadges");
+const topSwipeReason = document.getElementById("topSwipeReason");
 const topSwipePassBtn = document.getElementById("topSwipePassBtn");
 const topSwipeSurpriseBtn = document.getElementById("topSwipeSurpriseBtn");
 const topSwipeLikeBtn = document.getElementById("topSwipeLikeBtn");
@@ -4864,6 +4873,27 @@ const profileBackupImportSummary = document.getElementById("profileBackupImportS
 const profileBackupImportHint = document.getElementById("profileBackupImportHint");
 const profileBackupImportBtn = document.getElementById("profileBackupImportBtn");
 const profileBackupImportInput = document.getElementById("profileBackupImportInput");
+const socialProfileCard = document.getElementById("socialProfileCard");
+const socialConnectionBadge = document.getElementById("socialConnectionBadge");
+const socialAuthPanel = document.getElementById("socialAuthPanel");
+const socialEmailInput = document.getElementById("socialEmailInput");
+const socialPasswordInput = document.getElementById("socialPasswordInput");
+const socialUsernameInput = document.getElementById("socialUsernameInput");
+const socialDisplayNameInput = document.getElementById("socialDisplayNameInput");
+const socialSignUpBtn = document.getElementById("socialSignUpBtn");
+const socialSignInBtn = document.getElementById("socialSignInBtn");
+const socialSignOutBtn = document.getElementById("socialSignOutBtn");
+const socialSyncBtn = document.getElementById("socialSyncBtn");
+const socialStatus = document.getElementById("socialStatus");
+const socialSignedPanel = document.getElementById("socialSignedPanel");
+const socialAvatar = document.getElementById("socialAvatar");
+const socialDisplayName = document.getElementById("socialDisplayName");
+const socialHandle = document.getElementById("socialHandle");
+const socialCloudLikesCount = document.getElementById("socialCloudLikesCount");
+const socialTopStyle = document.getElementById("socialTopStyle");
+const socialMatchHint = document.getElementById("socialMatchHint");
+const socialRefreshFeedBtn = document.getElementById("socialRefreshFeedBtn");
+const socialFeedList = document.getElementById("socialFeedList");
 const summaryProfileStatus = document.getElementById("summaryProfileStatus");
 const summaryKnownCount = document.getElementById("summaryKnownCount");
 const summaryDiscoveredCount = document.getElementById("summaryDiscoveredCount");
@@ -5026,6 +5056,17 @@ let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
 let activeVibeTheme = "";
 let currentAuthUser = null;
+let socialState = {
+  ready: false,
+  enabled: false,
+  config: null,
+  session: null,
+  profile: null,
+  feed: [],
+  busy: false,
+  syncTimer: null,
+  lastSyncAt: 0
+};
 let googleAuthReady = false;
 let googleAuthLoading = false;
 let appleAuthReady = false;
@@ -5284,10 +5325,10 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v15";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v25";
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v3";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v26";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v4";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -5295,7 +5336,12 @@ const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
 const PROFILE_BACKUP_MAX_BYTES = 2_000_000;
 const PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY = "neonpulse:profileBackup:lastExport:v1";
+const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
+const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
+const SOCIAL_SYNC_LIMIT = 50;
+const SOCIAL_FEED_LIMIT = 14;
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
+const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
@@ -5389,23 +5435,26 @@ const SMART_PRESETS = {
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
 const recentArtistSignals = new Map();
+const soundCloudApiCache = new Map();
+const youtubeApiCache = new Map();
+let youtubeApiAvailable = true;
 
 const MIN_TRACKS_PER_STYLE = 20;
-const MIN_ARTISTS_PER_STYLE = 8;
+const MIN_ARTISTS_PER_STYLE = 12;
 const MIN_LABELS_PER_STYLE = 6;
 const STYLE_COVERAGE_OVERRIDES = {
   // Nichos ultra específicos: mantém rigor sem bloquear toda a experiência.
-  dark_progressive: { artists: 8, labels: 6, tracks: 24 },
-  full_on: { artists: 12, labels: 8, tracks: 28 },
-  full_on_night: { artists: 10, labels: 8, tracks: 24 },
-  full_on_morning: { artists: 10, labels: 8, tracks: 24 },
-  progressive_psy: { artists: 8, labels: 8, tracks: 24 },
+  dark_progressive: { artists: 12, labels: 6, tracks: 24 },
+  full_on: { artists: 16, labels: 8, tracks: 28 },
+  full_on_night: { artists: 14, labels: 8, tracks: 24 },
+  full_on_morning: { artists: 14, labels: 8, tracks: 24 },
+  progressive_psy: { artists: 12, labels: 8, tracks: 24 },
   psy_comercial: { artists: 8, labels: 6, tracks: 20 },
   hi_tech: { artists: 15, labels: 10, tracks: 28 },
-  slambient: { artists: 8, labels: 1, tracks: 20 },
+  slambient: { artists: 14, labels: 1, tracks: 24 },
   dark_experimental: { artists: 12, labels: 10, tracks: 24 },
   // Psycore depende fortemente de hidratação por artistas seed; não exige muitos labels para destravar recomendação.
-  psycore: { artists: 10, labels: 0, tracks: 18 },
+  psycore: { artists: 14, labels: 0, tracks: 22 },
   // Freeform ainda é nichado no dataset local; seeds e busca dinâmica devem destravar a experiência.
   freeform: { artists: 4, labels: 0, tracks: 12 },
   ambient: { artists: 12, labels: 6, tracks: 24 },
@@ -10560,7 +10609,9 @@ function isDynamicSource(source) {
     normalizedSource.includes("dynamic") ||
     compactSource.includes("itunesstyle") ||
     compactSource.includes("deezerstyle") ||
-    compactSource.includes("dataset")
+    compactSource.includes("dataset") ||
+    compactSource.includes("soundcloudapi") ||
+    compactSource.includes("soundclouddynamic")
   );
 }
 
@@ -10855,6 +10906,7 @@ function registerTrackFeedback(track, liked, options = {}) {
     adjustTrackPreviewIssueSignal(track, options?.rewardPreview ? -0.95 : -0.45);
     adjustPreviewReliabilitySignal(track.style, options?.rewardPreview ? 0.16 : 0.07);
     rememberLikedTrack(track, options?.source || "liked");
+    recordDailyMusicAction(track, "like");
     saveProgress();
     return "liked";
   }
@@ -11697,6 +11749,109 @@ async function fetchItunesTracksByArtist(artist, style = "") {
   return Array.from(collected.values()).slice(0, 80);
 }
 
+function resolveMusicApiEndpoint(globalName, fallbackPath) {
+  const configured = String(window?.[globalName] || "").trim();
+  if (configured) return configured;
+  return canUseRelativeApiEndpoint() ? fallbackPath : "";
+}
+
+function soundCloudApiQueryTerms(style, artist = "") {
+  const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
+  const styleTokens = String(styleTerm || "")
+    .split(/\s+/)
+    .map((token) => String(token || "").trim())
+    .filter(Boolean);
+  const compactStyleTerm = styleTokens.slice(0, 3).join(" ") || styleLabelByValue(style);
+  const primaryToken = styleTokens[0] || styleLabelByValue(style);
+  const family = familyOf(style);
+  const familyTerm = family === "dnb"
+    ? "drum and bass"
+    : family === "psytrance"
+      ? "psytrance"
+      : family === "techno"
+        ? "techno"
+        : family === "house"
+          ? "house"
+          : family === "bass_music"
+            ? "bass music"
+            : "electronic";
+  const artistName = String(artist || "").trim();
+
+  const queries = artistName
+    ? [
+        `${artistName} ${compactStyleTerm}`,
+        `${artistName} ${familyTerm}`,
+        `${artistName} ${primaryToken}`
+      ]
+    : [
+        `${compactStyleTerm}`,
+        `${compactStyleTerm} ${familyTerm}`,
+        `${primaryToken} ${familyTerm}`
+      ];
+
+  return Array.from(
+    new Set(
+      queries
+        .map((query) => query.replace(/\s+/g, " ").trim())
+        .filter(Boolean)
+    )
+  ).slice(0, artistName ? 2 : 3);
+}
+
+async function fetchSoundCloudTracksByStyle(style, artist = "") {
+  const endpoint = resolveMusicApiEndpoint("SONIC_SOUNDCLOUD_SEARCH_API_URL", "/api/soundcloud-search");
+  if (!endpoint || !style) return [];
+
+  const cacheKey = `${style}::${normalize(artist || "generic")}`;
+  if (soundCloudApiCache.has(cacheKey)) return soundCloudApiCache.get(cacheKey);
+
+  const collected = new Map();
+  const queries = soundCloudApiQueryTerms(style, artist);
+  for (const query of queries) {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          style,
+          query,
+          limit: artist ? 12 : 24
+        })
+      });
+      if (!response.ok) break;
+      const payload = await response.json();
+      const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
+      rows
+        .filter((row) => row?.song && row?.artist && row?.soundcloudTrackUrl)
+        .filter((row) => !artist || isArtistMatch(row.artist, artist))
+        .filter(
+          (row) =>
+            !hasTrackStyleSignalConflict(style, {
+              artist: row.artist,
+              song: row.song,
+              label: row.label || "SoundCloud",
+              artistGenre: [row.genre, row.tags, STYLE_SEARCH_TERMS[style], styleLabelByValue(style)]
+                .filter(Boolean)
+                .join(" "),
+              artistProfileHint: row.description || "",
+              source: "soundcloud_api"
+            })
+        )
+        .forEach((row) => collected.set(String(row.soundcloudTrackUrl), row));
+    } catch (_err) {
+      // SoundCloud e uma fonte complementar; se falhar, o app segue com catalogo local/Deezer/iTunes.
+      break;
+    }
+  }
+
+  const tracks = Array.from(collected.values()).slice(0, artist ? 12 : 48);
+  soundCloudApiCache.set(cacheKey, tracks);
+  return tracks;
+}
+
 function addDynamicTrackToCatalog({
   style,
   song,
@@ -11878,6 +12033,29 @@ function injectSoundCloudSupplementalSeeds() {
   return added;
 }
 
+function addSoundCloudApiTrackToCatalog(row, style, existingKeys) {
+  if (!row || !style) return false;
+  return addDynamicTrackToCatalog({
+    style,
+    song: row.song,
+    artist: row.artist,
+    label: row.label || row.genre || "SoundCloud",
+    bpmExact: Number(row.bpmExact) || 0,
+    previewUrl: "",
+    releaseDate: row.releaseDate || "SoundCloud",
+    durationSec: Number(row.durationSec) || 0,
+    artistCountry: "",
+    artistGenre: [row.genre, row.tags, STYLE_SEARCH_TERMS[style], styleLabelByValue(style)]
+      .filter(Boolean)
+      .join(" • "),
+    artistProfileHint: row.description || row.tags || row.genre || "Faixa localizada via SoundCloud API.",
+    artistBio: row.description || "",
+    labelBio: row.label ? `${row.label} apareceu como sinal de origem nesta busca do SoundCloud.` : "",
+    soundcloudTrackUrl: row.soundcloudTrackUrl,
+    source: "soundcloud_api"
+  }, existingKeys);
+}
+
 async function hydrateCatalogForStyle(style) {
   if (!style) return;
   purgeDynamicMismatches(style);
@@ -11925,6 +12103,26 @@ async function hydrateCatalogForStyle(style) {
     if (stats.trackCount >= targetSize) break;
   }
 
+  let stats = stylePoolStats(style);
+
+  // SoundCloud API: fonte server-side para previews/links reais e cena underground.
+  // Usamos poucos artistas-semente para ganhar variedade sem gastar chamadas demais.
+  if (
+    stats.trackCount < Math.max(MIN_TRACKS_PER_STYLE, coverageTarget.tracks) ||
+    stats.artistCount < coverageTarget.artists ||
+    stats.labels < coverageTarget.labels
+  ) {
+    for (const artist of selectedSeeds.slice(0, 6)) {
+      const rows = await fetchSoundCloudTracksByStyle(style, artist);
+      for (const row of rows) {
+        addSoundCloudApiTrackToCatalog(row, style, existingKeys);
+        stats = stylePoolStats(style);
+        if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+      }
+      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+    }
+  }
+
   // Segunda fonte: iTunes Search para estilos que aceitam preview sem BPM exato.
   if (allowItunesHydration) {
     for (const artist of selectedSeeds) {
@@ -11953,7 +12151,7 @@ async function hydrateCatalogForStyle(style) {
     }
   }
 
-  let stats = stylePoolStats(style);
+  stats = stylePoolStats(style);
 
   // Fallback por artista puro: usa base local de artistas quando o termo de estilo falha.
   if (allowItunesHydration && stats.trackCount < targetSize) {
@@ -12032,6 +12230,16 @@ async function hydrateCatalogForStyle(style) {
 
       stats = stylePoolStats(style);
       if (stats.trackCount >= targetSize && stats.artistCount >= MIN_ARTISTS_PER_STYLE) break;
+    }
+  }
+
+  stats = stylePoolStats(style);
+  if (!skipBroadStyleHydration && (stats.trackCount < targetSize || stats.artistCount < coverageTarget.artists)) {
+    const soundCloudRows = await fetchSoundCloudTracksByStyle(style);
+    for (const row of soundCloudRows) {
+      addSoundCloudApiTrackToCatalog(row, style, existingKeys);
+      stats = stylePoolStats(style);
+      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
     }
   }
 
@@ -12577,6 +12785,7 @@ const I18N = {
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
     discogsArtistLink: "Buscar artista no Discogs",
+    discogsArtistOpen: "Abrir perfil no Discogs",
     artistBioAiSource: "Bio refinada com apoio de IA e fontes: {sources}.",
     artistBioAiFallbackSource: "catálogo e fontes abertas",
     artistBioLocalSource: "Leitura rápida com os dados que já temos. Quando houver fonte melhor, o app refina automaticamente.",
@@ -12890,6 +13099,8 @@ const I18N = {
     spiritCollectibleHintLocal: "A entidade humana realista exige geração IA. Sem imagem pronta, não mostro avatar local genérico.",
     spiritCollectibleHintApi: "Arte premium por IA criada para este perfil: entidade humana adulta, realista, carismática e com características do espírito.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
+    premiumAvatarLimitReached: "Assine premium para desbloquear mais avatares humanos em alta qualidade.",
+    premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
@@ -13200,6 +13411,7 @@ const I18N = {
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
     discogsArtistLink: "Find artist on Discogs",
+    discogsArtistOpen: "Open Discogs profile",
     artistBioAiSource: "Bio refined with AI support and sources: {sources}.",
     artistBioAiFallbackSource: "catalog and open sources",
     artistBioLocalSource: "Quick read from the data already available. When better sources appear, the app refines it automatically.",
@@ -13510,6 +13722,8 @@ const I18N = {
     spiritCollectibleHintLocal: "The realistic human entity requires AI generation. Without a ready image, no generic local avatar is shown.",
     spiritCollectibleHintApi: "Premium AI artwork created for this profile: an adult, realistic, charismatic human entity with spirit-specific traits.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
+    premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality human avatars.",
+    premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
@@ -13531,7 +13745,7 @@ const I18N = {
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratedLocal: "AI generation is unavailable. Artwork stays pending instead of showing a local avatar.",
-    spiritCollectibleGeneratedApi: "Unique AI artwork created with the spirit\'s human traits.",
+    spiritCollectibleGeneratedApi: "Unique AI artwork created with the spirit's human traits.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
     spiritCollectibleError: "Image AI did not respond yet. I will not show a local avatar; try generating again when AI is available.",
     spiritRankUnlocked: "Spirit unlocked",
@@ -13820,6 +14034,7 @@ const I18N = {
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
     discogsArtistLink: "Buscar artista en Discogs",
+    discogsArtistOpen: "Abrir perfil en Discogs",
     artistBioAiSource: "Bio refinada con apoyo de IA y fuentes: {sources}.",
     artistBioAiFallbackSource: "catálogo y fuentes abiertas",
     artistBioLocalSource: "Lectura rápida con los datos disponibles. Cuando haya mejores fuentes, el app la refina automáticamente.",
@@ -14127,6 +14342,8 @@ const I18N = {
     spiritCollectibleHintLocal: "La entidad humana realista requiere generación con IA. Sin imagen lista, no muestro un avatar local genérico.",
     spiritCollectibleHintApi: "Arte premium con IA creada para este perfil: entidad humana adulta, realista, carismática y con rasgos del espíritu.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
+    premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más avatares humanos en alta calidad.",
+    premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
@@ -14864,7 +15081,7 @@ function applyLanguage() {
   setText("#spiritSpotlightYoutube", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
   setText("#spiritSpotlightSoundcloud", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
   setText("#spiritCollectibleTitle", t("spiritCollectibleTitle"));
-  setText("#spiritCollectibleHint", supportsAiCollectibleApi() ? t("spiritCollectibleHintApi") : t("spiritCollectibleHintLocal"));
+  setText("#spiritCollectibleHint", aiImagePremiumLockedByLimit() ? premiumAvatarLimitMessage() : supportsAiCollectibleApi() ? t("spiritCollectibleHintApi") : t("spiritCollectibleHintLocal"));
   setText("#spiritCollectibleRegenerateBtn", t("spiritCollectibleRegenerate"));
   setText("#spiritCollectibleDownload", t("spiritCollectibleDownload"));
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
@@ -17310,10 +17527,94 @@ function voiceMiniHumanList(items = []) {
   return list.length > 1 ? `${list.slice(0, -1).join(", ")} ${t("voiceMiniAnd")} ${list[list.length - 1]}` : list[0];
 }
 
+function sonicTinyCopy(pt = "", en = pt, es = pt) {
+  if (currentLanguage === "en") return en;
+  if (currentLanguage === "es") return es;
+  return pt;
+}
+
 function voiceMiniActiveLayerLabels() {
   return VOICE_MINI_PATTERN_KINDS
     .filter((kind) => Boolean(voiceMiniPadState[kind]))
     .map((kind) => voiceMiniLayerLabel(kind));
+}
+
+function voiceMiniSynthStackLayers(type = voiceMiniSynthType) {
+  const map = {
+    glow: [
+      { name: "Lead glow", role: sonicTinyCopy("melodia", "melody", "melodia"), primary: true },
+      { name: "Pad brilho", role: sonicTinyCopy("sustenta", "bed", "base") },
+      { name: "Arp curto", role: sonicTinyCopy("movimento", "motion", "movimiento") },
+      { name: "Sub sombra", role: sonicTinyCopy("peso", "weight", "peso") },
+      { name: "Delay FX", role: sonicTinyCopy("cauda", "tail", "cola") }
+    ],
+    acid: [
+      { name: "Acid 303", role: sonicTinyCopy("frase", "line", "frase"), primary: true },
+      { name: "Reso sweep", role: sonicTinyCopy("tensao", "tension", "tension") },
+      { name: "Ghost note", role: sonicTinyCopy("rebote", "bounce", "rebote") },
+      { name: "Sub pulso", role: sonicTinyCopy("grave", "low end", "grave") },
+      { name: "Ping FX", role: sonicTinyCopy("espaco", "space", "espacio") }
+    ],
+    pluck: [
+      { name: "Pluck limpo", role: sonicTinyCopy("gancho", "hook", "gancho"), primary: true },
+      { name: "Octava alta", role: sonicTinyCopy("brilho", "shine", "brillo") },
+      { name: "Eco curto", role: sonicTinyCopy("groove", "groove", "groove") },
+      { name: "Sub macio", role: sonicTinyCopy("corpo", "body", "cuerpo") },
+      { name: "Width FX", role: sonicTinyCopy("largura", "width", "anchura") }
+    ],
+    pad: [
+      { name: "Pad aberto", role: sonicTinyCopy("textura", "texture", "textura"), primary: true },
+      { name: "Drone grave", role: sonicTinyCopy("chao", "floor", "suelo") },
+      { name: "Shimmer", role: sonicTinyCopy("ar", "air", "aire") },
+      { name: "Chord bed", role: sonicTinyCopy("harmonia", "harmony", "armonia") },
+      { name: "Wash FX", role: sonicTinyCopy("nevoa", "mist", "niebla") }
+    ],
+    stab: [
+      { name: "Club stab", role: sonicTinyCopy("ataque", "attack", "ataque"), primary: true },
+      { name: "Chord hit", role: sonicTinyCopy("impacto", "impact", "impacto") },
+      { name: "Octave pop", role: sonicTinyCopy("lift", "lift", "lift") },
+      { name: "Sub snap", role: sonicTinyCopy("punch", "punch", "punch") },
+      { name: "Room FX", role: sonicTinyCopy("sala", "room", "sala") }
+    ],
+    sub: [
+      { name: "Sub macio", role: sonicTinyCopy("grave", "low end", "grave"), primary: true },
+      { name: "Octave ghost", role: sonicTinyCopy("definicao", "definition", "definicion") },
+      { name: "Low pad", role: sonicTinyCopy("sustenta", "bed", "base") },
+      { name: "Pulse click", role: sonicTinyCopy("ataque", "attack", "ataque") },
+      { name: "Filter FX", role: sonicTinyCopy("movimento", "motion", "movimiento") }
+    ]
+  };
+  return map[type] || map.glow;
+}
+
+function renderVoiceMiniSynthStack() {
+  const layers = voiceMiniSynthStackLayers();
+  if (voiceMiniLayerSignature) {
+    voiceMiniLayerSignature.innerHTML = "";
+    const type = document.createElement("span");
+    type.className = "voice-layer-pill primary";
+    type.textContent = voiceMiniSynthTypeLabelFor(voiceMiniSynthType);
+    voiceMiniLayerSignature.appendChild(type);
+    layers.slice(0, 3).forEach((layer) => {
+      const pill = document.createElement("span");
+      pill.className = "voice-layer-pill";
+      pill.textContent = layer.name;
+      voiceMiniLayerSignature.appendChild(pill);
+    });
+  }
+  if (voiceMiniQuickSynthStrip) {
+    voiceMiniQuickSynthStrip.innerHTML = "";
+    layers.forEach((layer) => {
+      const chip = document.createElement("div");
+      chip.className = `voice-synth-chip${layer.primary ? " active" : ""}`;
+      const title = document.createElement("strong");
+      title.textContent = layer.name;
+      const role = document.createElement("span");
+      role.textContent = layer.role;
+      chip.append(title, role);
+      voiceMiniQuickSynthStrip.appendChild(chip);
+    });
+  }
 }
 
 function syncVoiceMiniVisual() {
@@ -17338,6 +17639,7 @@ function updateVoiceMiniRecipe() {
       : t("voiceMiniRecipeMetaEmpty");
   }
   syncVoiceMiniVisual();
+  renderVoiceMiniSynthStack();
 }
 
 function toggleVoiceMiniStep(kind = "", step = 0) {
@@ -17428,6 +17730,7 @@ function updateVoiceMiniSynthType(value = voiceMiniSynthType, { announce = false
   syncVoiceMiniSynthTypeOptions();
   if (voiceMiniSynthTypeSelect) voiceMiniSynthTypeSelect.value = next;
   if (voiceMiniSynthTypeValue) voiceMiniSynthTypeValue.textContent = voiceMiniSynthTypeLabelFor(next);
+  renderVoiceMiniSynthStack();
   if (announce && voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
       control: t("voiceMiniSynthTypeLabel"),
@@ -18330,6 +18633,19 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
           detune: index * (profile.detune || 3)
         });
       });
+      if (voiceMiniSynthType === "pad" && synthAmount > 0.24) {
+        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * 0.08, root, beat, {
+          level: 0.07,
+          pan: -0.26,
+          detune: -10
+        });
+      } else if (synthAmount > 0.3) {
+        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * 0.48, chord[(barIndex + 2) % chord.length] * 2, beat, {
+          level: 0.04 + synthAmount * 0.028,
+          pan: 0.28,
+          detune: 12
+        });
+      }
     } else {
       const acidLine = [root * 2, root * 3, chord[1] * 1.5, root * 2.5, chord[2], root * 3, chord[1] * 2, root * 4];
       const note = voiceMiniSynthType === "acid"
@@ -18342,6 +18658,19 @@ function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0)
         pan: step % 2 ? 0.22 : -0.18,
         detune: step % 2 ? 6 : -6
       });
+      if (synthAmount > 0.24) {
+        const ghostDelay = voiceMiniSynthType === "acid" ? 0.375 : 0.25;
+        const ghostNote = voiceMiniSynthType === "sub"
+          ? note * 2
+          : voiceMiniSynthType === "acid"
+            ? acidLine[(step + barIndex + 3) % acidLine.length]
+            : note * (voiceMiniSynthType === "pluck" ? 1.25 : 1.5);
+        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * ghostDelay, ghostNote, beat, {
+          level: voiceMiniSynthType === "sub" ? 0.045 : 0.035 + synthAmount * 0.026,
+          pan: step % 2 ? -0.26 : 0.24,
+          detune: voiceMiniSynthType === "acid" ? 9 : 14
+        });
+      }
     }
   }
 }
@@ -21000,7 +21329,7 @@ function resolveExactBpm(track) {
 function bpmSourceLabel(track) {
   const source = normalize(track?.source || "");
   if (!source) return t("bpmCatalogReferenceLabel");
-  if (source.includes("deezer") || source.includes("itunes") || source.includes("dynamic")) {
+  if (source.includes("deezer") || source.includes("itunes") || source.includes("soundcloud") || source.includes("dynamic")) {
     return t("bpmApiMetadataLabel");
   }
   return t("bpmCatalogReferenceLabel");
@@ -21102,6 +21431,68 @@ function buildYouTubeTrackLink(track) {
   const styleTerm = STYLE_SEARCH_TERMS[track.style] || styleLabelByValue(track.style);
   const strictQuery = `"${track.artist}" "${track.song}" "${track.label || ""}" ${styleTerm} -mix -set -playlist`;
   return `https://www.youtube.com/results?search_query=${encodeURIComponent(strictQuery)}&sp=EgIQAQ%253D%253D`;
+}
+
+function youtubeApiTrackCacheKey(track) {
+  return recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+}
+
+async function resolveYouTubeVideoFromApi(track) {
+  if (!track || trackHasDirectYouTubeVideo(track) || !youtubeApiAvailable) return false;
+  const endpoint = resolveMusicApiEndpoint("SONIC_YOUTUBE_SEARCH_API_URL", "/api/youtube-search");
+  if (!endpoint) return false;
+  const cacheKey = youtubeApiTrackCacheKey(track);
+  if (cacheKey && youtubeApiCache.has(cacheKey)) {
+    const cached = youtubeApiCache.get(cacheKey);
+    if (cached?.youtubeTrackUrl) {
+      track.youtubeTrackUrl = cached.youtubeTrackUrl;
+      track.youtubeUrl = cached.youtubeTrackUrl;
+      track.youtubeVerified = true;
+      return true;
+    }
+    return false;
+  }
+
+  const query = youtubeSearchQueryVariants(track)[0] || `${track.artist || ""} ${track.song || ""}`.trim();
+  if (!query) return false;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        query,
+        style: track.style || "",
+        limit: 3
+      })
+    });
+    if (!response.ok) {
+      if ([403, 404, 503].includes(response.status)) youtubeApiAvailable = false;
+      if (cacheKey) youtubeApiCache.set(cacheKey, null);
+      return false;
+    }
+    const payload = await response.json();
+    const video = Array.isArray(payload?.videos) ? payload.videos[0] : null;
+    if (!video?.youtubeTrackUrl) {
+      if (cacheKey) youtubeApiCache.set(cacheKey, null);
+      return false;
+    }
+    const resolved = {
+      youtubeTrackUrl: video.youtubeTrackUrl,
+      videoId: video.videoId || extractYouTubeVideoId(video.youtubeTrackUrl)
+    };
+    if (cacheKey) youtubeApiCache.set(cacheKey, resolved);
+    track.youtubeTrackUrl = resolved.youtubeTrackUrl;
+    track.youtubeUrl = resolved.youtubeTrackUrl;
+    track.youtubeVerified = true;
+    return true;
+  } catch (_err) {
+    if (cacheKey) youtubeApiCache.set(cacheKey, null);
+    return false;
+  }
 }
 
 function buildSoundCloudTrackLink(track) {
@@ -21517,11 +21908,12 @@ function renderDiscogsArtistPanel(track) {
     discogsArtistLink.href = "#";
     return;
   }
+  const discogsProfileUrl = safeExternalUrl(track?.discogsArtistUrl || track?.artistDiscogsUrl || "");
   if (discogsArtistTitle) discogsArtistTitle.textContent = t("discogsArtistTitle");
   if (discogsArtistHint) discogsArtistHint.textContent = t("discogsArtistHint");
-  discogsArtistLink.href = buildDiscogsArtistSearchUrl(artist);
-  discogsArtistLink.textContent = t("discogsArtistLink");
-  discogsArtistLink.title = `${t("discogsArtistLink")} - ${artist}`;
+  discogsArtistLink.href = discogsProfileUrl || buildDiscogsArtistSearchUrl(artist);
+  discogsArtistLink.textContent = discogsProfileUrl ? t("discogsArtistOpen") : t("discogsArtistLink");
+  discogsArtistLink.title = `${discogsProfileUrl ? t("discogsArtistOpen") : t("discogsArtistLink")} - ${artist}`;
   discogsArtistPanel.classList.remove("hidden");
 }
 
@@ -21982,7 +22374,7 @@ function supportsArtistBioApi() {
 function artistBioAiCacheKey(track) {
   const trackKey = recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || ""}`);
   if (!trackKey) return "";
-  return `${currentLanguage}|${trackKey}|${normalize(track?.style || "")}|${normalize(track?.label || "")}`;
+  return `verified-v2|${currentLanguage}|${trackKey}|${normalize(track?.style || "")}|${normalize(track?.label || "")}`;
 }
 
 function artistBioApiSourceCandidates(track) {
@@ -22060,6 +22452,7 @@ async function requestArtistBioFromApi(track) {
       bio: bio.slice(0, 900),
       sourceSummary: String(payload?.sourceSummary || "").trim(),
       sources: Array.isArray(payload?.sources) ? payload.sources : [],
+      verification: payload?.verification && typeof payload.verification === "object" ? payload.verification : null,
       confidence: String(payload?.confidence || "").trim(),
       origin: String(payload?.origin || "").trim(),
       genre: String(payload?.genre || "").trim()
@@ -23065,6 +23458,21 @@ async function hydrateArtistBioFromAi(track) {
   if (aiBio.origin && !originCountryConsistentWithTrack(track, aiBio.origin)) return;
 
   artistBio.textContent = aiBio.bio;
+  const discogsSource = (aiBio.sources || []).find((source) => {
+    const name = normalize(source?.name || "");
+    const url = String(source?.url || "");
+    return name === "discogs" && /discogs\.com\/artist\//i.test(url);
+  });
+  const musicBrainzSource = (aiBio.sources || []).find((source) => {
+    const name = normalize(source?.name || "");
+    const url = String(source?.url || "");
+    return name === "musicbrainz" && /musicbrainz\.org\/artist\//i.test(url);
+  });
+  if (discogsSource?.url) {
+    track.discogsArtistUrl = discogsSource.url;
+    renderDiscogsArtistPanel(track);
+  }
+  if (musicBrainzSource?.url) track.musicBrainzArtistUrl = musicBrainzSource.url;
   if (aiBio.origin && !track.artistCountry && !track.artistArea) {
     const parsedOrigin = parseOriginText(aiBio.origin);
     if (parsedOrigin.country) {
@@ -25165,6 +25573,82 @@ function recordAiTextCall() {
   saveAiUsage(usage);
 }
 
+function dailyProductUsageStoreKey() {
+  return storageKeyForSession(DAILY_PRODUCT_USAGE_STORAGE_KEY) || DAILY_PRODUCT_USAGE_STORAGE_KEY;
+}
+
+function readDailyProductUsage() {
+  const fallback = {
+    day: aiTodayKey(),
+    musicActions: 0,
+    musicTrackKeys: {}
+  };
+  try {
+    const raw = localStorage.getItem(dailyProductUsageStoreKey());
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed || parsed.day !== fallback.day) return fallback;
+    const trackKeys = parsed.musicTrackKeys && typeof parsed.musicTrackKeys === "object"
+      ? parsed.musicTrackKeys
+      : {};
+    return {
+      day: fallback.day,
+      musicActions: Math.max(0, Number(parsed.musicActions) || 0),
+      musicTrackKeys: trackKeys
+    };
+  } catch (_err) {
+    return fallback;
+  }
+}
+
+function saveDailyProductUsage(usage) {
+  try {
+    localStorage.setItem(dailyProductUsageStoreKey(), JSON.stringify(usage || readDailyProductUsage()));
+  } catch (_err) {
+    // ignore storage failures
+  }
+}
+
+function dailyFreeDiscoveryLimit() {
+  return aiConfigInt("dailyFreeDiscoveryLimit", AI_DEFAULT_CONFIG.dailyFreeDiscoveryLimit, 0, 1000);
+}
+
+function dailyMusicDiscoveryCount() {
+  return readDailyProductUsage().musicActions;
+}
+
+function musicDiscoveryPremiumLocked() {
+  if (aiPremiumUnlocked()) return false;
+  const limit = dailyFreeDiscoveryLimit();
+  return Boolean(limit) && dailyMusicDiscoveryCount() >= limit;
+}
+
+function premiumDiscoveryLimitMessage() {
+  const limit = dailyFreeDiscoveryLimit();
+  return t("premiumDiscoveryLimitReached", { limit });
+}
+
+function showPremiumDiscoveryLimit() {
+  const message = premiumDiscoveryLimitMessage();
+  if (feedbackMessage) feedbackMessage.textContent = message;
+  showToast(message);
+}
+
+function canUseMusicDiscovery() {
+  return !musicDiscoveryPremiumLocked();
+}
+
+function recordDailyMusicAction(track, source = "discovery") {
+  const usage = readDailyProductUsage();
+  const trackKey = recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+  if (trackKey) {
+    const entryKey = `track:${trackKey}`;
+    if (usage.musicTrackKeys[entryKey]) return;
+    usage.musicTrackKeys[entryKey] = source || "music";
+  }
+  usage.musicActions += 1;
+  saveDailyProductUsage(usage);
+}
+
 function aiImageProfileKey() {
   return spiritCollectibleUserSignature();
 }
@@ -25185,16 +25669,36 @@ function hasApiSpiritImageForCurrentProfile() {
   ));
 }
 
+function aiImageLimitForCurrentPlan() {
+  if (aiPremiumUnlocked()) {
+    return aiConfigInt("premiumImageLimitPerProfile", AI_DEFAULT_CONFIG.premiumImageLimitPerProfile, 0, 1000);
+  }
+  return aiConfigInt("imageLimitPerProfile", AI_DEFAULT_CONFIG.imageLimitPerProfile, 0, 100);
+}
+
 function aiImageLimitReachedForProfile() {
-  const limit = aiConfigInt("imageLimitPerProfile", AI_DEFAULT_CONFIG.imageLimitPerProfile, 0, 10);
+  const limit = aiImageLimitForCurrentPlan();
   const allowRegeneration = aiConfigFlag("allowImageRegeneration", false);
   if (!limit) return false;
   return aiImageCallsForProfile() >= limit || (!allowRegeneration && hasApiSpiritImageForCurrentProfile());
 }
 
+function aiImagePremiumLockedByLimit() {
+  return aiImageEnabled() && !aiPremiumUnlocked() && aiImageLimitReachedForProfile();
+}
+
+function premiumAvatarLimitMessage() {
+  const limit = aiImageLimitForCurrentPlan();
+  return t("premiumAvatarLimitReached", { limit });
+}
+
+function aiImageAccessUnlockedForRequest() {
+  return aiPremiumUnlocked() || !aiImagePremiumLockedByLimit();
+}
+
 function canRequestAiImage() {
   return aiImageEnabled() &&
-    aiPremiumUnlocked() &&
+    aiImageAccessUnlockedForRequest() &&
     !aiImageLimitReachedForProfile() &&
     Boolean(resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image"));
 }
@@ -26076,8 +26580,9 @@ function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, p
       <g opacity="0.74">${spectrum}</g>
       <path d="M140 744 C250 680 356 790 468 722 C578 656 646 742 734 690" fill="none" stroke="${a}" stroke-opacity="0.38" stroke-width="5" stroke-linecap="round" />
       <path d="M172 782 H700" stroke="${b}" stroke-opacity="0.22" stroke-width="3" stroke-linecap="round" />
-    </g>`;
+	    </g>`;
 }
+
 
 function collectibleVariationToken() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
@@ -26103,7 +26608,8 @@ async function requestSpiritCollectibleFromApi(payload) {
       headers,
       body: JSON.stringify({
         ...payload,
-        premiumUnlocked: aiPremiumUnlocked(),
+        premiumUnlocked: aiPremiumUnlocked() || !aiImagePremiumLockedByLimit(),
+        freeTrialUnlocked: !aiPremiumUnlocked(),
         imageGenerationIndex: aiImageCallsForProfile() + 1,
         forceRegenerate: payload.forceRegenerate === true
       }),
@@ -26358,6 +26864,7 @@ function buildLocalSpiritCollectibleImage(
   const profileStatsLines = splitIntoSvgLines(profileStatsLine, 25, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
+  if (!hasBackgroundImage) return "";
   const accentX = 14 + (seed % 34);
   const accentY = 18 + ((seed >> 5) % 46);
   const titleTracking = currentLanguage === "en" ? "8" : "7";
@@ -26387,10 +26894,8 @@ function buildLocalSpiritCollectibleImage(
     const y = 802 - height;
     return `<rect x="${x}" y="${y}" width="10" height="${height}" rx="5" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${(0.08 + (index % 5) * 0.035).toFixed(2)}" />`;
   }).join("");
-  const mascotSvg = hasBackgroundImage
-    ? `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
-       <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`
-    : buildSpiritAbstractSignalSvg(theme, variant, seed, spirit, profileSignature);
+  const mascotSvg = `<image href="${escapeSvgText(safeBackgroundImage)}" x="94" y="144" width="612" height="612" preserveAspectRatio="xMidYMid slice" opacity="0.98" clip-path="url(#mascotClip)" />
+	       <rect x="94" y="144" width="612" height="612" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`;
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -26532,6 +27037,16 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   if (apiImage) {
     const { mime } = collectibleImageMeta(apiImage);
     const apiImageAsDataUrl = await collectibleImageAsDataUrl(apiImage, mime);
+    if (!/^data:image\//i.test(String(apiImageAsDataUrl || "").trim())) {
+      return {
+        imageUrl: "",
+        source: "pending",
+        createdAt: new Date().toISOString(),
+        prompt,
+        userSignature,
+        profileSignature
+      };
+    }
     return {
       imageUrl: buildLocalSpiritCollectibleImage(
         spirit,
@@ -26592,6 +27107,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+      } else if (aiImagePremiumLockedByLimit()) {
+        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
       } else if (!hasImage) {
         spiritCollectibleHint.textContent = supportsAiCollectibleApi()
           ? t("spiritCollectibleReadyToGenerate")
@@ -26659,12 +27176,13 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     }
     if (spiritCollectibleRegenerateBtn) {
       const aiImageLocked = hasImage && asset.source === "api" && !aiConfigFlag("allowImageRegeneration", false);
+      const premiumImageLocked = aiImagePremiumLockedByLimit();
       spiritCollectibleRegenerateBtn.textContent = spiritCollectibleBusy
         ? t("spiritCollectibleGenerating")
-        : aiImageLocked
+        : aiImageLocked || premiumImageLocked
           ? t("spiritCollectibleAiLimitUsed")
           : t("spiritCollectibleRegenerate");
-      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || aiImageLocked;
+      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || aiImageLocked || premiumImageLocked;
       if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
       else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
     }
@@ -26686,6 +27204,11 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   renderCollectibleState(collectible);
 
   if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
+    if (aiImagePremiumLockedByLimit()) {
+      showToast(premiumAvatarLimitMessage());
+      renderCollectibleState(collectible);
+      return null;
+    }
     const previousCollectible = collectible?.imageUrl ? collectible : null;
     let keptPreviousCollectible = false;
     spiritCollectibleBusy = true;
@@ -26979,7 +27502,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   void spiritCard.offsetWidth;
   spiritCard.classList.add("reveal");
 
-  setImageSourceWithFallback(spiritImage, selectedSpirit.image, SPIRIT_AVATAR_FALLBACK);
+  setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
   spiritImage.alt = t("spiritAvatarAlt", { name: spiritText.name });
   spiritName.textContent = spiritText.name;
   spiritArchetype.textContent =
@@ -27003,9 +27526,9 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleHintLocal");
   }
   if (collectible?.imageUrl) {
-    setImageSourceWithFallback(spiritImage, collectible.imageUrl, selectedSpirit.image || SPIRIT_AVATAR_FALLBACK, {
+    setImageSourceWithFallback(spiritImage, collectible.imageUrl, SPIRIT_AVATAR_FALLBACK, {
       onFallback: () => {
-        setImageSourceWithFallback(spiritImage, selectedSpirit.image, SPIRIT_AVATAR_FALLBACK);
+        setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
       }
     });
   }
@@ -27447,6 +27970,30 @@ function getFallbackEvents(artist) {
 }
 
 async function fetchUpcomingEvents(artist) {
+  const ticketmasterEndpoint = resolveMusicApiEndpoint("SONIC_TICKETMASTER_EVENTS_API_URL", "/api/ticketmaster-events");
+  if (ticketmasterEndpoint) {
+    try {
+      const response = await fetch(ticketmasterEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          artist,
+          size: 10
+        })
+      });
+      if (response.ok) {
+        const payload = await response.json();
+        const events = Array.isArray(payload?.events) ? payload.events : [];
+        if (events.length > 0) return { events, source: "ticketmaster" };
+      }
+    } catch (_error) {
+      // Ticketmaster e a fonte principal; se falhar, o app tenta as alternativas antigas.
+    }
+  }
+
   const endpoint = `https://rest.bandsintown.com/artists/${encodeURIComponent(artist)}/events?app_id=neonpulse_selector`;
 
   try {
@@ -27493,7 +28040,7 @@ function renderEventsPanel(artist, events, source) {
   }
 
   eventsIntro.textContent =
-    source === "bandsintown"
+    source !== "fallback"
       ? t("eventRealLoaded", { artist })
       : t("eventFallbackLoaded", { artist });
 
@@ -28415,6 +28962,101 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
   });
 }
 
+function renderSonicBadgeList(container, badges = []) {
+  if (!container) return;
+  container.innerHTML = "";
+  badges.filter(Boolean).forEach((badge) => {
+    const chip = document.createElement("span");
+    chip.className = `swipe-status-badge ${badge.type || ""}`.trim();
+    chip.textContent = badge.label || "";
+    container.appendChild(chip);
+  });
+}
+
+function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = {}) {
+  if (!track) return [];
+  const knownUnion = buildGlobalArtistExclusionSet();
+  const isKnown = artistSetHasMatch(knownUnion, track.artist);
+  const strongFit = recommendationHasStrongFit(track);
+  const hasPreview = trackHasPlayablePreviewExperience(track);
+  const selectedStyle = String(prefs?.style || "").trim();
+  const outsideStyle = Boolean(selectedStyle && track.style && track.style !== selectedStyle);
+  const sourceTrust = trackSourceTrustScore(track);
+  const badges = [];
+  if (saved) {
+    badges.push({ type: "saved", label: sonicTinyCopy("Salvo no radar", "Saved to radar", "Guardado") });
+  }
+  badges.push(isKnown
+    ? { type: "known", label: sonicTinyCopy("Ja conhecido", "Known artist", "Ya conocido") }
+    : { type: "fresh", label: sonicTinyCopy("Novo no radar", "New radar", "Nuevo radar") });
+  if (strongFit) badges.push({ type: "good", label: sonicTinyCopy("Alta compatibilidade", "Strong match", "Alta afinidad") });
+  if (hasPreview) badges.push({ type: "preview", label: sonicTinyCopy("Preview tocavel", "Playable preview", "Preview listo") });
+  if (outsideStyle) {
+    badges.push({ type: "explore", label: sonicTinyCopy("Fora da zona segura", "Outside comfort zone", "Fuera de zona") });
+  } else if (!selectedStyle) {
+    badges.push({ type: "explore", label: sonicTinyCopy("Rota livre", "Open route", "Ruta libre") });
+  }
+  if (sourceTrust >= 2) badges.push({ type: "good", label: sonicTinyCopy("Fonte confiavel", "Trusted source", "Fuente fiable") });
+  return badges;
+}
+
+function recommendationMicroReason(track, prefs = lastPrefs) {
+  if (!track) return "";
+  const bpmData = resolveBpmDisplay(track);
+  const style = styleLabelByValue(track.style || prefs?.style || "");
+  const bpm = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel");
+  const energy = energyLabelByValue(track.energy || prefs?.energy || "");
+  const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
+  const parts = [style, bpm, energy].filter(Boolean).join(" • ");
+  if (currentLanguage === "en") {
+    return `Why this one: ${parts}${context ? ` for ${context}` : ""}.`;
+  }
+  if (currentLanguage === "es") {
+    return `Por que esta: ${parts}${context ? ` para ${context}` : ""}.`;
+  }
+  return `Por que recomendei: ${parts}${context ? ` para ${context}` : ""}.`;
+}
+
+function renderTrackCardSignals(track, prefs = lastPrefs, { saved = false } = {}) {
+  const hasTrack = Boolean(track);
+  const badges = hasTrack ? recommendationBadgeItems(track, prefs, { saved }) : [];
+  renderSonicBadgeList(topSwipeBadges, badges.slice(0, 5));
+  renderSonicBadgeList(trackStatusBadges, badges);
+  const reason = hasTrack ? recommendationMicroReason(track, prefs) : "";
+  [topSwipeReason, trackMicroReason].forEach((element) => {
+    if (!element) return;
+    element.textContent = reason;
+    element.classList.toggle("hidden", !reason);
+  });
+}
+
+function setTrackPreviewVisualState(state = "idle") {
+  const states = ["searching", "playing", "ready", "embed", "external"];
+  const targets = [topSwipeCard, primaryTrackCard, artistVisualCard].filter(Boolean);
+  targets.forEach((element) => {
+    states.forEach((item) => element.classList.remove(`is-preview-${item}`));
+    if (state && state !== "idle") element.classList.add(`is-preview-${state}`);
+  });
+}
+
+function markCurrentTrackSaved(track = currentRecommendation) {
+  if (!track) return;
+  [topSwipeCard, primaryTrackCard].filter(Boolean).forEach((element) => element.classList.add("is-saved"));
+  const savedLabel = sonicTinyCopy("Salvo no radar", "Saved to radar", "Guardado");
+  if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = savedLabel;
+  if (swipeLikeBtn) swipeLikeBtn.textContent = savedLabel;
+  if (previewLikeBtn) previewLikeBtn.textContent = savedLabel;
+  renderTrackCardSignals(track, lastPrefs, { saved: true });
+  window.setTimeout(() => {
+    if (currentRecommendation !== track) return;
+    [topSwipeCard, primaryTrackCard].filter(Boolean).forEach((element) => element.classList.remove("is-saved"));
+    renderTrackCardSignals(track, lastPrefs);
+    if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
+    if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
+    if (previewLikeBtn) previewLikeBtn.textContent = sonicTinyCopy("Sim, curti", "Yes, liked it", "Si, me gusto");
+  }, 1600);
+}
+
 function prefsFromControls() {
   return {
     style: styleEl?.value || currentRecommendation?.style || "",
@@ -28486,6 +29128,7 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
 
 function registerRecommendationDelivery(track, prefs) {
   if (!track || !prefs) return;
+  recordDailyMusicAction(track, "discovery");
   registerSeenArtist(track.artist);
   const trackKey = `${track.artist}::${track.song}`;
   const normalizedTrackKey = recommendationTrackKey(track) || normalize(trackKey);
@@ -29138,6 +29781,8 @@ function updateSwipeFeedbackCard(track) {
     if (swipeEnergyChip) swipeEnergyChip.textContent = t("freeEnergy");
     if (swipeLikeBtn) swipeLikeBtn.disabled = true;
     if (swipePassBtn) swipePassBtn.disabled = true;
+    renderTrackCardSignals(null);
+    setTrackPreviewVisualState("idle");
     syncQuickKnownDecision(null);
     return;
   }
@@ -29163,6 +29808,7 @@ function updateSwipeFeedbackCard(track) {
   if (swipeEnergyChip) swipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
   if (swipeLikeBtn) swipeLikeBtn.disabled = false;
   if (swipePassBtn) swipePassBtn.disabled = false;
+  renderTrackCardSignals(track, lastPrefs);
   syncQuickKnownDecision(track);
 }
 
@@ -29258,6 +29904,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   playUiSfx("like");
   burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
   showToast(t("toastSongLiked"));
+  markCurrentTrackSaved(likedTrack);
   updateStats();
   const followups = runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
@@ -29446,6 +30093,7 @@ function renderRecommendation(track, prefs) {
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: styleLabelByValue(track.style) });
   renderRecommendationWhy(track, prefs);
+  renderTrackCardSignals(track, prefs);
   renderGenreGuide(track);
   renderArtistVisualFallback(track);
   void hydrateArtistVisual(track);
@@ -29518,6 +30166,7 @@ async function renderPreview(track) {
   previewPanel.classList.remove("hidden");
   listeningPrompt.classList.add("hidden");
   previewStatus.textContent = t("previewSearching");
+  setTrackPreviewVisualState("searching");
   resetTrackPreviewElement(trackPreview);
   resetSoundCloudPreviewEmbed();
   resetBandcampPreviewEmbed();
@@ -29548,6 +30197,14 @@ async function renderPreview(track) {
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${refreshedMeta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${refreshedMeta.duration}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${refreshedMeta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
+  const resolvedYoutube = await resolveYouTubeVideoFromApi(track);
+  if (resolvedYoutube && youtubeLink) {
+    setListenLinkState(youtubeLink, {
+      href: buildYouTubeTrackLink(track),
+      enabled: true,
+      title: ""
+    });
+  }
   const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
   const canRetryYoutube = youtubePreviewCanRetry(track);
   const youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
@@ -29574,6 +30231,7 @@ async function renderPreview(track) {
       syncPreviewAudioState();
       trackPreview.currentTime = 0;
       await trackPreview.play();
+      setTrackPreviewVisualState("playing");
       const previewLoadedMessage =
         track.previewConfidence && track.previewConfidence >= 0.9
           ? t("previewValidated")
@@ -29587,6 +30245,7 @@ async function renderPreview(track) {
       }
       listeningPrompt.classList.remove("hidden");
     } catch (_err) {
+      setTrackPreviewVisualState("ready");
       const readyMessage = t("previewReady");
       if (youtubeInlineReady) {
         previewStatus.textContent = `${readyMessage} ${t("previewYoutubeInlineHint")}`;
@@ -29603,16 +30262,19 @@ async function renderPreview(track) {
     track.previewMissing = true;
     const soundcloudFallbackReady = showSoundCloudPreviewEmbed(track, { autoplay: false });
     if (soundcloudFallbackReady) {
+      setTrackPreviewVisualState("embed");
       setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
       previewStatus.textContent = t("previewSoundcloudFallback");
     } else {
       const bandcampFallbackReady = showBandcampPreviewEmbed(track);
       if (bandcampFallbackReady) {
+        setTrackPreviewVisualState("embed");
         setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
         previewStatus.textContent = t("previewBandcampFallback");
       } else {
         const youtubeFallbackReady = showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt });
         if (youtubeFallbackReady) {
+          setTrackPreviewVisualState("embed");
           setYouTubePreviewActionState({
             visible: true,
             canToggle: true,
@@ -29621,6 +30283,7 @@ async function renderPreview(track) {
           });
           previewStatus.textContent = t("previewYoutubeFallback");
         } else {
+          setTrackPreviewVisualState("external");
           setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
           const platforms = availableExternalPlatforms();
           previewStatus.textContent = platforms.length
@@ -30975,6 +31638,7 @@ function rememberLikedTrack(track, source = "liked") {
     ...likedTrackHistory.filter((item) => likedTrackKeyFromEntry(item) !== entry.key)
   ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
   renderLikedTrackHistory();
+  queueSocialSync("liked_track");
 }
 
 function likedTrackDateLabel(value = "") {
@@ -31088,7 +31752,476 @@ function clearLikedTrackHistory() {
   likedTrackHistory = [];
   renderLikedTrackHistory();
   saveProgress();
+  queueSocialSync("profile");
   showToast(t("summaryLikedTracksCleared"));
+}
+
+function socialSetStatus(message = "", tone = "") {
+  if (!socialStatus) return;
+  socialStatus.textContent = message;
+  socialStatus.classList.toggle("error", tone === "error");
+  socialStatus.classList.toggle("ok", tone === "ok");
+  socialStatus.classList.toggle("muted", !tone);
+}
+
+function socialStoreSession(session = null) {
+  socialState.session = session || null;
+  try {
+    if (session) localStorage.setItem(SOCIAL_SESSION_STORAGE_KEY, JSON.stringify(session));
+    else localStorage.removeItem(SOCIAL_SESSION_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Social session storage unavailable", error);
+  }
+}
+
+function socialLoadStoredSession() {
+  try {
+    const raw = localStorage.getItem(SOCIAL_SESSION_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.access_token || !parsed?.user?.id) return null;
+    return parsed;
+  } catch (error) {
+    console.warn("Could not read social session", error);
+    return null;
+  }
+}
+
+function socialConfigReady() {
+  return Boolean(socialState.enabled && socialState.config?.supabaseUrl && socialState.config?.supabaseAnonKey);
+}
+
+function socialApiUrl(path = "") {
+  const base = String(socialState.config?.supabaseUrl || "").replace(/\/+$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+function socialHeaders({ auth = true, prefer = "" } = {}) {
+  const headers = {
+    apikey: socialState.config?.supabaseAnonKey || "",
+    Accept: "application/json",
+    "Content-Type": "application/json"
+  };
+  if (auth && socialState.session?.access_token) {
+    headers.Authorization = `Bearer ${socialState.session.access_token}`;
+  }
+  if (prefer) headers.Prefer = prefer;
+  return headers;
+}
+
+async function socialRequest(path, options = {}) {
+  if (!socialConfigReady()) throw new Error("Supabase social ainda nao esta configurado.");
+  const response = await fetch(socialApiUrl(path), {
+    method: options.method || "GET",
+    headers: {
+      ...socialHeaders({ auth: options.auth !== false, prefer: options.prefer || "" }),
+      ...(options.headers || {})
+    },
+    body: options.body === undefined ? undefined : JSON.stringify(options.body)
+  });
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = text;
+    }
+  }
+  if (!response.ok) {
+    const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
+    throw new Error(String(detail || "Falha no Supabase."));
+  }
+  return payload;
+}
+
+async function fetchSocialConfig() {
+  if (!socialProfileCard) return null;
+  try {
+    const response = await fetch(SOCIAL_CONFIG_ENDPOINT, { cache: "no-store" });
+    const config = await response.json();
+    socialState.config = config || null;
+    socialState.enabled = Boolean(config?.enabled && config?.supabaseUrl && config?.supabaseAnonKey);
+    socialState.ready = true;
+    return config;
+  } catch (error) {
+    console.warn("Could not load social config", error);
+    socialState.ready = true;
+    socialState.enabled = false;
+    return null;
+  }
+}
+
+function socialCleanUsername(value = "") {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^@+/, "")
+    .replace(/[^a-z0-9_]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 28);
+}
+
+function socialSuggestedUsername() {
+  const session = normalizeUserSession(currentAuthUser);
+  return socialCleanUsername(session.username || session.email.split("@")[0] || "sonic_user") || "sonic_user";
+}
+
+function socialSuggestedDisplayName() {
+  const session = normalizeUserSession(currentAuthUser);
+  return String(session.username || session.email?.split("@")[0] || "Sonic listener").trim();
+}
+
+function socialTopStyleValues(limit = 5) {
+  const ranked = [...adaptiveModel.likedStyles.entries()]
+    .map(([style, score]) => [normalize(style), Number(score) || 0])
+    .filter(([style, score]) => style && score > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([style]) => style);
+  const selectedStyle = normalize(styleEl?.value || "");
+  if (!ranked.length && selectedStyle) ranked.push(selectedStyle);
+  return ranked;
+}
+
+function socialCurrentProfilePayload() {
+  const session = socialState.session;
+  const userId = session?.user?.id;
+  if (!userId) return null;
+  const username = socialCleanUsername(socialUsernameInput?.value || socialState.profile?.username || socialSuggestedUsername());
+  const displayName = String(socialDisplayNameInput?.value || socialState.profile?.display_name || socialSuggestedDisplayName()).trim() || username;
+  const favoriteStyles = socialTopStyleValues(6);
+  return {
+    id: userId,
+    username,
+    display_name: displayName,
+    avatar_url: normalizeUserSession(currentAuthUser).avatar || socialState.profile?.avatar_url || null,
+    bio: socialState.profile?.bio || "",
+    favorite_styles: favoriteStyles,
+    liked_track_count: likedTrackHistory.length,
+    sonic_dna: {
+      favoriteStyle: resolveFavoriteStyleLabel(),
+      likedTracks: likedTrackHistory.length,
+      likedArtists: adaptiveModel.likedArtists.size,
+      discoveredArtists: knownArtistsMemory.size,
+      language: currentLanguage
+    },
+    updated_at: new Date().toISOString()
+  };
+}
+
+function socialTrackRowsForSync() {
+  const userId = socialState.session?.user?.id;
+  if (!userId) return [];
+  return likedTrackHistory.slice(0, SOCIAL_SYNC_LIMIT).map((entry) => ({
+    user_id: userId,
+    target_type: "track",
+    target_key: likedTrackKeyFromEntry(entry),
+    artist: entry.artist || "",
+    song: entry.song || "",
+    style: normalize(entry.style || ""),
+    source: entry.source || "liked",
+    metadata: {
+      bpm: entry.bpm || "",
+      energy: entry.energy || "",
+      label: entry.label || "",
+      spotifyUrl: entry.spotifyUrl || "",
+      youtubeUrl: entry.youtubeUrl || "",
+      soundcloudUrl: entry.soundcloudUrl || "",
+      likedAt: entry.likedAt || ""
+    },
+    created_at: entry.likedAt || new Date().toISOString()
+  })).filter((row) => row.target_key);
+}
+
+async function upsertSocialProfile() {
+  const payload = socialCurrentProfilePayload();
+  if (!payload) return null;
+  const [profile] = await socialRequest("/rest/v1/profiles?on_conflict=id", {
+    method: "POST",
+    prefer: "resolution=merge-duplicates,return=representation",
+    body: [payload]
+  });
+  socialState.profile = profile || payload;
+  return socialState.profile;
+}
+
+async function insertSocialActivity(action = "liked_track", track = null) {
+  const profile = socialState.profile || socialCurrentProfilePayload();
+  const userId = socialState.session?.user?.id;
+  if (!userId || !track) return;
+  await socialRequest("/rest/v1/activity_feed", {
+    method: "POST",
+    prefer: "return=minimal",
+    body: [{
+      user_id: userId,
+      activity_type: action,
+      target_type: "track",
+      target_key: track.key || track.target_key || likedTrackKeyFromEntry(track),
+      artist: track.artist || "",
+      song: track.song || "",
+      style: track.style || "",
+      metadata: {
+        displayName: profile?.display_name || socialSuggestedDisplayName(),
+        username: profile?.username || socialSuggestedUsername(),
+        artist: track.artist || "",
+        song: track.song || "",
+        style: track.style || "",
+        source: track.source || "liked"
+      }
+    }]
+  });
+}
+
+async function syncSocialLikedTracks(options = {}) {
+  if (!socialConfigReady() || !socialState.session?.access_token) return false;
+  if (socialState.busy && !options.force) return false;
+  socialState.busy = true;
+  renderSocialUi({ preserveStatus: true });
+  try {
+    await upsertSocialProfile();
+    const rows = socialTrackRowsForSync();
+    if (rows.length) {
+      await socialRequest("/rest/v1/likes?on_conflict=user_id,target_type,target_key", {
+        method: "POST",
+        prefer: "resolution=merge-duplicates,return=minimal",
+        body: rows
+      });
+      if (options.activity !== false) await insertSocialActivity("liked_track", rows[0]);
+    }
+    socialState.lastSyncAt = Date.now();
+    if (!options.silent) socialSetStatus("Perfil e curtidas sincronizados.", "ok");
+    await loadSocialFeed({ silent: true });
+    return true;
+  } catch (error) {
+    console.warn("Social sync failed", error);
+    if (!options.silent) socialSetStatus(`Nao consegui sincronizar: ${error.message}`, "error");
+    return false;
+  } finally {
+    socialState.busy = false;
+    renderSocialUi({ preserveStatus: true });
+  }
+}
+
+function queueSocialSync(reason = "profile") {
+  if (!socialConfigReady() || !socialState.session?.access_token) return;
+  if (socialState.syncTimer) clearTimeout(socialState.syncTimer);
+  socialState.syncTimer = setTimeout(() => {
+    socialState.syncTimer = null;
+    void syncSocialLikedTracks({ silent: true, activity: reason === "liked_track" });
+  }, 900);
+}
+
+async function loadSocialFeed(options = {}) {
+  if (!socialConfigReady() || !socialState.session?.access_token) {
+    renderSocialFeed();
+    return [];
+  }
+  try {
+    const params = new URLSearchParams({
+      select: "*",
+      order: "created_at.desc",
+      limit: String(SOCIAL_FEED_LIMIT)
+    });
+    const rows = await socialRequest(`/rest/v1/activity_feed?${params.toString()}`);
+    socialState.feed = Array.isArray(rows) ? rows : [];
+    renderSocialFeed();
+    if (!options.silent) socialSetStatus("Feed atualizado.", "ok");
+    return socialState.feed;
+  } catch (error) {
+    console.warn("Could not load social feed", error);
+    if (!options.silent) socialSetStatus(`Nao consegui carregar o feed: ${error.message}`, "error");
+    return [];
+  }
+}
+
+function renderSocialFeed() {
+  if (!socialFeedList) return;
+  socialFeedList.innerHTML = "";
+  if (!socialConfigReady()) {
+    const empty = document.createElement("p");
+    empty.className = "social-feed-empty muted";
+    empty.textContent = "Conecte o Supabase para ativar o feed social.";
+    socialFeedList.appendChild(empty);
+    return;
+  }
+  if (!socialState.session?.access_token) {
+    const empty = document.createElement("p");
+    empty.className = "social-feed-empty muted";
+    empty.textContent = "Entre ou crie seu perfil para ver o feed.";
+    socialFeedList.appendChild(empty);
+    return;
+  }
+  if (!socialState.feed.length) {
+    const empty = document.createElement("p");
+    empty.className = "social-feed-empty muted";
+    empty.textContent = "Seu feed aparece aqui quando curtidas forem sincronizadas.";
+    socialFeedList.appendChild(empty);
+    return;
+  }
+  socialState.feed.forEach((item) => {
+    const metadata = item?.metadata || {};
+    const card = document.createElement("article");
+    card.className = "social-feed-item";
+    const title = document.createElement("strong");
+    const displayName = metadata.displayName || metadata.username || "Sonic listener";
+    const song = metadata.song || "uma faixa";
+    const artist = metadata.artist ? ` de ${metadata.artist}` : "";
+    title.textContent = `${displayName} curtiu ${song}${artist}`;
+    const meta = document.createElement("span");
+    const style = metadata.style ? styleLabelByValue(metadata.style) : "";
+    const date = item?.created_at ? new Date(item.created_at) : null;
+    const dateLabel = date && !Number.isNaN(date.getTime())
+      ? new Intl.DateTimeFormat(currentLocale(), { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(date)
+      : "";
+    meta.textContent = [style, dateLabel].filter(Boolean).join(" • ");
+    card.appendChild(title);
+    card.appendChild(meta);
+    socialFeedList.appendChild(card);
+  });
+}
+
+function renderSocialUi(options = {}) {
+  if (!socialProfileCard) return;
+  const configured = socialConfigReady();
+  const signed = Boolean(socialState.session?.access_token);
+  if (socialConnectionBadge) {
+    socialConnectionBadge.textContent = signed ? "online" : configured ? "pronto" : "setup";
+    socialConnectionBadge.classList.toggle("connected", signed);
+  }
+  if (socialAuthPanel) socialAuthPanel.classList.remove("hidden");
+  if (socialSignedPanel) socialSignedPanel.classList.toggle("hidden", !signed);
+  [socialEmailInput, socialPasswordInput, socialUsernameInput, socialDisplayNameInput].forEach((input) => {
+    if (input) input.disabled = signed || socialState.busy;
+  });
+  if (socialSignUpBtn) socialSignUpBtn.classList.toggle("hidden", signed);
+  if (socialSignInBtn) socialSignInBtn.classList.toggle("hidden", signed);
+  if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
+  if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
+  if (socialSignUpBtn) socialSignUpBtn.disabled = signed || !configured || socialState.busy;
+  if (socialSignInBtn) socialSignInBtn.disabled = signed || !configured || socialState.busy;
+  if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
+  if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
+  if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
+
+  const profile = socialState.profile || socialCurrentProfilePayload();
+  const displayName = profile?.display_name || socialSuggestedDisplayName();
+  const username = profile?.username || socialSuggestedUsername();
+  if (socialAvatar) socialAvatar.textContent = (displayName || username || "S").slice(0, 1).toUpperCase();
+  if (socialDisplayName) socialDisplayName.textContent = displayName;
+  if (socialHandle) socialHandle.textContent = username ? `@${username}` : "@sonic";
+  if (socialCloudLikesCount) socialCloudLikesCount.textContent = String(likedTrackHistory.length);
+  if (socialTopStyle) socialTopStyle.textContent = resolveFavoriteStyleLabel();
+  if (socialMatchHint) {
+    const styles = socialTopStyleValues(3).map((style) => styleLabelByValue(style)).filter(Boolean);
+    socialMatchHint.textContent = styles.length ? styles.join(" + ") : "aguardando sinais";
+  }
+  renderSocialFeed();
+  if (!options.preserveStatus) {
+    if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true na Vercel para liberar login real.");
+    else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
+    else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
+  }
+}
+
+async function socialSignUp() {
+  if (!socialConfigReady()) {
+    socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
+    return;
+  }
+  const email = String(socialEmailInput?.value || "").trim();
+  const password = String(socialPasswordInput?.value || "");
+  const username = socialCleanUsername(socialUsernameInput?.value || socialSuggestedUsername());
+  const displayName = String(socialDisplayNameInput?.value || socialSuggestedDisplayName()).trim();
+  if (!email || !password || password.length < 6) {
+    socialSetStatus("Informe e-mail e senha com pelo menos 6 caracteres.", "error");
+    return;
+  }
+  socialSetStatus("Criando perfil social...");
+  try {
+    const payload = await socialRequest("/auth/v1/signup", {
+      method: "POST",
+      auth: false,
+      body: {
+        email,
+        password,
+        data: { username, display_name: displayName }
+      }
+    });
+    if (payload?.session?.access_token) {
+      socialStoreSession(payload.session);
+      await upsertSocialProfile();
+      await syncSocialLikedTracks({ silent: true, activity: false });
+      socialSetStatus("Perfil criado e conectado.", "ok");
+    } else {
+      socialSetStatus("Perfil criado. Se o Supabase pedir confirmacao, confirme o e-mail e depois faca login.", "ok");
+    }
+  } catch (error) {
+    socialSetStatus(`Nao consegui criar o perfil: ${error.message}`, "error");
+  } finally {
+    renderSocialUi({ preserveStatus: true });
+  }
+}
+
+async function socialSignIn() {
+  if (!socialConfigReady()) {
+    socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
+    return;
+  }
+  const email = String(socialEmailInput?.value || "").trim();
+  const password = String(socialPasswordInput?.value || "");
+  if (!email || !password) {
+    socialSetStatus("Informe e-mail e senha para entrar.", "error");
+    return;
+  }
+  socialSetStatus("Entrando...");
+  try {
+    const payload = await socialRequest("/auth/v1/token?grant_type=password", {
+      method: "POST",
+      auth: false,
+      body: { email, password }
+    });
+    socialStoreSession(payload);
+    await upsertSocialProfile();
+    await syncSocialLikedTracks({ silent: true, activity: false });
+    socialSetStatus("Perfil conectado.", "ok");
+  } catch (error) {
+    socialSetStatus(`Nao consegui entrar: ${error.message}`, "error");
+  } finally {
+    renderSocialUi({ preserveStatus: true });
+  }
+}
+
+async function socialSignOut() {
+  try {
+    if (socialConfigReady() && socialState.session?.access_token) {
+      await socialRequest("/auth/v1/logout", { method: "POST" });
+    }
+  } catch (error) {
+    console.warn("Social logout failed", error);
+  }
+  socialStoreSession(null);
+  socialState.profile = null;
+  socialState.feed = [];
+  socialSetStatus("Voce saiu do perfil social.");
+  renderSocialUi({ preserveStatus: true });
+}
+
+async function initSocialMvp() {
+  if (!socialProfileCard) return;
+  if (socialEmailInput && !socialEmailInput.value) socialEmailInput.value = normalizeUserSession(currentAuthUser).email || "";
+  if (socialUsernameInput && !socialUsernameInput.value) socialUsernameInput.value = socialSuggestedUsername();
+  if (socialDisplayNameInput && !socialDisplayNameInput.value) socialDisplayNameInput.value = socialSuggestedDisplayName();
+  await fetchSocialConfig();
+  const storedSession = socialLoadStoredSession();
+  if (storedSession) socialStoreSession(storedSession);
+  renderSocialUi();
+  if (socialConfigReady() && socialState.session?.access_token) {
+    await syncSocialLikedTracks({ silent: true, activity: false });
+    await loadSocialFeed({ silent: true });
+    renderSocialUi({ preserveStatus: true });
+  }
 }
 
 function updateStats() {
@@ -31122,6 +32255,7 @@ function updateStats() {
   if (summaryLikedArtistsCount) summaryLikedArtistsCount.textContent = String(adaptiveModel.likedArtists.size);
   if (summaryDislikedArtistsCount) summaryDislikedArtistsCount.textContent = String(adaptiveModel.dislikedArtists.size);
   if (summaryFavoriteStyle) summaryFavoriteStyle.textContent = resolveFavoriteStyleLabel();
+  renderSocialUi({ preserveStatus: true });
   if (summaryAchievementText) summaryAchievementText.textContent = resolveFiveStarAchievementText();
   renderLikedTrackHistory();
   renderSummaryTags(summaryFiveStarTracks, fiveStarTracks, t("summaryEmptyFiveStarTracks"));
@@ -31744,6 +32878,11 @@ async function generateRecommendationFromPrefs(
 
 async function generateRecommendationWithOverlay(prefs, options = {}, mode = "default") {
   if (recommendationRunBusy) return false;
+  if (!canUseMusicDiscovery()) {
+    playUiSfx("error");
+    showPremiumDiscoveryLimit();
+    return false;
+  }
   playUiSfx("search-start");
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
@@ -31765,6 +32904,11 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
 
 async function activateSuggestionQueueIndex(index) {
   if (recommendationRunBusy || !lastPrefs) return false;
+  if (!canUseMusicDiscovery()) {
+    playUiSfx("error");
+    showPremiumDiscoveryLimit();
+    return false;
+  }
   if (suggestionQueueContextKey !== recommendationContextKey(lastPrefs)) {
     refreshSuggestionQueue(lastPrefs, currentRecommendation);
   }
@@ -31988,6 +33132,11 @@ async function runSwipeStyleRecommendation(style = "") {
 
 async function runRecommendation() {
   if (recommendationRunBusy) return;
+  if (!canUseMusicDiscovery()) {
+    playUiSfx("error");
+    showPremiumDiscoveryLimit();
+    return;
+  }
   playUiSfx("search-start");
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
@@ -32117,6 +33266,11 @@ async function runRecommendation() {
 
 async function runSurpriseRecommendation() {
   if (recommendationRunBusy) return false;
+  if (!canUseMusicDiscovery()) {
+    playUiSfx("error");
+    showPremiumDiscoveryLimit();
+    return false;
+  }
   playUiSfx("search-start");
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
@@ -32606,6 +33760,26 @@ bind(profileBackupImportInput, "change", (event) => {
   const file = event.target?.files?.[0] || null;
   if (profileBackupImportInput) profileBackupImportInput.value = "";
   void importProfileBackupFile(file);
+});
+bind(socialSignUpBtn, "click", () => {
+  void socialSignUp();
+});
+bind(socialSignInBtn, "click", () => {
+  void socialSignIn();
+});
+bind(socialSignOutBtn, "click", () => {
+  void socialSignOut();
+});
+bind(socialSyncBtn, "click", () => {
+  void syncSocialLikedTracks({ force: true });
+});
+bind(socialRefreshFeedBtn, "click", () => {
+  void loadSocialFeed();
+});
+bind(socialPasswordInput, "keydown", (event) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  void socialSignIn();
 });
 bind(styleInfoCloseBtn, "click", () => {
   styleInfoDismissed = true;
@@ -33100,6 +34274,7 @@ bind(previewLikeBtn, "click", async () => {
   if (feedbackMessage) feedbackMessage.textContent = t("prioritizeSimilar");
   playUiSfx("like");
   showToast(t("toastShowMoreLikeThis"));
+  markCurrentTrackSaved(currentRecommendation);
   await runPositiveFeedbackFollowups(previewLikeBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
@@ -33152,6 +34327,7 @@ bind(noveltyLikedBtn, "click", async () => {
   playUiSfx("like");
   burstConfetti(noveltyLikedBtn);
   showToast(t("toastFavoritedDiscovery"));
+  markCurrentTrackSaved(currentRecommendation);
   await runPositiveFeedbackFollowups(noveltyLikedBtn, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
@@ -33461,6 +34637,7 @@ window.neonpulseGenreAuditSummary = () => {
   return summary;
 };
 loadLanguage();
+void initSocialMvp();
 void refreshDailyNews({ silent: true, live: false });
 bootstrapAudio();
 showIntroScreen();

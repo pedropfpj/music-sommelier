@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v3";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v4";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v4";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v5";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -120,7 +120,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", false);
+  const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", true);
   const maxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 5 : 1, 1, 20);
   const requestedGeneration = Math.max(1, Number(body.imageGenerationIndex) || 1);
   const forceRegenerate = body.forceRegenerate === true;
