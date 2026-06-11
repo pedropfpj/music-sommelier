@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v5";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v6";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v6";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v7";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -196,7 +196,8 @@ module.exports = async function handler(req, res) {
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
     "The app will add all text, stats, frame, and UI later. Generate only the central artwork; no typography, captions, numbers, logos, watermarks, borders, or UI panels.",
     "The figure must have visible face, head, neck, shoulders, and upper torso; believable warm eyes; natural skin detail with pores and subtle asymmetry; expressive brow and mouth; cinematic lighting; realistic fabric/material detail; and a music-reactive aura tied to the spirit brief.",
-    "Vary the human design across generations: apparent gender presentation, skin tone, heritage-inspired styling, hair, clothes, accessories, gaze, charisma, and emotional vibe should not repeat mechanically.",
+    "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, bass should feel physical and pressure-driven, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
+    "Vary the human design across generations: generate adult male and adult female bust variants when seeds change, with occasional androgynous adult variants; skin tone, heritage-inspired styling, hair, clothes, accessories, gaze, charisma, and emotional vibe should not repeat mechanically.",
     "Strict negative style: not mask-like, not mannequin-like, not plastic, not blank stare, not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic fantasy character, not generic stock portrait, not a literal DJ photo.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
     "Make the entity feel premium, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",

@@ -5549,8 +5549,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v27";
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v5";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v28";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v6";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -26846,6 +26846,118 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
   return lines.slice(0, maxLines);
 }
 
+function spiritPrimaryStyleKeys(spirit, limit = 6) {
+  return Object.entries(spirit?.styleWeights || {})
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([style]) => style)
+    .filter(Boolean);
+}
+
+function spiritVisualFamilyKey(spirit) {
+  const styles = new Set(spiritPrimaryStyleKeys(spirit, 8));
+  const has = (...values) => values.some((value) => styles.has(value));
+  if (has("psycore", "hi_tech")) return "psy_extreme";
+  if (has("dark_psy", "forest_psy", "dark_experimental", "slambient", "dark_progressive")) return "psy_dark";
+  if (has("psytrance", "goa_trance", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial")) return "psy_bright";
+  if (has("acid_techno", "techno", "hard_techno", "industrial_techno", "minimal_techno", "peak_time_techno", "melodic_techno")) return "techno";
+  if (has("ambient", "downtempo")) return "organic";
+  if (has("tech_house", "house", "deep_house", "afro_house", "organic_house", "bass_house", "progressive_house", "electro_house")) return "house";
+  if (has("drum_and_bass", "liquid_dnb", "neurofunk", "jump_up", "jungle", "dubstep", "breakbeat")) return "bass";
+  if (has("idm", "electro", "uk_garage", "future_garage")) return "experimental";
+  return "hybrid";
+}
+
+const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
+  psy_extreme: [
+    "Psycore/hi-tech styling: adult human bust with sharp high-BPM charisma, UV-reactive cyber-ritual accessories, prismatic ear cuffs, reflective performance jacket, controlled chaos, and no helmet or robot body",
+    "Extreme psychedelic styling: realistic adult club mystic with intense eyes, luminous face accents away from the eyes, speed-line jewelry, technical rave jacket, and surgical light cuts"
+  ],
+  psy_dark: [
+    "Dark/forest/slambient styling: adult human ritual presence, nocturnal psychedelic accessories, obsidian beads, mycelium-like light threads, layered dark textiles, smoky charisma, and visible natural skin",
+    "Shadow psychedelic styling: believable adult forest-rave figure with organic jewelry, hood or scarf kept away from the face, bioluminescent accents, deep mist, and magnetic warm eyes"
+  ],
+  psy_bright: [
+    "Psychedelic festival styling: adult human bust with saturated UV accessories, mandala jewelry, braided or neon hair accents, luminous scarf, open festival charisma, and clean euphoric stage light",
+    "Goa/full-on styling: realistic adult festival guide with colorful textile layers, sun or midnight laser reflections, bead-like light details, expressive face, and melodic psychedelic glow"
+  ],
+  techno: [
+    "Techno/acid styling: adult clubber bust with industrial elegance, black tailoring, leather or mesh textures, reflective seams, transparent visor lifted above the eyes, concrete-room strobe, and acid-green steel light",
+    "Industrial club styling: realistic adult techno figure with minimal black clothes, metallic accessories, precise posture, machine-room confidence, visible eyes, and no faceless mask"
+  ],
+  house: [
+    "House/tech-house styling: adult fashionable clubber with warm social charisma, tasteful jewelry, tinted glasses that keep the eyes visible, textured jacket, confident smile, and polished dancefloor glow",
+    "Soulful club styling: realistic adult upper-body portrait with elegant relaxed clubwear, amber or pink highlights, human warmth, community energy, and refined groove attitude"
+  ],
+  bass: [
+    "Bass/DnB styling: adult human bust with physical low-end presence, tactical street-club jacket, headphones or pressure-ring collar, kinetic shoulders, speaker-shadow aura, and sharp approachable gaze",
+    "Neuro/bass styling: realistic adult bass figure with heavyweight jacket, reflective straps, chest-level subwoofer light, clean drum-attack sparks, and confident impact-focused expression"
+  ],
+  organic: [
+    "Downtempo/ambient/organic styling: adult human bust with mystical but realistic calm, woven layered fabrics, analog jewelry, plant or wood accents, low-lamp glow, and serene magnetic expression",
+    "Organic atmospheric styling: realistic adult sonic guide with breathable textiles, warm earth-toned accessories, slow halo light, natural skin, and contemplative presence"
+  ],
+  experimental: [
+    "IDM/electro/garage styling: adult human editorial portrait with asymmetric club haircut, iridescent technical jacket, glitch jewelry, clever curious expression, and fractured light details",
+    "Experimental club styling: realistic adult figure with cyber-editorial fashion, unusual but wearable accessories, angular fabric panels, playful intelligence, and precise micro-detail aura"
+  ],
+  hybrid: [
+    "Hybrid electronic styling: adult human bust with distinctive underground clubwear, visible charismatic face, style-specific accessories, realistic fabric detail, and music-reactive light shaped by the listener's taste"
+  ]
+};
+
+const SPIRIT_STYLE_FAMILY_ACCESSORIES = {
+  psy_extreme: [
+    "UV micro-gems away from the eyes, prismatic ear cuffs, reflective technical jacket",
+    "speed-line jewelry, light-cut gloves, cyber-ritual collar"
+  ],
+  psy_dark: [
+    "obsidian beads, dark woven scarf kept below the face, bioluminescent thread accents",
+    "organic ear cuffs, smoky glass jewelry, forest-rave textile layers"
+  ],
+  psy_bright: [
+    "mandala pendant, colorful woven scarf, neon hair accent",
+    "festival beads, luminous shoulder trim, UV-reactive face accents away from the eyes"
+  ],
+  techno: [
+    "transparent visor lifted above the eyes, black mesh layer, acid-green reflective seams",
+    "minimal metal ear cuff, structured club coat, concrete-strobe reflections"
+  ],
+  house: [
+    "tasteful necklace stack, tinted glasses with visible eyes, textured fashion jacket",
+    "warm metallic jewelry, relaxed club shirt, polished social-dancefloor styling"
+  ],
+  bass: [
+    "headphones around the neck, pressure-ring collar, tactical club jacket",
+    "reflective straps, heavy bass jacket, wrist bands with subwoofer glow"
+  ],
+  organic: [
+    "woven collar, analog pendant, botanical textile accents",
+    "soft layered scarf, wood-metal jewelry, warm natural fabric textures"
+  ],
+  experimental: [
+    "asymmetric earring, iridescent technical collar, glitch-light pin",
+    "angular jacket panels, unusual club jewelry, cyber-editorial hair accent"
+  ],
+  hybrid: [
+    "distinctive club jewelry, textured jacket, music-reactive accessory set"
+  ]
+};
+
+function spiritStyleFamilyDirection(spirit, profileSignature = "") {
+  const familyKey = spiritVisualFamilyKey(spirit);
+  const options = SPIRIT_STYLE_FAMILY_DIRECTIONS[familyKey] || SPIRIT_STYLE_FAMILY_DIRECTIONS.hybrid;
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::style-family-direction`) >>> 0;
+  return options[seed % options.length];
+}
+
+function spiritStyleFamilyAccessoryCue(spirit, profileSignature = "") {
+  const familyKey = spiritVisualFamilyKey(spirit);
+  const options = SPIRIT_STYLE_FAMILY_ACCESSORIES[familyKey] || SPIRIT_STYLE_FAMILY_ACCESSORIES.hybrid;
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::style-family-accessories`) >>> 0;
+  return options[seed % options.length];
+}
+
 function spiritHumanIdentityVariation(spirit, profileSignature = "") {
   const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-diversity`) >>> 0;
   const ageCues = [
@@ -26854,11 +26966,12 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
     "mature adult in the early 40s",
     "adult with youthful club energy but clearly over 25"
   ];
-  const presentationCues = [
-    "masculine presentation",
-    "feminine presentation",
-    "androgynous presentation",
-    "gender-neutral editorial presentation"
+  const sexPresentationCues = [
+    "adult male bust with masculine club presentation",
+    "adult female bust with feminine club presentation",
+    "adult male bust with softer androgynous styling",
+    "adult female bust with sharper underground styling",
+    "androgynous adult bust only for this neutral variation"
   ];
   const heritageCues = [
     "deep brown skin with Afro-diasporic styling cues",
@@ -26892,10 +27005,11 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
   ];
   return [
     ageCues[seed % ageCues.length],
-    presentationCues[(seed >>> 3) % presentationCues.length],
+    `apparent adult sex/presentation: ${sexPresentationCues[(seed >>> 3) % sexPresentationCues.length]}`,
     heritageCues[(seed >>> 6) % heritageCues.length],
     hairCues[(seed >>> 9) % hairCues.length],
-    accessoryCues[(seed >>> 12) % accessoryCues.length]
+    accessoryCues[(seed >>> 12) % accessoryCues.length],
+    `style-family accessories: ${spiritStyleFamilyAccessoryCue(spirit, profileSignature)}`
   ].join("; ");
 }
 
@@ -26921,21 +27035,23 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
     `Realistic fictional adult human entity format: ${humanForms[seed % humanForms.length]}`,
     "Composition required: bust-up or chest-up portrait with visible face, neck, shoulders, and upper torso; the person must be the clear focus, not a background symbol",
     `Identity variation for this generation: ${spiritHumanIdentityVariation(spirit, profileSignature)}`,
+    `Subgenre visual family: ${spiritStyleFamilyDirection(spirit, profileSignature)}`,
     `Spirit identity: ${direction.identity}`,
     `Face and charisma: ${direction.face}; expression cue: ${expressionCues[seed % expressionCues.length]}`,
     `Wardrobe and material language: ${direction.wardrobe}`,
     `Music-reactive aura: ${direction.aura}`,
     `Scene: ${direction.environment}`,
     `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
-    "Human presence is required: visible face, head, shoulders and upper torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, distinct clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Vary apparent gender presentation, skin tone, hair, wardrobe, gaze, accessories, and vibe across generations. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, readable text, UI, or border"
+    "Human presence is required: visible face, head, shoulders and upper torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, distinct clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus skin tone, hair, wardrobe, gaze, accessories, and vibe. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
-function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "") {
+function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature = "", profileSignature = "", identitySignature = "") {
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
-  const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
-  const entityDirection = spiritCharacterIdentity(spirit, profileSignature);
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity as a bust-up or chest-up portrait with a believable face, natural skin detail, warm expressive eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling, unique clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const visualSignature = identitySignature || profileSignature;
+  const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${visualSignature || ""}`));
+  const entityDirection = spiritCharacterIdentity(spirit, visualSignature);
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity as a bust-up or chest-up portrait with a believable face, natural skin detail, warm expressive eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling, unique clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -28123,8 +28239,9 @@ function finishSpiritCollectibleGenerationProgress(success = false) {
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
-  const humanEntityBrief = spiritCharacterIdentity(spirit, profileSignature);
-  const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature)} Variation seed: ${variationToken || userSignature}.`;
+  const identitySignature = [profileSignature, variationToken || userSignature].filter(Boolean).join("::");
+  const humanEntityBrief = spiritCharacterIdentity(spirit, identitySignature);
+  const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature, identitySignature)} Variation seed: ${variationToken || userSignature}.`;
   const spiritAssetUrl = resolveRuntimeAssetUrl(spirit?.image || "");
   const { mime: spiritMime } = collectibleImageMeta(spiritAssetUrl);
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
