@@ -6,6 +6,19 @@ function envFlag(name, fallback = false) {
   return ["1", "true", "yes", "on", "enabled"].includes(raw);
 }
 
+function envPresent(name) {
+  return Object.prototype.hasOwnProperty.call(process.env, name) &&
+    String(process.env[name] || "").trim() !== "";
+}
+
+function featureEnabled(enabledEnv = "SONIC_MUSIC_APIS_ENABLED", fallback = false) {
+  if (enabledEnv && envPresent(enabledEnv)) return envFlag(enabledEnv, fallback);
+  if (enabledEnv !== "SONIC_MUSIC_APIS_ENABLED" && envPresent("SONIC_MUSIC_APIS_ENABLED")) {
+    return envFlag("SONIC_MUSIC_APIS_ENABLED", fallback);
+  }
+  return envFlag(enabledEnv, fallback);
+}
+
 function envInt(name, fallback, min = 0, max = 100000) {
   const parsed = Number.parseInt(String(process.env[name] || ""), 10);
   if (!Number.isFinite(parsed)) return fallback;
@@ -128,7 +141,7 @@ function requireMusicApi(req, res, {
     sendJson(req, res, 403, { error: "origin_not_allowed" }, allMethods);
     return false;
   }
-  if (!envFlag(enabledEnv, defaultEnabled)) {
+  if (!featureEnabled(enabledEnv, defaultEnabled)) {
     sendJson(req, res, 403, { error: "music_api_disabled", feature }, allMethods);
     return false;
   }
@@ -145,6 +158,8 @@ function requireMusicApi(req, res, {
 
 module.exports = {
   envFlag,
+  envPresent,
+  featureEnabled,
   envInt,
   envText,
   parseBody,

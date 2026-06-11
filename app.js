@@ -2,8 +2,11 @@ const STYLE_TO_FAMILY = {
   psytrance: "psytrance",
   forest_psy: "psytrance",
   dark_psy: "psytrance",
+  twilight_psy: "psytrance",
   dark_experimental: "psytrance",
   psycore: "psytrance",
+  psybreaks: "psytrance",
+  psybient: "psytrance",
   freeform: "psytrance",
   full_on: "psytrance",
   full_on_night: "psytrance",
@@ -14,9 +17,17 @@ const STYLE_TO_FAMILY = {
   goa_trance: "psytrance",
   psy_comercial: "psytrance",
   trance_uplifting: "trance",
+  tech_trance: "trance",
+  hard_trance: "trance",
   techno: "techno",
   acid_techno: "techno",
   hard_techno: "techno",
+  dub_techno: "techno",
+  hypnotic_techno: "techno",
+  raw_techno: "techno",
+  detroit_techno: "techno",
+  schranz: "techno",
+  ebm: "techno",
   minimal_techno: "techno",
   melodic_techno: "techno",
   industrial_techno: "techno",
@@ -29,6 +40,11 @@ const STYLE_TO_FAMILY = {
   organic_house: "house",
   bass_house: "house",
   electro_house: "house",
+  minimal_deep_tech: "house",
+  jackin_house: "house",
+  soulful_house: "house",
+  disco_house: "house",
+  garage_house: "house",
   drum_and_bass: "dnb",
   liquid_dnb: "dnb",
   neurofunk: "dnb",
@@ -38,15 +54,32 @@ const STYLE_TO_FAMILY = {
   uk_garage: "bass_music",
   future_garage: "bass_music",
   dubstep: "bass_music",
+  halftime_bass: "bass_music",
+  footwork_juke: "bass_music",
+  trap: "bass_music",
+  future_bass: "bass_music",
+  riddim: "bass_music",
+  experimental_bass: "bass_music",
+  wave: "bass_music",
+  breakcore: "bass_music",
   downtempo: "leftfield",
   ambient: "leftfield",
   chillout: "leftfield",
+  trip_hop: "leftfield",
+  darkwave: "leftfield",
+  coldwave: "leftfield",
+  synthwave: "leftfield",
+  witch_house: "leftfield",
   slambient: "psytrance",
   idm: "leftfield",
   electro: "leftfield",
   brazilian_funk: "bass_music",
   gabber: "techno",
-  hardstyle: "hard_dance"
+  hardstyle: "hard_dance",
+  hardcore: "hard_dance",
+  frenchcore: "hard_dance",
+  speedcore: "hard_dance",
+  rawstyle: "hard_dance"
 };
 
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
@@ -437,9 +470,14 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
   dark_psy: "dark psy psytrance",
+  twilight_psy: "twilight psytrance night full on forest",
   dark_progressive: "prog dark dark progressive zenonesque psy",
   psycore: "psycore darkpsy hitech psytrance",
+  psybreaks: "psybreaks psychedelic breaks psy breaks",
+  psybient: "psybient psychill psychedelic ambient",
   freeform: "freeform psytrance suomisaundi",
+  tech_trance: "tech trance underground trance",
+  hard_trance: "hard trance acid trance",
   tech_house: "tech house",
   full_on: "full on psytrance",
   full_on_night: "full on night psytrance",
@@ -450,26 +488,63 @@ const STYLE_SEARCH_TERMS = {
   psy_comercial: "commercial psytrance",
   acid_techno: "acid techno",
   hard_techno: "hard techno",
+  dub_techno: "dub techno deep techno",
+  hypnotic_techno: "hypnotic techno deep techno",
+  raw_techno: "raw techno warehouse techno",
+  detroit_techno: "detroit techno",
+  schranz: "schranz techno hard techno",
+  ebm: "ebm industrial body music techno",
   industrial_techno: "industrial techno",
   peak_time_techno: "peak time techno",
   minimal_techno: "minimal techno",
   melodic_techno: "melodic techno",
   gabber: "gabber hardcore techno",
+  minimal_deep_tech: "minimal deep tech house",
+  jackin_house: "jackin house chicago house",
+  soulful_house: "soulful house deep house",
+  disco_house: "disco house nu disco",
+  garage_house: "garage house us garage",
+  halftime_bass: "halftime bass halftime dnb",
+  footwork_juke: "footwork juke teklife",
+  trap: "edm trap electronic trap",
+  future_bass: "future bass electronic",
+  riddim: "riddim dubstep",
+  experimental_bass: "experimental bass leftfield bass",
+  wave: "wave bass music hardwave",
+  breakcore: "breakcore jungle hardcore",
   chillout: "chillout downtempo lounge",
-  brazilian_funk: "brazilian funk funk carioca baile funk"
+  trip_hop: "trip hop downtempo beats",
+  darkwave: "darkwave electronic post punk",
+  coldwave: "coldwave minimal synth darkwave",
+  synthwave: "synthwave outrun retrowave",
+  witch_house: "witch house dark electronic",
+  brazilian_funk: "brazilian funk funk carioca baile funk",
+  hardcore: "hardcore techno",
+  frenchcore: "frenchcore hardcore",
+  speedcore: "speedcore hardcore",
+  rawstyle: "rawstyle hardstyle"
 };
 
 const STYLE_TO_VIBE_THEME = {
   dark_psy: "dark",
   dark_experimental: "dark",
   dark_progressive: "dark",
+  twilight_psy: "dark",
   psycore: "dark",
+  psybreaks: "psy",
+  psybient: "ambient",
   freeform: "psy",
   full_on_night: "dark",
   slambient: "dark",
   techno: "techno",
   acid_techno: "techno",
   hard_techno: "techno",
+  dub_techno: "techno",
+  hypnotic_techno: "techno",
+  raw_techno: "techno",
+  detroit_techno: "techno",
+  schranz: "hard",
+  ebm: "leftfield",
   minimal_techno: "techno",
   melodic_techno: "techno",
   industrial_techno: "techno",
@@ -495,19 +570,43 @@ const STYLE_TO_VIBE_THEME = {
   organic_house: "house",
   bass_house: "house",
   electro_house: "house",
+  minimal_deep_tech: "house",
+  jackin_house: "house",
+  soulful_house: "house",
+  disco_house: "house",
+  garage_house: "house",
   breakbeat: "bass",
   uk_garage: "bass",
   future_garage: "bass",
   dubstep: "bass",
+  halftime_bass: "bass",
+  footwork_juke: "bass",
+  trap: "bass",
+  future_bass: "bass",
+  riddim: "bass",
+  experimental_bass: "bass",
+  wave: "bass",
+  breakcore: "hard",
   ambient: "ambient",
   downtempo: "ambient",
   chillout: "ambient",
+  trip_hop: "ambient",
+  darkwave: "leftfield",
+  coldwave: "leftfield",
+  synthwave: "leftfield",
+  witch_house: "dark",
   idm: "leftfield",
   electro: "leftfield",
   brazilian_funk: "bass",
   trance_uplifting: "trance",
+  tech_trance: "trance",
+  hard_trance: "hard",
   gabber: "hard",
-  hardstyle: "hard"
+  hardstyle: "hard",
+  hardcore: "hard",
+  frenchcore: "hard",
+  speedcore: "hard",
+  rawstyle: "hard"
 };
 
 const VIBE_THEME_TOKENS = {
@@ -1831,6 +1930,9 @@ const DATASET_STYLE_ALIASES = {
   forestpsy: "forest_psy",
   darkpsy: "dark_psy",
   darkpsytrance: "dark_psy",
+  twilight: "twilight_psy",
+  twilightpsy: "twilight_psy",
+  twilightpsytrance: "twilight_psy",
   progdark: "dark_progressive",
   darkprog: "dark_progressive",
   prog_dark: "dark_progressive",
@@ -1842,6 +1944,10 @@ const DATASET_STYLE_ALIASES = {
   experimentaldark: "dark_experimental",
   psycore: "psycore",
   psy_core: "psycore",
+  psybreaks: "psybreaks",
+  psybreak: "psybreaks",
+  psy_breaks: "psybreaks",
+  psychedelicbreaks: "psybreaks",
   freeform: "freeform",
   freeformpsy: "freeform",
   freeformpsytrance: "freeform",
@@ -1851,9 +1957,12 @@ const DATASET_STYLE_ALIASES = {
   suomisaundi: "freeform",
   gabber: "gabber",
   gabba: "gabber",
-  hardcore: "gabber",
+  hardcore: "hardcore",
   hardcoretechno: "gabber",
   hardcoregabber: "gabber",
+  frenchcore: "frenchcore",
+  speedcore: "speedcore",
+  rawstyle: "rawstyle",
   fullon: "full_on",
   fullonnight: "full_on_night",
   fullonmorning: "full_on_morning",
@@ -1864,9 +1973,11 @@ const DATASET_STYLE_ALIASES = {
   hitechpsy: "hi_tech",
   hitechpsytrance: "hi_tech",
   slambient: "slambient",
-  psychill: "ambient",
-  psybient: "ambient",
-  psychillpsybient: "ambient",
+  psychill: "psybient",
+  psybient: "psybient",
+  psychillpsybient: "psybient",
+  techtrance: "tech_trance",
+  hardtrance: "hard_trance",
   chill: "chillout",
   chillout: "chillout",
   chilloutdowntempo: "chillout",
@@ -1882,6 +1993,12 @@ const DATASET_STYLE_ALIASES = {
   chacotas: "psy_comercial",
   acidtechno: "acid_techno",
   hardtechno: "hard_techno",
+  dubtechno: "dub_techno",
+  hypnotictechno: "hypnotic_techno",
+  rawtechno: "raw_techno",
+  detroittechno: "detroit_techno",
+  schranz: "schranz",
+  ebm: "ebm",
   minimaltechno: "minimal_techno",
   melodictechno: "melodic_techno",
   industrialtechno: "industrial_techno",
@@ -1893,14 +2010,44 @@ const DATASET_STYLE_ALIASES = {
   organichouse: "organic_house",
   basshouse: "bass_house",
   electrohouse: "electro_house",
+  minimaldeeptech: "minimal_deep_tech",
+  deeptech: "minimal_deep_tech",
+  jackinhouse: "jackin_house",
+  soulfulhouse: "soulful_house",
+  discohouse: "disco_house",
+  garagehouse: "garage_house",
   drumandbass: "drum_and_bass",
   liquiddnb: "liquid_dnb",
   neurofunk: "neurofunk",
   jumpup: "jump_up",
   ukgarage: "uk_garage",
   futuregarage: "future_garage",
+  halftime: "halftime_bass",
+  halftimebass: "halftime_bass",
+  footwork: "footwork_juke",
+  juke: "footwork_juke",
+  footworkjuke: "footwork_juke",
+  edmtrap: "trap",
+  futurebass: "future_bass",
+  riddim: "riddim",
+  experimentalbass: "experimental_bass",
+  leftfieldbass: "experimental_bass",
+  wave: "wave",
+  hardwave: "wave",
+  breakcore: "breakcore",
   goatrance: "goa_trance",
-  upliftingtrance: "trance_uplifting"
+  upliftingtrance: "trance_uplifting",
+  triphop: "trip_hop",
+  trip_hop: "trip_hop",
+  darkwave: "darkwave",
+  coldwave: "coldwave",
+  minimalwave: "coldwave",
+  minimalsynth: "coldwave",
+  synthwave: "synthwave",
+  retrowave: "synthwave",
+  outrun: "synthwave",
+  witchhouse: "witch_house",
+  witch_house: "witch_house"
 };
 
 const CURATED_BANDCAMP_TRACK_EXPANSION = [
@@ -5034,15 +5181,24 @@ let swipeDragState = null;
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
-const SUGGESTION_QUEUE_TARGET = 5;
+const SUGGESTION_QUEUE_TARGET = 25;
 const SWIPE_DISCOVERY_STYLE_DECK = [
+  "downtempo",
+  "darkwave",
+  "trip_hop",
   "liquid_dnb",
   "uk_garage",
   "full_on_morning",
+  "twilight_psy",
   "hard_techno",
+  "dub_techno",
   "afro_house",
+  "tech_house",
   "dark_experimental",
+  "experimental_bass",
   "ambient",
+  "wave",
+  "breakcore",
   "future_garage",
   "psycore"
 ];
@@ -5507,8 +5663,11 @@ const STYLE_BPM_RULES = {
   psytrance: { min: 138, max: 148 },
   forest_psy: { min: 145, max: 154 },
   dark_psy: { min: 154, max: 175 },
+  twilight_psy: { min: 145, max: 154 },
   dark_experimental: { min: 175, max: 220 },
   psycore: { min: 175, max: 300 },
+  psybreaks: { min: 130, max: 145 },
+  psybient: { min: 70, max: 115 },
   freeform: { min: 138, max: 180 },
   full_on: { min: 142, max: 150 },
   full_on_night: { min: 146, max: 154 },
@@ -5519,9 +5678,17 @@ const STYLE_BPM_RULES = {
   goa_trance: { min: 135, max: 145 },
   psy_comercial: { min: 142, max: 152 },
   trance_uplifting: { min: 136, max: 142 },
+  tech_trance: { min: 132, max: 142 },
+  hard_trance: { min: 140, max: 150 },
   techno: { min: 128, max: 136 },
   acid_techno: { min: 130, max: 142 },
   hard_techno: { min: 145, max: 160 },
+  dub_techno: { min: 118, max: 128 },
+  hypnotic_techno: { min: 128, max: 138 },
+  raw_techno: { min: 132, max: 145 },
+  detroit_techno: { min: 125, max: 135 },
+  schranz: { min: 145, max: 160 },
+  ebm: { min: 120, max: 132 },
   minimal_techno: { min: 126, max: 132 },
   melodic_techno: { min: 122, max: 130 },
   industrial_techno: { min: 130, max: 150 },
@@ -5534,6 +5701,11 @@ const STYLE_BPM_RULES = {
   organic_house: { min: 112, max: 122 },
   bass_house: { min: 126, max: 132 },
   electro_house: { min: 126, max: 132 },
+  minimal_deep_tech: { min: 122, max: 128 },
+  jackin_house: { min: 122, max: 128 },
+  soulful_house: { min: 118, max: 124 },
+  disco_house: { min: 118, max: 126 },
+  garage_house: { min: 124, max: 130 },
   drum_and_bass: { min: 170, max: 176 },
   liquid_dnb: { min: 170, max: 176 },
   neurofunk: { min: 172, max: 178 },
@@ -5543,23 +5715,147 @@ const STYLE_BPM_RULES = {
   uk_garage: { min: 128, max: 136 },
   future_garage: { min: 130, max: 140 },
   dubstep: { min: 138, max: 150 },
+  halftime_bass: { min: 80, max: 90 },
+  footwork_juke: { min: 150, max: 165 },
+  trap: { min: 130, max: 150 },
+  future_bass: { min: 140, max: 160 },
+  riddim: { min: 140, max: 150 },
+  experimental_bass: { min: 70, max: 150 },
+  wave: { min: 130, max: 150 },
+  breakcore: { min: 160, max: 220 },
   downtempo: { min: 80, max: 115 },
   ambient: { min: 60, max: 110 },
   chillout: { min: 70, max: 112 },
+  trip_hop: { min: 70, max: 110 },
+  darkwave: { min: 80, max: 130 },
+  coldwave: { min: 85, max: 125 },
+  synthwave: { min: 80, max: 120 },
+  witch_house: { min: 65, max: 100 },
   slambient: { min: 155, max: 240 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
   brazilian_funk: { min: 125, max: 150 },
   gabber: { min: 160, max: 220 },
-  hardstyle: { min: 148, max: 160 }
+  hardstyle: { min: 148, max: 160 },
+  hardcore: { min: 160, max: 190 },
+  frenchcore: { min: 180, max: 220 },
+  speedcore: { min: 220, max: 300 },
+  rawstyle: { min: 150, max: 160 }
 };
+
+const STYLE_SIMILAR_FALLBACKS = {
+  psycore: ["dark_experimental", "hi_tech", "dark_psy", "speedcore", "frenchcore"],
+  dark_experimental: ["psycore", "hi_tech", "dark_psy", "slambient"],
+  dark_psy: ["twilight_psy", "forest_psy", "psycore", "dark_experimental"],
+  twilight_psy: ["dark_psy", "forest_psy", "full_on_night", "hi_tech"],
+  forest_psy: ["twilight_psy", "dark_psy", "goa_trance", "freeform"],
+  psybreaks: ["breakbeat", "experimental_bass", "psybient", "freeform"],
+  psybient: ["downtempo", "ambient", "chillout", "slambient", "trip_hop"],
+  slambient: ["psybient", "dark_psy", "ambient", "dark_experimental"],
+  hi_tech: ["psycore", "dark_experimental", "dark_psy", "full_on_night"],
+  full_on: ["full_on_night", "full_on_morning", "psytrance", "progressive_psy"],
+  full_on_night: ["twilight_psy", "dark_psy", "full_on", "hi_tech"],
+  full_on_morning: ["full_on", "goa_trance", "progressive_psy", "trance_uplifting"],
+  progressive_psy: ["dark_progressive", "goa_trance", "psytrance", "tech_trance"],
+  dark_progressive: ["progressive_psy", "slambient", "hypnotic_techno", "forest_psy"],
+  goa_trance: ["psytrance", "full_on_morning", "trance_uplifting", "progressive_psy"],
+  trance_uplifting: ["tech_trance", "hard_trance", "full_on_morning"],
+  tech_trance: ["hard_trance", "trance_uplifting", "peak_time_techno", "acid_techno"],
+  hard_trance: ["tech_trance", "acid_techno", "hard_techno", "rawstyle"],
+  techno: ["hypnotic_techno", "raw_techno", "detroit_techno", "minimal_techno", "tech_house"],
+  acid_techno: ["hard_techno", "raw_techno", "tech_trance", "schranz"],
+  hard_techno: ["raw_techno", "schranz", "industrial_techno", "acid_techno"],
+  dub_techno: ["hypnotic_techno", "minimal_techno", "deep_house", "ambient"],
+  hypnotic_techno: ["dub_techno", "minimal_techno", "raw_techno", "dark_progressive"],
+  raw_techno: ["hard_techno", "industrial_techno", "hypnotic_techno", "schranz"],
+  detroit_techno: ["techno", "electro", "minimal_techno", "raw_techno"],
+  schranz: ["hard_techno", "raw_techno", "industrial_techno", "gabber"],
+  ebm: ["industrial_techno", "darkwave", "coldwave", "electro"],
+  industrial_techno: ["raw_techno", "hard_techno", "ebm", "schranz"],
+  minimal_techno: ["hypnotic_techno", "dub_techno", "minimal_deep_tech", "techno"],
+  melodic_techno: ["progressive_house", "organic_house", "tech_trance", "progressive_psy"],
+  peak_time_techno: ["techno", "acid_techno", "tech_trance", "hard_techno"],
+  house: ["deep_house", "garage_house", "soulful_house", "tech_house"],
+  deep_house: ["soulful_house", "garage_house", "minimal_deep_tech", "dub_techno"],
+  tech_house: ["minimal_deep_tech", "house", "minimal_techno", "bass_house"],
+  progressive_house: ["melodic_techno", "organic_house", "progressive_psy", "deep_house"],
+  afro_house: ["organic_house", "deep_house", "house", "soulful_house"],
+  organic_house: ["afro_house", "progressive_house", "downtempo", "deep_house"],
+  bass_house: ["electro_house", "tech_house", "dubstep", "trap"],
+  electro_house: ["bass_house", "house", "electro", "tech_house"],
+  minimal_deep_tech: ["tech_house", "deep_house", "minimal_techno", "garage_house"],
+  jackin_house: ["disco_house", "garage_house", "house", "soulful_house"],
+  soulful_house: ["deep_house", "garage_house", "disco_house", "house"],
+  disco_house: ["jackin_house", "soulful_house", "house", "electro_house"],
+  garage_house: ["uk_garage", "soulful_house", "deep_house", "jackin_house"],
+  drum_and_bass: ["liquid_dnb", "neurofunk", "jump_up", "jungle"],
+  liquid_dnb: ["drum_and_bass", "jungle", "future_garage", "halftime_bass"],
+  neurofunk: ["drum_and_bass", "jump_up", "halftime_bass", "dark_psy"],
+  jump_up: ["drum_and_bass", "neurofunk", "jungle", "dubstep"],
+  jungle: ["drum_and_bass", "breakbeat", "footwork_juke", "breakcore"],
+  breakbeat: ["psybreaks", "uk_garage", "jungle", "experimental_bass"],
+  uk_garage: ["garage_house", "future_garage", "breakbeat", "bass_house"],
+  future_garage: ["uk_garage", "wave", "downtempo", "dubstep"],
+  dubstep: ["riddim", "halftime_bass", "experimental_bass", "trap"],
+  halftime_bass: ["experimental_bass", "neurofunk", "dubstep", "trap"],
+  footwork_juke: ["jungle", "breakcore", "halftime_bass", "experimental_bass"],
+  trap: ["future_bass", "wave", "experimental_bass", "bass_house"],
+  future_bass: ["trap", "wave", "electro_house", "chillout"],
+  riddim: ["dubstep", "experimental_bass", "halftime_bass", "hardcore"],
+  experimental_bass: ["halftime_bass", "dubstep", "wave", "breakbeat"],
+  wave: ["future_garage", "trap", "future_bass", "witch_house"],
+  breakcore: ["jungle", "footwork_juke", "speedcore", "hardcore"],
+  downtempo: ["trip_hop", "chillout", "ambient", "psybient"],
+  ambient: ["chillout", "downtempo", "psybient", "slambient"],
+  chillout: ["downtempo", "ambient", "trip_hop", "psybient"],
+  trip_hop: ["downtempo", "chillout", "darkwave", "experimental_bass"],
+  darkwave: ["coldwave", "witch_house", "ebm", "synthwave"],
+  coldwave: ["darkwave", "ebm", "synthwave", "electro"],
+  synthwave: ["darkwave", "coldwave", "electro", "chillout"],
+  witch_house: ["darkwave", "wave", "trip_hop", "experimental_bass"],
+  idm: ["ambient", "breakcore", "experimental_bass", "electro"],
+  electro: ["detroit_techno", "ebm", "coldwave", "electro_house"],
+  brazilian_funk: ["trap", "bass_house", "electro_house"],
+  gabber: ["hardcore", "frenchcore", "speedcore", "hardstyle"],
+  hardstyle: ["rawstyle", "hardcore", "hard_trance", "gabber"],
+  hardcore: ["gabber", "frenchcore", "speedcore", "rawstyle"],
+  frenchcore: ["hardcore", "speedcore", "psycore", "gabber"],
+  speedcore: ["frenchcore", "hardcore", "psycore", "breakcore"],
+  rawstyle: ["hardstyle", "hardcore", "hard_trance", "gabber"]
+};
+
+function styleBpmCenter(style = "") {
+  const rule = STYLE_BPM_RULES[style];
+  if (!rule) return 0;
+  return ((Number(rule.min) || 0) + (Number(rule.max) || 0)) / 2;
+}
+
+function similarFallbackStylesFor(style = "") {
+  const selected = String(style || "").trim();
+  if (!selected || !STYLE_BPM_RULES[selected]) return [];
+  const selectable = new Set(
+    (typeof getAllSelectableStyles === "function" ? getAllSelectableStyles() : Object.keys(STYLE_BPM_RULES))
+      .filter((item) => item && item !== selected && STYLE_BPM_RULES[item])
+  );
+  const explicit = (STYLE_SIMILAR_FALLBACKS[selected] || []).filter((item) => selectable.has(item));
+  const explicitSet = new Set(explicit);
+  const baseFamily = familyOf(selected);
+  const baseCenter = styleBpmCenter(selected);
+  const sameFamily = Array.from(selectable)
+    .filter((item) => !explicitSet.has(item) && familyOf(item) === baseFamily)
+    .sort((a, b) => Math.abs(styleBpmCenter(a) - baseCenter) - Math.abs(styleBpmCenter(b) - baseCenter));
+  return [...explicit, ...sameFamily].slice(0, 12);
+}
 
 const STYLE_INFO_PT = {
   psytrance: "Psytrance de pista com progressao hipnotica, synths acidos e foco em trance psicodelico.",
   forest_psy: "Vertente mais organica e tribal do psy, com atmosferas densas e camadas de floresta.",
   dark_psy: "Sonoridade mais sombria e agressiva, com design de som cortante e narrativa noturna.",
+  twilight_psy: "Psy noturno entre forest e full-on night, com groove de madrugada, leads tensos e clima underground.",
   dark_experimental: "Experimental extremo dentro do dark psy: normalmente 175+ BPM, com texturas abstratas, viradas imprevisiveis e pressao de pista acelerada.",
   psycore: "Subestilo extremo do psy, com muita densidade ritmica, recortes secos e altissima intensidade.",
+  psybreaks: "Breaks psicodelicos com basslines elasticas, delays acidos e estrutura quebrada para pista alternativa.",
+  psybient: "Psychill/psybient: paisagens psicodelicas lentas, graves macios e atmosfera de after ou escuta imersiva.",
   freeform: "Psytrance livre/West Psy, com estruturas menos previsiveis, groove mutante e BPM que pode ir do experimental organico ao rapido.",
   full_on: "Full-On classico de pista: groove reto, drops claros e leads melodicos para energia constante.",
   full_on_night: "Leitura mais noturna do Full-On, geralmente mais pesada, seca e focada em impacto de madrugada.",
@@ -5570,9 +5866,17 @@ const STYLE_INFO_PT = {
   goa_trance: "Raiz melodica do psy/trance, com linhas acidas, arpejos classicos e pegada psicodelica vintage.",
   psy_comercial: "Psy com formula mais radio/festival mainstream, hooks mais simples e refrões diretos.",
   trance_uplifting: "Trance melodico com breakdown emocional e retornos energeticos, foco em euforia.",
+  tech_trance: "Trance mais seco e clubber, com pressao techno, baixos firmes e melodias controladas.",
+  hard_trance: "Trance acelerado e acido, com riffs fortes, kicks marcados e energia de rave classica.",
   techno: "Techno de groove repetitivo e direcao de pista, com foco em textura e consistencia de pulso.",
   acid_techno: "Techno conduzido por linhas acidas (estetica 303), com drive e variacao timbrica.",
   hard_techno: "Techno mais rapido e agressivo, kicks pesados e ataque forte para momentos de pico.",
+  dub_techno: "Techno profundo e espacoso, com ecos dub, acordes filtrados e hipnose de baixa luz.",
+  hypnotic_techno: "Techno circular e mental, construido em microvariacoes, textura e repeticao imersiva.",
+  raw_techno: "Techno cru de warehouse, com percussao seca, saturacao e energia direta sem muito polimento.",
+  detroit_techno: "Raiz futurista do techno, com groove mecanico, soul sintetico e heranca de Detroit.",
+  schranz: "Vertente muito dura do techno, rapida, industrial e martelada para picos de alta pressao.",
+  ebm: "Electronic Body Music: pulso mecanico, synths frios, vocal/atitude industrial e corpo de pista.",
   minimal_techno: "Menos elementos, mais microdetalhes: espaco, repeticao e transicoes sutis.",
   melodic_techno: "Techno com protagonismo harmonico, atmosferas emotivas e arranjos cinematograficos.",
   industrial_techno: "Texturas metalicas e estetica mecanica, com impacto bruto e clima sombrio.",
@@ -5585,6 +5889,11 @@ const STYLE_INFO_PT = {
   organic_house: "House de textura natural e percussao leve, geralmente mais emocional e cinematico.",
   bass_house: "House com bassline pesada e linguagem de bass music aplicada ao pulso 4x4.",
   electro_house: "House de impacto, synths marcados e drops energicos com identidade eletrica.",
+  minimal_deep_tech: "House minimalista e profundo, com groove seco, subgrave elegante e microdetalhes de club.",
+  jackin_house: "House com swing forte, bateria saltada e energia funk/disco direta para pista.",
+  soulful_house: "House vocal e caloroso, com soul, gospel, acordes ricos e sensacao humana de pista.",
+  disco_house: "House com samples/disco, baixo dançante e brilho de dancefloor classico.",
+  garage_house: "House/garage com swing, vocais cortados e groove urbano entre US garage e UK flavors.",
   drum_and_bass: "Breaks acelerados e bassline profunda; foco em energia alta e precisao ritmica.",
   liquid_dnb: "Leitura melodica do DnB, com harmonias suaves e ambiente mais emotivo.",
   neurofunk: "DnB tecnico e sombrio, com bass design complexo e muita tensao ritmica.",
@@ -5594,15 +5903,32 @@ const STYLE_INFO_PT = {
   uk_garage: "Groove quebrado com swing britanico, linhas de baixo elasticas e vocal chops.",
   future_garage: "Vertente atmosferica do garage, com espacamento, texturas etereas e clima introspectivo.",
   dubstep: "Ritmo quebrado com half-time e bass de grande impacto, comum em drops dramaticos.",
+  halftime_bass: "Bass music em sensação half-time, grave pesado e bateria espaçosa entre DnB, hip hop e experimental.",
+  footwork_juke: "Ritmo rapido de Chicago, kicks sincopados, samples cortados e energia nervosa de dança.",
+  trap: "Trap eletronico com 808, hi-hats rapidos, drops pesados e linguagem de festival/bass music.",
+  future_bass: "Bass music melodica, chords brilhantes, drops emotivos e textura pop-eletronica.",
+  riddim: "Dubstep minimal e repetitivo, com wobble seco, groove quadrado e pressao de sound system.",
+  experimental_bass: "Bass music de laboratorio: graves fisicos, estruturas quebradas, sound design estranho e menos formula de drop.",
+  wave: "Wave/hardwave combina graves de trap, atmosfera melancolica e synths amplos para uma pista escura e emocional.",
+  breakcore: "Breakcore acelera breaks, jungle e ruido em cortes caoticos, com energia extrema e edicao hiperativa.",
   downtempo: "Andamento mais baixo para escuta focada em textura, ambiencia e fluidez.",
   ambient: "Musica de espaco sonoro, pouca percussao e foco em paisagem e atmosfera.",
   chillout: "Eletronica relaxada de lounge/after, com andamento baixo, textura suave e foco em respiro.",
+  trip_hop: "Batidas lentas, baixo pesado, samples sombrios e clima cinematografico entre hip hop, dub e downtempo.",
+  darkwave: "Darkwave mistura pulso eletronico, melancolia pos-punk, synths frios e vocal/atmosfera de sombra.",
+  coldwave: "Coldwave/minimal synth e mais seca e fria: maquinas simples, baixo rigido e melodia contida.",
+  synthwave: "Synthwave/retrowave trabalha nostalgia analogica, bateria marcada e synths cinematograficos de neon.",
+  witch_house: "Witch house desacelera club music em drones escuros, vozes fantasmaticas, trap pesado e textura ritual.",
   slambient: "Intersecao de ambient com psy escuro: drones, textura ritualistica e andamento hipnotico.",
   idm: "Eletronica experimental orientada a detalhe ritmico, estrutura complexa e escuta ativa.",
   electro: "Batidas secas e sintese retro-futurista com influencia de electro-funk e robotica.",
   brazilian_funk: "Funk brasileiro/carioca de baile: tamborzao, 808, vocal de impacto e groove direto.",
   gabber: "Hardcore techno extremo, com kicks distorcidos, BPM alto e energia bruta de rave.",
-  hardstyle: "Kick distorcido, leads antemicos e energia de hard dance para momentos de explosao."
+  hardstyle: "Kick distorcido, leads antemicos e energia de hard dance para momentos de explosao.",
+  hardcore: "Hard dance veloz e agressivo, com kicks distorcidos, rave extrema e alta intensidade.",
+  frenchcore: "Hardcore frances mais rapido, melodico e teatral, com kicks elasticos e energia explosiva.",
+  speedcore: "Extremo do hardcore em BPM altissimo, ruido, violencia ritmica e adrenalina pura.",
+  rawstyle: "Hardstyle mais seco e pesado, com kicks crus, screeches sombrios e pressao agressiva."
 };
 
 const STYLE_HUMAN_INFO = {
@@ -6232,6 +6558,7 @@ const STYLE_ARTIST_SEEDS = {
   psytrance: ["Astrix", "Avalon", "Vini Vici", "Blastoyz", "Electric Universe", "Tristan", "Mad Maxx", "Outsiders"],
   forest_psy: ["Atriohm", "Derango", "Arjuna", "Farebi Jalebi", "Mubali", "Ajja", "Krapul", "Psykovsky"],
   dark_psy: [...DARK_PSY_ARTIST_ROSTER],
+  twilight_psy: ["Aphid Moon", "Tron", "Southwild", "Dust", "Daksinamurti", "Djantrix", "Aardvarkk", "Endeavour"],
   dark_experimental: [
     "Audiosyntax",
     "Audio Syntax",
@@ -6254,6 +6581,8 @@ const STYLE_ARTIST_SEEDS = {
     ...NATURAIZ_FAST_ARTISTS
   ],
   psycore: [...PSYCORE_ARTIST_ROSTER, ...NATURAIZ_FAST_ARTISTS],
+  psybreaks: ["Kiwa", "Hedflux", "Bad Tango", "Neurodriver", "Far Too Loud", "Digitalis", "Monk3ylogic", "Beatman and Ludmilla"],
+  psybient: ["Shpongle", "Carbon Based Lifeforms", "Solar Fields", "Aes Dana", "Ott", "Entheogenic", "Bluetech", "Kaya Project"],
   freeform: [
     "Fractal Cowboys",
     "At Work",
@@ -6345,6 +6674,8 @@ const STYLE_ARTIST_SEEDS = {
   ],
   goa_trance: ["Astrix", "Hallucinogen", "Goasia", "Man With No Name", "Filteria", "Khetzal", "Electric Universe", "X-Dream", "Via Axis"],
   trance_uplifting: ["Armin van Buuren", "Aly & Fila", "Above & Beyond", "Giuseppe Ottaviani", "Craig Connelly", "Ferry Corsten", "Paul van Dyk", "John O'Callaghan"],
+  tech_trance: ["John Askew", "Bryan Kearney", "Indecent Noise", "Simon Patterson", "Jordan Suckley", "Scot Project", "Mark Sherry", "Sneijder"],
+  hard_trance: ["Scot Project", "Kai Tracid", "Yoji Biomehanika", "Lab4", "A*S*Y*S", "Cosmic Gate", "Derb", "Alphazone"],
   techno: ["ANNA", "Charlotte de Witte", "Amelie Lens", "Enrico Sangiuliano", "Adam Beyer", "Maceo Plex", "Sama Abdulhadi", "FJAAK"],
   acid_techno: ["999999999", "Emmanuel Top", "Regal", "Dax J", "Parfait", "A*S*Y*S", "Perc", "Airod"],
   hard_techno: [
@@ -6367,6 +6698,12 @@ const STYLE_ARTIST_SEEDS = {
     "Klangkuenstler",
     "Brutalismus 3000"
   ],
+  dub_techno: ["Basic Channel", "Deepchord", "Echospace", "Rod Modell", "Maurizio", "Fluxion", "Quantec", "Yagya"],
+  hypnotic_techno: ["Donato Dozzy", "Luigi Tozzi", "Wata Igarashi", "Claudio PRC", "Neel", "Rrose", "Oscar Mulero", "Dasha Rush"],
+  raw_techno: ["Blawan", "Randomer", "Paula Temple", "Kobosil", "AnD", "Perc", "UVB", "Dax J"],
+  detroit_techno: ["Juan Atkins", "Derrick May", "Kevin Saunderson", "Carl Craig", "Jeff Mills", "Robert Hood", "Underground Resistance", "Octave One"],
+  schranz: ["Chris Liebing", "Sven Wittekind", "Frank Kvitta", "Robert Natus", "Felix Krocher", "Pet Duo", "O.B.I.", "Arkus P."],
+  ebm: ["Nitzer Ebb", "Front 242", "DAF", "Front Line Assembly", "Fixmer/McCarthy", "Terence Fixmer", "Phase Fatale", "The Hacker"],
   minimal_techno: ["Luciano", "Rene Wise", "Richie Hawtin", "Raresh", "Priku", "Sonja Moonear", "Petre Inspirescu", "Ricardo Villalobos"],
   melodic_techno: ["Anyma", "Mind Against", "Tale Of Us", "Stephan Bodzin", "ARTBAT", "Massano", "Kevin de Vries", "Innellea"],
   industrial_techno: ["Perc", "Paula Temple", "Ancient Methods", "Rebekah", "Scalameriya", "SNTS", "AnD", "Blawan"],
@@ -6392,6 +6729,11 @@ const STYLE_ARTIST_SEEDS = {
   organic_house: ["Lee Burridge", "Satori", "Monaq", "Sebastian Leger", "Pambouk", "M.O.S.", "Volen Sentir", "Hraach"],
   bass_house: ["JOYRYDE", "Habstrakt", "Jauz", "AC Slater", "Knock2", "Curbi", "Malaa", "Dr. Fresch"],
   electro_house: ["deadmau5", "Wolfgang Gartner", "Feed Me", "Knife Party", "Porter Robinson", "Boys Noize", "Zedd", "Justice"],
+  minimal_deep_tech: ["Chris Stussy", "East End Dubs", "Prunk", "Toman", "Rossi.", "Sweely", "M-High", "Janeret"],
+  jackin_house: ["DJ Sneak", "Mark Farina", "Derrick Carter", "Phil Weeks", "Demuir", "J Paul Getto", "Inland Knights", "Natural Rhythm"],
+  soulful_house: ["Louie Vega", "Kenny Dope", "Masters At Work", "Dennis Ferrer", "Kerri Chandler", "Osunlade", "Ron Trent", "Jimpster"],
+  disco_house: ["Purple Disco Machine", "Folamour", "Dimitri From Paris", "Motor City Drum Ensemble", "The Shapeshifters", "Dr Packer", "Joey Negro", "Late Nite Tuff Guy"],
+  garage_house: ["Todd Edwards", "MK", "Tuff Jam", "Grant Nelson", "Kerri Chandler", "Dennis Ferrer", "Smokin Beats", "Booker T"],
   drum_and_bass: ["Sub Focus", "Dimension", "Culture Shock", "Camo & Krooked", "Netsky", "Metrik", "Wilkinson", "Andy C"],
   liquid_dnb: ["Calibre", "LSB", "Etherwood", "Makoto", "Logistics", "Hybrid Minds", "Keeno", "Technimatic"],
   neurofunk: ["Noisia", "Ed Rush & Optical", "Black Sun Empire", "Mefjus", "Phace", "Spor", "Neonlight", "Agressor Bunx"],
@@ -6401,9 +6743,22 @@ const STYLE_ARTIST_SEEDS = {
   uk_garage: ["Interplanetary Criminal", "Conducta", "MJ Cole", "El-B", "DJ EZ", "Disclosure", "Oppidan", "Y U QT"],
   future_garage: ["Burial", "Synkro", "Phaeleh", "Sorrow", "Clubroot", "Vacant", "Kiasmos", "Direct"],
   dubstep: ["Skrillex", "Benga", "Skream", "Digital Mystikz", "Saka", "Ganja White Night", "Mala", "Caspa"],
+  halftime_bass: ["Ivy Lab", "Shades", "Alix Perez", "Eprom", "Tsuruda", "Chee", "Noer the Boy", "Bleep Bloop"],
+  footwork_juke: ["DJ Rashad", "DJ Spinn", "RP Boo", "Traxman", "Jlin", "Teklife", "DJ Earl", "DJ Taye"],
+  trap: ["RL Grime", "Baauer", "TNGHT", "UZ", "Flosstradamus", "TroyBoi", "Hucci", "Yellow Claw"],
+  future_bass: ["Flume", "San Holo", "Illenium", "Odesza", "Wave Racer", "What So Not", "Mura Masa", "Porter Robinson"],
+  riddim: ["Subfiltronik", "Infekt", "Virtual Riot", "Svdden Death", "Marauda", "Badklaat", "Bommer", "Monxx"],
+  experimental_bass: ["Eprom", "G Jones", "Ivy Lab", "Tsuruda", "Chee", "Alix Perez", "Noer the Boy", "Bleep Bloop"],
+  wave: ["Skeler", "Barnacle Boi", "Sorsari", "Klimeks", "Ytho.", "Brothel.", "Sibewest", "Deadcrow"],
+  breakcore: ["Venetian Snares", "Igorrr", "Ruby My Dear", "Machine Girl", "Sewerslvt", "DJ Kuroneko", "Goreshit", "Alec Empire"],
   downtempo: ["Thievery Corporation", "Bonobo", "Tycho", "Emancipator", "Nightmares on Wax", "Blockhead", "Kruder & Dorfmeister", "Zero 7", "Air", "Morcheeba", "Lemon Jelly", "Boards of Canada", "DJ Shadow", "Moby"],
   ambient: ["Brian Eno", "Biosphere", "Loscil", "Rival Consoles", "Nils Frahm", "Aphex Twin", "A Winged Victory for the Sullen", "Stars of the Lid", "Carbon Based Lifeforms", "Solar Fields", "Aes Dana", "Hammock", "Max Richter", "Tim Hecker"],
   chillout: ["Moby", "Air", "Morcheeba", "Lemongrass", "Blank & Jones", "Nightmares on Wax", "Thievery Corporation", "Zero 7", "Groove Armada", "Kruder & Dorfmeister"],
+  trip_hop: ["Massive Attack", "Portishead", "Tricky", "DJ Shadow", "UNKLE", "Archive", "Hooverphonic", "Lamb"],
+  darkwave: ["Clan of Xymox", "The Frozen Autumn", "She Past Away", "Drab Majesty", "Lebanon Hanover", "Boy Harsher", "Linea Aspera", "Selofan"],
+  coldwave: ["Kas Product", "Asylum Party", "Little Nemo", "Martin Dupont", "Trisomie 21", "Deux", "Xeno & Oaklander", "Automelodi"],
+  synthwave: ["Kavinsky", "Perturbator", "Carpenter Brut", "The Midnight", "FM-84", "Timecop1983", "Gunship", "Dance With The Dead"],
+  witch_house: ["Salem", "Crystal Castles", "oOoOO", "White Ring", "Sidewalks and Skeletons", "Crim3s", "Pictureplane", "Pastel Ghost"],
   slambient: [...SLAMBIENT_ARTIST_ROSTER],
   idm: ["Aphex Twin", "Autechre", "Boards of Canada", "Squarepusher", "Floating Points", "Plaid", "Clark", "Mike Paradinas"],
   electro: ["Drexciya", "Aux 88", "DJ Stingray", "The Hacker", "Jensen Interceptor", "Kraftwerk", "Helena Hauff", "Cybotron"],
@@ -6428,7 +6783,11 @@ const STYLE_ARTIST_SEEDS = {
     "Bass-D",
     "Art of Fighters"
   ],
-  hardstyle: ["Brennan Heart", "Headhunterz", "Wildstylez", "Sub Zero Project", "D-Block & S-te-Fan", "Coone", "Da Tweekaz", "Ran-D"]
+  hardstyle: ["Brennan Heart", "Headhunterz", "Wildstylez", "Sub Zero Project", "D-Block & S-te-Fan", "Coone", "Da Tweekaz", "Ran-D"],
+  hardcore: ["Angerfist", "Neophyte", "Mad Dog", "Korsakoff", "Nosferatu", "Tha Playah", "Evil Activities", "Art of Fighters"],
+  frenchcore: ["Dr. Peacock", "Sefa", "Billx", "Radium", "The Sickest Squad", "Le Bask", "Floxytek", "Maissouille"],
+  speedcore: ["Noisekick", "The Destroyer", "m1dy", "Komprex", "La Peste", "Gabba Front Berlin", "Hellseeker", "Passenger of Shit"],
+  rawstyle: ["Radical Redemption", "Warface", "E-Force", "Delete", "Rebelion", "Rooler", "Malice", "D-Sturb"]
 };
 
 const SLAMBIENT_CORE_ARTISTS = [...SLAMBIENT_ARTIST_ROSTER];
@@ -7074,7 +7433,12 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "psytrance",
   "psy_comercial",
   "forest_psy",
+  "twilight_psy",
+  "psybreaks",
+  "psybient",
   "freeform",
+  "tech_trance",
+  "hard_trance",
   "techno",
   "tech_house",
   "house",
@@ -7093,17 +7457,124 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "minimal_techno",
   "acid_techno",
   "hard_techno",
+  "dub_techno",
+  "hypnotic_techno",
+  "raw_techno",
+  "detroit_techno",
+  "schranz",
+  "ebm",
+  "halftime_bass",
+  "footwork_juke",
+  "trap",
+  "future_bass",
+  "riddim",
+  "experimental_bass",
+  "wave",
+  "breakcore",
   "dark_psy",
   "full_on",
   "full_on_night",
-  "full_on_morning"
+  "full_on_morning",
+  "hardcore",
+  "frenchcore",
+  "speedcore",
+  "rawstyle"
 ]);
-const STRICT_FAMILY_SEED_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "industrial_techno", "full_on", "full_on_night", "full_on_morning"]);
-const STRICT_ARTIST_MATCH_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
-const LOCK_SEED_FROM_CATALOG_STYLES = new Set(["dark_progressive", "dark_psy", "dark_experimental", "psycore", "hi_tech", "slambient", "freeform", "acid_techno", "hard_techno", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial", "industrial_techno"]);
-const NO_CROSS_STYLE_FALLBACK_STYLES = new Set(["psycore"]);
-const NO_BROAD_STYLE_HYDRATION_STYLES = new Set(["ambient", "downtempo", "chillout", "dark_psy", "dark_experimental", "psycore"]);
-const DARK_UNDERGROUND_DISCOVERY_STYLES = new Set(["dark_psy", "dark_experimental", "psycore"]);
+const EXPANDED_NICHE_DISCOVERY_STYLES = [
+  "twilight_psy",
+  "psybreaks",
+  "psybient",
+  "tech_trance",
+  "hard_trance",
+  "dub_techno",
+  "hypnotic_techno",
+  "raw_techno",
+  "detroit_techno",
+  "schranz",
+  "ebm",
+  "halftime_bass",
+  "footwork_juke",
+  "trap",
+  "future_bass",
+  "riddim",
+  "experimental_bass",
+  "wave",
+  "breakcore",
+  "hardcore",
+  "frenchcore",
+  "speedcore",
+  "rawstyle"
+];
+const STRICT_FAMILY_SEED_STYLES = new Set([
+  "dark_progressive",
+  "dark_psy",
+  "dark_experimental",
+  "psycore",
+  "hi_tech",
+  "slambient",
+  "freeform",
+  "acid_techno",
+  "hard_techno",
+  "industrial_techno",
+  "full_on",
+  "full_on_night",
+  "full_on_morning",
+  ...EXPANDED_NICHE_DISCOVERY_STYLES
+]);
+const STRICT_ARTIST_MATCH_STYLES = new Set([
+  "dark_progressive",
+  "dark_psy",
+  "dark_experimental",
+  "psycore",
+  "hi_tech",
+  "slambient",
+  "freeform",
+  "acid_techno",
+  "hard_techno",
+  "full_on",
+  "full_on_night",
+  "full_on_morning",
+  "progressive_psy",
+  "psy_comercial",
+  "industrial_techno",
+  ...EXPANDED_NICHE_DISCOVERY_STYLES
+]);
+const LOCK_SEED_FROM_CATALOG_STYLES = new Set([
+  "dark_progressive",
+  "dark_psy",
+  "dark_experimental",
+  "psycore",
+  "hi_tech",
+  "slambient",
+  "freeform",
+  "acid_techno",
+  "hard_techno",
+  "full_on",
+  "full_on_night",
+  "full_on_morning",
+  "progressive_psy",
+  "psy_comercial",
+  "industrial_techno",
+  ...EXPANDED_NICHE_DISCOVERY_STYLES
+]);
+const NO_CROSS_STYLE_FALLBACK_STYLES = new Set([]);
+const NO_BROAD_STYLE_HYDRATION_STYLES = new Set([
+  "ambient",
+  "downtempo",
+  "chillout",
+  "dark_psy",
+  "dark_experimental",
+  "psycore",
+  "twilight_psy",
+  "psybient",
+  "dub_techno",
+  "riddim",
+  "speedcore",
+  "darkwave",
+  "witch_house",
+  "breakcore"
+]);
+const DARK_UNDERGROUND_DISCOVERY_STYLES = new Set(["dark_psy", "dark_experimental", "psycore", "twilight_psy", "psybient", "darkwave", "witch_house"]);
 const UNDERGROUND_DISCOVERY_STYLES = new Set([
   "dark_psy",
   "dark_experimental",
@@ -7111,7 +7582,28 @@ const UNDERGROUND_DISCOVERY_STYLES = new Set([
   "forest_psy",
   "hi_tech",
   "freeform",
-  "slambient"
+  "slambient",
+  "twilight_psy",
+  "psybreaks",
+  "psybient",
+  "dub_techno",
+  "hypnotic_techno",
+  "raw_techno",
+  "schranz",
+  "ebm",
+  "halftime_bass",
+  "footwork_juke",
+  "riddim",
+  "experimental_bass",
+  "wave",
+  "breakcore",
+  "darkwave",
+  "coldwave",
+  "witch_house",
+  "hardcore",
+  "frenchcore",
+  "speedcore",
+  "rawstyle"
 ]);
 const UNDERGROUND_SOURCE_TERMS = [
   "underground",
@@ -7142,7 +7634,12 @@ const DARK_UNDERGROUND_SIGNAL_TERMS = [
   "obscuro",
   "sombrio",
   "extreme",
-  "extremo"
+  "extremo",
+  "twilight",
+  "psybient",
+  "psychill",
+  "darkwave",
+  "witch house"
 ];
 const TECHNO_CROSSOVER_FORBIDDEN_TERMS = [
   "trap",
@@ -7164,6 +7661,12 @@ const TECHNO_REQUIRED_SIGNAL_TERMS = {
   techno: ["techno", "detroit techno", "berlin techno", "warehouse techno", "raw techno"],
   acid_techno: ["acid techno", "acid", "303", "techno"],
   hard_techno: ["hard techno", "schranz", "hard industrial", "techno"],
+  dub_techno: ["dub techno", "deep techno", "dub", "techno"],
+  hypnotic_techno: ["hypnotic techno", "deep techno", "mental techno", "techno"],
+  raw_techno: ["raw techno", "warehouse techno", "industrial techno", "techno"],
+  detroit_techno: ["detroit techno", "detroit", "techno"],
+  schranz: ["schranz", "hard techno", "techno"],
+  ebm: ["ebm", "electronic body music", "industrial", "body music", "techno"],
   minimal_techno: ["minimal techno", "minimal", "microhouse", "techno"],
   melodic_techno: ["melodic techno", "melodic", "afterlife", "techno"],
   industrial_techno: ["industrial techno", "industrial", "ebm techno", "techno"],
@@ -7179,14 +7682,28 @@ const BASS_REQUIRED_SIGNAL_TERMS = {
   breakbeat: ["breakbeat", "breaks"],
   uk_garage: ["uk garage", "garage", "2 step", "2step"],
   future_garage: ["future garage", "garage"],
+  halftime_bass: ["halftime", "halftime bass", "bass music", "beats"],
+  footwork_juke: ["footwork", "juke", "teklife", "chicago"],
+  trap: ["trap", "edm trap", "808", "bass music"],
+  future_bass: ["future bass", "future beats", "bass music"],
+  riddim: ["riddim", "dubstep", "wobble", "bass music"],
+  experimental_bass: ["experimental bass", "leftfield bass", "bass music", "sound design"],
+  wave: ["wave", "hardwave", "bass music", "trap"],
+  breakcore: ["breakcore", "jungle", "hardcore", "amen"],
   brazilian_funk: ["brazilian funk", "funk carioca", "baile funk", "funk brasileiro"]
 };
 const LOW_TEMPO_SIGNAL_TERMS = {
   ambient: ["ambient", "drone", "soundscape", "psybient", "space music", "new age"],
+  psybient: ["psybient", "psychill", "psychedelic ambient", "ambient", "downtempo"],
   downtempo: ["downtempo", "trip hop", "trip-hop", "chill", "lounge", "electronica", "leftfield"],
-  chillout: ["chillout", "chill out", "lounge", "downtempo", "balearic", "afterhours"]
+  chillout: ["chillout", "chill out", "lounge", "downtempo", "balearic", "afterhours"],
+  trip_hop: ["trip hop", "trip-hop", "downtempo", "beats", "dub"],
+  darkwave: ["darkwave", "post punk", "minimal synth", "coldwave"],
+  coldwave: ["coldwave", "minimal synth", "darkwave"],
+  synthwave: ["synthwave", "retrowave", "outrun"],
+  witch_house: ["witch house", "dark electronic", "drag", "haunted"]
 };
-const CURATED_PRIORITY_STYLES = new Set(["freeform", "ambient", "downtempo", "chillout", "brazilian_funk"]);
+const CURATED_PRIORITY_STYLES = new Set(["freeform", "ambient", "downtempo", "chillout", "brazilian_funk", "psybient", "dub_techno", "halftime_bass", "footwork_juke", "darkwave", "trip_hop", "experimental_bass"]);
 const PSYTRANCE_REQUIRED_SIGNAL_TERMS = [
   "psytrance",
   "psy trance",
@@ -7198,10 +7715,21 @@ const PSYTRANCE_REQUIRED_SIGNAL_TERMS = [
   "fullon",
   "hitech",
   "hi tech",
-  "progressive psy"
+  "progressive psy",
+  "twilight psy",
+  "psybreaks",
+  "psy breaks",
+  "psybient",
+  "psychill"
 ];
 const STYLE_FORBIDDEN_SIGNAL_TERMS = {
   techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  dub_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  hypnotic_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  raw_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  detroit_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  schranz: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  ebm: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   minimal_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   melodic_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   peak_time_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
@@ -12726,8 +13254,8 @@ const I18N = {
     ratingSavedHint: "{label} • avaliação salva com {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 para {song}.",
     ratingSavedToast: "{label}: {stars}/5 salvo.",
-    suggestionQueueTitle: "Fila rápida: 5 sugestões",
-    suggestionQueueHint: "Mais opções sem reprocessar seus filtros.",
+    suggestionQueueTitle: "Deck pronto: 25 faixas para swipar",
+    suggestionQueueHint: "Quando não há subgênero escolhido, misturo famílias diferentes. Com subgênero escolhido, a fila fica focada nele ou no vizinho mais próximo.",
     queueNow: "Agora",
     queueNext: "Próxima",
     queueUse: "Tocar esta",
@@ -13352,8 +13880,8 @@ const I18N = {
     ratingSavedHint: "{label} • saved with {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 for {song}.",
     ratingSavedToast: "{label}: {stars}/5 saved.",
-    suggestionQueueTitle: "Fast queue: 5 suggestions",
-    suggestionQueueHint: "More options without reprocessing your filters.",
+    suggestionQueueTitle: "Ready deck: 25 tracks to swipe",
+    suggestionQueueHint: "Without a selected subgenre, I mix different families. With a subgenre selected, the queue stays focused there or in the closest neighbor.",
     queueNow: "Now",
     queueNext: "Next",
     queueUse: "Play this",
@@ -13975,8 +14503,8 @@ const I18N = {
     ratingSavedHint: "{label} • guardado con {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 para {song}.",
     ratingSavedToast: "{label}: {stars}/5 guardado.",
-    suggestionQueueTitle: "Fila rápida: 5 sugerencias",
-    suggestionQueueHint: "Más opciones sin reprocesar tus filtros.",
+    suggestionQueueTitle: "Deck listo: 25 pistas para swipar",
+    suggestionQueueHint: "Sin subgénero elegido, mezclo familias distintas. Con subgénero elegido, la fila se queda ahí o en el vecino más cercano.",
     queueNow: "Ahora",
     queueNext: "Siguiente",
     queueUse: "Reproducir esta",
@@ -14615,11 +15143,33 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Outros eletrônicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
+        twilight_psy: "Twilight Psy",
+        psybreaks: "Psybreaks",
+        psybient: "Psybient / Psychill",
+        tech_trance: "Tech Trance",
+        hard_trance: "Hard Trance",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning",
+        dub_techno: "Dub Techno",
+        hypnotic_techno: "Hypnotic Techno",
+        raw_techno: "Raw Techno",
+        detroit_techno: "Detroit Techno",
+        ebm: "EBM / Industrial Body Music",
+        minimal_deep_tech: "Minimal / Deep Tech",
+        jackin_house: "Jackin House",
+        soulful_house: "Soulful House",
+        disco_house: "Disco House",
+        garage_house: "Garage House",
+        halftime_bass: "Halftime Bass",
+        footwork_juke: "Footwork / Juke",
+        future_bass: "Future Bass",
+        experimental_bass: "Experimental Bass",
+        wave: "Wave / Hardwave",
+        trip_hop: "Trip Hop",
+        witch_house: "Witch House",
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
@@ -14636,11 +15186,33 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Other relevant electronic styles"],
       styleSpecial: {
         psy_comercial: "Commercial Psy / Chacotas",
+        twilight_psy: "Twilight Psy",
+        psybreaks: "Psybreaks",
+        psybient: "Psybient / Psychill",
+        tech_trance: "Tech Trance",
+        hard_trance: "Hard Trance",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning",
+        dub_techno: "Dub Techno",
+        hypnotic_techno: "Hypnotic Techno",
+        raw_techno: "Raw Techno",
+        detroit_techno: "Detroit Techno",
+        ebm: "EBM / Industrial Body Music",
+        minimal_deep_tech: "Minimal / Deep Tech",
+        jackin_house: "Jackin House",
+        soulful_house: "Soulful House",
+        disco_house: "Disco House",
+        garage_house: "Garage House",
+        halftime_bass: "Halftime Bass",
+        footwork_juke: "Footwork / Juke",
+        future_bass: "Future Bass",
+        experimental_bass: "Experimental Bass",
+        wave: "Wave / Hardwave",
+        trip_hop: "Trip Hop",
+        witch_house: "Witch House",
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
@@ -14657,11 +15229,33 @@ function localizeOptionLabels() {
       styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Otros estilos electrónicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
+        twilight_psy: "Twilight Psy",
+        psybreaks: "Psybreaks",
+        psybient: "Psybient / Psychill",
+        tech_trance: "Tech Trance",
+        hard_trance: "Hard Trance",
         dark_progressive: "PROG DARK / Dark Progressive",
         dark_experimental: "Dark Experimental",
         freeform: "Freeform Psy",
         full_on_night: "Full-On Night",
         full_on_morning: "Full-On Morning",
+        dub_techno: "Dub Techno",
+        hypnotic_techno: "Techno Hipnotico",
+        raw_techno: "Raw Techno",
+        detroit_techno: "Detroit Techno",
+        ebm: "EBM / Industrial Body Music",
+        minimal_deep_tech: "Minimal / Deep Tech",
+        jackin_house: "Jackin House",
+        soulful_house: "Soulful House",
+        disco_house: "Disco House",
+        garage_house: "Garage House",
+        halftime_bass: "Halftime Bass",
+        footwork_juke: "Footwork / Juke",
+        future_bass: "Future Bass",
+        experimental_bass: "Experimental Bass",
+        wave: "Wave / Hardwave",
+        trip_hop: "Trip Hop",
+        witch_house: "Witch House",
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
@@ -20944,8 +21538,12 @@ function pickFallbackStyleForFreshRecommendation(
   if (NO_CROSS_STYLE_FALLBACK_STYLES.has(currentStyle)) return "";
   const currentFamily = familyOf(currentStyle);
   const selectedBpm = parseBpmRangeValue(prefs.bpm || "");
+  const similarStyles = similarFallbackStylesFor(currentStyle);
+  const fallbackCandidates = similarStyles.length
+    ? similarStyles
+    : getAllSelectableStyles().filter((style) => style && style !== currentStyle && familyOf(style) === currentFamily);
 
-  const ranked = getAllSelectableStyles()
+  const ranked = fallbackCandidates
     .filter((style) => style && style !== currentStyle)
     .map((style) => {
       const candidates = unseenTrackCandidatesForStyle(style, prefs, blockedArtists, blockedTrackKeys, blockedTrackTitles);
@@ -20954,6 +21552,8 @@ function pickFallbackStyleForFreshRecommendation(
       if (!uniqueArtists.size) return null;
 
       let score = uniqueArtists.size * 6 + Math.min(candidates.length, 24);
+      const proximityIndex = similarStyles.indexOf(style);
+      if (proximityIndex >= 0) score += 56 - proximityIndex * 4;
       if (familyOf(style) === currentFamily) score += 32;
       if (selectedBpm && STYLE_BPM_RULES[style]) {
         const styleRule = STYLE_BPM_RULES[style];
@@ -21453,7 +22053,8 @@ async function resolveYouTubeVideoFromApi(track) {
     return false;
   }
 
-  const query = youtubeSearchQueryVariants(track)[0] || `${track.artist || ""} ${track.song || ""}`.trim();
+  const queryVariants = youtubeSearchQueryVariants(track);
+  const query = queryVariants[0] || `${track.artist || ""} ${track.song || ""}`.trim();
   if (!query) return false;
 
   try {
@@ -21465,6 +22066,9 @@ async function resolveYouTubeVideoFromApi(track) {
       },
       body: JSON.stringify({
         query,
+        queries: queryVariants,
+        artist: track.artist || "",
+        song: track.song || track.title || "",
         style: track.style || "",
         limit: 3
       })
@@ -21475,7 +22079,7 @@ async function resolveYouTubeVideoFromApi(track) {
       return false;
     }
     const payload = await response.json();
-    const video = Array.isArray(payload?.videos) ? payload.videos[0] : null;
+    const video = payload?.bestVideo || (Array.isArray(payload?.videos) ? payload.videos[0] : null);
     if (!video?.youtubeTrackUrl) {
       if (cacheKey) youtubeApiCache.set(cacheKey, null);
       return false;
@@ -27950,7 +28554,7 @@ function formatEventDate(isoDate) {
 function formatEventDisplayDate(event) {
   if (!event?.datetime) return "";
   const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es-ES" : "en-US";
-  const date = new Date(event.datetime);
+  const date = new Date(event.dateOnly ? `${String(event.datetime).slice(0, 10)}T12:00:00` : event.datetime);
   if (event.dateOnly) {
     return date.toLocaleDateString(locale, {
       day: "2-digit",
@@ -27987,7 +28591,7 @@ async function fetchUpcomingEvents(artist) {
       if (response.ok) {
         const payload = await response.json();
         const events = Array.isArray(payload?.events) ? payload.events : [];
-        if (events.length > 0) return { events, source: "ticketmaster" };
+        if (events.length > 0) return { events, source: payload?.source || "ticketmaster" };
       }
     } catch (_error) {
       // Ticketmaster e a fonte principal; se falhar, o app tenta as alternativas antigas.
@@ -32288,7 +32892,6 @@ async function generateRecommendationFromPrefs(
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   let usedKnownFallback = false;
-  const selectedStyleAtRequest = String(prefs?.style || "").trim();
   if (resetRejected) rejectedArtists = new Set();
   if (!externalDatasetImportDone) {
     await hydrateExternalDatasetPackInBackground();
@@ -32325,9 +32928,9 @@ async function generateRecommendationFromPrefs(
   const sessionExcludedArtists = buildGlobalArtistExclusionSet();
   if (avoidArtistName) addArtistKeysToSet(sessionExcludedArtists, avoidArtistName);
   const trackAllowedInSession = (track) => !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  // If the user explicitly selected a style, recommendations must stay in it.
+  // If the selected style is exhausted, only adjacent styles from the similarity map may be used.
   const isStyleFallbackLocked = () =>
-    Boolean(selectedStyleAtRequest) || NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
+    NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
 
   const hasEligibleInCurrentScope = () =>
     catalog.some(

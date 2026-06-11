@@ -1,4 +1,4 @@
-const { envFlag, envInt, requireMusicApi, sendJson } = require("./_music-apis");
+const { envFlag, envInt, featureEnabled, requireMusicApi, sendJson } = require("./_music-apis");
 
 module.exports = async function handler(req, res) {
   if (!requireMusicApi(req, res, {
@@ -14,21 +14,25 @@ module.exports = async function handler(req, res) {
     providers: {
       soundcloud: {
         configured: Boolean(process.env.SOUNDCLOUD_CLIENT_ID && process.env.SOUNDCLOUD_CLIENT_SECRET),
-        enabled: envFlag("SONIC_MUSIC_APIS_ENABLED", false)
+        enabled: featureEnabled("SONIC_MUSIC_APIS_ENABLED", false)
       },
       youtube: {
         configured: Boolean(process.env.YOUTUBE_API_KEY || process.env.YOUTUBE_DATA_API_KEY),
-        enabled: envFlag("SONIC_YOUTUBE_ENABLED", false)
+        enabled: featureEnabled("SONIC_YOUTUBE_ENABLED", false)
       },
       ticketmaster: {
         configured: Boolean(process.env.TICKETMASTER_API_KEY || process.env.TICKETMASTER_CONSUMER_KEY),
-        enabled: envFlag("SONIC_TICKETMASTER_ENABLED", false)
+        enabled: featureEnabled("SONIC_TICKETMASTER_ENABLED", false)
+      },
+      bandsintown: {
+        configured: true,
+        enabled: featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)
       }
     },
     endpoints: {
       soundcloudSearch: "/api/soundcloud-search",
       youtubeSearch: "/api/youtube-search",
-      ticketmasterEvents: "/api/ticketmaster-events",
+      artistEvents: "/api/ticketmaster-events",
       artistBio: "/api/artist-bio"
     },
     limits: {

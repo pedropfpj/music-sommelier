@@ -65,6 +65,23 @@ Endpoints incluidos:
 - `/api/artist-bio`: refina a bio com base nos metadados e fontes conhecidas, sem inventar fatos
 - `/api/spirit-image`: gera arte personalizada para o Espirito Musical
 
+## APIs de musica e eventos
+
+As integracoes serverless ficam em `/api` para proteger chaves e controlar uso diario.
+
+- `/api/integration-health`: mostra quais provedores estao configurados/ligados e os limites diarios ativos
+- `/api/youtube-search`: busca videos usando YouTube Data API, escolhe melhor resultado por artista/faixa e evita usar playlist/set como faixa quando possivel
+- `/api/soundcloud-search`: busca faixas no SoundCloud com token server-side
+- `/api/ticketmaster-events`: agrega proximos eventos por artista via Ticketmaster e Bandsintown, com suporte a lote de artistas para auditoria
+
+Variaveis principais:
+
+- `SONIC_MUSIC_APIS_ENABLED`: liga as APIs de musica como fallback global
+- `SONIC_YOUTUBE_ENABLED` + `YOUTUBE_API_KEY` ou `YOUTUBE_DATA_API_KEY`: liga YouTube Data API
+- `SONIC_TICKETMASTER_ENABLED` + `TICKETMASTER_API_KEY`: liga busca de eventos
+- `SONIC_BANDSINTOWN_ENABLED`: mantem Bandsintown como reforco de cobertura de eventos
+- `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
+
 ## Qualidade do catalogo
 
 Antes de publicar mudancas grandes no catalogo, rode:
@@ -85,12 +102,14 @@ node scripts/quality-audit.mjs --strict
 
 ## Subgeneros incluidos
 
-- Psytrance: psytrance, forest, dark, freeform psy, full-on, full on night, full on morning, progressive psy, hi-tech, dark progressive (PROG DARK / zenonesque), goa
-- Techno: techno, acid techno, hard techno, gabber, minimal techno, melodic techno, industrial, peak time
-- House: house, deep house, tech house, progressive house, afro house, organic house, bass house, electro house
-- DnB/Bass: drum and bass, liquid dnb, neurofunk, jump up, jungle, breakbeat, uk garage, future garage, dubstep
-- Hard Dance: hardstyle
-- Outros: downtempo, ambient, idm, electro, uplifting trance
+O app tem 81 subgeneros selecionaveis no motor de curadoria.
+
+- Psytrance / Trance: psytrance, forest psy, dark psy, twilight psy, dark experimental, psycore, psybreaks, psybient/psychill, freeform psy, full-on, full-on night, full-on morning, psy comercial/chacotas, progressive psy, slambient, hi-tech, dark progressive (PROG DARK / zenonesque), goa trance, uplifting trance, tech trance, hard trance
+- Techno: techno, acid techno, hard techno, dub techno, hypnotic techno, raw techno, detroit techno, schranz, EBM / industrial body music, minimal techno, melodic techno, industrial techno, peak time techno, gabber
+- House: house, deep house, tech house, progressive house, afro house, organic house, bass house, electro house, minimal/deep tech, jackin house, soulful house, disco house, garage house
+- DnB/Bass: drum and bass, liquid dnb, neurofunk, jump up, jungle, breakbeat, brazilian funk, uk garage, future garage, dubstep, halftime bass, footwork/juke, trap, future bass, riddim, experimental bass, wave, breakcore
+- Hard Dance: hardstyle, hardcore, frenchcore, speedcore, rawstyle
+- Outros: downtempo, ambient, chillout, trip hop, darkwave, coldwave, synthwave, witch house, idm, electro
 
 ## Como executar
 
