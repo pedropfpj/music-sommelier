@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260611target1" />
+    <link rel="stylesheet" href="styles.css?v=20260611art1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -1310,7 +1310,21 @@
               <span id="spiritRankBadge" class="chip alt">Espírito desbloqueado</span>
             </div>
             <p id="spiritCollectibleHint" class="muted spirit-visual-hint">Gere um card estático com sua arte e status para compartilhar nos Stories.</p>
+            <div id="spiritCollectibleGenerationPanel" class="spirit-generation-progress hidden" role="status" aria-live="polite" aria-atomic="true">
+              <div class="spirit-generation-progress-head">
+                <span id="spiritCollectibleGenerationLabel">Preparando briefing humano...</span>
+                <strong id="spiritCollectibleGenerationPercent">0%</strong>
+              </div>
+              <div class="spirit-generation-progress-track" aria-hidden="true">
+                <span id="spiritCollectibleGenerationFill"></span>
+              </div>
+            </div>
             <div class="spirit-collectible-grid">
+              <div id="spiritCollectiblePlaceholder" class="spirit-collectible-placeholder" aria-hidden="true">
+                <span id="spiritCollectiblePlaceholderKicker">Retrato humano IA</span>
+                <strong id="spiritCollectiblePlaceholderTitle">Busto realista em criação</strong>
+                <small id="spiritCollectiblePlaceholderText">Rosto, roupa, acessórios e vibe mudam conforme o espírito.</small>
+              </div>
               <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
               <div class="spirit-collectible-meta">
                 <p id="spiritCollectibleMilestone" class="spirit-collectible-milestone"></p>
@@ -1544,6 +1558,6 @@
         allowImageRegeneration: true
       };
     </script>
-    <script src="app.js?v=20260611swipe2"></script>
+    <script src="app.js?v=20260611art1"></script>
   </body>
 </html>

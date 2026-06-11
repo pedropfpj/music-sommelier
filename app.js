@@ -5155,6 +5155,13 @@ const spiritSpotlightSoundcloud = document.getElementById("spiritSpotlightSoundc
 const spiritCollectiblePanel = document.getElementById("spiritCollectiblePanel");
 const spiritCollectibleTitle = document.getElementById("spiritCollectibleTitle");
 const spiritCollectibleHint = document.getElementById("spiritCollectibleHint");
+const spiritCollectibleGenerationPanel = document.getElementById("spiritCollectibleGenerationPanel");
+const spiritCollectibleGenerationLabel = document.getElementById("spiritCollectibleGenerationLabel");
+const spiritCollectibleGenerationPercent = document.getElementById("spiritCollectibleGenerationPercent");
+const spiritCollectibleGenerationFill = document.getElementById("spiritCollectibleGenerationFill");
+const spiritCollectiblePlaceholderKicker = document.getElementById("spiritCollectiblePlaceholderKicker");
+const spiritCollectiblePlaceholderTitle = document.getElementById("spiritCollectiblePlaceholderTitle");
+const spiritCollectiblePlaceholderText = document.getElementById("spiritCollectiblePlaceholderText");
 const spiritCollectibleImage = document.getElementById("spiritCollectibleImage");
 const spiritCollectibleMilestone = document.getElementById("spiritCollectibleMilestone");
 const spiritCollectibleProgress = document.getElementById("spiritCollectibleProgress");
@@ -5223,6 +5230,9 @@ let spiritLastReviewedSongLikes = 0;
 let spiritUnlocked = false;
 let spiritSignalsByStyle = new Map();
 let spiritCollectibleBusy = false;
+let spiritCollectibleProgressTimer = 0;
+let spiritCollectibleProgressValue = 0;
+let spiritCollectibleProgressSettling = false;
 let trackRatings = new Map();
 let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
@@ -5539,8 +5549,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v26";
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v4";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v27";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v5";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -13848,6 +13858,16 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {shown} apresentadas | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
+    spiritCollectibleGeneratingStart: "Criação iniciada. A imagem pode levar até 45 segundos.",
+    spiritCollectibleGeneratingBrief: "Preparando briefing humano do espírito...",
+    spiritCollectibleGeneratingPortrait: "Definindo rosto, busto, roupa e acessórios...",
+    spiritCollectibleGeneratingAi: "Renderizando retrato humano em alta qualidade...",
+    spiritCollectibleGeneratingCard: "Montando card compartilhável...",
+    spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
+    spiritCollectibleGeneratingFailed: "A IA não respondeu agora. Nenhum avatar genérico será usado.",
+    spiritCollectiblePlaceholderKicker: "Retrato humano IA",
+    spiritCollectiblePlaceholderTitle: "Busto realista em criação",
+    spiritCollectiblePlaceholderText: "Rosto, roupa, acessórios e vibe mudam conforme o espírito.",
     spiritCollectibleGeneratedLocal: "Geração IA indisponível. Mantive a arte pendente em vez de mostrar avatar local.",
     spiritCollectibleGeneratedApi: "Arte única por IA criada com as características humanas do espírito.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
@@ -14473,6 +14493,16 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {shown} shown | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your spirit artwork...",
+    spiritCollectibleGeneratingStart: "Creation started. The image can take up to 45 seconds.",
+    spiritCollectibleGeneratingBrief: "Preparing the human-spirit brief...",
+    spiritCollectibleGeneratingPortrait: "Defining face, bust, wardrobe, and accessories...",
+    spiritCollectibleGeneratingAi: "Rendering a high-quality human portrait...",
+    spiritCollectibleGeneratingCard: "Building the shareable card...",
+    spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
+    spiritCollectibleGeneratingFailed: "Image AI did not respond now. No generic avatar will be used.",
+    spiritCollectiblePlaceholderKicker: "AI human portrait",
+    spiritCollectiblePlaceholderTitle: "Realistic bust in creation",
+    spiritCollectiblePlaceholderText: "Face, outfit, accessories, and vibe change with each spirit.",
     spiritCollectibleGeneratedLocal: "AI generation is unavailable. Artwork stays pending instead of showing a local avatar.",
     spiritCollectibleGeneratedApi: "Unique AI artwork created with the spirit's human traits.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
@@ -15095,6 +15125,16 @@ const I18N = {
     spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {shown} presentadas | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
+    spiritCollectibleGeneratingStart: "Creación iniciada. La imagen puede tardar hasta 45 segundos.",
+    spiritCollectibleGeneratingBrief: "Preparando el briefing humano del espíritu...",
+    spiritCollectibleGeneratingPortrait: "Definiendo rostro, busto, ropa y accesorios...",
+    spiritCollectibleGeneratingAi: "Renderizando retrato humano en alta calidad...",
+    spiritCollectibleGeneratingCard: "Montando card para compartir...",
+    spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
+    spiritCollectibleGeneratingFailed: "La IA de imagen no respondió ahora. No usaré avatar genérico.",
+    spiritCollectiblePlaceholderKicker: "Retrato humano IA",
+    spiritCollectiblePlaceholderTitle: "Busto realista en creación",
+    spiritCollectiblePlaceholderText: "Rostro, ropa, accesorios y vibe cambian según el espíritu.",
     spiritCollectibleGeneratedLocal: "La generación IA no está disponible. Mantengo el arte pendiente en vez de mostrar avatar local.",
     spiritCollectibleGeneratedApi: "Arte único con IA creado con los rasgos humanos del espíritu.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
@@ -15882,6 +15922,10 @@ function applyLanguage() {
   setText("#spiritCollectibleRegenerateBtn", t("spiritCollectibleRegenerate"));
   setText("#spiritCollectibleDownload", t("spiritCollectibleDownload"));
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
+  setText("#spiritCollectiblePlaceholderKicker", t("spiritCollectiblePlaceholderKicker"));
+  setText("#spiritCollectiblePlaceholderTitle", t("spiritCollectiblePlaceholderTitle"));
+  setText("#spiritCollectiblePlaceholderText", t("spiritCollectiblePlaceholderText"));
+  setText("#spiritCollectibleGenerationLabel", t("spiritCollectibleGeneratingBrief"));
   setText("#spiritRankBadge", t("spiritRankUnlocked"));
   setText("#searchTitle", t("searchOverlayTitle"));
   setText("#searchStageLabel", t("searchOverlayStage", { current: searchStageFromProgress(searchProgressValue || 7), total: 4 }));
@@ -26802,6 +26846,59 @@ function splitIntoSvgLines(text = "", maxCharsPerLine = 56, maxLines = 2) {
   return lines.slice(0, maxLines);
 }
 
+function spiritHumanIdentityVariation(spirit, profileSignature = "") {
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-diversity`) >>> 0;
+  const ageCues = [
+    "adult in the late 20s to early 30s",
+    "adult in the 30s",
+    "mature adult in the early 40s",
+    "adult with youthful club energy but clearly over 25"
+  ];
+  const presentationCues = [
+    "masculine presentation",
+    "feminine presentation",
+    "androgynous presentation",
+    "gender-neutral editorial presentation"
+  ];
+  const heritageCues = [
+    "deep brown skin with Afro-diasporic styling cues",
+    "warm brown skin with Latin American styling cues",
+    "light skin with Mediterranean styling cues",
+    "fair skin with Northern European styling cues",
+    "golden tan skin with mixed-heritage styling cues",
+    "medium brown skin with South Asian styling cues",
+    "light olive skin with Middle Eastern styling cues",
+    "warm beige skin with East Asian styling cues"
+  ];
+  const hairCues = [
+    "short textured hair",
+    "braids or locs arranged away from the face",
+    "shaved or close-cropped hair",
+    "long dark hair with movement",
+    "curly shoulder-length hair",
+    "silver or dyed accent hair",
+    "clean bald head with strong silhouette",
+    "asymmetric club haircut"
+  ];
+  const accessoryCues = [
+    "transparent visor lifted above the eyes",
+    "subtle ear cuffs and layered necklaces",
+    "single statement ring and wrist bands",
+    "lightweight headphones around the neck",
+    "ritual scarf and reflective pins",
+    "minimal face gems away from the eyes",
+    "tinted glasses that still reveal the eyes",
+    "woven collar and metallic textile accents"
+  ];
+  return [
+    ageCues[seed % ageCues.length],
+    presentationCues[(seed >>> 3) % presentationCues.length],
+    heritageCues[(seed >>> 6) % heritageCues.length],
+    hairCues[(seed >>> 9) % hairCues.length],
+    accessoryCues[(seed >>> 12) % accessoryCues.length]
+  ].join("; ");
+}
+
 function spiritCharacterIdentity(spirit, profileSignature = "") {
   const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-identity`) >>> 0;
   const theme = spiritVisualTheme(spirit);
@@ -26822,13 +26919,15 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
   ];
   return [
     `Realistic fictional adult human entity format: ${humanForms[seed % humanForms.length]}`,
+    "Composition required: bust-up or chest-up portrait with visible face, neck, shoulders, and upper torso; the person must be the clear focus, not a background symbol",
+    `Identity variation for this generation: ${spiritHumanIdentityVariation(spirit, profileSignature)}`,
     `Spirit identity: ${direction.identity}`,
     `Face and charisma: ${direction.face}; expression cue: ${expressionCues[seed % expressionCues.length]}`,
     `Wardrobe and material language: ${direction.wardrobe}`,
     `Music-reactive aura: ${direction.aura}`,
     `Scene: ${direction.environment}`,
     `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
-    "Human presence is required: visible face, head, shoulders or torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, confident adult personality, and ethereal music-reactive aura. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, readable text, UI, or border"
+    "Human presence is required: visible face, head, shoulders and upper torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, distinct clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Vary apparent gender presentation, skin tone, hair, wardrobe, gaze, accessories, and vibe across generations. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
@@ -26836,7 +26935,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const styleSignals = spiritTopStyles(spirit, 3).join(", ");
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${profileSignature || ""}`));
   const entityDirection = spiritCharacterIdentity(spirit, profileSignature);
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity with a believable face, natural skin detail, warm expressive eyes, charismatic expression, head, shoulders, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity as a bust-up or chest-up portrait with a believable face, natural skin detail, warm expressive eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling, unique clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -27971,6 +28070,56 @@ function buildLocalSpiritCollectibleImage(
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
+function spiritGenerationStageKey(percent = 0) {
+  const value = Math.max(0, Math.min(100, Number(percent) || 0));
+  if (value >= 96) return "spiritCollectibleGeneratingDone";
+  if (value >= 74) return "spiritCollectibleGeneratingCard";
+  if (value >= 38) return "spiritCollectibleGeneratingAi";
+  if (value >= 18) return "spiritCollectibleGeneratingPortrait";
+  return "spiritCollectibleGeneratingBrief";
+}
+
+function clearSpiritCollectibleGenerationProgressTimer() {
+  if (!spiritCollectibleProgressTimer) return;
+  window.clearInterval(spiritCollectibleProgressTimer);
+  spiritCollectibleProgressTimer = 0;
+}
+
+function updateSpiritCollectibleGenerationProgress({ active = spiritCollectibleBusy, percent = spiritCollectibleProgressValue, labelKey = "" } = {}) {
+  const safePercent = Math.max(0, Math.min(100, Math.round(Number(percent) || 0)));
+  spiritCollectibleProgressValue = safePercent;
+  if (spiritCollectibleGenerationPanel) spiritCollectibleGenerationPanel.classList.toggle("hidden", !active);
+  if (spiritCollectibleGenerationLabel) spiritCollectibleGenerationLabel.textContent = t(labelKey || spiritGenerationStageKey(safePercent));
+  if (spiritCollectibleGenerationPercent) spiritCollectibleGenerationPercent.textContent = `${safePercent}%`;
+  if (spiritCollectibleGenerationFill) spiritCollectibleGenerationFill.style.width = `${safePercent}%`;
+}
+
+function startSpiritCollectibleGenerationProgress() {
+  clearSpiritCollectibleGenerationProgressTimer();
+  spiritCollectibleProgressValue = 7;
+  updateSpiritCollectibleGenerationProgress({ active: true, percent: spiritCollectibleProgressValue, labelKey: "spiritCollectibleGeneratingBrief" });
+  spiritCollectibleProgressTimer = window.setInterval(() => {
+    const current = Math.max(0, Number(spiritCollectibleProgressValue) || 0);
+    const step = current < 28 ? 7 : current < 62 ? 4 : current < 84 ? 2 : 1;
+    const next = Math.min(94, current + step);
+    updateSpiritCollectibleGenerationProgress({ active: true, percent: next });
+  }, 850);
+}
+
+function finishSpiritCollectibleGenerationProgress(success = false) {
+  clearSpiritCollectibleGenerationProgressTimer();
+  spiritCollectibleProgressSettling = true;
+  updateSpiritCollectibleGenerationProgress({
+    active: true,
+    percent: 100,
+    labelKey: success ? "spiritCollectibleGeneratingDone" : "spiritCollectibleGeneratingFailed"
+  });
+  window.setTimeout(() => {
+    spiritCollectibleProgressSettling = false;
+    if (!spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: false, percent: success ? 100 : 0 });
+  }, success ? 1000 : 1800);
+}
+
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
@@ -28067,6 +28216,9 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
 
     spiritCollectiblePanel.classList.remove("hidden");
     spiritCollectiblePanel.classList.toggle("awaiting-image", !hasImage);
+    spiritCollectiblePanel.classList.toggle("is-generating", spiritCollectibleBusy);
+    if (spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: true });
+    else if (!spiritCollectibleProgressTimer && !spiritCollectibleProgressSettling) updateSpiritCollectibleGenerationProgress({ active: false, percent: spiritCollectibleProgressValue });
     if (spiritCollectibleTitle) spiritCollectibleTitle.textContent = t("spiritCollectibleTitle");
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
@@ -28175,13 +28327,21 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     }
     const previousCollectible = collectible?.imageUrl ? collectible : null;
     let keptPreviousCollectible = false;
+    const canUseAiForThisAttempt = !forceRegenerate || !previousCollectible?.imageUrl || aiConfigFlag("allowImageRegeneration", false);
+    if (!supportsAiCollectibleApi() || !canUseAiForThisAttempt) {
+      showToast(supportsAiCollectibleApi() ? t("spiritCollectibleAiLimitUsed") : t("spiritCollectibleHintLocal"));
+      renderCollectibleState(collectible);
+      return null;
+    }
     spiritCollectibleBusy = true;
+    startSpiritCollectibleGenerationProgress();
+    showToast(t("spiritCollectibleGeneratingStart"));
     const variation = forceRegenerate ? collectibleVariationToken() : "";
     renderCollectibleState(collectible);
     try {
       const generatedCollectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
         variationToken: variation,
-        allowAi: !forceRegenerate || aiConfigFlag("allowImageRegeneration", false),
+        allowAi: canUseAiForThisAttempt,
         forceRegenerate
       });
       const expectedAiRefresh = forceRegenerate && supportsAiCollectibleApi() && aiImageEnabled();
@@ -28210,6 +28370,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     } finally {
       spiritCollectibleBusy = false;
     }
+    finishSpiritCollectibleGenerationProgress(Boolean(collectible?.imageUrl));
     if (collectible?.imageUrl && !keptPreviousCollectible) {
       store[slotKey] = collectible;
       saveSpiritCollectibleStore(store);
