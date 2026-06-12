@@ -56,6 +56,16 @@ function minimumQualityScore({ artist = "", song = "" } = {}) {
   return envInt("SONIC_YOUTUBE_MIN_QUALITY_SCORE", defaultScore, 0, 30);
 }
 
+function videoMatchesRequestedIdentity(video, { artist = "", song = "" } = {}) {
+  const artistNorm = normalizeForMatch(artist);
+  const songNorm = normalizeForMatch(song);
+  const title = `${video?.title || ""}`;
+  const fullText = `${video?.title || ""} ${video?.channelTitle || ""} ${video?.description || ""}`;
+  const artistOk = !artistNorm || tokenHit(fullText, artistNorm);
+  const songOk = !songNorm || tokenHit(`${title} ${video?.description || ""}`, songNorm);
+  return artistOk && songOk;
+}
+
 function normalizeVideo(row = {}, query = "") {
   const videoId = trimText(row?.id?.videoId || "", 80);
   const snippet = row?.snippet || {};
@@ -114,8 +124,10 @@ async function fetchYouTubeVideos({ query, limit, artist, song, style }) {
     .filter(Boolean)
     .map((video) => ({
       ...video,
+      identityMatch: videoMatchesRequestedIdentity(video, { artist, song }),
       qualityScore: scoreVideo(video, { artist, song, style, query })
     }))
+    .filter((video) => video.identityMatch || (!artist && !song))
     .sort((a, b) => b.qualityScore - a.qualityScore);
 }
 
