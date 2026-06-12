@@ -51,6 +51,11 @@ function scoreVideo(video, { artist = "", song = "", style = "", query = "" } = 
   return score;
 }
 
+function minimumQualityScore({ artist = "", song = "" } = {}) {
+  const defaultScore = artist && song ? 7 : 2.5;
+  return envInt("SONIC_YOUTUBE_MIN_QUALITY_SCORE", defaultScore, 0, 30);
+}
+
 function normalizeVideo(row = {}, query = "") {
   const videoId = trimText(row?.id?.videoId || "", 80);
   const snippet = row?.snippet || {};
@@ -177,7 +182,9 @@ module.exports = async function handler(req, res) {
       });
       if (merged.some((video) => video.qualityScore >= 10)) break;
     }
-    const videos = merged.sort((a, b) => b.qualityScore - a.qualityScore).slice(0, limit);
+    const minQualityScore = minimumQualityScore({ artist, song });
+    const rankedVideos = merged.sort((a, b) => b.qualityScore - a.qualityScore);
+    const videos = rankedVideos.filter((video) => video.qualityScore >= minQualityScore).slice(0, limit);
     sendJson(req, res, 200, {
       ok: true,
       source: "youtube",
@@ -185,6 +192,8 @@ module.exports = async function handler(req, res) {
       queries: queries.slice(0, maxQueries),
       style,
       count: videos.length,
+      minQualityScore,
+      rejectedCount: Math.max(0, rankedVideos.length - videos.length),
       bestVideo: videos[0] || null,
       videos
     }, ["GET", "POST", "OPTIONS"]);
