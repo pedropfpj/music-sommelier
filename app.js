@@ -648,6 +648,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/verified_track_expansion_v1.csv",
   "data/verified_track_expansion_v2.csv",
   "data/verified_track_expansion_v3.csv",
+  "data/verified_track_expansion_v4.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -10091,6 +10092,15 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
       pickDatasetValue(fields, ["bpm_exact", "bpm", "tempo", "tempo_bpm", "track_bpm", "tempo_profile", "bpm_guide"])
     );
     const previewUrl = pickDatasetValue(fields, ["preview_url", "preview", "sample_url", "audio_preview"]);
+    const spotifyUrl = pickDatasetValue(fields, ["spotify_url", "spotify", "spotify_link", "spotify_track_url"]);
+    const spotifyTrackUrl = pickDatasetValue(fields, ["spotify_track_url", "spotify_track", "spotify_track_link"]);
+    const youtubeUrl = pickDatasetValue(fields, ["youtube_url", "youtube", "youtube_link", "youtube_track_url", "youtube_watch_url", "youtube_video_url"]);
+    const youtubeTrackUrl = pickDatasetValue(fields, ["youtube_track_url", "youtube_watch_url", "youtube_video_url", "youtube_track", "youtube_video"]);
+    const soundcloudUrl = pickDatasetValue(fields, ["soundcloud_url", "soundcloud", "soundcloud_link", "soundcloud_track_url"]);
+    const soundcloudTrackUrl = pickDatasetValue(fields, ["soundcloud_track_url", "soundcloud_track", "soundcloud_permalink"]);
+    const bandcampUrl = pickDatasetValue(fields, ["bandcamp_url", "bandcamp", "bandcamp_link", "bandcamp_album_url"]);
+    const bandcampTrackUrl = pickDatasetValue(fields, ["bandcamp_track_url", "bandcamp_track", "bandcamp_track_link"]);
+    const bandcampTrackId = pickDatasetValue(fields, ["bandcamp_track_id", "bandcamp_id", "bandcamp_embed_id"]);
     const releaseDate = normalizeDatasetReleaseDate(
       pickDatasetValue(fields, ["release_date", "released", "date", "year", "ano"])
     );
@@ -10113,7 +10123,16 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         source: sourceTag.includes("dynamic") ? sourceTag : `dynamic_${sourceTag}`,
         artistCountry: country,
         artistGenre,
-        artistProfileHint
+        artistProfileHint,
+        spotifyUrl,
+        spotifyTrackUrl,
+        youtubeUrl,
+        youtubeTrackUrl,
+        soundcloudUrl,
+        soundcloudTrackUrl,
+        bandcampUrl,
+        bandcampTrackUrl,
+        bandcampTrackId
       },
       existingKeys
     );
@@ -12605,7 +12624,12 @@ function addDynamicTrackToCatalog({
   bandcampUrl = "",
   bandcampTrackUrl = "",
   bandcampTrackId = "",
-  soundcloudTrackUrl = ""
+  soundcloudUrl = "",
+  soundcloudTrackUrl = "",
+  spotifyUrl = "",
+  spotifyTrackUrl = "",
+  youtubeUrl = "",
+  youtubeTrackUrl = ""
 }, existingKeys) {
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
@@ -12651,6 +12675,19 @@ function addDynamicTrackToCatalog({
   const fallbackBpm = Math.round((STYLE_BPM_RULES[style]?.min + STYLE_BPM_RULES[style]?.max || 130) / 2);
   const duration = Number(durationSec) || 0;
   const normalizedPreview = normalizePreviewUrl(previewUrl);
+  const safeSpotifyUrl = String(spotifyUrl || "").trim();
+  const safeSpotifyTrackUrl = String(spotifyTrackUrl || "").trim();
+  const safeYoutubeUrl = String(youtubeUrl || "").trim();
+  const safeYoutubeTrackUrl = String(youtubeTrackUrl || "").trim();
+  const safeSoundcloudUrl = String(soundcloudUrl || "").trim();
+  const safeSoundcloudTrackUrl = String(soundcloudTrackUrl || "").trim();
+  const safeBandcampUrl = String(bandcampUrl || "").trim();
+  const safeBandcampTrackUrl = String(bandcampTrackUrl || "").trim();
+  const safeBandcampTrackId = String(bandcampTrackId || "").trim();
+  const hasDirectYoutube = isDirectYouTubeUrl(safeYoutubeTrackUrl) || isDirectYouTubeUrl(safeYoutubeUrl);
+  const hasDirectSoundcloud = isDirectSoundCloudTrackUrl(safeSoundcloudTrackUrl) || isDirectSoundCloudTrackUrl(safeSoundcloudUrl);
+  const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
+  const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
   if (isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
@@ -12667,20 +12704,25 @@ function addDynamicTrackToCatalog({
     vocals: "instrumental",
     context: ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
     vibe: `Garimpei esta faixa porque ela conversa bem com ${styleLabelByValue(style)} e pode abrir um caminho novo no seu gosto.`,
-    spotifyUrl: `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
-    youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artistName} ${songName}`)}`,
-    soundcloudTrackUrl: String(soundcloudTrackUrl || "").trim() || `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`,
-    bandcampUrl: String(bandcampUrl || "").trim(),
-    bandcampTrackUrl: String(bandcampTrackUrl || "").trim(),
-    bandcampTrackId: String(bandcampTrackId || "").trim(),
+    spotifyUrl: safeSpotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
+    spotifyTrackUrl: safeSpotifyTrackUrl,
+    youtubeUrl: safeYoutubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artistName} ${songName}`)}`,
+    soundcloudUrl: safeSoundcloudUrl,
+    soundcloudTrackUrl: safeSoundcloudTrackUrl || (safeSoundcloudUrl ? "" : `https://soundcloud.com/search?q=${encodeURIComponent(`"${artistName}" "${songName}"`)}`),
+    bandcampUrl: safeBandcampUrl,
+    bandcampTrackUrl: safeBandcampTrackUrl,
+    bandcampTrackId: safeBandcampTrackId,
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
-    youtubeTrackUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
+    youtubeTrackUrl: safeYoutubeTrackUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
     previewUrl: normalizedPreview,
     previewCandidates: normalizedPreview ? [normalizedPreview] : [],
-    spotifyVerified: false,
-    existenceVerified: normalizedPreview ? true : undefined,
+    spotifyVerified: Boolean(safeSpotifyTrackUrl),
+    youtubeVerified: hasDirectYoutube,
+    soundcloudVerified: hasDirectSoundcloud,
+    bandcampVerified: hasBandcampPreview,
+    existenceVerified: (normalizedPreview || hasPlayableFallback) ? true : undefined,
     previewChecked: Boolean(normalizedPreview),
-    previewMissing: !normalizedPreview,
+    previewMissing: !normalizedPreview && !hasPlayableFallback,
     artistCountry: String(artistCountry || "").trim(),
     artistGenre: String(artistGenre || "").trim(),
     artistProfileHint: String(artistProfileHint || "").trim(),
@@ -21415,7 +21457,7 @@ function surpriseTrackHasExactBpmAndPreview(track) {
   if (!track) return false;
   if (track.existenceVerified === false) return false;
   if (!hasReliableBpmForTrack(track)) return false;
-  return Boolean(track.previewUrl);
+  return trackHasPlayablePreviewExperience(track);
 }
 
 function stylePreferenceSignal(style = "") {
@@ -21715,7 +21757,7 @@ function pickSurpriseTrackFromAnotherGenre(
   const unknownArtist = (track) => !preferUnknownArtists || !artistSetHasMatch(blockedArtists, track.artist);
   const differentStyle = (track) => styleIsDifferent(track);
   const verifiedTrack = (track) => track.existenceVerified !== false;
-  const withPreview = (track) => Boolean(track.previewUrl);
+  const withPreview = (track) => trackHasPlayablePreviewExperience(track);
   const withReliableBpm = (track) => hasReliableBpmForTrack(track);
 
   const rankedPools = [
@@ -34010,8 +34052,8 @@ async function generateRecommendationFromPrefs(
       );
 
     const withReliableBpm = stylePool.filter((track) => track.existenceVerified !== false && hasReliableBpmForTrack(track));
-    const withReliableBpmAndPreview = withReliableBpm.filter((track) => Boolean(track.previewUrl));
-    const withPreview = stylePool.filter((track) => track.existenceVerified !== false && Boolean(track.previewUrl));
+    const withReliableBpmAndPreview = withReliableBpm.filter((track) => trackHasPlayablePreviewExperience(track));
+    const withPreview = stylePool.filter((track) => track.existenceVerified !== false && trackHasPlayablePreviewExperience(track));
     const verified = stylePool.filter((track) => track.existenceVerified !== false);
     const candidate = pickPool(withReliableBpmAndPreview) || pickPool(withReliableBpm) || pickPool(withPreview) || pickPool(verified) || pickPool(stylePool);
     if (!candidate) return false;
@@ -34212,7 +34254,7 @@ async function generateRecommendationFromPrefs(
     const exists =
       currentRecommendation.existenceVerified !== false ||
       (isTrustedCuratedCatalogTrack(currentRecommendation) && hasReliableBpmForTrack(currentRecommendation));
-    const hasPreview = Boolean(currentRecommendation.previewUrl);
+    const hasPreview = trackHasPlayablePreviewExperience(currentRecommendation);
 
     if (exists && !fallbackVerifiedTrack) fallbackVerifiedTrack = currentRecommendation;
     if (exists && hasPreview) break;
