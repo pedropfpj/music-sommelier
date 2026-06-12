@@ -96,7 +96,7 @@ const SUPPORT_DEFAULT_CONFIG = {
     description: "Sonic Search tip"
   },
   bitcoin: {
-    address: "",
+    address: "bc1qxreqyq0tvd59fsghqrged2lsfkhlvyq0em94z5",
     lightning: "",
     uri: ""
   }
@@ -5650,11 +5650,84 @@ const DEFAULT_WEIGHTS = {
 };
 
 const SMART_PRESETS = {
-  focus: { style: "", fallbackStyle: "minimal_techno", context: "foco", energy: "mid", bpm: "", vocals: "instrumental" },
-  work: { style: "", fallbackStyle: "techno", context: "trabalho", energy: "mid", bpm: "", vocals: "instrumental" },
-  workout: { style: "", fallbackStyle: "psytrance", context: "treino", energy: "high", bpm: "", vocals: "" },
+  focus: { style: "", fallbackStyle: "ambient", context: "foco", energy: "low", bpm: "", vocals: "instrumental" },
+  work: { style: "", fallbackStyle: "deep_house", context: "trabalho", energy: "mid", bpm: "", vocals: "instrumental" },
+  workout: { style: "", fallbackStyle: "tech_house", context: "treino", energy: "high", bpm: "", vocals: "" },
   after: { style: "", fallbackStyle: "chillout", context: "after", energy: "low", bpm: "", vocals: "" },
   peak: { style: "", fallbackStyle: "peak_time_techno", context: "peak", energy: "high", bpm: "", vocals: "instrumental" }
+};
+
+const CONTEXT_TARGET_PROFILES = {
+  foco: {
+    primary: ["ambient", "downtempo", "chillout", "deep_house", "organic_house", "dub_techno", "psybient", "future_garage"],
+    adjacent: ["minimal_techno", "hypnotic_techno", "liquid_dnb", "idm", "trip_hop"],
+    avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "forest_psy", "full_on", "full_on_night", "full_on_morning", "psytrance", "psy_comercial", "tech_house", "acid_techno", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "drum_and_bass", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
+    energy: { low: 2.8, mid: 0.4, high: -5.6, extreme: -10 },
+    primaryBoost: 7.4,
+    adjacentBoost: 2.5,
+    avoidPenalty: 12,
+    unknownPenalty: 1.5
+  },
+  trabalho: {
+    primary: ["deep_house", "organic_house", "minimal_techno", "hypnotic_techno", "dub_techno", "future_garage", "liquid_dnb", "idm"],
+    adjacent: ["techno", "melodic_techno", "progressive_house", "downtempo", "ambient", "trip_hop", "darkwave"],
+    avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
+    energy: { low: 1.1, mid: 2.1, high: -2.5, extreme: -6 },
+    primaryBoost: 5.8,
+    adjacentBoost: 2.1,
+    avoidPenalty: 8.5,
+    unknownPenalty: 0.4
+  },
+  treino: {
+    primary: ["tech_house", "techno", "peak_time_techno", "hard_techno", "industrial_techno", "bass_house", "electro_house", "drum_and_bass", "neurofunk", "jump_up", "brazilian_funk"],
+    adjacent: ["full_on", "full_on_night", "psytrance", "acid_techno", "gabber", "hardstyle", "breakbeat"],
+    avoid: ["ambient", "downtempo", "chillout", "psybient", "organic_house", "deep_house", "slambient"],
+    energy: { low: -5.5, mid: 0.8, high: 2.7, extreme: 2.1 },
+    primaryBoost: 5.4,
+    adjacentBoost: 2.2,
+    avoidPenalty: 6.4,
+    unknownPenalty: 0
+  },
+  after: {
+    primary: ["chillout", "downtempo", "ambient", "psybient", "slambient", "organic_house", "deep_house", "future_garage"],
+    adjacent: ["dark_progressive", "progressive_house", "dub_techno", "minimal_techno", "trip_hop", "darkwave", "idm"],
+    avoid: ["psycore", "hi_tech", "freeform", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "neurofunk", "jump_up", "breakcore", "speedcore"],
+    energy: { low: 2.6, mid: 1.2, high: -4.2, extreme: -8 },
+    primaryBoost: 5.2,
+    adjacentBoost: 2,
+    avoidPenalty: 9.4,
+    unknownPenalty: 0.7
+  },
+  peak: {
+    primary: ["peak_time_techno", "hard_techno", "industrial_techno", "techno", "acid_techno", "full_on", "full_on_night", "psytrance", "drum_and_bass", "neurofunk"],
+    adjacent: ["tech_house", "bass_house", "gabber", "hardstyle", "hi_tech", "psycore", "dark_psy", "breakbeat"],
+    avoid: ["ambient", "downtempo", "chillout", "organic_house", "deep_house", "psybient", "slambient"],
+    energy: { low: -6.5, mid: -0.8, high: 2.6, extreme: 2.2 },
+    primaryBoost: 5.8,
+    adjacentBoost: 2.5,
+    avoidPenalty: 7.2,
+    unknownPenalty: 0
+  },
+  warmup: {
+    primary: ["deep_house", "organic_house", "minimal_techno", "dub_techno", "melodic_techno", "progressive_house", "downtempo"],
+    adjacent: ["tech_house", "future_garage", "liquid_dnb", "chillout", "darkwave"],
+    avoid: ["psycore", "hi_tech", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "breakcore", "speedcore"],
+    energy: { low: 1.8, mid: 1.7, high: -2.6, extreme: -6.6 },
+    primaryBoost: 4.8,
+    adjacentBoost: 1.9,
+    avoidPenalty: 7.8,
+    unknownPenalty: 0.4
+  },
+  estrada: {
+    primary: ["progressive_house", "melodic_techno", "deep_house", "organic_house", "trance_uplifting", "psytrance", "full_on_morning", "liquid_dnb", "synthwave"],
+    adjacent: ["techno", "tech_house", "future_garage", "breakbeat", "goa_trance", "darkwave"],
+    avoid: ["psycore", "hi_tech", "speedcore", "breakcore", "gabber"],
+    energy: { low: -0.8, mid: 2, high: 1.1, extreme: -2.4 },
+    primaryBoost: 4.6,
+    adjacentBoost: 1.8,
+    avoidPenalty: 6.2,
+    unknownPenalty: 0
+  }
 };
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
@@ -13965,7 +14038,7 @@ const I18N = {
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
     spiritCollectibleHintLocal: "Para gerar o busto humano realista, abra o app pelo link do Vercel e toque em Gerar arte única IA. No arquivo local, a API de imagem não funciona; por isso não mostro avatar genérico.",
-    spiritCollectibleHintApi: "Arte premium por IA criada para este perfil: entidade humana adulta, realista, carismática e com características do espírito.",
+    spiritCollectibleHintApi: "Arte premium por IA: retrato humano adulto, realista e carismático, com roupa, acessórios e atmosfera derivados do seu espírito musical.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais avatares humanos em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
@@ -14601,7 +14674,7 @@ const I18N = {
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
     spiritCollectibleHintLocal: "To generate the realistic human bust, open the Vercel app link and tap Generate unique AI art. The local file cannot reach the image API, so no generic avatar is shown.",
-    spiritCollectibleHintApi: "Premium AI artwork created for this profile: an adult, realistic, charismatic human entity with spirit-specific traits.",
+    spiritCollectibleHintApi: "Premium AI artwork: an adult, realistic, charismatic human portrait with wardrobe, accessories, and atmosphere derived from your musical spirit.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality human avatars.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
@@ -15234,7 +15307,7 @@ const I18N = {
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
     spiritCollectibleHintLocal: "Para generar el busto humano realista, abre el link de Vercel y toca Generar arte único IA. El archivo local no puede usar la API de imagen; por eso no muestro avatar genérico.",
-    spiritCollectibleHintApi: "Arte premium con IA creada para este perfil: entidad humana adulta, realista, carismática y con rasgos del espíritu.",
+    spiritCollectibleHintApi: "Arte premium con IA: retrato humano adulto, realista y carismático, con ropa, accesorios y atmósfera derivados de tu espíritu musical.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más avatares humanos en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
@@ -20874,8 +20947,8 @@ async function applySmartPreset(presetName = "") {
   const preset = SMART_PRESETS[presetName];
   if (!preset) return;
 
-  const currentStyle = String(styleEl?.value || "").trim();
-  const nextStyle = preset.style || currentStyle || preset.fallbackStyle || "";
+  const presetControlsStyle = Object.prototype.hasOwnProperty.call(preset, "style");
+  const nextStyle = presetControlsStyle ? String(preset.style || "") : String(preset.fallbackStyle || styleEl?.value || "");
   const nextBpm = bestBpmOptionForStyle(nextStyle, preset.bpm);
   updateControlValue(styleEl, nextStyle);
   updateControlValue(contextEl, preset.context);
@@ -25636,22 +25709,22 @@ function buildSpiritLorePayload(spirit, spiritText = {}) {
 
   if (currentLanguage === "en") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""} Your map is not only a genre label: it shows how you respond to pressure, texture, repetition, and emotional payoff.`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo} In practice, this spirit tends to work when a track has a clear identity, evolves with intention, and gives either a physical reward or a mental image to follow.`),
-      nextText: normalizeInlineText(`Ask for ${nextStyles}, then tune energy and BPM. Mark “already knew it” and “new to me” whenever possible: that separates your repertoire from real discovery and makes the next bets sharper.`)
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""} This is a listening fingerprint: pressure tolerance, texture, repetition, and the kind of payoff that keeps you inside the track.`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo} In practice, this spirit needs tracks with a strong identity: not random genre tags, but a sound world with a readable mood, body weight, and progression.`),
+      nextText: normalizeInlineText(`For the next pass, ask for ${nextStyles} and tune context first, then energy and BPM. Mark “already knew it” and “new to me”: that is what separates your repertoire from real discovery.`)
     };
   }
   if (currentLanguage === "es") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Tu mapa no es solo una etiqueta de género: muestra cómo respondes a presión, textura, repetición y recompensa emocional.`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo} En la práctica, este espíritu funciona mejor cuando la pista tiene identidad clara, evoluciona con intención y entrega una recompensa física o una imagen mental para seguir.`),
-      nextText: normalizeInlineText(`Pide ${nextStyles}, luego ajusta energía y BPM. Marca “ya conocía” y “nuevo para mí” siempre que puedas: eso separa repertorio de descubrimiento real y afina las próximas apuestas.`)
+      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Esta es una huella de escucha: tolerancia a la presión, textura, repetición y el tipo de recompensa que te mantiene dentro de la pista.`),
+      whyText: normalizeInlineText(`${appeal} ${styleInfo} En la práctica, este espíritu pide pistas con identidad fuerte: no etiquetas sueltas, sino un mundo sonoro con ánimo, peso corporal y progresión legibles.`),
+      nextText: normalizeInlineText(`Para la próxima pasada, pide ${nextStyles} y ajusta primero el contexto, luego energía y BPM. Marca “ya conocía” y “nuevo para mí”: eso separa repertorio de descubrimiento real.`)
     };
   }
   return {
-    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Seu mapa não é só uma etiqueta de gênero: ele mostra como você responde a pressão, textura, repetição e recompensa emocional.`),
-    whyText: normalizeInlineText(`${appeal} ${styleInfo} Na prática, esse espírito tende a funcionar quando a faixa tem identidade clara, evolui com intenção e entrega uma recompensa física ou uma imagem mental para seguir.`),
-    nextText: normalizeInlineText(`Peça ${nextStyles}, depois ajuste energia e BPM. Marque “já conhecia” e “novidade para mim” sempre que puder: isso separa repertório de descoberta real e deixa as próximas apostas mais certeiras.`)
+    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Esta é uma impressão digital de escuta: tolerância a pressão, textura, repetição e o tipo de recompensa que prende você dentro da faixa.`),
+    whyText: normalizeInlineText(`${appeal} ${styleInfo} Na prática, esse espírito pede faixas com identidade forte: não etiquetas soltas, mas um mundo sonoro com clima, peso corporal e progressão legíveis.`),
+    nextText: normalizeInlineText(`Na próxima rodada, peça ${nextStyles} e ajuste primeiro o contexto, depois energia e BPM. Marque “já conhecia” e “novidade para mim”: é isso que separa repertório de descoberta real.`)
   };
 }
 
@@ -25714,9 +25787,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        spiritText?.archetype || "",
-        topStylesLine || "",
-        profile.styleSignature || ""
+        spiritText?.archetype ? `Human portrait for ${spiritText.archetype}` : "Realistic human portrait",
+        topStylesLine || profile.styleSignature || ""
       ]
         .filter(Boolean)
         .join(" • ")
@@ -25726,9 +25798,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        spiritText?.archetype || "",
-        topStylesLine || "",
-        profile.styleSignature || ""
+        spiritText?.archetype ? `Retrato humano para ${spiritText.archetype}` : "Retrato humano realista",
+        topStylesLine || profile.styleSignature || ""
       ]
         .filter(Boolean)
         .join(" • ")
@@ -25737,9 +25808,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 
   return normalizeInlineText(
     [
-      spiritText?.archetype || "",
-      topStylesLine || "",
-      profile.styleSignature || ""
+      spiritText?.archetype ? `Retrato humano para ${spiritText.archetype}` : "Retrato humano realista",
+      topStylesLine || profile.styleSignature || ""
     ]
       .filter(Boolean)
       .join(" • ")
@@ -25750,45 +25820,40 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   const profile = resolveSpiritNarrativeProfile(spirit);
   const rankLabel = t(resolveSpiritRank(likes).current.key);
   const topStylesLine = profile.topStyles.slice(0, 3).join(" • ");
-  const bpmLine = profile.bpmText ? `BPM ${profile.bpmText}` : "";
+  const bpmLine = profile.bpmText || "";
   const signatureLine = spiritCollectibleUserSignature().slice(0, 6).toUpperCase();
+  const archetype = spiritText?.archetype || spiritText?.name || profile.dominantStyle;
   if (currentLanguage === "pt") {
     return normalizeInlineText(
       [
-        spiritText?.archetype ? `Arquétipo: ${spiritText.archetype}` : "",
-        topStylesLine ? `Assinatura: ${topStylesLine}` : "",
-        bpmLine,
-        `${rankLabel} no marco de ${milestoneLikes} likes.`,
-        `Arte única: ${signatureLine}`
+        `Leitura do perfil: ${archetype}${topStylesLine ? ` com assinatura ${topStylesLine}` : ""}.`,
+        `${bpmLine ? `Pulso ${bpmLine}` : "Pulso livre"} e status ${rankLabel.toLowerCase()} no marco de ${milestoneLikes} likes.`,
+        `O retrato deve parecer humano realista: rosto carismático, roupa, acessórios e aura guiados por esse gosto. ID ${signatureLine}.`
       ]
         .filter(Boolean)
-        .join(" • ")
+        .join(" ")
     );
   }
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        spiritText?.archetype ? `Archetype: ${spiritText.archetype}` : "",
-        topStylesLine ? `Signature: ${topStylesLine}` : "",
-        bpmLine,
-        `${rankLabel} at ${milestoneLikes} likes.`,
-        `Unique art: ${signatureLine}`
+        `Profile reading: ${archetype}${topStylesLine ? ` with a ${topStylesLine} signature` : ""}.`,
+        `${bpmLine ? `Pulse ${bpmLine}` : "Open pulse"} and ${rankLabel.toLowerCase()} status at ${milestoneLikes} likes.`,
+        `The portrait should feel like a realistic human: charismatic face, wardrobe, accessories, and aura shaped by this taste. ID ${signatureLine}.`
       ]
         .filter(Boolean)
-        .join(" • ")
+        .join(" ")
     );
   }
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        spiritText?.archetype ? `Arquetipo: ${spiritText.archetype}` : "",
-        topStylesLine ? `Firma: ${topStylesLine}` : "",
-        bpmLine,
-        `${rankLabel} en el hito de ${milestoneLikes} likes.`,
-        `Arte única: ${signatureLine}`
+        `Lectura del perfil: ${archetype}${topStylesLine ? ` con firma ${topStylesLine}` : ""}.`,
+        `${bpmLine ? `Pulso ${bpmLine}` : "Pulso libre"} y estado ${rankLabel.toLowerCase()} en el hito de ${milestoneLikes} likes.`,
+        `El retrato debe sentirse humano realista: rostro carismático, ropa, accesorios y aura guiados por este gusto. ID ${signatureLine}.`
       ]
         .filter(Boolean)
-        .join(" • ")
+        .join(" ")
     );
   }
   return normalizeInlineText(
@@ -29600,78 +29665,34 @@ function bpmIntentStyleBoost(track, prefs = {}) {
   return 0;
 }
 
-function contextStyleBoost(track, prefs = {}) {
+function contextTargetProfile(context = "") {
+  return CONTEXT_TARGET_PROFILES[String(context || "")] || null;
+}
+
+function contextTargetStyleScore(track, prefs = {}) {
   const context = String(prefs?.context || "");
-  if (!context || prefs?.style) return 0;
+  const profile = contextTargetProfile(context);
+  if (!profile || !track) return 0;
 
   const style = String(track?.style || "");
   const energy = String(track?.energy || "");
-  const focusStyles = new Set([
-    "techno",
-    "minimal_techno",
-    "melodic_techno",
-    "deep_house",
-    "organic_house",
-    "future_garage",
-    "liquid_dnb",
-    "ambient",
-    "chillout",
-    "idm",
-    "downtempo"
-  ]);
-  const focusPenaltyStyles = new Set([
-    "psytrance",
-    "full_on",
-    "full_on_night",
-    "full_on_morning",
-    "psy_comercial",
-    "hi_tech",
-    "psycore",
-    "dark_psy",
-    "dark_experimental",
-    "gabber",
-    "hardstyle",
-    "hard_techno",
-    "industrial_techno",
-    "peak_time_techno"
-  ]);
+  const explicitStyle = Boolean(String(prefs?.style || "").trim());
+  let score = 0;
 
-  if (context === "foco" || context === "trabalho") {
-    let boost = 0;
-    if (focusStyles.has(style)) boost += context === "foco" ? 5.2 : 4.2;
-    if (["techno", "minimal_techno", "melodic_techno"].includes(style)) boost += context === "foco" ? 1.8 : 1.2;
-    if (style === "tech_house" && context === "trabalho") boost += 1.1;
-    if (energy === "low") boost += context === "foco" ? 1.6 : 0.7;
-    if (energy === "mid") boost += 1.1;
-    if (energy === "high") boost -= context === "foco" ? 1.4 : 0.3;
-    if (energy === "extreme") boost -= 4.2;
-    if (focusPenaltyStyles.has(style)) boost -= context === "foco" ? 5.8 : 4.6;
-    return boost;
+  if (profile.primary?.includes(style)) score += Number(profile.primaryBoost) || 0;
+  else if (profile.adjacent?.includes(style)) score += Number(profile.adjacentBoost) || 0;
+  else if (profile.avoid?.includes(style)) score -= Number(profile.avoidPenalty) || 0;
+  else score -= Number(profile.unknownPenalty) || 0;
+
+  if (profile.energy && Object.prototype.hasOwnProperty.call(profile.energy, energy)) {
+    score += Number(profile.energy[energy]) || 0;
   }
 
-  if (context === "treino") {
-    const workoutStyles = new Set([
-      "tech_house",
-      "techno",
-      "peak_time_techno",
-      "hard_techno",
-      "industrial_techno",
-      "drum_and_bass",
-      "neurofunk",
-      "jump_up",
-      "bass_house",
-      "electro_house",
-      "brazilian_funk",
-      "gabber",
-      "hardstyle"
-    ]);
-    let boost = workoutStyles.has(style) ? 4.4 : 0;
-    if (["high", "extreme"].includes(energy)) boost += 1.4;
-    if (["ambient", "downtempo", "chillout", "organic_house", "deep_house", "future_garage"].includes(style)) boost -= 3.2;
-    return boost;
-  }
+  return explicitStyle ? score * 0.45 : score;
+}
 
-  return 0;
+function contextStyleBoost(track, prefs = {}) {
+  return contextTargetStyleScore(track, prefs);
 }
 
 function energyDistance(a = "", b = "") {
@@ -29691,20 +29712,17 @@ function contextAffinityScore(track, prefs = {}) {
 
   const style = String(track.style || "");
   const energy = String(track.energy || "");
-  const styleGroups = {
-    foco: new Set(["ambient", "downtempo", "chillout", "idm", "deep_house", "organic_house", "future_garage", "minimal_techno", "liquid_dnb"]),
-    trabalho: new Set(["techno", "minimal_techno", "melodic_techno", "deep_house", "organic_house", "future_garage", "liquid_dnb", "idm"]),
-    treino: new Set(["tech_house", "techno", "peak_time_techno", "hard_techno", "industrial_techno", "drum_and_bass", "neurofunk", "jump_up", "bass_house", "brazilian_funk"]),
-    after: new Set(["chillout", "downtempo", "ambient", "deep_house", "organic_house", "future_garage", "slambient", "dark_progressive"]),
-    peak: new Set(["tech_house", "techno", "peak_time_techno", "hard_techno", "psytrance", "full_on", "full_on_night", "drum_and_bass", "neurofunk"])
-  };
-  const group = styleGroups[context];
-  if (group?.has(style)) score += 1.8;
+  const profile = contextTargetProfile(context);
+  if (profile) {
+    if (profile.primary?.includes(style)) score += 2.6;
+    else if (profile.adjacent?.includes(style)) score += 1.1;
+    else if (profile.avoid?.includes(style)) score -= 6.2;
+    else score -= Math.min(1.2, Number(profile.unknownPenalty) || 0);
 
-  if ((context === "foco" || context === "trabalho") && energy === "extreme") score -= 3.4;
-  if (context === "foco" && energy === "high") score -= 1.2;
-  if ((context === "treino" || context === "peak") && ["high", "extreme"].includes(energy)) score += 1.2;
-  if (context === "after" && ["low", "mid"].includes(energy)) score += 1.1;
+    if (profile.energy && Object.prototype.hasOwnProperty.call(profile.energy, energy)) {
+      score += clampScore((Number(profile.energy[energy]) || 0) * 0.42, -4.4, 2.2);
+    }
+  }
   return score;
 }
 
@@ -29939,8 +29957,9 @@ function recommendationPrecisionScore(track, prefs = {}) {
   }
 
   if (prefs.context) {
-    if (contexts.includes(prefs.context)) score += 3;
-    else score += Math.max(-2.6, contextAffinityScore(track, prefs) * 0.8 - 1.4);
+    const contextFit = contextAffinityScore(track, prefs);
+    if (contexts.includes(prefs.context)) score += 3 + Math.min(0, contextFit * 0.58);
+    else score += Math.max(-2.6, contextFit * 0.8 - 1.4);
   }
 
   if (prefs.energy) {

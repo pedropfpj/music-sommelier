@@ -4381,9 +4381,14 @@ input[type="range"] {
 
 .feedback-refinement-layout {
   display: grid;
-  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: minmax(280px, 0.86fr) minmax(360px, 1.14fr);
   gap: 0.62rem;
-  align-items: stretch;
+  align-items: start;
+}
+
+.feedback-refinement-layout > * {
+  min-width: 0;
+  align-self: start;
 }
 
 .swipe-start-panel {
@@ -5691,9 +5696,9 @@ input[type="range"] {
     linear-gradient(155deg, rgba(3, 9, 23, 0.98), rgba(8, 19, 42, 0.91));
   padding: clamp(1rem, 2.4vw, 1.5rem);
   display: grid;
-  grid-template-columns: minmax(250px, 420px) minmax(0, 1fr);
+  grid-template-columns: minmax(270px, 410px) minmax(340px, 1fr);
   gap: clamp(1rem, 2.4vw, 1.7rem);
-  align-items: stretch;
+  align-items: start;
   box-shadow:
     0 24px 70px rgba(1, 8, 24, 0.72),
     0 0 42px rgba(86, 228, 255, 0.13),
@@ -5809,7 +5814,10 @@ input[type="range"] {
   align-content: start;
   gap: 0.58rem;
   min-width: 0;
-  padding-block: 0.15rem;
+  padding: clamp(0.2rem, 0.8vw, 0.55rem) 0 clamp(0.2rem, 0.8vw, 0.55rem) clamp(0.85rem, 1.6vw, 1.2rem);
+  border-left: 1px solid rgba(139, 255, 222, 0.34);
+  background: linear-gradient(90deg, rgba(132, 232, 255, 0.08), transparent 72%);
+  border-radius: 0 16px 16px 0;
 }
 
 .spirit-name {
@@ -5833,10 +5841,10 @@ input[type="range"] {
 }
 
 .spirit-description {
-  color: #d9ecff;
-  line-height: 1.58;
-  font-size: clamp(1rem, 1.75vw, 1.1rem);
-  max-width: 66ch;
+  color: #eef9ff;
+  line-height: 1.62;
+  font-size: clamp(1.04rem, 1.5vw, 1.18rem);
+  max-width: 74ch;
   overflow-wrap: anywhere;
   word-break: normal;
 }
@@ -6119,13 +6127,13 @@ input[type="range"] {
 
 .spirit-collectible-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(0.75rem, 1.6vw, 1rem);
+  grid-template-columns: minmax(320px, 500px) minmax(360px, 1fr);
+  gap: clamp(0.9rem, 2vw, 1.25rem);
   align-items: start;
 }
 
 .spirit-collectible.awaiting-image .spirit-collectible-grid {
-  grid-template-columns: minmax(260px, 0.86fr) minmax(0, 1.14fr);
+  grid-template-columns: minmax(300px, 480px) minmax(360px, 1fr);
 }
 
 .spirit-collectible.awaiting-image .spirit-collectible-meta {
@@ -6241,18 +6249,20 @@ input[type="range"] {
 .spirit-collectible-meta {
   display: grid;
   align-content: start;
-  gap: 0.52rem;
+  gap: 0.62rem;
+  max-width: 78ch;
 }
 
 .spirit-collectible-milestone {
-  color: #dbf3ff;
-  font-weight: 700;
+  color: #f3fbff;
+  font-size: clamp(1.05rem, 1.55vw, 1.28rem);
+  font-weight: 800;
 }
 
 .spirit-collectible-details {
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: #bde4ff;
+  font-size: clamp(0.98rem, 1.1vw, 1.08rem);
+  line-height: 1.62;
+  color: #dff4ff;
   overflow-wrap: normal;
   word-break: normal;
 }
@@ -6294,7 +6304,7 @@ input[type="range"] {
 
 @media (max-width: 1180px) {
   .spirit-card {
-    grid-template-columns: minmax(160px, 230px) minmax(0, 1fr);
+    grid-template-columns: minmax(220px, 330px) minmax(0, 1fr);
   }
 
   .spirit-lore-panel {
@@ -6310,6 +6320,10 @@ input[type="range"] {
   }
 
   .spirit-collectible-image {
+    max-width: min(100%, 420px);
+  }
+
+  .spirit-collectible-placeholder {
     max-width: min(100%, 420px);
   }
 
@@ -7580,6 +7594,53 @@ input[type="range"] {
     border-radius: 18px;
     padding: 0.9rem;
     gap: 0.9rem;
+  }
+
+  .spirit-copy {
+    padding: 0;
+    border-left: 0;
+    background: none;
+    border-radius: 0;
+  }
+
+  .spirit-description {
+    color: #eefaff;
+    font-size: 1.03rem;
+    line-height: 1.58;
+  }
+
+  .spirit-collectible {
+    gap: 0.74rem;
+    padding: 1rem;
+  }
+
+  .spirit-collectible-header {
+    align-items: flex-start;
+  }
+
+  .spirit-collectible-image,
+  .spirit-collectible-placeholder {
+    max-width: min(100%, 350px);
+    border-radius: 16px;
+  }
+
+  .spirit-collectible-meta {
+    gap: 0.55rem;
+  }
+
+  .spirit-collectible-details {
+    color: #e8f8ff;
+    font-size: 1rem;
+    line-height: 1.62;
+  }
+
+  .spirit-collectible-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .rating-panel,
+  .feedback-action-group {
+    padding: 0.78rem;
   }
 
   .spirit-avatar-wrap {
