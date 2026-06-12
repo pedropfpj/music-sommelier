@@ -27,7 +27,43 @@ function cleanTitle(value = "") {
     .trim();
 }
 
-function normalizeTrack(row, style) {
+function selectPlayableTranscoding(row) {
+  const transcodings = Array.isArray(row?.media?.transcodings) ? row.media.transcodings : [];
+  const playable = transcodings.filter((item) => item?.url);
+  if (!playable.length) return null;
+
+  const progressiveMp3 = playable.find((item) => {
+    const protocol = String(item?.format?.protocol || "").toLowerCase();
+    const mime = String(item?.format?.mime_type || "").toLowerCase();
+    return protocol === "progressive" && /mpeg|mp3/.test(mime);
+  });
+  if (progressiveMp3) return progressiveMp3;
+
+  return playable.find((item) => String(item?.format?.protocol || "").toLowerCase() === "progressive") || null;
+}
+
+async function resolvePreviewUrl(row, token) {
+  if (row?.streamable === false) return "";
+  const transcoding = selectPlayableTranscoding(row);
+  const endpoint = String(transcoding?.url || "").trim();
+  if (!endpoint) return "";
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: {
+        Authorization: `OAuth ${token}`,
+        Accept: "application/json"
+      }
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload?.url) return "";
+    return trimText(payload.url, 1800);
+  } catch (_err) {
+    return "";
+  }
+}
+
+async function normalizeTrack(row, style, token, { resolvePreview = false } = {}) {
   const user = row?.user || {};
   const genre = trimText(row?.genre || "", 90);
   const tags = trimText(row?.tag_list || "", 220);
@@ -41,6 +77,7 @@ function normalizeTrack(row, style) {
   const durationMs = Number(row?.duration) || 0;
   const createdAt = String(row?.created_at || "").slice(0, 10);
   const releaseDate = String(row?.release_date || row?.display_date || createdAt || "").slice(0, 10);
+  const previewUrl = resolvePreview ? await resolvePreviewUrl(row, token) : "";
 
   return {
     id: String(row.id || row.permalink_url),
@@ -54,6 +91,12 @@ function normalizeTrack(row, style) {
     bpmExact: bpm > 0 ? bpm : 0,
     durationSec: durationMs > 0 ? Math.round(durationMs / 1000) : 0,
     releaseDate: releaseDate || "SoundCloud",
+    previewUrl,
+    preview: previewUrl,
+    previewCandidates: previewUrl ? [previewUrl] : [],
+    previewSource: previewUrl ? "soundcloud_transcoding" : "",
+    previewResolved: Boolean(previewUrl),
+    streamable: row?.streamable !== false,
     soundcloudTrackUrl: row.permalink_url,
     artworkUrl: row.artwork_url || user.avatar_url || "",
     description: trimText(row.description || "", 700),
@@ -106,6 +149,12 @@ async function getSoundCloudToken() {
 
 async function fetchSoundCloudTracks({ query, style, limit }) {
   const token = await getSoundCloudToken();
+  const previewResolveLimit = envInt(
+    "SONIC_SOUNDCLOUD_PREVIEW_RESOLVE_LIMIT",
+    Math.min(Number(limit) || 8, 8),
+    0,
+    20
+  );
   const params = new URLSearchParams({
     q: query,
     limit: String(limit),
@@ -128,9 +177,11 @@ async function fetchSoundCloudTracks({ query, style, limit }) {
   }
 
   const rawRows = Array.isArray(payload) ? payload : Array.isArray(payload.collection) ? payload.collection : [];
-  const tracks = rawRows
-    .map((row) => normalizeTrack(row, style))
-    .filter(Boolean);
+  const tracks = (await Promise.all(
+    rawRows.map((row, index) => normalizeTrack(row, style, token, {
+      resolvePreview: index < previewResolveLimit
+    }))
+  )).filter(Boolean);
 
   return tracks;
 }
