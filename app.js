@@ -5343,7 +5343,7 @@ let voiceMiniBarIndex = 0;
 let voiceMiniVoiceBuffer = null;
 let voiceMiniOutputBus = null;
 let voiceMiniBpm = 128;
-let voiceMiniVoiceLevel = 120;
+let voiceMiniVoiceLevel = 110;
 let voiceMiniVoiceLength = 100;
 let voiceMiniSwingAmount = 12;
 let voiceMiniSynthType = "glow";
@@ -18667,9 +18667,21 @@ function refreshVoiceMiniOutputBus(ctx = audioContext) {
   const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
   const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
   const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
+  const preview = Boolean(voiceMiniOutputBus.preview);
+  const baseInputGain = voiceMiniBaseMusicInputGain(preview);
 
+  if (voiceMiniOutputBus.input?.gain) {
+    voiceMiniOutputBus.input.gain.setTargetAtTime(baseInputGain, now, 0.035);
+    voiceMiniOutputBus.baseInputGain = baseInputGain;
+  }
   if (voiceMiniOutputBus.post?.gain) {
-    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * 0.82, now, 0.045);
+    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * (preview ? 0.76 : 0.88), now, 0.045);
+  }
+  if (voiceMiniOutputBus.voiceInput?.gain) {
+    voiceMiniOutputBus.voiceInput.gain.setTargetAtTime(preview ? 0.96 : 1.02, now, 0.035);
+  }
+  if (voiceMiniOutputBus.voicePost?.gain) {
+    voiceMiniOutputBus.voicePost.gain.setTargetAtTime(preview ? 0.9 : 0.96, now, 0.045);
   }
   if (voiceMiniOutputBus.shaper) {
     voiceMiniOutputBus.shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
@@ -19042,15 +19054,15 @@ async function getNormalizedVoiceBuffer(ctx) {
     }
   }
   const rms = sampleCount > 0 ? Math.sqrt(sumSquares / sampleCount) : 0;
-  const peakBoost = peak > 0.0001 ? 0.88 / peak : 1;
-  const rmsBoost = rms > 0.0001 ? 0.22 / rms : 1;
-  const boost = Math.max(1, Math.min(8, peakBoost, rmsBoost));
+  const peakBoost = peak > 0.0001 ? 0.76 / peak : 1;
+  const rmsBoost = rms > 0.0001 ? 0.18 / rms : 1;
+  const boost = Math.max(1, Math.min(6, peakBoost, rmsBoost));
   for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
     const source = decoded.getChannelData(channel);
     const target = normalized.getChannelData(channel);
     for (let i = 0; i < source.length; i += 1) {
       const amplified = source[i] * boost;
-      target[i] = Math.tanh(amplified * 0.86);
+      target[i] = Math.tanh(amplified * 0.72) * 0.96;
     }
   }
   voiceRecordingNormalizedBuffer = normalized;
@@ -19132,8 +19144,17 @@ function createMiniDriveCurve(amount = 0) {
   return curve;
 }
 
+function voiceMiniBaseMusicInputGain(preview = false) {
+  return preview ? 0.78 : 0.66;
+}
+
+function voiceMiniVoiceDestination(destination) {
+  return destination?.__voiceMiniVoiceInput || voiceMiniOutputBus?.voiceInput || destination;
+}
+
 function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } = {}) {
   const input = trackVoiceMiniNode(ctx.createGain());
+  const voiceInput = trackVoiceMiniNode(ctx.createGain());
   const master = trackVoiceMiniNode(ctx.createGain());
   const shaper = trackVoiceMiniNode(ctx.createWaveShaper());
   const phaser = trackVoiceMiniNode(ctx.createBiquadFilter());
@@ -19144,12 +19165,19 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
   const masterHighpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const masterLowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
   const post = trackVoiceMiniNode(ctx.createGain());
+  const voiceHighpass = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const voicePresence = trackVoiceMiniNode(ctx.createBiquadFilter());
+  const voiceCompressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
+  const voicePost = trackVoiceMiniNode(ctx.createGain());
+  const mixLimiter = trackVoiceMiniNode(ctx.createDynamicsCompressor());
   const phaserAmount = clampVoiceMiniPercent(voiceMiniPhaserAmount, 0, 80, 30) / 100;
   const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
   const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
   const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
+  const baseInputGain = voiceMiniBaseMusicInputGain(preview);
 
-  input.gain.value = preview ? 0.82 : 0.74;
+  input.gain.value = baseInputGain;
+  voiceInput.gain.value = preview ? 0.96 : 1.02;
   shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
   shaper.oversample = "4x";
   phaser.type = "allpass";
@@ -19169,7 +19197,25 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
   masterLowpass.type = "lowpass";
   masterLowpass.frequency.value = 14800;
   masterLowpass.Q.value = 0.42;
-  post.gain.value = (preview ? 0.72 : 0.82) * masterAmount * globalVolume;
+  post.gain.value = (preview ? 0.76 : 0.88) * masterAmount * globalVolume;
+  voiceHighpass.type = "highpass";
+  voiceHighpass.frequency.value = 105;
+  voiceHighpass.Q.value = 0.62;
+  voicePresence.type = "peaking";
+  voicePresence.frequency.value = 2450;
+  voicePresence.Q.value = 0.92;
+  voicePresence.gain.value = 2.8;
+  voiceCompressor.threshold.value = -20;
+  voiceCompressor.knee.value = 16;
+  voiceCompressor.ratio.value = 2.6;
+  voiceCompressor.attack.value = 0.004;
+  voiceCompressor.release.value = 0.18;
+  voicePost.gain.value = preview ? 0.9 : 0.96;
+  mixLimiter.threshold.value = -5.5;
+  mixLimiter.knee.value = 6;
+  mixLimiter.ratio.value = 7.5;
+  mixLimiter.attack.value = 0.002;
+  mixLimiter.release.value = 0.12;
 
   input.connect(master);
   master.connect(shaper);
@@ -19183,10 +19229,21 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
   compressor.connect(masterHighpass);
   masterHighpass.connect(masterLowpass);
   masterLowpass.connect(post);
-  post.connect(ctx.destination);
+  voiceInput.connect(voiceHighpass);
+  voiceHighpass.connect(voicePresence);
+  voicePresence.connect(voiceCompressor);
+  voiceCompressor.connect(voicePost);
+  post.connect(mixLimiter);
+  voicePost.connect(mixLimiter);
+  mixLimiter.connect(ctx.destination);
+
+  input.__voiceMiniVoiceInput = voiceInput;
 
   const outputBus = {
+    preview,
+    baseInputGain,
     input,
+    voiceInput,
     shaper,
     phaser,
     delay,
@@ -19195,6 +19252,11 @@ function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } =
     masterHighpass,
     masterLowpass,
     post,
+    voiceHighpass,
+    voicePresence,
+    voiceCompressor,
+    voicePost,
+    mixLimiter,
     phaserLfo: null,
     phaserDepth: null
   };
@@ -19549,9 +19611,10 @@ function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, dura
   const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
   const phraseDuration = Math.min(safeDuration, beat * 7.4);
   const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
+  const voiceDestination = voiceMiniVoiceDestination(destination);
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
   voiceBus.gain.value = 0.88;
-  voiceBus.connect(destination);
+  voiceBus.connect(voiceDestination);
 
   const phrase = trackVoiceMiniNode(ctx.createBufferSource());
   const phraseGain = trackVoiceMiniNode(ctx.createGain());
@@ -19607,12 +19670,13 @@ function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, 
   const sourceDuration = Math.max(0.08, Math.min(phraseDuration, safeDuration - phraseOffset));
   const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
   const beatmasherAmount = clampVoiceMiniPercent(voiceMiniBeatmasherAmount, 0, 100, 20) / 100;
+  const voiceDestination = voiceMiniVoiceDestination(destination);
   const voiceBus = trackVoiceMiniNode(ctx.createGain());
   const firstVoiceStep = activeVoiceSteps[0] || 0;
   const phraseStart = voiceMiniStepBeatTime(start, beat, firstVoiceStep);
 
   voiceBus.gain.value = 0.86;
-  voiceBus.connect(destination);
+  voiceBus.connect(voiceDestination);
   if (shouldPlayMainPhrase) {
     const source = trackVoiceMiniNode(ctx.createBufferSource());
     const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
@@ -19827,7 +19891,7 @@ async function previewVoiceDawPad(kind = "kick") {
     gain.gain.setValueAtTime(0.64 * voicePresence, now + Math.max(0.04, previewDuration - 0.08));
     gain.gain.linearRampToValueAtTime(0.0001, now + previewDuration);
     connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
-    gain.connect(bus);
+    gain.connect(voiceMiniVoiceDestination(bus));
     source.start(now, 0, previewDuration);
     source.stop(now + previewDuration + 0.04);
   }
