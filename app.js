@@ -4707,6 +4707,7 @@ const authUsernameLabel = document.getElementById("authUsernameLabel");
 const authPasswordLabel = document.getElementById("authPasswordLabel");
 const authUsername = document.getElementById("authUsername");
 const authPassword = document.getElementById("authPassword");
+const authResumeBtn = document.getElementById("authResumeBtn");
 const authLoginBtn = document.getElementById("authLoginBtn");
 const authGuestBtn = document.getElementById("authGuestBtn");
 const authTestUserBtn = document.getElementById("authTestUserBtn");
@@ -13277,13 +13278,14 @@ const I18N = {
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
+    authResumeSavedBtn: "Retomar perfil salvo",
     authLoginBtn: "Entrar",
     authGuestBtn: "Continuar sem login",
     authTestUserBtn: "Testar novo usuário",
     authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Modo visitante ativado. Você pode usar o app sem login.",
-    authSavedProfileReady: "Perfil salvo encontrado para {user}. Entre para continuar nele ou teste como usuário novo.",
+    authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
     authTestUserReady: "Modo teste criado para {user}. Dados reais salvos não foram apagados.",
     authSocialDivider: "ou entre com",
     authGoogleBtn: "Continuar com Google",
@@ -13833,7 +13835,7 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "A entidade humana realista exige geração IA. Sem imagem pronta, não mostro avatar local genérico.",
+    spiritCollectibleHintLocal: "Para gerar o busto humano realista, abra o app pelo link do Vercel e toque em Gerar arte única IA. No arquivo local, a API de imagem não funciona; por isso não mostro avatar genérico.",
     spiritCollectibleHintApi: "Arte premium por IA criada para este perfil: entidade humana adulta, realista, carismática e com características do espírito.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais avatares humanos em alta qualidade.",
@@ -13915,13 +13917,14 @@ const I18N = {
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
+    authResumeSavedBtn: "Resume saved profile",
     authLoginBtn: "Sign in",
     authGuestBtn: "Continue without login",
     authTestUserBtn: "Test new user",
     authRequired: "Fill username and password to sign in, or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Guest mode enabled. You can use the app without login.",
-    authSavedProfileReady: "Saved profile found for {user}. Sign in to continue or test as a new user.",
+    authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
     authTestUserReady: "Test mode created for {user}. Your real saved data was not erased.",
     authSocialDivider: "or continue with",
     authGoogleBtn: "Continue with Google",
@@ -14468,7 +14471,7 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "The realistic human entity requires AI generation. Without a ready image, no generic local avatar is shown.",
+    spiritCollectibleHintLocal: "To generate the realistic human bust, open the Vercel app link and tap Generate unique AI art. The local file cannot reach the image API, so no generic avatar is shown.",
     spiritCollectibleHintApi: "Premium AI artwork created for this profile: an adult, realistic, charismatic human entity with spirit-specific traits.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality human avatars.",
@@ -14550,13 +14553,14 @@ const I18N = {
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
+    authResumeSavedBtn: "Retomar perfil guardado",
     authLoginBtn: "Entrar",
     authGuestBtn: "Continuar sin login",
     authTestUserBtn: "Probar usuario nuevo",
     authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Modo invitado activado. Puedes usar la app sin login.",
-    authSavedProfileReady: "Perfil guardado encontrado para {user}. Entra para continuar o prueba como usuario nuevo.",
+    authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
     authTestUserReady: "Modo prueba creado para {user}. Tus datos reales guardados no se borraron.",
     authSocialDivider: "o entra con",
     authGoogleBtn: "Continuar con Google",
@@ -15100,7 +15104,7 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "La entidad humana realista requiere generación con IA. Sin imagen lista, no muestro un avatar local genérico.",
+    spiritCollectibleHintLocal: "Para generar el busto humano realista, abre el link de Vercel y toca Generar arte único IA. El archivo local no puede usar la API de imagen; por eso no muestro avatar genérico.",
     spiritCollectibleHintApi: "Arte premium con IA creada para este perfil: entidad humana adulta, realista, carismática y con rasgos del espíritu.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más avatares humanos en alta calidad.",
@@ -15822,6 +15826,7 @@ function applyLanguage() {
   setText("#authDesc", t("authDesc"));
   setText("#authUsernameLabel", t("authUsernameLabel"));
   setText("#authPasswordLabel", t("authPasswordLabel"));
+  setText("#authResumeBtn", t("authResumeSavedBtn"));
   setText("#authLoginBtn", t("authLoginBtn"));
   setText("#authGuestBtn", t("authGuestBtn"));
   setText("#authTestUserBtn", t("authTestUserBtn"));
@@ -17932,10 +17937,18 @@ function showAuthScreen() {
     });
   }
   if (storedUser && storedUser.mode !== "guest") {
+    if (authResumeBtn) {
+      authResumeBtn.classList.remove("hidden");
+      authResumeBtn.disabled = false;
+    }
     setAuthFeedback(t("authSavedProfileReady", {
       user: storedUser.username || storedUser.email || t("summaryNoData")
     }));
   } else {
+    if (authResumeBtn) {
+      authResumeBtn.classList.add("hidden");
+      authResumeBtn.disabled = true;
+    }
     setAuthFeedback("");
   }
   if (authUsername) authUsername.focus();
@@ -18099,6 +18112,22 @@ function loginWithCredentials() {
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authLoggedAs", { user: username }));
+  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+}
+
+function resumeStoredUserSession() {
+  const storedUser = readStoredUserSession();
+  if (!storedUser || storedUser.mode === "guest") {
+    setAuthFeedback(t("authRequired"), true);
+    playUiSfx("error");
+    return;
+  }
+  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
+  activateUserSession(storedUser);
+  persistUserSession(storedUser);
+  setAuthFeedback(t("authLoggedAs", {
+    user: storedUser.username || storedUser.email || t("summaryNoData")
+  }));
   continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
@@ -35084,6 +35113,7 @@ languageButtons.forEach((button) => {
 
 bind(usageGuideContinueBtn, "click", continueFromUsageGuide);
 bind(showUsageGuideBtn, "click", () => showUsageGuideScreen({ returnTo: "app" }));
+bind(authResumeBtn, "click", resumeStoredUserSession);
 bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
 bind(authTestUserBtn, "click", testAsNewUser);
