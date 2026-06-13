@@ -11617,11 +11617,12 @@ iframe {
   }
 
   .now-playing-genre strong.is-long-word {
-    --now-playing-style-size: clamp(1.16rem, 6.4vw, 1.72rem);
+    --now-playing-style-size: clamp(1.02rem, 5.35vw, 1.42rem);
+    white-space: nowrap;
   }
 
   .now-playing-genre strong.is-long-label {
-    --now-playing-style-size: clamp(1.06rem, 5.8vw, 1.58rem);
+    --now-playing-style-size: clamp(1rem, 5.2vw, 1.42rem);
   }
 
   .now-playing-genre small {

@@ -7377,6 +7377,7 @@ const ARTIST_STYLE_OVERRIDES = {
   outolintu: ["freeform"],
   "james reipas": ["freeform"],
   "troll scientists": ["freeform"],
+  "vertical": ["blocked_ambiguous_artist"],
   "angerfist": ["gabber"],
   "neophyte": ["gabber"],
   "rotterdam terror corps": ["gabber"],
@@ -7860,7 +7861,8 @@ const FOREST_PSY_ARTIST_BLOCKLIST = [
   "outsiders",
   "faders",
   "vegas",
-  "claudinho brasil"
+  "claudinho brasil",
+  "vertical"
 ];
 
 const STYLE_ARTIST_BLOCKLIST = {
@@ -10705,8 +10707,12 @@ function requiresExactBpmForDynamic(style, source = "") {
   // Psycore em APIs abertas quase nunca vem com BPM exato; mantemos filtro por artista seed/estilo e liberamos fallback de BPM.
   if (style === "psycore") return false;
   const sourceKey = normalize(source || "").replace(/[\s_]+/g, "");
+  const isExpansionSource =
+    sourceKey.includes("verifieddeezerexpansion") ||
+    sourceKey.includes("verifiedtrackexpansion") ||
+    sourceKey.includes("artistexpansion");
   if (isDynamicSource(source) && sourceKey.includes("dataset")) return false;
-  if (isDynamicSource(source) && (sourceKey.includes("artist") || sourceKey.includes("soundcloud"))) return false;
+  if (isDynamicSource(source) && !isExpansionSource && (sourceKey.includes("artist") || sourceKey.includes("soundcloud"))) return false;
   return STRICT_DYNAMIC_BPM_STYLES.has(style);
 }
 
@@ -11821,6 +11827,9 @@ function isDynamicSource(source) {
     compactSource.includes("itunesartist") ||
     compactSource.includes("deezerstyle") ||
     compactSource.includes("deezerartist") ||
+    compactSource.includes("verifieddeezerexpansion") ||
+    compactSource.includes("verifiedtrackexpansion") ||
+    compactSource.includes("artistexpansion") ||
     compactSource.includes("dataset") ||
     compactSource.includes("soundcloudapi") ||
     compactSource.includes("soundclouddynamic")
@@ -24267,6 +24276,7 @@ function formatBpmLine(track) {
 function genreGuideSummary(track) {
   const style = track?.style || "";
   if (!style) return "";
+  if (trackStyleCertainty(track) !== "confirmed") return "";
   const styleLabel = styleLabelByValue(style);
   const summary = styleInfoSummaryByLanguage(style);
   const bpmRange = styleBpmRangeCompact(style) || resolveBpmDisplay(track).range || t("bpmUnverifiedLabel");
@@ -29362,7 +29372,46 @@ function spiritMascotVariant(spirit, seed = 0) {
   return variants[Math.abs(Number(seed) || 0) % variants.length] || variants[0];
 }
 
-function spiritMascotQuote(variant = {}, spiritText = {}) {
+function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
+  const profile = resolveSpiritNarrativeProfile(spirit);
+  const family = familyOf(profile.dominantStyleKey || "");
+  const copies = {
+    pt: {
+      psytrance: "Seu espírito busca viagem, ritual e camadas que mudam sem pressa.",
+      techno: "Seu espírito constrói tensão com repetição, precisão e release calculado.",
+      house: "Seu espírito reconhece calor, swing e groove social no primeiro pulso.",
+      dnb: "Seu espírito persegue velocidade, contraste e subgrave com fluidez.",
+      bass_music: "Seu espírito reage a peso físico, textura e viradas que mudam o ar.",
+      leftfield: "Seu espírito percebe beleza no estranho quando ele começa a fazer sentido.",
+      trance: "Seu espírito procura melodia, suspensão e energia que abre espaço.",
+      hard_dance: "Seu espírito prefere catarse direta, kick forte e energia no limite.",
+      outros: "Seu espírito compara clima, textura e pulso antes de entregar o like."
+    },
+    en: {
+      psytrance: "Your spirit looks for journey, ritual, and layers that shift slowly.",
+      techno: "Your spirit builds tension through repetition, precision, and timed release.",
+      house: "Your spirit catches warmth, swing, and social groove in the first pulse.",
+      dnb: "Your spirit chases speed, contrast, and sub pressure with fluid motion.",
+      bass_music: "Your spirit reacts to physical weight, texture, and air-bending turns.",
+      leftfield: "Your spirit finds beauty in the strange once it starts making sense.",
+      trance: "Your spirit seeks melody, lift, and energy that opens space.",
+      hard_dance: "Your spirit prefers direct catharsis, hard kicks, and edge energy.",
+      outros: "Your spirit compares mood, texture, and pulse before giving the like."
+    },
+    es: {
+      psytrance: "Tu espiritu busca viaje, ritual y capas que cambian sin prisa.",
+      techno: "Tu espiritu construye tension con repeticion, precision y release calculado.",
+      house: "Tu espiritu reconoce calor, swing y groove social en el primer pulso.",
+      dnb: "Tu espiritu persigue velocidad, contraste y subgrave con fluidez.",
+      bass_music: "Tu espiritu reacciona al peso fisico, textura y giros que cambian el aire.",
+      leftfield: "Tu espiritu ve belleza en lo extrano cuando empieza a tener sentido.",
+      trance: "Tu espiritu busca melodia, elevacion y energia que abre espacio.",
+      hard_dance: "Tu espiritu prefiere catarsis directa, kick fuerte y energia al limite.",
+      outros: "Tu espiritu compara clima, textura y pulso antes de dar el like."
+    }
+  };
+  const familyCopy = (copies[currentLanguage] || copies.pt)[family] || (copies[currentLanguage] || copies.pt).outros;
+  if (familyCopy) return truncateByWordBoundary(familyCopy, 118);
   const quoted = variant?.quote?.[currentLanguage] || variant?.quote?.pt || "";
   if (quoted) return quoted;
   return truncateByWordBoundary(buildSpiritCollectibleCopy(null, spiritText), 92);
@@ -30341,7 +30390,7 @@ function buildLocalSpiritCollectibleImage(
   const statusLine = normalizeInlineText(profile?.status || rank);
   const seed = hashString(`${spirit?.id || "spirit"}::card::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`) >>> 0;
   const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
-  const quote = spiritMascotQuote(variant, spiritText);
+  const quote = spiritMascotQuote(spirit, variant, spiritText);
   const titleLines = splitIntoSvgLines(spiritTitle, 19, 2);
   const archetypeLines = splitIntoSvgLines(archetype, 24, 1);
   const genreLines = splitIntoSvgLines(favoriteGenre, 12, 2);
@@ -30381,8 +30430,8 @@ function buildLocalSpiritCollectibleImage(
     const y = 802 - height;
     return `<rect x="${x}" y="${y}" width="10" height="${height}" rx="5" fill="${escapeSvgText(index % 2 ? theme.b : theme.a)}" fill-opacity="${(0.08 + (index % 5) * 0.035).toFixed(2)}" />`;
   }).join("");
-  const mascotSvg = `<image href="${escapeSvgText(safeBackgroundImage)}" x="80" y="128" width="652" height="652" preserveAspectRatio="xMidYMid slice" opacity="0.99" clip-path="url(#mascotClip)" />
-	       <rect x="80" y="128" width="652" height="652" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`;
+  const mascotSvg = `<image href="${escapeSvgText(safeBackgroundImage)}" x="80" y="198" width="652" height="558" preserveAspectRatio="xMidYMid slice" opacity="0.99" clip-path="url(#mascotClip)" />
+	       <rect x="80" y="198" width="652" height="558" fill="url(#mascotImageScrim)" clip-path="url(#mascotClip)" />`;
 
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
@@ -30431,7 +30480,7 @@ function buildLocalSpiritCollectibleImage(
       <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.38" />
     </filter>
     <clipPath id="mascotClip">
-      <rect x="80" y="128" width="652" height="652" rx="76" />
+      <rect x="80" y="198" width="652" height="558" rx="72" />
     </clipPath>
   </defs>
   <rect width="1080" height="1080" fill="url(#spiritCardBg)" />
@@ -30473,9 +30522,9 @@ function buildLocalSpiritCollectibleImage(
   </g>
 
   <g filter="url(#softShadow)">
-    <rect x="84" y="98" width="622" height="184" rx="34" fill="#070b24" fill-opacity="0.44" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
-    <text x="120" y="154" fill="${escapeSvgText(theme.a)}" font-size="30" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.4">${escapeSvgText(labels.spirit)}</text>
-    ${titleLines.map((line, index) => `<text x="120" y="${216 + index * 55}" fill="#ffffff" font-size="${titleLines.length > 1 ? 47 : 58}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+    <rect x="84" y="104" width="622" height="84" rx="28" fill="#070b24" fill-opacity="0.56" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.2" />
+    <text x="120" y="136" fill="${escapeSvgText(theme.a)}" font-size="23" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.4">${escapeSvgText(labels.spirit)}</text>
+    ${titleLines.map((line, index) => `<text x="120" y="${164 + index * 30}" fill="#ffffff" font-size="${titleLines.length > 1 ? 29 : 36}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
   </g>
   <g transform="translate(92 730)">
     <rect x="0" y="0" width="456" height="58" rx="29" fill="${escapeSvgText(theme.c)}" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.2" />
@@ -31369,7 +31418,7 @@ function renderTopListeners(track) {
   topListenersPanel.classList.remove("hidden");
   if (topListenersTitle) topListenersTitle.textContent = t("topListenersTitle");
   topListenersSubtitle.textContent = t("topListenersSubtitle", {
-    style: styleLabelByValue(track.style)
+    style: recommendationStyleDisplayLabel(track)
   });
   topListenersList.innerHTML = "";
 
@@ -31436,16 +31485,78 @@ function styleFamilyLabel(style = "") {
   return labels[family] || labels.outros;
 }
 
+function textHasSpecificStyleSignal(style = "", rawText = "") {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  const text = normalize(rawText || "");
+  if (!cleanStyle || !text) return false;
+  const aliases = [
+    cleanStyle,
+    cleanStyle.replace(/_/g, " "),
+    styleLabelByValue(cleanStyle),
+    STYLE_SEARCH_TERMS[cleanStyle],
+    ...(STYLE_ADVANCED_SEARCH_TERMS[cleanStyle] || [])
+  ]
+    .map((item) => normalize(item || ""))
+    .filter(Boolean);
+  return aliases.some((item) => text.includes(item));
+}
+
+function trackStyleCertainty(track = null) {
+  const style = normalizeDatasetStyle(track?.style || "");
+  if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
+  if (!artistAllowedForStyle(style, track.artist || "")) return "unsafe";
+  if (hasTrackStyleSignalConflict(style, track)) return "unsafe";
+  if (isTrustedCuratedCatalogTrack(track)) return "confirmed";
+
+  const dynamic = isDynamicSource(track.source || "");
+  const sourceKey = normalize(track.source || "").replace(/[\s_]+/g, "");
+  const allowedStyles = allowedStylesForArtist(track.artist || "");
+  const artistLocked = allowedStyles.length > 0 && allowedStyles.includes(style);
+  const seedAnchored = artistSeedAnchoredForStyle(style, track.artist || "");
+  const reliableBpm = hasReliableBpmForTrack(track);
+  const signalText = [
+    track.artistGenre,
+    track.label,
+    track.artistProfileHint,
+    track.vibe,
+    track.source
+  ].filter(Boolean).join(" ");
+  const specificSignal = textHasSpecificStyleSignal(style, signalText);
+
+  if (!dynamic && (reliableBpm || specificSignal)) return "confirmed";
+  if (artistLocked && reliableBpm) return "confirmed";
+  if (seedAnchored && reliableBpm && specificSignal) return "confirmed";
+  if (seedAnchored && reliableBpm) return "probable";
+  if (sourceKey.includes("dataset") && reliableBpm && specificSignal) return "probable";
+  return "estimated";
+}
+
+function recommendationStyleDisplayLabel(track = null, { allowProbable = false } = {}) {
+  const style = normalizeDatasetStyle(track?.style || "");
+  if (!style) return t("freeStyle");
+  const certainty = trackStyleCertainty(track);
+  if (certainty === "confirmed") return styleLabelByValue(style);
+  if (allowProbable && certainty === "probable") {
+    return `${styleLabelByValue(style)} ${sonicTinyCopy("(provavel)", "(probable)", "(probable)")}`;
+  }
+  return styleFamilyLabel(style);
+}
+
 function setGenreSignalChip(chip, track = null) {
   if (!chip) return;
   const style = normalize(track?.style || "");
-  const label = style ? styleLabelByValue(style) : t("freeStyle");
+  const label = style ? recommendationStyleDisplayLabel(track) : t("freeStyle");
+  const certainty = trackStyleCertainty(track);
   chip.textContent = label;
   chip.classList.add("genre-signal");
-  chip.dataset.label = sonicTinyCopy("Subgênero", "Subgenre", "Subgénero");
+  chip.dataset.label = certainty === "confirmed"
+    ? sonicTinyCopy("Subgênero", "Subgenre", "Subgénero")
+    : sonicTinyCopy("Família", "Family", "Familia");
   chip.dataset.family = familyOf(style);
   chip.title = style
-    ? `${sonicTinyCopy("Subgênero tocando", "Playing subgenre", "Subgénero actual")}: ${label}`
+    ? `${certainty === "confirmed"
+      ? sonicTinyCopy("Subgênero tocando", "Playing subgenre", "Subgénero actual")
+      : sonicTinyCopy("Família musical estimada", "Estimated music family", "Familia musical estimada")}: ${label}`
     : "";
 }
 
@@ -31458,13 +31569,18 @@ function renderNowPlayingGenre(track = null) {
     return;
   }
   const style = normalize(track.style || "");
-  const styleLabel = style ? styleLabelByValue(style) : t("freeStyle");
+  const styleLabel = style ? recommendationStyleDisplayLabel(track) : t("freeStyle");
+  const certainty = trackStyleCertainty(track);
   const bpmLabel = formatBpmLine(track);
   const energyLabel = energyLabelByValue(track.energy);
 
   nowPlayingGenre.classList.remove("hidden");
   nowPlayingGenre.dataset.family = familyOf(style);
-  if (nowPlayingKicker) nowPlayingKicker.textContent = sonicTinyCopy("Tocando agora", "Now playing", "Sonando ahora");
+  if (nowPlayingKicker) {
+    nowPlayingKicker.textContent = certainty === "confirmed"
+      ? sonicTinyCopy("Tocando agora", "Now playing", "Sonando ahora")
+      : sonicTinyCopy("Universo tocando", "Playing lane", "Universo actual");
+  }
   if (nowPlayingStyle) {
     const compactLabel = normalizeInlineText(styleLabel);
     const compactChars = compactLabel.replace(/\s+/g, "");
@@ -32521,7 +32637,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
 function recommendationMetaLine(track) {
   const bpmData = resolveBpmDisplay(track);
   const bpmText = bpmData.reasonText || bpmData.lineText;
-  return `${styleLabelByValue(track.style)} • ${bpmText} • ${energyLabelByValue(track.energy)}`;
+  return `${recommendationStyleDisplayLabel(track)} • ${bpmText} • ${energyLabelByValue(track.energy)}`;
 }
 
 function renderSuggestionQueue(prefs = lastPrefs) {
@@ -32550,7 +32666,7 @@ function renderSuggestionQueue(prefs = lastPrefs) {
     slotChip.textContent = index === 0 ? t("queueNow") : `${t("queueNext")} ${index}`;
     const styleChip = document.createElement("span");
     styleChip.className = "queue-chip alt";
-    styleChip.textContent = styleLabelByValue(track.style);
+    styleChip.textContent = recommendationStyleDisplayLabel(track);
     top.append(slotChip, styleChip);
 
     const trackLine = document.createElement("p");
@@ -32588,7 +32704,7 @@ function recommendationHasStrongFit(track) {
 function recommendationHumanReason(track, prefs = lastPrefs) {
   const bpmData = resolveBpmDisplay(track);
   const bpm = bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel");
-  const style = styleLabelByValue(track?.style || prefs?.style || "");
+  const style = track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "");
   const energy = energyLabelByValue(track?.energy || prefs?.energy || "");
   const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
   const knownUnion = buildGlobalArtistExclusionSet();
@@ -32732,7 +32848,7 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
   const sourceTrust = trackSourceTrustScore(track);
   const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
   const chips = [
-    t("recommendationWhyStyle", { style: styleLabelByValue(track.style || prefs?.style || "") }),
+    t("recommendationWhyStyle", { style: track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "") }),
     t("recommendationWhyBpm", { bpm: bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel") }),
     t("recommendationWhyNovelty", {
       status: artistSetHasMatch(knownUnion, track.artist) ? t("recommendationWhyKnown") : t("recommendationWhyNew")
@@ -32809,7 +32925,7 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
 function recommendationMicroReason(track, prefs = lastPrefs) {
   if (!track) return "";
   prefs = normalizeRecommendationPrefs(prefs || {});
-  const style = styleLabelByValue(track.style || prefs?.style || "");
+  const style = track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "");
   const styleText = style || sonicTinyCopy("essa rota", "this lane", "esta ruta");
   const energy = energyLabelByValue(track.energy || prefs?.energy || "").toLowerCase();
   const energyText = energy ? sonicTinyCopy(`energia ${energy}`, `${energy} energy`, `energia ${energy}`) : sonicTinyCopy("energia equilibrada", "balanced energy", "energia equilibrada");
@@ -33012,7 +33128,7 @@ function trackInsightCacheKey(track, prefs = lastPrefs) {
 }
 
 function buildTrackInsightPrompt(track, prefs = {}) {
-  const style = styleLabelByValue(track.style);
+  const style = recommendationStyleDisplayLabel(track);
   const bpmData = resolveBpmDisplay(track);
   const bpmDescriptor = bpmData.aiText;
   const context = prefs.context ? contextLabelByValue(prefs.context) : t("freeContext");
@@ -33029,7 +33145,7 @@ function buildTrackInsightPrompt(track, prefs = {}) {
 }
 
 function localTrackInsight(track, prefs = {}) {
-  const style = styleLabelByValue(track.style);
+  const style = recommendationStyleDisplayLabel(track);
   const bpmData = resolveBpmDisplay(track);
   const bpmValue = bpmData.aiText;
   const energy = energyLabelByValue(track.energy);
@@ -33050,12 +33166,12 @@ function localTrackInsight(track, prefs = {}) {
 
 function buildListeningNarrative(track, prefs = {}) {
   if (!track) return "";
-  const style = styleLabelByValue(track.style);
+  const style = recommendationStyleDisplayLabel(track);
   const energy = energyLabelByValue(track.energy);
   const bpmData = resolveBpmDisplay(track);
   const context = prefs.context ? contextLabelByValue(prefs.context) : t("freeContext");
   const genreSignal = String(track.artistGenre || localizedArtistGenreHint(track.artist, track.style) || "").trim();
-  const cue = genreSignal ? `${genreSignal} • ${style}` : style;
+  const cue = trackStyleCertainty(track) === "confirmed" && genreSignal ? `${genreSignal} • ${style}` : style;
 
   if (currentLanguage === "en") {
     return `Now playing: ${track.song}, by ${track.artist}. This sits near ${cue}, with ${energy.toLowerCase()} energy around ${bpmData.aiText}; good for ${context.toLowerCase()} if you want that pulse to take over.`;
@@ -34034,7 +34150,7 @@ function renderRecommendation(track, prefs) {
   if (artistName) artistName.textContent = track.artist;
   updateArtistOriginFlags(track);
   if (labelName) labelName.textContent = displayLabel;
-  if (styleName) styleName.textContent = styleLabelByValue(track.style);
+  if (styleName) styleName.textContent = recommendationStyleDisplayLabel(track);
   if (bpmInfo) bpmInfo.textContent = formatBpmLine(track);
   if (energyInfo) energyInfo.textContent = `${t("energyPrefix")} ${energyLabelByValue(track.energy)}`;
   renderNowPlayingGenre(track);
@@ -34042,7 +34158,7 @@ function renderRecommendation(track, prefs) {
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${meta.duration}`;
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
-  if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: styleLabelByValue(track.style) });
+  if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: recommendationStyleDisplayLabel(track) });
   renderRecommendationWhy(track, prefs);
   renderTrackCardSignals(track, prefs);
   renderGenreGuide(track);
@@ -35677,7 +35793,7 @@ function likedTrackMetaParts(entry = {}) {
   const track = { ...(trackFromRecommendationKey(entry.key) || {}), ...entry };
   const parts = [];
   const artist = formatSummaryArtistName(track.artist || "");
-  const style = styleLabelByValue(track.style || "");
+  const style = track.style ? recommendationStyleDisplayLabel(track) : "";
   const bpm = resolveBpmDisplay(track).range || "";
   const energy = track.energy ? energyLabelByValue(track.energy) : "";
   if (artist) parts.push(artist);
