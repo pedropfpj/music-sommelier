@@ -31435,6 +31435,7 @@ function renderNowPlayingGenre(track = null) {
   if (!track) {
     nowPlayingGenre.classList.add("hidden");
     nowPlayingGenre.removeAttribute("data-family");
+    if (nowPlayingStyle) nowPlayingStyle.classList.remove("is-long-word", "is-long-label");
     return;
   }
   const style = normalize(track.style || "");
@@ -31445,7 +31446,13 @@ function renderNowPlayingGenre(track = null) {
   nowPlayingGenre.classList.remove("hidden");
   nowPlayingGenre.dataset.family = familyOf(style);
   if (nowPlayingKicker) nowPlayingKicker.textContent = sonicTinyCopy("Tocando agora", "Now playing", "Sonando ahora");
-  if (nowPlayingStyle) nowPlayingStyle.textContent = styleLabel;
+  if (nowPlayingStyle) {
+    const compactLabel = normalizeInlineText(styleLabel);
+    const compactChars = compactLabel.replace(/\s+/g, "");
+    nowPlayingStyle.textContent = compactLabel;
+    nowPlayingStyle.classList.toggle("is-long-word", compactChars.length >= 8 && !/\s/.test(compactLabel));
+    nowPlayingStyle.classList.toggle("is-long-label", compactLabel.length >= 14);
+  }
   if (nowPlayingFamily) nowPlayingFamily.textContent = styleFamilyLabel(style);
   if (nowPlayingBpm) nowPlayingBpm.textContent = bpmLabel;
   if (nowPlayingEnergy) nowPlayingEnergy.textContent = `${t("energyPrefix")} ${energyLabel}`;
