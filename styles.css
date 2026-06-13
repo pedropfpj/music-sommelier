@@ -5189,6 +5189,24 @@ input[type="range"] {
   white-space: normal;
 }
 
+.recommendation-issue-buttons {
+  margin-top: 0.55rem;
+}
+
+.recommendation-issue-buttons button {
+  min-height: 36px;
+  border-color: rgba(138, 199, 255, 0.34);
+  background: rgba(5, 13, 25, 0.54);
+  color: rgba(230, 245, 255, 0.86);
+  font-size: clamp(0.69rem, 0.66rem + 0.12vw, 0.78rem);
+}
+
+.recommendation-issue-buttons button:hover,
+.recommendation-issue-buttons button:focus-visible {
+  border-color: rgba(126, 232, 198, 0.68);
+  color: #f7ffff;
+}
+
 .correction-buttons {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

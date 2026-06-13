@@ -5113,6 +5113,9 @@ const listeningPrompt = document.getElementById("listeningPrompt");
 const previewLikeBtn = document.getElementById("previewLikeBtn");
 const previewIssueBtn = document.getElementById("previewIssueBtn");
 const previewDislikeBtn = document.getElementById("previewDislikeBtn");
+const styleIssueBtn = document.getElementById("styleIssueBtn");
+const bpmIssueBtn = document.getElementById("bpmIssueBtn");
+const imageIssueBtn = document.getElementById("imageIssueBtn");
 const recentListenersPanel = document.getElementById("recentListenersPanel");
 const listenersSubtitle = document.getElementById("listenersSubtitle");
 const recentListenersList = document.getElementById("recentListenersList");
@@ -5382,6 +5385,7 @@ let trackRatings = new Map();
 let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
 let trackPreviewIssueSignals = new Map();
+let trackRecommendationIssueSignals = new Map();
 let likedTrackHistory = [];
 let dislikedTrackHistory = [];
 let swipeFeedbackBusy = false;
@@ -12113,6 +12117,27 @@ function adjustTrackPreviewIssueSignal(track, delta = 0) {
   trackPreviewIssueSignals.set(trackKey, Math.max(0.05, Math.min(8, next)));
 }
 
+const RECOMMENDATION_ISSUE_REASONS = new Set(["style_issue", "bpm_issue", "image_issue"]);
+
+function adjustTrackRecommendationIssueSignal(track, delta = 0) {
+  if (!track || !Number.isFinite(delta) || delta === 0) return;
+  const trackKey = recommendationTrackKey(track);
+  if (!trackKey) return;
+  const next = (trackRecommendationIssueSignals.get(trackKey) || 0) + delta;
+  if (next <= 0.04) {
+    trackRecommendationIssueSignals.delete(trackKey);
+    return;
+  }
+  trackRecommendationIssueSignals.set(trackKey, Math.max(0.05, Math.min(8, next)));
+}
+
+function recommendationIssuePenaltyForTrack(track) {
+  if (!track) return 0;
+  const trackKey = recommendationTrackKey(track);
+  const issueSignal = Number(trackRecommendationIssueSignals.get(trackKey) || 0);
+  return issueSignal > 0 ? Math.min(5.4, issueSignal * 1.35) : 0;
+}
+
 function trackHasReliableAudioPreview(track) {
   if (!track) return false;
   if (normalizePreviewUrl(track.previewUrl)) return true;
@@ -12216,6 +12241,18 @@ function registerTrackFeedback(track, liked, options = {}) {
     }
     adjustTrackPreviewIssueSignal(track, 1);
     adjustPreviewReliabilitySignal(track.style, -0.65);
+    saveProgress();
+    return reason;
+  }
+
+  if (RECOMMENDATION_ISSUE_REASONS.has(reason)) {
+    // Erro de classificacao/tempo/imagem reduz confianca sem confundir com gosto musical do usuario.
+    const issueWeight = reason === "style_issue" ? 1.6 : reason === "bpm_issue" ? 1.35 : 1.1;
+    if (reason === "style_issue") boost(adaptiveModel.dislikedStyles, track.style, 0.22);
+    if (reason === "image_issue") boost(adaptiveModel.dislikedArtists, track.artist, 0.12);
+    registerTrackPreferenceSignal(track, -0.56 * issueWeight);
+    adjustTrackRecommendationIssueSignal(track, issueWeight);
+    adjustPreviewReliabilitySignal(track.style, reason === "image_issue" ? -0.08 : -0.18);
     saveProgress();
     return reason;
   }
@@ -14131,14 +14168,14 @@ const I18N = {
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Retomar perfil salvo",
     authLoginBtn: "Entrar em conta",
-    authGuestBtn: "Usar perfil local",
-    authTestUserBtn: "Teste isolado",
+    authGuestBtn: "Começar sem login",
+    authTestUserBtn: "Testar do zero",
     authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
-    authGuestReady: "Modo visitante ativado. Você pode usar o app sem login.",
+    authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
-    authTestUserReady: "Modo teste isolado criado para {user}. Histórico e limites começam zerados.",
+    authTestUserReady: "Teste do zero criado para {user}. Curtidas, limites e recomendações começam limpos.",
     authSocialDivider: "opcional: conta online",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
@@ -14728,6 +14765,10 @@ const I18N = {
     toastDiscoveryKnown: "Anotado. Vou aprofundar as próximas descobertas.",
     previewIssueLearned: "Entendi. Parece falha de preview/reprodução. Vou priorizar próximas faixas com player mais confiável.",
     toastPreviewIssueLearned: "Perfeito. Ajustei para evitar faixas com preview ruim.",
+    styleIssueLearned: "Entendi. Vou tratar essa faixa como classificação suspeita e buscar uma rota mais precisa.",
+    bpmIssueLearned: "Anotado. Vou baixar a confiança desse BPM e priorizar pulso mais verificado.",
+    imageIssueLearned: "Boa. Vou reduzir a confiança dessa imagem e procurar fontes visuais mais seguras.",
+    toastRecommendationIssueLearned: "Erro marcado. O radar ficou mais exigente.",
     skipAdjusted: "Recebido. Refiz a pesquisa e ajustei o próximo match com base no seu não.",
     toastSkipAdjusted: "Fechado. Ajustei sua recomendação com base no seu feedback.",
     catalogUpdateProgress: "Refinando {style} em segundo plano.",
@@ -14868,14 +14909,14 @@ const I18N = {
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Resume saved profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Use local profile",
-    authTestUserBtn: "Isolated test",
+    authGuestBtn: "Start without login",
+    authTestUserBtn: "Test from zero",
     authRequired: "Fill username and password to sign in, or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
-    authGuestReady: "Guest mode enabled. You can use the app without login.",
+    authGuestReady: "Local profile enabled. You can discover music without signing in.",
     authLocalResumeReady: "Local profile resumed for {user}.",
     authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
-    authTestUserReady: "Isolated test mode created for {user}. History and limits start clean.",
+    authTestUserReady: "Fresh test created for {user}. Likes, limits, and recommendations start clean.",
     authSocialDivider: "optional: online account",
     authGoogleBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
@@ -15462,6 +15503,10 @@ const I18N = {
     toastDiscoveryKnown: "Noted. I will deepen upcoming discoveries.",
     previewIssueLearned: "Understood. This looks like a preview/playback issue. I will prioritize next tracks with more reliable players.",
     toastPreviewIssueLearned: "Adjusted. I will avoid weak preview candidates.",
+    styleIssueLearned: "Understood. I will treat this track as suspicious classification and search a more precise lane.",
+    bpmIssueLearned: "Noted. I will lower confidence in this BPM and prioritize more verified pulse data.",
+    imageIssueLearned: "Good catch. I will reduce trust in this image and prefer safer visual sources.",
+    toastRecommendationIssueLearned: "Issue marked. The radar is more strict now.",
     skipAdjusted: "Received. I rebuilt the search and adjusted your next match from your feedback.",
     toastSkipAdjusted: "Done. Recommendation adjusted from your feedback.",
     catalogUpdateProgress: "Refining {style} in the background.",
@@ -15602,14 +15647,14 @@ const I18N = {
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Retomar perfil guardado",
     authLoginBtn: "Entrar en cuenta",
-    authGuestBtn: "Usar perfil local",
-    authTestUserBtn: "Prueba aislada",
+    authGuestBtn: "Empezar sin login",
+    authTestUserBtn: "Probar desde cero",
     authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
-    authGuestReady: "Modo invitado activado. Puedes usar la app sin login.",
+    authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
-    authTestUserReady: "Modo prueba aislado creado para {user}. El historial y los limites empiezan limpios.",
+    authTestUserReady: "Prueba desde cero creada para {user}. Likes, limites y recomendaciones empiezan limpios.",
     authSocialDivider: "opcional: cuenta online",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
@@ -16193,6 +16238,10 @@ const I18N = {
     toastDiscoveryKnown: "Anotado. Voy a profundizar los próximos descubrimientos.",
     previewIssueLearned: "Entendido. Parece una falla de preview/reproducción. Voy a priorizar próximas pistas con player más confiable.",
     toastPreviewIssueLearned: "Ajustado. Evitaré candidatos con preview débil.",
+    styleIssueLearned: "Entendido. Voy a tratar esta pista como clasificación dudosa y buscar una ruta más precisa.",
+    bpmIssueLearned: "Anotado. Bajaré la confianza de este BPM y priorizaré pulso más verificado.",
+    imageIssueLearned: "Bien visto. Bajaré la confianza de esta imagen y usaré fuentes visuales más seguras.",
+    toastRecommendationIssueLearned: "Error marcado. El radar quedó más exigente.",
     skipAdjusted: "Recibido. Rehice la búsqueda y ajusté el próximo match según tu no.",
     toastSkipAdjusted: "Perfecto. Ajusté tu recomendación según tu feedback.",
     catalogUpdateProgress: "Refinando {style} en segundo plano.",
@@ -16896,6 +16945,9 @@ function applyLanguage() {
       btnPreviewYes: "Sim, curti",
       btnPreviewIssue: "Não tocou",
       btnPreviewNo: "Não, troca agora",
+      btnStyleIssue: "Subgênero errado",
+      btnBpmIssue: "BPM estranho",
+      btnImageIssue: "Imagem errada",
       btnLikeSong: "Gostei da faixa",
       btnLikeArtist: "Gostei do artista",
       btnBlockArtist: "Não recomendar este artista",
@@ -16936,6 +16988,9 @@ function applyLanguage() {
       btnPreviewYes: "Yes, liked it",
       btnPreviewIssue: "Did not play",
       btnPreviewNo: "No, switch now",
+      btnStyleIssue: "Wrong subgenre",
+      btnBpmIssue: "BPM feels off",
+      btnImageIssue: "Wrong image",
       btnLikeSong: "Liked the track",
       btnLikeArtist: "Liked the artist",
       btnBlockArtist: "Never recommend this artist",
@@ -16976,6 +17031,9 @@ function applyLanguage() {
       btnPreviewYes: "Sí, me gustó",
       btnPreviewIssue: "No sonó",
       btnPreviewNo: "No, cambia ahora",
+      btnStyleIssue: "Subgénero errado",
+      btnBpmIssue: "BPM raro",
+      btnImageIssue: "Imagen errada",
       btnLikeSong: "Me gustó la pista",
       btnLikeArtist: "Me gustó el artista",
       btnBlockArtist: "No recomendar este artista",
@@ -17385,6 +17443,9 @@ function applyLanguage() {
   setText("#previewLikeBtn", labels.btnPreviewYes || "");
   setText("#previewIssueBtn", labels.btnPreviewIssue || "");
   setText("#previewDislikeBtn", labels.btnPreviewNo || "");
+  setText("#styleIssueBtn", labels.btnStyleIssue || "");
+  setText("#bpmIssueBtn", labels.btnBpmIssue || "");
+  setText("#imageIssueBtn", labels.btnImageIssue || "");
   setText("#likeSongBtn", labels.btnLikeSong || "");
   setText("#likeArtistBtn", labels.btnLikeArtist || "");
   setText("#blockArtistBtn", labels.btnBlockArtist || "");
@@ -17651,6 +17712,7 @@ function resetSessionStateInMemory() {
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
+  trackRecommendationIssueSignals = new Map();
   likedTrackHistory = [];
   dislikedTrackHistory = [];
   previewReliabilityByStyle = new Map();
@@ -19503,6 +19565,9 @@ function hasDedicatedClickSfxControl(el) {
     previewLikeBtn,
     previewIssueBtn,
     previewDislikeBtn,
+    styleIssueBtn,
+    bpmIssueBtn,
+    imageIssueBtn,
     noveltyLikedBtn,
     noveltyNotYetBtn,
     likeSongBtn,
@@ -22071,7 +22136,7 @@ function scrollResultPanelIntoView({ force = false } = {}) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, styleIssueBtn, bpmIssueBtn, imageIssueBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -22506,6 +22571,7 @@ function saveProgress() {
       likedTrackHistory: sanitizeLikedTrackHistory(likedTrackHistory),
       dislikedTrackHistory: sanitizeLikedTrackHistory(dislikedTrackHistory),
       trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
+      trackRecommendationIssueSignals: mapEntriesForStorage(trackRecommendationIssueSignals),
       previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
       quiz: {
         attemptsByStyle: mapEntriesForStorage(quizAttemptsByStyle, 120),
@@ -22549,6 +22615,7 @@ function loadProgress() {
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
+  trackRecommendationIssueSignals = new Map();
   likedTrackHistory = [];
   dislikedTrackHistory = [];
   previewReliabilityByStyle = new Map();
@@ -22603,6 +22670,7 @@ function loadProgress() {
         likedTrackHistory = sanitizeLikedTrackHistory(parsed?.likedTrackHistory);
         dislikedTrackHistory = sanitizeLikedTrackHistory(parsed?.dislikedTrackHistory);
         hydrateMapFromStorage(trackPreviewIssueSignals, parsed?.trackPreviewIssueSignals);
+        hydrateMapFromStorage(trackRecommendationIssueSignals, parsed?.trackRecommendationIssueSignals);
         hydrateMapFromStorage(previewReliabilityByStyle, parsed?.previewReliabilityByStyle);
         const quizProgress = parsed?.quiz || {};
         hydrateMapFromStorage(quizAttemptsByStyle, quizProgress.attemptsByStyle, 120);
@@ -22960,6 +23028,7 @@ function clearFilters() {
   trackInsightCache = new Map();
   currentTrackInsightTrackKey = "";
   trackPreviewIssueSignals = new Map();
+  trackRecommendationIssueSignals = new Map();
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   styleInfoDismissed = false;
@@ -32012,6 +32081,7 @@ function trackSourceTrustScore(track) {
   if (confidence >= 0.92) score += 1;
   else if (confidence >= 0.82) score += 0.55;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 8;
+  score -= recommendationIssuePenaltyForTrack(track);
   return score;
 }
 
@@ -32240,6 +32310,7 @@ function recommendationPrecisionScore(track, prefs = {}) {
   else if (isDynamicSource(track.source)) score -= 0.8;
 
   score += clampScore(trackSourceTrustScore(track), -4, 5) * 0.7;
+  score -= clampScore(recommendationIssuePenaltyForTrack(track), 0, 6) * 1.1;
   score += clampScore(trackUndergroundIntentScore(track, prefs), -8, 10) * 0.82;
   score += clampScore(trackFreshnessScore(track, prefs), -4, 4) * 0.55;
   score += clampScore(trackCatalogDepthScore(track), 0, 4) * 0.35;
@@ -32300,6 +32371,7 @@ function trackRecommendationReliabilityScore(track) {
   else if (ambiguousBpm) score -= 0.8;
   else if (dynamic && !String(track.source || "").toLowerCase().includes("dataset")) score -= 1.9;
   if (dynamic && !trackHasPlayablePreviewExperience(track) && !trusted) score -= 4.2;
+  score -= clampScore(recommendationIssuePenaltyForTrack(track), 0, 6) * 1.2;
   return score;
 }
 
@@ -32779,6 +32851,7 @@ function recommendationTrustAnalysis(track, prefs = lastPrefs) {
   else if (learningSignals >= 20 && profileSignal > 0.8) score += 6;
   else if (learningSignals >= 10 && profileSignal > 0.8) score += 4;
   if (!hasAudioPreview && !hasExternalPlayer && !trackHasReliableAudioPreview(track)) score -= 6;
+  score -= Math.min(22, recommendationIssuePenaltyForTrack(track) * 4);
 
   const cappedScore = ambiguousBpm ? Math.min(score, 74) : score;
   const rounded = Math.round(Math.max(24, Math.min(98, cappedScore)));
@@ -38571,11 +38644,19 @@ bind(previewLikeBtn, "click", async () => {
   });
 });
 
+function feedbackMessageForRecommendationIssue(reason = "") {
+  if (reason === "style_issue") return t("styleIssueLearned");
+  if (reason === "bpm_issue") return t("bpmIssueLearned");
+  if (reason === "image_issue") return t("imageIssueLearned");
+  return t("swappedNow");
+}
+
 async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
   userStats.skipped += 1;
   const isPreviewIssue = reason === "preview_issue";
+  const isRecommendationIssue = RECOMMENDATION_ISSUE_REASONS.has(reason);
   if (isPreviewIssue) {
     rejectedTrack.previewChecked = true;
     rejectedTrack.previewMissing = true;
@@ -38584,7 +38665,7 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
   const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source,
     reason: isPreviewIssue ? "preview_issue" : reason,
-    avoidRepeatArtist: !isPreviewIssue
+    avoidRepeatArtist: !isPreviewIssue && !isRecommendationIssue
   });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
   renderTrackCardSignals(rejectedTrack, lastPrefs);
@@ -38592,7 +38673,7 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: lastRejectedTrackKey,
-    avoidArtistName: isPreviewIssue ? "" : rejectedTrack?.artist || ""
+    avoidArtistName: isPreviewIssue || isRecommendationIssue ? "" : rejectedTrack?.artist || ""
   });
   if (!generated) {
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -38601,12 +38682,22 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
   }
   const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   const reasonMessage = appendSwipeLearningMessage(
-    feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swappedNow")
+    feedbackReason === "preview_issue"
+      ? t("previewIssueLearned")
+      : RECOMMENDATION_ISSUE_REASONS.has(feedbackReason)
+        ? feedbackMessageForRecommendationIssue(feedbackReason)
+        : t("swappedNow")
   );
   if (feedbackMessage) feedbackMessage.textContent = previewDislikeFallback || reasonMessage;
   playUiSfx("dislike");
   if (!previewDislikeFallback) {
-    showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastSwapped"));
+    showToast(
+      feedbackReason === "preview_issue"
+        ? t("toastPreviewIssueLearned")
+        : RECOMMENDATION_ISSUE_REASONS.has(feedbackReason)
+          ? t("toastRecommendationIssueLearned")
+          : t("toastSwapped")
+    );
   }
   updateStats();
 }
@@ -38623,6 +38714,30 @@ bind(previewDislikeBtn, "click", async () => {
   await swapAfterPreviewFeedback({
     source: "preview_dislike",
     triggerEl: previewDislikeBtn
+  });
+});
+
+bind(styleIssueBtn, "click", async () => {
+  await swapAfterPreviewFeedback({
+    reason: "style_issue",
+    source: "style_issue_button",
+    triggerEl: styleIssueBtn
+  });
+});
+
+bind(bpmIssueBtn, "click", async () => {
+  await swapAfterPreviewFeedback({
+    reason: "bpm_issue",
+    source: "bpm_issue_button",
+    triggerEl: bpmIssueBtn
+  });
+});
+
+bind(imageIssueBtn, "click", async () => {
+  await swapAfterPreviewFeedback({
+    reason: "image_issue",
+    source: "image_issue_button",
+    triggerEl: imageIssueBtn
   });
 });
 
