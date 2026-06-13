@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260613swipeimg1" />
+    <link rel="stylesheet" href="styles.css?v=20260613filters1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -399,6 +399,7 @@
 
       <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
         <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true">Descobrir</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtros</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">News</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
@@ -457,7 +458,7 @@
             <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
           </div>
-          <p id="topSwipeHint" class="muted swipe-hint">O perfil guarda os artistas e subgêneros que você andou curtindo.</p>
+          <p id="topSwipeHint" class="muted swipe-hint">O perfil guarda seu histórico; a aba Filtros afina subgênero, BPM e contexto.</p>
         </div>
       </section>
 
@@ -549,13 +550,13 @@
         </p>
       </section>
 
-      <section class="panel preference-panel app-tab-panel" data-app-tab="profile" aria-labelledby="preferencias-title">
+      <section class="panel preference-panel app-tab-panel" data-app-tab="filters" aria-labelledby="preferencias-title">
         <div class="section-head">
           <div>
-            <p id="preferenceSectionKicker" class="section-kicker">Radar de gosto</p>
-            <h3 id="preferencias-title">Ajuste o alvo</h3>
+            <p id="preferenceSectionKicker" class="section-kicker">Filtros de busca</p>
+            <h3 id="preferencias-title">Ajuste o radar</h3>
           </div>
-          <p id="preferenceSectionHint" class="section-hint muted">Escolha um momento primeiro; filtros finos ficam recolhidos.</p>
+          <p id="preferenceSectionHint" class="section-hint muted">Escolha subgênero, BPM, energia e contexto quando quiser uma recomendação mais precisa.</p>
         </div>
 
         <article class="context-moment-panel" aria-labelledby="contextMomentTitle">
@@ -1650,6 +1651,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260613swipeimg1"></script>
+    <script src="app.js?v=20260613filters1"></script>
   </body>
 </html>

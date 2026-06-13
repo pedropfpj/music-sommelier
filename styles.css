@@ -12202,6 +12202,66 @@ iframe {
   filter: brightness(1.1) saturate(1.14) contrast(1.04);
 }
 
+/* Dedicated filters tab: keep discovery Tinder-simple and move precision controls away from swipe. */
+.app-tab-bar {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.preference-panel[data-app-tab="filters"] {
+  grid-column: 1 / -1;
+  position: relative;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+  opacity: 1;
+}
+
+.preference-panel[data-app-tab="filters"] .section-head {
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+}
+
+.preference-panel[data-app-tab="filters"] .section-hint {
+  max-width: 34ch;
+}
+
+.preference-panel[data-app-tab="filters"] .context-moment-panel,
+.preference-panel[data-app-tab="filters"] .precision-filters,
+.preference-panel[data-app-tab="filters"] .recommendation-actions,
+.preference-panel[data-app-tab="filters"] .new-artists-panel {
+  max-width: 980px;
+  margin-inline: auto;
+}
+
+.preference-panel[data-app-tab="filters"] .precision-filters[open] {
+  padding-bottom: 0.72rem;
+}
+
+.preference-panel[data-app-tab="filters"] .recommendation-actions {
+  margin-top: 0.88rem;
+}
+
+@media (max-width: 780px) {
+  .app-tab-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .app-tab-btn,
+  .app-tab-btn:nth-child(5) {
+    grid-column: auto;
+  }
+
+  .preference-panel[data-app-tab="filters"] .section-head {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preference-panel[data-app-tab="filters"] .section-hint {
+    max-width: none;
+    text-align: left;
+  }
+}
+
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-preview-pulse {
   inset: auto 12% 1rem 12%;
   z-index: 2;

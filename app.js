@@ -14260,8 +14260,8 @@ const I18N = {
     supportCopied: "Copiado.",
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
     supportLegalNote: "Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.",
-    sectionKicker: "Radar de gosto",
-    sectionHint: "Escolha um momento primeiro; filtros finos ficam recolhidos.",
+    sectionKicker: "Filtros de busca",
+    sectionHint: "Escolha subgênero, BPM, energia e contexto quando quiser uma recomendação mais precisa.",
     contextMomentKicker: "Momento de escuta",
     contextMomentTitle: "Para que você quer música agora?",
     contextMomentHint: "Cada intenção ajusta energia, pulso e família sonora.",
@@ -14992,8 +14992,8 @@ const I18N = {
     supportCopied: "Copied.",
     supportMissingPayment: "Configure this support method before copying.",
     supportLegalNote: "Tips are voluntary support for the project, not an investment or crypto purchase.",
-    sectionKicker: "Taste radar",
-    sectionHint: "Pick a moment first; precise filters stay tucked away.",
+    sectionKicker: "Search filters",
+    sectionHint: "Pick subgenre, BPM, energy and context when you want a more precise recommendation.",
     contextMomentKicker: "Listening moment",
     contextMomentTitle: "What do you need music for now?",
     contextMomentHint: "Each intention tunes energy, pulse, and sound family.",
@@ -15721,8 +15721,8 @@ const I18N = {
     supportCopied: "Copiado.",
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
     supportLegalNote: "Las tips son apoyo voluntario al proyecto, no inversión ni compra de cripto.",
-    sectionKicker: "Radar de gusto",
-    sectionHint: "Elige primero un momento; los filtros finos quedan plegados.",
+    sectionKicker: "Filtros de búsqueda",
+    sectionHint: "Elige subgénero, BPM, energía y contexto cuando quieras una recomendación más precisa.",
     contextMomentKicker: "Momento de escucha",
     contextMomentTitle: "¿Para qué quieres música ahora?",
     contextMomentHint: "Cada intención ajusta energía, pulso y familia sonora.",
@@ -16837,7 +16837,7 @@ function applyLanguage() {
   document.documentElement.lang = currentLanguage === "pt" ? "pt-BR" : currentLanguage;
   const labels = {
     pt: {
-      profileTitle: "Ajuste o alvo",
+      profileTitle: "Ajuste o radar",
       subgenre: "Subgênero principal",
       context: "Contexto",
       energy: "Energia",
@@ -16877,7 +16877,7 @@ function applyLanguage() {
       btnMoreInfo: "Mais sobre artista/label"
     },
     en: {
-      profileTitle: "Tune the target",
+      profileTitle: "Tune the radar",
       subgenre: "Main subgenre",
       context: "Context",
       energy: "Energy",
@@ -16917,7 +16917,7 @@ function applyLanguage() {
       btnMoreInfo: "More about artist/label"
     },
     es: {
-      profileTitle: "Ajusta el objetivo",
+      profileTitle: "Ajusta el radar",
       subgenre: "Subgénero principal",
       context: "Contexto",
       energy: "Energía",
@@ -22310,7 +22310,7 @@ async function copySupportText(value = "", triggerButton = null) {
 }
 
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "news", "studio", "profile", "support"].includes(tabName) ? tabName : "discover";
+  const safeTab = ["discover", "filters", "news", "studio", "profile", "support"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
