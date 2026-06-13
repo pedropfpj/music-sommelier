@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260613sharepolish1" />
+    <link rel="stylesheet" href="styles.css?v=20260613abouttrust1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -415,6 +415,7 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">News</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Apoiar</button>
       </nav>
 
@@ -555,6 +556,56 @@
         <p id="supportLegalNote" class="muted support-legal-note">
           Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.
         </p>
+      </section>
+
+      <section id="aboutPanel" class="panel about-panel app-tab-panel" data-app-tab="about" aria-labelledby="aboutTitle">
+        <div class="section-head about-head">
+          <div>
+            <p id="aboutKicker" class="section-kicker">Por que usar</p>
+            <h3 id="aboutTitle">O Sonic Search encontra o que os apps grandes deixam passar</h3>
+          </div>
+          <span id="aboutStatusBadge" class="chip alt">Sommelier</span>
+        </div>
+        <p id="aboutIntro" class="section-hint muted about-intro">
+          Em vez de só buscar pelo nome de uma faixa, o app aprende seu gosto por swipe, cruza subgênero, pulso, energia e novidade, e explica o motivo de cada recomendação.
+        </p>
+        <div class="about-grid">
+          <article class="about-card about-card-primary">
+            <span id="aboutReasonOneKicker">01</span>
+            <h4 id="aboutReasonOneTitle">Descoberta com contexto</h4>
+            <p id="aboutReasonOneText">Você não precisa saber o nome certo. Curta, descarte ou peça surpresa; o radar entende direção, energia e familiaridade.</p>
+          </article>
+          <article class="about-card">
+            <span id="aboutReasonTwoKicker">02</span>
+            <h4 id="aboutReasonTwoTitle">Subgênero com confiança</h4>
+            <p id="aboutReasonTwoText">Quando o sinal é forte, o app mostra o subgênero. Quando a evidência é fraca, mostra família musical e deixa claro que é estimativa.</p>
+          </article>
+          <article class="about-card">
+            <span id="aboutReasonThreeKicker">03</span>
+            <h4 id="aboutReasonThreeTitle">Menos repetição</h4>
+            <p id="aboutReasonThreeText">O perfil separa artista conhecido, novidade real, músicas curtidas e descartadas para evitar ficar girando no mesmo óbvio.</p>
+          </article>
+          <article class="about-card">
+            <span id="aboutReasonFourKicker">04</span>
+            <h4 id="aboutReasonFourTitle">Correção que melhora o radar</h4>
+            <p id="aboutReasonFourText">Se o subgênero, BPM, imagem ou preview parecer errado, marque o erro. Isso reduz a confiança da rota sem confundir com seu gosto musical.</p>
+          </article>
+        </div>
+        <div class="about-flow">
+          <article>
+            <h4 id="aboutFlowTitle">Como usar em 30 segundos</h4>
+            <ol class="about-flow-list">
+              <li id="aboutFlowStepOne">Toque em Surpresa e escute sem pensar demais.</li>
+              <li id="aboutFlowStepTwo">Curta ou não curta para trocar automaticamente.</li>
+              <li id="aboutFlowStepThree">Abra Filtros só quando quiser subgênero, BPM ou contexto específico.</li>
+              <li id="aboutFlowStepFour">Revise suas curtidas, descartes e espírito musical no Perfil.</li>
+            </ol>
+          </article>
+          <article class="about-trust-box">
+            <h4 id="aboutTrustTitle">Como ler a confiança</h4>
+            <p id="aboutTrustText">Alta confiança combina fonte, player, BPM e perfil. Confiança média ainda pode ser uma boa descoberta. Quando a classificação fina não está segura, o app deve falar em família musical, não vender certeza falsa.</p>
+          </article>
+        </div>
       </section>
 
       <section class="panel preference-panel app-tab-panel" data-app-tab="filters" aria-labelledby="preferencias-title">
@@ -1683,6 +1734,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260613sharepolish1"></script>
+    <script src="app.js?v=20260613abouttrust1"></script>
   </body>
 </html>

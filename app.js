@@ -8005,6 +8005,28 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "speedcore",
   "rawstyle"
 ]);
+
+const FINE_SUBGENRE_EVIDENCE_STYLES = new Set([
+  "forest_psy",
+  "dark_psy",
+  "twilight_psy",
+  "dark_experimental",
+  "psycore",
+  "psybreaks",
+  "full_on",
+  "full_on_night",
+  "full_on_morning",
+  "hi_tech",
+  "dark_progressive",
+  "slambient",
+  "tech_house",
+  "minimal_deep_tech",
+  "hypnotic_techno",
+  "raw_techno",
+  "industrial_techno",
+  "peak_time_techno"
+]);
+
 const EXPANDED_NICHE_DISCOVERY_STYLES = [
   "twilight_psy",
   "psybreaks",
@@ -14211,12 +14233,13 @@ const I18N = {
     heroLogoLabel: "Voltar ao início",
     heroLogoToast: "Voltei para Descobrir.",
     heroTitle: "Encontre uma faixa que combina com agora",
-    heroDesc: "Escolha o clima, o pulso e o quanto quer sair do óbvio. O Sonic Search cruza seu histórico com sinais de cena para sugerir música eletrônica com mais tato.",
+    heroDesc: "Descubra eletrônica por sensação, não por busca manual. O Sonic Search cruza seu swipe, subgênero, pulso, energia e novidade para sugerir faixas com contexto.",
     tabDiscover: "Descobrir",
     tabFilters: "Filtros",
     tabNews: "News",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
+    tabAbout: "Sobre",
     tabSupport: "Apoiar",
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.",
@@ -14235,7 +14258,30 @@ const I18N = {
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
     topSwipeEmptyTitle: "Pronto para descobrir",
     topSwipeEmptyMeta: "Uma carta nova, sem briefing.",
-    topSwipeHint: "Curta, não curta ou peça surpresa. Filtros ficam na aba Filtros; seu histórico fica no Perfil.",
+    topSwipeHint: "Curta, não curta ou peça surpresa. Filtros ficam em Filtros; explicação, curtidas e erros ficam organizados fora do swipe.",
+    aboutKicker: "Por que usar",
+    aboutTitle: "O Sonic Search encontra o que os apps grandes deixam passar",
+    aboutBadge: "Sommelier",
+    aboutIntro: "Em vez de só buscar pelo nome de uma faixa, o app aprende seu gosto por swipe, cruza subgênero, pulso, energia e novidade, e explica o motivo de cada recomendação.",
+    aboutReasonOneKicker: "01",
+    aboutReasonOneTitle: "Descoberta com contexto",
+    aboutReasonOneText: "Você não precisa saber o nome certo. Curta, descarte ou peça surpresa; o radar entende direção, energia e familiaridade.",
+    aboutReasonTwoKicker: "02",
+    aboutReasonTwoTitle: "Subgênero com confiança",
+    aboutReasonTwoText: "Quando o sinal é forte, o app mostra o subgênero. Quando a evidência é fraca, mostra família musical e deixa claro que é estimativa.",
+    aboutReasonThreeKicker: "03",
+    aboutReasonThreeTitle: "Menos repetição",
+    aboutReasonThreeText: "O perfil separa artista conhecido, novidade real, músicas curtidas e descartadas para evitar ficar girando no mesmo óbvio.",
+    aboutReasonFourKicker: "04",
+    aboutReasonFourTitle: "Correção que melhora o radar",
+    aboutReasonFourText: "Se o subgênero, BPM, imagem ou preview parecer errado, marque o erro. Isso reduz a confiança da rota sem confundir com seu gosto musical.",
+    aboutFlowTitle: "Como usar em 30 segundos",
+    aboutFlowStepOne: "Toque em Surpresa e escute sem pensar demais.",
+    aboutFlowStepTwo: "Curta ou não curta para trocar automaticamente.",
+    aboutFlowStepThree: "Abra Filtros só quando quiser subgênero, BPM ou contexto específico.",
+    aboutFlowStepFour: "Revise suas curtidas, descartes e espírito musical no Perfil.",
+    aboutTrustTitle: "Como ler a confiança",
+    aboutTrustText: "Alta confiança combina fonte, player, BPM e perfil. Confiança média ainda pode ser uma boa descoberta. Quando a classificação fina não está segura, o app deve falar em família musical, não vender certeza falsa.",
     swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
@@ -14420,9 +14466,9 @@ const I18N = {
     recommendationWhyFreshArtistSentence: "Também mantive longe dos nomes óbvios para parecer descoberta real, não só mais do mesmo.",
     recommendationWhyProfilePositive: "O histórico recente do seu perfil aponta para essa direção.",
     recommendationWhySourcePositive: "A faixa tem sinais melhores de fonte, pulso ou player, então entra com mais segurança.",
-    recommendationWhyTextStrong: "Escolhi essa porque ela junta {style}, pulso em {bpm} e energia {energy} sem perder cara de faixa que dá vontade de ouvir até o fim.",
-    recommendationWhyTextContext: "Para {context}, ela segura energia {energy} sem ficar previsível demais. Fica no território de {style}, mas abre uma porta nova.",
-    recommendationWhyTextDiscovery: "Aqui a ideia é testar uma rota menos batida: {style}, energia {energy} e sinal musical suficiente para merecer play.",
+    recommendationWhyTextStrong: "Escolhi porque os sinais batem: {style}, pulso {bpm}, energia {energy} e uma fonte melhor para testar sem prometer certeza falsa.",
+    recommendationWhyTextContext: "Para {context}, ela entrega energia {energy} e fica perto de {style}. Se a classificação fina não estiver confirmada, trato como rota de família sonora.",
+    recommendationWhyTextDiscovery: "Aqui a aposta é descoberta: {style}, energia {energy} e sinais suficientes para ouvir. Se não bater, seu swipe corrige a próxima rota.",
     djModeTitle: "Modo DJ",
     djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
     djModeGenerateBtn: "Criar jornada",
@@ -14952,12 +14998,13 @@ const I18N = {
     heroLogoLabel: "Back to home",
     heroLogoToast: "Back to Discover.",
     heroTitle: "Find a track that fits right now",
-    heroDesc: "Choose the mood, pulse, and how far from obvious you want to go. Sonic Search blends your history with scene signals to suggest electronic music with more feel.",
+    heroDesc: "Discover electronic music by feel, not manual search. Sonic Search blends your swipes, subgenre, pulse, energy, and novelty to suggest tracks with context.",
     tabDiscover: "Discover",
     tabFilters: "Filters",
     tabNews: "News",
     tabStudio: "Studio",
     tabProfile: "Profile",
+    tabAbout: "About",
     tabSupport: "Support",
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the radar separates what lands, what tires you out, and what you already know.",
@@ -14976,7 +15023,30 @@ const I18N = {
     swipeHint: "Works with mouse or touch: drag the card and release.",
     topSwipeEmptyTitle: "Ready to discover",
     topSwipeEmptyMeta: "A fresh card, no briefing.",
-    topSwipeHint: "Like, pass, or ask for a surprise. Filters live in Filters; your history lives in Profile.",
+    topSwipeHint: "Like, pass, or ask for a surprise. Filters live in Filters; explanations, likes, and corrections stay out of the swipe.",
+    aboutKicker: "Why use it",
+    aboutTitle: "Sonic Search finds what big apps tend to miss",
+    aboutBadge: "Sommelier",
+    aboutIntro: "Instead of only searching for a track name, the app learns through swipe, blends subgenre, pulse, energy, and novelty, then explains why each recommendation appeared.",
+    aboutReasonOneKicker: "01",
+    aboutReasonOneTitle: "Contextual discovery",
+    aboutReasonOneText: "You do not need the exact name. Like, pass, or ask for surprise; the radar learns direction, energy, and familiarity.",
+    aboutReasonTwoKicker: "02",
+    aboutReasonTwoTitle: "Subgenre confidence",
+    aboutReasonTwoText: "When the signal is strong, the app shows the subgenre. When evidence is weak, it shows the music family and treats it as an estimate.",
+    aboutReasonThreeKicker: "03",
+    aboutReasonThreeTitle: "Less repetition",
+    aboutReasonThreeText: "Your profile separates known artists, real discoveries, liked tracks, and rejected tracks so the app does not circle the obvious.",
+    aboutReasonFourKicker: "04",
+    aboutReasonFourTitle: "Corrections improve the radar",
+    aboutReasonFourText: "If subgenre, BPM, image, or preview feels wrong, mark it. That lowers route confidence without confusing it with your musical taste.",
+    aboutFlowTitle: "How to use it in 30 seconds",
+    aboutFlowStepOne: "Tap Surprise and listen without overthinking.",
+    aboutFlowStepTwo: "Like or pass to move automatically.",
+    aboutFlowStepThree: "Open Filters only when you want a specific subgenre, BPM, or context.",
+    aboutFlowStepFour: "Review likes, rejects, and your music spirit in Profile.",
+    aboutTrustTitle: "How to read confidence",
+    aboutTrustText: "High confidence combines source, player, BPM, and profile. Medium confidence can still be a good discovery. When fine classification is not safe, the app should say music family instead of selling false certainty.",
     swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
@@ -15161,9 +15231,9 @@ const I18N = {
     recommendationWhyFreshArtistSentence: "I also kept it away from the obvious names, so it feels like real discovery instead of more of the same.",
     recommendationWhyProfilePositive: "Your recent profile signals point in this direction.",
     recommendationWhySourcePositive: "The track has stronger source, pulse, or player signals, so it enters with more confidence.",
-    recommendationWhyTextStrong: "I picked this because it connects {style}, a {bpm} pulse, and {energy} energy without losing the feeling of a track worth hearing through.",
-    recommendationWhyTextContext: "For {context}, it holds {energy} energy without becoming too predictable. It stays in {style}, but opens a new door.",
-    recommendationWhyTextDiscovery: "This tests a less obvious route: {style}, {energy} energy, and enough musical signal to deserve a play.",
+    recommendationWhyTextStrong: "I picked it because the signals line up: {style}, {bpm} pulse, {energy} energy, and a better source to test without pretending certainty.",
+    recommendationWhyTextContext: "For {context}, it delivers {energy} energy and sits near {style}. If fine classification is not confirmed, I treat it as a sound-family lane.",
+    recommendationWhyTextDiscovery: "This is a discovery bet: {style}, {energy} energy, and enough signal to hear. If it misses, your swipe corrects the next route.",
     djModeTitle: "DJ Mode",
     djModeHint: "5-track journey: open, build, peak, twist, close.",
     djModeGenerateBtn: "Create journey",
@@ -15689,13 +15759,14 @@ const I18N = {
     heroLogoLabel: "Volver al inicio",
     heroLogoToast: "Volví a Descubrir.",
     heroTitle: "Encuentra una pista que encaje ahora",
-    heroDesc: "Elige el clima, el pulso y cuánto quieres alejarte de lo obvio. Sonic Search cruza tu historial con señales de escena para sugerir electrónica con más tacto.",
+    heroDesc: "Descubre electrónica por sensación, no por búsqueda manual. Sonic Search cruza tus swipes, subgénero, pulso, energía y novedad para sugerir pistas con contexto.",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
     tabFilters: "Filtros",
     tabNews: "News",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
+    tabAbout: "Sobre",
     tabSupport: "Apoyar",
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que el radar separe lo que conecta, lo que cansa y lo que ya conoces.",
@@ -15714,7 +15785,30 @@ const I18N = {
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
     topSwipeEmptyTitle: "Listo para descubrir",
     topSwipeEmptyMeta: "Una carta nueva, sin briefing.",
-    topSwipeHint: "Da like, descarta o pide sorpresa. Los filtros viven en Filtros; tu historial vive en Perfil.",
+    topSwipeHint: "Da like, descarta o pide sorpresa. Los filtros viven en Filtros; explicaciones, likes y correcciones quedan fuera del swipe.",
+    aboutKicker: "Por qué usar",
+    aboutTitle: "Sonic Search encuentra lo que las apps grandes suelen dejar pasar",
+    aboutBadge: "Sommelier",
+    aboutIntro: "En vez de buscar solo por nombre de pista, la app aprende con swipe, cruza subgénero, pulso, energía y novedad, y explica por qué apareció cada recomendación.",
+    aboutReasonOneKicker: "01",
+    aboutReasonOneTitle: "Descubrimiento con contexto",
+    aboutReasonOneText: "No necesitas saber el nombre exacto. Da like, descarta o pide sorpresa; el radar aprende dirección, energía y familiaridad.",
+    aboutReasonTwoKicker: "02",
+    aboutReasonTwoTitle: "Subgénero con confianza",
+    aboutReasonTwoText: "Cuando la señal es fuerte, la app muestra el subgénero. Si la evidencia es débil, muestra la familia musical y lo trata como estimado.",
+    aboutReasonThreeKicker: "03",
+    aboutReasonThreeTitle: "Menos repetición",
+    aboutReasonThreeText: "Tu perfil separa artistas conocidos, descubrimientos reales, pistas gustadas y descartadas para no girar siempre en lo obvio.",
+    aboutReasonFourKicker: "04",
+    aboutReasonFourTitle: "La corrección mejora el radar",
+    aboutReasonFourText: "Si subgénero, BPM, imagen o preview parecen errados, márcalo. Eso baja la confianza de la ruta sin confundirlo con tu gusto musical.",
+    aboutFlowTitle: "Cómo usarlo en 30 segundos",
+    aboutFlowStepOne: "Toca Sorpresa y escucha sin pensarlo demasiado.",
+    aboutFlowStepTwo: "Da like o descarta para avanzar automáticamente.",
+    aboutFlowStepThree: "Abre Filtros solo cuando quieras subgénero, BPM o contexto específico.",
+    aboutFlowStepFour: "Revisa likes, descartes y tu espíritu musical en Perfil.",
+    aboutTrustTitle: "Cómo leer la confianza",
+    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Confianza media aún puede ser buen descubrimiento. Cuando la clasificación fina no es segura, la app debe hablar de familia musical, no vender certeza falsa.",
     swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
@@ -15899,9 +15993,9 @@ const I18N = {
     recommendationWhyFreshArtistSentence: "También la mantuve lejos de los nombres obvios, para que se sienta como descubrimiento real y no más de lo mismo.",
     recommendationWhyProfilePositive: "Las señales recientes de tu perfil apuntan en esta dirección.",
     recommendationWhySourcePositive: "La pista tiene mejores señales de fuente, pulso o player, así que entra con más seguridad.",
-    recommendationWhyTextStrong: "Elegí esta porque une {style}, pulso en {bpm} y energía {energy} sin perder sensación de pista que dan ganas de escuchar hasta el final.",
-    recommendationWhyTextContext: "Para {context}, sostiene energía {energy} sin volverse demasiado previsible. Se queda en {style}, pero abre una puerta nueva.",
-    recommendationWhyTextDiscovery: "Aquí la idea es probar una ruta menos obvia: {style}, energía {energy}, y suficiente señal musical para darle play.",
+    recommendationWhyTextStrong: "La elegí porque las señales encajan: {style}, pulso {bpm}, energía {energy} y una fuente mejor para probar sin fingir certeza.",
+    recommendationWhyTextContext: "Para {context}, entrega energía {energy} y queda cerca de {style}. Si la clasificación fina no está confirmada, la trato como ruta de familia sonora.",
+    recommendationWhyTextDiscovery: "Esta es una apuesta de descubrimiento: {style}, energía {energy} y señal suficiente para escuchar. Si no conecta, tu swipe corrige la próxima ruta.",
     djModeTitle: "Modo DJ",
     djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
     djModeGenerateBtn: "Crear viaje",
@@ -17115,8 +17209,32 @@ function applyLanguage() {
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
+  setText("[data-app-tab-target='about']", t("tabAbout"));
   setText("[data-app-tab-target='support']", t("tabSupport"));
   updateCatalogStatsHero();
+  setText("#aboutKicker", t("aboutKicker"));
+  setText("#aboutTitle", t("aboutTitle"));
+  setText("#aboutStatusBadge", t("aboutBadge"));
+  setText("#aboutIntro", t("aboutIntro"));
+  setText("#aboutReasonOneKicker", t("aboutReasonOneKicker"));
+  setText("#aboutReasonOneTitle", t("aboutReasonOneTitle"));
+  setText("#aboutReasonOneText", t("aboutReasonOneText"));
+  setText("#aboutReasonTwoKicker", t("aboutReasonTwoKicker"));
+  setText("#aboutReasonTwoTitle", t("aboutReasonTwoTitle"));
+  setText("#aboutReasonTwoText", t("aboutReasonTwoText"));
+  setText("#aboutReasonThreeKicker", t("aboutReasonThreeKicker"));
+  setText("#aboutReasonThreeTitle", t("aboutReasonThreeTitle"));
+  setText("#aboutReasonThreeText", t("aboutReasonThreeText"));
+  setText("#aboutReasonFourKicker", t("aboutReasonFourKicker"));
+  setText("#aboutReasonFourTitle", t("aboutReasonFourTitle"));
+  setText("#aboutReasonFourText", t("aboutReasonFourText"));
+  setText("#aboutFlowTitle", t("aboutFlowTitle"));
+  setText("#aboutFlowStepOne", t("aboutFlowStepOne"));
+  setText("#aboutFlowStepTwo", t("aboutFlowStepTwo"));
+  setText("#aboutFlowStepThree", t("aboutFlowStepThree"));
+  setText("#aboutFlowStepFour", t("aboutFlowStepFour"));
+  setText("#aboutTrustTitle", t("aboutTrustTitle"));
+  setText("#aboutTrustText", t("aboutTrustText"));
   setText("#dailyNewsKicker", t("dailyNewsKicker"));
   setText("#dailyNewsTitle", t("dailyNewsTitle"));
   setText("#dailyNewsIntro", t("dailyNewsIntro"));
@@ -22409,7 +22527,7 @@ async function copySupportText(value = "", triggerButton = null) {
 }
 
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "filters", "news", "studio", "profile", "support"].includes(tabName) ? tabName : "discover";
+  const safeTab = ["discover", "filters", "news", "studio", "profile", "about", "support"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
@@ -31570,6 +31688,27 @@ function textHasSpecificStyleSignal(style = "", rawText = "") {
   return aliases.some((item) => text.includes(item));
 }
 
+function fineSubgenreEvidenceLevel(style = "", track = null, { reliableBpm = false, specificSignal = false, artistLocked = false, seedAnchored = false } = {}) {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (!cleanStyle || !FINE_SUBGENRE_EVIDENCE_STYLES.has(cleanStyle)) return "broad";
+  if (!track) return "weak";
+  if (isTrustedCuratedCatalogTrack(track)) return "strong";
+  const source = normalize(track.source || "");
+  const datasetAnchored = source.includes("dataset") || source.includes("verified") || source.includes("local_seed");
+  const hasAnchor = Boolean(artistLocked || seedAnchored || datasetAnchored);
+  const hasBpm = Boolean(reliableBpm);
+  const hasText = Boolean(specificSignal);
+  if (hasAnchor && hasBpm && hasText) return "strong";
+  if (hasAnchor && hasBpm) return "medium";
+  if (hasText && hasBpm && !isDynamicSource(track.source || "")) return "medium";
+  return "weak";
+}
+
+function hasFineSubgenreEvidence(style = "", track = null, signals = {}) {
+  const level = fineSubgenreEvidenceLevel(style, track, signals);
+  return level === "broad" || level === "strong" || level === "medium";
+}
+
 function trackStyleCertainty(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
@@ -31591,6 +31730,14 @@ function trackStyleCertainty(track = null) {
     track.source
   ].filter(Boolean).join(" ");
   const specificSignal = textHasSpecificStyleSignal(style, signalText);
+  const fineEvidence = fineSubgenreEvidenceLevel(style, track, {
+    reliableBpm,
+    specificSignal,
+    artistLocked,
+    seedAnchored
+  });
+
+  if (fineEvidence === "weak") return "estimated";
 
   if (!dynamic && (reliableBpm || specificSignal)) return "confirmed";
   if (artistLocked && reliableBpm) return "confirmed";
@@ -32264,12 +32411,15 @@ function recommendationPrecisionScore(track, prefs = {}) {
   if (!track) return -1000000;
   let score = 0;
   const contexts = Array.isArray(track.context) ? track.context : [];
+  const weakFineSubgenre = FINE_SUBGENRE_EVIDENCE_STYLES.has(track.style) && trackStyleCertainty(track) === "estimated";
 
   if (prefs.style) {
     if (track.style !== prefs.style) return -1000000;
     score += 4.8;
+    if (weakFineSubgenre) score -= 9.5;
   } else if (track.style) {
     score += 0.35;
+    if (weakFineSubgenre) score -= 2.4;
   }
 
   if (prefs.bpm) {
@@ -32356,6 +32506,7 @@ function trackRecommendationReliabilityScore(track) {
   const dynamic = isDynamicSource(track.source);
   const trusted = isTrustedCuratedCatalogTrack(track);
   const ambiguousBpm = bpmHasPerceptualAmbiguity(track);
+  const weakFineSubgenre = FINE_SUBGENRE_EVIDENCE_STYLES.has(track.style) && trackStyleCertainty(track) === "estimated";
 
   if (trackHasReliableAudioPreview(track)) score += 4.2;
   else if (trackHasDirectYouTubeVideo(track)) score += 2.2;
@@ -32367,6 +32518,7 @@ function trackRecommendationReliabilityScore(track) {
   if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 3.4;
   if (track.existenceVerified === true || trusted) score += 1.8;
   if (track.existenceVerified === false && !trusted) score -= 12;
+  if (weakFineSubgenre) score -= 4.4;
   if (hasReliableBpmForTrust(track)) score += 1.4;
   else if (ambiguousBpm) score -= 0.8;
   else if (dynamic && !String(track.source || "").toLowerCase().includes("dataset")) score -= 1.9;
@@ -32453,10 +32605,12 @@ function recommendationQualityScore(track, prefs = {}) {
   prefs = normalizeRecommendationPrefs(prefs);
   if (!track) return -1000000;
   let score = 0;
+  const weakFineSubgenre = FINE_SUBGENRE_EVIDENCE_STYLES.has(track.style) && trackStyleCertainty(track) === "estimated";
 
   if (isTrustedCuratedCatalogTrack(track)) score += 2.4;
   else if (track.existenceVerified === true) score += 1.6;
   else if (isDynamicSource(track.source)) score -= 3.2;
+  if (weakFineSubgenre) score -= prefs.style ? 8.5 : 3.4;
 
   if (hasReliableBpmForTrack(track)) score += 2.6;
   else score -= prefs.bpm ? 5.2 : 1.4;
@@ -32983,6 +33137,9 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
   if (strongFit) badges.push({ type: "good", label: sonicTinyCopy("Alta compatibilidade", "Strong match", "Alta afinidad") });
   if (bpmData.ambiguous) {
     badges.push({ type: "explore", label: t("bpmAmbiguousBadge", { bpm: bpmData.perceived }) });
+  }
+  if (styleCertainty === "estimated") {
+    badges.push({ type: "explore", label: sonicTinyCopy("Familia estimada", "Estimated family", "Familia estimada") });
   }
   if (hasAudioPreview) {
     badges.push({ type: "preview", label: sonicTinyCopy("Audio direto", "Direct audio", "Audio directo") });

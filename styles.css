@@ -12277,7 +12277,13 @@ iframe {
   }
 
   #primaryTrackCard #nowPlayingGenre strong {
-    font-size: clamp(1.7rem, 9.2vw, 2.52rem);
+    font-size: var(--now-playing-style-size, clamp(1.45rem, 7.2vw, 2.18rem));
+  }
+
+  #primaryTrackCard #nowPlayingGenre strong.is-long-word,
+  #primaryTrackCard #nowPlayingGenre strong.is-long-label {
+    --now-playing-style-size: clamp(1rem, 5.15vw, 1.42rem);
+    line-height: 1.04;
   }
 }
 
@@ -12397,6 +12403,105 @@ iframe {
   margin-top: 0.88rem;
 }
 
+.app-tab-bar {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.about-panel {
+  max-width: 1180px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.about-head {
+  align-items: end;
+}
+
+.about-intro {
+  max-width: 760px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.78rem;
+  margin-top: 1rem;
+}
+
+.about-card {
+  min-height: 176px;
+  padding: 1rem;
+  border: 1px solid rgba(125, 224, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(9, 23, 42, 0.86), rgba(4, 10, 24, 0.74)),
+    rgba(4, 10, 24, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(151, 219, 255, 0.05);
+}
+
+.about-card-primary {
+  border-color: rgba(126, 232, 198, 0.42);
+  background:
+    linear-gradient(145deg, rgba(21, 81, 77, 0.48), rgba(8, 21, 42, 0.82)),
+    rgba(4, 10, 24, 0.74);
+}
+
+.about-card span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.18rem 0.54rem;
+  border: 1px solid rgba(126, 232, 198, 0.34);
+  border-radius: 999px;
+  color: #a9ffef;
+  font: 800 0.72rem/1 "Chakra Petch", sans-serif;
+}
+
+.about-card h4,
+.about-flow h4 {
+  margin: 0.72rem 0 0.42rem;
+  color: #f6fbff;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.02rem, 0.95rem + 0.28vw, 1.22rem);
+  letter-spacing: 0;
+}
+
+.about-card p,
+.about-flow p,
+.about-flow-list {
+  color: rgba(218, 238, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.48;
+}
+
+.about-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.7fr);
+  gap: 0.86rem;
+  margin-top: 0.86rem;
+}
+
+.about-flow > article {
+  padding: 1rem;
+  border: 1px solid rgba(125, 224, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(4, 10, 24, 0.54);
+}
+
+.about-flow-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.about-trust-box {
+  border-color: rgba(255, 208, 125, 0.32) !important;
+  background:
+    linear-gradient(150deg, rgba(59, 43, 14, 0.44), rgba(6, 17, 38, 0.72)),
+    rgba(4, 10, 24, 0.54) !important;
+}
+
 @media (max-width: 780px) {
   .app-tab-bar {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -12415,6 +12520,19 @@ iframe {
   .preference-panel[data-app-tab="filters"] .section-hint {
     max-width: none;
     text-align: left;
+  }
+
+  .about-head {
+    align-items: start;
+  }
+
+  .about-grid,
+  .about-flow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-card {
+    min-height: auto;
   }
 }
 
