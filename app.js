@@ -4840,6 +4840,8 @@ const dailyNewsTitle = document.getElementById("dailyNewsTitle");
 const dailyNewsIntro = document.getElementById("dailyNewsIntro");
 const dailyNewsRefreshBtn = document.getElementById("dailyNewsRefreshBtn");
 const dailyNewsStatus = document.getElementById("dailyNewsStatus");
+const dailyNewsProgress = document.getElementById("dailyNewsProgress");
+const dailyNewsProgressFill = document.getElementById("dailyNewsProgressFill");
 const dailyNewsList = document.getElementById("dailyNewsList");
 const supportPanel = document.getElementById("supportPanel");
 const supportKicker = document.getElementById("supportKicker");
@@ -14224,6 +14226,7 @@ const I18N = {
     dailyNewsIntro: "Radar recente da música eletrônica com prioridade para Brasil e complemento global de fontes especializadas.",
     dailyNewsRefreshBtn: "Atualizar",
     dailyNewsLoading: "Carregando notícias...",
+    dailyNewsProgressLabel: "Atualizando radar de notícias",
     dailyNewsLiveStatus: "Atualizado agora • {date}",
     dailyNewsCacheStatus: "Mostrando última atualização salva • {date}",
     dailyNewsFallbackStatus: "Busca ao vivo indisponível agora • abrindo atalhos para fontes confiáveis.",
@@ -14956,6 +14959,7 @@ const I18N = {
     dailyNewsIntro: "A fresh electronic music radar prioritizing Brazil, with global context from specialist sources.",
     dailyNewsRefreshBtn: "Refresh",
     dailyNewsLoading: "Loading news...",
+    dailyNewsProgressLabel: "Updating news radar",
     dailyNewsLiveStatus: "Updated now • {date}",
     dailyNewsCacheStatus: "Showing last saved update • {date}",
     dailyNewsFallbackStatus: "Live search unavailable now • showing trusted source shortcuts.",
@@ -15685,6 +15689,7 @@ const I18N = {
     dailyNewsIntro: "Radar reciente de música electrónica con prioridad para Brasil y contexto global de fuentes especializadas.",
     dailyNewsRefreshBtn: "Actualizar",
     dailyNewsLoading: "Cargando noticias...",
+    dailyNewsProgressLabel: "Actualizando radar de noticias",
     dailyNewsLiveStatus: "Actualizado ahora • {date}",
     dailyNewsCacheStatus: "Mostrando última actualización guardada • {date}",
     dailyNewsFallbackStatus: "Búsqueda en vivo no disponible ahora • mostrando accesos a fuentes confiables.",
@@ -17033,6 +17038,7 @@ function applyLanguage() {
   setText("#dailyNewsTitle", t("dailyNewsTitle"));
   setText("#dailyNewsIntro", t("dailyNewsIntro"));
   setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
+  if (dailyNewsProgress) dailyNewsProgress.setAttribute("aria-label", t("dailyNewsProgressLabel"));
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
   if (dailyNewsList?.children.length) {
     const cache = loadDailyNewsCache();
@@ -25990,6 +25996,32 @@ async function localizeDailyNewsItems(items = []) {
   return requestDailyNewsTranslations(items, language);
 }
 
+let dailyNewsProgressHideTimer = null;
+
+function setDailyNewsProgress(active = false, value = 0) {
+  if (!dailyNewsProgress) return;
+  if (dailyNewsProgressHideTimer) {
+    window.clearTimeout(dailyNewsProgressHideTimer);
+    dailyNewsProgressHideTimer = null;
+  }
+  const clampedValue = Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
+  dailyNewsProgress.hidden = !active;
+  dailyNewsProgress.classList.toggle("is-active", Boolean(active));
+  dailyNewsProgress.style.setProperty("--daily-news-progress", `${clampedValue}%`);
+  dailyNewsProgress.setAttribute("aria-valuenow", String(clampedValue));
+  dailyNewsProgress.setAttribute("aria-label", t("dailyNewsProgressLabel"));
+  if (dailyNewsProgressFill) dailyNewsProgressFill.style.width = `${clampedValue}%`;
+  if (dailyNewsStatus) dailyNewsStatus.classList.toggle("is-loading", Boolean(active));
+}
+
+function finishDailyNewsProgress() {
+  if (!dailyNewsProgress) return;
+  setDailyNewsProgress(true, 100);
+  dailyNewsProgressHideTimer = window.setTimeout(() => {
+    setDailyNewsProgress(false, 0);
+  }, 320);
+}
+
 async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = false, fallback = false } = {}) {
   if (!dailyNewsList || !dailyNewsStatus) return;
   const visibleItems = await localizeDailyNewsItems(compactDailyNewsItems(items.length ? items : dailyNewsFallbackItems()));
@@ -26045,12 +26077,17 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
 
 async function refreshDailyNews({ silent = false, live = true } = {}) {
   if (!dailyNewsPanel || !dailyNewsList || !dailyNewsStatus) return;
-  if (!silent) dailyNewsStatus.textContent = t("dailyNewsLoading");
+  const showProgress = !silent;
+  if (showProgress) {
+    dailyNewsStatus.textContent = t("dailyNewsLoading");
+    setDailyNewsProgress(true, 12);
+  }
   if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = true;
 
   const cache = loadDailyNewsCache();
   if (cache?.items?.length && !dailyNewsList.children.length) {
     await renderDailyNewsItems(cache.items, { updatedAt: cache.updatedAt, fromCache: true });
+    if (showProgress) setDailyNewsProgress(true, 26);
   }
 
   if (!live) {
@@ -26058,19 +26095,24 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
       await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
     }
     if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
+    if (showProgress) finishDailyNewsProgress();
     return;
   }
 
   try {
     const prioritySources = DAILY_NEWS_SOURCES.filter((source) => source.kind === "search");
     const supportingSources = DAILY_NEWS_SOURCES.filter((source) => source.kind !== "search");
+    if (showProgress) setDailyNewsProgress(true, 38);
     const priorityBatches = await Promise.all(prioritySources.map(fetchDailyNewsSource));
     const priorityItems = compactDailyNewsItems(priorityBatches.flat());
+    if (showProgress) setDailyNewsProgress(true, 58);
     if (priorityItems.length) {
       saveDailyNewsCache(priorityItems);
       await renderDailyNewsItems(priorityItems, { updatedAt: new Date().toISOString() });
+      if (showProgress) setDailyNewsProgress(true, 74);
       if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
       const supportingBatches = await Promise.all(supportingSources.map(fetchDailyNewsSource));
+      if (showProgress) setDailyNewsProgress(true, 90);
       const mergedItems = compactDailyNewsItems([...priorityItems, ...supportingBatches.flat()]);
       const prioritySignature = priorityItems.map((item) => normalizeNewsUrl(item.url) || normalize(item.title)).join("|");
       const mergedSignature = mergedItems.map((item) => normalizeNewsUrl(item.url) || normalize(item.title)).join("|");
@@ -26078,14 +26120,17 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
         saveDailyNewsCache(mergedItems);
         await renderDailyNewsItems(mergedItems, { updatedAt: new Date().toISOString() });
       }
+      if (showProgress) finishDailyNewsProgress();
       return;
     }
 
+    if (showProgress) setDailyNewsProgress(true, 68);
     const batches = await Promise.all(supportingSources.map(fetchDailyNewsSource));
     const items = compactDailyNewsItems(batches.flat());
     if (items.length) {
       saveDailyNewsCache(items);
       await renderDailyNewsItems(items, { updatedAt: new Date().toISOString() });
+      if (showProgress) finishDailyNewsProgress();
       return;
     }
   } catch (_err) {
@@ -26100,6 +26145,7 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
   } else {
     await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
   }
+  if (showProgress) finishDailyNewsProgress();
 }
 
 async function fetchArtistBioFromWikipedia(artistName, preferredLanguage = currentLanguage) {

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260613spirit1" />
+    <link rel="stylesheet" href="styles.css?v=20260613newsbar1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -474,6 +474,9 @@
           Radar recente da música eletrônica com prioridade para Brasil e complemento global de fontes especializadas.
         </p>
         <div id="dailyNewsStatus" class="daily-news-status muted" aria-live="polite">Carregando notícias...</div>
+        <div id="dailyNewsProgress" class="daily-news-progress" role="progressbar" aria-label="Atualizando notícias" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+          <span id="dailyNewsProgressFill" class="daily-news-progress-fill"></span>
+        </div>
         <div id="dailyNewsList" class="daily-news-list"></div>
         <div class="daily-news-sources" aria-label="Fontes do jornal">
           <a href="https://alataj.com.br/" target="_blank" rel="noopener noreferrer">Alataj</a>
@@ -1651,6 +1654,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260613spirit1"></script>
+    <script src="app.js?v=20260613newsbar1"></script>
   </body>
 </html>
