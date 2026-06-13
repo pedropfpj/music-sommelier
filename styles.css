@@ -12170,8 +12170,9 @@ iframe {
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: 1;
   opacity: 1;
-  filter: brightness(1.52) saturate(1.22) contrast(0.98);
+  filter: brightness(1.18) saturate(1.16) contrast(1.02);
   object-fit: cover;
   object-position: center center;
 }
@@ -12179,11 +12180,31 @@ iframe {
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-fallback {
   position: absolute;
   inset: 0;
+  z-index: 0;
   font-size: clamp(5rem, 24vw, 10rem);
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-fallback.hidden {
+  display: none;
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty).has-artist-image .swipe-hero-art {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(126, 232, 198, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(6, 13, 24, 0.98), rgba(2, 6, 14, 0.99));
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty).has-artist-image .swipe-hero-image {
+  box-sizing: border-box;
+  padding: clamp(0.6rem, 2.2vw, 1rem);
+  object-fit: contain;
+  object-position: center center;
+  filter: brightness(1.1) saturate(1.14) contrast(1.04);
 }
 
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-preview-pulse {
   inset: auto 12% 1rem 12%;
+  z-index: 2;
   opacity: 0.74;
 }
 

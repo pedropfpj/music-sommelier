@@ -33284,12 +33284,20 @@ function renderTopSwipeArtwork(track) {
   const hasTrack = Boolean(track);
   const artist = String(track?.artist || "").trim();
   const suppressArtistImage = shouldSuppressUnverifiedArtistImage(track, track?.artistImageSource || "");
+  const artistImageUrl = suppressArtistImage ? "" : String(track?.artistImageUrl || "").trim();
   const imageUrl = [
+    artistImageUrl,
     track?.coverUrl,
-    track?.imageUrl,
-    suppressArtistImage ? "" : track?.artistImageUrl
+    track?.imageUrl
   ].map((item) => String(item || "").trim()).find(Boolean) || "";
-  if (topSwipeFallback) topSwipeFallback.textContent = artist ? artistInitials(artist) : "SS";
+  const usesArtistImage = Boolean(imageUrl && artistImageUrl && imageUrl === artistImageUrl);
+  topSwipeCard.classList.toggle("has-swipe-image", Boolean(hasTrack && imageUrl));
+  topSwipeCard.classList.toggle("has-artist-image", usesArtistImage);
+  topSwipeCard.classList.toggle("has-cover-image", Boolean(hasTrack && imageUrl && !usesArtistImage));
+  if (topSwipeFallback) {
+    topSwipeFallback.textContent = artist ? artistInitials(artist) : "SS";
+    topSwipeFallback.classList.toggle("hidden", Boolean(hasTrack && imageUrl));
+  }
   if (!topSwipeImage) return;
   if (!hasTrack || !imageUrl) {
     topSwipeImage.classList.add("hidden");
@@ -37610,6 +37618,18 @@ window.addEventListener("resize", syncFloatingSurpriseButton);
 
 bind(artistPhoto, "error", () => {
   if (currentRecommendation) renderArtistVisualFallback(currentRecommendation, t("artistImageFallback"));
+});
+
+bind(topSwipeImage, "error", () => {
+  if (topSwipeImage) {
+    topSwipeImage.classList.add("hidden");
+    topSwipeImage.removeAttribute("src");
+    topSwipeImage.alt = "";
+  }
+  if (topSwipeFallback) topSwipeFallback.classList.remove("hidden");
+  if (topSwipeCard) {
+    topSwipeCard.classList.remove("has-swipe-image", "has-artist-image", "has-cover-image");
+  }
 });
 
 bind(introContinueBtn, "click", () => {
