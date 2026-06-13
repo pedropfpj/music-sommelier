@@ -5840,8 +5840,15 @@ const DEFAULT_WEIGHTS = {
 
 const SMART_PRESETS = {
   focus: { style: "", fallbackStyle: "ambient", context: "foco", energy: "low", bpm: "", vocals: "instrumental" },
+  study: { style: "", fallbackStyle: "dub_techno", context: "estudo", energy: "low", bpm: "", vocals: "instrumental" },
+  relax: { style: "", fallbackStyle: "chillout", context: "relaxar", energy: "low", bpm: "60-110", vocals: "instrumental" },
+  creative: { style: "", fallbackStyle: "idm", context: "criatividade", energy: "mid", bpm: "", vocals: "" },
   work: { style: "", fallbackStyle: "deep_house", context: "trabalho", energy: "mid", bpm: "", vocals: "instrumental" },
   workout: { style: "", fallbackStyle: "tech_house", context: "treino", energy: "high", bpm: "", vocals: "" },
+  drive: { style: "", fallbackStyle: "progressive_house", context: "estrada", energy: "mid", bpm: "", vocals: "" },
+  home: { style: "", fallbackStyle: "deep_house", context: "casa", energy: "mid", bpm: "", vocals: "" },
+  social: { style: "", fallbackStyle: "disco_house", context: "social", energy: "mid", bpm: "", vocals: "" },
+  night: { style: "", fallbackStyle: "darkwave", context: "noite", energy: "mid", bpm: "", vocals: "" },
   after: { style: "", fallbackStyle: "chillout", context: "after", energy: "low", bpm: "", vocals: "" },
   peak: { style: "", fallbackStyle: "peak_time_techno", context: "peak", energy: "high", bpm: "", vocals: "instrumental" }
 };
@@ -5857,6 +5864,36 @@ const CONTEXT_TARGET_PROFILES = {
     avoidPenalty: 12,
     unknownPenalty: 1.5
   },
+  estudo: {
+    primary: ["ambient", "dub_techno", "minimal_techno", "idm", "future_garage", "downtempo", "deep_house"],
+    adjacent: ["hypnotic_techno", "organic_house", "liquid_dnb", "trip_hop", "psybient", "chillout"],
+    avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "forest_psy", "full_on", "full_on_night", "psytrance", "tech_house", "acid_techno", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
+    energy: { low: 2.6, mid: 0.9, high: -4.8, extreme: -9 },
+    primaryBoost: 7,
+    adjacentBoost: 2.4,
+    avoidPenalty: 10.8,
+    unknownPenalty: 1.1
+  },
+  relaxar: {
+    primary: ["chillout", "downtempo", "ambient", "psybient", "organic_house", "deep_house", "trip_hop", "future_garage"],
+    adjacent: ["dub_techno", "minimal_techno", "idm", "liquid_dnb", "soulful_house", "slambient"],
+    avoid: ["freeform", "psycore", "hi_tech", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "drum_and_bass", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
+    energy: { low: 3, mid: 0.7, high: -5.2, extreme: -9.5 },
+    primaryBoost: 7.2,
+    adjacentBoost: 2.3,
+    avoidPenalty: 11.5,
+    unknownPenalty: 1.2
+  },
+  criatividade: {
+    primary: ["idm", "electro", "breakbeat", "trip_hop", "future_garage", "minimal_techno", "organic_house", "deep_house"],
+    adjacent: ["dub_techno", "melodic_techno", "progressive_house", "darkwave", "synthwave", "downtempo", "psybient"],
+    avoid: ["speedcore", "frenchcore", "gabber", "psycore", "hi_tech", "rawstyle"],
+    energy: { low: 0.8, mid: 2.6, high: 0.2, extreme: -4.2 },
+    primaryBoost: 5.7,
+    adjacentBoost: 2.4,
+    avoidPenalty: 6.8,
+    unknownPenalty: 0.2
+  },
   trabalho: {
     primary: ["deep_house", "organic_house", "minimal_techno", "hypnotic_techno", "dub_techno", "future_garage", "liquid_dnb", "idm"],
     adjacent: ["techno", "melodic_techno", "progressive_house", "downtempo", "ambient", "trip_hop", "darkwave"],
@@ -5866,6 +5903,36 @@ const CONTEXT_TARGET_PROFILES = {
     adjacentBoost: 2.1,
     avoidPenalty: 8.5,
     unknownPenalty: 0.4
+  },
+  casa: {
+    primary: ["deep_house", "house", "organic_house", "soulful_house", "disco_house", "garage_house", "afro_house", "chillout"],
+    adjacent: ["progressive_house", "minimal_deep_tech", "downtempo", "trip_hop", "uk_garage", "future_garage"],
+    avoid: ["psycore", "hi_tech", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "breakcore", "frenchcore", "speedcore"],
+    energy: { low: 1.1, mid: 2.3, high: 0.4, extreme: -5.4 },
+    primaryBoost: 5.4,
+    adjacentBoost: 2,
+    avoidPenalty: 7.8,
+    unknownPenalty: 0.2
+  },
+  social: {
+    primary: ["house", "disco_house", "soulful_house", "afro_house", "garage_house", "tech_house", "bass_house", "brazilian_funk"],
+    adjacent: ["progressive_house", "electro_house", "uk_garage", "deep_house", "jackin_house", "organic_house"],
+    avoid: ["ambient", "slambient", "psybient", "speedcore", "breakcore", "psycore", "hi_tech", "dark_experimental"],
+    energy: { low: -1.9, mid: 2.2, high: 1.4, extreme: -2.6 },
+    primaryBoost: 5.5,
+    adjacentBoost: 2.2,
+    avoidPenalty: 6.9,
+    unknownPenalty: 0
+  },
+  noite: {
+    primary: ["darkwave", "coldwave", "witch_house", "dub_techno", "hypnotic_techno", "dark_progressive", "slambient", "trip_hop"],
+    adjacent: ["industrial_techno", "minimal_techno", "ambient", "idm", "dark_psy", "progressive_psy"],
+    avoid: ["disco_house", "soulful_house", "brazilian_funk", "speedcore", "frenchcore", "jump_up"],
+    energy: { low: 1.5, mid: 2.4, high: 0.4, extreme: -3.8 },
+    primaryBoost: 5.9,
+    adjacentBoost: 2.1,
+    avoidPenalty: 6.4,
+    unknownPenalty: 0.3
   },
   treino: {
     primary: ["tech_house", "techno", "peak_time_techno", "hard_techno", "industrial_techno", "bass_house", "electro_house", "drum_and_bass", "neurofunk", "jump_up", "brazilian_funk"],
@@ -9788,7 +9855,21 @@ function bpmRangesOverlap(a, b) {
   return a.min <= b.max && b.min <= a.max;
 }
 
-const VALID_CONTEXT_VALUES = new Set(["warmup", "peak", "after", "foco", "trabalho", "treino", "estrada"]);
+const VALID_CONTEXT_VALUES = new Set([
+  "warmup",
+  "peak",
+  "after",
+  "foco",
+  "estudo",
+  "relaxar",
+  "criatividade",
+  "trabalho",
+  "treino",
+  "estrada",
+  "casa",
+  "social",
+  "noite"
+]);
 const VALID_ENERGY_VALUES = new Set(["low", "mid", "high", "extreme"]);
 const VALID_VOCAL_VALUES = new Set(["instrumental", "light_vocals", "vocal"]);
 
@@ -9801,7 +9882,21 @@ function normalizeRecommendationPrefs(prefs = {}) {
     workout: "treino",
     gym: "treino",
     road: "estrada",
-    travel: "estrada"
+    travel: "estrada",
+    relax: "relaxar",
+    relaxing: "relaxar",
+    chill: "relaxar",
+    study: "estudo",
+    studying: "estudo",
+    creative: "criatividade",
+    creativity: "criatividade",
+    create: "criatividade",
+    home: "casa",
+    house_home: "casa",
+    party: "social",
+    friends: "social",
+    night: "noite",
+    evening: "noite"
   };
   const energyAliases = { medium: "mid", med: "mid" };
   const vocalAliases = { light: "light_vocals", light_vocal: "light_vocals", strong: "vocal", mixed: "" };
@@ -14165,12 +14260,23 @@ const I18N = {
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
     supportLegalNote: "Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.",
     sectionKicker: "Radar de gosto",
-    sectionHint: "Use atalhos quando quiser fluidez ou filtros quando quiser precisão.",
+    sectionHint: "Escolha um momento primeiro; filtros finos ficam recolhidos.",
+    contextMomentKicker: "Momento de escuta",
+    contextMomentTitle: "Para que você quer música agora?",
+    contextMomentHint: "Cada intenção ajusta energia, pulso e família sonora.",
     presetFocus: "Foco",
+    presetStudy: "Estudo",
+    presetRelax: "Relaxar",
+    presetCreative: "Criar",
     presetWork: "Trabalho",
     presetWorkout: "Treino",
+    presetDrive: "Dirigir",
+    presetHome: "Casa",
+    presetSocial: "Social",
+    presetNight: "Noite",
     presetAfter: "After",
     presetPeak: "Peak",
+    precisionFiltersSummary: "Filtros manuais",
     advancedFiltersSummary: "Ajuste fino de prioridade",
     recommendBtn: "Encontrar faixa",
     recommendBtnBusy: "Buscando...",
@@ -14886,12 +14992,23 @@ const I18N = {
     supportMissingPayment: "Configure this support method before copying.",
     supportLegalNote: "Tips are voluntary support for the project, not an investment or crypto purchase.",
     sectionKicker: "Taste radar",
-    sectionHint: "Use shortcuts for flow or filters when you want precision.",
+    sectionHint: "Pick a moment first; precise filters stay tucked away.",
+    contextMomentKicker: "Listening moment",
+    contextMomentTitle: "What do you need music for now?",
+    contextMomentHint: "Each intention tunes energy, pulse, and sound family.",
     presetFocus: "Focus",
+    presetStudy: "Study",
+    presetRelax: "Relax",
+    presetCreative: "Create",
     presetWork: "Work",
     presetWorkout: "Workout",
+    presetDrive: "Drive",
+    presetHome: "Home",
+    presetSocial: "Social",
+    presetNight: "Night",
     presetAfter: "After",
     presetPeak: "Peak",
+    precisionFiltersSummary: "Manual filters",
     advancedFiltersSummary: "Fine-tune priorities",
     recommendBtn: "Find track",
     recommendBtnBusy: "Searching...",
@@ -15604,12 +15721,23 @@ const I18N = {
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
     supportLegalNote: "Las tips son apoyo voluntario al proyecto, no inversión ni compra de cripto.",
     sectionKicker: "Radar de gusto",
-    sectionHint: "Usa atajos para fluidez o filtros cuando quieras precisión.",
+    sectionHint: "Elige primero un momento; los filtros finos quedan plegados.",
+    contextMomentKicker: "Momento de escucha",
+    contextMomentTitle: "¿Para qué quieres música ahora?",
+    contextMomentHint: "Cada intención ajusta energía, pulso y familia sonora.",
     presetFocus: "Foco",
+    presetStudy: "Estudio",
+    presetRelax: "Relajar",
+    presetCreative: "Crear",
     presetWork: "Trabajo",
     presetWorkout: "Entreno",
+    presetDrive: "Conducir",
+    presetHome: "Casa",
+    presetSocial: "Social",
+    presetNight: "Noche",
     presetAfter: "After",
     presetPeak: "Peak",
+    precisionFiltersSummary: "Filtros manuales",
     advancedFiltersSummary: "Ajuste fino de prioridad",
     recommendBtn: "Encontrar pista",
     recommendBtnBusy: "Buscando...",
@@ -16357,9 +16485,51 @@ function energyLabelByValue(energyValue) {
 
 function contextLabelByValue(contextValue) {
   const labels = {
-    pt: { warmup: "warmup", peak: "peak", after: "after", foco: "foco profundo", trabalho: "trabalho criativo", treino: "academia / treino", estrada: "estrada" },
-    en: { warmup: "warm-up", peak: "peak time", after: "after", foco: "deep focus", trabalho: "creative work", treino: "gym / workout", estrada: "road trip" },
-    es: { warmup: "calentamiento", peak: "hora pico", after: "after", foco: "foco profundo", trabalho: "trabajo creativo", treino: "gimnasio / entrenamiento", estrada: "viaje" }
+    pt: {
+      warmup: "warmup",
+      peak: "peak",
+      after: "after",
+      foco: "foco profundo",
+      estudo: "estudo",
+      relaxar: "relaxar",
+      criatividade: "criatividade",
+      trabalho: "trabalho criativo",
+      treino: "academia / treino",
+      estrada: "estrada",
+      casa: "casa",
+      social: "social",
+      noite: "noite"
+    },
+    en: {
+      warmup: "warm-up",
+      peak: "peak time",
+      after: "after",
+      foco: "deep focus",
+      estudo: "study",
+      relaxar: "relax",
+      criatividade: "creative flow",
+      trabalho: "creative work",
+      treino: "gym / workout",
+      estrada: "road trip",
+      casa: "home listening",
+      social: "social",
+      noite: "night mode"
+    },
+    es: {
+      warmup: "calentamiento",
+      peak: "hora pico",
+      after: "after",
+      foco: "foco profundo",
+      estudo: "estudio",
+      relaxar: "relajar",
+      criatividade: "creatividad",
+      trabalho: "trabajo creativo",
+      treino: "gimnasio / entrenamiento",
+      estrada: "viaje",
+      casa: "casa",
+      social: "social",
+      noite: "noche"
+    }
   };
   return (labels[currentLanguage] || labels.pt)[contextValue] || contextValue || t("freeContext");
 }
@@ -16407,7 +16577,7 @@ function localizeOptionLabels() {
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
-      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Foco profundo", trabalho: "Trabalho criativo", treino: "Academia / treino", estrada: "Estrada / viagem" },
+      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Foco profundo", estudo: "Estudo", relaxar: "Relaxar", criatividade: "Criatividade", trabalho: "Trabalho criativo", treino: "Academia / treino", estrada: "Estrada / viagem", casa: "Casa", social: "Social", noite: "Noite" },
       energy: { low: "Baixa", mid: "Média", high: "Alta", extreme: "Extrema" },
       vocals: { instrumental: "Instrumental", light_vocals: "Vocais leves", vocal: "Vocal forte" }
     },
@@ -16450,7 +16620,7 @@ function localizeOptionLabels() {
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
-      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Deep focus", trabalho: "Creative work", treino: "Gym / workout", estrada: "Road / travel" },
+      context: { warmup: "Warm-up", peak: "Peak time", after: "After / downshift", foco: "Deep focus", estudo: "Study", relaxar: "Relax", criatividade: "Creative flow", trabalho: "Creative work", treino: "Gym / workout", estrada: "Road / travel", casa: "Home listening", social: "Social", noite: "Night mode" },
       energy: { low: "Low", mid: "Mid", high: "High", extreme: "Extreme" },
       vocals: { instrumental: "Instrumental", light_vocals: "Light vocals", vocal: "Strong vocals" }
     },
@@ -16493,7 +16663,7 @@ function localizeOptionLabels() {
         chillout: "Chillout",
         brazilian_funk: "Brazilian Funk"
       },
-      context: { warmup: "Calentamiento", peak: "Hora pico", after: "After / bajada", foco: "Foco profundo", trabalho: "Trabajo creativo", treino: "Gimnasio / entrenamiento", estrada: "Ruta / viaje" },
+      context: { warmup: "Calentamiento", peak: "Hora pico", after: "After / bajada", foco: "Foco profundo", estudo: "Estudio", relaxar: "Relajar", criatividade: "Creatividad", trabalho: "Trabajo creativo", treino: "Gimnasio / entrenamiento", estrada: "Ruta / viaje", casa: "Casa", social: "Social", noite: "Noche" },
       energy: { low: "Baja", mid: "Media", high: "Alta", extreme: "Extrema" },
       vocals: { instrumental: "Instrumental", light_vocals: "Voces ligeras", vocal: "Vocal fuerte" }
     }
@@ -16889,11 +17059,22 @@ function applyLanguage() {
   renderSupportPanel();
   setText("#preferenceSectionKicker", t("sectionKicker"));
   setText("#preferenceSectionHint", t("sectionHint"));
+  setText("#contextMomentKicker", t("contextMomentKicker"));
+  setText("#contextMomentTitle", t("contextMomentTitle"));
+  setText("#contextMomentHint", t("contextMomentHint"));
   setText("#presetFocusBtn", t("presetFocus"));
+  setText("#presetStudyBtn", t("presetStudy"));
+  setText("#presetRelaxBtn", t("presetRelax"));
+  setText("#presetCreativeBtn", t("presetCreative"));
   setText("#presetWorkBtn", t("presetWork"));
   setText("#presetWorkoutBtn", t("presetWorkout"));
+  setText("#presetDriveBtn", t("presetDrive"));
+  setText("#presetHomeBtn", t("presetHome"));
+  setText("#presetSocialBtn", t("presetSocial"));
+  setText("#presetNightBtn", t("presetNight"));
   setText("#presetAfterBtn", t("presetAfter"));
   setText("#presetPeakBtn", t("presetPeak"));
+  setText("#precisionFiltersSummary", t("precisionFiltersSummary"));
   setText("#advancedFiltersSummary", t("advancedFiltersSummary"));
   setText("#recommendBtn", t("recommendBtn"));
   setText("#rerollBtn", t("rerollBtn"));
@@ -33093,11 +33274,11 @@ function renderTopSwipeArtwork(track) {
   const hasTrack = Boolean(track);
   const artist = String(track?.artist || "").trim();
   const suppressArtistImage = shouldSuppressUnverifiedArtistImage(track, track?.artistImageSource || "");
-  const imageUrl = String(
-    suppressArtistImage
-      ? (track?.coverUrl || track?.imageUrl || "")
-      : (track?.artistImageUrl || track?.coverUrl || track?.imageUrl || "")
-  ).trim();
+  const imageUrl = [
+    track?.coverUrl,
+    track?.imageUrl,
+    suppressArtistImage ? "" : track?.artistImageUrl
+  ].map((item) => String(item || "").trim()).find(Boolean) || "";
   if (topSwipeFallback) topSwipeFallback.textContent = artist ? artistInitials(artist) : "SS";
   if (!topSwipeImage) return;
   if (!hasTrack || !imageUrl) {

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260613swipepolish1" />
+    <link rel="stylesheet" href="styles.css?v=20260613artcontext1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -555,16 +555,33 @@
             <p id="preferenceSectionKicker" class="section-kicker">Radar de gosto</p>
             <h3 id="preferencias-title">Ajuste o alvo</h3>
           </div>
-          <p id="preferenceSectionHint" class="section-hint muted">Use atalhos quando quiser fluidez ou filtros quando quiser precisão.</p>
+          <p id="preferenceSectionHint" class="section-hint muted">Escolha um momento primeiro; filtros finos ficam recolhidos.</p>
         </div>
 
-        <div id="smartPresetBar" class="smart-presets" aria-label="Atalhos de recomendação">
-          <button id="presetFocusBtn" class="smart-preset-btn" type="button" data-preset="focus" aria-pressed="false">Foco</button>
-          <button id="presetWorkBtn" class="smart-preset-btn" type="button" data-preset="work" aria-pressed="false">Trabalho</button>
-          <button id="presetWorkoutBtn" class="smart-preset-btn" type="button" data-preset="workout" aria-pressed="false">Treino</button>
-          <button id="presetAfterBtn" class="smart-preset-btn" type="button" data-preset="after" aria-pressed="false">After</button>
-          <button id="presetPeakBtn" class="smart-preset-btn" type="button" data-preset="peak" aria-pressed="false">Peak</button>
-        </div>
+        <article class="context-moment-panel" aria-labelledby="contextMomentTitle">
+          <div class="context-moment-copy">
+            <p id="contextMomentKicker" class="section-kicker">Momento de escuta</p>
+            <h4 id="contextMomentTitle">Para que você quer música agora?</h4>
+            <p id="contextMomentHint" class="muted">Escolha uma intenção e eu ajusto energia, pulso e família sonora.</p>
+          </div>
+          <div id="smartPresetBar" class="smart-presets" aria-label="Atalhos de recomendação">
+            <button id="presetFocusBtn" class="smart-preset-btn" type="button" data-preset="focus" aria-pressed="false">Foco</button>
+            <button id="presetStudyBtn" class="smart-preset-btn" type="button" data-preset="study" aria-pressed="false">Estudo</button>
+            <button id="presetRelaxBtn" class="smart-preset-btn" type="button" data-preset="relax" aria-pressed="false">Relaxar</button>
+            <button id="presetCreativeBtn" class="smart-preset-btn" type="button" data-preset="creative" aria-pressed="false">Criar</button>
+            <button id="presetWorkBtn" class="smart-preset-btn" type="button" data-preset="work" aria-pressed="false">Trabalho</button>
+            <button id="presetWorkoutBtn" class="smart-preset-btn" type="button" data-preset="workout" aria-pressed="false">Treino</button>
+            <button id="presetDriveBtn" class="smart-preset-btn" type="button" data-preset="drive" aria-pressed="false">Dirigir</button>
+            <button id="presetHomeBtn" class="smart-preset-btn" type="button" data-preset="home" aria-pressed="false">Casa</button>
+            <button id="presetSocialBtn" class="smart-preset-btn" type="button" data-preset="social" aria-pressed="false">Social</button>
+            <button id="presetNightBtn" class="smart-preset-btn" type="button" data-preset="night" aria-pressed="false">Noite</button>
+            <button id="presetAfterBtn" class="smart-preset-btn" type="button" data-preset="after" aria-pressed="false">After</button>
+            <button id="presetPeakBtn" class="smart-preset-btn" type="button" data-preset="peak" aria-pressed="false">Peak</button>
+          </div>
+        </article>
+
+        <details class="precision-filters">
+          <summary id="precisionFiltersSummary">Filtros manuais</summary>
 
         <div class="fields-grid">
           <div class="field style-field">
@@ -685,6 +702,12 @@
               <option value="trabalho">Trabalho criativo</option>
               <option value="treino">Academia / treino</option>
               <option value="estrada">Estrada / viagem</option>
+              <option value="relaxar">Relaxar</option>
+              <option value="estudo">Estudo</option>
+              <option value="criatividade">Criatividade</option>
+              <option value="casa">Casa</option>
+              <option value="social">Social</option>
+              <option value="noite">Noite</option>
             </select>
           </div>
 
@@ -766,6 +789,7 @@
               <button id="resetAppBtn" class="danger" type="button">Novo usuário (reset total)</button>
             </div>
           </div>
+        </details>
         </details>
 
         <div class="cta-row recommendation-actions">
@@ -1626,6 +1650,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260613swipepolish1"></script>
+    <script src="app.js?v=20260613artcontext1"></script>
   </body>
 </html>
