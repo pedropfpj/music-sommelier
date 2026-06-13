@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260612context1" />
+    <link rel="stylesheet" href="styles.css?v=20260613newuser1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -267,9 +267,14 @@
           <div class="brand-logo-wrap" aria-hidden="true">
             <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
-          <p id="authKicker" class="brand-kicker">Carregar usuário</p>
-          <h1 id="authTitle">Entre para carregar seu perfil</h1>
-          <p id="authDesc">Faça login para continuar com seu perfil salvo ou continue sem login.</p>
+          <p id="authKicker" class="brand-kicker">Conta opcional</p>
+          <h1 id="authTitle">Use o Sonic Search sem login</h1>
+          <p id="authDesc">Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.</p>
+        </div>
+        <div class="auth-local-note" aria-label="Modo local">
+          <span>Perfil local automático</span>
+          <span>Backup por arquivo</span>
+          <span>Login só como extra</span>
         </div>
         <div class="auth-grid">
           <label for="authUsername" id="authUsernameLabel">Usuário</label>
@@ -279,9 +284,9 @@
           <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
         <div class="cta-row">
+          <button id="authGuestBtn" class="primary">Usar perfil local</button>
           <button id="authResumeBtn" class="secondary hidden" type="button">Retomar perfil salvo</button>
-          <button id="authLoginBtn" class="primary">Entrar</button>
-          <button id="authGuestBtn">Continuar sem login</button>
+          <button id="authLoginBtn">Entrar em conta</button>
           <button id="authTestUserBtn" class="secondary" type="button">Testar novo usuário</button>
         </div>
         <div class="auth-divider">
@@ -323,6 +328,7 @@
         <div class="cta-row welcome-start-actions">
           <button id="startBtn" class="primary large">Iniciar experiência</button>
           <button id="startSurpriseBtn" class="large">Surpreenda-me</button>
+          <button id="welcomeImportProfileBtn" class="large secondary welcome-import-profile" type="button">Tenho perfil salvo</button>
         </div>
         <div id="quickSurprisePanel" class="quick-surprise-panel hidden">
           <p id="quickSurpriseTitle" class="quick-surprise-title">Modo Surpreenda-me</p>
@@ -403,10 +409,10 @@
         <div class="swipe-start-head">
           <div>
             <p id="swipeHeroKicker" class="section-kicker">Descoberta por swipe</p>
-            <h3 id="swipeHeroTitle">Ouça primeiro. Ensine depois.</h3>
+            <h3 id="swipeHeroTitle">Descubra no swipe.</h3>
           </div>
           <div class="swipe-start-cta">
-            <p id="swipeHeroHint" class="section-hint muted">Curta, troque ou arraste. O gesto vira direção para a próxima faixa.</p>
+            <p id="swipeHeroHint" class="section-hint muted">Curti, não curti ou surpresa. Os detalhes ficam para depois.</p>
           </div>
         </div>
         <div class="swipe-discovery-strip" aria-labelledby="swipeDeckTitle">
@@ -431,33 +437,27 @@
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da track</p>
               <h4 id="topSwipeTitle">Comece com uma descoberta</h4>
-              <p id="topSwipeMeta" class="muted">Use Surpreender para cair direto no som, ou ajuste o alvo quando quiser precisão.</p>
+              <p id="topSwipeMeta" class="muted">Toque em Surpresa e responda sem pensar demais.</p>
               <div id="topSwipeBadges" class="swipe-status-badges" aria-label="Sinais da recomendação"></div>
+              <div id="topRecommendationTrustPanel" class="recommendation-trust-panel compact hidden" aria-label="Confiança da recomendação">
+                <span id="topRecommendationTrustLabel">Confiança</span>
+                <strong id="topRecommendationTrustValue">--%</strong>
+                <small id="topRecommendationTrustReason"></small>
+              </div>
               <p id="topSwipeReason" class="swipe-card-reason hidden"></p>
               <div class="swipe-track-signals">
-                <span id="topSwipeStyleChip">Estilo</span>
+                <span id="topSwipeStyleChip" class="genre-signal">Estilo</span>
                 <span id="topSwipeBpmChip">BPM</span>
                 <span id="topSwipeEnergyChip">Energia</span>
               </div>
             </div>
           </article>
           <div class="swipe-hero-actions">
-            <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Trocar</button>
-            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa sonora</button>
+            <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Não curti</button>
+            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa</button>
             <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
           </div>
-          <div class="quick-known-panel hidden" data-quick-known-panel>
-            <div class="quick-known-copy">
-              <p class="quick-known-kicker" data-quick-known-kicker>Status rápido</p>
-              <p class="quick-known-question" data-quick-known-question>Este artista já estava no seu radar?</p>
-              <p class="quick-known-hint" data-quick-known-hint>Toque antes da próxima faixa para separar conhecido de descoberta real.</p>
-            </div>
-            <div class="quick-known-actions">
-              <button class="quick-known-btn known" type="button" data-quick-known-action="yes">Já conhecia</button>
-              <button class="quick-known-btn new" type="button" data-quick-known-action="no">Novidade pra mim</button>
-            </div>
-          </div>
-          <p id="topSwipeHint" class="muted swipe-hint">Arraste, curta ou troque. Um gesto já melhora a próxima aposta.</p>
+          <p id="topSwipeHint" class="muted swipe-hint">O perfil guarda os artistas e subgêneros que você andou curtindo.</p>
         </div>
       </section>
 
@@ -787,6 +787,11 @@
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
           <div id="trackStatusBadges" class="swipe-status-badges track-status-badges" aria-label="Sinais da faixa"></div>
+          <div id="recommendationTrustPanel" class="recommendation-trust-panel hidden" aria-label="Confiança da recomendação">
+            <span id="recommendationTrustLabel">Confiança</span>
+            <strong id="recommendationTrustValue">--%</strong>
+            <small id="recommendationTrustReason"></small>
+          </div>
           <span class="swipe-stamp primary-swipe-stamp swipe-stamp-like">Curti</span>
           <span class="swipe-stamp primary-swipe-stamp swipe-stamp-pass">Não curti</span>
           <figure id="artistVisualCard" class="artist-visual-card">
@@ -805,6 +810,17 @@
           </figure>
           <p id="primarySwipeHint" class="primary-swipe-hint">Arraste este card: direita curte, esquerda troca.</p>
           <h4 id="songTitle" class="track-title-animated"></h4>
+          <div id="nowPlayingGenre" class="now-playing-genre hidden" aria-label="Subgênero tocando agora">
+            <span id="nowPlayingKicker">Tocando agora</span>
+            <strong id="nowPlayingStyle">Subgênero</strong>
+            <small>
+              <span id="nowPlayingFamily">Família sonora</span>
+              <span>•</span>
+              <span id="nowPlayingBpm">BPM</span>
+              <span>•</span>
+              <span id="nowPlayingEnergy">Energia</span>
+            </small>
+          </div>
           <p id="trackMicroReason" class="track-micro-reason hidden"></p>
           <p id="artistLine" class="meta-line artist-line"><span id="artistOriginFlag" class="artist-origin-flag hidden" aria-hidden="true"></span><span id="artistName"></span> <span>•</span> <span id="labelName"></span></p>
           <p id="bpmLine" class="meta-line bpm-line"><span id="styleName"></span> <span>•</span> <span id="bpmInfo"></span> <span>•</span> <span id="energyInfo"></span></p>
@@ -867,6 +883,7 @@
               <p>Está gostando do que está escutando?</p>
               <div class="feedback-buttons">
                 <button id="previewLikeBtn">Sim, curti</button>
+                <button id="previewIssueBtn" class="secondary">Não tocou</button>
                 <button id="previewDislikeBtn" class="secondary">Não, troca agora</button>
               </div>
             </div>
@@ -968,7 +985,7 @@
               <h4 id="swipeTrackTitle">Gere uma recomendação</h4>
               <p id="swipeTrackMeta" class="muted">Arraste para direita se curtiu ou para esquerda se não combinou.</p>
               <div class="swipe-track-signals">
-                <span id="swipeStyleChip">Estilo</span>
+                <span id="swipeStyleChip" class="genre-signal">Estilo</span>
                 <span id="swipeBpmChip">BPM</span>
                 <span id="swipeEnergyChip">Energia</span>
               </div>
@@ -976,17 +993,6 @@
             <div class="swipe-actions">
               <button id="swipePassBtn" class="swipe-action-btn pass" type="button" aria-label="Não curti, trocar faixa">Trocar</button>
               <button id="swipeLikeBtn" class="swipe-action-btn like" type="button" aria-label="Curti, salvar no perfil">Curti</button>
-            </div>
-            <div class="quick-known-panel hidden" data-quick-known-panel>
-              <div class="quick-known-copy">
-                <p class="quick-known-kicker" data-quick-known-kicker>Status rápido</p>
-                <p class="quick-known-question" data-quick-known-question>Este artista já estava no seu radar?</p>
-                <p class="quick-known-hint" data-quick-known-hint>Toque antes da próxima faixa para separar conhecido de descoberta real.</p>
-              </div>
-              <div class="quick-known-actions">
-                <button class="quick-known-btn known" type="button" data-quick-known-action="yes">Já conhecia</button>
-                <button class="quick-known-btn new" type="button" data-quick-known-action="no">Novidade pra mim</button>
-              </div>
             </div>
             <p id="swipeHint" class="muted swipe-hint">Também funciona com mouse ou dedo: arraste o card e solte.</p>
           </div>
@@ -1014,8 +1020,10 @@
                   <button id="likeDiscoveryBtn">Curti a descoberta</button>
                 </div>
               </div>
-              <div class="feedback-action-group correction-feedback-group">
+              <div class="feedback-action-group correction-feedback-group" data-quick-known-panel>
                 <p id="feedbackCorrectGroupTitle" class="feedback-group-title">Corrigir rota</p>
+                <p class="quick-known-question compact" data-quick-known-question>Este artista já estava no seu radar?</p>
+                <p class="quick-known-hint compact" data-quick-known-hint>Marque conhecido ou novidade junto dos seus sinais de gosto.</p>
                 <div class="feedback-buttons correction-buttons">
                   <button id="knewDiscoveryBtn">Já conhecia</button>
                   <button id="newDiscoveryBtn" class="positive">Novidade pra mim</button>
@@ -1082,6 +1090,24 @@
                 <span><strong>2</strong><em id="voiceStudioStepTwo">Aperte play</em></span>
                 <span><strong>3</strong><em id="voiceStudioStepThree">Ajuste camadas</em></span>
               </div>
+              <div id="voiceStudioSessionPanel" class="voice-studio-session" aria-label="Resumo da sessão do estúdio">
+                <div>
+                  <span id="voiceStudioSessionStateLabel">Estado</span>
+                  <strong id="voiceStudioSessionStateValue">Pronto</strong>
+                </div>
+                <div>
+                  <span id="voiceStudioSessionLayersLabel">Camadas</span>
+                  <strong id="voiceStudioSessionLayersValue">5/6</strong>
+                </div>
+                <div>
+                  <span id="voiceStudioSessionLengthLabel">Export</span>
+                  <strong id="voiceStudioSessionLengthValue">8 compassos</strong>
+                </div>
+                <div>
+                  <span id="voiceStudioSessionFormatLabel">Arquivo</span>
+                  <strong id="voiceStudioSessionFormatValue">WAV local</strong>
+                </div>
+              </div>
             </div>
             <div class="voice-mini-transport">
               <span id="voiceMiniNoVoiceBadge" class="voice-mini-badge">Sem microfone e sem cadastro</span>
@@ -1106,6 +1132,24 @@
                 <strong id="voiceMiniRecipeTitle">Techno direto • 132 BPM</strong>
                 <p id="voiceMiniRecipeMeta" class="muted">Kick, Bass, Hat, Clap e Synth ativos.</p>
                 <div id="voiceMiniLayerSignature" class="voice-layer-signature" aria-label="Assinatura da receita"></div>
+                <div id="voiceMiniInsightPanel" class="voice-mini-insight" aria-label="Leitura da ideia">
+                  <p id="voiceMiniInsightKicker">Leitura local</p>
+                  <strong id="voiceMiniInsightTitle">Pronto para pista</strong>
+                  <div class="voice-mini-insight-grid">
+                    <span>
+                      <small id="voiceMiniInsightEnergyLabel">Energia</small>
+                      <b id="voiceMiniInsightEnergyValue">pista</b>
+                    </span>
+                    <span>
+                      <small id="voiceMiniInsightShapeLabel">Forma</small>
+                      <b id="voiceMiniInsightShapeValue">equilibrada</b>
+                    </span>
+                    <span>
+                      <small id="voiceMiniInsightMoveLabel">Próximo gesto</small>
+                      <b id="voiceMiniInsightMoveValue">varie o sequencer</b>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="voice-mini-section voice-mini-preset-section">
@@ -1116,6 +1160,18 @@
                 <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="trap">Trap mutante</button>
                 <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy ácido</button>
                 <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="ambient">Ambient pulsante</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="house">House orgânico</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="dnb">DnB líquido</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="darkprog">Dark prog</button>
+              </div>
+            </div>
+            <div class="voice-mini-section voice-mini-morph-section">
+              <p id="voiceMiniMorphTitle" class="voice-mini-section-title">Macromovimentos</p>
+              <div id="voiceMiniMorphGrid" class="voice-mini-morph-grid" aria-label="Macromovimentos do estúdio">
+                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="floor">Mais pista</button>
+                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="deep">Mais profundo</button>
+                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="weird">Mais estranho</button>
+                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="open">Mais aberto</button>
               </div>
             </div>
             <label class="voice-bpm-control voice-primary-bpm-control" for="voiceMiniBpmSlider">
@@ -1364,9 +1420,9 @@
         </div>
         <article id="profileBackupCard" class="profile-backup-card">
           <div>
-            <p id="profileBackupKicker" class="summary-kicker">Perfil seguro</p>
-            <h4 id="profileBackupTitle">Não perder minhas curtidas</h4>
-            <p id="profileBackupHint" class="muted">Enquanto a conta real não chega, seu mapa musical fica salvo neste aparelho. Você também pode guardar uma cópia privada.</p>
+            <p id="profileBackupKicker" class="summary-kicker">Perfil local portátil</p>
+            <h4 id="profileBackupTitle">Leve seu mapa musical com você</h4>
+            <p id="profileBackupHint" class="muted">O app funciona sem login e salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.</p>
           </div>
           <div class="profile-backup-actions">
             <p id="profileBackupStatus" class="profile-backup-status muted">Quando você curtir ou avaliar músicas, seu mapa fica salvo neste aparelho.</p>
@@ -1386,9 +1442,9 @@
         <article id="socialProfileCard" class="social-profile-card">
           <div class="social-profile-head">
             <div>
-              <p class="summary-kicker">Sonic Social Beta</p>
-              <h4>Perfil público e curtidas em comum</h4>
-              <p class="muted">Entre com uma conta social para salvar curtidas na nuvem, montar seu perfil público e preparar matches musicais com outros usuários.</p>
+              <p class="summary-kicker">Conta online opcional</p>
+              <h4>Sincronização, social e premium</h4>
+              <p class="muted">Use só quando quiser nuvem, matches, ranking público ou backup automático. A descoberta musical continua funcionando localmente.</p>
             </div>
             <span id="socialConnectionBadge" class="social-connection-badge">Local</span>
           </div>
@@ -1418,7 +1474,7 @@
               <button id="socialSignOutBtn" class="listen-btn secondary hidden" type="button">Sair</button>
               <button id="socialSyncBtn" class="listen-btn soundcloud-btn" type="button">Sincronizar curtidas</button>
             </div>
-            <p id="socialStatus" class="social-status muted">Conecte o Supabase para ativar perfis públicos, feed e curtidas em comum.</p>
+            <p id="socialStatus" class="social-status muted">Opcional: conecte conta online quando quiser sincronizar além deste aparelho.</p>
           </div>
 
           <div id="socialSignedPanel" class="social-signed-panel hidden">
@@ -1507,6 +1563,16 @@
             </div>
             <div id="summaryLikedTracksList" class="liked-track-list"></div>
           </article>
+          <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
+            <div class="liked-track-history-head">
+              <div>
+                <h4 id="summaryDislikedTracksTitle">Músicas não curtidas</h4>
+                <p id="summaryDislikedTracksHint" class="muted">Tudo que você descartar fica salvo aqui para revisar seu mapa musical.</p>
+              </div>
+              <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
+            </div>
+            <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
+          </article>
           <article class="profile-stat-card wide">
             <h4 id="summaryFiveStarTracksTitle">Faixas avaliadas com 5 estrelas</h4>
             <div id="summaryFiveStarTracks" class="summary-tags"></div>
@@ -1558,7 +1624,8 @@
         premiumImageLimitPerProfile: 0,
         allowImageRegeneration: true
       };
+      window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260612context1"></script>
+    <script src="app.js?v=20260613newuser1"></script>
   </body>
 </html>

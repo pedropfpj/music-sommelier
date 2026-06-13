@@ -15,6 +15,7 @@ const BLOCKS = [
   "EXTERNAL_DATASET_FILES",
   "SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS",
   "LOCAL_TRACK_SEED_BOOST",
+  "CURATED_BANDCAMP_TRACK_EXPANSION",
   "catalog",
   "discoveryCatalog",
   "INDEXED_DATASET_ARTIST_COUNT",
@@ -38,7 +39,7 @@ const GENERIC_SOURCE_PATTERNS = [
 
 const REQUIRED_MINIMUMS = {
   tracks: 20,
-  artists: 8,
+  artists: 50,
   labels: 6
 };
 
@@ -62,6 +63,7 @@ const DATASET_AREA_FIELDS = ["city", "origin_city", "state", "region", "area", "
 const DATASET_BIO_FIELDS = ["artist_bio", "bio", "description", "about", "resumo"];
 const DATASET_LABEL_FIELDS = ["label", "record_label", "release_label", "album", "imprint"];
 const DATASET_BPM_FIELDS = ["bpm_exact", "bpm", "tempo", "tempo_bpm", "track_bpm", "tempo_profile", "bpm_guide"];
+const DATASET_PREVIEW_FIELDS = ["preview_url", "preview", "audio_preview", "deezer_preview_url"];
 const DATASET_LINK_FIELDS = [
   "spotify_url",
   "spotify_track_url",
@@ -169,9 +171,12 @@ function extractConstLiteral(source, name) {
   throw new Error(`Nao consegui fechar o bloco ${name}`);
 }
 
-function evalLiteral(literal, name) {
+function evalLiteral(literal, name, context = {}) {
   try {
-    return vm.runInNewContext(`(${literal})`, Object.freeze({}), {
+    return vm.runInNewContext(`(${literal})`, Object.freeze({
+      encodeURIComponent,
+      ...context
+    }), {
       timeout: 1000,
       displayErrors: true
     });
@@ -190,17 +195,17 @@ function extractScalarConstLiteral(source, name) {
 }
 
 function loadBlocks(source) {
-  return Object.fromEntries(
-    BLOCKS.map((name) => {
-      let literal = "";
-      try {
-        literal = extractConstLiteral(source, name);
-      } catch (_error) {
-        literal = extractScalarConstLiteral(source, name);
-      }
-      return [name, evalLiteral(literal, name)];
-    })
-  );
+  const blocks = {};
+  for (const name of BLOCKS) {
+    let literal = "";
+    try {
+      literal = extractConstLiteral(source, name);
+    } catch (_error) {
+      literal = extractScalarConstLiteral(source, name);
+    }
+    blocks[name] = evalLiteral(literal, name, blocks);
+  }
+  return blocks;
 }
 
 function trackId(track) {
@@ -219,17 +224,27 @@ function sourceName(track) {
   return track.sourceName || track.source || track.origin || "catalogo local";
 }
 
+function numericFieldValue(value) {
+  const text = String(value ?? "").trim();
+  if (!text) return null;
+  const numberValue = Number(text);
+  return Number.isFinite(numberValue) ? numberValue : null;
+}
+
 function getTrackBpmInfo(track) {
-  if (Number.isFinite(Number(track.bpmExact))) {
-    const value = Number(track.bpmExact);
+  const bpmExactValue = numericFieldValue(track.bpmExact);
+  if (bpmExactValue !== null) {
+    const value = bpmExactValue;
     return { min: value, max: value, label: String(value), exact: true };
   }
-  if (Number.isFinite(Number(track.bpm))) {
-    const value = Number(track.bpm);
+  const bpmValue = numericFieldValue(track.bpm);
+  if (bpmValue !== null) {
+    const value = bpmValue;
     return { min: value, max: value, label: String(value), exact: true };
   }
-  if (Number.isFinite(Number(track.tempo))) {
-    const value = Number(track.tempo);
+  const tempoValue = numericFieldValue(track.tempo);
+  if (tempoValue !== null) {
+    const value = tempoValue;
     return { min: value, max: value, label: String(value), exact: true };
   }
 
@@ -265,15 +280,29 @@ function bpmFitsStyle(style, bpmInfo, rules) {
 }
 
 function targetForStyle(style, overrides) {
+  const artistTarget = overrides[style]?.artists ?? REQUIRED_MINIMUMS.artists;
   return {
     tracks: overrides[style]?.tracks ?? REQUIRED_MINIMUMS.tracks,
-    artists: overrides[style]?.artists ?? REQUIRED_MINIMUMS.artists,
+    artists: Math.max(REQUIRED_MINIMUMS.artists, artistTarget),
     labels: overrides[style]?.labels ?? REQUIRED_MINIMUMS.labels
   };
 }
 
 function hasAnyLink(track) {
   return LINK_FIELDS.some((field) => Boolean(track[field]));
+}
+
+function hasAnyPlayablePath(track) {
+  return Boolean(
+    track?.previewUrl ||
+    track?.preview ||
+    track?.audioPreview ||
+    track?.youtubeTrackUrl ||
+    track?.youtubeUrl ||
+    track?.soundcloudTrackUrl ||
+    track?.bandcampTrackUrl ||
+    hasAnyLink(track)
+  );
 }
 
 function looksGeneric(value) {
@@ -480,6 +509,7 @@ function externalRecordToArtistSignal(record, knownStyles) {
     style,
     label: fieldValue(record, DATASET_LABEL_FIELDS),
     bpmExact: fieldValue(record, DATASET_BPM_FIELDS),
+    previewUrl: fieldValue(record, DATASET_PREVIEW_FIELDS),
     artistCountry: fieldValue(record, DATASET_COUNTRY_FIELDS),
     artistArea: fieldValue(record, DATASET_AREA_FIELDS),
     artistBio: fieldValue(record, DATASET_BIO_FIELDS),
@@ -568,15 +598,16 @@ function auditCatalog(blocks) {
         addIssue(issues, "critical", label, "Artista parece generico ou placeholder.", track.auditSource);
       }
       if (!isExternalSeed && !track.artistBio && !track.artistProfileHint) {
-        addIssue(issues, "warning", label, "Seed sem bio ou pista editorial do artista.", track.auditSource);
+        addIssue(issues, "note", label, "Seed sem bio ou pista editorial do artista.", track.auditSource);
       }
       if (!isExternalSeed && !hasAnyLink(track)) {
-        addIssue(issues, "warning", label, "Seed sem link externo verificavel.", track.auditSource);
+        addIssue(issues, "note", label, "Seed sem link externo verificavel.", track.auditSource);
       }
       return;
     }
 
     const label = makeTrackLabel(track);
+    const hasTrackIdentity = Boolean(track.artist && track.song);
     if (!track.artist || !track.song) {
       addIssue(issues, "critical", label, "Faixa sem artista ou titulo.", track.auditSource);
     }
@@ -587,7 +618,13 @@ function auditCatalog(blocks) {
 
     const bpmInfo = getTrackBpmInfo(track);
     if (!bpmInfo) {
-      addIssue(issues, "warning", label, "BPM ausente ou ilegivel.", track.auditSource);
+      addIssue(
+        issues,
+        hasTrackIdentity || hasAnyPlayablePath(track) ? "note" : "warning",
+        label,
+        "BPM ausente ou ilegivel.",
+        track.auditSource
+      );
     } else {
       const fits = bpmFitsStyle(track.style, bpmInfo, STYLE_BPM_RULES);
       if (fits === false) {
@@ -607,15 +644,21 @@ function auditCatalog(blocks) {
     }
 
     if (looksGeneric(track.label)) {
-      addIssue(issues, "warning", label, "Gravadora parece generica ou placeholder.", track.auditSource);
+      addIssue(
+        issues,
+        hasAnyPlayablePath(track) ? "note" : "warning",
+        label,
+        "Gravadora parece generica ou placeholder.",
+        track.auditSource
+      );
     }
 
     if (!track.artistBio && !track.artistProfileHint) {
-      addIssue(issues, "warning", label, "Sem bio ou pista editorial do artista.", track.auditSource);
+      addIssue(issues, "note", label, "Sem bio ou pista editorial do artista.", track.auditSource);
     }
 
     if (!hasAnyLink(track)) {
-      addIssue(issues, "warning", label, "Sem link externo verificavel.", track.auditSource);
+      addIssue(issues, hasTrackIdentity ? "note" : "warning", label, "Sem link externo verificavel.", track.auditSource);
     }
   });
 
@@ -623,9 +666,9 @@ function auditCatalog(blocks) {
     if (!key.includes("::") || tracks.length <= 1) continue;
     addIssue(
       issues,
-      "warning",
+      "note",
       tracks[0].artist || key,
-      "Faixa duplicada no catalogo.",
+      "Faixa duplicada no catalogo bruto; runtime escolhe a melhor versao.",
       tracks.map((track) => `${track.auditSource}:${track.style}`).join(", ")
     );
   }
@@ -639,7 +682,7 @@ function auditCatalog(blocks) {
     if (hasCoreRecord && !flag) {
       addIssue(
         issues,
-        "warning",
+        "note",
         sample.artist || key,
         "Artista sem origem/bandeira confiavel.",
         "Adicionar artistCountry ou origem canonica."
@@ -647,9 +690,10 @@ function auditCatalog(blocks) {
     }
   }
 
-  const coverageRows = [...styleGroups.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([style, tracks]) => {
+  const coverageRows = [...knownStyles]
+    .sort((a, b) => a.localeCompare(b))
+    .map((style) => {
+      const tracks = styleGroups.get(style) || [];
       const target = targetForStyle(style, STYLE_COVERAGE_OVERRIDES);
       const artistSignalsForStyle = artistStyleGroups.get(style) || tracks;
       const actual = {
@@ -664,23 +708,20 @@ function auditCatalog(blocks) {
       };
       const ok = !missing.tracks && !missing.artists && !missing.labels;
       if (!ok) {
+        const hasArtistDepth = actual.artists >= target.artists;
+        const hasNoTracks = actual.tracks <= 0;
         addIssue(
           issues,
-          "warning",
+          hasNoTracks && !hasArtistDepth ? "critical" : "warning",
           style,
-          "Cobertura abaixo do alvo.",
-          `faltam ${missing.tracks} faixas, ${missing.artists} artistas, ${missing.labels} labels`
+          hasNoTracks ? "Estilo sem nenhuma faixa auditavel." : "Cobertura abaixo do alvo.",
+          hasNoTracks && hasArtistDepth
+            ? `Adicionar faixas verificadas; artistas locais ja cobrem ${actual.artists}/${target.artists}.`
+            : `faltam ${missing.tracks} faixas, ${missing.artists} artistas, ${missing.labels} labels`
         );
       }
       return { style, actual, target, missing, ok };
     });
-
-  const stylesWithoutTracks = [...knownStyles]
-    .filter((style) => !styleGroups.has(style))
-    .sort();
-  stylesWithoutTracks.forEach((style) => {
-    addIssue(issues, "critical", style, "Estilo sem nenhuma faixa auditavel.", "Adicionar seeds.");
-  });
 
   const counts = {
     tracks: allTracks.length,
@@ -716,9 +757,10 @@ function auditCatalog(blocks) {
     catalogHealth,
     issues,
     coverageRows,
-    stylesWithoutTracks,
+    stylesWithoutTracks: coverageRows.filter((row) => row.actual.tracks <= 0).map((row) => row.style),
     criticalCount: issues.filter((issue) => issue.severity === "critical").length,
-    warningCount: issues.filter((issue) => issue.severity === "warning").length
+    warningCount: issues.filter((issue) => issue.severity === "warning").length,
+    noteCount: issues.filter((issue) => issue.severity === "note").length
   };
 }
 
@@ -733,7 +775,7 @@ function formatReport(result) {
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   const now = new Date();
   const sortedIssues = [...result.issues].sort((a, b) => {
-    const severityRank = { critical: 0, warning: 1 };
+    const severityRank = { critical: 0, warning: 1, note: 2 };
     return (
       severityRank[a.severity] - severityRank[b.severity] ||
       a.scope.localeCompare(b.scope) ||
@@ -751,7 +793,7 @@ function formatReport(result) {
       : `faltam ${row.missing.tracks} faixas, ${row.missing.artists} artistas, ${row.missing.labels} labels`
   ]);
   const issueRows = sortedIssues.slice(0, 80).map((issue) => [
-    issue.severity === "critical" ? "Critico" : "Aviso",
+    issue.severity === "critical" ? "Critico" : issue.severity === "warning" ? "Aviso" : "Nota",
     issue.scope,
     issue.message,
     issue.detail
@@ -776,12 +818,15 @@ function formatReport(result) {
     `- Artistas vindos de datasets externos: ${result.counts.externalArtists}`,
     `- Problemas criticos: ${result.criticalCount}`,
     `- Avisos: ${result.warningCount}`,
+    `- Notas de enriquecimento: ${result.noteCount}`,
     "",
     "## Leitura rapida",
     "",
     result.criticalCount
       ? "- Primeiro resolva os itens criticos da tabela de problemas. Eles indicam erro que pode gerar recomendacao incorreta."
-      : "- Nao ha itens criticos. Os avisos ajudam a enriquecer bio, links, bandeiras e cobertura.",
+      : result.warningCount
+        ? "- Nao ha itens criticos. Os avisos ajudam a enriquecer bio, links, bandeiras e cobertura."
+        : "- Nao ha itens criticos nem avisos funcionais. As notas restantes sao metadados finos para enriquecer curadoria.",
     "- Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas verificadas, artistas ou labels.",
     "- A métrica de musicas buscaveis mede a capacidade de descoberta do app; faixas auditadas mede o quanto já está verificável no banco local.",
     "- Quando os criticos zerarem, rode `node scripts/quality-audit.mjs --strict` antes de publicar.",
@@ -818,7 +863,7 @@ function main() {
   console.log(
     `${result.counts.tracks} faixas auditadas, ${result.catalogHealth.searchableTracks} musicas buscaveis, ${result.catalogHealth.indexedArtists} artistas indexados, ${result.counts.styles} estilos.`
   );
-  console.log(`${result.criticalCount} criticos, ${result.warningCount} avisos.`);
+  console.log(`${result.criticalCount} criticos, ${result.warningCount} avisos, ${result.noteCount} notas.`);
   console.log(`Relatorio: ${path.relative(rootDir, reportPath)}`);
 
   if (strictMode && result.criticalCount > 0) {

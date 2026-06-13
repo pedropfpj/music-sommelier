@@ -127,15 +127,27 @@ const AUTH_PROVIDER_CONFIG = {
     ? window.SONIC_SEARCH_AUTH_CONFIG
     : {})
 };
+const LOCAL_STATIC_PREVIEW_PORTS = new Set(["5500", "5501", "5502", "5503", "5504", "5505", "5506", "5507", "8000", "8080"]);
+const REMOTE_SPIRIT_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
+
+function isLocalStaticPreviewEnvironment() {
+  if (typeof window === "undefined") return false;
+  const protocol = String(window.location?.protocol || "");
+  const hostname = String(window.location?.hostname || "").replace(/^\[|\]$/g, "");
+  const port = String(window.location?.port || "");
+  const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
+  return protocol === "file:" || (localHosts.has(hostname) && LOCAL_STATIC_PREVIEW_PORTS.has(port));
+}
+
 const AI_DEFAULT_CONFIG = {
   textEnabled: true,
-  imageEnabled: false,
+  imageEnabled: isLocalStaticPreviewEnvironment(),
   premiumUnlocked: false,
   dailyTextLimit: 10,
   dailyFreeDiscoveryLimit: 80,
-  imageLimitPerProfile: 5,
+  imageLimitPerProfile: isLocalStaticPreviewEnvironment() ? 3 : 5,
   premiumImageLimitPerProfile: 0,
-  allowImageRegeneration: false,
+  allowImageRegeneration: isLocalStaticPreviewEnvironment(),
   textCacheMaxEntries: 120
 };
 const AI_FEATURE_CONFIG = {
@@ -525,6 +537,85 @@ const STYLE_SEARCH_TERMS = {
   rawstyle: "rawstyle hardstyle"
 };
 
+const STYLE_ADVANCED_SEARCH_TERMS = {
+  psytrance: ["psychedelic trance", "full power psytrance", "goa psytrance"],
+  forest_psy: ["forest psy", "dark forest psytrance", "organic forest psytrance"],
+  dark_psy: ["dark psytrance", "darkpsy", "night psytrance"],
+  twilight_psy: ["twilight psy", "night full on", "twilight psytrance"],
+  dark_progressive: ["zenonesque", "prog dark psy", "dark progressive psytrance"],
+  psycore: ["psycore", "darkpsy hitech", "experimental psytrance"],
+  psybreaks: ["psy breaks", "psychedelic breaks", "psybreaks"],
+  psybient: ["psychill", "psybient", "psychedelic ambient"],
+  freeform: ["suomisaundi", "freeform psytrance", "finnish psytrance"],
+  full_on: ["full on psytrance", "fullon psytrance", "psytrance full on"],
+  full_on_night: ["night full on", "full on night", "dark full on"],
+  full_on_morning: ["morning full on", "melodic full on", "goa full on"],
+  progressive_psy: ["progressive psytrance", "prog psy", "psy progressive"],
+  hi_tech: ["hitech psytrance", "hi tech psy", "psytrance hi tech"],
+  dark_experimental: ["experimental psytrance", "dark experimental", "darkpsy experimental"],
+  slambient: ["dark ambient", "ritual ambient", "experimental ambient", "psychedelic ambient"],
+  techno: ["underground techno", "club techno", "raw techno"],
+  acid_techno: ["acid techno", "303 techno", "warehouse acid"],
+  hard_techno: ["hard techno", "industrial hard techno", "peak hard techno"],
+  dub_techno: ["dub techno", "deep dub techno", "ambient techno"],
+  hypnotic_techno: ["hypnotic techno", "deep techno", "mental techno"],
+  raw_techno: ["raw techno", "warehouse techno", "groove techno"],
+  detroit_techno: ["detroit techno", "motor city techno", "classic detroit techno"],
+  schranz: ["schranz", "hard techno schranz", "tribal schranz"],
+  ebm: ["ebm", "electronic body music", "industrial ebm"],
+  minimal_techno: ["minimal techno", "microhouse", "minimal electronic"],
+  melodic_techno: ["melodic techno", "melodic house techno", "progressive melodic techno"],
+  industrial_techno: ["industrial techno", "rave industrial techno", "dark industrial techno"],
+  peak_time_techno: ["peak time techno", "driving techno", "main room techno"],
+  house: ["house music", "classic house", "club house"],
+  deep_house: ["deep house", "deep electronic house", "deep club house"],
+  tech_house: ["tech house", "club tech house", "minimal tech house"],
+  progressive_house: ["progressive house", "melodic progressive house", "club progressive house"],
+  afro_house: ["afro house", "afro deep house", "afro electronic"],
+  organic_house: ["organic house", "organic deep house", "downtempo house"],
+  bass_house: ["bass house", "uk bass house", "club bass house"],
+  electro_house: ["electro house", "edm electro house", "big room electro house"],
+  minimal_deep_tech: ["minimal deep tech", "deep tech house", "minimal tech house"],
+  jackin_house: ["jackin house", "chicago jackin house", "funky house"],
+  soulful_house: ["soulful house", "vocal soulful house", "deep soulful house"],
+  disco_house: ["disco house", "nu disco house", "funky disco house"],
+  garage_house: ["garage house", "us garage", "ny garage house"],
+  drum_and_bass: ["drum and bass", "dnb", "jungle drum and bass"],
+  liquid_dnb: ["liquid drum and bass", "liquid dnb", "melodic dnb"],
+  neurofunk: ["neurofunk", "neuro drum and bass", "dark dnb"],
+  jump_up: ["jump up dnb", "jump up drum and bass", "roller dnb"],
+  jungle: ["jungle", "ragga jungle", "breakbeat jungle"],
+  breakbeat: ["breakbeat", "breaks", "nu skool breaks"],
+  uk_garage: ["uk garage", "2 step garage", "garage bassline"],
+  future_garage: ["future garage", "post dubstep garage", "ambient garage"],
+  dubstep: ["dubstep", "deep dubstep", "bass dubstep"],
+  halftime_bass: ["halftime bass", "halftime dnb", "slow fast bass"],
+  footwork_juke: ["footwork", "juke", "teklife footwork"],
+  trap: ["electronic trap", "edm trap", "bass trap"],
+  future_bass: ["future bass", "melodic future bass", "electronic future bass"],
+  riddim: ["riddim dubstep", "riddim bass", "heavy riddim"],
+  experimental_bass: ["experimental bass", "leftfield bass", "bass music"],
+  wave: ["wave music", "hardwave", "wave bass"],
+  breakcore: ["breakcore", "jungle breakcore", "hardcore breaks"],
+  downtempo: ["downtempo electronic", "chill downtempo", "slow electronic"],
+  ambient: ["ambient electronic", "drone ambient", "soundscape ambient", "dark ambient"],
+  chillout: ["chillout", "lounge electronic", "chill electronic"],
+  trip_hop: ["trip hop", "downtempo beats", "abstract hip hop"],
+  darkwave: ["darkwave", "dark electronic", "post punk electronic"],
+  coldwave: ["coldwave", "minimal synth", "darkwave synth"],
+  synthwave: ["synthwave", "retrowave", "outrun electronic"],
+  witch_house: ["witch house", "dark electronic", "drag electronic"],
+  idm: ["idm", "intelligent dance music", "braindance"],
+  electro: ["electro", "electro funk", "electro breaks"],
+  brazilian_funk: ["funk carioca", "baile funk", "brazilian funk"],
+  gabber: ["gabber", "hardcore techno", "early hardcore"],
+  hardstyle: ["hardstyle", "euphoric hardstyle", "reverse bass"],
+  hardcore: ["hardcore techno", "industrial hardcore", "rave hardcore"],
+  frenchcore: ["frenchcore", "frenchcore hardcore", "uptempo hardcore"],
+  speedcore: ["speedcore", "extratone", "extreme hardcore"],
+  rawstyle: ["rawstyle", "raw hardstyle", "xtra raw"]
+};
+
 const STYLE_TO_VIBE_THEME = {
   dark_psy: "dark",
   dark_experimental: "dark",
@@ -645,10 +736,17 @@ const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v5.csv",
   "data/artist_expansion_seeds_v6.csv",
   "data/artist_expansion_seeds_v7.csv",
+  "data/artist_expansion_seeds_v8.csv",
+  "data/artist_expansion_seeds_v9.csv",
+  "data/artist_expansion_seeds_v10.csv",
   "data/verified_track_expansion_v1.csv",
   "data/verified_track_expansion_v2.csv",
   "data/verified_track_expansion_v3.csv",
   "data/verified_track_expansion_v4.csv",
+  "data/verified_track_expansion_v5.csv",
+  "data/verified_track_expansion_v6.csv",
+  "data/verified_track_expansion_v7.csv",
+  "data/verified_track_expansion_v8.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -660,8 +758,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 3200;
-const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 8;
+const INDEXED_DATASET_ARTIST_COUNT = 4600;
+const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 
 const LOCAL_TRACK_SEED_BOOST = [
   {
@@ -4680,6 +4778,7 @@ const FALLBACK_EVENTS = {
 
 const startBtn = document.getElementById("startBtn");
 const startSurpriseBtn = document.getElementById("startSurpriseBtn");
+const welcomeImportProfileBtn = document.getElementById("welcomeImportProfileBtn");
 const introScreen = document.getElementById("introScreen");
 const introKicker = document.getElementById("introKicker");
 const introTitle = document.getElementById("introTitle");
@@ -4803,6 +4902,14 @@ const voiceEffectsTitle = document.getElementById("voiceEffectsTitle");
 const voiceEffectButtons = document.getElementById("voiceEffectButtons");
 const voiceMiniTitle = document.getElementById("voiceMiniTitle");
 const voiceMiniHint = document.getElementById("voiceMiniHint");
+const voiceStudioSessionStateLabel = document.getElementById("voiceStudioSessionStateLabel");
+const voiceStudioSessionStateValue = document.getElementById("voiceStudioSessionStateValue");
+const voiceStudioSessionLayersLabel = document.getElementById("voiceStudioSessionLayersLabel");
+const voiceStudioSessionLayersValue = document.getElementById("voiceStudioSessionLayersValue");
+const voiceStudioSessionLengthLabel = document.getElementById("voiceStudioSessionLengthLabel");
+const voiceStudioSessionLengthValue = document.getElementById("voiceStudioSessionLengthValue");
+const voiceStudioSessionFormatLabel = document.getElementById("voiceStudioSessionFormatLabel");
+const voiceStudioSessionFormatValue = document.getElementById("voiceStudioSessionFormatValue");
 const voiceMiniRandomBtn = document.getElementById("voiceMiniRandomBtn");
 const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
 const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
@@ -4812,6 +4919,14 @@ const voiceMiniRecipeLabel = document.getElementById("voiceMiniRecipeLabel");
 const voiceMiniRecipeTitle = document.getElementById("voiceMiniRecipeTitle");
 const voiceMiniRecipeMeta = document.getElementById("voiceMiniRecipeMeta");
 const voiceMiniLayerSignature = document.getElementById("voiceMiniLayerSignature");
+const voiceMiniInsightKicker = document.getElementById("voiceMiniInsightKicker");
+const voiceMiniInsightTitle = document.getElementById("voiceMiniInsightTitle");
+const voiceMiniInsightEnergyLabel = document.getElementById("voiceMiniInsightEnergyLabel");
+const voiceMiniInsightEnergyValue = document.getElementById("voiceMiniInsightEnergyValue");
+const voiceMiniInsightShapeLabel = document.getElementById("voiceMiniInsightShapeLabel");
+const voiceMiniInsightShapeValue = document.getElementById("voiceMiniInsightShapeValue");
+const voiceMiniInsightMoveLabel = document.getElementById("voiceMiniInsightMoveLabel");
+const voiceMiniInsightMoveValue = document.getElementById("voiceMiniInsightMoveValue");
 const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
 const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
 const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
@@ -4849,6 +4964,7 @@ const voiceMiniSynthLabel = document.getElementById("voiceMiniSynthLabel");
 const voiceMiniSynthValue = document.getElementById("voiceMiniSynthValue");
 const voiceMiniSynthSlider = document.getElementById("voiceMiniSynthSlider");
 const voiceMiniPresetGrid = document.getElementById("voiceMiniPresetGrid");
+const voiceMiniMorphGrid = document.getElementById("voiceMiniMorphGrid");
 const voiceMiniStatus = document.getElementById("voiceMiniStatus");
 const voiceStepSequencer = document.getElementById("voiceStepSequencer");
 const voicePadKickBtn = document.getElementById("voicePadKickBtn");
@@ -4936,6 +5052,12 @@ const discogsArtistLink = document.getElementById("discogsArtistLink");
 const styleName = document.getElementById("styleName");
 const bpmInfo = document.getElementById("bpmInfo");
 const energyInfo = document.getElementById("energyInfo");
+const nowPlayingGenre = document.getElementById("nowPlayingGenre");
+const nowPlayingKicker = document.getElementById("nowPlayingKicker");
+const nowPlayingStyle = document.getElementById("nowPlayingStyle");
+const nowPlayingFamily = document.getElementById("nowPlayingFamily");
+const nowPlayingBpm = document.getElementById("nowPlayingBpm");
+const nowPlayingEnergy = document.getElementById("nowPlayingEnergy");
 const releaseInfo = document.getElementById("releaseInfo");
 const durationInfo = document.getElementById("durationInfo");
 const keyInfo = document.getElementById("keyInfo");
@@ -4945,6 +5067,14 @@ const recommendationWhyPanel = document.getElementById("recommendationWhyPanel")
 const recommendationWhyTitle = document.getElementById("recommendationWhyTitle");
 const recommendationWhyText = document.getElementById("recommendationWhyText");
 const recommendationWhyList = document.getElementById("recommendationWhyList");
+const recommendationTrustPanel = document.getElementById("recommendationTrustPanel");
+const recommendationTrustLabel = document.getElementById("recommendationTrustLabel");
+const recommendationTrustValue = document.getElementById("recommendationTrustValue");
+const recommendationTrustReason = document.getElementById("recommendationTrustReason");
+const topRecommendationTrustPanel = document.getElementById("topRecommendationTrustPanel");
+const topRecommendationTrustLabel = document.getElementById("topRecommendationTrustLabel");
+const topRecommendationTrustValue = document.getElementById("topRecommendationTrustValue");
+const topRecommendationTrustReason = document.getElementById("topRecommendationTrustReason");
 const trackStatusBadges = document.getElementById("trackStatusBadges");
 const trackMicroReason = document.getElementById("trackMicroReason");
 const genreGuidePanel = document.getElementById("genreGuidePanel");
@@ -4978,6 +5108,7 @@ const youtubePreviewToggleBtn = document.getElementById("youtubePreviewToggleBtn
 const youtubePreviewRetryBtn = document.getElementById("youtubePreviewRetryBtn");
 const listeningPrompt = document.getElementById("listeningPrompt");
 const previewLikeBtn = document.getElementById("previewLikeBtn");
+const previewIssueBtn = document.getElementById("previewIssueBtn");
 const previewDislikeBtn = document.getElementById("previewDislikeBtn");
 const recentListenersPanel = document.getElementById("recentListenersPanel");
 const listenersSubtitle = document.getElementById("listenersSubtitle");
@@ -5107,6 +5238,10 @@ const summaryLikedTracksTitle = document.getElementById("summaryLikedTracksTitle
 const summaryLikedTracksHint = document.getElementById("summaryLikedTracksHint");
 const summaryLikedTracksList = document.getElementById("summaryLikedTracksList");
 const summaryLikedTracksClearBtn = document.getElementById("summaryLikedTracksClearBtn");
+const summaryDislikedTracksTitle = document.getElementById("summaryDislikedTracksTitle");
+const summaryDislikedTracksHint = document.getElementById("summaryDislikedTracksHint");
+const summaryDislikedTracksList = document.getElementById("summaryDislikedTracksList");
+const summaryDislikedTracksClearBtn = document.getElementById("summaryDislikedTracksClearBtn");
 const summaryFiveStarTracks = document.getElementById("summaryFiveStarTracks");
 const summaryKnownArtists = document.getElementById("summaryKnownArtists");
 const summaryLikedArtists = document.getElementById("summaryLikedArtists");
@@ -5194,7 +5329,9 @@ const userStats = {
   alreadyKnew: 0,
   skipped: 0,
   ratingCount: 0,
-  ratingSum: 0
+  ratingSum: 0,
+  swipeTrainingSignals: 0,
+  lastSwipeLearningMilestone: 0
 };
 
 let lastPrefs = null;
@@ -5240,13 +5377,18 @@ let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
 let trackPreviewIssueSignals = new Map();
 let likedTrackHistory = [];
+let dislikedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
 let swipeUserAnchoredStyle = "";
+let swipeStyleExposureCounts = new Map();
+let swipeStyleRailExpanded = false;
+let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
+const SWIPE_STYLE_RAIL_COMPACT_LIMIT = 24;
 const SWIPE_DISCOVERY_STYLE_DECK = [
   "downtempo",
   "darkwave",
@@ -5270,6 +5412,8 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
+const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 81;
+const SWIPE_LEARNING_MILESTONES = [10, 20, 30];
 const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
 let trackInsightCache = new Map();
 let currentTrackInsightTrackKey = "";
@@ -5367,6 +5511,7 @@ let voiceMiniActivePreset = "techno";
 const VOICE_MINI_START_LATENCY_SEC = 0.18;
 const VOICE_MINI_SCHEDULE_LOOKAHEAD_SEC = 0.24;
 const VOICE_MINI_SCHEDULE_INTERVAL_MS = 36;
+const VOICE_MINI_EXPORT_BARS = 8;
 const VOICE_MINI_PATTERN_KINDS = ["kick", "bass", "hat", "clap", "synth", "voice"];
 const VOICE_MINI_DEFAULT_PATTERN = {
   kick: [1, 0, 1, 0, 1, 0, 1, 0],
@@ -5526,6 +5671,48 @@ const VOICE_MINI_PRESETS = {
       synth: [1, 0, 1, 0, 1, 0, 1, 0],
       voice: [1, 0, 0, 0, 0, 0, 0, 0]
     }
+  },
+  house: {
+    bpm: 124,
+    swing: 18,
+    synthType: "stab",
+    grooveMode: "swing",
+    pattern: {
+      kick: [1, 0, 1, 0, 1, 0, 1, 0],
+      bass: [1, 0, 0, 1, 0, 1, 0, 1],
+      hat: [0, 1, 1, 1, 0, 1, 1, 1],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [0, 1, 0, 0, 1, 0, 1, 0],
+      voice: [1, 0, 0, 0, 0, 0, 1, 0]
+    }
+  },
+  dnb: {
+    bpm: 172,
+    swing: 6,
+    synthType: "sub",
+    grooveMode: "counter",
+    pattern: {
+      kick: [1, 0, 0, 1, 0, 0, 1, 0],
+      bass: [1, 0, 1, 0, 0, 1, 0, 1],
+      hat: [1, 1, 1, 1, 1, 1, 1, 1],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [1, 0, 0, 0, 1, 0, 0, 1],
+      voice: [0, 0, 1, 0, 0, 0, 1, 0]
+    }
+  },
+  darkprog: {
+    bpm: 136,
+    swing: 5,
+    synthType: "acid",
+    grooveMode: "late",
+    pattern: {
+      kick: [1, 0, 1, 0, 1, 0, 1, 0],
+      bass: [0, 1, 0, 1, 0, 1, 0, 1],
+      hat: [1, 0, 1, 1, 1, 0, 1, 1],
+      clap: [0, 0, 1, 0, 0, 0, 1, 0],
+      synth: [1, 0, 0, 1, 0, 0, 1, 0],
+      voice: [1, 0, 0, 0, 1, 0, 0, 0]
+    }
   }
 };
 let voiceMiniPattern = cloneVoiceMiniPattern(VOICE_MINI_DEFAULT_PATTERN);
@@ -5551,9 +5738,10 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v28";
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v6";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v29";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v10-coherent-profile";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
+const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
@@ -5608,6 +5796,7 @@ let spiritStoryPreparePromise = null;
 let spiritStoryPrepareTimer = 0;
 const artistDepthScoreCache = new Map();
 const discoveryArtistStatsCache = new Map();
+const styleDiscoveryScoreCache = new Map();
 
 const INTRO_QUOTE_CLASSES = [
   "intro-quote-flare",
@@ -5732,6 +5921,7 @@ const CONTEXT_TARGET_PROFILES = {
 const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
 const recentArtistSignals = new Map();
+const deezerArtistTopTrackCache = new Map();
 const soundCloudApiCache = new Map();
 const youtubeApiCache = new Map();
 let youtubeApiAvailable = true;
@@ -5746,10 +5936,10 @@ const SOUNDCLOUD_PREVIEW_REFRESH_STYLES = new Set([
 ]);
 
 const MIN_TRACKS_PER_STYLE = 20;
-const MIN_ARTISTS_PER_STYLE = 12;
+const MIN_ARTISTS_PER_STYLE = 50;
 const MIN_LABELS_PER_STYLE = 6;
 const STYLE_COVERAGE_OVERRIDES = {
-  // Nichos ultra específicos: mantém rigor sem bloquear toda a experiência.
+  // Nichos ultra específicos: ajustam tracks/labels sem baixar o piso global de artistas.
   dark_progressive: { artists: 12, labels: 6, tracks: 24 },
   full_on: { artists: 16, labels: 8, tracks: 28 },
   full_on_night: { artists: 14, labels: 8, tracks: 24 },
@@ -5892,6 +6082,14 @@ const STYLE_BPM_RULES = {
   speedcore: { min: 220, max: 300 },
   rawstyle: { min: 150, max: 160 }
 };
+
+const PERCEPTUAL_BPM_AMBIGUOUS_STYLES = new Set([
+  "psybreaks",
+  "breakbeat",
+  "future_garage",
+  "dubstep",
+  "trap"
+]);
 
 const STYLE_SIMILAR_FALLBACKS = {
   psycore: ["dark_experimental", "hi_tech", "dark_psy", "speedcore", "frenchcore"],
@@ -6858,7 +7056,7 @@ const STYLE_ARTIST_SEEDS = {
   melodic_techno: ["Anyma", "Mind Against", "Tale Of Us", "Stephan Bodzin", "ARTBAT", "Massano", "Kevin de Vries", "Innellea"],
   industrial_techno: ["Perc", "Paula Temple", "Ancient Methods", "Rebekah", "Scalameriya", "SNTS", "AnD", "Blawan"],
   peak_time_techno: ["Adam Beyer", "Space 92", "Layton Giordani", "Mha Iri", "HI-LO", "Wehbba", "Bart Skils", "UMEK"],
-  house: ["Frankie Knuckles", "Kerri Chandler", "Folamour", "Honey Dijon", "Chris Stussy", "The Martinez Brothers", "Peggy Gou", "Dennis Ferrer"],
+  house: ["Frankie Knuckles", "Kerri Chandler", "Folamour", "Honey Dijon", "Chris Stussy", "The Martinez Brothers", "Peggy Gou", "Dennis Ferrer", "Illusionize"],
   deep_house: ["Larry Heard", "Nora En Pure", "Ben Bohmer", "Kink", "YokoO", "Black Loops", "Atjazz", "Jimpster"],
   tech_house: [
     "Michael Bibi",
@@ -6871,6 +7069,7 @@ const STYLE_ARTIST_SEEDS = {
     "Jamie Jones",
     "Solardo",
     "Mochakk",
+    "Illusionize",
     "The Martinez Brothers",
     "Marco Carola"
   ],
@@ -6957,6 +7156,39 @@ const FREEFORM_CORE_ARTISTS = [
   "Mandalavandalz",
   "Outolintu",
   "James Reipas",
+  "Ocelot",
+  "Kiwa",
+  "Eraser vs Yojalka",
+  "Aavepyora",
+  "Taika-Kim",
+  "Tea Chairs",
+  "Lemon Slide",
+  "Sharaku",
+  "Puoskari",
+  "Igor Swamp",
+  "Huopatossu Mononen",
+  "Captain Kirk",
+  "Karmarama",
+  "Poly 61",
+  "Gad",
+  "Gorump Peyya",
+  "Jahbo",
+  "Derango",
+  "Ka-Sol",
+  "Trold",
+  "Yggdrasil",
+  "Hutti Heita",
+  "Procs",
+  "Zoon",
+  "Psy-H Project",
+  "Vishnudata",
+  "Gappeq",
+  "Goch",
+  "Sienis",
+  "Gaggalacka",
+  "Metsamoori",
+  "EvsY",
+  "Lemonchill",
   "Troll Scientists"
 ];
 
@@ -7038,6 +7270,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "shadow shaman": ["dark_progressive"],
   "alok": ["electro_house", "bass_house", "house"],
   "dubdogz": ["tech_house", "house"],
+  "illusionize": ["house", "tech_house", "bass_house", "electro_house"],
   "audio syntax": ["dark_experimental"],
   "audiosyntax": ["dark_experimental"],
   "sectio aurea": ["dark_experimental", "psycore"],
@@ -7224,6 +7457,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Brazil",
     area: "",
     disambiguation: "Alok e um DJ e produtor brasileiro ligado ao Brazilian bass, dance-pop e electro house de alcance global."
+  },
+  "illusionize": {
+    country: "Brazil",
+    area: "Goiania",
+    disambiguation: "Illusionize e um DJ/produtor brasileiro associado a house, tech house e bass house, com catalogo tocavel em plataformas abertas."
   },
   "afrika bambaataa & the soulsonic force": {
     country: "United States",
@@ -7521,6 +7759,10 @@ const ARTIST_CANONICAL_ORIGINS = {
     disambiguation: "Paranormal Attack e um projeto portugues de psytrance ligado ao eixo full-on/comercial."
   }
 };
+
+const AMBIGUOUS_ARTIST_IMAGE_KEYS = new Set([
+  "avalon"
+]);
 
 const FOREST_PSY_ARTIST_BLOCKLIST = [
   "astrix",
@@ -9270,7 +9512,8 @@ const STYLE_SEED_BACKFILL = {
   full_on_night: ["Burn In Noise", "Dickster", "Sonic Species", "GMS", "Volcano", "Mad Maxx", "Virtual Light", "Ital", "Braincell", "Circuit Breakers"],
   full_on_morning: ["Avalon", "Tristan", "Electric Universe", "Raja Ram", "1200 Micrograms", "Mad Maxx", "Faders", "Digicult", "Talamasca", "Laughing Buddha", "Outsiders"],
   hard_techno: ["Alignment", "DYEN", "Sara Landry", "I Hate Models", "Kobosil", "SPFDJ", "Shlomo", "Charlie Sparks", "Nico Moreno", "Airod", "Trym", "Fantasm", "6EJOU", "Onlynumbers", "CLTX", "Basswell", "Klangkuenstler", "Brutalismus 3000"],
-  tech_house: ["Mochakk", "Marco Carola", "Hot Since 82", "Green Velvet", "Mason Collective", "Loco Dice", "Dom Dolla"],
+  house: ["Illusionize", "Vintage Culture", "Mochakk", "Ashibah", "Dubdogz", "Zerb", "Bhaskar"],
+  tech_house: ["Illusionize", "Mochakk", "Marco Carola", "Hot Since 82", "Green Velvet", "Mason Collective", "Loco Dice", "Dom Dolla"],
   techno: ["ANNA", "Charlotte de Witte", "Amelie Lens", "Adam Beyer", "Enrico Sangiuliano", "Maceo Plex", "Sama Abdulhadi"]
 };
 
@@ -10263,6 +10506,16 @@ function externalDatasetImportedMessage(tracksImported, artistsImported) {
   return "Base musical atualizada em segundo plano.";
 }
 
+function waitForExternalDatasetIdleSlot() {
+  return new Promise((resolve) => {
+    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => resolve(), { timeout: 90 });
+      return;
+    }
+    window.setTimeout(resolve, 18);
+  });
+}
+
 async function hydrateExternalDatasetPackInBackground() {
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
 
@@ -10273,13 +10526,17 @@ async function hydrateExternalDatasetPackInBackground() {
     let artistsImported = 0;
     let seedsAdded = 0;
 
-    for (const path of EXTERNAL_DATASET_FILES) {
+    for (let index = 0; index < EXTERNAL_DATASET_FILES.length; index += 1) {
+      const path = EXTERNAL_DATASET_FILES[index];
       const rows = await readExternalDatasetRowsFromPath(path);
       if (!rows.length) continue;
       const merged = mergeExternalDatasetRows(rows, `dataset_v14_${path.split("/").pop()}`);
       tracksImported += merged.tracksImported;
       artistsImported += merged.artistsImported;
       seedsAdded += merged.artistSeedsAdded;
+      if (index < EXTERNAL_DATASET_FILES.length - 1) {
+        await waitForExternalDatasetIdleSlot();
+      }
     }
 
     if (tracksImported > 0 || artistsImported > 0 || seedsAdded > 0) {
@@ -10346,7 +10603,9 @@ function bpmFitsStyle(style, bpm) {
 function requiresExactBpmForDynamic(style, source = "") {
   // Psycore em APIs abertas quase nunca vem com BPM exato; mantemos filtro por artista seed/estilo e liberamos fallback de BPM.
   if (style === "psycore") return false;
-  if (isDynamicSource(source) && normalize(source || "").includes("dataset")) return false;
+  const sourceKey = normalize(source || "").replace(/[\s_]+/g, "");
+  if (isDynamicSource(source) && sourceKey.includes("dataset")) return false;
+  if (isDynamicSource(source) && (sourceKey.includes("artist") || sourceKey.includes("soundcloud"))) return false;
   return STRICT_DYNAMIC_BPM_STYLES.has(style);
 }
 
@@ -11353,6 +11612,30 @@ function artistSetHasMatch(setRef, nameLike = "") {
   return false;
 }
 
+function isAmbiguousArtistImageName(nameLike = "") {
+  const key = artistMatchKey(nameLike || "");
+  if (!key) return false;
+  return AMBIGUOUS_ARTIST_IMAGE_KEYS.has(key);
+}
+
+function artistImageSourceIsVerified(source = "") {
+  const value = normalize(source || "");
+  if (!value) return false;
+  return (
+    value.includes("manual") ||
+    value.includes("verified") ||
+    value.includes("verificado") ||
+    value.includes("artist photo")
+  );
+}
+
+function shouldSuppressUnverifiedArtistImage(track, source = "") {
+  const artist = String(track?.artist || "").trim();
+  if (!artist || !isAmbiguousArtistImageName(artist)) return false;
+  if (track?.artistImageVerified === true || track?.verifiedArtistImage === true) return false;
+  return !artistImageSourceIsVerified(source || track?.artistImageSource || "");
+}
+
 function compactArtistIdentitySet(setRef) {
   if (!setRef?.size) return;
   const compacted = new Set();
@@ -11434,7 +11717,9 @@ function isDynamicSource(source) {
   return (
     normalizedSource.includes("dynamic") ||
     compactSource.includes("itunesstyle") ||
+    compactSource.includes("itunesartist") ||
     compactSource.includes("deezerstyle") ||
+    compactSource.includes("deezerartist") ||
     compactSource.includes("dataset") ||
     compactSource.includes("soundcloudapi") ||
     compactSource.includes("soundclouddynamic")
@@ -11599,6 +11884,65 @@ function boost(mapRef, key, amount = 1) {
   mapRef.set(cleanKey, (mapRef.get(cleanKey) || 0) + amount);
 }
 
+function swipeTrainingSignalCount() {
+  const stored = Math.max(0, Number(userStats.swipeTrainingSignals) || 0);
+  if (stored > 0) return stored;
+  return (
+    Math.max(0, Number(userStats.likedSongs) || 0) +
+    Math.max(0, Number(userStats.likedArtists) || 0) +
+    Math.max(0, Number(userStats.likedDiscoveries) || 0) +
+    Math.max(0, Number(userStats.alreadyKnew) || 0) +
+    Math.max(0, Number(userStats.skipped) || 0) +
+    Math.max(0, Number(userStats.ratingCount) || 0)
+  );
+}
+
+function adaptiveLearningMultiplier() {
+  const signals = swipeTrainingSignalCount();
+  if (signals >= 30) return 1.9;
+  if (signals >= 20) return 1.62;
+  if (signals >= 10) return 1.34;
+  if (signals >= 5) return 1.14;
+  return 1;
+}
+
+function swipeLearningLevelKey() {
+  const signals = swipeTrainingSignalCount();
+  if (signals >= 30) return "swipeLearningLevelStrong";
+  if (signals >= 20) return "swipeLearningLevelGood";
+  if (signals >= 10) return "swipeLearningLevelWarming";
+  if (signals > 0) return "swipeLearningLevelEarly";
+  return "swipeLearningLevelEmpty";
+}
+
+function recordSwipeTrainingSignal(options = {}) {
+  const source = String(options?.source || "").toLowerCase();
+  if (!source || source === "system") return;
+  userStats.swipeTrainingSignals = Math.max(0, Number(userStats.swipeTrainingSignals) || 0) + 1;
+
+  const reached = SWIPE_LEARNING_MILESTONES
+    .filter((milestone) => userStats.swipeTrainingSignals >= milestone)
+    .pop() || 0;
+  const previous = Math.max(0, Number(userStats.lastSwipeLearningMilestone) || 0);
+  if (reached > previous) {
+    userStats.lastSwipeLearningMilestone = reached;
+    pendingSwipeLearningMessage = t(`swipeLearningMilestone${reached}`, {
+      count: userStats.swipeTrainingSignals
+    });
+  }
+}
+
+function takeSwipeLearningMessage() {
+  const message = pendingSwipeLearningMessage;
+  pendingSwipeLearningMessage = "";
+  return message;
+}
+
+function appendSwipeLearningMessage(message = "") {
+  const learningMessage = takeSwipeLearningMessage();
+  return [message, learningMessage].filter(Boolean).join(" ");
+}
+
 function getAdaptiveScore(track) {
   const styleKey = normalize(track.style);
   const artistKeys = artistMatchingKeys(track.artist);
@@ -11620,7 +11964,7 @@ function getAdaptiveScore(track) {
     artistDislike * 2 +
     (adaptiveModel.dislikedEnergies.get(energyKey) || 0) * 0.9;
 
-  return like - dislike;
+  return (like - dislike) * adaptiveLearningMultiplier();
 }
 
 function registerTrackPreferenceSignal(track, delta = 0) {
@@ -11665,13 +12009,25 @@ function trackHasReliableAudioPreview(track) {
   return previewCandidatesForTrack(track).some((candidate) => Boolean(normalizePreviewUrl(candidate)));
 }
 
-function trackHasPlayablePreviewExperience(track) {
-  return (
-    trackHasReliableAudioPreview(track) ||
+function trackHasConfirmedAudioPreview(track) {
+  if (!track || !normalizePreviewUrl(track.previewUrl)) return false;
+  if (track.previewChecked && track.previewMissing) return false;
+  return true;
+}
+
+function trackHasExternalPlayableFallback(track) {
+  return Boolean(
     trackHasDirectYouTubeVideo(track) ||
     trackHasDirectSoundCloudTrack(track) ||
     trackHasEmbeddableBandcampTrack(track) ||
     trackHasDirectBandcampTrack(track)
+  );
+}
+
+function trackHasPlayablePreviewExperience(track) {
+  return (
+    trackHasReliableAudioPreview(track) ||
+    trackHasExternalPlayableFallback(track)
   );
 }
 
@@ -11722,6 +12078,7 @@ function previewPenaltyForTrack(track) {
 
 function registerTrackFeedback(track, liked, options = {}) {
   if (!track) return;
+  recordSwipeTrainingSignal(options);
   const delta = liked ? 1 : 1.2;
   if (liked) {
     boost(adaptiveModel.likedStyles, track.style, delta);
@@ -11737,6 +12094,7 @@ function registerTrackFeedback(track, liked, options = {}) {
     return "liked";
   }
   const reason = options?.reason || inferNegativeFeedbackReason(track, { source: options?.source || "skip" });
+  rememberDislikedTrack(track, options?.source || reason || "disliked");
   if (reason === "preview_issue") {
     // Quando falha no preview, aprendemos a priorizar faixas com player melhor sem punir forte o gosto musical.
     boost(adaptiveModel.dislikedStyles, track.style, 0.18);
@@ -11955,6 +12313,7 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
   const nextSignal = ratingSignalFromStars(value);
   const signalDelta = nextSignal - previousSignal;
   if (signalDelta !== 0) applyRatingSignal(currentRecommendation, signalDelta);
+  recordSwipeTrainingSignal({ source: "rating" });
 
   trackRatings.set(key, value);
   if (nextSignal === 0) trackRatingSignals.delete(key);
@@ -11962,7 +12321,7 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
   if (value >= 4) {
     rememberLikedTrack(currentRecommendation, `rating_${value}`);
   } else if (value <= 2) {
-    removeLikedTrackFromHistory(key, { silent: true, save: false, render: false });
+    rememberDislikedTrack(currentRecommendation, `rating_${value}`);
   }
 
   recalculateRatingStats();
@@ -11970,11 +12329,11 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
   updateStats();
 
   if (feedbackMessage) {
-    feedbackMessage.textContent = t("ratingSavedFeedback", {
+    feedbackMessage.textContent = appendSwipeLearningMessage(t("ratingSavedFeedback", {
       label: ratingMoodLabel(value),
       stars: value,
       song: currentRecommendation.song
-    });
+    }));
   }
 
   if (value >= 4) {
@@ -12152,9 +12511,10 @@ function styleCoverageTarget(style) {
     labels: MIN_LABELS_PER_STYLE
   };
   const override = STYLE_COVERAGE_OVERRIDES[style] || {};
+  const artistTarget = Number(override.artists) || base.artists;
   return {
     tracks: Number(override.tracks) || base.tracks,
-    artists: Number(override.artists) || base.artists,
+    artists: Math.max(base.artists, artistTarget),
     labels: Number(override.labels) || base.labels
   };
 }
@@ -12181,8 +12541,18 @@ function styleCoverageStats(style) {
   };
 }
 
+function styleCoverageArtistSignal(stats = {}) {
+  return Math.max(Number(stats.artists) || 0, Number(stats.localArtists) || 0);
+}
+
 function isStyleCoverageHealthy(style, stats = styleCoverageStats(style), target = styleCoverageTarget(style)) {
-  return stats.tracks >= target.tracks && stats.artists >= target.artists && stats.labels >= target.labels;
+  return stats.tracks >= target.tracks && styleCoverageArtistSignal(stats) >= target.artists && stats.labels >= target.labels;
+}
+
+function externalCatalogHydrationAllowed() {
+  if (typeof window !== "undefined" && window.SONIC_LOCAL_CATALOG_ONLY === true) return false;
+  if (typeof navigator !== "undefined" && navigator.onLine === false) return false;
+  return true;
 }
 
 function coveragePassLimit(style, maxPasses = COVERAGE_MAX_PASSES) {
@@ -12225,12 +12595,14 @@ function buildCoverageReport() {
     .map((style) => {
       const target = styleCoverageTarget(style);
       const stats = styleCoverageStats(style);
+      const artistSignal = styleCoverageArtistSignal(stats);
       return {
         style,
         tracks: stats.tracks,
         artists: stats.artists,
         labels: stats.labels,
         localArtists: stats.localArtists,
+        artistSignal,
         targetTracks: target.tracks,
         targetArtists: target.artists,
         targetLabels: target.labels,
@@ -12402,23 +12774,91 @@ async function fetchDeezerTrackDetails(trackId) {
   }
 }
 
-async function fetchTracksByArtistAndStyle(artist, style) {
+function styleSearchParts(style) {
   const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
   const styleTokens = String(styleTerm || "")
     .split(/\s+/)
     .map((token) => String(token || "").trim())
     .filter(Boolean);
-  const compactStyleTerm = styleTokens.slice(0, 2).join(" ") || styleLabelByValue(style);
-  const broadStyleToken = styleTokens[0] || styleLabelByValue(style);
-  const familyHint = familyOf(style) === "psytrance" ? "psytrance" : "electronic";
+  const family = familyOf(style);
+  const familyTerm = family === "dnb"
+    ? "drum and bass"
+    : family === "psytrance"
+      ? "psytrance"
+      : family === "techno"
+        ? "techno"
+        : family === "house"
+          ? "house"
+          : family === "bass_music"
+            ? "bass music"
+            : family === "trance"
+              ? "trance"
+              : "electronic";
+
+  return {
+    styleTerm,
+    styleTokens,
+    compactStyleTerm: styleTokens.slice(0, 2).join(" ") || styleLabelByValue(style),
+    compactThreeTerm: styleTokens.slice(0, 3).join(" ") || styleLabelByValue(style),
+    broadStyleToken: styleTokens[0] || styleLabelByValue(style),
+    family,
+    familyTerm
+  };
+}
+
+function advancedStyleSearchTerms(style, limit = 6) {
+  const parts = styleSearchParts(style);
+  const terms = [
+    ...(STYLE_ADVANCED_SEARCH_TERMS[style] || []),
+    parts.styleTerm,
+    parts.compactThreeTerm,
+    parts.compactStyleTerm,
+    `${parts.broadStyleToken} ${parts.familyTerm}`,
+    styleLabelByValue(style),
+    parts.familyTerm
+  ];
+
+  const seen = new Set();
+  return terms
+    .map((term) => String(term || "").replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .filter((term) => {
+      const key = normalize(term);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, limit);
+}
+
+function hydrationSeedCapForStyle(style) {
+  if (style === "psycore") return 72;
+  if (style === "slambient" || DARK_UNDERGROUND_DISCOVERY_STYLES.has(style)) return 42;
+  return STRICT_DYNAMIC_BPM_STYLES.has(style) ? 24 : 48;
+}
+
+function deezerArtistTopSeedCapForStyle(style) {
+  if (style === "psycore") return 36;
+  if (style === "slambient" || DARK_UNDERGROUND_DISCOVERY_STYLES.has(style)) return 22;
+  return STRICT_DYNAMIC_BPM_STYLES.has(style) ? 14 : 28;
+}
+
+function soundCloudArtistSeedCapForStyle(style) {
+  if (style === "psycore") return 18;
+  if (style === "slambient" || DARK_UNDERGROUND_DISCOVERY_STYLES.has(style)) return 14;
+  return STRICT_DYNAMIC_BPM_STYLES.has(style) ? 10 : 12;
+}
+
+async function fetchTracksByArtistAndStyle(artist, style) {
   const fastMode = STRICT_DYNAMIC_BPM_STYLES.has(style) && style !== "psycore";
+  const parts = styleSearchParts(style);
+  const searchTerms = advancedStyleSearchTerms(style, fastMode ? 3 : 5);
   const queries = Array.from(
     new Set(
       [
-        `artist:"${artist}" ${compactStyleTerm}`,
-        `artist:"${artist}" ${broadStyleToken}`,
+        ...searchTerms.map((term) => `artist:"${artist}" ${term}`),
         `artist:"${artist}"`,
-        ...(fastMode ? [] : [`${artist} ${compactStyleTerm} ${familyHint}`])
+        ...(fastMode ? [] : searchTerms.slice(0, 3).map((term) => `${artist} ${term} ${parts.familyTerm}`))
       ]
         .map((query) => query.replace(/\s+/g, " ").trim())
         .filter(Boolean)
@@ -12427,7 +12867,7 @@ async function fetchTracksByArtistAndStyle(artist, style) {
   const collected = new Map();
 
   for (const rawQuery of queries) {
-    for (const index of (fastMode ? [0] : [0, 25])) {
+    for (const index of (fastMode ? [0, 25] : [0, 25, 50])) {
       try {
         const query = encodeURIComponent(rawQuery);
         const data = await deezerJsonp(`https://api.deezer.com/search?q=${query}&limit=25&index=${index}`);
@@ -12442,29 +12882,23 @@ async function fetchTracksByArtistAndStyle(artist, style) {
     }
   }
 
-  return Array.from(collected.values()).slice(0, 18);
+  return Array.from(collected.values()).slice(0, 28);
 }
 
 async function fetchDeezerTracksByStyle(style) {
-  const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
-  const styleTokens = String(styleTerm || "")
-    .split(/\s+/)
-    .map((token) => String(token || "").trim())
-    .filter(Boolean);
-  const compactStyleTerm = styleTokens.slice(0, 2).join(" ") || styleLabelByValue(style);
-  const broadStyleToken = styleTokens[0] || styleLabelByValue(style);
   const fastMode = STRICT_DYNAMIC_BPM_STYLES.has(style) && style !== "psycore";
-  const family = familyOf(style);
+  const parts = styleSearchParts(style);
+  const searchTerms = advancedStyleSearchTerms(style, fastMode ? 4 : 7);
   const queries = Array.from(
     new Set(
       [
-        `${compactStyleTerm} electronic`,
-        `${broadStyleToken} electronic`,
-        ...(family === "psytrance" ? [`${broadStyleToken} psytrance`] : []),
-        ...(family === "techno" ? [`${broadStyleToken} techno`] : []),
-        ...(family === "house" ? [`${broadStyleToken} house`] : []),
-        ...(family === "dnb" ? [`${broadStyleToken} drum and bass`] : []),
-        ...(fastMode ? [] : [`${compactStyleTerm} official`])
+        ...searchTerms.map((term) => `${term} ${parts.familyTerm}`),
+        ...searchTerms.slice(0, fastMode ? 2 : 4).map((term) => `${term} electronic`),
+        ...(parts.family === "psytrance" ? searchTerms.slice(0, 3).map((term) => `${term} psytrance`) : []),
+        ...(parts.family === "techno" ? searchTerms.slice(0, 3).map((term) => `${term} techno`) : []),
+        ...(parts.family === "house" ? searchTerms.slice(0, 3).map((term) => `${term} house`) : []),
+        ...(parts.family === "dnb" ? searchTerms.slice(0, 3).map((term) => `${term} drum and bass`) : []),
+        ...(fastMode ? [] : searchTerms.slice(0, 2).map((term) => `${term} official`))
       ]
         .map((query) => query.replace(/\s+/g, " ").trim())
         .filter(Boolean)
@@ -12487,58 +12921,101 @@ async function fetchDeezerTracksByStyle(style) {
     }
   }
 
-  return Array.from(collected.values()).slice(0, 90);
+  return Array.from(collected.values()).slice(0, 120);
+}
+
+async function fetchDeezerArtistTopTracks(artist, style) {
+  const artistName = sanitizeArtistLookupName(artist);
+  const cacheKey = `${style || "any"}::${normalize(artistName)}`;
+  if (!artistName || !style) return [];
+  if (deezerArtistTopTrackCache.has(cacheKey)) return deezerArtistTopTrackCache.get(cacheKey);
+
+  try {
+    const artistData = await deezerJsonp(`https://api.deezer.com/search/artist?q=${encodeURIComponent(artistName)}&limit=8`);
+    const artistRows = Array.isArray(artistData?.data) ? artistData.data : [];
+    const best = artistRows.find((row) => isArtistMatch(row?.name || "", artistName));
+    const topUrl = String(best?.tracklist || (best?.id ? `https://api.deezer.com/artist/${best.id}/top?limit=50` : "")).trim();
+    if (!topUrl) {
+      deezerArtistTopTrackCache.set(cacheKey, []);
+      return [];
+    }
+
+    let lookupUrl = topUrl.replace(/limit=\d+/i, "limit=50");
+    if (!/limit=/i.test(lookupUrl)) lookupUrl += `${lookupUrl.includes("?") ? "&" : "?"}limit=50`;
+    const topData = await deezerJsonp(lookupUrl);
+    const rows = Array.isArray(topData?.data) ? topData.data : [];
+    const collected = new Map();
+
+    rows
+      .filter((row) => row?.id && row?.title && row?.artist?.name)
+      .filter((row) => isArtistMatch(row.artist.name, artistName))
+      .filter(
+        (row) =>
+          !hasTrackStyleSignalConflict(style, {
+            artist: row.artist.name,
+            song: row.title,
+            label: row.album?.title || "",
+            artistGenre: [STYLE_SEARCH_TERMS[style], styleLabelByValue(style)].filter(Boolean).join(" "),
+            artistProfileHint: row.album?.title || "",
+            source: "deezer_artist_top"
+          })
+      )
+      .forEach((row) => collected.set(String(row.id), row));
+
+    const result = Array.from(collected.values()).slice(0, 40);
+    deezerArtistTopTrackCache.set(cacheKey, result);
+    return result;
+  } catch (_err) {
+    deezerArtistTopTrackCache.set(cacheKey, []);
+    return [];
+  }
 }
 
 async function fetchItunesTracksByStyle(style, artist = "") {
-  const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
-  const styleTokens = String(styleTerm || "")
-    .split(/\s+/)
-    .map((token) => String(token || "").trim())
-    .filter(Boolean);
-  const compactStyleTerm = styleTokens.slice(0, 2).join(" ") || styleLabelByValue(style);
-  const family = familyOf(style);
-  const genericScope = family === "techno"
-    ? "techno"
-    : family === "psytrance"
-      ? "psytrance"
-      : family === "house"
-        ? "house"
-        : family === "dnb"
-          ? "drum and bass"
-          : "electronic";
-  const rawTerm = artist ? `${artist} ${compactStyleTerm}` : `${compactStyleTerm} ${genericScope}`;
-  const term = encodeURIComponent(rawTerm);
+  const parts = styleSearchParts(style);
+  const searchTerms = advancedStyleSearchTerms(style, artist ? 3 : 5);
+  const rawTerms = Array.from(
+    new Set(
+      (artist
+        ? searchTerms.map((term) => `${artist} ${term}`)
+        : searchTerms.map((term) => `${term} ${parts.familyTerm}`))
+        .map((term) => term.replace(/\s+/g, " ").trim())
+        .filter(Boolean)
+    )
+  );
   const collected = new Map();
   const fastMode = STRICT_DYNAMIC_BPM_STYLES.has(style) && style !== "psycore";
   const offsets = artist
-    ? (fastMode ? [0] : [0, 60, 120])
+    ? (fastMode ? [0, 60] : [0, 60, 120])
     : (fastMode ? [0, 60] : [0, 60, 120]);
 
-  for (const offset of offsets) {
-    try {
-      const data = await itunesJsonp(`https://itunes.apple.com/search?term=${term}&entity=song&limit=60&offset=${offset}`);
-      const rows = data?.results || [];
-      rows
-        .filter((row) => row?.trackName && row?.artistName)
-        .filter((row) => !artist || isArtistMatch(row.artistName, artist))
-        .filter(
-          (row) =>
-            !hasTrackStyleSignalConflict(style, {
-              artist: row.artistName,
-              song: row.trackName,
-              label: row.collectionName || "",
-              artistGenre: row.primaryGenreName || "",
-              source: artist ? "itunes_dynamic" : "itunes_style"
-            })
-        )
-        .forEach((row) => collected.set(String(row.trackId || `${row.artistName}::${row.trackName}`), row));
-    } catch (_err) {
-      // segue fluxo com outros lotes/fontes
+  for (const rawTerm of rawTerms) {
+    const term = encodeURIComponent(rawTerm);
+    for (const offset of offsets) {
+      try {
+        const data = await itunesJsonp(`https://itunes.apple.com/search?term=${term}&entity=song&limit=60&offset=${offset}`);
+        const rows = data?.results || [];
+        rows
+          .filter((row) => row?.trackName && row?.artistName)
+          .filter((row) => !artist || isArtistMatch(row.artistName, artist))
+          .filter(
+            (row) =>
+              !hasTrackStyleSignalConflict(style, {
+                artist: row.artistName,
+                song: row.trackName,
+                label: row.collectionName || "",
+                artistGenre: row.primaryGenreName || "",
+                source: artist ? "itunes_artist_style" : "itunes_style"
+              })
+          )
+          .forEach((row) => collected.set(String(row.trackId || `${row.artistName}::${row.trackName}`), row));
+      } catch (_err) {
+        // segue fluxo com outros lotes/fontes
+      }
     }
   }
 
-  return Array.from(collected.values()).slice(0, 80);
+  return Array.from(collected.values()).slice(0, 100);
 }
 
 async function fetchItunesTracksByArtist(artist, style = "") {
@@ -12546,7 +13023,7 @@ async function fetchItunesTracksByArtist(artist, style = "") {
   if (!artistName) return [];
   const term = encodeURIComponent(artistName);
   const fastMode = STRICT_DYNAMIC_BPM_STYLES.has(style) && style !== "psycore";
-  const offsets = fastMode ? [0] : [0, 60];
+  const offsets = fastMode ? [0, 60] : [0, 60, 120];
   const collected = new Map();
 
   for (const offset of offsets) {
@@ -12583,37 +13060,15 @@ function resolveMusicApiEndpoint(globalName, fallbackPath) {
 }
 
 function soundCloudApiQueryTerms(style, artist = "") {
-  const styleTerm = STYLE_SEARCH_TERMS[style] || styleLabelByValue(style);
-  const styleTokens = String(styleTerm || "")
-    .split(/\s+/)
-    .map((token) => String(token || "").trim())
-    .filter(Boolean);
-  const compactStyleTerm = styleTokens.slice(0, 3).join(" ") || styleLabelByValue(style);
-  const primaryToken = styleTokens[0] || styleLabelByValue(style);
-  const family = familyOf(style);
-  const familyTerm = family === "dnb"
-    ? "drum and bass"
-    : family === "psytrance"
-      ? "psytrance"
-      : family === "techno"
-        ? "techno"
-        : family === "house"
-          ? "house"
-          : family === "bass_music"
-            ? "bass music"
-            : "electronic";
+  const parts = styleSearchParts(style);
+  const searchTerms = advancedStyleSearchTerms(style, artist ? 4 : 6);
   const artistName = String(artist || "").trim();
 
   const queries = artistName
-    ? [
-        `${artistName} ${compactStyleTerm}`,
-        `${artistName} ${familyTerm}`,
-        `${artistName} ${primaryToken}`
-      ]
+    ? searchTerms.map((term) => `${artistName} ${term}`)
     : [
-        `${compactStyleTerm}`,
-        `${compactStyleTerm} ${familyTerm}`,
-        `${primaryToken} ${familyTerm}`
+        ...searchTerms,
+        ...searchTerms.slice(0, 3).map((term) => `${term} ${parts.familyTerm}`)
       ];
 
   return Array.from(
@@ -12622,7 +13077,7 @@ function soundCloudApiQueryTerms(style, artist = "") {
         .map((query) => query.replace(/\s+/g, " ").trim())
         .filter(Boolean)
     )
-  ).slice(0, artistName ? 2 : 3);
+  ).slice(0, artistName ? 3 : 5);
 }
 
 async function fetchSoundCloudTracksByStyle(style, artist = "") {
@@ -12645,7 +13100,7 @@ async function fetchSoundCloudTracksByStyle(style, artist = "") {
         body: JSON.stringify({
           style,
           query,
-          limit: artist ? 12 : 24
+          limit: artist ? 16 : 32
         })
       });
       if (!response.ok) break;
@@ -12674,7 +13129,7 @@ async function fetchSoundCloudTracksByStyle(style, artist = "") {
     }
   }
 
-  const tracks = Array.from(collected.values()).slice(0, artist ? 12 : 48);
+  const tracks = Array.from(collected.values()).slice(0, artist ? 16 : 60);
   soundCloudApiCache.set(cacheKey, tracks);
   return tracks;
 }
@@ -12928,14 +13383,20 @@ async function hydrateCatalogForStyle(style) {
   const currentStats = styleCoverageStats(style);
   if (
     currentStats.tracks >= Math.max(targetSize, coverageTarget.tracks) &&
-    currentStats.artists >= coverageTarget.artists &&
+    styleCoverageArtistSignal(currentStats) >= coverageTarget.artists &&
     currentStats.labels >= coverageTarget.labels
   ) return;
+  if (!externalCatalogHydrationAllowed()) {
+    dynamicCatalogByStyle.set(style, Date.now());
+    saveDynamicCatalogCache();
+    return;
+  }
 
   const existingKeys = new Set(catalog.map((t) => normalize(`${t.artist}::${t.song}`)));
-  const seedCap = style === "psycore" ? 48 : STRICT_DYNAMIC_BPM_STYLES.has(style) ? 12 : 24;
+  const seedCap = hydrationSeedCapForStyle(style);
   const skipBroadStyleHydration = NO_BROAD_STYLE_HYDRATION_STYLES.has(style);
-  const allowItunesHydration = !requiresExactBpmForDynamic(style, "itunes_dynamic");
+  const allowArtistItunesHydration = !requiresExactBpmForDynamic(style, "itunes_artist_style");
+  const allowBroadItunesHydration = !requiresExactBpmForDynamic(style, "itunes_style");
   const selectedSeeds = selectHydrationArtists(style, seeds, Math.min(seedCap, seeds.length));
 
   for (const artist of selectedSeeds) {
@@ -12952,7 +13413,7 @@ async function hydrateCatalogForStyle(style) {
         releaseDate: details?.release_date || "Catálogo dinâmico",
         durationSec: Number(details?.duration) || Number(row.duration) || 0,
         artistProfileHint: row.album?.title || "",
-        source: "deezer_dynamic"
+        source: "deezer_artist_style"
       }, existingKeys);
 
       const stats = stylePoolStats(style);
@@ -12964,27 +13425,58 @@ async function hydrateCatalogForStyle(style) {
   }
 
   let stats = stylePoolStats(style);
+  const hasLocalArtistDepth = () => styleLocalArtistKnowledgeCount(style) >= coverageTarget.artists;
+
+  // Deezer por perfil de artista: busca o repertorio do seed direto, sem depender do termo de genero.
+  if (
+    stats.trackCount < targetSize ||
+    (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists) ||
+    stats.labels < coverageTarget.labels
+  ) {
+    for (const artist of selectedSeeds.slice(0, deezerArtistTopSeedCapForStyle(style))) {
+      const rows = await fetchDeezerArtistTopTracks(artist, style);
+      for (const row of rows) {
+        const details = await fetchDeezerTrackDetails(row.id);
+        addDynamicTrackToCatalog({
+          style,
+          song: row.title,
+          artist: row.artist?.name || artist,
+          label: details?.label || row.album?.title || "Catálogo dinâmico",
+          bpmExact: Number(details?.bpm) || 0,
+          previewUrl: row.preview || details?.preview || "",
+          releaseDate: details?.release_date || "Catálogo dinâmico",
+          durationSec: Number(details?.duration) || Number(row.duration) || 0,
+          artistProfileHint: row.album?.title || "",
+          source: "deezer_artist_top"
+        }, existingKeys);
+
+        stats = stylePoolStats(style);
+        if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
+      }
+      if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
+    }
+  }
 
   // SoundCloud API: fonte server-side para previews/links reais e cena underground.
   // Usamos poucos artistas-semente para ganhar variedade sem gastar chamadas demais.
   if (
     stats.trackCount < Math.max(MIN_TRACKS_PER_STYLE, coverageTarget.tracks) ||
-    stats.artistCount < coverageTarget.artists ||
+    (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists) ||
     stats.labels < coverageTarget.labels
   ) {
-    for (const artist of selectedSeeds.slice(0, 6)) {
+    for (const artist of selectedSeeds.slice(0, soundCloudArtistSeedCapForStyle(style))) {
       const rows = await fetchSoundCloudTracksByStyle(style, artist);
       for (const row of rows) {
         addSoundCloudApiTrackToCatalog(row, style, existingKeys);
         stats = stylePoolStats(style);
-        if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+        if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
       }
-      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+      if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
     }
   }
 
   // Segunda fonte: iTunes Search para estilos que aceitam preview sem BPM exato.
-  if (allowItunesHydration) {
+  if (allowArtistItunesHydration) {
     for (const artist of selectedSeeds) {
       const rows = await fetchItunesTracksByStyle(style, artist);
       for (const row of rows) {
@@ -13000,7 +13492,7 @@ async function hydrateCatalogForStyle(style) {
           artistCountry: "",
           artistGenre: row.primaryGenreName || "",
           artistProfileHint: row.collectionName || "",
-          source: "itunes_dynamic"
+          source: "itunes_artist_style"
         }, existingKeys);
 
         const stats = stylePoolStats(style);
@@ -13014,7 +13506,7 @@ async function hydrateCatalogForStyle(style) {
   stats = stylePoolStats(style);
 
   // Fallback por artista puro: usa base local de artistas quando o termo de estilo falha.
-  if (allowItunesHydration && stats.trackCount < targetSize) {
+  if (allowArtistItunesHydration && stats.trackCount < targetSize) {
     for (const artist of selectedSeeds) {
       const rows = await fetchItunesTracksByArtist(artist, style);
       for (const row of rows) {
@@ -13043,8 +13535,8 @@ async function hydrateCatalogForStyle(style) {
   // Busca genérica por estilo para atingir cobertura mínima (20 artistas + 20 faixas).
   if (
     !skipBroadStyleHydration &&
-    allowItunesHydration &&
-    (stats.trackCount < MIN_TRACKS_PER_STYLE || stats.artistCount < MIN_ARTISTS_PER_STYLE) &&
+    allowBroadItunesHydration &&
+    (stats.trackCount < MIN_TRACKS_PER_STYLE || (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists)) &&
     familyOf(style) !== "techno"
   ) {
     const genericRows = await fetchItunesTracksByStyle(style);
@@ -13065,13 +13557,13 @@ async function hydrateCatalogForStyle(style) {
       }, existingKeys);
 
       stats = stylePoolStats(style);
-      if (stats.trackCount >= targetSize && stats.artistCount >= MIN_ARTISTS_PER_STYLE) break;
+      if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
     }
   }
 
-  // Terceira fonte real: Deezer por termo de subgênero (sem depender apenas de seeds).
+  // Fallback real por subgenero: Deezer amplo quando os artistas-semente ainda nao bastaram.
   stats = stylePoolStats(style);
-  if (!skipBroadStyleHydration && (stats.trackCount < MIN_TRACKS_PER_STYLE || stats.artistCount < MIN_ARTISTS_PER_STYLE)) {
+  if (!skipBroadStyleHydration && (stats.trackCount < MIN_TRACKS_PER_STYLE || (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists))) {
     const deezerStyleRows = await fetchDeezerTracksByStyle(style);
     for (const row of deezerStyleRows) {
       const details = await fetchDeezerTrackDetails(row.id);
@@ -13089,7 +13581,7 @@ async function hydrateCatalogForStyle(style) {
       }, existingKeys);
 
       stats = stylePoolStats(style);
-      if (stats.trackCount >= targetSize && stats.artistCount >= MIN_ARTISTS_PER_STYLE) break;
+      if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
     }
   }
 
@@ -13099,7 +13591,7 @@ async function hydrateCatalogForStyle(style) {
     for (const row of soundCloudRows) {
       addSoundCloudApiTrackToCatalog(row, style, existingKeys);
       stats = stylePoolStats(style);
-      if (stats.trackCount >= targetSize && stats.artistCount >= coverageTarget.artists) break;
+      if (stats.trackCount >= targetSize && (stats.artistCount >= coverageTarget.artists || hasLocalArtistDepth())) break;
     }
   }
 
@@ -13138,10 +13630,36 @@ function styleBpmShortLabel(style = "") {
   return `${min}-${max} BPM`;
 }
 
+function swipeDiscoveryRailStyles({ expanded = swipeStyleRailExpanded } = {}) {
+  const availableStyles = new Set(getAllSelectableStyles());
+  const priorityStyles = SWIPE_DISCOVERY_STYLE_DECK.filter((style) => availableStyles.has(style));
+  const prioritySet = new Set(priorityStyles);
+  const activeStyle = styleEl?.value || "";
+  const activeFamily = familyOf(activeStyle);
+  const remainingStyles = getAllSelectableStyles().filter((style) => style && !prioritySet.has(style));
+  const allStyles = [activeStyle, ...priorityStyles, ...remainingStyles]
+    .filter(Boolean)
+    .filter((style, index, list) => list.indexOf(style) === index);
+  if (expanded || allStyles.length <= SWIPE_STYLE_RAIL_COMPACT_LIMIT) return allStyles;
+
+  const familyStyles = activeFamily ? allStyles.filter((style) => familyOf(style) === activeFamily) : [];
+  const unseenStyles = allStyles.filter((style) => !(Number(swipeStyleExposureCounts.get(style)) || 0));
+  const compactStyles = [
+    activeStyle,
+    ...familyStyles.slice(0, 7),
+    ...priorityStyles,
+    ...unseenStyles
+  ].filter(Boolean)
+    .filter((style, index, list) => list.indexOf(style) === index)
+    .slice(0, SWIPE_STYLE_RAIL_COMPACT_LIMIT);
+
+  return compactStyles.length ? compactStyles : allStyles.slice(0, SWIPE_STYLE_RAIL_COMPACT_LIMIT);
+}
+
 function renderSwipeStyleRail() {
   if (!swipeStyleRail) return;
-  const availableStyles = new Set(getAllSelectableStyles());
-  const styles = SWIPE_DISCOVERY_STYLE_DECK.filter((style) => availableStyles.has(style));
+  const styles = swipeDiscoveryRailStyles();
+  const allStyles = swipeDiscoveryRailStyles({ expanded: true });
   swipeStyleRail.innerHTML = "";
   swipeStyleRail.setAttribute("aria-label", t("swipeStyleRailAria"));
 
@@ -13150,6 +13668,7 @@ function renderSwipeStyleRail() {
     button.type = "button";
     button.className = "swipe-style-pill";
     button.dataset.swipeStyle = style;
+    button.dataset.swipeFamily = familyOf(style);
     button.setAttribute("aria-pressed", styleEl?.value === style ? "true" : "false");
     if (styleEl?.value === style) button.classList.add("active");
 
@@ -13162,6 +13681,26 @@ function renderSwipeStyleRail() {
     button.append(label, meta);
     swipeStyleRail.appendChild(button);
   });
+
+  if (allStyles.length > SWIPE_STYLE_RAIL_COMPACT_LIMIT) {
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "swipe-style-pill swipe-style-toggle";
+    toggle.dataset.swipeStyleToggle = swipeStyleRailExpanded ? "compact" : "all";
+    toggle.setAttribute("aria-expanded", swipeStyleRailExpanded ? "true" : "false");
+
+    const label = document.createElement("span");
+    label.textContent = swipeStyleRailExpanded
+      ? t("swipeShowFocusedStyles")
+      : t("swipeShowAllStyles", { count: allStyles.length });
+    const meta = document.createElement("small");
+    meta.textContent = swipeStyleRailExpanded
+      ? t("swipeDeckKicker")
+      : `${styles.length}/${allStyles.length}`;
+
+    toggle.append(label, meta);
+    swipeStyleRail.appendChild(toggle);
+  }
 }
 
 async function hydrateCatalogUntilCoverage(style, maxPasses = COVERAGE_MAX_PASSES) {
@@ -13334,7 +13873,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
         deezerMatch?.artist?.picture_medium ||
         ""
       ).trim();
-      if (deezerArtistImage) {
+      if (deezerArtistImage && !shouldSuppressUnverifiedArtistImage(track, "Deezer")) {
         track.artistImageUrl = deezerArtistImage;
         track.artistImageSource = "Deezer";
       }
@@ -13473,26 +14012,27 @@ const I18N = {
     usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Como usar",
-    authKicker: "Carregar usuário",
-    authTitle: "Entre para carregar seu perfil",
-    authDesc: "Faça login para continuar com seu perfil salvo ou continue sem login.",
+    authKicker: "Conta opcional",
+    authTitle: "Use o Sonic Search sem login",
+    authDesc: "Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Retomar perfil salvo",
-    authLoginBtn: "Entrar",
-    authGuestBtn: "Continuar sem login",
-    authTestUserBtn: "Testar novo usuário",
+    authLoginBtn: "Entrar em conta",
+    authGuestBtn: "Usar perfil local",
+    authTestUserBtn: "Teste isolado",
     authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Modo visitante ativado. Você pode usar o app sem login.",
+    authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
-    authTestUserReady: "Modo teste criado para {user}. Dados reais salvos não foram apagados.",
-    authSocialDivider: "ou entre com",
+    authTestUserReady: "Modo teste isolado criado para {user}. Histórico e limites começam zerados.",
+    authSocialDivider: "opcional: conta online",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Use Google ou Apple para manter um perfil separado neste aparelho.",
+    authProviderHint: "Login é extra para sincronização, social, premium e backup automático.",
     authProviderConfigMissing: "Login com {provider} ainda precisa ser configurado neste ambiente.",
     authProviderLoading: "Abrindo {provider}...",
     authProviderLoggedAs: "Perfil {provider} carregado para {user}.",
@@ -13501,12 +14041,13 @@ const I18N = {
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Google em breve",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "Login social entra na fase de contas reais. Por enquanto, salve uma cópia local para não perder curtidas e status.",
+    authProviderHintLocalBackup: "O app continua local. Baixe/importe seu perfil para trocar de aparelho sem depender de conta.",
     welcomeKicker: "Curadoria de música eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Seu sommelier de música eletrônica para rave, treino, foco ou viagem. Escolha seu estilo e receba faixa + artista novo para descobrir.",
     startBtn: "Iniciar experiência",
     startSurpriseBtn: "Surpreenda-me",
+    welcomeImportProfileBtn: "Tenho perfil salvo",
     floatingSurpriseBtn: "Surpresa",
     quickSurpriseTitle: "Surpreenda-me com novidade real",
     quickSurpriseHint: "Me diga o subgênero, artistas e músicas que você já conhece. Eu uso isso para fugir do repetido e buscar uma novidade com sentido.",
@@ -13532,20 +14073,22 @@ const I18N = {
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.",
     swipeHeroKicker: "Descoberta por swipe",
-    swipeHeroTitle: "O deck de tracks e subgêneros.",
-    swipeHeroHint: "Passe por estilos e DJs diferentes. Curtiu, salva o sinal. Não bateu, troca e o radar aprende.",
+    swipeHeroTitle: "Descubra no swipe.",
+    swipeHeroHint: "Curti, não curti ou surpresa. Os detalhes ficam para depois.",
     swipeDeckKicker: "Varredura de gosto",
     swipeDeckTitle: "Passe por vários mundos sonoros",
     swipeDeckHint: "Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.",
-    swipeStyleRailAria: "Rotas rápidas de descoberta por subgênero",
+    swipeStyleRailAria: "Todos os subgêneros disponíveis para descoberta por swipe",
+    swipeShowAllStyles: "Ver todos os {count} estilos",
+    swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe da track",
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
-    topSwipeEmptyTitle: "Toque em Surpresa sonora",
-    topSwipeEmptyMeta: "O primeiro card já vem de um subgênero diferente. Depois é só curtir ou trocar.",
-    topSwipeHint: "No modo descoberta, o deck começa variado e afina para a vertente que seus swipes sinalizam.",
-    swipeStartButton: "Surpresa sonora",
+    topSwipeEmptyTitle: "Toque em Surpresa",
+    topSwipeEmptyMeta: "Depois responda sem pensar demais: curti ou não curti.",
+    topSwipeHint: "O perfil guarda os artistas e subgêneros que você andou curtindo.",
+    swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
     quickKnownArtistQuestion: "{artist} já estava no seu radar?",
@@ -13562,6 +14105,15 @@ const I18N = {
     swipeDeckNext: "Próxima carta: saí de {from} e trouxe {to}.",
     swipeAnchorNext: "Subgênero respeitado: mantendo {focus}. Próxima carta em {next}.",
     swipeAffinityNext: "Radar afinou para {focus}. Próxima carta em {next}, dentro da mesma vertente ou uma vizinha próxima.",
+    swipeLearningBadge: "{count} sinais de gosto",
+    swipeLearningLevelEmpty: "Radar sem histórico",
+    swipeLearningLevelEarly: "Radar aprendendo",
+    swipeLearningLevelWarming: "Radar calibrado",
+    swipeLearningLevelGood: "Perfil consistente",
+    swipeLearningLevelStrong: "Perfil forte",
+    swipeLearningMilestone10: "Radar calibrado com {count} sinais: agora peso mais seu gosto real nas próximas escolhas.",
+    swipeLearningMilestone20: "Perfil ficando consistente com {count} sinais: vou reduzir repetições e buscar vizinhos mais certeiros.",
+    swipeLearningMilestone30: "Perfil forte com {count} sinais: recomendações passam a priorizar compatibilidade fina e descoberta segura.",
     feedbackLikeGroupTitle: "Guardar sinal positivo",
     feedbackCorrectGroupTitle: "Corrigir rota",
     feedbackExploreGroupTitle: "Próximo passo",
@@ -13640,6 +14192,11 @@ const I18N = {
     bpmCatalogReferenceLabel: "pulso de referência",
     bpmUnverifiedLabel: "BPM não verificado",
     bpmEstimatedRange: "estimativa {range}",
+    bpmTechnicalGridLabel: "grid técnico",
+    bpmPerceivedPulseLabel: "sensação ~{bpm} BPM",
+    bpmBreaksDisplay: "BPM técnico {exact} • sensação ~{perceived}",
+    bpmBreaksAiText: "{exact} BPM técnico; sensação perto de {perceived} BPM",
+    bpmAmbiguousBadge: "BPM sentido ~{bpm}",
     energyPrefix: "Energia",
     releasePrefix: "Lançamento",
     durationPrefix: "Duração",
@@ -13694,6 +14251,12 @@ const I18N = {
     recommendationWhyStrongFit: "Boa aposta: sinais fortes",
     recommendationWhyTrustedSource: "Fonte mais confiável",
     recommendationWhyProfileSignal: "Combina com seu perfil",
+    recommendationTrustLabel: "Confiança",
+    recommendationTrustChip: "Confiança {score}%",
+    recommendationTrustReasonHigh: "Alta: fonte, player, pulso e perfil estão alinhados.",
+    recommendationTrustReasonMedium: "Boa: há sinais musicais fortes, ainda com espaço para calibrar.",
+    recommendationTrustReasonLow: "Exploratória: trouxe como teste, não como certeza absoluta.",
+    recommendationTrustReasonTempoAmbiguous: "Boa, mas com pulso ambíguo: em breaks o grid pode dobrar a sensação real.",
     recommendationWhyFreshArtistSentence: "Também mantive longe dos nomes óbvios para parecer descoberta real, não só mais do mesmo.",
     recommendationWhyProfilePositive: "O histórico recente do seu perfil aponta para essa direção.",
     recommendationWhySourcePositive: "A faixa tem sinais melhores de fonte, pulso ou player, então entra com mais segurança.",
@@ -13774,17 +14337,61 @@ const I18N = {
     voiceStudioStepOne: "Escolha o clima",
     voiceStudioStepTwo: "Aperte play",
     voiceStudioStepThree: "Ajuste camadas",
+    voiceStudioSessionStateLabel: "Estado",
+    voiceStudioSessionLayersLabel: "Camadas",
+    voiceStudioSessionLengthLabel: "Export",
+    voiceStudioSessionFormatLabel: "Arquivo",
+    voiceStudioStateReady: "Pronto",
+    voiceStudioStatePlaying: "Tocando",
+    voiceStudioStateRecording: "Gravando voz",
+    voiceStudioStateRendering: "Exportando",
+    voiceStudioStateVoiceReady: "Voz pronta",
+    voiceStudioLayersValue: "{count}/{total} camadas",
+    voiceStudioLengthValue: "{bars} compassos • {seconds}s",
+    voiceStudioFormatLocal: "WAV local",
+    voiceStudioFormatVoice: "Voz + WAV",
     voiceMiniNoVoiceBadge: "Sem microfone e sem cadastro",
     voiceMiniRandomBtn: "Gerar ideia",
     voiceMiniPlayBtn: "Tocar mini música",
     voiceMiniStopBtn: "Parar loop",
     voiceMiniExportBtn: "Baixar mini música",
     voiceMiniPresetTitle: "Escolha o clima da ideia",
+    voiceMiniMorphTitle: "Macromovimentos",
+    voiceMiniMorphFloor: "Mais pista",
+    voiceMiniMorphDeep: "Mais profundo",
+    voiceMiniMorphWeird: "Mais estranho",
+    voiceMiniMorphOpen: "Mais aberto",
+    voiceMiniMorphApplied: "Movimento aplicado: {move}. O próximo compasso muda de direção.",
     voiceMiniLayerTitle: "Ligue/desligue camadas",
     voiceMiniRecipeLabel: "Receita atual",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} ativos.",
     voiceMiniRecipeMetaEmpty: "Escolha uma ideia ou toque em Gerar ideia para começar com som.",
+    voiceMiniInsightKicker: "Leitura local",
+    voiceMiniInsightEnergyLabel: "Energia",
+    voiceMiniInsightShapeLabel: "Forma",
+    voiceMiniInsightMoveLabel: "Próximo gesto",
+    voiceMiniInsightTitlePeak: "Pronto para pista",
+    voiceMiniInsightTitleGroove: "Groove em construção",
+    voiceMiniInsightTitleDeep: "Textura profunda",
+    voiceMiniInsightTitleExperimental: "Ideia mutante",
+    voiceMiniEnergyLow: "baixa",
+    voiceMiniEnergyGroove: "groove",
+    voiceMiniEnergyClub: "pista",
+    voiceMiniEnergyHigh: "alta",
+    voiceMiniEnergySprint: "sprint",
+    voiceMiniShapeMinimal: "minimal",
+    voiceMiniShapeBalanced: "equilibrada",
+    voiceMiniShapeAcid: "ácida",
+    voiceMiniShapeWide: "aberta",
+    voiceMiniShapeHeavy: "pesada",
+    voiceMiniShapeBroken: "quebrada",
+    voiceMiniNextMoveKick: "arme o kick",
+    voiceMiniNextMoveBass: "reforce o grave",
+    voiceMiniNextMoveSynth: "abra o synth",
+    voiceMiniNextMoveSpace: "adicione espaço",
+    voiceMiniNextMoveVoice: "grave voz",
+    voiceMiniNextMoveVariation: "varie o sequencer",
     voiceMiniAnd: "e",
     voiceMiniCustomPreset: "Desenho próprio",
     voiceMiniAdvancedTitle: "Ajustes avançados",
@@ -13836,6 +14443,9 @@ const I18N = {
     voiceMiniPresetTrap: "Trap mutante",
     voiceMiniPresetPsy: "Psy ácido",
     voiceMiniPresetAmbient: "Ambient pulsante",
+    voiceMiniPresetHouse: "House orgânico",
+    voiceMiniPresetDnb: "DnB líquido",
+    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Mapa do seu gosto",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -13858,10 +14468,10 @@ const I18N = {
     summaryShareStoryTitle: "Meu status musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
-    profileBackupKicker: "Perfil seguro",
-    profileBackupTitle: "Não perder minhas curtidas",
-    profileBackupHint: "Enquanto a conta real não chega, seu mapa musical fica salvo neste aparelho. Você também pode guardar uma cópia privada.",
-    profileBackupStatusEmpty: "Quando você curtir ou avaliar músicas, seu mapa fica salvo neste aparelho.",
+    profileBackupKicker: "Perfil local portátil",
+    profileBackupTitle: "Leve seu mapa musical com você",
+    profileBackupHint: "O app funciona sem login e salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.",
+    profileBackupStatusEmpty: "Seu mapa local já está pronto. Curta músicas para criar sinais e baixe uma cópia quando quiser.",
     profileBackupStatus: "{signals} sinais guardados neste aparelho • última cópia: {date}",
     profileBackupStatusNever: "ainda não salva",
     profileBackupExport: "Salvar cópia do perfil",
@@ -13878,6 +14488,16 @@ const I18N = {
     summaryLikedTracksEmpty: "Ainda não tem música curtida. Toque em Curti ou arraste para a direita para salvar aqui.",
     summaryLikedTracksCleared: "Histórico de músicas curtidas limpo.",
     summaryLikedTrackRemoved: "Música removida das curtidas.",
+    summaryDislikedTracksTitle: "Músicas não curtidas",
+    summaryDislikedTracksHint: "Tudo que você descartar fica salvo aqui para revisar seu mapa musical e evitar repetição.",
+    summaryDislikedTracksClear: "Limpar",
+    summaryDislikedTracksEmpty: "Ainda não tem música não curtida. Toque em Não curti ou arraste para a esquerda para salvar aqui.",
+    summaryDislikedTracksCleared: "Histórico de músicas não curtidas limpo.",
+    summaryDislikedTrackRemoved: "Música removida das não curtidas.",
+    summaryDislikedTrackSaved: "Descartada no perfil",
+    summaryDislikedTrackSavedAt: "Não curtida em {date}",
+    summaryDislikedTrackRemove: "Remover",
+    summaryDislikedTrackRemoveAria: "Remover {song} de {artist} das músicas não curtidas",
     summaryLikedTrackOpenSpotify: "Spotify",
     summaryLikedTrackOpenYoutube: "YouTube",
     summaryLikedTrackOpenSoundcloud: "SoundCloud",
@@ -14036,9 +14656,10 @@ const I18N = {
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
-    spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar arte única IA para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Para gerar o busto humano realista, abra o app pelo link do Vercel e toque em Gerar arte única IA. No arquivo local, a API de imagem não funciona; por isso não mostro avatar genérico.",
-    spiritCollectibleHintApi: "Arte premium por IA: retrato humano adulto, realista e carismático, com roupa, acessórios e atmosfera derivados do seu espírito musical.",
+    spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte bem diferente para criar um card estático com seu espírito e status.",
+    spiritCollectibleHintLocal: "Sem depender da API: gero um card local/offline com personagem, busto, expressão e composição derivados do seu espírito. No Vercel, a IA premium ainda pode criar um retrato mais realista.",
+    spiritCollectibleHintLocalReady: "Arte local/offline criada. Ela muda personagem, busto, expressão e composição a cada nova geração, mesmo sem API de imagem.",
+    spiritCollectibleHintApi: "Arte premium por IA: humano adulto realista, espiritual e levemente estilizado, com aura, roupa, acessórios e atmosfera derivados do seu espírito musical. Ao regenerar, muda personagem, busto e expressão.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais avatares humanos em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
@@ -14046,7 +14667,7 @@ const I18N = {
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
     spiritCollectibleAlt: "Colecionável de {spirit} no marco de {milestone} likes",
-    spiritCollectibleRegenerate: "Gerar arte única IA",
+    spiritCollectibleRegenerate: "Gerar nova arte bem diferente",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
     spiritCollectibleDownload: "Baixar imagem",
     spiritCollectibleDownloadPreparing: "Preparando imagem...",
@@ -14068,14 +14689,14 @@ const I18N = {
     spiritCollectibleGeneratingAi: "Renderizando retrato humano em alta qualidade...",
     spiritCollectibleGeneratingCard: "Montando card compartilhável...",
     spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
-    spiritCollectibleGeneratingFailed: "A IA não respondeu agora. Nenhum avatar genérico será usado.",
-    spiritCollectiblePlaceholderKicker: "Retrato humano IA",
-    spiritCollectiblePlaceholderTitle: "Busto realista em criação",
-    spiritCollectiblePlaceholderText: "Rosto, roupa, acessórios e vibe mudam conforme o espírito.",
-    spiritCollectibleGeneratedLocal: "Geração IA indisponível. Mantive a arte pendente em vez de mostrar avatar local.",
-    spiritCollectibleGeneratedApi: "Arte única por IA criada com as características humanas do espírito.",
+    spiritCollectibleGeneratingFailed: "A arte não ficou pronta agora. O fallback local pode tentar novamente sem API.",
+    spiritCollectiblePlaceholderKicker: "Humano-espírito IA",
+    spiritCollectiblePlaceholderTitle: "Retrato espiritual em criação",
+    spiritCollectiblePlaceholderText: "Rosto realista, beleza elevada, aura e roupa mudam conforme o espírito.",
+    spiritCollectibleGeneratedLocal: "Arte local/offline criada sem depender da API de imagem.",
+    spiritCollectibleGeneratedApi: "Arte humano-espírito criada por IA com aura, beleza e identidade do seu perfil.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
-    spiritCollectibleError: "IA de imagem ainda sem resposta. Não vou mostrar avatar local; tente gerar novamente quando a IA estiver disponível.",
+    spiritCollectibleError: "Não consegui montar a arte agora. Tente gerar novamente; o fallback local não depende da API.",
     spiritRankUnlocked: "Espírito desbloqueado",
     spiritRankNovice: "Sommelier iniciante",
     spiritRankResident: "Sommelier residente",
@@ -14112,26 +14733,27 @@ const I18N = {
     usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
     usageGuideContinueBtn: "Got it",
     showUsageGuideBtn: "How to use",
-    authKicker: "Load user",
-    authTitle: "Sign in to load your profile",
-    authDesc: "Log in to continue with your saved profile or continue without login.",
+    authKicker: "Optional account",
+    authTitle: "Use Sonic Search without signing in",
+    authDesc: "Your music map stays saved on this device. Sign in only when you want separate profiles, sync, or account testing.",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Resume saved profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Continue without login",
-    authTestUserBtn: "Test new user",
+    authGuestBtn: "Use local profile",
+    authTestUserBtn: "Isolated test",
     authRequired: "Fill username and password to sign in, or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Guest mode enabled. You can use the app without login.",
+    authLocalResumeReady: "Local profile resumed for {user}.",
     authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
-    authTestUserReady: "Test mode created for {user}. Your real saved data was not erased.",
-    authSocialDivider: "or continue with",
+    authTestUserReady: "Isolated test mode created for {user}. History and limits start clean.",
+    authSocialDivider: "optional: online account",
     authGoogleBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Use Google or Apple to keep a separate profile on this device.",
+    authProviderHint: "Login is extra for sync, social, premium, and automatic backup.",
     authProviderConfigMissing: "{provider} sign-in still needs to be configured for this environment.",
     authProviderLoading: "Opening {provider}...",
     authProviderLoggedAs: "{provider} profile loaded for {user}.",
@@ -14140,12 +14762,13 @@ const I18N = {
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
     authGoogleComingSoon: "Google soon",
     authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "Social login is planned for the real accounts phase. For now, save a local copy so likes and status are not lost.",
+    authProviderHintLocalBackup: "The app still runs locally. Download/import your profile to move devices without depending on an account.",
     welcomeKicker: "Electronic music curation",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Your electronic music sommelier for rave, workout, focus, or travel. Pick your style and get a track + a new artist to discover.",
     startBtn: "Start experience",
     startSurpriseBtn: "Surprise me now",
+    welcomeImportProfileBtn: "I have a saved profile",
     floatingSurpriseBtn: "Surprise",
     quickSurpriseTitle: "Surprise me with real discovery",
     quickSurpriseHint: "Tell me the subgenre, artists, and tracks you already know. I use that to avoid repetition and look for a new pick that makes sense.",
@@ -14171,20 +14794,22 @@ const I18N = {
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the radar separates what lands, what tires you out, and what you already know.",
     swipeHeroKicker: "Swipe discovery",
-    swipeHeroTitle: "A swipe deck for tracks and subgenres.",
-    swipeHeroHint: "Move through different styles and DJs. Like what lands, swap what misses, and the radar learns.",
+    swipeHeroTitle: "Discover by swiping.",
+    swipeHeroHint: "Like, pass, or surprise. Details can wait.",
     swipeDeckKicker: "Taste scan",
     swipeDeckTitle: "Swipe through different sound worlds",
     swipeDeckHint: "Pick a lane or start free. The deck mixes subgenres and DJs to learn your taste without a questionnaire.",
-    swipeStyleRailAria: "Quick subgenre discovery lanes",
+    swipeStyleRailAria: "All available subgenre discovery lanes",
+    swipeShowAllStyles: "Show all {count} styles",
+    swipeShowFocusedStyles: "Show fewer styles",
     swipeKicker: "Track swipe",
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
-    topSwipeEmptyTitle: "Tap Sound surprise",
-    topSwipeEmptyMeta: "The first card already comes from a different subgenre. Then just like or swap.",
-    topSwipeHint: "In discovery mode, the deck starts broad and then narrows toward the lane your swipes reveal.",
-    swipeStartButton: "Sound surprise",
+    topSwipeEmptyTitle: "Tap Surprise",
+    topSwipeEmptyMeta: "Then answer fast: like or not for me.",
+    topSwipeHint: "Your profile keeps the artists and subgenres you have been liking.",
+    swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
     quickKnownArtistQuestion: "Was {artist} already on your radar?",
@@ -14201,6 +14826,15 @@ const I18N = {
     swipeDeckNext: "Next card: moved from {from} into {to}.",
     swipeAnchorNext: "Subgenre respected: staying with {focus}. Next card in {next}.",
     swipeAffinityNext: "Radar tuned toward {focus}. Next card in {next}, inside the same lane or a close neighbor.",
+    swipeLearningBadge: "{count} taste signals",
+    swipeLearningLevelEmpty: "No taste history",
+    swipeLearningLevelEarly: "Radar learning",
+    swipeLearningLevelWarming: "Radar calibrated",
+    swipeLearningLevelGood: "Consistent profile",
+    swipeLearningLevelStrong: "Strong profile",
+    swipeLearningMilestone10: "Radar calibrated with {count} signals: I will weight your real taste more in the next picks.",
+    swipeLearningMilestone20: "Profile is getting consistent with {count} signals: I will reduce repeats and look for sharper neighbors.",
+    swipeLearningMilestone30: "Strong profile with {count} signals: recommendations now prioritize fine compatibility and safer discovery.",
     feedbackLikeGroupTitle: "Save positive signal",
     feedbackCorrectGroupTitle: "Correct route",
     feedbackExploreGroupTitle: "Next step",
@@ -14279,6 +14913,11 @@ const I18N = {
     bpmCatalogReferenceLabel: "reference pulse",
     bpmUnverifiedLabel: "BPM unverified",
     bpmEstimatedRange: "estimate {range}",
+    bpmTechnicalGridLabel: "technical grid",
+    bpmPerceivedPulseLabel: "feel ~{bpm} BPM",
+    bpmBreaksDisplay: "Technical BPM {exact} • feel ~{perceived}",
+    bpmBreaksAiText: "{exact} technical BPM; feel near {perceived} BPM",
+    bpmAmbiguousBadge: "Feel ~{bpm} BPM",
     energyPrefix: "Energy",
     releasePrefix: "Release",
     durationPrefix: "Duration",
@@ -14333,6 +14972,12 @@ const I18N = {
     recommendationWhyStrongFit: "Good bet: strong signals",
     recommendationWhyTrustedSource: "Stronger source signal",
     recommendationWhyProfileSignal: "Fits your profile",
+    recommendationTrustLabel: "Confidence",
+    recommendationTrustChip: "Confidence {score}%",
+    recommendationTrustReasonHigh: "High: source, player, pulse, and profile are aligned.",
+    recommendationTrustReasonMedium: "Good: strong musical signals, still with room to calibrate.",
+    recommendationTrustReasonLow: "Exploratory: I brought it as a test, not as absolute certainty.",
+    recommendationTrustReasonTempoAmbiguous: "Good, but tempo is ambiguous: in breaks the grid can double the felt pulse.",
     recommendationWhyFreshArtistSentence: "I also kept it away from the obvious names, so it feels like real discovery instead of more of the same.",
     recommendationWhyProfilePositive: "Your recent profile signals point in this direction.",
     recommendationWhySourcePositive: "The track has stronger source, pulse, or player signals, so it enters with more confidence.",
@@ -14410,17 +15055,61 @@ const I18N = {
     voiceStudioStepOne: "Pick the mood",
     voiceStudioStepTwo: "Press play",
     voiceStudioStepThree: "Adjust layers",
+    voiceStudioSessionStateLabel: "State",
+    voiceStudioSessionLayersLabel: "Layers",
+    voiceStudioSessionLengthLabel: "Export",
+    voiceStudioSessionFormatLabel: "File",
+    voiceStudioStateReady: "Ready",
+    voiceStudioStatePlaying: "Playing",
+    voiceStudioStateRecording: "Recording voice",
+    voiceStudioStateRendering: "Exporting",
+    voiceStudioStateVoiceReady: "Voice ready",
+    voiceStudioLayersValue: "{count}/{total} layers",
+    voiceStudioLengthValue: "{bars} bars • {seconds}s",
+    voiceStudioFormatLocal: "Local WAV",
+    voiceStudioFormatVoice: "Voice + WAV",
     voiceMiniNoVoiceBadge: "No mic or signup needed",
     voiceMiniRandomBtn: "Generate idea",
     voiceMiniPlayBtn: "Play mini track",
     voiceMiniStopBtn: "Stop loop",
     voiceMiniExportBtn: "Download mini track",
     voiceMiniPresetTitle: "Pick the idea mood",
+    voiceMiniMorphTitle: "Macro moves",
+    voiceMiniMorphFloor: "More floor",
+    voiceMiniMorphDeep: "Deeper",
+    voiceMiniMorphWeird: "Weirder",
+    voiceMiniMorphOpen: "More open",
+    voiceMiniMorphApplied: "Move applied: {move}. The next bar changes direction.",
     voiceMiniLayerTitle: "Toggle layers",
     voiceMiniRecipeLabel: "Current recipe",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} active.",
     voiceMiniRecipeMetaEmpty: "Pick an idea or tap Generate idea to start with sound.",
+    voiceMiniInsightKicker: "Local read",
+    voiceMiniInsightEnergyLabel: "Energy",
+    voiceMiniInsightShapeLabel: "Shape",
+    voiceMiniInsightMoveLabel: "Next move",
+    voiceMiniInsightTitlePeak: "Floor ready",
+    voiceMiniInsightTitleGroove: "Groove forming",
+    voiceMiniInsightTitleDeep: "Deep texture",
+    voiceMiniInsightTitleExperimental: "Mutant idea",
+    voiceMiniEnergyLow: "low",
+    voiceMiniEnergyGroove: "groove",
+    voiceMiniEnergyClub: "club",
+    voiceMiniEnergyHigh: "high",
+    voiceMiniEnergySprint: "sprint",
+    voiceMiniShapeMinimal: "minimal",
+    voiceMiniShapeBalanced: "balanced",
+    voiceMiniShapeAcid: "acidic",
+    voiceMiniShapeWide: "open",
+    voiceMiniShapeHeavy: "heavy",
+    voiceMiniShapeBroken: "broken",
+    voiceMiniNextMoveKick: "arm kick",
+    voiceMiniNextMoveBass: "push low end",
+    voiceMiniNextMoveSynth: "open synth",
+    voiceMiniNextMoveSpace: "add space",
+    voiceMiniNextMoveVoice: "record voice",
+    voiceMiniNextMoveVariation: "vary sequencer",
     voiceMiniAnd: "and",
     voiceMiniCustomPreset: "Custom pattern",
     voiceMiniAdvancedTitle: "Advanced tweaks",
@@ -14472,6 +15161,9 @@ const I18N = {
     voiceMiniPresetTrap: "Mutant trap",
     voiceMiniPresetPsy: "Acid psy",
     voiceMiniPresetAmbient: "Pulsing ambient",
+    voiceMiniPresetHouse: "Organic house",
+    voiceMiniPresetDnb: "Liquid DnB",
+    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Your taste map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -14494,10 +15186,10 @@ const I18N = {
     summaryShareStoryTitle: "My music status",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
-    profileBackupKicker: "Safe profile",
-    profileBackupTitle: "Keep my likes safe",
-    profileBackupHint: "Until real accounts arrive, your music map stays on this device. You can also keep a private copy.",
-    profileBackupStatusEmpty: "Once you like or rate tracks, your map stays saved on this device.",
+    profileBackupKicker: "Portable local profile",
+    profileBackupTitle: "Carry your music map with you",
+    profileBackupHint: "The app works without login and saves your taste on this device. Download a copy to return in another browser whenever you want.",
+    profileBackupStatusEmpty: "Your local map is ready. Like tracks to create signals and download a copy whenever you want.",
     profileBackupStatus: "{signals} signals kept on this device • last copy: {date}",
     profileBackupStatusNever: "not saved yet",
     profileBackupExport: "Save profile copy",
@@ -14514,6 +15206,16 @@ const I18N = {
     summaryLikedTracksEmpty: "No liked tracks yet. Tap Like or swipe right to save one here.",
     summaryLikedTracksCleared: "Liked track history cleared.",
     summaryLikedTrackRemoved: "Track removed from liked tracks.",
+    summaryDislikedTracksTitle: "Disliked tracks",
+    summaryDislikedTracksHint: "Everything you discard is saved here so you can review your music map and avoid repeats.",
+    summaryDislikedTracksClear: "Clear",
+    summaryDislikedTracksEmpty: "No disliked tracks yet. Tap Pass or swipe left to save one here.",
+    summaryDislikedTracksCleared: "Disliked track history cleared.",
+    summaryDislikedTrackRemoved: "Track removed from disliked tracks.",
+    summaryDislikedTrackSaved: "Discarded in profile",
+    summaryDislikedTrackSavedAt: "Disliked on {date}",
+    summaryDislikedTrackRemove: "Remove",
+    summaryDislikedTrackRemoveAria: "Remove {song} by {artist} from disliked tracks",
     summaryLikedTrackOpenSpotify: "Spotify",
     summaryLikedTrackOpenYoutube: "YouTube",
     summaryLikedTrackOpenSoundcloud: "SoundCloud",
@@ -14672,9 +15374,10 @@ const I18N = {
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
-    spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate unique AI art to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "To generate the realistic human bust, open the Vercel app link and tap Generate unique AI art. The local file cannot reach the image API, so no generic avatar is shown.",
-    spiritCollectibleHintApi: "Premium AI artwork: an adult, realistic, charismatic human portrait with wardrobe, accessories, and atmosphere derived from your musical spirit.",
+    spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate a very different artwork to build a static card with your spirit and status.",
+    spiritCollectibleHintLocal: "No API required: I generate a local/offline card with a character, bust, expression, and composition derived from your spirit. On Vercel, premium AI can still create a more realistic portrait.",
+    spiritCollectibleHintLocalReady: "Local/offline artwork created. It changes character, bust, expression, and composition on every new generation, even without the image API.",
+    spiritCollectibleHintApi: "Premium AI artwork: a realistic, spiritual, slightly stylized adult human with aura, wardrobe, accessories, and atmosphere derived from your musical spirit. Regeneration changes character, bust, and expression.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality human avatars.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
@@ -14682,7 +15385,7 @@ const I18N = {
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
     spiritCollectibleAlt: "{spirit} collectible at {milestone} likes milestone",
-    spiritCollectibleRegenerate: "Generate unique AI art",
+    spiritCollectibleRegenerate: "Generate a very different artwork",
     spiritCollectibleAiLimitUsed: "AI image already created",
     spiritCollectibleDownload: "Download image",
     spiritCollectibleDownloadPreparing: "Preparing image...",
@@ -14704,14 +15407,14 @@ const I18N = {
     spiritCollectibleGeneratingAi: "Rendering a high-quality human portrait...",
     spiritCollectibleGeneratingCard: "Building the shareable card...",
     spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
-    spiritCollectibleGeneratingFailed: "Image AI did not respond now. No generic avatar will be used.",
-    spiritCollectiblePlaceholderKicker: "AI human portrait",
-    spiritCollectiblePlaceholderTitle: "Realistic bust in creation",
-    spiritCollectiblePlaceholderText: "Face, outfit, accessories, and vibe change with each spirit.",
-    spiritCollectibleGeneratedLocal: "AI generation is unavailable. Artwork stays pending instead of showing a local avatar.",
-    spiritCollectibleGeneratedApi: "Unique AI artwork created with the spirit's human traits.",
+    spiritCollectibleGeneratingFailed: "Artwork was not ready now. The local fallback can try again without an API.",
+    spiritCollectiblePlaceholderKicker: "AI human-spirit",
+    spiritCollectiblePlaceholderTitle: "Spiritual portrait in creation",
+    spiritCollectiblePlaceholderText: "Realistic face, elevated beauty, aura, and outfit change with each spirit.",
+    spiritCollectibleGeneratedLocal: "Local/offline artwork created without depending on the image API.",
+    spiritCollectibleGeneratedApi: "AI human-spirit artwork created with your profile's aura, beauty, and identity.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
-    spiritCollectibleError: "Image AI did not respond yet. I will not show a local avatar; try generating again when AI is available.",
+    spiritCollectibleError: "I could not assemble the artwork right now. Try generating again; the local fallback does not depend on the API.",
     spiritRankUnlocked: "Spirit unlocked",
     spiritRankNovice: "Novice music sommelier",
     spiritRankResident: "Resident music sommelier",
@@ -14748,26 +15451,27 @@ const I18N = {
     usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Cómo usar",
-    authKicker: "Cargar usuario",
-    authTitle: "Inicia sesión para cargar tu perfil",
-    authDesc: "Inicia sesión para continuar con tu perfil guardado o continúa sin login.",
+    authKicker: "Cuenta opcional",
+    authTitle: "Usa Sonic Search sin iniciar sesión",
+    authDesc: "Tu mapa musical queda guardado en este dispositivo. Entra solo si quieres perfiles separados, sincronización o prueba de cuenta.",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Retomar perfil guardado",
-    authLoginBtn: "Entrar",
-    authGuestBtn: "Continuar sin login",
-    authTestUserBtn: "Probar usuario nuevo",
+    authLoginBtn: "Entrar en cuenta",
+    authGuestBtn: "Usar perfil local",
+    authTestUserBtn: "Prueba aislada",
     authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Modo invitado activado. Puedes usar la app sin login.",
+    authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
-    authTestUserReady: "Modo prueba creado para {user}. Tus datos reales guardados no se borraron.",
-    authSocialDivider: "o entra con",
+    authTestUserReady: "Modo prueba aislado creado para {user}. El historial y los limites empiezan limpios.",
+    authSocialDivider: "opcional: cuenta online",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "Usa Google o Apple para mantener un perfil separado en este dispositivo.",
+    authProviderHint: "El login es extra para sincronización, social, premium y backup automático.",
     authProviderConfigMissing: "El login con {provider} aún necesita configurarse en este entorno.",
     authProviderLoading: "Abriendo {provider}...",
     authProviderLoggedAs: "Perfil {provider} cargado para {user}.",
@@ -14776,12 +15480,13 @@ const I18N = {
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Google pronto",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "El login social entra en la fase de cuentas reales. Por ahora, guarda una copia local para no perder likes ni estado.",
+    authProviderHintLocalBackup: "La app sigue funcionando localmente. Descarga/importa tu perfil para cambiar de dispositivo sin depender de cuenta.",
     welcomeKicker: "Curaduría de música electrónica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Tu sommelier de música electrónica para rave, entrenamiento, foco o viaje. Elige tu estilo y recibe una pista + artista nuevo.",
     startBtn: "Iniciar experiencia",
     startSurpriseBtn: "Sorpréndeme",
+    welcomeImportProfileBtn: "Tengo perfil guardado",
     quickSurpriseTitle: "Sorpréndeme con novedad real",
     quickSurpriseHint: "Dime el subgénero, artistas y canciones que ya conoces. Uso eso para evitar repetición y buscar una novedad con sentido.",
     quickSurpriseStyleLabel: "Subgénero que más escuchas",
@@ -14807,20 +15512,22 @@ const I18N = {
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que el radar separe lo que conecta, lo que cansa y lo que ya conoces.",
     swipeHeroKicker: "Descubrimiento por swipe",
-    swipeHeroTitle: "El deck de pistas y subgéneros.",
-    swipeHeroHint: "Pasa por estilos y DJs diferentes. Si conecta, guarda la señal. Si no, cambia y el radar aprende.",
+    swipeHeroTitle: "Descubre con swipe.",
+    swipeHeroHint: "Me gusta, no me va o sorpresa. Los detalles pueden esperar.",
     swipeDeckKicker: "Escaneo de gusto",
     swipeDeckTitle: "Desliza por varios mundos sonoros",
     swipeDeckHint: "Elige una ruta o empieza libre. El deck mezcla subgéneros y DJs para entender tu gusto sin cuestionario.",
-    swipeStyleRailAria: "Rutas rápidas de descubrimiento por subgénero",
+    swipeStyleRailAria: "Todos los subgéneros disponibles para descubrir con swipe",
+    swipeShowAllStyles: "Ver los {count} estilos",
+    swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe de la pista",
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
-    topSwipeEmptyTitle: "Toca Sorpresa sonora",
-    topSwipeEmptyMeta: "La primera carta ya viene de un subgénero distinto. Después solo dale me gusta o cambia.",
-    topSwipeHint: "En modo descubrimiento, el deck empieza amplio y luego se afina hacia la vertiente que revelan tus swipes.",
-    swipeStartButton: "Sorpresa sonora",
+    topSwipeEmptyTitle: "Toca Sorpresa",
+    topSwipeEmptyMeta: "Después responde rápido: me gusta o no me va.",
+    topSwipeHint: "El perfil guarda los artistas y subgéneros que has ido marcando.",
+    swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
     quickKnownArtistQuestion: "¿{artist} ya estaba en tu radar?",
@@ -14837,6 +15544,15 @@ const I18N = {
     swipeDeckNext: "Próxima carta: salí de {from} y traje {to}.",
     swipeAnchorNext: "Subgénero respetado: mantengo {focus}. Próxima carta en {next}.",
     swipeAffinityNext: "Radar afinado hacia {focus}. Próxima carta en {next}, dentro de la misma vertiente o una vecina cercana.",
+    swipeLearningBadge: "{count} señales de gusto",
+    swipeLearningLevelEmpty: "Radar sin historial",
+    swipeLearningLevelEarly: "Radar aprendiendo",
+    swipeLearningLevelWarming: "Radar calibrado",
+    swipeLearningLevelGood: "Perfil consistente",
+    swipeLearningLevelStrong: "Perfil fuerte",
+    swipeLearningMilestone10: "Radar calibrado con {count} señales: ahora peso más tu gusto real en las próximas elecciones.",
+    swipeLearningMilestone20: "Perfil más consistente con {count} señales: voy a reducir repeticiones y buscar vecinos más certeros.",
+    swipeLearningMilestone30: "Perfil fuerte con {count} señales: las recomendaciones ahora priorizan compatibilidad fina y descubrimiento seguro.",
     feedbackLikeGroupTitle: "Guardar señal positiva",
     feedbackCorrectGroupTitle: "Corregir ruta",
     feedbackExploreGroupTitle: "Próximo paso",
@@ -14915,6 +15631,11 @@ const I18N = {
     bpmCatalogReferenceLabel: "pulso de referencia",
     bpmUnverifiedLabel: "BPM no verificado",
     bpmEstimatedRange: "estimado {range}",
+    bpmTechnicalGridLabel: "grid técnico",
+    bpmPerceivedPulseLabel: "sensación ~{bpm} BPM",
+    bpmBreaksDisplay: "BPM técnico {exact} • sensación ~{perceived}",
+    bpmBreaksAiText: "{exact} BPM técnico; sensación cerca de {perceived} BPM",
+    bpmAmbiguousBadge: "BPM sentido ~{bpm}",
     energyPrefix: "Energía",
     releasePrefix: "Lanzamiento",
     durationPrefix: "Duración",
@@ -14969,6 +15690,12 @@ const I18N = {
     recommendationWhyStrongFit: "Buena apuesta: señales fuertes",
     recommendationWhyTrustedSource: "Fuente más confiable",
     recommendationWhyProfileSignal: "Encaja con tu perfil",
+    recommendationTrustLabel: "Confianza",
+    recommendationTrustChip: "Confianza {score}%",
+    recommendationTrustReasonHigh: "Alta: fuente, player, pulso y perfil están alineados.",
+    recommendationTrustReasonMedium: "Buena: hay señales musicales fuertes, todavía con espacio para calibrar.",
+    recommendationTrustReasonLow: "Exploratoria: la traje como prueba, no como certeza absoluta.",
+    recommendationTrustReasonTempoAmbiguous: "Buena, pero con pulso ambiguo: en breaks el grid puede duplicar la sensación real.",
     recommendationWhyFreshArtistSentence: "También la mantuve lejos de los nombres obvios, para que se sienta como descubrimiento real y no más de lo mismo.",
     recommendationWhyProfilePositive: "Las señales recientes de tu perfil apuntan en esta dirección.",
     recommendationWhySourcePositive: "La pista tiene mejores señales de fuente, pulso o player, así que entra con más seguridad.",
@@ -15043,17 +15770,61 @@ const I18N = {
     voiceStudioStepOne: "Elige el clima",
     voiceStudioStepTwo: "Toca play",
     voiceStudioStepThree: "Ajusta capas",
+    voiceStudioSessionStateLabel: "Estado",
+    voiceStudioSessionLayersLabel: "Capas",
+    voiceStudioSessionLengthLabel: "Export",
+    voiceStudioSessionFormatLabel: "Archivo",
+    voiceStudioStateReady: "Listo",
+    voiceStudioStatePlaying: "Sonando",
+    voiceStudioStateRecording: "Grabando voz",
+    voiceStudioStateRendering: "Exportando",
+    voiceStudioStateVoiceReady: "Voz lista",
+    voiceStudioLayersValue: "{count}/{total} capas",
+    voiceStudioLengthValue: "{bars} compases • {seconds}s",
+    voiceStudioFormatLocal: "WAV local",
+    voiceStudioFormatVoice: "Voz + WAV",
     voiceMiniNoVoiceBadge: "Sin micrófono ni registro",
     voiceMiniRandomBtn: "Generar idea",
     voiceMiniPlayBtn: "Tocar mini canción",
     voiceMiniStopBtn: "Parar loop",
     voiceMiniExportBtn: "Descargar mini canción",
     voiceMiniPresetTitle: "Elige el clima de la idea",
+    voiceMiniMorphTitle: "Macromovimientos",
+    voiceMiniMorphFloor: "Más pista",
+    voiceMiniMorphDeep: "Más profundo",
+    voiceMiniMorphWeird: "Más extraño",
+    voiceMiniMorphOpen: "Más abierto",
+    voiceMiniMorphApplied: "Movimiento aplicado: {move}. El próximo compás cambia de dirección.",
     voiceMiniLayerTitle: "Activa/desactiva capas",
     voiceMiniRecipeLabel: "Receta actual",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} activos.",
     voiceMiniRecipeMetaEmpty: "Elige una idea o toca Generar idea para empezar con sonido.",
+    voiceMiniInsightKicker: "Lectura local",
+    voiceMiniInsightEnergyLabel: "Energía",
+    voiceMiniInsightShapeLabel: "Forma",
+    voiceMiniInsightMoveLabel: "Próximo gesto",
+    voiceMiniInsightTitlePeak: "Listo para pista",
+    voiceMiniInsightTitleGroove: "Groove en construcción",
+    voiceMiniInsightTitleDeep: "Textura profunda",
+    voiceMiniInsightTitleExperimental: "Idea mutante",
+    voiceMiniEnergyLow: "baja",
+    voiceMiniEnergyGroove: "groove",
+    voiceMiniEnergyClub: "pista",
+    voiceMiniEnergyHigh: "alta",
+    voiceMiniEnergySprint: "sprint",
+    voiceMiniShapeMinimal: "minimal",
+    voiceMiniShapeBalanced: "equilibrada",
+    voiceMiniShapeAcid: "ácida",
+    voiceMiniShapeWide: "abierta",
+    voiceMiniShapeHeavy: "pesada",
+    voiceMiniShapeBroken: "quebrada",
+    voiceMiniNextMoveKick: "arma el kick",
+    voiceMiniNextMoveBass: "refuerza el grave",
+    voiceMiniNextMoveSynth: "abre el synth",
+    voiceMiniNextMoveSpace: "agrega espacio",
+    voiceMiniNextMoveVoice: "graba voz",
+    voiceMiniNextMoveVariation: "varía el sequencer",
     voiceMiniAnd: "y",
     voiceMiniCustomPreset: "Patrón propio",
     voiceMiniAdvancedTitle: "Ajustes avanzados",
@@ -15105,6 +15876,9 @@ const I18N = {
     voiceMiniPresetTrap: "Trap mutante",
     voiceMiniPresetPsy: "Psy ácido",
     voiceMiniPresetAmbient: "Ambient pulsante",
+    voiceMiniPresetHouse: "House orgánico",
+    voiceMiniPresetDnb: "DnB líquido",
+    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Mapa de tu gusto",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -15127,10 +15901,10 @@ const I18N = {
     summaryShareStoryTitle: "Mi estado musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
-    profileBackupKicker: "Perfil seguro",
-    profileBackupTitle: "No perder mis likes",
-    profileBackupHint: "Hasta que lleguen las cuentas reales, tu mapa musical queda guardado en este dispositivo. También puedes guardar una copia privada.",
-    profileBackupStatusEmpty: "Cuando des like o valores pistas, tu mapa queda guardado en este dispositivo.",
+    profileBackupKicker: "Perfil local portátil",
+    profileBackupTitle: "Lleva tu mapa musical contigo",
+    profileBackupHint: "La app funciona sin login y guarda tu gusto en este dispositivo. Descarga una copia para volver en otro navegador cuando quieras.",
+    profileBackupStatusEmpty: "Tu mapa local ya está listo. Da like a pistas para crear señales y descarga una copia cuando quieras.",
     profileBackupStatus: "{signals} señales guardadas en este dispositivo • última copia: {date}",
     profileBackupStatusNever: "aún no guardada",
     profileBackupExport: "Guardar copia del perfil",
@@ -15147,6 +15921,16 @@ const I18N = {
     summaryLikedTracksEmpty: "Aún no hay pistas con like. Toca Me gusta o desliza a la derecha para guardarlas aquí.",
     summaryLikedTracksCleared: "Historial de pistas con like limpio.",
     summaryLikedTrackRemoved: "Pista eliminada de tus likes.",
+    summaryDislikedTracksTitle: "Pistas que no gustaron",
+    summaryDislikedTracksHint: "Todo lo que descartes queda guardado aquí para revisar tu mapa musical y evitar repeticiones.",
+    summaryDislikedTracksClear: "Limpiar",
+    summaryDislikedTracksEmpty: "Aún no hay pistas descartadas. Toca No me gustó o desliza a la izquierda para guardarlas aquí.",
+    summaryDislikedTracksCleared: "Historial de pistas descartadas limpio.",
+    summaryDislikedTrackRemoved: "Pista eliminada de las descartadas.",
+    summaryDislikedTrackSaved: "Descartada en el perfil",
+    summaryDislikedTrackSavedAt: "No gustó el {date}",
+    summaryDislikedTrackRemove: "Eliminar",
+    summaryDislikedTrackRemoveAria: "Eliminar {song} de {artist} de las pistas descartadas",
     summaryLikedTrackOpenSpotify: "Spotify",
     summaryLikedTrackOpenYoutube: "YouTube",
     summaryLikedTrackOpenSoundcloud: "SoundCloud",
@@ -15305,9 +16089,10 @@ const I18N = {
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
-    spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte único IA para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Para generar el busto humano realista, abre el link de Vercel y toca Generar arte único IA. El archivo local no puede usar la API de imagen; por eso no muestro avatar genérico.",
-    spiritCollectibleHintApi: "Arte premium con IA: retrato humano adulto, realista y carismático, con ropa, accesorios y atmósfera derivados de tu espíritu musical.",
+    spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte muy diferente para crear un card estático con tu espíritu y estado.",
+    spiritCollectibleHintLocal: "Sin depender de la API: genero un card local/offline con personaje, busto, expresión y composición derivados de tu espíritu. En Vercel, la IA premium aún puede crear un retrato más realista.",
+    spiritCollectibleHintLocalReady: "Arte local/offline creada. Cambia personaje, busto, expresión y composición en cada nueva generación, incluso sin API de imagen.",
+    spiritCollectibleHintApi: "Arte premium con IA: humano adulto realista, espiritual y levemente estilizado, con aura, ropa, accesorios y atmósfera derivados de tu espíritu musical. Al regenerar, cambia personaje, busto y expresión.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más avatares humanos en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
@@ -15315,7 +16100,7 @@ const I18N = {
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
     spiritCollectibleAlt: "Coleccionable de {spirit} en el hito de {milestone} likes",
-    spiritCollectibleRegenerate: "Generar arte único IA",
+    spiritCollectibleRegenerate: "Generar arte muy diferente",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
     spiritCollectibleDownload: "Descargar imagen",
     spiritCollectibleDownloadPreparing: "Preparando imagen...",
@@ -15337,14 +16122,14 @@ const I18N = {
     spiritCollectibleGeneratingAi: "Renderizando retrato humano en alta calidad...",
     spiritCollectibleGeneratingCard: "Montando card para compartir...",
     spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
-    spiritCollectibleGeneratingFailed: "La IA de imagen no respondió ahora. No usaré avatar genérico.",
-    spiritCollectiblePlaceholderKicker: "Retrato humano IA",
-    spiritCollectiblePlaceholderTitle: "Busto realista en creación",
-    spiritCollectiblePlaceholderText: "Rostro, ropa, accesorios y vibe cambian según el espíritu.",
-    spiritCollectibleGeneratedLocal: "La generación IA no está disponible. Mantengo el arte pendiente en vez de mostrar avatar local.",
-    spiritCollectibleGeneratedApi: "Arte único con IA creado con los rasgos humanos del espíritu.",
+    spiritCollectibleGeneratingFailed: "El arte no quedó lista ahora. El fallback local puede intentar de nuevo sin API.",
+    spiritCollectiblePlaceholderKicker: "Humano-espíritu IA",
+    spiritCollectiblePlaceholderTitle: "Retrato espiritual en creación",
+    spiritCollectiblePlaceholderText: "Rostro realista, belleza elevada, aura y ropa cambian según el espíritu.",
+    spiritCollectibleGeneratedLocal: "Arte local/offline creada sin depender de la API de imagen.",
+    spiritCollectibleGeneratedApi: "Arte humano-espíritu creada por IA con aura, belleza e identidad de tu perfil.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
-    spiritCollectibleError: "La IA de imagen aún no respondió. No mostraré un avatar local; intenta generar de nuevo cuando la IA esté disponible.",
+    spiritCollectibleError: "No pude montar el arte ahora. Intenta generar de nuevo; el fallback local no depende de la API.",
     spiritRankUnlocked: "Espíritu desbloqueado",
     spiritRankNovice: "Sommelier musical inicial",
     spiritRankResident: "Sommelier musical residente",
@@ -15909,6 +16694,7 @@ function applyLanguage() {
       btnNoveltyYes: "Gostei sim",
       btnNoveltyNo: "Ainda não",
       btnPreviewYes: "Sim, curti",
+      btnPreviewIssue: "Não tocou",
       btnPreviewNo: "Não, troca agora",
       btnLikeSong: "Gostei da faixa",
       btnLikeArtist: "Gostei do artista",
@@ -15948,6 +16734,7 @@ function applyLanguage() {
       btnNoveltyYes: "Yes, I liked it",
       btnNoveltyNo: "Not yet",
       btnPreviewYes: "Yes, liked it",
+      btnPreviewIssue: "Did not play",
       btnPreviewNo: "No, switch now",
       btnLikeSong: "Liked the track",
       btnLikeArtist: "Liked the artist",
@@ -15987,6 +16774,7 @@ function applyLanguage() {
       btnNoveltyYes: "Sí, me gustó",
       btnNoveltyNo: "Aún no",
       btnPreviewYes: "Sí, me gustó",
+      btnPreviewIssue: "No sonó",
       btnPreviewNo: "No, cambia ahora",
       btnLikeSong: "Me gustó la pista",
       btnLikeArtist: "Me gustó el artista",
@@ -16046,6 +16834,7 @@ function applyLanguage() {
   setText("#welcomeMission", t("appMission"));
   setText("#startBtn", t("startBtn"));
   setText("#startSurpriseBtn", t("startSurpriseBtn"));
+  setText("#welcomeImportProfileBtn", t("welcomeImportProfileBtn"));
   setText("#quickSurpriseTitle", t("quickSurpriseTitle"));
   setText("#quickSurpriseHint", t("quickSurpriseHint"));
   setText("#quickSurpriseStyleLabel", t("quickSurpriseStyleLabel"));
@@ -16229,6 +17018,9 @@ function applyLanguage() {
   setText("#summaryLikedTracksTitle", t("summaryLikedTracksTitle"));
   setText("#summaryLikedTracksHint", t("summaryLikedTracksHint"));
   setText("#summaryLikedTracksClearBtn", t("summaryLikedTracksClear"));
+  setText("#summaryDislikedTracksTitle", t("summaryDislikedTracksTitle"));
+  setText("#summaryDislikedTracksHint", t("summaryDislikedTracksHint"));
+  setText("#summaryDislikedTracksClearBtn", t("summaryDislikedTracksClear"));
   setText("#summaryFiveStarTracksTitle", t("summaryFiveStarTracksTitle"));
   setText("#summaryKnownArtistsTitle", t("summaryKnownArtistsTitle"));
   setText("#summaryLikedArtistsTitle", t("summaryLikedArtistsTitle"));
@@ -16240,6 +17032,8 @@ function applyLanguage() {
   setText("#suggestionQueueTitle", t("suggestionQueueTitle"));
   setText("#suggestionQueueHint", t("suggestionQueueHint"));
   setText("#recommendationWhyTitle", t("recommendationWhyTitle"));
+  setText("#recommendationTrustLabel", t("recommendationTrustLabel"));
+  setText("#topRecommendationTrustLabel", t("recommendationTrustLabel"));
   setText("#djModeTitle", t("djModeTitle"));
   setText("#djModeHint", t("djModeHint"));
   setText("#djModeGenerateBtn", t("djModeGenerateBtn"));
@@ -16280,6 +17074,10 @@ function applyLanguage() {
   setText("#voiceStudioStepOne", t("voiceStudioStepOne"));
   setText("#voiceStudioStepTwo", t("voiceStudioStepTwo"));
   setText("#voiceStudioStepThree", t("voiceStudioStepThree"));
+  setText("#voiceStudioSessionStateLabel", t("voiceStudioSessionStateLabel"));
+  setText("#voiceStudioSessionLayersLabel", t("voiceStudioSessionLayersLabel"));
+  setText("#voiceStudioSessionLengthLabel", t("voiceStudioSessionLengthLabel"));
+  setText("#voiceStudioSessionFormatLabel", t("voiceStudioSessionFormatLabel"));
   setText("#voiceMiniNoVoiceBadge", t("voiceMiniNoVoiceBadge"));
   setText("#voiceMiniRandomBtn", t("voiceMiniRandomBtn"));
   setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
@@ -16287,8 +17085,17 @@ function applyLanguage() {
   setText("#voiceMiniExportBtn", voiceMiniRendering ? t("voiceMiniExportBusy") : t("voiceMiniExportBtn"));
   setText("#voiceMiniExportLink", t("voiceMiniExportReady"));
   setText("#voiceMiniPresetTitle", t("voiceMiniPresetTitle"));
+  setText("#voiceMiniMorphTitle", t("voiceMiniMorphTitle"));
+  setText("[data-voice-mini-morph='floor']", t("voiceMiniMorphFloor"));
+  setText("[data-voice-mini-morph='deep']", t("voiceMiniMorphDeep"));
+  setText("[data-voice-mini-morph='weird']", t("voiceMiniMorphWeird"));
+  setText("[data-voice-mini-morph='open']", t("voiceMiniMorphOpen"));
   setText("#voiceMiniLayerTitle", t("voiceMiniLayerTitle"));
   setText("#voiceMiniRecipeLabel", t("voiceMiniRecipeLabel"));
+  setText("#voiceMiniInsightKicker", t("voiceMiniInsightKicker"));
+  setText("#voiceMiniInsightEnergyLabel", t("voiceMiniInsightEnergyLabel"));
+  setText("#voiceMiniInsightShapeLabel", t("voiceMiniInsightShapeLabel"));
+  setText("#voiceMiniInsightMoveLabel", t("voiceMiniInsightMoveLabel"));
   setText("#voiceMiniAdvancedTitle", t("voiceMiniAdvancedTitle"));
   setText("#voiceMiniAdvancedHint", t("voiceMiniAdvancedHint"));
   setText("#voiceMiniBpmLabel", t("voiceMiniBpmLabel"));
@@ -16326,6 +17133,9 @@ function applyLanguage() {
   setText("[data-voice-mini-preset='trap']", t("voiceMiniPresetTrap"));
   setText("[data-voice-mini-preset='psy']", t("voiceMiniPresetPsy"));
   setText("[data-voice-mini-preset='ambient']", t("voiceMiniPresetAmbient"));
+  setText("[data-voice-mini-preset='house']", t("voiceMiniPresetHouse"));
+  setText("[data-voice-mini-preset='dnb']", t("voiceMiniPresetDnb"));
+  setText("[data-voice-mini-preset='darkprog']", t("voiceMiniPresetDarkprog"));
   syncVoiceMiniPresetButtons();
   updateVoiceMiniRecipe();
   setText("#voicePadKickBtn", t("voicePadKick"));
@@ -16357,6 +17167,7 @@ function applyLanguage() {
   setText("#noveltyLikedBtn", labels.btnNoveltyYes || "");
   setText("#noveltyNotYetBtn", labels.btnNoveltyNo || "");
   setText("#previewLikeBtn", labels.btnPreviewYes || "");
+  setText("#previewIssueBtn", labels.btnPreviewIssue || "");
   setText("#previewDislikeBtn", labels.btnPreviewNo || "");
   setText("#likeSongBtn", labels.btnLikeSong || "");
   setText("#likeArtistBtn", labels.btnLikeArtist || "");
@@ -16459,12 +17270,62 @@ function uniqueStorageKeys(keys = []) {
 }
 
 function storageFallbackKeys(baseKey, session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  if (normalizedSession.mode === "test") {
+    return uniqueStorageKeys([storageKeyForSession(baseKey, session)]);
+  }
   const keys = [storageKeyForSession(baseKey, session)];
   if (baseKey) keys.push(baseKey);
-  if (normalizeUserSession(session).mode !== "guest") {
+  if (normalizedSession.mode !== "guest") {
     keys.push(storageKeyForSession(baseKey, { mode: "guest", username: "" }));
   }
   return uniqueStorageKeys(keys);
+}
+
+function localStorageKeysMatching(predicate) {
+  const keys = [];
+  try {
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (key && predicate(key)) keys.push(key);
+    }
+  } catch (_err) {
+    // ignore storage failures
+  }
+  return keys;
+}
+
+function removeLocalStorageKeys(keys = []) {
+  try {
+    uniqueStorageKeys(keys).forEach((key) => localStorage.removeItem(key));
+  } catch (_err) {
+    // ignore storage failures
+  }
+}
+
+function clearAllSonicLocalData() {
+  removeLocalStorageKeys(localStorageKeysMatching((key) => (
+    key.startsWith("neonpulse:") ||
+    key.startsWith("neonpulse_")
+  )));
+  try {
+    sessionStorage.clear();
+  } catch (_err) {
+    // ignore session failures
+  }
+}
+
+function clearSessionStorageBuckets(session, baseKeys = []) {
+  const normalizedSession = normalizeUserSession(session);
+  const profileKey = sessionProfileKey(normalizedSession);
+  if (!profileKey) return;
+  const suffix = `:${profileKey}`;
+  removeLocalStorageKeys(localStorageKeysMatching((key) => (
+    baseKeys.some((baseKey) => (
+      key === `${baseKey}${suffix}` ||
+      key.startsWith(`${baseKey}${suffix}:`)
+    ))
+  )));
 }
 
 function readFirstStoredJson(keys = []) {
@@ -16481,18 +17342,17 @@ function readFirstStoredJson(keys = []) {
 }
 
 function clearSessionProfileData(session) {
-  const preferenceKey = storageKeyForSession(STORAGE_KEY, session);
-  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY, session);
-  const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY, session);
-  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY, session);
-  try {
-    if (preferenceKey) localStorage.removeItem(preferenceKey);
-    if (progressKey) localStorage.removeItem(progressKey);
-    if (collectibleKey) localStorage.removeItem(collectibleKey);
-    if (artSeedKey) localStorage.removeItem(artSeedKey);
-  } catch (_err) {
-    // ignore storage failures
-  }
+  clearSessionStorageBuckets(session, [
+    STORAGE_KEY,
+    PROGRESS_STORAGE_KEY,
+    SPIRIT_COLLECTIBLE_STORAGE_KEY,
+    SPIRIT_ART_SEED_STORAGE_KEY,
+    SPIRIT_REGENERATION_COUNT_STORAGE_KEY,
+    PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY,
+    AI_USAGE_STORAGE_KEY,
+    DAILY_PRODUCT_USAGE_STORAGE_KEY,
+    AI_TEXT_CACHE_STORAGE_KEY
+  ]);
 }
 
 function hasUsageGuideAcknowledged() {
@@ -16531,6 +17391,9 @@ function resetSessionStateInMemory() {
   userStats.skipped = 0;
   userStats.ratingCount = 0;
   userStats.ratingSum = 0;
+  userStats.swipeTrainingSignals = 0;
+  userStats.lastSwipeLearningMilestone = 0;
+  pendingSwipeLearningMessage = "";
 
   knownArtistsMemory = new Set();
   knownTrackTitlesMemory = new Set();
@@ -16543,6 +17406,7 @@ function resetSessionStateInMemory() {
   recentTrackHistoryByStyle = new Map();
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
+  swipeStyleExposureCounts = new Map();
   lastRejectedTrackKey = "";
   recommendationBlockedByKnown = false;
   recommendationStyleFallbackInfo = null;
@@ -16572,6 +17436,7 @@ function resetSessionStateInMemory() {
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
   likedTrackHistory = [];
+  dislikedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   youtubePreviewSearchAttempt = 0;
@@ -18267,7 +19132,17 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
   syncFloatingSurpriseButton();
-  if (styleEl) styleEl.focus();
+  window.requestAnimationFrame(() => {
+    if (swipeStartPanel?.scrollIntoView) {
+      swipeStartPanel.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+    const firstDiscoveryAction = topSwipeSurpriseBtn || topSwipeCard || swipeStartPanel || appContent;
+    if (firstDiscoveryAction?.focus) {
+      firstDiscoveryAction.focus({ preventScroll: true });
+    }
+  });
   refreshAmbientForUiState();
   playUiSfx("confirm");
 
@@ -18298,6 +19173,22 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
       showToast(recommendationFailureMessage());
     });
   }, 320);
+}
+
+function startLocalProfileFlow({ preferStored = true, showGuide = null } = {}) {
+  const shouldShowUsageGuide = showGuide === null ? !hasUsageGuideAcknowledged() : Boolean(showGuide);
+  const storedUser = preferStored ? readStoredUserSession() : null;
+  const session = storedUser || { mode: "guest", username: "" };
+  activateUserSession(session);
+  persistUserSession(session);
+  if (storedUser && storedUser.mode !== "guest") {
+    setAuthFeedback(t("authLocalResumeReady", {
+      user: storedUser.username || storedUser.email || t("summaryNoData")
+    }));
+  } else {
+    setAuthFeedback(t("authGuestReady"));
+  }
+  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
 function loginWithCredentials() {
@@ -18334,12 +19225,7 @@ function resumeStoredUserSession() {
 }
 
 function continueWithoutLogin() {
-  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
-  const session = { mode: "guest", username: "" };
-  activateUserSession(session);
-  persistUserSession(session);
-  setAuthFeedback(t("authGuestReady"));
-  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+  startLocalProfileFlow({ preferStored: false });
 }
 
 function createTestUserSession() {
@@ -18355,6 +19241,7 @@ function createTestUserSession() {
 
 function testAsNewUser() {
   const session = createTestUserSession();
+  clearSessionProfileData(session);
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authTestUserReady", { user: session.username }));
@@ -18390,6 +19277,7 @@ function hasDedicatedClickSfxControl(el) {
     knownYesBtn,
     knownNoBtn,
     previewLikeBtn,
+    previewIssueBtn,
     previewDislikeBtn,
     noveltyLikedBtn,
     noveltyNotYetBtn,
@@ -18576,7 +19464,8 @@ function syncVoiceMiniPresetButtons() {
 }
 
 function voiceMiniPresetDisplayLabel(presetName = voiceMiniActivePreset) {
-  const key = String(presetName || "techno");
+  if (!presetName || !VOICE_MINI_PRESETS[presetName]) return t("voiceMiniCustomPreset");
+  const key = String(presetName);
   const translationKey = `voiceMiniPreset${key.charAt(0).toUpperCase()}${key.slice(1)}`;
   const translated = t(translationKey);
   return translated && translated !== translationKey ? translated : t("voiceMiniCustomPreset");
@@ -18609,6 +19498,126 @@ function voiceMiniActiveLayerLabels() {
   return VOICE_MINI_PATTERN_KINDS
     .filter((kind) => Boolean(voiceMiniPadState[kind]))
     .map((kind) => voiceMiniLayerLabel(kind));
+}
+
+function voiceMiniActiveLayerCount() {
+  return VOICE_MINI_PATTERN_KINDS.filter((kind) => Boolean(voiceMiniPadState[kind])).length;
+}
+
+function voiceMiniArrangementSeconds() {
+  const seconds = voiceMiniBeatDuration() * 4 * VOICE_MINI_EXPORT_BARS;
+  return Math.max(1, Math.round(seconds));
+}
+
+function updateVoiceStudioSession() {
+  const isRecording = voiceRecorder && voiceRecorder.state === "recording";
+  const hasRecording = Boolean(voiceRecordingBlob);
+  const stateKey = voiceMiniRendering
+    ? "voiceStudioStateRendering"
+    : isRecording
+      ? "voiceStudioStateRecording"
+      : voiceMiniTrackPlaying
+        ? "voiceStudioStatePlaying"
+        : hasRecording
+          ? "voiceStudioStateVoiceReady"
+          : "voiceStudioStateReady";
+  const activeLayers = voiceMiniActiveLayerCount();
+
+  if (voiceStudioSessionStateValue) {
+    voiceStudioSessionStateValue.textContent = t(stateKey);
+    voiceStudioSessionStateValue.dataset.state = stateKey.replace(/^voiceStudioState/, "").toLowerCase();
+  }
+  if (voiceStudioSessionLayersValue) {
+    voiceStudioSessionLayersValue.textContent = t("voiceStudioLayersValue", {
+      count: activeLayers,
+      total: VOICE_MINI_PATTERN_KINDS.length
+    });
+  }
+  if (voiceStudioSessionLengthValue) {
+    voiceStudioSessionLengthValue.textContent = t("voiceStudioLengthValue", {
+      bars: VOICE_MINI_EXPORT_BARS,
+      seconds: voiceMiniArrangementSeconds()
+    });
+  }
+  if (voiceStudioSessionFormatValue) {
+    voiceStudioSessionFormatValue.textContent = t(hasRecording ? "voiceStudioFormatVoice" : "voiceStudioFormatLocal");
+  }
+}
+
+function voiceMiniPatternHitCount(kind = "kick") {
+  return voiceMiniPatternSteps(kind).reduce((sum, step) => sum + (step ? 1 : 0), 0);
+}
+
+function voiceMiniPatternDensity(kind = "kick") {
+  const steps = voiceMiniPatternSteps(kind);
+  if (!steps.length) return 0;
+  return voiceMiniPatternHitCount(kind) / steps.length;
+}
+
+function voiceMiniAveragePatternDensity() {
+  const relevantKinds = VOICE_MINI_PATTERN_KINDS.filter((kind) => kind !== "voice" && Boolean(voiceMiniPadState[kind]));
+  const kinds = relevantKinds.length ? relevantKinds : ["kick", "bass", "hat", "synth"];
+  const total = kinds.reduce((sum, kind) => sum + voiceMiniPatternDensity(kind), 0);
+  return total / Math.max(1, kinds.length);
+}
+
+function voiceMiniStudioInsight() {
+  const activeLayers = voiceMiniActiveLayerCount();
+  const spaceAmount = voiceMiniDelayAmount + voiceMiniPhaserAmount;
+  const weightAmount = voiceMiniDriveAmount + voiceMiniBeatmasherAmount;
+  const density = voiceMiniAveragePatternDensity();
+  const isBroken = voiceMiniGrooveMode === "counter" || voiceMiniActivePreset === "breaks" || voiceMiniPatternDensity("kick") < 0.42;
+
+  const energyKey = voiceMiniBpm >= 165
+    ? "voiceMiniEnergySprint"
+    : voiceMiniBpm >= 142
+      ? "voiceMiniEnergyHigh"
+      : voiceMiniBpm >= 124
+        ? "voiceMiniEnergyClub"
+        : voiceMiniBpm >= 112
+          ? "voiceMiniEnergyGroove"
+          : "voiceMiniEnergyLow";
+
+  let shapeKey = "voiceMiniShapeBalanced";
+  if (isBroken) shapeKey = "voiceMiniShapeBroken";
+  if (voiceMiniSynthType === "acid" || voiceMiniDriveAmount >= 26) shapeKey = "voiceMiniShapeAcid";
+  if (spaceAmount >= 58 || voiceMiniSynthType === "pad") shapeKey = "voiceMiniShapeWide";
+  if (weightAmount >= 54 && voiceMiniSynthType !== "pad") shapeKey = "voiceMiniShapeHeavy";
+  if (activeLayers <= 3 || density < 0.34) shapeKey = "voiceMiniShapeMinimal";
+
+  const titleKey = shapeKey === "voiceMiniShapeWide" && (voiceMiniBpm < 120 || voiceMiniSynthType === "pad")
+    ? "voiceMiniInsightTitleDeep"
+    : (shapeKey === "voiceMiniShapeBroken" || shapeKey === "voiceMiniShapeAcid") && weightAmount >= 34
+      ? "voiceMiniInsightTitleExperimental"
+      : activeLayers >= 5 && voiceMiniBpm >= 122
+        ? "voiceMiniInsightTitlePeak"
+        : "voiceMiniInsightTitleGroove";
+
+  const moveKey = !voiceMiniPadState.kick || voiceMiniPatternHitCount("kick") < 2
+    ? "voiceMiniNextMoveKick"
+    : !voiceMiniPadState.bass || voiceMiniPatternHitCount("bass") < 2
+      ? "voiceMiniNextMoveBass"
+      : !voiceMiniPadState.synth || voiceMiniSynthLevel < 36
+        ? "voiceMiniNextMoveSynth"
+        : spaceAmount < 34
+          ? "voiceMiniNextMoveSpace"
+          : !voiceRecordingBlob && activeLayers >= 5
+            ? "voiceMiniNextMoveVoice"
+            : "voiceMiniNextMoveVariation";
+
+  return { titleKey, energyKey, shapeKey, moveKey };
+}
+
+function updateVoiceMiniInsight() {
+  const insight = voiceMiniStudioInsight();
+  if (voiceMiniInsightKicker) voiceMiniInsightKicker.textContent = t("voiceMiniInsightKicker");
+  if (voiceMiniInsightTitle) voiceMiniInsightTitle.textContent = t(insight.titleKey);
+  if (voiceMiniInsightEnergyLabel) voiceMiniInsightEnergyLabel.textContent = t("voiceMiniInsightEnergyLabel");
+  if (voiceMiniInsightEnergyValue) voiceMiniInsightEnergyValue.textContent = t(insight.energyKey);
+  if (voiceMiniInsightShapeLabel) voiceMiniInsightShapeLabel.textContent = t("voiceMiniInsightShapeLabel");
+  if (voiceMiniInsightShapeValue) voiceMiniInsightShapeValue.textContent = t(insight.shapeKey);
+  if (voiceMiniInsightMoveLabel) voiceMiniInsightMoveLabel.textContent = t("voiceMiniInsightMoveLabel");
+  if (voiceMiniInsightMoveValue) voiceMiniInsightMoveValue.textContent = t(insight.moveKey);
 }
 
 function voiceMiniSynthStackLayers(type = voiceMiniSynthType) {
@@ -18712,6 +19721,8 @@ function updateVoiceMiniRecipe() {
   }
   syncVoiceMiniVisual();
   renderVoiceMiniSynthStack();
+  updateVoiceStudioSession();
+  updateVoiceMiniInsight();
 }
 
 function toggleVoiceMiniStep(kind = "", step = 0) {
@@ -18772,6 +19783,7 @@ function updateVoiceMiniSwing(value = voiceMiniSwingAmount, { announce = false }
     voiceMiniSwingSlider.setAttribute("aria-valuenow", String(voiceMiniSwingAmount));
   }
   if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
+  updateVoiceMiniInsight();
   if (announce && voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
       control: t("voiceMiniSwingLabel"),
@@ -18803,6 +19815,7 @@ function updateVoiceMiniSynthType(value = voiceMiniSynthType, { announce = false
   if (voiceMiniSynthTypeSelect) voiceMiniSynthTypeSelect.value = next;
   if (voiceMiniSynthTypeValue) voiceMiniSynthTypeValue.textContent = voiceMiniSynthTypeLabelFor(next);
   renderVoiceMiniSynthStack();
+  updateVoiceMiniInsight();
   if (announce && voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
       control: t("voiceMiniSynthTypeLabel"),
@@ -18830,6 +19843,7 @@ function updateVoiceMiniGrooveMode(value = voiceMiniGrooveMode, { announce = fal
   syncVoiceMiniGrooveModeOptions();
   if (voiceMiniGrooveModeSelect) voiceMiniGrooveModeSelect.value = next;
   if (voiceMiniGrooveModeValue) voiceMiniGrooveModeValue.textContent = voiceMiniGrooveModeLabelFor(next);
+  updateVoiceMiniInsight();
   if (announce && voiceMiniStatus) {
     voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
       control: t("voiceMiniGrooveModeLabel"),
@@ -18961,6 +19975,7 @@ function updateVoiceMiniPercentControl({
   }
   if (valueEl) valueEl.textContent = t("voiceMiniPercentValue", { value: nextValue });
   refreshVoiceMiniOutputBus();
+  updateVoiceMiniInsight();
   if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
     control: t(labelKey),
     value: nextValue
@@ -19069,6 +20084,7 @@ function updateVoiceLabUi() {
   voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
   voicePlayback?.classList.toggle("hidden", !hasRecording);
   if (voiceMiniStatus && !voiceMiniStatus.textContent.trim()) voiceMiniStatus.textContent = t("voiceMiniReady");
+  updateVoiceStudioSession();
 }
 
 function syncVoicePadButtons() {
@@ -20119,16 +21135,122 @@ function ensureVoiceMiniAudiblePadState() {
   syncVoicePadButtons();
 }
 
+function voiceMiniNormalizeSteps(values = []) {
+  const fallback = Array.isArray(values) && values.length ? values : VOICE_MINI_DEFAULT_PATTERN.kick;
+  return Array.from({ length: 8 }, (_, index) => Number(fallback[index % fallback.length]) ? 1 : 0);
+}
+
+function setVoiceMiniPatternKind(kind = "kick", steps = []) {
+  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
+  voiceMiniPattern[kind] = voiceMiniNormalizeSteps(steps);
+}
+
+function rotateVoiceMiniSteps(steps = [], offset = 0) {
+  const normalized = voiceMiniNormalizeSteps(steps);
+  const safeOffset = ((Math.round(Number(offset) || 0) % 8) + 8) % 8;
+  return normalized.map((_, index) => normalized[(index - safeOffset + 8) % 8]);
+}
+
+function rotateVoiceMiniPatternKind(kind = "kick", offset = 0) {
+  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
+  voiceMiniPattern[kind] = rotateVoiceMiniSteps(voiceMiniPatternSteps(kind), offset);
+}
+
+function ensureVoiceMiniPatternHit(kind = "kick", fallbackIndex = 0) {
+  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
+  if (voiceMiniPatternHitCount(kind) > 0) return;
+  const steps = voiceMiniPatternSteps(kind);
+  steps[((Math.round(Number(fallbackIndex) || 0) % 8) + 8) % 8] = 1;
+}
+
+function finalizeVoiceMiniPatternChange() {
+  renderVoiceMiniSequencer();
+  syncVoiceMiniPresetButtons();
+  syncVoicePadButtons();
+  updateVoiceMiniRecipe();
+  if (voiceMiniTrackPlaying) refreshVoiceMiniOutputBus();
+}
+
+function mutateVoiceMiniPatternForIdea(presetName = voiceMiniActivePreset) {
+  const preset = VOICE_MINI_PRESETS[presetName] || VOICE_MINI_PRESETS.techno;
+  voiceMiniPattern = cloneVoiceMiniPattern(preset.pattern);
+  const rotationChoices = [-3, -2, -1, 1, 2, 3];
+  ["bass", "hat", "synth", "voice"].forEach((kind) => {
+    if (Math.random() < 0.72) {
+      rotateVoiceMiniPatternKind(kind, rotationChoices[Math.floor(Math.random() * rotationChoices.length)]);
+    }
+  });
+
+  const accentKinds = presetName === "ambient"
+    ? ["synth", "synth", "hat", "bass"]
+    : presetName === "dnb"
+      ? ["kick", "bass", "hat", "hat", "synth"]
+      : presetName === "trap"
+        ? ["hat", "hat", "bass", "synth", "kick"]
+        : ["bass", "hat", "synth", "clap", "kick"];
+  const mutationCount = 3 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < mutationCount; i += 1) {
+    const kind = accentKinds[Math.floor(Math.random() * accentKinds.length)];
+    const steps = voiceMiniPatternSteps(kind);
+    const index = Math.floor(Math.random() * 8);
+    if (kind === "kick" && presetName !== "breaks" && presetName !== "trap" && index % 2 === 0) continue;
+    if (kind === "clap" && [2, 6].includes(index)) continue;
+    steps[index] = steps[index] ? 0 : 1;
+  }
+
+  if (presetName === "techno" || presetName === "psy" || presetName === "darkprog") {
+    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 1, 0, 1, Math.random() < 0.45 ? 1 : 0]);
+  }
+  if (presetName === "ambient") {
+    setVoiceMiniPatternKind("kick", [1, 0, 0, 0, Math.random() < 0.38 ? 1 : 0, 0, 0, 0]);
+    setVoiceMiniPatternKind("hat", [0, 0, 1, 0, 0, Math.random() < 0.5 ? 1 : 0, 1, 0]);
+  }
+
+  ensureVoiceMiniPatternHit("kick", 0);
+  ensureVoiceMiniPatternHit("bass", presetName === "psy" ? 1 : 0);
+  ensureVoiceMiniPatternHit("hat", 2);
+  ensureVoiceMiniPatternHit("synth", 0);
+  renderVoiceMiniSequencer();
+  updateVoiceMiniRecipe();
+}
+
 function applyVoiceMiniIdeaVariation(presetName = voiceMiniActivePreset) {
   const variations = {
     techno: { drive: 18, delay: 12, phaser: 16, beatmasher: 8, synth: 44, master: 112 },
     breaks: { drive: 14, delay: 18, phaser: 20, beatmasher: 14, synth: 50, master: 110 },
     trap: { drive: 20, delay: 20, phaser: 14, beatmasher: 18, synth: 54, master: 108 },
     psy: { drive: 24, delay: 10, phaser: 24, beatmasher: 10, synth: 48, master: 114 },
-    ambient: { drive: 8, delay: 32, phaser: 34, beatmasher: 4, synth: 70, master: 104 }
+    ambient: { drive: 8, delay: 32, phaser: 34, beatmasher: 4, synth: 70, master: 104 },
+    house: { drive: 12, delay: 18, phaser: 18, beatmasher: 6, synth: 46, master: 110 },
+    dnb: { drive: 18, delay: 12, phaser: 14, beatmasher: 18, synth: 42, master: 112 },
+    darkprog: { drive: 22, delay: 14, phaser: 28, beatmasher: 10, synth: 52, master: 113 }
   };
   const base = variations[presetName] || variations.techno;
   const drift = () => Math.round((Math.random() - 0.5) * 8);
+  const synthAlternates = {
+    techno: ["stab", "acid", "pluck"],
+    breaks: ["pluck", "glow", "stab"],
+    trap: ["sub", "pluck", "acid"],
+    psy: ["acid", "stab", "glow"],
+    ambient: ["pad", "glow", "sub"],
+    house: ["stab", "glow", "pluck"],
+    dnb: ["sub", "acid", "pluck"],
+    darkprog: ["acid", "pad", "stab"]
+  };
+  const grooveAlternates = {
+    techno: ["tight", "late"],
+    breaks: ["swing", "counter"],
+    trap: ["late", "counter"],
+    psy: ["counter", "tight"],
+    ambient: ["floating", "late"],
+    house: ["swing", "late"],
+    dnb: ["counter", "tight"],
+    darkprog: ["late", "counter"]
+  };
+  const pick = (list = []) => list[Math.floor(Math.random() * list.length)];
+  if (Math.random() < 0.68) updateVoiceMiniSynthType(pick(synthAlternates[presetName] || synthAlternates.techno), { announce: false });
+  if (Math.random() < 0.62) updateVoiceMiniGrooveMode(pick(grooveAlternates[presetName] || grooveAlternates.techno), { announce: false });
+  updateVoiceMiniSwing(voiceMiniSwingAmount + Math.round(drift() * 0.75), { announce: false });
   updateVoiceMiniDrive(base.drive + drift(), { announce: false });
   updateVoiceMiniDelay(base.delay + drift(), { announce: false });
   updateVoiceMiniPhaser(base.phaser + drift(), { announce: false });
@@ -20144,6 +21266,7 @@ async function generateVoiceMiniIdea() {
   const nextPreset = presets[(currentIndex + offset) % presets.length] || "techno";
   const wasPlaying = voiceMiniTrackPlaying;
   applyVoiceMiniPreset(nextPreset);
+  mutateVoiceMiniPatternForIdea(nextPreset);
   applyVoiceMiniIdeaVariation(nextPreset);
   ensureVoiceMiniAudiblePadState();
   if (voiceMiniStatus) {
@@ -20154,6 +21277,117 @@ async function generateVoiceMiniIdea() {
   }
   if (!wasPlaying) {
     await playVoiceMiniTrack();
+  }
+}
+
+function voiceMiniMorphLabel(mode = "") {
+  const labels = {
+    floor: t("voiceMiniMorphFloor"),
+    deep: t("voiceMiniMorphDeep"),
+    weird: t("voiceMiniMorphWeird"),
+    open: t("voiceMiniMorphOpen")
+  };
+  return labels[mode] || labels.floor;
+}
+
+function applyVoiceMiniMorph(mode = "floor") {
+  const normalized = ["floor", "deep", "weird", "open"].includes(mode) ? mode : "floor";
+  voiceMiniActivePreset = "";
+  voiceMiniPattern = cloneVoiceMiniPattern(voiceMiniPattern);
+
+  if (normalized === "floor") {
+    voiceMiniPadState = {
+      kick: true,
+      bass: true,
+      hat: true,
+      clap: true,
+      synth: true,
+      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
+    };
+    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 1, 0, 1, 0]);
+    setVoiceMiniPatternKind("bass", [1, 0, 0, 1, 1, 0, 0, 1]);
+    setVoiceMiniPatternKind("hat", [1, 1, 1, 1, 1, 1, 1, 1]);
+    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 0, 1, 0]);
+    setVoiceMiniPatternKind("synth", [1, 0, 0, 0, 1, 0, 1, 0]);
+    updateVoiceMiniBpm(Math.max(124, Math.min(138, voiceMiniBpm + 2)), { announce: false });
+    updateVoiceMiniSwing(Math.max(4, voiceMiniSwingAmount - 4), { announce: false });
+    updateVoiceMiniSynthType(voiceMiniSynthType === "pad" ? "stab" : voiceMiniSynthType, { announce: false });
+    updateVoiceMiniGrooveMode("tight", { announce: false });
+    updateVoiceMiniDrive(voiceMiniDriveAmount + 10, { announce: false });
+    updateVoiceMiniMaster(voiceMiniMasterLevel + 6, { announce: false });
+    updateVoiceMiniDelay(Math.max(8, voiceMiniDelayAmount - 6), { announce: false });
+    updateVoiceMiniBeatmasher(Math.max(0, voiceMiniBeatmasherAmount - 4), { announce: false });
+  } else if (normalized === "deep") {
+    voiceMiniPadState = {
+      kick: true,
+      bass: true,
+      hat: true,
+      clap: false,
+      synth: true,
+      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
+    };
+    setVoiceMiniPatternKind("kick", [1, 0, 0, 0, 1, 0, 0, 0]);
+    setVoiceMiniPatternKind("bass", [1, 0, 0, 0, 0, 0, 1, 0]);
+    setVoiceMiniPatternKind("hat", [0, 0, 1, 0, 0, 1, 0, 0]);
+    setVoiceMiniPatternKind("clap", [0, 0, 0, 0, 0, 0, 1, 0]);
+    setVoiceMiniPatternKind("synth", [1, 0, 1, 0, 1, 0, 1, 0]);
+    updateVoiceMiniBpm(Math.max(98, voiceMiniBpm - 6), { announce: false });
+    updateVoiceMiniSwing(Math.min(24, voiceMiniSwingAmount + 4), { announce: false });
+    updateVoiceMiniSynthType(voiceMiniSynthType === "acid" ? "pad" : "pad", { announce: false });
+    updateVoiceMiniGrooveMode("floating", { announce: false });
+    updateVoiceMiniDelay(voiceMiniDelayAmount + 18, { announce: false });
+    updateVoiceMiniPhaser(voiceMiniPhaserAmount + 16, { announce: false });
+    updateVoiceMiniSynth(voiceMiniSynthLevel + 18, { announce: false });
+    updateVoiceMiniMaster(voiceMiniMasterLevel - 4, { announce: false });
+  } else if (normalized === "weird") {
+    voiceMiniPadState = {
+      kick: true,
+      bass: true,
+      hat: true,
+      clap: true,
+      synth: true,
+      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
+    };
+    setVoiceMiniPatternKind("kick", [1, 0, 0, 1, 0, 1, 0, 0]);
+    setVoiceMiniPatternKind("bass", [0, 1, 0, 0, 1, 0, 1, 0]);
+    setVoiceMiniPatternKind("hat", [1, 1, 0, 1, 1, 0, 1, 1]);
+    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 1, 0, 0]);
+    setVoiceMiniPatternKind("synth", [1, 0, 1, 0, 0, 1, 0, 1]);
+    updateVoiceMiniBpm(Math.min(176, voiceMiniBpm + 4), { announce: false });
+    updateVoiceMiniSwing(Math.min(32, voiceMiniSwingAmount + 8), { announce: false });
+    updateVoiceMiniSynthType("acid", { announce: false });
+    updateVoiceMiniGrooveMode("counter", { announce: false });
+    updateVoiceMiniDrive(voiceMiniDriveAmount + 16, { announce: false });
+    updateVoiceMiniBeatmasher(voiceMiniBeatmasherAmount + 22, { announce: false });
+    updateVoiceMiniDelay(voiceMiniDelayAmount + 6, { announce: false });
+  } else {
+    voiceMiniPadState = {
+      kick: true,
+      bass: true,
+      hat: true,
+      clap: voiceMiniActivePreset !== "ambient",
+      synth: true,
+      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
+    };
+    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 0, 0, 1, 0]);
+    setVoiceMiniPatternKind("bass", [1, 0, 0, 0, 1, 0, 0, 1]);
+    setVoiceMiniPatternKind("hat", [0, 1, 1, 0, 0, 1, 1, 0]);
+    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 0, 1, 0]);
+    setVoiceMiniPatternKind("synth", [1, 1, 0, 0, 1, 0, 1, 0]);
+    updateVoiceMiniSwing(Math.min(26, voiceMiniSwingAmount + 5), { announce: false });
+    updateVoiceMiniSynthType(voiceMiniSynthType === "sub" ? "glow" : "glow", { announce: false });
+    updateVoiceMiniGrooveMode("swing", { announce: false });
+    updateVoiceMiniDelay(voiceMiniDelayAmount + 16, { announce: false });
+    updateVoiceMiniPhaser(voiceMiniPhaserAmount + 12, { announce: false });
+    updateVoiceMiniSynth(voiceMiniSynthLevel + 14, { announce: false });
+  }
+
+  ensureVoiceMiniPatternHit("kick", 0);
+  ensureVoiceMiniPatternHit("bass", 0);
+  ensureVoiceMiniPatternHit("synth", 0);
+  finalizeVoiceMiniPatternChange();
+  if (voiceMiniStatus) {
+    voiceMiniStatus.textContent = t("voiceMiniMorphApplied", { move: voiceMiniMorphLabel(normalized) });
   }
 }
 
@@ -20257,7 +21491,7 @@ async function exportVoiceMiniTrack() {
   try {
     const sampleRate = 44100;
     const beat = voiceMiniBeatDuration();
-    const bars = 8;
+    const bars = VOICE_MINI_EXPORT_BARS;
     const renderDuration = beat * 4 * bars + 1.2;
     let voiceBuffer = null;
     if (voiceMiniPadState.voice && voiceRecordingBlob) {
@@ -20306,8 +21540,7 @@ async function playVoiceMiniTrack() {
   audioUnlocked = true;
   await audioContext.resume().catch(() => {});
 
-  voiceMiniPadState = voiceMiniBasePadState();
-  syncVoicePadButtons();
+  ensureVoiceMiniAudiblePadState();
   const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
   if (!loopReady) {
     voiceMiniPadState.kick = false;
@@ -20614,7 +21847,7 @@ function scrollResultPanelIntoView({ force = false } = {}) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function setRecommendationRunBusy(isBusy) {
@@ -20641,7 +21874,7 @@ function setRecommendationRunBusy(isBusy) {
     });
   }
   if (swipeStyleRail) {
-    swipeStyleRail.querySelectorAll("button[data-swipe-style]").forEach((button) => {
+    swipeStyleRail.querySelectorAll("button[data-swipe-style], button[data-swipe-style-toggle]").forEach((button) => {
       button.disabled = Boolean(isBusy);
     });
   }
@@ -21021,7 +22254,9 @@ function saveProgress() {
         alreadyKnew: Number(userStats.alreadyKnew) || 0,
         skipped: Number(userStats.skipped) || 0,
         ratingCount: Number(userStats.ratingCount) || 0,
-        ratingSum: Number(userStats.ratingSum) || 0
+        ratingSum: Number(userStats.ratingSum) || 0,
+        swipeTrainingSignals: Number(userStats.swipeTrainingSignals) || 0,
+        lastSwipeLearningMilestone: Number(userStats.lastSwipeLearningMilestone) || 0
       },
       adaptiveModel: {
         likedStyles: mapEntriesForStorage(adaptiveModel.likedStyles),
@@ -21045,6 +22280,7 @@ function saveProgress() {
       trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
       trackPreferenceSignals: mapEntriesForStorage(trackPreferenceSignals),
       likedTrackHistory: sanitizeLikedTrackHistory(likedTrackHistory),
+      dislikedTrackHistory: sanitizeLikedTrackHistory(dislikedTrackHistory),
       trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
       previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
       quiz: {
@@ -21067,6 +22303,9 @@ function loadProgress() {
   userStats.skipped = 0;
   userStats.ratingCount = 0;
   userStats.ratingSum = 0;
+  userStats.swipeTrainingSignals = 0;
+  userStats.lastSwipeLearningMilestone = 0;
+  pendingSwipeLearningMessage = "";
   adaptiveModel.likedStyles.clear();
   adaptiveModel.dislikedStyles.clear();
   adaptiveModel.likedArtists.clear();
@@ -21087,6 +22326,7 @@ function loadProgress() {
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
   likedTrackHistory = [];
+  dislikedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
 
@@ -21104,6 +22344,8 @@ function loadProgress() {
           userStats.skipped = Math.max(0, Number(parsed.stats.skipped) || 0);
           userStats.ratingCount = Math.max(0, Number(parsed.stats.ratingCount) || 0);
           userStats.ratingSum = Math.max(0, Number(parsed.stats.ratingSum) || 0);
+          userStats.swipeTrainingSignals = Math.max(0, Number(parsed.stats.swipeTrainingSignals) || 0);
+          userStats.lastSwipeLearningMilestone = Math.max(0, Number(parsed.stats.lastSwipeLearningMilestone) || 0);
         }
 
         const storedModel = parsed?.adaptiveModel || {};
@@ -21135,6 +22377,7 @@ function loadProgress() {
         hydrateMapFromStorage(trackRatingSignals, parsed?.trackRatingSignals);
         hydrateMapFromStorage(trackPreferenceSignals, parsed?.trackPreferenceSignals);
         likedTrackHistory = sanitizeLikedTrackHistory(parsed?.likedTrackHistory);
+        dislikedTrackHistory = sanitizeLikedTrackHistory(parsed?.dislikedTrackHistory);
         hydrateMapFromStorage(trackPreviewIssueSignals, parsed?.trackPreviewIssueSignals);
         hydrateMapFromStorage(previewReliabilityByStyle, parsed?.previewReliabilityByStyle);
         const quizProgress = parsed?.quiz || {};
@@ -21151,6 +22394,9 @@ function loadProgress() {
 
   if (!likedTrackHistory.length) {
     likedTrackHistory = backfillLikedTrackHistoryFromSignals();
+  }
+  if (!dislikedTrackHistory.length) {
+    dislikedTrackHistory = backfillDislikedTrackHistoryFromSignals();
   }
   recalculateRatingStats();
   updateStats();
@@ -21182,6 +22428,7 @@ function profileBackupSignalCount() {
     (Number(userStats.skipped) || 0) +
     (Number(userStats.ratingCount) || 0) +
     likedTrackHistory.length +
+    dislikedTrackHistory.length +
     knownArtistsMemory.size +
     discoveredArtistsInApp.size +
     seenTrackKeysMemory.size
@@ -21294,10 +22541,14 @@ function validProfileBackupPayload(payload) {
 
 function restoreProfileBackupPayload(payload) {
   if (!validProfileBackupPayload(payload)) return false;
-  const preferencesKey = storageKeyForSession(STORAGE_KEY);
-  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
-  const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
-  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
+  let targetSession = normalizeUserSession(payload.session || currentAuthUser || { mode: "guest", username: "" });
+  if (!sessionProfileKey(targetSession)) {
+    targetSession = normalizeUserSession(currentAuthUser || { mode: "guest", username: "" });
+  }
+  const preferencesKey = storageKeyForSession(STORAGE_KEY, targetSession);
+  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY, targetSession);
+  const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY, targetSession);
+  const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY, targetSession);
   const data = payload.data || {};
   if (preferencesKey && data.preferences && typeof data.preferences === "object") {
     localStorage.setItem(preferencesKey, JSON.stringify(data.preferences));
@@ -21315,9 +22566,11 @@ function restoreProfileBackupPayload(payload) {
     localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
   }
   if (payload.exportedAt) {
-    localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt);
+    const lastExportKey = storageKeyForSession(PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY, targetSession) || PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY;
+    localStorage.setItem(lastExportKey, payload.exportedAt);
   }
-  activateUserSession(currentAuthUser);
+  persistUserSession(targetSession);
+  activateUserSession(targetSession);
   updateProfileBackupStatus();
   showToast(t("profileBackupImported"));
   return true;
@@ -21475,6 +22728,7 @@ function clearFilters() {
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
   swipeUserAnchoredStyle = "";
+  swipeStyleExposureCounts = new Map();
   recommendationStyleFallbackInfo = null;
   updateBpmOptionsForSelectedStyle();
   suggestionQueueTracks = [];
@@ -21495,24 +22749,35 @@ function clearFilters() {
 
 function resetAppAsNewUser() {
   if (!window.confirm(t("resetAppConfirm"))) return;
+  clearAllSonicLocalData();
+  window.location.reload();
+}
+
+function consumeFreshTestResetParam() {
+  if (typeof window === "undefined" || !window.location?.href) return false;
+  let url;
   try {
-    const keys = [];
-    for (let i = 0; i < localStorage.length; i += 1) {
-      const key = localStorage.key(i);
-      if (key) keys.push(key);
-    }
-    keys
-      .filter((key) => key.startsWith("neonpulse:"))
-      .forEach((key) => localStorage.removeItem(key));
+    url = new URL(window.location.href);
   } catch (_err) {
-    // ignore storage failures
+    return false;
   }
+  const resetParams = ["fresh", "freshStart", "freshUser", "newUser", "newuser", "testNew", "reset", "resetTest", "qaReset", "novo", "novoUsuario"];
+  const active = resetParams.some((key) => {
+    const value = String(url.searchParams.get(key) || "").trim().toLowerCase();
+    return ["1", "true", "yes", "sim"].includes(value);
+  });
+  if (!active) return false;
+
+  clearAllSonicLocalData();
+  resetParams.forEach((key) => url.searchParams.delete(key));
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
   try {
-    sessionStorage.clear();
+    window.history.replaceState(null, document.title, nextUrl);
   } catch (_err) {
-    // ignore session failures
+    // ignore history failures; reload still clears state.
   }
   window.location.reload();
+  return true;
 }
 
 function pickRandomTrack(pool = []) {
@@ -21560,6 +22825,74 @@ function selectableSwipeStyle(style = "") {
 
 function explicitSwipeAnchorStyle() {
   return selectableSwipeStyle(swipeUserAnchoredStyle);
+}
+
+function registerSwipeStyleExposure(style = "") {
+  const styleKey = selectableSwipeStyle(style);
+  if (!styleKey) return;
+  swipeStyleExposureCounts.set(styleKey, Number(swipeStyleExposureCounts.get(styleKey) || 0) + 1);
+  if (swipeStyleExposureCounts.size > SWIPE_FULL_STYLE_COVERAGE_LIMIT + 12) {
+    const allowed = new Set(getAllSelectableStyles());
+    Array.from(swipeStyleExposureCounts.keys()).forEach((key) => {
+      if (!allowed.has(key)) swipeStyleExposureCounts.delete(key);
+    });
+  }
+}
+
+function shouldPrioritizeSwipeStyleCoverage() {
+  if (discoveryModeEl?.checked === false) return false;
+  if (explicitSwipeAnchorStyle()) return false;
+  const allStyles = getAllSelectableStyles();
+  if (!allStyles.length) return false;
+  const exposedCount = allStyles.filter((style) => Number(swipeStyleExposureCounts.get(style) || 0) > 0).length;
+  const seenCount = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
+  return exposedCount < allStyles.length && seenCount < Math.min(SWIPE_FULL_STYLE_COVERAGE_LIMIT, allStyles.length + 18);
+}
+
+function swipeCoverageStyleScore(style = "", sourceTrack = null) {
+  const styleKey = selectableSwipeStyle(style);
+  if (!styleKey) return -1000000;
+  const exposureCount = Number(swipeStyleExposureCounts.get(styleKey) || 0);
+  const styleSignal = swipeStyleSignal(styleKey);
+  const currentStyle = selectableSwipeStyle(currentRecommendation?.style || "");
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const crossFamily = currentStyle && familyOf(styleKey) !== familyOf(currentStyle);
+  const coverage = typeof styleCoverageStats === "function" ? styleCoverageStats(styleKey) : {};
+  const tracks = Number(coverage.tracks ?? coverage.trackCount ?? 0) || 0;
+  const artists = Number(coverage.artists ?? coverage.artistCount ?? 0) || 0;
+  let score =
+    16 -
+    exposureCount * 7.2 +
+    Math.min(tracks, 42) * 0.038 +
+    Math.min(artists, 28) * 0.072 +
+    familyPreferenceSignal(styleKey) * 0.62 +
+    styleSignal.net * 0.48;
+
+  if (!exposureCount) score += 6.4;
+  if (crossFamily) score += 2.1;
+  if (sourceStyle && styleKey === sourceStyle) score -= 3.6;
+  if (currentStyle && styleKey === currentStyle) score -= 4.4;
+  if (styleStronglyDisliked(styleKey)) score -= 26;
+  return score;
+}
+
+function buildSwipeCoverageStylePlan({ sourceTrack = null } = {}) {
+  if (!shouldPrioritizeSwipeStyleCoverage()) return null;
+  const ranked = getAllSelectableStyles()
+    .map((style) => ({
+      style,
+      score: swipeCoverageStyleScore(style, sourceTrack)
+    }))
+    .filter((entry) => Number.isFinite(entry.score) && entry.score > -20)
+    .sort((a, b) => b.score - a.score || styleLabelByValue(a.style).localeCompare(styleLabelByValue(b.style)));
+  if (!ranked.length) return null;
+  return {
+    focusStyle: ranked[0].style,
+    explicitAnchor: false,
+    sourceStyle: selectableSwipeStyle(sourceTrack?.style || ""),
+    fullCoverage: true,
+    styles: ranked.map((entry) => entry.style)
+  };
 }
 
 function swipeStyleSignal(style = "") {
@@ -21621,7 +22954,8 @@ function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {
   const explicitAnchor = explicitSwipeAnchorStyle();
   const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const focusStyle = explicitAnchor || dominantSwipeAffinityStyle(sourceTrack);
-  if (!focusStyle) return null;
+  const coveragePlan = !explicitAnchor ? buildSwipeCoverageStylePlan({ sourceTrack }) : null;
+  if (!focusStyle) return coveragePlan;
 
   const candidateMap = new Map();
   const similarStyles = similarFallbackStylesFor(focusStyle);
@@ -21687,12 +23021,25 @@ function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {
     }
   }
 
-  return {
+  const affinityPlan = {
     focusStyle,
     explicitAnchor: Boolean(explicitAnchor),
     sourceStyle,
     styles: ranked.map((entry) => entry.style)
   };
+  if (coveragePlan && coveragePlan.styles?.length && !positive) {
+    const mergedStyles = [
+      ...coveragePlan.styles.slice(0, 4),
+      ...affinityPlan.styles
+    ].filter((style, index, list) => style && list.indexOf(style) === index);
+    return {
+      ...affinityPlan,
+      focusStyle: mergedStyles[0] || affinityPlan.focusStyle,
+      fullCoverage: true,
+      styles: mergedStyles
+    };
+  }
+  return affinityPlan;
 }
 
 function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
@@ -21767,6 +23114,9 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
 }
 
 function pickAdaptiveSurpriseStyle(baseTrack = currentRecommendation) {
+  const coveragePlan = buildSwipeCoverageStylePlan({ sourceTrack: baseTrack });
+  if (coveragePlan?.styles?.length) return coveragePlan.styles[0];
+
   const ranked = rankAdaptiveSurpriseStyles(baseTrack);
   if (!ranked.length) return "";
 
@@ -22614,6 +23964,22 @@ function resolveExactBpm(track) {
   return 0;
 }
 
+function perceivedHalfTimeBpm(track, exactBpm = resolveExactBpm(track)) {
+  const bpm = Math.round(Number(exactBpm) || 0);
+  const style = normalizeDatasetStyle(track?.style || "");
+  if (!PERCEPTUAL_BPM_AMBIGUOUS_STYLES.has(style)) return 0;
+  if (bpm < 120 || bpm > 170) return 0;
+  return Math.round(bpm / 2);
+}
+
+function bpmHasPerceptualAmbiguity(track) {
+  return perceivedHalfTimeBpm(track) > 0;
+}
+
+function hasReliableBpmForTrust(track) {
+  return hasReliableBpmForTrack(track) && !bpmHasPerceptualAmbiguity(track);
+}
+
 function bpmSourceLabel(track) {
   const source = normalize(track?.source || "");
   if (!source) return t("bpmCatalogReferenceLabel");
@@ -22635,13 +24001,30 @@ function resolveBpmDisplay(track) {
   const rawRangeText = String(track?.bpm || "").trim();
   const rangeText = rawRangeText || styleBpmRangeCompact(track?.style);
   if (exactBpm > 0) {
+    const perceived = perceivedHalfTimeBpm(track, exactBpm);
     const sourceLabel = bpmSourceLabel(track);
+    if (perceived) {
+      return {
+        exact: exactBpm,
+        perceived,
+        ambiguous: true,
+        range: rangeText || mapBpmToRange(exactBpm),
+        sourceLabel: t("bpmTechnicalGridLabel"),
+        statusText: t("bpmPerceivedPulseLabel", { bpm: perceived }),
+        lineText: t("bpmBreaksDisplay", { exact: exactBpm, perceived }),
+        reasonText: `${t("bpmTechnicalGridLabel")} ${exactBpm} / ${t("bpmPerceivedPulseLabel", { bpm: perceived })}`,
+        aiText: t("bpmBreaksAiText", { exact: exactBpm, perceived })
+      };
+    }
     return {
       exact: exactBpm,
+      perceived: 0,
+      ambiguous: false,
       range: rangeText || mapBpmToRange(exactBpm),
       sourceLabel,
       statusText: sourceLabel,
       lineText: `${t("bpm")} ${exactBpm} (${sourceLabel})`,
+      reasonText: `${exactBpm} BPM`,
       aiText: `${exactBpm} BPM (${sourceLabel})`
     };
   }
@@ -22652,9 +24035,12 @@ function resolveBpmDisplay(track) {
   return {
     exact: 0,
     range: rangeText,
+    perceived: 0,
+    ambiguous: false,
     sourceLabel: t("bpmUnverifiedLabel"),
     statusText: t("bpmUnverifiedLabel"),
     lineText,
+    reasonText: lineText,
     aiText: estimateText ? `${t("bpmUnverifiedLabel")} - ${estimateText}` : t("bpmUnverifiedLabel")
   };
 }
@@ -23104,7 +24490,11 @@ function applyArtistPhoto(track, imageUrl = "", source = "") {
   const artist = String(track?.artist || "").trim();
   const url = String(imageUrl || "").trim();
   if (!artistVisualCard || !artist) return false;
-  if (!url) {
+  if (!url || shouldSuppressUnverifiedArtistImage(track, source)) {
+    if (shouldSuppressUnverifiedArtistImage(track, source)) {
+      track.artistImageUrl = "";
+      track.artistImageSource = "";
+    }
     renderArtistVisualFallback(track, t("artistImageFallback"));
     return false;
   }
@@ -23129,6 +24519,10 @@ async function fetchArtistImageFromDeezer(artistName = "") {
   const artist = sanitizeArtistLookupName(artistName);
   const key = normalize(artist);
   if (!key) return null;
+  if (isAmbiguousArtistImageName(artist)) {
+    artistImageCache.set(key, null);
+    return null;
+  }
   if (artistImageCache.has(key)) return artistImageCache.get(key);
   try {
     const data = await deezerJsonp(`https://api.deezer.com/search/artist?q=${encodeURIComponent(artist)}&limit=8`);
@@ -23148,9 +24542,13 @@ async function hydrateArtistVisual(track) {
   const artist = String(track?.artist || "").trim();
   if (!artist) return;
   const requestToken = (artistImageRequestToken += 1);
-  if (track.artistImageUrl) {
+  if (track.artistImageUrl && !shouldSuppressUnverifiedArtistImage(track, track.artistImageSource || "Catálogo")) {
     applyArtistPhoto(track, track.artistImageUrl, track.artistImageSource || "Catálogo");
     return;
+  }
+  if (track.artistImageUrl && shouldSuppressUnverifiedArtistImage(track, track.artistImageSource || "Catálogo")) {
+    track.artistImageUrl = "";
+    track.artistImageSource = "";
   }
   const result = await fetchArtistImageFromDeezer(artist);
   if (requestToken !== artistImageRequestToken) return;
@@ -24973,6 +26371,80 @@ function spiritSignalForStyle(style) {
   return (spiritSignalsByStyle.get(key) || 0) + (adaptiveModel.likedStyles.get(key) || 0);
 }
 
+function addStyleEvidenceScore(scores, style = "", delta = 0) {
+  const key = normalize(style || "");
+  if (!key || !Number.isFinite(delta) || delta === 0) return;
+  scores.set(key, (scores.get(key) || 0) + delta);
+}
+
+function spiritProfileStyleEntries(limit = 0) {
+  const scores = new Map();
+
+  adaptiveModel.likedStyles.forEach((value, style) => {
+    addStyleEvidenceScore(scores, style, Math.max(0, Number(value) || 0) * 1.15);
+  });
+  spiritSignalsByStyle.forEach((value, style) => {
+    const signal = Number(value) || 0;
+    addStyleEvidenceScore(scores, style, signal >= 0 ? signal * 0.95 : signal * 1.1);
+  });
+  adaptiveModel.dislikedStyles.forEach((value, style) => {
+    addStyleEvidenceScore(scores, style, -Math.max(0, Number(value) || 0) * 1.22);
+  });
+
+  likedTrackHistory.forEach((entry, index) => {
+    const recency = Math.max(0.24, 1 - index / Math.max(18, LIKED_TRACK_HISTORY_LIMIT));
+    const source = String(entry?.source || "");
+    const sourceBoost = source.startsWith("rating_5") ? 0.42 : source.startsWith("rating_4") ? 0.24 : 0;
+    addStyleEvidenceScore(scores, entry?.style, 0.48 * recency + sourceBoost);
+  });
+
+  trackPreferenceSignals.forEach((signal, key) => {
+    const track = trackFromRecommendationKey(key);
+    if (!track) return;
+    addStyleEvidenceScore(scores, track.style, (Number(signal) || 0) * 0.28);
+  });
+
+  trackRatingSignals.forEach((signal, key) => {
+    const track = trackFromRecommendationKey(key);
+    if (!track) return;
+    addStyleEvidenceScore(scores, track.style, (Number(signal) || 0) * 0.34);
+  });
+
+  trackRatings.forEach((stars, key) => {
+    const value = Math.round(Number(stars) || 0);
+    const track = trackFromRecommendationKey(key);
+    if (!track || value < 1 || value > 5) return;
+    if (value >= 4) addStyleEvidenceScore(scores, track.style, (value - 3) * 0.58);
+    else if (value <= 2) addStyleEvidenceScore(scores, track.style, -(3 - value) * 0.42);
+  });
+
+  const ranked = [...scores.entries()]
+    .map(([style, score]) => ({
+      style,
+      label: styleLabelByValue(style),
+      family: familyOf(style),
+      score: Number(score) || 0
+    }))
+    .filter((entry) => entry.style && entry.label && entry.score > 0.08)
+    .sort((a, b) => b.score - a.score || a.label.localeCompare(b.label));
+
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  return safeLimit ? ranked.slice(0, safeLimit) : ranked;
+}
+
+function dominantSpiritProfileStyleKey() {
+  return spiritProfileStyleEntries(1)[0]?.style || "";
+}
+
+function hasConsolidatedSpiritProfile(entries = spiritProfileStyleEntries()) {
+  const totalEvidence = entries.reduce((sum, entry) => sum + Math.max(0, Number(entry.score) || 0), 0);
+  return totalLikedSongs() >= SPIRIT_UNLOCK_TARGET || likedTrackHistory.length >= 4 || totalEvidence >= 4.4;
+}
+
+function styleEvidenceMap(entries = spiritProfileStyleEntries()) {
+  return new Map(entries.map((entry) => [entry.style, Number(entry.score) || 0]));
+}
+
 function spiritById(spiritId) {
   return MUSICAL_SPIRITS.find((item) => item.id === spiritId) || null;
 }
@@ -24983,10 +26455,8 @@ function localizedSpiritCopy(spirit) {
 }
 
 function spiritTopStyles(spirit, limit = 2) {
-  return Object.entries(spirit?.styleWeights || {})
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([style]) => styleLabelByValue(style))
+  return spiritTopStyleKeys(spirit, limit)
+    .map((style) => styleLabelByValue(style))
     .filter(Boolean);
 }
 
@@ -25478,6 +26948,8 @@ function buildSpiritShareStatusLine(snapshot) {
 }
 
 function profileStoryStyleKey() {
+  const consolidatedStyle = dominantSpiritProfileStyleKey();
+  if (consolidatedStyle) return consolidatedStyle;
   const topLikedStyle = [...adaptiveModel.likedStyles.entries()]
     .sort((a, b) => b[1] - a[1])
     .find(([, score]) => Number(score) > 0);
@@ -25551,11 +27023,46 @@ async function renderImageDataUrlToPng(sourceImageUrl = "", width = STORY_SHARE_
   }
 }
 
+function spiritRankedStyleEntries(spirit, limit = 0) {
+  const weights = Object.entries(spirit?.styleWeights || {});
+  if (!weights.length) return [];
+  const profileEntries = spiritProfileStyleEntries(12);
+  const evidenceByStyle = styleEvidenceMap(profileEntries);
+  const hasProfile = hasConsolidatedSpiritProfile(profileEntries);
+  const dominantStyle = profileEntries[0]?.style || "";
+  const dominantFamily = dominantStyle ? familyOf(dominantStyle) : "";
+
+  const ranked = weights
+    .map(([style, weight]) => {
+      const cleanStyle = normalize(style || "");
+      const cleanWeight = Math.max(0, Number(weight) || 0);
+      const directEvidence = Number(evidenceByStyle.get(cleanStyle) || 0);
+      const familyEvidence = profileEntries
+        .filter((entry) => entry.family && entry.family === familyOf(cleanStyle))
+        .reduce((sum, entry) => sum + Math.max(0, Number(entry.score) || 0), 0);
+      const profileScore = directEvidence * 7.4 + familyEvidence * 0.72;
+      const dominantBoost = dominantStyle && cleanStyle === dominantStyle
+        ? 3.8
+        : dominantFamily && familyOf(cleanStyle) === dominantFamily
+          ? 0.95
+          : 0;
+      return {
+        style: cleanStyle,
+        weight: cleanWeight,
+        evidence: directEvidence,
+        score: hasProfile ? profileScore + cleanWeight * 0.56 + dominantBoost : cleanWeight
+      };
+    })
+    .filter((entry) => entry.style)
+    .sort((a, b) => b.score - a.score || b.weight - a.weight || styleLabelByValue(a.style).localeCompare(styleLabelByValue(b.style)));
+
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  return safeLimit ? ranked.slice(0, safeLimit) : ranked;
+}
+
 function spiritTopStyleKeys(spirit, limit = 2) {
-  return Object.entries(spirit?.styleWeights || {})
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, limit)
-    .map(([style]) => style)
+  return spiritRankedStyleEntries(spirit, limit)
+    .map((entry) => entry.style)
     .filter(Boolean);
 }
 
@@ -25751,7 +27258,8 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
     return normalizeInlineText(
       [
         `Your profile is anchored in ${profile.styleSignature || "electronic curation"}.`,
-        profile.genreNarrative
+        profile.genreNarrative,
+        `I am weighing style, energy, novelty, and what you reject, so this spirit should behave like a listening map, not a decorative badge.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -25761,7 +27269,8 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
     return normalizeInlineText(
       [
         `Tu perfil se apoya en ${profile.styleSignature || "curaduría electrónica"}.`,
-        profile.genreNarrative
+        profile.genreNarrative,
+        `Estoy ponderando estilo, energía, novedad y lo que rechazas, para que este espíritu funcione como mapa de escucha, no como adorno.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -25770,7 +27279,8 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   return normalizeInlineText(
     [
       `Seu perfil se apoia em ${profile.styleSignature || "curadoria eletrônica"}.`,
-      profile.genreNarrative
+      profile.genreNarrative,
+      `Estou pesando estilo, energia, novidade e o que você rejeita, para esse espírito funcionar como mapa de escuta, não só como enfeite.`
     ]
       .filter(Boolean)
       .join(" ")
@@ -25787,7 +27297,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        spiritText?.archetype ? `Human portrait for ${spiritText.archetype}` : "Realistic human portrait",
+        spiritText?.archetype ? `Cinematic human portrait for ${spiritText.archetype}` : "Cinematic human portrait",
+        profile.genreNarrative || "",
         topStylesLine || profile.styleSignature || ""
       ]
         .filter(Boolean)
@@ -25798,7 +27309,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        spiritText?.archetype ? `Retrato humano para ${spiritText.archetype}` : "Retrato humano realista",
+        spiritText?.archetype ? `Retrato humano cinematográfico para ${spiritText.archetype}` : "Retrato humano cinematográfico",
+        profile.genreNarrative || "",
         topStylesLine || profile.styleSignature || ""
       ]
         .filter(Boolean)
@@ -25808,7 +27320,8 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 
   return normalizeInlineText(
     [
-      spiritText?.archetype ? `Retrato humano para ${spiritText.archetype}` : "Retrato humano realista",
+      spiritText?.archetype ? `Retrato humano cinematográfico para ${spiritText.archetype}` : "Retrato humano cinematográfico",
+      profile.genreNarrative || "",
       topStylesLine || profile.styleSignature || ""
     ]
       .filter(Boolean)
@@ -25828,7 +27341,7 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
       [
         `Leitura do perfil: ${archetype}${topStylesLine ? ` com assinatura ${topStylesLine}` : ""}.`,
         `${bpmLine ? `Pulso ${bpmLine}` : "Pulso livre"} e status ${rankLabel.toLowerCase()} no marco de ${milestoneLikes} likes.`,
-        `O retrato deve parecer humano realista: rosto carismático, roupa, acessórios e aura guiados por esse gosto. ID ${signatureLine}.`
+        `O retrato traduz essa curadoria em rosto, roupa, acessórios e aura; novas artes mudam composição, luz e silhueta. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -25839,7 +27352,7 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
       [
         `Profile reading: ${archetype}${topStylesLine ? ` with a ${topStylesLine} signature` : ""}.`,
         `${bpmLine ? `Pulse ${bpmLine}` : "Open pulse"} and ${rankLabel.toLowerCase()} status at ${milestoneLikes} likes.`,
-        `The portrait should feel like a realistic human: charismatic face, wardrobe, accessories, and aura shaped by this taste. ID ${signatureLine}.`
+        `The portrait turns this curation into face, wardrobe, accessories, and aura; new artworks change composition, light, and silhouette. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -25850,7 +27363,7 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
       [
         `Lectura del perfil: ${archetype}${topStylesLine ? ` con firma ${topStylesLine}` : ""}.`,
         `${bpmLine ? `Pulso ${bpmLine}` : "Pulso libre"} y estado ${rankLabel.toLowerCase()} en el hito de ${milestoneLikes} likes.`,
-        `El retrato debe sentirse humano realista: rostro carismático, ropa, accesorios y aura guiados por este gusto. ID ${signatureLine}.`
+        `El retrato traduce esta curaduría en rostro, ropa, accesorios y aura; las nuevas artes cambian composición, luz y silueta. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -26769,11 +28282,7 @@ function escapeSvgText(value) {
 }
 
 function isStaticPreviewHost() {
-  const protocol = String(window?.location?.protocol || "");
-  const hostname = String(window?.location?.hostname || "").replace(/^\[|\]$/g, "");
-  const port = String(window?.location?.port || "");
-  const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
-  return protocol === "file:" || (localHosts.has(hostname) && ["5500", "8000", "8080"].includes(port));
+  return isLocalStaticPreviewEnvironment();
 }
 
 function canUseRelativeApiEndpoint() {
@@ -26783,6 +28292,9 @@ function canUseRelativeApiEndpoint() {
 function resolveAiEndpoint(globalName, fallbackPath) {
   const configured = String(window?.[globalName] || "").trim();
   if (configured) return configured;
+  if (globalName === "NEONPULSE_IMAGE_API_URL" && fallbackPath === "/api/spirit-image" && isStaticPreviewHost()) {
+    return REMOTE_SPIRIT_IMAGE_API_URL;
+  }
   return canUseRelativeApiEndpoint() ? fallbackPath : "";
 }
 
@@ -27300,6 +28812,93 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
   ].join("; ");
 }
 
+function spiritMajorVisualMutation(spirit, profileSignature = "") {
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::major-visual-mutation`) >>> 0;
+  const isCharacterReplacement = String(profileSignature || "").includes("new-character");
+  const cameraCues = [
+    "three-quarter bust portrait with a strong shoulder turn and diagonal composition",
+    "front-facing close bust with hands kept low, cropped at chest level, and direct eye contact",
+    "low-angle upper-body portrait with dramatic club backlight and sculptural silhouette",
+    "side-lit half-profile portrait turning back toward the viewer",
+    "editorial waist-up crop with asymmetric negative space and clear face focus",
+    "tight cinematic portrait with the face larger in frame and the aura pushed behind the shoulders"
+  ];
+  const wardrobeCues = [
+    "replace the previous outfit with a structured technical jacket, different collar shape, and new jewelry",
+    "use layered clubwear with a new textile language, changed neckline, and distinct accessory set",
+    "switch to a long reflective coat silhouette with visible fabric texture and new shoulder geometry",
+    "use a softer ritual-festival layer with woven details, new pendant, and changed hair styling",
+    "use minimal black editorial clubwear with one strong accent accessory and no repeated garment shape",
+    "use kinetic street-club styling with pressure-ring collar, changed sleeves, and a new material palette"
+  ];
+  const lightingCues = [
+    "hard rim light from one side plus soft colored fill on the opposite cheek",
+    "split-color lighting with the face still natural and readable",
+    "warm low lamp against cold laser haze, with different shadow direction",
+    "overhead club beam creating a new silhouette and luminous particles behind the head",
+    "sub-bass rings reflected on skin and fabric from below",
+    "clean cinematic key light with a brighter aura edge and deeper background"
+  ];
+  const environmentCues = [
+    "concrete club tunnel with waveform haze",
+    "outdoor night-rave clearing with abstract light threads",
+    "minimal black booth space with floating equalizer dust",
+    "ritual listening room with speaker-shadow geometry",
+    "industrial backstage corridor with music-reactive fog",
+    "deep atmospheric void with subtle stage architecture"
+  ];
+  return [
+    `${isCharacterReplacement ? "Rejected-character regeneration" : "Major regeneration mutation"}: ${cameraCues[seed % cameraCues.length]}`,
+    wardrobeCues[(seed >>> 3) % wardrobeCues.length],
+    lightingCues[(seed >>> 6) % lightingCues.length],
+    `new environment: ${environmentCues[(seed >>> 9) % environmentCues.length]}`,
+    isCharacterReplacement
+      ? "Regeneration rule: the user did not like the previous character, bust, or expression; create a different fictional adult person with a different face, head shape, hair, apparent presentation, age cue, skin tone, wardrobe silhouette, posture, and emotional presence while preserving the same musical spirit"
+      : "Regeneration rule: do not merely recolor the previous image; change camera angle, silhouette, wardrobe, accessories, lighting direction, background environment, and expression while preserving the same musical spirit"
+  ].join("; ");
+}
+
+function spiritCharacterReplacementDirective(spirit, profileSignature = "") {
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::character-replacement`) >>> 0;
+  const isReplacement = String(profileSignature || "").includes("new-character");
+  const faceShapeCues = [
+    "oval face with soft cheekbones",
+    "angular face with sharp cheekbones",
+    "rounder face with expressive cheeks",
+    "long narrow face with calm intensity",
+    "heart-shaped face with strong brow line",
+    "square face with grounded presence"
+  ];
+  const buildCues = [
+    "lean upper-body silhouette",
+    "broader shoulder silhouette",
+    "compact chest-up silhouette",
+    "elegant elongated neck and posture",
+    "relaxed club stance with asymmetrical shoulders",
+    "upright ritual stance with sculptural shoulders"
+  ];
+  const differenceCues = [
+    "switch apparent adult presentation from the prior image where possible",
+    "change heritage-inspired styling and skin tone from the prior image",
+    "change hair length, hair texture, and hair color from the prior image",
+    "change face shape, nose bridge, brow shape, and mouth shape from the prior image",
+    "change posture, bust crop, and shoulder geometry from the prior image",
+    "change wardrobe silhouette and accessory language from the prior image"
+  ];
+  const base = [
+    `Character identity for this generation: ${faceShapeCues[seed % faceShapeCues.length]}`,
+    buildCues[(seed >>> 3) % buildCues.length],
+    differenceCues[(seed >>> 6) % differenceCues.length]
+  ];
+  if (!isReplacement) return base.join("; ");
+  return [
+    "NEW CHARACTER REQUIRED: treat this regeneration as the user rejecting the previous person",
+    "do not preserve the same face, bust, hair, body silhouette, expression, or apparent identity",
+    ...base,
+    "the new result must feel like a different fictional adult human character from the same musical universe, not the same character with different styling"
+  ].join("; ");
+}
+
 function spiritCharacterIdentity(spirit, profileSignature = "") {
   const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::human-entity-identity`) >>> 0;
   const theme = spiritVisualTheme(spirit);
@@ -27322,14 +28921,16 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
     `Realistic fictional adult human entity format: ${humanForms[seed % humanForms.length]}`,
     "Composition required: bust-up or chest-up portrait with visible face, neck, shoulders, and upper torso; the person must be the clear focus, not a background symbol",
     `Identity variation for this generation: ${spiritHumanIdentityVariation(spirit, profileSignature)}`,
+    spiritCharacterReplacementDirective(spirit, profileSignature),
     `Subgenre visual family: ${spiritStyleFamilyDirection(spirit, profileSignature)}`,
     `Spirit identity: ${direction.identity}`,
     `Face and charisma: ${direction.face}; expression cue: ${expressionCues[seed % expressionCues.length]}`,
+    spiritMajorVisualMutation(spirit, profileSignature),
     `Wardrobe and material language: ${direction.wardrobe}`,
     `Music-reactive aura: ${direction.aura}`,
     `Scene: ${direction.environment}`,
     `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
-    "Human presence is required: visible face, head, shoulders and upper torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, distinct clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus skin tone, hair, wardrobe, gaze, accessories, and vibe. No mask-like face, mannequin, cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
+    "Human presence is required: visible face, head, shoulders and upper torso, cinematic photorealism, charismatic expression, believable warm eyes, natural skin texture, distinct clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Desired finish: an evolved human musical spirit with sacred editorial beauty, subtle high-end animated-film softness, luminous aura, refined painterly polish, and realistic anatomy/skin. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus skin tone, hair, wardrobe, gaze, accessories, and vibe. No mask-like face, mannequin, childish cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
@@ -27338,20 +28939,27 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const visualSignature = identitySignature || profileSignature;
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${visualSignature || ""}`));
   const entityDirection = spiritCharacterIdentity(spirit, visualSignature);
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity as a bust-up or chest-up portrait with a believable face, natural skin detail, warm expressive eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure with spirit-specific styling, unique clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const mutationDirective = spiritMajorVisualMutation(spirit, visualSignature);
+  const replacingCharacter = String(visualSignature || "").includes("new-character");
+  const characterRejectionRule = replacingCharacter
+    ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult human character: different face, head shape, hair, apparent presentation, age cue, skin tone, body/bust silhouette, posture, wardrobe, accessories, and emotional expression. Do not keep the same person."
+    : "";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult human musical-spirit entity as a bust-up or chest-up portrait with a believable face, natural skin detail, warm expressive eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a real adult human portrait or upper-body figure, but elevated: spiritual, beautiful, evolved, slightly stylized like premium animated-film realism, with soft painterly polish, luminous aura, and spirit-specific styling. Keep real anatomy, believable skin, and cinematic lighting; avoid plain passport-photo realism. Use unique clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, childish cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
     spiritText?.archetype ? `archetype: ${spiritText.archetype}` : "",
+    characterRejectionRule,
+    mutationDirective,
     entityDirection
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central realistic human-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic portrait or upper-body figure with a charismatic human face, believable skin and material lighting, inviting but intense gaze, dark club atmosphere, ritual/electronic styling, luminous waveform aura, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, or generic fantasy character. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central realistic human-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic portrait or upper-body figure with a charismatic human face, believable skin and material lighting, inviting but intense gaze, sacred/electronic spirit aura, dark club atmosphere, ritual/electronic styling, luminous waveform halo, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, beautiful, spiritually evolved, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, or generic fantasy character. Major variation requirement: when regenerating, the new artwork must be a different character/person, not the same bust with new styling; change face identity, body silhouette, pose, camera, wardrobe, environment, lighting, accessories, and expression. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración central de una entidad humana realista para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: retrato cinematográfico o figura de torso con rostro humano carismático, piel y materiales con luz realista, mirada intensa y atractiva, atmósfera de club oscuro, estética ritual/electrónica, aura de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, icono abstracto ni personaje genérico de fantasía. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central de una entidad humana realista para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: retrato cinematográfico o figura de torso con rostro humano carismático, piel y materiales con luz realista, mirada intensa y atractiva, aura espiritual/electrónica, atmósfera de club oscuro, estética ritual/electrónica, halo de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse bella, evolucionada, magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, icono abstracto ni personaje genérico de fantasía. Requisito de variación mayor: al regenerar, la nueva imagen debe ser otro personaje/persona, no el mismo busto con otro estilo; cambia identidad facial, silueta corporal, pose, cámara, ropa, entorno, iluminación, accesorios y expresión. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a arte central de uma entidade humana realista para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: retrato cinematográfico ou figura de torso com rosto humano carismático, pele e materiais com luz realista, olhar intenso e atraente, atmosfera de club escuro, estética ritual/eletrônica, aura de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, ícone abstrato nem personagem genérico de fantasia. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central de uma entidade humana realista para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: retrato cinematográfico ou figura de torso com rosto humano carismático, pele e materiais com luz realista, olhar intenso e atraente, aura espiritual/eletrônica, atmosfera de club escuro, estética ritual/eletrônica, halo de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer lindo, evoluído, magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, ícone abstrato nem personagem genérico de fantasia. Requisito de variação forte: ao regenerar, a nova arte deve ser outro personagem/pessoa, não o mesmo busto com outro estilo; mude identidade facial, silhueta corporal, pose, câmera, roupa, ambiente, iluminação, acessórios e expressão. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -27377,7 +28985,7 @@ function spiritCollectibleCardLabels() {
       spirit: "SPIRIT",
       liked: "LIKED TRACKS",
       songs: "tracks",
-      genre: "FAVORITE GENRE",
+      genre: "SPIRIT BASE",
       status: "PROFILE",
       discovered: "discovered",
       shown: "shown",
@@ -27392,7 +29000,7 @@ function spiritCollectibleCardLabels() {
       spirit: "ESPÍRITU",
       liked: "PISTAS CON LIKE",
       songs: "pistas",
-      genre: "GÉNERO FAVORITO",
+      genre: "BASE DEL ESPÍRITU",
       status: "PERFIL",
       discovered: "descubiertos",
       shown: "vistas",
@@ -27406,7 +29014,7 @@ function spiritCollectibleCardLabels() {
     spirit: "ESPÍRITO",
     liked: "MÚSICAS CURTIDAS",
     songs: "músicas",
-    genre: "GÊNERO FAVORITO",
+    genre: "BASE DO ESPÍRITO",
     status: "PERFIL",
     discovered: "descobertas",
     shown: "vistas",
@@ -28050,8 +29658,30 @@ function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, p
 }
 
 
-function collectibleVariationToken() {
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+function spiritRegenerationCounterKey(spiritId = "", milestoneLikes = 0) {
+  const baseKey = storageKeyForSession(SPIRIT_REGENERATION_COUNT_STORAGE_KEY);
+  if (!baseKey) return "";
+  return `${baseKey}:${normalize(spiritId || "spirit")}:${Math.max(0, Number(milestoneLikes) || 0)}`;
+}
+
+function nextSpiritRegenerationCounter(spiritId = "", milestoneLikes = 0) {
+  const key = spiritRegenerationCounterKey(spiritId, milestoneLikes);
+  if (!key) return 1;
+  try {
+    const current = Math.max(0, Number(localStorage.getItem(key)) || 0);
+    const next = current + 1;
+    localStorage.setItem(key, String(next));
+    return next;
+  } catch (_err) {
+    return Math.max(1, Math.floor(Math.random() * 999));
+  }
+}
+
+function collectibleVariationToken({ forceNewCharacter = false, spiritId = "", milestoneLikes = 0 } = {}) {
+  const base = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+  if (!forceNewCharacter) return base;
+  const counter = nextSpiritRegenerationCounter(spiritId, milestoneLikes);
+  return `new-character-${counter}-${base}`;
 }
 
 async function requestSpiritCollectibleFromApi(payload) {
@@ -28305,15 +29935,12 @@ function buildLocalSpiritCollectibleImage(
   const labels = spiritCollectibleCardLabels();
   const rank = t(resolveSpiritRank(likes).current.key);
   const profile = snapshot || spiritShareProfileSnapshot();
+  const spiritProfile = resolveSpiritNarrativeProfile(spirit);
   const spiritTitle = normalizeInlineText(spiritText?.name || "Sonic Spirit");
   const archetype = normalizeInlineText(spiritText?.archetype || rank);
-  const topStyles = spiritTopStyles(spirit, 3);
-  const favoriteGenre = normalizeInlineText(
-    profile?.favoriteStyle && profile.favoriteStyle !== t("summaryNoData")
-      ? profile.favoriteStyle
-      : topStyles[0] || archetype || rank
-  );
-  const styleChips = splitIntoSvgLines(topStyles.join(" • "), 24, 1)[0] || archetype;
+  const topStyles = spiritProfile.topStyles.length ? spiritProfile.topStyles : spiritTopStyles(spirit, 3);
+  const favoriteGenre = normalizeInlineText(spiritProfile.dominantStyle || topStyles[0] || archetype || rank);
+  const styleChips = splitIntoSvgLines(topStyles.join(" • "), 20, 1)[0] || archetype;
   const likedCount = spiritCardNumber(profile?.likedSongs || likes || milestoneLikes);
   const shownCount = spiritCardNumber(profile?.tracksPresented || 0);
   const discoveredCount = spiritCardNumber(profile?.discoveredInApp || 0);
@@ -28321,19 +29948,19 @@ function buildLocalSpiritCollectibleImage(
   const seed = hashString(`${spirit?.id || "spirit"}::card::${milestoneLikes}::${likes}::${variationToken}::${userSignature}::${profileSignature}`) >>> 0;
   const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
   const quote = spiritMascotQuote(variant, spiritText);
-  const titleLines = splitIntoSvgLines(spiritTitle, 19, 2);
+  const titleLines = splitIntoSvgLines(spiritTitle, 16, 2);
   const archetypeLines = splitIntoSvgLines(archetype, 24, 1);
-  const genreLines = splitIntoSvgLines(favoriteGenre, 12, 2);
-  const quoteLines = splitIntoSvgLines(quote, 31, 2);
-  const statusLines = splitIntoSvgLines(statusLine, 18, 1);
+  const genreLines = splitIntoSvgLines(favoriteGenre, 10, 2);
+  const quoteLines = splitIntoSvgLines(quote, 25, 2);
+  const statusLines = splitIntoSvgLines(statusLine, 14, 1);
   const profileStatsLine = `${discoveredCount} ${labels.discovered} • ${shownCount} ${labels.shown}`;
-  const profileStatsLines = splitIntoSvgLines(profileStatsLine, 25, 1);
+  const profileStatsLines = splitIntoSvgLines(profileStatsLine, 20, 1);
   const safeBackgroundImage = String(backgroundImageUrl || "").trim();
   const hasBackgroundImage = /^data:image\//i.test(safeBackgroundImage);
   if (!hasBackgroundImage) return "";
   const accentX = 14 + (seed % 34);
   const accentY = 18 + ((seed >> 5) % 46);
-  const titleTracking = currentLanguage === "en" ? "8" : "7";
+  const titleTracking = currentLanguage === "en" ? "5" : "4.5";
   const microStars = Array.from({ length: 74 }, (_, index) => {
     const mixed = hashString(`${seed}::spirit-card-star::${index}`) >>> 0;
     const x = 56 + (mixed % 960);
@@ -28422,7 +30049,7 @@ function buildLocalSpiritCollectibleImage(
   <g>${equalizer}</g>
   <path d="M136 614 C260 292 520 184 792 214" fill="none" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.12" stroke-width="4" />
   <path d="M154 650 C340 330 620 288 884 404" fill="none" stroke="${escapeSvgText(theme.c)}" stroke-opacity="0.1" stroke-width="3" />
-  <text x="540" y="78" fill="#e9e7ff" fill-opacity="0.78" font-size="30" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" letter-spacing="${titleTracking}">${escapeSvgText(labels.kicker)}</text>
+  <text x="540" y="86" fill="#e9e7ff" fill-opacity="0.84" font-size="40" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle" letter-spacing="${titleTracking}">${escapeSvgText(labels.kicker)}</text>
   <circle cx="286" cy="68" r="5" fill="${escapeSvgText(theme.c)}" fill-opacity="0.8" />
   <circle cx="794" cy="68" r="5" fill="${escapeSvgText(theme.c)}" fill-opacity="0.8" />
 
@@ -28434,40 +30061,40 @@ function buildLocalSpiritCollectibleImage(
     <rect x="736" y="252" width="300" height="424" rx="34" fill="url(#sidePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
     <g transform="translate(774 296)">
       <g opacity="0.9">${spiritMotifSvg("star", 0, -4, 0.32, theme, 0.8)}</g>
-      <text x="0" y="90" fill="#e9e7ff" fill-opacity="0.74" font-size="21" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.35">${escapeSvgText(labels.liked)}</text>
-      <text x="0" y="154" fill="#ffffff" font-size="64" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(likedCount)}</text>
-      <text x="0" y="190" fill="#d6d3ef" fill-opacity="0.86" font-size="24" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(labels.songs)}</text>
+      <text x="0" y="90" fill="#e9e7ff" fill-opacity="0.78" font-size="24" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1">${escapeSvgText(labels.liked)}</text>
+      <text x="0" y="166" fill="#ffffff" font-size="86" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(likedCount)}</text>
+      <text x="0" y="206" fill="#d6d3ef" fill-opacity="0.9" font-size="29" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(labels.songs)}</text>
       <path d="M0 226 H224" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.16" stroke-width="2" />
       <g opacity="0.22">${spiritMotifSvg(variant?.motif || "star", 170, 238, 0.28, theme, 0.9)}</g>
-      <text x="0" y="276" fill="#e9e7ff" fill-opacity="0.74" font-size="21" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.35">${escapeSvgText(labels.genre)}</text>
-      ${genreLines.map((line, index) => `<text x="0" y="${326 + index * 35}" fill="#ffffff" font-size="${genreLines.length > 1 ? 31 : 36}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+      <text x="0" y="284" fill="#e9e7ff" fill-opacity="0.78" font-size="24" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1">${escapeSvgText(labels.genre)}</text>
+      ${genreLines.map((line, index) => `<text x="0" y="${340 + index * 45}" fill="#ffffff" font-size="${genreLines.length > 1 ? 39 : 47}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
     </g>
   </g>
 
   <g filter="url(#softShadow)">
-    <rect x="124" y="824" width="832" height="132" rx="34" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
-    <text x="190" y="874" fill="${escapeSvgText(theme.c)}" fill-opacity="0.3" font-size="34" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
-    ${quoteLines.map((line, index) => `<text x="540" y="${878 + index * 34}" fill="#f2f2ff" fill-opacity="0.92" font-size="23" font-weight="700" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
-    <text x="890" y="922" fill="${escapeSvgText(theme.c)}" fill-opacity="0.3" font-size="34" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
+    <rect x="104" y="806" width="872" height="164" rx="38" fill="url(#quotePanel)" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.2" />
+    <text x="176" y="870" fill="${escapeSvgText(theme.c)}" fill-opacity="0.34" font-size="44" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteOpen)}</text>
+    ${quoteLines.map((line, index) => `<text x="540" y="${872 + index * 43}" fill="#f2f2ff" fill-opacity="0.96" font-size="31" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" text-anchor="middle">${escapeSvgText(line)}</text>`).join("")}
+    <text x="904" y="930" fill="${escapeSvgText(theme.c)}" fill-opacity="0.34" font-size="44" font-weight="900" font-family="Georgia, serif" text-anchor="middle">${escapeSvgText(labels.quoteClose)}</text>
   </g>
 
   <g filter="url(#softShadow)">
-    <rect x="96" y="112" width="506" height="128" rx="30" fill="#070b24" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.1" />
-    <text x="126" y="160" fill="${escapeSvgText(theme.a)}" font-size="22" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="2">${escapeSvgText(labels.spirit)}</text>
-    ${titleLines.map((line, index) => `<text x="126" y="${206 + index * 40}" fill="#ffffff" font-size="${titleLines.length > 1 ? 34 : 38}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
+    <rect x="92" y="112" width="560" height="158" rx="34" fill="#070b24" fill-opacity="0.26" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.12" />
+    <text x="126" y="164" fill="${escapeSvgText(theme.a)}" font-size="27" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.4">${escapeSvgText(labels.spirit)}</text>
+    ${titleLines.map((line, index) => `<text x="126" y="${222 + index * 51}" fill="#ffffff" font-size="${titleLines.length > 1 ? 44 : 54}" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(line)}</text>`).join("")}
   </g>
   <g transform="translate(96 724)">
-    <rect x="0" y="0" width="390" height="46" rx="23" fill="${escapeSvgText(theme.c)}" fill-opacity="0.2" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.18" />
-    <path d="M28 16 V30 M40 10 V36 M52 18 V28 M64 13 V33" stroke="${escapeSvgText(theme.a)}" stroke-width="4" stroke-linecap="round" opacity="0.86" />
-    <text x="88" y="31" fill="#e8e2ff" font-size="20" font-weight="700" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(styleChips)}</text>
+    <rect x="0" y="0" width="456" height="58" rx="29" fill="${escapeSvgText(theme.c)}" fill-opacity="0.22" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.2" />
+    <path d="M30 20 V38 M44 12 V46 M58 22 V34 M72 16 V42" stroke="${escapeSvgText(theme.a)}" stroke-width="5" stroke-linecap="round" opacity="0.9" />
+    <text x="98" y="38" fill="#e8e2ff" font-size="26" font-weight="800" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(styleChips)}</text>
   </g>
   <g transform="translate(736 704)" filter="url(#softShadow)">
-    <rect x="0" y="0" width="300" height="92" rx="24" fill="#070b24" fill-opacity="0.32" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.12" />
-    <text x="28" y="30" fill="#cfd5ff" fill-opacity="0.68" font-size="17" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.25">${escapeSvgText(labels.status)}</text>
-    <text x="28" y="59" fill="#ffffff" fill-opacity="0.92" font-size="22" font-weight="800" font-family="Syne, Arial, sans-serif">${escapeSvgText(statusLines[0] || statusLine)}</text>
-    <text x="28" y="82" fill="#cfd5ff" fill-opacity="0.68" font-size="16" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(profileStatsLines[0] || profileStatsLine)}</text>
+    <rect x="0" y="0" width="300" height="104" rx="26" fill="#070b24" fill-opacity="0.34" stroke="${escapeSvgText(theme.a)}" stroke-opacity="0.14" />
+    <text x="28" y="34" fill="#cfd5ff" fill-opacity="0.74" font-size="20" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1">${escapeSvgText(labels.status)}</text>
+    <text x="28" y="70" fill="#ffffff" fill-opacity="0.96" font-size="30" font-weight="900" font-family="Syne, Arial, sans-serif">${escapeSvgText(statusLines[0] || statusLine)}</text>
+    <text x="28" y="95" fill="#cfd5ff" fill-opacity="0.74" font-size="18" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(profileStatsLines[0] || profileStatsLine)}</text>
   </g>
-  <text x="82" y="1016" fill="${escapeSvgText(theme.a)}" fill-opacity="0.74" font-size="20" font-weight="800" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1.5">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(String(milestoneLikes))} ${escapeSvgText(labels.likes)}</text>
+  <text x="82" y="1022" fill="${escapeSvgText(theme.a)}" fill-opacity="0.78" font-size="23" font-weight="900" font-family="Chakra Petch, Arial, sans-serif" letter-spacing="1">SONIC SEARCH • ${escapeSvgText(rank)} • ${escapeSvgText(String(milestoneLikes))} ${escapeSvgText(labels.likes)}</text>
 </svg>`;
 
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
@@ -28526,13 +30153,39 @@ function finishSpiritCollectibleGenerationProgress(success = false) {
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
-  const identitySignature = [profileSignature, variationToken || userSignature].filter(Boolean).join("::");
+  const identitySignature = [
+    profileSignature,
+    forceRegenerate ? "major-regeneration-new-character" : "base-generation",
+    variationToken || userSignature
+  ].filter(Boolean).join("::");
   const humanEntityBrief = spiritCharacterIdentity(spirit, identitySignature);
   const prompt = `${buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes, userSignature, profileSignature, identitySignature)} Variation seed: ${variationToken || userSignature}.`;
   const spiritAssetUrl = resolveRuntimeAssetUrl(spirit?.image || "");
   const { mime: spiritMime } = collectibleImageMeta(spiritAssetUrl);
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
+  const buildOfflineCollectible = () => {
+    const imageUrl = buildLocalSpiritCollectibleImageLegacy(
+      spirit,
+      spiritText,
+      likes,
+      milestoneLikes,
+      variationToken || userSignature,
+      "",
+      spiritImageDataUrl,
+      snapshot,
+      userSignature,
+      profileSignature
+    );
+    return {
+      imageUrl,
+      source: imageUrl ? "local" : "pending",
+      createdAt: new Date().toISOString(),
+      prompt,
+      userSignature,
+      profileSignature
+    };
+  };
   const apiImage = allowAi
     ? await requestSpiritCollectibleFromApi({
         prompt,
@@ -28543,6 +30196,11 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
         milestoneLikes,
         variation: variationToken || "base",
         forceRegenerate,
+        characterRegeneration: forceRegenerate,
+        mustChangeCharacter: forceRegenerate,
+        regenerationToken: variationToken || "",
+        identitySignature,
+        regenerationReason: forceRegenerate ? "user_rejected_previous_character_bust_expression" : "initial_character",
         promptVersion: SPIRIT_IMAGE_PROMPT_VERSION,
         userSignature,
         profileSignature,
@@ -28555,14 +30213,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     const { mime } = collectibleImageMeta(apiImage);
     const apiImageAsDataUrl = await collectibleImageAsDataUrl(apiImage, mime);
     if (!/^data:image\//i.test(String(apiImageAsDataUrl || "").trim())) {
-      return {
-        imageUrl: "",
-        source: "pending",
-        createdAt: new Date().toISOString(),
-        prompt,
-        userSignature,
-        profileSignature
-      };
+      return buildOfflineCollectible();
     }
     return {
       imageUrl: buildLocalSpiritCollectibleImage(
@@ -28584,14 +30235,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       profileSignature
     };
   }
-  return {
-    imageUrl: "",
-    source: "pending",
-    createdAt: new Date().toISOString(),
-    prompt,
-    userSignature,
-    profileSignature
-  };
+  return buildOfflineCollectible();
 }
 
 async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false } = {}) {
@@ -28627,14 +30271,16 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
-      } else if (aiImagePremiumLockedByLimit()) {
-        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
       } else if (!hasImage) {
         spiritCollectibleHint.textContent = supportsAiCollectibleApi()
           ? t("spiritCollectibleReadyToGenerate")
           : t("spiritCollectibleHintLocal");
       } else if (asset.source === "api") {
         spiritCollectibleHint.textContent = t("spiritCollectibleHintApi");
+      } else if (asset.source === "local") {
+        spiritCollectibleHint.textContent = t("spiritCollectibleHintLocalReady");
+      } else if (aiImagePremiumLockedByLimit()) {
+        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
       } else if (aiImageEnabled() && !aiPremiumUnlocked()) {
         spiritCollectibleHint.textContent = t("spiritCollectiblePremiumLocked");
       } else {
@@ -28695,14 +30341,10 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       }
     }
     if (spiritCollectibleRegenerateBtn) {
-      const aiImageLocked = hasImage && asset.source === "api" && !aiConfigFlag("allowImageRegeneration", false);
-      const premiumImageLocked = aiImagePremiumLockedByLimit();
       spiritCollectibleRegenerateBtn.textContent = spiritCollectibleBusy
         ? t("spiritCollectibleGenerating")
-        : aiImageLocked || premiumImageLocked
-          ? t("spiritCollectibleAiLimitUsed")
-          : t("spiritCollectibleRegenerate");
-      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || aiImageLocked || premiumImageLocked;
+        : t("spiritCollectibleRegenerate");
+      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy;
       if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
       else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
     }
@@ -28724,23 +30366,21 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   renderCollectibleState(collectible);
 
   if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
-    if (aiImagePremiumLockedByLimit()) {
-      showToast(premiumAvatarLimitMessage());
-      renderCollectibleState(collectible);
-      return null;
-    }
     const previousCollectible = collectible?.imageUrl ? collectible : null;
     let keptPreviousCollectible = false;
-    const canUseAiForThisAttempt = !forceRegenerate || !previousCollectible?.imageUrl || aiConfigFlag("allowImageRegeneration", false);
-    if (!supportsAiCollectibleApi() || !canUseAiForThisAttempt) {
-      showToast(supportsAiCollectibleApi() ? t("spiritCollectibleAiLimitUsed") : t("spiritCollectibleHintLocal"));
-      renderCollectibleState(collectible);
-      return null;
+    const apiAvailableForAttempt = supportsAiCollectibleApi();
+    let canUseAiForThisAttempt = apiAvailableForAttempt &&
+      (!forceRegenerate || !previousCollectible?.imageUrl || aiConfigFlag("allowImageRegeneration", false));
+    if (apiAvailableForAttempt && !canUseAiForThisAttempt) {
+      showToast(t("spiritCollectibleAiLimitUsed"));
+      canUseAiForThisAttempt = false;
     }
     spiritCollectibleBusy = true;
     startSpiritCollectibleGenerationProgress();
     showToast(t("spiritCollectibleGeneratingStart"));
-    const variation = forceRegenerate ? collectibleVariationToken() : "";
+    const variation = forceRegenerate
+      ? collectibleVariationToken({ forceNewCharacter: true, spiritId: spirit.id, milestoneLikes: milestone.likes })
+      : "";
     renderCollectibleState(collectible);
     try {
       const generatedCollectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
@@ -28748,8 +30388,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         allowAi: canUseAiForThisAttempt,
         forceRegenerate
       });
-      const expectedAiRefresh = forceRegenerate && supportsAiCollectibleApi() && aiImageEnabled();
-      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl) {
+      const expectedAiRefresh = forceRegenerate && canUseAiForThisAttempt && apiAvailableForAttempt && aiImageEnabled();
+      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl && !generatedCollectible?.imageUrl) {
         collectible = previousCollectible;
         keptPreviousCollectible = true;
       } else {
@@ -28810,7 +30450,20 @@ function triggerSpiritUnlockPulse() {
 triggerSpiritUnlockPulse.timer = 0;
 
 function resolveMusicalSpirit() {
-  const selectedStyle = styleEl?.value || lastPrefs?.style || currentRecommendation?.style || "";
+  const selectedStyle = normalize(styleEl?.value || lastPrefs?.style || currentRecommendation?.style || "");
+  const recommendationStyle = normalize(currentRecommendation?.style || "");
+  const discoveryStyle = normalize(currentDiscovery?.style || "");
+  const profileEntries = spiritProfileStyleEntries(12);
+  const evidenceByStyle = styleEvidenceMap(profileEntries);
+  const hasProfile = hasConsolidatedSpiritProfile(profileEntries);
+  const dominantStyle = profileEntries[0]?.style || "";
+  const dominantFamily = dominantStyle ? familyOf(dominantStyle) : "";
+  const dominantScore = Math.max(0, Number(profileEntries[0]?.score) || 0);
+  const familyEvidenceByFamily = new Map();
+  profileEntries.forEach((entry) => {
+    if (!entry.family) return;
+    familyEvidenceByFamily.set(entry.family, (familyEvidenceByFamily.get(entry.family) || 0) + Math.max(0, Number(entry.score) || 0));
+  });
   const fallbackSpirit = MUSICAL_SPIRITS[0];
   let best = fallbackSpirit;
   let bestScore = Number.NEGATIVE_INFINITY;
@@ -28818,11 +30471,29 @@ function resolveMusicalSpirit() {
   MUSICAL_SPIRITS.forEach((spirit) => {
     let score = 0;
     Object.entries(spirit.styleWeights).forEach(([style, weight]) => {
-      score += spiritSignalForStyle(style) * weight;
+      const styleKey = normalize(style || "");
+      const cleanWeight = Number(weight) || 0;
+      const directEvidence = Number(evidenceByStyle.get(styleKey) || 0);
+      const familyEvidence = Number(familyEvidenceByFamily.get(familyOf(styleKey)) || 0);
+      score += directEvidence * cleanWeight * 2.55;
+      score += familyEvidence * cleanWeight * 0.24;
+      if (!hasProfile) score += spiritSignalForStyle(styleKey) * cleanWeight;
     });
-    if (selectedStyle && spirit.styleWeights[selectedStyle]) score += spirit.styleWeights[selectedStyle] * 1.5;
-    if (currentRecommendation?.style && spirit.styleWeights[currentRecommendation.style]) score += spirit.styleWeights[currentRecommendation.style] * 1.2;
-    if (currentDiscovery?.style && spirit.styleWeights[currentDiscovery.style]) score += spirit.styleWeights[currentDiscovery.style] * 0.9;
+    const ownsDominantStyle = Boolean(dominantStyle && spirit.styleWeights[dominantStyle]);
+    const ownsDominantFamily = Boolean(
+      dominantFamily &&
+      Object.keys(spirit.styleWeights || {}).some((style) => familyOf(style) === dominantFamily)
+    );
+    if (hasProfile && dominantStyle) {
+      if (ownsDominantStyle) score += dominantScore * 4.2;
+      else if (ownsDominantFamily) score += dominantScore * 1.4;
+      else score -= dominantScore * 3.6;
+    }
+
+    const contextMultiplier = hasProfile ? 0.22 : 1.15;
+    if (selectedStyle && spirit.styleWeights[selectedStyle]) score += spirit.styleWeights[selectedStyle] * contextMultiplier;
+    if (recommendationStyle && spirit.styleWeights[recommendationStyle]) score += spirit.styleWeights[recommendationStyle] * (hasProfile ? 0.16 : 0.9);
+    if (discoveryStyle && spirit.styleWeights[discoveryStyle]) score += spirit.styleWeights[discoveryStyle] * (hasProfile ? 0.12 : 0.7);
 
     if (score > bestScore) {
       bestScore = score;
@@ -28854,16 +30525,23 @@ function spiritReviewProgress(likedSongs = totalLikedSongs()) {
 }
 
 function spiritInsightSignals(spirit, limit = 3) {
-  const selectedStyle = styleEl?.value || lastPrefs?.style || currentRecommendation?.style || "";
+  const selectedStyle = normalize(styleEl?.value || lastPrefs?.style || currentRecommendation?.style || "");
+  const recommendationStyle = normalize(currentRecommendation?.style || "");
+  const discoveryStyle = normalize(currentDiscovery?.style || "");
+  const profileEntries = spiritProfileStyleEntries(12);
+  const evidenceByStyle = styleEvidenceMap(profileEntries);
+  const hasProfile = hasConsolidatedSpiritProfile(profileEntries);
   const entries = Object.entries(spirit?.styleWeights || {}).map(([style, weight]) => {
-    const styleSignal = Math.max(0, Number(spiritSignalForStyle(style)) || 0);
-    const selectedBoost = selectedStyle === style ? Number(weight) * 0.9 : 0;
-    const currentBoost = currentRecommendation?.style === style ? Number(weight) * 0.7 : 0;
-    const discoveryBoost = currentDiscovery?.style === style ? Number(weight) * 0.45 : 0;
+    const styleKey = normalize(style || "");
+    const styleSignal = Math.max(0, Number(evidenceByStyle.get(styleKey) || spiritSignalForStyle(styleKey)) || 0);
+    const contextScale = hasProfile ? 0.18 : 1;
+    const selectedBoost = selectedStyle === styleKey ? Number(weight) * 0.9 * contextScale : 0;
+    const currentBoost = recommendationStyle === styleKey ? Number(weight) * 0.7 * contextScale : 0;
+    const discoveryBoost = discoveryStyle === styleKey ? Number(weight) * 0.45 * contextScale : 0;
     return {
-      style,
-      label: styleLabelByValue(style),
-      score: styleSignal * Number(weight || 0) + selectedBoost + currentBoost + discoveryBoost
+      style: styleKey,
+      label: styleLabelByValue(styleKey),
+      score: styleSignal * Number(weight || 0) * (hasProfile ? 1.22 : 1) + selectedBoost + currentBoost + discoveryBoost
     };
   });
   const ranked = entries
@@ -29346,6 +31024,56 @@ function setListenLinkState(linkEl, { href, enabled = true, title = "" }) {
 
 function familyOf(style) {
   return STYLE_TO_FAMILY[style] || "outros";
+}
+
+function styleFamilyLabel(style = "") {
+  const family = familyOf(normalize(style || ""));
+  const labels = {
+    psytrance: sonicTinyCopy("Família Psytrance", "Psytrance family", "Familia Psytrance"),
+    techno: sonicTinyCopy("Família Techno", "Techno family", "Familia Techno"),
+    house: sonicTinyCopy("Família House", "House family", "Familia House"),
+    dnb: sonicTinyCopy("Família DnB", "DnB family", "Familia DnB"),
+    bass_music: sonicTinyCopy("Família Bass", "Bass family", "Familia Bass"),
+    leftfield: sonicTinyCopy("Família Experimental", "Experimental family", "Familia experimental"),
+    trance: sonicTinyCopy("Família Trance", "Trance family", "Familia Trance"),
+    hard_dance: sonicTinyCopy("Família Hard Dance", "Hard dance family", "Familia Hard Dance"),
+    outros: sonicTinyCopy("Família eletrônica", "Electronic family", "Familia electrónica")
+  };
+  return labels[family] || labels.outros;
+}
+
+function setGenreSignalChip(chip, track = null) {
+  if (!chip) return;
+  const style = normalize(track?.style || "");
+  const label = style ? styleLabelByValue(style) : t("freeStyle");
+  chip.textContent = label;
+  chip.classList.add("genre-signal");
+  chip.dataset.label = sonicTinyCopy("Subgênero", "Subgenre", "Subgénero");
+  chip.dataset.family = familyOf(style);
+  chip.title = style
+    ? `${sonicTinyCopy("Subgênero tocando", "Playing subgenre", "Subgénero actual")}: ${label}`
+    : "";
+}
+
+function renderNowPlayingGenre(track = null) {
+  if (!nowPlayingGenre) return;
+  if (!track) {
+    nowPlayingGenre.classList.add("hidden");
+    nowPlayingGenre.removeAttribute("data-family");
+    return;
+  }
+  const style = normalize(track.style || "");
+  const styleLabel = style ? styleLabelByValue(style) : t("freeStyle");
+  const bpmLabel = formatBpmLine(track);
+  const energyLabel = energyLabelByValue(track.energy);
+
+  nowPlayingGenre.classList.remove("hidden");
+  nowPlayingGenre.dataset.family = familyOf(style);
+  if (nowPlayingKicker) nowPlayingKicker.textContent = sonicTinyCopy("Tocando agora", "Now playing", "Sonando ahora");
+  if (nowPlayingStyle) nowPlayingStyle.textContent = styleLabel;
+  if (nowPlayingFamily) nowPlayingFamily.textContent = styleFamilyLabel(style);
+  if (nowPlayingBpm) nowPlayingBpm.textContent = bpmLabel;
+  if (nowPlayingEnergy) nowPlayingEnergy.textContent = `${t("energyPrefix")} ${energyLabel}`;
 }
 
 function strongestLikedStyle() {
@@ -29914,10 +31642,11 @@ function personalTasteScore(track, prefs = {}) {
   const trackSignal = Number(trackPreferenceSignals.get(trackKey) || 0);
   let score = 0;
 
-  score += trackSignal * 1.3;
-  score += artistLike * 0.72;
-  score -= artistDislike * 1.05;
-  score += familyPreferenceSignal(track.style) * 0.85;
+  const learning = adaptiveLearningMultiplier();
+  score += trackSignal * 1.3 * learning;
+  score += artistLike * 0.72 * learning;
+  score -= artistDislike * 1.05 * learning;
+  score += familyPreferenceSignal(track.style) * 0.85 * Math.min(1.55, learning);
   if (prefs.style && track.style === prefs.style) {
     const selectedSignal = Number(adaptiveModel.likedStyles.get(styleKey) || 0) - Number(adaptiveModel.dislikedStyles.get(styleKey) || 0);
     score += Math.max(-2.2, Math.min(2.2, selectedSignal * 0.24));
@@ -30028,6 +31757,66 @@ function shouldPreferPrecisionCandidate(currentTrack, candidateTrack, prefs = {}
   return candidatePrecision >= currentPrecision + 1.1 && candidateScore >= currentScore - 0.75;
 }
 
+function trackRecommendationReliabilityScore(track) {
+  if (!track) return -1000000;
+  let score = 0;
+  const dynamic = isDynamicSource(track.source);
+  const trusted = isTrustedCuratedCatalogTrack(track);
+  const ambiguousBpm = bpmHasPerceptualAmbiguity(track);
+
+  if (trackHasReliableAudioPreview(track)) score += 4.2;
+  else if (trackHasDirectYouTubeVideo(track)) score += 2.2;
+  else if (trackHasDirectSoundCloudTrack(track)) score += 2;
+  else if (trackHasEmbeddableBandcampTrack(track)) score += 1.8;
+  else if (trackHasDirectBandcampTrack(track)) score += 1.1;
+  else score -= dynamic ? 5.8 : 2.4;
+
+  if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 3.4;
+  if (track.existenceVerified === true || trusted) score += 1.8;
+  if (track.existenceVerified === false && !trusted) score -= 12;
+  if (hasReliableBpmForTrust(track)) score += 1.4;
+  else if (ambiguousBpm) score -= 0.8;
+  else if (dynamic && !String(track.source || "").toLowerCase().includes("dataset")) score -= 1.9;
+  if (dynamic && !trackHasPlayablePreviewExperience(track) && !trusted) score -= 4.2;
+  return score;
+}
+
+function styleDiscoveryReadinessScore(style = "") {
+  const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
+  if (!styleKey || !STYLE_BPM_RULES[styleKey]) return 0;
+  const cacheKey = `${styleKey}::${catalog.length}`;
+  if (styleDiscoveryScoreCache.has(cacheKey)) return styleDiscoveryScoreCache.get(cacheKey);
+  if (styleDiscoveryScoreCache.size > 220) styleDiscoveryScoreCache.clear();
+  const stats = typeof styleCoverageStats === "function" ? styleCoverageStats(styleKey) : {};
+  const target = typeof styleCoverageTarget === "function" ? styleCoverageTarget(styleKey) : {};
+  const trackRatio = Math.min(1.4, (Number(stats.tracks) || 0) / Math.max(1, Number(target.tracks) || MIN_TRACKS_PER_STYLE));
+  const artistRatio = Math.min(1.4, styleCoverageArtistSignal(stats) / Math.max(1, Number(target.artists) || MIN_ARTISTS_PER_STYLE));
+  const labelRatio = Math.min(1.2, (Number(stats.labels) || 0) / Math.max(1, Number(target.labels) || MIN_LABELS_PER_STYLE));
+  const score = trackRatio * 1.15 + artistRatio * 1.35 + labelRatio * 0.5;
+  styleDiscoveryScoreCache.set(cacheKey, score);
+  return score;
+}
+
+function recommendationDiscoveryDiversityScore(track, prefs = {}) {
+  prefs = normalizeRecommendationPrefs(prefs);
+  if (!track?.style || prefs.style) return 0;
+  let score = styleDiscoveryReadinessScore(track.style) * 0.62;
+  const currentStyle = selectableSwipeStyle(currentRecommendation?.style || "");
+  const trackStyle = selectableSwipeStyle(track.style || "");
+  if (currentStyle && trackStyle) {
+    if (trackStyle === currentStyle) score -= 1.8;
+    else if (familyOf(trackStyle) !== familyOf(currentStyle)) score += 1.35;
+    else score += 0.35;
+  }
+  const exposureCount = Number(swipeStyleExposureCounts.get(trackStyle) || 0);
+  if (trackStyle && !exposureCount) score += 1.65;
+  else score -= Math.min(2.2, exposureCount * 0.42);
+  if (!adaptiveModel.likedStyles.size && !adaptiveModel.dislikedStyles.size) {
+    score += 0.55;
+  }
+  return score;
+}
+
 function findPrecisionReplacement(
   currentTrack,
   prefs = {},
@@ -30081,6 +31870,8 @@ function recommendationQualityScore(track, prefs = {}) {
   if (prefs.bpm && trackMatchesBpmPreference(track, prefs.bpm)) score += 2.1;
   if (prefs.style && track.style === prefs.style) score += 1.4;
   if (prefs.context) score += contextAffinityScore(track, prefs);
+  score += trackRecommendationReliabilityScore(track) * 0.78;
+  score += recommendationDiscoveryDiversityScore(track, prefs);
 
   if (prefs.energy) {
     const distance = energyDistance(track.energy, prefs.energy);
@@ -30093,7 +31884,8 @@ function recommendationQualityScore(track, prefs = {}) {
   else if (trackHasDirectSoundCloudTrack(track)) score += 0.95;
   else if (trackHasEmbeddableBandcampTrack(track)) score += 0.9;
   else if (trackHasDirectBandcampTrack(track)) score += 0.45;
-  else if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 1.8;
+  else if (track.previewChecked && track.previewMissing && !trackHasPlayablePreviewExperience(track)) score -= 2.8;
+  else if (!trackHasPlayablePreviewExperience(track) && isDynamicSource(track.source)) score -= 3.6;
 
   if (trackHasDirectYouTubeVideo(track)) score += 0.75;
   if (trackHasDirectSoundCloudTrack(track)) score += 0.72;
@@ -30141,7 +31933,9 @@ function recommendationScore(track, prefs) {
     score += track.vocals === prefs.vocals ? 1.45 * weights.vocals : -0.75 * weights.vocals;
   }
   if (track.previewUrl) score += 1.1;
-  if (track.previewChecked && !track.previewUrl && !trackHasPlayablePreviewExperience(track)) score -= 0.95;
+  if (trackHasPlayablePreviewExperience(track)) score += 1.15;
+  if (track.previewChecked && !track.previewUrl && !trackHasPlayablePreviewExperience(track)) score -= 1.65;
+  if (!trackHasPlayablePreviewExperience(track) && isDynamicSource(track.source) && !isTrustedCuratedCatalogTrack(track)) score -= 8.5;
   score -= previewPenaltyForTrack(track);
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 1000;
   if (track.existenceVerified === true || isTrustedCuratedCatalogTrack(track)) score += 0.8;
@@ -30152,6 +31946,8 @@ function recommendationScore(track, prefs) {
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
   score += recommendationQualityScore(track, prefs);
+  score += trackRecommendationReliabilityScore(track) * 0.45;
+  score += recommendationDiscoveryDiversityScore(track, prefs) * 0.85;
   score += clampScore(recommendationPrecisionScore(track, prefs), -8, 12) * (preferenceCount >= 2 ? 0.72 : 0.42);
   score += getAdaptiveScore(track);
   score += Math.random() * (preferenceCount ? 0.015 : 0.06);
@@ -30160,12 +31956,19 @@ function recommendationScore(track, prefs) {
 }
 
 function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtistKey = "", maxWindow = 7, scoreBand = null } = {}) {
-  const valid = scored
+  let valid = scored
     .filter((entry) => entry?.track && Number.isFinite(entry.score) && entry.score > -999999)
     .sort((a, b) => b.score - a.score);
   if (!valid.length) return null;
 
   const preferenceCount = selectedPreferenceCount(prefs);
+  const minimumReliability = preferenceCount >= 2 ? -6 : prefs?.style ? -4 : -1.5;
+  const reliableValid = valid.filter(
+    (entry) =>
+      trackRecommendationReliabilityScore(entry.track) >= minimumReliability ||
+      isTrustedCuratedCatalogTrack(entry.track)
+  );
+  if (reliableValid.length >= Math.min(3, valid.length)) valid = reliableValid;
   if (preferenceCount >= 3) return valid[0].track;
   if (preferenceCount >= 2 && valid[1] && valid[0].score - valid[1].score >= 0.65) return valid[0].track;
   if (prefs?.style && valid[1] && valid[0].score - valid[1].score >= 0.4) return valid[0].track;
@@ -30186,7 +31989,10 @@ function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtist
   const minScore = Math.min(...selectionPool.map((entry) => entry.score));
   const weightedPool = selectionPool.map((entry, index) => ({
     track: entry.track,
-    weight: Math.pow(Math.max(0.04, entry.score - minScore + 0.14), preferenceCount ? 2.2 : 1.55) / (1 + index * 0.16)
+    weight:
+      Math.pow(Math.max(0.04, entry.score - minScore + 0.14), preferenceCount ? 2.2 : 1.55) *
+      (1 + Math.max(0, Math.min(8, trackRecommendationReliabilityScore(entry.track))) * 0.055) /
+      (1 + index * 0.16)
   }));
   const totalWeight = weightedPool.reduce((sum, entry) => sum + entry.weight, 0);
   let randomCursor = Math.random() * totalWeight;
@@ -30313,7 +32119,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
 
 function recommendationMetaLine(track) {
   const bpmData = resolveBpmDisplay(track);
-  const bpmText = bpmData.exact > 0 ? `${t("bpm")} ${bpmData.exact}` : bpmData.lineText;
+  const bpmText = bpmData.reasonText || bpmData.lineText;
   return `${styleLabelByValue(track.style)} • ${bpmText} • ${energyLabelByValue(track.energy)}`;
 }
 
@@ -30368,7 +32174,7 @@ function renderSuggestionQueue(prefs = lastPrefs) {
 
 function recommendationHasStrongFit(track) {
   return (
-    hasReliableBpmForTrack(track) &&
+    hasReliableBpmForTrust(track) &&
     (Boolean(track?.previewUrl) ||
       trackHasDirectYouTubeVideo(track) ||
       trackHasDirectSoundCloudTrack(track) ||
@@ -30380,7 +32186,7 @@ function recommendationHasStrongFit(track) {
 
 function recommendationHumanReason(track, prefs = lastPrefs) {
   const bpmData = resolveBpmDisplay(track);
-  const bpm = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel");
+  const bpm = bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel");
   const style = styleLabelByValue(track?.style || prefs?.style || "");
   const energy = energyLabelByValue(track?.energy || prefs?.energy || "");
   const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
@@ -30405,15 +32211,114 @@ function recommendationHumanReason(track, prefs = lastPrefs) {
   return [reason, t("recommendationWhyFreshArtistSentence"), profileSentence].filter(Boolean).join(" ");
 }
 
+function recommendationTrustAnalysis(track, prefs = lastPrefs) {
+  if (!track) {
+    return {
+      score: 0,
+      level: "empty",
+      reason: "",
+      chip: ""
+    };
+  }
+  prefs = normalizeRecommendationPrefs(prefs);
+  const preferenceCount = selectedPreferenceCount(prefs);
+  const reliability = trackRecommendationReliabilityScore(track);
+  const sourceTrust = trackSourceTrustScore(track);
+  const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
+  const learningSignals = swipeTrainingSignalCount();
+  const hasAudioPreview = trackHasConfirmedAudioPreview(track);
+  const hasExternalPlayer = trackHasExternalPlayableFallback(track);
+  const ambiguousBpm = bpmHasPerceptualAmbiguity(track);
+  let score = 50;
+
+  if (recommendationHasStrongFit(track)) score += 12;
+  if (hasAudioPreview) score += 12;
+  else if (trackHasReliableAudioPreview(track)) score += 8;
+  else if (hasExternalPlayer) score += 5;
+  else if (track.previewChecked && track.previewMissing) score -= 16;
+  else if (isDynamicSource(track.source)) score -= 10;
+
+  if (hasReliableBpmForTrust(track)) score += 11;
+  else if (ambiguousBpm) score += 2;
+  else score -= preferenceCount >= 2 ? 12 : 7;
+  if (ambiguousBpm) score -= 8;
+  if (prefs.style && track.style === prefs.style) score += 8;
+  if (prefs.context && (Array.isArray(track.context) ? track.context : []).includes(prefs.context)) score += 5;
+  if (prefs.energy && track.energy === prefs.energy) score += 4;
+  if (track.existenceVerified === true || isTrustedCuratedCatalogTrack(track)) score += 7;
+  if (sourceTrust >= 2) score += 6;
+  else if (sourceTrust <= -1) score -= 6;
+  score += clampScore(reliability * 1.15, -11, 14);
+  score += clampScore(profileSignal * 0.58, -10, 13);
+  if (learningSignals >= 30 && profileSignal > 0.8) score += 8;
+  else if (learningSignals >= 20 && profileSignal > 0.8) score += 6;
+  else if (learningSignals >= 10 && profileSignal > 0.8) score += 4;
+  if (!hasAudioPreview && !hasExternalPlayer && !trackHasReliableAudioPreview(track)) score -= 6;
+
+  const cappedScore = ambiguousBpm ? Math.min(score, 74) : score;
+  const rounded = Math.round(Math.max(24, Math.min(98, cappedScore)));
+  const level = rounded >= 82 ? "high" : rounded >= 64 ? "medium" : "low";
+  const reasonKey = ambiguousBpm
+    ? "recommendationTrustReasonTempoAmbiguous"
+    : level === "high"
+    ? "recommendationTrustReasonHigh"
+    : level === "medium"
+      ? "recommendationTrustReasonMedium"
+      : "recommendationTrustReasonLow";
+
+  return {
+    score: rounded,
+    level,
+    reason: t(reasonKey, { count: learningSignals }),
+    chip: t("recommendationTrustChip", { score: rounded })
+  };
+}
+
+function renderRecommendationTrust(track, prefs = lastPrefs) {
+  const targets = [
+    {
+      panel: recommendationTrustPanel,
+      label: recommendationTrustLabel,
+      value: recommendationTrustValue,
+      reason: recommendationTrustReason
+    },
+    {
+      panel: topRecommendationTrustPanel,
+      label: topRecommendationTrustLabel,
+      value: topRecommendationTrustValue,
+      reason: topRecommendationTrustReason
+    }
+  ].filter((target) => target.panel);
+  if (!targets.length) return;
+  if (!track) {
+    targets.forEach(({ panel, value, reason }) => {
+      panel.classList.add("hidden");
+      if (value) value.textContent = "--%";
+      if (reason) reason.textContent = "";
+    });
+    return;
+  }
+  const trust = recommendationTrustAnalysis(track, prefs);
+  targets.forEach(({ panel, label, value, reason }) => {
+    panel.classList.remove("hidden");
+    panel.dataset.level = trust.level;
+    if (label) label.textContent = t("recommendationTrustLabel");
+    if (value) value.textContent = `${trust.score}%`;
+    if (reason) reason.textContent = trust.reason;
+  });
+}
+
 function renderRecommendationWhy(track, prefs = lastPrefs) {
   if (!recommendationWhyPanel || !recommendationWhyList) return;
   if (!track) {
     recommendationWhyPanel.classList.add("hidden");
+    renderRecommendationTrust(null, prefs);
     if (recommendationWhyText) recommendationWhyText.textContent = "";
     recommendationWhyList.innerHTML = "";
     return;
   }
   recommendationWhyPanel.classList.remove("hidden");
+  renderRecommendationTrust(track, prefs);
   if (recommendationWhyTitle) recommendationWhyTitle.textContent = t("recommendationWhyTitle");
   if (recommendationWhyText) recommendationWhyText.textContent = recommendationHumanReason(track, prefs);
   recommendationWhyList.innerHTML = "";
@@ -30427,19 +32332,21 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
   const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
   const chips = [
     t("recommendationWhyStyle", { style: styleLabelByValue(track.style || prefs?.style || "") }),
-    t("recommendationWhyBpm", { bpm: bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel") }),
+    t("recommendationWhyBpm", { bpm: bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel") }),
     t("recommendationWhyNovelty", {
       status: artistSetHasMatch(knownUnion, track.artist) ? t("recommendationWhyKnown") : t("recommendationWhyNew")
     })
   ];
   if (originLabel) chips.push(t("recommendationWhyOrigin", { origin: originLabel }));
   if (hasStrongFit) chips.push(t("recommendationWhyStrongFit"));
-  if (sourceTrust >= 2) chips.push(t("recommendationWhyTrustedSource"));
+  if (sourceTrust >= 2 && !bpmData.ambiguous) chips.push(t("recommendationWhyTrustedSource"));
   if (profileSignal >= 1.2) chips.push(t("recommendationWhyProfileSignal"));
+  chips.push({ text: recommendationTrustAnalysis(track, prefs).chip, className: "confidence" });
 
-  chips.forEach((text) => {
+  chips.forEach((item) => {
     const chip = document.createElement("span");
-    chip.className = "recommendation-why-chip";
+    const text = typeof item === "string" ? item : item?.text || "";
+    chip.className = `recommendation-why-chip ${typeof item === "string" ? "" : item?.className || ""}`.trim();
     chip.textContent = text;
     recommendationWhyList.appendChild(chip);
   });
@@ -30461,7 +32368,8 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
   const knownUnion = buildGlobalArtistExclusionSet();
   const isKnown = artistSetHasMatch(knownUnion, track.artist);
   const strongFit = recommendationHasStrongFit(track);
-  const hasPreview = trackHasPlayablePreviewExperience(track);
+  const hasAudioPreview = trackHasConfirmedAudioPreview(track);
+  const hasExternalPlayer = trackHasExternalPlayableFallback(track);
   const selectedStyle = String(prefs?.style || "").trim();
   const outsideStyle = Boolean(selectedStyle && track.style && track.style !== selectedStyle);
   const sourceTrust = trackSourceTrustScore(track);
@@ -30472,32 +32380,93 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
   badges.push(isKnown
     ? { type: "known", label: sonicTinyCopy("Ja conhecido", "Known artist", "Ya conocido") }
     : { type: "fresh", label: sonicTinyCopy("Novo no radar", "New radar", "Nuevo radar") });
+  const bpmData = resolveBpmDisplay(track);
   if (strongFit) badges.push({ type: "good", label: sonicTinyCopy("Alta compatibilidade", "Strong match", "Alta afinidad") });
-  if (hasPreview) badges.push({ type: "preview", label: sonicTinyCopy("Preview tocavel", "Playable preview", "Preview listo") });
+  if (bpmData.ambiguous) {
+    badges.push({ type: "explore", label: t("bpmAmbiguousBadge", { bpm: bpmData.perceived }) });
+  }
+  if (hasAudioPreview) {
+    badges.push({ type: "preview", label: sonicTinyCopy("Audio direto", "Direct audio", "Audio directo") });
+  } else if (hasExternalPlayer) {
+    badges.push({ type: "explore", label: sonicTinyCopy("Player externo", "External player", "Player externo") });
+  }
+  if (swipeTrainingSignalCount() > 0) {
+    badges.push({
+      type: swipeTrainingSignalCount() >= 10 ? "good" : "explore",
+      label: t("swipeLearningBadge", { count: swipeTrainingSignalCount() })
+    });
+  }
   if (outsideStyle) {
     badges.push({ type: "explore", label: sonicTinyCopy("Fora da zona segura", "Outside comfort zone", "Fuera de zona") });
   } else if (!selectedStyle) {
     badges.push({ type: "explore", label: sonicTinyCopy("Rota livre", "Open route", "Ruta libre") });
   }
-  if (sourceTrust >= 2) badges.push({ type: "good", label: sonicTinyCopy("Fonte confiavel", "Trusted source", "Fuente fiable") });
+  if (sourceTrust >= 2 && !bpmData.ambiguous) badges.push({ type: "good", label: sonicTinyCopy("Fonte confiavel", "Trusted source", "Fuente fiable") });
   return badges;
 }
 
 function recommendationMicroReason(track, prefs = lastPrefs) {
   if (!track) return "";
-  const bpmData = resolveBpmDisplay(track);
+  prefs = normalizeRecommendationPrefs(prefs || {});
   const style = styleLabelByValue(track.style || prefs?.style || "");
-  const bpm = bpmData.exact > 0 ? `${bpmData.exact} BPM` : bpmData.lineText || t("bpmUnverifiedLabel");
-  const energy = energyLabelByValue(track.energy || prefs?.energy || "");
+  const styleText = style || sonicTinyCopy("essa rota", "this lane", "esta ruta");
+  const energy = energyLabelByValue(track.energy || prefs?.energy || "").toLowerCase();
+  const energyText = energy ? sonicTinyCopy(`energia ${energy}`, `${energy} energy`, `energia ${energy}`) : sonicTinyCopy("energia equilibrada", "balanced energy", "energia equilibrada");
   const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
-  const parts = [style, bpm, energy].filter(Boolean).join(" • ");
+  const contextText = context ? context.toLowerCase() : "";
+  const knownArtists = buildGlobalArtistExclusionSet();
+  const isKnownArtist = artistSetHasMatch(knownArtists, track.artist);
+  const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
+  const sourceTrust = trackSourceTrustScore(track);
+  const strongFit = recommendationHasStrongFit(track);
+  const hasDirectAudio = trackHasConfirmedAudioPreview(track);
+  const bpmData = resolveBpmDisplay(track);
+  const pulseText = bpmData.ambiguous
+    ? sonicTinyCopy("grid tecnico, sensacao mais lenta", "a technical grid with a slower felt pulse", "grid tecnico con sensacion mas lenta")
+    : hasReliableBpmForTrack(track)
+    ? sonicTinyCopy("pulso de pista", "a locked dancefloor pulse", "pulso de pista")
+    : sonicTinyCopy("textura boa para testar", "a useful texture to test", "textura buena para probar");
+  let reason = "";
   if (currentLanguage === "en") {
-    return `Why this one: ${parts}${context ? ` for ${context}` : ""}.`;
+    if (isKnownArtist) {
+      reason = `My read: a safe pick inside your radar, with ${pulseText} to see if this lane still hits.`;
+    } else if (profileSignal >= 1.2) {
+      reason = `My read: your likes point toward this groove, with ${pulseText} and ${energyText}.`;
+    } else if (contextText) {
+      reason = `My read: it fits ${contextText} with ${pulseText}, without feeling too obvious.`;
+    } else if (strongFit || sourceTrust >= 2 || hasDirectAudio) {
+      reason = `My read: trusted signal and ${pulseText}, worth testing inside ${styleText}.`;
+    } else {
+      reason = `My read: it opens a ${styleText} route with ${energyText}, so you can decide if it lands.`;
+    }
+    return truncateByWordBoundary(reason, 154);
   }
   if (currentLanguage === "es") {
-    return `Por que esta: ${parts}${context ? ` para ${context}` : ""}.`;
+    if (isKnownArtist) {
+      reason = `Mi lectura: apuesta segura dentro de tu radar, con ${pulseText} para ver si esta ruta aun conecta.`;
+    } else if (profileSignal >= 1.2) {
+      reason = `Mi lectura: tus likes apuntan a este groove, con ${pulseText} y ${energyText}.`;
+    } else if (contextText) {
+      reason = `Mi lectura: encaja en ${contextText} con ${pulseText}, sin sentirse demasiado obvia.`;
+    } else if (strongFit || sourceTrust >= 2 || hasDirectAudio) {
+      reason = `Mi lectura: senal confiable y ${pulseText}, vale probarla dentro de ${styleText}.`;
+    } else {
+      reason = `Mi lectura: abre una ruta de ${styleText} con ${energyText}, para sentir si conecta.`;
+    }
+    return truncateByWordBoundary(reason, 154);
   }
-  return `Por que recomendei: ${parts}${context ? ` para ${context}` : ""}.`;
+  if (isKnownArtist) {
+    reason = `Minha leitura: aposta segura no seu radar, com ${pulseText} para sentir se esse caminho ainda bate.`;
+  } else if (profileSignal >= 1.2) {
+    reason = `Minha leitura: seus likes puxam para esse groove, com ${pulseText} e ${energyText}.`;
+  } else if (contextText) {
+    reason = `Minha leitura: encaixa em ${contextText} com ${pulseText}, sem virar uma escolha previsivel.`;
+  } else if (strongFit || sourceTrust >= 2 || hasDirectAudio) {
+    reason = `Minha leitura: tem fonte segura e ${pulseText}, entao vale testar dentro de ${styleText}.`;
+  } else {
+    reason = `Minha leitura: abre uma rota de ${styleText} com ${energyText}, para voce dizer se bate.`;
+  }
+  return truncateByWordBoundary(reason, 154);
 }
 
 function renderTrackCardSignals(track, prefs = lastPrefs, { saved = false } = {}) {
@@ -30613,6 +32582,7 @@ function registerRecommendationDelivery(track, prefs) {
   if (!track || !prefs) return;
   recordDailyMusicAction(track, "discovery");
   registerSeenArtist(track.artist);
+  registerSwipeStyleExposure(track.style);
   const trackKey = `${track.artist}::${track.song}`;
   const normalizedTrackKey = recommendationTrackKey(track) || normalize(trackKey);
   const normalizedTrackTitle = normalizeTitle(track.song || "");
@@ -31122,7 +33092,12 @@ function renderTopSwipeArtwork(track) {
   if (!topSwipeCard) return;
   const hasTrack = Boolean(track);
   const artist = String(track?.artist || "").trim();
-  const imageUrl = String(track?.artistImageUrl || track?.coverUrl || track?.imageUrl || "").trim();
+  const suppressArtistImage = shouldSuppressUnverifiedArtistImage(track, track?.artistImageSource || "");
+  const imageUrl = String(
+    suppressArtistImage
+      ? (track?.coverUrl || track?.imageUrl || "")
+      : (track?.artistImageUrl || track?.coverUrl || track?.imageUrl || "")
+  ).trim();
   if (topSwipeFallback) topSwipeFallback.textContent = artist ? artistInitials(artist) : "SS";
   if (!topSwipeImage) return;
   if (!hasTrack || !imageUrl) {
@@ -31179,6 +33154,16 @@ function syncQuickKnownDecision(track = currentRecommendation) {
   quickKnownActionButtons.forEach((button) => {
     const action = button.dataset.quickKnownAction || "";
     button.textContent = action === "yes" ? t("quickKnownYes") : t("quickKnownNo");
+    button.disabled = !hasTrack || Boolean(status);
+    button.classList.toggle("active", Boolean(status && status === action));
+    button.setAttribute("aria-pressed", status && status === action ? "true" : "false");
+  });
+  [
+    { button: knewDiscoveryBtn, action: "yes", label: t("quickKnownYes") },
+    { button: newDiscoveryBtn, action: "no", label: t("quickKnownNo") }
+  ].forEach(({ button, action, label }) => {
+    if (!button) return;
+    button.textContent = label;
     button.disabled = !hasTrack || Boolean(status);
     button.classList.toggle("active", Boolean(status && status === action));
     button.setAttribute("aria-pressed", status && status === action ? "true" : "false");
@@ -31256,14 +33241,14 @@ function updateSwipeFeedbackCard(track) {
   if (!hasTrack) {
     if (topSwipeTitle) topSwipeTitle.textContent = t("topSwipeEmptyTitle");
     if (topSwipeMeta) topSwipeMeta.textContent = t("topSwipeEmptyMeta");
-    if (topSwipeStyleChip) topSwipeStyleChip.textContent = t("freeStyle");
+    setGenreSignalChip(topSwipeStyleChip, null);
     if (topSwipeBpmChip) topSwipeBpmChip.textContent = t("bpm");
     if (topSwipeEnergyChip) topSwipeEnergyChip.textContent = t("freeEnergy");
     if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
     if (topSwipePassBtn) topSwipePassBtn.disabled = true;
     if (swipeTrackTitle) swipeTrackTitle.textContent = t("swipeEmptyTitle");
     if (swipeTrackMeta) swipeTrackMeta.textContent = t("swipeEmptyMeta");
-    if (swipeStyleChip) swipeStyleChip.textContent = t("freeStyle");
+    setGenreSignalChip(swipeStyleChip, null);
     if (swipeBpmChip) swipeBpmChip.textContent = t("bpm");
     if (swipeEnergyChip) swipeEnergyChip.textContent = t("freeEnergy");
     if (swipeLikeBtn) swipeLikeBtn.disabled = true;
@@ -31274,14 +33259,13 @@ function updateSwipeFeedbackCard(track) {
     return;
   }
 
-  const style = styleLabelByValue(track.style);
   const bpm = formatBpmLine(track);
   const energy = energyLabelByValue(track.energy);
   if (topSwipeTitle) topSwipeTitle.textContent = track.song || unknownTrackText;
   if (topSwipeMeta) {
     topSwipeMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
   }
-  if (topSwipeStyleChip) topSwipeStyleChip.textContent = style;
+  setGenreSignalChip(topSwipeStyleChip, track);
   if (topSwipeBpmChip) topSwipeBpmChip.textContent = bpm;
   if (topSwipeEnergyChip) topSwipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = false;
@@ -31290,7 +33274,7 @@ function updateSwipeFeedbackCard(track) {
   if (swipeTrackMeta) {
     swipeTrackMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
   }
-  if (swipeStyleChip) swipeStyleChip.textContent = style;
+  setGenreSignalChip(swipeStyleChip, track);
   if (swipeBpmChip) swipeBpmChip.textContent = bpm;
   if (swipeEnergyChip) swipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
   if (swipeLikeBtn) swipeLikeBtn.disabled = false;
@@ -31448,7 +33432,7 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
   if (adaptiveResult === true) return true;
   if (shouldExploreAcrossStyles) {
     const fromStyle = styleLabelByValue(likedTrack?.style || currentRecommendation?.style || lastPrefs?.style || "");
-    const generatedAcrossStyles = adaptiveResult === null && !explicitSwipeAnchorStyle()
+    const generatedAcrossStyles = !explicitSwipeAnchorStyle()
       ? await runSurpriseRecommendation()
       : false;
     if (generatedAcrossStyles) {
@@ -31480,6 +33464,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   const likedTrack = currentRecommendation;
   userStats.likedSongs += 1;
   registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
+  const nextMessage = appendSwipeLearningMessage(t("swipeLikedNext"));
   registerSpiritSignal(likedTrack.style, 1.25);
   playUiSfx("like");
   burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
@@ -31489,21 +33474,15 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   const followups = runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
-    eventsArtist: likedTrack.artist
+    animateBio: false,
+    loadEvents: false
   });
-  if (stageQuickKnownAdvance({
-    track: likedTrack,
-    likedTrack,
-    message: t("swipeLikedNext"),
-    positive: true
-  })) {
-    void followups.catch(() => {});
-    return true;
-  }
-  await followups;
+  pendingQuickKnownAdvance = null;
+  syncQuickKnownDecision(null);
+  void followups.catch(() => {});
   await advanceAfterSwipeFeedback({
     likedTrack,
-    message: t("swipeLikedNext"),
+    message: nextMessage,
     positive: true
   });
   return true;
@@ -31518,18 +33497,11 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
     avoidRepeatArtist: true
   });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
-  const reasonMessage = feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext");
-  if (stageQuickKnownAdvance({
-    track: rejectedTrack,
-    likedTrack: rejectedTrack,
-    avoidArtistName: rejectedTrack.artist || "",
-    message: reasonMessage,
-    positive: false
-  })) {
-    playUiSfx("dislike");
-    updateStats();
-    return true;
-  }
+  const reasonMessage = appendSwipeLearningMessage(
+    feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext")
+  );
+  pendingQuickKnownAdvance = null;
+  syncQuickKnownDecision(null);
   const generated = await advanceAfterSwipeFeedback({
     likedTrack: rejectedTrack,
     avoidArtistName: rejectedTrack.artist || "",
@@ -31656,6 +33628,7 @@ function renderRecommendation(track, prefs) {
   if (styleName) styleName.textContent = styleLabelByValue(track.style);
   if (bpmInfo) bpmInfo.textContent = formatBpmLine(track);
   if (energyInfo) energyInfo.textContent = `${t("energyPrefix")} ${energyLabelByValue(track.energy)}`;
+  renderNowPlayingGenre(track);
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${meta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${meta.duration}`;
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
@@ -31708,7 +33681,7 @@ function renderRecommendation(track, prefs) {
     enabled: bandcampEnabled,
     title: bandcampEnabled ? "" : t("bandcampUnverified")
   });
-  if (knownArtistPrompt) knownArtistPrompt.classList.remove("hidden");
+  if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   renderTrackRating(track);
   updateSwipeFeedbackCard(track);
@@ -31763,6 +33736,7 @@ async function renderPreview(track) {
   const displayLabel = sanitizeLabel(track.label, track.artist, track.song);
   if (bpmInfo) bpmInfo.textContent = formatBpmLine(track);
   if (energyInfo) energyInfo.textContent = `${t("energyPrefix")} ${energyLabelByValue(track.energy)}`;
+  renderNowPlayingGenre(track);
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${refreshedMeta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${refreshedMeta.duration}`;
   if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${refreshedMeta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
@@ -31882,6 +33856,8 @@ async function renderPreview(track) {
     }
     listeningPrompt.classList.remove("hidden");
   }
+  renderTrackCardSignals(track, lastPrefs || {});
+  renderRecommendationTrust(track, lastPrefs || {});
 }
 
 function renderDiscovery(discovery) {
@@ -32970,6 +34946,8 @@ function selectQuizOption(optionIndex) {
 }
 
 function resolveFavoriteStyleLabel() {
+  const consolidatedStyle = dominantSpiritProfileStyleKey();
+  if (consolidatedStyle) return styleLabelByValue(consolidatedStyle);
   const topLikedStyle = [...adaptiveModel.likedStyles.entries()]
     .sort((a, b) => b[1] - a[1])
     .find(([, score]) => score > 0);
@@ -33218,15 +35196,62 @@ function backfillLikedTrackHistoryFromSignals(limit = LIKED_TRACK_HISTORY_LIMIT)
     .filter(Boolean);
 }
 
+function backfillDislikedTrackHistoryFromSignals(limit = LIKED_TRACK_HISTORY_LIMIT) {
+  const candidates = new Map();
+  const pushCandidate = (key, score, source) => {
+    const normalizedKey = normalize(key || "");
+    if (!normalizedKey) return;
+    const track = trackFromRecommendationKey(normalizedKey);
+    if (!track) return;
+    const current = candidates.get(normalizedKey);
+    const nextScore = Number(score) || 0;
+    if (current && current.score >= nextScore) return;
+    candidates.set(normalizedKey, { track, score: nextScore, source });
+  };
+
+  trackPreferenceSignals.forEach((signal, key) => {
+    const score = Number(signal) || 0;
+    if (score <= -0.55) pushCandidate(key, Math.abs(score) * 3, "negative_signal");
+  });
+  trackRatings.forEach((stars, key) => {
+    const value = Math.round(Number(stars) || 0);
+    if (value > 0 && value <= 2) pushCandidate(key, (3 - value) * 2.4, `rating_${value}`);
+  });
+  trackRatingSignals.forEach((signal, key) => {
+    const score = Number(signal) || 0;
+    if (score <= -0.55) pushCandidate(key, Math.abs(score) * 3.4, "rating_signal");
+  });
+
+  return Array.from(candidates.values())
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((item) => likedTrackHistoryEntry(item.track, item.source, ""))
+    .filter(Boolean);
+}
+
 function rememberLikedTrack(track, source = "liked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  removeDislikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
   likedTrackHistory = [
     entry,
     ...likedTrackHistory.filter((item) => likedTrackKeyFromEntry(item) !== entry.key)
   ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
   renderLikedTrackHistory();
+  renderDislikedTrackHistory();
   queueSocialSync("liked_track");
+}
+
+function rememberDislikedTrack(track, source = "disliked") {
+  const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
+  if (!entry) return;
+  removeLikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
+  dislikedTrackHistory = [
+    entry,
+    ...dislikedTrackHistory.filter((item) => likedTrackKeyFromEntry(item) !== entry.key)
+  ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
+  renderLikedTrackHistory();
+  renderDislikedTrackHistory();
 }
 
 function likedTrackDateLabel(value = "") {
@@ -33342,6 +35367,106 @@ function clearLikedTrackHistory() {
   saveProgress();
   queueSocialSync("profile");
   showToast(t("summaryLikedTracksCleared"));
+}
+
+function dislikedTrackDateLabel(value = "") {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return t("summaryDislikedTrackSaved");
+  const formatted = new Intl.DateTimeFormat(currentLocale(), {
+    day: "2-digit",
+    month: "short"
+  }).format(date);
+  return t("summaryDislikedTrackSavedAt", { date: formatted });
+}
+
+function renderDislikedTrackHistory() {
+  if (!summaryDislikedTracksList) return;
+  summaryDislikedTracksList.innerHTML = "";
+  if (summaryDislikedTracksClearBtn) summaryDislikedTracksClearBtn.disabled = dislikedTrackHistory.length <= 0;
+
+  if (!dislikedTrackHistory.length) {
+    const empty = document.createElement("p");
+    empty.className = "liked-track-empty muted";
+    empty.textContent = t("summaryDislikedTracksEmpty");
+    summaryDislikedTracksList.appendChild(empty);
+    return;
+  }
+
+  dislikedTrackHistory.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
+    const item = document.createElement("article");
+    item.className = "liked-track-item is-disliked";
+
+    const body = document.createElement("div");
+    body.className = "liked-track-body";
+
+    const title = document.createElement("h5");
+    title.className = "liked-track-title";
+    title.textContent = formatSummaryTrackName(entry.song || "") || entry.song || t("summaryNoData");
+    body.appendChild(title);
+
+    const meta = document.createElement("p");
+    meta.className = "liked-track-meta";
+    meta.textContent = likedTrackMetaParts(entry).join(" • ");
+    body.appendChild(meta);
+
+    const saved = document.createElement("p");
+    saved.className = "liked-track-date";
+    saved.textContent = dislikedTrackDateLabel(entry.likedAt);
+    body.appendChild(saved);
+
+    const actions = document.createElement("div");
+    actions.className = "liked-track-actions";
+    [
+      { label: t("summaryLikedTrackOpenSpotify"), url: entry.spotifyUrl },
+      { label: t("summaryLikedTrackOpenYoutube"), url: entry.youtubeUrl },
+      { label: t("summaryLikedTrackOpenSoundcloud"), url: entry.soundcloudUrl }
+    ].forEach((linkData) => {
+      const url = safeExternalUrl(linkData.url);
+      if (!url) return;
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = linkData.label;
+      actions.appendChild(link);
+    });
+
+    const removeButton = document.createElement("button");
+    removeButton.className = "liked-track-remove";
+    removeButton.type = "button";
+    removeButton.dataset.dislikedTrackRemove = "1";
+    removeButton.dataset.dislikedTrackKey = entry.key;
+    removeButton.textContent = t("summaryDislikedTrackRemove");
+    removeButton.setAttribute("aria-label", t("summaryDislikedTrackRemoveAria", {
+      song: entry.song,
+      artist: entry.artist
+    }));
+    actions.appendChild(removeButton);
+
+    item.appendChild(body);
+    item.appendChild(actions);
+    summaryDislikedTracksList.appendChild(item);
+  });
+}
+
+function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
+  const normalizedKey = normalize(trackKey || "");
+  if (!normalizedKey) return false;
+  const before = dislikedTrackHistory.length;
+  dislikedTrackHistory = dislikedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
+  if (dislikedTrackHistory.length === before) return false;
+  if (options.render !== false) renderDislikedTrackHistory();
+  if (options.save !== false) saveProgress();
+  if (!options.silent) showToast(t("summaryDislikedTrackRemoved"));
+  return true;
+}
+
+function clearDislikedTrackHistory() {
+  if (!dislikedTrackHistory.length) return;
+  dislikedTrackHistory = [];
+  renderDislikedTrackHistory();
+  saveProgress();
+  showToast(t("summaryDislikedTracksCleared"));
 }
 
 function socialSetStatus(message = "", tone = "") {
@@ -33846,6 +35971,7 @@ function updateStats() {
   renderSocialUi({ preserveStatus: true });
   if (summaryAchievementText) summaryAchievementText.textContent = resolveFiveStarAchievementText();
   renderLikedTrackHistory();
+  renderDislikedTrackHistory();
   renderSummaryTags(summaryFiveStarTracks, fiveStarTracks, t("summaryEmptyFiveStarTracks"));
   renderSummaryTags(summaryKnownArtists, knownArtistsTop, t("summaryEmptyKnown"));
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
@@ -35194,6 +37320,11 @@ bind(voiceMiniPresetGrid, "click", (event) => {
   if (!target) return;
   applyVoiceMiniPreset(String(target.getAttribute("data-voice-mini-preset") || "techno"));
 });
+bind(voiceMiniMorphGrid, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-voice-mini-morph]") : null;
+  if (!target) return;
+  applyVoiceMiniMorph(String(target.getAttribute("data-voice-mini-morph") || "floor"));
+});
 bind(voiceStepSequencer, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-voice-step-kind][data-voice-step-index]") : null;
   if (!target) return;
@@ -35338,7 +37469,7 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    showAuthScreen();
+    startLocalProfileFlow({ preferStored: true });
   });
 });
 
@@ -35350,6 +37481,9 @@ bind(authGuestBtn, "click", continueWithoutLogin);
 bind(authTestUserBtn, "click", testAsNewUser);
 bind(authGoogleBtn, "click", loginWithGoogle);
 bind(authAppleBtn, "click", loginWithApple);
+bind(welcomeImportProfileBtn, "click", () => {
+  if (profileBackupImportInput) profileBackupImportInput.click();
+});
 bind(profileBackupExportBtn, "click", exportProfileBackup);
 bind(profileBackupImportBtn, "click", () => {
   if (profileBackupImportInput) profileBackupImportInput.click();
@@ -35391,6 +37525,15 @@ bind(summaryLikedTracksList, "click", (event) => {
 });
 bind(summaryLikedTracksClearBtn, "click", () => {
   clearLikedTrackHistory();
+});
+bind(summaryDislikedTracksList, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-disliked-track-remove]") : null;
+  if (!target) return;
+  event.preventDefault();
+  removeDislikedTrackFromHistory(target.dataset.dislikedTrackKey || "");
+});
+bind(summaryDislikedTracksClearBtn, "click", () => {
+  clearDislikedTrackHistory();
 });
 bind(summaryShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram({ triggerButton: summaryShareInstagramBtn });
@@ -35869,7 +38012,7 @@ bind(previewLikeBtn, "click", async () => {
     void listeningPrompt.offsetWidth;
     listeningPrompt.classList.add("celebrate");
   }
-  if (feedbackMessage) feedbackMessage.textContent = t("prioritizeSimilar");
+  if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("prioritizeSimilar"));
   playUiSfx("like");
   showToast(t("toastShowMoreLikeThis"));
   markCurrentTrackSaved(currentRecommendation);
@@ -35880,18 +38023,28 @@ bind(previewLikeBtn, "click", async () => {
   });
 });
 
-bind(previewDislikeBtn, "click", async () => {
+async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
   if (!currentRecommendation || !lastPrefs) return;
+  const rejectedTrack = currentRecommendation;
   userStats.skipped += 1;
-  const feedbackReason = registerTrackFeedback(currentRecommendation, false, {
-    source: "preview_dislike",
-    avoidRepeatArtist: true
+  const isPreviewIssue = reason === "preview_issue";
+  if (isPreviewIssue) {
+    rejectedTrack.previewChecked = true;
+    rejectedTrack.previewMissing = true;
+    rejectedTrack.previewUrl = "";
+  }
+  const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
+    source,
+    reason: isPreviewIssue ? "preview_issue" : reason,
+    avoidRepeatArtist: !isPreviewIssue
   });
-  lastRejectedTrackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
+  lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
+  renderTrackCardSignals(rejectedTrack, lastPrefs);
+  renderRecommendationTrust(rejectedTrack, lastPrefs);
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: lastRejectedTrackKey,
-    avoidArtistName: currentRecommendation?.artist || ""
+    avoidArtistName: isPreviewIssue ? "" : rejectedTrack?.artist || ""
   });
   if (!generated) {
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -35899,19 +38052,36 @@ bind(previewDislikeBtn, "click", async () => {
     return;
   }
   const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
-  const reasonMessage = feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swappedNow");
+  const reasonMessage = appendSwipeLearningMessage(
+    feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swappedNow")
+  );
   if (feedbackMessage) feedbackMessage.textContent = previewDislikeFallback || reasonMessage;
   playUiSfx("dislike");
   if (!previewDislikeFallback) {
     showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastSwapped"));
   }
   updateStats();
+}
+
+bind(previewIssueBtn, "click", async () => {
+  await swapAfterPreviewFeedback({
+    reason: "preview_issue",
+    source: "preview_issue_button",
+    triggerEl: previewIssueBtn
+  });
+});
+
+bind(previewDislikeBtn, "click", async () => {
+  await swapAfterPreviewFeedback({
+    source: "preview_dislike",
+    triggerEl: previewDislikeBtn
+  });
 });
 
 bind(noveltyLikedBtn, "click", async () => {
   if (!currentRecommendation) return;
   userStats.likedSongs += 1;
-  registerTrackFeedback(currentRecommendation, true);
+  registerTrackFeedback(currentRecommendation, true, { source: "novelty_like" });
   registerSpiritSignal(currentRecommendation.style, 1.1);
   updateStats();
   if (knownArtistPrompt) {
@@ -35920,7 +38090,7 @@ bind(noveltyLikedBtn, "click", async () => {
     knownArtistPrompt.classList.add("celebrate");
   }
   if (feedbackMessage) {
-    feedbackMessage.textContent = t("celebrationActivated", { song: currentRecommendation.song });
+    feedbackMessage.textContent = appendSwipeLearningMessage(t("celebrationActivated", { song: currentRecommendation.song }));
   }
   playUiSfx("like");
   burstConfetti(noveltyLikedBtn);
@@ -35952,7 +38122,9 @@ bind(noveltyNotYetBtn, "click", async () => {
   }
   const noveltyNotYetFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
-    feedbackMessage.textContent = noveltyNotYetFallback || (feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("refinedAfterNo"));
+    feedbackMessage.textContent = noveltyNotYetFallback || appendSwipeLearningMessage(
+      feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("refinedAfterNo")
+    );
   }
   playUiSfx("dislike");
   if (!noveltyNotYetFallback) {
@@ -35985,6 +38157,12 @@ bind(swipeHeroSurpriseBtn, "click", async () => {
 });
 
 bind(swipeStyleRail, "click", async (event) => {
+  const toggle = event.target instanceof Element ? event.target.closest("[data-swipe-style-toggle]") : null;
+  if (toggle) {
+    swipeStyleRailExpanded = !swipeStyleRailExpanded;
+    renderSwipeStyleRail();
+    return;
+  }
   const target = event.target instanceof Element ? event.target.closest("[data-swipe-style]") : null;
   if (!target) return;
   const style = String(target.getAttribute("data-swipe-style") || "").trim();
@@ -36062,9 +38240,9 @@ bind(window, "pointercancel", (event) => {
 bind(likeSongBtn, "click", async () => {
   if (!currentRecommendation) return;
   userStats.likedSongs += 1;
-  registerTrackFeedback(currentRecommendation, true);
+  registerTrackFeedback(currentRecommendation, true, { source: "button_like" });
   registerSpiritSignal(currentRecommendation.style, 1.25);
-  if (feedbackMessage) feedbackMessage.textContent = t("songAddedProfile", { song: currentRecommendation.song });
+  if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("songAddedProfile", { song: currentRecommendation.song }));
   playUiSfx("like");
   burstConfetti(likeSongBtn, ["#6effdc", "#7de0ff", "#ffd07d"]);
   showToast(t("toastSongLiked"));
@@ -36079,10 +38257,11 @@ bind(likeSongBtn, "click", async () => {
 bind(likeArtistBtn, "click", async () => {
   if (!currentRecommendation) return;
   userStats.likedArtists += 1;
+  recordSwipeTrainingSignal({ source: "artist_like" });
   boost(adaptiveModel.likedArtists, currentRecommendation.artist, 1.4);
   registerTrackPreferenceSignal(currentRecommendation, 0.56);
   registerSpiritSignal(currentRecommendation.style, 1);
-  if (feedbackMessage) feedbackMessage.textContent = t("artistFavorited", { artist: currentRecommendation.artist });
+  if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("artistFavorited", { artist: currentRecommendation.artist }));
   playUiSfx("like");
   showToast(t("toastArtistSaved"));
   updateStats();
@@ -36131,9 +38310,10 @@ bind(likeDiscoveryBtn, "click", async () => {
     return;
   }
   userStats.likedDiscoveries += 1;
+  recordSwipeTrainingSignal({ source: "discovery_like" });
   registerDiscoveredArtist(currentDiscovery.name);
   registerSpiritSignal(currentDiscovery.style, 0.95);
-  if (feedbackMessage) feedbackMessage.textContent = t("likedDiscovery", { artist: currentDiscovery.name });
+  if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("likedDiscovery", { artist: currentDiscovery.name }));
   playUiSfx("like");
   burstConfetti(likeDiscoveryBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
   showToast(t("toastDiscoveryLiked"));
@@ -36178,7 +38358,9 @@ bind(skipBtn, "click", async () => {
   }
   const skipFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
-    feedbackMessage.textContent = skipFallback || (feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("skipAdjusted"));
+    feedbackMessage.textContent = skipFallback || appendSwipeLearningMessage(
+      feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("skipAdjusted")
+    );
   }
   playUiSfx("dislike");
   if (!skipFallback) {
@@ -36215,35 +38397,38 @@ bind(voicePadClapBtn, "click", () => triggerVoiceDawPad("clap"));
 bind(voicePadSynthBtn, "click", () => triggerVoiceDawPad("synth"));
 bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
 
-syncDiscoveryFromSeeds();
-loadDynamicCatalogCache();
-injectLocalTrackSeedBoost();
-injectSoundCloudSupplementalSeeds();
-ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
-normalizeTrustedSlambientCatalog();
-sanitizeCatalogByStyleRules();
-Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
-dedupeCatalogByTrackKey();
-saveDynamicCatalogCache();
-void hydrateExternalDatasetPackInBackground();
-window.neonpulseCoverageReport = buildCoverageReport;
-window.neonpulseCoverageGaps = () => buildCoverageReport().filter((row) => !row.healthy);
-window.neonpulseGenreAudit = buildCatalogGenreAudit;
-window.neonpulseGenreAuditSummary = () => {
-  const report = buildCatalogGenreAudit({ sampleLimit: 0 });
-  const { sample, ...summary } = report;
-  return summary;
-};
-loadLanguage();
-void initSocialMvp();
-void refreshDailyNews({ silent: true, live: false });
-bootstrapAudio();
-showIntroScreen();
-updateWeightLabels();
-applyVoiceMiniPreset("techno");
-updateVoiceLabUi();
-updateSwipeFeedbackCard(currentRecommendation);
-renderSwipeStyleRail();
-bindPreferenceAutosave();
-ensureAllButtonsHaveAction();
-applyGenreVibeTheme("", { force: true });
+const freshTestResetPending = consumeFreshTestResetParam();
+if (!freshTestResetPending) {
+  syncDiscoveryFromSeeds();
+  loadDynamicCatalogCache();
+  injectLocalTrackSeedBoost();
+  injectSoundCloudSupplementalSeeds();
+  ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
+  normalizeTrustedSlambientCatalog();
+  sanitizeCatalogByStyleRules();
+  Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
+  dedupeCatalogByTrackKey();
+  saveDynamicCatalogCache();
+  void hydrateExternalDatasetPackInBackground();
+  window.neonpulseCoverageReport = buildCoverageReport;
+  window.neonpulseCoverageGaps = () => buildCoverageReport().filter((row) => !row.healthy);
+  window.neonpulseGenreAudit = buildCatalogGenreAudit;
+  window.neonpulseGenreAuditSummary = () => {
+    const report = buildCatalogGenreAudit({ sampleLimit: 0 });
+    const { sample, ...summary } = report;
+    return summary;
+  };
+  loadLanguage();
+  void initSocialMvp();
+  void refreshDailyNews({ silent: true, live: false });
+  bootstrapAudio();
+  showIntroScreen();
+  updateWeightLabels();
+  applyVoiceMiniPreset("techno");
+  updateVoiceLabUi();
+  updateSwipeFeedbackCard(currentRecommendation);
+  renderSwipeStyleRail();
+  bindPreferenceAutosave();
+  ensureAllButtonsHaveAction();
+  applyGenreVibeTheme("", { force: true });
+}

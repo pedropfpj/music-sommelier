@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v6";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v7";
+const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v10-coherent-profile";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v9";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -189,18 +189,24 @@ module.exports = async function handler(req, res) {
 
   const humanEntityBrief = spiritEntityBrief(body);
   const dominantStyles = trimText(body.dominantStyles, 220);
+  const characterRegeneration = body.forceRegenerate === true || body.characterRegeneration === true;
+  const characterReplacementInstruction = characterRegeneration
+    ? "USER REJECTED THE PREVIOUS CHARACTER: this regeneration must create a different fictional adult person. Do not keep the same face, bust, head shape, hair, apparent presentation, skin tone, body silhouette, posture, expression, or character identity. Preserve the same musical spirit/archetype, but replace the person."
+    : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: produce a photorealistic, cinematic, editorial bust-up or chest-up portrait of a fictional adult human musical-spirit entity. It must read instantly as a charismatic real human presence, not as an avatar or abstract symbol.",
+    "QUALITY GATE: produce a photorealistic, cinematic, editorial bust-up or chest-up portrait of a fictional adult human musical-spirit entity. It must read instantly as a charismatic real human presence, but elevated: spiritual, beautiful, evolved, luminous, and subtly stylized with premium animated-film realism and refined painterly polish. Not a plain passport-photo portrait, not an avatar or abstract symbol.",
+    characterReplacementInstruction,
     `Spirit-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
     "The app will add all text, stats, frame, and UI later. Generate only the central artwork; no typography, captions, numbers, logos, watermarks, borders, or UI panels.",
-    "The figure must have visible face, head, neck, shoulders, and upper torso; believable warm eyes; natural skin detail with pores and subtle asymmetry; expressive brow and mouth; cinematic lighting; realistic fabric/material detail; and a music-reactive aura tied to the spirit brief.",
+    "The figure must have visible face, head, neck, shoulders, and upper torso; believable warm eyes; natural skin detail with pores and subtle asymmetry; expressive brow and mouth; cinematic lighting; realistic fabric/material detail; and a music-reactive sacred/electronic aura tied to the spirit brief.",
     "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, bass should feel physical and pressure-driven, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
-    "Vary the human design across generations: generate adult male and adult female bust variants when seeds change, with occasional androgynous adult variants; skin tone, heritage-inspired styling, hair, clothes, accessories, gaze, charisma, and emotional vibe should not repeat mechanically.",
-    "Strict negative style: not mask-like, not mannequin-like, not plastic, not blank stare, not cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic fantasy character, not generic stock portrait, not a literal DJ photo.",
+    "Vary the human design across generations: generate adult male and adult female bust variants when seeds change, with occasional androgynous adult variants; skin tone, heritage-inspired styling, face shape, hair, clothes, body/bust silhouette, accessories, gaze, charisma, and emotional vibe should not repeat mechanically.",
+    characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
+    "Strict negative style: not mask-like, not mannequin-like, not plastic, not blank stare, not childish cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic fantasy character, not generic stock portrait, not a literal DJ photo.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
-    "Make the entity feel premium, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
+    "Make the entity feel premium, very beautiful, spiritually evolved, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
     prompt
   ].filter(Boolean).join(" ");
 
@@ -227,6 +233,8 @@ module.exports = async function handler(req, res) {
       spiritName: trimText(body.spiritName, 160),
       milestoneLikes: Math.max(0, Number(body.milestoneLikes) || 0),
       promptVersion: trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80),
+      characterRegeneration,
+      regenerationReason: trimText(body.regenerationReason, 120),
       profileSignature: trimText(body.profileSignature, 120),
       language: trimText(body.language, 8),
       store: hasDurableStore() ? "durable" : "memory"
