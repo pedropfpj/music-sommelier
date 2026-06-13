@@ -12307,14 +12307,22 @@ iframe {
 }
 
 .spirit-collectible-image {
-  filter: saturate(1.1) contrast(1.04);
+  filter: brightness(1.08) saturate(1.16) contrast(1.04);
   image-rendering: auto;
 }
 
 .spirit-collectible-details {
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(166, 236, 255, 0.22);
+  border-left-color: rgba(137, 255, 222, 0.58);
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(119, 243, 219, 0.09), rgba(119, 152, 255, 0.08)),
+    rgba(4, 11, 28, 0.46);
   color: rgba(240, 249, 255, 0.96);
   font-size: clamp(1.02rem, 2.9vw, 1.14rem);
   line-height: 1.58;
+  text-shadow: 0 1px 14px rgba(92, 224, 255, 0.14);
 }
 
 @media (max-width: 620px) {

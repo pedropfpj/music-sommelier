@@ -5739,8 +5739,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v30";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v11-electronic-bust";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v31";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v12-luminous-entity";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -14753,9 +14753,9 @@ const I18N = {
     spiritLoreSignatureKicker: "Assinatura",
     spiritLoreWhyKicker: "Por que atrai",
     spiritLoreNextKicker: "Próxima busca",
-    spiritLoreSignatureTitle: "Seu DNA sonoro",
-    spiritLoreWhyTitle: "O que esse som entrega",
-    spiritLoreNextTitle: "Como explorar melhor",
+    spiritLoreSignatureTitle: "Quem é esse espírito",
+    spiritLoreWhyTitle: "Por que ele apareceu",
+    spiritLoreNextTitle: "Como evoluir a leitura",
     spiritSpotlightTitle: "Faixa do espírito",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
     spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
@@ -14766,7 +14766,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte bem diferente para criar um card estático com seu espírito e status.",
     spiritCollectibleHintLocal: "Sem depender da API: gero um card local/offline com personagem, busto, expressão e composição derivados do seu espírito. No Vercel, a IA premium pode criar uma entidade espectral mais bonita e realista.",
     spiritCollectibleHintLocalReady: "Arte local/offline criada. Ela muda personagem, busto, expressão e composição a cada nova geração, mesmo sem API de imagem.",
-    spiritCollectibleHintApi: "Arte premium por IA: entidade musical espectral, adulta, realista e levemente cartunesca, com pele fantasma, aura, roupa, acessórios e atmosfera derivados do seu espírito musical. Ao regenerar, muda personagem, busto e expressão.",
+    spiritCollectibleHintApi: "Arte premium por IA: entidade musical espectral, adulta, futurista e levemente cartunesca. A pele pode variar entre azul, verde, rosa, vermelho, amarelo, violeta ou opalina, com luz mais clara no rosto, roupa eletrônica, acessórios e aura derivados do seu gosto. Ao regenerar, muda personagem, busto e expressão.",
     spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
@@ -15482,9 +15482,9 @@ const I18N = {
     spiritLoreSignatureKicker: "Signature",
     spiritLoreWhyKicker: "Why it pulls you in",
     spiritLoreNextKicker: "Next search",
-    spiritLoreSignatureTitle: "Your sonic DNA",
-    spiritLoreWhyTitle: "What this sound gives you",
-    spiritLoreNextTitle: "How to explore it",
+    spiritLoreSignatureTitle: "Who this spirit is",
+    spiritLoreWhyTitle: "Why it appeared",
+    spiritLoreNextTitle: "How to evolve the reading",
     spiritSpotlightTitle: "Spirit track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
     spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
@@ -15495,7 +15495,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate a very different artwork to build a static card with your spirit and status.",
     spiritCollectibleHintLocal: "No API required: I generate a local/offline card with a character, bust, expression, and composition derived from your spirit. On Vercel, premium AI can create a more beautiful realistic spectral entity.",
     spiritCollectibleHintLocalReady: "Local/offline artwork created. It changes character, bust, expression, and composition on every new generation, even without the image API.",
-    spiritCollectibleHintApi: "Premium AI artwork: a realistic, slightly cartooned adult spectral musical entity with ghost skin, aura, wardrobe, accessories, and atmosphere derived from your musical spirit. Regeneration changes character, bust, and expression.",
+    spiritCollectibleHintApi: "Premium AI artwork: a futuristic, slightly cartooned adult spectral musical entity. Skin may shift through blue, green, pink, red, yellow, violet, or opal tones, with a brighter face light, electronic wardrobe, accessories, and aura derived from your taste. Regeneration changes character, bust, and expression.",
     spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
@@ -16208,9 +16208,9 @@ const I18N = {
     spiritLoreSignatureKicker: "Firma",
     spiritLoreWhyKicker: "Por qué atrae",
     spiritLoreNextKicker: "Próxima búsqueda",
-    spiritLoreSignatureTitle: "Tu ADN sonoro",
-    spiritLoreWhyTitle: "Qué entrega este sonido",
-    spiritLoreNextTitle: "Cómo explorarlo mejor",
+    spiritLoreSignatureTitle: "Quién es este espíritu",
+    spiritLoreWhyTitle: "Por qué apareció",
+    spiritLoreNextTitle: "Cómo evolucionar la lectura",
     spiritSpotlightTitle: "Pista del espíritu",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
     spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
@@ -16221,7 +16221,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte muy diferente para crear un card estático con tu espíritu y estado.",
     spiritCollectibleHintLocal: "Sin depender de la API: genero un card local/offline con personaje, busto, expresión y composición derivados de tu espíritu. En Vercel, la IA premium puede crear una entidad espectral más bella y realista.",
     spiritCollectibleHintLocalReady: "Arte local/offline creada. Cambia personaje, busto, expresión y composición en cada nueva generación, incluso sin API de imagen.",
-    spiritCollectibleHintApi: "Arte premium con IA: entidad musical espectral, adulta, realista y levemente caricaturizada, con piel fantasma, aura, ropa, accesorios y atmósfera derivados de tu espíritu musical. Al regenerar, cambia personaje, busto y expresión.",
+    spiritCollectibleHintApi: "Arte premium con IA: entidad musical espectral, adulta, futurista y levemente caricaturizada. La piel puede variar entre azul, verde, rosa, rojo, amarillo, violeta u opalina, con luz más clara en el rostro, ropa electrónica, accesorios y aura derivados de tu gusto. Al regenerar, cambia personaje, busto y expresión.",
     spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
@@ -27359,6 +27359,123 @@ function resolveSpiritNarrativeProfile(spirit) {
   };
 }
 
+function spiritProfileStylesLine(profile = {}) {
+  const topStyles = Array.isArray(profile.topStyles) ? profile.topStyles.filter(Boolean) : [];
+  return topStyles.length ? topStyles.join(" • ") : profile.dominantStyle || t("freeStyle");
+}
+
+function spiritPersonalityText(profile = {}) {
+  const family = familyOf(profile.dominantStyleKey);
+  const copy = {
+    pt: {
+      psytrance: "Personalidade do gosto: intuitiva, ritualística e curiosa; prefere viagens longas, tensão que se abre aos poucos e sensação de transe.",
+      techno: "Personalidade do gosto: precisa, paciente e arquitetônica; gosta de repetição inteligente, pressão controlada e recompensa gradual.",
+      house: "Personalidade do gosto: social, solar e corporal; busca groove, calor de pista e movimento que parece natural antes de parecer técnico.",
+      dnb: "Personalidade do gosto: rápida, alerta e fluida; gosta de contraste, velocidade, subgrave e energia que corre sem perder controle.",
+      bass_music: "Personalidade do gosto: física, direta e curiosa por impacto; procura peso, textura, viradas e surpresa no corpo.",
+      leftfield: "Personalidade do gosto: observadora, imaginativa e pouco óbvia; valoriza textura, detalhe e ideias que demoram alguns segundos para revelar sentido.",
+      hard_dance: "Personalidade do gosto: intensa, frontal e catártica; prefere kick forte, euforia e liberação de energia sem muita volta.",
+      hybrid: "Personalidade do gosto: híbrida, seletiva e sensorial; compara textura, pulso e clima antes de decidir se uma faixa merece ficar."
+    },
+    en: {
+      psytrance: "Taste personality: intuitive, ritual-minded, and curious; it favors long journeys, tension that opens slowly, and trance states.",
+      techno: "Taste personality: precise, patient, and architectural; it likes intelligent repetition, controlled pressure, and gradual payoff.",
+      house: "Taste personality: social, warm, and body-led; it looks for groove, dancefloor heat, and motion that feels natural before it feels technical.",
+      dnb: "Taste personality: fast, alert, and fluid; it enjoys contrast, speed, sub-bass, and energy that moves without losing control.",
+      bass_music: "Taste personality: physical, direct, and impact-curious; it looks for weight, texture, turns, and body-level surprise.",
+      leftfield: "Taste personality: observant, imaginative, and less obvious; it values texture, detail, and ideas that reveal themselves after a few seconds.",
+      hard_dance: "Taste personality: intense, frontal, and cathartic; it wants strong kicks, euphoria, and energy release without much hesitation.",
+      hybrid: "Taste personality: hybrid, selective, and sensory; it compares texture, pulse, and mood before deciding whether a track should stay."
+    },
+    es: {
+      psytrance: "Personalidad del gusto: intuitiva, ritual y curiosa; prefiere viajes largos, tensión que se abre poco a poco y sensación de trance.",
+      techno: "Personalidad del gusto: precisa, paciente y arquitectónica; disfruta repetición inteligente, presión controlada y recompensa gradual.",
+      house: "Personalidad del gusto: social, cálida y corporal; busca groove, calor de pista y movimiento que se siente natural antes que técnico.",
+      dnb: "Personalidad del gusto: rápida, alerta y fluida; disfruta contraste, velocidad, subgrave y energía que corre sin perder control.",
+      bass_music: "Personalidad del gusto: física, directa y curiosa por el impacto; busca peso, textura, giros y sorpresa en el cuerpo.",
+      leftfield: "Personalidad del gusto: observadora, imaginativa y poco obvia; valora textura, detalle e ideas que tardan unos segundos en revelar sentido.",
+      hard_dance: "Personalidad del gusto: intensa, frontal y catártica; prefiere kick fuerte, euforia y liberación de energía sin demasiada vuelta.",
+      hybrid: "Personalidad del gusto: híbrida, selectiva y sensorial; compara textura, pulso y clima antes de decidir si una pista se queda."
+    }
+  };
+  const languageCopy = copy[currentLanguage] || copy.pt;
+  return languageCopy[family] || languageCopy.hybrid;
+}
+
+function spiritIdentityText(spirit, spiritText = {}, profile = resolveSpiritNarrativeProfile(spirit)) {
+  const name = spiritText?.name || spiritText?.archetype || profile.dominantStyle || t("freeStyle");
+  const archetype = spiritText?.archetype || profile.dominantStyle || name;
+  const stylesLine = spiritProfileStylesLine(profile);
+  if (currentLanguage === "en") {
+    return normalizeInlineText(`${name} is the visual form of your ${archetype}: a musical-spirit entity that turns ${stylesLine} into posture, wardrobe, gaze, and aura.`);
+  }
+  if (currentLanguage === "es") {
+    return normalizeInlineText(`${name} es la forma visual de tu ${archetype}: una entidad musical que convierte ${stylesLine} en postura, ropa, mirada y aura.`);
+  }
+  return normalizeInlineText(`${name} é a forma visual do seu ${archetype}: uma entidade musical que transforma ${stylesLine} em postura, roupa, olhar e aura.`);
+}
+
+function spiritIndicationText(profile = {}) {
+  const stylesLine = spiritProfileStylesLine(profile);
+  const pulse = profile.bpmText || "";
+  const narrative = normalizeInlineText(profile.genreNarrative || "");
+  if (currentLanguage === "en") {
+    return normalizeInlineText(`Why it appeared: your likes point toward ${stylesLine}${pulse ? ` with a ${pulse} pulse` : ""}. ${narrative} The app is reading the pattern behind your choices, not only the genre label.`);
+  }
+  if (currentLanguage === "es") {
+    return normalizeInlineText(`Por qué apareció: tus likes apuntan a ${stylesLine}${pulse ? ` con pulso ${pulse}` : ""}. ${narrative} La app lee el patrón detrás de tus elecciones, no solo la etiqueta de género.`);
+  }
+  return normalizeInlineText(`Por que apareceu: suas curtidas apontam para ${stylesLine}${pulse ? ` com pulso ${pulse}` : ""}. ${narrative} O app está lendo o padrão por trás das suas escolhas, não só a etiqueta do gênero.`);
+}
+
+function spiritArtDirectionText() {
+  if (currentLanguage === "en") {
+    return "In the artwork, that becomes a brighter spectral being with colored alien skin, electronic wardrobe, music accessories, and a futuristic aura: more spirit guide than normal portrait.";
+  }
+  if (currentLanguage === "es") {
+    return "En la arte, eso se vuelve una entidad espectral más luminosa, con piel alienígena de color, ropa electrónica, accesorios musicales y aura futurista: más guía espiritual que retrato normal.";
+  }
+  return "Na arte, isso vira um ser espectral mais iluminado, com pele alienígena colorida, roupa eletrônica, acessórios musicais e aura futurista: mais guia espiritual do que retrato comum.";
+}
+
+function spiritCollectibleMicroQuote(profile = {}) {
+  const family = familyOf(profile.dominantStyleKey);
+  const copy = {
+    pt: {
+      psytrance: "Você escolhe viagem, ritual e camadas que mudam sem pressa.",
+      techno: "Você constrói tensão com precisão, repetição e controle.",
+      house: "Você reconhece calor, groove e movimento social no primeiro pulso.",
+      dnb: "Você busca velocidade, contraste e subgrave sem perder fluidez.",
+      bass_music: "Você reage a peso físico, textura e viradas que mudam o ar.",
+      leftfield: "Você percebe beleza no estranho quando ele ganha forma.",
+      hard_dance: "Você prefere catarse direta, kick forte e energia no limite.",
+      hybrid: "Você compara clima, textura e pulso antes de entregar o like."
+    },
+    en: {
+      psytrance: "You choose journey, ritual, and layers that mutate slowly.",
+      techno: "You build tension through precision, repetition, and control.",
+      house: "You recognize warmth, groove, and social motion in the first pulse.",
+      dnb: "You seek speed, contrast, and sub-bass without losing flow.",
+      bass_music: "You react to physical weight, texture, and turns that change the room.",
+      leftfield: "You notice beauty in the strange once it takes shape.",
+      hard_dance: "You prefer direct catharsis, hard kicks, and peak energy.",
+      hybrid: "You compare mood, texture, and pulse before giving the like."
+    },
+    es: {
+      psytrance: "Eliges viaje, ritual y capas que mutan sin prisa.",
+      techno: "Construyes tensión con precisión, repetición y control.",
+      house: "Reconoces calor, groove y movimiento social en el primer pulso.",
+      dnb: "Buscas velocidad, contraste y subgrave sin perder fluidez.",
+      bass_music: "Reaccionas al peso físico, textura y giros que cambian la sala.",
+      leftfield: "Notas belleza en lo extraño cuando empieza a tomar forma.",
+      hard_dance: "Prefieres catarsis directa, kick fuerte y energía al límite.",
+      hybrid: "Comparas clima, textura y pulso antes de dar el like."
+    }
+  };
+  const languageCopy = copy[currentLanguage] || copy.pt;
+  return languageCopy[family] || languageCopy.hybrid;
+}
+
 function spiritStyleAppealText(styleKey = "") {
   const label = styleKey ? styleLabelByValue(styleKey) : t("freeStyle");
   const family = familyOf(styleKey);
@@ -27399,29 +27516,31 @@ function buildSpiritLorePayload(spirit, spiritText = {}) {
   const topStyles = profile.topStyles.length ? profile.topStyles : spiritTopStyles(spirit, 3);
   const topStyleKeys = spiritTopStyleKeys(spirit, 3);
   const dominantKey = profile.dominantStyleKey || topStyleKeys[0] || "";
-  const topStylesLine = topStyles.join(" • ");
   const styleInfo = dominantKey ? styleInfoSummaryByLanguage(dominantKey) : "";
   const appeal = spiritStyleAppealText(dominantKey);
   const nextStyles = topStyles.slice(0, 2).join(" + ") || profile.dominantStyle;
+  const identityText = spiritIdentityText(spirit, spiritText, profile);
+  const indicationText = spiritIndicationText(profile);
+  const personalityText = spiritPersonalityText(profile);
 
   if (currentLanguage === "en") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Pulse zone: ${profile.bpmText}.` : ""} This is a listening fingerprint: pressure tolerance, texture, repetition, and the kind of payoff that keeps you inside the track.`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo} In practice, this spirit needs tracks with a strong identity: not random genre tags, but a sound world with a readable mood, body weight, and progression.`),
-      nextText: normalizeInlineText(`For the next pass, ask for ${nextStyles} and tune context first, then energy and BPM. Mark “already knew it” and “new to me”: that is what separates your repertoire from real discovery.`)
+      signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
+      whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} In practice, this spirit needs tracks with a strong identity: not random genre tags, but a sound world with a readable mood, body weight, and progression.`),
+      nextText: normalizeInlineText(`For the next pass, ask for ${nextStyles} and tune context first, then energy and BPM. Mark “already knew it” and “new to me”: that is what separates your repertoire from real discovery. ${spiritArtDirectionText()}`)
     };
   }
   if (currentLanguage === "es") {
     return {
-      signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Esta es una huella de escucha: tolerancia a la presión, textura, repetición y el tipo de recompensa que te mantiene dentro de la pista.`),
-      whyText: normalizeInlineText(`${appeal} ${styleInfo} En la práctica, este espíritu pide pistas con identidad fuerte: no etiquetas sueltas, sino un mundo sonoro con ánimo, peso corporal y progresión legibles.`),
-      nextText: normalizeInlineText(`Para la próxima pasada, pide ${nextStyles} y ajusta primero el contexto, luego energía y BPM. Marca “ya conocía” y “nuevo para mí”: eso separa repertorio de descubrimiento real.`)
+      signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
+      whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} En la práctica, este espíritu pide pistas con identidad fuerte: no etiquetas sueltas, sino un mundo sonoro con ánimo, peso corporal y progresión legibles.`),
+      nextText: normalizeInlineText(`Para la próxima pasada, pide ${nextStyles} y ajusta primero el contexto, luego energía y BPM. Marca “ya conocía” y “nuevo para mí”: eso separa repertorio de descubrimiento real. ${spiritArtDirectionText()}`)
     };
   }
   return {
-    signatureText: normalizeInlineText(`${topStylesLine || profile.dominantStyle}. ${profile.bpmText ? `Zona de pulso: ${profile.bpmText}.` : ""} Esta é uma impressão digital de escuta: tolerância a pressão, textura, repetição e o tipo de recompensa que prende você dentro da faixa.`),
-    whyText: normalizeInlineText(`${appeal} ${styleInfo} Na prática, esse espírito pede faixas com identidade forte: não etiquetas soltas, mas um mundo sonoro com clima, peso corporal e progressão legíveis.`),
-    nextText: normalizeInlineText(`Na próxima rodada, peça ${nextStyles} e ajuste primeiro o contexto, depois energia e BPM. Marque “já conhecia” e “novidade para mim”: é isso que separa repertório de descoberta real.`)
+    signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
+    whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} Na prática, esse espírito pede faixas com identidade forte: não etiquetas soltas, mas um mundo sonoro com clima, peso corporal e progressão legíveis.`),
+    nextText: normalizeInlineText(`Na próxima rodada, peça ${nextStyles} e ajuste primeiro o contexto, depois energia e BPM. Marque “já conhecia” e “novidade para mim”: é isso que separa repertório de descoberta real. ${spiritArtDirectionText()}`)
   };
 }
 
@@ -27441,15 +27560,18 @@ function renderSpiritLore(spirit, spiritText = {}) {
 
 function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   const baseDescription = normalizeInlineText(spiritText?.description || "");
-  if (baseDescription) return baseDescription;
-
   const profile = resolveSpiritNarrativeProfile(spirit);
+  const identityText = spiritIdentityText(spirit, spiritText, profile);
+  const indicationText = spiritIndicationText(profile);
+  const personalityText = spiritPersonalityText(profile);
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        `Your profile is anchored in ${profile.styleSignature || "electronic curation"}.`,
-        profile.genreNarrative,
-        `I am weighing style, energy, novelty, and what you reject, so this spirit should behave like a listening map, not a decorative badge.`
+        identityText,
+        baseDescription ? `Original reading: ${baseDescription}` : "",
+        indicationText,
+        personalityText,
+        `It should behave like a listening map, not a decorative badge.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -27458,9 +27580,11 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        `Tu perfil se apoya en ${profile.styleSignature || "curaduría electrónica"}.`,
-        profile.genreNarrative,
-        `Estoy ponderando estilo, energía, novedad y lo que rechazas, para que este espíritu funcione como mapa de escucha, no como adorno.`
+        identityText,
+        baseDescription ? `Lectura inicial: ${baseDescription}` : "",
+        indicationText,
+        personalityText,
+        `Debe funcionar como mapa de escucha, no como adorno.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -27468,9 +27592,11 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   }
   return normalizeInlineText(
     [
-      `Seu perfil se apoia em ${profile.styleSignature || "curadoria eletrônica"}.`,
-      profile.genreNarrative,
-      `Estou pesando estilo, energia, novidade e o que você rejeita, para esse espírito funcionar como mapa de escuta, não só como enfeite.`
+      identityText,
+      baseDescription ? `Leitura inicial: ${baseDescription}` : "",
+      indicationText,
+      personalityText,
+      `Ele deve funcionar como mapa de escuta, não só como enfeite.`
     ]
       .filter(Boolean)
       .join(" ")
@@ -27479,14 +27605,15 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
 
 function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   const shortCopy = normalizeInlineText(spiritText?.cardDescription || spiritText?.collectibleDescription || "");
-  if (shortCopy) return shortCopy;
-
   const profile = resolveSpiritNarrativeProfile(spirit);
   const topStylesLine = profile.topStyles.join(" • ");
+  const microQuote = spiritCollectibleMicroQuote(profile);
+  if (shortCopy) return normalizeInlineText(`${microQuote} ${shortCopy}`);
 
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
+        microQuote,
         spiritText?.archetype ? `Spectral musical entity for ${spiritText.archetype}` : "Spectral musical entity",
         profile.genreNarrative || "",
         topStylesLine || profile.styleSignature || ""
@@ -27499,6 +27626,7 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
+        microQuote,
         spiritText?.archetype ? `Entidad musical espectral para ${spiritText.archetype}` : "Entidad musical espectral",
         profile.genreNarrative || "",
         topStylesLine || profile.styleSignature || ""
@@ -27510,6 +27638,7 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 
   return normalizeInlineText(
     [
+      microQuote,
       spiritText?.archetype ? `Entidade musical espectral para ${spiritText.archetype}` : "Entidade musical espectral",
       profile.genreNarrative || "",
       topStylesLine || profile.styleSignature || ""
@@ -27522,16 +27651,18 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneLikes) {
   const profile = resolveSpiritNarrativeProfile(spirit);
   const rankLabel = t(resolveSpiritRank(likes).current.key);
-  const topStylesLine = profile.topStyles.slice(0, 3).join(" • ");
-  const bpmLine = profile.bpmText || "";
   const signatureLine = spiritCollectibleUserSignature().slice(0, 6).toUpperCase();
-  const archetype = spiritText?.archetype || spiritText?.name || profile.dominantStyle;
+  const identityText = spiritIdentityText(spirit, spiritText, profile);
+  const indicationText = spiritIndicationText(profile);
+  const personalityText = spiritPersonalityText(profile);
+  const artDirectionText = spiritArtDirectionText();
   if (currentLanguage === "pt") {
     return normalizeInlineText(
       [
-        `Leitura do perfil: ${archetype}${topStylesLine ? ` com assinatura ${topStylesLine}` : ""}.`,
-        `${bpmLine ? `Pulso ${bpmLine}` : "Pulso livre"} e status ${rankLabel.toLowerCase()} no marco de ${milestoneLikes} likes.`,
-        `A arte transforma essa curadoria em uma entidade espectral com pele fantasma, roupa, acessórios e aura eletrônica. Novas artes trocam personagem, composição, luz e silhueta. ID ${signatureLine}.`
+        `Quem é: ${identityText}`,
+        indicationText,
+        personalityText,
+        `${artDirectionText} Status ${rankLabel.toLowerCase()} no marco de ${milestoneLikes} likes. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -27540,9 +27671,10 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        `Profile reading: ${archetype}${topStylesLine ? ` with a ${topStylesLine} signature` : ""}.`,
-        `${bpmLine ? `Pulse ${bpmLine}` : "Open pulse"} and ${rankLabel.toLowerCase()} status at ${milestoneLikes} likes.`,
-        `The artwork turns this curation into a spectral entity with ghost skin, wardrobe, accessories, and electronic aura. New artworks change character, composition, light, and silhouette. ID ${signatureLine}.`
+        `Who it is: ${identityText}`,
+        indicationText,
+        personalityText,
+        `${artDirectionText} ${rankLabel} status at ${milestoneLikes} likes. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -27551,9 +27683,10 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        `Lectura del perfil: ${archetype}${topStylesLine ? ` con firma ${topStylesLine}` : ""}.`,
-        `${bpmLine ? `Pulso ${bpmLine}` : "Pulso libre"} y estado ${rankLabel.toLowerCase()} en el hito de ${milestoneLikes} likes.`,
-        `La arte convierte esta curaduría en una entidad espectral con piel fantasma, ropa, accesorios y aura electrónica. Nuevas artes cambian personaje, composición, luz y silueta. ID ${signatureLine}.`
+        `Quién es: ${identityText}`,
+        indicationText,
+        personalityText,
+        `${artDirectionText} Estado ${rankLabel.toLowerCase()} en el hito de ${milestoneLikes} likes. ID ${signatureLine}.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -27561,9 +27694,9 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   }
   return normalizeInlineText(
     [
-      spiritText?.archetype || "",
-      topStylesLine,
-      bpmLine,
+      identityText,
+      indicationText,
+      personalityText,
       `${rankLabel} • ${milestoneLikes} likes`
     ]
       .filter(Boolean)
@@ -28971,7 +29104,12 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
     "silver-blue spirit skin with glassy highlights",
     "deep indigo ectoplasmic skin with luminous bone structure",
     "green-blue plasma skin with matte velvet shadows",
-    "porcelain-lilac semi-transparent spirit skin"
+    "porcelain-lilac semi-transparent spirit skin",
+    "rose-magenta alien spirit skin with soft translucent glow",
+    "warm golden-yellow ectoplasmic skin with opal highlights",
+    "red-orange plasma spirit skin with ember-like luminous edges",
+    "emerald green ghost skin with cyan aura veins",
+    "aqua-blue translucent alien skin with pearl sheen"
   ];
   const hairCues = [
     "short textured hair",
@@ -29023,11 +29161,11 @@ function spiritMajorVisualMutation(spirit, profileSignature = "") {
     "use kinetic street-club styling with pressure-ring collar, changed sleeves, and a new material palette"
   ];
   const lightingCues = [
-    "hard rim light from one side plus soft colored fill on the opposite cheek",
-    "split-color lighting with the spectral face still readable and beautiful",
-    "warm low lamp against cold laser haze, with different shadow direction",
-    "overhead club beam creating a new silhouette and luminous particles behind the head",
-    "sub-bass rings reflected on skin and fabric from below",
+    "hard rim light from one side plus soft colored fill on the opposite cheek, keeping the face clearly readable",
+    "split-color lighting with the spectral face still readable, brighter, and beautiful",
+    "warm low lamp against cold laser haze, with different shadow direction and visible eyes",
+    "overhead club beam creating a new silhouette, luminous particles behind the head, and a clear face key light",
+    "sub-bass rings reflected on skin and fabric from below, balanced by a clean soft key light",
     "clean cinematic key light with a brighter aura edge and deeper background"
   ];
   const environmentCues = [
@@ -29121,7 +29259,7 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
     `Music-reactive aura: ${direction.aura}`,
     `Scene: ${direction.environment}`,
     `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
-    "Humanoid spirit presence is required: visible face, head, shoulders and upper torso, cinematic realism, charismatic expression, believable luminous eyes, translucent ghost skin or pearlescent ectoplasmic skin, distinct electronic-music clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Desired finish: an evolved musical spirit with sacred editorial beauty, subtle high-end animated-film softness, luminous aura, refined painterly polish, and realistic anatomy under spectral material. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus spectral skin material, hair, wardrobe, gaze, accessories, and vibe. Avoid ordinary flesh-toned human portrait. No mask-like face, mannequin, childish cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
+    "Humanoid spirit presence is required: visible face, head, shoulders and upper torso, cinematic realism, charismatic expression, believable luminous eyes, brighter readable facial key light, colorful spectral or alien skin that may be blue, green, pink, red-orange, yellow, violet, cyan, or opaline, distinct electronic-music clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Desired finish: an evolved musical spirit with sacred editorial beauty, subtle high-end animated-film softness, luminous aura, refined painterly polish, and realistic anatomy under supernatural spectral material. It must feel more spiritual, alien, and futuristic than human while still having a beautiful humanoid bust. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus spectral skin material, hair, wardrobe, gaze, accessories, and vibe. Avoid ordinary flesh-toned human portrait. No mask-like face, mannequin, childish cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
@@ -29135,7 +29273,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult humanoid musical-spirit entity as a bust-up or chest-up portrait with a believable face, translucent ghost skin or pearlescent ectoplasmic skin, warm expressive luminous eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The result must read immediately as a beautiful spiritual being, not a normal human portrait: more spirit than person, slightly caricatured but ultra-realistic, like premium animated-film realism mixed with editorial dark-club photography, with soft painterly polish, luminous aura, and spirit-specific styling. Keep real anatomy under spectral material; avoid normal flesh-toned human skin, plain passport-photo realism, and literal artist/DJ photo results. Use unique electronic-music clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, childish cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, normal portrait, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult humanoid musical-spirit entity as a bust-up or chest-up portrait with a believable face, colorful spectral/alien skin, warm expressive luminous eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The face must have a brighter readable key light, not disappear into darkness. The result must read immediately as a beautiful spiritual being, not a normal human portrait: more spirit or evolved alien than person, slightly caricatured but ultra-realistic, like premium animated-film realism mixed with editorial futuristic-club photography, with soft painterly polish, luminous aura, and spirit-specific styling. Skin material can be blue, cyan, emerald green, rose pink, red-orange, golden yellow, violet, smoky obsidian, or opaline pearl, with glow under the surface; avoid normal flesh-toned human skin, plain passport-photo realism, and literal artist/DJ photo results. Use unique electronic-music clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, childish cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, normal portrait, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -29145,12 +29283,12 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
     entityDirection
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central spectral musical-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic bust or upper-body figure with a charismatic humanoid face, ghostly translucent skin, beautiful spectral material lighting, inviting but intense gaze, sacred/electronic spirit aura, dark club atmosphere, ritual/electronic styling, luminous waveform halo, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, beautiful, spiritually evolved, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, normal human photo, or generic fantasy character. Major variation requirement: when regenerating, the new artwork must be a different entity/character, not the same bust with new styling; change face identity, spectral skin, body silhouette, pose, camera, wardrobe, environment, lighting, accessories, aura, and expression. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central spectral musical-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic bust or upper-body figure with a charismatic humanoid face, luminous colorful spectral or alien skin, beautiful brighter spectral material lighting, inviting but intense gaze, sacred/electronic spirit aura, futuristic club atmosphere, ritual/electronic styling, luminous waveform halo, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, beautiful, spiritually evolved, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, normal human photo, or generic fantasy character. Major variation requirement: when regenerating, the new artwork must be a different entity/character, not the same bust with new styling; change face identity, spectral skin, body silhouette, pose, camera, wardrobe, environment, lighting, accessories, aura, and expression. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración central de una entidad musical espectral para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: busto cinematográfico o figura de torso con rostro humanoide carismático, piel fantasma translúcida, materiales espectrales con luz realista, mirada intensa y atractiva, aura espiritual/electrónica, atmósfera de club oscuro, estética ritual/electrónica, halo de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse bella, evolucionada, magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, foto humana normal, icono abstracto ni personaje genérico de fantasía. Requisito de variación mayor: al regenerar, la nueva imagen debe ser otra entidad/personaje, no el mismo busto con otro estilo; cambia identidad facial, piel espectral, silueta corporal, pose, cámara, ropa, entorno, iluminación, accesorios, aura y expresión. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central de una entidad musical espectral para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: busto cinematográfico o figura de torso con rostro humanoide carismático, piel espectral o alienígena luminosa y colorida, materiales espectrales con luz más clara, mirada intensa y atractiva, aura espiritual/electrónica, atmósfera de club futurista, estética ritual/electrónica, halo de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse bella, evolucionada, magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, foto humana normal, icono abstracto ni personaje genérico de fantasía. Requisito de variación mayor: al regenerar, la nueva imagen debe ser otra entidad/personaje, no el mismo busto con otro estilo; cambia identidad facial, piel espectral, silueta corporal, pose, cámara, ropa, entorno, iluminación, accesorios, aura y expresión. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a arte central de uma entidade musical espectral para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: busto cinematográfico ou figura de torso com rosto humanoide carismático, pele fantasma translúcida, materiais espectrais com luz realista, olhar intenso e atraente, aura espiritual/eletrônica, atmosfera de club escuro, estética ritual/eletrônica, halo de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer lindo, evoluído, magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, foto humana normal, ícone abstrato nem personagem genérico de fantasia. Requisito de variação forte: ao regenerar, a nova arte deve ser outra entidade/personagem, não o mesmo busto com outro estilo; mude identidade facial, pele espectral, silhueta corporal, pose, câmera, roupa, ambiente, iluminação, acessórios, aura e expressão. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central de uma entidade musical espectral para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: busto cinematográfico ou figura de torso com rosto humanoide carismático, pele espectral ou alienígena luminosa e colorida, materiais espectrais com luz mais clara, olhar intenso e atraente, aura espiritual/eletrônica, atmosfera de club futurista, estética ritual/eletrônica, halo de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer lindo, evoluído, magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, foto humana normal, ícone abstrato nem personagem genérico de fantasia. Requisito de variação forte: ao regenerar, a nova arte deve ser outra entidade/personagem, não o mesmo busto com outro estilo; mude identidade facial, pele espectral, silhueta corporal, pose, câmera, roupa, ambiente, iluminação, acessórios, aura e expressão. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
