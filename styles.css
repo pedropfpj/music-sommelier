@@ -6940,6 +6940,48 @@ input[type="range"] {
   white-space: nowrap;
 }
 
+.profile-library-section {
+  margin-top: 0.9rem;
+  padding: 0.95rem 0 1.05rem;
+  border-top: 1px solid rgba(126, 232, 198, 0.18);
+  border-bottom: 1px solid rgba(134, 191, 255, 0.14);
+}
+
+.profile-library-head {
+  display: grid;
+  gap: 0.24rem;
+  margin-bottom: 0.72rem;
+}
+
+.profile-library-head h4 {
+  margin: 0.12rem 0 0;
+  color: #f6fbff;
+  font-size: clamp(1.22rem, 2.5vw, 1.72rem);
+  line-height: 1.02;
+}
+
+.profile-library-head .muted {
+  max-width: 58ch;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.profile-library-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.72rem;
+}
+
+.profile-library-grid .profile-stat-card.wide {
+  grid-column: auto;
+}
+
+.profile-library-grid .liked-track-list {
+  max-height: min(420px, 52svh);
+  overflow: auto;
+  padding-right: 0.08rem;
+}
+
 .profile-backup-card {
   margin-top: 0.8rem;
   border: 1px solid rgba(116, 239, 218, 0.2);
@@ -7886,6 +7928,14 @@ input[type="range"] {
     width: 100%;
     min-height: 50px;
     white-space: normal;
+  }
+
+  .profile-library-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-library-grid .liked-track-list {
+    max-height: none;
   }
 
   .profile-stat-card.wide {
@@ -12305,6 +12355,11 @@ iframe {
 
 .preference-panel[data-app-tab="filters"] .section-hint {
   max-width: 34ch;
+}
+
+.preference-panel[data-app-tab="filters"] .filters-discovery-strip {
+  max-width: 980px;
+  margin-inline: auto;
 }
 
 .preference-panel[data-app-tab="filters"] .context-moment-panel,

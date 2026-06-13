@@ -5237,6 +5237,9 @@ const summaryLikedArtistsCount = document.getElementById("summaryLikedArtistsCou
 const summaryDislikedArtistsCount = document.getElementById("summaryDislikedArtistsCount");
 const summaryFavoriteStyle = document.getElementById("summaryFavoriteStyle");
 const summaryAchievementText = document.getElementById("summaryAchievementText");
+const profileLibraryKicker = document.getElementById("profileLibraryKicker");
+const profileLibraryTitle = document.getElementById("profileLibraryTitle");
+const profileLibraryHint = document.getElementById("profileLibraryHint");
 const summaryLikedTracksTitle = document.getElementById("summaryLikedTracksTitle");
 const summaryLikedTracksHint = document.getElementById("summaryLikedTracksHint");
 const summaryLikedTracksList = document.getElementById("summaryLikedTracksList");
@@ -14164,6 +14167,7 @@ const I18N = {
     heroTitle: "Encontre uma faixa que combina com agora",
     heroDesc: "Escolha o clima, o pulso e o quanto quer sair do óbvio. O Sonic Search cruza seu histórico com sinais de cena para sugerir música eletrônica com mais tato.",
     tabDiscover: "Descobrir",
+    tabFilters: "Filtros",
     tabNews: "News",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
@@ -14173,9 +14177,9 @@ const I18N = {
     swipeHeroKicker: "Descoberta por swipe",
     swipeHeroTitle: "Descubra no swipe.",
     swipeHeroHint: "Curti, não curti ou surpresa. Os detalhes ficam para depois.",
-    swipeDeckKicker: "Varredura de gosto",
-    swipeDeckTitle: "Passe por vários mundos sonoros",
-    swipeDeckHint: "Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.",
+    swipeDeckKicker: "Rotas rápidas",
+    swipeDeckTitle: "Escolha um mundo sonoro",
+    swipeDeckHint: "Use quando quiser filtrar a descoberta por subgênero. A tela principal continua livre para curtir, não curtir ou pedir surpresa.",
     swipeStyleRailAria: "Todos os subgêneros disponíveis para descoberta por swipe",
     swipeShowAllStyles: "Ver todos os {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
@@ -14185,7 +14189,7 @@ const I18N = {
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
     topSwipeEmptyTitle: "Pronto para descobrir",
     topSwipeEmptyMeta: "Uma carta nova, sem briefing.",
-    topSwipeHint: "O perfil guarda os artistas e subgêneros que você andou curtindo.",
+    topSwipeHint: "Curta, não curta ou peça surpresa. Filtros ficam na aba Filtros; seu histórico fica no Perfil.",
     swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
@@ -14578,6 +14582,9 @@ const I18N = {
     summaryShareStoryTitle: "Meu status musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
+    profileLibraryKicker: "Biblioteca do radar",
+    profileLibraryTitle: "Músicas que moldaram seu gosto",
+    profileLibraryHint: "Curtidas e descartadas ficam aqui para ouvir de novo, revisar seu mapa e manter o swipe principal limpo.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Leve seu mapa musical com você",
     profileBackupHint: "O app funciona sem login e salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.",
@@ -14897,6 +14904,7 @@ const I18N = {
     heroTitle: "Find a track that fits right now",
     heroDesc: "Choose the mood, pulse, and how far from obvious you want to go. Sonic Search blends your history with scene signals to suggest electronic music with more feel.",
     tabDiscover: "Discover",
+    tabFilters: "Filters",
     tabNews: "News",
     tabStudio: "Studio",
     tabProfile: "Profile",
@@ -14906,9 +14914,9 @@ const I18N = {
     swipeHeroKicker: "Swipe discovery",
     swipeHeroTitle: "Discover by swiping.",
     swipeHeroHint: "Like, pass, or surprise. Details can wait.",
-    swipeDeckKicker: "Taste scan",
-    swipeDeckTitle: "Swipe through different sound worlds",
-    swipeDeckHint: "Pick a lane or start free. The deck mixes subgenres and DJs to learn your taste without a questionnaire.",
+    swipeDeckKicker: "Quick lanes",
+    swipeDeckTitle: "Choose a sound world",
+    swipeDeckHint: "Use this when you want to filter discovery by subgenre. The main screen stays free for like, pass, or surprise.",
     swipeStyleRailAria: "All available subgenre discovery lanes",
     swipeShowAllStyles: "Show all {count} styles",
     swipeShowFocusedStyles: "Show fewer styles",
@@ -14918,7 +14926,7 @@ const I18N = {
     swipeHint: "Works with mouse or touch: drag the card and release.",
     topSwipeEmptyTitle: "Ready to discover",
     topSwipeEmptyMeta: "A fresh card, no briefing.",
-    topSwipeHint: "Your profile keeps the artists and subgenres you have been liking.",
+    topSwipeHint: "Like, pass, or ask for a surprise. Filters live in Filters; your history lives in Profile.",
     swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
@@ -15308,6 +15316,9 @@ const I18N = {
     summaryShareStoryTitle: "My music status",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
+    profileLibraryKicker: "Radar library",
+    profileLibraryTitle: "Tracks that shaped your taste",
+    profileLibraryHint: "Liked and rejected tracks live here, so you can replay, review your map, and keep the main swipe clean.",
     profileBackupKicker: "Portable local profile",
     profileBackupTitle: "Carry your music map with you",
     profileBackupHint: "The app works without login and saves your taste on this device. Download a copy to return in another browser whenever you want.",
@@ -15627,6 +15638,7 @@ const I18N = {
     heroDesc: "Elige el clima, el pulso y cuánto quieres alejarte de lo obvio. Sonic Search cruza tu historial con señales de escena para sugerir electrónica con más tacto.",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
+    tabFilters: "Filtros",
     tabNews: "News",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
@@ -15636,9 +15648,9 @@ const I18N = {
     swipeHeroKicker: "Descubrimiento por swipe",
     swipeHeroTitle: "Descubre con swipe.",
     swipeHeroHint: "Me gusta, no me va o sorpresa. Los detalles pueden esperar.",
-    swipeDeckKicker: "Escaneo de gusto",
-    swipeDeckTitle: "Desliza por varios mundos sonoros",
-    swipeDeckHint: "Elige una ruta o empieza libre. El deck mezcla subgéneros y DJs para entender tu gusto sin cuestionario.",
+    swipeDeckKicker: "Rutas rápidas",
+    swipeDeckTitle: "Elige un mundo sonoro",
+    swipeDeckHint: "Úsalo cuando quieras filtrar el descubrimiento por subgénero. La pantalla principal queda libre para gustar, descartar o pedir sorpresa.",
     swipeStyleRailAria: "Todos los subgéneros disponibles para descubrir con swipe",
     swipeShowAllStyles: "Ver los {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
@@ -15648,7 +15660,7 @@ const I18N = {
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
     topSwipeEmptyTitle: "Listo para descubrir",
     topSwipeEmptyMeta: "Una carta nueva, sin briefing.",
-    topSwipeHint: "El perfil guarda los artistas y subgéneros que has ido marcando.",
+    topSwipeHint: "Da like, descarta o pide sorpresa. Los filtros viven en Filtros; tu historial vive en Perfil.",
     swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
@@ -16035,6 +16047,9 @@ const I18N = {
     summaryShareStoryTitle: "Mi estado musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
+    profileLibraryKicker: "Biblioteca del radar",
+    profileLibraryTitle: "Pistas que moldearon tu gusto",
+    profileLibraryHint: "Likes y descartes viven aquí para escuchar de nuevo, revisar tu mapa y mantener limpio el swipe principal.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Lleva tu mapa musical contigo",
     profileBackupHint: "La app funciona sin login y guarda tu gusto en este dispositivo. Descarga una copia para volver en otro navegador cuando quieras.",
@@ -17029,6 +17044,7 @@ function applyLanguage() {
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
+  setText("[data-app-tab-target='filters']", t("tabFilters"));
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
@@ -17187,6 +17203,9 @@ function applyLanguage() {
   setText("#eventsPanel > h3", labels.eventsTitle || "");
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
   setText("#summaryShareInstagramBtn", t("summaryShareStoryBtn"));
+  setText("#profileLibraryKicker", t("profileLibraryKicker"));
+  setText("#profileLibraryTitle", t("profileLibraryTitle"));
+  setText("#profileLibraryHint", t("profileLibraryHint"));
   setText("#profileBackupKicker", t("profileBackupKicker"));
   setText("#profileBackupTitle", t("profileBackupTitle"));
   setText("#profileBackupHint", t("profileBackupHint"));

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260613typefix1" />
+    <link rel="stylesheet" href="styles.css?v=20260613profilefilters1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -416,14 +416,6 @@
             <p id="swipeHeroHint" class="section-hint muted">Curti, não curti ou surpresa. Os detalhes ficam para depois.</p>
           </div>
         </div>
-        <div class="swipe-discovery-strip" aria-labelledby="swipeDeckTitle">
-          <div class="swipe-discovery-copy">
-            <p id="swipeDeckKicker" class="section-kicker">Varredura de gosto</p>
-            <h4 id="swipeDeckTitle">Passe por vários mundos sonoros</h4>
-            <p id="swipeDeckHint" class="muted">Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.</p>
-          </div>
-          <div id="swipeStyleRail" class="swipe-style-rail" aria-label="Rotas rápidas de descoberta"></div>
-        </div>
         <div class="swipe-start-stage">
           <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para não curtir" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
             <span class="swipe-stamp swipe-stamp-like">Curti</span>
@@ -560,6 +552,15 @@
             <h3 id="preferencias-title">Ajuste o radar</h3>
           </div>
           <p id="preferenceSectionHint" class="section-hint muted">Escolha subgênero, BPM, energia e contexto quando quiser uma recomendação mais precisa.</p>
+        </div>
+
+        <div class="swipe-discovery-strip filters-discovery-strip" aria-labelledby="swipeDeckTitle">
+          <div class="swipe-discovery-copy">
+            <p id="swipeDeckKicker" class="section-kicker">Varredura de gosto</p>
+            <h4 id="swipeDeckTitle">Passe por vários mundos sonoros</h4>
+            <p id="swipeDeckHint" class="muted">Escolha uma rota ou comece livre. O deck mistura subgêneros e DJs para entender seu gosto sem questionário.</p>
+          </div>
+          <div id="swipeStyleRail" class="swipe-style-rail" aria-label="Rotas rápidas de descoberta"></div>
         </div>
 
         <article class="context-moment-panel" aria-labelledby="contextMomentTitle">
@@ -1446,6 +1447,37 @@
           </div>
           <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
         </div>
+        <section class="profile-library-section" aria-labelledby="profileLibraryTitle">
+          <div class="profile-library-head">
+            <div>
+              <p id="profileLibraryKicker" class="summary-kicker">Biblioteca do radar</p>
+              <h4 id="profileLibraryTitle">Músicas que moldaram seu gosto</h4>
+              <p id="profileLibraryHint" class="muted">Curtidas e descartadas ficam aqui para ouvir de novo, revisar seu mapa e manter o swipe principal limpo.</p>
+            </div>
+          </div>
+          <div class="profile-library-grid">
+            <article class="profile-stat-card wide liked-track-history-card">
+              <div class="liked-track-history-head">
+                <div>
+                  <h4 id="summaryLikedTracksTitle">Músicas curtidas</h4>
+                  <p id="summaryLikedTracksHint" class="muted">Tudo que você curtir fica salvo aqui para ouvir depois.</p>
+                </div>
+                <button id="summaryLikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
+              </div>
+              <div id="summaryLikedTracksList" class="liked-track-list"></div>
+            </article>
+            <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
+              <div class="liked-track-history-head">
+                <div>
+                  <h4 id="summaryDislikedTracksTitle">Músicas não curtidas</h4>
+                  <p id="summaryDislikedTracksHint" class="muted">Tudo que você descartar fica salvo aqui para revisar seu mapa musical.</p>
+                </div>
+                <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
+              </div>
+              <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
+            </article>
+          </div>
+        </section>
         <article id="profileBackupCard" class="profile-backup-card">
           <div>
             <p id="profileBackupKicker" class="summary-kicker">Perfil local portátil</p>
@@ -1581,26 +1613,6 @@
             <div id="quizHubList" class="quiz-hub-list"></div>
             <p id="quizHubProgress" class="muted quiz-hub-progress">Nenhum desafio desbloqueado ainda.</p>
           </article>
-          <article class="profile-stat-card wide liked-track-history-card">
-            <div class="liked-track-history-head">
-              <div>
-                <h4 id="summaryLikedTracksTitle">Músicas curtidas</h4>
-                <p id="summaryLikedTracksHint" class="muted">Tudo que você curtir fica salvo aqui para ouvir depois.</p>
-              </div>
-              <button id="summaryLikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
-            </div>
-            <div id="summaryLikedTracksList" class="liked-track-list"></div>
-          </article>
-          <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
-            <div class="liked-track-history-head">
-              <div>
-                <h4 id="summaryDislikedTracksTitle">Músicas não curtidas</h4>
-                <p id="summaryDislikedTracksHint" class="muted">Tudo que você descartar fica salvo aqui para revisar seu mapa musical.</p>
-              </div>
-              <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
-            </div>
-            <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
-          </article>
           <article class="profile-stat-card wide">
             <h4 id="summaryFiveStarTracksTitle">Faixas avaliadas com 5 estrelas</h4>
             <div id="summaryFiveStarTracks" class="summary-tags"></div>
@@ -1654,6 +1666,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260613typefix1"></script>
+    <script src="app.js?v=20260613profilefilters1"></script>
   </body>
 </html>
