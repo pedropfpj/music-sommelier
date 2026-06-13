@@ -31999,11 +31999,16 @@ function trackSourceTrustScore(track) {
   let score = 0;
   const source = normalize(track.source || "");
   const confidence = Number(track.previewConfidence) || 0;
+  const styleCertainty = trackStyleCertainty(track);
 
   if (isTrustedCuratedCatalogTrack(track)) score += 2.3;
   if (track.existenceVerified === true) score += 1.1;
   if (source.includes("dataset")) score += 0.8;
   if (!isDynamicSource(track.source)) score += 0.55;
+  if (styleCertainty === "confirmed") score += 0.45;
+  else if (styleCertainty === "probable") score -= 0.15;
+  else if (styleCertainty === "estimated") score -= 0.75;
+  else if (styleCertainty === "unsafe") score -= 4;
   if (confidence >= 0.92) score += 1;
   else if (confidence >= 0.82) score += 0.55;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 8;
@@ -32690,6 +32695,9 @@ function renderSuggestionQueue(prefs = lastPrefs) {
 }
 
 function recommendationHasStrongFit(track) {
+  const styleCertainty = trackStyleCertainty(track);
+  if (styleCertainty === "unsafe") return false;
+  if (styleCertainty === "estimated" && STRICT_DYNAMIC_BPM_STYLES.has(track?.style)) return false;
   return (
     hasReliableBpmForTrust(track) &&
     (Boolean(track?.previewUrl) ||
@@ -32882,6 +32890,7 @@ function renderSonicBadgeList(container, badges = []) {
 
 function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = {}) {
   if (!track) return [];
+  const styleCertainty = trackStyleCertainty(track);
   const knownUnion = buildGlobalArtistExclusionSet();
   const isKnown = artistSetHasMatch(knownUnion, track.artist);
   const strongFit = recommendationHasStrongFit(track);
@@ -32918,7 +32927,9 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
   } else if (!selectedStyle) {
     badges.push({ type: "explore", label: sonicTinyCopy("Rota livre", "Open route", "Ruta libre") });
   }
-  if (sourceTrust >= 2 && !bpmData.ambiguous) badges.push({ type: "good", label: sonicTinyCopy("Fonte confiavel", "Trusted source", "Fuente fiable") });
+  if (sourceTrust >= 2 && !bpmData.ambiguous && styleCertainty === "confirmed") {
+    badges.push({ type: "good", label: sonicTinyCopy("Fonte confiavel", "Trusted source", "Fuente fiable") });
+  }
   return badges;
 }
 

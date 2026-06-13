@@ -1,22 +1,22 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 13/06/2026, 03:32:36
+Gerado em: 13/06/2026, 15:54:59
 Status: OK
 
 ## Resumo
 
-- Faixas auditadas: 3966
-- Artistas unicos: 2659
+- Faixas auditadas: 3963
+- Artistas unicos: 2658
 - Artistas indexados exibidos no app: 4600
 - Musicas buscaveis estimadas no app: 87400
 - Media buscavel por artista indexado: 19.0x
 - Cobertura auditada versus buscavel: 4.5%
-- Gravadoras/labels unicas: 2695
+- Gravadoras/labels unicas: 2693
 - Estilos com faixas: 81
-- Artistas vindos de datasets externos: 2602
+- Artistas vindos de datasets externos: 2601
 - Problemas criticos: 0
 - Avisos: 0
-- Notas de enriquecimento: 3488
+- Notas de enriquecimento: 3485
 
 ## Leitura rapida
 
@@ -54,7 +54,7 @@ Status: OK
 | OK | electro_house | 33/20 | 60/50 | 29/6 | Completo |
 | OK | experimental_bass | 31/20 | 60/50 | 24/6 | Completo |
 | OK | footwork_juke | 30/20 | 60/50 | 14/6 | Completo |
-| OK | forest_psy | 122/20 | 202/50 | 95/6 | Completo |
+| OK | forest_psy | 119/20 | 201/50 | 93/6 | Completo |
 | OK | freeform | 40/12 | 57/50 | 26/0 | Completo |
 | OK | frenchcore | 89/20 | 68/50 | 77/6 | Completo |
 | OK | full_on | 160/28 | 70/50 | 122/8 | Completo |
