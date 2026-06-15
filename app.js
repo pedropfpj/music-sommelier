@@ -5748,8 +5748,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v18";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v35";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v16-guardian-bust";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v36";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -8890,6 +8890,104 @@ const MUSICAL_SPIRITS = [
         description: "Habitas la frontera entre IDM, electro e híbridos experimentales, buscando cortes improbables, asimetrías y microdetalle de diseño sonoro. Disfrutas cuando una pista sorprende sin perder coherencia estructural. Tu diferencial es curaduría de riesgo con oído para innovación real."
       }
     }
+  },
+  {
+    id: "oraculo_trance",
+    image: "assets/spirits/ritual_cosmico.svg",
+    styleWeights: {
+      trance_uplifting: 5,
+      tech_trance: 3.6,
+      hard_trance: 2.8,
+      melodic_techno: 1.2,
+      progressive_house: 1
+    },
+    copy: {
+      pt: {
+        name: "Oráculo Trance",
+        archetype: "Elevação melódica",
+        description: "Personalidade luminosa e emocional. Você procura suspensão, melodia grande, build limpo e aquele momento em que a pista parece respirar antes de abrir.",
+        cardDescription: "Trance: melodia, suspensão, euforia limpa e energia que abre espaço."
+      },
+      en: {
+        name: "Trance Oracle",
+        archetype: "Melodic lift",
+        description: "You seek lift, big melody, clean builds, and the moment where the floor seems to breathe before opening wide. Your taste values emotional release without losing rhythm.",
+        cardDescription: "Trance: melody, lift, clean euphoria, and energy that opens space."
+      },
+      es: {
+        name: "Oráculo Trance",
+        archetype: "Elevación melódica",
+        description: "Buscas elevación, melodía grande, builds limpios y el momento en que la pista parece respirar antes de abrirse. Tu gusto valora emoción sin perder pulso.",
+        cardDescription: "Trance: melodía, elevación, euforia limpia y energía que abre espacio."
+      }
+    }
+  },
+  {
+    id: "catalisador_hard",
+    image: "assets/spirits/acelerador_quantico.svg",
+    styleWeights: {
+      hardstyle: 5,
+      rawstyle: 4.2,
+      hardcore: 3.8,
+      frenchcore: 3.4,
+      speedcore: 2.8,
+      gabber: 2.6,
+      schranz: 1.7
+    },
+    copy: {
+      pt: {
+        name: "Catalisador Hard",
+        archetype: "Catarse de kick",
+        description: "Personalidade frontal e catártica. Você responde a kick forte, energia no limite, impacto físico e euforia direta, sem precisar disfarçar intensidade.",
+        cardDescription: "Hard dance: kick forte, catarse rápida, pressão física e euforia frontal."
+      },
+      en: {
+        name: "Hard Catalyst",
+        archetype: "Kick catharsis",
+        description: "You respond to hard kicks, edge energy, physical impact, and direct euphoria. This spirit turns intensity into release without apologizing for pressure.",
+        cardDescription: "Hard dance: hard kicks, fast catharsis, physical pressure, and frontal euphoria."
+      },
+      es: {
+        name: "Catalizador Hard",
+        archetype: "Catarsis de kick",
+        description: "Respondes al kick fuerte, energía al límite, impacto físico y euforia directa. Este espíritu convierte intensidad en liberación.",
+        cardDescription: "Hard dance: kick fuerte, catarsis rápida, presión física y euforia frontal."
+      }
+    }
+  },
+  {
+    id: "navegante_breaks",
+    image: "assets/spirits/explorador_fractal.svg",
+    styleWeights: {
+      breakbeat: 4.4,
+      uk_garage: 4.1,
+      future_garage: 3.8,
+      footwork_juke: 2.8,
+      wave: 2.5,
+      trap: 2.2,
+      future_bass: 2,
+      experimental_bass: 1.8
+    },
+    copy: {
+      pt: {
+        name: "Navegante Breaks",
+        archetype: "Pulso quebrado",
+        description: "Personalidade ágil e lateral. Você gosta de swing quebrado, baixo flexível, espaço entre batidas e viradas que surpreendem sem perder corpo.",
+        cardDescription: "Breaks/garage: swing quebrado, espaço, subgrave flexível e virada inteligente."
+      },
+      en: {
+        name: "Breaks Navigator",
+        archetype: "Broken pulse",
+        description: "You like broken swing, flexible low end, negative space between hits, and turns that surprise without losing body. Your rhythm sense moves sideways.",
+        cardDescription: "Breaks/garage: broken swing, space, flexible sub, and smart turns."
+      },
+      es: {
+        name: "Navegante Breaks",
+        archetype: "Pulso quebrado",
+        description: "Te gusta el swing quebrado, el grave flexible, el espacio entre golpes y giros que sorprenden sin perder cuerpo. Tu ritmo se mueve de lado.",
+        cardDescription: "Breaks/garage: swing quebrado, espacio, subgrave flexible y giro inteligente."
+      }
+    }
   }
 ];
 
@@ -8909,7 +9007,10 @@ const SPIRIT_VISUAL_THEMES = {
   arquiteto_hipnotico: { a: "#9feaff", b: "#93a7ff", c: "#d7e3ff", d: "#071226" },
   cacador_bass: { a: "#ff6ec7", b: "#7f8cff", c: "#35f0ff", d: "#15061c" },
   viajante_organico: { a: "#a3ff8b", b: "#f4d06f", c: "#51d0a6", d: "#082417" },
-  explorador_fractal: { a: "#ffb36b", b: "#75f4ff", c: "#9a7bff", d: "#10102c" }
+  explorador_fractal: { a: "#ffb36b", b: "#75f4ff", c: "#9a7bff", d: "#10102c" },
+  oraculo_trance: { a: "#9ff7ff", b: "#88a9ff", c: "#e4c6ff", d: "#06102e" },
+  catalisador_hard: { a: "#fff06a", b: "#ff4f88", c: "#5df6ff", d: "#120811" },
+  navegante_breaks: { a: "#6effdc", b: "#8bb5ff", c: "#ff8fd8", d: "#08111f" }
 };
 
 const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
@@ -9024,6 +9125,27 @@ const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
     wardrobe: "patchwork technical jacket, iridescent geometric accents, frontier-club styling, face unobscured",
     aura: "fractal cubes, broken-rhythm geometry, IDM micro-detail sparks, orange-cyan-violet asymmetry",
     environment: "experimental club lab with clean shadows, glitch light, and dimensional depth"
+  },
+  oraculo_trance: {
+    identity: "adult trance oracle with a luminous humanoid spectral face, emotional lift, and elegant melodic confidence",
+    face: "open hypnotic eyes, calm elevated expression, opaline silver-blue skin, soft celestial glow, emotionally readable but not sentimental",
+    wardrobe: "sleek chrome-blue collar, refined light jewelry, translucent club robe, headphones integrated like a melodic halo instrument",
+    aura: "wide euphoric rings, clean supersaw light arcs, violet-blue frequency halos, suspended melodic particles",
+    environment: "dark cathedral-like club space with celestial beams, fog, and clean uplifting stage light"
+  },
+  catalisador_hard: {
+    identity: "adult hard-dance catalyst with a powerful humanoid spectral face, athletic posture, and cathartic kick energy",
+    face: "focused bright eyes, fearless calm expression, red-cyan plasma skin, strong cheekbone light, intense but not aggressive",
+    wardrobe: "structured hard-club armor collar, reflective black performance jacket, kick-reactive chest core, no mascot or robot body",
+    aura: "hard-kick shock rings, red-white-cyan strobe bursts, euphoric impact halos, compression waves around the shoulders",
+    environment: "large peak-time warehouse floor with bright strobes, smoke, and physical low-end pressure"
+  },
+  navegante_breaks: {
+    identity: "adult broken-rhythm navigator with a stylish humanoid spectral face, agile lateral energy, and clever underground charisma",
+    face: "alert curious eyes, subtle sideways smirk, aqua-rose translucent skin, expressive brow, playful intelligence",
+    wardrobe: "asymmetric street-club jacket, lightweight headphones, iridescent straps, garage-inspired jewelry, face fully visible",
+    aura: "broken-grid waveforms, syncopated light steps, sub-bass ripples, magenta-cyan negative-space geometry",
+    environment: "night city club corridor with moving reflections, bass haze, and sharp off-grid light"
   }
 };
 
@@ -9491,6 +9613,93 @@ const SPIRIT_MASCOT_VARIANTS = {
         es: "Encuentras belleza en desvíos que todavía bailan."
       }
     }
+  ],
+  oraculo_trance: [
+    {
+      motif: "comet",
+      crown: "halo",
+      quote: {
+        pt: "Você sobe com a melodia e espera o drop abrir o céu.",
+        en: "You rise with melody and wait for the drop to open the sky.",
+        es: "Subes con la melodía y esperas que el drop abra el cielo."
+      }
+    },
+    {
+      motif: "star",
+      crown: "spark",
+      quote: {
+        pt: "Seu espírito procura suspensão, brilho e alívio emocional.",
+        en: "Your spirit seeks lift, glow, and emotional release.",
+        es: "Tu espíritu busca elevación, brillo y liberación emocional."
+      }
+    },
+    {
+      motif: "crystal",
+      crown: "halo",
+      quote: {
+        pt: "Você reconhece quando a energia fica grande sem perder beleza.",
+        en: "You know when energy gets big without losing beauty.",
+        es: "Reconoces cuando la energía crece sin perder belleza."
+      }
+    }
+  ],
+  catalisador_hard: [
+    {
+      motif: "bolt",
+      crown: "flame",
+      quote: {
+        pt: "Você quer kick, catarse e luz explodindo no peito.",
+        en: "You want kick, catharsis, and light exploding in the chest.",
+        es: "Quieres kick, catarsis y luz explotando en el pecho."
+      }
+    },
+    {
+      motif: "speaker",
+      crown: "spark",
+      quote: {
+        pt: "Seu espírito acelera quando a pressão vira euforia.",
+        en: "Your spirit accelerates when pressure becomes euphoria.",
+        es: "Tu espíritu acelera cuando la presión se vuelve euforia."
+      }
+    },
+    {
+      motif: "atom",
+      crown: "halo",
+      quote: {
+        pt: "Você transforma impacto em liberação direta.",
+        en: "You turn impact into direct release.",
+        es: "Conviertes impacto en liberación directa."
+      }
+    }
+  ],
+  navegante_breaks: [
+    {
+      motif: "grid",
+      crown: "spark",
+      quote: {
+        pt: "Você dança nos espaços entre uma batida e outra.",
+        en: "You dance in the spaces between hits.",
+        es: "Bailas en los espacios entre golpe y golpe."
+      }
+    },
+    {
+      motif: "drop",
+      crown: "halo",
+      quote: {
+        pt: "Seu radar gosta de swing quebrado e grave flexível.",
+        en: "Your radar likes broken swing and flexible low end.",
+        es: "Tu radar ama el swing quebrado y el grave flexible."
+      }
+    },
+    {
+      motif: "speaker",
+      crown: "flame",
+      quote: {
+        pt: "Você escolhe viradas que mudam o ar sem perder corpo.",
+        en: "You choose turns that change the room without losing body.",
+        es: "Eliges giros que cambian la sala sin perder cuerpo."
+      }
+    }
   ]
 };
 
@@ -9654,6 +9863,36 @@ const SPIRIT_MASCOT_TRAITS = {
     eyes: "curious",
     mouth: "open",
     headphones: "antenna"
+  },
+  oraculo_trance: {
+    shape: "soft",
+    face: "#edf6ff",
+    hair: "halo",
+    outfit: "robe",
+    accessory: "portalStaff",
+    eyes: "wonder",
+    mouth: "calm",
+    headphones: "classic"
+  },
+  catalisador_hard: {
+    shape: "angular",
+    face: "#fff0f5",
+    hair: "spikes",
+    outfit: "speedSuit",
+    accessory: "speakerRig",
+    eyes: "focused",
+    mouth: "smirk",
+    headphones: "bass"
+  },
+  navegante_breaks: {
+    shape: "diamond",
+    face: "#efffff",
+    hair: "fractal",
+    outfit: "patchwork",
+    accessory: "mixPanel",
+    eyes: "curious",
+    mouth: "smirk",
+    headphones: "studio"
   }
 };
 
@@ -27710,6 +27949,7 @@ function storyGenreNarrativeByStyle(styleKey = "") {
       bass_music: "Low-end impact first, broken rhythms, and high-contrast texture.",
       house: "Groove-led low-end, steady pulse, and warm dancefloor momentum.",
       leftfield: "Experimental textures, evolving ambience, and non-linear rhythmic identity.",
+      trance: "Big melody, emotional lift, and clean build-release energy for euphoric focus.",
       hard_dance: "Hard kick focus, aggressive transients, and peak-time intensity."
     };
     return byFamily[family] || "Electronic profile focused on texture, low-end impact, and dancefloor tension.";
@@ -27731,6 +27971,7 @@ function storyGenreNarrativeByStyle(styleKey = "") {
       bass_music: "Impacto de grave en primer plano, ritmo quebrado y textura contrastada.",
       house: "Grave con groove, pulso estable y energía cálida de club.",
       leftfield: "Texturas experimentales, ambiencia evolutiva y ritmo menos lineal.",
+      trance: "Melodía grande, elevación emocional y build-release limpio para foco eufórico.",
       hard_dance: "Kick agresivo, transientes duros y energía de pico."
     };
     return byFamily[family] || "Perfil electrónico centrado en textura, grave e intensidad de pista.";
@@ -27751,6 +27992,7 @@ function storyGenreNarrativeByStyle(styleKey = "") {
     bass_music: "Impacto de grave em primeiro plano, ritmo quebrado e textura contrastada.",
     house: "Groove de baixo marcado, pulso estável e calor de pista.",
     leftfield: "Texturas experimentais, ambiência evolutiva e ritmo menos linear.",
+    trance: "Melodia grande, elevação emocional e build-release limpo para foco eufórico.",
     hard_dance: "Kick agressivo, transientes secos e energia de pico."
   };
   return byFamily[family] || "Perfil eletrônico com foco em textura, grave e tensão de pista.";
@@ -27798,6 +28040,7 @@ function spiritPersonalityText(profile = {}) {
       dnb: "Personalidade do gosto: rápida, alerta e fluida; gosta de contraste, velocidade, subgrave e energia que corre sem perder controle.",
       bass_music: "Personalidade do gosto: física, direta e curiosa por impacto; procura peso, textura, viradas e surpresa no corpo.",
       leftfield: "Personalidade do gosto: observadora, imaginativa e pouco óbvia; valoriza textura, detalhe e ideias que demoram alguns segundos para revelar sentido.",
+      trance: "Personalidade do gosto: emocional, expansiva e aérea; procura melodia grande, suspensão, build limpo e liberação de energia com beleza.",
       hard_dance: "Personalidade do gosto: intensa, frontal e catártica; prefere kick forte, euforia e liberação de energia sem muita volta.",
       hybrid: "Personalidade do gosto: híbrida, seletiva e sensorial; compara textura, pulso e clima antes de decidir se uma faixa merece ficar."
     },
@@ -27808,6 +28051,7 @@ function spiritPersonalityText(profile = {}) {
       dnb: "Taste personality: fast, alert, and fluid; it enjoys contrast, speed, sub-bass, and energy that moves without losing control.",
       bass_music: "Taste personality: physical, direct, and impact-curious; it looks for weight, texture, turns, and body-level surprise.",
       leftfield: "Taste personality: observant, imaginative, and less obvious; it values texture, detail, and ideas that reveal themselves after a few seconds.",
+      trance: "Taste personality: emotional, expansive, and airborne; it seeks big melody, suspension, clean builds, and beautiful energy release.",
       hard_dance: "Taste personality: intense, frontal, and cathartic; it wants strong kicks, euphoria, and energy release without much hesitation.",
       hybrid: "Taste personality: hybrid, selective, and sensory; it compares texture, pulse, and mood before deciding whether a track should stay."
     },
@@ -27818,6 +28062,7 @@ function spiritPersonalityText(profile = {}) {
       dnb: "Personalidad del gusto: rápida, alerta y fluida; disfruta contraste, velocidad, subgrave y energía que corre sin perder control.",
       bass_music: "Personalidad del gusto: física, directa y curiosa por el impacto; busca peso, textura, giros y sorpresa en el cuerpo.",
       leftfield: "Personalidad del gusto: observadora, imaginativa y poco obvia; valora textura, detalle e ideas que tardan unos segundos en revelar sentido.",
+      trance: "Personalidad del gusto: emocional, expansiva y aérea; busca melodía grande, suspensión, builds limpios y liberación hermosa de energía.",
       hard_dance: "Personalidad del gusto: intensa, frontal y catártica; prefiere kick fuerte, euforia y liberación de energía sin demasiada vuelta.",
       hybrid: "Personalidad del gusto: híbrida, selectiva y sensorial; compara textura, pulso y clima antes de decidir si una pista se queda."
     }
@@ -27872,6 +28117,7 @@ function spiritCollectibleMicroQuote(profile = {}) {
       dnb: "Você busca velocidade, contraste e subgrave sem perder fluidez.",
       bass_music: "Você reage a peso físico, textura e viradas que mudam o ar.",
       leftfield: "Você percebe beleza no estranho quando ele ganha forma.",
+      trance: "Você procura melodia, suspensão e energia que abre espaço.",
       hard_dance: "Você prefere catarse direta, kick forte e energia no limite.",
       hybrid: "Você compara clima, textura e pulso antes de entregar o like."
     },
@@ -27882,6 +28128,7 @@ function spiritCollectibleMicroQuote(profile = {}) {
       dnb: "You seek speed, contrast, and sub-bass without losing flow.",
       bass_music: "You react to physical weight, texture, and turns that change the room.",
       leftfield: "You notice beauty in the strange once it takes shape.",
+      trance: "You seek melody, lift, and energy that opens space.",
       hard_dance: "You prefer direct catharsis, hard kicks, and peak energy.",
       hybrid: "You compare mood, texture, and pulse before giving the like."
     },
@@ -27892,6 +28139,7 @@ function spiritCollectibleMicroQuote(profile = {}) {
       dnb: "Buscas velocidad, contraste y subgrave sin perder fluidez.",
       bass_music: "Reaccionas al peso físico, textura y giros que cambian la sala.",
       leftfield: "Notas belleza en lo extraño cuando empieza a tomar forma.",
+      trance: "Buscas melodía, elevación y energía que abre espacio.",
       hard_dance: "Prefieres catarsis directa, kick fuerte y energía al límite.",
       hybrid: "Comparas clima, textura y pulso antes de dar el like."
     }
@@ -27911,6 +28159,7 @@ function spiritStyleAppealText(styleKey = "") {
       dnb: "Funciona pela velocidade, pela bateria quebrada e pelo contraste entre pressão e fluidez. Quando acerta, parece correr sem perder controle: subgrave, respiro melódico e impulso constante.",
       bass_music: "Chama atenção pelo impacto do subgrave, pelos drops e pela energia corporal imediata. É um gosto que procura textura física: peso, surpresa e aquela virada que muda o ar da sala.",
       leftfield: "Atrai quem gosta de textura, detalhe e surpresa, com menos fórmula e mais exploração sonora. O valor está no estranho que faz sentido depois de alguns segundos.",
+      trance: "Atrai pela melodia grande, pela suspensão emocional e pela sensação de abertura. Quando funciona, o build prepara o corpo e o drop vira alívio luminoso.",
       hard_dance: "Entrega catarse direta: kick forte, euforia e descarga de energia. Funciona quando o usuário quer intensidade sem pedir licença, com recompensa rápida e presença física."
     },
     en: {
@@ -27920,6 +28169,7 @@ function spiritStyleAppealText(styleKey = "") {
       dnb: "It hits through speed, broken drums, and the contrast between pressure and flow. When it lands, it feels fast without losing control: sub weight, melodic air, and forward motion.",
       bass_music: "It grabs attention with sub-bass impact, drops, and immediate body energy. This taste looks for physical texture: weight, surprise, and a turn that changes the room.",
       leftfield: "It attracts listeners who want texture, detail, surprise, and less predictable forms. The value is in the strange thing that starts making sense after a few seconds.",
+      trance: "It works through big melody, emotional suspension, and the feeling of opening space. When it lands, the build prepares the body and the drop becomes luminous release.",
       hard_dance: "It delivers direct catharsis: strong kicks, euphoria, and energy release. It works when intensity should arrive quickly and physically."
     },
     es: {
@@ -27929,6 +28179,7 @@ function spiritStyleAppealText(styleKey = "") {
       dnb: "Impacta por la velocidad, las baterías rotas y el contraste entre presión y fluidez. Cuando encaja, corre sin perder control: subgrave, aire melódico e impulso constante.",
       bass_music: "Llama por el subgrave, los drops y la energía corporal inmediata. Este gusto busca textura física: peso, sorpresa y un giro que cambia la sala.",
       leftfield: "Atrae a quien busca textura, detalle, sorpresa y formas menos previsibles. El valor está en lo extraño que empieza a tener sentido después de unos segundos.",
+      trance: "Atrae por la melodía grande, la suspensión emocional y la sensación de apertura. Cuando funciona, el build prepara el cuerpo y el drop se vuelve liberación luminosa.",
       hard_dance: "Entrega catarsis directa: kick fuerte, euforia y descarga de energía. Funciona cuando la intensidad debe llegar rápido y sentirse en el cuerpo."
     }
   };
@@ -29407,10 +29658,14 @@ function spiritVisualFamilyKey(spirit) {
   if (has("psycore", "hi_tech")) return "psy_extreme";
   if (has("dark_psy", "forest_psy", "dark_experimental", "slambient", "dark_progressive")) return "psy_dark";
   if (has("psytrance", "goa_trance", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial")) return "psy_bright";
+  if (has("trance_uplifting", "tech_trance", "hard_trance")) return "trance";
+  if (has("hardstyle", "hardcore", "frenchcore", "speedcore", "rawstyle", "gabber", "schranz")) return "hard_dance";
   if (has("acid_techno", "techno", "hard_techno", "industrial_techno", "minimal_techno", "peak_time_techno", "melodic_techno")) return "techno";
   if (has("ambient", "downtempo")) return "organic";
   if (has("tech_house", "house", "deep_house", "afro_house", "organic_house", "bass_house", "progressive_house", "electro_house")) return "house";
-  if (has("drum_and_bass", "liquid_dnb", "neurofunk", "jump_up", "jungle", "dubstep", "breakbeat")) return "bass";
+  if (has("drum_and_bass", "liquid_dnb", "neurofunk", "jump_up", "jungle", "dubstep", "riddim", "halftime_bass")) return "bass";
+  if (has("breakbeat", "uk_garage", "future_garage", "footwork_juke", "wave")) return "breaks";
+  if (has("trap", "future_bass", "experimental_bass", "brazilian_funk")) return "bass";
   if (has("idm", "electro", "uk_garage", "future_garage")) return "experimental";
   return "hybrid";
 }
@@ -29428,6 +29683,14 @@ const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
     "Psychedelic festival styling: adult humanoid spirit bust with saturated UV accessories, mandala jewelry, braided or neon hair accents, luminous scarf, open festival charisma, pearlescent ghost skin, and clean euphoric stage light",
     "Goa/full-on styling: realistic spectral festival guide with colorful textile layers, sun or midnight laser reflections, bead-like light details, expressive face, and melodic psychedelic glow"
   ],
+  trance: [
+    "Trance styling: adult luminous frequency oracle with celestial club elegance, opaline silver-blue skin, clean melodic halo rings, refined chrome collar, emotional open gaze, and no forest-psy ritual costume",
+    "Uplifting/tech-trance styling: realistic adult spectral melodic guardian with wide sound-wave arcs, blue-violet stage light, polished futuristic robe or jacket, and euphoric but calm expression"
+  ],
+  hard_dance: [
+    "Hard dance/hardcore styling: adult spectral kick catalyst with red-cyan plasma skin, structured impact collar, reflective black performance jacket, hard-kick shock rings, bright strobe energy, and intense but non-aggressive gaze",
+    "Hardstyle/frenchcore styling: realistic adult club guardian with athletic bust posture, euphoric impact halo, white-red-cyan light, compression-wave aura, and no psytrance mandalas"
+  ],
   techno: [
     "Techno/acid styling: adult spectral clubber bust with industrial elegance, black tailoring, leather or mesh textures, reflective seams, transparent visor lifted above the eyes, concrete-room strobe, acid-green steel light, and silver-blue ghost skin",
     "Industrial club styling: realistic adult techno spirit with minimal black clothes, metallic accessories, precise posture, machine-room confidence, visible eyes, and no faceless mask"
@@ -29439,6 +29702,10 @@ const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
   bass: [
     "Bass/DnB styling: adult humanoid bass spirit bust with physical low-end presence, tactical street-club jacket, headphones or pressure-ring collar, kinetic shoulders, speaker-shadow aura, translucent smoke skin, and sharp approachable gaze",
     "Neuro/bass styling: realistic adult bass entity with heavyweight jacket, reflective straps, chest-level subwoofer light, clean drum-attack sparks, and confident impact-focused expression"
+  ],
+  breaks: [
+    "Breaks/garage styling: adult spectral broken-rhythm navigator with asymmetric street-club jacket, visible clever eyes, aqua-rose ghost skin, lightweight headphones, syncopated light steps, and agile off-grid charisma",
+    "UK garage/future-garage styling: realistic adult underground spirit with elegant streetwear, negative-space waveform halo, bass haze, magenta-cyan reflections, and sideways rhythmic attitude"
   ],
   organic: [
     "Downtempo/ambient/organic styling: adult spectral bust with mystical but realistic calm, woven layered fabrics, analog jewelry, plant or wood accents, low-lamp glow, translucent moonlit skin, and serene magnetic expression",
@@ -29466,6 +29733,14 @@ const SPIRIT_STYLE_FAMILY_ACCESSORIES = {
     "mandala pendant, colorful woven scarf, neon hair accent",
     "festival beads, luminous shoulder trim, UV-reactive face accents away from the eyes"
   ],
+  trance: [
+    "chrome-blue collar, translucent melodic halo, opal earrings",
+    "crystal pendant, celestial headphone crown, violet frequency rings"
+  ],
+  hard_dance: [
+    "impact collar, reflective black performance jacket, red-cyan strobe accents",
+    "kick-reactive chest core, compression-wave shoulder trim, hard-club ear cuffs"
+  ],
   techno: [
     "transparent visor lifted above the eyes, black mesh layer, acid-green reflective seams",
     "minimal metal ear cuff, structured club coat, concrete-strobe reflections"
@@ -29477,6 +29752,10 @@ const SPIRIT_STYLE_FAMILY_ACCESSORIES = {
   bass: [
     "headphones around the neck, pressure-ring collar, tactical club jacket",
     "reflective straps, heavy bass jacket, wrist bands with subwoofer glow"
+  ],
+  breaks: [
+    "asymmetric street-club jacket, lightweight headphones, iridescent straps",
+    "garage-inspired jewelry, off-grid light pins, magenta-cyan strap details"
   ],
   organic: [
     "woven collar, analog pendant, botanical textile accents",
@@ -29697,7 +29976,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to electronic music, psytrance, frequency, rhythm, dance and festival culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and calm hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green or opaline tones, delicate gold circuit-like markings, metallic accents, refined ritual jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, ceremonial crown, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, electronic mandalas and dancefloor lights. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and calm hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",

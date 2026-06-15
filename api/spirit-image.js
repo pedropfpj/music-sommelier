@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v16-guardian-bust";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v12";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v13";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm humanoid spectral face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -35,8 +35,37 @@ const SPIRIT_ENTITY_BRIEFS = {
   arquiteto_hipnotico: "adult hypnotic architect, focused realistic face, steady eyes, structured dark coat, blueprint-light tattoos, repeating pressure corridors, acid techno geometry",
   cacador_bass: "adult bass hunter, charismatic humanoid spectral face, sharp eyes, magnetic grin, heavy bass jacket, pressure-ring collar, subwoofer rings, magenta-blue drop shockwaves",
   viajante_organico: "adult organic voyager, serene realistic humanoid spectral face, gentle smile, woven organic layers, botanical signal filaments, green-gold downtempo waves, analog warmth",
-  explorador_fractal: "adult fractal explorer, curious realistic humanoid spectral face, asymmetrical smile, patchwork technical jacket, fractal cubes, IDM micro-detail sparks, orange-cyan-violet geometry"
+  explorador_fractal: "adult fractal explorer, curious realistic humanoid spectral face, asymmetrical smile, patchwork technical jacket, fractal cubes, IDM micro-detail sparks, orange-cyan-violet geometry",
+  oraculo_trance: "adult trance oracle, luminous humanoid spectral face, open hypnotic eyes, chrome-blue collar, celestial melodic halo rings, violet-blue frequency arcs, clean euphoric club light",
+  catalisador_hard: "adult hard dance catalyst, powerful humanoid spectral face, red-cyan plasma skin, impact collar, reflective black performance jacket, hard-kick shock rings, euphoric strobe pressure",
+  navegante_breaks: "adult breaks navigator, stylish humanoid spectral face, alert curious eyes, asymmetric street-club jacket, lightweight headphones, broken-grid waveforms, magenta-cyan syncopated light"
 };
+
+function dominantStyleVisualRule(dominantStyles = "") {
+  const text = String(dominantStyles || "").toLowerCase();
+  if (/(hardstyle|hardcore|frenchcore|speedcore|rawstyle|gabber|schranz)/.test(text)) {
+    return "Hard dance / hardcore visual family: fierce but beautiful adult spectral club guardian, hard-kick armor collar, red-white-cyan strobe, euphoric impact halos, athletic posture, no psytrance mandalas unless the styles explicitly include psy.";
+  }
+  if (/(trance|uplifting|tech trance|hard trance)/.test(text) && !/(psy|goa|full[- ]?on)/.test(text)) {
+    return "Trance visual family: luminous adult melodic-frequency oracle, clean euphoric halo rings, elegant chrome-blue-violet collar, celestial club light, open emotional gaze, no forest-psy ritual styling.";
+  }
+  if (/(techno|acid|industrial|minimal|detroit|raw|ebm|peak)/.test(text)) {
+    return "Techno visual family: adult spectral club architect, industrial black tailoring, concrete-room strobe, acid or steel light, precise posture, minimal high-fashion accessories, no psychedelic festival costume.";
+  }
+  if (/(house|afro|organic|deep|disco|jackin|garage house|tech house)/.test(text)) {
+    return "House visual family: warm adult groove spirit, stylish clubwear, tasteful jewelry, visible human warmth, amber/pink/green light, social dancefloor charisma, no dark-psy forest costume.";
+  }
+  if (/(drum|dnb|jungle|neurofunk|jump up|dubstep|bass|trap|garage|breakbeat|footwork|wave)/.test(text)) {
+    return "Bass / DnB / breaks visual family: adult low-frequency guardian, tactical street-club fashion, pressure-ring collar, headphones or speaker-shadow aura, kinetic shoulders, magenta-cyan impact light, no psytrance shaman styling.";
+  }
+  if (/(ambient|downtempo|chillout|trip hop|organic|leftfield|idm|electro|experimental)/.test(text)) {
+    return "Ambient / leftfield visual family: adult atmospheric spirit, soft spectral skin, organic or cyber-editorial clothing depending on the brief, mist, particles, contemplative gaze, no festival-psy default.";
+  }
+  if (/(psy|goa|full[- ]?on|forest|dark progressive|slambient|hitech|hi tech)/.test(text)) {
+    return "Psychedelic visual family: adult spectral ritual/festival guardian with UV/fractal details, but still realistic and premium, with face fully readable.";
+  }
+  return "General electronic visual family: follow the dominant styles and spirit brief exactly; do not default to psytrance. Build a distinct club/frequency entity for the user's actual taste.";
+}
 
 function spiritEntityBrief(body = {}) {
   const bodyBrief = trimText(body.humanEntityBrief || body.spiritHumanBrief || "", 1400);
@@ -189,21 +218,23 @@ module.exports = async function handler(req, res) {
 
   const humanEntityBrief = spiritEntityBrief(body);
   const dominantStyles = trimText(body.dominantStyles, 220);
+  const visualFamilyRule = dominantStyleVisualRule(dominantStyles || humanEntityBrief);
   const characterRegeneration = body.forceRegenerate === true || body.characterRegeneration === true;
   const characterReplacementInstruction = characterRegeneration
     ? "USER REJECTED THE PREVIOUS CHARACTER: this regeneration must create a different fictional adult person. Do not keep the same face, bust, head shape, hair, apparent presentation, skin tone, body silhouette, posture, expression, or character identity. Preserve the same musical spirit/archetype, but replace the person."
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to electronic music, psytrance and festival culture: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies, rhythm and dance. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
+    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to the user's dominant electronic music styles, club culture, frequency, rhythm and dance: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
     characterReplacementInstruction,
     `Spirit-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
+    visualFamilyRule,
     "The app will add all text, stats, frame, and UI later. Generate only the central artwork: no typography, captions, numbers, logos, watermarks, borders, UI panels, poster text, label text or brand marks inside the image.",
     "Required visual language: realistic skin texture mixed with ethereal glow; luminous or translucent eyes; cool silver, blue, violet, cyan, rose, green or opaline spectral skin; delicate gold circuit-like lines or spiritual markings; refined metallic details; earrings, pendants, crystals, small ritual jewels and geometric ornaments.",
     "Required head and torso design: a large integrated head accessory combining futuristic headphones, ceremonial crown, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings, electronic mandalas and dancefloor lights. On the neck and upper chest, create an elegant futuristic collar or armor with glowing circuits, biomechanical detail and a central bright medallion containing sacred geometry, triangles, circles and violet/blue/cyan light.",
-    "Lighting and scene: dark cinematic background, soft smoke, particles, bokeh, neon purple, blue, magenta and cyan, dramatic side glow, readable face key light, metallic reflections, high contrast, shallow depth of field, deep trance atmosphere and premium sci-fi spiritual finish.",
-    "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, bass should feel physical and pressure-driven, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
+    "Lighting and scene: dark cinematic background, soft smoke, particles, bokeh, neon purple, blue, magenta and cyan, dramatic side glow, readable face key light, metallic reflections, high contrast, shallow depth of field, deep musical atmosphere and premium sci-fi spiritual finish.",
+    "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, trance should feel euphoric/celestial/melodic, bass should feel physical and pressure-driven, hard dance should feel high-impact and euphoric, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
     "Vary the entity design across generations: change face identity, head shape, spectral skin material, expression, headpiece, jewelry, collar, medallion, aura, lighting and emotional presence. Occasional androgynous adult variants are encouraged.",
     characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
     "Strict negative style: no cartoon, no anime, no childish illustration, no mascot, no emoji, no doll, no flat vector, no abstract crystal, no blank gradient, no placeholder, no robot body, no creature, no skull, no plastic mannequin, no deformed face, no crossed eyes, no hands, no full body, no aggressive expression, no generic fantasy character, no stock portrait, no ordinary DJ photo, no normal flesh-toned passport portrait.",

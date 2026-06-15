@@ -1,6 +1,6 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 15/06/2026, 17:17:39
+Gerado em: 15/06/2026, 18:12:50
 Status: OK
 
 ## Resumo
@@ -20,9 +20,9 @@ Status: OK
 
 ## Mudanca de catalogo
 
-- Faixas auditadas: +0 faixas adicionadas, -3 faixas removidas; total anterior 3962, total atual 3959.
-- Musicas buscaveis estimadas: +0 musicas adicionadas, -19 musicas removidas; total anterior 87400, total atual 87381.
-- Artistas indexados: delta -1; total atual 4599.
+- Faixas auditadas: +0 faixas adicionadas, -0 faixas removidas; total anterior 3959, total atual 3959.
+- Musicas buscaveis estimadas: +0 musicas adicionadas, -0 musicas removidas; total anterior 87381, total atual 87381.
+- Artistas indexados: delta +0; total atual 4599.
 - Observacao: se removermos musicas ou artistas ruins, a reducao aparece aqui explicitamente no proximo relatorio.
 
 ## Leitura rapida
