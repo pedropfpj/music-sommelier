@@ -145,9 +145,9 @@ const AI_DEFAULT_CONFIG = {
   premiumUnlocked: false,
   dailyTextLimit: 10,
   dailyFreeDiscoveryLimit: 80,
-  imageLimitPerProfile: isLocalStaticPreviewEnvironment() ? 3 : 5,
+  imageLimitPerProfile: 0,
   premiumImageLimitPerProfile: 0,
-  allowImageRegeneration: isLocalStaticPreviewEnvironment(),
+  allowImageRegeneration: true,
   textCacheMaxEntries: 120
 };
 const AI_FEATURE_CONFIG = {
@@ -5748,8 +5748,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v32";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v13-humanoid-local-guard";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v33";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v14-ai-first-no-mascot";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -30919,6 +30919,17 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
+    const imageEndpointAvailable = Boolean(resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image"));
+    if (imageEndpointAvailable && !isStaticPreviewHost()) {
+      return {
+        imageUrl: "",
+        source: "pending",
+        createdAt: new Date().toISOString(),
+        prompt,
+        userSignature,
+        profileSignature
+      };
+    }
     const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
       spirit,
       spiritText,
@@ -31165,7 +31176,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         forceRegenerate
       });
       const expectedAiRefresh = forceRegenerate && canUseAiForThisAttempt && apiAvailableForAttempt && aiImageEnabled();
-      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl && !generatedCollectible?.imageUrl) {
+      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl) {
         collectible = previousCollectible;
         keptPreviousCollectible = true;
       } else {

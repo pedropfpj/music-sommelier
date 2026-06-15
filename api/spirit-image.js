@@ -17,7 +17,7 @@ const {
 } = require("./_usage-store");
 
 const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v10-coherent-profile";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v9";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v10";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -98,12 +98,12 @@ module.exports = async function handler(req, res) {
     enabledEnv: "SONIC_AI_IMAGE_ENABLED",
     defaultEnabled: false,
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
-    defaultDailyLimit: 3,
+    defaultDailyLimit: 50,
     budgetOnStart: false
   })) return;
 
   const body = parseBody(req);
-  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", true);
+  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false);
   if (requirePremium && body.premiumUnlocked !== true) {
     sendJson(res, 402, { error: "premium_required" });
     return;
@@ -121,7 +121,7 @@ module.exports = async function handler(req, res) {
   }
 
   const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", true);
-  const maxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 5 : 1, 1, 20);
+  const maxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 20 : 1, 1, 50);
   const requestedGeneration = Math.max(1, Number(body.imageGenerationIndex) || 1);
   const forceRegenerate = body.forceRegenerate === true;
   const existing = await readJson(imageKey);
