@@ -5748,8 +5748,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v17";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v33";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v14-ai-first-no-mascot";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v34";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v15-hyperreal-bust";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -14934,10 +14934,10 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte bem diferente para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Sem depender da API: gero um card local/offline com personagem, busto, expressão e composição derivados do seu espírito. No Vercel, a IA premium pode criar uma entidade espectral mais bonita e realista.",
-    spiritCollectibleHintLocalReady: "Arte local/offline criada. Ela muda personagem, busto, expressão e composição a cada nova geração, mesmo sem API de imagem.",
-    spiritCollectibleHintApi: "Arte premium por IA: entidade musical espectral, adulta, futurista e levemente cartunesca. A pele pode variar entre azul, verde, rosa, vermelho, amarelo, violeta ou opalina, com luz mais clara no rosto, roupa eletrônica, acessórios e aura derivados do seu gosto. Ao regenerar, muda personagem, busto e expressão.",
-    spiritCollectiblePremiumLocked: "Arte IA premium preparada. Sem prévia local para evitar avatar artificial.",
+    spiritCollectibleHintLocal: "Sem depender da API: gero uma prévia local com busto espectral, fones/halo, collar futurista e aura derivados do seu espírito. No Vercel, a IA online tenta elevar isso para um retrato hiper-realista.",
+    spiritCollectibleHintLocalReady: "Prévia local criada. Ao regenerar, muda personagem, busto, expressão, pele espectral, acessórios e composição, mesmo sem API de imagem.",
+    spiritCollectibleHintApi: "Arte premium por IA: busto frontal hiper-realista de uma entidade musical espectral, adulta, andrógina, espiritual e futurista, com pele luminosa, fones/coroa/halo, joias, collar e medalhão derivados do seu gosto.",
+    spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a prévia local mantém o espírito visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
@@ -14968,9 +14968,9 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
     spiritCollectibleGeneratingFailed: "A arte não ficou pronta agora. O fallback local pode tentar novamente sem API.",
     spiritCollectiblePlaceholderKicker: "Espírito musical IA",
-    spiritCollectiblePlaceholderTitle: "Busto espectral em criação",
-    spiritCollectiblePlaceholderText: "Pele fantasma, beleza elevada, aura, roupa e acessórios mudam conforme o espírito.",
-    spiritCollectibleGeneratedLocal: "Arte local/offline criada sem depender da API de imagem.",
+    spiritCollectiblePlaceholderTitle: "Preparando busto espectral",
+    spiritCollectiblePlaceholderText: "O app cria uma prévia local e tenta elevar com IA online.",
+    spiritCollectibleGeneratedLocal: "Prévia espectral local criada sem depender da API de imagem.",
     spiritCollectibleGeneratedApi: "Arte espectral criada por IA com aura, beleza e identidade do seu perfil.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
     spiritCollectibleError: "Não consegui montar a arte agora. Tente gerar novamente; o fallback local não depende da API.",
@@ -15696,10 +15696,10 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate a very different artwork to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "No API required: I generate a local/offline card with a character, bust, expression, and composition derived from your spirit. On Vercel, premium AI can create a more beautiful realistic spectral entity.",
-    spiritCollectibleHintLocalReady: "Local/offline artwork created. It changes character, bust, expression, and composition on every new generation, even without the image API.",
-    spiritCollectibleHintApi: "Premium AI artwork: a futuristic, slightly cartooned adult spectral musical entity. Skin may shift through blue, green, pink, red, yellow, violet, or opal tones, with a brighter face light, electronic wardrobe, accessories, and aura derived from your taste. Regeneration changes character, bust, and expression.",
-    spiritCollectiblePremiumLocked: "Premium AI artwork is prepared. No local preview is shown, to avoid artificial-looking avatars.",
+    spiritCollectibleHintLocal: "No API required: I generate a local preview with a spectral bust, headphones/halo, futuristic collar, and aura derived from your spirit. On Vercel, online AI tries to elevate it into a hyper-real portrait.",
+    spiritCollectibleHintLocalReady: "Local preview created. Regeneration changes character, bust, expression, spectral skin, accessories, and composition, even without the image API.",
+    spiritCollectibleHintApi: "Premium AI artwork: a hyper-real front bust of an adult androgynous spiritual futuristic musical-spirit entity, with luminous skin, headphones/crown/halo, jewelry, collar, and medallion derived from your taste.",
+    spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the local preview keeps the spirit visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
@@ -15730,9 +15730,9 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
     spiritCollectibleGeneratingFailed: "Artwork was not ready now. The local fallback can try again without an API.",
     spiritCollectiblePlaceholderKicker: "AI music spirit",
-    spiritCollectiblePlaceholderTitle: "Spectral bust in progress",
-    spiritCollectiblePlaceholderText: "Ghost skin, elevated beauty, aura, wardrobe, and accessories change with the spirit.",
-    spiritCollectibleGeneratedLocal: "Local/offline artwork created without depending on the image API.",
+    spiritCollectiblePlaceholderTitle: "Preparing spectral bust",
+    spiritCollectiblePlaceholderText: "The app creates a local preview and tries to upgrade it with online AI.",
+    spiritCollectibleGeneratedLocal: "Local spectral preview created without depending on the image API.",
     spiritCollectibleGeneratedApi: "AI spectral artwork created with your profile's aura, beauty, and identity.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
     spiritCollectibleError: "I could not assemble the artwork right now. Try generating again; the local fallback does not depend on the API.",
@@ -16455,10 +16455,10 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte muy diferente para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Sin depender de la API: genero un card local/offline con personaje, busto, expresión y composición derivados de tu espíritu. En Vercel, la IA premium puede crear una entidad espectral más bella y realista.",
-    spiritCollectibleHintLocalReady: "Arte local/offline creada. Cambia personaje, busto, expresión y composición en cada nueva generación, incluso sin API de imagen.",
-    spiritCollectibleHintApi: "Arte premium con IA: entidad musical espectral, adulta, futurista y levemente caricaturizada. La piel puede variar entre azul, verde, rosa, rojo, amarillo, violeta u opalina, con luz más clara en el rostro, ropa electrónica, accesorios y aura derivados de tu gusto. Al regenerar, cambia personaje, busto y expresión.",
-    spiritCollectiblePremiumLocked: "El arte premium con IA está preparado. Sin vista previa local para evitar avatares artificiales.",
+    spiritCollectibleHintLocal: "Sin depender de la API: genero una vista local con busto espectral, audífonos/halo, collar futurista y aura derivados de tu espíritu. En Vercel, la IA online intenta elevarla a un retrato hiperrealista.",
+    spiritCollectibleHintLocalReady: "Vista local creada. Al regenerar cambia personaje, busto, expresión, piel espectral, accesorios y composición, incluso sin API de imagen.",
+    spiritCollectibleHintApi: "Arte premium con IA: busto frontal hiperrealista de una entidad musical espectral adulta, andrógina, espiritual y futurista, con piel luminosa, audífonos/corona/halo, joyas, collar y medallón derivados de tu gusto.",
+    spiritCollectiblePremiumLocked: "Arte IA preparado. Mientras la imagen online no llega, la vista local mantiene visible el espíritu.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
@@ -16489,9 +16489,9 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
     spiritCollectibleGeneratingFailed: "El arte no quedó lista ahora. El fallback local puede intentar de nuevo sin API.",
     spiritCollectiblePlaceholderKicker: "Espíritu musical IA",
-    spiritCollectiblePlaceholderTitle: "Busto espectral en creación",
-    spiritCollectiblePlaceholderText: "Piel fantasma, belleza elevada, aura, ropa y accesorios cambian según el espíritu.",
-    spiritCollectibleGeneratedLocal: "Arte local/offline creada sin depender de la API de imagen.",
+    spiritCollectiblePlaceholderTitle: "Preparando busto espectral",
+    spiritCollectiblePlaceholderText: "La app crea una vista local e intenta mejorarla con IA online.",
+    spiritCollectibleGeneratedLocal: "Vista espectral local creada sin depender de la API de imagen.",
     spiritCollectibleGeneratedApi: "Arte espectral creada por IA con aura, belleza e identidad de tu perfil.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
     spiritCollectibleError: "No pude montar el arte ahora. Intenta generar de nuevo; el fallback local no depende de la API.",
@@ -29601,7 +29601,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a fictional adult humanoid musical-spirit entity as a bust-up or chest-up portrait with a believable face, colorful spectral/alien skin, warm expressive luminous eyes, charismatic expression, visible neck, shoulders, upper torso, and cinematic presence. The face must have a brighter readable key light, not disappear into darkness. The result must read immediately as a beautiful spiritual being, not a normal human portrait: more spirit or evolved alien than person, slightly caricatured but ultra-realistic, like premium animated-film realism mixed with editorial futuristic-club photography, with soft painterly polish, luminous aura, and spirit-specific styling. Skin material can be blue, cyan, emerald green, rose pink, red-orange, golden yellow, violet, smoky obsidian, or opaline pearl, with glow under the surface; avoid normal flesh-toned human skin, plain passport-photo realism, and literal artist/DJ photo results. Use unique electronic-music clothes, unique accessories, unique gaze, and diverse adult presentation across generations. Alternate adult male and adult female busts across generations when seeds change, with occasional androgynous adult variants; never sexualize the body. Psychedelic genres must read as ritual/festival/UV/fractal accessories, techno must read as clubber/industrial/minimal, house as warm social clubwear, bass as physical pressure styling, downtempo/ambient as atmospheric organic, and experimental styles as asymmetric cyber-editorial. Reject any mask-like, mannequin-like, plastic, childish cartoon, anime, mascot, flat vector, emoji, doll, generic avatar, robot, creature, skull, abstract emblem, normal portrait, or literal DJ-photo result. Do not copy or resemble any real person or celebrity. No minors, nudity, sexualized body, gore, readable text, numbers, UI, logos, watermarks, or borders.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to electronic music, psytrance, frequency, rhythm, dance and festival culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and calm hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green or opaline tones, delicate gold circuit-like markings, metallic accents, refined ritual jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, ceremonial crown, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, electronic mandalas and dancefloor lights. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -30274,6 +30274,148 @@ function buildSpiritHumanAvatarSvg(theme, variant, seed = 0, spirit = null) {
     </g>`;
 }
 
+function buildPremiumSpiritBustSvg(theme, variant, seed = 0, spirit = null) {
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071124");
+  const uid = `premiumSpirit${Math.abs(seed || 1)}`;
+  const styleKey = spiritTopStyleKeys(spirit, 1)[0] || "";
+  const family = familyOf(styleKey);
+  const skinPairs = [
+    ["#cad7ff", "#7b6cff"],
+    ["#b7fff2", "#2bb8c9"],
+    ["#ffd1f4", "#8a4dff"],
+    ["#f7f0b2", "#ff8ad8"],
+    ["#b6ffce", "#16a4bd"],
+    ["#d6ccff", "#4bd6ff"],
+    ["#ffb2c9", "#7f8cff"],
+    ["#c8f7ff", "#a855f7"]
+  ];
+  const [skinA, skinB] = skinPairs[(seed >>> 4) % skinPairs.length];
+  const metal = (seed >>> 7) % 2 ? "#f7d477" : "#d8f6ff";
+  const browShift = ((seed >>> 9) % 9) - 4;
+  const eyeGlow = (seed >>> 12) % 2 ? b : a;
+  const expressionY = 453 + ((seed >>> 15) % 9);
+  const shoulderWide = 180 + ((seed >>> 18) % 34);
+  const haloTilt = ((seed >>> 21) % 22) - 11;
+  const chestCore = variant?.motif === "bolt"
+    ? `<path d="M452 666 L426 724 H456 L438 786 L504 704 H474 L492 666 Z" fill="${metal}" fill-opacity="0.72" stroke="${a}" stroke-width="4" />`
+    : `<path d="M450 668 L510 728 L450 788 L390 728 Z" fill="${c}" fill-opacity="0.22" stroke="${metal}" stroke-width="4" /><circle cx="450" cy="728" r="24" fill="${a}" fill-opacity="0.64" stroke="#ffffff" stroke-opacity="0.48" stroke-width="4" />`;
+  const familyAccent = {
+    psytrance: "mandala and UV festival frequency arcs",
+    techno: "precise industrial circuit geometry",
+    house: "warm rounded groove halos",
+    dnb: "fast pressure-ring halos",
+    bass_music: "sub-bass shock rings",
+    leftfield: "asymmetric experimental signal geometry",
+    trance: "melodic lift halos",
+    hard_dance: "hard-kick energy rays",
+    outros: "electronic ritual aura"
+  }[family] || "electronic ritual aura";
+  const haloRings = Array.from({ length: 6 }, (_, index) => {
+    const mixed = hashString(`${seed}::premium-halo::${index}`) >>> 0;
+    const rx = 188 + index * 34 + (mixed % 16);
+    const ry = 74 + index * 18 + ((mixed >>> 5) % 12);
+    const rotate = haloTilt + index * 8;
+    const color = index % 2 ? b : c;
+    return `<ellipse cx="450" cy="284" rx="${rx}" ry="${ry}" fill="none" stroke="${color}" stroke-width="${2.2 + (index % 3) * 0.8}" stroke-opacity="${(0.34 - index * 0.035).toFixed(2)}" transform="rotate(${rotate} 450 284)" />`;
+  }).join("");
+  const crownRays = Array.from({ length: 11 }, (_, index) => {
+    const angle = -72 + index * 14.4;
+    const length = 86 + ((hashString(`${seed}::premium-ray::${index}`) >>> 0) % 54);
+    const rad = (angle * Math.PI) / 180;
+    const x1 = 450 + Math.sin(rad) * 84;
+    const y1 = 194 - Math.cos(rad) * 28;
+    const x2 = 450 + Math.sin(rad) * length;
+    const y2 = 146 - Math.cos(rad) * length * 0.5;
+    return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="${index % 2 ? a : metal}" stroke-width="${index % 3 === 0 ? 5 : 3}" stroke-linecap="round" stroke-opacity="${index % 2 ? "0.62" : "0.46"}" />`;
+  }).join("");
+  const facialCircuits = Array.from({ length: 8 }, (_, index) => {
+    const side = index % 2 ? 1 : -1;
+    const y = 300 + Math.floor(index / 2) * 34;
+    const start = 450 + side * (18 + Math.floor(index / 2) * 14);
+    const end = 450 + side * (86 + (index % 3) * 12);
+    const control = 450 + side * (52 + (index % 4) * 10);
+    return `<path d="M${start} ${y} C${control} ${y - 22}, ${end} ${y + 14}, ${end + side * 26} ${y - 8}" fill="none" stroke="${index % 2 ? metal : a}" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.34" />`;
+  }).join("");
+  const jewelry = Array.from({ length: 5 }, (_, index) => {
+    const side = index % 2 ? 1 : -1;
+    const x = 450 + side * (120 + index * 10);
+    const y = 368 + index * 16;
+    return `<path d="M${x} ${y} V${y + 46}" stroke="${metal}" stroke-width="2.4" stroke-opacity="0.58" /><circle cx="${x}" cy="${y + 54}" r="${6 + (index % 2) * 3}" fill="${index % 2 ? c : a}" fill-opacity="0.76" />`;
+  }).join("");
+  const waveform = Array.from({ length: 25 }, (_, index) => {
+    const mixed = hashString(`${seed}::premium-wave::${index}`) >>> 0;
+    const height = 26 + (mixed % 96);
+    const x = 222 + index * 18;
+    const y = 785 - height;
+    const color = index % 3 === 0 ? c : (index % 2 ? b : a);
+    return `<rect x="${x}" y="${y}" width="9" height="${height}" rx="5" fill="${color}" fill-opacity="${(0.2 + (index % 4) * 0.08).toFixed(2)}" />`;
+  }).join("");
+
+  return `
+    <g filter="url(#mascotGlow)" data-local-spirit-family="${escapeSvgText(familyAccent)}">
+      <defs>
+        <radialGradient id="${uid}Skin" cx="50%" cy="34%" r="64%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.92" />
+          <stop offset="38%" stop-color="${escapeSvgText(skinA)}" stop-opacity="0.88" />
+          <stop offset="100%" stop-color="${escapeSvgText(skinB)}" stop-opacity="0.72" />
+        </radialGradient>
+        <linearGradient id="${uid}Armor" x1="12%" y1="0%" x2="88%" y2="100%">
+          <stop offset="0%" stop-color="${d}" stop-opacity="0.98" />
+          <stop offset="50%" stop-color="${b}" stop-opacity="0.22" />
+          <stop offset="100%" stop-color="${c}" stop-opacity="0.36" />
+        </linearGradient>
+        <radialGradient id="${uid}Core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.96" />
+          <stop offset="34%" stop-color="${a}" stop-opacity="0.78" />
+          <stop offset="100%" stop-color="${c}" stop-opacity="0.12" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="450" cy="810" rx="282" ry="62" fill="${a}" fill-opacity="0.12" />
+      <g opacity="0.94">${haloRings}</g>
+      <g opacity="0.82">${crownRays}</g>
+      <path d="M184 438 C258 236 356 158 450 158 C544 158 642 236 716 438" fill="none" stroke="${b}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.5" />
+      <path d="M240 438 C258 286 336 204 450 204 C564 204 642 286 660 438" fill="none" stroke="${metal}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.56" />
+      <rect x="178" y="392" width="86" height="142" rx="34" fill="#070b20" fill-opacity="0.88" stroke="${a}" stroke-width="7" />
+      <rect x="636" y="392" width="86" height="142" rx="34" fill="#070b20" fill-opacity="0.88" stroke="${b}" stroke-width="7" />
+      <circle cx="221" cy="463" r="26" fill="${c}" fill-opacity="0.22" stroke="${metal}" stroke-width="4" />
+      <circle cx="679" cy="463" r="26" fill="${c}" fill-opacity="0.22" stroke="${metal}" stroke-width="4" />
+      ${jewelry}
+      <path d="M${450 - shoulderWide} 612 C330 660 282 744 254 862 H646 C618 744 570 660 ${450 + shoulderWide} 612 C522 584 378 584 ${450 - shoulderWide} 612 Z" fill="url(#${uid}Armor)" stroke="${a}" stroke-opacity="0.32" stroke-width="5" />
+      <path d="M336 650 C382 690 414 722 450 820 C486 722 518 690 564 650" fill="none" stroke="${metal}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.54" />
+      <path d="M450 528 C488 588 502 636 450 694 C398 636 412 588 450 528 Z" fill="url(#${uid}Skin)" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3" />
+      <g>
+        <path d="M450 166 C534 168 592 232 586 342 C579 474 520 566 450 566 C380 566 321 474 314 342 C308 232 366 168 450 166 Z" fill="url(#${uid}Skin)" stroke="#f9ffff" stroke-opacity="0.28" stroke-width="5" />
+        <path d="M314 342 C314 252 368 176 450 166 C532 176 586 252 586 342 C548 292 508 268 450 268 C392 268 352 292 314 342 Z" fill="${d}" fill-opacity="0.34" />
+        <path d="M334 264 C380 186 520 184 566 266" fill="none" stroke="${a}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.34" />
+        <path d="M350 345 C376 328 408 328 434 346" fill="none" stroke="#0b1024" stroke-width="7" stroke-linecap="round" stroke-opacity="0.36" />
+        <path d="M466 346 C492 328 524 328 550 345" fill="none" stroke="#0b1024" stroke-width="7" stroke-linecap="round" stroke-opacity="0.36" />
+        <path d="M358 376 C382 358 414 358 438 376 C412 395 384 395 358 376 Z" fill="#efffff" fill-opacity="0.86" />
+        <path d="M462 376 C486 358 518 358 542 376 C516 395 488 395 462 376 Z" fill="#efffff" fill-opacity="0.86" />
+        <circle cx="400" cy="376" r="14" fill="${eyeGlow}" fill-opacity="0.92" />
+        <circle cx="500" cy="376" r="14" fill="${eyeGlow}" fill-opacity="0.92" />
+        <circle cx="403" cy="372" r="5" fill="#ffffff" />
+        <circle cx="503" cy="372" r="5" fill="#ffffff" />
+        <path d="M450 390 C432 422 432 450 458 466" fill="none" stroke="#11172f" stroke-width="5" stroke-linecap="round" stroke-opacity="0.46" />
+        <path d="M394 ${expressionY + browShift} C420 ${expressionY + 18} 482 ${expressionY + 18} 508 ${expressionY + browShift}" fill="none" stroke="#11172f" stroke-width="7" stroke-linecap="round" stroke-opacity="0.68" />
+        ${facialCircuits}
+        <path d="M450 214 L476 248 L450 282 L424 248 Z" fill="${metal}" fill-opacity="0.3" stroke="${metal}" stroke-width="3" stroke-opacity="0.66" />
+        <circle cx="450" cy="248" r="10" fill="${a}" fill-opacity="0.76" />
+      </g>
+      <g opacity="0.78">
+        <path d="M300 618 H600" stroke="${a}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.28" />
+        <path d="M382 612 C406 648 426 672 450 728 C474 672 494 648 518 612" fill="none" stroke="${b}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.42" />
+        <circle cx="450" cy="728" r="82" fill="url(#${uid}Core)" fill-opacity="0.34" stroke="${metal}" stroke-width="4" stroke-opacity="0.64" />
+        ${chestCore}
+      </g>
+      <g opacity="0.64">${waveform}</g>
+      <path d="M164 586 C288 500 392 646 504 558 C604 480 674 566 744 520" fill="none" stroke="${a}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.24" />
+      <path d="M182 630 C302 562 394 694 522 614 C622 552 694 622 748 596" fill="none" stroke="${c}" stroke-width="3" stroke-linecap="round" stroke-opacity="0.22" />
+    </g>`;
+}
+
 function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, profileSignature = "") {
   const a = escapeSvgText(theme.a || "#6effdc");
   const b = escapeSvgText(theme.b || "#7cb2ff");
@@ -30384,7 +30526,7 @@ function buildLocalSpiritHumanoidPortraitDataUrl(
     variationToken,
     userSignature,
     profileSignature,
-    "local-humanoid-spirit-v2"
+    "local-premium-spectral-bust-v1"
   ].join("::")) >>> 0;
   const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
   const a = escapeSvgText(theme.a || "#6effdc");
@@ -30424,7 +30566,7 @@ function buildLocalSpiritHumanoidPortraitDataUrl(
     const y = 812 - height;
     return `<rect x="${x}" y="${y}" width="9" height="${height}" rx="5" fill="${index % 3 === 0 ? c : (index % 2 ? b : a)}" fill-opacity="${(0.18 + (index % 6) * 0.035).toFixed(2)}" />`;
   }).join("");
-  const avatar = buildSpiritHumanAvatarSvg(theme, variant, seed, spirit);
+  const avatar = buildPremiumSpiritBustSvg(theme, variant, seed, spirit);
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900">
   <defs>
@@ -30981,17 +31123,6 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const imageEndpointAvailable = Boolean(resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image"));
-    if (imageEndpointAvailable && !isStaticPreviewHost()) {
-      return {
-        imageUrl: "",
-        source: "pending",
-        createdAt: new Date().toISOString(),
-        prompt,
-        userSignature,
-        profileSignature
-      };
-    }
     const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
       spirit,
       spiritText,
@@ -31232,21 +31363,38 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       : "";
     renderCollectibleState(collectible);
     try {
-      const generatedCollectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
+      const localPreviewCollectible = await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
         variationToken: variation,
-        allowAi: canUseAiForThisAttempt,
+        allowAi: false,
         forceRegenerate
       });
-      const expectedAiRefresh = forceRegenerate && canUseAiForThisAttempt && apiAvailableForAttempt && aiImageEnabled();
-      if (expectedAiRefresh && generatedCollectible?.source !== "api" && previousCollectible?.imageUrl) {
+      if (localPreviewCollectible?.imageUrl) {
+        collectible = localPreviewCollectible;
+        store[slotKey] = collectible;
+        saveSpiritCollectibleStore(store);
+        renderCollectibleState(collectible);
+      }
+
+      const generatedCollectible = canUseAiForThisAttempt
+        ? await generateSpiritCollectibleAsset(spirit, spiritText, likes, milestone.likes, {
+            variationToken: variation,
+            allowAi: true,
+            forceRegenerate
+          })
+        : localPreviewCollectible;
+      if (generatedCollectible?.imageUrl) {
+        collectible = generatedCollectible;
+      } else if (previousCollectible?.imageUrl && !collectible?.imageUrl) {
         collectible = previousCollectible;
         keptPreviousCollectible = true;
       } else {
-        collectible = generatedCollectible;
+        collectible = localPreviewCollectible;
       }
     } catch (error) {
       console.warn("Spirit collectible generation failed.", error);
-      if (previousCollectible?.imageUrl) {
+      if (collectible?.imageUrl) {
+        keptPreviousCollectible = false;
+      } else if (previousCollectible?.imageUrl) {
         collectible = previousCollectible;
         keptPreviousCollectible = true;
       } else {

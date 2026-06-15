@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "human-spirit-v10-coherent-profile";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v10";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v15-hyperreal-bust";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v11";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
@@ -155,7 +155,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const prompt = trimText(body.prompt, 2200);
+  const prompt = trimText(body.prompt, 4200);
   if (!prompt) {
     sendJson(res, 400, { error: "missing_prompt" });
     return;
@@ -195,16 +195,18 @@ module.exports = async function handler(req, res) {
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: produce a photorealistic, cinematic, editorial bust-up or chest-up portrait of a fictional adult human musical-spirit entity. It must read instantly as a charismatic real human presence, but elevated: spiritual, beautiful, evolved, luminous, and subtly stylized with premium animated-film realism and refined painterly polish. Not a plain passport-photo portrait, not an avatar or abstract symbol.",
+    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to electronic music, psytrance and festival culture: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies, rhythm and dance.",
     characterReplacementInstruction,
     `Spirit-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
-    "The app will add all text, stats, frame, and UI later. Generate only the central artwork; no typography, captions, numbers, logos, watermarks, borders, or UI panels.",
-    "The figure must have visible face, head, neck, shoulders, and upper torso; believable warm eyes; natural skin detail with pores and subtle asymmetry; expressive brow and mouth; cinematic lighting; realistic fabric/material detail; and a music-reactive sacred/electronic aura tied to the spirit brief.",
+    "The app will add all text, stats, frame, and UI later. Generate only the central artwork: no typography, captions, numbers, logos, watermarks, borders, UI panels, poster text, label text or brand marks inside the image.",
+    "Required visual language: realistic skin texture mixed with ethereal glow; luminous or translucent eyes; cool silver, blue, violet, cyan, rose, green or opaline spectral skin; delicate gold circuit-like lines or spiritual markings; refined metallic details; earrings, pendants, crystals, small ritual jewels and geometric ornaments.",
+    "Required head and torso design: a large integrated head accessory combining futuristic headphones, ceremonial crown, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings, electronic mandalas and dancefloor lights. On the neck and upper chest, create an elegant futuristic collar or armor with glowing circuits, biomechanical detail and a central bright medallion containing sacred geometry, triangles, circles and violet/blue/cyan light.",
+    "Lighting and scene: dark cinematic background, soft smoke, particles, bokeh, neon purple, blue, magenta and cyan, dramatic side glow, readable face key light, metallic reflections, high contrast, shallow depth of field, deep trance atmosphere and premium sci-fi spiritual finish.",
     "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, bass should feel physical and pressure-driven, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
-    "Vary the human design across generations: generate adult male and adult female bust variants when seeds change, with occasional androgynous adult variants; skin tone, heritage-inspired styling, face shape, hair, clothes, body/bust silhouette, accessories, gaze, charisma, and emotional vibe should not repeat mechanically.",
+    "Vary the entity design across generations: change face identity, head shape, spectral skin material, expression, headpiece, jewelry, collar, medallion, aura, lighting and emotional presence. Occasional androgynous adult variants are encouraged.",
     characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
-    "Strict negative style: not mask-like, not mannequin-like, not plastic, not blank stare, not childish cartoon, not anime, not mascot, not emoji, not doll, not flat vector, not robot, not creature, not skull, not generic fantasy character, not generic stock portrait, not a literal DJ photo.",
+    "Strict negative style: no cartoon, no anime, no childish illustration, no mascot, no emoji, no doll, no flat vector, no robot body, no creature, no skull, no plastic mannequin, no deformed face, no crossed eyes, no hands, no full body, no aggressive expression, no generic fantasy character, no stock portrait, no ordinary DJ photo, no normal flesh-toned passport portrait.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
     "Make the entity feel premium, very beautiful, spiritually evolved, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
     prompt
