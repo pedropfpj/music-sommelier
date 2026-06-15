@@ -9,6 +9,7 @@ const rootDir = path.resolve(__dirname, "..");
 const appPath = path.join(rootDir, "app.js");
 const reportsDir = path.join(rootDir, "reports");
 const reportPath = path.join(reportsDir, "quality-audit-latest.md");
+const metricsPath = path.join(reportsDir, "catalog-metrics-latest.json");
 const strictMode = process.argv.includes("--strict");
 
 const BLOCKS = [
@@ -771,6 +772,99 @@ function formatTable(rows, headers) {
   return [head, separator, ...body].join("\n");
 }
 
+function numberFromReportLine(text, label) {
+  const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = text.match(new RegExp(`- ${escapedLabel}:\\s*([\\d.,]+)`, "i"));
+  if (!match) return null;
+  const normalized = match[1].replace(/\./g, "").replace(",", ".");
+  const value = Number(normalized);
+  return Number.isFinite(value) ? value : null;
+}
+
+function buildCurrentCatalogMetrics(result) {
+  return {
+    auditedTracks: result.counts.tracks,
+    uniqueArtists: result.counts.artists,
+    indexedArtists: result.catalogHealth.indexedArtists,
+    searchableTracks: result.catalogHealth.searchableTracks,
+    labels: result.counts.labels,
+    styles: result.counts.styles,
+    externalArtists: result.counts.externalArtists,
+    criticalCount: result.criticalCount,
+    warningCount: result.warningCount,
+    noteCount: result.noteCount
+  };
+}
+
+function readPreviousCatalogMetrics() {
+  if (fs.existsSync(metricsPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(metricsPath, "utf8"));
+      if (parsed?.current && typeof parsed.current === "object") {
+        return parsed.current;
+      }
+    } catch (_error) {
+      // If the JSON snapshot is corrupted, fall back to the markdown report.
+    }
+  }
+
+  if (!fs.existsSync(reportPath)) return null;
+  const previousReport = fs.readFileSync(reportPath, "utf8");
+  const auditedTracks = numberFromReportLine(previousReport, "Faixas auditadas");
+  const searchableTracks = numberFromReportLine(previousReport, "Musicas buscaveis estimadas no app");
+  if (auditedTracks === null && searchableTracks === null) return null;
+
+  return {
+    auditedTracks,
+    uniqueArtists: numberFromReportLine(previousReport, "Artistas unicos"),
+    indexedArtists: numberFromReportLine(previousReport, "Artistas indexados exibidos no app"),
+    searchableTracks,
+    labels: numberFromReportLine(previousReport, "Gravadoras/labels unicas"),
+    styles: numberFromReportLine(previousReport, "Estilos com faixas"),
+    externalArtists: numberFromReportLine(previousReport, "Artistas vindos de datasets externos"),
+    criticalCount: numberFromReportLine(previousReport, "Problemas criticos"),
+    warningCount: numberFromReportLine(previousReport, "Avisos"),
+    noteCount: numberFromReportLine(previousReport, "Notas de enriquecimento")
+  };
+}
+
+function metricChange(previousValue, currentValue) {
+  if (!Number.isFinite(previousValue) || !Number.isFinite(currentValue)) {
+    return { previous: previousValue ?? null, current: currentValue ?? null, delta: null, added: null, removed: null };
+  }
+  const delta = currentValue - previousValue;
+  return {
+    previous: previousValue,
+    current: currentValue,
+    delta,
+    added: Math.max(0, delta),
+    removed: Math.max(0, -delta)
+  };
+}
+
+function buildCatalogDelta(previous, current) {
+  if (!previous) return null;
+  return {
+    auditedTracks: metricChange(previous.auditedTracks, current.auditedTracks),
+    searchableTracks: metricChange(previous.searchableTracks, current.searchableTracks),
+    uniqueArtists: metricChange(previous.uniqueArtists, current.uniqueArtists),
+    indexedArtists: metricChange(previous.indexedArtists, current.indexedArtists),
+    labels: metricChange(previous.labels, current.labels),
+    styles: metricChange(previous.styles, current.styles),
+    externalArtists: metricChange(previous.externalArtists, current.externalArtists),
+    criticalCount: metricChange(previous.criticalCount, current.criticalCount),
+    warningCount: metricChange(previous.warningCount, current.warningCount),
+    noteCount: metricChange(previous.noteCount, current.noteCount)
+  };
+}
+
+function formatDeltaLine(label, change, unit) {
+  if (!change || change.delta === null) {
+    return `- ${label}: sem base anterior confiavel.`;
+  }
+  return `- ${label}: +${change.added} ${unit} adicionadas, -${change.removed} ${unit} removidas; total anterior ${change.previous}, total atual ${change.current}.`;
+}
+
 function formatReport(result) {
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   const now = new Date();
@@ -820,6 +914,21 @@ function formatReport(result) {
     `- Avisos: ${result.warningCount}`,
     `- Notas de enriquecimento: ${result.noteCount}`,
     "",
+    "## Mudanca de catalogo",
+    "",
+    result.catalogDelta
+      ? formatDeltaLine("Faixas auditadas", result.catalogDelta.auditedTracks, "faixas")
+      : "- Base anterior: nao encontrada; esta auditoria vira a referencia para proximas adicoes/remocoes.",
+    result.catalogDelta
+      ? formatDeltaLine("Musicas buscaveis estimadas", result.catalogDelta.searchableTracks, "musicas")
+      : "- Musicas buscaveis estimadas: sem comparativo anterior.",
+    result.catalogDelta
+      ? `- Artistas indexados: delta ${result.catalogDelta.indexedArtists.delta >= 0 ? "+" : ""}${result.catalogDelta.indexedArtists.delta}; total atual ${result.catalogDelta.indexedArtists.current}.`
+      : "- Artistas indexados: sem comparativo anterior.",
+    result.catalogDelta
+      ? `- Observacao: se removermos musicas ou artistas ruins, a reducao aparece aqui explicitamente no proximo relatorio.`
+      : "- Observacao: a partir da proxima auditoria, remocoes de catalogo vao aparecer separadas de adicoes.",
+    "",
     "## Leitura rapida",
     "",
     result.criticalCount
@@ -854,15 +963,34 @@ function main() {
   const source = readAppSource();
   const blocks = loadBlocks(source);
   const result = auditCatalog(blocks);
+  const previousCatalogMetrics = readPreviousCatalogMetrics();
+  const currentCatalogMetrics = buildCurrentCatalogMetrics(result);
+  const catalogDelta = buildCatalogDelta(previousCatalogMetrics, currentCatalogMetrics);
+  result.catalogDelta = catalogDelta;
   const report = formatReport(result);
   fs.mkdirSync(reportsDir, { recursive: true });
   fs.writeFileSync(reportPath, report, "utf8");
+  fs.writeFileSync(
+    metricsPath,
+    `${JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      current: currentCatalogMetrics,
+      previous: previousCatalogMetrics,
+      delta: catalogDelta
+    }, null, 2)}\n`,
+    "utf8"
+  );
 
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   console.log(`Quality Audit: ${status}`);
   console.log(
     `${result.counts.tracks} faixas auditadas, ${result.catalogHealth.searchableTracks} musicas buscaveis, ${result.catalogHealth.indexedArtists} artistas indexados, ${result.counts.styles} estilos.`
   );
+  if (catalogDelta?.searchableTracks) {
+    console.log(
+      `Delta buscavel: +${catalogDelta.searchableTracks.added} adicionadas, -${catalogDelta.searchableTracks.removed} removidas, total ${catalogDelta.searchableTracks.current}.`
+    );
+  }
   console.log(`${result.criticalCount} criticos, ${result.warningCount} avisos, ${result.noteCount} notas.`);
   console.log(`Relatorio: ${path.relative(rootDir, reportPath)}`);
 

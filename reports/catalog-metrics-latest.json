@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-06-15T15:21:36.165Z",
+  "current": {
+    "auditedTracks": 3963,
+    "uniqueArtists": 2658,
+    "indexedArtists": 4600,
+    "searchableTracks": 87400,
+    "labels": 2693,
+    "styles": 81,
+    "externalArtists": 2601,
+    "criticalCount": 0,
+    "warningCount": 0,
+    "noteCount": 3485
+  },
+  "previous": {
+    "auditedTracks": 3963,
+    "uniqueArtists": 2658,
+    "indexedArtists": 4600,
+    "searchableTracks": 87400,
+    "labels": 2693,
+    "styles": 81,
+    "externalArtists": 2601,
+    "criticalCount": 0,
+    "warningCount": 0,
+    "noteCount": 3485
+  },
+  "delta": {
+    "auditedTracks": {
+      "previous": 3963,
+      "current": 3963,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "searchableTracks": {
+      "previous": 87400,
+      "current": 87400,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "uniqueArtists": {
+      "previous": 2658,
+      "current": 2658,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "indexedArtists": {
+      "previous": 4600,
+      "current": 4600,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "labels": {
+      "previous": 2693,
+      "current": 2693,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "styles": {
+      "previous": 81,
+      "current": 81,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "externalArtists": {
+      "previous": 2601,
+      "current": 2601,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "criticalCount": {
+      "previous": 0,
+      "current": 0,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "warningCount": {
+      "previous": 0,
+      "current": 0,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    },
+    "noteCount": {
+      "previous": 3485,
+      "current": 3485,
+      "delta": 0,
+      "added": 0,
+      "removed": 0
+    }
+  }
+}
