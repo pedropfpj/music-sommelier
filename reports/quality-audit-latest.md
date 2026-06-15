@@ -1,28 +1,28 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 15/06/2026, 13:10:09
+Gerado em: 15/06/2026, 17:17:39
 Status: OK
 
 ## Resumo
 
-- Faixas auditadas: 3962
-- Artistas unicos: 2658
-- Artistas indexados exibidos no app: 4600
-- Musicas buscaveis estimadas no app: 87400
+- Faixas auditadas: 3959
+- Artistas unicos: 2657
+- Artistas indexados exibidos no app: 4599
+- Musicas buscaveis estimadas no app: 87381
 - Media buscavel por artista indexado: 19.0x
 - Cobertura auditada versus buscavel: 4.5%
-- Gravadoras/labels unicas: 2692
+- Gravadoras/labels unicas: 2690
 - Estilos com faixas: 81
-- Artistas vindos de datasets externos: 2601
+- Artistas vindos de datasets externos: 2600
 - Problemas criticos: 0
 - Avisos: 0
-- Notas de enriquecimento: 3484
+- Notas de enriquecimento: 3482
 
 ## Mudanca de catalogo
 
-- Faixas auditadas: +0 faixas adicionadas, -1 faixa removida; total anterior 3963, total atual 3962.
-- Musicas buscaveis estimadas: +0 musicas adicionadas, -0 musicas removidas; total anterior 87400, total atual 87400.
-- Artistas indexados: delta +0; total atual 4600.
+- Faixas auditadas: +0 faixas adicionadas, -3 faixas removidas; total anterior 3962, total atual 3959.
+- Musicas buscaveis estimadas: +0 musicas adicionadas, -19 musicas removidas; total anterior 87400, total atual 87381.
+- Artistas indexados: delta -1; total atual 4599.
 - Observacao: se removermos musicas ou artistas ruins, a reducao aparece aqui explicitamente no proximo relatorio.
 
 ## Leitura rapida
@@ -45,9 +45,9 @@ Status: OK
 | OK | breakcore | 95/20 | 72/50 | 58/6 | Completo |
 | OK | chillout | 25/20 | 61/50 | 13/4 | Completo |
 | OK | coldwave | 24/20 | 60/50 | 14/6 | Completo |
-| OK | dark_experimental | 28/24 | 87/50 | 20/10 | Completo |
+| OK | dark_experimental | 28/24 | 86/50 | 20/10 | Completo |
 | OK | dark_progressive | 109/24 | 92/50 | 80/6 | Completo |
-| OK | dark_psy | 115/20 | 150/50 | 87/6 | Completo |
+| OK | dark_psy | 112/20 | 149/50 | 84/6 | Completo |
 | OK | darkwave | 30/20 | 60/50 | 11/6 | Completo |
 | OK | deep_house | 34/20 | 59/50 | 33/6 | Completo |
 | OK | detroit_techno | 24/20 | 60/50 | 17/6 | Completo |

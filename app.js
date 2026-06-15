@@ -759,7 +759,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 4600;
+const INDEXED_DATASET_ARTIST_COUNT = 4599;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 
 const LOCAL_TRACK_SEED_BOOST = [
@@ -5746,10 +5746,10 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v17";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v18";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v34";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v15-hyperreal-bust";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v35";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v16-guardian-bust";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -7381,6 +7381,7 @@ const ARTIST_STYLE_OVERRIDES = {
   outolintu: ["freeform"],
   "james reipas": ["freeform"],
   "troll scientists": ["freeform"],
+  "parus": ["blocked_ambiguous_artist"],
   "vertical": ["blocked_ambiguous_artist"],
   "angerfist": ["gabber"],
   "neophyte": ["gabber"],
@@ -7846,6 +7847,11 @@ const AMBIGUOUS_ARTIST_IMAGE_KEYS = new Set([
   "vertical"
 ]);
 
+const CURATOR_BLOCKED_ARTIST_KEYS = new Set([
+  "parus",
+  "vertical"
+]);
+
 const FOREST_PSY_ARTIST_BLOCKLIST = [
   "astrix",
   "alpha portal",
@@ -7870,6 +7876,7 @@ const FOREST_PSY_ARTIST_BLOCKLIST = [
   "faders",
   "vegas",
   "claudinho brasil",
+  "parus",
   "vertical"
 ];
 
@@ -7880,9 +7887,9 @@ const STYLE_ARTIST_BLOCKLIST = {
   full_on_night: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   full_on_morning: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "technical hitch", "audiophatik", "crazy astronaut", "maramba", "paralocks", "xenrox", "alienn", "insector", "virtuanoise", "arcek", "psynonima"],
   hi_tech: ["kindzadza", "psykovsky", "orestis", "yaminahua", "dark whisper", "dark elf", "arjuna", "zik", "audiosyntax", "audio syntax", "sectio aurea", "necropsycho", "indacoruna", "ogoun"],
-  dark_psy: ["technical hitch", "audiosyntax", "audio syntax", "audiophatik", "crazy astronaut", "oxidaksi", "fagins reject", "alienn", "xenrox"],
+  dark_psy: ["technical hitch", "audiosyntax", "audio syntax", "audiophatik", "crazy astronaut", "oxidaksi", "fagins reject", "alienn", "xenrox", "parus", "vertical"],
   psycore: ["maramba", "paralocks"],
-  dark_experimental: ["technical hitch", "crazy astronaut", "audiophatik", "fagins reject", "xenrox", "alienn", "dyen", "charlotte de witte", "tristan", "earthspace"],
+  dark_experimental: ["technical hitch", "crazy astronaut", "audiophatik", "fagins reject", "xenrox", "alienn", "dyen", "charlotte de witte", "tristan", "earthspace", "parus", "vertical"],
   hard_techno: [
     "astrix",
     "avalon",
@@ -7960,9 +7967,44 @@ const STYLE_ARTIST_BLOCKLIST = {
 const TRACK_STYLE_BLOCKLIST = [
   {
     family: "psytrance",
+    song: "Silver Screen",
+    reason: "Usuario validou que a faixa nao deve ser classificada como psy/dark psy."
+  },
+  {
+    family: "psytrance",
     artist: "Silent Horror",
     song: "Silver Screen",
     reason: "Usuario validou que a faixa nao deve ser classificada como psy/dark psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Parus",
+    song: "High Voltage",
+    reason: "Usuario validou artista/faixa ambigua fora do recorte confiavel de psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Parus",
+    song: "LaBoom",
+    reason: "Usuario validou artista/faixa ambigua fora do recorte confiavel de psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Parus",
+    song: "Legend",
+    reason: "Usuario validou artista/faixa ambigua fora do recorte confiavel de psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Vertical",
+    song: "Imaginate",
+    reason: "Usuario validou artista generico que nao deve entrar como psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Vertical",
+    song: "Imagínate",
+    reason: "Usuario validou artista generico que nao deve entrar como psy."
   }
 ];
 
@@ -9830,6 +9872,7 @@ function localizedArtistGenreHint(artistName = "", styleHint = "") {
 
 function artistSeedAllowedForStyle(style, artistName) {
   if (textHasForbiddenSignalsForStyle(style, artistName)) return false;
+  if (isCuratorBlockedArtistName(artistName)) return false;
   const strictWhitelist = STYLE_STRICT_WHITELISTS[style] || [];
   if (strictWhitelist.length && !strictWhitelist.some((seed) => isArtistMatch(artistName, seed))) {
     return false;
@@ -10449,6 +10492,7 @@ function registerRecentArtistSignal(style, artistName, releaseDate, source = "da
 function seedStyleArtistFromDataset(style, artistName) {
   const artist = String(artistName || "").trim();
   if (!style || !artist) return false;
+  if (isCuratorBlockedArtistName(artist)) return false;
   if (!artistSeedAllowedForStyle(style, artist)) return false;
 
   if (!Array.isArray(STYLE_ARTIST_SEEDS[style])) STYLE_ARTIST_SEEDS[style] = [];
@@ -10461,6 +10505,7 @@ function seedStyleArtistFromDataset(style, artistName) {
 function upsertArtistOverridesFromDataset(style, artistName) {
   const artistKey = normalize(artistName || "");
   if (!style || !artistKey) return;
+  if (isCuratorBlockedArtistName(artistName)) return;
   if (!Array.isArray(ARTIST_STYLE_OVERRIDES[artistKey])) ARTIST_STYLE_OVERRIDES[artistKey] = [];
   if (LOCKED_ARTIST_STYLE_OVERRIDES.has(artistKey) && !ARTIST_STYLE_OVERRIDES[artistKey].includes(style)) return;
   if (!ARTIST_STYLE_OVERRIDES[artistKey].includes(style)) ARTIST_STYLE_OVERRIDES[artistKey].push(style);
@@ -10484,6 +10529,7 @@ function upsertArtistOriginFromDataset(artistName, country = "", area = "") {
 function upsertDiscoveryFromDataset(style, artistName, bio = "") {
   const artist = String(artistName || "").trim();
   if (!style || !artist) return false;
+  if (isCuratorBlockedArtistName(artist)) return false;
 
   const artistKey = normalize(artist);
   const existing = discoveryCatalog.find(
@@ -11764,6 +11810,12 @@ function isAmbiguousArtistImageName(nameLike = "") {
   return AMBIGUOUS_ARTIST_IMAGE_KEYS.has(key);
 }
 
+function isCuratorBlockedArtistName(nameLike = "") {
+  const key = artistMatchKey(nameLike || "");
+  if (!key) return false;
+  return CURATOR_BLOCKED_ARTIST_KEYS.has(key);
+}
+
 function artistImageSourceIsVerified(source = "") {
   const value = normalize(source || "");
   if (!value) return false;
@@ -11825,6 +11877,7 @@ function hasStrictWhitelist(style) {
 }
 
 function artistAllowedForStyle(style, artistName) {
+  if (isCuratorBlockedArtistName(artistName)) return false;
   const strictWhitelist = STYLE_STRICT_WHITELISTS[style] || [];
   if (strictWhitelist.length && !strictWhitelist.some((seed) => isArtistMatch(artistName, seed))) {
     return false;
@@ -11847,6 +11900,7 @@ function trackBlockedForStyle(style, trackLike = {}) {
   if (!cleanStyle || !trackLike) return false;
   const trackArtist = String(trackLike.artist || "").trim();
   const trackSong = String(trackLike.song || trackLike.title || "").trim();
+  if (trackArtist && isCuratorBlockedArtistName(trackArtist)) return true;
   if (!trackArtist || !trackSong) return false;
   const styleFamily = familyOf(cleanStyle);
   return TRACK_STYLE_BLOCKLIST.some((entry) => {
@@ -11856,7 +11910,8 @@ function trackBlockedForStyle(style, trackLike = {}) {
       (entryStyle && entryStyle === cleanStyle) ||
       (entryFamily && entryFamily === styleFamily);
     if (!styleMatches) return false;
-    return isArtistMatch(trackArtist, entry.artist || "") && strictTitleMatch(trackSong, entry.song || "");
+    const artistMatches = entry.artist ? isArtistMatch(trackArtist, entry.artist) : true;
+    return artistMatches && strictTitleMatch(trackSong, entry.song || "");
   });
 }
 
@@ -12579,23 +12634,33 @@ function deezerJsonp(url) {
   return new Promise((resolve, reject) => {
     const callbackName = `dzcb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
     const script = document.createElement("script");
+    let settled = false;
     const timeout = setTimeout(() => {
+      if (settled) return;
+      settled = true;
       cleanup();
       reject(new Error("Timeout na consulta Deezer"));
     }, 4500);
 
     function cleanup() {
       clearTimeout(timeout);
-      delete window[callbackName];
+      window[callbackName] = () => {};
+      setTimeout(() => {
+        if (window[callbackName]) delete window[callbackName];
+      }, 10000);
       if (script.parentNode) script.parentNode.removeChild(script);
     }
 
     window[callbackName] = (data) => {
+      if (settled) return;
+      settled = true;
       cleanup();
       resolve(data);
     };
 
     script.onerror = () => {
+      if (settled) return;
+      settled = true;
       cleanup();
       reject(new Error("Falha ao carregar Deezer JSONP"));
     };
@@ -12610,23 +12675,33 @@ function itunesJsonp(url) {
   return new Promise((resolve, reject) => {
     const callbackName = `itcb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
     const script = document.createElement("script");
+    let settled = false;
     const timeout = setTimeout(() => {
+      if (settled) return;
+      settled = true;
       cleanup();
       reject(new Error("Timeout na consulta iTunes"));
     }, 4500);
 
     function cleanup() {
       clearTimeout(timeout);
-      delete window[callbackName];
+      window[callbackName] = () => {};
+      setTimeout(() => {
+        if (window[callbackName]) delete window[callbackName];
+      }, 10000);
       if (script.parentNode) script.parentNode.removeChild(script);
     }
 
     window[callbackName] = (data) => {
+      if (settled) return;
+      settled = true;
       cleanup();
       resolve(data);
     };
 
     script.onerror = () => {
+      if (settled) return;
+      settled = true;
       cleanup();
       reject(new Error("Falha ao carregar iTunes JSONP"));
     };
@@ -12971,6 +13046,7 @@ function isTrackEligibleForRecommendation(track) {
   if (!labelAllowedForStyle(track.style, track.label)) return false;
   if (trackBlockedForStyle(track.style, track)) return false;
   if (hasTrackStyleSignalConflict(track.style, track)) return false;
+  if (!trackFineSubgenreHasRecommendationProof(track)) return false;
   const bpmValue = Number(track.bpmExact);
   if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return false;
   if (isDynamicSource(track.source)) {
@@ -32096,6 +32172,39 @@ function hasFineSubgenreEvidence(style = "", track = null, signals = {}) {
   return level === "broad" || level === "strong" || level === "medium";
 }
 
+function trackFineSubgenreHasRecommendationProof(track = null) {
+  const style = normalizeDatasetStyle(track?.style || "");
+  if (!track || !style || !FINE_SUBGENRE_EVIDENCE_STYLES.has(style)) return true;
+  if (trackBlockedForStyle(style, track)) return false;
+  if (!artistAllowedForStyle(style, track.artist || "")) return false;
+  if (hasTrackStyleSignalConflict(style, track)) return false;
+  if (isTrustedCuratedCatalogTrack(track)) return true;
+
+  const dynamic = isDynamicSource(track.source || "");
+  const sourceKey = normalize(track.source || "").replace(/[\s_]+/g, "");
+  const allowedStyles = allowedStylesForArtist(track.artist || "");
+  const artistLocked = allowedStyles.length > 0 && allowedStyles.includes(style);
+  const seedAnchored = artistSeedAnchoredForStyle(style, track.artist || "");
+  const reliableBpm = hasReliableBpmForTrack(track);
+  const playable = trackHasPlayablePreviewExperience(track) || track.existenceVerified === true;
+  const signalText = [
+    track.artistGenre,
+    track.label,
+    track.artistProfileHint,
+    track.vibe,
+    track.source
+  ].filter(Boolean).join(" ");
+  const specificSignal = textHasSpecificStyleSignal(style, signalText);
+  const trustedFineSource = isTrustedSourceForFineStyle(track.source || "") || sourceKey.includes("verified");
+
+  if (!dynamic) return reliableBpm || specificSignal || artistLocked || seedAnchored;
+  if (requiresSeedAnchorForDynamicStyle(style) && !artistLocked && !seedAnchored) return false;
+  if ((artistLocked || seedAnchored) && specificSignal && reliableBpm) return true;
+  if ((artistLocked || seedAnchored) && trustedFineSource && specificSignal && playable) return true;
+  if (trustedFineSource && reliableBpm && specificSignal && playable) return true;
+  return false;
+}
+
 function trackStyleCertainty(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
@@ -32123,6 +32232,10 @@ function trackStyleCertainty(track = null) {
     artistLocked,
     seedAnchored
   });
+
+  if (FINE_SUBGENRE_EVIDENCE_STYLES.has(style) && !trackFineSubgenreHasRecommendationProof(track)) {
+    return dynamic ? "unsafe" : "estimated";
+  }
 
   if (fineEvidence === "weak") return "estimated";
 
@@ -33326,27 +33439,50 @@ function recommendationHumanReason(track, prefs = lastPrefs) {
   const bpmData = resolveBpmDisplay(track);
   const bpm = bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel");
   const style = track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "");
+  const exactStyle = track?.style ? styleLabelByValue(track.style) : style;
+  const certainty = trackStyleCertainty(track);
   const energy = energyLabelByValue(track?.energy || prefs?.energy || "");
   const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
   const knownUnion = buildGlobalArtistExclusionSet();
   const isKnown = artistSetHasMatch(knownUnion, track?.artist);
   const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
   const sourceTrust = trackSourceTrustScore(track);
-  const templateKey = recommendationHasStrongFit(track)
-    ? "recommendationWhyTextStrong"
-    : context
-      ? "recommendationWhyTextContext"
-      : "recommendationWhyTextDiscovery";
-  const reason = t(templateKey, { style, bpm, energy, context });
-  const profileSentence =
-    profileSignal >= 1.2
-      ? t("recommendationWhyProfilePositive")
-      : sourceTrust >= 2
-        ? t("recommendationWhySourcePositive")
-        : "";
+  const strongFit = recommendationHasStrongFit(track);
+  const familyLabel = track?.style ? styleFamilyLabel(track.style) : style;
+  const novelty = isKnown
+    ? sonicTinyCopy("artista que ja estava no seu radar", "an artist already in your radar", "artista que ya estaba en tu radar")
+    : sonicTinyCopy("artista novo para testar sem cair no obvio", "a fresh artist to test beyond the obvious", "artista nuevo para probar fuera de lo obvio");
+  const profileSentence = profileSignal >= 1.2
+    ? sonicTinyCopy("Seu historico recente reforca essa direcao.", "Your recent history reinforces this direction.", "Tu historial reciente refuerza esta direccion.")
+    : sourceTrust >= 2
+      ? sonicTinyCopy("A fonte e mais segura que uma busca solta.", "The source is safer than a loose search.", "La fuente es mas segura que una busqueda suelta.")
+      : "";
+  const contextSentence = context
+    ? sonicTinyCopy(`Pelo contexto ${context}, priorizei encaixe de momento antes de fama.`, `For ${context}, I prioritized moment fit over popularity.`, `Para ${context}, priorice encaje de momento antes que fama.`)
+    : "";
 
-  if (isKnown) return [reason, profileSentence].filter(Boolean).join(" ");
-  return [reason, t("recommendationWhyFreshArtistSentence"), profileSentence].filter(Boolean).join(" ");
+  let reason = "";
+  if (certainty === "confirmed" || strongFit) {
+    reason = sonicTinyCopy(
+      `Recomendei por sinais fortes: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} e ${novelty}.`,
+      `Recommended from strong signals: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} and ${novelty}.`,
+      `La elegi por senales fuertes: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} y ${novelty}.`
+    );
+  } else if (certainty === "probable") {
+    reason = sonicTinyCopy(
+      `Coloquei na rota ${familyLabel} com boa evidencia, mas ainda trato ${exactStyle} como provavel: preciso do seu swipe para confirmar.`,
+      `Placed it in the ${familyLabel} lane with good evidence, but I still treat ${exactStyle} as probable: your swipe confirms it.`,
+      `La puse en la ruta ${familyLabel} con buena evidencia, pero aun trato ${exactStyle} como probable: tu swipe confirma.`
+    );
+  } else {
+    reason = sonicTinyCopy(
+      `Leitura cautelosa: ha sinal de ${familyLabel}, mas o app evita cravar ${exactStyle} sem fonte, artista e pulso suficientes.`,
+      `Careful read: there is a ${familyLabel} signal, but the app avoids claiming ${exactStyle} without enough source, artist and pulse evidence.`,
+      `Lectura cautelosa: hay senal de ${familyLabel}, pero la app evita afirmar ${exactStyle} sin suficiente fuente, artista y pulso.`
+    );
+  }
+
+  return [reason, contextSentence, profileSentence].filter(Boolean).join(" ");
 }
 
 function recommendationTrustAnalysis(track, prefs = lastPrefs) {
@@ -33566,12 +33702,22 @@ function recommendationMicroReason(track, prefs = lastPrefs) {
   const strongFit = recommendationHasStrongFit(track);
   const hasDirectAudio = trackHasConfirmedAudioPreview(track);
   const bpmData = resolveBpmDisplay(track);
+  const certainty = trackStyleCertainty(track);
+  const familyText = track?.style ? styleFamilyLabel(track.style) : styleText;
   const pulseText = bpmData.ambiguous
     ? sonicTinyCopy("grid tecnico, sensacao mais lenta", "a technical grid with a slower felt pulse", "grid tecnico con sensacion mas lenta")
     : hasReliableBpmForTrack(track)
     ? sonicTinyCopy("pulso de pista", "a locked dancefloor pulse", "pulso de pista")
     : sonicTinyCopy("textura boa para testar", "a useful texture to test", "textura buena para probar");
   let reason = "";
+  if (certainty !== "confirmed" && certainty !== "probable" && FINE_SUBGENRE_EVIDENCE_STYLES.has(track?.style)) {
+    reason = sonicTinyCopy(
+      `Leitura cautelosa: deixei como ${familyText}; subgenero fino so aparece quando fonte, artista e pulso fecham.`,
+      `Careful read: kept it as ${familyText}; fine subgenre only appears when source, artist and pulse agree.`,
+      `Lectura cautelosa: queda como ${familyText}; el subgenero fino solo aparece cuando fuente, artista y pulso coinciden.`
+    );
+    return truncateByWordBoundary(reason, 154);
+  }
   if (currentLanguage === "en") {
     if (isKnownArtist) {
       reason = `My read: a safe pick inside your radar, with ${pulseText} to see if this lane still hits.`;

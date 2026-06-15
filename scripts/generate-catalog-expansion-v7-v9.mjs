@@ -31,7 +31,7 @@ const CURATED_STYLE_ARTISTS = {
     "Derango", "Psykovsky", "Para Halu", "Kashyyyk", "Digital Talk", "Jelly Headz",
     "Blisargon Demogorgon", "Zik", "Megalopsy", "Atriohm", "Orestis", "Yaminahua",
     "Necropsycho", "Quasar", "Baphomet Engine", "N.O.M", "Primordial Ooze", "Gidra",
-    "Abrahadabra", "Kerosene Club", "Kindzadza", "Parus", "Osom", "Furious",
+    "Abrahadabra", "Kerosene Club", "Kindzadza", "Osom", "Furious",
     "Dark Whisper", "Will O Wisp", "Mubali", "Cosmo", "Highko", "Silent Horror",
     "Encephalopaticys", "Alien Mental", "Claw", "Polyphonia", "Farebi Jalebi", "Arjuna"
   ],
@@ -39,7 +39,7 @@ const CURATED_STYLE_ARTISTS = {
     "Arjuna", "Farebi Jalebi", "Southwild", "Onkel Dunkel", "Nargun", "Jangaramongara",
     "Tengri", "Ka-Sol", "Goch", "Trold", "Hutti Heita", "Kabayun", "Gaspard", "Procs",
     "Loke", "Krapul", "Archaic", "Aardvarkk", "Jikkenteki", "Derango", "Atriohm",
-    "Jahbo", "Mubali", "Ulvae", "Vertical", "Nobot", "Confo", "Pantomiman",
+    "Jahbo", "Mubali", "Ulvae", "Nobot", "Confo", "Pantomiman",
     "Yggdrasil", "Enichkin", "Ocelot", "Ajja", "Flipknot", "Once Upon a Time",
     "Dohm", "Maramba", "Drury Nevil", "Dsompa"
   ],

@@ -16,26 +16,26 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v15-hyperreal-bust";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v11";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v16-guardian-bust";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v12";
 
 const SPIRIT_ENTITY_BRIEFS = {
-  ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm human face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
-  alquimista_sombrio: "adult shadow alchemist, magnetic human face, deep believable eyes, obsidian coat, spectral vapor, sub-bass pressure rings, dark ritual elegance, aqua and purple glow",
+  ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm humanoid spectral face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",
+  alquimista_sombrio: "adult shadow alchemist, magnetic humanoid spectral face, deep believable eyes, obsidian coat, spectral vapor, sub-bass pressure rings, dark ritual elegance, aqua and purple glow",
   oraculo_nevoa: "adult mist oracle, serene realistic face, compassionate eyes, translucent hood, slow waveform halos, fog spirals, slambient darkness, calm charismatic presence",
   feiticeiro_darkpsy: "adult dark-psy forest sorcerer, human charismatic face, alert wild eyes, magnetic grin, bioluminescent forest-club textiles, twisted psy spirals, nocturnal smoke",
-  cirurgiao_psycore: "adult psycore surgeon, precise realistic human face, sharp confident eyes, futuristic clinical rave jacket, glitch trails, high-BPM light cuts, controlled chaos",
+  cirurgiao_psycore: "adult psycore surgeon, precise realistic humanoid spectral face, sharp confident eyes, futuristic clinical rave jacket, glitch trails, high-BPM light cuts, controlled chaos",
   guardiao_fullon_noite: "adult full-on night guardian, realistic festival face, awake playful eyes, confident smile, acid-neon midnight jacket, dense melodic neon arcs, post-midnight psy energy",
   viajante_sunrise: "adult sunrise psy voyager, warm realistic smile, bright eyes, golden skin light, soft festival layers, pink and gold melodic ribbons, uplifting morning atmosphere",
-  estilista_tech_house: "adult tech-house stylist, stylish confident human face, visible eyes, relaxed smirk, sharp black clubwear, dry bass pulses, chopped vocal light fragments, social club charisma",
-  alma_house: "adult house-soul entity, warm expressive human face, generous smile, amber clubwear, rounded bass waves, vocal warmth, golden clap particles, community dancefloor glow",
-  operador_acido: "adult acid operator, focused realistic human face, visible eyes, structured industrial coat, acid-green reflective lines, 303 curves, hypnotic grid corridors, concrete club light",
-  acelerador_quantico: "adult quantum accelerator, fearless human face, intense bright eyes, kinetic smirk, prismatic speed-suit jacket, atom arcs, micro-cut sparks, ultra-fast hi-tech aura",
+  estilista_tech_house: "adult tech-house stylist, stylish confident humanoid spectral face, visible eyes, relaxed smirk, sharp black clubwear, dry bass pulses, chopped vocal light fragments, social club charisma",
+  alma_house: "adult house-soul entity, warm expressive humanoid spectral face, generous smile, amber clubwear, rounded bass waves, vocal warmth, golden clap particles, community dancefloor glow",
+  operador_acido: "adult acid operator, focused realistic humanoid spectral face, visible eyes, structured industrial coat, acid-green reflective lines, 303 curves, hypnotic grid corridors, concrete club light",
+  acelerador_quantico: "adult quantum accelerator, fearless humanoid spectral face, intense bright eyes, kinetic smirk, prismatic speed-suit jacket, atom arcs, micro-cut sparks, ultra-fast hi-tech aura",
   engenheiro_groove: "adult groove engineer, friendly realistic face, warm eyes, calm smile, studio-club vest, headphones around neck, holographic mixer lines, rounded bass loops",
   arquiteto_hipnotico: "adult hypnotic architect, focused realistic face, steady eyes, structured dark coat, blueprint-light tattoos, repeating pressure corridors, acid techno geometry",
-  cacador_bass: "adult bass hunter, charismatic human face, sharp eyes, magnetic grin, heavy bass jacket, pressure-ring collar, subwoofer rings, magenta-blue drop shockwaves",
-  viajante_organico: "adult organic voyager, serene realistic human face, gentle smile, woven organic layers, botanical signal filaments, green-gold downtempo waves, analog warmth",
-  explorador_fractal: "adult fractal explorer, curious realistic human face, asymmetrical smile, patchwork technical jacket, fractal cubes, IDM micro-detail sparks, orange-cyan-violet geometry"
+  cacador_bass: "adult bass hunter, charismatic humanoid spectral face, sharp eyes, magnetic grin, heavy bass jacket, pressure-ring collar, subwoofer rings, magenta-blue drop shockwaves",
+  viajante_organico: "adult organic voyager, serene realistic humanoid spectral face, gentle smile, woven organic layers, botanical signal filaments, green-gold downtempo waves, analog warmth",
+  explorador_fractal: "adult fractal explorer, curious realistic humanoid spectral face, asymmetrical smile, patchwork technical jacket, fractal cubes, IDM micro-detail sparks, orange-cyan-violet geometry"
 };
 
 function spiritEntityBrief(body = {}) {
@@ -195,7 +195,7 @@ module.exports = async function handler(req, res) {
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to electronic music, psytrance and festival culture: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies, rhythm and dance.",
+    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to electronic music, psytrance and festival culture: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies, rhythm and dance. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
     characterReplacementInstruction,
     `Spirit-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
@@ -206,7 +206,7 @@ module.exports = async function handler(req, res) {
     "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, bass should feel physical and pressure-driven, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
     "Vary the entity design across generations: change face identity, head shape, spectral skin material, expression, headpiece, jewelry, collar, medallion, aura, lighting and emotional presence. Occasional androgynous adult variants are encouraged.",
     characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
-    "Strict negative style: no cartoon, no anime, no childish illustration, no mascot, no emoji, no doll, no flat vector, no robot body, no creature, no skull, no plastic mannequin, no deformed face, no crossed eyes, no hands, no full body, no aggressive expression, no generic fantasy character, no stock portrait, no ordinary DJ photo, no normal flesh-toned passport portrait.",
+    "Strict negative style: no cartoon, no anime, no childish illustration, no mascot, no emoji, no doll, no flat vector, no abstract crystal, no blank gradient, no placeholder, no robot body, no creature, no skull, no plastic mannequin, no deformed face, no crossed eyes, no hands, no full body, no aggressive expression, no generic fantasy character, no stock portrait, no ordinary DJ photo, no normal flesh-toned passport portrait.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
     "Make the entity feel premium, very beautiful, spiritually evolved, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
     prompt

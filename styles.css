@@ -3104,11 +3104,13 @@ input[type="range"] {
 
 .recommendation-why-panel {
   display: grid;
-  gap: 0.4rem;
-  border: 1px solid rgba(126, 214, 255, 0.22);
+  gap: 0.48rem;
+  border: 1px solid rgba(126, 214, 255, 0.32);
   border-radius: 10px;
-  padding: 0.56rem;
-  background: rgba(5, 14, 31, 0.62);
+  padding: 0.68rem;
+  background:
+    linear-gradient(135deg, rgba(6, 20, 39, 0.88), rgba(7, 12, 30, 0.82)),
+    rgba(5, 14, 31, 0.7);
 }
 
 .recommendation-trust-panel {
@@ -3191,11 +3193,12 @@ input[type="range"] {
 
 .recommendation-why-text {
   margin: 0;
-  max-width: 68ch;
-  color: #d8e8ff;
-  font-size: clamp(0.92rem, 1.8vw, 1.02rem);
-  font-weight: 600;
-  line-height: 1.42;
+  max-width: 74ch;
+  color: #e6f2ff;
+  font-size: clamp(0.96rem, 1.75vw, 1.06rem);
+  font-weight: 650;
+  line-height: 1.52;
+  text-wrap: pretty;
 }
 
 .recommendation-why-list {
@@ -12368,10 +12371,16 @@ iframe {
 
 #topSwipeCard.swipe-hero-card:not(.is-empty).has-artist-image .swipe-hero-image {
   box-sizing: border-box;
-  padding: clamp(0.6rem, 2.2vw, 1rem);
-  object-fit: contain;
+  padding: 0;
+  object-fit: cover;
   object-position: center center;
-  filter: brightness(1.1) saturate(1.14) contrast(1.04);
+  filter: brightness(1.2) saturate(1.18) contrast(1.08);
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty).has-artist-image .swipe-hero-copy {
+  background:
+    linear-gradient(180deg, rgba(2, 6, 14, 0.82), rgba(2, 6, 14, 0.98)),
+    rgba(2, 6, 14, 0.9);
 }
 
 /* Dedicated filters tab: keep discovery Tinder-simple and move precision controls away from swipe. */
