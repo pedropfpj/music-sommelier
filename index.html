@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260615psytrust1" />
+    <link rel="stylesheet" href="styles.css?v=20260615newuser1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -284,9 +284,9 @@
           <p id="authDesc">Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.</p>
         </div>
         <div class="auth-local-note" aria-label="Modo local">
-          <span>Perfil local automático</span>
-          <span>Backup por arquivo</span>
-          <span>Login só como extra</span>
+          <span id="authLocalNoteProfile">Perfil local automático</span>
+          <span id="authLocalNoteNewUser">Novo usuário limpo</span>
+          <span id="authLocalNoteBackup">Backup por arquivo</span>
         </div>
         <div class="auth-grid">
           <label for="authUsername" id="authUsernameLabel">Usuário</label>
@@ -296,11 +296,12 @@
           <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
         <div class="cta-row">
-          <button id="authGuestBtn" class="primary">Usar perfil local</button>
+          <button id="authTestUserBtn" class="primary auth-new-user-btn" type="button">Começar como novo usuário</button>
+          <button id="authGuestBtn" class="secondary" type="button">Continuar perfil local</button>
           <button id="authResumeBtn" class="secondary hidden" type="button">Retomar perfil salvo</button>
           <button id="authLoginBtn">Entrar em conta</button>
-          <button id="authTestUserBtn" class="secondary" type="button">Testar novo usuário</button>
         </div>
+        <p id="authNewUserHint" class="muted auth-new-user-hint">Use para testar como alguém novo: cria uma sessão limpa sem depender de aba anônima.</p>
         <div class="auth-divider">
           <span id="authSocialDivider">ou entre com</span>
         </div>
@@ -1734,6 +1735,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260615spiritbust1"></script>
+    <script src="app.js?v=20260615newuser1"></script>
   </body>
 </html>

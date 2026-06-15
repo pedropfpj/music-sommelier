@@ -14248,20 +14248,24 @@ const I18N = {
     authKicker: "Conta opcional",
     authTitle: "Use o Sonic Search sem login",
     authDesc: "Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.",
+    authLocalNoteProfile: "Perfil local automático",
+    authLocalNoteNewUser: "Novo usuário limpo",
+    authLocalNoteBackup: "Backup por arquivo",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Retomar perfil salvo",
     authLoginBtn: "Entrar em conta",
-    authGuestBtn: "Começar sem login",
-    authTestUserBtn: "Testar do zero",
+    authGuestBtn: "Continuar perfil local",
+    authTestUserBtn: "Começar como novo usuário",
+    authNewUserHint: "Use para testar como alguém novo: cria uma sessão limpa sem depender de aba anônima.",
     authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
-    authTestUserReady: "Teste do zero criado para {user}. Curtidas, limites e recomendações começam limpos.",
+    authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e espírito começam limpos.",
     authSocialDivider: "opcional: conta online",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
@@ -15013,20 +15017,24 @@ const I18N = {
     authKicker: "Optional account",
     authTitle: "Use Sonic Search without signing in",
     authDesc: "Your music map stays saved on this device. Sign in only when you want separate profiles, sync, or account testing.",
+    authLocalNoteProfile: "Automatic local profile",
+    authLocalNoteNewUser: "Clean new user",
+    authLocalNoteBackup: "File backup",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Resume saved profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Start without login",
-    authTestUserBtn: "Test from zero",
+    authGuestBtn: "Continue local profile",
+    authTestUserBtn: "Start as a new user",
+    authNewUserHint: "Use this to test like a first-time listener: it creates a clean session without needing private browsing.",
     authRequired: "Fill username and password to sign in, or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Local profile enabled. You can discover music without signing in.",
     authLocalResumeReady: "Local profile resumed for {user}.",
     authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
-    authTestUserReady: "Fresh test created for {user}. Likes, limits, and recommendations start clean.",
+    authTestUserReady: "New user created for {user}. Likes, history, recommendations, and spirit start clean.",
     authSocialDivider: "optional: online account",
     authGoogleBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
@@ -15775,20 +15783,24 @@ const I18N = {
     authKicker: "Cuenta opcional",
     authTitle: "Usa Sonic Search sin iniciar sesión",
     authDesc: "Tu mapa musical queda guardado en este dispositivo. Entra solo si quieres perfiles separados, sincronización o prueba de cuenta.",
+    authLocalNoteProfile: "Perfil local automático",
+    authLocalNoteNewUser: "Usuario nuevo limpio",
+    authLocalNoteBackup: "Backup por archivo",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Retomar perfil guardado",
     authLoginBtn: "Entrar en cuenta",
-    authGuestBtn: "Empezar sin login",
-    authTestUserBtn: "Probar desde cero",
+    authGuestBtn: "Continuar perfil local",
+    authTestUserBtn: "Empezar como usuario nuevo",
+    authNewUserHint: "Úsalo para probar como oyente nuevo: crea una sesión limpia sin depender de navegación privada.",
     authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
-    authTestUserReady: "Prueba desde cero creada para {user}. Likes, limites y recomendaciones empiezan limpios.",
+    authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y espíritu empiezan limpios.",
     authSocialDivider: "opcional: cuenta online",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
@@ -17230,12 +17242,16 @@ function applyLanguage() {
   setText("#authKicker", t("authKicker"));
   setText("#authTitle", t("authTitle"));
   setText("#authDesc", t("authDesc"));
+  setText("#authLocalNoteProfile", t("authLocalNoteProfile"));
+  setText("#authLocalNoteNewUser", t("authLocalNoteNewUser"));
+  setText("#authLocalNoteBackup", t("authLocalNoteBackup"));
   setText("#authUsernameLabel", t("authUsernameLabel"));
   setText("#authPasswordLabel", t("authPasswordLabel"));
   setText("#authResumeBtn", t("authResumeSavedBtn"));
   setText("#authLoginBtn", t("authLoginBtn"));
   setText("#authGuestBtn", t("authGuestBtn"));
   setText("#authTestUserBtn", t("authTestUserBtn"));
+  setText("#authNewUserHint", t("authNewUserHint"));
   setText("#authSocialDivider", t("authSocialDivider"));
   setText("#authGoogleLabel", t("authGoogleBtn"));
   setText("#authAppleLabel", t("authAppleBtn"));
@@ -19478,7 +19494,11 @@ function showAuthScreen() {
     }
     setAuthFeedback("");
   }
-  if (authUsername) authUsername.focus();
+  const preferredAuthAction = storedUser && storedUser.mode !== "guest"
+    ? authResumeBtn
+    : authTestUserBtn;
+  if (preferredAuthAction?.focus) preferredAuthAction.focus();
+  else if (authUsername) authUsername.focus();
   refreshAmbientForUiState();
   playUiSfx("confirm");
 }
@@ -38614,7 +38634,7 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    startLocalProfileFlow({ preferStored: true });
+    showAuthScreen();
   });
 });
 
