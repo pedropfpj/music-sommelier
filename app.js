@@ -5748,8 +5748,8 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v31";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v12-luminous-entity";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v32";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v13-humanoid-local-guard";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -7839,7 +7839,11 @@ const ARTIST_CANONICAL_ORIGINS = {
 };
 
 const AMBIGUOUS_ARTIST_IMAGE_KEYS = new Set([
-  "avalon"
+  "avalon",
+  "parus",
+  "shiva",
+  "tristan",
+  "vertical"
 ]);
 
 const FOREST_PSY_ARTIST_BLOCKLIST = [
@@ -30018,7 +30022,20 @@ function buildSpiritHumanAvatarSvg(theme, variant, seed = 0, spirit = null) {
     }
   };
   const profile = profiles[spirit?.id] || profiles.ritual_cosmico;
-  const skinPalette = ["#f0c09f", "#c98558", "#8f5c43", "#efd8bf", "#b17462", "#d5b492"];
+  const skinPalette = [
+    "#8ff8ff",
+    "#80f5d8",
+    "#b58cff",
+    "#ff80d6",
+    "#ff6f8e",
+    "#ffd86f",
+    "#6ee7ff",
+    "#36d399",
+    "#c7f9ff",
+    "#7c5cff",
+    "#e0f2fe",
+    "#fb7185"
+  ];
   const hairPalette = ["#15121d", "#342014", "#4a2a1b", "#191d35", "#6345ff", "#252a3a"];
   const skin = escapeSvgText(skinPalette[(seed + (spirit?.id || "").length) % skinPalette.length]);
   const hair = escapeSvgText(hairPalette[(seed >> 3) % hairPalette.length]);
@@ -30285,6 +30302,113 @@ function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, p
       <path d="M140 744 C250 680 356 790 468 722 C578 656 646 742 734 690" fill="none" stroke="${a}" stroke-opacity="0.38" stroke-width="5" stroke-linecap="round" />
       <path d="M172 782 H700" stroke="${b}" stroke-opacity="0.22" stroke-width="3" stroke-linecap="round" />
 	    </g>`;
+}
+
+function buildLocalSpiritHumanoidPortraitDataUrl(
+  spirit,
+  spiritText,
+  likes,
+  milestoneLikes,
+  variationToken = "",
+  userSignature = "",
+  profileSignature = ""
+) {
+  const theme = spiritVisualTheme(spirit);
+  const seed = hashString([
+    spirit?.id || "spirit",
+    spiritText?.name || "",
+    likes,
+    milestoneLikes,
+    variationToken,
+    userSignature,
+    profileSignature,
+    "local-humanoid-spirit-v2"
+  ].join("::")) >>> 0;
+  const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071124");
+  const accentX = 20 + (seed % 44);
+  const accentY = 18 + ((seed >>> 5) % 48);
+  const particles = Array.from({ length: 88 }, (_, index) => {
+    const mixed = hashString(`${seed}::local-spirit-particle::${index}`) >>> 0;
+    const x = 44 + (mixed % 812);
+    const y = 42 + ((mixed >>> 7) % 786);
+    const radius = 1.2 + ((mixed >>> 15) % 30) / 10;
+    const opacity = 0.14 + ((mixed >>> 20) % 42) / 100;
+    const color = index % 4 === 0 ? c : (index % 2 ? b : a);
+    return `<circle cx="${x}" cy="${y}" r="${radius.toFixed(1)}" fill="${color}" fill-opacity="${opacity.toFixed(2)}" />`;
+  }).join("");
+  const auraThreads = Array.from({ length: 10 }, (_, index) => {
+    const mixed = hashString(`${seed}::local-spirit-thread::${index}`) >>> 0;
+    const y = 158 + index * 58 + ((mixed >>> 4) % 28);
+    const lift = 56 + (mixed % 96);
+    const color = index % 2 ? b : a;
+    return `<path d="M68 ${y} C${230 + lift} ${y - 118}, ${590 - lift} ${y + 132}, 830 ${y - 20}" fill="none" stroke="${color}" stroke-width="${1.4 + (index % 4) * 0.65}" stroke-opacity="${(0.11 + index * 0.024).toFixed(2)}" stroke-linecap="round" />`;
+  }).join("");
+  const bassRings = Array.from({ length: 7 }, (_, index) => {
+    const mixed = hashString(`${seed}::local-spirit-ring::${index}`) >>> 0;
+    const rx = 178 + index * 42 + (mixed % 18);
+    const ry = 52 + index * 17 + ((mixed >>> 6) % 14);
+    const rotate = -18 + index * 7 + (mixed % 8);
+    const opacity = 0.28 - index * 0.024;
+    return `<ellipse cx="450" cy="420" rx="${rx}" ry="${ry}" fill="none" stroke="${index % 2 ? b : c}" stroke-width="${2.6 + (index % 3) * 0.7}" stroke-opacity="${Math.max(0.08, opacity).toFixed(2)}" transform="rotate(${rotate} 450 420)" />`;
+  }).join("");
+  const spectrum = Array.from({ length: 36 }, (_, index) => {
+    const mixed = hashString(`${seed}::local-spirit-spectrum::${index}`) >>> 0;
+    const height = 24 + (mixed % 128);
+    const x = 102 + index * 19;
+    const y = 812 - height;
+    return `<rect x="${x}" y="${y}" width="9" height="${height}" rx="5" fill="${index % 3 === 0 ? c : (index % 2 ? b : a)}" fill-opacity="${(0.18 + (index % 6) * 0.035).toFixed(2)}" />`;
+  }).join("");
+  const avatar = buildSpiritHumanAvatarSvg(theme, variant, seed, spirit);
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900">
+  <defs>
+    <linearGradient id="portraitBg" x1="${accentX}%" y1="${accentY}%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${d}" />
+      <stop offset="48%" stop-color="#111843" />
+      <stop offset="100%" stop-color="${c}" stop-opacity="0.62" />
+    </linearGradient>
+    <radialGradient id="portraitHalo" cx="48%" cy="42%" r="52%">
+      <stop offset="0%" stop-color="${a}" stop-opacity="0.62" />
+      <stop offset="54%" stop-color="${b}" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="${d}" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="faceGrad" x1="18%" y1="4%" x2="86%" y2="96%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.78" />
+      <stop offset="42%" stop-color="${a}" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="${c}" stop-opacity="0.48" />
+    </linearGradient>
+    <linearGradient id="cloakGrad" x1="18%" y1="4%" x2="88%" y2="96%">
+      <stop offset="0%" stop-color="${d}" stop-opacity="0.92" />
+      <stop offset="52%" stop-color="${b}" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="${c}" stop-opacity="0.46" />
+    </linearGradient>
+    <filter id="mascotGlow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="${a}" flood-opacity="0.48" />
+      <feDropShadow dx="0" dy="24" stdDeviation="30" flood-color="#000000" flood-opacity="0.42" />
+    </filter>
+    <clipPath id="portraitClip">
+      <rect x="34" y="34" width="832" height="832" rx="72" />
+    </clipPath>
+  </defs>
+  <rect width="900" height="900" fill="url(#portraitBg)" />
+  <rect width="900" height="900" fill="#030617" opacity="0.18" />
+  <circle cx="450" cy="414" r="380" fill="url(#portraitHalo)" />
+  <g clip-path="url(#portraitClip)">
+    <g opacity="0.82">${particles}</g>
+    <g opacity="0.96">${auraThreads}</g>
+    <g opacity="0.7">${bassRings}</g>
+    <g transform="translate(38 -18) scale(1.02)">
+      ${avatar}
+    </g>
+    <g opacity="0.84">${spectrum}</g>
+    <rect x="34" y="34" width="832" height="832" fill="none" stroke="${a}" stroke-opacity="0.22" stroke-width="4" />
+  </g>
+</svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
 
@@ -30795,18 +30919,40 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const imageUrl = buildLocalSpiritCollectibleImageLegacy(
+    const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
       spirit,
       spiritText,
       likes,
       milestoneLikes,
       variationToken || userSignature,
-      "",
-      spiritImageDataUrl,
-      snapshot,
       userSignature,
       profileSignature
     );
+    const imageUrl =
+      buildLocalSpiritCollectibleImage(
+        spirit,
+        spiritText,
+        likes,
+        milestoneLikes,
+        variationToken || userSignature,
+        localPortraitDataUrl,
+        spiritImageDataUrl,
+        snapshot,
+        userSignature,
+        profileSignature
+      ) ||
+      buildLocalSpiritCollectibleImageLegacy(
+        spirit,
+        spiritText,
+        likes,
+        milestoneLikes,
+        variationToken || userSignature,
+        "",
+        spiritImageDataUrl,
+        snapshot,
+        userSignature,
+        profileSignature
+      );
     return {
       imageUrl,
       source: imageUrl ? "local" : "pending",
