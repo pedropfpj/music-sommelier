@@ -5746,7 +5746,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v16";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v17";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v33";
 const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v14-ai-first-no-mascot";
@@ -7956,6 +7956,15 @@ const STYLE_ARTIST_BLOCKLIST = {
     "crazy astronaut"
   ]
 };
+
+const TRACK_STYLE_BLOCKLIST = [
+  {
+    family: "psytrance",
+    artist: "Silent Horror",
+    song: "Silver Screen",
+    reason: "Usuario validou que a faixa nao deve ser classificada como psy/dark psy."
+  }
+];
 
 const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "psycore",
@@ -11833,6 +11842,41 @@ function artistAllowedForStyle(style, artistName) {
   return seeds.some((seed) => isArtistMatch(artistName, seed));
 }
 
+function trackBlockedForStyle(style, trackLike = {}) {
+  const cleanStyle = normalizeDatasetStyle(style || trackLike?.style || "");
+  if (!cleanStyle || !trackLike) return false;
+  const trackArtist = String(trackLike.artist || "").trim();
+  const trackSong = String(trackLike.song || trackLike.title || "").trim();
+  if (!trackArtist || !trackSong) return false;
+  const styleFamily = familyOf(cleanStyle);
+  return TRACK_STYLE_BLOCKLIST.some((entry) => {
+    const entryStyle = normalizeDatasetStyle(entry.style || "");
+    const entryFamily = normalize(entry.family || "");
+    const styleMatches =
+      (entryStyle && entryStyle === cleanStyle) ||
+      (entryFamily && entryFamily === styleFamily);
+    if (!styleMatches) return false;
+    return isArtistMatch(trackArtist, entry.artist || "") && strictTitleMatch(trackSong, entry.song || "");
+  });
+}
+
+function dynamicFineStyleNeedsVerifiedTrack(style, source = "") {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (!cleanStyle || !isDynamicSource(source)) return false;
+  if (isTrustedSourceForFineStyle(source)) return false;
+  return familyOf(cleanStyle) === "psytrance" || FINE_SUBGENRE_EVIDENCE_STYLES.has(cleanStyle);
+}
+
+function isTrustedSourceForFineStyle(source = "") {
+  const sourceKey = normalize(source || "").replace(/[\s_]+/g, "");
+  return (
+    sourceKey.includes("datasetlocal") ||
+    sourceKey.includes("localseed") ||
+    sourceKey.includes("verifiedtrackexpansion") ||
+    sourceKey.includes("verifieddeezerexpansion")
+  );
+}
+
 function requiresSeedAnchorForDynamicStyle(style) {
   return style === "forest_psy" || style === "psy_comercial" || DARK_UNDERGROUND_DISCOVERY_STYLES.has(style);
 }
@@ -11938,12 +11982,14 @@ function purgeDynamicMismatches(style) {
     const bpmPresent = Number.isFinite(bpmValue) && bpmValue > 0;
     const bpmOk =
       (!requiresExactBpmForDynamic(styleToCheck, track.source) || bpmPresent) &&
+      (!dynamicFineStyleNeedsVerifiedTrack(styleToCheck, track.source) || bpmPresent) &&
       (!bpmPresent || bpmFitsStyle(styleToCheck, bpmValue));
     const labelOk = labelAllowedForStyle(styleToCheck, track.label);
     const styleSignalConflict = hasTrackStyleSignalConflict(styleToCheck, track);
+    const blockedTrack = trackBlockedForStyle(styleToCheck, track);
     const generatedArtist = isLikelyChannelStyleArtistName(track.artist);
     const generatedTitle = isLikelyGeneratedTrackTitle(track.song);
-    if (!artistOk || !anchoredArtistOk || !bpmOk || !labelOk || isInvalidDynamic || styleSignalConflict || generatedArtist || generatedTitle) {
+    if (!artistOk || !anchoredArtistOk || !bpmOk || !labelOk || isInvalidDynamic || styleSignalConflict || blockedTrack || generatedArtist || generatedTitle) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
     }
@@ -11964,13 +12010,20 @@ function sanitizeCatalogByStyleRules() {
     const generatedDynamic =
       isDynamicSource(track.source) &&
       (isLikelyGeneratedTrackTitle(track.song) || isLikelyChannelStyleArtistName(track.artist));
+    const bpmValue = Number(track.bpmExact);
+    const bpmPresent = Number.isFinite(bpmValue) && bpmValue > 0;
+    const unverifiableFineDynamic =
+      isDynamicSource(track.source) &&
+      dynamicFineStyleNeedsVerifiedTrack(track.style, track.source) &&
+      !bpmPresent;
     const styleSignalConflict = hasTrackStyleSignalConflict(track.style, track);
-    if (!artistAllowedForStyle(track.style, track.artist) || !labelAllowedForStyle(track.style, track.label) || styleSignalConflict) {
+    const blockedTrack = trackBlockedForStyle(track.style, track);
+    if (!artistAllowedForStyle(track.style, track.artist) || !labelAllowedForStyle(track.style, track.label) || styleSignalConflict || blockedTrack) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
       continue;
     }
-    if (invalidDynamic || generatedDynamic) {
+    if (invalidDynamic || generatedDynamic || unverifiableFineDynamic) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
     }
@@ -12916,6 +12969,7 @@ function isTrackEligibleForRecommendation(track) {
   if (track.existenceVerified === false && !trustedCurated) return false;
   if (!artistAllowedForStyle(track.style, track.artist)) return false;
   if (!labelAllowedForStyle(track.style, track.label)) return false;
+  if (trackBlockedForStyle(track.style, track)) return false;
   if (hasTrackStyleSignalConflict(track.style, track)) return false;
   const bpmValue = Number(track.bpmExact);
   if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return false;
@@ -12924,6 +12978,9 @@ function isTrackEligibleForRecommendation(track) {
       return false;
     }
     if (requiresSeedAnchorForDynamicStyle(track.style) && !artistSeedAnchoredForStyle(track.style, track.artist)) {
+      return false;
+    }
+    if (dynamicFineStyleNeedsVerifiedTrack(track.style, track.source) && !hasReliableBpmForTrack(track)) {
       return false;
     }
     const invalidDynamic = isLikelyCompilationEntry({
@@ -13345,6 +13402,7 @@ function addDynamicTrackToCatalog({
   label = curatedInput.label || label;
   artistGenre = curatedInput.artistGenre || artistGenre;
   artistProfileHint = curatedInput.artistProfileHint || artistProfileHint;
+  if (trackBlockedForStyle(style, { artist: artistName, song: songName })) return false;
   if (hasTrackStyleSignalConflict(style, {
     artist: artistName,
     song: songName,
@@ -13372,6 +13430,8 @@ function addDynamicTrackToCatalog({
   const bpmNumber = Number(bpmExact) || 0;
   if (requiresExactBpmForDynamic(style, source) && !bpmNumber) return false;
   if (bpmNumber && !bpmFitsStyle(style, bpmNumber)) return false;
+  const fineStyleNeedsVerifiedTrack = dynamicFineStyleNeedsVerifiedTrack(style, source);
+  if (fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
 
   const fallbackBpm = Math.round((STYLE_BPM_RULES[style]?.min + STYLE_BPM_RULES[style]?.max || 130) / 2);
   const duration = Number(durationSec) || 0;
@@ -23038,6 +23098,7 @@ function loadDynamicCatalogCache() {
       if (!STYLE_BPM_RULES[track.style]) return;
       if (!artistAllowedForStyle(track.style, track.artist)) return;
       if (!labelAllowedForStyle(track.style, track.label)) return;
+      if (trackBlockedForStyle(track.style, track)) return;
       if (hasTrackStyleSignalConflict(track.style, track)) return;
       const trackMeta = TRACK_METADATA[`${track.song}|${track.artist}`] || {};
       const durationSec = parseDurationTextToSeconds(trackMeta.duration);
@@ -23053,6 +23114,7 @@ function loadDynamicCatalogCache() {
       if (isLikelyChannelStyleArtistName(track.artist)) return;
       const bpmValue = Number(track.bpmExact);
       if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return;
+      if (dynamicFineStyleNeedsVerifiedTrack(track.style, track.source) && !hasReliableBpmForTrack(track)) return;
       const key = normalize(`${track.artist}::${track.song}`);
       if (existingKeys.has(key)) return;
       existingKeys.add(key);

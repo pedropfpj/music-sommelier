@@ -1,26 +1,26 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 15/06/2026, 12:21:36
+Gerado em: 15/06/2026, 13:10:09
 Status: OK
 
 ## Resumo
 
-- Faixas auditadas: 3963
+- Faixas auditadas: 3962
 - Artistas unicos: 2658
 - Artistas indexados exibidos no app: 4600
 - Musicas buscaveis estimadas no app: 87400
 - Media buscavel por artista indexado: 19.0x
 - Cobertura auditada versus buscavel: 4.5%
-- Gravadoras/labels unicas: 2693
+- Gravadoras/labels unicas: 2692
 - Estilos com faixas: 81
 - Artistas vindos de datasets externos: 2601
 - Problemas criticos: 0
 - Avisos: 0
-- Notas de enriquecimento: 3485
+- Notas de enriquecimento: 3484
 
 ## Mudanca de catalogo
 
-- Faixas auditadas: +0 faixas adicionadas, -0 faixas removidas; total anterior 3963, total atual 3963.
+- Faixas auditadas: +0 faixas adicionadas, -1 faixa removida; total anterior 3963, total atual 3962.
 - Musicas buscaveis estimadas: +0 musicas adicionadas, -0 musicas removidas; total anterior 87400, total atual 87400.
 - Artistas indexados: delta +0; total atual 4600.
 - Observacao: se removermos musicas ou artistas ruins, a reducao aparece aqui explicitamente no proximo relatorio.
@@ -47,7 +47,7 @@ Status: OK
 | OK | coldwave | 24/20 | 60/50 | 14/6 | Completo |
 | OK | dark_experimental | 28/24 | 87/50 | 20/10 | Completo |
 | OK | dark_progressive | 109/24 | 92/50 | 80/6 | Completo |
-| OK | dark_psy | 116/20 | 150/50 | 88/6 | Completo |
+| OK | dark_psy | 115/20 | 150/50 | 87/6 | Completo |
 | OK | darkwave | 30/20 | 60/50 | 11/6 | Completo |
 | OK | deep_house | 34/20 | 59/50 | 33/6 | Completo |
 | OK | detroit_techno | 24/20 | 60/50 | 17/6 | Completo |

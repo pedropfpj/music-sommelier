@@ -858,11 +858,19 @@ function buildCatalogDelta(previous, current) {
   };
 }
 
-function formatDeltaLine(label, change, unit) {
+function pluralizeCount(count, singular, plural) {
+  return `${count} ${Number(count) === 1 ? singular : plural}`;
+}
+
+function formatDeltaLine(label, change, singularUnit, pluralUnit) {
   if (!change || change.delta === null) {
     return `- ${label}: sem base anterior confiavel.`;
   }
-  return `- ${label}: +${change.added} ${unit} adicionadas, -${change.removed} ${unit} removidas; total anterior ${change.previous}, total atual ${change.current}.`;
+  const addedUnit = pluralizeCount(change.added, singularUnit, pluralUnit);
+  const removedUnit = pluralizeCount(change.removed, singularUnit, pluralUnit);
+  const addedAction = Number(change.added) === 1 ? "adicionada" : "adicionadas";
+  const removedAction = Number(change.removed) === 1 ? "removida" : "removidas";
+  return `- ${label}: +${addedUnit} ${addedAction}, -${removedUnit} ${removedAction}; total anterior ${change.previous}, total atual ${change.current}.`;
 }
 
 function formatReport(result) {
@@ -917,10 +925,10 @@ function formatReport(result) {
     "## Mudanca de catalogo",
     "",
     result.catalogDelta
-      ? formatDeltaLine("Faixas auditadas", result.catalogDelta.auditedTracks, "faixas")
+      ? formatDeltaLine("Faixas auditadas", result.catalogDelta.auditedTracks, "faixa", "faixas")
       : "- Base anterior: nao encontrada; esta auditoria vira a referencia para proximas adicoes/remocoes.",
     result.catalogDelta
-      ? formatDeltaLine("Musicas buscaveis estimadas", result.catalogDelta.searchableTracks, "musicas")
+      ? formatDeltaLine("Musicas buscaveis estimadas", result.catalogDelta.searchableTracks, "musica", "musicas")
       : "- Musicas buscaveis estimadas: sem comparativo anterior.",
     result.catalogDelta
       ? `- Artistas indexados: delta ${result.catalogDelta.indexedArtists.delta >= 0 ? "+" : ""}${result.catalogDelta.indexedArtists.delta}; total atual ${result.catalogDelta.indexedArtists.current}.`

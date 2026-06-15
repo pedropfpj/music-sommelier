@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-06-15T15:21:36.165Z",
+  "generatedAt": "2026-06-15T16:10:09.713Z",
   "current": {
-    "auditedTracks": 3963,
+    "auditedTracks": 3962,
     "uniqueArtists": 2658,
     "indexedArtists": 4600,
     "searchableTracks": 87400,
-    "labels": 2693,
+    "labels": 2692,
     "styles": 81,
     "externalArtists": 2601,
     "criticalCount": 0,
     "warningCount": 0,
-    "noteCount": 3485
+    "noteCount": 3484
   },
   "previous": {
     "auditedTracks": 3963,
@@ -27,10 +27,10 @@
   "delta": {
     "auditedTracks": {
       "previous": 3963,
-      "current": 3963,
-      "delta": 0,
+      "current": 3962,
+      "delta": -1,
       "added": 0,
-      "removed": 0
+      "removed": 1
     },
     "searchableTracks": {
       "previous": 87400,
@@ -55,10 +55,10 @@
     },
     "labels": {
       "previous": 2693,
-      "current": 2693,
-      "delta": 0,
+      "current": 2692,
+      "delta": -1,
       "added": 0,
-      "removed": 0
+      "removed": 1
     },
     "styles": {
       "previous": 81,
@@ -90,10 +90,10 @@
     },
     "noteCount": {
       "previous": 3485,
-      "current": 3485,
-      "delta": 0,
+      "current": 3484,
+      "delta": -1,
       "added": 0,
-      "removed": 0
+      "removed": 1
     }
   }
 }
