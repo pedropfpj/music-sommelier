@@ -5763,7 +5763,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v18";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v19";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v36";
 const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
@@ -7860,10 +7860,17 @@ const ARTIST_CANONICAL_ORIGINS = {
 
 const AMBIGUOUS_ARTIST_IMAGE_KEYS = new Set([
   "avalon",
+  "cosmo",
+  "nom",
   "parus",
   "shiva",
   "tristan",
   "vertical"
+]);
+
+const DYNAMIC_PSY_HOMONYM_RISK_ARTIST_KEYS = new Set([
+  "cosmo",
+  "nom"
 ]);
 
 const CURATOR_BLOCKED_ARTIST_KEYS = new Set([
@@ -8024,6 +8031,42 @@ const TRACK_STYLE_BLOCKLIST = [
     artist: "Vertical",
     song: "Imagínate",
     reason: "Usuario validou artista generico que nao deve entrar como psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Cosmo",
+    song: "TANZSCHEIN",
+    reason: "Homônimo de Deezer fora do projeto psy/hi-tech esperado."
+  },
+  {
+    family: "psytrance",
+    artist: "Cosmo",
+    song: "ALLE MEINE NACHBARN",
+    reason: "Homônimo de Deezer fora do projeto psy/hi-tech esperado."
+  },
+  {
+    family: "psytrance",
+    artist: "Cosmo",
+    song: "DU MACHST MICH HIGH",
+    reason: "Homônimo de Deezer fora do projeto psy/hi-tech esperado."
+  },
+  {
+    family: "psytrance",
+    artist: "N.O.M",
+    song: "MEGA PUNCH",
+    reason: "Homônimo de Deezer fora do recorte dark psy confiavel."
+  },
+  {
+    family: "psytrance",
+    artist: "N.O.M",
+    song: "LOOK",
+    reason: "Homônimo de Deezer fora do recorte dark psy confiavel."
+  },
+  {
+    family: "psytrance",
+    artist: "N.O.M",
+    song: "I can't Wait",
+    reason: "Homônimo de Deezer fora do recorte dark psy confiavel."
   }
 ];
 
@@ -8342,6 +8385,36 @@ const PSYTRANCE_REQUIRED_SIGNAL_TERMS = [
   "psy breaks",
   "psybient",
   "psychill"
+];
+const PSYTRANCE_SCENE_LABEL_TERMS = [
+  "anomalistic",
+  "bom shanka",
+  "boom shankar",
+  "dark prisma",
+  "dharma kshetra",
+  "forestdelic",
+  "free spirit",
+  "goa gil",
+  "horrordelic",
+  "iboga",
+  "kamino",
+  "looney moon",
+  "maharetta",
+  "naturaiz",
+  "noise poison",
+  "osom",
+  "parvati",
+  "pixan",
+  "pralayah",
+  "prisma",
+  "quintessence",
+  "sangoma",
+  "sonic loom",
+  "suntrip",
+  "tantrumm",
+  "timecode",
+  "wildthings",
+  "zenon"
 ];
 const STYLE_FORBIDDEN_SIGNAL_TERMS = {
   techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
@@ -11958,6 +12031,51 @@ function hasPsytranceIntegrityConflict(style, trackLike = {}) {
   return true;
 }
 
+function textHasPsytranceSceneLabelSignal(rawText = "") {
+  const text = normalize(rawText || "");
+  if (!text) return false;
+  return PSYTRANCE_SCENE_LABEL_TERMS.some((term) => text.includes(normalize(term)));
+}
+
+function isGenericDynamicPsyLabel(label = "", artistName = "", songName = "") {
+  const raw = String(label || "").trim();
+  if (!raw) return true;
+  const key = normalize(raw);
+  if (!key) return true;
+  if (key === normalize("Catálogo dinâmico") || key === normalize("Dynamic catalog")) return true;
+  if (songName && key === normalize(songName)) return true;
+  if (artistName && key === normalize(artistName)) return true;
+  return isLikelyGenreDescriptorEntity(raw);
+}
+
+function hasAmbiguousDynamicPsyHomonymConflict(style, trackLike = {}) {
+  const cleanStyle = normalizeDatasetStyle(style || trackLike?.style || "");
+  if (!cleanStyle || familyOf(cleanStyle) !== "psytrance" || !trackLike) return false;
+
+  const sourceRaw = String(trackLike.source || "").trim();
+  const sourceCompact = normalize(sourceRaw).replace(/[\s_]+/g, "");
+  if (!isDynamicSource(sourceRaw)) return false;
+  if (!sourceCompact.includes("deezer") && !sourceCompact.includes("itunes") && !sourceCompact.includes("artistexpansion")) return false;
+
+  const artistKey = artistMatchKey(trackLike.artist || "");
+  if (!DYNAMIC_PSY_HOMONYM_RISK_ARTIST_KEYS.has(artistKey)) return false;
+
+  const bpmValue = Number(trackLike.bpmExact || 0);
+  const reliableBpm = Number.isFinite(bpmValue) && bpmValue > 0 && bpmFitsStyle(cleanStyle, bpmValue);
+  const sceneEvidence = textHasPsytranceSceneLabelSignal([
+    trackLike.label,
+    trackLike.artistGenre,
+    trackLike.artistProfileHint,
+    trackLike.labelBio,
+    trackLike.vibe
+  ].filter(Boolean).join(" "));
+  const genericLabel = isGenericDynamicPsyLabel(trackLike.label, trackLike.artist, trackLike.song);
+
+  if (sceneEvidence && reliableBpm) return false;
+  if (sceneEvidence && !genericLabel && !sourceCompact.includes("deezer")) return false;
+  return true;
+}
+
 function hasTrackStyleSignalConflict(style, trackLike = {}) {
   if (!style || !trackLike) return false;
   const merged = [
@@ -11975,6 +12093,7 @@ function hasTrackStyleSignalConflict(style, trackLike = {}) {
   if (hasBassFamilyIntegrityConflict(style, trackLike)) return true;
   if (hasLowTempoIntegrityConflict(style, trackLike)) return true;
   if (hasPsytranceIntegrityConflict(style, trackLike)) return true;
+  if (hasAmbiguousDynamicPsyHomonymConflict(style, trackLike)) return true;
   return false;
 }
 
