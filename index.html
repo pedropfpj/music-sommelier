@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260615spiritall1" />
+    <link rel="stylesheet" href="styles.css?v=20260616spiritvitals2" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -1430,6 +1430,28 @@
             <span id="spiritProgressFill"></span>
           </div>
           <p id="spiritInsightText" class="muted spirit-visual-hint">Curta músicas para o app revelar seu arquétipo musical.</p>
+          <div id="spiritVitals" class="spirit-vitals-grid" aria-label="Resumo do espírito musical">
+            <article class="spirit-vital-card">
+              <span id="spiritVitalDnaLabel">DNA dominante</span>
+              <strong id="spiritVitalDnaValue">Sinais em coleta</strong>
+              <small id="spiritVitalDnaDetail">Curta faixas para calibrar.</small>
+            </article>
+            <article class="spirit-vital-card">
+              <span id="spiritVitalCycleLabel">Ciclo de revisão</span>
+              <strong id="spiritVitalCycleValue">0/10 likes</strong>
+              <small id="spiritVitalCycleDetail">Faltam 10 para revelar.</small>
+            </article>
+            <article class="spirit-vital-card">
+              <span id="spiritVitalRankLabel">Nível do espírito</span>
+              <strong id="spiritVitalRankValue">Em formação</strong>
+              <small id="spiritVitalRankDetail">Aguardando sinais.</small>
+            </article>
+            <article class="spirit-vital-card">
+              <span id="spiritVitalNextLabel">Próximo impulso</span>
+              <strong id="spiritVitalNextValue">Curta sem pressa</strong>
+              <small id="spiritVitalNextDetail">O próximo sinal muda a leitura.</small>
+            </article>
+          </div>
           <div id="spiritSignalList" class="spirit-signal-list"></div>
         </div>
         <article id="spiritCard" class="spirit-card hidden">
@@ -1735,6 +1757,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260615spiritall1"></script>
+    <script src="app.js?v=20260616spiritvitals2"></script>
   </body>
 </html>

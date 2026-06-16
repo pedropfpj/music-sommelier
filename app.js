@@ -5289,6 +5289,19 @@ const spiritInsightTitle = document.getElementById("spiritInsightTitle");
 const spiritInsightStatus = document.getElementById("spiritInsightStatus");
 const spiritInsightText = document.getElementById("spiritInsightText");
 const spiritProgressFill = document.getElementById("spiritProgressFill");
+const spiritVitals = document.getElementById("spiritVitals");
+const spiritVitalDnaLabel = document.getElementById("spiritVitalDnaLabel");
+const spiritVitalDnaValue = document.getElementById("spiritVitalDnaValue");
+const spiritVitalDnaDetail = document.getElementById("spiritVitalDnaDetail");
+const spiritVitalCycleLabel = document.getElementById("spiritVitalCycleLabel");
+const spiritVitalCycleValue = document.getElementById("spiritVitalCycleValue");
+const spiritVitalCycleDetail = document.getElementById("spiritVitalCycleDetail");
+const spiritVitalRankLabel = document.getElementById("spiritVitalRankLabel");
+const spiritVitalRankValue = document.getElementById("spiritVitalRankValue");
+const spiritVitalRankDetail = document.getElementById("spiritVitalRankDetail");
+const spiritVitalNextLabel = document.getElementById("spiritVitalNextLabel");
+const spiritVitalNextValue = document.getElementById("spiritVitalNextValue");
+const spiritVitalNextDetail = document.getElementById("spiritVitalNextDetail");
 const spiritSignalList = document.getElementById("spiritSignalList");
 const spiritSpotlightPanel = document.getElementById("spiritSpotlightPanel");
 const spiritSpotlightTitle = document.getElementById("spiritSpotlightTitle");
@@ -15239,6 +15252,24 @@ const I18N = {
     spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
     spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
     spiritInsightSignalScore: "{label}: sinal {score}",
+    spiritVitalDnaLabel: "DNA dominante",
+    spiritVitalCycleLabel: "Ciclo de revisão",
+    spiritVitalRankLabel: "Nível do espírito",
+    spiritVitalNextLabel: "Próximo impulso",
+    spiritVitalNoSignal: "Sinais em coleta",
+    spiritVitalDnaLocked: "Ainda estou somando pistas antes de revelar o arquétipo.",
+    spiritVitalDnaUnlocked: "{name} aparece por causa desse eixo de gosto.",
+    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleUnlocked: "{current}/{target} no ciclo",
+    spiritVitalCycleRemaining: "Faltam {remaining} para a próxima leitura.",
+    spiritVitalCycleReady: "Leitura pronta para revisar.",
+    spiritVitalRankLocked: "Em formação",
+    spiritVitalRankNext: "Próximo nível: {rank} em {likes} likes.",
+    spiritVitalRankMax: "Nível máximo atual do radar.",
+    spiritVitalNextLocked: "Curta sem pressa",
+    spiritVitalNextUnlocked: "Siga {style}",
+    spiritVitalNextDetailLocked: "O próximo sinal já muda a leitura.",
+    spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
     spiritLoreSignatureKicker: "Assinatura",
     spiritLoreWhyKicker: "Por que atrai",
     spiritLoreNextKicker: "Próxima busca",
@@ -16005,6 +16036,24 @@ const I18N = {
     spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
     spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
     spiritInsightSignalScore: "{label}: signal {score}",
+    spiritVitalDnaLabel: "Dominant DNA",
+    spiritVitalCycleLabel: "Review cycle",
+    spiritVitalRankLabel: "Spirit level",
+    spiritVitalNextLabel: "Next impulse",
+    spiritVitalNoSignal: "Collecting signals",
+    spiritVitalDnaLocked: "I am still adding clues before revealing the archetype.",
+    spiritVitalDnaUnlocked: "{name} appears because of this taste axis.",
+    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleUnlocked: "{current}/{target} this cycle",
+    spiritVitalCycleRemaining: "{remaining} left until the next reading.",
+    spiritVitalCycleReady: "Reading ready to review.",
+    spiritVitalRankLocked: "Forming",
+    spiritVitalRankNext: "Next level: {rank} at {likes} likes.",
+    spiritVitalRankMax: "Current maximum radar level.",
+    spiritVitalNextLocked: "Like freely",
+    spiritVitalNextUnlocked: "Follow {style}",
+    spiritVitalNextDetailLocked: "The next signal already changes the reading.",
+    spiritVitalNextDetailUnlocked: "Use filters or swipe to test this path.",
     spiritLoreSignatureKicker: "Signature",
     spiritLoreWhyKicker: "Why it pulls you in",
     spiritLoreNextKicker: "Next search",
@@ -16768,6 +16817,24 @@ const I18N = {
     spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
     spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
     spiritInsightSignalScore: "{label}: señal {score}",
+    spiritVitalDnaLabel: "ADN dominante",
+    spiritVitalCycleLabel: "Ciclo de revisión",
+    spiritVitalRankLabel: "Nivel del espíritu",
+    spiritVitalNextLabel: "Próximo impulso",
+    spiritVitalNoSignal: "Señales en recopilación",
+    spiritVitalDnaLocked: "Aún estoy sumando pistas antes de revelar el arquetipo.",
+    spiritVitalDnaUnlocked: "{name} aparece por este eje de gusto.",
+    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleUnlocked: "{current}/{target} en el ciclo",
+    spiritVitalCycleRemaining: "Faltan {remaining} para la próxima lectura.",
+    spiritVitalCycleReady: "Lectura lista para revisar.",
+    spiritVitalRankLocked: "En formación",
+    spiritVitalRankNext: "Próximo nivel: {rank} en {likes} likes.",
+    spiritVitalRankMax: "Nivel máximo actual del radar.",
+    spiritVitalNextLocked: "Dale like sin prisa",
+    spiritVitalNextUnlocked: "Sigue {style}",
+    spiritVitalNextDetailLocked: "La próxima señal ya cambia la lectura.",
+    spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
     spiritLoreSignatureKicker: "Firma",
     spiritLoreWhyKicker: "Por qué atrae",
     spiritLoreNextKicker: "Próxima búsqueda",
@@ -17692,6 +17759,10 @@ function applyLanguage() {
   setText("#spiritIntro", t("spiritIntro"));
   setText("#spiritBadge", t("spiritBadge"));
   setText("#spiritInsightTitle", t("spiritInsightTitle"));
+  setText("#spiritVitalDnaLabel", t("spiritVitalDnaLabel"));
+  setText("#spiritVitalCycleLabel", t("spiritVitalCycleLabel"));
+  setText("#spiritVitalRankLabel", t("spiritVitalRankLabel"));
+  setText("#spiritVitalNextLabel", t("spiritVitalNextLabel"));
   setText("#spiritSpotlightTitle", t("spiritSpotlightTitle"));
   setText("#spiritSpotlightHint", t("spiritSpotlightHintPredicted"));
   setText("#spiritSpotlightSpotify", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
@@ -31923,6 +31994,77 @@ function spiritInsightSignals(spirit, limit = 3) {
   return (positive.length ? positive : ranked).slice(0, limit);
 }
 
+function setSpiritVital(labelEl, valueEl, detailEl, labelKey, value = "", detail = "") {
+  if (labelEl) labelEl.textContent = t(labelKey);
+  if (valueEl) valueEl.textContent = String(value || "").trim();
+  if (detailEl) detailEl.textContent = String(detail || "").trim();
+}
+
+function renderSpiritVitals({
+  unlocked = false,
+  likedSongs = totalLikedSongs(),
+  progress = spiritReviewProgress(likedSongs),
+  selectedSpirit = null,
+  spiritText = {},
+  signals = [],
+  signalText = ""
+} = {}) {
+  if (!spiritVitals) return;
+  const safeSignals = Array.isArray(signals) ? signals : [];
+  const primarySignal =
+    safeSignals.find((entry) => Number(entry.score) > 0)?.label ||
+    safeSignals[0]?.label ||
+    spiritTopStyles(selectedSpirit, 1)[0] ||
+    t("spiritVitalNoSignal");
+  const hasSignalText = signalText && signalText !== t("spiritInsightNoSignals");
+  const dnaValue = hasSignalText ? signalText : t("spiritVitalNoSignal");
+  const name = spiritText?.name || selectedSpirit?.id || "Sonic Spirit";
+  const rank = resolveSpiritRank(totalPositiveLikes());
+
+  spiritVitals.classList.toggle("is-unlocked", Boolean(unlocked));
+  setSpiritVital(
+    spiritVitalDnaLabel,
+    spiritVitalDnaValue,
+    spiritVitalDnaDetail,
+    "spiritVitalDnaLabel",
+    dnaValue,
+    unlocked ? t("spiritVitalDnaUnlocked", { name }) : t("spiritVitalDnaLocked")
+  );
+  setSpiritVital(
+    spiritVitalCycleLabel,
+    spiritVitalCycleValue,
+    spiritVitalCycleDetail,
+    "spiritVitalCycleLabel",
+    t(unlocked ? "spiritVitalCycleUnlocked" : "spiritVitalCycleLocked", {
+      current: likedSongs,
+      target: progress.target
+    }),
+    progress.remaining
+      ? t("spiritVitalCycleRemaining", { remaining: progress.remaining })
+      : t("spiritVitalCycleReady")
+  );
+  setSpiritVital(
+    spiritVitalRankLabel,
+    spiritVitalRankValue,
+    spiritVitalRankDetail,
+    "spiritVitalRankLabel",
+    unlocked ? t(rank.current.key) : t("spiritVitalRankLocked"),
+    unlocked && rank.next
+      ? t("spiritVitalRankNext", { rank: t(rank.next.key), likes: rank.next.likes })
+      : unlocked
+        ? t("spiritVitalRankMax")
+        : t("spiritVitalDnaLocked")
+  );
+  setSpiritVital(
+    spiritVitalNextLabel,
+    spiritVitalNextValue,
+    spiritVitalNextDetail,
+    "spiritVitalNextLabel",
+    unlocked ? t("spiritVitalNextUnlocked", { style: primarySignal }) : t("spiritVitalNextLocked"),
+    unlocked ? t("spiritVitalNextDetailUnlocked") : t("spiritVitalNextDetailLocked")
+  );
+}
+
 function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   if (!spiritInsightPanel) return;
   const likedSongs = totalLikedSongs();
@@ -31959,6 +32101,7 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
         })
       : t("spiritInsightLockedText", { remaining: progress.remaining });
   }
+  renderSpiritVitals({ unlocked, likedSongs, progress, selectedSpirit, spiritText, signals, signalText });
   if (!spiritSignalList) return;
   spiritSignalList.innerHTML = "";
   if (!signals.length) {
