@@ -3538,15 +3538,30 @@ input[type="range"] {
   height: 130px;
 }
 
-.youtube-preview-actions {
+.youtube-preview-actions,
+.preview-source-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.youtube-preview-actions .secondary {
+.youtube-preview-actions .secondary,
+.preview-source-actions .secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 38px;
   padding: 0.5rem 0.9rem;
+  text-decoration: none;
+}
+
+.soundcloud-inline-btn,
+.soundcloud-search-link {
+  border-color: rgba(255, 145, 86, 0.46);
+  color: #ffe2d1;
+  background:
+    linear-gradient(135deg, rgba(255, 96, 44, 0.18), rgba(7, 14, 31, 0.78)),
+    rgba(5, 11, 24, 0.78);
 }
 
 .listeners-panel {

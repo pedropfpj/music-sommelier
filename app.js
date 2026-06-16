@@ -5109,6 +5109,8 @@ const youtubePreviewFrame = document.getElementById("youtubePreviewFrame");
 const youtubePreviewActions = document.getElementById("youtubePreviewActions");
 const youtubePreviewToggleBtn = document.getElementById("youtubePreviewToggleBtn");
 const youtubePreviewRetryBtn = document.getElementById("youtubePreviewRetryBtn");
+const soundcloudPreviewToggleBtn = document.getElementById("soundcloudPreviewToggleBtn");
+const soundcloudPreviewSearchLink = document.getElementById("soundcloudPreviewSearchLink");
 const listeningPrompt = document.getElementById("listeningPrompt");
 const previewLikeBtn = document.getElementById("previewLikeBtn");
 const previewIssueBtn = document.getElementById("previewIssueBtn");
@@ -15146,6 +15148,11 @@ const I18N = {
     previewYoutubeOpenInlineBtn: "Abrir player no app",
     previewYoutubeCloseInlineBtn: "Ocultar player",
     previewYoutubeRetryBtn: "Tentar outro vídeo",
+    previewSoundcloudOpenInlineBtn: "Tocar SoundCloud no app",
+    previewSoundcloudCloseInlineBtn: "Ocultar SoundCloud",
+    previewSoundcloudSearchBtn: "Buscar no SoundCloud",
+    previewSoundcloudInlineHint: "SoundCloud disponível no player abaixo. Toque no play do widget se o navegador bloquear autoplay.",
+    previewSoundcloudSearchHint: "Não achei link embutível desta faixa no SoundCloud. A busca abre a fonte para você conferir.",
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
     previewSoundcloudFallback: "Preview em áudio aberto via SoundCloud. Se não iniciar sozinho, toque no player.",
     previewBandcampFallback: "Preview aberto via Bandcamp com fonte validada. Se não iniciar sozinho, toque no player.",
@@ -15930,6 +15937,11 @@ const I18N = {
     previewYoutubeOpenInlineBtn: "Open player in app",
     previewYoutubeCloseInlineBtn: "Hide player",
     previewYoutubeRetryBtn: "Try another video",
+    previewSoundcloudOpenInlineBtn: "Play SoundCloud in app",
+    previewSoundcloudCloseInlineBtn: "Hide SoundCloud",
+    previewSoundcloudSearchBtn: "Search SoundCloud",
+    previewSoundcloudInlineHint: "SoundCloud is available in the player below. Tap the widget play button if the browser blocks autoplay.",
+    previewSoundcloudSearchHint: "I did not find an embeddable SoundCloud link for this track. Search opens the source so you can check it.",
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
     previewSoundcloudFallback: "Audio preview opened through SoundCloud. If it does not start by itself, tap the player.",
     previewBandcampFallback: "Preview opened through a verified Bandcamp source. If it does not start by itself, tap the player.",
@@ -16711,6 +16723,11 @@ const I18N = {
     previewYoutubeOpenInlineBtn: "Abrir player en app",
     previewYoutubeCloseInlineBtn: "Ocultar player",
     previewYoutubeRetryBtn: "Probar otro video",
+    previewSoundcloudOpenInlineBtn: "Tocar SoundCloud en app",
+    previewSoundcloudCloseInlineBtn: "Ocultar SoundCloud",
+    previewSoundcloudSearchBtn: "Buscar en SoundCloud",
+    previewSoundcloudInlineHint: "SoundCloud está disponible en el player abajo. Toca play en el widget si el navegador bloquea autoplay.",
+    previewSoundcloudSearchHint: "No encontré un enlace embebible de SoundCloud para esta pista. La búsqueda abre la fuente para verificar.",
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
     previewSoundcloudFallback: "Preview de audio abierto vía SoundCloud. Si no empieza solo, toca el player.",
     previewBandcampFallback: "Preview abierto vía Bandcamp con fuente validada. Si no empieza solo, toca el player.",
@@ -17799,11 +17816,29 @@ function applyLanguage() {
   if (youtubePreviewFrame) {
     youtubePreviewFrame.title = currentLanguage === "en" ? "YouTube preview player" : currentLanguage === "es" ? "Player de preview YouTube" : "Player de preview YouTube";
   }
+  if (soundcloudPreviewFrame) {
+    soundcloudPreviewFrame.title = currentLanguage === "en" ? "SoundCloud preview player" : currentLanguage === "es" ? "Player de preview SoundCloud" : "Player de preview SoundCloud";
+  }
   setYouTubePreviewActionState({
     visible: Boolean(youtubePreviewActions && !youtubePreviewActions.classList.contains("hidden")),
     canToggle: Boolean(youtubePreviewToggleBtn && !youtubePreviewToggleBtn.classList.contains("hidden") && !youtubePreviewToggleBtn.disabled),
     canRetry: Boolean(youtubePreviewRetryBtn && !youtubePreviewRetryBtn.classList.contains("hidden") && !youtubePreviewRetryBtn.disabled),
     expanded: Boolean(youtubePreviewWrap && !youtubePreviewWrap.classList.contains("hidden"))
+  });
+  setSoundCloudPreviewActionState({
+    visible: Boolean(
+      (soundcloudPreviewToggleBtn && !soundcloudPreviewToggleBtn.classList.contains("hidden")) ||
+      (soundcloudPreviewSearchLink && !soundcloudPreviewSearchLink.classList.contains("hidden"))
+    ),
+    canToggle: Boolean(soundcloudPreviewToggleBtn && !soundcloudPreviewToggleBtn.classList.contains("hidden") && !soundcloudPreviewToggleBtn.disabled),
+    canSearch: Boolean(
+      soundcloudPreviewSearchLink &&
+      !soundcloudPreviewSearchLink.classList.contains("hidden") &&
+      soundcloudPreviewSearchLink.getAttribute("href") &&
+      soundcloudPreviewSearchLink.getAttribute("href") !== "#"
+    ),
+    expanded: Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden")),
+    href: soundcloudPreviewSearchLink?.getAttribute("href") || ""
   });
   setText("#discoverySpotifyLink", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
   setText("#discoveryYoutubeLink", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
@@ -25676,10 +25711,18 @@ function youtubeSearchPlanForAttempt(track, attempt = 0) {
   };
 }
 
+function syncPreviewSourceActionsVisibility() {
+  if (!youtubePreviewActions) return;
+  const hasVisibleAction = [
+    youtubePreviewToggleBtn,
+    youtubePreviewRetryBtn,
+    soundcloudPreviewToggleBtn,
+    soundcloudPreviewSearchLink
+  ].some((item) => Boolean(item && !item.classList.contains("hidden")));
+  youtubePreviewActions.classList.toggle("hidden", !hasVisibleAction);
+}
+
 function setYouTubePreviewActionState({ visible = false, canToggle = false, canRetry = false, expanded = false } = {}) {
-  if (youtubePreviewActions) {
-    youtubePreviewActions.classList.toggle("hidden", !visible);
-  }
   if (youtubePreviewToggleBtn) {
     youtubePreviewToggleBtn.classList.toggle("hidden", !visible || !canToggle);
     youtubePreviewToggleBtn.disabled = !canToggle;
@@ -25692,6 +25735,38 @@ function setYouTubePreviewActionState({ visible = false, canToggle = false, canR
     youtubePreviewRetryBtn.disabled = !canRetry;
     youtubePreviewRetryBtn.textContent = t("previewYoutubeRetryBtn");
   }
+  syncPreviewSourceActionsVisibility();
+}
+
+function setSoundCloudPreviewActionState({ visible = false, canToggle = false, canSearch = false, expanded = false, href = "" } = {}) {
+  if (soundcloudPreviewToggleBtn) {
+    soundcloudPreviewToggleBtn.classList.toggle("hidden", !visible || !canToggle);
+    soundcloudPreviewToggleBtn.disabled = !canToggle;
+    soundcloudPreviewToggleBtn.textContent = expanded
+      ? t("previewSoundcloudCloseInlineBtn")
+      : t("previewSoundcloudOpenInlineBtn");
+  }
+  if (soundcloudPreviewSearchLink) {
+    const safeHref = String(href || "").trim();
+    soundcloudPreviewSearchLink.classList.toggle("hidden", !visible || !canSearch || !safeHref);
+    if (safeHref) soundcloudPreviewSearchLink.href = safeHref;
+    else soundcloudPreviewSearchLink.href = "#";
+    soundcloudPreviewSearchLink.textContent = t("previewSoundcloudSearchBtn");
+    soundcloudPreviewSearchLink.setAttribute("aria-disabled", safeHref ? "false" : "true");
+  }
+  syncPreviewSourceActionsVisibility();
+}
+
+function syncSoundCloudPreviewActionForTrack(track, { expanded = false } = {}) {
+  const direct = trackHasDirectSoundCloudTrack(track);
+  const href = buildSoundCloudTrackLink(track);
+  setSoundCloudPreviewActionState({
+    visible: Boolean(direct || href),
+    canToggle: direct,
+    canSearch: !direct && Boolean(href),
+    expanded,
+    href
+  });
 }
 
 function buildYouTubeEmbedUrl(track, { autoplay = false, attempt = 0 } = {}) {
@@ -25736,11 +25811,16 @@ function buildSoundCloudEmbedUrl(track, { autoplay = false } = {}) {
   return `https://w.soundcloud.com/player/?${params.toString()}`;
 }
 
-function resetSoundCloudPreviewEmbed() {
+function resetSoundCloudPreviewEmbed({ keepActions = false, track = null } = {}) {
   if (!soundcloudPreviewWrap || !soundcloudPreviewFrame) return;
   soundcloudPreviewWrap.classList.add("hidden");
   if (soundcloudPreviewFrame.getAttribute("src")) {
     soundcloudPreviewFrame.removeAttribute("src");
+  }
+  if (keepActions && track) {
+    syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+  } else if (!keepActions) {
+    setSoundCloudPreviewActionState({ visible: false, canToggle: false, canSearch: false, expanded: false, href: "" });
   }
 }
 
@@ -25752,6 +25832,7 @@ function showSoundCloudPreviewEmbed(track, { autoplay = false } = {}) {
     soundcloudPreviewFrame.setAttribute("src", embedUrl);
   }
   soundcloudPreviewWrap.classList.remove("hidden");
+  syncSoundCloudPreviewActionForTrack(track, { expanded: true });
   return true;
 }
 
@@ -35577,6 +35658,7 @@ async function renderPreview(track) {
       title: ""
     });
   }
+  const hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
   const canRetryYoutube = youtubePreviewCanRetry(track);
   const youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
@@ -35598,6 +35680,7 @@ async function renderPreview(track) {
       canRetry: canRetryYoutube,
       expanded: youtubeInlineReady
     });
+    syncSoundCloudPreviewActionForTrack(track, { expanded: false });
 
     try {
       syncPreviewAudioState();
@@ -35610,6 +35693,8 @@ async function renderPreview(track) {
           : t("previewLoaded");
       if (youtubeInlineReady) {
         previewStatus.textContent = `${previewLoadedMessage} ${t("previewYoutubeInlineHint")}`;
+      } else if (hasDirectSoundCloud) {
+        previewStatus.textContent = `${previewLoadedMessage} ${t("previewSoundcloudInlineHint")}`;
       } else if (canRetryYoutube || !hasDirectYoutube) {
         previewStatus.textContent = `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`;
       } else {
@@ -35621,6 +35706,8 @@ async function renderPreview(track) {
       const readyMessage = t("previewReady");
       if (youtubeInlineReady) {
         previewStatus.textContent = `${readyMessage} ${t("previewYoutubeInlineHint")}`;
+      } else if (hasDirectSoundCloud) {
+        previewStatus.textContent = `${readyMessage} ${t("previewSoundcloudInlineHint")}`;
       } else if (canRetryYoutube || !hasDirectYoutube) {
         previewStatus.textContent = `${readyMessage} ${t("previewYoutubeOptionalHint")}`;
       } else {
@@ -35643,12 +35730,14 @@ async function renderPreview(track) {
         canRetry: canRetryYoutube,
         expanded: true
       });
+      syncSoundCloudPreviewActionForTrack(track, { expanded: false });
       previewStatus.textContent = t("previewYoutubeFallback");
     } else {
       const bandcampFallbackReady = showBandcampPreviewEmbed(track);
       if (bandcampFallbackReady) {
         setTrackPreviewVisualState("embed");
         setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
+        syncSoundCloudPreviewActionForTrack(track, { expanded: false });
         previewStatus.textContent = t("previewBandcampFallback");
       } else {
         const soundcloudFallbackReady = showSoundCloudPreviewEmbed(track, { autoplay: false });
@@ -35671,12 +35760,16 @@ async function renderPreview(track) {
               canRetry: canRetryYoutube,
               expanded: true
             });
+            syncSoundCloudPreviewActionForTrack(track, { expanded: false });
             previewStatus.textContent = t("previewYoutubeFallback");
           } else {
             setTrackPreviewVisualState("external");
             setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
+            syncSoundCloudPreviewActionForTrack(track, { expanded: false });
             const platforms = availableExternalPlatforms();
-            previewStatus.textContent = platforms.length
+            previewStatus.textContent = buildSoundCloudTrackLink(track) && !hasDirectSoundCloud
+              ? t("previewSoundcloudSearchHint")
+              : platforms.length
               ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
               : t("previewUnavailable");
           }
@@ -39542,6 +39635,31 @@ bind(youtubePreviewToggleBtn, "click", () => {
   }
 });
 
+bind(soundcloudPreviewToggleBtn, "click", () => {
+  if (!currentRecommendation) return;
+  const expanded = Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden"));
+  if (expanded) {
+    resetSoundCloudPreviewEmbed({ keepActions: true, track: currentRecommendation });
+    if (previewStatus) previewStatus.textContent = t("previewReady");
+    return;
+  }
+
+  if (trackPreview && !trackPreview.paused) {
+    trackPreview.pause();
+  }
+  resetYouTubePreviewEmbed();
+  resetBandcampPreviewEmbed();
+  const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: false });
+  if (opened) {
+    setTrackPreviewVisualState("embed");
+    if (previewStatus) previewStatus.textContent = t("previewSoundcloudFallback");
+    return;
+  }
+
+  syncSoundCloudPreviewActionForTrack(currentRecommendation, { expanded: false });
+  if (previewStatus) previewStatus.textContent = t("previewSoundcloudSearchHint");
+});
+
 bind(youtubePreviewRetryBtn, "click", () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
@@ -39933,6 +40051,24 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
 }
 
 bind(previewIssueBtn, "click", async () => {
+  if (
+    currentRecommendation &&
+    trackHasDirectSoundCloudTrack(currentRecommendation) &&
+    soundcloudPreviewWrap?.classList.contains("hidden")
+  ) {
+    if (trackPreview && !trackPreview.paused) {
+      trackPreview.pause();
+    }
+    resetYouTubePreviewEmbed();
+    resetBandcampPreviewEmbed();
+    const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: false });
+    if (opened) {
+      setTrackPreviewVisualState("embed");
+      if (previewStatus) previewStatus.textContent = t("previewSoundcloudFallback");
+      return;
+    }
+  }
+
   await swapAfterPreviewFeedback({
     reason: "preview_issue",
     source: "preview_issue_button",
