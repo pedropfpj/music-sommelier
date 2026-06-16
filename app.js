@@ -1997,6 +1997,11 @@ const ARTIST_GENRE_HINT_OVERRIDES = {
     en: "Progressive psy / psytrance",
     es: "Progressive psy / psytrance"
   },
+  "baphomet engine": {
+    pt: "Dark Psy / Twilight Psy / psychedelic trance brasileiro",
+    en: "Brazilian Dark Psy / Twilight Psy / psychedelic trance",
+    es: "Dark Psy / Twilight Psy / psychedelic trance brasileno"
+  },
   "evil oil man": {
     pt: "Prog Dark / zenonesque",
     en: "Prog Dark / zenonesque",
@@ -2067,6 +2072,14 @@ const ARTIST_RELEASE_LABEL_OVERRIDES = {
     "red means distortion": "HOMmega Productions",
     "he art": "Shamanic Tales",
     heart: "Shamanic Tales"
+  },
+  "baphomet engine": {
+    "baphomet engine": "Baphomet Engine LP",
+    "calling to death": "Baphomet Engine LP",
+    "preludio": "Baphomet Engine LP",
+    "prelúdio": "Baphomet Engine LP",
+    "sweep of the puppies": "Catálogo Baphomet Engine",
+    "morphic fields": "Morphic Fields"
   }
 };
 
@@ -4739,7 +4752,10 @@ const TRACK_METADATA = {
   "Your Voice|Black Coffee": { releaseDate: "2019-11-29", duration: "07:06", musicalKey: "A minor", catalogRef: "SLST-088" },
   "Solar System|Sub Focus": { releaseDate: "2023-05-12", duration: "03:39", musicalKey: "F minor", catalogRef: "RAM-412" },
   "Original Nuttah|UK Apache & Shy FX": { releaseDate: "1994-10-17", duration: "05:39", musicalKey: "F minor", catalogRef: "SB-004" },
-  "Windowlicker|Aphex Twin": { releaseDate: "1999-03-22", duration: "06:07", musicalKey: "D# minor", catalogRef: "WAP-105" }
+  "Windowlicker|Aphex Twin": { releaseDate: "1999-03-22", duration: "06:07", musicalKey: "D# minor", catalogRef: "WAP-105" },
+  "Sweep of the Puppies|Baphomet Engine": { releaseDate: "2020-07-24", duration: "07:45", musicalKey: "N/A", catalogRef: "QZHZ62059907" },
+  "Calling To Death|Baphomet Engine": { releaseDate: "2009-05-28", duration: "07:19", musicalKey: "N/A", catalogRef: "QZ5AB1906775" },
+  "Prelúdio|Baphomet Engine": { releaseDate: "2009-05-28", duration: "06:59", musicalKey: "N/A", catalogRef: "QZ5AB1906774" }
 };
 
 const FALLBACK_EVENTS = {
@@ -5204,6 +5220,7 @@ const artistSocialsHint = document.getElementById("artistSocialsHint");
 const artistSocialLinks = document.getElementById("artistSocialLinks");
 const statsLine = document.getElementById("statsLine");
 const summaryShareInstagramBtn = document.getElementById("summaryShareInstagramBtn");
+const summaryShareLinkBtn = document.getElementById("summaryShareLinkBtn");
 const profileBackupKicker = document.getElementById("profileBackupKicker");
 const profileBackupTitle = document.getElementById("profileBackupTitle");
 const profileBackupHint = document.getElementById("profileBackupHint");
@@ -5330,6 +5347,7 @@ const spiritCollectibleDetails = document.getElementById("spiritCollectibleDetai
 const spiritCollectibleRegenerateBtn = document.getElementById("spiritCollectibleRegenerateBtn");
 const spiritCollectibleDownload = document.getElementById("spiritCollectibleDownload");
 const spiritCollectibleShareInstagramBtn = document.getElementById("spiritCollectibleShareInstagramBtn");
+const spiritShareLinkBtn = document.getElementById("spiritShareLinkBtn");
 const spiritRankBadge = document.getElementById("spiritRankBadge");
 
 const likeSongBtn = document.getElementById("likeSongBtn");
@@ -5451,6 +5469,10 @@ let activeVibeTheme = "";
 let currentAuthUser = null;
 const LOGIN_FLOW_ENABLED = false;
 const SOCIAL_PROFILE_ENABLED = false;
+let publicVisitorMode = false;
+let ephemeralProfileMode = false;
+let sharedSpiritViewMode = false;
+let sharedSpiritPayload = null;
 let socialState = {
   ready: false,
   enabled: false,
@@ -5763,7 +5785,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v19";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v36";
 const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
@@ -7300,6 +7322,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "yaminahua": ["dark_psy", "psycore"],
   "dark whisper": ["dark_psy", "psycore"],
   "dark elf": ["dark_psy", "psycore"],
+  "baphomet engine": ["dark_psy", "twilight_psy"],
   "arjuna": ["forest_psy", "dark_psy", "psycore"],
   "zik": ["psycore", "dark_psy"],
   "alpscore": ["psycore", "hi_tech", "dark_psy"],
@@ -7500,6 +7523,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Brazil",
     area: "",
     disambiguation: "Necropsycho e um projeto brasileiro associado ao dark psy e a vertentes experimentais intensas."
+  },
+  "baphomet engine": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Baphomet Engine e um grupo/projeto brasileiro registrado como projeto de psychedelic trance, com leitura curada no app no eixo Dark Psy / Twilight Psy."
   },
   "animalien": {
     country: "Mexico",
@@ -7872,6 +7900,10 @@ const DYNAMIC_PSY_HOMONYM_RISK_ARTIST_KEYS = new Set([
   "cosmo",
   "nom"
 ]);
+
+const CURATED_FINE_STYLE_NO_BPM_ARTIST_PROOF = {
+  "baphomet engine": ["dark_psy", "twilight_psy"]
+};
 
 const CURATOR_BLOCKED_ARTIST_KEYS = new Set([
   "parus",
@@ -12324,6 +12356,25 @@ function artistSeedAnchoredForStyle(style, artistName) {
   return seeds.some((seed) => isArtistMatch(artistName, seed));
 }
 
+function hasCuratedFineStyleProofWithoutBpm(style, track = null) {
+  const cleanStyle = normalizeDatasetStyle(style || track?.style || "");
+  if (!cleanStyle || !track) return false;
+  const artistKey = artistMatchKey(track.artist || "");
+  const allowed = CURATED_FINE_STYLE_NO_BPM_ARTIST_PROOF[artistKey] || [];
+  if (!allowed.includes(cleanStyle)) return false;
+  const sourceKey = normalize(track.source || "").replace(/[\s_]+/g, "");
+  if (!sourceKey.includes("verifieddeezerexpansion") && !sourceKey.includes("verifiedtrackexpansion") && !sourceKey.includes("datasetlocal")) return false;
+  if (!trackHasPlayablePreviewExperience(track) && track.existenceVerified !== true) return false;
+  const signalText = [
+    track.artistGenre,
+    track.label,
+    track.artistProfileHint,
+    track.vibe,
+    track.source
+  ].filter(Boolean).join(" ");
+  return textHasSpecificStyleSignal(cleanStyle, signalText);
+}
+
 function isDynamicSource(source) {
   const normalizedSource = normalize(source || "");
   const compactSource = normalizedSource.replace(/[\s_]+/g, "");
@@ -15192,6 +15243,12 @@ const I18N = {
     summaryAchievementTierProgress: "Nível atual: {tier}. Faltam {remaining} faixas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nível máximo alcançado: {tier}.",
     summaryShareStoryBtn: "Compartilhar status nos Stories",
+    shareLinkBtn: "Copiar link compartilhável",
+    shareSpiritLinkBtn: "Copiar link do espírito",
+    shareLinkCopying: "Copiando link...",
+    shareLinkCopied: "Link compartilhável copiado.",
+    shareLinkCopiedShort: "Link copiado",
+    shareLinkFailed: "Não consegui copiar o link agora.",
     summaryShareStoryTitle: "Meu status musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
@@ -15981,6 +16038,12 @@ const I18N = {
     summaryAchievementTierProgress: "Current tier: {tier}. {remaining} more 5★ tracks to reach {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Max tier reached: {tier}.",
     summaryShareStoryBtn: "Share status to Stories",
+    shareLinkBtn: "Copy share link",
+    shareSpiritLinkBtn: "Copy spirit link",
+    shareLinkCopying: "Copying link...",
+    shareLinkCopied: "Share link copied.",
+    shareLinkCopiedShort: "Link copied",
+    shareLinkFailed: "I could not copy the link right now.",
     summaryShareStoryTitle: "My music status",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
@@ -16767,6 +16830,12 @@ const I18N = {
     summaryAchievementTierProgress: "Nivel actual: {tier}. Faltan {remaining} pistas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nivel máximo alcanzado: {tier}.",
     summaryShareStoryBtn: "Compartir estado en Stories",
+    shareLinkBtn: "Copiar enlace",
+    shareSpiritLinkBtn: "Copiar enlace del espíritu",
+    shareLinkCopying: "Copiando enlace...",
+    shareLinkCopied: "Enlace compartible copiado.",
+    shareLinkCopiedShort: "Enlace copiado",
+    shareLinkFailed: "No pude copiar el enlace ahora.",
     summaryShareStoryTitle: "Mi estado musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
@@ -17913,6 +17982,7 @@ function applyLanguage() {
   setText("#spiritCollectibleRegenerateBtn", t("spiritCollectibleRegenerate"));
   setText("#spiritCollectibleDownload", t("spiritCollectibleDownload"));
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
+  setText("#spiritShareLinkBtn", t("shareSpiritLinkBtn"));
   setText("#spiritCollectiblePlaceholderKicker", t("spiritCollectiblePlaceholderKicker"));
   setText("#spiritCollectiblePlaceholderTitle", t("spiritCollectiblePlaceholderTitle"));
   setText("#spiritCollectiblePlaceholderText", t("spiritCollectiblePlaceholderText"));
@@ -18012,6 +18082,7 @@ function applyLanguage() {
   setText("#eventsPanel > h3", labels.eventsTitle || "");
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
   setText("#summaryShareInstagramBtn", t("summaryShareStoryBtn"));
+  setText("#summaryShareLinkBtn", t("shareLinkBtn"));
   setText("#profileLibraryKicker", t("profileLibraryKicker"));
   setText("#profileLibraryTitle", t("profileLibraryTitle"));
   setText("#profileLibraryHint", t("profileLibraryHint"));
@@ -18242,9 +18313,70 @@ function loadLanguage() {
   applyLanguage();
 }
 
+function currentAppUrl() {
+  if (typeof window === "undefined" || !window.location?.href) return null;
+  try {
+    return new URL(window.location.href);
+  } catch (_err) {
+    return null;
+  }
+}
+
+function urlBooleanParam(url, names = []) {
+  if (!url) return false;
+  return names.some((name) => {
+    const raw = String(url.searchParams.get(name) || "").trim().toLowerCase();
+    return ["1", "true", "yes", "sim", "visitante", "visitor"].includes(raw);
+  });
+}
+
+function parseSharedSpiritPayloadFromUrl() {
+  const url = currentAppUrl();
+  if (!url) return null;
+  const spiritId = String(url.searchParams.get("spirit") || url.searchParams.get("spiritId") || "").trim();
+  const spirit = spiritById(spiritId);
+  if (!spirit) return null;
+  const rawLikes = Number(url.searchParams.get("likes") || url.searchParams.get("liked") || 0);
+  const likes = Math.max(SPIRIT_UNLOCK_TARGET, Math.min(999, Number.isFinite(rawLikes) ? Math.round(rawLikes) : SPIRIT_UNLOCK_TARGET));
+  const styles = String(url.searchParams.get("styles") || "")
+    .split(",")
+    .map((style) => normalizeDatasetStyle(style))
+    .filter((style) => style && STYLE_BPM_RULES[style])
+    .slice(0, 5);
+  const language = String(url.searchParams.get("lang") || "").trim().toLowerCase();
+  return {
+    spiritId: spirit.id,
+    likes,
+    styles,
+    language: ["pt", "en", "es"].includes(language) ? language : ""
+  };
+}
+
+function urlRequestsPublicVisitorMode() {
+  const url = currentAppUrl();
+  return Boolean(
+    parseSharedSpiritPayloadFromUrl() ||
+    urlBooleanParam(url, ["visitor", "visitante", "share", "shared", "public"])
+  );
+}
+
+function createVisitorSession() {
+  const suffix = Math.random().toString(36).slice(2, 8);
+  return {
+    mode: "visitor",
+    username: "Visitante",
+    providerId: `visitor-${Date.now().toString(36)}-${suffix}`
+  };
+}
+
+function isEphemeralSession(session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  return Boolean(ephemeralProfileMode || normalizedSession.mode === "visitor");
+}
+
 function normalizeAuthMode(mode) {
   const value = String(mode || "").toLowerCase();
-  return ["login", "google", "apple", "test"].includes(value) ? value : "guest";
+  return ["login", "google", "apple", "test", "visitor"].includes(value) ? value : "guest";
 }
 
 function normalizeUserSession(session) {
@@ -18259,6 +18391,7 @@ function normalizeUserSession(session) {
 
 function sessionProfileKey(session = currentAuthUser) {
   const normalizedSession = normalizeUserSession(session);
+  if (isEphemeralSession(normalizedSession)) return "";
   if (normalizedSession.mode === "login") {
     const usernameKey = normalize(normalizedSession.username);
     return usernameKey ? `login:${usernameKey}` : "";
@@ -18290,6 +18423,7 @@ function uniqueStorageKeys(keys = []) {
 
 function storageFallbackKeys(baseKey, session = currentAuthUser) {
   const normalizedSession = normalizeUserSession(session);
+  if (isEphemeralSession(normalizedSession)) return [];
   if (normalizedSession.mode === "test") {
     return uniqueStorageKeys([storageKeyForSession(baseKey, session)]);
   }
@@ -18375,6 +18509,7 @@ function clearSessionProfileData(session) {
 }
 
 function hasUsageGuideAcknowledged() {
+  if (publicVisitorMode || sharedSpiritViewMode) return true;
   try {
     if (localStorage.getItem(USAGE_GUIDE_ACK_STORAGE_KEY) === "yes") return true;
     if (localStorage.getItem(USER_SESSION_STORAGE_KEY)) return true;
@@ -18919,6 +19054,7 @@ function readStoredUserSession() {
 }
 
 function persistUserSession(session) {
+  if (isEphemeralSession(session)) return;
   try {
     const normalizedSession = normalizeUserSession(session);
     localStorage.setItem(USER_SESSION_STORAGE_KEY, JSON.stringify({
@@ -20084,8 +20220,8 @@ function continueFromAuthToWelcome({ showGuide = false } = {}) {
 
 function ensureLocalProfileSession({ preferStored = true } = {}) {
   if (currentAuthUser) return normalizeUserSession(currentAuthUser);
-  const storedUser = preferStored ? readStoredUserSession() : null;
-  const session = storedUser || { mode: "guest", username: "" };
+  const storedUser = publicVisitorMode ? null : (preferStored ? readStoredUserSession() : null);
+  const session = publicVisitorMode ? createVisitorSession() : (storedUser || { mode: "guest", username: "" });
   activateUserSession(session);
   persistUserSession(session);
   return normalizeUserSession(session);
@@ -20227,10 +20363,52 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
   }, 320);
 }
 
+function applySharedSpiritPayload(payload = sharedSpiritPayload) {
+  if (!payload?.spiritId || !spiritById(payload.spiritId)) return false;
+  publicVisitorMode = true;
+  ephemeralProfileMode = true;
+  sharedSpiritViewMode = true;
+  sharedSpiritPayload = payload;
+  activateUserSession(createVisitorSession());
+  if (payload.language && payload.language !== currentLanguage) setLanguage(payload.language);
+
+  userStats.likedSongs = Math.max(SPIRIT_UNLOCK_TARGET, Number(payload.likes) || SPIRIT_UNLOCK_TARGET);
+  currentSpiritId = payload.spiritId;
+  spiritUnlocked = true;
+  spiritLastReviewedSongLikes = spiritReviewCheckpointFromSongLikes(userStats.likedSongs);
+  spiritSignalsByStyle = new Map();
+  const spirit = spiritById(payload.spiritId);
+  const sharedStyles = payload.styles?.length ? payload.styles : spiritTopStyleKeys(spirit, 4);
+  sharedStyles.forEach((style, index) => {
+    const cleanStyle = normalizeDatasetStyle(style);
+    if (cleanStyle) spiritSignalsByStyle.set(cleanStyle, Math.max(0.7, 2.2 - index * 0.32));
+  });
+
+  clearIntroAutoAdvance();
+  stopIntroQuoteLoop();
+  hideQuizChallengeBubble({ clearPending: true });
+  closeQuizOverlay({ skipSnooze: true });
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (appContent) appContent.classList.remove("hidden");
+  setActiveAppTab("profile");
+  updateStats();
+  void renderMusicalSpirit({ celebrate: false, forceAnimation: false }).then(() => {
+    const target = spiritPanel || summaryPanel || appContent;
+    target?.scrollIntoView?.({ behavior: "auto", block: "start" });
+  });
+  refreshAmbientForUiState();
+  syncFloatingSurpriseButton();
+  return true;
+}
+
 function startLocalProfileFlow({ preferStored = true, showGuide = null } = {}) {
   const shouldShowUsageGuide = showGuide === null ? !hasUsageGuideAcknowledged() : Boolean(showGuide);
-  const storedUser = preferStored ? readStoredUserSession() : null;
-  const session = storedUser || { mode: "guest", username: "" };
+  const storedUser = publicVisitorMode ? null : (preferStored ? readStoredUserSession() : null);
+  const session = publicVisitorMode ? createVisitorSession() : (storedUser || { mode: "guest", username: "" });
   activateUserSession(session);
   persistUserSession(session);
   if (storedUser && storedUser.mode !== "guest") {
@@ -23172,6 +23350,68 @@ async function copySupportText(value = "", triggerButton = null) {
   return operation.catch(() => {
     showToast(t("supportMissingPayment"));
   });
+}
+
+async function writeTextToClipboard(text = "") {
+  const safeText = String(text || "").trim();
+  if (!safeText) throw new Error("Missing text");
+  if (navigator?.clipboard?.writeText) {
+    await navigator.clipboard.writeText(safeText);
+    return;
+  }
+  const fallback = document.createElement("textarea");
+  fallback.value = safeText;
+  fallback.setAttribute("readonly", "");
+  fallback.style.position = "fixed";
+  fallback.style.opacity = "0";
+  document.body.appendChild(fallback);
+  fallback.select();
+  document.execCommand("copy");
+  fallback.remove();
+}
+
+function buildShareableAppUrl({ includeSpirit = true } = {}) {
+  const baseUrl = currentAppUrl() || new URL("https://music-sommelier1.vercel.app/");
+  const url = new URL(`${baseUrl.origin}${baseUrl.pathname || "/"}`);
+  url.searchParams.set("visitor", "1");
+  url.searchParams.set("lang", currentLanguage || DEFAULT_LANGUAGE);
+  url.searchParams.set("tab", includeSpirit && currentSpiritId ? "profile" : "discover");
+
+  const spirit = includeSpirit ? spiritById(currentSpiritId || "") : null;
+  const likes = totalPositiveLikes();
+  if (spirit && likes >= SPIRIT_UNLOCK_TARGET) {
+    const styleKeys = spiritTopStyleKeys(spirit, 5)
+      .map((style) => normalizeDatasetStyle(style))
+      .filter((style) => style && STYLE_BPM_RULES[style]);
+    url.searchParams.set("spirit", spirit.id);
+    url.searchParams.set("likes", String(Math.max(SPIRIT_UNLOCK_TARGET, likes)));
+    if (styleKeys.length) url.searchParams.set("styles", styleKeys.join(","));
+  }
+  return url.toString();
+}
+
+async function copyShareableLink({ triggerButton = null, includeSpirit = true } = {}) {
+  const link = buildShareableAppUrl({ includeSpirit });
+  const originalText = triggerButton?.textContent || "";
+  if (triggerButton) {
+    triggerButton.disabled = true;
+    triggerButton.textContent = t("shareLinkCopying");
+  }
+  try {
+    await writeTextToClipboard(link);
+    showToast(t("shareLinkCopied"));
+    if (triggerButton) triggerButton.textContent = t("shareLinkCopiedShort");
+  } catch (_err) {
+    showToast(t("shareLinkFailed"));
+  } finally {
+    if (triggerButton) {
+      window.setTimeout(() => {
+        triggerButton.textContent = originalText || t("shareLinkBtn");
+        triggerButton.disabled = false;
+      }, 780);
+    }
+  }
+  return link;
 }
 
 function setActiveAppTab(tabName = "discover") {
@@ -32093,6 +32333,10 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         spiritCollectibleShareInstagramBtn.removeAttribute("data-filename");
       }
     }
+    if (spiritShareLinkBtn) {
+      spiritShareLinkBtn.textContent = t("shareSpiritLinkBtn");
+      spiritShareLinkBtn.disabled = false;
+    }
 
     return { hasImage, shareFilename };
   };
@@ -32497,6 +32741,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     if (spiritLorePanel) spiritLorePanel.classList.add("hidden");
     if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
+    if (spiritShareLinkBtn) spiritShareLinkBtn.disabled = true;
     updateSpiritProgressText();
     renderSpiritInsight(resolveMusicalSpirit(), { unlocked: false });
     return;
@@ -32531,6 +32776,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   spiritCard.classList.remove("reveal");
   void spiritCard.offsetWidth;
   spiritCard.classList.add("reveal");
+  if (spiritShareLinkBtn) spiritShareLinkBtn.disabled = false;
 
   setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
   spiritImage.alt = t("spiritAvatarAlt", { name: spiritText.name });
@@ -32886,6 +33132,7 @@ function fineSubgenreEvidenceLevel(style = "", track = null, { reliableBpm = fal
   if (!cleanStyle || !FINE_SUBGENRE_EVIDENCE_STYLES.has(cleanStyle)) return "broad";
   if (!track) return "weak";
   if (isTrustedCuratedCatalogTrack(track)) return "strong";
+  if (hasCuratedFineStyleProofWithoutBpm(cleanStyle, track)) return "strong";
   const source = normalize(track.source || "");
   const datasetAnchored = source.includes("dataset") || source.includes("verified") || source.includes("local_seed");
   const hasAnchor = Boolean(artistLocked || seedAnchored || datasetAnchored);
@@ -32968,6 +33215,7 @@ function trackStyleCertainty(track = null) {
   }
 
   if (fineEvidence === "weak") return "estimated";
+  if (hasCuratedFineStyleProofWithoutBpm(style, track) && specificSignal) return "confirmed";
 
   if (!dynamic && (reliableBpm || specificSignal)) return "confirmed";
   if (artistLocked && reliableBpm) return "confirmed";
@@ -36611,6 +36859,7 @@ function buildQuizQuestions(style, knownCount = 0, displayIndex = null) {
 }
 
 function quizOfferStateReady() {
+  if (publicVisitorMode || sharedSpiritViewMode) return false;
   if (preAppScreensVisible()) return false;
   if (appContent?.classList.contains("hidden")) return false;
   if (searchOverlay && !searchOverlay.classList.contains("hidden")) return false;
@@ -36685,6 +36934,10 @@ function evaluateQuizChallengeNow() {
 }
 
 function scheduleQuizChallengeEvaluation(delayMs = 260) {
+  if (publicVisitorMode || sharedSpiritViewMode) {
+    hideQuizChallengeBubble({ clearPending: true });
+    return;
+  }
   if (quizOfferTimer) window.clearTimeout(quizOfferTimer);
   quizOfferTimer = window.setTimeout(() => {
     quizOfferTimer = 0;
@@ -39601,6 +39854,9 @@ bind(summaryDislikedTracksClearBtn, "click", () => {
 bind(summaryShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram({ triggerButton: summaryShareInstagramBtn });
 });
+bind(summaryShareLinkBtn, "click", async () => {
+  await copyShareableLink({ triggerButton: summaryShareLinkBtn, includeSpirit: true });
+});
 bind(authPassword, "keydown", (event) => {
   if (event.key !== "Enter") return;
   event.preventDefault();
@@ -39662,6 +39918,9 @@ bind(spiritCollectibleRegenerateBtn, "click", async () => {
 });
 bind(spiritCollectibleShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram();
+});
+bind(spiritShareLinkBtn, "click", async () => {
+  await copyShareableLink({ triggerButton: spiritShareLinkBtn, includeSpirit: true });
 });
 bind(trackAiRefreshBtn, "click", async () => {
   if (!currentRecommendation) return;
@@ -40545,7 +40804,12 @@ bind(voicePadClapBtn, "click", () => triggerVoiceDawPad("clap"));
 bind(voicePadSynthBtn, "click", () => triggerVoiceDawPad("synth"));
 bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
 
-const freshTestResetPending = consumeFreshTestResetParam();
+sharedSpiritPayload = parseSharedSpiritPayloadFromUrl();
+sharedSpiritViewMode = Boolean(sharedSpiritPayload);
+publicVisitorMode = sharedSpiritViewMode || urlRequestsPublicVisitorMode();
+ephemeralProfileMode = publicVisitorMode;
+
+const freshTestResetPending = publicVisitorMode ? false : consumeFreshTestResetParam();
 if (!freshTestResetPending) {
   syncDiscoveryFromSeeds();
   loadDynamicCatalogCache();
@@ -40570,7 +40834,9 @@ if (!freshTestResetPending) {
   void initSocialMvp();
   void refreshDailyNews({ silent: true, live: false });
   bootstrapAudio();
-  showIntroScreen();
+  if (!applySharedSpiritPayload(sharedSpiritPayload)) {
+    showIntroScreen();
+  }
   updateWeightLabels();
   applyVoiceMiniPreset("techno");
   updateVoiceLabUi();

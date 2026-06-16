@@ -7079,6 +7079,18 @@ input[type="range"] {
   white-space: nowrap;
 }
 
+.summary-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.summary-share-link-btn,
+.share-link-btn {
+  min-width: max-content;
+}
+
 .profile-library-section {
   margin-top: 0.9rem;
   padding: 0.95rem 0 1.05rem;
@@ -8067,6 +8079,11 @@ input[type="range"] {
     width: 100%;
     min-height: 50px;
     white-space: normal;
+  }
+
+  .summary-share-actions,
+  .summary-share-link-btn {
+    width: 100%;
   }
 
   .profile-library-grid {
