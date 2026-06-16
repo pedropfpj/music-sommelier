@@ -2727,8 +2727,17 @@ button:disabled {
   justify-content: center;
 }
 
+.welcome-start-actions #startBtn {
+  min-width: min(100%, 17rem);
+}
+
 .welcome-import-profile {
   color: #08172a !important;
+}
+
+.social-profile-card.hidden,
+.social-profile-card[aria-hidden="true"] {
+  display: none !important;
 }
 
 .quick-surprise-panel {
@@ -6613,12 +6622,12 @@ input[type="range"] {
   align-content: end;
   gap: 0.34rem;
   padding: clamp(1rem, 2.4vw, 1.45rem);
-  border-radius: 20px;
+  border-radius: 8px;
   border: 1px solid rgba(182, 231, 255, 0.38);
   background:
-    linear-gradient(180deg, transparent 0%, rgba(2, 7, 20, 0.24) 46%, rgba(2, 7, 20, 0.82) 100%),
-    radial-gradient(circle at 50% 28%, rgba(126, 255, 224, 0.26), transparent 32%),
-    radial-gradient(circle at 68% 20%, rgba(130, 166, 255, 0.32), transparent 28%),
+    linear-gradient(180deg, transparent 0%, rgba(2, 7, 20, 0.14) 42%, rgba(2, 7, 20, 0.9) 100%),
+    radial-gradient(circle at 50% 34%, rgba(126, 255, 224, 0.22), transparent 30%),
+    radial-gradient(circle at 72% 20%, rgba(130, 166, 255, 0.28), transparent 28%),
     linear-gradient(150deg, rgba(5, 14, 32, 0.96), rgba(13, 47, 70, 0.86));
   color: #eafcff;
   box-shadow:
@@ -6637,14 +6646,19 @@ input[type="range"] {
 }
 
 .spirit-collectible-placeholder::before {
-  inset: 13% 20% 31%;
-  border-radius: 45% 45% 38% 38%;
-  border: 1px solid rgba(219, 255, 250, 0.22);
+  inset: 15% 18% 34%;
+  border-radius: 8px;
+  border: 1px solid rgba(219, 255, 250, 0.24);
   background:
-    radial-gradient(circle at 50% 26%, rgba(236, 255, 255, 0.28), transparent 18%),
-    radial-gradient(circle at 52% 72%, rgba(130, 255, 229, 0.16), transparent 42%);
-  filter: blur(0.2px);
-  opacity: 0.76;
+    linear-gradient(90deg, transparent 48%, rgba(143, 246, 229, 0.32) 49%, rgba(143, 246, 229, 0.32) 51%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(125, 207, 255, 0.24) 49%, rgba(125, 207, 255, 0.24) 51%, transparent 52%),
+    repeating-linear-gradient(90deg, rgba(143, 246, 229, 0.12) 0 2px, transparent 2px 22px),
+    repeating-linear-gradient(0deg, rgba(125, 207, 255, 0.1) 0 2px, transparent 2px 22px),
+    radial-gradient(circle at 50% 50%, rgba(143, 255, 229, 0.22), transparent 36%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 38px rgba(98, 242, 255, 0.18);
+  opacity: 0.9;
 }
 
 .spirit-collectible-placeholder::after {
@@ -6675,7 +6689,7 @@ input[type="range"] {
   color: #8ff6e5;
   font-size: 0.72rem;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 

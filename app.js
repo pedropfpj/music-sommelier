@@ -5447,6 +5447,8 @@ let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
 let activeVibeTheme = "";
 let currentAuthUser = null;
+const LOGIN_FLOW_ENABLED = false;
+const SOCIAL_PROFILE_ENABLED = false;
 let socialState = {
   ready: false,
   enabled: false,
@@ -5470,7 +5472,7 @@ let introQuoteTimer = 0;
 let introQuoteIndex = 0;
 let introAutoAdvanceTimer = 0;
 let introDismissed = false;
-let usageGuideReturnTarget = "auth";
+let usageGuideReturnTarget = "welcome";
 let audioContext = null;
 let audioMasterGain = null;
 let audioMusicGain = null;
@@ -5763,6 +5765,7 @@ const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v18";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v36";
 const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "scanner-v1";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -5780,6 +5783,7 @@ const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
+const SEARCH_AUDIO_STANDBY = true;
 const AUDIO_GAIN_PROFILE = {
   masterTarget: 1.68,
   fxBusGain: 1.18,
@@ -15075,7 +15079,7 @@ const I18N = {
     profileLibraryHint: "Curtidas e descartadas ficam aqui para ouvir de novo, revisar seu mapa e manter o swipe principal limpo.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Leve seu mapa musical com você",
-    profileBackupHint: "O app funciona sem login e salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.",
+    profileBackupHint: "O app salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.",
     profileBackupStatusEmpty: "Seu mapa local já está pronto. Curta músicas para criar sinais e baixe uma cópia quando quiser.",
     profileBackupStatus: "{signals} sinais guardados neste aparelho • última cópia: {date}",
     profileBackupStatusNever: "ainda não salva",
@@ -15284,8 +15288,8 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte bem diferente para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Sem depender da API: gero uma prévia local com busto espectral, fones/halo, collar futurista e aura derivados do seu espírito. No Vercel, a IA online tenta elevar isso para um retrato hiper-realista.",
-    spiritCollectibleHintLocalReady: "Prévia local criada. Ao regenerar, muda personagem, busto, expressão, pele espectral, acessórios e composição, mesmo sem API de imagem.",
+    spiritCollectibleHintLocal: "Sem depender da API: mostro um scanner visual elegante enquanto o card do espírito fica pronto. No Vercel, a IA online tenta elevar isso para um retrato premium.",
+    spiritCollectibleHintLocalReady: "Prévia local segura criada. Ao regenerar, a IA tenta substituir por uma arte premium quando estiver disponível.",
     spiritCollectibleHintApi: "Arte premium por IA: busto frontal hiper-realista de uma entidade musical espectral, adulta, andrógina, espiritual e futurista, com pele luminosa, fones/coroa/halo, joias, collar e medalhão derivados do seu gosto.",
     spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a prévia local mantém o espírito visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
@@ -15312,14 +15316,14 @@ const I18N = {
     spiritCollectibleGenerating: "Gerando arte do seu espírito...",
     spiritCollectibleGeneratingStart: "Criação iniciada. A imagem pode levar até 45 segundos.",
     spiritCollectibleGeneratingBrief: "Preparando briefing espectral do espírito...",
-    spiritCollectibleGeneratingPortrait: "Definindo rosto, busto, roupa e acessórios...",
+    spiritCollectibleGeneratingPortrait: "Definindo aura, paleta e símbolos do espírito...",
     spiritCollectibleGeneratingAi: "Renderizando entidade espectral em alta qualidade...",
     spiritCollectibleGeneratingCard: "Montando card compartilhável...",
     spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
     spiritCollectibleGeneratingFailed: "A arte não ficou pronta agora. O fallback local pode tentar novamente sem API.",
-    spiritCollectiblePlaceholderKicker: "Espírito musical IA",
-    spiritCollectiblePlaceholderTitle: "Preparando busto espectral",
-    spiritCollectiblePlaceholderText: "O app cria uma prévia local e tenta elevar com IA online.",
+    spiritCollectiblePlaceholderKicker: "Arte em preparação",
+    spiritCollectiblePlaceholderTitle: "Scanner do espírito musical",
+    spiritCollectiblePlaceholderText: "A arte final entra aqui quando a IA terminar.",
     spiritCollectibleGeneratedLocal: "Prévia espectral local criada sem depender da API de imagem.",
     spiritCollectibleGeneratedApi: "Arte espectral criada por IA com aura, beleza e identidade do seu perfil.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
@@ -15859,7 +15863,7 @@ const I18N = {
     profileLibraryHint: "Liked and rejected tracks live here, so you can replay, review your map, and keep the main swipe clean.",
     profileBackupKicker: "Portable local profile",
     profileBackupTitle: "Carry your music map with you",
-    profileBackupHint: "The app works without login and saves your taste on this device. Download a copy to return in another browser whenever you want.",
+    profileBackupHint: "The app saves your taste on this device. Download a copy to return in another browser whenever you want.",
     profileBackupStatusEmpty: "Your local map is ready. Like tracks to create signals and download a copy whenever you want.",
     profileBackupStatus: "{signals} signals kept on this device • last copy: {date}",
     profileBackupStatusNever: "not saved yet",
@@ -16068,8 +16072,8 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate a very different artwork to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "No API required: I generate a local preview with a spectral bust, headphones/halo, futuristic collar, and aura derived from your spirit. On Vercel, online AI tries to elevate it into a hyper-real portrait.",
-    spiritCollectibleHintLocalReady: "Local preview created. Regeneration changes character, bust, expression, spectral skin, accessories, and composition, even without the image API.",
+    spiritCollectibleHintLocal: "No API required: I show an elegant visual scanner while the spirit card gets ready. On Vercel, online AI tries to upgrade it into a premium portrait.",
+    spiritCollectibleHintLocalReady: "Safe local preview created. Regeneration still tries to replace it with premium AI artwork when available.",
     spiritCollectibleHintApi: "Premium AI artwork: a hyper-real front bust of an adult androgynous spiritual futuristic musical-spirit entity, with luminous skin, headphones/crown/halo, jewelry, collar, and medallion derived from your taste.",
     spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the local preview keeps the spirit visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
@@ -16096,14 +16100,14 @@ const I18N = {
     spiritCollectibleGenerating: "Generating your spirit artwork...",
     spiritCollectibleGeneratingStart: "Creation started. The image can take up to 45 seconds.",
     spiritCollectibleGeneratingBrief: "Preparing the spectral-spirit brief...",
-    spiritCollectibleGeneratingPortrait: "Defining face, bust, wardrobe, and accessories...",
+    spiritCollectibleGeneratingPortrait: "Defining the spirit aura, palette, and symbols...",
     spiritCollectibleGeneratingAi: "Rendering a high-quality spectral entity...",
     spiritCollectibleGeneratingCard: "Building the shareable card...",
     spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
     spiritCollectibleGeneratingFailed: "Artwork was not ready now. The local fallback can try again without an API.",
-    spiritCollectiblePlaceholderKicker: "AI music spirit",
-    spiritCollectiblePlaceholderTitle: "Preparing spectral bust",
-    spiritCollectiblePlaceholderText: "The app creates a local preview and tries to upgrade it with online AI.",
+    spiritCollectiblePlaceholderKicker: "Artwork preparing",
+    spiritCollectiblePlaceholderTitle: "Musical spirit scanner",
+    spiritCollectiblePlaceholderText: "The final artwork appears here when AI finishes.",
     spiritCollectibleGeneratedLocal: "Local spectral preview created without depending on the image API.",
     spiritCollectibleGeneratedApi: "AI spectral artwork created with your profile's aura, beauty, and identity.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
@@ -16640,7 +16644,7 @@ const I18N = {
     profileLibraryHint: "Likes y descartes viven aquí para escuchar de nuevo, revisar tu mapa y mantener limpio el swipe principal.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Lleva tu mapa musical contigo",
-    profileBackupHint: "La app funciona sin login y guarda tu gusto en este dispositivo. Descarga una copia para volver en otro navegador cuando quieras.",
+    profileBackupHint: "La app guarda tu gusto en este dispositivo. Descarga una copia para volver en otro navegador cuando quieras.",
     profileBackupStatusEmpty: "Tu mapa local ya está listo. Da like a pistas para crear señales y descarga una copia cuando quieras.",
     profileBackupStatus: "{signals} señales guardadas en este dispositivo • última copia: {date}",
     profileBackupStatusNever: "aún no guardada",
@@ -16849,8 +16853,8 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte muy diferente para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Sin depender de la API: genero una vista local con busto espectral, audífonos/halo, collar futurista y aura derivados de tu espíritu. En Vercel, la IA online intenta elevarla a un retrato hiperrealista.",
-    spiritCollectibleHintLocalReady: "Vista local creada. Al regenerar cambia personaje, busto, expresión, piel espectral, accesorios y composición, incluso sin API de imagen.",
+    spiritCollectibleHintLocal: "Sin API: muestro un scanner visual elegante mientras la tarjeta del espíritu queda lista. En Vercel, la IA online intenta elevarlo a un retrato premium.",
+    spiritCollectibleHintLocalReady: "Vista local segura creada. Al regenerar, la IA intenta reemplazarla por arte premium cuando esté disponible.",
     spiritCollectibleHintApi: "Arte premium con IA: busto frontal hiperrealista de una entidad musical espectral adulta, andrógina, espiritual y futurista, con piel luminosa, audífonos/corona/halo, joyas, collar y medallón derivados de tu gusto.",
     spiritCollectiblePremiumLocked: "Arte IA preparado. Mientras la imagen online no llega, la vista local mantiene visible el espíritu.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
@@ -16877,14 +16881,14 @@ const I18N = {
     spiritCollectibleGenerating: "Generando arte de tu espíritu...",
     spiritCollectibleGeneratingStart: "Creación iniciada. La imagen puede tardar hasta 45 segundos.",
     spiritCollectibleGeneratingBrief: "Preparando el briefing espectral del espíritu...",
-    spiritCollectibleGeneratingPortrait: "Definiendo rostro, busto, ropa y accesorios...",
+    spiritCollectibleGeneratingPortrait: "Definiendo aura, paleta y símbolos del espíritu...",
     spiritCollectibleGeneratingAi: "Renderizando entidad espectral en alta calidad...",
     spiritCollectibleGeneratingCard: "Montando card para compartir...",
     spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
     spiritCollectibleGeneratingFailed: "El arte no quedó lista ahora. El fallback local puede intentar de nuevo sin API.",
-    spiritCollectiblePlaceholderKicker: "Espíritu musical IA",
-    spiritCollectiblePlaceholderTitle: "Preparando busto espectral",
-    spiritCollectiblePlaceholderText: "La app crea una vista local e intenta mejorarla con IA online.",
+    spiritCollectiblePlaceholderKicker: "Arte en preparación",
+    spiritCollectiblePlaceholderTitle: "Scanner del espíritu musical",
+    spiritCollectiblePlaceholderText: "El arte final aparece aquí cuando la IA termine.",
     spiritCollectibleGeneratedLocal: "Vista espectral local creada sin depender de la API de imagen.",
     spiritCollectibleGeneratedApi: "Arte espectral creada por IA con aura, belleza e identidad de tu perfil.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
@@ -19311,6 +19315,10 @@ function requestOpeningSting() {
 }
 
 function startSearchAudioPulse() {
+  if (SEARCH_AUDIO_STANDBY) {
+    stopSearchAudioPulse();
+    return;
+  }
   if (searchAudioPulseTimer) return;
   let pulseStep = 0;
   searchAudioPulseTimer = window.setInterval(() => {
@@ -19572,6 +19580,7 @@ function playUiSfx(type = "tap") {
   }
 
   if (type === "search-start") {
+    if (SEARCH_AUDIO_STANDBY) return;
     duckIntroAmbientForFx(0.52, 0.2);
     spawnTechnoKick({ frequency: 54, volume: 0.19, click: true });
     spawnTechnoKick({ frequency: 58, volume: 0.13, when: 0.23, click: false });
@@ -19583,6 +19592,7 @@ function playUiSfx(type = "tap") {
   }
 
   if (type === "search-done") {
+    if (SEARCH_AUDIO_STANDBY) return;
     duckIntroAmbientForFx(0.54, 0.2);
     spawnTechnoKick({ frequency: 58, volume: 0.15, click: true });
     spawnTechnoHat({ when: 0.08, volume: 0.026, pan: -0.18 });
@@ -19635,7 +19645,7 @@ function setAudioEnabled(nextEnabled, { persist = true, fromUser = false } = {})
   if (audioEnabled) {
     if (fromUser) primeAudioFromUserGesture();
     else ensureAudioReady();
-    if (searchOverlay && !searchOverlay.classList.contains("hidden")) {
+    if (!SEARCH_AUDIO_STANDBY && searchOverlay && !searchOverlay.classList.contains("hidden")) {
       startSearchAudioPulse();
     }
   } else {
@@ -19802,7 +19812,7 @@ function showIntroScreen() {
   requestOpeningSting();
 }
 
-function showUsageGuideScreen({ returnTo = "auth" } = {}) {
+function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
   usageGuideReturnTarget = returnTo;
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
@@ -19839,10 +19849,14 @@ function continueFromUsageGuide() {
     if (startBtn) startBtn.focus();
     return;
   }
-  showAuthScreen();
+  startLocalProfileFlow({ preferStored: true, showGuide: false });
 }
 
 function showAuthScreen() {
+  if (!LOGIN_FLOW_ENABLED) {
+    startLocalProfileFlow({ preferStored: true, showGuide: false });
+    return;
+  }
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: false });
@@ -19912,6 +19926,15 @@ function continueFromAuthToWelcome({ showGuide = false } = {}) {
   }
   refreshAmbientForUiState();
   playUiSfx("confirm");
+}
+
+function ensureLocalProfileSession({ preferStored = true } = {}) {
+  if (currentAuthUser) return normalizeUserSession(currentAuthUser);
+  const storedUser = preferStored ? readStoredUserSession() : null;
+  const session = storedUser || { mode: "guest", username: "" };
+  activateUserSession(session);
+  persistUserSession(session);
+  return normalizeUserSession(session);
 }
 
 function openQuickSurprisePanel() {
@@ -19989,6 +20012,7 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
 }
 
 function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
+  ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
@@ -30954,6 +30978,84 @@ function buildSpiritAbstractSignalSvg(theme, variant, seed = 0, spirit = null, p
 	    </g>`;
 }
 
+function buildLocalSpiritSafeScannerDataUrl(
+  spirit,
+  spiritText,
+  likes,
+  milestoneLikes,
+  variationToken = "",
+  userSignature = "",
+  profileSignature = ""
+) {
+  const theme = spiritVisualTheme(spirit);
+  const seed = hashString([
+    spirit?.id || "spirit",
+    spiritText?.name || "",
+    likes,
+    milestoneLikes,
+    variationToken,
+    userSignature,
+    profileSignature,
+    SPIRIT_LOCAL_COLLECTIBLE_VERSION
+  ].join("::")) >>> 0;
+  const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
+  const a = escapeSvgText(theme.a || "#6effdc");
+  const b = escapeSvgText(theme.b || "#7cb2ff");
+  const c = escapeSvgText(theme.c || "#9f7bff");
+  const d = escapeSvgText(theme.d || "#071421");
+  const accentX = 18 + (seed % 52);
+  const accentY = 12 + ((seed >>> 5) % 54);
+  const signal = buildSpiritAbstractSignalSvg(theme, variant, seed, spirit, profileSignature);
+  const scanLines = Array.from({ length: 16 }, (_, index) => {
+    const y = 120 + index * 42;
+    const opacity = 0.08 + (index % 4) * 0.018;
+    return `<path d="M96 ${y} H804" stroke="${index % 2 ? b : a}" stroke-opacity="${opacity.toFixed(2)}" stroke-width="2" stroke-linecap="round" />`;
+  }).join("");
+  const cornerMarks = [
+    "M112 112 H232 M112 112 V232",
+    "M788 112 H668 M788 112 V232",
+    "M112 788 H232 M112 788 V668",
+    "M788 788 H668 M788 788 V668"
+  ].map((path, index) => `<path d="${path}" fill="none" stroke="${index % 2 ? b : a}" stroke-width="6" stroke-linecap="round" stroke-opacity="0.5" />`).join("");
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900">
+  <defs>
+    <linearGradient id="scannerBg" x1="${accentX}%" y1="${accentY}%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${d}" />
+      <stop offset="48%" stop-color="#07162b" />
+      <stop offset="100%" stop-color="${c}" stop-opacity="0.58" />
+    </linearGradient>
+    <radialGradient id="scannerHalo" cx="50%" cy="43%" r="58%">
+      <stop offset="0%" stop-color="${a}" stop-opacity="0.42" />
+      <stop offset="52%" stop-color="${b}" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="${d}" stop-opacity="0" />
+    </radialGradient>
+    <filter id="mascotGlow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="${a}" flood-opacity="0.34" />
+      <feDropShadow dx="0" dy="22" stdDeviation="34" flood-color="#000000" flood-opacity="0.38" />
+    </filter>
+    <clipPath id="scannerClip">
+      <rect x="44" y="44" width="812" height="812" rx="34" />
+    </clipPath>
+  </defs>
+  <rect width="900" height="900" fill="url(#scannerBg)" />
+  <rect width="900" height="900" fill="#020617" opacity="0.22" />
+  <circle cx="450" cy="430" r="386" fill="url(#scannerHalo)" />
+  <g clip-path="url(#scannerClip)">
+    <rect x="44" y="44" width="812" height="812" fill="${d}" fill-opacity="0.2" />
+    ${scanLines}
+    <g transform="translate(30 20) scale(1.02)">
+      ${signal}
+    </g>
+    <path d="M134 452 H766" stroke="${a}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.3" />
+    <path d="M450 132 V768" stroke="${b}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.22" />
+    <rect x="44" y="44" width="812" height="812" fill="none" stroke="${a}" stroke-opacity="0.2" stroke-width="4" />
+    ${cornerMarks}
+  </g>
+</svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function buildLocalSpiritHumanoidPortraitDataUrl(
   spirit,
   spiritText,
@@ -31569,7 +31671,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
+    const localPortraitDataUrl = buildLocalSpiritSafeScannerDataUrl(
       spirit,
       spiritText,
       likes,
@@ -31609,7 +31711,8 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       createdAt: new Date().toISOString(),
       prompt,
       userSignature,
-      profileSignature
+      profileSignature,
+      fallbackVersion: SPIRIT_LOCAL_COLLECTIBLE_VERSION
     };
   };
   const apiImage = allowAi
@@ -31681,6 +31784,11 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const slotKey = `${spirit.id}::${milestone.likes}::${userSignature}`;
   const store = readSpiritCollectibleStore();
   let collectible = store[slotKey] || null;
+  if (collectible?.source === "local" && collectible.fallbackVersion !== SPIRIT_LOCAL_COLLECTIBLE_VERSION) {
+    delete store[slotKey];
+    saveSpiritCollectibleStore(store);
+    collectible = null;
+  }
 
   const renderCollectibleState = (asset = collectible) => {
     const hasImage = Boolean(asset?.imageUrl);
@@ -31814,7 +31922,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         allowAi: false,
         forceRegenerate
       });
-      if (localPreviewCollectible?.imageUrl) {
+      if (localPreviewCollectible?.imageUrl && !canUseAiForThisAttempt) {
         collectible = localPreviewCollectible;
         store[slotKey] = collectible;
         saveSpiritCollectibleStore(store);
@@ -37518,6 +37626,11 @@ function renderSocialFeed() {
 
 function renderSocialUi(options = {}) {
   if (!socialProfileCard) return;
+  if (!SOCIAL_PROFILE_ENABLED) {
+    socialProfileCard.classList.add("hidden");
+    socialProfileCard.setAttribute("aria-hidden", "true");
+    return;
+  }
   const configured = socialConfigReady();
   const signed = Boolean(socialState.session?.access_token);
   if (socialConnectionBadge) {
@@ -37644,6 +37757,11 @@ async function socialSignOut() {
 
 async function initSocialMvp() {
   if (!socialProfileCard) return;
+  if (!SOCIAL_PROFILE_ENABLED) {
+    socialProfileCard.classList.add("hidden");
+    socialProfileCard.setAttribute("aria-hidden", "true");
+    return;
+  }
   if (socialEmailInput && !socialEmailInput.value) socialEmailInput.value = normalizeUserSession(currentAuthUser).email || "";
   if (socialUsernameInput && !socialUsernameInput.value) socialUsernameInput.value = socialSuggestedUsername();
   if (socialDisplayNameInput && !socialDisplayNameInput.value) socialDisplayNameInput.value = socialSuggestedDisplayName();
@@ -39202,7 +39320,7 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    showAuthScreen();
+    startLocalProfileFlow({ preferStored: true, showGuide: false });
   });
 });
 

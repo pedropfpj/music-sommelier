@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260616spiritvitals2" />
+    <link rel="stylesheet" href="styles.css?v=20260616startsafe2" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -340,8 +340,6 @@
         </div>
         <div class="cta-row welcome-start-actions">
           <button id="startBtn" class="primary large">Iniciar experiência</button>
-          <button id="startSurpriseBtn" class="large">Surpreenda-me</button>
-          <button id="welcomeImportProfileBtn" class="large secondary welcome-import-profile" type="button">Tenho perfil salvo</button>
         </div>
         <div id="quickSurprisePanel" class="quick-surprise-panel hidden">
           <p id="quickSurpriseTitle" class="quick-surprise-title">Modo Surpreenda-me</p>
@@ -1498,9 +1496,9 @@
             </div>
             <div class="spirit-collectible-grid">
               <div id="spiritCollectiblePlaceholder" class="spirit-collectible-placeholder" aria-hidden="true">
-                <span id="spiritCollectiblePlaceholderKicker">Entidade espectral IA</span>
-                <strong id="spiritCollectiblePlaceholderTitle">Busto espiritual em criação</strong>
-                <small id="spiritCollectiblePlaceholderText">Pele fantasma, aura, roupa e acessórios mudam conforme seu gosto.</small>
+                <span id="spiritCollectiblePlaceholderKicker">Arte em preparação</span>
+                <strong id="spiritCollectiblePlaceholderTitle">Scanner do espírito musical</strong>
+                <small id="spiritCollectiblePlaceholderText">A arte final entra aqui quando a IA terminar.</small>
               </div>
               <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
               <div class="spirit-collectible-meta">
@@ -1573,7 +1571,7 @@
           <div>
             <p id="profileBackupKicker" class="summary-kicker">Perfil local portátil</p>
             <h4 id="profileBackupTitle">Leve seu mapa musical com você</h4>
-            <p id="profileBackupHint" class="muted">O app funciona sem login e salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.</p>
+            <p id="profileBackupHint" class="muted">O app salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.</p>
           </div>
           <div class="profile-backup-actions">
             <p id="profileBackupStatus" class="profile-backup-status muted">Quando você curtir ou avaliar músicas, seu mapa fica salvo neste aparelho.</p>
@@ -1590,7 +1588,7 @@
             <input id="profileBackupImportInput" class="hidden" type="file" accept="application/json,.json" />
           </div>
         </article>
-        <article id="socialProfileCard" class="social-profile-card">
+        <article id="socialProfileCard" class="social-profile-card hidden" aria-hidden="true">
           <div class="social-profile-head">
             <div>
               <p class="summary-kicker">Conta online opcional</p>
@@ -1757,6 +1755,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260616spiritvitals2"></script>
+    <script src="app.js?v=20260616startsafe2"></script>
   </body>
 </html>
