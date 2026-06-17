@@ -5429,6 +5429,8 @@ let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
+let curationUserSeed = "";
+const curationOpenSeed = createRuntimeCurationSeed();
 let swipeStyleRailExpanded = false;
 let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
@@ -5794,6 +5796,7 @@ const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v3-techno-copy";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
+const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
@@ -34224,6 +34227,101 @@ function personalTasteScore(track, prefs = {}) {
   return score;
 }
 
+function createRuntimeCurationSeed() {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      const values = new Uint32Array(3);
+      crypto.getRandomValues(values);
+      return Array.from(values).map((value) => value.toString(36)).join("-");
+    }
+  } catch (_err) {
+    // Fallback below keeps the app usable in restricted browsers.
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
+function currentCurationUserSeed() {
+  if (curationUserSeed) return curationUserSeed;
+  try {
+    const stored = String(localStorage.getItem(CURATION_SEED_STORAGE_KEY) || "").trim();
+    if (stored) {
+      curationUserSeed = stored;
+      return curationUserSeed;
+    }
+    curationUserSeed = createRuntimeCurationSeed();
+    localStorage.setItem(CURATION_SEED_STORAGE_KEY, curationUserSeed);
+    return curationUserSeed;
+  } catch (_err) {
+    if (!curationUserSeed) curationUserSeed = createRuntimeCurationSeed();
+    return curationUserSeed;
+  }
+}
+
+function hashUnit(value = "") {
+  return (hashString(value) % 10000) / 10000;
+}
+
+function curationContextSignature(prefs = {}) {
+  prefs = normalizeRecommendationPrefs(prefs);
+  return [
+    prefs.style || "",
+    prefs.context || "",
+    prefs.energy || "",
+    prefs.bpm || "",
+    prefs.vocals || "",
+    discoveryModeEl?.checked ? "discovery" : "direct"
+  ].join("|");
+}
+
+function curationDiversityScore(track, prefs = {}, rawIndex = 0) {
+  if (!track) return 0;
+  prefs = normalizeRecommendationPrefs(prefs);
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist);
+  const context = curationContextSignature(prefs);
+  const userSeed = currentCurationUserSeed();
+  const perUser = hashUnit(`${userSeed}::${context}::${trackKey}`) - 0.5;
+  const perOpen = hashUnit(`${curationOpenSeed}::${context}::${trackKey}`) - 0.5;
+  let score = perOpen * (prefs.style ? 5.2 : 6.4) + perUser * (prefs.style ? 2.4 : 3.1);
+
+  if (trackKey && recommendationMemory.has(trackKey)) score -= 4.8;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 6.6;
+  if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) score -= 4.2;
+  if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 3.4;
+  if (artistKey && seenArtistsMemory.has(artistKey)) score -= 1.7;
+  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 2.8;
+
+  score += trackReleaseFreshnessScore(track) * 1.85;
+  if (trackHasPlayablePreviewExperience(track)) score += 0.45;
+  if (hasReliableBpmForTrack(track)) score += 0.35;
+  score -= Math.min(1.2, Math.max(0, rawIndex) * 0.025);
+  return score;
+}
+
+function curationSelectionWeight(track, prefs = {}, index = 0) {
+  if (!track) return 0.1;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist);
+  let weight = 1;
+  if (trackKey && recommendationMemory.has(trackKey)) weight *= 0.36;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) weight *= 0.18;
+  if (artistKey && seenArtistsMemory.has(artistKey)) weight *= 0.68;
+  if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) weight *= 0.34;
+  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) weight *= 1.32;
+  if (trackReleaseFreshnessScore(track) > 0) weight *= 1.12;
+  return Math.max(0.08, weight / (1 + Math.max(0, index) * 0.012));
+}
+
+function diversifyScoredRecommendationEntries(scored = [], prefs = {}) {
+  return scored
+    .map((entry, index) => ({
+      ...entry,
+      rawIndex: index,
+      selectionScore: Number(entry?.score) + curationDiversityScore(entry?.track, prefs, index)
+    }))
+    .sort((a, b) => (b.selectionScore - a.selectionScore) || (b.score - a.score));
+}
+
 function selectedPreferenceCount(prefs = {}) {
   prefs = normalizeRecommendationPrefs(prefs);
   return ["style", "context", "energy", "bpm", "vocals"].reduce(
@@ -34477,7 +34575,7 @@ function recommendationQualityScore(track, prefs = {}) {
   score += trackUndergroundIntentScore(track, prefs);
   score += trackFreshnessScore(track, prefs);
   score += trackCatalogDepthScore(track);
-  score += trackReleaseFreshnessScore(track);
+  score += trackReleaseFreshnessScore(track) * 1.7;
   score += personalTasteScore(track, prefs);
 
   return score;
@@ -34548,30 +34646,39 @@ function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtist
       isTrustedCuratedCatalogTrack(entry.track)
   );
   if (reliableValid.length >= Math.min(3, valid.length)) valid = reliableValid;
-  if (preferenceCount >= 3) return valid[0].track;
-  if (preferenceCount >= 2 && valid[1] && valid[0].score - valid[1].score >= 0.65) return valid[0].track;
-  if (prefs?.style && valid[1] && valid[0].score - valid[1].score >= 0.4) return valid[0].track;
 
-  const bestScore = valid[0].score;
+  if (valid[1] && valid[0].score - valid[1].score >= 12) return valid[0].track;
+
+  const diversified = diversifyScoredRecommendationEntries(valid, prefs);
+  const bestScore = diversified[0].selectionScore;
   const band = Number.isFinite(scoreBand)
-    ? Math.min(scoreBand, preferenceCount >= 2 ? 1.1 : scoreBand)
-    : (preferenceCount >= 2 ? 1 : prefs?.style ? 1.35 : 1.8);
-  const topWindow = valid
-    .filter((entry) => entry.score >= bestScore - band)
-    .slice(0, Math.max(1, Math.min(preferenceCount ? Math.min(maxWindow, 4) : maxWindow, valid.length)));
+    ? scoreBand
+    : (preferenceCount >= 2 ? 3.6 : prefs?.style ? 5.8 : 6.4);
+  const requestedWindow = Math.max(1, Number(maxWindow) || 7);
+  const windowLimit = Math.max(
+    1,
+    Math.min(
+      prefs?.style ? Math.max(requestedWindow, 12) : Math.max(requestedWindow, 14),
+      diversified.length
+    )
+  );
+  const topWindow = diversified
+    .filter((entry) => entry.selectionScore >= bestScore - band)
+    .slice(0, windowLimit);
   const artistVaried = previousArtistKey
     ? topWindow.filter((entry) => artistMatchKey(entry.track.artist) !== previousArtistKey)
     : topWindow;
   const selectionPool = artistVaried.length ? artistVaried : topWindow;
   if (selectionPool.length === 1) return selectionPool[0].track;
 
-  const minScore = Math.min(...selectionPool.map((entry) => entry.score));
+  const minScore = Math.min(...selectionPool.map((entry) => entry.selectionScore));
   const weightedPool = selectionPool.map((entry, index) => ({
     track: entry.track,
     weight:
-      Math.pow(Math.max(0.04, entry.score - minScore + 0.14), preferenceCount ? 2.2 : 1.55) *
+      Math.pow(Math.max(0.06, entry.selectionScore - minScore + 0.26), preferenceCount ? 1.28 : 1.12) *
+      curationSelectionWeight(entry.track, prefs, index) *
       (1 + Math.max(0, Math.min(8, trackRecommendationReliabilityScore(entry.track))) * 0.055) /
-      (1 + index * 0.16)
+      (1 + index * 0.055)
   }));
   const totalWeight = weightedPool.reduce((sum, entry) => sum + entry.weight, 0);
   let randomCursor = Math.random() * totalWeight;
@@ -34659,17 +34766,19 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
   if (anchorTrack) maybeAdd(anchorTrack, { ignoreKnown: true });
 
   const eligible = styleScopedEligibleTracks(prefs);
-  const scoredUnknown = eligible
-    .filter((track) => !artistSetHasMatch(knownUnion, track.artist))
-    .map((track) => ({ track, score: recommendationScore(track, prefs) }))
-    .sort((a, b) => b.score - a.score);
+  const scoredUnknown = diversifyScoredRecommendationEntries(
+    eligible
+      .filter((track) => !artistSetHasMatch(knownUnion, track.artist))
+      .map((track) => ({ track, score: recommendationScore(track, prefs) })),
+    prefs
+  );
 
-  const anchorArtistKey = normalize(anchorTrack?.artist || "");
+  const anchorArtistKey = artistMatchKey(anchorTrack?.artist || "");
   const fillFromScored = (entries, { diversify = false } = {}) => {
     entries.forEach((entry) => {
       if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
       if (!entry?.track) return;
-      if (diversify && anchorArtistKey && normalize(entry.track.artist) === anchorArtistKey && queue.length === 1) {
+      if (diversify && anchorArtistKey && artistMatchKey(entry.track.artist) === anchorArtistKey && queue.length === 1) {
         return;
       }
       maybeAdd(entry.track);
@@ -34682,9 +34791,10 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
   if (queue.length < SUGGESTION_QUEUE_TARGET) fillFromScored(scoredUnknown);
 
   if (queue.length < SUGGESTION_QUEUE_TARGET) {
-    const scoredFallback = eligible
-      .map((track) => ({ track, score: recommendationScore(track, prefs) }))
-      .sort((a, b) => b.score - a.score);
+    const scoredFallback = diversifyScoredRecommendationEntries(
+      eligible.map((track) => ({ track, score: recommendationScore(track, prefs) })),
+      prefs
+    );
     const scoredReliableFallback = scoredFallback.filter((entry) => hasReliableBpmForTrack(entry.track));
     fillFromScored(scoredReliableFallback, { diversify: true });
     scoredFallback.forEach((entry) => {
@@ -35551,8 +35661,8 @@ function pickRecommendation(
 
   return pickFromScoredRecommendations(scored, prefs, {
     previousArtistKey,
-    maxWindow: prefs.style ? 6 : 7,
-    scoreBand: prefs.style ? 2.2 : 1.8
+    maxWindow: prefs.style ? 18 : 20,
+    scoreBand: prefs.style ? 7.2 : 6.4
   });
 }
 
