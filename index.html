@@ -9,19 +9,20 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Sonic Search - descubra música eletrônica por swipe" />
     <meta property="og:description" content="Um sommelier musical para descobrir faixas, artistas e estilos com swipe, radar de gosto e espírito musical." />
-    <meta property="og:url" content="https://music-sommelier1.vercel.app/" />
-    <meta property="og:image" content="https://music-sommelier1.vercel.app/assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <meta property="og:url" content="https://sonicsearch.app/" />
+    <meta property="og:image" content="https://sonicsearch.app/assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Sonic Search - descubra música eletrônica por swipe" />
     <meta name="twitter:description" content="Curadoria musical com swipe, perfil de gosto e espírito musical para eletrônica." />
-    <meta name="twitter:image" content="https://music-sommelier1.vercel.app/assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <meta name="twitter:image" content="https://sonicsearch.app/assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <link rel="canonical" href="https://sonicsearch.app/" />
     <title>SONIC SEARCH - Descubra música eletrônica</title>
     <link rel="icon" type="image/png" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260617artlabel1" />
+    <link rel="stylesheet" href="styles.css?v=20260617legal1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -1728,6 +1729,47 @@
       </section>
     </main>
 
+    <section id="legalHub" class="legal-hub" aria-labelledby="legalHubTitle">
+      <div class="legal-hub-inner">
+        <div class="legal-hub-head">
+          <p id="legalHubKicker" class="section-kicker">Avisos legais</p>
+          <h2 id="legalHubTitle">Direitos autorais, uso e marcas</h2>
+          <p id="legalHubIntro" class="muted">
+            Sonic Search e seus textos, interface, curadoria, identidade visual, ranking, lógica de recomendação e código original pertencem a Pedro Freire / CBK Labs. Todos os direitos reservados.
+          </p>
+        </div>
+        <div class="legal-grid">
+          <details class="legal-item" open>
+            <summary id="legalCopyrightTitle">Direitos autorais</summary>
+            <p id="legalCopyrightText">
+              É proibido copiar, revender, republicar, raspar, clonar ou explorar comercialmente o app, sua interface, textos, imagens autorais, lógica de curadoria ou bases organizadas sem autorização por escrito.
+            </p>
+          </details>
+          <details class="legal-item">
+            <summary id="legalThirdPartyTitle">Conteúdo musical e terceiros</summary>
+            <p id="legalThirdPartyText">
+              Músicas, previews, capas, nomes de artistas, links, plataformas e marcas de terceiros pertencem aos seus respectivos titulares. Sonic Search é independente e não afirma parceria oficial com Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple ou serviços semelhantes.
+            </p>
+          </details>
+          <details class="legal-item">
+            <summary id="legalUseTitle">Uso permitido</summary>
+            <p id="legalUseText">
+              O app é uma ferramenta de descoberta e recomendação. Use os links oficiais para ouvir, comprar ou apoiar artistas. Classificações de gênero, espírito musical e explicações são estimativas curatoriais, não dados oficiais dos artistas.
+            </p>
+          </details>
+          <details class="legal-item">
+            <summary id="legalPrivacyTitle">Privacidade e responsabilidade</summary>
+            <p id="legalPrivacyText">
+              O perfil musical pode ficar salvo neste aparelho via armazenamento local. Integrações externas e links abertos fora do Sonic Search seguem suas próprias políticas. Tips são apoio voluntário, não investimento, promessa de retorno ou compra de cripto.
+            </p>
+          </details>
+        </div>
+        <p id="legalDisclaimer" class="legal-disclaimer">
+          Este aviso é uma camada informativa de proteção do produto e não substitui contrato, registro de marca ou orientação jurídica profissional.
+        </p>
+      </div>
+    </section>
+
     <footer id="signatureBar" class="signature-bar" aria-label="Créditos do projeto">
       <div class="signature-track" aria-hidden="true">
         <span class="signature-pill">CBK Labs - By Pedro Freire</span>
@@ -1759,8 +1801,8 @@
         premiumImageLimitPerProfile: 0,
         allowImageRegeneration: true
       };
-      window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
+      window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260617artlabel1"></script>
+    <script src="app.js?v=20260617legal1"></script>
   </body>
 </html>

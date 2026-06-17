@@ -84,6 +84,23 @@ Variaveis principais:
 
 ## Qualidade do catalogo
 
+Antes de publicar qualquer mudanca de produto/copy/UI, rode:
+
+```bash
+node scripts/product-verify.mjs
+```
+
+Esse gate roda `node --check app.js`, confere a biblia de estilos, bloqueia frases proibidas em subgeneros criticos, testa invariantes de BPM/cache e avisa quando houver arquivo de UI alterado exigindo screenshots mobile/desktop.
+
+Quando mexer em UI, use:
+
+```bash
+node scripts/product-verify.mjs --screenshots
+```
+
+Esse modo salva `reports/ui-desktop-latest.png` e `reports/ui-mobile-latest.png`.
+Se quiser que falha de screenshot bloqueie o processo, rode com `--strict-screenshots`.
+
 Antes de publicar mudancas grandes no catalogo, rode:
 
 ```bash

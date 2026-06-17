@@ -5788,9 +5788,9 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v37";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v38";
 const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v18-all-genre-guardian-bust";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v2";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v3-techno-copy";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -6386,7 +6386,7 @@ const STYLE_INFO_PT = {
   coldwave: "Coldwave/minimal synth e mais seca e fria: maquinas simples, baixo rigido e melodia contida.",
   synthwave: "Synthwave/retrowave trabalha nostalgia analogica, bateria marcada e synths cinematograficos de neon.",
   witch_house: "Witch house desacelera club music em drones escuros, vozes fantasmaticas, trap pesado e textura ritual.",
-  slambient: "Intersecao de ambient com psy escuro: drones, textura ritualistica e andamento hipnotico.",
+  slambient: "Intersecao de ambient com psy escuro: drones, textura ritualistica e pulso denso de alta pressao.",
   idm: "Eletronica experimental orientada a detalhe ritmico, estrutura complexa e escuta ativa.",
   electro: "Batidas secas e sintese retro-futurista com influencia de electro-funk e robotica.",
   brazilian_funk: "Funk brasileiro/carioca de baile: tamborzao, 808, vocal de impacto e groove direto.",
@@ -6421,7 +6421,7 @@ const STYLE_HUMAN_INFO = {
     liquid_dnb: "Liquid DnB é o lado mais emocional do drum and bass. Continua rápido, mas traz melodia, leveza e uma sensação mais bonita de movimento.",
     neurofunk: "Neurofunk é drum and bass técnico, sombrio e futurista. O baixo parece esculpido, cheio de tensão, para quem gosta de detalhe e peso.",
     ambient: "Ambient é música para entrar num espaço, não necessariamente para seguir uma batida. É textura, clima e imaginação.",
-    slambient: "Slambient mistura ambient escuro com psicodelia profunda. Pode soar como um ritual lento ou uma névoa pesada, feito para imersão."
+    slambient: "Slambient mistura ambient escuro com psicodelia profunda pelo lado da pressao: drones densos, pulso hipnotico e transicoes sombrias de alta intensidade."
   },
   en: {
     psytrance: "Think of a long dancefloor trip: the beat keeps pulling forward, the synths feel mental, and the track grows layer by layer. People love it because it creates a shared trance feeling without needing a simple chorus.",
@@ -8604,20 +8604,20 @@ const MUSICAL_SPIRITS = [
     copy: {
       pt: {
         name: "Oraculo da Nevoa",
-        archetype: "Psicodelia ritual lenta",
-        description: "Seu gosto aponta para nevoa, textura e pressao escura. Voce prefere espirais profundas, drones densos e uma presenca quase ritual, como se a pista respirasse devagar antes de abrir outra camada.",
+        archetype: "Psicodelia ritual densa",
+        description: "Seu gosto aponta para nevoa, textura e pressao escura. Voce prefere drones densos, pulso hipnotico e transicoes de alta intensidade, como se a pista abrisse camadas sob baixa frequencia.",
         cardDescription: "Slambient com identidade propria: nevoa escura, pulso hipnotico e psicodelia em camadas."
       },
       en: {
         name: "Mist Oracle",
-        archetype: "Slow ritual psychedelia",
-        description: "Your taste points toward fog, texture, and dark pressure. You favor deep spirals, dense drones, and a ritual presence, as if the floor breathes slowly before revealing another layer.",
+        archetype: "Dense ritual psychedelia",
+        description: "Your taste points toward fog, texture, and dark pressure. You favor dense drones, hypnotic pulse, and high-intensity transitions, as if the floor opens layers under low-frequency force.",
         cardDescription: "Slambient with its own identity: dark mist, hypnotic pulse, and layered psychedelia."
       },
       es: {
         name: "Oraculo de Niebla",
-        archetype: "Psicodelia ritual lenta",
-        description: "Tu gusto apunta a niebla, textura y presion oscura. Prefieres espirales profundas, drones densos y una presencia ritual, como si la pista respirara lento antes de abrir otra capa.",
+        archetype: "Psicodelia ritual densa",
+        description: "Tu gusto apunta a niebla, textura y presion oscura. Prefieres drones densos, pulso hipnotico y transiciones de alta intensidad, como si la pista abriera capas bajo baja frecuencia.",
         cardDescription: "Slambient con identidad propia: niebla oscura, pulso hipnotico y psicodelia en capas."
       }
     }
@@ -8822,19 +8822,19 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Operador Acido",
         archetype: "Maquina hipnotica",
-        description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e releases calculados. O espirito deve parecer mais maquina de clube do que personagem fofo.",
+        description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e tensao de pista. O espirito deve parecer mais maquina de clube do que personagem fofo.",
         cardDescription: "Techno/acid: metal, repeticao, linhas acidas e controle hipnotico."
       },
       en: {
         name: "Acid Operator",
         archetype: "Hypnotic machine",
-        description: "You hear techno as pressure architecture: acid lines, functional repetition, metal, concrete, and calculated releases. This spirit should feel more like a club machine than a cute character.",
+        description: "You hear techno as pressure architecture: acid lines, functional repetition, metal, concrete, and dancefloor tension. This spirit should feel more like a club machine than a cute character.",
         cardDescription: "Techno/acid: metal, repetition, acid lines, and hypnotic control."
       },
       es: {
         name: "Operador Acido",
         archetype: "Maquina hipnotica",
-        description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y releases calculados. Este espiritu debe sentirse mas maquina de club que personaje tierno.",
+        description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y tension de pista. Este espiritu debe sentirse mas maquina de club que personaje tierno.",
         cardDescription: "Techno/acid: metal, repeticion, lineas acidas y control hipnotico."
       }
     }
@@ -8911,7 +8911,7 @@ const MUSICAL_SPIRITS = [
         name: "Arquiteto Hipnótico",
         archetype: "Tensão hipnótica",
         description: "Personalidade estratégica e imersiva. Você constrói narrativa por repetição inteligente, variação tímbrica e liberações calculadas, mantendo foco contínuo de escuta.",
-        cardDescription: "Tensão hipnótica: repetição inteligente, camadas evolutivas e release calculado."
+        cardDescription: "Tensão hipnótica: repetição inteligente, pulso firme e textura de máquina."
       },
       en: {
         name: "Hypnotic Architect",
@@ -9154,11 +9154,11 @@ const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
     environment: "low-ceiling dark room, mist, wet reflections, cinematic side light"
   },
   oraculo_nevoa: {
-    identity: "adult mist oracle with a serene realistic face, slow psychedelic presence, and quiet emotional gravity",
-    face: "calm compassionate eyes, meditative micro-smile, translucent eyelids and spectral skin detail, face clearly visible through fog",
+    identity: "adult mist oracle with a magnetic realistic face, dense psychedelic presence, and low-frequency ritual pressure",
+    face: "focused watchful eyes, subtle intense micro-smile, translucent eyelids and spectral skin detail, face clearly visible through fog",
     wardrobe: "translucent hooded fabric, layered dark-club textiles, soft reflective accents, no abstract mask",
-    aura: "fog spirals, slow waveform halos, pale green and violet particles, deep slambient pressure",
-    environment: "dim ritual chamber filled with breathable mist and low-frequency light"
+    aura: "fog spirals, waveform pressure halos, pale green and violet particles, deep slambient force",
+    environment: "dim ritual chamber filled with charged mist and low-frequency light"
   },
   feiticeiro_darkpsy: {
     identity: "adult dark-psy forest sorcerer with a human, charismatic, slightly wild face and nocturnal confidence",
@@ -9347,9 +9347,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "crystal",
       crown: "halo",
       quote: {
-        pt: "Seu som favorito parece ritual lento em luz baixa.",
-        en: "Your favorite sound feels like a slow ritual in low light.",
-        es: "Tu sonido favorito parece un ritual lento en luz baja."
+        pt: "Seu som favorito parece ritual denso em luz baixa.",
+        en: "Your favorite sound feels like a dense ritual in low light.",
+        es: "Tu sonido favorito parece un ritual denso en luz baja."
       }
     },
     {
@@ -9550,9 +9550,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "grid",
       crown: "spark",
       quote: {
-        pt: "Metal, filtro, concreto e release calculado.",
-        en: "Metal, filter, concrete, and calculated release.",
-        es: "Metal, filtro, concreto y release calculado."
+        pt: "Metal, filtro, concreto e tensão de pista.",
+        en: "Metal, filter, concrete, and dancefloor tension.",
+        es: "Metal, filtro, concreto y tension de pista."
       }
     },
     {
@@ -14975,6 +14975,18 @@ const I18N = {
     supportCopied: "Copiado.",
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
     supportLegalNote: "Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.",
+    legalHubKicker: "Avisos legais",
+    legalHubTitle: "Direitos autorais, uso e marcas",
+    legalHubIntro: "Sonic Search e seus textos, interface, curadoria, identidade visual, ranking, lógica de recomendação e código original pertencem a Pedro Freire / CBK Labs. Todos os direitos reservados.",
+    legalCopyrightTitle: "Direitos autorais",
+    legalCopyrightText: "É proibido copiar, revender, republicar, raspar, clonar ou explorar comercialmente o app, sua interface, textos, imagens autorais, lógica de curadoria ou bases organizadas sem autorização por escrito.",
+    legalThirdPartyTitle: "Conteúdo musical e terceiros",
+    legalThirdPartyText: "Músicas, previews, capas, nomes de artistas, links, plataformas e marcas de terceiros pertencem aos seus respectivos titulares. Sonic Search é independente e não afirma parceria oficial com Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple ou serviços semelhantes.",
+    legalUseTitle: "Uso permitido",
+    legalUseText: "O app é uma ferramenta de descoberta e recomendação. Use os links oficiais para ouvir, comprar ou apoiar artistas. Classificações de gênero, espírito musical e explicações são estimativas curatoriais, não dados oficiais dos artistas.",
+    legalPrivacyTitle: "Privacidade e responsabilidade",
+    legalPrivacyText: "O perfil musical pode ficar salvo neste aparelho via armazenamento local. Integrações externas e links abertos fora do Sonic Search seguem suas próprias políticas. Tips são apoio voluntário, não investimento, promessa de retorno ou compra de cripto.",
+    legalDisclaimer: "Este aviso é uma camada informativa de proteção do produto e não substitui contrato, registro de marca ou orientação jurídica profissional.",
     sectionKicker: "Filtros de busca",
     sectionHint: "Escolha subgênero, BPM, energia e contexto quando quiser uma recomendação mais precisa.",
     contextMomentKicker: "Momento de escuta",
@@ -15774,6 +15786,18 @@ const I18N = {
     supportCopied: "Copied.",
     supportMissingPayment: "Configure this support method before copying.",
     supportLegalNote: "Tips are voluntary support for the project, not an investment or crypto purchase.",
+    legalHubKicker: "Legal notices",
+    legalHubTitle: "Copyright, use, and trademarks",
+    legalHubIntro: "Sonic Search and its text, interface, curation, visual identity, ranking, recommendation logic, and original code belong to Pedro Freire / CBK Labs. All rights reserved.",
+    legalCopyrightTitle: "Copyright",
+    legalCopyrightText: "You may not copy, resell, republish, scrape, clone, or commercially exploit the app, its interface, text, authored images, curation logic, or organized datasets without written permission.",
+    legalThirdPartyTitle: "Music and third parties",
+    legalThirdPartyText: "Songs, previews, covers, artist names, links, platforms, and third-party trademarks belong to their respective owners. Sonic Search is independent and does not claim an official partnership with Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple, or similar services.",
+    legalUseTitle: "Permitted use",
+    legalUseText: "The app is a discovery and recommendation tool. Use official links to listen, buy, or support artists. Genre labels, music spirit results, and explanations are curatorial estimates, not official artist data.",
+    legalPrivacyTitle: "Privacy and responsibility",
+    legalPrivacyText: "Your music profile may be saved on this device through local storage. External integrations and links opened outside Sonic Search follow their own policies. Tips are voluntary support, not an investment, return promise, or crypto purchase.",
+    legalDisclaimer: "This notice is an informational product-protection layer and does not replace a contract, trademark registration, or professional legal guidance.",
     sectionKicker: "Search filters",
     sectionHint: "Pick subgenre, BPM, energy and context when you want a more precise recommendation.",
     contextMomentKicker: "Listening moment",
@@ -16570,6 +16594,18 @@ const I18N = {
     supportCopied: "Copiado.",
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
     supportLegalNote: "Las tips son apoyo voluntario al proyecto, no inversión ni compra de cripto.",
+    legalHubKicker: "Avisos legales",
+    legalHubTitle: "Derechos de autor, uso y marcas",
+    legalHubIntro: "Sonic Search y sus textos, interfaz, curaduría, identidad visual, ranking, lógica de recomendación y código original pertenecen a Pedro Freire / CBK Labs. Todos los derechos reservados.",
+    legalCopyrightTitle: "Derechos de autor",
+    legalCopyrightText: "No está permitido copiar, revender, republicar, extraer, clonar o explotar comercialmente la app, su interfaz, textos, imágenes autorales, lógica de curaduría o bases organizadas sin autorización por escrito.",
+    legalThirdPartyTitle: "Música y terceros",
+    legalThirdPartyText: "Canciones, previews, portadas, nombres de artistas, links, plataformas y marcas de terceros pertenecen a sus respectivos titulares. Sonic Search es independiente y no afirma una alianza oficial con Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple o servicios similares.",
+    legalUseTitle: "Uso permitido",
+    legalUseText: "La app es una herramienta de descubrimiento y recomendación. Usa los links oficiales para escuchar, comprar o apoyar artistas. Clasificaciones de género, espíritu musical y explicaciones son estimaciones curatoriales, no datos oficiales de los artistas.",
+    legalPrivacyTitle: "Privacidad y responsabilidad",
+    legalPrivacyText: "Tu perfil musical puede quedar guardado en este dispositivo mediante almacenamiento local. Integraciones externas y links abiertos fuera de Sonic Search siguen sus propias políticas. Las tips son apoyo voluntario, no inversión, promesa de retorno ni compra de cripto.",
+    legalDisclaimer: "Este aviso es una capa informativa de protección del producto y no sustituye contrato, registro de marca ni orientación jurídica profesional.",
     sectionKicker: "Filtros de búsqueda",
     sectionHint: "Elige subgénero, BPM, energía y contexto cuando quieras una recomendación más precisa.",
     contextMomentKicker: "Momento de escucha",
@@ -17981,6 +18017,18 @@ function applyLanguage() {
   setText("#supportCryptoTitle", t("supportCryptoTitle"));
   setText("#supportCopyCryptoBtn", t("supportCopyCrypto"));
   setText("#supportLegalNote", t("supportLegalNote"));
+  setText("#legalHubKicker", t("legalHubKicker"));
+  setText("#legalHubTitle", t("legalHubTitle"));
+  setText("#legalHubIntro", t("legalHubIntro"));
+  setText("#legalCopyrightTitle", t("legalCopyrightTitle"));
+  setText("#legalCopyrightText", t("legalCopyrightText"));
+  setText("#legalThirdPartyTitle", t("legalThirdPartyTitle"));
+  setText("#legalThirdPartyText", t("legalThirdPartyText"));
+  setText("#legalUseTitle", t("legalUseTitle"));
+  setText("#legalUseText", t("legalUseText"));
+  setText("#legalPrivacyTitle", t("legalPrivacyTitle"));
+  setText("#legalPrivacyText", t("legalPrivacyText"));
+  setText("#legalDisclaimer", t("legalDisclaimer"));
   renderSupportPanel();
   setText("#preferenceSectionKicker", t("sectionKicker"));
   setText("#preferenceSectionHint", t("sectionHint"));
@@ -28692,7 +28740,12 @@ function spiritPersonalityText(profile = {}) {
   const family = familyOf(profile.dominantStyleKey);
   const copy = {
     pt: {
-      psytrance: "Personalidade do gosto: intuitiva, ritualística e curiosa; prefere viagens longas, tensão que se abre aos poucos e sensação de transe.",
+      psycore: "Personalidade do gosto: extrema, técnica e física; procura BPM alto, cortes secos e pressão escura sem descanso.",
+      slambient: "Personalidade do gosto: densa, textural e subterrânea; gosta de drones pesados, pulso hipnótico e transições sombrias.",
+      hi_tech: "Personalidade do gosto: acelerada, precisa e elétrica; busca glitches, linhas nervosas e clareza dentro do caos.",
+      dark_experimental: "Personalidade do gosto: mutante e sombria; valoriza viradas tortas, risco estrutural e pressão psicodélica.",
+      dark_psy: "Personalidade do gosto: noturna e ritual; prefere subgrave pesado, criaturas sonoras e tensão de floresta fechada.",
+      psytrance: "Personalidade do gosto: intuitiva, ritualística e curiosa; prefere transe, progressão psicodélica e pressão de pista.",
       techno: "Personalidade do gosto: precisa, paciente e arquitetônica; gosta de repetição inteligente, pressão controlada e recompensa gradual.",
       house: "Personalidade do gosto: social, solar e corporal; busca groove, calor de pista e movimento que parece natural antes de parecer técnico.",
       dnb: "Personalidade do gosto: rápida, alerta e fluida; gosta de contraste, velocidade, subgrave e energia que corre sem perder controle.",
@@ -28703,7 +28756,12 @@ function spiritPersonalityText(profile = {}) {
       hybrid: "Personalidade do gosto: híbrida, seletiva e sensorial; compara textura, pulso e clima antes de decidir se uma faixa merece ficar."
     },
     en: {
-      psytrance: "Taste personality: intuitive, ritual-minded, and curious; it favors long journeys, tension that opens slowly, and trance states.",
+      psycore: "Taste personality: extreme, technical, and physical; it seeks high BPM, dry edits, and dark pressure without rest.",
+      slambient: "Taste personality: dense, textural, and underground; it likes heavy drones, hypnotic pulse, and shadow transitions.",
+      hi_tech: "Taste personality: accelerated, precise, and electric; it wants glitches, nervous lines, and clarity inside chaos.",
+      dark_experimental: "Taste personality: mutating and dark; it values crooked switches, structural risk, and psychedelic pressure.",
+      dark_psy: "Taste personality: nocturnal and ritual-driven; it favors heavy sub, sonic creatures, and closed-forest tension.",
+      psytrance: "Taste personality: intuitive, ritual-minded, and curious; it favors trance, psychedelic progression, and dancefloor pressure.",
       techno: "Taste personality: precise, patient, and architectural; it likes intelligent repetition, controlled pressure, and gradual payoff.",
       house: "Taste personality: social, warm, and body-led; it looks for groove, dancefloor heat, and motion that feels natural before it feels technical.",
       dnb: "Taste personality: fast, alert, and fluid; it enjoys contrast, speed, sub-bass, and energy that moves without losing control.",
@@ -28714,7 +28772,12 @@ function spiritPersonalityText(profile = {}) {
       hybrid: "Taste personality: hybrid, selective, and sensory; it compares texture, pulse, and mood before deciding whether a track should stay."
     },
     es: {
-      psytrance: "Personalidad del gusto: intuitiva, ritual y curiosa; prefiere viajes largos, tensión que se abre poco a poco y sensación de trance.",
+      psycore: "Personalidad del gusto: extrema, técnica y física; busca BPM alto, cortes secos y presión oscura sin descanso.",
+      slambient: "Personalidad del gusto: densa, textural y subterránea; disfruta drones pesados, pulso hipnótico y transiciones oscuras.",
+      hi_tech: "Personalidad del gusto: acelerada, precisa y eléctrica; busca glitches, líneas nerviosas y claridad dentro del caos.",
+      dark_experimental: "Personalidad del gusto: mutante y oscura; valora giros torcidos, riesgo estructural y presión psicodélica.",
+      dark_psy: "Personalidad del gusto: nocturna y ritual; prefiere subgrave pesado, criaturas sonoras y tensión de bosque cerrado.",
+      psytrance: "Personalidad del gusto: intuitiva, ritual y curiosa; prefiere trance, progresión psicodélica y presión de pista.",
       techno: "Personalidad del gusto: precisa, paciente y arquitectónica; disfruta repetición inteligente, presión controlada y recompensa gradual.",
       house: "Personalidad del gusto: social, cálida y corporal; busca groove, calor de pista y movimiento que se siente natural antes que técnico.",
       dnb: "Personalidad del gusto: rápida, alerta y fluida; disfruta contraste, velocidad, subgrave y energía que corre sin perder control.",
@@ -28726,7 +28789,7 @@ function spiritPersonalityText(profile = {}) {
     }
   };
   const languageCopy = copy[currentLanguage] || copy.pt;
-  return languageCopy[family] || languageCopy.hybrid;
+  return languageCopy[profile.dominantStyleKey || ""] || languageCopy[family] || languageCopy.hybrid;
 }
 
 function spiritIdentityText(spirit, spiritText = {}, profile = resolveSpiritNarrativeProfile(spirit)) {
@@ -28769,7 +28832,12 @@ function spiritCollectibleMicroQuote(profile = {}) {
   const family = familyOf(profile.dominantStyleKey);
   const copy = {
     pt: {
-      psytrance: "Você escolhe viagem, ritual e camadas que mudam sem pressa.",
+      psycore: "Você escolhe BPM extremo, recortes secos e pressão sem descanso.",
+      slambient: "Você escolhe névoa pesada, drones densos e pulso sombrio.",
+      hi_tech: "Você escolhe velocidade técnica, glitches e caos cristalino.",
+      dark_experimental: "Você escolhe mutação sombria, textura extrema e risco.",
+      dark_psy: "Você escolhe subgrave noturno, criaturas sonoras e floresta fechada.",
+      psytrance: "Você escolhe transe, ritual e camadas com pressão de pista.",
       techno: "Você constrói tensão com precisão, repetição e controle.",
       house: "Você reconhece calor, groove e movimento social no primeiro pulso.",
       dnb: "Você busca velocidade, contraste e subgrave sem perder fluidez.",
@@ -28780,7 +28848,12 @@ function spiritCollectibleMicroQuote(profile = {}) {
       hybrid: "Você compara clima, textura e pulso antes de entregar o like."
     },
     en: {
-      psytrance: "You choose journey, ritual, and layers that mutate slowly.",
+      psycore: "You choose extreme BPM, dry edits, and pressure without rest.",
+      slambient: "You choose heavy mist, dense drones, and shadow pulse.",
+      hi_tech: "You choose technical speed, glitches, and crystal chaos.",
+      dark_experimental: "You choose dark mutation, extreme texture, and risk.",
+      dark_psy: "You choose nocturnal sub, sonic creatures, and closed forest.",
+      psytrance: "You choose trance, ritual, and layers with dancefloor pressure.",
       techno: "You build tension through precision, repetition, and control.",
       house: "You recognize warmth, groove, and social motion in the first pulse.",
       dnb: "You seek speed, contrast, and sub-bass without losing flow.",
@@ -28791,7 +28864,12 @@ function spiritCollectibleMicroQuote(profile = {}) {
       hybrid: "You compare mood, texture, and pulse before giving the like."
     },
     es: {
-      psytrance: "Eliges viaje, ritual y capas que mutan sin prisa.",
+      psycore: "Eliges BPM extremo, cortes secos y presión sin descanso.",
+      slambient: "Eliges niebla pesada, drones densos y pulso oscuro.",
+      hi_tech: "Eliges velocidad técnica, glitches y caos cristalino.",
+      dark_experimental: "Eliges mutación oscura, textura extrema y riesgo.",
+      dark_psy: "Eliges subgrave nocturno, criaturas sonoras y bosque cerrado.",
+      psytrance: "Eliges trance, ritual y capas con presión de pista.",
       techno: "Construyes tensión con precisión, repetición y control.",
       house: "Reconoces calor, groove y movimiento social en el primer pulso.",
       dnb: "Buscas velocidad, contraste y subgrave sin perder fluidez.",
@@ -28803,15 +28881,38 @@ function spiritCollectibleMicroQuote(profile = {}) {
     }
   };
   const languageCopy = copy[currentLanguage] || copy.pt;
-  return languageCopy[family] || languageCopy.hybrid;
+  return languageCopy[profile.dominantStyleKey || ""] || languageCopy[family] || languageCopy.hybrid;
 }
 
 function spiritStyleAppealText(styleKey = "") {
   const label = styleKey ? styleLabelByValue(styleKey) : t("freeStyle");
   const family = familyOf(styleKey);
+  const styleCopy = {
+    pt: {
+      psycore: "Atrai pela urgência extrema: BPM alto, kick físico, recortes secos e sensação de pressão contínua. O prazer está no controle técnico dentro da agressividade.",
+      slambient: "Atrai pela névoa pesada: drones densos, pulso hipnótico e textura ritual com baixa frequência marcada. Não é descanso; é imersão sombria com peso.",
+      hi_tech: "Atrai pela velocidade técnica, pelos glitches e pela clareza no caos. A recompensa vem quando a faixa parece impossível, mas ainda segura a pista.",
+      dark_experimental: "Atrai por risco e mutação: estruturas tortas, textura extrema e viradas que mantêm a mente alerta sem perder pressão.",
+      dark_psy: "Atrai pela tensão noturna: subgrave pesado, desenho psicodélico sombrio e narrativa de floresta fechada."
+    },
+    en: {
+      psycore: "It attracts through extreme urgency: high BPM, physical kick, dry edits, and constant pressure. The reward is technical control inside aggression.",
+      slambient: "It attracts through heavy mist: dense drones, hypnotic pulse, and ritual texture with marked low-frequency weight. This is not rest; it is dark immersion with pressure.",
+      hi_tech: "It attracts through technical speed, glitches, and clarity inside chaos. The reward comes when the track feels impossible but still holds the floor.",
+      dark_experimental: "It attracts through risk and mutation: crooked structures, extreme texture, and switches that keep the mind alert without losing pressure.",
+      dark_psy: "It attracts through nocturnal tension: heavy sub, dark psychedelic design, and closed-forest storytelling."
+    },
+    es: {
+      psycore: "Atrae por urgencia extrema: BPM alto, kick físico, cortes secos y presión constante. La recompensa es control técnico dentro de la agresividad.",
+      slambient: "Atrae por niebla pesada: drones densos, pulso hipnótico y textura ritual con grave marcado. No es descanso; es inmersión oscura con presión.",
+      hi_tech: "Atrae por velocidad técnica, glitches y claridad dentro del caos. La recompensa llega cuando la pista parece imposible, pero sigue firme.",
+      dark_experimental: "Atrae por riesgo y mutación: estructuras torcidas, textura extrema y giros que mantienen la mente alerta sin perder presión.",
+      dark_psy: "Atrae por tensión nocturna: subgrave pesado, diseño psicodélico oscuro y narrativa de bosque cerrado."
+    }
+  };
   const familyCopy = {
     pt: {
-      psytrance: "As pessoas costumam gostar porque cria transe, senso de ritual e uma viagem mental em camadas. O prazer vem da repetição que muda aos poucos: baixo hipnótico, pequenas viradas e tensão que abre espaço.",
+      psytrance: "As pessoas costumam gostar porque cria transe, senso de ritual e uma viagem mental em camadas. O prazer vem da repetição psicodélica: baixo hipnótico, pequenas viradas e pressão que mantém a pista acesa.",
       techno: "As pessoas gostam pela repetição inteligente, pela pressão física do kick e pela sensação de foco contínuo. O detalhe está em como pouca coisa muda, mas cada mudança parece maior dentro da pista.",
       house: "Atrai pelo groove humano, pelo balanço social e pela sensação de movimento sem esforço. É música que convida o corpo antes de pedir análise: swing, baixo redondo e calor de pista.",
       dnb: "Funciona pela velocidade, pela bateria quebrada e pelo contraste entre pressão e fluidez. Quando acerta, parece correr sem perder controle: subgrave, respiro melódico e impulso constante.",
@@ -28821,7 +28922,7 @@ function spiritStyleAppealText(styleKey = "") {
       hard_dance: "Entrega catarse direta: kick forte, euforia e descarga de energia. Funciona quando o usuário quer intensidade sem pedir licença, com recompensa rápida e presença física."
     },
     en: {
-      psytrance: "People often love it because it creates trance, ritual focus, and a layered mental journey. The reward comes from repetition that slowly mutates: hypnotic bass, tiny turns, and tension that keeps opening space.",
+      psytrance: "People often love it because it creates trance, ritual focus, and a layered mental journey. The reward comes from psychedelic repetition: hypnotic bass, tiny turns, and pressure that keeps the floor alive.",
       techno: "It pulls people in through intelligent repetition, physical kick pressure, and continuous dancefloor focus. The detail is how small changes start feeling huge inside the groove.",
       house: "It works through human groove, social swing, and effortless movement. It invites the body before it asks for analysis: round bass, warmth, and a social pulse.",
       dnb: "It hits through speed, broken drums, and the contrast between pressure and flow. When it lands, it feels fast without losing control: sub weight, melodic air, and forward motion.",
@@ -28841,7 +28942,9 @@ function spiritStyleAppealText(styleKey = "") {
       hard_dance: "Entrega catarsis directa: kick fuerte, euforia y descarga de energía. Funciona cuando la intensidad debe llegar rápido y sentirse en el cuerpo."
     }
   };
-  return `${label}: ${(familyCopy[currentLanguage] || familyCopy.pt)[family] || (familyCopy[currentLanguage] || familyCopy.pt).leftfield}`;
+  const languageStyleCopy = styleCopy[currentLanguage] || styleCopy.pt;
+  const languageFamilyCopy = familyCopy[currentLanguage] || familyCopy.pt;
+  return `${label}: ${languageStyleCopy[styleKey] || languageFamilyCopy[family] || languageFamilyCopy.leftfield}`;
 }
 
 function buildSpiritLorePayload(spirit, spiritText = {}) {
@@ -30605,7 +30708,7 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
     "direct warm gaze",
     "subtle confident smirk",
     "inviting intense eyes",
-    "calm charismatic expression"
+    "focused charismatic expression"
   ];
   return [
     `Realistic fictional adult musical-spirit entity format: ${humanForms[seed % humanForms.length]}`,
@@ -30634,7 +30737,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and calm hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and focused hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -30663,8 +30766,16 @@ function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
   const family = familyOf(profile.dominantStyleKey || "");
   const copies = {
     pt: {
-      psytrance: "Seu espírito busca viagem, ritual e camadas que mudam sem pressa.",
-      techno: "Seu espírito constrói tensão com repetição, precisão e release calculado.",
+      psycore: "Seu espírito acelera com BPM extremo, peso sombrio e recortes secos, sem aliviar a pressão.",
+      slambient: "Seu espírito atravessa névoa pesada, drones densos e pulso sombrio sem virar descanso.",
+      hi_tech: "Seu espírito dispara em cortes precisos, glitches e linhas nervosas de alta rotação.",
+      dark_experimental: "Seu espírito gosta de mutação sombria: viradas tortas, textura extrema e risco de pista.",
+      dark_psy: "Seu espírito entra na mata fechada: subgrave noturno, criaturas sonoras e tensão psicodélica.",
+      forest_psy: "Seu espírito segue percussão orgânica, sombras de floresta e transe denso de madrugada.",
+      dark_progressive: "Seu espírito trava no groove sombrio: pressão seca, detalhe mínimo e hipnose profunda.",
+      full_on_night: "Seu espírito quer drive de madrugada, acidez e tensão dançante sem abrir mão do peso.",
+      psytrance: "Seu espírito busca transe, ritual e camadas que evoluem com pressão de pista.",
+      techno: "Seu espírito trava no pulso: repetição firme, textura limpa e tensão de pista.",
       house: "Seu espírito reconhece calor, swing e groove social no primeiro pulso.",
       dnb: "Seu espírito persegue velocidade, contraste e subgrave com fluidez.",
       bass_music: "Seu espírito reage a peso físico, textura e viradas que mudam o ar.",
@@ -30674,8 +30785,16 @@ function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
       outros: "Seu espírito compara clima, textura e pulso antes de entregar o like."
     },
     en: {
-      psytrance: "Your spirit looks for journey, ritual, and layers that shift slowly.",
-      techno: "Your spirit builds tension through repetition, precision, and timed release.",
+      psycore: "Your spirit accelerates through extreme BPM, dark weight, and dry edits without easing the pressure.",
+      slambient: "Your spirit crosses heavy mist, dense drones, and shadow pulse without turning into rest.",
+      hi_tech: "Your spirit fires through precise cuts, glitches, and nervous high-rotation lines.",
+      dark_experimental: "Your spirit likes dark mutation: crooked switches, extreme texture, and dancefloor risk.",
+      dark_psy: "Your spirit enters the closed forest: nocturnal sub, sonic creatures, and psychedelic tension.",
+      forest_psy: "Your spirit follows organic percussion, forest shadows, and dense midnight trance.",
+      dark_progressive: "Your spirit locks into shadow groove: dry pressure, tiny details, and deep hypnosis.",
+      full_on_night: "Your spirit wants midnight drive, acid tension, and dancefloor weight.",
+      psytrance: "Your spirit seeks trance, ritual, and layers that evolve with dancefloor pressure.",
+      techno: "Your spirit locks into pulse, firm repetition, clean texture, and dancefloor tension.",
       house: "Your spirit catches warmth, swing, and social groove in the first pulse.",
       dnb: "Your spirit chases speed, contrast, and sub pressure with fluid motion.",
       bass_music: "Your spirit reacts to physical weight, texture, and air-bending turns.",
@@ -30685,8 +30804,16 @@ function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
       outros: "Your spirit compares mood, texture, and pulse before giving the like."
     },
     es: {
-      psytrance: "Tu espiritu busca viaje, ritual y capas que cambian sin prisa.",
-      techno: "Tu espiritu construye tension con repeticion, precision y release calculado.",
+      psycore: "Tu espiritu acelera con BPM extremo, peso oscuro y cortes secos, sin aflojar la presion.",
+      slambient: "Tu espiritu cruza niebla pesada, drones densos y pulso oscuro sin convertirse en descanso.",
+      hi_tech: "Tu espiritu dispara cortes precisos, glitches y lineas nerviosas de alta rotacion.",
+      dark_experimental: "Tu espiritu busca mutacion oscura: giros torcidos, textura extrema y riesgo de pista.",
+      dark_psy: "Tu espiritu entra al bosque cerrado: subgrave nocturno, criaturas sonoras y tension psicodelica.",
+      forest_psy: "Tu espiritu sigue percusion organica, sombras de bosque y trance denso de madrugada.",
+      dark_progressive: "Tu espiritu se fija en groove oscuro: presion seca, detalle minimo e hipnosis profunda.",
+      full_on_night: "Tu espiritu quiere drive de madrugada, acidez y tension de pista con peso.",
+      psytrance: "Tu espiritu busca trance, ritual y capas que evolucionan con presion de pista.",
+      techno: "Tu espiritu se fija en el pulso: repeticion firme, textura limpia y tension de pista.",
       house: "Tu espiritu reconoce calor, swing y groove social en el primer pulso.",
       dnb: "Tu espiritu persigue velocidad, contraste y subgrave con fluidez.",
       bass_music: "Tu espiritu reacciona al peso fisico, textura y giros que cambian el aire.",
@@ -30696,7 +30823,9 @@ function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
       outros: "Tu espiritu compara clima, textura y pulso antes de dar el like."
     }
   };
-  const familyCopy = (copies[currentLanguage] || copies.pt)[family] || (copies[currentLanguage] || copies.pt).outros;
+  const languageCopies = copies[currentLanguage] || copies.pt;
+  const styleCopy = languageCopies[profile.dominantStyleKey || ""];
+  const familyCopy = styleCopy || languageCopies[family] || languageCopies.outros;
   if (familyCopy) return truncateByWordBoundary(familyCopy, 118);
   const quoted = variant?.quote?.[currentLanguage] || variant?.quote?.pt || "";
   if (quoted) return quoted;
@@ -32234,7 +32363,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
+    const localPortraitDataUrl = buildLocalSpiritSafeScannerDataUrl(
       spirit,
       spiritText,
       likes,
