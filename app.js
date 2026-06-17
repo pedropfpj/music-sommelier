@@ -14503,42 +14503,83 @@ function shouldRefreshSoundCloudPreview(track, { force = false } = {}) {
   return SOUNDCLOUD_PREVIEW_REFRESH_STYLES.has(track.style);
 }
 
-async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
-  if (!shouldRefreshSoundCloudPreview(track, { force })) return false;
-  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist);
-  if (!rows.length) return false;
+function soundCloudDirectUrlFromRow(row) {
+  const url = String(row?.soundcloudTrackUrl || "").trim();
+  return isDirectSoundCloudTrackUrl(url) ? url : "";
+}
 
+function rankedSoundCloudRowsForTrack(track, rows = []) {
   const currentDirectUrl = canonicalExternalTrackUrl(directSoundCloudTrackUrl(track));
-  const ranked = rows
+  return rows
     .map((row) => {
-      const rowUrl = canonicalExternalTrackUrl(row.soundcloudTrackUrl || "");
+      const directUrl = soundCloudDirectUrlFromRow(row);
+      const rowUrl = canonicalExternalTrackUrl(directUrl);
       const previewUrl = soundCloudPreviewUrlFromRow(row);
       const sameDirectUrl = Boolean(currentDirectUrl && rowUrl && currentDirectUrl === rowUrl);
       const titleScore = titleConfidence(track.song, row.song || row.title || "");
       const artistOk = isArtistMatch(row.artist || "", track.artist || "");
       const titleOk = strictTitleMatch(track.song, row.song || row.title || "");
       const score =
+        (directUrl ? 2.5 : 0) +
         (previewUrl ? 2.2 : 0) +
         (sameDirectUrl ? 2.4 : 0) +
         (artistOk ? 1.1 : 0) +
         titleScore;
-      return { row, previewUrl, sameDirectUrl, titleScore, artistOk, titleOk, score };
+      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleOk, score };
     })
     .sort((a, b) => b.score - a.score);
+}
 
-  const best = ranked[0];
-  if (!best?.previewUrl) return false;
-  if (!best.sameDirectUrl && (!best.artistOk || best.titleScore < 0.86 || !best.titleOk)) return false;
+function isTrustedSoundCloudMatch(candidate) {
+  if (!candidate) return false;
+  if (candidate.sameDirectUrl) return true;
+  return Boolean(candidate.artistOk && candidate.titleOk && candidate.titleScore >= 0.86);
+}
 
-  promotePreviewCandidate(track, best.previewUrl);
-  if (best.row?.soundcloudTrackUrl) track.soundcloudTrackUrl = best.row.soundcloudTrackUrl;
+function applySoundCloudMatchToTrack(track, candidate, { requirePreview = false, requireDirect = false } = {}) {
+  if (!track || !isTrustedSoundCloudMatch(candidate)) return false;
+  if (requirePreview && !candidate.previewUrl) return false;
+  if (requireDirect && !candidate.directUrl) return false;
+
+  if (candidate.directUrl) {
+    track.soundcloudTrackUrl = candidate.directUrl;
+    track.soundcloudUrl = candidate.directUrl;
+  }
+  if (candidate.previewUrl) {
+    promotePreviewCandidate(track, candidate.previewUrl);
+    track.previewChecked = true;
+    track.previewMissing = false;
+    track.previewLookupAttempted = true;
+    track.previewSource = "soundcloud_api";
+  }
   track.soundcloudVerified = true;
   track.existenceVerified = true;
-  track.previewChecked = true;
-  track.previewMissing = false;
-  track.previewLookupAttempted = true;
-  track.previewSource = "soundcloud_api";
-  return true;
+  return Boolean(candidate.directUrl || candidate.previewUrl);
+}
+
+async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
+  if (!shouldRefreshSoundCloudPreview(track, { force })) return false;
+  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist);
+  if (!rows.length) return false;
+
+  const best = rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.previewUrl && isTrustedSoundCloudMatch(candidate));
+  return applySoundCloudMatchToTrack(track, best, { requirePreview: true });
+}
+
+async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
+  if (!track?.style || !track?.artist || !track?.song) return false;
+  if (trackHasDirectSoundCloudTrack(track)) {
+    track.soundcloudVerified = true;
+    return true;
+  }
+  if (!force && track.soundcloudEmbedLookupAttempted) return false;
+  track.soundcloudEmbedLookupAttempted = true;
+
+  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist);
+  if (!rows.length) return false;
+
+  const best = rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.directUrl && isTrustedSoundCloudMatch(candidate));
+  return applySoundCloudMatchToTrack(track, best, { requireDirect: true });
 }
 
 async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
@@ -36136,6 +36177,16 @@ async function renderPreview(track) {
       title: ""
     });
   }
+  const needsSoundCloudEmbedLookup =
+    !trackHasDirectSoundCloudTrack(track) &&
+    (
+      !trackHasReliableAudioPreview(track) ||
+      !trackHasDirectYouTubeVideo(track) ||
+      String(track.source || "").toLowerCase().includes("soundcloud")
+    );
+  if (needsSoundCloudEmbedLookup) {
+    await resolveSoundCloudEmbedForTrack(track, { force: !trackHasReliableAudioPreview(track) });
+  }
   const hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
   const canRetryYoutube = youtubePreviewCanRetry(track);
@@ -36197,19 +36248,18 @@ async function renderPreview(track) {
     trackPreview.classList.add("hidden");
     track.previewUrl = "";
     track.previewMissing = true;
-    const youtubeDirectFallbackReady = hasDirectYoutube
-      ? showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt })
+    const soundcloudFallbackReady = hasDirectSoundCloud
+      ? showSoundCloudPreviewEmbed(track, { autoplay: false })
       : false;
-    if (youtubeDirectFallbackReady) {
+    if (soundcloudFallbackReady) {
       setTrackPreviewVisualState("embed");
       setYouTubePreviewActionState({
-        visible: true,
-        canToggle: true,
+        visible: canRetryYoutube || hasDirectYoutube,
+        canToggle: hasDirectYoutube,
         canRetry: canRetryYoutube,
-        expanded: true
+        expanded: false
       });
-      syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-      previewStatus.textContent = t("previewYoutubeFallback");
+      previewStatus.textContent = t("previewSoundcloudFallback");
     } else {
       const bandcampFallbackReady = showBandcampPreviewEmbed(track);
       if (bandcampFallbackReady) {
@@ -36218,16 +36268,19 @@ async function renderPreview(track) {
         syncSoundCloudPreviewActionForTrack(track, { expanded: false });
         previewStatus.textContent = t("previewBandcampFallback");
       } else {
-        const soundcloudFallbackReady = showSoundCloudPreviewEmbed(track, { autoplay: false });
-        if (soundcloudFallbackReady) {
+        const youtubeDirectFallbackReady = hasDirectYoutube
+          ? showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt })
+          : false;
+        if (youtubeDirectFallbackReady) {
           setTrackPreviewVisualState("embed");
           setYouTubePreviewActionState({
-            visible: canRetryYoutube,
-            canToggle: false,
+            visible: true,
+            canToggle: true,
             canRetry: canRetryYoutube,
-            expanded: false
+            expanded: true
           });
-          previewStatus.textContent = t("previewSoundcloudFallback");
+          syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+          previewStatus.textContent = t("previewYoutubeFallback");
         } else {
           const youtubeSearchFallbackReady = showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt });
           if (youtubeSearchFallbackReady) {
@@ -40176,13 +40229,18 @@ bind(youtubePreviewToggleBtn, "click", () => {
   }
 });
 
-bind(soundcloudPreviewToggleBtn, "click", () => {
+bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (!currentRecommendation) return;
   const expanded = Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden"));
   if (expanded) {
     resetSoundCloudPreviewEmbed({ keepActions: true, track: currentRecommendation });
     if (previewStatus) previewStatus.textContent = t("previewReady");
     return;
+  }
+
+  if (!trackHasDirectSoundCloudTrack(currentRecommendation)) {
+    if (previewStatus) previewStatus.textContent = t("previewSearching");
+    await resolveSoundCloudEmbedForTrack(currentRecommendation, { force: true });
   }
 
   if (trackPreview && !trackPreview.paused) {
@@ -40592,6 +40650,11 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
 }
 
 bind(previewIssueBtn, "click", async () => {
+  if (currentRecommendation && !trackHasDirectSoundCloudTrack(currentRecommendation)) {
+    if (previewStatus) previewStatus.textContent = t("previewSearching");
+    await resolveSoundCloudEmbedForTrack(currentRecommendation, { force: true });
+  }
+
   if (
     currentRecommendation &&
     trackHasDirectSoundCloudTrack(currentRecommendation) &&
