@@ -27089,6 +27089,66 @@ function dailyNewsTextBlob(item = {}) {
   ].filter(Boolean).join(" ");
 }
 
+const DAILY_NEWS_LANGUAGE_SIGNAL_WORDS = {
+  pt: new Set([
+    "a", "as", "o", "os", "de", "do", "da", "dos", "das", "e", "em", "no", "na", "nos", "nas", "ao", "aos", "com", "para",
+    "brasil", "brasileiro", "brasileira", "musica", "eletronica", "noticia", "festival", "festivais", "anuncia", "anunciou",
+    "revela", "revelou", "lanca", "lancou", "confirma", "confirmou", "recebe", "estreia", "retorna", "divulga", "palco",
+    "ingressos", "faixa", "album", "turne", "edicao", "artistas", "novo", "nova", "ultimas"
+  ]),
+  en: new Set([
+    "the", "and", "from", "with", "for", "in", "on", "to", "of", "news", "electronic", "music", "festival", "festivals",
+    "announces", "announced", "reveals", "revealed", "releases", "released", "confirms", "confirmed", "hosts", "debuts",
+    "returns", "shares", "stage", "tickets", "track", "album", "tour", "edition", "artists", "new", "latest"
+  ]),
+  es: new Set([
+    "la", "las", "el", "los", "de", "del", "y", "en", "con", "para", "noticia", "musica", "electronica", "festival",
+    "festivales", "anuncia", "anuncio", "revela", "revelo", "lanza", "lanzo", "confirma", "confirmo", "recibe",
+    "estrena", "regresa", "comparte", "escenario", "entradas", "pista", "album", "gira", "edicion", "artistas",
+    "nuevo", "nueva", "ultimas"
+  ])
+};
+
+function detectDailyNewsTextLanguage(text = "") {
+  const normalized = normalize(text || "");
+  if (!normalized) return "";
+  const tokens = normalized.split(/[^a-z0-9]+/).filter(Boolean);
+  if (!tokens.length) return "";
+  const scores = { pt: 0, en: 0, es: 0 };
+  tokens.forEach((token) => {
+    Object.entries(DAILY_NEWS_LANGUAGE_SIGNAL_WORDS).forEach(([language, words]) => {
+      if (words.has(token)) scores[language] += 1;
+    });
+  });
+  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const [topLanguage, topScore] = ranked[0] || ["", 0];
+  const secondScore = ranked[1]?.[1] || 0;
+  if (topScore < 2) return "";
+  if (topScore <= secondScore) return "";
+  return topLanguage;
+}
+
+function dailyNewsItemSourceLanguage(item = {}) {
+  if (item.region === "br" || dailyNewsIsBrazilian(item)) return "pt";
+  const detectedTitle = detectDailyNewsTextLanguage(item.title || "");
+  if (detectedTitle) return detectedTitle;
+  return detectDailyNewsTextLanguage(dailyNewsTextBlob(item));
+}
+
+function dailyNewsRuntimeSummary(item = {}) {
+  if (item.kind === "search") {
+    return t("dailyNewsSearchSummary", { source: item.source || t("dailyNewsSourceFallback") });
+  }
+  return item.summary || "";
+}
+
+function dailyNewsNeedsLocalization(item = {}, language = dailyNewsTargetLanguage()) {
+  if (!language) return false;
+  const sourceLanguage = dailyNewsItemSourceLanguage(item);
+  if (!sourceLanguage) return Boolean(item.region === "br" && language !== "pt");
+  return sourceLanguage !== language;
+}
+
 function dailyNewsAgeDays(item = {}) {
   const value = item.publishedAt || "";
   const date = value ? new Date(value) : null;
@@ -27359,56 +27419,123 @@ function saveDailyNewsTranslationStore(store) {
 
 function locallyTranslateDailyNewsText(text = "", language = dailyNewsTargetLanguage()) {
   const original = normalizeInlineText(text);
-  if (!original || language === "en") return original;
-  const replacements = language === "es"
-    ? [
-        ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
-        ["electronic music", "música electrónica"],
-        ["dance music", "música dance"],
-        ["lineup", "cartel"],
-        ["line-up", "cartel"],
-        ["festival", "festival"],
-        ["festivals", "festivales"],
-        ["tour", "gira"],
-        ["album", "álbum"],
-        ["albums", "álbumes"],
-        ["EPs", "EPs"],
-        ["mixtapes", "mixtapes"],
-        ["announces", "anuncia"],
-        ["announce", "anuncia"],
-        ["reveals", "revela"],
-        ["revealed", "revelado"],
-        ["unveils", "presenta"],
-        ["shares", "comparte"],
-        ["new", "nuevo"],
-        ["best", "mejores"],
-        ["tickets", "entradas"],
-        ["fan voting", "votación de fans"]
-      ]
-    : [
-        ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
-        ["electronic music", "música eletrônica"],
-        ["dance music", "música dance"],
-        ["lineup", "lineup"],
-        ["line-up", "lineup"],
-        ["festival", "festival"],
-        ["festivals", "festivais"],
-        ["tour", "turnê"],
-        ["album", "álbum"],
-        ["albums", "álbuns"],
-        ["EPs", "EPs"],
-        ["mixtapes", "mixtapes"],
-        ["announces", "anuncia"],
-        ["announce", "anuncia"],
-        ["reveals", "revela"],
-        ["revealed", "revelado"],
-        ["unveils", "apresenta"],
-        ["shares", "compartilha"],
-        ["new", "novo"],
-        ["best", "melhores"],
-        ["tickets", "ingressos"],
-        ["fan voting", "votação dos fãs"]
-      ];
+  if (!original) return original;
+  const replacementsByLanguage = {
+    en: [
+      ["música eletrônica", "electronic music"],
+      ["musica eletronica", "electronic music"],
+      ["música electrónica", "electronic music"],
+      ["musica electronica", "electronic music"],
+      ["música dance", "dance music"],
+      ["musica dance", "dance music"],
+      ["festivais", "festivals"],
+      ["festival", "festival"],
+      ["cartel", "lineup"],
+      ["line-up", "lineup"],
+      ["turnê", "tour"],
+      ["turne", "tour"],
+      ["gira", "tour"],
+      ["álbuns", "albums"],
+      ["albuns", "albums"],
+      ["álbum", "album"],
+      ["albumes", "albums"],
+      ["anunciou", "announced"],
+      ["anuncia", "announces"],
+      ["revelou", "revealed"],
+      ["revela", "reveals"],
+      ["lançou", "released"],
+      ["lancou", "released"],
+      ["lança", "releases"],
+      ["lanca", "releases"],
+      ["confirmou", "confirmed"],
+      ["confirma", "confirms"],
+      ["divulgou", "shared"],
+      ["divulga", "shares"],
+      ["apresentou", "presented"],
+      ["apresenta", "presents"],
+      ["recebe", "hosts"],
+      ["estreia", "debuts"],
+      ["retorna", "returns"],
+      ["regresa", "returns"],
+      ["novo", "new"],
+      ["nova", "new"],
+      ["melhores", "best"],
+      ["maiores", "biggest"],
+      ["ingressos", "tickets"],
+      ["entradas", "tickets"],
+      ["votação dos fãs", "fan voting"],
+      ["votacao dos fas", "fan voting"],
+      ["palco", "stage"],
+      ["escenario", "stage"],
+      ["faixa", "track"],
+      ["pista", "track"],
+      ["lançamento", "release"],
+      ["lancamento", "release"],
+      ["edição", "edition"],
+      ["edicao", "edition"],
+      ["edicion", "edition"],
+      ["artistas", "artists"],
+      ["brasil", "Brazil"],
+      ["são paulo", "Sao Paulo"],
+      ["sao paulo", "Sao Paulo"],
+      ["rio de janeiro", "Rio de Janeiro"],
+      ["últimas", "latest"],
+      ["ultimas", "latest"]
+    ],
+    es: [
+      ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
+      ["electronic music", "música electrónica"],
+      ["música eletrônica", "música electrónica"],
+      ["musica eletronica", "música electrónica"],
+      ["dance music", "música dance"],
+      ["lineup", "cartel"],
+      ["line-up", "cartel"],
+      ["festivals", "festivales"],
+      ["tour", "gira"],
+      ["albums", "álbumes"],
+      ["album", "álbum"],
+      ["announced", "anunció"],
+      ["announces", "anuncia"],
+      ["announce", "anuncia"],
+      ["revealed", "reveló"],
+      ["reveals", "revela"],
+      ["released", "lanzó"],
+      ["releases", "lanza"],
+      ["unveils", "presenta"],
+      ["shares", "comparte"],
+      ["new", "nuevo"],
+      ["best", "mejores"],
+      ["tickets", "entradas"],
+      ["fan voting", "votación de fans"]
+    ],
+    pt: [
+      ["Electronic Dance Music Awards", "Electronic Dance Music Awards"],
+      ["electronic music", "música eletrônica"],
+      ["música electrónica", "música eletrônica"],
+      ["musica electronica", "música eletrônica"],
+      ["dance music", "música dance"],
+      ["lineup", "lineup"],
+      ["line-up", "lineup"],
+      ["festivals", "festivais"],
+      ["tour", "turnê"],
+      ["albums", "álbuns"],
+      ["album", "álbum"],
+      ["announced", "anunciou"],
+      ["announces", "anuncia"],
+      ["announce", "anuncia"],
+      ["revealed", "revelou"],
+      ["reveals", "revela"],
+      ["released", "lançou"],
+      ["releases", "lança"],
+      ["unveils", "apresenta"],
+      ["shares", "compartilha"],
+      ["new", "novo"],
+      ["best", "melhores"],
+      ["tickets", "ingressos"],
+      ["fan voting", "votação dos fãs"]
+    ]
+  };
+  const replacements = replacementsByLanguage[language] || replacementsByLanguage.pt;
   return replacements.reduce((acc, [from, to]) => {
     const pattern = new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
     return acc.replace(pattern, to);
@@ -27416,44 +27543,55 @@ function locallyTranslateDailyNewsText(text = "", language = dailyNewsTargetLang
 }
 
 function fallbackLocalizeDailyNewsItems(items = [], language = dailyNewsTargetLanguage()) {
-  if (language === "en") return items;
   return items.map((item) => ({
     ...item,
-    title: item.fallbackDirectory ? (locallyTranslateDailyNewsText(item.title, language) || item.title) : item.title,
-    summary: locallyTranslateDailyNewsText(item.summary, language) || item.summary,
-    translatedBy: "local"
+    title: dailyNewsNeedsLocalization(item, language)
+      ? locallyTranslateDailyNewsText(item.title, language) || item.title
+      : item.title,
+    summary: dailyNewsNeedsLocalization(item, language)
+      ? locallyTranslateDailyNewsText(dailyNewsRuntimeSummary(item), language) || dailyNewsRuntimeSummary(item)
+      : dailyNewsRuntimeSummary(item),
+    translatedBy: dailyNewsNeedsLocalization(item, language) ? "local" : item.translatedBy || "native"
   }));
 }
 
 function completeDailyNewsTranslations(items = [], language = dailyNewsTargetLanguage()) {
-  if (language === "en") return items;
   return items.map((item) => {
-    if (item.translatedBy) return item;
+    const normalizedItem = {
+      ...item,
+      summary: dailyNewsRuntimeSummary(item) || item.summary
+    };
+    if (normalizedItem.translatedBy && !dailyNewsNeedsLocalization(normalizedItem, language)) return normalizedItem;
     return fallbackLocalizeDailyNewsItems([item], language)[0] || item;
   });
 }
 
 async function requestDailyNewsTranslations(items = [], language = dailyNewsTargetLanguage()) {
-  if (!items.length || language === "en") return items;
+  if (!items.length) return items;
   const endpoint = resolveAiEndpoint("NEONPULSE_NEWS_TRANSLATE_API_URL", "/api/news-translate");
   if (!endpoint) return fallbackLocalizeDailyNewsItems(items, language);
 
   const store = loadDailyNewsTranslationStore();
-  const output = [...items];
+  const output = fallbackLocalizeDailyNewsItems(items, language);
   const missing = [];
-  output.forEach((item, index) => {
+  items.forEach((item, index) => {
+    const normalizedItem = {
+      ...item,
+      summary: dailyNewsRuntimeSummary(item) || item.summary
+    };
+    if (!dailyNewsNeedsLocalization(normalizedItem, language)) return;
     const key = dailyNewsTranslationKey(item, language);
     const cached = store[key];
     if (cached?.title || cached?.summary) {
       output[index] = {
-        ...item,
+        ...normalizedItem,
         title: cached.title || item.title,
-        summary: cached.summary || item.summary,
+        summary: cached.summary || normalizedItem.summary,
         translatedBy: cached.source || "cache"
       };
       return;
     }
-    missing.push({ item, index, key });
+    missing.push({ item: normalizedItem, index, key });
   });
 
   if (!missing.length) return output;
@@ -27508,7 +27646,6 @@ async function requestDailyNewsTranslations(items = [], language = dailyNewsTarg
 
 async function localizeDailyNewsItems(items = []) {
   const language = dailyNewsTargetLanguage();
-  if (language === "en") return items;
   return requestDailyNewsTranslations(items, language);
 }
 
