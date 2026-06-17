@@ -1,4 +1,19 @@
-const { envFlag, envInt, featureEnabled, requireMusicApi, sendJson } = require("./_music-apis");
+const { envFirst, envFlag, envInt, featureEnabled, requireMusicApi, sendJson } = require("./_music-apis");
+
+const TICKETMASTER_KEY_ENVS = [
+  "TICKETMASTER_API_KEY",
+  "TICKETMASTER_CONSUMER_KEY",
+  "TICKETMASTER_CUSTOMER_KEY",
+  "TICKETMASTER_COSTUMER_KEY",
+  "TICKETMASTER_DISCOVERY_API_KEY",
+  "TM_CONSUMER_KEY"
+];
+const TICKETMASTER_SECRET_ENVS = [
+  "TICKETMASTER_CONSUMER_SECRET",
+  "TICKETMASTER_API_SECRET",
+  "TICKETMASTER_SECRET",
+  "TM_CONSUMER_SECRET"
+];
 
 module.exports = async function handler(req, res) {
   if (!requireMusicApi(req, res, {
@@ -8,8 +23,9 @@ module.exports = async function handler(req, res) {
     defaultEnabled: true
   })) return;
 
-  const artistEventsEnabled = featureEnabled("SONIC_ARTIST_EVENTS_ENABLED", false);
-  const ticketmasterConfigured = Boolean(process.env.TICKETMASTER_API_KEY || process.env.TICKETMASTER_CONSUMER_KEY);
+  const artistEventsEnabled = featureEnabled("SONIC_ARTIST_EVENTS_ENABLED", true);
+  const ticketmasterConfigured = Boolean(envFirst(TICKETMASTER_KEY_ENVS));
+  const ticketmasterSecretConfigured = Boolean(envFirst(TICKETMASTER_SECRET_ENVS));
   const bandsintownConfigured = Boolean(process.env.BANDSINTOWN_APP_ID);
   sendJson(req, res, 200, {
     ok: true,
@@ -25,6 +41,8 @@ module.exports = async function handler(req, res) {
       },
       ticketmaster: {
         configured: ticketmasterConfigured,
+        consumerKeyConfigured: ticketmasterConfigured,
+        consumerSecretConfigured: ticketmasterSecretConfigured,
         enabled: ticketmasterConfigured &&
           artistEventsEnabled &&
           featureEnabled("SONIC_TICKETMASTER_ENABLED", true)
@@ -35,13 +53,13 @@ module.exports = async function handler(req, res) {
           artistEventsEnabled &&
           featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)
       },
+      localEvents: {
+        configured: true,
+        enabled: artistEventsEnabled
+      },
       artistEvents: {
-        configured: ticketmasterConfigured || bandsintownConfigured,
-        enabled: artistEventsEnabled &&
-          (
-            (ticketmasterConfigured && featureEnabled("SONIC_TICKETMASTER_ENABLED", true)) ||
-            (bandsintownConfigured && featureEnabled("SONIC_BANDSINTOWN_ENABLED", true))
-          )
+        configured: true,
+        enabled: artistEventsEnabled
       }
     },
     endpoints: {

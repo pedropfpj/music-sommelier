@@ -78,7 +78,8 @@ Variaveis principais:
 
 - `SONIC_MUSIC_APIS_ENABLED`: liga as APIs de musica como fallback global
 - `SONIC_YOUTUBE_ENABLED` + `YOUTUBE_API_KEY` ou `YOUTUBE_DATA_API_KEY`: liga YouTube Data API
-- `SONIC_TICKETMASTER_ENABLED` + `TICKETMASTER_API_KEY`: liga busca de eventos
+- `SONIC_ARTIST_EVENTS_ENABLED`: liga/desliga a rota `/api/ticketmaster-events` (por padrao ela responde tambem com eventos locais curados)
+- `SONIC_TICKETMASTER_ENABLED` + `TICKETMASTER_CONSUMER_KEY` (ou `TICKETMASTER_API_KEY`): liga busca ao vivo de eventos no Ticketmaster. O `TICKETMASTER_CONSUMER_SECRET` pode ficar configurado no servidor, mas a Discovery API usa a consumer key como `apikey`.
 - `SONIC_BANDSINTOWN_ENABLED`: mantem Bandsintown como reforco de cobertura de eventos
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
 
@@ -141,3 +142,13 @@ python3 -m http.server 8080
 ```
 
 Depois acesse `http://localhost:8080`.
+
+Para testar o app completo com as rotas `/api/*` locais, use o preview Node:
+
+```bash
+node scripts/local-preview-server.mjs --port=8793
+```
+
+Para ligar Ticketmaster localmente, copie `.env.example` para `.env.local` e preencha `TICKETMASTER_CONSUMER_KEY` e `TICKETMASTER_CONSUMER_SECRET`. Nunca coloque essas credenciais no frontend.
+
+Depois acesse `http://127.0.0.1:8793/?qa=1&surprise=1`. O parametro `qa=1` pula idioma/intro e entra direto em uma sessao de teste.

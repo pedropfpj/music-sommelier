@@ -1933,12 +1933,12 @@ const LOCAL_TRACK_SEED_BOOST = [
   {
     style: "ambient",
     artist: "Aphex Twin",
-    song: "#3",
-    label: "Warp",
+    song: "Pulsewidth",
+    label: "Selected Ambient Works 85-92",
     bpmExact: 85,
     artistCountry: "Ireland",
     artistGenre: "Ambient",
-    artistProfileHint: "Ambient eletronico minimal e emocional."
+    artistProfileHint: "Ambient techno/IDM com pulso leve, evitando repetir a carta #3 como abertura."
   },
   {
     style: "chillout",
@@ -2570,20 +2570,20 @@ const catalog = [
   },
   {
     style: "dark_psy",
-    song: "Hallucinogenic Lyrical",
+    song: "Astro",
     artist: "Necropsycho",
-    label: "Dark Valley Records",
+    label: "Esfera",
     bpm: "155-175",
     bpmExact: 162,
     energy: "high",
     vocals: "instrumental",
     context: ["peak", "after", "foco"],
-    vibe: "Dark psy com assinatura brasileira, linhas agressivas e clima obscuro.",
-    spotifyUrl: "https://open.spotify.com/search/Necropsycho%20Hallucinogenic%20Lyrical",
-    youtubeUrl: "https://www.youtube.com/results?search_query=Necropsycho+Hallucinogenic+Lyrical",
-    beatportUrl: "https://www.beatport.com/search?q=Necropsycho%20Hallucinogenic%20Lyrical",
+    vibe: "Dark psy brasileiro, hipnotico e sombrio, com pressao suficiente para testar a rota sem depender de uma faixa sem preview.",
+    spotifyUrl: "https://open.spotify.com/search/Necropsycho%20Astro",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Necropsycho+Astro",
+    beatportUrl: "https://www.beatport.com/search?q=Necropsycho%20Astro",
     artistBio: "Necropsycho e um projeto brasileiro ligado ao eixo dark psy com forte identidade experimental.",
-    labelBio: "Dark Valley Records e uma label brasileira voltada para dark psychedelic."
+    labelBio: "Esfera aparece como trilha de catalogo para uma faixa de Necropsycho mais facil de validar em previews."
   },
   {
     style: "hi_tech",
@@ -4762,9 +4762,10 @@ const TRACK_METADATA = {
 const FALLBACK_EVENTS = {
   "michael bibi": [
     {
-      datetime: "2026-11-28T00:00:00",
-      dateOnly: true,
-      venue: "One Life Sao Paulo - Arena Pinheiros",
+      name: "Michael Bibi apresenta One Life Sao Paulo",
+      datetime: "2026-11-28T14:00:00-03:00",
+      dateOnly: false,
+      venue: "Arena Pinheiros",
       city: "Sao Paulo",
       country: "BR",
       url: "https://wegoout.com.br/eventos/michael-bibi-one-life",
@@ -5051,6 +5052,7 @@ const artistDetailsCard = document.getElementById("artistDetailsCard");
 const labelDetailsCard = document.getElementById("labelDetailsCard");
 const discoveryCard = document.getElementById("discoveryCard");
 
+const trackSequenceBadge = document.getElementById("trackSequenceBadge");
 const matchReason = document.getElementById("matchReason");
 const songTitle = document.getElementById("songTitle");
 const artistLine = document.getElementById("artistLine");
@@ -5117,6 +5119,7 @@ const blockArtistBtn = document.getElementById("blockArtistBtn");
 const previewPanel = document.getElementById("previewPanel");
 const previewStatus = document.getElementById("previewStatus");
 const trackPreview = document.getElementById("trackPreview");
+const previewPlayBtn = document.getElementById("previewPlayBtn");
 const soundcloudPreviewWrap = document.getElementById("soundcloudPreviewWrap");
 const soundcloudPreviewFrame = document.getElementById("soundcloudPreviewFrame");
 const bandcampPreviewWrap = document.getElementById("bandcampPreviewWrap");
@@ -5161,6 +5164,7 @@ const topSwipeCard = document.getElementById("topSwipeCard");
 const topSwipeImage = document.getElementById("topSwipeImage");
 const topSwipeFallback = document.getElementById("topSwipeFallback");
 const topSwipeKicker = document.getElementById("topSwipeKicker");
+const topSwipeCount = document.getElementById("topSwipeCount");
 const topSwipeTitle = document.getElementById("topSwipeTitle");
 const topSwipeMeta = document.getElementById("topSwipeMeta");
 const topSwipeStyleChip = document.getElementById("topSwipeStyleChip");
@@ -5407,6 +5411,8 @@ let searchProgressTimer = 0;
 let searchProgressValue = 0;
 let youtubePreviewSearchAttempt = 0;
 let youtubePreviewTrackKey = "";
+let previewRecoveryBusy = false;
+let previewRecoveryToken = 0;
 let supportTipAmount = SUPPORT_DEFAULT_AMOUNT;
 let bioAnimationToken = 0;
 let artistImageRequestToken = 0;
@@ -6054,6 +6060,8 @@ const artistApiProfileCache = new Map();
 const artistImageCache = new Map();
 const recentArtistSignals = new Map();
 const deezerArtistTopTrackCache = new Map();
+const artistCatalogDepthCache = new Map();
+const artistCatalogDepthInFlight = new Map();
 const soundCloudApiCache = new Map();
 const youtubeApiCache = new Map();
 let youtubeApiAvailable = true;
@@ -6070,6 +6078,10 @@ const SOUNDCLOUD_PREVIEW_REFRESH_STYLES = new Set([
 const MIN_TRACKS_PER_STYLE = 20;
 const MIN_ARTISTS_PER_STYLE = 50;
 const MIN_LABELS_PER_STYLE = 6;
+const MIN_TRACKS_PER_ARTIST = 2;
+const ARTIST_CATALOG_DEPTH_TARGET = 5;
+const ARTIST_CATALOG_DEPTH_BATCH_LIMIT = 10;
+const ARTIST_CATALOG_DEPTH_STYLE_LIMIT = 8;
 const STYLE_COVERAGE_OVERRIDES = {
   // Nichos ultra específicos: ajustam tracks/labels sem baixar o piso global de artistas.
   dark_progressive: { artists: 12, labels: 6, tracks: 24 },
@@ -11623,6 +11635,33 @@ function parseDurationTextToSeconds(value) {
   return (minutes * 60) + seconds;
 }
 
+function previewUrlExpiryEpoch(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return 0;
+  try {
+    const parsed = new URL(raw);
+    const signedToken = [
+      parsed.searchParams.get("hdnea"),
+      parsed.searchParams.get("hdnts"),
+      parsed.searchParams.get("token"),
+      raw
+    ]
+      .filter(Boolean)
+      .join("~");
+    const match = signedToken.match(/(?:^|[~&?])exp=(\d{9,12})(?:$|[~&])/i);
+    return match ? Number(match[1]) || 0 : 0;
+  } catch (_err) {
+    const match = raw.match(/(?:^|[~&?])exp=(\d{9,12})(?:$|[~&])/i);
+    return match ? Number(match[1]) || 0 : 0;
+  }
+}
+
+function previewUrlIsExpired(value = "", graceSeconds = 30) {
+  const expiresAt = previewUrlExpiryEpoch(value);
+  if (!expiresAt) return false;
+  return expiresAt <= Math.floor(Date.now() / 1000) + Math.max(0, Number(graceSeconds) || 0);
+}
+
 function normalizePreviewUrl(value = "") {
   const raw = String(value || "").trim();
   if (!raw) return "";
@@ -11630,7 +11669,8 @@ function normalizePreviewUrl(value = "") {
   try {
     const parsed = new URL(raw);
     if (parsed.protocol === "http:") parsed.protocol = "https:";
-    return parsed.toString();
+    const normalized = parsed.toString();
+    return previewUrlIsExpired(normalized) ? "" : normalized;
   } catch (_err) {
     return "";
   }
@@ -11675,6 +11715,273 @@ function previewCandidatesForTrack(track) {
   return ordered;
 }
 
+const ARTIST_PREVIEW_FALLBACK_LIMIT = 6;
+const ARTIST_PREVIEW_FALLBACK_LOOKUP_TARGET = 3;
+
+function artistPreviewOptionKey(option = {}) {
+  return [
+    artistMatchKey(option.artist || ""),
+    normalizeTitle(option.song || ""),
+    normalizePreviewUrl(option.previewUrl || "")
+  ].join("::");
+}
+
+function scoreArtistPreviewOption(option = {}, baseTrack = {}) {
+  let score = 0;
+  const sameTitle = normalizeTitle(option.song || "") === normalizeTitle(baseTrack.song || "");
+  if (!sameTitle) score += 3;
+  if (option.source === "catalog") score += 1.6;
+  if (option.source === "itunes") score += 1.4;
+  if (option.source === "deezer") score += 1.2;
+  if (option.source === "soundcloud") score += 1.1;
+  if (option.style && option.style === baseTrack.style) score += 0.7;
+  if (option.previewUrl) score += 0.8;
+  if (Number(option.rank) > 0) score += Math.min(1.8, Math.log10(Number(option.rank) + 1) / 3);
+  if (sameTitle) score -= 1.6;
+  return score;
+}
+
+function isAwkwardArtistPreviewTitle(value = "") {
+  const normalized = normalize(value || "");
+  return Boolean(
+    normalized.includes("includes hidden track") ||
+    normalized.includes("continuous mix") ||
+    normalized.includes("full album") ||
+    normalized.includes("entire album")
+  );
+}
+
+function addArtistPreviewOption(options, seen, baseTrack, option = {}) {
+  if (!baseTrack || !option) return;
+  const previewUrl = normalizePreviewUrl(option.previewUrl || "");
+  const artist = String(option.artist || baseTrack.artist || "").trim();
+  const song = String(option.song || option.title || "").trim();
+  if (!previewUrl || !artist || !song) return;
+  if (isAwkwardArtistPreviewTitle(song)) return;
+  if (Array.isArray(baseTrack.artistPreviewFailedUrls) && baseTrack.artistPreviewFailedUrls.includes(previewUrl)) return;
+  if (!isArtistMatch(artist, baseTrack.artist || "") && !isArtistMatch(baseTrack.artist || "", artist)) return;
+  if (hasUnrequestedAlternateVersion(baseTrack.song || "", song) && normalizeTitle(baseTrack.song || "") === normalizeTitle(song)) return;
+
+  const normalized = {
+    artist,
+    song,
+    previewUrl,
+    source: String(option.source || "artist").trim() || "artist",
+    style: option.style || baseTrack.style || "",
+    rank: Number(option.rank) || 0,
+    score: 0
+  };
+  normalized.score = scoreArtistPreviewOption(normalized, baseTrack);
+  const key = artistPreviewOptionKey(normalized);
+  if (!key || seen.has(key)) return;
+  seen.add(key);
+  options.push(normalized);
+}
+
+function removeArtistPreviewOption(track, previewUrl = "") {
+  if (!track) return;
+  const normalized = normalizePreviewUrl(previewUrl);
+  if (!normalized) return;
+  if (!Array.isArray(track.artistPreviewFailedUrls)) track.artistPreviewFailedUrls = [];
+  if (!track.artistPreviewFailedUrls.includes(normalized)) track.artistPreviewFailedUrls.push(normalized);
+  if (Array.isArray(track.artistPreviewOptions)) {
+    track.artistPreviewOptions = track.artistPreviewOptions.filter((option) => normalizePreviewUrl(option?.previewUrl) !== normalized);
+  }
+  if (normalizePreviewUrl(track.artistPreviewFallback?.previewUrl) === normalized) {
+    track.artistPreviewFallback = null;
+  }
+}
+
+async function fetchDeezerPreviewOptionsByArtist(artist, style = "") {
+  const artistName = sanitizeArtistLookupName(artist);
+  if (!artistName) return [];
+  const queries = [
+    `artist:"${artistName}"`,
+    artistName
+  ];
+  const collected = new Map();
+
+  for (const queryValue of queries) {
+    try {
+      const data = await deezerJsonp(`https://api.deezer.com/search?q=${encodeURIComponent(queryValue)}&limit=50`);
+      const rows = Array.isArray(data?.data) ? data.data : [];
+      rows
+        .filter((row) => row?.title && row?.artist?.name)
+        .filter((row) => isArtistMatch(row.artist.name, artistName))
+        .filter((row) => normalizePreviewUrl(row.preview || ""))
+        .filter((row) => !isLikelyDjMixOrSetTitle(row.title || ""))
+        .filter((row) => !hasUnrequestedAlternateVersion("", row.title || ""))
+        .forEach((row) => {
+          const key = String(row.id || `${row.artist.name}::${row.title}`);
+          if (!collected.has(key)) collected.set(key, row);
+        });
+    } catch (_err) {
+      // tenta a proxima query
+    }
+  }
+
+  return Array.from(collected.values())
+    .filter((row) => !style || !hasTrackStyleSignalConflict(style, {
+      artist: row.artist?.name || artistName,
+      song: row.title || "",
+      label: row.album?.title || "",
+      artistGenre: [STYLE_SEARCH_TERMS[style], styleLabelByValue(style)].filter(Boolean).join(" "),
+      artistProfileHint: row.album?.title || "",
+      source: "deezer_artist_preview"
+    }))
+    .slice(0, 30);
+}
+
+async function collectArtistPreviewOptions(track, { forceLookup = false } = {}) {
+  if (!track?.artist) return [];
+  if (!forceLookup && Array.isArray(track.artistPreviewOptions) && track.artistPreviewOptions.length) {
+    return track.artistPreviewOptions;
+  }
+  if (!forceLookup && track.artistPreviewLookupAttempted) return track.artistPreviewOptions || [];
+
+  const options = [];
+  const seen = new Set();
+  const addOption = (option) => addArtistPreviewOption(options, seen, track, option);
+
+  catalog
+    .filter((candidate) => candidate && candidate !== track && candidate.artist && candidate.song)
+    .filter((candidate) => isArtistMatch(candidate.artist, track.artist) || isArtistMatch(track.artist, candidate.artist))
+    .sort((a, b) => {
+      const aScore =
+        (a.style === track.style ? 2 : 0) +
+        (trackHasReliableAudioPreview(a) ? 2 : 0) -
+        (normalizeTitle(a.song) === normalizeTitle(track.song) ? 1 : 0);
+      const bScore =
+        (b.style === track.style ? 2 : 0) +
+        (trackHasReliableAudioPreview(b) ? 2 : 0) -
+        (normalizeTitle(b.song) === normalizeTitle(track.song) ? 1 : 0);
+      return bScore - aScore;
+    })
+    .slice(0, 12)
+    .forEach((candidate) => {
+      previewCandidatesForTrack(candidate).forEach((previewUrl) => {
+        addOption({
+          artist: candidate.artist,
+          song: candidate.song,
+          previewUrl,
+          source: "catalog",
+          style: candidate.style
+        });
+      });
+    });
+
+  if (forceLookup || options.length < ARTIST_PREVIEW_FALLBACK_LOOKUP_TARGET) {
+    try {
+      const rows = await fetchDeezerPreviewOptionsByArtist(track.artist, track.style);
+      rows
+        .slice(0, 16)
+        .forEach((row) => {
+          addOption({
+            artist: row?.artist?.name || track.artist,
+            song: row?.title || "",
+            previewUrl: row?.preview || "",
+            source: "deezer",
+            style: track.style,
+            rank: row?.rank
+          });
+        });
+    } catch (_err) {
+      // segue para top tracks
+    }
+  }
+
+  if (forceLookup || options.length < ARTIST_PREVIEW_FALLBACK_LOOKUP_TARGET) {
+    try {
+      const rows = await fetchDeezerArtistTopTracks(track.artist, track.style);
+      rows
+        .filter((row) => normalizePreviewUrl(row?.preview || ""))
+        .slice(0, 12)
+        .forEach((row) => {
+          addOption({
+            artist: row?.artist?.name || track.artist,
+            song: row?.title || "",
+            previewUrl: row?.preview || "",
+            source: "deezer",
+            style: track.style,
+            rank: row?.rank
+          });
+        });
+    } catch (_err) {
+      // segue para iTunes/SoundCloud
+    }
+  }
+
+  if (forceLookup || options.length < ARTIST_PREVIEW_FALLBACK_LOOKUP_TARGET) {
+    try {
+      const rows = await fetchItunesTracksByArtist(track.artist, track.style);
+      rows
+        .filter((row) => normalizePreviewUrl(row?.previewUrl || ""))
+        .slice(0, 16)
+        .forEach((row) => {
+          addOption({
+            artist: row?.artistName || track.artist,
+            song: row?.trackName || "",
+            previewUrl: row?.previewUrl || "",
+            source: "itunes",
+            style: track.style
+          });
+        });
+    } catch (_err) {
+      // segue para SoundCloud
+    }
+  }
+
+  if (forceLookup || options.length < ARTIST_PREVIEW_FALLBACK_LOOKUP_TARGET) {
+    try {
+      const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist, { track, force: forceLookup });
+      rows
+        .map((row) => ({
+          row,
+          previewUrl: soundCloudPreviewUrlFromRow(row)
+        }))
+        .filter((entry) => normalizePreviewUrl(entry.previewUrl))
+        .slice(0, 12)
+        .forEach(({ row, previewUrl }) => {
+          addOption({
+            artist: row?.artist || track.artist,
+            song: row?.song || row?.title || "",
+            previewUrl,
+            source: "soundcloud",
+            style: track.style
+          });
+        });
+    } catch (_err) {
+      // sem alternativas extras
+    }
+  }
+
+  const sorted = options
+    .sort((a, b) => b.score - a.score)
+    .slice(0, ARTIST_PREVIEW_FALLBACK_LIMIT);
+  track.artistPreviewOptions = sorted;
+  track.artistPreviewLookupAttempted = true;
+  return sorted;
+}
+
+async function pickPlayableArtistPreviewFallback(audioEl, track, { forceLookup = false } = {}) {
+  if (!audioEl || !track) return null;
+  const options = await collectArtistPreviewOptions(track, { forceLookup });
+  for (const option of options) {
+    const previewUrl = normalizePreviewUrl(option.previewUrl || "");
+    if (!previewUrl) continue;
+    const probe = await probeAudioSource(audioEl, previewUrl);
+    if (probe.ok) {
+      track.artistPreviewFallback = option;
+      track.previewChecked = true;
+      track.previewMissing = false;
+      return option;
+    }
+    removeArtistPreviewOption(track, previewUrl);
+  }
+  resetTrackPreviewElement(audioEl);
+  return null;
+}
+
 function resetTrackPreviewElement(audioEl) {
   if (!audioEl) return;
   try {
@@ -11717,6 +12024,7 @@ function probeAudioSource(audioEl, previewUrl, timeoutMs = 6500) {
 
     const cleanup = () => {
       if (timeoutId) window.clearTimeout(timeoutId);
+      delete audioEl.dataset.previewProbing;
       audioEl.removeEventListener("canplay", onCanPlay);
       audioEl.removeEventListener("canplaythrough", onCanPlayThrough);
       audioEl.removeEventListener("loadedmetadata", onLoadedMeta);
@@ -11738,6 +12046,7 @@ function probeAudioSource(audioEl, previewUrl, timeoutMs = 6500) {
 
     try {
       resetTrackPreviewElement(audioEl);
+      audioEl.dataset.previewProbing = "true";
       audioEl.src = previewUrl;
       audioEl.load();
     } catch (_err) {
@@ -12539,7 +12848,7 @@ function sanitizeCatalogByStyleRules() {
 function dedupeCatalogByTrackKey() {
   const scoreTrack = (track) => {
     let score = 0;
-    if (track?.previewUrl) score += 4;
+    if (trackHasReliableAudioPreview(track)) score += 4;
     if (track?.existenceVerified === true) score += 3;
     if (track?.spotifyVerified === true) score += 2;
     if (track?.youtubeVerified === true) score += 1.5;
@@ -12549,10 +12858,29 @@ function dedupeCatalogByTrackKey() {
     return score;
   };
 
+  const mergeTrackPlayableCandidates = (target, source) => {
+    if (!target || !source || target === source) return;
+    previewCandidatesForTrack(source).forEach((url) => registerPreviewCandidate(target, url));
+    const mergedYoutube = youtubeVideoCandidatesForTrack(target);
+    youtubeVideoCandidatesForTrack(source).forEach((candidate) => {
+      const exists = mergedYoutube.some((item) => item.videoId === candidate.videoId);
+      if (!exists) mergedYoutube.push(candidate);
+    });
+    if (mergedYoutube.length) setYouTubeVideoCandidates(target, mergedYoutube);
+    if (!target.soundcloudTrackUrl && source.soundcloudTrackUrl) target.soundcloudTrackUrl = source.soundcloudTrackUrl;
+    if (!target.soundcloudUrl && source.soundcloudUrl) target.soundcloudUrl = source.soundcloudUrl;
+    if (!target.bandcampTrackUrl && source.bandcampTrackUrl) target.bandcampTrackUrl = source.bandcampTrackUrl;
+    if (!target.bandcampTrackId && source.bandcampTrackId) target.bandcampTrackId = source.bandcampTrackId;
+  };
+
   const bestByKey = new Map();
+  const tracksByKey = new Map();
   catalog.forEach((track) => {
     const key = recommendationTrackKey(track);
     if (!key) return;
+    const grouped = tracksByKey.get(key) || [];
+    grouped.push(track);
+    tracksByKey.set(key, grouped);
     const currentBest = bestByKey.get(key);
     if (!currentBest || scoreTrack(track) > scoreTrack(currentBest)) {
       bestByKey.set(key, track);
@@ -12570,7 +12898,11 @@ function dedupeCatalogByTrackKey() {
     }
     if (seen.has(key)) return;
     seen.add(key);
-    deduped.push(bestByKey.get(key) || track);
+    const best = bestByKey.get(key) || track;
+    (tracksByKey.get(key) || [])
+      .filter((item) => item !== best)
+      .forEach((item) => mergeTrackPlayableCandidates(best, item));
+    deduped.push(best);
   });
 
   catalog.length = 0;
@@ -12726,6 +13058,7 @@ function recommendationIssuePenaltyForTrack(track) {
 function trackHasReliableAudioPreview(track) {
   if (!track) return false;
   if (normalizePreviewUrl(track.previewUrl)) return true;
+  if (normalizePreviewUrl(track.artistPreviewFallback?.previewUrl || "")) return true;
   return previewCandidatesForTrack(track).some((candidate) => Boolean(normalizePreviewUrl(candidate)));
 }
 
@@ -12739,8 +13072,7 @@ function trackHasExternalPlayableFallback(track) {
   return Boolean(
     trackHasDirectYouTubeVideo(track) ||
     trackHasDirectSoundCloudTrack(track) ||
-    trackHasEmbeddableBandcampTrack(track) ||
-    trackHasDirectBandcampTrack(track)
+    trackHasEmbeddableBandcampTrack(track)
   );
 }
 
@@ -13729,6 +14061,290 @@ async function fetchDeezerArtistTopTracks(artist, style) {
   }
 }
 
+function catalogTrackEntriesForArtist(artist, style = "", { eligibleOnly = false } = {}) {
+  const artistName = String(artist || "").trim();
+  if (!artistName) return [];
+  return catalog.filter((track) => {
+    if (!track?.artist || !track?.song) return false;
+    if (style && track.style !== style) return false;
+    if (!isArtistMatch(track.artist, artistName) && !isArtistMatch(artistName, track.artist)) return false;
+    if (eligibleOnly && !isTrackEligibleForRecommendation(track)) return false;
+    return true;
+  });
+}
+
+function catalogTrackDepthForArtist(artist, style = "", options = {}) {
+  const uniqueTitles = new Set();
+  catalogTrackEntriesForArtist(artist, style, options).forEach((track) => {
+    const title = normalizeTitle(track.song || "");
+    if (title) uniqueTitles.add(title);
+  });
+  return uniqueTitles.size;
+}
+
+function catalogPlayableTrackDepthForArtist(artist, style = "", options = {}) {
+  const uniqueTitles = new Set();
+  catalogTrackEntriesForArtist(artist, style, options).forEach((track) => {
+    if (!trackHasPlayablePreviewExperience(track)) return;
+    const title = normalizeTitle(track.song || "");
+    if (title) uniqueTitles.add(title);
+  });
+  return uniqueTitles.size;
+}
+
+function catalogPrimaryStyleForArtist(artist, preferredStyle = "") {
+  if (preferredStyle && STYLE_BPM_RULES[preferredStyle]) return preferredStyle;
+  const counts = new Map();
+  catalogTrackEntriesForArtist(artist).forEach((track) => {
+    const style = String(track.style || "").trim();
+    if (!style || !STYLE_BPM_RULES[style]) return;
+    counts.set(style, (counts.get(style) || 0) + 1);
+  });
+  return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+}
+
+function artistDepthCacheKey(artist, style = "") {
+  return `${style || "any"}::${artistMatchKey(artist || "")}`;
+}
+
+function buildCatalogArtistDepthAudit({ style = "", minimum = MIN_TRACKS_PER_ARTIST } = {}) {
+  const byArtist = new Map();
+  catalog.forEach((track) => {
+    if (!track?.artist || !track?.song) return;
+    if (style && track.style !== style) return;
+    if (!isTrackEligibleForRecommendation(track)) return;
+    const key = artistMatchKey(track.artist);
+    if (!key) return;
+    const entry = byArtist.get(key) || {
+      artist: track.artist,
+      styles: new Set(),
+      songs: new Set()
+    };
+    entry.styles.add(track.style);
+    entry.songs.add(normalizeTitle(track.song));
+    byArtist.set(key, entry);
+  });
+
+  const rows = Array.from(byArtist.values())
+    .map((entry) => ({
+      artist: entry.artist,
+      count: entry.songs.size,
+      playableCount: catalogPlayableTrackDepthForArtist(entry.artist, style, { eligibleOnly: false }),
+      styles: Array.from(entry.styles)
+    }))
+    .sort((a, b) => a.count - b.count || a.playableCount - b.playableCount || a.artist.localeCompare(b.artist));
+
+  return {
+    artists: rows.length,
+    belowMinimum: rows.filter((row) => row.count < minimum || row.playableCount < minimum).length,
+    minimum,
+    sample: rows.filter((row) => row.count < minimum || row.playableCount < minimum).slice(0, 40),
+    rows
+  };
+}
+
+function artistsNeedingCatalogDepth(style = "", { limit = ARTIST_CATALOG_DEPTH_STYLE_LIMIT, target = ARTIST_CATALOG_DEPTH_TARGET } = {}) {
+  const byArtist = new Map();
+  catalog.forEach((track) => {
+    if (!track?.artist || !track?.song) return;
+    if (style && track.style !== style) return;
+    const artistKey = artistMatchKey(track.artist);
+    if (!artistKey) return;
+    const entry = byArtist.get(artistKey) || {
+      artist: track.artist,
+      style: track.style,
+      songs: new Set(),
+      previewTracks: 0,
+      eligibleTracks: 0
+    };
+    entry.songs.add(normalizeTitle(track.song));
+    if (trackHasPlayablePreviewExperience(track)) entry.previewTracks += 1;
+    if (isTrackEligibleForRecommendation(track)) entry.eligibleTracks += 1;
+    byArtist.set(artistKey, entry);
+  });
+
+  return Array.from(byArtist.values())
+    .filter(
+      (entry) =>
+        entry.artist &&
+        entry.style &&
+        entry.songs.size > 0 &&
+        (entry.songs.size < target || entry.previewTracks < MIN_TRACKS_PER_ARTIST)
+    )
+    .sort((a, b) => {
+      const aNeed = target - a.songs.size;
+      const bNeed = target - b.songs.size;
+      return bNeed - aNeed || a.previewTracks - b.previewTracks || b.eligibleTracks - a.eligibleTracks;
+    })
+    .slice(0, Math.max(0, Number(limit) || 0));
+}
+
+async function addDeezerArtistDepthTrack(row, style, fallbackArtist, existingKeys) {
+  if (!row || !style || !existingKeys) return false;
+  const artist = String(row?.artist?.name || fallbackArtist || "").trim();
+  const song = String(row?.title || row?.title_short || "").trim();
+  const previewUrl = normalizePreviewUrl(row?.preview || "");
+  if (!artist || !song || !previewUrl) return false;
+  if (!isArtistMatch(artist, fallbackArtist) && !isArtistMatch(fallbackArtist, artist)) return false;
+  if (isAwkwardArtistPreviewTitle(song) || isLikelyDjMixOrSetTitle(song)) return false;
+  if (hasUnrequestedAlternateVersion("", song)) return false;
+
+  const key = normalize(`${artist}::${song}`);
+  const existingTrack = catalog.find((track) => recommendationTrackKey(track) === key);
+  if (existingTrack) {
+    promotePreviewCandidate(existingTrack, previewUrl);
+    existingTrack.previewChecked = true;
+    existingTrack.previewMissing = false;
+    existingTrack.previewLookupAttempted = true;
+    existingTrack.previewSource = existingTrack.previewSource || "deezer_artist_depth";
+    existingTrack.existenceVerified = true;
+    return true;
+  }
+
+  const details = row.id ? await fetchDeezerTrackDetails(row.id) : null;
+  const inserted = addDynamicTrackToCatalog(
+    {
+      style,
+      song,
+      artist,
+      label: details?.label || row?.album?.title || "Deezer",
+      bpmExact: Number(details?.bpm) || 0,
+      previewUrl: details?.preview || previewUrl,
+      releaseDate: details?.release_date || "Deezer",
+      durationSec: Number(details?.duration) || Number(row?.duration) || 0,
+      artistGenre: [STYLE_SEARCH_TERMS[style], styleLabelByValue(style)].filter(Boolean).join(" • "),
+      artistProfileHint: row?.album?.title || "Expansão automática de repertório do artista com preview tocável.",
+      source: "verified_deezer_expansion_artist_depth"
+    },
+    existingKeys
+  );
+
+  if (!inserted) return false;
+  const insertedTrack = catalog.find((track) => recommendationTrackKey(track) === normalize(`${artist}::${song}`));
+  if (insertedTrack) {
+    insertedTrack.deezerTrackId = row.id || details?.id || "";
+    if (row?.artist?.picture_xl || row?.artist?.picture_big || row?.artist?.picture_medium) {
+      insertedTrack.artistImageUrl = row.artist.picture_xl || row.artist.picture_big || row.artist.picture_medium;
+      insertedTrack.artistImageSource = "Deezer";
+    }
+  }
+  return true;
+}
+
+async function expandCatalogForArtistDepth(artist, style = "", options = {}) {
+  const artistName = sanitizeArtistLookupName(artist);
+  const resolvedStyle = catalogPrimaryStyleForArtist(artistName, style);
+  if (!artistName || !resolvedStyle) return { added: 0, depth: 0, skipped: true };
+
+  const target = Math.max(MIN_TRACKS_PER_ARTIST, Number(options.target) || ARTIST_CATALOG_DEPTH_TARGET);
+  const force = Boolean(options.force);
+  const cacheKey = artistDepthCacheKey(artistName, resolvedStyle);
+  const currentDepth = catalogTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+  const currentPlayableDepth = catalogPlayableTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+  if (!force && currentDepth >= target && currentPlayableDepth >= MIN_TRACKS_PER_ARTIST) {
+    return { added: 0, depth: currentDepth, playableDepth: currentPlayableDepth, ok: true };
+  }
+  if (!externalCatalogHydrationAllowed()) return { added: 0, depth: currentDepth, skipped: true };
+
+  const cached = artistCatalogDepthCache.get(cacheKey);
+  if (!force && cached && Date.now() - cached.at < 20 * 60 * 1000 && currentDepth >= MIN_TRACKS_PER_ARTIST && currentPlayableDepth >= MIN_TRACKS_PER_ARTIST) {
+    return { added: 0, depth: currentDepth, playableDepth: currentPlayableDepth, ok: true, cached: true };
+  }
+  if (artistCatalogDepthInFlight.has(cacheKey)) return artistCatalogDepthInFlight.get(cacheKey);
+
+  const task = (async () => {
+    const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)).filter(Boolean));
+    const rowMap = new Map();
+    const addRow = (row) => {
+      if (!row?.title || !row?.artist?.name) return;
+      const key = String(row.id || `${row.artist.name}::${row.title}`);
+      if (!key || rowMap.has(key)) return;
+      rowMap.set(key, row);
+    };
+
+    try {
+      const previewRows = await fetchDeezerPreviewOptionsByArtist(artistName, resolvedStyle);
+      previewRows.forEach(addRow);
+    } catch (_err) {
+      // segue para top tracks
+    }
+
+    if (rowMap.size < target) {
+      try {
+        const topRows = await fetchDeezerArtistTopTracks(artistName, resolvedStyle);
+        topRows.filter((row) => normalizePreviewUrl(row?.preview || "")).forEach(addRow);
+      } catch (_err) {
+        // SoundCloud abaixo cobre artistas que nao vierem do Deezer
+      }
+    }
+
+    let added = 0;
+    for (const row of Array.from(rowMap.values()).slice(0, ARTIST_CATALOG_DEPTH_BATCH_LIMIT)) {
+      const depthNow = catalogTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+      const playableDepthNow = catalogPlayableTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+      if (depthNow >= target && playableDepthNow >= MIN_TRACKS_PER_ARTIST) break;
+      if (await addDeezerArtistDepthTrack(row, resolvedStyle, artistName, existingKeys)) {
+        added += 1;
+      }
+    }
+
+    let depth = catalogTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+    let playableDepth = catalogPlayableTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+    if (depth < MIN_TRACKS_PER_ARTIST || playableDepth < MIN_TRACKS_PER_ARTIST) {
+      try {
+        const rows = await fetchSoundCloudTracksByStyle(resolvedStyle, artistName);
+        for (const row of rows.slice(0, ARTIST_CATALOG_DEPTH_BATCH_LIMIT)) {
+          if (depth >= target && playableDepth >= MIN_TRACKS_PER_ARTIST) break;
+          if (addSoundCloudApiTrackToCatalog(row, resolvedStyle, existingKeys)) {
+            added += 1;
+            depth = catalogTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+            playableDepth = catalogPlayableTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+          }
+        }
+      } catch (_err) {
+        // fonte complementar opcional
+      }
+    }
+
+    depth = catalogTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+    playableDepth = catalogPlayableTrackDepthForArtist(artistName, resolvedStyle, { eligibleOnly: false });
+    artistCatalogDepthCache.set(cacheKey, {
+      at: Date.now(),
+      added,
+      depth,
+      playableDepth
+    });
+    if (added > 0) {
+      dedupeCatalogByTrackKey();
+      saveDynamicCatalogCache();
+    }
+    return { added, depth, playableDepth, ok: depth >= MIN_TRACKS_PER_ARTIST && playableDepth >= MIN_TRACKS_PER_ARTIST };
+  })();
+
+  artistCatalogDepthInFlight.set(cacheKey, task);
+  try {
+    return await task;
+  } finally {
+    artistCatalogDepthInFlight.delete(cacheKey);
+  }
+}
+
+async function ensureCatalogArtistDepthForStyle(style, options = {}) {
+  const styleKey = String(style || "").trim();
+  if (!styleKey) return { added: 0, checked: 0 };
+  const limit = Math.max(1, Number(options.limit) || ARTIST_CATALOG_DEPTH_STYLE_LIMIT);
+  const target = Math.max(MIN_TRACKS_PER_ARTIST, Number(options.target) || ARTIST_CATALOG_DEPTH_TARGET);
+  const artists = artistsNeedingCatalogDepth(styleKey, { limit, target });
+  let added = 0;
+  let checked = 0;
+  for (const entry of artists) {
+    checked += 1;
+    const result = await expandCatalogForArtistDepth(entry.artist, styleKey, { target });
+    added += Number(result?.added) || 0;
+  }
+  return { added, checked };
+}
+
 async function fetchItunesTracksByStyle(style, artist = "") {
   const parts = styleSearchParts(style);
   const searchTerms = advancedStyleSearchTerms(style, artist ? 3 : 5);
@@ -14405,6 +15021,11 @@ async function hydrateCatalogForStyle(style) {
     }
   }
 
+  await ensureCatalogArtistDepthForStyle(style, {
+    limit: ARTIST_CATALOG_DEPTH_STYLE_LIMIT,
+    target: ARTIST_CATALOG_DEPTH_TARGET
+  });
+
   dynamicCatalogByStyle.set(style, Date.now());
   saveDynamicCatalogCache();
 }
@@ -14687,7 +15308,9 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     track.existenceVerified = true;
   }
   if (trustedSlambient) normalizeTrustedSlambientCatalog();
-  const currentPreview = normalizePreviewUrl(track.previewUrl);
+  const rawPreviewUrl = String(track.previewUrl || "").trim();
+  const previewExpired = Boolean(rawPreviewUrl && previewUrlIsExpired(rawPreviewUrl, 0));
+  const currentPreview = normalizePreviewUrl(rawPreviewUrl);
   if (currentPreview) {
     track.previewUrl = currentPreview;
     registerPreviewCandidate(track, currentPreview);
@@ -14698,7 +15321,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     track.previewMissing = false;
     return;
   }
-  if (track.previewChecked && track.existenceVerified !== undefined && !forceLookup && (trustedCurated || track.previewLookupAttempted)) return;
+  if (track.previewChecked && track.existenceVerified !== undefined && !forceLookup && !previewExpired && (trustedCurated || track.previewLookupAttempted)) return;
 
   let foundEvidence = Boolean(currentPreview);
   const strictStyle = hasStrictWhitelist(track.style) || STRICT_ARTIST_MATCH_STYLES.has(track.style);
@@ -14966,6 +15589,7 @@ const I18N = {
     swipeShowAllStyles: "Ver todos os {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe da track",
+    discoverySequence: "Descoberta #{number}",
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
@@ -15486,6 +16110,7 @@ const I18N = {
     previewAudioWithFixedSources: "Preview de áudio pronto. Também fixei {sources} abaixo quando havia fonte embutível.",
     previewSoundcloudInlineHint: "SoundCloud disponível no player abaixo. Toque no play do widget se o navegador bloquear autoplay.",
     previewSoundcloudSearchHint: "Não achei link embutível desta faixa no SoundCloud. A busca abre a fonte para você conferir.",
+    previewArtistFallbackLoaded: "Prévia tocável do artista: {song} ({artist}). A recomendação continua sendo {original}.",
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
     previewSoundcloudFallback: "Preview em áudio aberto via SoundCloud. Se não iniciar sozinho, toque no player.",
     previewBandcampFallback: "Preview aberto via Bandcamp com fonte validada. Se não iniciar sozinho, toque no player.",
@@ -15498,9 +16123,14 @@ const I18N = {
     toastError: "Ops, deu um erro nesta ação. Já vou melhorar isso.",
     feedbackError: "Ocorreu um erro ao processar a ação. Tente novamente.",
     toastButtonFallback: "Ação registrada. Esse botão já está clicável.",
-    eventNotFound: "Não encontrei eventos futuros para {artist} agora.",
+    eventNotFound: "Não encontrei datas futuras confirmadas para {artist} agora. Deixei buscas rápidas para checar a agenda ao vivo.",
     eventRealLoaded: "Agenda real de {artist} carregada.",
     eventFallbackLoaded: "Agenda de {artist} carregada em modo catálogo local.",
+    eventSearchTitle: "Checar agenda ao vivo",
+    eventSearchHint: "Alguns artistas anunciam datas por promotoras, RA, Songkick ou postagens sociais antes das APIs públicas atualizarem.",
+    eventSearchBandsintown: "Bandsintown",
+    eventSearchSongkick: "Songkick",
+    eventSearchGoogle: "Google eventos",
     openEvent: "Abrir evento",
     genericVibe: "Faixa recomendada para o perfil {style}.",
     genericArtistBio: "{artist} aparece com destaque no subgênero {style}.",
@@ -15512,7 +16142,7 @@ const I18N = {
     artistSocialsTitle: "Redes do artista",
     artistSocialsHint: "Links por busca do nome do artista nas plataformas.",
     warmupCatalogToast: "Base musical refinada em segundo plano.",
-    eventsPrompt: "Curta um artista para carregar agenda de shows.",
+    eventsPrompt: "Abra Mais sobre ou curta um artista para carregar agenda de shows.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Pesquisando catálogo e montando sugestão...",
     catalogGenerating: "Preparando uma rota confiável em {style}...",
@@ -15781,6 +16411,7 @@ const I18N = {
     swipeShowAllStyles: "Show all {count} styles",
     swipeShowFocusedStyles: "Show fewer styles",
     swipeKicker: "Track swipe",
+    discoverySequence: "Discovery #{number}",
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
@@ -16298,6 +16929,7 @@ const I18N = {
     previewAudioWithFixedSources: "Audio preview is ready. I also fixed {sources} below when an embeddable source was available.",
     previewSoundcloudInlineHint: "SoundCloud is available in the player below. Tap the widget play button if the browser blocks autoplay.",
     previewSoundcloudSearchHint: "I did not find an embeddable SoundCloud link for this track. Search opens the source so you can check it.",
+    previewArtistFallbackLoaded: "Playable artist preview: {song} ({artist}). The recommendation is still {original}.",
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
     previewSoundcloudFallback: "Audio preview opened through SoundCloud. If it does not start by itself, tap the player.",
     previewBandcampFallback: "Preview opened through a verified Bandcamp source. If it does not start by itself, tap the player.",
@@ -16310,9 +16942,14 @@ const I18N = {
     toastError: "Something went wrong in this action. I will improve this.",
     feedbackError: "An error happened while processing this action. Please try again.",
     toastButtonFallback: "Action recorded. This button is clickable.",
-    eventNotFound: "No upcoming events found for {artist} right now.",
+    eventNotFound: "No confirmed upcoming dates found for {artist} right now. I added quick live searches to check the agenda.",
     eventRealLoaded: "Live event schedule for {artist} loaded.",
     eventFallbackLoaded: "Local fallback event schedule for {artist} loaded.",
+    eventSearchTitle: "Check live agenda",
+    eventSearchHint: "Some artists announce dates through promoters, RA, Songkick, or social posts before public APIs update.",
+    eventSearchBandsintown: "Bandsintown",
+    eventSearchSongkick: "Songkick",
+    eventSearchGoogle: "Google events",
     openEvent: "Open event",
     genericVibe: "Track recommended for the {style} profile.",
     genericArtistBio: "{artist} is highlighted in the {style} subgenre.",
@@ -16324,7 +16961,7 @@ const I18N = {
     artistSocialsTitle: "Artist social links",
     artistSocialsHint: "Links open platform search by artist name.",
     warmupCatalogToast: "Music base refined in the background.",
-    eventsPrompt: "Like an artist to load upcoming events.",
+    eventsPrompt: "Open More info or like an artist to load upcoming events.",
     eventsLoading: "Searching upcoming events for {artist}...",
     searchingCatalog: "Searching catalog and building recommendation...",
     catalogGenerating: "Preparing a reliable route in {style}...",
@@ -16593,6 +17230,7 @@ const I18N = {
     swipeShowAllStyles: "Ver los {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe de la pista",
+    discoverySequence: "Descubrimiento #{number}",
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
@@ -17107,6 +17745,7 @@ const I18N = {
     previewAudioWithFixedSources: "Preview de audio listo. También fijé {sources} abajo cuando había una fuente embebible.",
     previewSoundcloudInlineHint: "SoundCloud está disponible en el player abajo. Toca play en el widget si el navegador bloquea autoplay.",
     previewSoundcloudSearchHint: "No encontré un enlace embebible de SoundCloud para esta pista. La búsqueda abre la fuente para verificar.",
+    previewArtistFallbackLoaded: "Preview reproducible del artista: {song} ({artist}). La recomendación sigue siendo {original}.",
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
     previewSoundcloudFallback: "Preview de audio abierto vía SoundCloud. Si no empieza solo, toca el player.",
     previewBandcampFallback: "Preview abierto vía Bandcamp con fuente validada. Si no empieza solo, toca el player.",
@@ -17119,9 +17758,14 @@ const I18N = {
     toastError: "Ocurrió un error en esta acción. Ya lo voy a mejorar.",
     feedbackError: "Ocurrió un error al procesar esta acción. Intenta nuevamente.",
     toastButtonFallback: "Acción registrada. Este botón ya es clicable.",
-    eventNotFound: "No encontré eventos próximos para {artist} ahora.",
+    eventNotFound: "No encontré fechas próximas confirmadas para {artist} ahora. Dejé búsquedas rápidas para revisar la agenda en vivo.",
     eventRealLoaded: "Agenda real de {artist} cargada.",
     eventFallbackLoaded: "Agenda local de {artist} cargada en modo catálogo.",
+    eventSearchTitle: "Consultar agenda en vivo",
+    eventSearchHint: "Algunos artistas anuncian fechas por promotoras, RA, Songkick o redes antes de que las APIs públicas se actualicen.",
+    eventSearchBandsintown: "Bandsintown",
+    eventSearchSongkick: "Songkick",
+    eventSearchGoogle: "Google eventos",
     openEvent: "Abrir evento",
     genericVibe: "Pista recomendada para el perfil {style}.",
     genericArtistBio: "{artist} aparece como destacado en el subgénero {style}.",
@@ -17133,7 +17777,7 @@ const I18N = {
     artistSocialsTitle: "Redes del artista",
     artistSocialsHint: "Los links abren búsqueda por nombre del artista en cada plataforma.",
     warmupCatalogToast: "Base musical refinada en segundo plano.",
-    eventsPrompt: "Dale like a un artista para cargar eventos próximos.",
+    eventsPrompt: "Abre Más información o dale like a un artista para cargar eventos próximos.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Buscando catálogo y preparando recomendación...",
     catalogGenerating: "Preparando una ruta confiable en {style}...",
@@ -17895,6 +18539,7 @@ function applyLanguage() {
       btnNoveltyYes: "Gostei sim",
       btnNoveltyNo: "Ainda não",
       btnPreviewYes: "Sim, curti",
+      btnPreviewPlay: "Tocar preview",
       btnPreviewIssue: "Não tocou",
       btnPreviewNo: "Não, troca agora",
       btnStyleIssue: "Subgênero errado",
@@ -17938,6 +18583,7 @@ function applyLanguage() {
       btnNoveltyYes: "Yes, I liked it",
       btnNoveltyNo: "Not yet",
       btnPreviewYes: "Yes, liked it",
+      btnPreviewPlay: "Play preview",
       btnPreviewIssue: "Did not play",
       btnPreviewNo: "No, switch now",
       btnStyleIssue: "Wrong subgenre",
@@ -17981,6 +18627,7 @@ function applyLanguage() {
       btnNoveltyYes: "Sí, me gustó",
       btnNoveltyNo: "Aún no",
       btnPreviewYes: "Sí, me gustó",
+      btnPreviewPlay: "Reproducir preview",
       btnPreviewIssue: "No sonó",
       btnPreviewNo: "No, cambia ahora",
       btnStyleIssue: "Subgénero errado",
@@ -18278,6 +18925,7 @@ function applyLanguage() {
   setText("#topSwipeSurpriseBtn", t("swipeStartButton"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
+  updateDiscoverySequenceBadges(currentRecommendation);
   syncQuickKnownDecision(currentRecommendation);
   setText("#feedbackLikeGroupTitle", t("feedbackLikeGroupTitle"));
   setText("#feedbackCorrectGroupTitle", t("feedbackCorrectGroupTitle"));
@@ -18465,6 +19113,7 @@ function applyLanguage() {
   setText("#noveltyLikedBtn", labels.btnNoveltyYes || "");
   setText("#noveltyNotYetBtn", labels.btnNoveltyNo || "");
   setText("#previewLikeBtn", labels.btnPreviewYes || "");
+  setText("#previewPlayBtn", labels.btnPreviewPlay || "");
   setText("#previewIssueBtn", labels.btnPreviewIssue || "");
   setText("#previewDislikeBtn", labels.btnPreviewNo || "");
   setText("#styleIssueBtn", labels.btnStyleIssue || "");
@@ -18569,6 +19218,57 @@ function urlRequestsPublicVisitorMode() {
     parseSharedSpiritPayloadFromUrl() ||
     urlBooleanParam(url, ["visitor", "visitante", "share", "shared", "public"])
   );
+}
+
+function urlRequestsQaPreviewMode() {
+  const url = currentAppUrl();
+  if (!url) return false;
+  const keys = ["qa", "qaPreview", "previewMode", "testApp", "directApp"];
+  return keys.some((key) => {
+    if (!url.searchParams.has(key)) return false;
+    const raw = String(url.searchParams.get(key) || "").trim().toLowerCase();
+    if (!raw) return true;
+    return ["1", "true", "yes", "sim", "preview", "app", "direct"].includes(raw);
+  });
+}
+
+function urlRequestsQaAutoSurprise() {
+  const url = currentAppUrl();
+  if (!url) return true;
+  const raw = String(url.searchParams.get("surprise") || url.searchParams.get("autoSurprise") || url.searchParams.get("auto") || "").trim().toLowerCase();
+  if (!raw) return true;
+  return !["0", "false", "no", "nao", "off"].includes(raw);
+}
+
+function urlRequestsQaAutoRecommendation() {
+  const url = currentAppUrl();
+  if (!url) return true;
+  const raw = String(url.searchParams.get("recommendation") || url.searchParams.get("autoRecommendation") || "").trim().toLowerCase();
+  if (!raw) return true;
+  return !["0", "false", "no", "nao", "off"].includes(raw);
+}
+
+function qaPreviewLanguageFromUrl() {
+  const url = currentAppUrl();
+  const lang = String(url?.searchParams.get("lang") || "").trim().toLowerCase();
+  return ["pt", "en", "es"].includes(lang) ? lang : DEFAULT_LANGUAGE;
+}
+
+function qaPreviewEventsArtistFromUrl() {
+  const url = currentAppUrl();
+  return String(url?.searchParams.get("eventsArtist") || url?.searchParams.get("artistEvents") || "").trim();
+}
+
+function qaPreviewSurprisePresetFromUrl() {
+  const url = currentAppUrl();
+  if (!url) return null;
+  const style = normalizeDatasetStyle(url.searchParams.get("style") || url.searchParams.get("genre") || "");
+  if (!style) return null;
+  return {
+    style,
+    knownArtists: String(url.searchParams.get("artists") || url.searchParams.get("knownArtists") || "").trim(),
+    knownTracks: String(url.searchParams.get("tracks") || url.searchParams.get("knownTracks") || "").trim()
+  };
 }
 
 function createVisitorSession() {
@@ -19393,6 +20093,38 @@ function syncPreviewAudioState() {
   trackPreview.muted = shouldMute;
   if (!shouldMute) {
     trackPreview.volume = Math.max(0, Math.min(1, audioVolume));
+  }
+}
+
+async function startTrackPreviewPlayback(audioEl = trackPreview) {
+  if (!audioEl) return { ok: false, mutedFallback: false };
+  syncPreviewAudioState();
+  audioEl.currentTime = 0;
+  try {
+    await audioEl.play();
+    return { ok: true, mutedFallback: false };
+  } catch (firstError) {
+    if (!audioEl.muted && !audioUnavailable && audioVolume > 0.001) {
+      try {
+        audioEl.muted = true;
+        await audioEl.play();
+        window.setTimeout(() => {
+          syncPreviewAudioState();
+          if (audioEl.paused && !audioEl.muted) {
+            audioEl.play().catch(() => {});
+          }
+        }, 140);
+        window.setTimeout(() => {
+          if (audioEl.paused && !audioEl.muted) {
+            audioEl.play().catch(() => {});
+          }
+        }, 620);
+        return { ok: true, mutedFallback: true };
+      } catch (_mutedError) {
+        syncPreviewAudioState();
+      }
+    }
+    throw firstError;
   }
 }
 
@@ -20274,6 +21006,13 @@ function bootstrapAudio() {
   refreshAmbientForUiState({ immediate: true });
 }
 
+function primeAudioForDiscoveryGesture() {
+  if (!audioEnabled || audioUnavailable) return false;
+  const primed = primeAudioFromUserGesture({ fromGlobal: true });
+  syncPreviewAudioState();
+  return primed;
+}
+
 function enforceVisualIntroOnly() {
   if (!introScreen) return;
   const legacyCopy = introScreen.querySelector(".intro-copy");
@@ -20575,7 +21314,7 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   return true;
 }
 
-function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
+function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoRecommendation = true } = {}) {
   ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
@@ -20604,6 +21343,8 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null } = {}) {
     warmupCatalogInBackground();
   }, 250);
   scheduleQuizChallengeEvaluation(220);
+
+  if (!autoRecommendation) return;
 
   if (!surprise) {
     window.setTimeout(() => {
@@ -20764,6 +21505,37 @@ function testAsNewUser() {
   persistUserSession(session);
   setAuthFeedback(t("authTestUserReady", { user: session.username }));
   continueFromAuthToWelcome({ showGuide: true });
+}
+
+function enterQaPreviewMode() {
+  setLanguage(qaPreviewLanguageFromUrl());
+  markUsageGuideAcknowledged();
+  const eventsArtist = qaPreviewEventsArtistFromUrl();
+  const autoRecommendation = urlRequestsQaAutoRecommendation();
+
+  const session = createTestUserSession();
+  clearSessionProfileData(session);
+  activateUserSession(session);
+  persistUserSession(session);
+  setAuthFeedback(t("authTestUserReady", { user: session.username }));
+
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+
+  enterAppFromWelcome({
+    surprise: autoRecommendation && urlRequestsQaAutoSurprise(),
+    surprisePreset: qaPreviewSurprisePresetFromUrl(),
+    autoRecommendation
+  });
+
+  if (eventsArtist) {
+    window.setTimeout(() => {
+      void loadEventsForArtist(eventsArtist);
+    }, autoRecommendation ? 1800 : 360);
+  }
 }
 
 function syncDiscoveryFromSeeds() {
@@ -23702,6 +24474,32 @@ async function copyShareableLink({ triggerButton = null, includeSpirit = true } 
   return link;
 }
 
+function tabNamesForPanel(panel) {
+  return String(panel?.getAttribute?.("data-app-tab") || "")
+    .split(/\s+/)
+    .map((tab) => tab.trim())
+    .filter(Boolean);
+}
+
+function panelMatchesAppTab(panel, tabName = "discover") {
+  return tabNamesForPanel(panel).includes(tabName);
+}
+
+function currentActiveAppTabName() {
+  const activeButton = appTabBar?.querySelector("[data-app-tab-target].active, [data-app-tab-target][aria-pressed='true']");
+  return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
+}
+
+function ensureEventsPanelActive() {
+  if (!eventsPanel) return;
+  const activeTab = currentActiveAppTabName();
+  if (panelMatchesAppTab(eventsPanel, activeTab)) {
+    eventsPanel.classList.add("active");
+    return;
+  }
+  setActiveAppTab("discover");
+}
+
 function setActiveAppTab(tabName = "discover") {
   const safeTab = ["discover", "filters", "news", "studio", "profile", "about", "support"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
@@ -23712,7 +24510,7 @@ function setActiveAppTab(tabName = "discover") {
     });
   }
   appTabPanels.forEach((panel) => {
-    panel.classList.toggle("active", panel.getAttribute("data-app-tab") === safeTab);
+    panel.classList.toggle("active", panelMatchesAppTab(panel, safeTab));
   });
 }
 
@@ -25841,6 +26639,50 @@ function youtubeApiTrackCacheKey(track) {
   return recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
 }
 
+function setYouTubeVideoCandidates(track, videos = []) {
+  if (!track) return [];
+  const candidates = [];
+  const seen = new Set();
+  (Array.isArray(videos) ? videos : []).forEach((video) => {
+    const url = String(video?.youtubeTrackUrl || video?.url || video || "").trim();
+    const videoId = extractYouTubeVideoId(url) || String(video?.videoId || "").trim();
+    const resolvedUrl = url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
+    const resolvedId = extractYouTubeVideoId(resolvedUrl);
+    if (!resolvedId || seen.has(resolvedId)) return;
+    seen.add(resolvedId);
+    candidates.push({
+      youtubeTrackUrl: resolvedUrl,
+      videoId: resolvedId
+    });
+  });
+  track.youtubeVideoCandidates = candidates;
+  if (candidates[0]?.youtubeTrackUrl) {
+    track.youtubeTrackUrl = candidates[0].youtubeTrackUrl;
+    track.youtubeUrl = candidates[0].youtubeTrackUrl;
+    track.youtubeVerified = true;
+  }
+  return candidates;
+}
+
+function youtubeVideoCandidatesForTrack(track) {
+  if (!track) return [];
+  const candidates = [];
+  const seen = new Set();
+  const add = (value) => {
+    const url = String(value?.youtubeTrackUrl || value?.url || value || "").trim();
+    const videoId = extractYouTubeVideoId(url) || String(value?.videoId || "").trim();
+    const resolvedUrl = url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
+    const resolvedId = extractYouTubeVideoId(resolvedUrl);
+    if (!resolvedId || seen.has(resolvedId)) return;
+    seen.add(resolvedId);
+    candidates.push({ youtubeTrackUrl: resolvedUrl, videoId: resolvedId });
+  };
+  if (Array.isArray(track.youtubeVideoCandidates)) track.youtubeVideoCandidates.forEach(add);
+  add(track.youtubeTrackUrl);
+  add(track.youtubeUrl);
+  return candidates;
+}
+
 async function resolveYouTubeVideoFromApi(track) {
   if (!track || trackHasDirectYouTubeVideo(track) || !youtubeApiAvailable) return false;
   const endpoint = resolveMusicApiEndpoint("SONIC_YOUTUBE_SEARCH_API_URL", "/api/youtube-search");
@@ -25849,9 +26691,7 @@ async function resolveYouTubeVideoFromApi(track) {
   if (cacheKey && youtubeApiCache.has(cacheKey)) {
     const cached = youtubeApiCache.get(cacheKey);
     if (cached?.youtubeTrackUrl) {
-      track.youtubeTrackUrl = cached.youtubeTrackUrl;
-      track.youtubeUrl = cached.youtubeTrackUrl;
-      track.youtubeVerified = true;
+      setYouTubeVideoCandidates(track, cached.candidates?.length ? cached.candidates : [cached]);
       return true;
     }
     return false;
@@ -25888,14 +26728,13 @@ async function resolveYouTubeVideoFromApi(track) {
       if (cacheKey) youtubeApiCache.set(cacheKey, null);
       return false;
     }
+    const candidates = setYouTubeVideoCandidates(track, Array.isArray(payload?.videos) ? payload.videos : [video]);
     const resolved = {
-      youtubeTrackUrl: video.youtubeTrackUrl,
-      videoId: video.videoId || extractYouTubeVideoId(video.youtubeTrackUrl)
+      youtubeTrackUrl: candidates[0]?.youtubeTrackUrl || video.youtubeTrackUrl,
+      videoId: candidates[0]?.videoId || video.videoId || extractYouTubeVideoId(video.youtubeTrackUrl),
+      candidates
     };
     if (cacheKey) youtubeApiCache.set(cacheKey, resolved);
-    track.youtubeTrackUrl = resolved.youtubeTrackUrl;
-    track.youtubeUrl = resolved.youtubeTrackUrl;
-    track.youtubeVerified = true;
     return true;
   } catch (_err) {
     if (cacheKey) youtubeApiCache.set(cacheKey, null);
@@ -26378,6 +27217,7 @@ function extractYouTubeVideoId(url = "") {
 
 function trackHasDirectYouTubeVideo(track) {
   if (!track) return false;
+  if (youtubeVideoCandidatesForTrack(track).length > 0) return true;
   return Boolean(
     extractYouTubeVideoId(track.youtubeTrackUrl) ||
     extractYouTubeVideoId(track.youtubeUrl)
@@ -26472,10 +27312,12 @@ function syncYouTubePreviewAttemptForTrack(track) {
 }
 
 function youtubePreviewCanRetry(track) {
-  return false;
+  return youtubeVideoCandidatesForTrack(track).length > 1;
 }
 
 function youtubePreviewSearchAttemptCount(track) {
+  const candidateCount = youtubeVideoCandidatesForTrack(track).length;
+  if (candidateCount > 0) return candidateCount;
   return trackHasDirectYouTubeVideo(track) ? 1 : 0;
 }
 
@@ -26578,10 +27420,13 @@ function buildYouTubeEmbedUrl(track, { autoplay = false, attempt = 0 } = {}) {
   if (!track) return "";
   const autoplayParam = autoplay ? "&autoplay=1&mute=1" : "";
   const commonParams = `rel=0&modestbranding=1&playsinline=1${autoplayParam}`;
+  const safeAttempt = Math.max(0, Number(attempt) || 0);
+  const candidates = youtubeVideoCandidatesForTrack(track);
+  const candidate = candidates.length ? candidates[safeAttempt % candidates.length] : null;
   const directVideoId =
+    candidate?.videoId ||
     extractYouTubeVideoId(track.youtubeTrackUrl) ||
     extractYouTubeVideoId(track.youtubeUrl);
-  const safeAttempt = Math.max(0, Number(attempt) || 0);
   if (directVideoId) {
     return `https://www.youtube-nocookie.com/embed/${directVideoId}?${commonParams}&retry=${safeAttempt}`;
   }
@@ -34197,6 +35042,52 @@ function getFallbackEvents(artist) {
     .sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
 }
 
+function eventSearchLinksForArtist(artist) {
+  const cleanArtist = String(artist || "").trim();
+  const query = encodeURIComponent(cleanArtist);
+  const googleQuery = encodeURIComponent(`${cleanArtist} tour dates events tickets`);
+  return [
+    {
+      label: t("eventSearchBandsintown"),
+      url: `https://www.bandsintown.com/search?q=${query}`
+    },
+    {
+      label: t("eventSearchSongkick"),
+      url: `https://www.songkick.com/search?query=${query}`
+    },
+    {
+      label: t("eventSearchGoogle"),
+      url: `https://www.google.com/search?q=${googleQuery}`
+    }
+  ];
+}
+
+function renderEventSearchFallback(artist) {
+  if (!eventsCalendar) return;
+  const card = document.createElement("article");
+  card.className = "event-search-card";
+
+  const title = document.createElement("strong");
+  title.textContent = t("eventSearchTitle");
+
+  const hint = document.createElement("span");
+  hint.textContent = t("eventSearchHint");
+
+  const actions = document.createElement("div");
+  actions.className = "event-search-actions";
+  eventSearchLinksForArtist(artist).forEach((item) => {
+    const link = document.createElement("a");
+    link.href = item.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.label;
+    actions.appendChild(link);
+  });
+
+  card.append(title, hint, actions);
+  eventsCalendar.appendChild(card);
+}
+
 async function fetchUpcomingEvents(artist) {
   const ticketmasterEndpoint = resolveMusicApiEndpoint("SONIC_TICKETMASTER_EVENTS_API_URL", "/api/ticketmaster-events");
   if (ticketmasterEndpoint) {
@@ -34264,6 +35155,7 @@ function renderEventsPanel(artist, events, source) {
 
   if (!events.length) {
     eventsIntro.textContent = t("eventNotFound", { artist });
+    renderEventSearchFallback(artist);
     return;
   }
 
@@ -35181,6 +36073,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     const bpmMatches = !prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm);
     if (!bpmMatches) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackHasPlayablePreviewExperience(track)) return false;
     const artistKey = artistMatchKey(track.artist);
     const trackKey = recommendationTrackKey(track);
     if (!artistKey || !trackKey) return false;
@@ -35741,16 +36634,22 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
   renderSuggestionQueue(prefs);
 }
 
-function registerRecommendationDelivery(track, prefs) {
-  if (!track || !prefs) return;
-  recordDailyMusicAction(track, "discovery");
+function markRecommendationPresented(track) {
+  if (!track) return;
   registerSeenArtist(track.artist);
-  registerSwipeStyleExposure(track.style);
-  const trackKey = `${track.artist}::${track.song}`;
-  const normalizedTrackKey = recommendationTrackKey(track) || normalize(trackKey);
+  const normalizedTrackKey = recommendationTrackKey(track);
   const normalizedTrackTitle = normalizeTitle(track.song || "");
   if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
   if (normalizedTrackTitle) knownTrackTitlesMemory.add(normalizedTrackTitle);
+  saveProgress();
+}
+
+function registerRecommendationDelivery(track, prefs) {
+  if (!track || !prefs) return;
+  recordDailyMusicAction(track, "discovery");
+  markRecommendationPresented(track);
+  registerSwipeStyleExposure(track.style);
+  const trackKey = `${track.artist}::${track.song}`;
   registerGlobalRecommendation(trackKey);
   if (prefs.style && track?.style === prefs.style) {
     const styleTracks = catalog.filter((item) => item.style === prefs.style);
@@ -36085,6 +36984,10 @@ function pickRecommendation(
   }
   finalPool = applyUndergroundIntentPoolFilter(finalPool, prefs);
   if (!finalPool.length) return null;
+  const playableFinalPool = finalPool.filter((track) => trackHasPlayablePreviewExperience(track));
+  if (playableFinalPool.length) {
+    finalPool = playableFinalPool;
+  }
 
   const scored = finalPool
     .map((track) => ({ track, score: recommendationScore(track, prefs) }))
@@ -36390,6 +37293,35 @@ async function continuePendingQuickKnownAdvance(pending = pendingQuickKnownAdvan
   });
 }
 
+function presentedCardNumberForTrack(track) {
+  const seenCount = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
+  if (!track) return seenCount + 1;
+  const trackKey = recommendationTrackKey(track);
+  const alreadySeen = Boolean(trackKey && seenTrackKeysMemory.has(trackKey));
+  return Math.max(1, seenCount + (alreadySeen ? 0 : 1));
+}
+
+function updateDiscoverySequenceBadges(track) {
+  const hasTrack = Boolean(track);
+  const targets = [topSwipeCount, trackSequenceBadge].filter(Boolean);
+  if (!targets.length) return;
+  if (!hasTrack) {
+    targets.forEach((badge) => {
+      badge.textContent = "";
+      badge.classList.add("hidden");
+      badge.removeAttribute("aria-label");
+    });
+    return;
+  }
+  const number = presentedCardNumberForTrack(track);
+  const label = t("discoverySequence", { number });
+  targets.forEach((badge) => {
+    badge.textContent = label;
+    badge.setAttribute("aria-label", label);
+    badge.classList.remove("hidden");
+  });
+}
+
 function updateSwipeFeedbackCard(track) {
   resetSwipeCardPosition();
   const hasTrack = Boolean(track);
@@ -36410,6 +37342,7 @@ function updateSwipeFeedbackCard(track) {
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
   renderTopSwipeArtwork(track);
   if (!hasTrack) {
+    updateDiscoverySequenceBadges(null);
     if (topSwipeTitle) topSwipeTitle.textContent = t("topSwipeEmptyTitle");
     if (topSwipeMeta) topSwipeMeta.textContent = t("topSwipeEmptyMeta");
     setGenreSignalChip(topSwipeStyleChip, null);
@@ -36432,6 +37365,7 @@ function updateSwipeFeedbackCard(track) {
 
   const bpm = formatBpmLine(track);
   const energy = energyLabelByValue(track.energy);
+  updateDiscoverySequenceBadges(track);
   if (topSwipeTitle) topSwipeTitle.textContent = track.song || unknownTrackText;
   if (topSwipeMeta) {
     topSwipeMeta.textContent = `${track.artist || unknownArtistText} • ${sanitizeLabel(track.label, track.artist, track.song)}`;
@@ -36875,16 +37809,21 @@ function renderRecommendation(track, prefs) {
 }
 
 async function renderPreview(track) {
-  if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return;
+  if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return false;
   previewPanel.classList.remove("hidden");
   previewPanel.classList.remove("has-fixed-embeds");
   listeningPrompt.classList.add("hidden");
   previewStatus.textContent = t("previewSearching");
+  if (previewPlayBtn) {
+    previewPlayBtn.disabled = true;
+    previewPlayBtn.classList.add("hidden");
+  }
   setTrackPreviewVisualState("searching");
   resetTrackPreviewElement(trackPreview);
   resetSoundCloudPreviewEmbed();
   resetBandcampPreviewEmbed();
   resetYouTubePreviewEmbed();
+  track.artistPreviewFallback = null;
   syncYouTubePreviewAttemptForTrack(track);
 
   await resolvePreviewForTrack(track);
@@ -36932,6 +37871,7 @@ async function renderPreview(track) {
   let youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
   let playablePreview = await resolvePlayablePreview(false);
+  let artistPreviewFallback = null;
   if (!playablePreview) {
     playablePreview = await resolvePlayablePreview(true);
     hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
@@ -36939,9 +37879,17 @@ async function renderPreview(track) {
     canRetryYoutube = youtubePreviewCanRetry(track);
     youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
+  if (!playablePreview) {
+    artistPreviewFallback = await pickPlayableArtistPreviewFallback(trackPreview, track, { forceLookup: true });
+    if (artistPreviewFallback?.previewUrl) playablePreview = artistPreviewFallback.previewUrl;
+  }
 
   if (playablePreview) {
     trackPreview.classList.remove("hidden");
+    if (previewPlayBtn) {
+      previewPlayBtn.disabled = false;
+      previewPlayBtn.classList.remove("hidden");
+    }
     const fixedPlayers = showFixedPreviewPlayers(track, {
       includeYoutubeSearch: false,
       autoplayYoutube: false,
@@ -36950,32 +37898,50 @@ async function renderPreview(track) {
     previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
 
     try {
-      syncPreviewAudioState();
-      trackPreview.currentTime = 0;
-      await trackPreview.play();
+      await startTrackPreviewPlayback(trackPreview);
       setTrackPreviewVisualState("playing");
       const previewLoadedMessage =
         track.previewConfidence && track.previewConfidence >= 0.9
           ? t("previewValidated")
           : t("previewLoaded");
-      previewStatus.textContent = fixedPlayers.sources.length
-        ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
-        : hasDirectYoutube
-          ? `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`
-          : previewLoadedMessage;
+      const artistFallbackMessage = artistPreviewFallback
+        ? t("previewArtistFallbackLoaded", {
+          song: artistPreviewFallback.song,
+          artist: artistPreviewFallback.artist || track.artist,
+          original: track.song
+        })
+        : "";
+      previewStatus.textContent = artistFallbackMessage ||
+        (fixedPlayers.sources.length
+          ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
+          : hasDirectYoutube
+            ? `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`
+            : previewLoadedMessage);
       listeningPrompt.classList.remove("hidden");
     } catch (_err) {
       setTrackPreviewVisualState("ready");
       const readyMessage = t("previewReady");
-      previewStatus.textContent = fixedPlayers.sources.length
-        ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
-        : hasDirectYoutube
-          ? `${readyMessage} ${t("previewYoutubeOptionalHint")}`
-          : readyMessage;
+      const artistFallbackMessage = artistPreviewFallback
+        ? t("previewArtistFallbackLoaded", {
+          song: artistPreviewFallback.song,
+          artist: artistPreviewFallback.artist || track.artist,
+          original: track.song
+        })
+        : "";
+      previewStatus.textContent = artistFallbackMessage ||
+        (fixedPlayers.sources.length
+          ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
+          : hasDirectYoutube
+            ? `${readyMessage} ${t("previewYoutubeOptionalHint")}`
+            : readyMessage);
       listeningPrompt.classList.remove("hidden");
     }
   } else {
     trackPreview.classList.add("hidden");
+    if (previewPlayBtn) {
+      previewPlayBtn.disabled = true;
+      previewPlayBtn.classList.add("hidden");
+    }
     track.previewUrl = "";
     track.previewMissing = true;
     const fixedPlayers = showFixedPreviewPlayers(track, {
@@ -37019,8 +37985,105 @@ async function renderPreview(track) {
     }
     listeningPrompt.classList.remove("hidden");
   }
+  const playbackReady = renderedPreviewHasPlaybackRoute(track);
   renderTrackCardSignals(track, lastPrefs || {});
   renderRecommendationTrust(track, lastPrefs || {});
+  return playbackReady;
+}
+
+function visiblePreviewFrameHasSource(wrap, frame) {
+  return Boolean(
+    wrap &&
+    frame &&
+    !wrap.classList.contains("hidden") &&
+    String(frame.getAttribute("src") || "").trim()
+  );
+}
+
+function renderedPreviewHasPlaybackRoute(track = currentRecommendation) {
+  const audioSource = normalizePreviewUrl(
+    trackPreview?.currentSrc ||
+    trackPreview?.src ||
+    track?.previewUrl ||
+    track?.artistPreviewFallback?.previewUrl ||
+    ""
+  );
+  const audioReady = Boolean(
+    trackPreview &&
+    audioSource &&
+    !trackPreview.classList.contains("hidden")
+  );
+  return Boolean(
+    audioReady ||
+    visiblePreviewFrameHasSource(youtubePreviewWrap, youtubePreviewFrame) ||
+    visiblePreviewFrameHasSource(soundcloudPreviewWrap, soundcloudPreviewFrame) ||
+    visiblePreviewFrameHasSource(bandcampPreviewWrap, bandcampPreviewFrame)
+  );
+}
+
+function removePreviewCandidate(track, previewUrl = "") {
+  if (!track) return;
+  const normalized = normalizePreviewUrl(previewUrl);
+  const candidates = previewCandidatesForTrack(track)
+    .filter((candidate) => !normalized || candidate !== normalized);
+  track.previewCandidates = candidates;
+  if (!normalized || normalizePreviewUrl(track.previewUrl) === normalized) {
+    track.previewUrl = candidates[0] || "";
+  }
+}
+
+async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
+  if (!currentRecommendation || !trackPreview || previewRecoveryBusy) return;
+  if (trackPreview.dataset.previewProbing === "true") return;
+  const track = currentRecommendation;
+  const trackKey = recommendationTrackKey(track);
+  const failedPreview = normalizePreviewUrl(trackPreview.currentSrc || trackPreview.src || track.previewUrl);
+  if (!failedPreview && !trackKey) return;
+
+  previewRecoveryBusy = true;
+  previewRecoveryToken += 1;
+  const token = previewRecoveryToken;
+  try {
+    if (!trackStillActive(track)) return;
+    if (failedPreview) removePreviewCandidate(track, failedPreview);
+    if (failedPreview) removeArtistPreviewOption(track, failedPreview);
+    track.previewChecked = false;
+    track.previewMissing = false;
+    track.previewLookupAttempted = false;
+    adjustTrackPreviewIssueSignal(track, 0.32);
+    adjustPreviewReliabilitySignal(track.style, -0.28);
+    if (previewStatus) previewStatus.textContent = t("previewSearching");
+    setTrackPreviewVisualState("searching");
+    const recovered = await renderPreview(track);
+    if (token !== previewRecoveryToken || !trackStillActive(track)) return;
+    if (!recovered && lastPrefs) {
+      const replacement = await pickPlayableReplacementForPrefs(lastPrefs, {
+        currentTrack: track,
+        excludedTrackKeys: new Set(trackKey ? [trackKey] : []),
+        allowKnownFallback: true
+      });
+      if (replacement && token === previewRecoveryToken && trackStillActive(track)) {
+        currentRecommendation = replacement;
+        currentDiscovery = discoveryModeEl.checked
+          ? pickDiscovery(lastPrefs, buildGlobalArtistExclusionSet(), replacement.artist)
+          : null;
+        renderRecommendation(replacement, lastPrefs);
+        renderDiscovery(currentDiscovery);
+        markRecommendationPresented(replacement);
+        await renderPreview(replacement);
+        registerRecommendationDelivery(replacement, lastPrefs);
+        refreshSuggestionQueue(lastPrefs, replacement);
+      }
+    }
+    if (reason === "error") {
+      renderTrackCardSignals(currentRecommendation || track, lastPrefs || {});
+      renderRecommendationTrust(currentRecommendation || track, lastPrefs || {});
+    }
+  } finally {
+    window.setTimeout(() => {
+      if (token === previewRecoveryToken) previewRecoveryBusy = false;
+    }, 420);
+  }
 }
 
 function renderDiscovery(discovery) {
@@ -39568,6 +40631,114 @@ function updateStats() {
   saveProgress();
 }
 
+async function pickPlayableReplacementForPrefs(
+  prefs,
+  {
+    currentTrack = currentRecommendation,
+    excludedTrackKeys = new Set(),
+    excludedTrackTitles = new Set(),
+    excludedArtists = new Set(),
+    allowKnownFallback = false,
+    maxAttempts = 28
+  } = {}
+) {
+  prefs = normalizeRecommendationPrefs(prefs);
+  const currentKey = recommendationTrackKey(currentTrack);
+  const knownArtists = allowKnownFallback ? new Set() : excludedArtists;
+  const trackAllowed = (track) =>
+    !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
+  const pool = catalog.filter((track) => {
+    if (!track || track === currentTrack) return false;
+    if (!isTrackEligibleForRecommendation(track)) return false;
+    if (prefs.style && track.style !== prefs.style) return false;
+    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
+    if (currentKey && recommendationTrackKey(track) === currentKey) return false;
+    if (!trackAllowed(track)) return false;
+    if (!allowKnownFallback && artistSetHasMatch(knownArtists, track.artist)) return false;
+    return true;
+  });
+  if (!pool.length) return null;
+
+  const scored = pool
+    .map((track) => ({
+      track,
+      score:
+        recommendationScore(track, prefs) +
+        (trackHasReliableAudioPreview(track) ? 8 : trackHasPlayablePreviewExperience(track) ? 5 : 0) +
+        (hasReliableBpmForTrack(track) ? 1.4 : 0)
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const knownPlayable = scored.filter((entry) => trackHasPlayablePreviewExperience(entry.track));
+  const queue = [
+    ...knownPlayable,
+    ...scored.filter((entry) => !trackHasPlayablePreviewExperience(entry.track))
+  ];
+  const tried = new Set();
+  let attempts = 0;
+
+  for (const entry of queue) {
+    const candidate = entry?.track;
+    const key = recommendationTrackKey(candidate);
+    if (!candidate || !key || tried.has(key)) continue;
+    tried.add(key);
+    attempts += 1;
+    await resolvePreviewForTrack(candidate, { forceLookup: attempts <= 8 });
+    if (trackHasPlayablePreviewExperience(candidate)) return candidate;
+    candidate.previewChecked = true;
+    candidate.previewMissing = true;
+    adjustTrackPreviewIssueSignal(candidate, 0.18);
+    if (attempts >= maxAttempts) break;
+  }
+
+  if (!allowKnownFallback) {
+    return pickPlayableReplacementForPrefs(prefs, {
+      currentTrack,
+      excludedTrackKeys,
+      excludedTrackTitles,
+      excludedArtists,
+      allowKnownFallback: true,
+      maxAttempts: Math.max(8, Math.floor(maxAttempts / 2))
+    });
+  }
+  return null;
+}
+
+async function ensureCurrentRecommendationPlayable(
+  prefs,
+  {
+    excludedTrackKeys = new Set(),
+    excludedTrackTitles = new Set(),
+    excludedArtists = new Set(),
+    allowKnownFallback = false
+  } = {}
+) {
+  if (!currentRecommendation) return false;
+  await resolvePreviewForTrack(currentRecommendation);
+  if (trackHasPlayablePreviewExperience(currentRecommendation)) return true;
+
+  const rejected = currentRecommendation;
+  const rejectedKey = recommendationTrackKey(rejected);
+  if (rejectedKey) excludedTrackKeys.add(rejectedKey);
+  rejected.previewChecked = true;
+  rejected.previewMissing = true;
+  adjustTrackPreviewIssueSignal(rejected, 0.6);
+  adjustPreviewReliabilitySignal(rejected.style, -0.28);
+
+  const replacement = await pickPlayableReplacementForPrefs(prefs, {
+    currentTrack: rejected,
+    excludedTrackKeys,
+    excludedTrackTitles,
+    excludedArtists,
+    allowKnownFallback
+  });
+  if (!replacement) return false;
+  currentRecommendation = replacement;
+  return true;
+}
+
 async function generateRecommendationFromPrefs(
   prefs,
   {
@@ -39974,7 +41145,7 @@ async function generateRecommendationFromPrefs(
   }
 
   // Verifica existência real da faixa e tenta priorizar opções com preview.
-  let fallbackVerifiedTrack = null;
+  let fallbackPlayableTrack = null;
   let integrityAttempts = 0;
   const maxIntegrityAttempts = prefs.style ? 10 : 6;
   while (currentRecommendation && integrityAttempts < maxIntegrityAttempts) {
@@ -39985,7 +41156,7 @@ async function generateRecommendationFromPrefs(
       (isTrustedCuratedCatalogTrack(currentRecommendation) && hasReliableBpmForTrack(currentRecommendation));
     const hasPreview = trackHasPlayablePreviewExperience(currentRecommendation);
 
-    if (exists && !fallbackVerifiedTrack) fallbackVerifiedTrack = currentRecommendation;
+    if (exists && hasPreview && !fallbackPlayableTrack) fallbackPlayableTrack = currentRecommendation;
     if (exists && hasPreview) break;
 
     excludedTrackKeys.add(currentKey);
@@ -40011,8 +41182,22 @@ async function generateRecommendationFromPrefs(
     integrityAttempts += 1;
   }
 
-  if (currentRecommendation?.existenceVerified === false && fallbackVerifiedTrack) {
-    currentRecommendation = fallbackVerifiedTrack;
+  if (
+    currentRecommendation &&
+    !trackHasPlayablePreviewExperience(currentRecommendation) &&
+    fallbackPlayableTrack
+  ) {
+    currentRecommendation = fallbackPlayableTrack;
+  }
+  if (currentRecommendation && !trackHasPlayablePreviewExperience(currentRecommendation)) {
+    const playableReplacement = await pickPlayableReplacementForPrefs(prefs, {
+      currentTrack: currentRecommendation,
+      excludedTrackKeys,
+      excludedTrackTitles,
+      excludedArtists: sessionExcludedArtists,
+      allowKnownFallback: usedKnownFallback
+    });
+    currentRecommendation = playableReplacement || null;
   }
   if (currentRecommendation && currentRecommendation.existenceVerified === false) {
     currentRecommendation = null;
@@ -40084,7 +41269,33 @@ async function generateRecommendationFromPrefs(
     }
   }
 
-  const recommendationSnapshot = currentRecommendation;
+  if (
+    currentRecommendation &&
+    (
+      catalogTrackDepthForArtist(currentRecommendation.artist, currentRecommendation.style, { eligibleOnly: false }) < MIN_TRACKS_PER_ARTIST ||
+      catalogPlayableTrackDepthForArtist(currentRecommendation.artist, currentRecommendation.style, { eligibleOnly: false }) < MIN_TRACKS_PER_ARTIST
+    )
+  ) {
+    await expandCatalogForArtistDepth(currentRecommendation.artist, currentRecommendation.style, {
+      target: ARTIST_CATALOG_DEPTH_TARGET
+    });
+  }
+
+  if (
+    !(await ensureCurrentRecommendationPlayable(prefs, {
+      excludedTrackKeys,
+      excludedTrackTitles,
+      excludedArtists: sessionExcludedArtists,
+      allowKnownFallback: usedKnownFallback
+    }))
+  ) {
+    markRecommendationBlockedByKnown();
+    currentRecommendation = null;
+    currentDiscovery = null;
+    return false;
+  }
+
+  let recommendationSnapshot = currentRecommendation;
   let discoverySnapshot = discoveryModeEl.checked
     ? pickDiscovery(prefs, sessionExcludedArtists, currentRecommendation.artist, excludedDiscoveryNames)
     : null;
@@ -40142,7 +41353,46 @@ async function generateRecommendationFromPrefs(
   currentDiscovery = discoverySnapshot;
   renderRecommendation(recommendationSnapshot, prefs);
   renderDiscovery(discoverySnapshot);
-  await renderPreview(recommendationSnapshot);
+  markRecommendationPresented(recommendationSnapshot);
+  let previewReady = await renderPreview(recommendationSnapshot);
+  if (!previewReady) {
+    const rejectedSnapshot = recommendationSnapshot;
+    const rejectedKey = recommendationTrackKey(rejectedSnapshot);
+    if (rejectedKey) excludedTrackKeys.add(rejectedKey);
+    rejectedSnapshot.previewChecked = true;
+    rejectedSnapshot.previewMissing = true;
+    rejectedSnapshot.previewUrl = "";
+    adjustTrackPreviewIssueSignal(rejectedSnapshot, 0.85);
+    adjustPreviewReliabilitySignal(rejectedSnapshot.style, -0.38);
+    const playableReplacement = await pickPlayableReplacementForPrefs(prefs, {
+      currentTrack: rejectedSnapshot,
+      excludedTrackKeys,
+      excludedTrackTitles,
+      excludedArtists: sessionExcludedArtists,
+      allowKnownFallback: usedKnownFallback
+    });
+    if (!playableReplacement) {
+      markRecommendationBlockedByKnown();
+      currentRecommendation = null;
+      currentDiscovery = null;
+      return false;
+    }
+    recommendationSnapshot = playableReplacement;
+    currentRecommendation = playableReplacement;
+    discoverySnapshot = discoveryModeEl.checked
+      ? pickDiscovery(prefs, sessionExcludedArtists, playableReplacement.artist, excludedDiscoveryNames)
+      : null;
+    renderRecommendation(recommendationSnapshot, prefs);
+    renderDiscovery(discoverySnapshot);
+    markRecommendationPresented(recommendationSnapshot);
+    previewReady = await renderPreview(recommendationSnapshot);
+    if (!previewReady) {
+      markRecommendationBlockedByKnown();
+      currentRecommendation = null;
+      currentDiscovery = null;
+      return false;
+    }
+  }
   applyBpmFallbackMessage({ setFeedback: false });
   if (
     prefs.style &&
@@ -40180,6 +41430,7 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
     showPremiumDiscoveryLimit();
     return false;
   }
+  primeAudioForDiscoveryGesture();
   playUiSfx("search-start");
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
@@ -40206,6 +41457,7 @@ async function activateSuggestionQueueIndex(index) {
     showPremiumDiscoveryLimit();
     return false;
   }
+  primeAudioForDiscoveryGesture();
   if (suggestionQueueContextKey !== recommendationContextKey(lastPrefs)) {
     refreshSuggestionQueue(lastPrefs, currentRecommendation);
   }
@@ -40220,6 +41472,7 @@ async function activateSuggestionQueueIndex(index) {
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
   try {
+    let activatedTrack = selectedTrack;
     currentRecommendation = selectedTrack;
     currentDiscovery = discoveryModeEl.checked
       ? pickDiscovery(lastPrefs, buildGlobalArtistExclusionSet(), selectedTrack.artist)
@@ -40227,9 +41480,37 @@ async function activateSuggestionQueueIndex(index) {
 
     renderRecommendation(selectedTrack, lastPrefs);
     renderDiscovery(currentDiscovery);
-    await renderPreview(selectedTrack);
-    registerRecommendationDelivery(selectedTrack, lastPrefs);
-    refreshSuggestionQueue(lastPrefs, selectedTrack);
+    markRecommendationPresented(selectedTrack);
+    let previewReady = await renderPreview(selectedTrack);
+    if (!previewReady) {
+      const rejectedKey = recommendationTrackKey(selectedTrack);
+      const playableReplacement = await pickPlayableReplacementForPrefs(lastPrefs, {
+        currentTrack: selectedTrack,
+        excludedTrackKeys: new Set(rejectedKey ? [rejectedKey] : []),
+        allowKnownFallback: true
+      });
+      if (!playableReplacement) {
+        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+        showToast(recommendationFailureMessage());
+        return false;
+      }
+      activatedTrack = playableReplacement;
+      currentRecommendation = playableReplacement;
+      currentDiscovery = discoveryModeEl.checked
+        ? pickDiscovery(lastPrefs, buildGlobalArtistExclusionSet(), playableReplacement.artist)
+        : null;
+      renderRecommendation(playableReplacement, lastPrefs);
+      renderDiscovery(currentDiscovery);
+      markRecommendationPresented(playableReplacement);
+      previewReady = await renderPreview(playableReplacement);
+      if (!previewReady) {
+        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+        showToast(recommendationFailureMessage());
+        return false;
+      }
+    }
+    registerRecommendationDelivery(activatedTrack, lastPrefs);
+    refreshSuggestionQueue(lastPrefs, activatedTrack);
 
     if (eventsPanel) eventsPanel.classList.add("hidden");
     if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
@@ -40238,7 +41519,7 @@ async function activateSuggestionQueueIndex(index) {
     if (detailsPanel) detailsPanel.classList.add("hidden");
     if (resultPanel) resultPanel.classList.remove("hidden");
     scrollResultPanelIntoView();
-    if (feedbackMessage) feedbackMessage.textContent = t("queueActivated", { song: selectedTrack.song });
+    if (feedbackMessage) feedbackMessage.textContent = t("queueActivated", { song: activatedTrack.song });
     playUiSfx("swap");
     savePreferences();
     return true;
@@ -40251,6 +41532,7 @@ async function activateSuggestionQueueIndex(index) {
 async function loadEventsForArtist(artist) {
   if (!eventsPanel || !eventsIntro || !eventsCalendar || !eventsList) return;
   eventsPanel.classList.remove("hidden");
+  ensureEventsPanelActive();
   eventsIntro.textContent = t("eventsLoading", { artist });
   eventsCalendar.innerHTML = "";
   eventsList.innerHTML = "";
@@ -40575,6 +41857,7 @@ async function runSurpriseRecommendation() {
     showPremiumDiscoveryLimit();
     return false;
   }
+  primeAudioForDiscoveryGesture();
   swipeUserAnchoredStyle = "";
   playUiSfx("search-start");
   recommendationRunBusy = true;
@@ -40635,7 +41918,45 @@ async function runSurpriseRecommendation() {
 
     renderRecommendation(surpriseTrack, surprisePrefs);
     renderDiscovery(currentDiscovery);
-    await renderPreview(surpriseTrack);
+    markRecommendationPresented(surpriseTrack);
+    let previewReady = await renderPreview(surpriseTrack);
+    if (!previewReady) {
+      const rejectedKey = recommendationTrackKey(surpriseTrack);
+      const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
+      surpriseTrack.previewChecked = true;
+      surpriseTrack.previewMissing = true;
+      surpriseTrack.previewUrl = "";
+      adjustTrackPreviewIssueSignal(surpriseTrack, 0.85);
+      adjustPreviewReliabilitySignal(surpriseTrack.style, -0.38);
+      const playableReplacement = await pickPlayableReplacementForPrefs(surprisePrefs, {
+        currentTrack: surpriseTrack,
+        excludedTrackKeys,
+        allowKnownFallback: true
+      });
+      if (!playableReplacement) {
+        playUiSfx("error");
+        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+        showToast(recommendationFailureMessage());
+        if (resultPanel) resultPanel.classList.add("hidden");
+        return false;
+      }
+      surpriseTrack = playableReplacement;
+      currentRecommendation = playableReplacement;
+      currentDiscovery = discoveryModeEl.checked
+        ? pickDiscovery(surprisePrefs, buildGlobalArtistExclusionSet(), playableReplacement.artist)
+        : null;
+      renderRecommendation(playableReplacement, surprisePrefs);
+      renderDiscovery(currentDiscovery);
+      markRecommendationPresented(playableReplacement);
+      previewReady = await renderPreview(playableReplacement);
+      if (!previewReady) {
+        playUiSfx("error");
+        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+        showToast(recommendationFailureMessage());
+        if (resultPanel) resultPanel.classList.add("hidden");
+        return false;
+      }
+    }
 
     registerRecommendationDelivery(surpriseTrack, surprisePrefs);
     refreshSuggestionQueue(surprisePrefs, surpriseTrack);
@@ -41258,6 +42579,29 @@ bind(quizCloseBtn, "click", () => {
   closeQuizOverlay({ playSound: true });
 });
 
+bind(trackPreview, "error", () => {
+  void recoverCurrentPreviewAfterPlaybackIssue("error");
+});
+
+bind(previewPlayBtn, "click", async () => {
+  if (!trackPreview || previewPlayBtn?.disabled) return;
+  const previewSource = normalizePreviewUrl(trackPreview.currentSrc || trackPreview.src || currentRecommendation?.previewUrl || currentRecommendation?.artistPreviewFallback?.previewUrl || "");
+  if (!previewSource) return;
+  primeAudioForDiscoveryGesture();
+  if (previewPlayBtn) previewPlayBtn.disabled = true;
+  try {
+    await startTrackPreviewPlayback(trackPreview);
+    setTrackPreviewVisualState("playing");
+    if (previewStatus) previewStatus.textContent = t("previewLoaded");
+    listeningPrompt?.classList.remove("hidden");
+  } catch (_err) {
+    setTrackPreviewVisualState("ready");
+    if (previewStatus) previewStatus.textContent = t("previewReady");
+  } finally {
+    if (previewPlayBtn) previewPlayBtn.disabled = false;
+  }
+});
+
 bind(youtubePreviewToggleBtn, "click", () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
@@ -41333,7 +42677,6 @@ bind(soundcloudPreviewToggleBtn, "click", async () => {
 bind(youtubePreviewRetryBtn, "click", () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
-  if (trackHasDirectYouTubeVideo(currentRecommendation)) return;
 
   const attemptCount = youtubePreviewSearchAttemptCount(currentRecommendation);
   if (attemptCount < 2) return;
@@ -42100,6 +43443,7 @@ bind(skipBtn, "click", async () => {
 bind(moreInfoBtn, "click", () => {
   if (!currentRecommendation) return;
   renderArtistHub(currentRecommendation);
+  void loadEventsForArtist(currentRecommendation.artist);
   if (detailsPanel) {
     detailsPanel.classList.remove("hidden");
     detailsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -42129,6 +43473,7 @@ sharedSpiritPayload = parseSharedSpiritPayloadFromUrl();
 sharedSpiritViewMode = Boolean(sharedSpiritPayload);
 publicVisitorMode = sharedSpiritViewMode || urlRequestsPublicVisitorMode();
 ephemeralProfileMode = publicVisitorMode;
+const qaPreviewMode = !sharedSpiritViewMode && urlRequestsQaPreviewMode();
 
 const freshTestResetPending = publicVisitorMode ? false : consumeFreshTestResetParam();
 if (!freshTestResetPending) {
@@ -42151,12 +43496,16 @@ if (!freshTestResetPending) {
     const { sample, ...summary } = report;
     return summary;
   };
+  window.neonpulseArtistDepthAudit = buildCatalogArtistDepthAudit;
+  window.neonpulseArtistDepthGaps = (style = "") => buildCatalogArtistDepthAudit({ style, minimum: MIN_TRACKS_PER_ARTIST }).sample;
+  window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
   void initSocialMvp();
   void refreshDailyNews({ silent: true, live: false });
   bootstrapAudio();
   if (!applySharedSpiritPayload(sharedSpiritPayload)) {
-    showIntroScreen();
+    if (qaPreviewMode) enterQaPreviewMode();
+    else showIntroScreen();
   }
   updateWeightLabels();
   applyVoiceMiniPreset("techno");

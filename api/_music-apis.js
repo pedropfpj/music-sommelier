@@ -30,6 +30,14 @@ function envText(name, fallback = "") {
   return raw || fallback;
 }
 
+function envFirst(names = [], fallback = "") {
+  for (const name of names) {
+    const value = envText(name);
+    if (value) return value;
+  }
+  return fallback;
+}
+
 function trimText(value, maxLength = 1200) {
   return String(value || "")
     .replace(/\s+/g, " ")
@@ -162,6 +170,7 @@ module.exports = {
   featureEnabled,
   envInt,
   envText,
+  envFirst,
   parseBody,
   requireMusicApi,
   sendJson,
