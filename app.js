@@ -127,6 +127,7 @@ const AUTH_PROVIDER_CONFIG = {
     ? window.SONIC_SEARCH_AUTH_CONFIG
     : {})
 };
+const AUTH_LOGIN_STANDBY = true;
 const LOCAL_STATIC_PREVIEW_PORTS = new Set(["5500", "5501", "5502", "5503", "5504", "5505", "5506", "5507", "8000", "8080"]);
 const REMOTE_SPIRIT_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
 
@@ -5787,9 +5788,9 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v36";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "scanner-v1";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v37";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v18-all-genre-guardian-bust";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v2";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -13475,6 +13476,7 @@ function isTrackEligibleForRecommendation(track) {
   if (trackBlockedForStyle(track.style, track)) return false;
   if (hasTrackStyleSignalConflict(track.style, track)) return false;
   if (!trackFineSubgenreHasRecommendationProof(track)) return false;
+  if (!dynamicPsyHomonymHasStrongIdentityProof(track)) return false;
   const bpmValue = Number(track.bpmExact);
   if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return false;
   if (isDynamicSource(track.source)) {
@@ -14749,32 +14751,33 @@ const I18N = {
     usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Como usar",
-    authKicker: "Conta opcional",
-    authTitle: "Use o Sonic Search sem login",
-    authDesc: "Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.",
-    authLocalNoteProfile: "Perfil local automático",
-    authLocalNoteNewUser: "Novo usuário limpo",
-    authLocalNoteBackup: "Backup por arquivo",
+    authKicker: "Acesso simplificado",
+    authTitle: "Comece como novo usuário",
+    authDesc: "Nesta fase de teste, o Sonic Search entra sempre em uma sessão local limpa. Login, Google/Apple e sincronização ficam em standby.",
+    authLocalNoteProfile: "Sem login",
+    authLocalNoteNewUser: "Sessão nova",
+    authLocalNoteBackup: "Backup manual",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Retomar perfil salvo",
-    authLoginBtn: "Entrar em conta",
-    authGuestBtn: "Continuar perfil local",
-    authTestUserBtn: "Começar como novo usuário",
-    authNewUserHint: "Use para testar como alguém novo: cria uma sessão limpa sem depender de aba anônima.",
-    authRequired: "Preencha usuário e senha para entrar, ou continue sem login.",
+    authLoginBtn: "Login em standby",
+    authGuestBtn: "Perfil local em standby",
+    authTestUserBtn: "Começar descoberta",
+    authNewUserHint: "Use para testar como alguém novo: cria uma sessão limpa, sem histórico antigo, senha ou aba anônima.",
+    authRequired: "Login está em standby. Comece como novo usuário.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
     authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e espírito começam limpos.",
-    authSocialDivider: "opcional: conta online",
+    authSocialDivider: "conta online em standby",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Login é extra para sincronização, social, premium e backup automático.",
-    authProviderConfigMissing: "Login com {provider} ainda precisa ser configurado neste ambiente.",
+    authProviderHint: "Conta online em standby. Use backup/importação manual no Perfil quando precisar levar seus dados.",
+    authProviderConfigMissing: "{provider} está em standby nesta versão.",
+    authStandbyFeedback: "Login está em standby nesta versão. Use Começar descoberta para entrar como novo usuário.",
     authProviderLoading: "Abrindo {provider}...",
     authProviderLoggedAs: "Perfil {provider} carregado para {user}.",
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
@@ -15471,8 +15474,8 @@ const I18N = {
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
     spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte bem diferente para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Sem depender da API: mostro um scanner visual elegante enquanto o card do espírito fica pronto. No Vercel, a IA online tenta elevar isso para um retrato premium.",
-    spiritCollectibleHintLocalReady: "Prévia local segura criada. Ao regenerar, a IA tenta substituir por uma arte premium quando estiver disponível.",
+    spiritCollectibleHintLocal: "Sem depender da API: preparo um busto espectral local enquanto a arte premium fica pronta. No Vercel, a IA online tenta elevar para o retrato final.",
+    spiritCollectibleHintLocalReady: "Busto espectral local criado. Ao regenerar, a IA tenta substituir por uma arte premium quando estiver disponível.",
     spiritCollectibleHintApi: "Arte premium por IA: busto frontal hiper-realista de uma entidade musical espectral, adulta, andrógina, espiritual e futurista, com pele luminosa, fones/coroa/halo, joias, collar e medalhão derivados do seu gosto.",
     spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a prévia local mantém o espírito visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
@@ -15505,7 +15508,7 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
     spiritCollectibleGeneratingFailed: "A arte não ficou pronta agora. O fallback local pode tentar novamente sem API.",
     spiritCollectiblePlaceholderKicker: "Arte em preparação",
-    spiritCollectiblePlaceholderTitle: "Scanner do espírito musical",
+    spiritCollectiblePlaceholderTitle: "Busto espectral musical",
     spiritCollectiblePlaceholderText: "A arte final entra aqui quando a IA terminar.",
     spiritCollectibleGeneratedLocal: "Prévia espectral local criada sem depender da API de imagem.",
     spiritCollectibleGeneratedApi: "Arte espectral criada por IA com aura, beleza e identidade do seu perfil.",
@@ -15547,32 +15550,33 @@ const I18N = {
     usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
     usageGuideContinueBtn: "Got it",
     showUsageGuideBtn: "How to use",
-    authKicker: "Optional account",
-    authTitle: "Use Sonic Search without signing in",
-    authDesc: "Your music map stays saved on this device. Sign in only when you want separate profiles, sync, or account testing.",
-    authLocalNoteProfile: "Automatic local profile",
-    authLocalNoteNewUser: "Clean new user",
-    authLocalNoteBackup: "File backup",
+    authKicker: "Simplified access",
+    authTitle: "Start as a new user",
+    authDesc: "For this testing phase, Sonic Search always opens a clean local session. Login, Google/Apple, and sync are on standby.",
+    authLocalNoteProfile: "No login",
+    authLocalNoteNewUser: "Fresh session",
+    authLocalNoteBackup: "Manual backup",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Resume saved profile",
-    authLoginBtn: "Sign in",
-    authGuestBtn: "Continue local profile",
-    authTestUserBtn: "Start as a new user",
-    authNewUserHint: "Use this to test like a first-time listener: it creates a clean session without needing private browsing.",
-    authRequired: "Fill username and password to sign in, or continue without login.",
+    authLoginBtn: "Login on standby",
+    authGuestBtn: "Local profile on standby",
+    authTestUserBtn: "Start discovering",
+    authNewUserHint: "Use this to test like a first-time listener: it creates a clean session without old history, password, or private browsing.",
+    authRequired: "Login is on standby. Start as a new user.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Local profile enabled. You can discover music without signing in.",
     authLocalResumeReady: "Local profile resumed for {user}.",
     authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
     authTestUserReady: "New user created for {user}. Likes, history, recommendations, and spirit start clean.",
-    authSocialDivider: "optional: online account",
+    authSocialDivider: "online account on standby",
     authGoogleBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Login is extra for sync, social, premium, and automatic backup.",
-    authProviderConfigMissing: "{provider} sign-in still needs to be configured for this environment.",
+    authProviderHint: "Online account is on standby. Use manual backup/import in Profile when you need to move your data.",
+    authProviderConfigMissing: "{provider} is on standby in this version.",
+    authStandbyFeedback: "Login is on standby in this version. Use Start discovering to enter as a new user.",
     authProviderLoading: "Opening {provider}...",
     authProviderLoggedAs: "{provider} profile loaded for {user}.",
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
@@ -16266,8 +16270,8 @@ const I18N = {
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
     spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate a very different artwork to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "No API required: I show an elegant visual scanner while the spirit card gets ready. On Vercel, online AI tries to upgrade it into a premium portrait.",
-    spiritCollectibleHintLocalReady: "Safe local preview created. Regeneration still tries to replace it with premium AI artwork when available.",
+    spiritCollectibleHintLocal: "No API required: I prepare a local spectral bust while the premium artwork gets ready. On Vercel, online AI tries to upgrade it into the final portrait.",
+    spiritCollectibleHintLocalReady: "Local spectral bust created. Regeneration still tries to replace it with premium AI artwork when available.",
     spiritCollectibleHintApi: "Premium AI artwork: a hyper-real front bust of an adult androgynous spiritual futuristic musical-spirit entity, with luminous skin, headphones/crown/halo, jewelry, collar, and medallion derived from your taste.",
     spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the local preview keeps the spirit visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
@@ -16300,7 +16304,7 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
     spiritCollectibleGeneratingFailed: "Artwork was not ready now. The local fallback can try again without an API.",
     spiritCollectiblePlaceholderKicker: "Artwork preparing",
-    spiritCollectiblePlaceholderTitle: "Musical spirit scanner",
+    spiritCollectiblePlaceholderTitle: "Spectral musical bust",
     spiritCollectiblePlaceholderText: "The final artwork appears here when AI finishes.",
     spiritCollectibleGeneratedLocal: "Local spectral preview created without depending on the image API.",
     spiritCollectibleGeneratedApi: "AI spectral artwork created with your profile's aura, beauty, and identity.",
@@ -16342,32 +16346,33 @@ const I18N = {
     usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Cómo usar",
-    authKicker: "Cuenta opcional",
-    authTitle: "Usa Sonic Search sin iniciar sesión",
-    authDesc: "Tu mapa musical queda guardado en este dispositivo. Entra solo si quieres perfiles separados, sincronización o prueba de cuenta.",
-    authLocalNoteProfile: "Perfil local automático",
-    authLocalNoteNewUser: "Usuario nuevo limpio",
-    authLocalNoteBackup: "Backup por archivo",
+    authKicker: "Acceso simplificado",
+    authTitle: "Empieza como usuario nuevo",
+    authDesc: "En esta fase de prueba, Sonic Search siempre abre una sesión local limpia. Login, Google/Apple y sincronización quedan en standby.",
+    authLocalNoteProfile: "Sin login",
+    authLocalNoteNewUser: "Sesión nueva",
+    authLocalNoteBackup: "Backup manual",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Retomar perfil guardado",
-    authLoginBtn: "Entrar en cuenta",
-    authGuestBtn: "Continuar perfil local",
-    authTestUserBtn: "Empezar como usuario nuevo",
-    authNewUserHint: "Úsalo para probar como oyente nuevo: crea una sesión limpia sin depender de navegación privada.",
-    authRequired: "Completa usuario y contraseña para entrar, o continúa sin login.",
+    authLoginBtn: "Login en standby",
+    authGuestBtn: "Perfil local en standby",
+    authTestUserBtn: "Empezar descubrimiento",
+    authNewUserHint: "Úsalo para probar como oyente nuevo: crea una sesión limpia, sin historial anterior, contraseña ni navegación privada.",
+    authRequired: "El login está en standby. Empieza como usuario nuevo.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
     authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y espíritu empiezan limpios.",
-    authSocialDivider: "opcional: cuenta online",
+    authSocialDivider: "cuenta online en standby",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "El login es extra para sincronización, social, premium y backup automático.",
-    authProviderConfigMissing: "El login con {provider} aún necesita configurarse en este entorno.",
+    authProviderHint: "La cuenta online está en standby. Usa backup/importación manual en Perfil cuando necesites mover tus datos.",
+    authProviderConfigMissing: "{provider} está en standby en esta versión.",
+    authStandbyFeedback: "El login está en standby en esta versión. Usa Empezar descubrimiento para entrar como usuario nuevo.",
     authProviderLoading: "Abriendo {provider}...",
     authProviderLoggedAs: "Perfil {provider} cargado para {user}.",
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
@@ -17058,8 +17063,8 @@ const I18N = {
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
     spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar arte muy diferente para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Sin API: muestro un scanner visual elegante mientras la tarjeta del espíritu queda lista. En Vercel, la IA online intenta elevarlo a un retrato premium.",
-    spiritCollectibleHintLocalReady: "Vista local segura creada. Al regenerar, la IA intenta reemplazarla por arte premium cuando esté disponible.",
+    spiritCollectibleHintLocal: "Sin API: preparo un busto espectral local mientras el arte premium queda listo. En Vercel, la IA online intenta elevarlo al retrato final.",
+    spiritCollectibleHintLocalReady: "Busto espectral local creado. Al regenerar, la IA intenta reemplazarlo por arte premium cuando esté disponible.",
     spiritCollectibleHintApi: "Arte premium con IA: busto frontal hiperrealista de una entidad musical espectral adulta, andrógina, espiritual y futurista, con piel luminosa, audífonos/corona/halo, joyas, collar y medallón derivados de tu gusto.",
     spiritCollectiblePremiumLocked: "Arte IA preparado. Mientras la imagen online no llega, la vista local mantiene visible el espíritu.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
@@ -17092,7 +17097,7 @@ const I18N = {
     spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
     spiritCollectibleGeneratingFailed: "El arte no quedó lista ahora. El fallback local puede intentar de nuevo sin API.",
     spiritCollectiblePlaceholderKicker: "Arte en preparación",
-    spiritCollectiblePlaceholderTitle: "Scanner del espíritu musical",
+    spiritCollectiblePlaceholderTitle: "Busto musical espectral",
     spiritCollectiblePlaceholderText: "El arte final aparece aquí cuando la IA termine.",
     spiritCollectibleGeneratedLocal: "Vista espectral local creada sin depender de la API de imagen.",
     spiritCollectibleGeneratedApi: "Arte espectral creada por IA con aura, belleza e identidad de tu perfil.",
@@ -18756,6 +18761,36 @@ function configuredAuthValue(key) {
   return String(AUTH_PROVIDER_CONFIG?.[key] || "").trim();
 }
 
+function syncAuthStandbyUi() {
+  if (!AUTH_LOGIN_STANDBY) return;
+  const authGrid = authUsername?.closest(".auth-grid");
+  const divider = authSocialDivider?.closest(".auth-divider");
+  const hiddenControls = [
+    authGrid,
+    divider,
+    authGoogleNativeSlot,
+    authGoogleBtn,
+    authAppleBtn,
+    authResumeBtn,
+    authLoginBtn,
+    authGuestBtn
+  ];
+  hiddenControls.forEach((control) => {
+    if (!control) return;
+    control.classList.add("hidden");
+    control.setAttribute("aria-hidden", "true");
+  });
+  [authUsername, authPassword, authGoogleBtn, authAppleBtn, authResumeBtn, authLoginBtn, authGuestBtn].forEach((control) => {
+    if (control) control.disabled = true;
+  });
+  if (authTestUserBtn) {
+    authTestUserBtn.disabled = false;
+    authTestUserBtn.classList.add("auth-new-user-btn");
+    authTestUserBtn.removeAttribute("aria-hidden");
+  }
+  if (authProviderHint) authProviderHint.textContent = t("authProviderHint");
+}
+
 function googleClientId() {
   return configuredAuthValue("googleClientId");
 }
@@ -18783,6 +18818,10 @@ function createAuthStateToken() {
 }
 
 function setAuthProviderBusy(provider, isBusy) {
+  if (AUTH_LOGIN_STANDBY) {
+    syncAuthStandbyUi();
+    return;
+  }
   const button = provider === "apple" ? authAppleBtn : authGoogleBtn;
   const label = provider === "apple" ? authAppleLabel : authGoogleLabel;
   const configured = provider === "apple" ? Boolean(appleClientId()) : Boolean(googleClientId());
@@ -18807,6 +18846,10 @@ function setAuthProviderBusy(provider, isBusy) {
 }
 
 function updateAuthProviderUi() {
+  if (AUTH_LOGIN_STANDBY) {
+    syncAuthStandbyUi();
+    return;
+  }
   const googleConfigured = Boolean(googleClientId());
   const appleConfigured = Boolean(appleClientId());
   setAuthProviderBusy("google", googleAuthLoading);
@@ -18824,6 +18867,11 @@ function updateAuthProviderUi() {
 }
 
 function showAuthProviderConfigMissing(provider) {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return;
+  }
   setAuthFeedback(
     t("authProviderConfigMissing", { provider: authProviderDisplayName(provider) }),
     true
@@ -18900,6 +18948,11 @@ function socialSessionFromPayload(provider, payload = {}) {
 }
 
 function completeSocialLogin(provider, payload = {}) {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return false;
+  }
   const session = socialSessionFromPayload(provider, payload);
   if (!session.providerId && !session.email) {
     setAuthFeedback(
@@ -18932,6 +18985,11 @@ function handleGoogleCredentialResponse(response) {
 }
 
 async function initializeGoogleSignIn({ silent = false } = {}) {
+  if (AUTH_LOGIN_STANDBY) {
+    syncAuthStandbyUi();
+    if (!silent) setAuthFeedback(t("authStandbyFeedback"), true);
+    return false;
+  }
   if (!authGoogleNativeSlot) return false;
   const clientId = googleClientId();
   if (!clientId) {
@@ -18985,6 +19043,11 @@ async function initializeGoogleSignIn({ silent = false } = {}) {
 }
 
 async function loginWithGoogle() {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return;
+  }
   if (!googleClientId()) {
     showAuthProviderConfigMissing("google");
     return;
@@ -18993,6 +19056,11 @@ async function loginWithGoogle() {
 }
 
 async function loginWithApple() {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return;
+  }
   if (!appleClientId()) {
     showAuthProviderConfigMissing("apple");
     return;
@@ -20151,7 +20219,7 @@ function showAuthScreen() {
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
-  const storedUser = readStoredUserSession();
+  const storedUser = AUTH_LOGIN_STANDBY ? null : readStoredUserSession();
 
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
@@ -20164,7 +20232,7 @@ function showAuthScreen() {
   if (authUsername) authUsername.value = storedUser?.username || "";
   if (authPassword) authPassword.value = "";
   updateAuthProviderUi();
-  if (googleClientId()) {
+  if (!AUTH_LOGIN_STANDBY && googleClientId()) {
     initializeGoogleSignIn({ silent: true }).catch(() => {
       // The manual Google button remains available if the native script fails to load.
     });
@@ -20406,6 +20474,10 @@ function applySharedSpiritPayload(payload = sharedSpiritPayload) {
 }
 
 function startLocalProfileFlow({ preferStored = true, showGuide = null } = {}) {
+  if (AUTH_LOGIN_STANDBY) {
+    testAsNewUser();
+    return;
+  }
   const shouldShowUsageGuide = showGuide === null ? !hasUsageGuideAcknowledged() : Boolean(showGuide);
   const storedUser = publicVisitorMode ? null : (preferStored ? readStoredUserSession() : null);
   const session = publicVisitorMode ? createVisitorSession() : (storedUser || { mode: "guest", username: "" });
@@ -20422,6 +20494,11 @@ function startLocalProfileFlow({ preferStored = true, showGuide = null } = {}) {
 }
 
 function loginWithCredentials() {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return;
+  }
   const username = String(authUsername?.value || "").trim();
   const password = String(authPassword?.value || "").trim();
   if (!username || !password) {
@@ -20439,6 +20516,11 @@ function loginWithCredentials() {
 }
 
 function resumeStoredUserSession() {
+  if (AUTH_LOGIN_STANDBY) {
+    setAuthFeedback(t("authStandbyFeedback"), true);
+    playUiSfx("error");
+    return;
+  }
   const storedUser = readStoredUserSession();
   if (!storedUser || storedUser.mode === "guest") {
     setAuthFeedback(t("authRequired"), true);
@@ -32111,7 +32193,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const localPortraitDataUrl = buildLocalSpiritSafeScannerDataUrl(
+    const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
       spirit,
       spiritText,
       likes,
@@ -33182,11 +33264,40 @@ function trackFineSubgenreHasRecommendationProof(track = null) {
   return false;
 }
 
+function dynamicPsyHomonymHasStrongIdentityProof(track = null) {
+  const style = normalizeDatasetStyle(track?.style || "");
+  if (!track || !style || familyOf(style) !== "psytrance") return true;
+  if (!isDynamicSource(track.source || "")) return true;
+  const artistKey = artistMatchKey(track.artist || "");
+  const riskyArtist =
+    DYNAMIC_PSY_HOMONYM_RISK_ARTIST_KEYS.has(artistKey) ||
+    AMBIGUOUS_ARTIST_IMAGE_KEYS.has(artistKey);
+  if (!riskyArtist) return true;
+
+  const allowedStyles = allowedStylesForArtist(track.artist || "");
+  const artistLocked = allowedStyles.length > 0 && allowedStyles.includes(style);
+  const seedAnchored = artistSeedAnchoredForStyle(style, track.artist || "");
+  const reliableBpm = hasReliableBpmForTrack(track);
+  const sourceKey = normalize(track.source || "").replace(/[\s_]+/g, "");
+  const trustedFineSource = isTrustedSourceForFineStyle(track.source || "") || sourceKey.includes("verified");
+  const signalText = [
+    track.artistGenre,
+    track.label,
+    track.artistProfileHint,
+    track.artistBio,
+    track.vibe,
+    track.source
+  ].filter(Boolean).join(" ");
+  const specificSignal = textHasSpecificStyleSignal(style, signalText);
+  return trustedFineSource && reliableBpm && specificSignal && (artistLocked || seedAnchored);
+}
+
 function trackStyleCertainty(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
   if (!artistAllowedForStyle(style, track.artist || "")) return "unsafe";
   if (hasTrackStyleSignalConflict(style, track)) return "unsafe";
+  if (!dynamicPsyHomonymHasStrongIdentityProof(track)) return "unsafe";
   if (isTrustedCuratedCatalogTrack(track)) return "confirmed";
 
   const dynamic = isDynamicSource(track.source || "");
@@ -37763,6 +37874,10 @@ function clearDislikedTrackHistory() {
   showToast(t("summaryDislikedTracksCleared"));
 }
 
+function socialStandbyMessage() {
+  return "Conta online em standby nesta versão. O teste atual cria apenas usuários novos locais; use backup/importação manual para guardar dados.";
+}
+
 function socialSetStatus(message = "", tone = "") {
   if (!socialStatus) return;
   socialStatus.textContent = message;
@@ -37795,6 +37910,7 @@ function socialLoadStoredSession() {
 }
 
 function socialConfigReady() {
+  if (AUTH_LOGIN_STANDBY) return false;
   return Boolean(socialState.enabled && socialState.config?.supabaseUrl && socialState.config?.supabaseAnonKey);
 }
 
@@ -37982,6 +38098,11 @@ async function insertSocialActivity(action = "liked_track", track = null) {
 }
 
 async function syncSocialLikedTracks(options = {}) {
+  if (AUTH_LOGIN_STANDBY) {
+    if (!options.silent) socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return false;
+  }
   if (!socialConfigReady() || !socialState.session?.access_token) return false;
   if (socialState.busy && !options.force) return false;
   socialState.busy = true;
@@ -38012,6 +38133,7 @@ async function syncSocialLikedTracks(options = {}) {
 }
 
 function queueSocialSync(reason = "profile") {
+  if (AUTH_LOGIN_STANDBY) return;
   if (!socialConfigReady() || !socialState.session?.access_token) return;
   if (socialState.syncTimer) clearTimeout(socialState.syncTimer);
   socialState.syncTimer = setTimeout(() => {
@@ -38021,6 +38143,12 @@ function queueSocialSync(reason = "profile") {
 }
 
 async function loadSocialFeed(options = {}) {
+  if (AUTH_LOGIN_STANDBY) {
+    socialState.feed = [];
+    renderSocialFeed();
+    if (!options.silent) socialSetStatus(socialStandbyMessage(), "ok");
+    return [];
+  }
   if (!socialConfigReady() || !socialState.session?.access_token) {
     renderSocialFeed();
     return [];
@@ -38046,6 +38174,13 @@ async function loadSocialFeed(options = {}) {
 function renderSocialFeed() {
   if (!socialFeedList) return;
   socialFeedList.innerHTML = "";
+  if (AUTH_LOGIN_STANDBY) {
+    const empty = document.createElement("p");
+    empty.className = "social-feed-empty muted";
+    empty.textContent = "Feed social em standby. Curta músicas e use o Perfil local para revisar seu mapa musical.";
+    socialFeedList.appendChild(empty);
+    return;
+  }
   if (!socialConfigReady()) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
@@ -38138,6 +38273,11 @@ function renderSocialUi(options = {}) {
 }
 
 async function socialSignUp() {
+  if (AUTH_LOGIN_STANDBY) {
+    socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return;
+  }
   if (!socialConfigReady()) {
     socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
     return;
@@ -38177,6 +38317,11 @@ async function socialSignUp() {
 }
 
 async function socialSignIn() {
+  if (AUTH_LOGIN_STANDBY) {
+    socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return;
+  }
   if (!socialConfigReady()) {
     socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
     return;
@@ -38206,6 +38351,14 @@ async function socialSignIn() {
 }
 
 async function socialSignOut() {
+  if (AUTH_LOGIN_STANDBY) {
+    socialStoreSession(null);
+    socialState.profile = null;
+    socialState.feed = [];
+    socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return;
+  }
   try {
     if (socialConfigReady() && socialState.session?.access_token) {
       await socialRequest("/auth/v1/logout", { method: "POST" });
@@ -38222,6 +38375,16 @@ async function socialSignOut() {
 
 async function initSocialMvp() {
   if (!socialProfileCard) return;
+  if (AUTH_LOGIN_STANDBY) {
+    socialStoreSession(null);
+    socialState.config = null;
+    socialState.enabled = false;
+    socialState.ready = true;
+    socialState.profile = null;
+    socialState.feed = [];
+    renderSocialUi();
+    return;
+  }
   if (!SOCIAL_PROFILE_ENABLED) {
     socialProfileCard.classList.add("hidden");
     socialProfileCard.setAttribute("aria-hidden", "true");

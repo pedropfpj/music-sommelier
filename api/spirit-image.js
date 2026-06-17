@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v17-all-genre-guardian-bust";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v13";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v18-all-genre-guardian-bust";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v14";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "charismatic adult cosmic trance shaman, visible warm humanoid spectral face, kind commanding eyes, festival ritual robe, mandala halo, harmonic laser arcs, melodic psy and goa color energy",

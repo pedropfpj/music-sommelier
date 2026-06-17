@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260616share1" />
+    <link rel="stylesheet" href="styles.css?v=20260616newuser2" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -274,21 +274,21 @@
     </section>
 
     <section id="authScreen" class="welcome-screen hidden">
-      <div class="welcome-card auth-card">
+      <div class="welcome-card auth-card auth-standby-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
             <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
-          <p id="authKicker" class="brand-kicker">Conta opcional</p>
-          <h1 id="authTitle">Use o Sonic Search sem login</h1>
-          <p id="authDesc">Seu mapa musical fica salvo neste aparelho. Entre só se quiser separar perfis, sincronizar ou testar conta.</p>
+          <p id="authKicker" class="brand-kicker">Acesso simplificado</p>
+          <h1 id="authTitle">Comece como novo usuário</h1>
+          <p id="authDesc">Nesta fase de teste, o Sonic Search entra sempre em uma sessão local limpa. Login, Google/Apple e sincronização ficam em standby.</p>
         </div>
         <div class="auth-local-note" aria-label="Modo local">
-          <span id="authLocalNoteProfile">Perfil local automático</span>
-          <span id="authLocalNoteNewUser">Novo usuário limpo</span>
-          <span id="authLocalNoteBackup">Backup por arquivo</span>
+          <span id="authLocalNoteProfile">Sem login</span>
+          <span id="authLocalNoteNewUser">Sessão nova</span>
+          <span id="authLocalNoteBackup">Backup manual</span>
         </div>
-        <div class="auth-grid">
+        <div class="auth-grid auth-standby-hidden" aria-hidden="true">
           <label for="authUsername" id="authUsernameLabel">Usuário</label>
           <input id="authUsername" type="text" autocomplete="username" placeholder="Digite seu usuário" />
 
@@ -296,16 +296,16 @@
           <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
         <div class="cta-row">
-          <button id="authTestUserBtn" class="primary auth-new-user-btn" type="button">Começar como novo usuário</button>
-          <button id="authGuestBtn" class="secondary" type="button">Continuar perfil local</button>
+          <button id="authTestUserBtn" class="primary auth-new-user-btn" type="button">Começar descoberta</button>
+          <button id="authGuestBtn" class="secondary hidden" type="button">Continuar perfil local</button>
           <button id="authResumeBtn" class="secondary hidden" type="button">Retomar perfil salvo</button>
-          <button id="authLoginBtn">Entrar em conta</button>
+          <button id="authLoginBtn" class="hidden" type="button">Login em standby</button>
         </div>
-        <p id="authNewUserHint" class="muted auth-new-user-hint">Use para testar como alguém novo: cria uma sessão limpa sem depender de aba anônima.</p>
-        <div class="auth-divider">
-          <span id="authSocialDivider">ou entre com</span>
+        <p id="authNewUserHint" class="muted auth-new-user-hint">Use para testar como alguém novo: cria uma sessão limpa, sem histórico antigo, senha ou aba anônima.</p>
+        <div class="auth-divider auth-standby-hidden" aria-hidden="true">
+          <span id="authSocialDivider">conta online em standby</span>
         </div>
-        <div class="auth-social-grid" aria-label="Login social">
+        <div class="auth-social-grid auth-standby-hidden" aria-label="Login social em standby" aria-hidden="true">
           <div id="authGoogleNativeSlot" class="auth-google-native-slot hidden"></div>
           <button id="authGoogleBtn" class="auth-social-btn google" type="button">
             <span class="auth-provider-mark" aria-hidden="true">G</span>
@@ -316,7 +316,7 @@
             <span id="authAppleLabel">Continuar com Apple</span>
           </button>
         </div>
-        <p id="authProviderHint" class="muted auth-provider-hint">Use Google ou Apple para manter um perfil separado neste aparelho.</p>
+        <p id="authProviderHint" class="muted auth-provider-hint">Conta online em standby. Use backup/importação manual no Perfil quando precisar levar seus dados.</p>
         <p id="authFeedback" class="muted auth-feedback"></p>
       </div>
     </section>
@@ -1499,7 +1499,7 @@
             <div class="spirit-collectible-grid">
               <div id="spiritCollectiblePlaceholder" class="spirit-collectible-placeholder" aria-hidden="true">
                 <span id="spiritCollectiblePlaceholderKicker">Arte em preparação</span>
-                <strong id="spiritCollectiblePlaceholderTitle">Scanner do espírito musical</strong>
+                <strong id="spiritCollectiblePlaceholderTitle">Busto espectral musical</strong>
                 <small id="spiritCollectiblePlaceholderText">A arte final entra aqui quando a IA terminar.</small>
               </div>
               <img id="spiritCollectibleImage" class="spirit-collectible-image" src="" alt="" loading="lazy" />
@@ -1761,6 +1761,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260616share1"></script>
+    <script src="app.js?v=20260616newuser2"></script>
   </body>
 </html>

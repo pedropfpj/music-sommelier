@@ -2604,6 +2604,31 @@ textarea {
   min-height: 1.2rem;
 }
 
+.auth-standby-card {
+  max-width: 720px;
+}
+
+.auth-standby-card .cta-row {
+  justify-content: center;
+}
+
+.auth-standby-card .auth-new-user-btn {
+  width: min(100%, 360px);
+  min-height: 56px;
+}
+
+.auth-standby-card .auth-provider-hint {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(126, 218, 255, 0.24);
+  border-radius: 10px;
+  background: rgba(6, 16, 35, 0.64);
+  color: rgba(224, 242, 255, 0.84);
+}
+
+.auth-standby-hidden {
+  display: none !important;
+}
+
 .checkbox .checkline {
   border: 1px solid var(--line);
   border-radius: 12px;
