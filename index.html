@@ -971,6 +971,7 @@
               <button id="youtubePreviewToggleBtn" class="secondary" type="button">Abrir player no app</button>
               <button id="youtubePreviewRetryBtn" class="secondary hidden" type="button">Tentar outro vídeo</button>
               <button id="soundcloudPreviewToggleBtn" class="secondary soundcloud-inline-btn hidden" type="button">Tocar SoundCloud no app</button>
+              <button id="bandcampPreviewToggleBtn" class="secondary bandcamp-inline-btn hidden" type="button">Tocar Bandcamp no app</button>
               <a id="soundcloudPreviewSearchLink" class="secondary soundcloud-search-link hidden" href="#" target="_blank" rel="noopener noreferrer">Buscar no SoundCloud</a>
             </div>
             <div id="listeningPrompt" class="known-prompt hidden">
@@ -1709,6 +1710,18 @@
             <div id="quizHubList" class="quiz-hub-list"></div>
             <p id="quizHubProgress" class="muted quiz-hub-progress">Nenhum desafio desbloqueado ainda.</p>
           </article>
+          <article id="profileArtistRecommendationsCard" class="profile-stat-card wide profile-artist-recommendations-card hidden" aria-live="polite">
+            <div class="profile-artist-recommendations-head">
+              <div>
+                <p id="profileArtistRecommendationsKicker" class="summary-kicker">Radar do perfil</p>
+                <h4 id="profileArtistRecommendationsTitle">Achamos que você pode gostar de:</h4>
+                <p id="profileArtistRecommendationsHint" class="muted">Artistas puxados pelos subgêneros que mais aparecem nos seus sinais.</p>
+              </div>
+              <span id="profileArtistRecommendationsBadge" class="chip alt">curadoria</span>
+            </div>
+            <div id="profileArtistRecommendationsList" class="profile-artist-recommendations-list"></div>
+            <p id="profileArtistRecommendationsStatus" class="muted profile-artist-recommendations-status">Continue avaliando para destravar recomendações pessoais.</p>
+          </article>
           <article class="profile-stat-card wide">
             <h4 id="summaryFiveStarTracksTitle">Faixas avaliadas com 5 estrelas</h4>
             <div id="summaryFiveStarTracks" class="summary-tags"></div>
@@ -1803,6 +1816,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260617curation1"></script>
+    <script src="app.js?v=20260617previewstack1"></script>
   </body>
 </html>

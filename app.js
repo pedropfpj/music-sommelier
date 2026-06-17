@@ -5127,6 +5127,7 @@ const youtubePreviewActions = document.getElementById("youtubePreviewActions");
 const youtubePreviewToggleBtn = document.getElementById("youtubePreviewToggleBtn");
 const youtubePreviewRetryBtn = document.getElementById("youtubePreviewRetryBtn");
 const soundcloudPreviewToggleBtn = document.getElementById("soundcloudPreviewToggleBtn");
+const bandcampPreviewToggleBtn = document.getElementById("bandcampPreviewToggleBtn");
 const soundcloudPreviewSearchLink = document.getElementById("soundcloudPreviewSearchLink");
 const listeningPrompt = document.getElementById("listeningPrompt");
 const previewLikeBtn = document.getElementById("previewLikeBtn");
@@ -5260,6 +5261,11 @@ const summaryLikedArtistsCount = document.getElementById("summaryLikedArtistsCou
 const summaryDislikedArtistsCount = document.getElementById("summaryDislikedArtistsCount");
 const summaryFavoriteStyle = document.getElementById("summaryFavoriteStyle");
 const summaryAchievementText = document.getElementById("summaryAchievementText");
+const profileArtistRecommendationsCard = document.getElementById("profileArtistRecommendationsCard");
+const profileArtistRecommendationsHint = document.getElementById("profileArtistRecommendationsHint");
+const profileArtistRecommendationsBadge = document.getElementById("profileArtistRecommendationsBadge");
+const profileArtistRecommendationsList = document.getElementById("profileArtistRecommendationsList");
+const profileArtistRecommendationsStatus = document.getElementById("profileArtistRecommendationsStatus");
 const profileLibraryKicker = document.getElementById("profileLibraryKicker");
 const profileLibraryTitle = document.getElementById("profileLibraryTitle");
 const profileLibraryHint = document.getElementById("profileLibraryHint");
@@ -5802,6 +5808,8 @@ const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
 const PROFILE_BACKUP_MAX_BYTES = 2_000_000;
 const PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY = "neonpulse:profileBackup:lastExport:v1";
+const PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS = 8;
+const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_SYNC_LIMIT = 50;
@@ -15457,7 +15465,11 @@ const I18N = {
     previewYoutubeRetryBtn: "Tentar outro vídeo",
     previewSoundcloudOpenInlineBtn: "Tocar SoundCloud no app",
     previewSoundcloudCloseInlineBtn: "Ocultar SoundCloud",
+    previewBandcampOpenInlineBtn: "Tocar Bandcamp no app",
+    previewBandcampCloseInlineBtn: "Ocultar Bandcamp",
     previewSoundcloudSearchBtn: "Buscar no SoundCloud",
+    previewFixedSources: "Players fixos encontrados: {sources}. Use qualquer player abaixo para avaliar a faixa.",
+    previewAudioWithFixedSources: "Preview de áudio pronto. Também fixei {sources} abaixo quando havia fonte embutível.",
     previewSoundcloudInlineHint: "SoundCloud disponível no player abaixo. Toque no play do widget se o navegador bloquear autoplay.",
     previewSoundcloudSearchHint: "Não achei link embutível desta faixa no SoundCloud. A busca abre a fonte para você conferir.",
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
@@ -16265,7 +16277,11 @@ const I18N = {
     previewYoutubeRetryBtn: "Try another video",
     previewSoundcloudOpenInlineBtn: "Play SoundCloud in app",
     previewSoundcloudCloseInlineBtn: "Hide SoundCloud",
+    previewBandcampOpenInlineBtn: "Play Bandcamp in app",
+    previewBandcampCloseInlineBtn: "Hide Bandcamp",
     previewSoundcloudSearchBtn: "Search SoundCloud",
+    previewFixedSources: "Fixed players found: {sources}. Use any player below to evaluate the track.",
+    previewAudioWithFixedSources: "Audio preview is ready. I also fixed {sources} below when an embeddable source was available.",
     previewSoundcloudInlineHint: "SoundCloud is available in the player below. Tap the widget play button if the browser blocks autoplay.",
     previewSoundcloudSearchHint: "I did not find an embeddable SoundCloud link for this track. Search opens the source so you can check it.",
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
@@ -17070,7 +17086,11 @@ const I18N = {
     previewYoutubeRetryBtn: "Probar otro video",
     previewSoundcloudOpenInlineBtn: "Tocar SoundCloud en app",
     previewSoundcloudCloseInlineBtn: "Ocultar SoundCloud",
+    previewBandcampOpenInlineBtn: "Tocar Bandcamp en app",
+    previewBandcampCloseInlineBtn: "Ocultar Bandcamp",
     previewSoundcloudSearchBtn: "Buscar en SoundCloud",
+    previewFixedSources: "Players fijos encontrados: {sources}. Usa cualquier player abajo para evaluar la pista.",
+    previewAudioWithFixedSources: "Preview de audio listo. También fijé {sources} abajo cuando había una fuente embebible.",
     previewSoundcloudInlineHint: "SoundCloud está disponible en el player abajo. Toca play en el widget si el navegador bloquea autoplay.",
     previewSoundcloudSearchHint: "No encontré un enlace embebible de SoundCloud para esta pista. La búsqueda abre la fuente para verificar.",
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
@@ -18177,6 +18197,9 @@ function applyLanguage() {
   if (soundcloudPreviewFrame) {
     soundcloudPreviewFrame.title = currentLanguage === "en" ? "SoundCloud preview player" : currentLanguage === "es" ? "Player de preview SoundCloud" : "Player de preview SoundCloud";
   }
+  if (bandcampPreviewFrame) {
+    bandcampPreviewFrame.title = currentLanguage === "en" ? "Bandcamp preview player" : currentLanguage === "es" ? "Player de preview Bandcamp" : "Player de preview Bandcamp";
+  }
   setYouTubePreviewActionState({
     visible: Boolean(youtubePreviewActions && !youtubePreviewActions.classList.contains("hidden")),
     canToggle: Boolean(youtubePreviewToggleBtn && !youtubePreviewToggleBtn.classList.contains("hidden") && !youtubePreviewToggleBtn.disabled),
@@ -18197,6 +18220,11 @@ function applyLanguage() {
     ),
     expanded: Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden")),
     href: soundcloudPreviewSearchLink?.getAttribute("href") || ""
+  });
+  setBandcampPreviewActionState({
+    visible: Boolean(bandcampPreviewToggleBtn && !bandcampPreviewToggleBtn.classList.contains("hidden")),
+    canToggle: Boolean(bandcampPreviewToggleBtn && !bandcampPreviewToggleBtn.classList.contains("hidden") && !bandcampPreviewToggleBtn.disabled),
+    expanded: Boolean(bandcampPreviewWrap && !bandcampPreviewWrap.classList.contains("hidden"))
   });
   setText("#discoverySpotifyLink", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
   setText("#discoveryYoutubeLink", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
@@ -26322,6 +26350,7 @@ function syncPreviewSourceActionsVisibility() {
     youtubePreviewToggleBtn,
     youtubePreviewRetryBtn,
     soundcloudPreviewToggleBtn,
+    bandcampPreviewToggleBtn,
     soundcloudPreviewSearchLink
   ].some((item) => Boolean(item && !item.classList.contains("hidden")));
   youtubePreviewActions.classList.toggle("hidden", !hasVisibleAction);
@@ -26360,6 +26389,26 @@ function setSoundCloudPreviewActionState({ visible = false, canToggle = false, c
     soundcloudPreviewSearchLink.setAttribute("aria-disabled", safeHref ? "false" : "true");
   }
   syncPreviewSourceActionsVisibility();
+}
+
+function setBandcampPreviewActionState({ visible = false, canToggle = false, expanded = false } = {}) {
+  if (bandcampPreviewToggleBtn) {
+    bandcampPreviewToggleBtn.classList.toggle("hidden", !visible || !canToggle);
+    bandcampPreviewToggleBtn.disabled = !canToggle;
+    bandcampPreviewToggleBtn.textContent = expanded
+      ? t("previewBandcampCloseInlineBtn")
+      : t("previewBandcampOpenInlineBtn");
+  }
+  syncPreviewSourceActionsVisibility();
+}
+
+function syncBandcampPreviewActionForTrack(track, { expanded = false } = {}) {
+  const embeddable = trackHasEmbeddableBandcampTrack(track);
+  setBandcampPreviewActionState({
+    visible: embeddable,
+    canToggle: embeddable,
+    expanded
+  });
 }
 
 function syncSoundCloudPreviewActionForTrack(track, { expanded = false } = {}) {
@@ -26447,11 +26496,16 @@ function buildBandcampEmbedUrl(track) {
   return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/transparent=true/`;
 }
 
-function resetBandcampPreviewEmbed() {
+function resetBandcampPreviewEmbed({ keepActions = false, track = null } = {}) {
   if (!bandcampPreviewWrap || !bandcampPreviewFrame) return;
   bandcampPreviewWrap.classList.add("hidden");
   if (bandcampPreviewFrame.getAttribute("src")) {
     bandcampPreviewFrame.removeAttribute("src");
+  }
+  if (keepActions && track) {
+    syncBandcampPreviewActionForTrack(track, { expanded: false });
+  } else if (!keepActions) {
+    setBandcampPreviewActionState({ visible: false, canToggle: false, expanded: false });
   }
 }
 
@@ -26463,6 +26517,7 @@ function showBandcampPreviewEmbed(track) {
     bandcampPreviewFrame.setAttribute("src", embedUrl);
   }
   bandcampPreviewWrap.classList.remove("hidden");
+  syncBandcampPreviewActionForTrack(track, { expanded: true });
   return true;
 }
 
@@ -26475,6 +26530,69 @@ function showYouTubePreviewEmbed(track, { autoplay = false, attempt = 0 } = {}) 
   }
   youtubePreviewWrap.classList.remove("hidden");
   return true;
+}
+
+function previewSourceListLabel(sources = []) {
+  const unique = [...new Set(sources.map((source) => String(source || "").trim()).filter(Boolean))];
+  return unique.join(" + ");
+}
+
+function fixedPreviewStatusMessage({ audioReady = false, sources = [], fallbackKey = "" } = {}) {
+  const sourceLabel = previewSourceListLabel(sources);
+  if (sourceLabel) {
+    return audioReady
+      ? t("previewAudioWithFixedSources", { sources: sourceLabel })
+      : t("previewFixedSources", { sources: sourceLabel });
+  }
+  return fallbackKey ? t(fallbackKey) : t("previewReady");
+}
+
+function showFixedPreviewPlayers(track, {
+  includeYoutubeSearch = false,
+  autoplayYoutube = false,
+  autoplaySoundCloud = false
+} = {}) {
+  const sources = [];
+  const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
+  const canRetryYoutube = youtubePreviewCanRetry(track);
+  const youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
+
+  const soundcloudReady = trackHasDirectSoundCloudTrack(track)
+    ? showSoundCloudPreviewEmbed(track, { autoplay: autoplaySoundCloud })
+    : false;
+  if (soundcloudReady) {
+    sources.push("SoundCloud");
+  } else {
+    syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+  }
+
+  const bandcampReady = showBandcampPreviewEmbed(track);
+  if (bandcampReady) {
+    sources.push("Bandcamp");
+  } else {
+    syncBandcampPreviewActionForTrack(track, { expanded: false });
+  }
+
+  const shouldShowYoutube = hasDirectYoutube || (includeYoutubeSearch && youtubePreviewSearchAttemptCount(track) > 0);
+  const youtubeReady = shouldShowYoutube
+    ? showYouTubePreviewEmbed(track, { autoplay: autoplayYoutube, attempt: youtubeAttempt })
+    : false;
+  if (youtubeReady) sources.push("YouTube");
+
+  setYouTubePreviewActionState({
+    visible: Boolean(hasDirectYoutube || canRetryYoutube || youtubePreviewSearchAttemptCount(track) > 0),
+    canToggle: Boolean(hasDirectYoutube || youtubePreviewSearchAttemptCount(track) > 0),
+    canRetry: canRetryYoutube,
+    expanded: youtubeReady
+  });
+
+  return {
+    sources,
+    soundcloudReady,
+    bandcampReady,
+    youtubeReady,
+    anyReady: Boolean(soundcloudReady || bandcampReady || youtubeReady)
+  };
 }
 
 function artistOriginLookupKeys(artistName = "") {
@@ -36446,6 +36564,7 @@ function renderRecommendation(track, prefs) {
 async function renderPreview(track) {
   if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return;
   previewPanel.classList.remove("hidden");
+  previewPanel.classList.remove("has-fixed-embeds");
   listeningPrompt.classList.add("hidden");
   previewStatus.textContent = t("previewSearching");
   setTrackPreviewVisualState("searching");
@@ -36490,13 +36609,9 @@ async function renderPreview(track) {
   }
   const needsSoundCloudEmbedLookup =
     !trackHasDirectSoundCloudTrack(track) &&
-    (
-      !trackHasReliableAudioPreview(track) ||
-      !trackHasDirectYouTubeVideo(track) ||
-      String(track.source || "").toLowerCase().includes("soundcloud")
-    );
+    Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
-    await resolveSoundCloudEmbedForTrack(track, { force: !trackHasReliableAudioPreview(track) });
+    await resolveSoundCloudEmbedForTrack(track, { force: false });
   }
   let hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   let hasDirectYoutube = trackHasDirectYouTubeVideo(track);
@@ -36514,17 +36629,12 @@ async function renderPreview(track) {
 
   if (playablePreview) {
     trackPreview.classList.remove("hidden");
-    const shouldAutoOpenYoutube = hasDirectYoutube;
-    const youtubeInlineReady = shouldAutoOpenYoutube
-      ? showYouTubePreviewEmbed(track, { autoplay: false, attempt: youtubeAttempt })
-      : false;
-    setYouTubePreviewActionState({
-      visible: true,
-      canToggle: true,
-      canRetry: canRetryYoutube,
-      expanded: youtubeInlineReady
+    const fixedPlayers = showFixedPreviewPlayers(track, {
+      includeYoutubeSearch: false,
+      autoplayYoutube: false,
+      autoplaySoundCloud: false
     });
-    syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+    previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
 
     try {
       syncPreviewAudioState();
@@ -36535,91 +36645,63 @@ async function renderPreview(track) {
         track.previewConfidence && track.previewConfidence >= 0.9
           ? t("previewValidated")
           : t("previewLoaded");
-      if (youtubeInlineReady) {
-        previewStatus.textContent = `${previewLoadedMessage} ${t("previewYoutubeInlineHint")}`;
-      } else if (hasDirectSoundCloud) {
-        previewStatus.textContent = `${previewLoadedMessage} ${t("previewSoundcloudInlineHint")}`;
-      } else if (canRetryYoutube || !hasDirectYoutube) {
-        previewStatus.textContent = `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`;
-      } else {
-        previewStatus.textContent = previewLoadedMessage;
-      }
+      previewStatus.textContent = fixedPlayers.sources.length
+        ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
+        : canRetryYoutube || !hasDirectYoutube
+          ? `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`
+          : previewLoadedMessage;
       listeningPrompt.classList.remove("hidden");
     } catch (_err) {
       setTrackPreviewVisualState("ready");
       const readyMessage = t("previewReady");
-      if (youtubeInlineReady) {
-        previewStatus.textContent = `${readyMessage} ${t("previewYoutubeInlineHint")}`;
-      } else if (hasDirectSoundCloud) {
-        previewStatus.textContent = `${readyMessage} ${t("previewSoundcloudInlineHint")}`;
-      } else if (canRetryYoutube || !hasDirectYoutube) {
-        previewStatus.textContent = `${readyMessage} ${t("previewYoutubeOptionalHint")}`;
-      } else {
-        previewStatus.textContent = readyMessage;
-      }
+      previewStatus.textContent = fixedPlayers.sources.length
+        ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
+        : canRetryYoutube || !hasDirectYoutube
+          ? `${readyMessage} ${t("previewYoutubeOptionalHint")}`
+          : readyMessage;
       listeningPrompt.classList.remove("hidden");
     }
   } else {
     trackPreview.classList.add("hidden");
     track.previewUrl = "";
     track.previewMissing = true;
-    const soundcloudFallbackReady = hasDirectSoundCloud
-      ? showSoundCloudPreviewEmbed(track, { autoplay: false })
-      : false;
-    if (soundcloudFallbackReady) {
+    const fixedPlayers = showFixedPreviewPlayers(track, {
+      includeYoutubeSearch: false,
+      autoplayYoutube: false,
+      autoplaySoundCloud: false
+    });
+    previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
+    if (fixedPlayers.anyReady) {
       setTrackPreviewVisualState("embed");
-      setYouTubePreviewActionState({
-        visible: canRetryYoutube || hasDirectYoutube,
-        canToggle: hasDirectYoutube,
-        canRetry: canRetryYoutube,
-        expanded: false
+      previewStatus.textContent = fixedPreviewStatusMessage({
+        sources: fixedPlayers.sources,
+        fallbackKey: fixedPlayers.soundcloudReady
+          ? "previewSoundcloudFallback"
+          : fixedPlayers.bandcampReady
+            ? "previewBandcampFallback"
+            : "previewYoutubeFallback"
       });
-      previewStatus.textContent = t("previewSoundcloudFallback");
     } else {
-      const bandcampFallbackReady = showBandcampPreviewEmbed(track);
-      if (bandcampFallbackReady) {
+      const youtubeSearchFallbackReady = showFixedPreviewPlayers(track, {
+        includeYoutubeSearch: true,
+        autoplayYoutube: true,
+        autoplaySoundCloud: false
+      });
+      previewPanel.classList.toggle("has-fixed-embeds", youtubeSearchFallbackReady.anyReady);
+      if (youtubeSearchFallbackReady.anyReady) {
         setTrackPreviewVisualState("embed");
+        previewStatus.textContent = t("previewYoutubeFallback");
+      } else {
+        setTrackPreviewVisualState("external");
         setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
         syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-        previewStatus.textContent = t("previewBandcampFallback");
-      } else {
-        const youtubeDirectFallbackReady = hasDirectYoutube
-          ? showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt })
-          : false;
-        if (youtubeDirectFallbackReady) {
-          setTrackPreviewVisualState("embed");
-          setYouTubePreviewActionState({
-            visible: true,
-            canToggle: true,
-            canRetry: canRetryYoutube,
-            expanded: true
-          });
-          syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-          previewStatus.textContent = t("previewYoutubeFallback");
-        } else {
-          const youtubeSearchFallbackReady = showYouTubePreviewEmbed(track, { autoplay: true, attempt: youtubeAttempt });
-          if (youtubeSearchFallbackReady) {
-            setTrackPreviewVisualState("embed");
-            setYouTubePreviewActionState({
-              visible: true,
-              canToggle: true,
-              canRetry: canRetryYoutube,
-              expanded: true
-            });
-            syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-            previewStatus.textContent = t("previewYoutubeFallback");
-          } else {
-            setTrackPreviewVisualState("external");
-            setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
-            syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-            const platforms = availableExternalPlatforms();
-            previewStatus.textContent = buildSoundCloudTrackLink(track) && !hasDirectSoundCloud
-              ? t("previewSoundcloudSearchHint")
-              : platforms.length
-              ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
-              : t("previewUnavailable");
-          }
-        }
+        syncBandcampPreviewActionForTrack(track, { expanded: false });
+        const platforms = availableExternalPlatforms();
+        previewStatus.textContent = buildSoundCloudTrackLink(track) && !hasDirectSoundCloud
+          ? t("previewSoundcloudSearchHint")
+          : platforms.length
+          ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
+          : t("previewUnavailable");
       }
     }
     listeningPrompt.classList.remove("hidden");
@@ -37861,6 +37943,359 @@ function fiveStarTracksForSummary(limit = 12) {
   return result;
 }
 
+function profileArtistRecommendationSignalCount() {
+  let ratingSignals = 0;
+  trackRatings.forEach((stars) => {
+    const value = Math.round(Number(stars) || 0);
+    if (value >= 4) ratingSignals += value === 5 ? 1.6 : 1;
+    else if (value > 0) ratingSignals += 0.35;
+  });
+  return Math.round(
+    userStats.likedSongs +
+    userStats.likedArtists +
+    userStats.likedDiscoveries +
+    likedTrackHistory.length +
+    Math.min(6, adaptiveModel.likedStyles.size * 1.4) +
+    Math.min(4, adaptiveModel.likedArtists.size * 0.8) +
+    ratingSignals
+  );
+}
+
+function profileArtistRecommendationStyleEntries(limit = 5) {
+  const styleScores = new Map();
+  const boostStyle = (styleLike = "", amount = 0) => {
+    const style = normalize(styleLike || "");
+    const value = Number(amount) || 0;
+    if (!style || !Number.isFinite(value) || value === 0) return;
+    styleScores.set(style, (styleScores.get(style) || 0) + value);
+  };
+
+  adaptiveModel.likedStyles.forEach((score, style) => boostStyle(style, Math.max(0, Number(score) || 0) * 1.55));
+  adaptiveModel.dislikedStyles.forEach((score, style) => boostStyle(style, -Math.max(0, Number(score) || 0) * 1.25));
+  adaptiveModel.likedArtists.forEach((score, artistKey) => {
+    quizStylesForArtist(artistKey).forEach((style) => boostStyle(style, Math.max(0, Number(score) || 0) * 0.72));
+  });
+
+  likedTrackHistory.forEach((entry, index) => {
+    const recency = 1 / (1 + index * 0.08);
+    boostStyle(entry?.style, 1.35 * recency);
+  });
+  dislikedTrackHistory.forEach((entry, index) => {
+    const recency = 1 / (1 + index * 0.12);
+    boostStyle(entry?.style, -0.85 * recency);
+  });
+
+  trackRatings.forEach((stars, key) => {
+    const value = Math.round(Number(stars) || 0);
+    const track = trackFromRecommendationKey(key);
+    if (!track?.style || value <= 0) return;
+    if (value >= 4) boostStyle(track.style, value === 5 ? 2.25 : 1.2);
+    else if (value <= 2) boostStyle(track.style, value === 1 ? -1.25 : -0.7);
+  });
+
+  return [...styleScores.entries()]
+    .filter(([style, score]) => style && score > 0.65)
+    .map(([style, score]) => ({
+      style,
+      score,
+      family: familyOf(style),
+      label: styleLabelByValue(style)
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+function profileArtistRecommendationExcludedArtists() {
+  const excluded = new Set();
+  const add = (artistLike = "") => addArtistIdentityToSet(excluded, artistLike);
+
+  parseKnownArtists(knownArtistsEl ? knownArtistsEl.value : "").forEach(add);
+  knownArtistsMemory.forEach(add);
+  blockedArtistsMemory.forEach(add);
+  rejectedArtists.forEach(add);
+  discoveredArtistsInApp.forEach(add);
+  seenArtistsMemory.forEach(add);
+  adaptiveModel.likedArtists.forEach((_score, artist) => add(artist));
+  adaptiveModel.dislikedArtists.forEach((_score, artist) => add(artist));
+  likedTrackHistory.forEach((entry) => add(entry?.artist));
+  dislikedTrackHistory.forEach((entry) => add(entry?.artist));
+  return excluded;
+}
+
+function profileStyleAffinity(styleLike = "", targetStyles = []) {
+  const style = normalize(styleLike || "");
+  if (!style) return 0;
+  const exact = targetStyles.find((entry) => entry.style === style);
+  if (exact) return exact.score;
+  const family = familyOf(style);
+  const familyMatch = targetStyles
+    .filter((entry) => entry.family === family)
+    .sort((a, b) => b.score - a.score)[0];
+  return familyMatch ? familyMatch.score * 0.54 : 0;
+}
+
+function profileArtistCandidateVariance(name = "", style = "") {
+  const key = artistMatchKey(name || "");
+  if (!key) return 0;
+  return (hashUnit(`${currentCurationUserSeed()}::${curationOpenSeed}::profile-artist::${style}::${key}`) - 0.5) * 1.9;
+}
+
+function upsertProfileArtistCandidate(candidates, data = {}, targetStyles = [], excludedArtists = new Set()) {
+  const name = formatSummaryArtistName(data.name || data.artist || "");
+  const key = artistMatchKey(name);
+  if (!key || !validSummaryArtistName(name)) return;
+  if (artistSetHasMatch(excludedArtists, name)) return;
+  if (isCuratorBlockedArtistName(name)) return;
+
+  const style = normalize(data.style || "");
+  const affinity = profileStyleAffinity(style, targetStyles);
+  if (affinity <= 0) return;
+
+  const existing = candidates.get(key) || {
+    key,
+    name,
+    style,
+    styleScore: 0,
+    score: 0,
+    support: 0,
+    trackCount: 0,
+    previewTracks: 0,
+    reliableTracks: 0,
+    spotifyUrl: "",
+    youtubeUrl: "",
+    soundcloudUrl: "",
+    bandcampUrl: "",
+    bio: "",
+    sources: new Set()
+  };
+
+  if (affinity > existing.styleScore) {
+    existing.style = style || existing.style;
+    existing.styleScore = affinity;
+  }
+  existing.score += (Number(data.score) || 0) + affinity * 0.95;
+  existing.support += Number(data.support) || 1;
+  existing.trackCount += Number(data.trackCount) || 0;
+  existing.previewTracks += Number(data.previewTracks) || 0;
+  existing.reliableTracks += Number(data.reliableTracks) || 0;
+  existing.spotifyUrl ||= data.spotifyUrl || "";
+  existing.youtubeUrl ||= data.youtubeUrl || "";
+  existing.soundcloudUrl ||= data.soundcloudUrl || "";
+  existing.bandcampUrl ||= data.bandcampUrl || "";
+  existing.bio ||= data.bio || "";
+  if (data.source) existing.sources.add(data.source);
+  candidates.set(key, existing);
+}
+
+function buildProfileArtistRecommendationCandidates(targetStyles = [], excludedArtists = new Set()) {
+  const candidates = new Map();
+
+  discoveryCatalog.forEach((artist) => {
+    if (!artist?.name || !artist?.style) return;
+    const affinity = profileStyleAffinity(artist.style, targetStyles);
+    if (affinity <= 0) return;
+    upsertProfileArtistCandidate(candidates, {
+      name: artist.name,
+      style: artist.style,
+      bio: artist.bio,
+      spotifyUrl: artist.spotifyUrl,
+      youtubeUrl: artist.youtubeUrl,
+      soundcloudUrl: artist.soundcloudUrl,
+      bandcampUrl: artist.bandcampUrl,
+      source: "discovery",
+      score: discoveryArtistScore(artist, { style: artist.style }, excludedArtists, "") + affinity * 0.6,
+      support: 1.4
+    }, targetStyles, excludedArtists);
+  });
+
+  catalog.forEach((track) => {
+    if (!track?.artist || !track?.style) return;
+    if (!isTrackEligibleForRecommendation(track)) return;
+    const affinity = profileStyleAffinity(track.style, targetStyles);
+    if (affinity <= 0) return;
+    upsertProfileArtistCandidate(candidates, {
+      name: track.artist,
+      style: track.style,
+      bio: track.artistBio,
+      spotifyUrl: track.spotifyUrl,
+      youtubeUrl: track.youtubeUrl,
+      soundcloudUrl: track.soundcloudTrackUrl || track.soundcloudUrl,
+      bandcampUrl: track.bandcampUrl || track.bandcampTrackUrl,
+      source: "catalog",
+      score:
+        Math.min(2.2, affinity * 0.42) +
+        trackCatalogDepthScore(track) +
+        trackSourceTrustScore(track) * 0.36 +
+        trackReleaseFreshnessScore(track) * 0.7,
+      support: 1,
+      trackCount: 1,
+      previewTracks: trackHasPlayablePreviewExperience(track) ? 1 : 0,
+      reliableTracks: hasReliableBpmForTrack(track) ? 1 : 0
+    }, targetStyles, excludedArtists);
+  });
+
+  targetStyles.forEach((styleEntry) => {
+    (STYLE_ARTIST_SEEDS[styleEntry.style] || []).forEach((name, index) => {
+      upsertProfileArtistCandidate(candidates, {
+        name,
+        style: styleEntry.style,
+        source: "style-seed",
+        score: Math.max(0.2, styleEntry.score * 0.55 - index * 0.05),
+        support: 0.55
+      }, targetStyles, excludedArtists);
+    });
+  });
+
+  return [...candidates.values()]
+    .map((candidate) => {
+      const previewBonus = Math.min(1.4, candidate.previewTracks * 0.28);
+      const depthBonus = Math.min(1.6, candidate.trackCount * 0.16);
+      const reliableBonus = Math.min(1, candidate.reliableTracks * 0.18);
+      const sourceBonus = candidate.sources.has("discovery") ? 0.55 : candidate.sources.has("catalog") ? 0.35 : 0;
+      return {
+        ...candidate,
+        score:
+          candidate.score +
+          candidate.support * 0.3 +
+          previewBonus +
+          depthBonus +
+          reliableBonus +
+          sourceBonus +
+          profileArtistCandidateVariance(candidate.name, candidate.style)
+      };
+    })
+    .filter((candidate) => candidate.score > -20)
+    .sort((a, b) => b.score - a.score);
+}
+
+function pickProfileArtistRecommendations(limit = PROFILE_ARTIST_RECOMMENDATION_LIMIT) {
+  const signalCount = profileArtistRecommendationSignalCount();
+  const targetStyles = profileArtistRecommendationStyleEntries(5);
+  if (signalCount < PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS || !targetStyles.length) {
+    return { signalCount, targetStyles, recommendations: [] };
+  }
+
+  const excludedArtists = profileArtistRecommendationExcludedArtists();
+  const candidates = buildProfileArtistRecommendationCandidates(targetStyles, excludedArtists);
+  const picked = [];
+  const pickedKeys = new Set();
+  const styleCounts = new Map();
+  const addCandidate = (candidate) => {
+    if (!candidate || pickedKeys.has(candidate.key) || picked.length >= limit) return false;
+    picked.push(candidate);
+    pickedKeys.add(candidate.key);
+    styleCounts.set(candidate.style, (styleCounts.get(candidate.style) || 0) + 1);
+    return true;
+  };
+
+  targetStyles.forEach((styleEntry) => {
+    const direct = candidates.find((candidate) => candidate.style === styleEntry.style && !pickedKeys.has(candidate.key));
+    if (direct) addCandidate(direct);
+  });
+
+  candidates.forEach((candidate) => {
+    if (picked.length >= limit) return;
+    if ((styleCounts.get(candidate.style) || 0) >= 2) return;
+    addCandidate(candidate);
+  });
+
+  candidates.forEach((candidate) => {
+    if (picked.length >= limit) return;
+    addCandidate(candidate);
+  });
+
+  return { signalCount, targetStyles, recommendations: picked.slice(0, limit) };
+}
+
+function profileArtistRecommendationReason(candidate = {}) {
+  const styleLabel = styleLabelByValue(candidate.style || "");
+  if (candidate.previewTracks > 0) {
+    return `Forte encaixe com seu sinal em ${styleLabel}, com material tocável no catálogo.`;
+  }
+  if (candidate.sources?.has?.("discovery")) {
+    return `Boa ponte para ${styleLabel}, vindo do radar de descoberta.`;
+  }
+  return `Nome alinhado ao seu mapa de ${styleLabel}, sem repetir artistas já marcados.`;
+}
+
+function renderProfileArtistRecommendations() {
+  if (!profileArtistRecommendationsCard || !profileArtistRecommendationsList) return;
+  const { signalCount, targetStyles, recommendations } = pickProfileArtistRecommendations();
+  const ready = signalCount >= PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS && recommendations.length > 0;
+
+  profileArtistRecommendationsCard.classList.toggle("hidden", !ready);
+  if (!ready) {
+    profileArtistRecommendationsList.innerHTML = "";
+    if (profileArtistRecommendationsStatus) {
+      const remaining = Math.max(0, PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS - signalCount);
+      profileArtistRecommendationsStatus.textContent = remaining > 0
+        ? `Mais ${remaining} sinais para liberar sugestões de artistas.`
+        : "Ainda calibrando os subgêneros mais fortes.";
+    }
+    return;
+  }
+
+  if (profileArtistRecommendationsBadge) {
+    profileArtistRecommendationsBadge.textContent = `${recommendations.length} artistas`;
+  }
+  if (profileArtistRecommendationsHint) {
+    const labels = targetStyles.slice(0, 3).map((entry) => entry.label).filter(Boolean);
+    profileArtistRecommendationsHint.textContent = labels.length
+      ? `Baseado principalmente em ${labels.join(" + ")}.`
+      : "Baseado nos sinais mais fortes do seu perfil.";
+  }
+  if (profileArtistRecommendationsStatus) {
+    profileArtistRecommendationsStatus.textContent = "A lista muda conforme você curte, recusa e avalia novas faixas.";
+  }
+
+  profileArtistRecommendationsList.innerHTML = "";
+  recommendations.forEach((candidate) => {
+    const item = document.createElement("article");
+    item.className = "profile-artist-recommendation";
+
+    const main = document.createElement("div");
+    main.className = "profile-artist-recommendation-main";
+
+    const name = document.createElement("strong");
+    name.className = "profile-artist-recommendation-name";
+    name.textContent = candidate.name;
+
+    const style = document.createElement("span");
+    style.className = "profile-artist-recommendation-style";
+    style.textContent = styleLabelByValue(candidate.style || "");
+
+    const reason = document.createElement("p");
+    reason.className = "profile-artist-recommendation-reason";
+    reason.textContent = profileArtistRecommendationReason(candidate);
+
+    main.append(name, style, reason);
+    item.appendChild(main);
+
+    const query = `${candidate.name} ${styleLabelByValue(candidate.style || "")}`.trim();
+    const links = [
+      { label: "Spotify", url: candidate.spotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(query)}` },
+      { label: "YouTube", url: candidate.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` }
+    ];
+    if (candidate.soundcloudUrl) links.push({ label: "SoundCloud", url: candidate.soundcloudUrl });
+    if (candidate.bandcampUrl) links.push({ label: "Bandcamp", url: candidate.bandcampUrl });
+
+    const linksEl = document.createElement("div");
+    linksEl.className = "profile-artist-recommendation-links";
+    links.slice(0, 3).forEach((entry) => {
+      const url = safeExternalUrl(entry.url);
+      if (!url) return;
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = entry.label;
+      linksEl.appendChild(link);
+    });
+    if (linksEl.children.length) item.appendChild(linksEl);
+    profileArtistRecommendationsList.appendChild(item);
+  });
+}
+
 function safeExternalUrl(value = "") {
   const raw = String(value || "").trim();
   if (!raw) return "";
@@ -38807,6 +39242,7 @@ function updateStats() {
   if (summaryAchievementText) summaryAchievementText.textContent = resolveFiveStarAchievementText();
   renderLikedTrackHistory();
   renderDislikedTrackHistory();
+  renderProfileArtistRecommendations();
   renderSummaryTags(summaryFiveStarTracks, fiveStarTracks, t("summaryEmptyFiveStarTracks"));
   renderSummaryTags(summaryKnownArtists, knownArtistsTop, t("summaryEmptyKnown"));
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
@@ -40527,8 +40963,6 @@ bind(youtubePreviewToggleBtn, "click", () => {
 
   const hasAudioPreview = Boolean(trackPreview && !trackPreview.classList.contains("hidden"));
   const attempt = trackHasDirectYouTubeVideo(currentRecommendation) ? 0 : youtubePreviewSearchAttempt;
-  resetSoundCloudPreviewEmbed();
-  resetBandcampPreviewEmbed();
   const opened = showYouTubePreviewEmbed(currentRecommendation, { autoplay: !hasAudioPreview, attempt });
   setYouTubePreviewActionState({
     visible: true,
@@ -40561,8 +40995,6 @@ bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (trackPreview && !trackPreview.paused) {
     trackPreview.pause();
   }
-  resetYouTubePreviewEmbed();
-  resetBandcampPreviewEmbed();
   const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: false });
   if (opened) {
     setTrackPreviewVisualState("embed");
@@ -40584,8 +41016,6 @@ bind(youtubePreviewRetryBtn, "click", () => {
   youtubePreviewSearchAttempt = (youtubePreviewSearchAttempt + 1) % attemptCount;
 
   const hasAudioPreview = Boolean(trackPreview && !trackPreview.classList.contains("hidden"));
-  resetSoundCloudPreviewEmbed();
-  resetBandcampPreviewEmbed();
   const opened = showYouTubePreviewEmbed(currentRecommendation, {
     autoplay: !hasAudioPreview,
     attempt: youtubePreviewSearchAttempt
@@ -40607,6 +41037,34 @@ bind(youtubePreviewRetryBtn, "click", () => {
     previewStatus.textContent = hasAudioPreview
       ? `${t("previewReady")} ${t("previewYoutubeInlineHint")}`
       : t("previewYoutubeFallback");
+  }
+});
+
+bind(bandcampPreviewToggleBtn, "click", () => {
+  if (!currentRecommendation) return;
+  const expanded = Boolean(bandcampPreviewWrap && !bandcampPreviewWrap.classList.contains("hidden"));
+  if (expanded) {
+    resetBandcampPreviewEmbed({ keepActions: true, track: currentRecommendation });
+    if (previewStatus) previewStatus.textContent = t("previewReady");
+    return;
+  }
+
+  if (trackPreview && !trackPreview.paused) {
+    trackPreview.pause();
+  }
+  const opened = showBandcampPreviewEmbed(currentRecommendation);
+  if (opened) {
+    setTrackPreviewVisualState("embed");
+    if (previewStatus) previewStatus.textContent = t("previewBandcampFallback");
+    return;
+  }
+
+  syncBandcampPreviewActionForTrack(currentRecommendation, { expanded: false });
+  const platforms = availableExternalPlatforms();
+  if (previewStatus) {
+    previewStatus.textContent = platforms.length
+      ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
+      : t("previewUnavailable");
   }
 });
 
@@ -40978,8 +41436,6 @@ bind(previewIssueBtn, "click", async () => {
     if (trackPreview && !trackPreview.paused) {
       trackPreview.pause();
     }
-    resetYouTubePreviewEmbed();
-    resetBandcampPreviewEmbed();
     const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: false });
     if (opened) {
       setTrackPreviewVisualState("embed");

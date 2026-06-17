@@ -3532,6 +3532,11 @@ input[type="range"] {
   gap: 0.5rem;
 }
 
+.preview-panel.has-fixed-embeds {
+  border-color: rgba(101, 255, 220, 0.48);
+  box-shadow: 0 0 22px rgba(59, 214, 196, 0.12);
+}
+
 .youtube-preview,
 .soundcloud-preview,
 .bandcamp-preview {
@@ -3540,6 +3545,32 @@ input[type="range"] {
   border-radius: 12px;
   overflow: hidden;
   background: rgba(2, 6, 16, 0.92);
+}
+
+.youtube-preview::before,
+.soundcloud-preview::before,
+.bandcamp-preview::before {
+  display: block;
+  padding: 0.36rem 0.62rem;
+  border-bottom: 1px solid rgba(124, 221, 255, 0.18);
+  color: rgba(226, 249, 255, 0.82);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, rgba(102, 216, 255, 0.12), rgba(2, 6, 16, 0));
+}
+
+.youtube-preview::before {
+  content: "YouTube";
+}
+
+.soundcloud-preview::before {
+  content: "SoundCloud";
+}
+
+.bandcamp-preview::before {
+  content: "Bandcamp";
 }
 
 .youtube-preview-frame,
@@ -3586,6 +3617,14 @@ input[type="range"] {
   color: #ffe2d1;
   background:
     linear-gradient(135deg, rgba(255, 96, 44, 0.18), rgba(7, 14, 31, 0.78)),
+    rgba(5, 11, 24, 0.78);
+}
+
+.bandcamp-inline-btn {
+  border-color: rgba(60, 220, 255, 0.46);
+  color: #d9f8ff;
+  background:
+    linear-gradient(135deg, rgba(37, 165, 201, 0.2), rgba(7, 14, 31, 0.78)),
     rgba(5, 11, 24, 0.78);
 }
 
@@ -7309,6 +7348,118 @@ input[type="range"] {
   color: #d8edff;
 }
 
+.profile-artist-recommendations-card.hidden {
+  display: none;
+}
+
+.profile-artist-recommendations-card {
+  gap: 0.75rem;
+  border-color: rgba(116, 239, 218, 0.28);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(116, 239, 218, 0.13), transparent 34%),
+    radial-gradient(circle at 94% 10%, rgba(157, 123, 255, 0.15), transparent 32%),
+    linear-gradient(155deg, rgba(6, 14, 31, 0.96), rgba(9, 17, 38, 0.84));
+}
+
+.profile-artist-recommendations-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.profile-artist-recommendations-head h4 {
+  margin: 0.12rem 0 0.22rem;
+  color: #f1fbff;
+  font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+}
+
+.profile-artist-recommendations-head .muted,
+.profile-artist-recommendations-status {
+  margin: 0;
+  line-height: 1.42;
+}
+
+.profile-artist-recommendations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.56rem;
+}
+
+.profile-artist-recommendation {
+  min-width: 0;
+  border: 1px solid rgba(155, 206, 255, 0.25);
+  border-radius: 10px;
+  padding: 0.68rem;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.1), transparent 42%),
+    rgba(5, 12, 27, 0.78);
+  display: grid;
+  gap: 0.46rem;
+}
+
+.profile-artist-recommendation-main {
+  min-width: 0;
+  display: grid;
+  gap: 0.24rem;
+}
+
+.profile-artist-recommendation-name {
+  color: #f6fbff;
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.profile-artist-recommendation-style {
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid rgba(116, 239, 218, 0.32);
+  border-radius: 999px;
+  padding: 0.16rem 0.5rem;
+  color: #9af7e9;
+  background: rgba(7, 20, 32, 0.75);
+  font-size: 0.75rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.profile-artist-recommendation-reason {
+  margin: 0;
+  color: #c9d9ec;
+  font-size: 0.84rem;
+  line-height: 1.38;
+}
+
+.profile-artist-recommendation-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.36rem;
+}
+
+.profile-artist-recommendation-links a {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(155, 206, 255, 0.26);
+  border-radius: 999px;
+  padding: 0.22rem 0.52rem;
+  color: #dff2ff;
+  background: rgba(10, 21, 43, 0.78);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.profile-artist-recommendation-links a:hover {
+  border-color: rgba(116, 239, 218, 0.48);
+  color: #f6ffff;
+}
+
 .summary-tags {
   min-height: 2.2rem;
   display: flex;
@@ -8121,6 +8272,18 @@ input[type="range"] {
 
   .profile-stat-card.wide {
     grid-column: 1 / -1;
+  }
+
+  .profile-artist-recommendations-head {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-artist-recommendations-list {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-artist-recommendation-links a {
+    flex: 1 1 92px;
   }
 
   .liked-track-history-head,
