@@ -5436,6 +5436,7 @@ let suggestionQueueContextKey = "";
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
 let curationUserSeed = "";
+let curationVisitId = "";
 const curationOpenSeed = createRuntimeCurationSeed();
 let swipeStyleRailExpanded = false;
 let pendingSwipeLearningMessage = "";
@@ -5803,6 +5804,7 @@ const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
+const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
@@ -24372,6 +24374,70 @@ function pickRandomTrack(pool = []) {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+function scoreDiversePoolTrack(track, prefs = {}) {
+  try {
+    const score = Number(recommendationScore(track, prefs));
+    if (Number.isFinite(score) && score > -999999) return score;
+  } catch (_err) {
+    // Some early surprise pools are intentionally broader than the normal scorer.
+  }
+  let fallbackScore = 0;
+  if (track?.existenceVerified !== false) fallbackScore += 0.6;
+  if (trackHasPlayablePreviewExperience(track)) fallbackScore += 1.4;
+  if (hasReliableBpmForTrack(track)) fallbackScore += 1.1;
+  return fallbackScore;
+}
+
+function diverseTrackEntriesForPool(pool = [], prefs = {}) {
+  const tracks = Array.isArray(pool) ? pool.filter(Boolean) : [];
+  if (!tracks.length) return [];
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs);
+  return diversifyScoredRecommendationEntries(
+    tracks.map((track) => {
+      const trackKey = recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || ""}`);
+      const visitNoise = hashUnit(`${currentCurationUserSeed()}::${currentCurationVisitId()}::${curationOpenSeed}::pool::${trackKey}`) - 0.5;
+      const baseScore = Math.max(-8, Math.min(8, scoreDiversePoolTrack(track, normalizedPrefs)));
+      return {
+        track,
+        score: baseScore + visitNoise * (normalizedPrefs.style ? 5.4 : 6.8) + Math.random() * 0.8
+      };
+    }),
+    normalizedPrefs
+  );
+}
+
+function orderDiverseTracksForPool(pool = [], prefs = {}) {
+  return diverseTrackEntriesForPool(pool, prefs).map((entry) => entry.track).filter(Boolean);
+}
+
+function pickDiverseTrackFromPool(pool = [], prefs = {}, { maxWindow = 28, scoreBand = 12 } = {}) {
+  const entries = diverseTrackEntriesForPool(pool, prefs);
+  if (!entries.length) return null;
+  if (entries.length === 1) return entries[0].track;
+
+  const bestScore = entries[0].selectionScore;
+  const selectionPool = entries
+    .filter((entry) => entry.selectionScore >= bestScore - scoreBand)
+    .slice(0, Math.max(1, Math.min(maxWindow, entries.length)));
+  if (selectionPool.length === 1) return selectionPool[0].track;
+
+  const minScore = Math.min(...selectionPool.map((entry) => entry.selectionScore));
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs);
+  const weightedPool = selectionPool.map((entry, index) => ({
+    track: entry.track,
+    weight:
+      Math.pow(Math.max(0.08, entry.selectionScore - minScore + 0.32), 1.12) *
+      curationSelectionWeight(entry.track, normalizedPrefs, index)
+  }));
+  const totalWeight = weightedPool.reduce((sum, entry) => sum + entry.weight, 0);
+  let cursor = Math.random() * totalWeight;
+  for (const item of weightedPool) {
+    cursor -= item.weight;
+    if (cursor <= 0) return item.track;
+  }
+  return weightedPool[0]?.track || null;
+}
+
 function hasReliableBpmForTrack(track) {
   const exactBpm = resolveExactBpm(track);
   if (!Number.isFinite(exactBpm) || exactBpm <= 0) return false;
@@ -24734,6 +24800,7 @@ function pickSurpriseTrackFromAnotherGenre(
   const blockedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
   const styleIsDifferent = (track) =>
     !requireDifferentStyle || !baseStyleKey || normalize(track?.style || "") !== baseStyleKey;
+  const surprisePrefs = { style: "", context: "", energy: "", bpm: "", vocals: "" };
 
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles);
   const eligible = catalog.filter(
@@ -24752,7 +24819,7 @@ function pickSurpriseTrackFromAnotherGenre(
       !artistSetHasMatch(blockedArtists, track.artist) &&
       trackAllowed(track)
   );
-  if (!eligible.length) return pickRandomTrack(emergencyPool);
+  if (!eligible.length) return pickDiverseTrackFromPool(emergencyPool, surprisePrefs);
 
   // Regra principal: com faixa atual tocando, surpresa deve sair para outro gênero/família.
   const crossGenrePool =
@@ -24785,11 +24852,72 @@ function pickSurpriseTrackFromAnotherGenre(
   ];
 
   for (const pool of rankedPools) {
-    const chosen = pickRandomTrack(pool);
+    const chosen = pickDiverseTrackFromPool(pool, surprisePrefs);
     if (chosen) return chosen;
   }
 
-  return pickRandomTrack(eligible) || pickRandomTrack(emergencyPool);
+  return pickDiverseTrackFromPool(eligible, surprisePrefs) || pickDiverseTrackFromPool(emergencyPool, surprisePrefs);
+}
+
+function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set() } = {}) {
+  const styles = getAllSelectableStyles();
+  if (!styles.length) return null;
+  const visitId = currentCurationVisitId();
+  const userSeed = currentCurationUserSeed();
+  const styleEntries = styles
+    .map((style) => {
+      const pool = catalog.filter((track) => {
+        if (!track || track.style !== style) return false;
+        if (!isTrackEligibleForRecommendation(track)) return false;
+        if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+        if (trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles)) return false;
+        return surpriseTrackHasExactBpmAndPreview(track);
+      });
+      if (!pool.length) return null;
+      const uniqueArtists = new Set(pool.map((track) => artistMatchKey(track.artist)).filter(Boolean)).size;
+      const exposureCount = Number(swipeStyleExposureCounts.get(style) || 0);
+      const readiness = (() => {
+        try {
+          return Number(styleDiscoveryReadinessScore(style)) || 0;
+        } catch (_err) {
+          return 0;
+        }
+      })();
+      const seedNoise = hashUnit(`${userSeed}::${visitId}::${curationOpenSeed}::opening-style::${style}`) - 0.5;
+      const adaptiveSignal = Number(adaptiveModel.likedStyles.get(style) || 0) - Number(adaptiveModel.dislikedStyles.get(style) || 0);
+      const score =
+        seedNoise * 12 +
+        readiness * 1.4 +
+        adaptiveSignal * 0.9 +
+        Math.min(pool.length, 28) * 0.11 +
+        Math.min(uniqueArtists, 18) * 0.24 -
+        exposureCount * 2.8;
+      return { style, pool, score };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score);
+
+  if (!styleEntries.length) return null;
+  const bestScore = styleEntries[0].score;
+  const stylePool = styleEntries
+    .filter((entry) => entry.score >= bestScore - 8.5)
+    .slice(0, Math.min(9, styleEntries.length));
+  const minScore = Math.min(...stylePool.map((entry) => entry.score));
+  const totalWeight = stylePool.reduce((sum, entry) => sum + Math.max(0.1, entry.score - minScore + 0.6), 0);
+  let cursor = Math.random() * totalWeight;
+  let selected = stylePool[0];
+  for (const entry of stylePool) {
+    cursor -= Math.max(0.1, entry.score - minScore + 0.6);
+    if (cursor <= 0) {
+      selected = entry;
+      break;
+    }
+  }
+  return pickDiverseTrackFromPool(
+    selected.pool,
+    { style: selected.style, context: "", energy: "", bpm: "", vocals: "" },
+    { maxWindow: 18, scoreBand: 9 }
+  );
 }
 
 async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, reportProgress = null) {
@@ -24827,6 +24955,15 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   };
 
   update(24, t("searchOverlayGenerating"));
+  if (!baseTrack) {
+    const openingCandidate = pickOpeningSurpriseTrack({
+      blockedArtists,
+      blockedTrackKeys: knownTrackSignals.keys,
+      blockedTrackTitles: knownTrackSignals.titles
+    });
+    const openingValidated = await validateCandidate(openingCandidate);
+    if (openingValidated) return openingValidated;
+  }
   const fastAttempts = Math.min(56, Math.max(18, Math.floor(catalog.length * 0.22)));
   for (let attempt = 0; attempt < fastAttempts; attempt += 1) {
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
@@ -24880,7 +25017,9 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
-  if (strictCrossGenrePool.length) return pickRandomTrack(strictCrossGenrePool);
+  if (strictCrossGenrePool.length) {
+    return pickDiverseTrackFromPool(strictCrossGenrePool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+  }
 
   const strictDifferentStylePool = catalog.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
@@ -24890,7 +25029,9 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
-  if (strictDifferentStylePool.length) return pickRandomTrack(strictDifferentStylePool);
+  if (strictDifferentStylePool.length) {
+    return pickDiverseTrackFromPool(strictDifferentStylePool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+  }
 
   if (exactBpmFallbackTrack) {
     await resolvePreviewForTrack(exactBpmFallbackTrack);
@@ -24921,11 +25062,10 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
 
   const validatePool = async (pool = [], maxAttempts = 72) => {
     if (!Array.isArray(pool) || !pool.length) return null;
-    const candidates = pool.slice();
+    const candidates = orderDiverseTracksForPool(pool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
     let attempts = 0;
     while (candidates.length && attempts < maxAttempts) {
-      const idx = Math.floor(Math.random() * candidates.length);
-      const candidate = candidates.splice(idx, 1)[0];
+      const candidate = candidates.shift();
       const key = recommendationTrackKey(candidate);
       attempts += 1;
       if (!key || triedTrackKeys.has(key)) continue;
@@ -25002,7 +25142,9 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (!trackAllowed(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
-  if (lastChancePool.length) return pickRandomTrack(lastChancePool);
+  if (lastChancePool.length) {
+    return pickDiverseTrackFromPool(lastChancePool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+  }
 
   return null;
 }
@@ -34425,11 +34567,11 @@ function trackFreshnessScore(track, prefs = {}) {
   let score = 0;
 
   if (trackKey && recommendationMemory.has(trackKey)) score -= 3.2;
-  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 2.4;
-  if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) score -= 2.2;
-  if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 1.8;
-  if (artistKey && seenArtistsMemory.has(artistKey)) score -= 0.75;
-  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 1.9;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 4.8;
+  if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) score -= 3.4;
+  if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 3.8;
+  if (artistKey && seenArtistsMemory.has(artistKey)) score -= 2.9;
+  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 2.6;
   return score;
 }
 
@@ -34519,6 +34661,21 @@ function currentCurationUserSeed() {
   }
 }
 
+function currentCurationVisitId() {
+  if (curationVisitId) return curationVisitId;
+  try {
+    const stored = Number.parseInt(String(localStorage.getItem(CURATION_VISIT_STORAGE_KEY) || "0"), 10);
+    const nextVisit = Number.isFinite(stored) && stored >= 0 ? stored + 1 : 1;
+    const boundedVisit = nextVisit > 1000000 ? 1 : nextVisit;
+    localStorage.setItem(CURATION_VISIT_STORAGE_KEY, String(boundedVisit));
+    curationVisitId = `${boundedVisit}`;
+    return curationVisitId;
+  } catch (_err) {
+    curationVisitId = createRuntimeCurationSeed();
+    return curationVisitId;
+  }
+}
+
 function hashUnit(value = "") {
   return (hashString(value) % 10000) / 10000;
 }
@@ -34542,16 +34699,21 @@ function curationDiversityScore(track, prefs = {}, rawIndex = 0) {
   const artistKey = artistMatchKey(track.artist);
   const context = curationContextSignature(prefs);
   const userSeed = currentCurationUserSeed();
+  const visitId = currentCurationVisitId();
   const perUser = hashUnit(`${userSeed}::${context}::${trackKey}`) - 0.5;
   const perOpen = hashUnit(`${curationOpenSeed}::${context}::${trackKey}`) - 0.5;
-  let score = perOpen * (prefs.style ? 5.2 : 6.4) + perUser * (prefs.style ? 2.4 : 3.1);
+  const perVisit = hashUnit(`${visitId}::${curationOpenSeed}::${context}::${trackKey}`) - 0.5;
+  let score =
+    perOpen * (prefs.style ? 4.6 : 5.4) +
+    perVisit * (prefs.style ? 5.8 : 6.6) +
+    perUser * (prefs.style ? 1.5 : 2.1);
 
-  if (trackKey && recommendationMemory.has(trackKey)) score -= 4.8;
-  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 6.6;
+  if (trackKey && recommendationMemory.has(trackKey)) score -= 6.8;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 10.5;
   if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) score -= 4.2;
-  if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 3.4;
-  if (artistKey && seenArtistsMemory.has(artistKey)) score -= 1.7;
-  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 2.8;
+  if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 5.8;
+  if (artistKey && seenArtistsMemory.has(artistKey)) score -= 4.6;
+  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 3.6;
 
   score += trackReleaseFreshnessScore(track) * 1.85;
   if (trackHasPlayablePreviewExperience(track)) score += 0.45;
@@ -34565,11 +34727,12 @@ function curationSelectionWeight(track, prefs = {}, index = 0) {
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist);
   let weight = 1;
-  if (trackKey && recommendationMemory.has(trackKey)) weight *= 0.36;
-  if (trackKey && seenTrackKeysMemory.has(trackKey)) weight *= 0.18;
-  if (artistKey && seenArtistsMemory.has(artistKey)) weight *= 0.68;
+  if (trackKey && recommendationMemory.has(trackKey)) weight *= 0.22;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) weight *= 0.06;
+  if (artistKey && seenArtistsMemory.has(artistKey)) weight *= 0.32;
+  if (prefs?.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) weight *= 0.18;
   if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) weight *= 0.34;
-  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) weight *= 1.32;
+  if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) weight *= 1.55;
   if (trackReleaseFreshnessScore(track) > 0) weight *= 1.12;
   return Math.max(0.08, weight / (1 + Math.max(0, index) * 0.012));
 }
@@ -34909,18 +35072,24 @@ function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtist
   );
   if (reliableValid.length >= Math.min(3, valid.length)) valid = reliableValid;
 
-  if (valid[1] && valid[0].score - valid[1].score >= 12) return valid[0].track;
+  const topTrackKey = recommendationTrackKey(valid[0]?.track);
+  const topArtistKey = artistMatchKey(valid[0]?.track?.artist || "");
+  const topIsFresh =
+    (!topTrackKey || (!recommendationMemory.has(topTrackKey) && !seenTrackKeysMemory.has(topTrackKey))) &&
+    (!topArtistKey || !seenArtistsMemory.has(topArtistKey)) &&
+    (!prefs?.style || !getServedArtistCycle(prefs.style).includes(topArtistKey));
+  if (valid[1] && valid[0].score - valid[1].score >= 12 && topIsFresh) return valid[0].track;
 
   const diversified = diversifyScoredRecommendationEntries(valid, prefs);
   const bestScore = diversified[0].selectionScore;
   const band = Number.isFinite(scoreBand)
     ? scoreBand
-    : (preferenceCount >= 2 ? 3.6 : prefs?.style ? 5.8 : 6.4);
+    : (preferenceCount >= 2 ? 6.2 : prefs?.style ? 8.8 : 9.6);
   const requestedWindow = Math.max(1, Number(maxWindow) || 7);
   const windowLimit = Math.max(
     1,
     Math.min(
-      prefs?.style ? Math.max(requestedWindow, 12) : Math.max(requestedWindow, 14),
+      prefs?.style ? Math.max(requestedWindow, 24) : Math.max(requestedWindow, 28),
       diversified.length
     )
   );
@@ -35923,8 +36092,8 @@ function pickRecommendation(
 
   return pickFromScoredRecommendations(scored, prefs, {
     previousArtistKey,
-    maxWindow: prefs.style ? 18 : 20,
-    scoreBand: prefs.style ? 7.2 : 6.4
+    maxWindow: prefs.style ? 32 : 36,
+    scoreBand: prefs.style ? 10.8 : 10.2
   });
 }
 
