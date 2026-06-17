@@ -293,6 +293,61 @@ function hasAnyLink(track) {
   return LINK_FIELDS.some((field) => Boolean(track[field]));
 }
 
+function isSearchLikeUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    const path = String(parsed.pathname || "").toLowerCase();
+    const search = String(parsed.search || "").toLowerCase();
+    return path.includes("/search") || search.includes("search_query=") || search.includes("q=");
+  } catch (_err) {
+    return /\/search|search_query=|\bq=/.test(raw.toLowerCase());
+  }
+}
+
+function isDirectYouTubeUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw || isSearchLikeUrl(raw)) return false;
+  try {
+    const parsed = new URL(raw);
+    const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+    if (!/(^|\.)youtube\.com$|youtu\.be$/.test(host)) return false;
+    const path = String(parsed.pathname || "");
+    return Boolean(parsed.searchParams.get("v") || host === "youtu.be" || /\/(embed|shorts|live)\//.test(path));
+  } catch (_err) {
+    return false;
+  }
+}
+
+function isDirectSoundCloudTrackUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw || isSearchLikeUrl(raw)) return false;
+  try {
+    const parsed = new URL(raw);
+    const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+    if (!host.endsWith("soundcloud.com")) return false;
+    const parts = parsed.pathname.split("/").map((part) => part.trim()).filter(Boolean);
+    if (parts.length < 2) return false;
+    return !["search", "discover", "sets", "stream", "charts"].includes(parts[0]) && parts[1] !== "sets";
+  } catch (_err) {
+    return false;
+  }
+}
+
+function playableSourceSet(track) {
+  const sources = new Set();
+  if (track?.previewUrl || track?.preview || track?.audioPreview) sources.add("audio");
+  if (isDirectYouTubeUrl(track?.youtubeTrackUrl) || isDirectYouTubeUrl(track?.youtubeUrl)) sources.add("youtube");
+  if (isDirectSoundCloudTrackUrl(track?.soundcloudTrackUrl) || isDirectSoundCloudTrackUrl(track?.soundcloudUrl)) sources.add("soundcloud");
+  if (track?.bandcampTrackId || track?.bandcampTrackUrl || track?.bandcampUrl) sources.add("bandcamp");
+  return sources;
+}
+
+function hasReliablePlayablePath(track) {
+  return playableSourceSet(track).size > 0;
+}
+
 function hasAnyPlayablePath(track) {
   return Boolean(
     track?.previewUrl ||
@@ -697,10 +752,24 @@ function auditCatalog(blocks) {
       const tracks = styleGroups.get(style) || [];
       const target = targetForStyle(style, STYLE_COVERAGE_OVERRIDES);
       const artistSignalsForStyle = artistStyleGroups.get(style) || tracks;
+      const reliablePlayableTracks = tracks.filter((track) => hasReliablePlayablePath(track));
+      const sourceCounts = {
+        audio: 0,
+        youtube: 0,
+        soundcloud: 0,
+        bandcamp: 0
+      };
+      reliablePlayableTracks.forEach((track) => {
+        playableSourceSet(track).forEach((source) => {
+          sourceCounts[source] = (sourceCounts[source] || 0) + 1;
+        });
+      });
       const actual = {
         tracks: tracks.length,
         artists: uniqueCount(artistSignalsForStyle, artistId),
-        labels: uniqueCount(tracks, labelId)
+        labels: uniqueCount(tracks, labelId),
+        playable: reliablePlayableTracks.length,
+        sourceCounts
       };
       const missing = {
         tracks: Math.max(0, target.tracks - actual.tracks),
@@ -873,6 +942,17 @@ function formatDeltaLine(label, change, singularUnit, pluralUnit) {
   return `- ${label}: +${addedUnit} ${addedAction}, -${removedUnit} ${removedAction}; total anterior ${change.previous}, total atual ${change.current}.`;
 }
 
+function sourceCountSummary(counts = {}) {
+  return [
+    ["audio", "aud"],
+    ["youtube", "yt"],
+    ["soundcloud", "sc"],
+    ["bandcamp", "bc"]
+  ]
+    .map(([key, label]) => `${label}:${counts[key] || 0}`)
+    .join(" ");
+}
+
 function formatReport(result) {
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   const now = new Date();
@@ -890,6 +970,8 @@ function formatReport(result) {
     `${row.actual.tracks}/${row.target.tracks}`,
     `${row.actual.artists}/${row.target.artists}`,
     `${row.actual.labels}/${row.target.labels}`,
+    `${row.actual.playable}/${row.actual.tracks}`,
+    sourceCountSummary(row.actual.sourceCounts),
     row.ok
       ? "Completo"
       : `faltam ${row.missing.tracks} faixas, ${row.missing.artists} artistas, ${row.missing.labels} labels`
@@ -946,11 +1028,12 @@ function formatReport(result) {
         : "- Nao ha itens criticos nem avisos funcionais. As notas restantes sao metadados finos para enriquecer curadoria.",
     "- Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas verificadas, artistas ou labels.",
     "- A métrica de musicas buscaveis mede a capacidade de descoberta do app; faixas auditadas mede o quanto já está verificável no banco local.",
+    "- A coluna Tocaveis conta fontes diretas já gravadas no catalogo; resolucoes dinamicas por API devem ser confirmadas em teste live.",
     "- Quando os criticos zerarem, rode `node scripts/quality-audit.mjs --strict` antes de publicar.",
     "",
     "## Cobertura por subgenero",
     "",
-    formatTable(coverageRows, ["Status", "Subgenero", "Faixas", "Artistas", "Labels", "Observacao"]),
+    formatTable(coverageRows, ["Status", "Subgenero", "Faixas", "Artistas", "Labels", "Tocaveis", "Fontes", "Observacao"]),
     "",
     "## Problemas principais",
     "",

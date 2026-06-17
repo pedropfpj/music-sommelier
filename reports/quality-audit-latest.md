@@ -1,6 +1,6 @@
 # Quality Audit - Sonic Search
 
-Gerado em: 16/06/2026, 23:50:08
+Gerado em: 17/06/2026, 09:28:50
 Status: OK
 
 ## Resumo
@@ -30,93 +30,94 @@ Status: OK
 - Nao ha itens criticos nem avisos funcionais. As notas restantes sao metadados finos para enriquecer curadoria.
 - Depois use a tabela de cobertura para escolher quais subgeneros precisam de mais musicas verificadas, artistas ou labels.
 - A métrica de musicas buscaveis mede a capacidade de descoberta do app; faixas auditadas mede o quanto já está verificável no banco local.
+- A coluna Tocaveis conta fontes diretas já gravadas no catalogo; resolucoes dinamicas por API devem ser confirmadas em teste live.
 - Quando os criticos zerarem, rode `node scripts/quality-audit.mjs --strict` antes de publicar.
 
 ## Cobertura por subgenero
 
-| Status | Subgenero | Faixas | Artistas | Labels | Observacao |
-| --- | --- | --- | --- | --- | --- |
-| OK | acid_techno | 34/20 | 61/50 | 18/6 | Completo |
-| OK | afro_house | 33/20 | 60/50 | 29/6 | Completo |
-| OK | ambient | 128/24 | 122/50 | 101/6 | Completo |
-| OK | bass_house | 33/20 | 60/50 | 29/6 | Completo |
-| OK | brazilian_funk | 34/20 | 60/50 | 21/4 | Completo |
-| OK | breakbeat | 33/20 | 60/50 | 24/6 | Completo |
-| OK | breakcore | 95/20 | 72/50 | 58/6 | Completo |
-| OK | chillout | 25/20 | 61/50 | 13/4 | Completo |
-| OK | coldwave | 24/20 | 60/50 | 14/6 | Completo |
-| OK | dark_experimental | 28/24 | 86/50 | 20/10 | Completo |
-| OK | dark_progressive | 109/24 | 92/50 | 80/6 | Completo |
-| OK | dark_psy | 112/20 | 149/50 | 84/6 | Completo |
-| OK | darkwave | 30/20 | 60/50 | 11/6 | Completo |
-| OK | deep_house | 34/20 | 59/50 | 33/6 | Completo |
-| OK | detroit_techno | 24/20 | 60/50 | 17/6 | Completo |
-| OK | disco_house | 30/20 | 60/50 | 30/6 | Completo |
-| OK | downtempo | 25/24 | 60/50 | 18/6 | Completo |
-| OK | drum_and_bass | 35/20 | 60/50 | 21/6 | Completo |
-| OK | dub_techno | 93/20 | 80/50 | 71/6 | Completo |
-| OK | dubstep | 32/20 | 60/50 | 17/6 | Completo |
-| OK | ebm | 24/20 | 60/50 | 14/6 | Completo |
-| OK | electro | 77/20 | 70/50 | 57/6 | Completo |
-| OK | electro_house | 33/20 | 60/50 | 29/6 | Completo |
-| OK | experimental_bass | 31/20 | 60/50 | 24/6 | Completo |
-| OK | footwork_juke | 30/20 | 60/50 | 14/6 | Completo |
-| OK | forest_psy | 119/20 | 201/50 | 93/6 | Completo |
-| OK | freeform | 40/12 | 57/50 | 26/0 | Completo |
-| OK | frenchcore | 89/20 | 68/50 | 77/6 | Completo |
-| OK | full_on | 160/28 | 70/50 | 122/8 | Completo |
-| OK | full_on_morning | 24/24 | 60/50 | 14/8 | Completo |
-| OK | full_on_night | 28/24 | 60/50 | 17/8 | Completo |
-| OK | future_bass | 30/20 | 60/50 | 24/6 | Completo |
-| OK | future_garage | 106/20 | 65/50 | 81/6 | Completo |
-| OK | gabber | 33/16 | 60/50 | 26/0 | Completo |
-| OK | garage_house | 26/20 | 60/50 | 24/6 | Completo |
-| OK | goa_trance | 108/20 | 63/50 | 75/6 | Completo |
-| OK | halftime_bass | 29/20 | 60/50 | 18/6 | Completo |
-| OK | hard_techno | 24/20 | 60/50 | 19/6 | Completo |
-| OK | hard_trance | 30/20 | 61/50 | 25/6 | Completo |
-| OK | hardcore | 24/20 | 61/50 | 24/6 | Completo |
-| OK | hardstyle | 104/20 | 63/50 | 91/6 | Completo |
-| OK | hi_tech | 46/28 | 147/50 | 14/10 | Completo |
-| OK | house | 57/20 | 60/50 | 31/6 | Completo |
-| OK | hypnotic_techno | 24/20 | 61/50 | 19/6 | Completo |
-| OK | idm | 35/20 | 60/50 | 16/6 | Completo |
-| OK | industrial_techno | 68/20 | 65/50 | 53/6 | Completo |
-| OK | jackin_house | 30/20 | 61/50 | 21/6 | Completo |
-| OK | jump_up | 32/20 | 61/50 | 24/6 | Completo |
-| OK | jungle | 33/20 | 62/50 | 32/6 | Completo |
-| OK | liquid_dnb | 35/20 | 60/50 | 24/6 | Completo |
-| OK | melodic_techno | 104/20 | 67/50 | 86/6 | Completo |
-| OK | minimal_deep_tech | 30/20 | 60/50 | 26/6 | Completo |
-| OK | minimal_techno | 66/20 | 69/50 | 51/6 | Completo |
-| OK | neurofunk | 35/20 | 61/50 | 24/6 | Completo |
-| OK | organic_house | 33/20 | 61/50 | 27/6 | Completo |
-| OK | peak_time_techno | 24/20 | 61/50 | 15/6 | Completo |
-| OK | progressive_house | 33/20 | 60/50 | 29/6 | Completo |
-| OK | progressive_psy | 129/24 | 89/50 | 103/8 | Completo |
-| OK | psy_comercial | 24/20 | 61/50 | 20/6 | Completo |
-| OK | psybient | 96/20 | 60/50 | 62/6 | Completo |
-| OK | psybreaks | 30/20 | 60/50 | 12/6 | Completo |
-| OK | psycore | 48/22 | 162/50 | 17/0 | Completo |
-| OK | psytrance | 37/20 | 68/50 | 24/6 | Completo |
-| OK | raw_techno | 24/20 | 60/50 | 21/6 | Completo |
-| OK | rawstyle | 30/20 | 60/50 | 28/6 | Completo |
-| OK | riddim | 30/20 | 60/50 | 24/6 | Completo |
-| OK | schranz | 24/20 | 60/50 | 19/6 | Completo |
-| OK | slambient | 65/24 | 149/50 | 5/1 | Completo |
-| OK | soulful_house | 30/20 | 60/50 | 27/6 | Completo |
-| OK | speedcore | 30/20 | 63/50 | 12/6 | Completo |
-| OK | synthwave | 102/20 | 73/50 | 76/6 | Completo |
-| OK | tech_house | 52/20 | 60/50 | 21/6 | Completo |
-| OK | tech_trance | 30/20 | 60/50 | 29/6 | Completo |
-| OK | techno | 50/20 | 60/50 | 30/6 | Completo |
-| OK | trance_uplifting | 34/20 | 63/50 | 31/6 | Completo |
-| OK | trap | 30/20 | 60/50 | 20/6 | Completo |
-| OK | trip_hop | 102/20 | 66/50 | 69/6 | Completo |
-| OK | twilight_psy | 30/20 | 60/50 | 30/6 | Completo |
-| OK | uk_garage | 33/20 | 61/50 | 26/6 | Completo |
-| OK | wave | 30/20 | 61/50 | 24/6 | Completo |
-| OK | witch_house | 24/20 | 60/50 | 17/6 | Completo |
+| Status | Subgenero | Faixas | Artistas | Labels | Tocaveis | Fontes | Observacao |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| OK | acid_techno | 34/20 | 61/50 | 18/6 | 24/34 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | afro_house | 33/20 | 60/50 | 29/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | ambient | 128/24 | 122/50 | 101/6 | 115/128 | aud:115 yt:0 sc:0 bc:0 | Completo |
+| OK | bass_house | 33/20 | 60/50 | 29/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | brazilian_funk | 34/20 | 60/50 | 21/4 | 23/34 | aud:23 yt:0 sc:0 bc:0 | Completo |
+| OK | breakbeat | 33/20 | 60/50 | 24/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | breakcore | 95/20 | 72/50 | 58/6 | 95/95 | aud:95 yt:0 sc:0 bc:0 | Completo |
+| OK | chillout | 25/20 | 61/50 | 13/4 | 13/25 | aud:13 yt:0 sc:0 bc:0 | Completo |
+| OK | coldwave | 24/20 | 60/50 | 14/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | dark_experimental | 28/24 | 86/50 | 20/10 | 25/28 | aud:17 yt:0 sc:0 bc:8 | Completo |
+| OK | dark_progressive | 109/24 | 92/50 | 80/6 | 92/109 | aud:92 yt:0 sc:0 bc:0 | Completo |
+| OK | dark_psy | 112/20 | 149/50 | 84/6 | 100/112 | aud:98 yt:0 sc:2 bc:1 | Completo |
+| OK | darkwave | 30/20 | 60/50 | 11/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | deep_house | 34/20 | 59/50 | 33/6 | 24/34 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | detroit_techno | 24/20 | 60/50 | 17/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | disco_house | 30/20 | 60/50 | 30/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | downtempo | 25/24 | 60/50 | 18/6 | 12/25 | aud:12 yt:0 sc:0 bc:0 | Completo |
+| OK | drum_and_bass | 35/20 | 60/50 | 21/6 | 24/35 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | dub_techno | 93/20 | 80/50 | 71/6 | 93/93 | aud:93 yt:0 sc:0 bc:0 | Completo |
+| OK | dubstep | 32/20 | 60/50 | 17/6 | 20/32 | aud:20 yt:0 sc:0 bc:0 | Completo |
+| OK | ebm | 24/20 | 60/50 | 14/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | electro | 77/20 | 70/50 | 57/6 | 68/77 | aud:68 yt:0 sc:0 bc:0 | Completo |
+| OK | electro_house | 33/20 | 60/50 | 29/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | experimental_bass | 31/20 | 60/50 | 24/6 | 31/31 | aud:31 yt:0 sc:0 bc:0 | Completo |
+| OK | footwork_juke | 30/20 | 60/50 | 14/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | forest_psy | 119/20 | 201/50 | 93/6 | 106/119 | aud:106 yt:0 sc:0 bc:0 | Completo |
+| OK | freeform | 40/12 | 57/50 | 26/0 | 33/40 | aud:26 yt:0 sc:4 bc:4 | Completo |
+| OK | frenchcore | 89/20 | 68/50 | 77/6 | 89/89 | aud:89 yt:0 sc:0 bc:0 | Completo |
+| OK | full_on | 160/28 | 70/50 | 122/8 | 143/160 | aud:143 yt:0 sc:0 bc:0 | Completo |
+| OK | full_on_morning | 24/24 | 60/50 | 14/8 | 10/24 | aud:10 yt:0 sc:0 bc:0 | Completo |
+| OK | full_on_night | 28/24 | 60/50 | 17/8 | 15/28 | aud:15 yt:0 sc:0 bc:0 | Completo |
+| OK | future_bass | 30/20 | 60/50 | 24/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | future_garage | 106/20 | 65/50 | 81/6 | 95/106 | aud:95 yt:0 sc:0 bc:0 | Completo |
+| OK | gabber | 33/16 | 60/50 | 26/0 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | garage_house | 26/20 | 60/50 | 24/6 | 26/26 | aud:26 yt:0 sc:0 bc:0 | Completo |
+| OK | goa_trance | 108/20 | 63/50 | 75/6 | 98/108 | aud:98 yt:0 sc:0 bc:0 | Completo |
+| OK | halftime_bass | 29/20 | 60/50 | 18/6 | 29/29 | aud:29 yt:0 sc:0 bc:0 | Completo |
+| OK | hard_techno | 24/20 | 60/50 | 19/6 | 13/24 | aud:13 yt:0 sc:0 bc:0 | Completo |
+| OK | hard_trance | 30/20 | 61/50 | 25/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | hardcore | 24/20 | 61/50 | 24/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | hardstyle | 104/20 | 63/50 | 91/6 | 95/104 | aud:95 yt:0 sc:0 bc:0 | Completo |
+| OK | hi_tech | 46/28 | 147/50 | 14/10 | 0/46 | aud:0 yt:0 sc:0 bc:0 | Completo |
+| OK | house | 57/20 | 60/50 | 31/6 | 0/57 | aud:0 yt:0 sc:0 bc:0 | Completo |
+| OK | hypnotic_techno | 24/20 | 61/50 | 19/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | idm | 35/20 | 60/50 | 16/6 | 24/35 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | industrial_techno | 68/20 | 65/50 | 53/6 | 59/68 | aud:59 yt:0 sc:0 bc:0 | Completo |
+| OK | jackin_house | 30/20 | 61/50 | 21/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | jump_up | 32/20 | 61/50 | 24/6 | 23/32 | aud:23 yt:0 sc:0 bc:0 | Completo |
+| OK | jungle | 33/20 | 62/50 | 32/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | liquid_dnb | 35/20 | 60/50 | 24/6 | 24/35 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | melodic_techno | 104/20 | 67/50 | 86/6 | 93/104 | aud:93 yt:0 sc:0 bc:0 | Completo |
+| OK | minimal_deep_tech | 30/20 | 60/50 | 26/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | minimal_techno | 66/20 | 69/50 | 51/6 | 55/66 | aud:55 yt:0 sc:0 bc:0 | Completo |
+| OK | neurofunk | 35/20 | 61/50 | 24/6 | 24/35 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | organic_house | 33/20 | 61/50 | 27/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | peak_time_techno | 24/20 | 61/50 | 15/6 | 15/24 | aud:15 yt:0 sc:0 bc:0 | Completo |
+| OK | progressive_house | 33/20 | 60/50 | 29/6 | 24/33 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | progressive_psy | 129/24 | 89/50 | 103/8 | 114/129 | aud:114 yt:0 sc:0 bc:0 | Completo |
+| OK | psy_comercial | 24/20 | 61/50 | 20/6 | 13/24 | aud:13 yt:0 sc:0 bc:0 | Completo |
+| OK | psybient | 96/20 | 60/50 | 62/6 | 96/96 | aud:96 yt:0 sc:0 bc:0 | Completo |
+| OK | psybreaks | 30/20 | 60/50 | 12/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | psycore | 48/22 | 162/50 | 17/0 | 24/48 | aud:0 yt:0 sc:10 bc:18 | Completo |
+| OK | psytrance | 37/20 | 68/50 | 24/6 | 23/37 | aud:23 yt:0 sc:0 bc:0 | Completo |
+| OK | raw_techno | 24/20 | 60/50 | 21/6 | 23/24 | aud:23 yt:0 sc:0 bc:0 | Completo |
+| OK | rawstyle | 30/20 | 60/50 | 28/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | riddim | 30/20 | 60/50 | 24/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | schranz | 24/20 | 60/50 | 19/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | slambient | 65/24 | 149/50 | 5/1 | 28/65 | aud:0 yt:0 sc:0 bc:28 | Completo |
+| OK | soulful_house | 30/20 | 60/50 | 27/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | speedcore | 30/20 | 63/50 | 12/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | synthwave | 102/20 | 73/50 | 76/6 | 102/102 | aud:102 yt:0 sc:0 bc:0 | Completo |
+| OK | tech_house | 52/20 | 60/50 | 21/6 | 0/52 | aud:0 yt:0 sc:0 bc:0 | Completo |
+| OK | tech_trance | 30/20 | 60/50 | 29/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | techno | 50/20 | 60/50 | 30/6 | 0/50 | aud:0 yt:0 sc:0 bc:0 | Completo |
+| OK | trance_uplifting | 34/20 | 63/50 | 31/6 | 24/34 | aud:24 yt:0 sc:0 bc:0 | Completo |
+| OK | trap | 30/20 | 60/50 | 20/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | trip_hop | 102/20 | 66/50 | 69/6 | 102/102 | aud:102 yt:0 sc:0 bc:0 | Completo |
+| OK | twilight_psy | 30/20 | 60/50 | 30/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | uk_garage | 33/20 | 61/50 | 26/6 | 22/33 | aud:22 yt:0 sc:0 bc:0 | Completo |
+| OK | wave | 30/20 | 61/50 | 24/6 | 30/30 | aud:30 yt:0 sc:0 bc:0 | Completo |
+| OK | witch_house | 24/20 | 60/50 | 17/6 | 24/24 | aud:24 yt:0 sc:0 bc:0 | Completo |
 
 ## Problemas principais
 

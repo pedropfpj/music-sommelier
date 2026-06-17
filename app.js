@@ -12171,6 +12171,15 @@ function strictTitleMatch(baseTitle, candidateTitle) {
   return a.startsWith(b) || b.startsWith(a);
 }
 
+function hasUnrequestedAlternateVersion(baseTitle, candidateTitle) {
+  const base = normalizeTitle(baseTitle);
+  const candidate = normalizeTitle(candidateTitle);
+  if (!base || !candidate) return false;
+  const baseAllowsAlternate = /\b(remix|bootleg|rework|edit|vip|dub|flip|version|refix)\b/.test(base);
+  if (baseAllowsAlternate) return false;
+  return /\b(remix|bootleg|rework|cover|mashup|flip|edit|vip|refix|live|set|session|podcast)\b/.test(candidate);
+}
+
 function canonicalArtistIdentity(nameLike = "") {
   const raw = String(nameLike || "");
   const noParentheses = raw.replace(/\([^)]*\)/g, " ");
@@ -14591,6 +14600,7 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
         )
       );
       const titleOk = strictTitleMatch(track.song, candidateTitle);
+      const alternateVersionConflict = hasUnrequestedAlternateVersion(track.song, candidateTitle);
       const score =
         (directUrl ? 2.5 : 0) +
         (previewUrl ? 2.2 : 0) +
@@ -14598,8 +14608,9 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
         (artistOk ? 1.1 : 0) +
         (titleArtistOk || compactTitleArtistOk ? 0.9 : 0) +
         (descriptionArtistOk ? 0.55 : 0) +
-        titleScore;
-      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleArtistOk, compactTitleArtistOk, descriptionArtistOk, titleOk, score };
+        titleScore -
+        (alternateVersionConflict ? 4 : 0);
+      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleArtistOk, compactTitleArtistOk, descriptionArtistOk, titleOk, alternateVersionConflict, score };
     })
     .sort((a, b) => b.score - a.score);
 }
@@ -14607,6 +14618,7 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
 function isTrustedSoundCloudMatch(candidate) {
   if (!candidate) return false;
   if (candidate.sameDirectUrl) return true;
+  if (candidate.alternateVersionConflict) return false;
   return Boolean(
     candidate.titleOk &&
     candidate.titleScore >= 0.86 &&
@@ -26318,14 +26330,11 @@ function syncYouTubePreviewAttemptForTrack(track) {
 }
 
 function youtubePreviewCanRetry(track) {
-  return youtubePreviewSearchAttemptCount(track) > 1;
+  return false;
 }
 
 function youtubePreviewSearchAttemptCount(track) {
-  if (!track || trackHasDirectYouTubeVideo(track)) return 1;
-  const variants = youtubeSearchQueryVariants(track);
-  if (!variants.length) return 0;
-  return variants.length * YOUTUBE_SEARCH_RESULTS_PER_QUERY;
+  return trackHasDirectYouTubeVideo(track) ? 1 : 0;
 }
 
 function youtubeSearchPlanForAttempt(track, attempt = 0) {
@@ -26434,9 +26443,7 @@ function buildYouTubeEmbedUrl(track, { autoplay = false, attempt = 0 } = {}) {
   if (directVideoId) {
     return `https://www.youtube-nocookie.com/embed/${directVideoId}?${commonParams}&retry=${safeAttempt}`;
   }
-  const plan = youtubeSearchPlanForAttempt(track, safeAttempt);
-  if (!plan?.query) return "";
-  return `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(plan.query)}&index=${plan.resultIndex}&${commonParams}&retry=${safeAttempt}`;
+  return "";
 }
 
 function resetYouTubePreviewEmbed() {
@@ -26573,15 +26580,15 @@ function showFixedPreviewPlayers(track, {
     syncBandcampPreviewActionForTrack(track, { expanded: false });
   }
 
-  const shouldShowYoutube = hasDirectYoutube || (includeYoutubeSearch && youtubePreviewSearchAttemptCount(track) > 0);
+  const shouldShowYoutube = hasDirectYoutube;
   const youtubeReady = shouldShowYoutube
     ? showYouTubePreviewEmbed(track, { autoplay: autoplayYoutube, attempt: youtubeAttempt })
     : false;
   if (youtubeReady) sources.push("YouTube");
 
   setYouTubePreviewActionState({
-    visible: Boolean(hasDirectYoutube || canRetryYoutube || youtubePreviewSearchAttemptCount(track) > 0),
-    canToggle: Boolean(hasDirectYoutube || youtubePreviewSearchAttemptCount(track) > 0),
+    visible: hasDirectYoutube,
+    canToggle: hasDirectYoutube,
     canRetry: canRetryYoutube,
     expanded: youtubeReady
   });
@@ -36784,7 +36791,7 @@ async function renderPreview(track) {
           : t("previewLoaded");
       previewStatus.textContent = fixedPlayers.sources.length
         ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
-        : canRetryYoutube || !hasDirectYoutube
+        : hasDirectYoutube
           ? `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`
           : previewLoadedMessage;
       listeningPrompt.classList.remove("hidden");
@@ -36793,7 +36800,7 @@ async function renderPreview(track) {
       const readyMessage = t("previewReady");
       previewStatus.textContent = fixedPlayers.sources.length
         ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.sources })
-        : canRetryYoutube || !hasDirectYoutube
+        : hasDirectYoutube
           ? `${readyMessage} ${t("previewYoutubeOptionalHint")}`
           : readyMessage;
       listeningPrompt.classList.remove("hidden");
@@ -41085,6 +41092,17 @@ bind(quizCloseBtn, "click", () => {
 bind(youtubePreviewToggleBtn, "click", () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
+  const hasDirectYoutube = trackHasDirectYouTubeVideo(currentRecommendation);
+  if (!hasDirectYoutube) {
+    resetYouTubePreviewEmbed();
+    const platforms = availableExternalPlatforms();
+    if (previewStatus) {
+      previewStatus.textContent = platforms.length
+        ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
+        : t("previewUnavailable");
+    }
+    return;
+  }
   const canRetry = youtubePreviewCanRetry(currentRecommendation);
   const expanded = Boolean(youtubePreviewWrap && !youtubePreviewWrap.classList.contains("hidden"));
   if (expanded) {
@@ -41099,7 +41117,7 @@ bind(youtubePreviewToggleBtn, "click", () => {
   }
 
   const hasAudioPreview = Boolean(trackPreview && !trackPreview.classList.contains("hidden"));
-  const attempt = trackHasDirectYouTubeVideo(currentRecommendation) ? 0 : youtubePreviewSearchAttempt;
+  const attempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   const opened = showYouTubePreviewEmbed(currentRecommendation, { autoplay: !hasAudioPreview, attempt });
   setYouTubePreviewActionState({
     visible: true,
