@@ -13852,6 +13852,9 @@ function soundCloudRowHasTrackArtistSignal(row, artist = "", song = "") {
   const normalizedArtist = normalize(safeArtist);
   const normalizedSearchable = normalize(searchable);
   if (normalizedArtist && normalizedSearchable.includes(normalizedArtist)) return true;
+  const compactArtist = normalizedArtist.replace(/\s+/g, "");
+  const compactSearchable = normalizedSearchable.replace(/\s+/g, "");
+  if (compactArtist && compactSearchable.includes(compactArtist)) return true;
 
   const songTitle = String(song || "").trim();
   if (!songTitle) return false;
@@ -14567,9 +14570,14 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
       const artistOk = isArtistMatch(row.artist || "", track.artist || "");
       const normalizedArtist = normalize(track.artist || "");
       const titleArtistOk = Boolean(normalizedArtist && normalize(candidateTitle).includes(normalizedArtist));
+      const compactArtist = normalizedArtist.replace(/\s+/g, "");
+      const compactTitleArtistOk = Boolean(compactArtist && normalize(candidateTitle).replace(/\s+/g, "").includes(compactArtist));
       const descriptionArtistOk = Boolean(
         normalizedArtist &&
-        normalize([row.description, row.tags, row.genre].filter(Boolean).join(" ")).includes(normalizedArtist)
+        (
+          normalize([row.description, row.tags, row.genre].filter(Boolean).join(" ")).includes(normalizedArtist) ||
+          normalize([row.description, row.tags, row.genre].filter(Boolean).join(" ")).replace(/\s+/g, "").includes(compactArtist)
+        )
       );
       const titleOk = strictTitleMatch(track.song, candidateTitle);
       const score =
@@ -14577,10 +14585,10 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
         (previewUrl ? 2.2 : 0) +
         (sameDirectUrl ? 2.4 : 0) +
         (artistOk ? 1.1 : 0) +
-        (titleArtistOk ? 0.9 : 0) +
+        (titleArtistOk || compactTitleArtistOk ? 0.9 : 0) +
         (descriptionArtistOk ? 0.55 : 0) +
         titleScore;
-      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleArtistOk, descriptionArtistOk, titleOk, score };
+      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleArtistOk, compactTitleArtistOk, descriptionArtistOk, titleOk, score };
     })
     .sort((a, b) => b.score - a.score);
 }
@@ -14591,7 +14599,7 @@ function isTrustedSoundCloudMatch(candidate) {
   return Boolean(
     candidate.titleOk &&
     candidate.titleScore >= 0.86 &&
-    (candidate.artistOk || candidate.titleArtistOk || candidate.descriptionArtistOk)
+    (candidate.artistOk || candidate.titleArtistOk || candidate.compactTitleArtistOk || candidate.descriptionArtistOk)
   );
 }
 
