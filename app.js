@@ -13795,10 +13795,31 @@ function resolveMusicApiEndpoint(globalName, fallbackPath) {
   return canUseRelativeApiEndpoint() ? fallbackPath : "";
 }
 
-function soundCloudApiQueryTerms(style, artist = "") {
+function soundCloudApiQueryTerms(style, artist = "", track = null) {
   const parts = styleSearchParts(style);
   const searchTerms = advancedStyleSearchTerms(style, artist ? 4 : 6);
   const artistName = String(artist || "").trim();
+  const songName = String(track?.song || track?.title || "").trim();
+  const labelName = sanitizeLabel(String(track?.label || "").trim(), artistName, songName);
+  const styleTerm = String(STYLE_SEARCH_TERMS[style] || styleLabelByValue(style) || "").trim();
+
+  if (artistName && songName) {
+    const exactQueries = [
+      `"${artistName}" "${songName}"`,
+      `${artistName} ${songName}`,
+      `"${songName}" "${artistName}"`,
+      [artistName, songName, labelName && !/catalog|catálogo|curated|dinâmico|dinamico/i.test(labelName) ? labelName : ""].filter(Boolean).join(" "),
+      [artistName, songName, styleTerm].filter(Boolean).join(" "),
+      [songName, artistName, parts.familyTerm].filter(Boolean).join(" ")
+    ];
+    return Array.from(
+      new Set(
+        exactQueries
+          .map((query) => query.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+      )
+    ).slice(0, 6);
+  }
 
   const queries = artistName
     ? searchTerms.map((term) => `${artistName} ${term}`)
@@ -13816,15 +13837,38 @@ function soundCloudApiQueryTerms(style, artist = "") {
   ).slice(0, artistName ? 3 : 5);
 }
 
-async function fetchSoundCloudTracksByStyle(style, artist = "") {
+function soundCloudRowHasTrackArtistSignal(row, artist = "", song = "") {
+  const safeArtist = String(artist || "").trim();
+  if (!safeArtist) return true;
+  if (isArtistMatch(row?.artist || "", safeArtist)) return true;
+
+  const searchable = [
+    row?.song,
+    row?.title,
+    row?.description,
+    row?.tags,
+    row?.genre
+  ].filter(Boolean).join(" ");
+  const normalizedArtist = normalize(safeArtist);
+  const normalizedSearchable = normalize(searchable);
+  if (normalizedArtist && normalizedSearchable.includes(normalizedArtist)) return true;
+
+  const songTitle = String(song || "").trim();
+  if (!songTitle) return false;
+  return strictTitleMatch(songTitle, row?.song || row?.title || "") && titleConfidence(songTitle, row?.song || row?.title || "") >= 0.92;
+}
+
+async function fetchSoundCloudTracksByStyle(style, artist = "", options = {}) {
   const endpoint = resolveMusicApiEndpoint("SONIC_SOUNDCLOUD_SEARCH_API_URL", "/api/soundcloud-search");
   if (!endpoint || !style) return [];
 
-  const cacheKey = `${style}::${normalize(artist || "generic")}`;
-  if (soundCloudApiCache.has(cacheKey)) return soundCloudApiCache.get(cacheKey);
+  const track = options?.track || null;
+  const trackKey = track?.song ? normalize(`${track.artist || artist}::${track.song}`) : "";
+  const cacheKey = `${style}::${normalize(artist || "generic")}::${trackKey || "style"}`;
+  if (!options?.force && soundCloudApiCache.has(cacheKey)) return soundCloudApiCache.get(cacheKey);
 
   const collected = new Map();
-  const queries = soundCloudApiQueryTerms(style, artist);
+  const queries = soundCloudApiQueryTerms(style, artist, track);
   for (const query of queries) {
     try {
       const response = await fetch(endpoint, {
@@ -13836,7 +13880,9 @@ async function fetchSoundCloudTracksByStyle(style, artist = "") {
         body: JSON.stringify({
           style,
           query,
-          limit: artist ? 16 : 32
+          limit: track ? 20 : artist ? 16 : 32,
+          resolvePreview: true,
+          previewResolveLimit: track ? 20 : artist ? 16 : 12
         })
       });
       if (!response.ok) break;
@@ -13844,11 +13890,11 @@ async function fetchSoundCloudTracksByStyle(style, artist = "") {
       const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
       rows
         .filter((row) => row?.song && row?.artist && row?.soundcloudTrackUrl)
-        .filter((row) => !artist || isArtistMatch(row.artist, artist))
+        .filter((row) => !artist || (track ? soundCloudRowHasTrackArtistSignal(row, artist, track.song) : isArtistMatch(row.artist, artist)))
         .filter(
           (row) =>
             !hasTrackStyleSignalConflict(style, {
-              artist: row.artist,
+              artist: track?.artist || row.artist,
               song: row.song,
               label: row.label || "SoundCloud",
               artistGenre: [row.genre, row.tags, STYLE_SEARCH_TERMS[style], styleLabelByValue(style)]
@@ -13865,7 +13911,7 @@ async function fetchSoundCloudTracksByStyle(style, artist = "") {
     }
   }
 
-  const tracks = Array.from(collected.values()).slice(0, artist ? 16 : 60);
+  const tracks = Array.from(collected.values()).slice(0, track ? 24 : artist ? 16 : 60);
   soundCloudApiCache.set(cacheKey, tracks);
   return tracks;
 }
@@ -14515,17 +14561,26 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
       const directUrl = soundCloudDirectUrlFromRow(row);
       const rowUrl = canonicalExternalTrackUrl(directUrl);
       const previewUrl = soundCloudPreviewUrlFromRow(row);
+      const candidateTitle = row.song || row.title || "";
       const sameDirectUrl = Boolean(currentDirectUrl && rowUrl && currentDirectUrl === rowUrl);
-      const titleScore = titleConfidence(track.song, row.song || row.title || "");
+      const titleScore = titleConfidence(track.song, candidateTitle);
       const artistOk = isArtistMatch(row.artist || "", track.artist || "");
-      const titleOk = strictTitleMatch(track.song, row.song || row.title || "");
+      const normalizedArtist = normalize(track.artist || "");
+      const titleArtistOk = Boolean(normalizedArtist && normalize(candidateTitle).includes(normalizedArtist));
+      const descriptionArtistOk = Boolean(
+        normalizedArtist &&
+        normalize([row.description, row.tags, row.genre].filter(Boolean).join(" ")).includes(normalizedArtist)
+      );
+      const titleOk = strictTitleMatch(track.song, candidateTitle);
       const score =
         (directUrl ? 2.5 : 0) +
         (previewUrl ? 2.2 : 0) +
         (sameDirectUrl ? 2.4 : 0) +
         (artistOk ? 1.1 : 0) +
+        (titleArtistOk ? 0.9 : 0) +
+        (descriptionArtistOk ? 0.55 : 0) +
         titleScore;
-      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleOk, score };
+      return { row, directUrl, previewUrl, sameDirectUrl, titleScore, artistOk, titleArtistOk, descriptionArtistOk, titleOk, score };
     })
     .sort((a, b) => b.score - a.score);
 }
@@ -14533,7 +14588,11 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
 function isTrustedSoundCloudMatch(candidate) {
   if (!candidate) return false;
   if (candidate.sameDirectUrl) return true;
-  return Boolean(candidate.artistOk && candidate.titleOk && candidate.titleScore >= 0.86);
+  return Boolean(
+    candidate.titleOk &&
+    candidate.titleScore >= 0.86 &&
+    (candidate.artistOk || candidate.titleArtistOk || candidate.descriptionArtistOk)
+  );
 }
 
 function applySoundCloudMatchToTrack(track, candidate, { requirePreview = false, requireDirect = false } = {}) {
@@ -14552,6 +14611,9 @@ function applySoundCloudMatchToTrack(track, candidate, { requirePreview = false,
     track.previewLookupAttempted = true;
     track.previewSource = "soundcloud_api";
   }
+  if (Array.isArray(candidate.row?.previewCandidates)) {
+    candidate.row.previewCandidates.forEach((previewUrl) => registerPreviewCandidate(track, previewUrl));
+  }
   track.soundcloudVerified = true;
   track.existenceVerified = true;
   return Boolean(candidate.directUrl || candidate.previewUrl);
@@ -14559,11 +14621,13 @@ function applySoundCloudMatchToTrack(track, candidate, { requirePreview = false,
 
 async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
   if (!shouldRefreshSoundCloudPreview(track, { force })) return false;
-  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist);
+  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist, { track, force });
   if (!rows.length) return false;
 
-  const best = rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.previewUrl && isTrustedSoundCloudMatch(candidate));
-  return applySoundCloudMatchToTrack(track, best, { requirePreview: true });
+  const best =
+    rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.previewUrl && isTrustedSoundCloudMatch(candidate)) ||
+    rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.directUrl && isTrustedSoundCloudMatch(candidate));
+  return applySoundCloudMatchToTrack(track, best);
 }
 
 async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
@@ -14575,7 +14639,7 @@ async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
   if (!force && track.soundcloudEmbedLookupAttempted) return false;
   track.soundcloudEmbedLookupAttempted = true;
 
-  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist);
+  const rows = await fetchSoundCloudTracksByStyle(track.style, track.artist, { track, force });
   if (!rows.length) return false;
 
   const best = rankedSoundCloudRowsForTrack(track, rows).find((candidate) => candidate.directUrl && isTrustedSoundCloudMatch(candidate));
@@ -14756,7 +14820,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   const previewCandidates = previewCandidatesForTrack(track);
   track.previewUrl = previewCandidates[0] || "";
   track.previewChecked = true;
-  track.previewMissing = previewCandidates.length === 0;
+  track.previewMissing = previewCandidates.length === 0 && !trackHasExternalPlayableFallback(track);
   track.previewLookupAttempted = true;
 }
 
@@ -36316,14 +36380,18 @@ async function renderPreview(track) {
   if (needsSoundCloudEmbedLookup) {
     await resolveSoundCloudEmbedForTrack(track, { force: !trackHasReliableAudioPreview(track) });
   }
-  const hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
-  const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
-  const canRetryYoutube = youtubePreviewCanRetry(track);
-  const youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
+  let hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
+  let hasDirectYoutube = trackHasDirectYouTubeVideo(track);
+  let canRetryYoutube = youtubePreviewCanRetry(track);
+  let youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
   let playablePreview = await resolvePlayablePreview(false);
   if (!playablePreview) {
     playablePreview = await resolvePlayablePreview(true);
+    hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
+    hasDirectYoutube = trackHasDirectYouTubeVideo(track);
+    canRetryYoutube = youtubePreviewCanRetry(track);
+    youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
 
   if (playablePreview) {

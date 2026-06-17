@@ -65,10 +65,12 @@ async function resolvePreviewUrl(row, token) {
 
 async function normalizeTrack(row, style, token, { resolvePreview = false } = {}) {
   const user = row?.user || {};
+  const publisherArtist = trimText(row?.publisher_metadata?.artist || "", 90);
+  const userName = trimText(user.username || "", 90);
   const genre = trimText(row?.genre || "", 90);
   const tags = trimText(row?.tag_list || "", 220);
   const title = cleanTitle(row?.title || "");
-  const artist = trimText(user.username || row?.publisher_metadata?.artist || "", 90);
+  const artist = publisherArtist || userName;
   if (!title || !artist || !row?.permalink_url) return null;
 
   const publisherLabel = row?.publisher_metadata?.p_line || row?.publisher_metadata?.label_name || "";
@@ -84,6 +86,8 @@ async function normalizeTrack(row, style, token, { resolvePreview = false } = {}
     title,
     song: title,
     artist,
+    soundcloudUser: userName,
+    publisherArtist,
     label,
     style,
     genre,
@@ -147,11 +151,14 @@ async function getSoundCloudToken() {
   return cachedToken.value;
 }
 
-async function fetchSoundCloudTracks({ query, style, limit }) {
+async function fetchSoundCloudTracks({ query, style, limit, previewResolveLimit: requestedPreviewResolveLimit = null }) {
   const token = await getSoundCloudToken();
+  const requestedLimit = Number.parseInt(String(requestedPreviewResolveLimit ?? ""), 10);
   const previewResolveLimit = envInt(
     "SONIC_SOUNDCLOUD_PREVIEW_RESOLVE_LIMIT",
-    Math.min(Number(limit) || 8, 8),
+    Number.isFinite(requestedLimit)
+      ? Math.max(0, Math.min(20, requestedLimit))
+      : Math.min(Number(limit) || 16, 16),
     0,
     20
   );
@@ -200,6 +207,7 @@ module.exports = async function handler(req, res) {
   const query = trimText(body.query, 140);
   const style = trimText(body.style, 80);
   const limit = safeLimit(body.limit, envInt("SONIC_SOUNDCLOUD_SEARCH_LIMIT", 12, 1, 50));
+  const requestedPreviewResolveLimit = Number.parseInt(String(body.previewResolveLimit || ""), 10);
 
   if (!query) {
     sendJson(req, res, 400, { error: "missing_query" });
@@ -207,7 +215,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const tracks = await fetchSoundCloudTracks({ query, style, limit });
+    const tracks = await fetchSoundCloudTracks({ query, style, limit, previewResolveLimit: requestedPreviewResolveLimit });
     sendJson(req, res, 200, {
       ok: true,
       source: "soundcloud",
