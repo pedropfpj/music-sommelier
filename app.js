@@ -5302,16 +5302,6 @@ const spiritImage = document.getElementById("spiritImage");
 const spiritName = document.getElementById("spiritName");
 const spiritArchetype = document.getElementById("spiritArchetype");
 const spiritDescription = document.getElementById("spiritDescription");
-const spiritLorePanel = document.getElementById("spiritLorePanel");
-const spiritLoreSignatureKicker = document.getElementById("spiritLoreSignatureKicker");
-const spiritLoreSignatureTitle = document.getElementById("spiritLoreSignatureTitle");
-const spiritLoreSignatureText = document.getElementById("spiritLoreSignatureText");
-const spiritLoreWhyKicker = document.getElementById("spiritLoreWhyKicker");
-const spiritLoreWhyTitle = document.getElementById("spiritLoreWhyTitle");
-const spiritLoreWhyText = document.getElementById("spiritLoreWhyText");
-const spiritLoreNextKicker = document.getElementById("spiritLoreNextKicker");
-const spiritLoreNextTitle = document.getElementById("spiritLoreNextTitle");
-const spiritLoreNextText = document.getElementById("spiritLoreNextText");
 const spiritProgress = document.getElementById("spiritProgress");
 const spiritInsightPanel = document.getElementById("spiritInsightPanel");
 const spiritInsightTitle = document.getElementById("spiritInsightTitle");
@@ -16244,12 +16234,6 @@ const I18N = {
     spiritVitalNextUnlocked: "Siga {style}",
     spiritVitalNextDetailLocked: "O próximo sinal já muda a leitura.",
     spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
-    spiritLoreSignatureKicker: "Assinatura",
-    spiritLoreWhyKicker: "Por que atrai",
-    spiritLoreNextKicker: "Próxima busca",
-    spiritLoreSignatureTitle: "Quem é esse espírito",
-    spiritLoreWhyTitle: "Por que ele apareceu",
-    spiritLoreNextTitle: "Como evoluir a leitura",
     spiritSpotlightTitle: "Faixa do espírito",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
     spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
@@ -16257,10 +16241,10 @@ const I18N = {
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
-    spiritCollectibleReadyToGenerate: "Pronto para criar sua arte única. Toque em Gerar nova arte para criar um card estático com seu espírito e status.",
-    spiritCollectibleHintLocal: "Sem depender da API: preparo um busto espectral local enquanto a arte premium fica pronta. No Vercel, a IA online tenta elevar para o retrato final.",
-    spiritCollectibleHintLocalReady: "Busto espectral local criado. Ao regenerar, a IA tenta substituir por uma arte premium quando estiver disponível.",
-    spiritCollectibleHintApi: "Arte premium por IA: busto frontal hiper-realista de uma entidade musical espectral, adulta, andrógina, espiritual e futurista, com pele luminosa, fones/coroa/halo, joias, collar e medalhão derivados do seu gosto.",
+    spiritCollectibleReadyToGenerate: "Pronto para gerar um card estático do seu espírito com imagem, nível e marco de likes.",
+    spiritCollectibleHintLocal: "Prévia local ativa. Quando a IA estiver disponível, ela tenta trocar por uma arte mais premium.",
+    spiritCollectibleHintLocalReady: "Arte local criada. Regenerar tenta buscar uma versão premium quando disponível.",
+    spiritCollectibleHintApi: "Arte IA baseada no seu gosto: retrato espectral com pele luminosa, acessórios musicais e aura futurista.",
     spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a prévia local mantém o espírito visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
@@ -17064,12 +17048,6 @@ const I18N = {
     spiritVitalNextUnlocked: "Follow {style}",
     spiritVitalNextDetailLocked: "The next signal already changes the reading.",
     spiritVitalNextDetailUnlocked: "Use filters or swipe to test this path.",
-    spiritLoreSignatureKicker: "Signature",
-    spiritLoreWhyKicker: "Why it pulls you in",
-    spiritLoreNextKicker: "Next search",
-    spiritLoreSignatureTitle: "Who this spirit is",
-    spiritLoreWhyTitle: "Why it appeared",
-    spiritLoreNextTitle: "How to evolve the reading",
     spiritSpotlightTitle: "Spirit track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
     spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
@@ -17077,10 +17055,10 @@ const I18N = {
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
-    spiritCollectibleReadyToGenerate: "Ready to create your unique artwork. Tap Generate new artwork to build a static card with your spirit and status.",
-    spiritCollectibleHintLocal: "No API required: I prepare a local spectral bust while the premium artwork gets ready. On Vercel, online AI tries to upgrade it into the final portrait.",
-    spiritCollectibleHintLocalReady: "Local spectral bust created. Regeneration still tries to replace it with premium AI artwork when available.",
-    spiritCollectibleHintApi: "Premium AI artwork: a hyper-real front bust of an adult androgynous spiritual futuristic musical-spirit entity, with luminous skin, headphones/crown/halo, jewelry, collar, and medallion derived from your taste.",
+    spiritCollectibleReadyToGenerate: "Ready to generate a static spirit card with artwork, level, and like milestone.",
+    spiritCollectibleHintLocal: "Local preview active. When AI is available, it tries to swap in a more premium artwork.",
+    spiritCollectibleHintLocalReady: "Local artwork created. Regenerating still tries to fetch a premium version when available.",
+    spiritCollectibleHintApi: "AI artwork based on your taste: a spectral portrait with luminous skin, music accessories, and futuristic aura.",
     spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the local preview keeps the spirit visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
@@ -17881,12 +17859,6 @@ const I18N = {
     spiritVitalNextUnlocked: "Sigue {style}",
     spiritVitalNextDetailLocked: "La próxima señal ya cambia la lectura.",
     spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
-    spiritLoreSignatureKicker: "Firma",
-    spiritLoreWhyKicker: "Por qué atrae",
-    spiritLoreNextKicker: "Próxima búsqueda",
-    spiritLoreSignatureTitle: "Quién es este espíritu",
-    spiritLoreWhyTitle: "Por qué apareció",
-    spiritLoreNextTitle: "Cómo evolucionar la lectura",
     spiritSpotlightTitle: "Pista del espíritu",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
     spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
@@ -17894,10 +17866,10 @@ const I18N = {
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
-    spiritCollectibleReadyToGenerate: "Listo para crear tu arte único. Toca Generar nueva arte para crear un card estático con tu espíritu y estado.",
-    spiritCollectibleHintLocal: "Sin API: preparo un busto espectral local mientras el arte premium queda listo. En Vercel, la IA online intenta elevarlo al retrato final.",
-    spiritCollectibleHintLocalReady: "Busto espectral local creado. Al regenerar, la IA intenta reemplazarlo por arte premium cuando esté disponible.",
-    spiritCollectibleHintApi: "Arte premium con IA: busto frontal hiperrealista de una entidad musical espectral adulta, andrógina, espiritual y futurista, con piel luminosa, audífonos/corona/halo, joyas, collar y medallón derivados de tu gusto.",
+    spiritCollectibleReadyToGenerate: "Listo para generar un card estático del espíritu con imagen, nivel e hito de likes.",
+    spiritCollectibleHintLocal: "Vista local activa. Cuando la IA esté disponible, intenta traer una arte más premium.",
+    spiritCollectibleHintLocalReady: "Arte local creada. Regenerar intenta buscar una versión premium cuando esté disponible.",
+    spiritCollectibleHintApi: "Arte IA basada en tu gusto: retrato espectral con piel luminosa, accesorios musicales y aura futurista.",
     spiritCollectiblePremiumLocked: "Arte IA preparado. Mientras la imagen online no llega, la vista local mantiene visible el espíritu.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
@@ -30273,67 +30245,18 @@ function spiritStyleAppealText(styleKey = "") {
   return `${label}: ${languageStyleCopy[styleKey] || languageFamilyCopy[family] || languageFamilyCopy.leftfield}`;
 }
 
-function buildSpiritLorePayload(spirit, spiritText = {}) {
-  const profile = resolveSpiritNarrativeProfile(spirit);
-  const topStyles = profile.topStyles.length ? profile.topStyles : spiritTopStyles(spirit, 3);
-  const topStyleKeys = spiritTopStyleKeys(spirit, 3);
-  const dominantKey = profile.dominantStyleKey || topStyleKeys[0] || "";
-  const styleInfo = dominantKey ? styleInfoSummaryByLanguage(dominantKey) : "";
-  const appeal = spiritStyleAppealText(dominantKey);
-  const nextStyles = topStyles.slice(0, 2).join(" + ") || profile.dominantStyle;
-  const identityText = spiritIdentityText(spirit, spiritText, profile);
-  const indicationText = spiritIndicationText(profile);
-  const personalityText = spiritPersonalityText(profile);
-
-  if (currentLanguage === "en") {
-    return {
-      signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
-      whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} In practice, this spirit needs tracks with a strong identity: not random genre tags, but a sound world with a readable mood, body weight, and progression.`),
-      nextText: normalizeInlineText(`For the next pass, ask for ${nextStyles} and tune context first, then energy and BPM. Mark “already knew it” and “new to me”: that is what separates your repertoire from real discovery. ${spiritArtDirectionText()}`)
-    };
-  }
-  if (currentLanguage === "es") {
-    return {
-      signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
-      whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} En la práctica, este espíritu pide pistas con identidad fuerte: no etiquetas sueltas, sino un mundo sonoro con ánimo, peso corporal y progresión legibles.`),
-      nextText: normalizeInlineText(`Para la próxima pasada, pide ${nextStyles} y ajusta primero el contexto, luego energía y BPM. Marca “ya conocía” y “nuevo para mí”: eso separa repertorio de descubrimiento real. ${spiritArtDirectionText()}`)
-    };
-  }
-  return {
-    signatureText: normalizeInlineText(`${identityText} ${personalityText}`),
-    whyText: normalizeInlineText(`${indicationText} ${appeal} ${styleInfo} Na prática, esse espírito pede faixas com identidade forte: não etiquetas soltas, mas um mundo sonoro com clima, peso corporal e progressão legíveis.`),
-    nextText: normalizeInlineText(`Na próxima rodada, peça ${nextStyles} e ajuste primeiro o contexto, depois energia e BPM. Marque “já conhecia” e “novidade para mim”: é isso que separa repertório de descoberta real. ${spiritArtDirectionText()}`)
-  };
-}
-
-function renderSpiritLore(spirit, spiritText = {}) {
-  if (!spiritLorePanel) return;
-  const payload = buildSpiritLorePayload(spirit, spiritText);
-  if (spiritLoreSignatureKicker) spiritLoreSignatureKicker.textContent = t("spiritLoreSignatureKicker");
-  if (spiritLoreWhyKicker) spiritLoreWhyKicker.textContent = t("spiritLoreWhyKicker");
-  if (spiritLoreNextKicker) spiritLoreNextKicker.textContent = t("spiritLoreNextKicker");
-  if (spiritLoreSignatureTitle) spiritLoreSignatureTitle.textContent = t("spiritLoreSignatureTitle");
-  if (spiritLoreWhyTitle) spiritLoreWhyTitle.textContent = t("spiritLoreWhyTitle");
-  if (spiritLoreNextTitle) spiritLoreNextTitle.textContent = t("spiritLoreNextTitle");
-  if (spiritLoreSignatureText) spiritLoreSignatureText.textContent = payload.signatureText;
-  if (spiritLoreWhyText) spiritLoreWhyText.textContent = payload.whyText;
-  if (spiritLoreNextText) spiritLoreNextText.textContent = payload.nextText;
-}
-
 function buildSpiritPanelNarrative(spirit, spiritText = {}) {
-  const baseDescription = normalizeInlineText(spiritText?.description || "");
   const profile = resolveSpiritNarrativeProfile(spirit);
-  const identityText = spiritIdentityText(spirit, spiritText, profile);
-  const indicationText = spiritIndicationText(profile);
-  const personalityText = spiritPersonalityText(profile);
+  const stylesLine = spiritProfileStylesLine(profile);
+  const genreNarrative = normalizeInlineText(profile.genreNarrative || "");
+  const microQuote = spiritCollectibleMicroQuote(profile);
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        identityText,
-        baseDescription ? `Original reading: ${baseDescription}` : "",
-        indicationText,
-        personalityText,
-        `It should behave like a listening map, not a decorative badge.`
+        `Your spirit is pulling toward ${stylesLine}.`,
+        genreNarrative,
+        microQuote,
+        "Use it as a compass: look for tracks with a whole world, not just the right tag."
       ]
         .filter(Boolean)
         .join(" ")
@@ -30342,11 +30265,10 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        identityText,
-        baseDescription ? `Lectura inicial: ${baseDescription}` : "",
-        indicationText,
-        personalityText,
-        `Debe funcionar como mapa de escucha, no como adorno.`
+        `Tu espíritu está tirando hacia ${stylesLine}.`,
+        genreNarrative,
+        microQuote,
+        "Úsalo como brújula: busca pistas con mundo propio, no solo la etiqueta correcta."
       ]
         .filter(Boolean)
         .join(" ")
@@ -30354,11 +30276,10 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   }
   return normalizeInlineText(
     [
-      identityText,
-      baseDescription ? `Leitura inicial: ${baseDescription}` : "",
-      indicationText,
-      personalityText,
-      `Ele deve funcionar como mapa de escuta, não só como enfeite.`
+      `Seu espírito agora puxa para ${stylesLine}.`,
+      genreNarrative,
+      microQuote,
+      "Use como bússola: procure faixas com mundo próprio, não só etiqueta certa."
     ]
       .filter(Boolean)
       .join(" ")
@@ -30412,19 +30333,13 @@ function buildSpiritCollectibleCopy(spirit, spiritText = {}) {
 
 function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneLikes) {
   const profile = resolveSpiritNarrativeProfile(spirit);
-  const rankLabel = t(resolveSpiritRank(likes).current.key);
-  const signatureLine = spiritCollectibleUserSignature().slice(0, 6).toUpperCase();
-  const identityText = spiritIdentityText(spirit, spiritText, profile);
-  const indicationText = spiritIndicationText(profile);
-  const personalityText = spiritPersonalityText(profile);
-  const artDirectionText = spiritArtDirectionText();
+  const spiritName = spiritText?.name || spiritText?.archetype || profile.dominantStyle || t("freeStyle");
+  const styleSignature = profile.styleSignature || spiritProfileStylesLine(profile);
   if (currentLanguage === "pt") {
     return normalizeInlineText(
       [
-        `Quem é: ${identityText}`,
-        indicationText,
-        personalityText,
-        `${artDirectionText} Status ${rankLabel.toLowerCase()} no marco de ${milestoneLikes} likes. ID ${signatureLine}.`
+        `A arte traduz ${styleSignature} em pele luminosa, gesto ritual e acessórios de pista.`,
+        `Um retrato de ${spiritName} no marco de ${milestoneLikes} likes.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -30433,10 +30348,8 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        `Who it is: ${identityText}`,
-        indicationText,
-        personalityText,
-        `${artDirectionText} ${rankLabel} status at ${milestoneLikes} likes. ID ${signatureLine}.`
+        `The artwork turns ${styleSignature} into luminous skin, ritual posture, and dancefloor artifacts.`,
+        `A portrait of ${spiritName} at the ${milestoneLikes}-like milestone.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -30445,10 +30358,8 @@ function buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestoneL
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        `Quién es: ${identityText}`,
-        indicationText,
-        personalityText,
-        `${artDirectionText} Estado ${rankLabel.toLowerCase()} en el hito de ${milestoneLikes} likes. ID ${signatureLine}.`
+        `La arte traduce ${styleSignature} en piel luminosa, gesto ritual y accesorios de pista.`,
+        `Un retrato de ${spiritName} en el hito de ${milestoneLikes} likes.`
       ]
         .filter(Boolean)
         .join(" ")
@@ -34316,7 +34227,6 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     spiritUnlocked = false;
     spiritAnimationToken += 1;
     clearSpiritSpotlight();
-    if (spiritLorePanel) spiritLorePanel.classList.add("hidden");
     if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleImage) spiritCollectibleImage.removeAttribute("src");
     if (spiritShareLinkBtn) spiritShareLinkBtn.disabled = true;
@@ -34368,10 +34278,16 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
         : "Arquétipo em calibração");
   updateSpiritProgressText();
   renderSpiritInsight(selectedSpirit, { unlocked: true });
-  if (spiritLorePanel) spiritLorePanel.classList.remove("hidden");
-  renderSpiritLore(selectedSpirit, spiritText);
   const spiritSpotlightPayload = resolveSpiritSpotlightTrack(selectedSpirit);
   const spotlightTrack = renderSpiritSpotlight(spiritSpotlightPayload);
+  const spiritNarrative = buildSpiritPanelNarrative(selectedSpirit, spiritText);
+  const mustAnimate = forceAnimation || wasHidden || changedSpirit || !spiritDescription.textContent.trim();
+  const spiritNarrativeTask = mustAnimate
+    ? animateSpiritDescription(spiritNarrative)
+    : Promise.resolve().then(() => {
+        spiritDescription.textContent = spiritNarrative;
+        spiritDescription.classList.remove("typing");
+      });
   let collectible = null;
   try {
     collectible = await ensureSpiritCollectible(selectedSpirit, spiritText, { forceRegenerate: false });
@@ -34386,15 +34302,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
       }
     });
   }
-  const spiritNarrative = buildSpiritPanelNarrative(selectedSpirit, spiritText);
-
-  const mustAnimate = forceAnimation || wasHidden || changedSpirit || !spiritDescription.textContent.trim();
-  if (mustAnimate) {
-    await animateSpiritDescription(spiritNarrative);
-  } else {
-    spiritDescription.textContent = spiritNarrative;
-    spiritDescription.classList.remove("typing");
-  }
+  await spiritNarrativeTask;
 
   if (wasHidden && celebrate) {
     if (feedbackMessage) {

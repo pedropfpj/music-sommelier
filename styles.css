@@ -6409,9 +6409,9 @@ input[type="range"] {
 
 .spirit-description {
   color: #eef9ff;
-  line-height: 1.62;
-  font-size: clamp(1.04rem, 1.5vw, 1.18rem);
-  max-width: 74ch;
+  line-height: 1.52;
+  font-size: clamp(0.98rem, 1.28vw, 1.08rem);
+  max-width: 58ch;
   overflow-wrap: anywhere;
   word-break: normal;
 }
@@ -6425,48 +6425,6 @@ input[type="range"] {
   vertical-align: -0.14em;
   background: rgba(132, 231, 255, 0.96);
   animation: spirit-cursor 820ms steps(1, end) infinite;
-}
-
-.spirit-lore-panel {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.72rem;
-}
-
-.spirit-lore-card {
-  display: grid;
-  gap: 0.4rem;
-  min-width: 0;
-  padding: 0.84rem 0.9rem;
-  border: 1px solid rgba(123, 221, 255, 0.22);
-  border-left-color: rgba(139, 255, 222, 0.56);
-  border-radius: 12px;
-  background:
-    radial-gradient(circle at 8% 0%, rgba(126, 255, 224, 0.13), transparent 42%),
-    linear-gradient(180deg, rgba(10, 30, 56, 0.62), rgba(4, 12, 28, 0.68)),
-    rgba(5, 14, 31, 0.76);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
-}
-
-.spirit-lore-kicker {
-  color: #8ff6e5;
-  font-size: 0.68rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.spirit-lore-card strong {
-  color: #f2fbff;
-  font-size: 0.96rem;
-  line-height: 1.15;
-}
-
-.spirit-lore-card p {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.48;
 }
 
 .spirit-progress {
@@ -6902,8 +6860,8 @@ input[type="range"] {
 }
 
 .spirit-collectible-details {
-  font-size: clamp(0.98rem, 1.1vw, 1.08rem);
-  line-height: 1.62;
+  font-size: clamp(0.92rem, 1vw, 1rem);
+  line-height: 1.48;
   color: #dff4ff;
   overflow-wrap: normal;
   word-break: normal;
@@ -6951,10 +6909,6 @@ input[type="range"] {
 
   .spirit-vitals-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .spirit-lore-panel {
-    grid-template-columns: 1fr;
   }
 
   .spirit-collectible-grid {
@@ -8418,10 +8372,6 @@ input[type="range"] {
     min-height: 96px;
   }
 
-  .spirit-lore-panel {
-    grid-template-columns: 1fr;
-  }
-
   .spirit-insight-head {
     align-items: flex-start;
   }
@@ -8507,7 +8457,6 @@ input[type="range"] {
     border-radius: 20px;
   }
 
-  .spirit-lore-card,
   .spirit-spotlight,
   .spirit-collectible {
     border-radius: 14px;
