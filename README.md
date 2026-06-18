@@ -43,7 +43,7 @@ App web estiloso e funcional para curadoria de musica eletronica.
 - busca atingir no minimo 20 faixas e 20 artistas no estilo selecionado quando ha dados disponiveis
 - faz warmup em background para tentar elevar cobertura de todos os subgeneros (20+ faixas/artistas por estilo quando as APIs retornam dados)
 - tenta enriquecer faixa com preview e BPM real (quando a fonte fornece)
-- pode usar IA via backend serverless da Vercel para leitura da faixa, bio honesta de artista e arte personalizada do Espirito Musical
+- pode usar IA via backend serverless da Vercel para leitura da faixa, bio honesta de artista e arte personalizada do Arquetipo Musical
 
 ## IA opcional
 
@@ -63,7 +63,7 @@ Endpoints incluidos:
 
 - `/api/track-insight`: gera leitura curta da faixa em JSON
 - `/api/artist-bio`: refina a bio com base nos metadados e fontes conhecidas, sem inventar fatos
-- `/api/spirit-image`: gera arte personalizada para o Espirito Musical
+- `/api/spirit-image`: gera arte personalizada para o Arquetipo Musical
 
 ## APIs de musica e eventos
 

@@ -16,7 +16,7 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v19-bright-emotional-face";
+const SPIRIT_IMAGE_PROMPT_VERSION = "musical-archetype-v20-bright-emotional-face";
 const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v14";
 
 const SPIRIT_ENTITY_BRIEFS = {
@@ -64,7 +64,7 @@ function dominantStyleVisualRule(dominantStyles = "") {
   if (/(psy|goa|full[- ]?on|forest|dark progressive|slambient|hitech|hi tech)/.test(text)) {
     return "Psychedelic visual family: adult spectral ritual/festival guardian with UV/fractal details, but still realistic and premium, with face fully readable.";
   }
-  return "General electronic visual family: follow the dominant styles and spirit brief exactly; do not default to psytrance. Build a distinct club/frequency entity for the user's actual taste.";
+  return "General electronic visual family: follow the dominant styles and archetype brief exactly; do not default to psytrance. Build a distinct club/frequency entity for the user's actual taste.";
 }
 
 function spiritEntityBrief(body = {}) {
@@ -221,13 +221,13 @@ module.exports = async function handler(req, res) {
   const visualFamilyRule = dominantStyleVisualRule(dominantStyles || humanEntityBrief);
   const characterRegeneration = body.forceRegenerate === true || body.characterRegeneration === true;
   const characterReplacementInstruction = characterRegeneration
-    ? "USER REJECTED THE PREVIOUS CHARACTER: this regeneration must create a different fictional adult person. Do not keep the same face, bust, head shape, hair, apparent presentation, skin tone, body silhouette, posture, expression, or character identity. Preserve the same musical spirit/archetype, but replace the person."
+    ? "USER REJECTED THE PREVIOUS CHARACTER: this regeneration must create a different fictional adult person. Do not keep the same face, bust, head shape, hair, apparent presentation, skin tone, body silhouette, posture, expression, or character identity. Preserve the same musical archetype, but replace the person."
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to the user's dominant electronic music styles, club culture, frequency, rhythm and dance: humanoid in anatomy, skin, face and expression, but clearly not fully human. The face must be large, bright, clear, emotional, and readable on a phone: expressive eyes, visible mouth, strong facial key light, no hidden shadow, no mask-like blankness, no face lost behind smoke, helmet, text, or effects. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
+    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-archetype entity linked to the user's dominant electronic music styles, club culture, frequency, rhythm and dance: humanoid in anatomy, skin, face and expression, but clearly not fully human. The face must be large, bright, clear, emotional, and readable on a phone: expressive eyes, visible mouth, strong facial key light, no hidden shadow, no mask-like blankness, no face lost behind smoke, helmet, text, or effects. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
     characterReplacementInstruction,
-    `Spirit-specific human brief: ${humanEntityBrief}.`,
+    `Archetype-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
     visualFamilyRule,
     "The app will add all text, stats, frame, and UI later. Generate only the central artwork: no typography, captions, numbers, logos, watermarks, borders, UI panels, poster text, label text or brand marks inside the image.",
@@ -239,7 +239,7 @@ module.exports = async function handler(req, res) {
     characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
     "Strict negative style: no cartoon, no anime, no childish illustration, no mascot, no emoji, no doll, no flat vector, no abstract crystal, no blank gradient, no placeholder, no robot body, no creature, no skull, no plastic mannequin, no deformed face, no crossed eyes, no hands, no full body, no aggressive expression, no generic fantasy character, no stock portrait, no ordinary DJ photo, no normal flesh-toned passport portrait.",
     "Safety: fictional adult only; no real person or celebrity likeness, no minors, no nudity, no sexualized body, no gore, no readable text, and no brand marks.",
-    "Make the entity feel premium, very beautiful, spiritually evolved, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific spirit characteristics.",
+    "Make the entity feel premium, very beautiful, spiritually evolved, emotionally magnetic, underground, personal, sonically alive, and clearly shaped by the specific musical archetype characteristics.",
     prompt
   ].filter(Boolean).join(" ");
 

@@ -5794,7 +5794,7 @@ const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v38";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v19-bright-emotional-face";
+const SPIRIT_IMAGE_PROMPT_VERSION = "musical-archetype-v20-bright-emotional-face";
 const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v4-bright-face";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
@@ -8660,19 +8660,19 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Feiticeiro Dark Psy",
         archetype: "Floresta noturna",
-        description: "Voce procura psicodelia sombria de verdade: criaturas sonoras, linhas tortas, subgrave de madrugada e narrativa de floresta fechada. O seu espirito nao e triste; ele e magnetico, estranho e ritualistico.",
+        description: "Voce procura psicodelia sombria de verdade: criaturas sonoras, linhas tortas, subgrave de madrugada e narrativa de floresta fechada. O seu arquetipo nao e triste; ele e magnetico, estranho e ritualistico.",
         cardDescription: "Dark psy: floresta fechada, criaturas sonoras e tensao psicodelica noturna."
       },
       en: {
         name: "Dark Psy Sorcerer",
         archetype: "Nocturnal forest",
-        description: "You search for real dark psychedelia: sonic creatures, crooked lines, late-night sub-bass, and closed-forest storytelling. Your spirit is not sad; it is magnetic, strange, and ritualistic.",
+        description: "You search for real dark psychedelia: sonic creatures, crooked lines, late-night sub-bass, and closed-forest storytelling. Your archetype is not sad; it is magnetic, strange, and ritualistic.",
         cardDescription: "Dark psy: closed forest, sonic creatures, and nocturnal psychedelic tension."
       },
       es: {
         name: "Hechicero Dark Psy",
         archetype: "Bosque nocturno",
-        description: "Buscas psicodelia oscura de verdad: criaturas sonoras, lineas torcidas, subgrave de madrugada y narrativa de bosque cerrado. Tu espiritu no es triste; es magnetico, raro y ritual.",
+        description: "Buscas psicodelia oscura de verdad: criaturas sonoras, lineas torcidas, subgrave de madrugada y narrativa de bosque cerrado. Tu arquetipo no es triste; es magnetico, raro y ritual.",
         cardDescription: "Dark psy: bosque cerrado, criaturas sonoras y tension psicodelica nocturna."
       }
     }
@@ -8690,7 +8690,7 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Cirurgiao Psycore",
         archetype: "Precisao extrema",
-        description: "Voce gosta quando a velocidade vira engenharia: BPM extremo, recortes secos, impacto nervoso e clareza mesmo no caos. Esse espirito deve parecer afiado, quase clinico, mas com energia mutante de pista.",
+        description: "Voce gosta quando a velocidade vira engenharia: BPM extremo, recortes secos, impacto nervoso e clareza mesmo no caos. Esse arquetipo deve parecer afiado, quase clinico, mas com energia mutante de pista.",
         cardDescription: "Psycore/hi-tech: alta velocidade, cortes cirurgicos e agressividade controlada."
       },
       en: {
@@ -8702,7 +8702,7 @@ const MUSICAL_SPIRITS = [
       es: {
         name: "Cirujano Psycore",
         archetype: "Precision extrema",
-        description: "Te gusta cuando la velocidad se vuelve ingenieria: BPM extremo, cortes secos, impacto nervioso y claridad en el caos. Este espiritu debe sentirse afilado, casi clinico, pero mutante para la pista.",
+        description: "Te gusta cuando la velocidad se vuelve ingenieria: BPM extremo, cortes secos, impacto nervioso y claridad en el caos. Este arquetipo debe sentirse afilado, casi clinico, pero mutante para la pista.",
         cardDescription: "Psycore/hi-tech: velocidad alta, cortes quirurgicos y agresividad controlada."
       }
     }
@@ -8721,7 +8721,7 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Guardiao Full-On Night",
         archetype: "Madrugada eletrica",
-        description: "Seu lado psy quer drive, brilho acido e energia noturna sem cair no dark absoluto. E um espirito de festival depois da meia-noite: olhar desperto, cores neon mais densas e corpo pronto para a virada.",
+        description: "Seu lado psy quer drive, brilho acido e energia noturna sem cair no dark absoluto. E um arquetipo de festival depois da meia-noite: olhar desperto, cores neon mais densas e corpo pronto para a virada.",
         cardDescription: "Full-on night: drive de madrugada, acidez, neon denso e tensao de pista."
       },
       en: {
@@ -8733,7 +8733,7 @@ const MUSICAL_SPIRITS = [
       es: {
         name: "Guardian Full-On Night",
         archetype: "Madrugada electrica",
-        description: "Tu lado psy quiere drive, brillo acido y energia nocturna sin caer en oscuridad total. Es un espiritu de festival despues de medianoche: mirada despierta, neon denso y cuerpo listo para el cambio.",
+        description: "Tu lado psy quiere drive, brillo acido y energia nocturna sin caer en oscuridad total. Es un arquetipo de festival despues de medianoche: mirada despierta, neon denso y cuerpo listo para el cambio.",
         cardDescription: "Full-on night: drive de madrugada, acidez, neon denso y tension de pista."
       }
     }
@@ -8752,7 +8752,7 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Viajante Sunrise",
         archetype: "Psicodelia solar",
-        description: "Voce responde a melodias abertas, basslines elasticas e aquele clima de manha em festival quando tudo fica mais leve. O espirito aqui deve ser colorido, otimista e psicodelico, sem perder o impulso de pista.",
+        description: "Voce responde a melodias abertas, basslines elasticas e aquele clima de manha em festival quando tudo fica mais leve. O arquetipo aqui deve ser colorido, otimista e psicodelico, sem perder o impulso de pista.",
         cardDescription: "Full-on morning: luz, melodias abertas, elasticidade psy e energia de amanhecer."
       },
       en: {
@@ -8764,7 +8764,7 @@ const MUSICAL_SPIRITS = [
       es: {
         name: "Viajero Sunrise",
         archetype: "Psicodelia solar",
-        description: "Respondes a melodias abiertas, bajos elasticos y ese clima de manana de festival donde todo se vuelve mas liviano. Este espiritu debe ser colorido, optimista y psicodelico sin perder impulso de pista.",
+        description: "Respondes a melodias abiertas, bajos elasticos y ese clima de manana de festival donde todo se vuelve mas liviano. Este arquetipo debe ser colorido, optimista y psicodelico sin perder impulso de pista.",
         cardDescription: "Full-on morning: luz, melodias abiertas, elasticidad psy y energia de amanecer."
       }
     }
@@ -8814,19 +8814,19 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Alma House",
         archetype: "Calor social",
-        description: "Seu espirito mora no groove humano: baixo redondo, palma, vocal quente e sensacao de comunidade. Ele deve parecer mais solar e elegante, menos tecnico, com alma de pista e sorriso de fim de tarde.",
+        description: "Seu arquetipo mora no groove humano: baixo redondo, palma, vocal quente e sensacao de comunidade. Ele deve parecer mais solar e elegante, menos tecnico, com alma de pista e sorriso de fim de tarde.",
         cardDescription: "House/deep/afro: calor humano, vocal, swing e comunidade de pista."
       },
       en: {
         name: "House Soul",
         archetype: "Social warmth",
-        description: "Your spirit lives in human groove: rounded bass, claps, warm vocals, and a feeling of community. It should feel more solar and elegant than technical, with dancefloor soul and late-afternoon warmth.",
+        description: "Your archetype lives in human groove: rounded bass, claps, warm vocals, and a feeling of community. It should feel more solar and elegant than technical, with dancefloor soul and late-afternoon warmth.",
         cardDescription: "House/deep/afro: human warmth, vocals, swing, and dancefloor community."
       },
       es: {
         name: "Alma House",
         archetype: "Calor social",
-        description: "Tu espiritu vive en el groove humano: bajo redondo, palmas, vocal calida y sensacion de comunidad. Debe sentirse mas solar y elegante que tecnico, con alma de pista.",
+        description: "Tu arquetipo vive en el groove humano: bajo redondo, palmas, vocal calida y sensacion de comunidad. Debe sentirse mas solar y elegante que tecnico, con alma de pista.",
         cardDescription: "House/deep/afro: calor humano, vocal, swing y comunidad de pista."
       }
     }
@@ -8846,7 +8846,7 @@ const MUSICAL_SPIRITS = [
       pt: {
         name: "Operador Acido",
         archetype: "Maquina hipnotica",
-        description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e tensao de pista. O espirito deve parecer mais maquina de clube do que personagem fofo.",
+        description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e tensao de pista. O arquetipo deve parecer mais maquina de clube do que personagem fofo.",
         cardDescription: "Techno/acid: metal, repeticao, linhas acidas e controle hipnotico."
       },
       en: {
@@ -8858,7 +8858,7 @@ const MUSICAL_SPIRITS = [
       es: {
         name: "Operador Acido",
         archetype: "Maquina hipnotica",
-        description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y tension de pista. Este espiritu debe sentirse mas maquina de club que personaje tierno.",
+        description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y tension de pista. Este arquetipo debe sentirse mas maquina de club que personaje tierno.",
         cardDescription: "Techno/acid: metal, repeticion, lineas acidas y control hipnotico."
       }
     }
@@ -9099,7 +9099,7 @@ const MUSICAL_SPIRITS = [
       es: {
         name: "Catalizador Hard",
         archetype: "Catarsis de kick",
-        description: "Respondes al kick fuerte, energía al límite, impacto físico y euforia directa. Este espíritu convierte intensidad en liberación.",
+        description: "Respondes al kick fuerte, energía al límite, impacto físico y euforia directa. Este arquetipo convierte intensidad en liberación.",
         cardDescription: "Hard dance: kick fuerte, catarsis rápida, presión física y euforia frontal."
       }
     }
@@ -9661,9 +9661,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "visor",
       crown: "spark",
       quote: {
-        pt: "Seu espírito enxerga estrutura dentro da pressão.",
-        en: "Your spirit sees structure inside the pressure.",
-        es: "Tu espíritu ve estructura dentro de la presión."
+        pt: "Seu arquétipo enxerga estrutura dentro da pressão.",
+        en: "Your archetype sees structure inside the pressure.",
+        es: "Tu arquetipo ve estructura dentro de la presión."
       }
     },
     {
@@ -9748,9 +9748,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "grid",
       crown: "halo",
       quote: {
-        pt: "Seu espírito gosta de risco, microdetalhe e forma mutante.",
-        en: "Your spirit likes risk, micro-detail, and shifting form.",
-        es: "Tu espíritu ama riesgo, microdetalle y forma mutante."
+        pt: "Seu arquétipo gosta de risco, microdetalhe e forma mutante.",
+        en: "Your archetype likes risk, micro-detail, and shifting form.",
+        es: "Tu arquetipo ama riesgo, microdetalle y forma mutante."
       }
     },
     {
@@ -9777,9 +9777,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "star",
       crown: "spark",
       quote: {
-        pt: "Seu espírito procura suspensão, brilho e alívio emocional.",
-        en: "Your spirit seeks lift, glow, and emotional release.",
-        es: "Tu espíritu busca elevación, brillo y liberación emocional."
+        pt: "Seu arquétipo procura suspensão, brilho e alívio emocional.",
+        en: "Your archetype seeks lift, glow, and emotional release.",
+        es: "Tu arquetipo busca elevación, brillo y liberación emocional."
       }
     },
     {
@@ -9806,9 +9806,9 @@ const SPIRIT_MASCOT_VARIANTS = {
       motif: "speaker",
       crown: "spark",
       quote: {
-        pt: "Seu espírito acelera quando a pressão vira euforia.",
-        en: "Your spirit accelerates when pressure becomes euphoria.",
-        es: "Tu espíritu acelera cuando la presión se vuelve euforia."
+        pt: "Seu arquétipo acelera quando a pressão vira euforia.",
+        en: "Your archetype accelerates when pressure becomes euphoria.",
+        es: "Tu arquetipo acelera cuando la presión se vuelve euforia."
       }
     },
     {
@@ -15560,7 +15560,7 @@ const I18N = {
     authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
-    authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e espírito começam limpos.",
+    authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e arquétipo começam limpos.",
     authSocialDivider: "conta online em standby",
     authGoogleBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
@@ -15646,7 +15646,7 @@ const I18N = {
     aboutFlowStepOne: "Toque em Surpresa e escute sem pensar demais.",
     aboutFlowStepTwo: "Curta ou não curta para trocar automaticamente.",
     aboutFlowStepThree: "Abra Filtros só quando quiser subgênero, BPM ou contexto específico.",
-    aboutFlowStepFour: "Revise suas curtidas, descartes e espírito musical no Perfil.",
+    aboutFlowStepFour: "Revise suas curtidas, descartes e arquétipo musical no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
     aboutTrustText: "Alta confiança combina fonte, player, BPM e perfil. Confiança média ainda pode ser uma boa descoberta. Quando a classificação fina não está segura, o app deve falar em família musical, não vender certeza falsa.",
     swipeStartButton: "Surpresa",
@@ -15734,7 +15734,7 @@ const I18N = {
     legalThirdPartyTitle: "Conteúdo musical e terceiros",
     legalThirdPartyText: "Músicas, previews, capas, nomes de artistas, links, plataformas e marcas de terceiros pertencem aos seus respectivos titulares. Sonic Search é independente e não afirma parceria oficial com Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple ou serviços semelhantes.",
     legalUseTitle: "Uso permitido",
-    legalUseText: "O app é uma ferramenta de descoberta e recomendação. Use os links oficiais para ouvir, comprar ou apoiar artistas. Classificações de gênero, espírito musical e explicações são estimativas curatoriais, não dados oficiais dos artistas.",
+    legalUseText: "O app é uma ferramenta de descoberta e recomendação. Use os links oficiais para ouvir, comprar ou apoiar artistas. Classificações de gênero, arquétipo musical e explicações são estimativas curatoriais, não dados oficiais dos artistas.",
     legalPrivacyTitle: "Privacidade e responsabilidade",
     legalPrivacyText: "O perfil musical pode ficar salvo neste aparelho via armazenamento local. Integrações externas e links abertos fora do Sonic Search seguem suas próprias políticas. Tips são apoio voluntário, não investimento, promessa de retorno ou compra de cripto.",
     legalDisclaimer: "Este aviso é uma camada informativa de proteção do produto e não substitui contrato, registro de marca ou orientação jurídica profissional.",
@@ -16051,7 +16051,7 @@ const I18N = {
     summaryAchievementTierMax: "Nível máximo alcançado: {tier}.",
     summaryShareStoryBtn: "Compartilhar status nos Stories",
     shareLinkBtn: "Copiar link compartilhável",
-    shareSpiritLinkBtn: "Copiar link do espírito",
+    shareSpiritLinkBtn: "Copiar link do arquétipo",
     shareLinkCopying: "Copiando link...",
     shareLinkCopied: "Link compartilhável copiado.",
     shareLinkCopiedShort: "Link copiado",
@@ -16237,19 +16237,19 @@ const I18N = {
     catalogFallbackToast: "Cobertura parcial neste subgênero. Vou recomendar com o catálogo local disponível.",
     catalogFallbackUsingLocal: "Cobertura parcial em {style}. Usei uma rota local confiável enquanto continuo ampliando a base.",
     catalogFallbackSearching: "Cobertura parcial em {style}. Buscando sinais melhores antes de recomendar...",
-    spiritPanelTitle: "Seu espírito musical",
-    spiritIntro: "A cada 10 músicas curtidas, seu espírito musical é revisado.",
-    spiritBadge: "Espírito desbloqueado",
-    spiritAvatarAlt: "Entidade musical espectral do espírito {name}",
-    spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para revelar seu espírito.",
+    spiritPanelTitle: "Seu arquétipo musical",
+    spiritIntro: "A cada 10 músicas curtidas, seu arquétipo musical é revisado.",
+    spiritBadge: "Arquétipo desbloqueado",
+    spiritAvatarAlt: "Entidade musical espectral do arquétipo {name}",
+    spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para revelar seu arquétipo.",
     spiritProgressUnlocked: "Perfil consolidado com {current} músicas curtidas.",
-    spiritUnlockedToast: "Espírito revelado: {name}",
-    spiritUnlockedFeedback: "Seu espírito musical foi revelado: {name}.",
-    spiritShiftedFeedback: "Seu espírito musical evoluiu para: {name}.",
-    spiritReviewStayedFeedback: "Revisão concluída: seu espírito permanece {name}.",
-    spiritReviewStayedToast: "Revisão concluída: espírito mantido em {name}.",
-    spiritReviewShiftedToast: "Revisão concluída: espírito atualizado para {name}.",
-    spiritInsightTitle: "Calibração do espírito",
+    spiritUnlockedToast: "Arquétipo revelado: {name}",
+    spiritUnlockedFeedback: "Seu arquétipo musical foi revelado: {name}.",
+    spiritShiftedFeedback: "Seu arquétipo musical evoluiu para: {name}.",
+    spiritReviewStayedFeedback: "Revisão concluída: seu arquétipo permanece {name}.",
+    spiritReviewStayedToast: "Revisão concluída: arquétipo mantido em {name}.",
+    spiritReviewShiftedToast: "Revisão concluída: arquétipo atualizado para {name}.",
+    spiritInsightTitle: "Calibração do arquétipo",
     spiritInsightLockedStatus: "Em formação",
     spiritInsightUnlockedStatus: "Ativo",
     spiritInsightLockedText: "Curta mais {remaining} músicas para revelar seu arquétipo. Estou lendo estilo, energia e feedback.",
@@ -16258,7 +16258,7 @@ const I18N = {
     spiritInsightSignalScore: "{label}: sinal {score}",
     spiritVitalDnaLabel: "DNA dominante",
     spiritVitalCycleLabel: "Ciclo de revisão",
-    spiritVitalRankLabel: "Nível do espírito",
+    spiritVitalRankLabel: "Nível do arquétipo",
     spiritVitalNextLabel: "Próximo impulso",
     spiritVitalNoSignal: "Sinais em coleta",
     spiritVitalDnaLocked: "Ainda estou somando pistas antes de revelar o arquétipo.",
@@ -16274,18 +16274,18 @@ const I18N = {
     spiritVitalNextUnlocked: "Siga {style}",
     spiritVitalNextDetailLocked: "O próximo sinal já muda a leitura.",
     spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
-    spiritSpotlightTitle: "Faixa do espírito",
+    spiritSpotlightTitle: "Faixa do arquétipo",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
     spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
-    spiritSpotlightHintFallback: "Faixa escolhida para representar seu espírito neste momento.",
+    spiritSpotlightHintFallback: "Faixa escolhida para representar seu arquétipo neste momento.",
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
-    spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
-    spiritCollectibleTitle: "Arte única do espírito",
+    spiritSpotlightFeedback: "Faixa do arquétipo: {song} • {artist}.",
+    spiritCollectibleTitle: "Arte única do arquétipo",
     spiritCollectibleReadyToGenerate: "Sua arte aparece uma vez acima. Gere um card estático para baixar ou compartilhar com nível e marco de likes.",
     spiritCollectibleHintLocal: "Sua arte aparece uma vez acima. Use este painel para baixar, compartilhar ou gerar uma nova versão.",
     spiritCollectibleHintLocalReady: "Arte pronta e exibida acima. Use os botões para baixar, compartilhar ou tentar uma versão premium.",
     spiritCollectibleHintApi: "Arte IA baseada no seu gosto, exibida uma única vez acima. Baixe, compartilhe ou gere outra versão por aqui.",
-    spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a arte acima mantém o espírito visível.",
+    spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a arte acima mantém o arquétipo visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
@@ -16300,17 +16300,17 @@ const I18N = {
     spiritCollectibleDownloadFallback: "Imagem baixada. No celular, use Compartilhar se quiser enviar direto.",
     spiritCollectibleShareInstagram: "Compartilhar card estático",
     spiritCollectibleSharePreparing: "Preparando Story...",
-    spiritCollectibleShareNoAsset: "Gere uma arte do espírito antes de compartilhar.",
+    spiritCollectibleShareNoAsset: "Gere uma arte do arquétipo antes de compartilhar.",
     spiritCollectibleShareNativeDone: "Compartilhamento aberto. Escolha Instagram Stories na lista de apps.",
     spiritCollectibleShareFallback: "Não consegui abrir o compartilhamento nativo. Use Baixar imagem só se quiser publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
-    spiritCollectibleShareCaption: "Meu espírito musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "Meu arquétipo musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {shown} apresentadas | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
-    spiritCollectibleGenerating: "Gerando arte do seu espírito...",
+    spiritCollectibleGenerating: "Gerando arte do seu arquétipo...",
     spiritCollectibleGeneratingStart: "Criação iniciada. A imagem pode levar até 45 segundos.",
-    spiritCollectibleGeneratingBrief: "Preparando briefing espectral do espírito...",
-    spiritCollectibleGeneratingPortrait: "Definindo aura, paleta e símbolos do espírito...",
+    spiritCollectibleGeneratingBrief: "Preparando briefing espectral do arquétipo...",
+    spiritCollectibleGeneratingPortrait: "Definindo aura, paleta e símbolos do arquétipo...",
     spiritCollectibleGeneratingAi: "Renderizando entidade espectral em alta qualidade...",
     spiritCollectibleGeneratingCard: "Montando card compartilhável...",
     spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
@@ -16322,7 +16322,7 @@ const I18N = {
     spiritCollectibleGeneratedApi: "Arte espectral criada por IA com aura, beleza e identidade do seu perfil.",
     spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
     spiritCollectibleError: "Não consegui montar a arte agora. Tente gerar novamente; o fallback local não depende da API.",
-    spiritRankUnlocked: "Espírito desbloqueado",
+    spiritRankUnlocked: "Arquétipo desbloqueado",
     spiritRankNovice: "Sommelier iniciante",
     spiritRankResident: "Sommelier residente",
     spiritRankMaster: "Sommelier mestre"
@@ -16866,7 +16866,7 @@ const I18N = {
     summaryAchievementTierMax: "Max tier reached: {tier}.",
     summaryShareStoryBtn: "Share status to Stories",
     shareLinkBtn: "Copy share link",
-    shareSpiritLinkBtn: "Copy spirit link",
+    shareSpiritLinkBtn: "Copy archetype link",
     shareLinkCopying: "Copying link...",
     shareLinkCopied: "Share link copied.",
     shareLinkCopiedShort: "Link copied",
@@ -17052,19 +17052,19 @@ const I18N = {
     catalogFallbackToast: "Partial coverage in this subgenre. I will recommend using the available local catalog.",
     catalogFallbackUsingLocal: "Partial coverage in {style}. I used a reliable local route while the base keeps expanding.",
     catalogFallbackSearching: "Partial coverage in {style}. Searching for stronger signals before recommending...",
-    spiritPanelTitle: "Your musical spirit",
-    spiritIntro: "Every 10 liked songs, your musical spirit is reviewed.",
-    spiritBadge: "Spirit unlocked",
-    spiritAvatarAlt: "Spectral musical spirit entity {name}",
-    spiritProgressLocked: "Liked songs: {current}/{target}. {remaining} to reveal your spirit.",
+    spiritPanelTitle: "Your musical archetype",
+    spiritIntro: "Every 10 liked songs, your musical archetype is reviewed.",
+    spiritBadge: "Archetype unlocked",
+    spiritAvatarAlt: "Spectral musical archetype entity {name}",
+    spiritProgressLocked: "Liked songs: {current}/{target}. {remaining} to reveal your archetype.",
     spiritProgressUnlocked: "Profile consolidated with {current} liked songs.",
-    spiritUnlockedToast: "Spirit revealed: {name}",
-    spiritUnlockedFeedback: "Your musical spirit has been revealed: {name}.",
-    spiritShiftedFeedback: "Your musical spirit evolved to: {name}.",
-    spiritReviewStayedFeedback: "Review complete: your spirit remains {name}.",
-    spiritReviewStayedToast: "Review complete: spirit stays as {name}.",
-    spiritReviewShiftedToast: "Review complete: spirit updated to {name}.",
-    spiritInsightTitle: "Spirit calibration",
+    spiritUnlockedToast: "Archetype revealed: {name}",
+    spiritUnlockedFeedback: "Your musical archetype has been revealed: {name}.",
+    spiritShiftedFeedback: "Your musical archetype evolved to: {name}.",
+    spiritReviewStayedFeedback: "Review complete: your archetype remains {name}.",
+    spiritReviewStayedToast: "Review complete: archetype stays as {name}.",
+    spiritReviewShiftedToast: "Review complete: archetype updated to {name}.",
+    spiritInsightTitle: "Archetype calibration",
     spiritInsightLockedStatus: "Forming",
     spiritInsightUnlockedStatus: "Active",
     spiritInsightLockedText: "{remaining} more song likes to reveal your archetype. I am reading style, energy, and feedback.",
@@ -17073,7 +17073,7 @@ const I18N = {
     spiritInsightSignalScore: "{label}: signal {score}",
     spiritVitalDnaLabel: "Dominant DNA",
     spiritVitalCycleLabel: "Review cycle",
-    spiritVitalRankLabel: "Spirit level",
+    spiritVitalRankLabel: "Archetype level",
     spiritVitalNextLabel: "Next impulse",
     spiritVitalNoSignal: "Collecting signals",
     spiritVitalDnaLocked: "I am still adding clues before revealing the archetype.",
@@ -17089,18 +17089,18 @@ const I18N = {
     spiritVitalNextUnlocked: "Follow {style}",
     spiritVitalNextDetailLocked: "The next signal already changes the reading.",
     spiritVitalNextDetailUnlocked: "Use filters or swipe to test this path.",
-    spiritSpotlightTitle: "Spirit track",
+    spiritSpotlightTitle: "Archetype track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
     spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
-    spiritSpotlightHintFallback: "Track selected to represent your spirit right now.",
+    spiritSpotlightHintFallback: "Track selected to represent your archetype right now.",
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
-    spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
-    spiritCollectibleTitle: "Unique spirit artwork",
+    spiritSpotlightFeedback: "Archetype track: {song} • {artist}.",
+    spiritCollectibleTitle: "Unique archetype artwork",
     spiritCollectibleReadyToGenerate: "Your artwork appears once above. Generate a static card to download or share with level and like milestone.",
     spiritCollectibleHintLocal: "Your artwork appears once above. Use this panel to download, share, or generate a new version.",
     spiritCollectibleHintLocalReady: "Artwork is ready and shown above. Use the buttons to download, share, or try a premium version.",
     spiritCollectibleHintApi: "AI artwork based on your taste, shown once above. Download, share, or generate another version here.",
-    spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the artwork above keeps the spirit visible.",
+    spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the artwork above keeps the archetype visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
@@ -17115,17 +17115,17 @@ const I18N = {
     spiritCollectibleDownloadFallback: "Image downloaded. On mobile, use Share if you want to send it directly.",
     spiritCollectibleShareInstagram: "Share static card",
     spiritCollectibleSharePreparing: "Preparing Story...",
-    spiritCollectibleShareNoAsset: "Generate spirit artwork before sharing.",
+    spiritCollectibleShareNoAsset: "Generate archetype artwork before sharing.",
     spiritCollectibleShareNativeDone: "Share sheet opened. Choose Instagram Stories in the app list.",
     spiritCollectibleShareFallback: "I could not open native sharing. Use Download image only if you want to post manually.",
     spiritCollectibleShareCanceled: "Share canceled.",
-    spiritCollectibleShareCaption: "My musical spirit on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "My musical archetype on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {shown} shown | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
-    spiritCollectibleGenerating: "Generating your spirit artwork...",
+    spiritCollectibleGenerating: "Generating your archetype artwork...",
     spiritCollectibleGeneratingStart: "Creation started. The image can take up to 45 seconds.",
-    spiritCollectibleGeneratingBrief: "Preparing the spectral-spirit brief...",
-    spiritCollectibleGeneratingPortrait: "Defining the spirit aura, palette, and symbols...",
+    spiritCollectibleGeneratingBrief: "Preparing the spectral-archetype brief...",
+    spiritCollectibleGeneratingPortrait: "Defining the archetype aura, palette, and symbols...",
     spiritCollectibleGeneratingAi: "Rendering a high-quality spectral entity...",
     spiritCollectibleGeneratingCard: "Building the shareable card...",
     spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
@@ -17137,7 +17137,7 @@ const I18N = {
     spiritCollectibleGeneratedApi: "AI spectral artwork created with your profile's aura, beauty, and identity.",
     spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
     spiritCollectibleError: "I could not assemble the artwork right now. Try generating again; the local fallback does not depend on the API.",
-    spiritRankUnlocked: "Spirit unlocked",
+    spiritRankUnlocked: "Archetype unlocked",
     spiritRankNovice: "Novice music sommelier",
     spiritRankResident: "Resident music sommelier",
     spiritRankMaster: "Master music sommelier"
@@ -17193,7 +17193,7 @@ const I18N = {
     authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
-    authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y espíritu empiezan limpios.",
+    authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y arquetipo empiezan limpios.",
     authSocialDivider: "cuenta online en standby",
     authGoogleBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
@@ -17279,7 +17279,7 @@ const I18N = {
     aboutFlowStepOne: "Toca Sorpresa y escucha sin pensarlo demasiado.",
     aboutFlowStepTwo: "Da like o descarta para avanzar automáticamente.",
     aboutFlowStepThree: "Abre Filtros solo cuando quieras subgénero, BPM o contexto específico.",
-    aboutFlowStepFour: "Revisa likes, descartes y tu espíritu musical en Perfil.",
+    aboutFlowStepFour: "Revisa likes, descartes y tu arquetipo musical en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
     aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Confianza media aún puede ser buen descubrimiento. Cuando la clasificación fina no es segura, la app debe hablar de familia musical, no vender certeza falsa.",
     swipeStartButton: "Sorpresa",
@@ -17367,7 +17367,7 @@ const I18N = {
     legalThirdPartyTitle: "Música y terceros",
     legalThirdPartyText: "Canciones, previews, portadas, nombres de artistas, links, plataformas y marcas de terceros pertenecen a sus respectivos titulares. Sonic Search es independiente y no afirma una alianza oficial con Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple o servicios similares.",
     legalUseTitle: "Uso permitido",
-    legalUseText: "La app es una herramienta de descubrimiento y recomendación. Usa los links oficiales para escuchar, comprar o apoyar artistas. Clasificaciones de género, espíritu musical y explicaciones son estimaciones curatoriales, no datos oficiales de los artistas.",
+    legalUseText: "La app es una herramienta de descubrimiento y recomendación. Usa los links oficiales para escuchar, comprar o apoyar artistas. Clasificaciones de género, arquetipo musical y explicaciones son estimaciones curatoriales, no datos oficiales de los artistas.",
     legalPrivacyTitle: "Privacidad y responsabilidad",
     legalPrivacyText: "Tu perfil musical puede quedar guardado en este dispositivo mediante almacenamiento local. Integraciones externas y links abiertos fuera de Sonic Search siguen sus propias políticas. Las tips son apoyo voluntario, no inversión, promesa de retorno ni compra de cripto.",
     legalDisclaimer: "Este aviso es una capa informativa de protección del producto y no sustituye contrato, registro de marca ni orientación jurídica profesional.",
@@ -17678,7 +17678,7 @@ const I18N = {
     summaryAchievementTierMax: "Nivel máximo alcanzado: {tier}.",
     summaryShareStoryBtn: "Compartir estado en Stories",
     shareLinkBtn: "Copiar enlace",
-    shareSpiritLinkBtn: "Copiar enlace del espíritu",
+    shareSpiritLinkBtn: "Copiar enlace del arquetipo",
     shareLinkCopying: "Copiando enlace...",
     shareLinkCopied: "Enlace compartible copiado.",
     shareLinkCopiedShort: "Enlace copiado",
@@ -17864,19 +17864,19 @@ const I18N = {
     catalogFallbackToast: "Cobertura parcial en este subgénero. Recomendaré usando el catálogo local disponible.",
     catalogFallbackUsingLocal: "Cobertura parcial en {style}. Usé una ruta local confiable mientras sigo ampliando la base.",
     catalogFallbackSearching: "Cobertura parcial en {style}. Buscando señales mejores antes de recomendar...",
-    spiritPanelTitle: "Tu espíritu musical",
-    spiritIntro: "Cada 10 canciones con like, tu espíritu musical se revisa.",
-    spiritBadge: "Espíritu desbloqueado",
-    spiritAvatarAlt: "Entidad musical espectral del espíritu {name}",
-    spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para revelar tu espíritu.",
+    spiritPanelTitle: "Tu arquetipo musical",
+    spiritIntro: "Cada 10 canciones con like, tu arquetipo musical se revisa.",
+    spiritBadge: "Arquetipo desbloqueado",
+    spiritAvatarAlt: "Entidad musical espectral del arquetipo {name}",
+    spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para revelar tu arquetipo.",
     spiritProgressUnlocked: "Perfil consolidado con {current} canciones con like.",
-    spiritUnlockedToast: "Espíritu revelado: {name}",
-    spiritUnlockedFeedback: "Tu espíritu musical fue revelado: {name}.",
-    spiritShiftedFeedback: "Tu espíritu musical evolucionó a: {name}.",
-    spiritReviewStayedFeedback: "Revisión completa: tu espíritu permanece {name}.",
-    spiritReviewStayedToast: "Revisión completa: el espíritu se mantiene en {name}.",
-    spiritReviewShiftedToast: "Revisión completa: espíritu actualizado a {name}.",
-    spiritInsightTitle: "Calibración del espíritu",
+    spiritUnlockedToast: "Arquetipo revelado: {name}",
+    spiritUnlockedFeedback: "Tu arquetipo musical fue revelado: {name}.",
+    spiritShiftedFeedback: "Tu arquetipo musical evolucionó a: {name}.",
+    spiritReviewStayedFeedback: "Revisión completa: tu arquetipo permanece {name}.",
+    spiritReviewStayedToast: "Revisión completa: el arquetipo se mantiene en {name}.",
+    spiritReviewShiftedToast: "Revisión completa: arquetipo actualizado a {name}.",
+    spiritInsightTitle: "Calibración del arquetipo",
     spiritInsightLockedStatus: "En formación",
     spiritInsightUnlockedStatus: "Activo",
     spiritInsightLockedText: "Faltan {remaining} likes de pistas para revelar tu arquetipo. Estoy leyendo estilo, energía y feedback.",
@@ -17885,7 +17885,7 @@ const I18N = {
     spiritInsightSignalScore: "{label}: señal {score}",
     spiritVitalDnaLabel: "ADN dominante",
     spiritVitalCycleLabel: "Ciclo de revisión",
-    spiritVitalRankLabel: "Nivel del espíritu",
+    spiritVitalRankLabel: "Nivel del arquetipo",
     spiritVitalNextLabel: "Próximo impulso",
     spiritVitalNoSignal: "Señales en recopilación",
     spiritVitalDnaLocked: "Aún estoy sumando pistas antes de revelar el arquetipo.",
@@ -17901,18 +17901,18 @@ const I18N = {
     spiritVitalNextUnlocked: "Sigue {style}",
     spiritVitalNextDetailLocked: "La próxima señal ya cambia la lectura.",
     spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
-    spiritSpotlightTitle: "Pista del espíritu",
+    spiritSpotlightTitle: "Pista del arquetipo",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
     spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
-    spiritSpotlightHintFallback: "Pista seleccionada para representar tu espíritu ahora.",
+    spiritSpotlightHintFallback: "Pista seleccionada para representar tu arquetipo ahora.",
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
-    spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
-    spiritCollectibleTitle: "Arte único del espíritu",
+    spiritSpotlightFeedback: "Pista del arquetipo: {song} • {artist}.",
+    spiritCollectibleTitle: "Arte único del arquetipo",
     spiritCollectibleReadyToGenerate: "Tu arte aparece una sola vez arriba. Genera un card estático para descargar o compartir con nivel e hito de likes.",
     spiritCollectibleHintLocal: "Tu arte aparece una sola vez arriba. Usa este panel para descargar, compartir o generar una nueva versión.",
     spiritCollectibleHintLocalReady: "Arte lista y mostrada arriba. Usa los botones para descargar, compartir o intentar una versión premium.",
     spiritCollectibleHintApi: "Arte IA basada en tu gusto, mostrada una sola vez arriba. Descarga, comparte o genera otra versión aquí.",
-    spiritCollectiblePremiumLocked: "Arte IA preparada. Mientras la imagen online no llega, el arte de arriba mantiene visible el espíritu.",
+    spiritCollectiblePremiumLocked: "Arte IA preparada. Mientras la imagen online no llega, el arte de arriba mantiene visible el arquetipo.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
@@ -17927,17 +17927,17 @@ const I18N = {
     spiritCollectibleDownloadFallback: "Imagen descargada. En móvil, usa Compartir si quieres enviarla directo.",
     spiritCollectibleShareInstagram: "Compartir card estático",
     spiritCollectibleSharePreparing: "Preparando Story...",
-    spiritCollectibleShareNoAsset: "Genera una obra del espíritu antes de compartir.",
+    spiritCollectibleShareNoAsset: "Genera una obra del arquetipo antes de compartir.",
     spiritCollectibleShareNativeDone: "Compartir abierto. Elige Instagram Stories en la lista de apps.",
     spiritCollectibleShareFallback: "No pude abrir el compartir nativo. Usa Descargar imagen solo si quieres publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
-    spiritCollectibleShareCaption: "Mi espíritu musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "Mi arquetipo musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
     spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {shown} presentadas | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
-    spiritCollectibleGenerating: "Generando arte de tu espíritu...",
+    spiritCollectibleGenerating: "Generando arte de tu arquetipo...",
     spiritCollectibleGeneratingStart: "Creación iniciada. La imagen puede tardar hasta 45 segundos.",
-    spiritCollectibleGeneratingBrief: "Preparando el briefing espectral del espíritu...",
-    spiritCollectibleGeneratingPortrait: "Definiendo aura, paleta y símbolos del espíritu...",
+    spiritCollectibleGeneratingBrief: "Preparando el briefing espectral del arquetipo...",
+    spiritCollectibleGeneratingPortrait: "Definiendo aura, paleta y símbolos del arquetipo...",
     spiritCollectibleGeneratingAi: "Renderizando entidad espectral en alta calidad...",
     spiritCollectibleGeneratingCard: "Montando card para compartir...",
     spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
@@ -17949,7 +17949,7 @@ const I18N = {
     spiritCollectibleGeneratedApi: "Arte espectral creada por IA con aura, belleza e identidad de tu perfil.",
     spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
     spiritCollectibleError: "No pude montar el arte ahora. Intenta generar de nuevo; el fallback local no depende de la API.",
-    spiritRankUnlocked: "Espíritu desbloqueado",
+    spiritRankUnlocked: "Arquetipo desbloqueado",
     spiritRankNovice: "Sommelier musical inicial",
     spiritRankResident: "Sommelier musical residente",
     spiritRankMaster: "Sommelier musical maestro"
@@ -30155,7 +30155,7 @@ function spiritIdentityText(spirit, spiritText = {}, profile = resolveSpiritNarr
   const archetype = spiritText?.archetype || profile.dominantStyle || name;
   const stylesLine = spiritProfileStylesLine(profile);
   if (currentLanguage === "en") {
-    return normalizeInlineText(`${name} is the visual form of your ${archetype}: a musical-spirit entity that turns ${stylesLine} into posture, wardrobe, gaze, and aura.`);
+    return normalizeInlineText(`${name} is the visual form of your ${archetype}: a musical-archetype entity that turns ${stylesLine} into posture, wardrobe, gaze, and aura.`);
   }
   if (currentLanguage === "es") {
     return normalizeInlineText(`${name} es la forma visual de tu ${archetype}: una entidad musical que convierte ${stylesLine} en postura, ropa, mirada y aura.`);
@@ -30178,7 +30178,7 @@ function spiritIndicationText(profile = {}) {
 
 function spiritArtDirectionText() {
   if (currentLanguage === "en") {
-    return "In the artwork, that becomes a brighter spectral being with colored alien skin, electronic wardrobe, music accessories, and a futuristic aura: more spirit guide than normal portrait.";
+    return "In the artwork, that becomes a brighter spectral being with colored alien skin, electronic wardrobe, music accessories, and a futuristic aura: more frequency guide than normal portrait.";
   }
   if (currentLanguage === "es") {
     return "En la arte, eso se vuelve una entidad espectral más luminosa, con piel alienígena de color, ropa electrónica, accesorios musicales y aura futurista: más guía espiritual que retrato normal.";
@@ -30313,7 +30313,7 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   if (currentLanguage === "en") {
     return normalizeInlineText(
       [
-        `Your spirit is pulling toward ${stylesLine}.`,
+        `Your archetype is pulling toward ${stylesLine}.`,
         genreNarrative,
         microQuote,
         "Use it as a compass: look for tracks with a whole world, not just the right tag."
@@ -30325,7 +30325,7 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   if (currentLanguage === "es") {
     return normalizeInlineText(
       [
-        `Tu espíritu está tirando hacia ${stylesLine}.`,
+        `Tu arquetipo está tirando hacia ${stylesLine}.`,
         genreNarrative,
         microQuote,
         "Úsalo como brújula: busca pistas con mundo propio, no solo la etiqueta correcta."
@@ -30336,7 +30336,7 @@ function buildSpiritPanelNarrative(spirit, spiritText = {}) {
   }
   return normalizeInlineText(
     [
-      `Seu espírito agora puxa para ${stylesLine}.`,
+      `Seu arquétipo agora puxa para ${stylesLine}.`,
       genreNarrative,
       microQuote,
       "Use como bússola: procure faixas com mundo próprio, não só etiqueta certa."
@@ -31730,7 +31730,7 @@ function spiritVisualFamilyKey(spirit) {
 
 const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
   psy_extreme: [
-    "Psycore/hi-tech styling: adult humanoid musical spirit bust with sharp high-BPM charisma, ghostly plasma skin, UV-reactive cyber-ritual accessories, prismatic ear cuffs, reflective performance jacket, controlled chaos, and no helmet or robot body",
+    "Psycore/hi-tech styling: adult humanoid musical archetype bust with sharp high-BPM charisma, ghostly plasma skin, UV-reactive cyber-ritual accessories, prismatic ear cuffs, reflective performance jacket, controlled chaos, and no helmet or robot body",
     "Extreme psychedelic styling: spectral adult club mystic with intense eyes, translucent face glow away from the eyes, speed-line jewelry, technical rave jacket, and surgical light cuts"
   ],
   psy_dark: [
@@ -31774,7 +31774,7 @@ const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
     "Experimental club styling: realistic adult spirit figure with cyber-editorial fashion, unusual but wearable accessories, angular fabric panels, playful intelligence, and precise micro-detail aura"
   ],
   hybrid: [
-    "Hybrid electronic styling: adult humanoid musical-spirit bust with distinctive underground clubwear, visible charismatic face, style-specific accessories, realistic fabric detail, spectral skin, and music-reactive light shaped by the listener's taste"
+    "Hybrid electronic styling: adult humanoid musical-archetype bust with distinctive underground clubwear, visible charismatic face, style-specific accessories, realistic fabric detail, spectral skin, and music-reactive light shaped by the listener's taste"
   ]
 };
 
@@ -31943,8 +31943,8 @@ function spiritMajorVisualMutation(spirit, profileSignature = "") {
     lightingCues[(seed >>> 6) % lightingCues.length],
     `new environment: ${environmentCues[(seed >>> 9) % environmentCues.length]}`,
     isCharacterReplacement
-      ? "Regeneration rule: the user did not like the previous character, bust, or expression; create a different fictional adult musical-spirit entity with a different face, head shape, hair, apparent presentation, age cue, spectral skin material, wardrobe silhouette, posture, and emotional presence while preserving the same musical spirit"
-      : "Regeneration rule: do not merely recolor the previous image; change camera angle, silhouette, wardrobe, accessories, lighting direction, background environment, and expression while preserving the same musical spirit"
+      ? "Regeneration rule: the user did not like the previous character, bust, or expression; create a different fictional adult musical-archetype entity with a different face, head shape, hair, apparent presentation, age cue, spectral skin material, wardrobe silhouette, posture, and emotional presence while preserving the same musical archetype"
+      : "Regeneration rule: do not merely recolor the previous image; change camera angle, silhouette, wardrobe, accessories, lighting direction, background environment, and expression while preserving the same musical archetype"
   ].join("; ");
 }
 
@@ -31985,7 +31985,7 @@ function spiritCharacterReplacementDirective(spirit, profileSignature = "") {
     "NEW CHARACTER REQUIRED: treat this regeneration as the user rejecting the previous person",
     "do not preserve the same face, bust, hair, body silhouette, expression, or apparent identity",
     ...base,
-    "the new result must feel like a different fictional adult musical-spirit entity from the same musical universe, not the same character with different styling"
+    "the new result must feel like a different fictional adult musical-archetype entity from the same musical universe, not the same character with different styling"
   ].join("; ");
 }
 
@@ -31994,11 +31994,11 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
   const theme = spiritVisualTheme(spirit);
   const direction = SPIRIT_HUMAN_ENTITY_DIRECTIONS[spirit?.id] || SPIRIT_HUMAN_ENTITY_DIRECTIONS.engenheiro_groove;
   const humanForms = [
-    "cinematic adult humanoid musical-spirit portrait with visible face, neck, shoulders, and upper body",
-    "realistic adult personification of the listener's musical spirit, illustrated like premium editorial cinema",
+    "cinematic adult humanoid musical-archetype portrait with visible face, neck, shoulders, and upper body",
+    "realistic adult personification of the listener's musical archetype, illustrated like premium editorial cinema",
     "fictional adult spectral entity emerging from club smoke and waveform halos",
     "high-detail adult ritual performer with a believable humanoid face, ghost skin, and sonic aura",
-    "underground electronic-music spirit guide with expressive eyes and translucent spectral skin"
+    "underground electronic-music archetype guide with expressive eyes and translucent spectral skin"
   ];
   const expressionCues = [
     "magnetic micro-smile",
@@ -32008,19 +32008,19 @@ function spiritCharacterIdentity(spirit, profileSignature = "") {
     "focused charismatic expression"
   ];
   return [
-    `Realistic fictional adult musical-spirit entity format: ${humanForms[seed % humanForms.length]}`,
+    `Realistic fictional adult musical-archetype entity format: ${humanForms[seed % humanForms.length]}`,
     "Composition required: bust-up or chest-up portrait with visible face, neck, shoulders, and upper torso; the person must be the clear focus, not a background symbol",
     `Identity variation for this generation: ${spiritHumanIdentityVariation(spirit, profileSignature)}`,
     spiritCharacterReplacementDirective(spirit, profileSignature),
     `Subgenre visual family: ${spiritStyleFamilyDirection(spirit, profileSignature)}`,
-    `Spirit identity: ${direction.identity}`,
+    `Archetype identity: ${direction.identity}`,
     `Face and charisma: ${direction.face}; expression cue: ${expressionCues[seed % expressionCues.length]}`,
     spiritMajorVisualMutation(spirit, profileSignature),
     `Wardrobe and material language: ${direction.wardrobe}`,
     `Music-reactive aura: ${direction.aura}`,
     `Scene: ${direction.environment}`,
     `Palette reference: ${theme.a}, ${theme.b}, ${theme.c} on deep base ${theme.d}`,
-    "Humanoid spirit presence is required: visible face, head, shoulders and upper torso, cinematic realism, charismatic expression, believable luminous eyes, brighter readable facial key light, colorful spectral or alien skin that may be blue, green, pink, red-orange, yellow, violet, cyan, or opaline, distinct electronic-music clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Desired finish: an evolved musical spirit with sacred editorial beauty, subtle high-end animated-film softness, luminous aura, refined painterly polish, and realistic anatomy under supernatural spectral material. It must feel more spiritual, alien, and futuristic than human while still having a beautiful humanoid bust. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus spectral skin material, hair, wardrobe, gaze, accessories, and vibe. Avoid ordinary flesh-toned human portrait. No mask-like face, mannequin, childish cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
+    "Humanoid archetype presence is required: visible face, head, shoulders and upper torso, cinematic realism, charismatic expression, believable luminous eyes, brighter readable facial key light, colorful spectral or alien skin that may be blue, green, pink, red-orange, yellow, violet, cyan, or opaline, distinct electronic-music clothing, distinct accessories, confident adult personality, and ethereal music-reactive aura. Desired finish: an evolved musical archetype with sacred editorial beauty, subtle high-end animated-film softness, luminous aura, refined painterly polish, and realistic anatomy under supernatural spectral material. It must feel more spiritual, alien, and futuristic than human while still having a beautiful humanoid bust. Vary adult male and adult female presentations across generations, with occasional androgynous adult variants, plus spectral skin material, hair, wardrobe, gaze, accessories, and vibe. Avoid ordinary flesh-toned human portrait. No mask-like face, mannequin, childish cartoon, anime, mascot, doll, generic avatar, celebrity likeness, real public person, child, nudity, sexualized body, gore, logos, readable text, UI, or border"
   ].join(". ");
 }
 
@@ -32032,9 +32032,9 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const mutationDirective = spiritMajorVisualMutation(spirit, visualSignature);
   const replacingCharacter = String(visualSignature || "").includes("new-character");
   const characterRejectionRule = replacingCharacter
-    ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
+    ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-archetype entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and focused hypnotic expression, but clearly not fully human. The face must be the first thing the viewer sees: large in frame, bright enough to read on a phone, expressive in the eyes and mouth, emotionally magnetic, never hidden in shadow, smoke, mask, helmet, or abstract effects. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic, brighter and readable, with a clean key light on the face, luminous smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-archetype entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and focused hypnotic expression, but clearly not fully human. The face must be the first thing the viewer sees: large in frame, bright enough to read on a phone, expressive in the eyes and mouth, emotionally magnetic, never hidden in shadow, smoke, mask, helmet, or abstract effects. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic, brighter and readable, with a clean key light on the face, luminous smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -32044,12 +32044,12 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
     entityDirection
   ].filter(Boolean).join("; ");
   if (currentLanguage === "en") {
-    return `Create only the central spectral musical-spirit artwork for a premium "your musical spirit" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Spirit-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic bust or upper-body figure with a charismatic humanoid face, luminous colorful spectral or alien skin, beautiful brighter spectral material lighting, inviting but intense gaze, sacred/electronic spirit aura, futuristic club atmosphere, ritual/electronic styling, luminous waveform halo, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, beautiful, spiritually evolved, emotionally magnetic, musical, underground, and unique to this specific spirit, never like a cute avatar, stock portrait, abstract icon, normal human photo, or generic fantasy character. Major variation requirement: when regenerating, the new artwork must be a different entity/character, not the same bust with new styling; change face identity, spectral skin, body silhouette, pose, camera, wardrobe, environment, lighting, accessories, aura, and expression. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
+    return `Create only the central spectral musical-archetype artwork for a premium "your musical archetype" share card. The app will add all text and stats later, so do not create typography, captions, UI, numbers, logos, watermarks, or borders. User art signature: ${userSignature || "local"}. Taste fingerprint: ${profileSignature || "profile"}. Prompt version: ${SPIRIT_IMAGE_PROMPT_VERSION}. Archetype: "${spiritText.name}" (${spiritText.archetype}). Dominant electronic styles: ${styleSignals}. Archetype-specific visual direction: ${visualHook}. ${humanEntityGuardrail} Make an original adult fictional entity: a high-detail cinematic bust or upper-body figure with a charismatic humanoid face, luminous colorful spectral or alien skin, beautiful brighter spectral material lighting, inviting but intense gaze, sacred/electronic archetype aura, futuristic club atmosphere, ritual/electronic styling, luminous waveform halo, sub-bass rings, equalizer particles, and polished collectible finish. It must feel premium, beautiful, spiritually evolved, emotionally magnetic, musical, underground, and unique to this specific archetype, never like a cute avatar, stock portrait, abstract icon, normal human photo, or generic fantasy character. Major variation requirement: when regenerating, the new artwork must be a different entity/character, not the same bust with new styling; change face identity, spectral skin, body silhouette, pose, camera, wardrobe, environment, lighting, accessories, aura, and expression. Milestone context: ${milestoneLikes} likes reached out of ${likes}.`;
   }
   if (currentLanguage === "es") {
-    return `Crea solo la ilustración central de una entidad musical espectral para una tarjeta premium de "tu espíritu musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del espíritu: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: busto cinematográfico o figura de torso con rostro humanoide carismático, piel espectral o alienígena luminosa y colorida, materiales espectrales con luz más clara, mirada intensa y atractiva, aura espiritual/electrónica, atmósfera de club futurista, estética ritual/electrónica, halo de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse bella, evolucionada, magnética, underground, intensa, musical y única para este espíritu específico, nunca como avatar simpático, retrato stock, foto humana normal, icono abstracto ni personaje genérico de fantasía. Requisito de variación mayor: al regenerar, la nueva imagen debe ser otra entidad/personaje, no el mismo busto con otro estilo; cambia identidad facial, piel espectral, silueta corporal, pose, cámara, ropa, entorno, iluminación, accesorios, aura y expresión. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
+    return `Crea solo la ilustración central de una entidad musical espectral para una tarjeta premium de "tu arquetipo musical". La app agregará texto y estadísticas después, así que no generes tipografía, leyendas, UI, números, logos, marcas de agua ni bordes. Firma visual del usuario: ${userSignature || "local"}. Huella de gusto: ${profileSignature || "perfil"}. Version del prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquetipo: "${spiritText.name}" (${spiritText.archetype}). Estilos electrónicos dominantes: ${styleSignals}. Dirección visual específica del arquetipo: ${visualHook}. ${humanEntityGuardrail} Haz una entidad adulta ficticia original: busto cinematográfico o figura de torso con rostro humanoide carismático, piel espectral o alienígena luminosa y colorida, materiales espectrales con luz más clara, mirada intensa y atractiva, aura espiritual/electrónica, atmósfera de club futurista, estética ritual/electrónica, halo de waveform, anillos de subgrave, partículas de ecualizador y acabado coleccionable premium. Debe sentirse bella, evolucionada, magnética, underground, intensa, musical y única para este arquetipo específico, nunca como avatar simpático, retrato stock, foto humana normal, icono abstracto ni personaje genérico de fantasía. Requisito de variación mayor: al regenerar, la nueva imagen debe ser otra entidad/personaje, no el mismo busto con otro estilo; cambia identidad facial, piel espectral, silueta corporal, pose, cámara, ropa, entorno, iluminación, accesorios, aura y expresión. Hito contextual: ${milestoneLikes} likes de ${likes}.`;
   }
-  return `Crie somente a arte central de uma entidade musical espectral para um card premium de "seu espírito musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do espírito: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: busto cinematográfico ou figura de torso com rosto humanoide carismático, pele espectral ou alienígena luminosa e colorida, materiais espectrais com luz mais clara, olhar intenso e atraente, aura espiritual/eletrônica, atmosfera de club futurista, estética ritual/eletrônica, halo de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer lindo, evoluído, magnético, underground, intenso, musical e único para este espírito específico, nunca um avatar fofinho, retrato stock, foto humana normal, ícone abstrato nem personagem genérico de fantasia. Requisito de variação forte: ao regenerar, a nova arte deve ser outra entidade/personagem, não o mesmo busto com outro estilo; mude identidade facial, pele espectral, silhueta corporal, pose, câmera, roupa, ambiente, iluminação, acessórios, aura e expressão. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
+  return `Crie somente a arte central de uma entidade musical espectral para um card premium de "seu arquétipo musical". O app vai adicionar textos e estatísticas depois, então não gere tipografia, legendas, UI, números, logos, marca d'água nem bordas. Assinatura visual do usuário: ${userSignature || "local"}. Impressão de gosto: ${profileSignature || "perfil"}. Versão do prompt: ${SPIRIT_IMAGE_PROMPT_VERSION}. Arquétipo: "${spiritText.name}" (${spiritText.archetype}). Estilos eletrônicos dominantes: ${styleSignals}. Direção visual específica do arquétipo: ${visualHook}. ${humanEntityGuardrail} Faça uma entidade adulta fictícia original: busto cinematográfico ou figura de torso com rosto humanoide carismático, pele espectral ou alienígena luminosa e colorida, materiais espectrais com luz mais clara, olhar intenso e atraente, aura espiritual/eletrônica, atmosfera de club futurista, estética ritual/eletrônica, halo de waveform, anéis de subgrave, partículas de equalizador e acabamento colecionável premium. Precisa parecer lindo, evoluído, magnético, underground, intenso, musical e único para este arquétipo específico, nunca um avatar fofinho, retrato stock, foto humana normal, ícone abstrato nem personagem genérico de fantasia. Requisito de variação forte: ao regenerar, a nova arte deve ser outra entidade/personagem, não o mesmo busto com outro estilo; mude identidade facial, pele espectral, silhueta corporal, pose, câmera, roupa, ambiente, iluminação, acessórios, aura e expressão. Contexto do marco: ${milestoneLikes} likes de ${likes}.`;
 }
 
 function spiritMascotVariant(spirit, seed = 0) {
@@ -32063,61 +32063,61 @@ function spiritMascotQuote(spirit, variant = {}, spiritText = {}) {
   const family = familyOf(profile.dominantStyleKey || "");
   const copies = {
     pt: {
-      psycore: "Seu espírito acelera com BPM extremo, peso sombrio e recortes secos, sem aliviar a pressão.",
-      slambient: "Seu espírito atravessa névoa pesada, drones densos e pulso sombrio sem virar descanso.",
-      hi_tech: "Seu espírito dispara em cortes precisos, glitches e linhas nervosas de alta rotação.",
-      dark_experimental: "Seu espírito gosta de mutação sombria: viradas tortas, textura extrema e risco de pista.",
-      dark_psy: "Seu espírito entra na mata fechada: subgrave noturno, criaturas sonoras e tensão psicodélica.",
-      forest_psy: "Seu espírito segue percussão orgânica, sombras de floresta e transe denso de madrugada.",
-      dark_progressive: "Seu espírito trava no groove sombrio: pressão seca, detalhe mínimo e hipnose profunda.",
-      full_on_night: "Seu espírito quer drive de madrugada, acidez e tensão dançante sem abrir mão do peso.",
-      psytrance: "Seu espírito busca transe, ritual e camadas que evoluem com pressão de pista.",
-      techno: "Seu espírito trava no pulso: repetição firme, textura limpa e tensão de pista.",
-      house: "Seu espírito reconhece calor, swing e groove social no primeiro pulso.",
-      dnb: "Seu espírito persegue velocidade, contraste e subgrave com fluidez.",
-      bass_music: "Seu espírito reage a peso físico, textura e viradas que mudam o ar.",
-      leftfield: "Seu espírito percebe beleza no estranho quando ele começa a fazer sentido.",
-      trance: "Seu espírito procura melodia, suspensão e energia que abre espaço.",
-      hard_dance: "Seu espírito prefere catarse direta, kick forte e energia no limite.",
-      outros: "Seu espírito compara clima, textura e pulso antes de entregar o like."
+      psycore: "Seu arquétipo acelera com BPM extremo, peso sombrio e recortes secos, sem aliviar a pressão.",
+      slambient: "Seu arquétipo atravessa névoa pesada, drones densos e pulso sombrio sem virar descanso.",
+      hi_tech: "Seu arquétipo dispara em cortes precisos, glitches e linhas nervosas de alta rotação.",
+      dark_experimental: "Seu arquétipo gosta de mutação sombria: viradas tortas, textura extrema e risco de pista.",
+      dark_psy: "Seu arquétipo entra na mata fechada: subgrave noturno, criaturas sonoras e tensão psicodélica.",
+      forest_psy: "Seu arquétipo segue percussão orgânica, sombras de floresta e transe denso de madrugada.",
+      dark_progressive: "Seu arquétipo trava no groove sombrio: pressão seca, detalhe mínimo e hipnose profunda.",
+      full_on_night: "Seu arquétipo quer drive de madrugada, acidez e tensão dançante sem abrir mão do peso.",
+      psytrance: "Seu arquétipo busca transe, ritual e camadas que evoluem com pressão de pista.",
+      techno: "Seu arquétipo trava no pulso: repetição firme, textura limpa e tensão de pista.",
+      house: "Seu arquétipo reconhece calor, swing e groove social no primeiro pulso.",
+      dnb: "Seu arquétipo persegue velocidade, contraste e subgrave com fluidez.",
+      bass_music: "Seu arquétipo reage a peso físico, textura e viradas que mudam o ar.",
+      leftfield: "Seu arquétipo percebe beleza no estranho quando ele começa a fazer sentido.",
+      trance: "Seu arquétipo procura melodia, suspensão e energia que abre espaço.",
+      hard_dance: "Seu arquétipo prefere catarse direta, kick forte e energia no limite.",
+      outros: "Seu arquétipo compara clima, textura e pulso antes de entregar o like."
     },
     en: {
-      psycore: "Your spirit accelerates through extreme BPM, dark weight, and dry edits without easing the pressure.",
-      slambient: "Your spirit crosses heavy mist, dense drones, and shadow pulse without turning into rest.",
-      hi_tech: "Your spirit fires through precise cuts, glitches, and nervous high-rotation lines.",
-      dark_experimental: "Your spirit likes dark mutation: crooked switches, extreme texture, and dancefloor risk.",
-      dark_psy: "Your spirit enters the closed forest: nocturnal sub, sonic creatures, and psychedelic tension.",
-      forest_psy: "Your spirit follows organic percussion, forest shadows, and dense midnight trance.",
-      dark_progressive: "Your spirit locks into shadow groove: dry pressure, tiny details, and deep hypnosis.",
-      full_on_night: "Your spirit wants midnight drive, acid tension, and dancefloor weight.",
-      psytrance: "Your spirit seeks trance, ritual, and layers that evolve with dancefloor pressure.",
-      techno: "Your spirit locks into pulse, firm repetition, clean texture, and dancefloor tension.",
-      house: "Your spirit catches warmth, swing, and social groove in the first pulse.",
-      dnb: "Your spirit chases speed, contrast, and sub pressure with fluid motion.",
-      bass_music: "Your spirit reacts to physical weight, texture, and air-bending turns.",
-      leftfield: "Your spirit finds beauty in the strange once it starts making sense.",
-      trance: "Your spirit seeks melody, lift, and energy that opens space.",
-      hard_dance: "Your spirit prefers direct catharsis, hard kicks, and edge energy.",
-      outros: "Your spirit compares mood, texture, and pulse before giving the like."
+      psycore: "Your archetype accelerates through extreme BPM, dark weight, and dry edits without easing the pressure.",
+      slambient: "Your archetype crosses heavy mist, dense drones, and shadow pulse without turning into rest.",
+      hi_tech: "Your archetype fires through precise cuts, glitches, and nervous high-rotation lines.",
+      dark_experimental: "Your archetype likes dark mutation: crooked switches, extreme texture, and dancefloor risk.",
+      dark_psy: "Your archetype enters the closed forest: nocturnal sub, sonic creatures, and psychedelic tension.",
+      forest_psy: "Your archetype follows organic percussion, forest shadows, and dense midnight trance.",
+      dark_progressive: "Your archetype locks into shadow groove: dry pressure, tiny details, and deep hypnosis.",
+      full_on_night: "Your archetype wants midnight drive, acid tension, and dancefloor weight.",
+      psytrance: "Your archetype seeks trance, ritual, and layers that evolve with dancefloor pressure.",
+      techno: "Your archetype locks into pulse, firm repetition, clean texture, and dancefloor tension.",
+      house: "Your archetype catches warmth, swing, and social groove in the first pulse.",
+      dnb: "Your archetype chases speed, contrast, and sub pressure with fluid motion.",
+      bass_music: "Your archetype reacts to physical weight, texture, and air-bending turns.",
+      leftfield: "Your archetype finds beauty in the strange once it starts making sense.",
+      trance: "Your archetype seeks melody, lift, and energy that opens space.",
+      hard_dance: "Your archetype prefers direct catharsis, hard kicks, and edge energy.",
+      outros: "Your archetype compares mood, texture, and pulse before giving the like."
     },
     es: {
-      psycore: "Tu espiritu acelera con BPM extremo, peso oscuro y cortes secos, sin aflojar la presion.",
-      slambient: "Tu espiritu cruza niebla pesada, drones densos y pulso oscuro sin convertirse en descanso.",
-      hi_tech: "Tu espiritu dispara cortes precisos, glitches y lineas nerviosas de alta rotacion.",
-      dark_experimental: "Tu espiritu busca mutacion oscura: giros torcidos, textura extrema y riesgo de pista.",
-      dark_psy: "Tu espiritu entra al bosque cerrado: subgrave nocturno, criaturas sonoras y tension psicodelica.",
-      forest_psy: "Tu espiritu sigue percusion organica, sombras de bosque y trance denso de madrugada.",
-      dark_progressive: "Tu espiritu se fija en groove oscuro: presion seca, detalle minimo e hipnosis profunda.",
-      full_on_night: "Tu espiritu quiere drive de madrugada, acidez y tension de pista con peso.",
-      psytrance: "Tu espiritu busca trance, ritual y capas que evolucionan con presion de pista.",
-      techno: "Tu espiritu se fija en el pulso: repeticion firme, textura limpia y tension de pista.",
-      house: "Tu espiritu reconoce calor, swing y groove social en el primer pulso.",
-      dnb: "Tu espiritu persigue velocidad, contraste y subgrave con fluidez.",
-      bass_music: "Tu espiritu reacciona al peso fisico, textura y giros que cambian el aire.",
-      leftfield: "Tu espiritu ve belleza en lo extrano cuando empieza a tener sentido.",
-      trance: "Tu espiritu busca melodia, elevacion y energia que abre espacio.",
-      hard_dance: "Tu espiritu prefiere catarsis directa, kick fuerte y energia al limite.",
-      outros: "Tu espiritu compara clima, textura y pulso antes de dar el like."
+      psycore: "Tu arquetipo acelera con BPM extremo, peso oscuro y cortes secos, sin aflojar la presion.",
+      slambient: "Tu arquetipo cruza niebla pesada, drones densos y pulso oscuro sin convertirse en descanso.",
+      hi_tech: "Tu arquetipo dispara cortes precisos, glitches y lineas nerviosas de alta rotacion.",
+      dark_experimental: "Tu arquetipo busca mutacion oscura: giros torcidos, textura extrema y riesgo de pista.",
+      dark_psy: "Tu arquetipo entra al bosque cerrado: subgrave nocturno, criaturas sonoras y tension psicodelica.",
+      forest_psy: "Tu arquetipo sigue percusion organica, sombras de bosque y trance denso de madrugada.",
+      dark_progressive: "Tu arquetipo se fija en groove oscuro: presion seca, detalle minimo e hipnosis profunda.",
+      full_on_night: "Tu arquetipo quiere drive de madrugada, acidez y tension de pista con peso.",
+      psytrance: "Tu arquetipo busca trance, ritual y capas que evolucionan con presion de pista.",
+      techno: "Tu arquetipo se fija en el pulso: repeticion firme, textura limpia y tension de pista.",
+      house: "Tu arquetipo reconoce calor, swing y groove social en el primer pulso.",
+      dnb: "Tu arquetipo persigue velocidad, contraste y subgrave con fluidez.",
+      bass_music: "Tu arquetipo reacciona al peso fisico, textura y giros que cambian el aire.",
+      leftfield: "Tu arquetipo ve belleza en lo extrano cuando empieza a tener sentido.",
+      trance: "Tu arquetipo busca melodia, elevacion y energia que abre espacio.",
+      hard_dance: "Tu arquetipo prefiere catarsis directa, kick fuerte y energia al limite.",
+      outros: "Tu arquetipo compara clima, textura y pulso antes de dar el like."
     }
   };
   const languageCopies = copies[currentLanguage] || copies.pt;
@@ -32136,11 +32136,11 @@ function spiritMascotTraits(spirit) {
 function spiritCollectibleCardLabels() {
   if (currentLanguage === "en") {
     return {
-      kicker: "YOUR MUSICAL SPIRIT",
-      spirit: "SPIRIT",
+      kicker: "YOUR MUSICAL ARCHETYPE",
+      spirit: "ARCHETYPE",
       liked: "LIKED TRACKS",
       songs: "tracks",
-      genre: "SPIRIT BASE",
+      genre: "ARCHETYPE BASE",
       status: "PROFILE",
       discovered: "discovered",
       shown: "shown",
@@ -32151,11 +32151,11 @@ function spiritCollectibleCardLabels() {
   }
   if (currentLanguage === "es") {
     return {
-      kicker: "TU ESPÍRITU MUSICAL",
-      spirit: "ESPÍRITU",
+      kicker: "TU ARQUETIPO MUSICAL",
+      spirit: "ARQUETIPO",
       liked: "PISTAS CON LIKE",
       songs: "pistas",
-      genre: "BASE DEL ESPÍRITU",
+      genre: "BASE DEL ARQUETIPO",
       status: "PERFIL",
       discovered: "descubiertos",
       shown: "vistas",
@@ -32165,11 +32165,11 @@ function spiritCollectibleCardLabels() {
     };
   }
   return {
-    kicker: "SEU ESPÍRITO MUSICAL",
-    spirit: "ESPÍRITO",
+    kicker: "SEU ARQUÉTIPO MUSICAL",
+    spirit: "ARQUÉTIPO",
     liked: "MÚSICAS CURTIDAS",
     songs: "músicas",
-    genre: "BASE DO ESPÍRITO",
+    genre: "BASE DO ARQUÉTIPO",
     status: "PERFIL",
     discovered: "descobertas",
     shown: "vistas",
@@ -34406,7 +34406,7 @@ async function runPositiveFeedbackFollowups(
   const targetArtist = loadEvents ? String(eventsArtist || currentRecommendation?.artist || "").trim() : "";
   const followups = [
     {
-      name: "musical-spirit",
+      name: "musical-archetype",
       run: () => renderMusicalSpirit({ celebrate, triggerEl, forceAnimation })
     },
     {
