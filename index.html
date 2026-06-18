@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260618spirit-profile4" />
+    <link rel="stylesheet" href="styles.css?v=20260618legal-tab1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -417,6 +417,7 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Apoiar</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
       </nav>
 
       <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
@@ -1727,9 +1728,7 @@
           </article>
         </div>
       </section>
-    </main>
-
-    <section id="legalHub" class="legal-hub" aria-labelledby="legalHubTitle">
+      <section id="legalHub" class="legal-hub app-tab-panel" data-app-tab="legal" aria-labelledby="legalHubTitle">
       <div class="legal-hub-inner">
         <div class="legal-hub-head">
           <p id="legalHubKicker" class="section-kicker">Avisos legais</p>
@@ -1768,7 +1767,8 @@
           Este aviso é uma camada informativa de proteção do produto e não substitui contrato, registro de marca ou orientação jurídica profissional.
         </p>
       </div>
-    </section>
+      </section>
+    </main>
 
     <footer id="signatureBar" class="signature-bar" aria-label="Créditos do projeto">
       <div class="signature-track" aria-hidden="true">
@@ -1803,6 +1803,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260618spirit-profile4"></script>
+    <script src="app.js?v=20260618legal-tab1"></script>
   </body>
 </html>

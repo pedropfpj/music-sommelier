@@ -4841,6 +4841,7 @@ const authFeedback = document.getElementById("authFeedback");
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
 const appTabBar = document.getElementById("appTabBar");
+const signatureBar = document.getElementById("signatureBar");
 const appTabPanels = document.querySelectorAll("[data-app-tab]");
 const catalogStatsKicker = document.getElementById("catalogStatsKicker");
 const catalogStatsHealth = document.getElementById("catalogStatsHealth");
@@ -15566,6 +15567,7 @@ const I18N = {
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoiar",
+    tabLegal: "Avisos",
     feedbackKicker: "Refinamento",
     feedbackHint: "Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.",
     swipeHeroKicker: "Descoberta por swipe",
@@ -16383,6 +16385,7 @@ const I18N = {
     tabProfile: "Profile",
     tabAbout: "About",
     tabSupport: "Support",
+    tabLegal: "Legal",
     feedbackKicker: "Refinement",
     feedbackHint: "Use quick signals so the radar separates what lands, what tires you out, and what you already know.",
     swipeHeroKicker: "Swipe discovery",
@@ -17197,6 +17200,7 @@ const I18N = {
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoyar",
+    tabLegal: "Avisos",
     feedbackKicker: "Refinamiento",
     feedbackHint: "Usa señales rápidas para que el radar separe lo que conecta, lo que cansa y lo que ya conoces.",
     swipeHeroKicker: "Descubrimiento por swipe",
@@ -18694,6 +18698,7 @@ function applyLanguage() {
   setText("[data-app-tab-target='profile']", t("tabProfile"));
   setText("[data-app-tab-target='about']", t("tabAbout"));
   setText("[data-app-tab-target='support']", t("tabSupport"));
+  setText("[data-app-tab-target='legal']", t("tabLegal"));
   updateCatalogStatsHero();
   setText("#aboutKicker", t("aboutKicker"));
   setText("#aboutTitle", t("aboutTitle"));
@@ -21057,6 +21062,7 @@ function showLanguageScreen() {
   if (appContent) appContent.classList.add("hidden");
   if (languageScreen) languageScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
 
   const preferredButton = Array.from(languageButtons).find((button) => button.dataset.lang === currentLanguage) || languageButtons[0];
   if (preferredButton) preferredButton.focus();
@@ -21079,6 +21085,7 @@ function showIntroScreen() {
   if (appContent) appContent.classList.add("hidden");
   if (introScreen) introScreen.focus();
   syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
 
   startIntroQuoteLoop();
   clearIntroAutoAdvance();
@@ -21102,6 +21109,7 @@ function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
   if (appContent) appContent.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
   if (usageGuideScreen) usageGuideScreen.focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: "auto" });
   refreshAmbientForUiState();
@@ -21114,6 +21122,7 @@ function continueFromUsageGuide() {
     if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
     if (appContent) appContent.classList.remove("hidden");
     syncFloatingSurpriseButton();
+    updateSignatureBarForTab();
     refreshAmbientForUiState();
     if (showUsageGuideBtn) showUsageGuideBtn.focus();
     return;
@@ -21122,6 +21131,7 @@ function continueFromUsageGuide() {
     if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
     if (welcomeScreen) welcomeScreen.classList.remove("hidden");
     syncFloatingSurpriseButton();
+    updateSignatureBarForTab();
     refreshAmbientForUiState();
     if (startBtn) startBtn.focus();
     return;
@@ -21147,6 +21157,7 @@ function showAuthScreen() {
   if (appContent) appContent.classList.add("hidden");
   if (authScreen) authScreen.classList.remove("hidden");
   syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
 
   if (authUsername) authUsername.value = storedUser?.username || "";
   if (authPassword) authPassword.value = "";
@@ -21299,6 +21310,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
   syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
     if (swipeStartPanel?.scrollIntoView) {
       swipeStartPanel.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
@@ -24464,6 +24476,14 @@ function currentActiveAppTabName() {
   return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
 }
 
+function updateSignatureBarForTab(tabName = currentActiveAppTabName()) {
+  if (!signatureBar) return;
+  const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
+  const shouldShow = !appVisible || tabName === "discover";
+  signatureBar.classList.toggle("is-hidden", !shouldShow);
+  signatureBar.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+}
+
 function ensureEventsPanelActive() {
   if (!eventsPanel) return;
   const activeTab = currentActiveAppTabName();
@@ -24475,7 +24495,7 @@ function ensureEventsPanelActive() {
 }
 
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "filters", "news", "studio", "profile", "about", "support"].includes(tabName) ? tabName : "discover";
+  const safeTab = ["discover", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
@@ -24486,6 +24506,7 @@ function setActiveAppTab(tabName = "discover") {
   appTabPanels.forEach((panel) => {
     panel.classList.toggle("active", panelMatchesAppTab(panel, safeTab));
   });
+  updateSignatureBarForTab(safeTab);
 }
 
 function handleHeroLogoClick() {
