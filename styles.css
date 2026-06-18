@@ -13176,19 +13176,19 @@ iframe {
 .swipe-card-count {
   display: inline-flex;
   width: fit-content;
-  max-width: 100%;
-  min-height: 30px;
+  min-width: 54px;
+  min-height: 38px;
   align-items: center;
   justify-content: center;
-  padding: 0.24rem 0.62rem;
-  border: 1px solid rgba(126, 232, 198, 0.46);
-  border-radius: 999px;
+  padding: 0.2rem 0.56rem;
+  border: 1px solid rgba(126, 232, 198, 0.62);
+  border-radius: 10px;
   background:
-    linear-gradient(135deg, rgba(126, 232, 198, 0.18), rgba(120, 164, 255, 0.14)),
-    rgba(3, 10, 22, 0.76);
-  color: #dffdf7;
+    linear-gradient(135deg, rgba(126, 232, 198, 0.28), rgba(120, 164, 255, 0.2)),
+    rgba(3, 10, 22, 0.88);
+  color: #f3fffc;
   font-family: "Syne", sans-serif;
-  font-size: clamp(0.78rem, 1.5vw, 0.92rem);
+  font-size: clamp(1.04rem, 2.1vw, 1.32rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: 0;
@@ -13199,12 +13199,27 @@ iframe {
 }
 
 .primary-track-count {
-  margin: 0 0 0.66rem;
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 5;
+  margin: 0;
   border-color: rgba(123, 224, 255, 0.48);
   background:
-    linear-gradient(135deg, rgba(123, 224, 255, 0.16), rgba(126, 232, 198, 0.14)),
-    rgba(4, 13, 30, 0.82);
+    linear-gradient(135deg, rgba(123, 224, 255, 0.24), rgba(126, 232, 198, 0.22)),
+    rgba(4, 13, 30, 0.92);
   color: #e9fcff;
+}
+
+#topSwipeCount {
+  position: absolute;
+  top: 0.9rem;
+  left: 0.9rem;
+  z-index: 5;
+}
+
+#primaryTrackCard.main-track {
+  padding-top: clamp(3.25rem, 5vw, 3.75rem);
 }
 
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
@@ -13253,9 +13268,20 @@ iframe {
 
 @media (max-width: 620px) {
   .swipe-card-count {
-    min-height: 28px;
-    padding-inline: 0.54rem;
-    font-size: 0.72rem;
+    min-width: 48px;
+    min-height: 34px;
+    padding-inline: 0.48rem;
+    font-size: 1rem;
+  }
+
+  .primary-track-count {
+    top: 0.72rem;
+    left: 0.72rem;
+  }
+
+  #topSwipeCount {
+    top: 0.72rem;
+    left: 0.72rem;
   }
 
   #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {

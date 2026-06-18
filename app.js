@@ -15589,7 +15589,8 @@ const I18N = {
     swipeShowAllStyles: "Ver todos os {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe da track",
-    discoverySequence: "Descoberta #{number}",
+    discoverySequence: "#{number}",
+    heardTrackSequence: "Música ouvida #{number}",
     swipeEmptyTitle: "Gere uma recomendação",
     swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
     swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
@@ -16411,7 +16412,8 @@ const I18N = {
     swipeShowAllStyles: "Show all {count} styles",
     swipeShowFocusedStyles: "Show fewer styles",
     swipeKicker: "Track swipe",
-    discoverySequence: "Discovery #{number}",
+    discoverySequence: "#{number}",
+    heardTrackSequence: "Track heard #{number}",
     swipeEmptyTitle: "Generate a recommendation",
     swipeEmptyMeta: "Drag right if you like it or left if it missed.",
     swipeHint: "Works with mouse or touch: drag the card and release.",
@@ -17230,7 +17232,8 @@ const I18N = {
     swipeShowAllStyles: "Ver los {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe de la pista",
-    discoverySequence: "Descubrimiento #{number}",
+    discoverySequence: "#{number}",
+    heardTrackSequence: "Pista escuchada #{number}",
     swipeEmptyTitle: "Genera una recomendación",
     swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
     swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
@@ -37315,9 +37318,11 @@ function updateDiscoverySequenceBadges(track) {
   }
   const number = presentedCardNumberForTrack(track);
   const label = t("discoverySequence", { number });
+  const ariaLabel = t("heardTrackSequence", { number });
   targets.forEach((badge) => {
     badge.textContent = label;
-    badge.setAttribute("aria-label", label);
+    badge.setAttribute("aria-label", ariaLabel);
+    badge.title = ariaLabel;
     badge.classList.remove("hidden");
   });
 }
