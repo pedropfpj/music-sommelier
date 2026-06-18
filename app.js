@@ -5794,8 +5794,8 @@ const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v38";
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v18-all-genre-guardian-bust";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v3-techno-copy";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v19-bright-emotional-face";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v4-bright-face";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -31996,7 +31996,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression. Create a different fictional adult musical-spirit entity: different face, head shape, hair, apparent presentation, age cue, spectral skin material, body/bust silhouette, posture, wardrobe, accessories, aura color, and emotional expression. Do not keep the same entity."
     : "";
-  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and focused hypnotic expression, but clearly not fully human. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic and readable, with dark smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
+  const humanEntityGuardrail = "Non-negotiable quality gate: render a hyper-realistic front-facing bust portrait of a fictional adult musical-spirit entity tied to the user's actual dominant electronic subgenres, frequency, rhythm, dance and club culture. Composition must be central, symmetrical, chest-up only: realistic humanoid anatomy, face, skin texture and focused hypnotic expression, but clearly not fully human. The face must be the first thing the viewer sees: large in frame, bright enough to read on a phone, expressive in the eyes and mouth, emotionally magnetic, never hidden in shadow, smoke, mask, helmet, or abstract effects. The entity must feel androgynous, spiritual, futuristic, mysterious and premium, like a guardian of sound frequencies. Use luminous or translucent eyes, spectral/alien skin in cool silver, blue, violet, cyan, rose, green, gold, red-orange or opaline tones, delicate circuit-like markings, metallic accents, refined music jewelry, earrings, crystals, geometric ornaments, and a headpiece that combines futuristic headphones, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings and dancefloor lights. Only use psychedelic/festival/ritual styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use industrial/minimal club language, for House use warm/social groove language, for Trance use celestial melodic lift, for Bass/DnB/Breaks use pressure and broken-rhythm language, for Hard Dance use kick-impact euphoria, and for Ambient/Leftfield use atmospheric editorial language. The neck and upper chest must include an elegant futuristic collar or armor with glowing circuits, biomechanical details and a central bright medallion with sacred geometry. Lighting must be cinematic, dramatic, brighter and readable, with a clean key light on the face, luminous smoky background, particles, bokeh, neon purple, blue, magenta and cyan, shallow depth of field, high contrast and sophisticated sci-fi spiritual realism. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, ordinary DJ photo and plain normal human portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
@@ -32779,9 +32779,9 @@ function buildPremiumSpiritBustSvg(theme, variant, seed = 0, spirit = null) {
     <g filter="url(#mascotGlow)" data-local-spirit-family="${escapeSvgText(familyAccent)}">
       <defs>
         <radialGradient id="${uid}Skin" cx="50%" cy="34%" r="64%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.92" />
-          <stop offset="38%" stop-color="${escapeSvgText(skinA)}" stop-opacity="0.88" />
-          <stop offset="100%" stop-color="${escapeSvgText(skinB)}" stop-opacity="0.72" />
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98" />
+      <stop offset="38%" stop-color="${escapeSvgText(skinA)}" stop-opacity="0.94" />
+      <stop offset="100%" stop-color="${escapeSvgText(skinB)}" stop-opacity="0.8" />
         </radialGradient>
         <linearGradient id="${uid}Armor" x1="12%" y1="0%" x2="88%" y2="100%">
           <stop offset="0%" stop-color="${d}" stop-opacity="0.98" />
@@ -32794,7 +32794,7 @@ function buildPremiumSpiritBustSvg(theme, variant, seed = 0, spirit = null) {
           <stop offset="100%" stop-color="${c}" stop-opacity="0.12" />
         </radialGradient>
       </defs>
-      <ellipse cx="450" cy="810" rx="282" ry="62" fill="${a}" fill-opacity="0.12" />
+      <ellipse cx="450" cy="810" rx="282" ry="62" fill="${a}" fill-opacity="0.16" />
       <g opacity="0.94">${haloRings}</g>
       <g opacity="0.82">${crownRays}</g>
       <path d="M184 438 C258 236 356 158 450 158 C544 158 642 236 716 438" fill="none" stroke="${b}" stroke-width="14" stroke-linecap="round" stroke-opacity="0.5" />
@@ -32808,19 +32808,20 @@ function buildPremiumSpiritBustSvg(theme, variant, seed = 0, spirit = null) {
       <path d="M336 650 C382 690 414 722 450 820 C486 722 518 690 564 650" fill="none" stroke="${metal}" stroke-width="5" stroke-linecap="round" stroke-opacity="0.54" />
       <path d="M450 528 C488 588 502 636 450 694 C398 636 412 588 450 528 Z" fill="url(#${uid}Skin)" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3" />
       <g>
-        <path d="M450 166 C534 168 592 232 586 342 C579 474 520 566 450 566 C380 566 321 474 314 342 C308 232 366 168 450 166 Z" fill="url(#${uid}Skin)" stroke="#f9ffff" stroke-opacity="0.28" stroke-width="5" />
-        <path d="M314 342 C314 252 368 176 450 166 C532 176 586 252 586 342 C548 292 508 268 450 268 C392 268 352 292 314 342 Z" fill="${d}" fill-opacity="0.34" />
+        <path d="M450 166 C534 168 592 232 586 342 C579 474 520 566 450 566 C380 566 321 474 314 342 C308 232 366 168 450 166 Z" fill="url(#${uid}Skin)" stroke="#f9ffff" stroke-opacity="0.42" stroke-width="5" />
+        <path d="M450 188 C528 190 574 252 568 352 C562 454 512 532 450 532 C388 532 338 454 332 352 C326 252 372 190 450 188 Z" fill="#ffffff" fill-opacity="0.09" />
+        <path d="M314 342 C314 252 368 176 450 166 C532 176 586 252 586 342 C548 292 508 268 450 268 C392 268 352 292 314 342 Z" fill="${d}" fill-opacity="0.24" />
         <path d="M334 264 C380 186 520 184 566 266" fill="none" stroke="${a}" stroke-width="4" stroke-linecap="round" stroke-opacity="0.34" />
         <path d="M350 345 C376 328 408 328 434 346" fill="none" stroke="#0b1024" stroke-width="7" stroke-linecap="round" stroke-opacity="0.36" />
         <path d="M466 346 C492 328 524 328 550 345" fill="none" stroke="#0b1024" stroke-width="7" stroke-linecap="round" stroke-opacity="0.36" />
-        <path d="M358 376 C382 358 414 358 438 376 C412 395 384 395 358 376 Z" fill="#efffff" fill-opacity="0.86" />
-        <path d="M462 376 C486 358 518 358 542 376 C516 395 488 395 462 376 Z" fill="#efffff" fill-opacity="0.86" />
-        <circle cx="400" cy="376" r="14" fill="${eyeGlow}" fill-opacity="0.92" />
-        <circle cx="500" cy="376" r="14" fill="${eyeGlow}" fill-opacity="0.92" />
+        <path d="M358 376 C382 358 414 358 438 376 C412 397 384 397 358 376 Z" fill="#f8ffff" fill-opacity="0.94" />
+        <path d="M462 376 C486 358 518 358 542 376 C516 397 488 397 462 376 Z" fill="#f8ffff" fill-opacity="0.94" />
+        <circle cx="400" cy="376" r="15" fill="${eyeGlow}" fill-opacity="0.96" />
+        <circle cx="500" cy="376" r="15" fill="${eyeGlow}" fill-opacity="0.96" />
         <circle cx="403" cy="372" r="5" fill="#ffffff" />
         <circle cx="503" cy="372" r="5" fill="#ffffff" />
         <path d="M450 390 C432 422 432 450 458 466" fill="none" stroke="#11172f" stroke-width="5" stroke-linecap="round" stroke-opacity="0.46" />
-        <path d="M394 ${expressionY + browShift} C420 ${expressionY + 18} 482 ${expressionY + 18} 508 ${expressionY + browShift}" fill="none" stroke="#11172f" stroke-width="7" stroke-linecap="round" stroke-opacity="0.68" />
+        <path d="M388 ${expressionY + browShift} C420 ${expressionY + 24} 482 ${expressionY + 24} 512 ${expressionY + browShift}" fill="none" stroke="#11172f" stroke-width="7" stroke-linecap="round" stroke-opacity="0.76" />
         ${facialCircuits}
         <path d="M450 214 L476 248 L450 282 L424 248 Z" fill="${metal}" fill-opacity="0.3" stroke="${metal}" stroke-width="3" stroke-opacity="0.66" />
         <circle cx="450" cy="248" r="10" fill="${a}" fill-opacity="0.76" />
@@ -33075,14 +33076,14 @@ function buildLocalSpiritHumanoidPortraitDataUrl(
       <stop offset="100%" stop-color="${c}" stop-opacity="0.62" />
     </linearGradient>
     <radialGradient id="portraitHalo" cx="48%" cy="42%" r="52%">
-      <stop offset="0%" stop-color="${a}" stop-opacity="0.62" />
-      <stop offset="54%" stop-color="${b}" stop-opacity="0.18" />
+      <stop offset="0%" stop-color="${a}" stop-opacity="0.72" />
+      <stop offset="54%" stop-color="${b}" stop-opacity="0.24" />
       <stop offset="100%" stop-color="${d}" stop-opacity="0" />
     </radialGradient>
     <linearGradient id="faceGrad" x1="18%" y1="4%" x2="86%" y2="96%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.78" />
-      <stop offset="42%" stop-color="${a}" stop-opacity="0.5" />
-      <stop offset="100%" stop-color="${c}" stop-opacity="0.48" />
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.94" />
+      <stop offset="42%" stop-color="${a}" stop-opacity="0.62" />
+      <stop offset="100%" stop-color="${c}" stop-opacity="0.54" />
     </linearGradient>
     <linearGradient id="cloakGrad" x1="18%" y1="4%" x2="88%" y2="96%">
       <stop offset="0%" stop-color="${d}" stop-opacity="0.92" />
@@ -33098,13 +33099,13 @@ function buildLocalSpiritHumanoidPortraitDataUrl(
     </clipPath>
   </defs>
   <rect width="900" height="900" fill="url(#portraitBg)" />
-  <rect width="900" height="900" fill="#030617" opacity="0.18" />
+  <rect width="900" height="900" fill="#030617" opacity="0.08" />
   <circle cx="450" cy="414" r="380" fill="url(#portraitHalo)" />
   <g clip-path="url(#portraitClip)">
     <g opacity="0.82">${particles}</g>
     <g opacity="0.96">${auraThreads}</g>
     <g opacity="0.7">${bassRings}</g>
-    <g transform="translate(38 -18) scale(1.02)">
+    <g transform="translate(8 -36) scale(1.08)">
       ${avatar}
     </g>
     <g opacity="0.84">${spectrum}</g>
@@ -33622,7 +33623,15 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
   const buildOfflineCollectible = () => {
-    const localPortraitDataUrl = buildLocalSpiritSafeScannerDataUrl(
+    const localPortraitDataUrl = buildLocalSpiritHumanoidPortraitDataUrl(
+      spirit,
+      spiritText,
+      likes,
+      milestoneLikes,
+      variationToken || userSignature,
+      userSignature,
+      profileSignature
+    ) || buildLocalSpiritSafeScannerDataUrl(
       spirit,
       spiritText,
       likes,
@@ -33716,6 +33725,19 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     };
   }
   return buildOfflineCollectible();
+}
+
+function syncSpiritAvatarWithCollectible(collectible, spiritText = {}) {
+  if (!spiritImage || !collectible?.imageUrl) return false;
+  setImageSourceWithFallback(spiritImage, collectible.imageUrl, SPIRIT_AVATAR_FALLBACK, {
+    onFallback: () => {
+      setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
+    }
+  });
+  if (spiritText?.name) {
+    spiritImage.alt = t("spiritAvatarAlt", { name: spiritText.name });
+  }
+  return true;
 }
 
 async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false } = {}) {
@@ -33866,11 +33888,12 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         allowAi: false,
         forceRegenerate
       });
-      if (localPreviewCollectible?.imageUrl && !canUseAiForThisAttempt) {
+      if (localPreviewCollectible?.imageUrl && (forceRegenerate || !previousCollectible?.imageUrl || !canUseAiForThisAttempt)) {
         collectible = localPreviewCollectible;
         store[slotKey] = collectible;
         saveSpiritCollectibleStore(store);
         renderCollectibleState(collectible);
+        syncSpiritAvatarWithCollectible(collectible, spiritText);
       }
 
       const generatedCollectible = canUseAiForThisAttempt
@@ -33928,6 +33951,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     return null;
   }
 
+  syncSpiritAvatarWithCollectible(collectible, spiritText);
   scheduleStorySharePrewarm(collectible.imageUrl, renderedState.shareFilename, 350);
   return collectible;
 }
@@ -34307,11 +34331,7 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleHintLocal");
   }
   if (collectible?.imageUrl) {
-    setImageSourceWithFallback(spiritImage, collectible.imageUrl, SPIRIT_AVATAR_FALLBACK, {
-      onFallback: () => {
-        setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
-      }
-    });
+    syncSpiritAvatarWithCollectible(collectible, spiritText);
   }
   await spiritNarrativeTask;
 

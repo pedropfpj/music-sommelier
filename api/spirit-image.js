@@ -16,7 +16,7 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v18-all-genre-guardian-bust";
+const SPIRIT_IMAGE_PROMPT_VERSION = "spectral-spirit-v19-bright-emotional-face";
 const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v14";
 
 const SPIRIT_ENTITY_BRIEFS = {
@@ -225,7 +225,7 @@ module.exports = async function handler(req, res) {
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
-    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to the user's dominant electronic music styles, club culture, frequency, rhythm and dance: humanoid in anatomy, skin, face and expression, but clearly not fully human. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
+    "QUALITY GATE: create a hyper-realistic digital-art front bust portrait, chest-up, centered and symmetrical. The subject is a fictional adult musical-spirit entity linked to the user's dominant electronic music styles, club culture, frequency, rhythm and dance: humanoid in anatomy, skin, face and expression, but clearly not fully human. The face must be large, bright, clear, emotional, and readable on a phone: expressive eyes, visible mouth, strong facial key light, no hidden shadow, no mask-like blankness, no face lost behind smoke, helmet, text, or effects. It must feel androgynous, spiritual, futuristic, mysterious, beautiful, premium and cinematic, like a guardian of sound frequencies. The final artwork must be a complete visible entity, never an empty placeholder, blank gradient, icon, abstract crystal, flat mascot or simple illustration.",
     characterReplacementInstruction,
     `Spirit-specific human brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
@@ -233,7 +233,7 @@ module.exports = async function handler(req, res) {
     "The app will add all text, stats, frame, and UI later. Generate only the central artwork: no typography, captions, numbers, logos, watermarks, borders, UI panels, poster text, label text or brand marks inside the image.",
     "Required visual language: realistic skin texture mixed with ethereal glow; luminous or translucent eyes; cool silver, blue, violet, cyan, rose, green or opaline spectral skin; delicate gold circuit-like lines or spiritual markings; refined metallic details; earrings, pendants, crystals, small ritual jewels and geometric ornaments.",
     "Required head and torso design: a large integrated head accessory combining futuristic headphones, ceremonial crown, technological halo and sacred audio instrument. Add circular luminous arcs behind the head like sound waves, frequency rings, electronic mandalas and dancefloor lights. On the neck and upper chest, create an elegant futuristic collar or armor with glowing circuits, biomechanical detail and a central bright medallion containing sacred geometry, triangles, circles and violet/blue/cyan light.",
-    "Lighting and scene: dark cinematic background, soft smoke, particles, bokeh, neon purple, blue, magenta and cyan, dramatic side glow, readable face key light, metallic reflections, high contrast, shallow depth of field, deep musical atmosphere and premium sci-fi spiritual finish.",
+    "Lighting and scene: luminous cinematic background with controlled darkness, soft smoke, particles, bokeh, neon purple, blue, magenta and cyan, dramatic side glow, bright readable face key light, metallic reflections, high contrast, shallow depth of field, deep musical atmosphere and premium sci-fi spiritual finish.",
     "Respect the subgenre visual family embedded in the human brief: psychedelic styles should look ritual/festival/UV/fractal, techno should look clubber/industrial/minimal, house should feel warm/social, trance should feel euphoric/celestial/melodic, bass should feel physical and pressure-driven, hard dance should feel high-impact and euphoric, downtempo/ambient should feel atmospheric/organic, and experimental styles should look asymmetric cyber-editorial.",
     "Vary the entity design across generations: change face identity, head shape, spectral skin material, expression, headpiece, jewelry, collar, medallion, aura, lighting and emotional presence. Occasional androgynous adult variants are encouraged.",
     characterRegeneration ? "For this request, prioritize character replacement over continuity: another adult human from the same sonic universe is better than a familiar face with improved styling." : "",
