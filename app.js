@@ -6765,7 +6765,6 @@ const HITECH_ARTIST_ROSTER = [
   "Flowrest",
   "Fobi",
   "Frenesi Hertz",
-  "Fungus Funk",
   "Furious",
   "Fx23",
   "Gen Ohm",
@@ -7099,6 +7098,7 @@ const STYLE_ARTIST_SEEDS = {
   full_on_night: [
     "Burn In Noise",
     "Dickster",
+    "Fungus Funk",
     "Sonic Species",
     "GMS",
     "Volcano",
@@ -7367,6 +7367,9 @@ const ARTIST_STYLE_OVERRIDES = {
   "gms": ["full_on", "full_on_night", "full_on_morning"],
   "avalon": ["full_on", "full_on_night", "full_on_morning"],
   "tristan": ["full_on", "full_on_night", "full_on_morning"],
+  "fungus funk": ["full_on_night", "dark_psy", "twilight_psy"],
+  "kashyyyk": ["hi_tech", "dark_psy"],
+  "will o wisp": ["dark_psy", "psycore", "hi_tech"],
   "faders": ["full_on_morning"],
   "earthspace": ["full_on"],
   "space tribe": ["full_on"],
@@ -7502,7 +7505,13 @@ const ARTIST_STYLE_OVERRIDES = {
   "bonde do tigrao": ["brazilian_funk"]
 };
 
-const LOCKED_ARTIST_STYLE_OVERRIDES = new Set(["astrix", "alpha portal"]);
+const LOCKED_ARTIST_STYLE_OVERRIDES = new Set([
+  "astrix",
+  "alpha portal",
+  "fungus funk",
+  "kashyyyk",
+  "will o wisp"
+]);
 
 const ARTIST_CANONICAL_ORIGINS = {
   "astrix": {
@@ -10044,7 +10053,7 @@ const STYLE_SEED_BACKFILL = {
   hi_tech: [...HITECH_ARTIST_ROSTER],
   freeform: ["Fractal Cowboys", "At Work", "Atwork", "Hongos Longos", "Mubali", "Texas Faggott", "Squaremeat", "Haltya", "Pelinpala", "Salakavala", "Flying Scorpions", "Luomuhappo", "Mandalavandalz", "Outolintu", "James Reipas", "Troll Scientists"],
   full_on: ["Mad Maxx", "Space Tribe", "Avalon", "Tristan", "Earthspace", "Sonic Species", "GMS", "Raja Ram"],
-  full_on_night: ["Burn In Noise", "Dickster", "Sonic Species", "GMS", "Volcano", "Mad Maxx", "Virtual Light", "Ital", "Braincell", "Circuit Breakers"],
+  full_on_night: ["Burn In Noise", "Dickster", "Fungus Funk", "Sonic Species", "GMS", "Volcano", "Mad Maxx", "Virtual Light", "Ital", "Braincell", "Circuit Breakers"],
   full_on_morning: ["Avalon", "Tristan", "Electric Universe", "Raja Ram", "1200 Micrograms", "Mad Maxx", "Faders", "Digicult", "Talamasca", "Laughing Buddha", "Outsiders"],
   hard_techno: ["Alignment", "DYEN", "Sara Landry", "I Hate Models", "Kobosil", "SPFDJ", "Shlomo", "Charlie Sparks", "Nico Moreno", "Airod", "Trym", "Fantasm", "6EJOU", "Onlynumbers", "CLTX", "Basswell", "Klangkuenstler", "Brutalismus 3000"],
   house: ["Illusionize", "Vintage Culture", "Mochakk", "Ashibah", "Dubdogz", "Zerb", "Bhaskar"],
@@ -12601,6 +12610,35 @@ function allowedStylesForArtist(artistName) {
   if (canonicalExact?.length) return canonicalExact;
   const aliasKey = Object.keys(ARTIST_STYLE_OVERRIDES).find((key) => isArtistMatch(normalizedArtist, key));
   return aliasKey ? ARTIST_STYLE_OVERRIDES[aliasKey] : [];
+}
+
+function resolveProfileArtistCandidateStyle(artistName = "", rawStyle = "", targetStyles = [], sourceLabel = "") {
+  const style = normalizeDatasetStyle(rawStyle || "") || normalize(rawStyle || "");
+  if (!artistName || !style) return { style: "", sourceStyle: "", styleCorrected: false };
+  if (artistAllowedForStyle(style, artistName)) {
+    return { style, sourceStyle: style, styleCorrected: false };
+  }
+
+  const allowedStyles = allowedStylesForArtist(artistName)
+    .map((entry) => normalizeDatasetStyle(entry || "") || normalize(entry || ""))
+    .filter((entry, index, list) => entry && STYLE_BPM_RULES[entry] && list.indexOf(entry) === index)
+    .filter((entry) => artistAllowedForStyle(entry, artistName));
+  if (!allowedStyles.length) return { style: "", sourceStyle: style, styleCorrected: false };
+
+  const exactTargetStyle = allowedStyles.find((entry) => targetStyles.some((target) => target.style === entry));
+  const sourceKey = normalize(sourceLabel || "");
+  if (sourceKey === "styleseed" || sourceKey === "style seed" || sourceKey === "style-seed") {
+    if (!exactTargetStyle) return { style: "", sourceStyle: style, styleCorrected: false };
+    return { style: exactTargetStyle, sourceStyle: style, styleCorrected: exactTargetStyle !== style };
+  }
+
+  const familyTargetStyle = allowedStyles.find((entry) => profileStyleAffinity(entry, targetStyles) > 0);
+  const resolvedStyle = exactTargetStyle || familyTargetStyle || "";
+  return {
+    style: resolvedStyle,
+    sourceStyle: style,
+    styleCorrected: Boolean(resolvedStyle && resolvedStyle !== style)
+  };
 }
 
 function hasStrictWhitelist(style) {
@@ -39366,7 +39404,9 @@ function upsertProfileArtistCandidate(candidates, data = {}, targetStyles = [], 
   if (artistSetHasMatch(excludedArtists, name)) return;
   if (isCuratorBlockedArtistName(name)) return;
 
-  const style = normalize(data.style || "");
+  const resolvedStyle = resolveProfileArtistCandidateStyle(name, data.style || "", targetStyles, data.source || "");
+  const style = resolvedStyle.style;
+  if (!style) return;
   const affinity = profileStyleAffinity(style, targetStyles);
   if (affinity <= 0) return;
 
@@ -39385,14 +39425,19 @@ function upsertProfileArtistCandidate(candidates, data = {}, targetStyles = [], 
     soundcloudUrl: "",
     bandcampUrl: "",
     bio: "",
+    sourceStyle: "",
+    styleCorrected: false,
     sources: new Set()
   };
 
   if (affinity > existing.styleScore) {
     existing.style = style || existing.style;
     existing.styleScore = affinity;
+    existing.sourceStyle = resolvedStyle.sourceStyle || "";
+    existing.styleCorrected = Boolean(resolvedStyle.styleCorrected);
   }
-  existing.score += (Number(data.score) || 0) + affinity * 0.95;
+  const baseScore = Number(data.score) || 0;
+  existing.score += (resolvedStyle.styleCorrected ? baseScore * 0.72 : baseScore) + affinity * 0.95;
   existing.support += Number(data.support) || 1;
   existing.trackCount += Number(data.trackCount) || 0;
   existing.previewTracks += Number(data.previewTracks) || 0;
@@ -39528,6 +39573,10 @@ function pickProfileArtistRecommendations(limit = PROFILE_ARTIST_RECOMMENDATION_
 
 function profileArtistRecommendationReason(candidate = {}) {
   const styleLabel = styleLabelByValue(candidate.style || "");
+  if (candidate.styleCorrected && candidate.sourceStyle && candidate.sourceStyle !== candidate.style) {
+    const sourceLabel = styleLabelByValue(candidate.sourceStyle || "");
+    return `Curadoria revisada: entra como ${styleLabel}, sem cravar ${sourceLabel}.`;
+  }
   if (candidate.previewTracks > 0) {
     return `Forte encaixe com seu sinal em ${styleLabel}, com material tocável no catálogo.`;
   }
