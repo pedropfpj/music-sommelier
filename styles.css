@@ -6307,7 +6307,7 @@ input[type="range"] {
 }
 
 .spirit-avatar-wrap {
-  width: min(100%, 390px);
+  width: min(100%, 340px);
   justify-self: center;
   align-self: start;
   aspect-ratio: 1 / 1;
@@ -6722,17 +6722,17 @@ input[type="range"] {
 
 .spirit-collectible-grid {
   display: grid;
-  grid-template-columns: minmax(320px, 500px) minmax(360px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(0.9rem, 2vw, 1.25rem);
   align-items: start;
 }
 
 .spirit-collectible.awaiting-image .spirit-collectible-grid {
-  grid-template-columns: minmax(300px, 480px) minmax(360px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .spirit-collectible.awaiting-image .spirit-collectible-meta {
-  max-width: 760px;
+  max-width: 100%;
 }
 
 .spirit-collectible-placeholder {
@@ -6830,6 +6830,7 @@ input[type="range"] {
 }
 
 .spirit-collectible-image {
+  display: none !important;
   width: 100%;
   max-width: 520px;
   justify-self: center;
@@ -6846,11 +6847,15 @@ input[type="range"] {
     0 0 58px rgba(98, 242, 255, 0.2);
 }
 
+.spirit-collectible-placeholder {
+  display: none !important;
+}
+
 .spirit-collectible-meta {
   display: grid;
   align-content: start;
   gap: 0.62rem;
-  max-width: 78ch;
+  max-width: 100%;
 }
 
 .spirit-collectible-milestone {
@@ -8353,7 +8358,7 @@ input[type="range"] {
   }
 
   .spirit-avatar-wrap {
-    width: min(100%, 320px);
+    width: min(100%, 280px);
   }
 
   .spirit-avatar {
@@ -8426,12 +8431,6 @@ input[type="range"] {
 
   .spirit-collectible-header {
     align-items: flex-start;
-  }
-
-  .spirit-collectible-image,
-  .spirit-collectible-placeholder {
-    max-width: min(100%, 420px);
-    border-radius: 16px;
   }
 
   .spirit-collectible-meta {

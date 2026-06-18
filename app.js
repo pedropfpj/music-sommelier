@@ -16243,11 +16243,11 @@ const I18N = {
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do espírito: {song} • {artist}.",
     spiritCollectibleTitle: "Arte única do espírito",
-    spiritCollectibleReadyToGenerate: "Pronto para gerar um card estático do seu espírito com imagem, nível e marco de likes.",
-    spiritCollectibleHintLocal: "Prévia local ativa. Quando a IA estiver disponível, ela tenta trocar por uma arte mais premium.",
-    spiritCollectibleHintLocalReady: "Arte local criada. Regenerar tenta buscar uma versão premium quando disponível.",
-    spiritCollectibleHintApi: "Arte IA baseada no seu gosto: retrato espectral com pele luminosa, acessórios musicais e aura futurista.",
-    spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a prévia local mantém o espírito visível.",
+    spiritCollectibleReadyToGenerate: "Sua arte aparece uma vez acima. Gere um card estático para baixar ou compartilhar com nível e marco de likes.",
+    spiritCollectibleHintLocal: "Sua arte aparece uma vez acima. Use este painel para baixar, compartilhar ou gerar uma nova versão.",
+    spiritCollectibleHintLocalReady: "Arte pronta e exibida acima. Use os botões para baixar, compartilhar ou tentar uma versão premium.",
+    spiritCollectibleHintApi: "Arte IA baseada no seu gosto, exibida uma única vez acima. Baixe, compartilhe ou gere outra versão por aqui.",
+    spiritCollectiblePremiumLocked: "Arte IA preparada. Enquanto a imagem online não vem, a arte acima mantém o espírito visível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais artes espectrais em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
@@ -17058,11 +17058,11 @@ const I18N = {
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Spirit track: {song} • {artist}.",
     spiritCollectibleTitle: "Unique spirit artwork",
-    spiritCollectibleReadyToGenerate: "Ready to generate a static spirit card with artwork, level, and like milestone.",
-    spiritCollectibleHintLocal: "Local preview active. When AI is available, it tries to swap in a more premium artwork.",
-    spiritCollectibleHintLocalReady: "Local artwork created. Regenerating still tries to fetch a premium version when available.",
-    spiritCollectibleHintApi: "AI artwork based on your taste: a spectral portrait with luminous skin, music accessories, and futuristic aura.",
-    spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the local preview keeps the spirit visible.",
+    spiritCollectibleReadyToGenerate: "Your artwork appears once above. Generate a static card to download or share with level and like milestone.",
+    spiritCollectibleHintLocal: "Your artwork appears once above. Use this panel to download, share, or generate a new version.",
+    spiritCollectibleHintLocalReady: "Artwork is ready and shown above. Use the buttons to download, share, or try a premium version.",
+    spiritCollectibleHintApi: "AI artwork based on your taste, shown once above. Download, share, or generate another version here.",
+    spiritCollectiblePremiumLocked: "AI artwork is prepared. While the online image is not ready, the artwork above keeps the spirit visible.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality spectral artworks.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
@@ -17870,11 +17870,11 @@ const I18N = {
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del espíritu: {song} • {artist}.",
     spiritCollectibleTitle: "Arte único del espíritu",
-    spiritCollectibleReadyToGenerate: "Listo para generar un card estático del espíritu con imagen, nivel e hito de likes.",
-    spiritCollectibleHintLocal: "Vista local activa. Cuando la IA esté disponible, intenta traer una arte más premium.",
-    spiritCollectibleHintLocalReady: "Arte local creada. Regenerar intenta buscar una versión premium cuando esté disponible.",
-    spiritCollectibleHintApi: "Arte IA basada en tu gusto: retrato espectral con piel luminosa, accesorios musicales y aura futurista.",
-    spiritCollectiblePremiumLocked: "Arte IA preparado. Mientras la imagen online no llega, la vista local mantiene visible el espíritu.",
+    spiritCollectibleReadyToGenerate: "Tu arte aparece una sola vez arriba. Genera un card estático para descargar o compartir con nivel e hito de likes.",
+    spiritCollectibleHintLocal: "Tu arte aparece una sola vez arriba. Usa este panel para descargar, compartir o generar una nueva versión.",
+    spiritCollectibleHintLocalReady: "Arte lista y mostrada arriba. Usa los botones para descargar, compartir o intentar una versión premium.",
+    spiritCollectibleHintApi: "Arte IA basada en tu gusto, mostrada una sola vez arriba. Descarga, comparte o genera otra versión aquí.",
+    spiritCollectiblePremiumLocked: "Arte IA preparada. Mientras la imagen online no llega, el arte de arriba mantiene visible el espíritu.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más artes espectrales en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
@@ -33718,7 +33718,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
 }
 
 async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false } = {}) {
-  if (!spiritCollectiblePanel || !spiritCollectibleImage || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return null;
+  if (!spiritCollectiblePanel || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return null;
   const likes = totalPositiveLikes();
   if (likes < SPIRIT_UNLOCK_TARGET) {
     spiritCollectiblePanel.classList.add("hidden");
@@ -33772,24 +33772,13 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       }
     }
 
-    if (hasImage) {
-      spiritCollectibleImage.classList.remove("hidden");
-      setImageSourceWithFallback(
-        spiritCollectibleImage,
-        imageUrl,
-        SPIRIT_COLLECTIBLE_FALLBACK,
-        {
-          onFallback: () => {
-            if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleError");
-          }
-        }
-      );
-    } else {
+    if (spiritCollectibleImage) {
       spiritCollectibleImage.classList.add("hidden");
       spiritCollectibleImage.removeAttribute("src");
+      spiritCollectibleImage.setAttribute("aria-hidden", "true");
+      spiritCollectibleImage.dataset.assetReady = hasImage ? "true" : "false";
+      spiritCollectibleImage.alt = "";
     }
-    spiritCollectibleImage.dataset.assetReady = hasImage ? "true" : "false";
-    spiritCollectibleImage.alt = t("spiritCollectibleAlt", { spirit: spiritText?.name || spirit.id, milestone: milestone.likes });
     spiritCollectibleMilestone.textContent = t("spiritCollectibleMilestone", { likes: milestone.likes });
     spiritRankBadge.textContent = t(rank.current.key);
 
