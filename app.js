@@ -24479,9 +24479,10 @@ function currentActiveAppTabName() {
 function updateSignatureBarForTab(tabName = currentActiveAppTabName()) {
   if (!signatureBar) return;
   const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
-  const shouldShow = !appVisible || tabName === "discover";
+  const shouldShow = !appVisible;
   signatureBar.classList.toggle("is-hidden", !shouldShow);
   signatureBar.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+  document.body.classList.toggle("signature-bar-hidden", !shouldShow);
 }
 
 function ensureEventsPanelActive() {
