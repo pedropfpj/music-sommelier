@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260617track-count1" />
+    <link rel="stylesheet" href="styles.css?v=20260618count-corner1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -442,7 +442,6 @@
             </div>
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da track</p>
-              <span id="topSwipeCount" class="swipe-card-count hidden">#1</span>
               <h4 id="topSwipeTitle">Comece com uma descoberta</h4>
               <p id="topSwipeMeta" class="muted">Toque em Surpresa e responda sem pensar demais.</p>
               <div id="topSwipeBadges" class="swipe-status-badges" aria-label="Sinais da recomendação"></div>
@@ -462,7 +461,10 @@
           <div class="swipe-hero-actions">
             <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Não curti</button>
             <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa</button>
-            <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
+            <div class="swipe-like-count-wrap">
+              <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
+              <span id="topSwipeCount" class="swipe-card-count hidden">#1</span>
+            </div>
           </div>
           <p id="topSwipeHint" class="muted swipe-hint">O perfil guarda seu histórico; a aba Filtros afina subgênero, BPM e contexto.</p>
         </div>
@@ -877,7 +879,6 @@
       <section id="resultPanel" class="panel hidden app-tab-panel active" data-app-tab="discover" aria-live="polite">
         <h3>Sua recomendação</h3>
         <article id="primaryTrackCard" class="result-card main-track" role="group" aria-label="Arraste para direita para curtir ou esquerda para não curtir" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
-          <span id="trackSequenceBadge" class="swipe-card-count primary-track-count hidden">#1</span>
           <p class="chip" id="matchReason"></p>
           <p id="generatedBadge" class="generated-badge">Gerada agora</p>
           <div id="trackStatusBadges" class="swipe-status-badges track-status-badges" aria-label="Sinais da faixa"></div>
@@ -1819,6 +1820,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260617track-count1"></script>
+    <script src="app.js?v=20260618count-corner1"></script>
   </body>
 </html>

@@ -4964,6 +4964,18 @@ input[type="range"] {
   border-radius: 999px;
 }
 
+.swipe-like-count-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.swipe-like-count-wrap .swipe-action-btn {
+  width: 100%;
+}
+
 .swipe-hero-surprise {
   box-shadow: 0 14px 30px rgba(93, 233, 255, 0.18);
 }
@@ -13176,8 +13188,8 @@ iframe {
 .swipe-card-count {
   display: inline-flex;
   width: fit-content;
-  min-width: 54px;
-  min-height: 38px;
+  min-width: 52px;
+  min-height: 100%;
   align-items: center;
   justify-content: center;
   padding: 0.2rem 0.56rem;
@@ -13198,28 +13210,9 @@ iframe {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.primary-track-count {
-  position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
-  z-index: 5;
-  margin: 0;
-  border-color: rgba(123, 224, 255, 0.48);
-  background:
-    linear-gradient(135deg, rgba(123, 224, 255, 0.24), rgba(126, 232, 198, 0.22)),
-    rgba(4, 13, 30, 0.92);
-  color: #e9fcff;
-}
-
 #topSwipeCount {
-  position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
-  z-index: 5;
-}
-
-#primaryTrackCard.main-track {
-  padding-top: clamp(3.25rem, 5vw, 3.75rem);
+  align-self: stretch;
+  border-color: rgba(126, 232, 198, 0.72);
 }
 
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
@@ -13266,22 +13259,29 @@ iframe {
   min-width: 0;
 }
 
+#swipeStartPanel .swipe-hero-actions {
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr) minmax(126px, 1.16fr);
+  align-items: stretch;
+}
+
+#swipeStartPanel .swipe-like-count-wrap,
+#swipeStartPanel .swipe-like-count-wrap .swipe-action-btn {
+  min-width: 0;
+}
+
 @media (max-width: 620px) {
   .swipe-card-count {
-    min-width: 48px;
-    min-height: 34px;
+    min-width: 42px;
     padding-inline: 0.48rem;
-    font-size: 1rem;
+    font-size: 0.92rem;
   }
 
-  .primary-track-count {
-    top: 0.72rem;
-    left: 0.72rem;
+  .swipe-like-count-wrap {
+    gap: 0.32rem;
   }
 
-  #topSwipeCount {
-    top: 0.72rem;
-    left: 0.72rem;
+  #swipeStartPanel .swipe-hero-actions {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 0.96fr) minmax(112px, 1.16fr);
   }
 
   #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {

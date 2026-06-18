@@ -5052,7 +5052,6 @@ const artistDetailsCard = document.getElementById("artistDetailsCard");
 const labelDetailsCard = document.getElementById("labelDetailsCard");
 const discoveryCard = document.getElementById("discoveryCard");
 
-const trackSequenceBadge = document.getElementById("trackSequenceBadge");
 const matchReason = document.getElementById("matchReason");
 const songTitle = document.getElementById("songTitle");
 const artistLine = document.getElementById("artistLine");
@@ -37306,7 +37305,7 @@ function presentedCardNumberForTrack(track) {
 
 function updateDiscoverySequenceBadges(track) {
   const hasTrack = Boolean(track);
-  const targets = [topSwipeCount, trackSequenceBadge].filter(Boolean);
+  const targets = [topSwipeCount].filter(Boolean);
   if (!targets.length) return;
   if (!hasTrack) {
     targets.forEach((badge) => {
