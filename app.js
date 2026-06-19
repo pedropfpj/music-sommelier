@@ -18568,7 +18568,7 @@ function applyLanguage() {
       btnKnewDiscovery: "Já conhecia",
       btnNewDiscovery: "Novidade pra mim",
       btnSkip: "Não combinou",
-      btnMoreInfo: "Mais sobre artista/label"
+      btnMoreInfo: "Mais sobre artista e label"
     },
     en: {
       profileTitle: "Tune the radar",
@@ -18612,7 +18612,7 @@ function applyLanguage() {
       btnKnewDiscovery: "Already knew",
       btnNewDiscovery: "New to me",
       btnSkip: "Did not match",
-      btnMoreInfo: "More about artist/label"
+      btnMoreInfo: "More about artist and label"
     },
     es: {
       profileTitle: "Ajusta el radar",
@@ -18656,7 +18656,7 @@ function applyLanguage() {
       btnKnewDiscovery: "Ya conocía",
       btnNewDiscovery: "Novedad para mí",
       btnSkip: "No combinó",
-      btnMoreInfo: "Más sobre artista/sello"
+      btnMoreInfo: "Más sobre artista y sello"
     }
   }[currentLanguage] || {};
 

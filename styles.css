@@ -13217,10 +13217,51 @@ iframe {
 .feedback-action-group.explore .feedback-buttons {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
+  gap: 0.56rem;
 }
 
 .feedback-action-group.explore .feedback-buttons button {
   min-width: 0;
+  min-height: 54px;
+  border-radius: 8px;
+  padding: 0.6rem 0.78rem;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(0.86rem, 1.35vw, 1rem);
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: 0;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.feedback-action-group.explore #adaptiveSurpriseBtn {
+  min-height: 54px;
+  color: #061523;
+  font-size: clamp(0.9rem, 1.25vw, 1.02rem);
+  background:
+    linear-gradient(105deg, #45f1d0 0%, #78cfff 62%, #9ba0ff 100%);
+}
+
+.feedback-action-group.explore #moreInfoBtn {
+  color: #1b1308;
+  font-size: clamp(0.88rem, 1.15vw, 0.98rem);
+  background:
+    linear-gradient(105deg, #ffd18b 0%, #ffc06f 100%);
+}
+
+.feedback-action-group.explore .feedback-buttons button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.feedback-action-group.explore .feedback-buttons button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.82);
+  outline-offset: 3px;
 }
 
 #swipeStartPanel .swipe-hero-actions {
@@ -13258,5 +13299,15 @@ iframe {
     min-height: 58px;
     padding-inline: 0.72rem;
     font-size: clamp(0.96rem, 4.5vw, 1.1rem);
+  }
+
+  .feedback-action-group.explore .feedback-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-action-group.explore .feedback-buttons button,
+  .feedback-action-group.explore #adaptiveSurpriseBtn {
+    min-height: 50px;
+    font-size: 0.96rem;
   }
 }
