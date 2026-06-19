@@ -7242,7 +7242,9 @@ input[type="range"] {
 .profile-library-grid .liked-track-list {
   max-height: min(420px, 52svh);
   overflow: auto;
-  padding-right: 0.08rem;
+  padding-right: 0.28rem;
+  align-content: start;
+  scrollbar-gutter: stable;
 }
 
 .profile-backup-card {
@@ -7539,6 +7541,7 @@ input[type="range"] {
 
 .liked-track-history-card {
   gap: 0.7rem;
+  align-content: start;
 }
 
 .liked-track-history-head {
@@ -7598,12 +7601,12 @@ input[type="range"] {
 
 .liked-track-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 0.62rem;
   border: 1px solid rgba(139, 205, 255, 0.24);
   border-radius: 10px;
-  padding: 0.72rem;
+  padding: 0.78rem 0.84rem;
   background:
     radial-gradient(circle at 0% 0%, rgba(110, 255, 220, 0.1), transparent 40%),
     rgba(5, 12, 27, 0.78);
@@ -7619,15 +7622,18 @@ input[type="range"] {
 .liked-track-body {
   min-width: 0;
   display: grid;
-  gap: 0.2rem;
+  gap: 0.26rem;
 }
 
 .liked-track-title {
+  margin: 0;
   color: #f5fbff;
   font-family: "Syne", sans-serif;
-  font-size: clamp(1rem, 2vw, 1.18rem);
-  line-height: 1.08;
-  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 1.55vw, 1.18rem);
+  line-height: 1.12;
+  overflow-wrap: break-word;
+  word-break: normal;
+  text-wrap: balance;
 }
 
 .liked-track-meta,
@@ -7649,25 +7655,27 @@ input[type="range"] {
 .liked-track-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.42rem;
-  max-width: 390px;
+  justify-content: flex-start;
+  gap: 0.38rem;
+  max-width: none;
+  padding-top: 0.14rem;
 }
 
 .liked-track-actions a,
 .liked-track-remove {
-  min-height: 36px;
+  min-height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   border: 1px solid rgba(139, 205, 255, 0.3);
-  padding: 0.36rem 0.72rem;
+  padding: 0.34rem 0.66rem;
   color: #eaf7ff;
   background: rgba(12, 22, 45, 0.78);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .liked-track-actions a:hover,
