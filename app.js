@@ -5253,6 +5253,7 @@ const socialUsernameInput = document.getElementById("socialUsernameInput");
 const socialDisplayNameInput = document.getElementById("socialDisplayNameInput");
 const socialSignUpBtn = document.getElementById("socialSignUpBtn");
 const socialSignInBtn = document.getElementById("socialSignInBtn");
+const socialResendConfirmBtn = document.getElementById("socialResendConfirmBtn");
 const socialSignOutBtn = document.getElementById("socialSignOutBtn");
 const socialSyncBtn = document.getElementById("socialSyncBtn");
 const socialStatus = document.getElementById("socialStatus");
@@ -40333,6 +40334,47 @@ function socialLoadStoredSession() {
   }
 }
 
+function socialAuthRedirectUrl() {
+  const fallback = "https://sonicsearch.app";
+  try {
+    const protocol = window.location?.protocol || "";
+    const origin = window.location?.origin || "";
+    const pathname = window.location?.pathname || "/";
+    if ((protocol === "http:" || protocol === "https:") && origin) {
+      return `${origin}${pathname || "/"}`;
+    }
+  } catch (error) {
+    console.warn("Could not resolve social auth redirect URL", error);
+  }
+  return fallback;
+}
+
+function socialAuthRedirectPath(path = "") {
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}redirect_to=${encodeURIComponent(socialAuthRedirectUrl())}`;
+}
+
+function socialFriendlyAuthError(message = "") {
+  const text = String(message || "").trim();
+  const lower = text.toLowerCase();
+  if (lower.includes("otp_expired") || lower.includes("expired")) {
+    return "Esse link de confirmacao expirou. Clique em Reenviar confirmacao e use o e-mail mais recente.";
+  }
+  if (lower.includes("email not confirmed") || lower.includes("not confirmed")) {
+    return "Confirme o e-mail mais recente do Supabase antes de entrar.";
+  }
+  if (lower.includes("invalid login credentials")) {
+    return "E-mail ou senha incorretos. Se acabou de criar a conta, confirme o e-mail mais recente antes de entrar.";
+  }
+  if (lower.includes("already registered") || lower.includes("user already registered")) {
+    return "Este e-mail ja tem uma conta. Use Entrar, ou reenvie a confirmacao se ainda nao confirmou.";
+  }
+  if (lower.includes("security purposes") || lower.includes("rate limit")) {
+    return "O Supabase bloqueou novas tentativas por alguns instantes. Aguarde um minuto e tente de novo.";
+  }
+  return text || "Falha no Supabase.";
+}
+
 function socialConfigReady() {
   if (AUTH_LOGIN_STANDBY) return false;
   return Boolean(socialState.enabled && socialState.config?.supabaseUrl && socialState.config?.supabaseAnonKey);
@@ -40380,6 +40422,95 @@ async function socialRequest(path, options = {}) {
     throw new Error(String(detail || "Falha no Supabase."));
   }
   return payload;
+}
+
+async function socialFetchAuthUser(accessToken = "") {
+  if (!socialConfigReady() || !accessToken) throw new Error("Sessao Supabase ausente.");
+  const response = await fetch(socialApiUrl("/auth/v1/user"), {
+    method: "GET",
+    headers: {
+      ...socialHeaders({ auth: false }),
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = text;
+    }
+  }
+  if (!response.ok) {
+    const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
+    throw new Error(String(detail || "Nao consegui validar o usuario."));
+  }
+  return payload?.user || payload;
+}
+
+function socialAuthHashParams() {
+  try {
+    const hash = window.location?.hash || "";
+    if (!hash || hash.length < 2) return null;
+    const params = new URLSearchParams(hash.slice(1));
+    const hasSocialAuthSignal = params.has("access_token") || params.has("error") || params.has("error_code") || params.has("error_description");
+    return hasSocialAuthSignal ? params : null;
+  } catch (error) {
+    console.warn("Could not parse social auth redirect", error);
+    return null;
+  }
+}
+
+function socialClearAuthHash() {
+  try {
+    if (window.history?.replaceState) {
+      window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+    }
+  } catch (error) {
+    console.warn("Could not clear social auth hash", error);
+  }
+}
+
+async function socialHandleAuthRedirect() {
+  const params = socialAuthHashParams();
+  if (!params || !socialConfigReady()) return false;
+  const redirectError = [params.get("error_code"), params.get("error_description") || params.get("error")]
+    .filter(Boolean)
+    .join(" ");
+  if (redirectError) {
+    socialSetStatus(socialFriendlyAuthError(redirectError), "error");
+    socialClearAuthHash();
+    return true;
+  }
+  const accessToken = params.get("access_token") || "";
+  if (!accessToken) return false;
+  try {
+    const user = await socialFetchAuthUser(accessToken);
+    const expiresIn = Number(params.get("expires_in") || 3600) || 3600;
+    const session = {
+      access_token: accessToken,
+      refresh_token: params.get("refresh_token") || "",
+      token_type: params.get("token_type") || "bearer",
+      expires_in: expiresIn,
+      expires_at: Math.floor(Date.now() / 1000) + expiresIn,
+      user
+    };
+    if (!session.user?.id) throw new Error("Nao consegui confirmar o usuario do Supabase.");
+    socialStoreSession(session);
+    if (socialEmailInput && !socialEmailInput.value && session.user.email) socialEmailInput.value = session.user.email;
+    await loadSocialProfile({ silent: true });
+    await upsertSocialProfile();
+    await syncSocialLikedTracks({ silent: true, activity: false, force: true });
+    socialSetStatus("E-mail confirmado. Perfil conectado.", "ok");
+  } catch (error) {
+    console.warn("Could not finish social auth redirect", error);
+    socialSetStatus(`E-mail confirmado, mas nao consegui entrar automaticamente: ${socialFriendlyAuthError(error.message)} Use Entrar.`, "error");
+  } finally {
+    socialClearAuthHash();
+    renderSocialUi({ preserveStatus: true });
+  }
+  return true;
 }
 
 async function fetchSocialConfig() {
@@ -40746,10 +40877,12 @@ function renderSocialUi(options = {}) {
   });
   if (socialSignUpBtn) socialSignUpBtn.classList.toggle("hidden", signed);
   if (socialSignInBtn) socialSignInBtn.classList.toggle("hidden", signed);
+  if (socialResendConfirmBtn) socialResendConfirmBtn.classList.toggle("hidden", signed);
   if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
   if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
   if (socialSignUpBtn) socialSignUpBtn.disabled = signed || !configured || socialState.busy;
   if (socialSignInBtn) socialSignInBtn.disabled = signed || !configured || socialState.busy;
+  if (socialResendConfirmBtn) socialResendConfirmBtn.disabled = signed || !configured || socialState.busy;
   if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
   if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
@@ -40792,9 +40925,12 @@ async function socialSignUp() {
     socialSetStatus("Informe e-mail e senha com pelo menos 6 caracteres.", "error");
     return;
   }
+  if (socialState.busy) return;
+  socialState.busy = true;
   socialSetStatus("Criando perfil social...");
+  renderSocialUi({ preserveStatus: true });
   try {
-    const payload = await socialRequest("/auth/v1/signup", {
+    const payload = await socialRequest(socialAuthRedirectPath("/auth/v1/signup"), {
       method: "POST",
       auth: false,
       body: {
@@ -40807,14 +40943,15 @@ async function socialSignUp() {
       socialStoreSession(payload.session);
       await loadSocialProfile({ silent: true });
       await upsertSocialProfile();
-      await syncSocialLikedTracks({ silent: true, activity: false });
+      await syncSocialLikedTracks({ silent: true, activity: false, force: true });
       socialSetStatus("Perfil criado e conectado.", "ok");
     } else {
-      socialSetStatus("Perfil criado. Se o Supabase pedir confirmacao, confirme o e-mail e depois faca login.", "ok");
+      socialSetStatus("Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.", "ok");
     }
   } catch (error) {
-    socialSetStatus(`Nao consegui criar o perfil: ${error.message}`, "error");
+    socialSetStatus(`Nao consegui criar o perfil: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
+    socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
   }
 }
@@ -40835,7 +40972,10 @@ async function socialSignIn() {
     socialSetStatus("Informe e-mail e senha para entrar.", "error");
     return;
   }
+  if (socialState.busy) return;
+  socialState.busy = true;
   socialSetStatus("Entrando...");
+  renderSocialUi({ preserveStatus: true });
   try {
     const payload = await socialRequest("/auth/v1/token?grant_type=password", {
       method: "POST",
@@ -40845,11 +40985,49 @@ async function socialSignIn() {
     socialStoreSession(payload);
     await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
-    await syncSocialLikedTracks({ silent: true, activity: false });
+    await syncSocialLikedTracks({ silent: true, activity: false, force: true });
     socialSetStatus("Perfil conectado.", "ok");
   } catch (error) {
-    socialSetStatus(`Nao consegui entrar: ${error.message}`, "error");
+    socialSetStatus(`Nao consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
+    socialState.busy = false;
+    renderSocialUi({ preserveStatus: true });
+  }
+}
+
+async function socialResendConfirmation() {
+  if (AUTH_LOGIN_STANDBY) {
+    socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return;
+  }
+  if (!socialConfigReady()) {
+    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    return;
+  }
+  const email = String(socialEmailInput?.value || "").trim();
+  if (!email) {
+    socialSetStatus("Informe o e-mail para reenviar a confirmacao.", "error");
+    return;
+  }
+  if (socialState.busy) return;
+  socialState.busy = true;
+  socialSetStatus("Enviando novo e-mail de confirmacao...");
+  renderSocialUi({ preserveStatus: true });
+  try {
+    await socialRequest(socialAuthRedirectPath("/auth/v1/resend"), {
+      method: "POST",
+      auth: false,
+      body: {
+        type: "signup",
+        email
+      }
+    });
+    socialSetStatus("Enviei um novo e-mail de confirmacao. Use o link mais recente e depois volte aqui.", "ok");
+  } catch (error) {
+    socialSetStatus(`Nao consegui reenviar: ${socialFriendlyAuthError(error.message)}`, "error");
+  } finally {
+    socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
   }
 }
@@ -40898,12 +41076,13 @@ async function initSocialMvp() {
   if (socialUsernameInput && !socialUsernameInput.value) socialUsernameInput.value = socialSuggestedUsername();
   if (socialDisplayNameInput && !socialDisplayNameInput.value) socialDisplayNameInput.value = socialSuggestedDisplayName();
   await fetchSocialConfig();
+  const handledAuthRedirect = await socialHandleAuthRedirect();
   const storedSession = socialLoadStoredSession();
-  if (storedSession) socialStoreSession(storedSession);
+  if (!socialState.session?.access_token && storedSession) socialStoreSession(storedSession);
   if (socialConfigReady() && socialState.session?.access_token) {
     await loadSocialProfile({ silent: true });
   }
-  renderSocialUi();
+  renderSocialUi({ preserveStatus: handledAuthRedirect });
   if (socialConfigReady() && socialState.session?.access_token) {
     await syncSocialLikedTracks({ silent: true, activity: false });
     await loadSocialFeed({ silent: true });
@@ -42888,6 +43067,9 @@ bind(socialSignUpBtn, "click", () => {
 });
 bind(socialSignInBtn, "click", () => {
   void socialSignIn();
+});
+bind(socialResendConfirmBtn, "click", () => {
+  void socialResendConfirmation();
 });
 bind(socialSignOutBtn, "click", () => {
   void socialSignOut();
