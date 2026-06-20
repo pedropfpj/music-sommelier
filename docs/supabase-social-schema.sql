@@ -1,3 +1,7 @@
+-- Legacy social-only schema for Supabase.
+-- Prefer the full database v1 migration at:
+-- supabase/migrations/20260619010700_sonic_search_core.sql
+--
 -- Sonic Search social MVP schema for Supabase.
 -- Run this in Supabase SQL Editor, then set these Vercel env vars:
 -- SUPABASE_URL

@@ -127,7 +127,7 @@ const AUTH_PROVIDER_CONFIG = {
     ? window.SONIC_SEARCH_AUTH_CONFIG
     : {})
 };
-const AUTH_LOGIN_STANDBY = true;
+const AUTH_LOGIN_STANDBY = false;
 const LOCAL_STATIC_PREVIEW_PORTS = new Set(["5500", "5501", "5502", "5503", "5504", "5505", "5506", "5507", "8000", "8080"]);
 const REMOTE_SPIRIT_IMAGE_API_URL = "https://music-sommelier1.vercel.app/api/spirit-image";
 
@@ -138,6 +138,12 @@ function isLocalStaticPreviewEnvironment() {
   const port = String(window.location?.port || "");
   const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
   return protocol === "file:" || (localHosts.has(hostname) && LOCAL_STATIC_PREVIEW_PORTS.has(port));
+}
+
+function isLocalDevelopmentHost() {
+  if (typeof window === "undefined") return false;
+  const hostname = String(window.location?.hostname || "").replace(/^\[|\]$/g, "");
+  return new Set(["localhost", "127.0.0.1", "::1"]).has(hostname);
 }
 
 const AI_DEFAULT_CONFIG = {
@@ -762,6 +768,8 @@ const EXTERNAL_DATASET_FILES = [
 ];
 const INDEXED_DATASET_ARTIST_COUNT = 4599;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
+const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
+const CATALOG_EXTRA_IMPORT_LIMIT = 80;
 
 const LOCAL_TRACK_SEED_BOOST = [
   {
@@ -5474,7 +5482,7 @@ let recommendationBpmFallbackInfo = false;
 let activeVibeTheme = "";
 let currentAuthUser = null;
 const LOGIN_FLOW_ENABLED = false;
-const SOCIAL_PROFILE_ENABLED = false;
+const SOCIAL_PROFILE_ENABLED = true;
 let publicVisitorMode = false;
 let ephemeralProfileMode = false;
 let sharedSpiritViewMode = false;
@@ -5498,6 +5506,10 @@ const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
 let externalDatasetImportPromise = null;
+let catalogExtraImportDoneAll = false;
+let catalogExtraImportPromises = new Map();
+let catalogExtraImportedStyles = new Set();
+let catalogExtraImportNotified = false;
 let introQuoteTimer = 0;
 let introQuoteIndex = 0;
 let introAutoAdvanceTimer = 0;
@@ -5795,7 +5807,7 @@ const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v38";
 const SPIRIT_IMAGE_PROMPT_VERSION = "musical-archetype-v20-bright-emotional-face";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v4-bright-face";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "spectral-bust-v5-copy-bright-face";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
@@ -8278,7 +8290,10 @@ const LOCK_SEED_FROM_CATALOG_STYLES = new Set([
   "industrial_techno",
   ...EXPANDED_NICHE_DISCOVERY_STYLES
 ]);
-const NO_CROSS_STYLE_FALLBACK_STYLES = new Set([]);
+const NO_CROSS_STYLE_FALLBACK_STYLES = new Set([
+  "psycore",
+  "tech_house"
+]);
 const NO_BROAD_STYLE_HYDRATION_STYLES = new Set([
   "ambient",
   "downtempo",
@@ -10939,6 +10954,214 @@ function upsertDiscoveryFromDataset(style, artistName, bio = "") {
     youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${artist} ${styleLabel}`)}`
   });
   return true;
+}
+
+function catalogExtraRowText(row = {}, key = "") {
+  return String(row?.[key] ?? "").trim();
+}
+
+function isCatalogExtraTrack(track = {}) {
+  const source = normalize(track?.source || "");
+  return Boolean(track?.catalogExtra || track?.cloudCatalogExtra || source.includes("supabase catalog extra"));
+}
+
+function isTrustedCatalogExtraTrack(track = {}) {
+  return isCatalogExtraTrack(track) && track?.existenceVerified !== false;
+}
+
+function restoreCatalogExtraTrackHints(track = {}) {
+  if (!isCatalogExtraTrack(track)) return;
+  const style = normalizeDatasetStyle(track.style || "");
+  const artist = String(track.artist || "").trim();
+  if (!style || !artist || !STYLE_BPM_RULES[style]) return;
+
+  seedStyleArtistFromDataset(style, artist);
+  upsertArtistOverridesFromDataset(style, artist);
+  upsertArtistOriginFromDataset(artist, track.artistCountry || track.country || "", track.artistCity || track.city || "");
+  upsertDiscoveryFromDataset(style, artist, track.artistBio || track.artistProfileHint || "");
+}
+
+function catalogExtraUrlFields(row = {}) {
+  const sourceUrl = catalogExtraRowText(row, "source_url");
+  const label = catalogExtraRowText(row, "label");
+  const url = sourceUrl || (/^https?:\/\//i.test(label) ? label : "");
+  if (!url) return {};
+
+  const lowerUrl = url.toLowerCase();
+  if (isDirectYouTubeUrl(url)) return { youtubeTrackUrl: url };
+  if (lowerUrl.includes("youtube.com") || lowerUrl.includes("youtu.be")) return { youtubeUrl: url };
+  if (isDirectSoundCloudTrackUrl(url)) return { soundcloudTrackUrl: url };
+  if (lowerUrl.includes("soundcloud.com")) return { soundcloudUrl: url };
+  if (lowerUrl.includes("bandcamp.com")) return { bandcampTrackUrl: url, bandcampUrl: url };
+  if (lowerUrl.includes("spotify.com/track")) return { spotifyTrackUrl: url };
+  if (lowerUrl.includes("spotify.com")) return { spotifyUrl: url };
+  return {};
+}
+
+function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_extra") {
+  const existingKeys = new Set(catalog.map((track) => normalize(`${track.artist}::${track.song}`)));
+  const seededArtistKeys = new Set();
+  const importedArtistKeys = new Set();
+  let tracksImported = 0;
+
+  const artistRows = Array.isArray(payload?.artists) ? payload.artists : [];
+  const trackRows = Array.isArray(payload?.tracks) ? payload.tracks : [];
+
+  const registerArtist = (row = {}) => {
+    const style = normalizeDatasetStyle(catalogExtraRowText(row, "style"));
+    const artist = catalogExtraRowText(row, "artist");
+    if (!style || !STYLE_BPM_RULES[style] || !artist) return false;
+
+    const country = catalogExtraRowText(row, "country");
+    const city = catalogExtraRowText(row, "city");
+    const bio = catalogExtraRowText(row, "artist_bio");
+    if (seedStyleArtistFromDataset(style, artist)) {
+      seededArtistKeys.add(`${style}::${normalize(artist)}`);
+    }
+    upsertArtistOverridesFromDataset(style, artist);
+    upsertArtistOriginFromDataset(artist, country, city);
+    if (upsertDiscoveryFromDataset(style, artist, bio)) {
+      importedArtistKeys.add(normalize(artist));
+    }
+    return true;
+  };
+
+  artistRows.forEach(registerArtist);
+  trackRows.forEach(registerArtist);
+
+  trackRows.forEach((row = {}) => {
+    const style = normalizeDatasetStyle(catalogExtraRowText(row, "style"));
+    const artist = catalogExtraRowText(row, "artist");
+    const song = catalogExtraRowText(row, "song");
+    if (!style || !STYLE_BPM_RULES[style] || !artist || !song) return;
+
+    const label = catalogExtraRowText(row, "label") || catalogExtraRowText(row, "source") || "Supabase catalog";
+    const bpmExact = Number(row?.bpm_exact) || 0;
+    const releaseDate = normalizeDatasetReleaseDate(catalogExtraRowText(row, "release_date") || "Supabase catalog");
+    const durationSec = parseDatasetDurationSeconds(catalogExtraRowText(row, "duration_sec"));
+    const urlFields = catalogExtraUrlFields(row);
+    const added = addDynamicTrackToCatalog(
+      {
+        style,
+        song,
+        artist,
+        label,
+        bpmExact,
+        previewUrl: catalogExtraRowText(row, "preview_url"),
+        releaseDate,
+        durationSec,
+        source: sourceTag,
+        artistCountry: catalogExtraRowText(row, "country"),
+        artistGenre: catalogExtraRowText(row, "artist_genre") || styleLabelByValue(style),
+        artistProfileHint:
+          catalogExtraRowText(row, "artist_profile_hint") ||
+          `Entrada curada no Supabase para ${styleLabelByValue(style)}.`,
+        artistBio: catalogExtraRowText(row, "artist_bio"),
+        ...urlFields
+      },
+      existingKeys
+    );
+    if (!added) return;
+
+    tracksImported += 1;
+    importedArtistKeys.add(normalize(artist));
+    const trackKey = normalize(`${artist}::${song}`);
+    const importedTrack = catalog.find((track) => recommendationTrackKey(track) === trackKey);
+    if (importedTrack) {
+      importedTrack.catalogExtra = true;
+      importedTrack.cloudCatalogExtra = true;
+      importedTrack.existenceVerified = true;
+      importedTrack.sourceUrl = catalogExtraRowText(row, "source_url");
+      importedTrack.artistBio = catalogExtraRowText(row, "artist_bio") || importedTrack.artistBio;
+      importedTrack.artistGenre = catalogExtraRowText(row, "artist_genre") || importedTrack.artistGenre;
+      importedTrack.artistProfileHint = catalogExtraRowText(row, "artist_profile_hint") || importedTrack.artistProfileHint;
+    }
+    if (releaseDate && releaseDate !== "Catálogo dinâmico" && releaseDate !== "Supabase catalog") {
+      registerRecentArtistSignal(style, artist, releaseDate, sourceTag);
+    }
+  });
+
+  return {
+    tracksImported,
+    artistsImported: importedArtistKeys.size,
+    artistSeedsAdded: seededArtistKeys.size
+  };
+}
+
+function catalogExtraImportedMessage(tracksImported, artistsImported) {
+  if (currentLanguage === "en") {
+    return `Cloud catalog connected: ${tracksImported} tracks and ${artistsImported} artists ready.`;
+  }
+  if (currentLanguage === "es") {
+    return `Catalogo en la nube conectado: ${tracksImported} pistas y ${artistsImported} artistas listos.`;
+  }
+  return `Catalogo na nuvem conectado: ${tracksImported} faixas e ${artistsImported} artistas prontos.`;
+}
+
+async function fetchCatalogExtraPayload(style = "") {
+  const params = new URLSearchParams({
+    type: "all",
+    limit: String(CATALOG_EXTRA_IMPORT_LIMIT)
+  });
+  if (style) params.set("style", style);
+
+  try {
+    const response = await fetch(`${CATALOG_EXTRA_ENDPOINT}?${params.toString()}`, { cache: "no-store" });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    if (!payload?.ok || payload.enabled === false || payload.setupNeeded) return null;
+    return payload;
+  } catch (_err) {
+    return null;
+  }
+}
+
+async function hydrateCatalogExtraFromSupabase(style = "") {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (catalogExtraImportDoneAll) return { tracksImported: 0, artistsImported: 0, artistSeedsAdded: 0 };
+  if (cleanStyle && catalogExtraImportedStyles.has(cleanStyle)) {
+    return { tracksImported: 0, artistsImported: 0, artistSeedsAdded: 0 };
+  }
+
+  const key = cleanStyle || "__all__";
+  if (catalogExtraImportPromises.has(key)) return catalogExtraImportPromises.get(key);
+
+  const promise = (async () => {
+    const payload = await fetchCatalogExtraPayload(cleanStyle);
+    if (!payload) {
+      if (cleanStyle) catalogExtraImportedStyles.add(cleanStyle);
+      return { tracksImported: 0, artistsImported: 0, artistSeedsAdded: 0 };
+    }
+
+    const merged = mergeCatalogExtraPayload(payload);
+    if (cleanStyle) catalogExtraImportedStyles.add(cleanStyle);
+    else catalogExtraImportDoneAll = true;
+
+    if (merged.tracksImported > 0 || merged.artistsImported > 0 || merged.artistSeedsAdded > 0) {
+      dedupeCatalogByTrackKey();
+      syncDiscoveryFromSeeds();
+      sanitizeCatalogByStyleRules();
+      if (cleanStyle) purgeDynamicMismatches(cleanStyle);
+      if (merged.tracksImported > 0) {
+        suggestionQueueTracks = [];
+        suggestionQueueContextKey = "";
+      }
+      saveDynamicCatalogCache();
+
+      const appVisible = appContent && !appContent.classList.contains("hidden");
+      if (!catalogExtraImportNotified && feedbackMessage && appVisible) {
+        catalogExtraImportNotified = true;
+        const message = catalogExtraImportedMessage(merged.tracksImported, merged.artistsImported);
+        feedbackMessage.textContent = message;
+        showToast(message);
+      }
+    }
+
+    return merged;
+  })();
+
+  catalogExtraImportPromises.set(key, promise);
+  return promise;
 }
 
 function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
@@ -25020,7 +25243,7 @@ async function importProfileBackupFile(file) {
 function saveDynamicCatalogCache() {
   try {
     const dynamicTracks = catalog
-      .filter((track) => isDynamicSource(track.source))
+      .filter((track) => isDynamicSource(track.source) || isCatalogExtraTrack(track))
       .slice(-2400);
     localStorage.setItem(DYNAMIC_CATALOG_CACHE_KEY, JSON.stringify(dynamicTracks));
   } catch (_err) {
@@ -25040,6 +25263,7 @@ function loadDynamicCatalogCache() {
     parsed.forEach((track) => {
       if (!track || !track.style || !track.artist || !track.song) return;
       if (!STYLE_BPM_RULES[track.style]) return;
+      restoreCatalogExtraTrackHints(track);
       if (!artistAllowedForStyle(track.style, track.artist)) return;
       if (!labelAllowedForStyle(track.style, track.label)) return;
       if (trackBlockedForStyle(track.style, track)) return;
@@ -25280,6 +25504,7 @@ function surpriseTrackHasExactBpmAndPreview(track) {
   if (!track) return false;
   if (track.existenceVerified === false) return false;
   if (!hasReliableBpmForTrack(track)) return false;
+  if (isTrustedCatalogExtraTrack(track)) return true;
   return trackHasPlayablePreviewExperience(track);
 }
 
@@ -31480,6 +31705,7 @@ function dailyMusicDiscoveryCount() {
 }
 
 function musicDiscoveryPremiumLocked() {
+  if (isLocalDevelopmentHost()) return false;
   if (aiPremiumUnlocked()) return false;
   const limit = dailyFreeDiscoveryLimit();
   return Boolean(limit) && dailyMusicDiscoveryCount() >= limit;
@@ -35915,6 +36141,7 @@ function recommendationScore(track, prefs) {
   if (hasReliableBpmForTrack(track)) score += 2.4;
   else score -= isDynamicSource(track.source) ? 8.5 : 2.2;
   score += curatedCatalogPriorityScore(track);
+  if (isCatalogExtraTrack(track)) score += prefs.style ? 16.4 : 6.2;
   score += bpmIntentStyleBoost(track, prefs);
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
@@ -35939,7 +36166,8 @@ function pickFromScoredRecommendations(scored = [], prefs = {}, { previousArtist
   const reliableValid = valid.filter(
     (entry) =>
       trackRecommendationReliabilityScore(entry.track) >= minimumReliability ||
-      isTrustedCuratedCatalogTrack(entry.track)
+      isTrustedCuratedCatalogTrack(entry.track) ||
+      isTrustedCatalogExtraTrack(entry.track)
   );
   if (reliableValid.length >= Math.min(3, valid.length)) valid = reliableValid;
 
@@ -36052,7 +36280,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     const bpmMatches = !prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm);
     if (!bpmMatches) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (!trackHasPlayablePreviewExperience(track)) return false;
+    if (!trackHasPlayablePreviewExperience(track) && !isTrustedCatalogExtraTrack(track)) return false;
     const artistKey = artistMatchKey(track.artist);
     const trackKey = recommendationTrackKey(track);
     if (!artistKey || !trackKey) return false;
@@ -36088,6 +36316,9 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     });
   };
 
+  const scoredCatalogExtra = scoredUnknown.filter((entry) => isTrustedCatalogExtraTrack(entry.track));
+  fillFromScored(scoredCatalogExtra, { diversify: true });
+
   const scoredReliableUnknown = scoredUnknown.filter((entry) => hasReliableBpmForTrack(entry.track));
   fillFromScored(scoredReliableUnknown, { diversify: true });
   if (queue.length < SUGGESTION_QUEUE_TARGET) fillFromScored(scoredUnknown, { diversify: true });
@@ -36103,6 +36334,23 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     scoredFallback.forEach((entry) => {
       if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
       maybeAdd(entry.track);
+    });
+  }
+
+  if (prefs.style && queue.length < Math.min(6, SUGGESTION_QUEUE_TARGET)) {
+    const recycledStylePool = diversifyScoredRecommendationEntries(
+      eligible.map((track) => ({
+        track,
+        score: recommendationScore(track, prefs)
+      })),
+      prefs
+    );
+    recycledStylePool.forEach((entry) => {
+      if (queue.length >= SUGGESTION_QUEUE_TARGET) return;
+      maybeAdd(entry.track, {
+        ignoreKnown: true,
+        allowSameArtist: queue.length >= Math.max(8, SUGGESTION_QUEUE_TARGET - 6)
+      });
     });
   }
 
@@ -36965,7 +37213,12 @@ function pickRecommendation(
   if (!finalPool.length) return null;
   const playableFinalPool = finalPool.filter((track) => trackHasPlayablePreviewExperience(track));
   if (playableFinalPool.length) {
-    finalPool = playableFinalPool;
+    const catalogExtraWindow = finalPool
+      .filter((track) => isCatalogExtraTrack(track) && !trackHasPlayablePreviewExperience(track))
+      .slice(0, 10);
+    finalPool = catalogExtraWindow.length
+      ? [...playableFinalPool, ...catalogExtraWindow]
+      : playableFinalPool;
   }
 
   const scored = finalPool
@@ -40046,7 +40299,7 @@ function clearDislikedTrackHistory() {
 }
 
 function socialStandbyMessage() {
-  return "Conta online em standby nesta versão. O teste atual cria apenas usuários novos locais; use backup/importação manual para guardar dados.";
+  return "Conta online desativada nesta versão. Use backup/importação manual para guardar dados.";
 }
 
 function socialSetStatus(message = "", tone = "") {
@@ -40157,14 +40410,45 @@ function socialCleanUsername(value = "") {
     .slice(0, 28);
 }
 
+function socialSessionMetadata() {
+  const user = socialState.session?.user || {};
+  return user.user_metadata || user.raw_user_meta_data || {};
+}
+
+function socialSessionEmail() {
+  return String(
+    socialState.session?.user?.email ||
+      normalizeUserSession(currentAuthUser).email ||
+      ""
+  ).trim();
+}
+
 function socialSuggestedUsername() {
   const session = normalizeUserSession(currentAuthUser);
-  return socialCleanUsername(session.username || session.email.split("@")[0] || "sonic_user") || "sonic_user";
+  const metadata = socialSessionMetadata();
+  const emailPrefix = socialSessionEmail().split("@")[0] || "";
+  return socialCleanUsername(
+    metadata.username ||
+      metadata.display_name ||
+      metadata.name ||
+      session.username ||
+      emailPrefix ||
+      "sonic_user"
+  ) || "sonic_user";
 }
 
 function socialSuggestedDisplayName() {
   const session = normalizeUserSession(currentAuthUser);
-  return String(session.username || session.email?.split("@")[0] || "Sonic listener").trim();
+  const metadata = socialSessionMetadata();
+  const emailPrefix = socialSessionEmail().split("@")[0] || "";
+  return String(
+    metadata.display_name ||
+      metadata.full_name ||
+      metadata.name ||
+      session.username ||
+      emailPrefix ||
+      "Sonic listener"
+  ).trim();
 }
 
 function socialTopStyleValues(limit = 5) {
@@ -40183,8 +40467,22 @@ function socialCurrentProfilePayload() {
   const session = socialState.session;
   const userId = session?.user?.id;
   if (!userId) return null;
-  const username = socialCleanUsername(socialUsernameInput?.value || socialState.profile?.username || socialSuggestedUsername());
-  const displayName = String(socialDisplayNameInput?.value || socialState.profile?.display_name || socialSuggestedDisplayName()).trim() || username;
+  const suggestedUsername = socialSuggestedUsername();
+  const suggestedDisplayName = socialSuggestedDisplayName();
+  const profileUsername = socialCleanUsername(socialState.profile?.username || "");
+  const inputUsername = socialCleanUsername(socialUsernameInput?.value || "");
+  const profileDisplayName = String(socialState.profile?.display_name || "").trim();
+  const inputDisplayName = String(socialDisplayNameInput?.value || "").trim();
+  const profileUsesDefaultName = !profileDisplayName || profileDisplayName === "Sonic listener";
+  const profileUsesDefaultUsername = !profileUsername || profileUsername === "sonic_user";
+  const inputUsesDefaultName = !inputDisplayName || inputDisplayName === "Sonic listener";
+  const inputUsesDefaultUsername = !inputUsername || inputUsername === "sonic_user";
+  const username = profileUsesDefaultUsername
+    ? (!inputUsesDefaultUsername ? inputUsername : (suggestedUsername || profileUsername || "sonic_user"))
+    : profileUsername;
+  const displayName = profileUsesDefaultName
+    ? (!inputUsesDefaultName ? inputDisplayName : (suggestedDisplayName || profileDisplayName || username))
+    : profileDisplayName;
   const favoriteStyles = socialTopStyleValues(6);
   return {
     id: userId,
@@ -40229,6 +40527,35 @@ function socialTrackRowsForSync() {
   })).filter((row) => row.target_key);
 }
 
+function hydrateSocialProfileInputs(profile = socialState.profile) {
+  if (!profile) return;
+  if (socialUsernameInput && profile.username) socialUsernameInput.value = profile.username;
+  if (socialDisplayNameInput && profile.display_name) socialDisplayNameInput.value = profile.display_name;
+}
+
+async function loadSocialProfile(options = {}) {
+  const userId = socialState.session?.user?.id;
+  if (!userId || !socialConfigReady()) return null;
+  try {
+    const params = new URLSearchParams({
+      id: `eq.${userId}`,
+      select: "*",
+      limit: "1"
+    });
+    const rows = await socialRequest(`/rest/v1/profiles?${params.toString()}`);
+    const profile = Array.isArray(rows) ? rows[0] : null;
+    if (profile) {
+      socialState.profile = profile;
+      hydrateSocialProfileInputs(profile);
+    }
+    return profile;
+  } catch (error) {
+    console.warn("Could not load social profile", error);
+    if (!options.silent) socialSetStatus(`Nao consegui carregar o perfil: ${error.message}`, "error");
+    return null;
+  }
+}
+
 async function upsertSocialProfile() {
   const payload = socialCurrentProfilePayload();
   if (!payload) return null;
@@ -40238,6 +40565,7 @@ async function upsertSocialProfile() {
     body: [payload]
   });
   socialState.profile = profile || payload;
+  hydrateSocialProfileInputs(socialState.profile);
   return socialState.profile;
 }
 
@@ -40279,6 +40607,7 @@ async function syncSocialLikedTracks(options = {}) {
   socialState.busy = true;
   renderSocialUi({ preserveStatus: true });
   try {
+    await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
     const rows = socialTrackRowsForSync();
     if (rows.length) {
@@ -40402,6 +40731,8 @@ function renderSocialUi(options = {}) {
     socialProfileCard.setAttribute("aria-hidden", "true");
     return;
   }
+  socialProfileCard.classList.remove("hidden");
+  socialProfileCard.setAttribute("aria-hidden", "false");
   const configured = socialConfigReady();
   const signed = Boolean(socialState.session?.access_token);
   if (socialConnectionBadge) {
@@ -40437,7 +40768,7 @@ function renderSocialUi(options = {}) {
   }
   renderSocialFeed();
   if (!options.preserveStatus) {
-    if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true na Vercel para liberar login real.");
+    if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true no ambiente para liberar login real.");
     else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
     else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
   }
@@ -40450,7 +40781,7 @@ async function socialSignUp() {
     return;
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
+    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
@@ -40474,6 +40805,7 @@ async function socialSignUp() {
     });
     if (payload?.session?.access_token) {
       socialStoreSession(payload.session);
+      await loadSocialProfile({ silent: true });
       await upsertSocialProfile();
       await syncSocialLikedTracks({ silent: true, activity: false });
       socialSetStatus("Perfil criado e conectado.", "ok");
@@ -40494,7 +40826,7 @@ async function socialSignIn() {
     return;
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado na Vercel.", "error");
+    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
@@ -40511,6 +40843,7 @@ async function socialSignIn() {
       body: { email, password }
     });
     socialStoreSession(payload);
+    await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false });
     socialSetStatus("Perfil conectado.", "ok");
@@ -40567,6 +40900,9 @@ async function initSocialMvp() {
   await fetchSocialConfig();
   const storedSession = socialLoadStoredSession();
   if (storedSession) socialStoreSession(storedSession);
+  if (socialConfigReady() && socialState.session?.access_token) {
+    await loadSocialProfile({ silent: true });
+  }
   renderSocialUi();
   if (socialConfigReady() && socialState.session?.access_token) {
     await syncSocialLikedTracks({ silent: true, activity: false });
@@ -40709,7 +41045,13 @@ async function ensureCurrentRecommendationPlayable(
 ) {
   if (!currentRecommendation) return false;
   await resolvePreviewForTrack(currentRecommendation);
+  if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
   if (trackHasPlayablePreviewExperience(currentRecommendation)) return true;
+  if (isTrustedCatalogExtraTrack(currentRecommendation)) {
+    currentRecommendation.previewChecked = true;
+    currentRecommendation.previewMissing = !trackHasPlayablePreviewExperience(currentRecommendation);
+    return true;
+  }
 
   const rejected = currentRecommendation;
   const rejectedKey = recommendationTrackKey(rejected);
@@ -40753,6 +41095,7 @@ async function generateRecommendationFromPrefs(
   if (!externalDatasetImportDone) {
     await hydrateExternalDatasetPackInBackground();
   }
+  await hydrateCatalogExtraFromSupabase(prefs?.style || "");
   if (prefs?.style === "slambient" || !prefs?.style) normalizeTrustedSlambientCatalog();
   sanitizeCatalogByStyleRules();
   if (prefs?.style) purgeDynamicMismatches(prefs.style);
@@ -40764,16 +41107,28 @@ async function generateRecommendationFromPrefs(
 
   const excludedTrackKeys = new Set();
   const excludedTrackTitles = new Set([...knownTrackTitlesMemory]);
+  const hardExcludedTrackKeys = new Set();
+  const hardExcludedTrackTitles = new Set(typedKnownTrackTitles);
   (Array.isArray(avoidTrackTitles) ? avoidTrackTitles : [avoidTrackTitles]).forEach((trackTitleLike) => {
-    parseKnownTrackTitles(String(trackTitleLike || "")).forEach((trackTitle) => excludedTrackTitles.add(trackTitle));
+    parseKnownTrackTitles(String(trackTitleLike || "")).forEach((trackTitle) => {
+      excludedTrackTitles.add(trackTitle);
+      hardExcludedTrackTitles.add(trackTitle);
+    });
   });
   const excludedDiscoveryNames = new Set();
-  if (avoidTrackKey) excludedTrackKeys.add(normalize(avoidTrackKey));
+  if (avoidTrackKey) {
+    const normalizedAvoidKey = normalize(avoidTrackKey);
+    excludedTrackKeys.add(normalizedAvoidKey);
+    hardExcludedTrackKeys.add(normalizedAvoidKey);
+  }
   if (Array.isArray(avoidTrackKeys)) {
     avoidTrackKeys
       .map((trackKey) => normalize(trackKey))
       .filter(Boolean)
-      .forEach((trackKey) => excludedTrackKeys.add(trackKey));
+      .forEach((trackKey) => {
+        excludedTrackKeys.add(trackKey);
+        hardExcludedTrackKeys.add(trackKey);
+      });
   }
   const globalTrackExclusions = buildGlobalTrackExclusionSet(
     Array.from(excludedTrackKeys),
@@ -40784,7 +41139,11 @@ async function generateRecommendationFromPrefs(
   if (avoidDiscoveryName) excludedDiscoveryNames.add(normalize(avoidDiscoveryName));
   const sessionExcludedArtists = buildGlobalArtistExclusionSet();
   if (avoidArtistName) addArtistKeysToSet(sessionExcludedArtists, avoidArtistName);
-  const trackAllowedInSession = (track) => !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
+  let recycleKnownStyleCatalog = false;
+  const trackAllowedInSession = (track) =>
+    recycleKnownStyleCatalog
+      ? !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
+      : !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
   // If the selected style is exhausted, only adjacent styles from the similarity map may be used.
   const isStyleFallbackLocked = () =>
     NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
@@ -40808,6 +41167,23 @@ async function generateRecommendationFromPrefs(
   const markRecommendationBlockedByKnown = () => {
     recommendationBlockedByKnown = hasEligibleInCurrentScope() && !hasEligibleUnknownInCurrentScope();
   };
+
+  const hasRecyclableStyleCandidate = () =>
+    Boolean(prefs.style) &&
+    catalog.some(
+      (track) =>
+        isTrackEligibleForRecommendation(track) &&
+        track.style === prefs.style &&
+        (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
+        !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
+    );
+
+  const shouldRecycleKnownStyleCatalog = () =>
+    Boolean(prefs.style) &&
+    !allowKnownFallback &&
+    hasEligibleInCurrentScope() &&
+    !hasEligibleUnknownInCurrentScope() &&
+    hasRecyclableStyleCandidate();
 
   const applyStyleSwitch = (nextStyle) => {
     if (isStyleFallbackLocked()) return false;
@@ -40885,10 +41261,23 @@ async function generateRecommendationFromPrefs(
   };
 
   const tryKnownFallbackRecommendation = () => {
-    if (!allowKnownFallback) return false;
+    const recycleStyleCatalog = shouldRecycleKnownStyleCatalog();
+    if (!allowKnownFallback && !recycleStyleCatalog) return false;
+    if (recycleStyleCatalog) {
+      recycleKnownStyleCatalog = true;
+      recentTrackHistoryByStyle.set(prefs.style, []);
+      servedTrackCycleByStyle.set(prefs.style, []);
+      servedArtistCycleByStyle.set(prefs.style, []);
+    }
     const relaxedExcludedArtists = new Set([...rejectedArtists]);
     if (avoidArtistName) addArtistKeysToSet(relaxedExcludedArtists, avoidArtistName);
-    const candidate = pickRecommendation(prefs, new Set(), relaxedExcludedArtists, excludedTrackKeys, excludedTrackTitles);
+    const candidate = pickRecommendation(
+      prefs,
+      new Set(),
+      relaxedExcludedArtists,
+      recycleStyleCatalog ? hardExcludedTrackKeys : excludedTrackKeys,
+      recycleStyleCatalog ? hardExcludedTrackTitles : excludedTrackTitles
+    );
     if (!candidate || !isTrackEligibleForRecommendation(candidate)) return false;
     currentRecommendation = candidate;
     usedKnownFallback = true;
@@ -41142,13 +41531,16 @@ async function generateRecommendationFromPrefs(
   const maxIntegrityAttempts = prefs.style ? 10 : 6;
   while (currentRecommendation && integrityAttempts < maxIntegrityAttempts) {
     await resolvePreviewForTrack(currentRecommendation);
+    if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
     const currentKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
     const exists =
       currentRecommendation.existenceVerified !== false ||
       (isTrustedCuratedCatalogTrack(currentRecommendation) && hasReliableBpmForTrack(currentRecommendation));
     const hasPreview = trackHasPlayablePreviewExperience(currentRecommendation);
+    const trustedCatalogExtra = isTrustedCatalogExtraTrack(currentRecommendation);
 
     if (exists && hasPreview && !fallbackPlayableTrack) fallbackPlayableTrack = currentRecommendation;
+    if (exists && trustedCatalogExtra) break;
     if (exists && hasPreview) break;
 
     excludedTrackKeys.add(currentKey);
@@ -41177,11 +41569,16 @@ async function generateRecommendationFromPrefs(
   if (
     currentRecommendation &&
     !trackHasPlayablePreviewExperience(currentRecommendation) &&
+    !isTrustedCatalogExtraTrack(currentRecommendation) &&
     fallbackPlayableTrack
   ) {
     currentRecommendation = fallbackPlayableTrack;
   }
-  if (currentRecommendation && !trackHasPlayablePreviewExperience(currentRecommendation)) {
+  if (
+    currentRecommendation &&
+    !trackHasPlayablePreviewExperience(currentRecommendation) &&
+    !isTrustedCatalogExtraTrack(currentRecommendation)
+  ) {
     const playableReplacement = await pickPlayableReplacementForPrefs(prefs, {
       currentTrack: currentRecommendation,
       excludedTrackKeys,
@@ -41347,6 +41744,11 @@ async function generateRecommendationFromPrefs(
   renderDiscovery(discoverySnapshot);
   markRecommendationPresented(recommendationSnapshot);
   let previewReady = await renderPreview(recommendationSnapshot);
+  if (!previewReady && isTrustedCatalogExtraTrack(recommendationSnapshot)) {
+    recommendationSnapshot.previewChecked = true;
+    recommendationSnapshot.previewMissing = true;
+    previewReady = true;
+  }
   if (!previewReady) {
     const rejectedSnapshot = recommendationSnapshot;
     const rejectedKey = recommendationTrackKey(rejectedSnapshot);
@@ -41474,6 +41876,11 @@ async function activateSuggestionQueueIndex(index) {
     renderDiscovery(currentDiscovery);
     markRecommendationPresented(selectedTrack);
     let previewReady = await renderPreview(selectedTrack);
+    if (!previewReady && isTrustedCatalogExtraTrack(selectedTrack)) {
+      selectedTrack.previewChecked = true;
+      selectedTrack.previewMissing = true;
+      previewReady = true;
+    }
     if (!previewReady) {
       const rejectedKey = recommendationTrackKey(selectedTrack);
       const playableReplacement = await pickPlayableReplacementForPrefs(lastPrefs, {
@@ -41842,6 +42249,75 @@ async function runRecommendation() {
   }
 }
 
+function prefsFromManualControls() {
+  return normalizeRecommendationPrefs({
+    style: styleEl?.value || "",
+    context: contextEl?.value || "",
+    energy: energyEl?.value || "",
+    bpm: bpmEl?.value || "",
+    vocals: vocalsEl?.value || ""
+  });
+}
+
+function manualPrefsAreActive(prefs = prefsFromManualControls()) {
+  return selectedPreferenceCount(prefs) > 0;
+}
+
+function prefsForSameTargetAction() {
+  const manualPrefs = prefsFromManualControls();
+  if (manualPrefsAreActive(manualPrefs)) return manualPrefs;
+  return lastPrefs ? normalizeRecommendationPrefs(lastPrefs) : null;
+}
+
+async function runManualFilterSurprise() {
+  const prefs = prefsFromManualControls();
+  if (!manualPrefsAreActive(prefs)) return false;
+
+  const previousTrack = currentRecommendation;
+  const generated = await generateRecommendationWithOverlay(
+    prefs,
+    {
+      resetRejected: false,
+      avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
+      avoidTrackTitles: previousTrack?.song ? [previousTrack.song] : [],
+      avoidArtistName: previousTrack?.artist || "",
+      allowKnownFallback: false
+    },
+    "catalog"
+  );
+
+  if (!generated) {
+    const fallback = recommendationFailureMessage();
+    if (feedbackMessage) feedbackMessage.textContent = fallback;
+    showToast(fallback);
+    return true;
+  }
+
+  lastPrefs = prefs;
+  swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
+  if (rerollBtn) rerollBtn.disabled = false;
+  if (eventsPanel) eventsPanel.classList.add("hidden");
+  if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+  if (eventsCalendar) eventsCalendar.innerHTML = "";
+  if (eventsList) eventsList.innerHTML = "";
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
+
+  const styleFallbackMessage = applyStyleFallbackMessage({ setFeedback: false });
+  const bpmFallbackMessage = applyBpmFallbackMessage({ setFeedback: false });
+  if (feedbackMessage) {
+    feedbackMessage.textContent =
+      styleFallbackMessage ||
+      bpmFallbackMessage ||
+      (prefs.style
+        ? t("quickSurpriseGenerated", { style: styleLabelByValue(prefs.style) })
+        : t("recommendationGenerated"));
+  }
+  savePreferences();
+  return true;
+}
+
 async function runSurpriseRecommendation() {
   if (recommendationRunBusy) return false;
   if (!canUseMusicDiscovery()) {
@@ -41912,6 +42388,11 @@ async function runSurpriseRecommendation() {
     renderDiscovery(currentDiscovery);
     markRecommendationPresented(surpriseTrack);
     let previewReady = await renderPreview(surpriseTrack);
+    if (!previewReady && isTrustedCatalogExtraTrack(surpriseTrack)) {
+      surpriseTrack.previewChecked = true;
+      surpriseTrack.previewMissing = true;
+      previewReady = true;
+    }
     if (!previewReady) {
       const rejectedKey = recommendationTrackKey(surpriseTrack);
       const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
@@ -42730,7 +43211,8 @@ bind(bandcampPreviewToggleBtn, "click", () => {
 bind(recommendBtn, "click", runRecommendation);
 
 bind(rerollBtn, "click", async () => {
-  if (!lastPrefs) return;
+  const targetPrefs = prefsForSameTargetAction();
+  if (!targetPrefs) return;
   const previousTrackKey = currentRecommendation
     ? normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`)
     : "";
@@ -42746,7 +43228,7 @@ bind(rerollBtn, "click", async () => {
     addArtistIdentityToSet(rejectedArtists, currentRecommendation.artist);
   }
 
-  const generated = await generateRecommendationWithOverlay(lastPrefs, {
+  const generated = await generateRecommendationWithOverlay(targetPrefs, {
     resetRejected: false,
     avoidTrackKey,
     avoidTrackKeys: queueTrackKeys,
@@ -42759,6 +43241,7 @@ bind(rerollBtn, "click", async () => {
     return;
   }
 
+  lastPrefs = targetPrefs;
   if (eventsPanel) eventsPanel.classList.add("hidden");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
   if (eventsCalendar) eventsCalendar.innerHTML = "";
@@ -42789,6 +43272,7 @@ bind(rerollBtn, "click", async () => {
 });
 
 bind(surpriseBtn, "click", async () => {
+  if (await runManualFilterSurprise()) return;
   await runSurpriseRecommendation();
 });
 
