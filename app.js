@@ -5483,7 +5483,7 @@ let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
 let activeVibeTheme = "";
 let currentAuthUser = null;
-const LOGIN_FLOW_ENABLED = false;
+const LOGIN_FLOW_ENABLED = true;
 const SOCIAL_PROFILE_ENABLED = true;
 let publicVisitorMode = false;
 let ephemeralProfileMode = false;
@@ -5504,6 +5504,7 @@ let googleAuthReady = false;
 let googleAuthLoading = false;
 let appleAuthReady = false;
 let appleAuthLoading = false;
+let authConfigLoading = false;
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
@@ -15765,41 +15766,42 @@ const I18N = {
     usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Como usar",
-    authKicker: "Acesso simplificado",
-    authTitle: "Comece como novo usuário",
-    authDesc: "Nesta fase de teste, o Sonic Search entra sempre em uma sessão local limpa. Login, Google/Apple e sincronização ficam em standby.",
-    authLocalNoteProfile: "Sem login",
-    authLocalNoteNewUser: "Sessão nova",
-    authLocalNoteBackup: "Backup manual",
+    authKicker: "Acesso opcional",
+    authTitle: "Entre ou siga sem login",
+    authDesc: "Use Google para sincronizar perfil e curtidas na nuvem, ou continue localmente sem criar conta.",
+    authLocalNoteProfile: "Google opcional",
+    authLocalNoteNewUser: "Modo local livre",
+    authLocalNoteBackup: "Sincronização quando quiser",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Retomar perfil salvo",
-    authLoginBtn: "Login em standby",
-    authGuestBtn: "Perfil local em standby",
-    authTestUserBtn: "Começar descoberta",
-    authNewUserHint: "Use para testar como alguém novo: cria uma sessão limpa, sem histórico antigo, senha ou aba anônima.",
-    authRequired: "Login está em standby. Comece como novo usuário.",
+    authLoginBtn: "Entrar",
+    authGuestBtn: "Continuar sem login",
+    authTestUserBtn: "Começar sem histórico",
+    authNewUserHint: "Sem login salva dados neste navegador. Google permite recuperar perfil em outro aparelho.",
+    authRequired: "Escolha Google ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
     authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e arquétipo começam limpos.",
-    authSocialDivider: "conta online em standby",
-    authGoogleBtn: "Continuar com Google",
+    authSocialDivider: "conta online opcional",
+    authGoogleBtn: "Entrar com Google",
+    authContinueOnlineBtn: "Continuar com perfil online",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Conta online em standby. Use backup/importação manual no Perfil quando precisar levar seus dados.",
-    authProviderConfigMissing: "{provider} está em standby nesta versão.",
-    authStandbyFeedback: "Login está em standby nesta versão. Use Começar descoberta para entrar como novo usuário.",
+    authProviderHint: "Você decide: login Google para nuvem, ou modo local para começar agora.",
+    authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
+    authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
-    authProviderLoggedAs: "Perfil {provider} carregado para {user}.",
+    authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
-    authProviderGoogleReady: "Botão do Google carregado. Toque nele para continuar.",
+    authProviderGoogleReady: "Google pronto. Toque para entrar.",
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
-    authGoogleComingSoon: "Google em breve",
+    authGoogleComingSoon: "Google indisponível",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "O app continua local. Baixe/importe seu perfil para trocar de aparelho sem depender de conta.",
+    authProviderHintLocalBackup: "O modo local funciona agora; para nuvem, confira o Google no Supabase.",
     welcomeKicker: "Curadoria de música eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Seu sommelier de música eletrônica para rave, treino, foco ou viagem. Escolha seu estilo e receba faixa + artista novo para descobrir.",
@@ -16583,41 +16585,42 @@ const I18N = {
     usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
     usageGuideContinueBtn: "Got it",
     showUsageGuideBtn: "How to use",
-    authKicker: "Simplified access",
-    authTitle: "Start as a new user",
-    authDesc: "For this testing phase, Sonic Search always opens a clean local session. Login, Google/Apple, and sync are on standby.",
-    authLocalNoteProfile: "No login",
-    authLocalNoteNewUser: "Fresh session",
-    authLocalNoteBackup: "Manual backup",
+    authKicker: "Optional access",
+    authTitle: "Sign in or continue locally",
+    authDesc: "Use Google to sync your profile and likes in the cloud, or continue locally without creating an account.",
+    authLocalNoteProfile: "Google optional",
+    authLocalNoteNewUser: "Free local mode",
+    authLocalNoteBackup: "Sync when you want",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Resume saved profile",
-    authLoginBtn: "Login on standby",
-    authGuestBtn: "Local profile on standby",
-    authTestUserBtn: "Start discovering",
-    authNewUserHint: "Use this to test like a first-time listener: it creates a clean session without old history, password, or private browsing.",
-    authRequired: "Login is on standby. Start as a new user.",
+    authLoginBtn: "Sign in",
+    authGuestBtn: "Continue without login",
+    authTestUserBtn: "Start without history",
+    authNewUserHint: "Without login, data stays in this browser. Google lets you recover your profile on another device.",
+    authRequired: "Choose Google or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Local profile enabled. You can discover music without signing in.",
     authLocalResumeReady: "Local profile resumed for {user}.",
     authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
     authTestUserReady: "New user created for {user}. Likes, history, recommendations, and spirit start clean.",
-    authSocialDivider: "online account on standby",
-    authGoogleBtn: "Continue with Google",
+    authSocialDivider: "optional online account",
+    authGoogleBtn: "Sign in with Google",
+    authContinueOnlineBtn: "Continue with online profile",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Online account is on standby. Use manual backup/import in Profile when you need to move your data.",
-    authProviderConfigMissing: "{provider} is on standby in this version.",
-    authStandbyFeedback: "Login is on standby in this version. Use Start discovering to enter as a new user.",
+    authProviderHint: "Your choice: Google login for cloud sync, or local mode to start now.",
+    authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
+    authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
-    authProviderLoggedAs: "{provider} profile loaded for {user}.",
+    authProviderLoggedAs: "Online profile connected for {user}.",
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
-    authProviderGoogleReady: "Google button loaded. Tap it to continue.",
+    authProviderGoogleReady: "Google is ready. Tap to sign in.",
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
-    authGoogleComingSoon: "Google soon",
+    authGoogleComingSoon: "Google unavailable",
     authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "The app still runs locally. Download/import your profile to move devices without depending on an account.",
+    authProviderHintLocalBackup: "Local mode works now; for cloud sync, check Google in Supabase.",
     welcomeKicker: "Electronic music curation",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Your electronic music sommelier for rave, workout, focus, or travel. Pick your style and get a track + a new artist to discover.",
@@ -17398,41 +17401,42 @@ const I18N = {
     usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
     usageGuideContinueBtn: "Entendido",
     showUsageGuideBtn: "Cómo usar",
-    authKicker: "Acceso simplificado",
-    authTitle: "Empieza como usuario nuevo",
-    authDesc: "En esta fase de prueba, Sonic Search siempre abre una sesión local limpia. Login, Google/Apple y sincronización quedan en standby.",
-    authLocalNoteProfile: "Sin login",
-    authLocalNoteNewUser: "Sesión nueva",
-    authLocalNoteBackup: "Backup manual",
+    authKicker: "Acceso opcional",
+    authTitle: "Entra o sigue sin login",
+    authDesc: "Usa Google para sincronizar perfil y likes en la nube, o continúa localmente sin crear cuenta.",
+    authLocalNoteProfile: "Google opcional",
+    authLocalNoteNewUser: "Modo local libre",
+    authLocalNoteBackup: "Sincroniza cuando quieras",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Retomar perfil guardado",
-    authLoginBtn: "Login en standby",
-    authGuestBtn: "Perfil local en standby",
-    authTestUserBtn: "Empezar descubrimiento",
-    authNewUserHint: "Úsalo para probar como oyente nuevo: crea una sesión limpia, sin historial anterior, contraseña ni navegación privada.",
-    authRequired: "El login está en standby. Empieza como usuario nuevo.",
+    authLoginBtn: "Entrar",
+    authGuestBtn: "Continuar sin login",
+    authTestUserBtn: "Empezar sin historial",
+    authNewUserHint: "Sin login, los datos quedan en este navegador. Google permite recuperar tu perfil en otro dispositivo.",
+    authRequired: "Elige Google o continúa sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
     authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
     authLocalResumeReady: "Perfil local retomado para {user}.",
     authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
     authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y arquetipo empiezan limpios.",
-    authSocialDivider: "cuenta online en standby",
-    authGoogleBtn: "Continuar con Google",
+    authSocialDivider: "cuenta online opcional",
+    authGoogleBtn: "Entrar con Google",
+    authContinueOnlineBtn: "Continuar con perfil online",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "La cuenta online está en standby. Usa backup/importación manual en Perfil cuando necesites mover tus datos.",
-    authProviderConfigMissing: "{provider} está en standby en esta versión.",
-    authStandbyFeedback: "El login está en standby en esta versión. Usa Empezar descubrimiento para entrar como usuario nuevo.",
+    authProviderHint: "Tú decides: login Google para nube, o modo local para empezar ahora.",
+    authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
+    authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
-    authProviderLoggedAs: "Perfil {provider} cargado para {user}.",
+    authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
-    authProviderGoogleReady: "Botón de Google cargado. Tócalo para continuar.",
+    authProviderGoogleReady: "Google listo. Toca para entrar.",
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
-    authGoogleComingSoon: "Google pronto",
+    authGoogleComingSoon: "Google no disponible",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "La app sigue funcionando localmente. Descarga/importa tu perfil para cambiar de dispositivo sin depender de cuenta.",
+    authProviderHintLocalBackup: "El modo local funciona ahora; para nube, revisa Google en Supabase.",
     welcomeKicker: "Curaduría de música electrónica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Tu sommelier de música electrónica para rave, entrenamiento, foco o viaje. Elige tu estilo y recibe una pista + artista nuevo.",
@@ -19998,17 +20002,43 @@ function updateAuthProviderUi() {
     syncAuthStandbyUi();
     return;
   }
-  const googleConfigured = Boolean(googleClientId());
-  const appleConfigured = Boolean(appleClientId());
-  setAuthProviderBusy("google", googleAuthLoading);
-  setAuthProviderBusy("apple", appleAuthLoading);
-  if (authGoogleNativeSlot && !googleAuthReady) {
+  const googleConfigured = socialConfigReady();
+  const signed = authHasOnlineSession();
+  const busy = Boolean(authConfigLoading || socialState.busy);
+  if (authGoogleNativeSlot) {
     authGoogleNativeSlot.classList.add("hidden");
     authGoogleNativeSlot.innerHTML = "";
   }
-  if (authGoogleBtn && (!googleAuthReady || !googleConfigured)) authGoogleBtn.classList.remove("hidden");
+  if (authAppleBtn) {
+    authAppleBtn.classList.add("hidden");
+    authAppleBtn.setAttribute("aria-hidden", "true");
+    authAppleBtn.disabled = true;
+  }
+  if (authGoogleBtn) {
+    authGoogleBtn.classList.remove("hidden");
+    authGoogleBtn.removeAttribute("aria-hidden");
+    authGoogleBtn.disabled = busy || (!googleConfigured && !signed);
+    authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
+    authGoogleBtn.title = !googleConfigured && !signed
+      ? t("authProviderConfigMissing", { provider: "Google" })
+      : "";
+  }
+  if (authGoogleLabel) {
+    authGoogleLabel.textContent = signed
+      ? t("authContinueOnlineBtn")
+      : authConfigLoading
+        ? t("authProviderLoading", { provider: "Google" })
+        : googleConfigured
+          ? t("authGoogleBtn")
+          : t("authGoogleComingSoon");
+  }
+  if (authGuestBtn) {
+    authGuestBtn.classList.remove("hidden");
+    authGuestBtn.removeAttribute("aria-hidden");
+    authGuestBtn.disabled = false;
+  }
   if (authProviderHint) {
-    authProviderHint.textContent = googleConfigured || appleConfigured
+    authProviderHint.textContent = googleConfigured || signed
       ? t("authProviderHint")
       : t("authProviderHintLocalBackup");
   }
@@ -20122,6 +20152,51 @@ function completeSocialLogin(provider, payload = {}) {
   return true;
 }
 
+function authHasOnlineSession() {
+  return Boolean(socialState.session?.access_token);
+}
+
+function authOnlineSessionUserLabel() {
+  if (!authHasOnlineSession()) return "";
+  return socialSessionEmail() || socialSuggestedDisplayName() || socialSuggestedUsername() || "Google";
+}
+
+function onlineSocialUserSession() {
+  const user = socialState.session?.user || {};
+  const metadata = user.user_metadata || user.raw_user_meta_data || {};
+  const email = String(user.email || "").trim();
+  const username = String(
+    metadata.full_name ||
+      metadata.name ||
+      metadata.display_name ||
+      metadata.username ||
+      email ||
+      "Google user"
+  ).trim();
+  return normalizeUserSession({
+    mode: "google",
+    provider: "google",
+    providerId: user.id || user.sub || email || "",
+    email,
+    username,
+    avatar: metadata.avatar_url || metadata.picture || ""
+  });
+}
+
+function continueWithOnlineSocialSession() {
+  if (!authHasOnlineSession()) return false;
+  const session = onlineSocialUserSession();
+  activateUserSession(session);
+  persistUserSession(session);
+  setAuthFeedback(t("authProviderLoggedAs", {
+    provider: "Google",
+    user: session.username || session.email || "Google"
+  }));
+  continueFromAuthToWelcome({ showGuide: !hasUsageGuideAcknowledged() });
+  void syncSocialLikedTracks({ force: true, silent: true, activity: false });
+  return true;
+}
+
 function handleGoogleCredentialResponse(response) {
   const payload = decodeJwtPayload(response?.credential || "");
   if (!payload?.sub) {
@@ -20196,11 +20271,28 @@ async function loginWithGoogle() {
     playUiSfx("error");
     return;
   }
-  if (!googleClientId()) {
-    showAuthProviderConfigMissing("google");
+  if (authHasOnlineSession()) {
+    continueWithOnlineSocialSession();
     return;
   }
-  await initializeGoogleSignIn();
+  authConfigLoading = true;
+  setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
+  updateAuthProviderUi();
+  try {
+    if (!socialState.ready || !socialConfigReady()) await fetchSocialConfig();
+    if (!socialConfigReady()) {
+      showAuthProviderConfigMissing("google");
+      return;
+    }
+    await socialSignInWithGoogle();
+  } catch (error) {
+    console.warn("Could not start Google login", error);
+    setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
+    playUiSfx("error");
+  } finally {
+    authConfigLoading = false;
+    updateAuthProviderUi();
+  }
 }
 
 async function loginWithApple() {
@@ -21402,7 +21494,7 @@ function continueFromUsageGuide() {
   startLocalProfileFlow({ preferStored: true, showGuide: false });
 }
 
-function showAuthScreen() {
+async function showAuthScreen() {
   if (!LOGIN_FLOW_ENABLED) {
     startLocalProfileFlow({ preferStored: true, showGuide: false });
     return;
@@ -21425,12 +21517,29 @@ function showAuthScreen() {
   if (authUsername) authUsername.value = storedUser?.username || "";
   if (authPassword) authPassword.value = "";
   updateAuthProviderUi();
-  if (!AUTH_LOGIN_STANDBY && googleClientId()) {
-    initializeGoogleSignIn({ silent: true }).catch(() => {
-      // The manual Google button remains available if the native script fails to load.
-    });
+
+  if (!AUTH_LOGIN_STANDBY && !socialState.ready) {
+    authConfigLoading = true;
+    updateAuthProviderUi();
+    try {
+      await fetchSocialConfig();
+    } finally {
+      authConfigLoading = false;
+      updateAuthProviderUi();
+    }
   }
-  if (storedUser && storedUser.mode !== "guest") {
+
+  const onlineUser = authOnlineSessionUserLabel();
+  if (onlineUser) {
+    if (authResumeBtn) {
+      authResumeBtn.classList.add("hidden");
+      authResumeBtn.disabled = true;
+    }
+    setAuthFeedback(t("authProviderLoggedAs", {
+      provider: "Google",
+      user: onlineUser
+    }));
+  } else if (storedUser && storedUser.mode !== "guest") {
     if (authResumeBtn) {
       authResumeBtn.classList.remove("hidden");
       authResumeBtn.disabled = false;
@@ -21445,9 +21554,11 @@ function showAuthScreen() {
     }
     setAuthFeedback("");
   }
-  const preferredAuthAction = storedUser && storedUser.mode !== "guest"
+  const preferredAuthAction = onlineUser || socialConfigReady()
+    ? authGoogleBtn
+    : storedUser && storedUser.mode !== "guest"
     ? authResumeBtn
-    : authTestUserBtn;
+    : authGuestBtn;
   if (preferredAuthAction?.focus) preferredAuthAction.focus();
   else if (authUsername) authUsername.focus();
   refreshAmbientForUiState();
@@ -21732,7 +21843,8 @@ function resumeStoredUserSession() {
   continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
-function continueWithoutLogin() {
+async function continueWithoutLogin() {
+  if (socialState.session?.access_token) await socialSignOut();
   startLocalProfileFlow({ preferStored: false });
 }
 
@@ -40543,6 +40655,7 @@ async function socialHandleAuthRedirect() {
   } finally {
     socialClearAuthHash();
     renderSocialUi({ preserveStatus: true });
+    updateAuthProviderUi();
   }
   return true;
 }
@@ -40943,26 +41056,33 @@ function renderSocialUi(options = {}) {
   }
 }
 
-function socialSignInWithGoogle() {
+async function socialSignInWithGoogle() {
   if (AUTH_LOGIN_STANDBY) {
     socialSetStatus(socialStandbyMessage(), "ok");
     renderSocialUi({ preserveStatus: true });
-    return;
+    return false;
+  }
+  if (!socialConfigReady()) {
+    await fetchSocialConfig();
   }
   if (!socialConfigReady()) {
     socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
-    return;
+    updateAuthProviderUi();
+    return false;
   }
-  if (socialState.busy) return;
+  if (socialState.busy) return false;
   const url = socialOAuthAuthorizeUrl("google");
   if (!url) {
     socialSetStatus("Nao consegui montar o login do Google. Confira o provider no Supabase.", "error");
-    return;
+    updateAuthProviderUi();
+    return false;
   }
   socialState.busy = true;
   socialSetStatus("Abrindo login do Google...");
   renderSocialUi({ preserveStatus: true });
+  updateAuthProviderUi();
   window.location.assign(url);
+  return true;
 }
 
 async function socialSignUp() {
@@ -41111,6 +41231,7 @@ async function socialSignOut() {
   socialState.feed = [];
   socialSetStatus("Voce saiu do perfil social.");
   renderSocialUi({ preserveStatus: true });
+  updateAuthProviderUi();
 }
 
 async function initSocialMvp() {
@@ -41146,6 +41267,7 @@ async function initSocialMvp() {
     await loadSocialFeed({ silent: true });
     renderSocialUi({ preserveStatus: true });
   }
+  updateAuthProviderUi();
 }
 
 function updateStats() {
@@ -43096,7 +43218,7 @@ languageButtons.forEach((button) => {
   bind(button, "click", () => {
     const lang = button.dataset.lang || DEFAULT_LANGUAGE;
     setLanguage(lang);
-    startLocalProfileFlow({ preferStored: true, showGuide: false });
+    void showAuthScreen();
   });
 });
 
@@ -43121,7 +43243,7 @@ bind(profileBackupImportInput, "change", (event) => {
   void importProfileBackupFile(file);
 });
 bind(socialGoogleBtn, "click", () => {
-  socialSignInWithGoogle();
+  void socialSignInWithGoogle();
 });
 bind(socialSignUpBtn, "click", () => {
   void socialSignUp();

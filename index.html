@@ -276,49 +276,45 @@
     </section>
 
     <section id="authScreen" class="welcome-screen hidden">
-      <div class="welcome-card auth-card auth-standby-card">
+      <div class="welcome-card auth-card auth-entry-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
             <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
           </div>
-          <p id="authKicker" class="brand-kicker">Acesso simplificado</p>
-          <h1 id="authTitle">Comece como novo usuário</h1>
-          <p id="authDesc">Nesta fase de teste, o Sonic Search entra sempre em uma sessão local limpa. Login, Google/Apple e sincronização ficam em standby.</p>
+          <p id="authKicker" class="brand-kicker">Acesso opcional</p>
+          <h1 id="authTitle">Entre ou siga sem login</h1>
+          <p id="authDesc">Use Google para sincronizar perfil e curtidas na nuvem, ou continue localmente sem criar conta.</p>
         </div>
         <div class="auth-local-note" aria-label="Modo local">
-          <span id="authLocalNoteProfile">Sem login</span>
-          <span id="authLocalNoteNewUser">Sessão nova</span>
-          <span id="authLocalNoteBackup">Backup manual</span>
+          <span id="authLocalNoteProfile">Google opcional</span>
+          <span id="authLocalNoteNewUser">Modo local livre</span>
+          <span id="authLocalNoteBackup">Sincronização quando quiser</span>
         </div>
-        <div class="auth-grid auth-standby-hidden" aria-hidden="true">
+        <div class="auth-grid hidden" aria-hidden="true">
           <label for="authUsername" id="authUsernameLabel">Usuário</label>
           <input id="authUsername" type="text" autocomplete="username" placeholder="Digite seu usuário" />
 
           <label for="authPassword" id="authPasswordLabel">Senha</label>
           <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
-        <div class="cta-row">
-          <button id="authTestUserBtn" class="primary auth-new-user-btn" type="button">Começar descoberta</button>
-          <button id="authGuestBtn" class="secondary hidden" type="button">Continuar perfil local</button>
+        <div class="cta-row auth-entry-actions">
+          <button id="authGoogleBtn" class="primary auth-google-entry-btn" type="button">
+            <span class="auth-provider-mark" aria-hidden="true">G</span>
+            <span id="authGoogleLabel">Entrar com Google</span>
+          </button>
+          <button id="authGuestBtn" class="secondary" type="button">Continuar sem login</button>
           <button id="authResumeBtn" class="secondary hidden" type="button">Retomar perfil salvo</button>
+          <button id="authTestUserBtn" class="hidden" type="button">Começar sem histórico</button>
           <button id="authLoginBtn" class="hidden" type="button">Login em standby</button>
         </div>
-        <p id="authNewUserHint" class="muted auth-new-user-hint">Use para testar como alguém novo: cria uma sessão limpa, sem histórico antigo, senha ou aba anônima.</p>
-        <div class="auth-divider auth-standby-hidden" aria-hidden="true">
-          <span id="authSocialDivider">conta online em standby</span>
-        </div>
-        <div class="auth-social-grid auth-standby-hidden" aria-label="Login social em standby" aria-hidden="true">
-          <div id="authGoogleNativeSlot" class="auth-google-native-slot hidden"></div>
-          <button id="authGoogleBtn" class="auth-social-btn google" type="button">
-            <span class="auth-provider-mark" aria-hidden="true">G</span>
-            <span id="authGoogleLabel">Continuar com Google</span>
-          </button>
-          <button id="authAppleBtn" class="auth-social-btn apple" type="button">
-            <span class="auth-provider-mark apple-mark" aria-hidden="true">A</span>
-            <span id="authAppleLabel">Continuar com Apple</span>
-          </button>
-        </div>
-        <p id="authProviderHint" class="muted auth-provider-hint">Conta online em standby. Use backup/importação manual no Perfil quando precisar levar seus dados.</p>
+        <p id="authNewUserHint" class="muted auth-new-user-hint">Sem login salva dados neste navegador. Google permite recuperar perfil em outro aparelho.</p>
+        <span id="authSocialDivider" class="hidden">conta online opcional</span>
+        <div id="authGoogleNativeSlot" class="auth-google-native-slot hidden"></div>
+        <button id="authAppleBtn" class="auth-social-btn apple hidden" type="button" aria-hidden="true">
+          <span class="auth-provider-mark apple-mark" aria-hidden="true">A</span>
+          <span id="authAppleLabel">Continuar com Apple</span>
+        </button>
+        <p id="authProviderHint" class="muted auth-provider-hint">Você decide: login Google para nuvem, ou modo local para começar agora.</p>
         <p id="authFeedback" class="muted auth-feedback"></p>
       </div>
     </section>

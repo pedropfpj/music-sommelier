@@ -2570,6 +2570,34 @@ textarea {
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
+.auth-entry-card {
+  max-width: 760px;
+}
+
+.auth-entry-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 0.7rem;
+  align-items: stretch;
+}
+
+.auth-google-entry-btn {
+  min-height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  box-shadow:
+    0 18px 44px rgba(97, 238, 226, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.auth-google-entry-btn .auth-provider-mark {
+  width: 26px;
+  height: 26px;
+  flex-basis: 26px;
+}
+
 .auth-new-user-hint {
   margin: -0.15rem 0 0.1rem;
   max-width: 62ch;
@@ -7762,6 +7790,10 @@ input[type="range"] {
   }
 
   .auth-social-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-entry-actions {
     grid-template-columns: 1fr;
   }
 
