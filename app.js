@@ -5251,6 +5251,7 @@ const socialEmailInput = document.getElementById("socialEmailInput");
 const socialPasswordInput = document.getElementById("socialPasswordInput");
 const socialUsernameInput = document.getElementById("socialUsernameInput");
 const socialDisplayNameInput = document.getElementById("socialDisplayNameInput");
+const socialGoogleBtn = document.getElementById("socialGoogleBtn");
 const socialSignUpBtn = document.getElementById("socialSignUpBtn");
 const socialSignInBtn = document.getElementById("socialSignInBtn");
 const socialResendConfirmBtn = document.getElementById("socialResendConfirmBtn");
@@ -40354,6 +40355,15 @@ function socialAuthRedirectPath(path = "") {
   return `${path}${separator}redirect_to=${encodeURIComponent(socialAuthRedirectUrl())}`;
 }
 
+function socialOAuthAuthorizeUrl(provider = "google") {
+  if (!socialConfigReady()) return "";
+  const params = new URLSearchParams({
+    provider,
+    redirect_to: socialAuthRedirectUrl()
+  });
+  return socialApiUrl(`/auth/v1/authorize?${params.toString()}`);
+}
+
 function socialFriendlyAuthError(message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
@@ -40449,13 +40459,29 @@ async function socialFetchAuthUser(accessToken = "") {
   return payload?.user || payload;
 }
 
+function socialParamsIncludeAuthSignal(params) {
+  return Boolean(
+    params?.has("access_token") ||
+      params?.has("error") ||
+      params?.has("error_code") ||
+      params?.has("error_description") ||
+      params?.has("code")
+  );
+}
+
 function socialAuthHashParams() {
   try {
     const hash = window.location?.hash || "";
-    if (!hash || hash.length < 2) return null;
-    const params = new URLSearchParams(hash.slice(1));
-    const hasSocialAuthSignal = params.has("access_token") || params.has("error") || params.has("error_code") || params.has("error_description");
-    return hasSocialAuthSignal ? params : null;
+    if (hash && hash.length > 1) {
+      const hashParams = new URLSearchParams(hash.slice(1));
+      if (socialParamsIncludeAuthSignal(hashParams)) return hashParams;
+    }
+    const search = window.location?.search || "";
+    if (search && search.length > 1) {
+      const searchParams = new URLSearchParams(search.slice(1));
+      if (socialParamsIncludeAuthSignal(searchParams)) return searchParams;
+    }
+    return null;
   } catch (error) {
     console.warn("Could not parse social auth redirect", error);
     return null;
@@ -40465,7 +40491,10 @@ function socialAuthHashParams() {
 function socialClearAuthHash() {
   try {
     if (window.history?.replaceState) {
-      window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`);
+      const params = new URLSearchParams(window.location.search || "");
+      ["access_token", "refresh_token", "expires_in", "token_type", "type", "provider_token", "provider_refresh_token", "error", "error_code", "error_description", "code"].forEach((key) => params.delete(key));
+      const search = params.toString();
+      window.history.replaceState(null, document.title, `${window.location.pathname}${search ? `?${search}` : ""}`);
     }
   } catch (error) {
     console.warn("Could not clear social auth hash", error);
@@ -40484,6 +40513,11 @@ async function socialHandleAuthRedirect() {
     return true;
   }
   const accessToken = params.get("access_token") || "";
+  if (!accessToken && params.has("code")) {
+    socialSetStatus("Recebi o retorno do Google, mas a sessao nao veio completa. Tente Entrar com Google novamente.", "error");
+    socialClearAuthHash();
+    return true;
+  }
   if (!accessToken) return false;
   try {
     const user = await socialFetchAuthUser(accessToken);
@@ -40502,10 +40536,10 @@ async function socialHandleAuthRedirect() {
     await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true });
-    socialSetStatus("E-mail confirmado. Perfil conectado.", "ok");
+    socialSetStatus("Perfil conectado.", "ok");
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
-    socialSetStatus(`E-mail confirmado, mas nao consegui entrar automaticamente: ${socialFriendlyAuthError(error.message)} Use Entrar.`, "error");
+    socialSetStatus(`Recebi o login, mas nao consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente Entrar de novo.`, "error");
   } finally {
     socialClearAuthHash();
     renderSocialUi({ preserveStatus: true });
@@ -40875,11 +40909,13 @@ function renderSocialUi(options = {}) {
   [socialEmailInput, socialPasswordInput, socialUsernameInput, socialDisplayNameInput].forEach((input) => {
     if (input) input.disabled = signed || socialState.busy;
   });
+  if (socialGoogleBtn) socialGoogleBtn.classList.toggle("hidden", signed);
   if (socialSignUpBtn) socialSignUpBtn.classList.toggle("hidden", signed);
   if (socialSignInBtn) socialSignInBtn.classList.toggle("hidden", signed);
   if (socialResendConfirmBtn) socialResendConfirmBtn.classList.toggle("hidden", signed);
   if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
   if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
+  if (socialGoogleBtn) socialGoogleBtn.disabled = signed || !configured || socialState.busy;
   if (socialSignUpBtn) socialSignUpBtn.disabled = signed || !configured || socialState.busy;
   if (socialSignInBtn) socialSignInBtn.disabled = signed || !configured || socialState.busy;
   if (socialResendConfirmBtn) socialResendConfirmBtn.disabled = signed || !configured || socialState.busy;
@@ -40905,6 +40941,28 @@ function renderSocialUi(options = {}) {
     else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
     else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
   }
+}
+
+function socialSignInWithGoogle() {
+  if (AUTH_LOGIN_STANDBY) {
+    socialSetStatus(socialStandbyMessage(), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return;
+  }
+  if (!socialConfigReady()) {
+    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    return;
+  }
+  if (socialState.busy) return;
+  const url = socialOAuthAuthorizeUrl("google");
+  if (!url) {
+    socialSetStatus("Nao consegui montar o login do Google. Confira o provider no Supabase.", "error");
+    return;
+  }
+  socialState.busy = true;
+  socialSetStatus("Abrindo login do Google...");
+  renderSocialUi({ preserveStatus: true });
+  window.location.assign(url);
 }
 
 async function socialSignUp() {
@@ -43061,6 +43119,9 @@ bind(profileBackupImportInput, "change", (event) => {
   const file = event.target?.files?.[0] || null;
   if (profileBackupImportInput) profileBackupImportInput.value = "";
   void importProfileBackupFile(file);
+});
+bind(socialGoogleBtn, "click", () => {
+  socialSignInWithGoogle();
 });
 bind(socialSignUpBtn, "click", () => {
   void socialSignUp();
