@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v25-ai-only-premium";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v19";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v26-ai-pending-polish";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v20";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "adult psytrance/goa party archetype, joyful expressive human face, UV-reactive geometric ravewear, round tinted glasses, layered utility vest, mandala patches, neon makeup, a few festival beads, psychedelic club light, not carnival",
@@ -210,7 +210,7 @@ module.exports = async function handler(req, res) {
   if (!enforceOpenAiDailyBudget(req, res, {
     feature: "spirit-image",
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
-    defaultDailyLimit: 3
+    defaultDailyLimit: 25
   })) {
     await deleteKey(lockKey);
     return;

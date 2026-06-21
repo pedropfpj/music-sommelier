@@ -5950,11 +5950,12 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v43";
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v25-ai-only-premium";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v44";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v26-ai-pending-polish";
 const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v10-ai-only";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
+const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
@@ -34267,7 +34268,7 @@ async function requestSpiritCollectibleFromApi(payload) {
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   let timeoutId = 0;
   try {
-    if (controller) timeoutId = window.setTimeout(() => controller.abort(), 45000);
+    if (controller) timeoutId = window.setTimeout(() => controller.abort(), SPIRIT_IMAGE_REQUEST_TIMEOUT_MS);
     const response = await fetch(endpoint, {
       method: "POST",
       headers,
@@ -34733,9 +34734,9 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
   const { mime: spiritMime } = collectibleImageMeta(spiritAssetUrl);
   const spiritImageDataUrl = await collectibleImageAsDataUrl(spiritAssetUrl, spiritMime);
   const snapshot = spiritShareProfileSnapshot();
-  const buildPendingCollectible = () => ({
+  const buildPendingCollectible = (source = "pending") => ({
     imageUrl: "",
-    source: "pending",
+    source,
     createdAt: new Date().toISOString(),
     prompt,
     userSignature,
@@ -34769,7 +34770,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     const { mime } = collectibleImageMeta(apiImage);
     const apiImageAsDataUrl = await collectibleImageAsDataUrl(apiImage, mime);
     if (!/^data:image\//i.test(String(apiImageAsDataUrl || "").trim())) {
-      return buildPendingCollectible();
+      return buildPendingCollectible("error");
     }
     return {
       imageUrl: buildLocalSpiritCollectibleImage(
@@ -34791,7 +34792,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       profileSignature
     };
   }
-  return buildPendingCollectible();
+  return buildPendingCollectible(allowAi ? "error" : "pending");
 }
 
 function syncSpiritAvatarWithCollectible(collectible, spiritText = {}) {
@@ -34846,7 +34847,9 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
       } else if (!hasImage) {
-        spiritCollectibleHint.textContent = supportsAiCollectibleApi()
+        spiritCollectibleHint.textContent = asset?.source === "error"
+          ? t("spiritCollectibleError")
+          : supportsAiCollectibleApi()
           ? t("spiritCollectibleReadyToGenerate")
           : t("spiritCollectibleHintLocal");
       } else if (asset.source === "api") {
@@ -34964,9 +34967,9 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         keptPreviousCollectible = true;
       } else {
         const profileSignature = spiritCollectibleProfileSignature(spirit, milestone.likes);
-        collectible = {
+        collectible = generatedCollectible || {
           imageUrl: "",
-          source: "pending",
+          source: "error",
           createdAt: new Date().toISOString(),
           prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
           userSignature,
@@ -34984,7 +34987,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         const profileSignature = spiritCollectibleProfileSignature(spirit, milestone.likes);
         collectible = {
           imageUrl: "",
-          source: "pending",
+          source: "error",
           createdAt: new Date().toISOString(),
           prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
           userSignature,
@@ -35363,7 +35366,8 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   spiritCard.classList.add("reveal");
   if (spiritShareLinkBtn) spiritShareLinkBtn.disabled = false;
 
-  setImageSourceWithFallback(spiritImage, SPIRIT_AVATAR_FALLBACK, SPIRIT_AVATAR_FALLBACK);
+  const spiritAvatarSource = resolveRuntimeAssetUrl(selectedSpirit.image || SPIRIT_AVATAR_FALLBACK);
+  setImageSourceWithFallback(spiritImage, spiritAvatarSource, SPIRIT_AVATAR_FALLBACK);
   spiritImage.alt = t("spiritAvatarAlt", { name: spiritText.name });
   spiritName.textContent = spiritText.name;
   spiritArchetype.textContent =
