@@ -5827,6 +5827,7 @@ const PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS = 8;
 const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
+const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
 const SOCIAL_SYNC_LIMIT = 50;
 const SOCIAL_FEED_LIMIT = 14;
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
@@ -40760,6 +40761,22 @@ function socialOAuthAuthorizeUrl(provider = "google") {
   return socialApiUrl(`/auth/v1/authorize?${params.toString()}`);
 }
 
+async function socialDirectOAuthUrl(provider = "google") {
+  const params = new URLSearchParams({
+    provider,
+    redirect_to: socialAuthRedirectUrl()
+  });
+  try {
+    const response = await fetch(`${SOCIAL_OAUTH_URL_ENDPOINT}?${params.toString()}`, { cache: "no-store" });
+    const payload = await response.json().catch(() => null);
+    const url = String(payload?.url || "").trim();
+    if (response.ok && payload?.ok && url) return url;
+  } catch (error) {
+    console.warn("Could not create direct OAuth URL", error);
+  }
+  return socialOAuthAuthorizeUrl(provider);
+}
+
 function socialFriendlyAuthError(message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
@@ -41355,7 +41372,7 @@ async function socialSignInWithGoogle() {
     return false;
   }
   if (socialState.busy) return false;
-  const url = socialOAuthAuthorizeUrl("google");
+  const url = await socialDirectOAuthUrl("google");
   if (!url) {
     socialSetStatus("Nao consegui montar o login do Google. Confira o provider no Supabase.", "error");
     updateAuthProviderUi();
@@ -41365,7 +41382,7 @@ async function socialSignInWithGoogle() {
   socialSetStatus("Abrindo login do Google...");
   renderSocialUi({ preserveStatus: true });
   updateAuthProviderUi();
-  window.location.assign(url);
+  window.location.href = url;
   return true;
 }
 
