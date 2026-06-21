@@ -41276,13 +41276,18 @@ function socialOAuthAuthorizeUrl(provider = "google") {
   return socialApiUrl(`/auth/v1/authorize?${params.toString()}`);
 }
 
-async function socialDirectOAuthUrl(provider = "google") {
+function socialOAuthEndpointUrl(provider = "google", { redirect = false } = {}) {
   const params = new URLSearchParams({
     provider,
     redirect_to: socialAuthRedirectUrl()
   });
+  if (redirect) params.set("redirect", "1");
+  return `${SOCIAL_OAUTH_URL_ENDPOINT}?${params.toString()}`;
+}
+
+async function socialDirectOAuthUrl(provider = "google") {
   try {
-    const response = await fetch(`${SOCIAL_OAUTH_URL_ENDPOINT}?${params.toString()}`, { cache: "no-store" });
+    const response = await fetch(socialOAuthEndpointUrl(provider), { cache: "no-store" });
     const payload = await response.json().catch(() => null);
     const url = String(payload?.url || "").trim();
     if (response.ok && payload?.ok && url) return url;
@@ -42066,7 +42071,7 @@ async function socialSignInWithGoogle() {
     return false;
   }
   if (socialState.busy) return false;
-  const url = await socialDirectOAuthUrl("google");
+  const url = socialOAuthEndpointUrl("google", { redirect: true });
   if (!url) {
     socialSetStatus("Nao consegui montar o login do Google. Confira o provider no Supabase.", "error");
     updateAuthProviderUi();

@@ -111,6 +111,12 @@ module.exports = async function handler(req, res) {
       return;
     }
     res.setHeader("Cache-Control", "no-store");
+    if (queryValue(req, "redirect") === "1" || queryValue(req, "mode") === "redirect") {
+      res.statusCode = 302;
+      res.setHeader("Location", location);
+      res.end();
+      return;
+    }
     sendJson(req, res, 200, { ok: true, provider, url: location }, ["GET", "OPTIONS"]);
   } catch (error) {
     sendJson(req, res, 502, {
