@@ -20663,6 +20663,7 @@ function updateAuthProviderUi() {
   const googleConfigured = socialConfigReady();
   const signed = authHasOnlineSession();
   const busy = Boolean(authConfigLoading || socialState.busy);
+  const googleOAuthHref = socialOAuthEndpointUrl("google", { redirect: true });
   if (authGoogleNativeSlot) {
     authGoogleNativeSlot.classList.add("hidden");
     authGoogleNativeSlot.innerHTML = "";
@@ -20676,6 +20677,10 @@ function updateAuthProviderUi() {
     authGoogleBtn.classList.remove("hidden");
     authGoogleBtn.removeAttribute("aria-hidden");
     authGoogleBtn.disabled = busy || (!googleConfigured && !signed);
+    if (authGoogleBtn.tagName === "A") {
+      authGoogleBtn.setAttribute("href", signed ? "#" : googleOAuthHref);
+      authGoogleBtn.setAttribute("aria-disabled", busy ? "true" : "false");
+    }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
     authGoogleBtn.title = !googleConfigured && !signed
       ? t("authProviderConfigMissing", { provider: "Google" })
@@ -20938,6 +20943,17 @@ async function loginWithGoogle() {
   if (AUTH_LOGIN_STANDBY) {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
+    return;
+  }
+  const shouldUseNativeLink = authGoogleBtn?.tagName === "A" && !socialState.session?.access_token && !authHasOnlineSession();
+  if (shouldUseNativeLink) {
+    socialState.busy = true;
+    pendingSocialOAuthUrl = authGoogleBtn.getAttribute("href") || socialOAuthEndpointUrl("google", { redirect: true });
+    setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
+    socialSetStatus("Abrindo login do Google...");
+    renderSocialUi({ preserveStatus: true });
+    updateAuthProviderUi();
+    scheduleSocialOAuthNavigationRecovery();
     return;
   }
   if (pendingSocialOAuthUrl && !socialState.busy) {

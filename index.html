@@ -298,7 +298,7 @@
           <input id="authPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" />
         </div>
         <div class="cta-row auth-entry-actions">
-          <button id="authGoogleBtn" class="primary auth-google-entry-btn" type="button">
+          <a id="authGoogleBtn" class="primary auth-google-entry-btn" href="/api/social-oauth-url?provider=google&amp;redirect=1&amp;redirect_to=https%3A%2F%2Fsonicsearch.app%2F">
             <span class="auth-provider-mark google-mark" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.5c-.3 1.4-1.1 2.7-2.3 3.5v2.9h3.7c2.2-2 3.6-5 3.6-8.4Z" />
@@ -308,7 +308,7 @@
               </svg>
             </span>
             <span id="authGoogleLabel">Entrar com Google</span>
-          </button>
+          </a>
           <button id="authGuestBtn" class="secondary" type="button">Continuar sem login</button>
           <button id="authResumeBtn" class="secondary hidden" type="button">Retomar perfil salvo</button>
           <button id="authTestUserBtn" class="hidden" type="button">Começar sem histórico</button>
@@ -1825,6 +1825,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260621ai-pending-polish1"></script>
+    <script src="app.js?v=20260621google-oauth-link1"></script>
   </body>
 </html>
