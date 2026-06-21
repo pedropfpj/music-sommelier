@@ -5953,9 +5953,9 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v45";
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v27-direct-preview";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v11-ai-direct";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v46";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v28-limit-unlock";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v12-ai-direct-limit-unlock";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
@@ -34355,7 +34355,8 @@ async function requestSpiritCollectibleFromApi(payload) {
         ...payload,
         premiumUnlocked: aiPremiumUnlocked() || !aiImagePremiumLockedByLimit(),
         freeTrialUnlocked: !aiPremiumUnlocked(),
-        imageGenerationIndex: aiImageCallsForProfile() + 1,
+        imageGenerationIndex: Math.max(1, Number(payload.imageGenerationIndex) || 1),
+        clientImageCallCount: aiImageCallsForProfile(),
         forceRegenerate: payload.forceRegenerate === true
       }),
       signal: controller?.signal

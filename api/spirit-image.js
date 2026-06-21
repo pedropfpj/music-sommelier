@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v27-direct-preview";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v21";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v28-limit-unlock";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v22";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "adult psytrance/goa party archetype, joyful expressive human face, UV-reactive geometric ravewear, round tinted glasses, layered utility vest, mandala patches, neon makeup, a few festival beads, psychedelic club light, not carnival",
@@ -150,8 +150,10 @@ module.exports = async function handler(req, res) {
   }
 
   const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", true);
-  const maxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 20 : 1, 1, 50);
-  const requestedGeneration = Math.max(1, Number(body.imageGenerationIndex) || 1);
+  const configuredMaxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 25 : 1, 1, 100);
+  const maxPerUser = allowBetaRegeneration
+    ? Math.max(configuredMaxPerUser, 25)
+    : configuredMaxPerUser;
   const forceRegenerate = body.forceRegenerate === true;
   const existing = await readJson(imageKey);
   const existingGenerationCount = Math.max(
@@ -165,7 +167,7 @@ module.exports = async function handler(req, res) {
       sendJson(res, 200, storedImageResponse(existing, true));
       return;
     }
-    if (existingGenerationCount >= maxPerUser || requestedGeneration > maxPerUser) {
+    if (existingGenerationCount >= maxPerUser) {
       sendJson(res, 429, {
         error: "image_generation_limit_reached",
         maxPerUser,
@@ -173,15 +175,6 @@ module.exports = async function handler(req, res) {
       });
       return;
     }
-  }
-
-  if (!existing && requestedGeneration > maxPerUser) {
-    sendJson(res, 429, {
-      error: "image_generation_limit_reached",
-      maxPerUser,
-      generationCount: 0
-    });
-    return;
   }
 
   const prompt = trimText(body.prompt, 4200);
