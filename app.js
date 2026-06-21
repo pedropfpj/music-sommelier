@@ -13656,6 +13656,13 @@ function boost(mapRef, key, amount = 1) {
   mapRef.set(cleanKey, (mapRef.get(cleanKey) || 0) + amount);
 }
 
+function ensureMapScoreAtLeast(mapRef, key, amount = 1) {
+  const cleanKey = normalize(key || "");
+  const score = Number(amount) || 0;
+  if (!cleanKey || !Number.isFinite(score) || score <= 0) return;
+  mapRef.set(cleanKey, Math.max(Number(mapRef.get(cleanKey)) || 0, score));
+}
+
 function swipeTrainingSignalCount() {
   const stored = Math.max(0, Number(userStats.swipeTrainingSignals) || 0);
   if (stored > 0) return stored;
@@ -20729,6 +20736,8 @@ async function continueWithOnlineSocialSession(options = {}) {
     provider: "Google",
     user: session.username || session.email || "Google"
   }));
+  applyCloudLikedTrackSignals([]);
+  updateStats();
   continueFromAuthToWelcome({ showGuide: options.showGuide ?? !hasUsageGuideAcknowledged() });
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
@@ -41526,17 +41535,24 @@ function socialLikedTrackFromRow(row = {}) {
 }
 
 function applyCloudLikedTrackSignals(entries = []) {
-  const signalEntries = entries.length || adaptiveModel.likedStyles.size || adaptiveModel.likedArtists.size
-    ? entries
-    : likedTrackHistory;
+  const signalEntries = entries.length ? entries : likedTrackHistory;
+  const replayingHistory = !entries.length;
   signalEntries.forEach((entry) => {
     if (!entry) return;
-    boost(adaptiveModel.likedStyles, entry.style, 1);
-    boost(adaptiveModel.likedArtists, entry.artist, 1);
-    boost(adaptiveModel.likedEnergies, entry.energy, 0.45);
-    registerTrackPreferenceSignal(entry, 0.95);
-    if (entry.key) seenTrackKeysMemory.add(entry.key);
-    registerSeenArtist(entry.artist);
+    const trackKey = likedTrackKeyFromEntry(entry);
+    if (replayingHistory) {
+      ensureMapScoreAtLeast(adaptiveModel.likedStyles, entry.style, 1);
+      ensureMapScoreAtLeast(adaptiveModel.likedArtists, entry.artist, 1);
+      ensureMapScoreAtLeast(adaptiveModel.likedEnergies, entry.energy, 0.45);
+      if (trackKey && !trackPreferenceSignals.has(trackKey)) registerTrackPreferenceSignal(entry, 0.95);
+    } else {
+      boost(adaptiveModel.likedStyles, entry.style, 1);
+      boost(adaptiveModel.likedArtists, entry.artist, 1);
+      boost(adaptiveModel.likedEnergies, entry.energy, 0.45);
+      registerTrackPreferenceSignal(entry, 0.95);
+    }
+    if (trackKey) seenTrackKeysMemory.add(trackKey);
+    registerDiscoveredArtist(entry.artist);
   });
   if (likedTrackHistory.length) {
     userStats.likedSongs = Math.max(Number(userStats.likedSongs) || 0, likedTrackHistory.length);
@@ -41579,6 +41595,8 @@ async function restoreSocialLikedTracksFromCloud(options = {}) {
     if (!imported.length) {
       applyCloudLikedTrackSignals([]);
       updateDiscoverySequenceBadges(currentRecommendation);
+      if (options.render !== false) updateStats();
+      else saveProgress();
       return 0;
     }
     likedTrackHistory = sanitizeLikedTrackHistory([...imported, ...likedTrackHistory]);
@@ -41696,6 +41714,8 @@ async function syncSocialLikedTracks(options = {}) {
     socialState.lastSyncAt = Date.now();
     if (!options.silent) socialSetStatus("Perfil e curtidas sincronizados.", "ok");
     await loadSocialFeed({ silent: true });
+    applyCloudLikedTrackSignals([]);
+    updateStats();
     return true;
   } catch (error) {
     console.warn("Social sync failed", error);
@@ -42078,6 +42098,7 @@ async function initSocialMvp() {
 }
 
 function updateStats() {
+  applyCloudLikedTrackSignals([]);
   recalculateRatingStats();
   pruneInvalidArtistSignals(adaptiveModel.likedArtists);
   pruneInvalidArtistSignals(adaptiveModel.dislikedArtists);
