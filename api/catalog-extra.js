@@ -16,6 +16,12 @@ function catalogLimit(value) {
   return Math.max(1, Math.min(CATALOG_LIMIT_MAX, parsed));
 }
 
+function catalogOffset(value) {
+  const parsed = Number.parseInt(String(value || ""), 10);
+  if (!Number.isFinite(parsed) || parsed < 0) return 0;
+  return Math.min(5000, parsed);
+}
+
 function catalogQuery(req, key, maxLength = 80) {
   return trimText(req.query?.[key] || req.body?.[key] || "", maxLength);
 }
@@ -39,10 +45,11 @@ async function fetchCatalogTable(config, table, params) {
   return Array.isArray(payload) ? payload : [];
 }
 
-function baseParams({ limit, style }) {
+function baseParams({ limit, style, offset = 0 }) {
   const params = new URLSearchParams({
     status: "eq.published",
-    limit: String(limit)
+    limit: String(limit),
+    offset: String(offset)
   });
   if (style) params.set("style", `eq.${style}`);
   return params;
@@ -52,16 +59,16 @@ function safeIlikeValue(value = "") {
   return String(value || "").replace(/[(),]/g, " ").trim();
 }
 
-async function fetchArtists(config, { style, q, limit }) {
-  const params = baseParams({ style, limit });
+async function fetchArtists(config, { style, q, limit, offset }) {
+  const params = baseParams({ style, limit, offset });
   params.set("select", "id,style,artist,country,city,artist_bio,artist_genre,artist_profile_hint,source,source_url,metadata,created_at");
   params.set("order", "style.asc,artist.asc");
   if (q) params.set("artist", `ilike.*${safeIlikeValue(q)}*`);
   return fetchCatalogTable(config, "catalog_artists", params);
 }
 
-async function fetchTracks(config, { style, q, limit }) {
-  const params = baseParams({ style, limit });
+async function fetchTracks(config, { style, q, limit, offset }) {
+  const params = baseParams({ style, limit, offset });
   params.set("select", "id,style,artist,song,label,bpm_exact,preview_url,release_date,duration_sec,country,city,artist_bio,artist_genre,artist_profile_hint,source,source_url,metadata,created_at");
   params.set("order", "style.asc,artist.asc,song.asc");
   if (q) {
@@ -101,19 +108,21 @@ module.exports = async function handler(req, res) {
   const q = catalogQuery(req, "q", 80);
   const type = catalogQuery(req, "type", 20);
   const limit = catalogLimit(catalogQuery(req, "limit", 12));
+  const offset = catalogOffset(catalogQuery(req, "offset", 12));
 
   try {
     const includeArtists = !type || type === "artists" || type === "all";
     const includeTracks = !type || type === "tracks" || type === "all";
     const [artists, tracks] = await Promise.all([
-      includeArtists ? fetchArtists(config, { style, q, limit }) : Promise.resolve([]),
-      includeTracks ? fetchTracks(config, { style, q, limit }) : Promise.resolve([])
+      includeArtists ? fetchArtists(config, { style, q, limit, offset }) : Promise.resolve([]),
+      includeTracks ? fetchTracks(config, { style, q, limit, offset }) : Promise.resolve([])
     ]);
     sendJson(req, res, 200, {
       ok: true,
       enabled: true,
       style,
       q,
+      offset,
       count: {
         artists: artists.length,
         tracks: tracks.length

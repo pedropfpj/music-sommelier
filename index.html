@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260619next-step-buttons1" />
+    <link rel="stylesheet" href="styles.css?v=20260621google-logo1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -299,7 +299,14 @@
         </div>
         <div class="cta-row auth-entry-actions">
           <button id="authGoogleBtn" class="primary auth-google-entry-btn" type="button">
-            <span class="auth-provider-mark" aria-hidden="true">G</span>
+            <span class="auth-provider-mark google-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.5c-.3 1.4-1.1 2.7-2.3 3.5v2.9h3.7c2.2-2 3.6-5 3.6-8.4Z" />
+                <path fill="#34a853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.1-4.2 1.1-3.1 0-5.7-2.1-6.7-4.9H1.5v3C3.4 21.3 7.4 24 12 24Z" />
+                <path fill="#fbbc05" d="M5.3 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4v-3H1.5C.5 8.2 0 10.1 0 12s.5 3.8 1.5 5.4l3.8-3Z" />
+                <path fill="#ea4335" d="M12 4.7c1.7 0 3.3.6 4.5 1.8l3.3-3.3C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.5 6.6l3.8 3C6.3 6.8 8.9 4.7 12 4.7Z" />
+              </svg>
+            </span>
             <span id="authGoogleLabel">Entrar com Google</span>
           </button>
           <button id="authGuestBtn" class="secondary" type="button">Continuar sem login</button>
@@ -1611,7 +1618,17 @@
               </label>
             </div>
             <div class="social-auth-actions">
-              <button id="socialGoogleBtn" class="listen-btn google-login-btn" type="button">Entrar com Google</button>
+              <button id="socialGoogleBtn" class="listen-btn google-login-btn" type="button">
+                <span class="auth-provider-mark google-mark" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.5c-.3 1.4-1.1 2.7-2.3 3.5v2.9h3.7c2.2-2 3.6-5 3.6-8.4Z" />
+                    <path fill="#34a853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.1-4.2 1.1-3.1 0-5.7-2.1-6.7-4.9H1.5v3C3.4 21.3 7.4 24 12 24Z" />
+                    <path fill="#fbbc05" d="M5.3 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4v-3H1.5C.5 8.2 0 10.1 0 12s.5 3.8 1.5 5.4l3.8-3Z" />
+                    <path fill="#ea4335" d="M12 4.7c1.7 0 3.3.6 4.5 1.8l3.3-3.3C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.5 6.6l3.8 3C6.3 6.8 8.9 4.7 12 4.7Z" />
+                  </svg>
+                </span>
+                <span>Entrar com Google</span>
+              </button>
               <button id="socialSignUpBtn" class="listen-btn" type="button">Criar perfil</button>
               <button id="socialSignInBtn" class="listen-btn secondary" type="button">Entrar</button>
               <button id="socialResendConfirmBtn" class="listen-btn secondary confirm-link-btn" type="button">Reenviar confirmação</button>
@@ -1802,6 +1819,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260619manual-style-lock"></script>
+    <script src="app.js?v=20260621catalog-extra1"></script>
   </body>
 </html>

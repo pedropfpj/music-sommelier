@@ -2587,9 +2587,22 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 0.7rem;
+  border-color: rgba(117, 223, 255, 0.64);
+  background:
+    linear-gradient(135deg, rgba(116, 255, 222, 0.95), rgba(126, 189, 255, 0.95));
+  color: #06152a;
   box-shadow:
     0 18px 44px rgba(97, 238, 226, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.auth-google-entry-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 22px 56px rgba(97, 238, 226, 0.3),
+    0 0 0 3px rgba(110, 255, 220, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
 .auth-google-entry-btn .auth-provider-mark {
@@ -2621,9 +2634,51 @@ textarea {
   line-height: 1;
 }
 
+.auth-provider-mark svg {
+  width: 68%;
+  height: 68%;
+  display: block;
+}
+
+.auth-provider-mark.google-mark {
+  background:
+    linear-gradient(180deg, #ffffff, #eef4ff);
+  box-shadow:
+    0 8px 20px rgba(7, 18, 35, 0.2),
+    inset 0 0 0 1px rgba(12, 25, 52, 0.08);
+}
+
 .auth-provider-mark.apple-mark {
   background: #f7f7f5;
   color: #05070d;
+}
+
+.social-profile-card .social-auth-actions .google-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 46px;
+  border-color: rgba(255, 255, 255, 0.5);
+  background:
+    linear-gradient(135deg, #ffffff, #eef5ff);
+  color: #07162c;
+  box-shadow:
+    0 14px 32px rgba(15, 26, 50, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.social-profile-card .social-auth-actions .google-login-btn .auth-provider-mark {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.social-profile-card .social-auth-actions .google-login-btn:not(:disabled):hover {
+  border-color: rgba(110, 255, 220, 0.72);
+  box-shadow:
+    0 0 22px rgba(126, 205, 255, 0.2),
+    0 12px 34px rgba(15, 26, 50, 0.22);
 }
 
 .auth-provider-hint {

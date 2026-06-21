@@ -769,7 +769,9 @@ const EXTERNAL_DATASET_FILES = [
 const INDEXED_DATASET_ARTIST_COUNT = 4599;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
-const CATALOG_EXTRA_IMPORT_LIMIT = 80;
+const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 80;
+const CATALOG_EXTRA_IMPORT_MAX_PAGES = 8;
+const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
 
 const LOCAL_TRACK_SEED_BOOST = [
   {
@@ -10963,6 +10965,181 @@ function catalogExtraRowText(row = {}, key = "") {
   return String(row?.[key] ?? "").trim();
 }
 
+function catalogExtraRowMetadata(row = {}) {
+  const metadata = row?.metadata;
+  if (!metadata) return {};
+  if (typeof metadata === "object" && !Array.isArray(metadata)) return metadata;
+  if (typeof metadata !== "string") return {};
+  try {
+    const parsed = JSON.parse(metadata);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (_err) {
+    return {};
+  }
+}
+
+function catalogExtraMetadataText(metadata = {}, key = "") {
+  const value = metadata?.[key];
+  if (Array.isArray(value)) return value.map((item) => String(item || "").trim()).filter(Boolean).join(";");
+  if (value && typeof value === "object") return "";
+  return String(value ?? "").trim();
+}
+
+function catalogExtraMetadataList(metadata = {}, key = "") {
+  const value = metadata?.[key];
+  if (Array.isArray(value)) return value.map((item) => String(item || "").trim()).filter(Boolean);
+  const text = String(value ?? "").trim();
+  if (!text) return [];
+  return text.split(/[;,]/).map((item) => item.trim()).filter(Boolean);
+}
+
+function catalogTrackMetadata(track = {}) {
+  const metadata = track?.catalogMetadata || track?.metadata;
+  if (!metadata) return {};
+  if (typeof metadata === "object" && !Array.isArray(metadata)) return metadata;
+  if (typeof metadata !== "string") return {};
+  try {
+    const parsed = JSON.parse(metadata);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (_err) {
+    return {};
+  }
+}
+
+function catalogTrackMetadataList(track = {}, key = "") {
+  const metadata = catalogTrackMetadata(track);
+  const direct = track?.[key];
+  const value = direct != null && direct !== "" ? direct : metadata?.[key];
+  if (Array.isArray(value)) return value.map((item) => String(item || "").trim()).filter(Boolean);
+  const text = String(value ?? "").trim();
+  if (!text) return [];
+  return text.split(/[;,]/).map((item) => item.trim()).filter(Boolean);
+}
+
+function catalogTrackMetadataText(track = {}, key = "") {
+  const metadata = catalogTrackMetadata(track);
+  const direct = track?.[key];
+  const value = direct != null && direct !== "" ? direct : metadata?.[key];
+  if (Array.isArray(value)) return value.map((item) => String(item || "").trim()).filter(Boolean).join(" ");
+  if (value && typeof value === "object") return "";
+  return String(value ?? "").trim();
+}
+
+function catalogExtraSignalText(track = {}) {
+  return [
+    catalogTrackMetadataText(track, "catalogRole"),
+    catalogTrackMetadataText(track, "catalog_role"),
+    catalogTrackMetadataText(track, "energyBand"),
+    catalogTrackMetadataText(track, "energy_band"),
+    catalogTrackMetadataText(track, "source_type"),
+    catalogTrackMetadataText(track, "source_note"),
+    ...catalogTrackMetadataList(track, "sourceTags"),
+    ...catalogTrackMetadataList(track, "source_tags"),
+    ...catalogTrackMetadataList(track, "albumKeywords"),
+    ...catalogTrackMetadataList(track, "album_keywords")
+  ].filter(Boolean).join(" ");
+}
+
+const CATALOG_EXTRA_STYLE_SIGNAL_TERMS = {
+  acid_techno: ["acid techno", "acid", "303", "tb 303", "rave", "warehouse"],
+  minimal_techno: ["minimal techno", "minimal", "hypnotic", "dub", "microhouse", "loop"],
+  melodic_techno: ["melodic techno", "melodic", "afterlife", "cinematic", "progressive", "synth"],
+  minimal_deep_tech: ["minimal deep tech", "deep tech", "minimal house", "piv", "fuse", "low slung", "groove"],
+  afro_house: ["afro house", "afro tech", "south african", "percussive", "tribal", "afro"],
+  organic_house: ["organic house", "downtempo", "desert", "organic", "global", "live"]
+};
+
+function catalogExtraClubStyleScore(style = "", role = "", energyBand = "", signalText = "", bpmValue = 0) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  const terms = CATALOG_EXTRA_STYLE_SIGNAL_TERMS[styleKey];
+  if (!terms) return 0;
+
+  const text = normalize([role, energyBand, signalText].filter(Boolean).join(" "));
+  const stylePhrase = normalize(styleKey.replace(/_/g, " "));
+  const bpm = Number(bpmValue) || 0;
+  let score = 0;
+  let matches = 0;
+
+  if (stylePhrase && text.includes(stylePhrase)) score += 0.9;
+  for (const term of terms) {
+    if (text.includes(normalize(term))) matches += 1;
+  }
+  score += Math.min(1.35, matches * 0.28);
+
+  if (role.includes("anchor")) score += 0.85;
+  if (role.includes("bridge")) score += 0.45;
+  if (role.includes("depth")) score += 0.42;
+  if (role.includes("peak")) score += 0.35;
+  if (role.includes("scene")) score += 0.35;
+
+  if (energyBand.includes("peak") || energyBand.includes("warehouse") || energyBand.includes("rave")) score += 0.32;
+  if (energyBand.includes("hypnotic") || energyBand.includes("deep") || energyBand.includes("organic")) score += 0.26;
+  if (energyBand.includes("groove") || energyBand.includes("percussive")) score += 0.24;
+
+  if (styleKey === "acid_techno" && (text.includes("303") || text.includes("acid"))) score += 0.75;
+  if (styleKey === "minimal_deep_tech" && (text.includes("bassline") || text.includes("low slung") || text.includes("groove"))) score += 0.55;
+  if (styleKey === "afro_house" && (text.includes("south african") || text.includes("percussive"))) score += 0.55;
+  if (styleKey === "organic_house" && (text.includes("organic") || text.includes("desert") || text.includes("global"))) score += 0.5;
+  if (styleKey === "melodic_techno" && (text.includes("afterlife") || text.includes("cinematic") || text.includes("synth"))) score += 0.45;
+
+  if (bpm > 0) {
+    if (styleKey === "acid_techno" && bpm >= 124 && bpm <= 145) score += 0.45;
+    else if (styleKey === "minimal_techno" && bpm >= 123 && bpm <= 130) score += 0.42;
+    else if (styleKey === "melodic_techno" && bpm >= 120 && bpm <= 127) score += 0.4;
+    else if (styleKey === "minimal_deep_tech" && bpm >= 124 && bpm <= 130) score += 0.42;
+    else if (styleKey === "afro_house" && bpm >= 118 && bpm <= 124) score += 0.4;
+    else if (styleKey === "organic_house" && bpm >= 110 && bpm <= 122) score += 0.4;
+  }
+
+  return Math.min(3.8, score);
+}
+
+function catalogExtraEnrichmentScore(track = {}, prefs = {}) {
+  if (!isCatalogExtraTrack(track)) return 0;
+  prefs = normalizeRecommendationPrefs(prefs || {});
+  const style = normalizeDatasetStyle(track.style || prefs.style || "");
+  const role = normalize(catalogTrackMetadataText(track, "catalogRole") || catalogTrackMetadataText(track, "catalog_role"));
+  const energyBand = normalize(catalogTrackMetadataText(track, "energyBand") || catalogTrackMetadataText(track, "energy_band"));
+  const confidence = normalize(catalogTrackMetadataText(track, "catalogConfidence") || catalogTrackMetadataText(track, "confidence"));
+  const signalText = normalize(catalogExtraSignalText(track));
+  const bpmValue = Number(track.bpmExact) || 0;
+  let score = 0;
+
+  if (signalText.includes("psycore")) score += 1.25;
+  if (signalText.includes("darkpsy") || signalText.includes("dark psy")) score += style === "psycore" ? 0.7 : 0.35;
+  if (signalText.includes("bandcamp")) score += 0.45;
+  if (confidence === "high") score += 0.8;
+  else if (confidence === "medium_high") score += 0.45;
+
+  if (style !== "psycore") {
+    score += catalogExtraClubStyleScore(style, role, energyBand, signalText, bpmValue);
+  }
+
+  if (style === "psycore") {
+    if (role.includes("solo_artist_bpm_anchor")) score += 2.1;
+    if (role.includes("modern_2026_psycore_va")) score += 1.9;
+    if (role.includes("modern_2026_darkpsy_psycore_va")) score += 1.55;
+    if (role.includes("brazilian_scene_depth")) score += 1.25;
+    if (role.includes("hitech_psycore_adjacent")) score += 0.75;
+
+    if (energyBand.includes("ultra_fast")) score += 2;
+    else if (energyBand.includes("extreme_psycore")) score += 1.75;
+    else if (energyBand.includes("high_velocity")) score += 1.25;
+    else if (energyBand.includes("darkpsy_psycore_entry")) score += 0.7;
+    else if (energyBand.includes("bpm_unknown")) score -= prefs.bpm ? 2.2 : 0.65;
+
+    if (bpmValue >= 220) score += 1.65;
+    else if (bpmValue >= 200) score += 1.25;
+    else if (bpmValue >= 180) score += 0.75;
+    else if (bpmValue > 0 && bpmValue < 170) score -= 1.2;
+  }
+
+  if (track.coverArtUrl) score += 0.18;
+  if (Array.isArray(track.labelLinks) && track.labelLinks.length) score += 0.25;
+  if (Array.isArray(track.socialDiscoveryLinks) && track.socialDiscoveryLinks.length) score += 0.18;
+  return score;
+}
+
 function isCatalogExtraTrack(track = {}) {
   const source = normalize(track?.source || "");
   return Boolean(track?.catalogExtra || track?.cloudCatalogExtra || source.includes("supabase catalog extra"));
@@ -10985,7 +11162,11 @@ function restoreCatalogExtraTrackHints(track = {}) {
 }
 
 function catalogExtraUrlFields(row = {}) {
-  const sourceUrl = catalogExtraRowText(row, "source_url");
+  const metadata = catalogExtraRowMetadata(row);
+  const sourceUrl =
+    catalogExtraRowText(row, "source_url") ||
+    catalogExtraMetadataText(metadata, "track_url") ||
+    catalogExtraMetadataText(metadata, "source_album_url");
   const label = catalogExtraRowText(row, "label");
   const url = sourceUrl || (/^https?:\/\//i.test(label) ? label : "");
   if (!url) return {};
@@ -11038,6 +11219,7 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
     const song = catalogExtraRowText(row, "song");
     if (!style || !STYLE_BPM_RULES[style] || !artist || !song) return;
 
+    const metadata = catalogExtraRowMetadata(row);
     const label = catalogExtraRowText(row, "label") || catalogExtraRowText(row, "source") || "Supabase catalog";
     const bpmExact = Number(row?.bpm_exact) || 0;
     const releaseDate = normalizeDatasetReleaseDate(catalogExtraRowText(row, "release_date") || "Supabase catalog");
@@ -11060,6 +11242,16 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
           catalogExtraRowText(row, "artist_profile_hint") ||
           `Entrada curada no Supabase para ${styleLabelByValue(style)}.`,
         artistBio: catalogExtraRowText(row, "artist_bio"),
+        catalogMetadata: metadata,
+        sourceTags: catalogExtraMetadataList(metadata, "source_tags"),
+        albumKeywords: catalogExtraMetadataList(metadata, "album_keywords"),
+        energyBand: catalogExtraMetadataText(metadata, "energy_band"),
+        catalogRole: catalogExtraMetadataText(metadata, "catalog_role"),
+        coverArtUrl: catalogExtraMetadataText(metadata, "cover_art_url"),
+        labelLinks: catalogExtraMetadataList(metadata, "label_links"),
+        socialDiscoveryLinks: catalogExtraMetadataList(metadata, "social_discovery_links"),
+        sourceNote: catalogExtraMetadataText(metadata, "source_note"),
+        catalogConfidence: catalogExtraMetadataText(metadata, "confidence"),
         ...urlFields
       },
       existingKeys
@@ -11075,6 +11267,16 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
       importedTrack.cloudCatalogExtra = true;
       importedTrack.existenceVerified = true;
       importedTrack.sourceUrl = catalogExtraRowText(row, "source_url");
+      importedTrack.catalogMetadata = metadata;
+      importedTrack.sourceTags = catalogExtraMetadataList(metadata, "source_tags");
+      importedTrack.albumKeywords = catalogExtraMetadataList(metadata, "album_keywords");
+      importedTrack.energyBand = catalogExtraMetadataText(metadata, "energy_band");
+      importedTrack.catalogRole = catalogExtraMetadataText(metadata, "catalog_role");
+      importedTrack.coverArtUrl = catalogExtraMetadataText(metadata, "cover_art_url");
+      importedTrack.labelLinks = catalogExtraMetadataList(metadata, "label_links");
+      importedTrack.socialDiscoveryLinks = catalogExtraMetadataList(metadata, "social_discovery_links");
+      importedTrack.sourceNote = catalogExtraMetadataText(metadata, "source_note");
+      importedTrack.catalogConfidence = catalogExtraMetadataText(metadata, "confidence");
       importedTrack.artistBio = catalogExtraRowText(row, "artist_bio") || importedTrack.artistBio;
       importedTrack.artistGenre = catalogExtraRowText(row, "artist_genre") || importedTrack.artistGenre;
       importedTrack.artistProfileHint = catalogExtraRowText(row, "artist_profile_hint") || importedTrack.artistProfileHint;
@@ -11101,10 +11303,11 @@ function catalogExtraImportedMessage(tracksImported, artistsImported) {
   return `Catalogo na nuvem conectado: ${tracksImported} faixas e ${artistsImported} artistas prontos.`;
 }
 
-async function fetchCatalogExtraPayload(style = "") {
+async function fetchCatalogExtraPage(style = "", offset = 0) {
   const params = new URLSearchParams({
     type: "all",
-    limit: String(CATALOG_EXTRA_IMPORT_LIMIT)
+    limit: String(CATALOG_EXTRA_IMPORT_PAGE_SIZE),
+    offset: String(Math.max(0, Number(offset) || 0))
   });
   if (style) params.set("style", style);
 
@@ -11117,6 +11320,52 @@ async function fetchCatalogExtraPayload(style = "") {
   } catch (_err) {
     return null;
   }
+}
+
+async function fetchCatalogExtraPayload(style = "") {
+  const combined = {
+    ok: true,
+    enabled: true,
+    style,
+    count: { artists: 0, tracks: 0 },
+    artists: [],
+    tracks: []
+  };
+  const seenArtists = new Set();
+  const seenTracks = new Set();
+  let loadedAnyPage = false;
+
+  for (let page = 0; page < CATALOG_EXTRA_IMPORT_MAX_PAGES; page += 1) {
+    const offset = page * CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+    const payload = await fetchCatalogExtraPage(style, offset);
+    if (!payload) return loadedAnyPage ? combined : null;
+
+    loadedAnyPage = true;
+    const artists = Array.isArray(payload.artists) ? payload.artists : [];
+    const tracks = Array.isArray(payload.tracks) ? payload.tracks : [];
+
+    artists.forEach((artist) => {
+      const key = String(artist?.id || `${artist?.style || ""}::${artist?.artist || ""}`).trim();
+      if (!key || seenArtists.has(key)) return;
+      seenArtists.add(key);
+      combined.artists.push(artist);
+    });
+
+    tracks.forEach((track) => {
+      const key = String(track?.id || `${track?.style || ""}::${track?.artist || ""}::${track?.song || ""}`).trim();
+      if (!key || seenTracks.has(key)) return;
+      seenTracks.add(key);
+      combined.tracks.push(track);
+    });
+
+    if (artists.length < CATALOG_EXTRA_IMPORT_PAGE_SIZE && tracks.length < CATALOG_EXTRA_IMPORT_PAGE_SIZE) break;
+  }
+
+  combined.count = {
+    artists: combined.artists.length,
+    tracks: combined.tracks.length
+  };
+  return loadedAnyPage ? combined : null;
 }
 
 async function hydrateCatalogExtraFromSupabase(style = "") {
@@ -12956,7 +13205,8 @@ function hasCuratedFineStyleProofWithoutBpm(style, track = null) {
     track.label,
     track.artistProfileHint,
     track.vibe,
-    track.source
+    track.source,
+    catalogExtraSignalText(track)
   ].filter(Boolean).join(" ");
   return textHasSpecificStyleSignal(cleanStyle, signalText);
 }
@@ -14834,7 +15084,17 @@ function addDynamicTrackToCatalog({
   spotifyUrl = "",
   spotifyTrackUrl = "",
   youtubeUrl = "",
-  youtubeTrackUrl = ""
+  youtubeTrackUrl = "",
+  catalogMetadata = null,
+  sourceTags = [],
+  albumKeywords = [],
+  energyBand = "",
+  catalogRole = "",
+  coverArtUrl = "",
+  labelLinks = [],
+  socialDiscoveryLinks = [],
+  sourceNote = "",
+  catalogConfidence = ""
 }, existingKeys) {
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
@@ -14892,6 +15152,9 @@ function addDynamicTrackToCatalog({
   const safeBandcampUrl = String(bandcampUrl || "").trim();
   const safeBandcampTrackUrl = String(bandcampTrackUrl || "").trim();
   const safeBandcampTrackId = String(bandcampTrackId || "").trim();
+  const safeCatalogMetadata = catalogMetadata && typeof catalogMetadata === "object" && !Array.isArray(catalogMetadata)
+    ? catalogMetadata
+    : {};
   const hasDirectYoutube = isDirectYouTubeUrl(safeYoutubeTrackUrl) || isDirectYouTubeUrl(safeYoutubeUrl);
   const hasDirectSoundcloud = isDirectSoundCloudTrackUrl(safeSoundcloudTrackUrl) || isDirectSoundCloudTrackUrl(safeSoundcloudUrl);
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
@@ -14936,6 +15199,16 @@ function addDynamicTrackToCatalog({
     artistProfileHint: String(artistProfileHint || "").trim(),
     artistBio: String(artistBio || "").trim() || `${artistName} entrou no radar como uma pista nova dentro de ${styleLabelByValue(style)}. Use esta faixa como porta de entrada e, se bater, vale ouvir mais do projeto.`,
     labelBio: String(labelBio || "").trim() || buildDynamicLabelSummary(style, cleanLabel),
+    catalogMetadata: safeCatalogMetadata,
+    sourceTags: Array.isArray(sourceTags) ? sourceTags.map((item) => String(item || "").trim()).filter(Boolean) : [],
+    albumKeywords: Array.isArray(albumKeywords) ? albumKeywords.map((item) => String(item || "").trim()).filter(Boolean) : [],
+    energyBand: String(energyBand || safeCatalogMetadata.energy_band || "").trim(),
+    catalogRole: String(catalogRole || safeCatalogMetadata.catalog_role || "").trim(),
+    coverArtUrl: String(coverArtUrl || safeCatalogMetadata.cover_art_url || "").trim(),
+    labelLinks: Array.isArray(labelLinks) ? labelLinks.map((item) => String(item || "").trim()).filter(Boolean) : [],
+    socialDiscoveryLinks: Array.isArray(socialDiscoveryLinks) ? socialDiscoveryLinks.map((item) => String(item || "").trim()).filter(Boolean) : [],
+    sourceNote: String(sourceNote || safeCatalogMetadata.source_note || "").trim(),
+    catalogConfidence: String(catalogConfidence || safeCatalogMetadata.confidence || "").trim(),
     source
   };
 
@@ -35064,7 +35337,8 @@ function trackFineSubgenreHasRecommendationProof(track = null) {
     track.label,
     track.artistProfileHint,
     track.vibe,
-    track.source
+    track.source,
+    catalogExtraSignalText(track)
   ].filter(Boolean).join(" ");
   const specificSignal = textHasSpecificStyleSignal(style, signalText);
   const trustedFineSource = isTrustedSourceForFineStyle(track.source || "") || sourceKey.includes("verified");
@@ -35099,7 +35373,8 @@ function dynamicPsyHomonymHasStrongIdentityProof(track = null) {
     track.artistProfileHint,
     track.artistBio,
     track.vibe,
-    track.source
+    track.source,
+    catalogExtraSignalText(track)
   ].filter(Boolean).join(" ");
   const specificSignal = textHasSpecificStyleSignal(style, signalText);
   return trustedFineSource && reliableBpm && specificSignal && (artistLocked || seedAnchored);
@@ -35124,7 +35399,8 @@ function trackStyleCertainty(track = null) {
     track.label,
     track.artistProfileHint,
     track.vibe,
-    track.source
+    track.source,
+    catalogExtraSignalText(track)
   ].filter(Boolean).join(" ");
   const specificSignal = textHasSpecificStyleSignal(style, signalText);
   const fineEvidence = fineSubgenreEvidenceLevel(style, track, {
@@ -35669,6 +35945,7 @@ function trackSourceTrustScore(track) {
   if (isTrustedCuratedCatalogTrack(track)) score += 2.3;
   if (track.existenceVerified === true) score += 1.1;
   if (source.includes("dataset")) score += 0.8;
+  if (isCatalogExtraTrack(track)) score += 0.8;
   if (!isDynamicSource(track.source)) score += 0.55;
   if (styleCertainty === "confirmed") score += 0.45;
   else if (styleCertainty === "probable") score -= 0.15;
@@ -35676,6 +35953,7 @@ function trackSourceTrustScore(track) {
   else if (styleCertainty === "unsafe") score -= 4;
   if (confidence >= 0.92) score += 1;
   else if (confidence >= 0.82) score += 0.55;
+  score += clampScore(catalogExtraEnrichmentScore(track), -2, 6) * 0.25;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) score -= 8;
   score -= recommendationIssuePenaltyForTrack(track);
   return score;
@@ -35712,7 +35990,8 @@ function trackUndergroundIntentScore(track, prefs = {}) {
     track.artistBio,
     track.labelBio,
     track.vibe,
-    track.source
+    track.source,
+    catalogExtraSignalText(track)
   ].filter(Boolean).join(" ");
   const hasSceneSource = textHasAnySignal(text, UNDERGROUND_SOURCE_TERMS);
   const hasDarkSignal = textHasAnySignal(text, DARK_UNDERGROUND_SIGNAL_TERMS);
@@ -35731,6 +36010,7 @@ function trackUndergroundIntentScore(track, prefs = {}) {
   if (trackHasEmbeddableBandcampTrack(track)) score += 1.1;
   if (hasSceneSource) score += 1.9;
   if (hasDarkSignal) score += darkUndergroundIntentStyle(style) ? 2.6 : 0.9;
+  score += clampScore(catalogExtraEnrichmentScore(track, prefs), -2, 6) * 0.55;
 
   if (style === "psycore") {
     if (Number.isFinite(bpmValue) && bpmValue >= 200) score += 2.2;
@@ -36025,6 +36305,7 @@ function recommendationPrecisionScore(track, prefs = {}) {
   else if (isDynamicSource(track.source)) score -= 0.8;
 
   score += clampScore(trackSourceTrustScore(track), -4, 5) * 0.7;
+  score += clampScore(catalogExtraEnrichmentScore(track, prefs), -3, 7) * 0.8;
   score -= clampScore(recommendationIssuePenaltyForTrack(track), 0, 6) * 1.1;
   score += clampScore(trackUndergroundIntentScore(track, prefs), -8, 10) * 0.82;
   score += clampScore(trackFreshnessScore(track, prefs), -4, 4) * 0.55;
@@ -36088,6 +36369,7 @@ function trackRecommendationReliabilityScore(track) {
   else if (ambiguousBpm) score -= 0.8;
   else if (dynamic && !String(track.source || "").toLowerCase().includes("dataset")) score -= 1.9;
   if (dynamic && !trackHasPlayablePreviewExperience(track) && !trusted) score -= 4.2;
+  score += clampScore(catalogExtraEnrichmentScore(track), -2, 6) * 0.35;
   score -= clampScore(recommendationIssuePenaltyForTrack(track), 0, 6) * 1.2;
   return score;
 }
@@ -36207,6 +36489,7 @@ function recommendationQualityScore(track, prefs = {}) {
   if (track.soundcloudVerified === true || track.soundcloudTrackUrl) score += 0.45;
   if (track.bandcampTrackUrl || track.bandcampUrl) score += 0.35;
   score -= previewPenaltyForTrack(track) * 0.65;
+  score += clampScore(catalogExtraEnrichmentScore(track, prefs), -4, 8) * 1.05;
   score += trackSourceTrustScore(track);
   score += trackUndergroundIntentScore(track, prefs);
   score += trackFreshnessScore(track, prefs);
@@ -36256,6 +36539,7 @@ function recommendationScore(track, prefs) {
   else score -= isDynamicSource(track.source) ? 8.5 : 2.2;
   score += curatedCatalogPriorityScore(track);
   if (isCatalogExtraTrack(track)) score += prefs.style ? 16.4 : 6.2;
+  score += clampScore(catalogExtraEnrichmentScore(track, prefs), -5, 9) * 0.9;
   score += bpmIntentStyleBoost(track, prefs);
   if (track.style === "minimal_techno" && track.energy === "low") score -= 2.5;
   if (track.style === "minimal_techno" && track.bpm === "110-124") score -= 3.5;
