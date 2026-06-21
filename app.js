@@ -41443,10 +41443,12 @@ async function restoreSocialLikedTracksFromCloud(options = {}) {
     });
     if (!imported.length) {
       applyCloudLikedTrackSignals([]);
+      updateDiscoverySequenceBadges(currentRecommendation);
       return 0;
     }
     likedTrackHistory = sanitizeLikedTrackHistory([...imported, ...likedTrackHistory]);
     applyCloudLikedTrackSignals(imported);
+    updateDiscoverySequenceBadges(currentRecommendation);
     if (options.render !== false) {
       updateStats();
       renderLikedTrackHistory();
