@@ -20681,7 +20681,7 @@ function completeSocialLogin(provider, payload = {}) {
 }
 
 function authHasOnlineSession() {
-  return Boolean(socialState.session?.access_token);
+  return Boolean(socialState.session?.access_token && !socialSessionExpiresSoon(socialState.session, 0));
 }
 
 function authOnlineSessionUserLabel() {
@@ -20711,8 +20711,17 @@ function onlineSocialUserSession() {
   });
 }
 
-function continueWithOnlineSocialSession() {
-  if (!authHasOnlineSession()) return false;
+async function continueWithOnlineSocialSession(options = {}) {
+  if (!socialState.session?.access_token) return false;
+  const fresh = await ensureFreshSocialSession({ clearOnFailure: true });
+  if (!fresh) {
+    if (!options.silentFailure) {
+      setAuthFeedback("Sua sessao do Google expirou. Toque em Entrar com Google para conectar novamente.", true);
+      playUiSfx("error");
+    }
+    updateAuthProviderUi();
+    return false;
+  }
   const session = onlineSocialUserSession();
   activateUserSession(session);
   persistUserSession(session);
@@ -20799,8 +20808,16 @@ async function loginWithGoogle() {
     playUiSfx("error");
     return;
   }
+  if (socialState.session?.access_token) {
+    const resumed = await continueWithOnlineSocialSession({ silentFailure: true });
+    if (resumed) return;
+  }
+  if (socialState.session?.access_token) {
+    socialStoreSession(null);
+    updateAuthProviderUi();
+  }
   if (authHasOnlineSession()) {
-    continueWithOnlineSocialSession();
+    await continueWithOnlineSocialSession();
     return;
   }
   authConfigLoading = true;
@@ -22056,6 +22073,16 @@ async function showAuthScreen() {
       updateAuthProviderUi();
     }
   }
+  if (!AUTH_LOGIN_STANDBY && socialConfigReady() && socialState.session?.access_token) {
+    authConfigLoading = true;
+    updateAuthProviderUi();
+    try {
+      await ensureFreshSocialSession({ clearOnFailure: true });
+    } finally {
+      authConfigLoading = false;
+      updateAuthProviderUi();
+    }
+  }
 
   const onlineUser = authOnlineSessionUserLabel();
   if (onlineUser) {
@@ -22350,7 +22377,7 @@ function loginWithCredentials() {
   continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
-function resumeStoredUserSession() {
+async function resumeStoredUserSession() {
   if (AUTH_LOGIN_STANDBY) {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
@@ -22365,9 +22392,38 @@ function resumeStoredUserSession() {
   const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   activateUserSession(storedUser);
   persistUserSession(storedUser);
-  setAuthFeedback(t("authLoggedAs", {
-    user: storedUser.username || storedUser.email || t("summaryNoData")
-  }));
+  let restoredOnline = false;
+  if (storedUser.mode === "google") {
+    authConfigLoading = true;
+    updateAuthProviderUi();
+    try {
+      if (!socialState.ready) await fetchSocialConfig();
+      const storedSession = socialLoadStoredSession();
+      if (!socialState.session?.access_token && storedSession) socialStoreSession(storedSession);
+      restoredOnline = socialConfigReady() && socialState.session?.access_token
+        ? await ensureFreshSocialSession({ clearOnFailure: true })
+        : false;
+      if (restoredOnline) {
+        ensureOnlineSocialUserSession();
+        await loadSocialProfile({ silent: true });
+        await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
+        await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
+        updateStats();
+        renderSocialUi({ preserveStatus: true });
+      }
+    } finally {
+      authConfigLoading = false;
+      updateAuthProviderUi();
+    }
+  }
+  setAuthFeedback(restoredOnline
+    ? t("authProviderLoggedAs", {
+      provider: "Google",
+      user: storedUser.username || storedUser.email || t("summaryNoData")
+    })
+    : t("authLoggedAs", {
+      user: storedUser.username || storedUser.email || t("summaryNoData")
+    }));
   continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
 }
 
@@ -40986,6 +41042,81 @@ function socialLoadStoredSession() {
   }
 }
 
+function socialSessionExpiresAt(session = socialState.session) {
+  const storedExpiresAt = Number(session?.expires_at || 0) || 0;
+  if (storedExpiresAt) return storedExpiresAt;
+  const tokenPayload = decodeJwtPayload(session?.access_token || "");
+  return Number(tokenPayload?.exp || 0) || 0;
+}
+
+function socialSessionExpiresSoon(session = socialState.session, skewSeconds = 90) {
+  if (!session?.access_token) return true;
+  const expiresAt = socialSessionExpiresAt(session);
+  if (!expiresAt) return false;
+  return expiresAt <= Math.floor(Date.now() / 1000) + skewSeconds;
+}
+
+function socialStoredRefreshToken(session = socialState.session) {
+  return String(session?.refresh_token || "").trim();
+}
+
+async function socialRefreshSession(options = {}) {
+  if (!socialConfigReady()) return false;
+  const refreshToken = socialStoredRefreshToken();
+  if (!refreshToken) {
+    if (options.clearOnFailure) socialStoreSession(null);
+    return false;
+  }
+  try {
+    const response = await fetch(socialApiUrl("/auth/v1/token?grant_type=refresh_token"), {
+      method: "POST",
+      headers: socialHeaders({ auth: false }),
+      body: JSON.stringify({ refresh_token: refreshToken })
+    });
+    const text = await response.text();
+    let payload = null;
+    if (text) {
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        payload = text;
+      }
+    }
+    if (!response.ok) {
+      const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
+      throw new Error(String(detail || "Nao consegui renovar a sessao."));
+    }
+    const expiresIn = Number(payload?.expires_in || socialState.session?.expires_in || 3600) || 3600;
+    const nextSession = {
+      ...(socialState.session || {}),
+      ...(payload || {}),
+      refresh_token: payload?.refresh_token || refreshToken,
+      token_type: payload?.token_type || socialState.session?.token_type || "bearer",
+      expires_in: expiresIn,
+      expires_at: Math.floor(Date.now() / 1000) + expiresIn,
+      user: payload?.user || socialState.session?.user || null
+    };
+    if (!nextSession.user?.id && nextSession.access_token) {
+      nextSession.user = await socialFetchAuthUser(nextSession.access_token);
+    }
+    if (!nextSession.access_token || !nextSession.user?.id) {
+      throw new Error("Sessao Supabase incompleta.");
+    }
+    socialStoreSession(nextSession);
+    return true;
+  } catch (error) {
+    console.warn("Could not refresh social session", error);
+    if (options.clearOnFailure) socialStoreSession(null);
+    return false;
+  }
+}
+
+async function ensureFreshSocialSession(options = {}) {
+  if (!socialState.session?.access_token) return false;
+  if (!socialSessionExpiresSoon(socialState.session, options.skewSeconds ?? 90)) return true;
+  return socialRefreshSession({ clearOnFailure: options.clearOnFailure !== false });
+}
+
 function socialAuthRedirectUrl() {
   const fallback = "https://sonicsearch.app";
   try {
@@ -41077,6 +41208,9 @@ function socialHeaders({ auth = true, prefer = "" } = {}) {
 
 async function socialRequest(path, options = {}) {
   if (!socialConfigReady()) throw new Error("Supabase social ainda nao esta configurado.");
+  if (options.auth !== false && socialState.session?.access_token) {
+    await ensureFreshSocialSession({ clearOnFailure: true });
+  }
   const response = await fetch(socialApiUrl(path), {
     method: options.method || "GET",
     headers: {
@@ -41924,13 +42058,16 @@ async function initSocialMvp() {
   const handledAuthRedirect = await socialHandleAuthRedirect();
   const storedSession = socialLoadStoredSession();
   if (!socialState.session?.access_token && storedSession) socialStoreSession(storedSession);
-  if (socialConfigReady() && socialState.session?.access_token) {
+  const hasFreshSession = socialConfigReady() && socialState.session?.access_token
+    ? await ensureFreshSocialSession({ clearOnFailure: true })
+    : false;
+  if (hasFreshSession) {
     ensureOnlineSocialUserSession();
     await loadSocialProfile({ silent: true });
     await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
   }
   renderSocialUi({ preserveStatus: handledAuthRedirect });
-  if (socialConfigReady() && socialState.session?.access_token) {
+  if (hasFreshSession) {
     await syncSocialLikedTracks({ silent: true, activity: false, restore: false });
     await loadSocialFeed({ silent: true });
     updateStats();
