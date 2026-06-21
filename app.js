@@ -32,6 +32,12 @@ const STYLE_TO_FAMILY = {
   melodic_techno: "techno",
   industrial_techno: "techno",
   peak_time_techno: "techno",
+  deep_techno: "techno",
+  ambient_techno: "techno",
+  bleep_techno: "techno",
+  tribal_techno: "techno",
+  hardgroove_techno: "techno",
+  broken_techno: "techno",
   house: "house",
   deep_house: "house",
   tech_house: "house",
@@ -518,6 +524,12 @@ const STYLE_SEARCH_TERMS = {
   peak_time_techno: "peak time techno",
   minimal_techno: "minimal techno",
   melodic_techno: "melodic techno",
+  deep_techno: "deep techno atmospheric techno",
+  ambient_techno: "ambient techno atmospheric techno",
+  bleep_techno: "bleep techno sheffield techno",
+  tribal_techno: "tribal techno percussive techno",
+  hardgroove_techno: "hardgroove techno groove techno",
+  broken_techno: "broken techno bass techno",
   gabber: "gabber hardcore techno",
   minimal_deep_tech: "minimal deep tech house",
   jackin_house: "jackin house chicago house",
@@ -575,6 +587,12 @@ const STYLE_ADVANCED_SEARCH_TERMS = {
   melodic_techno: ["melodic techno", "melodic house techno", "progressive melodic techno"],
   industrial_techno: ["industrial techno", "rave industrial techno", "dark industrial techno"],
   peak_time_techno: ["peak time techno", "driving techno", "main room techno"],
+  deep_techno: ["deep techno", "atmospheric techno", "deep hypnotic techno"],
+  ambient_techno: ["ambient techno", "intelligent techno", "atmospheric ambient techno"],
+  bleep_techno: ["bleep techno", "sheffield techno", "uk bleep"],
+  tribal_techno: ["tribal techno", "percussive techno", "latin techno"],
+  hardgroove_techno: ["hardgroove techno", "groove techno", "funky techno"],
+  broken_techno: ["broken techno", "bass techno", "broken beat techno"],
   house: ["house music", "classic house", "club house"],
   deep_house: ["deep house", "deep electronic house", "deep club house"],
   tech_house: ["tech house", "club tech house", "minimal tech house"],
@@ -648,6 +666,12 @@ const STYLE_TO_VIBE_THEME = {
   melodic_techno: "techno",
   industrial_techno: "techno",
   peak_time_techno: "techno",
+  deep_techno: "techno",
+  ambient_techno: "techno",
+  bleep_techno: "techno",
+  tribal_techno: "techno",
+  hardgroove_techno: "techno",
+  broken_techno: "techno",
   drum_and_bass: "dnb",
   liquid_dnb: "dnb",
   neurofunk: "dnb",
@@ -747,6 +771,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v8.csv",
   "data/artist_expansion_seeds_v9.csv",
   "data/artist_expansion_seeds_v10.csv",
+  "data/artist_expansion_seeds_v11.csv",
   "data/verified_track_expansion_v1.csv",
   "data/verified_track_expansion_v2.csv",
   "data/verified_track_expansion_v3.csv",
@@ -755,6 +780,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/verified_track_expansion_v6.csv",
   "data/verified_track_expansion_v7.csv",
   "data/verified_track_expansion_v8.csv",
+  "data/verified_track_expansion_v9.csv",
+  "data/techno_enrichment_v3_20260621.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -766,7 +793,7 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 4599;
+const INDEXED_DATASET_ARTIST_COUNT = 4690;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 80;
@@ -803,6 +830,12 @@ const LOCAL_TRACK_SEED_BOOST = [
   { style: "hard_techno", artist: "DYEN", song: "Pacemaker", label: "KNTXT", bpmExact: 147 },
   { style: "minimal_techno", artist: "Rene Wise", song: "Cave", label: "Mote Evolver", bpmExact: 128 },
   { style: "melodic_techno", artist: "Anyma", song: "Explore Your Future", label: "Afterlife", bpmExact: 126 },
+  { style: "deep_techno", artist: "Luigi Tozzi", song: "Tender Is The Night", label: "Hypnus Records", bpmExact: 128 },
+  { style: "ambient_techno", artist: "B12", song: "Telefone 529", label: "Warp Records", bpmExact: 125 },
+  { style: "bleep_techno", artist: "LFO", song: "LFO", label: "Warp Records", bpmExact: 123 },
+  { style: "tribal_techno", artist: "Cave", song: "Street Carnival", label: "Ingoma", bpmExact: 136 },
+  { style: "hardgroove_techno", artist: "Ben Sims", song: "Manipulated", label: "Theory Recordings", bpmExact: 136 },
+  { style: "broken_techno", artist: "Objekt", song: "Theme From Q", label: "Objekt", bpmExact: 130 },
   { style: "house", artist: "Frankie Knuckles", song: "Baby Wants To Ride", label: "Trax Records", bpmExact: 122 },
   { style: "tech_house", artist: "PAWSA", song: "Dirty Cash", label: "Solid Grooves", bpmExact: 128 },
   { style: "drum_and_bass", artist: "Sub Focus", song: "Tidal Wave", label: "RAM Records", bpmExact: 174 },
@@ -2175,6 +2208,15 @@ const DATASET_STYLE_ALIASES = {
   melodictechno: "melodic_techno",
   industrialtechno: "industrial_techno",
   peaktimetechno: "peak_time_techno",
+  deeptechno: "deep_techno",
+  ambienttechno: "ambient_techno",
+  bleeptechno: "bleep_techno",
+  tribaltechno: "tribal_techno",
+  hardgroove: "hardgroove_techno",
+  hardgroovetechno: "hardgroove_techno",
+  groovetechno: "hardgroove_techno",
+  brokentechno: "broken_techno",
+  basstechno: "broken_techno",
   deephouse: "deep_house",
   techhouse: "tech_house",
   progressivehouse: "progressive_house",
@@ -2526,8 +2568,103 @@ const CURATED_BANDCAMP_TRACK_EXPANSION = [
   };
 });
 
+const CURATED_TECHNO_SUBGENRE_EXPANSION = [
+  { style: "deep_techno", artist: "Luigi Tozzi", song: "Tender Is The Night", label: "Hypnus Records", bpmExact: 128, artistCountry: "Italy", artistGenre: "Deep Techno / Hypnotic Techno" },
+  { style: "deep_techno", artist: "Claudio PRC", song: "Inner State", label: "Prologue", bpmExact: 128, artistCountry: "Italy", artistGenre: "Deep Techno / Hypnotic Techno" },
+  { style: "deep_techno", artist: "Deepbass", song: "Parallel to Radius", label: "Informa Records", bpmExact: 128, artistCountry: "United Kingdom", artistGenre: "Deep Techno / Atmospheric Techno" },
+  { style: "deep_techno", artist: "Ness", song: "Trancemigration", label: "The Gods Planet", bpmExact: 128, artistCountry: "Italy", artistGenre: "Deep Techno / Mental Techno" },
+  { style: "deep_techno", artist: "Artefakt", song: "The Fifth Planet", label: "Delsin", bpmExact: 128, artistCountry: "Netherlands", artistGenre: "Deep Techno / Atmospheric Techno" },
+  { style: "deep_techno", artist: "Polar Inertia", song: "The Last Vehicle", label: "Dement3d", bpmExact: 130, artistCountry: "France", artistGenre: "Deep Techno / Atmospheric Techno" },
+
+  { style: "ambient_techno", artist: "B12", song: "Telefone 529", label: "Warp Records", bpmExact: 125, artistCountry: "United Kingdom", artistGenre: "Ambient Techno / IDM" },
+  { style: "ambient_techno", artist: "The Black Dog", song: "Virtual", label: "Warp Records", bpmExact: 126, artistCountry: "United Kingdom", artistGenre: "Ambient Techno / IDM" },
+  { style: "ambient_techno", artist: "Global Communication", song: "14:31", label: "Dedicated", bpmExact: 90, artistCountry: "United Kingdom", artistGenre: "Ambient Techno / Ambient" },
+  { style: "ambient_techno", artist: "Biosphere", song: "Novelty Waves", label: "Apollo", bpmExact: 128, artistCountry: "Norway", artistGenre: "Ambient Techno / Arctic Ambient" },
+  { style: "ambient_techno", artist: "Higher Intelligence Agency", song: "Ketamine Entity", label: "Beyond", bpmExact: 120, artistCountry: "United Kingdom", artistGenre: "Ambient Techno / Intelligent Techno" },
+  { style: "ambient_techno", artist: "Voices From The Lake", song: "Velo Di Maya", label: "Prologue", bpmExact: 126, artistCountry: "Italy", artistGenre: "Ambient Techno / Deep Techno" },
+
+  { style: "bleep_techno", artist: "LFO", song: "LFO", label: "Warp Records", bpmExact: 123, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / Sheffield Techno" },
+  { style: "bleep_techno", artist: "Sweet Exorcist", song: "Testone", label: "Warp Records", bpmExact: 124, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / UK Techno" },
+  { style: "bleep_techno", artist: "Forgemasters", song: "Track With No Name", label: "Warp Records", bpmExact: 122, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / Sheffield Techno" },
+  { style: "bleep_techno", artist: "Nightmares on Wax", song: "Dextrous", label: "Warp Records", bpmExact: 124, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / UK Rave" },
+  { style: "bleep_techno", artist: "Unique 3", song: "The Theme", label: "10 Records", bpmExact: 122, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / UK Bass" },
+  { style: "bleep_techno", artist: "Tricky Disco", song: "Tricky Disco", label: "Warp Records", bpmExact: 123, artistCountry: "United Kingdom", artistGenre: "Bleep Techno / Rave Techno" },
+
+  { style: "tribal_techno", artist: "Cave", song: "Street Carnival", label: "Ingoma", bpmExact: 136, artistCountry: "Norway", artistGenre: "Tribal Techno / Percussive Techno" },
+  { style: "tribal_techno", artist: "Hertz", song: "Recreate", label: "Sway", bpmExact: 136, artistCountry: "Sweden", artistGenre: "Tribal Techno / Percussive Techno" },
+  { style: "tribal_techno", artist: "The Advent", song: "Bad Boy", label: "Kombination Research", bpmExact: 137, artistCountry: "United Kingdom", artistGenre: "Tribal Techno / Hardgroove" },
+  { style: "tribal_techno", artist: "Marco Bailey", song: "Sniff", label: "MB Elektronics", bpmExact: 136, artistCountry: "Belgium", artistGenre: "Tribal Techno / Driving Techno" },
+  { style: "tribal_techno", artist: "Tomaz vs Filterheadz", song: "Sunshine", label: "Intec", bpmExact: 136, artistCountry: "Belgium", artistGenre: "Tribal Techno / Percussive Techno" },
+  { style: "tribal_techno", artist: "Cristian Varela", song: "Your Body Experience", label: "Pornographic Recordings", bpmExact: 136, artistCountry: "Spain", artistGenre: "Tribal Techno / Spanish Techno" },
+
+  { style: "hardgroove_techno", artist: "Ben Sims", song: "Manipulated", label: "Theory Recordings", bpmExact: 136, artistCountry: "United Kingdom", artistGenre: "Hardgroove Techno / Funky Techno" },
+  { style: "hardgroove_techno", artist: "Mark Broom", song: "Satellite", label: "Beard Man", bpmExact: 136, artistCountry: "United Kingdom", artistGenre: "Hardgroove Techno / Loop Techno" },
+  { style: "hardgroove_techno", artist: "DJ Shufflemaster", song: "EXP", label: "Tresor", bpmExact: 136, artistCountry: "Japan", artistGenre: "Hardgroove Techno / Tribal Techno" },
+  { style: "hardgroove_techno", artist: "The Advent", song: "Sketches", label: "Kombination Research", bpmExact: 137, artistCountry: "United Kingdom", artistGenre: "Hardgroove Techno / Driving Techno" },
+  { style: "hardgroove_techno", artist: "Player", song: "Player Eight", label: "Player", bpmExact: 137, artistCountry: "United Kingdom", artistGenre: "Hardgroove Techno / Funky Techno" },
+  { style: "hardgroove_techno", artist: "Samuel L Session", song: "Velvet", label: "New Soil", bpmExact: 136, artistCountry: "Sweden", artistGenre: "Hardgroove Techno / Loop Techno" },
+
+  { style: "broken_techno", artist: "Objekt", song: "Theme From Q", label: "Objekt", bpmExact: 130, artistCountry: "Germany", artistGenre: "Broken Techno / Bass Techno" },
+  { style: "broken_techno", artist: "Pangaea", song: "Hex", label: "Hessle Audio", bpmExact: 130, artistCountry: "United Kingdom", artistGenre: "Broken Techno / UK Techno" },
+  { style: "broken_techno", artist: "Batu", song: "Marius", label: "Timedance", bpmExact: 130, artistCountry: "United Kingdom", artistGenre: "Broken Techno / UK Bass" },
+  { style: "broken_techno", artist: "Bruce", song: "Steals", label: "Hessle Audio", bpmExact: 128, artistCountry: "United Kingdom", artistGenre: "Broken Techno / UK Techno" },
+  { style: "broken_techno", artist: "Laksa", song: "Contrasts", label: "Timedance", bpmExact: 130, artistCountry: "United Kingdom", artistGenre: "Broken Techno / Bass Techno" },
+  { style: "broken_techno", artist: "Skee Mask", song: "Rev8617", label: "Ilian Tape", bpmExact: 132, artistCountry: "Germany", artistGenre: "Broken Techno / IDM Techno" },
+
+  { style: "dub_techno", artist: "Basic Channel", song: "Phylyps Trak II", label: "Basic Channel", bpmExact: 127, artistCountry: "Germany", artistGenre: "Dub Techno / Minimal Techno" },
+  { style: "dub_techno", artist: "Maurizio", song: "M4.5", label: "Maurizio", bpmExact: 127, artistCountry: "Germany", artistGenre: "Dub Techno / Minimal Techno" },
+  { style: "dub_techno", artist: "Fluxion", song: "Prospect", label: "Chain Reaction", bpmExact: 126, artistCountry: "Greece", artistGenre: "Dub Techno / Deep Techno" },
+  { style: "dub_techno", artist: "Yagya", song: "Rigning One", label: "Sending Orbs", bpmExact: 120, artistCountry: "Iceland", artistGenre: "Dub Techno / Ambient Techno" },
+
+  { style: "hypnotic_techno", artist: "Donato Dozzy", song: "Cassandra", label: "Time To Express", bpmExact: 126, artistCountry: "Italy", artistGenre: "Hypnotic Techno / Deep Techno" },
+  { style: "hypnotic_techno", artist: "Wata Igarashi", song: "Question and Answer", label: "The Bunker New York", bpmExact: 128, artistCountry: "Japan", artistGenre: "Hypnotic Techno / Mental Techno" },
+  { style: "hypnotic_techno", artist: "Rrose", song: "Waterfall", label: "Eaux", bpmExact: 128, artistCountry: "United States", artistGenre: "Hypnotic Techno / Experimental Techno" },
+  { style: "hypnotic_techno", artist: "Oscar Mulero", song: "Rotula", label: "Warm Up", bpmExact: 130, artistCountry: "Spain", artistGenre: "Hypnotic Techno / Spanish Techno" },
+
+  { style: "raw_techno", artist: "Blawan", song: "Why They Hide Their Bodies Under My Garage?", label: "Hinge Finger", bpmExact: 130, artistCountry: "United Kingdom", artistGenre: "Raw Techno / UK Techno" },
+  { style: "raw_techno", artist: "Randomer", song: "Bring", label: "L.I.E.S.", bpmExact: 132, artistCountry: "United Kingdom", artistGenre: "Raw Techno / Warehouse Techno" },
+  { style: "raw_techno", artist: "Dax J", song: "Escape The System", label: "Monnom Black", bpmExact: 138, artistCountry: "United Kingdom", artistGenre: "Raw Techno / Hard Techno" },
+  { style: "raw_techno", artist: "Paula Temple", song: "Gegen", label: "Noise Manifesto", bpmExact: 142, artistCountry: "Germany", artistGenre: "Raw Techno / Industrial Techno" },
+
+  { style: "detroit_techno", artist: "Model 500", song: "No UFOs", label: "Metroplex", bpmExact: 125, artistCountry: "United States", artistGenre: "Detroit Techno / Electro Techno" },
+  { style: "detroit_techno", artist: "Rhythim Is Rhythim", song: "Strings of Life", label: "Transmat", bpmExact: 122, artistCountry: "United States", artistGenre: "Detroit Techno / Classic Techno" },
+  { style: "detroit_techno", artist: "Underground Resistance", song: "Transition", label: "Underground Resistance", bpmExact: 132, artistCountry: "United States", artistGenre: "Detroit Techno / Underground Techno" },
+  { style: "detroit_techno", artist: "Octave One", song: "Blackwater", label: "430 West", bpmExact: 128, artistCountry: "United States", artistGenre: "Detroit Techno / Soul Techno" },
+
+  { style: "ebm", artist: "Nitzer Ebb", song: "Join In The Chant", label: "Mute", bpmExact: 120, artistCountry: "United Kingdom", artistGenre: "EBM / Industrial Body Music" },
+  { style: "ebm", artist: "DAF", song: "Der Mussolini", label: "Virgin", bpmExact: 126, artistCountry: "Germany", artistGenre: "EBM / Neue Deutsche Welle" },
+  { style: "ebm", artist: "Front 242", song: "Headhunter", label: "Wax Trax!", bpmExact: 124, artistCountry: "Belgium", artistGenre: "EBM / Industrial Body Music" },
+  { style: "ebm", artist: "Terence Fixmer", song: "Aktion Mekanik Theme", label: "Gigolo", bpmExact: 128, artistCountry: "France", artistGenre: "EBM Techno / Electro Techno" }
+].map((track) => {
+  const bpmValue = Number(track.bpmExact) || 0;
+  const searchQuery = encodeURIComponent(`${track.artist} ${track.song}`);
+  const styleText = STYLE_SEARCH_TERMS[track.style] || track.style.replace(/_/g, " ");
+  const bpmLabel = track.bpm || (bpmValue ? `${bpmValue} BPM` : "124-132");
+
+  return {
+    ...track,
+    bpm: bpmLabel,
+    energy: track.energy || (bpmValue >= 140 ? "high" : "mid"),
+    vocals: track.vocals || "instrumental",
+    context: track.context || (["ambient_techno", "deep_techno", "dub_techno", "hypnotic_techno"].includes(track.style)
+      ? ["after", "foco", "noite"]
+      : ["peak", "after", "treino"]),
+    vibe: track.vibe || `Curadoria techno v3 para ampliar ${styleText} com artista e faixa de referencia.`,
+    spotifyUrl: track.spotifyUrl || `https://open.spotify.com/search/${searchQuery}`,
+    youtubeUrl: track.youtubeUrl || `https://www.youtube.com/results?search_query=${searchQuery}`,
+    youtubeTrackUrl: track.youtubeTrackUrl || `https://www.youtube.com/results?search_query=${searchQuery}`,
+    beatportUrl: track.beatportUrl || `https://www.beatport.com/search?q=${searchQuery}`,
+    spotifyVerified: false,
+    artistProfileHint: track.artistProfileHint || `Anchor editorial para ${styleText}; bom para destravar recomendacoes de techno mais especificas.`,
+    artistBio: track.artistBio || `${track.artist} entra como referencia curada no eixo ${styleText}, ajudando a separar vertentes de techno por pulso, timbre e funcao de pista.`,
+    labelBio: track.labelBio || `${track.label} aparece como ponto de contexto para esta faixa no recorte ${styleText}.`,
+    source: "curated_techno_subgenre_expansion_v3"
+  };
+});
+
 const catalog = [
   ...CURATED_BANDCAMP_TRACK_EXPANSION,
+  ...CURATED_TECHNO_SUBGENRE_EXPANSION,
   {
     style: "psytrance",
     song: "Deep Jungle Walk",
@@ -5829,6 +5966,7 @@ const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
 const SOCIAL_SYNC_LIMIT = 50;
+const SOCIAL_CLOUD_RESTORE_LIMIT = 200;
 const SOCIAL_FEED_LIMIT = 14;
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
 const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
@@ -5934,7 +6072,7 @@ const SMART_PRESETS = {
 
 const CONTEXT_TARGET_PROFILES = {
   foco: {
-    primary: ["ambient", "downtempo", "chillout", "deep_house", "organic_house", "dub_techno", "psybient", "future_garage"],
+    primary: ["ambient", "ambient_techno", "deep_techno", "downtempo", "chillout", "deep_house", "organic_house", "dub_techno", "psybient", "future_garage"],
     adjacent: ["minimal_techno", "hypnotic_techno", "liquid_dnb", "idm", "trip_hop"],
     avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "forest_psy", "full_on", "full_on_night", "full_on_morning", "psytrance", "psy_comercial", "tech_house", "acid_techno", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "drum_and_bass", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
     energy: { low: 2.8, mid: 0.4, high: -5.6, extreme: -10 },
@@ -5944,7 +6082,7 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 1.5
   },
   estudo: {
-    primary: ["ambient", "dub_techno", "minimal_techno", "idm", "future_garage", "downtempo", "deep_house"],
+    primary: ["ambient", "ambient_techno", "dub_techno", "deep_techno", "minimal_techno", "idm", "future_garage", "downtempo", "deep_house"],
     adjacent: ["hypnotic_techno", "organic_house", "liquid_dnb", "trip_hop", "psybient", "chillout"],
     avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "forest_psy", "full_on", "full_on_night", "psytrance", "tech_house", "acid_techno", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
     energy: { low: 2.6, mid: 0.9, high: -4.8, extreme: -9 },
@@ -5955,7 +6093,7 @@ const CONTEXT_TARGET_PROFILES = {
   },
   relaxar: {
     primary: ["chillout", "downtempo", "ambient", "psybient", "organic_house", "deep_house", "trip_hop", "future_garage"],
-    adjacent: ["dub_techno", "minimal_techno", "idm", "liquid_dnb", "soulful_house", "slambient"],
+    adjacent: ["ambient_techno", "deep_techno", "dub_techno", "minimal_techno", "idm", "liquid_dnb", "soulful_house", "slambient"],
     avoid: ["freeform", "psycore", "hi_tech", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "drum_and_bass", "neurofunk", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
     energy: { low: 3, mid: 0.7, high: -5.2, extreme: -9.5 },
     primaryBoost: 7.2,
@@ -5964,8 +6102,8 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 1.2
   },
   criatividade: {
-    primary: ["idm", "electro", "breakbeat", "trip_hop", "future_garage", "minimal_techno", "organic_house", "deep_house"],
-    adjacent: ["dub_techno", "melodic_techno", "progressive_house", "darkwave", "synthwave", "downtempo", "psybient"],
+    primary: ["idm", "electro", "breakbeat", "broken_techno", "bleep_techno", "trip_hop", "future_garage", "minimal_techno", "organic_house", "deep_house"],
+    adjacent: ["ambient_techno", "dub_techno", "melodic_techno", "progressive_house", "darkwave", "synthwave", "downtempo", "psybient"],
     avoid: ["speedcore", "frenchcore", "gabber", "psycore", "hi_tech", "rawstyle"],
     energy: { low: 0.8, mid: 2.6, high: 0.2, extreme: -4.2 },
     primaryBoost: 5.7,
@@ -5974,7 +6112,7 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0.2
   },
   trabalho: {
-    primary: ["deep_house", "organic_house", "minimal_techno", "hypnotic_techno", "dub_techno", "future_garage", "liquid_dnb", "idm"],
+    primary: ["deep_house", "organic_house", "minimal_techno", "hypnotic_techno", "deep_techno", "ambient_techno", "dub_techno", "future_garage", "liquid_dnb", "idm"],
     adjacent: ["techno", "melodic_techno", "progressive_house", "downtempo", "ambient", "trip_hop", "darkwave"],
     avoid: ["freeform", "psycore", "hi_tech", "dark_psy", "dark_experimental", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "jump_up", "breakcore", "frenchcore", "speedcore", "riddim"],
     energy: { low: 1.1, mid: 2.1, high: -2.5, extreme: -6 },
@@ -6004,8 +6142,8 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0
   },
   noite: {
-    primary: ["darkwave", "coldwave", "witch_house", "dub_techno", "hypnotic_techno", "dark_progressive", "slambient", "trip_hop"],
-    adjacent: ["industrial_techno", "minimal_techno", "ambient", "idm", "dark_psy", "progressive_psy"],
+    primary: ["darkwave", "coldwave", "witch_house", "dub_techno", "deep_techno", "ambient_techno", "hypnotic_techno", "dark_progressive", "slambient", "trip_hop"],
+    adjacent: ["industrial_techno", "minimal_techno", "broken_techno", "ambient", "idm", "dark_psy", "progressive_psy"],
     avoid: ["disco_house", "soulful_house", "brazilian_funk", "speedcore", "frenchcore", "jump_up"],
     energy: { low: 1.5, mid: 2.4, high: 0.4, extreme: -3.8 },
     primaryBoost: 5.9,
@@ -6014,8 +6152,8 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0.3
   },
   treino: {
-    primary: ["tech_house", "techno", "peak_time_techno", "hard_techno", "industrial_techno", "bass_house", "electro_house", "drum_and_bass", "neurofunk", "jump_up", "brazilian_funk"],
-    adjacent: ["full_on", "full_on_night", "psytrance", "acid_techno", "gabber", "hardstyle", "breakbeat"],
+    primary: ["tech_house", "techno", "hardgroove_techno", "tribal_techno", "peak_time_techno", "hard_techno", "industrial_techno", "bass_house", "electro_house", "drum_and_bass", "neurofunk", "jump_up", "brazilian_funk"],
+    adjacent: ["full_on", "full_on_night", "psytrance", "acid_techno", "broken_techno", "gabber", "hardstyle", "breakbeat"],
     avoid: ["ambient", "downtempo", "chillout", "psybient", "organic_house", "deep_house", "slambient"],
     energy: { low: -5.5, mid: 0.8, high: 2.7, extreme: 2.1 },
     primaryBoost: 5.4,
@@ -6025,7 +6163,7 @@ const CONTEXT_TARGET_PROFILES = {
   },
   after: {
     primary: ["chillout", "downtempo", "ambient", "psybient", "slambient", "organic_house", "deep_house", "future_garage"],
-    adjacent: ["dark_progressive", "progressive_house", "dub_techno", "minimal_techno", "trip_hop", "darkwave", "idm"],
+    adjacent: ["dark_progressive", "progressive_house", "ambient_techno", "deep_techno", "dub_techno", "minimal_techno", "trip_hop", "darkwave", "idm"],
     avoid: ["psycore", "hi_tech", "freeform", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "neurofunk", "jump_up", "breakcore", "speedcore"],
     energy: { low: 2.6, mid: 1.2, high: -4.2, extreme: -8 },
     primaryBoost: 5.2,
@@ -6034,8 +6172,8 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0.7
   },
   peak: {
-    primary: ["peak_time_techno", "hard_techno", "industrial_techno", "techno", "acid_techno", "full_on", "full_on_night", "psytrance", "drum_and_bass", "neurofunk"],
-    adjacent: ["tech_house", "bass_house", "gabber", "hardstyle", "hi_tech", "psycore", "dark_psy", "breakbeat"],
+    primary: ["peak_time_techno", "hardgroove_techno", "tribal_techno", "hard_techno", "industrial_techno", "techno", "acid_techno", "full_on", "full_on_night", "psytrance", "drum_and_bass", "neurofunk"],
+    adjacent: ["tech_house", "bass_house", "broken_techno", "gabber", "hardstyle", "hi_tech", "psycore", "dark_psy", "breakbeat"],
     avoid: ["ambient", "downtempo", "chillout", "organic_house", "deep_house", "psybient", "slambient"],
     energy: { low: -6.5, mid: -0.8, high: 2.6, extreme: 2.2 },
     primaryBoost: 5.8,
@@ -6044,7 +6182,7 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0
   },
   warmup: {
-    primary: ["deep_house", "organic_house", "minimal_techno", "dub_techno", "melodic_techno", "progressive_house", "downtempo"],
+    primary: ["deep_house", "organic_house", "minimal_techno", "deep_techno", "dub_techno", "melodic_techno", "progressive_house", "downtempo"],
     adjacent: ["tech_house", "future_garage", "liquid_dnb", "chillout", "darkwave"],
     avoid: ["psycore", "hi_tech", "hard_techno", "industrial_techno", "peak_time_techno", "gabber", "hardstyle", "breakcore", "speedcore"],
     energy: { low: 1.8, mid: 1.7, high: -2.6, extreme: -6.6 },
@@ -6054,8 +6192,8 @@ const CONTEXT_TARGET_PROFILES = {
     unknownPenalty: 0.4
   },
   estrada: {
-    primary: ["progressive_house", "melodic_techno", "deep_house", "organic_house", "trance_uplifting", "psytrance", "full_on_morning", "liquid_dnb", "synthwave"],
-    adjacent: ["techno", "tech_house", "future_garage", "breakbeat", "goa_trance", "darkwave"],
+    primary: ["progressive_house", "melodic_techno", "deep_techno", "deep_house", "organic_house", "trance_uplifting", "psytrance", "full_on_morning", "liquid_dnb", "synthwave"],
+    adjacent: ["techno", "tech_house", "hardgroove_techno", "future_garage", "breakbeat", "goa_trance", "darkwave"],
     avoid: ["psycore", "hi_tech", "speedcore", "breakcore", "gabber"],
     energy: { low: -0.8, mid: 2, high: 1.1, extreme: -2.4 },
     primaryBoost: 4.6,
@@ -6109,7 +6247,13 @@ const STYLE_COVERAGE_OVERRIDES = {
   downtempo: { artists: 12, labels: 6, tracks: 24 },
   chillout: { artists: 10, labels: 4, tracks: 20 },
   brazilian_funk: { artists: 10, labels: 4, tracks: 20 },
-  gabber: { artists: 10, labels: 0, tracks: 16 }
+  gabber: { artists: 10, labels: 0, tracks: 16 },
+  deep_techno: { artists: 10, labels: 4, tracks: 20 },
+  ambient_techno: { artists: 8, labels: 4, tracks: 16 },
+  bleep_techno: { artists: 6, labels: 4, tracks: 14 },
+  tribal_techno: { artists: 8, labels: 4, tracks: 16 },
+  hardgroove_techno: { artists: 10, labels: 4, tracks: 20 },
+  broken_techno: { artists: 8, labels: 4, tracks: 16 }
 };
 const COVERAGE_MAX_PASSES = 5;
 const FAST_COVERAGE_MAX_PASSES = 2;
@@ -6185,6 +6329,12 @@ const STYLE_BPM_RULES = {
   melodic_techno: { min: 122, max: 130 },
   industrial_techno: { min: 130, max: 150 },
   peak_time_techno: { min: 132, max: 140 },
+  deep_techno: { min: 124, max: 132 },
+  ambient_techno: { min: 90, max: 128 },
+  bleep_techno: { min: 120, max: 132 },
+  tribal_techno: { min: 130, max: 140 },
+  hardgroove_techno: { min: 132, max: 145 },
+  broken_techno: { min: 124, max: 140 },
   house: { min: 122, max: 128 },
   deep_house: { min: 110, max: 124 },
   tech_house: { min: 124, max: 128 },
@@ -6262,19 +6412,25 @@ const STYLE_SIMILAR_FALLBACKS = {
   trance_uplifting: ["tech_trance", "hard_trance", "full_on_morning"],
   tech_trance: ["hard_trance", "trance_uplifting", "peak_time_techno", "acid_techno"],
   hard_trance: ["tech_trance", "acid_techno", "hard_techno", "rawstyle"],
-  techno: ["hypnotic_techno", "raw_techno", "detroit_techno", "minimal_techno", "tech_house"],
+  techno: ["hypnotic_techno", "raw_techno", "detroit_techno", "minimal_techno", "deep_techno", "hardgroove_techno", "tech_house"],
   acid_techno: ["hard_techno", "raw_techno", "tech_trance", "schranz"],
   hard_techno: ["raw_techno", "schranz", "industrial_techno", "acid_techno"],
-  dub_techno: ["hypnotic_techno", "minimal_techno", "deep_house", "ambient"],
-  hypnotic_techno: ["dub_techno", "minimal_techno", "raw_techno", "dark_progressive"],
-  raw_techno: ["hard_techno", "industrial_techno", "hypnotic_techno", "schranz"],
-  detroit_techno: ["techno", "electro", "minimal_techno", "raw_techno"],
-  schranz: ["hard_techno", "raw_techno", "industrial_techno", "gabber"],
+  dub_techno: ["deep_techno", "ambient_techno", "hypnotic_techno", "minimal_techno", "ambient"],
+  hypnotic_techno: ["deep_techno", "dub_techno", "minimal_techno", "raw_techno", "dark_progressive"],
+  raw_techno: ["hardgroove_techno", "hard_techno", "industrial_techno", "hypnotic_techno", "schranz"],
+  detroit_techno: ["techno", "bleep_techno", "electro", "minimal_techno", "raw_techno"],
+  schranz: ["hard_techno", "raw_techno", "industrial_techno", "hardgroove_techno", "gabber"],
   ebm: ["industrial_techno", "darkwave", "coldwave", "electro"],
   industrial_techno: ["raw_techno", "hard_techno", "ebm", "schranz"],
-  minimal_techno: ["hypnotic_techno", "dub_techno", "minimal_deep_tech", "techno"],
+  minimal_techno: ["hypnotic_techno", "deep_techno", "dub_techno", "minimal_deep_tech", "techno"],
   melodic_techno: ["progressive_house", "organic_house", "tech_trance", "progressive_psy"],
-  peak_time_techno: ["techno", "acid_techno", "tech_trance", "hard_techno"],
+  peak_time_techno: ["techno", "acid_techno", "hardgroove_techno", "tech_trance", "hard_techno"],
+  deep_techno: ["hypnotic_techno", "dub_techno", "ambient_techno", "minimal_techno"],
+  ambient_techno: ["deep_techno", "dub_techno", "ambient", "idm"],
+  bleep_techno: ["detroit_techno", "electro", "acid_techno", "broken_techno"],
+  tribal_techno: ["hardgroove_techno", "raw_techno", "tech_house", "peak_time_techno"],
+  hardgroove_techno: ["tribal_techno", "raw_techno", "detroit_techno", "peak_time_techno"],
+  broken_techno: ["bleep_techno", "breakbeat", "uk_garage", "electro"],
   house: ["deep_house", "garage_house", "soulful_house", "tech_house"],
   deep_house: ["soulful_house", "garage_house", "minimal_deep_tech", "dub_techno"],
   tech_house: ["minimal_deep_tech", "house", "minimal_techno", "bass_house"],
@@ -6381,6 +6537,12 @@ const STYLE_INFO_PT = {
   melodic_techno: "Techno com protagonismo harmonico, atmosferas emotivas e arranjos cinematograficos.",
   industrial_techno: "Texturas metalicas e estetica mecanica, com impacto bruto e clima sombrio.",
   peak_time_techno: "Techno pensado para horario de pico, com energia alta e estrutura orientada a drop.",
+  deep_techno: "Techno profundo e atmosferico, com pressao controlada, pads escuros e hipnose de longa duracao.",
+  ambient_techno: "Techno contemplativo entre pulso e paisagem, com textura espacial, melodias discretas e foco em imersao.",
+  bleep_techno: "Raiz UK/Sheffield do techno: bleeps agudos, subgrave seco, electro e rave inicial em formato cru.",
+  tribal_techno: "Techno percussivo com bateria tribal/latina, loops fisicos e movimento de pista centrado no ritmo.",
+  hardgroove_techno: "Techno funkado e rapido, com loops fortes, swing de percussao e energia de warehouse sem perder groove.",
+  broken_techno: "Techno quebrado, com groove fora do 4x4 tradicional, baixo pesado e ponte natural com breaks/UK bass.",
   house: "House classico de groove dançante, balanço 4x4 e sensacao calorosa de pista.",
   deep_house: "House mais profundo e envolvente, com timbres suaves e vibe sofisticada.",
   tech_house: "Hibrido de house com design techno: percussao seca, bassline direta e foco no groove.",
@@ -6449,6 +6611,12 @@ const STYLE_HUMAN_INFO = {
     psy_comercial: "Psy comercial é mais imediato: refrões, drops fáceis de reconhecer e energia de festival. Funciona para quem quer impacto rápido e menos viagem abstrata.",
     techno: "Techno é repetição com intenção. A beleza está no pulso, nas pequenas mudanças e na sensação de máquina viva que segura a pista sem precisar explicar demais.",
     hard_techno: "Hard techno é direto no corpo: kick forte, velocidade e tensão. É para momentos em que a pista quer força e impacto.",
+    deep_techno: "Deep techno pega a repetição do techno e joga para dentro: menos explosão, mais profundidade, pads escuros e pressão controlada. Funciona quando você quer entrar no loop e perceber as mudanças pequenas.",
+    ambient_techno: "Ambient techno fica entre escuta e pista. Tem pulso, mas a atmosfera importa tanto quanto o kick, ótimo para foco, viagem longa ou after mais mental.",
+    bleep_techno: "Bleep techno é raiz britânica: poucos elementos, bleeps agudos, subgrave seco e energia rave antiga. Parece simples, mas tem uma tensão crua muito própria.",
+    tribal_techno: "Tribal techno coloca a percussão na frente. O corpo entende rápido: loops físicos, tambores, pressão constante e menos dependência de melodia.",
+    hardgroove_techno: "Hardgroove é techno com swing e músculo. Ele bate forte, mas o charme está no funk das percussões e no movimento que não deixa o kick virar só martelo.",
+    broken_techno: "Broken techno quebra o 4x4 sem sair do universo techno. É bom para quem gosta de pista mais torta, baixo pesado e grooves que conversam com breaks e UK bass.",
     tech_house: "Tech house junta o balanço do house com a secura do techno. É groove limpo, bassline grudenta e aquela vontade de mexer a cabeça sem pensar muito.",
     drum_and_bass: "Drum and bass é velocidade com baixo profundo. Os breaks correm, o grave segura tudo e a energia fica elétrica.",
     liquid_dnb: "Liquid DnB é o lado mais emocional do drum and bass. Continua rápido, mas traz melodia, leveza e uma sensação mais bonita de movimento.",
@@ -7208,6 +7376,12 @@ const STYLE_ARTIST_SEEDS = {
   melodic_techno: ["Anyma", "Mind Against", "Tale Of Us", "Stephan Bodzin", "ARTBAT", "Massano", "Kevin de Vries", "Innellea"],
   industrial_techno: ["Perc", "Paula Temple", "Ancient Methods", "Rebekah", "Scalameriya", "SNTS", "AnD", "Blawan"],
   peak_time_techno: ["Adam Beyer", "Space 92", "Layton Giordani", "Mha Iri", "HI-LO", "Wehbba", "Bart Skils", "UMEK"],
+  deep_techno: ["Luigi Tozzi", "Claudio PRC", "Deepbass", "Ness", "Artefakt", "Natural/Electronic.System.", "Refracted", "Polar Inertia"],
+  ambient_techno: ["B12", "The Black Dog", "Biosphere", "Higher Intelligence Agency", "Global Communication", "Autechre", "Future Sound of London", "Voices From The Lake"],
+  bleep_techno: ["LFO", "Sweet Exorcist", "Unique 3", "Forgemasters", "Nightmares on Wax", "Tricky Disco", "Ability II", "Tuff Little Unit"],
+  tribal_techno: ["Cave", "Hertz", "The Advent", "Ben Sims", "Cristian Varela", "Marco Bailey", "Tomaz", "Filterheadz"],
+  hardgroove_techno: ["Ben Sims", "Mark Broom", "DJ Shufflemaster", "The Advent", "Hertz", "Cave", "Player", "DJ Rush", "Mark Williams", "Samuel L Session"],
+  broken_techno: ["Objekt", "Pangaea", "Batu", "Bruce", "Laksa", "Skee Mask", "Blawan", "Karenn", "Surgeon", "Pearson Sound"],
   house: ["Frankie Knuckles", "Kerri Chandler", "Folamour", "Honey Dijon", "Chris Stussy", "The Martinez Brothers", "Peggy Gou", "Dennis Ferrer", "Illusionize"],
   deep_house: ["Larry Heard", "Nora En Pure", "Ben Bohmer", "Kink", "YokoO", "Black Loops", "Atjazz", "Jimpster"],
   tech_house: [
@@ -8180,6 +8354,12 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
   "detroit_techno",
   "schranz",
   "ebm",
+  "deep_techno",
+  "ambient_techno",
+  "bleep_techno",
+  "tribal_techno",
+  "hardgroove_techno",
+  "broken_techno",
   "halftime_bass",
   "footwork_juke",
   "trap",
@@ -8216,7 +8396,13 @@ const FINE_SUBGENRE_EVIDENCE_STYLES = new Set([
   "hypnotic_techno",
   "raw_techno",
   "industrial_techno",
-  "peak_time_techno"
+  "peak_time_techno",
+  "deep_techno",
+  "ambient_techno",
+  "bleep_techno",
+  "tribal_techno",
+  "hardgroove_techno",
+  "broken_techno"
 ]);
 
 const EXPANDED_NICHE_DISCOVERY_STYLES = [
@@ -8231,6 +8417,12 @@ const EXPANDED_NICHE_DISCOVERY_STYLES = [
   "detroit_techno",
   "schranz",
   "ebm",
+  "deep_techno",
+  "ambient_techno",
+  "bleep_techno",
+  "tribal_techno",
+  "hardgroove_techno",
+  "broken_techno",
   "halftime_bass",
   "footwork_juke",
   "trap",
@@ -8310,6 +8502,8 @@ const NO_BROAD_STYLE_HYDRATION_STYLES = new Set([
   "twilight_psy",
   "psybient",
   "dub_techno",
+  "ambient_techno",
+  "bleep_techno",
   "riddim",
   "speedcore",
   "darkwave",
@@ -8333,6 +8527,12 @@ const UNDERGROUND_DISCOVERY_STYLES = new Set([
   "raw_techno",
   "schranz",
   "ebm",
+  "deep_techno",
+  "ambient_techno",
+  "bleep_techno",
+  "tribal_techno",
+  "hardgroove_techno",
+  "broken_techno",
   "halftime_bass",
   "footwork_juke",
   "riddim",
@@ -8412,7 +8612,13 @@ const TECHNO_REQUIRED_SIGNAL_TERMS = {
   minimal_techno: ["minimal techno", "minimal", "microhouse", "techno"],
   melodic_techno: ["melodic techno", "melodic", "afterlife", "techno"],
   industrial_techno: ["industrial techno", "industrial", "ebm techno", "techno"],
-  peak_time_techno: ["peak time techno", "driving techno", "peak time", "techno"]
+  peak_time_techno: ["peak time techno", "driving techno", "peak time", "techno"],
+  deep_techno: ["deep techno", "atmospheric techno", "hypnotic techno", "techno"],
+  ambient_techno: ["ambient techno", "ambient", "intelligent techno", "techno"],
+  bleep_techno: ["bleep techno", "bleep", "sheffield", "uk techno", "techno"],
+  tribal_techno: ["tribal techno", "percussive techno", "latin techno", "techno"],
+  hardgroove_techno: ["hardgroove", "hardgroove techno", "groove techno", "funky techno", "techno"],
+  broken_techno: ["broken techno", "bass techno", "broken beat", "techno"]
 };
 const BASS_REQUIRED_SIGNAL_TERMS = {
   dubstep: ["dubstep", "brostep", "riddim", "drumstep", "tearout", "wobble", "bass music"],
@@ -8505,6 +8711,12 @@ const STYLE_FORBIDDEN_SIGNAL_TERMS = {
   minimal_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   melodic_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   peak_time_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  deep_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  ambient_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  bleep_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  tribal_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  hardgroove_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
+  broken_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   acid_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   industrial_techno: [...TECHNO_CROSSOVER_FORBIDDEN_TERMS],
   hard_techno: [
@@ -10454,6 +10666,12 @@ function normalizeDatasetStyle(rawStyle = "") {
   if (compact.includes("melodictechno")) return "melodic_techno";
   if (compact.includes("industrialtechno")) return "industrial_techno";
   if (compact.includes("peaktimetechno")) return "peak_time_techno";
+  if (compact.includes("deeptechno")) return "deep_techno";
+  if (compact.includes("ambienttechno")) return "ambient_techno";
+  if (compact.includes("bleeptechno")) return "bleep_techno";
+  if (compact.includes("tribaltechno")) return "tribal_techno";
+  if (compact.includes("hardgroove")) return "hardgroove_techno";
+  if (compact.includes("brokentechno") || compact.includes("basstechno")) return "broken_techno";
   if (compact.includes("drumandbass")) return "drum_and_bass";
   if (compact.includes("liquiddnb")) return "liquid_dnb";
   if (compact.includes("jumpup")) return "jump_up";
@@ -11045,6 +11263,12 @@ const CATALOG_EXTRA_STYLE_SIGNAL_TERMS = {
   acid_techno: ["acid techno", "acid", "303", "tb 303", "rave", "warehouse"],
   minimal_techno: ["minimal techno", "minimal", "hypnotic", "dub", "microhouse", "loop"],
   melodic_techno: ["melodic techno", "melodic", "afterlife", "cinematic", "progressive", "synth"],
+  deep_techno: ["deep techno", "atmospheric techno", "hypnotic", "deep", "mental", "drone"],
+  ambient_techno: ["ambient techno", "ambient", "intelligent techno", "atmospheric", "idm", "space"],
+  bleep_techno: ["bleep techno", "bleep", "sheffield", "warp", "uk techno", "sub bass"],
+  tribal_techno: ["tribal techno", "tribal", "percussive", "latin techno", "drums", "loop"],
+  hardgroove_techno: ["hardgroove", "hardgroove techno", "groove techno", "funky techno", "loop", "warehouse"],
+  broken_techno: ["broken techno", "broken beat", "bass techno", "uk techno", "breaks", "syncopated"],
   minimal_deep_tech: ["minimal deep tech", "deep tech", "minimal house", "piv", "fuse", "low slung", "groove"],
   afro_house: ["afro house", "afro tech", "south african", "percussive", "tribal", "afro"],
   organic_house: ["organic house", "downtempo", "desert", "organic", "global", "live"]
@@ -11082,6 +11306,12 @@ function catalogExtraClubStyleScore(style = "", role = "", energyBand = "", sign
   if (styleKey === "afro_house" && (text.includes("south african") || text.includes("percussive"))) score += 0.55;
   if (styleKey === "organic_house" && (text.includes("organic") || text.includes("desert") || text.includes("global"))) score += 0.5;
   if (styleKey === "melodic_techno" && (text.includes("afterlife") || text.includes("cinematic") || text.includes("synth"))) score += 0.45;
+  if (styleKey === "deep_techno" && (text.includes("deep") || text.includes("atmospheric") || text.includes("hypnotic"))) score += 0.5;
+  if (styleKey === "ambient_techno" && (text.includes("ambient") || text.includes("intelligent") || text.includes("space"))) score += 0.5;
+  if (styleKey === "bleep_techno" && (text.includes("bleep") || text.includes("sheffield") || text.includes("warp"))) score += 0.55;
+  if (styleKey === "tribal_techno" && (text.includes("tribal") || text.includes("percussive") || text.includes("latin"))) score += 0.5;
+  if (styleKey === "hardgroove_techno" && (text.includes("hardgroove") || text.includes("funky") || text.includes("groove"))) score += 0.55;
+  if (styleKey === "broken_techno" && (text.includes("broken") || text.includes("syncopated") || text.includes("bass techno"))) score += 0.5;
 
   if (bpm > 0) {
     if (styleKey === "acid_techno" && bpm >= 124 && bpm <= 145) score += 0.45;
@@ -11090,6 +11320,12 @@ function catalogExtraClubStyleScore(style = "", role = "", energyBand = "", sign
     else if (styleKey === "minimal_deep_tech" && bpm >= 124 && bpm <= 130) score += 0.42;
     else if (styleKey === "afro_house" && bpm >= 118 && bpm <= 124) score += 0.4;
     else if (styleKey === "organic_house" && bpm >= 110 && bpm <= 122) score += 0.4;
+    else if (styleKey === "deep_techno" && bpm >= 124 && bpm <= 132) score += 0.42;
+    else if (styleKey === "ambient_techno" && bpm >= 90 && bpm <= 128) score += 0.38;
+    else if (styleKey === "bleep_techno" && bpm >= 120 && bpm <= 132) score += 0.4;
+    else if (styleKey === "tribal_techno" && bpm >= 130 && bpm <= 140) score += 0.42;
+    else if (styleKey === "hardgroove_techno" && bpm >= 132 && bpm <= 145) score += 0.42;
+    else if (styleKey === "broken_techno" && bpm >= 124 && bpm <= 140) score += 0.4;
   }
 
   return Math.min(3.8, score);
@@ -18755,6 +18991,12 @@ function localizeOptionLabels() {
         hypnotic_techno: "Hypnotic Techno",
         raw_techno: "Raw Techno",
         detroit_techno: "Detroit Techno",
+        deep_techno: "Deep Techno",
+        ambient_techno: "Ambient Techno",
+        bleep_techno: "Bleep Techno",
+        tribal_techno: "Tribal Techno",
+        hardgroove_techno: "Hardgroove Techno",
+        broken_techno: "Broken Techno",
         ebm: "EBM / Industrial Body Music",
         minimal_deep_tech: "Minimal / Deep Tech",
         jackin_house: "Jackin House",
@@ -18798,6 +19040,12 @@ function localizeOptionLabels() {
         hypnotic_techno: "Hypnotic Techno",
         raw_techno: "Raw Techno",
         detroit_techno: "Detroit Techno",
+        deep_techno: "Deep Techno",
+        ambient_techno: "Ambient Techno",
+        bleep_techno: "Bleep Techno",
+        tribal_techno: "Tribal Techno",
+        hardgroove_techno: "Hardgroove Techno",
+        broken_techno: "Broken Techno",
         ebm: "EBM / Industrial Body Music",
         minimal_deep_tech: "Minimal / Deep Tech",
         jackin_house: "Jackin House",
@@ -18841,6 +19089,12 @@ function localizeOptionLabels() {
         hypnotic_techno: "Techno Hipnotico",
         raw_techno: "Raw Techno",
         detroit_techno: "Detroit Techno",
+        deep_techno: "Deep Techno",
+        ambient_techno: "Ambient Techno",
+        bleep_techno: "Bleep Techno",
+        tribal_techno: "Tribal Techno",
+        hardgroove_techno: "Hardgroove Techno",
+        broken_techno: "Broken Techno",
         ebm: "EBM / Industrial Body Music",
         minimal_deep_tech: "Minimal / Deep Tech",
         jackin_house: "Jackin House",
@@ -32332,7 +32586,7 @@ function spiritVisualFamilyKey(spirit) {
   if (has("psytrance", "goa_trance", "full_on", "full_on_night", "full_on_morning", "progressive_psy", "psy_comercial")) return "psy_bright";
   if (has("trance_uplifting", "tech_trance", "hard_trance")) return "trance";
   if (has("hardstyle", "hardcore", "frenchcore", "speedcore", "rawstyle", "gabber", "schranz")) return "hard_dance";
-  if (has("acid_techno", "techno", "hard_techno", "industrial_techno", "minimal_techno", "peak_time_techno", "melodic_techno")) return "techno";
+  if (has("acid_techno", "techno", "hard_techno", "industrial_techno", "minimal_techno", "peak_time_techno", "melodic_techno", "deep_techno", "ambient_techno", "bleep_techno", "tribal_techno", "hardgroove_techno", "broken_techno")) return "techno";
   if (has("ambient", "downtempo")) return "organic";
   if (has("tech_house", "house", "deep_house", "afro_house", "organic_house", "bass_house", "progressive_house", "electro_house")) return "house";
   if (has("drum_and_bass", "liquid_dnb", "neurofunk", "jump_up", "jungle", "dubstep", "riddim", "halftime_bass")) return "bass";
@@ -40945,10 +41199,12 @@ async function socialHandleAuthRedirect() {
     };
     if (!session.user?.id) throw new Error("Nao consegui confirmar o usuario do Supabase.");
     socialStoreSession(session);
+    ensureOnlineSocialUserSession();
     if (socialEmailInput && !socialEmailInput.value && session.user.email) socialEmailInput.value = session.user.email;
     await loadSocialProfile({ silent: true });
+    await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
     await upsertSocialProfile();
-    await syncSocialLikedTracks({ silent: true, activity: false, force: true });
+    await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
@@ -41106,6 +41362,106 @@ function socialTrackRowsForSync() {
   })).filter((row) => row.target_key);
 }
 
+function socialParseMetadata(value) {
+  if (value && typeof value === "object" && !Array.isArray(value)) return value;
+  if (typeof value !== "string") return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (_err) {
+    return {};
+  }
+}
+
+function socialLikedTrackFromRow(row = {}) {
+  const metadata = socialParseMetadata(row.metadata);
+  const track = {
+    key: row.target_key || metadata.key || "",
+    artist: row.artist || metadata.artist || "",
+    song: row.song || metadata.song || "",
+    style: row.style || metadata.style || "",
+    bpm: metadata.bpm || "",
+    energy: metadata.energy || "",
+    label: metadata.label || "",
+    spotifyUrl: metadata.spotifyUrl || "",
+    youtubeUrl: metadata.youtubeUrl || "",
+    soundcloudUrl: metadata.soundcloudUrl || ""
+  };
+  return likedTrackHistoryEntry(track, row.source || "cloud_like", metadata.likedAt || row.created_at || "");
+}
+
+function applyCloudLikedTrackSignals(entries = []) {
+  const signalEntries = entries.length || adaptiveModel.likedStyles.size || adaptiveModel.likedArtists.size
+    ? entries
+    : likedTrackHistory;
+  signalEntries.forEach((entry) => {
+    if (!entry) return;
+    boost(adaptiveModel.likedStyles, entry.style, 1);
+    boost(adaptiveModel.likedArtists, entry.artist, 1);
+    boost(adaptiveModel.likedEnergies, entry.energy, 0.45);
+    registerTrackPreferenceSignal(entry, 0.95);
+    if (entry.key) seenTrackKeysMemory.add(entry.key);
+    registerSeenArtist(entry.artist);
+  });
+  if (likedTrackHistory.length) {
+    userStats.likedSongs = Math.max(Number(userStats.likedSongs) || 0, likedTrackHistory.length);
+    userStats.swipeTrainingSignals = Math.max(Number(userStats.swipeTrainingSignals) || 0, likedTrackHistory.length);
+  }
+}
+
+function ensureOnlineSocialUserSession() {
+  if (!socialState.session?.access_token) return false;
+  const session = onlineSocialUserSession();
+  const currentKey = sessionProfileKey(currentAuthUser);
+  const nextKey = sessionProfileKey(session);
+  if (currentKey === nextKey && normalizeUserSession(currentAuthUser).mode === "google") return false;
+  activateUserSession(session);
+  persistUserSession(session);
+  return true;
+}
+
+async function restoreSocialLikedTracksFromCloud(options = {}) {
+  const userId = socialState.session?.user?.id;
+  if (!userId || !socialConfigReady()) return 0;
+  try {
+    const params = new URLSearchParams({
+      user_id: `eq.${userId}`,
+      target_type: "eq.track",
+      select: "target_key,artist,song,style,source,metadata,created_at",
+      order: "created_at.desc",
+      limit: String(SOCIAL_CLOUD_RESTORE_LIMIT)
+    });
+    const rows = await socialRequest(`/rest/v1/likes?${params.toString()}`);
+    const existing = new Set(likedTrackHistory.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean));
+    const imported = [];
+    (Array.isArray(rows) ? rows : []).forEach((row) => {
+      const entry = socialLikedTrackFromRow(row);
+      const key = likedTrackKeyFromEntry(entry);
+      if (!entry || !key || existing.has(key)) return;
+      existing.add(key);
+      imported.push(entry);
+    });
+    if (!imported.length) {
+      applyCloudLikedTrackSignals([]);
+      return 0;
+    }
+    likedTrackHistory = sanitizeLikedTrackHistory([...imported, ...likedTrackHistory]);
+    applyCloudLikedTrackSignals(imported);
+    if (options.render !== false) {
+      updateStats();
+      renderLikedTrackHistory();
+    } else {
+      saveProgress();
+    }
+    if (!options.silent) socialSetStatus(`Restaurei ${imported.length} curtidas da nuvem.`, "ok");
+    return imported.length;
+  } catch (error) {
+    console.warn("Could not restore social liked tracks", error);
+    if (!options.silent) socialSetStatus(`Nao consegui baixar curtidas da nuvem: ${error.message}`, "error");
+    return 0;
+  }
+}
+
 function hydrateSocialProfileInputs(profile = socialState.profile) {
   if (!profile) return;
   if (socialUsernameInput && profile.username) socialUsernameInput.value = profile.username;
@@ -41186,6 +41542,9 @@ async function syncSocialLikedTracks(options = {}) {
   socialState.busy = true;
   renderSocialUi({ preserveStatus: true });
   try {
+    if (options.restore !== false) {
+      await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
+    }
     await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
     const rows = socialTrackRowsForSync();
@@ -41420,9 +41779,11 @@ async function socialSignUp() {
     });
     if (payload?.session?.access_token) {
       socialStoreSession(payload.session);
+      ensureOnlineSocialUserSession();
       await loadSocialProfile({ silent: true });
+      await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
       await upsertSocialProfile();
-      await syncSocialLikedTracks({ silent: true, activity: false, force: true });
+      await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
       socialSetStatus("Perfil criado e conectado.", "ok");
     } else {
       socialSetStatus("Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.", "ok");
@@ -41462,9 +41823,11 @@ async function socialSignIn() {
       body: { email, password }
     });
     socialStoreSession(payload);
+    ensureOnlineSocialUserSession();
     await loadSocialProfile({ silent: true });
+    await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
     await upsertSocialProfile();
-    await syncSocialLikedTracks({ silent: true, activity: false, force: true });
+    await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
   } catch (error) {
     socialSetStatus(`Nao consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
@@ -41560,12 +41923,15 @@ async function initSocialMvp() {
   const storedSession = socialLoadStoredSession();
   if (!socialState.session?.access_token && storedSession) socialStoreSession(storedSession);
   if (socialConfigReady() && socialState.session?.access_token) {
+    ensureOnlineSocialUserSession();
     await loadSocialProfile({ silent: true });
+    await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
   }
   renderSocialUi({ preserveStatus: handledAuthRedirect });
   if (socialConfigReady() && socialState.session?.access_token) {
-    await syncSocialLikedTracks({ silent: true, activity: false });
+    await syncSocialLikedTracks({ silent: true, activity: false, restore: false });
     await loadSocialFeed({ silent: true });
+    updateStats();
     renderSocialUi({ preserveStatus: true });
   }
   updateAuthProviderUi();
@@ -42601,12 +42967,12 @@ async function loadEventsForArtist(artist) {
 }
 
 const TASTE_TUNE_STYLES = {
-  heavier: ["gabber", "hard_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
-  melodic: ["melodic_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
-  underground: ["dark_psy", "psycore", "dark_experimental", "forest_psy", "hi_tech", "freeform", "slambient", "acid_techno", "minimal_techno", "breakbeat"],
-  faster: ["gabber", "hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno"],
+  heavier: ["gabber", "hard_techno", "hardgroove_techno", "dark_psy", "industrial", "neurofunk", "psycore", "hi_tech"],
+  melodic: ["melodic_techno", "deep_techno", "ambient_techno", "progressive_house", "progressive_psy", "organic_house", "liquid_dnb", "full_on_morning"],
+  underground: ["dark_psy", "psycore", "dark_experimental", "forest_psy", "hi_tech", "freeform", "slambient", "acid_techno", "minimal_techno", "deep_techno", "bleep_techno", "broken_techno", "breakbeat"],
+  faster: ["gabber", "hi_tech", "psycore", "drum_and_bass", "neurofunk", "jump_up", "hard_techno", "hardgroove_techno"],
   familiar: ["tech_house", "house", "melodic_techno", "full_on", "drum_and_bass", "progressive_house"],
-  weirder: ["freeform", "idm", "electro", "slambient", "dark_experimental", "future_garage", "forest_psy"]
+  weirder: ["freeform", "idm", "electro", "slambient", "dark_experimental", "ambient_techno", "bleep_techno", "broken_techno", "future_garage", "forest_psy"]
 };
 
 function tuneLabel(mode = "") {
