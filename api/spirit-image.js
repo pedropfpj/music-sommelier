@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v26-ai-pending-polish";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v20";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v27-direct-preview";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v21";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "adult psytrance/goa party archetype, joyful expressive human face, UV-reactive geometric ravewear, round tinted glasses, layered utility vest, mandala patches, neon makeup, a few festival beads, psychedelic club light, not carnival",

@@ -6917,7 +6917,7 @@ input[type="range"] {
 }
 
 .spirit-collectible-image {
-  display: none !important;
+  display: block;
   width: 100%;
   max-width: 520px;
   justify-self: center;
@@ -6935,7 +6935,7 @@ input[type="range"] {
 }
 
 .spirit-collectible-placeholder {
-  display: none !important;
+  display: none;
 }
 
 .spirit-collectible-meta {
