@@ -20729,8 +20729,8 @@ async function continueWithOnlineSocialSession(options = {}) {
     provider: "Google",
     user: session.username || session.email || "Google"
   }));
-  continueFromAuthToWelcome({ showGuide: !hasUsageGuideAcknowledged() });
-  void syncSocialLikedTracks({ force: true, silent: true, activity: false });
+  continueFromAuthToWelcome({ showGuide: options.showGuide ?? !hasUsageGuideAcknowledged() });
+  if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
 }
 
@@ -41340,6 +41340,7 @@ async function socialHandleAuthRedirect() {
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
+    await continueWithOnlineSocialSession({ sync: false });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
     socialSetStatus(`Recebi o login, mas nao consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente Entrar de novo.`, "error");
