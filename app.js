@@ -5563,6 +5563,7 @@ let spiritLastReviewedSongLikes = 0;
 let spiritUnlocked = false;
 let spiritSignalsByStyle = new Map();
 let spiritCollectibleBusy = false;
+let spiritPanelRefreshTimer = 0;
 let spiritCollectibleProgressTimer = 0;
 let spiritCollectibleProgressValue = 0;
 let spiritCollectibleProgressSettling = false;
@@ -25476,6 +25477,7 @@ function setActiveAppTab(tabName = "discover") {
     panel.classList.toggle("active", panelMatchesAppTab(panel, safeTab));
   });
   updateSignatureBarForTab(safeTab);
+  if (safeTab === "profile") scheduleMusicalSpiritRefresh({ force: true });
 }
 
 function handleHeroLogoClick() {
@@ -35332,6 +35334,16 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   }
 }
 
+function scheduleMusicalSpiritRefresh({ force = false, delay = 80 } = {}) {
+  if (!spiritPanel || !appContent || appContent.classList.contains("hidden")) return;
+  if (!force && currentActiveAppTabName() !== "profile") return;
+  window.clearTimeout(spiritPanelRefreshTimer);
+  spiritPanelRefreshTimer = window.setTimeout(() => {
+    spiritPanelRefreshTimer = 0;
+    void renderMusicalSpirit({ celebrate: false, forceAnimation: false });
+  }, Math.max(0, Number(delay) || 0));
+}
+
 async function runPositiveFeedbackFollowups(
   triggerEl = null,
   { celebrate = false, forceAnimation = true, animateBio = true, loadEvents = true, eventsArtist = "" } = {}
@@ -42140,6 +42152,7 @@ function updateStats() {
   renderSummaryTags(summaryDislikedArtists, dislikedArtistsTop, t("summaryEmptyDisliked"));
   updateProfileBackupStatus();
   updateSpiritProgressText();
+  scheduleMusicalSpiritRefresh();
   applyGenreVibeTheme();
   scheduleQuizChallengeEvaluation();
   scheduleStorySharePrewarm(profileStoryFallbackImageUrl(), "", 900);
