@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-06-21T20:09:20.914Z",
+  "source": "michael_bibi_playable_expansion_20260621",
+  "artist": "Michael Bibi",
+  "trackCount": 53,
+  "artistCount": 1,
+  "playableTracks": 53,
+  "previewTracks": 52,
+  "bandcampEmbedTracks": 1,
+  "importantTracks": [
+    {
+      "song": "Lets Get High",
+      "releaseDate": "2026-06-03",
+      "playback": "audio_preview",
+      "deezerTrackId": "4029680771",
+      "bandcampTrackId": null
+    },
+    {
+      "song": "Bad Wolf",
+      "releaseDate": "2026-05-15",
+      "playback": "audio_preview",
+      "deezerTrackId": "3995968761",
+      "bandcampTrackId": null
+    },
+    {
+      "song": "Front & Back Seat",
+      "releaseDate": "2025-07-24",
+      "playback": "audio_preview",
+      "deezerTrackId": "3458494341",
+      "bandcampTrackId": null
+    },
+    {
+      "song": "Sungazing (Electronic Mix)",
+      "releaseDate": "2025-04-25",
+      "playback": "audio_preview",
+      "deezerTrackId": "3310789741",
+      "bandcampTrackId": null
+    },
+    {
+      "song": "Hanging Tree",
+      "releaseDate": "2018-11-16",
+      "playback": "bandcamp_embed",
+      "deezerTrackId": null,
+      "bandcampTrackId": "2895187749"
+    },
+    {
+      "song": "Got The Fire",
+      "releaseDate": "2018-02-09",
+      "playback": "audio_preview",
+      "deezerTrackId": "457348062",
+      "bandcampTrackId": null
+    }
+  ]
+}

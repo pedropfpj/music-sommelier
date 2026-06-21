@@ -782,6 +782,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/verified_track_expansion_v8.csv",
   "data/verified_track_expansion_v9.csv",
   "data/techno_enrichment_v3_20260621.csv",
+  "data/michael_bibi_artist_profile_20260621.csv",
+  "data/michael_bibi_playable_tracks_20260621.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -11481,6 +11483,7 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
           `Entrada curada no Supabase para ${styleLabelByValue(style)}.`,
         artistBio: catalogExtraRowText(row, "artist_bio"),
         catalogMetadata: metadata,
+        deezerTrackId: catalogExtraMetadataText(metadata, "deezer_track_id") || catalogExtraMetadataText(metadata, "deezerTrackId"),
         sourceTags: catalogExtraMetadataList(metadata, "source_tags"),
         albumKeywords: catalogExtraMetadataList(metadata, "album_keywords"),
         energyBand: catalogExtraMetadataText(metadata, "energy_band"),
@@ -11506,6 +11509,10 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
       importedTrack.existenceVerified = true;
       importedTrack.sourceUrl = catalogExtraRowText(row, "source_url");
       importedTrack.catalogMetadata = metadata;
+      importedTrack.deezerTrackId =
+        catalogExtraMetadataText(metadata, "deezer_track_id") ||
+        catalogExtraMetadataText(metadata, "deezerTrackId") ||
+        importedTrack.deezerTrackId;
       importedTrack.sourceTags = catalogExtraMetadataList(metadata, "source_tags");
       importedTrack.albumKeywords = catalogExtraMetadataList(metadata, "album_keywords");
       importedTrack.energyBand = catalogExtraMetadataText(metadata, "energy_band");
@@ -11706,6 +11713,10 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const bandcampUrl = pickDatasetValue(fields, ["bandcamp_url", "bandcamp", "bandcamp_link", "bandcamp_album_url"]);
     const bandcampTrackUrl = pickDatasetValue(fields, ["bandcamp_track_url", "bandcamp_track", "bandcamp_track_link"]);
     const bandcampTrackId = pickDatasetValue(fields, ["bandcamp_track_id", "bandcamp_id", "bandcamp_embed_id"]);
+    const deezerTrackId = pickDatasetValue(fields, ["deezer_track_id", "deezer_id", "deezerTrackId"]);
+    const deezerTrackUrl = pickDatasetValue(fields, ["deezer_track_url", "deezer_url", "deezer"]);
+    const coverArtUrl = pickDatasetValue(fields, ["cover_art_url", "cover_url", "artwork_url", "image_url"]);
+    const catalogConfidence = pickDatasetValue(fields, ["confidence", "catalog_confidence", "verification_confidence"]);
     const releaseDate = normalizeDatasetReleaseDate(
       pickDatasetValue(fields, ["release_date", "released", "date", "year", "ano"])
     );
@@ -11714,6 +11725,26 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     );
     const artistGenre = pickDatasetValue(fields, ["artist_genre", "genre_signal", "genre_tags", "tags"]);
     const artistProfileHint = pickDatasetValue(fields, ["artist_profile_hint", "profile_hint", "source_note"]);
+    const catalogMetadata = Object.fromEntries(Object.entries({
+      deezer_track_id: deezerTrackId,
+      deezer_track_url: deezerTrackUrl,
+      cover_art_url: coverArtUrl,
+      bandcamp_track_id: bandcampTrackId,
+      bandcamp_track_url: bandcampTrackUrl,
+      soundcloud_track_url: soundcloudTrackUrl,
+      youtube_track_url: youtubeTrackUrl,
+      confidence: catalogConfidence
+    }).filter(([, value]) => String(value ?? "").trim()));
+    if (previewUrl || bandcampTrackId || bandcampTrackUrl || soundcloudTrackUrl || youtubeTrackUrl || deezerTrackId) {
+      catalogMetadata.playback_policy = "published_requires_in_app_playback";
+      catalogMetadata.playable_sources = [
+        previewUrl ? "audio_preview" : "",
+        bandcampTrackId || bandcampTrackUrl ? "bandcamp_embed" : "",
+        soundcloudTrackUrl ? "soundcloud_embed" : "",
+        youtubeTrackUrl ? "youtube_embed" : "",
+        deezerTrackId ? "deezer_preview_refresh" : ""
+      ].filter(Boolean);
+    }
 
     const added = addDynamicTrackToCatalog(
       {
@@ -11737,7 +11768,12 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         soundcloudTrackUrl,
         bandcampUrl,
         bandcampTrackUrl,
-        bandcampTrackId
+        bandcampTrackId,
+        deezerTrackId,
+        artistBio: bio,
+        catalogMetadata,
+        coverArtUrl,
+        catalogConfidence
       },
       existingKeys
     );
@@ -13825,10 +13861,19 @@ function trackHasExternalPlayableFallback(track) {
   );
 }
 
+function trackHasRefreshablePreview(track) {
+  return Boolean(
+    track?.deezerTrackId ||
+    catalogTrackMetadataText(track, "deezer_track_id") ||
+    catalogTrackMetadataText(track, "deezerTrackId")
+  );
+}
+
 function trackHasPlayablePreviewExperience(track) {
   return (
     trackHasReliableAudioPreview(track) ||
-    trackHasExternalPlayableFallback(track)
+    trackHasExternalPlayableFallback(track) ||
+    trackHasRefreshablePreview(track)
   );
 }
 
@@ -15330,6 +15375,7 @@ function addDynamicTrackToCatalog({
   spotifyTrackUrl = "",
   youtubeUrl = "",
   youtubeTrackUrl = "",
+  deezerTrackId = "",
   catalogMetadata = null,
   sourceTags = [],
   albumKeywords = [],
@@ -15400,10 +15446,16 @@ function addDynamicTrackToCatalog({
   const safeCatalogMetadata = catalogMetadata && typeof catalogMetadata === "object" && !Array.isArray(catalogMetadata)
     ? catalogMetadata
     : {};
+  const safeDeezerTrackId = String(
+    deezerTrackId ||
+    safeCatalogMetadata.deezer_track_id ||
+    safeCatalogMetadata.deezerTrackId ||
+    ""
+  ).trim();
   const hasDirectYoutube = isDirectYouTubeUrl(safeYoutubeTrackUrl) || isDirectYouTubeUrl(safeYoutubeUrl);
   const hasDirectSoundcloud = isDirectSoundCloudTrackUrl(safeSoundcloudTrackUrl) || isDirectSoundCloudTrackUrl(safeSoundcloudUrl);
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
-  const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
+  const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview || safeDeezerTrackId);
   if (isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
@@ -15428,6 +15480,7 @@ function addDynamicTrackToCatalog({
     bandcampUrl: safeBandcampUrl,
     bandcampTrackUrl: safeBandcampTrackUrl,
     bandcampTrackId: safeBandcampTrackId,
+    deezerTrackId: safeDeezerTrackId,
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
     youtubeTrackUrl: safeYoutubeTrackUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
     previewUrl: normalizedPreview,
@@ -15608,6 +15661,7 @@ async function hydrateCatalogForStyle(style) {
         label: details?.label || row.album?.title || "Catálogo dinâmico",
         bpmExact: Number(details?.bpm) || 0,
         previewUrl: row.preview || details?.preview || "",
+        deezerTrackId: row.id || details?.id || "",
         releaseDate: details?.release_date || "Catálogo dinâmico",
         durationSec: Number(details?.duration) || Number(row.duration) || 0,
         artistProfileHint: row.album?.title || "",
@@ -15642,6 +15696,7 @@ async function hydrateCatalogForStyle(style) {
           label: details?.label || row.album?.title || "Catálogo dinâmico",
           bpmExact: Number(details?.bpm) || 0,
           previewUrl: row.preview || details?.preview || "",
+          deezerTrackId: row.id || details?.id || "",
           releaseDate: details?.release_date || "Catálogo dinâmico",
           durationSec: Number(details?.duration) || Number(row.duration) || 0,
           artistProfileHint: row.album?.title || "",
@@ -16111,6 +16166,66 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       catalogRef: catalogRef || current.catalogRef || "CATALOGO"
     };
   };
+
+  const applyDeezerTrackDetailsMatch = (details = null, source = "deezer_track_id") => {
+    if (!details || details.error) return false;
+    const candidateTitle = details.title || details.title_short || "";
+    const confidence = Number(details.previewConfidence) || titleConfidence(track.song, candidateTitle);
+    if (!candidateTitle || confidence < minConfidence || !strictTitleMatch(track.song, candidateTitle)) return false;
+    const contributorNames = Array.isArray(details.contributors)
+      ? details.contributors.map((contributor) => contributor?.name).filter(Boolean)
+      : [];
+    const artistName = details.artist?.name || "";
+    const artistOk = artistName
+      ? isArtistMatch(artistName, track.artist)
+      : contributorNames.some((name) => isArtistMatch(name, track.artist));
+    if (!artistOk) return false;
+    const bpmExact = Number(details.bpm) || 0;
+    if (bpmExact && !bpmFitsStyle(track.style, bpmExact)) return false;
+
+    foundEvidence = true;
+    track.existenceVerified = true;
+    track.spotifyVerified = true;
+    track.youtubeVerified = true;
+    track.previewConfidence = Math.max(Number(track.previewConfidence) || 0, confidence);
+    track.previewLookupAttempted = true;
+    track.deezerTrackId = details.id || track.deezerTrackId;
+    track.artistProfileHint = track.artistProfileHint || details.album?.title || "";
+    const coverArtUrl = String(
+      details.album?.cover_xl ||
+      details.album?.cover_big ||
+      details.album?.cover_medium ||
+      ""
+    ).trim();
+    if (coverArtUrl && !track.coverArtUrl) track.coverArtUrl = coverArtUrl;
+    if (bpmExact) {
+      track.bpmExact = bpmExact;
+      track.bpm = mapBpmToRange(track.bpmExact);
+      if (!track.energy) track.energy = energyFromBpm(track.bpmExact);
+    }
+    if (details.preview) {
+      promotePreviewCandidate(track, details.preview);
+      track.previewSource = source;
+      track.previewChecked = true;
+      track.previewMissing = false;
+    }
+    if (!track.spotifyTrackUrl) track.spotifyTrackUrl = buildSpotifyTrackLink(track);
+    if (!track.youtubeTrackUrl) track.youtubeTrackUrl = buildYouTubeTrackLink(track);
+    ensureTrackMetadata(details.release_date || "", Number(details.duration) || 0, details.isrc || String(details.id || "DEEZER"));
+    return true;
+  };
+
+  const metadataDeezerTrackId =
+    catalogTrackMetadataText(track, "deezer_track_id") ||
+    catalogTrackMetadataText(track, "deezerTrackId") ||
+    String(track.deezerTrackId || "").trim();
+  if ((forceLookup || previewExpired || !currentPreview) && metadataDeezerTrackId) {
+    try {
+      applyDeezerTrackDetailsMatch(await fetchDeezerTrackDetails(metadataDeezerTrackId), "deezer_track_id");
+    } catch (_err) {
+      // Text search below can still recover a preview if direct id lookup fails.
+    }
+  }
 
   try {
     const query = encodeURIComponent(`artist:"${track.artist}" track:"${track.song}"`);
