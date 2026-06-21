@@ -5647,6 +5647,8 @@ let googleAuthLoading = false;
 let appleAuthReady = false;
 let appleAuthLoading = false;
 let authConfigLoading = false;
+let socialOAuthNavigationTimer = 0;
+let pendingSocialOAuthUrl = "";
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
@@ -5952,7 +5954,7 @@ const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v44";
 const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v26-ai-pending-polish";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v10-ai-only";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v11-copy-ai-only";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
@@ -5969,6 +5971,7 @@ const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
+const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 4500;
 const SOCIAL_SYNC_LIMIT = 50;
 const SOCIAL_CLOUD_RESTORE_LIMIT = 200;
 const SOCIAL_FEED_LIMIT = 14;
@@ -16429,6 +16432,7 @@ const I18N = {
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
+    authProviderOpenTimeout: "O Google não abriu. Tente de novo ou continue sem login.",
     authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
     authProviderGoogleReady: "Google pronto. Toque para entrar.",
@@ -17248,6 +17252,7 @@ const I18N = {
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
+    authProviderOpenTimeout: "Google did not open. Try again or continue without login.",
     authProviderLoggedAs: "Online profile connected for {user}.",
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
     authProviderGoogleReady: "Google is ready. Tap to sign in.",
@@ -18064,6 +18069,7 @@ const I18N = {
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
+    authProviderOpenTimeout: "Google no se abrió. Intenta de nuevo o continúa sin login.",
     authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
     authProviderGoogleReady: "Google listo. Toca para entrar.",
@@ -20678,7 +20684,7 @@ function updateAuthProviderUi() {
   if (authGoogleLabel) {
     authGoogleLabel.textContent = signed
       ? t("authContinueOnlineBtn")
-      : authConfigLoading
+      : busy
         ? t("authProviderLoading", { provider: "Google" })
         : googleConfigured
           ? t("authGoogleBtn")
@@ -20933,6 +20939,14 @@ async function loginWithGoogle() {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
     return;
+  }
+  if (pendingSocialOAuthUrl && !socialState.busy) {
+    socialState.busy = true;
+    setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
+    socialSetStatus("Abrindo login do Google...");
+    renderSocialUi({ preserveStatus: true });
+    updateAuthProviderUi();
+    if (startSocialOAuthNavigation(pendingSocialOAuthUrl)) return;
   }
   if (socialState.session?.access_token) {
     const resumed = await continueWithOnlineSocialSession({ silentFailure: true });
@@ -22354,7 +22368,8 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   return true;
 }
 
-function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoRecommendation = true } = {}) {
+function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoRecommendation = null } = {}) {
+  const shouldAutoRecommend = autoRecommendation === null ? Boolean(surprise) : Boolean(autoRecommendation);
   ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
@@ -22385,7 +22400,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   }, 250);
   scheduleQuizChallengeEvaluation(220);
 
-  if (!autoRecommendation) return;
+  if (!shouldAutoRecommend) return;
 
   if (!surprise) {
     window.setTimeout(() => {
@@ -22554,6 +22569,7 @@ async function resumeStoredUserSession() {
 }
 
 async function continueWithoutLogin() {
+  resetSocialOAuthNavigationState({ clearUrl: true });
   if (socialState.session?.access_token) await socialSignOut();
   startLocalProfileFlow({ preferStored: false });
 }
@@ -41276,6 +41292,62 @@ async function socialDirectOAuthUrl(provider = "google") {
   return socialOAuthAuthorizeUrl(provider);
 }
 
+function clearSocialOAuthNavigationTimer() {
+  if (!socialOAuthNavigationTimer || typeof window === "undefined") return;
+  window.clearTimeout(socialOAuthNavigationTimer);
+  socialOAuthNavigationTimer = 0;
+}
+
+function resetSocialOAuthNavigationState({ clearUrl = false } = {}) {
+  clearSocialOAuthNavigationTimer();
+  socialState.busy = false;
+  authConfigLoading = false;
+  if (clearUrl) pendingSocialOAuthUrl = "";
+}
+
+function showSocialOAuthNavigationRecovery() {
+  const message = t("authProviderOpenTimeout");
+  setAuthFeedback(message, true);
+  socialSetStatus(message, "error");
+  renderSocialUi({ preserveStatus: true });
+  updateAuthProviderUi();
+}
+
+function scheduleSocialOAuthNavigationRecovery() {
+  clearSocialOAuthNavigationTimer();
+  if (typeof window === "undefined") return;
+  socialOAuthNavigationTimer = window.setTimeout(() => {
+    socialOAuthNavigationTimer = 0;
+    if (!socialState.busy) return;
+    resetSocialOAuthNavigationState();
+    showSocialOAuthNavigationRecovery();
+  }, SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS);
+}
+
+function startSocialOAuthNavigation(url = "") {
+  const cleanUrl = String(url || "").trim();
+  if (!cleanUrl) return false;
+  pendingSocialOAuthUrl = cleanUrl;
+  scheduleSocialOAuthNavigationRecovery();
+  try {
+    if (typeof window === "undefined" || !window.location) throw new Error("Navigation unavailable");
+    if (typeof window.location.assign === "function") {
+      window.location.assign(cleanUrl);
+    } else {
+      window.location.href = cleanUrl;
+    }
+    return true;
+  } catch (error) {
+    console.warn("Could not navigate to Google OAuth", error);
+    resetSocialOAuthNavigationState();
+    setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
+    socialSetStatus(t("authProviderFailed", { provider: "Google" }), "error");
+    renderSocialUi({ preserveStatus: true });
+    updateAuthProviderUi();
+    return false;
+  }
+}
+
 function socialFriendlyAuthError(message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
@@ -41459,6 +41531,7 @@ async function socialHandleAuthRedirect() {
     console.warn("Could not finish social auth redirect", error);
     socialSetStatus(`Recebi o login, mas nao consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente Entrar de novo.`, "error");
   } finally {
+    resetSocialOAuthNavigationState({ clearUrl: true });
     socialClearAuthHash();
     renderSocialUi({ preserveStatus: true });
     updateAuthProviderUi();
@@ -42003,8 +42076,7 @@ async function socialSignInWithGoogle() {
   socialSetStatus("Abrindo login do Google...");
   renderSocialUi({ preserveStatus: true });
   updateAuthProviderUi();
-  window.location.href = url;
-  return true;
+  return startSocialOAuthNavigation(url);
 }
 
 async function socialSignUp() {
