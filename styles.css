@@ -7084,6 +7084,14 @@ input[type="range"] {
   display: none;
 }
 
+.spirit-collectible.awaiting-image .spirit-collectible-placeholder {
+  display: none;
+}
+
+.spirit-collectible.is-generating.awaiting-image .spirit-collectible-grid {
+  display: none;
+}
+
 .spirit-collectible-meta {
   display: grid;
   align-content: start;
@@ -13591,7 +13599,7 @@ iframe {
 }
 
 .feedback-action-group.explore .feedback-buttons {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   align-items: stretch;
   gap: 0.56rem;
 }
@@ -13628,6 +13636,13 @@ iframe {
   font-size: clamp(0.88rem, 1.15vw, 0.98rem);
   background:
     linear-gradient(105deg, #ffd18b 0%, #ffc06f 100%);
+}
+
+.feedback-action-group.explore #artistEventsBtn {
+  color: #05111d;
+  font-size: clamp(0.88rem, 1.15vw, 0.98rem);
+  background:
+    linear-gradient(105deg, #9df4ff 0%, #8cffc5 100%);
 }
 
 .feedback-action-group.explore .feedback-buttons button:hover {
@@ -13858,7 +13873,7 @@ button,
 }
 
 .auth-entry-actions.has-online {
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .auth-entry-actions > :is(button, a) {
@@ -13866,16 +13881,22 @@ button,
   min-width: 0;
   min-height: 58px;
   border-radius: 10px;
-  padding: 0.78rem 0.96rem;
-  font-family: "Syne", sans-serif;
-  font-size: clamp(0.92rem, 1.08vw, 1rem);
-  font-weight: 900;
-  line-height: 1.12;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.56rem;
+  padding: 0.76rem 0.86rem;
+  font-family: "Chakra Petch", sans-serif;
+  font-size: clamp(0.88rem, 0.98vw, 0.96rem);
+  font-weight: 800;
+  line-height: 1.16;
   text-align: center;
   text-decoration: none;
-  white-space: nowrap;
-  overflow-wrap: normal;
-  text-wrap: nowrap;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-wrap: balance;
 }
 
 #authGuestBtn {
@@ -13904,8 +13925,7 @@ button,
 
 .auth-google-entry-btn {
   order: 2;
-  justify-content: center;
-  gap: 0.62rem;
+  min-width: 0;
   color: #dff6ff;
   border-color: rgba(126, 205, 255, 0.36);
   background:
@@ -13915,14 +13935,17 @@ button,
 }
 
 .auth-google-entry-btn .auth-provider-mark {
-  flex: 0 0 30px;
-  width: 30px;
-  height: 30px;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
 }
 
 .auth-google-entry-btn #authGoogleLabel {
   min-width: 0;
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .auth-google-entry-btn.is-unconfigured {
@@ -13980,6 +14003,7 @@ button,
 
   .auth-entry-actions > :is(button, a) {
     min-height: 56px;
+    font-size: 0.94rem;
   }
 }
 

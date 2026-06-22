@@ -39,21 +39,28 @@ module.exports = async function handler(req, res) {
   const ticketmasterSecretConfigured = Boolean(envFirst(TICKETMASTER_SECRET_ENVS));
   const bandsintownConfigured = Boolean(process.env.BANDSINTOWN_APP_ID);
   const soundcloudConfigured = Boolean(process.env.SOUNDCLOUD_CLIENT_ID && process.env.SOUNDCLOUD_CLIENT_SECRET);
-  const soundcloudRouteEnabled = featureEnabled("SONIC_SOUNDCLOUD_ENABLED", false, { allowGlobalFallback: false });
+  const soundcloudRouteEnabled = featureEnabled("SONIC_SOUNDCLOUD_ENABLED", true, { allowGlobalFallback: false });
   const youtubeConfigured = Boolean(process.env.YOUTUBE_API_KEY || process.env.YOUTUBE_DATA_API_KEY);
-  const youtubeRouteEnabled = featureEnabled("SONIC_YOUTUBE_ENABLED", false, { allowGlobalFallback: false });
-  const bandsintownRouteEnabled = featureEnabled("SONIC_BANDSINTOWN_ENABLED", false, { allowGlobalFallback: false });
+  const youtubeRouteEnabled = featureEnabled("SONIC_YOUTUBE_ENABLED", true, { allowGlobalFallback: false });
+  const bandsintownRouteEnabled = featureEnabled("SONIC_BANDSINTOWN_ENABLED", true, { allowGlobalFallback: false });
   const artistBioEnabled = envFlag("SONIC_AI_TEXT_ENABLED", true) && envFlag("SONIC_ARTIST_BIO_ENABLED", true);
   const discogsConfigured = Boolean(envFirst(DISCOGS_TOKEN_ENVS));
-  const discogsEnabled = envFlag("SONIC_DISCOGS_ENABLED", false);
+  const discogsEnabled = envFlag("SONIC_DISCOGS_ENABLED", true);
   const musicBrainzEnabled = envFlag("SONIC_MUSICBRAINZ_ENABLED", true);
   const newsFeedRouteEnabled = envFlag("SONIC_NEWS_FEED_ROUTE_ENABLED", true);
-  const newsFeedEnabled = envFlag("SONIC_NEWS_FEED_ENABLED", false);
+  const newsFeedEnabled = envFlag("SONIC_NEWS_FEED_ENABLED", true);
   const coverArtEnabled = featureEnabled("SONIC_COVER_ART_ENABLED", true, { allowGlobalFallback: false });
   const radioBrowserEnabled = featureEnabled("SONIC_RADIO_BROWSER_ENABLED", true, { allowGlobalFallback: false });
+  const catalogExtraSupabaseUrl = envText("SUPABASE_URL").replace(/\/+$/, "");
+  const catalogExtraAnonKey = envText("SUPABASE_ANON_KEY") || envText("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  const catalogExtraRouteEnabled = envFlag("SONIC_CATALOG_EXTRA_ENABLED", envFlag("SONIC_SOCIAL_ENABLED", false));
+  const catalogExtraConfigured = Boolean(catalogExtraSupabaseUrl && catalogExtraAnonKey);
+  const catalogExtraEnabled = catalogExtraConfigured && catalogExtraRouteEnabled;
   const catalogEnrichment = supabaseConfig();
+  const catalogEnrichmentRouteEnabled = catalogEnrichment.enabled || envFlag("SONIC_CATALOG_ENRICHMENT_ENABLED", true);
   const lastfmConfigured = Boolean(envText("LASTFM_API_KEY") || envText("SONIC_LASTFM_API_KEY"));
-  const lastfmEnabled = lastfmConfigured && featureEnabled("SONIC_LASTFM_ENABLED", false, { allowGlobalFallback: false });
+  const lastfmRouteEnabled = featureEnabled("SONIC_LASTFM_ENABLED", true, { allowGlobalFallback: false });
+  const lastfmEnabled = lastfmConfigured && lastfmRouteEnabled;
   const durableUsageStore = hasDurableStore();
   sendJson(req, res, 200, {
     ok: true,
@@ -170,13 +177,38 @@ module.exports = async function handler(req, res) {
       },
       lastfm: {
         configured: lastfmConfigured,
+        routeEnabled: lastfmRouteEnabled,
         enabled: lastfmEnabled,
+        ...providerState({
+          configured: lastfmConfigured,
+          routeEnabled: lastfmRouteEnabled,
+          enabled: lastfmEnabled,
+          disabledReason: "explicitly_disabled_until_lastfm_api_key"
+        }),
         compliance: {
           backendOnly: true,
           requiresCredentials: true,
           optIn: true,
           attributionVisible: true,
           cacheSeconds: envInt("SONIC_LASTFM_CACHE_SECONDS", 86400, 300, 604800)
+        }
+      },
+      catalogExtra: {
+        configured: catalogExtraConfigured,
+        routeEnabled: catalogExtraRouteEnabled,
+        enabled: catalogExtraEnabled,
+        ...providerState({
+          configured: catalogExtraConfigured,
+          routeEnabled: catalogExtraRouteEnabled,
+          enabled: catalogExtraEnabled,
+          disabledReason: "disabled_until_supabase_catalog_is_configured"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: true,
+          requiresExplicitEnable: true,
+          publicSelectOnly: true,
+          table: "catalog_artists/catalog_tracks"
         }
       },
       radioBrowser: {
@@ -195,7 +227,7 @@ module.exports = async function handler(req, res) {
         enabled: catalogEnrichment.enabled,
         ...providerState({
           configured: Boolean(catalogEnrichment.supabaseUrl && catalogEnrichment.serviceKey),
-          routeEnabled: envFlag("SONIC_CATALOG_ENRICHMENT_ENABLED", envFlag("SONIC_CATALOG_EXTRA_ENABLED", false)),
+          routeEnabled: catalogEnrichmentRouteEnabled,
           enabled: catalogEnrichment.enabled,
           disabledReason: "disabled_until_supabase_service_role_is_configured"
         }),
@@ -270,6 +302,7 @@ module.exports = async function handler(req, res) {
       artistBio: "/api/artist-bio",
       lastfmArtist: "/api/lastfm-artist",
       radioBrowser: "/api/radio-browser",
+      catalogExtra: "/api/catalog-extra",
       catalogEnrichment: "supabase/rest/v1/catalog_enrichments",
       newsFeed: "/api/news-feed"
     },

@@ -6082,6 +6082,7 @@ const newDiscoveryBtn = document.getElementById("newDiscoveryBtn");
 const skipBtn = document.getElementById("skipBtn");
 const adaptiveSurpriseBtn = document.getElementById("adaptiveSurpriseBtn");
 const moreInfoBtn = document.getElementById("moreInfoBtn");
+const artistEventsBtn = document.getElementById("artistEventsBtn");
 const ratingTitle = document.getElementById("ratingTitle");
 const ratingHint = document.getElementById("ratingHint");
 const ratingCelebration = document.getElementById("ratingCelebration");
@@ -16568,7 +16569,8 @@ function apiProviderLabel(key = "") {
     artistProfile: "MusicBrainz/Wikipedia",
     radioBrowser: "Radio Browser",
     lastfm: "Last.fm",
-    catalogEnrichment: "Banco próprio",
+    catalogExtra: "Catálogo Supabase",
+    catalogEnrichment: "Memória própria",
     artistBio: "Bio IA/Discogs",
     newsFeed: "News/RSS",
     soundcloud: "SoundCloud",
@@ -16615,7 +16617,7 @@ function apiHealthProviderDetail(key = "", provider = {}) {
     if (enabledProviders.length) pieces.push(enabledProviders.join(", "));
   }
   if (compliance.backendOnly) pieces.push(t("apiHealthBackendOnly"));
-  if (key === "catalogEnrichment" && compliance.table) pieces.push(compliance.table);
+  if ((key === "catalogExtra" || key === "catalogEnrichment") && compliance.table) pieces.push(compliance.table);
   return pieces.filter(Boolean).slice(0, 3).join(" · ");
 }
 
@@ -16649,6 +16651,7 @@ function apiHealthItems(payload = {}) {
     "artistProfile",
     "radioBrowser",
     "lastfm",
+    "catalogExtra",
     "catalogEnrichment",
     "artistBio",
     "newsFeed",
@@ -19168,7 +19171,8 @@ const I18N = {
     lastfmTopTracksTitle: "Faixas fortes",
     lastfmSimilarArtistsTitle: "Artistas próximos",
     warmupCatalogToast: "Base musical refinada em segundo plano.",
-    eventsPrompt: "Curta um artista para ver agenda.",
+    eventsPrompt: "Use Ver agenda do artista para buscar próximos eventos.",
+    eventsNeedArtist: "Gere uma faixa primeiro para buscar a agenda do artista.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Lendo catálogo, contexto e histórico...",
     catalogGenerating: "Montando uma rota confiável em {style}...",
@@ -20030,7 +20034,8 @@ const I18N = {
     lastfmTopTracksTitle: "Strong tracks",
     lastfmSimilarArtistsTitle: "Nearby artists",
     warmupCatalogToast: "Music base refined in the background.",
-    eventsPrompt: "Like an artist to see events.",
+    eventsPrompt: "Use View artist agenda to search upcoming events.",
+    eventsNeedArtist: "Generate a track first to search the artist agenda.",
     eventsLoading: "Searching upcoming events for {artist}...",
     searchingCatalog: "Reading catalog, context, and history...",
     catalogGenerating: "Building a reliable route in {style}...",
@@ -20889,7 +20894,8 @@ const I18N = {
     lastfmTopTracksTitle: "Pistas fuertes",
     lastfmSimilarArtistsTitle: "Artistas cercanos",
     warmupCatalogToast: "Base musical refinada en segundo plano.",
-    eventsPrompt: "Da like a un artista para ver eventos.",
+    eventsPrompt: "Usa Ver agenda del artista para buscar próximos eventos.",
+    eventsNeedArtist: "Genera una pista primero para buscar la agenda del artista.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Leyendo catálogo, contexto e historial...",
     catalogGenerating: "Armando una ruta confiable en {style}...",
@@ -21685,7 +21691,8 @@ function applyLanguage() {
       btnKnewDiscovery: "Já estava no radar",
       btnNewDiscovery: "Novidade pra mim",
       btnSkip: "Não combinou",
-      btnMoreInfo: "Abrir contexto do artista"
+      btnMoreInfo: "Abrir contexto do artista",
+      btnArtistEvents: "Ver agenda do artista"
     },
     en: {
       profileTitle: "Fine-tune the radar",
@@ -21729,7 +21736,8 @@ function applyLanguage() {
       btnKnewDiscovery: "Already on my radar",
       btnNewDiscovery: "New to me",
       btnSkip: "Did not match",
-      btnMoreInfo: "Open artist context"
+      btnMoreInfo: "Open artist context",
+      btnArtistEvents: "View artist agenda"
     },
     es: {
       profileTitle: "Ajuste fino del radar",
@@ -21773,7 +21781,8 @@ function applyLanguage() {
       btnKnewDiscovery: "Ya estaba en mi radar",
       btnNewDiscovery: "Novedad para mí",
       btnSkip: "No combinó",
-      btnMoreInfo: "Abrir contexto del artista"
+      btnMoreInfo: "Abrir contexto del artista",
+      btnArtistEvents: "Ver agenda del artista"
     }
   }[currentLanguage] || {};
 
@@ -22264,6 +22273,7 @@ function applyLanguage() {
   setText("#newDiscoveryBtn", labels.btnNewDiscovery || "");
   setText("#skipBtn", labels.btnSkip || "");
   setText("#moreInfoBtn", labels.btnMoreInfo || "");
+  setText("#artistEventsBtn", labels.btnArtistEvents || "");
   if (generatedBadge) generatedBadge.textContent = t("generatedNow");
   if (genreGuideTitle) genreGuideTitle.textContent = t("genreGuideTitle");
   renderGenreGuide(currentRecommendation);
@@ -24928,6 +24938,7 @@ function hasDedicatedClickSfxControl(el) {
     newDiscoveryBtn,
     skipBtn,
     adaptiveSurpriseBtn,
+    artistEventsBtn,
     quizStartBtn,
     quizLaterBtn,
     quizSubmitBtn,
@@ -37575,7 +37586,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
       } else if (!hasImage) {
         spiritCollectibleHint.textContent = asset?.source === "error"
-          ? t("spiritCollectibleError")
+          ? t("spiritCollectibleGeneratedLocal")
           : supportsAiCollectibleApi()
           ? t("spiritCollectibleReadyToGenerate")
           : t("spiritCollectibleHintLocal");
@@ -37627,9 +37638,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     }
 
     if (spiritCollectibleDetails) {
-      spiritCollectibleDetails.textContent = !hasImage && asset?.source === "error" && asset.error
-        ? asset.error
-        : buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestone.likes);
+      spiritCollectibleDetails.textContent = buildSpiritCollectibleDetailsText(spirit, spiritText, likes, milestone.likes);
     }
     if (spiritCollectibleDownload) {
       spiritCollectibleDownload.textContent = t("spiritCollectibleDownload");
@@ -47690,6 +47699,24 @@ function currentStatusArtistName() {
   return String(currentRecommendation?.artist || currentDiscovery?.name || "").trim();
 }
 
+async function openArtistEventsForCurrentArtist({ scroll = true } = {}) {
+  const artistName = currentStatusArtistName();
+  if (!artistName) {
+    const message = t("eventsNeedArtist");
+    if (feedbackMessage) feedbackMessage.textContent = message;
+    showToast(message);
+    return false;
+  }
+
+  await loadEventsForArtist(artistName);
+  if (scroll && eventsPanel) {
+    window.requestAnimationFrame(() => {
+      eventsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+  return true;
+}
+
 function markArtistKnownStatus(artistName = "") {
   const safeArtist = String(artistName || "").trim();
   if (!safeArtist) return false;
@@ -48310,6 +48337,10 @@ bind(skipBtn, "click", async () => {
     showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastSkipAdjusted"));
   }
   updateStats();
+});
+
+bind(artistEventsBtn, "click", async () => {
+  await openArtistEventsForCurrentArtist({ scroll: true });
 });
 
 bind(moreInfoBtn, "click", () => {

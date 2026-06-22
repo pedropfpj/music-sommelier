@@ -317,10 +317,13 @@ function normalizeItunesRow(row = {}, request = {}) {
 async function searchItunes(request = {}) {
   const { artist, song, limit } = request;
   if (!envFlag("SONIC_ITUNES_ENABLED", true)) return [];
+  const requestedLimit = Math.max(1, Number(limit) || 5);
+  const appleLimit = Math.min(requestedLimit, envInt("SONIC_ITUNES_PROVIDER_LIMIT", 5, 1, 5));
   const params = new URLSearchParams({
     term: `${artist} ${song}`,
+    media: "music",
     entity: "song",
-    limit: String(limit)
+    limit: String(appleLimit)
   });
   const payload = await fetchJson(`${ITUNES_SEARCH_URL}?${params.toString()}`);
   const rows = Array.isArray(payload?.results) ? payload.results : [];

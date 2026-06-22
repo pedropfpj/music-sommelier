@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260622google-nav1" />
+    <link rel="stylesheet" href="styles.css?v=20260622prod-no-error1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -1280,6 +1280,7 @@
                 <div class="feedback-buttons">
                   <button id="adaptiveSurpriseBtn" class="primary">Surpreenda por perfil</button>
                   <button id="moreInfoBtn" class="secondary">Abrir contexto do artista</button>
+                  <button id="artistEventsBtn" class="secondary">Ver agenda</button>
                 </div>
               </div>
             </div>
@@ -1319,6 +1320,13 @@
             <p id="labelBio"></p>
           </article>
         </div>
+      </section>
+
+      <section id="eventsPanel" class="panel events-hub-panel hidden app-tab-panel" data-app-tab="discover profile">
+        <h3>Agenda do artista</h3>
+        <p id="eventsIntro" class="muted">Gere uma faixa e use Ver agenda para buscar próximos eventos.</p>
+        <div id="eventsCalendar" class="events-calendar"></div>
+        <ul id="eventsList" class="events-list"></ul>
       </section>
 
       <section id="voiceLabPanel" class="panel voice-lab-panel app-tab-panel" data-app-tab="studio" aria-labelledby="voiceLabTitle">
@@ -1562,13 +1570,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section id="eventsPanel" class="panel events-hub-panel hidden app-tab-panel" data-app-tab="discover profile">
-        <h3>Agenda do artista</h3>
-        <p id="eventsIntro" class="muted">Curta um artista para ver agenda.</p>
-        <div id="eventsCalendar" class="events-calendar"></div>
-        <ul id="eventsList" class="events-list"></ul>
       </section>
 
       <section id="spiritPanel" class="panel spirit-panel hidden app-tab-panel" data-app-tab="profile" aria-live="polite">
@@ -1981,6 +1982,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260622google-nav1"></script>
+    <script src="app.js?v=20260622prod-no-error1"></script>
   </body>
 </html>
