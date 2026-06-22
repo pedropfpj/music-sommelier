@@ -16,8 +16,8 @@ const {
   writeJson
 } = require("./_usage-store");
 
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v28-limit-unlock";
-const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v22";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v29-electronic-personality";
+const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v23";
 
 const SPIRIT_ENTITY_BRIEFS = {
   ritual_cosmico: "adult psytrance/goa party archetype, joyful expressive human face, UV-reactive geometric ravewear, round tinted glasses, layered utility vest, mandala patches, neon makeup, a few festival beads, psychedelic club light, not carnival",
@@ -27,7 +27,7 @@ const SPIRIT_ENTITY_BRIEFS = {
   cirurgiao_psycore: "adult psycore/hi-tech rave archetype, precise realistic face, sharp confident smile, futuristic clinical rave jacket, reflective seams, glitch accessories, high-BPM light cuts, controlled chaos",
   guardiao_fullon_noite: "adult full-on night psytrance party archetype, awake playful eyes, confident smile, acid-neon midnight jacket, curated psy accessories, dense melodic neon arcs, post-midnight rave energy",
   viajante_sunrise: "adult sunrise progressive/full-on party archetype, warm realistic smile, bright eyes, light festival layers, soft technical scarf, pink and gold melodic light, uplifting morning rave atmosphere",
-  estilista_tech_house: "adult tech-house clubber archetype, stylish confident face, visible eyes, relaxed smirk, sharp black clubwear, glossy jacket, tasteful jewelry, chopped-vocal light fragments, social club charisma",
+  estilista_tech_house: "adult tech-house / bass-house groove connector archetype, social club charisma, booth-aware confidence, visible happy face, technical mesh or transparent-vinyl clubwear, utility zipper details, one curated accessory only, DJ mixer fader geometry, CDJ jog-wheel arcs, equalizer blocks, chopped-vocal LED fragments, dry bass pulse bars, not a plain leather-jacket portrait",
   alma_house: "adult house/disco clubber archetype, warm expressive face, generous smile, glossy jacket or fitted shirt, amber jewelry, rounded bass waves, vocal warmth, social dancefloor glow",
   operador_acido: "adult acid techno operator archetype, focused realistic face, visible eyes, structured industrial coat, black mesh layer, acid-green reflective lines, 303 curves, concrete club light",
   acelerador_quantico: "adult hi-tech/psycore accelerator archetype, fearless human face, intense bright eyes, kinetic grin, prismatic technical jacket, speed-line accessories, micro-cut sparks, ultra-fast rave energy",
@@ -53,7 +53,7 @@ function dominantStyleVisualRule(dominantStyles = "") {
     return "Techno visual family: adult warehouse/club archetype with industrial black tailoring, mesh or nylon layers, harness or reflective seams, concrete-room strobe, acid or steel light, precise posture, minimal high-fashion accessories, no psychedelic festival costume.";
   }
   if (/(house|afro|organic|deep|disco|jackin|garage house|tech house)/.test(text)) {
-    return "House visual family: warm adult clubber archetype with stylish clubwear, tasteful jewelry, visible human warmth, amber/pink/green light, confident social dancefloor charisma, no dark-psy forest costume.";
+    return "House / tech-house visual family: warm adult clubber or groove connector with visible human warmth, booth-to-dancefloor confidence, technical clubwear, mesh/vinyl/utility seams, one curated accessory, mixer-fader/CDJ/equalizer geometry, dry-bass pulse light, and social club charisma. A plain person with leather jacket, necklace, glasses, and neon waveform is not enough.";
   }
   if (/(drum|dnb|jungle|neurofunk|jump up|dubstep|bass|trap|garage|breakbeat|footwork|wave)/.test(text)) {
     return "Bass / DnB / breaks visual family: adult bass-scene archetype with tactical street-club fashion, oversized hoodie or cargo details, pressure-ring collar, headphones around neck, kinetic shoulders, magenta-cyan impact light, no psytrance shaman styling.";
@@ -218,6 +218,7 @@ module.exports = async function handler(req, res) {
     : "";
   const safePrompt = [
     `Prompt version: ${trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80)}.`,
+    "ELECTRONIC PERSONALITY LOCK: the result must be unmistakably electronic before it reads as a portrait. Include at least three visible electronic-culture cues integrated into wardrobe, light, or background: DJ mixer faders, CDJ jog-wheel arcs, modular-synth patch grid, cable silhouettes, equalizer blocks, speaker pressure rings, LED strips, club wristband, transparent in-ear monitor, reflective utility seams, mesh/vinyl clubwear, or booth light panels. A plain person with colored neon, a single waveform, glasses, necklace, and leather jacket is a failed result.",
     "QUALITY GATE: create a polished semi-realistic / hyper-realistic digital-art bust portrait, chest-up only, centered, with head, neck, shoulders, and upper chest visible. The subject is a fictional adult human electronic-music party archetype linked to the user's dominant electronic subgenres, club culture, rhythm, dance, fashion, and nightlife. The face must be large, bright, clear, happy or warmly confident, and readable on a phone: expressive eyes, visible mouth, strong facial key light, no hidden shadow, no mask-like blankness, no face lost behind smoke, helmet, text, or effects. It must look like a distinct person from an electronic music scene, not a supernatural spirit, generic musician, carnival performer, fantasy character, mascot, or abstract icon.",
     characterReplacementInstruction,
     `Archetype-specific partygoer brief: ${humanEntityBrief}.`,

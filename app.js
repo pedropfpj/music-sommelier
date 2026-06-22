@@ -5953,9 +5953,9 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v46";
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v28-limit-unlock";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v12-ai-direct-limit-unlock";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v47";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v29-electronic-personality";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v13-personality";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
@@ -9022,22 +9022,22 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Estilista Tech House",
-        archetype: "Groove de club",
-        description: "Voce gosta de groove com postura: baixo seco, vocal picado, swing elegante e aquela energia de pista com oculos escuros, camiseta boa e movimento calculado. Nao e sombrio; e confiante, social e cheio de bounce.",
-        cardDescription: "Tech house: oculos escuros, groove seco, vocal picado e bounce de club."
+        name: "Conector do Groove",
+        archetype: "Tech-house social",
+        description: "Voce gosta de groove com presenca de club: baixo seco, vocal picado, bounce elegante, LEDs de mixer e aquela confianca social de quem sabe onde a pista encaixa. Nao e retrato fashion; e energia de booth, movimento calculado e carisma de after.",
+        cardDescription: "Tech house/bass house: bounce seco, vocal picado, mixer LEDs e carisma de club."
       },
       en: {
-        name: "Tech House Stylist",
-        archetype: "Club groove",
-        description: "You like groove with posture: dry bass, chopped vocals, elegant swing, and that sunglasses-on dancefloor energy. It is not dark; it is confident, social, and full of bounce.",
-        cardDescription: "Tech house: sunglasses, dry groove, chopped vocals, and club bounce."
+        name: "Groove Connector",
+        archetype: "Social tech-house",
+        description: "You like groove with real club presence: dry bass, chopped vocals, elegant bounce, mixer LEDs, and the social confidence of someone who knows where the floor locks in. It is not a fashion portrait; it is booth energy, calculated movement, and after-hours charisma.",
+        cardDescription: "Tech house/bass house: dry bounce, chopped vocals, mixer LEDs, and club charisma."
       },
       es: {
-        name: "Estilista Tech House",
-        archetype: "Groove de club",
-        description: "Te gusta el groove con postura: bajo seco, vocales cortadas, swing elegante y energia de pista con gafas oscuras. No es oscuro; es confiado, social y lleno de bounce.",
-        cardDescription: "Tech house: gafas oscuras, groove seco, vocal cortado y bounce de club."
+        name: "Conector del Groove",
+        archetype: "Tech-house social",
+        description: "Te gusta el groove con presencia de club: bajo seco, vocales cortadas, bounce elegante, LEDs de mixer y la confianza social de quien sabe donde encaja la pista. No es retrato de moda; es energia de booth, movimiento calculado y carisma de after.",
+        cardDescription: "Tech house/bass house: bounce seco, vocal cortada, LEDs de mixer y carisma de club."
       }
     }
   },
@@ -9053,19 +9053,19 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Alma House",
+        name: "Selector da Alma",
         archetype: "Calor social",
         description: "Seu arquetipo mora no groove humano: baixo redondo, palma, vocal quente e sensacao de comunidade. Ele deve parecer mais solar e elegante, menos tecnico, com alma de pista e sorriso de fim de tarde.",
         cardDescription: "House/deep/afro: calor humano, vocal, swing e comunidade de pista."
       },
       en: {
-        name: "House Soul",
+        name: "Soul Selector",
         archetype: "Social warmth",
         description: "Your archetype lives in human groove: rounded bass, claps, warm vocals, and a feeling of community. It should feel more solar and elegant than technical, with dancefloor soul and late-afternoon warmth.",
         cardDescription: "House/deep/afro: human warmth, vocals, swing, and dancefloor community."
       },
       es: {
-        name: "Alma House",
+        name: "Selector del Alma",
         archetype: "Calor social",
         description: "Tu arquetipo vive en el groove humano: bajo redondo, palmas, vocal calida y sensacion de comunidad. Debe sentirse mas solar y elegante que tecnico, con alma de pista.",
         cardDescription: "House/deep/afro: calor humano, vocal, swing y comunidad de pista."
@@ -9085,19 +9085,19 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Operador Acido",
+        name: "Operador 303",
         archetype: "Maquina hipnotica",
         description: "Voce escuta techno como arquitetura de pressao: linhas acidas, repeticao funcional, metal, concreto e tensao de pista. O arquetipo deve parecer mais maquina de clube do que personagem fofo.",
         cardDescription: "Techno/acid: metal, repeticao, linhas acidas e controle hipnotico."
       },
       en: {
-        name: "Acid Operator",
+        name: "303 Operator",
         archetype: "Hypnotic machine",
         description: "You hear techno as pressure architecture: acid lines, functional repetition, metal, concrete, and dancefloor tension. This spirit should feel more like a club machine than a cute character.",
         cardDescription: "Techno/acid: metal, repetition, acid lines, and hypnotic control."
       },
       es: {
-        name: "Operador Acido",
+        name: "Operador 303",
         archetype: "Maquina hipnotica",
         description: "Escuchas techno como arquitectura de presion: lineas acidas, repeticion funcional, metal, concreto y tension de pista. Este arquetipo debe sentirse mas maquina de club que personaje tierno.",
         cardDescription: "Techno/acid: metal, repeticion, lineas acidas y control hipnotico."
@@ -9204,19 +9204,19 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Caçador de Bass",
+        name: "Caçador de Subgrave",
         archetype: "Impacto de baixa frequência",
         description: "Personalidade física e cirúrgica. Você procura subgraves fortes, bateria com ataque limpo e drops que batem no peito sem virar bagunça. Seu ouvido gosta de pressão, mas também percebe respiro, silêncio antes do impacto e detalhes de sound design que fazem o grave parecer maior.",
         cardDescription: "Bass forte com controle: subgrave físico, bateria limpa e drops que respiram antes do impacto."
       },
       en: {
-        name: "Bass Hunter",
+        name: "Sub Hunter",
         archetype: "Rhythmic impact",
         description: "You hunt impact in dnb, neurofunk, and bass music through strong sub-bass, clean drum attack, and drops that hit the chest without turning messy. You notice silence before impact, pressure that still breathes, and sound-design details that make the low end feel bigger.",
         cardDescription: "Controlled bass pressure: physical sub, clean drums, and drops with breath before impact."
       },
       es: {
-        name: "Cazador de Bass",
+        name: "Cazador de Subgrave",
         archetype: "Impacto rítmico",
         description: "Buscas impacto en dnb, neurofunk y bass music con subgrave fuerte, batería limpia y drops que golpean el pecho sin volverse confusos. Percibes el silencio antes del golpe, la presión que respira y los detalles de diseño sonoro que hacen que el grave parezca más grande.",
         cardDescription: "Bass fuerte con control: subgrave físico, batería limpia y drops con respiro antes del impacto."
@@ -9326,19 +9326,19 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Catalisador Hard",
+        name: "Catalisador de Kick",
         archetype: "Catarse de kick",
         description: "Personalidade frontal e catártica. Você responde a kick forte, energia no limite, impacto físico e euforia direta, sem precisar disfarçar intensidade.",
         cardDescription: "Hard dance: kick forte, catarse rápida, pressão física e euforia frontal."
       },
       en: {
-        name: "Hard Catalyst",
+        name: "Kick Catalyst",
         archetype: "Kick catharsis",
         description: "You respond to hard kicks, edge energy, physical impact, and direct euphoria. This spirit turns intensity into release without apologizing for pressure.",
         cardDescription: "Hard dance: hard kicks, fast catharsis, physical pressure, and frontal euphoria."
       },
       es: {
-        name: "Catalizador Hard",
+        name: "Catalizador de Kick",
         archetype: "Catarsis de kick",
         description: "Respondes al kick fuerte, energía al límite, impacto físico y euforia directa. Este arquetipo convierte intensidad en liberación.",
         cardDescription: "Hard dance: kick fuerte, catarsis rápida, presión física y euforia frontal."
@@ -9360,19 +9360,19 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Navegante Breaks",
+        name: "Navegante Offbeat",
         archetype: "Pulso quebrado",
         description: "Personalidade ágil e lateral. Você gosta de swing quebrado, baixo flexível, espaço entre batidas e viradas que surpreendem sem perder corpo.",
         cardDescription: "Breaks/garage: swing quebrado, espaço, subgrave flexível e virada inteligente."
       },
       en: {
-        name: "Breaks Navigator",
+        name: "Offbeat Navigator",
         archetype: "Broken pulse",
         description: "You like broken swing, flexible low end, negative space between hits, and turns that surprise without losing body. Your rhythm sense moves sideways.",
         cardDescription: "Breaks/garage: broken swing, space, flexible sub, and smart turns."
       },
       es: {
-        name: "Navegante Breaks",
+        name: "Navegante Offbeat",
         archetype: "Pulso quebrado",
         description: "Te gusta el swing quebrado, el grave flexible, el espacio entre golpes y giros que sorprenden sin perder cuerpo. Tu ritmo se mueve de lado.",
         cardDescription: "Breaks/garage: swing quebrado, espacio, subgrave flexible y giro inteligente."
@@ -9454,11 +9454,11 @@ const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
     environment: "festival sunrise horizon with soft haze and uplifting clean light"
   },
   estilista_tech_house: {
-    identity: "adult tech-house stylist with stylish human confidence, social charisma, and controlled club swagger",
-    face: "visible eyes through lightly tinted glasses or no glasses, relaxed smirk, opal ghost skin, expressive eyebrows",
-    wardrobe: "sharp black club shirt, tasteful jewelry, textured jacket, contemporary fashion, no mascot pose",
-    aura: "dry bass pulses, chopped vocal light fragments, clean groove loops, green-blue club reflections",
-    environment: "sleek intimate club corner with warm crowd energy and polished shadows"
+    identity: "adult tech-house / bass-house groove connector with social club charisma, booth awareness, dry-bass confidence, and a distinct after-hours personality",
+    face: "visible expressive eyes, relaxed confident smile, realistic skin under magenta-cyan club light, expressive eyebrows, not a plain fashion portrait",
+    wardrobe: "technical clubwear instead of a generic leather jacket: mesh or transparent vinyl layer, utility zipper details, reflective seam piping, one asymmetric earpiece or one clean chain, no repeated glasses or repeated necklace",
+    aura: "DJ mixer fader geometry, CDJ jog-wheel arcs, chopped-vocal LED fragments, dry bass pulse bars, equalizer blocks reflected in fabric, green-blue club reflections",
+    environment: "intimate underground booth or club-wall light panel with visible abstract mixer/CDJ/equalizer architecture behind the shoulders, not just a colored neon wave"
   },
   alma_house: {
     identity: "adult house-soul entity with a warm humanoid spectral face, soulful charisma, and community dancefloor glow",
@@ -17150,7 +17150,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Gere a arte IA em alta qualidade para baixar ou compartilhar com nível e marco de likes.",
     spiritCollectibleHintLocal: "A arte IA precisa estar pronta para baixar ou compartilhar.",
     spiritCollectibleHintLocalReady: "Arte IA pronta e exibida acima. Use os botões para baixar, compartilhar ou gerar outra versão.",
-    spiritCollectibleHintApi: "Arte IA baseada no seu gosto, exibida uma única vez acima. Baixe, compartilhe ou gere outra versão por aqui.",
+    spiritCollectibleHintApi: "Arte IA baseada no seu gosto, exibida aqui. Baixe, compartilhe ou gere outra versão por aqui.",
     spiritCollectiblePremiumLocked: "A arte IA está preparada. Gere novamente quando a imagem online estiver disponível.",
     premiumAvatarLimitReached: "Assine premium para desbloquear mais bustos de arquétipo em alta qualidade.",
     premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
@@ -17976,7 +17976,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Generate the high-quality AI artwork to download or share with level and like milestone.",
     spiritCollectibleHintLocal: "AI artwork must be ready before downloading or sharing.",
     spiritCollectibleHintLocalReady: "AI artwork is ready and shown above. Use the buttons to download, share, or generate another version.",
-    spiritCollectibleHintApi: "AI artwork based on your taste, shown once above. Download, share, or generate another version here.",
+    spiritCollectibleHintApi: "AI artwork based on your taste, shown here. Download, share, or generate another version here.",
     spiritCollectiblePremiumLocked: "AI artwork is prepared. Generate again when the online image is available.",
     premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality archetype busts.",
     premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
@@ -18799,7 +18799,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Genera el arte IA en alta calidad para descargar o compartir con nivel e hito de likes.",
     spiritCollectibleHintLocal: "El arte IA debe estar listo antes de descargar o compartir.",
     spiritCollectibleHintLocalReady: "Arte IA lista y mostrada arriba. Usa los botones para descargar, compartir o generar otra versión.",
-    spiritCollectibleHintApi: "Arte IA basada en tu gusto, mostrada una sola vez arriba. Descarga, comparte o genera otra versión aquí.",
+    spiritCollectibleHintApi: "Arte IA basada en tu gusto, mostrada aquí. Descarga, comparte o genera otra versión aquí.",
     spiritCollectiblePremiumLocked: "El arte IA está preparado. Genera de nuevo cuando la imagen online esté disponible.",
     premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más bustos de arquetipo en alta calidad.",
     premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
@@ -32865,8 +32865,8 @@ const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
     "Industrial club styling: realistic adult techno spirit with minimal black clothes, metallic accessories, precise posture, machine-room confidence, visible eyes, and no faceless mask"
   ],
   house: [
-    "House/tech-house styling: adult fashionable club spirit with warm social charisma, tasteful jewelry, tinted glasses that keep the eyes visible, textured jacket, confident smile, opal ghost skin, and polished dancefloor glow",
-    "Soulful club styling: realistic spectral upper-body portrait with elegant relaxed clubwear, amber or pink highlights, emotional warmth, community energy, and refined groove attitude"
+    "House/tech-house styling: adult groove connector from an underground club booth, visible friendly face, technical mesh or transparent-vinyl clubwear, one curated accessory, mixer-fader/equalizer light reflected on fabric, dry-bass social charisma, no plain leather-jacket portrait",
+    "Soulful/house styling: adult dancefloor selector with relaxed clubwear, warm jewelry used once, visible smile, amber-pink booth light, rounded bass-wave background, community energy, and real club personality rather than generic neon portrait"
   ],
   bass: [
     "Bass/DnB styling: adult humanoid bass spirit bust with physical low-end presence, tactical street-club jacket, headphones or pressure-ring collar, kinetic shoulders, speaker-shadow aura, translucent smoke skin, and sharp approachable gaze",
@@ -32915,8 +32915,8 @@ const SPIRIT_STYLE_FAMILY_ACCESSORIES = {
     "minimal metal ear cuff, structured club coat, concrete-strobe reflections"
   ],
   house: [
-    "tasteful necklace stack, tinted glasses with visible eyes, textured fashion jacket",
-    "warm metallic jewelry, relaxed club shirt, polished social-dancefloor styling"
+    "single clean chain or transparent in-ear monitor, mesh club layer, mixer-LED reflections",
+    "one warm metallic accessory, utility zipper detail, polished booth-to-dancefloor styling"
   ],
   bass: [
     "headphones around the neck, pressure-ring collar, tactical club jacket",
@@ -33168,12 +33168,14 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression or repeated styling. Create a different fictional adult electronic party archetype and a complete visual overhaul: different face, head shape, hair, apparent presentation, age cue, skin tone, makeup, body/bust silhouette, posture, clothing category, jacket/collar shape, strap layout, eyewear/visor/headphones, jewelry, background color, lighting, and emotional expression. Do not keep the same person or the same outfit formula."
     : "";
+  const electronicSceneRule = "Electronic personality lock: the image must be unmistakably electronic before it reads as a portrait. Include at least three visible electronic-culture cues integrated into wardrobe, light, or background: DJ mixer faders, CDJ jog-wheel arcs, modular-synth patch grid, cable silhouettes, equalizer blocks, speaker pressure rings, LED strips, club wristband, transparent in-ear monitor, reflective utility seams, mesh/vinyl clubwear, or booth light panels. A plain person with colored neon or a single waveform behind them is a failed result. Avoid repeating the previous leather-jacket / glasses / pendant formula.";
   const humanEntityGuardrail = "Non-negotiable quality gate: render a polished semi-realistic / hyper-realistic bust portrait of a fictional adult electronic-music party archetype tied to the user's actual dominant electronic subgenres, rhythm, dance, fashion, and club culture. Composition must be central, chest-up only, with face, neck, shoulders, and upper chest visible. The face must be large, bright enough to read on a phone, happy or warmly confident, expressive in the eyes and mouth, never hidden in shadow, smoke, mask, helmet, or abstract effects. It must look like a distinct adult person from an electronic music scene, not a supernatural spirit, generic musician, DJ press photo, carnival performer, fantasy character, mascot, or abstract icon. Electronic-first rule: build the character and background from recognizable club, rave, DJ booth, synth, and sound-system culture: abstract mixer-fader geometry, equalizer bars, waveform arcs, modular-synth patch-grid or cable silhouettes, speaker-pressure rings, laser lines, LED strips, UV-reactive seams, chrome, transparent vinyl, reflective nylon, mesh, and subgenre-specific clubwear. Total visual variation is mandatory: do not repeat outfit type, jacket cut, harness or strap layout, collar, glasses or visor shape, headphones, jewelry set, hairstyle, makeup pattern, dominant palette, lighting direction, or background composition. Accessory discipline is mandatory: at most one eyewear item total; if glasses are on the face, never add another pair on the head or forehead. Use at most one necklace or one pendant focal point; do not stack repeated necklaces, repeated beads, duplicate pendants, duplicate ear cuffs, duplicate rings, or multiple accessories serving the same role. Only use psychedelic/festival styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use warehouse/industrial/minimal club language, for House use warm/social/fashionable groove language, for Trance use clean euphoric melodic clubwear, for Bass/DnB/Breaks use pressure-driven street-club language, for Hard Dance use kick-impact strobe performance language, and for Ambient/Leftfield use atmospheric organic or cyber-editorial language. Background must be a modular editable abstract neon studio/light panel behind the bust, separated from the subject, with abstract equalizer, waveform, mixer, modular-synth, laser, LED, or speaker-pressure geometry and no readable text. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid duplicate accessories, two pairs of glasses, glasses on face plus glasses on forehead, carnival feathers, samba costume, circus/clown feeling, cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands dominating the frame, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, fantasy robe, crowns, armor, acoustic instruments, guitars, lyres, tambourines, ordinary DJ photo and plain passport portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
     spiritText?.archetype ? `archetype: ${spiritText.archetype}` : "",
     characterRejectionRule,
+    electronicSceneRule,
     mutationDirective,
     entityDirection
   ].filter(Boolean).join("; ");
@@ -35117,7 +35119,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     return null;
   }
 
-  syncSpiritAvatarWithCollectible(collectible, spiritText);
+  // Keep the AI artwork in one place; duplicating it in the header makes the archetype panel feel repetitive.
   scheduleStorySharePrewarm(collectible.imageUrl, renderedState.shareFilename, 350);
   return collectible;
 }
@@ -35496,9 +35498,6 @@ async function renderMusicalSpirit({ celebrate = false, triggerEl = null, forceA
   } catch (error) {
     console.warn("Spirit collectible unavailable; keeping static artwork fallback.", error);
     if (spiritCollectibleHint) spiritCollectibleHint.textContent = t("spiritCollectibleHintLocal");
-  }
-  if (collectible?.imageUrl) {
-    syncSpiritAvatarWithCollectible(collectible, spiritText);
   }
   await spiritNarrativeTask;
 
