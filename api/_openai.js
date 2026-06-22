@@ -391,7 +391,7 @@ async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium",
   }
 
   const model = String(requestedModel || process.env.OPENAI_IMAGE_MODEL || "gpt-image-1").trim();
-  const safeQuality = String(process.env.OPENAI_IMAGE_QUALITY || quality || "medium").trim();
+  const safeQuality = String(quality || process.env.OPENAI_IMAGE_QUALITY || "medium").trim();
   const response = await fetch(OPENAI_IMAGES_URL, {
     method: "POST",
     headers: {
