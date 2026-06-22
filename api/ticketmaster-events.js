@@ -11,7 +11,106 @@ const TICKETMASTER_KEY_ENVS = [
   "TICKETMASTER_DISCOVERY_API_KEY",
   "TM_CONSUMER_KEY"
 ];
+
+const COSMIC_CREW_2026_EVENT_URL = "https://zig.tickets/eventos/cosmic-crew-23-anos";
+const COSMIC_CREW_2026_EVENT_ARTISTS = [
+  ["umber vamber", "Umber Vamber"],
+  ["umber sonus", "Umber Sonus"],
+  ["phagos sonus", "Phagos Sonus"],
+  ["ipotocaticac", "Ipotocaticac"],
+  ["ipotocattica", "Ipotocaticac"],
+  ["ipotocatticac", "Ipotocaticac"],
+  ["paralocks", "Paralocks"],
+  ["paralocks retro", "Paralocks"],
+  ["salakavala", "Salakavala"],
+  ["igor swamp", "Igor Swamp"],
+  ["gaida", "Gaida"],
+  ["dylalien", "Dylalien"],
+  ["alcohbata", "Alcohbata"],
+  ["alcohibata", "Alcohbata"],
+  ["traxon", "Traxon"],
+  ["minimal criminal", "Minimal Criminal"],
+  ["at work", "At Work"],
+  ["atwork", "At Work"],
+  ["indacoruna", "IndacoRuna"],
+  ["indaco runa", "IndacoRuna"],
+  ["radiruna", "RadiRuna"],
+  ["radi runa", "RadiRuna"],
+  ["radice", "Radice"],
+  ["umbra lumen", "Umbra Lumen"]
+];
+
+const PACHAMAMA_2026_EVENT_URL = "https://zig.tickets/eventos/pachamama-festival-11-anos";
+const PACHAMAMA_2026_EVENT_ARTISTS = [
+  ["zik", "Zik"],
+  ["polyzik", "Polyzik"],
+  ["poly zik", "Polyzik"],
+  ["oxidaksi", "Oxidaksi"],
+  ["oxidaksi retro set", "Oxidaksi"],
+  ["depuratus", "Depuratus"],
+  ["audiosyntax", "Audiosyntax"],
+  ["audio syntax", "Audiosyntax"],
+  ["kasatka", "Kasatka"],
+  ["calyptratus", "Calyptratus"],
+  ["opus summum", "Opus Summum"],
+  ["kaos", "Kaos"],
+  ["polykaos", "Polykaos"],
+  ["poly kaos", "Polykaos"],
+  ["strangekaos", "StrangeKaos"],
+  ["strange kaos", "StrangeKaos"],
+  ["stranger", "Stranger"],
+  ["bethad", "Bethad"],
+  ["penurna", "Penurna"],
+  ["khaline", "Khaline"],
+  ["yara", "Yara"],
+  ["dark notes", "Dark Notes"],
+  ["dark notes br", "Dark Notes"],
+  ["yara vs dark notes", "Yara / Dark Notes"],
+  ["alcohbata", "Alcohbata"],
+  ["alcohibata", "Alcohbata"],
+  ["umbra lumen", "Umbra Lumen"],
+  ["vuttun", "Vuttun"],
+  ["vutt un", "Vuttun"],
+  ["vucsetics", "Vucsetics"]
+];
+
 const KNOWN_EVENT_FALLBACKS = {
+  ...Object.fromEntries(COSMIC_CREW_2026_EVENT_ARTISTS.map(([key, artist]) => [
+    key,
+    [
+      {
+        id: `cosmic-crew-23-anos-${key.replace(/[^a-z0-9]+/g, "-")}-2026`,
+        name: "Cosmic Crew 23 anos - Psychedelic Revolution",
+        artist,
+        datetime: "2026-07-31",
+        dateOnly: true,
+        venue: "Estancia Nazare Paulista",
+        city: "Nazare Paulista",
+        country: "BR",
+        url: COSMIC_CREW_2026_EVENT_URL,
+        sourceName: "Zig.Tickets",
+        sourceUrl: COSMIC_CREW_2026_EVENT_URL
+      }
+    ]
+  ])),
+  ...Object.fromEntries(PACHAMAMA_2026_EVENT_ARTISTS.map(([key, artist]) => [
+    key,
+    [
+      {
+        id: `pachamama-11-anos-${key.replace(/[^a-z0-9]+/g, "-")}-2026`,
+        name: "Pachamama Festival 11 anos - A Nova Era",
+        artist,
+        datetime: "2026-10-16",
+        dateOnly: true,
+        venue: "Estancia Nazare Paulista",
+        city: "Nazare Paulista",
+        country: "BR",
+        url: PACHAMAMA_2026_EVENT_URL,
+        sourceName: "Zig.Tickets",
+        sourceUrl: PACHAMAMA_2026_EVENT_URL
+      }
+    ]
+  ])),
   "michael bibi": [
     {
       id: "michael-bibi-one-life-sao-paulo-2026",
@@ -243,7 +342,7 @@ async function fetchTicketmasterAttractionIds({ apiKey, query }) {
 
 async function fetchBandsintownEventsForQuery({ query }) {
   const appId = envText("BANDSINTOWN_APP_ID", "");
-  if (!appId || !featureEnabled("SONIC_BANDSINTOWN_ENABLED", true)) return [];
+  if (!appId || !featureEnabled("SONIC_BANDSINTOWN_ENABLED", false, { allowGlobalFallback: false })) return [];
   const params = new URLSearchParams({ app_id: appId });
   const response = await fetch(`${BANDSINTOWN_EVENTS_URL}/${encodeURIComponent(query)}/events?${params.toString()}`, {
     headers: { Accept: "application/json" }

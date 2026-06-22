@@ -1,6 +1,6 @@
 const { envFlag, envText, sendJson, trimText } = require("./_music-apis");
 
-const CATALOG_LIMIT_MAX = 80;
+const CATALOG_LIMIT_MAX = 200;
 
 function supabaseConfig() {
   const supabaseUrl = envText("SUPABASE_URL").replace(/\/+$/, "");
@@ -19,7 +19,7 @@ function catalogLimit(value) {
 function catalogOffset(value) {
   const parsed = Number.parseInt(String(value || ""), 10);
   if (!Number.isFinite(parsed) || parsed < 0) return 0;
-  return Math.min(5000, parsed);
+  return Math.min(20000, parsed);
 }
 
 function catalogQuery(req, key, maxLength = 80) {

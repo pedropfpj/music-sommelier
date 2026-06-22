@@ -51,11 +51,38 @@ const STYLE_TO_FAMILY = {
   soulful_house: "house",
   disco_house: "house",
   garage_house: "house",
+  edm: "house",
+  progressive_edm: "house",
+  big_room_house: "house",
+  future_house: "house",
+  slap_house: "house",
+  tropical_house: "house",
+  complextro: "house",
+  electronic_dance_pop: "house",
+  chicago_house: "house",
+  french_house: "house",
+  funky_house: "house",
+  tribal_house: "house",
+  latin_house: "house",
+  piano_house: "house",
+  melodic_house: "house",
+  microhouse: "house",
+  eurodance: "house",
+  ghetto_house: "house",
+  big_room_techno: "house",
+  mainstage_techno: "house",
   drum_and_bass: "dnb",
   liquid_dnb: "dnb",
   neurofunk: "dnb",
   jump_up: "dnb",
   jungle: "dnb",
+  darkstep: "dnb",
+  techstep: "dnb",
+  hardstep: "dnb",
+  atmospheric_jungle: "dnb",
+  ragga_jungle: "dnb",
+  sambass: "dnb",
+  drumfunk: "dnb",
   breakbeat: "bass_music",
   uk_garage: "bass_music",
   future_garage: "bass_music",
@@ -68,6 +95,28 @@ const STYLE_TO_FAMILY = {
   experimental_bass: "bass_music",
   wave: "bass_music",
   breakcore: "bass_music",
+  brostep: "bass_music",
+  melodic_dubstep: "bass_music",
+  chillstep: "bass_music",
+  post_dubstep: "bass_music",
+  drumstep: "bass_music",
+  nu_skool_breaks: "bass_music",
+  florida_breaks: "bass_music",
+  bassline: "bass_music",
+  uk_bass: "bass_music",
+  wonky: "bass_music",
+  glitch_hop: "bass_music",
+  neurohop: "bass_music",
+  edm_trap: "bass_music",
+  hardwave: "bass_music",
+  jersey_club: "bass_music",
+  baltimore_club: "bass_music",
+  ballroom_vogue_beats: "bass_music",
+  kuduro_eletronico: "bass_music",
+  batida: "bass_music",
+  singeli: "bass_music",
+  shangaan_electro: "bass_music",
+  ghettotech: "bass_music",
   downtempo: "leftfield",
   ambient: "leftfield",
   chillout: "leftfield",
@@ -79,13 +128,45 @@ const STYLE_TO_FAMILY = {
   slambient: "psytrance",
   idm: "leftfield",
   electro: "leftfield",
+  dark_ambient: "leftfield",
+  space_ambient: "leftfield",
+  ambient_house: "leftfield",
+  ambient_dub: "leftfield",
+  lowercase: "leftfield",
+  microsound: "leftfield",
+  electroacoustic: "leftfield",
+  musique_concrete: "leftfield",
+  berlin_school: "leftfield",
+  kosmische_musik: "leftfield",
+  italo_disco: "leftfield",
+  hi_nrg: "leftfield",
+  retrowave: "leftfield",
+  outrun: "leftfield",
+  darksynth: "leftfield",
+  minimal_wave: "leftfield",
+  futurepop: "leftfield",
+  industrial_dance: "leftfield",
+  deconstructed_club: "leftfield",
   brazilian_funk: "bass_music",
   gabber: "techno",
+  crossbreed: "hard_dance",
   hardstyle: "hard_dance",
   hardcore: "hard_dance",
   frenchcore: "hard_dance",
   speedcore: "hard_dance",
-  rawstyle: "hard_dance"
+  rawstyle: "hard_dance",
+  euphoric_hardstyle: "hard_dance",
+  reverse_bass: "hard_dance",
+  hard_dance: "hard_dance",
+  uk_hardcore: "hard_dance",
+  terrorcore: "hard_dance",
+  extratone: "hard_dance",
+  makina: "hard_dance",
+  progressive_trance: "trance",
+  acid_trance: "trance",
+  balearic_trance: "trance",
+  dream_trance: "trance",
+  vocal_trance: "trance"
 };
 
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
@@ -167,6 +248,21 @@ const AI_FEATURE_CONFIG = {
   ...AI_DEFAULT_CONFIG,
   ...(typeof window !== "undefined" && window.SONIC_SEARCH_AI_CONFIG
     ? window.SONIC_SEARCH_AI_CONFIG
+    : {})
+};
+const COMPLIANCE_DEFAULT_CONFIG = {
+  clientMusicCatalogApisEnabled: true,
+  clientDeezerEnabled: false,
+  clientItunesEnabled: true,
+  clientArtistReferenceApisEnabled: false,
+  directNewsFetchEnabled: false,
+  newsFeedEndpoint: "",
+  externalQrApiEnabled: false
+};
+const COMPLIANCE_CONFIG = {
+  ...COMPLIANCE_DEFAULT_CONFIG,
+  ...(typeof window !== "undefined" && window.SONIC_SEARCH_COMPLIANCE_CONFIG
+    ? window.SONIC_SEARCH_COMPLIANCE_CONFIG
     : {})
 };
 const PREMIUM_ART_PROMPT_MIN_LIKES = 50;
@@ -493,6 +589,186 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
   }
 ];
 
+const DJ_RECOMMENDATION_STORAGE_KEY = "sonic_search_dj_recommendations_v1";
+const DJ_SET_RECOMMENDATION_SEEDS = [
+  {
+    id: "mop-paula",
+    lane: "mop",
+    style: "dark_psy",
+    name: "Paula",
+    country: "Brasil",
+    scene: "MOP / darkpsy brasileiro",
+    subgenre: "Dark Psy / Psycore",
+    setTitle: "Paula @ Master of Puppets 2025",
+    setUrl: "https://www.youtube.com/watch?v=4fXJmW78rns",
+    platform: "YouTube",
+    sourceName: "PAULA",
+    eventSignal: "Master of Puppets",
+    roleNote: "DJ/selectora; entra como recomendacao por set, nao como artista-produtor.",
+    reason: "Set diretamente ligado ao circuito MOP, com leitura darkpsy de pista e transicoes rapidas para calibrar o radar extremo."
+  },
+  {
+    id: "mop-booo",
+    lane: "mop",
+    style: "hi_tech",
+    name: "DJ Booo",
+    country: "Brasil",
+    scene: "MOP / hi-tech brasileiro",
+    subgenre: "Hi-Tech / Psycore",
+    setTitle: "DJ BOOO - ReveillOz 2018 / 2019",
+    setUrl: "https://soundcloud.com/booo_cosmic_crew/dj-booo-reveilloz-2018-2019",
+    platform: "SoundCloud",
+    sourceName: "booo_cosmic_crew",
+    eventSignal: "Master of Puppets",
+    roleNote: "DJ de destaque no recorte MOP; mantido fora do catalogo de faixas autorais.",
+    reason: "Boa referencia de energia hi-tech/psycore brasileira sem exigir faixa propria no banco principal."
+  },
+  {
+    id: "mop-anginha",
+    lane: "mop",
+    style: "hi_tech",
+    name: "Anginha",
+    country: "Brasil",
+    scene: "Hi-tech brasileiro",
+    subgenre: "Hi-Tech",
+    setTitle: "ANGINHA - Set exclusivo Hitech Connection #001",
+    setUrl: "https://soundcloud.com/hitechconnection/anginha-set-exclusivo-hitech-connection-001",
+    platform: "SoundCloud",
+    sourceName: "Hitech Connection",
+    eventSignal: "MOP / Naturaiz / Hitech Revolution",
+    roleNote: "DJ recomendada por set publico; nao entra como produtora no catalogo de tracks.",
+    reason: "A melhor entrada e pelo set: hi-tech direto, rapido e mais limpo de classificar que buscar faixa autoral incerta."
+  },
+  {
+    id: "mop-maiko",
+    lane: "mop",
+    style: "dark_psy",
+    name: "Maiko",
+    country: "Lituania",
+    scene: "Dark / forest psy",
+    subgenre: "Dark Psy / Forest Psy",
+    setTitle: "Maiko - Full Set @ Universo Paralello #18",
+    setUrl: "https://www.youtube.com/watch?v=c03EeWES7kQ",
+    platform: "YouTube",
+    sourceName: "Psicodelia Coletiva",
+    eventSignal: "MOP Brazil 2026 flyer",
+    roleNote: "DJ/selectora internacional; catalogada por set e nao por faixa propria.",
+    reason: "Set longo e tocavel para mapear a area dark/forest sem confundir com hi-tech ou dark experimental."
+  },
+  {
+    id: "mop-psynonima",
+    lane: "mop",
+    style: "hi_tech",
+    name: "Psynonima",
+    country: "Espanha",
+    scene: "Hi-tech europeu",
+    subgenre: "Hi-Tech / 200 BPM",
+    setTitle: "Pakawalla Hitech DJSET / Psynonima",
+    setUrl: "https://soundcloud.com/psynonima/pakawalla-hitech-djset-psynonima",
+    platform: "SoundCloud",
+    sourceName: "Psynonima",
+    eventSignal: "MOP Brazil 2026 flyer",
+    roleNote: "DJ-first no app; recomendacao baseada em set publico de 200 BPM.",
+    reason: "O proprio upload sinaliza 200 BPM, entao a aba trata como hi-tech/alta velocidade em vez de dark experimental."
+  },
+  {
+    id: "global-psy-giuseppe",
+    lane: "global_psy",
+    style: "forest_psy",
+    name: "Giuseppe",
+    country: "Italia",
+    scene: "Parvati / forest psy",
+    subgenre: "Forest Psy / Dark Psy",
+    setTitle: "Giuseppe @ The Hive - MoDem Festival 2024",
+    setUrl: "https://www.youtube.com/watch?v=o7q7SoKsk9Y",
+    platform: "YouTube",
+    sourceName: "MoDem Festival Official",
+    eventSignal: "MoDem / Parvati Records",
+    roleNote: "DJ e curador de label; recomendado como selector de cena.",
+    reason: "Referencia internacional forte para forest/dark psy com set oficial de festival e assinatura de curadoria Parvati."
+  },
+  {
+    id: "global-psy-boom-shankar",
+    lane: "global_psy",
+    style: "psytrance",
+    name: "Boom Shankar",
+    country: "Alemanha",
+    scene: "Psytrance global",
+    subgenre: "Psytrance / Twilight",
+    setTitle: "Boom Shankar @ Boom Festival 2022 - Full Set Movie",
+    setUrl: "https://www.youtube.com/watch?v=jaq6dvI5wuM",
+    platform: "YouTube",
+    sourceName: "BMSS Records",
+    eventSignal: "Boom Festival / BMSS",
+    roleNote: "DJ/label curator; recomendado por set, separado de produtores do catalogo.",
+    reason: "Boa ponte para usuarios que querem selector global de psytrance sem necessariamente buscar faixa autoral."
+  },
+  {
+    id: "global-club-ben-ufo",
+    lane: "global_club",
+    style: "uk_garage",
+    name: "Ben UFO",
+    country: "Reino Unido",
+    scene: "UK bass / club selector",
+    subgenre: "UK Garage / Bass / Techno",
+    setTitle: "Ben UFO | Boiler Room x Dekmantel 2019",
+    setUrl: "https://www.youtube.com/watch?v=phClx3879HM",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    eventSignal: "Dekmantel / Boiler Room",
+    roleNote: "DJ-first reconhecido pela selecao, nao por catalogo autoral.",
+    reason: "Referencia internacional de selector que atravessa UK bass, techno e garage com narrativa de set."
+  },
+  {
+    id: "global-club-jane-fitz",
+    lane: "global_club",
+    style: "deep_house",
+    name: "Jane Fitz",
+    country: "Reino Unido",
+    scene: "Deep club selector",
+    subgenre: "Deep House / Acid / Techno",
+    setTitle: "Jane Fitz | Boiler Room Milan: Apollo",
+    setUrl: "https://www.youtube.com/watch?v=E4v61EdGFI4",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    eventSignal: "Boiler Room / Apollo",
+    roleNote: "DJ/selectora de pesquisa; entra como recomendacao de set.",
+    reason: "Ideal para abrir uma trilha de selectors sem depender de discografia propria."
+  },
+  {
+    id: "global-club-josey-rebelle",
+    lane: "global_club",
+    style: "techno",
+    name: "Josey Rebelle",
+    country: "Reino Unido",
+    scene: "Techno / house selector",
+    subgenre: "Techno / House / Electro",
+    setTitle: "Josey Rebelle | Boiler Room x Dekmantel Festival 2022",
+    setUrl: "https://www.youtube.com/watch?v=UpgpCZM97Hg",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    eventSignal: "Dekmantel / Boiler Room",
+    roleNote: "DJ-first; forte como curadoria de pista e radio, sem precisar virar produtora no app.",
+    reason: "Set internacional de alto criterio para usuarios que querem selectors fora da bolha de produtores."
+  },
+  {
+    id: "global-club-jyoty",
+    lane: "global_club",
+    style: "house",
+    name: "Jyoty",
+    country: "Paises Baixos / India",
+    scene: "Global club / radio selector",
+    subgenre: "House / Global Club / Bass",
+    setTitle: "Jyoty | Boiler Room: London",
+    setUrl: "https://www.youtube.com/watch?v=2VrztYTNYT8",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    eventSignal: "Boiler Room / Rinse",
+    roleNote: "DJ e apresentadora/curadora; recomendada por set tocavel.",
+    reason: "Curadoria global acessivel para abrir a aba de DJs alem do eixo psy/dark."
+  }
+];
+
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
   dark_psy: "dark psy psytrance",
@@ -772,6 +1048,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/artist_expansion_seeds_v9.csv",
   "data/artist_expansion_seeds_v10.csv",
   "data/artist_expansion_seeds_v11.csv",
+  "data/artist_expansion_seeds_v12.csv",
+  "data/artist_expansion_seeds_v13.csv",
   "data/verified_track_expansion_v1.csv",
   "data/verified_track_expansion_v2.csv",
   "data/verified_track_expansion_v3.csv",
@@ -781,9 +1059,32 @@ const EXTERNAL_DATASET_FILES = [
   "data/verified_track_expansion_v7.csv",
   "data/verified_track_expansion_v8.csv",
   "data/verified_track_expansion_v9.csv",
+  "data/verified_track_expansion_v10.csv",
+  "data/club_styles_enrichment_v1_20260620.csv",
+  "data/club_styles_enrichment_v2_20260621.csv",
+  "data/club_styles_artist_profiles_v2_20260621.csv",
+  "data/electronic_subgenre_expansion_v15_20260621.csv",
+  "data/electronic_subgenre_artist_profiles_v15_20260621.csv",
+  "data/catalog_playable_depth_v16_20260622.csv",
+  "data/catalog_playable_focus_club_v17_20260622.csv",
+  "data/michael_bibi_artist_profile_20260621.csv",
+  "data/michael_bibi_playable_tracks_20260621.csv",
+  "data/psycore_artist_profiles_v4_20260621.csv",
+  "data/psycore_artist_profiles_v5_20260621.csv",
   "data/techno_enrichment_v3_20260621.csv",
   "data/michael_bibi_artist_profile_20260621.csv",
   "data/michael_bibi_playable_tracks_20260621.csv",
+  "data/techno_enrichment_v4_20260621.csv",
+  "data/techno_enrichment_v5_20260621.csv",
+  "data/techno_artist_profiles_v3_20260621.csv",
+  "data/techno_artist_profiles_v4_20260621.csv",
+  "data/hive_festival_2026_artist_profiles.csv",
+  "data/cosmic_crew_2026_artist_profiles.csv",
+  "data/cosmic_crew_2026_playable_tracks.csv",
+  "data/mop_brasil_2026_rage_artist_profiles.csv",
+  "data/mop_brasil_2026_rage_playable_tracks.csv",
+  "data/pachamama_2026_artist_profiles.csv",
+  "data/pachamama_2026_playable_tracks.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -795,11 +1096,12 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
   "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
 ];
-const INDEXED_DATASET_ARTIST_COUNT = 4690;
+const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
-const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 80;
-const CATALOG_EXTRA_IMPORT_MAX_PAGES = 8;
+const API_HEALTH_ENDPOINT = "/api/integration-health";
+const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
+const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
 
 const LOCAL_TRACK_SEED_BOOST = [
@@ -1453,7 +1755,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     bpmExact: 145,
     artistCountry: "Italy",
     artistGenre: "Hard Techno / Acid",
-    artistProfileHint: "Hard techno acido de alta pressao para energia extrema."
+    artistProfileHint: "Hard techno acido de alta pressao para energia extrema.",
+    spotifyUrl: "https://open.spotify.com/search/999999999%20X0004000X",
+    youtubeUrl: "https://www.youtube.com/results?search_query=999999999%20X0004000X"
   },
   {
     style: "hard_techno",
@@ -1883,7 +2187,9 @@ const LOCAL_TRACK_SEED_BOOST = [
     bpmExact: 138,
     artistCountry: "Israel",
     artistGenre: "Progressive Psy",
-    artistProfileHint: "Progressive psy elastico com assinatura israelense."
+    artistProfileHint: "Progressive psy elastico com assinatura israelense.",
+    spotifyUrl: "https://open.spotify.com/search/Ace%20Ventura%20Presence",
+    youtubeUrl: "https://www.youtube.com/results?search_query=Ace%20Ventura%20Presence"
   },
   {
     style: "hi_tech",
@@ -2185,6 +2491,11 @@ const DATASET_STYLE_ALIASES = {
   psychillpsybient: "psybient",
   techtrance: "tech_trance",
   hardtrance: "hard_trance",
+  progressivetrance: "progressive_trance",
+  acidtrance: "acid_trance",
+  balearictrance: "balearic_trance",
+  dreamtrance: "dream_trance",
+  vocaltrance: "vocal_trance",
   chill: "chillout",
   chillout: "chillout",
   chilloutdowntempo: "chillout",
@@ -2232,10 +2543,43 @@ const DATASET_STYLE_ALIASES = {
   soulfulhouse: "soulful_house",
   discohouse: "disco_house",
   garagehouse: "garage_house",
+  edm: "edm",
+  festivaledm: "edm",
+  progressiveedm: "progressive_edm",
+  festivalprogressivehouse: "progressive_edm",
+  bigroomhouse: "big_room_house",
+  bigroom: "big_room_house",
+  futurehouse: "future_house",
+  slaphouse: "slap_house",
+  tropicalhouse: "tropical_house",
+  complextro: "complextro",
+  electronicdancepop: "electronic_dance_pop",
+  dancepopeletronico: "electronic_dance_pop",
+  electronicdance: "electronic_dance_pop",
+  chicagohouse: "chicago_house",
+  frenchhouse: "french_house",
+  filterhouse: "french_house",
+  funkyhouse: "funky_house",
+  tribalhouse: "tribal_house",
+  latinhouse: "latin_house",
+  pianohouse: "piano_house",
+  melodichouse: "melodic_house",
+  microhouse: "microhouse",
+  eurodance: "eurodance",
+  ghettohouse: "ghetto_house",
+  bigroomtechno: "big_room_techno",
+  mainstagetechno: "mainstage_techno",
   drumandbass: "drum_and_bass",
   liquiddnb: "liquid_dnb",
   neurofunk: "neurofunk",
   jumpup: "jump_up",
+  darkstep: "darkstep",
+  techstep: "techstep",
+  hardstep: "hardstep",
+  atmosphericjungle: "atmospheric_jungle",
+  raggajungle: "ragga_jungle",
+  sambass: "sambass",
+  drumfunk: "drumfunk",
   ukgarage: "uk_garage",
   futuregarage: "future_garage",
   halftime: "halftime_bass",
@@ -2244,26 +2588,77 @@ const DATASET_STYLE_ALIASES = {
   juke: "footwork_juke",
   footworkjuke: "footwork_juke",
   edmtrap: "trap",
+  electronictrap: "edm_trap",
+  festivaltrap: "edm_trap",
   futurebass: "future_bass",
   riddim: "riddim",
   experimentalbass: "experimental_bass",
   leftfieldbass: "experimental_bass",
   wave: "wave",
-  hardwave: "wave",
+  hardwave: "hardwave",
+  brostep: "brostep",
+  melodicdubstep: "melodic_dubstep",
+  chillstep: "chillstep",
+  postdubstep: "post_dubstep",
+  drumstep: "drumstep",
+  nuskoolbreaks: "nu_skool_breaks",
+  nuskoolbreakbeat: "nu_skool_breaks",
+  floridabreaks: "florida_breaks",
+  bassline: "bassline",
+  ukbass: "uk_bass",
+  wonky: "wonky",
+  glitchhop: "glitch_hop",
+  neurohop: "neurohop",
+  jerseyclub: "jersey_club",
+  baltimoreclub: "baltimore_club",
+  ballroom: "ballroom_vogue_beats",
+  voguebeats: "ballroom_vogue_beats",
+  ballroomvoguebeats: "ballroom_vogue_beats",
+  kuduroeletronico: "kuduro_eletronico",
+  kuduroelectronic: "kuduro_eletronico",
+  batida: "batida",
+  singeli: "singeli",
+  shangaanelectro: "shangaan_electro",
+  ghettotech: "ghettotech",
   breakcore: "breakcore",
+  crossbreed: "crossbreed",
   goatrance: "goa_trance",
   upliftingtrance: "trance_uplifting",
   triphop: "trip_hop",
   trip_hop: "trip_hop",
   darkwave: "darkwave",
   coldwave: "coldwave",
-  minimalwave: "coldwave",
+  minimalwave: "minimal_wave",
   minimalsynth: "coldwave",
   synthwave: "synthwave",
-  retrowave: "synthwave",
-  outrun: "synthwave",
+  retrowave: "retrowave",
+  outrun: "outrun",
   witchhouse: "witch_house",
-  witch_house: "witch_house"
+  witch_house: "witch_house",
+  darkambient: "dark_ambient",
+  spaceambient: "space_ambient",
+  ambienthouse: "ambient_house",
+  ambientdub: "ambient_dub",
+  lowercase: "lowercase",
+  microsound: "microsound",
+  electroacoustic: "electroacoustic",
+  musiqueconcrete: "musique_concrete",
+  berlinschool: "berlin_school",
+  kosmischemusik: "kosmische_musik",
+  italodisco: "italo_disco",
+  hinrg: "hi_nrg",
+  hi_nrg: "hi_nrg",
+  darksynth: "darksynth",
+  futurepop: "futurepop",
+  industrialdance: "industrial_dance",
+  deconstructedclub: "deconstructed_club",
+  euphorichardstyle: "euphoric_hardstyle",
+  reversebass: "reverse_bass",
+  harddance: "hard_dance",
+  ukhardcore: "uk_hardcore",
+  terrorcore: "terrorcore",
+  extratone: "extratone",
+  makina: "makina"
 };
 
 const CURATED_BANDCAMP_TRACK_EXPANSION = [
@@ -4757,6 +5152,30 @@ const catalog = [
   }
 ];
 
+function ensureTrackDiscoveryLinks(track = {}) {
+  if (!track || typeof track !== "object") return track;
+  const artist = String(track.artist || track.name || "").trim();
+  const song = String(track.song || track.title || "").trim();
+  if (!artist) return track;
+
+  const artistQuery = encodeURIComponent(artist);
+  const trackQuery = encodeURIComponent([artist, song].filter(Boolean).join(" "));
+  if (!track.spotifyUrl) track.spotifyUrl = `https://open.spotify.com/search/${trackQuery || artistQuery}`;
+  if (!track.youtubeUrl) track.youtubeUrl = `https://www.youtube.com/results?search_query=${trackQuery || artistQuery}`;
+  if (song && !track.beatportUrl) track.beatportUrl = `https://www.beatport.com/search?q=${trackQuery}`;
+  if (!track.artistBio && !track.artistProfileHint) {
+    const styleText = String(track.style || "musica eletronica").replace(/_/g, " ");
+    track.artistProfileHint = song
+      ? `${artist} foi mantido no banco proprio como referencia de ${styleText}; "${song}" funciona como porta de entrada editorial para descoberta.`
+      : `${artist} foi mantido no banco proprio como referencia de ${styleText} para ampliar descoberta com curadoria local.`;
+  }
+  return track;
+}
+
+[catalog, LOCAL_TRACK_SEED_BOOST].forEach((items) => {
+  if (Array.isArray(items)) items.forEach(ensureTrackDiscoveryLinks);
+});
+
 const discoveryCatalog = [
   { name: "Ajja", style: "forest_psy", bio: "Forest psy detalhista e psicodelico.", spotifyUrl: "https://open.spotify.com/search/Ajja", youtubeUrl: "https://www.youtube.com/results?search_query=Ajja" },
   { name: "Southwild", style: "dark_psy", bio: "Dark psy com atmosferas mais obscuras.", spotifyUrl: "https://open.spotify.com/search/Southwild", youtubeUrl: "https://www.youtube.com/results?search_query=Southwild+dark+psy" },
@@ -4908,7 +5327,93 @@ const TRACK_METADATA = {
   "Prelúdio|Baphomet Engine": { releaseDate: "2009-05-28", duration: "06:59", musicalKey: "N/A", catalogRef: "QZ5AB1906774" }
 };
 
+const COSMIC_CREW_2026_EVENT = {
+  name: "Cosmic Crew 23 anos - Psychedelic Revolution",
+  datetime: "2026-07-31",
+  dateOnly: true,
+  venue: "Estancia Nazare Paulista",
+  city: "Nazare Paulista",
+  country: "BR",
+  url: "https://zig.tickets/eventos/cosmic-crew-23-anos",
+  sourceName: "Zig.Tickets",
+  sourceUrl: "https://zig.tickets/eventos/cosmic-crew-23-anos"
+};
+
+const COSMIC_CREW_2026_EVENT_ARTISTS = [
+  "umber vamber",
+  "umber sonus",
+  "phagos sonus",
+  "ipotocaticac",
+  "ipotocattica",
+  "ipotocatticac",
+  "paralocks",
+  "paralocks retro",
+  "salakavala",
+  "igor swamp",
+  "gaida",
+  "dylalien",
+  "alcohbata",
+  "alcohibata",
+  "traxon",
+  "minimal criminal",
+  "at work",
+  "atwork",
+  "indacoruna",
+  "indaco runa",
+  "radiruna",
+  "radi runa",
+  "radice",
+  "umbra lumen"
+];
+
+const PACHAMAMA_2026_EVENT = {
+  name: "Pachamama Festival 11 anos - A Nova Era",
+  datetime: "2026-10-16",
+  dateOnly: true,
+  venue: "Estancia Nazare Paulista",
+  city: "Nazare Paulista",
+  country: "BR",
+  url: "https://zig.tickets/eventos/pachamama-festival-11-anos",
+  sourceName: "Zig.Tickets",
+  sourceUrl: "https://zig.tickets/eventos/pachamama-festival-11-anos"
+};
+
+const PACHAMAMA_2026_EVENT_ARTISTS = [
+  "zik",
+  "polyzik",
+  "poly zik",
+  "oxidaksi",
+  "oxidaksi retro set",
+  "depuratus",
+  "audiosyntax",
+  "audio syntax",
+  "kasatka",
+  "calyptratus",
+  "opus summum",
+  "kaos",
+  "polykaos",
+  "poly kaos",
+  "strangekaos",
+  "strange kaos",
+  "stranger",
+  "bethad",
+  "penurna",
+  "khaline",
+  "yara",
+  "dark notes",
+  "dark notes br",
+  "yara vs dark notes",
+  "alcohbata",
+  "alcohibata",
+  "umbra lumen",
+  "vuttun",
+  "vutt un",
+  "vucsetics"
+];
+
 const FALLBACK_EVENTS = {
+  ...Object.fromEntries(COSMIC_CREW_2026_EVENT_ARTISTS.map((artist) => [artist, [COSMIC_CREW_2026_EVENT]])),
+  ...Object.fromEntries(PACHAMAMA_2026_EVENT_ARTISTS.map((artist) => [artist, [PACHAMAMA_2026_EVENT]])),
   "michael bibi": [
     {
       name: "Michael Bibi apresenta One Life Sao Paulo",
@@ -5220,6 +5725,12 @@ const discogsArtistPanel = document.getElementById("discogsArtistPanel");
 const discogsArtistTitle = document.getElementById("discogsArtistTitle");
 const discogsArtistHint = document.getElementById("discogsArtistHint");
 const discogsArtistLink = document.getElementById("discogsArtistLink");
+const lastfmArtistPanel = document.getElementById("lastfmArtistPanel");
+const lastfmArtistTitle = document.getElementById("lastfmArtistTitle");
+const lastfmArtistHint = document.getElementById("lastfmArtistHint");
+const lastfmArtistTags = document.getElementById("lastfmArtistTags");
+const lastfmTopTracks = document.getElementById("lastfmTopTracks");
+const lastfmSimilarArtists = document.getElementById("lastfmSimilarArtists");
 const styleName = document.getElementById("styleName");
 const bpmInfo = document.getElementById("bpmInfo");
 const energyInfo = document.getElementById("energyInfo");
@@ -5288,6 +5799,14 @@ const previewDislikeBtn = document.getElementById("previewDislikeBtn");
 const styleIssueBtn = document.getElementById("styleIssueBtn");
 const bpmIssueBtn = document.getElementById("bpmIssueBtn");
 const imageIssueBtn = document.getElementById("imageIssueBtn");
+const radioBrowserPanel = document.getElementById("radioBrowserPanel");
+const radioBrowserKicker = document.getElementById("radioBrowserKicker");
+const radioBrowserTitle = document.getElementById("radioBrowserTitle");
+const radioBrowserRefreshBtn = document.getElementById("radioBrowserRefreshBtn");
+const radioBrowserStatus = document.getElementById("radioBrowserStatus");
+const radioBrowserStations = document.getElementById("radioBrowserStations");
+const radioBrowserPlayer = document.getElementById("radioBrowserPlayer");
+const radioBrowserAttribution = document.getElementById("radioBrowserAttribution");
 const recentListenersPanel = document.getElementById("recentListenersPanel");
 const listenersSubtitle = document.getElementById("listenersSubtitle");
 const recentListenersList = document.getElementById("recentListenersList");
@@ -5340,6 +5859,29 @@ const djModeHint = document.getElementById("djModeHint");
 const djModeGenerateBtn = document.getElementById("djModeGenerateBtn");
 const djModeList = document.getElementById("djModeList");
 const djModeStatus = document.getElementById("djModeStatus");
+const djDiscoveryPanel = document.getElementById("djDiscoveryPanel");
+const djDiscoverySceneFilter = document.getElementById("djDiscoverySceneFilter");
+const djDiscoveryShuffleBtn = document.getElementById("djDiscoveryShuffleBtn");
+const djSwipeCard = document.getElementById("djSwipeCard");
+const djSwipeKicker = document.getElementById("djSwipeKicker");
+const djSwipeName = document.getElementById("djSwipeName");
+const djSwipeMeta = document.getElementById("djSwipeMeta");
+const djSwipeBadges = document.getElementById("djSwipeBadges");
+const djSwipeReason = document.getElementById("djSwipeReason");
+const djSwipeStyleChip = document.getElementById("djSwipeStyleChip");
+const djSwipeSetChip = document.getElementById("djSwipeSetChip");
+const djSwipeSourceChip = document.getElementById("djSwipeSourceChip");
+const djSwipeSourceLink = document.getElementById("djSwipeSourceLink");
+const djSwipePassBtn = document.getElementById("djSwipePassBtn");
+const djSwipeLikeBtn = document.getElementById("djSwipeLikeBtn");
+const djSwipeStatus = document.getElementById("djSwipeStatus");
+const djPreviewTitle = document.getElementById("djPreviewTitle");
+const djPreviewMeta = document.getElementById("djPreviewMeta");
+const djPreviewFrame = document.getElementById("djPreviewFrame");
+const djPreviewOpenLink = document.getElementById("djPreviewOpenLink");
+const djRadarCount = document.getElementById("djRadarCount");
+const djRadarLiked = document.getElementById("djRadarLiked");
+const djRadarScope = document.getElementById("djRadarScope");
 const tasteTuningCard = document.getElementById("tasteTuningCard");
 const tasteTuningTitle = document.getElementById("tasteTuningTitle");
 const tasteTuningHint = document.getElementById("tasteTuningHint");
@@ -5376,6 +5918,13 @@ const artistSocialLinks = document.getElementById("artistSocialLinks");
 const statsLine = document.getElementById("statsLine");
 const summaryShareInstagramBtn = document.getElementById("summaryShareInstagramBtn");
 const summaryShareLinkBtn = document.getElementById("summaryShareLinkBtn");
+const apiHealthPanel = document.getElementById("apiHealthPanel");
+const apiHealthKicker = document.getElementById("apiHealthKicker");
+const apiHealthTitle = document.getElementById("apiHealthTitle");
+const apiHealthIntro = document.getElementById("apiHealthIntro");
+const apiHealthRefreshBtn = document.getElementById("apiHealthRefreshBtn");
+const apiHealthStatus = document.getElementById("apiHealthStatus");
+const apiHealthGrid = document.getElementById("apiHealthGrid");
 const profileBackupKicker = document.getElementById("profileBackupKicker");
 const profileBackupTitle = document.getElementById("profileBackupTitle");
 const profileBackupHint = document.getElementById("profileBackupHint");
@@ -5579,6 +6128,12 @@ let likedTrackHistory = [];
 let dislikedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
+let currentDjRecommendation = null;
+let djSwipeBusy = false;
+let djSwipeDragState = null;
+let likedDjRecommendationKeys = new Set();
+let passedDjRecommendationKeys = new Set();
+let recentDjRecommendationKeys = [];
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
@@ -5614,7 +6169,7 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
-const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 81;
+const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 168;
 const SWIPE_LEARNING_MILESTONES = [10, 20, 30];
 const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
 let trackInsightCache = new Map();
@@ -6211,11 +6766,17 @@ const CONTEXT_TARGET_PROFILES = {
   }
 };
 const artistApiProfileCache = new Map();
+const lastfmArtistApiCache = new Map();
 const artistImageCache = new Map();
 const recentArtistSignals = new Map();
 const deezerArtistTopTrackCache = new Map();
 const artistCatalogDepthCache = new Map();
 const artistCatalogDepthInFlight = new Map();
+const trackMetadataApiCache = new Map();
+const coverArtApiCache = new Map();
+const radioBrowserApiCache = new Map();
+let apiHealthPayload = null;
+let apiHealthLoading = false;
 const soundCloudApiCache = new Map();
 const youtubeApiCache = new Map();
 let youtubeApiAvailable = true;
@@ -6232,10 +6793,10 @@ const SOUNDCLOUD_PREVIEW_REFRESH_STYLES = new Set([
 const MIN_TRACKS_PER_STYLE = 20;
 const MIN_ARTISTS_PER_STYLE = 50;
 const MIN_LABELS_PER_STYLE = 6;
-const MIN_TRACKS_PER_ARTIST = 2;
-const ARTIST_CATALOG_DEPTH_TARGET = 5;
-const ARTIST_CATALOG_DEPTH_BATCH_LIMIT = 10;
-const ARTIST_CATALOG_DEPTH_STYLE_LIMIT = 8;
+const MIN_TRACKS_PER_ARTIST = 4;
+const ARTIST_CATALOG_DEPTH_TARGET = 8;
+const ARTIST_CATALOG_DEPTH_BATCH_LIMIT = 16;
+const ARTIST_CATALOG_DEPTH_STYLE_LIMIT = 12;
 const STYLE_COVERAGE_OVERRIDES = {
   // Nichos ultra específicos: ajustam tracks/labels sem baixar o piso global de artistas.
   dark_progressive: { artists: 12, labels: 6, tracks: 24 },
@@ -6261,7 +6822,88 @@ const STYLE_COVERAGE_OVERRIDES = {
   bleep_techno: { artists: 6, labels: 4, tracks: 14 },
   tribal_techno: { artists: 8, labels: 4, tracks: 16 },
   hardgroove_techno: { artists: 10, labels: 4, tracks: 20 },
-  broken_techno: { artists: 8, labels: 4, tracks: 16 }
+  broken_techno: { artists: 8, labels: 4, tracks: 16 },
+  edm: { artists: 2, labels: 1, tracks: 2 },
+  progressive_edm: { artists: 2, labels: 1, tracks: 2 },
+  big_room_house: { artists: 2, labels: 1, tracks: 2 },
+  future_house: { artists: 2, labels: 1, tracks: 2 },
+  slap_house: { artists: 2, labels: 1, tracks: 2 },
+  tropical_house: { artists: 2, labels: 1, tracks: 2 },
+  complextro: { artists: 2, labels: 1, tracks: 2 },
+  electronic_dance_pop: { artists: 2, labels: 1, tracks: 2 },
+  chicago_house: { artists: 2, labels: 1, tracks: 2 },
+  french_house: { artists: 2, labels: 1, tracks: 2 },
+  funky_house: { artists: 2, labels: 1, tracks: 2 },
+  tribal_house: { artists: 2, labels: 1, tracks: 2 },
+  latin_house: { artists: 2, labels: 1, tracks: 2 },
+  piano_house: { artists: 2, labels: 1, tracks: 2 },
+  melodic_house: { artists: 2, labels: 1, tracks: 2 },
+  microhouse: { artists: 2, labels: 1, tracks: 2 },
+  progressive_trance: { artists: 2, labels: 1, tracks: 2 },
+  acid_trance: { artists: 2, labels: 1, tracks: 2 },
+  balearic_trance: { artists: 2, labels: 1, tracks: 2 },
+  dream_trance: { artists: 2, labels: 1, tracks: 2 },
+  vocal_trance: { artists: 2, labels: 1, tracks: 2 },
+  brostep: { artists: 2, labels: 1, tracks: 2 },
+  melodic_dubstep: { artists: 2, labels: 1, tracks: 2 },
+  chillstep: { artists: 2, labels: 1, tracks: 2 },
+  post_dubstep: { artists: 2, labels: 1, tracks: 2 },
+  drumstep: { artists: 2, labels: 1, tracks: 2 },
+  nu_skool_breaks: { artists: 2, labels: 1, tracks: 2 },
+  florida_breaks: { artists: 2, labels: 1, tracks: 2 },
+  bassline: { artists: 2, labels: 1, tracks: 2 },
+  uk_bass: { artists: 2, labels: 1, tracks: 2 },
+  wonky: { artists: 2, labels: 1, tracks: 2 },
+  glitch_hop: { artists: 2, labels: 1, tracks: 2 },
+  neurohop: { artists: 2, labels: 1, tracks: 2 },
+  edm_trap: { artists: 2, labels: 1, tracks: 2 },
+  hardwave: { artists: 2, labels: 1, tracks: 2 },
+  darkstep: { artists: 2, labels: 1, tracks: 2 },
+  techstep: { artists: 2, labels: 1, tracks: 2 },
+  hardstep: { artists: 2, labels: 1, tracks: 2 },
+  atmospheric_jungle: { artists: 2, labels: 1, tracks: 2 },
+  ragga_jungle: { artists: 2, labels: 1, tracks: 2 },
+  sambass: { artists: 2, labels: 1, tracks: 2 },
+  drumfunk: { artists: 2, labels: 1, tracks: 2 },
+  crossbreed: { artists: 2, labels: 1, tracks: 2 },
+  euphoric_hardstyle: { artists: 2, labels: 1, tracks: 2 },
+  reverse_bass: { artists: 2, labels: 1, tracks: 2 },
+  hard_dance: { artists: 2, labels: 1, tracks: 2 },
+  uk_hardcore: { artists: 2, labels: 1, tracks: 2 },
+  terrorcore: { artists: 2, labels: 1, tracks: 2 },
+  extratone: { artists: 2, labels: 1, tracks: 2 },
+  makina: { artists: 2, labels: 1, tracks: 2 },
+  dark_ambient: { artists: 2, labels: 1, tracks: 2 },
+  space_ambient: { artists: 2, labels: 1, tracks: 2 },
+  ambient_house: { artists: 2, labels: 1, tracks: 2 },
+  ambient_dub: { artists: 2, labels: 1, tracks: 2 },
+  lowercase: { artists: 2, labels: 1, tracks: 2 },
+  microsound: { artists: 2, labels: 1, tracks: 2 },
+  electroacoustic: { artists: 2, labels: 1, tracks: 2 },
+  musique_concrete: { artists: 2, labels: 1, tracks: 2 },
+  berlin_school: { artists: 2, labels: 1, tracks: 2 },
+  kosmische_musik: { artists: 2, labels: 1, tracks: 2 },
+  italo_disco: { artists: 2, labels: 1, tracks: 2 },
+  hi_nrg: { artists: 2, labels: 1, tracks: 2 },
+  eurodance: { artists: 2, labels: 1, tracks: 2 },
+  retrowave: { artists: 2, labels: 1, tracks: 2 },
+  outrun: { artists: 2, labels: 1, tracks: 2 },
+  darksynth: { artists: 2, labels: 1, tracks: 2 },
+  minimal_wave: { artists: 2, labels: 1, tracks: 2 },
+  futurepop: { artists: 2, labels: 1, tracks: 2 },
+  industrial_dance: { artists: 2, labels: 1, tracks: 2 },
+  jersey_club: { artists: 2, labels: 1, tracks: 2 },
+  baltimore_club: { artists: 2, labels: 1, tracks: 2 },
+  ballroom_vogue_beats: { artists: 2, labels: 1, tracks: 2 },
+  kuduro_eletronico: { artists: 2, labels: 1, tracks: 2 },
+  batida: { artists: 2, labels: 1, tracks: 2 },
+  singeli: { artists: 2, labels: 1, tracks: 2 },
+  shangaan_electro: { artists: 2, labels: 1, tracks: 2 },
+  ghetto_house: { artists: 2, labels: 1, tracks: 2 },
+  ghettotech: { artists: 2, labels: 1, tracks: 2 },
+  deconstructed_club: { artists: 2, labels: 1, tracks: 2 },
+  big_room_techno: { artists: 2, labels: 1, tracks: 2 },
+  mainstage_techno: { artists: 2, labels: 1, tracks: 2 }
 };
 const COVERAGE_MAX_PASSES = 5;
 const FAST_COVERAGE_MAX_PASSES = 2;
@@ -6321,19 +6963,24 @@ const STYLE_BPM_RULES = {
   dark_progressive: { min: 132, max: 140 },
   goa_trance: { min: 135, max: 145 },
   psy_comercial: { min: 142, max: 152 },
+  progressive_trance: { min: 128, max: 138 },
+  acid_trance: { min: 132, max: 145 },
+  balearic_trance: { min: 120, max: 136 },
+  dream_trance: { min: 132, max: 140 },
+  vocal_trance: { min: 132, max: 140 },
   trance_uplifting: { min: 136, max: 142 },
   tech_trance: { min: 132, max: 142 },
   hard_trance: { min: 140, max: 150 },
   techno: { min: 128, max: 136 },
-  acid_techno: { min: 130, max: 142 },
+  acid_techno: { min: 124, max: 145 },
   hard_techno: { min: 145, max: 160 },
   dub_techno: { min: 118, max: 128 },
-  hypnotic_techno: { min: 128, max: 138 },
-  raw_techno: { min: 132, max: 145 },
-  detroit_techno: { min: 125, max: 135 },
+  hypnotic_techno: { min: 126, max: 138 },
+  raw_techno: { min: 130, max: 145 },
+  detroit_techno: { min: 122, max: 135 },
   schranz: { min: 145, max: 160 },
   ebm: { min: 120, max: 132 },
-  minimal_techno: { min: 126, max: 132 },
+  minimal_techno: { min: 125, max: 132 },
   melodic_techno: { min: 122, max: 130 },
   industrial_techno: { min: 130, max: 150 },
   peak_time_techno: { min: 132, max: 140 },
@@ -6356,11 +7003,38 @@ const STYLE_BPM_RULES = {
   soulful_house: { min: 118, max: 124 },
   disco_house: { min: 118, max: 126 },
   garage_house: { min: 124, max: 130 },
+  edm: { min: 124, max: 132 },
+  progressive_edm: { min: 126, max: 130 },
+  big_room_house: { min: 126, max: 132 },
+  future_house: { min: 122, max: 128 },
+  slap_house: { min: 118, max: 126 },
+  tropical_house: { min: 100, max: 124 },
+  complextro: { min: 126, max: 132 },
+  electronic_dance_pop: { min: 118, max: 132 },
+  chicago_house: { min: 118, max: 126 },
+  french_house: { min: 120, max: 128 },
+  funky_house: { min: 122, max: 128 },
+  tribal_house: { min: 122, max: 130 },
+  latin_house: { min: 122, max: 130 },
+  piano_house: { min: 118, max: 126 },
+  melodic_house: { min: 118, max: 126 },
+  microhouse: { min: 120, max: 128 },
+  eurodance: { min: 124, max: 145 },
+  ghetto_house: { min: 130, max: 150 },
+  big_room_techno: { min: 130, max: 140 },
+  mainstage_techno: { min: 130, max: 140 },
   drum_and_bass: { min: 170, max: 176 },
   liquid_dnb: { min: 170, max: 176 },
   neurofunk: { min: 172, max: 178 },
   jump_up: { min: 172, max: 178 },
   jungle: { min: 160, max: 174 },
+  darkstep: { min: 170, max: 180 },
+  techstep: { min: 168, max: 176 },
+  hardstep: { min: 168, max: 176 },
+  atmospheric_jungle: { min: 160, max: 170 },
+  ragga_jungle: { min: 160, max: 174 },
+  sambass: { min: 170, max: 176 },
+  drumfunk: { min: 165, max: 175 },
   breakbeat: { min: 125, max: 150 },
   uk_garage: { min: 128, max: 136 },
   future_garage: { min: 130, max: 140 },
@@ -6373,6 +7047,28 @@ const STYLE_BPM_RULES = {
   experimental_bass: { min: 70, max: 150 },
   wave: { min: 130, max: 150 },
   breakcore: { min: 160, max: 220 },
+  brostep: { min: 138, max: 150 },
+  melodic_dubstep: { min: 138, max: 150 },
+  chillstep: { min: 130, max: 145 },
+  post_dubstep: { min: 124, max: 140 },
+  drumstep: { min: 160, max: 175 },
+  nu_skool_breaks: { min: 128, max: 140 },
+  florida_breaks: { min: 125, max: 135 },
+  bassline: { min: 132, max: 142 },
+  uk_bass: { min: 126, max: 138 },
+  wonky: { min: 80, max: 150 },
+  glitch_hop: { min: 90, max: 115 },
+  neurohop: { min: 90, max: 115 },
+  edm_trap: { min: 130, max: 150 },
+  hardwave: { min: 130, max: 150 },
+  jersey_club: { min: 130, max: 145 },
+  baltimore_club: { min: 125, max: 135 },
+  ballroom_vogue_beats: { min: 120, max: 130 },
+  kuduro_eletronico: { min: 130, max: 145 },
+  batida: { min: 125, max: 145 },
+  singeli: { min: 180, max: 240 },
+  shangaan_electro: { min: 170, max: 190 },
+  ghettotech: { min: 140, max: 160 },
   downtempo: { min: 80, max: 115 },
   ambient: { min: 60, max: 110 },
   chillout: { min: 70, max: 112 },
@@ -6384,13 +7080,40 @@ const STYLE_BPM_RULES = {
   slambient: { min: 155, max: 240 },
   idm: { min: 95, max: 145 },
   electro: { min: 120, max: 132 },
+  dark_ambient: { min: 40, max: 110 },
+  space_ambient: { min: 40, max: 110 },
+  ambient_house: { min: 100, max: 125 },
+  ambient_dub: { min: 70, max: 115 },
+  lowercase: { min: 40, max: 90 },
+  microsound: { min: 40, max: 140 },
+  electroacoustic: { min: 40, max: 140 },
+  musique_concrete: { min: 40, max: 140 },
+  berlin_school: { min: 70, max: 130 },
+  kosmische_musik: { min: 60, max: 130 },
+  italo_disco: { min: 110, max: 125 },
+  hi_nrg: { min: 120, max: 140 },
+  retrowave: { min: 80, max: 120 },
+  outrun: { min: 90, max: 125 },
+  darksynth: { min: 90, max: 130 },
+  minimal_wave: { min: 80, max: 125 },
+  futurepop: { min: 120, max: 140 },
+  industrial_dance: { min: 115, max: 140 },
+  deconstructed_club: { min: 70, max: 150 },
   brazilian_funk: { min: 125, max: 150 },
   gabber: { min: 160, max: 220 },
   hardstyle: { min: 148, max: 160 },
   hardcore: { min: 160, max: 190 },
   frenchcore: { min: 180, max: 220 },
   speedcore: { min: 220, max: 300 },
-  rawstyle: { min: 150, max: 160 }
+  rawstyle: { min: 150, max: 160 },
+  crossbreed: { min: 170, max: 190 },
+  euphoric_hardstyle: { min: 150, max: 160 },
+  reverse_bass: { min: 145, max: 155 },
+  hard_dance: { min: 140, max: 155 },
+  uk_hardcore: { min: 160, max: 180 },
+  terrorcore: { min: 190, max: 280 },
+  extratone: { min: 300, max: 1200 },
+  makina: { min: 160, max: 180 }
 };
 
 const PERCEPTUAL_BPM_AMBIGUOUS_STYLES = new Set([
@@ -6625,7 +7348,7 @@ const STYLE_HUMAN_INFO = {
     tribal_techno: "Tribal techno coloca a percussão na frente. O corpo entende rápido: loops físicos, tambores, pressão constante e menos dependência de melodia.",
     hardgroove_techno: "Hardgroove é techno com swing e músculo. Ele bate forte, mas o charme está no funk das percussões e no movimento que não deixa o kick virar só martelo.",
     broken_techno: "Broken techno quebra o 4x4 sem sair do universo techno. É bom para quem gosta de pista mais torta, baixo pesado e grooves que conversam com breaks e UK bass.",
-    tech_house: "Tech house junta o balanço do house com a secura do techno. É groove limpo, bassline grudenta e aquela vontade de mexer a cabeça sem pensar muito.",
+    tech_house: "Tech house junta o balanço do house com a secura do techno. É groove limpo, bassline grudenta e movimento direto.",
     drum_and_bass: "Drum and bass é velocidade com baixo profundo. Os breaks correm, o grave segura tudo e a energia fica elétrica.",
     liquid_dnb: "Liquid DnB é o lado mais emocional do drum and bass. Continua rápido, mas traz melodia, leveza e uma sensação mais bonita de movimento.",
     neurofunk: "Neurofunk é drum and bass técnico, sombrio e futurista. O baixo parece esculpido, cheio de tensão, para quem gosta de detalhe e peso.",
@@ -8108,6 +8831,456 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Portugal",
     area: "Lisboa",
     disambiguation: "Paranormal Attack e um projeto portugues de psytrance ligado ao eixo full-on/comercial."
+  },
+  "ankoudead": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "AnkouDead aparece no pacote local curado do catalogo como artista brasileiro ligado ao eixo experimental/psy extremo."
+  },
+  "bahaael": {
+    country: "Chile",
+    area: "",
+    disambiguation: "Bahaael aparece no pacote local curado do catalogo com origem chilena para o recorte dark/experimental."
+  },
+  "cinder vomit": {
+    country: "United States",
+    area: "",
+    disambiguation: "CinderVOMIT aparece no pacote local curado do catalogo com origem/base nos Estados Unidos, dentro do eixo slambient/psycore."
+  },
+  "cindervomit": {
+    country: "United States",
+    area: "",
+    disambiguation: "CinderVOMIT aparece no pacote local curado do catalogo com origem/base nos Estados Unidos, dentro do eixo slambient/psycore."
+  },
+  "claudinho brasil": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Claudinho Brasil e um nome brasileiro associado ao psytrance e a cenas de festival no Brasil."
+  },
+  "cloonee": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Cloonee e um produtor britanico ligado ao tech house moderno e a grooves diretos de club."
+  },
+  "cybotron": {
+    country: "United States",
+    area: "Detroit",
+    disambiguation: "Cybotron e um projeto de Detroit fundamental para a ponte entre electro, techno inicial e futurismo urbano."
+  },
+  "d-nox": {
+    country: "Germany",
+    area: "",
+    disambiguation: "D-Nox e um DJ/produtor alemao associado a progressive house, progressive techno e ao eixo club/festival."
+  },
+  "deadmau5": {
+    country: "Canada",
+    area: "",
+    disambiguation: "deadmau5 e um produtor canadense central para progressive house, electro house e musica eletronica autoral."
+  },
+  "deize tigrona": {
+    country: "Brazil",
+    area: "Rio de Janeiro",
+    disambiguation: "Deize Tigrona e uma artista brasileira ligada ao funk carioca e a cultura de baile."
+  },
+  "dennis cruz": {
+    country: "Spain",
+    area: "",
+    disambiguation: "Dennis Cruz e um produtor espanhol associado ao tech house e house de pista."
+  },
+  "dickster": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Dickster e o projeto de Dick Trevor, produtor britanico ligado ao psytrance."
+  },
+  "dj buzz fuzz": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "DJ Buzz Fuzz e um nome neerlandes associado ao hardcore/gabber."
+  },
+  "dj mad dog": {
+    country: "Italy",
+    area: "",
+    disambiguation: "DJ Mad Dog e um produtor italiano ligado ao hardcore techno."
+  },
+  "dj marlboro": {
+    country: "Brazil",
+    area: "Rio de Janeiro",
+    disambiguation: "DJ Marlboro e uma figura brasileira central para o funk carioca."
+  },
+  "dj paul elstak": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "DJ Paul Elstak e um produtor neerlandes historico do hardcore/gabber."
+  },
+  "drokz": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Drokz e um artista neerlandes ligado a terrorcore, speedcore e hardcore extremo."
+  },
+  "dyen": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "DYEN e um produtor neerlandes ligado ao hard techno contemporaneo."
+  },
+  "emmanuel top": {
+    country: "France",
+    area: "",
+    disambiguation: "Emmanuel Top e um produtor frances associado ao acid techno e trance dos anos 1990."
+  },
+  "eric prydz": {
+    country: "Sweden",
+    area: "",
+    disambiguation: "Eric Prydz e um produtor sueco ligado a progressive house, melodic house e grandes producoes audiovisuais."
+  },
+  "evil activities": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Evil Activities e um projeto neerlandes de hardcore/gabber."
+  },
+  "feed me": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Feed Me e o alias de um produtor britanico ligado a electro house, bass music e design sonoro maximalista."
+  },
+  "floating points": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Floating Points e um produtor britanico ligado a electronica, jazz, house e composicao detalhista."
+  },
+  "frankie knuckles": {
+    country: "United States",
+    area: "Chicago",
+    disambiguation: "Frankie Knuckles foi um DJ/produtor norte-americano essencial para a historia da house music em Chicago."
+  },
+  "groovality": {
+    country: "Brazil",
+    area: "Sao Paulo",
+    disambiguation: "Groovality aparece no pacote local curado do catalogo com origem em Sao Paulo, dentro do eixo psy/slambient."
+  },
+  "grouch": {
+    country: "New Zealand",
+    area: "",
+    disambiguation: "Grouch e um projeto neozelandes associado a progressive psy, dark progressive e grooves psicodelicos."
+  },
+  "headhunterz": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Headhunterz e um produtor neerlandes ligado ao hardstyle melodico."
+  },
+  "hybrid": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Hybrid e um grupo/projeto britanico associado a breaks progressivo e electronica cinematografica."
+  },
+  "hypogeo": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Hypogeo e um produtor italiano ligado ao dark progressive/zenonesque."
+  },
+  "interplanetary criminal": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Interplanetary Criminal e um produtor britanico ligado a UK garage, bassline e cultura club."
+  },
+  "jamie jones": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Jamie Jones e um DJ/produtor britanico associado a house, tech house e cultura de Ibiza."
+  },
+  "jauz": {
+    country: "United States",
+    area: "",
+    disambiguation: "Jauz e um produtor norte-americano ligado a bass house, dubstep e electro house."
+  },
+  "jeff mills": {
+    country: "United States",
+    area: "Detroit",
+    disambiguation: "Jeff Mills e um produtor norte-americano essencial para o techno de Detroit e para o techno minimal/hipnotico."
+  },
+  "josh wink": {
+    country: "United States",
+    area: "",
+    disambiguation: "Josh Wink e um produtor norte-americano associado a acid house, techno e club music."
+  },
+  "joyryde": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "JOYRYDE e um produtor britanico ligado a bass house e electro house."
+  },
+  "kevin o chris": {
+    country: "Brazil",
+    area: "Rio de Janeiro",
+    disambiguation: "Kevin O Chris e um artista brasileiro ligado ao funk carioca."
+  },
+  "kindzadza": {
+    country: "Russia",
+    area: "",
+    disambiguation: "Kindzadza e um projeto russo associado ao dark psy e a vertentes intensas de psytrance."
+  },
+  "klangkuenstler": {
+    country: "Germany",
+    area: "",
+    disambiguation: "Klangkuenstler e um produtor alemao ligado ao hard techno."
+  },
+  "korsakoff": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Korsakoff e uma produtora/DJ neerlandesa associada ao hardcore/gabber."
+  },
+  "kruder & dorfmeister": {
+    country: "Austria",
+    area: "",
+    disambiguation: "Kruder & Dorfmeister e um duo austriaco essencial para downtempo, trip-hop e lounge electronico."
+  },
+  "lenny dee": {
+    country: "United States",
+    area: "New York",
+    disambiguation: "Lenny Dee e um DJ/produtor norte-americano ligado ao hardcore techno."
+  },
+  "liquid soul": {
+    country: "Switzerland",
+    area: "",
+    disambiguation: "Liquid Soul e um projeto suico ligado ao progressive psytrance."
+  },
+  "loscil": {
+    country: "Canada",
+    area: "",
+    disambiguation: "Loscil e um projeto canadense associado a ambient, dub techno e texturas minimalistas."
+  },
+  "m-beat": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "M-Beat e um produtor britanico associado a jungle e drum and bass."
+  },
+  "macky gee": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Macky Gee e um produtor britanico ligado a jump-up drum and bass."
+  },
+  "mandragora": {
+    country: "Mexico",
+    area: "",
+    disambiguation: "Mandragora e um produtor mexicano associado ao psytrance comercial e progressive psy de festival."
+  },
+  "marshall jefferson": {
+    country: "United States",
+    area: "Chicago",
+    disambiguation: "Marshall Jefferson e um produtor norte-americano fundamental para a house music de Chicago."
+  },
+  "maya jane coles": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Maya Jane Coles e uma produtora britanica associada a house, deep house e electronica."
+  },
+  "mc bin laden": {
+    country: "Brazil",
+    area: "Sao Paulo",
+    disambiguation: "MC Bin Laden e um artista brasileiro ligado ao funk paulista."
+  },
+  "mj cole": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "MJ Cole e um produtor britanico associado a UK garage e 2-step."
+  },
+  "moby": {
+    country: "United States",
+    area: "New York",
+    disambiguation: "Moby e um artista norte-americano ligado a electronica, ambient, techno e pop alternativo."
+  },
+  "monolink": {
+    country: "Germany",
+    area: "",
+    disambiguation: "Monolink e um artista alemao ligado a melodic house/techno com vocais e instrumentacao ao vivo."
+  },
+  "mubali": {
+    country: "United States",
+    area: "",
+    disambiguation: "Mubali e um projeto norte-americano ligado a psytrance, forest e west psy/freeform."
+  },
+  "neophyte": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Neophyte e um projeto neerlandes historico do hardcore/gabber."
+  },
+  "netsky": {
+    country: "Belgium",
+    area: "",
+    disambiguation: "Netsky e um produtor belga ligado ao liquid drum and bass."
+  },
+  "nosferatu": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Nosferatu e um artista neerlandes associado ao hardcore/gabber."
+  },
+  "ophidian": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Ophidian e um produtor neerlandes ligado ao hardcore, industrial hardcore e sonoridades mais sombrias."
+  },
+  "orcoro": {
+    country: "Brazil",
+    area: "Santa Catarina",
+    disambiguation: "Orcoro aparece no pacote local curado do catalogo com referencia a Santa Catarina para o recorte dark/experimental."
+  },
+  "pendulum": {
+    country: "Australia",
+    area: "",
+    disambiguation: "Pendulum e um grupo australiano central para drum and bass de grande alcance."
+  },
+  "phyllorum": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Phyllorum aparece no pacote local curado do catalogo como projeto brasileiro de slambient/psycore."
+  },
+  "plastikman": {
+    country: "Canada",
+    area: "",
+    disambiguation: "Plastikman e um alias canadense de Richie Hawtin, essencial para minimal techno e acid techno."
+  },
+  "plump djs": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Plump DJs e um duo britanico associado a breaks e club music."
+  },
+  "promo": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Promo e um produtor neerlandes ligado ao hardcore techno."
+  },
+  "rotterdam terror corps": {
+    country: "Netherlands",
+    area: "Rotterdam",
+    disambiguation: "Rotterdam Terror Corps e um projeto neerlandes ligado ao hardcore/gabber de Rotterdam."
+  },
+  "ryanosaurus": {
+    country: "Australia",
+    area: "",
+    disambiguation: "Ryanosaurus e um projeto australiano associado ao dark progressive/zenonesque."
+  },
+  "sensient": {
+    country: "Australia",
+    area: "",
+    disambiguation: "Sensient e um produtor australiano ligado ao dark progressive e ao universo Zenon."
+  },
+  "sesto sento": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Sesto Sento e um projeto israelense associado ao full-on e psytrance melodico."
+  },
+  "skazi": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Skazi e um projeto israelense ligado ao psytrance/full-on de festival."
+  },
+  "solar fields": {
+    country: "Sweden",
+    area: "",
+    disambiguation: "Solar Fields e um projeto sueco associado a ambient, psybient e progressive electronica."
+  },
+  "sonic species": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Sonic Species e um projeto britanico ligado ao psytrance/full-on."
+  },
+  "squaremeat": {
+    country: "Finland",
+    area: "",
+    disambiguation: "Squaremeat e um projeto finlandes ligado ao suomisaundi e psytrance experimental."
+  },
+  "stanton warriors": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Stanton Warriors e um duo britanico ligado a breakbeat e bass music."
+  },
+  "sweet female attitude": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Sweet Female Attitude e um duo britanico associado a UK garage e 2-step."
+  },
+  "tati quebra barraco": {
+    country: "Brazil",
+    area: "Rio de Janeiro",
+    disambiguation: "Tati Quebra Barraco e uma artista brasileira ligada ao funk carioca."
+  },
+  "technical hitch": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Technical Hitch e um projeto israelense associado a psytrance, hi-tech e linhas cinematicas intensas."
+  },
+  "tetrameth": {
+    country: "Australia",
+    area: "",
+    disambiguation: "Tetrameth e um projeto australiano associado a progressive psytrance."
+  },
+  "texas faggott": {
+    country: "Finland",
+    area: "",
+    disambiguation: "Texas Faggott e um projeto finlandes ligado ao suomisaundi e psytrance experimental."
+  },
+  "tha playah": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Tha Playah e um produtor neerlandes associado ao hardcore/gabber."
+  },
+  "the martinez brothers": {
+    country: "United States",
+    area: "New York",
+    disambiguation: "The Martinez Brothers sao um duo norte-americano ligado a house e tech house."
+  },
+  "the stunned guys": {
+    country: "Italy",
+    area: "",
+    disambiguation: "The Stunned Guys e um projeto italiano historico do hardcore/gabber."
+  },
+  "thievery corporation": {
+    country: "United States",
+    area: "Washington, DC",
+    disambiguation: "Thievery Corporation e um duo norte-americano ligado a downtempo, trip-hop, dub e lounge."
+  },
+  "tinlicker": {
+    country: "Netherlands",
+    area: "",
+    disambiguation: "Tinlicker e um duo neerlandes associado a progressive house e melodic house/techno."
+  },
+  "tommyknocker": {
+    country: "Italy",
+    area: "",
+    disambiguation: "Tommyknocker e um produtor italiano ligado ao hardcore techno."
+  },
+  "uk apache": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "UK Apache e um MC britanico ligado a jungle/drum and bass, aqui usado para resolver colaboracoes com Shy FX."
+  },
+  "via axis": {
+    country: "Brazil",
+    area: "",
+    disambiguation: "Via Axis e um projeto brasileiro associado ao psytrance noturno e recortes full-on/dark."
+  },
+  "volcano": {
+    country: "Israel",
+    area: "",
+    disambiguation: "Volcano e um projeto israelense ligado ao full-on/psytrance de festival."
+  },
+  "wade": {
+    country: "Spain",
+    area: "",
+    disambiguation: "Wade e um produtor espanhol associado ao tech house."
+  },
+  "wolfgang gartner": {
+    country: "United States",
+    area: "",
+    disambiguation: "Wolfgang Gartner e um produtor norte-americano ligado a electro house."
+  },
+  "yagya": {
+    country: "Iceland",
+    area: "",
+    disambiguation: "Yagya e um produtor islandes associado a dub techno e ambient techno."
+  },
+  "zero 7": {
+    country: "United Kingdom",
+    area: "",
+    disambiguation: "Zero 7 e um duo britanico ligado a downtempo, chillout e electronica suave."
   }
 };
 
@@ -8131,7 +9304,11 @@ const CURATED_FINE_STYLE_NO_BPM_ARTIST_PROOF = {
 };
 
 const CURATOR_BLOCKED_ARTIST_KEYS = new Set([
+  "booo",
+  "dj booo",
   "parus",
+  "sutemi",
+  "dj sutemi",
   "vertical"
 ]);
 
@@ -9405,50 +10582,50 @@ const SPIRIT_VISUAL_THEMES = {
 
 const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
   ritual_cosmico: {
-    identity: "charismatic adult cosmic trance shaman with a grounded humanoid spectral face, luminous skin highlights, and a calm ceremonial authority",
-    face: "open expressive eyes, kind half-smile, pearlescent spectral skin texture, soft asymmetry, confident direct gaze",
-    wardrobe: "festival ritual robe mixed with modern clubwear, bead-like light details, no costume mask",
-    aura: "mandala halo, harmonic laser arcs, goa-trance geometry, melodic psy light ribbons around the shoulders",
-    environment: "dark festival clearing with clean cyan, blue, and violet stage light"
+    identity: "charismatic adult psytrance/goa partygoer with grounded human presence, warm smile, and calm dancefloor confidence",
+    face: "open expressive eyes, kind half-smile, realistic skin texture, soft asymmetry, confident direct gaze",
+    wardrobe: "UV-reactive geometric ravewear, layered utility vest, round tinted glasses, beads, face gems, and no carnival costume",
+    aura: "psychedelic laser arcs, goa-trance geometry, melodic UV light ribbons, and editable abstract neon panels around the shoulders",
+    environment: "clean dark rave-studio backdrop with cyan, blue, acid-green, and violet club light"
   },
   alquimista_sombrio: {
-    identity: "adult shadow alchemist with a magnetic humanoid spectral face, nocturnal elegance, and underground ritual presence",
+    identity: "adult dark electronic party archetype with magnetic human face, nocturnal elegance, and underground club presence",
     face: "deep-set believable eyes, subtle inviting smirk, textured skin, cheekbone shadow, intense but warm expression",
-    wardrobe: "obsidian coat, dark robe layers, metallic thread, smoky glass jewelry, no mask",
-    aura: "spectral vapor, sub-bass pressure rings, purple and aqua chemical glow, dense drone texture",
+    wardrobe: "black layered clubwear, smoked-lens accessories, metallic thread, glossy dark jacket, no robe or mask",
+    aura: "sub-bass pressure rings, purple and aqua glow, dense drone texture, and abstract club haze",
     environment: "low-ceiling dark room, mist, wet reflections, cinematic side light"
   },
   oraculo_nevoa: {
-    identity: "adult mist oracle with a magnetic realistic face, dense psychedelic presence, and low-frequency ritual pressure",
-    face: "focused watchful eyes, subtle intense micro-smile, translucent eyelids and spectral skin detail, face clearly visible through fog",
-    wardrobe: "translucent hooded fabric, layered dark-club textiles, soft reflective accents, no abstract mask",
+    identity: "adult slambient/leftfield party archetype with a magnetic realistic face, dense atmospheric presence, and low-frequency pressure",
+    face: "focused watchful eyes, subtle intense micro-smile, visible skin detail, face clearly visible through fog",
+    wardrobe: "technical hood kept away from the face, layered dark-club textiles, soft reflective accents, no abstract mask",
     aura: "fog spirals, waveform pressure halos, pale green and violet particles, deep slambient force",
-    environment: "dim ritual chamber filled with charged mist and low-frequency light"
+    environment: "dim club-studio space filled with charged mist and low-frequency light"
   },
   feiticeiro_darkpsy: {
-    identity: "adult dark-psy forest sorcerer with a human, charismatic, slightly wild face and nocturnal confidence",
-    face: "alert eyes, magnetic grin, smoky ghost-skin texture, expressive brow, warmth inside the darkness",
-    wardrobe: "dark forest-club cloak, organic textile patterns, bioluminescent mycelium threads, no skull or creature design",
+    identity: "adult dark-psy / forest-rave party archetype with a human, charismatic, slightly wild face and nocturnal confidence",
+    face: "alert eyes, magnetic grin, realistic skin with neon rim light, expressive brow, warmth inside the darkness",
+    wardrobe: "dark forest-club layers, organic textile patterns, bioluminescent thread accents, no cloak, skull, or creature design",
     aura: "twisted forest geometry, shadowy psy spirals, nocturnal neon spores, bass pulses between trees",
     environment: "closed forest rave at night, black-green depth, magenta flashes, ritual smoke"
   },
   cirurgiao_psycore: {
-    identity: "adult psycore surgeon entity with a precise humanoid spectral face, sharp charisma, and high-speed technical focus",
-    face: "piercing eyes, controlled confident smirk, realistic spectral surface detail, clean facial structure, not cold or mannequin-like",
-    wardrobe: "futuristic clinical jacket fused with rave armor, reflective seams, light-cut gloves, no robot body",
+    identity: "adult psycore / hi-tech rave archetype with a precise realistic face, sharp charisma, and high-speed technical focus",
+    face: "piercing eyes, controlled confident smirk, realistic surface detail, clean facial structure, not cold or mannequin-like",
+    wardrobe: "futuristic clinical rave jacket, reflective seams, technical straps, light-cut gloves, no armor or robot body",
     aura: "surgical glitch trails, orange-yellow transient sparks, extreme BPM wave slices, sharp sub-bass grids",
     environment: "dark hi-tech booth with strobing light cuts and controlled chaos"
   },
   guardiao_fullon_noite: {
-    identity: "adult full-on night guardian with a charismatic festival face, alert eyes, and electric midnight energy",
-    face: "awake playful eyes, confident smile, opal ghost skin, sweat-glow highlights, strong spiritual presence",
+    identity: "adult full-on night psytrance party archetype with a charismatic festival face, alert eyes, and electric midnight energy",
+    face: "awake playful eyes, confident smile, natural skin with sweat-glow highlights, strong friendly presence",
     wardrobe: "midnight festival jacket, acid-neon trim, layered psy accessories, face unobstructed",
     aura: "dense neon arcs, acid lines, midnight drive trails, full-on energy waves around the torso",
     environment: "post-midnight outdoor stage, dark blue air, violet laser haze, clean melodic tension"
   },
   viajante_sunrise: {
     identity: "adult sunrise psy voyager with a warm human smile, optimistic charisma, and open melodic energy",
-    face: "bright eyes, genuine smile, golden spectral rim-light, approachable expression, detailed humanoid spirit face",
+    face: "bright eyes, genuine smile, golden rim-light, approachable expression, detailed human face",
     wardrobe: "light festival layers, soft poncho textures, sunrise-colored accents, no cartoon styling",
     aura: "gold and pink melodic ribbons, elastic bassline waves, morning psy mandala, airy particles",
     environment: "festival sunrise horizon with soft haze and uplifting clean light"
@@ -9461,78 +10638,78 @@ const SPIRIT_HUMAN_ENTITY_DIRECTIONS = {
     environment: "intimate underground booth or club-wall light panel with visible abstract mixer/CDJ/equalizer architecture behind the shoulders, not just a colored neon wave"
   },
   alma_house: {
-    identity: "adult house-soul entity with a warm humanoid spectral face, soulful charisma, and community dancefloor glow",
-    face: "soft expressive eyes, generous smile, pearlescent spirit skin, emotionally open presence, believable warmth",
+    identity: "adult house/disco clubber archetype with warm human face, soulful charisma, and community dancefloor glow",
+    face: "soft expressive eyes, generous smile, detailed skin, emotionally open presence, believable warmth",
     wardrobe: "elegant relaxed clubwear, amber fabric highlights, subtle retro soul details, no fantasy mask",
     aura: "rounded bass waves, vocal warmth, claps as golden particles, pink and amber groove light",
     environment: "late-afternoon indoor-outdoor dancefloor, warm haze, communal human energy"
   },
   operador_acido: {
-    identity: "adult acid operator with a focused humanoid spectral face, industrial confidence, and hypnotic machine-room attitude",
-    face: "eyes clearly visible behind transparent visor or bare face, focused expression, spectral stubble shadow or translucent skin texture",
+    identity: "adult acid techno operator with a focused human face, industrial confidence, and hypnotic machine-room attitude",
+    face: "eyes clearly visible behind transparent visor or bare face, focused expression, realistic stubble shadow or skin texture",
     wardrobe: "structured coat, acid-green reflective lines, concrete-tech materials, no robot or faceless helmet",
     aura: "303 acid curves, grid corridors, lime waveform ribbons, metallic repetition patterns",
     environment: "industrial club architecture with concrete, low smoke, and precise green light"
   },
   acelerador_quantico: {
-    identity: "adult quantum accelerator with a humanoid spectral face, fearless charisma, and ultra-fast hi-tech precision",
-    face: "intense bright eyes, kinetic smile or smirk, plasma ghost skin, emotion under extreme speed",
+    identity: "adult hi-tech accelerator archetype with a human face, fearless charisma, and ultra-fast precision",
+    face: "intense bright eyes, kinetic smile or smirk, natural skin under prismatic club light, emotion under extreme speed",
     wardrobe: "speed-suit jacket, prismatic seams, transient-light accessories, no cyborg body",
     aura: "quantum trails, atom-like arcs, micro-cut sparks, high-BPM orange and aqua light streaks",
     environment: "dark kinetic chamber with motion blur, crisp highlights, and controlled hi-tech energy"
   },
   engenheiro_groove: {
     identity: "adult groove engineer with a realistic friendly face, calm charisma, and refined rhythmic control",
-    face: "warm eyes, understated smile, translucent face texture, relaxed confidence, approachable spirit presence",
+    face: "warm eyes, understated smile, realistic face texture, relaxed confidence, approachable presence",
     wardrobe: "studio-club vest, clean headphones around neck, tactile fabric, subtle green-blue glow",
     aura: "holographic mixer lines, rounded bass loops, swing grid, precise but warm club atmosphere",
     environment: "intimate studio-club hybrid with soft monitors and elegant low-end light"
   },
   arquiteto_hipnotico: {
     identity: "adult hypnotic architect with a realistic focused face, elegant severity, and emotional engineering presence",
-    face: "steady eyes, composed mouth, realistic spectral skin and eyelids, thoughtful intensity, not blank or mannequin-like",
+    face: "steady eyes, composed mouth, realistic skin and eyelids, thoughtful intensity, not blank or mannequin-like",
     wardrobe: "structured dark coat, blueprint-light tattoos, minimal techno tailoring, no faceless visor",
     aura: "repeating pressure corridors, acid-blueprint lines, slow hypnotic loops, silver-blue stereo geometry",
     environment: "large dark techno room with architectural light beams and patient tension"
   },
   cacador_bass: {
     identity: "adult bass hunter with a human charismatic face, physical intensity, and confident low-frequency presence",
-    face: "sharp eyes, magnetic grin, smoky translucent skin, expressive cheeks, approachable but powerful",
+    face: "sharp eyes, magnetic grin, detailed skin, expressive cheeks, approachable but powerful",
     wardrobe: "heavy bass jacket, tactical club textures, headphones or pressure-ring collar, face never covered",
     aura: "subwoofer rings, magenta-blue bass shockwaves, clean drum attack sparks, drop pressure halos",
     environment: "dark bass room with huge speaker shadows and chest-level light pulses"
   },
   viajante_organico: {
-    identity: "adult organic voyager with a serene humanoid spectral face, earthy charisma, and analog warmth",
-    face: "soft eyes, gentle smile, moonlit spectral skin, calm breathing presence, emotionally grounded",
+    identity: "adult organic/downtempo voyager with a serene human face, earthy charisma, and analog warmth",
+    face: "soft eyes, gentle smile, moonlit skin, calm breathing presence, emotionally grounded",
     wardrobe: "organic woven layers, botanical accents, analog fabric textures, no costume mask",
     aura: "botanical signal filaments, warm downtempo waves, green-gold particles, slow evolving melody lines",
     environment: "night garden dancefloor with warm lamps, plants, wood, and deep breathing space"
   },
   explorador_fractal: {
-    identity: "adult fractal explorer with a curious humanoid spectral face, playful intelligence, and experimental confidence",
-    face: "curious eyes, asymmetrical smile, iridescent spectral skin, lively expression, charismatic not weirdly abstract",
+    identity: "adult IDM/electro fractal explorer with a curious human face, playful intelligence, and experimental confidence",
+    face: "curious eyes, asymmetrical smile, skin lit by iridescent club reflections, lively expression, charismatic not weirdly abstract",
     wardrobe: "patchwork technical jacket, iridescent geometric accents, frontier-club styling, face unobscured",
     aura: "fractal cubes, broken-rhythm geometry, IDM micro-detail sparks, orange-cyan-violet asymmetry",
     environment: "experimental club lab with clean shadows, glitch light, and dimensional depth"
   },
   oraculo_trance: {
-    identity: "adult trance oracle with a luminous humanoid spectral face, emotional lift, and elegant melodic confidence",
-    face: "open hypnotic eyes, calm elevated expression, opaline silver-blue skin, soft celestial glow, emotionally readable but not sentimental",
-    wardrobe: "sleek chrome-blue collar, refined light jewelry, translucent club robe, headphones integrated like a melodic halo instrument",
+    identity: "adult trance club archetype with a luminous human face, emotional lift, and elegant melodic confidence",
+    face: "open hypnotic eyes, calm happy expression, skin lit by silver-blue club light, emotionally readable but not sentimental",
+    wardrobe: "sleek chrome-blue collar or jacket, refined light jewelry, elegant clubwear, headphones or light arcs kept wearable",
     aura: "wide euphoric rings, clean supersaw light arcs, violet-blue frequency halos, suspended melodic particles",
     environment: "dark cathedral-like club space with celestial beams, fog, and clean uplifting stage light"
   },
   catalisador_hard: {
-    identity: "adult hard-dance catalyst with a powerful humanoid spectral face, athletic posture, and cathartic kick energy",
-    face: "focused bright eyes, fearless calm expression, red-cyan plasma skin, strong cheekbone light, intense but not aggressive",
-    wardrobe: "structured hard-club armor collar, reflective black performance jacket, kick-reactive chest core, no mascot or robot body",
+    identity: "adult hard-dance catalyst with a powerful human face, athletic posture, and cathartic kick energy",
+    face: "focused bright eyes, fearless calm expression, realistic skin under red-cyan strobes, strong cheekbone light, intense but not aggressive",
+    wardrobe: "structured hard-club collar, reflective black performance jacket, kick-reactive light accents, no armor, mascot, or robot body",
     aura: "hard-kick shock rings, red-white-cyan strobe bursts, euphoric impact halos, compression waves around the shoulders",
     environment: "large peak-time warehouse floor with bright strobes, smoke, and physical low-end pressure"
   },
   navegante_breaks: {
-    identity: "adult broken-rhythm navigator with a stylish humanoid spectral face, agile lateral energy, and clever underground charisma",
-    face: "alert curious eyes, subtle sideways smirk, aqua-rose translucent skin, expressive brow, playful intelligence",
+    identity: "adult breaks/garage navigator with a stylish human face, agile lateral energy, and clever underground charisma",
+    face: "alert curious eyes, subtle sideways smirk, skin lit by aqua-rose reflections, expressive brow, playful intelligence",
     wardrobe: "asymmetric street-club jacket, lightweight headphones, iridescent straps, garage-inspired jewelry, face fully visible",
     aura: "broken-grid waveforms, syncopated light steps, sub-bass ripples, magenta-cyan negative-space geometry",
     environment: "night city club corridor with moving reflections, bass haze, and sharp off-grid light"
@@ -10817,6 +11994,15 @@ function pickDatasetValue(fieldMap, keys = []) {
   return "";
 }
 
+function parseDatasetListValue(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return [];
+  return raw
+    .split(/\s*(?:\||;|,\s+)\s*/g)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function parseDatasetBpm(value = "") {
   const raw = String(value || "").trim().replace(",", ".");
   if (!raw) return 0;
@@ -11220,6 +12406,61 @@ function catalogExtraMetadataList(metadata = {}, key = "") {
   return text.split(/[;,]/).map((item) => item.trim()).filter(Boolean);
 }
 
+function catalogExtraIsSearchLikeUrl(url = "") {
+  const raw = String(url || "").trim();
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    const path = String(parsed.pathname || "").toLowerCase();
+    const search = String(parsed.search || "").toLowerCase();
+    return path.includes("/search") || path.includes("/results") || search.includes("search_query=") || search.includes("q=");
+  } catch (_err) {
+    return /\/search|\/results|search_query=|\bq=/.test(raw.toLowerCase());
+  }
+}
+
+function catalogExtraBandcampTrackId(row = {}, metadata = catalogExtraRowMetadata(row)) {
+  return String(
+    catalogExtraRowText(row, "bandcamp_track_id") ||
+    catalogExtraMetadataText(metadata, "bandcamp_track_id") ||
+    catalogExtraMetadataText(metadata, "bandcamp_id") ||
+    catalogExtraMetadataText(metadata, "bandcamp_embed_id") ||
+    ""
+  ).replace(/[^\d]/g, "").trim();
+}
+
+function catalogExtraUrlCandidates(row = {}, metadata = catalogExtraRowMetadata(row)) {
+  const label = catalogExtraRowText(row, "label");
+  return [
+    catalogExtraMetadataText(metadata, "youtube_track_url"),
+    catalogExtraMetadataText(metadata, "youtube_url"),
+    catalogExtraMetadataText(metadata, "soundcloud_track_url"),
+    catalogExtraMetadataText(metadata, "soundcloud_url"),
+    catalogExtraMetadataText(metadata, "bandcamp_track_url"),
+    catalogExtraMetadataText(metadata, "bandcamp_url"),
+    catalogExtraMetadataText(metadata, "track_url"),
+    catalogExtraMetadataText(metadata, "source_anchor_url"),
+    catalogExtraMetadataText(metadata, "source_album_url"),
+    catalogExtraRowText(row, "source_url"),
+    /^https?:\/\//i.test(label) ? label : ""
+  ].map((url) => String(url || "").trim()).filter(Boolean);
+}
+
+function catalogExtraPlayableSources(row = {}) {
+  const sources = new Set();
+  const metadata = catalogExtraRowMetadata(row);
+  const urlFields = catalogExtraUrlFields(row);
+  if (catalogExtraRowText(row, "preview_url")) sources.add("audio_preview");
+  if (isDirectYouTubeUrl(urlFields.youtubeTrackUrl)) sources.add("youtube_embed");
+  if (isDirectSoundCloudTrackUrl(urlFields.soundcloudTrackUrl)) sources.add("soundcloud_embed");
+  if (catalogExtraBandcampTrackId(row, metadata)) sources.add("bandcamp_embed");
+  return [...sources];
+}
+
+function catalogExtraRowHasPlayablePath(row = {}) {
+  return catalogExtraPlayableSources(row).length > 0;
+}
+
 function catalogTrackMetadata(track = {}) {
   const metadata = track?.catalogMetadata || track?.metadata;
   if (!metadata) return {};
@@ -11408,23 +12649,29 @@ function restoreCatalogExtraTrackHints(track = {}) {
 
 function catalogExtraUrlFields(row = {}) {
   const metadata = catalogExtraRowMetadata(row);
-  const sourceUrl =
-    catalogExtraRowText(row, "source_url") ||
-    catalogExtraMetadataText(metadata, "track_url") ||
-    catalogExtraMetadataText(metadata, "source_album_url");
-  const label = catalogExtraRowText(row, "label");
-  const url = sourceUrl || (/^https?:\/\//i.test(label) ? label : "");
-  if (!url) return {};
+  const urls = catalogExtraUrlCandidates(row, metadata);
+  const fields = {};
+  const youtubeTrackUrl = urls.find((url) => isDirectYouTubeUrl(url));
+  const youtubeUrl = urls.find((url) => /(?:youtube\.com|youtu\.be)/i.test(url));
+  const soundcloudTrackUrl = urls.find((url) => isDirectSoundCloudTrackUrl(url));
+  const soundcloudUrl = urls.find((url) => /soundcloud\.com/i.test(url));
+  const bandcampUrl = urls.find((url) => /bandcamp\.com/i.test(url) && !catalogExtraIsSearchLikeUrl(url));
+  const spotifyTrackUrl = urls.find((url) => /spotify\.com\/track/i.test(url));
+  const spotifyUrl = urls.find((url) => /spotify\.com/i.test(url));
+  const bandcampTrackId = catalogExtraBandcampTrackId(row, metadata);
 
-  const lowerUrl = url.toLowerCase();
-  if (isDirectYouTubeUrl(url)) return { youtubeTrackUrl: url };
-  if (lowerUrl.includes("youtube.com") || lowerUrl.includes("youtu.be")) return { youtubeUrl: url };
-  if (isDirectSoundCloudTrackUrl(url)) return { soundcloudTrackUrl: url };
-  if (lowerUrl.includes("soundcloud.com")) return { soundcloudUrl: url };
-  if (lowerUrl.includes("bandcamp.com")) return { bandcampTrackUrl: url, bandcampUrl: url };
-  if (lowerUrl.includes("spotify.com/track")) return { spotifyTrackUrl: url };
-  if (lowerUrl.includes("spotify.com")) return { spotifyUrl: url };
-  return {};
+  if (youtubeTrackUrl) fields.youtubeTrackUrl = youtubeTrackUrl;
+  else if (youtubeUrl) fields.youtubeUrl = youtubeUrl;
+  if (soundcloudTrackUrl) fields.soundcloudTrackUrl = soundcloudTrackUrl;
+  else if (soundcloudUrl) fields.soundcloudUrl = soundcloudUrl;
+  if (bandcampUrl) {
+    fields.bandcampTrackUrl = bandcampUrl;
+    fields.bandcampUrl = bandcampUrl;
+  }
+  if (bandcampTrackId) fields.bandcampTrackId = bandcampTrackId;
+  if (spotifyTrackUrl) fields.spotifyTrackUrl = spotifyTrackUrl;
+  else if (spotifyUrl) fields.spotifyUrl = spotifyUrl;
+  return fields;
 }
 
 function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_extra") {
@@ -11463,8 +12710,13 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
     const artist = catalogExtraRowText(row, "artist");
     const song = catalogExtraRowText(row, "song");
     if (!style || !STYLE_BPM_RULES[style] || !artist || !song) return;
+    if (!catalogExtraRowHasPlayablePath(row)) return;
 
-    const metadata = catalogExtraRowMetadata(row);
+    const metadata = {
+      ...catalogExtraRowMetadata(row),
+      playback_policy: "published_requires_in_app_playback",
+      playable_sources: catalogExtraPlayableSources(row)
+    };
     const label = catalogExtraRowText(row, "label") || catalogExtraRowText(row, "source") || "Supabase catalog";
     const bpmExact = Number(row?.bpm_exact) || 0;
     const releaseDate = normalizeDatasetReleaseDate(catalogExtraRowText(row, "release_date") || "Supabase catalog");
@@ -11498,6 +12750,7 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
         socialDiscoveryLinks: catalogExtraMetadataList(metadata, "social_discovery_links"),
         sourceNote: catalogExtraMetadataText(metadata, "source_note"),
         catalogConfidence: catalogExtraMetadataText(metadata, "confidence"),
+        bandcampTrackId: catalogExtraBandcampTrackId(row, metadata),
         ...urlFields
       },
       existingKeys
@@ -11722,6 +12975,15 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const deezerTrackUrl = pickDatasetValue(fields, ["deezer_track_url", "deezer_url", "deezer"]);
     const coverArtUrl = pickDatasetValue(fields, ["cover_art_url", "cover_url", "artwork_url", "image_url"]);
     const catalogConfidence = pickDatasetValue(fields, ["confidence", "catalog_confidence", "verification_confidence"]);
+    const sourceUrl = pickDatasetValue(fields, ["source_url", "source_link", "reference_url"]);
+    const trackUrl = pickDatasetValue(fields, ["track_url", "track_link", "reference_track_url"]);
+    const sourceTags = parseDatasetListValue(pickDatasetValue(fields, ["source_tags", "catalog_tags", "tags"]));
+    const albumKeywords = parseDatasetListValue(pickDatasetValue(fields, ["album_keywords", "keywords", "search_keywords"]));
+    const labelLinks = parseDatasetListValue(pickDatasetValue(fields, ["label_links", "label_urls", "label_discovery_links"]));
+    const socialDiscoveryLinks = parseDatasetListValue(pickDatasetValue(fields, ["social_discovery_links", "artist_links", "artist_urls", "discovery_links"]));
+    const energyBand = pickDatasetValue(fields, ["energy_band", "energy_profile", "energy"]);
+    const catalogRole = pickDatasetValue(fields, ["catalog_role", "role", "editorial_role"]);
+    const sourceNote = pickDatasetValue(fields, ["source_note", "note", "curation_note"]);
     const releaseDate = normalizeDatasetReleaseDate(
       pickDatasetValue(fields, ["release_date", "released", "date", "year", "ano"])
     );
@@ -11738,7 +13000,16 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
       bandcamp_track_url: bandcampTrackUrl,
       soundcloud_track_url: soundcloudTrackUrl,
       youtube_track_url: youtubeTrackUrl,
-      confidence: catalogConfidence
+      source_url: sourceUrl,
+      track_url: trackUrl,
+      confidence: catalogConfidence,
+      source_tags: sourceTags,
+      album_keywords: albumKeywords,
+      label_links: labelLinks,
+      social_discovery_links: socialDiscoveryLinks,
+      energy_band: energyBand,
+      catalog_role: catalogRole,
+      source_note: sourceNote
     }).filter(([, value]) => String(value ?? "").trim()));
     if (previewUrl || bandcampTrackId || bandcampTrackUrl || soundcloudTrackUrl || youtubeTrackUrl || deezerTrackId) {
       catalogMetadata.playback_policy = "published_requires_in_app_playback";
@@ -11778,6 +13049,13 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         artistBio: bio,
         catalogMetadata,
         coverArtUrl,
+        sourceTags,
+        albumKeywords,
+        energyBand,
+        catalogRole,
+        labelLinks,
+        socialDiscoveryLinks,
+        sourceNote,
         catalogConfidence
       },
       existingKeys
@@ -14213,6 +15491,9 @@ async function rateCurrentRecommendation(stars, triggerEl = null) {
 }
 
 function deezerJsonp(url) {
+  if (COMPLIANCE_CONFIG.clientDeezerEnabled !== true) {
+    return Promise.reject(new Error("Deezer client API disabled by compliance settings"));
+  }
   return new Promise((resolve, reject) => {
     const callbackName = `dzcb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
     const script = document.createElement("script");
@@ -14254,6 +15535,9 @@ function deezerJsonp(url) {
 }
 
 function itunesJsonp(url) {
+  if (COMPLIANCE_CONFIG.clientItunesEnabled !== true) {
+    return Promise.reject(new Error("iTunes client API disabled by compliance settings"));
+  }
   return new Promise((resolve, reject) => {
     const callbackName = `itcb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
     const script = document.createElement("script");
@@ -14433,9 +15717,18 @@ function isStyleCoverageHealthy(style, stats = styleCoverageStats(style), target
 }
 
 function externalCatalogHydrationAllowed() {
+  if (COMPLIANCE_CONFIG.clientMusicCatalogApisEnabled !== true) return false;
   if (typeof window !== "undefined" && window.SONIC_LOCAL_CATALOG_ONLY === true) return false;
   if (typeof navigator !== "undefined" && navigator.onLine === false) return false;
   return true;
+}
+
+function clientDeezerCatalogHydrationAllowed() {
+  return externalCatalogHydrationAllowed() && COMPLIANCE_CONFIG.clientDeezerEnabled === true;
+}
+
+function clientItunesCatalogHydrationAllowed() {
+  return externalCatalogHydrationAllowed() && COMPLIANCE_CONFIG.clientItunesEnabled === true;
 }
 
 function coveragePassLimit(style, maxPasses = COVERAGE_MAX_PASSES) {
@@ -15054,6 +16347,7 @@ async function expandCatalogForArtistDepth(artist, style = "", options = {}) {
   const task = (async () => {
     const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)).filter(Boolean));
     const rowMap = new Map();
+    const deezerCatalogAllowed = clientDeezerCatalogHydrationAllowed();
     const addRow = (row) => {
       if (!row?.title || !row?.artist?.name) return;
       const key = String(row.id || `${row.artist.name}::${row.title}`);
@@ -15061,19 +16355,21 @@ async function expandCatalogForArtistDepth(artist, style = "", options = {}) {
       rowMap.set(key, row);
     };
 
-    try {
-      const previewRows = await fetchDeezerPreviewOptionsByArtist(artistName, resolvedStyle);
-      previewRows.forEach(addRow);
-    } catch (_err) {
-      // segue para top tracks
-    }
-
-    if (rowMap.size < target) {
+    if (deezerCatalogAllowed) {
       try {
-        const topRows = await fetchDeezerArtistTopTracks(artistName, resolvedStyle);
-        topRows.filter((row) => normalizePreviewUrl(row?.preview || "")).forEach(addRow);
+        const previewRows = await fetchDeezerPreviewOptionsByArtist(artistName, resolvedStyle);
+        previewRows.forEach(addRow);
       } catch (_err) {
-        // SoundCloud abaixo cobre artistas que nao vierem do Deezer
+        // segue para top tracks
+      }
+
+      if (rowMap.size < target) {
+        try {
+          const topRows = await fetchDeezerArtistTopTracks(artistName, resolvedStyle);
+          topRows.filter((row) => normalizePreviewUrl(row?.preview || "")).forEach(addRow);
+        } catch (_err) {
+          // SoundCloud abaixo cobre artistas que nao vierem do Deezer
+        }
       }
     }
 
@@ -15230,6 +16526,680 @@ function resolveMusicApiEndpoint(globalName, fallbackPath) {
   const configured = String(window?.[globalName] || "").trim();
   if (configured) return configured;
   return canUseRelativeApiEndpoint() ? fallbackPath : "";
+}
+
+function apiHealthEndpoint() {
+  return resolveMusicApiEndpoint("SONIC_INTEGRATION_HEALTH_API_URL", API_HEALTH_ENDPOINT);
+}
+
+function apiProviderLabel(key = "") {
+  const labels = {
+    trackMetadata: "iTunes/Deezer",
+    coverArt: "Cover Art",
+    artistProfile: "MusicBrainz/Wikipedia",
+    radioBrowser: "Radio Browser",
+    lastfm: "Last.fm",
+    catalogEnrichment: "Banco próprio",
+    artistBio: "Bio IA/Discogs",
+    newsFeed: "News/RSS",
+    soundcloud: "SoundCloud",
+    youtube: "YouTube",
+    ticketmaster: "Ticketmaster",
+    bandsintown: "Bandsintown",
+    localEvents: "Eventos locais"
+  };
+  return labels[key] || key;
+}
+
+function apiHealthStatusFor(provider = {}) {
+  if (provider.status) return provider.status;
+  if (provider.configured === false) return "needs_credentials";
+  if (provider.enabled) return "active";
+  return "disabled";
+}
+
+function apiHealthStatusLabel(status = "") {
+  if (status === "active") return t("apiHealthActive");
+  if (status === "needs_credentials") return t("apiHealthNeedsCredentials");
+  if (status === "disabled") return t("apiHealthDisabled");
+  return t("apiHealthUnknown");
+}
+
+function apiHealthClass(status = "") {
+  if (status === "active") return "active";
+  if (status === "needs_credentials") return "needs-credentials";
+  if (status === "disabled") return "disabled";
+  return "unknown";
+}
+
+function apiHealthProviderDetail(key = "", provider = {}) {
+  const compliance = provider.compliance || {};
+  const pieces = [];
+  if (apiHealthStatusFor(provider) === "needs_credentials") pieces.push(t("apiHealthMissingKey"));
+  else if (provider.enabled) pieces.push(t("apiHealthReady"));
+  else pieces.push(String(provider.reason || "").replace(/_/g, " "));
+
+  if (provider.providers && typeof provider.providers === "object") {
+    const enabledProviders = Object.entries(provider.providers)
+      .filter(([, enabled]) => Boolean(enabled))
+      .map(([name]) => name);
+    if (enabledProviders.length) pieces.push(enabledProviders.join(", "));
+  }
+  if (compliance.backendOnly) pieces.push(t("apiHealthBackendOnly"));
+  if (key === "catalogEnrichment" && compliance.table) pieces.push(compliance.table);
+  return pieces.filter(Boolean).slice(0, 3).join(" · ");
+}
+
+function apiHealthProviderMeta(key = "", provider = {}, payload = {}) {
+  const compliance = provider.compliance || {};
+  const limits = payload.limits || {};
+  const limitKey = {
+    trackMetadata: "trackMetadataDailyLimit",
+    coverArt: "coverArtDailyLimit",
+    artistProfile: "artistProfileDailyLimit",
+    artistBio: "artistBioDailyLimit",
+    lastfm: "lastfmDailyLimit",
+    radioBrowser: "radioBrowserDailyLimit",
+    newsFeed: "newsFeedDailyLimit",
+    soundcloud: "soundcloudSearchDailyLimit",
+    youtube: "youtubeSearchDailyLimit",
+    ticketmaster: "ticketmasterEventsDailyLimit"
+  }[key];
+  const pieces = [];
+  if (Number(compliance.cacheSeconds)) pieces.push(t("apiHealthCacheSeconds", { seconds: compliance.cacheSeconds }));
+  else if (provider.enabled) pieces.push(t("apiHealthNoCache"));
+  if (limitKey && Number(limits[limitKey])) pieces.push(t("apiHealthDailyLimit", { limit: limits[limitKey] }));
+  return pieces.slice(0, 2).join(" · ");
+}
+
+function apiHealthItems(payload = {}) {
+  const providers = payload.providers || {};
+  return [
+    "trackMetadata",
+    "coverArt",
+    "artistProfile",
+    "radioBrowser",
+    "lastfm",
+    "catalogEnrichment",
+    "artistBio",
+    "newsFeed",
+    "soundcloud",
+    "youtube",
+    "ticketmaster",
+    "bandsintown"
+  ]
+    .map((key) => ({ key, provider: providers[key] }))
+    .filter((item) => item.provider);
+}
+
+function renderApiHealthPanel(payload = null) {
+  if (!apiHealthPanel || !apiHealthGrid) return;
+  const items = apiHealthItems(payload || {});
+  apiHealthGrid.innerHTML = "";
+  let active = 0;
+  let attention = 0;
+  items.forEach(({ key, provider }) => {
+    const status = apiHealthStatusFor(provider);
+    if (status === "active") active += 1;
+    if (status === "needs_credentials") attention += 1;
+
+    const card = document.createElement("article");
+    card.className = `api-health-item ${apiHealthClass(status)}`;
+
+    const head = document.createElement("div");
+    head.className = "api-health-item-head";
+
+    const name = document.createElement("span");
+    name.className = "api-health-name";
+    name.textContent = apiProviderLabel(key);
+
+    const badge = document.createElement("span");
+    badge.className = "api-health-badge";
+    badge.textContent = apiHealthStatusLabel(status);
+
+    const detail = document.createElement("p");
+    detail.className = "api-health-detail";
+    detail.textContent = apiHealthProviderDetail(key, provider);
+
+    const meta = document.createElement("p");
+    meta.className = "api-health-meta";
+    meta.textContent = apiHealthProviderMeta(key, provider, payload);
+
+    head.append(name, badge);
+    card.append(head, detail);
+    if (meta.textContent) card.appendChild(meta);
+    apiHealthGrid.appendChild(card);
+  });
+
+  if (apiHealthStatus) {
+    apiHealthStatus.textContent = t("apiHealthUpdated", { active, attention });
+  }
+}
+
+async function loadApiHealthPanel({ force = false } = {}) {
+  if (!apiHealthPanel || apiHealthLoading) return;
+  const endpoint = apiHealthEndpoint();
+  if (!endpoint) {
+    if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthUnavailable");
+    return;
+  }
+  if (!force && apiHealthPayload) {
+    renderApiHealthPanel(apiHealthPayload);
+    return;
+  }
+  apiHealthLoading = true;
+  if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthLoading");
+  if (apiHealthRefreshBtn) apiHealthRefreshBtn.disabled = true;
+  try {
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) throw new Error("health_unavailable");
+    apiHealthPayload = await response.json();
+    renderApiHealthPanel(apiHealthPayload);
+  } catch (_err) {
+    if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthUnavailable");
+  } finally {
+    apiHealthLoading = false;
+    if (apiHealthRefreshBtn) apiHealthRefreshBtn.disabled = false;
+  }
+}
+
+function trackMetadataApiCacheKey(track = {}) {
+  return recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+}
+
+function trackDurationSecondsForApi(track = {}) {
+  const value =
+    track.durationSec ||
+    track.duration ||
+    catalogTrackMetadataText(track, "duration_sec") ||
+    catalogTrackMetadataText(track, "durationSec") ||
+    catalogTrackMetadataText(track, "duration");
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed) : 0;
+}
+
+function trackReleaseYearForApi(track = {}) {
+  const value =
+    track.releaseYear ||
+    track.releaseDate ||
+    catalogTrackMetadataText(track, "release_year") ||
+    catalogTrackMetadataText(track, "releaseYear") ||
+    catalogTrackMetadataText(track, "release_date") ||
+    catalogTrackMetadataText(track, "releaseDate");
+  const match = String(value || "").match(/\b(19|20)\d{2}\b/);
+  return match ? Number(match[0]) : 0;
+}
+
+async function fetchTrackMetadataFromApi(track) {
+  if (!track?.artist || !track?.song) return null;
+  const endpoint = resolveMusicApiEndpoint("SONIC_TRACK_METADATA_API_URL", "/api/track-metadata");
+  if (!endpoint) return null;
+  const cacheKey = trackMetadataApiCacheKey(track);
+  if (cacheKey && trackMetadataApiCache.has(cacheKey)) return trackMetadataApiCache.get(cacheKey);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        artist: track.artist || "",
+        song: track.song || track.title || "",
+        style: track.style || "",
+        album: coverArtReleaseName(track),
+        durationSec: trackDurationSecondsForApi(track),
+        releaseYear: trackReleaseYearForApi(track)
+      })
+    });
+    if (!response.ok) {
+      if (cacheKey) trackMetadataApiCache.set(cacheKey, null);
+      return null;
+    }
+    const payload = await response.json();
+    const result = payload?.best || null;
+    if (cacheKey) trackMetadataApiCache.set(cacheKey, result);
+    return result;
+  } catch (_err) {
+    if (cacheKey) trackMetadataApiCache.set(cacheKey, null);
+    return null;
+  }
+}
+
+function coverArtReleaseName(track = {}) {
+  return String(
+    track.album ||
+      track.release ||
+      track.collectionName ||
+      catalogTrackMetadataText(track, "album") ||
+      catalogTrackMetadataText(track, "album_title") ||
+      catalogTrackMetadataText(track, "release") ||
+      catalogTrackMetadataText(track, "release_title") ||
+      catalogTrackMetadataText(track, "collection_name") ||
+      ""
+  ).trim();
+}
+
+function coverArtApiCacheKey(track = {}) {
+  const artist = normalize(track?.artist || "");
+  const release = normalize(coverArtReleaseName(track) || track?.song || track?.title || "");
+  return artist && release ? `${artist}::${release}` : "";
+}
+
+async function fetchCoverArtFromApi(track) {
+  if (!track?.artist || !(track.song || track.title || coverArtReleaseName(track))) return null;
+  const endpoint = resolveMusicApiEndpoint("SONIC_COVER_ART_API_URL", "/api/cover-art");
+  if (!endpoint) return null;
+  const cacheKey = coverArtApiCacheKey(track);
+  if (cacheKey && coverArtApiCache.has(cacheKey)) return coverArtApiCache.get(cacheKey);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        artist: track.artist || "",
+        song: track.song || track.title || "",
+        album: coverArtReleaseName(track),
+        style: track.style || "",
+        releaseYear: trackReleaseYearForApi(track)
+      })
+    });
+    if (!response.ok) {
+      if (cacheKey) coverArtApiCache.set(cacheKey, null);
+      return null;
+    }
+    const payload = await response.json();
+    const result = payload?.cover?.imageUrl || payload?.imageUrl ? payload : null;
+    if (cacheKey) coverArtApiCache.set(cacheKey, result);
+    return result;
+  } catch (_err) {
+    if (cacheKey) coverArtApiCache.set(cacheKey, null);
+    return null;
+  }
+}
+
+function applyCoverArtToTrack(track, payload = null) {
+  if (!track || !payload) return false;
+  const imageUrl = String(payload?.cover?.imageUrl || payload?.imageUrl || "").trim();
+  if (!imageUrl) return false;
+  if (!track.coverArtUrl) track.coverArtUrl = imageUrl;
+  if (!track.coverUrl) track.coverUrl = imageUrl;
+  track.coverArtSource = "Cover Art Archive";
+  if (Array.isArray(payload.sourceDetails) && payload.sourceDetails.length) {
+    track.coverArtSourceDetails = payload.sourceDetails;
+    track.coverArtAttribution = payload.attribution || null;
+  }
+  if (currentRecommendation === track) renderTopSwipeArtwork(track);
+  return true;
+}
+
+async function hydrateTrackCoverArt(track) {
+  if (!track?.artist) return false;
+  if (track.coverArtUrl || track.coverUrl || track.imageUrl) return false;
+  const payload = await fetchCoverArtFromApi(track);
+  if (currentRecommendation !== track) return false;
+  return applyCoverArtToTrack(track, payload);
+}
+
+function radioBrowserApiCacheKey(track = {}) {
+  const style = normalize(track?.style || "");
+  const country = preferredRadioCountryCode();
+  return style ? `style::${style}::${currentLanguage || DEFAULT_LANGUAGE}::${country}` : "";
+}
+
+function preferredRadioCountryCode() {
+  const language = String(navigator?.language || "").trim();
+  const match = language.match(/-([a-z]{2})$/i);
+  return match ? match[1].toUpperCase() : "";
+}
+
+function radioStationStreamUrl(station = {}) {
+  const url = String(station.urlResolved || station.streamUrl || station.url || "").trim();
+  return /^https?:\/\//i.test(url) ? url : "";
+}
+
+function radioStationMetaText(station = {}) {
+  const parts = [
+    station.country || station.countryCode || "",
+    station.codec || "",
+    station.bitrate ? `${station.bitrate} kbps` : "",
+    Array.isArray(station.tags) ? station.tags.slice(0, 3).join(", ") : ""
+  ].filter(Boolean);
+  return parts.join(" • ");
+}
+
+async function fetchRadioBrowserStations(track) {
+  if (!track?.style) return [];
+  const endpoint = resolveMusicApiEndpoint("SONIC_RADIO_BROWSER_API_URL", "/api/radio-browser");
+  if (!endpoint) return [];
+  const cacheKey = radioBrowserApiCacheKey(track);
+  if (cacheKey && radioBrowserApiCache.has(cacheKey)) return radioBrowserApiCache.get(cacheKey);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        style: track.style,
+        tag: styleLabelByValue(track.style) || "",
+        country: preferredRadioCountryCode(),
+        language: currentLanguage || DEFAULT_LANGUAGE,
+        minBitrate: 64,
+        healthyOnly: true,
+        limit: 6
+      })
+    });
+    if (!response.ok) {
+      if (cacheKey) radioBrowserApiCache.set(cacheKey, []);
+      return [];
+    }
+    const payload = await response.json();
+    const stations = Array.isArray(payload?.stations)
+      ? payload.stations.filter((station) => radioStationStreamUrl(station))
+      : [];
+    if (cacheKey) radioBrowserApiCache.set(cacheKey, stations);
+    return stations;
+  } catch (_err) {
+    if (cacheKey) radioBrowserApiCache.set(cacheKey, []);
+    return [];
+  }
+}
+
+function stopRadioBrowserPlayer() {
+  if (!radioBrowserPlayer) return;
+  try {
+    radioBrowserPlayer.pause();
+    radioBrowserPlayer.removeAttribute("src");
+    radioBrowserPlayer.load();
+  } catch (_err) {
+    // ignore radio reset failures
+  }
+  radioBrowserPlayer.classList.add("hidden");
+}
+
+function resetRadioBrowserPanel(track = null) {
+  if (!radioBrowserPanel) return;
+  stopRadioBrowserPlayer();
+  if (!track?.style) {
+    radioBrowserPanel.classList.add("hidden");
+    return;
+  }
+  radioBrowserPanel.classList.remove("hidden");
+  if (radioBrowserKicker) radioBrowserKicker.textContent = t("radioBrowserKicker");
+  if (radioBrowserTitle) radioBrowserTitle.textContent = t("radioBrowserTitle", { style: styleLabelByValue(track.style) || track.style });
+  if (radioBrowserRefreshBtn) {
+    radioBrowserRefreshBtn.textContent = t("radioBrowserLoadBtn");
+    radioBrowserRefreshBtn.disabled = false;
+  }
+  if (radioBrowserStatus) {
+    radioBrowserStatus.textContent = t("radioBrowserIdle", { style: styleLabelByValue(track.style) || track.style });
+  }
+  if (radioBrowserStations) radioBrowserStations.innerHTML = "";
+  if (radioBrowserAttribution) radioBrowserAttribution.textContent = t("radioBrowserAttribution");
+}
+
+function renderRadioBrowserStations(stations = []) {
+  if (!radioBrowserStations) return;
+  radioBrowserStations.innerHTML = "";
+  stations.slice(0, 6).forEach((station, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "radio-station-btn";
+    button.dataset.radioStationIndex = String(index);
+    button.setAttribute("aria-label", t("radioBrowserPlayStation", { station: station.name || t("radioBrowserUnnamed") }));
+
+    const name = document.createElement("span");
+    name.className = "radio-station-name";
+    name.textContent = station.name || t("radioBrowserUnnamed");
+
+    const meta = document.createElement("span");
+    meta.className = "radio-station-meta";
+    meta.textContent = radioStationMetaText(station) || t("radioBrowserPublicStation");
+
+    button.append(name, meta);
+    radioBrowserStations.appendChild(button);
+  });
+}
+
+async function loadRadioBrowserForCurrentTrack() {
+  if (!currentRecommendation?.style) return;
+  if (radioBrowserRefreshBtn) {
+    radioBrowserRefreshBtn.disabled = true;
+    radioBrowserRefreshBtn.textContent = t("radioBrowserLoadingBtn");
+  }
+  if (radioBrowserStatus) {
+    radioBrowserStatus.textContent = t("radioBrowserLoading", {
+      style: styleLabelByValue(currentRecommendation.style) || currentRecommendation.style
+    });
+  }
+  const stations = await fetchRadioBrowserStations(currentRecommendation);
+  if (currentRecommendation?.style && radioBrowserRefreshBtn) {
+    radioBrowserRefreshBtn.disabled = false;
+    radioBrowserRefreshBtn.textContent = stations.length ? t("radioBrowserRefreshBtn") : t("radioBrowserLoadBtn");
+  }
+  if (!stations.length) {
+    if (radioBrowserStations) radioBrowserStations.innerHTML = "";
+    if (radioBrowserStatus) radioBrowserStatus.textContent = t("radioBrowserEmpty");
+    return;
+  }
+  renderRadioBrowserStations(stations);
+  if (radioBrowserStatus) radioBrowserStatus.textContent = t("radioBrowserFound", { count: stations.length });
+  if (radioBrowserAttribution) radioBrowserAttribution.textContent = t("radioBrowserAttribution");
+}
+
+async function playRadioBrowserStation(index = -1) {
+  if (!currentRecommendation?.style || !radioBrowserPlayer) return;
+  const stations = await fetchRadioBrowserStations(currentRecommendation);
+  const station = stations[index] || null;
+  const streamUrl = radioStationStreamUrl(station);
+  if (!station || !streamUrl) {
+    if (radioBrowserStatus) radioBrowserStatus.textContent = t("radioBrowserStationUnavailable");
+    return;
+  }
+  if (trackPreview && !trackPreview.paused) resetTrackPreviewElement(trackPreview);
+  radioBrowserPlayer.src = streamUrl;
+  radioBrowserPlayer.classList.remove("hidden");
+  radioBrowserStations?.querySelectorAll(".radio-station-btn").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.radioStationIndex || -1) === index);
+  });
+  if (radioBrowserStatus) {
+    radioBrowserStatus.textContent = t("radioBrowserPlaying", { station: station.name || t("radioBrowserUnnamed") });
+  }
+  primeAudioForDiscoveryGesture();
+  try {
+    await radioBrowserPlayer.play();
+  } catch (_err) {
+    if (radioBrowserStatus) {
+      radioBrowserStatus.textContent = t("radioBrowserReady", { station: station.name || t("radioBrowserUnnamed") });
+    }
+  }
+}
+
+async function fetchArtistProfileFromApi(artistName, preferredLanguage = currentLanguage) {
+  const artist = String(artistName || "").trim();
+  if (!artist) return null;
+  const endpoint = resolveMusicApiEndpoint("SONIC_ARTIST_PROFILE_API_URL", "/api/artist-profile");
+  if (!endpoint) return null;
+  const locale = ["pt", "en", "es"].includes(preferredLanguage) ? preferredLanguage : DEFAULT_LANGUAGE;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        artist,
+        language: locale
+      })
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const profile = payload?.profile || null;
+    return hasMeaningfulArtistProfile(profile) ? profile : null;
+  } catch (_err) {
+    return null;
+  }
+}
+
+async function fetchLastfmArtistFromApi(artistName, preferredLanguage = currentLanguage) {
+  const artist = String(artistName || "").trim();
+  if (!artist) return null;
+  const endpoint = resolveMusicApiEndpoint("SONIC_LASTFM_ARTIST_API_URL", "/api/lastfm-artist");
+  if (!endpoint) return null;
+  const locale = ["pt", "en", "es"].includes(preferredLanguage) ? preferredLanguage : DEFAULT_LANGUAGE;
+  const cacheKey = `${normalize(artist)}::${locale}`;
+  if (cacheKey && lastfmArtistApiCache.has(cacheKey)) return lastfmArtistApiCache.get(cacheKey);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({ artist, language: locale })
+    });
+    if (!response.ok) {
+      if (cacheKey) lastfmArtistApiCache.set(cacheKey, null);
+      return null;
+    }
+    const payload = await response.json();
+    const profile = payload?.profile || null;
+    const hasSignals = Boolean(
+      profile?.bioSummary ||
+        (Array.isArray(profile?.tags) && profile.tags.length) ||
+        (Array.isArray(profile?.similarArtists) && profile.similarArtists.length) ||
+        (Array.isArray(profile?.topTracks) && profile.topTracks.length)
+    );
+    const result = hasSignals ? profile : null;
+    if (cacheKey) lastfmArtistApiCache.set(cacheKey, result);
+    return result;
+  } catch (_err) {
+    if (cacheKey) lastfmArtistApiCache.set(cacheKey, null);
+    return null;
+  }
+}
+
+function resetLastfmArtistPanel() {
+  if (!lastfmArtistPanel) return;
+  lastfmArtistPanel.classList.add("hidden");
+  if (lastfmArtistTags) lastfmArtistTags.innerHTML = "";
+  if (lastfmTopTracks) lastfmTopTracks.innerHTML = "";
+  if (lastfmSimilarArtists) lastfmSimilarArtists.innerHTML = "";
+}
+
+function safeExternalUrl(value = "") {
+  const url = String(value || "").trim();
+  return /^https?:\/\//i.test(url) ? url : "";
+}
+
+function appendLastfmList(container, title, rows = [], labelForRow) {
+  if (!container || !rows.length) return;
+  const titleEl = document.createElement("p");
+  titleEl.className = "lastfm-list-title";
+  titleEl.textContent = title;
+  container.appendChild(titleEl);
+  rows.slice(0, 5).forEach((row) => {
+    const label = labelForRow(row);
+    const url = safeExternalUrl(row?.url || "");
+    const item = url ? document.createElement("a") : document.createElement("span");
+    item.textContent = label;
+    if (url) {
+      item.href = url;
+      item.target = "_blank";
+      item.rel = "noopener noreferrer";
+    }
+    container.appendChild(item);
+  });
+}
+
+function renderLastfmArtistPanel(profile = null) {
+  if (!lastfmArtistPanel || !profile) return false;
+  const tags = Array.isArray(profile.tags) ? profile.tags.filter((tag) => tag?.name).slice(0, 8) : [];
+  const topTracks = Array.isArray(profile.topTracks) ? profile.topTracks.filter((track) => track?.name).slice(0, 5) : [];
+  const similarArtists = Array.isArray(profile.similarArtists) ? profile.similarArtists.filter((artist) => artist?.name).slice(0, 5) : [];
+  if (!tags.length && !topTracks.length && !similarArtists.length && !profile.bioSummary) return false;
+
+  if (lastfmArtistTitle) lastfmArtistTitle.textContent = t("lastfmArtistTitle");
+  if (lastfmArtistHint) {
+    const listeners = Number(profile.listeners) || 0;
+    lastfmArtistHint.textContent = listeners > 0
+      ? t("lastfmArtistHintWithListeners", { listeners: listeners.toLocaleString(currentLanguage === "en" ? "en-US" : "pt-BR") })
+      : t("lastfmArtistHint");
+  }
+  if (lastfmArtistTags) {
+    lastfmArtistTags.innerHTML = "";
+    tags.forEach((tag) => {
+      const chip = document.createElement("span");
+      chip.className = "lastfm-tag";
+      chip.textContent = tag.name;
+      lastfmArtistTags.appendChild(chip);
+    });
+  }
+  if (lastfmTopTracks) {
+    lastfmTopTracks.innerHTML = "";
+    appendLastfmList(lastfmTopTracks, t("lastfmTopTracksTitle"), topTracks, (track) => track.name || "");
+  }
+  if (lastfmSimilarArtists) {
+    lastfmSimilarArtists.innerHTML = "";
+    appendLastfmList(lastfmSimilarArtists, t("lastfmSimilarArtistsTitle"), similarArtists, (artist) => artist.name || "");
+  }
+  lastfmArtistPanel.classList.remove("hidden");
+  return true;
+}
+
+function applyLastfmProfileToRecommendation(track, profile = null) {
+  if (!track || !profile) return false;
+  const style = normalizeDatasetStyle(track.style || "");
+  if (!style) return false;
+  const tags = Array.isArray(profile.tags) ? profile.tags.map((tag) => tag?.name || "").filter(Boolean).slice(0, 8) : [];
+  const similarArtists = Array.isArray(profile.similarArtists)
+    ? profile.similarArtists.map((artist) => artist?.name || "").filter(Boolean).slice(0, 8)
+    : [];
+  const topTracks = Array.isArray(profile.topTracks)
+    ? profile.topTracks.map((item) => item?.name || "").filter(Boolean).slice(0, 8)
+    : [];
+  if (!tags.length && !similarArtists.length && !topTracks.length) return false;
+
+  track.lastfmTags = tags;
+  track.lastfmSimilarArtists = similarArtists;
+  track.lastfmTopTracks = topTracks;
+  if (tags.length && !track.artistGenre) track.artistGenre = tags.slice(0, 4).join(" / ");
+  if (tags.length && !track.artistProfileHint) {
+    track.artistProfileHint = `Sinais Last.fm: ${tags.slice(0, 5).join(", ")}.`;
+  }
+
+  similarArtists.forEach((artistName) => {
+    if (!artistName || isCuratorBlockedArtistName(artistName)) return;
+    seedStyleArtistFromDataset(style, artistName);
+    upsertArtistOverridesFromDataset(style, artistName);
+    upsertDiscoveryFromDataset(style, artistName, `Artista próximo de ${track.artist} segundo sinais Last.fm.`);
+  });
+  return true;
+}
+
+async function hydrateLastfmArtistPanel(track) {
+  if (!track?.artist || !trackStillActive(track)) return;
+  const profile = await fetchLastfmArtistFromApi(track.artist, currentLanguage);
+  if (!profile || !trackStillActive(track)) return;
+  if (profile.bioSummary && artistBio && isGenericArtistBioText(artistBio.textContent || "")) {
+    artistBio.textContent = truncateByWordBoundary(profile.bioSummary, 420);
+  }
+  applyLastfmProfileToRecommendation(track, profile);
+  renderLastfmArtistPanel(profile);
 }
 
 function soundCloudApiQueryTerms(style, artist = "", track = null) {
@@ -15460,7 +17430,8 @@ function addDynamicTrackToCatalog({
   const hasDirectYoutube = isDirectYouTubeUrl(safeYoutubeTrackUrl) || isDirectYouTubeUrl(safeYoutubeUrl);
   const hasDirectSoundcloud = isDirectSoundCloudTrackUrl(safeSoundcloudTrackUrl) || isDirectSoundCloudTrackUrl(safeSoundcloudUrl);
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
-  const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview || safeDeezerTrackId);
+  const hasRefreshablePreview = Boolean(safeDeezerTrackId);
+  const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
   if (isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
@@ -15488,15 +17459,16 @@ function addDynamicTrackToCatalog({
     deezerTrackId: safeDeezerTrackId,
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
     youtubeTrackUrl: safeYoutubeTrackUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
+    deezerTrackId: safeDeezerTrackId,
     previewUrl: normalizedPreview,
     previewCandidates: normalizedPreview ? [normalizedPreview] : [],
     spotifyVerified: Boolean(safeSpotifyTrackUrl),
     youtubeVerified: hasDirectYoutube,
     soundcloudVerified: hasDirectSoundcloud,
     bandcampVerified: hasBandcampPreview,
-    existenceVerified: (normalizedPreview || hasPlayableFallback) ? true : undefined,
+    existenceVerified: (normalizedPreview || hasPlayableFallback || hasRefreshablePreview) ? true : undefined,
     previewChecked: Boolean(normalizedPreview),
-    previewMissing: !normalizedPreview && !hasPlayableFallback,
+    previewMissing: !normalizedPreview && !hasPlayableFallback && !hasRefreshablePreview,
     artistCountry: String(artistCountry || "").trim(),
     artistGenre: String(artistGenre || "").trim(),
     artistProfileHint: String(artistProfileHint || "").trim(),
@@ -15651,34 +17623,38 @@ async function hydrateCatalogForStyle(style) {
   const existingKeys = new Set(catalog.map((t) => normalize(`${t.artist}::${t.song}`)));
   const seedCap = hydrationSeedCapForStyle(style);
   const skipBroadStyleHydration = NO_BROAD_STYLE_HYDRATION_STYLES.has(style);
-  const allowArtistItunesHydration = !requiresExactBpmForDynamic(style, "itunes_artist_style");
-  const allowBroadItunesHydration = !requiresExactBpmForDynamic(style, "itunes_style");
+  const deezerCatalogAllowed = clientDeezerCatalogHydrationAllowed();
+  const itunesCatalogAllowed = clientItunesCatalogHydrationAllowed();
+  const allowArtistItunesHydration = itunesCatalogAllowed && !requiresExactBpmForDynamic(style, "itunes_artist_style");
+  const allowBroadItunesHydration = itunesCatalogAllowed && !requiresExactBpmForDynamic(style, "itunes_style");
   const selectedSeeds = selectHydrationArtists(style, seeds, Math.min(seedCap, seeds.length));
 
-  for (const artist of selectedSeeds) {
-    const results = await fetchTracksByArtistAndStyle(artist, style);
-    for (const row of results) {
-      const details = await fetchDeezerTrackDetails(row.id);
-      addDynamicTrackToCatalog({
-        style,
-        song: row.title,
-        artist: row.artist.name,
-        label: details?.label || row.album?.title || "Catálogo dinâmico",
-        bpmExact: Number(details?.bpm) || 0,
-        previewUrl: row.preview || details?.preview || "",
-        deezerTrackId: row.id || details?.id || "",
-        releaseDate: details?.release_date || "Catálogo dinâmico",
-        durationSec: Number(details?.duration) || Number(row.duration) || 0,
-        artistProfileHint: row.album?.title || "",
-        source: "deezer_artist_style"
-      }, existingKeys);
+  if (deezerCatalogAllowed) {
+    for (const artist of selectedSeeds) {
+      const results = await fetchTracksByArtistAndStyle(artist, style);
+      for (const row of results) {
+        const details = await fetchDeezerTrackDetails(row.id);
+        addDynamicTrackToCatalog({
+          style,
+          song: row.title,
+          artist: row.artist.name,
+          label: details?.label || row.album?.title || "Catálogo dinâmico",
+          bpmExact: Number(details?.bpm) || 0,
+          previewUrl: row.preview || details?.preview || "",
+          deezerTrackId: row.id || details?.id || "",
+          releaseDate: details?.release_date || "Catálogo dinâmico",
+          durationSec: Number(details?.duration) || Number(row.duration) || 0,
+          artistProfileHint: row.album?.title || "",
+          source: "deezer_artist_style"
+        }, existingKeys);
+
+        const stats = stylePoolStats(style);
+        if (stats.trackCount >= targetSize) break;
+      }
 
       const stats = stylePoolStats(style);
       if (stats.trackCount >= targetSize) break;
     }
-
-    const stats = stylePoolStats(style);
-    if (stats.trackCount >= targetSize) break;
   }
 
   let stats = stylePoolStats(style);
@@ -15686,9 +17662,12 @@ async function hydrateCatalogForStyle(style) {
 
   // Deezer por perfil de artista: busca o repertorio do seed direto, sem depender do termo de genero.
   if (
-    stats.trackCount < targetSize ||
-    (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists) ||
-    stats.labels < coverageTarget.labels
+    deezerCatalogAllowed &&
+    (
+      stats.trackCount < targetSize ||
+      (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists) ||
+      stats.labels < coverageTarget.labels
+    )
   ) {
     for (const artist of selectedSeeds.slice(0, deezerArtistTopSeedCapForStyle(style))) {
       const rows = await fetchDeezerArtistTopTracks(artist, style);
@@ -15821,7 +17800,7 @@ async function hydrateCatalogForStyle(style) {
 
   // Fallback real por subgenero: Deezer amplo quando os artistas-semente ainda nao bastaram.
   stats = stylePoolStats(style);
-  if (!skipBroadStyleHydration && (stats.trackCount < MIN_TRACKS_PER_STYLE || (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists))) {
+  if (deezerCatalogAllowed && !skipBroadStyleHydration && (stats.trackCount < MIN_TRACKS_PER_STYLE || (!hasLocalArtistDepth() && stats.artistCount < coverageTarget.artists))) {
     const deezerStyleRows = await fetchDeezerTracksByStyle(style);
     for (const row of deezerStyleRows) {
       const details = await fetchDeezerTrackDetails(row.id);
@@ -16158,18 +18137,81 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   let foundEvidence = Boolean(currentPreview);
   const strictStyle = hasStrictWhitelist(track.style) || STRICT_ARTIST_MATCH_STYLES.has(track.style);
   const minConfidence = track.style === "slambient" ? 0.97 : strictStyle ? 0.94 : 0.9;
-  const ensureTrackMetadata = (releaseDate = "", durationSec = 0, catalogRef = "") => {
+  const deezerLookupAllowed = COMPLIANCE_CONFIG.clientDeezerEnabled === true;
+  const ensureTrackMetadata = (releaseDate = "", durationSec = 0, catalogRef = "", sourceInfo = {}) => {
     const current = TRACK_METADATA[`${track.song}|${track.artist}`] || {};
     const duration =
       durationSec > 0
         ? `${String(Math.floor(durationSec / 60)).padStart(2, "0")}:${String(durationSec % 60).padStart(2, "0")}`
         : current.duration || "06:00";
+    const sourceDetails = Array.isArray(sourceInfo.sourceDetails) && sourceInfo.sourceDetails.length
+      ? sourceInfo.sourceDetails
+      : (Array.isArray(current.sourceDetails) ? current.sourceDetails : []);
+    const sourceLabel = trackMetadataSourceLabel({
+      sourceLabel: sourceInfo.sourceLabel || current.sourceLabel || "",
+      sourceDetails,
+      source: sourceInfo.source || ""
+    });
     TRACK_METADATA[`${track.song}|${track.artist}`] = {
       releaseDate: releaseDate || current.releaseDate || "Catálogo local",
       duration,
       musicalKey: current.musicalKey || "N/A",
-      catalogRef: catalogRef || current.catalogRef || "CATALOGO"
+      catalogRef: catalogRef || current.catalogRef || "CATALOGO",
+      sourceLabel,
+      sourceDetails,
+      attribution: sourceInfo.attribution || current.attribution || null
     };
+  };
+
+  const applyTrackMetadataApiMatch = (match = null) => {
+    if (!match) return false;
+    const candidateTitle = match.song || match.title || "";
+    const confidence = Number(match.confidenceScore) || titleConfidence(track.song, candidateTitle);
+    if (!candidateTitle || confidence < minConfidence || !strictTitleMatch(track.song, candidateTitle)) return false;
+    if (match.artist && !isArtistMatch(match.artist, track.artist)) return false;
+    const bpmExact = Number(match.bpmExact) || 0;
+    if (bpmExact && !bpmFitsStyle(track.style, bpmExact)) return false;
+
+    foundEvidence = true;
+    track.existenceVerified = true;
+    track.spotifyVerified = true;
+    track.youtubeVerified = true;
+    track.previewConfidence = Math.max(Number(track.previewConfidence) || 0, confidence);
+    track.artistProfileHint = track.artistProfileHint || match.album || "";
+    if (match.artistGenre && !track.artistGenre) track.artistGenre = match.artistGenre;
+    if (Array.isArray(match.sourceDetails) && match.sourceDetails.length) {
+      track.trackMetadataSourceDetails = match.sourceDetails;
+      track.trackMetadataAttribution = match.attribution || null;
+    }
+    if (match.artistImageUrl && !shouldSuppressUnverifiedArtistImage(track, match.source || "Metadata")) {
+      track.artistImageUrl = match.artistImageUrl;
+      track.artistImageSource = match.source === "deezer" ? "Deezer" : "Metadata";
+    }
+    const matchCoverArtUrl = String(match.coverArtUrl || match.artworkUrl || "").trim();
+    if (matchCoverArtUrl && !track.coverArtUrl) {
+      track.coverArtUrl = matchCoverArtUrl;
+      if (!track.coverUrl) track.coverUrl = matchCoverArtUrl;
+      track.coverArtSource = trackMetadataSourceLabel(match) || (match.source === "deezer" ? "Deezer" : "iTunes");
+      if (currentRecommendation === track) renderTopSwipeArtwork(track);
+    }
+    if (bpmExact) {
+      track.bpmExact = bpmExact;
+      track.bpm = mapBpmToRange(track.bpmExact);
+      if (!track.energy) track.energy = energyFromBpm(track.bpmExact);
+    }
+    if (match.previewUrl) {
+      promotePreviewCandidate(track, match.previewUrl);
+      track.previewSource = `track_metadata_${match.source || "api"}`;
+      track.previewChecked = true;
+      track.previewMissing = false;
+      track.previewLookupAttempted = true;
+    }
+    ensureTrackMetadata(match.releaseDate || "", Number(match.durationSec) || 0, match.catalogRef || String(match.id || "").toUpperCase(), {
+      source: match.source || "",
+      sourceDetails: match.sourceDetails || [],
+      attribution: match.attribution || null
+    });
+    return true;
   };
 
   const applyDeezerTrackDetailsMatch = (details = null, source = "deezer_track_id") => {
@@ -16202,7 +18244,12 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       details.album?.cover_medium ||
       ""
     ).trim();
-    if (coverArtUrl && !track.coverArtUrl) track.coverArtUrl = coverArtUrl;
+    if (coverArtUrl && !track.coverArtUrl) {
+      track.coverArtUrl = coverArtUrl;
+      if (!track.coverUrl) track.coverUrl = coverArtUrl;
+      track.coverArtSource = "Deezer";
+      if (currentRecommendation === track) renderTopSwipeArtwork(track);
+    }
     if (bpmExact) {
       track.bpmExact = bpmExact;
       track.bpm = mapBpmToRange(track.bpmExact);
@@ -16216,7 +18263,10 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     }
     if (!track.spotifyTrackUrl) track.spotifyTrackUrl = buildSpotifyTrackLink(track);
     if (!track.youtubeTrackUrl) track.youtubeTrackUrl = buildYouTubeTrackLink(track);
-    ensureTrackMetadata(details.release_date || "", Number(details.duration) || 0, details.isrc || String(details.id || "DEEZER"));
+    ensureTrackMetadata(details.release_date || "", Number(details.duration) || 0, details.isrc || String(details.id || "DEEZER"), {
+      source: "deezer",
+      sourceLabel: "Deezer"
+    });
     return true;
   };
 
@@ -16224,81 +18274,92 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     catalogTrackMetadataText(track, "deezer_track_id") ||
     catalogTrackMetadataText(track, "deezerTrackId") ||
     String(track.deezerTrackId || "").trim();
-  if ((forceLookup || previewExpired || !currentPreview) && metadataDeezerTrackId) {
+  if (deezerLookupAllowed && (forceLookup || previewExpired || !currentPreview) && metadataDeezerTrackId) {
     try {
       applyDeezerTrackDetailsMatch(await fetchDeezerTrackDetails(metadataDeezerTrackId), "deezer_track_id");
     } catch (_err) {
-      // Text search below can still recover a preview if direct id lookup fails.
+      // If the direct Deezer id lookup fails, the text search below can still recover a preview.
     }
   }
 
   try {
-    const query = encodeURIComponent(`artist:"${track.artist}" track:"${track.song}"`);
-    const data = await deezerJsonp(`https://api.deezer.com/search?q=${query}`);
-    const ranked = (data?.data || [])
-      .filter((item) => isArtistMatch(item?.artist?.name || "", track.artist))
-      .map((item) => ({
-        item,
-        score: titleConfidence(track.song, item?.title || "")
-      }))
-      .sort((a, b) => b.score - a.score);
-
-    const best = ranked[0];
-    const candidateTitle = best?.item?.title || "";
-    const deezerMatch =
-      best &&
-      best.score >= minConfidence &&
-      strictTitleMatch(track.song, candidateTitle)
-        ? best.item
-        : null;
-
-    if (deezerMatch) {
-      foundEvidence = true;
-      track.existenceVerified = true;
-      track.spotifyVerified = true;
-      track.youtubeVerified = true;
-      track.previewConfidence = best.score;
-      track.artistProfileHint = track.artistProfileHint || deezerMatch?.album?.title || "";
-      const deezerArtistImage = String(
-        deezerMatch?.artist?.picture_xl ||
-        deezerMatch?.artist?.picture_big ||
-        deezerMatch?.artist?.picture_medium ||
-        ""
-      ).trim();
-      if (deezerArtistImage && !shouldSuppressUnverifiedArtistImage(track, "Deezer")) {
-        track.artistImageUrl = deezerArtistImage;
-        track.artistImageSource = "Deezer";
-      }
-      promotePreviewCandidate(track, deezerMatch.preview || "");
-      track.spotifyTrackUrl = buildSpotifyTrackLink(track);
-      track.youtubeTrackUrl = buildYouTubeTrackLink(track);
-
-      const details = await fetchDeezerTrackDetails(deezerMatch.id);
-      if (details?.bpm && !bpmFitsStyle(track.style, Number(details.bpm))) {
-        track.previewUrl = "";
-        track.previewCandidates = [];
-        if (trustedCurated && hasReliableBpmForTrack(track)) {
-          foundEvidence = true;
-          track.existenceVerified = true;
-          track.previewConfidence = 0;
-        } else {
-          track.existenceVerified = false;
-          track.previewChecked = true;
-          track.previewMissing = true;
-          track.previewLookupAttempted = true;
-          return;
-        }
-      } else {
-        if (details?.bpm && bpmFitsStyle(track.style, Number(details.bpm))) {
-          track.bpmExact = Number(details.bpm);
-          track.bpm = mapBpmToRange(track.bpmExact);
-          if (!track.energy) track.energy = energyFromBpm(track.bpmExact);
-        }
-        ensureTrackMetadata(details?.release_date || "", Number(details?.duration) || Number(deezerMatch?.duration) || 0, details?.isrc || "DEEZER");
-      }
-    }
+    applyTrackMetadataApiMatch(await fetchTrackMetadataFromApi(track));
   } catch (_err) {
-    // tenta iTunes abaixo
+    // Optional server-side metadata enrichment; local catalog still works without it.
+  }
+
+  if (deezerLookupAllowed) {
+    try {
+      const query = encodeURIComponent(`artist:"${track.artist}" track:"${track.song}"`);
+      const data = await deezerJsonp(`https://api.deezer.com/search?q=${query}`);
+      const ranked = (data?.data || [])
+        .filter((item) => isArtistMatch(item?.artist?.name || "", track.artist))
+        .map((item) => ({
+          item,
+          score: titleConfidence(track.song, item?.title || "")
+        }))
+        .sort((a, b) => b.score - a.score);
+
+      const best = ranked[0];
+      const candidateTitle = best?.item?.title || "";
+      const deezerMatch =
+        best &&
+        best.score >= minConfidence &&
+        strictTitleMatch(track.song, candidateTitle)
+          ? best.item
+          : null;
+
+      if (deezerMatch) {
+        foundEvidence = true;
+        track.existenceVerified = true;
+        track.spotifyVerified = true;
+        track.youtubeVerified = true;
+        track.previewConfidence = best.score;
+        track.artistProfileHint = track.artistProfileHint || deezerMatch?.album?.title || "";
+        const deezerArtistImage = String(
+          deezerMatch?.artist?.picture_xl ||
+          deezerMatch?.artist?.picture_big ||
+          deezerMatch?.artist?.picture_medium ||
+          ""
+        ).trim();
+        if (deezerArtistImage && !shouldSuppressUnverifiedArtistImage(track, "Deezer")) {
+          track.artistImageUrl = deezerArtistImage;
+          track.artistImageSource = "Deezer";
+        }
+        promotePreviewCandidate(track, deezerMatch.preview || "");
+        track.spotifyTrackUrl = buildSpotifyTrackLink(track);
+        track.youtubeTrackUrl = buildYouTubeTrackLink(track);
+
+        const details = await fetchDeezerTrackDetails(deezerMatch.id);
+        if (details?.bpm && !bpmFitsStyle(track.style, Number(details.bpm))) {
+          track.previewUrl = "";
+          track.previewCandidates = [];
+          if (trustedCurated && hasReliableBpmForTrack(track)) {
+            foundEvidence = true;
+            track.existenceVerified = true;
+            track.previewConfidence = 0;
+          } else {
+            track.existenceVerified = false;
+            track.previewChecked = true;
+            track.previewMissing = true;
+            track.previewLookupAttempted = true;
+            return;
+          }
+        } else {
+          if (details?.bpm && bpmFitsStyle(track.style, Number(details.bpm))) {
+            track.bpmExact = Number(details.bpm);
+            track.bpm = mapBpmToRange(track.bpmExact);
+            if (!track.energy) track.energy = energyFromBpm(track.bpmExact);
+          }
+          ensureTrackMetadata(details?.release_date || "", Number(details?.duration) || Number(deezerMatch?.duration) || 0, details?.isrc || "DEEZER", {
+            source: "deezer",
+            sourceLabel: "Deezer"
+          });
+        }
+      }
+    } catch (_err) {
+      // tenta iTunes abaixo
+    }
   }
 
   try {
@@ -16339,7 +18400,11 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       ensureTrackMetadata(
         itunesMatch.releaseDate ? String(itunesMatch.releaseDate).slice(0, 10) : "",
         Math.round((Number(itunesMatch.trackTimeMillis) || 0) / 1000),
-        String(itunesMatch.trackId || "ITUNES")
+        String(itunesMatch.trackId || "ITUNES"),
+        {
+          source: "itunes",
+          sourceLabel: "iTunes"
+        }
       );
     }
   } catch (_err) {
@@ -16375,61 +18440,61 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
 const I18N = {
   pt: {
     introKicker: "Pre-show sensorial",
-    introTitle: "Entre na frequencia da pista",
-    introDesc: "Antes de escolher o idioma, viva uma abertura animada com frases psicodelicas em movimento.",
-    introImpact: "Seu ouvido comeca a ser lido no primeiro pulso.",
-    introContinueBtn: "Comecar agora",
+    introTitle: "Entre na frequência da pista",
+    introDesc: "Uma abertura rápida para ligar o ouvido antes da primeira descoberta.",
+    introImpact: "A primeira batida já coloca o radar em movimento.",
+    introContinueBtn: "Entrar no Sonic Search",
     audioOn: "Som ligado",
     audioOff: "Som desligado",
     audioStart: "Ativar som",
     audioUnavailable: "Som indisponível",
     audioActivateHint: "Toque na tela para liberar audio no navegador.",
     volumeLabel: "Volume",
-    langKicker: "Escolha seu idioma",
-    langTitle: "Selecione o idioma",
-    langDesc: "Escolha o idioma para toda a experiência do app.",
-    appSlogan: "Nós amamos música",
-    appMission: "Cada curti, troca e “já conhecia” ensina o radar a ouvir com você.",
+    langKicker: "Antes de começar",
+    langTitle: "Escolha seu idioma",
+    langDesc: "O radar adapta textos, botões e explicações.",
+    appSlogan: "Descoberta sem ruído",
+    appMission: "Seu feedback afina cada próxima faixa.",
     usageGuideKicker: "Guia rápido",
-    usageGuideTitle: "Como aproveitar melhor o Sonic Search",
-    usageGuideDesc: "Use o app como um amigo de pista: diga o clima, ouça a aposta e responda sem pensar demais.",
-    usageGuideStep1Title: "Comece pelo momento",
-    usageGuideStep1Text: "Escolha Foco, Trabalho, Treino, After ou Peak para o app montar um ponto de partida musical.",
-    usageGuideStep2Title: "Diga quem você já conhece",
-    usageGuideStep2Text: "Adicione artistas conhecidos para o app sair do óbvio e procurar novidade de verdade.",
-    usageGuideStep3Title: "Use o feedback",
-    usageGuideStep3Text: "Curta, troque ou marque “já conhecia”. Cada resposta vira um sinal de gosto, não só um clique.",
-    usageGuideStep4Title: "Refine sem medo",
-    usageGuideStep4Text: "Ajuste energia, BPM, vocal e prioridades quando quiser uma busca mais precisa.",
-    usageGuideNote: "Dica: o botão Surpreender gera uma track surpresa automaticamente. Se quiser precisão, preencha estilo e artistas conhecidos antes.",
-    usageGuideContinueBtn: "Entendido",
+    usageGuideTitle: "Encontre uma boa faixa em poucos toques",
+    usageGuideDesc: "Diga o momento, ouça o preview e deixe cada reação afinar o radar.",
+    usageGuideStep1Title: "Escolha o momento da escuta",
+    usageGuideStep1Text: "Foco, treino, after ou pista: o app ajusta energia, pulso e clima.",
+    usageGuideStep2Title: "Conte o que já está no seu radar",
+    usageGuideStep2Text: "Nomes conhecidos ajudam o app a fugir do óbvio e reduzir repetição.",
+    usageGuideStep3Title: "Reaja sem pensar demais",
+    usageGuideStep3Text: "Curti, não curti, novidade ou já conhecia: cada toque melhora a próxima carta.",
+    usageGuideStep4Title: "Abra filtros só quando quiser precisão",
+    usageGuideStep4Text: "Subgênero, BPM e vocal entram como ajuste fino, não como obrigação.",
+    usageGuideNote: "Quer ouvir agora? Use Surpresa. Quer acertar fino? Preencha estilo, momento e artistas conhecidos.",
+    usageGuideContinueBtn: "Começar descoberta",
     showUsageGuideBtn: "Como usar",
-    authKicker: "Acesso opcional",
-    authTitle: "Entre ou siga sem login",
-    authDesc: "Use Google para sincronizar perfil e curtidas na nuvem, ou continue localmente sem criar conta.",
-    authLocalNoteProfile: "Google opcional",
-    authLocalNoteNewUser: "Modo local livre",
-    authLocalNoteBackup: "Sincronização quando quiser",
+    authKicker: "Acesso rápido",
+    authTitle: "Entre no Sonic Search",
+    authDesc: "Faça login com Google para sincronizar seu perfil. Sem login, suas descobertas ficam salvas neste aparelho.",
+    authLocalNoteProfile: "Sem conta",
+    authLocalNoteNewUser: "Perfil local",
+    authLocalNoteBackup: "Google opcional",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
-    authResumeSavedBtn: "Retomar perfil salvo",
+    authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Continuar sem login",
+    authGuestBtn: "Entrar sem login",
     authTestUserBtn: "Começar sem histórico",
-    authNewUserHint: "Sem login salva dados neste navegador. Google permite recuperar perfil em outro aparelho.",
-    authRequired: "Escolha Google ou continue sem login.",
+    authNewUserHint: "Sem login, eu continuo do perfil salvo neste navegador.",
+    authRequired: "Entre com Google ou sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
-    authGuestReady: "Perfil local ativado. Você pode descobrir músicas sem login.",
-    authLocalResumeReady: "Perfil local retomado para {user}.",
-    authSavedProfileReady: "Perfil salvo encontrado para {user}. Retome para continuar com suas curtidas e descobertas.",
+    authGuestReady: "Perfil local pronto. Vamos descobrir faixas.",
+    authLocalResumeReady: "Perfil local carregado para {user}.",
+    authSavedProfileReady: "Encontrei o perfil local de {user}. O botão deste aparelho já continua com ele.",
     authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e arquétipo começam limpos.",
     authSocialDivider: "conta online opcional",
     authGoogleBtn: "Entrar com Google",
-    authContinueOnlineBtn: "Continuar com perfil online",
+    authContinueOnlineBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Você decide: login Google para nuvem, ou modo local para começar agora.",
+    authProviderHint: "Google sincroniza seu perfil entre aparelhos.",
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
@@ -16438,121 +18503,121 @@ const I18N = {
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
     authProviderGoogleReady: "Google pronto. Toque para entrar.",
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
-    authGoogleComingSoon: "Google indisponível",
+    authGoogleComingSoon: "Entrar com Google",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "O modo local funciona agora; para nuvem, confira o Google no Supabase.",
-    welcomeKicker: "Curadoria de música eletrônica",
+    authProviderHintLocalBackup: "Google ainda não está configurado neste ambiente. Entre sem login por enquanto.",
+    welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
-    welcomeDesc: "Seu sommelier de música eletrônica para rave, treino, foco ou viagem. Escolha seu estilo e receba faixa + artista novo para descobrir.",
-    startBtn: "Iniciar experiência",
-    startSurpriseBtn: "Surpreenda-me",
+    welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
+    startBtn: "Começar a descobrir",
+    startSurpriseBtn: "Abrir surpresa",
     welcomeImportProfileBtn: "Tenho perfil salvo",
     floatingSurpriseBtn: "Surpresa",
-    quickSurpriseTitle: "Surpreenda-me com novidade real",
-    quickSurpriseHint: "Me diga o subgênero, artistas e músicas que você já conhece. Eu uso isso para fugir do repetido e buscar uma novidade com sentido.",
+    quickSurpriseTitle: "Surpresa com direção",
+    quickSurpriseHint: "Dê um subgênero e o que você já conhece para receber algo menos óbvio.",
     quickSurpriseStyleLabel: "Subgênero que você mais ouve",
     quickSurpriseStylePlaceholder: "Escolha o subgênero",
-    quickSurpriseKnownLabel: "Artistas que você já conhece",
+    quickSurpriseKnownLabel: "Artistas que já estão no seu radar",
     quickSurpriseKnownPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
-    quickSurpriseKnownTracksLabel: "Músicas que você já conhece",
+    quickSurpriseKnownTracksLabel: "Faixas que você já conhece",
     quickSurpriseKnownTracksPlaceholder: "Ex.: Poison Turtle, Hit N Run",
-    quickSurpriseRunBtn: "Gerar surpresa focada",
+    quickSurpriseRunBtn: "Gerar surpresa com direção",
     quickSurpriseCancelBtn: "Cancelar",
-    quickSurpriseNeedStyle: "Escolha primeiro o subgênero que você mais ouve para eu surpreender melhor.",
-    quickSurpriseGenerated: "Surpresa gerada com foco em faixa nova dentro de {style}.",
+    quickSurpriseNeedStyle: "Escolha um subgênero para a surpresa sair do óbvio.",
+    quickSurpriseGenerated: "Surpresa pronta: busquei uma faixa nova dentro de {style}.",
     heroLogoLabel: "Voltar ao início",
     heroLogoToast: "Voltei para Descobrir.",
-    heroTitle: "Encontre uma faixa que combina com agora",
-    heroDesc: "Descubra eletrônica por sensação, não por busca manual. O Sonic Search cruza seu swipe, subgênero, pulso, energia e novidade para sugerir faixas com contexto.",
+    heroTitle: "A faixa certa para agora",
+    heroDesc: "Diga o momento, marque o que já conhece e deixe o Sonic Search trazer uma faixa com motivo, preview e contexto.",
     tabDiscover: "Descobrir",
     tabFilters: "Filtros",
-    tabNews: "News",
+    tabNews: "Notícias",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoiar",
     tabLegal: "Avisos",
-    feedbackKicker: "Refinamento",
-    feedbackHint: "Use sinais rápidos para o radar separar o que bate, o que cansa e o que você já conhece.",
+    feedbackKicker: "Aprendizado",
+    feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
     swipeHeroKicker: "Descoberta por swipe",
-    swipeHeroTitle: "Descubra no swipe.",
-    swipeHeroHint: "Curti, não curti ou surpresa. Os detalhes ficam para depois.",
-    swipeDeckKicker: "Rotas rápidas",
-    swipeDeckTitle: "Escolha um mundo sonoro",
-    swipeDeckHint: "Use quando quiser filtrar a descoberta por subgênero. A tela principal continua livre para curtir, não curtir ou pedir surpresa.",
+    swipeHeroTitle: "Escute, deslize, refine",
+    swipeHeroHint: "A carta muda rápido; o radar aprende junto.",
+    swipeDeckKicker: "Rotas de descoberta",
+    swipeDeckTitle: "Escolha uma direção sonora",
+    swipeDeckHint: "Use um subgênero para abrir uma sequência mais coerente.",
     swipeStyleRailAria: "Todos os subgêneros disponíveis para descoberta por swipe",
     swipeShowAllStyles: "Ver todos os {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
-    swipeKicker: "Swipe da track",
+    swipeKicker: "Swipe da faixa",
     discoverySequence: "#{number}",
-    heardTrackSequence: "Música ouvida #{number}",
-    swipeEmptyTitle: "Gere uma recomendação",
-    swipeEmptyMeta: "Arraste para direita se curtiu ou para esquerda se não combinou.",
-    swipeHint: "Também funciona com mouse ou dedo: arraste o card e solte.",
-    topSwipeEmptyTitle: "Pronto para descobrir",
-    topSwipeEmptyMeta: "Uma carta nova, sem briefing.",
-    topSwipeHint: "Curta, não curta ou peça surpresa. Filtros ficam em Filtros; explicação, curtidas e erros ficam organizados fora do swipe.",
-    aboutKicker: "Por que usar",
-    aboutTitle: "O Sonic Search encontra o que os apps grandes deixam passar",
-    aboutBadge: "Sommelier",
-    aboutIntro: "Em vez de só buscar pelo nome de uma faixa, o app aprende seu gosto por swipe, cruza subgênero, pulso, energia e novidade, e explica o motivo de cada recomendação.",
+    heardTrackSequence: "Faixa ouvida #{number}",
+    swipeEmptyTitle: "Abra a primeira carta",
+    swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
+    swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
+    topSwipeEmptyTitle: "Primeira carta esperando play",
+    topSwipeEmptyMeta: "Abra a surpresa, ouça o preview e deslize quando sentir.",
+    topSwipeHint: "O fluxo principal fica leve; filtros e contexto estão nas outras abas.",
+    aboutKicker: "O que melhora",
+    aboutTitle: "Descoberta sem busca cega",
+    aboutBadge: "Radar",
+    aboutIntro: "O Sonic Search combina momento, histórico e feedback para explicar por que cada faixa entrou no radar.",
     aboutReasonOneKicker: "01",
-    aboutReasonOneTitle: "Descoberta com contexto",
-    aboutReasonOneText: "Você não precisa saber o nome certo. Curta, descarte ou peça surpresa; o radar entende direção, energia e familiaridade.",
+    aboutReasonOneTitle: "Menos digitação, mais escuta",
+    aboutReasonOneText: "Você não precisa lembrar nomes exatos: peça surpresa, ouça e responda no swipe.",
     aboutReasonTwoKicker: "02",
-    aboutReasonTwoTitle: "Subgênero com confiança",
-    aboutReasonTwoText: "Quando o sinal é forte, o app mostra o subgênero. Quando a evidência é fraca, mostra família musical e deixa claro que é estimativa.",
+    aboutReasonTwoTitle: "Subgênero com honestidade",
+    aboutReasonTwoText: "Quando há sinal forte, mostramos o subgênero; quando não há, ficamos na família sonora.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Menos repetição",
-    aboutReasonThreeText: "O perfil separa artista conhecido, novidade real, músicas curtidas e descartadas para evitar ficar girando no mesmo óbvio.",
+    aboutReasonThreeText: "Conhecidos, novidades, curtidas e descartes viram sinais separados para evitar mais do mesmo.",
     aboutReasonFourKicker: "04",
-    aboutReasonFourTitle: "Correção que melhora o radar",
-    aboutReasonFourText: "Se o subgênero, BPM, imagem ou preview parecer errado, marque o erro. Isso reduz a confiança da rota sem confundir com seu gosto musical.",
-    aboutFlowTitle: "Como usar em 30 segundos",
-    aboutFlowStepOne: "Toque em Surpresa e escute sem pensar demais.",
-    aboutFlowStepTwo: "Curta ou não curta para trocar automaticamente.",
-    aboutFlowStepThree: "Abra Filtros só quando quiser subgênero, BPM ou contexto específico.",
-    aboutFlowStepFour: "Revise suas curtidas, descartes e arquétipo musical no Perfil.",
+    aboutReasonFourTitle: "Erro vira ajuste",
+    aboutReasonFourText: "Marque subgênero, BPM, imagem ou preview ruim para o radar corrigir a próxima rota.",
+    aboutFlowTitle: "Como usar",
+    aboutFlowStepOne: "Toque em Surpresa e escute o preview.",
+    aboutFlowStepTwo: "Curta, passe ou marque se já conhecia.",
+    aboutFlowStepThree: "Abra Filtros quando quiser subgênero, BPM ou contexto específico.",
+    aboutFlowStepFour: "Revise curtidas, descartes e arquétipo musical no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
-    aboutTrustText: "Alta confiança combina fonte, player, BPM e perfil. Confiança média ainda pode ser uma boa descoberta. Quando a classificação fina não está segura, o app deve falar em família musical, não vender certeza falsa.",
+    aboutTrustText: "Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume a família sonora em vez de forçar rótulo.",
     swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
     quickKnownArtistQuestion: "{artist} já estava no seu radar?",
-    quickKnownHint: "Toque antes da próxima faixa para separar conhecido de descoberta real.",
+    quickKnownHint: "Isso separa repetição de descoberta real e melhora a próxima carta.",
     quickKnownPendingNext: "Antes da próxima carta: {artist} já era conhecido ou é novidade?",
     quickKnownYes: "Já conhecia",
     quickKnownNo: "Novidade pra mim",
-    primarySwipeHint: "Arraste, curta ou troque: o radar entende melhor quando você reage no momento.",
+    primarySwipeHint: "Direita salva. Esquerda troca.",
     swipeLike: "Curti",
     swipePass: "Não curti",
-    swipeLikedNext: "Curti essa. Salvei o sinal e vou afinar o radar se esse caminho repetir.",
-    swipePassedNext: "Boa, removi essa rota e puxei uma carta nova.",
+    swipeLikedNext: "Sinal salvo. Vou puxar mais faixas nessa direção, sem repetir demais.",
+    swipePassedNext: "Essa rota saiu da fila. Trouxe outra carta para testar no ouvido.",
     swipeStyleDeckGenerated: "Carta aberta em {style}. Curta ou troque para eu calibrar seu mapa.",
     swipeDeckNext: "Próxima carta: saí de {from} e trouxe {to}.",
     swipeAnchorNext: "Subgênero respeitado: mantendo {focus}. Próxima carta em {next}.",
     swipeAffinityNext: "Radar afinou para {focus}. Próxima carta em {next}, dentro da mesma vertente ou uma vizinha próxima.",
     swipeLearningBadge: "{count} sinais de gosto",
-    swipeLearningLevelEmpty: "Radar sem histórico",
-    swipeLearningLevelEarly: "Radar aprendendo",
-    swipeLearningLevelWarming: "Radar calibrado",
-    swipeLearningLevelGood: "Perfil consistente",
-    swipeLearningLevelStrong: "Perfil forte",
+    swipeLearningLevelEmpty: "Sem histórico de escuta",
+    swipeLearningLevelEarly: "Primeiros sinais chegando",
+    swipeLearningLevelWarming: "Preferências tomando forma",
+    swipeLearningLevelGood: "Perfil com direção clara",
+    swipeLearningLevelStrong: "Assinatura de gosto forte",
     swipeLearningMilestone10: "Radar calibrado com {count} sinais: agora peso mais seu gosto real nas próximas escolhas.",
     swipeLearningMilestone20: "Perfil ficando consistente com {count} sinais: vou reduzir repetições e buscar vizinhos mais certeiros.",
     swipeLearningMilestone30: "Perfil forte com {count} sinais: recomendações passam a priorizar compatibilidade fina e descoberta segura.",
-    feedbackLikeGroupTitle: "Guardar sinal positivo",
+    feedbackLikeGroupTitle: "Salvar bom sinal",
     feedbackCorrectGroupTitle: "Corrigir rota",
     feedbackExploreGroupTitle: "Próximo passo",
-    catalogStatsKicker: "Nossa base para descoberta",
+    catalogStatsKicker: "Base de descoberta",
     catalogStatsArtists: "artistas indexados",
-    catalogStatsTracks: "músicas buscáveis",
+    catalogStatsTracks: "faixas buscáveis",
     catalogStatsStyles: "subgêneros",
     catalogStatsLabels: "labels",
-    catalogStatsHealth: "{ratio} músicas por artista indexado, combinando base auditada e expansão dinâmica por subgênero.",
-    dailyNewsKicker: "Daily News",
-    dailyNewsTitle: "Jornal de música eletrônica",
-    dailyNewsIntro: "Radar recente da música eletrônica com prioridade para Brasil e complemento global de fontes especializadas.",
+    catalogStatsHealth: "{ratio} faixas por artista indexado.",
+    dailyNewsKicker: "Radar diário",
+    dailyNewsTitle: "Radar de notícias eletrônicas",
+    dailyNewsIntro: "Atualizações do Brasil e do mundo com foco em cenas, artistas, festivais e pistas.",
     dailyNewsRefreshBtn: "Atualizar",
     dailyNewsLoading: "Carregando notícias...",
     dailyNewsProgressLabel: "Atualizando radar de notícias",
@@ -16568,16 +18633,16 @@ const I18N = {
     dailyNewsUntitled: "Notícia sem título",
     dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
     supportKicker: "Apoie o projeto",
-    supportTitle: "Ajude o Sonic Search a crescer",
-    supportIntro: "Se o app te ajudou a descobrir uma track, você pode enviar uma tip para manter catálogo, IA e melhorias rodando.",
+    supportTitle: "Apoie o Sonic Search",
+    supportIntro: "Seu apoio mantém catálogo, IA e melhorias em movimento.",
     supportBadge: "Tips",
     supportCustomAmount: "Outro valor",
     supportPixKicker: "Pix",
     supportPixTitle: "QR Code + copia e cola",
     supportPixReady: "Pix ativo",
     supportPixMissing: "Aguardando chave",
-    supportPixHintReady: "Escolha o valor, copie o código Pix e cole no app do banco. A chave também fica visível como alternativa.",
-    supportPixHintMissing: "Configure sua chave Pix em SUPPORT_PAYMENT_CONFIG para ativar o QR Code real.",
+    supportPixHintReady: "Escolha o valor e copie o código Pix.",
+    supportPixHintMissing: "Pix ainda não configurado.",
     supportPixKeyLabel: "Chave Pix",
     supportCopyPixKey: "Copiar chave",
     supportCopyPix: "Copiar código Pix",
@@ -16586,29 +18651,29 @@ const I18N = {
     supportCryptoTitle: "Bitcoin / Lightning",
     supportCryptoReady: "Crypto ativo",
     supportCryptoMissing: "Opcional",
-    supportCryptoHintReady: "Use o QR ou copie o endereço para enviar uma tip em crypto.",
-    supportCryptoHintMissing: "Configure um endereço Bitcoin ou Lightning para ativar tips em crypto.",
+    supportCryptoHintReady: "Use o QR ou copie o endereço.",
+    supportCryptoHintMissing: "Crypto ainda não configurado.",
     supportCopyCrypto: "Copiar crypto",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
-    supportLegalNote: "Tips são apoio voluntário ao projeto, não investimento nem compra de cripto.",
+    supportLegalNote: "Apoio voluntário ao projeto.",
     legalHubKicker: "Avisos legais",
     legalHubTitle: "Direitos autorais, uso e marcas",
-    legalHubIntro: "Sonic Search e seus textos, interface, curadoria, identidade visual, ranking, lógica de recomendação e código original pertencem a Pedro Freire / CBK Labs. Todos os direitos reservados.",
+    legalHubIntro: "Sonic Search é um produto Pedro Freire / CBK Labs. Textos, interface, curadoria, identidade visual e código original têm todos os direitos reservados.",
     legalCopyrightTitle: "Direitos autorais",
-    legalCopyrightText: "É proibido copiar, revender, republicar, raspar, clonar ou explorar comercialmente o app, sua interface, textos, imagens autorais, lógica de curadoria ou bases organizadas sem autorização por escrito.",
+    legalCopyrightText: "Não copie, revenda, clone, raspe ou explore comercialmente o app, a interface, a curadoria ou bases organizadas sem autorização por escrito.",
     legalThirdPartyTitle: "Conteúdo musical e terceiros",
-    legalThirdPartyText: "Músicas, previews, capas, nomes de artistas, links, plataformas e marcas de terceiros pertencem aos seus respectivos titulares. Sonic Search é independente e não afirma parceria oficial com Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple ou serviços semelhantes.",
+    legalThirdPartyText: "Músicas, previews, capas, artistas, links, plataformas e marcas pertencem aos respectivos titulares, incluindo Spotify, YouTube, Deezer e SoundCloud. Sonic Search é independente dessas empresas.",
     legalUseTitle: "Uso permitido",
-    legalUseText: "O app é uma ferramenta de descoberta e recomendação. Use os links oficiais para ouvir, comprar ou apoiar artistas. Classificações de gênero, arquétipo musical e explicações são estimativas curatoriais, não dados oficiais dos artistas.",
+    legalUseText: "Use os links oficiais para ouvir, comprar ou apoiar artistas. Gêneros, arquétipo e explicações são estimativas curatoriais.",
     legalPrivacyTitle: "Privacidade e responsabilidade",
-    legalPrivacyText: "O perfil musical pode ficar salvo neste aparelho via armazenamento local. Integrações externas e links abertos fora do Sonic Search seguem suas próprias políticas. Tips são apoio voluntário, não investimento, promessa de retorno ou compra de cripto.",
-    legalDisclaimer: "Este aviso é uma camada informativa de proteção do produto e não substitui contrato, registro de marca ou orientação jurídica profissional.",
-    sectionKicker: "Filtros de busca",
-    sectionHint: "Escolha subgênero, BPM, energia e contexto quando quiser uma recomendação mais precisa.",
+    legalPrivacyText: "Seu perfil pode ficar salvo neste aparelho. Links e integrações externas seguem suas próprias políticas. Tips são apoio voluntário.",
+    legalDisclaimer: "Aviso informativo; não substitui contrato ou orientação jurídica.",
+    sectionKicker: "Precisão quando quiser",
+    sectionHint: "Abra filtros para guiar a busca sem travar a descoberta.",
     contextMomentKicker: "Momento de escuta",
-    contextMomentTitle: "Para que você quer música agora?",
-    contextMomentHint: "Cada intenção ajusta energia, pulso e família sonora.",
+    contextMomentTitle: "Para que momento é a faixa?",
+    contextMomentHint: "O momento ajusta energia, pulso e clima antes do catálogo.",
     presetFocus: "Foco",
     presetStudy: "Estudo",
     presetRelax: "Relaxar",
@@ -16621,17 +18686,17 @@ const I18N = {
     presetNight: "Noite",
     presetAfter: "After",
     presetPeak: "Peak",
-    precisionFiltersSummary: "Filtros manuais",
-    advancedFiltersSummary: "Ajuste fino de prioridade",
-    recommendBtn: "Encontrar faixa",
+    precisionFiltersSummary: "Refinar por subgênero e BPM",
+    advancedFiltersSummary: "Peso dos sinais",
+    recommendBtn: "Encontrar minha faixa",
     recommendBtnBusy: "Buscando...",
-    rerollBtn: "Outra no mesmo alvo",
-    surpriseBtn: "Surpresa",
-    adaptiveSurpriseBtn: "Surpreenda por perfil",
-    clearFiltersBtn: "Limpar filtros",
-    resetAppBtn: "Novo usuário (reset total)",
+    rerollBtn: "Outra parecida",
+    surpriseBtn: "Surpresa sem filtro",
+    adaptiveSurpriseBtn: "Surpresa pelo perfil",
+    clearFiltersBtn: "Limpar tudo",
+    resetAppBtn: "Zerar perfil",
     resetAppConfirm: "Isso vai apagar todo o seu histórico local e reiniciar o app como novo usuário. Deseja continuar?",
-    generatedNow: "Gerada agora",
+    generatedNow: "Encontrada agora",
     freeStyle: "estilo livre",
     freeContext: "contexto livre",
     freeEnergy: "energia livre",
@@ -16654,6 +18719,7 @@ const I18N = {
     keyPrefix: "Key",
     catalogPrefix: "Catálogo",
     labelPrefix: "Gravadora",
+    trackDataPrefix: "Dados",
     suggestedSubgenre: "Subgênero sugerido",
     styleInfoTitle: "Leitura rápida do subgênero",
     styleInfoBpmLabel: "Faixa típica",
@@ -16664,10 +18730,10 @@ const I18N = {
     genreGuideTitle: "Sobre o subgênero",
     genreGuideText: "Em poucas palavras: {summary}",
     bpmFallbackRelaxed: "Essa faixa usa a faixa típica de BPM do subgênero para manter novas opções sem inventar BPM exato.",
-    defaultStats: "Nenhum feedback ainda.",
-    stats: "Likes faixa: {likedSongs} | Likes artista: {likedArtists} | Descobertas curtidas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Artistas descobertos: {discoveredInApp} | Músicas apresentadas: {tracksPresented} | Avaliações: {ratingCount} | Média: {ratingAvg}",
+    defaultStats: "Comece com uma faixa: seus sinais aparecem aqui.",
+    stats: "Faixas curtidas: {likedSongs} | Artistas curtidos: {likedArtists} | Descobertas: {likedDiscoveries} | Já conhecia: {alreadyKnew} | Não combinou: {skipped} | Avaliações: {ratingCount} | Média: {ratingAvg}",
     ratingTitle: "Avalie esta recomendação",
-    ratingHint: "1 estrela = gostei pouco • 5 estrelas = gostei muito",
+    ratingHint: "1 = fraco • 5 = certeiro",
     ratingAwaiting: "Toque para avaliar",
     ratingCelebration: "Toque para avaliar",
     ratingAriaGroup: "Avaliação em estrelas",
@@ -16675,14 +18741,14 @@ const I18N = {
     ratingSavedHint: "{label} • avaliação salva com {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 para {song}.",
     ratingSavedToast: "{label}: {stars}/5 salvo.",
-    suggestionQueueTitle: "Deck pronto: 25 faixas para swipar",
-    suggestionQueueHint: "Quando não há subgênero escolhido, misturo famílias diferentes. Com subgênero escolhido, a fila fica focada nele ou no vizinho mais próximo.",
+    suggestionQueueTitle: "Deck pronto: 25 faixas para decidir no swipe",
+    suggestionQueueHint: "Mais opções com a mesma intenção.",
     queueNow: "Agora",
     queueNext: "Próxima",
     queueUse: "Tocar esta",
     queueActivated: "Fila ativa: agora tocando {song}.",
-    tasteTuningTitle: "Ajuste seu gosto",
-    tasteTuningHint: "Refine a próxima recomendação por sensação, sem mexer em filtros técnicos.",
+    tasteTuningTitle: "Mude a direção",
+    tasteTuningHint: "Ajuste a próxima sugestão pela sensação, sem recomeçar.",
     tasteTuneHeavier: "Mais pesado",
     tasteTuneMelodic: "Mais melódico",
     tasteTuneUnderground: "Mais underground",
@@ -16690,34 +18756,34 @@ const I18N = {
     tasteTuneFamiliar: "Mais conhecido",
     tasteTuneWeirder: "Mais estranho",
     tasteTuneRunning: "Ajustando curadoria: {label}.",
-    tasteTuneGenerated: "Ajuste aplicado: {label}. Agora estou testando uma nova direção para o seu gosto.",
-    tasteTuneFallback: "Não achei uma opção boa nesse ajuste agora. Mantive sua recomendação atual.",
-    recommendationWhyTitle: "Por que apareceu",
-    recommendationWhyStyle: "Vibe: {style}",
+    tasteTuneGenerated: "Direção mudada: {label}. A próxima carta já testa essa sensação.",
+    tasteTuneFallback: "Não achei uma faixa digna desse ajuste agora. Mantive a atual para não forçar.",
+    recommendationWhyTitle: "Por que entrou no radar",
+    recommendationWhyStyle: "Vibe detectada: {style}",
     recommendationWhyBpm: "Pulso: {bpm}",
     recommendationWhyNovelty: "Descoberta: {status}",
-    recommendationWhyKnown: "artista conhecido",
+    recommendationWhyKnown: "já estava no radar",
     recommendationWhyNew: "nova para você",
     recommendationWhyOrigin: "Cena: {origin}",
-    recommendationWhyStrongFit: "Boa aposta: sinais fortes",
-    recommendationWhyTrustedSource: "Fonte mais confiável",
-    recommendationWhyProfileSignal: "Combina com seu perfil",
+    recommendationWhyStrongFit: "Boa aposta: sinais alinhados",
+    recommendationWhyTrustedSource: "Fonte/player mais confiável",
+    recommendationWhyProfileSignal: "Conversa com seu perfil",
     recommendationTrustLabel: "Confiança",
     recommendationTrustChip: "Confiança {score}%",
-    recommendationTrustReasonHigh: "Alta: fonte, player, pulso e perfil estão alinhados.",
-    recommendationTrustReasonMedium: "Boa: há sinais musicais fortes, ainda com espaço para calibrar.",
-    recommendationTrustReasonLow: "Exploratória: trouxe como teste, não como certeza absoluta.",
+    recommendationTrustReasonHigh: "Alta: fonte, player, pulso e histórico contam a mesma história.",
+    recommendationTrustReasonMedium: "Boa: há sinais consistentes, mas o perfil ainda está abrindo caminho.",
+    recommendationTrustReasonLow: "Exploratória: vale ouvir como teste, não como certeza.",
     recommendationTrustReasonTempoAmbiguous: "Boa, mas com pulso ambíguo: em breaks o grid pode dobrar a sensação real.",
     recommendationWhyFreshArtistSentence: "Também mantive longe dos nomes óbvios para parecer descoberta real, não só mais do mesmo.",
     recommendationWhyProfilePositive: "O histórico recente do seu perfil aponta para essa direção.",
     recommendationWhySourcePositive: "A faixa tem sinais melhores de fonte, pulso ou player, então entra com mais segurança.",
-    recommendationWhyTextStrong: "Escolhi porque os sinais batem: {style}, pulso {bpm}, energia {energy} e uma fonte melhor para testar sem prometer certeza falsa.",
+    recommendationWhyTextStrong: "Escolhi esta porque os sinais batem: {style}, pulso {bpm}, energia {energy} e uma fonte melhor para testar com confiança.",
     recommendationWhyTextContext: "Para {context}, ela entrega energia {energy} e fica perto de {style}. Se a classificação fina não estiver confirmada, trato como rota de família sonora.",
-    recommendationWhyTextDiscovery: "Aqui a aposta é descoberta: {style}, energia {energy} e sinais suficientes para ouvir. Se não bater, seu swipe corrige a próxima rota.",
+    recommendationWhyTextDiscovery: "Aqui a aposta é descoberta: {style}, energia {energy} e sinais suficientes para ouvir. Se não bater, seu swipe recalibra a próxima rota.",
     djModeTitle: "Modo DJ",
-    djModeHint: "Jornada de 5 faixas: abre, sobe, bate forte e fecha.",
-    djModeGenerateBtn: "Criar jornada",
-    djModeStatusReady: "Gere uma recomendação ou escolha um estilo para criar uma jornada.",
+    djModeHint: "Crie uma mini jornada: abre, sobe, bate e fecha.",
+    djModeGenerateBtn: "Criar mini jornada",
+    djModeStatusReady: "Gere uma recomendação ou escolha um estilo para montar uma mini jornada.",
     djModeStatusGenerated: "Jornada pronta para {style}.",
     djModeStepWarmup: "Warm-up",
     djModeStepBuild: "Subida",
@@ -16736,9 +18802,9 @@ const I18N = {
     voiceMiniLayerOn: "Armado",
     voiceMiniLayerOff: "Livre",
     voiceMiniLayerDisabled: "Grave voz",
-    artistHubIntro: "Uma leitura curta para entender quem é o artista, de onde vem o som e se vale continuar cavando.",
+    artistHubIntro: "Bio, label e links para continuar a descoberta.",
     discogsArtistTitle: "Bio completa no Discogs",
-    discogsArtistHint: "Abra o perfil do artista no Discogs para ver biografia, aliases e discografia completa.",
+    discogsArtistHint: "Veja bio, aliases e discografia completa.",
     discogsArtistLink: "Buscar artista no Discogs",
     discogsArtistOpen: "Abrir perfil no Discogs",
     artistBioAiSource: "Bio refinada com apoio de IA e fontes: {sources}.",
@@ -16748,14 +18814,14 @@ const I18N = {
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiRefreshBusy: "Atualizando...",
     trackAiRefreshDone: "Atualizada",
-    trackAiLoading: "Analisando sua faixa atual e preparando uma leitura rápida...",
+    trackAiLoading: "Preparando leitura rápida...",
     trackAiApiSource: "Leitura gerada por IA em tempo real.",
     trackAiLocalSource: "Leitura do Sonic Search baseada no som, no contexto e no seu histórico.",
-    trackAiFallback: "Essa faixa parece conversar com seu momento agora. Ouça o primeiro minuto: se o corpo acompanhar, salva; se não, troca que eu ajusto a rota.",
+    trackAiFallback: "Ouça o primeiro minuto. Se conectar, salve; se não, troque.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
     voiceLabKicker: "Estúdio rápido",
-    voiceLabTitle: "Monte uma mini música em segundos",
-    voiceLabHint: "Um fluxo simples para criar um loop eletrônico: escolha o clima, aperte play, ajuste camadas e salve a ideia.",
+    voiceLabTitle: "Monte um loop tocável em segundos",
+    voiceLabHint: "Escolha uma vibe, aperte play, ajuste camadas e baixe.",
     voiceEffectsTitle: "Efeito da voz",
     voiceEffectRobot: "Robô",
     voiceEffectChipmunk: "Engraçada",
@@ -16774,7 +18840,7 @@ const I18N = {
     voicePlayBtn: "Ouvir efeito",
     voiceResetBtn: "Limpar",
     voiceDownloadBtn: "Baixar gravação",
-    voiceReady: "Pronto para gravar.",
+    voiceReady: "Microfone em espera. Grave só se quiser usar sua voz no loop.",
     voiceRecording: "Gravando... {seconds}s",
     voiceRecorded: "Voz pronta. Escolha um efeito ou ligue a camada Voz no loop.",
     voiceNeedRecording: "Grave uma voz para usar esta camada.",
@@ -16783,16 +18849,16 @@ const I18N = {
     voicePlaying: "Tocando com efeito: {effect}.",
     voiceCleared: "Gravação apagada.",
     voiceMiniEyebrow: "Beat maker simples",
-    voiceMiniTitle: "Escolha uma vibe. Aperte play.",
-    voiceMiniHint: "A mini música nasce pronta para tocar. Depois você liga ou desliga camadas, mexe no BPM e baixa a ideia.",
+    voiceMiniTitle: "Escolha a vibe. Aperte play.",
+    voiceMiniHint: "O loop já começa tocável. Ajuste camadas, BPM e exporte.",
     voiceStudioStepOne: "Escolha o clima",
-    voiceStudioStepTwo: "Aperte play",
+    voiceStudioStepTwo: "Dê play",
     voiceStudioStepThree: "Ajuste camadas",
     voiceStudioSessionStateLabel: "Estado",
     voiceStudioSessionLayersLabel: "Camadas",
     voiceStudioSessionLengthLabel: "Export",
     voiceStudioSessionFormatLabel: "Arquivo",
-    voiceStudioStateReady: "Pronto",
+    voiceStudioStateReady: "Em espera",
     voiceStudioStatePlaying: "Tocando",
     voiceStudioStateRecording: "Gravando voz",
     voiceStudioStateRendering: "Exportando",
@@ -16801,19 +18867,19 @@ const I18N = {
     voiceStudioLengthValue: "{bars} compassos • {seconds}s",
     voiceStudioFormatLocal: "WAV local",
     voiceStudioFormatVoice: "Voz + WAV",
-    voiceMiniNoVoiceBadge: "Sem microfone e sem cadastro",
+    voiceMiniNoVoiceBadge: "Sem cadastro",
     voiceMiniRandomBtn: "Gerar ideia",
     voiceMiniPlayBtn: "Tocar mini música",
     voiceMiniStopBtn: "Parar loop",
     voiceMiniExportBtn: "Baixar mini música",
-    voiceMiniPresetTitle: "Escolha o clima da ideia",
+    voiceMiniPresetTitle: "Clima da ideia",
     voiceMiniMorphTitle: "Macromovimentos",
     voiceMiniMorphFloor: "Mais pista",
     voiceMiniMorphDeep: "Mais profundo",
     voiceMiniMorphWeird: "Mais estranho",
     voiceMiniMorphOpen: "Mais aberto",
     voiceMiniMorphApplied: "Movimento aplicado: {move}. O próximo compasso muda de direção.",
-    voiceMiniLayerTitle: "Ligue/desligue camadas",
+    voiceMiniLayerTitle: "Camadas",
     voiceMiniRecipeLabel: "Receita atual",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} ativos.",
@@ -16822,7 +18888,7 @@ const I18N = {
     voiceMiniInsightEnergyLabel: "Energia",
     voiceMiniInsightShapeLabel: "Forma",
     voiceMiniInsightMoveLabel: "Próximo gesto",
-    voiceMiniInsightTitlePeak: "Pronto para pista",
+    voiceMiniInsightTitlePeak: "Com pressão de pista",
     voiceMiniInsightTitleGroove: "Groove em construção",
     voiceMiniInsightTitleDeep: "Textura profunda",
     voiceMiniInsightTitleExperimental: "Ideia mutante",
@@ -16877,7 +18943,7 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
     voiceMiniSelectChanged: "{control}: {value}. O próximo compasso já entra assim.",
-    voiceMiniReady: "Pronto: escolha um clima ou toque em Gerar ideia.",
+    voiceMiniReady: "Escolha um clima ou gere uma ideia para ouvir o primeiro loop.",
     voiceMiniPlaying: "Loop rodando no tempo. Toque nas camadas para armar ou remover no próximo compasso.",
     voiceMiniDone: "Loop parado. Toque a mini música ou um pad para começar de novo.",
     voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
@@ -16897,25 +18963,25 @@ const I18N = {
     voiceMiniPresetHouse: "House orgânico",
     voiceMiniPresetDnb: "DnB líquido",
     voiceMiniPresetDarkprog: "Dark prog",
-    summaryPanelTitle: "Mapa do seu gosto",
+    summaryPanelTitle: "Seu mapa musical",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
     summaryDiscoveredCountLabel: "Artistas descobertos no app",
-    summaryPresentedTracksLabel: "Músicas apresentadas",
+    summaryPresentedTracksLabel: "Faixas apresentadas",
     summaryLikedCountLabel: "Artistas que curte",
     summaryDislikedCountLabel: "Artistas que não curte",
     summaryFavoriteStyleLabel: "Gênero favorito",
     summaryAchievementLabel: "Conquista 5 estrelas",
     summaryAchievementPending: "Avalie faixas com 5 estrelas para desbloquear esta conquista.",
     summaryAchievementFiveStarOne: "Você avaliou {count} música com 5 estrelas.",
-    summaryAchievementFiveStarMany: "Você avaliou {count} músicas com 5 estrelas.",
+    summaryAchievementFiveStarMany: "Você avaliou {count} faixas com 5 estrelas.",
     summaryAchievementTierA: "Ritual inicial",
     summaryAchievementTierB: "Curador de ouro",
-    summaryAchievementTierC: "Sommelier magnético",
+    summaryAchievementTierC: "Curador magnético",
     summaryAchievementTierD: "Lenda do espectro",
     summaryAchievementTierProgress: "Nível atual: {tier}. Faltam {remaining} faixas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nível máximo alcançado: {tier}.",
-    summaryShareStoryBtn: "Compartilhar status nos Stories",
+    summaryShareStoryBtn: "Compartilhar nos Stories",
     shareLinkBtn: "Copiar link compartilhável",
     shareSpiritLinkBtn: "Copiar link do arquétipo",
     shareLinkCopying: "Copiando link...",
@@ -16925,46 +18991,63 @@ const I18N = {
     summaryShareStoryTitle: "Meu status musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} faixas curtidas • {artists} artistas curtidos • {ratings} avaliações • média {average}",
+    apiHealthKicker: "APIs",
+    apiHealthTitle: "Saúde das integrações",
+    apiHealthIntro: "Status real das fontes externas e da memória própria.",
+    apiHealthRefreshBtn: "Atualizar",
+    apiHealthLoading: "Verificando integrações...",
+    apiHealthUpdated: "Integrações verificadas: {active} ativas, {attention} pedem atenção.",
+    apiHealthUnavailable: "Não consegui verificar as integrações agora.",
+    apiHealthActive: "ativo",
+    apiHealthDisabled: "desligado",
+    apiHealthNeedsCredentials: "sem chave",
+    apiHealthUnknown: "indefinido",
+    apiHealthNoCache: "cache local",
+    apiHealthCacheSeconds: "cache {seconds}s",
+    apiHealthDailyLimit: "limite {limit}/dia",
+    apiHealthMissingKey: "precisa de credencial própria",
+    apiHealthReady: "pronto no backend",
+    apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Biblioteca do radar",
-    profileLibraryTitle: "Músicas que moldaram seu gosto",
-    profileLibraryHint: "Curtidas e descartadas ficam aqui para ouvir de novo, revisar seu mapa e manter o swipe principal limpo.",
+    profileLibraryTitle: "Faixas que ensinaram o radar",
+    profileLibraryHint: "Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Leve seu mapa musical com você",
-    profileBackupHint: "O app salva seu gosto neste aparelho. Baixe uma cópia para voltar em outro navegador quando quiser.",
-    profileBackupStatusEmpty: "Seu mapa local já está pronto. Curta músicas para criar sinais e baixe uma cópia quando quiser.",
+    profileBackupHint: "Baixe uma cópia para usar em outro navegador.",
+    profileBackupStatusEmpty: "Seu mapa local está neste navegador.",
     profileBackupStatus: "{signals} sinais guardados neste aparelho • última cópia: {date}",
     profileBackupStatusNever: "ainda não salva",
     profileBackupExport: "Salvar cópia do perfil",
     profileBackupImportSummary: "Tenho um perfil salvo",
-    profileBackupImportHint: "Use só se trocou de celular ou abriu o app em outro navegador.",
+    profileBackupImportHint: "Use para restaurar seu mapa local.",
     profileBackupImport: "Trazer perfil para cá",
     profileBackupExported: "Cópia do perfil salva.",
     profileBackupImported: "Perfil trazido para este aparelho.",
     profileBackupInvalid: "Não consegui ler esse arquivo de perfil.",
     profileBackupImportConfirm: "Trazer este perfil vai trocar os dados salvos neste aparelho. Continuar?",
-    summaryLikedTracksTitle: "Músicas curtidas",
-    summaryLikedTracksHint: "Tudo que você curtir fica salvo aqui para ouvir depois.",
+    summaryLikedTracksTitle: "Faixas curtidas",
+    summaryLikedTracksHint: "Salvas para ouvir de novo.",
     summaryLikedTracksClear: "Limpar",
-    summaryLikedTracksEmpty: "Ainda não tem música curtida. Toque em Curti ou arraste para a direita para salvar aqui.",
-    summaryLikedTracksCleared: "Histórico de músicas curtidas limpo.",
+    summaryLikedTracksEmpty: "Nenhuma faixa salva ainda. Curta ou deslize para a direita quando uma entrar no clima.",
+    summaryLikedTracksCleared: "Histórico de faixas curtidas limpo.",
     summaryLikedTrackRemoved: "Música removida das curtidas.",
-    summaryDislikedTracksTitle: "Músicas não curtidas",
-    summaryDislikedTracksHint: "Tudo que você descartar fica salvo aqui para revisar seu mapa musical e evitar repetição.",
+    summaryDislikedTracksTitle: "Faixas descartadas",
+    summaryDislikedTracksHint: "Descartes ajudam o radar a não insistir.",
     summaryDislikedTracksClear: "Limpar",
-    summaryDislikedTracksEmpty: "Ainda não tem música não curtida. Toque em Não curti ou arraste para a esquerda para salvar aqui.",
-    summaryDislikedTracksCleared: "Histórico de músicas não curtidas limpo.",
+    summaryDislikedTracksEmpty: "Nenhuma faixa descartada ainda. Passe ou deslize à esquerda quando a rota não bater.",
+    summaryDislikedTracksCleared: "Histórico de faixas descartadas limpo.",
     summaryDislikedTrackRemoved: "Música removida das não curtidas.",
     summaryDislikedTrackSaved: "Descartada no perfil",
     summaryDislikedTrackSavedAt: "Não curtida em {date}",
     summaryDislikedTrackRemove: "Remover",
-    summaryDislikedTrackRemoveAria: "Remover {song} de {artist} das músicas não curtidas",
+    summaryDislikedTrackRemoveAria: "Remover {song} de {artist} das faixas descartadas",
     summaryLikedTrackOpenSpotify: "Spotify",
     summaryLikedTrackOpenYoutube: "YouTube",
     summaryLikedTrackOpenSoundcloud: "SoundCloud",
     summaryLikedTrackSaved: "Salva no perfil",
     summaryLikedTrackSavedAt: "Curtida em {date}",
     summaryLikedTrackRemove: "Remover",
-    summaryLikedTrackRemoveAria: "Remover {song} de {artist} das músicas curtidas",
+    summaryLikedTrackRemoveAria: "Remover {song} de {artist} das faixas curtidas",
     summaryFiveStarTracksTitle: "Faixas que você marcou com 5 estrelas",
     summaryEmptyFiveStarTracks: "Avalie faixas com 5 estrelas para montar seu mapa de gosto.",
     summaryKnownArtistsTitle: "Artistas que você conhece",
@@ -16972,26 +19055,26 @@ const I18N = {
     summaryDislikedArtistsTitle: "Artistas que você não curte",
     quizHubTitle: "Desafios de conhecimento",
     quizHubBadge: "Evolução rápida",
-    quizHubHint: "Ignorou o balão de desafio? Ele fica salvo aqui para você evoluir pelo conhecimento quando quiser.",
+    quizHubHint: "Desafios ficam salvos aqui.",
     quizHubProgressEmpty: "Nenhum desafio desbloqueado ainda.",
-    summaryNoData: "Sem dados",
+    summaryNoData: "Sem leitura ainda",
     summaryStatusNew: "Novo",
     summaryStatusExploring: "Explorando",
     summaryStatusActive: "Ativo",
     summaryStatusAdvanced: "Curadoria avançada",
-    summaryEmptyKnown: "Nenhum artista marcado como conhecido ainda.",
-    summaryEmptyLiked: "Ainda sem artistas curtidos.",
-    summaryEmptyDisliked: "Ainda sem artistas marcados como não curtidos.",
+    summaryEmptyKnown: "Marque artistas conhecidos para o app fugir do óbvio.",
+    summaryEmptyLiked: "Salve artistas quando quiser reforçar essa direção.",
+    summaryEmptyDisliked: "Artistas recusados aparecem aqui para evitar insistência.",
     listenersSubtitle: "{count} ouvintes da comunidade nas últimas horas (feed local).",
     topListenersTitle: "Top listeners da comunidade",
     topListenersSubtitle: "Quem mais ouviu {style} nas últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} pontos",
     topListenerPlays: "{plays} plays",
-    previewSearching: "Buscando preview da faixa...",
-    previewValidated: "Preview validado com alta confiança. Está gostando do que está escutando?",
-    previewLoaded: "Preview carregado com boa confiança. Está gostando do que está escutando?",
-    previewReady: "Preview pronto. Clique play para ouvir e avaliar.",
+    previewSearching: "Procurando um preview tocável...",
+    previewValidated: "Preview validado com alta confiança. O som conectou?",
+    previewLoaded: "Preview carregado com boa confiança. O som conectou?",
+    previewReady: "Preview pronto. Dê play e responda no ouvido.",
     previewYoutubeInlineHint: "Player do YouTube disponível abaixo para assistir direto no app.",
     previewYoutubeOptionalHint: "Se quiser assistir no app, abra o player do YouTube abaixo.",
     previewYoutubeOpenInlineBtn: "Abrir player no app",
@@ -17010,8 +19093,24 @@ const I18N = {
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
     previewSoundcloudFallback: "Preview em áudio aberto via SoundCloud. Se não iniciar sozinho, toque no player.",
     previewBandcampFallback: "Preview aberto via Bandcamp com fonte validada. Se não iniciar sozinho, toque no player.",
-    previewUnavailable: "Preview indisponível para esta faixa. Use Spotify/YouTube/SoundCloud e me diga se gostou.",
-    previewUnavailableWithLinks: "Preview indisponível para esta faixa. Use {platforms} e me diga se gostou.",
+    previewUnavailable: "Não achei preview seguro aqui. Use Spotify, YouTube ou SoundCloud para ouvir.",
+    previewUnavailableWithLinks: "Não achei preview seguro aqui. Use {platforms} para ouvir.",
+    radioBrowserKicker: "Rádio do subgênero",
+    radioBrowserTitle: "Sintonizar {style}",
+    radioBrowserIdle: "Carregue estações públicas próximas de {style}.",
+    radioBrowserLoadBtn: "Buscar rádios",
+    radioBrowserRefreshBtn: "Atualizar rádios",
+    radioBrowserLoadingBtn: "Buscando...",
+    radioBrowserLoading: "Buscando estações públicas para {style}...",
+    radioBrowserFound: "{count} estações encontradas. Escolha uma para tocar.",
+    radioBrowserEmpty: "Não encontrei rádio pública confiável para esse recorte agora.",
+    radioBrowserAttribution: "Dados de diretório: Radio Browser. Streams pertencem às respectivas estações.",
+    radioBrowserPlayStation: "Tocar rádio {station}",
+    radioBrowserUnnamed: "Estação sem nome",
+    radioBrowserPublicStation: "Rádio pública",
+    radioBrowserPlaying: "Tocando {station}.",
+    radioBrowserReady: "{station} pronta. Dê play no player se o navegador bloqueou.",
+    radioBrowserStationUnavailable: "Essa estação não está tocável agora. Tente outra.",
     spotifyUnverified: "Link do Spotify não verificado: abrindo busca aproximada para esta faixa.",
     youtubeUnverified: "Link do YouTube ainda não verificado para evitar abrir faixa errada.",
     soundcloudUnverified: "Link do SoundCloud ainda não verificado para evitar abrir faixa errada.",
@@ -17036,60 +19135,65 @@ const I18N = {
     artistImageLoaded: "Foto real do artista",
     artistImageFallback: "Foto não encontrada; exibindo identidade do artista.",
     artistSocialsTitle: "Redes do artista",
-    artistSocialsHint: "Links por busca do nome do artista nas plataformas.",
+    artistSocialsHint: "Busca rápida pelo nome do artista.",
+    lastfmArtistTitle: "Sinais Last.fm",
+    lastfmArtistHint: "Tags, faixas fortes e artistas próximos quando Last.fm estiver habilitado.",
+    lastfmArtistHintWithListeners: "{listeners} ouvintes no Last.fm. Use como sinal complementar, não como verdade única.",
+    lastfmTopTracksTitle: "Faixas fortes",
+    lastfmSimilarArtistsTitle: "Artistas próximos",
     warmupCatalogToast: "Base musical refinada em segundo plano.",
-    eventsPrompt: "Abra Mais sobre ou curta um artista para carregar agenda de shows.",
+    eventsPrompt: "Curta um artista para ver agenda.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
-    searchingCatalog: "Pesquisando catálogo e montando sugestão...",
-    catalogGenerating: "Preparando uma rota confiável em {style}...",
-    recommendationGenerated: "Recomendação gerada com base nas preferências que você selecionou.",
-    exploratoryGenerated: "Sem filtros definidos: gerei uma recomendação exploratória.",
+    searchingCatalog: "Lendo catálogo, contexto e histórico...",
+    catalogGenerating: "Montando uma rota confiável em {style}...",
+    recommendationGenerated: "Faixa pronta para ouvir.",
+    exploratoryGenerated: "Aposta exploratória pronta para ouvir.",
     styleExhaustedFallback: "Não encontrei artistas novos em {from} agora. Troquei para {to} para manter descoberta sem repetição.",
     surpriseCrossGenreGenerated: "Refino ativo: saí de {from} e abri uma rota nova em {to}.",
     surpriseAdaptiveGenerated: "Refino por perfil: seus sinais apontaram uma nova rota em {to}, saindo de {from}.",
     surpriseAdaptiveNeedSignals: "Faça alguns likes/dislikes primeiro para eu aprender seu perfil e surpreender melhor.",
     rerollNoOption: "Não há outra faixa no catálogo para esse estilo específico no momento.",
     rerollGenerated: "Nova sugestão gerada com rotação de artista e faixa no mesmo perfil.",
-    clearFiltersFeedback: "Filtros limpos. Você pode gerar uma busca exploratória.",
+    clearFiltersFeedback: "Filtros limpos.",
     noUnknownOption: "Não achei outra opção desconhecida com esse perfil no catálogo local agora.",
-    swappedUnknown: "Beleza. Troquei para outra sugestão parecida que você provavelmente ainda não conhece.",
-    toastFoundNewArtist: "Perfeito. Busquei outro artista para você descobrir.",
-    newArtistDetected: "Top. Marquei como descoberta nova e salvei esse sinal no seu perfil.",
-    toastNewDiscovery: "Que bom! Descoberta nova desbloqueada.",
-    prioritizeSimilar: "Perfeito. Vou priorizar sons parecidos e abrir agenda do artista.",
-    toastShowMoreLikeThis: "Que bom que gostou! Vou te mostrar mais nessa linha.",
-    swappedNow: "Troquei agora com nova pesquisa no mesmo perfil e sem repetir artista/faixa.",
-    toastSwapped: "Sem problema. Troquei para outra faixa agora.",
-    celebrationActivated: "Celebração ativada. {song} entrou nas suas descobertas favoritas.",
-    toastFavoritedDiscovery: "Excelente escolha! Descoberta favoritada.",
-    refinedAfterNo: "Troquei a faixa com base no seu feedback para refinar sua curadoria.",
-    toastTryBetter: "Entendi, vou tentar uma recomendação melhor.",
-    songAddedProfile: "Boa. A faixa {song} entrou no seu perfil.",
-    toastSongLiked: "Boa! Faixa curtida.",
-    artistFavorited: "Perfeito. O artista {artist} foi marcado como favorito.",
-    toastArtistSaved: "Artista salvo como favorito.",
-    artistBlockedFromRecommendations: "Perfeito. O artista {artist} não será mais recomendado para você.",
-    toastArtistBlocked: "Artista bloqueado das recomendações.",
+    swappedUnknown: "Troquei por uma faixa próxima, mas fora dos nomes já marcados.",
+    toastFoundNewArtist: "Novo artista na rota. Hora de testar no ouvido.",
+    newArtistDetected: "Descoberta registrada. Esse nome saiu da zona conhecida.",
+    toastNewDiscovery: "Descoberta nova entrou no mapa.",
+    prioritizeSimilar: "Esse caminho ganhou peso. Vou puxar faixas vizinhas e abrir contexto do artista.",
+    toastShowMoreLikeThis: "Sinal positivo salvo: mais dessa pressão vem na sequência.",
+    swappedNow: "Troquei sem repetir artista nem faixa dentro deste perfil.",
+    toastSwapped: "Rota descartada. Nova faixa na mesa.",
+    celebrationActivated: "{song} virou descoberta favorita no seu mapa.",
+    toastFavoritedDiscovery: "Descoberta salva como favorita.",
+    refinedAfterNo: "Seu não ajustou a rota. A próxima busca já evita esse caminho.",
+    toastTryBetter: "Rota recalibrada. Vou buscar um encaixe mais fino.",
+    songAddedProfile: "{song} agora pesa nas próximas recomendações.",
+    toastSongLiked: "Faixa salva no mapa.",
+    artistFavorited: "{artist} ganhou peso no seu mapa.",
+    toastArtistSaved: "Artista salvo como referência.",
+    artistBlockedFromRecommendations: "{artist} saiu das próximas rotas.",
+    toastArtistBlocked: "Artista removido do radar.",
     enableDiscoveryMode: "Ative o modo descoberta para receber artista novo.",
-    likedDiscovery: "Ótimo, você curtiu conhecer {artist}.",
-    toastDiscoveryLiked: "Top! Descoberta curtida.",
-    discoveryKnown: "Anotado. Vou buscar nomes ainda menos óbvios na próxima.",
-    toastDiscoveryKnown: "Anotado. Vou aprofundar as próximas descobertas.",
-    previewIssueLearned: "Entendi. Parece falha de preview/reprodução. Vou priorizar próximas faixas com player mais confiável.",
-    toastPreviewIssueLearned: "Perfeito. Ajustei para evitar faixas com preview ruim.",
-    styleIssueLearned: "Entendi. Vou tratar essa faixa como classificação suspeita e buscar uma rota mais precisa.",
-    bpmIssueLearned: "Anotado. Vou baixar a confiança desse BPM e priorizar pulso mais verificado.",
-    imageIssueLearned: "Boa. Vou reduzir a confiança dessa imagem e procurar fontes visuais mais seguras.",
-    toastRecommendationIssueLearned: "Erro marcado. O radar ficou mais exigente.",
-    skipAdjusted: "Recebido. Refiz a pesquisa e ajustei o próximo match com base no seu não.",
-    toastSkipAdjusted: "Fechado. Ajustei sua recomendação com base no seu feedback.",
+    likedDiscovery: "{artist} entrou como descoberta que vale seguir.",
+    toastDiscoveryLiked: "Descoberta reforçada no mapa.",
+    discoveryKnown: "Esse nome já era conhecido. Vou cavar mais fundo na próxima.",
+    toastDiscoveryKnown: "Conhecido marcado. Próximas cartas ficam menos óbvias.",
+    previewIssueLearned: "Falha de preview marcada. Vou subir o peso de players mais confiáveis.",
+    toastPreviewIssueLearned: "Preview ruim saiu da prioridade.",
+    styleIssueLearned: "Subgênero contestado. Vou tratar esta faixa com mais cautela.",
+    bpmIssueLearned: "Pulso contestado. Próximas escolhas pedem BPM mais confiável.",
+    imageIssueLearned: "Imagem contestada. Vou preferir fontes visuais mais seguras.",
+    toastRecommendationIssueLearned: "Correção salva: essa rota ficou mais exigente.",
+    skipAdjusted: "Descarte recebido. Recalculei o próximo match a partir desse não.",
+    toastSkipAdjusted: "Seu descarte já pesou na próxima escolha.",
     catalogUpdateProgress: "Refinando {style} em segundo plano.",
-    searchOverlayTitle: "Buscando recomendação",
+    searchOverlayTitle: "Procurando a faixa certa",
     searchOverlayStage: "Etapa {current} de {total}",
-    searchOverlayPreparing: "Lendo intenção, energia, BPM e artistas conhecidos...",
-    searchOverlayCatalog: "Varrendo catálogo e checando faixas confiáveis...",
-    searchOverlayGenerating: "Cruzando perfil, subgênero e descoberta nova...",
-    searchOverlayFinishing: "Polindo o match e preparando a escuta...",
+    searchOverlayPreparing: "Lendo seu momento e histórico...",
+    searchOverlayCatalog: "Checando rotas no catálogo...",
+    searchOverlayGenerating: "Cruzando perfil, novidade e confiança...",
+    searchOverlayFinishing: "Preparando preview e contexto...",
     newArtistsBtn: "Buscar artistas novos (< 2 anos)",
     newArtistsTitle: "Artistas novos no subgênero",
     newArtistsSelectStyle: "Escolha um subgênero para buscar artistas novos.",
@@ -17104,7 +19208,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial em {style}. Usei uma rota local confiável enquanto continuo ampliando a base.",
     catalogFallbackSearching: "Cobertura parcial em {style}. Buscando sinais melhores antes de recomendar...",
     spiritPanelTitle: "Seu arquétipo musical",
-    spiritIntro: "A cada 10 músicas curtidas, seu arquétipo musical é revisado.",
+    spiritIntro: "10 curtidas revelam seu arquétipo.",
     spiritBadge: "Arquétipo desbloqueado",
     spiritAvatarAlt: "Busto de arquétipo eletrônico {name}",
     spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para revelar seu arquétipo.",
@@ -17118,7 +19222,7 @@ const I18N = {
     spiritInsightTitle: "Calibração do arquétipo",
     spiritInsightLockedStatus: "Em formação",
     spiritInsightUnlockedStatus: "Ativo",
-    spiritInsightLockedText: "Curta mais {remaining} músicas para revelar seu arquétipo. Estou lendo estilo, energia e feedback.",
+    spiritInsightLockedText: "Curta mais {remaining} faixas para revelar seu arquétipo.",
     spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
     spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
     spiritInsightSignalScore: "{label}: sinal {score}",
@@ -17142,7 +19246,7 @@ const I18N = {
     spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
     spiritSpotlightTitle: "Faixa do arquétipo",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
-    spiritSpotlightHintPredicted: "Aposta de alta afinidade para seu perfil atual.",
+    spiritSpotlightHintPredicted: "A melhor faixa para seu perfil aparece aqui.",
     spiritSpotlightHintFallback: "Faixa escolhida para representar seu arquétipo neste momento.",
     spiritSpotlightNone: "Ainda sem faixa candidata. Gere uma nova recomendação para calibrar melhor.",
     spiritSpotlightFeedback: "Faixa do arquétipo: {song} • {artist}.",
@@ -17170,7 +19274,7 @@ const I18N = {
     spiritCollectibleShareNativeDone: "Compartilhamento aberto. Escolha Instagram Stories na lista de apps.",
     spiritCollectibleShareFallback: "Não consegui abrir o compartilhamento nativo. Use Baixar imagem só se quiser publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartilhamento cancelado.",
-    spiritCollectibleShareCaption: "Meu arquétipo musical no Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "Meu arquétipo musical no Sonic Search: {spirit}. #SonicSearch #ElectronicMusic",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} faixas curtidas | {shown} apresentadas | Já conhecia {known}",
     spiritCollectibleShareStoryTitle: "Meu status musical",
     spiritCollectibleGenerating: "Gerando arte do seu arquétipo...",
@@ -17198,67 +19302,67 @@ const I18N = {
     spiritCollectibleErrorApiPrefix: "Falha da API de imagem:",
     spiritCollectibleErrorApiStatus: "Falha da API de imagem (HTTP {status}). Tente gerar novamente.",
     spiritRankUnlocked: "Arquétipo desbloqueado",
-    spiritRankNovice: "Sommelier iniciante",
-    spiritRankResident: "Sommelier residente",
-    spiritRankMaster: "Sommelier mestre"
+    spiritRankNovice: "Curador iniciante",
+    spiritRankResident: "Curador residente",
+    spiritRankMaster: "Curador mestre"
   },
   en: {
     introKicker: "Sensory pre-show",
     introTitle: "Enter the frequency",
-    introDesc: "Before choosing language, enjoy an animated opening with psychedelic phrases in motion.",
-    introImpact: "Your ear starts getting mapped on the very first pulse.",
-    introContinueBtn: "Start now",
+    introDesc: "A quick opener to switch your ear on before the first discovery.",
+    introImpact: "The first beat already puts the radar in motion.",
+    introContinueBtn: "Enter Sonic Search",
     audioOn: "Sound on",
     audioOff: "Sound off",
     audioStart: "Start audio",
     audioUnavailable: "Audio unavailable",
     audioActivateHint: "Tap the screen once to unlock browser audio.",
     volumeLabel: "Volume",
-    langKicker: "Choose your language",
-    langTitle: "Select your language",
-    langDesc: "Choose the language for the full app experience.",
-    appSlogan: "We love music",
-    appMission: "Every like, swap, and “already knew it” teaches the radar to listen with you.",
+    langKicker: "Before you start",
+    langTitle: "Choose your language",
+    langDesc: "The radar adapts copy, buttons, and explanations.",
+    appSlogan: "Discovery without noise",
+    appMission: "Your feedback sharpens every next track.",
     usageGuideKicker: "Quick guide",
-    usageGuideTitle: "How to get more from Sonic Search",
-    usageGuideDesc: "Use the app like a dancefloor friend: set the mood, hear the bet, and react without overthinking.",
-    usageGuideStep1Title: "Start with the moment",
-    usageGuideStep1Text: "Pick Focus, Work, Workout, After, or Peak so the app can set a musical starting point.",
-    usageGuideStep2Title: "Say who you know",
-    usageGuideStep2Text: "Add known artists so the app can leave obvious picks behind and look for real discovery.",
-    usageGuideStep3Title: "Use feedback",
-    usageGuideStep3Text: "Like, swap, or mark “already knew it”. Every response becomes a taste signal, not just a click.",
-    usageGuideStep4Title: "Fine-tune freely",
-    usageGuideStep4Text: "Adjust energy, BPM, vocals, and priorities whenever you want a more precise search.",
-    usageGuideNote: "Tip: the Surprise button automatically generates a surprise track. For precision, fill in style and known artists first.",
-    usageGuideContinueBtn: "Got it",
+    usageGuideTitle: "Find a good track in a few taps",
+    usageGuideDesc: "Set the moment, hear the preview, and let each reaction tune the radar.",
+    usageGuideStep1Title: "Choose the listening moment",
+    usageGuideStep1Text: "Focus, workout, after, or floor: the app adjusts energy, pulse, and mood.",
+    usageGuideStep2Title: "Tell what is already on your radar",
+    usageGuideStep2Text: "Known names help the app dodge the obvious and reduce repetition.",
+    usageGuideStep3Title: "React without overthinking",
+    usageGuideStep3Text: "Like, pass, new to me, or already knew it: each tap improves the next card.",
+    usageGuideStep4Title: "Open filters only when you want precision",
+    usageGuideStep4Text: "Subgenre, BPM, and vocals work as fine-tuning, not homework.",
+    usageGuideNote: "Want to listen now? Use Surprise. Want a sharper hit? Add style, moment, and known artists.",
+    usageGuideContinueBtn: "Start discovering",
     showUsageGuideBtn: "How to use",
-    authKicker: "Optional access",
-    authTitle: "Sign in or continue locally",
-    authDesc: "Use Google to sync your profile and likes in the cloud, or continue locally without creating an account.",
-    authLocalNoteProfile: "Google optional",
-    authLocalNoteNewUser: "Free local mode",
-    authLocalNoteBackup: "Sync when you want",
+    authKicker: "Quick access",
+    authTitle: "Enter Sonic Search",
+    authDesc: "Sign in with Google to sync your profile. Without login, your discoveries stay saved on this device.",
+    authLocalNoteProfile: "No account",
+    authLocalNoteNewUser: "Local profile",
+    authLocalNoteBackup: "Google optional",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
-    authResumeSavedBtn: "Resume saved profile",
+    authResumeSavedBtn: "Use local profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Continue without login",
+    authGuestBtn: "Enter without login",
     authTestUserBtn: "Start without history",
-    authNewUserHint: "Without login, data stays in this browser. Google lets you recover your profile on another device.",
-    authRequired: "Choose Google or continue without login.",
+    authNewUserHint: "Without login, I continue from the profile saved in this browser.",
+    authRequired: "Sign in with Google or enter without login.",
     authLoggedAs: "Profile loaded for {user}.",
-    authGuestReady: "Local profile enabled. You can discover music without signing in.",
-    authLocalResumeReady: "Local profile resumed for {user}.",
-    authSavedProfileReady: "Saved profile found for {user}. Resume it to keep your likes and discoveries.",
+    authGuestReady: "Local profile ready. Let's discover tracks.",
+    authLocalResumeReady: "Local profile loaded for {user}.",
+    authSavedProfileReady: "I found {user}'s local profile. The device button will continue from it.",
     authTestUserReady: "New user created for {user}. Likes, history, recommendations, and spirit start clean.",
     authSocialDivider: "optional online account",
     authGoogleBtn: "Sign in with Google",
-    authContinueOnlineBtn: "Continue with online profile",
+    authContinueOnlineBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Your choice: Google login for cloud sync, or local mode to start now.",
+    authProviderHint: "Google syncs your profile across devices.",
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
@@ -17267,32 +19371,32 @@ const I18N = {
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
     authProviderGoogleReady: "Google is ready. Tap to sign in.",
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
-    authGoogleComingSoon: "Google unavailable",
+    authGoogleComingSoon: "Sign in with Google",
     authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "Local mode works now; for cloud sync, check Google in Supabase.",
-    welcomeKicker: "Electronic music curation",
+    authProviderHintLocalBackup: "Google is not configured in this environment yet. Enter without login for now.",
+    welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
-    welcomeDesc: "Your electronic music sommelier for rave, workout, focus, or travel. Pick your style and get a track + a new artist to discover.",
-    startBtn: "Start experience",
-    startSurpriseBtn: "Surprise me now",
+    welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
+    startBtn: "Start discovering",
+    startSurpriseBtn: "Open surprise",
     welcomeImportProfileBtn: "I have a saved profile",
     floatingSurpriseBtn: "Surprise",
-    quickSurpriseTitle: "Surprise me with real discovery",
-    quickSurpriseHint: "Tell me the subgenre, artists, and tracks you already know. I use that to avoid repetition and look for a new pick that makes sense.",
+    quickSurpriseTitle: "Surprise with direction",
+    quickSurpriseHint: "Give me a subgenre and what you already know to get something less obvious.",
     quickSurpriseStyleLabel: "Subgenre you listen to most",
     quickSurpriseStylePlaceholder: "Choose subgenre",
-    quickSurpriseKnownLabel: "Artists you already know",
+    quickSurpriseKnownLabel: "Artists already on your radar",
     quickSurpriseKnownPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
     quickSurpriseKnownTracksLabel: "Tracks you already know",
     quickSurpriseKnownTracksPlaceholder: "Ex.: Poison Turtle, Hit N Run",
-    quickSurpriseRunBtn: "Generate focused surprise",
+    quickSurpriseRunBtn: "Generate directed surprise",
     quickSurpriseCancelBtn: "Cancel",
-    quickSurpriseNeedStyle: "Choose the subgenre you listen to most so I can surprise you better.",
-    quickSurpriseGenerated: "Surprise generated with a new-track focus inside {style}.",
+    quickSurpriseNeedStyle: "Choose a subgenre so the surprise can move beyond the obvious.",
+    quickSurpriseGenerated: "Surprise ready: I looked for a new track inside {style}.",
     heroLogoLabel: "Back to home",
     heroLogoToast: "Back to Discover.",
-    heroTitle: "Find a track that fits right now",
-    heroDesc: "Discover electronic music by feel, not manual search. Sonic Search blends your swipes, subgenre, pulse, energy, and novelty to suggest tracks with context.",
+    heroTitle: "The right track for now",
+    heroDesc: "Set the moment, mark what you already know, and let Sonic Search bring a track with a reason, preview, and context.",
     tabDiscover: "Discover",
     tabFilters: "Filters",
     tabNews: "News",
@@ -17301,87 +19405,87 @@ const I18N = {
     tabAbout: "About",
     tabSupport: "Support",
     tabLegal: "Legal",
-    feedbackKicker: "Refinement",
-    feedbackHint: "Use quick signals so the radar separates what lands, what tires you out, and what you already know.",
+    feedbackKicker: "Learning",
+    feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Swipe discovery",
-    swipeHeroTitle: "Discover by swiping.",
-    swipeHeroHint: "Like, pass, or surprise. Details can wait.",
-    swipeDeckKicker: "Quick lanes",
-    swipeDeckTitle: "Choose a sound world",
-    swipeDeckHint: "Use this when you want to filter discovery by subgenre. The main screen stays free for like, pass, or surprise.",
+    swipeHeroTitle: "Listen, swipe, refine",
+    swipeHeroHint: "Cards move fast; the radar learns with them.",
+    swipeDeckKicker: "Discovery routes",
+    swipeDeckTitle: "Choose a sound direction",
+    swipeDeckHint: "Use a subgenre to open a more coherent sequence.",
     swipeStyleRailAria: "All available subgenre discovery lanes",
     swipeShowAllStyles: "Show all {count} styles",
     swipeShowFocusedStyles: "Show fewer styles",
     swipeKicker: "Track swipe",
     discoverySequence: "#{number}",
     heardTrackSequence: "Track heard #{number}",
-    swipeEmptyTitle: "Generate a recommendation",
-    swipeEmptyMeta: "Drag right if you like it or left if it missed.",
-    swipeHint: "Works with mouse or touch: drag the card and release.",
-    topSwipeEmptyTitle: "Ready to discover",
-    topSwipeEmptyMeta: "A fresh card, no briefing.",
-    topSwipeHint: "Like, pass, or ask for a surprise. Filters live in Filters; explanations, likes, and corrections stay out of the swipe.",
-    aboutKicker: "Why use it",
-    aboutTitle: "Sonic Search finds what big apps tend to miss",
-    aboutBadge: "Sommelier",
-    aboutIntro: "Instead of only searching for a track name, the app learns through swipe, blends subgenre, pulse, energy, and novelty, then explains why each recommendation appeared.",
+    swipeEmptyTitle: "Open the first card",
+    swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
+    swipeHint: "Drag with mouse or touch; release to save the signal.",
+    topSwipeEmptyTitle: "First card waiting for play",
+    topSwipeEmptyMeta: "Open the surprise, hear the preview, then swipe when it clicks.",
+    topSwipeHint: "The main flow stays light; filters and context live in the other tabs.",
+    aboutKicker: "What improves",
+    aboutTitle: "Discovery without blind search",
+    aboutBadge: "Radar",
+    aboutIntro: "Sonic Search combines moment, history, and feedback to explain why each track entered the radar.",
     aboutReasonOneKicker: "01",
-    aboutReasonOneTitle: "Contextual discovery",
-    aboutReasonOneText: "You do not need the exact name. Like, pass, or ask for surprise; the radar learns direction, energy, and familiarity.",
+    aboutReasonOneTitle: "Less typing, more listening",
+    aboutReasonOneText: "You do not need exact names: ask for surprise, listen, and answer with a swipe.",
     aboutReasonTwoKicker: "02",
-    aboutReasonTwoTitle: "Subgenre confidence",
-    aboutReasonTwoText: "When the signal is strong, the app shows the subgenre. When evidence is weak, it shows the music family and treats it as an estimate.",
+    aboutReasonTwoTitle: "Honest subgenre labels",
+    aboutReasonTwoText: "When the signal is strong, we show the subgenre; when it is not, we stay with the sound family.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Less repetition",
-    aboutReasonThreeText: "Your profile separates known artists, real discoveries, liked tracks, and rejected tracks so the app does not circle the obvious.",
+    aboutReasonThreeText: "Known names, discoveries, likes, and rejects become separate signals to avoid more of the same.",
     aboutReasonFourKicker: "04",
-    aboutReasonFourTitle: "Corrections improve the radar",
-    aboutReasonFourText: "If subgenre, BPM, image, or preview feels wrong, mark it. That lowers route confidence without confusing it with your musical taste.",
-    aboutFlowTitle: "How to use it in 30 seconds",
-    aboutFlowStepOne: "Tap Surprise and listen without overthinking.",
-    aboutFlowStepTwo: "Like or pass to move automatically.",
-    aboutFlowStepThree: "Open Filters only when you want a specific subgenre, BPM, or context.",
-    aboutFlowStepFour: "Review likes, rejects, and your music spirit in Profile.",
+    aboutReasonFourTitle: "Mistakes become tuning",
+    aboutReasonFourText: "Mark a weak subgenre, BPM, image, or preview so the radar corrects the next route.",
+    aboutFlowTitle: "How to use",
+    aboutFlowStepOne: "Tap Surprise and hear the preview.",
+    aboutFlowStepTwo: "Like, pass, or mark whether you already knew it.",
+    aboutFlowStepThree: "Open Filters when you want a specific subgenre, BPM, or context.",
+    aboutFlowStepFour: "Review likes, rejects, and your musical archetype in Profile.",
     aboutTrustTitle: "How to read confidence",
-    aboutTrustText: "High confidence combines source, player, BPM, and profile. Medium confidence can still be a good discovery. When fine classification is not safe, the app should say music family instead of selling false certainty.",
+    aboutTrustText: "High confidence combines source, player, BPM, and profile. When certainty is missing, the app uses the sound family instead of forcing a label.",
     swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
     quickKnownArtistQuestion: "Was {artist} already on your radar?",
-    quickKnownHint: "Tap before the next track to separate known names from real discoveries.",
+    quickKnownHint: "This separates repeats from real discoveries and improves the next card.",
     quickKnownPendingNext: "Before the next card: did you already know {artist}, or is it new?",
     quickKnownYes: "Already knew",
     quickKnownNo: "New to me",
-    primarySwipeHint: "Drag, like, or swap: the radar understands more when you react in the moment.",
+    primarySwipeHint: "Right saves. Left swaps.",
     swipeLike: "Like",
     swipePass: "Not for me",
-    swipeLikedNext: "Liked. I saved the signal and will tighten the radar if this lane keeps repeating.",
-    swipePassedNext: "Good, I removed that route and pulled a new card.",
+    swipeLikedNext: "Signal saved. I will pull more tracks in this direction without repeating too much.",
+    swipePassedNext: "That route left the queue. I pulled another card for an ear test.",
     swipeStyleDeckGenerated: "Card opened in {style}. Like or swap so I can calibrate your map.",
     swipeDeckNext: "Next card: moved from {from} into {to}.",
     swipeAnchorNext: "Subgenre respected: staying with {focus}. Next card in {next}.",
     swipeAffinityNext: "Radar tuned toward {focus}. Next card in {next}, inside the same lane or a close neighbor.",
     swipeLearningBadge: "{count} taste signals",
     swipeLearningLevelEmpty: "No taste history",
-    swipeLearningLevelEarly: "Radar learning",
-    swipeLearningLevelWarming: "Radar calibrated",
-    swipeLearningLevelGood: "Consistent profile",
-    swipeLearningLevelStrong: "Strong profile",
+    swipeLearningLevelEarly: "First signals coming in",
+    swipeLearningLevelWarming: "Preferences taking shape",
+    swipeLearningLevelGood: "Profile with a clear direction",
+    swipeLearningLevelStrong: "Strong taste signature",
     swipeLearningMilestone10: "Radar calibrated with {count} signals: I will weight your real taste more in the next picks.",
     swipeLearningMilestone20: "Profile is getting consistent with {count} signals: I will reduce repeats and look for sharper neighbors.",
     swipeLearningMilestone30: "Strong profile with {count} signals: recommendations now prioritize fine compatibility and safer discovery.",
-    feedbackLikeGroupTitle: "Save positive signal",
+    feedbackLikeGroupTitle: "Save good signal",
     feedbackCorrectGroupTitle: "Correct route",
     feedbackExploreGroupTitle: "Next step",
-    catalogStatsKicker: "Our discovery base",
+    catalogStatsKicker: "Discovery base",
     catalogStatsArtists: "indexed artists",
     catalogStatsTracks: "searchable tracks",
     catalogStatsStyles: "subgenres",
     catalogStatsLabels: "labels",
-    catalogStatsHealth: "{ratio} searchable tracks per indexed artist, combining audited data and dynamic subgenre expansion.",
-    dailyNewsKicker: "Daily News",
-    dailyNewsTitle: "Electronic music journal",
-    dailyNewsIntro: "A fresh electronic music radar prioritizing Brazil, with global context from specialist sources.",
+    catalogStatsHealth: "{ratio} searchable tracks per indexed artist.",
+    dailyNewsKicker: "Daily Radar",
+    dailyNewsTitle: "Electronic news radar",
+    dailyNewsIntro: "Updates from Brazil and the world, focused on scenes, artists, festivals, and dancefloors.",
     dailyNewsRefreshBtn: "Refresh",
     dailyNewsLoading: "Loading news...",
     dailyNewsProgressLabel: "Updating news radar",
@@ -17397,16 +19501,16 @@ const I18N = {
     dailyNewsUntitled: "Untitled news",
     dailyNewsNoSummary: "Open the story to read the full details.",
     supportKicker: "Support the project",
-    supportTitle: "Help Sonic Search grow",
-    supportIntro: "If the app helped you discover a track, you can send a tip to keep catalog, AI, and improvements running.",
+    supportTitle: "Support Sonic Search",
+    supportIntro: "Your support keeps the catalog, AI, and improvements moving.",
     supportBadge: "Tips",
     supportCustomAmount: "Custom amount",
     supportPixKicker: "Pix",
     supportPixTitle: "QR Code + copy-paste",
     supportPixReady: "Pix active",
     supportPixMissing: "Waiting for key",
-    supportPixHintReady: "Choose the amount, copy the Pix code, and paste it into your bank app. The key is also visible as an alternative.",
-    supportPixHintMissing: "Configure your Pix key in SUPPORT_PAYMENT_CONFIG to enable the real QR Code.",
+    supportPixHintReady: "Choose an amount and copy the Pix code.",
+    supportPixHintMissing: "Pix is not configured yet.",
     supportPixKeyLabel: "Pix key",
     supportCopyPixKey: "Copy key",
     supportCopyPix: "Copy Pix code",
@@ -17414,30 +19518,30 @@ const I18N = {
     supportCryptoTitle: "Bitcoin / Lightning",
     supportCryptoReady: "Crypto active",
     supportCryptoMissing: "Optional",
-    supportCryptoHintReady: "Use the QR or copy the address to send a crypto tip.",
-    supportCryptoHintMissing: "Configure a Bitcoin or Lightning address to enable crypto tips.",
+    supportCryptoHintReady: "Use the QR or copy the address.",
+    supportCryptoHintMissing: "Crypto is not configured yet.",
     supportCopyCrypto: "Copy crypto",
     supportCopying: "Copying...",
     supportCopied: "Copied.",
     supportMissingPayment: "Configure this support method before copying.",
-    supportLegalNote: "Tips are voluntary support for the project, not an investment or crypto purchase.",
+    supportLegalNote: "Voluntary project support.",
     legalHubKicker: "Legal notices",
     legalHubTitle: "Copyright, use, and trademarks",
-    legalHubIntro: "Sonic Search and its text, interface, curation, visual identity, ranking, recommendation logic, and original code belong to Pedro Freire / CBK Labs. All rights reserved.",
+    legalHubIntro: "Sonic Search is a Pedro Freire / CBK Labs product. Text, interface, curation, visual identity, and original code are all rights reserved.",
     legalCopyrightTitle: "Copyright",
-    legalCopyrightText: "You may not copy, resell, republish, scrape, clone, or commercially exploit the app, its interface, text, authored images, curation logic, or organized datasets without written permission.",
+    legalCopyrightText: "Do not copy, resell, clone, scrape, or commercially exploit the app, interface, curation, or organized datasets without written permission.",
     legalThirdPartyTitle: "Music and third parties",
-    legalThirdPartyText: "Songs, previews, covers, artist names, links, platforms, and third-party trademarks belong to their respective owners. Sonic Search is independent and does not claim an official partnership with Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple, or similar services.",
+    legalThirdPartyText: "Songs, previews, covers, artists, links, platforms, and trademarks belong to their owners, including Spotify, YouTube, Deezer, and SoundCloud. Sonic Search is independent from them.",
     legalUseTitle: "Permitted use",
-    legalUseText: "The app is a discovery and recommendation tool. Use official links to listen, buy, or support artists. Genre labels, music spirit results, and explanations are curatorial estimates, not official artist data.",
+    legalUseText: "Use official links to listen, buy, or support artists. Genres, archetype, and explanations are curatorial estimates.",
     legalPrivacyTitle: "Privacy and responsibility",
-    legalPrivacyText: "Your music profile may be saved on this device through local storage. External integrations and links opened outside Sonic Search follow their own policies. Tips are voluntary support, not an investment, return promise, or crypto purchase.",
-    legalDisclaimer: "This notice is an informational product-protection layer and does not replace a contract, trademark registration, or professional legal guidance.",
-    sectionKicker: "Search filters",
-    sectionHint: "Pick subgenre, BPM, energy and context when you want a more precise recommendation.",
+    legalPrivacyText: "Your profile may be saved on this device. External links and integrations follow their own policies. Tips are voluntary support.",
+    legalDisclaimer: "Informational notice; not legal advice.",
+    sectionKicker: "Precision when you want it",
+    sectionHint: "Open filters to guide the search without blocking discovery.",
     contextMomentKicker: "Listening moment",
-    contextMomentTitle: "What do you need music for now?",
-    contextMomentHint: "Each intention tunes energy, pulse, and sound family.",
+    contextMomentTitle: "What moment is this track for?",
+    contextMomentHint: "The moment tunes energy, pulse, and mood before the catalog search.",
     presetFocus: "Focus",
     presetStudy: "Study",
     presetRelax: "Relax",
@@ -17450,17 +19554,17 @@ const I18N = {
     presetNight: "Night",
     presetAfter: "After",
     presetPeak: "Peak",
-    precisionFiltersSummary: "Manual filters",
-    advancedFiltersSummary: "Fine-tune priorities",
-    recommendBtn: "Find track",
+    precisionFiltersSummary: "Refine by subgenre and BPM",
+    advancedFiltersSummary: "Signal weight",
+    recommendBtn: "Find my track",
     recommendBtnBusy: "Searching...",
-    rerollBtn: "Another in this target",
-    surpriseBtn: "Surprise me",
-    adaptiveSurpriseBtn: "Profile surprise",
-    clearFiltersBtn: "Clear filters",
-    resetAppBtn: "New user (full reset)",
+    rerollBtn: "Another similar one",
+    surpriseBtn: "Surprise without filters",
+    adaptiveSurpriseBtn: "Surprise by profile",
+    clearFiltersBtn: "Clear all",
+    resetAppBtn: "Reset profile",
     resetAppConfirm: "This will erase your local history and restart the app as a new user. Do you want to continue?",
-    generatedNow: "Generated now",
+    generatedNow: "Found now",
     freeStyle: "free style",
     freeContext: "free context",
     freeEnergy: "free energy",
@@ -17483,6 +19587,7 @@ const I18N = {
     keyPrefix: "Key",
     catalogPrefix: "Catalog",
     labelPrefix: "Label",
+    trackDataPrefix: "Data",
     suggestedSubgenre: "Suggested subgenre",
     styleInfoTitle: "Subgenre quick guide",
     styleInfoBpmLabel: "Typical range",
@@ -17493,10 +19598,10 @@ const I18N = {
     genreGuideTitle: "About the subgenre",
     genreGuideText: "In plain words: {summary}",
     bpmFallbackRelaxed: "This track uses the subgenre's typical BPM range to keep new options flowing without inventing an exact BPM.",
-    defaultStats: "No feedback yet.",
-    stats: "Song likes: {likedSongs} | Artist likes: {likedArtists} | Discovery likes: {likedDiscoveries} | Already knew: {alreadyKnew} | Skipped: {skipped} | Artists discovered: {discoveredInApp} | Tracks shown: {tracksPresented} | Ratings: {ratingCount} | Avg: {ratingAvg}",
+    defaultStats: "Start with one track: your signals will show up here.",
+    stats: "Liked tracks: {likedSongs} | Liked artists: {likedArtists} | Discoveries: {likedDiscoveries} | Already knew: {alreadyKnew} | Misses: {skipped} | Ratings: {ratingCount} | Avg: {ratingAvg}",
     ratingTitle: "Rate this recommendation",
-    ratingHint: "1 star = liked a little • 5 stars = loved it",
+    ratingHint: "1 = weak • 5 = nailed it",
     ratingAwaiting: "Tap to rate",
     ratingCelebration: "Tap to rate",
     ratingAriaGroup: "Star rating",
@@ -17504,14 +19609,14 @@ const I18N = {
     ratingSavedHint: "{label} • saved with {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 for {song}.",
     ratingSavedToast: "{label}: {stars}/5 saved.",
-    suggestionQueueTitle: "Ready deck: 25 tracks to swipe",
-    suggestionQueueHint: "Without a selected subgenre, I mix different families. With a subgenre selected, the queue stays focused there or in the closest neighbor.",
+    suggestionQueueTitle: "Ready deck: 25 tracks to decide by swipe",
+    suggestionQueueHint: "More options with the same intent.",
     queueNow: "Now",
     queueNext: "Next",
     queueUse: "Play this",
     queueActivated: "Queue active: now playing {song}.",
-    tasteTuningTitle: "Tune your taste",
-    tasteTuningHint: "Refine the next recommendation by feel, without technical filters.",
+    tasteTuningTitle: "Change direction",
+    tasteTuningHint: "Adjust the next suggestion by feel without starting over.",
     tasteTuneHeavier: "Heavier",
     tasteTuneMelodic: "More melodic",
     tasteTuneUnderground: "More underground",
@@ -17519,34 +19624,34 @@ const I18N = {
     tasteTuneFamiliar: "More familiar",
     tasteTuneWeirder: "Weirder",
     tasteTuneRunning: "Tuning curation: {label}.",
-    tasteTuneGenerated: "Tune applied: {label}. Now testing a new direction for your taste.",
-    tasteTuneFallback: "I could not find a strong option for that tune right now. Kept your current recommendation.",
-    recommendationWhyTitle: "Why this track",
-    recommendationWhyStyle: "Vibe: {style}",
+    tasteTuneGenerated: "Direction changed: {label}. The next card already tests that feel.",
+    tasteTuneFallback: "I could not find a worthy track for that shift right now. I kept the current one instead of forcing it.",
+    recommendationWhyTitle: "Why it entered the radar",
+    recommendationWhyStyle: "Detected vibe: {style}",
     recommendationWhyBpm: "Pulse: {bpm}",
     recommendationWhyNovelty: "Discovery: {status}",
-    recommendationWhyKnown: "known artist",
+    recommendationWhyKnown: "already on your radar",
     recommendationWhyNew: "new to you",
     recommendationWhyOrigin: "Scene: {origin}",
-    recommendationWhyStrongFit: "Good bet: strong signals",
-    recommendationWhyTrustedSource: "Stronger source signal",
-    recommendationWhyProfileSignal: "Fits your profile",
+    recommendationWhyStrongFit: "Good bet: aligned signals",
+    recommendationWhyTrustedSource: "Stronger source/player signal",
+    recommendationWhyProfileSignal: "Matches your profile",
     recommendationTrustLabel: "Confidence",
     recommendationTrustChip: "Confidence {score}%",
-    recommendationTrustReasonHigh: "High: source, player, pulse, and profile are aligned.",
-    recommendationTrustReasonMedium: "Good: strong musical signals, still with room to calibrate.",
-    recommendationTrustReasonLow: "Exploratory: I brought it as a test, not as absolute certainty.",
+    recommendationTrustReasonHigh: "High: source, player, pulse, and history tell the same story.",
+    recommendationTrustReasonMedium: "Good: signals are consistent, but the profile is still opening up.",
+    recommendationTrustReasonLow: "Exploratory: worth hearing as a test, not a certainty.",
     recommendationTrustReasonTempoAmbiguous: "Good, but tempo is ambiguous: in breaks the grid can double the felt pulse.",
     recommendationWhyFreshArtistSentence: "I also kept it away from the obvious names, so it feels like real discovery instead of more of the same.",
     recommendationWhyProfilePositive: "Your recent profile signals point in this direction.",
     recommendationWhySourcePositive: "The track has stronger source, pulse, or player signals, so it enters with more confidence.",
-    recommendationWhyTextStrong: "I picked it because the signals line up: {style}, {bpm} pulse, {energy} energy, and a better source to test without pretending certainty.",
+    recommendationWhyTextStrong: "I picked this because the signals line up: {style}, {bpm} pulse, {energy} energy, and a stronger source to test with confidence.",
     recommendationWhyTextContext: "For {context}, it delivers {energy} energy and sits near {style}. If fine classification is not confirmed, I treat it as a sound-family lane.",
-    recommendationWhyTextDiscovery: "This is a discovery bet: {style}, {energy} energy, and enough signal to hear. If it misses, your swipe corrects the next route.",
+    recommendationWhyTextDiscovery: "This is a discovery bet: {style}, {energy} energy, and enough signal to hear. If it misses, your swipe recalibrates the next route.",
     djModeTitle: "DJ Mode",
-    djModeHint: "5-track journey: open, build, peak, twist, close.",
-    djModeGenerateBtn: "Create journey",
-    djModeStatusReady: "Generate a recommendation or choose a style to create a journey.",
+    djModeHint: "Create a mini journey: open, build, hit, close.",
+    djModeGenerateBtn: "Create mini journey",
+    djModeStatusReady: "Generate a recommendation or choose a style to build a mini journey.",
     djModeStatusGenerated: "Journey ready for {style}.",
     djModeStepWarmup: "Warm-up",
     djModeStepBuild: "Build",
@@ -17565,9 +19670,9 @@ const I18N = {
     voiceMiniLayerOn: "Armed",
     voiceMiniLayerOff: "Free",
     voiceMiniLayerDisabled: "Record voice",
-    artistHubIntro: "A short read on who the artist is, where the sound comes from, and whether it is worth digging deeper.",
+    artistHubIntro: "Bio, label, and links to continue the discovery.",
     discogsArtistTitle: "Full bio on Discogs",
-    discogsArtistHint: "Open the artist profile on Discogs to see biography, aliases, and full discography.",
+    discogsArtistHint: "See bio, aliases, and full discography.",
     discogsArtistLink: "Find artist on Discogs",
     discogsArtistOpen: "Open Discogs profile",
     artistBioAiSource: "Bio refined with AI support and sources: {sources}.",
@@ -17577,14 +19682,14 @@ const I18N = {
     trackAiRefreshBtn: "Refresh insight",
     trackAiRefreshBusy: "Refreshing...",
     trackAiRefreshDone: "Refreshed",
-    trackAiLoading: "Analyzing your current track and preparing a quick read...",
+    trackAiLoading: "Preparing a quick read...",
     trackAiApiSource: "Insight generated by real-time AI.",
     trackAiLocalSource: "Sonic Search read based on the sound, context, and your history.",
-    trackAiFallback: "This track seems to fit your moment. Play the first minute: if your body follows, save it; if not, swap and I will adjust the route.",
+    trackAiFallback: "Play the first minute. If it connects, save it; if not, swap.",
     trackAiUpdatedToast: "AI insight updated.",
     voiceLabKicker: "Quick studio",
-    voiceLabTitle: "Build a mini track in seconds",
-    voiceLabHint: "A simple flow for making an electronic loop: pick the mood, press play, adjust layers, and save the idea.",
+    voiceLabTitle: "Build a playable loop in seconds",
+    voiceLabHint: "Pick a vibe, hit play, adjust layers, and download.",
     voiceEffectsTitle: "Voice effect",
     voiceEffectRobot: "Robot",
     voiceEffectChipmunk: "Funny",
@@ -17600,7 +19705,7 @@ const I18N = {
     voicePlayBtn: "Play effect",
     voiceResetBtn: "Clear",
     voiceDownloadBtn: "Download recording",
-    voiceReady: "Ready to record.",
+    voiceReady: "Mic on standby. Record only if you want your voice in the loop.",
     voiceRecording: "Recording... {seconds}s",
     voiceRecorded: "Voice ready. Choose an effect or turn on the Voice layer in the loop.",
     voiceNeedRecording: "Record a voice to use this layer.",
@@ -17609,16 +19714,16 @@ const I18N = {
     voicePlaying: "Playing with effect: {effect}.",
     voiceCleared: "Recording cleared.",
     voiceMiniEyebrow: "Simple beat maker",
-    voiceMiniTitle: "Pick a vibe. Press play.",
-    voiceMiniHint: "The mini track starts ready to play. Then toggle layers, move the BPM, and download the idea.",
+    voiceMiniTitle: "Pick the vibe. Hit play.",
+    voiceMiniHint: "The loop starts playable. Adjust layers, BPM, and export.",
     voiceStudioStepOne: "Pick the mood",
-    voiceStudioStepTwo: "Press play",
+    voiceStudioStepTwo: "Hit play",
     voiceStudioStepThree: "Adjust layers",
     voiceStudioSessionStateLabel: "State",
     voiceStudioSessionLayersLabel: "Layers",
     voiceStudioSessionLengthLabel: "Export",
     voiceStudioSessionFormatLabel: "File",
-    voiceStudioStateReady: "Ready",
+    voiceStudioStateReady: "Standby",
     voiceStudioStatePlaying: "Playing",
     voiceStudioStateRecording: "Recording voice",
     voiceStudioStateRendering: "Exporting",
@@ -17632,14 +19737,14 @@ const I18N = {
     voiceMiniPlayBtn: "Play mini track",
     voiceMiniStopBtn: "Stop loop",
     voiceMiniExportBtn: "Download mini track",
-    voiceMiniPresetTitle: "Pick the idea mood",
+    voiceMiniPresetTitle: "Idea mood",
     voiceMiniMorphTitle: "Macro moves",
     voiceMiniMorphFloor: "More floor",
     voiceMiniMorphDeep: "Deeper",
     voiceMiniMorphWeird: "Weirder",
     voiceMiniMorphOpen: "More open",
     voiceMiniMorphApplied: "Move applied: {move}. The next bar changes direction.",
-    voiceMiniLayerTitle: "Toggle layers",
+    voiceMiniLayerTitle: "Layers",
     voiceMiniRecipeLabel: "Current recipe",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} active.",
@@ -17648,7 +19753,7 @@ const I18N = {
     voiceMiniInsightEnergyLabel: "Energy",
     voiceMiniInsightShapeLabel: "Shape",
     voiceMiniInsightMoveLabel: "Next move",
-    voiceMiniInsightTitlePeak: "Floor ready",
+    voiceMiniInsightTitlePeak: "Floor pressure on",
     voiceMiniInsightTitleGroove: "Groove forming",
     voiceMiniInsightTitleDeep: "Deep texture",
     voiceMiniInsightTitleExperimental: "Mutant idea",
@@ -17703,7 +19808,7 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
     voiceMiniSelectChanged: "{control}: {value}. The next bar uses this feel.",
-    voiceMiniReady: "Ready: pick a mood or tap Generate idea.",
+    voiceMiniReady: "Choose a mood or generate an idea to hear the first loop.",
     voiceMiniPlaying: "Loop locked in time. Tap layers to arm or remove them on the next bar.",
     voiceMiniDone: "Loop stopped. Play the mini track or tap a pad to start again.",
     voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
@@ -17723,7 +19828,7 @@ const I18N = {
     voiceMiniPresetHouse: "Organic house",
     voiceMiniPresetDnb: "Liquid DnB",
     voiceMiniPresetDarkprog: "Dark prog",
-    summaryPanelTitle: "Your taste map",
+    summaryPanelTitle: "Your music map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
     summaryDiscoveredCountLabel: "Artists discovered in app",
@@ -17737,11 +19842,11 @@ const I18N = {
     summaryAchievementFiveStarMany: "You rated {count} tracks with 5 stars.",
     summaryAchievementTierA: "First signal",
     summaryAchievementTierB: "Gold curator",
-    summaryAchievementTierC: "Magnetic sommelier",
+    summaryAchievementTierC: "Magnetic curator",
     summaryAchievementTierD: "Spectrum legend",
     summaryAchievementTierProgress: "Current tier: {tier}. {remaining} more 5★ tracks to reach {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Max tier reached: {tier}.",
-    summaryShareStoryBtn: "Share status to Stories",
+    summaryShareStoryBtn: "Share to Stories",
     shareLinkBtn: "Copy share link",
     shareSpiritLinkBtn: "Copy archetype link",
     shareLinkCopying: "Copying link...",
@@ -17751,33 +19856,50 @@ const I18N = {
     summaryShareStoryTitle: "My music status",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} liked tracks • {artists} liked artists • {ratings} ratings • avg {average}",
+    apiHealthKicker: "APIs",
+    apiHealthTitle: "Integration health",
+    apiHealthIntro: "Live status for external sources and owned memory.",
+    apiHealthRefreshBtn: "Refresh",
+    apiHealthLoading: "Checking integrations...",
+    apiHealthUpdated: "Integrations checked: {active} active, {attention} need attention.",
+    apiHealthUnavailable: "I could not check integrations right now.",
+    apiHealthActive: "active",
+    apiHealthDisabled: "disabled",
+    apiHealthNeedsCredentials: "needs key",
+    apiHealthUnknown: "unknown",
+    apiHealthNoCache: "local cache",
+    apiHealthCacheSeconds: "cache {seconds}s",
+    apiHealthDailyLimit: "limit {limit}/day",
+    apiHealthMissingKey: "needs owned credentials",
+    apiHealthReady: "ready in backend",
+    apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Radar library",
-    profileLibraryTitle: "Tracks that shaped your taste",
-    profileLibraryHint: "Liked and rejected tracks live here, so you can replay, review your map, and keep the main swipe clean.",
+    profileLibraryTitle: "Tracks that taught the radar",
+    profileLibraryHint: "Likes and rejects stay here so you can review them and the app can avoid repeats.",
     profileBackupKicker: "Portable local profile",
     profileBackupTitle: "Carry your music map with you",
-    profileBackupHint: "The app saves your taste on this device. Download a copy to return in another browser whenever you want.",
-    profileBackupStatusEmpty: "Your local map is ready. Like tracks to create signals and download a copy whenever you want.",
+    profileBackupHint: "Download a copy to use in another browser.",
+    profileBackupStatusEmpty: "Your local map lives in this browser.",
     profileBackupStatus: "{signals} signals kept on this device • last copy: {date}",
     profileBackupStatusNever: "not saved yet",
     profileBackupExport: "Save profile copy",
     profileBackupImportSummary: "I have a saved profile",
-    profileBackupImportHint: "Use this only if you changed phones or opened the app in another browser.",
+    profileBackupImportHint: "Use this to restore your local map.",
     profileBackupImport: "Bring profile here",
     profileBackupExported: "Profile copy saved.",
     profileBackupImported: "Profile brought to this device.",
     profileBackupInvalid: "I could not read this profile file.",
     profileBackupImportConfirm: "Bringing this profile will replace the data saved on this device. Continue?",
     summaryLikedTracksTitle: "Liked tracks",
-    summaryLikedTracksHint: "Everything you like is saved here so you can listen again later.",
+    summaryLikedTracksHint: "Saved to hear again.",
     summaryLikedTracksClear: "Clear",
-    summaryLikedTracksEmpty: "No liked tracks yet. Tap Like or swipe right to save one here.",
+    summaryLikedTracksEmpty: "No saved tracks yet. Like or swipe right when one hits the mood.",
     summaryLikedTracksCleared: "Liked track history cleared.",
     summaryLikedTrackRemoved: "Track removed from liked tracks.",
-    summaryDislikedTracksTitle: "Disliked tracks",
-    summaryDislikedTracksHint: "Everything you discard is saved here so you can review your music map and avoid repeats.",
+    summaryDislikedTracksTitle: "Passed tracks",
+    summaryDislikedTracksHint: "Rejects help the radar stop insisting.",
     summaryDislikedTracksClear: "Clear",
-    summaryDislikedTracksEmpty: "No disliked tracks yet. Tap Pass or swipe left to save one here.",
+    summaryDislikedTracksEmpty: "No passed tracks yet. Pass or swipe left when the route misses.",
     summaryDislikedTracksCleared: "Disliked track history cleared.",
     summaryDislikedTrackRemoved: "Track removed from disliked tracks.",
     summaryDislikedTrackSaved: "Discarded in profile",
@@ -17798,26 +19920,26 @@ const I18N = {
     summaryDislikedArtistsTitle: "Artists you don't like",
     quizHubTitle: "Knowledge challenges",
     quizHubBadge: "Fast evolution",
-    quizHubHint: "Skipped the challenge bubble? It stays saved here so you can build knowledge whenever you want.",
+    quizHubHint: "Challenges stay saved here.",
     quizHubProgressEmpty: "No challenge unlocked yet.",
-    summaryNoData: "No data",
+    summaryNoData: "No read yet",
     summaryStatusNew: "New",
     summaryStatusExploring: "Exploring",
     summaryStatusActive: "Active",
     summaryStatusAdvanced: "Advanced curation",
-    summaryEmptyKnown: "No known artists added yet.",
-    summaryEmptyLiked: "No liked artists yet.",
-    summaryEmptyDisliked: "No disliked artists yet.",
+    summaryEmptyKnown: "Mark known artists so the app can dodge the obvious.",
+    summaryEmptyLiked: "Save artists when you want to reinforce that direction.",
+    summaryEmptyDisliked: "Rejected artists appear here so the radar stops insisting.",
     listenersSubtitle: "{count} community listeners in the last hours (local feed).",
     topListenersTitle: "Top community listeners",
     topListenersSubtitle: "Who listened to {style} the most in the last 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} points",
     topListenerPlays: "{plays} plays",
-    previewSearching: "Searching track preview...",
-    previewValidated: "Preview validated with high confidence. Are you enjoying what you're listening to?",
-    previewLoaded: "Preview loaded with good confidence. Are you enjoying what you're listening to?",
-    previewReady: "Preview ready. Press play to listen and rate.",
+    previewSearching: "Looking for a playable preview...",
+    previewValidated: "Preview validated with high confidence. Did the sound connect?",
+    previewLoaded: "Preview loaded with good confidence. Did the sound connect?",
+    previewReady: "Preview ready. Press play and answer by ear.",
     previewYoutubeInlineHint: "YouTube player is available below to watch directly in the app.",
     previewYoutubeOptionalHint: "If you want to watch inside the app, open the YouTube player below.",
     previewYoutubeOpenInlineBtn: "Open player in app",
@@ -17836,8 +19958,24 @@ const I18N = {
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
     previewSoundcloudFallback: "Audio preview opened through SoundCloud. If it does not start by itself, tap the player.",
     previewBandcampFallback: "Preview opened through a verified Bandcamp source. If it does not start by itself, tap the player.",
-    previewUnavailable: "Preview unavailable for this track. Use Spotify/YouTube/SoundCloud and tell me if you liked it.",
-    previewUnavailableWithLinks: "Preview unavailable for this track. Use {platforms} and tell me if you liked it.",
+    previewUnavailable: "I could not find a safe preview here. Use Spotify, YouTube, or SoundCloud to listen.",
+    previewUnavailableWithLinks: "I could not find a safe preview here. Use {platforms} to listen.",
+    radioBrowserKicker: "Subgenre radio",
+    radioBrowserTitle: "Tune into {style}",
+    radioBrowserIdle: "Load public stations near {style}.",
+    radioBrowserLoadBtn: "Find radios",
+    radioBrowserRefreshBtn: "Refresh radios",
+    radioBrowserLoadingBtn: "Searching...",
+    radioBrowserLoading: "Searching public stations for {style}...",
+    radioBrowserFound: "{count} stations found. Pick one to play.",
+    radioBrowserEmpty: "I could not find a reliable public station for this cut right now.",
+    radioBrowserAttribution: "Directory data: Radio Browser. Streams belong to their respective stations.",
+    radioBrowserPlayStation: "Play radio {station}",
+    radioBrowserUnnamed: "Unnamed station",
+    radioBrowserPublicStation: "Public radio",
+    radioBrowserPlaying: "Playing {station}.",
+    radioBrowserReady: "{station} is ready. Press play if the browser blocked it.",
+    radioBrowserStationUnavailable: "This station is not playable right now. Try another.",
     spotifyUnverified: "Spotify link is not fully verified yet: opening an approximate search for this track.",
     youtubeUnverified: "YouTube link not verified yet to avoid opening the wrong track.",
     soundcloudUnverified: "SoundCloud link not verified yet to avoid opening the wrong track.",
@@ -17862,60 +20000,65 @@ const I18N = {
     artistImageLoaded: "Real artist photo",
     artistImageFallback: "Photo not found; showing artist identity.",
     artistSocialsTitle: "Artist social links",
-    artistSocialsHint: "Links open platform search by artist name.",
+    artistSocialsHint: "Quick artist-name search.",
+    lastfmArtistTitle: "Last.fm signals",
+    lastfmArtistHint: "Tags, strong tracks, and nearby artists when Last.fm is enabled.",
+    lastfmArtistHintWithListeners: "{listeners} Last.fm listeners. Use this as a complementary signal, not a single source of truth.",
+    lastfmTopTracksTitle: "Strong tracks",
+    lastfmSimilarArtistsTitle: "Nearby artists",
     warmupCatalogToast: "Music base refined in the background.",
-    eventsPrompt: "Open More info or like an artist to load upcoming events.",
+    eventsPrompt: "Like an artist to see events.",
     eventsLoading: "Searching upcoming events for {artist}...",
-    searchingCatalog: "Searching catalog and building recommendation...",
-    catalogGenerating: "Preparing a reliable route in {style}...",
-    recommendationGenerated: "Recommendation generated from your selected preferences.",
-    exploratoryGenerated: "No filters selected: generated an exploratory recommendation.",
+    searchingCatalog: "Reading catalog, context, and history...",
+    catalogGenerating: "Building a reliable route in {style}...",
+    recommendationGenerated: "Track ready to hear.",
+    exploratoryGenerated: "Exploratory bet ready to hear.",
     styleExhaustedFallback: "I did not find new artists in {from} right now. I switched to {to} to keep discovery without repeats.",
     surpriseCrossGenreGenerated: "Refinement active: moved from {from} and opened a new route in {to}.",
     surpriseAdaptiveGenerated: "Profile refinement: your signals pointed to a new route in {to}, moving out of {from}.",
     surpriseAdaptiveNeedSignals: "Give me a few likes/dislikes first so I can learn your profile and surprise you better.",
     rerollNoOption: "No other track found for this exact style at the moment.",
     rerollGenerated: "New suggestion generated with artist/track rotation in the same profile.",
-    clearFiltersFeedback: "Filters cleared. You can run a new exploratory search.",
+    clearFiltersFeedback: "Filters cleared.",
     noUnknownOption: "I could not find another unknown option for this profile right now.",
-    swappedUnknown: "Done. Switched to a similar suggestion you probably do not know yet.",
-    toastFoundNewArtist: "Great. I searched another artist for you to discover.",
-    newArtistDetected: "Nice. I marked this as a new discovery and saved the signal to your profile.",
-    toastNewDiscovery: "Great! New discovery unlocked.",
-    prioritizeSimilar: "Perfect. I will prioritize similar sounds and load artist events.",
-    toastShowMoreLikeThis: "Great that you liked it. I will show more in this direction.",
-    swappedNow: "Swapped now with a new search in the same profile, without repeating track/artist.",
-    toastSwapped: "No problem. I switched to another track now.",
-    celebrationActivated: "Celebration on. {song} is now in your favorite discoveries.",
-    toastFavoritedDiscovery: "Excellent pick! Discovery favorited.",
-    refinedAfterNo: "I switched the track based on your feedback to refine curation.",
-    toastTryBetter: "Got it, I will try a better recommendation.",
-    songAddedProfile: "Nice. Track {song} was added to your profile.",
-    toastSongLiked: "Nice! Track liked.",
-    artistFavorited: "Perfect. Artist {artist} was marked as favorite.",
-    toastArtistSaved: "Artist saved as favorite.",
-    artistBlockedFromRecommendations: "Done. Artist {artist} will no longer be recommended to you.",
-    toastArtistBlocked: "Artist blocked from recommendations.",
+    swappedUnknown: "Swapped to a nearby track outside the names already marked.",
+    toastFoundNewArtist: "New artist on the route. Time for an ear test.",
+    newArtistDetected: "Discovery logged. This name was outside the known zone.",
+    toastNewDiscovery: "New discovery entered the map.",
+    prioritizeSimilar: "That path gained weight. I will pull neighboring tracks and open artist context.",
+    toastShowMoreLikeThis: "Positive signal saved: more of this pressure comes next.",
+    swappedNow: "Swapped without repeating artist or track inside this profile.",
+    toastSwapped: "Route passed. New track on the table.",
+    celebrationActivated: "{song} became a favorite discovery in your map.",
+    toastFavoritedDiscovery: "Discovery saved as a favorite.",
+    refinedAfterNo: "Your no adjusted the route. The next search already avoids that path.",
+    toastTryBetter: "Route recalibrated. I will look for a tighter fit.",
+    songAddedProfile: "{song} now weighs into your next recommendations.",
+    toastSongLiked: "Track saved to the map.",
+    artistFavorited: "{artist} gained weight in your map.",
+    toastArtistSaved: "Artist saved as a reference.",
+    artistBlockedFromRecommendations: "{artist} left the next routes.",
+    toastArtistBlocked: "Artist removed from the radar.",
     enableDiscoveryMode: "Enable discovery mode to receive a new artist.",
-    likedDiscovery: "Great, you liked discovering {artist}.",
-    toastDiscoveryLiked: "Great! Discovery liked.",
-    discoveryKnown: "Noted. I will search for even less obvious names next.",
-    toastDiscoveryKnown: "Noted. I will deepen upcoming discoveries.",
-    previewIssueLearned: "Understood. This looks like a preview/playback issue. I will prioritize next tracks with more reliable players.",
-    toastPreviewIssueLearned: "Adjusted. I will avoid weak preview candidates.",
-    styleIssueLearned: "Understood. I will treat this track as suspicious classification and search a more precise lane.",
-    bpmIssueLearned: "Noted. I will lower confidence in this BPM and prioritize more verified pulse data.",
-    imageIssueLearned: "Good catch. I will reduce trust in this image and prefer safer visual sources.",
-    toastRecommendationIssueLearned: "Issue marked. The radar is more strict now.",
-    skipAdjusted: "Received. I rebuilt the search and adjusted your next match from your feedback.",
-    toastSkipAdjusted: "Done. Recommendation adjusted from your feedback.",
+    likedDiscovery: "{artist} entered as a discovery worth following.",
+    toastDiscoveryLiked: "Discovery reinforced in the map.",
+    discoveryKnown: "That name was already known. I will dig deeper next.",
+    toastDiscoveryKnown: "Known marked. Next cards get less obvious.",
+    previewIssueLearned: "Preview failure marked. I will raise the weight of more reliable players.",
+    toastPreviewIssueLearned: "Weak preview moved down in priority.",
+    styleIssueLearned: "Subgenre challenged. I will treat this track with more caution.",
+    bpmIssueLearned: "Pulse challenged. Next picks need more reliable BPM.",
+    imageIssueLearned: "Image challenged. I will prefer safer visual sources.",
+    toastRecommendationIssueLearned: "Correction saved: this route got stricter.",
+    skipAdjusted: "Pass received. I recalculated the next match from that no.",
+    toastSkipAdjusted: "Your pass already shaped the next pick.",
     catalogUpdateProgress: "Refining {style} in the background.",
-    searchOverlayTitle: "Searching recommendation",
+    searchOverlayTitle: "Finding the right track",
     searchOverlayStage: "Step {current} of {total}",
-    searchOverlayPreparing: "Reading intent, energy, BPM, and known artists...",
-    searchOverlayCatalog: "Scanning catalog and checking reliable tracks...",
-    searchOverlayGenerating: "Matching profile, subgenre, and new discovery...",
-    searchOverlayFinishing: "Polishing the match and preparing playback...",
+    searchOverlayPreparing: "Reading your moment and history...",
+    searchOverlayCatalog: "Checking catalog routes...",
+    searchOverlayGenerating: "Matching profile, novelty, and confidence...",
+    searchOverlayFinishing: "Preparing preview and context...",
     newArtistsBtn: "Find new artists (< 2 years)",
     newArtistsTitle: "New artists in this subgenre",
     newArtistsSelectStyle: "Choose a subgenre to search for new artists.",
@@ -17930,11 +20073,11 @@ const I18N = {
     catalogFallbackUsingLocal: "Partial coverage in {style}. I used a reliable local route while the base keeps expanding.",
     catalogFallbackSearching: "Partial coverage in {style}. Searching for stronger signals before recommending...",
     spiritPanelTitle: "Your musical archetype",
-    spiritIntro: "Every 10 liked songs, your musical archetype is reviewed.",
+    spiritIntro: "10 likes reveal your archetype.",
     spiritBadge: "Archetype unlocked",
-    spiritAvatarAlt: "Spectral musical archetype entity {name}",
-    spiritProgressLocked: "Liked songs: {current}/{target}. {remaining} to reveal your archetype.",
-    spiritProgressUnlocked: "Profile consolidated with {current} liked songs.",
+    spiritAvatarAlt: "Electronic archetype bust {name}",
+    spiritProgressLocked: "Liked tracks: {current}/{target}. {remaining} to reveal your archetype.",
+    spiritProgressUnlocked: "Profile consolidated with {current} liked tracks.",
     spiritUnlockedToast: "Archetype revealed: {name}",
     spiritUnlockedFeedback: "Your musical archetype has been revealed: {name}.",
     spiritShiftedFeedback: "Your musical archetype evolved to: {name}.",
@@ -17944,7 +20087,7 @@ const I18N = {
     spiritInsightTitle: "Archetype calibration",
     spiritInsightLockedStatus: "Forming",
     spiritInsightUnlockedStatus: "Active",
-    spiritInsightLockedText: "{remaining} more song likes to reveal your archetype. I am reading style, energy, and feedback.",
+    spiritInsightLockedText: "{remaining} more track likes to reveal your archetype.",
     spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
     spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
     spiritInsightSignalScore: "{label}: signal {score}",
@@ -17968,7 +20111,7 @@ const I18N = {
     spiritVitalNextDetailUnlocked: "Use filters or swipe to test this path.",
     spiritSpotlightTitle: "Archetype track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
-    spiritSpotlightHintPredicted: "High-affinity pick for your current profile.",
+    spiritSpotlightHintPredicted: "The best track for your profile appears here.",
     spiritSpotlightHintFallback: "Track selected to represent your archetype right now.",
     spiritSpotlightNone: "No track candidate yet. Generate a new recommendation to refine matching.",
     spiritSpotlightFeedback: "Archetype track: {song} • {artist}.",
@@ -17996,7 +20139,7 @@ const I18N = {
     spiritCollectibleShareNativeDone: "Share sheet opened. Choose Instagram Stories in the app list.",
     spiritCollectibleShareFallback: "I could not open native sharing. Use Download image only if you want to post manually.",
     spiritCollectibleShareCanceled: "Share canceled.",
-    spiritCollectibleShareCaption: "My musical archetype on Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "My musical archetype on Sonic Search: {spirit}. #SonicSearch #ElectronicMusic",
     spiritCollectibleShareStatusLine: "Status {status} | {songs} liked tracks | {shown} shown | Already knew {known}",
     spiritCollectibleShareStoryTitle: "My music status",
     spiritCollectibleGenerating: "Generating your archetype artwork...",
@@ -18024,67 +20167,67 @@ const I18N = {
     spiritCollectibleErrorApiPrefix: "Image API failure:",
     spiritCollectibleErrorApiStatus: "Image API failure (HTTP {status}). Try generating again.",
     spiritRankUnlocked: "Archetype unlocked",
-    spiritRankNovice: "Novice music sommelier",
-    spiritRankResident: "Resident music sommelier",
-    spiritRankMaster: "Master music sommelier"
+    spiritRankNovice: "Novice curator",
+    spiritRankResident: "Resident curator",
+    spiritRankMaster: "Master curator"
   },
   es: {
     introKicker: "Pre-show sensorial",
     introTitle: "Entra en la frecuencia",
-    introDesc: "Antes de elegir idioma, vive una apertura animada con frases psicodelicas en movimiento.",
-    introImpact: "Tu oido empieza a leerse desde el primer pulso.",
-    introContinueBtn: "Comenzar ahora",
+    introDesc: "Una apertura rápida para encender el oído antes del primer descubrimiento.",
+    introImpact: "El primer pulso ya pone el radar en movimiento.",
+    introContinueBtn: "Entrar a Sonic Search",
     audioOn: "Sonido activo",
     audioOff: "Sonido inactivo",
     audioStart: "Activar sonido",
     audioUnavailable: "Sonido no disponible",
     audioActivateHint: "Toca la pantalla una vez para habilitar audio en el navegador.",
     volumeLabel: "Volumen",
-    langKicker: "Elige tu idioma",
-    langTitle: "Selecciona tu idioma",
-    langDesc: "Elige el idioma para toda la experiencia de la app.",
-    appSlogan: "Amamos la música",
-    appMission: "Cada me gusta, cambio y “ya conocía” enseña al radar a escuchar contigo.",
+    langKicker: "Antes de empezar",
+    langTitle: "Elige tu idioma",
+    langDesc: "El radar adapta textos, botones y explicaciones.",
+    appSlogan: "Descubrimiento sin ruido",
+    appMission: "Tu feedback afina cada próxima pista.",
     usageGuideKicker: "Guía rápida",
-    usageGuideTitle: "Cómo aprovechar mejor Sonic Search",
-    usageGuideDesc: "Usa la app como un amigo de pista: marca el clima, escucha la apuesta y responde sin pensarlo demasiado.",
-    usageGuideStep1Title: "Empieza por el momento",
-    usageGuideStep1Text: "Elige Foco, Trabajo, Entreno, After o Peak para que la app cree un punto de partida musical.",
-    usageGuideStep2Title: "Di a quién ya conoces",
-    usageGuideStep2Text: "Agrega artistas conocidos para que la app salga de lo obvio y busque descubrimiento real.",
-    usageGuideStep3Title: "Usa el feedback",
-    usageGuideStep3Text: "Marca me gusta, cambia o indica “ya conocía”. Cada respuesta se vuelve una señal de gusto, no solo un clic.",
-    usageGuideStep4Title: "Refina sin miedo",
-    usageGuideStep4Text: "Ajusta energía, BPM, vocales y prioridades cuando quieras una búsqueda más precisa.",
-    usageGuideNote: "Tip: el botón Sorprender genera automáticamente una track sorpresa. Para precisión, completa estilo y artistas conocidos antes.",
-    usageGuideContinueBtn: "Entendido",
+    usageGuideTitle: "Encuentra una buena pista en pocos toques",
+    usageGuideDesc: "Marca el momento, escucha el preview y deja que cada reacción afine el radar.",
+    usageGuideStep1Title: "Elige el momento de escucha",
+    usageGuideStep1Text: "Foco, entreno, after o pista: la app ajusta energía, pulso y clima.",
+    usageGuideStep2Title: "Cuenta lo que ya está en tu radar",
+    usageGuideStep2Text: "Los nombres conocidos ayudan a evitar lo obvio y reducir repetición.",
+    usageGuideStep3Title: "Reacciona sin pensarlo demasiado",
+    usageGuideStep3Text: "Like, no va, novedad o ya conocía: cada toque mejora la próxima carta.",
+    usageGuideStep4Title: "Abre filtros solo cuando quieras precisión",
+    usageGuideStep4Text: "Subgénero, BPM y vocal funcionan como ajuste fino, no como tarea.",
+    usageGuideNote: "¿Quieres escuchar ahora? Usa Sorpresa. ¿Quieres afinar? Agrega estilo, momento y artistas conocidos.",
+    usageGuideContinueBtn: "Empezar a descubrir",
     showUsageGuideBtn: "Cómo usar",
-    authKicker: "Acceso opcional",
-    authTitle: "Entra o sigue sin login",
-    authDesc: "Usa Google para sincronizar perfil y likes en la nube, o continúa localmente sin crear cuenta.",
-    authLocalNoteProfile: "Google opcional",
-    authLocalNoteNewUser: "Modo local libre",
-    authLocalNoteBackup: "Sincroniza cuando quieras",
+    authKicker: "Acceso rápido",
+    authTitle: "Entra en Sonic Search",
+    authDesc: "Inicia sesión con Google para sincronizar tu perfil. Sin login, tus descubrimientos quedan en este dispositivo.",
+    authLocalNoteProfile: "Sin cuenta",
+    authLocalNoteNewUser: "Perfil local",
+    authLocalNoteBackup: "Google opcional",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
-    authResumeSavedBtn: "Retomar perfil guardado",
+    authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Continuar sin login",
+    authGuestBtn: "Entrar sin login",
     authTestUserBtn: "Empezar sin historial",
-    authNewUserHint: "Sin login, los datos quedan en este navegador. Google permite recuperar tu perfil en otro dispositivo.",
-    authRequired: "Elige Google o continúa sin login.",
+    authNewUserHint: "Sin login, sigo desde el perfil guardado en este navegador.",
+    authRequired: "Entra con Google o sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
-    authGuestReady: "Perfil local activado. Puedes descubrir música sin iniciar sesión.",
-    authLocalResumeReady: "Perfil local retomado para {user}.",
-    authSavedProfileReady: "Perfil guardado encontrado para {user}. Retómalo para conservar tus likes y descubrimientos.",
+    authGuestReady: "Perfil local listo. Vamos a descubrir pistas.",
+    authLocalResumeReady: "Perfil local cargado para {user}.",
+    authSavedProfileReady: "Encontré el perfil local de {user}. El botón de este dispositivo continúa desde ahí.",
     authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y arquetipo empiezan limpios.",
     authSocialDivider: "cuenta online opcional",
     authGoogleBtn: "Entrar con Google",
-    authContinueOnlineBtn: "Continuar con perfil online",
+    authContinueOnlineBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "Tú decides: login Google para nube, o modo local para empezar ahora.",
+    authProviderHint: "Google sincroniza tu perfil entre dispositivos.",
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
@@ -18093,121 +20236,121 @@ const I18N = {
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
     authProviderGoogleReady: "Google listo. Toca para entrar.",
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
-    authGoogleComingSoon: "Google no disponible",
+    authGoogleComingSoon: "Entrar con Google",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "El modo local funciona ahora; para nube, revisa Google en Supabase.",
-    welcomeKicker: "Curaduría de música electrónica",
+    authProviderHintLocalBackup: "Google todavía no está configurado en este entorno. Entra sin login por ahora.",
+    welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
-    welcomeDesc: "Tu sommelier de música electrónica para rave, entrenamiento, foco o viaje. Elige tu estilo y recibe una pista + artista nuevo.",
-    startBtn: "Iniciar experiencia",
-    startSurpriseBtn: "Sorpréndeme",
+    welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
+    startBtn: "Empezar a descubrir",
+    startSurpriseBtn: "Abrir sorpresa",
     welcomeImportProfileBtn: "Tengo perfil guardado",
-    quickSurpriseTitle: "Sorpréndeme con novedad real",
-    quickSurpriseHint: "Dime el subgénero, artistas y canciones que ya conoces. Uso eso para evitar repetición y buscar una novedad con sentido.",
+    quickSurpriseTitle: "Sorpresa con dirección",
+    quickSurpriseHint: "Dime un subgénero y lo que ya conoces para recibir algo menos obvio.",
     quickSurpriseStyleLabel: "Subgénero que más escuchas",
     quickSurpriseStylePlaceholder: "Elige subgénero",
-    quickSurpriseKnownLabel: "Artistas que ya conoces",
+    quickSurpriseKnownLabel: "Artistas que ya están en tu radar",
     quickSurpriseKnownPlaceholder: "Ej.: Astrix, Charlotte de Witte, Alok",
-    quickSurpriseKnownTracksLabel: "Canciones que ya conoces",
+    quickSurpriseKnownTracksLabel: "Pistas que ya conoces",
     quickSurpriseKnownTracksPlaceholder: "Ej.: Poison Turtle, Hit N Run",
-    quickSurpriseRunBtn: "Generar sorpresa enfocada",
+    quickSurpriseRunBtn: "Generar sorpresa con dirección",
     quickSurpriseCancelBtn: "Cancelar",
-    quickSurpriseNeedStyle: "Primero elige el subgénero que más escuchas para sorprenderte mejor.",
-    quickSurpriseGenerated: "Sorpresa generada con foco en pista nueva dentro de {style}.",
+    quickSurpriseNeedStyle: "Elige un subgénero para que la sorpresa salga de lo obvio.",
+    quickSurpriseGenerated: "Sorpresa lista: busqué una pista nueva dentro de {style}.",
     heroLogoLabel: "Volver al inicio",
     heroLogoToast: "Volví a Descubrir.",
-    heroTitle: "Encuentra una pista que encaje ahora",
-    heroDesc: "Descubre electrónica por sensación, no por búsqueda manual. Sonic Search cruza tus swipes, subgénero, pulso, energía y novedad para sugerir pistas con contexto.",
+    heroTitle: "La pista correcta para ahora",
+    heroDesc: "Marca el momento, indica lo que ya conoces y deja que Sonic Search traiga una pista con motivo, preview y contexto.",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
     tabFilters: "Filtros",
-    tabNews: "News",
+    tabNews: "Noticias",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoyar",
     tabLegal: "Avisos",
-    feedbackKicker: "Refinamiento",
-    feedbackHint: "Usa señales rápidas para que el radar separe lo que conecta, lo que cansa y lo que ya conoces.",
+    feedbackKicker: "Aprendizaje",
+    feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
     swipeHeroKicker: "Descubrimiento por swipe",
-    swipeHeroTitle: "Descubre con swipe.",
-    swipeHeroHint: "Me gusta, no me va o sorpresa. Los detalles pueden esperar.",
-    swipeDeckKicker: "Rutas rápidas",
-    swipeDeckTitle: "Elige un mundo sonoro",
-    swipeDeckHint: "Úsalo cuando quieras filtrar el descubrimiento por subgénero. La pantalla principal queda libre para gustar, descartar o pedir sorpresa.",
+    swipeHeroTitle: "Escucha, desliza, afina",
+    swipeHeroHint: "La carta cambia rápido; el radar aprende contigo.",
+    swipeDeckKicker: "Rutas de descubrimiento",
+    swipeDeckTitle: "Elige una dirección sonora",
+    swipeDeckHint: "Usa un subgénero para abrir una secuencia más coherente.",
     swipeStyleRailAria: "Todos los subgéneros disponibles para descubrir con swipe",
     swipeShowAllStyles: "Ver los {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe de la pista",
     discoverySequence: "#{number}",
     heardTrackSequence: "Pista escuchada #{number}",
-    swipeEmptyTitle: "Genera una recomendación",
-    swipeEmptyMeta: "Arrastra a la derecha si te gustó o a la izquierda si no encajó.",
-    swipeHint: "Funciona con mouse o dedo: arrastra la tarjeta y suelta.",
-    topSwipeEmptyTitle: "Listo para descubrir",
-    topSwipeEmptyMeta: "Una carta nueva, sin briefing.",
-    topSwipeHint: "Da like, descarta o pide sorpresa. Los filtros viven en Filtros; explicaciones, likes y correcciones quedan fuera del swipe.",
-    aboutKicker: "Por qué usar",
-    aboutTitle: "Sonic Search encuentra lo que las apps grandes suelen dejar pasar",
-    aboutBadge: "Sommelier",
-    aboutIntro: "En vez de buscar solo por nombre de pista, la app aprende con swipe, cruza subgénero, pulso, energía y novedad, y explica por qué apareció cada recomendación.",
+    swipeEmptyTitle: "Abre la primera carta",
+    swipeEmptyMeta: "Toca Sorpresa, escucha y decide con swipe.",
+    swipeHint: "Arrastra con mouse o dedo; suelta para guardar la señal.",
+    topSwipeEmptyTitle: "Primera carta esperando play",
+    topSwipeEmptyMeta: "Abre la sorpresa, escucha el preview y desliza cuando conecte.",
+    topSwipeHint: "El flujo principal queda ligero; filtros y contexto viven en otras pestañas.",
+    aboutKicker: "Qué mejora",
+    aboutTitle: "Descubrimiento sin búsqueda ciega",
+    aboutBadge: "Radar",
+    aboutIntro: "Sonic Search combina momento, historial y feedback para explicar por qué cada pista entró en el radar.",
     aboutReasonOneKicker: "01",
-    aboutReasonOneTitle: "Descubrimiento con contexto",
-    aboutReasonOneText: "No necesitas saber el nombre exacto. Da like, descarta o pide sorpresa; el radar aprende dirección, energía y familiaridad.",
+    aboutReasonOneTitle: "Menos escritura, más escucha",
+    aboutReasonOneText: "No necesitas recordar nombres exactos: pide sorpresa, escucha y responde con swipe.",
     aboutReasonTwoKicker: "02",
-    aboutReasonTwoTitle: "Subgénero con confianza",
-    aboutReasonTwoText: "Cuando la señal es fuerte, la app muestra el subgénero. Si la evidencia es débil, muestra la familia musical y lo trata como estimado.",
+    aboutReasonTwoTitle: "Subgénero con honestidad",
+    aboutReasonTwoText: "Cuando hay señal fuerte, mostramos el subgénero; cuando no, nos quedamos en la familia sonora.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Menos repetición",
-    aboutReasonThreeText: "Tu perfil separa artistas conocidos, descubrimientos reales, pistas gustadas y descartadas para no girar siempre en lo obvio.",
+    aboutReasonThreeText: "Conocidos, novedades, likes y descartes se vuelven señales separadas para evitar más de lo mismo.",
     aboutReasonFourKicker: "04",
-    aboutReasonFourTitle: "La corrección mejora el radar",
-    aboutReasonFourText: "Si subgénero, BPM, imagen o preview parecen errados, márcalo. Eso baja la confianza de la ruta sin confundirlo con tu gusto musical.",
-    aboutFlowTitle: "Cómo usarlo en 30 segundos",
-    aboutFlowStepOne: "Toca Sorpresa y escucha sin pensarlo demasiado.",
-    aboutFlowStepTwo: "Da like o descarta para avanzar automáticamente.",
-    aboutFlowStepThree: "Abre Filtros solo cuando quieras subgénero, BPM o contexto específico.",
+    aboutReasonFourTitle: "El error se vuelve ajuste",
+    aboutReasonFourText: "Marca subgénero, BPM, imagen o preview débil para que el radar corrija la próxima ruta.",
+    aboutFlowTitle: "Cómo usar",
+    aboutFlowStepOne: "Toca Sorpresa y escucha el preview.",
+    aboutFlowStepTwo: "Da like, descarta o marca si ya conocías.",
+    aboutFlowStepThree: "Abre Filtros cuando quieras subgénero, BPM o contexto específico.",
     aboutFlowStepFour: "Revisa likes, descartes y tu arquetipo musical en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
-    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Confianza media aún puede ser buen descubrimiento. Cuando la clasificación fina no es segura, la app debe hablar de familia musical, no vender certeza falsa.",
+    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Cuando falta certeza, la app usa familia sonora en vez de forzar etiqueta.",
     swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
     quickKnownArtistQuestion: "¿{artist} ya estaba en tu radar?",
-    quickKnownHint: "Toca antes de la próxima pista para separar conocidos de descubrimientos reales.",
+    quickKnownHint: "Esto separa repetición de descubrimiento real y mejora la próxima carta.",
     quickKnownPendingNext: "Antes de la próxima carta: ¿ya conocías a {artist} o es novedad?",
     quickKnownYes: "Ya conocía",
     quickKnownNo: "Novedad para mí",
-    primarySwipeHint: "Arrastra, dale me gusta o cambia: el radar entiende más cuando reaccionas en el momento.",
+    primarySwipeHint: "Derecha guarda. Izquierda cambia.",
     swipeLike: "Me gusta",
     swipePass: "No me va",
-    swipeLikedNext: "Te gustó. Guardé la señal y voy a afinar el radar si esta ruta se repite.",
-    swipePassedNext: "Bien, saqué esa ruta y traje una carta nueva.",
+    swipeLikedNext: "Señal guardada. Voy a traer más pistas en esta dirección sin repetir demasiado.",
+    swipePassedNext: "Esa ruta salió de la fila. Traje otra carta para probar al oído.",
     swipeStyleDeckGenerated: "Carta abierta en {style}. Dale me gusta o cambia para calibrar tu mapa.",
     swipeDeckNext: "Próxima carta: salí de {from} y traje {to}.",
     swipeAnchorNext: "Subgénero respetado: mantengo {focus}. Próxima carta en {next}.",
     swipeAffinityNext: "Radar afinado hacia {focus}. Próxima carta en {next}, dentro de la misma vertiente o una vecina cercana.",
     swipeLearningBadge: "{count} señales de gusto",
-    swipeLearningLevelEmpty: "Radar sin historial",
-    swipeLearningLevelEarly: "Radar aprendiendo",
-    swipeLearningLevelWarming: "Radar calibrado",
-    swipeLearningLevelGood: "Perfil consistente",
-    swipeLearningLevelStrong: "Perfil fuerte",
+    swipeLearningLevelEmpty: "Sin historial de escucha",
+    swipeLearningLevelEarly: "Primeras señales entrando",
+    swipeLearningLevelWarming: "Preferencias tomando forma",
+    swipeLearningLevelGood: "Perfil con dirección clara",
+    swipeLearningLevelStrong: "Firma de gusto fuerte",
     swipeLearningMilestone10: "Radar calibrado con {count} señales: ahora peso más tu gusto real en las próximas elecciones.",
     swipeLearningMilestone20: "Perfil más consistente con {count} señales: voy a reducir repeticiones y buscar vecinos más certeros.",
     swipeLearningMilestone30: "Perfil fuerte con {count} señales: las recomendaciones ahora priorizan compatibilidad fina y descubrimiento seguro.",
-    feedbackLikeGroupTitle: "Guardar señal positiva",
+    feedbackLikeGroupTitle: "Guardar buena señal",
     feedbackCorrectGroupTitle: "Corregir ruta",
     feedbackExploreGroupTitle: "Próximo paso",
-    catalogStatsKicker: "Nuestra base para descubrir",
+    catalogStatsKicker: "Base de descubrimiento",
     catalogStatsArtists: "artistas indexados",
     catalogStatsTracks: "pistas buscables",
     catalogStatsStyles: "subgéneros",
     catalogStatsLabels: "sellos",
-    catalogStatsHealth: "{ratio} pistas por artista indexado, combinando base auditada y expansión dinámica por subgénero.",
-    dailyNewsKicker: "Daily News",
-    dailyNewsTitle: "Periódico de música electrónica",
-    dailyNewsIntro: "Radar reciente de música electrónica con prioridad para Brasil y contexto global de fuentes especializadas.",
+    catalogStatsHealth: "{ratio} pistas por artista indexado.",
+    dailyNewsKicker: "Radar diario",
+    dailyNewsTitle: "Radar de noticias electrónicas",
+    dailyNewsIntro: "Actualizaciones de Brasil y del mundo con foco en escenas, artistas, festivales y pistas.",
     dailyNewsRefreshBtn: "Actualizar",
     dailyNewsLoading: "Cargando noticias...",
     dailyNewsProgressLabel: "Actualizando radar de noticias",
@@ -18223,16 +20366,16 @@ const I18N = {
     dailyNewsUntitled: "Noticia sin título",
     dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
     supportKicker: "Apoya el proyecto",
-    supportTitle: "Ayuda a Sonic Search a crecer",
-    supportIntro: "Si la app te ayudó a descubrir una track, puedes enviar una tip para mantener catálogo, IA y mejoras funcionando.",
+    supportTitle: "Apoya Sonic Search",
+    supportIntro: "Tu apoyo mantiene catálogo, IA y mejoras en movimiento.",
     supportBadge: "Tips",
     supportCustomAmount: "Otro valor",
     supportPixKicker: "Pix",
     supportPixTitle: "QR Code + copiar y pegar",
     supportPixReady: "Pix activo",
     supportPixMissing: "Esperando clave",
-    supportPixHintReady: "Elige el valor, copia el código Pix y pégalo en la app del banco. La clave también queda visible como alternativa.",
-    supportPixHintMissing: "Configura tu clave Pix en SUPPORT_PAYMENT_CONFIG para activar el QR Code real.",
+    supportPixHintReady: "Elige un valor y copia el código Pix.",
+    supportPixHintMissing: "Pix aún no configurado.",
     supportPixKeyLabel: "Clave Pix",
     supportCopyPixKey: "Copiar clave",
     supportCopyPix: "Copiar código Pix",
@@ -18240,30 +20383,30 @@ const I18N = {
     supportCryptoTitle: "Bitcoin / Lightning",
     supportCryptoReady: "Crypto activo",
     supportCryptoMissing: "Opcional",
-    supportCryptoHintReady: "Usa el QR o copia la dirección para enviar una tip en crypto.",
-    supportCryptoHintMissing: "Configura una dirección Bitcoin o Lightning para activar tips en crypto.",
+    supportCryptoHintReady: "Usa el QR o copia la dirección.",
+    supportCryptoHintMissing: "Crypto aún no configurado.",
     supportCopyCrypto: "Copiar crypto",
     supportCopying: "Copiando...",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
-    supportLegalNote: "Las tips son apoyo voluntario al proyecto, no inversión ni compra de cripto.",
+    supportLegalNote: "Apoyo voluntario al proyecto.",
     legalHubKicker: "Avisos legales",
     legalHubTitle: "Derechos de autor, uso y marcas",
-    legalHubIntro: "Sonic Search y sus textos, interfaz, curaduría, identidad visual, ranking, lógica de recomendación y código original pertenecen a Pedro Freire / CBK Labs. Todos los derechos reservados.",
+    legalHubIntro: "Sonic Search es un producto de Pedro Freire / CBK Labs. Textos, interfaz, curaduría, identidad visual y código original tienen todos los derechos reservados.",
     legalCopyrightTitle: "Derechos de autor",
-    legalCopyrightText: "No está permitido copiar, revender, republicar, extraer, clonar o explotar comercialmente la app, su interfaz, textos, imágenes autorales, lógica de curaduría o bases organizadas sin autorización por escrito.",
+    legalCopyrightText: "No copies, revendas, clones, extraigas ni explotes comercialmente la app, la interfaz, la curaduría o bases organizadas sin autorización por escrito.",
     legalThirdPartyTitle: "Música y terceros",
-    legalThirdPartyText: "Canciones, previews, portadas, nombres de artistas, links, plataformas y marcas de terceros pertenecen a sus respectivos titulares. Sonic Search es independiente y no afirma una alianza oficial con Spotify, YouTube, Deezer, SoundCloud, Bandcamp, Discogs, Google, Apple o servicios similares.",
+    legalThirdPartyText: "Canciones, previews, portadas, artistas, links, plataformas y marcas pertenecen a sus titulares, incluidos Spotify, YouTube, Deezer y SoundCloud. Sonic Search es independiente.",
     legalUseTitle: "Uso permitido",
-    legalUseText: "La app es una herramienta de descubrimiento y recomendación. Usa los links oficiales para escuchar, comprar o apoyar artistas. Clasificaciones de género, arquetipo musical y explicaciones son estimaciones curatoriales, no datos oficiales de los artistas.",
+    legalUseText: "Usa links oficiales para escuchar, comprar o apoyar artistas. Géneros, arquetipo y explicaciones son estimaciones curatoriales.",
     legalPrivacyTitle: "Privacidad y responsabilidad",
-    legalPrivacyText: "Tu perfil musical puede quedar guardado en este dispositivo mediante almacenamiento local. Integraciones externas y links abiertos fuera de Sonic Search siguen sus propias políticas. Las tips son apoyo voluntario, no inversión, promesa de retorno ni compra de cripto.",
-    legalDisclaimer: "Este aviso es una capa informativa de protección del producto y no sustituye contrato, registro de marca ni orientación jurídica profesional.",
-    sectionKicker: "Filtros de búsqueda",
-    sectionHint: "Elige subgénero, BPM, energía y contexto cuando quieras una recomendación más precisa.",
+    legalPrivacyText: "Tu perfil puede quedar guardado en este dispositivo. Links e integraciones externas siguen sus propias políticas. Las tips son apoyo voluntario.",
+    legalDisclaimer: "Aviso informativo; no sustituye asesoría jurídica.",
+    sectionKicker: "Precisión cuando quieras",
+    sectionHint: "Abre filtros para guiar la búsqueda sin frenar el descubrimiento.",
     contextMomentKicker: "Momento de escucha",
-    contextMomentTitle: "¿Para qué quieres música ahora?",
-    contextMomentHint: "Cada intención ajusta energía, pulso y familia sonora.",
+    contextMomentTitle: "¿Para qué momento es la pista?",
+    contextMomentHint: "El momento ajusta energía, pulso y clima antes del catálogo.",
     presetFocus: "Foco",
     presetStudy: "Estudio",
     presetRelax: "Relajar",
@@ -18276,17 +20419,17 @@ const I18N = {
     presetNight: "Noche",
     presetAfter: "After",
     presetPeak: "Peak",
-    precisionFiltersSummary: "Filtros manuales",
-    advancedFiltersSummary: "Ajuste fino de prioridad",
-    recommendBtn: "Encontrar pista",
+    precisionFiltersSummary: "Refinar por subgénero y BPM",
+    advancedFiltersSummary: "Peso de señales",
+    recommendBtn: "Encontrar mi pista",
     recommendBtnBusy: "Buscando...",
-    rerollBtn: "Otra en este objetivo",
-    surpriseBtn: "Sorprenderme",
+    rerollBtn: "Otra parecida",
+    surpriseBtn: "Sorpresa sin filtro",
     adaptiveSurpriseBtn: "Sorpresa por perfil",
-    clearFiltersBtn: "Limpiar filtros",
-    resetAppBtn: "Nuevo usuario (reinicio total)",
+    clearFiltersBtn: "Limpiar todo",
+    resetAppBtn: "Reiniciar perfil",
     resetAppConfirm: "Esto borrará tu historial local y reiniciará la app como nuevo usuario. ¿Deseas continuar?",
-    generatedNow: "Generada ahora",
+    generatedNow: "Encontrada ahora",
     freeStyle: "estilo libre",
     freeContext: "contexto libre",
     freeEnergy: "energía libre",
@@ -18309,6 +20452,7 @@ const I18N = {
     keyPrefix: "Key",
     catalogPrefix: "Catálogo",
     labelPrefix: "Sello",
+    trackDataPrefix: "Datos",
     suggestedSubgenre: "Subgénero sugerido",
     styleInfoTitle: "Guía rápida del subgénero",
     styleInfoBpmLabel: "Rango típico",
@@ -18319,10 +20463,10 @@ const I18N = {
     genreGuideTitle: "Sobre el subgénero",
     genreGuideText: "En pocas palabras: {summary}",
     bpmFallbackRelaxed: "Esta pista usa el rango típico de BPM del subgénero para mantener opciones nuevas sin inventar BPM exacto.",
-    defaultStats: "Sin feedback todavía.",
-    stats: "Likes de pista: {likedSongs} | Likes de artista: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Artistas descubiertos: {discoveredInApp} | Pistas presentadas: {tracksPresented} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
+    defaultStats: "Empieza con una pista: tus señales aparecerán aquí.",
+    stats: "Pistas con like: {likedSongs} | Artistas con like: {likedArtists} | Descubrimientos: {likedDiscoveries} | Ya conocía: {alreadyKnew} | No encajó: {skipped} | Valoraciones: {ratingCount} | Promedio: {ratingAvg}",
     ratingTitle: "Evalúa esta recomendación",
-    ratingHint: "1 estrella = me gustó poco • 5 estrellas = me encantó",
+    ratingHint: "1 = floja • 5 = exacta",
     ratingAwaiting: "Toca para valorar",
     ratingCelebration: "Toca para valorar",
     ratingAriaGroup: "Valoración por estrellas",
@@ -18330,14 +20474,14 @@ const I18N = {
     ratingSavedHint: "{label} • guardado con {stars}/5.",
     ratingSavedFeedback: "{label}: {stars}/5 para {song}.",
     ratingSavedToast: "{label}: {stars}/5 guardado.",
-    suggestionQueueTitle: "Deck listo: 25 pistas para swipar",
-    suggestionQueueHint: "Sin subgénero elegido, mezclo familias distintas. Con subgénero elegido, la fila se queda ahí o en el vecino más cercano.",
+    suggestionQueueTitle: "Deck listo: 25 pistas para decidir con swipe",
+    suggestionQueueHint: "Más opciones con la misma intención.",
     queueNow: "Ahora",
     queueNext: "Siguiente",
     queueUse: "Reproducir esta",
     queueActivated: "Fila activa: ahora suena {song}.",
-    tasteTuningTitle: "Ajusta tu gusto",
-    tasteTuningHint: "Refina la próxima recomendación por sensación, sin tocar filtros técnicos.",
+    tasteTuningTitle: "Cambia la dirección",
+    tasteTuningHint: "Ajusta la próxima sugerencia por sensación, sin empezar de nuevo.",
     tasteTuneHeavier: "Más pesado",
     tasteTuneMelodic: "Más melódico",
     tasteTuneUnderground: "Más underground",
@@ -18345,34 +20489,34 @@ const I18N = {
     tasteTuneFamiliar: "Más conocido",
     tasteTuneWeirder: "Más extraño",
     tasteTuneRunning: "Ajustando curaduría: {label}.",
-    tasteTuneGenerated: "Ajuste aplicado: {label}. Ahora pruebo una nueva dirección para tu gusto.",
-    tasteTuneFallback: "No encontré una buena opción para ese ajuste ahora. Mantuve tu recomendación actual.",
-    recommendationWhyTitle: "Por qué apareció",
-    recommendationWhyStyle: "Vibe: {style}",
+    tasteTuneGenerated: "Dirección cambiada: {label}. La próxima carta ya prueba esa sensación.",
+    tasteTuneFallback: "No encontré una pista digna de ese ajuste ahora. Mantuve la actual para no forzar.",
+    recommendationWhyTitle: "Por qué entró en el radar",
+    recommendationWhyStyle: "Vibe detectada: {style}",
     recommendationWhyBpm: "Pulso: {bpm}",
     recommendationWhyNovelty: "Descubrimiento: {status}",
-    recommendationWhyKnown: "artista conocido",
+    recommendationWhyKnown: "ya estaba en tu radar",
     recommendationWhyNew: "nuevo para ti",
     recommendationWhyOrigin: "Escena: {origin}",
-    recommendationWhyStrongFit: "Buena apuesta: señales fuertes",
-    recommendationWhyTrustedSource: "Fuente más confiable",
-    recommendationWhyProfileSignal: "Encaja con tu perfil",
+    recommendationWhyStrongFit: "Buena apuesta: señales alineadas",
+    recommendationWhyTrustedSource: "Fuente/player más confiable",
+    recommendationWhyProfileSignal: "Conecta con tu perfil",
     recommendationTrustLabel: "Confianza",
     recommendationTrustChip: "Confianza {score}%",
-    recommendationTrustReasonHigh: "Alta: fuente, player, pulso y perfil están alineados.",
-    recommendationTrustReasonMedium: "Buena: hay señales musicales fuertes, todavía con espacio para calibrar.",
-    recommendationTrustReasonLow: "Exploratoria: la traje como prueba, no como certeza absoluta.",
+    recommendationTrustReasonHigh: "Alta: fuente, player, pulso e historial cuentan la misma historia.",
+    recommendationTrustReasonMedium: "Buena: hay señales consistentes, pero el perfil aún se está abriendo.",
+    recommendationTrustReasonLow: "Exploratoria: vale escucharla como prueba, no como certeza.",
     recommendationTrustReasonTempoAmbiguous: "Buena, pero con pulso ambiguo: en breaks el grid puede duplicar la sensación real.",
     recommendationWhyFreshArtistSentence: "También la mantuve lejos de los nombres obvios, para que se sienta como descubrimiento real y no más de lo mismo.",
     recommendationWhyProfilePositive: "Las señales recientes de tu perfil apuntan en esta dirección.",
     recommendationWhySourcePositive: "La pista tiene mejores señales de fuente, pulso o player, así que entra con más seguridad.",
-    recommendationWhyTextStrong: "La elegí porque las señales encajan: {style}, pulso {bpm}, energía {energy} y una fuente mejor para probar sin fingir certeza.",
+    recommendationWhyTextStrong: "Elegí esta porque las señales encajan: {style}, pulso {bpm}, energía {energy} y una fuente más fuerte para probar con confianza.",
     recommendationWhyTextContext: "Para {context}, entrega energía {energy} y queda cerca de {style}. Si la clasificación fina no está confirmada, la trato como ruta de familia sonora.",
-    recommendationWhyTextDiscovery: "Esta es una apuesta de descubrimiento: {style}, energía {energy} y señal suficiente para escuchar. Si no conecta, tu swipe corrige la próxima ruta.",
+    recommendationWhyTextDiscovery: "Esta es una apuesta de descubrimiento: {style}, energía {energy} y señal suficiente para escuchar. Si no conecta, tu swipe recalibra la próxima ruta.",
     djModeTitle: "Modo DJ",
-    djModeHint: "Viaje de 5 pistas: abre, sube, pega fuerte y cierra.",
-    djModeGenerateBtn: "Crear viaje",
-    djModeStatusReady: "Genera una recomendación o elige un estilo para crear un viaje.",
+    djModeHint: "Crea una mini jornada: abre, sube, pega y cierra.",
+    djModeGenerateBtn: "Crear mini jornada",
+    djModeStatusReady: "Genera una recomendación o elige un estilo para armar una mini jornada.",
     djModeStatusGenerated: "Viaje listo para {style}.",
     djModeStepWarmup: "Warm-up",
     djModeStepBuild: "Subida",
@@ -18391,9 +20535,9 @@ const I18N = {
     voiceMiniLayerOn: "Armado",
     voiceMiniLayerOff: "Libre",
     voiceMiniLayerDisabled: "Graba voz",
-    artistHubIntro: "Una lectura corta para entender quién es el artista, de dónde viene el sonido y si vale seguir cavando.",
+    artistHubIntro: "Bio, sello y links para continuar el descubrimiento.",
     discogsArtistTitle: "Bio completa en Discogs",
-    discogsArtistHint: "Abre el perfil del artista en Discogs para ver biografía, alias y discografía completa.",
+    discogsArtistHint: "Ve bio, alias y discografía completa.",
     discogsArtistLink: "Buscar artista en Discogs",
     discogsArtistOpen: "Abrir perfil en Discogs",
     artistBioAiSource: "Bio refinada con apoyo de IA y fuentes: {sources}.",
@@ -18403,14 +20547,14 @@ const I18N = {
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiRefreshBusy: "Actualizando...",
     trackAiRefreshDone: "Actualizada",
-    trackAiLoading: "Analizando tu pista actual y preparando una lectura rápida...",
+    trackAiLoading: "Preparando lectura rápida...",
     trackAiApiSource: "Lectura generada por IA en tiempo real.",
     trackAiLocalSource: "Lectura de Sonic Search basada en el sonido, el contexto y tu historial.",
-    trackAiFallback: "Esta pista parece conversar con tu momento. Escucha el primer minuto: si el cuerpo acompaña, guárdala; si no, cambia y ajusto la ruta.",
+    trackAiFallback: "Escucha el primer minuto. Si conecta, guarda; si no, cambia.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
     voiceLabKicker: "Estudio rápido",
-    voiceLabTitle: "Arma una mini canción en segundos",
-    voiceLabHint: "Un flujo simple para crear un loop electrónico: elige el clima, toca play, ajusta capas y guarda la idea.",
+    voiceLabTitle: "Monta un loop tocable en segundos",
+    voiceLabHint: "Elige una vibe, dale play, ajusta capas y descarga.",
     voiceEffectsTitle: "Efecto de voz",
     voiceEffectRobot: "Robot",
     voiceEffectChipmunk: "Graciosa",
@@ -18423,7 +20567,7 @@ const I18N = {
     voicePlayBtn: "Oír efecto",
     voiceResetBtn: "Limpiar",
     voiceDownloadBtn: "Descargar grabación",
-    voiceReady: "Listo para grabar.",
+    voiceReady: "Micrófono en espera. Graba solo si quieres usar tu voz en el loop.",
     voiceRecording: "Grabando... {seconds}s",
     voiceRecorded: "Voz lista. Elige un efecto o activa la capa Voz en el loop.",
     voiceNeedRecording: "Graba una voz para usar esta capa.",
@@ -18432,16 +20576,16 @@ const I18N = {
     voicePlaying: "Sonando con efecto: {effect}.",
     voiceCleared: "Grabación borrada.",
     voiceMiniEyebrow: "Beat maker simple",
-    voiceMiniTitle: "Elige una vibe. Toca play.",
-    voiceMiniHint: "La mini canción nace lista para sonar. Después activas capas, mueves el BPM y descargas la idea.",
+    voiceMiniTitle: "Elige la vibe. Dale play.",
+    voiceMiniHint: "El loop ya empieza tocable. Ajusta capas, BPM y exporta.",
     voiceStudioStepOne: "Elige el clima",
-    voiceStudioStepTwo: "Toca play",
+    voiceStudioStepTwo: "Dale play",
     voiceStudioStepThree: "Ajusta capas",
     voiceStudioSessionStateLabel: "Estado",
     voiceStudioSessionLayersLabel: "Capas",
     voiceStudioSessionLengthLabel: "Export",
     voiceStudioSessionFormatLabel: "Archivo",
-    voiceStudioStateReady: "Listo",
+    voiceStudioStateReady: "En espera",
     voiceStudioStatePlaying: "Sonando",
     voiceStudioStateRecording: "Grabando voz",
     voiceStudioStateRendering: "Exportando",
@@ -18450,19 +20594,19 @@ const I18N = {
     voiceStudioLengthValue: "{bars} compases • {seconds}s",
     voiceStudioFormatLocal: "WAV local",
     voiceStudioFormatVoice: "Voz + WAV",
-    voiceMiniNoVoiceBadge: "Sin micrófono ni registro",
+    voiceMiniNoVoiceBadge: "Sin registro",
     voiceMiniRandomBtn: "Generar idea",
     voiceMiniPlayBtn: "Tocar mini canción",
     voiceMiniStopBtn: "Parar loop",
     voiceMiniExportBtn: "Descargar mini canción",
-    voiceMiniPresetTitle: "Elige el clima de la idea",
+    voiceMiniPresetTitle: "Clima de la idea",
     voiceMiniMorphTitle: "Macromovimientos",
     voiceMiniMorphFloor: "Más pista",
     voiceMiniMorphDeep: "Más profundo",
     voiceMiniMorphWeird: "Más extraño",
     voiceMiniMorphOpen: "Más abierto",
     voiceMiniMorphApplied: "Movimiento aplicado: {move}. El próximo compás cambia de dirección.",
-    voiceMiniLayerTitle: "Activa/desactiva capas",
+    voiceMiniLayerTitle: "Capas",
     voiceMiniRecipeLabel: "Receta actual",
     voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
     voiceMiniRecipeMeta: "{layers} activos.",
@@ -18471,7 +20615,7 @@ const I18N = {
     voiceMiniInsightEnergyLabel: "Energía",
     voiceMiniInsightShapeLabel: "Forma",
     voiceMiniInsightMoveLabel: "Próximo gesto",
-    voiceMiniInsightTitlePeak: "Listo para pista",
+    voiceMiniInsightTitlePeak: "Con presión de pista",
     voiceMiniInsightTitleGroove: "Groove en construcción",
     voiceMiniInsightTitleDeep: "Textura profunda",
     voiceMiniInsightTitleExperimental: "Idea mutante",
@@ -18526,7 +20670,7 @@ const I18N = {
     voiceMiniPercentValue: "{value}%",
     voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
     voiceMiniSelectChanged: "{control}: {value}. El próximo compás entra así.",
-    voiceMiniReady: "Listo: elige un clima o toca Generar idea.",
+    voiceMiniReady: "Elige un clima o genera una idea para oír el primer loop.",
     voiceMiniPlaying: "Loop corriendo a tempo. Toca capas para armarlas o quitarlas en el próximo compás.",
     voiceMiniDone: "Loop parado. Toca la mini canción o un pad para empezar otra vez.",
     voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
@@ -18546,7 +20690,7 @@ const I18N = {
     voiceMiniPresetHouse: "House orgánico",
     voiceMiniPresetDnb: "DnB líquido",
     voiceMiniPresetDarkprog: "Dark prog",
-    summaryPanelTitle: "Mapa de tu gusto",
+    summaryPanelTitle: "Tu mapa musical",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
     summaryDiscoveredCountLabel: "Artistas descubiertos en la app",
@@ -18560,11 +20704,11 @@ const I18N = {
     summaryAchievementFiveStarMany: "Has valorado {count} pistas con 5 estrellas.",
     summaryAchievementTierA: "Señal inicial",
     summaryAchievementTierB: "Curador de oro",
-    summaryAchievementTierC: "Sommelier magnético",
+    summaryAchievementTierC: "Curador magnético",
     summaryAchievementTierD: "Leyenda del espectro",
     summaryAchievementTierProgress: "Nivel actual: {tier}. Faltan {remaining} pistas 5★ para {nextTier} ({nextAt}).",
     summaryAchievementTierMax: "Nivel máximo alcanzado: {tier}.",
-    summaryShareStoryBtn: "Compartir estado en Stories",
+    summaryShareStoryBtn: "Compartir en Stories",
     shareLinkBtn: "Copiar enlace",
     shareSpiritLinkBtn: "Copiar enlace del arquetipo",
     shareLinkCopying: "Copiando enlace...",
@@ -18574,33 +20718,50 @@ const I18N = {
     summaryShareStoryTitle: "Mi estado musical",
     summaryShareStoryArchetype: "{status} • {style}",
     summaryShareStoryDetails: "{songs} pistas con like • {artists} artistas con like • {ratings} valoraciones • media {average}",
+    apiHealthKicker: "APIs",
+    apiHealthTitle: "Salud de integraciones",
+    apiHealthIntro: "Estado real de fuentes externas y memoria propia.",
+    apiHealthRefreshBtn: "Actualizar",
+    apiHealthLoading: "Verificando integraciones...",
+    apiHealthUpdated: "Integraciones verificadas: {active} activas, {attention} requieren atención.",
+    apiHealthUnavailable: "No pude verificar las integraciones ahora.",
+    apiHealthActive: "activo",
+    apiHealthDisabled: "apagado",
+    apiHealthNeedsCredentials: "sin clave",
+    apiHealthUnknown: "indefinido",
+    apiHealthNoCache: "cache local",
+    apiHealthCacheSeconds: "cache {seconds}s",
+    apiHealthDailyLimit: "límite {limit}/día",
+    apiHealthMissingKey: "necesita credencial propia",
+    apiHealthReady: "listo en backend",
+    apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Biblioteca del radar",
-    profileLibraryTitle: "Pistas que moldearon tu gusto",
-    profileLibraryHint: "Likes y descartes viven aquí para escuchar de nuevo, revisar tu mapa y mantener limpio el swipe principal.",
+    profileLibraryTitle: "Pistas que enseñaron al radar",
+    profileLibraryHint: "Likes y descartes quedan aquí para revisar y evitar repetición.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Lleva tu mapa musical contigo",
-    profileBackupHint: "La app guarda tu gusto en este dispositivo. Descarga una copia para volver en otro navegador cuando quieras.",
-    profileBackupStatusEmpty: "Tu mapa local ya está listo. Da like a pistas para crear señales y descarga una copia cuando quieras.",
+    profileBackupHint: "Descarga una copia para usarla en otro navegador.",
+    profileBackupStatusEmpty: "Tu mapa local está en este navegador.",
     profileBackupStatus: "{signals} señales guardadas en este dispositivo • última copia: {date}",
     profileBackupStatusNever: "aún no guardada",
     profileBackupExport: "Guardar copia del perfil",
     profileBackupImportSummary: "Tengo un perfil guardado",
-    profileBackupImportHint: "Úsalo solo si cambiaste de móvil o abriste la app en otro navegador.",
+    profileBackupImportHint: "Úsalo para restaurar tu mapa local.",
     profileBackupImport: "Traer perfil aquí",
     profileBackupExported: "Copia del perfil guardada.",
     profileBackupImported: "Perfil traído a este dispositivo.",
     profileBackupInvalid: "No pude leer este archivo de perfil.",
     profileBackupImportConfirm: "Traer este perfil cambiará los datos guardados en este dispositivo. ¿Continuar?",
     summaryLikedTracksTitle: "Pistas con like",
-    summaryLikedTracksHint: "Todo lo que marques como me gusta queda guardado aquí para escuchar después.",
+    summaryLikedTracksHint: "Guardadas para escuchar de nuevo.",
     summaryLikedTracksClear: "Limpiar",
-    summaryLikedTracksEmpty: "Aún no hay pistas con like. Toca Me gusta o desliza a la derecha para guardarlas aquí.",
+    summaryLikedTracksEmpty: "Aún no hay pistas guardadas. Dale like o desliza a la derecha cuando una entre en clima.",
     summaryLikedTracksCleared: "Historial de pistas con like limpio.",
     summaryLikedTrackRemoved: "Pista eliminada de tus likes.",
-    summaryDislikedTracksTitle: "Pistas que no gustaron",
-    summaryDislikedTracksHint: "Todo lo que descartes queda guardado aquí para revisar tu mapa musical y evitar repeticiones.",
+    summaryDislikedTracksTitle: "Pistas descartadas",
+    summaryDislikedTracksHint: "Los descartes ayudan al radar a no insistir.",
     summaryDislikedTracksClear: "Limpiar",
-    summaryDislikedTracksEmpty: "Aún no hay pistas descartadas. Toca No me gustó o desliza a la izquierda para guardarlas aquí.",
+    summaryDislikedTracksEmpty: "Aún no hay pistas descartadas. Pasa o desliza a la izquierda cuando la ruta no encaje.",
     summaryDislikedTracksCleared: "Historial de pistas descartadas limpio.",
     summaryDislikedTrackRemoved: "Pista eliminada de las descartadas.",
     summaryDislikedTrackSaved: "Descartada en el perfil",
@@ -18621,26 +20782,26 @@ const I18N = {
     summaryDislikedArtistsTitle: "Artistas que no te gustan",
     quizHubTitle: "Desafíos de conocimiento",
     quizHubBadge: "Evolución rápida",
-    quizHubHint: "¿Ignoraste el aviso de desafío? Queda guardado aquí para que evoluciones tu conocimiento cuando quieras.",
+    quizHubHint: "Los desafíos quedan guardados aquí.",
     quizHubProgressEmpty: "Aún no hay desafíos desbloqueados.",
-    summaryNoData: "Sin datos",
+    summaryNoData: "Sin lectura todavía",
     summaryStatusNew: "Nuevo",
     summaryStatusExploring: "Explorando",
     summaryStatusActive: "Activo",
     summaryStatusAdvanced: "Curaduría avanzada",
-    summaryEmptyKnown: "Aún no hay artistas marcados como conocidos.",
-    summaryEmptyLiked: "Aún no hay artistas con like.",
-    summaryEmptyDisliked: "Aún no hay artistas marcados como no gustados.",
+    summaryEmptyKnown: "Marca artistas conocidos para que la app evite lo obvio.",
+    summaryEmptyLiked: "Guarda artistas cuando quieras reforzar esa dirección.",
+    summaryEmptyDisliked: "Los artistas rechazados aparecen aquí para evitar insistencia.",
     listenersSubtitle: "{count} oyentes de la comunidad en las últimas horas (feed local).",
     topListenersTitle: "Top listeners de la comunidad",
     topListenersSubtitle: "Quién más escuchó {style} en las últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} puntos",
     topListenerPlays: "{plays} reproducciones",
-    previewSearching: "Buscando preview de la pista...",
-    previewValidated: "Preview validado con alta confianza. ¿Te gusta lo que escuchas?",
-    previewLoaded: "Preview cargado con buena confianza. ¿Te gusta lo que escuchas?",
-    previewReady: "Preview listo. Dale play para escuchar y evaluar.",
+    previewSearching: "Buscando un preview reproducible...",
+    previewValidated: "Preview validado con alta confianza. ¿Conectó el sonido?",
+    previewLoaded: "Preview cargado con buena confianza. ¿Conectó el sonido?",
+    previewReady: "Preview listo. Dale play y responde con el oído.",
     previewYoutubeInlineHint: "El player de YouTube está disponible abajo para ver directamente en la app.",
     previewYoutubeOptionalHint: "Si quieres ver dentro de la app, abre el player de YouTube abajo.",
     previewYoutubeOpenInlineBtn: "Abrir player en app",
@@ -18659,8 +20820,24 @@ const I18N = {
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
     previewSoundcloudFallback: "Preview de audio abierto vía SoundCloud. Si no empieza solo, toca el player.",
     previewBandcampFallback: "Preview abierto vía Bandcamp con fuente validada. Si no empieza solo, toca el player.",
-    previewUnavailable: "Preview no disponible para esta pista. Usa Spotify/YouTube/SoundCloud y dime si te gustó.",
-    previewUnavailableWithLinks: "Preview no disponible para esta pista. Usa {platforms} y dime si te gustó.",
+    previewUnavailable: "No encontré preview seguro aquí. Usa Spotify, YouTube o SoundCloud para escuchar.",
+    previewUnavailableWithLinks: "No encontré preview seguro aquí. Usa {platforms} para escuchar.",
+    radioBrowserKicker: "Radio del subgénero",
+    radioBrowserTitle: "Sintonizar {style}",
+    radioBrowserIdle: "Carga estaciones públicas cercanas a {style}.",
+    radioBrowserLoadBtn: "Buscar radios",
+    radioBrowserRefreshBtn: "Actualizar radios",
+    radioBrowserLoadingBtn: "Buscando...",
+    radioBrowserLoading: "Buscando estaciones públicas para {style}...",
+    radioBrowserFound: "{count} estaciones encontradas. Elige una para tocar.",
+    radioBrowserEmpty: "No encontré una radio pública confiable para este recorte ahora.",
+    radioBrowserAttribution: "Datos de directorio: Radio Browser. Los streams pertenecen a sus respectivas estaciones.",
+    radioBrowserPlayStation: "Tocar radio {station}",
+    radioBrowserUnnamed: "Estación sin nombre",
+    radioBrowserPublicStation: "Radio pública",
+    radioBrowserPlaying: "Tocando {station}.",
+    radioBrowserReady: "{station} lista. Dale play si el navegador bloqueó el audio.",
+    radioBrowserStationUnavailable: "Esta estación no se puede reproducir ahora. Prueba otra.",
     spotifyUnverified: "Enlace de Spotify no verificado: se abrirá una búsqueda aproximada para esta pista.",
     youtubeUnverified: "Enlace de YouTube aún no verificado para evitar abrir la pista equivocada.",
     soundcloudUnverified: "Enlace de SoundCloud aún no verificado para evitar abrir la pista equivocada.",
@@ -18685,60 +20862,65 @@ const I18N = {
     artistImageLoaded: "Foto real del artista",
     artistImageFallback: "Foto no encontrada; mostrando identidad del artista.",
     artistSocialsTitle: "Redes del artista",
-    artistSocialsHint: "Los links abren búsqueda por nombre del artista en cada plataforma.",
+    artistSocialsHint: "Búsqueda rápida por nombre del artista.",
+    lastfmArtistTitle: "Señales Last.fm",
+    lastfmArtistHint: "Tags, pistas fuertes y artistas cercanos cuando Last.fm esté habilitado.",
+    lastfmArtistHintWithListeners: "{listeners} oyentes en Last.fm. Úsalo como señal complementaria, no como verdad única.",
+    lastfmTopTracksTitle: "Pistas fuertes",
+    lastfmSimilarArtistsTitle: "Artistas cercanos",
     warmupCatalogToast: "Base musical refinada en segundo plano.",
-    eventsPrompt: "Abre Más información o dale like a un artista para cargar eventos próximos.",
+    eventsPrompt: "Da like a un artista para ver eventos.",
     eventsLoading: "Buscando próximos eventos de {artist}...",
-    searchingCatalog: "Buscando catálogo y preparando recomendación...",
-    catalogGenerating: "Preparando una ruta confiable en {style}...",
-    recommendationGenerated: "Recomendación generada según tus preferencias seleccionadas.",
-    exploratoryGenerated: "Sin filtros definidos: generé una recomendación exploratoria.",
+    searchingCatalog: "Leyendo catálogo, contexto e historial...",
+    catalogGenerating: "Armando una ruta confiable en {style}...",
+    recommendationGenerated: "Pista lista para escuchar.",
+    exploratoryGenerated: "Apuesta exploratoria lista para escuchar.",
     styleExhaustedFallback: "No encontré artistas nuevos en {from} por ahora. Cambié a {to} para mantener descubrimiento sin repeticiones.",
     surpriseCrossGenreGenerated: "Refinamiento activo: salí de {from} y abrí una ruta nueva en {to}.",
     surpriseAdaptiveGenerated: "Refinamiento por perfil: tus señales apuntaron una nueva ruta en {to}, saliendo de {from}.",
     surpriseAdaptiveNeedSignals: "Dame algunos likes/dislikes primero para aprender tu perfil y sorprenderte mejor.",
     rerollNoOption: "No hay otra pista en el catálogo para este estilo específico ahora.",
     rerollGenerated: "Nueva sugerencia generada con rotación de artista y pista en el mismo perfil.",
-    clearFiltersFeedback: "Filtros limpiados. Puedes generar una búsqueda exploratoria.",
+    clearFiltersFeedback: "Filtros limpiados.",
     noUnknownOption: "No encontré otra opción desconocida para este perfil por ahora.",
-    swappedUnknown: "Listo. Cambié a otra sugerencia similar que probablemente no conocías.",
-    toastFoundNewArtist: "Perfecto. Busqué otro artista para que descubras.",
-    newArtistDetected: "Excelente. Lo marqué como descubrimiento nuevo y guardé la señal en tu perfil.",
-    toastNewDiscovery: "Qué bueno. Nuevo descubrimiento desbloqueado.",
-    prioritizeSimilar: "Perfecto. Priorizaré sonidos parecidos y abriré eventos del artista.",
-    toastShowMoreLikeThis: "Qué bueno que te gustó. Te mostraré más en esa línea.",
-    swappedNow: "Cambié ahora con nueva búsqueda en el mismo perfil, sin repetir artista/pista.",
-    toastSwapped: "Sin problema. Cambié a otra pista ahora.",
-    celebrationActivated: "Celebración activada. {song} entró en tus descubrimientos favoritos.",
-    toastFavoritedDiscovery: "Excelente elección. Descubrimiento favorito.",
-    refinedAfterNo: "Cambié la pista según tu feedback para refinar la curaduría.",
-    toastTryBetter: "Entendido, intentaré una recomendación mejor.",
-    songAddedProfile: "Bien. La pista {song} entró en tu perfil.",
-    toastSongLiked: "Bien. Pista con like.",
-    artistFavorited: "Perfecto. El artista {artist} fue marcado como favorito.",
-    toastArtistSaved: "Artista guardado como favorito.",
-    artistBlockedFromRecommendations: "Perfecto. El artista {artist} ya no se recomendará para ti.",
-    toastArtistBlocked: "Artista bloqueado de las recomendaciones.",
+    swappedUnknown: "Cambié por una pista cercana, pero fuera de los nombres ya marcados.",
+    toastFoundNewArtist: "Nuevo artista en la ruta. Hora de probar al oído.",
+    newArtistDetected: "Descubrimiento registrado. Ese nombre salió de la zona conocida.",
+    toastNewDiscovery: "Descubrimiento nuevo entró en el mapa.",
+    prioritizeSimilar: "Ese camino ganó peso. Traeré pistas vecinas y abriré contexto del artista.",
+    toastShowMoreLikeThis: "Señal positiva guardada: más de esa presión viene después.",
+    swappedNow: "Cambié sin repetir artista ni pista dentro de este perfil.",
+    toastSwapped: "Ruta descartada. Nueva pista sobre la mesa.",
+    celebrationActivated: "{song} se volvió descubrimiento favorito en tu mapa.",
+    toastFavoritedDiscovery: "Descubrimiento guardado como favorito.",
+    refinedAfterNo: "Tu no ajustó la ruta. La próxima búsqueda ya evita ese camino.",
+    toastTryBetter: "Ruta recalibrada. Buscaré un encaje más fino.",
+    songAddedProfile: "{song} ahora pesa en tus próximas recomendaciones.",
+    toastSongLiked: "Pista guardada en el mapa.",
+    artistFavorited: "{artist} ganó peso en tu mapa.",
+    toastArtistSaved: "Artista guardado como referencia.",
+    artistBlockedFromRecommendations: "{artist} salió de las próximas rutas.",
+    toastArtistBlocked: "Artista removido del radar.",
     enableDiscoveryMode: "Activa el modo descubrimiento para recibir un artista nuevo.",
-    likedDiscovery: "Excelente, te gustó conocer a {artist}.",
-    toastDiscoveryLiked: "Top. Descubrimiento con like.",
-    discoveryKnown: "Anotado. Voy a buscar nombres aún menos obvios en la próxima.",
-    toastDiscoveryKnown: "Anotado. Voy a profundizar los próximos descubrimientos.",
-    previewIssueLearned: "Entendido. Parece una falla de preview/reproducción. Voy a priorizar próximas pistas con player más confiable.",
-    toastPreviewIssueLearned: "Ajustado. Evitaré candidatos con preview débil.",
-    styleIssueLearned: "Entendido. Voy a tratar esta pista como clasificación dudosa y buscar una ruta más precisa.",
-    bpmIssueLearned: "Anotado. Bajaré la confianza de este BPM y priorizaré pulso más verificado.",
-    imageIssueLearned: "Bien visto. Bajaré la confianza de esta imagen y usaré fuentes visuales más seguras.",
-    toastRecommendationIssueLearned: "Error marcado. El radar quedó más exigente.",
-    skipAdjusted: "Recibido. Rehice la búsqueda y ajusté el próximo match según tu no.",
-    toastSkipAdjusted: "Perfecto. Ajusté tu recomendación según tu feedback.",
+    likedDiscovery: "{artist} entró como descubrimiento que vale seguir.",
+    toastDiscoveryLiked: "Descubrimiento reforzado en el mapa.",
+    discoveryKnown: "Ese nombre ya era conocido. Voy a cavar más hondo en la próxima.",
+    toastDiscoveryKnown: "Conocido marcado. Las próximas cartas quedan menos obvias.",
+    previewIssueLearned: "Falla de preview marcada. Subiré el peso de players más confiables.",
+    toastPreviewIssueLearned: "Preview débil bajó de prioridad.",
+    styleIssueLearned: "Subgénero cuestionado. Trataré esta pista con más cautela.",
+    bpmIssueLearned: "Pulso cuestionado. Las próximas elecciones piden BPM más confiable.",
+    imageIssueLearned: "Imagen cuestionada. Preferiré fuentes visuales más seguras.",
+    toastRecommendationIssueLearned: "Corrección guardada: esa ruta quedó más exigente.",
+    skipAdjusted: "Descarte recibido. Recalculé el próximo match a partir de ese no.",
+    toastSkipAdjusted: "Tu descarte ya pesó en la próxima elección.",
     catalogUpdateProgress: "Refinando {style} en segundo plano.",
-    searchOverlayTitle: "Buscando recomendación",
+    searchOverlayTitle: "Buscando la pista correcta",
     searchOverlayStage: "Etapa {current} de {total}",
-    searchOverlayPreparing: "Leyendo intención, energía, BPM y artistas conocidos...",
-    searchOverlayCatalog: "Escaneando catálogo y validando pistas confiables...",
-    searchOverlayGenerating: "Cruzando perfil, subgénero y descubrimiento nuevo...",
-    searchOverlayFinishing: "Puliendo el match y preparando la escucha...",
+    searchOverlayPreparing: "Leyendo tu momento e historial...",
+    searchOverlayCatalog: "Revisando rutas del catálogo...",
+    searchOverlayGenerating: "Cruzando perfil, novedad y confianza...",
+    searchOverlayFinishing: "Preparando preview y contexto...",
     newArtistsBtn: "Buscar artistas nuevos (< 2 años)",
     newArtistsTitle: "Artistas nuevos en el subgénero",
     newArtistsSelectStyle: "Elige un subgénero para buscar artistas nuevos.",
@@ -18753,7 +20935,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial en {style}. Usé una ruta local confiable mientras sigo ampliando la base.",
     catalogFallbackSearching: "Cobertura parcial en {style}. Buscando señales mejores antes de recomendar...",
     spiritPanelTitle: "Tu arquetipo musical",
-    spiritIntro: "Cada 10 canciones con like, tu arquetipo musical se revisa.",
+    spiritIntro: "10 likes revelan tu arquetipo.",
     spiritBadge: "Arquetipo desbloqueado",
     spiritAvatarAlt: "Busto de arquetipo electrónico {name}",
     spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para revelar tu arquetipo.",
@@ -18767,7 +20949,7 @@ const I18N = {
     spiritInsightTitle: "Calibración del arquetipo",
     spiritInsightLockedStatus: "En formación",
     spiritInsightUnlockedStatus: "Activo",
-    spiritInsightLockedText: "Faltan {remaining} likes de pistas para revelar tu arquetipo. Estoy leyendo estilo, energía y feedback.",
+    spiritInsightLockedText: "Faltan {remaining} likes de pistas para revelar tu arquetipo.",
     spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
     spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
     spiritInsightSignalScore: "{label}: señal {score}",
@@ -18791,7 +20973,7 @@ const I18N = {
     spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
     spiritSpotlightTitle: "Pista del arquetipo",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
-    spiritSpotlightHintPredicted: "Apuesta de alta afinidad para tu perfil actual.",
+    spiritSpotlightHintPredicted: "La mejor pista para tu perfil aparece aquí.",
     spiritSpotlightHintFallback: "Pista seleccionada para representar tu arquetipo ahora.",
     spiritSpotlightNone: "Aún no hay pista candidata. Genera una nueva recomendación para ajustar mejor.",
     spiritSpotlightFeedback: "Pista del arquetipo: {song} • {artist}.",
@@ -18819,7 +21001,7 @@ const I18N = {
     spiritCollectibleShareNativeDone: "Compartir abierto. Elige Instagram Stories en la lista de apps.",
     spiritCollectibleShareFallback: "No pude abrir el compartir nativo. Usa Descargar imagen solo si quieres publicar manualmente.",
     spiritCollectibleShareCanceled: "Compartir cancelado.",
-    spiritCollectibleShareCaption: "Mi arquetipo musical en Sonic Search: {spirit}. #SonicSearch #MusicSommelier",
+    spiritCollectibleShareCaption: "Mi arquetipo musical en Sonic Search: {spirit}. #SonicSearch #ElectronicMusic",
     spiritCollectibleShareStatusLine: "Estado {status} | {songs} pistas con like | {shown} presentadas | Ya conocías {known}",
     spiritCollectibleShareStoryTitle: "Mi estado musical",
     spiritCollectibleGenerating: "Generando arte de tu arquetipo...",
@@ -18847,9 +21029,9 @@ const I18N = {
     spiritCollectibleErrorApiPrefix: "Fallo de la API de imagen:",
     spiritCollectibleErrorApiStatus: "Fallo de la API de imagen (HTTP {status}). Intenta generar de nuevo.",
     spiritRankUnlocked: "Arquetipo desbloqueado",
-    spiritRankNovice: "Sommelier musical inicial",
-    spiritRankResident: "Sommelier musical residente",
-    spiritRankMaster: "Sommelier musical maestro"
+    spiritRankNovice: "Curador inicial",
+    spiritRankResident: "Curador residente",
+    spiritRankMaster: "Curador maestro"
   }
 };
 
@@ -19442,7 +21624,7 @@ function applyLanguage() {
   document.documentElement.lang = currentLanguage === "pt" ? "pt-BR" : currentLanguage;
   const labels = {
     pt: {
-      profileTitle: "Ajuste o radar",
+      profileTitle: "Ajuste fino do radar",
       subgenre: "Subgênero principal",
       context: "Contexto",
       energy: "Energia",
@@ -19450,43 +21632,43 @@ function applyLanguage() {
       vocals: "Preferência de vocal",
       discoveryMode: "Modo descoberta",
       discoveryToggle: "Quero artista novo fora do meu radar",
-      knownArtists: "Artistas que você já conhece (separe por vírgula)",
+      knownArtists: "Artistas que já estão no seu radar (separe por vírgula)",
       knownArtistsPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Prioridade dos filtros",
-      resultTitle: "Faixa recomendada",
-      listenersTitle: "Quem ouviu essa música recentemente",
+      resultTitle: "Sua faixa",
+      listenersTitle: "Quem ouviu essa faixa recentemente",
       feedbackTitle: "Ensine o radar",
-      detailsTitle: "Hub do artista",
+      detailsTitle: "Continue pelo artista",
       artistTitle: "Artista",
       labelTitle: "Gravadora",
       eventsTitle: "Agenda do artista",
-      summaryTitle: "7) Resumo de perfil",
-      defaultStats: "Nenhum feedback ainda.",
-      knownPrompt: "Você já conhecia este artista?",
-      previewPrompt: "Está gostando do que está escutando?",
-      noveltyPrompt: "Legal, novidade desbloqueada. Você gostou dessa faixa?",
-      btnKnownYes: "Sim, já conhecia",
-      btnKnownNo: "Não, novidade para mim",
-      btnNoveltyYes: "Gostei sim",
-      btnNoveltyNo: "Ainda não",
-      btnPreviewYes: "Sim, curti",
+      summaryTitle: "Resumo do perfil",
+      defaultStats: "Comece com uma faixa: seus sinais aparecem aqui.",
+      knownPrompt: "Esse artista já estava no seu radar?",
+      previewPrompt: "O som conectou?",
+      noveltyPrompt: "Novidade marcada. Essa faixa entrou no clima?",
+      btnKnownYes: "Já estava no radar",
+      btnKnownNo: "Novidade pra mim",
+      btnNoveltyYes: "Entrou, gostei",
+      btnNoveltyNo: "Ainda não entrou",
+      btnPreviewYes: "Conectou",
       btnPreviewPlay: "Tocar preview",
       btnPreviewIssue: "Não tocou",
-      btnPreviewNo: "Não, troca agora",
+      btnPreviewNo: "Não conectou, troca",
       btnStyleIssue: "Subgênero errado",
       btnBpmIssue: "BPM estranho",
       btnImageIssue: "Imagem errada",
-      btnLikeSong: "Gostei da faixa",
-      btnLikeArtist: "Gostei do artista",
-      btnBlockArtist: "Não recomendar este artista",
-      btnLikeDiscovery: "Curti a descoberta",
-      btnKnewDiscovery: "Já conhecia",
+      btnLikeSong: "Salvar faixa",
+      btnLikeArtist: "Salvar artista",
+      btnBlockArtist: "Tirar artista do radar",
+      btnLikeDiscovery: "Salvar descoberta",
+      btnKnewDiscovery: "Já estava no radar",
       btnNewDiscovery: "Novidade pra mim",
       btnSkip: "Não combinou",
-      btnMoreInfo: "Mais sobre artista e label"
+      btnMoreInfo: "Abrir contexto do artista"
     },
     en: {
-      profileTitle: "Tune the radar",
+      profileTitle: "Fine-tune the radar",
       subgenre: "Main subgenre",
       context: "Context",
       energy: "Energy",
@@ -19494,43 +21676,43 @@ function applyLanguage() {
       vocals: "Vocal preference",
       discoveryMode: "Discovery mode",
       discoveryToggle: "I want a new artist outside my radar",
-      knownArtists: "Artists you already know (comma-separated)",
+      knownArtists: "Artists already on your radar (comma-separated)",
       knownArtistsPlaceholder: "Ex.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Filter priority",
-      resultTitle: "Recommended track",
+      resultTitle: "Your track",
       listenersTitle: "Who listened to this track recently",
       feedbackTitle: "Teach the radar",
-      detailsTitle: "Artist hub",
+      detailsTitle: "Continue with the artist",
       artistTitle: "Artist",
       labelTitle: "Label",
       eventsTitle: "Artist agenda",
-      summaryTitle: "7) Profile summary",
-      defaultStats: "No feedback yet.",
-      knownPrompt: "Did you already know this artist?",
-      previewPrompt: "Are you enjoying what you are listening to?",
-      noveltyPrompt: "Nice, new discovery unlocked. Did you enjoy this track?",
-      btnKnownYes: "Yes, I knew",
+      summaryTitle: "Profile summary",
+      defaultStats: "Start with one track: your signals will show up here.",
+      knownPrompt: "Was this artist already on your radar?",
+      previewPrompt: "Did the sound connect?",
+      noveltyPrompt: "Discovery marked. Did this track fit the mood?",
+      btnKnownYes: "Already on my radar",
       btnKnownNo: "No, new to me",
-      btnNoveltyYes: "Yes, I liked it",
-      btnNoveltyNo: "Not yet",
-      btnPreviewYes: "Yes, liked it",
+      btnNoveltyYes: "It fit, I liked it",
+      btnNoveltyNo: "Not in the map yet",
+      btnPreviewYes: "It connected",
       btnPreviewPlay: "Play preview",
       btnPreviewIssue: "Did not play",
-      btnPreviewNo: "No, switch now",
+      btnPreviewNo: "No, swap it",
       btnStyleIssue: "Wrong subgenre",
       btnBpmIssue: "BPM feels off",
       btnImageIssue: "Wrong image",
-      btnLikeSong: "Liked the track",
-      btnLikeArtist: "Liked the artist",
-      btnBlockArtist: "Never recommend this artist",
-      btnLikeDiscovery: "Liked discovery",
-      btnKnewDiscovery: "Already knew",
+      btnLikeSong: "Save track",
+      btnLikeArtist: "Save artist",
+      btnBlockArtist: "Remove artist from radar",
+      btnLikeDiscovery: "Save discovery",
+      btnKnewDiscovery: "Already on my radar",
       btnNewDiscovery: "New to me",
       btnSkip: "Did not match",
-      btnMoreInfo: "More about artist and label"
+      btnMoreInfo: "Open artist context"
     },
     es: {
-      profileTitle: "Ajusta el radar",
+      profileTitle: "Ajuste fino del radar",
       subgenre: "Subgénero principal",
       context: "Contexto",
       energy: "Energía",
@@ -19538,40 +21720,40 @@ function applyLanguage() {
       vocals: "Preferencia de voz",
       discoveryMode: "Modo descubrimiento",
       discoveryToggle: "Quiero artista nuevo fuera de mi radar",
-      knownArtists: "Artistas que ya conoces (separados por coma)",
+      knownArtists: "Artistas que ya están en tu radar (separados por coma)",
       knownArtistsPlaceholder: "Ej.: Astrix, Charlotte de Witte, Alok",
       weightsTitle: "Prioridad de filtros",
-      resultTitle: "Pista recomendada",
+      resultTitle: "Tu pista",
       listenersTitle: "Quién escuchó esta pista recientemente",
       feedbackTitle: "Enséñale al radar",
-      detailsTitle: "Hub del artista",
+      detailsTitle: "Continúa por el artista",
       artistTitle: "Artista",
       labelTitle: "Sello",
       eventsTitle: "Agenda del artista",
-      summaryTitle: "7) Resumen de perfil",
-      defaultStats: "Sin feedback todavía.",
-      knownPrompt: "¿Ya conocías este artista?",
-      previewPrompt: "¿Te está gustando lo que escuchas?",
-      noveltyPrompt: "Bien, novedad desbloqueada. ¿Te gustó esta pista?",
-      btnKnownYes: "Sí, ya conocía",
+      summaryTitle: "Resumen del perfil",
+      defaultStats: "Empieza con una pista: tus señales aparecerán aquí.",
+      knownPrompt: "¿Este artista ya estaba en tu radar?",
+      previewPrompt: "¿Conectó el sonido?",
+      noveltyPrompt: "Novedad marcada. ¿Esta pista entró en el clima?",
+      btnKnownYes: "Ya estaba en mi radar",
       btnKnownNo: "No, novedad para mí",
-      btnNoveltyYes: "Sí, me gustó",
-      btnNoveltyNo: "Aún no",
-      btnPreviewYes: "Sí, me gustó",
+      btnNoveltyYes: "Entró, me gustó",
+      btnNoveltyNo: "Aún no entra",
+      btnPreviewYes: "Conectó",
       btnPreviewPlay: "Reproducir preview",
       btnPreviewIssue: "No sonó",
-      btnPreviewNo: "No, cambia ahora",
+      btnPreviewNo: "No conectó, cambia",
       btnStyleIssue: "Subgénero errado",
       btnBpmIssue: "BPM raro",
       btnImageIssue: "Imagen errada",
-      btnLikeSong: "Me gustó la pista",
-      btnLikeArtist: "Me gustó el artista",
-      btnBlockArtist: "No recomendar este artista",
-      btnLikeDiscovery: "Me gustó el descubrimiento",
-      btnKnewDiscovery: "Ya conocía",
+      btnLikeSong: "Guardar pista",
+      btnLikeArtist: "Guardar artista",
+      btnBlockArtist: "Sacar artista del radar",
+      btnLikeDiscovery: "Guardar descubrimiento",
+      btnKnewDiscovery: "Ya estaba en mi radar",
       btnNewDiscovery: "Novedad para mí",
       btnSkip: "No combinó",
-      btnMoreInfo: "Más sobre artista y sello"
+      btnMoreInfo: "Abrir contexto del artista"
     }
   }[currentLanguage] || {};
 
@@ -19874,6 +22056,12 @@ function applyLanguage() {
   setText("#summaryPanelTitle", t("summaryPanelTitle"));
   setText("#summaryShareInstagramBtn", t("summaryShareStoryBtn"));
   setText("#summaryShareLinkBtn", t("shareLinkBtn"));
+  setText("#apiHealthKicker", t("apiHealthKicker"));
+  setText("#apiHealthTitle", t("apiHealthTitle"));
+  setText("#apiHealthIntro", t("apiHealthIntro"));
+  setText("#apiHealthRefreshBtn", t("apiHealthRefreshBtn"));
+  if (apiHealthPayload) renderApiHealthPanel(apiHealthPayload);
+  else if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthLoading");
   setText("#profileLibraryKicker", t("profileLibraryKicker"));
   setText("#profileLibraryTitle", t("profileLibraryTitle"));
   setText("#profileLibraryHint", t("profileLibraryHint"));
@@ -20727,6 +22915,11 @@ function updateAuthProviderUi() {
     authGuestBtn.classList.remove("hidden");
     authGuestBtn.removeAttribute("aria-hidden");
     authGuestBtn.disabled = false;
+  }
+  if (authResumeBtn) {
+    authResumeBtn.classList.add("hidden");
+    authResumeBtn.setAttribute("aria-hidden", "true");
+    authResumeBtn.disabled = true;
   }
   if (authProviderHint) {
     authProviderHint.textContent = googleConfigured || signed
@@ -22269,34 +24462,23 @@ async function showAuthScreen() {
   }
 
   const onlineUser = authOnlineSessionUserLabel();
+  if (authResumeBtn) {
+    authResumeBtn.classList.add("hidden");
+    authResumeBtn.setAttribute("aria-hidden", "true");
+    authResumeBtn.disabled = true;
+  }
   if (onlineUser) {
-    if (authResumeBtn) {
-      authResumeBtn.classList.add("hidden");
-      authResumeBtn.disabled = true;
-    }
     setAuthFeedback(t("authProviderLoggedAs", {
       provider: "Google",
       user: onlineUser
     }));
   } else if (storedUser && storedUser.mode !== "guest") {
-    if (authResumeBtn) {
-      authResumeBtn.classList.remove("hidden");
-      authResumeBtn.disabled = false;
-    }
-    setAuthFeedback(t("authSavedProfileReady", {
-      user: storedUser.username || storedUser.email || t("summaryNoData")
-    }));
+    setAuthFeedback("");
   } else {
-    if (authResumeBtn) {
-      authResumeBtn.classList.add("hidden");
-      authResumeBtn.disabled = true;
-    }
     setAuthFeedback("");
   }
   const preferredAuthAction = onlineUser || socialConfigReady()
     ? authGoogleBtn
-    : storedUser && storedUser.mode !== "guest"
-    ? authResumeBtn
     : authGuestBtn;
   if (preferredAuthAction?.focus) preferredAuthAction.focus();
   else if (authUsername) authUsername.focus();
@@ -22615,7 +24797,7 @@ async function resumeStoredUserSession() {
 async function continueWithoutLogin() {
   resetSocialOAuthNavigationState({ clearUrl: true });
   if (socialState.session?.access_token) await socialSignOut();
-  startLocalProfileFlow({ preferStored: false });
+  startLocalProfileFlow({ preferStored: true });
 }
 
 function createTestUserSession() {
@@ -25429,10 +27611,278 @@ function buildCryptoPayload() {
   return `bitcoin:${address}?message=${encodeURIComponent(brlNote)}`;
 }
 
+const LOCAL_QR_L_CONFIG = {
+  1: { data: 19, ecc: 7, blocks: 1, align: [] },
+  2: { data: 34, ecc: 10, blocks: 1, align: [6, 18] },
+  3: { data: 55, ecc: 15, blocks: 1, align: [6, 22] },
+  4: { data: 80, ecc: 20, blocks: 1, align: [6, 26] },
+  5: { data: 108, ecc: 26, blocks: 1, align: [6, 30] },
+  6: { data: 136, ecc: 18, blocks: 2, align: [6, 34] },
+  7: { data: 156, ecc: 20, blocks: 2, align: [6, 22, 38] },
+  8: { data: 194, ecc: 24, blocks: 2, align: [6, 24, 42] },
+  9: { data: 232, ecc: 30, blocks: 2, align: [6, 26, 46] }
+};
+
+let localQrGfCache = null;
+const localQrGeneratorCache = new Map();
+
+function localQrBytes(value = "") {
+  const text = String(value || "");
+  if (typeof TextEncoder !== "undefined") return Array.from(new TextEncoder().encode(text));
+  return unescape(encodeURIComponent(text)).split("").map((char) => char.charCodeAt(0));
+}
+
+function localQrAppendBits(target, value, length) {
+  for (let bit = length - 1; bit >= 0; bit -= 1) {
+    target.push((value >>> bit) & 1);
+  }
+}
+
+function localQrConfigFor(byteLength) {
+  return Object.entries(LOCAL_QR_L_CONFIG).find(([, config]) => {
+    const requiredBits = 4 + 8 + byteLength * 8;
+    return requiredBits <= config.data * 8;
+  }) || null;
+}
+
+function localQrDataCodewords(bytes, config) {
+  const bits = [];
+  localQrAppendBits(bits, 0x4, 4);
+  localQrAppendBits(bits, bytes.length, 8);
+  bytes.forEach((byte) => localQrAppendBits(bits, byte, 8));
+  const capacityBits = config.data * 8;
+  const terminator = Math.min(4, capacityBits - bits.length);
+  for (let index = 0; index < terminator; index += 1) bits.push(0);
+  while (bits.length % 8) bits.push(0);
+
+  const codewords = [];
+  for (let index = 0; index < bits.length; index += 8) {
+    let value = 0;
+    for (let bit = 0; bit < 8; bit += 1) value = (value << 1) | bits[index + bit];
+    codewords.push(value);
+  }
+  for (let pad = 0; codewords.length < config.data; pad += 1) {
+    codewords.push(pad % 2 === 0 ? 0xec : 0x11);
+  }
+  return codewords;
+}
+
+function localQrGfTables() {
+  if (localQrGfCache) return localQrGfCache;
+  const exp = new Array(512).fill(0);
+  const log = new Array(256).fill(0);
+  let value = 1;
+  for (let index = 0; index < 255; index += 1) {
+    exp[index] = value;
+    log[value] = index;
+    value <<= 1;
+    if (value & 0x100) value ^= 0x11d;
+  }
+  for (let index = 255; index < 512; index += 1) exp[index] = exp[index - 255];
+  localQrGfCache = { exp, log };
+  return localQrGfCache;
+}
+
+function localQrGfMultiply(left, right) {
+  if (!left || !right) return 0;
+  const { exp, log } = localQrGfTables();
+  return exp[log[left] + log[right]];
+}
+
+function localQrGeneratorPolynomial(degree) {
+  if (localQrGeneratorCache.has(degree)) return localQrGeneratorCache.get(degree);
+  const { exp } = localQrGfTables();
+  let coefficients = [1];
+  for (let index = 0; index < degree; index += 1) {
+    const next = new Array(coefficients.length + 1).fill(0);
+    coefficients.forEach((coefficient, coefficientIndex) => {
+      next[coefficientIndex] ^= localQrGfMultiply(coefficient, exp[index]);
+      next[coefficientIndex + 1] ^= coefficient;
+    });
+    coefficients = next;
+  }
+  const generator = coefficients.slice(1);
+  localQrGeneratorCache.set(degree, generator);
+  return generator;
+}
+
+function localQrErrorCorrection(dataCodewords, degree) {
+  const generator = localQrGeneratorPolynomial(degree);
+  const result = new Array(degree).fill(0);
+  dataCodewords.forEach((codeword) => {
+    const factor = codeword ^ result.shift();
+    result.push(0);
+    generator.forEach((coefficient, index) => {
+      result[index] ^= localQrGfMultiply(coefficient, factor);
+    });
+  });
+  return result;
+}
+
+function localQrFinalCodewords(dataCodewords, config) {
+  const blockLength = config.data / config.blocks;
+  if (!Number.isInteger(blockLength)) return [];
+  const dataBlocks = [];
+  const eccBlocks = [];
+  for (let block = 0; block < config.blocks; block += 1) {
+    const start = block * blockLength;
+    const dataBlock = dataCodewords.slice(start, start + blockLength);
+    dataBlocks.push(dataBlock);
+    eccBlocks.push(localQrErrorCorrection(dataBlock, config.ecc));
+  }
+
+  const result = [];
+  for (let index = 0; index < blockLength; index += 1) {
+    dataBlocks.forEach((block) => result.push(block[index]));
+  }
+  for (let index = 0; index < config.ecc; index += 1) {
+    eccBlocks.forEach((block) => result.push(block[index]));
+  }
+  return result;
+}
+
+function localQrMatrix(version, config, codewords) {
+  const size = 17 + version * 4;
+  const modules = Array.from({ length: size }, () => new Array(size).fill(false));
+  const reserved = Array.from({ length: size }, () => new Array(size).fill(false));
+  const setModule = (row, column, dark, isReserved = true) => {
+    if (row < 0 || column < 0 || row >= size || column >= size) return;
+    modules[row][column] = Boolean(dark);
+    if (isReserved) reserved[row][column] = true;
+  };
+
+  const addFinder = (row, column) => {
+    for (let dy = -1; dy <= 7; dy += 1) {
+      for (let dx = -1; dx <= 7; dx += 1) {
+        const y = row + dy;
+        const x = column + dx;
+        if (y < 0 || x < 0 || y >= size || x >= size) continue;
+        const inFinder = dy >= 0 && dy <= 6 && dx >= 0 && dx <= 6;
+        const dark = inFinder && (dy === 0 || dy === 6 || dx === 0 || dx === 6 || (dy >= 2 && dy <= 4 && dx >= 2 && dx <= 4));
+        setModule(y, x, dark);
+      }
+    }
+  };
+
+  const addAlignment = (row, column) => {
+    for (let dy = -2; dy <= 2; dy += 1) {
+      for (let dx = -2; dx <= 2; dx += 1) {
+        const radius = Math.max(Math.abs(dx), Math.abs(dy));
+        setModule(row + dy, column + dx, radius === 2 || radius === 0);
+      }
+    }
+  };
+
+  addFinder(0, 0);
+  addFinder(0, size - 7);
+  addFinder(size - 7, 0);
+
+  for (let index = 8; index < size - 8; index += 1) {
+    setModule(6, index, index % 2 === 0);
+    setModule(index, 6, index % 2 === 0);
+  }
+
+  config.align.forEach((row) => {
+    config.align.forEach((column) => {
+      if (reserved[row]?.[column]) return;
+      addAlignment(row, column);
+    });
+  });
+
+  for (let index = 0; index < 9; index += 1) {
+    if (index !== 6) {
+      reserved[8][index] = true;
+      reserved[index][8] = true;
+    }
+  }
+  for (let index = 0; index < 8; index += 1) {
+    reserved[8][size - 1 - index] = true;
+    reserved[size - 1 - index][8] = true;
+  }
+  setModule(size - 8, 8, true);
+
+  const bits = [];
+  codewords.forEach((codeword) => localQrAppendBits(bits, codeword, 8));
+  let bitIndex = 0;
+  let upward = true;
+  for (let column = size - 1; column > 0; column -= 2) {
+    if (column === 6) column -= 1;
+    for (let step = 0; step < size; step += 1) {
+      const row = upward ? size - 1 - step : step;
+      for (let offset = 0; offset < 2; offset += 1) {
+        const currentColumn = column - offset;
+        if (reserved[row][currentColumn]) continue;
+        let dark = bitIndex < bits.length ? bits[bitIndex] === 1 : false;
+        if ((row + currentColumn) % 2 === 0) dark = !dark;
+        setModule(row, currentColumn, dark, false);
+        bitIndex += 1;
+      }
+    }
+    upward = !upward;
+  }
+
+  const formatBits = localQrFormatBits(0);
+  const formatBit = (index) => ((formatBits >>> index) & 1) === 1;
+  for (let index = 0; index <= 5; index += 1) setModule(8, index, formatBit(index));
+  setModule(8, 7, formatBit(6));
+  setModule(8, 8, formatBit(7));
+  setModule(7, 8, formatBit(8));
+  for (let index = 9; index < 15; index += 1) setModule(14 - index, 8, formatBit(index));
+  for (let index = 0; index < 8; index += 1) setModule(size - 1 - index, 8, formatBit(index));
+  for (let index = 8; index < 15; index += 1) setModule(8, size - 15 + index, formatBit(index));
+  setModule(size - 8, 8, true);
+  return modules;
+}
+
+function localQrFormatBits(mask) {
+  const errorCorrectionLevel = 1;
+  const data = (errorCorrectionLevel << 3) | (mask & 7);
+  let remainder = data;
+  for (let index = 0; index < 10; index += 1) {
+    remainder = (remainder << 1) ^ (((remainder >>> 9) & 1) ? 0x537 : 0);
+  }
+  return ((data << 10) | (remainder & 0x3ff)) ^ 0x5412;
+}
+
+function localQrSvgDataUrl(payload = "") {
+  const value = String(payload || "").trim();
+  if (!value) return "";
+  const bytes = localQrBytes(value);
+  const selected = localQrConfigFor(bytes.length);
+  if (!selected) return "";
+  const [versionText, config] = selected;
+  const version = Number(versionText);
+  const dataCodewords = localQrDataCodewords(bytes, config);
+  const codewords = localQrFinalCodewords(dataCodewords, config);
+  if (!codewords.length) return "";
+  const modules = localQrMatrix(version, config, codewords);
+  const quiet = 4;
+  const size = modules.length;
+  const viewBoxSize = size + quiet * 2;
+  const cells = [];
+  modules.forEach((row, y) => {
+    row.forEach((dark, x) => {
+      if (dark) cells.push(`M${x + quiet} ${y + quiet}h1v1h-1z`);
+    });
+  });
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewBoxSize} ${viewBoxSize}" shape-rendering="crispEdges">`,
+    `<rect width="${viewBoxSize}" height="${viewBoxSize}" fill="#fff"/>`,
+    `<path d="${cells.join("")}" fill="#0b1220"/>`,
+    "</svg>"
+  ].join("");
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 function supportQrUrl(payload = "") {
   const value = String(payload || "").trim();
   if (!value) return "";
-  return `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=12&data=${encodeURIComponent(value)}`;
+  const localUrl = localQrSvgDataUrl(value);
+  if (localUrl) return localUrl;
+  if (COMPLIANCE_CONFIG.externalQrApiEnabled === true) {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=12&data=${encodeURIComponent(value)}`;
+  }
+  return "";
 }
 
 function setSupportQr(imageEl, placeholderEl, payload = "", alt = "") {
@@ -25641,7 +28091,7 @@ function ensureEventsPanelActive() {
 }
 
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName) ? tabName : "discover";
+  const safeTab = ["discover", "djs", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName) ? tabName : "discover";
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
@@ -25654,6 +28104,7 @@ function setActiveAppTab(tabName = "discover") {
   });
   updateSignatureBarForTab(safeTab);
   if (safeTab === "profile") scheduleMusicalSpiritRefresh({ force: true });
+  if (safeTab === "djs") ensureDjDiscoveryReady();
 }
 
 function handleHeroLogoClick() {
@@ -27980,6 +30431,9 @@ const COUNTRY_CODE_BY_NAME = {
   alemanha: "DE",
   greece: "GR",
   india: "IN",
+  iceland: "IS",
+  islandia: "IS",
+  "islândia": "IS",
   ireland: "IE",
   israel: "IL",
   italy: "IT",
@@ -27993,6 +30447,9 @@ const COUNTRY_CODE_BY_NAME = {
   holanda: "NL",
   "paises baixos": "NL",
   "países baixos": "NL",
+  "new zealand": "NZ",
+  "nova zelandia": "NZ",
+  "nova zelândia": "NZ",
   "north macedonia": "MK",
   "macedonia do norte": "MK",
   "macedônia do norte": "MK",
@@ -28775,6 +31232,18 @@ function applyCanonicalOriginToProfile(artistName, profile) {
   const sources = Array.isArray(merged.sources) ? [...merged.sources] : [];
   if (!sources.includes("CuratedOrigin")) sources.push("CuratedOrigin");
   merged.sources = sources;
+  const sourceDetails = Array.isArray(merged.sourceDetails) ? [...merged.sourceDetails] : [];
+  if (!sourceDetails.some((detail) => detail?.provider === "CuratedOrigin" || detail?.name === "CuratedOrigin")) {
+    sourceDetails.push({
+      name: "CuratedOrigin",
+      provider: "CuratedOrigin",
+      dataType: "artist origin override",
+      url: "",
+      license: "Sonic Search curated data",
+      attribution: "Origin curated in Sonic Search local catalog."
+    });
+  }
+  merged.sourceDetails = sourceDetails;
   return merged;
 }
 
@@ -28914,12 +31383,14 @@ function renderArtistHub(track, { hydrate = true } = {}) {
       artistBioAiMeta.classList.remove("hidden");
     }
   }
+  resetLastfmArtistPanel();
   renderDiscogsArtistPanel(track);
   renderArtistSocialLinks(track);
   if (labelBio) {
     labelBio.textContent = detailedLabelBio(track);
   }
   if (hydrate && artistBio && trackStillActive(track)) {
+    void hydrateLastfmArtistPanel(track);
     void hydrateArtistBioFromApis(track);
     void hydrateArtistBioFromAi(track);
   }
@@ -29010,6 +31481,8 @@ async function requestArtistBioFromApi(track) {
       bio: bio.slice(0, 900),
       sourceSummary: String(payload?.sourceSummary || "").trim(),
       sources: Array.isArray(payload?.sources) ? payload.sources : [],
+      sourceDetails: Array.isArray(payload?.sourceDetails) ? payload.sourceDetails : [],
+      attribution: payload?.attribution && typeof payload.attribution === "object" ? payload.attribution : null,
       verification: payload?.verification && typeof payload.verification === "object" ? payload.verification : null,
       confidence: String(payload?.confidence || "").trim(),
       origin: String(payload?.origin || "").trim(),
@@ -29866,6 +32339,39 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
   else dailyNewsStatus.textContent = t("dailyNewsLiveStatus", { date: statusDate });
 }
 
+function dailyNewsBackendEndpoint() {
+  const configured = String(
+    window?.SONIC_NEWS_FEED_API_URL ||
+      COMPLIANCE_CONFIG.newsFeedEndpoint ||
+      ""
+  ).trim();
+  if (configured) return configured;
+  return canUseRelativeApiEndpoint() ? "/api/news-feed" : "";
+}
+
+async function fetchDailyNewsFromBackend() {
+  const endpoint = dailyNewsBackendEndpoint();
+  if (!endpoint) return [];
+  const params = new URLSearchParams({
+    language: dailyNewsTargetLanguage(),
+    limit: String(DAILY_NEWS_MAX_ITEMS)
+  });
+  const separator = endpoint.includes("?") ? "&" : "?";
+  try {
+    const response = await fetch(`${endpoint}${separator}${params.toString()}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      cache: "no-store"
+    });
+    if (!response.ok) return [];
+    const payload = await response.json();
+    const items = Array.isArray(payload?.items) ? payload.items : [];
+    return compactDailyNewsItems(items);
+  } catch (_err) {
+    return [];
+  }
+}
+
 async function refreshDailyNews({ silent = false, live = true } = {}) {
   if (!dailyNewsPanel || !dailyNewsList || !dailyNewsStatus) return;
   const showProgress = !silent;
@@ -29883,6 +32389,27 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
 
   if (!live) {
     if (!cache?.items?.length && !dailyNewsList.children.length) {
+      await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
+    }
+    if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
+    if (showProgress) finishDailyNewsProgress();
+    return;
+  }
+
+  const backendNews = await fetchDailyNewsFromBackend();
+  if (backendNews.length) {
+    saveDailyNewsCache(backendNews);
+    await renderDailyNewsItems(backendNews, { updatedAt: new Date().toISOString() });
+    if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
+    if (showProgress) finishDailyNewsProgress();
+    return;
+  }
+
+  if (COMPLIANCE_CONFIG.directNewsFetchEnabled !== true) {
+    const latestCache = loadDailyNewsCache();
+    if (latestCache?.items?.length) {
+      await renderDailyNewsItems(latestCache.items, { updatedAt: latestCache.updatedAt, fromCache: true });
+    } else {
       await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
     }
     if (dailyNewsRefreshBtn) dailyNewsRefreshBtn.disabled = false;
@@ -30031,7 +32558,8 @@ function mergeArtistProfile(...chunks) {
     genre: "",
     lifeStartYear: "",
     wikiSummary: "",
-    sources: []
+    sources: [],
+    sourceDetails: []
   };
   let countrySource = "";
   let areaSource = "";
@@ -30056,6 +32584,21 @@ function mergeArtistProfile(...chunks) {
     if (chunk.lifeStartYear && !profile.lifeStartYear) profile.lifeStartYear = chunk.lifeStartYear;
     if (chunk.wikiSummary && !profile.wikiSummary) profile.wikiSummary = chunk.wikiSummary;
     if (chunk.source && !profile.sources.includes(chunk.source)) profile.sources.push(chunk.source);
+    const chunkDetails = Array.isArray(chunk.sourceDetails)
+      ? chunk.sourceDetails
+      : (chunk.source ? [{
+          name: chunk.source,
+          provider: String(chunk.source || "").replace(/-.+$/, ""),
+          url: chunk.sourceUrl || chunk.wikiUrl || "",
+          dataType: "artist metadata",
+          license: "",
+          attribution: ""
+        }] : []);
+    chunkDetails.forEach((detail) => {
+      const detailKey = `${detail?.provider || detail?.name || ""}::${detail?.url || ""}`;
+      const exists = profile.sourceDetails.some((item) => `${item?.provider || item?.name || ""}::${item?.url || ""}` === detailKey);
+      if (detailKey !== "::" && !exists) profile.sourceDetails.push(detail);
+    });
   });
   if (profile.area && profile.country && areaSource && countrySource && areaSource !== countrySource) {
     profile.country = "";
@@ -30074,6 +32617,28 @@ function hasMeaningfulArtistProfile(profile) {
     profile.genre ||
     safeSummary
   );
+}
+
+function artistProfileSourcesLine(profile) {
+  const details = Array.isArray(profile?.sourceDetails) ? profile.sourceDetails : [];
+  const sources = details.length
+    ? details.map((detail) => String(detail?.provider || detail?.name || "").trim()).filter(Boolean)
+    : Array.isArray(profile?.sources)
+      ? profile.sources.map((source) => String(source || "").trim()).filter(Boolean)
+      : [];
+  if (!sources.length) return "";
+  const uniqueSources = Array.from(new Set(sources)).slice(0, 4).join(", ");
+  if (currentLanguage === "en") return `Sources: ${uniqueSources}.`;
+  if (currentLanguage === "es") return `Fuentes: ${uniqueSources}.`;
+  return `Fontes: ${uniqueSources}.`;
+}
+
+function artistProfileAttributionMetaLine(profile) {
+  const line = artistProfileSourcesLine(profile);
+  if (!line) return "";
+  if (currentLanguage === "en") return `Open-source artist data. ${line}`;
+  if (currentLanguage === "es") return `Datos abiertos del artista. ${line}`;
+  return `Dados abertos do artista. ${line}`;
 }
 
 function buildArtistBioFromApiProfile(track, profile) {
@@ -30139,6 +32704,19 @@ async function fetchArtistApiProfile(artistName, preferredLanguage = currentLang
   const cacheKey = `${key}::${locale}`;
   if (artistApiProfileCache.has(cacheKey)) return artistApiProfileCache.get(cacheKey);
 
+  const backendProfile = await fetchArtistProfileFromApi(artistName, locale);
+  if (backendProfile) {
+    const canonicalBackendProfile = applyCanonicalOriginToProfile(artistName, backendProfile);
+    const result = hasMeaningfulArtistProfile(canonicalBackendProfile) ? canonicalBackendProfile : null;
+    artistApiProfileCache.set(cacheKey, result);
+    return result;
+  }
+
+  if (COMPLIANCE_CONFIG.clientArtistReferenceApisEnabled !== true) {
+    artistApiProfileCache.set(cacheKey, null);
+    return null;
+  }
+
   const [wiki, musicBrainz, itunes] = await Promise.all([
     fetchArtistBioFromWikipedia(artistName, locale),
     fetchArtistProfileFromMusicBrainz(artistName),
@@ -30173,7 +32751,16 @@ async function hydrateArtistBioFromApis(track) {
   updateArtistOriginFlags(track);
 
   const enriched = buildArtistBioFromApiProfile(track, profile);
-  if (enriched) artistBio.textContent = enriched;
+  if (enriched) {
+    artistBio.textContent = enriched;
+    if (artistBioAiMeta) {
+      const attribution = artistProfileAttributionMetaLine(profile);
+      if (attribution) {
+        artistBioAiMeta.textContent = attribution;
+        artistBioAiMeta.classList.remove("hidden");
+      }
+    }
+  }
 }
 
 async function hydrateArtistBioFromAi(track) {
@@ -30186,12 +32773,14 @@ async function hydrateArtistBioFromAi(track) {
   if (aiBio.origin && !originCountryConsistentWithTrack(track, aiBio.origin)) return;
 
   artistBio.textContent = aiBio.bio;
-  const discogsSource = (aiBio.sources || []).find((source) => {
+  const displaySources = (Array.isArray(aiBio.sourceDetails) && aiBio.sourceDetails.length ? aiBio.sourceDetails : aiBio.sources || [])
+    .filter((source) => source?.configured !== false && source?.enabled !== false);
+  const discogsSource = displaySources.find((source) => {
     const name = normalize(source?.name || "");
     const url = String(source?.url || "");
     return name === "discogs" && /discogs\.com\/artist\//i.test(url);
   });
-  const musicBrainzSource = (aiBio.sources || []).find((source) => {
+  const musicBrainzSource = displaySources.find((source) => {
     const name = normalize(source?.name || "");
     const url = String(source?.url || "");
     return name === "musicbrainz" && /musicbrainz\.org\/artist\//i.test(url);
@@ -30214,7 +32803,7 @@ async function hydrateArtistBioFromAi(track) {
   updateArtistOriginFlags(track);
 
   if (artistBioAiMeta) {
-    const sourceNames = (aiBio.sources || [])
+    const sourceNames = displaySources
       .map((source) => String(source?.name || "").trim())
       .filter(Boolean)
       .slice(0, 4);
@@ -31265,12 +33854,12 @@ function spiritIdentityText(spirit, spiritText = {}, profile = resolveSpiritNarr
   const archetype = spiritText?.archetype || profile.dominantStyle || name;
   const stylesLine = spiritProfileStylesLine(profile);
   if (currentLanguage === "en") {
-    return normalizeInlineText(`${name} is the visual form of your ${archetype}: a musical-archetype entity that turns ${stylesLine} into posture, wardrobe, gaze, and aura.`);
+    return normalizeInlineText(`${name} is the visual form of your ${archetype}: an electronic-party archetype that turns ${stylesLine} into posture, wardrobe, gaze, and background light.`);
   }
   if (currentLanguage === "es") {
-    return normalizeInlineText(`${name} es la forma visual de tu ${archetype}: una entidad musical que convierte ${stylesLine} en postura, ropa, mirada y aura.`);
+    return normalizeInlineText(`${name} es la forma visual de tu ${archetype}: un arquetipo de fiesta electrónica que convierte ${stylesLine} en postura, ropa, mirada y luz de fondo.`);
   }
-  return normalizeInlineText(`${name} é a forma visual do seu ${archetype}: uma entidade musical que transforma ${stylesLine} em postura, roupa, olhar e aura.`);
+  return normalizeInlineText(`${name} é a forma visual do seu ${archetype}: um arquétipo de festa eletrônica que transforma ${stylesLine} em postura, roupa, olhar e luz de fundo.`);
 }
 
 function spiritIndicationText(profile = {}) {
@@ -31754,7 +34343,7 @@ function buildSpiritStoryShareImage(baseImageDataUrl, spiritImageDataUrl, spirit
   <text x="104" y="1740" fill="#d6ecff" font-size="24" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(genreNarrativeLines[1] || "")}</text>
   <text x="104" y="1792" fill="#d7eaff" font-size="25" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(statusLines[0] || "")}</text>
   <text x="104" y="1828" fill="#d7eaff" font-size="25" font-family="Chakra Petch, Arial, sans-serif">${escapeSvgText(statusLines[1] || "")}</text>
-  <text x="104" y="1848" fill="#82d8ff" font-size="24" font-family="Chakra Petch, Arial, sans-serif">Sonic Search • Music Sommelier</text>
+  <text x="104" y="1848" fill="#82d8ff" font-size="24" font-family="Chakra Petch, Arial, sans-serif">Sonic Search • Music Discovery</text>
 </svg>`;
 
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
@@ -32052,7 +34641,7 @@ async function buildSpiritStoryShareVideo({
       ctx.fillText(statusLines[1] || "", 104, 1828);
       ctx.fillStyle = "#82d8ff";
       ctx.font = "24px Chakra Petch, Arial, sans-serif";
-      ctx.fillText("Sonic Search • Music Sommelier", 104, 1848);
+      ctx.fillText("Sonic Search • Music Discovery", 104, 1848);
     };
 
     const renderLoop = (timestamp) => {
@@ -32841,51 +35430,51 @@ function spiritVisualFamilyKey(spirit) {
 
 const SPIRIT_STYLE_FAMILY_DIRECTIONS = {
   psy_extreme: [
-    "Psycore/hi-tech styling: adult humanoid musical archetype bust with sharp high-BPM charisma, ghostly plasma skin, UV-reactive cyber-ritual accessories, prismatic ear cuffs, reflective performance jacket, controlled chaos, and no helmet or robot body",
-    "Extreme psychedelic styling: spectral adult club mystic with intense eyes, translucent face glow away from the eyes, speed-line jewelry, technical rave jacket, and surgical light cuts"
+    "Psycore/hi-tech styling: adult electronic party archetype bust with sharp high-BPM charisma, UV-reactive cyber-rave accessories, prismatic ear cuffs, reflective technical jacket, controlled chaos, and no helmet or robot body",
+    "Extreme psychedelic styling: adult hi-tech rave person with intense happy eyes, neon face accents away from the eyes, speed-line jewelry, technical rave jacket, and surgical light cuts"
   ],
   psy_dark: [
-    "Dark/forest/slambient styling: adult spectral ritual presence, nocturnal psychedelic accessories, obsidian beads, mycelium-like light threads, layered dark textiles, smoky charisma, and translucent ghost skin",
-    "Shadow psychedelic styling: believable adult forest-rave spirit figure with organic jewelry, hood or scarf kept away from the face, bioluminescent accents, deep mist, and magnetic luminous eyes"
+    "Dark/forest/slambient styling: adult dark-psy party archetype, nocturnal psychedelic accessories, obsidian beads, mycelium-like light threads, layered dark textiles, smoky charisma, and realistic skin under UV light",
+    "Shadow psychedelic styling: believable adult forest-rave person with organic jewelry, hood or scarf kept away from the face, bioluminescent accents, deep mist, and magnetic readable eyes"
   ],
   psy_bright: [
-    "Psychedelic festival styling: adult humanoid spirit bust with saturated UV accessories, mandala jewelry, braided or neon hair accents, luminous scarf, open festival charisma, pearlescent ghost skin, and clean euphoric stage light",
-    "Goa/full-on styling: realistic spectral festival guide with colorful textile layers, sun or midnight laser reflections, bead-like light details, expressive face, and melodic psychedelic glow"
+    "Psychedelic rave styling: adult psytrance partygoer bust with saturated UV accessories, geometric textile patterns, braided or neon hair accents, tinted glasses, open festival charisma, realistic skin, and clean euphoric stage light",
+    "Goa/full-on styling: realistic adult rave person with colorful textile layers, sun or midnight laser reflections, bead-like light details, expressive face, and melodic psychedelic glow"
   ],
   trance: [
-    "Trance styling: adult luminous frequency oracle with celestial club elegance, opaline silver-blue skin, clean melodic halo rings, refined chrome collar, emotional open gaze, and no forest-psy ritual costume",
-    "Uplifting/tech-trance styling: realistic adult spectral melodic guardian with wide sound-wave arcs, blue-violet stage light, polished futuristic robe or jacket, and euphoric but calm expression"
+    "Trance styling: adult melodic club archetype with clean club elegance, blue-violet light, refined chrome collar or jacket, emotional open gaze, and no forest-psy ritual costume",
+    "Uplifting/tech-trance styling: realistic adult club person with wide sound-wave arcs, blue-violet stage light, polished futuristic jacket, and euphoric but calm expression"
   ],
   hard_dance: [
-    "Hard dance/hardcore styling: adult spectral kick catalyst with red-cyan plasma skin, structured impact collar, reflective black performance jacket, hard-kick shock rings, bright strobe energy, and intense but non-aggressive gaze",
-    "Hardstyle/frenchcore styling: realistic adult club guardian with athletic bust posture, euphoric impact halo, white-red-cyan light, compression-wave aura, and no psytrance mandalas"
+    "Hard dance/hardcore styling: adult hard-club archetype with red-cyan strobe light, structured impact collar, reflective black performance jacket, hard-kick shock rings, bright energy, and intense but non-aggressive gaze",
+    "Hardstyle/frenchcore styling: realistic adult club person with athletic bust posture, euphoric impact light, white-red-cyan accents, compression-wave aura, and no psytrance mandalas"
   ],
   techno: [
-    "Techno/acid styling: adult spectral clubber bust with industrial elegance, black tailoring, leather or mesh textures, reflective seams, transparent visor lifted above the eyes, concrete-room strobe, acid-green steel light, and silver-blue ghost skin",
-    "Industrial club styling: realistic adult techno spirit with minimal black clothes, metallic accessories, precise posture, machine-room confidence, visible eyes, and no faceless mask"
+    "Techno/acid styling: adult warehouse clubber bust with industrial elegance, black tailoring, leather or mesh textures, reflective seams, transparent visor lifted above the eyes, concrete-room strobe, acid-green steel light, and visible human skin",
+    "Industrial club styling: realistic adult techno person with minimal black clothes, metallic accessories, precise posture, machine-room confidence, visible eyes, and no faceless mask"
   ],
   house: [
     "House/tech-house styling: adult groove pilot from an underground club booth, visible friendly face, technical mesh or transparent-vinyl clubwear, asymmetric zipper vest or crossbody utility harness, reflective fader seams, two or three distinct non-duplicated accessories, mixer-fader/equalizer light reflected on fabric, dry-bass social charisma, no plain leather-jacket portrait or simple headshot",
     "Soulful/house styling: adult dancefloor selector with relaxed clubwear, warm jewelry used once, visible smile, amber-pink booth light, rounded bass-wave background, community energy, and real club personality rather than generic neon portrait"
   ],
   bass: [
-    "Bass/DnB styling: adult humanoid bass spirit bust with physical low-end presence, tactical street-club jacket, headphones or pressure-ring collar, kinetic shoulders, speaker-shadow aura, translucent smoke skin, and sharp approachable gaze",
-    "Neuro/bass styling: realistic adult bass entity with heavyweight jacket, reflective straps, chest-level subwoofer light, clean drum-attack sparks, and confident impact-focused expression"
+    "Bass/DnB styling: adult bass-scene bust with physical low-end presence, tactical street-club jacket, headphones or pressure-ring collar, kinetic shoulders, speaker-shadow aura, and sharp approachable gaze",
+    "Neuro/bass styling: realistic adult bass person with heavyweight jacket, reflective straps, chest-level subwoofer light, clean drum-attack sparks, and confident impact-focused expression"
   ],
   breaks: [
-    "Breaks/garage styling: adult spectral broken-rhythm navigator with asymmetric street-club jacket, visible clever eyes, aqua-rose ghost skin, lightweight headphones, syncopated light steps, and agile off-grid charisma",
-    "UK garage/future-garage styling: realistic adult underground spirit with elegant streetwear, negative-space waveform halo, bass haze, magenta-cyan reflections, and sideways rhythmic attitude"
+    "Breaks/garage styling: adult broken-rhythm navigator with asymmetric street-club jacket, visible clever eyes, lightweight headphones, syncopated light steps, and agile off-grid charisma",
+    "UK garage/future-garage styling: realistic adult underground club person with elegant streetwear, negative-space waveform light, bass haze, magenta-cyan reflections, and sideways rhythmic attitude"
   ],
   organic: [
-    "Downtempo/ambient/organic styling: adult spectral bust with mystical but realistic calm, woven layered fabrics, analog jewelry, plant or wood accents, low-lamp glow, translucent moonlit skin, and serene magnetic expression",
-    "Organic atmospheric styling: realistic adult sonic spirit with breathable textiles, warm earth-toned accessories, slow halo light, mist-soft ghost skin, and contemplative presence"
+    "Downtempo/ambient/organic styling: adult electronic-scene bust with mystical but realistic calm, woven layered fabrics, analog jewelry, plant or wood accents, low-lamp glow, moonlit skin, and serene magnetic expression",
+    "Organic atmospheric styling: realistic adult club person with breathable textiles, warm earth-toned accessories, slow light arcs, mist-soft ambience, and contemplative presence"
   ],
   experimental: [
-    "IDM/electro/garage styling: adult spectral editorial portrait with asymmetric club haircut, iridescent technical jacket, glitch jewelry, clever curious expression, semi-transparent skin, and fractured light details",
-    "Experimental club styling: realistic adult spirit figure with cyber-editorial fashion, unusual but wearable accessories, angular fabric panels, playful intelligence, and precise micro-detail aura"
+    "IDM/electro/garage styling: adult editorial portrait with asymmetric club haircut, iridescent technical jacket, glitch jewelry, clever curious expression, visible skin, and fractured light details",
+    "Experimental club styling: realistic adult club figure with cyber-editorial fashion, unusual but wearable accessories, angular fabric panels, playful intelligence, and precise micro-detail aura"
   ],
   hybrid: [
-    "Hybrid electronic styling: adult humanoid musical-archetype bust with distinctive underground clubwear, visible charismatic face, style-specific accessories, realistic fabric detail, spectral skin, and music-reactive light shaped by the listener's taste"
+    "Hybrid electronic styling: adult musical-archetype bust with distinctive underground clubwear, visible charismatic face, style-specific accessories, realistic fabric detail, and music-reactive light shaped by the listener's taste"
   ]
 };
 
@@ -32954,7 +35543,7 @@ function spiritStyleFamilyAccessoryCue(spirit, profileSignature = "") {
 }
 
 function spiritHumanIdentityVariation(spirit, profileSignature = "") {
-  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::spectral-entity-diversity`) >>> 0;
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::electronic-party-person-diversity`) >>> 0;
   const ageCues = [
     "adult in the late 20s to early 30s",
     "adult in the 30s",
@@ -32999,7 +35588,7 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
     "lightweight headphones around the neck",
     "ritual scarf and reflective pins",
     "minimal face gems away from the eyes",
-    "tinted glasses that still reveal the eyes",
+    "one tinted glasses item that still reveals the eyes",
     "woven collar and metallic textile accents"
   ];
   return [
@@ -33024,16 +35613,28 @@ function spiritMajorVisualMutation(spirit, profileSignature = "") {
     "tight cinematic portrait with the face larger in frame and the aura pushed behind the shoulders"
   ];
   const wardrobeCues = [
-    "replace the previous outfit with a structured technical jacket, different collar shape, and new jewelry",
-    "use layered clubwear with a new textile language, changed neckline, and distinct accessory set",
-    "switch to a long reflective coat silhouette with visible fabric texture and new shoulder geometry",
-    "use a softer ritual-festival layer with woven details, new pendant, and changed hair styling",
-    "use minimal black editorial clubwear with one strong accent accessory and no repeated garment shape",
-    "use kinetic street-club styling with pressure-ring collar, changed sleeves, and a new material palette"
+    "complete wardrobe reset: replace every visible clothing item with a different garment category, different neckline, different collar shape, and different material language",
+    "use layered clubwear with a new textile language, changed shoulder geometry, changed neckline, and a distinct accessory set",
+    "switch to a silhouette that does not repeat the previous jacket, harness, strap layout, collar, or glasses shape",
+    "use a softer rave or club layer with new woven/synthetic details, a new pendant or no pendant, and changed hair styling",
+    "use minimal editorial clubwear with one strong accent accessory and no repeated garment shape, trim pattern, or jewelry set",
+    "use kinetic street-club styling with changed sleeves, changed collar, changed accessory family, and a new material palette"
+  ];
+  const accessoryOverhaulCues = [
+    "replace all visible accessories: if the prior image used glasses, use headphones or jewelry instead; if it used headphones, use eyewear or piercings instead",
+    "change eyewear/visor/headwear completely, or remove it entirely and shift emphasis to hair, piercings, makeup, and necklaces",
+    "use a different jewelry family and avoid repeating the same ear cuffs, chain stack, collar, goggles, face gems, or strap layout",
+    "make the accessory silhouette unmistakably new at thumbnail size"
+  ];
+  const paletteOverhaulCues = [
+    "use a different dominant palette and background panel from the prior attempt, not just a small accent recolor",
+    "change the main fabric color, rim-light color, makeup color, and background color family together",
+    "avoid repeating the same black jacket plus green accent formula unless the profile is strictly acid techno, and even then change cut, texture, and accessories",
+    "make the next image immediately distinguishable when seen beside the previous bust"
   ];
   const lightingCues = [
     "hard rim light from one side plus soft colored fill on the opposite cheek, keeping the face clearly readable",
-    "split-color lighting with the spectral face still readable, brighter, and beautiful",
+    "split-color lighting with the human face still readable, brighter, and beautiful",
     "warm low lamp against cold laser haze, with different shadow direction and visible eyes",
     "overhead club beam creating a new silhouette, luminous particles behind the head, and a clear face key light",
     "sub-bass rings reflected on skin and fabric from below, balanced by a clean soft key light",
@@ -33050,11 +35651,13 @@ function spiritMajorVisualMutation(spirit, profileSignature = "") {
   return [
     `${isCharacterReplacement ? "Rejected-character regeneration" : "Major regeneration mutation"}: ${cameraCues[seed % cameraCues.length]}`,
     wardrobeCues[(seed >>> 3) % wardrobeCues.length],
+    accessoryOverhaulCues[(seed >>> 5) % accessoryOverhaulCues.length],
+    paletteOverhaulCues[(seed >>> 7) % paletteOverhaulCues.length],
     lightingCues[(seed >>> 6) % lightingCues.length],
     `new environment: ${environmentCues[(seed >>> 9) % environmentCues.length]}`,
     isCharacterReplacement
-      ? "Regeneration rule: the user did not like the previous character, bust, or expression; create a different fictional adult musical-archetype entity with a different face, head shape, hair, apparent presentation, age cue, spectral skin material, wardrobe silhouette, posture, and emotional presence while preserving the same musical archetype"
-      : "Regeneration rule: do not merely recolor the previous image; change camera angle, silhouette, wardrobe, accessories, lighting direction, background environment, and expression while preserving the same musical archetype"
+      ? "Regeneration rule: the user did not like the previous character, bust, expression, or repeated clothing; create a different fictional adult electronic party archetype with a different face, head shape, hair, apparent presentation, age cue, skin tone, makeup, wardrobe silhouette, clothing category, accessory family, posture, palette, background, and emotional presence while preserving the same musical archetype"
+      : "Regeneration rule: do not merely recolor the previous image; change camera angle, face, silhouette, wardrobe category, accessories, lighting direction, background environment, palette, and expression while preserving the same musical archetype"
   ].join("; ");
 }
 
@@ -33079,11 +35682,12 @@ function spiritCharacterReplacementDirective(spirit, profileSignature = "") {
   ];
   const differenceCues = [
     "switch apparent adult presentation from the prior image where possible",
-    "change spectral skin material and aura color from the prior image",
+    "change skin tone, makeup, lighting color, and background from the prior image",
     "change hair length, hair texture, and hair color from the prior image",
     "change face shape, nose bridge, brow shape, and mouth shape from the prior image",
     "change posture, bust crop, and shoulder geometry from the prior image",
-    "change wardrobe silhouette and accessory language from the prior image"
+    "change wardrobe silhouette and accessory language from the prior image",
+    "do not reuse the previous jacket, vest, harness, glasses, visor, headphones, jewelry stack, collar, or strap layout"
   ];
   const base = [
     `Character identity for this generation: ${faceShapeCues[seed % faceShapeCues.length]}`,
@@ -33094,8 +35698,9 @@ function spiritCharacterReplacementDirective(spirit, profileSignature = "") {
   return [
     "NEW CHARACTER REQUIRED: treat this regeneration as the user rejecting the previous person",
     "do not preserve the same face, bust, hair, body silhouette, expression, or apparent identity",
+    "COMPLETE VISUAL OVERHAUL REQUIRED: do not preserve the same outfit, jacket cut, harness/strap layout, eyewear/visor, headphones, jewelry, makeup pattern, palette, or background panel",
     ...base,
-    "the new result must feel like a different fictional adult musical-archetype entity from the same musical universe, not the same character with different styling"
+    "the new result must feel like a different fictional adult electronic party archetype from the same musical universe, not the same character with different styling"
   ].join("; ");
 }
 
@@ -33123,22 +35728,22 @@ function electronicPartyBriefText(value = "") {
 }
 
 function spiritCharacterIdentity(spirit, profileSignature = "") {
-  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::spectral-entity-identity`) >>> 0;
+  const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::electronic-party-bust-identity`) >>> 0;
   const theme = spiritVisualTheme(spirit);
   const direction = SPIRIT_HUMAN_ENTITY_DIRECTIONS[spirit?.id] || SPIRIT_HUMAN_ENTITY_DIRECTIONS.engenheiro_groove;
   const humanForms = [
-    "cinematic adult humanoid musical-archetype portrait with visible face, neck, shoulders, and upper body",
-    "realistic adult personification of the listener's musical archetype, illustrated like premium editorial cinema",
-    "fictional adult spectral entity emerging from club smoke and waveform halos",
-    "high-detail adult ritual performer with a believable humanoid face, ghost skin, and sonic aura",
-    "underground electronic-music archetype guide with expressive eyes and translucent spectral skin"
+    "cinematic adult electronic-party archetype portrait with visible face, neck, shoulders, and upper chest",
+    "realistic adult personification of the listener's electronic music taste, illustrated like premium editorial nightlife",
+    "fictional adult club/rave person emerging from clean club smoke and waveform light",
+    "high-detail adult partygoer with a believable human face, subgenre-specific clothing, and sonic light aura",
+    "underground electronic-music archetype with expressive eyes, wearable accessories, and scene-specific styling"
   ];
   const expressionCues = [
-    "magnetic micro-smile",
+    "genuine happy smile",
     "direct warm gaze",
-    "subtle confident smirk",
-    "inviting intense eyes",
-    "focused charismatic expression"
+    "subtle confident smirk with warmth",
+    "inviting bright eyes",
+    "focused charismatic expression with a visible smile"
   ];
   return [
     `Realistic fictional adult electronic-party archetype format: ${electronicPartyBriefText(humanForms[seed % humanForms.length])}`,
@@ -34199,7 +36804,7 @@ function buildLocalSpiritHumanoidPortraitDataUrl(
     variationToken,
     userSignature,
     profileSignature,
-    "local-premium-spectral-bust-v1"
+    "local-premium-electronic-party-bust-v1"
   ].join("::")) >>> 0;
   const variant = spiritMascotVariant(spirit, seed + milestoneLikes);
   const a = escapeSvgText(theme.a || "#6effdc");
@@ -36124,8 +38729,36 @@ function getTrackMetadata(track) {
     releaseDate: details.releaseDate || "Catálogo local",
     duration: details.duration || "06:00",
     musicalKey: details.musicalKey || "N/A",
-    catalogRef: details.catalogRef || `${track.label.toUpperCase().slice(0, 6)}-${track.style.toUpperCase().slice(0, 4)}`
+    catalogRef: details.catalogRef || `${track.label.toUpperCase().slice(0, 6)}-${track.style.toUpperCase().slice(0, 4)}`,
+    sourceLabel: details.sourceLabel || "",
+    sourceDetails: Array.isArray(details.sourceDetails) ? details.sourceDetails : [],
+    attribution: details.attribution || null
   };
+}
+
+function trackMetadataSourceLabelFromDetails(details = []) {
+  const providers = Array.isArray(details)
+    ? details.map((detail) => String(detail?.name || detail?.provider || "").trim()).filter(Boolean)
+    : [];
+  return Array.from(new Set(providers)).slice(0, 3).join(", ");
+}
+
+function trackMetadataSourceLabel(sourceInfo = {}) {
+  const explicit = String(sourceInfo.sourceLabel || "").trim();
+  if (explicit) return explicit;
+  const detailsLabel = trackMetadataSourceLabelFromDetails(sourceInfo.sourceDetails);
+  if (detailsLabel) return detailsLabel;
+  const source = String(sourceInfo.source || "").trim().toLowerCase();
+  if (source === "itunes") return "iTunes";
+  if (source === "deezer") return "Deezer";
+  if (source === "soundcloud") return "SoundCloud";
+  return String(sourceInfo.source || "").trim();
+}
+
+function formatCatalogInfo(meta = {}, displayLabel = "") {
+  const base = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
+  const sourceLabel = trackMetadataSourceLabel(meta);
+  return sourceLabel ? `${base} | ${t("trackDataPrefix")}: ${sourceLabel}` : base;
 }
 
 function formatEventDate(isoDate) {
@@ -36228,42 +38861,11 @@ async function fetchUpcomingEvents(artist) {
         if (events.length > 0) return { events, source: payload?.source || "ticketmaster" };
       }
     } catch (_error) {
-      // Ticketmaster e a fonte principal; se falhar, o app tenta as alternativas antigas.
+      // Eventos ao vivo ficam no backend para manter credenciais e app IDs sob controle.
     }
   }
 
-  const endpoint = `https://rest.bandsintown.com/artists/${encodeURIComponent(artist)}/events?app_id=neonpulse_selector`;
-
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) throw new Error("Falha ao consultar eventos");
-
-    const rawEvents = await response.json();
-    if (!Array.isArray(rawEvents)) throw new Error("Resposta invalida");
-
-    const now = new Date();
-    const events = rawEvents
-      .filter((item) => item.datetime && new Date(item.datetime) >= now)
-      .map((item) => ({
-        datetime: item.datetime,
-        dateOnly: false,
-        venue: item.venue?.name || "Venue a confirmar",
-        city: item.venue?.city || "Cidade a confirmar",
-        country: item.venue?.country || "",
-        url: item.url || "",
-        sourceName: "Bandsintown",
-        sourceUrl: item.url || ""
-      }))
-      .sort((a, b) => new Date(a.datetime) - new Date(b.datetime))
-      .slice(0, 10);
-
-    if (events.length > 0) return { events, source: "bandsintown" };
-
-    const fallback = getFallbackEvents(artist);
-    return { events: fallback, source: "fallback" };
-  } catch (_error) {
-    return { events: getFallbackEvents(artist), source: "fallback" };
-  }
+  return { events: getFallbackEvents(artist), source: "fallback" };
 }
 
 function renderEventsPanel(artist, events, source) {
@@ -37771,6 +40373,289 @@ function generateDjModeJourney() {
   playUiSfx("confirm");
 }
 
+function djRecommendationKey(seed = {}) {
+  const safeSeed = seed || {};
+  return normalize(safeSeed.id || `${safeSeed.name || ""}::${safeSeed.setTitle || ""}`);
+}
+
+function djLaneLabel(lane = "") {
+  if (lane === "mop") return "MOP / darkpsy";
+  if (lane === "global_psy") return "Psy global";
+  if (lane === "global_club") return "Selector global";
+  return "DJ set";
+}
+
+function youtubeVideoIdFromUrl(url = "") {
+  try {
+    const parsed = new URL(String(url || "").trim());
+    if (parsed.hostname.includes("youtu.be")) return parsed.pathname.replace(/^\/+/, "").split("/")[0] || "";
+    if (parsed.searchParams.get("v")) return parsed.searchParams.get("v") || "";
+    const embedMatch = parsed.pathname.match(/\/embed\/([^/?#]+)/);
+    if (embedMatch) return embedMatch[1] || "";
+    const shortsMatch = parsed.pathname.match(/\/shorts\/([^/?#]+)/);
+    if (shortsMatch) return shortsMatch[1] || "";
+  } catch (_err) {
+    return "";
+  }
+  return "";
+}
+
+function djSetEmbedUrl(seed = {}) {
+  const platform = normalize(seed.platform || "");
+  if (platform.includes("youtube")) {
+    const id = youtubeVideoIdFromUrl(seed.setUrl);
+    return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : "";
+  }
+  if (platform.includes("soundcloud") && seed.setUrl) {
+    return `https://w.soundcloud.com/player/?url=${encodeURIComponent(seed.setUrl)}&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=true`;
+  }
+  return "";
+}
+
+function filteredDjRecommendationPool() {
+  const lane = String(djDiscoverySceneFilter?.value || "").trim();
+  const pool = DJ_SET_RECOMMENDATION_SEEDS.filter((seed) => !lane || seed.lane === lane);
+  return pool.length ? pool : DJ_SET_RECOMMENDATION_SEEDS;
+}
+
+function pickDjRecommendation({ avoidKey = "" } = {}) {
+  const pool = filteredDjRecommendationPool();
+  const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
+  const lane = String(djDiscoverySceneFilter?.value || "").trim();
+  if (!currentDjRecommendation && !lane) {
+    const mopSoundCloud = pool.find((seed) => seed.lane === "mop" && normalize(seed.platform || "").includes("soundcloud"));
+    if (mopSoundCloud) return mopSoundCloud;
+  }
+  const candidates = pool.filter((seed) => djRecommendationKey(seed) !== currentKey);
+  const basePool = candidates.length ? candidates : pool;
+  const freshPool = basePool.filter((seed) => {
+    const key = djRecommendationKey(seed);
+    return !likedDjRecommendationKeys.has(key) && !passedDjRecommendationKeys.has(key) && !recentDjRecommendationKeys.includes(key);
+  });
+  const lightlySeenPool = basePool.filter((seed) => !recentDjRecommendationKeys.includes(djRecommendationKey(seed)));
+  const finalPool = freshPool.length ? freshPool : lightlySeenPool.length ? lightlySeenPool : basePool;
+  return finalPool[Math.floor(Math.random() * finalPool.length)] || pool[0] || null;
+}
+
+function rememberDjRecommendation(seed) {
+  const key = djRecommendationKey(seed);
+  if (!key) return;
+  recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 6);
+}
+
+function saveDjRecommendationMemory() {
+  try {
+    localStorage.setItem(DJ_RECOMMENDATION_STORAGE_KEY, JSON.stringify({
+      liked: Array.from(likedDjRecommendationKeys),
+      passed: Array.from(passedDjRecommendationKeys),
+      recent: recentDjRecommendationKeys
+    }));
+  } catch (_err) {
+    // A aba segue funcional mesmo se o navegador bloquear localStorage.
+  }
+}
+
+function loadDjRecommendationMemory() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DJ_RECOMMENDATION_STORAGE_KEY) || "{}");
+    likedDjRecommendationKeys = new Set(Array.isArray(parsed.liked) ? parsed.liked.map(String) : []);
+    passedDjRecommendationKeys = new Set(Array.isArray(parsed.passed) ? parsed.passed.map(String) : []);
+    recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 6) : [];
+  } catch (_err) {
+    likedDjRecommendationKeys = new Set();
+    passedDjRecommendationKeys = new Set();
+    recentDjRecommendationKeys = [];
+  }
+}
+
+function renderDjRadarSummary() {
+  if (djRadarCount) djRadarCount.textContent = `${DJ_SET_RECOMMENDATION_SEEDS.length} sets verificados`;
+  if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
+  if (djRadarScope) {
+    const lane = String(djDiscoverySceneFilter?.value || "").trim();
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : "MOP + fora do Brasil";
+  }
+}
+
+function renderDjRecommendationBadges(seed = null) {
+  const key = djRecommendationKey(seed);
+  const badges = seed
+    ? [
+        { type: seed.lane === "mop" ? "known" : "fresh", label: djLaneLabel(seed.lane) },
+        { type: "preview", label: "Set tocavel" },
+        { type: "good", label: seed.platform || "Preview" },
+        likedDjRecommendationKeys.has(key) ? { type: "saved", label: "Salvo" } : null
+      ]
+    : [];
+  renderSonicBadgeList(djSwipeBadges, badges);
+}
+
+function renderDjRecommendation(seed = currentDjRecommendation) {
+  const hasSeed = Boolean(seed);
+  resetSwipeElementPosition(djSwipeCard);
+  if (djSwipeCard) djSwipeCard.classList.toggle("is-empty", !hasSeed);
+  if (djSwipeKicker) djSwipeKicker.textContent = hasSeed ? "Set recomendado" : "Set recomendado";
+  if (djSwipeName) djSwipeName.textContent = hasSeed ? seed.name : "Abra um DJ";
+  if (djSwipeMeta) {
+    djSwipeMeta.textContent = hasSeed
+      ? `${seed.country} • ${seed.scene}`
+      : "Seletores com set publico, separados do catalogo de produtores.";
+  }
+  if (djSwipeReason) {
+    djSwipeReason.textContent = hasSeed ? seed.reason : "";
+    djSwipeReason.classList.toggle("hidden", !hasSeed);
+  }
+  if (djSwipeStyleChip) {
+    djSwipeStyleChip.dataset.label = "Subgenero";
+    djSwipeStyleChip.dataset.family = familyOf(seed?.style || "");
+    djSwipeStyleChip.textContent = hasSeed ? seed.subgenre : "Cena";
+  }
+  if (djSwipeSetChip) djSwipeSetChip.textContent = hasSeed ? seed.setTitle : "Set";
+  if (djSwipeSourceChip) djSwipeSourceChip.textContent = hasSeed ? seed.sourceName || seed.platform : "Fonte";
+  if (djSwipeSourceLink) {
+    djSwipeSourceLink.href = hasSeed ? seed.setUrl : "#";
+    djSwipeSourceLink.textContent = hasSeed ? `Abrir ${seed.platform || "set"}` : "Abrir set";
+    djSwipeSourceLink.classList.toggle("is-disabled", !hasSeed);
+    djSwipeSourceLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
+  }
+  renderDjRecommendationBadges(seed);
+  if (djSwipePassBtn) djSwipePassBtn.disabled = !hasSeed;
+  if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
+
+  const embedUrl = hasSeed ? djSetEmbedUrl(seed) : "";
+  if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : "Player pronto";
+  if (djPreviewMeta) {
+    djPreviewMeta.textContent = hasSeed
+      ? `${seed.name} • ${seed.subgenre} • ${seed.platform}`
+      : "O player aparece quando uma carta de DJ estiver ativa.";
+  }
+  if (djPreviewOpenLink) {
+    djPreviewOpenLink.href = hasSeed ? seed.setUrl : "#";
+    djPreviewOpenLink.textContent = hasSeed ? seed.platform || "Abrir" : "YouTube";
+    djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
+    djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
+  }
+  if (djPreviewFrame) {
+    if (embedUrl) {
+      if (djPreviewFrame.src !== embedUrl) djPreviewFrame.src = embedUrl;
+    } else {
+      djPreviewFrame.removeAttribute("src");
+    }
+  }
+  renderDjRadarSummary();
+}
+
+function selectDjRecommendation(seed = null) {
+  currentDjRecommendation = seed || pickDjRecommendation();
+  rememberDjRecommendation(currentDjRecommendation);
+  saveDjRecommendationMemory();
+  renderDjRecommendation(currentDjRecommendation);
+}
+
+function ensureDjDiscoveryReady({ force = false } = {}) {
+  const poolKeys = new Set(filteredDjRecommendationPool().map(djRecommendationKey));
+  if (force || !currentDjRecommendation || !poolKeys.has(djRecommendationKey(currentDjRecommendation))) {
+    selectDjRecommendation(pickDjRecommendation());
+    return;
+  }
+  renderDjRecommendation(currentDjRecommendation);
+}
+
+async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
+  if (djSwipeBusy || !currentDjRecommendation || !djSwipeCard) return;
+  const seed = currentDjRecommendation;
+  const key = djRecommendationKey(seed);
+  djSwipeBusy = true;
+  djSwipeCard.classList.remove("is-dragging");
+  djSwipeCard.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
+  if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = true;
+  if (djSwipePassBtn) djSwipePassBtn.disabled = true;
+  await waitMs(180);
+  if (direction === "like") {
+    likedDjRecommendationKeys.add(key);
+    passedDjRecommendationKeys.delete(key);
+    if (djSwipeStatus) djSwipeStatus.textContent = `${seed.name} salvo no radar de DJs.`;
+    playUiSfx("like");
+    burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
+    showToast(`${seed.name} salvo nos DJs`);
+  } else {
+    passedDjRecommendationKeys.add(key);
+    if (djSwipeStatus) djSwipeStatus.textContent = "Passei este set e trouxe outro DJ.";
+    playUiSfx("dislike");
+  }
+  saveDjRecommendationMemory();
+  selectDjRecommendation(pickDjRecommendation({ avoidKey: key }));
+  djSwipeBusy = false;
+}
+
+function finishDjSwipePointer(event, canceled = false) {
+  if (!djSwipeDragState) return;
+  const { element, pointerId, startX, startY, startedAt } = djSwipeDragState;
+  if (!element) return;
+  if (event && pointerId !== event.pointerId) return;
+  const dx = event ? event.clientX - startX : Number(djSwipeDragState.dx || 0);
+  const dy = event ? event.clientY - startY : Number(djSwipeDragState.dy || 0);
+  const elapsedMs = Math.max(1, (typeof performance !== "undefined" ? performance.now() : Date.now()) - startedAt);
+  element.classList.remove("is-dragging");
+  try {
+    element.releasePointerCapture?.(pointerId);
+  } catch (_) {
+    // Pointer capture pode ja ter sido liberado pelo navegador.
+  }
+  djSwipeDragState = null;
+  const decision = swipeGestureDecision(element, dx, dy, elapsedMs);
+  if (!canceled && decision.shouldCommit) {
+    void completeDjSwipe(decision.direction, element);
+    return;
+  }
+  resetSwipeElementPosition(element);
+}
+
+function handleDjSwipePointerMove(event) {
+  if (!djSwipeDragState || djSwipeDragState.pointerId !== event.pointerId) return;
+  const dx = event.clientX - djSwipeDragState.startX;
+  const dy = event.clientY - djSwipeDragState.startY;
+  djSwipeDragState.dx = dx;
+  djSwipeDragState.dy = dy;
+  if (shouldCancelSwipeForVerticalGesture(dx, dy)) {
+    finishDjSwipePointer(event, true);
+    return;
+  }
+  setSwipeDragVisual(dx, djSwipeDragState.element, dy);
+}
+
+function beginDjSwipePointer(event, element = djSwipeCard) {
+  if (!element || !currentDjRecommendation || djSwipeBusy) return;
+  if (typeof event.button === "number" && event.button > 0) return;
+  if (shouldIgnoreSwipePointerStart(event)) return;
+  djSwipeDragState = {
+    element,
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    startedAt: typeof performance !== "undefined" ? performance.now() : Date.now(),
+    dx: 0,
+    dy: 0
+  };
+  element.classList.add("is-dragging");
+  element.setPointerCapture?.(event.pointerId);
+}
+
+function handleDjSwipeKeyboard(event) {
+  if (!djSwipeCard || !currentDjRecommendation || djSwipeBusy) return;
+  if (event.key === "Escape") {
+    event.preventDefault();
+    resetSwipeElementPosition(djSwipeCard);
+    return;
+  }
+  if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+  event.preventDefault();
+  const direction = event.key === "ArrowRight" ? "like" : "pass";
+  const width = swipeThresholds(djSwipeCard).width;
+  setSwipeDragVisual((direction === "like" ? 1 : -1) * Math.min(140, width * 0.3), djSwipeCard);
+  void completeDjSwipe(direction, djSwipeCard);
+}
+
 function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommendation) {
   if (!prefs || !anchorTrack) {
     suggestionQueueTracks = [];
@@ -38316,6 +41201,7 @@ function renderTopSwipeArtwork(track) {
   const artistImageUrl = suppressArtistImage ? "" : String(track?.artistImageUrl || "").trim();
   const imageUrl = [
     artistImageUrl,
+    track?.coverArtUrl,
     track?.coverUrl,
     track?.imageUrl
   ].map((item) => String(item || "").trim()).find(Boolean) || "";
@@ -38893,13 +41779,15 @@ function renderRecommendation(track, prefs) {
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${meta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${meta.duration}`;
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
-  if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${meta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
+  if (catalogInfo) catalogInfo.textContent = formatCatalogInfo(meta, displayLabel);
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: recommendationStyleDisplayLabel(track) });
   renderRecommendationWhy(track, prefs);
   renderTrackCardSignals(track, prefs);
   renderGenreGuide(track);
   renderArtistVisualFallback(track);
   void hydrateArtistVisual(track);
+  void hydrateTrackCoverArt(track);
+  resetRadioBrowserPanel(track);
   void revealListeningNarrative(track, prefs);
 
   if (matchReason) {
@@ -39006,7 +41894,7 @@ async function renderPreview(track) {
   renderNowPlayingGenre(track);
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${refreshedMeta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${refreshedMeta.duration}`;
-  if (catalogInfo) catalogInfo.textContent = `${t("catalogPrefix")}: ${refreshedMeta.catalogRef} | ${t("labelPrefix")}: ${displayLabel}`;
+  if (catalogInfo) catalogInfo.textContent = formatCatalogInfo(refreshedMeta, displayLabel);
   const resolvedYoutube = await resolveYouTubeVideoFromApi(track);
   if (resolvedYoutube && youtubeLink) {
     setListenLinkState(youtubeLink, {
@@ -42038,7 +44926,7 @@ function renderSocialFeed() {
   if (AUTH_LOGIN_STANDBY) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Feed social em standby. Curta músicas e use o Perfil local para revisar seu mapa musical.";
+    empty.textContent = "Feed social em standby. Curta faixas e use o Perfil local para revisar seu mapa musical.";
     socialFeedList.appendChild(empty);
     return;
   }
@@ -44390,6 +47278,9 @@ bind(summaryShareInstagramBtn, "click", async () => {
 bind(summaryShareLinkBtn, "click", async () => {
   await copyShareableLink({ triggerButton: summaryShareLinkBtn, includeSpirit: true });
 });
+bind(apiHealthRefreshBtn, "click", () => {
+  void loadApiHealthPanel({ force: true });
+});
 bind(authPassword, "keydown", (event) => {
   if (event.key !== "Enter") return;
   event.preventDefault();
@@ -44519,6 +47410,7 @@ bind(previewPlayBtn, "click", async () => {
   if (!trackPreview || previewPlayBtn?.disabled) return;
   const previewSource = normalizePreviewUrl(trackPreview.currentSrc || trackPreview.src || currentRecommendation?.previewUrl || currentRecommendation?.artistPreviewFallback?.previewUrl || "");
   if (!previewSource) return;
+  stopRadioBrowserPlayer();
   primeAudioForDiscoveryGesture();
   if (previewPlayBtn) previewPlayBtn.disabled = true;
   try {
@@ -44532,6 +47424,17 @@ bind(previewPlayBtn, "click", async () => {
   } finally {
     if (previewPlayBtn) previewPlayBtn.disabled = false;
   }
+});
+
+bind(radioBrowserRefreshBtn, "click", () => {
+  void loadRadioBrowserForCurrentTrack();
+});
+
+bind(radioBrowserStations, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-radio-station-index]") : null;
+  if (!target) return;
+  const index = Number(target.getAttribute("data-radio-station-index") || -1);
+  void playRadioBrowserStation(index);
 });
 
 bind(youtubePreviewToggleBtn, "click", () => {
@@ -45386,6 +48289,30 @@ bind(moreInfoBtn, "click", () => {
 });
 
 bind(djModeGenerateBtn, "click", generateDjModeJourney);
+bind(djDiscoveryShuffleBtn, "click", () => {
+  ensureDjDiscoveryReady({ force: true });
+  playUiSfx("confirm");
+});
+bind(djDiscoverySceneFilter, "change", () => {
+  ensureDjDiscoveryReady({ force: true });
+});
+bind(djSwipeLikeBtn, "click", () => {
+  void completeDjSwipe("like", djSwipeCard);
+});
+bind(djSwipePassBtn, "click", () => {
+  void completeDjSwipe("pass", djSwipeCard);
+});
+bind(djSwipeCard, "pointerdown", (event) => {
+  beginDjSwipePointer(event, djSwipeCard);
+});
+bind(djSwipeCard, "pointermove", handleDjSwipePointerMove);
+bind(djSwipeCard, "pointerup", (event) => {
+  finishDjSwipePointer(event);
+});
+bind(djSwipeCard, "pointercancel", (event) => {
+  finishDjSwipePointer(event, true);
+});
+bind(djSwipeCard, "keydown", handleDjSwipeKeyboard);
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshDailyNews({ silent: false });
 });
@@ -45396,6 +48323,7 @@ bind(appTabBar, "click", (event) => {
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
   setActiveAppTab(nextTab);
   if (nextTab === "news") void refreshDailyNews({ silent: false });
+  if (nextTab === "djs") ensureDjDiscoveryReady();
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
@@ -45435,7 +48363,11 @@ if (!freshTestResetPending) {
   window.neonpulseArtistDepthGaps = (style = "") => buildCatalogArtistDepthAudit({ style, minimum: MIN_TRACKS_PER_ARTIST }).sample;
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
+  loadDjRecommendationMemory();
+  renderDjRadarSummary();
+  renderDjRecommendation(null);
   void initSocialMvp();
+  void loadApiHealthPanel();
   void refreshDailyNews({ silent: true, live: false });
   bootstrapAudio();
   if (!applySharedSpiritPayload(sharedSpiritPayload)) {

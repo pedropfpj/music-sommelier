@@ -1,6 +1,14 @@
 const { envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
 
 const SEARCH_URL = "https://www.googleapis.com/youtube/v3/search";
+const YOUTUBE_SOURCE_DETAIL = {
+  name: "YouTube",
+  provider: "YouTube Data API",
+  dataType: "video search result and embeddable playback link",
+  url: "https://developers.google.com/youtube/v3",
+  license: "YouTube API Services Terms",
+  attribution: "Video search metadata from the YouTube Data API."
+};
 
 function requestParam(req, body, name, maxLength = 180) {
   return trimText(body?.[name] || req?.query?.[name] || "", maxLength);
@@ -82,8 +90,35 @@ function normalizeVideo(row = {}, query = "") {
     youtubeTrackUrl: url,
     embedUrl: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}`,
     source: "youtube_api",
+    sourceDetails: [{
+      ...YOUTUBE_SOURCE_DETAIL,
+      url
+    }],
+    attribution: {
+      providers: ["YouTube"],
+      line: "Video data: YouTube.",
+      details: [{
+        ...YOUTUBE_SOURCE_DETAIL,
+        url
+      }]
+    },
     youtubeVerified: true,
     query
+  };
+}
+
+function youtubeAttribution(videos = []) {
+  const details = [];
+  videos.forEach((video) => {
+    const detail = Array.isArray(video?.sourceDetails) ? video.sourceDetails[0] : null;
+    if (!detail) return;
+    if (!details.some((item) => item.provider === detail.provider)) details.push(detail);
+  });
+  const providers = Array.from(new Set(details.map((detail) => detail.name || detail.provider).filter(Boolean)));
+  return {
+    providers,
+    line: providers.length ? `Video data: ${providers.join(", ")}.` : "",
+    details
   };
 }
 
@@ -167,6 +202,7 @@ module.exports = async function handler(req, res) {
     feature: "youtube-search",
     enabledEnv: "SONIC_YOUTUBE_ENABLED",
     defaultEnabled: false,
+    allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_YOUTUBE_SEARCH_DAILY_LIMIT",
     defaultDailyLimit: 80
   })) return;
@@ -200,6 +236,7 @@ module.exports = async function handler(req, res) {
     sendJson(req, res, 200, {
       ok: true,
       source: "youtube",
+      attribution: youtubeAttribution(videos),
       query,
       queries: queries.slice(0, maxQueries),
       style,

@@ -1,4 +1,5 @@
 const dailyBudget = new Map();
+const { enforceDailyUsageLimit, hashStoreKey } = require("./_usage-store");
 
 function envFlag(name, fallback = false) {
   const raw = String(process.env[name] || "").trim().toLowerCase();
@@ -11,9 +12,9 @@ function envPresent(name) {
     String(process.env[name] || "").trim() !== "";
 }
 
-function featureEnabled(enabledEnv = "SONIC_MUSIC_APIS_ENABLED", fallback = false) {
+function featureEnabled(enabledEnv = "SONIC_MUSIC_APIS_ENABLED", fallback = false, { allowGlobalFallback = true } = {}) {
   if (enabledEnv && envPresent(enabledEnv)) return envFlag(enabledEnv, fallback);
-  if (enabledEnv !== "SONIC_MUSIC_APIS_ENABLED" && envPresent("SONIC_MUSIC_APIS_ENABLED")) {
+  if (allowGlobalFallback && enabledEnv !== "SONIC_MUSIC_APIS_ENABLED" && envPresent("SONIC_MUSIC_APIS_ENABLED")) {
     return envFlag("SONIC_MUSIC_APIS_ENABLED", fallback);
   }
   return envFlag(enabledEnv, fallback);
@@ -131,11 +132,49 @@ function enforceDailyBudget(req, feature, limit) {
   return { ok: true, remaining: safeLimit - current - 1 };
 }
 
+function secondsUntilNextUtcDay() {
+  const now = Date.now();
+  const next = new Date(now);
+  next.setUTCHours(24, 0, 0, 0);
+  return Math.max(60, Math.ceil((next.getTime() - now) / 1000) + 3600);
+}
+
+async function enforceDurableMusicDailyLimit(req, res, {
+  feature = "music",
+  dailyLimitEnv = "",
+  defaultDailyLimit = 0,
+  methods = ["POST"]
+} = {}) {
+  if (!dailyLimitEnv) return true;
+  const dailyLimit = envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000);
+  const key = `sonic:usage:${feature}:${todayKey()}:${hashStoreKey(requestClientId(req))}`;
+  const budget = await enforceDailyUsageLimit({
+    key,
+    limit: dailyLimit,
+    expiresInSeconds: secondsUntilNextUtcDay()
+  });
+  const allMethods = Array.from(new Set([...methods, "OPTIONS"]));
+  if (!budget.ok) {
+    sendJson(req, res, 429, {
+      ok: false,
+      enabled: true,
+      error: budget.error || "daily_music_api_limit_reached",
+      feature,
+      limit: dailyLimit
+    }, allMethods);
+    return false;
+  }
+  if (budget.remaining !== null) res.setHeader("X-Sonic-Music-Durable-Remaining", String(budget.remaining));
+  res.setHeader("X-Sonic-Usage-Store", budget.store || "memory");
+  return true;
+}
+
 function requireMusicApi(req, res, {
   methods = ["POST"],
   feature = "music",
   enabledEnv = "SONIC_MUSIC_APIS_ENABLED",
   defaultEnabled = false,
+  allowGlobalFallback = true,
   dailyLimitEnv = "",
   defaultDailyLimit = 0
 } = {}) {
@@ -149,7 +188,7 @@ function requireMusicApi(req, res, {
     sendJson(req, res, 403, { error: "origin_not_allowed" }, allMethods);
     return false;
   }
-  if (!featureEnabled(enabledEnv, defaultEnabled)) {
+  if (!featureEnabled(enabledEnv, defaultEnabled, { allowGlobalFallback })) {
     sendJson(req, res, 403, { error: "music_api_disabled", feature }, allMethods);
     return false;
   }
@@ -171,7 +210,9 @@ module.exports = {
   envInt,
   envText,
   envFirst,
+  enforceDurableMusicDailyLimit,
   parseBody,
+  requestClientId,
   requireMusicApi,
   sendJson,
   trimText

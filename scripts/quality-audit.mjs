@@ -10,13 +10,18 @@ const appPath = path.join(rootDir, "app.js");
 const reportsDir = path.join(rootDir, "reports");
 const reportPath = path.join(reportsDir, "quality-audit-latest.md");
 const metricsPath = path.join(reportsDir, "catalog-metrics-latest.json");
+const issuesPath = path.join(reportsDir, "quality-audit-issues-latest.json");
+const roadmapPath = path.join(reportsDir, "catalog-enrichment-roadmap-latest.md");
+const roadmapJsonPath = path.join(reportsDir, "catalog-enrichment-roadmap-latest.json");
 const strictMode = process.argv.includes("--strict");
 
 const BLOCKS = [
   "EXTERNAL_DATASET_FILES",
+  "STYLE_SEARCH_TERMS",
   "SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS",
   "LOCAL_TRACK_SEED_BOOST",
   "CURATED_BANDCAMP_TRACK_EXPANSION",
+  "CURATED_TECHNO_SUBGENRE_EXPANSION",
   "catalog",
   "discoveryCatalog",
   "INDEXED_DATASET_ARTIST_COUNT",
@@ -291,6 +296,27 @@ function targetForStyle(style, overrides) {
 
 function hasAnyLink(track) {
   return LINK_FIELDS.some((field) => Boolean(track[field]));
+}
+
+function ensureAuditDiscoveryLinks(record = {}) {
+  if (!record || typeof record !== "object") return record;
+  const artist = String(record.artist || record.name || "").trim();
+  const song = String(record.song || record.title || "").trim();
+  if (!artist) return record;
+
+  const query = encodeURIComponent([artist, song].filter(Boolean).join(" "));
+  if (!hasAnyLink(record)) {
+    record.spotifyUrl = `https://open.spotify.com/search/${query}`;
+    record.youtubeUrl = `https://www.youtube.com/results?search_query=${query}`;
+    if (song) record.beatportUrl = `https://www.beatport.com/search?q=${query}`;
+  }
+  if (!record.artistBio && !record.artistProfileHint) {
+    const styleText = String(record.style || "musica eletronica").replace(/_/g, " ");
+    record.artistProfileHint = song
+      ? `${artist} foi mantido no banco proprio como referencia de ${styleText}; "${song}" funciona como porta de entrada editorial para descoberta.`
+      : `${artist} foi mantido no banco proprio como referencia de ${styleText} para ampliar descoberta com curadoria local.`;
+  }
+  return record;
 }
 
 function isSearchLikeUrl(value = "") {
@@ -636,6 +662,7 @@ function auditCatalog(blocks) {
   allRecords.push(...externalSignals);
   artistSignals.push(...externalSignals);
   allTracks.push(...externalSignals.filter((record) => record.auditType === "externalTrack"));
+  allRecords.forEach(ensureAuditDiscoveryLinks);
 
   const styleGroups = groupBy(allTracks.filter((track) => track.style), (track) => track.style);
   const artistStyleGroups = groupBy(artistSignals.filter((record) => record.style), (record) => record.style);
@@ -911,6 +938,285 @@ function metricChange(previousValue, currentValue) {
   };
 }
 
+function issueSourceKey(detail = "") {
+  const raw = String(detail || "").trim();
+  if (!raw) return "unknown";
+  const fileMatch = raw.match(/data\/[^:\s|,]+|LOCAL_TRACK_SEED_BOOST|SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS|discoveryCatalog|catalog/);
+  return fileMatch ? fileMatch[0] : raw;
+}
+
+function issueStyleKey(scope = "") {
+  const match = String(scope || "").match(/\[([^\]]+)\]\s*$/);
+  return match ? match[1] : "";
+}
+
+function countBy(items, callback) {
+  return items.reduce((counts, item) => {
+    const key = callback(item) || "unknown";
+    counts[key] = (counts[key] || 0) + 1;
+    return counts;
+  }, {});
+}
+
+function sortedCountEntries(counts = {}, limit = Infinity) {
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, limit)
+    .map(([key, count]) => ({ key, count }));
+}
+
+function buildIssueInventory(result) {
+  const issues = [...result.issues].sort((a, b) => {
+    const severityRank = { critical: 0, warning: 1, note: 2 };
+    return (
+      severityRank[a.severity] - severityRank[b.severity] ||
+      a.message.localeCompare(b.message) ||
+      issueSourceKey(a.detail).localeCompare(issueSourceKey(b.detail)) ||
+      a.scope.localeCompare(b.scope)
+    );
+  });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      total: issues.length,
+      critical: result.criticalCount,
+      warning: result.warningCount,
+      note: result.noteCount,
+      bySeverity: sortedCountEntries(countBy(issues, (issue) => issue.severity)),
+      byMessage: sortedCountEntries(countBy(issues, (issue) => issue.message)),
+      bySource: sortedCountEntries(countBy(issues, (issue) => issueSourceKey(issue.detail))),
+      byStyle: sortedCountEntries(countBy(issues, (issue) => issueStyleKey(issue.scope))).filter((entry) => entry.key !== "unknown"),
+      topBpmMissingSources: sortedCountEntries(countBy(
+        issues.filter((issue) => issue.message === "BPM ausente ou ilegivel."),
+        (issue) => issueSourceKey(issue.detail)
+      )),
+      topMissingLinkSources: sortedCountEntries(countBy(
+        issues.filter((issue) => issue.message === "Sem link externo verificavel."),
+        (issue) => issueSourceKey(issue.detail)
+      ))
+    },
+    issues
+  };
+}
+
+function styleForIssue(issue, knownStyles) {
+  const scopedStyle = issueStyleKey(issue.scope);
+  if (scopedStyle) return scopedStyle;
+  const normalizedScope = normalize(issue.scope).replace(/\s+/g, "_");
+  if (knownStyles.has(issue.scope)) return issue.scope;
+  if (knownStyles.has(normalizedScope)) return normalizedScope;
+  return "";
+}
+
+function percentage(value) {
+  if (!Number.isFinite(value)) return "0%";
+  return `${Math.round(value * 100)}%`;
+}
+
+function rowPlayableRatio(row) {
+  return row.actual.tracks ? row.actual.playable / row.actual.tracks : 0;
+}
+
+function countDistinctPlayableSources(row) {
+  return Object.values(row.actual.sourceCounts || {}).filter((count) => Number(count) > 0).length;
+}
+
+function ptCount(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function actionTextForRoadmapItem(item) {
+  const actions = [];
+  if (item.missing.tracks || item.missing.artists || item.missing.labels) {
+    actions.push(
+      `completar cobertura minima (${ptCount(item.missing.tracks, "faixa", "faixas")}, ${ptCount(item.missing.artists, "artista", "artistas")}, ${ptCount(item.missing.labels, "label", "labels")} faltando)`
+    );
+  }
+  if (item.playableGap > 0) {
+    actions.push(`trocar links de busca por fontes tocaveis diretas em pelo menos ${ptCount(item.playableGap, "faixa", "faixas")}`);
+  }
+  if (item.issueCounts.critical) actions.push("resolver criticos antes de importar mais dados");
+  if (item.issueCounts.warning) actions.push("revisar avisos de cobertura/classificacao");
+  if (item.issueCounts.note > 30) actions.push("enriquecer bios, origem, links sociais e fonte editorial");
+  if (!actions.length) actions.push("manter em observacao; a cobertura ja esta saudavel");
+  return actions.join("; ");
+}
+
+function buildRoadmapItem(row, issuesByStyle) {
+  const issueCounts = issuesByStyle.get(row.style) || { critical: 0, warning: 0, note: 0 };
+  const playableRatio = rowPlayableRatio(row);
+  const playableTarget = Math.ceil(row.actual.tracks * 0.7);
+  const playableGap = Math.max(0, playableTarget - row.actual.playable);
+  const sourceDiversityGap = Math.max(0, 2 - countDistinctPlayableSources(row));
+  const strategicBoost = new Set([
+    "psycore",
+    "dark_psy",
+    "forest_psy",
+    "hi_tech",
+    "techno",
+    "tech_house",
+    "hypnotic_techno",
+    "hard_techno",
+    "melodic_techno",
+    "progressive_psy",
+    "goa_trance",
+    "full_on"
+  ]).has(row.style)
+    ? 8
+    : 0;
+  const score =
+    row.missing.tracks * 5 +
+    row.missing.artists * 1.6 +
+    row.missing.labels * 2 +
+    playableGap * 1.4 +
+    sourceDiversityGap * 6 +
+    issueCounts.critical * 25 +
+    issueCounts.warning * 6 +
+    Math.min(issueCounts.note, 100) * 0.12 +
+    strategicBoost;
+
+  const item = {
+    style: row.style,
+    status: row.ok ? "ok" : "coverage_gap",
+    score: Number(score.toFixed(1)),
+    actual: row.actual,
+    target: row.target,
+    missing: row.missing,
+    playableRatio,
+    playableGap,
+    sourceDiversity: countDistinctPlayableSources(row),
+    issueCounts
+  };
+  return { ...item, action: actionTextForRoadmapItem(item) };
+}
+
+function buildEnrichmentRoadmap(result) {
+  const knownStyles = new Set(result.coverageRows.map((row) => row.style));
+  const issuesByStyle = new Map();
+  result.issues.forEach((issue) => {
+    const style = styleForIssue(issue, knownStyles);
+    if (!style) return;
+    if (!issuesByStyle.has(style)) issuesByStyle.set(style, { critical: 0, warning: 0, note: 0 });
+    const counts = issuesByStyle.get(style);
+    counts[issue.severity] = (counts[issue.severity] || 0) + 1;
+  });
+
+  const items = result.coverageRows
+    .map((row) => buildRoadmapItem(row, issuesByStyle))
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.style.localeCompare(b.style));
+
+  const coverageBacklog = items.filter((item) => item.status === "coverage_gap");
+  const playableBacklog = items
+    .filter((item) => item.actual.tracks >= 20 && item.playableGap > 0)
+    .sort((a, b) => b.playableGap - a.playableGap || a.style.localeCompare(b.style));
+  const strategicStyles = items.filter((item) =>
+    ["psycore", "dark_psy", "forest_psy", "hi_tech", "techno", "tech_house"].includes(item.style)
+  );
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      criticalCount: result.criticalCount,
+      warningCount: result.warningCount,
+      noteCount: result.noteCount,
+      auditedTracks: result.counts.tracks,
+      uniqueArtists: result.counts.artists,
+      styles: result.counts.styles,
+      coverageBacklogCount: coverageBacklog.length,
+      playableBacklogCount: playableBacklog.length
+    },
+    nextBatches: [
+      {
+        name: "Lote A - fontes tocaveis dos estilos fortes",
+        why: "melhora a experiencia agora: recomendacao aparece com mais chance de tocar/abrir direto.",
+        styles: playableBacklog.slice(0, 8).map((item) => item.style)
+      },
+      {
+        name: "Lote B - subgeneros com pouca base",
+        why: "evita que estilos de cauda longa fiquem com dois artistas genericos.",
+        styles: coverageBacklog.slice(0, 8).map((item) => item.style)
+      },
+      {
+        name: "Lote C - DNA psy/techno prioritario",
+        why: "mantem o diferencial do Sonic Search em psicodelia extrema e musica de pista.",
+        styles: strategicStyles.map((item) => item.style)
+      }
+    ],
+    topPriorities: items.slice(0, 40),
+    coverageBacklog: coverageBacklog.slice(0, 40),
+    playableBacklog: playableBacklog.slice(0, 40),
+    strategicStyles
+  };
+}
+
+function formatRoadmapTable(items, limit = 20) {
+  return formatTable(
+    items.slice(0, limit).map((item) => [
+      item.score,
+      item.style,
+      item.status === "ok" ? "OK" : "Cobertura",
+      `${item.actual.tracks}/${item.target.tracks}`,
+      `${item.actual.artists}/${item.target.artists}`,
+      `${item.actual.playable}/${item.actual.tracks} (${percentage(item.playableRatio)})`,
+      item.action
+    ]),
+    ["Score", "Subgenero", "Status", "Faixas", "Artistas", "Tocaveis", "Proxima acao"]
+  );
+}
+
+function formatEnrichmentRoadmap(roadmap) {
+  const now = new Date();
+  const batchLines = roadmap.nextBatches.flatMap((batch) => [
+    `### ${batch.name}`,
+    "",
+    batch.why,
+    "",
+    batch.styles.length ? `Prioridade: ${batch.styles.join(", ")}` : "Sem estilos pendentes neste lote.",
+    ""
+  ]);
+
+  return [
+    "# Catalog Enrichment Roadmap - Sonic Search",
+    "",
+    `Gerado em: ${now.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`,
+    "",
+    "## Resumo executivo",
+    "",
+    `- Faixas auditadas: ${roadmap.summary.auditedTracks}`,
+    `- Artistas unicos: ${roadmap.summary.uniqueArtists}`,
+    `- Estilos auditados: ${roadmap.summary.styles}`,
+    `- Criticos atuais: ${roadmap.summary.criticalCount}`,
+    `- Avisos atuais: ${roadmap.summary.warningCount}`,
+    `- Subgeneros com cobertura abaixo do alvo: ${roadmap.summary.coverageBacklogCount}`,
+    `- Subgeneros com lacuna de fontes tocaveis: ${roadmap.summary.playableBacklogCount}`,
+    "",
+    "## Proximos lotes",
+    "",
+    ...batchLines,
+    "## Prioridades gerais",
+    "",
+    roadmap.topPriorities.length ? formatRoadmapTable(roadmap.topPriorities, 25) : "Nenhuma prioridade aberta.",
+    "",
+    "## Lacuna de fontes tocaveis",
+    "",
+    roadmap.playableBacklog.length ? formatRoadmapTable(roadmap.playableBacklog, 20) : "Nenhuma lacuna relevante.",
+    "",
+    "## Lacuna de cobertura",
+    "",
+    roadmap.coverageBacklog.length ? formatRoadmapTable(roadmap.coverageBacklog, 20) : "Nenhuma lacuna de cobertura.",
+    "",
+    "## Como usar",
+    "",
+    "1. Escolha um lote pequeno, com 1 a 3 subgeneros.",
+    "2. Pesquise fontes oficiais, Bandcamp, Discogs, MusicBrainz, SoundCloud e Beatport antes de gerar SQL.",
+    "3. Gere/importa CSV ou seed SQL com `status = 'needs_review'` quando a fonte ainda nao for tocavel no app.",
+    "4. Rode a auditoria de novo e confira se criticos continuam zerados.",
+    ""
+  ].join("\n");
+}
+
 function buildCatalogDelta(previous, current) {
   if (!previous) return null;
   return {
@@ -1059,6 +1365,7 @@ function main() {
   const catalogDelta = buildCatalogDelta(previousCatalogMetrics, currentCatalogMetrics);
   result.catalogDelta = catalogDelta;
   const report = formatReport(result);
+  const roadmap = buildEnrichmentRoadmap(result);
   fs.mkdirSync(reportsDir, { recursive: true });
   fs.writeFileSync(reportPath, report, "utf8");
   fs.writeFileSync(
@@ -1071,6 +1378,9 @@ function main() {
     }, null, 2)}\n`,
     "utf8"
   );
+  fs.writeFileSync(issuesPath, `${JSON.stringify(buildIssueInventory(result), null, 2)}\n`, "utf8");
+  fs.writeFileSync(roadmapPath, formatEnrichmentRoadmap(roadmap), "utf8");
+  fs.writeFileSync(roadmapJsonPath, `${JSON.stringify(roadmap, null, 2)}\n`, "utf8");
 
   const status = result.criticalCount ? "ATENCAO" : result.warningCount ? "REVISAR" : "OK";
   console.log(`Quality Audit: ${status}`);
@@ -1084,6 +1394,8 @@ function main() {
   }
   console.log(`${result.criticalCount} criticos, ${result.warningCount} avisos, ${result.noteCount} notas.`);
   console.log(`Relatorio: ${path.relative(rootDir, reportPath)}`);
+  console.log(`Inventario: ${path.relative(rootDir, issuesPath)}`);
+  console.log(`Roadmap: ${path.relative(rootDir, roadmapPath)}`);
 
   if (strictMode && result.criticalCount > 0) {
     process.exitCode = 1;

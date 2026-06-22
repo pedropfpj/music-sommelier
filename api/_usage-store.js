@@ -1,6 +1,7 @@
 const crypto = require("node:crypto");
 
 const memoryStore = new Map();
+const memoryCounters = new Map();
 
 function storeUrl() {
   return String(
@@ -85,16 +86,75 @@ async function writeJson(key, value, options = {}) {
 async function deleteKey(key) {
   if (!key) return false;
   if (!hasDurableStore()) {
+    memoryCounters.delete(key);
     return memoryStore.delete(key);
   }
   const result = await redisCommand(["DEL", key]);
   return result.ok;
 }
 
+function memoryCounterValue(key, expiresInSeconds = 0) {
+  const now = Date.now();
+  const current = memoryCounters.get(key);
+  if (!current || (current.expiresAt && current.expiresAt <= now)) {
+    const next = {
+      count: 1,
+      expiresAt: expiresInSeconds ? now + Number(expiresInSeconds) * 1000 : 0
+    };
+    memoryCounters.set(key, next);
+    return next.count;
+  }
+  current.count = Math.max(0, Number(current.count) || 0) + 1;
+  memoryCounters.set(key, current);
+  return current.count;
+}
+
+async function incrementCounter(key, options = {}) {
+  if (!key) return { ok: false, count: 0, store: "none", error: "missing_key" };
+  const expiresInSeconds = Math.max(0, Number(options.expiresInSeconds) || 0);
+  if (!hasDurableStore()) {
+    return {
+      ok: true,
+      count: memoryCounterValue(key, expiresInSeconds),
+      store: "memory"
+    };
+  }
+
+  const result = await redisCommand(["INCR", key]);
+  if (!result.ok) {
+    return { ok: false, count: 0, store: "durable", error: result.error || "counter_failed" };
+  }
+  const count = Math.max(0, Number(result.result) || 0);
+  if (count === 1 && expiresInSeconds) {
+    await redisCommand(["EXPIRE", key, expiresInSeconds]);
+  }
+  return { ok: true, count, store: "durable" };
+}
+
+async function enforceDailyUsageLimit({ key = "", limit = 0, expiresInSeconds = 0 } = {}) {
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  const store = hasDurableStore() ? "durable" : "memory";
+  if (!safeLimit) return { ok: true, current: 0, remaining: null, limit: safeLimit, store };
+  const counter = await incrementCounter(key, { expiresInSeconds });
+  if (!counter.ok) {
+    return { ok: false, current: 0, remaining: 0, limit: safeLimit, store: counter.store, error: counter.error };
+  }
+  const remaining = Math.max(0, safeLimit - counter.count);
+  return {
+    ok: counter.count <= safeLimit,
+    current: counter.count,
+    remaining,
+    limit: safeLimit,
+    store: counter.store
+  };
+}
+
 module.exports = {
   deleteKey,
+  enforceDailyUsageLimit,
   hasDurableStore,
   hashStoreKey,
+  incrementCounter,
   readJson,
   writeJson
 };

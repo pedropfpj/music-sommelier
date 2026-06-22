@@ -17,6 +17,14 @@ const layersPath = path.join(rootDir, "docs/improvement-layers-2026-06-17.md");
 const reportsDir = path.join(rootDir, "reports");
 const screenshotMode = process.argv.includes("--screenshots");
 const strictScreenshots = process.argv.includes("--strict-screenshots");
+const SCREENSHOT_TIMEOUT_MS = Math.max(
+  30000,
+  Number.parseInt(process.env.SONIC_SCREENSHOT_TIMEOUT_MS || "90000", 10) || 90000
+);
+const SCREENSHOT_VIRTUAL_TIME_BUDGET_MS = Math.max(
+  1000,
+  Number.parseInt(process.env.SONIC_SCREENSHOT_VIRTUAL_TIME_BUDGET_MS || "3500", 10) || 3500
+);
 
 const CRITICAL_STYLES = [
   "psycore",
@@ -578,7 +586,7 @@ function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
       "--run-all-compositor-stages-before-draw",
       "--disable-features=Translate,OptimizationHints,MediaRouter",
       `--user-data-dir=${profileDir}`,
-      "--virtual-time-budget=3500",
+      `--virtual-time-budget=${SCREENSHOT_VIRTUAL_TIME_BUDGET_MS}`,
       `--screenshot=${outputPath}`,
       `--window-size=${width},${height}`,
       url
@@ -610,7 +618,7 @@ function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
       }
       cleanup();
       reject(new Error(`Chrome screenshot timed out for ${path.relative(rootDir, outputPath)}`));
-    }, 30000);
+    }, SCREENSHOT_TIMEOUT_MS);
 
     child.stdout.on("data", (chunk) => {
       stdout = `${stdout}${chunk}`.slice(-6000);

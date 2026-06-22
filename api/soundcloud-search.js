@@ -2,6 +2,14 @@ const { envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = requ
 
 const TOKEN_URL = "https://secure.soundcloud.com/oauth/token";
 const TRACKS_URL = "https://api.soundcloud.com/tracks";
+const SOUNDCLOUD_SOURCE_DETAIL = {
+  name: "SoundCloud",
+  provider: "SoundCloud API",
+  dataType: "track search result, public permalink and optional preview transcoding",
+  url: "https://developers.soundcloud.com/docs/api",
+  license: "SoundCloud API Terms of Use",
+  attribution: "Track metadata from the SoundCloud API."
+};
 let cachedToken = null;
 
 function safeLimit(value, fallback = 12) {
@@ -107,8 +115,35 @@ async function normalizeTrack(row, style, token, { resolvePreview = false } = {}
     playbackCount: Number(row.playback_count) || 0,
     likesCount: Number(row.likes_count) || 0,
     source: "soundcloud_api",
+    sourceDetails: [{
+      ...SOUNDCLOUD_SOURCE_DETAIL,
+      url: row.permalink_url
+    }],
+    attribution: {
+      providers: ["SoundCloud"],
+      line: "Track data: SoundCloud.",
+      details: [{
+        ...SOUNDCLOUD_SOURCE_DETAIL,
+        url: row.permalink_url
+      }]
+    },
     soundcloudVerified: true,
     existenceVerified: true
+  };
+}
+
+function soundCloudAttribution(tracks = []) {
+  const details = [];
+  tracks.forEach((track) => {
+    const detail = Array.isArray(track?.sourceDetails) ? track.sourceDetails[0] : null;
+    if (!detail) return;
+    if (!details.some((item) => item.provider === detail.provider)) details.push(detail);
+  });
+  const providers = Array.from(new Set(details.map((detail) => detail.name || detail.provider).filter(Boolean)));
+  return {
+    providers,
+    line: providers.length ? `Track data: ${providers.join(", ")}.` : "",
+    details
   };
 }
 
@@ -197,8 +232,9 @@ module.exports = async function handler(req, res) {
   if (!requireMusicApi(req, res, {
     methods: ["POST"],
     feature: "soundcloud-search",
-    enabledEnv: "SONIC_MUSIC_APIS_ENABLED",
+    enabledEnv: "SONIC_SOUNDCLOUD_ENABLED",
     defaultEnabled: false,
+    allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT",
     defaultDailyLimit: 80
   })) return;
@@ -219,6 +255,7 @@ module.exports = async function handler(req, res) {
     sendJson(req, res, 200, {
       ok: true,
       source: "soundcloud",
+      attribution: soundCloudAttribution(tracks),
       query,
       style,
       count: tracks.length,
