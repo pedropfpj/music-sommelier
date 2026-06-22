@@ -123,7 +123,7 @@ async function fetchDiscogsArtist(artistName = "") {
     name: "Discogs",
     url: `https://www.discogs.com/search/?q=${encodeURIComponent(artist)}&type=artist`
   };
-  const enabled = envFlag("SONIC_DISCOGS_ENABLED", false);
+  const enabled = envFlag("SONIC_DISCOGS_ENABLED", true);
   const token = envFirst(DISCOGS_TOKEN_ENVS);
   if (!enabled) {
     return {

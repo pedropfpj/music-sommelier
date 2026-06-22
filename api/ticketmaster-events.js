@@ -342,7 +342,7 @@ async function fetchTicketmasterAttractionIds({ apiKey, query }) {
 
 async function fetchBandsintownEventsForQuery({ query }) {
   const appId = envText("BANDSINTOWN_APP_ID", "");
-  if (!appId || !featureEnabled("SONIC_BANDSINTOWN_ENABLED", false, { allowGlobalFallback: false })) return [];
+  if (!appId || !featureEnabled("SONIC_BANDSINTOWN_ENABLED", true, { allowGlobalFallback: false })) return [];
   const params = new URLSearchParams({ app_id: appId });
   const response = await fetch(`${BANDSINTOWN_EVENTS_URL}/${encodeURIComponent(query)}/events?${params.toString()}`, {
     headers: { Accept: "application/json" }

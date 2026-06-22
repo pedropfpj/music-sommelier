@@ -233,7 +233,7 @@ module.exports = async function handler(req, res) {
     methods: ["POST"],
     feature: "soundcloud-search",
     enabledEnv: "SONIC_SOUNDCLOUD_ENABLED",
-    defaultEnabled: false,
+    defaultEnabled: true,
     allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT",
     defaultDailyLimit: 80

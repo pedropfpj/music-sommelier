@@ -93,11 +93,13 @@ Variaveis principais:
 - `SONIC_TRACK_METADATA_ENABLED` + `SONIC_ITUNES_ENABLED`: recupera previews/metadados por rota server-side usando iTunes Search e exibe a fonte dos dados. `SONIC_DEEZER_ENABLED` permanece opt-in.
 - `SONIC_COVER_ART_ENABLED`: recupera capas por MusicBrainz/Cover Art Archive no backend sem chave, usando `SONIC_REFERENCE_USER_AGENT`, `SONIC_COVER_ART_DAILY_LIMIT` e `SONIC_COVER_ART_CACHE_SECONDS`.
 - `SONIC_ARTIST_PROFILE_ENABLED` + `SONIC_MUSICBRAINZ_ENABLED`, `SONIC_WIKIPEDIA_ENABLED` e/ou `SONIC_ITUNES_ENABLED`: recupera contexto de artista por rota server-side com User-Agent, rate limit e fontes exibidas.
-- `SONIC_LASTFM_ENABLED=true` + `LASTFM_API_KEY`: liga tags/similares/top tracks por Last.fm. Fica desligado por padrao ate o projeto usar chave propria.
+- `SONIC_LASTFM_ENABLED=true` + `LASTFM_API_KEY`: liga tags/similares/top tracks por Last.fm. Sem chave, o health mostra `needs_credentials`.
 - `SONIC_RADIO_BROWSER_ENABLED`: liga busca de radios publicas por estilo/tag sem chave, com `SONIC_RADIO_BROWSER_DAILY_LIMIT` e `SONIC_RADIO_BROWSER_CACHE_SECONDS`.
+- `SONIC_CATALOG_EXTRA_ENABLED=true` + `SUPABASE_URL` + `SUPABASE_ANON_KEY`: liga leitura do catalogo proprio publicado em `catalog_artists` e `catalog_tracks`.
 - `SONIC_CATALOG_ENRICHMENT_ENABLED=true` + `SUPABASE_SERVICE_ROLE_KEY`: permite que rotas server-side persistam respostas uteis em `catalog_enrichments`. Use somente em ambiente backend; nunca exponha service role no navegador.
-- `SONIC_ARTIST_BIO_ENABLED` + `OPENAI_API_KEY`: liga bio curta por IA. `SONIC_DISCOGS_ENABLED=true` + `DISCOGS_USER_TOKEN` adiciona Discogs como enriquecimento opt-in no backend.
-- `SONIC_NEWS_FEED_ENABLED`: liga a rota server-side de noticias. Mantenha `false` ate revisar termos/fontes e configurar `SONIC_NEWS_USER_AGENT`.
+- `SONIC_AI_TEXT_ENABLED=true` + `OPENAI_API_KEY`: liga leitura de faixa, traducao de noticias e bio curta por IA. `SONIC_DISCOGS_ENABLED=true` + `DISCOGS_USER_TOKEN` adiciona Discogs como enriquecimento backend quando houver token.
+- `SONIC_AI_IMAGE_ENABLED=true` + `OPENAI_API_KEY`: liga a rota de imagem do arquetipo musical, com limite diario e trava por usuario.
+- `SONIC_NEWS_FEED_ENABLED`: liga a rota server-side de noticias com cache, User-Agent e limite diario.
 - `SONIC_NEWS_FEED_DAILY_LIMIT`: limita chamadas diarias por cliente; usa `KV_REST_API_URL`/`KV_REST_API_TOKEN` quando configurado, com fallback em memoria local.
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
 
@@ -132,7 +134,7 @@ Nunca exponha `SUPABASE_SERVICE_ROLE_KEY` no navegador, no `index.html` ou em va
 
 ## Modo compliance
 
-O app nasce em modo balanceado: iTunes Search pode rodar no cliente porque a Apple documenta uso em websites/JSONP; MusicBrainz/Wikipedia/Cover Art Archive ficam no backend para respeitar User-Agent, rate limit e atribuicao; Radio Browser fica backend-only por organizacao, cache e limite. Deezer, SoundCloud, YouTube Data API, Bandsintown sem app ID proprio, Last.fm sem chave propria, RSS direto/proxies publicos e QRServer ficam desligados por padrao ou em opt-in explicito. Para ligar qualquer fonte externa sensivel no navegador, ajuste `window.SONIC_SEARCH_COMPLIANCE_CONFIG` no `index.html` somente depois de confirmar termos, atribuicao, limite de uso e credenciais do provedor. O caminho recomendado e preferir rotas em `/api/*` com cache, rate limit e User-Agent, como `/api/track-metadata`, `/api/cover-art`, `/api/artist-profile`, `/api/radio-browser` e `/api/news-feed`.
+O app nasce em modo balanceado: iTunes Search pode rodar no cliente porque a Apple documenta uso em websites/JSONP; MusicBrainz/Wikipedia/Cover Art Archive ficam no backend para respeitar User-Agent, rate limit e atribuicao; Radio Browser fica backend-only por organizacao, cache e limite. SoundCloud, YouTube Data API, Bandsintown, Last.fm, Discogs, IA e memoria Supabase ficam prontos no backend, mas so ficam `active` quando as credenciais oficiais existem no ambiente da Vercel. Deezer segue pendente ate haver app/termos disponiveis. Para ligar qualquer fonte externa sensivel no navegador, ajuste `window.SONIC_SEARCH_COMPLIANCE_CONFIG` no `index.html` somente depois de confirmar termos, atribuicao, limite de uso e credenciais do provedor. O caminho recomendado e preferir rotas em `/api/*` com cache, rate limit e User-Agent, como `/api/track-metadata`, `/api/cover-art`, `/api/artist-profile`, `/api/radio-browser` e `/api/news-feed`.
 
 O registro de decisoes por provedor fica em `docs/api-approvals.md`.
 
@@ -174,6 +176,14 @@ Para validar as rotas de API sem depender de rede real, rode:
 ```bash
 node scripts/smoke-music-apis.mjs
 ```
+
+Para auditar o dominio publicado depois do deploy/envs de producao, rode:
+
+```bash
+node scripts/check-api-activation.mjs https://sonicsearch.app
+```
+
+O health deve mostrar `active` para todos os provedores. `needs_credentials` significa que a rota esta pronta, mas falta uma chave no backend da Vercel.
 
 Quando os problemas criticos estiverem zerados, use o modo estrito antes de commit/push:
 

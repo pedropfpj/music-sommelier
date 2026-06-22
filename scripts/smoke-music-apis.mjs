@@ -116,11 +116,27 @@ const safeDefaults = {
   SONIC_MUSICBRAINZ_ENABLED: "true",
   SONIC_WIKIPEDIA_ENABLED: "true",
   SONIC_RADIO_BROWSER_ENABLED: "true",
-  SONIC_LASTFM_ENABLED: "false",
-  SONIC_SOUNDCLOUD_ENABLED: "false",
-  SONIC_YOUTUBE_ENABLED: "false",
-  SONIC_BANDSINTOWN_ENABLED: "false",
-  SONIC_CATALOG_ENRICHMENT_ENABLED: "false",
+  SONIC_AI_TEXT_ENABLED: "true",
+  SONIC_AI_IMAGE_ENABLED: "true",
+  SONIC_ARTIST_BIO_ENABLED: "true",
+  SONIC_LASTFM_ENABLED: "true",
+  SONIC_SOUNDCLOUD_ENABLED: "true",
+  SONIC_YOUTUBE_ENABLED: "true",
+  SONIC_BANDSINTOWN_ENABLED: "true",
+  SONIC_CATALOG_EXTRA_ENABLED: "true",
+  SONIC_CATALOG_ENRICHMENT_ENABLED: "true",
+  SONIC_NEWS_FEED_ENABLED: "true",
+  OPENAI_API_KEY: "",
+  YOUTUBE_API_KEY: "",
+  YOUTUBE_DATA_API_KEY: "",
+  SOUNDCLOUD_CLIENT_ID: "",
+  SOUNDCLOUD_CLIENT_SECRET: "",
+  BANDSINTOWN_APP_ID: "",
+  DISCOGS_USER_TOKEN: "",
+  DISCOGS_TOKEN: "",
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: "",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
   LASTFM_API_KEY: "",
   SONIC_LASTFM_API_KEY: "",
   SUPABASE_SERVICE_ROLE_KEY: "",
@@ -128,7 +144,7 @@ const safeDefaults = {
   SUPABASE_SERVICE_ROLE: ""
 };
 
-test("sensitive APIs stay disabled without explicit flags", async () => {
+test("credentialed APIs require credentials when active", async () => {
   await withEnv(safeDefaults, async () => {
     const soundcloud = await callHandler("api/soundcloud-search.js", {
       body: { query: "test", style: "techno" }
@@ -136,10 +152,10 @@ test("sensitive APIs stay disabled without explicit flags", async () => {
     const youtube = await callHandler("api/youtube-search.js", {
       body: { query: "test", artist: "ANNA", song: "Hidden Beauties" }
     });
-    assert.equal(soundcloud.statusCode, 403);
-    assert.equal(soundcloud.json().error, "music_api_disabled");
-    assert.equal(youtube.statusCode, 403);
-    assert.equal(youtube.json().error, "music_api_disabled");
+    assert.equal(soundcloud.statusCode, 503);
+    assert.equal(soundcloud.json().error, "missing_soundcloud_credentials");
+    assert.equal(youtube.statusCode, 503);
+    assert.equal(youtube.json().error, "missing_youtube_api_key");
   });
 });
 
@@ -148,10 +164,37 @@ test("integration health reports provider state", async () => {
     const res = await callHandler("api/integration-health.js", { method: "GET" });
     const payload = res.json();
     assert.equal(res.statusCode, 200);
+    assert.equal(payload.providers.soundcloud.status, "needs_credentials");
+    assert.equal(payload.providers.youtube.status, "needs_credentials");
+    assert.equal(payload.providers.lastfm.status, "needs_credentials");
+    assert.equal(payload.providers.catalogExtra.status, "needs_credentials");
+    assert.equal(payload.providers.catalogEnrichment.status, "needs_credentials");
+    assert.equal(payload.providers.artistBio.status, "needs_credentials");
+    assert.equal(payload.providers.trackInsight.status, "needs_credentials");
+    assert.equal(payload.providers.newsTranslate.status, "needs_credentials");
+    assert.equal(payload.providers.spiritImage.status, "needs_credentials");
+    assert.equal(payload.providers.newsFeed.enabled, true);
+    assert.equal(payload.providers.radioBrowser.enabled, true);
+  });
+});
+
+test("explicit flags can still disable sensitive APIs", async () => {
+  await withEnv({
+    ...safeDefaults,
+    SONIC_LASTFM_ENABLED: "false",
+    SONIC_SOUNDCLOUD_ENABLED: "false",
+    SONIC_YOUTUBE_ENABLED: "false",
+    SONIC_CATALOG_EXTRA_ENABLED: "false",
+    SONIC_CATALOG_ENRICHMENT_ENABLED: "false"
+  }, async () => {
+    const res = await callHandler("api/integration-health.js", { method: "GET" });
+    const payload = res.json();
+    assert.equal(res.statusCode, 200);
+    assert.equal(payload.providers.lastfm.status, "disabled");
     assert.equal(payload.providers.soundcloud.status, "disabled");
     assert.equal(payload.providers.youtube.status, "disabled");
+    assert.equal(payload.providers.catalogExtra.status, "disabled");
     assert.equal(payload.providers.catalogEnrichment.status, "disabled");
-    assert.equal(payload.providers.radioBrowser.enabled, true);
   });
 });
 
@@ -159,6 +202,9 @@ test("track metadata prefers exact iTunes matches and returns attribution", asyn
   await withEnv(safeDefaults, async () => {
     await withFetchMock((url) => {
       assert.match(url, /itunes\.apple\.com\/search/);
+      const parsedUrl = new URL(url);
+      assert.equal(parsedUrl.searchParams.get("media"), "music");
+      assert.equal(parsedUrl.searchParams.get("limit"), "5");
       return jsonResponse({
         resultCount: 2,
         results: [

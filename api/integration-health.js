@@ -43,7 +43,10 @@ module.exports = async function handler(req, res) {
   const youtubeConfigured = Boolean(process.env.YOUTUBE_API_KEY || process.env.YOUTUBE_DATA_API_KEY);
   const youtubeRouteEnabled = featureEnabled("SONIC_YOUTUBE_ENABLED", true, { allowGlobalFallback: false });
   const bandsintownRouteEnabled = featureEnabled("SONIC_BANDSINTOWN_ENABLED", true, { allowGlobalFallback: false });
-  const artistBioEnabled = envFlag("SONIC_AI_TEXT_ENABLED", true) && envFlag("SONIC_ARTIST_BIO_ENABLED", true);
+  const openAiConfigured = Boolean(process.env.OPENAI_API_KEY);
+  const aiTextRouteEnabled = envFlag("SONIC_AI_TEXT_ENABLED", true);
+  const aiImageRouteEnabled = envFlag("SONIC_AI_IMAGE_ENABLED", true);
+  const artistBioRouteEnabled = aiTextRouteEnabled && envFlag("SONIC_ARTIST_BIO_ENABLED", true);
   const discogsConfigured = Boolean(envFirst(DISCOGS_TOKEN_ENVS));
   const discogsEnabled = envFlag("SONIC_DISCOGS_ENABLED", true);
   const musicBrainzEnabled = envFlag("SONIC_MUSICBRAINZ_ENABLED", true);
@@ -151,10 +154,17 @@ module.exports = async function handler(req, res) {
         }
       },
       artistBio: {
-        configured: Boolean(process.env.OPENAI_API_KEY),
-        enabled: artistBioEnabled,
+        configured: openAiConfigured,
+        routeEnabled: artistBioRouteEnabled,
+        enabled: openAiConfigured && artistBioRouteEnabled,
+        ...providerState({
+          configured: openAiConfigured,
+          routeEnabled: artistBioRouteEnabled,
+          enabled: openAiConfigured && artistBioRouteEnabled,
+          disabledReason: "disabled_until_openai_api_key"
+        }),
         providers: {
-          openai: Boolean(process.env.OPENAI_API_KEY),
+          openai: openAiConfigured,
           musicbrainz: musicBrainzEnabled,
           discogs: discogsEnabled && discogsConfigured
         },
@@ -173,6 +183,56 @@ module.exports = async function handler(req, res) {
           userAgent: envText("SONIC_REFERENCE_USER_AGENT", "SonicSearch/1.0 (+https://sonicsearch.app)"),
           discogsUserAgent: envText("SONIC_DISCOGS_USER_AGENT", envText("SONIC_REFERENCE_USER_AGENT", "SonicSearch/1.0 (+https://sonicsearch.app)")),
           cacheSeconds: envInt("SONIC_ARTIST_BIO_REFERENCE_CACHE_SECONDS", 86400, 60, 604800)
+        }
+      },
+      trackInsight: {
+        configured: openAiConfigured,
+        routeEnabled: aiTextRouteEnabled,
+        enabled: openAiConfigured && aiTextRouteEnabled,
+        ...providerState({
+          configured: openAiConfigured,
+          routeEnabled: aiTextRouteEnabled,
+          enabled: openAiConfigured && aiTextRouteEnabled,
+          disabledReason: "disabled_until_openai_api_key"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: true,
+          dailyLimit: envInt("SONIC_AI_TRACK_DAILY_LIMIT", 24, 0, 10000)
+        }
+      },
+      newsTranslate: {
+        configured: openAiConfigured,
+        routeEnabled: aiTextRouteEnabled,
+        enabled: openAiConfigured && aiTextRouteEnabled,
+        ...providerState({
+          configured: openAiConfigured,
+          routeEnabled: aiTextRouteEnabled,
+          enabled: openAiConfigured && aiTextRouteEnabled,
+          disabledReason: "disabled_until_openai_api_key"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: true,
+          dailyLimit: envInt("SONIC_AI_NEWS_DAILY_LIMIT", 24, 0, 10000)
+        }
+      },
+      spiritImage: {
+        configured: openAiConfigured,
+        routeEnabled: aiImageRouteEnabled,
+        enabled: openAiConfigured && aiImageRouteEnabled,
+        ...providerState({
+          configured: openAiConfigured,
+          routeEnabled: aiImageRouteEnabled,
+          enabled: openAiConfigured && aiImageRouteEnabled,
+          disabledReason: "disabled_until_openai_api_key"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: true,
+          premiumGateAvailable: envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false),
+          uniquePerUser: true,
+          dailyLimit: envInt("SONIC_AI_IMAGE_DAILY_LIMIT", 50, 0, 10000)
         }
       },
       lastfm: {
@@ -300,6 +360,9 @@ module.exports = async function handler(req, res) {
       artistProfile: "/api/artist-profile",
       artistEvents: "/api/ticketmaster-events",
       artistBio: "/api/artist-bio",
+      trackInsight: "/api/track-insight",
+      newsTranslate: "/api/news-translate",
+      spiritImage: "/api/spirit-image",
       lastfmArtist: "/api/lastfm-artist",
       radioBrowser: "/api/radio-browser",
       catalogExtra: "/api/catalog-extra",

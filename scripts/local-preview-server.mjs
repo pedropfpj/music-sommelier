@@ -49,6 +49,35 @@ function loadLocalEnvFile(filename) {
 
 const port = Number(process.env.PORT || process.argv.find((arg) => /^--port=/.test(arg))?.split("=")[1] || 8794);
 const host = process.env.HOST || "127.0.0.1";
+const apiRewrites = loadVercelApiRewrites();
+
+function loadVercelApiRewrites() {
+  const configPath = path.join(rootDir, "vercel.json");
+  if (!fs.existsSync(configPath)) return [];
+  try {
+    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    return (Array.isArray(config.rewrites) ? config.rewrites : [])
+      .map((rewrite) => {
+        const source = String(rewrite?.source || "").trim();
+        const destination = String(rewrite?.destination || "").trim();
+        if (!source.startsWith("/api/") || !destination.startsWith("/api/")) return null;
+        const destinationUrl = new URL(destination, "http://local.test");
+        const routeName = destinationUrl.pathname.replace(/^\/api\/+/, "").replace(/\/+$/, "");
+        return {
+          source,
+          routeName,
+          query: Object.fromEntries(destinationUrl.searchParams.entries())
+        };
+      })
+      .filter(Boolean);
+  } catch (_error) {
+    return [];
+  }
+}
+
+function apiRewriteFor(pathname = "") {
+  return apiRewrites.find((rewrite) => rewrite.source === pathname) || null;
+}
 
 function send(res, statusCode, body, headers = {}) {
   res.writeHead(statusCode, headers);
@@ -109,7 +138,7 @@ function createApiResponse(res) {
 }
 
 async function handleApi(req, res, parsedUrl) {
-  const routeName = parsedUrl.pathname.replace(/^\/api\/+/, "").replace(/\/+$/, "");
+  let routeName = parsedUrl.pathname.replace(/^\/api\/+/, "").replace(/\/+$/, "");
   if (!routeName || routeName.startsWith("_")) {
     send(res, 404, JSON.stringify({ error: "api_not_found" }), {
       "Content-Type": "application/json; charset=utf-8"
@@ -117,7 +146,12 @@ async function handleApi(req, res, parsedUrl) {
     return;
   }
 
-  const apiPath = path.join(rootDir, "api", `${routeName}.js`);
+  let apiPath = path.join(rootDir, "api", `${routeName}.js`);
+  const rewrite = fs.existsSync(apiPath) ? null : apiRewriteFor(parsedUrl.pathname);
+  if (rewrite) {
+    routeName = rewrite.routeName;
+    apiPath = path.join(rootDir, "api", `${routeName}.js`);
+  }
   if (!fs.existsSync(apiPath)) {
     send(res, 404, JSON.stringify({ error: "api_not_found", route: routeName }), {
       "Content-Type": "application/json; charset=utf-8"
@@ -128,7 +162,10 @@ async function handleApi(req, res, parsedUrl) {
   try {
     const rawBody = await readRequestBody(req);
     req.body = parseBody(rawBody, String(req.headers["content-type"] || ""));
-    req.query = Object.fromEntries(parsedUrl.searchParams.entries());
+    req.query = {
+      ...Object.fromEntries(parsedUrl.searchParams.entries()),
+      ...(rewrite?.query || {})
+    };
     const resolvedApiPath = require.resolve(apiPath);
     delete require.cache[resolvedApiPath];
     const handler = require(resolvedApiPath);

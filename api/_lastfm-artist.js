@@ -181,7 +181,7 @@ module.exports = async function handler(req, res) {
     methods: ["GET", "POST"],
     feature: "lastfm-artist",
     enabledEnv: "SONIC_LASTFM_ENABLED",
-    defaultEnabled: false,
+    defaultEnabled: true,
     allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_LASTFM_DAILY_LIMIT",
     defaultDailyLimit: 80

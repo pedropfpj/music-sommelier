@@ -1,6 +1,6 @@
 # Sonic Search API Compliance Setup
 
-Este projeto usa um modo balanceado por padrao: APIs publicas sem segredo e com uso documentado ficam ligadas com cache/limites; integracoes com credencial, aceite especifico ou consentimento ficam desligadas ate revisao e credenciais proprias.
+Este projeto usa um modo balanceado por padrao: APIs publicas sem segredo e com uso documentado ficam ligadas com cache/limites; integracoes com credencial ficam prontas no backend e aparecem como `needs_credentials` ate receberem chaves oficiais.
 
 O registro vivo de decisoes fica em `docs/api-approvals.md`.
 
@@ -14,12 +14,12 @@ O registro vivo de decisoes fica em `docs/api-approvals.md`.
 - `/api/cover-art` usa MusicBrainz + Cover Art Archive apenas no backend, com User-Agent, intervalo minimo, cache, limite diario e aviso de que imagens continuam com copyright dos titulares.
 - MusicBrainz/Wikipedia no navegador ficam bloqueados; use `/api/artist-profile` para origem/genero/resumo com User-Agent, rate limit e fontes visiveis.
 - `/api/artist-profile` retorna detalhes estruturados de fonte/licenca em `profile.sourceDetails` e `attribution`.
-- `/api/lastfm-artist` fica desligado por padrao; habilite somente com `LASTFM_API_KEY` propria para tags, artistas similares e top tracks.
+- `/api/lastfm-artist` fica pronto no backend; sem `LASTFM_API_KEY` propria, o health mostra `needs_credentials`.
 - `/api/radio-browser` busca diretorio publico de radios por estilo/tag via backend, sem chave, com cache, limite diario e atribuicao.
-- `/api/artist-bio` usa OpenAI no backend e pode enriquecer com MusicBrainz; Discogs fica em opt-in por `SONIC_DISCOGS_ENABLED=true` + token proprio.
+- `/api/artist-bio` usa OpenAI no backend e pode enriquecer com MusicBrainz; Discogs so chama a API quando `DISCOGS_USER_TOKEN` existir.
 - `/api/artist-bio` retorna `sources`, `sourceDetails` e `attribution`, e o estado completo aparece em `/api/integration-health`.
 - `/api/youtube-search` e `/api/soundcloud-search` usam credenciais somente no backend e retornam `sourceDetails`/`attribution` por resultado.
-- Noticias ao vivo usam `/api/news-feed` quando `SONIC_NEWS_FEED_ENABLED=true`; proxies publicos ficam bloqueados por padrao. A rota usa backend, User-Agent, cache, limite diario e fontes estruturadas.
+- Noticias ao vivo usam `/api/news-feed`; proxies publicos ficam bloqueados por padrao. A rota usa backend, User-Agent, cache, limite diario e fontes estruturadas.
 
 ## Para habilitar uma API sensivel
 
@@ -51,7 +51,12 @@ Padrao recomendado:
 - `SONIC_MUSICBRAINZ_ENABLED=true`
 - `SONIC_WIKIPEDIA_ENABLED=true`
 - `SONIC_ARTIST_BIO_ENABLED=true`
+- `SONIC_AI_TEXT_ENABLED=true`
 - `SONIC_AI_BIO_DAILY_LIMIT=18`
+- `SONIC_AI_TRACK_DAILY_LIMIT=24`
+- `SONIC_AI_NEWS_DAILY_LIMIT=24`
+- `SONIC_AI_IMAGE_ENABLED=true`
+- `SONIC_AI_IMAGE_DAILY_LIMIT=50`
 - `SONIC_ARTIST_BIO_REFERENCE_CACHE_SECONDS=86400`
 - `SONIC_REFERENCE_USER_AGENT=SonicSearch/1.0 (+https://sonicsearch.app)`
 - `SONIC_RADIO_BROWSER_ENABLED=true`
@@ -60,12 +65,12 @@ Padrao recomendado:
 - `window.SONIC_SEARCH_COMPLIANCE_CONFIG.clientMusicCatalogApisEnabled=true`
 - `window.SONIC_SEARCH_COMPLIANCE_CONFIG.clientItunesEnabled=true`
 
-Opt-in apos revisao:
+Ativacao completa com credenciais oficiais:
 
 - `SONIC_YOUTUBE_ENABLED=true` + `YOUTUBE_API_KEY=...`
 - `SONIC_SOUNDCLOUD_ENABLED=true` + `SOUNDCLOUD_CLIENT_ID=...` + `SOUNDCLOUD_CLIENT_SECRET=...`
 - `SONIC_BANDSINTOWN_ENABLED=true` + `BANDSINTOWN_APP_ID=...`
-- `SONIC_DEEZER_ENABLED=true`
+- `SONIC_DEEZER_ENABLED=true` somente depois de termos/app oficial
 - `SONIC_LASTFM_ENABLED=true` + `LASTFM_API_KEY=...`
 - `SONIC_DISCOGS_ENABLED=true` + `DISCOGS_USER_TOKEN=...`
 - `SONIC_NEWS_FEED_ENABLED=true`

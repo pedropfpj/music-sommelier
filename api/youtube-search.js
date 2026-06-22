@@ -201,7 +201,7 @@ module.exports = async function handler(req, res) {
     methods: ["GET", "POST"],
     feature: "youtube-search",
     enabledEnv: "SONIC_YOUTUBE_ENABLED",
-    defaultEnabled: false,
+    defaultEnabled: true,
     allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_YOUTUBE_SEARCH_DAILY_LIMIT",
     defaultDailyLimit: 80

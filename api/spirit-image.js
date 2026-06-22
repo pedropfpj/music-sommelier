@@ -126,7 +126,7 @@ module.exports = async function handler(req, res) {
   if (!requireOpenAiPost(req, res, {
     feature: "spirit-image",
     enabledEnv: "SONIC_AI_IMAGE_ENABLED",
-    defaultEnabled: false,
+    defaultEnabled: true,
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
     defaultDailyLimit: 50,
     budgetOnStart: false

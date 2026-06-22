@@ -11,13 +11,13 @@ Registro simples para separar integracoes aprovadas, opt-in e pendentes. Atualiz
 | Cover Art Archive | Aprovado via backend | capas de releases/faixas | `/api/cover-art` | usar MusicBrainz no backend com User-Agent/cache/limite; imagens seguem copyright dos titulares |
 | Wikipedia/Wikimedia | Aprovado via backend | resumo factual curto | `/api/artist-profile` | User-Agent proprio, cache, atribuicao e trechos curtos |
 | Radio Browser | Aprovado via backend | radios publicas por estilo/tag | `/api/radio-browser` | sem chave; manter cache, limite diario e atribuicao do diretorio |
-| Last.fm | Opt-in com credencial | tags, similares, top tracks e bio curta | `/api/lastfm-artist` | usar API key propria no backend; manter desligado ate registrar chave e revisar termos |
+| Last.fm | Ativacao com credencial | tags, similares, top tracks e bio curta | `/api/lastfm-artist` | usar API key propria no backend; sem chave fica `needs_credentials` |
 | Deezer | Pendente | previews/BPM/capas/metadados extras | `/api/track-metadata` | criar app/aceitar termos quando Deezer voltar a aceitar novos apps |
 | YouTube Data API | Opt-in com credencial | link/video embutivel de faixa | `/api/youtube-search` | usar chave propria, backend, filtro de qualidade e atribuicao visivel |
-| SoundCloud API | Opt-in com credencial | busca underground, links e previews quando disponiveis | `/api/soundcloud-search` | usar OAuth client credentials no backend, token cache e atribuicao visivel |
+| SoundCloud API | Ativacao com credencial | busca underground, links e previews quando disponiveis | `/api/soundcloud-search` | usar OAuth client credentials no backend, token cache e atribuicao visivel |
 | Ticketmaster | Opt-in com credencial | agenda de eventos | `/api/ticketmaster-events` | usar API key propria e limites |
-| Bandsintown | Pendente/opt-in | reforco de agenda | `/api/ticketmaster-events` | exigir `BANDSINTOWN_APP_ID` proprio |
-| RSS/news | Pendente/opt-in | noticias | `/api/news-feed` | backend-only, User-Agent proprio, cache, limite diario duravel quando KV existir e fontes estruturadas |
+| Bandsintown | Ativacao com credencial | reforco de agenda | `/api/ticketmaster-events` | exigir `BANDSINTOWN_APP_ID` proprio |
+| RSS/news | Aprovado via backend | noticias | `/api/news-feed` | backend-only, User-Agent proprio, cache, limite diario duravel quando KV existir e fontes estruturadas |
 | QR externo | Desnecessario | nenhum | gerador local SVG | manter local por privacidade |
 
 ## Checklist antes de habilitar opt-in
@@ -40,5 +40,5 @@ node scripts/product-verify.mjs
 - MusicBrainz/Wikipedia continuam backend-only para respeitar User-Agent e rate limit.
 - Cover Art Archive entra backend-only para recuperar capas sem expor chamadas diretas do navegador.
 - Radio Browser entra backend-only como fonte gratuita de descoberta por estilo, sem tocar streams automaticamente.
-- Last.fm fica opt-in ate o projeto ter `LASTFM_API_KEY` propria e decisao registrada.
+- Last.fm, SoundCloud, Bandsintown e Discogs ficam prontos no backend; sem credencial propria aparecem como `needs_credentials` e nao fazem chamada externa.
 - iTunes Search pode ficar client-side por ser documentado para uso em websites, mas o backend tambem cobre previews/metadados com `sourceDetails` e atribuicao.

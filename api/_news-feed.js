@@ -263,7 +263,7 @@ module.exports = async function handler(req, res) {
     allowGlobalFallback: false
   })) return;
 
-  if (!envFlag("SONIC_NEWS_FEED_ENABLED", false)) {
+  if (!envFlag("SONIC_NEWS_FEED_ENABLED", true)) {
     sendJson(req, res, 200, {
       ok: true,
       enabled: false,
