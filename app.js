@@ -23032,7 +23032,7 @@ function completeSocialLogin(provider, payload = {}) {
     provider: authProviderDisplayName(provider),
     user: session.username || session.email
   }));
-  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
   return true;
 }
 
@@ -23087,7 +23087,7 @@ async function continueWithOnlineSocialSession(options = {}) {
   }));
   applyCloudLikedTrackSignals([]);
   updateStats();
-  continueFromAuthToWelcome({ showGuide: options.showGuide ?? !hasUsageGuideAcknowledged() });
+  continueFromAuthToDiscover({ showGuide: options.showGuide ?? !hasUsageGuideAcknowledged() });
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
 }
@@ -24395,6 +24395,10 @@ function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
 
 function continueFromUsageGuide() {
   markUsageGuideAcknowledged();
+  if (usageGuideReturnTarget === "discover") {
+    enterAppFromWelcome({ surprise: false, autoRecommendation: false });
+    return;
+  }
   if (usageGuideReturnTarget === "app") {
     if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
     if (appContent) appContent.classList.remove("hidden");
@@ -24486,12 +24490,12 @@ async function showAuthScreen() {
   playUiSfx("confirm");
 }
 
-function continueFromAuthToWelcome({ showGuide = false } = {}) {
+function continueFromAuthToDiscover({ showGuide = false } = {}) {
+  if (introScreen) introScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
-  if (welcomeScreen) welcomeScreen.classList.remove("hidden");
-  syncFloatingSurpriseButton();
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
   if (quickSurprisePanel) quickSurprisePanel.classList.add("hidden");
@@ -24504,11 +24508,10 @@ function continueFromAuthToWelcome({ showGuide = false } = {}) {
   }
   syncQuickSurpriseStyleOptions();
   if (showGuide) {
-    showUsageGuideScreen({ returnTo: "welcome" });
+    showUsageGuideScreen({ returnTo: "discover" });
     return;
   }
-  refreshAmbientForUiState();
-  playUiSfx("confirm");
+  enterAppFromWelcome({ surprise: false, autoRecommendation: false });
 }
 
 function ensureLocalProfileSession({ preferStored = true } = {}) {
@@ -24599,12 +24602,16 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   closeQuickSurprisePanel();
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
+  setActiveAppTab("discover");
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
@@ -24719,7 +24726,7 @@ function startLocalProfileFlow({ preferStored = true, showGuide = null } = {}) {
   } else {
     setAuthFeedback(t("authGuestReady"));
   }
-  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
 
 function loginWithCredentials() {
@@ -24741,7 +24748,7 @@ function loginWithCredentials() {
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authLoggedAs", { user: username }));
-  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
 
 async function resumeStoredUserSession() {
@@ -24791,7 +24798,7 @@ async function resumeStoredUserSession() {
     : t("authLoggedAs", {
       user: storedUser.username || storedUser.email || t("summaryNoData")
     }));
-  continueFromAuthToWelcome({ showGuide: shouldShowUsageGuide });
+  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
 
 async function continueWithoutLogin() {
@@ -24817,7 +24824,7 @@ function testAsNewUser() {
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authTestUserReady", { user: session.username }));
-  continueFromAuthToWelcome({ showGuide: true });
+  continueFromAuthToDiscover({ showGuide: true });
 }
 
 function enterQaPreviewMode() {
