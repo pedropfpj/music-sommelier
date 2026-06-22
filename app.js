@@ -5953,9 +5953,9 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
-const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v47";
-const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v29-electronic-personality";
-const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v13-personality";
+const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v49";
+const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v31-subgenre-wardrobe";
+const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "electronic-party-bust-v15-subgenre-wardrobe";
 const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
@@ -9022,21 +9022,21 @@ const MUSICAL_SPIRITS = [
     },
     copy: {
       pt: {
-        name: "Conector do Groove",
-        archetype: "Tech-house social",
-        description: "Voce gosta de groove com presenca de club: baixo seco, vocal picado, bounce elegante, LEDs de mixer e aquela confianca social de quem sabe onde a pista encaixa. Nao e retrato fashion; e energia de booth, movimento calculado e carisma de after.",
+        name: "Piloto do Groove",
+        archetype: "Booth tech-house",
+        description: "Voce gosta de groove com presenca de club: baixo seco, vocal picado, bounce elegante, CDJ em volta, LEDs de mixer e aquela confianca social de quem sabe onde a pista encaixa. Nao e retrato fashion; e energia de booth, movimento calculado e carisma de after.",
         cardDescription: "Tech house/bass house: bounce seco, vocal picado, mixer LEDs e carisma de club."
       },
       en: {
-        name: "Groove Connector",
-        archetype: "Social tech-house",
-        description: "You like groove with real club presence: dry bass, chopped vocals, elegant bounce, mixer LEDs, and the social confidence of someone who knows where the floor locks in. It is not a fashion portrait; it is booth energy, calculated movement, and after-hours charisma.",
+        name: "Groove Pilot",
+        archetype: "Booth tech-house",
+        description: "You like groove with real club presence: dry bass, chopped vocals, elegant bounce, CDJs around you, mixer LEDs, and the social confidence of someone who knows where the floor locks in. It is not a fashion portrait; it is booth energy, calculated movement, and after-hours charisma.",
         cardDescription: "Tech house/bass house: dry bounce, chopped vocals, mixer LEDs, and club charisma."
       },
       es: {
-        name: "Conector del Groove",
-        archetype: "Tech-house social",
-        description: "Te gusta el groove con presencia de club: bajo seco, vocales cortadas, bounce elegante, LEDs de mixer y la confianza social de quien sabe donde encaja la pista. No es retrato de moda; es energia de booth, movimiento calculado y carisma de after.",
+        name: "Piloto del Groove",
+        archetype: "Booth tech-house",
+        description: "Te gusta el groove con presencia de club: bajo seco, vocales cortadas, bounce elegante, CDJs alrededor, LEDs de mixer y la confianza social de quien sabe donde encaja la pista. No es retrato de moda; es energia de booth, movimiento calculado y carisma de after.",
         cardDescription: "Tech house/bass house: bounce seco, vocal cortada, LEDs de mixer y carisma de club."
       }
     }
@@ -32969,19 +32969,18 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
     "androgynous adult bust only for this neutral variation"
   ];
   const heritageCues = [
-    "translucent cyan-gray spectral skin with pearlescent subsurface glow",
-    "smoky violet ghost skin with soft vapor edges",
-    "pale moonlit opal skin with luminous aura veins",
-    "obsidian smoke skin with teal rim-light along the cheekbones",
-    "silver-blue spirit skin with glassy highlights",
-    "deep indigo ectoplasmic skin with luminous bone structure",
-    "green-blue plasma skin with matte velvet shadows",
-    "porcelain-lilac semi-transparent spirit skin",
-    "rose-magenta alien spirit skin with soft translucent glow",
-    "warm golden-yellow ectoplasmic skin with opal highlights",
-    "red-orange plasma spirit skin with ember-like luminous edges",
-    "emerald green ghost skin with cyan aura veins",
-    "aqua-blue translucent alien skin with pearl sheen"
+    "deep brown skin with cyan-magenta club reflections and realistic texture",
+    "warm olive skin under acid-green rim light and soft amber booth fill",
+    "fair skin under violet-blue neon with natural pores and clear facial key light",
+    "medium tan skin with teal rim light and warm dancefloor highlights",
+    "golden brown skin under blue laser haze with realistic sweat-glow",
+    "dark skin with magenta side light, clean eye catchlights, and premium skin detail",
+    "light brown skin with lime LED reflections and soft pink fill",
+    "freckled fair skin under chrome-blue club light with natural warmth",
+    "medium neutral skin under orange-cyan booth light with readable face detail",
+    "warm beige skin under red-cyan strobe softened by a clear front key light",
+    "deep umber skin with emerald laser edge and natural human texture",
+    "olive-brown skin with violet booth reflections and bright expressive eyes"
   ];
   const hairCues = [
     "short textured hair",
@@ -32995,8 +32994,8 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
   ];
   const accessoryCues = [
     "transparent visor lifted above the eyes",
-    "subtle ear cuffs and layered necklaces",
-    "single statement ring and wrist bands",
+    "one subtle ear cuff and no repeated jewelry",
+    "single statement ring or one club wristband",
     "lightweight headphones around the neck",
     "ritual scarf and reflective pins",
     "minimal face gems away from the eyes",
@@ -33006,7 +33005,7 @@ function spiritHumanIdentityVariation(spirit, profileSignature = "") {
   return [
     ageCues[seed % ageCues.length],
     `apparent adult sex/presentation: ${sexPresentationCues[(seed >>> 3) % sexPresentationCues.length]}`,
-    `spectral skin/material cue: ${heritageCues[(seed >>> 6) % heritageCues.length]}; not normal human flesh tone`,
+    `skin and lighting cue: ${heritageCues[(seed >>> 6) % heritageCues.length]}`,
     hairCues[(seed >>> 9) % hairCues.length],
     accessoryCues[(seed >>> 12) % accessoryCues.length],
     `style-family accessories: ${spiritStyleFamilyAccessoryCue(spirit, profileSignature)}`
@@ -33168,7 +33167,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression or repeated styling. Create a different fictional adult electronic party archetype and a complete visual overhaul: different face, head shape, hair, apparent presentation, age cue, skin tone, makeup, body/bust silhouette, posture, clothing category, jacket/collar shape, strap layout, eyewear/visor/headphones, jewelry, background color, lighting, and emotional expression. Do not keep the same person or the same outfit formula."
     : "";
-  const electronicSceneRule = "Electronic personality lock: the image must be unmistakably electronic before it reads as a portrait. Include at least three visible electronic-culture cues integrated into wardrobe, light, or background: DJ mixer faders, CDJ jog-wheel arcs, modular-synth patch grid, cable silhouettes, equalizer blocks, speaker pressure rings, LED strips, club wristband, transparent in-ear monitor, reflective utility seams, mesh/vinyl clubwear, or booth light panels. A plain person with colored neon or a single waveform behind them is a failed result. Avoid repeating the previous leather-jacket / glasses / pendant formula.";
+  const electronicSceneRule = "Electronic personality lock: the image must be unmistakably electronic before it reads as a portrait. Include at least three visible electronic-culture cues integrated into wardrobe, light, or background: DJ mixer faders, CDJ jog-wheel arcs, modular-synth patch grid, cable silhouettes, equalizer blocks, speaker pressure rings, LED strips, club wristband, transparent in-ear monitor, reflective utility seams, mesh/vinyl clubwear, or booth light panels. Rejection criteria: a clean headshot, LinkedIn/passport/dating-profile portrait, plain person with colored neon, single waveform background, plain black leather jacket, plain black T-shirt, simple pendant necklace, or generic club photo is a failed result. Subgenre wardrobe test: the viewer should infer the electronic subgenre from wearable design before reading the name. Avoid repeating the previous leather-jacket / glasses / pendant formula.";
   const humanEntityGuardrail = "Non-negotiable quality gate: render a polished semi-realistic / hyper-realistic bust portrait of a fictional adult electronic-music party archetype tied to the user's actual dominant electronic subgenres, rhythm, dance, fashion, and club culture. Composition must be central, chest-up only, with face, neck, shoulders, and upper chest visible. The face must be large, bright enough to read on a phone, happy or warmly confident, expressive in the eyes and mouth, never hidden in shadow, smoke, mask, helmet, or abstract effects. It must look like a distinct adult person from an electronic music scene, not a supernatural spirit, generic musician, DJ press photo, carnival performer, fantasy character, mascot, or abstract icon. Electronic-first rule: build the character and background from recognizable club, rave, DJ booth, synth, and sound-system culture: abstract mixer-fader geometry, equalizer bars, waveform arcs, modular-synth patch-grid or cable silhouettes, speaker-pressure rings, laser lines, LED strips, UV-reactive seams, chrome, transparent vinyl, reflective nylon, mesh, and subgenre-specific clubwear. Total visual variation is mandatory: do not repeat outfit type, jacket cut, harness or strap layout, collar, glasses or visor shape, headphones, jewelry set, hairstyle, makeup pattern, dominant palette, lighting direction, or background composition. Accessory discipline is mandatory: at most one eyewear item total; if glasses are on the face, never add another pair on the head or forehead. Use at most one necklace or one pendant focal point; do not stack repeated necklaces, repeated beads, duplicate pendants, duplicate ear cuffs, duplicate rings, or multiple accessories serving the same role. Only use psychedelic/festival styling when the dominant styles are Psy/Goa/Full-On/Forest/Dark Psy; for Techno use warehouse/industrial/minimal club language, for House use warm/social/fashionable groove language, for Trance use clean euphoric melodic clubwear, for Bass/DnB/Breaks use pressure-driven street-club language, for Hard Dance use kick-impact strobe performance language, and for Ambient/Leftfield use atmospheric organic or cyber-editorial language. Background must be a modular editable abstract neon studio/light panel behind the bust, separated from the subject, with abstract equalizer, waveform, mixer, modular-synth, laser, LED, or speaker-pressure geometry and no readable text. The app will add all text and UI later, so the image itself must contain no typography, captions, logos, numbers, watermarks, UI, frames or borders. Avoid duplicate accessories, two pairs of glasses, glasses on face plus glasses on forehead, carnival feathers, samba costume, circus/clown feeling, cartoon, anime, childish illustration, mascot, flat vector, abstract symbol, robot, creature, skull, plastic mannequin, deformed face, crossed eyes, hands dominating the frame, full body, aggressive expression, real person likeness, celebrity likeness, minors, nudity, gore, brand marks, fantasy robe, crowns, armor, acoustic instruments, guitars, lyres, tambourines, ordinary DJ photo and plain passport portrait.";
   const visualHook = [
     variant?.motif ? `motif: ${variant.motif}` : "",

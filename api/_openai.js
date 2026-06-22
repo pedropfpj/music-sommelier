@@ -385,12 +385,12 @@ async function callOpenAiText({ system, user, maxOutputTokens = 500 }) {
   };
 }
 
-async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium" }) {
+async function callOpenAiImage({ prompt, size = "1024x1024", quality = "medium", model: requestedModel = "" }) {
   if (!hasOpenAiKey()) {
     return { ok: false, status: 503, payload: { error: "missing_openai_api_key" } };
   }
 
-  const model = String(process.env.OPENAI_IMAGE_MODEL || "gpt-image-1-mini").trim();
+  const model = String(requestedModel || process.env.OPENAI_IMAGE_MODEL || "gpt-image-1").trim();
   const safeQuality = String(process.env.OPENAI_IMAGE_QUALITY || quality || "medium").trim();
   const response = await fetch(OPENAI_IMAGES_URL, {
     method: "POST",
