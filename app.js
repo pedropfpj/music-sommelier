@@ -23186,7 +23186,7 @@ async function initializeGoogleSignIn({ silent = false } = {}) {
   }
 }
 
-async function loginWithGoogle() {
+async function loginWithGoogle(event) {
   if (AUTH_LOGIN_STANDBY) {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
@@ -23194,13 +23194,14 @@ async function loginWithGoogle() {
   }
   const shouldUseNativeLink = authGoogleBtn?.tagName === "A" && !socialState.session?.access_token && !authHasOnlineSession();
   if (shouldUseNativeLink) {
+    event?.preventDefault?.();
     socialState.busy = true;
     pendingSocialOAuthUrl = authGoogleBtn.getAttribute("href") || socialOAuthEndpointUrl("google", { redirect: true });
     setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
     socialSetStatus("Abrindo login do Google...");
     renderSocialUi({ preserveStatus: true });
     updateAuthProviderUi();
-    scheduleSocialOAuthNavigationRecovery();
+    startSocialOAuthNavigation(pendingSocialOAuthUrl);
     return;
   }
   if (pendingSocialOAuthUrl && !socialState.busy) {
