@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
   const route = routeFromRequest(req);
   const routeHandler = handlers[route];
   if (!routeHandler) {
-    return sendJson(res, 404, {
+    return sendJson(req, res, 404, {
       error: "music_route_not_found",
       route,
       availableRoutes: Object.keys(handlers)

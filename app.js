@@ -1036,7 +1036,22 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 42, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
+const EXTERNAL_DATASET_CACHE_VERSION = "20260622-playable-v18";
+const EXTERNAL_DATASET_PRIORITY_FILES = [
+  "data/catalog_playable_focus_club_v17_20260622.csv",
+  "data/catalog_playable_depth_v16_20260622.csv",
+  "data/electronic_subgenre_expansion_v15_20260621.csv",
+  "data/verified_track_expansion_v10.csv",
+  "data/verified_track_expansion_v9.csv",
+  "data/verified_track_expansion_v8.csv",
+  "data/verified_track_expansion_v7.csv",
+  "data/verified_track_expansion_v6.csv",
+  "data/verified_track_expansion_v5.csv",
+  "data/festival_2026_2027_recommendations_20260622.csv",
+  "reports/catalog_extra_bulk_local_20260621.rows.json"
+];
 const EXTERNAL_DATASET_FILES = [
+  ...EXTERNAL_DATASET_PRIORITY_FILES,
   "data/artist_expansion_seeds_v1.csv",
   "data/artist_expansion_seeds_v2.csv",
   "data/artist_expansion_seeds_v3.csv",
@@ -1087,6 +1102,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/mop_brasil_2026_rage_playable_tracks.csv",
   "data/pachamama_2026_artist_profiles.csv",
   "data/pachamama_2026_playable_tracks.csv",
+  "data/festival_2026_2027_recommendations_20260622.csv",
+  "data/hive_festival_2026_artist_subgenres.csv",
   "data/codex_dataset_pack_v14/tracks.json",
   "data/codex_dataset_pack_v14/tracks.csv",
   "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
@@ -1096,8 +1113,9 @@ const EXTERNAL_DATASET_FILES = [
   "data/codex_dataset_pack_v14/data/psytrance_db_v14.jsonl",
   "data/codex_dataset_pack_v14/data/psycore_db_v14.jsonl",
   "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
-  "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv"
-];
+  "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv",
+  "reports/catalog_extra_bulk_local_20260621.rows.json"
+].filter((path, index, list) => list.indexOf(path) === index);
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
@@ -1105,6 +1123,10 @@ const API_HEALTH_ENDPOINT = "/api/integration-health";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+const FAST_DATASET_WAIT_MS = 260;
+const FAST_SUPABASE_WAIT_MS = 650;
+const FAST_COVERAGE_WAIT_MS = 850;
+const PREVIEW_PROBE_TIMEOUT_MS = 2600;
 
 const LOCAL_TRACK_SEED_BOOST = [
   {
@@ -6112,6 +6134,8 @@ let seenTrackKeysMemory = new Set();
 let blockedArtistsMemory = new Set();
 let rejectedArtists = new Set();
 let dynamicCatalogByStyle = new Map();
+let catalogIndexLength = -1;
+let catalogTracksByStyle = new Map();
 let recommendationMemory = new Set();
 let recentTrackHistoryByStyle = new Map();
 let recommendationMemoryQueue = [];
@@ -11728,7 +11752,7 @@ function ensureMinimumArtistSeedsPerStyle(minArtists = 20) {
     addMany(STYLE_SEED_BACKFILL[style] || []);
     if (!LOCK_SEED_FROM_CATALOG_STYLES.has(style)) {
       addMany(discoveryCatalog.filter((item) => item.style === style).map((item) => item.name));
-      addMany(catalog.filter((track) => track.style === style).map((track) => track.artist));
+      addMany(catalogTracksForStyle(style).map((track) => track.artist));
     }
 
     if (pool.size < minArtists && !STRICT_FAMILY_SEED_STYLES.has(style)) {
@@ -13014,6 +13038,15 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const energyBand = pickDatasetValue(fields, ["energy_band", "energy_profile", "energy"]);
     const catalogRole = pickDatasetValue(fields, ["catalog_role", "role", "editorial_role"]);
     const sourceNote = pickDatasetValue(fields, ["source_note", "note", "curation_note"]);
+    const hasPlayablePath = Boolean(
+      previewUrl ||
+      deezerTrackId ||
+      bandcampTrackId ||
+      bandcampTrackUrl ||
+      isDirectSoundCloudTrackUrl(soundcloudTrackUrl) ||
+      isDirectYouTubeUrl(youtubeTrackUrl)
+    );
+    if (!hasPlayablePath) return;
     const releaseDate = normalizeDatasetReleaseDate(
       pickDatasetValue(fields, ["release_date", "released", "date", "year", "ano"])
     );
@@ -13113,7 +13146,8 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
 
 async function readExternalDatasetRowsFromPath(path) {
   try {
-    const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
+    const separator = String(path || "").includes("?") ? "&" : "?";
+    const response = await fetch(`${path}${separator}v=${EXTERNAL_DATASET_CACHE_VERSION}`, { cache: "force-cache" });
     if (!response.ok) return [];
     const lowerPath = String(path || "").toLowerCase();
     if (lowerPath.endsWith(".json")) {
@@ -13142,6 +13176,33 @@ function externalDatasetImportedMessage(tracksImported, artistsImported) {
     return "Base musical actualizada en segundo plano.";
   }
   return "Base musical atualizada em segundo plano.";
+}
+
+function waitForPromiseWithTimeout(promise, timeoutMs = 0, fallbackValue = null) {
+  if (!promise || typeof promise.then !== "function") return Promise.resolve(fallbackValue);
+  const ms = Math.max(0, Number(timeoutMs) || 0);
+  if (!ms) return promise;
+  return new Promise((resolve) => {
+    let settled = false;
+    const timer = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve(fallbackValue);
+    }, ms);
+    promise
+      .then((value) => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        resolve(value);
+      })
+      .catch(() => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        resolve(fallbackValue);
+      });
+  });
 }
 
 function waitForExternalDatasetIdleSlot() {
@@ -13200,6 +13261,59 @@ async function hydrateExternalDatasetPackInBackground() {
   })();
 
   return externalDatasetImportPromise;
+}
+
+function scheduleExternalDatasetWarmup(delayMs = 420) {
+  if (externalDatasetImportDone || externalDatasetImportStarted || externalDatasetImportPromise) return;
+  const start = () => {
+    if (externalDatasetImportDone || externalDatasetImportStarted || externalDatasetImportPromise) return;
+    void hydrateExternalDatasetPackInBackground().catch(() => null);
+  };
+  window.setTimeout(() => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(start, { timeout: 1400 });
+      return;
+    }
+    start();
+  }, Math.max(0, Number(delayMs) || 0));
+}
+
+async function prepareLocalDatasetForRecommendation(prefs = {}) {
+  if (externalDatasetImportDone) return;
+  const style = normalizeDatasetStyle(prefs?.style || "");
+  if (!style) {
+    scheduleExternalDatasetWarmup(0);
+    return;
+  }
+  const promise = hydrateExternalDatasetPackInBackground();
+  const stats = styleCoverageStats(style);
+  const target = styleCoverageTarget(style);
+  const shouldWait =
+    stats.tracks < Math.min(18, Math.max(8, target.tracks)) ||
+    styleCoverageArtistSignal(stats) < Math.min(8, Math.max(4, target.artists));
+  if (shouldWait) {
+    await waitForPromiseWithTimeout(promise, FAST_DATASET_WAIT_MS, null);
+  } else {
+    void promise.catch(() => null);
+  }
+}
+
+async function prepareSupabaseCatalogForRecommendation(prefs = {}) {
+  const style = normalizeDatasetStyle(prefs?.style || "");
+  if (!style) return;
+  const promise = hydrateCatalogExtraFromSupabase(style);
+  const stats = styleCoverageStats(style);
+  const shouldWait = Boolean(stats && stats.tracks < 10);
+  if (shouldWait) {
+    await waitForPromiseWithTimeout(promise, FAST_SUPABASE_WAIT_MS, null);
+  } else {
+    void promise.catch(() => null);
+  }
+}
+
+async function prepareCatalogForFastRecommendation(prefs = {}) {
+  await prepareLocalDatasetForRecommendation(prefs);
+  await prepareSupabaseCatalogForRecommendation(prefs);
 }
 
 function trackBpmRangeOverlapsPreference(track, selectedBpm = "") {
@@ -13331,9 +13445,7 @@ function registerServedArtist(style, artistName, maxSize) {
 
 function resetServedCycleIfExhausted(style) {
   if (!style) return;
-  const pool = catalog
-    .filter((track) => track.style === style)
-    .map((track) => normalize(`${track.artist}::${track.song}`));
+  const pool = catalogTracksForStyle(style).map((track) => normalize(`${track.artist}::${track.song}`));
   const uniquePool = new Set(pool);
   const cycle = getServedCycle(style);
   if (!uniquePool.size) return;
@@ -13343,8 +13455,8 @@ function resetServedCycleIfExhausted(style) {
 function resetServedArtistCycleIfExhausted(style) {
   if (!style) return;
   const pool = new Set(
-    catalog
-      .filter((track) => track.style === style && isTrackEligibleForRecommendation(track))
+    catalogTracksForStyle(style)
+      .filter((track) => isTrackEligibleForRecommendation(track))
       .map((track) => artistMatchKey(track.artist))
       .filter(Boolean)
   );
@@ -13367,9 +13479,7 @@ function registerGlobalRecommendation(trackKey) {
 
 function clearRecentHistoryIfExhausted(style) {
   if (!style) return;
-  const stylePoolKeys = catalog
-    .filter((track) => track.style === style)
-    .map((track) => normalize(`${track.artist}::${track.song}`));
+  const stylePoolKeys = catalogTracksForStyle(style).map((track) => normalize(`${track.artist}::${track.song}`));
   const uniquePool = new Set(stylePoolKeys);
   const history = getRecentTrackHistory(style);
   if (!uniquePool.size) return;
@@ -14054,7 +14164,7 @@ function resetTrackPreviewElement(audioEl) {
   }
 }
 
-function probeAudioSource(audioEl, previewUrl, timeoutMs = 6500) {
+function probeAudioSource(audioEl, previewUrl, timeoutMs = PREVIEW_PROBE_TIMEOUT_MS) {
   return new Promise((resolve) => {
     let settled = false;
     let timeoutId = 0;
@@ -15694,11 +15804,30 @@ function selectHydrationArtists(style, artists = [], cap = 24) {
 }
 
 function stylePoolStats(style) {
-  const tracks = catalog.filter((track) => track.style === style);
+  const tracks = catalogTracksForStyle(style);
   return {
     trackCount: tracks.length,
     artistCount: new Set(tracks.map((track) => artistMatchKey(track.artist)).filter(Boolean)).size
   };
+}
+
+function rebuildCatalogStyleIndex() {
+  catalogTracksByStyle = new Map();
+  catalog.forEach((track) => {
+    const style = String(track?.style || "").trim();
+    if (!style) return;
+    const list = catalogTracksByStyle.get(style) || [];
+    list.push(track);
+    catalogTracksByStyle.set(style, list);
+  });
+  catalogIndexLength = catalog.length;
+}
+
+function catalogTracksForStyle(style = "") {
+  const cleanStyle = String(style || "").trim();
+  if (!cleanStyle) return catalog;
+  if (catalogIndexLength !== catalog.length) rebuildCatalogStyleIndex();
+  return catalogTracksByStyle.get(cleanStyle) || [];
 }
 
 function styleCoverageTarget(style) {
@@ -15717,7 +15846,7 @@ function styleCoverageTarget(style) {
 }
 
 function styleCoverageStats(style) {
-  const styleTracks = catalog.filter((track) => track.style === style);
+  const styleTracks = catalogTracksForStyle(style);
   const validatedTracks = styleTracks.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
     return track.style === style;
@@ -15790,6 +15919,26 @@ async function ensureStyleCoverageWithTimeout(style, maxPasses = COVERAGE_MAX_PA
     }, timeoutMs);
   });
 
+  const coveragePromise = ensureStyleCoverage(style, effectivePasses);
+  const result = await Promise.race([coveragePromise, timeoutPromise]);
+  window.clearTimeout(timeoutId);
+  return result;
+}
+
+async function ensureStyleCoverageFast(style, maxPasses = 1, timeoutMs = FAST_COVERAGE_WAIT_MS) {
+  if (!style) return { ok: true, stats: null, target: null };
+  const effectivePasses = Math.max(1, Math.min(coveragePassLimit(style, maxPasses), 2));
+  let timeoutId = 0;
+  const timeoutPromise = new Promise((resolve) => {
+    timeoutId = window.setTimeout(() => {
+      resolve({
+        ok: false,
+        timedOut: true,
+        stats: styleCoverageStats(style),
+        target: styleCoverageTarget(style)
+      });
+    }, Math.max(120, Number(timeoutMs) || FAST_COVERAGE_WAIT_MS));
+  });
   const coveragePromise = ensureStyleCoverage(style, effectivePasses);
   const result = await Promise.race([coveragePromise, timeoutPromise]);
   window.clearTimeout(timeoutId);
@@ -16186,9 +16335,9 @@ async function fetchDeezerArtistTopTracks(artist, style) {
 function catalogTrackEntriesForArtist(artist, style = "", { eligibleOnly = false } = {}) {
   const artistName = String(artist || "").trim();
   if (!artistName) return [];
-  return catalog.filter((track) => {
+  const basePool = style ? catalogTracksForStyle(style) : catalog;
+  return basePool.filter((track) => {
     if (!track?.artist || !track?.song) return false;
-    if (style && track.style !== style) return false;
     if (!isArtistMatch(track.artist, artistName) && !isArtistMatch(artistName, track.artist)) return false;
     if (eligibleOnly && !isTrackEligibleForRecommendation(track)) return false;
     return true;
@@ -16739,7 +16888,14 @@ async function loadApiHealthPanel({ force = false } = {}) {
 }
 
 function trackMetadataApiCacheKey(track = {}) {
-  return recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+  const baseKey = recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+  const deezerId = String(
+    track?.deezerTrackId ||
+    catalogTrackMetadataText(track, "deezer_track_id") ||
+    catalogTrackMetadataText(track, "deezerTrackId") ||
+    ""
+  ).trim();
+  return deezerId ? `${baseKey}::dz:${normalize(deezerId)}` : baseKey;
 }
 
 function trackDurationSecondsForApi(track = {}) {
@@ -16785,7 +16941,12 @@ async function fetchTrackMetadataFromApi(track) {
         style: track.style || "",
         album: coverArtReleaseName(track),
         durationSec: trackDurationSecondsForApi(track),
-        releaseYear: trackReleaseYearForApi(track)
+        releaseYear: trackReleaseYearForApi(track),
+        deezerTrackId:
+          track.deezerTrackId ||
+          catalogTrackMetadataText(track, "deezer_track_id") ||
+          catalogTrackMetadataText(track, "deezerTrackId") ||
+          ""
       })
     });
     if (!response.ok) {
@@ -17501,6 +17662,9 @@ function addDynamicTrackToCatalog({
     existenceVerified: (normalizedPreview || hasPlayableFallback || hasRefreshablePreview) ? true : undefined,
     previewChecked: Boolean(normalizedPreview),
     previewMissing: !normalizedPreview && !hasPlayableFallback && !hasRefreshablePreview,
+    previewLookupAttempted: Boolean(normalizedPreview || hasPlayableFallback || hasRefreshablePreview),
+    releaseDate,
+    durationSec: duration,
     artistCountry: String(artistCountry || "").trim(),
     artistGenre: String(artistGenre || "").trim(),
     artistProfileHint: String(artistProfileHint || "").trim(),
@@ -17978,7 +18142,7 @@ function renderSwipeStyleRail() {
 }
 
 async function hydrateCatalogUntilCoverage(style, maxPasses = COVERAGE_MAX_PASSES) {
-  const coverage = await ensureStyleCoverageWithTimeout(style, maxPasses);
+  const coverage = await ensureStyleCoverageFast(style, Math.min(maxPasses, 1));
   return coverage.stats || styleCoverageStats(style);
 }
 
@@ -18158,7 +18322,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     track.previewUrl = currentPreview;
     registerPreviewCandidate(track, currentPreview);
   }
-  if (currentPreview && track.existenceVerified !== false && !forceLookup && (trustedCurated || track.previewLookupAttempted)) {
+  if (currentPreview && !previewExpired && track.existenceVerified !== false && !forceLookup && (trustedCurated || track.previewLookupAttempted)) {
     track.existenceVerified = true;
     track.previewChecked = true;
     track.previewMissing = false;
@@ -29161,8 +29325,8 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
       );
       const availablePool = freshUnknown.length
         ? freshUnknown
-        : catalog.filter((track) => {
-            if (!track || track.style !== style) return false;
+        : catalogTracksForStyle(style).filter((track) => {
+            if (!track) return false;
             if (!isTrackEligibleForRecommendation(track)) return false;
             if (artistSetHasMatch(excludedArtists, track.artist)) return false;
             return !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
@@ -29304,8 +29468,8 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
   const userSeed = currentCurationUserSeed();
   const styleEntries = styles
     .map((style) => {
-      const pool = catalog.filter((track) => {
-        if (!track || track.style !== style) return false;
+      const pool = catalogTracksForStyle(style).filter((track) => {
+        if (!track) return false;
         if (!isTrackEligibleForRecommendation(track)) return false;
         if (artistSetHasMatch(blockedArtists, track.artist)) return false;
         if (trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles)) return false;
@@ -29432,7 +29596,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   for (let index = 0; index < hydrationStyles.length; index += 1) {
     const style = hydrationStyles[index];
     update(60 + index * 6, t("searchOverlayCatalog"));
-    await ensureStyleCoverageWithTimeout(style, 2);
+    await ensureStyleCoverageFast(style, 1);
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
       triedTrackKeys,
       requireCrossGenre: true,
@@ -29557,12 +29721,11 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
   for (let index = 0; index < hydrationStyles.length; index += 1) {
     const style = hydrationStyles[index];
     update(Math.min(97, 94 + index), t("searchOverlayCatalog"));
-    await ensureStyleCoverageWithTimeout(style, 2);
+    await ensureStyleCoverageFast(style, 1);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(style);
-    const stylePool = catalog.filter(
+    const stylePool = catalogTracksForStyle(style).filter(
       (track) =>
-        track.style === style &&
         isTrackEligibleForRecommendation(track) &&
         differentStyle(track) &&
         !artistSetHasMatch(blockedArtists, track.artist) &&
@@ -29719,8 +29882,8 @@ function unseenTrackCandidatesForStyle(
   blockedTrackTitles = new Set()
 ) {
   if (!style) return [];
-  return catalog.filter((track) => {
-    if (!track || track.style !== style) return false;
+  return catalogTracksForStyle(style).filter((track) => {
+    if (!track) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm) && !trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
     const artistKey = artistMatchKey(track.artist);
@@ -29862,7 +30025,7 @@ function mergeNewArtistCandidate(targetMap, candidate) {
 
 function collectNewArtistsFromCatalog(style, knownSet) {
   const byArtist = new Map();
-  const styleTracks = catalog.filter((track) => track.style === style);
+  const styleTracks = catalogTracksForStyle(style);
 
   styleTracks.forEach((track) => {
     const artist = String(track.artist || "").trim();
@@ -30031,7 +30194,7 @@ async function searchNewArtistsByStyle() {
 
   const artists = await withSearchOverlay(t("newArtistsSearching"), async (update) => {
     update(15, t("searchOverlayCatalog"));
-    const coverage = await ensureStyleCoverageWithTimeout(style, COVERAGE_MAX_PASSES);
+    const coverage = await ensureStyleCoverageFast(style, 1);
     if (!coverage.ok) {
       const fallbackAllowed = canFallbackToPartialCoverage(coverage);
       if (newArtistsStatus) {
@@ -30056,7 +30219,7 @@ async function searchNewArtistsByStyle() {
 
     if (!externalDatasetImportDone) {
       update(38, t("searchOverlayCatalog"));
-      await hydrateExternalDatasetPackInBackground();
+      await prepareLocalDatasetForRecommendation({ style });
     }
 
     update(48, t("newArtistsSearching"));
@@ -33186,7 +33349,11 @@ function resolveFavoriteSpiritTrack(spirit) {
 function resolvePredictedSpiritTrack(spirit) {
   const preferredStyles = spiritTopStyleKeys(spirit, 4);
   const styleSet = new Set(preferredStyles);
-  const basePool = catalog.filter((track) => isTrackEligibleForRecommendation(track));
+  const preferredPool = preferredStyles.flatMap((style) => catalogTracksForStyle(style));
+  const preferredEligiblePool = preferredPool.filter((track) => isTrackEligibleForRecommendation(track));
+  const basePool = preferredEligiblePool.length
+    ? preferredEligiblePool
+    : catalog.filter((track) => isTrackEligibleForRecommendation(track));
   if (!basePool.length) return null;
 
   let candidatePool = basePool;
@@ -39589,9 +39756,9 @@ function findPrecisionReplacement(
 ) {
   prefs = normalizeRecommendationPrefs(prefs);
   if (!selectedPreferenceCount(prefs)) return currentTrack || null;
-  const pool = catalog.filter((track) => {
+  const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+  const pool = basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (prefs.style && track.style !== prefs.style) return false;
     if (prefs.bpm) {
       const bpmOk = trackMatchesBpmPreference(track, prefs.bpm);
       if (!bpmOk) return false;
@@ -39821,9 +39988,9 @@ function recommendationContextKey(prefs = {}) {
 
 function styleScopedEligibleTracks(prefs = {}) {
   prefs = normalizeRecommendationPrefs(prefs);
-  return catalog.filter((track) => {
+  const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+  return basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (prefs.style && track.style !== prefs.style) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
@@ -40969,7 +41136,8 @@ function pickRecommendation(
   excludedTrackKeys = new Set(),
   excludedTrackTitles = new Set()
 ) {
-  const eligibleCatalog = catalog.filter((track) => {
+  const baseCatalog = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+  const eligibleCatalog = baseCatalog.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     return true;
@@ -40983,10 +41151,8 @@ function pickRecommendation(
     return Boolean(artistKey) && !artistSetHasMatch(excludedArtists, track.artist) && !artistSetHasMatch(knownArtists, track.artist);
   };
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  const styleLockedPool = prefs.style ? eligibleCatalog.filter((track) => track.style === prefs.style) : eligibleCatalog;
-  const familyScopedPool = prefs.style
-    ? eligibleCatalog.filter((track) => familyOf(track.style) === familyOf(prefs.style))
-    : eligibleCatalog;
+  const styleLockedPool = eligibleCatalog;
+  const familyScopedPool = eligibleCatalog;
   const styleLockedAllowedPool = styleLockedPool.filter((track) => artistAllowed(track));
   const familyScopedAllowedPool = familyScopedPool.filter((track) => artistAllowed(track));
   const eligibleAllowedCatalog = eligibleCatalog.filter((track) => artistAllowed(track));
@@ -41912,6 +42078,8 @@ async function renderPreview(track) {
   resetYouTubePreviewEmbed();
   track.artistPreviewFallback = null;
   syncYouTubePreviewAttemptForTrack(track);
+  const renderPreviewTrackKey = recommendationTrackKey(track);
+  const isStillCurrentPreviewTrack = () => recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
 
   await resolvePreviewForTrack(track);
 
@@ -41938,19 +42106,36 @@ async function renderPreview(track) {
   if (releaseInfo) releaseInfo.textContent = `${t("releasePrefix")}: ${refreshedMeta.releaseDate}`;
   if (durationInfo) durationInfo.textContent = `${t("durationPrefix")}: ${refreshedMeta.duration}`;
   if (catalogInfo) catalogInfo.textContent = formatCatalogInfo(refreshedMeta, displayLabel);
-  const resolvedYoutube = await resolveYouTubeVideoFromApi(track);
-  if (resolvedYoutube && youtubeLink) {
-    setListenLinkState(youtubeLink, {
-      href: buildYouTubeTrackLink(track),
-      enabled: true,
-      title: ""
-    });
-  }
+  void resolveYouTubeVideoFromApi(track)
+    .then((resolvedYoutube) => {
+      if (!resolvedYoutube || !youtubeLink || !isStillCurrentPreviewTrack()) return;
+      setListenLinkState(youtubeLink, {
+        href: buildYouTubeTrackLink(track),
+        enabled: true,
+        title: ""
+      });
+      syncYouTubePreviewAttemptForTrack(track);
+      setYouTubePreviewActionState({
+        visible: true,
+        canToggle: true,
+        canRetry: youtubePreviewCanRetry(track),
+        expanded: false
+      });
+    })
+    .catch(() => null);
   const needsSoundCloudEmbedLookup =
     !trackHasDirectSoundCloudTrack(track) &&
     Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
-    await resolveSoundCloudEmbedForTrack(track, { force: false });
+    void resolveSoundCloudEmbedForTrack(track, { force: false })
+      .then((resolved) => {
+        if (!resolved || !isStillCurrentPreviewTrack()) return;
+        syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+        if (previewStatus && trackPreview?.classList.contains("hidden")) {
+          previewStatus.textContent = t("previewSoundcloudFallback");
+        }
+      })
+      .catch(() => null);
   }
   let hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   let hasDirectYoutube = trackHasDirectYouTubeVideo(track);
@@ -45359,10 +45544,10 @@ async function pickPlayableReplacementForPrefs(
   const knownArtists = allowKnownFallback ? new Set() : excludedArtists;
   const trackAllowed = (track) =>
     !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  const pool = catalog.filter((track) => {
+  const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+  const pool = basePool.filter((track) => {
     if (!track || track === currentTrack) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (prefs.style && track.style !== prefs.style) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
@@ -45476,10 +45661,7 @@ async function generateRecommendationFromPrefs(
   recommendationBpmFallbackInfo = false;
   let usedKnownFallback = false;
   if (resetRejected) rejectedArtists = new Set();
-  if (!externalDatasetImportDone) {
-    await hydrateExternalDatasetPackInBackground();
-  }
-  await hydrateCatalogExtraFromSupabase(prefs?.style || "");
+  await prepareCatalogForFastRecommendation(prefs);
   if (prefs?.style === "slambient" || !prefs?.style) normalizeTrustedSlambientCatalog();
   sanitizeCatalogByStyleRules();
   if (prefs?.style) purgeDynamicMismatches(prefs.style);
@@ -45533,18 +45715,16 @@ async function generateRecommendationFromPrefs(
     NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
 
   const hasEligibleInCurrentScope = () =>
-    catalog.some(
+    (prefs.style ? catalogTracksForStyle(prefs.style) : catalog).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
-        (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
-        (!prefs.style || track.style === prefs.style)
+        (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm))
     );
   const hasEligibleUnknownInCurrentScope = () =>
-    catalog.some(
+    (prefs.style ? catalogTracksForStyle(prefs.style) : catalog).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
-        (!prefs.style || track.style === prefs.style) &&
         !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
         trackAllowedInSession(track)
     );
@@ -45554,10 +45734,9 @@ async function generateRecommendationFromPrefs(
 
   const hasRecyclableStyleCandidate = () =>
     Boolean(prefs.style) &&
-    catalog.some(
+    catalogTracksForStyle(prefs.style).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
-        track.style === prefs.style &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
     );
@@ -45594,7 +45773,7 @@ async function generateRecommendationFromPrefs(
     );
     if (freshCandidates.length) return;
 
-    await ensureStyleCoverageWithTimeout(prefs.style, 2);
+    await ensureStyleCoverageFast(prefs.style, 1);
     freshCandidates = unseenTrackCandidatesForStyle(
       prefs.style,
       prefs,
@@ -45613,7 +45792,7 @@ async function generateRecommendationFromPrefs(
     );
     if (!fallbackStyle) return;
     applyStyleSwitch(fallbackStyle);
-    await ensureStyleCoverageWithTimeout(fallbackStyle, 2);
+    await ensureStyleCoverageFast(fallbackStyle, 1);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
   };
@@ -45631,7 +45810,7 @@ async function generateRecommendationFromPrefs(
     );
     if (!fallbackStyle) return false;
     if (!applyStyleSwitch(fallbackStyle)) return false;
-    await ensureStyleCoverageWithTimeout(fallbackStyle, 2);
+    await ensureStyleCoverageFast(fallbackStyle, 1);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
     currentRecommendation = pickRecommendation(
@@ -45672,10 +45851,10 @@ async function generateRecommendationFromPrefs(
   const tryEmergencyStyleRecommendation = () => {
     if (!prefs?.style) return false;
     if (prefs.style === "slambient") normalizeTrustedSlambientCatalog();
+    const styleCatalog = catalogTracksForStyle(prefs.style);
 
-    const strictStylePool = catalog.filter(
+    const strictStylePool = styleCatalog.filter(
       (track) =>
-        track.style === prefs.style &&
         isTrackEligibleForRecommendation(track) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
@@ -45684,8 +45863,8 @@ async function generateRecommendationFromPrefs(
 
     let stylePool = strictStylePool.length
       ? strictStylePool
-      : catalog.filter((track) => {
-          if (!track || track.style !== prefs.style) return false;
+      : styleCatalog.filter((track) => {
+          if (!track) return false;
           if (!track.artist || !track.song) return false;
           if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
           if (!artistAllowedForStyle(prefs.style, track.artist)) return false;
@@ -45697,8 +45876,8 @@ async function generateRecommendationFromPrefs(
           return true;
         });
     if (!stylePool.length && allowKnownFallback) {
-      stylePool = catalog.filter((track) => {
-        if (!track || track.style !== prefs.style) return false;
+      stylePool = styleCatalog.filter((track) => {
+        if (!track) return false;
         if (!isTrackEligibleForRecommendation(track)) return false;
         if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
         if (!trackAllowedInSession(track)) return false;
@@ -45737,9 +45916,9 @@ async function generateRecommendationFromPrefs(
     if (!prefs.bpm) return false;
     const selectedRange = parseBpmRangeValue(prefs.bpm);
     if (!selectedRange) return false;
-    const scopedPool = catalog.filter((track) => {
+    const scopedBasePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+    const scopedPool = scopedBasePool.filter((track) => {
       if (!isTrackEligibleForRecommendation(track)) return false;
-      if (prefs.style && track.style !== prefs.style) return false;
       if (!trackAllowedInSession(track)) return false;
       if (!trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
       return true;
@@ -45809,9 +45988,13 @@ async function generateRecommendationFromPrefs(
   if (normalizedAvoidTrack && currentRecommendation) {
     let attempts = 0;
     let currentKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
-    const stylePool = prefs.style
-      ? catalog.filter((track) => track.style === prefs.style && isTrackEligibleForRecommendation(track) && (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) && trackAllowedInSession(track))
-      : catalog.filter((track) => isTrackEligibleForRecommendation(track) && (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) && trackAllowedInSession(track));
+    const stylePoolBase = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+    const stylePool = stylePoolBase.filter(
+      (track) =>
+        isTrackEligibleForRecommendation(track) &&
+        (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
+        trackAllowedInSession(track)
+    );
     const maxAttempts = Math.min(14, Math.max(4, stylePool.length));
     while (currentRecommendation && currentKey === normalizedAvoidTrack && attempts < maxAttempts) {
       excludedTrackKeys.add(currentKey);
@@ -45851,13 +46034,12 @@ async function generateRecommendationFromPrefs(
 
   // Proteção final: se algum bug externo tentar cruzar estilo, força faixa correta do estilo escolhido.
   if (prefs.style && currentRecommendation && currentRecommendation.style !== prefs.style) {
-    const strictPool = catalog.filter(
+    const strictPool = catalogTracksForStyle(prefs.style).filter(
       (track) =>
-        track.style === prefs.style &&
         isTrackEligibleForRecommendation(track) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
-          !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
-          trackAllowedInSession(track)
+        !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
+        trackAllowedInSession(track)
     );
     if (strictPool.length > 0) {
       currentRecommendation =
@@ -46350,7 +46532,7 @@ function pickTasteTuneStyle(mode = "", baseStyle = "") {
   const preferred = TASTE_TUNE_STYLES[mode] || [];
   const withCatalogSignal = preferred.filter((style) =>
     selectable.has(style) &&
-    catalog.some((track) => track?.style === style && track?.artist && track?.song)
+    catalogTracksForStyle(style).some((track) => track?.artist && track?.song)
   );
   const pool = withCatalogSignal.length ? withCatalogSignal : preferred.filter((style) => selectable.has(style));
   const baseKey = normalize(baseStyle || "");
@@ -46526,7 +46708,7 @@ async function runRecommendation() {
       update(14, t("searchOverlayPreparing"));
       if (prefs.style) {
         update(32, t("searchOverlayCatalog"));
-        const coverage = await ensureStyleCoverageWithTimeout(prefs.style, COVERAGE_MAX_PASSES);
+        const coverage = await ensureStyleCoverageFast(prefs.style, 1);
         const stats = coverage.stats || styleCoverageStats(prefs.style);
         const target = coverage.target || styleCoverageTarget(prefs.style);
         if (feedbackMessage) {
@@ -48415,7 +48597,7 @@ if (!freshTestResetPending) {
   Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
   dedupeCatalogByTrackKey();
   saveDynamicCatalogCache();
-  void hydrateExternalDatasetPackInBackground();
+  scheduleExternalDatasetWarmup(520);
   window.neonpulseCoverageReport = buildCoverageReport;
   window.neonpulseCoverageGaps = () => buildCoverageReport().filter((row) => !row.healthy);
   window.neonpulseGenreAudit = buildCatalogGenreAudit;

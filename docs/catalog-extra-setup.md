@@ -98,11 +98,19 @@ Local e Vercel:
 SUPABASE_URL=https://SEU-PROJETO.supabase.co
 SUPABASE_ANON_KEY=SUA_PUBLISHABLE_KEY
 SONIC_CATALOG_EXTRA_ENABLED=true
-SONIC_CATALOG_ENRICHMENT_ENABLED=false
-# Somente no backend/Vercel, se quiser persistir respostas boas das APIs:
-# SUPABASE_SERVICE_ROLE_KEY=SUA_SERVICE_ROLE_KEY
 ```
 
-Se `SONIC_CATALOG_EXTRA_ENABLED` nao existir, o endpoint usa `SONIC_SOCIAL_ENABLED` como fallback.
+Isso liga a leitura de `catalog_artists` e `catalog_tracks` via `/api/catalog-extra`.
 
-Quando `SONIC_CATALOG_ENRICHMENT_ENABLED=true` e `SUPABASE_SERVICE_ROLE_KEY` estiverem configurados no backend, rotas como `/api/track-metadata`, `/api/cover-art`, `/api/artist-profile`, `/api/lastfm-artist` e `/api/radio-browser` salvam enriquecimentos úteis em `catalog_enrichments`.
+Para a memória própria de enriquecimentos, configure também no backend/Vercel:
+
+```bash
+SUPABASE_SERVICE_ROLE_KEY=SUA_SERVICE_ROLE_KEY
+SONIC_CATALOG_ENRICHMENT_ENABLED=true
+```
+
+Isso permite que rotas como `/api/track-metadata`, `/api/cover-art`, `/api/artist-profile`, `/api/lastfm-artist` e `/api/radio-browser` salvem respostas úteis em `catalog_enrichments`.
+
+Se ainda nao quiser gravar memoria propria, deixe `SONIC_CATALOG_ENRICHMENT_ENABLED=false` ou ausente.
+
+Se `SONIC_CATALOG_EXTRA_ENABLED` nao existir, o endpoint usa `SONIC_SOCIAL_ENABLED` como fallback.

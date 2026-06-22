@@ -108,8 +108,8 @@ function metadataCandidateScore(candidate = {}, request = {}) {
   return Math.max(0, Math.min(1, score));
 }
 
-function cacheKey({ artist, song, album = "" }) {
-  return `${normalizeText(artist)}::${normalizeText(song)}::${normalizeText(album)}`;
+function cacheKey({ artist, song, album = "", deezerTrackId = "" }) {
+  return `${normalizeText(artist)}::${normalizeText(song)}::${normalizeText(album)}::dz:${normalizeText(deezerTrackId)}`;
 }
 
 function cacheRead(key) {
@@ -280,6 +280,16 @@ async function searchDeezer(request = {}) {
   return normalized;
 }
 
+async function lookupDeezerTrackId(request = {}) {
+  if (!envFlag("SONIC_DEEZER_ENABLED", false)) return [];
+  const id = trimText(request.deezerTrackId || request.deezer_track_id || "", 80).replace(/[^\d]/g, "");
+  if (!id) return [];
+  const details = await fetchDeezerDetails(id);
+  if (!details || details.error) return [];
+  const normalized = normalizeDeezerRow(details, details, request);
+  return normalized?.artist && normalized?.song ? [normalized] : [];
+}
+
 function itunesArtworkUrl(row = {}) {
   const artwork = trimText(row?.artworkUrl100 || row?.artworkUrl60 || row?.artworkUrl30 || "", 1200);
   if (!artwork) return "";
@@ -360,6 +370,7 @@ module.exports = async function handler(req, res) {
   const song = trimText(body.song || body.track || req.query?.song || req.query?.track || "", 180);
   const style = trimText(body.style || req.query?.style || "", 80);
   const album = trimText(body.album || body.release || req.query?.album || req.query?.release || "", 180);
+  const deezerTrackId = trimText(body.deezerTrackId || body.deezer_track_id || req.query?.deezerTrackId || req.query?.deezer_track_id || "", 80).replace(/[^\d]/g, "");
   const durationSec = Math.max(0, Number(body.durationSec || body.duration || req.query?.durationSec || req.query?.duration || 0) || 0);
   const releaseYear = yearFrom(body.releaseYear || body.releaseDate || req.query?.releaseYear || req.query?.releaseDate || "");
   const limit = envInt("SONIC_TRACK_METADATA_PROVIDER_LIMIT", 8, 1, 20);
@@ -369,7 +380,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const request = { artist, song, style, album, durationSec, releaseYear };
+  const request = { artist, song, style, album, durationSec, releaseYear, deezerTrackId };
   const key = cacheKey(request);
   const cached = cacheRead(key);
   if (cached) {
@@ -378,11 +389,12 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const [deezer, itunes] = await Promise.all([
+    const [directDeezer, deezer, itunes] = await Promise.all([
+      lookupDeezerTrackId(request),
       searchDeezer({ ...request, limit }),
       searchItunes({ ...request, limit })
     ]);
-    const candidates = [...deezer, ...itunes]
+    const candidates = [...directDeezer, ...deezer, ...itunes]
       .filter((item) => Number(item.confidenceScore) >= 0.72)
       .sort((a, b) => (Number(b.confidenceScore) || 0) - (Number(a.confidenceScore) || 0));
     const payload = {
@@ -397,6 +409,7 @@ module.exports = async function handler(req, res) {
       song,
       style,
       album,
+      deezerTrackId,
       durationSec,
       releaseYear,
       count: candidates.length,
