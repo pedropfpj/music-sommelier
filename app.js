@@ -18500,10 +18500,7 @@ const I18N = {
     showUsageGuideBtn: "Como usar",
     authKicker: "Acesso rápido",
     authTitle: "Comece pela descoberta",
-    authDesc: "Abra o perfil local agora. Quando o Google estiver disponível, ele entra só como sincronização entre aparelhos.",
-    authLocalNoteProfile: "Perfil local",
-    authLocalNoteNewUser: "Sem bloqueio",
-    authLocalNoteBackup: "Sync opcional",
+    authDesc: "Comece sem conta agora ou entre com Google para sincronizar seu perfil entre aparelhos.",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
@@ -19368,10 +19365,7 @@ const I18N = {
     showUsageGuideBtn: "How to use",
     authKicker: "Quick access",
     authTitle: "Start with discovery",
-    authDesc: "Open the local profile now. When Google is available, it only adds sync across devices.",
-    authLocalNoteProfile: "Local profile",
-    authLocalNoteNewUser: "No gate",
-    authLocalNoteBackup: "Optional sync",
+    authDesc: "Start without an account now, or sign in with Google to sync your profile across devices.",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
@@ -20233,10 +20227,7 @@ const I18N = {
     showUsageGuideBtn: "Cómo usar",
     authKicker: "Acceso rápido",
     authTitle: "Empieza por descubrir",
-    authDesc: "Abre el perfil local ahora. Cuando Google esté disponible, solo suma sincronización entre dispositivos.",
-    authLocalNoteProfile: "Perfil local",
-    authLocalNoteNewUser: "Sin bloqueo",
-    authLocalNoteBackup: "Sync opcional",
+    authDesc: "Empieza sin cuenta ahora o entra con Google para sincronizar tu perfil entre dispositivos.",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
@@ -21813,9 +21804,6 @@ function applyLanguage() {
   setText("#authKicker", t("authKicker"));
   setText("#authTitle", t("authTitle"));
   setText("#authDesc", t("authDesc"));
-  setText("#authLocalNoteProfile", t("authLocalNoteProfile"));
-  setText("#authLocalNoteNewUser", t("authLocalNoteNewUser"));
-  setText("#authLocalNoteBackup", t("authLocalNoteBackup"));
   setText("#authUsernameLabel", t("authUsernameLabel"));
   setText("#authPasswordLabel", t("authPasswordLabel"));
   setText("#authResumeBtn", t("authResumeSavedBtn"));

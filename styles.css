@@ -2462,29 +2462,6 @@ textarea {
   gap: 0.45rem;
 }
 
-.auth-local-note {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin: 0.1rem 0 0.25rem;
-}
-
-.auth-local-note span {
-  min-height: 42px;
-  display: grid;
-  place-items: center;
-  padding: 0.48rem 0.6rem;
-  border: 1px solid rgba(116, 239, 218, 0.24);
-  border-radius: 10px;
-  background:
-    linear-gradient(145deg, rgba(8, 18, 39, 0.82), rgba(7, 13, 29, 0.64));
-  color: #dff8ff;
-  font-size: 0.78rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-align: center;
-}
-
 .auth-divider {
   display: flex;
   align-items: center;
@@ -8131,10 +8108,6 @@ input[type="range"] {
 
   .auth-card {
     padding: 1.2rem;
-  }
-
-  .auth-local-note {
-    grid-template-columns: 1fr;
   }
 
   .auth-social-grid {
@@ -13876,38 +13849,19 @@ button,
   text-wrap: pretty;
 }
 
-.auth-entry-card .auth-local-note {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin: 0;
-}
-
-.auth-entry-card .auth-local-note span {
-  min-height: 38px;
-  border-radius: 8px;
-  border-color: rgba(126, 205, 255, 0.22);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
-    rgba(4, 12, 29, 0.56);
-  color: rgba(223, 246, 255, 0.88);
-  font-size: 0.76rem;
-  letter-spacing: 0;
-}
-
 .auth-entry-actions {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.72rem;
   align-items: stretch;
-  margin-top: 0.1rem;
+  margin-top: 0.35rem;
 }
 
 .auth-entry-actions.has-online {
   grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
 }
 
-.auth-entry-actions > button {
+.auth-entry-actions > :is(button, a) {
   width: 100%;
   min-width: 0;
   min-height: 58px;
@@ -13918,6 +13872,7 @@ button,
   font-weight: 900;
   line-height: 1.12;
   text-align: center;
+  text-decoration: none;
   white-space: nowrap;
   overflow-wrap: normal;
   text-wrap: nowrap;
@@ -14018,16 +13973,12 @@ button,
     font-size: 0.96rem;
   }
 
-  .auth-entry-card .auth-local-note {
-    grid-template-columns: 1fr;
-  }
-
   .auth-entry-actions,
   .auth-entry-actions.has-online {
     grid-template-columns: 1fr;
   }
 
-  .auth-entry-actions > button {
+  .auth-entry-actions > :is(button, a) {
     min-height: 56px;
   }
 }
