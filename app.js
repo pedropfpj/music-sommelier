@@ -250,6 +250,17 @@ const AI_FEATURE_CONFIG = {
     ? window.SONIC_SEARCH_AI_CONFIG
     : {})
 };
+const ACCESS_DEFAULT_CONFIG = {
+  ownerEmails: ["pedropfpj@gmail.com"],
+  freeDiscoveryLimit: 50,
+  imageGenerationRequiresTrustedUser: true
+};
+const ACCESS_CONFIG = {
+  ...ACCESS_DEFAULT_CONFIG,
+  ...(typeof window !== "undefined" && window.SONIC_SEARCH_ACCESS_CONFIG
+    ? window.SONIC_SEARCH_ACCESS_CONFIG
+    : {})
+};
 const COMPLIANCE_DEFAULT_CONFIG = {
   clientMusicCatalogApisEnabled: true,
   clientDeezerEnabled: false,
@@ -6093,6 +6104,9 @@ const spiritCollectibleDetails = document.getElementById("spiritCollectibleDetai
 const spiritCollectibleRegenerateBtn = document.getElementById("spiritCollectibleRegenerateBtn");
 const spiritCollectibleDownload = document.getElementById("spiritCollectibleDownload");
 const spiritCollectibleShareInstagramBtn = document.getElementById("spiritCollectibleShareInstagramBtn");
+const spiritArtPresentation = document.getElementById("spiritArtPresentation");
+const spiritArtVibe = document.getElementById("spiritArtVibe");
+const spiritArtAccessoryInputs = Array.from(document.querySelectorAll("[data-spirit-art-accessory]"));
 const spiritShareLinkBtn = document.getElementById("spiritShareLinkBtn");
 const spiritRankBadge = document.getElementById("spiritRankBadge");
 
@@ -19450,8 +19464,8 @@ const I18N = {
     spiritCollectibleHintLocalReady: "Arte IA pronta e exibida acima. Use os botões para baixar, compartilhar ou gerar outra versão.",
     spiritCollectibleHintApi: "Arte IA baseada no seu gosto, exibida aqui. Baixe, compartilhe ou gere outra versão por aqui.",
     spiritCollectiblePremiumLocked: "A arte IA está preparada. Gere novamente quando a imagem online estiver disponível.",
-    premiumAvatarLimitReached: "Assine premium para desbloquear mais bustos de arquétipo em alta qualidade.",
-    premiumDiscoveryLimitReached: "Você chegou ao limite diário de {limit} músicas curtidas ou descobertas. Assine premium para mais descobertas.",
+    premiumAvatarLimitReached: "Entre com o Google autorizado ou assine premium para gerar artes IA em alta qualidade.",
+    premiumDiscoveryLimitReached: "Você chegou ao limite gratuito de {limit} músicas descobertas. Assine premium para continuar descobrindo.",
     spiritCollectibleMilestone: "Marco atual: {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
@@ -19490,6 +19504,7 @@ const I18N = {
     spiritCollectibleErrorTimeout: "A imagem demorou demais para voltar. Tente gerar novamente; a API pode levar mais em horários de pico.",
     spiritCollectibleErrorNoImage: "A API respondeu, mas não devolveu uma imagem válida.",
     spiritCollectibleErrorPremiumRequired: "A API pediu acesso premium para gerar esta arte.",
+    spiritCollectibleErrorLoginRequired: "Entre com o Google autorizado ou assine premium para gerar esta arte.",
     spiritCollectibleErrorLimit: "O limite de geração desta arte foi atingido para este perfil. Use um novo marco ou tente mais tarde.",
     spiritCollectibleErrorDailyLimit: "O limite diário da API de imagem foi atingido. Tente novamente mais tarde.",
     spiritCollectibleErrorMissingKey: "A API está sem chave OpenAI configurada no servidor.",
@@ -20313,8 +20328,8 @@ const I18N = {
     spiritCollectibleHintLocalReady: "AI artwork is ready and shown above. Use the buttons to download, share, or generate another version.",
     spiritCollectibleHintApi: "AI artwork based on your taste, shown here. Download, share, or generate another version here.",
     spiritCollectiblePremiumLocked: "AI artwork is prepared. Generate again when the online image is available.",
-    premiumAvatarLimitReached: "Subscribe to premium to unlock more high-quality archetype busts.",
-    premiumDiscoveryLimitReached: "You reached today's limit of {limit} liked or discovered tracks. Subscribe to premium for more discoveries.",
+    premiumAvatarLimitReached: "Sign in with the authorized Google account or subscribe to premium to generate high-quality AI artwork.",
+    premiumDiscoveryLimitReached: "You reached the free limit of {limit} discovered tracks. Subscribe to premium to keep discovering.",
     spiritCollectibleMilestone: "Current milestone: {likes} likes",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
@@ -20353,6 +20368,7 @@ const I18N = {
     spiritCollectibleErrorTimeout: "The image took too long to return. Try generating again; the API can take longer at busy times.",
     spiritCollectibleErrorNoImage: "The API responded, but did not return a valid image.",
     spiritCollectibleErrorPremiumRequired: "The API requested premium access to generate this artwork.",
+    spiritCollectibleErrorLoginRequired: "Sign in with the authorized Google account or subscribe to premium to generate this artwork.",
     spiritCollectibleErrorLimit: "The generation limit for this artwork was reached for this profile. Use a new milestone or try later.",
     spiritCollectibleErrorDailyLimit: "The daily image API limit was reached. Try again later.",
     spiritCollectibleErrorMissingKey: "The server is missing the OpenAI API key.",
@@ -21173,8 +21189,8 @@ const I18N = {
     spiritCollectibleHintLocalReady: "Arte IA lista y mostrada arriba. Usa los botones para descargar, compartir o generar otra versión.",
     spiritCollectibleHintApi: "Arte IA basada en tu gusto, mostrada aquí. Descarga, comparte o genera otra versión aquí.",
     spiritCollectiblePremiumLocked: "El arte IA está preparado. Genera de nuevo cuando la imagen online esté disponible.",
-    premiumAvatarLimitReached: "Suscríbete a premium para desbloquear más bustos de arquetipo en alta calidad.",
-    premiumDiscoveryLimitReached: "Llegaste al límite diario de {limit} canciones curtidas o descubiertas. Suscríbete a premium para más descubrimientos.",
+    premiumAvatarLimitReached: "Entra con el Google autorizado o suscríbete a premium para generar artes IA en alta calidad.",
+    premiumDiscoveryLimitReached: "Llegaste al límite gratuito de {limit} canciones descubiertas. Suscríbete a premium para seguir descubriendo.",
     spiritCollectibleMilestone: "Hito actual: {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
@@ -21213,6 +21229,7 @@ const I18N = {
     spiritCollectibleErrorTimeout: "La imagen tardó demasiado en volver. Intenta generar de nuevo; la API puede demorar más en horarios de alta demanda.",
     spiritCollectibleErrorNoImage: "La API respondió, pero no devolvió una imagen válida.",
     spiritCollectibleErrorPremiumRequired: "La API pidió acceso premium para generar este arte.",
+    spiritCollectibleErrorLoginRequired: "Entra con el Google autorizado o suscríbete a premium para generar este arte.",
     spiritCollectibleErrorLimit: "Se alcanzó el límite de generación de este arte para este perfil. Usa un nuevo hito o intenta más tarde.",
     spiritCollectibleErrorDailyLimit: "Se alcanzó el límite diario de la API de imagen. Intenta de nuevo más tarde.",
     spiritCollectibleErrorMissingKey: "El servidor no tiene configurada la clave de OpenAI.",
@@ -33548,6 +33565,63 @@ function spiritCollectibleUserSignature() {
   return hashString(`${profileKey}::${userSeed}`).toString(36);
 }
 
+function spiritCollectibleArtParams() {
+  const presentation = String(spiritArtPresentation?.value || "auto").trim();
+  const vibe = String(spiritArtVibe?.value || "auto").trim();
+  const accessories = spiritArtAccessoryInputs
+    .filter((input) => input?.checked)
+    .map((input) => String(input.value || "").trim())
+    .filter(Boolean)
+    .slice(0, 6);
+  return {
+    presentation,
+    vibe,
+    accessories
+  };
+}
+
+function spiritCollectibleArtParamsSignature(params = spiritCollectibleArtParams()) {
+  const raw = [
+    params.presentation || "auto",
+    params.vibe || "auto",
+    ...(Array.isArray(params.accessories) ? [...params.accessories].sort() : [])
+  ].join("|");
+  return hashString(raw).toString(36);
+}
+
+function spiritCollectibleArtParamBrief(params = spiritCollectibleArtParams()) {
+  const presentationLabels = {
+    feminine: "adult female-presenting fictional person",
+    masculine: "adult male-presenting fictional person",
+    androgynous: "adult androgynous fictional person"
+  };
+  const vibeLabels = {
+    dark_club: "dark underground club / warehouse light",
+    neon_festival: "neon festival / UV rave energy",
+    techwear_editorial: "cyber-editorial techwear and reflective materials",
+    organic_mystic: "organic mystical electronic mood with woven or botanical texture",
+    warm_house: "warm house groove with social dancefloor charisma"
+  };
+  const accessoryLabels = {
+    headphones: "headphones or transparent in-ear monitor",
+    visor: "single visor or tinted eyewear",
+    harness: "utility harness or crossbody rig",
+    piercings: "ear cuff or clean piercings",
+    led_trim: "LED trim integrated into clothing",
+    face_gems: "tasteful face gems or rave makeup"
+  };
+  const parts = [];
+  if (presentationLabels[params.presentation]) parts.push(`presentation: ${presentationLabels[params.presentation]}`);
+  if (vibeLabels[params.vibe]) parts.push(`vibe: ${vibeLabels[params.vibe]}`);
+  const accessories = Array.isArray(params.accessories)
+    ? params.accessories.map((item) => accessoryLabels[item]).filter(Boolean)
+    : [];
+  if (accessories.length) parts.push(`accessories: ${accessories.join(", ")}`);
+  return parts.length
+    ? `User-selected art parameters: ${parts.join("; ")}. Keep everything fictional, clearly adult, respectful, non-sexualized, and consistent with the music archetype.`
+    : "";
+}
+
 function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
   const styleSignals = spiritInsightSignals(spirit, 4)
     .map((signal) => `${normalize(signal.label)}:${Number(signal.score || 0).toFixed(1)}`);
@@ -33571,7 +33645,8 @@ function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
     topMapKeysForSignature(adaptiveModel?.likedStyles, 5).join("|"),
     topMapKeysForSignature(adaptiveModel?.likedArtists, 5).join("|"),
     [...knownUnion].map((artist) => normalize(artist)).sort().slice(0, 8).join("|"),
-    styleSignals.join("|")
+    styleSignals.join("|"),
+    spiritCollectibleArtParamsSignature()
   ].join("::");
   return hashString(raw).toString(36);
 }
@@ -35280,6 +35355,51 @@ function aiConfigInt(key, fallback = 0, min = 0, max = 10000) {
   return Math.max(min, Math.min(max, parsed));
 }
 
+function accessConfigFlag(key, fallback = false) {
+  const value = ACCESS_CONFIG?.[key];
+  if (typeof value === "boolean") return value;
+  if (typeof value === "number") return value > 0;
+  const normalized = String(value ?? "").trim().toLowerCase();
+  if (!normalized) return Boolean(fallback);
+  return ["1", "true", "yes", "on", "enabled"].includes(normalized);
+}
+
+function accessConfigInt(key, fallback = 0, min = 0, max = 10000) {
+  const parsed = Number.parseInt(String(ACCESS_CONFIG?.[key] ?? ""), 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(min, Math.min(max, parsed));
+}
+
+function normalizeAccessEmail(value = "") {
+  return String(value || "").trim().toLowerCase();
+}
+
+function ownerEmailSet() {
+  const configured = Array.isArray(ACCESS_CONFIG?.ownerEmails)
+    ? ACCESS_CONFIG.ownerEmails
+    : String(ACCESS_CONFIG?.ownerEmails || "").split(",");
+  return new Set(configured.map(normalizeAccessEmail).filter(Boolean));
+}
+
+function currentAccessEmail() {
+  return normalizeAccessEmail(socialSessionEmail() || normalizeUserSession(currentAuthUser).email || "");
+}
+
+function hasOwnerAccess() {
+  const session = normalizeUserSession(currentAuthUser);
+  const email = currentAccessEmail();
+  return Boolean(
+    session.mode === "google" &&
+      email &&
+      ownerEmailSet().has(email) &&
+      authHasOnlineSession()
+  );
+}
+
+function hasPremiumAccess() {
+  return hasOwnerAccess() || aiConfigFlag("premiumUnlocked", false);
+}
+
 function aiTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -35323,7 +35443,7 @@ function aiTextEnabled() {
 }
 
 function aiPremiumUnlocked() {
-  return aiConfigFlag("premiumUnlocked", false);
+  return hasPremiumAccess();
 }
 
 function aiImageEnabled() {
@@ -35353,19 +35473,19 @@ function dailyProductUsageStoreKey() {
 
 function readDailyProductUsage() {
   const fallback = {
-    day: aiTodayKey(),
+    day: "free-trial",
     musicActions: 0,
     musicTrackKeys: {}
   };
   try {
     const raw = localStorage.getItem(dailyProductUsageStoreKey());
     const parsed = raw ? JSON.parse(raw) : null;
-    if (!parsed || parsed.day !== fallback.day) return fallback;
+    if (!parsed) return fallback;
     const trackKeys = parsed.musicTrackKeys && typeof parsed.musicTrackKeys === "object"
       ? parsed.musicTrackKeys
       : {};
     return {
-      day: fallback.day,
+      day: parsed.day || fallback.day,
       musicActions: Math.max(0, Number(parsed.musicActions) || 0),
       musicTrackKeys: trackKeys
     };
@@ -35383,7 +35503,7 @@ function saveDailyProductUsage(usage) {
 }
 
 function dailyFreeDiscoveryLimit() {
-  return aiConfigInt("dailyFreeDiscoveryLimit", AI_DEFAULT_CONFIG.dailyFreeDiscoveryLimit, 0, 1000);
+  return accessConfigInt("freeDiscoveryLimit", aiConfigInt("dailyFreeDiscoveryLimit", AI_DEFAULT_CONFIG.dailyFreeDiscoveryLimit, 0, 1000), 0, 1000);
 }
 
 function dailyMusicDiscoveryCount() {
@@ -35392,7 +35512,7 @@ function dailyMusicDiscoveryCount() {
 
 function musicDiscoveryPremiumLocked() {
   if (isLocalDevelopmentHost()) return false;
-  if (aiPremiumUnlocked()) return false;
+  if (hasPremiumAccess()) return false;
   const limit = dailyFreeDiscoveryLimit();
   return Boolean(limit) && dailyMusicDiscoveryCount() >= limit;
 }
@@ -35445,13 +35565,15 @@ function hasApiSpiritImageForCurrentProfile() {
 }
 
 function aiImageLimitForCurrentPlan() {
-  if (aiPremiumUnlocked()) {
+  if (hasOwnerAccess()) return 0;
+  if (hasPremiumAccess()) {
     return aiConfigInt("premiumImageLimitPerProfile", AI_DEFAULT_CONFIG.premiumImageLimitPerProfile, 0, 1000);
   }
   return aiConfigInt("imageLimitPerProfile", AI_DEFAULT_CONFIG.imageLimitPerProfile, 0, 100);
 }
 
 function aiImageLimitReachedForProfile() {
+  if (hasOwnerAccess()) return false;
   if (totalPositiveLikes() < PREMIUM_ART_PROMPT_MIN_LIKES) return false;
   const limit = aiImageLimitForCurrentPlan();
   const allowRegeneration = aiConfigFlag("allowImageRegeneration", false);
@@ -35460,7 +35582,7 @@ function aiImageLimitReachedForProfile() {
 }
 
 function aiImagePremiumLockedByLimit() {
-  return aiImageEnabled() && !aiPremiumUnlocked() && aiImageLimitReachedForProfile();
+  return aiImageEnabled() && !hasPremiumAccess() && aiImageLimitReachedForProfile();
 }
 
 function premiumAvatarLimitMessage() {
@@ -35469,7 +35591,11 @@ function premiumAvatarLimitMessage() {
 }
 
 function aiImageAccessUnlockedForRequest() {
-  return aiPremiumUnlocked() || !aiImagePremiumLockedByLimit();
+  if (hasOwnerAccess()) return true;
+  if (accessConfigFlag("imageGenerationRequiresTrustedUser", ACCESS_DEFAULT_CONFIG.imageGenerationRequiresTrustedUser)) {
+    return hasPremiumAccess();
+  }
+  return hasPremiumAccess() || !aiImagePremiumLockedByLimit();
 }
 
 function canRequestAiImage() {
@@ -35980,6 +36106,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
   const variant = spiritMascotVariant(spirit, hashString(`${spirit?.id || ""}::${visualSignature || ""}`));
   const entityDirection = spiritCharacterIdentity(spirit, visualSignature);
   const mutationDirective = spiritMajorVisualMutation(spirit, visualSignature);
+  const artParamBrief = spiritCollectibleArtParamBrief();
   const replacingCharacter = String(visualSignature || "").includes("new-character");
   const characterRejectionRule = replacingCharacter
     ? "The user clicked regenerate because they did not like the previous character/bust/expression or repeated styling. Create a different fictional adult electronic party archetype and a complete visual overhaul: different face, head shape, hair, apparent presentation, age cue, skin tone, makeup, body/bust silhouette, posture, clothing category, jacket/collar shape, strap layout, eyewear/visor/headphones, jewelry, background color, lighting, and emotional expression. Do not keep the same person or the same outfit formula."
@@ -35990,6 +36117,7 @@ function buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestoneLikes,
     variant?.motif ? `motif: ${variant.motif}` : "",
     variant?.crown ? `motion accent: ${variant.crown}` : "",
     spiritText?.archetype ? `archetype: ${spiritText.archetype}` : "",
+    artParamBrief,
     characterRejectionRule,
     electronicSceneRule,
     mutationDirective,
@@ -37137,6 +37265,7 @@ function spiritCollectibleApiFailureText(code = "", detail = "", status = 0) {
   const normalizedDetail = String(detail || "").trim();
 
   if (normalizedCode === "premium_required") return t("spiritCollectibleErrorPremiumRequired");
+  if (normalizedCode === "login_required" || normalizedCode === "owner_required") return t("spiritCollectibleErrorLoginRequired");
   if (normalizedCode === "image_generation_limit_reached") return t("spiritCollectibleErrorLimit");
   if (normalizedCode === "daily_ai_limit_reached") return t("spiritCollectibleErrorDailyLimit");
   if (normalizedCode === "missing_openai_api_key") return t("spiritCollectibleErrorMissingKey");
@@ -37147,20 +37276,36 @@ function spiritCollectibleApiFailureText(code = "", detail = "", status = 0) {
   return t("spiritCollectibleError");
 }
 
+async function currentApiAccessToken() {
+  if (!socialState.session?.access_token) return "";
+  try {
+    await ensureFreshSocialSession({ clearOnFailure: true });
+  } catch (error) {
+    console.warn("Could not refresh API auth token", error);
+  }
+  return String(socialState.session?.access_token || "").trim();
+}
+
 async function requestSpiritCollectibleFromApi(payload) {
   const endpoint = resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image");
   spiritCollectibleLastApiError = "";
-  if (!endpoint || !canRequestAiImage()) {
+  if (!endpoint || !aiImageEnabled()) {
     spiritCollectibleLastApiError = t("spiritCollectibleErrorUnavailable");
     return "";
   }
+  if (!aiImageAccessUnlockedForRequest() || aiImageLimitReachedForProfile()) {
+    spiritCollectibleLastApiError = t("spiritCollectibleErrorLoginRequired");
+    return "";
+  }
   const token = String(window?.NEONPULSE_IMAGE_API_TOKEN || "").trim();
+  const accessToken = await currentApiAccessToken();
 
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json"
   };
   if (token) headers.Authorization = `Bearer ${token}`;
+  if (accessToken) headers["X-Sonic-Auth-Token"] = accessToken;
 
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   let timeoutId = 0;
@@ -37173,6 +37318,7 @@ async function requestSpiritCollectibleFromApi(payload) {
         ...payload,
         premiumUnlocked: aiPremiumUnlocked() || !aiImagePremiumLockedByLimit(),
         freeTrialUnlocked: !aiPremiumUnlocked(),
+        accessRole: hasOwnerAccess() ? "owner" : hasPremiumAccess() ? "premium" : "free",
         imageGenerationIndex: Math.max(1, Number(payload.imageGenerationIndex) || 1),
         clientImageCallCount: aiImageCallsForProfile(),
         forceRegenerate: payload.forceRegenerate === true
@@ -37641,8 +37787,10 @@ function finishSpiritCollectibleGenerationProgress(success = false) {
 async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milestoneLikes, { variationToken = "", allowAi = true, forceRegenerate = false } = {}) {
   const userSignature = spiritCollectibleUserSignature();
   const profileSignature = spiritCollectibleProfileSignature(spirit, milestoneLikes);
+  const artParams = spiritCollectibleArtParams();
   const identitySignature = [
     profileSignature,
+    spiritCollectibleArtParamsSignature(artParams),
     forceRegenerate ? "major-regeneration-new-character" : "base-generation",
     variationToken || userSignature
   ].filter(Boolean).join("::");
@@ -37655,6 +37803,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     prompt,
     userSignature,
     profileSignature,
+    artParams,
     error: source === "error" ? (spiritCollectibleLastApiError || t("spiritCollectibleError")) : "",
     fallbackVersion: SPIRIT_LOCAL_COLLECTIBLE_VERSION
   });
@@ -37676,6 +37825,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
         promptVersion: SPIRIT_IMAGE_PROMPT_VERSION,
         userSignature,
         profileSignature,
+        artParams,
         humanEntityBrief,
         dominantStyles: spiritTopStyles(spirit, 4).join(", "),
         language: currentLanguage
@@ -37694,7 +37844,8 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       createdAt: new Date().toISOString(),
       prompt,
       userSignature,
-      profileSignature
+      profileSignature,
+      artParams
     };
   }
   return buildPendingCollectible(allowAi ? "error" : "pending");
@@ -37713,7 +37864,7 @@ function syncSpiritAvatarWithCollectible(collectible, spiritText = {}) {
   return true;
 }
 
-async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false } = {}) {
+async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false, autoGenerate = false } = {}) {
   if (!spiritCollectiblePanel || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return null;
   const likes = totalPositiveLikes();
   if (likes < SPIRIT_UNLOCK_TARGET) {
@@ -37727,7 +37878,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const milestone = collectibleMilestoneForLikes(likes);
   const rank = resolveSpiritRank(likes);
   const userSignature = spiritCollectibleUserSignature();
-  const slotKey = `${spirit.id}::${milestone.likes}::${userSignature}`;
+  const artSignature = spiritCollectibleArtParamsSignature();
+  const slotKey = `${spirit.id}::${milestone.likes}::${userSignature}::${artSignature}`;
   const store = readSpiritCollectibleStore();
   let collectible = store[slotKey] || null;
   if (collectible?.source === "local") {
@@ -37738,6 +37890,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
 
   const renderCollectibleState = (asset = collectible) => {
     const hasImage = Boolean(asset?.imageUrl);
+    const requestAvailable = canRequestAiImage();
     const imageUrl = hasImage ? asset.imageUrl : "";
     const baseFilename = spiritCollectibleFilename(spirit.id, milestone.likes, imageUrl);
     const shareFilename = spiritStoryFilename(baseFilename);
@@ -37751,6 +37904,10 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+      } else if (!hasImage && !aiImageAccessUnlockedForRequest()) {
+        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
+      } else if (!hasImage && !requestAvailable) {
+        spiritCollectibleHint.textContent = t("spiritCollectibleErrorUnavailable");
       } else if (!hasImage) {
         spiritCollectibleHint.textContent = asset?.source === "error"
           ? t("spiritCollectibleGeneratedLocal")
@@ -37825,7 +37982,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       spiritCollectibleRegenerateBtn.textContent = spiritCollectibleBusy
         ? t("spiritCollectibleGenerating")
         : t("spiritCollectibleRegenerate");
-      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy;
+      spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || (!hasImage && !requestAvailable);
       if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
       else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
     }
@@ -37850,7 +38007,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
 
   renderCollectibleState(collectible);
 
-  if ((forceRegenerate || !collectible?.imageUrl) && !spiritCollectibleBusy) {
+  if ((forceRegenerate || (autoGenerate && !collectible?.imageUrl)) && !spiritCollectibleBusy) {
     const previousCollectible = collectible?.imageUrl ? collectible : null;
     let keptPreviousCollectible = false;
     const apiAvailableForAttempt = supportsAiCollectibleApi();
@@ -47563,7 +47720,11 @@ bind(spiritCollectibleRegenerateBtn, "click", async () => {
     return;
   }
   const spiritText = localizedSpiritCopy(spirit) || {};
-  await ensureSpiritCollectible(spirit, spiritText, { forceRegenerate: true });
+  const hasReadyImage = spiritCollectibleImage?.dataset.assetReady === "true";
+  await ensureSpiritCollectible(spirit, spiritText, {
+    forceRegenerate: hasReadyImage,
+    autoGenerate: true
+  });
 });
 bind(spiritCollectibleShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram();

@@ -6916,6 +6916,84 @@ input[type="range"] {
   display: none;
 }
 
+.spirit-art-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  align-items: start;
+}
+
+.spirit-art-control {
+  display: grid;
+  gap: 0.34rem;
+  min-width: 0;
+  color: #dff4ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.spirit-art-control span,
+.spirit-art-accessories legend {
+  color: #9cefff;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.spirit-art-control select {
+  min-height: 42px;
+  width: 100%;
+  border: 1px solid rgba(147, 225, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(3, 10, 25, 0.82);
+  color: #f4fbff;
+  font: inherit;
+  padding: 0.56rem 0.7rem;
+  outline: none;
+}
+
+.spirit-art-control select:focus-visible {
+  border-color: rgba(138, 255, 226, 0.72);
+  box-shadow: 0 0 0 3px rgba(138, 255, 226, 0.14);
+}
+
+.spirit-art-accessories {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.55rem;
+  border: 1px solid rgba(147, 225, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(2, 8, 22, 0.42);
+}
+
+.spirit-art-accessories legend {
+  padding: 0 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.spirit-art-accessories label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  min-height: 34px;
+  padding: 0.36rem 0.55rem;
+  border: 1px solid rgba(143, 246, 229, 0.18);
+  border-radius: 8px;
+  background: rgba(5, 17, 36, 0.72);
+  color: #dff4ff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.spirit-art-accessories input {
+  accent-color: #8affdf;
+}
+
 .spirit-generation-progress-head {
   display: flex;
   align-items: center;
@@ -7179,6 +7257,10 @@ input[type="range"] {
 
   .spirit-collectible-actions {
     grid-template-columns: 1fr;
+  }
+
+  .spirit-art-controls {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .spirit-collectible-actions .listen-btn,

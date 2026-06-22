@@ -15,6 +15,7 @@ const {
   readJson,
   writeJson
 } = require("./_usage-store");
+const { resolveAccessContext } = require("./_access-control");
 
 const SPIRIT_IMAGE_PROMPT_VERSION = "electronic-party-bust-v33-visible-gear";
 const SPIRIT_IMAGE_STORE_PREFIX = "sonic:spirit-image:v27";
@@ -75,6 +76,59 @@ function spiritEntityBrief(body = {}) {
   return SPIRIT_ENTITY_BRIEFS[spiritId] || SPIRIT_ENTITY_BRIEFS.engenheiro_groove;
 }
 
+function normalizeParam(value = "") {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function spiritArtParameterBrief(body = {}) {
+  const rawParams = body.artParams && typeof body.artParams === "object" ? body.artParams : {};
+  const presentation = normalizeParam(rawParams.presentation || rawParams.genderPresentation || rawParams.sex);
+  const vibe = normalizeParam(rawParams.vibe || rawParams.mood);
+  const accessories = Array.isArray(rawParams.accessories) ? rawParams.accessories.map(normalizeParam) : [];
+
+  const presentationMap = {
+    feminine: "Character presentation requested by the user: fictional adult female-presenting person; keep it respectful, non-sexualized, and clearly adult.",
+    female: "Character presentation requested by the user: fictional adult female-presenting person; keep it respectful, non-sexualized, and clearly adult.",
+    masculine: "Character presentation requested by the user: fictional adult male-presenting person; keep it respectful, non-sexualized, and clearly adult.",
+    male: "Character presentation requested by the user: fictional adult male-presenting person; keep it respectful, non-sexualized, and clearly adult.",
+    androgynous: "Character presentation requested by the user: fictional adult androgynous electronic-scene person; keep it respectful, non-sexualized, and clearly adult."
+  };
+  const vibeMap = {
+    dark_club: "User-selected visual vibe: dark underground club, low key warehouse light, sharp LEDs, premium after-hours atmosphere.",
+    neon_festival: "User-selected visual vibe: neon festival energy, UV accents, expressive rave color, clean readable face.",
+    techwear_editorial: "User-selected visual vibe: cyber-editorial techwear, structured materials, reflective seams, fashion-forward club styling.",
+    organic_mystic: "User-selected visual vibe: organic mystical electronic mood, botanical or woven materials blended with sound-system light.",
+    warm_house: "User-selected visual vibe: warm house groove, social dancefloor charisma, glossy clubwear, amber and cyan booth glow."
+  };
+  const accessoryMap = {
+    headphones: "headphones or transparent in-ear monitor",
+    visor: "single angular visor or tinted eyewear",
+    harness: "utility harness or crossbody rig",
+    piercings: "ear cuff or clean piercings",
+    led_trim: "LED trim integrated into clothing",
+    face_gems: "tasteful face gems or rave makeup",
+    modular_cables: "abstract modular cable or patch-grid details",
+    club_wristband: "club wristband"
+  };
+
+  const selectedAccessories = Array.from(new Set(accessories))
+    .map((item) => accessoryMap[item])
+    .filter(Boolean)
+    .slice(0, 4);
+  return [
+    presentationMap[presentation] || "",
+    vibeMap[vibe] || "",
+    selectedAccessories.length
+      ? `User-selected accessory accents to include if they fit the subgenre: ${selectedAccessories.join(", ")}. Keep accessories curated and non-duplicated.`
+      : ""
+  ].filter(Boolean).join(" ");
+}
+
 function spiritImageOwnerKey(body = {}) {
   const userIdentity = trimText(
     body.userKey ||
@@ -133,9 +187,22 @@ module.exports = async function handler(req, res) {
   })) return;
 
   const body = parseBody(req);
+  const accessContext = await resolveAccessContext(req, body);
+  const ownerUnlimited = accessContext.owner && envFlag("SONIC_OWNER_UNLIMITED_ACCESS", true);
+  const requireTrustedUser = envFlag("SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER", true);
+  if (requireTrustedUser && !accessContext.premium) {
+    sendJson(res, accessContext.tokenPresent && !accessContext.authenticated ? 401 : 402, {
+      error: accessContext.tokenPresent && !accessContext.authenticated ? "login_required" : "premium_required",
+      role: accessContext.role,
+      authenticated: accessContext.authenticated,
+      owner: accessContext.owner,
+      premium: accessContext.premium
+    });
+    return;
+  }
   const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false);
-  if (requirePremium && body.premiumUnlocked !== true) {
-    sendJson(res, 402, { error: "premium_required" });
+  if (requirePremium && !accessContext.premium) {
+    sendJson(res, 402, { error: "premium_required", role: accessContext.role });
     return;
   }
 
@@ -152,7 +219,9 @@ module.exports = async function handler(req, res) {
 
   const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", true);
   const configuredMaxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 25 : 1, 1, 100);
-  const maxPerUser = allowBetaRegeneration
+  const maxPerUser = ownerUnlimited
+    ? 0
+    : allowBetaRegeneration
     ? Math.max(configuredMaxPerUser, 25)
     : configuredMaxPerUser;
   const forceRegenerate = body.forceRegenerate === true;
@@ -168,7 +237,7 @@ module.exports = async function handler(req, res) {
       sendJson(res, 200, storedImageResponse(existing, true));
       return;
     }
-    if (existingGenerationCount >= maxPerUser) {
+    if (maxPerUser && existingGenerationCount >= maxPerUser) {
       sendJson(res, 429, {
         error: "image_generation_limit_reached",
         maxPerUser,
@@ -201,7 +270,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!enforceOpenAiDailyBudget(req, res, {
+  if (!ownerUnlimited && !enforceOpenAiDailyBudget(req, res, {
     feature: "spirit-image",
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
     defaultDailyLimit: 25
@@ -213,6 +282,7 @@ module.exports = async function handler(req, res) {
   const humanEntityBrief = spiritEntityBrief(body);
   const dominantStyles = trimText(body.dominantStyles, 220);
   const visualFamilyRule = dominantStyleVisualRule(dominantStyles || humanEntityBrief);
+  const artParameterBrief = spiritArtParameterBrief(body);
   const characterRegeneration = body.forceRegenerate === true || body.characterRegeneration === true;
   const characterReplacementInstruction = characterRegeneration
     ? "USER REJECTED THE PREVIOUS CHARACTER: this regeneration must create a different fictional adult person and a complete visual redesign. Do not keep the same face, bust, head shape, hair, apparent presentation, skin tone, body silhouette, posture, expression, clothing silhouette, jacket, harness, collar, glasses, visor, headphones, jewelry, makeup pattern, color palette, lighting setup, background panel, or character identity. Preserve the same musical archetype, but replace the person and every visible styling decision."
@@ -225,6 +295,7 @@ module.exports = async function handler(req, res) {
     "PARTY-GEAR MINIMUM: do not generate a normal unaccessorized person. The upper chest and shoulders must visibly include at least three electronic-scene gear cues: utility harness, asymmetric zipper vest, crossbody rig, transparent-vinyl or mesh club layer, reflective fader-like seams, angular tinted glasses or lifted visor, transparent in-ear monitor, club wristband, single ear cuff, headphones, LED trim, mixer/CDJ patch motif, or clean chain. Use different accessory roles, never duplicates. If the outfit is a simple shirt, plain jacket, ordinary fashion top, or only a simple crossbody strap with an equalizer background, the image fails.",
     "QUALITY GATE: create a polished semi-realistic / hyper-realistic digital-art bust portrait, chest-up only, centered, with head, neck, shoulders, and upper chest visible. The subject is a fictional adult human electronic-music party archetype linked to the user's dominant electronic subgenres, club culture, rhythm, dance, fashion, and nightlife. The face must be large, bright, clear, happy or warmly confident, and readable on a phone: expressive eyes, visible mouth, strong facial key light, no hidden shadow, no mask-like blankness, no face lost behind smoke, helmet, text, or effects. It must look like a distinct person from an electronic music scene, not a supernatural spirit, generic musician, carnival performer, fantasy character, mascot, or abstract icon.",
     characterReplacementInstruction,
+    artParameterBrief,
     `Archetype-specific partygoer brief: ${humanEntityBrief}.`,
     dominantStyles ? `Dominant music styles to embody visually: ${dominantStyles}.` : "",
     visualFamilyRule,
@@ -272,6 +343,7 @@ module.exports = async function handler(req, res) {
       regenerationReason: trimText(body.regenerationReason, 120),
       profileSignature: trimText(body.profileSignature, 120),
       language: trimText(body.language, 8),
+      accessRole: accessContext.role,
       store: hasDurableStore() ? "durable" : "memory"
     };
     const stored = await writeJson(imageKey, record, { onlyIfMissing: !allowBetaRegeneration });
