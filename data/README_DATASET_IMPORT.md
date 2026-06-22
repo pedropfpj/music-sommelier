@@ -26,6 +26,8 @@ O app tenta importar automaticamente estes arquivos (se existirem):
 - `../verified_track_expansion_v6.csv`
 - `../verified_track_expansion_v7.csv`
 - `../verified_track_expansion_v8.csv`
+- `../varazslo_absurdus_playable_tracks_20260622.csv`
+- `../moonclipse_astrix_techno_project_20260622.csv`
 - `../verified_track_expansion_v9.csv`
 - `../techno_enrichment_v3_20260621.csv`
 - `../techno_enrichment_v4_20260621.csv`
@@ -58,6 +60,10 @@ Observacao: o pacote `electronic_subgenre_expansion_v15_20260621.csv` foi aprofu
 Observacao: o pacote `catalog_playable_depth_v16_20260622.csv` adiciona 650 faixas tocaveis a artistas ja publicados, com resolucao exata de artista no Deezer.
 
 Observacao: `../dj_set_recommendations_20260622.csv` e um dataset de DJs/selectors por set tocavel. Ele nao deve ser importado como tracks/produtores; a aba `DJs` usa esse recorte separado para previews de set.
+
+Observacao: `../varazslo_absurdus_playable_tracks_20260622.csv` prioriza Varazslo, Absurdus e Varasurdum com faixas tocaveis e subgeneros separados. Ele deve carregar antes das duplicatas antigas para preservar os previews oficiais e o embed do YouTube.
+
+Observacao: `../moonclipse_astrix_techno_project_20260622.csv` adiciona Moonclipse como o projeto Melodic Techno & House ligado ao Astrix, com faixas tocaveis do Deezer e sem reclassificar Astrix fora do eixo psytrance/progressive/full-on.
 
 - `CSV`
 - `JSON`

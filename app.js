@@ -1058,6 +1058,8 @@ const EXTERNAL_DATASET_FILES = [
   "data/verified_track_expansion_v6.csv",
   "data/verified_track_expansion_v7.csv",
   "data/verified_track_expansion_v8.csv",
+  "data/varazslo_absurdus_playable_tracks_20260622.csv",
+  "data/moonclipse_astrix_techno_project_20260622.csv",
   "data/verified_track_expansion_v9.csv",
   "data/verified_track_expansion_v10.csv",
   "data/club_styles_enrichment_v1_20260620.csv",
@@ -5411,9 +5413,30 @@ const PACHAMAMA_2026_EVENT_ARTISTS = [
   "vucsetics"
 ];
 
+const EXISTANCE_2026_EVENT = {
+  name: "Existance Festival 2026",
+  datetime: "2026-09-03",
+  dateOnly: true,
+  venue: "Licensed outdoor venue",
+  city: "Tetbury",
+  country: "UK",
+  url: "https://www.skiddle.com/festivals/existance-festival/",
+  sourceName: "Skiddle / Access All Areas",
+  sourceUrl: "https://www.skiddle.com/festivals/existance-festival/"
+};
+
+const EXISTANCE_2026_EVENT_ARTISTS = [
+  "absurdus",
+  "abusurdus",
+  "varasurdum",
+  "varazlo",
+  "varazslo"
+];
+
 const FALLBACK_EVENTS = {
   ...Object.fromEntries(COSMIC_CREW_2026_EVENT_ARTISTS.map((artist) => [artist, [COSMIC_CREW_2026_EVENT]])),
   ...Object.fromEntries(PACHAMAMA_2026_EVENT_ARTISTS.map((artist) => [artist, [PACHAMAMA_2026_EVENT]])),
+  ...Object.fromEntries(EXISTANCE_2026_EVENT_ARTISTS.map((artist) => [artist, [EXISTANCE_2026_EVENT]])),
   "michael bibi": [
     {
       name: "Michael Bibi apresenta One Life Sao Paulo",
@@ -8104,7 +8127,7 @@ const STYLE_ARTIST_SEEDS = {
   schranz: ["Chris Liebing", "Sven Wittekind", "Frank Kvitta", "Robert Natus", "Felix Krocher", "Pet Duo", "O.B.I.", "Arkus P."],
   ebm: ["Nitzer Ebb", "Front 242", "DAF", "Front Line Assembly", "Fixmer/McCarthy", "Terence Fixmer", "Phase Fatale", "The Hacker"],
   minimal_techno: ["Luciano", "Rene Wise", "Richie Hawtin", "Raresh", "Priku", "Sonja Moonear", "Petre Inspirescu", "Ricardo Villalobos"],
-  melodic_techno: ["Anyma", "Mind Against", "Tale Of Us", "Stephan Bodzin", "ARTBAT", "Massano", "Kevin de Vries", "Innellea"],
+  melodic_techno: ["Moonclipse", "Anyma", "Mind Against", "Tale Of Us", "Stephan Bodzin", "ARTBAT", "Massano", "Kevin de Vries", "Innellea"],
   industrial_techno: ["Perc", "Paula Temple", "Ancient Methods", "Rebekah", "Scalameriya", "SNTS", "AnD", "Blawan"],
   peak_time_techno: ["Adam Beyer", "Space 92", "Layton Giordani", "Mha Iri", "HI-LO", "Wehbba", "Bart Skils", "UMEK"],
   deep_techno: ["Luigi Tozzi", "Claudio PRC", "Deepbass", "Ness", "Artefakt", "Natural/Electronic.System.", "Refracted", "Polar Inertia"],
@@ -8431,6 +8454,7 @@ const ARTIST_STYLE_OVERRIDES = {
 const LOCKED_ARTIST_STYLE_OVERRIDES = new Set([
   "astrix",
   "alpha portal",
+  "moonclipse",
   "fungus funk",
   "kashyyyk",
   "will o wisp"
@@ -8446,6 +8470,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "Israel",
     area: "",
     disambiguation: "Alpha Portal e o projeto/collab de Astrix com Ace Ventura, ligado ao eixo progressive psy/psytrance."
+  },
+  "moonclipse": {
+    country: "",
+    area: "",
+    disambiguation: "Moonclipse e o projeto Melodic Techno & House de Omri Sasi com Avi Shmailov (Astrix); usar como ponte techno do Astrix sem reclassificar Astrix para techno."
   },
   "ajja": {
     country: "Switzerland",
@@ -18470,18 +18499,18 @@ const I18N = {
     usageGuideContinueBtn: "Começar descoberta",
     showUsageGuideBtn: "Como usar",
     authKicker: "Acesso rápido",
-    authTitle: "Entre no Sonic Search",
-    authDesc: "Faça login com Google para sincronizar seu perfil. Sem login, suas descobertas ficam salvas neste aparelho.",
-    authLocalNoteProfile: "Sem conta",
-    authLocalNoteNewUser: "Perfil local",
-    authLocalNoteBackup: "Google opcional",
+    authTitle: "Comece pela descoberta",
+    authDesc: "Abra o perfil local agora. Quando o Google estiver disponível, ele entra só como sincronização entre aparelhos.",
+    authLocalNoteProfile: "Perfil local",
+    authLocalNoteNewUser: "Sem bloqueio",
+    authLocalNoteBackup: "Sync opcional",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Entrar sem login",
+    authGuestBtn: "Começar descoberta",
     authTestUserBtn: "Começar sem histórico",
     authNewUserHint: "Sem login, eu continuo do perfil salvo neste navegador.",
     authRequired: "Entre com Google ou sem login.",
@@ -18494,7 +18523,7 @@ const I18N = {
     authGoogleBtn: "Entrar com Google",
     authContinueOnlineBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Google sincroniza seu perfil entre aparelhos.",
+    authProviderHint: "Google sincroniza seu perfil entre aparelhos quando a conta online está ativa.",
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
@@ -18505,7 +18534,7 @@ const I18N = {
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar com Google",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "Google ainda não está configurado neste ambiente. Entre sem login por enquanto.",
+    authProviderHintLocalBackup: "Perfil local ativo neste aparelho. Login online pode ser ligado depois.",
     welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
@@ -19338,18 +19367,18 @@ const I18N = {
     usageGuideContinueBtn: "Start discovering",
     showUsageGuideBtn: "How to use",
     authKicker: "Quick access",
-    authTitle: "Enter Sonic Search",
-    authDesc: "Sign in with Google to sync your profile. Without login, your discoveries stay saved on this device.",
-    authLocalNoteProfile: "No account",
-    authLocalNoteNewUser: "Local profile",
-    authLocalNoteBackup: "Google optional",
+    authTitle: "Start with discovery",
+    authDesc: "Open the local profile now. When Google is available, it only adds sync across devices.",
+    authLocalNoteProfile: "Local profile",
+    authLocalNoteNewUser: "No gate",
+    authLocalNoteBackup: "Optional sync",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Use local profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Enter without login",
+    authGuestBtn: "Start discovering",
     authTestUserBtn: "Start without history",
     authNewUserHint: "Without login, I continue from the profile saved in this browser.",
     authRequired: "Sign in with Google or enter without login.",
@@ -19362,7 +19391,7 @@ const I18N = {
     authGoogleBtn: "Sign in with Google",
     authContinueOnlineBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Google syncs your profile across devices.",
+    authProviderHint: "Google syncs your profile across devices when the online account is active.",
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
@@ -19373,7 +19402,7 @@ const I18N = {
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
     authGoogleComingSoon: "Sign in with Google",
     authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "Google is not configured in this environment yet. Enter without login for now.",
+    authProviderHintLocalBackup: "Local profile is active on this device. Online login can be enabled later.",
     welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
@@ -20203,18 +20232,18 @@ const I18N = {
     usageGuideContinueBtn: "Empezar a descubrir",
     showUsageGuideBtn: "Cómo usar",
     authKicker: "Acceso rápido",
-    authTitle: "Entra en Sonic Search",
-    authDesc: "Inicia sesión con Google para sincronizar tu perfil. Sin login, tus descubrimientos quedan en este dispositivo.",
-    authLocalNoteProfile: "Sin cuenta",
-    authLocalNoteNewUser: "Perfil local",
-    authLocalNoteBackup: "Google opcional",
+    authTitle: "Empieza por descubrir",
+    authDesc: "Abre el perfil local ahora. Cuando Google esté disponible, solo suma sincronización entre dispositivos.",
+    authLocalNoteProfile: "Perfil local",
+    authLocalNoteNewUser: "Sin bloqueo",
+    authLocalNoteBackup: "Sync opcional",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Entrar sin login",
+    authGuestBtn: "Empezar a descubrir",
     authTestUserBtn: "Empezar sin historial",
     authNewUserHint: "Sin login, sigo desde el perfil guardado en este navegador.",
     authRequired: "Entra con Google o sin login.",
@@ -20227,7 +20256,7 @@ const I18N = {
     authGoogleBtn: "Entrar con Google",
     authContinueOnlineBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "Google sincroniza tu perfil entre dispositivos.",
+    authProviderHint: "Google sincroniza tu perfil entre dispositivos cuando la cuenta online está activa.",
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
@@ -20238,7 +20267,7 @@ const I18N = {
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar con Google",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "Google todavía no está configurado en este entorno. Entra sin login por ahora.",
+    authProviderHintLocalBackup: "Perfil local activo en este dispositivo. El login online puede activarse después.",
     welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
@@ -22880,6 +22909,12 @@ function updateAuthProviderUi() {
   const signed = authHasOnlineSession();
   const busy = Boolean(authConfigLoading || socialState.busy);
   const googleOAuthHref = socialOAuthEndpointUrl("google", { redirect: true });
+  const showGoogleOption = Boolean(googleConfigured || signed || busy);
+  const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
+  if (authEntryActions) {
+    authEntryActions.classList.toggle("has-online", showGoogleOption);
+    authEntryActions.classList.toggle("local-only", !showGoogleOption);
+  }
   if (authGoogleNativeSlot) {
     authGoogleNativeSlot.classList.add("hidden");
     authGoogleNativeSlot.innerHTML = "";
@@ -22890,15 +22925,18 @@ function updateAuthProviderUi() {
     authAppleBtn.disabled = true;
   }
   if (authGoogleBtn) {
-    authGoogleBtn.classList.remove("hidden");
-    authGoogleBtn.removeAttribute("aria-hidden");
-    authGoogleBtn.disabled = busy || (!googleConfigured && !signed);
+    authGoogleBtn.classList.toggle("hidden", !showGoogleOption);
+    authGoogleBtn.setAttribute("aria-hidden", showGoogleOption ? "false" : "true");
+    authGoogleBtn.disabled = !showGoogleOption || busy || (!googleConfigured && !signed);
     if (authGoogleBtn.tagName === "A") {
       authGoogleBtn.setAttribute("href", signed ? "#" : googleOAuthHref);
-      authGoogleBtn.setAttribute("aria-disabled", busy ? "true" : "false");
+      authGoogleBtn.setAttribute(
+        "aria-disabled",
+        !showGoogleOption || busy || (!googleConfigured && !signed) ? "true" : "false"
+      );
     }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
-    authGoogleBtn.title = !googleConfigured && !signed
+    authGoogleBtn.title = showGoogleOption && !googleConfigured && !signed
       ? t("authProviderConfigMissing", { provider: "Google" })
       : "";
   }

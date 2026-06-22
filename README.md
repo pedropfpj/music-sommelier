@@ -101,6 +101,35 @@ Variaveis principais:
 - `SONIC_NEWS_FEED_DAILY_LIMIT`: limita chamadas diarias por cliente; usa `KV_REST_API_URL`/`KV_REST_API_TOKEN` quando configurado, com fallback em memoria local.
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
 
+## Importacao remota do catalogo
+
+Para consolidar os CSVs/JSONs locais em um pacote importavel:
+
+```bash
+node scripts/generate-catalog-extra-bulk-import.mjs
+```
+
+Isso gera `supabase/seeds/catalog_extra_bulk_local_20260621.sql`, `reports/catalog_extra_bulk_local_20260621.json` e `reports/catalog_extra_bulk_local_20260621.rows.json`.
+
+Para diagnosticar o Supabase remoto sem gravar:
+
+```bash
+node scripts/import-catalog-extra-remote.mjs --dry-run
+```
+
+Para importar de verdade, configure no ambiente backend/local uma destas credenciais administrativas:
+
+- `DATABASE_URL` ou `POSTGRES_URL`, quando quiser aplicar o SQL via `psql`
+- `SUPABASE_SERVICE_ROLE_KEY`, quando quiser importar via API REST do Supabase
+
+Depois rode:
+
+```bash
+node scripts/import-catalog-extra-remote.mjs
+```
+
+Nunca exponha `SUPABASE_SERVICE_ROLE_KEY` no navegador, no `index.html` ou em variaveis `VITE_`. Ela deve existir apenas em ambiente backend/local seguro.
+
 ## Modo compliance
 
 O app nasce em modo balanceado: iTunes Search pode rodar no cliente porque a Apple documenta uso em websites/JSONP; MusicBrainz/Wikipedia/Cover Art Archive ficam no backend para respeitar User-Agent, rate limit e atribuicao; Radio Browser fica backend-only por organizacao, cache e limite. Deezer, SoundCloud, YouTube Data API, Bandsintown sem app ID proprio, Last.fm sem chave propria, RSS direto/proxies publicos e QRServer ficam desligados por padrao ou em opt-in explicito. Para ligar qualquer fonte externa sensivel no navegador, ajuste `window.SONIC_SEARCH_COMPLIANCE_CONFIG` no `index.html` somente depois de confirmar termos, atribuicao, limite de uso e credenciais do provedor. O caminho recomendado e preferir rotas em `/api/*` com cache, rate limit e User-Agent, como `/api/track-metadata`, `/api/cover-art`, `/api/artist-profile`, `/api/radio-browser` e `/api/news-feed`.
