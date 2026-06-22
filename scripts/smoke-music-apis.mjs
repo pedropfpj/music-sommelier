@@ -64,6 +64,16 @@ async function callHandler(relativePath, options = {}) {
   return res;
 }
 
+async function callMusicRoute(route, options = {}) {
+  return callHandler("api/music.js", {
+    ...options,
+    query: {
+      ...(options.query || {}),
+      route
+    }
+  });
+}
+
 async function withEnv(updates, fn) {
   const previous = new Map();
   Object.keys(updates).forEach((key) => {
@@ -179,7 +189,7 @@ test("track metadata prefers exact iTunes matches and returns attribution", asyn
         ]
       });
     }, async () => {
-      const res = await callHandler("api/track-metadata.js", {
+      const res = await callMusicRoute("track-metadata", {
         body: {
           artist: "ANNA",
           song: "Hidden Beauties",
@@ -223,7 +233,7 @@ test("cover art resolves MusicBrainz/Cover Art Archive through backend", async (
       }
       return jsonResponse({}, 404);
     }, async () => {
-      const res = await callHandler("api/cover-art.js", {
+      const res = await callMusicRoute("cover-art", {
         body: { artist: "ANNA", song: "Hidden Beauties", album: "Hidden Beauties", releaseYear: 2018 }
       });
       const payload = res.json();
@@ -270,7 +280,7 @@ test("artist profile merges MusicBrainz, Wikipedia and iTunes signals", async ()
       }
       return jsonResponse({}, 404);
     }, async () => {
-      const res = await callHandler("api/artist-profile.js", {
+      const res = await callMusicRoute("artist-profile", {
         body: { artist: "Avalon", language: "en" }
       });
       const payload = res.json();
@@ -284,7 +294,7 @@ test("artist profile merges MusicBrainz, Wikipedia and iTunes signals", async ()
 
 test("Last.fm remains credential-gated", async () => {
   await withEnv({ ...safeDefaults, SONIC_LASTFM_ENABLED: "true" }, async () => {
-    const res = await callHandler("api/lastfm-artist.js", {
+    const res = await callMusicRoute("lastfm-artist", {
       body: { artist: "Avalon" }
     });
     assert.equal(res.statusCode, 503);
@@ -313,7 +323,7 @@ test("Radio Browser falls back from strict locale filters to style-family result
         lastcheckok: 1
       }]);
     }, async () => {
-      const res = await callHandler("api/radio-browser.js", {
+      const res = await callMusicRoute("radio-browser", {
         body: {
           style: "hard_techno",
           country: "BR",
