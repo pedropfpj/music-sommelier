@@ -13872,6 +13872,12 @@ button,
   margin-top: 0.35rem;
 }
 
+#authScreen #authTestUserBtn,
+#authScreen #authLoginBtn,
+#authScreen #authResumeBtn {
+  display: none !important;
+}
+
 .auth-entry-actions.has-online {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
