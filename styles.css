@@ -14257,3 +14257,18 @@ button,
     grid-template-rows: auto auto auto;
   }
 }
+
+.spirit-card {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.spirit-avatar-wrap {
+  display: none !important;
+}
+
+.spirit-copy {
+  padding: 0;
+  border-left: 0;
+  background: none;
+  border-radius: 0;
+}
