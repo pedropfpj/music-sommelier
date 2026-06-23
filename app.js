@@ -18896,7 +18896,6 @@ const I18N = {
     volumeLabel: "Volume",
     langKicker: "Antes de começar",
     langTitle: "Escolha seu idioma",
-    langDesc: "Você pode trocar depois quando quiser.",
     appSlogan: "Descoberta sem ruído",
     appMission: "Seu feedback afina cada próxima faixa.",
     usageGuideKicker: "Guia rápido",
@@ -19767,7 +19766,6 @@ const I18N = {
     volumeLabel: "Volume",
     langKicker: "Before you start",
     langTitle: "Choose your language",
-    langDesc: "You can change this later whenever you want.",
     appSlogan: "Discovery without noise",
     appMission: "Your feedback sharpens every next track.",
     usageGuideKicker: "Quick guide",
@@ -20635,7 +20633,6 @@ const I18N = {
     volumeLabel: "Volumen",
     langKicker: "Antes de empezar",
     langTitle: "Elige tu idioma",
-    langDesc: "Puedes cambiarlo después cuando quieras.",
     appSlogan: "Descubrimiento sin ruido",
     appMission: "Tu feedback afina cada próxima pista.",
     usageGuideKicker: "Guía rápida",
@@ -22221,7 +22218,6 @@ function applyLanguage() {
   updateAudioToggleUi();
   setText("#langKicker", t("langKicker"));
   setText("#langTitle", t("langTitle"));
-  setText("#langDesc", t("langDesc"));
   setText("#langSlogan", t("appSlogan"));
   setText("#usageGuideKicker", t("usageGuideKicker"));
   setText("#usageGuideTitle", t("usageGuideTitle"));

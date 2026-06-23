@@ -1138,14 +1138,6 @@ body[data-vibe-theme="hard"] {
   text-wrap: balance;
 }
 
-.language-card #langDesc {
-  max-width: 52ch;
-  font-size: 1.05rem;
-  line-height: 1.5;
-  color: #cfe3ff;
-  text-wrap: pretty;
-}
-
 .lang-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -8444,10 +8436,6 @@ input[type="range"] {
   .brand-logo-wrap {
     width: 100%;
     padding: 0.26rem 0.42rem;
-  }
-
-  .language-card #langDesc {
-    font-size: 0.98rem;
   }
 
   .app-slogan {
