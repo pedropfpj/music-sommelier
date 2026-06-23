@@ -1,4 +1,4 @@
-const { envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
 
 const SEARCH_URL = "https://www.googleapis.com/youtube/v3/search";
 const YOUTUBE_SOURCE_DETAIL = {
@@ -204,7 +204,15 @@ module.exports = async function handler(req, res) {
     defaultEnabled: true,
     allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_YOUTUBE_SEARCH_DAILY_LIMIT",
-    defaultDailyLimit: 80
+    defaultDailyLimit: 80,
+    budgetOnStart: false
+  })) return;
+
+  if (!await enforceDurableMusicDailyLimit(req, res, {
+    feature: "youtube-search",
+    dailyLimitEnv: "SONIC_YOUTUBE_SEARCH_DAILY_LIMIT",
+    defaultDailyLimit: 80,
+    methods: ["GET", "POST"]
   })) return;
 
   const body = parseBody(req);

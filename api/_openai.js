@@ -1,5 +1,12 @@
 const OPENAI_RESPONSES_URL = "https://api.openai.com/v1/responses";
 const OPENAI_IMAGES_URL = "https://api.openai.com/v1/images/generations";
+const { enforceDailyUsageLimit, hashStoreKey, hasDurableStore } = require("./_usage-store");
+const {
+  allowedOrigin,
+  isProductionLike,
+  requestBodyTooLarge,
+  setCorsHeaders
+} = require("./_request-security");
 const dailyBudget = new Map();
 
 function envFlag(name, fallback = false) {
@@ -19,43 +26,16 @@ function envText(name, fallback = "") {
   return raw || fallback;
 }
 
-function allowedOrigins() {
-  return String(process.env.SONIC_AI_ALLOWED_ORIGINS || "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function originMatchesRequestHost(req) {
-  const origin = String(req?.headers?.origin || "").trim();
-  const host = String(req?.headers?.host || "").trim();
-  if (!origin || !host) return false;
-  try {
-    return new URL(origin).host === host;
-  } catch (_err) {
-    return false;
-  }
-}
-
 function setCors(res) {
-  const origins = allowedOrigins();
-  const origin = String(res.req?.headers?.origin || "").trim();
-  if (!origins.length) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-  } else if (origin && origins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  } else if (originMatchesRequestHost(res.req)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Sonic-Auth-Token, X-Sonic-Access-Token");
+  setCorsHeaders(res.req, res, {
+    originEnvNames: ["SONIC_AI_ALLOWED_ORIGINS"],
+    methods: ["POST", "OPTIONS"],
+    allowedHeaders: "Content-Type, Authorization, X-Sonic-Auth-Token, X-Sonic-Access-Token"
+  });
 }
 
 function originAllowed(req) {
-  const origins = allowedOrigins();
-  if (!origins.length) return true;
-  const origin = String(req.headers?.origin || "").trim();
-  return Boolean(origin && (origins.includes(origin) || originMatchesRequestHost(req)));
+  return allowedOrigin(req, ["SONIC_AI_ALLOWED_ORIGINS"]);
 }
 
 function sendJson(res, statusCode, payload) {
@@ -78,6 +58,10 @@ function requirePost(req, res) {
   if (handleOptions(req, res)) return false;
   if (req.method !== "POST") {
     sendJson(res, 405, { error: "method_not_allowed" });
+    return false;
+  }
+  if (requestBodyTooLarge(req, envInt("SONIC_API_MAX_BODY_BYTES", 1048576, 1024, 5242880))) {
+    sendJson(res, 413, { error: "request_body_too_large" });
     return false;
   }
   return true;
@@ -125,6 +109,44 @@ function enforceOpenAiDailyBudget(req, res, {
     res.setHeader("X-Sonic-AI-Remaining", String(budget.remaining));
   }
 
+  return true;
+}
+
+function secondsUntilNextUtcDay() {
+  const now = Date.now();
+  const next = new Date(now);
+  next.setUTCHours(24, 0, 0, 0);
+  return Math.max(60, Math.ceil((next.getTime() - now) / 1000) + 3600);
+}
+
+function durableRateLimitsRequired() {
+  return envFlag("SONIC_REQUIRE_DURABLE_RATE_LIMITS", isProductionLike());
+}
+
+async function enforceDurableOpenAiDailyBudget(req, res, {
+  feature = "text",
+  dailyLimitEnv = "SONIC_AI_TEXT_DAILY_LIMIT",
+  defaultDailyLimit = 80
+} = {}) {
+  const dailyLimit = envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000);
+  if (dailyLimit && durableRateLimitsRequired() && !hasDurableStore()) {
+    sendJson(res, 503, { error: "durable_rate_limit_required", feature });
+    return false;
+  }
+
+  const key = `sonic:usage:ai:${feature}:${todayKey()}:${hashStoreKey(requestClientId(req))}`;
+  const budget = await enforceDailyUsageLimit({
+    key,
+    limit: dailyLimit,
+    expiresInSeconds: secondsUntilNextUtcDay()
+  });
+  if (!budget.ok) {
+    sendJson(res, 429, { error: budget.error || "daily_ai_limit_reached", feature, limit: dailyLimit });
+    return false;
+  }
+
+  if (budget.remaining !== null) res.setHeader("X-Sonic-AI-Durable-Remaining", String(budget.remaining));
+  res.setHeader("X-Sonic-Usage-Store", budget.store || "memory");
   return true;
 }
 
@@ -439,6 +461,7 @@ module.exports = {
   callOpenAiJson,
   callOpenAiText,
   enforceOpenAiDailyBudget,
+  enforceDurableOpenAiDailyBudget,
   envFlag,
   envInt,
   parseBody,

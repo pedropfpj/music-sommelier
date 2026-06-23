@@ -58,6 +58,8 @@ Configure as variaveis de ambiente:
 - `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: exige premium antes de gerar imagem
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: exige KV/Redis para garantir uma imagem IA por usuario em producao
 - `KV_REST_API_URL` / `KV_REST_API_TOKEN`: armazenamento duravel para travas por usuario e limites diarios de API em producao
+- `SONIC_AI_ALLOWED_ORIGINS` e `SONIC_MUSIC_ALLOWED_ORIGINS`: dominios autorizados a chamar as rotas serverless
+- `SONIC_REQUIRE_DURABLE_RATE_LIMITS=true`: em producao, bloqueia rotas caras se KV/Upstash nao estiver configurado
 
 Endpoints incluidos:
 
@@ -102,6 +104,7 @@ Variaveis principais:
 - `SONIC_NEWS_FEED_ENABLED`: liga a rota server-side de noticias com cache, User-Agent e limite diario.
 - `SONIC_NEWS_FEED_DAILY_LIMIT`: limita chamadas diarias por cliente; usa `KV_REST_API_URL`/`KV_REST_API_TOKEN` quando configurado, com fallback em memoria local.
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
+- `SONIC_API_MAX_BODY_BYTES`: limite maximo do corpo das requisicoes POST para reduzir abuso de payload
 
 ## Importacao remota do catalogo
 

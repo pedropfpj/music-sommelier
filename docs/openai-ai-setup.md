@@ -20,6 +20,8 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 - `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: `true` para exigir premium antes de gerar imagem. Mantenha `true` em produção.
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: `true` para exigir banco/Redis antes de gerar imagem. Use em produção para garantir uma imagem IA por usuário.
 - `SONIC_AI_ALLOWED_ORIGINS`: domínios permitidos, separados por vírgula. Exemplo: `https://music-sommelier1.vercel.app`.
+- `SONIC_REQUIRE_DURABLE_RATE_LIMITS`: `true` em produção para bloquear chamadas caras quando KV/Upstash não estiver configurado.
+- `SONIC_API_MAX_BODY_BYTES`: limite de payload das rotas serverless. Sugestão: `1048576`.
 - `SONIC_AI_TEXT_MAX_OUTPUT_TOKENS`: teto de resposta de texto. Sugestão para GPT-5 mini em teste: `1400`.
 - `OPENAI_REASONING_EFFORT`: esforço de raciocínio para modelos GPT-5. Sugestão inicial: `minimal`.
 - `KV_REST_API_URL` e `KV_REST_API_TOKEN`: armazenamento durável da Vercel KV/Upstash para travar uma imagem IA por usuário.
@@ -63,8 +65,12 @@ Antes de liberar para usuários reais, volte para `imageLimitPerProfile: 1` e `a
 4. Antes de liberar premium real:
    - Implementar login/banco/subscription no servidor.
    - Validar premium no backend, não só no navegador.
+   - Definir `SONIC_REQUIRE_DURABLE_RATE_LIMITS=true`.
+   - Definir `SONIC_AI_ALLOWED_ORIGINS=https://sonicsearch.app,https://www.sonicsearch.app`.
    - Definir `SONIC_AI_IMAGE_STORE_REQUIRED=true`.
    - Definir `SONIC_AI_IMAGE_REQUIRE_PREMIUM=true`.
+   - Definir `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION=false`.
+   - Definir `SONIC_AI_IMAGE_MAX_PER_USER=1`.
    - Configurar orçamento mensal no painel da OpenAI.
 
 ## Como funciona a imagem unica por usuario

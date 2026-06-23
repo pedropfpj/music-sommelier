@@ -1,5 +1,11 @@
 const dailyBudget = new Map();
-const { enforceDailyUsageLimit, hashStoreKey } = require("./_usage-store");
+const { enforceDailyUsageLimit, hasDurableStore, hashStoreKey } = require("./_usage-store");
+const {
+  allowedOrigin,
+  isProductionLike,
+  requestBodyTooLarge,
+  setCorsHeaders
+} = require("./_request-security");
 
 function envFlag(name, fallback = false) {
   const raw = String(process.env[name] || "").trim().toLowerCase();
@@ -46,42 +52,16 @@ function trimText(value, maxLength = 1200) {
     .slice(0, maxLength);
 }
 
-function allowedOrigins() {
-  return String(process.env.SONIC_MUSIC_ALLOWED_ORIGINS || process.env.SONIC_AI_ALLOWED_ORIGINS || "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function originMatchesRequestHost(req) {
-  const origin = String(req?.headers?.origin || "").trim();
-  const host = String(req?.headers?.host || "").trim();
-  if (!origin || !host) return false;
-  try {
-    return new URL(origin).host === host;
-  } catch (_err) {
-    return false;
-  }
-}
-
 function originAllowed(req) {
-  const origins = allowedOrigins();
-  if (!origins.length) return true;
-  const origin = String(req.headers?.origin || "").trim();
-  if (!origin) return true;
-  return origins.includes(origin) || originMatchesRequestHost(req);
+  return allowedOrigin(req, ["SONIC_MUSIC_ALLOWED_ORIGINS", "SONIC_AI_ALLOWED_ORIGINS"]);
 }
 
 function setCors(req, res, methods = ["POST", "OPTIONS"]) {
-  const origins = allowedOrigins();
-  const origin = String(req?.headers?.origin || "").trim();
-  if (!origins.length) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-  } else if (origin && (origins.includes(origin) || originMatchesRequestHost(req))) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Methods", methods.join(", "));
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  setCorsHeaders(req, res, {
+    originEnvNames: ["SONIC_MUSIC_ALLOWED_ORIGINS", "SONIC_AI_ALLOWED_ORIGINS"],
+    methods,
+    allowedHeaders: "Content-Type, Authorization"
+  });
 }
 
 function sendJson(req, res, statusCode, payload, methods) {
@@ -139,6 +119,10 @@ function secondsUntilNextUtcDay() {
   return Math.max(60, Math.ceil((next.getTime() - now) / 1000) + 3600);
 }
 
+function durableRateLimitsRequired() {
+  return envFlag("SONIC_REQUIRE_DURABLE_RATE_LIMITS", isProductionLike());
+}
+
 async function enforceDurableMusicDailyLimit(req, res, {
   feature = "music",
   dailyLimitEnv = "",
@@ -147,6 +131,17 @@ async function enforceDurableMusicDailyLimit(req, res, {
 } = {}) {
   if (!dailyLimitEnv) return true;
   const dailyLimit = envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000);
+  if (dailyLimit && durableRateLimitsRequired() && !hasDurableStore()) {
+    const allMethods = Array.from(new Set([...methods, "OPTIONS"]));
+    sendJson(req, res, 503, {
+      ok: false,
+      enabled: true,
+      error: "durable_rate_limit_required",
+      feature,
+      limit: dailyLimit
+    }, allMethods);
+    return false;
+  }
   const key = `sonic:usage:${feature}:${todayKey()}:${hashStoreKey(requestClientId(req))}`;
   const budget = await enforceDailyUsageLimit({
     key,
@@ -176,12 +171,17 @@ function requireMusicApi(req, res, {
   defaultEnabled = false,
   allowGlobalFallback = true,
   dailyLimitEnv = "",
-  defaultDailyLimit = 0
+  defaultDailyLimit = 0,
+  budgetOnStart = true
 } = {}) {
   const allMethods = Array.from(new Set([...methods, "OPTIONS"]));
   if (handleOptions(req, res, allMethods)) return false;
   if (!methods.includes(req.method)) {
     sendJson(req, res, 405, { error: "method_not_allowed" }, allMethods);
+    return false;
+  }
+  if (requestBodyTooLarge(req, envInt("SONIC_API_MAX_BODY_BYTES", 1048576, 1024, 5242880))) {
+    sendJson(req, res, 413, { error: "request_body_too_large" }, allMethods);
     return false;
   }
   if (!originAllowed(req)) {
@@ -192,7 +192,7 @@ function requireMusicApi(req, res, {
     sendJson(req, res, 403, { error: "music_api_disabled", feature }, allMethods);
     return false;
   }
-  if (dailyLimitEnv) {
+  if (dailyLimitEnv && budgetOnStart) {
     const budget = enforceDailyBudget(req, feature, envInt(dailyLimitEnv, defaultDailyLimit, 0, 10000));
     if (!budget.ok) {
       sendJson(req, res, 429, { error: "daily_music_api_limit_reached", feature }, allMethods);

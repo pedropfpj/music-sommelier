@@ -1,4 +1,4 @@
-const { callOpenAiText, enforceOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
+const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 const { envFirst, envFlag, envInt, envText } = require("./_music-apis");
 
 const DEFAULT_REFERENCE_USER_AGENT = "SonicSearch/1.0 (+https://sonicsearch.app)";
@@ -359,7 +359,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!enforceOpenAiDailyBudget(req, res, {
+  if (!await enforceDurableOpenAiDailyBudget(req, res, {
     feature: "artist-bio",
     dailyLimitEnv: "SONIC_AI_BIO_DAILY_LIMIT",
     defaultDailyLimit: 18

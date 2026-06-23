@@ -56,7 +56,11 @@ Padrao recomendado:
 - `SONIC_AI_TRACK_DAILY_LIMIT=24`
 - `SONIC_AI_NEWS_DAILY_LIMIT=24`
 - `SONIC_AI_IMAGE_ENABLED=true`
-- `SONIC_AI_IMAGE_DAILY_LIMIT=50`
+- `SONIC_AI_IMAGE_DAILY_LIMIT=25`
+- `SONIC_AI_IMAGE_REQUIRE_PREMIUM=true`
+- `SONIC_AI_IMAGE_STORE_REQUIRED=true`
+- `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION=false`
+- `SONIC_AI_IMAGE_MAX_PER_USER=1`
 - `SONIC_ARTIST_BIO_REFERENCE_CACHE_SECONDS=86400`
 - `SONIC_REFERENCE_USER_AGENT=SonicSearch/1.0 (+https://sonicsearch.app)`
 - `SONIC_RADIO_BROWSER_ENABLED=true`
@@ -78,6 +82,9 @@ Ativacao completa com credenciais oficiais:
 - `SONIC_NEWS_USER_AGENT=SonicSearch/1.0 (+https://sonicsearch.app)`
 - `SONIC_NEWS_FEED_DAILY_LIMIT=80`
 - `KV_REST_API_URL=...` + `KV_REST_API_TOKEN=...` para limites duraveis em producao
+- `SONIC_REQUIRE_DURABLE_RATE_LIMITS=true`
+- `SONIC_AI_ALLOWED_ORIGINS=https://sonicsearch.app,https://www.sonicsearch.app`
+- `SONIC_MUSIC_ALLOWED_ORIGINS=https://sonicsearch.app,https://www.sonicsearch.app`
 - `window.SONIC_SEARCH_COMPLIANCE_CONFIG.clientDeezerEnabled=true`
 - `window.SONIC_SEARCH_COMPLIANCE_CONFIG.clientArtistReferenceApisEnabled=true`
 - `window.SONIC_SEARCH_COMPLIANCE_CONFIG.directNewsFetchEnabled=true`

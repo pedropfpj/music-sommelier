@@ -1,4 +1,4 @@
-const { callOpenAiJson, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
+const { callOpenAiJson, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 const NEWS_TRANSLATION_SCHEMA = {
   type: "object",
@@ -25,6 +25,13 @@ module.exports = async function handler(req, res) {
     feature: "news-translate",
     enabledEnv: "SONIC_AI_TEXT_ENABLED",
     defaultEnabled: true,
+    dailyLimitEnv: "SONIC_AI_NEWS_DAILY_LIMIT",
+    defaultDailyLimit: 12,
+    budgetOnStart: false
+  })) return;
+
+  if (!await enforceDurableOpenAiDailyBudget(req, res, {
+    feature: "news-translate",
     dailyLimitEnv: "SONIC_AI_NEWS_DAILY_LIMIT",
     defaultDailyLimit: 12
   })) return;

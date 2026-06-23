@@ -1,10 +1,17 @@
-const { callOpenAiText, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
+const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
 
 module.exports = async function handler(req, res) {
   if (!requireOpenAiPost(req, res, {
     feature: "track-insight",
     enabledEnv: "SONIC_AI_TEXT_ENABLED",
     defaultEnabled: true,
+    dailyLimitEnv: "SONIC_AI_TRACK_DAILY_LIMIT",
+    defaultDailyLimit: 24,
+    budgetOnStart: false
+  })) return;
+
+  if (!await enforceDurableOpenAiDailyBudget(req, res, {
+    feature: "track-insight",
     dailyLimitEnv: "SONIC_AI_TRACK_DAILY_LIMIT",
     defaultDailyLimit: 24
   })) return;

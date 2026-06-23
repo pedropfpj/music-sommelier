@@ -1,4 +1,4 @@
-const { envFirst, envInt, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envFirst, envInt, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
 
 const TICKETMASTER_EVENTS_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const TICKETMASTER_ATTRACTIONS_URL = "https://app.ticketmaster.com/discovery/v2/attractions.json";
@@ -408,7 +408,15 @@ module.exports = async function handler(req, res) {
     enabledEnv: "SONIC_ARTIST_EVENTS_ENABLED",
     defaultEnabled: true,
     dailyLimitEnv: "SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT",
-    defaultDailyLimit: 80
+    defaultDailyLimit: 80,
+    budgetOnStart: false
+  })) return;
+
+  if (!await enforceDurableMusicDailyLimit(req, res, {
+    feature: "artist-events",
+    dailyLimitEnv: "SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT",
+    defaultDailyLimit: 80,
+    methods: ["GET", "POST"]
   })) return;
 
   const body = parseBody(req);

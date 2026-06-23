@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260622access-art-controls1" />
+    <link rel="stylesheet" href="styles.css?v=20260622dj-radar-copy1" />
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -454,7 +454,7 @@
             <label class="sr-only" for="djDiscoverySceneFilter">Cena</label>
             <select id="djDiscoverySceneFilter" aria-label="Filtrar DJs por cena">
               <option value="">Todos</option>
-              <option value="mop">MOP / darkpsy</option>
+              <option value="mop">Master of Puppets</option>
               <option value="global_psy">Psy global</option>
               <option value="global_club">Selectors globais</option>
             </select>
@@ -469,6 +469,7 @@
               <p id="djSwipeKicker" class="swipe-kicker">Set recomendado</p>
               <h4 id="djSwipeName">Abra um DJ</h4>
               <p id="djSwipeMeta" class="muted">Seletores com set público, separados do catálogo de produtores.</p>
+              <div id="djSwipeContext" class="dj-context-list hidden" aria-label="Contexto do set recomendado"></div>
               <div id="djSwipeBadges" class="swipe-status-badges" aria-label="Sinais do DJ"></div>
               <p id="djSwipeReason" class="swipe-card-reason hidden"></p>
               <div class="swipe-track-signals dj-swipe-signals">
@@ -482,7 +483,7 @@
               <button id="djSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Passo</button>
               <button id="djSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
-            <p id="djSwipeStatus" class="muted swipe-hint">A curadoria começa com MOP, hi-tech, darkpsy e selectors internacionais.</p>
+            <p id="djSwipeStatus" class="muted swipe-hint">A curadoria começa por Master of Puppets, hi-tech, darkpsy e selectors internacionais.</p>
           </div>
           <aside class="dj-preview-panel" aria-labelledby="djPreviewTitle">
             <div class="dj-preview-head">
@@ -501,7 +502,7 @@
         <div class="dj-radar-strip" aria-label="Resumo da curadoria de DJs">
           <span id="djRadarCount">11 sets verificados</span>
           <span id="djRadarLiked">0 curtidos</span>
-          <span id="djRadarScope">MOP + fora do Brasil</span>
+          <span id="djRadarScope">Master of Puppets + mundo</span>
         </div>
       </section>
 

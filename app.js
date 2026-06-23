@@ -608,7 +608,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     style: "dark_psy",
     name: "Paula",
     country: "Brasil",
-    scene: "MOP / darkpsy brasileiro",
+    scene: "Master of Puppets",
     subgenre: "Dark Psy / Psycore",
     setTitle: "Paula @ Master of Puppets 2025",
     setUrl: "https://www.youtube.com/watch?v=4fXJmW78rns",
@@ -616,7 +616,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     sourceName: "PAULA",
     eventSignal: "Master of Puppets",
     roleNote: "DJ/selectora; entra como recomendacao por set, nao como artista-produtor.",
-    reason: "Set diretamente ligado ao circuito MOP, com leitura darkpsy de pista e transicoes rapidas para calibrar o radar extremo."
+    reason: "Set ligado ao circuito Master of Puppets, com leitura darkpsy de pista e transicoes rapidas para calibrar o radar extremo."
   },
   {
     id: "mop-booo",
@@ -624,7 +624,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     style: "hi_tech",
     name: "DJ Booo",
     country: "Brasil",
-    scene: "MOP / hi-tech brasileiro",
+    scene: "Master of Puppets",
     subgenre: "Hi-Tech / Psycore",
     setTitle: "DJ BOOO - ReveillOz 2018 / 2019",
     setUrl: "https://soundcloud.com/booo_cosmic_crew/dj-booo-reveilloz-2018-2019",
@@ -632,7 +632,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     sourceName: "booo_cosmic_crew",
     eventSignal: "Master of Puppets",
     roleNote: "DJ de destaque no recorte MOP; mantido fora do catalogo de faixas autorais.",
-    reason: "Boa referencia de energia hi-tech/psycore brasileira sem exigir faixa propria no banco principal."
+    reason: "Referencia de pista para hi-tech/psycore brasileiro: rapido, psicodelico e util para calibrar o radar sem depender de faixa autoral no catalogo."
   },
   {
     id: "mop-anginha",
@@ -640,7 +640,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     style: "hi_tech",
     name: "Anginha",
     country: "Brasil",
-    scene: "Hi-tech brasileiro",
+    scene: "Cena hi-tech brasileira",
     subgenre: "Hi-Tech",
     setTitle: "ANGINHA - Set exclusivo Hitech Connection #001",
     setUrl: "https://soundcloud.com/hitechconnection/anginha-set-exclusivo-hitech-connection-001",
@@ -5922,6 +5922,7 @@ const djSwipeCard = document.getElementById("djSwipeCard");
 const djSwipeKicker = document.getElementById("djSwipeKicker");
 const djSwipeName = document.getElementById("djSwipeName");
 const djSwipeMeta = document.getElementById("djSwipeMeta");
+const djSwipeContext = document.getElementById("djSwipeContext");
 const djSwipeBadges = document.getElementById("djSwipeBadges");
 const djSwipeReason = document.getElementById("djSwipeReason");
 const djSwipeStyleChip = document.getElementById("djSwipeStyleChip");
@@ -40746,10 +40747,44 @@ function djRecommendationKey(seed = {}) {
 }
 
 function djLaneLabel(lane = "") {
-  if (lane === "mop") return "MOP / darkpsy";
+  if (lane === "mop") return "Master of Puppets";
   if (lane === "global_psy") return "Psy global";
   if (lane === "global_club") return "Selector global";
   return "DJ set";
+}
+
+function djMetaLine(seed = {}) {
+  const scene = String(seed.scene || seed.eventSignal || djLaneLabel(seed.lane)).trim();
+  const platform = String(seed.platform || "").trim();
+  return [scene, platform].filter(Boolean).join(" • ") || "Set público selecionado por curadoria.";
+}
+
+function djContextItems(seed = {}) {
+  return [
+    { label: "Origem", value: seed.country },
+    { label: "Som", value: seed.subgenre || seed.style },
+    { label: "Entrada", value: seed.platform ? "Set público" : "Curadoria por set" }
+  ].filter((item) => String(item.value || "").trim());
+}
+
+function renderDjContextList(seed = null) {
+  if (!djSwipeContext) return;
+  djSwipeContext.innerHTML = "";
+  if (!seed) {
+    djSwipeContext.classList.add("hidden");
+    return;
+  }
+  djContextItems(seed).forEach((item) => {
+    const chip = document.createElement("span");
+    chip.className = "dj-context-pill";
+    const label = document.createElement("strong");
+    label.textContent = item.label;
+    const value = document.createElement("span");
+    value.textContent = item.value;
+    chip.append(label, value);
+    djSwipeContext.appendChild(chip);
+  });
+  djSwipeContext.classList.toggle("hidden", !djSwipeContext.children.length);
 }
 
 function youtubeVideoIdFromUrl(url = "") {
@@ -40840,7 +40875,7 @@ function renderDjRadarSummary() {
   if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
   if (djRadarScope) {
     const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : "MOP + fora do Brasil";
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Master of Puppets + mundo";
   }
 }
 
@@ -40865,9 +40900,10 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeName) djSwipeName.textContent = hasSeed ? seed.name : "Abra um DJ";
   if (djSwipeMeta) {
     djSwipeMeta.textContent = hasSeed
-      ? `${seed.country} • ${seed.scene}`
-      : "Seletores com set publico, separados do catalogo de produtores.";
+      ? djMetaLine(seed)
+      : "Seletores com set público, separados do catálogo de produtores.";
   }
+  renderDjContextList(hasSeed ? seed : null);
   if (djSwipeReason) {
     djSwipeReason.textContent = hasSeed ? seed.reason : "";
     djSwipeReason.classList.toggle("hidden", !hasSeed);

@@ -1,4 +1,4 @@
-const { envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
 
 const TOKEN_URL = "https://secure.soundcloud.com/oauth/token";
 const TRACKS_URL = "https://api.soundcloud.com/tracks";
@@ -236,7 +236,15 @@ module.exports = async function handler(req, res) {
     defaultEnabled: true,
     allowGlobalFallback: false,
     dailyLimitEnv: "SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT",
-    defaultDailyLimit: 80
+    defaultDailyLimit: 80,
+    budgetOnStart: false
+  })) return;
+
+  if (!await enforceDurableMusicDailyLimit(req, res, {
+    feature: "soundcloud-search",
+    dailyLimitEnv: "SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT",
+    defaultDailyLimit: 80,
+    methods: ["POST"]
   })) return;
 
   const body = parseBody(req);

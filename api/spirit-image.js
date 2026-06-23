@@ -1,6 +1,6 @@
 const {
   callOpenAiImage,
-  enforceOpenAiDailyBudget,
+  enforceDurableOpenAiDailyBudget,
   envFlag,
   envInt,
   parseBody,
@@ -182,7 +182,7 @@ module.exports = async function handler(req, res) {
     enabledEnv: "SONIC_AI_IMAGE_ENABLED",
     defaultEnabled: true,
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
-    defaultDailyLimit: 50,
+    defaultDailyLimit: 25,
     budgetOnStart: false
   })) return;
 
@@ -200,7 +200,7 @@ module.exports = async function handler(req, res) {
     });
     return;
   }
-  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false);
+  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", true);
   if (requirePremium && !accessContext.premium) {
     sendJson(res, 402, { error: "premium_required", role: accessContext.role });
     return;
@@ -217,8 +217,8 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", true);
-  const configuredMaxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", allowBetaRegeneration ? 25 : 1, 1, 100);
+  const allowBetaRegeneration = envFlag("SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION", false);
+  const configuredMaxPerUser = envInt("SONIC_AI_IMAGE_MAX_PER_USER", 1, 1, 100);
   const maxPerUser = ownerUnlimited
     ? 0
     : allowBetaRegeneration
@@ -270,7 +270,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!ownerUnlimited && !enforceOpenAiDailyBudget(req, res, {
+  if (!ownerUnlimited && !await enforceDurableOpenAiDailyBudget(req, res, {
     feature: "spirit-image",
     dailyLimitEnv: "SONIC_AI_IMAGE_DAILY_LIMIT",
     defaultDailyLimit: 25
