@@ -55,7 +55,8 @@ Configure as variaveis de ambiente:
 - `OPENAI_TEXT_MODEL`: modelo de texto opcional, padrao `gpt-5-mini`
 - `OPENAI_IMAGE_MODEL`: modelo de imagem opcional, padrao `gpt-image-1-mini`
 - `SONIC_AI_IMAGE_ENABLED`: libera a rota de imagem por IA
-- `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: exige premium antes de gerar imagem
+- `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: exige premium antes de gerar imagem. Para liberar Sound System para convidados apos 10 curtidas, mantenha `false`.
+- `SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER`: exige login/premium para `/api/spirit-image`. Para teste guest, mantenha `false`.
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: exige KV/Redis para garantir uma imagem IA por usuario em producao
 - `KV_REST_API_URL` / `KV_REST_API_TOKEN`: armazenamento duravel para travas por usuario e limites diarios de API em producao
 - `SONIC_AI_ALLOWED_ORIGINS` e `SONIC_MUSIC_ALLOWED_ORIGINS`: dominios autorizados a chamar as rotas serverless
@@ -100,7 +101,7 @@ Variaveis principais:
 - `SONIC_CATALOG_EXTRA_ENABLED=true` + `SUPABASE_URL` + `SUPABASE_ANON_KEY`: liga leitura do catalogo proprio publicado em `catalog_artists` e `catalog_tracks`.
 - `SONIC_CATALOG_ENRICHMENT_ENABLED=true` + `SUPABASE_SERVICE_ROLE_KEY`: permite que rotas server-side persistam respostas uteis em `catalog_enrichments`. Use somente em ambiente backend; nunca exponha service role no navegador.
 - `SONIC_AI_TEXT_ENABLED=true` + `OPENAI_API_KEY`: liga leitura de faixa, traducao de noticias e bio curta por IA. `SONIC_DISCOGS_ENABLED=true` + `DISCOGS_USER_TOKEN` adiciona Discogs como enriquecimento backend quando houver token.
-- `SONIC_AI_IMAGE_ENABLED=true` + `OPENAI_API_KEY`: liga a rota de imagem do arquetipo musical, com limite diario e trava por usuario.
+- `SONIC_AI_IMAGE_ENABLED=true` + `OPENAI_API_KEY`: liga a rota de imagem do arquetipo musical, com limite diario e trava por usuario. Guest libera no app apos 10 curtidas quando `SONIC_AI_IMAGE_REQUIRE_PREMIUM=false` e `SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER=false`.
 - `SONIC_NEWS_FEED_ENABLED`: liga a rota server-side de noticias com cache, User-Agent e limite diario.
 - `SONIC_NEWS_FEED_DAILY_LIMIT`: limita chamadas diarias por cliente; usa `KV_REST_API_URL`/`KV_REST_API_TOKEN` quando configurado, com fallback em memoria local.
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado

@@ -6716,6 +6716,17 @@ const SOCIAL_FEED_LIMIT = 14;
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
 const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
+const PROFILE_DATA_STORAGE_KEYS = [
+  STORAGE_KEY,
+  PROGRESS_STORAGE_KEY,
+  SPIRIT_COLLECTIBLE_STORAGE_KEY,
+  SPIRIT_ART_SEED_STORAGE_KEY,
+  SPIRIT_REGENERATION_COUNT_STORAGE_KEY,
+  PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY,
+  AI_USAGE_STORAGE_KEY,
+  DAILY_PRODUCT_USAGE_STORAGE_KEY,
+  AI_TEXT_CACHE_STORAGE_KEY
+];
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const SEARCH_AUDIO_STANDBY = true;
@@ -10235,10 +10246,10 @@ const SPIRIT_RANK_TIERS = [
   { likes: 10, key: "spiritRankUnlocked" },
   { likes: 20, key: "spiritRankHomeStudio" },
   { likes: 30, key: "spiritRankProStudio" },
-  { likes: 50, key: "spiritRankClubStage" },
-  { likes: 80, key: "spiritRankFestivalStage" },
-  { likes: 120, key: "spiritRankFutureStage" },
-  { likes: 250, key: "spiritRankImpossibleSystem" }
+  { likes: 40, key: "spiritRankClubStage" },
+  { likes: 50, key: "spiritRankFestivalStage" },
+  { likes: 60, key: "spiritRankFutureStage" },
+  { likes: 70, key: "spiritRankImpossibleSystem" }
 ];
 const MUSICAL_SPIRITS = [
   {
@@ -15364,7 +15375,7 @@ function swipeTrainingSignalCount() {
   const stored = Math.max(0, Number(userStats.swipeTrainingSignals) || 0);
   if (stored > 0) return stored;
   return (
-    Math.max(0, Number(userStats.likedSongs) || 0) +
+    totalLikedSongs() +
     Math.max(0, Number(userStats.likedArtists) || 0) +
     Math.max(0, Number(userStats.likedDiscoveries) || 0) +
     Math.max(0, Number(userStats.alreadyKnew) || 0) +
@@ -18904,7 +18915,7 @@ const I18N = {
     showUsageGuideBtn: "Como usar",
     authKicker: "Acesso rápido",
     authTitle: "Comece pela descoberta",
-    authDesc: "Comece sem conta agora ou entre com Google para sincronizar seu perfil entre aparelhos.",
+    authDesc: "Comece sem conta com uma descoberta limpa, ou entre com Google para sincronizar seu perfil entre aparelhos.",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
@@ -18913,10 +18924,10 @@ const I18N = {
     authLoginBtn: "Entrar",
     authGuestBtn: "Começar descoberta",
     authTestUserBtn: "Começar sem histórico",
-    authNewUserHint: "Sem login, eu continuo do perfil salvo neste navegador.",
+    authNewUserHint: "Sem login, cada entrada começa sem histórico salvo.",
     authRequired: "Entre com Google ou sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
-    authGuestReady: "Perfil local pronto. Vamos descobrir faixas.",
+    authGuestReady: "Descoberta limpa pronta. Vamos testar faixas do zero.",
     authLocalResumeReady: "Perfil local carregado para {user}.",
     authSavedProfileReady: "Encontrei o perfil local de {user}. O botão deste aparelho já continua com ele.",
     authTestUserReady: "Novo usuário criado para {user}. Curtidas, histórico, recomendações e Sound System começam limpos.",
@@ -18935,7 +18946,7 @@ const I18N = {
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar com Google",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "Perfil local ativo neste aparelho. Login online pode ser ligado depois.",
+    authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. Google pode ser ligado depois.",
     welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
@@ -18981,11 +18992,11 @@ const I18N = {
     swipeKicker: "Swipe da faixa",
     discoverySequence: "#{number}",
     heardTrackSequence: "Faixa ouvida #{number}",
-    swipeEmptyTitle: "Abra a primeira carta",
+    swipeEmptyTitle: "Abra uma faixa",
     swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
     swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
-    topSwipeEmptyTitle: "Primeira carta esperando play",
-    topSwipeEmptyMeta: "Abra a surpresa, ouça o preview e deslize quando sentir.",
+    topSwipeEmptyTitle: "Radar pronto para a próxima faixa",
+    topSwipeEmptyMeta: "Toque em Surpresa, ouça o preview e deslize quando sentir.",
     topSwipeHint: "O fluxo principal fica leve; filtros e contexto estão nas outras abas.",
     aboutKicker: "O que melhora",
     aboutTitle: "Descoberta sem busca cega",
@@ -19689,14 +19700,14 @@ const I18N = {
     spiritCollectiblePremiumLocked: "O Sound System IA está preparado. Gere novamente quando a imagem online estiver disponível.",
     premiumAvatarLimitReached: "O limite de geração IA deste perfil foi atingido. Evolua para um novo marco ou tente mais tarde.",
     premiumDiscoveryLimitReached: "Você chegou ao limite gratuito de {limit} músicas descobertas. Assine premium para continuar descobrindo.",
-    spiritCollectibleMilestone: "Marco atual: {likes} likes",
+    spiritCollectibleMilestone: "Arte desbloqueada no marco de {likes} likes",
     spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
     spiritCollectibleAlt: "Sound System de {spirit} no marco de {milestone} likes",
     spiritCollectibleRegenerate: "Gerar imagem",
     spiritCollectibleRegenerateAgain: "Gerar outra",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
-    spiritCollectibleDownload: "Baixar",
+    spiritCollectibleDownload: "Baixar card",
     spiritCollectibleDownloadPreparing: "Preparando imagem...",
     spiritCollectibleDownloadReady: "Imagem pronta. Escolha Salvar imagem, Arquivos ou compartilhe.",
     spiritCollectibleDownloadFallback: "Imagem baixada. No celular, use Compartilhar se quiser enviar direto.",
@@ -19775,7 +19786,7 @@ const I18N = {
     showUsageGuideBtn: "How to use",
     authKicker: "Quick access",
     authTitle: "Start with discovery",
-    authDesc: "Start without an account now, or sign in with Google to sync your profile across devices.",
+    authDesc: "Start without an account with a clean discovery run, or sign in with Google to sync your profile across devices.",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
@@ -19784,10 +19795,10 @@ const I18N = {
     authLoginBtn: "Sign in",
     authGuestBtn: "Start discovering",
     authTestUserBtn: "Start without history",
-    authNewUserHint: "Without login, I continue from the profile saved in this browser.",
+    authNewUserHint: "Without login, each entry starts without saved history.",
     authRequired: "Sign in with Google or enter without login.",
     authLoggedAs: "Profile loaded for {user}.",
-    authGuestReady: "Local profile ready. Let's discover tracks.",
+    authGuestReady: "Clean discovery ready. Let's test tracks from zero.",
     authLocalResumeReady: "Local profile loaded for {user}.",
     authSavedProfileReady: "I found {user}'s local profile. The device button will continue from it.",
     authTestUserReady: "New user created for {user}. Likes, history, recommendations, and Sound System start clean.",
@@ -19806,7 +19817,7 @@ const I18N = {
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
     authGoogleComingSoon: "Sign in with Google",
     authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "Local profile is active on this device. Online login can be enabled later.",
+    authProviderHintLocalBackup: "Without login, discovery starts clean on this device. Google can be enabled later.",
     welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
@@ -19852,11 +19863,11 @@ const I18N = {
     swipeKicker: "Track swipe",
     discoverySequence: "#{number}",
     heardTrackSequence: "Track heard #{number}",
-    swipeEmptyTitle: "Open the first card",
+    swipeEmptyTitle: "Open a track",
     swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
     swipeHint: "Drag with mouse or touch; release to save the signal.",
-    topSwipeEmptyTitle: "First card waiting for play",
-    topSwipeEmptyMeta: "Open the surprise, hear the preview, then swipe when it clicks.",
+    topSwipeEmptyTitle: "Radar ready for the next track",
+    topSwipeEmptyMeta: "Tap Surprise, hear the preview, then swipe when it clicks.",
     topSwipeHint: "The main flow stays light; filters and context live in the other tabs.",
     aboutKicker: "What improves",
     aboutTitle: "Discovery without blind search",
@@ -20557,14 +20568,14 @@ const I18N = {
     spiritCollectiblePremiumLocked: "The AI Sound System is prepared. Generate again when the online image is available.",
     premiumAvatarLimitReached: "The AI generation limit for this profile was reached. Evolve to a new milestone or try later.",
     premiumDiscoveryLimitReached: "You reached the free limit of {limit} discovered tracks. Subscribe to premium to keep discovering.",
-    spiritCollectibleMilestone: "Current milestone: {likes} likes",
+    spiritCollectibleMilestone: "Artwork unlocked at {likes}-like milestone",
     spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
     spiritCollectibleAlt: "{spirit} Sound System at {milestone} likes milestone",
     spiritCollectibleRegenerate: "Generate image",
     spiritCollectibleRegenerateAgain: "Generate another",
     spiritCollectibleAiLimitUsed: "AI image already created",
-    spiritCollectibleDownload: "Download",
+    spiritCollectibleDownload: "Download card",
     spiritCollectibleDownloadPreparing: "Preparing image...",
     spiritCollectibleDownloadReady: "Image ready. Choose Save Image, Files, or share it.",
     spiritCollectibleDownloadFallback: "Image downloaded. On mobile, use Share if you want to send it directly.",
@@ -20643,7 +20654,7 @@ const I18N = {
     showUsageGuideBtn: "Cómo usar",
     authKicker: "Acceso rápido",
     authTitle: "Empieza por descubrir",
-    authDesc: "Empieza sin cuenta ahora o entra con Google para sincronizar tu perfil entre dispositivos.",
+    authDesc: "Empieza sin cuenta con un descubrimiento limpio o entra con Google para sincronizar tu perfil entre dispositivos.",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
@@ -20652,10 +20663,10 @@ const I18N = {
     authLoginBtn: "Entrar",
     authGuestBtn: "Empezar a descubrir",
     authTestUserBtn: "Empezar sin historial",
-    authNewUserHint: "Sin login, sigo desde el perfil guardado en este navegador.",
+    authNewUserHint: "Sin login, cada entrada empieza sin historial guardado.",
     authRequired: "Entra con Google o sin login.",
     authLoggedAs: "Perfil cargado para {user}.",
-    authGuestReady: "Perfil local listo. Vamos a descubrir pistas.",
+    authGuestReady: "Descubrimiento limpio listo. Vamos a probar pistas desde cero.",
     authLocalResumeReady: "Perfil local cargado para {user}.",
     authSavedProfileReady: "Encontré el perfil local de {user}. El botón de este dispositivo continúa desde ahí.",
     authTestUserReady: "Usuario nuevo creado para {user}. Likes, historial, recomendaciones y Sound System empiezan limpios.",
@@ -20674,7 +20685,7 @@ const I18N = {
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar con Google",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "Perfil local activo en este dispositivo. El login online puede activarse después.",
+    authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. Google puede activarse después.",
     welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
@@ -20720,11 +20731,11 @@ const I18N = {
     swipeKicker: "Swipe de la pista",
     discoverySequence: "#{number}",
     heardTrackSequence: "Pista escuchada #{number}",
-    swipeEmptyTitle: "Abre la primera carta",
+    swipeEmptyTitle: "Abre una pista",
     swipeEmptyMeta: "Toca Sorpresa, escucha y decide con swipe.",
     swipeHint: "Arrastra con mouse o dedo; suelta para guardar la señal.",
-    topSwipeEmptyTitle: "Primera carta esperando play",
-    topSwipeEmptyMeta: "Abre la sorpresa, escucha el preview y desliza cuando conecte.",
+    topSwipeEmptyTitle: "Radar listo para la próxima pista",
+    topSwipeEmptyMeta: "Toca Sorpresa, escucha el preview y desliza cuando conecte.",
     topSwipeHint: "El flujo principal queda ligero; filtros y contexto viven en otras pestañas.",
     aboutKicker: "Qué mejora",
     aboutTitle: "Descubrimiento sin búsqueda ciega",
@@ -21422,14 +21433,14 @@ const I18N = {
     spiritCollectiblePremiumLocked: "El Sound System IA está preparado. Genera de nuevo cuando la imagen online esté disponible.",
     premiumAvatarLimitReached: "Se alcanzó el límite de generación IA de este perfil. Evoluciona a un nuevo hito o intenta más tarde.",
     premiumDiscoveryLimitReached: "Llegaste al límite gratuito de {limit} canciones descubiertas. Suscríbete a premium para seguir descubriendo.",
-    spiritCollectibleMilestone: "Hito actual: {likes} likes",
+    spiritCollectibleMilestone: "Arte desbloqueado en el hito de {likes} likes",
     spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
     spiritCollectibleAlt: "Sound System de {spirit} en el hito de {milestone} likes",
     spiritCollectibleRegenerate: "Generar imagen",
     spiritCollectibleRegenerateAgain: "Generar otra",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
-    spiritCollectibleDownload: "Descargar",
+    spiritCollectibleDownload: "Descargar card",
     spiritCollectibleDownloadPreparing: "Preparando imagen...",
     spiritCollectibleDownloadReady: "Imagen lista. Elige Guardar imagen, Archivos o compártela.",
     spiritCollectibleDownloadFallback: "Imagen descargada. En móvil, usa Compartir si quieres enviarla directo.",
@@ -21756,7 +21767,7 @@ function localizeOptionLabels() {
       energyFirst: "Escolha a energia",
       bpmFirst: "Sem preferência",
       vocalsFirst: "Livre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Outros eletrônicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "EDM / Festival", "House", "Drum and Bass / Bass Music", "Hard Dance", "Outros eletrônicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         twilight_psy: "Twilight Psy",
@@ -21805,7 +21816,7 @@ function localizeOptionLabels() {
       energyFirst: "Choose energy",
       bpmFirst: "No preference",
       vocalsFirst: "Any",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Other relevant electronic styles"],
+      styleGroups: ["Psytrance / Trance", "Techno", "EDM / Festival", "House", "Drum and Bass / Bass Music", "Hard Dance", "Other relevant electronic styles"],
       styleSpecial: {
         psy_comercial: "Commercial Psy / Chacotas",
         twilight_psy: "Twilight Psy",
@@ -21854,7 +21865,7 @@ function localizeOptionLabels() {
       energyFirst: "Elige energía",
       bpmFirst: "Sin preferencia",
       vocalsFirst: "Libre",
-      styleGroups: ["Psytrance / Trance", "Techno", "House", "Drum and Bass / Bass Music", "Hard Dance", "Otros estilos electrónicos relevantes"],
+      styleGroups: ["Psytrance / Trance", "Techno", "EDM / Festival", "House", "Drum and Bass / Bass Music", "Hard Dance", "Otros estilos electrónicos relevantes"],
       styleSpecial: {
         psy_comercial: "Psy Comercial / Chacotas",
         twilight_psy: "Twilight Psy",
@@ -22969,17 +22980,27 @@ function readFirstStoredJson(keys = []) {
 }
 
 function clearSessionProfileData(session) {
-  clearSessionStorageBuckets(session, [
-    STORAGE_KEY,
-    PROGRESS_STORAGE_KEY,
-    SPIRIT_COLLECTIBLE_STORAGE_KEY,
-    SPIRIT_ART_SEED_STORAGE_KEY,
-    SPIRIT_REGENERATION_COUNT_STORAGE_KEY,
-    PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY,
-    AI_USAGE_STORAGE_KEY,
-    DAILY_PRODUCT_USAGE_STORAGE_KEY,
-    AI_TEXT_CACHE_STORAGE_KEY
-  ]);
+  clearSessionStorageBuckets(session, PROFILE_DATA_STORAGE_KEYS);
+}
+
+function clearAnonymousDiscoveryStorage() {
+  const storedUser = readStoredUserSession();
+  [
+    { mode: "guest", username: "" },
+    currentAuthUser,
+    storedUser
+  ].forEach((session) => {
+    const normalizedSession = normalizeUserSession(session || {});
+    if (["guest", "test", "visitor"].includes(normalizedSession.mode)) {
+      clearSessionStorageBuckets(normalizedSession, PROFILE_DATA_STORAGE_KEYS);
+    }
+  });
+  removeLocalStorageKeys(PROFILE_DATA_STORAGE_KEYS);
+  try {
+    localStorage.removeItem(USER_SESSION_STORAGE_KEY);
+  } catch (_err) {
+    // ignore storage failures
+  }
 }
 
 function hasUsageGuideAcknowledged() {
@@ -25257,9 +25278,14 @@ async function resumeStoredUserSession() {
 }
 
 async function continueWithoutLogin() {
+  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   resetSocialOAuthNavigationState({ clearUrl: true });
   if (socialState.session?.access_token) await socialSignOut();
-  startLocalProfileFlow({ preferStored: true });
+  clearAnonymousDiscoveryStorage();
+  const session = createVisitorSession();
+  activateUserSession(session);
+  setAuthFeedback(t("authGuestReady"));
+  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
 
 function createTestUserSession() {
@@ -28482,7 +28508,7 @@ function buildShareableAppUrl({ includeSpirit = true } = {}) {
   url.searchParams.set("tab", includeSpirit && currentSpiritId ? "profile" : "discover");
 
   const spirit = includeSpirit ? spiritById(currentSpiritId || "") : null;
-  const likes = totalPositiveLikes();
+  const likes = totalLikedSongs();
   if (spirit && likes >= SPIRIT_UNLOCK_TARGET) {
     const styleKeys = spiritTopStyleKeys(spirit, 5)
       .map((style) => normalizeDatasetStyle(style))
@@ -28685,7 +28711,7 @@ function saveProgress() {
     recalculateRatingStats();
     const payload = {
       stats: {
-        likedSongs: Number(userStats.likedSongs) || 0,
+        likedSongs: totalLikedSongs(),
         likedArtists: Number(userStats.likedArtists) || 0,
         likedDiscoveries: Number(userStats.likedDiscoveries) || 0,
         alreadyKnew: Number(userStats.alreadyKnew) || 0,
@@ -28840,6 +28866,7 @@ function loadProgress() {
   }
   recalculateRatingStats();
   updateStats();
+  updateSwipeFeedbackCard(currentRecommendation);
   renderTrackRating(currentRecommendation);
   void renderMusicalSpirit({ celebrate: false, forceAnimation: false });
 }
@@ -28861,7 +28888,7 @@ function profileBackupLastExportKey() {
 
 function profileBackupSignalCount() {
   return Math.max(0,
-    (Number(userStats.likedSongs) || 0) +
+    totalLikedSongs() +
     (Number(userStats.likedArtists) || 0) +
     (Number(userStats.likedDiscoveries) || 0) +
     (Number(userStats.alreadyKnew) || 0) +
@@ -33420,11 +33447,15 @@ function waitMs(ms) {
 }
 
 function totalPositiveLikes() {
-  return userStats.likedSongs + userStats.likedArtists + userStats.likedDiscoveries;
+  return totalLikedSongs() + userStats.likedArtists + userStats.likedDiscoveries;
 }
 
 function totalLikedSongs() {
-  return Math.max(0, Number(userStats.likedSongs) || 0);
+  return Math.max(
+    0,
+    Number(userStats.likedSongs) || 0,
+    Array.isArray(likedTrackHistory) ? likedTrackHistory.length : 0
+  );
 }
 
 function spiritReviewCheckpointFromSongLikes(songLikes = totalLikedSongs()) {
@@ -33737,7 +33768,7 @@ function spiritVisualTheme(spirit) {
   };
 }
 
-function resolveSpiritRank(likes = totalPositiveLikes()) {
+function resolveSpiritRank(likes = totalLikedSongs()) {
   let current = SPIRIT_RANK_TIERS[0];
   SPIRIT_RANK_TIERS.forEach((tier) => {
     if (likes >= tier.likes) current = tier;
@@ -33746,14 +33777,14 @@ function resolveSpiritRank(likes = totalPositiveLikes()) {
   return { current, next };
 }
 
-function collectibleMilestoneForLikes(likes = totalPositiveLikes()) {
+function collectibleMilestoneForLikes(likes = totalLikedSongs()) {
   const unlocked = SPIRIT_RANK_TIERS.filter((tier) => likes >= tier.likes);
   return unlocked[unlocked.length - 1] || SPIRIT_RANK_TIERS[0];
 }
 
-function soundSystemStageForLikes(likes = totalPositiveLikes()) {
+function soundSystemStageForLikes(likes = totalLikedSongs()) {
   const safeLikes = Math.max(0, Number(likes) || 0);
-  if (safeLikes >= 250) {
+  if (safeLikes >= 70) {
     return {
       key: "impossible",
       name: "Impossible Future Sound System",
@@ -33763,7 +33794,7 @@ function soundSystemStageForLikes(likes = totalPositiveLikes()) {
       brief: "a city-scale futuristic electronic sound system with floating speaker arrays, subwoofer towers, laser architecture, holographic mixing bridges, modular synth walls, and impossible clean sci-fi engineering"
     };
   }
-  if (safeLikes >= 120) {
+  if (safeLikes >= 60) {
     return {
       key: "future_stage",
       name: "Future Mega Stage",
@@ -33773,7 +33804,7 @@ function soundSystemStageForLikes(likes = totalPositiveLikes()) {
       brief: "a huge futuristic festival stage with monumental speaker stacks, suspended line arrays, LED ribs, laser tunnels, cinematic DJ booth architecture, and premium sci-fi dancefloor scale"
     };
   }
-  if (safeLikes >= 80) {
+  if (safeLikes >= 50) {
     return {
       key: "festival_stage",
       name: "Festival Sound Wall",
@@ -33783,7 +33814,7 @@ function soundSystemStageForLikes(likes = totalPositiveLikes()) {
       brief: "a festival-grade stage system with wide subwoofer walls, tall line-array columns, moving-head lights, LED panels, road cases, cable runs, and open-air electronic music energy"
     };
   }
-  if (safeLikes >= 50) {
+  if (safeLikes >= 40) {
     return {
       key: "club_stage",
       name: "Club Stage System",
@@ -33823,7 +33854,7 @@ function soundSystemStageForLikes(likes = totalPositiveLikes()) {
   };
 }
 
-function localizedSoundSystemStageName(likes = totalPositiveLikes()) {
+function localizedSoundSystemStageName(likes = totalLikedSongs()) {
   const stage = soundSystemStageForLikes(likes);
   return stage?.[currentLanguage] || stage?.en || stage?.name || "";
 }
@@ -33948,7 +33979,7 @@ function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
     selectedStyle || "",
     currentRecommendation?.style || "",
     currentDiscovery?.style || "",
-    totalPositiveLikes(),
+    totalLikedSongs(),
     topMapKeysForSignature(adaptiveModel?.likedStyles, 5).join("|"),
     topMapKeysForSignature(adaptiveModel?.likedArtists, 5).join("|"),
     [...knownUnion].map((artist) => normalize(artist)).sort().slice(0, 8).join("|"),
@@ -34020,6 +34051,7 @@ function spiritStoryFilename(baseFilename = "", extension = "png") {
     .trim()
     .replace(/\.[a-z0-9]+$/i, "") || "sonic-search-spirit";
   const safeExtension = String(extension || "png").replace(/[^a-z0-9]/gi, "").toLowerCase() || "png";
+  if (/-story-\d+x\d+$/i.test(baseNameWithoutExt)) return `${baseNameWithoutExt}.${safeExtension}`;
   return `${baseNameWithoutExt}-story-1080x1920.${safeExtension}`;
 }
 
@@ -34037,9 +34069,20 @@ async function triggerSpiritCollectibleDownload(imageUrl, filename = "") {
     .replace(/\.[a-z0-9]+$/i, "") || "sonic-search-spirit")
     .replace(/[^a-z0-9._-]+/gi, "-")
     .replace(/^-+|-+$/g, "") || "sonic-search-spirit";
-  const pngFilename = `${baseName}.png`;
-  const renderedPng = await renderImageDataUrlToPng(safeUrl, 1080, 1080);
-  const assetUrl = renderedPng || safeUrl;
+  let pngFilename = spiritStoryFilename(`${baseName}.png`, "png");
+  let assetUrl = "";
+  const storyAsset = await prepareSpiritStoryAsset({
+    imageUrl: safeUrl,
+    baseFilename: `${baseName}.png`,
+    preferStatic: true
+  });
+  if (storyAsset?.storyAssetUrl) {
+    assetUrl = storyAsset.storyAssetUrl;
+    pngFilename = storyAsset.filename || pngFilename;
+  } else {
+    const renderedPng = await renderImageDataUrlToPng(safeUrl, STORY_SHARE_WIDTH, STORY_SHARE_HEIGHT);
+    assetUrl = renderedPng || safeUrl;
+  }
   const blob = await spiritCollectibleBlobFromUrl(assetUrl, "image/png");
   const fileType = blob.type && blob.type !== "image/svg+xml" ? blob.type : "image/png";
   const shareFile = typeof File === "function"
@@ -34135,7 +34178,7 @@ function spiritShareProfileSnapshot() {
   const knownUnion = new Set([...typedKnown, ...knownArtistsMemory]);
   return {
     status: resolveProfileStatusLabel(),
-    likedSongs: Math.max(0, Number(userStats.likedSongs) || 0),
+    likedSongs: totalLikedSongs(),
     likedArtists: Math.max(0, Number(adaptiveModel?.likedArtists?.size) || 0),
     discoveredInApp: Math.max(0, Number(discoveredArtistsInApp?.size) || 0),
     tracksPresented: Math.max(0, Number(seenTrackKeysMemory?.size) || 0),
@@ -35279,7 +35322,7 @@ async function prepareSpiritStoryAsset({ imageUrl = "", baseFilename = "", prefe
   const safeImageUrl = String(imageUrl || "").trim();
   if (!safeImageUrl || safeImageUrl === "#") return null;
 
-  const likes = totalPositiveLikes();
+  const likes = totalLikedSongs();
   const milestone = collectibleMilestoneForLikes(likes);
   const spirit = spiritById(currentSpiritId || "");
   const snapshot = spiritShareProfileSnapshot();
@@ -35391,7 +35434,7 @@ function resolveStoryShareBaseFilename(imageUrl = "", preferredFilename = "") {
       spiritCollectibleShareInstagramBtn?.dataset.filename ||
       spiritCollectibleFilename(
         currentSpiritId || "status",
-        collectibleMilestoneForLikes(totalPositiveLikes()).likes,
+        collectibleMilestoneForLikes(totalLikedSongs()).likes,
         imageUrl
       )
   );
@@ -35432,7 +35475,7 @@ function storyShareCacheKey(imageUrl = "", baseFilename = "") {
     String(baseFilename || ""),
     currentLanguage,
     currentSpiritId || "",
-    totalPositiveLikes(),
+    totalLikedSongs(),
     userStats.likedSongs,
     userStats.likedArtists,
     userStats.alreadyKnew,
@@ -35708,6 +35751,10 @@ function hasPremiumAccess() {
   return hasOwnerAccess() || aiConfigFlag("premiumUnlocked", false);
 }
 
+function aiImageRequiresTrustedUser() {
+  return accessConfigFlag("imageGenerationRequiresTrustedUser", ACCESS_DEFAULT_CONFIG.imageGenerationRequiresTrustedUser);
+}
+
 function aiTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -35882,7 +35929,7 @@ function aiImageLimitForCurrentPlan() {
 
 function aiImageLimitReachedForProfile() {
   if (hasOwnerAccess()) return false;
-  if (totalPositiveLikes() < PREMIUM_ART_PROMPT_MIN_LIKES) return false;
+  if (totalLikedSongs() < PREMIUM_ART_PROMPT_MIN_LIKES) return false;
   const limit = aiImageLimitForCurrentPlan();
   const allowRegeneration = aiConfigFlag("allowImageRegeneration", false);
   if (!limit) return false;
@@ -35900,9 +35947,7 @@ function premiumAvatarLimitMessage() {
 
 function aiImageAccessUnlockedForRequest() {
   if (hasOwnerAccess()) return true;
-  if (accessConfigFlag("imageGenerationRequiresTrustedUser", ACCESS_DEFAULT_CONFIG.imageGenerationRequiresTrustedUser)) {
-    return hasPremiumAccess();
-  }
+  if (aiImageRequiresTrustedUser()) return hasPremiumAccess();
   return hasPremiumAccess() || !aiImagePremiumLockedByLimit();
 }
 
@@ -36373,7 +36418,7 @@ function electronicPartyBriefText(value = "") {
     .replace(/sacred/gi, "electronic");
 }
 
-function spiritCharacterIdentity(spirit, profileSignature = "", likes = totalPositiveLikes(), milestoneLikes = collectibleMilestoneForLikes(likes).likes) {
+function spiritCharacterIdentity(spirit, profileSignature = "", likes = totalLikedSongs(), milestoneLikes = collectibleMilestoneForLikes(likes).likes) {
   const seed = hashString(`${spirit?.id || "spirit"}::${profileSignature || "profile"}::personal-sound-system`) >>> 0;
   const theme = spiritVisualTheme(spirit);
   const stage = soundSystemStageForLikes(milestoneLikes || likes);
@@ -38173,7 +38218,7 @@ function syncSpiritAvatarWithCollectible(collectible, spiritText = {}) {
 
 async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = false, autoGenerate = false } = {}) {
   if (!spiritCollectiblePanel || !spiritCollectibleMilestone || !spiritCollectibleProgress || !spiritRankBadge) return null;
-  const likes = totalPositiveLikes();
+  const likes = totalLikedSongs();
   if (likes < SPIRIT_UNLOCK_TARGET) {
     spiritCollectiblePanel.classList.add("hidden");
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
@@ -38211,8 +38256,12 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+      } else if (!hasImage && asset?.error) {
+        spiritCollectibleHint.textContent = asset.error;
       } else if (!hasImage && !aiImageAccessUnlockedForRequest()) {
-        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
+        spiritCollectibleHint.textContent = aiImageRequiresTrustedUser()
+          ? t("spiritCollectibleErrorLoginRequired")
+          : premiumAvatarLimitMessage();
       } else if (!hasImage && !requestAvailable) {
         spiritCollectibleHint.textContent = t("spiritCollectibleErrorUnavailable");
       } else if (!hasImage) {
@@ -38545,7 +38594,7 @@ function renderSpiritVitals({
   const hasSignalText = signalText && signalText !== t("spiritInsightNoSignals");
   const dnaValue = hasSignalText ? signalText : t("spiritVitalNoSignal");
   const name = spiritText?.name || selectedSpirit?.id || "Sonic Spirit";
-  const rank = resolveSpiritRank(totalPositiveLikes());
+  const rank = resolveSpiritRank(likedSongs);
 
   spiritVitals.classList.toggle("is-unlocked", Boolean(unlocked));
   setSpiritVital(
@@ -40843,6 +40892,76 @@ function renderSonicBadgeList(container, badges = []) {
   });
 }
 
+function localizedCountLabel(count = 0, labels = {}) {
+  const value = Math.max(0, Number(count) || 0);
+  const singular = value === 1;
+  if (currentLanguage === "en") return `${value} ${singular ? labels.enOne : labels.enMany}`;
+  if (currentLanguage === "es") return `${value} ${singular ? labels.esOne : labels.esMany}`;
+  return `${value} ${singular ? labels.ptOne : labels.ptMany}`;
+}
+
+function profileListeningBadgeItems({ includeShown = false } = {}) {
+  const likedSongs = totalLikedSongs();
+  const shownTracks = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
+  const badges = [];
+  if (likedSongs > 0) {
+    badges.push({
+      type: "saved",
+      label: localizedCountLabel(likedSongs, {
+        ptOne: "curtida",
+        ptMany: "curtidas",
+        enOne: "liked track",
+        enMany: "liked tracks",
+        esOne: "like",
+        esMany: "likes"
+      })
+    });
+  }
+  if (includeShown && shownTracks > 0) {
+    badges.push({
+      type: "fresh",
+      label: localizedCountLabel(shownTracks, {
+        ptOne: "faixa vista",
+        ptMany: "faixas vistas",
+        enOne: "track shown",
+        enMany: "tracks shown",
+        esOne: "pista vista",
+        esMany: "pistas vistas"
+      })
+    });
+  }
+  return badges;
+}
+
+function emptySwipeProfileCopy() {
+  const likedSongs = totalLikedSongs();
+  const shownTracks = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
+  const hasProfileHistory = likedSongs > 0 || shownTracks > 0 || likedTrackHistory.length > 0;
+  if (!hasProfileHistory) {
+    return {
+      title: t("topSwipeEmptyTitle"),
+      meta: t("topSwipeEmptyMeta")
+    };
+  }
+  const nextNumber = presentedCardNumberForTrack(null);
+  if (currentLanguage === "en") {
+    return {
+      title: likedSongs > 0 ? `Radar calibrated with ${likedSongs} liked tracks` : `Radar has ${shownTracks} tracks mapped`,
+      meta: `History loaded. Tap Surprise to continue toward track #${nextNumber}.`
+    };
+  }
+  if (currentLanguage === "es") {
+    return {
+      title: likedSongs > 0 ? `Radar calibrado con ${likedSongs} likes` : `Radar con ${shownTracks} pistas mapeadas`,
+      meta: `Historial cargado. Toca Sorpresa para seguir hacia la pista #${nextNumber}.`
+    };
+  }
+  return {
+    title: likedSongs > 0 ? `Radar calibrado com ${likedSongs} curtidas` : `Radar com ${shownTracks} faixas mapeadas`,
+    meta: `Histórico carregado. Toque em Surpresa para seguir para a faixa #${nextNumber}.`
+  };
+}
+
 function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = {}) {
   if (!track) return [];
   const styleCertainty = trackStyleCertainty(track);
@@ -40858,6 +40977,7 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
   if (saved) {
     badges.push({ type: "saved", label: sonicTinyCopy("Salvo no radar", "Saved to radar", "Guardado") });
   }
+  badges.push(...profileListeningBadgeItems().slice(0, 1));
   badges.push(isKnown
     ? { type: "known", label: sonicTinyCopy("Ja conhecido", "Known artist", "Ya conocido") }
     : { type: "fresh", label: sonicTinyCopy("Novo no radar", "New radar", "Nuevo radar") });
@@ -40967,7 +41087,9 @@ function recommendationMicroReason(track, prefs = lastPrefs) {
 
 function renderTrackCardSignals(track, prefs = lastPrefs, { saved = false } = {}) {
   const hasTrack = Boolean(track);
-  const badges = hasTrack ? recommendationBadgeItems(track, prefs, { saved }) : [];
+  const badges = hasTrack
+    ? recommendationBadgeItems(track, prefs, { saved })
+    : profileListeningBadgeItems({ includeShown: true });
   renderSonicBadgeList(topSwipeBadges, badges.slice(0, 5));
   renderSonicBadgeList(trackStatusBadges, badges);
   const reason = hasTrack ? recommendationMicroReason(track, prefs) : "";
@@ -42107,9 +42229,10 @@ function updateSwipeFeedbackCard(track) {
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
   renderTopSwipeArtwork(track);
   if (!hasTrack) {
+    const emptyCopy = emptySwipeProfileCopy();
     updateDiscoverySequenceBadges(null);
-    if (topSwipeTitle) topSwipeTitle.textContent = t("topSwipeEmptyTitle");
-    if (topSwipeMeta) topSwipeMeta.textContent = t("topSwipeEmptyMeta");
+    if (topSwipeTitle) topSwipeTitle.textContent = emptyCopy.title;
+    if (topSwipeMeta) topSwipeMeta.textContent = emptyCopy.meta;
     setGenreSignalChip(topSwipeStyleChip, null);
     if (topSwipeBpmChip) topSwipeBpmChip.textContent = t("bpm");
     if (topSwipeEnergyChip) topSwipeEnergyChip.textContent = t("freeEnergy");
@@ -46006,7 +46129,7 @@ function updateStats() {
 
   if (statsLine) {
     statsLine.textContent = t("stats", {
-      likedSongs: userStats.likedSongs,
+      likedSongs: totalLikedSongs(),
       likedArtists: userStats.likedArtists,
       likedDiscoveries: userStats.likedDiscoveries,
       alreadyKnew: userStats.alreadyKnew,
@@ -46034,6 +46157,7 @@ function updateStats() {
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
   renderSummaryTags(summaryDislikedArtists, dislikedArtistsTop, t("summaryEmptyDisliked"));
   updateProfileBackupStatus();
+  if (!currentRecommendation) updateSwipeFeedbackCard(null);
   updateSpiritProgressText();
   scheduleMusicalSpiritRefresh();
   applyGenreVibeTheme();
@@ -48039,9 +48163,9 @@ bind(spiritCollectibleDownload, "click", async (event) => {
     return;
   }
   const baseFilename = String(
-    spiritCollectibleShareInstagramBtn?.dataset.filename ||
-      spiritCollectibleDownload?.getAttribute("download") ||
-      spiritCollectibleFilename(currentSpiritId || "spirit", collectibleMilestoneForLikes(totalPositiveLikes()).likes, imageUrl)
+    spiritCollectibleDownload?.getAttribute("download") ||
+      spiritCollectibleShareInstagramBtn?.dataset.filename ||
+      spiritCollectibleFilename(currentSpiritId || "spirit", collectibleMilestoneForLikes(totalLikedSongs()).likes, imageUrl)
   );
   const originalText = spiritCollectibleDownload?.textContent || t("spiritCollectibleDownload");
   if (spiritCollectibleDownload) {

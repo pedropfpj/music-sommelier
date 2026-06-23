@@ -10,14 +10,15 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 - `OPENAI_IMAGE_MODEL`: modelo de imagem. Use somente quando o premium estiver pronto.
 - `OPENAI_IMAGE_QUALITY`: qualidade da imagem. Para testes, use `medium`.
 - `SONIC_AI_TEXT_ENABLED`: `true` para liberar textos por IA.
-- `SONIC_AI_IMAGE_ENABLED`: `true` para liberar imagem por IA. Deixe `false` até testar premium.
+- `SONIC_AI_IMAGE_ENABLED`: `true` para liberar imagem por IA.
 - `SONIC_AI_TRACK_DAILY_LIMIT`: limite diário leve para `/api/track-insight`.
 - `SONIC_AI_BIO_DAILY_LIMIT`: limite diário leve para `/api/artist-bio`.
 - `SONIC_AI_NEWS_DAILY_LIMIT`: limite diário leve para `/api/news-translate`.
 - `SONIC_AI_IMAGE_DAILY_LIMIT`: limite diário leve para `/api/spirit-image`.
 - `SONIC_AI_IMAGE_MAX_PER_USER`: máximo de imagens IA por perfil. Use `1` em produção; `5` pode ser usado em beta fechado.
 - `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION`: `true` permite gerar novas versões da arte no beta, respeitando `SONIC_AI_IMAGE_MAX_PER_USER`.
-- `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: `true` para exigir premium antes de gerar imagem. Mantenha `true` em produção.
+- `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: `true` exige premium antes de gerar imagem. Para liberar Sound System para convidados apos 10 curtidas, mantenha `false`.
+- `SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER`: `true` exige login/premium para `/api/spirit-image`. Para teste guest, mantenha `false`.
 - `SONIC_AI_IMAGE_STORE_REQUIRED`: `true` para exigir banco/Redis antes de gerar imagem. Use em produção para garantir uma imagem IA por usuário.
 - `SONIC_AI_ALLOWED_ORIGINS`: domínios permitidos, separados por vírgula. Exemplo: `https://music-sommelier1.vercel.app`.
 - `SONIC_REQUIRE_DURABLE_RATE_LIMITS`: `true` em produção para bloquear chamadas caras quando KV/Upstash não estiver configurado.
@@ -68,7 +69,8 @@ Antes de liberar para usuários reais, volte para `imageLimitPerProfile: 1` e `a
    - Definir `SONIC_REQUIRE_DURABLE_RATE_LIMITS=true`.
    - Definir `SONIC_AI_ALLOWED_ORIGINS=https://sonicsearch.app,https://www.sonicsearch.app`.
    - Definir `SONIC_AI_IMAGE_STORE_REQUIRED=true`.
-   - Definir `SONIC_AI_IMAGE_REQUIRE_PREMIUM=true`.
+   - Definir `SONIC_AI_IMAGE_REQUIRE_PREMIUM=false` para permitir Sound System guest apos 10 curtidas.
+   - Definir `SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER=false`.
    - Definir `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION=false`.
    - Definir `SONIC_AI_IMAGE_MAX_PER_USER=1`.
    - Configurar orçamento mensal no painel da OpenAI.

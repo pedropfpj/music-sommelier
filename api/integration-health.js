@@ -231,6 +231,8 @@ module.exports = async function handler(req, res) {
           backendOnly: true,
           requiresCredentials: true,
           premiumGateAvailable: envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false),
+          guestUnlockAvailable: true,
+          guestUnlockLikes: 10,
           uniquePerUser: true,
           dailyLimit: envInt("SONIC_AI_IMAGE_DAILY_LIMIT", 50, 0, 10000)
         }

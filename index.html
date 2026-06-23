@@ -24,6 +24,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20260623artist-layout1" />
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -282,7 +286,7 @@
           </div>
           <p id="authKicker" class="brand-kicker">Acesso rápido</p>
           <h1 id="authTitle">Entre no Sonic Search</h1>
-          <p id="authDesc">Faça login com Google para sincronizar seu perfil. Sem login, suas descobertas ficam salvas neste aparelho.</p>
+          <p id="authDesc">Comece sem conta com uma descoberta limpa, ou entre com Google para sincronizar seu perfil entre aparelhos.</p>
         </div>
         <div class="cta-row auth-entry-actions">
           <button id="authGuestBtn" class="primary auth-guest-entry-btn" type="button">Começar descoberta</button>
@@ -298,7 +302,7 @@
             <span id="authGoogleLabel">Entrar com Google</span>
           </a>
         </div>
-        <p id="authProviderHint" class="muted auth-provider-hint">Google sincroniza seu perfil entre aparelhos.</p>
+        <p id="authProviderHint" class="muted auth-provider-hint">Google sincroniza seu perfil entre aparelhos quando a conta online está ativa.</p>
         <p id="authFeedback" class="muted auth-feedback"></p>
       </div>
     </section>
@@ -416,8 +420,8 @@
             </div>
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da faixa</p>
-              <h4 id="topSwipeTitle">Primeira carta esperando play</h4>
-              <p id="topSwipeMeta" class="muted">Abra a surpresa, ouça o preview e deslize quando sentir.</p>
+              <h4 id="topSwipeTitle">Radar pronto para a próxima faixa</h4>
+              <p id="topSwipeMeta" class="muted">Toque em Surpresa, ouça o preview e deslize quando sentir.</p>
               <div id="topSwipeBadges" class="swipe-status-badges" aria-label="Sinais da recomendação"></div>
               <div id="topRecommendationTrustPanel" class="recommendation-trust-panel compact hidden" aria-label="Confiança da recomendação">
                 <span id="topRecommendationTrustLabel">Confiança</span>
@@ -1984,6 +1988,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260623sasha-xpander1"></script>
+    <script src="app.js?v=20260623guest-soundsystem1"></script>
   </body>
 </html>
