@@ -19734,6 +19734,7 @@ const I18N = {
     spiritCollectibleErrorLimit: "O limite de geração desta arte foi atingido para este perfil. Use um novo marco ou tente mais tarde.",
     spiritCollectibleErrorDailyLimit: "O limite diário da API de imagem foi atingido. Tente novamente mais tarde.",
     spiritCollectibleErrorMissingKey: "A API está sem chave OpenAI configurada no servidor.",
+    spiritCollectibleErrorServiceBusy: "A geração demorou ou o servidor de imagem ficou ocupado. Tente novamente em instantes.",
     spiritCollectibleErrorApiPrefix: "Falha da API de imagem:",
     spiritCollectibleErrorApiStatus: "Falha da API de imagem (HTTP {status}). Tente gerar novamente.",
     spiritRankUnlocked: "Sistema básico",
@@ -20601,6 +20602,7 @@ const I18N = {
     spiritCollectibleErrorLimit: "The generation limit for this artwork was reached for this profile. Use a new milestone or try later.",
     spiritCollectibleErrorDailyLimit: "The daily image API limit was reached. Try again later.",
     spiritCollectibleErrorMissingKey: "The server is missing the OpenAI API key.",
+    spiritCollectibleErrorServiceBusy: "Image generation took too long or the image server was busy. Try again in a moment.",
     spiritCollectibleErrorApiPrefix: "Image API failure:",
     spiritCollectibleErrorApiStatus: "Image API failure (HTTP {status}). Try generating again.",
     spiritRankUnlocked: "Starter system",
@@ -21465,6 +21467,7 @@ const I18N = {
     spiritCollectibleErrorLimit: "Se alcanzó el límite de generación de este arte para este perfil. Usa un nuevo hito o intenta más tarde.",
     spiritCollectibleErrorDailyLimit: "Se alcanzó el límite diario de la API de imagen. Intenta de nuevo más tarde.",
     spiritCollectibleErrorMissingKey: "El servidor no tiene configurada la clave de OpenAI.",
+    spiritCollectibleErrorServiceBusy: "La generación demoró demasiado o el servidor de imagen estaba ocupado. Inténtalo de nuevo en un momento.",
     spiritCollectibleErrorApiPrefix: "Fallo de la API de imagen:",
     spiritCollectibleErrorApiStatus: "Fallo de la API de imagen (HTTP {status}). Intenta generar de nuevo.",
     spiritRankUnlocked: "Sistema básico",
@@ -37606,6 +37609,12 @@ function spiritCollectibleApiFailureText(code = "", detail = "", status = 0) {
   if (normalizedCode === "missing_openai_api_key") return t("spiritCollectibleErrorMissingKey");
   if (normalizedCode === "missing_image_output") return t("spiritCollectibleErrorNoImage");
   if (normalizedCode === "image_generation_pending") return t("spiritCollectibleGenerating");
+  if (["openai_image_failed", "durable_rate_limit_required", "durable_store_required"].includes(normalizedCode)) {
+    return normalizedDetail
+      ? `${t("spiritCollectibleErrorApiPrefix")} ${normalizedDetail}`
+      : t("spiritCollectibleErrorServiceBusy");
+  }
+  if ([502, 503, 504].includes(Number(status) || 0)) return t("spiritCollectibleErrorServiceBusy");
   if (normalizedDetail) return `${t("spiritCollectibleErrorApiPrefix")} ${normalizedDetail}`;
   if (status) return t("spiritCollectibleErrorApiStatus", { status });
   return t("spiritCollectibleError");

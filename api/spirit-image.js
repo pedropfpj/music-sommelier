@@ -332,7 +332,7 @@ module.exports = async function handler(req, res) {
     const result = await callOpenAiImage({
       prompt: safePrompt,
       size: "1024x1024",
-      quality: "high",
+      quality: String(process.env.OPENAI_SPIRIT_IMAGE_QUALITY || "medium").trim() || "medium",
       model: SPIRIT_IMAGE_MODEL
     });
     if (!result.ok) {

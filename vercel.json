@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/spirit-image.js": {
+      "maxDuration": 60
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
