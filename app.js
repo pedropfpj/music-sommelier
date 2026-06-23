@@ -2572,6 +2572,23 @@ const ARTIST_RELEASE_LABEL_OVERRIDES = {
     "prelúdio": "Baphomet Engine LP",
     "sweep of the puppies": "Catálogo Baphomet Engine",
     "morphic fields": "Morphic Fields"
+  },
+  sasha: {
+    "the xpander e p": "Deconstruction",
+    "the xpander ep": "Deconstruction",
+    "xpander e p": "Deconstruction",
+    "xpander ep": "Deconstruction"
+  }
+};
+
+const CURATED_TRACK_METADATA_OVERRIDES = {
+  "sasha::xpander": {
+    style: "progressive_house",
+    label: "Deconstruction",
+    bpmExact: 128,
+    artistGenre: "Progressive House",
+    artistProfileHint: "Sasha - Xpander fica ancorada no EP original da Deconstruction; versoes live nao devem virar gravadora ou subgenero principal.",
+    reason: "Sasha - Xpander estava sendo contaminada por metadata de Refracted (Live)."
   }
 };
 
@@ -8474,6 +8491,7 @@ const ARTIST_STYLE_OVERRIDES = {
   "oxidaksi": ["hi_tech"],
   "1200 micrograms": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
   "1200 mics": ["psytrance", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
+  "sasha": ["progressive_house"],
   "blastoyz": ["psytrance", "full_on", "full_on_morning", "progressive_psy", "psy_comercial"],
   "astrix": ["psytrance", "progressive_psy", "full_on", "full_on_morning", "goa_trance", "psy_comercial"],
   "alpha portal": ["psytrance", "progressive_psy"],
@@ -8639,6 +8657,7 @@ const LOCKED_ARTIST_STYLE_OVERRIDES = new Set([
   "astrix",
   "alpha portal",
   "moonclipse",
+  "sasha",
   "fungus funk",
   "kashyyyk",
   "will o wisp"
@@ -8659,6 +8678,11 @@ const ARTIST_CANONICAL_ORIGINS = {
     country: "",
     area: "",
     disambiguation: "Moonclipse e o projeto Melodic Techno & House de Omri Sasi com Avi Shmailov (Astrix); usar como ponte techno do Astrix sem reclassificar Astrix para techno."
+  },
+  "sasha": {
+    country: "United Kingdom",
+    area: "Wales",
+    disambiguation: "Sasha aqui e Alexander Coe, DJ/produtor ligado ao progressive house; nao misturar com artistas homonimos nem usar albuns live como label."
   },
   "ajja": {
     country: "Switzerland",
@@ -14508,8 +14532,25 @@ function isGenericArtistGenreSignal(rawValue = "") {
   return tokens.length > 1 && tokens.every((entry) => genericSignals.includes(entry));
 }
 
+function curatedTrackMetadataOverride(track = {}) {
+  const artistKey = artistMatchKey(track.artist || "");
+  const titleKey = normalize(track.song || track.title || "");
+  if (!artistKey || !titleKey) return null;
+  return CURATED_TRACK_METADATA_OVERRIDES[`${artistKey}::${titleKey}`] || null;
+}
+
 function applyCuratedTrackMetadata(track) {
   if (!track) return track;
+  const trackOverride = curatedTrackMetadataOverride(track);
+  if (trackOverride) {
+    if (trackOverride.style) track.style = trackOverride.style;
+    if (trackOverride.label) track.label = trackOverride.label;
+    if (Number.isFinite(Number(trackOverride.bpmExact))) track.bpmExact = Number(trackOverride.bpmExact);
+    if (trackOverride.artistGenre) track.artistGenre = trackOverride.artistGenre;
+    if (trackOverride.artistProfileHint) track.artistProfileHint = trackOverride.artistProfileHint;
+    track.curatedCorrection = trackOverride.reason || "Curadoria local de metadata.";
+  }
+
   const curatedGenre = directArtistGenreHint(track.artist);
   if (curatedGenre) {
     const rawGenre = String(track.artistGenre || "").trim();
