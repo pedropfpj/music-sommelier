@@ -19696,12 +19696,12 @@ const I18N = {
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
     spiritCollectibleAlt: "Sound System de {spirit} no marco de {milestone} likes",
     spiritCollectibleRegenerate: "Gerar imagem",
-    spiritCollectibleRegenerateAgain: "Gerar outra",
+    spiritCollectibleRegenerateAgain: "Gerar nova",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
-    spiritCollectibleDownload: "Baixar card",
+    spiritCollectibleDownload: "Baixar",
     spiritCollectibleDownloadPreparing: "Preparando imagem...",
-    spiritCollectibleDownloadReady: "Imagem pronta. Escolha Salvar imagem, Arquivos ou compartilhe.",
-    spiritCollectibleDownloadFallback: "Imagem baixada. No celular, use Compartilhar se quiser enviar direto.",
+    spiritCollectibleDownloadReady: "Imagem pronta.",
+    spiritCollectibleDownloadFallback: "Imagem baixada.",
     spiritCollectibleShareInstagram: "Compartilhar",
     spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Gere a imagem antes de compartilhar.",
@@ -20564,12 +20564,12 @@ const I18N = {
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
     spiritCollectibleAlt: "{spirit} Sound System at {milestone} likes milestone",
     spiritCollectibleRegenerate: "Generate image",
-    spiritCollectibleRegenerateAgain: "Generate another",
+    spiritCollectibleRegenerateAgain: "Generate new",
     spiritCollectibleAiLimitUsed: "AI image already created",
-    spiritCollectibleDownload: "Download card",
+    spiritCollectibleDownload: "Download",
     spiritCollectibleDownloadPreparing: "Preparing image...",
-    spiritCollectibleDownloadReady: "Image ready. Choose Save Image, Files, or share it.",
-    spiritCollectibleDownloadFallback: "Image downloaded. On mobile, use Share if you want to send it directly.",
+    spiritCollectibleDownloadReady: "Image ready.",
+    spiritCollectibleDownloadFallback: "Image downloaded.",
     spiritCollectibleShareInstagram: "Share",
     spiritCollectibleSharePreparing: "Preparing Story...",
     spiritCollectibleShareNoAsset: "Generate the image before sharing.",
@@ -21429,12 +21429,12 @@ const I18N = {
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
     spiritCollectibleAlt: "Sound System de {spirit} en el hito de {milestone} likes",
     spiritCollectibleRegenerate: "Generar imagen",
-    spiritCollectibleRegenerateAgain: "Generar otra",
+    spiritCollectibleRegenerateAgain: "Generar nueva",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
-    spiritCollectibleDownload: "Descargar card",
+    spiritCollectibleDownload: "Descargar",
     spiritCollectibleDownloadPreparing: "Preparando imagen...",
-    spiritCollectibleDownloadReady: "Imagen lista. Elige Guardar imagen, Archivos o compártela.",
-    spiritCollectibleDownloadFallback: "Imagen descargada. En móvil, usa Compartir si quieres enviarla directo.",
+    spiritCollectibleDownloadReady: "Imagen lista.",
+    spiritCollectibleDownloadFallback: "Imagen descargada.",
     spiritCollectibleShareInstagram: "Compartir",
     spiritCollectibleSharePreparing: "Preparando Story...",
     spiritCollectibleShareNoAsset: "Genera la imagen antes de compartir.",
@@ -38342,15 +38342,10 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     }
     if (spiritCollectibleShareInstagramBtn) {
       spiritCollectibleShareInstagramBtn.textContent = t("spiritCollectibleShareInstagram");
-      spiritCollectibleShareInstagramBtn.classList.toggle("hidden", !hasImage);
-      spiritCollectibleShareInstagramBtn.disabled = !hasImage;
-      if (hasImage) {
-        spiritCollectibleShareInstagramBtn.dataset.imageUrl = asset.imageUrl;
-        spiritCollectibleShareInstagramBtn.dataset.filename = shareFilename;
-      } else {
-        spiritCollectibleShareInstagramBtn.removeAttribute("data-image-url");
-        spiritCollectibleShareInstagramBtn.removeAttribute("data-filename");
-      }
+      spiritCollectibleShareInstagramBtn.classList.add("hidden");
+      spiritCollectibleShareInstagramBtn.disabled = true;
+      spiritCollectibleShareInstagramBtn.removeAttribute("data-image-url");
+      spiritCollectibleShareInstagramBtn.removeAttribute("data-filename");
     }
     if (spiritShareLinkBtn) {
       spiritShareLinkBtn.textContent = t("shareSpiritLinkBtn");
