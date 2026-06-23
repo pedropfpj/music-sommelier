@@ -6744,15 +6744,7 @@ const AUDIO_GAIN_PROFILE = {
 };
 const PROGRESS_MAP_LIMIT = 240;
 const LIKED_TRACK_HISTORY_LIMIT = 80;
-const DEFAULT_LANGUAGE = (() => {
-  const language =
-    typeof navigator !== "undefined"
-      ? String(navigator.language || navigator.userLanguage || "").toLowerCase()
-      : "";
-  if (language.startsWith("pt")) return "pt";
-  if (language.startsWith("es")) return "es";
-  return "en";
-})();
+const DEFAULT_LANGUAGE = "en";
 const NEW_ARTIST_LOOKBACK_YEARS = 2;
 const QUIZ_TRIGGER_MIN_KNOWN = 6;
 const QUIZ_REOFFER_STEP = 4;
@@ -22216,8 +22208,6 @@ function applyLanguage() {
   setText("#introImpact", t("introImpact"));
   setText("#introContinueBtn", t("introContinueBtn"));
   updateAudioToggleUi();
-  setText("#langKicker", t("langKicker"));
-  setText("#langTitle", t("langTitle"));
   setText("#langSlogan", t("appSlogan"));
   setText("#usageGuideKicker", t("usageGuideKicker"));
   setText("#usageGuideTitle", t("usageGuideTitle"));
