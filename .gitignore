@@ -8,3 +8,12 @@ node_modules/
 .env.local
 *.unreadable-*
 .vercel/
+
+# Generated local verification/report artifacts.
+reports/ui-*.png
+reports/*-latest.json
+reports/*-inventory-latest.*
+reports/hive_festival_2026_musicbrainz_cache.json
+
+# One-off local import helper pages; keep them out of commits/deploys.
+importar-club-styles-v2.html

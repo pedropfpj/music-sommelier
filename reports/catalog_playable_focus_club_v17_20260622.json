@@ -1,0 +1,27 @@
+{
+  "batch": "catalog_playable_focus_club_v17_20260622",
+  "generatedAt": "2026-06-22T00:44:42.437Z",
+  "targetTracksPerArtist": 10,
+  "focusStyles": [
+    "techno",
+    "house",
+    "tech_house"
+  ],
+  "maxArtistsToQuery": 180,
+  "maxNewRows": 500,
+  "output": "data/catalog_playable_focus_club_v17_20260622.csv",
+  "stats": {
+    "seedTracks": 8156,
+    "candidateArtists": 94,
+    "queriedArtists": 62,
+    "resolvedArtists": 61,
+    "addedRows": 500,
+    "skippedDuplicateTracks": 181,
+    "skippedWithoutResolution": 1
+  },
+  "byStyle": {
+    "house": 194,
+    "tech_house": 162,
+    "techno": 144
+  }
+}

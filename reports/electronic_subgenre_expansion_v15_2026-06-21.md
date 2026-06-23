@@ -1,0 +1,89 @@
+# electronic_subgenre_expansion_v15_20260621
+
+Generated 1183 merged track rows and 163 artist profiles across 81 new electronic subgenres.
+
+Artist depth target: 8 tracks per style/artist when Deezer has enough usable playable top tracks.
+
+Existing rows preserved before generation: 1023. Fresh generated rows: 1182. Curated anchor preview matches: 157/213. Extra artist-depth preview tracks: 974. Rows without previews remain as needs_review discovery anchors.
+
+- acid_trance: 16 tracks, 2 artists, 16 playable previews
+- ambient_dub: 16 tracks, 2 artists, 16 playable previews
+- ambient_house: 16 tracks, 2 artists, 16 playable previews
+- atmospheric_jungle: 16 tracks, 2 artists, 16 playable previews
+- balearic_trance: 12 tracks, 2 artists, 12 playable previews
+- ballroom_vogue_beats: 16 tracks, 2 artists, 16 playable previews
+- baltimore_club: 10 tracks, 2 artists, 8 playable previews
+- bassline: 16 tracks, 2 artists, 15 playable previews
+- batida: 12 tracks, 2 artists, 11 playable previews
+- berlin_school: 16 tracks, 2 artists, 16 playable previews
+- big_room_house: 16 tracks, 2 artists, 16 playable previews
+- big_room_techno: 16 tracks, 2 artists, 16 playable previews
+- brostep: 16 tracks, 2 artists, 16 playable previews
+- chicago_house: 16 tracks, 2 artists, 16 playable previews
+- chillstep: 16 tracks, 2 artists, 16 playable previews
+- complextro: 16 tracks, 2 artists, 16 playable previews
+- crossbreed: 12 tracks, 2 artists, 12 playable previews
+- dark_ambient: 9 tracks, 2 artists, 8 playable previews
+- darkstep: 13 tracks, 2 artists, 12 playable previews
+- darksynth: 16 tracks, 2 artists, 16 playable previews
+- deconstructed_club: 16 tracks, 2 artists, 16 playable previews
+- dream_trance: 12 tracks, 2 artists, 11 playable previews
+- drumfunk: 16 tracks, 2 artists, 15 playable previews
+- drumstep: 16 tracks, 2 artists, 16 playable previews
+- edm: 16 tracks, 2 artists, 16 playable previews
+- edm_trap: 16 tracks, 2 artists, 16 playable previews
+- electroacoustic: 9 tracks, 2 artists, 6 playable previews
+- electronic_dance_pop: 16 tracks, 2 artists, 16 playable previews
+- euphoric_hardstyle: 16 tracks, 2 artists, 16 playable previews
+- eurodance: 16 tracks, 2 artists, 16 playable previews
+- extratone: 8 tracks, 2 artists, 0 playable previews
+- florida_breaks: 12 tracks, 2 artists, 10 playable previews
+- french_house: 11 tracks, 2 artists, 8 playable previews
+- funky_house: 16 tracks, 2 artists, 16 playable previews
+- future_house: 16 tracks, 2 artists, 16 playable previews
+- futurepop: 16 tracks, 2 artists, 16 playable previews
+- ghetto_house: 16 tracks, 2 artists, 16 playable previews
+- ghettotech: 16 tracks, 2 artists, 15 playable previews
+- glitch_hop: 16 tracks, 2 artists, 16 playable previews
+- hard_dance: 16 tracks, 2 artists, 16 playable previews
+- hardstep: 16 tracks, 2 artists, 15 playable previews
+- hardwave: 16 tracks, 2 artists, 15 playable previews
+- hi_nrg: 16 tracks, 2 artists, 15 playable previews
+- industrial_dance: 16 tracks, 2 artists, 16 playable previews
+- italo_disco: 11 tracks, 2 artists, 10 playable previews
+- jersey_club: 16 tracks, 2 artists, 16 playable previews
+- kosmische_musik: 16 tracks, 2 artists, 15 playable previews
+- kuduro_eletronico: 16 tracks, 2 artists, 15 playable previews
+- latin_house: 9 tracks, 2 artists, 9 playable previews
+- lowercase: 8 tracks, 2 artists, 2 playable previews
+- mainstage_techno: 16 tracks, 2 artists, 16 playable previews
+- makina: 12 tracks, 2 artists, 11 playable previews
+- melodic_dubstep: 16 tracks, 2 artists, 16 playable previews
+- melodic_house: 16 tracks, 2 artists, 16 playable previews
+- microhouse: 12 tracks, 2 artists, 10 playable previews
+- microsound: 15 tracks, 2 artists, 15 playable previews
+- minimal_wave: 12 tracks, 2 artists, 12 playable previews
+- musique_concrete: 12 tracks, 2 artists, 11 playable previews
+- neurohop: 12 tracks, 2 artists, 9 playable previews
+- nu_skool_breaks: 16 tracks, 2 artists, 16 playable previews
+- outrun: 16 tracks, 2 artists, 15 playable previews
+- piano_house: 16 tracks, 2 artists, 16 playable previews
+- post_dubstep: 16 tracks, 2 artists, 16 playable previews
+- progressive_edm: 24 tracks, 3 artists, 23 playable previews
+- progressive_trance: 16 tracks, 2 artists, 16 playable previews
+- ragga_jungle: 16 tracks, 2 artists, 15 playable previews
+- retrowave: 16 tracks, 2 artists, 16 playable previews
+- reverse_bass: 16 tracks, 2 artists, 15 playable previews
+- sambass: 12 tracks, 2 artists, 11 playable previews
+- shangaan_electro: 8 tracks, 2 artists, 4 playable previews
+- singeli: 12 tracks, 2 artists, 12 playable previews
+- slap_house: 16 tracks, 2 artists, 15 playable previews
+- space_ambient: 12 tracks, 2 artists, 12 playable previews
+- techstep: 12 tracks, 2 artists, 12 playable previews
+- terrorcore: 16 tracks, 2 artists, 15 playable previews
+- tribal_house: 16 tracks, 2 artists, 16 playable previews
+- tropical_house: 16 tracks, 2 artists, 16 playable previews
+- uk_bass: 16 tracks, 2 artists, 16 playable previews
+- uk_hardcore: 16 tracks, 2 artists, 16 playable previews
+- vocal_trance: 16 tracks, 2 artists, 16 playable previews
+- wonky: 16 tracks, 2 artists, 15 playable previews

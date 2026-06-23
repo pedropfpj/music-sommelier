@@ -1,0 +1,34 @@
+{
+  "batch": "catalog_playable_depth_v16_20260622",
+  "generatedAt": "2026-06-22T00:35:20.565Z",
+  "targetTracksPerArtist": 10,
+  "maxArtistsToQuery": 220,
+  "maxNewRows": 650,
+  "output": "data/catalog_playable_depth_v16_20260622.csv",
+  "stats": {
+    "seedTracks": 8156,
+    "candidateArtists": 220,
+    "queriedArtists": 220,
+    "resolvedArtists": 216,
+    "addedRows": 601,
+    "skippedDuplicateTracks": 507,
+    "skippedWithoutResolution": 4
+  },
+  "byStyle": {
+    "ambient": 24,
+    "dark_progressive": 24,
+    "dark_psy": 40,
+    "electro": 1,
+    "forest_psy": 94,
+    "freeform": 18,
+    "frenchcore": 1,
+    "full_on": 238,
+    "full_on_night": 7,
+    "goa_trance": 2,
+    "hard_techno": 7,
+    "hi_tech": 7,
+    "progressive_psy": 129,
+    "psycore": 2,
+    "schranz": 7
+  }
+}

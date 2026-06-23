@@ -1,0 +1,769 @@
+{
+  "batch": "catalog_extra_bulk_local_20260621",
+  "generatedAt": "2026-06-22T06:10:48.698Z",
+  "files": [
+    "data/artist_expansion_seeds_v1.csv",
+    "data/artist_expansion_seeds_v10.csv",
+    "data/artist_expansion_seeds_v11.csv",
+    "data/artist_expansion_seeds_v12.csv",
+    "data/artist_expansion_seeds_v13.csv",
+    "data/artist_expansion_seeds_v2.csv",
+    "data/artist_expansion_seeds_v3.csv",
+    "data/artist_expansion_seeds_v4.csv",
+    "data/artist_expansion_seeds_v5.csv",
+    "data/artist_expansion_seeds_v6.csv",
+    "data/artist_expansion_seeds_v7.csv",
+    "data/artist_expansion_seeds_v8.csv",
+    "data/artist_expansion_seeds_v9.csv",
+    "data/catalog_playable_depth_v16_20260622.csv",
+    "data/catalog_playable_focus_club_v17_20260622.csv",
+    "data/club_styles_artist_profiles_v2_20260621.csv",
+    "data/club_styles_enrichment_v1_20260620.csv",
+    "data/club_styles_enrichment_v2_20260621.csv",
+    "data/codex_dataset_pack_v14/artists.csv",
+    "data/codex_dataset_pack_v14/artists.json",
+    "data/codex_dataset_pack_v14/data/psycore_db_v14.jsonl",
+    "data/codex_dataset_pack_v14/data/psytrance_db_v14.jsonl",
+    "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
+    "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
+    "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv",
+    "data/codex_dataset_pack_v14/recent_artist_signals.json",
+    "data/codex_dataset_pack_v14/tracks.csv",
+    "data/codex_dataset_pack_v14/tracks.json",
+    "data/cosmic_crew_2026_artist_profiles.csv",
+    "data/cosmic_crew_2026_playable_tracks.csv",
+    "data/cosmic_crew_2026_research.csv",
+    "data/dj_set_recommendations_20260622.csv",
+    "data/electronic_subgenre_artist_profiles_v15_20260621.csv",
+    "data/electronic_subgenre_expansion_v15_20260621.csv",
+    "data/hive_festival_2026_artist_profiles.csv",
+    "data/hive_festival_2026_artist_subgenres.csv",
+    "data/michael_bibi_artist_profile_20260621.csv",
+    "data/michael_bibi_playable_tracks_20260621.csv",
+    "data/mop_brasil_2026_rage_artist_profiles.csv",
+    "data/mop_brasil_2026_rage_playable_tracks.csv",
+    "data/mop_brasil_2026_rage_research.csv",
+    "data/pachamama_2026_artist_profiles.csv",
+    "data/pachamama_2026_playable_tracks.csv",
+    "data/pachamama_2026_research.csv",
+    "data/psycore_artist_profiles_v4_20260621.csv",
+    "data/psycore_artist_profiles_v5_20260621.csv",
+    "data/psycore_enrichment_v1_20260620.csv",
+    "data/psycore_enrichment_v2_20260620.csv",
+    "data/psycore_enrichment_v3_20260620.csv",
+    "data/psycore_enrichment_v4_20260621.csv",
+    "data/psycore_enrichment_v5_20260621.csv",
+    "data/techno_artist_profiles_v3_20260621.csv",
+    "data/techno_artist_profiles_v4_20260621.csv",
+    "data/techno_enrichment_v3_20260621.csv",
+    "data/techno_enrichment_v4_20260621.csv",
+    "data/techno_enrichment_v5_20260621.csv",
+    "data/varazslo_absurdus_playable_tracks_20260622.csv",
+    "data/verified_track_expansion_v1.csv",
+    "data/verified_track_expansion_v10.csv",
+    "data/verified_track_expansion_v2.csv",
+    "data/verified_track_expansion_v3.csv",
+    "data/verified_track_expansion_v4.csv",
+    "data/verified_track_expansion_v5.csv",
+    "data/verified_track_expansion_v6.csv",
+    "data/verified_track_expansion_v7.csv",
+    "data/verified_track_expansion_v8.csv",
+    "data/verified_track_expansion_v9.csv"
+  ],
+  "outputSql": "supabase/seeds/catalog_extra_bulk_local_20260621.sql",
+  "artists": 6866,
+  "tracks": 8607,
+  "publishedTracks": 7587,
+  "reviewTracks": 1020,
+  "playback": {
+    "publishedPlayable": 7587,
+    "publishedWithoutPlayback": 0,
+    "missingPlayback": 1020,
+    "bySource": {
+      "audio_preview": 7513,
+      "youtube_embed": 37,
+      "soundcloud_embed": 13,
+      "bandcamp_embed": 31
+    }
+  },
+  "styles": 168,
+  "byStyle": {
+    "acid_techno": {
+      "tracks": 43,
+      "artists": 112
+    },
+    "acid_trance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "afro_house": {
+      "tracks": 57,
+      "artists": 61
+    },
+    "ambient": {
+      "tracks": 143,
+      "artists": 122
+    },
+    "ambient_dub": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "ambient_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "ambient_techno": {
+      "tracks": 85,
+      "artists": 52
+    },
+    "atmospheric_jungle": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "balearic_trance": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "ballroom_vogue_beats": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "baltimore_club": {
+      "tracks": 10,
+      "artists": 2
+    },
+    "bass_house": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "bassline": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "batida": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "berlin_school": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "big_room_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "big_room_techno": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "bleep_techno": {
+      "tracks": 68,
+      "artists": 53
+    },
+    "brazilian_funk": {
+      "tracks": 37,
+      "artists": 65
+    },
+    "breakbeat": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "breakcore": {
+      "tracks": 95,
+      "artists": 72
+    },
+    "broken_techno": {
+      "tracks": 76,
+      "artists": 54
+    },
+    "brostep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "chicago_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "chillout": {
+      "tracks": 19,
+      "artists": 83
+    },
+    "chillstep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "coldwave": {
+      "tracks": 61,
+      "artists": 66
+    },
+    "complextro": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "crossbreed": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "dark_ambient": {
+      "tracks": 9,
+      "artists": 2
+    },
+    "dark_experimental": {
+      "tracks": 68,
+      "artists": 84
+    },
+    "dark_progressive": {
+      "tracks": 217,
+      "artists": 99
+    },
+    "dark_psy": {
+      "tracks": 242,
+      "artists": 163
+    },
+    "darkstep": {
+      "tracks": 13,
+      "artists": 2
+    },
+    "darksynth": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "darkwave": {
+      "tracks": 38,
+      "artists": 62
+    },
+    "deconstructed_club": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "deep_house": {
+      "tracks": 30,
+      "artists": 59
+    },
+    "deep_techno": {
+      "tracks": 70,
+      "artists": 52
+    },
+    "detroit_techno": {
+      "tracks": 80,
+      "artists": 75
+    },
+    "disco_house": {
+      "tracks": 30,
+      "artists": 80
+    },
+    "downtempo": {
+      "tracks": 18,
+      "artists": 60
+    },
+    "dream_trance": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "drum_and_bass": {
+      "tracks": 46,
+      "artists": 61
+    },
+    "drumfunk": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "drumstep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "dub_techno": {
+      "tracks": 101,
+      "artists": 80
+    },
+    "dubstep": {
+      "tracks": 37,
+      "artists": 62
+    },
+    "ebm": {
+      "tracks": 32,
+      "artists": 70
+    },
+    "edm": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "edm_trap": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "electro": {
+      "tracks": 75,
+      "artists": 69
+    },
+    "electro_house": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "electroacoustic": {
+      "tracks": 9,
+      "artists": 2
+    },
+    "electronic_dance_pop": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "euphoric_hardstyle": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "eurodance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "experimental_bass": {
+      "tracks": 31,
+      "artists": 60
+    },
+    "extratone": {
+      "tracks": 8,
+      "artists": 2
+    },
+    "florida_breaks": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "footwork_juke": {
+      "tracks": 41,
+      "artists": 64
+    },
+    "forest_psy": {
+      "tracks": 291,
+      "artists": 206
+    },
+    "freeform": {
+      "tracks": 75,
+      "artists": 59
+    },
+    "french_house": {
+      "tracks": 11,
+      "artists": 2
+    },
+    "frenchcore": {
+      "tracks": 132,
+      "artists": 68
+    },
+    "full_on": {
+      "tracks": 467,
+      "artists": 76
+    },
+    "full_on_morning": {
+      "tracks": 89,
+      "artists": 66
+    },
+    "full_on_night": {
+      "tracks": 97,
+      "artists": 73
+    },
+    "funky_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "future_bass": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "future_garage": {
+      "tracks": 103,
+      "artists": 65
+    },
+    "future_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "futurepop": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "gabber": {
+      "tracks": 86,
+      "artists": 62
+    },
+    "garage_house": {
+      "tracks": 68,
+      "artists": 66
+    },
+    "ghetto_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "ghettotech": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "glitch_hop": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "goa_trance": {
+      "tracks": 163,
+      "artists": 64
+    },
+    "halftime_bass": {
+      "tracks": 35,
+      "artists": 67
+    },
+    "hard_dance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "hard_techno": {
+      "tracks": 83,
+      "artists": 137
+    },
+    "hard_trance": {
+      "tracks": 30,
+      "artists": 132
+    },
+    "hardcore": {
+      "tracks": 80,
+      "artists": 75
+    },
+    "hardgroove_techno": {
+      "tracks": 88,
+      "artists": 55
+    },
+    "hardstep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "hardstyle": {
+      "tracks": 101,
+      "artists": 64
+    },
+    "hardwave": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "hi_nrg": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "hi_tech": {
+      "tracks": 108,
+      "artists": 151
+    },
+    "house": {
+      "tracks": 239,
+      "artists": 60
+    },
+    "hypnotic_techno": {
+      "tracks": 33,
+      "artists": 73
+    },
+    "idm": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "industrial_dance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "industrial_techno": {
+      "tracks": 69,
+      "artists": 67
+    },
+    "italo_disco": {
+      "tracks": 11,
+      "artists": 2
+    },
+    "jackin_house": {
+      "tracks": 56,
+      "artists": 67
+    },
+    "jersey_club": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "jump_up": {
+      "tracks": 29,
+      "artists": 60
+    },
+    "jungle": {
+      "tracks": 50,
+      "artists": 60
+    },
+    "kosmische_musik": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "kuduro_eletronico": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "latin_house": {
+      "tracks": 9,
+      "artists": 2
+    },
+    "liquid_dnb": {
+      "tracks": 50,
+      "artists": 60
+    },
+    "lowercase": {
+      "tracks": 8,
+      "artists": 2
+    },
+    "mainstage_techno": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "makina": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "melodic_dubstep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "melodic_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "melodic_techno": {
+      "tracks": 106,
+      "artists": 66
+    },
+    "microhouse": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "microsound": {
+      "tracks": 15,
+      "artists": 2
+    },
+    "minimal_deep_tech": {
+      "tracks": 38,
+      "artists": 64
+    },
+    "minimal_techno": {
+      "tracks": 69,
+      "artists": 68
+    },
+    "minimal_wave": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "musique_concrete": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "neurofunk": {
+      "tracks": 42,
+      "artists": 62
+    },
+    "neurohop": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "nu_skool_breaks": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "organic_house": {
+      "tracks": 60,
+      "artists": 64
+    },
+    "outrun": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "peak_time_techno": {
+      "tracks": 81,
+      "artists": 64
+    },
+    "piano_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "post_dubstep": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "progressive_edm": {
+      "tracks": 24,
+      "artists": 3
+    },
+    "progressive_house": {
+      "tracks": 30,
+      "artists": 59
+    },
+    "progressive_psy": {
+      "tracks": 329,
+      "artists": 95
+    },
+    "progressive_trance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "psy_comercial": {
+      "tracks": 85,
+      "artists": 67
+    },
+    "psybient": {
+      "tracks": 180,
+      "artists": 116
+    },
+    "psybreaks": {
+      "tracks": 52,
+      "artists": 67
+    },
+    "psycore": {
+      "tracks": 276,
+      "artists": 288
+    },
+    "psytrance": {
+      "tracks": 101,
+      "artists": 82
+    },
+    "ragga_jungle": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "raw_techno": {
+      "tracks": 32,
+      "artists": 68
+    },
+    "rawstyle": {
+      "tracks": 78,
+      "artists": 66
+    },
+    "retrowave": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "reverse_bass": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "riddim": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "sambass": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "schranz": {
+      "tracks": 35,
+      "artists": 73
+    },
+    "shangaan_electro": {
+      "tracks": 8,
+      "artists": 2
+    },
+    "singeli": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "slambient": {
+      "tracks": 23,
+      "artists": 145
+    },
+    "slap_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "soulful_house": {
+      "tracks": 59,
+      "artists": 68
+    },
+    "space_ambient": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "speedcore": {
+      "tracks": 48,
+      "artists": 69
+    },
+    "synthwave": {
+      "tracks": 102,
+      "artists": 73
+    },
+    "tech_house": {
+      "tracks": 263,
+      "artists": 75
+    },
+    "tech_trance": {
+      "tracks": 30,
+      "artists": 65
+    },
+    "techno": {
+      "tracks": 187,
+      "artists": 99
+    },
+    "techstep": {
+      "tracks": 12,
+      "artists": 2
+    },
+    "terrorcore": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "trance_uplifting": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "trap": {
+      "tracks": 30,
+      "artists": 60
+    },
+    "tribal_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "tribal_techno": {
+      "tracks": 70,
+      "artists": 56
+    },
+    "trip_hop": {
+      "tracks": 102,
+      "artists": 66
+    },
+    "tropical_house": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "twilight_psy": {
+      "tracks": 102,
+      "artists": 68
+    },
+    "uk_bass": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "uk_garage": {
+      "tracks": 42,
+      "artists": 62
+    },
+    "uk_hardcore": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "vocal_trance": {
+      "tracks": 16,
+      "artists": 2
+    },
+    "wave": {
+      "tracks": 30,
+      "artists": 61
+    },
+    "witch_house": {
+      "tracks": 70,
+      "artists": 74
+    },
+    "wonky": {
+      "tracks": 16,
+      "artists": 2
+    }
+  },
+  "skipped": {
+    "noArtist": 80,
+    "noStyle": 111,
+    "noSongForTrack": 8695
+  }
+}
