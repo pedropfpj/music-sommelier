@@ -3423,7 +3423,7 @@ input[type="range"] {
   gap: 0.14rem;
 }
 
-.artist-visual-card figcaption span {
+.artist-visual-card figcaption > span {
   color: var(--cyan);
   font-family: "Syne", sans-serif;
   font-size: 0.72rem;
@@ -13033,11 +13033,13 @@ iframe {
 
 #primaryTrackCard #artistVisualCard {
   order: 1;
-  grid-template-columns: minmax(106px, 34%) minmax(0, 1fr);
+  grid-template-columns: clamp(150px, 22vw, 280px) minmax(0, 1fr);
   align-items: center;
+  gap: clamp(0.86rem, 2.2vw, 1.65rem);
+  width: min(100%, 880px);
   max-width: 100%;
   margin: 0 0 0.12rem;
-  padding: 0.58rem;
+  padding: clamp(0.62rem, 1.3vw, 0.92rem);
   border-radius: 14px;
   border-color: rgba(205, 245, 255, 0.22);
   background:
@@ -13048,19 +13050,39 @@ iframe {
 #primaryTrackCard #artistVisualCard .artist-photo-frame {
   width: 100%;
   min-width: 94px;
+  max-width: 280px;
   border-radius: 12px;
 }
 
-#primaryTrackCard #artistVisualCard figcaption span {
-  font-size: 0.68rem;
+#primaryTrackCard #artistVisualCard figcaption {
+  gap: 0.3rem;
+  max-width: 42rem;
+}
+
+#primaryTrackCard #artistVisualCard figcaption > span {
+  font-size: clamp(0.8rem, 1vw, 0.98rem);
 }
 
 #primaryTrackCard #artistVisualCard figcaption strong {
-  font-size: clamp(1.02rem, 4vw, 1.42rem);
+  font-size: clamp(1.46rem, 2.9vw, 2.72rem);
+  line-height: 0.96;
+  text-wrap: balance;
 }
 
 #primaryTrackCard #artistVisualCard figcaption small {
-  font-size: 0.76rem;
+  max-width: 48ch;
+  font-size: clamp(0.88rem, 1.12vw, 1.04rem);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+#primaryTrackCard #artistVisualCard #artistPhotoName {
+  min-width: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  text-transform: none;
 }
 
 #primaryTrackCard #songTitle {
@@ -13173,11 +13195,34 @@ iframe {
   }
 
   #primaryTrackCard #artistVisualCard {
-    grid-template-columns: 104px minmax(0, 1fr);
+    grid-template-columns: clamp(82px, 28vw, 104px) minmax(0, 1fr);
+    gap: 0.68rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.48rem;
   }
 
   #primaryTrackCard #artistVisualCard .artist-photo-frame {
     min-width: 0;
+    max-width: 104px;
+  }
+
+  #primaryTrackCard #artistVisualCard figcaption {
+    gap: 0.16rem;
+  }
+
+  #primaryTrackCard #artistVisualCard figcaption > span {
+    font-size: clamp(0.68rem, 2.7vw, 0.8rem);
+  }
+
+  #primaryTrackCard #artistVisualCard figcaption strong {
+    font-size: clamp(1.08rem, 5.2vw, 1.42rem);
+    line-height: 1.02;
+  }
+
+  #primaryTrackCard #artistVisualCard figcaption small {
+    font-size: clamp(0.72rem, 3vw, 0.84rem);
+    line-height: 1.28;
   }
 
   #primaryTrackCard #nowPlayingGenre strong {
