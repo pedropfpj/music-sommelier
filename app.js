@@ -34058,46 +34058,19 @@ async function triggerSpiritCollectibleDownload(imageUrl, filename = "") {
     .replace(/\.[a-z0-9]+$/i, "") || "sonic-search-spirit")
     .replace(/[^a-z0-9._-]+/gi, "-")
     .replace(/^-+|-+$/g, "") || "sonic-search-spirit";
-  let pngFilename = spiritStoryFilename(`${baseName}.png`, "png");
-  let assetUrl = "";
-  const storyAsset = await prepareSpiritStoryAsset({
-    imageUrl: safeUrl,
-    baseFilename: `${baseName}.png`,
-    preferStatic: true
-  });
-  if (storyAsset?.storyAssetUrl) {
-    assetUrl = storyAsset.storyAssetUrl;
-    pngFilename = storyAsset.filename || pngFilename;
-  } else {
-    const renderedPng = await renderImageDataUrlToPng(safeUrl, STORY_SHARE_WIDTH, STORY_SHARE_HEIGHT);
-    assetUrl = renderedPng || safeUrl;
+  let downloadFilename = `${baseName}.png`;
+  let assetUrl = await renderImageDataUrlToPng(safeUrl, 1024, 1024);
+  if (!assetUrl) {
+    const { extension } = collectibleImageMeta(safeUrl);
+    assetUrl = safeUrl;
+    downloadFilename = `${baseName}.${extension || "png"}`;
   }
   const blob = await spiritCollectibleBlobFromUrl(assetUrl, "image/png");
-  const fileType = blob.type && blob.type !== "image/svg+xml" ? blob.type : "image/png";
-  const shareFile = typeof File === "function"
-    ? new File([blob], pngFilename, { type: fileType })
-    : null;
-
-  if (
-    shareFile &&
-    typeof navigator !== "undefined" &&
-    typeof navigator.share === "function"
-  ) {
-    const canShareFiles = typeof navigator.canShare !== "function" || navigator.canShare({ files: [shareFile] });
-    if (canShareFiles) {
-      await navigator.share({
-        files: [shareFile],
-        title: "Sonic Search",
-        text: t("spiritCollectibleShareCaption", { spirit: "" }).replace(/:\s+\./, ".")
-      });
-      return "shared";
-    }
-  }
 
   const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = objectUrl;
-  link.download = pngFilename;
+  link.download = downloadFilename;
   link.rel = "noopener";
   link.style.display = "none";
   document.body.appendChild(link);
