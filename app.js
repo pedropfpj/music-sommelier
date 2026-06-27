@@ -1147,7 +1147,7 @@ const ACTIVE_DISCOVERY_WARMUP_RETRY_MS = 8000;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627fluid1";
+const SONIC_APP_BUILD_ID = "20260627qa1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -22895,6 +22895,12 @@ function urlRequestsQaPreviewMode() {
   });
 }
 
+function urlRequestsScreenshotMode() {
+  const url = currentAppUrl();
+  if (!url) return false;
+  return url.searchParams.has("screenshot") || url.searchParams.has("visualQa");
+}
+
 function urlRequestsQaAutoSurprise() {
   const url = currentAppUrl();
   if (!url) return true;
@@ -25180,7 +25186,9 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
-    if (swipeStartPanel?.scrollIntoView) {
+    if (urlRequestsScreenshotMode()) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    } else if (swipeStartPanel?.scrollIntoView) {
       swipeStartPanel.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
     } else {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });

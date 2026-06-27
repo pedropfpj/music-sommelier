@@ -560,16 +560,38 @@ function startStaticServer() {
         reject(new Error("Could not start local screenshot server"));
         return;
       }
-      resolve({ server, url: `http://127.0.0.1:${address.port}/index.html?verify=${Date.now()}` });
+      const params = new URLSearchParams({
+        verify: String(Date.now()),
+        qa: "1",
+        autoRecommendation: "0",
+        screenshot: "1",
+        lang: "en"
+      });
+      resolve({ server, url: `http://127.0.0.1:${address.port}/index.html?${params.toString()}` });
     });
   });
 }
 
+function stopChromeProcess(child) {
+  try {
+    if (child.pid) process.kill(-child.pid, "SIGKILL");
+    return;
+  } catch (_error) {
+    // Fall through to direct child kill; process groups can fail on some macOS launches.
+  }
+  try {
+    child.kill("SIGKILL");
+  } catch (_killError) {
+    // Ignore kill failures; the process may already be gone.
+  }
+}
+
 function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-product-verify-"));
+  fs.rmSync(outputPath, { force: true });
   return new Promise((resolve, reject) => {
     const args = [
-      "--headless",
+      "--headless=new",
       "--disable-gpu",
       "--no-sandbox",
       "--hide-scrollbars",
@@ -604,18 +626,20 @@ function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
     const cleanup = () => {
       fs.rmSync(profileDir, { recursive: true, force: true });
     };
+    const readyTimer = setInterval(() => {
+      if (settled || !fs.existsSync(outputPath)) return;
+      settled = true;
+      clearTimeout(timer);
+      clearInterval(readyTimer);
+      stopChromeProcess(child);
+      cleanup();
+      resolve();
+    }, 250);
     const timer = setTimeout(() => {
       if (settled) return;
       settled = true;
-      try {
-        if (child.pid) process.kill(-child.pid, "SIGKILL");
-      } catch (_error) {
-        try {
-          child.kill("SIGKILL");
-        } catch (_killError) {
-          // Ignore kill failures; the process may already be gone.
-        }
-      }
+      clearInterval(readyTimer);
+      stopChromeProcess(child);
       cleanup();
       reject(new Error(`Chrome screenshot timed out for ${path.relative(rootDir, outputPath)}`));
     }, SCREENSHOT_TIMEOUT_MS);
@@ -630,6 +654,7 @@ function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      clearInterval(readyTimer);
       cleanup();
       reject(error);
     });
@@ -637,6 +662,7 @@ function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      clearInterval(readyTimer);
       cleanup();
       if (code === 0 && fs.existsSync(outputPath)) {
         resolve();
@@ -671,6 +697,10 @@ async function captureUiScreenshots() {
 }
 
 async function verifyUiScreenshotReminder() {
+  if (screenshotMode) {
+    await captureUiScreenshots();
+    return;
+  }
   const result = spawnSync("git", ["diff", "--name-only", "--", "index.html", "styles.css"], {
     cwd: rootDir,
     encoding: "utf8"
@@ -678,10 +708,6 @@ async function verifyUiScreenshotReminder() {
   if (result.status !== 0) return;
   const changed = result.stdout.split("\n").map((item) => item.trim()).filter(Boolean);
   if (changed.length) {
-    if (screenshotMode) {
-      await captureUiScreenshots();
-      return;
-    }
     warn(`UI files changed (${changed.join(", ")}). Run node scripts/product-verify.mjs --screenshots before publishing.`);
   }
 }

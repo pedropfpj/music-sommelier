@@ -14688,3 +14688,119 @@ button,
     min-height: 44px;
   }
 }
+
+/* Deterministic screenshot mode for product verification. */
+html[data-sonic-screenshot="true"] *,
+html[data-sonic-screenshot="true"] *::before,
+html[data-sonic-screenshot="true"] *::after {
+  animation: none !important;
+  box-sizing: border-box !important;
+  scroll-behavior: auto !important;
+  transition: none !important;
+}
+
+html[data-sonic-screenshot="true"] body {
+  min-height: 100vh;
+  background-attachment: scroll;
+}
+
+html[data-sonic-screenshot="true"],
+html[data-sonic-screenshot="true"] body {
+  background-color: var(--bg-0);
+}
+
+html[data-sonic-screenshot="true"] #introScreen,
+html[data-sonic-screenshot="true"] #languageScreen,
+html[data-sonic-screenshot="true"] #usageGuideScreen,
+html[data-sonic-screenshot="true"] #authScreen,
+html[data-sonic-screenshot="true"] #welcomeScreen,
+html[data-sonic-screenshot="true"] #searchOverlay,
+html[data-sonic-screenshot="true"] #quizChallengeBubble,
+html[data-sonic-screenshot="true"] #quizOverlay,
+html[data-sonic-screenshot="true"] #toast {
+  display: none !important;
+}
+
+html[data-sonic-screenshot="true"] #appContent.hidden,
+html[data-sonic-screenshot="true"] #appContent {
+  display: grid !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+html[data-sonic-screenshot="true"] .floating-sonic-layer {
+  opacity: 0.42;
+}
+
+@media (max-width: 620px) {
+  html[data-sonic-screenshot="true"] .app-shell {
+    width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 28px) !important;
+    margin: 0.42rem auto 0.62rem !important;
+    gap: 0.56rem;
+    overflow: hidden;
+  }
+
+  html[data-sonic-screenshot="true"] .hero {
+    display: none !important;
+  }
+
+  html[data-sonic-screenshot="true"] .hero #heroDesc,
+  html[data-sonic-screenshot="true"] .hero-slogan,
+  html[data-sonic-screenshot="true"] .hero-mission {
+    display: none !important;
+  }
+
+  html[data-sonic-screenshot="true"] .hero-brand {
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: start;
+    gap: 0.34rem;
+  }
+
+  html[data-sonic-screenshot="true"] .hero-logo-wrap {
+    width: min(44vw, 150px) !important;
+    min-width: 0;
+  }
+
+  html[data-sonic-screenshot="true"] .hero h2 {
+    max-width: 100%;
+    font-size: clamp(1.34rem, 7vw, 1.82rem);
+    line-height: 1;
+  }
+
+  html[data-sonic-screenshot="true"] .hero-actions {
+    display: none !important;
+  }
+
+  html[data-sonic-screenshot="true"] .app-tab-bar {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.34rem;
+  }
+
+  html[data-sonic-screenshot="true"] .app-tab-btn:not(.active):not([aria-pressed="true"]) {
+    display: none !important;
+  }
+
+  html[data-sonic-screenshot="true"] .app-tab-btn,
+  html[data-sonic-screenshot="true"] #swipeStartPanel .swipe-hero-actions button,
+  html[data-sonic-screenshot="true"] #swipeStartPanel .swipe-like-count-wrap {
+    min-width: 0 !important;
+    width: 100%;
+  }
+
+  html[data-sonic-screenshot="true"] #swipeStartPanel.swipe-start-panel[data-app-tab="discover"] {
+    padding: 0.62rem;
+  }
+
+  html[data-sonic-screenshot="true"] #topSwipeCard.swipe-hero-card {
+    min-height: 380px;
+  }
+
+  html[data-sonic-screenshot="true"] #swipeStartPanel .swipe-hero-actions {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "surprise"
+      "pass"
+      "like";
+  }
+}
