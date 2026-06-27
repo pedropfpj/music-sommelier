@@ -2254,6 +2254,101 @@ body[data-vibe-theme="hard"] {
   width: 100%;
 }
 
+.support-contact-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 0.9rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(123, 244, 217, 0.28);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(123, 244, 217, 0.1), rgba(255, 198, 123, 0.08)),
+    rgba(4, 12, 27, 0.78);
+}
+
+.support-contact-copy {
+  display: grid;
+  gap: 0.32rem;
+  min-width: 0;
+}
+
+.support-contact-copy h4 {
+  margin: 0;
+  color: #f2fbff;
+  font-size: clamp(1.02rem, 0.98rem + 0.22vw, 1.24rem);
+}
+
+.support-contact-copy .muted {
+  margin: 0;
+  line-height: 1.38;
+  text-align: left;
+}
+
+.support-contact-body {
+  display: grid;
+  gap: 0.64rem;
+  min-width: 0;
+}
+
+.support-contact-email {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+  padding: 0.62rem 0.72rem;
+  border: 1px solid rgba(125, 224, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(2, 7, 18, 0.68);
+}
+
+.support-contact-email span {
+  color: #98ffe9;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.support-contact-email code {
+  min-width: 0;
+  color: #e8f6ff;
+  font: 0.86rem/1.25 "Chakra Petch", monospace;
+  overflow-wrap: anywhere;
+}
+
+.support-contact-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.54rem;
+}
+
+.support-contact-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: 0;
+  border-radius: 8px;
+  padding: 0.62rem 0.78rem;
+  text-align: center;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 900;
+  line-height: 1.15;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.support-contact-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(3, 12, 27, 0.32);
+}
+
+.support-contact-action[aria-disabled="true"] {
+  opacity: 0.48;
+  pointer-events: none;
+}
+
 .support-legal-note {
   margin: 0.88rem 0 0;
   font-size: 0.78rem;
@@ -8251,6 +8346,15 @@ input[type="range"] {
 
   .support-payment-card {
     padding: 0.86rem;
+  }
+
+  .support-contact-card {
+    grid-template-columns: 1fr;
+    padding: 0.86rem;
+  }
+
+  .support-contact-actions {
+    grid-template-columns: 1fr;
   }
 
   .support-payment-head {

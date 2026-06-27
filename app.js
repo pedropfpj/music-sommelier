@@ -186,6 +186,9 @@ const SUPPORT_DEFAULT_CONFIG = {
     address: "bc1qxreqyq0tvd59fsghqrged2lsfkhlvyq0em94z5",
     lightning: "",
     uri: ""
+  },
+  contact: {
+    email: "pedropfpj@gmail.com"
   }
 };
 const SUPPORT_PAYMENT_CONFIG = {
@@ -200,6 +203,10 @@ const SUPPORT_PAYMENT_CONFIG = {
   bitcoin: {
     ...SUPPORT_DEFAULT_CONFIG.bitcoin,
     ...((typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG?.bitcoin) || {})
+  },
+  contact: {
+    ...SUPPORT_DEFAULT_CONFIG.contact,
+    ...((typeof window !== "undefined" && window.SONIC_SEARCH_SUPPORT_CONFIG?.contact) || {})
   }
 };
 const AUTH_DEFAULT_CONFIG = {
@@ -1149,7 +1156,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627idle1";
+const SONIC_APP_BUILD_ID = "20260627contact1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -5742,6 +5749,13 @@ const supportCryptoPlaceholder = document.getElementById("supportCryptoPlacehold
 const supportCryptoHint = document.getElementById("supportCryptoHint");
 const supportCryptoPayload = document.getElementById("supportCryptoPayload");
 const supportCopyCryptoBtn = document.getElementById("supportCopyCryptoBtn");
+const supportContactKicker = document.getElementById("supportContactKicker");
+const supportContactTitle = document.getElementById("supportContactTitle");
+const supportContactText = document.getElementById("supportContactText");
+const supportContactEmailLabel = document.getElementById("supportContactEmailLabel");
+const supportContactEmail = document.getElementById("supportContactEmail");
+const supportContactMailBtn = document.getElementById("supportContactMailBtn");
+const supportContactCopyBtn = document.getElementById("supportContactCopyBtn");
 const supportLegalNote = document.getElementById("supportLegalNote");
 const quickSurprisePanel = document.getElementById("quickSurprisePanel");
 const quickSurpriseTitle = document.getElementById("quickSurpriseTitle");
@@ -19188,6 +19202,14 @@ const I18N = {
     supportKicker: "Apoie o projeto",
     supportTitle: "Apoie o Sonic Search",
     supportIntro: "Seu apoio mantém catálogo, IA e melhorias em movimento.",
+    supportContactKicker: "Contato",
+    supportContactTitle: "Fale com o Sonic Search",
+    supportContactText: "Envie feedback, bugs, parcerias ou ideias direto para o projeto.",
+    supportContactEmailLabel: "E-mail direto",
+    supportContactMail: "Enviar e-mail",
+    supportContactCopy: "Copiar e-mail",
+    supportContactSubject: "Contato Sonic Search",
+    supportContactBody: "Oi, quero falar sobre o Sonic Search.\n\nTema: ",
     supportBadge: "Tips",
     supportCustomAmount: "Outro valor",
     supportPixKicker: "Pix",
@@ -20059,6 +20081,14 @@ const I18N = {
     supportKicker: "Support the project",
     supportTitle: "Support Sonic Search",
     supportIntro: "Your support keeps the catalog, AI, and improvements moving.",
+    supportContactKicker: "Contact",
+    supportContactTitle: "Talk to Sonic Search",
+    supportContactText: "Send feedback, bugs, partnerships, or ideas directly to the project.",
+    supportContactEmailLabel: "Direct email",
+    supportContactMail: "Send email",
+    supportContactCopy: "Copy email",
+    supportContactSubject: "Sonic Search contact",
+    supportContactBody: "Hi, I want to talk about Sonic Search.\n\nTopic: ",
     supportBadge: "Tips",
     supportCustomAmount: "Custom amount",
     supportPixKicker: "Pix",
@@ -20927,6 +20957,14 @@ const I18N = {
     supportKicker: "Apoya el proyecto",
     supportTitle: "Apoya Sonic Search",
     supportIntro: "Tu apoyo mantiene catálogo, IA y mejoras en movimiento.",
+    supportContactKicker: "Contacto",
+    supportContactTitle: "Habla con Sonic Search",
+    supportContactText: "Envía feedback, bugs, alianzas o ideas directamente al proyecto.",
+    supportContactEmailLabel: "E-mail directo",
+    supportContactMail: "Enviar e-mail",
+    supportContactCopy: "Copiar e-mail",
+    supportContactSubject: "Contacto Sonic Search",
+    supportContactBody: "Hola, quiero hablar sobre Sonic Search.\n\nTema: ",
     supportBadge: "Tips",
     supportCustomAmount: "Otro valor",
     supportPixKicker: "Pix",
@@ -22449,6 +22487,12 @@ function applyLanguage() {
   setText("#supportCryptoKicker", t("supportCryptoKicker"));
   setText("#supportCryptoTitle", t("supportCryptoTitle"));
   setText("#supportCopyCryptoBtn", t("supportCopyCrypto"));
+  setText("#supportContactKicker", t("supportContactKicker"));
+  setText("#supportContactTitle", t("supportContactTitle"));
+  setText("#supportContactText", t("supportContactText"));
+  setText("#supportContactEmailLabel", t("supportContactEmailLabel"));
+  setText("#supportContactMailBtn", t("supportContactMail"));
+  setText("#supportContactCopyBtn", t("supportContactCopy"));
   setText("#supportLegalNote", t("supportLegalNote"));
   setText("#legalHubKicker", t("legalHubKicker"));
   setText("#legalHubTitle", t("legalHubTitle"));
@@ -22872,6 +22916,13 @@ function urlBooleanParam(url, names = []) {
     const raw = String(url.searchParams.get(name) || "").trim().toLowerCase();
     return ["1", "true", "yes", "sim", "visitante", "visitor"].includes(raw);
   });
+}
+
+function requestedAppTabFromUrl(fallback = "discover") {
+  const url = currentAppUrl();
+  if (!url) return safeAppTabName(fallback);
+  const rawTab = String(url.searchParams.get("tab") || fallback || "discover").trim().toLowerCase();
+  return safeAppTabName(rawTab);
 }
 
 function parseSharedSpiritPayloadFromUrl() {
@@ -25203,7 +25254,8 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
-  setActiveAppTab("discover");
+  const initialTab = shouldAutoRecommend ? "discover" : requestedAppTabFromUrl("discover");
+  setActiveAppTab(initialTab);
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
@@ -28546,6 +28598,34 @@ function setSupportQr(imageEl, placeholderEl, payload = "", alt = "") {
   if (placeholderEl) placeholderEl.classList.toggle("hidden", Boolean(qrUrl));
 }
 
+function configuredSupportContactEmail() {
+  return String(SUPPORT_PAYMENT_CONFIG.contact?.email || SUPPORT_DEFAULT_CONFIG.contact?.email || "").trim();
+}
+
+function buildSupportContactHref(email = "") {
+  const address = String(email || "").trim();
+  if (!address) return "";
+  const subject = encodeURIComponent(t("supportContactSubject"));
+  const body = encodeURIComponent(t("supportContactBody"));
+  return `mailto:${address}?subject=${subject}&body=${body}`;
+}
+
+function renderSupportContact() {
+  const email = configuredSupportContactEmail();
+  if (supportContactEmail) supportContactEmail.textContent = email || "-";
+  if (supportContactMailBtn) {
+    const href = buildSupportContactHref(email);
+    if (href) {
+      supportContactMailBtn.href = href;
+      supportContactMailBtn.removeAttribute("aria-disabled");
+    } else {
+      supportContactMailBtn.removeAttribute("href");
+      supportContactMailBtn.setAttribute("aria-disabled", "true");
+    }
+  }
+  if (supportContactCopyBtn) supportContactCopyBtn.disabled = !email;
+}
+
 function renderSupportPanel() {
   if (!supportPanel) return;
   const pixKey = String(SUPPORT_PAYMENT_CONFIG.pix?.key || "").trim();
@@ -28574,6 +28654,7 @@ function renderSupportPanel() {
   }
   if (supportCopyCryptoBtn) supportCopyCryptoBtn.disabled = !hasCrypto;
   setSupportQr(supportCryptoQr, supportCryptoPlaceholder, cryptoPayload, "QR Code crypto para apoiar o Sonic Search");
+  renderSupportContact();
 }
 
 async function runButtonTask(button, { busyText = "", doneText = "", doneDuration = 720 } = {}, task = async () => {}) {
@@ -28712,6 +28793,12 @@ function panelMatchesAppTab(panel, tabName = "discover") {
   return tabNamesForPanel(panel).includes(tabName);
 }
 
+function safeAppTabName(tabName = "discover") {
+  return ["discover", "djs", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName)
+    ? tabName
+    : "discover";
+}
+
 function currentActiveAppTabName() {
   const activeButton = appTabBar?.querySelector("[data-app-tab-target].active, [data-app-tab-target][aria-pressed='true']");
   return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
@@ -28737,7 +28824,7 @@ function ensureEventsPanelActive() {
 }
 
 function setActiveAppTab(tabName = "discover") {
-  const safeTab = ["discover", "djs", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName) ? tabName : "discover";
+  const safeTab = safeAppTabName(tabName);
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const isActive = button.getAttribute("data-app-tab-target") === safeTab;
@@ -48271,6 +48358,14 @@ bind(supportCopyPixKeyBtn, "click", () => {
 
 bind(supportCopyCryptoBtn, "click", () => {
   copySupportText(supportCryptoPayload?.value || "", supportCopyCryptoBtn);
+});
+
+bind(supportContactCopyBtn, "click", () => {
+  copySupportText(configuredSupportContactEmail(), supportContactCopyBtn);
+});
+
+bind(supportContactMailBtn, "click", () => {
+  playUiSfx("tap");
 });
 
 window.addEventListener("resize", syncFloatingSurpriseButton);
