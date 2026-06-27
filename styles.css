@@ -13646,6 +13646,44 @@ iframe {
   gap: 0.52rem;
 }
 
+.community-topic-field {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 260px);
+  align-items: center;
+  justify-content: start;
+  gap: 0.5rem;
+  color: rgba(209, 226, 247, 0.72);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.community-topic-field span {
+  color: #a4ffe8;
+  text-transform: uppercase;
+}
+
+.community-topic-field select {
+  min-height: 40px;
+  border: 1px solid rgba(137, 193, 255, 0.26);
+  border-radius: 12px;
+  padding: 0.32rem 2.2rem 0.32rem 0.72rem;
+  color: #e8f6ff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+    rgba(3, 9, 21, 0.82);
+  font: inherit;
+}
+
+.community-topic-field select:focus {
+  border-color: rgba(126, 232, 198, 0.62);
+  box-shadow: 0 0 0 3px rgba(126, 232, 198, 0.11);
+  outline: none;
+}
+
+.community-topic-field.is-filter-locked select {
+  opacity: 0.68;
+}
+
 .community-composer.hidden,
 .community-login-prompt.hidden {
   display: none !important;
@@ -13912,6 +13950,14 @@ iframe {
 
   .community-type-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .community-topic-field {
+    grid-template-columns: 1fr;
+  }
+
+  .community-topic-field select {
+    width: 100%;
   }
 }
 

@@ -31,7 +31,7 @@
       } catch (_) {}
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260627community2" />
+    <link rel="stylesheet" href="styles.css?v=20260627community3" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -564,14 +564,17 @@
         </div>
         <article class="community-composer-card">
           <div id="communityComposer" class="community-composer hidden">
-            <div id="communityTypeGrid" class="community-type-grid" role="radiogroup" aria-label="Tipo de post">
-              <button class="community-type-btn active" type="button" data-community-topic="track" aria-pressed="true">Faixa</button>
-              <button class="community-type-btn" type="button" data-community-topic="artist" aria-pressed="false">Artista/DJ</button>
-              <button class="community-type-btn" type="button" data-community-topic="event" aria-pressed="false">Festa</button>
-              <button class="community-type-btn" type="button" data-community-topic="festival" aria-pressed="false">Festival</button>
-              <button class="community-type-btn" type="button" data-community-topic="question" aria-pressed="false">Pergunta</button>
-              <button class="community-type-btn" type="button" data-community-topic="id" aria-pressed="false">ID de música</button>
-            </div>
+            <label class="community-topic-field" for="communityPostTopicSelect">
+              <span id="communityPostTopicLabel">Tipo</span>
+              <select id="communityPostTopicSelect">
+                <option value="track">Faixa</option>
+                <option value="artist">Artista/DJ</option>
+                <option value="event">Festa</option>
+                <option value="festival">Festival</option>
+                <option value="question">Pergunta</option>
+                <option value="id">ID de música</option>
+              </select>
+            </label>
             <label class="sr-only" for="communityPostTitle">Título do post</label>
             <input id="communityPostTitle" type="text" maxlength="120" placeholder="Título curto da conversa" />
             <label class="sr-only" for="communityPostBody">Mensagem para a comunidade</label>
@@ -2116,6 +2119,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260627community2"></script>
+    <script src="app.js?v=20260627community3"></script>
   </body>
 </html>

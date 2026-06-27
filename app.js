@@ -1159,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627community2";
+const SONIC_APP_BUILD_ID = "20260627community3";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6063,6 +6063,8 @@ const communityIntro = document.getElementById("communityIntro");
 const communityRefreshBtn = document.getElementById("communityRefreshBtn");
 const communityTopicTabs = document.getElementById("communityTopicTabs");
 const communityTypeGrid = document.getElementById("communityTypeGrid");
+const communityPostTopicLabel = document.getElementById("communityPostTopicLabel");
+const communityPostTopicSelect = document.getElementById("communityPostTopicSelect");
 const communityComposer = document.getElementById("communityComposer");
 const communityPostTitle = document.getElementById("communityPostTitle");
 const communityPostBody = document.getElementById("communityPostBody");
@@ -19187,6 +19189,7 @@ const I18N = {
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Pergunta",
     communityTypeId: "ID de música",
+    communityPostTopicLabel: "Tipo",
     communityTitlePlaceholder: "Título curto da conversa",
     communityBodyPlaceholder: "O que você quer perguntar, recomendar ou contar?",
     communityMetaPlaceholder: "Cidade, festa, artista, faixa ou link de contexto",
@@ -20162,6 +20165,7 @@ const I18N = {
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Question",
     communityTypeId: "Track ID",
+    communityPostTopicLabel: "Type",
     communityTitlePlaceholder: "Short conversation title",
     communityBodyPlaceholder: "What do you want to ask, recommend, or report?",
     communityMetaPlaceholder: "City, party, artist, track, or context link",
@@ -21134,6 +21138,7 @@ const I18N = {
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Pregunta",
     communityTypeId: "ID de pista",
+    communityPostTopicLabel: "Tipo",
     communityTitlePlaceholder: "Título corto de la conversación",
     communityBodyPlaceholder: "¿Qué quieres preguntar, recomendar o contar?",
     communityMetaPlaceholder: "Ciudad, fiesta, artista, pista o link de contexto",
@@ -47027,6 +47032,11 @@ function communitySetStatus(message = "", tone = "") {
   communityStatus.classList.toggle("ok", tone === "ok");
 }
 
+function communityActionText(label = "", count = 0) {
+  const safeCount = Number(count) || 0;
+  return safeCount > 0 ? `${label} ${safeCount}` : label;
+}
+
 async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
   const headers = {
     Accept: "application/json",
@@ -47072,6 +47082,25 @@ function updateCommunityControlsText() {
   if (communityLoginText) communityLoginText.textContent = t("communityLoginText");
   if (communityLoginBtn) communityLoginBtn.textContent = t("communityLoginBtn");
   if (communityPostSubmitBtn) communityPostSubmitBtn.textContent = t("communitySubmit");
+  if (communityPostTopicLabel) communityPostTopicLabel.textContent = t("communityPostTopicLabel");
+  if (communityPostTopicSelect) {
+    const topicOptions = {
+      track: "communityTypeTrack",
+      artist: "communityTypeArtist",
+      event: "communityTypeEvent",
+      festival: "communityTypeFestival",
+      question: "communityTypeQuestion",
+      id: "communityTypeId"
+    };
+    Array.from(communityPostTopicSelect.options || []).forEach((option) => {
+      const key = topicOptions[String(option.value || "").trim()];
+      if (key) option.textContent = t(key);
+    });
+    communityPostTopicSelect.value = communityState.topic;
+    const locked = communityState.filter !== "all";
+    communityPostTopicSelect.disabled = locked;
+    communityPostTopicSelect.closest(".community-topic-field")?.classList.toggle("is-filter-locked", locked);
+  }
   communityTopicTabs?.querySelectorAll("[data-community-filter]").forEach((button) => {
     const filter = String(button.getAttribute("data-community-filter") || "all");
     button.textContent = communityFilterLabel(filter);
@@ -47117,7 +47146,8 @@ function renderCommunityComment(comment = {}, postId = "") {
     button.dataset.commentId = comment.id || "";
     button.dataset.reactionValue = String(data.value);
     button.classList.toggle("active", Number(reactions.myReaction) === data.value);
-    button.textContent = `${data.label} ${data.count}`;
+    button.textContent = communityActionText(data.label, data.count);
+    button.setAttribute("aria-label", communityActionText(data.label, data.count));
     actions.appendChild(button);
   });
   if (comment.mine) {
@@ -47234,7 +47264,8 @@ function renderCommunityPost(post = {}) {
     button.dataset.postId = post.id || "";
     button.dataset.reactionValue = String(data.value);
     button.classList.toggle("active", Number(reactions.myReaction) === data.value);
-    button.textContent = `${data.label} ${data.count}`;
+    button.textContent = communityActionText(data.label, data.count);
+    button.setAttribute("aria-label", communityActionText(data.label, data.count));
     actions.appendChild(button);
   });
   const commentsButton = document.createElement("button");
@@ -51039,6 +51070,11 @@ bind(communityTopicTabs, "click", (event) => {
   communityState.filter = nextFilter;
   if (nextFilter !== "all") communityState.topic = nextFilter;
   void loadCommunityPosts({ silent: false });
+});
+bind(communityPostTopicSelect, "change", () => {
+  const nextTopic = String(communityPostTopicSelect?.value || "question");
+  communityState.topic = nextTopic;
+  renderCommunityPanel();
 });
 bind(communityTypeGrid, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-topic]") : null;
