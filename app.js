@@ -1158,7 +1158,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627comments2";
+const SONIC_APP_BUILD_ID = "20260627copy1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -41469,22 +41469,27 @@ function emptySwipeProfileCopy() {
       meta: t("topSwipeEmptyMeta")
     };
   }
-  const nextNumber = presentedCardNumberForTrack(null);
   if (currentLanguage === "en") {
     return {
-      title: likedSongs > 0 ? `Radar calibrated with ${likedSongs} liked tracks` : `Radar has ${shownTracks} tracks mapped`,
-      meta: `History loaded. Tap Surprise to continue toward track #${nextNumber}.`
+      title: likedSongs > 0 ? "Radar calibrated" : "Radar ready",
+      meta: likedSongs > 0
+        ? `${likedSongs} liked tracks in your history. Tap Surprise for the next suggestion.`
+        : `${shownTracks} tracks mapped. Tap Surprise for the next suggestion.`
     };
   }
   if (currentLanguage === "es") {
     return {
-      title: likedSongs > 0 ? `Radar calibrado con ${likedSongs} likes` : `Radar con ${shownTracks} pistas mapeadas`,
-      meta: `Historial cargado. Toca Sorpresa para seguir hacia la pista #${nextNumber}.`
+      title: likedSongs > 0 ? "Radar calibrado" : "Radar listo",
+      meta: likedSongs > 0
+        ? `${likedSongs} likes en tu historial. Toca Sorpresa para la próxima sugerencia.`
+        : `${shownTracks} pistas mapeadas. Toca Sorpresa para la próxima sugerencia.`
     };
   }
   return {
-    title: likedSongs > 0 ? `Radar calibrado com ${likedSongs} curtidas` : `Radar com ${shownTracks} faixas mapeadas`,
-    meta: `Histórico carregado. Toque em Surpresa para seguir para a faixa #${nextNumber}.`
+    title: likedSongs > 0 ? "Radar calibrado" : "Radar pronto",
+    meta: likedSongs > 0
+      ? `${likedSongs} curtidas no histórico. Toque em Surpresa para ouvir a próxima sugestão.`
+      : `${shownTracks} faixas mapeadas. Toque em Surpresa para ouvir a próxima sugestão.`
   };
 }
 
