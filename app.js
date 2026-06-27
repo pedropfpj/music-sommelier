@@ -1034,17 +1034,17 @@ const VIBE_THEME_TOKENS = {
 };
 
 const VIBE_THEME_CONFIG = {
-  default: { density: 40, minSize: 0.96, maxSize: 1.66, minDuration: 9.8, maxDuration: 18.5 },
-  dark: { density: 44, minSize: 1.04, maxSize: 1.84, minDuration: 8.8, maxDuration: 16.8 },
-  psy: { density: 42, minSize: 1.02, maxSize: 1.8, minDuration: 8.6, maxDuration: 16.2 },
-  techno: { density: 40, minSize: 1, maxSize: 1.74, minDuration: 8.9, maxDuration: 15.8 },
-  dnb: { density: 42, minSize: 0.98, maxSize: 1.72, minDuration: 7.8, maxDuration: 14.5 },
-  house: { density: 38, minSize: 0.96, maxSize: 1.68, minDuration: 9.2, maxDuration: 17.2 },
-  bass: { density: 42, minSize: 0.98, maxSize: 1.72, minDuration: 8.2, maxDuration: 15.2 },
-  ambient: { density: 30, minSize: 0.94, maxSize: 1.58, minDuration: 11.8, maxDuration: 20.5 },
-  leftfield: { density: 32, minSize: 0.98, maxSize: 1.74, minDuration: 10.6, maxDuration: 19.1 },
-  trance: { density: 38, minSize: 1, maxSize: 1.76, minDuration: 9.2, maxDuration: 16.8 },
-  hard: { density: 42, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
+  default: { density: 26, minSize: 0.96, maxSize: 1.66, minDuration: 9.8, maxDuration: 18.5 },
+  dark: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 8.8, maxDuration: 16.8 },
+  psy: { density: 28, minSize: 1.02, maxSize: 1.8, minDuration: 8.6, maxDuration: 16.2 },
+  techno: { density: 26, minSize: 1, maxSize: 1.74, minDuration: 8.9, maxDuration: 15.8 },
+  dnb: { density: 28, minSize: 0.98, maxSize: 1.72, minDuration: 7.8, maxDuration: 14.5 },
+  house: { density: 24, minSize: 0.96, maxSize: 1.68, minDuration: 9.2, maxDuration: 17.2 },
+  bass: { density: 28, minSize: 0.98, maxSize: 1.72, minDuration: 8.2, maxDuration: 15.2 },
+  ambient: { density: 20, minSize: 0.94, maxSize: 1.58, minDuration: 11.8, maxDuration: 20.5 },
+  leftfield: { density: 22, minSize: 0.98, maxSize: 1.74, minDuration: 10.6, maxDuration: 19.1 },
+  trance: { density: 24, minSize: 1, maxSize: 1.76, minDuration: 9.2, maxDuration: 16.8 },
+  hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
 const EXTERNAL_DATASET_CACHE_VERSION = "20260622-playable-v18";
@@ -1134,10 +1134,28 @@ const API_HEALTH_ENDPOINT = "/api/integration-health";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
-const FAST_DATASET_WAIT_MS = 260;
-const FAST_SUPABASE_WAIT_MS = 650;
-const FAST_COVERAGE_WAIT_MS = 850;
-const PREVIEW_PROBE_TIMEOUT_MS = 2600;
+const CATALOG_EXTRA_STYLE_PAGE_LIMIT = 4;
+const FAST_DATASET_WAIT_MS = 120;
+const FAST_SUPABASE_WAIT_MS = 360;
+const FAST_COVERAGE_WAIT_MS = 420;
+const PREVIEW_PROBE_TIMEOUT_MS = 1800;
+const OPTIONAL_API_TIMEOUT_MS = 3600;
+const FAST_OPTIONAL_API_TIMEOUT_MS = 2600;
+const EXTERNAL_DATASET_FETCH_TIMEOUT_MS = 2200;
+const BACKGROUND_CATALOG_WARMUP_DELAY_MS = 22000;
+const ACTIVE_DISCOVERY_WARMUP_RETRY_MS = 8000;
+const SURPRISE_FAST_STYLE_LIMIT = 8;
+const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
+const SURPRISE_FAST_POOL_LIMIT = 96;
+const SONIC_APP_BUILD_ID = "20260627fluid1";
+
+if (typeof window !== "undefined") {
+  window.__sonicAppBuild = SONIC_APP_BUILD_ID;
+  document.documentElement.dataset.sonicAppBuild = SONIC_APP_BUILD_ID;
+  if ("scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+}
 
 const LOCAL_TRACK_SEED_BOOST = [
   {
@@ -6278,6 +6296,8 @@ let servedArtistCycleByStyle = new Map();
 let lastRejectedTrackKey = "";
 let pendingQuickKnownAdvance = null;
 let catalogWarmupRunning = false;
+let catalogMaintenanceTimer = 0;
+let catalogMaintenanceDone = false;
 let searchOverlayLocks = 0;
 let searchProgressTimer = 0;
 let searchProgressValue = 0;
@@ -6289,6 +6309,7 @@ let supportTipAmount = SUPPORT_DEFAULT_AMOUNT;
 let bioAnimationToken = 0;
 let artistImageRequestToken = 0;
 let listeningNarrativeToken = 0;
+let recommendationDetailRenderToken = 0;
 let spiritAnimationToken = 0;
 let spiritStoryShareBusy = false;
 let currentSpiritId = "";
@@ -6353,7 +6374,7 @@ const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
 const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 168;
 const SWIPE_LEARNING_MILESTONES = [10, 20, 30];
-const BACKGROUND_WARMUP_STYLE_LIMIT = 12;
+const BACKGROUND_WARMUP_STYLE_LIMIT = 4;
 let trackInsightCache = new Map();
 let currentTrackInsightTrackKey = "";
 let styleInfoDismissed = false;
@@ -13085,7 +13106,7 @@ async function fetchCatalogExtraPage(style = "", offset = 0) {
   if (style) params.set("style", style);
 
   try {
-    const response = await fetch(`${CATALOG_EXTRA_ENDPOINT}?${params.toString()}`, { cache: "no-store" });
+    const response = await fetchWithTimeout(`${CATALOG_EXTRA_ENDPOINT}?${params.toString()}`, { cache: "no-store" }, FAST_OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) return null;
     const payload = await response.json();
     if (!payload?.ok || payload.enabled === false || payload.setupNeeded) return null;
@@ -13108,7 +13129,10 @@ async function fetchCatalogExtraPayload(style = "") {
   const seenTracks = new Set();
   let loadedAnyPage = false;
 
-  for (let page = 0; page < CATALOG_EXTRA_IMPORT_MAX_PAGES; page += 1) {
+  const maxPages = style
+    ? Math.min(CATALOG_EXTRA_IMPORT_MAX_PAGES, CATALOG_EXTRA_STYLE_PAGE_LIMIT)
+    : CATALOG_EXTRA_IMPORT_MAX_PAGES;
+  for (let page = 0; page < maxPages; page += 1) {
     const offset = page * CATALOG_EXTRA_IMPORT_PAGE_SIZE;
     const payload = await fetchCatalogExtraPage(style, offset);
     if (!payload) return loadedAnyPage ? combined : null;
@@ -13363,7 +13387,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
 async function readExternalDatasetRowsFromPath(path) {
   try {
     const separator = String(path || "").includes("?") ? "&" : "?";
-    const response = await fetch(`${path}${separator}v=${EXTERNAL_DATASET_CACHE_VERSION}`, { cache: "force-cache" });
+    const response = await fetchWithTimeout(`${path}${separator}v=${EXTERNAL_DATASET_CACHE_VERSION}`, { cache: "force-cache" }, EXTERNAL_DATASET_FETCH_TIMEOUT_MS);
     if (!response.ok) return [];
     const lowerPath = String(path || "").toLowerCase();
     if (lowerPath.endsWith(".json")) {
@@ -13421,6 +13445,32 @@ function waitForPromiseWithTimeout(promise, timeoutMs = 0, fallbackValue = null)
   });
 }
 
+async function fetchWithTimeout(endpoint, options = {}, timeoutMs = OPTIONAL_API_TIMEOUT_MS) {
+  const controller = typeof AbortController !== "undefined" && !options.signal
+    ? new AbortController()
+    : null;
+  let timeoutId = 0;
+  try {
+    if (controller) timeoutId = window.setTimeout(() => controller.abort(), Math.max(250, Number(timeoutMs) || OPTIONAL_API_TIMEOUT_MS));
+    return await fetch(endpoint, {
+      ...options,
+      signal: controller?.signal || options.signal
+    });
+  } finally {
+    if (timeoutId) window.clearTimeout(timeoutId);
+  }
+}
+
+function waitForMainThreadBreath() {
+  return new Promise((resolve) => {
+    if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(() => resolve());
+      return;
+    }
+    window.setTimeout(resolve, 0);
+  });
+}
+
 function waitForExternalDatasetIdleSlot() {
   return new Promise((resolve) => {
     if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
@@ -13449,6 +13499,7 @@ async function hydrateExternalDatasetPackInBackground() {
       tracksImported += merged.tracksImported;
       artistsImported += merged.artistsImported;
       seedsAdded += merged.artistSeedsAdded;
+      if (index % 3 === 2) await waitForMainThreadBreath();
       if (index < EXTERNAL_DATASET_FILES.length - 1) {
         await waitForExternalDatasetIdleSlot();
       }
@@ -13479,10 +13530,18 @@ async function hydrateExternalDatasetPackInBackground() {
   return externalDatasetImportPromise;
 }
 
-function scheduleExternalDatasetWarmup(delayMs = 420) {
+function scheduleExternalDatasetWarmup(delayMs = BACKGROUND_CATALOG_WARMUP_DELAY_MS) {
   if (externalDatasetImportDone || externalDatasetImportStarted || externalDatasetImportPromise) return;
   const start = () => {
     if (externalDatasetImportDone || externalDatasetImportStarted || externalDatasetImportPromise) return;
+    if (
+      recommendationRunBusy ||
+      swipeFeedbackBusy ||
+      (searchOverlay && !searchOverlay.classList.contains("hidden"))
+    ) {
+      scheduleExternalDatasetWarmup(ACTIVE_DISCOVERY_WARMUP_RETRY_MS);
+      return;
+    }
     void hydrateExternalDatasetPackInBackground().catch(() => null);
   };
   window.setTimeout(() => {
@@ -13491,6 +13550,35 @@ function scheduleExternalDatasetWarmup(delayMs = 420) {
       return;
     }
     start();
+  }, Math.max(0, Number(delayMs) || 0));
+}
+
+function scheduleCatalogMaintenance(delayMs = BACKGROUND_CATALOG_WARMUP_DELAY_MS) {
+  if (catalogMaintenanceDone) return;
+  window.clearTimeout(catalogMaintenanceTimer);
+  catalogMaintenanceTimer = window.setTimeout(() => {
+    const run = () => {
+      if (catalogMaintenanceDone) return;
+      if (
+        recommendationRunBusy ||
+        swipeFeedbackBusy ||
+        (searchOverlay && !searchOverlay.classList.contains("hidden"))
+      ) {
+        scheduleCatalogMaintenance(ACTIVE_DISCOVERY_WARMUP_RETRY_MS);
+        return;
+      }
+      normalizeTrustedSlambientCatalog();
+      sanitizeCatalogByStyleRules();
+      Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
+      dedupeCatalogByTrackKey();
+      saveDynamicCatalogCache();
+      catalogMaintenanceDone = true;
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(run, { timeout: 2400 });
+      return;
+    }
+    run();
   }, Math.max(0, Number(delayMs) || 0));
 }
 
@@ -13528,8 +13616,10 @@ async function prepareSupabaseCatalogForRecommendation(prefs = {}) {
 }
 
 async function prepareCatalogForFastRecommendation(prefs = {}) {
-  await prepareLocalDatasetForRecommendation(prefs);
-  await prepareSupabaseCatalogForRecommendation(prefs);
+  await Promise.all([
+    prepareLocalDatasetForRecommendation(prefs),
+    prepareSupabaseCatalogForRecommendation(prefs)
+  ]);
 }
 
 function trackBpmRangeOverlapsPreference(track, selectedBpm = "") {
@@ -15540,6 +15630,15 @@ function trackHasPlayablePreviewExperience(track) {
   );
 }
 
+function trackHasFastListenRoute(track) {
+  return Boolean(
+    trackHasPlayablePreviewExperience(track) ||
+      youtubeLinkTrusted(track) ||
+      soundCloudLinkTrusted(track) ||
+      bandcampLinkTrusted(track)
+  );
+}
+
 function inferNegativeFeedbackReason(track, { source = "skip" } = {}) {
   if (!track) return "taste_mismatch";
   const noReliableAudio =
@@ -15883,7 +15982,7 @@ function deezerJsonp(url) {
       settled = true;
       cleanup();
       reject(new Error("Timeout na consulta Deezer"));
-    }, 4500);
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
 
     function cleanup() {
       clearTimeout(timeout);
@@ -15927,7 +16026,7 @@ function itunesJsonp(url) {
       settled = true;
       cleanup();
       reject(new Error("Timeout na consulta iTunes"));
-    }, 4500);
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
 
     function cleanup() {
       clearTimeout(timeout);
@@ -17112,10 +17211,10 @@ async function loadApiHealthPanel({ force = false } = {}) {
   if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthLoading");
   if (apiHealthRefreshBtn) apiHealthRefreshBtn.disabled = true;
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "GET",
       headers: { Accept: "application/json" }
-    });
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) throw new Error("health_unavailable");
     apiHealthPayload = await response.json();
     renderApiHealthPanel(apiHealthPayload);
@@ -17169,7 +17268,7 @@ async function fetchTrackMetadataFromApi(track) {
   if (cacheKey && trackMetadataApiCache.has(cacheKey)) return trackMetadataApiCache.get(cacheKey);
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17188,7 +17287,7 @@ async function fetchTrackMetadataFromApi(track) {
           catalogTrackMetadataText(track, "deezerTrackId") ||
           ""
       })
-    });
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) {
       if (cacheKey) trackMetadataApiCache.set(cacheKey, null);
       return null;
@@ -17231,7 +17330,7 @@ async function fetchCoverArtFromApi(track) {
   if (cacheKey && coverArtApiCache.has(cacheKey)) return coverArtApiCache.get(cacheKey);
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17244,7 +17343,7 @@ async function fetchCoverArtFromApi(track) {
         style: track.style || "",
         releaseYear: trackReleaseYearForApi(track)
       })
-    });
+    }, OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) {
       if (cacheKey) coverArtApiCache.set(cacheKey, null);
       return null;
@@ -17317,7 +17416,7 @@ async function fetchRadioBrowserStations(track) {
   if (cacheKey && radioBrowserApiCache.has(cacheKey)) return radioBrowserApiCache.get(cacheKey);
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17332,7 +17431,7 @@ async function fetchRadioBrowserStations(track) {
         healthyOnly: true,
         limit: 6
       })
-    });
+    }, OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) {
       if (cacheKey) radioBrowserApiCache.set(cacheKey, []);
       return [];
@@ -17467,7 +17566,7 @@ async function fetchArtistProfileFromApi(artistName, preferredLanguage = current
   const locale = ["pt", "en", "es"].includes(preferredLanguage) ? preferredLanguage : DEFAULT_LANGUAGE;
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17477,7 +17576,7 @@ async function fetchArtistProfileFromApi(artistName, preferredLanguage = current
         artist,
         language: locale
       })
-    });
+    }, OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) return null;
     const payload = await response.json();
     const profile = payload?.profile || null;
@@ -17497,14 +17596,14 @@ async function fetchLastfmArtistFromApi(artistName, preferredLanguage = currentL
   if (cacheKey && lastfmArtistApiCache.has(cacheKey)) return lastfmArtistApiCache.get(cacheKey);
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"
       },
       body: JSON.stringify({ artist, language: locale })
-    });
+    }, OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) {
       if (cacheKey) lastfmArtistApiCache.set(cacheKey, null);
       return null;
@@ -17714,7 +17813,7 @@ async function fetchSoundCloudTracksByStyle(style, artist = "", options = {}) {
   const queries = soundCloudApiQueryTerms(style, artist, track);
   for (const query of queries) {
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetchWithTimeout(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -17727,7 +17826,7 @@ async function fetchSoundCloudTracksByStyle(style, artist = "", options = {}) {
           resolvePreview: true,
           previewResolveLimit: track ? 20 : artist ? 16 : 12
         })
-      });
+      }, FAST_OPTIONAL_API_TIMEOUT_MS);
       if (!response.ok) break;
       const payload = await response.json();
       const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
@@ -18409,6 +18508,7 @@ async function warmupCatalogInBackground() {
         artists: stats.artists
       });
     }
+    await waitForExternalDatasetIdleSlot();
   }
 
   catalogWarmupRunning = false;
@@ -25095,7 +25195,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
 
   window.setTimeout(() => {
     warmupCatalogInBackground();
-  }, 250);
+  }, BACKGROUND_CATALOG_WARMUP_DELAY_MS);
   scheduleQuizChallengeEvaluation(220);
 
   if (!shouldAutoRecommend) return;
@@ -27904,6 +28004,38 @@ function finishSearchOverlay() {
   }, 180);
 }
 
+function sonicPerfEnabled() {
+  const url = currentAppUrl();
+  return Boolean(urlRequestsQaPreviewMode() || url?.searchParams.has("perf"));
+}
+
+function sonicPerfReset(scope = "app") {
+  if (!sonicPerfEnabled() || typeof window === "undefined") return;
+  window.__sonicPerf = {
+    scope,
+    startedAt: performance.now(),
+    marks: []
+  };
+  document.documentElement.dataset.sonicPerf = JSON.stringify({ scope, marks: [] });
+}
+
+function sonicPerfMark(label, data = {}) {
+  if (!sonicPerfEnabled() || typeof window === "undefined" || !window.__sonicPerf) return;
+  const mark = {
+    label,
+    at: Math.round(performance.now() - window.__sonicPerf.startedAt),
+    ...data
+  };
+  window.__sonicPerf.marks.push(mark);
+  document.documentElement.dataset.sonicPerf = JSON.stringify({
+    scope: window.__sonicPerf.scope,
+    marks: window.__sonicPerf.marks
+  });
+  if (typeof console !== "undefined" && console.info) {
+    console.info("[sonic-perf]", JSON.stringify(mark));
+  }
+}
+
 async function withSearchOverlay(initialMessage, worker) {
   beginSearchOverlay(initialMessage);
   try {
@@ -29320,7 +29452,7 @@ function surpriseTrackHasExactBpmAndPreview(track) {
   if (track.existenceVerified === false) return false;
   if (!hasReliableBpmForTrack(track)) return false;
   if (isTrustedCatalogExtraTrack(track)) return true;
-  return trackHasPlayablePreviewExperience(track);
+  return trackHasFastListenRoute(track);
 }
 
 function stylePreferenceSignal(style = "") {
@@ -29807,6 +29939,52 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     [...recommendationMemory, baseTrackKey].filter(Boolean)
   );
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
+  const fastCandidateAllowed = (track) => {
+    const key = trackKeyOf(track);
+    if (!key || (baseTrackKey && key === baseTrackKey)) return false;
+    if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+    if (!trackAllowed(track)) return false;
+    if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!hasReliableBpmForTrack(track)) return false;
+    return trackHasFastListenRoute(track);
+  };
+  const fastStyles = getAllSelectableStyles()
+    .filter((style) => style && normalize(style) !== baseStyleKey)
+    .sort((a, b) => {
+      const aCross = baseFamily && familyOf(a) !== baseFamily ? 0 : 1;
+      const bCross = baseFamily && familyOf(b) !== baseFamily ? 0 : 1;
+      const aExposure = Number(swipeStyleExposureCounts.get(a) || 0);
+      const bExposure = Number(swipeStyleExposureCounts.get(b) || 0);
+      return aCross - bCross || aExposure - bExposure;
+    })
+    .slice(0, SURPRISE_FAST_STYLE_LIMIT);
+  const instantPool = [];
+  const instantCrossFamilyPool = [];
+  for (const style of fastStyles) {
+    const styleTracks = catalogTracksForStyle(style);
+    let acceptedForStyle = 0;
+    for (const track of styleTracks) {
+      if (!fastCandidateAllowed(track)) continue;
+      instantPool.push(track);
+      if (!baseFamily || familyOf(track.style) !== baseFamily) {
+        instantCrossFamilyPool.push(track);
+      }
+      acceptedForStyle += 1;
+      if (
+        acceptedForStyle >= SURPRISE_FAST_TRACKS_PER_STYLE ||
+        instantPool.length >= SURPRISE_FAST_POOL_LIMIT
+      ) {
+        break;
+      }
+    }
+    if (instantPool.length >= SURPRISE_FAST_POOL_LIMIT) break;
+  }
+  if (instantCrossFamilyPool.length || instantPool.length) {
+    update(86, t("searchOverlayFinishing"));
+    const readyPool = instantCrossFamilyPool.length ? instantCrossFamilyPool : instantPool;
+    return pickRandomTrack(readyPool.slice(0, Math.min(42, readyPool.length)));
+  }
   let exactBpmFallbackTrack = null;
 
   const validateCandidate = async (track) => {
@@ -29818,6 +29996,8 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (artistSetHasMatch(blockedArtists, track.artist)) return null;
     if (!trackAllowed(track)) return null;
     triedTrackKeys.add(key);
+    if (!hasReliableBpmForTrack(track)) return null;
+    if (surpriseTrackHasExactBpmAndPreview(track)) return track;
     await resolvePreviewForTrack(track);
     if (surpriseTrackHasExactBpmAndPreview(track)) return track;
     if (!exactBpmFallbackTrack && track.existenceVerified !== false && hasReliableBpmForTrack(track)) {
@@ -29836,7 +30016,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     const openingValidated = await validateCandidate(openingCandidate);
     if (openingValidated) return openingValidated;
   }
-  const fastAttempts = Math.min(56, Math.max(18, Math.floor(catalog.length * 0.22)));
+  const fastAttempts = Math.min(28, Math.max(12, Math.floor(catalog.length * 0.12)));
   for (let attempt = 0; attempt < fastAttempts; attempt += 1) {
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
       triedTrackKeys,
@@ -29850,6 +30030,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (validated) return validated;
     if (attempt % 8 === 0) {
       update(Math.min(58, 28 + attempt), t("searchOverlayCatalog"));
+      await waitForMainThreadBreath();
     }
   }
 
@@ -29862,7 +30043,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   const hydrationStyles = [
     ...crossGenreStyles,
     ...selectableStyles.filter((style) => !crossGenreStyles.includes(style))
-  ].slice(0, 6);
+  ].slice(0, 3);
   for (let index = 0; index < hydrationStyles.length; index += 1) {
     const style = hydrationStyles[index];
     update(60 + index * 6, t("searchOverlayCatalog"));
@@ -29932,7 +30113,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
   const differentStyle = (track) =>
     !baseStyleKey || normalize(track?.style || "") !== baseStyleKey;
 
-  const validatePool = async (pool = [], maxAttempts = 72) => {
+  const validatePool = async (pool = [], maxAttempts = 32) => {
     if (!Array.isArray(pool) || !pool.length) return null;
     const candidates = orderDiverseTracksForPool(pool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
     let attempts = 0;
@@ -29947,8 +30128,11 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       if (artistSetHasMatch(blockedArtists, candidate.artist)) continue;
       if (!trackAllowed(candidate)) continue;
       triedTrackKeys.add(key);
+      if (!hasReliableBpmForTrack(candidate)) continue;
+      if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
       await resolvePreviewForTrack(candidate);
       if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
+      if (attempts % 8 === 0) await waitForMainThreadBreath();
     }
     return null;
   };
@@ -29986,7 +30170,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       const bCross = baseFamily && familyOf(b) !== baseFamily ? 0 : 1;
       return aCross - bCross;
     })
-    .slice(0, 10);
+    .slice(0, 4);
 
   for (let index = 0; index < hydrationStyles.length; index += 1) {
     const style = hydrationStyles[index];
@@ -30001,7 +30185,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
         !artistSetHasMatch(blockedArtists, track.artist) &&
         trackAllowed(track)
     );
-    candidate = await validatePool(stylePool, 54);
+    candidate = await validatePool(stylePool, 24);
     if (candidate) return candidate;
   }
 
@@ -30775,7 +30959,7 @@ async function resolveYouTubeVideoFromApi(track) {
   if (!query) return false;
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetchWithTimeout(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30789,7 +30973,7 @@ async function resolveYouTubeVideoFromApi(track) {
         style: track.style || "",
         limit: 3
       })
-    });
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) {
       if ([403, 404, 503].includes(response.status)) youtubeApiAvailable = false;
       if (cacheKey) youtubeApiCache.set(cacheKey, null);
@@ -32836,11 +33020,11 @@ async function fetchDailyNewsFromBackend() {
   });
   const separator = endpoint.includes("?") ? "&" : "?";
   try {
-    const response = await fetch(`${endpoint}${separator}${params.toString()}`, {
+    const response = await fetchWithTimeout(`${endpoint}${separator}${params.toString()}`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store"
-    });
+    }, OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) return [];
     const payload = await response.json();
     const items = Array.isArray(payload?.items) ? payload.items : [];
@@ -42172,7 +42356,7 @@ function updateDiscoverySequenceBadges(track) {
   });
 }
 
-function updateSwipeFeedbackCard(track) {
+function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   resetSwipeCardPosition();
   const hasTrack = Boolean(track);
   const unknownTrackText = currentLanguage === "en" ? "Untitled track" : currentLanguage === "es" ? "Pista sin titulo" : "Faixa sem titulo";
@@ -42235,7 +42419,7 @@ function updateSwipeFeedbackCard(track) {
   if (swipeEnergyChip) swipeEnergyChip.textContent = `${t("energyPrefix")} ${energy}`;
   if (swipeLikeBtn) swipeLikeBtn.disabled = false;
   if (swipePassBtn) swipePassBtn.disabled = false;
-  renderTrackCardSignals(track, lastPrefs);
+  renderTrackCardSignals(track, prefs);
   syncQuickKnownDecision(track);
 }
 
@@ -42570,6 +42754,42 @@ function beginSwipePointer(event, element) {
   element.setPointerCapture?.(event.pointerId);
 }
 
+function scheduleRecommendationDetailRender(track, prefs) {
+  const trackKey = recommendationTrackKey(track);
+  const token = ++recommendationDetailRenderToken;
+  const run = () => {
+    if (token !== recommendationDetailRenderToken) return;
+    if (trackKey && recommendationTrackKey(currentRecommendation) !== trackKey) return;
+    renderRecommendationWhy(track, prefs);
+    renderTrackCardSignals(track, prefs);
+    renderGenreGuide(track);
+    renderArtistVisualFallback(track);
+    void hydrateArtistVisual(track);
+    void hydrateTrackCoverArt(track);
+    resetRadioBrowserPanel(track);
+    void revealListeningNarrative(track, prefs);
+    applyGenreVibeTheme(track.style);
+    renderSwipeStyleRail();
+    if (generatedBadge) generatedBadge.textContent = t("generatedNow");
+    if (primaryTrackCard) {
+      primaryTrackCard.classList.remove("fresh");
+      void primaryTrackCard.offsetWidth;
+      primaryTrackCard.classList.add("fresh");
+    }
+
+    renderArtistHub(track);
+    pulseLine(artistLine);
+    pulseLine(bpmLine);
+    renderRecentListeners(track);
+    renderTopListeners(track);
+    renderTrackInsightPanel(track, prefs);
+  };
+
+  window.requestAnimationFrame(() => {
+    window.setTimeout(run, 0);
+  });
+}
+
 function renderRecommendation(track, prefs) {
   track = applyCuratedTrackMetadata(track);
   setActiveAppTab("discover");
@@ -42590,14 +42810,7 @@ function renderRecommendation(track, prefs) {
   if (keyInfo) keyInfo.textContent = `${t("keyPrefix")}: ${meta.musicalKey}`;
   if (catalogInfo) catalogInfo.textContent = formatCatalogInfo(meta, displayLabel);
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: recommendationStyleDisplayLabel(track) });
-  renderRecommendationWhy(track, prefs);
-  renderTrackCardSignals(track, prefs);
-  renderGenreGuide(track);
-  renderArtistVisualFallback(track);
-  void hydrateArtistVisual(track);
-  void hydrateTrackCoverArt(track);
-  resetRadioBrowserPanel(track);
-  void revealListeningNarrative(track, prefs);
+  updateSwipeFeedbackCard(track, prefs);
 
   if (matchReason) {
     const selectedStyle = prefs.style ? styleLabelByValue(prefs.style) : t("freeStyle");
@@ -42605,8 +42818,6 @@ function renderRecommendation(track, prefs) {
     const energy = prefs.energy ? energyLabelByValue(prefs.energy) : t("freeEnergy");
     matchReason.textContent = `${t("match")}: ${selectedStyle} | ${context} | ${energy}`;
   }
-
-  applyGenreVibeTheme(track.style);
 
   const spotifyHref = buildSpotifyTrackLink(track);
   const spotifyEnabled = Boolean(spotifyHref && spotifyHref !== "#");
@@ -42642,23 +42853,7 @@ function renderRecommendation(track, prefs) {
   if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   renderTrackRating(track);
-  updateSwipeFeedbackCard(track);
-  renderSwipeStyleRail();
-  if (generatedBadge) generatedBadge.textContent = t("generatedNow");
-  if (primaryTrackCard) {
-    primaryTrackCard.classList.remove("fresh");
-    void primaryTrackCard.offsetWidth;
-    primaryTrackCard.classList.add("fresh");
-    const focusCard = topSwipeCard || primaryTrackCard;
-    focusCard.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
-  renderArtistHub(track);
-  pulseLine(artistLine);
-  pulseLine(bpmLine);
-  renderRecentListeners(track);
-  renderTopListeners(track);
-  renderTrackInsightPanel(track, prefs);
+  scheduleRecommendationDetailRender(track, prefs);
 }
 
 async function renderPreview(track) {
@@ -42680,8 +42875,17 @@ async function renderPreview(track) {
   syncYouTubePreviewAttemptForTrack(track);
   const renderPreviewTrackKey = recommendationTrackKey(track);
   const isStillCurrentPreviewTrack = () => recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
+  const hasImmediatePlaybackRoute =
+    trackHasReliableAudioPreview(track) ||
+    trackHasExternalPlayableFallback(track) ||
+    (hasReliableBpmForTrack(track) && trackHasFastListenRoute(track));
 
-  await resolvePreviewForTrack(track);
+  if (!hasImmediatePlaybackRoute) {
+    await waitForPromiseWithTimeout(resolvePreviewForTrack(track), FAST_OPTIONAL_API_TIMEOUT_MS, null);
+  } else {
+    track.previewChecked = true;
+    track.previewMissing = !trackHasReliableAudioPreview(track);
+  }
 
   const resolvePlayablePreview = async (forceLookup = false) => {
     if (forceLookup) {
@@ -42742,16 +42946,17 @@ async function renderPreview(track) {
   let canRetryYoutube = youtubePreviewCanRetry(track);
   let youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
+  const hasExternalPlaybackRoute = trackHasExternalPlayableFallback(track);
   let playablePreview = await resolvePlayablePreview(false);
   let artistPreviewFallback = null;
-  if (!playablePreview) {
+  if (!playablePreview && !hasExternalPlaybackRoute) {
     playablePreview = await resolvePlayablePreview(true);
     hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
     hasDirectYoutube = trackHasDirectYouTubeVideo(track);
     canRetryYoutube = youtubePreviewCanRetry(track);
     youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
-  if (!playablePreview) {
+  if (!playablePreview && !hasExternalPlaybackRoute) {
     artistPreviewFallback = await pickPlayableArtistPreviewFallback(trackPreview, track, { forceLookup: true });
     if (artistPreviewFallback?.previewUrl) playablePreview = artistPreviewFallback.previewUrl;
   }
@@ -42889,7 +43094,8 @@ function renderedPreviewHasPlaybackRoute(track = currentRecommendation) {
     audioReady ||
     visiblePreviewFrameHasSource(youtubePreviewWrap, youtubePreviewFrame) ||
     visiblePreviewFrameHasSource(soundcloudPreviewWrap, soundcloudPreviewFrame) ||
-    visiblePreviewFrameHasSource(bandcampPreviewWrap, bandcampPreviewFrame)
+    visiblePreviewFrameHasSource(bandcampPreviewWrap, bandcampPreviewFrame) ||
+    trackHasFastListenRoute(track)
   );
 }
 
@@ -46137,7 +46343,7 @@ async function pickPlayableReplacementForPrefs(
     excludedTrackTitles = new Set(),
     excludedArtists = new Set(),
     allowKnownFallback = false,
-    maxAttempts = 28
+    maxAttempts = 16
   } = {}
 ) {
   prefs = normalizeRecommendationPrefs(prefs);
@@ -46183,11 +46389,13 @@ async function pickPlayableReplacementForPrefs(
     if (!candidate || !key || tried.has(key)) continue;
     tried.add(key);
     attempts += 1;
-    await resolvePreviewForTrack(candidate, { forceLookup: attempts <= 8 });
+    if (trackHasPlayablePreviewExperience(candidate)) return candidate;
+    await resolvePreviewForTrack(candidate, { forceLookup: attempts <= 3 });
     if (trackHasPlayablePreviewExperience(candidate)) return candidate;
     candidate.previewChecked = true;
     candidate.previewMissing = true;
     adjustTrackPreviewIssueSignal(candidate, 0.18);
+    if (attempts % 4 === 0) await waitForMainThreadBreath();
     if (attempts >= maxAttempts) break;
   }
 
@@ -47492,6 +47700,8 @@ async function runSurpriseRecommendation() {
     showPremiumDiscoveryLimit();
     return false;
   }
+  sonicPerfReset("surprise");
+  sonicPerfMark("start");
   primeAudioForDiscoveryGesture();
   swipeUserAnchoredStyle = "";
   playUiSfx("search-start");
@@ -47503,13 +47713,17 @@ async function runSurpriseRecommendation() {
     const knownTracksTyped = parseKnownTrackTitles(quickSurpriseKnownTracksEl ? quickSurpriseKnownTracksEl.value : "");
     knownTracksTyped.forEach((trackTitle) => knownTrackTitlesMemory.add(trackTitle));
     saveProgress();
+    sonicPerfMark("known-saved");
 
     const previousTrack = currentRecommendation;
     let surpriseTrack = null;
     await withSearchOverlay(t("searchOverlayPreparing"), async (update) => {
+      sonicPerfMark("pick-start", { hasPrevious: Boolean(previousTrack) });
       surpriseTrack = await pickValidatedSurpriseTrack(previousTrack, update);
+      sonicPerfMark("pick-validated", { found: Boolean(surpriseTrack) });
       if (!surpriseTrack) {
         surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        sonicPerfMark("pick-emergency", { found: Boolean(surpriseTrack) });
       }
       if (
         surpriseTrack &&
@@ -47517,9 +47731,11 @@ async function runSurpriseRecommendation() {
         normalize(surpriseTrack.style || "") === normalize(previousTrack.style || "")
       ) {
         surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        sonicPerfMark("pick-emergency-same-style", { found: Boolean(surpriseTrack) });
       }
       update(96, t("searchOverlayFinishing"));
     });
+    sonicPerfMark("overlay-done", { found: Boolean(surpriseTrack) });
     if (!surpriseTrack) {
       playUiSfx("error");
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -47550,15 +47766,19 @@ async function runSurpriseRecommendation() {
     currentDiscovery = discoveryModeEl.checked
       ? pickDiscovery(surprisePrefs, buildGlobalArtistExclusionSet(), surpriseTrack.artist)
       : null;
+    sonicPerfMark("discovery-picked");
 
     renderRecommendation(surpriseTrack, surprisePrefs);
+    sonicPerfMark("render-recommendation");
     renderDiscovery(currentDiscovery);
     markRecommendationPresented(surpriseTrack);
     let previewReady = await renderPreview(surpriseTrack);
+    sonicPerfMark("render-preview", { previewReady });
     if (!previewReady && isTrustedCatalogExtraTrack(surpriseTrack)) {
       surpriseTrack.previewChecked = true;
       surpriseTrack.previewMissing = true;
       previewReady = true;
+      sonicPerfMark("trusted-extra-preview-skip");
     }
     if (!previewReady) {
       const rejectedKey = recommendationTrackKey(surpriseTrack);
@@ -47573,6 +47793,7 @@ async function runSurpriseRecommendation() {
         excludedTrackKeys,
         allowKnownFallback: true
       });
+      sonicPerfMark("replacement-picked", { found: Boolean(playableReplacement) });
       if (!playableReplacement) {
         playUiSfx("error");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -47589,6 +47810,7 @@ async function runSurpriseRecommendation() {
       renderDiscovery(currentDiscovery);
       markRecommendationPresented(playableReplacement);
       previewReady = await renderPreview(playableReplacement);
+      sonicPerfMark("replacement-preview", { previewReady });
       if (!previewReady) {
         playUiSfx("error");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -47619,6 +47841,7 @@ async function runSurpriseRecommendation() {
     playUiSfx("search-done");
 
     savePreferences();
+    sonicPerfMark("done");
     return true;
   } finally {
     recommendationRunBusy = false;
@@ -49197,12 +49420,8 @@ if (!freshTestResetPending) {
   injectLocalTrackSeedBoost();
   injectSoundCloudSupplementalSeeds();
   ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
-  normalizeTrustedSlambientCatalog();
-  sanitizeCatalogByStyleRules();
-  Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
-  dedupeCatalogByTrackKey();
-  saveDynamicCatalogCache();
-  scheduleExternalDatasetWarmup(520);
+  scheduleCatalogMaintenance(BACKGROUND_CATALOG_WARMUP_DELAY_MS);
+  scheduleExternalDatasetWarmup(BACKGROUND_CATALOG_WARMUP_DELAY_MS);
   window.neonpulseCoverageReport = buildCoverageReport;
   window.neonpulseCoverageGaps = () => buildCoverageReport().filter((row) => !row.healthy);
   window.neonpulseGenreAudit = buildCatalogGenreAudit;

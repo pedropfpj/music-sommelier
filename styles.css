@@ -14580,3 +14580,111 @@ button,
     font-size: 0.78rem;
   }
 }
+
+/* Fluidity pass: keep the first decision visible after a recommendation renders. */
+#swipeStartPanel.swipe-start-panel[data-app-tab="discover"] {
+  min-height: auto;
+  gap: clamp(0.46rem, 1.2vh, 0.78rem);
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty) {
+  grid-template-rows: minmax(230px, 1fr) auto;
+  min-height: clamp(390px, 54svh, 540px);
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art {
+  min-height: clamp(230px, 34svh, 360px);
+}
+
+#topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
+  padding-block: clamp(0.72rem, 1.8vh, 1rem);
+}
+
+#swipeStartPanel .swipe-hero-actions {
+  margin-top: 0;
+}
+
+#swipeStartPanel .swipe-hero-actions button {
+  min-height: clamp(48px, 7vh, 54px);
+}
+
+@media (max-width: 620px) {
+  .app-shell {
+    scroll-margin-top: 0;
+  }
+
+  .app-tab-bar {
+    gap: 0.3rem;
+    padding: 0.28rem;
+  }
+
+  .app-tab-btn {
+    min-height: 40px;
+    padding: 0.34rem 0.3rem;
+    font-size: clamp(0.72rem, 3vw, 0.8rem);
+  }
+
+  #swipeStartPanel.swipe-start-panel[data-app-tab="discover"] {
+    padding: 0.66rem;
+  }
+
+  #swipeStartPanel .swipe-start-head h3 {
+    font-size: clamp(1.16rem, 5.4vw, 1.48rem);
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) {
+    grid-template-rows: minmax(240px, 1fr) auto;
+    min-height: clamp(390px, 54svh, 500px);
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art {
+    min-height: clamp(240px, 36svh, 350px);
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
+    padding: 0.7rem 0.76rem 0.78rem;
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {
+    font-size: clamp(1.46rem, 6.8vw, 2.05rem);
+    line-height: 1.02;
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy .muted {
+    font-size: 0.88rem;
+  }
+
+  #swipeStartPanel .swipe-hero-actions {
+    gap: 0.32rem;
+  }
+
+  #swipeStartPanel .swipe-hero-actions button {
+    min-height: 46px;
+  }
+
+  .toast {
+    top: calc(env(safe-area-inset-top, 0px) + 10px);
+    bottom: auto;
+    width: min(86vw, 360px);
+    max-height: 3.2rem;
+    padding: 0.62rem 0.82rem;
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 0.88rem;
+    line-height: 1.22;
+  }
+}
+
+@media (max-width: 430px) {
+  #topSwipeCard.swipe-hero-card:not(.is-empty) {
+    min-height: clamp(370px, 51svh, 470px);
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art {
+    min-height: clamp(220px, 33svh, 320px);
+  }
+
+  #swipeStartPanel .swipe-hero-actions button {
+    min-height: 44px;
+  }
+}
