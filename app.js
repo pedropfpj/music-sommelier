@@ -1159,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627community1";
+const SONIC_APP_BUILD_ID = "20260627community2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -47346,6 +47346,10 @@ async function submitCommunityPost() {
     if (communityPostTitle) communityPostTitle.value = "";
     if (communityPostBody) communityPostBody.value = "";
     if (communityPostMeta) communityPostMeta.value = "";
+    const postedTopic = String(payload?.post?.topic || communityState.topic || "question").trim();
+    if (postedTopic && communityState.filter !== "all" && communityState.filter !== postedTopic) {
+      communityState.filter = postedTopic;
+    }
     showToast(t("communityPosted"));
     await loadCommunityPosts({ silent: true });
     return true;
@@ -51031,13 +51035,21 @@ bind(communityRefreshBtn, "click", () => {
 bind(communityTopicTabs, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
   if (!target) return;
-  communityState.filter = String(target.getAttribute("data-community-filter") || "all");
+  const nextFilter = String(target.getAttribute("data-community-filter") || "all");
+  communityState.filter = nextFilter;
+  if (nextFilter !== "all") communityState.topic = nextFilter;
   void loadCommunityPosts({ silent: false });
 });
 bind(communityTypeGrid, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-topic]") : null;
   if (!target) return;
-  communityState.topic = String(target.getAttribute("data-community-topic") || "question");
+  const nextTopic = String(target.getAttribute("data-community-topic") || "question");
+  communityState.topic = nextTopic;
+  if (communityState.filter !== "all" && communityState.filter !== nextTopic) {
+    communityState.filter = nextTopic;
+    void loadCommunityPosts({ silent: false });
+    return;
+  }
   renderCommunityPanel();
 });
 bind(communityPostSubmitBtn, "click", () => {
