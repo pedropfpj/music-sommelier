@@ -2,7 +2,7 @@ const { normalizeEmail, resolveAccessContext } = require("./_access-control");
 const { envText, parseBody, sendJson, trimText } = require("./_music-apis");
 const crypto = require("node:crypto");
 
-const ALLOWED_TARGET_TYPES = new Set(["track", "artist", "dj", "event", "news", "playlist"]);
+const ALLOWED_TARGET_TYPES = new Set(["track", "artist", "dj", "event", "festival", "news", "playlist", "post"]);
 const MAX_COMMENT_LENGTH = 800;
 const COMMENT_LIMIT = 40;
 const STORAGE_COMMENTS_BUCKET = "sonic-social-comments";
@@ -36,7 +36,7 @@ function normalizeCommentId(value = "") {
 }
 
 function setupNeededFromError(error = "") {
-  return /schema cache|does not exist|could not find|column .* does not exist|relation .* does not exist|permission denied|insufficient privilege/i.test(String(error || ""));
+  return /schema cache|does not exist|could not find|column .* does not exist|relation .* does not exist|permission denied|insufficient privilege|check constraint/i.test(String(error || ""));
 }
 
 function restHeaders(config, { prefer = "" } = {}) {

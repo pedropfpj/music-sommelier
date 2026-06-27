@@ -31,7 +31,7 @@
       } catch (_) {}
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260627copy1" />
+    <link rel="stylesheet" href="styles.css?v=20260627community1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -397,6 +397,7 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="djs" aria-pressed="false">DJs</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtro manual</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">Notícias</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="community" aria-pressed="false">Comunidade</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
@@ -541,6 +542,54 @@
           <a href="https://mixmag.net/news" target="_blank" rel="noopener noreferrer">Mixmag</a>
           <a href="https://dancingastronaut.com/" target="_blank" rel="noopener noreferrer">Dancing Astronaut</a>
         </div>
+      </section>
+
+      <section id="communityPanel" class="panel community-panel app-tab-panel" data-app-tab="community" aria-labelledby="communityTitle">
+        <div class="section-head community-head">
+          <div>
+            <p id="communityKicker" class="section-kicker">Comunidade</p>
+            <h3 id="communityTitle">Conversa de pista</h3>
+            <p id="communityIntro" class="muted">Fale de faixas, DJs, festas, festivais e IDs que a cena está procurando.</p>
+          </div>
+          <button id="communityRefreshBtn" class="secondary" type="button">Atualizar</button>
+        </div>
+        <div id="communityTopicTabs" class="community-topic-tabs" role="tablist" aria-label="Filtrar comunidade">
+          <button class="community-topic-tab active" type="button" data-community-filter="all" aria-pressed="true">Tudo</button>
+          <button class="community-topic-tab" type="button" data-community-filter="track" aria-pressed="false">Faixas</button>
+          <button class="community-topic-tab" type="button" data-community-filter="artist" aria-pressed="false">DJs</button>
+          <button class="community-topic-tab" type="button" data-community-filter="event" aria-pressed="false">Festas</button>
+          <button class="community-topic-tab" type="button" data-community-filter="festival" aria-pressed="false">Festivais</button>
+          <button class="community-topic-tab" type="button" data-community-filter="question" aria-pressed="false">Perguntas</button>
+          <button class="community-topic-tab" type="button" data-community-filter="id" aria-pressed="false">ID</button>
+        </div>
+        <article class="community-composer-card">
+          <div id="communityComposer" class="community-composer hidden">
+            <div id="communityTypeGrid" class="community-type-grid" role="radiogroup" aria-label="Tipo de post">
+              <button class="community-type-btn active" type="button" data-community-topic="track" aria-pressed="true">Faixa</button>
+              <button class="community-type-btn" type="button" data-community-topic="artist" aria-pressed="false">Artista/DJ</button>
+              <button class="community-type-btn" type="button" data-community-topic="event" aria-pressed="false">Festa</button>
+              <button class="community-type-btn" type="button" data-community-topic="festival" aria-pressed="false">Festival</button>
+              <button class="community-type-btn" type="button" data-community-topic="question" aria-pressed="false">Pergunta</button>
+              <button class="community-type-btn" type="button" data-community-topic="id" aria-pressed="false">ID de música</button>
+            </div>
+            <label class="sr-only" for="communityPostTitle">Título do post</label>
+            <input id="communityPostTitle" type="text" maxlength="120" placeholder="Título curto da conversa" />
+            <label class="sr-only" for="communityPostBody">Mensagem para a comunidade</label>
+            <textarea id="communityPostBody" maxlength="1000" rows="4" placeholder="O que você quer perguntar, recomendar ou contar?"></textarea>
+            <label class="sr-only" for="communityPostMeta">Contexto opcional</label>
+            <input id="communityPostMeta" type="text" maxlength="160" placeholder="Cidade, festa, artista, faixa ou link de contexto" />
+            <div class="community-compose-actions">
+              <p id="communityComposerHint" class="muted">Abra uma conversa sobre faixa, artista, festa ou ID e deixe a cena responder.</p>
+              <button id="communityPostSubmitBtn" class="primary" type="button">Publicar</button>
+            </div>
+          </div>
+          <div id="communityLoginPrompt" class="social-comments-login-prompt hidden">
+            <p id="communityLoginText" class="muted">Entre para publicar, responder e reagir na comunidade.</p>
+            <button id="communityLoginBtn" class="secondary" type="button">Ir para Perfil</button>
+          </div>
+        </article>
+        <p id="communityStatus" class="muted community-status" role="status" aria-live="polite"></p>
+        <div id="communityFeedList" class="community-feed-list"></div>
       </section>
 
       <section id="supportPanel" class="panel support-panel app-tab-panel" data-app-tab="support" aria-labelledby="supportTitle">
@@ -2067,6 +2116,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260627copy1"></script>
+    <script src="app.js?v=20260627community1"></script>
   </body>
 </html>

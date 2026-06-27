@@ -1139,6 +1139,7 @@ const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
 const API_HEALTH_ENDPOINT = "/api/integration-health";
 const SOCIAL_COMMENTS_ENDPOINT = "/api/comments";
+const COMMUNITY_ENDPOINT = "/api/community";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
@@ -1158,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627copy1";
+const SONIC_APP_BUILD_ID = "20260627community1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6055,6 +6056,24 @@ const socialCommentsLoginText = document.getElementById("socialCommentsLoginText
 const socialCommentsLoginBtn = document.getElementById("socialCommentsLoginBtn");
 const socialCommentsStatus = document.getElementById("socialCommentsStatus");
 const socialCommentsList = document.getElementById("socialCommentsList");
+const communityPanel = document.getElementById("communityPanel");
+const communityKicker = document.getElementById("communityKicker");
+const communityTitle = document.getElementById("communityTitle");
+const communityIntro = document.getElementById("communityIntro");
+const communityRefreshBtn = document.getElementById("communityRefreshBtn");
+const communityTopicTabs = document.getElementById("communityTopicTabs");
+const communityTypeGrid = document.getElementById("communityTypeGrid");
+const communityComposer = document.getElementById("communityComposer");
+const communityPostTitle = document.getElementById("communityPostTitle");
+const communityPostBody = document.getElementById("communityPostBody");
+const communityPostMeta = document.getElementById("communityPostMeta");
+const communityComposerHint = document.getElementById("communityComposerHint");
+const communityPostSubmitBtn = document.getElementById("communityPostSubmitBtn");
+const communityLoginPrompt = document.getElementById("communityLoginPrompt");
+const communityLoginText = document.getElementById("communityLoginText");
+const communityLoginBtn = document.getElementById("communityLoginBtn");
+const communityStatus = document.getElementById("communityStatus");
+const communityFeedList = document.getElementById("communityFeedList");
 const swipeStartPanel = document.getElementById("swipeStartPanel");
 const swipeHeroKicker = document.getElementById("swipeHeroKicker");
 const swipeHeroTitle = document.getElementById("swipeHeroTitle");
@@ -6453,6 +6472,18 @@ let socialCommentsState = {
   setupNeeded: false,
   enabled: true,
   loadToken: 0
+};
+let communityState = {
+  filter: "all",
+  topic: "track",
+  loading: false,
+  posting: false,
+  enabled: true,
+  setupNeeded: false,
+  posts: [],
+  expandedPostId: "",
+  commentsByPost: new Map(),
+  commentLoading: new Set()
 };
 let googleAuthReady = false;
 let googleAuthLoading = false;
@@ -19133,11 +19164,54 @@ const I18N = {
     tabDiscover: "Descobrir",
     tabFilters: "Filtro manual",
     tabNews: "Notícias",
+    tabCommunity: "Comunidade",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoiar",
     tabLegal: "Avisos",
+    communityKicker: "Comunidade",
+    communityTitle: "Conversa de pista",
+    communityIntro: "Fale de faixas, DJs, festas, festivais e IDs que a cena está procurando.",
+    communityRefresh: "Atualizar",
+    communityFilterAll: "Tudo",
+    communityFilterTrack: "Faixas",
+    communityFilterArtist: "DJs",
+    communityFilterEvent: "Festas",
+    communityFilterFestival: "Festivais",
+    communityFilterQuestion: "Perguntas",
+    communityFilterId: "ID",
+    communityTypeTrack: "Faixa",
+    communityTypeArtist: "Artista/DJ",
+    communityTypeEvent: "Festa",
+    communityTypeFestival: "Festival",
+    communityTypeQuestion: "Pergunta",
+    communityTypeId: "ID de música",
+    communityTitlePlaceholder: "Título curto da conversa",
+    communityBodyPlaceholder: "O que você quer perguntar, recomendar ou contar?",
+    communityMetaPlaceholder: "Cidade, festa, artista, faixa ou link de contexto",
+    communityComposerHint: "Abra uma conversa sobre faixa, artista, festa ou ID e deixe a cena responder.",
+    communityLoginText: "Entre para publicar, responder e reagir na comunidade.",
+    communityLoginBtn: "Ir para Perfil",
+    communitySubmit: "Publicar",
+    communityLoading: "Carregando comunidade...",
+    communityEmpty: "Ainda não há conversas nesse filtro.",
+    communityDisabled: "Comunidade indisponível agora. Tente atualizar em instantes.",
+    communityPostMissing: "Escreva uma mensagem para publicar.",
+    communityPosted: "Post publicado na comunidade.",
+    communityPostFailed: "Não consegui publicar agora.",
+    communityReactionFailed: "Não consegui registrar a reação agora.",
+    communityDeleted: "Post removido.",
+    communityComment: "Comentar",
+    communityComments: "Comentários",
+    communityCommentPlaceholder: "Responder nessa conversa",
+    communityCommentSubmit: "Responder",
+    communityCommentEmpty: "Ainda não há comentários nesse post.",
+    communityCommentPosted: "Comentário publicado.",
+    communityContextLabel: "Contexto",
+    communityDelete: "Remover",
+    communityLike: "Curtir",
+    communityDislike: "Descurtir",
     feedbackKicker: "Aprendizado",
     feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
     swipeHeroKicker: "Descoberta por swipe",
@@ -20065,11 +20139,54 @@ const I18N = {
     tabDiscover: "Discover",
     tabFilters: "Manual filter",
     tabNews: "News",
+    tabCommunity: "Community",
     tabStudio: "Studio",
     tabProfile: "Profile",
     tabAbout: "About",
     tabSupport: "Support",
     tabLegal: "Legal",
+    communityKicker: "Community",
+    communityTitle: "Floor talk",
+    communityIntro: "Talk tracks, DJs, parties, festivals, and IDs the scene is chasing.",
+    communityRefresh: "Refresh",
+    communityFilterAll: "All",
+    communityFilterTrack: "Tracks",
+    communityFilterArtist: "DJs",
+    communityFilterEvent: "Parties",
+    communityFilterFestival: "Festivals",
+    communityFilterQuestion: "Questions",
+    communityFilterId: "ID",
+    communityTypeTrack: "Track",
+    communityTypeArtist: "Artist/DJ",
+    communityTypeEvent: "Party",
+    communityTypeFestival: "Festival",
+    communityTypeQuestion: "Question",
+    communityTypeId: "Track ID",
+    communityTitlePlaceholder: "Short conversation title",
+    communityBodyPlaceholder: "What do you want to ask, recommend, or report?",
+    communityMetaPlaceholder: "City, party, artist, track, or context link",
+    communityComposerHint: "Start a conversation about a track, artist, party, or ID and let the scene answer.",
+    communityLoginText: "Sign in to post, reply, and react in the community.",
+    communityLoginBtn: "Go to Profile",
+    communitySubmit: "Post",
+    communityLoading: "Loading community...",
+    communityEmpty: "No conversations in this filter yet.",
+    communityDisabled: "Community is unavailable right now. Try refreshing in a moment.",
+    communityPostMissing: "Write a message before posting.",
+    communityPosted: "Posted to the community.",
+    communityPostFailed: "I could not post that right now.",
+    communityReactionFailed: "I could not save that reaction right now.",
+    communityDeleted: "Post removed.",
+    communityComment: "Comment",
+    communityComments: "Comments",
+    communityCommentPlaceholder: "Reply in this conversation",
+    communityCommentSubmit: "Reply",
+    communityCommentEmpty: "No comments on this post yet.",
+    communityCommentPosted: "Comment posted.",
+    communityContextLabel: "Context",
+    communityDelete: "Remove",
+    communityLike: "Like",
+    communityDislike: "Dislike",
     feedbackKicker: "Learning",
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Swipe discovery",
@@ -20994,11 +21111,54 @@ const I18N = {
     tabDiscover: "Descubrir",
     tabFilters: "Filtro manual",
     tabNews: "Noticias",
+    tabCommunity: "Comunidad",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
     tabSupport: "Apoyar",
     tabLegal: "Avisos",
+    communityKicker: "Comunidad",
+    communityTitle: "Charla de pista",
+    communityIntro: "Habla de pistas, DJs, fiestas, festivales e IDs que la escena está buscando.",
+    communityRefresh: "Actualizar",
+    communityFilterAll: "Todo",
+    communityFilterTrack: "Pistas",
+    communityFilterArtist: "DJs",
+    communityFilterEvent: "Fiestas",
+    communityFilterFestival: "Festivales",
+    communityFilterQuestion: "Preguntas",
+    communityFilterId: "ID",
+    communityTypeTrack: "Pista",
+    communityTypeArtist: "Artista/DJ",
+    communityTypeEvent: "Fiesta",
+    communityTypeFestival: "Festival",
+    communityTypeQuestion: "Pregunta",
+    communityTypeId: "ID de pista",
+    communityTitlePlaceholder: "Título corto de la conversación",
+    communityBodyPlaceholder: "¿Qué quieres preguntar, recomendar o contar?",
+    communityMetaPlaceholder: "Ciudad, fiesta, artista, pista o link de contexto",
+    communityComposerHint: "Abre una conversación sobre una pista, artista, fiesta o ID y deja que la escena responda.",
+    communityLoginText: "Entra para publicar, responder y reaccionar en la comunidad.",
+    communityLoginBtn: "Ir al Perfil",
+    communitySubmit: "Publicar",
+    communityLoading: "Cargando comunidad...",
+    communityEmpty: "Aún no hay conversaciones en este filtro.",
+    communityDisabled: "La comunidad no está disponible ahora. Intenta actualizar en un momento.",
+    communityPostMissing: "Escribe un mensaje antes de publicar.",
+    communityPosted: "Post publicado en la comunidad.",
+    communityPostFailed: "No pude publicar ahora.",
+    communityReactionFailed: "No pude guardar esa reacción ahora.",
+    communityDeleted: "Post removido.",
+    communityComment: "Comentar",
+    communityComments: "Comentarios",
+    communityCommentPlaceholder: "Responder en esta conversación",
+    communityCommentSubmit: "Responder",
+    communityCommentEmpty: "Aún no hay comentarios en este post.",
+    communityCommentPosted: "Comentario publicado.",
+    communityContextLabel: "Contexto",
+    communityDelete: "Remover",
+    communityLike: "Like",
+    communityDislike: "Dislike",
     feedbackKicker: "Aprendizaje",
     feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
     swipeHeroKicker: "Descubrimiento por swipe",
@@ -22623,6 +22783,7 @@ function applyLanguage() {
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
   setText("[data-app-tab-target='filters']", t("tabFilters"));
   setText("[data-app-tab-target='news']", t("tabNews"));
+  setText("[data-app-tab-target='community']", t("tabCommunity"));
   setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
   setText("[data-app-tab-target='about']", t("tabAbout"));
@@ -22658,6 +22819,7 @@ function applyLanguage() {
   setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
   if (dailyNewsProgress) dailyNewsProgress.setAttribute("aria-label", t("dailyNewsProgressLabel"));
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
+  renderCommunityPanel();
   if (dailyNewsList?.children.length) {
     const cache = loadDailyNewsCache();
     const cachedItems = cache?.items?.length ? cache.items : dailyNewsFallbackItems();
@@ -29044,7 +29206,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 }
 
 function safeAppTabName(tabName = "discover") {
-  return ["discover", "djs", "filters", "news", "studio", "profile", "about", "support", "legal"].includes(tabName)
+  return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(tabName)
     ? tabName
     : "discover";
 }
@@ -29094,6 +29256,10 @@ function setActiveAppTab(tabName = "discover") {
   if (safeTab === "djs") ensureDjDiscoveryReady();
   if (safeTab === "studio") ensureVoiceLabUiReady();
   if (safeTab === "news") void refreshDailyNews({ silent: false });
+  if (safeTab === "community") {
+    void ensureSocialMvpReady();
+    void loadCommunityPosts({ silent: false });
+  }
 }
 
 function handleHeroLogoClick() {
@@ -46824,6 +46990,544 @@ async function deleteSocialComment(commentId = "") {
   }
 }
 
+function communitySignedIn() {
+  return Boolean(socialState.session?.access_token);
+}
+
+function communityTopicLabel(topic = "question") {
+  const key = {
+    all: "communityFilterAll",
+    track: "communityTypeTrack",
+    artist: "communityTypeArtist",
+    event: "communityTypeEvent",
+    festival: "communityTypeFestival",
+    question: "communityTypeQuestion",
+    id: "communityTypeId"
+  }[String(topic || "").trim()] || "communityTypeQuestion";
+  return t(key);
+}
+
+function communityFilterLabel(filter = "all") {
+  const key = {
+    all: "communityFilterAll",
+    track: "communityFilterTrack",
+    artist: "communityFilterArtist",
+    event: "communityFilterEvent",
+    festival: "communityFilterFestival",
+    question: "communityFilterQuestion",
+    id: "communityFilterId"
+  }[String(filter || "").trim()] || "communityFilterAll";
+  return t(key);
+}
+
+function communitySetStatus(message = "", tone = "") {
+  if (!communityStatus) return;
+  communityStatus.textContent = message;
+  communityStatus.classList.toggle("error", tone === "error");
+  communityStatus.classList.toggle("ok", tone === "ok");
+}
+
+async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
+  const headers = {
+    Accept: "application/json",
+    ...(options.headers || {})
+  };
+  if (options.body !== undefined) headers["Content-Type"] = "application/json";
+  const accessToken = await currentApiAccessToken();
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+    headers["X-Sonic-Auth-Token"] = accessToken;
+  }
+  const response = await fetchWithTimeout(path, {
+    method: options.method || "GET",
+    headers,
+    body: options.body === undefined ? undefined : JSON.stringify(options.body),
+    cache: "no-store"
+  }, SOCIAL_COMMENTS_API_TIMEOUT_MS);
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = null;
+    }
+  }
+  if (!response.ok) {
+    const detail = payload?.detail || payload?.error || response.statusText;
+    throw new Error(String(detail || "community_request_failed"));
+  }
+  return payload || {};
+}
+
+function updateCommunityControlsText() {
+  if (communityKicker) communityKicker.textContent = t("communityKicker");
+  if (communityTitle) communityTitle.textContent = t("communityTitle");
+  if (communityIntro) communityIntro.textContent = t("communityIntro");
+  if (communityRefreshBtn) communityRefreshBtn.textContent = t("communityRefresh");
+  if (communityPostTitle) communityPostTitle.placeholder = t("communityTitlePlaceholder");
+  if (communityPostBody) communityPostBody.placeholder = t("communityBodyPlaceholder");
+  if (communityPostMeta) communityPostMeta.placeholder = t("communityMetaPlaceholder");
+  if (communityComposerHint) communityComposerHint.textContent = t("communityComposerHint");
+  if (communityLoginText) communityLoginText.textContent = t("communityLoginText");
+  if (communityLoginBtn) communityLoginBtn.textContent = t("communityLoginBtn");
+  if (communityPostSubmitBtn) communityPostSubmitBtn.textContent = t("communitySubmit");
+  communityTopicTabs?.querySelectorAll("[data-community-filter]").forEach((button) => {
+    const filter = String(button.getAttribute("data-community-filter") || "all");
+    button.textContent = communityFilterLabel(filter);
+    const active = communityState.filter === filter;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+  communityTypeGrid?.querySelectorAll("[data-community-topic]").forEach((button) => {
+    const topic = String(button.getAttribute("data-community-topic") || "question");
+    button.textContent = communityTopicLabel(topic);
+    const active = communityState.topic === topic;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function renderCommunityComment(comment = {}, postId = "") {
+  const item = document.createElement("article");
+  item.className = "community-comment-item";
+  if (comment.mine) item.classList.add("is-mine");
+  const author = comment.author || {};
+  const displayName = String(author.displayName || author.username || "Sonic listener").trim();
+  const meta = document.createElement("div");
+  meta.className = "community-comment-meta";
+  meta.textContent = [displayName, socialCommentDateLabel(comment.createdAt)].filter(Boolean).join(" • ");
+  item.appendChild(meta);
+  const body = document.createElement("p");
+  body.className = "social-comment-body";
+  body.textContent = String(comment.body || "").trim();
+  item.appendChild(body);
+  const actions = document.createElement("div");
+  actions.className = "community-comment-actions";
+  const reactions = comment.reactions || {};
+  [
+    { action: "comment-like", value: 1, label: t("communityLike"), count: Number(reactions.likes) || 0 },
+    { action: "comment-dislike", value: -1, label: t("communityDislike"), count: Number(reactions.dislikes) || 0 }
+  ].forEach((data) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "social-comment-action";
+    button.dataset.communityAction = data.action;
+    button.dataset.postId = postId;
+    button.dataset.commentId = comment.id || "";
+    button.dataset.reactionValue = String(data.value);
+    button.classList.toggle("active", Number(reactions.myReaction) === data.value);
+    button.textContent = `${data.label} ${data.count}`;
+    actions.appendChild(button);
+  });
+  if (comment.mine) {
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "social-comment-action danger";
+    remove.dataset.communityAction = "comment-delete";
+    remove.dataset.postId = postId;
+    remove.dataset.commentId = comment.id || "";
+    remove.textContent = t("communityDelete");
+    actions.appendChild(remove);
+  }
+  item.appendChild(actions);
+  return item;
+}
+
+function renderCommunityPostComments(container, post = {}) {
+  const postId = post.id || "";
+  const commentsWrap = document.createElement("div");
+  commentsWrap.className = "community-post-comments";
+  const title = document.createElement("strong");
+  title.textContent = t("communityComments");
+  commentsWrap.appendChild(title);
+
+  if (communitySignedIn()) {
+    const box = document.createElement("div");
+    box.className = "community-comment-box";
+    const textarea = document.createElement("textarea");
+    textarea.maxLength = 800;
+    textarea.rows = 2;
+    textarea.placeholder = t("communityCommentPlaceholder");
+    textarea.dataset.communityCommentInput = postId;
+    box.appendChild(textarea);
+    const submit = document.createElement("button");
+    submit.type = "button";
+    submit.className = "secondary community-comment-submit";
+    submit.dataset.communityAction = "comment-submit";
+    submit.dataset.postId = postId;
+    submit.textContent = t("communityCommentSubmit");
+    box.appendChild(submit);
+    commentsWrap.appendChild(box);
+  }
+
+  const list = document.createElement("div");
+  list.className = "community-comment-list";
+  if (communityState.commentLoading.has(postId)) {
+    const loading = document.createElement("p");
+    loading.className = "muted social-comments-empty";
+    loading.textContent = t("socialCommentsLoading");
+    list.appendChild(loading);
+  } else {
+    const comments = communityState.commentsByPost.get(postId) || [];
+    if (!comments.length) {
+      const empty = document.createElement("p");
+      empty.className = "muted social-comments-empty";
+      empty.textContent = t("communityCommentEmpty");
+      list.appendChild(empty);
+    } else {
+      comments.forEach((comment) => list.appendChild(renderCommunityComment(comment, postId)));
+    }
+  }
+  commentsWrap.appendChild(list);
+  container.appendChild(commentsWrap);
+}
+
+function renderCommunityPost(post = {}) {
+  const card = document.createElement("article");
+  card.className = "community-post-card";
+  if (post.mine) card.classList.add("is-mine");
+  card.dataset.communityPostId = post.id || "";
+
+  const head = document.createElement("div");
+  head.className = "community-post-head";
+  const main = document.createElement("div");
+  const topic = document.createElement("span");
+  topic.className = "community-post-topic";
+  topic.textContent = communityTopicLabel(post.topic);
+  main.appendChild(topic);
+  const title = document.createElement("h4");
+  title.className = "community-post-title";
+  title.textContent = String(post.title || t("communityTitle")).trim();
+  main.appendChild(title);
+  if (post.context) {
+    const context = document.createElement("div");
+    context.className = "community-post-meta";
+    context.textContent = `${t("communityContextLabel")}: ${post.context}`;
+    main.appendChild(context);
+  }
+  head.appendChild(main);
+  const author = document.createElement("div");
+  author.className = "community-post-author";
+  const authorInfo = post.author || {};
+  const displayName = String(authorInfo.displayName || authorInfo.username || "Sonic listener").trim();
+  author.textContent = [displayName, socialCommentDateLabel(post.createdAt)].filter(Boolean).join(" • ");
+  head.appendChild(author);
+  card.appendChild(head);
+
+  const body = document.createElement("p");
+  body.className = "community-post-body";
+  body.textContent = String(post.body || "").trim();
+  card.appendChild(body);
+
+  const actions = document.createElement("div");
+  actions.className = "community-post-actions";
+  const reactions = post.reactions || {};
+  [
+    { action: "like", value: 1, label: t("communityLike"), count: Number(reactions.likes) || 0 },
+    { action: "dislike", value: -1, label: t("communityDislike"), count: Number(reactions.dislikes) || 0 }
+  ].forEach((data) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "social-comment-action";
+    button.dataset.communityAction = data.action;
+    button.dataset.postId = post.id || "";
+    button.dataset.reactionValue = String(data.value);
+    button.classList.toggle("active", Number(reactions.myReaction) === data.value);
+    button.textContent = `${data.label} ${data.count}`;
+    actions.appendChild(button);
+  });
+  const commentsButton = document.createElement("button");
+  commentsButton.type = "button";
+  commentsButton.className = "social-comment-action";
+  commentsButton.dataset.communityAction = "comments";
+  commentsButton.dataset.postId = post.id || "";
+  commentsButton.textContent = t("communityComment");
+  actions.appendChild(commentsButton);
+  if (post.mine) {
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "social-comment-action danger";
+    remove.dataset.communityAction = "delete";
+    remove.dataset.postId = post.id || "";
+    remove.textContent = t("communityDelete");
+    actions.appendChild(remove);
+  }
+  card.appendChild(actions);
+
+  if (communityState.expandedPostId === post.id) {
+    renderCommunityPostComments(card, post);
+  }
+  return card;
+}
+
+function renderCommunityFeed() {
+  if (!communityFeedList) return;
+  communityFeedList.innerHTML = "";
+  if (communityState.loading) return;
+  if (!communityState.enabled) {
+    const disabled = document.createElement("p");
+    disabled.className = "community-empty muted";
+    disabled.textContent = t("communityDisabled");
+    communityFeedList.appendChild(disabled);
+    return;
+  }
+  if (!communityState.posts.length) {
+    const empty = document.createElement("p");
+    empty.className = "community-empty muted";
+    empty.textContent = t("communityEmpty");
+    communityFeedList.appendChild(empty);
+    return;
+  }
+  communityState.posts.forEach((post) => communityFeedList.appendChild(renderCommunityPost(post)));
+}
+
+function renderCommunityPanel() {
+  if (!communityPanel) return;
+  updateCommunityControlsText();
+  const signed = communitySignedIn();
+  if (communityComposer) communityComposer.classList.toggle("hidden", !signed || !communityState.enabled);
+  if (communityLoginPrompt) communityLoginPrompt.classList.toggle("hidden", signed || !communityState.enabled);
+  if (communityPostSubmitBtn) communityPostSubmitBtn.disabled = communityState.posting || !communityState.enabled;
+  if (communityRefreshBtn) communityRefreshBtn.disabled = communityState.loading;
+  if (communityState.loading) communitySetStatus(t("communityLoading"));
+  else communitySetStatus("");
+  renderCommunityFeed();
+}
+
+async function loadCommunityPosts(options = {}) {
+  if (!communityPanel) return false;
+  communityState.loading = true;
+  communityState.setupNeeded = false;
+  if (!options.silent) renderCommunityPanel();
+  const params = new URLSearchParams({ topic: communityState.filter });
+  try {
+    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`);
+    communityState.enabled = payload.enabled !== false;
+    communityState.setupNeeded = Boolean(payload.setupNeeded);
+    communityState.posts = Array.isArray(payload.posts) ? payload.posts : [];
+    return true;
+  } catch (error) {
+    console.warn("Could not load community posts", error);
+    communityState.posts = [];
+    communityState.enabled = false;
+    return false;
+  } finally {
+    communityState.loading = false;
+    renderCommunityPanel();
+  }
+}
+
+async function submitCommunityPost() {
+  if (!communitySignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const body = String(communityPostBody?.value || "").trim().slice(0, 1000);
+  if (!body) {
+    communitySetStatus(t("communityPostMissing"), "error");
+    communityPostBody?.focus();
+    return false;
+  }
+  communityState.posting = true;
+  renderCommunityPanel();
+  try {
+    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
+      method: "POST",
+      body: {
+        topic: communityState.topic,
+        title: String(communityPostTitle?.value || "").trim().slice(0, 120),
+        body,
+        context: String(communityPostMeta?.value || "").trim().slice(0, 160),
+        metadata: socialCommentAuthorMeta()
+      }
+    });
+    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "community_create_failed");
+    if (communityPostTitle) communityPostTitle.value = "";
+    if (communityPostBody) communityPostBody.value = "";
+    if (communityPostMeta) communityPostMeta.value = "";
+    showToast(t("communityPosted"));
+    await loadCommunityPosts({ silent: true });
+    return true;
+  } catch (error) {
+    console.warn("Could not submit community post", error);
+    communitySetStatus(t("communityPostFailed"), "error");
+    showToast(t("communityPostFailed"));
+    return false;
+  } finally {
+    communityState.posting = false;
+    renderCommunityPanel();
+  }
+}
+
+function replaceCommunityPost(updatedPost = {}) {
+  if (!updatedPost?.id) return;
+  communityState.posts = communityState.posts.map((post) => post.id === updatedPost.id ? updatedPost : post);
+}
+
+async function reactCommunityPost(postId = "", desiredValue = 0) {
+  if (!communitySignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const post = communityState.posts.find((item) => item.id === postId);
+  if (!post) return false;
+  const previous = Number(post.reactions?.myReaction) || 0;
+  const nextValue = previous === desiredValue ? 0 : desiredValue;
+  try {
+    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "react",
+        postId,
+        value: nextValue
+      }
+    });
+    if (payload?.post) replaceCommunityPost(payload.post);
+    renderCommunityPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not react to community post", error);
+    showToast(t("communityReactionFailed"));
+    return false;
+  }
+}
+
+async function deleteCommunityPost(postId = "") {
+  if (!communitySignedIn() || !postId) return false;
+  try {
+    const params = new URLSearchParams({ id: postId });
+    await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
+    communityState.posts = communityState.posts.filter((post) => post.id !== postId);
+    if (communityState.expandedPostId === postId) communityState.expandedPostId = "";
+    showToast(t("communityDeleted"));
+    renderCommunityPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not delete community post", error);
+    showToast(t("socialCommentsUnavailable"));
+    return false;
+  }
+}
+
+async function loadCommunityPostComments(postId = "") {
+  if (!postId) return false;
+  communityState.commentLoading.add(postId);
+  renderCommunityPanel();
+  const params = new URLSearchParams({ targetType: "post", targetKey: postId });
+  try {
+    const payload = await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`);
+    communityState.commentsByPost.set(postId, Array.isArray(payload.comments) ? payload.comments : []);
+    return true;
+  } catch (error) {
+    console.warn("Could not load community post comments", error);
+    communityState.commentsByPost.set(postId, []);
+    return false;
+  } finally {
+    communityState.commentLoading.delete(postId);
+    renderCommunityPanel();
+  }
+}
+
+async function toggleCommunityComments(postId = "") {
+  if (!postId) return false;
+  if (communityState.expandedPostId === postId) {
+    communityState.expandedPostId = "";
+    renderCommunityPanel();
+    return true;
+  }
+  communityState.expandedPostId = postId;
+  renderCommunityPanel();
+  return loadCommunityPostComments(postId);
+}
+
+async function submitCommunityComment(postId = "") {
+  if (!communitySignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-input]") || [])
+    .find((element) => String(element.getAttribute("data-community-comment-input") || "") === postId);
+  const text = String(input?.value || "").trim().slice(0, 800);
+  if (!text) {
+    input?.focus();
+    return false;
+  }
+  const post = communityState.posts.find((item) => item.id === postId);
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST",
+      body: {
+        targetType: "post",
+        targetKey: postId,
+        body: text,
+        metadata: {
+          ...socialCommentAuthorMeta(),
+          targetLabel: post?.title || t("communityTitle"),
+          topic: post?.topic || "question"
+        }
+      }
+    });
+    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "comment_create_failed");
+    if (input) input.value = "";
+    showToast(t("communityCommentPosted"));
+    await loadCommunityPostComments(postId);
+    return true;
+  } catch (error) {
+    console.warn("Could not submit community comment", error);
+    showToast(t("socialCommentsPostFailed"));
+    return false;
+  }
+}
+
+async function reactCommunityComment(postId = "", commentId = "", desiredValue = 0) {
+  if (!communitySignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const comments = communityState.commentsByPost.get(postId) || [];
+  const comment = comments.find((item) => item.id === commentId);
+  if (!comment) return false;
+  const previous = Number(comment.reactions?.myReaction) || 0;
+  const nextValue = previous === desiredValue ? 0 : desiredValue;
+  try {
+    await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "react",
+        commentId,
+        targetType: "post",
+        targetKey: postId,
+        value: nextValue
+      }
+    });
+    await loadCommunityPostComments(postId);
+    return true;
+  } catch (error) {
+    console.warn("Could not react to community comment", error);
+    showToast(t("socialCommentsReactionFailed"));
+    return false;
+  }
+}
+
+async function deleteCommunityComment(postId = "", commentId = "") {
+  if (!communitySignedIn() || !postId || !commentId) return false;
+  const params = new URLSearchParams({
+    id: commentId,
+    targetType: "post",
+    targetKey: postId
+  });
+  try {
+    await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
+    await loadCommunityPostComments(postId);
+    return true;
+  } catch (error) {
+    console.warn("Could not delete community comment", error);
+    showToast(t("socialCommentsUnavailable"));
+    return false;
+  }
+}
+
 function renderSocialUi(options = {}) {
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
@@ -46872,6 +47576,7 @@ function renderSocialUi(options = {}) {
   }
   renderSocialFeed();
   renderSocialCommentsPanel();
+  renderCommunityPanel();
   if (!options.preserveStatus) {
     if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true no ambiente para liberar login real.");
     else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
@@ -50319,6 +51024,57 @@ bind(djSwipeCard, "pointercancel", (event) => {
 bind(djSwipeCard, "keydown", handleDjSwipeKeyboard);
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshDailyNews({ silent: false });
+});
+bind(communityRefreshBtn, "click", () => {
+  void loadCommunityPosts({ silent: false });
+});
+bind(communityTopicTabs, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
+  if (!target) return;
+  communityState.filter = String(target.getAttribute("data-community-filter") || "all");
+  void loadCommunityPosts({ silent: false });
+});
+bind(communityTypeGrid, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-community-topic]") : null;
+  if (!target) return;
+  communityState.topic = String(target.getAttribute("data-community-topic") || "question");
+  renderCommunityPanel();
+});
+bind(communityPostSubmitBtn, "click", () => {
+  void submitCommunityPost();
+});
+bind(communityLoginBtn, "click", () => {
+  showSocialCommentsLogin();
+});
+bind(communityFeedList, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-community-action]") : null;
+  if (!target) return;
+  const action = String(target.getAttribute("data-community-action") || "").trim();
+  const postId = String(target.getAttribute("data-post-id") || "").trim();
+  const commentId = String(target.getAttribute("data-comment-id") || "").trim();
+  if (action === "comments") {
+    await toggleCommunityComments(postId);
+    return;
+  }
+  if (action === "comment-submit") {
+    await submitCommunityComment(postId);
+    return;
+  }
+  if (action === "comment-delete") {
+    await deleteCommunityComment(postId, commentId);
+    return;
+  }
+  if (action === "comment-like" || action === "comment-dislike") {
+    await reactCommunityComment(postId, commentId, Number(target.getAttribute("data-reaction-value")) || 0);
+    return;
+  }
+  if (action === "delete") {
+    await deleteCommunityPost(postId);
+    return;
+  }
+  if (action === "like" || action === "dislike") {
+    await reactCommunityPost(postId, Number(target.getAttribute("data-reaction-value")) || 0);
+  }
 });
 bind(heroLogoBtn, "click", handleHeroLogoClick);
 bind(appTabBar, "click", (event) => {
