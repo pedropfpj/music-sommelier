@@ -31,7 +31,7 @@
       } catch (_) {}
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260627contact2" />
+    <link rel="stylesheet" href="styles.css?v=20260627comments2" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -1220,6 +1220,34 @@
           </div>
         </article>
 
+        <article id="socialCommentsCard" class="result-card social-comments-card hidden" aria-labelledby="socialCommentsTitle">
+          <div class="social-comments-head">
+            <div>
+              <p id="socialCommentsKicker" class="section-kicker">Comunidade</p>
+              <h4 id="socialCommentsTitle">Discussão da faixa</h4>
+              <p id="socialCommentsSubtitle" class="muted">Comente o que a faixa entrega na pista.</p>
+            </div>
+            <span id="socialCommentsCount" class="social-comments-count">0</span>
+          </div>
+          <div class="social-comments-tabs" role="tablist" aria-label="Tipo de discussão">
+            <button id="socialCommentsTrackTab" class="social-comments-tab active" type="button" data-comments-target="track" aria-pressed="true">Faixa</button>
+            <button id="socialCommentsArtistTab" class="social-comments-tab" type="button" data-comments-target="artist" aria-pressed="false">Artista</button>
+          </div>
+          <div id="socialCommentsComposer" class="social-comments-composer hidden">
+            <textarea id="socialCommentsInput" maxlength="800" rows="3" placeholder="Escreva um comentário sobre essa faixa"></textarea>
+            <div class="social-comments-compose-actions">
+              <p id="socialCommentsComposerHint" class="muted">Seu comentário aparece para outros ouvintes logados.</p>
+              <button id="socialCommentsSubmitBtn" class="primary" type="button">Publicar comentário</button>
+            </div>
+          </div>
+          <div id="socialCommentsLoginPrompt" class="social-comments-login-prompt hidden">
+            <p id="socialCommentsLoginText" class="muted">Entre para comentar, curtir ou descurtir comentários.</p>
+            <button id="socialCommentsLoginBtn" class="secondary" type="button">Ir para Perfil</button>
+          </div>
+          <p id="socialCommentsStatus" class="muted social-comments-status" role="status" aria-live="polite"></p>
+          <div id="socialCommentsList" class="social-comments-list"></div>
+        </article>
+
         <article id="suggestionQueueCard" class="result-card suggestion-queue hidden">
           <div class="queue-head">
             <p id="suggestionQueueTitle" class="queue-title">Fila rápida: 5 sugestões</p>
@@ -2039,6 +2067,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260627contact2"></script>
+    <script src="app.js?v=20260627comments2"></script>
   </body>
 </html>

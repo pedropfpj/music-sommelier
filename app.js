@@ -1138,6 +1138,7 @@ const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
 const API_HEALTH_ENDPOINT = "/api/integration-health";
+const SOCIAL_COMMENTS_ENDPOINT = "/api/comments";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
@@ -1148,6 +1149,7 @@ const FAST_COVERAGE_WAIT_MS = 420;
 const PREVIEW_PROBE_TIMEOUT_MS = 1800;
 const OPTIONAL_API_TIMEOUT_MS = 3600;
 const FAST_OPTIONAL_API_TIMEOUT_MS = 2600;
+const SOCIAL_COMMENTS_API_TIMEOUT_MS = 9000;
 const EXTERNAL_DATASET_FETCH_TIMEOUT_MS = 2200;
 const BACKGROUND_CATALOG_WARMUP_DELAY_MS = 22000;
 const ACTIVE_DISCOVERY_WARMUP_RETRY_MS = 8000;
@@ -1156,7 +1158,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627contact2";
+const SONIC_APP_BUILD_ID = "20260627comments2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6037,6 +6039,22 @@ const trackAiTitle = document.getElementById("trackAiTitle");
 const trackAiRefreshBtn = document.getElementById("trackAiRefreshBtn");
 const trackAiText = document.getElementById("trackAiText");
 const trackAiMeta = document.getElementById("trackAiMeta");
+const socialCommentsCard = document.getElementById("socialCommentsCard");
+const socialCommentsKicker = document.getElementById("socialCommentsKicker");
+const socialCommentsTitle = document.getElementById("socialCommentsTitle");
+const socialCommentsSubtitle = document.getElementById("socialCommentsSubtitle");
+const socialCommentsCount = document.getElementById("socialCommentsCount");
+const socialCommentsTrackTab = document.getElementById("socialCommentsTrackTab");
+const socialCommentsArtistTab = document.getElementById("socialCommentsArtistTab");
+const socialCommentsComposer = document.getElementById("socialCommentsComposer");
+const socialCommentsInput = document.getElementById("socialCommentsInput");
+const socialCommentsComposerHint = document.getElementById("socialCommentsComposerHint");
+const socialCommentsSubmitBtn = document.getElementById("socialCommentsSubmitBtn");
+const socialCommentsLoginPrompt = document.getElementById("socialCommentsLoginPrompt");
+const socialCommentsLoginText = document.getElementById("socialCommentsLoginText");
+const socialCommentsLoginBtn = document.getElementById("socialCommentsLoginBtn");
+const socialCommentsStatus = document.getElementById("socialCommentsStatus");
+const socialCommentsList = document.getElementById("socialCommentsList");
 const swipeStartPanel = document.getElementById("swipeStartPanel");
 const swipeHeroKicker = document.getElementById("swipeHeroKicker");
 const swipeHeroTitle = document.getElementById("swipeHeroTitle");
@@ -6425,6 +6443,16 @@ let socialState = {
   busy: false,
   syncTimer: null,
   lastSyncAt: 0
+};
+let socialCommentsState = {
+  targetType: "track",
+  targetKey: "",
+  loading: false,
+  comments: [],
+  reactionsEnabled: true,
+  setupNeeded: false,
+  enabled: true,
+  loadToken: 0
 };
 let googleAuthReady = false;
 let googleAuthLoading = false;
@@ -19674,6 +19702,37 @@ const I18N = {
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} pontos",
     topListenerPlays: "{plays} plays",
+    socialCommentsKicker: "Comunidade",
+    socialCommentsTitleTrack: "Discussão da faixa",
+    socialCommentsTitleArtist: "Discussão do artista",
+    socialCommentsSubtitleTrack: "Comente o que a faixa entrega na pista.",
+    socialCommentsSubtitleArtist: "Fale sobre repertório, fase ou identidade do artista.",
+    socialCommentsTabTrack: "Faixa",
+    socialCommentsTabArtist: "Artista",
+    socialCommentsPlaceholderTrack: "Escreva um comentário sobre essa faixa",
+    socialCommentsPlaceholderArtist: "Escreva um comentário sobre esse artista",
+    socialCommentsComposerHint: "Seu comentário aparece para outros ouvintes logados.",
+    socialCommentsLoginText: "Entre para comentar, curtir ou descurtir comentários.",
+    socialCommentsLoginBtn: "Ir para Perfil",
+    socialCommentsSubmit: "Publicar comentário",
+    socialCommentsLoading: "Carregando comentários...",
+    socialCommentsEmptyTrack: "Ainda não há comentários nesta faixa.",
+    socialCommentsEmptyArtist: "Ainda não há comentários sobre este artista.",
+    socialCommentsDisabled: "Comentários ficam disponíveis quando a camada social estiver ativa.",
+    socialCommentsSetupNeeded: "Falta ativar comentários e reações no Supabase.",
+    socialCommentsMissing: "Abra uma faixa para comentar.",
+    socialCommentsLoginRequired: "Entre no Perfil para participar da conversa.",
+    socialCommentsPosted: "Comentário publicado.",
+    socialCommentsPostFailed: "Não consegui publicar agora.",
+    socialCommentsReactionFailed: "Não consegui registrar a reação agora.",
+    socialCommentsDeleted: "Comentário removido.",
+    socialCommentsDelete: "Remover",
+    socialCommentsLike: "Curtir",
+    socialCommentsDislike: "Descurtir",
+    socialCommentsCount: "{count} comentário(s)",
+    socialCommentsCountEmpty: "0",
+    socialCommentsMine: "você",
+    socialCommentsUnavailable: "Comentários indisponíveis agora.",
     previewSearching: "Procurando um preview tocável...",
     previewValidated: "Preview validado com alta confiança. O som conectou?",
     previewLoaded: "Preview carregado com boa confiança. O som conectou?",
@@ -20572,6 +20631,37 @@ const I18N = {
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} points",
     topListenerPlays: "{plays} plays",
+    socialCommentsKicker: "Community",
+    socialCommentsTitleTrack: "Track discussion",
+    socialCommentsTitleArtist: "Artist discussion",
+    socialCommentsSubtitleTrack: "Comment on what this track brings to the floor.",
+    socialCommentsSubtitleArtist: "Talk about catalog, current phase, or artist identity.",
+    socialCommentsTabTrack: "Track",
+    socialCommentsTabArtist: "Artist",
+    socialCommentsPlaceholderTrack: "Write a comment about this track",
+    socialCommentsPlaceholderArtist: "Write a comment about this artist",
+    socialCommentsComposerHint: "Your comment appears to other signed-in listeners.",
+    socialCommentsLoginText: "Sign in to comment, like, or dislike comments.",
+    socialCommentsLoginBtn: "Go to Profile",
+    socialCommentsSubmit: "Post comment",
+    socialCommentsLoading: "Loading comments...",
+    socialCommentsEmptyTrack: "No comments on this track yet.",
+    socialCommentsEmptyArtist: "No comments on this artist yet.",
+    socialCommentsDisabled: "Comments become available when the social layer is active.",
+    socialCommentsSetupNeeded: "Comments and reactions still need Supabase activation.",
+    socialCommentsMissing: "Open a track before commenting.",
+    socialCommentsLoginRequired: "Sign in from Profile to join the conversation.",
+    socialCommentsPosted: "Comment posted.",
+    socialCommentsPostFailed: "I could not post that right now.",
+    socialCommentsReactionFailed: "I could not save that reaction right now.",
+    socialCommentsDeleted: "Comment removed.",
+    socialCommentsDelete: "Remove",
+    socialCommentsLike: "Like",
+    socialCommentsDislike: "Dislike",
+    socialCommentsCount: "{count} comment(s)",
+    socialCommentsCountEmpty: "0",
+    socialCommentsMine: "you",
+    socialCommentsUnavailable: "Comments are unavailable right now.",
     previewSearching: "Looking for a playable preview...",
     previewValidated: "Preview validated with high confidence. Did the sound connect?",
     previewLoaded: "Preview loaded with good confidence. Did the sound connect?",
@@ -21467,6 +21557,37 @@ const I18N = {
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} puntos",
     topListenerPlays: "{plays} reproducciones",
+    socialCommentsKicker: "Comunidad",
+    socialCommentsTitleTrack: "Discusión de la pista",
+    socialCommentsTitleArtist: "Discusión del artista",
+    socialCommentsSubtitleTrack: "Comenta qué entrega esta pista en la pista.",
+    socialCommentsSubtitleArtist: "Habla sobre catálogo, etapa o identidad del artista.",
+    socialCommentsTabTrack: "Pista",
+    socialCommentsTabArtist: "Artista",
+    socialCommentsPlaceholderTrack: "Escribe un comentario sobre esta pista",
+    socialCommentsPlaceholderArtist: "Escribe un comentario sobre este artista",
+    socialCommentsComposerHint: "Tu comentario aparece para otros oyentes conectados.",
+    socialCommentsLoginText: "Entra para comentar, dar like o dislike a comentarios.",
+    socialCommentsLoginBtn: "Ir al Perfil",
+    socialCommentsSubmit: "Publicar comentario",
+    socialCommentsLoading: "Cargando comentarios...",
+    socialCommentsEmptyTrack: "Aún no hay comentarios en esta pista.",
+    socialCommentsEmptyArtist: "Aún no hay comentarios sobre este artista.",
+    socialCommentsDisabled: "Los comentarios estarán disponibles cuando la capa social esté activa.",
+    socialCommentsSetupNeeded: "Falta activar comentarios y reacciones en Supabase.",
+    socialCommentsMissing: "Abre una pista para comentar.",
+    socialCommentsLoginRequired: "Entra desde Perfil para participar en la conversación.",
+    socialCommentsPosted: "Comentario publicado.",
+    socialCommentsPostFailed: "No pude publicar ahora.",
+    socialCommentsReactionFailed: "No pude guardar la reacción ahora.",
+    socialCommentsDeleted: "Comentario eliminado.",
+    socialCommentsDelete: "Eliminar",
+    socialCommentsLike: "Me gusta",
+    socialCommentsDislike: "No me gusta",
+    socialCommentsCount: "{count} comentario(s)",
+    socialCommentsCountEmpty: "0",
+    socialCommentsMine: "tú",
+    socialCommentsUnavailable: "Comentarios no disponibles ahora.",
     previewSearching: "Buscando un preview reproducible...",
     previewValidated: "Preview validado con alta confianza. ¿Conectó el sonido?",
     previewLoaded: "Preview cargado con buena confianza. ¿Conectó el sonido?",
@@ -22710,6 +22831,7 @@ function applyLanguage() {
   setText("#resultPanel > h3", labels.resultTitle || "");
   setText(".listeners-title", labels.listenersTitle || "");
   setText("#topListenersTitle", t("topListenersTitle"));
+  renderSocialCommentsPanel();
   setText("#feedbackKicker", t("feedbackKicker"));
   setText("#feedbackTitle", labels.feedbackTitle || "");
   setText("#feedbackHint", t("feedbackHint"));
@@ -43110,6 +43232,7 @@ function renderRecommendation(track, prefs) {
   if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
   if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
   renderTrackRating(track);
+  void loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
   scheduleRecommendationDetailRender(track, prefs);
 }
 
@@ -46264,6 +46387,438 @@ function renderSocialFeed() {
   });
 }
 
+function socialCommentsSignedIn() {
+  return Boolean(socialState.session?.access_token);
+}
+
+function socialCommentAuthorMeta() {
+  const profile = socialState.profile || socialCurrentProfilePayload();
+  const username = socialCleanUsername(profile?.username || socialSuggestedUsername() || "");
+  const displayName = String(profile?.display_name || profile?.displayName || socialSuggestedDisplayName() || username || "").trim();
+  return {
+    username,
+    displayName,
+    avatarUrl: String(profile?.avatar_url || profile?.avatarUrl || "").trim()
+  };
+}
+
+function socialCommentsTrackTarget(track = currentRecommendation) {
+  const targetKey = recommendationTrackKey(track);
+  if (!track || !targetKey) return null;
+  const song = formatSummaryTrackName(track.song || "") || String(track.song || "").trim();
+  const artist = formatSummaryArtistName(track.artist || "") || String(track.artist || "").trim();
+  const label = [song, artist].filter(Boolean).join(" • ");
+  return {
+    targetType: "track",
+    targetKey,
+    label,
+    metadata: {
+      artist,
+      song,
+      style: track.style || "",
+      targetLabel: label
+    }
+  };
+}
+
+function socialCommentsArtistTarget(track = currentRecommendation) {
+  const artist = formatSummaryArtistName(track?.artist || "") || String(track?.artist || "").trim();
+  const targetKey = normalize(artist || "");
+  if (!artist || !targetKey) return null;
+  return {
+    targetType: "artist",
+    targetKey,
+    label: artist,
+    metadata: {
+      artist,
+      song: "",
+      style: track?.style || "",
+      targetLabel: artist
+    }
+  };
+}
+
+function currentSocialCommentTarget(targetType = socialCommentsState.targetType) {
+  const safeType = targetType === "artist" ? "artist" : "track";
+  return safeType === "artist"
+    ? socialCommentsArtistTarget(currentRecommendation)
+    : socialCommentsTrackTarget(currentRecommendation);
+}
+
+async function socialCommentsRequest(path = "", options = {}) {
+  const headers = {
+    Accept: "application/json",
+    ...(options.headers || {})
+  };
+  if (options.body !== undefined) headers["Content-Type"] = "application/json";
+  const accessToken = await currentApiAccessToken();
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+    headers["X-Sonic-Auth-Token"] = accessToken;
+  }
+  const response = await fetchWithTimeout(path, {
+    method: options.method || "GET",
+    headers,
+    body: options.body === undefined ? undefined : JSON.stringify(options.body),
+    cache: "no-store"
+  }, SOCIAL_COMMENTS_API_TIMEOUT_MS);
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = null;
+    }
+  }
+  if (!response.ok) {
+    const detail = payload?.detail || payload?.error || response.statusText;
+    throw new Error(String(detail || "comments_request_failed"));
+  }
+  return payload || {};
+}
+
+function socialCommentDateLabel(value = "") {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat(currentLocale(), {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(date);
+}
+
+function socialCommentsStatusText(targetType = socialCommentsState.targetType) {
+  if (socialCommentsState.loading) return t("socialCommentsLoading");
+  if (!socialCommentsState.enabled) return t("socialCommentsDisabled");
+  if (socialCommentsState.setupNeeded || !socialCommentsState.reactionsEnabled) return t("socialCommentsSetupNeeded");
+  if (!currentSocialCommentTarget(targetType)) return t("socialCommentsMissing");
+  return "";
+}
+
+function renderSocialCommentItem(comment = {}) {
+  const item = document.createElement("article");
+  item.className = "social-comment-item";
+  if (comment.mine) item.classList.add("is-mine");
+  item.dataset.commentId = comment.id || "";
+
+  const head = document.createElement("div");
+  head.className = "social-comment-head";
+
+  const avatar = document.createElement("span");
+  avatar.className = "social-comment-avatar";
+  const author = comment.author || {};
+  const displayName = String(author.displayName || author.username || "Sonic listener").trim();
+  avatar.textContent = displayName.slice(0, 1).toUpperCase() || "S";
+  head.appendChild(avatar);
+
+  const authorBlock = document.createElement("div");
+  authorBlock.className = "social-comment-author";
+  const name = document.createElement("strong");
+  name.textContent = comment.mine ? `${displayName} (${t("socialCommentsMine")})` : displayName;
+  authorBlock.appendChild(name);
+  const meta = document.createElement("span");
+  const handle = author.username ? `@${author.username}` : "";
+  meta.textContent = [handle, socialCommentDateLabel(comment.createdAt)].filter(Boolean).join(" • ");
+  authorBlock.appendChild(meta);
+  head.appendChild(authorBlock);
+
+  item.appendChild(head);
+
+  const body = document.createElement("p");
+  body.className = "social-comment-body";
+  body.textContent = String(comment.body || "").trim();
+  item.appendChild(body);
+
+  const actions = document.createElement("div");
+  actions.className = "social-comment-actions";
+  const reactions = comment.reactions || {};
+  [
+    { action: "like", value: 1, label: t("socialCommentsLike"), count: Number(reactions.likes) || 0 },
+    { action: "dislike", value: -1, label: t("socialCommentsDislike"), count: Number(reactions.dislikes) || 0 }
+  ].forEach((data) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "social-comment-action";
+    button.dataset.commentAction = data.action;
+    button.dataset.commentId = comment.id || "";
+    button.dataset.reactionValue = String(data.value);
+    button.disabled = !socialCommentsState.enabled || !socialCommentsState.reactionsEnabled;
+    button.classList.toggle("active", Number(reactions.myReaction) === data.value);
+    button.setAttribute("aria-label", data.label);
+    button.textContent = `${data.label} ${data.count}`;
+    actions.appendChild(button);
+  });
+
+  if (comment.mine) {
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "social-comment-action danger";
+    removeButton.dataset.commentAction = "delete";
+    removeButton.dataset.commentId = comment.id || "";
+    removeButton.textContent = t("socialCommentsDelete");
+    actions.appendChild(removeButton);
+  }
+
+  item.appendChild(actions);
+  return item;
+}
+
+function renderSocialCommentsList() {
+  if (!socialCommentsList) return;
+  socialCommentsList.innerHTML = "";
+  const targetType = socialCommentsState.targetType === "artist" ? "artist" : "track";
+  if (socialCommentsState.loading) return;
+  if (!socialCommentsState.enabled) {
+    return;
+  }
+  if (!socialCommentsState.comments.length) {
+    const empty = document.createElement("p");
+    empty.className = "social-comments-empty muted";
+    empty.textContent = targetType === "artist" ? t("socialCommentsEmptyArtist") : t("socialCommentsEmptyTrack");
+    socialCommentsList.appendChild(empty);
+    return;
+  }
+  socialCommentsState.comments.forEach((comment) => {
+    socialCommentsList.appendChild(renderSocialCommentItem(comment));
+  });
+}
+
+function renderSocialCommentsPanel() {
+  if (!socialCommentsCard) return;
+  const targetType = socialCommentsState.targetType === "artist" ? "artist" : "track";
+  const target = currentSocialCommentTarget(targetType);
+  if (!target) {
+    socialCommentsCard.classList.add("hidden");
+    return;
+  }
+  socialCommentsCard.classList.remove("hidden");
+  if (socialCommentsKicker) socialCommentsKicker.textContent = t("socialCommentsKicker");
+  if (socialCommentsTitle) {
+    socialCommentsTitle.textContent = targetType === "artist" ? t("socialCommentsTitleArtist") : t("socialCommentsTitleTrack");
+  }
+  if (socialCommentsSubtitle) {
+    socialCommentsSubtitle.textContent = targetType === "artist" ? t("socialCommentsSubtitleArtist") : t("socialCommentsSubtitleTrack");
+  }
+  if (socialCommentsCount) {
+    socialCommentsCount.textContent = socialCommentsState.comments.length
+      ? t("socialCommentsCount", { count: socialCommentsState.comments.length })
+      : t("socialCommentsCountEmpty");
+  }
+  [
+    [socialCommentsTrackTab, "track"],
+    [socialCommentsArtistTab, "artist"]
+  ].forEach(([button, value]) => {
+    if (!button) return;
+    const active = targetType === value;
+    button.textContent = value === "artist" ? t("socialCommentsTabArtist") : t("socialCommentsTabTrack");
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+  if (socialCommentsInput) {
+    socialCommentsInput.placeholder = targetType === "artist"
+      ? t("socialCommentsPlaceholderArtist")
+      : t("socialCommentsPlaceholderTrack");
+  }
+  if (socialCommentsComposerHint) socialCommentsComposerHint.textContent = t("socialCommentsComposerHint");
+  if (socialCommentsSubmitBtn) {
+    socialCommentsSubmitBtn.textContent = t("socialCommentsSubmit");
+    socialCommentsSubmitBtn.disabled = socialCommentsState.loading || !socialCommentsState.enabled;
+  }
+  if (socialCommentsLoginText) socialCommentsLoginText.textContent = t("socialCommentsLoginText");
+  if (socialCommentsLoginBtn) socialCommentsLoginBtn.textContent = t("socialCommentsLoginBtn");
+
+  const signed = socialCommentsSignedIn();
+  if (socialCommentsComposer) socialCommentsComposer.classList.toggle("hidden", !signed || !socialCommentsState.enabled);
+  if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.toggle("hidden", signed || !socialCommentsState.enabled);
+  if (socialCommentsStatus) socialCommentsStatus.textContent = socialCommentsStatusText(targetType);
+  renderSocialCommentsList();
+}
+
+async function loadSocialComments(options = {}) {
+  if (!socialCommentsCard) return false;
+  const targetType = options.targetType === "artist" ? "artist" : socialCommentsState.targetType === "artist" ? "artist" : "track";
+  const target = currentSocialCommentTarget(targetType);
+  socialCommentsState.targetType = targetType;
+  if (!target) {
+    socialCommentsState.targetKey = "";
+    socialCommentsState.comments = [];
+    renderSocialCommentsPanel();
+    return false;
+  }
+  socialCommentsState.targetKey = target.targetKey;
+  socialCommentsState.loading = true;
+  socialCommentsState.setupNeeded = false;
+  const token = socialCommentsState.loadToken + 1;
+  socialCommentsState.loadToken = token;
+  if (!options.silent) renderSocialCommentsPanel();
+
+  const params = new URLSearchParams({
+    targetType: target.targetType,
+    targetKey: target.targetKey
+  });
+  try {
+    const payload = await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`);
+    if (token !== socialCommentsState.loadToken) return false;
+    socialCommentsState.enabled = payload.enabled !== false;
+    socialCommentsState.setupNeeded = Boolean(payload.setupNeeded);
+    socialCommentsState.reactionsEnabled = payload.reactionsEnabled !== false && !payload.setupNeeded;
+    socialCommentsState.comments = Array.isArray(payload.comments) ? payload.comments : [];
+    return true;
+  } catch (error) {
+    if (token !== socialCommentsState.loadToken) return false;
+    console.warn("Could not load social comments", error);
+    socialCommentsState.enabled = false;
+    socialCommentsState.comments = [];
+    return false;
+  } finally {
+    if (token === socialCommentsState.loadToken) {
+      socialCommentsState.loading = false;
+      renderSocialCommentsPanel();
+    }
+  }
+}
+
+function showSocialCommentsLogin() {
+  showToast(t("socialCommentsLoginRequired"));
+  setActiveAppTab("profile");
+  void ensureSocialMvpReady();
+}
+
+async function submitSocialComment() {
+  const target = currentSocialCommentTarget(socialCommentsState.targetType);
+  if (!target || !socialCommentsInput) {
+    if (socialCommentsStatus) socialCommentsStatus.textContent = t("socialCommentsMissing");
+    return false;
+  }
+  if (!socialCommentsSignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const text = String(socialCommentsInput.value || "").trim().slice(0, 800);
+  if (!text) {
+    socialCommentsInput.focus();
+    return false;
+  }
+  const author = socialCommentAuthorMeta();
+  const previousDisabled = Boolean(socialCommentsSubmitBtn?.disabled);
+  if (socialCommentsSubmitBtn) socialCommentsSubmitBtn.disabled = true;
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST",
+      body: {
+        targetType: target.targetType,
+        targetKey: target.targetKey,
+        body: text,
+        metadata: {
+          ...target.metadata,
+          ...author
+        }
+      }
+    });
+    if (payload?.setupNeeded) {
+      socialCommentsState.setupNeeded = true;
+      renderSocialCommentsPanel();
+      return false;
+    }
+    socialCommentsInput.value = "";
+    showToast(t("socialCommentsPosted"));
+    await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
+    return true;
+  } catch (error) {
+    console.warn("Could not submit social comment", error);
+    if (socialCommentsStatus) socialCommentsStatus.textContent = t("socialCommentsPostFailed");
+    showToast(t("socialCommentsPostFailed"));
+    window.setTimeout(() => {
+      void loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
+    }, 1600);
+    return false;
+  } finally {
+    if (socialCommentsSubmitBtn) socialCommentsSubmitBtn.disabled = previousDisabled;
+    renderSocialCommentsPanel();
+  }
+}
+
+function applyLocalCommentReaction(commentId = "", nextReaction = 0) {
+  const comment = socialCommentsState.comments.find((item) => item.id === commentId);
+  if (!comment) return;
+  const reactions = {
+    likes: 0,
+    dislikes: 0,
+    myReaction: 0,
+    ...(comment.reactions || {})
+  };
+  const previous = Number(reactions.myReaction) || 0;
+  if (previous > 0) reactions.likes = Math.max(0, Number(reactions.likes) - 1);
+  if (previous < 0) reactions.dislikes = Math.max(0, Number(reactions.dislikes) - 1);
+  if (nextReaction > 0) reactions.likes = Number(reactions.likes) + 1;
+  if (nextReaction < 0) reactions.dislikes = Number(reactions.dislikes) + 1;
+  reactions.myReaction = nextReaction;
+  comment.reactions = reactions;
+}
+
+async function reactSocialComment(commentId = "", desiredValue = 0) {
+  if (!socialCommentsSignedIn()) {
+    showSocialCommentsLogin();
+    return false;
+  }
+  const target = currentSocialCommentTarget(socialCommentsState.targetType);
+  const comment = socialCommentsState.comments.find((item) => item.id === commentId);
+  if (!comment || !target) return false;
+  const previous = Number(comment.reactions?.myReaction) || 0;
+  const nextValue = previous === desiredValue ? 0 : desiredValue;
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "react",
+        commentId,
+        targetType: target.targetType,
+        targetKey: target.targetKey,
+        value: nextValue
+      }
+    });
+    if (payload?.setupNeeded) {
+      socialCommentsState.reactionsEnabled = false;
+      socialCommentsState.setupNeeded = true;
+      renderSocialCommentsPanel();
+      return false;
+    }
+    applyLocalCommentReaction(commentId, nextValue);
+    renderSocialCommentsPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not react to social comment", error);
+    showToast(t("socialCommentsReactionFailed"));
+    return false;
+  }
+}
+
+async function deleteSocialComment(commentId = "") {
+  if (!socialCommentsSignedIn() || !commentId) return false;
+  const target = currentSocialCommentTarget(socialCommentsState.targetType);
+  if (!target) return false;
+  const params = new URLSearchParams({
+    id: commentId,
+    targetType: target.targetType,
+    targetKey: target.targetKey
+  });
+  try {
+    await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`, {
+      method: "DELETE"
+    });
+    socialCommentsState.comments = socialCommentsState.comments.filter((comment) => comment.id !== commentId);
+    showToast(t("socialCommentsDeleted"));
+    renderSocialCommentsPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not delete social comment", error);
+    showToast(t("socialCommentsUnavailable"));
+    return false;
+  }
+}
+
 function renderSocialUi(options = {}) {
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
@@ -46311,6 +46866,7 @@ function renderSocialUi(options = {}) {
     socialMatchHint.textContent = styles.length ? styles.join(" + ") : "aguardando sinais";
   }
   renderSocialFeed();
+  renderSocialCommentsPanel();
   if (!options.preserveStatus) {
     if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true no ambiente para liberar login real.");
     else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
@@ -46386,6 +46942,7 @@ async function socialSignUp() {
       await upsertSocialProfile();
       await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
       socialSetStatus("Perfil criado e conectado.", "ok");
+      void loadSocialComments({ silent: true });
     } else {
       socialSetStatus("Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.", "ok");
     }
@@ -46430,6 +46987,7 @@ async function socialSignIn() {
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
+    void loadSocialComments({ silent: true });
   } catch (error) {
     socialSetStatus(`Nao consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
@@ -46497,6 +47055,7 @@ async function socialSignOut() {
   socialSetStatus("Voce saiu do perfil social.");
   renderSocialUi({ preserveStatus: true });
   updateAuthProviderUi();
+  void loadSocialComments({ silent: true });
 }
 
 async function initSocialMvp() {
@@ -46537,6 +47096,7 @@ async function initSocialMvp() {
     await loadSocialFeed({ silent: true });
     updateStats();
     renderSocialUi({ preserveStatus: true });
+    void loadSocialComments({ silent: true });
   }
   updateAuthProviderUi();
 }
@@ -49481,6 +50041,36 @@ bind(swipeStyleRail, "click", async (event) => {
   if (!target) return;
   const style = String(target.getAttribute("data-swipe-style") || "").trim();
   await runSwipeStyleRecommendation(style);
+});
+
+bind(socialCommentsTrackTab, "click", () => {
+  void loadSocialComments({ targetType: "track" });
+});
+
+bind(socialCommentsArtistTab, "click", () => {
+  void loadSocialComments({ targetType: "artist" });
+});
+
+bind(socialCommentsSubmitBtn, "click", () => {
+  void submitSocialComment();
+});
+
+bind(socialCommentsLoginBtn, "click", () => {
+  showSocialCommentsLogin();
+});
+
+bind(socialCommentsList, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-comment-action]") : null;
+  if (!target) return;
+  const action = String(target.getAttribute("data-comment-action") || "").trim();
+  const commentId = String(target.getAttribute("data-comment-id") || "").trim();
+  if (!commentId) return;
+  if (action === "delete") {
+    await deleteSocialComment(commentId);
+    return;
+  }
+  const value = Number(target.getAttribute("data-reaction-value")) || 0;
+  if (value) await reactSocialComment(commentId, value);
 });
 
 bind(topSwipeCard, "pointerdown", (event) => {
