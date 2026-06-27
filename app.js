@@ -1156,7 +1156,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627contact1";
+const SONIC_APP_BUILD_ID = "20260627contact2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -5754,6 +5754,12 @@ const supportContactTitle = document.getElementById("supportContactTitle");
 const supportContactText = document.getElementById("supportContactText");
 const supportContactEmailLabel = document.getElementById("supportContactEmailLabel");
 const supportContactEmail = document.getElementById("supportContactEmail");
+const supportContactForm = document.getElementById("supportContactForm");
+const supportContactTopic = document.getElementById("supportContactTopic");
+const supportContactName = document.getElementById("supportContactName");
+const supportContactReply = document.getElementById("supportContactReply");
+const supportContactMessage = document.getElementById("supportContactMessage");
+const supportContactStatus = document.getElementById("supportContactStatus");
 const supportContactMailBtn = document.getElementById("supportContactMailBtn");
 const supportContactCopyBtn = document.getElementById("supportContactCopyBtn");
 const supportLegalNote = document.getElementById("supportLegalNote");
@@ -19203,13 +19209,35 @@ const I18N = {
     supportTitle: "Apoie o Sonic Search",
     supportIntro: "Seu apoio mantém catálogo, IA e melhorias em movimento.",
     supportContactKicker: "Contato",
-    supportContactTitle: "Fale com o Sonic Search",
-    supportContactText: "Envie feedback, bugs, parcerias ou ideias direto para o projeto.",
-    supportContactEmailLabel: "E-mail direto",
-    supportContactMail: "Enviar e-mail",
-    supportContactCopy: "Copiar e-mail",
-    supportContactSubject: "Contato Sonic Search",
-    supportContactBody: "Oi, quero falar sobre o Sonic Search.\n\nTema: ",
+    supportContactTitle: "Central Sonic Search",
+    supportContactText: "Envie feedback, bugs, parcerias ou ideias com contexto pronto.",
+    supportContactEmailLabel: "Canal direto",
+    supportContactTopicLabel: "Assunto",
+    supportContactTopicFeedback: "Feedback do app",
+    supportContactTopicBug: "Bug ou problema",
+    supportContactTopicPartnership: "Parceria",
+    supportContactTopicCatalog: "Catálogo ou curadoria",
+    supportContactNameLabel: "Nome",
+    supportContactReplyLabel: "E-mail para resposta",
+    supportContactMessageLabel: "Mensagem",
+    supportContactNamePlaceholder: "Seu nome ou projeto",
+    supportContactReplyPlaceholder: "voce@email.com",
+    supportContactMessagePlaceholder: "Conte o que aconteceu, ideia ou proposta.",
+    supportContactMail: "Preparar envio",
+    supportContactCopy: "Copiar briefing",
+    supportContactReady: "O envio abre no seu app de e-mail com a mensagem organizada.",
+    supportContactMissingMessage: "Escreva uma mensagem para preparar o contato.",
+    supportContactOpening: "Abrindo e-mail com o briefing pronto.",
+    supportContactCopiedBrief: "Briefing copiado.",
+    supportContactSubjectPrefix: "Sonic Search",
+    supportContactBodyGreeting: "Oi, quero falar sobre o Sonic Search.",
+    supportContactBodyTopic: "Assunto",
+    supportContactBodyName: "Nome",
+    supportContactBodyReply: "E-mail para resposta",
+    supportContactBodyMessage: "Mensagem",
+    supportContactBodyPage: "Pagina",
+    supportContactBodyBuild: "Build",
+    supportContactAnonymous: "Nao informado",
     supportBadge: "Tips",
     supportCustomAmount: "Outro valor",
     supportPixKicker: "Pix",
@@ -20082,13 +20110,35 @@ const I18N = {
     supportTitle: "Support Sonic Search",
     supportIntro: "Your support keeps the catalog, AI, and improvements moving.",
     supportContactKicker: "Contact",
-    supportContactTitle: "Talk to Sonic Search",
-    supportContactText: "Send feedback, bugs, partnerships, or ideas directly to the project.",
-    supportContactEmailLabel: "Direct email",
-    supportContactMail: "Send email",
-    supportContactCopy: "Copy email",
-    supportContactSubject: "Sonic Search contact",
-    supportContactBody: "Hi, I want to talk about Sonic Search.\n\nTopic: ",
+    supportContactTitle: "Sonic Search desk",
+    supportContactText: "Send feedback, bugs, partnerships, or ideas with ready context.",
+    supportContactEmailLabel: "Direct channel",
+    supportContactTopicLabel: "Subject",
+    supportContactTopicFeedback: "App feedback",
+    supportContactTopicBug: "Bug or issue",
+    supportContactTopicPartnership: "Partnership",
+    supportContactTopicCatalog: "Catalog or curation",
+    supportContactNameLabel: "Name",
+    supportContactReplyLabel: "Reply email",
+    supportContactMessageLabel: "Message",
+    supportContactNamePlaceholder: "Your name or project",
+    supportContactReplyPlaceholder: "you@email.com",
+    supportContactMessagePlaceholder: "Describe what happened, your idea, or proposal.",
+    supportContactMail: "Prepare email",
+    supportContactCopy: "Copy brief",
+    supportContactReady: "Sending opens your email app with the message already structured.",
+    supportContactMissingMessage: "Write a message to prepare the contact.",
+    supportContactOpening: "Opening email with the brief ready.",
+    supportContactCopiedBrief: "Brief copied.",
+    supportContactSubjectPrefix: "Sonic Search",
+    supportContactBodyGreeting: "Hi, I want to talk about Sonic Search.",
+    supportContactBodyTopic: "Subject",
+    supportContactBodyName: "Name",
+    supportContactBodyReply: "Reply email",
+    supportContactBodyMessage: "Message",
+    supportContactBodyPage: "Page",
+    supportContactBodyBuild: "Build",
+    supportContactAnonymous: "Not provided",
     supportBadge: "Tips",
     supportCustomAmount: "Custom amount",
     supportPixKicker: "Pix",
@@ -20958,13 +21008,35 @@ const I18N = {
     supportTitle: "Apoya Sonic Search",
     supportIntro: "Tu apoyo mantiene catálogo, IA y mejoras en movimiento.",
     supportContactKicker: "Contacto",
-    supportContactTitle: "Habla con Sonic Search",
-    supportContactText: "Envía feedback, bugs, alianzas o ideas directamente al proyecto.",
-    supportContactEmailLabel: "E-mail directo",
-    supportContactMail: "Enviar e-mail",
-    supportContactCopy: "Copiar e-mail",
-    supportContactSubject: "Contacto Sonic Search",
-    supportContactBody: "Hola, quiero hablar sobre Sonic Search.\n\nTema: ",
+    supportContactTitle: "Central Sonic Search",
+    supportContactText: "Envía feedback, bugs, alianzas o ideas con contexto listo.",
+    supportContactEmailLabel: "Canal directo",
+    supportContactTopicLabel: "Asunto",
+    supportContactTopicFeedback: "Feedback de la app",
+    supportContactTopicBug: "Bug o problema",
+    supportContactTopicPartnership: "Alianza",
+    supportContactTopicCatalog: "Catálogo o curaduría",
+    supportContactNameLabel: "Nombre",
+    supportContactReplyLabel: "E-mail de respuesta",
+    supportContactMessageLabel: "Mensaje",
+    supportContactNamePlaceholder: "Tu nombre o proyecto",
+    supportContactReplyPlaceholder: "tu@email.com",
+    supportContactMessagePlaceholder: "Cuenta qué pasó, tu idea o propuesta.",
+    supportContactMail: "Preparar envío",
+    supportContactCopy: "Copiar brief",
+    supportContactReady: "El envío abre tu app de e-mail con el mensaje organizado.",
+    supportContactMissingMessage: "Escribe un mensaje para preparar el contacto.",
+    supportContactOpening: "Abriendo e-mail con el brief listo.",
+    supportContactCopiedBrief: "Brief copiado.",
+    supportContactSubjectPrefix: "Sonic Search",
+    supportContactBodyGreeting: "Hola, quiero hablar sobre Sonic Search.",
+    supportContactBodyTopic: "Asunto",
+    supportContactBodyName: "Nombre",
+    supportContactBodyReply: "E-mail de respuesta",
+    supportContactBodyMessage: "Mensaje",
+    supportContactBodyPage: "Pagina",
+    supportContactBodyBuild: "Build",
+    supportContactAnonymous: "No informado",
     supportBadge: "Tips",
     supportCustomAmount: "Otro valor",
     supportPixKicker: "Pix",
@@ -22491,8 +22563,20 @@ function applyLanguage() {
   setText("#supportContactTitle", t("supportContactTitle"));
   setText("#supportContactText", t("supportContactText"));
   setText("#supportContactEmailLabel", t("supportContactEmailLabel"));
+  setText("#supportContactTopicLabel", t("supportContactTopicLabel"));
+  setText("#supportContactTopicFeedback", t("supportContactTopicFeedback"));
+  setText("#supportContactTopicBug", t("supportContactTopicBug"));
+  setText("#supportContactTopicPartnership", t("supportContactTopicPartnership"));
+  setText("#supportContactTopicCatalog", t("supportContactTopicCatalog"));
+  setText("#supportContactNameLabel", t("supportContactNameLabel"));
+  setText("#supportContactReplyLabel", t("supportContactReplyLabel"));
+  setText("#supportContactMessageLabel", t("supportContactMessageLabel"));
   setText("#supportContactMailBtn", t("supportContactMail"));
   setText("#supportContactCopyBtn", t("supportContactCopy"));
+  if (supportContactName) supportContactName.placeholder = t("supportContactNamePlaceholder");
+  if (supportContactReply) supportContactReply.placeholder = t("supportContactReplyPlaceholder");
+  if (supportContactMessage) supportContactMessage.placeholder = t("supportContactMessagePlaceholder");
+  if (supportContactStatus) supportContactStatus.textContent = t("supportContactReady");
   setText("#supportLegalNote", t("supportLegalNote"));
   setText("#legalHubKicker", t("legalHubKicker"));
   setText("#legalHubTitle", t("legalHubTitle"));
@@ -28602,27 +28686,71 @@ function configuredSupportContactEmail() {
   return String(SUPPORT_PAYMENT_CONFIG.contact?.email || SUPPORT_DEFAULT_CONFIG.contact?.email || "").trim();
 }
 
-function buildSupportContactHref(email = "") {
+function supportContactTopicLabel(value = "") {
+  const topic = String(value || "feedback").trim();
+  const key = {
+    feedback: "supportContactTopicFeedback",
+    bug: "supportContactTopicBug",
+    partnership: "supportContactTopicPartnership",
+    catalog: "supportContactTopicCatalog"
+  }[topic] || "supportContactTopicFeedback";
+  return t(key);
+}
+
+function supportContactFormData() {
+  return {
+    topic: String(supportContactTopic?.value || "feedback").trim() || "feedback",
+    name: String(supportContactName?.value || "").trim(),
+    reply: String(supportContactReply?.value || "").trim(),
+    message: String(supportContactMessage?.value || "").trim(),
+    page: currentAppUrl()?.href || "https://sonicsearch.app/",
+    build: SONIC_APP_BUILD_ID
+  };
+}
+
+function buildSupportContactBriefing(data = supportContactFormData()) {
+  const topicLabel = supportContactTopicLabel(data.topic);
+  const anonymous = t("supportContactAnonymous");
+  return [
+    t("supportContactBodyGreeting"),
+    "",
+    `${t("supportContactBodyTopic")}: ${topicLabel}`,
+    `${t("supportContactBodyName")}: ${data.name || anonymous}`,
+    `${t("supportContactBodyReply")}: ${data.reply || anonymous}`,
+    "",
+    `${t("supportContactBodyMessage")}:`,
+    data.message,
+    "",
+    `${t("supportContactBodyPage")}: ${data.page}`,
+    `${t("supportContactBodyBuild")}: ${data.build}`
+  ].join("\n");
+}
+
+function buildSupportContactHref(email = "", data = supportContactFormData()) {
   const address = String(email || "").trim();
   if (!address) return "";
-  const subject = encodeURIComponent(t("supportContactSubject"));
-  const body = encodeURIComponent(t("supportContactBody"));
+  const subject = encodeURIComponent(`${t("supportContactSubjectPrefix")} - ${supportContactTopicLabel(data.topic)}`);
+  const body = encodeURIComponent(buildSupportContactBriefing(data));
   return `mailto:${address}?subject=${subject}&body=${body}`;
+}
+
+function validateSupportContactMessage() {
+  const message = String(supportContactMessage?.value || "").trim();
+  if (message) return true;
+  const feedback = t("supportContactMissingMessage");
+  if (supportContactStatus) supportContactStatus.textContent = feedback;
+  showToast(feedback);
+  if (supportContactMessage?.focus) supportContactMessage.focus();
+  return false;
 }
 
 function renderSupportContact() {
   const email = configuredSupportContactEmail();
   if (supportContactEmail) supportContactEmail.textContent = email || "-";
-  if (supportContactMailBtn) {
-    const href = buildSupportContactHref(email);
-    if (href) {
-      supportContactMailBtn.href = href;
-      supportContactMailBtn.removeAttribute("aria-disabled");
-    } else {
-      supportContactMailBtn.removeAttribute("href");
-      supportContactMailBtn.setAttribute("aria-disabled", "true");
-    }
+  if (supportContactStatus && !String(supportContactStatus.textContent || "").trim()) {
+    supportContactStatus.textContent = t("supportContactReady");
   }
+  if (supportContactMailBtn) supportContactMailBtn.disabled = !email;
   if (supportContactCopyBtn) supportContactCopyBtn.disabled = !email;
 }
 
@@ -48360,12 +48488,33 @@ bind(supportCopyCryptoBtn, "click", () => {
   copySupportText(supportCryptoPayload?.value || "", supportCopyCryptoBtn);
 });
 
-bind(supportContactCopyBtn, "click", () => {
-  copySupportText(configuredSupportContactEmail(), supportContactCopyBtn);
+bind(supportContactForm, "submit", (event) => {
+  event.preventDefault();
+  const email = configuredSupportContactEmail();
+  if (!email) {
+    showToast(t("supportMissingPayment"));
+    return;
+  }
+  if (!validateSupportContactMessage()) return;
+  if (supportContactStatus) supportContactStatus.textContent = t("supportContactOpening");
+  window.location.href = buildSupportContactHref(email);
 });
 
-bind(supportContactMailBtn, "click", () => {
-  playUiSfx("tap");
+bind(supportContactMailBtn, "click", () => {});
+
+bind(supportContactCopyBtn, "click", () => {
+  if (!validateSupportContactMessage()) return;
+  copySupportText(buildSupportContactBriefing(), supportContactCopyBtn);
+  if (supportContactStatus) supportContactStatus.textContent = t("supportContactCopiedBrief");
+});
+
+[supportContactTopic, supportContactName, supportContactReply, supportContactMessage].forEach((field) => {
+  bind(field, "input", () => {
+    if (supportContactStatus) supportContactStatus.textContent = t("supportContactReady");
+  });
+  bind(field, "change", () => {
+    if (supportContactStatus) supportContactStatus.textContent = t("supportContactReady");
+  });
 });
 
 window.addEventListener("resize", syncFloatingSurpriseButton);
