@@ -1144,10 +1144,12 @@ const FAST_OPTIONAL_API_TIMEOUT_MS = 2600;
 const EXTERNAL_DATASET_FETCH_TIMEOUT_MS = 2200;
 const BACKGROUND_CATALOG_WARMUP_DELAY_MS = 22000;
 const ACTIVE_DISCOVERY_WARMUP_RETRY_MS = 8000;
+const POST_BOOT_HYDRATION_DELAY_MS = 4200;
+const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627qa1";
+const SONIC_APP_BUILD_ID = "20260627idle1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6278,6 +6280,9 @@ const userStats = {
 let lastPrefs = null;
 let currentRecommendation = null;
 let currentDiscovery = null;
+let postBootHydrationScheduled = false;
+let voiceLabUiReady = false;
+let socialMvpInitPromise = null;
 let knownArtistsMemory = new Set();
 let knownTrackTitlesMemory = new Set();
 let discoveredArtistsInApp = new Set();
@@ -6983,6 +6988,7 @@ const coverArtApiCache = new Map();
 const radioBrowserApiCache = new Map();
 let apiHealthPayload = null;
 let apiHealthLoading = false;
+let apiHealthCheckedOnce = false;
 const soundCloudApiCache = new Map();
 const youtubeApiCache = new Map();
 let youtubeApiAvailable = true;
@@ -13481,6 +13487,18 @@ function waitForExternalDatasetIdleSlot() {
   });
 }
 
+function schedulePostBootIdleTask(callback, { delayMs = 0, timeoutMs = 1800 } = {}) {
+  if (typeof callback !== "function") return;
+  const runWhenIdle = () => {
+    if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => callback(), { timeout: Math.max(120, Number(timeoutMs) || 1800) });
+      return;
+    }
+    window.setTimeout(() => callback(), 0);
+  };
+  window.setTimeout(runWhenIdle, Math.max(0, Number(delayMs) || 0));
+}
+
 async function hydrateExternalDatasetPackInBackground() {
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
 
@@ -17200,9 +17218,11 @@ async function loadApiHealthPanel({ force = false } = {}) {
   if (!apiHealthPanel || apiHealthLoading) return;
   const endpoint = apiHealthEndpoint();
   if (!endpoint) {
+    apiHealthCheckedOnce = true;
     if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthUnavailable");
     return;
   }
+  if (!force && apiHealthCheckedOnce && !apiHealthPayload) return;
   if (!force && apiHealthPayload) {
     renderApiHealthPanel(apiHealthPayload);
     return;
@@ -17221,6 +17241,7 @@ async function loadApiHealthPanel({ force = false } = {}) {
   } catch (_err) {
     if (apiHealthStatus) apiHealthStatus.textContent = t("apiHealthUnavailable");
   } finally {
+    apiHealthCheckedOnce = true;
     apiHealthLoading = false;
     if (apiHealthRefreshBtn) apiHealthRefreshBtn.disabled = false;
   }
@@ -26279,6 +26300,13 @@ function updateVoiceLabUi() {
   updateVoiceStudioSession();
 }
 
+function ensureVoiceLabUiReady() {
+  if (voiceLabUiReady) return;
+  voiceLabUiReady = true;
+  applyVoiceMiniPreset("techno");
+  updateVoiceLabUi();
+}
+
 function syncVoicePadButtons() {
   const buttons = {
     kick: voicePadKickBtn,
@@ -28721,8 +28749,14 @@ function setActiveAppTab(tabName = "discover") {
     panel.classList.toggle("active", panelMatchesAppTab(panel, safeTab));
   });
   updateSignatureBarForTab(safeTab);
-  if (safeTab === "profile") scheduleMusicalSpiritRefresh({ force: true });
+  if (safeTab === "profile") {
+    scheduleMusicalSpiritRefresh({ force: true });
+    void ensureSocialMvpReady();
+    void loadApiHealthPanel();
+  }
   if (safeTab === "djs") ensureDjDiscoveryReady();
+  if (safeTab === "studio") ensureVoiceLabUiReady();
+  if (safeTab === "news") void refreshDailyNews({ silent: false });
 }
 
 function handleHeroLogoClick() {
@@ -46292,6 +46326,54 @@ async function initSocialMvp() {
   updateAuthProviderUi();
 }
 
+function ensureSocialMvpReady() {
+  if (!socialMvpInitPromise) {
+    socialMvpInitPromise = initSocialMvp().catch((error) => {
+      console.warn("Social profile initialization failed", error);
+    });
+  }
+  return socialMvpInitPromise;
+}
+
+function schedulePostBootHydration() {
+  if (postBootHydrationScheduled) return;
+  postBootHydrationScheduled = true;
+
+  schedulePostBootIdleTask(() => {
+    if (!currentDjRecommendation) {
+      renderDjRadarSummary();
+      renderDjRecommendation(null);
+    }
+    ensureVoiceLabUiReady();
+  }, {
+    delayMs: POST_BOOT_HYDRATION_DELAY_MS,
+    timeoutMs: 2200
+  });
+
+  schedulePostBootIdleTask(() => {
+    void ensureSocialMvpReady();
+  }, {
+    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS,
+    timeoutMs: 3200
+  });
+
+  schedulePostBootIdleTask(() => {
+    void loadApiHealthPanel();
+  }, {
+    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS + 1200,
+    timeoutMs: 3200
+  });
+
+  schedulePostBootIdleTask(() => {
+    if (!dailyNewsList?.children.length) {
+      void refreshDailyNews({ silent: true, live: false });
+    }
+  }, {
+    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS + 2200,
+    timeoutMs: 3200
+  });
+}
+
 function updateStats() {
   applyCloudLikedTrackSignals([]);
   recalculateRatingStats();
@@ -49405,8 +49487,6 @@ bind(appTabBar, "click", (event) => {
   if (!target) return;
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
   setActiveAppTab(nextTab);
-  if (nextTab === "news") void refreshDailyNews({ silent: false });
-  if (nextTab === "djs") ensureDjDiscoveryReady();
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
@@ -49443,22 +49523,16 @@ if (!freshTestResetPending) {
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
   loadDjRecommendationMemory();
-  renderDjRadarSummary();
-  renderDjRecommendation(null);
-  void initSocialMvp();
-  void loadApiHealthPanel();
-  void refreshDailyNews({ silent: true, live: false });
   bootstrapAudio();
   if (!applySharedSpiritPayload(sharedSpiritPayload)) {
     if (qaPreviewMode) enterQaPreviewMode();
     else showIntroScreen();
   }
   updateWeightLabels();
-  applyVoiceMiniPreset("techno");
-  updateVoiceLabUi();
   updateSwipeFeedbackCard(currentRecommendation);
   renderSwipeStyleRail();
   bindPreferenceAutosave();
   ensureAllButtonsHaveAction();
   applyGenreVibeTheme("", { force: true });
+  if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
 }
