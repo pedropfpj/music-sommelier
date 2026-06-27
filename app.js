@@ -1159,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627community4";
+const SONIC_APP_BUILD_ID = "20260627community5";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -19191,8 +19191,8 @@ const I18N = {
     communityBodyPlaceholder: "O que você quer perguntar, recomendar ou contar?",
     communityMetaPlaceholder: "Cidade, festa, artista, faixa ou link de contexto",
     communityComposerHint: "Abra uma conversa sobre faixa, artista, festa ou ID e deixe a cena responder.",
-    communityLoginText: "Entre para publicar, responder e reagir na comunidade.",
-    communityLoginBtn: "Ir para Perfil",
+    communityLoginText: "Entre ou cadastre-se para comentar, curtir e publicar.",
+    communityLoginBtn: "Entrar / cadastrar",
     communitySubmit: "Publicar",
     communityLoading: "Carregando comunidade...",
     communityEmpty: "Ainda não há conversas nesse filtro.",
@@ -19786,8 +19786,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escreva um comentário sobre essa faixa",
     socialCommentsPlaceholderArtist: "Escreva um comentário sobre esse artista",
     socialCommentsComposerHint: "Seu comentário aparece para outros ouvintes logados.",
-    socialCommentsLoginText: "Entre para comentar, curtir ou descurtir comentários.",
-    socialCommentsLoginBtn: "Ir para Perfil",
+    socialCommentsLoginText: "Entre ou cadastre-se para comentar e reagir.",
+    socialCommentsLoginBtn: "Entrar / cadastrar",
     socialCommentsSubmit: "Publicar comentário",
     socialCommentsLoading: "Carregando comentários...",
     socialCommentsEmptyTrack: "Ainda não há comentários nesta faixa.",
@@ -20167,8 +20167,8 @@ const I18N = {
     communityBodyPlaceholder: "What do you want to ask, recommend, or report?",
     communityMetaPlaceholder: "City, party, artist, track, or context link",
     communityComposerHint: "Start a conversation about a track, artist, party, or ID and let the scene answer.",
-    communityLoginText: "Sign in to post, reply, and react in the community.",
-    communityLoginBtn: "Go to Profile",
+    communityLoginText: "Sign in or create an account to comment, like, and post.",
+    communityLoginBtn: "Sign in / join",
     communitySubmit: "Post",
     communityLoading: "Loading community...",
     communityEmpty: "No conversations in this filter yet.",
@@ -20759,8 +20759,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Write a comment about this track",
     socialCommentsPlaceholderArtist: "Write a comment about this artist",
     socialCommentsComposerHint: "Your comment appears to other signed-in listeners.",
-    socialCommentsLoginText: "Sign in to comment, like, or dislike comments.",
-    socialCommentsLoginBtn: "Go to Profile",
+    socialCommentsLoginText: "Sign in or create an account to comment and react.",
+    socialCommentsLoginBtn: "Sign in / join",
     socialCommentsSubmit: "Post comment",
     socialCommentsLoading: "Loading comments...",
     socialCommentsEmptyTrack: "No comments on this track yet.",
@@ -21140,8 +21140,8 @@ const I18N = {
     communityBodyPlaceholder: "¿Qué quieres preguntar, recomendar o contar?",
     communityMetaPlaceholder: "Ciudad, fiesta, artista, pista o link de contexto",
     communityComposerHint: "Abre una conversación sobre una pista, artista, fiesta o ID y deja que la escena responda.",
-    communityLoginText: "Entra para publicar, responder y reaccionar en la comunidad.",
-    communityLoginBtn: "Ir al Perfil",
+    communityLoginText: "Entra o regístrate para comentar, dar like y publicar.",
+    communityLoginBtn: "Entrar / registrarse",
     communitySubmit: "Publicar",
     communityLoading: "Cargando comunidad...",
     communityEmpty: "Aún no hay conversaciones en este filtro.",
@@ -21729,8 +21729,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escribe un comentario sobre esta pista",
     socialCommentsPlaceholderArtist: "Escribe un comentario sobre este artista",
     socialCommentsComposerHint: "Tu comentario aparece para otros oyentes conectados.",
-    socialCommentsLoginText: "Entra para comentar, dar like o dislike a comentarios.",
-    socialCommentsLoginBtn: "Ir al Perfil",
+    socialCommentsLoginText: "Entra o regístrate para comentar y reaccionar.",
+    socialCommentsLoginBtn: "Entrar / registrarse",
     socialCommentsSubmit: "Publicar comentario",
     socialCommentsLoading: "Cargando comentarios...",
     socialCommentsEmptyTrack: "Aún no hay comentarios en esta pista.",
