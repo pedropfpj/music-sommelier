@@ -1159,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627community5";
+const SONIC_APP_BUILD_ID = "20260627login1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -24199,7 +24199,7 @@ async function loginWithGoogle(event) {
     if (startSocialOAuthNavigation(pendingSocialOAuthUrl)) return;
   }
   if (socialState.session?.access_token) {
-    const resumed = await continueWithOnlineSocialSession({ silentFailure: true });
+    const resumed = await continueWithOnlineSocialSession({ silentFailure: true, showGuide: false });
     if (resumed) return;
   }
   if (socialState.session?.access_token) {
@@ -24207,7 +24207,7 @@ async function loginWithGoogle(event) {
     updateAuthProviderUi();
   }
   if (authHasOnlineSession()) {
-    await continueWithOnlineSocialSession();
+    await continueWithOnlineSocialSession({ showGuide: false });
     return;
   }
   authConfigLoading = true;
@@ -46038,6 +46038,10 @@ function socialAuthHashParams() {
   }
 }
 
+function hasPendingSocialAuthRedirect() {
+  return Boolean(socialAuthHashParams());
+}
+
 function socialClearAuthHash() {
   try {
     if (window.history?.replaceState) {
@@ -46089,7 +46093,7 @@ async function socialHandleAuthRedirect() {
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
-    await continueWithOnlineSocialSession({ sync: false });
+    await continueWithOnlineSocialSession({ sync: false, showGuide: false });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
     socialSetStatus(`Recebi o login, mas nao consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente Entrar de novo.`, "error");
@@ -51125,7 +51129,17 @@ if (!freshTestResetPending) {
   loadLanguage();
   loadDjRecommendationMemory();
   bootstrapAudio();
-  if (!applySharedSpiritPayload(sharedSpiritPayload)) {
+  const pendingSocialAuthRedirect = hasPendingSocialAuthRedirect();
+  if (pendingSocialAuthRedirect) {
+    if (introScreen) introScreen.classList.add("hidden");
+    if (languageScreen) languageScreen.classList.add("hidden");
+    if (authScreen) authScreen.classList.add("hidden");
+    if (welcomeScreen) welcomeScreen.classList.add("hidden");
+    if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+    if (appContent) appContent.classList.remove("hidden");
+    setActiveAppTab("discover");
+    void ensureSocialMvpReady();
+  } else if (!applySharedSpiritPayload(sharedSpiritPayload)) {
     if (qaPreviewMode) enterQaPreviewMode();
     else showIntroScreen();
   }
