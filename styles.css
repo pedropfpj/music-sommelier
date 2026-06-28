@@ -11558,7 +11558,7 @@ iframe {
 
 .swipe-style-pill {
   min-width: 0;
-  flex: 0 0 clamp(150px, 29%, 190px);
+  flex: 0 0 clamp(176px, 24%, 220px);
   min-height: 68px;
   display: grid;
   align-content: center;
@@ -11578,15 +11578,18 @@ iframe {
 
 .swipe-style-pill span,
 .swipe-style-pill small {
+  display: block;
   min-width: 0;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .swipe-style-pill span {
   color: #f3fbff;
   font-family: "Syne", sans-serif;
-  font-size: clamp(0.94rem, 1.45vw, 1.06rem);
+  font-size: clamp(0.92rem, 1.18vw, 1.04rem);
   font-weight: 900;
   line-height: 1.05;
 }
@@ -11924,7 +11927,7 @@ iframe {
   }
 
   .swipe-style-pill {
-    flex: 0 0 min(62vw, 178px);
+    flex: 0 0 min(66vw, 196px);
     min-height: 64px;
     scroll-snap-align: start;
   }
