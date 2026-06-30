@@ -90,6 +90,24 @@ function emptyFeed() {
   };
 }
 
+function applyCommunityFeedMigrations(feed = {}) {
+  let changed = false;
+  const posts = Array.isArray(feed.posts) ? feed.posts : [];
+  posts.forEach((post) => {
+    if (
+      post?.id === "21465622-f5aa-49e3-9c03-28edb711d1a5" &&
+      post.topic === "track" &&
+      post.title === "Sugestões e comentários" &&
+      post.context === "Feedback do desenvolvedor, comunidade Sonic Search"
+    ) {
+      post.topic = "all";
+      post.updatedAt = new Date().toISOString();
+      changed = true;
+    }
+  });
+  return changed;
+}
+
 async function readFeed(config) {
   await ensureCommunityBucket(config);
   const result = await storageFetch(config, `object/${COMMUNITY_BUCKET}/${COMMUNITY_FEED_PATH}`, {
@@ -184,6 +202,8 @@ async function listPosts(req, res, config, access) {
   try {
     const filter = normalizeFilter(req.query?.topic || req.query?.filter || "all");
     const feed = await readFeed(config);
+    const migrated = applyCommunityFeedMigrations(feed);
+    if (migrated) await writeFeed(config, feed);
     const posts = feed.posts
       .filter((post) => !post.deletedAt)
       .filter((post) => filter === "all" || normalizeTopic(post.topic) === filter)
