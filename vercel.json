@@ -26,12 +26,14 @@
   ],
   "rewrites": [
     { "source": "/api/artist-profile", "destination": "/api/music?route=artist-profile" },
+    { "source": "/api/beta-access", "destination": "/api/music?route=beta-access" },
     { "source": "/api/comments", "destination": "/api/music?route=comments" },
     { "source": "/api/community", "destination": "/api/music?route=community" },
     { "source": "/api/cover-art", "destination": "/api/music?route=cover-art" },
     { "source": "/api/lastfm-artist", "destination": "/api/music?route=lastfm-artist" },
     { "source": "/api/news-feed", "destination": "/api/music?route=news-feed" },
     { "source": "/api/radio-browser", "destination": "/api/music?route=radio-browser" },
-    { "source": "/api/track-metadata", "destination": "/api/music?route=track-metadata" }
+    { "source": "/api/track-metadata", "destination": "/api/music?route=track-metadata" },
+    { "source": "/api/waitlist", "destination": "/api/music?route=waitlist" }
   ]
 }

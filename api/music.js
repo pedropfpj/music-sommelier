@@ -2,13 +2,15 @@ const { sendJson } = require("./_music-apis");
 
 const handlers = {
   "artist-profile": require("./_artist-profile"),
+  "beta-access": require("./_beta-access"),
   comments: require("./_comments"),
   community: require("./_community"),
   "cover-art": require("./_cover-art"),
   "lastfm-artist": require("./_lastfm-artist"),
   "news-feed": require("./_news-feed"),
   "radio-browser": require("./_radio-browser"),
-  "track-metadata": require("./_track-metadata")
+  "track-metadata": require("./_track-metadata"),
+  waitlist: require("./_waitlist")
 };
 
 function routeFromRequest(req) {
