@@ -107,6 +107,37 @@ Variaveis principais:
 - `SONIC_YOUTUBE_SEARCH_DAILY_LIMIT`, `SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT`, `SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT`: travas contra gasto/uso inesperado
 - `SONIC_API_MAX_BODY_BYTES`: limite maximo do corpo das requisicoes POST para reduzir abuso de payload
 
+## Login social com dominio profissional
+
+Se o Google mostrar `Prosseguir para bskj...supabase.co`, o callback do OAuth ainda esta usando o dominio tecnico do projeto Supabase. Para trocar por uma URL bonita:
+
+1. Crie um dominio de Auth no Supabase, por exemplo `auth.sonicsearch.app`, em Custom Domains.
+2. Aponte o DNS conforme o Supabase pedir e aguarde o status ficar ativo.
+3. No Google Cloud, adicione `https://auth.sonicsearch.app/auth/v1/callback` em Authorized redirect URIs do OAuth client usado pelo Supabase.
+4. Na Vercel, mantenha `SUPABASE_URL=https://bskj...supabase.co` e adicione `SUPABASE_AUTH_URL=https://auth.sonicsearch.app`.
+5. No Supabase Auth, mantenha `https://sonicsearch.app` e `https://www.sonicsearch.app` nas URLs permitidas de redirect/site.
+
+Depois do deploy, o app continua usando `SUPABASE_URL` para dados e usa `SUPABASE_AUTH_URL` apenas para iniciar o login com Google. A tela do Google passa a apontar para o dominio de Auth configurado, em vez do project ref do Supabase.
+
+## Beta fechado e waitlist
+
+A home publica abre uma porta de beta fechado. Visitantes podem solicitar acesso pela waitlist; o app completo fica liberado somente quando `/api/beta-access` valida um codigo configurado no backend.
+
+- Em producao, configure `SONIC_BETA_ACCESS_CODES` na Vercel com codigos separados por virgula.
+- Configure tambem `SONIC_BETA_ACCESS_SECRET` com uma frase longa e privada para assinar o cookie de acesso.
+- O `index.html` nao deve conter codigos reais de convite.
+- Entrada direta para convidados: `/?beta=CODIGO_AUTORIZADO`
+- QA continua entrando direto: `/?qa=1&surprise=1`
+- Em preview local, quando `SONIC_BETA_ACCESS_CODES` nao existe e `NODE_ENV/VERCEL_ENV` nao estao em producao, `/api/beta-access` aceita o codigo de desenvolvimento `SONIC-BETA`.
+- A rota `/api/waitlist` salva pedidos no Supabase quando `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` e a tabela `waitlist_signups` existem.
+- Se o backend/tabela nao estiverem prontos, o formulario prepara um e-mail de solicitacao para o contato configurado.
+
+Para ativar o armazenamento da waitlist, aplique a migration:
+
+```bash
+supabase/migrations/20260630000100_waitlist_signups.sql
+```
+
 ## Importacao remota do catalogo
 
 Para consolidar os CSVs/JSONs locais em um pacote importavel:

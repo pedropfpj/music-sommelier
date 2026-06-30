@@ -260,7 +260,11 @@ const AI_FEATURE_CONFIG = {
 const ACCESS_DEFAULT_CONFIG = {
   ownerEmails: ["pedropfpj@gmail.com"],
   freeDiscoveryLimit: 50,
-  imageGenerationRequiresTrustedUser: false
+  imageGenerationRequiresTrustedUser: false,
+  betaGateEnabled: false,
+  betaAccessCodes: [],
+  betaAccessApiEndpoint: "",
+  waitlistEmail: "pedropfpj@gmail.com"
 };
 const ACCESS_CONFIG = {
   ...ACCESS_DEFAULT_CONFIG,
@@ -268,6 +272,8 @@ const ACCESS_CONFIG = {
     ? window.SONIC_SEARCH_ACCESS_CONFIG
     : {})
 };
+const BETA_GATE_STORAGE_KEY = "sonic_search:beta_access:v1";
+const BETA_WAITLIST_STORAGE_KEY = "sonic_search:waitlist_request:v1";
 const COMPLIANCE_DEFAULT_CONFIG = {
   clientMusicCatalogApisEnabled: true,
   clientDeezerEnabled: false,
@@ -1159,7 +1165,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260630language1";
+const SONIC_APP_BUILD_ID = "20260630betaTester1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -5700,6 +5706,17 @@ const authAppleBtn = document.getElementById("authAppleBtn");
 const authAppleLabel = document.getElementById("authAppleLabel");
 const authProviderHint = document.getElementById("authProviderHint");
 const authFeedback = document.getElementById("authFeedback");
+const betaGateScreen = document.getElementById("betaGateScreen");
+const betaWaitlistForm = document.getElementById("betaWaitlistForm");
+const betaWaitlistName = document.getElementById("betaWaitlistName");
+const betaWaitlistEmail = document.getElementById("betaWaitlistEmail");
+const betaWaitlistRole = document.getElementById("betaWaitlistRole");
+const betaWaitlistNote = document.getElementById("betaWaitlistNote");
+const betaWaitlistSubmitBtn = document.getElementById("betaWaitlistSubmitBtn");
+const betaAccessCode = document.getElementById("betaAccessCode");
+const betaAccessBtn = document.getElementById("betaAccessBtn");
+const betaExitAccessBtn = document.getElementById("betaExitAccessBtn");
+const betaGateStatus = document.getElementById("betaGateStatus");
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
 const appTabBar = document.getElementById("appTabBar");
@@ -5756,6 +5773,7 @@ const supportContactKicker = document.getElementById("supportContactKicker");
 const supportContactTitle = document.getElementById("supportContactTitle");
 const supportContactText = document.getElementById("supportContactText");
 const supportContactEmailLabel = document.getElementById("supportContactEmailLabel");
+const supportContactEmailLink = document.getElementById("supportContactEmailLink");
 const supportContactEmail = document.getElementById("supportContactEmail");
 const supportContactForm = document.getElementById("supportContactForm");
 const supportContactTopic = document.getElementById("supportContactTopic");
@@ -6849,9 +6867,12 @@ const AUDIO_GAIN_PROFILE = {
 };
 const PROGRESS_MAP_LIMIT = 240;
 const LIKED_TRACK_HISTORY_LIMIT = 80;
+const API_HEALTH_PANEL_ENABLED = false;
+const SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED = false;
 const DEFAULT_LANGUAGE = "en";
 const SUPPORTED_LANGUAGES = ["pt", "en", "es"];
 const NEW_ARTIST_LOOKBACK_YEARS = 2;
+const QUIZ_CHALLENGES_ENABLED = false;
 const QUIZ_TRIGGER_MIN_KNOWN = 6;
 const QUIZ_REOFFER_STEP = 4;
 const QUIZ_BASE_QUESTION_COUNT = 5;
@@ -15729,12 +15750,7 @@ function trackHasPlayablePreviewExperience(track) {
 }
 
 function trackHasFastListenRoute(track) {
-  return Boolean(
-    trackHasPlayablePreviewExperience(track) ||
-      youtubeLinkTrusted(track) ||
-      soundCloudLinkTrusted(track) ||
-      bandcampLinkTrusted(track)
-  );
+  return trackHasPlayablePreviewExperience(track);
 }
 
 function inferNegativeFeedbackReason(track, { source = "skip" } = {}) {
@@ -17252,6 +17268,11 @@ function apiHealthItems(payload = {}) {
 
 function renderApiHealthPanel(payload = null) {
   if (!apiHealthPanel || !apiHealthGrid) return;
+  if (!API_HEALTH_PANEL_ENABLED) {
+    apiHealthPanel.classList.add("hidden");
+    apiHealthPanel.setAttribute("aria-hidden", "true");
+    return;
+  }
   const items = apiHealthItems(payload || {});
   apiHealthGrid.innerHTML = "";
   let active = 0;
@@ -17295,7 +17316,7 @@ function renderApiHealthPanel(payload = null) {
 }
 
 async function loadApiHealthPanel({ force = false } = {}) {
-  if (!apiHealthPanel || apiHealthLoading) return;
+  if (!apiHealthPanel || apiHealthLoading || !API_HEALTH_PANEL_ENABLED) return;
   const endpoint = apiHealthEndpoint();
   if (!endpoint) {
     apiHealthCheckedOnce = true;
@@ -19169,11 +19190,11 @@ const I18N = {
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
-    tabSupport: "Apoiar",
+    tabSupport: "Contato",
     tabLegal: "Avisos",
     communityKicker: "Comunidade",
     communityTitle: "Conversa de pista",
-    communityIntro: "Fale de faixas, DJs, festas, festivais e músicas que a cena quer identificar.",
+    communityIntro: "Fale de faixas, DJs, festas, festivais e perguntas da cena.",
     communityRefresh: "Atualizar",
     communityFilterAll: "Tudo",
     communityFilterTrack: "Faixas",
@@ -19181,20 +19202,18 @@ const I18N = {
     communityFilterEvent: "Festas",
     communityFilterFestival: "Festivais",
     communityFilterQuestion: "Perguntas",
-    communityFilterId: "Identificar faixa",
     communityTypeTrack: "Faixa",
     communityTypeArtist: "Artista/DJ",
     communityTypeEvent: "Festa",
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Pergunta",
-    communityTypeId: "Identificar faixa",
     communityComposerTopicHint: "Categoria: {topic}",
     communityTitlePlaceholder: "Título curto da conversa",
     communityBodyPlaceholder: "O que você quer perguntar, recomendar ou contar?",
     communityMetaPlaceholder: "Cidade, festa, artista, faixa ou link de contexto",
-    communityComposerHint: "Abra uma conversa sobre faixa, artista, festa ou uma música para identificar.",
-    communityLoginText: "Entre ou cadastre-se para comentar, curtir e publicar.",
-    communityLoginBtn: "Entrar / cadastrar",
+    communityComposerHint: "Abra uma conversa sobre faixa, artista, festa, festival ou dúvida da cena.",
+    communityLoginText: "Faça login para comentar, curtir ou publicar. Sem login, a descoberta e o perfil local continuam funcionando.",
+    communityLoginBtn: "Entrar para participar",
     communitySubmit: "Publicar",
     communityLoading: "Carregando comunidade...",
     communityEmpty: "Ainda não há conversas nesse filtro.",
@@ -19243,7 +19262,7 @@ const I18N = {
     aboutReasonOneText: "Você não precisa lembrar nomes exatos: peça surpresa, ouça e responda no swipe.",
     aboutReasonTwoKicker: "02",
     aboutReasonTwoTitle: "Subgênero com honestidade",
-    aboutReasonTwoText: "Quando há sinal forte, mostramos o subgênero; quando não há, ficamos na família sonora.",
+    aboutReasonTwoText: "Quando há sinal forte, mostramos o subgênero; quando não há, ficamos no estilo mais amplo.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Menos repetição",
     aboutReasonThreeText: "Conhecidos, novidades, curtidas e descartes viram sinais separados para evitar mais do mesmo.",
@@ -19256,7 +19275,7 @@ const I18N = {
     aboutFlowStepThree: "Use o Filtro manual quando quiser subgênero, BPM ou contexto específico.",
     aboutFlowStepFour: "Revise curtidas, descartes e seu Sound System no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
-    aboutTrustText: "Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume a família sonora em vez de forçar rótulo.",
+    aboutTrustText: "Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume o estilo mais amplo em vez de forçar rótulo.",
     swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
@@ -19309,12 +19328,12 @@ const I18N = {
     dailyNewsSearchSummary: "Matéria recente de {source}. Abra a fonte para ler a cobertura completa.",
     dailyNewsUntitled: "Notícia sem título",
     dailyNewsNoSummary: "Abra a matéria para ler os detalhes completos.",
-    supportKicker: "Apoie o projeto",
-    supportTitle: "Apoie o Sonic Search",
-    supportIntro: "Seu apoio mantém catálogo, IA e melhorias em movimento.",
+    supportKicker: "Contato direto",
+    supportTitle: "Contato e apoio",
+    supportIntro: "Fale com Pedro Freire sobre feedback, bugs, parcerias ou catálogo. Apoios voluntários ficam logo abaixo.",
     supportContactKicker: "Contato",
     supportContactTitle: "Central Sonic Search",
-    supportContactText: "Envie feedback, bugs, parcerias ou ideias com contexto pronto.",
+    supportContactText: "Envie feedback, bugs, parcerias ou ideias. O app monta um e-mail com página e build para facilitar o retorno.",
     supportContactEmailLabel: "Canal direto",
     supportContactTopicLabel: "Assunto",
     supportContactTopicFeedback: "Feedback do app",
@@ -19327,7 +19346,7 @@ const I18N = {
     supportContactNamePlaceholder: "Seu nome ou projeto",
     supportContactReplyPlaceholder: "voce@email.com",
     supportContactMessagePlaceholder: "Conte o que aconteceu, ideia ou proposta.",
-    supportContactMail: "Preparar envio",
+    supportContactMail: "Abrir e-mail",
     supportContactCopy: "Copiar briefing",
     supportContactReady: "O envio abre no seu app de e-mail com a mensagem organizada.",
     supportContactMissingMessage: "Escreva uma mensagem para preparar o contato.",
@@ -19485,7 +19504,7 @@ const I18N = {
     recommendationWhyProfilePositive: "O histórico recente do seu perfil aponta para essa direção.",
     recommendationWhySourcePositive: "A faixa tem sinais melhores de fonte, pulso ou player, então entra com mais segurança.",
     recommendationWhyTextStrong: "Escolhi esta porque os sinais batem: {style}, pulso {bpm}, energia {energy} e uma fonte melhor para testar com confiança.",
-    recommendationWhyTextContext: "Para {context}, ela entrega energia {energy} e fica perto de {style}. Se a classificação fina não estiver confirmada, trato como rota de família sonora.",
+    recommendationWhyTextContext: "Para {context}, ela entrega energia {energy} e fica perto de {style}. Se a classificação fina não estiver confirmada, trato como rota de estilo mais amplo.",
     recommendationWhyTextDiscovery: "Aqui a aposta é descoberta: {style}, energia {energy} e sinais suficientes para ouvir. Se não bater, seu swipe recalibra a próxima rota.",
     djModeTitle: "Modo DJ",
     djModeHint: "Crie uma mini jornada: abre, sobe, bate e fecha.",
@@ -19788,8 +19807,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escreva um comentário sobre essa faixa",
     socialCommentsPlaceholderArtist: "Escreva um comentário sobre esse artista",
     socialCommentsComposerHint: "Seu comentário aparece para outros ouvintes logados.",
-    socialCommentsLoginText: "Entre ou cadastre-se para comentar e reagir.",
-    socialCommentsLoginBtn: "Entrar / cadastrar",
+    socialCommentsLoginText: "Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.",
+    socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentário",
     socialCommentsLoading: "Carregando comentários...",
     socialCommentsEmptyTrack: "Ainda não há comentários nesta faixa.",
@@ -19797,7 +19816,8 @@ const I18N = {
     socialCommentsDisabled: "Comentários ficam disponíveis quando a camada social estiver ativa.",
     socialCommentsSetupNeeded: "Falta ativar comentários e reações no Supabase.",
     socialCommentsMissing: "Abra uma faixa para comentar.",
-    socialCommentsLoginRequired: "Entre no Perfil para participar da conversa.",
+    socialCommentsLoginRequired: "Faça login para comentar, curtir ou publicar.",
+    socialCommentsLoginUnavailable: "Login social indisponível neste ambiente. Você ainda pode ouvir e salvar no perfil local.",
     socialCommentsPosted: "Comentário publicado.",
     socialCommentsPostFailed: "Não consegui publicar agora.",
     socialCommentsReactionFailed: "Não consegui registrar a reação agora.",
@@ -20145,11 +20165,11 @@ const I18N = {
     tabStudio: "Studio",
     tabProfile: "Profile",
     tabAbout: "About",
-    tabSupport: "Support",
+    tabSupport: "Contact",
     tabLegal: "Legal",
     communityKicker: "Community",
     communityTitle: "Floor talk",
-    communityIntro: "Talk tracks, DJs, parties, festivals, and songs the scene is trying to identify.",
+    communityIntro: "Talk tracks, DJs, parties, festivals, and scene questions.",
     communityRefresh: "Refresh",
     communityFilterAll: "All",
     communityFilterTrack: "Tracks",
@@ -20157,20 +20177,18 @@ const I18N = {
     communityFilterEvent: "Parties",
     communityFilterFestival: "Festivals",
     communityFilterQuestion: "Questions",
-    communityFilterId: "Identify track",
     communityTypeTrack: "Track",
     communityTypeArtist: "Artist/DJ",
     communityTypeEvent: "Party",
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Question",
-    communityTypeId: "Identify track",
     communityComposerTopicHint: "Category: {topic}",
     communityTitlePlaceholder: "Short conversation title",
     communityBodyPlaceholder: "What do you want to ask, recommend, or report?",
     communityMetaPlaceholder: "City, party, artist, track, or context link",
-    communityComposerHint: "Start a conversation about a track, artist, party, or a song to identify.",
-    communityLoginText: "Sign in or create an account to comment, like, and post.",
-    communityLoginBtn: "Sign in / join",
+    communityComposerHint: "Start a conversation about a track, artist, party, festival, or scene question.",
+    communityLoginText: "Sign in to comment, like, or post. Without login, discovery and your local profile still work.",
+    communityLoginBtn: "Sign in to join",
     communitySubmit: "Post",
     communityLoading: "Loading community...",
     communityEmpty: "No conversations in this filter yet.",
@@ -20219,7 +20237,7 @@ const I18N = {
     aboutReasonOneText: "You do not need exact names: ask for surprise, listen, and answer with a swipe.",
     aboutReasonTwoKicker: "02",
     aboutReasonTwoTitle: "Honest subgenre labels",
-    aboutReasonTwoText: "When the signal is strong, we show the subgenre; when it is not, we stay with the sound family.",
+    aboutReasonTwoText: "When the signal is strong, we show the subgenre; when it is not, we stay with the broader style.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Less repetition",
     aboutReasonThreeText: "Known names, discoveries, likes, and rejects become separate signals to avoid more of the same.",
@@ -20232,7 +20250,7 @@ const I18N = {
     aboutFlowStepThree: "Use Manual filter when you want a specific subgenre, BPM, or context.",
     aboutFlowStepFour: "Review likes, rejects, and your Sound System in Profile.",
     aboutTrustTitle: "How to read confidence",
-    aboutTrustText: "High confidence combines source, player, BPM, and profile. When certainty is missing, the app uses the sound family instead of forcing a label.",
+    aboutTrustText: "High confidence combines source, player, BPM, and profile. When certainty is missing, the app uses the broader style instead of forcing a label.",
     swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
@@ -20285,12 +20303,12 @@ const I18N = {
     dailyNewsSearchSummary: "Recent story from {source}. Open the source to read the full coverage.",
     dailyNewsUntitled: "Untitled news",
     dailyNewsNoSummary: "Open the story to read the full details.",
-    supportKicker: "Support the project",
-    supportTitle: "Support Sonic Search",
-    supportIntro: "Your support keeps the catalog, AI, and improvements moving.",
+    supportKicker: "Direct contact",
+    supportTitle: "Contact and support",
+    supportIntro: "Contact Pedro Freire about feedback, bugs, partnerships, or catalog notes. Voluntary support options sit below.",
     supportContactKicker: "Contact",
     supportContactTitle: "Sonic Search desk",
-    supportContactText: "Send feedback, bugs, partnerships, or ideas with ready context.",
+    supportContactText: "Send feedback, bugs, partnerships, or ideas. The app prepares an email with page and build context for a cleaner reply.",
     supportContactEmailLabel: "Direct channel",
     supportContactTopicLabel: "Subject",
     supportContactTopicFeedback: "App feedback",
@@ -20303,7 +20321,7 @@ const I18N = {
     supportContactNamePlaceholder: "Your name or project",
     supportContactReplyPlaceholder: "you@email.com",
     supportContactMessagePlaceholder: "Describe what happened, your idea, or proposal.",
-    supportContactMail: "Prepare email",
+    supportContactMail: "Open email",
     supportContactCopy: "Copy brief",
     supportContactReady: "Sending opens your email app with the message already structured.",
     supportContactMissingMessage: "Write a message to prepare the contact.",
@@ -20461,7 +20479,7 @@ const I18N = {
     recommendationWhyProfilePositive: "Your recent profile signals point in this direction.",
     recommendationWhySourcePositive: "The track has stronger source, pulse, or player signals, so it enters with more confidence.",
     recommendationWhyTextStrong: "I picked this because the signals line up: {style}, {bpm} pulse, {energy} energy, and a stronger source to test with confidence.",
-    recommendationWhyTextContext: "For {context}, it delivers {energy} energy and sits near {style}. If fine classification is not confirmed, I treat it as a sound-family lane.",
+    recommendationWhyTextContext: "For {context}, it delivers {energy} energy and sits near {style}. If fine classification is not confirmed, I treat it as a broader style lane.",
     recommendationWhyTextDiscovery: "This is a discovery bet: {style}, {energy} energy, and enough signal to hear. If it misses, your swipe recalibrates the next route.",
     djModeTitle: "DJ Mode",
     djModeHint: "Create a mini journey: open, build, hit, close.",
@@ -20761,8 +20779,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Write a comment about this track",
     socialCommentsPlaceholderArtist: "Write a comment about this artist",
     socialCommentsComposerHint: "Your comment appears to other signed-in listeners.",
-    socialCommentsLoginText: "Sign in or create an account to comment and react.",
-    socialCommentsLoginBtn: "Sign in / join",
+    socialCommentsLoginText: "Sign in to comment or like this conversation. Without login, you can still listen and save locally.",
+    socialCommentsLoginBtn: "Sign in to join",
     socialCommentsSubmit: "Post comment",
     socialCommentsLoading: "Loading comments...",
     socialCommentsEmptyTrack: "No comments on this track yet.",
@@ -20770,7 +20788,8 @@ const I18N = {
     socialCommentsDisabled: "Comments become available when the social layer is active.",
     socialCommentsSetupNeeded: "Comments and reactions still need Supabase activation.",
     socialCommentsMissing: "Open a track before commenting.",
-    socialCommentsLoginRequired: "Sign in from Profile to join the conversation.",
+    socialCommentsLoginRequired: "Sign in to comment, like, or post.",
+    socialCommentsLoginUnavailable: "Social login is unavailable in this environment. You can still listen and save to your local profile.",
     socialCommentsPosted: "Comment posted.",
     socialCommentsPostFailed: "I could not post that right now.",
     socialCommentsReactionFailed: "I could not save that reaction right now.",
@@ -21118,11 +21137,11 @@ const I18N = {
     tabStudio: "Estudio",
     tabProfile: "Perfil",
     tabAbout: "Sobre",
-    tabSupport: "Apoyar",
+    tabSupport: "Contacto",
     tabLegal: "Avisos",
     communityKicker: "Comunidad",
     communityTitle: "Charla de pista",
-    communityIntro: "Habla de pistas, DJs, fiestas, festivales y canciones que la escena quiere identificar.",
+    communityIntro: "Habla de pistas, DJs, fiestas, festivales y preguntas de la escena.",
     communityRefresh: "Actualizar",
     communityFilterAll: "Todo",
     communityFilterTrack: "Pistas",
@@ -21130,20 +21149,18 @@ const I18N = {
     communityFilterEvent: "Fiestas",
     communityFilterFestival: "Festivales",
     communityFilterQuestion: "Preguntas",
-    communityFilterId: "Identificar pista",
     communityTypeTrack: "Pista",
     communityTypeArtist: "Artista/DJ",
     communityTypeEvent: "Fiesta",
     communityTypeFestival: "Festival",
     communityTypeQuestion: "Pregunta",
-    communityTypeId: "Identificar pista",
     communityComposerTopicHint: "Categoría: {topic}",
     communityTitlePlaceholder: "Título corto de la conversación",
     communityBodyPlaceholder: "¿Qué quieres preguntar, recomendar o contar?",
     communityMetaPlaceholder: "Ciudad, fiesta, artista, pista o link de contexto",
-    communityComposerHint: "Abre una conversación sobre una pista, artista, fiesta o una canción para identificar.",
-    communityLoginText: "Entra o regístrate para comentar, dar like y publicar.",
-    communityLoginBtn: "Entrar / registrarse",
+    communityComposerHint: "Abre una conversación sobre una pista, artista, fiesta, festival o pregunta de la escena.",
+    communityLoginText: "Entra para comentar, dar like o publicar. Sin login, el descubrimiento y tu perfil local siguen funcionando.",
+    communityLoginBtn: "Entrar para participar",
     communitySubmit: "Publicar",
     communityLoading: "Cargando comunidad...",
     communityEmpty: "Aún no hay conversaciones en este filtro.",
@@ -21192,7 +21209,7 @@ const I18N = {
     aboutReasonOneText: "No necesitas recordar nombres exactos: pide sorpresa, escucha y responde con swipe.",
     aboutReasonTwoKicker: "02",
     aboutReasonTwoTitle: "Subgénero con honestidad",
-    aboutReasonTwoText: "Cuando hay señal fuerte, mostramos el subgénero; cuando no, nos quedamos en la familia sonora.",
+    aboutReasonTwoText: "Cuando hay señal fuerte, mostramos el subgénero; cuando no, nos quedamos en el estilo más amplio.",
     aboutReasonThreeKicker: "03",
     aboutReasonThreeTitle: "Menos repetición",
     aboutReasonThreeText: "Conocidos, novedades, likes y descartes se vuelven señales separadas para evitar más de lo mismo.",
@@ -21205,7 +21222,7 @@ const I18N = {
     aboutFlowStepThree: "Usa el Filtro manual cuando quieras subgénero, BPM o contexto específico.",
     aboutFlowStepFour: "Revisa likes, descartes y tu Sound System en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
-    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Cuando falta certeza, la app usa familia sonora en vez de forzar etiqueta.",
+    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Cuando falta certeza, la app usa el estilo más amplio en vez de forzar etiqueta.",
     swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
@@ -21258,12 +21275,12 @@ const I18N = {
     dailyNewsSearchSummary: "Nota reciente de {source}. Abre la fuente para leer la cobertura completa.",
     dailyNewsUntitled: "Noticia sin título",
     dailyNewsNoSummary: "Abre la nota para leer todos los detalles.",
-    supportKicker: "Apoya el proyecto",
-    supportTitle: "Apoya Sonic Search",
-    supportIntro: "Tu apoyo mantiene catálogo, IA y mejoras en movimiento.",
+    supportKicker: "Contacto directo",
+    supportTitle: "Contacto y apoyo",
+    supportIntro: "Habla con Pedro Freire sobre feedback, bugs, alianzas o catálogo. Los apoyos voluntarios quedan abajo.",
     supportContactKicker: "Contacto",
     supportContactTitle: "Central Sonic Search",
-    supportContactText: "Envía feedback, bugs, alianzas o ideas con contexto listo.",
+    supportContactText: "Envía feedback, bugs, alianzas o ideas. La app prepara un e-mail con página y build para facilitar la respuesta.",
     supportContactEmailLabel: "Canal directo",
     supportContactTopicLabel: "Asunto",
     supportContactTopicFeedback: "Feedback de la app",
@@ -21276,7 +21293,7 @@ const I18N = {
     supportContactNamePlaceholder: "Tu nombre o proyecto",
     supportContactReplyPlaceholder: "tu@email.com",
     supportContactMessagePlaceholder: "Cuenta qué pasó, tu idea o propuesta.",
-    supportContactMail: "Preparar envío",
+    supportContactMail: "Abrir e-mail",
     supportContactCopy: "Copiar brief",
     supportContactReady: "El envío abre tu app de e-mail con el mensaje organizado.",
     supportContactMissingMessage: "Escribe un mensaje para preparar el contacto.",
@@ -21434,7 +21451,7 @@ const I18N = {
     recommendationWhyProfilePositive: "Las señales recientes de tu perfil apuntan en esta dirección.",
     recommendationWhySourcePositive: "La pista tiene mejores señales de fuente, pulso o player, así que entra con más seguridad.",
     recommendationWhyTextStrong: "Elegí esta porque las señales encajan: {style}, pulso {bpm}, energía {energy} y una fuente más fuerte para probar con confianza.",
-    recommendationWhyTextContext: "Para {context}, entrega energía {energy} y queda cerca de {style}. Si la clasificación fina no está confirmada, la trato como ruta de familia sonora.",
+    recommendationWhyTextContext: "Para {context}, entrega energía {energy} y queda cerca de {style}. Si la clasificación fina no está confirmada, la trato como ruta de estilo más amplio.",
     recommendationWhyTextDiscovery: "Esta es una apuesta de descubrimiento: {style}, energía {energy} y señal suficiente para escuchar. Si no conecta, tu swipe recalibra la próxima ruta.",
     djModeTitle: "Modo DJ",
     djModeHint: "Crea una mini jornada: abre, sube, pega y cierra.",
@@ -21731,8 +21748,8 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escribe un comentario sobre esta pista",
     socialCommentsPlaceholderArtist: "Escribe un comentario sobre este artista",
     socialCommentsComposerHint: "Tu comentario aparece para otros oyentes conectados.",
-    socialCommentsLoginText: "Entra o regístrate para comentar y reaccionar.",
-    socialCommentsLoginBtn: "Entrar / registrarse",
+    socialCommentsLoginText: "Entra para comentar o dar like en esta conversación. Sin login, puedes seguir escuchando y guardar localmente.",
+    socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentario",
     socialCommentsLoading: "Cargando comentarios...",
     socialCommentsEmptyTrack: "Aún no hay comentarios en esta pista.",
@@ -21740,7 +21757,8 @@ const I18N = {
     socialCommentsDisabled: "Los comentarios estarán disponibles cuando la capa social esté activa.",
     socialCommentsSetupNeeded: "Falta activar comentarios y reacciones en Supabase.",
     socialCommentsMissing: "Abre una pista para comentar.",
-    socialCommentsLoginRequired: "Entra desde Perfil para participar en la conversación.",
+    socialCommentsLoginRequired: "Entra para comentar, dar like o publicar.",
+    socialCommentsLoginUnavailable: "El login social no está disponible en este entorno. Puedes seguir escuchando y guardando en tu perfil local.",
     socialCommentsPosted: "Comentario publicado.",
     socialCommentsPostFailed: "No pude publicar ahora.",
     socialCommentsReactionFailed: "No pude guardar la reacción ahora.",
@@ -23388,6 +23406,317 @@ function urlRequestsQaPreviewMode() {
     if (!raw) return true;
     return ["1", "true", "yes", "sim", "preview", "app", "direct"].includes(raw);
   });
+}
+
+function normalizeBetaCode(value = "") {
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g, "")
+    .toUpperCase();
+}
+
+function configuredBetaAccessCodes() {
+  const rawCodes = Array.isArray(ACCESS_CONFIG.betaAccessCodes)
+    ? ACCESS_CONFIG.betaAccessCodes
+    : String(ACCESS_CONFIG.betaAccessCodes || "").split(",");
+  return rawCodes
+    .map(normalizeBetaCode)
+    .filter(Boolean);
+}
+
+function betaAccessCodeFromUrl() {
+  const url = currentAppUrl();
+  if (!url) return "";
+  const params = ["beta", "access", "codigo", "code", "invite"];
+  for (const param of params) {
+    const value = normalizeBetaCode(url.searchParams.get(param) || "");
+    if (value) return value;
+  }
+  return "";
+}
+
+function clearBetaAccessCodeFromUrl() {
+  const url = currentAppUrl();
+  if (!url || typeof window === "undefined" || !window.history?.replaceState) return;
+  ["beta", "access", "codigo", "code", "invite"].forEach((param) => url.searchParams.delete(param));
+  const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
+  window.history.replaceState({}, document.title, cleanUrl || "/");
+}
+
+function betaCodeIsValid(value = "") {
+  const code = normalizeBetaCode(value);
+  if (!code) return false;
+  return configuredBetaAccessCodes().includes(code);
+}
+
+function betaAccessApiEndpoint() {
+  return cleanBetaField(ACCESS_CONFIG.betaAccessApiEndpoint || "", 220);
+}
+
+function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
+  try {
+    localStorage.setItem(BETA_GATE_STORAGE_KEY, JSON.stringify({
+      granted: true,
+      source,
+      grantId: cleanBetaField(grant.grantId || grant.access || "beta", 80),
+      serverValidated: Boolean(grant.serverValidated || grant.server || grant.expiresAt),
+      legacyCodeHint: normalizeBetaCode(code).slice(0, 4),
+      expiresAt: cleanBetaField(grant.expiresAt || "", 80),
+      grantedAt: new Date().toISOString()
+    }));
+  } catch (_error) {
+    // Private browsing can block localStorage; current session still continues.
+  }
+}
+
+function storedBetaAccessGranted() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(BETA_GATE_STORAGE_KEY) || "{}");
+    if (!parsed?.granted) return false;
+    if (parsed.expiresAt) {
+      const expiresAt = Date.parse(parsed.expiresAt);
+      if (Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
+        localStorage.removeItem(BETA_GATE_STORAGE_KEY);
+        return false;
+      }
+    }
+    return true;
+  } catch (_error) {
+    return false;
+  }
+}
+
+function clearStoredBetaAccessGrant() {
+  try {
+    localStorage.removeItem(BETA_GATE_STORAGE_KEY);
+  } catch (_error) {
+    // Non-critical; the current session can still return to the public gate.
+  }
+}
+
+function betaAccessGranted() {
+  if (!ACCESS_CONFIG.betaGateEnabled) return true;
+  return storedBetaAccessGranted();
+}
+
+async function validateBetaAccessCode(code = "", source = "manual") {
+  const normalizedCode = normalizeBetaCode(code);
+  if (!normalizedCode) return { ok: false, error: "missing_code" };
+  const endpoint = betaAccessApiEndpoint();
+  if (endpoint && typeof fetch === "function") {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: normalizedCode,
+          source,
+          build: SONIC_APP_BUILD_ID
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (response.ok && result?.ok) {
+        storeBetaAccessGrant(normalizedCode, source, {
+          ...result,
+          serverValidated: true
+        });
+        return { ok: true, server: true, result };
+      }
+      return {
+        ok: false,
+        server: true,
+        error: result?.error || "invalid_code",
+        status: response.status
+      };
+    } catch (_error) {
+      if (!betaCodeIsValid(normalizedCode)) return { ok: false, error: "network_error" };
+    }
+  }
+  if (!betaCodeIsValid(normalizedCode)) return { ok: false, error: "invalid_code" };
+  storeBetaAccessGrant(normalizedCode, source, { serverValidated: false });
+  return { ok: true, server: false };
+}
+
+async function applyBetaAccessCodeFromUrl() {
+  if (!ACCESS_CONFIG.betaGateEnabled) return { attempted: false, ok: true };
+  const urlCode = betaAccessCodeFromUrl();
+  if (!urlCode) return { attempted: false, ok: false };
+  const result = await validateBetaAccessCode(urlCode, "url");
+  if (result.ok) clearBetaAccessCodeFromUrl();
+  return { attempted: true, ...result };
+}
+
+function shouldShowBetaGateOnBoot({ qaPreviewMode = false, pendingSocialAuthRedirect = false } = {}) {
+  if (!ACCESS_CONFIG.betaGateEnabled) return false;
+  if (pendingSocialAuthRedirect || qaPreviewMode || sharedSpiritViewMode || urlRequestsPublicVisitorMode()) return false;
+  return !betaAccessGranted();
+}
+
+function setBetaGateStatus(message = "", state = "") {
+  if (!betaGateStatus) return;
+  betaGateStatus.textContent = message;
+  betaGateStatus.classList.toggle("error", state === "error");
+  betaGateStatus.classList.toggle("ok", state === "ok");
+}
+
+function hideBetaGateScreen() {
+  if (betaGateScreen) betaGateScreen.classList.add("hidden");
+}
+
+function showBetaGateScreen() {
+  clearIntroAutoAdvance();
+  stopIntroQuoteLoop();
+  hideQuizChallengeBubble({ clearPending: false });
+  closeQuizOverlay({ skipSnooze: true });
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (appContent) appContent.classList.add("hidden");
+  if (betaGateScreen) betaGateScreen.classList.remove("hidden");
+  setBetaGateStatus("Acesso completo liberado apenas para beta testers.");
+  syncFloatingSurpriseButton();
+  updateSignatureBarForTab();
+  refreshAmbientForUiState({ immediate: true });
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function cleanBetaField(value = "", maxLength = 500) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function betaWaitlistPayload() {
+  return {
+    name: cleanBetaField(betaWaitlistName?.value || "", 80),
+    email: cleanBetaField(betaWaitlistEmail?.value || "", 160).toLowerCase(),
+    role: cleanBetaField(betaWaitlistRole?.value || "listener", 40),
+    note: cleanBetaField(betaWaitlistNote?.value || "", 500),
+    source: typeof window !== "undefined" ? window.location.href : "app"
+  };
+}
+
+function betaWaitlistEmailLooksValid(email = "") {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
+}
+
+function persistBetaWaitlistRequest(payload = {}) {
+  try {
+    localStorage.setItem(BETA_WAITLIST_STORAGE_KEY, JSON.stringify({
+      ...payload,
+      requestedAt: new Date().toISOString()
+    }));
+  } catch (_error) {
+    // Non-essential; the backend or email fallback carries the request.
+  }
+}
+
+function betaWaitlistFallbackHref(payload = {}) {
+  const to = cleanBetaField(ACCESS_CONFIG.waitlistEmail || "pedropfpj@gmail.com", 160);
+  const subject = "Sonic Search - pedido de acesso beta";
+  const body = [
+    "Quero entrar no beta do Sonic Search.",
+    "",
+    `Nome: ${payload.name || "-"}`,
+    `E-mail: ${payload.email || "-"}`,
+    `Perfil: ${payload.role || "-"}`,
+    `Interesse: ${payload.note || "-"}`,
+    `Origem: ${payload.source || "-"}`
+  ].join("\n");
+  return `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function openBetaWaitlistEmail(payload = {}) {
+  const href = betaWaitlistFallbackHref(payload);
+  if (!href) return;
+  window.location.href = href;
+}
+
+async function submitBetaWaitlist(event) {
+  event?.preventDefault?.();
+  const payload = betaWaitlistPayload();
+  if (!betaWaitlistEmailLooksValid(payload.email)) {
+    setBetaGateStatus("Coloque um e-mail valido para entrar na lista beta.", "error");
+    if (betaWaitlistEmail) betaWaitlistEmail.focus();
+    return;
+  }
+  persistBetaWaitlistRequest(payload);
+  const originalText = betaWaitlistSubmitBtn?.textContent || "Entrar na lista beta";
+  if (betaWaitlistSubmitBtn) {
+    betaWaitlistSubmitBtn.disabled = true;
+    betaWaitlistSubmitBtn.textContent = "Enviando...";
+  }
+  try {
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (response.ok && result?.ok) {
+      if (result.stored) {
+        setBetaGateStatus("Pedido recebido. Vou liberar convites para os melhores perfis de teste.", "ok");
+      } else {
+        setBetaGateStatus("Pedido preparado. Seu navegador vai abrir um e-mail para confirmar a entrada.", "ok");
+        openBetaWaitlistEmail(payload);
+      }
+      if (betaWaitlistForm) betaWaitlistForm.reset();
+      return;
+    }
+    setBetaGateStatus("Nao consegui salvar agora. Vou abrir um e-mail para voce enviar o pedido.", "error");
+    openBetaWaitlistEmail(payload);
+  } catch (_error) {
+    setBetaGateStatus("Sem backend agora. Vou abrir um e-mail para voce enviar o pedido.", "error");
+    openBetaWaitlistEmail(payload);
+  } finally {
+    if (betaWaitlistSubmitBtn) {
+      betaWaitlistSubmitBtn.disabled = false;
+      betaWaitlistSubmitBtn.textContent = originalText;
+    }
+  }
+}
+
+async function handleBetaAccessSubmit() {
+  const code = betaAccessCode?.value || "";
+  const originalText = betaAccessBtn?.textContent || "Liberar app";
+  if (betaAccessBtn) {
+    betaAccessBtn.disabled = true;
+    betaAccessBtn.textContent = "Validando...";
+  }
+  const result = await validateBetaAccessCode(code, "manual");
+  if (!result.ok) {
+    const message = result.error === "too_many_attempts"
+      ? "Muitas tentativas. Aguarde um pouco ou solicite acesso pela lista."
+      : "Codigo beta invalido. Solicite acesso pela lista.";
+    setBetaGateStatus(message, "error");
+    if (betaAccessCode) betaAccessCode.focus();
+    if (betaAccessBtn) {
+      betaAccessBtn.disabled = false;
+      betaAccessBtn.textContent = originalText;
+    }
+    playUiSfx("error");
+    return;
+  }
+  setBetaGateStatus("Acesso liberado. Entrando no Sonic Search...", "ok");
+  playUiSfx("confirm");
+  window.setTimeout(() => {
+    if (betaAccessBtn) {
+      betaAccessBtn.disabled = false;
+      betaAccessBtn.textContent = originalText;
+    }
+    hideBetaGateScreen();
+    showIntroScreen();
+  }, 280);
+}
+
+function handleBetaExitAccess() {
+  clearStoredBetaAccessGrant();
+  clearBetaAccessCodeFromUrl();
+  showBetaGateScreen();
+  setBetaGateStatus("Voce esta vendo a tela publica do beta fechado.", "ok");
 }
 
 function urlRequestsScreenshotMode() {
@@ -25400,6 +25729,7 @@ function showLanguageScreen() {
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
 
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -25422,6 +25752,7 @@ function showIntroScreen() {
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
 
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.remove("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
@@ -25447,6 +25778,7 @@ function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -25499,6 +25831,7 @@ async function showAuthScreen() {
   closeQuizOverlay({ skipSnooze: true });
   const storedUser = AUTH_LOGIN_STANDBY ? null : readStoredUserSession();
 
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
@@ -25559,6 +25892,7 @@ async function showAuthScreen() {
 }
 
 function continueFromAuthToDiscover({ showGuide = false } = {}) {
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
@@ -25670,6 +26004,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -25763,6 +26098,7 @@ function applySharedSpiritPayload(payload = sharedSpiritPayload) {
   stopIntroQuoteLoop();
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
+  hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -25920,6 +26256,7 @@ function enterQaPreviewMode() {
   if (authScreen) authScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  hideBetaGateScreen();
 
   enterAppFromWelcome({
     surprise: autoRecommendation && urlRequestsQaAutoSurprise(),
@@ -29088,6 +29425,10 @@ function validateSupportContactMessage() {
 function renderSupportContact() {
   const email = configuredSupportContactEmail();
   if (supportContactEmail) supportContactEmail.textContent = email || "-";
+  if (supportContactEmailLink) {
+    supportContactEmailLink.href = email ? `mailto:${email}` : "#";
+    supportContactEmailLink.setAttribute("aria-disabled", email ? "false" : "true");
+  }
   if (supportContactStatus && !String(supportContactStatus.textContent || "").trim()) {
     supportContactStatus.textContent = t("supportContactReady");
   }
@@ -29276,7 +29617,8 @@ function currentActiveAppTabName() {
 function updateSignatureBarForTab(tabName = currentActiveAppTabName()) {
   if (!signatureBar) return;
   const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
-  const shouldShow = !appVisible;
+  const betaGateVisible = Boolean(betaGateScreen && !betaGateScreen.classList.contains("hidden"));
+  const shouldShow = !appVisible && !betaGateVisible;
   signatureBar.classList.toggle("is-hidden", !shouldShow);
   signatureBar.setAttribute("aria-hidden", shouldShow ? "false" : "true");
   document.body.classList.toggle("signature-bar-hidden", !shouldShow);
@@ -30053,7 +30395,6 @@ function surpriseTrackHasExactBpmAndPreview(track) {
   if (!track) return false;
   if (track.existenceVerified === false) return false;
   if (!hasReliableBpmForTrack(track)) return false;
-  if (isTrustedCatalogExtraTrack(track)) return true;
   return trackHasFastListenRoute(track);
 }
 
@@ -30881,6 +31222,9 @@ function buildGlobalTrackExclusionSet(extraTrackKeys = [], extraTrackTitles = []
 function trackBlockedByKnownSignals(track, excludedTrackKeys = new Set(), excludedTrackTitles = new Set()) {
   if (!track) return true;
   const trackKey = recommendationTrackKey(track);
+  const trackTitle = normalizeTitle(track.song || "");
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) return true;
+  if (trackTitle && knownTrackTitlesMemory.has(trackTitle)) return true;
   if (trackKey && excludedTrackKeys.has(trackKey)) return true;
   return trackMatchesKnownTitle(track, excludedTrackTitles);
 }
@@ -39873,15 +40217,15 @@ function familyOf(style) {
 function styleFamilyLabel(style = "") {
   const family = familyOf(normalize(style || ""));
   const labels = {
-    psytrance: sonicTinyCopy("Família Psytrance", "Psytrance family", "Familia Psytrance"),
-    techno: sonicTinyCopy("Família Techno", "Techno family", "Familia Techno"),
-    house: sonicTinyCopy("Família House", "House family", "Familia House"),
-    dnb: sonicTinyCopy("Família DnB", "DnB family", "Familia DnB"),
-    bass_music: sonicTinyCopy("Família Bass", "Bass family", "Familia Bass"),
-    leftfield: sonicTinyCopy("Família Experimental", "Experimental family", "Familia experimental"),
-    trance: sonicTinyCopy("Família Trance", "Trance family", "Familia Trance"),
-    hard_dance: sonicTinyCopy("Família Hard Dance", "Hard dance family", "Familia Hard Dance"),
-    outros: sonicTinyCopy("Família eletrônica", "Electronic family", "Familia electrónica")
+    psytrance: "Psytrance",
+    techno: "Techno",
+    house: "House",
+    dnb: "DnB",
+    bass_music: "Bass",
+    leftfield: sonicTinyCopy("Experimental", "Experimental", "Experimental"),
+    trance: "Trance",
+    hard_dance: "Hard Dance",
+    outros: sonicTinyCopy("Eletrônica", "Electronic", "Electrónica")
   };
   return labels[family] || labels.outros;
 }
@@ -40061,12 +40405,12 @@ function setGenreSignalChip(chip, track = null) {
   chip.classList.add("genre-signal");
   chip.dataset.label = certainty === "confirmed"
     ? sonicTinyCopy("Subgênero", "Subgenre", "Subgénero")
-    : sonicTinyCopy("Família", "Family", "Familia");
+    : sonicTinyCopy("Estilo", "Style", "Estilo");
   chip.dataset.family = familyOf(style);
   chip.title = style
     ? `${certainty === "confirmed"
       ? sonicTinyCopy("Subgênero tocando", "Playing subgenre", "Subgénero actual")
-      : sonicTinyCopy("Família musical estimada", "Estimated music family", "Familia musical estimada")}: ${label}`
+      : sonicTinyCopy("Estilo estimado", "Estimated style", "Estilo estimado")}: ${label}`
     : "";
 }
 
@@ -41291,7 +41635,7 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
     const bpmMatches = !prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm);
     if (!bpmMatches) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (!trackHasPlayablePreviewExperience(track) && !isTrustedCatalogExtraTrack(track)) return false;
+    if (!trackHasPlayablePreviewExperience(track)) return false;
     const artistKey = artistMatchKey(track.artist);
     const trackKey = recommendationTrackKey(track);
     if (!artistKey || !trackKey) return false;
@@ -41741,7 +42085,7 @@ function recommendationBadgeItems(track, prefs = lastPrefs, { saved = false } = 
     badges.push({ type: "explore", label: t("bpmAmbiguousBadge", { bpm: bpmData.perceived }) });
   }
   if (styleCertainty === "estimated") {
-    badges.push({ type: "explore", label: sonicTinyCopy("Familia estimada", "Estimated family", "Familia estimada") });
+    badges.push({ type: "explore", label: sonicTinyCopy("Estilo estimado", "Estimated style", "Estilo estimado") });
   }
   if (hasAudioPreview) {
     badges.push({ type: "preview", label: sonicTinyCopy("Audio direto", "Direct audio", "Audio directo") });
@@ -43030,6 +43374,25 @@ function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   syncQuickKnownDecision(track);
 }
 
+function clearFailedRecommendationSurface() {
+  currentRecommendation = null;
+  currentDiscovery = null;
+  pendingQuickKnownAdvance = null;
+  updateSwipeFeedbackCard(null);
+  renderDiscovery(null);
+  renderTrackInsightPanel(null);
+  if (resultPanel) resultPanel.classList.add("hidden");
+  if (previewPanel) previewPanel.classList.add("hidden");
+  if (trackPreview) resetTrackPreviewElement(trackPreview);
+  resetSoundCloudPreviewEmbed();
+  resetBandcampPreviewEmbed();
+  resetYouTubePreviewEmbed();
+  suggestionQueueTracks = [];
+  suggestionQueueContextKey = "";
+  renderSuggestionQueue(null);
+  syncQuickKnownDecision(null);
+}
+
 function swipeThresholds(element) {
   const width = Math.max(1, element?.getBoundingClientRect().width || 320);
   return {
@@ -43702,8 +44065,7 @@ function renderedPreviewHasPlaybackRoute(track = currentRecommendation) {
     audioReady ||
     visiblePreviewFrameHasSource(youtubePreviewWrap, youtubePreviewFrame) ||
     visiblePreviewFrameHasSource(soundcloudPreviewWrap, soundcloudPreviewFrame) ||
-    visiblePreviewFrameHasSource(bandcampPreviewWrap, bandcampPreviewFrame) ||
-    trackHasFastListenRoute(track)
+    visiblePreviewFrameHasSource(bandcampPreviewWrap, bandcampPreviewFrame)
   );
 }
 
@@ -43755,10 +44117,13 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
           : null;
         renderRecommendation(replacement, lastPrefs);
         renderDiscovery(currentDiscovery);
-        markRecommendationPresented(replacement);
-        await renderPreview(replacement);
-        registerRecommendationDelivery(replacement, lastPrefs);
-        refreshSuggestionQueue(lastPrefs, replacement);
+        const replacementReady = await renderPreview(replacement);
+        if (replacementReady) {
+          registerRecommendationDelivery(replacement, lastPrefs);
+          refreshSuggestionQueue(lastPrefs, replacement);
+        } else {
+          clearFailedRecommendationSurface();
+        }
       }
     }
     if (reason === "error") {
@@ -44482,6 +44847,7 @@ function buildQuizQuestions(style, knownCount = 0, displayIndex = null) {
 }
 
 function quizOfferStateReady() {
+  if (!QUIZ_CHALLENGES_ENABLED) return false;
   if (publicVisitorMode || sharedSpiritViewMode) return false;
   if (preAppScreensVisible()) return false;
   if (appContent?.classList.contains("hidden")) return false;
@@ -44491,11 +44857,21 @@ function quizOfferStateReady() {
 }
 
 function hideQuizChallengeBubble({ clearPending = false } = {}) {
-  if (quizChallengeBubble) quizChallengeBubble.classList.add("hidden");
+  if (quizChallengeBubble) {
+    quizChallengeBubble.classList.add("hidden");
+    quizChallengeBubble.setAttribute("hidden", "");
+    quizChallengeBubble.setAttribute("aria-hidden", "true");
+  }
+  if (quizStartBtn) quizStartBtn.disabled = true;
+  if (quizLaterBtn) quizLaterBtn.disabled = true;
   if (clearPending) quizPendingChallenge = null;
 }
 
 function renderQuizChallengeBubble(challenge = quizPendingChallenge) {
+  if (!QUIZ_CHALLENGES_ENABLED) {
+    hideQuizChallengeBubble({ clearPending: true });
+    return;
+  }
   if (!quizChallengeBubble || !quizBubbleText || !challenge) return;
   quizPendingChallenge = challenge;
   const styleName = styleLabelByValue(challenge.style) || challenge.style || t("freeStyle");
@@ -44557,7 +44933,9 @@ function evaluateQuizChallengeNow() {
 }
 
 function scheduleQuizChallengeEvaluation(delayMs = 260) {
-  if (publicVisitorMode || sharedSpiritViewMode) {
+  if (!QUIZ_CHALLENGES_ENABLED || publicVisitorMode || sharedSpiritViewMode) {
+    if (quizOfferTimer) window.clearTimeout(quizOfferTimer);
+    quizOfferTimer = 0;
     hideQuizChallengeBubble({ clearPending: true });
     return;
   }
@@ -44748,6 +45126,10 @@ function startQuizSession(style, knownCount = 0) {
 }
 
 function startQuizFromChallenge() {
+  if (!QUIZ_CHALLENGES_ENABLED) {
+    hideQuizChallengeBubble({ clearPending: true });
+    return;
+  }
   const challenge = quizPendingChallenge || resolveQuizChallengeCandidate();
   if (!challenge) return;
   const started = startQuizSession(challenge.style, challenge.knownCount);
@@ -46582,14 +46964,14 @@ function renderSocialFeed() {
   if (!socialConfigReady()) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Conecte o Supabase para ativar o feed social.";
+    empty.textContent = "Login com Google indisponível neste ambiente.";
     socialFeedList.appendChild(empty);
     return;
   }
   if (!socialState.session?.access_token) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Entre ou crie seu perfil para ver o feed.";
+    empty.textContent = "Entre com Google para ver o feed.";
     socialFeedList.appendChild(empty);
     return;
   }
@@ -46915,10 +47297,26 @@ async function loadSocialComments(options = {}) {
   }
 }
 
-function showSocialCommentsLogin() {
-  showToast(t("socialCommentsLoginRequired"));
-  setActiveAppTab("profile");
-  void ensureSocialMvpReady();
+async function showSocialCommentsLogin({ surface = "comments", startLogin = false } = {}) {
+  const setLoginMessage = (message, configured = true) => {
+    if (surface === "community") {
+      if (communityLoginPrompt) communityLoginPrompt.classList.remove("hidden");
+      communitySetStatus(message, configured ? "" : "error");
+    } else {
+      if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.remove("hidden");
+      if (socialCommentsStatus) socialCommentsStatus.textContent = message;
+    }
+  };
+  const waitingMessage = t("socialCommentsLoginRequired");
+  setLoginMessage(waitingMessage, true);
+  showToast(waitingMessage);
+  await ensureSocialMvpReady();
+  const configured = socialConfigReady();
+  const message = configured ? t("socialCommentsLoginRequired") : t("socialCommentsLoginUnavailable");
+  setLoginMessage(message, configured);
+  if (startLogin && configured) {
+    await socialSignInWithGoogle();
+  }
 }
 
 async function submitSocialComment() {
@@ -46928,7 +47326,7 @@ async function submitSocialComment() {
     return false;
   }
   if (!socialCommentsSignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "comments" });
     return false;
   }
   const text = String(socialCommentsInput.value || "").trim().slice(0, 800);
@@ -46995,7 +47393,7 @@ function applyLocalCommentReaction(commentId = "", nextReaction = 0) {
 
 async function reactSocialComment(commentId = "", desiredValue = 0) {
   if (!socialCommentsSignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "comments" });
     return false;
   }
   const target = currentSocialCommentTarget(socialCommentsState.targetType);
@@ -47058,29 +47456,40 @@ function communitySignedIn() {
   return Boolean(socialState.session?.access_token);
 }
 
+function normalizeCommunityTopic(topic = "track") {
+  const value = String(topic || "").trim();
+  if (value === "id") return "track";
+  return ["track", "artist", "event", "festival", "question"].includes(value) ? value : "track";
+}
+
+function normalizeCommunityFilter(filter = "all") {
+  const value = String(filter || "").trim();
+  if (value === "id") return "track";
+  return ["all", "track", "artist", "event", "festival", "question"].includes(value) ? value : "all";
+}
+
 function communityTopicLabel(topic = "question") {
+  const normalizedTopic = normalizeCommunityTopic(topic);
   const key = {
-    all: "communityFilterAll",
     track: "communityTypeTrack",
     artist: "communityTypeArtist",
     event: "communityTypeEvent",
     festival: "communityTypeFestival",
-    question: "communityTypeQuestion",
-    id: "communityTypeId"
-  }[String(topic || "").trim()] || "communityTypeQuestion";
+    question: "communityTypeQuestion"
+  }[normalizedTopic] || "communityTypeQuestion";
   return t(key);
 }
 
 function communityFilterLabel(filter = "all") {
+  const normalizedFilter = normalizeCommunityFilter(filter);
   const key = {
     all: "communityFilterAll",
     track: "communityFilterTrack",
     artist: "communityFilterArtist",
     event: "communityFilterEvent",
     festival: "communityFilterFestival",
-    question: "communityFilterQuestion",
-    id: "communityFilterId"
-  }[String(filter || "").trim()] || "communityFilterAll";
+    question: "communityFilterQuestion"
+  }[normalizedFilter] || "communityFilterAll";
   return t(key);
 }
 
@@ -47130,6 +47539,8 @@ async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
 }
 
 function updateCommunityControlsText() {
+  communityState.filter = normalizeCommunityFilter(communityState.filter);
+  communityState.topic = normalizeCommunityTopic(communityState.topic);
   if (communityKicker) communityKicker.textContent = t("communityKicker");
   if (communityTitle) communityTitle.textContent = t("communityTitle");
   if (communityIntro) communityIntro.textContent = t("communityIntro");
@@ -47146,7 +47557,15 @@ function updateCommunityControlsText() {
   if (communityLoginBtn) communityLoginBtn.textContent = t("communityLoginBtn");
   if (communityPostSubmitBtn) communityPostSubmitBtn.textContent = t("communitySubmit");
   communityTopicTabs?.querySelectorAll("[data-community-filter]").forEach((button) => {
-    const filter = String(button.getAttribute("data-community-filter") || "all");
+    const rawFilter = String(button.getAttribute("data-community-filter") || "all");
+    if (rawFilter === "id") {
+      button.classList.add("hidden");
+      button.setAttribute("hidden", "");
+      button.setAttribute("aria-hidden", "true");
+      button.setAttribute("aria-pressed", "false");
+      return;
+    }
+    const filter = normalizeCommunityFilter(rawFilter);
     button.textContent = communityFilterLabel(filter);
     const active = communityState.filter === filter;
     button.classList.toggle("active", active);
@@ -47365,6 +47784,8 @@ function renderCommunityPanel() {
 
 async function loadCommunityPosts(options = {}) {
   if (!communityPanel) return false;
+  communityState.filter = normalizeCommunityFilter(communityState.filter);
+  communityState.topic = normalizeCommunityTopic(communityState.topic);
   communityState.loading = true;
   communityState.setupNeeded = false;
   if (!options.silent) renderCommunityPanel();
@@ -47373,7 +47794,9 @@ async function loadCommunityPosts(options = {}) {
     const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`);
     communityState.enabled = payload.enabled !== false;
     communityState.setupNeeded = Boolean(payload.setupNeeded);
-    communityState.posts = Array.isArray(payload.posts) ? payload.posts : [];
+    communityState.posts = Array.isArray(payload.posts)
+      ? payload.posts.map((post) => ({ ...post, topic: normalizeCommunityTopic(post?.topic || "track") }))
+      : [];
     return true;
   } catch (error) {
     console.warn("Could not load community posts", error);
@@ -47388,7 +47811,7 @@ async function loadCommunityPosts(options = {}) {
 
 async function submitCommunityPost() {
   if (!communitySignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "community" });
     return false;
   }
   const body = String(communityPostBody?.value || "").trim().slice(0, 1000);
@@ -47400,10 +47823,12 @@ async function submitCommunityPost() {
   communityState.posting = true;
   renderCommunityPanel();
   try {
+    const topic = normalizeCommunityTopic(communityState.topic);
+    communityState.topic = topic;
     const payload = await communityRequest(COMMUNITY_ENDPOINT, {
       method: "POST",
       body: {
-        topic: communityState.topic,
+        topic,
         title: String(communityPostTitle?.value || "").trim().slice(0, 120),
         body,
         context: String(communityPostMeta?.value || "").trim().slice(0, 160),
@@ -47414,7 +47839,7 @@ async function submitCommunityPost() {
     if (communityPostTitle) communityPostTitle.value = "";
     if (communityPostBody) communityPostBody.value = "";
     if (communityPostMeta) communityPostMeta.value = "";
-    const postedTopic = String(payload?.post?.topic || communityState.topic || "question").trim();
+    const postedTopic = normalizeCommunityTopic(payload?.post?.topic || communityState.topic || "track");
     if (postedTopic && communityState.filter !== "all" && communityState.filter !== postedTopic) {
       communityState.filter = postedTopic;
     }
@@ -47439,7 +47864,7 @@ function replaceCommunityPost(updatedPost = {}) {
 
 async function reactCommunityPost(postId = "", desiredValue = 0) {
   if (!communitySignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "community" });
     return false;
   }
   const post = communityState.posts.find((item) => item.id === postId);
@@ -47515,7 +47940,7 @@ async function toggleCommunityComments(postId = "") {
 
 async function submitCommunityComment(postId = "") {
   if (!communitySignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "community" });
     return false;
   }
   const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-input]") || [])
@@ -47554,7 +47979,7 @@ async function submitCommunityComment(postId = "") {
 
 async function reactCommunityComment(postId = "", commentId = "", desiredValue = 0) {
   if (!communitySignedIn()) {
-    showSocialCommentsLogin();
+    void showSocialCommentsLogin({ surface: "community" });
     return false;
   }
   const comments = communityState.commentsByPost.get(postId) || [];
@@ -47612,24 +48037,33 @@ function renderSocialUi(options = {}) {
   const configured = socialConfigReady();
   const signed = Boolean(socialState.session?.access_token);
   if (socialConnectionBadge) {
-    socialConnectionBadge.textContent = signed ? "online" : configured ? "pronto" : "setup";
+    socialConnectionBadge.textContent = signed ? "online" : configured ? "pronto" : "offline";
     socialConnectionBadge.classList.toggle("connected", signed);
   }
   if (socialAuthPanel) socialAuthPanel.classList.remove("hidden");
   if (socialSignedPanel) socialSignedPanel.classList.toggle("hidden", !signed);
   [socialEmailInput, socialPasswordInput, socialUsernameInput, socialDisplayNameInput].forEach((input) => {
-    if (input) input.disabled = signed || socialState.busy;
+    if (input) input.disabled = !SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED || signed || socialState.busy;
   });
+  if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
+    const socialEmailPasswordGrid = document.getElementById("socialEmailPasswordGrid");
+    if (socialEmailPasswordGrid) {
+      socialEmailPasswordGrid.classList.add("hidden");
+      socialEmailPasswordGrid.setAttribute("hidden", "");
+      socialEmailPasswordGrid.setAttribute("aria-hidden", "true");
+    }
+  }
   if (socialGoogleBtn) socialGoogleBtn.classList.toggle("hidden", signed);
-  if (socialSignUpBtn) socialSignUpBtn.classList.toggle("hidden", signed);
-  if (socialSignInBtn) socialSignInBtn.classList.toggle("hidden", signed);
-  if (socialResendConfirmBtn) socialResendConfirmBtn.classList.toggle("hidden", signed);
+  [socialSignUpBtn, socialSignInBtn, socialResendConfirmBtn].forEach((button) => {
+    if (!button) return;
+    button.classList.add("hidden");
+    button.setAttribute("hidden", "");
+    button.setAttribute("aria-hidden", "true");
+    button.disabled = true;
+  });
   if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
   if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
   if (socialGoogleBtn) socialGoogleBtn.disabled = signed || !configured || socialState.busy;
-  if (socialSignUpBtn) socialSignUpBtn.disabled = signed || !configured || socialState.busy;
-  if (socialSignInBtn) socialSignInBtn.disabled = signed || !configured || socialState.busy;
-  if (socialResendConfirmBtn) socialResendConfirmBtn.disabled = signed || !configured || socialState.busy;
   if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
   if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
@@ -47650,8 +48084,8 @@ function renderSocialUi(options = {}) {
   renderSocialCommentsPanel();
   renderCommunityPanel();
   if (!options.preserveStatus) {
-    if (!configured) socialSetStatus("Configure SUPABASE_URL, SUPABASE_ANON_KEY e SONIC_SOCIAL_ENABLED=true no ambiente para liberar login real.");
-    else if (!signed) socialSetStatus("Crie seu perfil ou entre para salvar curtidas reais na nuvem.");
+    if (!configured) socialSetStatus("Login com Google indisponível neste ambiente. Seu perfil local continua funcionando.", "error");
+    else if (!signed) socialSetStatus("Entre com Google para sincronizar curtidas e participar da comunidade.");
     else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
   }
 }
@@ -47666,14 +48100,14 @@ async function socialSignInWithGoogle() {
     await fetchSocialConfig();
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    socialSetStatus("Login com Google indisponível neste ambiente.", "error");
     updateAuthProviderUi();
     return false;
   }
   if (socialState.busy) return false;
   const url = socialOAuthEndpointUrl("google", { redirect: true });
   if (!url) {
-    socialSetStatus("Nao consegui montar o login do Google. Confira o provider no Supabase.", "error");
+    socialSetStatus("Não consegui abrir o login do Google agora.", "error");
     updateAuthProviderUi();
     return false;
   }
@@ -47690,8 +48124,12 @@ async function socialSignUp() {
     renderSocialUi({ preserveStatus: true });
     return;
   }
+  if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
+    socialSetStatus("Use Entrar com Google para conectar sua conta.", "error");
+    return;
+  }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    socialSetStatus("Login por e-mail e senha está desativado.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
@@ -47742,8 +48180,12 @@ async function socialSignIn() {
     renderSocialUi({ preserveStatus: true });
     return;
   }
+  if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
+    socialSetStatus("Use Entrar com Google para conectar sua conta.", "error");
+    return;
+  }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    socialSetStatus("Login por e-mail e senha está desativado.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
@@ -47784,8 +48226,12 @@ async function socialResendConfirmation() {
     renderSocialUi({ preserveStatus: true });
     return;
   }
+  if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
+    socialSetStatus("Confirmação por e-mail está desativada. Use Entrar com Google.", "error");
+    return;
+  }
   if (!socialConfigReady()) {
-    socialSetStatus("Supabase ainda nao esta configurado no ambiente.", "error");
+    socialSetStatus("Confirmação por e-mail está desativada. Use Entrar com Google.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
@@ -48072,11 +48518,6 @@ async function ensureCurrentRecommendationPlayable(
   await resolvePreviewForTrack(currentRecommendation);
   if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
   if (trackHasPlayablePreviewExperience(currentRecommendation)) return true;
-  if (isTrustedCatalogExtraTrack(currentRecommendation)) {
-    currentRecommendation.previewChecked = true;
-    currentRecommendation.previewMissing = !trackHasPlayablePreviewExperience(currentRecommendation);
-    return true;
-  }
 
   const rejected = currentRecommendation;
   const rejectedKey = recommendationTrackKey(rejected);
@@ -48131,6 +48572,13 @@ async function generateRecommendationFromPrefs(
   const excludedTrackTitles = new Set([...knownTrackTitlesMemory]);
   const hardExcludedTrackKeys = new Set();
   const hardExcludedTrackTitles = new Set(typedKnownTrackTitles);
+  seenTrackKeysMemory.forEach((trackKey) => {
+    const normalizedTrackKey = normalize(trackKey || "");
+    if (normalizedTrackKey) hardExcludedTrackKeys.add(normalizedTrackKey);
+  });
+  knownTrackTitlesMemory.forEach((trackTitle) => {
+    if (trackTitle) hardExcludedTrackTitles.add(trackTitle);
+  });
   (Array.isArray(avoidTrackTitles) ? avoidTrackTitles : [avoidTrackTitles]).forEach((trackTitleLike) => {
     parseKnownTrackTitles(String(trackTitleLike || "")).forEach((trackTitle) => {
       excludedTrackTitles.add(trackTitle);
@@ -48559,10 +49007,8 @@ async function generateRecommendationFromPrefs(
       currentRecommendation.existenceVerified !== false ||
       (isTrustedCuratedCatalogTrack(currentRecommendation) && hasReliableBpmForTrack(currentRecommendation));
     const hasPreview = trackHasPlayablePreviewExperience(currentRecommendation);
-    const trustedCatalogExtra = isTrustedCatalogExtraTrack(currentRecommendation);
 
     if (exists && hasPreview && !fallbackPlayableTrack) fallbackPlayableTrack = currentRecommendation;
-    if (exists && trustedCatalogExtra) break;
     if (exists && hasPreview) break;
 
     excludedTrackKeys.add(currentKey);
@@ -48591,15 +49037,13 @@ async function generateRecommendationFromPrefs(
   if (
     currentRecommendation &&
     !trackHasPlayablePreviewExperience(currentRecommendation) &&
-    !isTrustedCatalogExtraTrack(currentRecommendation) &&
     fallbackPlayableTrack
   ) {
     currentRecommendation = fallbackPlayableTrack;
   }
   if (
     currentRecommendation &&
-    !trackHasPlayablePreviewExperience(currentRecommendation) &&
-    !isTrustedCatalogExtraTrack(currentRecommendation)
+    !trackHasPlayablePreviewExperience(currentRecommendation)
   ) {
     const playableReplacement = await pickPlayableReplacementForPrefs(prefs, {
       currentTrack: currentRecommendation,
@@ -48764,13 +49208,7 @@ async function generateRecommendationFromPrefs(
   currentDiscovery = discoverySnapshot;
   renderRecommendation(recommendationSnapshot, prefs);
   renderDiscovery(discoverySnapshot);
-  markRecommendationPresented(recommendationSnapshot);
   let previewReady = await renderPreview(recommendationSnapshot);
-  if (!previewReady && isTrustedCatalogExtraTrack(recommendationSnapshot)) {
-    recommendationSnapshot.previewChecked = true;
-    recommendationSnapshot.previewMissing = true;
-    previewReady = true;
-  }
   if (!previewReady) {
     const rejectedSnapshot = recommendationSnapshot;
     const rejectedKey = recommendationTrackKey(rejectedSnapshot);
@@ -48789,8 +49227,7 @@ async function generateRecommendationFromPrefs(
     });
     if (!playableReplacement) {
       markRecommendationBlockedByKnown();
-      currentRecommendation = null;
-      currentDiscovery = null;
+      clearFailedRecommendationSurface();
       return false;
     }
     recommendationSnapshot = playableReplacement;
@@ -48800,12 +49237,10 @@ async function generateRecommendationFromPrefs(
       : null;
     renderRecommendation(recommendationSnapshot, prefs);
     renderDiscovery(discoverySnapshot);
-    markRecommendationPresented(recommendationSnapshot);
     previewReady = await renderPreview(recommendationSnapshot);
     if (!previewReady) {
       markRecommendationBlockedByKnown();
-      currentRecommendation = null;
-      currentDiscovery = null;
+      clearFailedRecommendationSurface();
       return false;
     }
   }
@@ -48896,13 +49331,7 @@ async function activateSuggestionQueueIndex(index) {
 
     renderRecommendation(selectedTrack, lastPrefs);
     renderDiscovery(currentDiscovery);
-    markRecommendationPresented(selectedTrack);
     let previewReady = await renderPreview(selectedTrack);
-    if (!previewReady && isTrustedCatalogExtraTrack(selectedTrack)) {
-      selectedTrack.previewChecked = true;
-      selectedTrack.previewMissing = true;
-      previewReady = true;
-    }
     if (!previewReady) {
       const rejectedKey = recommendationTrackKey(selectedTrack);
       const playableReplacement = await pickPlayableReplacementForPrefs(lastPrefs, {
@@ -48911,6 +49340,7 @@ async function activateSuggestionQueueIndex(index) {
         allowKnownFallback: true
       });
       if (!playableReplacement) {
+        clearFailedRecommendationSurface();
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
         return false;
@@ -48922,9 +49352,9 @@ async function activateSuggestionQueueIndex(index) {
         : null;
       renderRecommendation(playableReplacement, lastPrefs);
       renderDiscovery(currentDiscovery);
-      markRecommendationPresented(playableReplacement);
       previewReady = await renderPreview(playableReplacement);
       if (!previewReady) {
+        clearFailedRecommendationSurface();
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
         return false;
@@ -49418,15 +49848,8 @@ async function runSurpriseRecommendation() {
     renderRecommendation(surpriseTrack, surprisePrefs);
     sonicPerfMark("render-recommendation");
     renderDiscovery(currentDiscovery);
-    markRecommendationPresented(surpriseTrack);
     let previewReady = await renderPreview(surpriseTrack);
     sonicPerfMark("render-preview", { previewReady });
-    if (!previewReady && isTrustedCatalogExtraTrack(surpriseTrack)) {
-      surpriseTrack.previewChecked = true;
-      surpriseTrack.previewMissing = true;
-      previewReady = true;
-      sonicPerfMark("trusted-extra-preview-skip");
-    }
     if (!previewReady) {
       const rejectedKey = recommendationTrackKey(surpriseTrack);
       const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
@@ -49442,10 +49865,10 @@ async function runSurpriseRecommendation() {
       });
       sonicPerfMark("replacement-picked", { found: Boolean(playableReplacement) });
       if (!playableReplacement) {
+        clearFailedRecommendationSurface();
         playUiSfx("error");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
-        if (resultPanel) resultPanel.classList.add("hidden");
         return false;
       }
       surpriseTrack = playableReplacement;
@@ -49455,14 +49878,13 @@ async function runSurpriseRecommendation() {
         : null;
       renderRecommendation(playableReplacement, surprisePrefs);
       renderDiscovery(currentDiscovery);
-      markRecommendationPresented(playableReplacement);
       previewReady = await renderPreview(playableReplacement);
       sonicPerfMark("replacement-preview", { previewReady });
       if (!previewReady) {
+        clearFailedRecommendationSurface();
         playUiSfx("error");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
-        if (resultPanel) resultPanel.classList.add("hidden");
         return false;
       }
     }
@@ -49887,6 +50309,19 @@ bind(startBtn, "click", () => {
 
 bind(startSurpriseBtn, "click", () => {
   enterAppFromWelcome({ surprise: true });
+});
+
+bind(betaWaitlistForm, "submit", (event) => {
+  void submitBetaWaitlist(event);
+});
+
+bind(betaAccessBtn, "click", handleBetaAccessSubmit);
+bind(betaExitAccessBtn, "click", handleBetaExitAccess);
+
+bind(betaAccessCode, "keydown", (event) => {
+  if (event.key !== "Enter") return;
+  event.preventDefault();
+  void handleBetaAccessSubmit();
 });
 
 bind(floatingSurpriseBtn, "click", async () => {
@@ -50838,7 +51273,7 @@ bind(socialCommentsSubmitBtn, "click", () => {
 });
 
 bind(socialCommentsLoginBtn, "click", () => {
-  showSocialCommentsLogin();
+  void showSocialCommentsLogin({ surface: "comments", startLogin: true });
 });
 
 bind(socialCommentsList, "click", async (event) => {
@@ -51103,16 +51538,16 @@ bind(communityRefreshBtn, "click", () => {
 bind(communityTopicTabs, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
   if (!target) return;
-  const nextFilter = String(target.getAttribute("data-community-filter") || "all");
+  const nextFilter = normalizeCommunityFilter(target.getAttribute("data-community-filter") || "all");
   communityState.filter = nextFilter;
-  communityState.topic = nextFilter === "all" ? "track" : nextFilter;
+  communityState.topic = nextFilter === "all" ? "track" : normalizeCommunityTopic(nextFilter);
   void loadCommunityPosts({ silent: false });
 });
 bind(communityPostSubmitBtn, "click", () => {
   void submitCommunityPost();
 });
 bind(communityLoginBtn, "click", () => {
-  showSocialCommentsLogin();
+  void showSocialCommentsLogin({ surface: "community", startLogin: true });
 });
 bind(communityFeedList, "click", async (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-action]") : null;
@@ -51165,7 +51600,9 @@ ephemeralProfileMode = publicVisitorMode;
 const qaPreviewMode = !sharedSpiritViewMode && urlRequestsQaPreviewMode();
 
 const freshTestResetPending = publicVisitorMode ? false : consumeFreshTestResetParam();
-if (!freshTestResetPending) {
+
+async function bootSonicSearch() {
+  if (freshTestResetPending) return;
   syncDiscoveryFromSeeds();
   loadDynamicCatalogCache();
   injectLocalTrackSeedBoost();
@@ -51188,7 +51625,9 @@ if (!freshTestResetPending) {
   loadDjRecommendationMemory();
   bootstrapAudio();
   const pendingSocialAuthRedirect = hasPendingSocialAuthRedirect();
+  const betaUrlAccess = await applyBetaAccessCodeFromUrl();
   if (pendingSocialAuthRedirect) {
+    hideBetaGateScreen();
     if (introScreen) introScreen.classList.add("hidden");
     if (languageScreen) languageScreen.classList.add("hidden");
     if (authScreen) authScreen.classList.add("hidden");
@@ -51198,7 +51637,13 @@ if (!freshTestResetPending) {
     setActiveAppTab("discover");
     void ensureSocialMvpReady();
   } else if (!applySharedSpiritPayload(sharedSpiritPayload)) {
-    if (qaPreviewMode) enterQaPreviewMode();
+    if (shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) {
+      showBetaGateScreen();
+      if (betaUrlAccess.attempted && !betaUrlAccess.ok) {
+        setBetaGateStatus("Codigo beta invalido ou expirado. Solicite acesso pela lista.", "error");
+      }
+    }
+    else if (qaPreviewMode) enterQaPreviewMode();
     else showIntroScreen();
   }
   updateWeightLabels();
@@ -51209,3 +51654,5 @@ if (!freshTestResetPending) {
   applyGenreVibeTheme("", { force: true });
   if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
 }
+
+void bootSonicSearch();

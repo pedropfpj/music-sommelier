@@ -31,7 +31,17 @@
       } catch (_) {}
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260627community6" />
+    <style>
+      #quizChallengeBubble,
+      #quizOverlay,
+      #quizHubCard,
+      .quiz-bubble,
+      .quiz-overlay,
+      .quiz-hub-card {
+        display: none !important;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css?v=20260627community15" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -150,14 +160,14 @@
         </div>
       </div>
     </section>
-    <section id="quizChallengeBubble" class="quiz-bubble hidden" aria-live="polite">
+    <section id="quizChallengeBubble" class="quiz-bubble hidden" aria-live="polite" aria-hidden="true" hidden inert>
       <p id="quizBubbleText">Sonic Quiz disponível.</p>
       <div class="quiz-bubble-actions">
         <button id="quizStartBtn" class="primary" type="button">Aceitar desafio</button>
         <button id="quizLaterBtn" type="button">Depois</button>
       </div>
     </section>
-    <section id="quizOverlay" class="quiz-overlay hidden" role="dialog" aria-modal="true" aria-live="polite">
+    <section id="quizOverlay" class="quiz-overlay hidden" role="dialog" aria-modal="true" aria-live="polite" aria-hidden="true" hidden inert>
       <div class="quiz-card">
         <p id="quizKicker" class="quiz-kicker">Sonic Quiz IA</p>
         <h4 id="quizTitle">Desafio de subgênero</h4>
@@ -173,6 +183,68 @@
           <button id="quizNextBtn" class="primary hidden" type="button">Próxima</button>
           <button id="quizRetryBtn" class="secondary hidden" type="button">Novo quiz</button>
           <button id="quizCloseBtn" type="button">Fechar</button>
+        </div>
+      </div>
+    </section>
+    <section id="betaGateScreen" class="beta-gate-screen hidden" aria-labelledby="betaGateTitle" tabindex="-1">
+      <div class="beta-gate-shell">
+        <div class="beta-gate-copy">
+          <div class="beta-gate-logo-wrap" aria-hidden="true">
+            <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+          </div>
+          <p class="brand-kicker beta-gate-kicker">Beta fechado</p>
+          <h1 id="betaGateTitle">Descoberta eletrônica fora do óbvio.</h1>
+          <p id="betaGateDesc" class="beta-gate-desc">
+            <span>Sonic Search recomenda faixas por contexto.</span>
+            <span>Subgênero e feedback real afinam o radar.</span>
+            <span>A experiência completa está em beta privado.</span>
+          </p>
+          <div class="beta-gate-metrics" aria-label="Sinais atuais do produto">
+            <span><strong>98k+</strong> musicas buscaveis</span>
+            <span><strong>168</strong> subgeneros</span>
+            <span><strong>0</strong> criticos no catalogo</span>
+          </div>
+        </div>
+
+        <div class="beta-gate-actions" aria-label="Acesso beta e lista de espera">
+          <form id="betaWaitlistForm" class="beta-waitlist-form">
+            <p class="section-kicker">Solicitar acesso</p>
+            <label for="betaWaitlistName">
+              <span>Nome</span>
+              <input id="betaWaitlistName" name="name" type="text" maxlength="80" autocomplete="name" />
+            </label>
+            <label for="betaWaitlistEmail">
+              <span>E-mail</span>
+              <input id="betaWaitlistEmail" name="email" type="email" maxlength="160" autocomplete="email" required />
+            </label>
+            <label for="betaWaitlistRole">
+              <span>Perfil</span>
+              <select id="betaWaitlistRole" name="role">
+                <option value="listener">Ouvinte / fan de eletronica</option>
+                <option value="dj">DJ / selector</option>
+                <option value="producer">Produtor / artista</option>
+                <option value="event">Festa / festival / label</option>
+                <option value="investor">Investidor / parceiro</option>
+              </select>
+            </label>
+            <label for="betaWaitlistNote">
+              <span>O que voce quer descobrir?</span>
+              <textarea id="betaWaitlistNote" name="note" maxlength="500" rows="3" placeholder="Ex.: psycore, dark psy, techno hipnotico, house brasileiro..."></textarea>
+            </label>
+            <button id="betaWaitlistSubmitBtn" class="primary beta-waitlist-submit" type="submit">Entrar na lista beta</button>
+          </form>
+
+          <div class="beta-code-panel">
+            <p class="section-kicker">Ja tem convite?</p>
+            <label class="beta-code-field" for="betaAccessCode">
+              <span>Codigo beta</span>
+              <input id="betaAccessCode" type="password" inputmode="text" autocomplete="one-time-code" placeholder="Digite seu codigo" />
+            </label>
+            <button id="betaAccessBtn" class="secondary beta-access-btn" type="button">Liberar app</button>
+            <p id="betaGateStatus" class="muted beta-gate-status" role="status" aria-live="polite">
+              Acesso completo liberado apenas para beta testers.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -359,6 +431,13 @@
     </section>
 
     <main id="appContent" class="app-shell hidden">
+      <aside id="betaTesterRibbon" class="beta-tester-ribbon" aria-label="Status do beta privado">
+        <div>
+          <span class="beta-tester-eyebrow">Beta privado</span>
+          <strong>Tester autorizado</strong>
+        </div>
+        <button id="betaExitAccessBtn" class="beta-exit-access-btn" type="button">Ver tela beta</button>
+      </aside>
       <header class="hero panel">
         <div class="hero-brand">
           <button id="heroLogoBtn" class="hero-logo-wrap hero-logo-btn" type="button" aria-label="Voltar ao início" title="Voltar ao início">
@@ -401,7 +480,7 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Apoiar</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Contato</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
       </nav>
 
@@ -549,7 +628,7 @@
           <div>
             <p id="communityKicker" class="section-kicker">Comunidade</p>
             <h3 id="communityTitle">Conversa de pista</h3>
-            <p id="communityIntro" class="muted">Fale de faixas, DJs, festas, festivais e músicas que a cena quer identificar.</p>
+            <p id="communityIntro" class="muted">Fale de faixas, DJs, festas, festivais e perguntas da cena.</p>
           </div>
           <button id="communityRefreshBtn" class="secondary" type="button">Atualizar</button>
         </div>
@@ -560,7 +639,6 @@
           <button class="community-topic-tab" type="button" data-community-filter="event" aria-pressed="false">Festas</button>
           <button class="community-topic-tab" type="button" data-community-filter="festival" aria-pressed="false">Festivais</button>
           <button class="community-topic-tab" type="button" data-community-filter="question" aria-pressed="false">Perguntas</button>
-          <button class="community-topic-tab" type="button" data-community-filter="id" aria-pressed="false">Identificar faixa</button>
         </div>
         <article class="community-composer-card">
           <div id="communityComposer" class="community-composer hidden">
@@ -576,8 +654,8 @@
             </div>
           </div>
           <div id="communityLoginPrompt" class="social-comments-login-prompt hidden">
-            <p id="communityLoginText" class="muted">Entre ou cadastre-se para comentar, curtir e publicar.</p>
-            <button id="communityLoginBtn" class="primary" type="button">Entrar / cadastrar</button>
+            <p id="communityLoginText" class="muted">Faça login para comentar, curtir ou publicar. Sem login, a descoberta e o perfil local continuam funcionando.</p>
+            <button id="communityLoginBtn" class="primary" type="button">Entrar para participar</button>
           </div>
         </article>
         <p id="communityStatus" class="muted community-status" role="status" aria-live="polite"></p>
@@ -587,14 +665,61 @@
       <section id="supportPanel" class="panel support-panel app-tab-panel" data-app-tab="support" aria-labelledby="supportTitle">
         <div class="section-head support-head">
           <div>
-            <p id="supportKicker" class="section-kicker">Apoie o projeto</p>
-            <h3 id="supportTitle">Apoie o Sonic Search</h3>
+            <p id="supportKicker" class="section-kicker">Contato direto</p>
+            <h3 id="supportTitle">Contato e apoio</h3>
           </div>
           <span id="supportStatusBadge" class="chip alt">Tips</span>
         </div>
         <p id="supportIntro" class="section-hint muted support-intro">
-          Seu apoio mantém catálogo, IA e melhorias em movimento.
+          Fale com Pedro Freire sobre feedback, bugs, parcerias ou catálogo. Apoios voluntários ficam logo abaixo.
         </p>
+        <article class="support-contact-card" aria-labelledby="supportContactTitle">
+          <div class="support-contact-copy">
+            <p id="supportContactKicker" class="section-kicker">Contato</p>
+            <h4 id="supportContactTitle">Central Sonic Search</h4>
+            <p id="supportContactText" class="muted">
+              Envie feedback, bugs, parcerias ou ideias com contexto pronto.
+            </p>
+            <div class="support-contact-email">
+              <span id="supportContactEmailLabel">Canal direto</span>
+              <a id="supportContactEmailLink" class="support-contact-email-link" href="mailto:pedropfpj@gmail.com">
+                <code id="supportContactEmail">pedropfpj@gmail.com</code>
+              </a>
+            </div>
+          </div>
+          <form id="supportContactForm" class="support-contact-form" novalidate>
+            <label class="support-contact-field" for="supportContactTopic">
+              <span id="supportContactTopicLabel">Assunto</span>
+              <select id="supportContactTopic">
+                <option id="supportContactTopicFeedback" value="feedback">Feedback do app</option>
+                <option id="supportContactTopicBug" value="bug">Bug ou problema</option>
+                <option id="supportContactTopicPartnership" value="partnership">Parceria</option>
+                <option id="supportContactTopicCatalog" value="catalog">Catálogo ou curadoria</option>
+              </select>
+            </label>
+            <div class="support-contact-row">
+              <label class="support-contact-field" for="supportContactName">
+                <span id="supportContactNameLabel">Nome</span>
+                <input id="supportContactName" type="text" maxlength="80" autocomplete="name" />
+              </label>
+              <label class="support-contact-field" for="supportContactReply">
+                <span id="supportContactReplyLabel">E-mail para resposta</span>
+                <input id="supportContactReply" type="email" maxlength="160" autocomplete="email" />
+              </label>
+            </div>
+            <label class="support-contact-field support-contact-message-field" for="supportContactMessage">
+              <span id="supportContactMessageLabel">Mensagem</span>
+              <textarea id="supportContactMessage" maxlength="1200" rows="4" required></textarea>
+            </label>
+            <p id="supportContactStatus" class="muted support-contact-status" aria-live="polite">
+              O envio abre no seu app de e-mail com a mensagem organizada.
+            </p>
+            <div class="support-contact-actions">
+              <button id="supportContactMailBtn" class="support-contact-action primary" type="submit">Preparar envio</button>
+              <button id="supportContactCopyBtn" class="support-contact-action secondary" type="button">Copiar briefing</button>
+            </div>
+          </form>
+        </article>
         <div class="support-amounts" aria-label="Valores rápidos para apoio">
           <button class="support-amount-btn active" type="button" data-tip-amount="5">R$ 5</button>
           <button class="support-amount-btn" type="button" data-tip-amount="10">R$ 10</button>
@@ -644,51 +769,6 @@
             <button id="supportCopyCryptoBtn" class="secondary support-copy-btn" type="button">Copiar crypto</button>
           </article>
         </div>
-        <article class="support-contact-card" aria-labelledby="supportContactTitle">
-          <div class="support-contact-copy">
-            <p id="supportContactKicker" class="section-kicker">Contato</p>
-            <h4 id="supportContactTitle">Central Sonic Search</h4>
-            <p id="supportContactText" class="muted">
-              Envie feedback, bugs, parcerias ou ideias com contexto pronto.
-            </p>
-            <div class="support-contact-email">
-              <span id="supportContactEmailLabel">Canal direto</span>
-              <code id="supportContactEmail">pedropfpj@gmail.com</code>
-            </div>
-          </div>
-          <form id="supportContactForm" class="support-contact-form" novalidate>
-            <label class="support-contact-field" for="supportContactTopic">
-              <span id="supportContactTopicLabel">Assunto</span>
-              <select id="supportContactTopic">
-                <option id="supportContactTopicFeedback" value="feedback">Feedback do app</option>
-                <option id="supportContactTopicBug" value="bug">Bug ou problema</option>
-                <option id="supportContactTopicPartnership" value="partnership">Parceria</option>
-                <option id="supportContactTopicCatalog" value="catalog">Catálogo ou curadoria</option>
-              </select>
-            </label>
-            <div class="support-contact-row">
-              <label class="support-contact-field" for="supportContactName">
-                <span id="supportContactNameLabel">Nome</span>
-                <input id="supportContactName" type="text" maxlength="80" autocomplete="name" />
-              </label>
-              <label class="support-contact-field" for="supportContactReply">
-                <span id="supportContactReplyLabel">E-mail para resposta</span>
-                <input id="supportContactReply" type="email" maxlength="160" autocomplete="email" />
-              </label>
-            </div>
-            <label class="support-contact-field support-contact-message-field" for="supportContactMessage">
-              <span id="supportContactMessageLabel">Mensagem</span>
-              <textarea id="supportContactMessage" maxlength="1200" rows="4" required></textarea>
-            </label>
-            <p id="supportContactStatus" class="muted support-contact-status" aria-live="polite">
-              O envio abre no seu app de e-mail com a mensagem organizada.
-            </p>
-            <div class="support-contact-actions">
-              <button id="supportContactMailBtn" class="support-contact-action primary" type="submit">Preparar envio</button>
-              <button id="supportContactCopyBtn" class="support-contact-action secondary" type="button">Copiar briefing</button>
-            </div>
-          </form>
-        </article>
         <p id="supportLegalNote" class="muted support-legal-note">
           Apoio voluntário ao projeto.
         </p>
@@ -714,7 +794,7 @@
           <article class="about-card">
             <span id="aboutReasonTwoKicker">02</span>
             <h4 id="aboutReasonTwoTitle">Subgênero com honestidade</h4>
-            <p id="aboutReasonTwoText">Quando há sinal forte, mostramos o subgênero; quando não há, ficamos na família sonora.</p>
+            <p id="aboutReasonTwoText">Quando há sinal forte, mostramos o subgênero; quando não há, ficamos no estilo mais amplo.</p>
           </article>
           <article class="about-card">
             <span id="aboutReasonThreeKicker">03</span>
@@ -739,7 +819,7 @@
           </article>
           <article class="about-trust-box">
             <h4 id="aboutTrustTitle">Como ler a confiança</h4>
-            <p id="aboutTrustText">Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume a família sonora em vez de forçar rótulo.</p>
+            <p id="aboutTrustText">Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume o estilo mais amplo em vez de forçar rótulo.</p>
           </article>
         </div>
       </section>
@@ -1127,11 +1207,11 @@
           </figure>
           <p id="primarySwipeHint" class="primary-swipe-hint">Direita salva. Esquerda troca.</p>
           <h4 id="songTitle" class="track-title-animated"></h4>
-          <div id="nowPlayingGenre" class="now-playing-genre hidden" aria-label="Subgênero tocando agora">
+          <div id="nowPlayingGenre" class="now-playing-genre hidden" aria-label="Estilo tocando agora">
             <span id="nowPlayingKicker">Tocando agora</span>
             <strong id="nowPlayingStyle">Subgênero</strong>
             <small>
-              <span id="nowPlayingFamily">Família sonora</span>
+              <span id="nowPlayingFamily">Estilo</span>
               <span>•</span>
               <span id="nowPlayingBpm">BPM</span>
               <span>•</span>
@@ -1207,7 +1287,7 @@
                 <button id="previewIssueBtn" class="secondary">Não tocou</button>
                 <button id="previewDislikeBtn" class="secondary">Não conectou, troca</button>
               </div>
-              <div class="feedback-buttons recommendation-issue-buttons" aria-label="Corrigir recomendação">
+              <div class="feedback-buttons recommendation-issue-buttons hidden" aria-label="Corrigir recomendação" aria-hidden="true">
                 <button id="styleIssueBtn" class="secondary" type="button">Subgênero errado</button>
                 <button id="bpmIssueBtn" class="secondary" type="button">BPM estranho</button>
                 <button id="imageIssueBtn" class="secondary" type="button">Imagem errada</button>
@@ -1282,8 +1362,8 @@
             </div>
           </div>
           <div id="socialCommentsLoginPrompt" class="social-comments-login-prompt hidden">
-            <p id="socialCommentsLoginText" class="muted">Entre ou cadastre-se para comentar e reagir.</p>
-            <button id="socialCommentsLoginBtn" class="primary" type="button">Entrar / cadastrar</button>
+            <p id="socialCommentsLoginText" class="muted">Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.</p>
+            <button id="socialCommentsLoginBtn" class="primary" type="button">Entrar para participar</button>
           </div>
           <p id="socialCommentsStatus" class="muted social-comments-status" role="status" aria-live="polite"></p>
           <div id="socialCommentsList" class="social-comments-list"></div>
@@ -1800,7 +1880,7 @@
             <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
           </div>
         </div>
-        <section id="apiHealthPanel" class="api-health-panel" aria-labelledby="apiHealthTitle">
+        <section id="apiHealthPanel" class="api-health-panel hidden" aria-labelledby="apiHealthTitle" aria-hidden="true">
           <div class="api-health-head">
             <div>
               <p id="apiHealthKicker" class="summary-kicker">APIs</p>
@@ -1867,32 +1947,14 @@
         <article id="socialProfileCard" class="social-profile-card hidden" aria-hidden="true">
           <div class="social-profile-head">
             <div>
-              <p class="summary-kicker">Conta online opcional</p>
-              <h4>Sincronização e social</h4>
-              <p class="muted">Opcional: nuvem, ranking e backup automático.</p>
+              <p class="summary-kicker">Login com Google</p>
+              <h4>Sincronização social</h4>
+              <p class="muted">Use Google para sincronizar curtidas e comentar. Apple entra depois.</p>
             </div>
             <span id="socialConnectionBadge" class="social-connection-badge">Local</span>
           </div>
 
           <div id="socialAuthPanel" class="social-auth-panel">
-            <div class="social-auth-grid">
-              <label>
-                <span>E-mail</span>
-                <input id="socialEmailInput" type="email" autocomplete="email" placeholder="voce@email.com" />
-              </label>
-              <label>
-                <span>Senha</span>
-                <input id="socialPasswordInput" type="password" autocomplete="current-password" placeholder="mínimo 6 caracteres" />
-              </label>
-              <label>
-                <span>@username</span>
-                <input id="socialUsernameInput" type="text" autocomplete="nickname" placeholder="pedropfpj" />
-              </label>
-              <label>
-                <span>Nome público</span>
-                <input id="socialDisplayNameInput" type="text" autocomplete="name" placeholder="Pedro Freire" />
-              </label>
-            </div>
             <div class="social-auth-actions">
               <button id="socialGoogleBtn" class="listen-btn google-login-btn" type="button">
                 <span class="auth-provider-mark google-mark" aria-hidden="true">
@@ -1905,13 +1967,10 @@
                 </span>
                 <span>Entrar com Google</span>
               </button>
-              <button id="socialSignUpBtn" class="listen-btn" type="button">Criar perfil</button>
-              <button id="socialSignInBtn" class="listen-btn secondary" type="button">Entrar</button>
-              <button id="socialResendConfirmBtn" class="listen-btn secondary confirm-link-btn" type="button">Reenviar confirmação</button>
               <button id="socialSignOutBtn" class="listen-btn secondary hidden" type="button">Sair</button>
-              <button id="socialSyncBtn" class="listen-btn soundcloud-btn" type="button">Sincronizar curtidas</button>
+              <button id="socialSyncBtn" class="listen-btn soundcloud-btn hidden" type="button">Sincronizar curtidas</button>
             </div>
-            <p id="socialStatus" class="social-status muted">Opcional: conecte para sincronizar fora deste aparelho.</p>
+            <p id="socialStatus" class="social-status muted">Entre com Google para sincronizar fora deste aparelho.</p>
           </div>
 
           <div id="socialSignedPanel" class="social-signed-panel hidden">
@@ -1981,7 +2040,7 @@
             <p id="summaryAchievementLabel" class="summary-kicker">Conquista 5 estrelas</p>
             <p id="summaryAchievementText" class="summary-value achievement-value">Dê 5 estrelas para destacar suas certezas.</p>
           </article>
-          <article id="quizHubCard" class="profile-stat-card wide quiz-hub-card">
+          <article id="quizHubCard" class="profile-stat-card wide quiz-hub-card hidden" aria-hidden="true" hidden inert>
             <div class="quiz-hub-head">
               <h4 id="quizHubTitle">Desafios de conhecimento</h4>
               <span id="quizHubBadge" class="chip alt">Evolução rápida</span>
@@ -2086,7 +2145,11 @@
       window.SONIC_SEARCH_ACCESS_CONFIG = {
         ownerEmails: ["pedropfpj@gmail.com"],
         freeDiscoveryLimit: 50,
-        imageGenerationRequiresTrustedUser: false
+        imageGenerationRequiresTrustedUser: false,
+        betaGateEnabled: true,
+        betaAccessCodes: [],
+        betaAccessApiEndpoint: "/api/beta-access",
+        waitlistEmail: "pedropfpj@gmail.com"
       };
       window.SONIC_SEARCH_AI_CONFIG = {
         textEnabled: true,
@@ -2108,6 +2171,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260630language1"></script>
+    <script src="app.js?v=20260630betaTester1"></script>
   </body>
 </html>
