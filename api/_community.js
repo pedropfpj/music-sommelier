@@ -8,7 +8,7 @@ const COMMUNITY_LIMIT = 60;
 const MAX_TITLE_LENGTH = 120;
 const MAX_BODY_LENGTH = 1000;
 const MAX_META_LENGTH = 160;
-const ALLOWED_TOPICS = new Set(["track", "artist", "event", "festival", "question", "id"]);
+const ALLOWED_TOPICS = new Set(["all", "track", "artist", "event", "festival", "question", "id"]);
 
 function supabaseConfig() {
   const supabaseUrl = envText("SUPABASE_URL").replace(/\/+$/, "");
@@ -323,6 +323,55 @@ async function deletePost(req, res, config, access, body) {
   }
 }
 
+async function updatePost(req, res, config, access, body) {
+  if (!access.authenticated || !access.userId) {
+    sendJson(req, res, 401, { ok: false, error: "login_required" }, ["GET", "POST", "DELETE", "OPTIONS"]);
+    return;
+  }
+  const postId = trimText(body.postId || body.id || "", 80);
+  if (!postId) {
+    sendJson(req, res, 400, { ok: false, error: "missing_post_id" }, ["GET", "POST", "DELETE", "OPTIONS"]);
+    return;
+  }
+  try {
+    const feed = await readFeed(config);
+    const post = feed.posts.find((item) => item.id === postId && !item.deletedAt);
+    if (!post || post.userId !== access.userId) {
+      sendJson(req, res, 404, { ok: false, error: "post_not_found" }, ["GET", "POST", "DELETE", "OPTIONS"]);
+      return;
+    }
+    if (body.topic || body.type) post.topic = normalizeTopic(body.topic || body.type);
+    if (body.title !== undefined) {
+      post.title = trimText(body.title || "", MAX_TITLE_LENGTH) || post.title || "Conversa da comunidade";
+    }
+    if (body.body !== undefined) {
+      const postBody = trimText(body.body || body.text || "", MAX_BODY_LENGTH);
+      if (!postBody) {
+        sendJson(req, res, 400, { ok: false, error: "missing_body" }, ["GET", "POST", "DELETE", "OPTIONS"]);
+        return;
+      }
+      post.body = postBody;
+    }
+    if (body.context !== undefined || body.meta !== undefined) {
+      post.context = trimText(body.context || body.meta || "", MAX_META_LENGTH);
+    }
+    post.updatedAt = new Date().toISOString();
+    await writeFeed(config, feed);
+    sendJson(req, res, 200, {
+      ok: true,
+      enabled: true,
+      post: serializePost(post, access.userId)
+    }, ["GET", "POST", "DELETE", "OPTIONS"]);
+  } catch (error) {
+    sendJson(req, res, 200, {
+      ok: false,
+      setupNeeded: true,
+      error: "community_update_failed",
+      detail: error.message
+    }, ["GET", "POST", "DELETE", "OPTIONS"]);
+  }
+}
+
 module.exports = async function handler(req, res) {
   const methods = ["GET", "POST", "DELETE", "OPTIONS"];
   if (req.method === "OPTIONS") {
@@ -347,6 +396,10 @@ module.exports = async function handler(req, res) {
   }
   if (req.method === "POST") {
     const action = String(body.action || req.query?.action || "").trim().toLowerCase();
+    if (action === "update") {
+      await updatePost(req, res, config, access, body);
+      return;
+    }
     if (action === "react") {
       await reactToPost(req, res, config, access, body);
       return;

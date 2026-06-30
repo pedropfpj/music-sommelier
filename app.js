@@ -19223,6 +19223,8 @@ const I18N = {
     communityPostFailed: "Não consegui publicar agora.",
     communityReactionFailed: "Não consegui registrar a reação agora.",
     communityDeleted: "Post removido.",
+    communityUpdated: "Post atualizado.",
+    communityMoveToAll: "Mover para Tudo",
     communityComment: "Comentar",
     communityComments: "Comentários",
     communityCommentPlaceholder: "Responder nessa conversa",
@@ -20198,6 +20200,8 @@ const I18N = {
     communityPostFailed: "I could not post that right now.",
     communityReactionFailed: "I could not save that reaction right now.",
     communityDeleted: "Post removed.",
+    communityUpdated: "Post updated.",
+    communityMoveToAll: "Move to All",
     communityComment: "Comment",
     communityComments: "Comments",
     communityCommentPlaceholder: "Reply in this conversation",
@@ -21170,6 +21174,8 @@ const I18N = {
     communityPostFailed: "No pude publicar ahora.",
     communityReactionFailed: "No pude guardar esa reacción ahora.",
     communityDeleted: "Post removido.",
+    communityUpdated: "Post actualizado.",
+    communityMoveToAll: "Mover a Todo",
     communityComment: "Comentar",
     communityComments: "Comentarios",
     communityCommentPlaceholder: "Responder en esta conversación",
@@ -47459,7 +47465,7 @@ function communitySignedIn() {
 function normalizeCommunityTopic(topic = "track") {
   const value = String(topic || "").trim();
   if (value === "id") return "track";
-  return ["track", "artist", "event", "festival", "question"].includes(value) ? value : "track";
+  return ["all", "track", "artist", "event", "festival", "question"].includes(value) ? value : "track";
 }
 
 function normalizeCommunityFilter(filter = "all") {
@@ -47471,6 +47477,7 @@ function normalizeCommunityFilter(filter = "all") {
 function communityTopicLabel(topic = "question") {
   const normalizedTopic = normalizeCommunityTopic(topic);
   const key = {
+    all: "communityFilterAll",
     track: "communityTypeTrack",
     artist: "communityTypeArtist",
     event: "communityTypeEvent",
@@ -47732,6 +47739,15 @@ function renderCommunityPost(post = {}) {
   commentsButton.textContent = t("communityComment");
   actions.appendChild(commentsButton);
   if (post.mine) {
+    if (normalizeCommunityTopic(post.topic) !== "all") {
+      const moveToAll = document.createElement("button");
+      moveToAll.type = "button";
+      moveToAll.className = "social-comment-action";
+      moveToAll.dataset.communityAction = "topic-all";
+      moveToAll.dataset.postId = post.id || "";
+      moveToAll.textContent = t("communityMoveToAll");
+      actions.appendChild(moveToAll);
+    }
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "social-comment-action danger";
@@ -47886,6 +47902,29 @@ async function reactCommunityPost(postId = "", desiredValue = 0) {
   } catch (error) {
     console.warn("Could not react to community post", error);
     showToast(t("communityReactionFailed"));
+    return false;
+  }
+}
+
+async function updateCommunityPostTopic(postId = "", topic = "all") {
+  if (!communitySignedIn() || !postId) return false;
+  try {
+    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "update",
+        postId,
+        topic: normalizeCommunityTopic(topic)
+      }
+    });
+    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "community_update_failed");
+    if (payload?.post) replaceCommunityPost(payload.post);
+    showToast(t("communityUpdated"));
+    renderCommunityPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not update community post", error);
+    showToast(t("communityPostFailed"));
     return false;
   }
 }
@@ -51540,7 +51579,7 @@ bind(communityTopicTabs, "click", (event) => {
   if (!target) return;
   const nextFilter = normalizeCommunityFilter(target.getAttribute("data-community-filter") || "all");
   communityState.filter = nextFilter;
-  communityState.topic = nextFilter === "all" ? "track" : normalizeCommunityTopic(nextFilter);
+  communityState.topic = normalizeCommunityTopic(nextFilter);
   void loadCommunityPosts({ silent: false });
 });
 bind(communityPostSubmitBtn, "click", () => {
@@ -51573,6 +51612,10 @@ bind(communityFeedList, "click", async (event) => {
   }
   if (action === "delete") {
     await deleteCommunityPost(postId);
+    return;
+  }
+  if (action === "topic-all") {
+    await updateCommunityPostTopic(postId, "all");
     return;
   }
   if (action === "like" || action === "dislike") {
