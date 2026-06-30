@@ -1159,7 +1159,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260627community6";
+const SONIC_APP_BUILD_ID = "20260630language1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6801,6 +6801,7 @@ const SPIRIT_ART_SEED_STORAGE_KEY = "neonpulse:spiritArtSeed:v1";
 const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount:v1";
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
+const LANGUAGE_STORAGE_KEY = "neonpulse:language:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
@@ -6849,6 +6850,7 @@ const AUDIO_GAIN_PROFILE = {
 const PROGRESS_MAP_LIMIT = 240;
 const LIKED_TRACK_HISTORY_LIMIT = 80;
 const DEFAULT_LANGUAGE = "en";
+const SUPPORTED_LANGUAGES = ["pt", "en", "es"];
 const NEW_ARTIST_LOOKBACK_YEARS = 2;
 const QUIZ_TRIGGER_MIN_KNOWN = 6;
 const QUIZ_REOFFER_STEP = 4;
@@ -23260,14 +23262,65 @@ function applyLanguage() {
   updateStats();
 }
 
-function setLanguage(lang) {
-  if (!["pt", "en", "es"].includes(lang)) return;
-  currentLanguage = lang;
+function normalizeLanguageCode(lang = "") {
+  const clean = String(lang || "").trim().toLowerCase().replace("_", "-");
+  if (clean.startsWith("pt")) return "pt";
+  if (clean.startsWith("es")) return "es";
+  if (clean.startsWith("en")) return "en";
+  return "";
+}
+
+function isSupportedLanguage(lang = "") {
+  return SUPPORTED_LANGUAGES.includes(lang);
+}
+
+function readLanguageFromUrl() {
+  try {
+    const lang = normalizeLanguageCode(new URL(window.location.href).searchParams.get("lang") || "");
+    return isSupportedLanguage(lang) ? lang : "";
+  } catch (_err) {
+    return "";
+  }
+}
+
+function readStoredLanguage() {
+  try {
+    const lang = normalizeLanguageCode(localStorage.getItem(LANGUAGE_STORAGE_KEY) || "");
+    return isSupportedLanguage(lang) ? lang : "";
+  } catch (_err) {
+    return "";
+  }
+}
+
+function preferredBrowserLanguage() {
+  const languages = typeof navigator !== "undefined"
+    ? [navigator.language, ...(navigator.languages || [])]
+    : [];
+  const lang = languages.map(normalizeLanguageCode).find(isSupportedLanguage);
+  return lang || "";
+}
+
+function persistLanguage(lang) {
+  try {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+  } catch (_err) {}
+}
+
+function setLanguage(lang, options = {}) {
+  const normalized = normalizeLanguageCode(lang);
+  if (!isSupportedLanguage(normalized)) return;
+  currentLanguage = normalized;
+  if (options.persist !== false) persistLanguage(normalized);
   applyLanguage();
 }
 
 function loadLanguage() {
-  currentLanguage = DEFAULT_LANGUAGE;
+  currentLanguage =
+    readLanguageFromUrl() ||
+    readStoredLanguage() ||
+    preferredBrowserLanguage() ||
+    DEFAULT_LANGUAGE;
+  persistLanguage(currentLanguage);
   applyLanguage();
 }
 
@@ -23832,7 +23885,9 @@ function appleRedirectURI() {
   const configured = configuredAuthValue("appleRedirectURI");
   if (configured) return configured;
   if (typeof window !== "undefined" && window.location?.protocol === "https:") {
-    return `${window.location.origin}${window.location.pathname}`;
+    const url = new URL(`${window.location.origin}${window.location.pathname}`);
+    url.searchParams.set("lang", currentLanguage || DEFAULT_LANGUAGE);
+    return url.toString();
   }
   return "";
 }
@@ -24182,7 +24237,7 @@ async function loginWithGoogle(event) {
   if (shouldUseNativeLink) {
     event?.preventDefault?.();
     socialState.busy = true;
-    pendingSocialOAuthUrl = authGoogleBtn.getAttribute("href") || socialOAuthEndpointUrl("google", { redirect: true });
+    pendingSocialOAuthUrl = socialOAuthEndpointUrl("google", { redirect: true }) || authGoogleBtn.getAttribute("href") || "";
     setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
     socialSetStatus("Abrindo login do Google...");
     renderSocialUi({ preserveStatus: true });
@@ -45812,7 +45867,10 @@ function socialAuthRedirectUrl() {
     const origin = window.location?.origin || "";
     const pathname = window.location?.pathname || "/";
     if ((protocol === "http:" || protocol === "https:") && origin) {
-      return `${origin}${pathname || "/"}`;
+      const url = new URL(`${origin}${pathname || "/"}`);
+      const lang = normalizeLanguageCode(currentLanguage) || readStoredLanguage() || DEFAULT_LANGUAGE;
+      if (isSupportedLanguage(lang)) url.searchParams.set("lang", lang);
+      return url.toString();
     }
   } catch (error) {
     console.warn("Could not resolve social auth redirect URL", error);
