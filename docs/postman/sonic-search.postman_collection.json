@@ -1,0 +1,772 @@
+{
+  "info": {
+    "_postman_id": "1c75f84b-b5f1-47e9-a8ab-e6685f0fb686",
+    "name": "Sonic Search API QA",
+    "description": "Production API checks for Sonic Search. Run Core smoke first. Folders marked quota or write should be run intentionally.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test(\"response is not a 5xx server error\", function () {",
+          "  pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "const contentType = pm.response.headers.get(\"Content-Type\") || \"\";",
+          "if (contentType.includes(\"application/json\")) {",
+          "  const json = pm.response.json();",
+          "  pm.test(\"no durable rate limit setup blocker\", function () {",
+          "    pm.expect(json.error || \"\").to.not.eql(\"durable_rate_limit_required\");",
+          "  });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Core smoke - safe",
+      "description": "Safe checks that should not spend OpenAI image/text quota and should not write user data.",
+      "item": [
+        {
+          "name": "Integration health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"health payload is ok\", function () {",
+                  "  pm.expect(json.ok).to.eql(true);",
+                  "  pm.expect(json.providers).to.be.an(\"object\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/integration-health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "integration-health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Social config",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"social config shape\", function () {",
+                  "  pm.expect(json.ok).to.eql(true);",
+                  "  pm.expect(json.provider).to.eql(\"supabase\");",
+                  "  pm.expect(json.supabaseUrl || \"\").to.match(/^https:\\/\\//);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/social-config",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "social-config"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Google OAuth URL",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"returns Google URL\", function () {",
+                  "  pm.expect(json.ok).to.eql(true);",
+                  "  pm.expect(json.url || \"\").to.include(\"accounts.google.com\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/social-oauth-url?provider=google&redirect_to={{redirect_to}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "social-oauth-url"
+              ],
+              "query": [
+                {
+                  "key": "provider",
+                  "value": "google"
+                },
+                {
+                  "key": "redirect_to",
+                  "value": "{{redirect_to}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Catalog extra",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"catalog is enabled and returns arrays\", function () {",
+                  "  pm.expect(json.enabled).to.eql(true);",
+                  "  pm.expect(json.artists || []).to.be.an(\"array\");",
+                  "  pm.expect(json.tracks || []).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/catalog-extra?limit=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "catalog-extra"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Track metadata",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"track metadata enabled\", function () {",
+                  "  pm.expect(json.enabled).to.eql(true);",
+                  "  pm.expect(json.best || json.candidates).to.exist;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"{{track_artist}}\",\n  \"song\": \"{{track_song}}\",\n  \"style\": \"{{style}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/track-metadata",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "track-metadata"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Artist profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"artist profile enabled\", function () {",
+                  "  pm.expect(json.enabled).to.eql(true);",
+                  "  pm.expect(json.profile).to.be.an(\"object\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"Avalon\",\n  \"language\": \"pt-BR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/artist-profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "artist-profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "News feed",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"news feed shape\", function () {",
+                  "  pm.expect(json.enabled).to.eql(true);",
+                  "  pm.expect(json.items).to.be.an(\"array\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/news-feed?limit=2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "news-feed"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Current production blockers",
+      "description": "These should turn green after SONIC_REQUIRE_DURABLE_RATE_LIMITS=false or after KV/Upstash is configured.",
+      "item": [
+        {
+          "name": "Cover art",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"{{track_artist}}\",\n  \"song\": \"{{track_song}}\",\n  \"album\": \"Discovery\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cover-art",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cover-art"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Radio Browser",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"style\": \"hard_techno\",\n  \"limit\": 2,\n  \"healthyOnly\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/radio-browser",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "radio-browser"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Artist events",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/ticketmaster-events?artist={{event_artist}}&size=2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "ticketmaster-events"
+              ],
+              "query": [
+                {
+                  "key": "artist",
+                  "value": "{{event_artist}}"
+                },
+                {
+                  "key": "size",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Write and gated checks",
+      "description": "These can create/update data or require a real beta code. Run intentionally.",
+      "item": [
+        {
+          "name": "Waitlist invalid email guard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"invalid email is rejected\", function () { pm.response.to.have.status(400); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"error is invalid_email\", function () { pm.expect(json.error).to.eql(\"invalid_email\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"invalid\",\n  \"name\": \"Postman QA\",\n  \"role\": \"listener\",\n  \"source\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/waitlist",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "waitlist"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Waitlist submit test email - writes data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{waitlist_email}}\",\n  \"name\": \"{{waitlist_name}}\",\n  \"role\": \"listener\",\n  \"note\": \"Postman production test\",\n  \"source\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/waitlist",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "waitlist"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Beta access invalid code guard",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"invalid code is rejected\", function () { pm.response.to.have.status(403); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"error is invalid_code\", function () { pm.expect(json.error).to.eql(\"invalid_code\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"WRONG-CODE\",\n  \"source\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/beta-access",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "beta-access"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Beta access real code - grants cookie",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{beta_code}}\",\n  \"source\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/beta-access",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "beta-access"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Beta event ingest",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"response is not a 5xx server error\", function () { pm.expect(pm.response.code).to.be.below(500); });",
+                  "const json = pm.response.json();",
+                  "pm.test(\"event endpoint accepts the request\", function () { pm.expect([200, 202]).to.include(pm.response.code); });",
+                  "pm.test(\"event payload is ok\", function () {",
+                  "  pm.expect(json.ok).to.eql(true);",
+                  "  pm.expect(json).to.have.property(\"stored\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"postman_beta_event\",\n  \"sessionId\": \"postman-{{$timestamp}}\",\n  \"source\": \"postman\",\n  \"payload\": {\n    \"note\": \"postman analytics smoke\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/beta-events",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "beta-events"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quota checks - run intentionally",
+      "description": "These call credentialed or AI-backed APIs. They may consume provider quota.",
+      "item": [
+        {
+          "name": "YouTube search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"{{track_artist}}\",\n  \"song\": \"{{track_song}}\",\n  \"limit\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/youtube-search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "youtube-search"
+              ]
+            }
+          }
+        },
+        {
+          "name": "SoundCloud search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"{{track_artist}}\",\n  \"song\": \"{{track_song}}\",\n  \"limit\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/soundcloud-search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "soundcloud-search"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Last.fm artist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artist\": \"Avalon\",\n  \"limit\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/lastfm-artist",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "lastfm-artist"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Track insight - OpenAI text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "{{origin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"pt\",\n  \"context\": \"qa\",\n  \"track\": {\n    \"artist\": \"{{track_artist}}\",\n    \"song\": \"{{track_song}}\",\n    \"style\": \"{{style}}\",\n    \"bpm\": \"123\",\n    \"energy\": \"euphoric\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/track-insight",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "track-insight"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": []
+}

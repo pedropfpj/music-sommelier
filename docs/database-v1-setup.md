@@ -88,6 +88,7 @@ Esperado:
   "enabled": true,
   "provider": "supabase",
   "supabaseUrl": "https://...",
+  "supabaseAuthUrl": "https://auth.sonicsearch.app",
   "supabaseAnonKey": "..."
 }
 ```

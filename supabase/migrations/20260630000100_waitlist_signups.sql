@@ -50,3 +50,5 @@ alter table public.waitlist_signups enable row level security;
 
 -- No public policies on purpose: waitlist data is private.
 -- The server-side service role used by /api/waitlist bypasses RLS.
+grant usage on schema public to service_role;
+grant select, insert, update on public.waitlist_signups to service_role;

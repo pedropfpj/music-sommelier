@@ -3,6 +3,7 @@ const { sendJson } = require("./_music-apis");
 const handlers = {
   "artist-profile": require("./_artist-profile"),
   "beta-access": require("./_beta-access"),
+  "beta-events": require("./_beta-events"),
   comments: require("./_comments"),
   community: require("./_community"),
   "cover-art": require("./_cover-art"),

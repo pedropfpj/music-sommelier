@@ -264,6 +264,7 @@ const ACCESS_DEFAULT_CONFIG = {
   betaGateEnabled: false,
   betaAccessCodes: [],
   betaAccessApiEndpoint: "",
+  betaEventsEndpoint: "/api/beta-events",
   waitlistEmail: "pedropfpj@gmail.com"
 };
 const ACCESS_CONFIG = {
@@ -274,6 +275,7 @@ const ACCESS_CONFIG = {
 };
 const BETA_GATE_STORAGE_KEY = "sonic_search:beta_access:v1";
 const BETA_WAITLIST_STORAGE_KEY = "sonic_search:waitlist_request:v1";
+const BETA_EVENT_SESSION_STORAGE_KEY = "sonic_search:beta_event_session:v1";
 const COMPLIANCE_DEFAULT_CONFIG = {
   clientMusicCatalogApisEnabled: true,
   clientDeezerEnabled: false,
@@ -15812,6 +15814,9 @@ function registerTrackFeedback(track, liked, options = {}) {
     adjustPreviewReliabilitySignal(track.style, options?.rewardPreview ? 0.16 : 0.07);
     rememberLikedTrack(track, options?.source || "liked");
     recordDailyMusicAction(track, "like");
+    trackRecommendationEvent("track_liked", track, lastPrefs || {}, {
+      source: options?.source || "liked"
+    });
     saveProgress();
     return "liked";
   }
@@ -15828,6 +15833,10 @@ function registerTrackFeedback(track, liked, options = {}) {
     }
     adjustTrackPreviewIssueSignal(track, 1);
     adjustPreviewReliabilitySignal(track.style, -0.65);
+    trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
+      source: options?.source || reason || "disliked",
+      reason
+    });
     saveProgress();
     return reason;
   }
@@ -15840,6 +15849,10 @@ function registerTrackFeedback(track, liked, options = {}) {
     registerTrackPreferenceSignal(track, -0.56 * issueWeight);
     adjustTrackRecommendationIssueSignal(track, issueWeight);
     adjustPreviewReliabilitySignal(track.style, reason === "image_issue" ? -0.08 : -0.18);
+    trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
+      source: options?.source || reason || "disliked",
+      reason
+    });
     saveProgress();
     return reason;
   }
@@ -15853,6 +15866,10 @@ function registerTrackFeedback(track, liked, options = {}) {
   }
   adjustTrackPreviewIssueSignal(track, -0.65);
   adjustPreviewReliabilitySignal(track.style, 0.08);
+  trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
+    source: options?.source || reason || "disliked",
+    reason
+  });
   saveProgress();
   return reason;
 }
@@ -23459,6 +23476,85 @@ function betaAccessApiEndpoint() {
   return cleanBetaField(ACCESS_CONFIG.betaAccessApiEndpoint || "", 220);
 }
 
+function betaEventsEndpoint() {
+  return cleanBetaField(ACCESS_CONFIG.betaEventsEndpoint || "", 220);
+}
+
+function createBetaEventSessionId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `ss-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
+function betaEventSessionId() {
+  try {
+    const stored = cleanBetaField(localStorage.getItem(BETA_EVENT_SESSION_STORAGE_KEY) || "", 80)
+      .replace(/[^a-zA-Z0-9_.:-]/g, "");
+    if (stored) return stored;
+    const created = createBetaEventSessionId();
+    localStorage.setItem(BETA_EVENT_SESSION_STORAGE_KEY, created);
+    return created;
+  } catch (_error) {
+    return createBetaEventSessionId();
+  }
+}
+
+function safeBetaPayloadValue(value, maxLength = 160) {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "number" || typeof value === "boolean") return value;
+  return cleanBetaField(value, maxLength);
+}
+
+function trackBetaEvent(eventName = "", payload = {}, options = {}) {
+  const endpoint = betaEventsEndpoint();
+  if (!endpoint || typeof window === "undefined") return;
+  const safeEventName = cleanBetaField(eventName, 80).toLowerCase();
+  if (!/^[a-z0-9][a-z0-9_.:-]{1,79}$/.test(safeEventName)) return;
+  const body = {
+    event: safeEventName,
+    sessionId: betaEventSessionId(),
+    source: cleanBetaField(options.source || payload.source || "app", 80),
+    pageUrl: window.location?.href || "",
+    payload: {
+      build: SONIC_APP_BUILD_ID,
+      language: typeof currentLanguage !== "undefined" ? currentLanguage : "",
+      betaGranted: betaAccessGranted(),
+      ...payload
+    }
+  };
+  const serialized = JSON.stringify(body);
+  if (
+    options.beacon !== false &&
+    typeof navigator !== "undefined" &&
+    typeof navigator.sendBeacon === "function"
+  ) {
+    const sent = navigator.sendBeacon(endpoint, new Blob([serialized], { type: "application/json" }));
+    if (sent) return;
+  }
+  if (typeof fetch !== "function") return;
+  fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: serialized,
+    keepalive: true
+  }).catch(() => {});
+}
+
+function trackRecommendationEvent(eventName = "", track = null, prefs = {}, extra = {}) {
+  if (!track) return;
+  trackBetaEvent(eventName, {
+    artist: safeBetaPayloadValue(track.artist),
+    song: safeBetaPayloadValue(track.song),
+    style: safeBetaPayloadValue(track.style || prefs?.style || ""),
+    bpm: safeBetaPayloadValue(track.bpm || prefs?.bpm || ""),
+    energy: safeBetaPayloadValue(track.energy || prefs?.energy || ""),
+    context: safeBetaPayloadValue(prefs?.context || ""),
+    trackKey: safeBetaPayloadValue(recommendationTrackKey(track), 220),
+    ...extra
+  }, { source: extra.source || "recommendation" });
+}
+
 function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
   try {
     localStorage.setItem(BETA_GATE_STORAGE_KEY, JSON.stringify({
@@ -23526,6 +23622,11 @@ async function validateBetaAccessCode(code = "", source = "manual") {
           ...result,
           serverValidated: true
         });
+        trackBetaEvent("beta_access_granted", {
+          source,
+          server: true,
+          expiresAt: cleanBetaField(result.expiresAt || "", 80)
+        }, { source: "beta_access" });
         return { ok: true, server: true, result };
       }
       return {
@@ -23540,6 +23641,10 @@ async function validateBetaAccessCode(code = "", source = "manual") {
   }
   if (!betaCodeIsValid(normalizedCode)) return { ok: false, error: "invalid_code" };
   storeBetaAccessGrant(normalizedCode, source, { serverValidated: false });
+  trackBetaEvent("beta_access_granted", {
+    source,
+    server: false
+  }, { source: "beta_access" });
   return { ok: true, server: false };
 }
 
@@ -23663,6 +23768,12 @@ async function submitBetaWaitlist(event) {
     });
     const result = await response.json().catch(() => ({}));
     if (response.ok && result?.ok) {
+      trackBetaEvent("waitlist_submitted", {
+        role: cleanBetaField(payload.role || "", 40),
+        stored: Boolean(result.stored),
+        status: cleanBetaField(result.status || "", 40),
+        source: "beta_gate"
+      }, { source: "waitlist" });
       if (result.stored) {
         setBetaGateStatus("Pedido recebido. Vou liberar convites para os melhores perfis de teste.", "ok");
       } else {
@@ -42633,6 +42744,9 @@ function registerRecommendationDelivery(track, prefs) {
   recordDailyMusicAction(track, "discovery");
   markRecommendationPresented(track);
   registerSwipeStyleExposure(track.style);
+  trackRecommendationEvent("discovery_started", track, prefs, {
+    source: "recommendation_delivery"
+  });
   const trackKey = `${track.artist}::${track.song}`;
   registerGlobalRecommendation(trackKey);
   if (prefs.style && track?.style === prefs.style) {
@@ -46277,7 +46391,7 @@ function socialOAuthAuthorizeUrl(provider = "google") {
     provider,
     redirect_to: socialAuthRedirectUrl()
   });
-  return socialApiUrl(`/auth/v1/authorize?${params.toString()}`);
+  return socialAuthApiUrl(`/auth/v1/authorize?${params.toString()}`);
 }
 
 function socialOAuthEndpointUrl(provider = "google", { redirect = false } = {}) {
@@ -46385,6 +46499,11 @@ function socialConfigReady() {
 
 function socialApiUrl(path = "") {
   const base = String(socialState.config?.supabaseUrl || "").replace(/\/+$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+function socialAuthApiUrl(path = "") {
+  const base = String(socialState.config?.supabaseAuthUrl || socialState.config?.supabaseUrl || "").replace(/\/+$/, "");
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
@@ -51473,6 +51592,11 @@ bind(likeDiscoveryBtn, "click", async () => {
   recordSwipeTrainingSignal({ source: "discovery_like" });
   registerDiscoveredArtist(currentDiscovery.name);
   registerSpiritSignal(currentDiscovery.style, 0.95);
+  trackBetaEvent("discovery_artist_liked", {
+    artist: safeBetaPayloadValue(currentDiscovery.name),
+    style: safeBetaPayloadValue(currentDiscovery.style || ""),
+    source: "discovery_card"
+  }, { source: "discovery_card" });
   if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("likedDiscovery", { artist: currentDiscovery.name }));
   playUiSfx("like");
   burstConfetti(likeDiscoveryBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);

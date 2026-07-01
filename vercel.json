@@ -27,6 +27,7 @@
   "rewrites": [
     { "source": "/api/artist-profile", "destination": "/api/music?route=artist-profile" },
     { "source": "/api/beta-access", "destination": "/api/music?route=beta-access" },
+    { "source": "/api/beta-events", "destination": "/api/music?route=beta-events" },
     { "source": "/api/comments", "destination": "/api/music?route=comments" },
     { "source": "/api/community", "destination": "/api/music?route=community" },
     { "source": "/api/cover-art", "destination": "/api/music?route=cover-art" },
