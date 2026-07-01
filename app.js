@@ -26151,9 +26151,9 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   refreshAmbientForUiState();
   playUiSfx("confirm");
 
-  window.setTimeout(() => {
+  schedulePostBootIdleTask(() => {
     warmupCatalogInBackground();
-  }, BACKGROUND_CATALOG_WARMUP_DELAY_MS);
+  }, { delayMs: BACKGROUND_CATALOG_WARMUP_DELAY_MS, timeoutMs: 2400 });
   scheduleQuizChallengeEvaluation(220);
 
   if (!shouldAutoRecommend) return;
@@ -50439,7 +50439,18 @@ bind(supportContactCopyBtn, "click", () => {
   });
 });
 
-window.addEventListener("resize", syncFloatingSurpriseButton);
+let floatingSurpriseResizeRaf = 0;
+window.addEventListener("resize", () => {
+  if (floatingSurpriseResizeRaf) return;
+  if (typeof window.requestAnimationFrame !== "function") {
+    syncFloatingSurpriseButton();
+    return;
+  }
+  floatingSurpriseResizeRaf = window.requestAnimationFrame(() => {
+    floatingSurpriseResizeRaf = 0;
+    syncFloatingSurpriseButton();
+  });
+});
 
 bind(artistPhoto, "error", () => {
   if (currentRecommendation) renderArtistVisualFallback(currentRecommendation, t("artistImageFallback"));

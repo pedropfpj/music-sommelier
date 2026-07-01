@@ -15872,11 +15872,240 @@ html[data-sonic-screenshot="true"] .floating-sonic-layer {
     min-height: 380px;
   }
 
-  html[data-sonic-screenshot="true"] #swipeStartPanel .swipe-hero-actions {
+html[data-sonic-screenshot="true"] #swipeStartPanel .swipe-hero-actions {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "surprise"
       "pass"
       "like";
+  }
+}
+
+/* Beta readiness performance pass. */
+:root {
+  --touch-target-size: 44px;
+}
+
+body {
+  overscroll-behavior-x: none;
+}
+
+.floating-sonic-layer {
+  contain: layout paint;
+}
+
+.app-tab-panel,
+#resultPanel,
+#detailsPanel,
+#eventsPanel,
+#dailyNewsPanel,
+#spiritPanel,
+#supportPanel,
+#summaryPanel,
+#quickSurprisePanel,
+.usage-guide-card,
+.search-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 540px;
+}
+
+.hero,
+.app-tab-bar,
+.swipe-start-panel,
+.preference-panel,
+.search-overlay:not(.hidden) .search-card {
+  content-visibility: visible;
+  contain-intrinsic-size: auto;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: rgba(126, 232, 198, 0.18);
+}
+
+button,
+.primary,
+.secondary,
+.listen-btn,
+.app-tab-btn {
+  touch-action: manipulation;
+}
+
+@media (hover: none), (pointer: coarse), (max-width: 780px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .floating-sonic-layer {
+    opacity: 0.08;
+  }
+
+  .floating-sonic-layer::before,
+  .genre-fx-layer {
+    opacity: 0.18;
+  }
+
+  .sonic-note.note-g,
+  .sonic-note.note-h,
+  .sonic-note.note-i,
+  .sonic-note.note-j,
+  .sonic-note.note-k,
+  .sonic-note.note-l,
+  .sonic-note.note-m,
+  .sonic-note.note-n,
+  .sonic-note.note-o,
+  .sonic-note.note-p,
+  .sonic-note.note-q,
+  .sonic-note.note-r,
+  .sonic-note.note-s,
+  .sonic-note.note-t,
+  .sonic-note.note-u,
+  .sonic-note.note-v,
+  .sonic-note.note-w,
+  .sonic-note.note-x,
+  .sonic-orb.orb-e,
+  .sonic-orb.orb-f,
+  .sonic-orb.orb-g,
+  .sonic-orb.orb-h,
+  .sonic-beam,
+  .sonic-shard,
+  .sonic-pulse,
+  .sonic-speaker.speaker-c {
+    display: none;
+  }
+
+  .sonic-note,
+  .sonic-orb,
+  .sonic-speaker,
+  .genre-fx-token {
+    animation-duration: 28s !important;
+  }
+
+  .intro-logo-wrap,
+  .intro-logo-mark,
+  .intro-ring,
+  .intro-symbol,
+  .eq-bar,
+  .swipe-preview-pulse span,
+  .star-btn,
+  .rating-celebration {
+    animation: none !important;
+  }
+
+  .intro-logo-wrap {
+    opacity: 1;
+    transform: none;
+  }
+
+  .intro-logo-wrap::before {
+    display: none;
+  }
+
+  .welcome-screen,
+  .beta-gate-screen {
+    min-height: 100svh;
+  }
+
+  .beta-gate-screen {
+    overflow-y: auto;
+    padding-block:
+      max(12px, env(safe-area-inset-top))
+      calc(var(--signature-bar-height) + 20px + env(safe-area-inset-bottom));
+  }
+
+  .beta-gate-shell {
+    min-height: auto;
+    align-content: start;
+  }
+
+  .welcome-card,
+  .beta-waitlist-form,
+  .beta-code-panel,
+  .panel {
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  }
+
+  .app-shell {
+    width: min(100% - 24px, 1180px);
+    margin-top: 0.55rem;
+  }
+
+  .hero,
+  .panel {
+    border-radius: 8px;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-actions {
+    align-items: stretch;
+  }
+
+  .audio-control-group,
+  .audio-volume-control {
+    width: 100%;
+  }
+
+  .audio-volume-control {
+    position: static;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    margin-top: 0.4rem;
+    border-radius: 8px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .primary,
+  .secondary,
+  .listen-btn,
+  .app-tab-btn {
+    min-height: var(--touch-target-size);
+  }
+
+  .auth-entry-actions,
+  .welcome-start-actions,
+  .cta-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .beta-gate-actions {
+    gap: 0.72rem;
+  }
+
+  .beta-gate-copy {
+    min-height: auto;
+  }
+
+  .beta-gate-metrics span {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 380px) {
+  .beta-gate-copy h1 {
+    font-size: clamp(2rem, 9.4vw, 2.55rem);
+  }
+
+  .beta-gate-desc {
+    font-size: 0.94rem;
+  }
+
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {
+    font-size: clamp(1.32rem, 6vw, 1.72rem);
   }
 }

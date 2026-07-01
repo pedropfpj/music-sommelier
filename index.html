@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="icon" type="image/svg+xml" href="assets/image-bank/logos/sonic-search-tab-icon.svg?v=20260618tabicon1" />
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <link rel="preload" href="styles.css?v=20260701betaPerf1" as="style" />
+    <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script>
@@ -41,7 +43,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260627community15" />
+    <link rel="stylesheet" href="styles.css?v=20260701betaPerf1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
@@ -190,7 +192,7 @@
       <div class="beta-gate-shell">
         <div class="beta-gate-copy">
           <div class="beta-gate-logo-wrap" aria-hidden="true">
-            <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" fetchpriority="high" decoding="async" />
           </div>
           <p class="brand-kicker beta-gate-kicker">Beta fechado</p>
           <h1 id="betaGateTitle">Descoberta eletrônica fora do óbvio.</h1>
@@ -264,7 +266,7 @@
               <span class="intro-glyph glyph-c">⚡</span>
               <span class="intro-glyph glyph-d">◈</span>
               <div class="intro-logo-wrap">
-                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" fetchpriority="high" decoding="async" />
               </div>
             </div>
             <div class="intro-symbol-cloud" aria-hidden="true">
@@ -300,7 +302,7 @@
       <div class="welcome-card language-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
           </div>
           <p id="langKicker" class="brand-kicker">Before you start</p>
           <h1 id="langTitle">Choose your language</h1>
@@ -317,7 +319,7 @@
       <div class="welcome-card usage-guide-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
           </div>
           <p id="usageGuideKicker" class="brand-kicker">Guia rápido</p>
           <h1 id="usageGuideTitle">Encontre uma boa faixa em poucos toques</h1>
@@ -361,7 +363,7 @@
       <div class="welcome-card auth-card auth-entry-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
           </div>
           <p id="authKicker" class="brand-kicker">Acesso rápido</p>
           <h1 id="authTitle">Entre no Sonic Search</h1>
@@ -390,7 +392,7 @@
       <div class="welcome-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
           </div>
           <p id="welcomeKicker" class="brand-kicker">Descoberta eletrônica</p>
           <h1 id="welcomeTitle">SONIC SEARCH</h1>
@@ -441,7 +443,7 @@
       <header class="hero panel">
         <div class="hero-brand">
           <button id="heroLogoBtn" class="hero-logo-wrap hero-logo-btn" type="button" aria-label="Voltar ao início" title="Voltar ao início">
-            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" />
+            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
           </button>
           <div>
             <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
@@ -2172,6 +2174,6 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script src="app.js?v=20260630communityAll1"></script>
+    <script defer src="app.js?v=20260701betaPerf1"></script>
   </body>
 </html>
