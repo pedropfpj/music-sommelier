@@ -16109,3 +16109,67 @@ button,
     font-size: clamp(1.32rem, 6vw, 1.72rem);
   }
 }
+
+/* iPhone swipe labels: keep gesture feedback above the artwork/copy stack. */
+.swipe-stamp {
+  z-index: 36;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(2.38rem, 7.5vw, 3.12rem);
+  max-width: calc(100% - 1.6rem);
+  padding: 0.44rem clamp(0.78rem, 2.8vw, 1.12rem);
+  border-width: 2px;
+  text-align: center;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.44);
+  transform-origin: center center;
+}
+
+.swipe-track-card > .swipe-stamp,
+.main-track > .swipe-stamp {
+  position: absolute;
+  top: clamp(0.82rem, 2.4vw, 1.18rem);
+  z-index: 42;
+}
+
+.swipe-track-card > .swipe-stamp-like,
+.main-track > .swipe-stamp-like {
+  right: clamp(0.82rem, 2.6vw, 1.12rem);
+  left: auto;
+  opacity: var(--swipe-like-opacity, 0);
+  transform: translate3d(0, -0.2rem, 0) rotate(10deg) scale(0.98);
+}
+
+.swipe-track-card > .swipe-stamp-pass,
+.main-track > .swipe-stamp-pass {
+  left: clamp(0.82rem, 2.6vw, 1.12rem);
+  right: auto;
+  opacity: var(--swipe-pass-opacity, 0);
+  transform: translate3d(0, -0.2rem, 0) rotate(-10deg) scale(0.98);
+}
+
+.swipe-track-card.is-like > .swipe-stamp-like,
+.main-track.is-like > .swipe-stamp-like {
+  transform: translate3d(0, 0, 0) rotate(8deg) scale(1.04);
+}
+
+.swipe-track-card.is-pass > .swipe-stamp-pass,
+.main-track.is-pass > .swipe-stamp-pass {
+  transform: translate3d(0, 0, 0) rotate(-8deg) scale(1.04);
+}
+
+@media (max-width: 760px) {
+  #topSwipeCard.swipe-hero-card > .swipe-stamp {
+    top: clamp(4.08rem, 14vw, 5.15rem);
+    max-width: calc(50% - 0.86rem);
+    min-height: 38px;
+    padding-inline: clamp(0.62rem, 3.2vw, 0.86rem);
+    font-size: clamp(0.8rem, 4.2vw, 1rem);
+  }
+}
+
+@media (max-width: 390px) {
+  #topSwipeCard.swipe-hero-card > .swipe-stamp {
+    top: clamp(3.78rem, 15vw, 4.66rem);
+  }
+}
