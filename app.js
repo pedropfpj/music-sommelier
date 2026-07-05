@@ -717,40 +717,40 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
 const DJ_RECOMMENDATION_STORAGE_KEY = "sonic_search_dj_recommendations_v1";
 const DJ_SET_RECOMMENDATION_SEEDS = [
   {
-    id: "mop-paula",
-    lane: "mop",
+    id: "hitech-psycore-paula",
+    lane: "hitech_psycore",
     style: "dark_psy",
     name: "Paula",
     country: "Brasil",
-    scene: "Master of Puppets",
+    scene: "Psytrance BR",
     subgenre: "Dark Psy / Psycore",
     setTitle: "Paula @ Master of Puppets 2025",
     setUrl: "https://www.youtube.com/watch?v=4fXJmW78rns",
     platform: "YouTube",
     sourceName: "PAULA",
-    eventSignal: "Master of Puppets",
+    eventSignal: "Master of Puppets 2025",
     roleNote: "DJ/selectora; entra como recomendacao por set, nao como artista-produtor.",
-    reason: "Set ligado ao circuito Master of Puppets, com leitura darkpsy de pista e transicoes rapidas para calibrar o radar extremo."
+    reason: "Set de evento brasileiro com leitura darkpsy de pista e transicoes rapidas para calibrar o radar extremo."
   },
   {
-    id: "mop-booo",
-    lane: "mop",
+    id: "hitech-psycore-booo",
+    lane: "hitech_psycore",
     style: "hi_tech",
     name: "DJ Booo",
     country: "Brasil",
-    scene: "Master of Puppets",
+    scene: "Cosmic Crew / hi-tech BR",
     subgenre: "Hi-Tech / Psycore",
     setTitle: "DJ BOOO - ReveillOz 2018 / 2019",
     setUrl: "https://soundcloud.com/booo_cosmic_crew/dj-booo-reveilloz-2018-2019",
     platform: "SoundCloud",
     sourceName: "booo_cosmic_crew",
-    eventSignal: "Master of Puppets",
-    roleNote: "DJ de destaque no recorte MOP; mantido fora do catalogo de faixas autorais.",
+    eventSignal: "ReveillOz / Cosmic Crew",
+    roleNote: "DJ de destaque no recorte hi-tech/psycore; mantido fora do catalogo de faixas autorais.",
     reason: "Set hi-tech/psycore brasileiro: rápido, psicodélico e bom para calibrar o radar extremo."
   },
   {
-    id: "mop-anginha",
-    lane: "mop",
+    id: "hitech-psycore-anginha",
+    lane: "hitech_psycore",
     style: "hi_tech",
     name: "Anginha",
     country: "Brasil",
@@ -760,29 +760,29 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     setUrl: "https://soundcloud.com/hitechconnection/anginha-set-exclusivo-hitech-connection-001",
     platform: "SoundCloud",
     sourceName: "Hitech Connection",
-    eventSignal: "MOP / Naturaiz / Hitech Revolution",
+    eventSignal: "Hitech Connection",
     roleNote: "DJ recomendada por set publico; nao entra como produtora no catalogo de tracks.",
     reason: "A melhor entrada e pelo set: hi-tech direto, rapido e mais limpo de classificar que buscar faixa autoral incerta."
   },
   {
-    id: "mop-maiko",
-    lane: "mop",
-    style: "dark_psy",
+    id: "hitech-psycore-maiko",
+    lane: "hitech_psycore",
+    style: "hi_tech",
     name: "Maiko",
     country: "Lituania",
-    scene: "Dark / forest psy",
-    subgenre: "Dark Psy / Forest Psy",
+    scene: "Hi-tech internacional",
+    subgenre: "Hi-Tech",
     setTitle: "Maiko - Full Set @ Universo Paralello #18",
     setUrl: "https://www.youtube.com/watch?v=c03EeWES7kQ",
     platform: "YouTube",
     sourceName: "Psicodelia Coletiva",
-    eventSignal: "MOP Brazil 2026 flyer",
+    eventSignal: "Universo Paralello / Psicodelia Coletiva",
     roleNote: "DJ/selectora internacional; catalogada por set e nao por faixa propria.",
-    reason: "Set longo e tocavel para mapear a area dark/forest sem confundir com hi-tech ou dark experimental."
+    reason: "Set longo de festival com energia hi-tech; fica melhor no radar de alta velocidade do que em dark/forest."
   },
   {
-    id: "mop-psynonima",
-    lane: "mop",
+    id: "hitech-psycore-psynonima",
+    lane: "hitech_psycore",
     style: "hi_tech",
     name: "Psynonima",
     country: "Espanha",
@@ -792,7 +792,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     setUrl: "https://soundcloud.com/psynonima/pakawalla-hitech-djset-psynonima",
     platform: "SoundCloud",
     sourceName: "Psynonima",
-    eventSignal: "MOP Brazil 2026 flyer",
+    eventSignal: "Pakawalla / Psynonima",
     roleNote: "DJ-first no app; recomendacao baseada em set publico de 200 BPM.",
     reason: "O proprio upload sinaliza 200 BPM, entao a aba trata como hi-tech/alta velocidade em vez de dark experimental."
   },
@@ -43431,7 +43431,8 @@ function djRecommendationKey(seed = {}) {
 }
 
 function djLaneLabel(lane = "") {
-  if (lane === "mop") return "Master of Puppets";
+  if (lane === "hitech_psycore") return "Hi-Tech / Psycore";
+  if (lane === "mop") return "Psy BR";
   if (lane === "global_psy") return "Psy global";
   if (lane === "global_club") return "Selector global";
   return "DJ set";
@@ -43509,8 +43510,9 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
   const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
   if (!currentDjRecommendation && !lane) {
-    const mopSoundCloud = pool.find((seed) => seed.lane === "mop" && normalize(seed.platform || "").includes("soundcloud"));
-    if (mopSoundCloud) return mopSoundCloud;
+    const starter = pool.find((seed) => seed.id === "hitech-psycore-anginha")
+      || pool.find((seed) => seed.lane === "hitech_psycore" && normalize(seed.platform || "").includes("soundcloud"));
+    if (starter) return starter;
   }
   const candidates = pool.filter((seed) => djRecommendationKey(seed) !== currentKey);
   const basePool = candidates.length ? candidates : pool;
@@ -43559,7 +43561,7 @@ function renderDjRadarSummary() {
   if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
   if (djRadarScope) {
     const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Master of Puppets + mundo";
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Hi-Tech, psy e selectors";
   }
 }
 
