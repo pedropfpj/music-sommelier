@@ -19569,7 +19569,8 @@ const I18N = {
     heroTitle: "A faixa certa para agora",
     heroDesc: "Diga o momento, marque o que já conhece e deixe o Sonic Search trazer uma faixa com motivo, preview e contexto.",
     tabDiscover: "Descobrir",
-    tabFilters: "Filtro manual",
+    tabDjs: "DJs",
+    tabFilters: "Filtros",
     tabNews: "Notícias",
     tabCommunity: "Comunidade",
     tabStudio: "Estúdio",
@@ -20633,7 +20634,8 @@ const I18N = {
     heroTitle: "The right track for now",
     heroDesc: "Set the moment, mark what you already know, and let Sonic Search bring a track with a reason, preview, and context.",
     tabDiscover: "Discover",
-    tabFilters: "Manual filter",
+    tabDjs: "DJs",
+    tabFilters: "Filters",
     tabNews: "News",
     tabCommunity: "Community",
     tabStudio: "Studio",
@@ -21694,7 +21696,8 @@ const I18N = {
     heroDesc: "Marca el momento, indica lo que ya conoces y deja que Sonic Search traiga una pista con motivo, preview y contexto.",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
-    tabFilters: "Filtro manual",
+    tabDjs: "DJs",
+    tabFilters: "Filtros",
     tabNews: "Noticias",
     tabCommunity: "Comunidad",
     tabStudio: "Estudio",
@@ -23430,6 +23433,7 @@ function applyLanguage() {
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
+  setText("[data-app-tab-target='djs']", t("tabDjs"));
   setText("[data-app-tab-target='filters']", t("tabFilters"));
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='community']", t("tabCommunity"));

@@ -17253,3 +17253,41 @@ html.sonic-ios-app .voice-effects-card {
       inset 0 1px 0 rgba(255, 255, 255, 0.24);
   }
 }
+
+/* Public navigation pass: keep the primary sections scannable without pushing discovery down. */
+.app-tab-bar {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 0.34rem;
+  padding: 0.32rem;
+}
+
+.app-tab-btn {
+  min-height: 38px;
+  padding: 0.38rem 0.32rem;
+  font-size: clamp(0.68rem, 0.78vw, 0.82rem);
+  line-height: 1.05;
+  white-space: nowrap;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1180px) {
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-bar {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-bar {
+    display: flex;
+    grid-template-columns: none !important;
+  }
+
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-btn,
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-btn:nth-child(5) {
+    min-width: clamp(5.7rem, 28vw, 7.3rem);
+    min-height: 40px;
+    padding: 0.48rem 0.78rem;
+  }
+}
