@@ -172,10 +172,11 @@ const STYLE_TO_FAMILY = {
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v2";
 const DAILY_NEWS_MAX_ITEMS = 8;
-const DAILY_NEWS_FETCH_TIMEOUT_MS = 5200;
+const DAILY_NEWS_FETCH_TIMEOUT_MS = 9000;
 const DAILY_NEWS_MAX_AGE_DAYS = 45;
 const DAILY_NEWS_BRAZIL_MIN_ITEMS = 3;
 const SUPPORT_DEFAULT_CONFIG = {
+  paymentsEnabled: true,
   pix: {
     key: "4faa32c3-f275-401b-8b56-d9e1ea1501c8",
     name: "PEDRO FREIRE",
@@ -240,6 +241,101 @@ function isLocalDevelopmentHost() {
   return new Set(["localhost", "127.0.0.1", "::1"]).has(hostname);
 }
 
+const SONIC_PRODUCTION_ORIGIN = "https://sonicsearch.app";
+const SONIC_NATIVE_AUTH_REDIRECT_URL = "sonicsearch://auth/callback";
+
+function isNativeAppRuntime() {
+  if (typeof window === "undefined") return false;
+  const protocol = String(window.location?.protocol || "");
+  if (protocol === "capacitor:" || protocol === "ionic:") return true;
+  return Boolean(window.Capacitor?.isNativePlatform?.());
+}
+
+function nativeSocialAuthRedirectUrl() {
+  if (typeof window === "undefined") return "";
+  return String(window.SONIC_SEARCH_NATIVE_REDIRECT_URL || SONIC_NATIVE_AUTH_REDIRECT_URL).trim();
+}
+
+function sonicIosConfig() {
+  if (typeof window === "undefined" || !window.SONIC_SEARCH_IOS_CONFIG) return {};
+  return typeof window.SONIC_SEARCH_IOS_CONFIG === "object" ? window.SONIC_SEARCH_IOS_CONFIG : {};
+}
+
+function isAppStoreRuntimeMode() {
+  if (typeof window === "undefined") return false;
+  return Boolean(window.SONIC_SEARCH_APP_STORE_MODE || sonicIosConfig().appStoreMode);
+}
+
+function shouldHideSocialLoginForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().hideSocialLogin !== false);
+}
+
+function shouldDisableCommunityForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableCommunity !== false);
+}
+
+function shouldDisableSocialCommentsForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableSocialComments !== false);
+}
+
+function shouldReadOnlyCommunityForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().readOnlyCommunity !== false);
+}
+
+function shouldAutoEnterDiscoveryForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().autoEnterDiscovery === true);
+}
+
+function supportPaymentsAllowed() {
+  return Boolean(
+    SUPPORT_PAYMENT_CONFIG.paymentsEnabled !== false &&
+    !(isAppStoreRuntimeMode() && sonicIosConfig().disableSupportPayments !== false)
+  );
+}
+
+function capacitorPlugin(name = "") {
+  if (typeof window === "undefined" || !name) return null;
+  return window.Capacitor?.Plugins?.[name] || null;
+}
+
+function configuredAppApiBaseUrl() {
+  if (typeof window === "undefined") return "";
+  const configured = String(window.SONIC_SEARCH_API_BASE_URL || "").trim().replace(/\/+$/, "");
+  if (configured) return configured;
+  return isNativeAppRuntime() ? SONIC_PRODUCTION_ORIGIN : "";
+}
+
+function resolveAppApiEndpoint(endpoint = "") {
+  const raw = String(endpoint || "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  if (canUseRelativeApiEndpoint()) return raw;
+  const baseUrl = configuredAppApiBaseUrl();
+  if (baseUrl && raw.startsWith("/")) return `${baseUrl}${raw}`;
+  if (raw.startsWith("/api/")) return "";
+  return raw;
+}
+
+function resolveConfiguredAppApiEndpoint(endpoint = "", globalNames = [], fallbackPath = "") {
+  const raw = String(endpoint || fallbackPath || "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const configured = globalNames
+    .map((name) => String(window?.[name] || "").trim())
+    .find(Boolean);
+  if (configured && fallbackPath && (raw === fallbackPath || raw.startsWith(`${fallbackPath}?`))) {
+    return `${configured.replace(/\/+$/, "")}${raw.slice(fallbackPath.length)}`;
+  }
+  return resolveAppApiEndpoint(raw);
+}
+
+function resolveAppApiUrl(endpoint = "", params = null) {
+  const url = resolveAppApiEndpoint(endpoint);
+  const query = params && typeof params.toString === "function" ? params.toString() : "";
+  if (!url || !query) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}${query}`;
+}
+
 const AI_DEFAULT_CONFIG = {
   textEnabled: true,
   imageEnabled: isLocalStaticPreviewEnvironment(),
@@ -276,6 +372,9 @@ const ACCESS_CONFIG = {
 const BETA_GATE_STORAGE_KEY = "sonic_search:beta_access:v1";
 const BETA_WAITLIST_STORAGE_KEY = "sonic_search:waitlist_request:v1";
 const BETA_EVENT_SESSION_STORAGE_KEY = "sonic_search:beta_event_session:v1";
+const BETA_EVENT_ONCE_STORAGE_KEY = "sonic_search:beta_event_once:v1";
+const BETA_VISIT_STORAGE_KEY = "sonic_search:beta_visit:v1";
+const BETA_INTENT_STORAGE_KEY = "sonic_search:beta_intent:v1";
 const COMPLIANCE_DEFAULT_CONFIG = {
   clientMusicCatalogApisEnabled: true,
   clientDeezerEnabled: false,
@@ -647,7 +746,7 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     sourceName: "booo_cosmic_crew",
     eventSignal: "Master of Puppets",
     roleNote: "DJ de destaque no recorte MOP; mantido fora do catalogo de faixas autorais.",
-    reason: "Referencia de pista para hi-tech/psycore brasileiro: rapido, psicodelico e util para calibrar o radar sem depender de faixa autoral no catalogo."
+    reason: "Set hi-tech/psycore brasileiro: rápido, psicodélico e bom para calibrar o radar extremo."
   },
   {
     id: "mop-anginha",
@@ -1065,6 +1164,8 @@ const VIBE_THEME_CONFIG = {
 const EXTERNAL_DATASET_CACHE_VERSION = "20260705-ignez-hypnotic-techno-v1";
 const EXTERNAL_DATASET_PRIORITY_FILES = [
   "data/datasetlocal_hypnotic_techno_ignez_enrichment_v1_20260705.csv",
+  "data/uk_garage_mattik_bridge_v1_20260704.csv",
+  "data/indietronica_bridge_enrichment_v1_20260704.csv",
   "data/catalog_playable_focus_club_v17_20260622.csv",
   "data/catalog_playable_depth_v16_20260622.csv",
   "data/electronic_subgenre_expansion_v15_20260621.csv",
@@ -1157,8 +1258,12 @@ const FAST_DATASET_WAIT_MS = 120;
 const FAST_SUPABASE_WAIT_MS = 360;
 const FAST_COVERAGE_WAIT_MS = 420;
 const PREVIEW_PROBE_TIMEOUT_MS = 1800;
+const FAST_PREVIEW_PROBE_TIMEOUT_MS = 620;
+const FAST_PREVIEW_PROBE_LIMIT = 2;
+const FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS = 900;
 const OPTIONAL_API_TIMEOUT_MS = 3600;
 const FAST_OPTIONAL_API_TIMEOUT_MS = 2600;
+const JSONP_LATE_CALLBACK_GRACE_MS = 120000;
 const SOCIAL_COMMENTS_API_TIMEOUT_MS = 9000;
 const EXTERNAL_DATASET_FETCH_TIMEOUT_MS = 2200;
 const BACKGROUND_CATALOG_WARMUP_DELAY_MS = 22000;
@@ -5710,6 +5815,7 @@ const authAppleLabel = document.getElementById("authAppleLabel");
 const authProviderHint = document.getElementById("authProviderHint");
 const authFeedback = document.getElementById("authFeedback");
 const betaGateScreen = document.getElementById("betaGateScreen");
+const betaTesterRibbon = document.getElementById("betaTesterRibbon");
 const betaWaitlistForm = document.getElementById("betaWaitlistForm");
 const betaWaitlistName = document.getElementById("betaWaitlistName");
 const betaWaitlistEmail = document.getElementById("betaWaitlistEmail");
@@ -5720,6 +5826,7 @@ const betaAccessCode = document.getElementById("betaAccessCode");
 const betaAccessBtn = document.getElementById("betaAccessBtn");
 const betaExitAccessBtn = document.getElementById("betaExitAccessBtn");
 const betaGateStatus = document.getElementById("betaGateStatus");
+const betaIntentButtons = Array.from(document.querySelectorAll("[data-beta-intent]"));
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
 const appTabBar = document.getElementById("appTabBar");
@@ -5750,6 +5857,8 @@ const supportTitle = document.getElementById("supportTitle");
 const supportIntro = document.getElementById("supportIntro");
 const supportStatusBadge = document.getElementById("supportStatusBadge");
 const supportCustomAmountLabel = document.getElementById("supportCustomAmountLabel");
+const supportAmountGroup = document.querySelector(".support-amounts");
+const supportPaymentGrid = document.querySelector(".support-payment-grid");
 const supportCustomAmount = document.getElementById("supportCustomAmount");
 const supportAmountButtons = document.querySelectorAll("[data-tip-amount]");
 const supportPixKicker = document.getElementById("supportPixKicker");
@@ -6210,6 +6319,7 @@ const profileBackupImportSummary = document.getElementById("profileBackupImportS
 const profileBackupImportHint = document.getElementById("profileBackupImportHint");
 const profileBackupImportBtn = document.getElementById("profileBackupImportBtn");
 const profileBackupImportInput = document.getElementById("profileBackupImportInput");
+const profileDeleteDataBtn = document.getElementById("profileDeleteDataBtn");
 const socialProfileCard = document.getElementById("socialProfileCard");
 const socialConnectionBadge = document.getElementById("socialConnectionBadge");
 const socialAuthPanel = document.getElementById("socialAuthPanel");
@@ -6432,23 +6542,37 @@ let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
 const SWIPE_STYLE_RAIL_COMPACT_LIMIT = 24;
 const SWIPE_DISCOVERY_STYLE_DECK = [
-  "downtempo",
-  "darkwave",
-  "trip_hop",
-  "liquid_dnb",
-  "uk_garage",
-  "full_on_morning",
-  "twilight_psy",
-  "hard_techno",
-  "dub_techno",
-  "afro_house",
+  "deep_house",
+  "house",
+  "soulful_house",
+  "disco_house",
+  "garage_house",
   "tech_house",
-  "dark_experimental",
-  "experimental_bass",
+  "organic_house",
+  "afro_house",
+  "dub_techno",
+  "deep_techno",
+  "minimal_techno",
+  "techno",
+  "detroit_techno",
+  "ambient_techno",
+  "downtempo",
   "ambient",
+  "chillout",
+  "trip_hop",
+  "darkwave",
+  "uk_garage",
+  "liquid_dnb",
+  "full_on_morning",
+  "progressive_psy",
+  "goa_trance",
+  "twilight_psy",
+  "experimental_bass",
   "wave",
-  "breakcore",
   "future_garage",
+  "hard_techno",
+  "dark_experimental",
+  "breakcore",
   "psycore"
 ];
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
@@ -6464,14 +6588,21 @@ let recommendationBlockedByKnown = false;
 let recommendationRunBusy = false;
 let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
+let recommendationPreviewRenderToken = 0;
+let socialCommentsAccessBlockedUntil = 0;
 let activeVibeTheme = "";
 let currentAuthUser = null;
 const LOGIN_FLOW_ENABLED = true;
-const SOCIAL_PROFILE_ENABLED = true;
+const SOCIAL_PROFILE_ENABLED = !shouldHideSocialLoginForAppStore();
 let publicVisitorMode = false;
 let ephemeralProfileMode = false;
 let sharedSpiritViewMode = false;
 let sharedSpiritPayload = null;
+let betaAppSessionTracked = false;
+let betaGateViewTracked = false;
+let betaGrowthReactionCount = 0;
+let betaGrowthThreeReactionsTracked = false;
+let betaEventOnceMemory = new Set();
 let socialState = {
   ready: false,
   enabled: false,
@@ -6512,6 +6643,7 @@ let appleAuthLoading = false;
 let authConfigLoading = false;
 let socialOAuthNavigationTimer = 0;
 let pendingSocialOAuthUrl = "";
+let pendingNativeSocialAuthCallbackUrl = "";
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
@@ -6792,6 +6924,7 @@ const VOICE_MINI_PRESETS = {
     }
   }
 };
+const VOICE_MINI_IDEA_PRESETS = ["techno", "psy", "house"];
 let voiceMiniPattern = cloneVoiceMiniPattern(VOICE_MINI_DEFAULT_PATTERN);
 let quizOfferTimer = 0;
 let quizPendingChallenge = null;
@@ -6835,7 +6968,7 @@ const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
-const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 4500;
+const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 120000;
 const SOCIAL_SYNC_LIMIT = 50;
 const SOCIAL_CLOUD_RESTORE_LIMIT = 200;
 const SOCIAL_FEED_LIMIT = 14;
@@ -7352,8 +7485,8 @@ const STYLE_BPM_RULES = {
   sambass: { min: 170, max: 176 },
   drumfunk: { min: 165, max: 175 },
   breakbeat: { min: 125, max: 150 },
-  uk_garage: { min: 128, max: 136 },
-  future_garage: { min: 130, max: 140 },
+  uk_garage: { min: 128, max: 140 },
+  future_garage: { min: 130, max: 142 },
   dubstep: { min: 138, max: 150 },
   halftime_bass: { min: 80, max: 90 },
   footwork_juke: { min: 150, max: 165 },
@@ -7531,6 +7664,142 @@ function styleBpmCenter(style = "") {
   const rule = STYLE_BPM_RULES[style];
   if (!rule) return 0;
   return ((Number(rule.min) || 0) + (Number(rule.max) || 0)) / 2;
+}
+
+const OPENING_DISCOVERY_RAMP_STYLES = new Set([
+  "deep_house",
+  "house",
+  "soulful_house",
+  "disco_house",
+  "garage_house",
+  "tech_house",
+  "organic_house",
+  "afro_house",
+  "dub_techno",
+  "deep_techno",
+  "minimal_techno",
+  "techno",
+  "detroit_techno",
+  "ambient_techno",
+  "downtempo",
+  "ambient",
+  "chillout",
+  "trip_hop",
+  "darkwave",
+  "uk_garage",
+  "liquid_dnb",
+  "psybient",
+  "progressive_psy",
+  "goa_trance"
+]);
+
+const OPENING_DISCOVERY_FAST_FAMILIES = new Set(["psytrance", "dnb", "hard_dance"]);
+
+function discoveryRampExposureCount() {
+  const styleExposureTotal = Array.from(swipeStyleExposureCounts?.values?.() || [])
+    .reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0);
+  const seenCount = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
+  return Math.max(styleExposureTotal, seenCount);
+}
+
+function openingDiscoveryRampScore(style = "") {
+  const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
+  if (!styleKey || !STYLE_BPM_RULES[styleKey]) return 0;
+
+  const exposureCount = Number(swipeStyleExposureCounts?.get?.(styleKey) || 0);
+  const exposureTotal = discoveryRampExposureCount();
+  const family = familyOf(styleKey);
+  const center = styleBpmCenter(styleKey);
+  let score = 0;
+
+  if (!exposureCount) score += 1.25;
+  else score -= Math.min(1.5, exposureCount * 0.28);
+
+  if (OPENING_DISCOVERY_RAMP_STYLES.has(styleKey)) score += 2.55;
+  if (family === "house") score += 1.55;
+  if (family === "techno") score += 1.25;
+  if (family === "leftfield") score += 0.75;
+
+  if (exposureTotal < 6) {
+    if (center >= 96 && center <= 136) score += 4.8;
+    else if (center > 70 && center < 96) score += 2.05;
+    else if (center > 136 && center <= 145) score -= 0.8;
+    else if (center > 145 && center <= 170) score -= 4.9;
+    else if (center > 170) score -= 7.6;
+    if (OPENING_DISCOVERY_FAST_FAMILIES.has(family) && center > 132) score -= 2.4;
+  } else if (exposureTotal < 14) {
+    if (center >= 100 && center <= 142) score += 3.1;
+    else if (center > 142 && center <= 155) score += 0.35;
+    else if (center > 155 && center <= 175) score -= 2.1;
+    else if (center > 175) score -= 4.3;
+    if (family === "psytrance" && center <= 148) score += 0.9;
+  } else if (exposureTotal < 28) {
+    if (center >= 90 && center <= 156) score += 1.4;
+    else if (center > 156 && center <= 180) score -= 0.45;
+    else if (center > 180) score -= 1.7;
+    if (family === "psytrance" || family === "dnb") score += 0.6;
+  } else {
+    score += Math.max(-0.6, 0.9 - Math.abs(center - 132) / 80);
+  }
+
+  return score;
+}
+
+function surpriseStyleHopScore(style = "", baseTrack = null) {
+  const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
+  if (!styleKey || !STYLE_BPM_RULES[styleKey]) return -1000000;
+  const baseStyle = selectableSwipeStyle(baseTrack?.style || "");
+  const baseFamily = familyOf(baseStyle);
+  const crossFamily = baseFamily && familyOf(styleKey) !== baseFamily;
+  const exposureCount = Number(swipeStyleExposureCounts?.get?.(styleKey) || 0);
+  return (
+    openingDiscoveryRampScore(styleKey) * 0.85 +
+    styleDiscoveryReadinessScore(styleKey) * 0.36 +
+    stylePreferenceSignal(styleKey) * 0.56 +
+    (crossFamily ? 3.6 : 0.7) +
+    (!baseStyle || styleKey !== baseStyle ? 1.4 : -3.8) -
+    Math.min(3.4, exposureCount * 0.82)
+  );
+}
+
+function orderSurpriseTrackPool(pool = [], baseTrack = null) {
+  if (!Array.isArray(pool) || !pool.length) return [];
+  const baseTrackKey = recommendationTrackKey(baseTrack);
+  const baseArtistKey = artistMatchKey(baseTrack?.artist || "");
+  const baseFamily = familyOf(baseTrack?.style || "");
+  return pool
+    .filter(Boolean)
+    .map((track, index) => {
+      const trackKey = recommendationTrackKey(track);
+      const artistKey = artistMatchKey(track.artist || "");
+      const styleKey = selectableSwipeStyle(track.style || "") || normalizeDatasetStyle(track.style || "");
+      const crossFamily = styleKey && baseFamily && familyOf(styleKey) !== baseFamily;
+      let score = surpriseStyleHopScore(styleKey, baseTrack);
+      if (crossFamily) score += 0.8;
+      if (trackKey && seenTrackKeysMemory?.has?.(trackKey)) score -= 4.8;
+      if (artistKey && seenArtistsMemory?.has?.(artistKey)) score -= 1.6;
+      if (artistKey && baseArtistKey && artistKey === baseArtistKey) score -= 5.5;
+      if (trackKey && baseTrackKey && trackKey === baseTrackKey) score -= 8;
+      if (hasReliableBpmForTrack(track)) score += 0.55;
+      if (trackHasPlayablePreviewExperience(track)) score += 0.48;
+      score += trackReleaseFreshnessScore(track) * 0.45;
+      score -= index * 0.012;
+      return { track, score };
+    })
+    .filter((entry) => Number.isFinite(entry.score) && entry.score > -999999)
+    .sort((a, b) => b.score - a.score)
+    .map((entry) => entry.track);
+}
+
+function pickSurpriseDiverseTrack(pool = [], baseTrack = null) {
+  const ranked = orderSurpriseTrackPool(pool, baseTrack);
+  if (!ranked.length) return null;
+  const windowed = ranked.slice(0, Math.min(54, ranked.length));
+  return pickDiverseTrackFromPool(
+    windowed,
+    { style: "", context: "", energy: "", bpm: "", vocals: "" },
+    { maxWindow: 16, scoreBand: 8 }
+  ) || windowed[0] || null;
 }
 
 function similarFallbackStylesFor(style = "") {
@@ -8486,9 +8755,10 @@ const STYLE_ARTIST_SEEDS = {
   neurofunk: ["Noisia", "Ed Rush & Optical", "Black Sun Empire", "Mefjus", "Phace", "Spor", "Neonlight", "Agressor Bunx"],
   jump_up: ["Bou", "Serum", "Hedex", "Turno", "Profile", "Sota", "Captain Bass", "Taxman"],
   jungle: ["Shy FX", "Congo Natty", "Nia Archives", "Tim Reaper", "DJ Hype", "DJ Zinc", "Krust", "Aphrodite"],
-  breakbeat: ["Bicep", "Plump DJs", "Leftfield", "Stanton Warriors", "Freestylers", "Aquasky", "Sasha Carassi", "The Crystal Method"],
-  uk_garage: ["Interplanetary Criminal", "Conducta", "MJ Cole", "El-B", "DJ EZ", "Disclosure", "Oppidan", "Y U QT"],
-  future_garage: ["Burial", "Synkro", "Phaeleh", "Sorrow", "Clubroot", "Vacant", "Kiasmos", "Direct"],
+  breakbeat: ["Bicep", "Overmono", "Plump DJs", "Leftfield", "Stanton Warriors", "Freestylers", "Aquasky", "Sasha Carassi", "The Crystal Method"],
+  uk_garage: ["Mattik", "Sammy Virji", "Interplanetary Criminal", "Conducta", "MJ Cole", "Wookie", "El-B", "DJ EZ", "Disclosure", "Oppidan", "Y U QT", "MPH", "Main Phase"],
+  bassline: ["Mattik", "Flava D", "Champion", "Oppidan", "Sammy Virji", "Conducta", "MPH", "TQD"],
+  future_garage: ["Burial", "Joy Orbison", "Synkro", "Phaeleh", "Sorrow", "Clubroot", "Vacant", "Kiasmos", "Direct"],
   dubstep: ["Skrillex", "Benga", "Skream", "Digital Mystikz", "Saka", "Ganja White Night", "Mala", "Caspa"],
   halftime_bass: ["Ivy Lab", "Shades", "Alix Perez", "Eprom", "Tsuruda", "Chee", "Noer the Boy", "Bleep Bloop"],
   footwork_juke: ["DJ Rashad", "DJ Spinn", "RP Boo", "Traxman", "Jlin", "Teklife", "DJ Earl", "DJ Taye"],
@@ -13216,7 +13486,7 @@ async function fetchCatalogExtraPage(style = "", offset = 0) {
   if (style) params.set("style", style);
 
   try {
-    const response = await fetchWithTimeout(`${CATALOG_EXTRA_ENDPOINT}?${params.toString()}`, { cache: "no-store" }, FAST_OPTIONAL_API_TIMEOUT_MS);
+    const response = await fetchWithTimeout(resolveAppApiUrl(CATALOG_EXTRA_ENDPOINT, params), { cache: "no-store" }, FAST_OPTIONAL_API_TIMEOUT_MS);
     if (!response.ok) return null;
     const payload = await response.json();
     if (!payload?.ok || payload.enabled === false || payload.setupNeeded) return null;
@@ -14654,8 +14924,12 @@ function probeAudioSource(audioEl, previewUrl, timeoutMs = PREVIEW_PROBE_TIMEOUT
   });
 }
 
-async function pickPlayablePreviewSource(audioEl, candidates = []) {
+async function pickPlayablePreviewSource(audioEl, candidates = [], options = {}) {
   if (!audioEl) return "";
+  const timeoutMs = Math.max(120, Number(options.timeoutMs) || PREVIEW_PROBE_TIMEOUT_MS);
+  const maxCandidates = Number.isFinite(Number(options.maxCandidates))
+    ? Math.max(1, Math.floor(Number(options.maxCandidates)))
+    : Infinity;
   const uniqueCandidates = [];
   const seen = new Set();
   (Array.isArray(candidates) ? candidates : []).forEach((value) => {
@@ -14665,8 +14939,8 @@ async function pickPlayablePreviewSource(audioEl, candidates = []) {
     uniqueCandidates.push(normalized);
   });
 
-  for (const candidate of uniqueCandidates) {
-    const probe = await probeAudioSource(audioEl, candidate);
+  for (const candidate of uniqueCandidates.slice(0, maxCandidates)) {
+    const probe = await probeAudioSource(audioEl, candidate, timeoutMs);
     if (probe.ok) return candidate;
   }
   resetTrackPreviewElement(audioEl);
@@ -15818,6 +16092,9 @@ function registerTrackFeedback(track, liked, options = {}) {
     trackRecommendationEvent("track_liked", track, lastPrefs || {}, {
       source: options?.source || "liked"
     });
+    trackBetaReactionMilestone("track_liked", track, {
+      source: options?.source || "liked"
+    });
     saveProgress();
     return "liked";
   }
@@ -15838,6 +16115,10 @@ function registerTrackFeedback(track, liked, options = {}) {
       source: options?.source || reason || "disliked",
       reason
     });
+    trackBetaReactionMilestone("track_disliked", track, {
+      source: options?.source || reason || "disliked",
+      reason
+    });
     saveProgress();
     return reason;
   }
@@ -15851,6 +16132,10 @@ function registerTrackFeedback(track, liked, options = {}) {
     adjustTrackRecommendationIssueSignal(track, issueWeight);
     adjustPreviewReliabilitySignal(track.style, reason === "image_issue" ? -0.08 : -0.18);
     trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
+      source: options?.source || reason || "disliked",
+      reason
+    });
+    trackBetaReactionMilestone("track_disliked", track, {
       source: options?.source || reason || "disliked",
       reason
     });
@@ -15868,6 +16153,10 @@ function registerTrackFeedback(track, liked, options = {}) {
   adjustTrackPreviewIssueSignal(track, -0.65);
   adjustPreviewReliabilitySignal(track.style, 0.08);
   trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
+    source: options?.source || reason || "disliked",
+    reason
+  });
+  trackBetaReactionMilestone("track_disliked", track, {
     source: options?.source || reason || "disliked",
     reason
   });
@@ -16121,7 +16410,7 @@ function deezerJsonp(url) {
       window[callbackName] = () => {};
       setTimeout(() => {
         if (window[callbackName]) delete window[callbackName];
-      }, 10000);
+      }, JSONP_LATE_CALLBACK_GRACE_MS);
       if (script.parentNode) script.parentNode.removeChild(script);
     }
 
@@ -16165,7 +16454,7 @@ function itunesJsonp(url) {
       window[callbackName] = () => {};
       setTimeout(() => {
         if (window[callbackName]) delete window[callbackName];
-      }, 10000);
+      }, JSONP_LATE_CALLBACK_GRACE_MS);
       if (script.parentNode) script.parentNode.removeChild(script);
     }
 
@@ -17175,7 +17464,7 @@ async function fetchItunesTracksByArtist(artist, style = "") {
 function resolveMusicApiEndpoint(globalName, fallbackPath) {
   const configured = String(window?.[globalName] || "").trim();
   if (configured) return configured;
-  return canUseRelativeApiEndpoint() ? fallbackPath : "";
+  return resolveAppApiEndpoint(fallbackPath);
 }
 
 function apiHealthEndpoint() {
@@ -17483,7 +17772,7 @@ async function fetchCoverArtFromApi(track) {
         style: track.style || "",
         releaseYear: trackReleaseYearForApi(track)
       })
-    }, OPTIONAL_API_TIMEOUT_MS);
+    }, DAILY_NEWS_FETCH_TIMEOUT_MS);
     if (!response.ok) {
       if (cacheKey) coverArtApiCache.set(cacheKey, null);
       return null;
@@ -19178,6 +19467,7 @@ const I18N = {
     authGoogleComingSoon: "Entrar com Google",
     authAppleComingSoon: "Apple em breve",
     authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. Google pode ser ligado depois.",
+    authProviderHintAppStoreLocal: "Na versão iOS, a descoberta começa local neste aparelho. Sincronização online volta quando Apple e Google estiverem completos.",
     welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
@@ -19199,6 +19489,83 @@ const I18N = {
     quickSurpriseGenerated: "Surpresa pronta: busquei uma faixa nova dentro de {style}.",
     heroLogoLabel: "Voltar ao início",
     heroLogoToast: "Voltei para Descobrir.",
+    betaGateAria: "Tela de acesso beta",
+    betaGateKicker: "Beta privado para cena eletrônica",
+    betaGateTitle: "Descoberta eletrônica fora do óbvio.",
+    betaGateDescOne: "Radar por contexto, subgênero, BPM e gosto real.",
+    betaGateDescTwo: "Ouça, reaja e fuja do algoritmo óbvio.",
+    betaGateDescThree: "DJs, selectors e fãs intensos têm prioridade.",
+    betaGateMetricsAria: "Sinais atuais do produto",
+    betaMetricSearchable: "músicas buscáveis",
+    betaMetricAudited: "faixas auditadas",
+    betaMetricArtists: "artistas indexados",
+    betaMetricStyles: "subgêneros",
+    betaProofAria: "Por que testar agora",
+    betaProofOneTitle: "Radar pessoal",
+    betaProofOneText: "Like, dislike e novidade afinam as próximas escolhas.",
+    betaProofTwoTitle: "DNA de cena",
+    betaProofTwoText: "Psy, techno, house, DnB e microgêneros sem achatamento genérico.",
+    betaProofThreeTitle: "Pronto para Pro",
+    betaProofThreeText: "Crates, radar semanal e cards premium entram pelo interesse do beta.",
+    betaGateActionsAria: "Acesso beta e lista de espera",
+    betaWaitlistKicker: "Solicitar acesso prioritário",
+    betaWaitlistNameLabel: "Nome",
+    betaWaitlistEmailLabel: "E-mail",
+    betaWaitlistRoleLabel: "Perfil",
+    betaRoleListener: "Ouvinte / fã de eletrônica",
+    betaRoleDj: "DJ / selector",
+    betaRoleProducer: "Produtor / artista",
+    betaRoleEvent: "Festa / festival / label",
+    betaRoleInvestor: "Investidor / parceiro",
+    betaWaitlistNoteLabel: "Que estilos você quer explorar?",
+    betaWaitlistNotePlaceholder: "Ex.: house, techno, tech house, progressive psy, full on, forest, dark psy e muito mais...",
+    betaWaitlistSubmitBtn: "Entrar na lista beta",
+    betaWaitlistPrivacyPrefix: "Ao enviar, usamos seus dados para responder ao pedido de beta. Leia a",
+    betaWaitlistPrivacyLink: "Política de Privacidade",
+    betaInviteKicker: "Já tem convite?",
+    betaAccessCodeLabel: "Código beta",
+    betaAccessCodePlaceholder: "Digite seu código",
+    betaAccessBtn: "Liberar app",
+    betaGateStatusDefault: "Acesso completo liberado apenas para testadores beta.",
+    betaAccessCookieNote: "O acesso beta usa cookie essencial e registro local para manter sua sessão.",
+    betaPrivacySettingsBtn: "Preferências de privacidade",
+    betaIntentPanelAria: "Interesse em recursos pagos",
+    betaIntentKicker: "O que teria valor para você?",
+    betaIntentProTitle: "Sonic Pro",
+    betaIntentProText: "histórico, cards premium e radar avançado",
+    betaIntentCrateTitle: "Seleção para DJ",
+    betaIntentCrateText: "montar e exportar faixas por BPM, energia e subgênero",
+    betaIntentRadarTitle: "Radar semanal",
+    betaIntentRadarText: "pacote de descobertas direto para seu perfil",
+    betaIntentHint: "Cada clique ajuda a decidir o primeiro pacote pago do Sonic Search.",
+    betaTesterRibbonAria: "Status do beta privado",
+    betaTesterEyebrow: "Beta privado",
+    betaTesterStatus: "Tester autorizado",
+    betaExitAccessBtn: "Ver tela beta",
+    betaIntentLabelPro: "Sonic Pro",
+    betaIntentLabelCrate: "Seleção para DJ",
+    betaIntentLabelRadar: "Radar semanal",
+    betaIntentSavedWithEmail: "{label}: interesse salvo. Envie o formulário para eu priorizar seu convite.",
+    betaIntentSavedNoEmail: "{label}: interesse salvo. Deixe seu e-mail para eu avisar quando abrir.",
+    betaIntentSummaryPrefix: "Interesses",
+    betaWaitlistInvalidEmail: "Coloque um e-mail válido para entrar na lista beta.",
+    betaWaitlistSending: "Enviando...",
+    betaWaitlistReceived: "Pedido recebido. Vou liberar convites para os melhores perfis de teste.",
+    betaWaitlistFallbackPrepared: "Pedido preparado. Seu navegador vai abrir um e-mail para confirmar a entrada. Mantive o formulário preenchido aqui.",
+    betaWaitlistSaveFailed: "Não consegui salvar agora. Vou abrir um e-mail para você enviar o pedido.",
+    betaWaitlistBackendUnavailable: "Sem backend agora. Vou abrir um e-mail para você enviar o pedido.",
+    betaWaitlistEmailSubject: "Sonic Search - pedido de acesso beta",
+    betaWaitlistEmailIntro: "Quero entrar no beta do Sonic Search.",
+    betaWaitlistEmailName: "Nome",
+    betaWaitlistEmailEmail: "E-mail",
+    betaWaitlistEmailRole: "Perfil",
+    betaWaitlistEmailInterest: "Interesse",
+    betaWaitlistEmailOrigin: "Origem",
+    betaAccessValidating: "Validando...",
+    betaAccessTooMany: "Muitas tentativas. Aguarde um pouco ou solicite acesso pela lista.",
+    betaAccessInvalid: "Código beta inválido. Solicite acesso pela lista.",
+    betaAccessGrantedStatus: "Acesso liberado. Entrando no Sonic Search...",
+    betaExitStatus: "Você está vendo a tela pública do beta fechado.",
     heroTitle: "A faixa certa para agora",
     heroDesc: "Diga o momento, marque o que já conhece e deixe o Sonic Search trazer uma faixa com motivo, preview e contexto.",
     tabDiscover: "Descobrir",
@@ -19295,7 +19662,7 @@ const I18N = {
     aboutFlowStepThree: "Use o Filtro manual quando quiser subgênero, BPM ou contexto específico.",
     aboutFlowStepFour: "Revise curtidas, descartes e seu Sound System no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
-    aboutTrustText: "Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume o estilo mais amplo em vez de forçar rótulo.",
+    aboutTrustText: "Confiança alta = fonte, player, BPM e perfil. Sem certeza, usamos o estilo amplo.",
     swipeStartButton: "Surpresa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
@@ -19402,10 +19769,11 @@ const I18N = {
     supportCopyCrypto: "Copiar crypto",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
-    supportLegalNote: "Apoio voluntário ao projeto.",
+    supportPaymentsUnavailable: "Na versão iOS, apoio financeiro fica fora do app. Use o contato para falar com Pedro.",
+    supportLegalNote: "Apoio voluntário ao projeto. Não é assinatura, compra de música ou garantia de benefício.",
     legalHubKicker: "Avisos legais",
-    legalHubTitle: "Direitos autorais, uso e marcas",
-    legalHubIntro: "Sonic Search é um produto Pedro Freire / CBK Labs. Textos, interface, curadoria, identidade visual e código original têm todos os direitos reservados.",
+    legalHubTitle: "Privacidade, uso e marcas",
+    legalHubIntro: "Sonic Search é um produto Pedro Freire / CBK Labs. Os documentos completos explicam dados, cookies, beta, uso permitido e responsabilidade.",
     legalCopyrightTitle: "Direitos autorais",
     legalCopyrightText: "Não copie, revenda, clone, raspe ou explore comercialmente o app, a interface, a curadoria ou bases organizadas sem autorização por escrito.",
     legalThirdPartyTitle: "Conteúdo musical e terceiros",
@@ -19413,7 +19781,13 @@ const I18N = {
     legalUseTitle: "Uso permitido",
     legalUseText: "Use os links oficiais para ouvir, comprar ou apoiar artistas. Gêneros, Sound System e explicações são estimativas curatoriais.",
     legalPrivacyTitle: "Privacidade e responsabilidade",
-    legalPrivacyText: "Seu perfil pode ficar salvo neste aparelho. Links e integrações externas seguem suas próprias políticas. Tips são apoio voluntário.",
+    legalPrivacyText: "Seu perfil musical fica local por padrão. Waitlist, login social, comentários, eventos beta e IA podem usar backend quando você aciona esses recursos.",
+    legalDataTitle: "Dados e cookies",
+    legalDataText: "Cookies essenciais mantêm o acesso beta. Analytics só carrega depois do aceite; você pode reabrir as preferências no rodapé.",
+    legalLinksTitle: "Documentos completos",
+    legalPrivacyPolicyLink: "Política de Privacidade",
+    legalTermsLink: "Termos de Uso",
+    legalCookiesLink: "Política de Cookies",
     legalDisclaimer: "Aviso informativo; não substitui contrato ou orientação jurídica.",
     sectionKicker: "Controle manual",
     sectionHint: "Guie subgênero, BPM e contexto sem travar a descoberta.",
@@ -19441,7 +19815,7 @@ const I18N = {
     adaptiveSurpriseBtn: "Surpresa pelo perfil",
     clearFiltersBtn: "Limpar tudo",
     resetAppBtn: "Zerar perfil",
-    resetAppConfirm: "Isso vai apagar todo o seu histórico local e reiniciar o app como novo usuário. Deseja continuar?",
+    resetAppConfirm: "Isso vai apagar perfil local, curtidas, descartes, sessão e preferências deste aparelho. Deseja continuar?",
     generatedNow: "Encontrada agora",
     freeStyle: "estilo livre",
     freeContext: "contexto livre",
@@ -19701,12 +20075,12 @@ const I18N = {
     voiceMiniExportDone: "Mini música gerada em WAV.",
     voiceMiniExportUnsupported: "Este navegador não consegue baixar a mini música aqui.",
     voiceMiniExportFailed: "Não consegui gerar o arquivo agora. Tente de novo.",
-    voiceMiniPresetTechno: "Techno direto",
+    voiceMiniPresetTechno: "Techno",
     voiceMiniPresetBreaks: "Breaks elástico",
     voiceMiniPresetTrap: "Trap mutante",
-    voiceMiniPresetPsy: "Psy ácido",
+    voiceMiniPresetPsy: "Psy",
     voiceMiniPresetAmbient: "Ambient pulsante",
-    voiceMiniPresetHouse: "House orgânico",
+    voiceMiniPresetHouse: "House",
     voiceMiniPresetDnb: "DnB líquido",
     voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Seu mapa musical",
@@ -19767,6 +20141,7 @@ const I18N = {
     profileBackupImportSummary: "Tenho um perfil salvo",
     profileBackupImportHint: "Use para restaurar seu mapa local.",
     profileBackupImport: "Trazer perfil para cá",
+    profileDeleteData: "Apagar dados deste aparelho",
     profileBackupExported: "Cópia do perfil salva.",
     profileBackupImported: "Perfil trazido para este aparelho.",
     profileBackupInvalid: "Não consegui ler esse arquivo de perfil.",
@@ -19987,7 +20362,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial em {style}. Usei uma rota local confiável enquanto continuo ampliando a base.",
     catalogFallbackSearching: "Cobertura parcial em {style}. Buscando sinais melhores antes de recomendar...",
     spiritPanelTitle: "Seu Sound System",
-    spiritIntro: "10 curtidas liberam seu primeiro sistema de som.",
+    spiritIntro: "10 curtidas desbloqueiam a primeira leitura.",
     spiritBadge: "Sound System desbloqueado",
     spiritAvatarAlt: "Sound System pessoal {name}",
     spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para liberar seu Sound System.",
@@ -19998,13 +20373,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisão concluída: seu sistema permanece {name}.",
     spiritReviewStayedToast: "Revisão concluída: Sound System mantido em {name}.",
     spiritReviewShiftedToast: "Revisão concluída: Sound System atualizado para {name}.",
-    spiritInsightTitle: "Calibração do Sound System",
-    spiritInsightLockedStatus: "Em formação",
+    spiritInsightTitle: "Calibração",
+    spiritInsightLockedStatus: "Coletando",
     spiritInsightUnlockedStatus: "Ativo",
-    spiritInsightLockedText: "Curta mais {remaining} faixas para liberar seu Sound System.",
+    spiritInsightLockedText: "Faltam {remaining} curtidas para calibrar.",
     spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
     spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
-    spiritInsightSignalScore: "{label}: sinal {score}",
+    spiritInsightSignalScore: "sinal {score}",
     spiritVitalDnaLabel: "DNA dominante",
     spiritVitalCycleLabel: "Ciclo de revisão",
     spiritVitalRankLabel: "Nível do sistema",
@@ -20018,8 +20393,9 @@ const I18N = {
     spiritVitalCycleReady: "Leitura pronta para revisar.",
     spiritVitalRankLocked: "Em formação",
     spiritVitalRankNext: "Próximo nível: {rank} em {likes} likes.",
+    spiritVitalRankLockedDetail: "O nível aparece quando a primeira leitura fechar.",
     spiritVitalRankMax: "Nível máximo atual do radar.",
-    spiritVitalNextLocked: "Curta sem pressa",
+    spiritVitalNextLocked: "Curta livremente",
     spiritVitalNextUnlocked: "Siga {style}",
     spiritVitalNextDetailLocked: "O próximo sinal já muda a leitura.",
     spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
@@ -20155,6 +20531,7 @@ const I18N = {
     authGoogleComingSoon: "Sign in with Google",
     authAppleComingSoon: "Apple soon",
     authProviderHintLocalBackup: "Without login, discovery starts clean on this device. Google can be enabled later.",
+    authProviderHintAppStoreLocal: "In the iOS version, discovery starts locally on this device. Online sync returns when Apple and Google are complete.",
     welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
@@ -20176,6 +20553,83 @@ const I18N = {
     quickSurpriseGenerated: "Surprise ready: I looked for a new track inside {style}.",
     heroLogoLabel: "Back to home",
     heroLogoToast: "Back to Discover.",
+    betaGateAria: "Beta access screen",
+    betaGateKicker: "Private beta for electronic music",
+    betaGateTitle: "Electronic discovery beyond the obvious.",
+    betaGateDescOne: "A radar for context, subgenre, BPM, and real taste.",
+    betaGateDescTwo: "Listen, react, and escape the obvious algorithm.",
+    betaGateDescThree: "DJs, selectors, and intense listeners get priority.",
+    betaGateMetricsAria: "Current product signals",
+    betaMetricSearchable: "searchable tracks",
+    betaMetricAudited: "audited tracks",
+    betaMetricArtists: "indexed artists",
+    betaMetricStyles: "subgenres",
+    betaProofAria: "Why test now",
+    betaProofOneTitle: "Personal radar",
+    betaProofOneText: "Likes, passes, and novelty tune the next picks.",
+    betaProofTwoTitle: "Scene DNA",
+    betaProofTwoText: "Psy, techno, house, DnB, and microgenres without generic flattening.",
+    betaProofThreeTitle: "Ready for Pro",
+    betaProofThreeText: "Crates, weekly radar, and premium cards are shaped by beta interest.",
+    betaGateActionsAria: "Beta access and waitlist",
+    betaWaitlistKicker: "Request priority access",
+    betaWaitlistNameLabel: "Name",
+    betaWaitlistEmailLabel: "Email",
+    betaWaitlistRoleLabel: "Profile",
+    betaRoleListener: "Listener / electronic fan",
+    betaRoleDj: "DJ / selector",
+    betaRoleProducer: "Producer / artist",
+    betaRoleEvent: "Party / festival / label",
+    betaRoleInvestor: "Investor / partner",
+    betaWaitlistNoteLabel: "Which styles do you want to explore?",
+    betaWaitlistNotePlaceholder: "Ex.: house, techno, tech house, progressive psy, full on, forest, dark psy, and more...",
+    betaWaitlistSubmitBtn: "Join beta waitlist",
+    betaWaitlistPrivacyPrefix: "By submitting, we use your data to respond to the beta request. Read the",
+    betaWaitlistPrivacyLink: "Privacy Policy",
+    betaInviteKicker: "Already invited?",
+    betaAccessCodeLabel: "Beta code",
+    betaAccessCodePlaceholder: "Enter your code",
+    betaAccessBtn: "Unlock app",
+    betaGateStatusDefault: "Full access is only open to beta testers.",
+    betaAccessCookieNote: "Beta access uses an essential cookie and local record to keep your session.",
+    betaPrivacySettingsBtn: "Privacy preferences",
+    betaIntentPanelAria: "Paid feature interest",
+    betaIntentKicker: "What would be valuable to you?",
+    betaIntentProTitle: "Sonic Pro",
+    betaIntentProText: "history, premium cards, and advanced radar",
+    betaIntentCrateTitle: "DJ crate",
+    betaIntentCrateText: "build and export tracks by BPM, energy, and subgenre",
+    betaIntentRadarTitle: "Weekly radar",
+    betaIntentRadarText: "a discovery pack delivered to your profile",
+    betaIntentHint: "Each click helps decide Sonic Search's first paid package.",
+    betaTesterRibbonAria: "Private beta status",
+    betaTesterEyebrow: "Private beta",
+    betaTesterStatus: "Authorized tester",
+    betaExitAccessBtn: "View beta page",
+    betaIntentLabelPro: "Sonic Pro",
+    betaIntentLabelCrate: "DJ crate",
+    betaIntentLabelRadar: "Weekly radar",
+    betaIntentSavedWithEmail: "{label}: interest saved. Send the form so I can prioritize your invite.",
+    betaIntentSavedNoEmail: "{label}: interest saved. Leave your email so I can notify you when it opens.",
+    betaIntentSummaryPrefix: "Interests",
+    betaWaitlistInvalidEmail: "Add a valid email to join the beta waitlist.",
+    betaWaitlistSending: "Sending...",
+    betaWaitlistReceived: "Request received. I will release invites for the strongest test profiles.",
+    betaWaitlistFallbackPrepared: "Request prepared. Your browser will open an email to confirm entry. I kept the form filled here.",
+    betaWaitlistSaveFailed: "I could not save that right now. I will open an email so you can send the request.",
+    betaWaitlistBackendUnavailable: "Backend is unavailable right now. I will open an email so you can send the request.",
+    betaWaitlistEmailSubject: "Sonic Search - beta access request",
+    betaWaitlistEmailIntro: "I want to join the Sonic Search beta.",
+    betaWaitlistEmailName: "Name",
+    betaWaitlistEmailEmail: "Email",
+    betaWaitlistEmailRole: "Profile",
+    betaWaitlistEmailInterest: "Interest",
+    betaWaitlistEmailOrigin: "Source",
+    betaAccessValidating: "Validating...",
+    betaAccessTooMany: "Too many attempts. Wait a bit or request access through the waitlist.",
+    betaAccessInvalid: "Invalid beta code. Request access through the waitlist.",
+    betaAccessGrantedStatus: "Access granted. Entering Sonic Search...",
+    betaExitStatus: "You are viewing the public closed-beta page.",
     heroTitle: "The right track for now",
     heroDesc: "Set the moment, mark what you already know, and let Sonic Search bring a track with a reason, preview, and context.",
     tabDiscover: "Discover",
@@ -20272,7 +20726,7 @@ const I18N = {
     aboutFlowStepThree: "Use Manual filter when you want a specific subgenre, BPM, or context.",
     aboutFlowStepFour: "Review likes, rejects, and your Sound System in Profile.",
     aboutTrustTitle: "How to read confidence",
-    aboutTrustText: "High confidence combines source, player, BPM, and profile. When certainty is missing, the app uses the broader style instead of forcing a label.",
+    aboutTrustText: "High confidence = source, player, BPM, and profile. If unsure, we use the broader style.",
     swipeStartButton: "Surprise",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
@@ -20379,10 +20833,11 @@ const I18N = {
     supportCopying: "Copying...",
     supportCopied: "Copied.",
     supportMissingPayment: "Configure this support method before copying.",
-    supportLegalNote: "Voluntary project support.",
+    supportPaymentsUnavailable: "In the iOS version, financial support stays outside the app. Use contact to reach Pedro.",
+    supportLegalNote: "Voluntary project support. It is not a subscription, music purchase, or guaranteed benefit.",
     legalHubKicker: "Legal notices",
-    legalHubTitle: "Copyright, use, and trademarks",
-    legalHubIntro: "Sonic Search is a Pedro Freire / CBK Labs product. Text, interface, curation, visual identity, and original code are all rights reserved.",
+    legalHubTitle: "Privacy, use, and trademarks",
+    legalHubIntro: "Sonic Search is a Pedro Freire / CBK Labs product. The full documents explain data, cookies, beta access, permitted use, and responsibility.",
     legalCopyrightTitle: "Copyright",
     legalCopyrightText: "Do not copy, resell, clone, scrape, or commercially exploit the app, interface, curation, or organized datasets without written permission.",
     legalThirdPartyTitle: "Music and third parties",
@@ -20390,7 +20845,13 @@ const I18N = {
     legalUseTitle: "Permitted use",
     legalUseText: "Use official links to listen, buy, or support artists. Genres, Sound System, and explanations are curatorial estimates.",
     legalPrivacyTitle: "Privacy and responsibility",
-    legalPrivacyText: "Your profile may be saved on this device. External links and integrations follow their own policies. Tips are voluntary support.",
+    legalPrivacyText: "Your music profile stays local by default. Waitlist, social login, comments, beta events, and AI may use the backend when you trigger those features.",
+    legalDataTitle: "Data and cookies",
+    legalDataText: "Essential cookies keep beta access. Analytics loads only after consent; you can reopen preferences from the footer.",
+    legalLinksTitle: "Full documents",
+    legalPrivacyPolicyLink: "Privacy Policy",
+    legalTermsLink: "Terms of Use",
+    legalCookiesLink: "Cookie Policy",
     legalDisclaimer: "Informational notice; not legal advice.",
     sectionKicker: "Manual control",
     sectionHint: "Guide subgenre, BPM, and context without blocking discovery.",
@@ -20418,7 +20879,7 @@ const I18N = {
     adaptiveSurpriseBtn: "Surprise by profile",
     clearFiltersBtn: "Clear all",
     resetAppBtn: "Reset profile",
-    resetAppConfirm: "This will erase your local history and restart the app as a new user. Do you want to continue?",
+    resetAppConfirm: "This will erase the local profile, likes, rejects, session, and preferences on this device. Continue?",
     generatedNow: "Found now",
     freeStyle: "free style",
     freeContext: "free context",
@@ -20675,12 +21136,12 @@ const I18N = {
     voiceMiniExportDone: "Mini track generated as WAV.",
     voiceMiniExportUnsupported: "This browser cannot download the mini track here.",
     voiceMiniExportFailed: "I could not generate the file right now. Try again.",
-    voiceMiniPresetTechno: "Direct techno",
+    voiceMiniPresetTechno: "Techno",
     voiceMiniPresetBreaks: "Elastic breaks",
     voiceMiniPresetTrap: "Mutant trap",
-    voiceMiniPresetPsy: "Acid psy",
+    voiceMiniPresetPsy: "Psy",
     voiceMiniPresetAmbient: "Pulsing ambient",
-    voiceMiniPresetHouse: "Organic house",
+    voiceMiniPresetHouse: "House",
     voiceMiniPresetDnb: "Liquid DnB",
     voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Your music map",
@@ -20741,6 +21202,7 @@ const I18N = {
     profileBackupImportSummary: "I have a saved profile",
     profileBackupImportHint: "Use this to restore your local map.",
     profileBackupImport: "Bring profile here",
+    profileDeleteData: "Delete data from this device",
     profileBackupExported: "Profile copy saved.",
     profileBackupImported: "Profile brought to this device.",
     profileBackupInvalid: "I could not read this profile file.",
@@ -20961,7 +21423,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Partial coverage in {style}. I used a reliable local route while the base keeps expanding.",
     catalogFallbackSearching: "Partial coverage in {style}. Searching for stronger signals before recommending...",
     spiritPanelTitle: "Your Sound System",
-    spiritIntro: "10 likes unlock your first sound system.",
+    spiritIntro: "10 likes unlock your first reading.",
     spiritBadge: "Sound System unlocked",
     spiritAvatarAlt: "Personal Sound System {name}",
     spiritProgressLocked: "Liked tracks: {current}/{target}. {remaining} to unlock your Sound System.",
@@ -20972,13 +21434,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Review complete: your system remains {name}.",
     spiritReviewStayedToast: "Review complete: Sound System stays as {name}.",
     spiritReviewShiftedToast: "Review complete: Sound System updated to {name}.",
-    spiritInsightTitle: "Sound System calibration",
-    spiritInsightLockedStatus: "Forming",
+    spiritInsightTitle: "Calibration",
+    spiritInsightLockedStatus: "Collecting",
     spiritInsightUnlockedStatus: "Active",
-    spiritInsightLockedText: "{remaining} more track likes to unlock your Sound System.",
+    spiritInsightLockedText: "{remaining} likes left to calibrate.",
     spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
     spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
-    spiritInsightSignalScore: "{label}: signal {score}",
+    spiritInsightSignalScore: "signal {score}",
     spiritVitalDnaLabel: "Dominant DNA",
     spiritVitalCycleLabel: "Review cycle",
     spiritVitalRankLabel: "System level",
@@ -20992,6 +21454,7 @@ const I18N = {
     spiritVitalCycleReady: "Reading ready to review.",
     spiritVitalRankLocked: "Forming",
     spiritVitalRankNext: "Next level: {rank} at {likes} likes.",
+    spiritVitalRankLockedDetail: "The level appears when the first reading closes.",
     spiritVitalRankMax: "Current maximum radar level.",
     spiritVitalNextLocked: "Like freely",
     spiritVitalNextUnlocked: "Follow {style}",
@@ -21129,6 +21592,7 @@ const I18N = {
     authGoogleComingSoon: "Entrar con Google",
     authAppleComingSoon: "Apple pronto",
     authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. Google puede activarse después.",
+    authProviderHintAppStoreLocal: "En la versión iOS, el descubrimiento empieza local en este dispositivo. La sincronización online vuelve cuando Apple y Google estén completos.",
     welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
@@ -21149,6 +21613,83 @@ const I18N = {
     quickSurpriseGenerated: "Sorpresa lista: busqué una pista nueva dentro de {style}.",
     heroLogoLabel: "Volver al inicio",
     heroLogoToast: "Volví a Descubrir.",
+    betaGateAria: "Pantalla de acceso beta",
+    betaGateKicker: "Beta privado para música electrónica",
+    betaGateTitle: "Descubrimiento electrónico fuera de lo obvio.",
+    betaGateDescOne: "Radar por contexto, subgénero, BPM y gusto real.",
+    betaGateDescTwo: "Escucha, reacciona y escapa del algoritmo obvio.",
+    betaGateDescThree: "DJs, selectors y oyentes intensos tienen prioridad.",
+    betaGateMetricsAria: "Señales actuales del producto",
+    betaMetricSearchable: "pistas buscables",
+    betaMetricAudited: "pistas auditadas",
+    betaMetricArtists: "artistas indexados",
+    betaMetricStyles: "subgéneros",
+    betaProofAria: "Por qué probar ahora",
+    betaProofOneTitle: "Radar personal",
+    betaProofOneText: "Likes, descartes y novedades afinan las próximas elecciones.",
+    betaProofTwoTitle: "ADN de escena",
+    betaProofTwoText: "Psy, techno, house, DnB y microgéneros sin aplanamiento genérico.",
+    betaProofThreeTitle: "Listo para Pro",
+    betaProofThreeText: "Crates, radar semanal y cards premium se definen con el interés del beta.",
+    betaGateActionsAria: "Acceso beta y lista de espera",
+    betaWaitlistKicker: "Solicitar acceso prioritario",
+    betaWaitlistNameLabel: "Nombre",
+    betaWaitlistEmailLabel: "E-mail",
+    betaWaitlistRoleLabel: "Perfil",
+    betaRoleListener: "Oyente / fan de electrónica",
+    betaRoleDj: "DJ / selector",
+    betaRoleProducer: "Productor / artista",
+    betaRoleEvent: "Fiesta / festival / label",
+    betaRoleInvestor: "Inversor / partner",
+    betaWaitlistNoteLabel: "¿Qué estilos quieres explorar?",
+    betaWaitlistNotePlaceholder: "Ej.: house, techno, tech house, progressive psy, full on, forest, dark psy y más...",
+    betaWaitlistSubmitBtn: "Entrar en la lista beta",
+    betaWaitlistPrivacyPrefix: "Al enviar, usamos tus datos para responder al pedido de beta. Lee la",
+    betaWaitlistPrivacyLink: "Política de Privacidad",
+    betaInviteKicker: "¿Ya tienes invitación?",
+    betaAccessCodeLabel: "Código beta",
+    betaAccessCodePlaceholder: "Ingresa tu código",
+    betaAccessBtn: "Liberar app",
+    betaGateStatusDefault: "El acceso completo está liberado solo para testers beta.",
+    betaAccessCookieNote: "El acceso beta usa una cookie esencial y registro local para mantener tu sesión.",
+    betaPrivacySettingsBtn: "Preferencias de privacidad",
+    betaIntentPanelAria: "Interés en recursos pagos",
+    betaIntentKicker: "¿Qué tendría valor para ti?",
+    betaIntentProTitle: "Sonic Pro",
+    betaIntentProText: "historial, cards premium y radar avanzado",
+    betaIntentCrateTitle: "Selección para DJ",
+    betaIntentCrateText: "armar y exportar pistas por BPM, energía y subgénero",
+    betaIntentRadarTitle: "Radar semanal",
+    betaIntentRadarText: "paquete de descubrimientos directo a tu perfil",
+    betaIntentHint: "Cada clic ayuda a decidir el primer paquete pago de Sonic Search.",
+    betaTesterRibbonAria: "Estado del beta privado",
+    betaTesterEyebrow: "Beta privado",
+    betaTesterStatus: "Tester autorizado",
+    betaExitAccessBtn: "Ver página beta",
+    betaIntentLabelPro: "Sonic Pro",
+    betaIntentLabelCrate: "Selección para DJ",
+    betaIntentLabelRadar: "Radar semanal",
+    betaIntentSavedWithEmail: "{label}: interés guardado. Envía el formulario para priorizar tu invitación.",
+    betaIntentSavedNoEmail: "{label}: interés guardado. Deja tu e-mail para avisarte cuando abra.",
+    betaIntentSummaryPrefix: "Intereses",
+    betaWaitlistInvalidEmail: "Coloca un e-mail válido para entrar en la lista beta.",
+    betaWaitlistSending: "Enviando...",
+    betaWaitlistReceived: "Pedido recibido. Voy a liberar invitaciones para los mejores perfiles de prueba.",
+    betaWaitlistFallbackPrepared: "Pedido preparado. Tu navegador abrirá un e-mail para confirmar la entrada. Mantuve el formulario completo aquí.",
+    betaWaitlistSaveFailed: "No pude guardar ahora. Voy a abrir un e-mail para que envíes el pedido.",
+    betaWaitlistBackendUnavailable: "Sin backend ahora. Voy a abrir un e-mail para que envíes el pedido.",
+    betaWaitlistEmailSubject: "Sonic Search - pedido de acceso beta",
+    betaWaitlistEmailIntro: "Quiero entrar en el beta de Sonic Search.",
+    betaWaitlistEmailName: "Nombre",
+    betaWaitlistEmailEmail: "E-mail",
+    betaWaitlistEmailRole: "Perfil",
+    betaWaitlistEmailInterest: "Interés",
+    betaWaitlistEmailOrigin: "Origen",
+    betaAccessValidating: "Validando...",
+    betaAccessTooMany: "Muchas tentativas. Espera un poco o solicita acceso por la lista.",
+    betaAccessInvalid: "Código beta inválido. Solicita acceso por la lista.",
+    betaAccessGrantedStatus: "Acceso liberado. Entrando en Sonic Search...",
+    betaExitStatus: "Estás viendo la página pública del beta cerrado.",
     heroTitle: "La pista correcta para ahora",
     heroDesc: "Marca el momento, indica lo que ya conoces y deja que Sonic Search traiga una pista con motivo, preview y contexto.",
     floatingSurpriseBtn: "Sorpresa",
@@ -21246,7 +21787,7 @@ const I18N = {
     aboutFlowStepThree: "Usa el Filtro manual cuando quieras subgénero, BPM o contexto específico.",
     aboutFlowStepFour: "Revisa likes, descartes y tu Sound System en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
-    aboutTrustText: "Alta confianza combina fuente, player, BPM y perfil. Cuando falta certeza, la app usa el estilo más amplio en vez de forzar etiqueta.",
+    aboutTrustText: "Alta confianza = fuente, player, BPM y perfil. Sin certeza, usamos el estilo amplio.",
     swipeStartButton: "Sorpresa",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
@@ -21353,10 +21894,11 @@ const I18N = {
     supportCopying: "Copiando...",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
-    supportLegalNote: "Apoyo voluntario al proyecto.",
+    supportPaymentsUnavailable: "En la versión iOS, el apoyo financiero queda fuera de la app. Usa contacto para hablar con Pedro.",
+    supportLegalNote: "Apoyo voluntario al proyecto. No es suscripción, compra de música ni garantía de beneficio.",
     legalHubKicker: "Avisos legales",
-    legalHubTitle: "Derechos de autor, uso y marcas",
-    legalHubIntro: "Sonic Search es un producto de Pedro Freire / CBK Labs. Textos, interfaz, curaduría, identidad visual y código original tienen todos los derechos reservados.",
+    legalHubTitle: "Privacidad, uso y marcas",
+    legalHubIntro: "Sonic Search es un producto de Pedro Freire / CBK Labs. Los documentos completos explican datos, cookies, beta, uso permitido y responsabilidad.",
     legalCopyrightTitle: "Derechos de autor",
     legalCopyrightText: "No copies, revendas, clones, extraigas ni explotes comercialmente la app, la interfaz, la curaduría o bases organizadas sin autorización por escrito.",
     legalThirdPartyTitle: "Música y terceros",
@@ -21364,7 +21906,13 @@ const I18N = {
     legalUseTitle: "Uso permitido",
     legalUseText: "Usa links oficiales para escuchar, comprar o apoyar artistas. Géneros, Sound System y explicaciones son estimaciones curatoriales.",
     legalPrivacyTitle: "Privacidad y responsabilidad",
-    legalPrivacyText: "Tu perfil puede quedar guardado en este dispositivo. Links e integraciones externas siguen sus propias políticas. Las tips son apoyo voluntario.",
+    legalPrivacyText: "Tu perfil musical queda local por defecto. Waitlist, login social, comentarios, eventos beta e IA pueden usar backend cuando activas esos recursos.",
+    legalDataTitle: "Datos y cookies",
+    legalDataText: "Las cookies esenciales mantienen el acceso beta. Analytics solo carga después del consentimiento; puedes reabrir preferencias en el pie.",
+    legalLinksTitle: "Documentos completos",
+    legalPrivacyPolicyLink: "Política de Privacidad",
+    legalTermsLink: "Términos de Uso",
+    legalCookiesLink: "Política de Cookies",
     legalDisclaimer: "Aviso informativo; no sustituye asesoría jurídica.",
     sectionKicker: "Control manual",
     sectionHint: "Guía subgénero, BPM y contexto sin frenar el descubrimiento.",
@@ -21392,7 +21940,7 @@ const I18N = {
     adaptiveSurpriseBtn: "Sorpresa por perfil",
     clearFiltersBtn: "Limpiar todo",
     resetAppBtn: "Reiniciar perfil",
-    resetAppConfirm: "Esto borrará tu historial local y reiniciará la app como nuevo usuario. ¿Deseas continuar?",
+    resetAppConfirm: "Esto borrará perfil local, likes, descartes, sesión y preferencias de este dispositivo. ¿Deseas continuar?",
     generatedNow: "Encontrada ahora",
     freeStyle: "estilo libre",
     freeContext: "contexto libre",
@@ -21646,12 +22194,12 @@ const I18N = {
     voiceMiniExportDone: "Mini canción generada en WAV.",
     voiceMiniExportUnsupported: "Este navegador no puede descargar la mini canción aquí.",
     voiceMiniExportFailed: "No pude generar el archivo ahora. Intenta de nuevo.",
-    voiceMiniPresetTechno: "Techno directo",
+    voiceMiniPresetTechno: "Techno",
     voiceMiniPresetBreaks: "Breaks elástico",
     voiceMiniPresetTrap: "Trap mutante",
-    voiceMiniPresetPsy: "Psy ácido",
+    voiceMiniPresetPsy: "Psy",
     voiceMiniPresetAmbient: "Ambient pulsante",
-    voiceMiniPresetHouse: "House orgánico",
+    voiceMiniPresetHouse: "House",
     voiceMiniPresetDnb: "DnB líquido",
     voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Tu mapa musical",
@@ -21712,6 +22260,7 @@ const I18N = {
     profileBackupImportSummary: "Tengo un perfil guardado",
     profileBackupImportHint: "Úsalo para restaurar tu mapa local.",
     profileBackupImport: "Traer perfil aquí",
+    profileDeleteData: "Borrar datos de este dispositivo",
     profileBackupExported: "Copia del perfil guardada.",
     profileBackupImported: "Perfil traído a este dispositivo.",
     profileBackupInvalid: "No pude leer este archivo de perfil.",
@@ -21932,7 +22481,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial en {style}. Usé una ruta local confiable mientras sigo ampliando la base.",
     catalogFallbackSearching: "Cobertura parcial en {style}. Buscando señales mejores antes de recomendar...",
     spiritPanelTitle: "Tu Sound System",
-    spiritIntro: "10 likes desbloquean tu primer sistema de sonido.",
+    spiritIntro: "10 likes desbloquean tu primera lectura.",
     spiritBadge: "Sound System desbloqueado",
     spiritAvatarAlt: "Sound System personal {name}",
     spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para desbloquear tu Sound System.",
@@ -21943,13 +22492,13 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisión completa: tu sistema permanece {name}.",
     spiritReviewStayedToast: "Revisión completa: el Sound System se mantiene en {name}.",
     spiritReviewShiftedToast: "Revisión completa: Sound System actualizado a {name}.",
-    spiritInsightTitle: "Calibración del Sound System",
-    spiritInsightLockedStatus: "En formación",
+    spiritInsightTitle: "Calibración",
+    spiritInsightLockedStatus: "Recopilando",
     spiritInsightUnlockedStatus: "Activo",
-    spiritInsightLockedText: "Faltan {remaining} likes de pistas para desbloquear tu Sound System.",
+    spiritInsightLockedText: "Faltan {remaining} likes para calibrar.",
     spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
     spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
-    spiritInsightSignalScore: "{label}: señal {score}",
+    spiritInsightSignalScore: "señal {score}",
     spiritVitalDnaLabel: "ADN dominante",
     spiritVitalCycleLabel: "Ciclo de revisión",
     spiritVitalRankLabel: "Nivel del sistema",
@@ -21963,8 +22512,9 @@ const I18N = {
     spiritVitalCycleReady: "Lectura lista para revisar.",
     spiritVitalRankLocked: "En formación",
     spiritVitalRankNext: "Próximo nivel: {rank} en {likes} likes.",
+    spiritVitalRankLockedDetail: "El nivel aparece cuando cierre la primera lectura.",
     spiritVitalRankMax: "Nivel máximo actual del radar.",
-    spiritVitalNextLocked: "Dale like sin prisa",
+    spiritVitalNextLocked: "Dale like libremente",
     spiritVitalNextUnlocked: "Sigue {style}",
     spiritVitalNextDetailLocked: "La próxima señal ya cambia la lectura.",
     spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
@@ -22180,12 +22730,12 @@ function q(key, vars = {}) {
 
 function noVerifiedTrackMessage() {
   if (currentLanguage === "en") {
-    return "I could not verify a real track for this profile yet. Try a different style or click Suggest again.";
+    return "Radar is still calibrating: I could not find a reliable next track right now. Try Surprise again or pick another style.";
   }
   if (currentLanguage === "es") {
-    return "No pude verificar una pista real para este perfil todavía. Prueba otro subgénero o pulsa sugerir de nuevo.";
+    return "Radar todavía calibrando: no encontré una pista confiable ahora. Prueba Sorpresa otra vez o elige otro subgénero.";
   }
-  return "Ainda não consegui validar uma faixa real para este perfil. Tente outro subgênero ou gere nova sugestão.";
+  return "Radar ainda calibrando: não achei uma faixa confiável agora. Tente Surpresa de novo ou escolha outro subgênero.";
 }
 
 function recommendationFailureMessage() {
@@ -22822,6 +23372,59 @@ function applyLanguage() {
     heroLogoBtn.setAttribute("aria-label", t("heroLogoLabel"));
     heroLogoBtn.title = t("heroLogoLabel");
   }
+  if (betaGateScreen) betaGateScreen.setAttribute("aria-label", t("betaGateAria"));
+  setText("#betaGateKicker", t("betaGateKicker"));
+  setText("#betaGateTitle", t("betaGateTitle"));
+  setText("#betaGateDescOne", t("betaGateDescOne"));
+  setText("#betaGateDescTwo", t("betaGateDescTwo"));
+  setText("#betaGateDescThree", t("betaGateDescThree"));
+  if (document.getElementById("betaGateMetrics")) document.getElementById("betaGateMetrics").setAttribute("aria-label", t("betaGateMetricsAria"));
+  setText("#betaMetricSearchable", t("betaMetricSearchable"));
+  setText("#betaMetricAudited", t("betaMetricAudited"));
+  setText("#betaMetricArtists", t("betaMetricArtists"));
+  setText("#betaMetricStyles", t("betaMetricStyles"));
+  if (document.getElementById("betaProofGrid")) document.getElementById("betaProofGrid").setAttribute("aria-label", t("betaProofAria"));
+  setText("#betaProofOneTitle", t("betaProofOneTitle"));
+  setText("#betaProofOneText", t("betaProofOneText"));
+  setText("#betaProofTwoTitle", t("betaProofTwoTitle"));
+  setText("#betaProofTwoText", t("betaProofTwoText"));
+  setText("#betaProofThreeTitle", t("betaProofThreeTitle"));
+  setText("#betaProofThreeText", t("betaProofThreeText"));
+  if (document.getElementById("betaGateActions")) document.getElementById("betaGateActions").setAttribute("aria-label", t("betaGateActionsAria"));
+  setText("#betaWaitlistKicker", t("betaWaitlistKicker"));
+  setText("#betaWaitlistNameLabel", t("betaWaitlistNameLabel"));
+  setText("#betaWaitlistEmailLabel", t("betaWaitlistEmailLabel"));
+  setText("#betaWaitlistRoleLabel", t("betaWaitlistRoleLabel"));
+  setText("#betaRoleListener", t("betaRoleListener"));
+  setText("#betaRoleDj", t("betaRoleDj"));
+  setText("#betaRoleProducer", t("betaRoleProducer"));
+  setText("#betaRoleEvent", t("betaRoleEvent"));
+  setText("#betaRoleInvestor", t("betaRoleInvestor"));
+  setText("#betaWaitlistNoteLabel", t("betaWaitlistNoteLabel"));
+  if (betaWaitlistNote) betaWaitlistNote.placeholder = t("betaWaitlistNotePlaceholder");
+  setText("#betaWaitlistSubmitBtn", t("betaWaitlistSubmitBtn"));
+  setText("#betaWaitlistPrivacyPrefix", t("betaWaitlistPrivacyPrefix"));
+  setText("#betaWaitlistPrivacyLink", t("betaWaitlistPrivacyLink"));
+  setText("#betaInviteKicker", t("betaInviteKicker"));
+  setText("#betaAccessCodeLabel", t("betaAccessCodeLabel"));
+  if (betaAccessCode) betaAccessCode.placeholder = t("betaAccessCodePlaceholder");
+  setText("#betaAccessBtn", t("betaAccessBtn"));
+  setText("#betaGateStatus", t("betaGateStatusDefault"));
+  setText("#betaAccessCookieNote", t("betaAccessCookieNote"));
+  setText("#betaPrivacySettingsBtn", t("betaPrivacySettingsBtn"));
+  if (document.getElementById("betaIntentPanel")) document.getElementById("betaIntentPanel").setAttribute("aria-label", t("betaIntentPanelAria"));
+  setText("#betaIntentKicker", t("betaIntentKicker"));
+  setText("#betaIntentProTitle", t("betaIntentProTitle"));
+  setText("#betaIntentProText", t("betaIntentProText"));
+  setText("#betaIntentCrateTitle", t("betaIntentCrateTitle"));
+  setText("#betaIntentCrateText", t("betaIntentCrateText"));
+  setText("#betaIntentRadarTitle", t("betaIntentRadarTitle"));
+  setText("#betaIntentRadarText", t("betaIntentRadarText"));
+  setText("#betaIntentHint", t("betaIntentHint"));
+  if (betaTesterRibbon) betaTesterRibbon.setAttribute("aria-label", t("betaTesterRibbonAria"));
+  setText("#betaTesterEyebrow", t("betaTesterEyebrow"));
+  setText("#betaTesterStatus", t("betaTesterStatus"));
+  setText("#betaExitAccessBtn", t("betaExitAccessBtn"));
   setText("#heroTitle", t("heroTitle"));
   setText("#heroDesc", t("heroDesc"));
   setText("#heroSlogan", t("appSlogan"));
@@ -22918,6 +23521,12 @@ function applyLanguage() {
   setText("#legalUseText", t("legalUseText"));
   setText("#legalPrivacyTitle", t("legalPrivacyTitle"));
   setText("#legalPrivacyText", t("legalPrivacyText"));
+  setText("#legalDataTitle", t("legalDataTitle"));
+  setText("#legalDataText", t("legalDataText"));
+  setText("#legalLinksTitle", t("legalLinksTitle"));
+  setText("#legalPrivacyPolicyLink", t("legalPrivacyPolicyLink"));
+  setText("#legalTermsLink", t("legalTermsLink"));
+  setText("#legalCookiesLink", t("legalCookiesLink"));
   setText("#legalDisclaimer", t("legalDisclaimer"));
   renderSupportPanel();
   setText("#preferenceSectionKicker", t("sectionKicker"));
@@ -23093,6 +23702,7 @@ function applyLanguage() {
   setText("#profileBackupImportSummary", t("profileBackupImportSummary"));
   setText("#profileBackupImportHint", t("profileBackupImportHint"));
   setText("#profileBackupImportBtn", t("profileBackupImport"));
+  setText("#profileDeleteDataBtn", t("profileDeleteData"));
   updateProfileBackupStatus();
   setText("#summaryStatusLabel", t("summaryStatusLabel"));
   setText("#summaryKnownCountLabel", t("summaryKnownCountLabel"));
@@ -23216,13 +23826,8 @@ function applyLanguage() {
   setText("#voiceMiniSynthLabel", t("voiceMiniSynthLabel"));
   if (voiceMiniSynthValue) voiceMiniSynthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSynthLevel });
   setText("[data-voice-mini-preset='techno']", t("voiceMiniPresetTechno"));
-  setText("[data-voice-mini-preset='breaks']", t("voiceMiniPresetBreaks"));
-  setText("[data-voice-mini-preset='trap']", t("voiceMiniPresetTrap"));
   setText("[data-voice-mini-preset='psy']", t("voiceMiniPresetPsy"));
-  setText("[data-voice-mini-preset='ambient']", t("voiceMiniPresetAmbient"));
   setText("[data-voice-mini-preset='house']", t("voiceMiniPresetHouse"));
-  setText("[data-voice-mini-preset='dnb']", t("voiceMiniPresetDnb"));
-  setText("[data-voice-mini-preset='darkprog']", t("voiceMiniPresetDarkprog"));
   syncVoiceMiniPresetButtons();
   updateVoiceMiniRecipe();
   setText("#voicePadKickBtn", t("voicePadKick"));
@@ -23474,11 +24079,11 @@ function betaCodeIsValid(value = "") {
 }
 
 function betaAccessApiEndpoint() {
-  return cleanBetaField(ACCESS_CONFIG.betaAccessApiEndpoint || "", 220);
+  return cleanBetaField(resolveAppApiEndpoint(ACCESS_CONFIG.betaAccessApiEndpoint || ""), 220);
 }
 
 function betaEventsEndpoint() {
-  return cleanBetaField(ACCESS_CONFIG.betaEventsEndpoint || "", 220);
+  return cleanBetaField(resolveAppApiEndpoint(ACCESS_CONFIG.betaEventsEndpoint || ""), 220);
 }
 
 function createBetaEventSessionId() {
@@ -23505,6 +24110,25 @@ function safeBetaPayloadValue(value, maxLength = 160) {
   if (value === null || value === undefined) return "";
   if (typeof value === "number" || typeof value === "boolean") return value;
   return cleanBetaField(value, maxLength);
+}
+
+function readBetaJsonStorage(key = "", fallback = {}) {
+  try {
+    if (typeof localStorage === "undefined") return fallback;
+    return JSON.parse(localStorage.getItem(key) || "") || fallback;
+  } catch (_error) {
+    return fallback;
+  }
+}
+
+function writeBetaJsonStorage(key = "", value = {}) {
+  try {
+    if (typeof localStorage === "undefined") return false;
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (_error) {
+    return false;
+  }
 }
 
 function trackBetaEvent(eventName = "", payload = {}, options = {}) {
@@ -23542,18 +24166,104 @@ function trackBetaEvent(eventName = "", payload = {}, options = {}) {
   }).catch(() => {});
 }
 
+function markBetaEventOnce(key = "") {
+  const safeKey = cleanBetaField(key, 120).toLowerCase();
+  if (!safeKey) return false;
+  if (betaEventOnceMemory.has(safeKey)) return false;
+  const cache = readBetaJsonStorage(BETA_EVENT_ONCE_STORAGE_KEY, {});
+  if (cache[safeKey]) return false;
+  cache[safeKey] = new Date().toISOString();
+  betaEventOnceMemory.add(safeKey);
+  if (writeBetaJsonStorage(BETA_EVENT_ONCE_STORAGE_KEY, cache)) return true;
+  return true;
+}
+
+function trackBetaEventOnce(key = "", eventName = "", payload = {}, options = {}) {
+  if (!markBetaEventOnce(key || eventName)) return;
+  trackBetaEvent(eventName || key, payload, options);
+}
+
+function recommendationBetaPayload(track = null, prefs = {}, extra = {}) {
+  return {
+    artist: safeBetaPayloadValue(track?.artist || ""),
+    song: safeBetaPayloadValue(track?.song || ""),
+    style: safeBetaPayloadValue(track?.style || prefs?.style || ""),
+    bpm: safeBetaPayloadValue(track?.bpm || prefs?.bpm || ""),
+    energy: safeBetaPayloadValue(track?.energy || prefs?.energy || ""),
+    context: safeBetaPayloadValue(prefs?.context || ""),
+    trackKey: safeBetaPayloadValue(track ? recommendationTrackKey(track) : "", 220),
+    ...extra
+  };
+}
+
 function trackRecommendationEvent(eventName = "", track = null, prefs = {}, extra = {}) {
   if (!track) return;
-  trackBetaEvent(eventName, {
-    artist: safeBetaPayloadValue(track.artist),
-    song: safeBetaPayloadValue(track.song),
-    style: safeBetaPayloadValue(track.style || prefs?.style || ""),
-    bpm: safeBetaPayloadValue(track.bpm || prefs?.bpm || ""),
-    energy: safeBetaPayloadValue(track.energy || prefs?.energy || ""),
-    context: safeBetaPayloadValue(prefs?.context || ""),
-    trackKey: safeBetaPayloadValue(recommendationTrackKey(track), 220),
-    ...extra
-  }, { source: extra.source || "recommendation" });
+  trackBetaEvent(eventName, recommendationBetaPayload(track, prefs, extra), {
+    source: extra.source || "recommendation"
+  });
+}
+
+function trackRecommendationEventOnce(eventName = "", track = null, prefs = {}, extra = {}) {
+  if (!track) return;
+  const key = `${eventName}:${recommendationTrackKey(track) || "unknown"}`;
+  if (!markBetaEventOnce(key)) return;
+  trackRecommendationEvent(eventName, track, prefs, extra);
+}
+
+function trackBetaReactionMilestone(action = "", track = null, extra = {}) {
+  betaGrowthReactionCount += 1;
+  if (betaGrowthThreeReactionsTracked || betaGrowthReactionCount < 3) return;
+  betaGrowthThreeReactionsTracked = true;
+  const payload = track
+    ? recommendationBetaPayload(track, lastPrefs || {}, extra)
+    : { ...extra };
+  trackBetaEvent("three_reactions_session", {
+    action: safeBetaPayloadValue(action, 80),
+    reactionCount: betaGrowthReactionCount,
+    ...payload
+  }, { source: "activation" });
+}
+
+function trackBetaGateViewed() {
+  if (betaGateViewTracked) return;
+  betaGateViewTracked = true;
+  trackBetaEvent("beta_gate_viewed", {
+    hasStoredAccess: storedBetaAccessGranted(),
+    source: "beta_gate"
+  }, { source: "beta_gate" });
+}
+
+function trackBetaAppSession() {
+  if (betaAppSessionTracked || typeof window === "undefined") return;
+  betaAppSessionTracked = true;
+  const now = Date.now();
+  const previous = readBetaJsonStorage(BETA_VISIT_STORAGE_KEY, {});
+  const firstSeenAt = Number(previous.firstSeenAt || 0) || now;
+  const lastSeenAt = Number(previous.lastSeenAt || 0) || 0;
+  const daysSinceFirstVisit = Math.max(0, Math.floor((now - firstSeenAt) / 86400000));
+  const daysSinceLastVisit = lastSeenAt ? Math.max(0, Math.floor((now - lastSeenAt) / 86400000)) : 0;
+  const returning = Boolean(lastSeenAt && now - lastSeenAt > 6 * 60 * 60 * 1000);
+
+  trackBetaEvent("app_session_started", {
+    returning,
+    daysSinceFirstVisit,
+    daysSinceLastVisit,
+    betaGranted: betaAccessGranted()
+  }, { source: "app_session" });
+
+  if (returning) {
+    trackBetaEvent("returning_user", {
+      daysSinceFirstVisit,
+      daysSinceLastVisit,
+      betaGranted: betaAccessGranted()
+    }, { source: "retention" });
+  }
+
+  writeBetaJsonStorage(BETA_VISIT_STORAGE_KEY, {
+    firstSeenAt,
+    lastSeenAt: now,
+    visits: Math.max(0, Number(previous.visits || 0)) + 1
+  });
 }
 
 function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
@@ -23562,6 +24272,7 @@ function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
       granted: true,
       source,
       grantId: cleanBetaField(grant.grantId || grant.access || "beta", 80),
+      betaAccessToken: cleanBetaField(grant.betaAccessToken || grant.token || "", 2400),
       serverValidated: Boolean(grant.serverValidated || grant.server || grant.expiresAt),
       legacyCodeHint: normalizeBetaCode(code).slice(0, 4),
       expiresAt: cleanBetaField(grant.expiresAt || "", 80),
@@ -23589,6 +24300,16 @@ function storedBetaAccessGranted() {
   }
 }
 
+function storedBetaAccessToken() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(BETA_GATE_STORAGE_KEY) || "{}");
+    if (!parsed?.granted || !storedBetaAccessGranted()) return "";
+    return cleanBetaField(parsed.betaAccessToken || "", 2400);
+  } catch (_error) {
+    return "";
+  }
+}
+
 function clearStoredBetaAccessGrant() {
   try {
     localStorage.removeItem(BETA_GATE_STORAGE_KEY);
@@ -23601,6 +24322,55 @@ function betaAccessGranted() {
   if (!ACCESS_CONFIG.betaGateEnabled) return true;
   return storedBetaAccessGranted();
 }
+
+function syncBetaTesterRibbonVisibility() {
+  if (!betaTesterRibbon) return;
+  const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
+  const betaGateVisible = Boolean(betaGateScreen && !betaGateScreen.classList.contains("hidden"));
+  const shouldShow = Boolean(
+    ACCESS_CONFIG.betaGateEnabled &&
+    storedBetaAccessGranted() &&
+    appVisible &&
+    !betaGateVisible &&
+    !urlRequestsPublicVisitorMode()
+  );
+  betaTesterRibbon.hidden = !shouldShow;
+  betaTesterRibbon.classList.toggle("hidden", !shouldShow);
+  betaTesterRibbon.setAttribute("aria-hidden", shouldShow ? "false" : "true");
+}
+
+function betaApiHeaderShouldAttach(url = "") {
+  const raw = String(url || "").trim();
+  if (!raw) return false;
+  if (raw.startsWith("/api/")) return true;
+  try {
+    const parsed = new URL(raw, window.location?.origin || SONIC_PRODUCTION_ORIGIN);
+    const apiBase = configuredAppApiBaseUrl() || window.location?.origin || SONIC_PRODUCTION_ORIGIN;
+    const configured = new URL(apiBase);
+    return parsed.origin === configured.origin && parsed.pathname.startsWith("/api/");
+  } catch (_error) {
+    return false;
+  }
+}
+
+function installBetaApiFetchHeaders() {
+  if (typeof window === "undefined" || typeof window.fetch !== "function" || window.__sonicBetaFetchHeadersInstalled) return;
+  const nativeFetch = window.fetch.bind(window);
+  window.__sonicBetaFetchHeadersInstalled = true;
+  window.fetch = (input, init = {}) => {
+    const requestUrl = typeof input === "string" ? input : input?.url || "";
+    const token = storedBetaAccessToken();
+    if (!token || !betaApiHeaderShouldAttach(requestUrl)) return nativeFetch(input, init);
+    const headers = new Headers(init?.headers || input?.headers || {});
+    if (!headers.has("X-Sonic-Beta-Token")) headers.set("X-Sonic-Beta-Token", token);
+    return nativeFetch(input, {
+      ...init,
+      headers
+    });
+  };
+}
+
+installBetaApiFetchHeaders();
 
 async function validateBetaAccessCode(code = "", source = "manual") {
   const normalizedCode = normalizeBetaCode(code);
@@ -23673,6 +24443,7 @@ function setBetaGateStatus(message = "", state = "") {
 
 function hideBetaGateScreen() {
   if (betaGateScreen) betaGateScreen.classList.add("hidden");
+  syncBetaTesterRibbonVisibility();
 }
 
 function showBetaGateScreen() {
@@ -23687,7 +24458,9 @@ function showBetaGateScreen() {
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (betaGateScreen) betaGateScreen.classList.remove("hidden");
-  setBetaGateStatus("Acesso completo liberado apenas para beta testers.");
+  syncBetaTesterRibbonVisibility();
+  setBetaGateStatus(t("betaGateStatusDefault"));
+  trackBetaGateViewed();
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   refreshAmbientForUiState({ immediate: true });
@@ -23715,6 +24488,93 @@ function betaWaitlistEmailLooksValid(email = "") {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
 }
 
+function betaIntentLabel(intent = "") {
+  return {
+    sonic_pro: t("betaIntentLabelPro"),
+    dj_crate: t("betaIntentLabelCrate"),
+    weekly_radar: t("betaIntentLabelRadar")
+  }[intent] || t("betaIntentLabelPro");
+}
+
+function betaIntentEventName(intent = "") {
+  return {
+    sonic_pro: "premium_interest_clicked",
+    dj_crate: "dj_crate_interest_clicked",
+    weekly_radar: "weekly_radar_interest_clicked"
+  }[intent] || "business_intent_clicked";
+}
+
+function persistBetaIntent(intent = "") {
+  const safeIntent = cleanBetaField(intent, 60);
+  if (!safeIntent) return;
+  const state = readBetaJsonStorage(BETA_INTENT_STORAGE_KEY, { intents: [] });
+  const intents = Array.isArray(state.intents) ? state.intents : [];
+  const nextIntents = intents.includes(safeIntent) ? intents : [...intents, safeIntent];
+  writeBetaJsonStorage(BETA_INTENT_STORAGE_KEY, {
+    intents: nextIntents.slice(-12),
+    updatedAt: new Date().toISOString()
+  });
+}
+
+function betaStoredIntentList() {
+  const state = readBetaJsonStorage(BETA_INTENT_STORAGE_KEY, { intents: [] });
+  return Array.isArray(state.intents)
+    ? state.intents.map((intent) => cleanBetaField(intent, 60)).filter(Boolean)
+    : [];
+}
+
+function betaStoredIntentLabels() {
+  return betaStoredIntentList()
+    .map(betaIntentLabel)
+    .filter(Boolean);
+}
+
+function appendBetaIntentToWaitlistNote(intent = "") {
+  if (!betaWaitlistNote) return;
+  const labels = betaStoredIntentLabels();
+  if (!labels.length) return;
+  const current = String(betaWaitlistNote.value || "").trim();
+  const summaryPrefix = t("betaIntentSummaryPrefix");
+  const userNote = current
+    .split(/\r?\n/)
+    .filter((line) => !/^(interesses?|interests?|intereses?):/i.test(line.trim()))
+    .join("\n")
+    .trim();
+  const summary = `${summaryPrefix}: ${labels.join(", ")}`;
+  betaWaitlistNote.value = [userNote, summary].filter(Boolean).join("\n").slice(0, 500);
+}
+
+function handleBetaIntentClick(button = null) {
+  const intent = cleanBetaField(button?.dataset?.betaIntent || "", 60);
+  if (!intent) return;
+  const label = betaIntentLabel(intent);
+  const role = cleanBetaField(betaWaitlistRole?.value || "", 40);
+  const hasEmail = betaWaitlistEmailLooksValid(betaWaitlistEmail?.value || "");
+  persistBetaIntent(intent);
+  appendBetaIntentToWaitlistNote(intent);
+  trackBetaEvent("business_intent_clicked", {
+    intent,
+    label,
+    role,
+    hasEmail,
+    source: "beta_gate"
+  }, { source: "business_intent" });
+  trackBetaEvent(betaIntentEventName(intent), {
+    intent,
+    label,
+    role,
+    hasEmail,
+    source: "beta_gate"
+  }, { source: "business_intent" });
+  setBetaGateStatus(
+    hasEmail
+      ? t("betaIntentSavedWithEmail", { label })
+      : t("betaIntentSavedNoEmail", { label }),
+    "ok"
+  );
+  if (!hasEmail && betaWaitlistEmail) betaWaitlistEmail.focus();
+}
+
 function persistBetaWaitlistRequest(payload = {}) {
   try {
     localStorage.setItem(BETA_WAITLIST_STORAGE_KEY, JSON.stringify({
@@ -23728,15 +24588,17 @@ function persistBetaWaitlistRequest(payload = {}) {
 
 function betaWaitlistFallbackHref(payload = {}) {
   const to = cleanBetaField(ACCESS_CONFIG.waitlistEmail || "pedropfpj@gmail.com", 160);
-  const subject = "Sonic Search - pedido de acesso beta";
+  const subject = t("betaWaitlistEmailSubject");
+  const note = cleanBetaField(payload.note || "", 500);
+  const noteLine = /^(interesses?|interests?|intereses?):/i.test(note) ? note : `${t("betaWaitlistEmailInterest")}: ${note || "-"}`;
   const body = [
-    "Quero entrar no beta do Sonic Search.",
+    t("betaWaitlistEmailIntro"),
     "",
-    `Nome: ${payload.name || "-"}`,
-    `E-mail: ${payload.email || "-"}`,
-    `Perfil: ${payload.role || "-"}`,
-    `Interesse: ${payload.note || "-"}`,
-    `Origem: ${payload.source || "-"}`
+    `${t("betaWaitlistEmailName")}: ${payload.name || "-"}`,
+    `${t("betaWaitlistEmailEmail")}: ${payload.email || "-"}`,
+    `${t("betaWaitlistEmailRole")}: ${payload.role || "-"}`,
+    noteLine,
+    `${t("betaWaitlistEmailOrigin")}: ${payload.source || "-"}`
   ].join("\n");
   return `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
@@ -23751,18 +24613,20 @@ async function submitBetaWaitlist(event) {
   event?.preventDefault?.();
   const payload = betaWaitlistPayload();
   if (!betaWaitlistEmailLooksValid(payload.email)) {
-    setBetaGateStatus("Coloque um e-mail valido para entrar na lista beta.", "error");
+    setBetaGateStatus(t("betaWaitlistInvalidEmail"), "error");
     if (betaWaitlistEmail) betaWaitlistEmail.focus();
     return;
   }
   persistBetaWaitlistRequest(payload);
-  const originalText = betaWaitlistSubmitBtn?.textContent || "Entrar na lista beta";
+  const originalText = betaWaitlistSubmitBtn?.textContent || t("betaWaitlistSubmitBtn");
   if (betaWaitlistSubmitBtn) {
     betaWaitlistSubmitBtn.disabled = true;
-    betaWaitlistSubmitBtn.textContent = "Enviando...";
+    betaWaitlistSubmitBtn.textContent = t("betaWaitlistSending");
   }
   try {
-    const response = await fetch("/api/waitlist", {
+    const waitlistEndpoint = resolveAppApiEndpoint("/api/waitlist");
+    if (!waitlistEndpoint) throw new Error("waitlist_endpoint_unavailable");
+    const response = await fetch(waitlistEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -23771,23 +24635,30 @@ async function submitBetaWaitlist(event) {
     if (response.ok && result?.ok) {
       trackBetaEvent("waitlist_submitted", {
         role: cleanBetaField(payload.role || "", 40),
+        intents: betaStoredIntentList(),
         stored: Boolean(result.stored),
         status: cleanBetaField(result.status || "", 40),
         source: "beta_gate"
       }, { source: "waitlist" });
       if (result.stored) {
-        setBetaGateStatus("Pedido recebido. Vou liberar convites para os melhores perfis de teste.", "ok");
+        setBetaGateStatus(t("betaWaitlistReceived"), "ok");
+        if (betaWaitlistForm) betaWaitlistForm.reset();
       } else {
-        setBetaGateStatus("Pedido preparado. Seu navegador vai abrir um e-mail para confirmar a entrada.", "ok");
+        trackBetaEvent("waitlist_email_fallback_opened", {
+          role: cleanBetaField(payload.role || "", 40),
+          intents: betaStoredIntentList(),
+          reason: cleanBetaField(result.reason || "not_stored", 80),
+          source: "beta_gate"
+        }, { source: "waitlist" });
+        setBetaGateStatus(t("betaWaitlistFallbackPrepared"), "ok");
         openBetaWaitlistEmail(payload);
       }
-      if (betaWaitlistForm) betaWaitlistForm.reset();
       return;
     }
-    setBetaGateStatus("Nao consegui salvar agora. Vou abrir um e-mail para voce enviar o pedido.", "error");
+    setBetaGateStatus(t("betaWaitlistSaveFailed"), "error");
     openBetaWaitlistEmail(payload);
   } catch (_error) {
-    setBetaGateStatus("Sem backend agora. Vou abrir um e-mail para voce enviar o pedido.", "error");
+    setBetaGateStatus(t("betaWaitlistBackendUnavailable"), "error");
     openBetaWaitlistEmail(payload);
   } finally {
     if (betaWaitlistSubmitBtn) {
@@ -23799,16 +24670,16 @@ async function submitBetaWaitlist(event) {
 
 async function handleBetaAccessSubmit() {
   const code = betaAccessCode?.value || "";
-  const originalText = betaAccessBtn?.textContent || "Liberar app";
+  const originalText = betaAccessBtn?.textContent || t("betaAccessBtn");
   if (betaAccessBtn) {
     betaAccessBtn.disabled = true;
-    betaAccessBtn.textContent = "Validando...";
+    betaAccessBtn.textContent = t("betaAccessValidating");
   }
   const result = await validateBetaAccessCode(code, "manual");
   if (!result.ok) {
     const message = result.error === "too_many_attempts"
-      ? "Muitas tentativas. Aguarde um pouco ou solicite acesso pela lista."
-      : "Codigo beta invalido. Solicite acesso pela lista.";
+      ? t("betaAccessTooMany")
+      : t("betaAccessInvalid");
     setBetaGateStatus(message, "error");
     if (betaAccessCode) betaAccessCode.focus();
     if (betaAccessBtn) {
@@ -23818,7 +24689,7 @@ async function handleBetaAccessSubmit() {
     playUiSfx("error");
     return;
   }
-  setBetaGateStatus("Acesso liberado. Entrando no Sonic Search...", "ok");
+  setBetaGateStatus(t("betaAccessGrantedStatus"), "ok");
   playUiSfx("confirm");
   window.setTimeout(() => {
     if (betaAccessBtn) {
@@ -23834,7 +24705,7 @@ function handleBetaExitAccess() {
   clearStoredBetaAccessGrant();
   clearBetaAccessCodeFromUrl();
   showBetaGateScreen();
-  setBetaGateStatus("Voce esta vendo a tela publica do beta fechado.", "ok");
+  setBetaGateStatus(t("betaExitStatus"), "ok");
 }
 
 function urlRequestsScreenshotMode() {
@@ -23981,7 +24852,9 @@ function removeLocalStorageKeys(keys = []) {
 function clearAllSonicLocalData() {
   removeLocalStorageKeys(localStorageKeysMatching((key) => (
     key.startsWith("neonpulse:") ||
-    key.startsWith("neonpulse_")
+    key.startsWith("neonpulse_") ||
+    key.startsWith("sonic_search:") ||
+    key.startsWith("sonic_search_")
   )));
   try {
     sessionStorage.clear();
@@ -24384,8 +25257,9 @@ function updateAuthProviderUi() {
   const googleConfigured = socialConfigReady();
   const signed = authHasOnlineSession();
   const busy = Boolean(authConfigLoading || socialState.busy);
-  const googleOAuthHref = socialOAuthEndpointUrl("google", { redirect: true });
-  const showGoogleOption = Boolean(googleConfigured || signed || busy);
+  const googleOAuthHref = socialOAuthStartUrl("google");
+  const hideOnlineAuth = shouldHideSocialLoginForAppStore();
+  const showGoogleOption = Boolean(!hideOnlineAuth && (googleConfigured || signed || busy));
   const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
   if (authEntryActions) {
     authEntryActions.classList.toggle("has-online", showGoogleOption);
@@ -24436,9 +25310,11 @@ function updateAuthProviderUi() {
     authResumeBtn.disabled = true;
   }
   if (authProviderHint) {
-    authProviderHint.textContent = googleConfigured || signed
-      ? t("authProviderHint")
-      : t("authProviderHintLocalBackup");
+    authProviderHint.textContent = hideOnlineAuth
+      ? t("authProviderHintAppStoreLocal")
+      : googleConfigured || signed
+        ? t("authProviderHint")
+        : t("authProviderHintLocalBackup");
   }
 }
 
@@ -24680,11 +25556,16 @@ async function loginWithGoogle(event) {
     playUiSfx("error");
     return;
   }
+  if (shouldHideSocialLoginForAppStore()) {
+    event?.preventDefault?.();
+    setAuthFeedback(t("authProviderHintAppStoreLocal"));
+    return;
+  }
   const shouldUseNativeLink = authGoogleBtn?.tagName === "A" && !socialState.session?.access_token && !authHasOnlineSession();
   if (shouldUseNativeLink) {
     event?.preventDefault?.();
     socialState.busy = true;
-    pendingSocialOAuthUrl = socialOAuthEndpointUrl("google", { redirect: true }) || authGoogleBtn.getAttribute("href") || "";
+    pendingSocialOAuthUrl = socialOAuthStartUrl("google") || authGoogleBtn.getAttribute("href") || "";
     setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
     socialSetStatus("Abrindo login do Google...");
     renderSocialUi({ preserveStatus: true });
@@ -25694,6 +26575,14 @@ function playUiSfx(type = "tap") {
     spawnUiTone({ frequency: 246.94, slideTo: 174.61, duration: 0.28, volume: 0.102, type: "triangle", when: 0.05, pan: -0.12, filterFrequency: 690 });
     spawnUiTone({ frequency: 196, slideTo: 138.59, duration: 0.3, volume: 0.086, type: "triangle", when: 0.11, pan: -0.18, filterFrequency: 620 });
     spawnUiTransient({ duration: 0.15, volume: 0.042, when: 0.04, pan: -0.14, highpass: 420, lowpass: 2100 });
+    return;
+  }
+
+  if (type === "notice") {
+    duckIntroAmbientForFx(0.62, 0.12);
+    spawnUiTone({ frequency: 330, slideTo: 294, duration: 0.13, volume: 0.05, type: "sine", pan: -0.08, filterFrequency: 1200 });
+    spawnUiTone({ frequency: 440, slideTo: 392, duration: 0.14, volume: 0.044, type: "triangle", when: 0.04, pan: 0.1, filterFrequency: 1600 });
+    spawnUiTransient({ duration: 0.06, volume: 0.012, when: 0.03, pan: 0.02, highpass: 900, lowpass: 3000 });
     return;
   }
 
@@ -28123,11 +29012,41 @@ function createVoicePadBus(ctx) {
   return connectVoiceMiniOutputBus(ctx, { preview: true });
 }
 
+function primeVoiceMiniAudioFromGesture(ctx = audioContext) {
+  if (!ctx || ctx.state === "closed") return false;
+  try {
+    audioUnlocked = true;
+    applyAudioMasterVolume({ immediate: true });
+    const unlockOsc = trackVoiceMiniNode(ctx.createOscillator());
+    const unlockGain = trackVoiceMiniNode(ctx.createGain());
+    const now = ctx.currentTime || 0;
+    unlockOsc.type = "sine";
+    unlockOsc.frequency.value = 58;
+    unlockGain.gain.setValueAtTime(0.0001, now);
+    unlockGain.gain.setValueAtTime(0.0001, now + 0.04);
+    unlockOsc.connect(unlockGain);
+    unlockGain.connect(ctx.destination);
+    unlockOsc.start(now);
+    unlockOsc.stop(now + 0.04);
+    voiceMiniTrackTimers.push(window.setTimeout(() => {
+      try {
+        unlockOsc.disconnect();
+        unlockGain.disconnect();
+      } catch (_err) {
+        // The unlock pulse may already be disconnected by stopVoiceMiniTrack.
+      }
+    }, 180));
+    return true;
+  } catch (_err) {
+    return false;
+  }
+}
+
 async function resumeVoiceMiniAudioContext(ctx) {
   if (!ctx || ctx.state === "closed") return false;
   if (ctx.state !== "suspended") return true;
   const timeout = new Promise((resolve) => {
-    window.setTimeout(() => resolve(false), 520);
+    window.setTimeout(() => resolve(false), 1200);
   });
   const resumed = ctx.resume()
     .then(() => true)
@@ -28143,12 +29062,15 @@ async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
     return false;
   }
   audioUnlocked = true;
+  primeVoiceMiniAudioFromGesture(audioContext);
   const audioReady = await resumeVoiceMiniAudioContext(audioContext);
   if (!audioReady) {
     if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
     setVoiceStatus(t("voiceMiniAudioBlocked"));
     return false;
   }
+  applyAudioMasterVolume({ immediate: true });
+  updateAudioToggleUi();
   if (requireVoice && !voiceRecordingBlob) {
     setVoiceStatus(t("voiceNeedRecording"));
     showToast(t("voiceNeedRecording"));
@@ -28412,7 +29334,7 @@ function applyVoiceMiniIdeaVariation(presetName = voiceMiniActivePreset) {
 }
 
 async function generateVoiceMiniIdea() {
-  const presets = Object.keys(VOICE_MINI_PRESETS);
+  const presets = VOICE_MINI_IDEA_PRESETS;
   const currentIndex = Math.max(0, presets.indexOf(voiceMiniActivePreset));
   const offset = 1 + Math.floor(Math.random() * Math.max(1, presets.length - 1));
   const nextPreset = presets[(currentIndex + offset) % presets.length] || "techno";
@@ -28690,7 +29612,8 @@ async function playVoiceMiniTrack() {
   stopActiveVoicePlayback();
   stopVoiceMiniTrack({ silent: true });
   audioUnlocked = true;
-  await audioContext.resume().catch(() => {});
+  primeVoiceMiniAudioFromGesture(audioContext);
+  await resumeVoiceMiniAudioContext(audioContext);
 
   ensureVoiceMiniAudiblePadState();
   const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
@@ -29556,6 +30479,28 @@ function renderSupportContact() {
 
 function renderSupportPanel() {
   if (!supportPanel) return;
+  const paymentsAllowed = supportPaymentsAllowed();
+  if (supportAmountGroup) {
+    supportAmountGroup.classList.toggle("hidden", !paymentsAllowed);
+    supportAmountGroup.setAttribute("aria-hidden", paymentsAllowed ? "false" : "true");
+  }
+  if (supportPaymentGrid) {
+    supportPaymentGrid.classList.toggle("hidden", !paymentsAllowed);
+    supportPaymentGrid.setAttribute("aria-hidden", paymentsAllowed ? "false" : "true");
+  }
+  if (!paymentsAllowed) {
+    if (supportLegalNote) supportLegalNote.textContent = t("supportPaymentsUnavailable");
+    [supportPixPayload, supportCryptoPayload].forEach((field) => {
+      if (!field) return;
+      field.value = "";
+      field.classList.add("hidden");
+    });
+    [supportCopyPixKeyBtn, supportCopyPixBtn, supportCopyCryptoBtn].forEach((button) => {
+      if (button) button.disabled = true;
+    });
+    renderSupportContact();
+    return;
+  }
   const pixKey = String(SUPPORT_PAYMENT_CONFIG.pix?.key || "").trim();
   const pixPayload = buildPixPayload();
   const cryptoPayload = buildCryptoPayload();
@@ -29689,6 +30634,12 @@ function buildShareableAppUrl({ includeSpirit = true } = {}) {
 async function copyShareableLink({ triggerButton = null, includeSpirit = true } = {}) {
   const link = buildShareableAppUrl({ includeSpirit });
   const originalText = triggerButton?.textContent || "";
+  trackBetaEvent("share_card_clicked", {
+    method: "copy_link",
+    includeSpirit: Boolean(includeSpirit),
+    spiritUnlocked: totalLikedSongs() >= SPIRIT_UNLOCK_TARGET,
+    source: "share_link"
+  }, { source: "share" });
   if (triggerButton) {
     triggerButton.disabled = true;
     triggerButton.textContent = t("shareLinkCopying");
@@ -29722,8 +30673,10 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 }
 
 function safeAppTabName(tabName = "discover") {
-  return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(tabName)
-    ? tabName
+  const requestedTab = String(tabName || "discover");
+  if (requestedTab === "community" && shouldDisableCommunityForAppStore()) return "discover";
+  return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(requestedTab)
+    ? requestedTab
     : "discover";
 }
 
@@ -29732,11 +30685,43 @@ function currentActiveAppTabName() {
   return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
 }
 
+function scrollActiveAppTabIntoView(button) {
+  if (!appTabBar || !button || button.hidden) return;
+  const compactNav =
+    window.matchMedia?.("(max-width: 620px)")?.matches ||
+    window.matchMedia?.("(hover: none)")?.matches;
+  if (!compactNav || appTabBar.scrollWidth <= appTabBar.clientWidth + 4) return;
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  window.requestAnimationFrame(() => {
+    try {
+      button.scrollIntoView({
+        block: "nearest",
+        inline: "center",
+        behavior: prefersReducedMotion ? "auto" : "smooth"
+      });
+    } catch (_err) {
+      const left = button.offsetLeft - (appTabBar.clientWidth - button.clientWidth) / 2;
+      appTabBar.scrollTo({
+        left: Math.max(0, left),
+        behavior: prefersReducedMotion ? "auto" : "smooth"
+      });
+    }
+  });
+}
+
 function updateSignatureBarForTab(tabName = currentActiveAppTabName()) {
+  syncBetaTesterRibbonVisibility();
   if (!signatureBar) return;
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode()) {
+    signatureBar.classList.add("is-hidden");
+    signatureBar.setAttribute("aria-hidden", "true");
+    document.body.classList.add("signature-bar-hidden");
+    return;
+  }
   const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
   const betaGateVisible = Boolean(betaGateScreen && !betaGateScreen.classList.contains("hidden"));
-  const shouldShow = !appVisible && !betaGateVisible;
+  const preAppVisible = typeof preAppScreensVisible === "function" && preAppScreensVisible();
+  const shouldShow = !appVisible && !betaGateVisible && !preAppVisible;
   signatureBar.classList.toggle("is-hidden", !shouldShow);
   signatureBar.setAttribute("aria-hidden", shouldShow ? "false" : "true");
   document.body.classList.toggle("signature-bar-hidden", !shouldShow);
@@ -29754,16 +30739,26 @@ function ensureEventsPanelActive() {
 
 function setActiveAppTab(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
+  let activeTabButton = null;
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
-      const isActive = button.getAttribute("data-app-tab-target") === safeTab;
+      const targetTab = button.getAttribute("data-app-tab-target") || "";
+      const disabledForReview = targetTab === "community" && shouldDisableCommunityForAppStore();
+      button.hidden = disabledForReview;
+      button.setAttribute("aria-hidden", disabledForReview ? "true" : "false");
+      const isActive = !disabledForReview && targetTab === safeTab;
       button.classList.toggle("active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (isActive) activeTabButton = button;
     });
   }
   appTabPanels.forEach((panel) => {
-    panel.classList.toggle("active", panelMatchesAppTab(panel, safeTab));
+    const disabledForReview = panelMatchesAppTab(panel, "community") && shouldDisableCommunityForAppStore();
+    panel.hidden = disabledForReview;
+    panel.setAttribute("aria-hidden", disabledForReview ? "true" : "false");
+    panel.classList.toggle("active", !disabledForReview && panelMatchesAppTab(panel, safeTab));
   });
+  scrollActiveAppTabIntoView(activeTabButton);
   updateSignatureBarForTab(safeTab);
   if (safeTab === "profile") {
     scheduleMusicalSpiritRefresh({ force: true });
@@ -29773,7 +30768,7 @@ function setActiveAppTab(tabName = "discover") {
   if (safeTab === "djs") ensureDjDiscoveryReady();
   if (safeTab === "studio") ensureVoiceLabUiReady();
   if (safeTab === "news") void refreshDailyNews({ silent: false });
-  if (safeTab === "community") {
+  if (safeTab === "community" && !shouldDisableCommunityForAppStore()) {
     void ensureSocialMvpReady();
     void loadCommunityPosts({ silent: false });
   }
@@ -30584,7 +31579,8 @@ function swipeCoverageStyleScore(style = "", sourceTrack = null) {
     Math.min(tracks, 42) * 0.038 +
     Math.min(artists, 28) * 0.072 +
     familyPreferenceSignal(styleKey) * 0.62 +
-    styleSignal.net * 0.48;
+    styleSignal.net * 0.48 +
+    openingDiscoveryRampScore(styleKey) * 1.2;
 
   if (!exposureCount) score += 6.4;
   if (crossFamily) score += 2.1;
@@ -30801,15 +31797,19 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
       ).size;
       const adaptiveSignal = stylePreferenceSignal(style);
       const crossFamily = !baseFamily || familyOf(style) !== baseFamily;
+      const exposureCount = Number(swipeStyleExposureCounts.get(style) || 0);
+      const rampScore = openingDiscoveryRampScore(style);
       const likeScore = Number(adaptiveModel.likedStyles.get(normalize(style)) || 0);
       const dislikeScore = Number(adaptiveModel.dislikedStyles.get(normalize(style)) || 0);
       const dislikePenalty = Math.max(0, dislikeScore - likeScore - 0.2);
 
       const score =
         adaptiveSignal * 3.6 +
+        rampScore * 1.05 +
         Math.min(availablePool.length, 22) * 0.26 +
         Math.min(uniqueArtists, 16) * 0.32 +
         (crossFamily ? 2.8 : 0.55) -
+        Math.min(2.4, exposureCount * 0.55) -
         dislikePenalty * 2.4;
 
       return {
@@ -30917,11 +31917,16 @@ function pickSurpriseTrackFromAnotherGenre(
   ];
 
   for (const pool of rankedPools) {
-    const chosen = pickDiverseTrackFromPool(pool, surprisePrefs);
+    const chosen = pickSurpriseDiverseTrack(pool, baseTrack) || pickDiverseTrackFromPool(pool, surprisePrefs);
     if (chosen) return chosen;
   }
 
-  return pickDiverseTrackFromPool(eligible, surprisePrefs) || pickDiverseTrackFromPool(emergencyPool, surprisePrefs);
+  return (
+    pickSurpriseDiverseTrack(eligible, baseTrack) ||
+    pickDiverseTrackFromPool(eligible, surprisePrefs) ||
+    pickSurpriseDiverseTrack(emergencyPool, baseTrack) ||
+    pickDiverseTrackFromPool(emergencyPool, surprisePrefs)
+  );
 }
 
 function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set() } = {}) {
@@ -30950,9 +31955,11 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
       })();
       const seedNoise = hashUnit(`${userSeed}::${visitId}::${curationOpenSeed}::opening-style::${style}`) - 0.5;
       const adaptiveSignal = Number(adaptiveModel.likedStyles.get(style) || 0) - Number(adaptiveModel.dislikedStyles.get(style) || 0);
+      const rampScore = openingDiscoveryRampScore(style);
       const score =
-        seedNoise * 12 +
-        readiness * 1.4 +
+        seedNoise * 4.6 +
+        rampScore * 2.35 +
+        readiness * 1.25 +
         adaptiveSignal * 0.9 +
         Math.min(pool.length, 28) * 0.11 +
         Math.min(uniqueArtists, 18) * 0.24 -
@@ -31017,7 +32024,12 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
       const bCross = baseFamily && familyOf(b) !== baseFamily ? 0 : 1;
       const aExposure = Number(swipeStyleExposureCounts.get(a) || 0);
       const bExposure = Number(swipeStyleExposureCounts.get(b) || 0);
-      return aCross - bCross || aExposure - bExposure;
+      return (
+        aCross - bCross ||
+        openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a) ||
+        aExposure - bExposure ||
+        styleDiscoveryReadinessScore(b) - styleDiscoveryReadinessScore(a)
+      );
     })
     .slice(0, SURPRISE_FAST_STYLE_LIMIT);
   const instantPool = [];
@@ -31044,7 +32056,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   if (instantCrossFamilyPool.length || instantPool.length) {
     update(86, t("searchOverlayFinishing"));
     const readyPool = instantCrossFamilyPool.length ? instantCrossFamilyPool : instantPool;
-    return pickRandomTrack(readyPool.slice(0, Math.min(42, readyPool.length)));
+    return pickSurpriseDiverseTrack(readyPool.slice(0, Math.min(72, readyPool.length)), baseTrack);
   }
   let exactBpmFallbackTrack = null;
 
@@ -31132,7 +32144,10 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (strictCrossGenrePool.length) {
-    return pickDiverseTrackFromPool(strictCrossGenrePool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+    return (
+      pickSurpriseDiverseTrack(strictCrossGenrePool, baseTrack) ||
+      pickDiverseTrackFromPool(strictCrossGenrePool, { style: "", context: "", energy: "", bpm: "", vocals: "" })
+    );
   }
 
   const strictDifferentStylePool = catalog.filter((track) => {
@@ -31144,7 +32159,10 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (strictDifferentStylePool.length) {
-    return pickDiverseTrackFromPool(strictDifferentStylePool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+    return (
+      pickSurpriseDiverseTrack(strictDifferentStylePool, baseTrack) ||
+      pickDiverseTrackFromPool(strictDifferentStylePool, { style: "", context: "", energy: "", bpm: "", vocals: "" })
+    );
   }
 
   if (exactBpmFallbackTrack) {
@@ -33479,6 +34497,10 @@ function dailyNewsRuntimeSummary(item = {}) {
   return item.summary || "";
 }
 
+function dailyNewsDisplaySummary(item = {}) {
+  return truncateByWordBoundary(dailyNewsRuntimeSummary(item) || item.summary || t("dailyNewsNoSummary"), 112);
+}
+
 function dailyNewsNeedsLocalization(item = {}, language = dailyNewsTargetLanguage()) {
   if (!language) return false;
   const sourceLanguage = dailyNewsItemSourceLanguage(item);
@@ -34030,9 +35052,7 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
     sourceAnchor.target = "_blank";
     sourceAnchor.rel = "noopener noreferrer";
     sourceAnchor.textContent = item.source || t("dailyNewsSourceFallback");
-
-    const sourceLabel = document.createElement("span");
-    sourceLabel.textContent = `${t("dailyNewsSourcePrefix")}: `;
+    sourceAnchor.setAttribute("aria-label", `${t("dailyNewsSourcePrefix")}: ${sourceAnchor.textContent}`);
 
     const dateLabel = document.createElement("span");
     dateLabel.textContent = ` • ${dailyNewsDateLabel(item.publishedAt || updatedAt)}`;
@@ -34041,7 +35061,7 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
     marketBadge.className = `daily-news-market ${dailyNewsIsBrazilian(item) ? "br" : "global"}`;
     marketBadge.textContent = dailyNewsIsBrazilian(item) ? t("dailyNewsMarketBrazil") : t("dailyNewsMarketGlobal");
 
-    meta.append(sourceLabel, sourceAnchor, dateLabel);
+    meta.append(sourceAnchor, dateLabel);
     meta.appendChild(marketBadge);
 
     const title = document.createElement("a");
@@ -34053,7 +35073,7 @@ async function renderDailyNewsItems(items = [], { updatedAt = "", fromCache = fa
 
     const summary = document.createElement("p");
     summary.className = "daily-news-summary muted";
-    summary.textContent = item.summary || t("dailyNewsNoSummary");
+    summary.textContent = dailyNewsDisplaySummary(item);
 
     card.append(meta, title, summary);
     dailyNewsList.appendChild(card);
@@ -34072,7 +35092,7 @@ function dailyNewsBackendEndpoint() {
       ""
   ).trim();
   if (configured) return configured;
-  return canUseRelativeApiEndpoint() ? "/api/news-feed" : "";
+  return resolveAppApiEndpoint("/api/news-feed");
 }
 
 async function fetchDailyNewsFromBackend() {
@@ -36816,6 +37836,12 @@ async function shareSpiritCollectibleToInstagram({
   }
 
   const resolvedImageUrl = resolveStoryShareImageUrl(imageUrl);
+  trackBetaEvent("share_card_clicked", {
+    method: "story_share",
+    hasCustomImage: Boolean(imageUrl),
+    spiritUnlocked: totalLikedSongs() >= SPIRIT_UNLOCK_TARGET,
+    source: "spirit_story"
+  }, { source: "share" });
 
   if (!resolvedImageUrl || resolvedImageUrl === "#") {
     showToast(t("spiritCollectibleShareNoAsset"));
@@ -36898,7 +37924,7 @@ function resolveAiEndpoint(globalName, fallbackPath) {
   if (globalName === "NEONPULSE_IMAGE_API_URL" && fallbackPath === "/api/spirit-image" && isStaticPreviewHost()) {
     return REMOTE_SPIRIT_IMAGE_API_URL;
   }
-  return canUseRelativeApiEndpoint() ? fallbackPath : "";
+  return resolveAppApiEndpoint(fallbackPath);
 }
 
 function aiConfigFlag(key, fallback = false) {
@@ -39839,7 +40865,7 @@ function renderSpiritVitals({
       ? t("spiritVitalRankNext", { rank: t(rank.next.key), likes: rank.next.likes })
       : unlocked
         ? t("spiritVitalRankMax")
-        : t("spiritVitalDnaLocked")
+        : t("spiritVitalRankLockedDetail")
   );
   setSpiritVital(
     spiritVitalNextLabel,
@@ -39858,7 +40884,6 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   const selectedSpirit = spirit || resolveMusicalSpirit();
   const spiritText = localizedSpiritCopy(selectedSpirit) || {};
   const signals = spiritInsightSignals(selectedSpirit, 3);
-  const maxScore = Math.max(1, ...signals.map((entry) => Number(entry.score) || 0));
   const signalLabels = signals
     .filter((entry) => Number(entry.score) > 0)
     .map((entry) => entry.label)
@@ -39866,7 +40891,7 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   const fallbackSignalLabels = spiritTopStyles(selectedSpirit, 2);
   const signalText = signalLabels.length
     ? signalLabels.join(" + ")
-    : fallbackSignalLabels.length
+    : unlocked && fallbackSignalLabels.length
       ? fallbackSignalLabels.join(" + ")
       : t("spiritInsightNoSignals");
 
@@ -39890,20 +40915,19 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   renderSpiritVitals({ unlocked, likedSongs, progress, selectedSpirit, spiritText, signals, signalText });
   if (!spiritSignalList) return;
   spiritSignalList.innerHTML = "";
-  if (!signals.length) {
-    const empty = document.createElement("p");
-    empty.className = "muted spirit-signal-empty";
-    empty.textContent = t("spiritInsightNoSignals");
-    spiritSignalList.appendChild(empty);
+  const visibleSignals = signals.filter((entry) => Number(entry.score) > 0);
+  spiritSignalList.classList.toggle("hidden", !visibleSignals.length);
+  if (!visibleSignals.length) {
     return;
   }
-  signals.forEach((entry) => {
+  const visibleMaxScore = Math.max(1, ...visibleSignals.map((entry) => Number(entry.score) || 0));
+  visibleSignals.forEach((entry) => {
     const item = document.createElement("div");
     item.className = "spirit-signal-item";
     const label = document.createElement("span");
     label.textContent = entry.label;
     const meter = document.createElement("i");
-    meter.style.width = `${Math.max(8, Math.min(100, (Number(entry.score) / maxScore) * 100))}%`;
+    meter.style.width = `${Math.max(8, Math.min(100, (Number(entry.score) / visibleMaxScore) * 100))}%`;
     const value = document.createElement("strong");
     value.textContent = t("spiritInsightSignalScore", {
       label: entry.label,
@@ -41471,6 +42495,7 @@ function recommendationDiscoveryDiversityScore(track, prefs = {}) {
   let score = styleDiscoveryReadinessScore(track.style) * 0.62;
   const currentStyle = selectableSwipeStyle(currentRecommendation?.style || "");
   const trackStyle = selectableSwipeStyle(track.style || "");
+  if (trackStyle) score += openingDiscoveryRampScore(trackStyle) * 1.15;
   if (currentStyle && trackStyle) {
     if (trackStyle === currentStyle) score -= 1.8;
     else if (familyOf(trackStyle) !== familyOf(currentStyle)) score += 1.35;
@@ -42748,6 +43773,12 @@ function registerRecommendationDelivery(track, prefs) {
   trackRecommendationEvent("discovery_started", track, prefs, {
     source: "recommendation_delivery"
   });
+  trackRecommendationEvent("recommendation_generated", track, prefs, {
+    source: "recommendation_delivery"
+  });
+  trackBetaEventOnce("first_recommendation", "first_recommendation", recommendationBetaPayload(track, prefs, {
+    source: "recommendation_delivery"
+  }), { source: "activation" });
   const trackKey = `${track.artist}::${track.song}`;
   registerGlobalRecommendation(trackKey);
   if (prefs.style && track?.style === prefs.style) {
@@ -43236,13 +44267,33 @@ function pickDiscovery(prefs, knownArtists, mainArtist, excludedDiscoveryNames =
 
 function resetSwipeElementPosition(element) {
   if (!element) return;
-  element.classList.remove("is-dragging", "is-like", "is-pass", "is-ready", "is-accepted", "is-rejected");
+  element.classList.remove("is-dragging", "is-like", "is-pass", "is-ready", "is-returning", "is-accepted", "is-rejected");
   element.style.setProperty("--swipe-x", "0px");
+  element.style.setProperty("--swipe-y", "0px");
+  element.style.setProperty("--swipe-rotate", "0deg");
+  element.style.setProperty("--swipe-scale", "1");
+  element.style.setProperty("--swipe-exit-x", "120%");
+  element.style.setProperty("--swipe-exit-y", "-14px");
+  element.style.setProperty("--swipe-exit-rotate", "16deg");
+  element.style.setProperty("--swipe-progress", "0");
+  element.style.setProperty("--swipe-like-opacity", "0");
+  element.style.setProperty("--swipe-pass-opacity", "0");
+}
+
+function returnSwipeElementToCenter(element) {
+  if (!element) return;
+  element.classList.remove("is-dragging", "is-like", "is-pass", "is-ready", "is-accepted", "is-rejected");
+  element.classList.add("is-returning");
+  element.style.setProperty("--swipe-x", "0px");
+  element.style.setProperty("--swipe-y", "0px");
   element.style.setProperty("--swipe-rotate", "0deg");
   element.style.setProperty("--swipe-scale", "1");
   element.style.setProperty("--swipe-progress", "0");
   element.style.setProperty("--swipe-like-opacity", "0");
   element.style.setProperty("--swipe-pass-opacity", "0");
+  window.setTimeout(() => {
+    element.classList.remove("is-returning");
+  }, 420);
 }
 
 function resetSwipeCardPosition() {
@@ -43553,9 +44604,11 @@ function setSwipeDragVisual(dx = 0, element = swipeDragState?.element || swipeTr
   const progress = Math.max(-1, Math.min(1, dx / (width * 0.36)));
   const decision = swipeGestureDecision(element, dx, dy);
   const intensity = Math.min(1, Math.abs(progress));
+  const verticalDrift = Math.max(-18, Math.min(18, dy * 0.14));
   element.style.setProperty("--swipe-x", `${dx}px`);
-  element.style.setProperty("--swipe-rotate", `${progress * 8}deg`);
-  element.style.setProperty("--swipe-scale", String(1 - intensity * 0.018));
+  element.style.setProperty("--swipe-y", `${verticalDrift}px`);
+  element.style.setProperty("--swipe-rotate", `${progress * 10}deg`);
+  element.style.setProperty("--swipe-scale", String(1 - intensity * 0.024));
   element.style.setProperty("--swipe-progress", String(decision.readiness));
   element.style.setProperty("--swipe-like-opacity", String(Math.max(0, progress)));
   element.style.setProperty("--swipe-pass-opacity", String(Math.max(0, -progress)));
@@ -43572,6 +44625,155 @@ function swipeAdaptiveNextMessage(plan, finalStyle = "", fallbackMessage = "") {
     return t("swipeAnchorNext", { focus, next });
   }
   return t("swipeAffinityNext", { focus, next });
+}
+
+function uniqueSwipeStyleList(styles = []) {
+  const seen = new Set();
+  return (Array.isArray(styles) ? styles : [])
+    .map((style) => selectableSwipeStyle(style))
+    .filter((style) => {
+      if (!style || seen.has(style)) return false;
+      seen.add(style);
+      return true;
+    });
+}
+
+function swipeInstantPrefsForStyle(basePrefs, plan, style) {
+  const nextPrefs = {
+    ...normalizeRecommendationPrefs(basePrefs),
+    style: selectableSwipeStyle(style) || normalizeRecommendationPrefs(basePrefs).style || ""
+  };
+  if (plan && !plan.explicitAnchor && nextPrefs.style && nextPrefs.style !== plan.focusStyle) {
+    nextPrefs.context = "";
+    nextPrefs.bpm = "";
+  }
+  return normalizeRecommendationPrefs(nextPrefs);
+}
+
+function instantSwipeStyleCandidates(sourceTrack, plan) {
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const baseStyle = selectableSwipeStyle(lastPrefs?.style || "");
+  const baseFamily = familyOf(sourceStyle || baseStyle);
+  const rankedCoverageStyles = discoveryModeEl?.checked === false || explicitSwipeAnchorStyle()
+    ? []
+    : getAllSelectableStyles()
+        .filter((style) => style && style !== sourceStyle)
+        .sort((a, b) => {
+          const aCross = baseFamily && familyOf(a) !== baseFamily ? 0 : 1;
+          const bCross = baseFamily && familyOf(b) !== baseFamily ? 0 : 1;
+          return (
+            aCross - bCross ||
+            Number(swipeStyleExposureCounts.get(a) || 0) - Number(swipeStyleExposureCounts.get(b) || 0) ||
+            styleDiscoveryReadinessScore(b) - styleDiscoveryReadinessScore(a)
+          );
+        })
+        .slice(0, 10);
+  return uniqueSwipeStyleList([
+    ...(plan?.styles || []),
+    ...rankedCoverageStyles,
+    baseStyle,
+    sourceStyle
+  ]);
+}
+
+function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtistName = "" } = {}) {
+  if (!lastPrefs) return null;
+  const basePrefs = normalizeRecommendationPrefs(lastPrefs);
+  const plan = buildSwipeAdaptiveStylePlan({ sourceTrack, positive });
+  const styles = instantSwipeStyleCandidates(sourceTrack, plan);
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  const sourceTitle = sourceTrack?.song || "";
+  const exclusions = buildGlobalTrackExclusionSet(
+    [sourceKey, lastRejectedTrackKey].filter(Boolean),
+    sourceTitle ? [sourceTitle] : []
+  );
+  const blockedArtists = buildGlobalArtistExclusionSet(
+    [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
+  );
+
+  for (const style of styles.length ? styles : [basePrefs.style || ""]) {
+    const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
+    const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+    const pool = basePool.filter((track) => {
+      if (!track || track === sourceTrack) return false;
+      if (!isTrackEligibleForRecommendation(track)) return false;
+      if (prefs.style && track.style !== prefs.style) return false;
+      if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+      if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+      if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
+      const bpmValue = Number(track.bpmExact);
+      if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
+      if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+      if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
+      if (!hasReliableBpmForTrack(track)) return false;
+      return trackHasFastListenRoute(track);
+    });
+    const candidate = pickBestRecommendationCandidate(pool, prefs, {
+      maxWindow: 14,
+      scoreBand: 8.5
+    });
+    if (candidate) return { track: candidate, prefs, plan };
+  }
+
+  return null;
+}
+
+function presentInstantSwipeRecommendation({ track, prefs, plan = null, message = "" } = {}) {
+  if (!track || !prefs) return false;
+  recommendationStyleFallbackInfo = null;
+  recommendationBpmFallbackInfo = false;
+  const finalPrefs = normalizeRecommendationPrefs({
+    ...prefs,
+    style: selectableSwipeStyle(track.style || prefs.style) || prefs.style || ""
+  });
+
+  if (styleEl) styleEl.value = finalPrefs.style;
+  if (contextEl) contextEl.value = finalPrefs.context || "";
+  if (energyEl) energyEl.value = finalPrefs.energy || "";
+  if (bpmEl) bpmEl.value = finalPrefs.bpm || "";
+  if (vocalsEl) vocalsEl.value = finalPrefs.vocals || "";
+  styleInfoDismissed = false;
+  renderStyleInfoBubble(finalPrefs.style, { reveal: Boolean(finalPrefs.style) });
+  applyGenreVibeTheme(finalPrefs.style, { force: true });
+  renderSwipeStyleRail();
+
+  lastPrefs = finalPrefs;
+  currentRecommendation = track;
+  currentDiscovery = discoveryModeEl.checked
+    ? pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist)
+    : null;
+  renderRecommendation(track, finalPrefs);
+  renderDiscovery(currentDiscovery);
+  registerRecommendationDelivery(track, finalPrefs);
+  refreshSuggestionQueue(finalPrefs, track);
+
+  if (rerollBtn) rerollBtn.disabled = false;
+  if (eventsPanel) eventsPanel.classList.add("hidden");
+  if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+  if (eventsCalendar) eventsCalendar.innerHTML = "";
+  if (eventsList) eventsList.innerHTML = "";
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
+
+  const deckMessage = plan
+    ? swipeAdaptiveNextMessage(plan, finalPrefs.style, message)
+    : message;
+  if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
+  savePreferences();
+  void renderPreview(track, { fast: true }).catch(() => {});
+  return true;
+}
+
+function tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName = "", message = "", positive = true } = {}) {
+  const instant = pickInstantSwipeTrack({ sourceTrack: likedTrack, positive, avoidArtistName });
+  if (!instant) return false;
+  return presentInstantSwipeRecommendation({
+    track: instant.track,
+    prefs: instant.prefs,
+    plan: instant.plan,
+    message
+  });
 }
 
 async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, avoidArtistName = "", message = "" } = {}) {
@@ -43606,7 +44808,8 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
         avoidTrackKey,
         avoidTrackTitles,
         avoidArtistName,
-        allowKnownFallback: false
+        allowKnownFallback: false,
+        failureSfx: false
       },
       "catalog"
     );
@@ -43650,6 +44853,14 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
   if (!lastPrefs) {
     if (feedbackMessage && message) feedbackMessage.textContent = message;
     return false;
+  }
+  if (!canUseMusicDiscovery()) {
+    playUiSfx("error");
+    showPremiumDiscoveryLimit();
+    return false;
+  }
+  if (tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName, message, positive })) {
+    return true;
   }
   const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false;
   const adaptiveResult = shouldExploreAcrossStyles
@@ -43745,11 +44956,25 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   return generated;
 }
 
+function animateSwipeCommit(element, direction = "like") {
+  if (!element) return;
+  const width = swipeThresholds(element).width;
+  const sign = direction === "like" ? 1 : -1;
+  const exitX = sign * Math.max(width * 1.28, 390);
+  element.style.setProperty("--swipe-exit-x", `${exitX}px`);
+  element.style.setProperty("--swipe-exit-y", "-18px");
+  element.style.setProperty("--swipe-exit-rotate", `${sign * 18}deg`);
+  element.style.setProperty("--swipe-progress", "1");
+  element.style.setProperty("--swipe-like-opacity", direction === "like" ? "1" : "0");
+  element.style.setProperty("--swipe-pass-opacity", direction === "pass" ? "1" : "0");
+}
+
 async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   const animatedEl = swipeAnimationElement(triggerEl);
   if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
   swipeFeedbackBusy = true;
-  animatedEl.classList.remove("is-dragging");
+  animatedEl.classList.remove("is-dragging", "is-returning");
+  animateSwipeCommit(animatedEl, direction);
   animatedEl.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
   const decisionMessage = direction === "like" ? t("toastSongLiked") : t("swipePassedNext");
   if (feedbackMessage && decisionMessage) feedbackMessage.textContent = decisionMessage;
@@ -43758,7 +44983,7 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   if (swipePassBtn) swipePassBtn.disabled = true;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
   if (topSwipePassBtn) topSwipePassBtn.disabled = true;
-  await waitMs(180);
+  await waitMs(270);
   try {
     if (direction === "like") await likeCurrentTrackFromSwipe(triggerEl);
     else await passCurrentTrackFromSwipe(triggerEl);
@@ -43789,7 +45014,7 @@ function finishSwipePointer(event, canceled = false) {
     void completeSwipeFeedback(decision.direction, element);
     return;
   }
-  resetSwipeElementPosition(element);
+  returnSwipeElementToCenter(element);
 }
 
 function handleSwipePointerMove(event) {
@@ -43832,6 +45057,7 @@ function beginSwipePointer(event, element) {
   if (!element || !currentRecommendation || swipeFeedbackBusy) return;
   if (typeof event.button === "number" && event.button > 0) return;
   if (shouldIgnoreSwipePointerStart(event)) return;
+  element.classList.remove("is-returning", "is-accepted", "is-rejected");
   swipeDragState = {
     element,
     pointerId: event.pointerId,
@@ -43948,8 +45174,21 @@ function renderRecommendation(track, prefs) {
   scheduleRecommendationDetailRender(track, prefs);
 }
 
-async function renderPreview(track) {
+async function renderPreview(track, options = {}) {
   if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return false;
+  const renderToken = ++recommendationPreviewRenderToken;
+  const fastMode = Boolean(options.fast);
+  const probeTimeoutMs = Math.max(
+    120,
+    Number(options.probeTimeoutMs) || (fastMode ? FAST_PREVIEW_PROBE_TIMEOUT_MS : PREVIEW_PROBE_TIMEOUT_MS)
+  );
+  const maxProbeCandidates = Number.isFinite(Number(options.maxProbeCandidates))
+    ? Math.max(1, Math.floor(Number(options.maxProbeCandidates)))
+    : (fastMode ? FAST_PREVIEW_PROBE_LIMIT : Infinity);
+  const resolveTimeoutMs = Math.max(
+    0,
+    Number(options.resolveTimeoutMs) || (fastMode ? FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS : FAST_OPTIONAL_API_TIMEOUT_MS)
+  );
   previewPanel.classList.remove("hidden");
   previewPanel.classList.remove("has-fixed-embeds");
   listeningPrompt.classList.add("hidden");
@@ -43966,14 +45205,17 @@ async function renderPreview(track) {
   track.artistPreviewFallback = null;
   syncYouTubePreviewAttemptForTrack(track);
   const renderPreviewTrackKey = recommendationTrackKey(track);
-  const isStillCurrentPreviewTrack = () => recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
+  const isStillCurrentPreviewTrack = () =>
+    renderToken === recommendationPreviewRenderToken &&
+    recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
   const hasImmediatePlaybackRoute =
     trackHasReliableAudioPreview(track) ||
     trackHasExternalPlayableFallback(track) ||
     (hasReliableBpmForTrack(track) && trackHasFastListenRoute(track));
 
   if (!hasImmediatePlaybackRoute) {
-    await waitForPromiseWithTimeout(resolvePreviewForTrack(track), FAST_OPTIONAL_API_TIMEOUT_MS, null);
+    await waitForPromiseWithTimeout(resolvePreviewForTrack(track), resolveTimeoutMs, null);
+    if (!isStillCurrentPreviewTrack()) return false;
   } else {
     track.previewChecked = true;
     track.previewMissing = !trackHasReliableAudioPreview(track);
@@ -43985,7 +45227,11 @@ async function renderPreview(track) {
     }
     const candidates = previewCandidatesForTrack(track);
     if (!candidates.length) return "";
-    const playable = await pickPlayablePreviewSource(trackPreview, candidates);
+    const playable = await pickPlayablePreviewSource(trackPreview, candidates, {
+      timeoutMs: probeTimeoutMs,
+      maxCandidates: maxProbeCandidates
+    });
+    if (!isStillCurrentPreviewTrack()) return "";
     if (!playable) return "";
     track.previewUrl = playable;
     registerPreviewCandidate(track, playable);
@@ -44040,17 +45286,26 @@ async function renderPreview(track) {
 
   const hasExternalPlaybackRoute = trackHasExternalPlayableFallback(track);
   let playablePreview = await resolvePlayablePreview(false);
+  if (!isStillCurrentPreviewTrack()) return false;
   let artistPreviewFallback = null;
-  if (!playablePreview && !hasExternalPlaybackRoute) {
+  if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
     playablePreview = await resolvePlayablePreview(true);
+    if (!isStillCurrentPreviewTrack()) return false;
     hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
     hasDirectYoutube = trackHasDirectYouTubeVideo(track);
     canRetryYoutube = youtubePreviewCanRetry(track);
     youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
-  if (!playablePreview && !hasExternalPlaybackRoute) {
+  if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
     artistPreviewFallback = await pickPlayableArtistPreviewFallback(trackPreview, track, { forceLookup: true });
+    if (!isStillCurrentPreviewTrack()) return false;
     if (artistPreviewFallback?.previewUrl) playablePreview = artistPreviewFallback.previewUrl;
+  }
+  if (!playablePreview && !hasExternalPlaybackRoute && fastMode) {
+    window.setTimeout(() => {
+      if (!isStillCurrentPreviewTrack()) return;
+      void renderPreview(track).catch(() => {});
+    }, 520);
   }
 
   if (playablePreview) {
@@ -44067,7 +45322,13 @@ async function renderPreview(track) {
     previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
 
     try {
-      await startTrackPreviewPlayback(trackPreview);
+      const playbackStart = await waitForPromiseWithTimeout(
+        startTrackPreviewPlayback(trackPreview),
+        fastMode ? FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS : 0,
+        null
+      );
+      if (!isStillCurrentPreviewTrack()) return false;
+      if (!playbackStart) throw new Error("preview_playback_deferred");
       setTrackPreviewVisualState("playing");
       const previewLoadedMessage =
         track.previewConfidence && track.previewConfidence >= 0.9
@@ -44087,6 +45348,10 @@ async function renderPreview(track) {
             ? `${previewLoadedMessage} ${t("previewYoutubeOptionalHint")}`
             : previewLoadedMessage);
       listeningPrompt.classList.remove("hidden");
+      trackRecommendationEvent("preview_played", track, lastPrefs || {}, {
+        source: "auto_audio_preview",
+        previewKind: artistPreviewFallback ? "artist_fallback_audio" : "direct_audio"
+      });
     } catch (_err) {
       setTrackPreviewVisualState("ready");
       const readyMessage = t("previewReady");
@@ -46365,6 +47630,10 @@ async function ensureFreshSocialSession(options = {}) {
 
 function socialAuthRedirectUrl() {
   const fallback = "https://sonicsearch.app";
+  if (isNativeAppRuntime()) {
+    const nativeRedirect = nativeSocialAuthRedirectUrl();
+    if (nativeRedirect) return nativeRedirect;
+  }
   try {
     const protocol = window.location?.protocol || "";
     const origin = window.location?.origin || "";
@@ -46396,17 +47665,26 @@ function socialOAuthAuthorizeUrl(provider = "google") {
 }
 
 function socialOAuthEndpointUrl(provider = "google", { redirect = false } = {}) {
+  const endpoint = resolveAppApiEndpoint(SOCIAL_OAUTH_URL_ENDPOINT);
+  if (!endpoint) return "";
   const params = new URLSearchParams({
     provider,
     redirect_to: socialAuthRedirectUrl()
   });
   if (redirect) params.set("redirect", "1");
-  return `${SOCIAL_OAUTH_URL_ENDPOINT}?${params.toString()}`;
+  return `${endpoint}?${params.toString()}`;
+}
+
+function socialOAuthStartUrl(provider = "google") {
+  if (isNativeAppRuntime()) return socialOAuthAuthorizeUrl(provider);
+  return socialOAuthEndpointUrl(provider, { redirect: true });
 }
 
 async function socialDirectOAuthUrl(provider = "google") {
   try {
-    const response = await fetch(socialOAuthEndpointUrl(provider), { cache: "no-store" });
+    const endpoint = socialOAuthEndpointUrl(provider);
+    if (!endpoint) throw new Error("social_oauth_endpoint_unavailable");
+    const response = await fetch(endpoint, { cache: "no-store" });
     const payload = await response.json().catch(() => null);
     const url = String(payload?.url || "").trim();
     if (response.ok && payload?.ok && url) return url;
@@ -46448,6 +47726,15 @@ function scheduleSocialOAuthNavigationRecovery() {
   }, SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS);
 }
 
+function handleSocialOAuthNavigationFailure(error = null) {
+  if (error) console.warn("Could not navigate to Google OAuth", error);
+  resetSocialOAuthNavigationState();
+  setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
+  socialSetStatus(t("authProviderFailed", { provider: "Google" }), "error");
+  renderSocialUi({ preserveStatus: true });
+  updateAuthProviderUi();
+}
+
 function startSocialOAuthNavigation(url = "") {
   const cleanUrl = String(url || "").trim();
   if (!cleanUrl) return false;
@@ -46455,6 +47742,18 @@ function startSocialOAuthNavigation(url = "") {
   scheduleSocialOAuthNavigationRecovery();
   try {
     if (typeof window === "undefined" || !window.location) throw new Error("Navigation unavailable");
+    if (isNativeAppRuntime()) {
+      const browser = capacitorPlugin("Browser");
+      if (browser?.open) {
+        Promise.resolve(browser.open({
+          url: cleanUrl,
+          presentationStyle: "fullscreen",
+          windowName: "_blank"
+        })).catch((error) => handleSocialOAuthNavigationFailure(error));
+        return true;
+      }
+      throw new Error("Capacitor Browser plugin unavailable");
+    }
     if (typeof window.location.assign === "function") {
       window.location.assign(cleanUrl);
     } else {
@@ -46462,12 +47761,7 @@ function startSocialOAuthNavigation(url = "") {
     }
     return true;
   } catch (error) {
-    console.warn("Could not navigate to Google OAuth", error);
-    resetSocialOAuthNavigationState();
-    setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
-    socialSetStatus(t("authProviderFailed", { provider: "Google" }), "error");
-    renderSocialUi({ preserveStatus: true });
-    updateAuthProviderUi();
+    handleSocialOAuthNavigationFailure(error);
     return false;
   }
 }
@@ -46495,6 +47789,7 @@ function socialFriendlyAuthError(message = "") {
 
 function socialConfigReady() {
   if (AUTH_LOGIN_STANDBY) return false;
+  if (shouldHideSocialLoginForAppStore()) return false;
   return Boolean(socialState.enabled && socialState.config?.supabaseUrl && socialState.config?.supabaseAnonKey);
 }
 
@@ -46585,8 +47880,29 @@ function socialParamsIncludeAuthSignal(params) {
   );
 }
 
+function socialAuthParamsFromUrlString(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  try {
+    const url = new URL(raw);
+    if (url.hash && url.hash.length > 1) {
+      const hashParams = new URLSearchParams(url.hash.slice(1));
+      if (socialParamsIncludeAuthSignal(hashParams)) return hashParams;
+    }
+    if (url.search && url.search.length > 1) {
+      const searchParams = new URLSearchParams(url.search.slice(1));
+      if (socialParamsIncludeAuthSignal(searchParams)) return searchParams;
+    }
+  } catch (error) {
+    console.warn("Could not parse social auth URL", error);
+  }
+  return null;
+}
+
 function socialAuthHashParams() {
   try {
+    const nativeParams = socialAuthParamsFromUrlString(pendingNativeSocialAuthCallbackUrl);
+    if (nativeParams) return nativeParams;
     const hash = window.location?.hash || "";
     if (hash && hash.length > 1) {
       const hashParams = new URLSearchParams(hash.slice(1));
@@ -46672,10 +47988,56 @@ async function socialHandleAuthRedirect() {
   return true;
 }
 
+async function handleNativeSocialAuthCallback(url = "") {
+  const callbackUrl = String(url || "").trim();
+  if (!callbackUrl || !socialAuthParamsFromUrlString(callbackUrl)) return false;
+  pendingNativeSocialAuthCallbackUrl = callbackUrl;
+  try {
+    const browser = capacitorPlugin("Browser");
+    if (browser?.close) {
+      try {
+        await browser.close();
+      } catch (_error) {
+        // The browser may already be closed after the app receives the callback.
+      }
+    }
+    if (!socialState.ready || !socialConfigReady()) await fetchSocialConfig();
+    return await socialHandleAuthRedirect();
+  } finally {
+    pendingNativeSocialAuthCallbackUrl = "";
+  }
+}
+
+function setupNativeSocialAuthBridge() {
+  if (!isNativeAppRuntime()) return;
+  const appPlugin = capacitorPlugin("App");
+  if (!appPlugin) return;
+  try {
+    appPlugin.addListener?.("appUrlOpen", (event) => {
+      void handleNativeSocialAuthCallback(event?.url || "");
+    });
+    Promise.resolve(appPlugin.getLaunchUrl?.()).then((launch) => {
+      if (launch?.url) void handleNativeSocialAuthCallback(launch.url);
+    }).catch((error) => {
+      console.warn("Could not read native launch URL", error);
+    });
+  } catch (error) {
+    console.warn("Could not attach native auth bridge", error);
+  }
+}
+
 async function fetchSocialConfig() {
+  if (shouldHideSocialLoginForAppStore()) {
+    socialState.config = null;
+    socialState.enabled = false;
+    socialState.ready = true;
+    return null;
+  }
   if (!socialProfileCard) return null;
   try {
-    const response = await fetch(SOCIAL_CONFIG_ENDPOINT, { cache: "no-store" });
+    const endpoint = resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT);
+    if (!endpoint) throw new Error("social_config_endpoint_unavailable");
+    const response = await fetch(endpoint, { cache: "no-store" });
     const config = await response.json();
     socialState.config = config || null;
     socialState.enabled = Boolean(config?.enabled && config?.supabaseUrl && config?.supabaseAnonKey);
@@ -47189,6 +48551,12 @@ function currentSocialCommentTarget(targetType = socialCommentsState.targetType)
 }
 
 async function socialCommentsRequest(path = "", options = {}) {
+  const endpoint = resolveConfiguredAppApiEndpoint(
+    path,
+    ["SONIC_SOCIAL_COMMENTS_API_URL", "SONIC_SEARCH_SOCIAL_COMMENTS_API_URL"],
+    SOCIAL_COMMENTS_ENDPOINT
+  );
+  if (!endpoint) throw new Error("comments_endpoint_unavailable");
   const headers = {
     Accept: "application/json",
     ...(options.headers || {})
@@ -47199,7 +48567,7 @@ async function socialCommentsRequest(path = "", options = {}) {
     headers.Authorization = `Bearer ${accessToken}`;
     headers["X-Sonic-Auth-Token"] = accessToken;
   }
-  const response = await fetchWithTimeout(path, {
+  const response = await fetchWithTimeout(endpoint, {
     method: options.method || "GET",
     headers,
     body: options.body === undefined ? undefined : JSON.stringify(options.body),
@@ -47330,6 +48698,14 @@ function renderSocialCommentsList() {
 
 function renderSocialCommentsPanel() {
   if (!socialCommentsCard) return;
+  if (shouldDisableSocialCommentsForAppStore()) {
+    socialCommentsCard.classList.add("hidden");
+    socialCommentsCard.hidden = true;
+    socialCommentsCard.setAttribute("aria-hidden", "true");
+    return;
+  }
+  socialCommentsCard.hidden = false;
+  socialCommentsCard.setAttribute("aria-hidden", "false");
   const targetType = socialCommentsState.targetType === "artist" ? "artist" : "track";
   const target = currentSocialCommentTarget(targetType);
   if (!target) {
@@ -47381,6 +48757,15 @@ function renderSocialCommentsPanel() {
 
 async function loadSocialComments(options = {}) {
   if (!socialCommentsCard) return false;
+  if (shouldDisableSocialCommentsForAppStore()) {
+    socialCommentsState.enabled = false;
+    socialCommentsState.comments = [];
+    renderSocialCommentsPanel();
+    return false;
+  }
+  if (options.silent && socialCommentsAccessBlockedUntil > Date.now()) {
+    return false;
+  }
   const targetType = options.targetType === "artist" ? "artist" : socialCommentsState.targetType === "artist" ? "artist" : "track";
   const target = currentSocialCommentTarget(targetType);
   socialCommentsState.targetType = targetType;
@@ -47411,7 +48796,12 @@ async function loadSocialComments(options = {}) {
     return true;
   } catch (error) {
     if (token !== socialCommentsState.loadToken) return false;
-    console.warn("Could not load social comments", error);
+    const errorMessage = String(error?.message || "");
+    const accessBlocked = /beta_access_required|auth|unauthorized|forbidden/i.test(errorMessage);
+    if (accessBlocked) socialCommentsAccessBlockedUntil = Date.now() + 120000;
+    if (!options.silent || !accessBlocked) {
+      console.warn("Could not load social comments", error);
+    }
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
     return false;
@@ -47633,6 +49023,12 @@ function communityActionText(label = "", count = 0) {
 }
 
 async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
+  const endpoint = resolveConfiguredAppApiEndpoint(
+    path,
+    ["SONIC_COMMUNITY_API_URL", "SONIC_SEARCH_COMMUNITY_API_URL"],
+    COMMUNITY_ENDPOINT
+  );
+  if (!endpoint) throw new Error("community_endpoint_unavailable");
   const headers = {
     Accept: "application/json",
     ...(options.headers || {})
@@ -47643,7 +49039,7 @@ async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
     headers.Authorization = `Bearer ${accessToken}`;
     headers["X-Sonic-Auth-Token"] = accessToken;
   }
-  const response = await fetchWithTimeout(path, {
+  const response = await fetchWithTimeout(endpoint, {
     method: options.method || "GET",
     headers,
     body: options.body === undefined ? undefined : JSON.stringify(options.body),
@@ -47833,6 +49229,10 @@ function renderCommunityPost(post = {}) {
   body.textContent = String(post.body || "").trim();
   card.appendChild(body);
 
+  if (shouldReadOnlyCommunityForAppStore()) {
+    return card;
+  }
+
   const actions = document.createElement("div");
   actions.className = "community-post-actions";
   const reactions = post.reactions || {};
@@ -47907,11 +49307,22 @@ function renderCommunityFeed() {
 
 function renderCommunityPanel() {
   if (!communityPanel) return;
+  if (shouldDisableCommunityForAppStore()) {
+    communityState.enabled = false;
+    communityState.posts = [];
+    communityPanel.hidden = true;
+    communityPanel.setAttribute("aria-hidden", "true");
+    communityPanel.classList.remove("active");
+    return;
+  }
+  communityPanel.hidden = false;
+  communityPanel.setAttribute("aria-hidden", "false");
   updateCommunityControlsText();
   const signed = communitySignedIn();
-  if (communityComposer) communityComposer.classList.toggle("hidden", !signed || !communityState.enabled);
-  if (communityLoginPrompt) communityLoginPrompt.classList.toggle("hidden", signed || !communityState.enabled);
-  if (communityPostSubmitBtn) communityPostSubmitBtn.disabled = communityState.posting || !communityState.enabled;
+  const readOnly = shouldReadOnlyCommunityForAppStore();
+  if (communityComposer) communityComposer.classList.toggle("hidden", readOnly || !signed || !communityState.enabled);
+  if (communityLoginPrompt) communityLoginPrompt.classList.toggle("hidden", readOnly || signed || !communityState.enabled);
+  if (communityPostSubmitBtn) communityPostSubmitBtn.disabled = readOnly || communityState.posting || !communityState.enabled;
   if (communityRefreshBtn) communityRefreshBtn.disabled = communityState.loading;
   if (communityState.loading) communitySetStatus(t("communityLoading"));
   else communitySetStatus("");
@@ -47920,6 +49331,12 @@ function renderCommunityPanel() {
 
 async function loadCommunityPosts(options = {}) {
   if (!communityPanel) return false;
+  if (shouldDisableCommunityForAppStore()) {
+    communityState.enabled = false;
+    communityState.posts = [];
+    renderCommunityPanel();
+    return false;
+  }
   communityState.filter = normalizeCommunityFilter(communityState.filter);
   communityState.topic = normalizeCommunityTopic(communityState.topic);
   communityState.loading = true;
@@ -48255,6 +49672,11 @@ async function socialSignInWithGoogle() {
     renderSocialUi({ preserveStatus: true });
     return false;
   }
+  if (shouldHideSocialLoginForAppStore()) {
+    socialSetStatus(t("authProviderHintAppStoreLocal"), "ok");
+    renderSocialUi({ preserveStatus: true });
+    return false;
+  }
   if (!socialConfigReady()) {
     await fetchSocialConfig();
   }
@@ -48264,7 +49686,7 @@ async function socialSignInWithGoogle() {
     return false;
   }
   if (socialState.busy) return false;
-  const url = socialOAuthEndpointUrl("google", { redirect: true });
+  const url = socialOAuthStartUrl("google");
   if (!url) {
     socialSetStatus("Não consegui abrir o login do Google agora.", "error");
     updateAuthProviderUi();
@@ -49452,7 +50874,11 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
       update(92, t("searchOverlayFinishing"));
       return generatedResult;
     });
-    playUiSfx(generated ? "search-done" : "error");
+    if (generated) {
+      playUiSfx("search-done");
+    } else if (options.failureSfx !== false) {
+      playUiSfx(options.failureSfx || "notice");
+    }
     return generated;
   } finally {
     recommendationRunBusy = false;
@@ -49633,11 +51059,12 @@ async function runTasteTune(mode = "") {
     resetRejected: false,
     avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
     avoidArtistName: previousTrack?.artist || "",
-    allowKnownFallback: mode === "familiar"
+    allowKnownFallback: mode === "familiar",
+    failureSfx: false
   });
 
   if (!generated) {
-    playUiSfx("error");
+    playUiSfx("notice");
     const fallback = t("tasteTuneFallback");
     if (feedbackMessage) feedbackMessage.textContent = fallback;
     showToast(fallback);
@@ -49802,7 +51229,7 @@ async function runRecommendation() {
       update(94, t("searchOverlayFinishing"));
     });
     if (blockedByCoverage) {
-      playUiSfx("error");
+      playUiSfx("notice");
       if (resultPanel) resultPanel.classList.add("hidden");
       suggestionQueueTracks = [];
       suggestionQueueContextKey = "";
@@ -49811,7 +51238,7 @@ async function runRecommendation() {
       return;
     }
     if (!recommendationGenerated) {
-      playUiSfx("error");
+      playUiSfx("notice");
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
       if (resultPanel) resultPanel.classList.add("hidden");
@@ -49973,7 +51400,7 @@ async function runSurpriseRecommendation() {
     });
     sonicPerfMark("overlay-done", { found: Boolean(surpriseTrack) });
     if (!surpriseTrack) {
-      playUiSfx("error");
+      playUiSfx("notice");
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
       if (resultPanel) resultPanel.classList.add("hidden");
@@ -50007,9 +51434,9 @@ async function runSurpriseRecommendation() {
     renderRecommendation(surpriseTrack, surprisePrefs);
     sonicPerfMark("render-recommendation");
     renderDiscovery(currentDiscovery);
-    let previewReady = await renderPreview(surpriseTrack);
+    let previewReady = await renderPreview(surpriseTrack, { fast: true });
     sonicPerfMark("render-preview", { previewReady });
-    if (!previewReady) {
+    if (!previewReady && !trackHasFastListenRoute(surpriseTrack)) {
       const rejectedKey = recommendationTrackKey(surpriseTrack);
       const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
       surpriseTrack.previewChecked = true;
@@ -50025,7 +51452,7 @@ async function runSurpriseRecommendation() {
       sonicPerfMark("replacement-picked", { found: Boolean(playableReplacement) });
       if (!playableReplacement) {
         clearFailedRecommendationSurface();
-        playUiSfx("error");
+        playUiSfx("notice");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
         return false;
@@ -50037,11 +51464,11 @@ async function runSurpriseRecommendation() {
         : null;
       renderRecommendation(playableReplacement, surprisePrefs);
       renderDiscovery(currentDiscovery);
-      previewReady = await renderPreview(playableReplacement);
+      previewReady = await renderPreview(playableReplacement, { fast: true });
       sonicPerfMark("replacement-preview", { previewReady });
-      if (!previewReady) {
+      if (!previewReady && !trackHasFastListenRoute(playableReplacement)) {
         clearFailedRecommendationSurface();
-        playUiSfx("error");
+        playUiSfx("notice");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
         showToast(recommendationFailureMessage());
         return false;
@@ -50487,6 +51914,9 @@ bind(betaWaitlistForm, "submit", (event) => {
 
 bind(betaAccessBtn, "click", handleBetaAccessSubmit);
 bind(betaExitAccessBtn, "click", handleBetaExitAccess);
+betaIntentButtons.forEach((button) => {
+  bind(button, "click", () => handleBetaIntentClick(button));
+});
 
 bind(betaAccessCode, "keydown", (event) => {
   if (event.key !== "Enter") return;
@@ -50554,6 +51984,7 @@ bind(profileBackupImportInput, "change", (event) => {
   if (profileBackupImportInput) profileBackupImportInput.value = "";
   void importProfileBackupFile(file);
 });
+bind(profileDeleteDataBtn, "click", resetAppAsNewUser);
 bind(socialGoogleBtn, "click", () => {
   void socialSignInWithGoogle();
 });
@@ -50752,6 +52183,10 @@ bind(previewPlayBtn, "click", async () => {
     setTrackPreviewVisualState("playing");
     if (previewStatus) previewStatus.textContent = t("previewLoaded");
     listeningPrompt?.classList.remove("hidden");
+    trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+      source: "audio_preview",
+      previewKind: "direct_audio"
+    });
   } catch (_err) {
     setTrackPreviewVisualState("ready");
     if (previewStatus) previewStatus.textContent = t("previewReady");
@@ -50807,6 +52242,12 @@ bind(youtubePreviewToggleBtn, "click", () => {
     canRetry,
     expanded: opened
   });
+  if (opened) {
+    trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+      source: "youtube_embed",
+      previewKind: "youtube_embed"
+    });
+  }
   if (!opened && previewStatus) {
     const platforms = availableExternalPlatforms();
     previewStatus.textContent = platforms.length
@@ -50836,6 +52277,10 @@ bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (opened) {
     setTrackPreviewVisualState("embed");
     if (previewStatus) previewStatus.textContent = t("previewSoundcloudFallback");
+    trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+      source: "soundcloud_embed",
+      previewKind: "soundcloud_embed"
+    });
     return;
   }
 
@@ -50862,6 +52307,12 @@ bind(youtubePreviewRetryBtn, "click", () => {
     canRetry: attemptCount > 1,
     expanded: opened
   });
+  if (opened) {
+    trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+      source: "youtube_retry_embed",
+      previewKind: "youtube_embed"
+    });
+  }
   if (!opened && previewStatus) {
     const platforms = availableExternalPlatforms();
     previewStatus.textContent = platforms.length
@@ -50892,6 +52343,10 @@ bind(bandcampPreviewToggleBtn, "click", () => {
   if (opened) {
     setTrackPreviewVisualState("embed");
     if (previewStatus) previewStatus.textContent = t("previewBandcampFallback");
+    trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+      source: "bandcamp_embed",
+      previewKind: "bandcamp_embed"
+    });
     return;
   }
 
@@ -51018,6 +52473,14 @@ function markArtistKnownStatus(artistName = "") {
   if (!alreadyMarkedKnown) userStats.alreadyKnew += 1;
   saveProgress();
   updateStats();
+  trackBetaEvent("already_known", {
+    artist: safeBetaPayloadValue(safeArtist),
+    source: "known_artist_fallback"
+  }, { source: "known_artist" });
+  trackBetaReactionMilestone("already_known", currentRecommendation, {
+    artist: safeBetaPayloadValue(safeArtist),
+    source: "known_artist_fallback"
+  });
   return true;
 }
 
@@ -51051,6 +52514,12 @@ async function handleKnownArtistYes() {
   saveProgress();
   syncQuickKnownDecision(currentRecommendation);
   updateStats();
+  trackRecommendationEvent("already_known", currentRecommendation, lastPrefs || {}, {
+    source: "known_artist_yes"
+  });
+  trackBetaReactionMilestone("already_known", currentRecommendation, {
+    source: "known_artist_yes"
+  });
 
   let generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
@@ -51103,7 +52572,7 @@ async function handleKnownArtistYes() {
     if (feedbackMessage) {
       feedbackMessage.textContent = t("noUnknownOption");
     }
-    playUiSfx("error");
+    playUiSfx("notice");
     return;
   }
 
@@ -51123,6 +52592,20 @@ function handleKnownArtistNo(triggerEl = knownNoBtn) {
     return;
   }
   registerDiscoveredArtist(artistName);
+  if (currentRecommendation) {
+    trackRecommendationEvent("new_artist_confirmed", currentRecommendation, lastPrefs || {}, {
+      source: "known_artist_no"
+    });
+  } else {
+    trackBetaEvent("new_artist_confirmed", {
+      artist: safeBetaPayloadValue(artistName),
+      source: "known_artist_no"
+    }, { source: "known_artist" });
+  }
+  trackBetaReactionMilestone("new_artist_confirmed", currentRecommendation, {
+    artist: safeBetaPayloadValue(artistName),
+    source: "known_artist_no"
+  });
   if (noveltyEnjoyPrompt && currentRecommendation) noveltyEnjoyPrompt.classList.remove("hidden");
   burstConfetti(triggerEl || knownNoBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
   if (feedbackMessage) {
@@ -51297,6 +52780,10 @@ bind(previewIssueBtn, "click", async () => {
     if (opened) {
       setTrackPreviewVisualState("embed");
       if (previewStatus) previewStatus.textContent = t("previewSoundcloudFallback");
+      trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
+        source: "preview_issue_soundcloud_embed",
+        previewKind: "soundcloud_embed"
+      });
       return;
     }
   }
@@ -51552,6 +53039,12 @@ bind(likeArtistBtn, "click", async () => {
   boost(adaptiveModel.likedArtists, currentRecommendation.artist, 1.4);
   registerTrackPreferenceSignal(currentRecommendation, 0.56);
   registerSpiritSignal(currentRecommendation.style, 1);
+  trackRecommendationEvent("artist_liked", currentRecommendation, lastPrefs || {}, {
+    source: "artist_like_button"
+  });
+  trackBetaReactionMilestone("artist_liked", currentRecommendation, {
+    source: "artist_like_button"
+  });
   if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("artistFavorited", { artist: currentRecommendation.artist }));
   playUiSfx("like");
   showToast(t("toastArtistSaved"));
@@ -51609,6 +53102,11 @@ bind(likeDiscoveryBtn, "click", async () => {
     style: safeBetaPayloadValue(currentDiscovery.style || ""),
     source: "discovery_card"
   }, { source: "discovery_card" });
+  trackBetaReactionMilestone("discovery_artist_liked", currentRecommendation, {
+    artist: safeBetaPayloadValue(currentDiscovery.name),
+    style: safeBetaPayloadValue(currentDiscovery.style || ""),
+    source: "discovery_card"
+  });
   if (feedbackMessage) feedbackMessage.textContent = appendSwipeLearningMessage(t("likedDiscovery", { artist: currentDiscovery.name }));
   playUiSfx("like");
   burstConfetti(likeDiscoveryBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
@@ -51801,6 +53299,8 @@ async function bootSonicSearch() {
   window.neonpulseArtistDepthGaps = (style = "") => buildCatalogArtistDepthAudit({ style, minimum: MIN_TRACKS_PER_ARTIST }).sample;
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
+  trackBetaAppSession();
+  setupNativeSocialAuthBridge();
   loadDjRecommendationMemory();
   bootstrapAudio();
   const pendingSocialAuthRedirect = hasPendingSocialAuthRedirect();
@@ -51819,9 +53319,10 @@ async function bootSonicSearch() {
     if (shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) {
       showBetaGateScreen();
       if (betaUrlAccess.attempted && !betaUrlAccess.ok) {
-        setBetaGateStatus("Codigo beta invalido ou expirado. Solicite acesso pela lista.", "error");
+        setBetaGateStatus(t("betaAccessInvalid"), "error");
       }
     }
+    else if (shouldAutoEnterDiscoveryForAppStore()) startLocalProfileFlow({ preferStored: true, showGuide: false });
     else if (qaPreviewMode) enterQaPreviewMode();
     else showIntroScreen();
   }

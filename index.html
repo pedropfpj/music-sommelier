@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Encontre uma faixa eletrônica para o momento com swipe, preview, contexto e menos repetição." />
     <meta name="theme-color" content="#06111f" />
     <meta property="og:site_name" content="Sonic Search" />
@@ -20,15 +20,27 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="icon" type="image/svg+xml" href="assets/image-bank/logos/sonic-search-tab-icon.svg?v=20260618tabicon1" />
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
-    <link rel="preload" href="styles.css?v=20260701swipeStamp1" as="style" />
+    <link rel="privacy-policy" href="privacy.html" />
+    <link rel="terms-of-service" href="terms.html" />
+    <link rel="preload" href="styles.css?v=20260705publicUi1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script>
       try {
         const sonicSearchParams = new URLSearchParams(window.location.search);
+        const sonicNativeProtocol = window.location.protocol === "capacitor:" || window.location.protocol === "ionic:";
+        if (sonicNativeProtocol || sonicSearchParams.has("iosApp")) {
+          document.documentElement.classList.add("sonic-ios-app", "app-store-mode");
+          document.documentElement.dataset.sonicNativeApp = "true";
+          window.SONIC_SEARCH_IOS_APP = true;
+          window.SONIC_SEARCH_APP_STORE_MODE = true;
+        }
         if (sonicSearchParams.has("screenshot") || sonicSearchParams.has("visualQa")) {
           document.documentElement.dataset.sonicScreenshot = "true";
+        }
+        if (sonicSearchParams.has("storeScreenshot")) {
+          document.documentElement.dataset.sonicStoreScreenshot = "true";
         }
       } catch (_) {}
     </script>
@@ -43,11 +55,29 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260701swipeStamp1" />
+    <link rel="stylesheet" href="styles.css?v=20260705publicUi1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
+      window.loadSonicAnalytics = window.loadSonicAnalytics || function () {
+        try {
+          const protocol = String(window.location.protocol || "");
+          const host = String(window.location.hostname || "");
+          const localHost = /^(localhost|127\.0\.0\.1|::1)$/i.test(host);
+          if (!/^https?:$/.test(protocol) || localHost || window.__sonicAnalyticsLoaded) return;
+          window.__sonicAnalyticsLoaded = true;
+          const script = document.createElement("script");
+          script.defer = true;
+          script.src = "/_vercel/insights/script.js";
+          document.head.appendChild(script);
+        } catch (_) {}
+      };
+      try {
+        if (localStorage.getItem(window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY) === "yes") {
+          window.loadSonicAnalytics();
+        }
+      } catch (_) {}
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
     <style id="sonic-social-mvp-styles">
       .social-profile-card{display:grid;gap:1rem;margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(111,229,255,.26);border-radius:8px;background:linear-gradient(145deg,rgba(5,12,31,.94),rgba(11,24,55,.82));box-shadow:0 22px 54px rgba(2,8,24,.34),inset 0 0 0 1px rgba(151,219,255,.06)}
       .social-profile-head,.social-feed-head,.social-identity{display:flex;align-items:center;justify-content:space-between;gap:1rem}.social-profile-head h4,.social-feed-head h5,.social-display-name,.social-handle{margin:0}
@@ -127,6 +157,21 @@
       Surpresa
     </button>
     <div id="toast" class="toast hidden" aria-live="polite"></div>
+    <section id="privacyConsentBanner" class="privacy-consent-banner hidden" aria-live="polite" aria-label="Preferências de privacidade">
+      <div>
+        <p class="privacy-consent-title">Privacidade primeiro</p>
+        <p class="privacy-consent-copy">
+          Usamos dados essenciais para beta, segurança e perfil local. Analytics só entra se você aceitar.
+          <a href="privacy.html">Privacidade</a>
+          <span aria-hidden="true">·</span>
+          <a href="cookies.html">Cookies</a>
+        </p>
+      </div>
+      <div class="privacy-consent-actions">
+        <button id="privacyEssentialBtn" class="secondary" type="button">Só essenciais</button>
+        <button id="privacyAnalyticsBtn" class="primary" type="button">Aceitar analytics</button>
+      </div>
+    </section>
     <section id="searchOverlay" class="search-overlay hidden" aria-live="polite" aria-busy="true">
       <div class="search-card">
         <div class="search-visual" aria-hidden="true">
@@ -194,58 +239,101 @@
           <div class="beta-gate-logo-wrap" aria-hidden="true">
             <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" fetchpriority="high" decoding="async" />
           </div>
-          <p class="brand-kicker beta-gate-kicker">Beta fechado</p>
+          <p id="betaGateKicker" class="brand-kicker beta-gate-kicker">Beta privado para cena eletrônica</p>
           <h1 id="betaGateTitle">Descoberta eletrônica fora do óbvio.</h1>
           <p id="betaGateDesc" class="beta-gate-desc">
-            <span>Sonic Search recomenda faixas por contexto.</span>
-            <span>Subgênero e feedback real afinam o radar.</span>
-            <span>A experiência completa está em beta privado.</span>
+            <span id="betaGateDescOne">Radar por contexto, subgênero, BPM e gosto real.</span>
+            <span id="betaGateDescTwo">Ouça, reaja e fuja do algoritmo óbvio.</span>
+            <span id="betaGateDescThree">DJs, selectors e fãs intensos têm prioridade.</span>
           </p>
-          <div class="beta-gate-metrics" aria-label="Sinais atuais do produto">
-            <span><strong>98k+</strong> músicas buscáveis</span>
-            <span><strong>168</strong> subgêneros</span>
-            <span><strong>0</strong> críticos no catálogo</span>
+          <div id="betaGateMetrics" class="beta-gate-metrics" aria-label="Sinais atuais do produto">
+            <span><strong>98k+</strong> <span id="betaMetricSearchable">músicas buscáveis</span></span>
+            <span><strong>16.484</strong> <span id="betaMetricAudited">faixas auditadas</span></span>
+            <span><strong>5.179</strong> <span id="betaMetricArtists">artistas indexados</span></span>
+            <span><strong>168</strong> <span id="betaMetricStyles">subgêneros</span></span>
+          </div>
+          <div id="betaProofGrid" class="beta-proof-grid" aria-label="Por que testar agora">
+            <div>
+              <strong id="betaProofOneTitle">Radar pessoal</strong>
+              <span id="betaProofOneText">Like, dislike e novidade afinam as próximas escolhas.</span>
+            </div>
+            <div>
+              <strong id="betaProofTwoTitle">DNA de cena</strong>
+              <span id="betaProofTwoText">Psy, techno, house, DnB e microgêneros sem achatamento genérico.</span>
+            </div>
+            <div>
+              <strong id="betaProofThreeTitle">Pronto para Pro</strong>
+              <span id="betaProofThreeText">Crates, radar semanal e cards premium entram pelo interesse do beta.</span>
+            </div>
           </div>
         </div>
 
-        <div class="beta-gate-actions" aria-label="Acesso beta e lista de espera">
+        <div id="betaGateActions" class="beta-gate-actions" aria-label="Acesso beta e lista de espera">
           <form id="betaWaitlistForm" class="beta-waitlist-form">
-            <p class="section-kicker">Solicitar acesso</p>
+            <p id="betaWaitlistKicker" class="section-kicker">Solicitar acesso prioritário</p>
             <label for="betaWaitlistName">
-              <span>Nome</span>
+              <span id="betaWaitlistNameLabel">Nome</span>
               <input id="betaWaitlistName" name="name" type="text" maxlength="80" autocomplete="name" />
             </label>
             <label for="betaWaitlistEmail">
-              <span>E-mail</span>
+              <span id="betaWaitlistEmailLabel">E-mail</span>
               <input id="betaWaitlistEmail" name="email" type="email" maxlength="160" autocomplete="email" required />
             </label>
             <label for="betaWaitlistRole">
-              <span>Perfil</span>
+              <span id="betaWaitlistRoleLabel">Perfil</span>
               <select id="betaWaitlistRole" name="role">
-                <option value="listener">Ouvinte / fã de eletrônica</option>
-                <option value="dj">DJ / selector</option>
-                <option value="producer">Produtor / artista</option>
-                <option value="event">Festa / festival / label</option>
-                <option value="investor">Investidor / parceiro</option>
+                <option id="betaRoleListener" value="listener">Ouvinte / fã de eletrônica</option>
+                <option id="betaRoleDj" value="dj">DJ / selector</option>
+                <option id="betaRoleProducer" value="producer">Produtor / artista</option>
+                <option id="betaRoleEvent" value="event">Festa / festival / label</option>
+                <option id="betaRoleInvestor" value="investor">Investidor / parceiro</option>
               </select>
             </label>
             <label for="betaWaitlistNote">
-              <span>O que você quer descobrir?</span>
-              <textarea id="betaWaitlistNote" name="note" maxlength="500" rows="3" placeholder="Ex.: psycore, dark psy, techno hipnótico, house brasileiro..."></textarea>
+              <span id="betaWaitlistNoteLabel">Que estilos você quer explorar?</span>
+              <textarea id="betaWaitlistNote" name="note" maxlength="500" rows="3" placeholder="Ex.: house, techno, tech house, progressive psy, full on, forest, dark psy e muito mais..."></textarea>
             </label>
             <button id="betaWaitlistSubmitBtn" class="primary beta-waitlist-submit" type="submit">Entrar na lista beta</button>
+            <p id="betaWaitlistPrivacyNote" class="legal-inline-note">
+              <span id="betaWaitlistPrivacyPrefix">Ao enviar, usamos seus dados para responder ao pedido de beta. Leia a</span> <a id="betaWaitlistPrivacyLink" href="privacy.html">Política de Privacidade</a>.
+            </p>
           </form>
 
           <div class="beta-code-panel">
-            <p class="section-kicker">Já tem convite?</p>
+            <p id="betaInviteKicker" class="section-kicker">Já tem convite?</p>
             <label class="beta-code-field" for="betaAccessCode">
-              <span>Código beta</span>
+              <span id="betaAccessCodeLabel">Código beta</span>
               <input id="betaAccessCode" type="password" inputmode="text" autocomplete="one-time-code" placeholder="Digite seu código" />
             </label>
             <button id="betaAccessBtn" class="secondary beta-access-btn" type="button">Liberar app</button>
             <p id="betaGateStatus" class="muted beta-gate-status" role="status" aria-live="polite">
               Acesso completo liberado apenas para testadores beta.
             </p>
+            <p id="betaAccessCookieNote" class="legal-inline-note">
+              O acesso beta usa cookie essencial e registro local para manter sua sessão.
+            </p>
+            <button id="betaPrivacySettingsBtn" class="privacy-settings-inline" type="button" data-privacy-settings>
+              Preferências de privacidade
+            </button>
+          </div>
+
+          <div id="betaIntentPanel" class="beta-intent-panel" aria-label="Interesse em recursos pagos">
+            <p id="betaIntentKicker" class="section-kicker">O que teria valor para você?</p>
+            <div class="beta-intent-actions">
+              <button class="beta-intent-btn" type="button" data-beta-intent="sonic_pro">
+                <strong id="betaIntentProTitle">Sonic Pro</strong>
+                <span id="betaIntentProText">histórico, cards premium e radar avançado</span>
+              </button>
+              <button class="beta-intent-btn" type="button" data-beta-intent="dj_crate">
+                <strong id="betaIntentCrateTitle">Seleção para DJ</strong>
+                <span id="betaIntentCrateText">montar e exportar faixas por BPM, energia e subgênero</span>
+              </button>
+              <button class="beta-intent-btn" type="button" data-beta-intent="weekly_radar">
+                <strong id="betaIntentRadarTitle">Radar semanal</strong>
+                <span id="betaIntentRadarText">pacote de descobertas direto para seu perfil</span>
+              </button>
+            </div>
+            <p id="betaIntentHint" class="beta-intent-hint">Cada clique ajuda a decidir o primeiro pacote pago do Sonic Search.</p>
           </div>
         </div>
       </div>
@@ -371,7 +459,7 @@
         </div>
         <div class="cta-row auth-entry-actions">
           <button id="authGuestBtn" class="primary auth-guest-entry-btn" type="button">Começar descoberta</button>
-          <a id="authGoogleBtn" class="secondary auth-google-entry-btn" href="/api/social-oauth-url?provider=google&amp;redirect=1&amp;redirect_to=https%3A%2F%2Fsonicsearch.app%2F">
+          <button id="authGoogleBtn" class="secondary auth-google-entry-btn" type="button">
             <span class="auth-provider-mark google-mark" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path fill="#4285f4" d="M23.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h6.5c-.3 1.4-1.1 2.7-2.3 3.5v2.9h3.7c2.2-2 3.6-5 3.6-8.4Z" />
@@ -381,9 +469,12 @@
               </svg>
             </span>
             <span id="authGoogleLabel">Entrar com Google</span>
-          </a>
+          </button>
         </div>
         <p id="authProviderHint" class="muted auth-provider-hint">Google sincroniza seu perfil entre aparelhos quando a conta online está ativa.</p>
+        <p id="authLegalNote" class="legal-inline-note auth-legal-note">
+          Ao continuar, você aceita os <a href="terms.html">Termos de Uso</a> e a <a href="privacy.html">Política de Privacidade</a>.
+        </p>
         <p id="authFeedback" class="muted auth-feedback"></p>
       </div>
     </section>
@@ -433,10 +524,10 @@
     </section>
 
     <main id="appContent" class="app-shell hidden">
-      <aside id="betaTesterRibbon" class="beta-tester-ribbon" aria-label="Status do beta privado">
+      <aside id="betaTesterRibbon" class="beta-tester-ribbon hidden" aria-label="Status do beta privado" aria-hidden="true">
         <div>
-          <span class="beta-tester-eyebrow">Beta privado</span>
-          <strong>Tester autorizado</strong>
+          <span id="betaTesterEyebrow" class="beta-tester-eyebrow">Beta privado</span>
+          <strong id="betaTesterStatus">Tester autorizado</strong>
         </div>
         <button id="betaExitAccessBtn" class="beta-exit-access-btn" type="button">Ver tela beta</button>
       </aside>
@@ -720,6 +811,9 @@
               <button id="supportContactMailBtn" class="support-contact-action primary" type="submit">Preparar envio</button>
               <button id="supportContactCopyBtn" class="support-contact-action secondary" type="button">Copiar briefing</button>
             </div>
+            <p id="supportPrivacyNote" class="legal-inline-note">
+              O formulário prepara um e-mail no seu aparelho; seus dados só são enviados se você confirmar no app de e-mail.
+            </p>
           </form>
         </article>
         <div class="support-amounts" aria-label="Valores rápidos para apoio">
@@ -821,7 +915,7 @@
           </article>
           <article class="about-trust-box">
             <h4 id="aboutTrustTitle">Como ler a confiança</h4>
-            <p id="aboutTrustText">Confiança alta combina fonte, player, BPM e perfil. Quando faltar certeza, o app assume o estilo mais amplo em vez de forçar rótulo.</p>
+            <p id="aboutTrustText">Confiança alta = fonte, player, BPM e perfil. Sem certeza, usamos o estilo amplo.</p>
           </article>
         </div>
       </section>
@@ -1593,7 +1687,7 @@
               </div>
               <div class="voice-mini-recipe">
                 <p id="voiceMiniRecipeLabel" class="voice-mini-recipe-label">Receita atual</p>
-                <strong id="voiceMiniRecipeTitle">Techno direto • 132 BPM</strong>
+                <strong id="voiceMiniRecipeTitle">Techno • 132 BPM</strong>
                 <p id="voiceMiniRecipeMeta" class="muted">Kick, Bass, Hat, Clap e Synth ativos.</p>
                 <div id="voiceMiniLayerSignature" class="voice-layer-signature" aria-label="Assinatura da receita"></div>
                 <div id="voiceMiniInsightPanel" class="voice-mini-insight" aria-label="Leitura da ideia">
@@ -1619,14 +1713,9 @@
             <div class="voice-mini-section voice-mini-preset-section">
               <p id="voiceMiniPresetTitle" class="voice-mini-section-title">Clima da ideia</p>
               <div id="voiceMiniPresetGrid" class="voice-mini-preset-grid" aria-label="Presets de groove">
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno direto</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="breaks">Breaks elástico</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="trap">Trap mutante</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy ácido</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="ambient">Ambient pulsante</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="house">House orgânico</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="dnb">DnB líquido</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="darkprog">Dark prog</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy</button>
+                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="house">House</button>
               </div>
             </div>
             <div class="voice-mini-section voice-mini-morph-section">
@@ -1779,10 +1868,10 @@
 
       <section id="spiritPanel" class="panel spirit-panel hidden app-tab-panel" data-app-tab="profile" aria-live="polite">
         <h3 id="spiritPanelTitle">Seu Sound System</h3>
-        <p id="spiritIntro" class="muted">10 curtidas liberam seu primeiro sistema de som.</p>
+        <p id="spiritIntro" class="muted">10 curtidas desbloqueiam a primeira leitura.</p>
         <div id="spiritInsightPanel" class="spirit-insight-panel">
           <div class="spirit-insight-head">
-            <p id="spiritInsightTitle" class="spirit-visual-title">Calibração do Sound System</p>
+            <p id="spiritInsightTitle" class="spirit-visual-title">Calibração</p>
             <span id="spiritInsightStatus" class="chip alt">Em formação</span>
           </div>
           <div class="spirit-progress-track" aria-hidden="true">
@@ -1935,6 +2024,7 @@
             <p id="profileBackupStatus" class="profile-backup-status muted">Seu mapa fica salvo neste aparelho.</p>
             <div class="profile-backup-buttons">
               <button id="profileBackupExportBtn" class="listen-btn" type="button">Salvar cópia do perfil</button>
+              <button id="profileDeleteDataBtn" class="listen-btn secondary profile-delete-data-btn" type="button">Apagar dados deste aparelho</button>
             </div>
             <details class="profile-transfer-details">
               <summary id="profileBackupImportSummary">Tenho um perfil salvo</summary>
@@ -1973,6 +2063,9 @@
               <button id="socialSyncBtn" class="listen-btn soundcloud-btn hidden" type="button">Sincronizar curtidas</button>
             </div>
             <p id="socialStatus" class="social-status muted">Entre com Google para sincronizar fora deste aparelho.</p>
+            <p id="socialPrivacyNote" class="legal-inline-note">
+              Login social, comentários e curtidas seguem a Política de Privacidade.
+            </p>
           </div>
 
           <div id="socialSignedPanel" class="social-signed-panel hidden">
@@ -2115,7 +2208,19 @@
               Seu perfil pode ficar salvo neste aparelho. Links e integrações externas seguem suas próprias políticas. Tips são apoio voluntário.
             </p>
           </details>
+          <details class="legal-item">
+            <summary id="legalDataTitle">Dados e cookies</summary>
+            <p id="legalDataText">
+              Coletamos apenas o necessário para segurança, perfil local, recursos opcionais e melhoria do produto.
+            </p>
+          </details>
         </div>
+        <nav class="legal-link-list" aria-label="Documentos legais">
+          <span id="legalLinksTitle">Documentos completos</span>
+          <a id="legalPrivacyPolicyLink" href="privacy.html">Política de Privacidade</a>
+          <a id="legalTermsLink" href="terms.html">Termos de Uso</a>
+          <a id="legalCookiesLink" href="cookies.html">Política de Cookies</a>
+        </nav>
         <p id="legalDisclaimer" class="legal-disclaimer">
           Aviso informativo; não substitui contrato ou orientação jurídica.
         </p>
@@ -2136,6 +2241,12 @@
         <span class="signature-pill">Electronic Music Discovery</span>
         <span class="signature-divider">•</span>
       </div>
+      <nav class="signature-legal-links" aria-label="Links legais">
+        <a href="privacy.html">Privacidade</a>
+        <a href="terms.html">Termos</a>
+        <a href="cookies.html">Cookies</a>
+        <button id="privacySettingsLink" type="button" data-privacy-settings>Preferências</button>
+      </nav>
     </footer>
 
     <script>
@@ -2148,7 +2259,7 @@
         ownerEmails: ["pedropfpj@gmail.com"],
         freeDiscoveryLimit: 50,
         imageGenerationRequiresTrustedUser: false,
-        betaGateEnabled: true,
+        betaGateEnabled: false,
         betaAccessCodes: [],
         betaAccessApiEndpoint: "/api/beta-access",
         betaEventsEndpoint: "/api/beta-events",
@@ -2174,6 +2285,140 @@
       };
       window.NEONPULSE_IMAGE_API_URL = "https://sonicsearch.app/api/spirit-image";
     </script>
-    <script defer src="app.js?v=20260701betaPerf1"></script>
+    <script>
+      (function () {
+        const key = window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY || "sonic_search:privacy:analytics:v1";
+        const banner = document.getElementById("privacyConsentBanner");
+        const essentialBtn = document.getElementById("privacyEssentialBtn");
+        const analyticsBtn = document.getElementById("privacyAnalyticsBtn");
+        const settingsButtons = document.querySelectorAll("[data-privacy-settings]");
+        const languageButtons = document.querySelectorAll("[data-lang]");
+        const languageKey = "neonpulse:language:v1";
+        const copy = {
+          pt: {
+            aria: "Preferências de privacidade",
+            title: "Privacidade primeiro",
+            body: "Usamos dados essenciais para beta, segurança e perfil local. Analytics só entra se você aceitar.",
+            privacy: "Privacidade",
+            cookies: "Cookies",
+            essential: "Só essenciais",
+            analytics: "Aceitar analytics"
+          },
+          en: {
+            aria: "Privacy preferences",
+            title: "Privacy first",
+            body: "We use essential data for beta access, security, and your local profile. Analytics only loads if you accept.",
+            privacy: "Privacy",
+            cookies: "Cookies",
+            essential: "Essential only",
+            analytics: "Allow analytics"
+          },
+          es: {
+            aria: "Preferencias de privacidad",
+            title: "Privacidad primero",
+            body: "Usamos datos esenciales para beta, seguridad y tu perfil local. Analytics solo se activa si aceptas.",
+            privacy: "Privacidad",
+            cookies: "Cookies",
+            essential: "Solo esenciales",
+            analytics: "Aceptar analytics"
+          }
+        };
+
+        function normalizeLanguage(value) {
+          const lang = String(value || "").trim().toLowerCase().slice(0, 2);
+          return ["pt", "en", "es"].includes(lang) ? lang : "";
+        }
+
+        function privacyLanguage() {
+          try {
+            const urlLang = normalizeLanguage(new URLSearchParams(window.location.search).get("lang"));
+            if (urlLang) return urlLang;
+          } catch (_) {}
+          try {
+            const storedLang = normalizeLanguage(localStorage.getItem(languageKey));
+            if (storedLang) return storedLang;
+          } catch (_) {}
+          const browserLang = normalizeLanguage(navigator.language || "");
+          return browserLang || "en";
+        }
+
+        function applyPrivacyCopy(lang = privacyLanguage()) {
+          const labels = copy[normalizeLanguage(lang) || "en"] || copy.en;
+          const title = banner?.querySelector(".privacy-consent-title");
+          const body = banner?.querySelector(".privacy-consent-copy");
+          const links = body ? body.querySelectorAll("a") : [];
+          if (banner) banner.setAttribute("aria-label", labels.aria);
+          if (title) title.textContent = labels.title;
+          if (body) {
+            const privacyLink = links[0];
+            const cookiesLink = links[1];
+            body.firstChild.textContent = `${labels.body} `;
+            if (privacyLink) privacyLink.textContent = labels.privacy;
+            if (cookiesLink) cookiesLink.textContent = labels.cookies;
+          }
+          if (essentialBtn) essentialBtn.textContent = labels.essential;
+          if (analyticsBtn) analyticsBtn.textContent = labels.analytics;
+        }
+
+        function readChoice() {
+          try {
+            return localStorage.getItem(key) || "";
+          } catch (_) {
+            return "no";
+          }
+        }
+
+        function writeChoice(value) {
+          try {
+            localStorage.setItem(key, value);
+          } catch (_) {}
+        }
+
+        function syncBannerLayoutMode() {
+          const betaGate = document.getElementById("betaGateScreen");
+          const betaGateVisible = Boolean(betaGate && !betaGate.classList.contains("hidden"));
+          document.documentElement.classList.toggle("privacy-consent-visible", Boolean(banner && !banner.classList.contains("hidden")));
+          banner?.classList.toggle("beta-gate-consent-mode", betaGateVisible);
+        }
+
+        function showBanner() {
+          applyPrivacyCopy();
+          if (banner) banner.classList.remove("hidden");
+          syncBannerLayoutMode();
+        }
+
+        function hideBanner() {
+          if (banner) banner.classList.add("hidden");
+          syncBannerLayoutMode();
+        }
+
+        function choose(value) {
+          writeChoice(value);
+          hideBanner();
+          if (value === "yes" && typeof window.loadSonicAnalytics === "function") {
+            window.loadSonicAnalytics();
+          }
+        }
+
+        if (!readChoice()) showBanner();
+        essentialBtn?.addEventListener("click", () => choose("no"));
+        analyticsBtn?.addEventListener("click", () => choose("yes"));
+        languageButtons.forEach((button) => {
+          button.addEventListener("click", () => applyPrivacyCopy(button.getAttribute("data-lang")));
+        });
+        settingsButtons.forEach((button) => {
+          button.addEventListener("click", () => showBanner());
+        });
+        const betaGate = document.getElementById("betaGateScreen");
+        if (betaGate && "MutationObserver" in window) {
+          new MutationObserver(syncBannerLayoutMode).observe(betaGate, {
+            attributes: true,
+            attributeFilter: ["class"]
+          });
+        }
+        syncBannerLayoutMode();
+      })();
+    </script>
+    <script defer src="app.js?v=20260702footer1"></script>
   </body>
 </html>

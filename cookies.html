@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Política de Cookies e armazenamento local do Sonic Search." />
+    <meta name="theme-color" content="#050814" />
+    <title>Política de Cookies - Sonic Search</title>
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="legal.css" />
+  </head>
+  <body>
+    <main class="legal-page">
+      <header class="legal-topbar">
+        <a class="legal-brand" href="index.html">
+          <img src="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" alt="" />
+          <span>Sonic Search</span>
+        </a>
+        <nav class="legal-nav" aria-label="Documentos legais">
+          <a href="privacy.html">Privacidade</a>
+          <a href="terms.html">Termos</a>
+          <a href="index.html">Voltar ao app</a>
+        </nav>
+      </header>
+
+      <section class="legal-hero">
+        <p class="legal-kicker">Cookies e armazenamento</p>
+        <h1>Política de Cookies</h1>
+        <p class="legal-updated">Atualizada em 1 de julho de 2026.</p>
+        <p>
+          Esta página explica cookies, localStorage, sessionStorage e tecnologias parecidas usadas pelo Sonic Search.
+        </p>
+      </section>
+
+      <section class="legal-summary" aria-label="Resumo">
+        <div>
+          <strong>Essenciais</strong>
+          <span>Mantêm acesso beta, idioma, áudio, sessão e segurança. Sem eles, partes do app podem não funcionar.</span>
+        </div>
+        <div>
+          <strong>Perfil local</strong>
+          <span>O app salva preferências musicais no aparelho para reduzir repetição e melhorar recomendações.</span>
+        </div>
+        <div>
+          <strong>Analytics</strong>
+          <span>Vercel Insights só carrega após aceite. A preferência fica salva em localStorage.</span>
+        </div>
+      </section>
+
+      <section class="legal-section">
+        <h2>1. O que são cookies e armazenamento local</h2>
+        <p>
+          Cookies são pequenos arquivos salvos pelo navegador. localStorage e sessionStorage são áreas de armazenamento do
+          navegador usadas para lembrar preferências, estado do app e dados locais. No Sonic Search, essas tecnologias ajudam
+          a manter o beta, idioma, perfil musical, progresso e preferências.
+        </p>
+      </section>
+
+      <section class="legal-section">
+        <h2>2. Tecnologias usadas</h2>
+        <div class="legal-table">
+          <div class="legal-table-row">
+            <strong>Cookie beta</strong>
+            <span><code>sonic_beta_access</code>: cookie essencial, HttpOnly quando emitido pelo backend, usado para manter o acesso beta pelo período configurado.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Preferência de analytics</strong>
+            <span><code>sonic_search:privacy:analytics:v1</code>: salva "yes" ou "no" para lembrar sua escolha sobre Vercel Insights.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Acesso e waitlist beta</strong>
+            <span><code>sonic_search:beta_access:v1</code>, <code>sonic_search:waitlist_request:v1</code> e <code>sonic_search:beta_event_session:v1</code>: ajudam a manter liberação, evitar repetição de pedidos e medir eventos do beta.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Perfil musical</strong>
+            <span><code>neonpulse:preferences:v2</code>, <code>neonpulse:progress:v2</code>, <code>neonpulse:spiritCollectible:*</code> e chaves relacionadas: guardam preferências, curtidas, descartes, progresso, arte e uso de IA.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Idioma e áudio</strong>
+            <span><code>neonpulse:language:v1</code>, <code>neonpulse:audio:v2</code> e <code>neonpulse:audioVolume:v1</code>: lembram idioma, som ligado/desligado e volume.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Login social</strong>
+            <span><code>neonpulse:socialSession:v1</code>: pode guardar sessão local quando login social está ativo. O provedor de autenticação também pode usar seus próprios cookies.</span>
+          </div>
+          <div class="legal-table-row">
+            <strong>Cache e limites</strong>
+            <span>Chaves como <code>neonpulse_daily_news_cache_v2</code>, <code>neonpulse:dynamicCatalog:v20</code>, <code>neonpulse:aiUsage:v1</code> e <code>neonpulse:dailyProductUsage:v1</code> reduzem chamadas repetidas e controlam uso.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal-section">
+        <h2>3. Categorias</h2>
+        <ul>
+          <li><strong>Essenciais:</strong> necessários para segurança, beta, sessão, preferências básicas e funcionamento do app.</li>
+          <li><strong>Funcionais:</strong> guardam perfil musical, idioma, volume, histórico local, backup e personalização.</li>
+          <li><strong>Analytics:</strong> ajudam a entender uso e estabilidade. No Sonic Search, são opcionais e dependem do aceite.</li>
+          <li><strong>Terceiros:</strong> links, players, OAuth e APIs externas podem usar cookies próprios quando você interage com esses serviços.</li>
+        </ul>
+      </section>
+
+      <section class="legal-section">
+        <h2>4. Analytics</h2>
+        <p>
+          O Sonic Search não carrega Vercel Insights automaticamente. O script de analytics só é inserido depois que você clica
+          em "Aceitar analytics". Se escolher "Só essenciais", essa preferência também fica registrada e o analytics não carrega.
+        </p>
+        <p>
+          Você pode reabrir as preferências pelo botão "Preferências" no rodapé do app principal. Também pode limpar os dados do
+          site no navegador para apagar a escolha.
+        </p>
+      </section>
+
+      <section class="legal-section">
+        <h2>5. Como controlar</h2>
+        <ul>
+          <li>Use o banner do app para escolher analytics ou somente essenciais.</li>
+          <li>Use o botão "Preferências" no rodapé do app para reabrir o banner.</li>
+          <li>Limpe cookies e dados do site nas configurações do navegador para apagar perfil local e preferências.</li>
+          <li>No iOS, use os controles do sistema/navegador ou reinstale/limpe dados do app se precisar reiniciar tudo.</li>
+          <li>Bloqueadores de conteúdo podem impedir scripts de terceiros, mas também podem quebrar players e login.</li>
+        </ul>
+      </section>
+
+      <section class="legal-section">
+        <h2>6. Relação com a Política de Privacidade</h2>
+        <p>
+          Cookies e armazenamento local podem envolver dados pessoais quando associados ao seu aparelho, conta, perfil musical
+          ou interações. Leia a <a href="privacy.html">Política de Privacidade</a> para detalhes sobre finalidades, bases legais,
+          compartilhamento, retenção e direitos.
+        </p>
+      </section>
+
+      <section class="legal-contact">
+        <p><strong>Dúvidas sobre cookies</strong><br />Pedro Freire / CBK Labs</p>
+        <a href="mailto:pedropfpj@gmail.com">pedropfpj@gmail.com</a>
+      </section>
+
+      <footer class="legal-footer">
+        <span>Sonic Search - Pedro Freire / CBK Labs</span>
+        <span>Documento informativo; não substitui aconselhamento jurídico.</span>
+      </footer>
+    </main>
+  </body>
+</html>
