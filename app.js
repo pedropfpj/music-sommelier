@@ -1062,8 +1062,9 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20260622-playable-v18";
+const EXTERNAL_DATASET_CACHE_VERSION = "20260705-ignez-hypnotic-techno-v1";
 const EXTERNAL_DATASET_PRIORITY_FILES = [
+  "data/datasetlocal_hypnotic_techno_ignez_enrichment_v1_20260705.csv",
   "data/catalog_playable_focus_club_v17_20260622.csv",
   "data/catalog_playable_depth_v16_20260622.csv",
   "data/electronic_subgenre_expansion_v15_20260621.csv",
@@ -8438,7 +8439,7 @@ const STYLE_ARTIST_SEEDS = {
     "Brutalismus 3000"
   ],
   dub_techno: ["Basic Channel", "Deepchord", "Echospace", "Rod Modell", "Maurizio", "Fluxion", "Quantec", "Yagya"],
-  hypnotic_techno: ["Donato Dozzy", "Luigi Tozzi", "Wata Igarashi", "Claudio PRC", "Neel", "Rrose", "Oscar Mulero", "Dasha Rush"],
+  hypnotic_techno: ["Donato Dozzy", "Luigi Tozzi", "Wata Igarashi", "Claudio PRC", "Neel", "Rrose", "Oscar Mulero", "Dasha Rush", "Ignez"],
   raw_techno: ["Blawan", "Randomer", "Paula Temple", "Kobosil", "AnD", "Perc", "UVB", "Dax J"],
   detroit_techno: ["Juan Atkins", "Derrick May", "Kevin Saunderson", "Carl Craig", "Jeff Mills", "Robert Hood", "Underground Resistance", "Octave One"],
   schranz: ["Chris Liebing", "Sven Wittekind", "Frank Kvitta", "Robert Natus", "Felix Krocher", "Pet Duo", "O.B.I.", "Arkus P."],
