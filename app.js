@@ -18677,6 +18677,8 @@ function apiProviderLabel(key = "") {
     youtube: "YouTube",
     ticketmaster: "Ticketmaster",
     bandsintown: "Bandsintown",
+    goabase: "Goabase",
+    eventRadar: "Radar de eventos",
     localEvents: "Eventos locais"
   };
   return labels[key] || key;
@@ -18734,7 +18736,9 @@ function apiHealthProviderMeta(key = "", provider = {}, payload = {}) {
     newsFeed: "newsFeedDailyLimit",
     soundcloud: "soundcloudSearchDailyLimit",
     youtube: "youtubeSearchDailyLimit",
-    ticketmaster: "ticketmasterEventsDailyLimit"
+    ticketmaster: "ticketmasterEventsDailyLimit",
+    goabase: "ticketmasterEventsDailyLimit",
+    eventRadar: "eventRadarDailyLimit"
   }[key];
   const pieces = [];
   if (Number(compliance.cacheSeconds)) pieces.push(t("apiHealthCacheSeconds", { seconds: compliance.cacheSeconds }));
@@ -18758,7 +18762,9 @@ function apiHealthItems(payload = {}) {
     "soundcloud",
     "youtube",
     "ticketmaster",
-    "bandsintown"
+    "bandsintown",
+    "goabase",
+    "eventRadar"
   ]
     .map((key) => ({ key, provider: providers[key] }))
     .filter((item) => item.provider);

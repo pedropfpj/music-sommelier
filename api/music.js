@@ -7,6 +7,7 @@ const handlers = {
   comments: require("../lib/api/_comments"),
   community: require("../lib/api/_community"),
   "cover-art": require("../lib/api/_cover-art"),
+  "event-radar": require("../lib/api/_event-radar"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
   "news-feed": require("../lib/api/_news-feed"),
   "radio-browser": require("../lib/api/_radio-browser"),

@@ -1,4 +1,8 @@
 const { enforceDurableMusicDailyLimit, envFirst, envInt, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("../lib/api/_music-apis");
+const {
+  fetchGoabaseEventsForQuery,
+  goabaseSnapshotEventsForQuery
+} = require("../lib/api/_event-sources");
 
 const TICKETMASTER_EVENTS_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const TICKETMASTER_ATTRACTIONS_URL = "https://app.ticketmaster.com/discovery/v2/attractions.json";
@@ -249,7 +253,7 @@ function eventDedupeKey(event) {
 function mergeEvents(...groups) {
   const seen = new Set();
   const merged = [];
-  groups.flat().forEach((event) => {
+  groups.flat(Infinity).forEach((event) => {
     if (!event) return;
     const key = event.url || eventDedupeKey(event);
     if (!key || seen.has(key)) return;
@@ -356,6 +360,8 @@ async function fetchAggregatedEvents({ artist, countryCode, size }) {
   const variants = artistQueryVariants(artist).slice(0, envInt("SONIC_EVENTS_QUERY_VARIANTS_LIMIT", 4, 1, 8));
   const ticketmasterGroups = [];
   const bandsintownGroups = [];
+  const goabaseGroups = [];
+  const snapshotGroups = [];
 
   for (const query of variants) {
     try {
@@ -368,9 +374,19 @@ async function fetchAggregatedEvents({ artist, countryCode, size }) {
     } catch (_error) {
       // Bandsintown is a coverage booster; Ticketmaster/fallback still keep the endpoint useful.
     }
+    try {
+      goabaseGroups.push(await fetchGoabaseEventsForQuery({ query, countryCode, size }));
+    } catch (_error) {
+      // Goabase is public and useful for psytrance, but the local snapshot/fallback can still respond.
+    }
+    try {
+      snapshotGroups.push(goabaseSnapshotEventsForQuery({ query, countryCode, size }));
+    } catch (_error) {
+      // Snapshot is best-effort and must never block artist agenda.
+    }
   }
 
-  const liveEvents = mergeEvents(ticketmasterGroups, bandsintownGroups);
+  const liveEvents = mergeEvents(ticketmasterGroups, bandsintownGroups, goabaseGroups, snapshotGroups);
   const fallbackEvents = knownFallbackEventsForArtist(artist);
   const events = mergeEvents(liveEvents, fallbackEvents).slice(0, size);
   const providers = Array.from(new Set(events.map((event) => event.sourceName).filter(Boolean)));

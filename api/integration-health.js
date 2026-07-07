@@ -35,6 +35,8 @@ module.exports = async function handler(req, res) {
   })) return;
 
   const artistEventsEnabled = featureEnabled("SONIC_ARTIST_EVENTS_ENABLED", true);
+  const goabaseEnabled = featureEnabled("SONIC_GOABASE_ENABLED", true, { allowGlobalFallback: false });
+  const eventRadarEnabled = featureEnabled("SONIC_EVENT_RADAR_ENABLED", true, { allowGlobalFallback: false });
   const ticketmasterConfigured = Boolean(envFirst(TICKETMASTER_KEY_ENVS));
   const ticketmasterSecretConfigured = Boolean(envFirst(TICKETMASTER_SECRET_ENVS));
   const bandsintownConfigured = Boolean(process.env.BANDSINTOWN_APP_ID);
@@ -318,6 +320,27 @@ module.exports = async function handler(req, res) {
           timeoutMs: envInt("SONIC_NEWS_FEED_TIMEOUT_MS", 5200, 1000, 15000)
         }
       },
+      goabase: {
+        configured: true,
+        routeEnabled: goabaseEnabled,
+        enabled: artistEventsEnabled && goabaseEnabled,
+        ...providerState({
+          configured: true,
+          routeEnabled: artistEventsEnabled && goabaseEnabled,
+          enabled: artistEventsEnabled && goabaseEnabled,
+          disabledReason: "disabled_by_config"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: false,
+          attributionVisible: true,
+          backlinkRequired: true,
+          publicJsonApi: true,
+          userAgent: envText("SONIC_REFERENCE_USER_AGENT", "SonicSearch/1.0 (+https://sonicsearch.app)"),
+          listLimit: envInt("SONIC_GOABASE_LIST_LIMIT", 40, 1, 50),
+          detailLimit: envInt("SONIC_GOABASE_DETAIL_LIMIT", 20, 1, 50)
+        }
+      },
       ticketmaster: {
         configured: ticketmasterConfigured,
         consumerKeyConfigured: ticketmasterConfigured,
@@ -352,6 +375,17 @@ module.exports = async function handler(req, res) {
       artistEvents: {
         configured: true,
         enabled: artistEventsEnabled
+      },
+      eventRadar: {
+        configured: true,
+        routeEnabled: eventRadarEnabled,
+        enabled: eventRadarEnabled,
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: false,
+          source: "Goabase snapshot",
+          attributionVisible: true
+        }
       }
     },
     endpoints: {
@@ -361,6 +395,7 @@ module.exports = async function handler(req, res) {
       coverArt: "/api/cover-art",
       artistProfile: "/api/artist-profile",
       artistEvents: "/api/ticketmaster-events",
+      eventRadar: "/api/event-radar",
       artistBio: "/api/artist-bio",
       trackInsight: "/api/track-insight",
       newsTranslate: "/api/news-translate",
@@ -383,7 +418,8 @@ module.exports = async function handler(req, res) {
       lastfmDailyLimit: envInt("SONIC_LASTFM_DAILY_LIMIT", 80, 0, 10000),
       radioBrowserDailyLimit: envInt("SONIC_RADIO_BROWSER_DAILY_LIMIT", 120, 0, 10000),
       newsFeedDailyLimit: envInt("SONIC_NEWS_FEED_DAILY_LIMIT", 80, 0, 10000),
-      ticketmasterEventsDailyLimit: envInt("SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT", 80, 0, 10000)
+      ticketmasterEventsDailyLimit: envInt("SONIC_TICKETMASTER_EVENTS_DAILY_LIMIT", 80, 0, 10000),
+      eventRadarDailyLimit: envInt("SONIC_EVENT_RADAR_DAILY_LIMIT", 160, 0, 10000)
     }
   }, ["GET", "POST", "OPTIONS"]);
 };
