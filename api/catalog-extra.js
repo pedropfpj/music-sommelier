@@ -1,4 +1,11 @@
-const { envFlag, envText, sendJson, trimText } = require("./_music-apis");
+const {
+  enforceDurableMusicDailyLimit,
+  envFlag,
+  envText,
+  requireMusicApi,
+  sendJson,
+  trimText
+} = require("../lib/api/_music-apis");
 
 const CATALOG_LIMIT_MAX = 200;
 
@@ -79,19 +86,24 @@ async function fetchTracks(config, { style, q, limit, offset }) {
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.statusCode = 204;
-    res.end();
-    return;
-  }
+  const methods = ["GET", "OPTIONS"];
+  if (!requireMusicApi(req, res, {
+    methods: ["GET"],
+    feature: "catalog-extra",
+    enabledEnv: "SONIC_CATALOG_EXTRA_ROUTE_ENABLED",
+    defaultEnabled: true,
+    allowGlobalFallback: false,
+    dailyLimitEnv: "SONIC_CATALOG_EXTRA_DAILY_LIMIT",
+    defaultDailyLimit: 240,
+    budgetOnStart: false
+  })) return;
 
-  if (req.method !== "GET") {
-    sendJson(req, res, 405, { error: "method_not_allowed" }, ["GET", "OPTIONS"]);
-    return;
-  }
+  if (!await enforceDurableMusicDailyLimit(req, res, {
+    feature: "catalog-extra",
+    dailyLimitEnv: "SONIC_CATALOG_EXTRA_DAILY_LIMIT",
+    defaultDailyLimit: 240,
+    methods
+  })) return;
 
   const config = supabaseConfig();
   if (!config.enabled) {
@@ -100,7 +112,7 @@ module.exports = async function handler(req, res) {
       enabled: false,
       artists: [],
       tracks: []
-    }, ["GET", "OPTIONS"]);
+    }, methods);
     return;
   }
 
@@ -129,7 +141,7 @@ module.exports = async function handler(req, res) {
       },
       artists,
       tracks
-    }, ["GET", "OPTIONS"]);
+    }, methods);
   } catch (error) {
     const setupNeeded = /catalog_(artists|tracks)|schema cache|does not exist|could not find/i.test(String(error.message || ""));
     sendJson(req, res, setupNeeded ? 200 : 500, {
@@ -140,6 +152,6 @@ module.exports = async function handler(req, res) {
       detail: error.message,
       artists: [],
       tracks: []
-    }, ["GET", "OPTIONS"]);
+    }, methods);
   }
 };

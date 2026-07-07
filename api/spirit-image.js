@@ -7,15 +7,15 @@ const {
   requireOpenAiPost,
   sendJson,
   trimText
-} = require("./_openai");
+} = require("../lib/api/_openai");
 const {
   deleteKey,
   hasDurableStore,
   hashStoreKey,
   readJson,
   writeJson
-} = require("./_usage-store");
-const { resolveAccessContext } = require("./_access-control");
+} = require("../lib/api/_usage-store");
+const { resolveAccessContext } = require("../lib/api/_access-control");
 
 const SPIRIT_IMAGE_PROMPT_VERSION = "personal-sound-system-v1";
 const SPIRIT_IMAGE_STORE_PREFIX = "sonic:sound-system-image:v1";

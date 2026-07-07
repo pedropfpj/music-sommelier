@@ -1,4 +1,4 @@
-const { enforceDurableMusicDailyLimit, envFirst, envInt, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envFirst, envInt, featureEnabled, parseBody, requireMusicApi, sendJson, trimText } = require("../lib/api/_music-apis");
 
 const TICKETMASTER_EVENTS_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const TICKETMASTER_ATTRACTIONS_URL = "https://app.ticketmaster.com/discovery/v2/attractions.json";

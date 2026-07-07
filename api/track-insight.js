@@ -1,4 +1,4 @@
-const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
+const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("../lib/api/_openai");
 
 module.exports = async function handler(req, res) {
   if (!requireOpenAiPost(req, res, {

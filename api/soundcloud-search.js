@@ -1,4 +1,4 @@
-const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("../lib/api/_music-apis");
 
 const TOKEN_URL = "https://secure.soundcloud.com/oauth/token";
 const TRACKS_URL = "https://api.soundcloud.com/tracks";

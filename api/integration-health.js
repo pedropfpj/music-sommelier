@@ -1,6 +1,6 @@
-const { envFirst, envFlag, envInt, envText, featureEnabled, requireMusicApi, sendJson } = require("./_music-apis");
-const { hasDurableStore } = require("./_usage-store");
-const { supabaseConfig } = require("./_catalog-enrichment-store");
+const { envFirst, envFlag, envInt, envText, featureEnabled, requireMusicApi, sendJson } = require("../lib/api/_music-apis");
+const { hasDurableStore } = require("../lib/api/_usage-store");
+const { supabaseConfig } = require("../lib/api/_catalog-enrichment-store");
 
 const TICKETMASTER_KEY_ENVS = [
   "TICKETMASTER_API_KEY",

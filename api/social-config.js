@@ -1,4 +1,4 @@
-const { envFlag, envText, sendJson } = require("./_music-apis");
+const { envFlag, envText, requireMusicApi, sendJson } = require("../lib/api/_music-apis");
 
 function cleanBaseUrl(value = "", fallback = "") {
   const raw = String(value || fallback || "").trim().replace(/\/+$/, "");
@@ -13,19 +13,14 @@ function cleanBaseUrl(value = "", fallback = "") {
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.statusCode = 204;
-    res.end();
-    return;
-  }
-
-  if (req.method !== "GET") {
-    sendJson(req, res, 405, { error: "method_not_allowed" }, ["GET", "OPTIONS"]);
-    return;
-  }
+  const methods = ["GET", "OPTIONS"];
+  if (!requireMusicApi(req, res, {
+    methods: ["GET"],
+    feature: "social-config",
+    enabledEnv: "SONIC_SOCIAL_CONFIG_ROUTE_ENABLED",
+    defaultEnabled: true,
+    allowGlobalFallback: false
+  })) return;
 
   const supabaseUrl = cleanBaseUrl(envText("SUPABASE_URL"));
   const supabaseAuthUrl = cleanBaseUrl(envText("SUPABASE_AUTH_URL"), supabaseUrl);
@@ -39,5 +34,5 @@ module.exports = async function handler(req, res) {
     supabaseUrl: enabled ? supabaseUrl : "",
     supabaseAuthUrl: enabled ? supabaseAuthUrl : "",
     supabaseAnonKey: enabled ? supabaseAnonKey : ""
-  }, ["GET", "OPTIONS"]);
+  }, methods);
 };

@@ -1,4 +1,4 @@
-const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("./_music-apis");
+const { enforceDurableMusicDailyLimit, envInt, envText, parseBody, requireMusicApi, sendJson, trimText } = require("../lib/api/_music-apis");
 
 const SEARCH_URL = "https://www.googleapis.com/youtube/v3/search";
 const YOUTUBE_SOURCE_DETAIL = {

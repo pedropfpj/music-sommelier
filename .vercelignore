@@ -3,12 +3,15 @@
 
 node_modules/
 .vendor/
+www/
 *.log
 *.unreadable-*
+api/* 2.js
 
 docs/
 scripts/
 supabase/
+ios/
 
 reports/*
 !reports/catalog_extra_bulk_local_20260621.rows.json

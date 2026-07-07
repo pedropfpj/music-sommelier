@@ -1,4 +1,4 @@
-const { envFlag, envText, sendJson } = require("./_music-apis");
+const { envFlag, envText, requireMusicApi, sendJson } = require("../lib/api/_music-apis");
 
 function requestOrigin(req) {
   const host = String(req.headers?.host || "").trim();
@@ -27,9 +27,25 @@ function cleanBaseUrl(value = "", fallback = "") {
   }
 }
 
+function configuredNativeRedirects() {
+  return new Set(
+    [
+      "sonicsearch://auth/callback",
+      ...envText("SONIC_SOCIAL_ALLOWED_REDIRECTS")
+        .split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+    ].map((entry) => entry.replace(/\/+$/, ""))
+  );
+}
+
 function safeRedirectTo(req) {
   const fallback = requestOrigin(req);
   const requested = queryValue(req, "redirect_to") || fallback;
+  const normalizedRequested = requested.replace(/\/+$/, "");
+  if (configuredNativeRedirects().has(normalizedRequested)) {
+    return normalizedRequested;
+  }
   try {
     const url = new URL(requested);
     const requestHost = String(req.headers?.host || "").trim();
@@ -70,23 +86,18 @@ function isGoogleOAuthUrl(value = "") {
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.statusCode = 204;
-    res.end();
-    return;
-  }
-
-  if (req.method !== "GET") {
-    sendJson(req, res, 405, { error: "method_not_allowed" }, ["GET", "OPTIONS"]);
-    return;
-  }
+  const methods = ["GET", "OPTIONS"];
+  if (!requireMusicApi(req, res, {
+    methods: ["GET"],
+    feature: "social-oauth-url",
+    enabledEnv: "SONIC_SOCIAL_OAUTH_ROUTE_ENABLED",
+    defaultEnabled: true,
+    allowGlobalFallback: false
+  })) return;
 
   const provider = queryValue(req, "provider") || "google";
   if (provider !== "google") {
-    sendJson(req, res, 400, { ok: false, error: "unsupported_provider" }, ["GET", "OPTIONS"]);
+    sendJson(req, res, 400, { ok: false, error: "unsupported_provider" }, methods);
     return;
   }
 
@@ -95,7 +106,7 @@ module.exports = async function handler(req, res) {
   const supabaseAnonKey = envText("SUPABASE_ANON_KEY") || envText("NEXT_PUBLIC_SUPABASE_ANON_KEY");
   const enabled = envFlag("SONIC_SOCIAL_ENABLED", false) && Boolean(supabaseUrl && supabaseAuthUrl && supabaseAnonKey);
   if (!enabled) {
-    sendJson(req, res, 503, { ok: false, error: "social_auth_not_configured" }, ["GET", "OPTIONS"]);
+    sendJson(req, res, 503, { ok: false, error: "social_auth_not_configured" }, methods);
     return;
   }
 
@@ -120,7 +131,7 @@ module.exports = async function handler(req, res) {
         ok: false,
         error: "missing_google_redirect",
         status: response.status
-      }, ["GET", "OPTIONS"]);
+      }, methods);
       return;
     }
     res.setHeader("Cache-Control", "no-store");
@@ -130,12 +141,12 @@ module.exports = async function handler(req, res) {
       res.end();
       return;
     }
-    sendJson(req, res, 200, { ok: true, provider, url: location }, ["GET", "OPTIONS"]);
+    sendJson(req, res, 200, { ok: true, provider, url: location }, methods);
   } catch (error) {
     sendJson(req, res, 502, {
       ok: false,
       error: "oauth_url_failed",
       message: error?.message || "Could not create Google OAuth URL"
-    }, ["GET", "OPTIONS"]);
+    }, methods);
   }
 };

@@ -715,7 +715,215 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
 ];
 
 const DJ_RECOMMENDATION_STORAGE_KEY = "sonic_search_dj_recommendations_v1";
+function buildPsyFestivalLineupRecommendationSeeds() {
+  const searchUrlFor = (name = "", subgenre = "", roleKind = "live") => {
+    const roleSearch = roleKind === "b2b" ? "B2B set" : roleKind === "dj" ? "DJ set" : "live set";
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${name} ${subgenre || "psytrance"} ${roleSearch}`)}`;
+  };
+
+  const lineupGroups = [
+    {
+      eventName: "Naturaiz Memento Mori",
+      date: "25-26/07/2026",
+      city: "Fortaleza-CE",
+      sourceName: "Naturaiz Ceara / Instagram",
+      sourceUrl: "https://www.instagram.com/p/DaQ6P3BqVkp/",
+      items: [
+        { id: "naturaiz-memento-mori-baile-freak-jam", name: "Baile Freak Jam", country: "Brasil", time: "15:00", style: "dark_psy", subgenre: "Dark Psy / Psytrance Jam", roleKind: "b2b" },
+        { id: "naturaiz-memento-mori-karapana", name: "Karapana", country: "Brasil", time: "18:00", style: "forest_psy", subgenre: "Forest Psy / Dark Psy" },
+        { id: "naturaiz-memento-mori-groark", name: "Groark", country: "Brasil", time: "20:00", style: "dark_psy", subgenre: "Dark Psy / Forest" },
+        { id: "naturaiz-memento-mori-surke", name: "Surke", country: "Brasil", time: "22:00", style: "forest_psy", subgenre: "Forest Psy / Dark Psy" },
+        { id: "naturaiz-memento-mori-may", name: "May", country: "Brasil", time: "00:00", style: "dark_psy", subgenre: "Dark Psy / Psytrance DJ", roleKind: "dj" },
+        { id: "naturaiz-memento-mori-isiteshi", name: "Isiteshi", country: "Hungria", time: "02:00", style: "psycore", subgenre: "Psycore / Dark Psy" },
+        { id: "naturaiz-memento-mori-yara", name: "Yara", country: "LatAm", time: "04:00", style: "dark_psy", subgenre: "Dark Psy / Dark Forest" },
+        {
+          id: "naturaiz-memento-mori-varazslo",
+          name: "Varazslo",
+          country: "Hungria",
+          time: "07:00",
+          style: "psycore",
+          subgenre: "Psycore / High-BPM Darkpsy",
+          setTitle: "Varazslo - Taltos",
+          setUrl: "https://soundcloud.com/varazslo/varazslo-taltos?in=rpmota/sets/psycore",
+          platform: "SoundCloud",
+          sourceName: "SoundCloud / Underground"
+        },
+        { id: "naturaiz-memento-mori-arkhos", name: "Arkhos", country: "Brasil", time: "10:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-memento-mori-adrian", name: "Adrian", country: "Brasil", time: "12:00", style: "psycore", subgenre: "Psycore / High-BPM Psytrance" },
+        { id: "naturaiz-memento-mori-neutralizer", name: "Neutralizer", country: "Grecia", time: "14:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-memento-mori-lonchar", name: "Lonchar", country: "Uzbequistao", time: "16:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-memento-mori-varazslo-neutralizer", name: "Varazslo vs Neutralizer", country: "Hungria / Grecia", time: "18:00", style: "psycore", subgenre: "Psycore / High-BPM B2B", roleKind: "b2b" }
+      ]
+    },
+    {
+      eventName: "Cosmic Crew - Psychedelic Revolution",
+      date: "31/07-02/08/2026",
+      city: "Nazare Paulista-SP",
+      sourceName: "Cosmic Crew / Instagram",
+      sourceUrl: "https://www.instagram.com/reel/DPhFpViCCsT/",
+      items: [
+        { id: "cosmic-crew-2026-umber-vamber", name: "Umber Vamber", country: "Russia", style: "forest_psy", subgenre: "Dark Forest / Forest Psy" },
+        { id: "cosmic-crew-2026-umber-sonus", name: "Umber Sonus", country: "Russia", style: "forest_psy", subgenre: "Dark Forest / Forest Psy" },
+        { id: "cosmic-crew-2026-phagos-sonus", name: "Phagos Sonus", country: "Russia", style: "dark_psy", subgenre: "Dark Psy / Forest" },
+        { id: "cosmic-crew-2026-ipotocaticac", name: "Ipotocaticac", country: "Franca", style: "dark_psy", subgenre: "Dark Psy / Forest / Psygressive" },
+        { id: "cosmic-crew-2026-paralocks", name: "Paralocks", country: "Africa do Sul", style: "hi_tech", subgenre: "Hi-Tech / Psycore" },
+        { id: "cosmic-crew-2026-paralocks-retro", name: "Paralocks Retro", country: "Africa do Sul", style: "hi_tech", subgenre: "Hi-Tech / Retro Set", roleKind: "dj" },
+        { id: "cosmic-crew-2026-salakavala", name: "Salakavala", country: "Finlandia", style: "freeform", subgenre: "Freeform / Suomisaundi" },
+        { id: "cosmic-crew-2026-igor-swamp", name: "Igor Swamp", country: "Finlandia", style: "freeform", subgenre: "Freeform / Suomisaundi" },
+        { id: "cosmic-crew-2026-gaida", name: "Gaida", country: "Finlandia", style: "freeform", subgenre: "Freeform / Goa / Forest" },
+        { id: "cosmic-crew-2026-dylalien", name: "Dylalien", country: "Estados Unidos", style: "forest_psy", subgenre: "Forest Psy / Dark Psy" },
+        { id: "cosmic-crew-2026-alcohbata", name: "Alcohbata", country: "Brasil", style: "dark_psy", subgenre: "Dark Psy / Forest" },
+        { id: "cosmic-crew-2026-traxon", name: "Traxon", country: "Brasil", style: "forest_psy", subgenre: "Forest Psy / Dark Psy" },
+        { id: "cosmic-crew-2026-minimal-criminal", name: "Minimal Criminal", country: "Brasil", style: "dark_progressive", subgenre: "Dark Progressive / Zenonesque" },
+        { id: "cosmic-crew-2026-at-work-mielikki", name: "At Work vs Mielikki", country: "Brasil", style: "freeform", subgenre: "Freeform / Suomisaundi B2B", roleKind: "b2b" },
+        {
+          id: "cosmic-crew-2026-dj-booo",
+          name: "DJ Booo",
+          country: "Brasil",
+          style: "hi_tech",
+          subgenre: "Hi-Tech / Psycore DJ",
+          roleKind: "dj",
+          setTitle: "DJ BOOO - ReveillOz 2018 / 2019",
+          setUrl: "https://soundcloud.com/booo_cosmic_crew/dj-booo-reveilloz-2018-2019",
+          platform: "SoundCloud",
+          sourceName: "booo_cosmic_crew"
+        },
+        { id: "cosmic-crew-2026-sutemi", name: "Sutemi", country: "Internacional", style: "forest_psy", subgenre: "Forest Psy / Dark Psy DJ", roleKind: "dj" },
+        { id: "cosmic-crew-2026-indacoruna", name: "IndacoRuna", country: "Italia", style: "dark_experimental", subgenre: "Dark Experimental / Psycore" },
+        { id: "cosmic-crew-2026-radiruna", name: "RadiRuna", country: "Italia", style: "psycore", subgenre: "Psycore / Dark Experimental" },
+        { id: "cosmic-crew-2026-radice", name: "Radice", country: "Italia", style: "slambient", subgenre: "Slambient / Dark Experimental" },
+        {
+          id: "cosmic-crew-2026-paula",
+          name: "Paula",
+          country: "Brasil",
+          style: "dark_psy",
+          subgenre: "Dark Psy / Ritual DJ",
+          roleKind: "dj",
+          setTitle: "Paula @ Master of Puppets 2025",
+          setUrl: "https://www.youtube.com/watch?v=4fXJmW78rns",
+          platform: "YouTube",
+          sourceName: "PAULA"
+        },
+        {
+          id: "cosmic-crew-2026-umbra-lumen",
+          name: "Umbra Lumen",
+          country: "Brasil",
+          style: "dark_experimental",
+          subgenre: "Dark Experimental / Psycore",
+          setTitle: "Umbra Lumen - Vysehrad",
+          setUrl: "https://www.youtube.com/watch?v=lx4M6xI-bcA",
+          platform: "YouTube",
+          sourceName: "Umbra Lumen / YouTube"
+        },
+        { id: "cosmic-crew-2026-thaty", name: "Thaty", country: "Brasil", style: "dark_psy", subgenre: "Dark Psy / Ritual DJ", roleKind: "dj" }
+      ]
+    },
+    {
+      eventName: "Naturaiz Amor Fati",
+      date: "10-12/07/2026",
+      city: "Nazare Paulista-SP",
+      sourceName: "JamBase / Zig Tickets",
+      sourceUrl: "https://www.jambase.com/festival/naturaiz-festival-2026",
+      items: [
+        { id: "naturaiz-amor-fati-hypnokrono", name: "Hypnokrono", country: "Brasil", time: "sex 16:00", style: "psycore", subgenre: "Psycore / Dark Psy" },
+        { id: "naturaiz-amor-fati-rasztec", name: "Rasztec", country: "Brasil", time: "sex 18:00", style: "psycore", subgenre: "Psycore / High-BPM" },
+        { id: "naturaiz-amor-fati-arkhos", name: "Arkhos", country: "Brasil", time: "sex 20:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-amor-fati-adrian", name: "Adrian", country: "Brasil", time: "sex 22:00", style: "psycore", subgenre: "Psycore / High-BPM Psytrance" },
+        { id: "naturaiz-amor-fati-octaplex", name: "Octaplex", country: "Japao", time: "sab 00:00", style: "slambient", subgenre: "Slambient / Dark Experimental" },
+        { id: "naturaiz-amor-fati-maleficium", name: "Maleficium", country: "Japao", time: "sab 02:00", style: "dark_experimental", subgenre: "Dark Experimental / Psycore" },
+        { id: "naturaiz-amor-fati-xiin", name: "Xiin", country: "China", time: "sab 04:00", style: "hi_tech", subgenre: "Hi-Tech / Psycore" },
+        { id: "naturaiz-amor-fati-ants", name: "Ants", country: "China", time: "sab 06:00", style: "hi_tech", subgenre: "Hi-Tech / Psycore" },
+        { id: "naturaiz-amor-fati-xydur", name: "Xydur", country: "Brasil", time: "sab 08:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-amor-fati-crone", name: "Crone", country: "Grecia", time: "sab 10:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-amor-fati-neutralizer", name: "Neutralizer", country: "Grecia", time: "sab 12:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-amor-fati-hyperekplexia", name: "Hyperekplexia", country: "Grecia", time: "sab 14:00", style: "dark_experimental", subgenre: "Dark Experimental / Psycore" },
+        { id: "naturaiz-amor-fati-neutrahyper-varacrone", name: "NeutraHyper Varacrone", country: "Grecia / Hungria", time: "sab 16:00", style: "psycore", subgenre: "Psycore / High-BPM B2B", roleKind: "b2b" },
+        {
+          id: "naturaiz-amor-fati-paula-anginha",
+          name: "Paula vs Anginha",
+          country: "Brasil",
+          time: "sab 18:00",
+          style: "hi_tech",
+          subgenre: "Hi-Tech / Psycore B2B",
+          roleKind: "b2b",
+          setTitle: "Anginha - Hitech Connection #001",
+          setUrl: "https://soundcloud.com/hitechconnection/anginha-set-exclusivo-hitech-connection-001",
+          platform: "SoundCloud",
+          sourceName: "Hitech Connection"
+        },
+        { id: "naturaiz-amor-fati-isiteshi", name: "Isiteshi", country: "Hungria", time: "sab 20:00", style: "psycore", subgenre: "Psycore / Dark Psy" },
+        { id: "naturaiz-amor-fati-sishiva", name: "Sishiva", country: "Grecia", time: "sab 22:00", style: "dark_experimental", subgenre: "Dark Experimental / Psycore" },
+        { id: "naturaiz-amor-fati-yoshua-em", name: "Yoshua E.M", country: "Mexico", time: "dom 00:00", style: "slambient", subgenre: "Slambient / Psycore" },
+        { id: "naturaiz-amor-fati-raiz-jam", name: "Raiz Jam", country: "Brasil / Mexico", time: "dom 03:00", style: "psycore", subgenre: "Psycore / Jam", roleKind: "b2b" },
+        {
+          id: "naturaiz-amor-fati-varazslo",
+          name: "Varazslo",
+          country: "Hungria",
+          time: "dom 05:00",
+          style: "psycore",
+          subgenre: "Psycore / High-BPM Darkpsy",
+          setTitle: "Varazslo - Taltos",
+          setUrl: "https://soundcloud.com/varazslo/varazslo-taltos?in=rpmota/sets/psycore",
+          platform: "SoundCloud",
+          sourceName: "SoundCloud / Underground"
+        },
+        { id: "naturaiz-amor-fati-diansis", name: "Diansis", country: "Grecia", time: "dom 07:00", style: "dark_psy", subgenre: "Dark Psy / Psycore" },
+        { id: "naturaiz-amor-fati-xenrox", name: "Xenrox", country: "Austria", time: "dom 09:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        { id: "naturaiz-amor-fati-supersonics", name: "Supersonics", country: "Austria", time: "dom 11:00", style: "hi_tech", subgenre: "Hi-Tech / Psycore" },
+        { id: "naturaiz-amor-fati-lonchar", name: "Lonchar", country: "Uzbequistao", time: "dom 12:00", style: "psycore", subgenre: "Psycore / Hi-Tech" },
+        {
+          id: "naturaiz-amor-fati-sectio-aurea",
+          name: "Sectio Aurea",
+          country: "Suica",
+          time: "dom 14:00",
+          style: "dark_experimental",
+          subgenre: "Dark Experimental / Psycore",
+          setTitle: "Sectio Aurea - Gato Murr",
+          setUrl: "https://www.youtube.com/watch?v=kTohGm5y-Fk",
+          platform: "YouTube",
+          sourceName: "YouTube / Anomalistic Records"
+        },
+        { id: "naturaiz-amor-fati-surprise-jam", name: "Surprise Jam", country: "Internacional", time: "dom 17:00", style: "psycore", subgenre: "Psycore / Surprise Jam", roleKind: "b2b" }
+      ]
+    }
+  ];
+
+  return lineupGroups.flatMap((lineup) => lineup.items.map((item) => {
+    const roleKind = item.roleKind || "live";
+    const subgenre = item.subgenre || styleLabelByValue(item.style);
+    const scene = [lineup.eventName, lineup.city].filter(Boolean).join(" - ");
+    const roleLabel = roleKind === "b2b" ? "B2B" : roleKind === "dj" ? "set" : "live";
+    return {
+      id: item.id,
+      lane: "psy_festival_lineups",
+      style: item.style,
+      name: item.name,
+      country: item.country,
+      scene,
+      eventName: lineup.eventName,
+      date: lineup.date,
+      floor: lineup.eventName,
+      time: item.time || "",
+      subgenre,
+      setTitle: item.setTitle || `${item.name} - busca de ${roleLabel}`,
+      setUrl: item.setUrl || searchUrlFor(item.name, subgenre, roleKind),
+      sourceUrl: item.sourceUrl || lineup.sourceUrl,
+      platform: item.platform || "Busca",
+      sourceName: item.sourceName || lineup.sourceName,
+      eventSignal: [lineup.eventName, lineup.date, lineup.city].filter(Boolean).join(" / "),
+      roleKind,
+      roleNote: roleKind === "dj"
+        ? "DJ/session em line-up pesquisado; entra como recomendacao por set, separado de produtor autoral."
+        : roleKind === "b2b"
+          ? "B2B/jam em line-up pesquisado; entra como recomendacao contextual de festa."
+          : "Projeto/live em line-up pesquisado; entra como recomendacao com festa, data e horario.",
+      reason: `${item.name} aparece em ${lineup.eventName}${item.time ? ` (${item.time})` : ""}; recomendado no recorte ${subgenre}.`
+    };
+  }));
+}
+
 const DJ_SET_RECOMMENDATION_SEEDS = [
+  ...buildPsyFestivalLineupRecommendationSeeds(),
   {
     id: "hitech-psycore-paula",
     lane: "hitech_psycore",
@@ -891,6 +1099,986 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     eventSignal: "Boiler Room / Rinse",
     roleNote: "DJ e apresentadora/curadora; recomendada por set tocavel.",
     reason: "Curadoria global acessivel para abrir a aba de DJs alem do eixo psy/dark."
+  },
+  {
+    id: "berghain-20260704-hiroko-yamamura",
+    lane: "house_selectors",
+    style: "chicago_house",
+    name: "Hiroko Yamamura",
+    country: "Estados Unidos",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "23:59",
+    subgenre: "Chicago House / Techno",
+    setTitle: "Busca de set: Hiroko Yamamura",
+    setUrl: "https://www.youtube.com/results?search_query=Hiroko%20Yamamura%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/hirokoyamamura",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ no line-up do Klubnacht 04/07/2026; entra como selector de Chicago house/techno.",
+    reason: "Boa ponte entre Chicago house, acid e techno para quem quer um selector com groove menos obvio."
+  },
+  {
+    id: "berghain-20260704-ignez-live",
+    lane: "techno_live_dj",
+    style: "hypnotic_techno",
+    name: "Ignez",
+    country: "Paises Baixos / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "04:00",
+    subgenre: "Hypnotic Techno / LIVE",
+    setTitle: "Busca de live: Ignez Somov",
+    setUrl: "https://www.youtube.com/results?search_query=Ignez%20Somov%20live%20set",
+    sourceUrl: "https://ra.co/dj/ignez",
+    platform: "Busca",
+    sourceName: "Resident Advisor / Somov",
+    eventSignal: "Klubnacht / Berghain / Somov",
+    roleKind: "live",
+    roleNote: "LIVE act; fica marcado como live, separado do DJ set puro.",
+    reason: "Somov e Ignez funcionam como ancora de techno hipnotico/deep: recomendacao certa quando o usuario pede live de pista longa."
+  },
+  {
+    id: "berghain-20260704-kyle-geiger",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "Kyle Geiger",
+    country: "Estados Unidos / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "05:00",
+    subgenre: "Techno",
+    setTitle: "Busca de set: Kyle Geiger",
+    setUrl: "https://www.youtube.com/results?search_query=Kyle%20Geiger%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/kylegeiger",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain / Geiger Counter",
+    roleKind: "dj",
+    roleNote: "DJ/produtor de techno; line-up indica contexto Geiger Counter.",
+    reason: "Entrada direta para techno com pressao funcional e leitura americana/europeia."
+  },
+  {
+    id: "berghain-20260704-mari-sakurai",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "Mari Sakurai",
+    country: "Japao",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "09:00",
+    subgenre: "Techno",
+    setTitle: "Busca de set: Mari Sakurai",
+    setUrl: "https://www.youtube.com/results?search_query=Mari%20Sakurai%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/marisakurai",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ no line-up do Klubnacht; catalogada como techno pelo recorte musical.",
+    reason: "Boa carta para abrir techno japones em horario de manha sem misturar com house/minimal."
+  },
+  {
+    id: "berghain-20260704-aocram",
+    lane: "techno_live_dj",
+    style: "hypnotic_techno",
+    name: "Aöcram",
+    country: "Internacional",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "13:00",
+    subgenre: "Hypnotic Techno / Mord",
+    setTitle: "Busca de set: Aöcram",
+    setUrl: "https://www.youtube.com/results?search_query=A%C3%B6cram%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/aocram",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain / Mord",
+    roleKind: "dj",
+    roleNote: "DJ/produtor de techno hipnotico; image line-up associa ao eixo Mord.",
+    reason: "Serve para calibrar o radar de hypnotic techno mais austero, mental e menos peak-time."
+  },
+  {
+    id: "berghain-20260704-temudo",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "Temudo",
+    country: "Portugal",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "17:00",
+    subgenre: "Techno",
+    setTitle: "Busca de set: Temudo",
+    setUrl: "https://www.youtube.com/results?search_query=Temudo%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/temudo",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtor de techno; ja existia no catalogo e agora ganha contexto Berghain.",
+    reason: "Techno funcional e moderno para usuarios que querem pressao de pista sem cair em hard techno generico."
+  },
+  {
+    id: "berghain-20260704-juri-heidemann",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "Juri Heidemann",
+    country: "Alemanha",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "21:00",
+    subgenre: "Techno",
+    setTitle: "Busca de set: Juri Heidemann",
+    setUrl: "https://www.youtube.com/results?search_query=Juri%20Heidemann%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/juriheidemann",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtor berlinense; entra como descoberta de Berghain.",
+    reason: "Boa recomendacao para empurrar o usuario para nomes atuais de Berlin sem sair do eixo techno."
+  },
+  {
+    id: "berghain-20260704-philippa-pacho",
+    lane: "techno_live_dj",
+    style: "hardgroove_techno",
+    name: "Philippa Pacho",
+    country: "Suecia / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Berghain",
+    floor: "Berghain",
+    time: "01:00",
+    subgenre: "Techno / Hardgroove",
+    setTitle: "Busca de set: Philippa Pacho",
+    setUrl: "https://www.youtube.com/results?search_query=Philippa%20Pacho%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/philippapacho",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtora; ja existia como seed techno e agora ganha contexto Berghain.",
+    reason: "Use como carta de techno contemporaneo com energia de fechamento, hardgroove e pressao moderna."
+  },
+  {
+    id: "panorama-20260704-biesmans",
+    lane: "house_selectors",
+    style: "house",
+    name: "Biesmans",
+    country: "Belgica / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Panorama Bar",
+    floor: "Panorama Bar",
+    time: "23:59",
+    subgenre: "House / Running Back",
+    setTitle: "Busca de set: Biesmans",
+    setUrl: "https://www.youtube.com/results?search_query=Biesmans%20DJ%20set",
+    sourceUrl: "https://soundcloud.com/biesmans",
+    platform: "Busca",
+    sourceName: "SoundCloud / Resident Advisor",
+    eventSignal: "Klubnacht / Panorama Bar / Running Back",
+    roleKind: "dj",
+    roleNote: "DJ/produtor; entra como house selector, com contexto Running Back.",
+    reason: "House analogico, caloroso e melodico: bom para recomendacao de house com assinatura Running Back."
+  },
+  {
+    id: "panorama-20260704-moxie",
+    lane: "house_selectors",
+    style: "house",
+    name: "Moxie",
+    country: "Reino Unido",
+    scene: "Klubnacht 04/07/2026 - Panorama Bar",
+    floor: "Panorama Bar",
+    time: "04:00",
+    subgenre: "House / UK Club / On Loop",
+    setTitle: "Busca de set: Moxie",
+    setUrl: "https://www.youtube.com/results?search_query=Moxie%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/moxie",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Panorama Bar / On Loop",
+    roleKind: "dj",
+    roleNote: "DJ/selectora e curadora; catalogada como house/UK club selector.",
+    reason: "Carta de selector para house e UK club com perfil de curadoria, ideal para a aba DJs."
+  },
+  {
+    id: "panorama-20260704-liquid-earth",
+    lane: "minimal_deep_selectors",
+    style: "minimal_deep_tech",
+    name: "Liquid Earth",
+    country: "Estados Unidos / Espanha",
+    scene: "Klubnacht 04/07/2026 - Panorama Bar",
+    floor: "Panorama Bar",
+    time: "08:00",
+    subgenre: "Microhouse / Minimal Deep Tech",
+    setTitle: "Busca de set: Liquid Earth",
+    setUrl: "https://www.youtube.com/results?search_query=Liquid%20Earth%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/liquidearth",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Panorama Bar",
+    roleKind: "dj",
+    roleNote: "DJ/produtor; entra no recorte Panorama Bar/microhouse.",
+    reason: "Groove elastico e minimal deep tech para usuarios que curtiram Panorama sem ir para tech house comercial."
+  },
+  {
+    id: "panorama-20260704-djulz",
+    lane: "house_selectors",
+    style: "tech_house",
+    name: "D'Julz",
+    country: "Franca",
+    scene: "Klubnacht 04/07/2026 - Panorama Bar",
+    floor: "Panorama Bar",
+    time: "19:30",
+    subgenre: "Tech House / Bass Culture",
+    setTitle: "Busca de set: D'Julz",
+    setUrl: "https://www.youtube.com/results?search_query=D%27Julz%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/djulz",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Klubnacht / Panorama Bar / Bass Culture",
+    roleKind: "dj",
+    roleNote: "DJ's DJ, Bass Culture; fica no eixo house/tech house.",
+    reason: "Bom para recomendar house/tech house de selector experiente, sem misturar com techno puro."
+  },
+  {
+    id: "panorama-20260704-alexander-skancke-henriku-b2b",
+    lane: "minimal_deep_selectors",
+    style: "minimal_deep_tech",
+    name: "Alexander Skancke B2B Henriku",
+    country: "Noruega / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Panorama Bar",
+    floor: "Panorama Bar",
+    time: "00:00",
+    subgenre: "Minimal House / Deep Tech / B2B",
+    setTitle: "Busca de B2B: Alexander Skancke + Henriku",
+    setUrl: "https://www.youtube.com/results?search_query=Alexander%20Skancke%20Henriku%20B2B%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/alexanderskancke",
+    platform: "Busca",
+    sourceName: "Resident Advisor / Quirk / Howdy",
+    eventSignal: "Klubnacht / Panorama Bar / Quirk / Howdy",
+    roleKind: "b2b",
+    roleNote: "B2B; entra como uma carta conjunta para preservar o contexto do line-up.",
+    reason: "O slot e B2B, entao a recomendacao deve vir junta: Panorama Bar, minimal/deep tech e groove de after."
+  },
+  {
+    id: "garten-20260704-sedef-adasi",
+    lane: "house_selectors",
+    style: "house",
+    name: "Sedef Adasï",
+    country: "Turquia / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Garten",
+    floor: "Garten",
+    time: "12:00",
+    subgenre: "House / Acid / Electro",
+    setTitle: "Busca de set: Sedef Adasï",
+    setUrl: "https://www.youtube.com/results?search_query=Sedef%20Adas%C3%AF%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/sedefadasi",
+    platform: "Busca",
+    sourceName: "Resident Advisor / Public Possession",
+    eventSignal: "Klubnacht / Garten / Public Possession",
+    roleKind: "dj",
+    roleNote: "DJ/selectora; entra como house/acid/electro selector com contexto Public Possession.",
+    reason: "Som solar, acid/house/electro e perfil aberto: outra energia musical, nao techno."
+  },
+  {
+    id: "garten-20260704-bell-towers",
+    lane: "disco_italo_selectors",
+    style: "italo_disco",
+    name: "Bell Towers",
+    country: "Australia / Alemanha",
+    scene: "Klubnacht 04/07/2026 - Garten",
+    floor: "Garten",
+    time: "16:00",
+    subgenre: "Italo Disco / Disco House / Public Possession",
+    setTitle: "Busca de set: Bell Towers",
+    setUrl: "https://www.youtube.com/results?search_query=Bell%20Towers%20DJ%20set",
+    sourceUrl: "https://ra.co/dj/belltowers",
+    platform: "Busca",
+    sourceName: "Resident Advisor / Public Possession",
+    eventSignal: "Klubnacht / Garten / Public Possession",
+    roleKind: "dj",
+    roleNote: "DJ/produtor; colocado no eixo disco/italo/house pela ligacao Public Possession.",
+    reason: "Carta para o lado disco/italo/house, perfeita para recomendacao mais colorida e diurna."
+  },
+  {
+    id: "berlin-20260711-berghain-tobias",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Tobias.",
+    country: "Alemanha",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "23:59",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Busca de set: Tobias.",
+    setUrl: "https://www.youtube.com/results?search_query=Tobias.%20DJ%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain / July 2026",
+    roleKind: "dj",
+    roleNote: "DJ/produtor no programa oficial de Berghain; entra como referencia de techno hipnotico/deep.",
+    reason: "Bom ponto de partida para quem quer o lado mental, preciso e profundo da pista de Berlim."
+  },
+  {
+    id: "berlin-20260711-berghain-doltz-live",
+    lane: "berlin_hypnotic_deep",
+    style: "deep_techno",
+    name: "Doltz",
+    country: "Japao",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "Live",
+    subgenre: "Deep Techno / Hypnotic Techno / Live",
+    setTitle: "Busca de live: Doltz",
+    setUrl: "https://www.youtube.com/results?search_query=Doltz%20live%20techno%20set",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain / Live",
+    roleKind: "live",
+    roleNote: "Live act no programa oficial; separado de DJ set para preservar o formato.",
+    reason: "Live profundo e textural para sugerir quando o usuario pedir techno mental sem pico obvio."
+  },
+  {
+    id: "berlin-20260711-berghain-adiel",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Adiel",
+    country: "Italia",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Busca de set: Adiel",
+    setUrl: "https://www.youtube.com/results?search_query=Adiel%20DJ%20set%20hypnotic%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ no programa oficial; classificada pelo recorte hipnotico/profundo.",
+    reason: "Carta forte para abrir techno circular, escuro e refinado sem cair em hard techno generico."
+  },
+  {
+    id: "berlin-20260711-berghain-blanka",
+    lane: "berlin_raw_hardgroove",
+    style: "hardgroove_techno",
+    name: "BLANKA",
+    country: "Franca",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "",
+    subgenre: "Hardgroove Techno / Raw Techno",
+    setTitle: "Busca de set: BLANKA",
+    setUrl: "https://www.youtube.com/results?search_query=BLANKA%20DJ%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ no programa oficial; mapeada para hardgroove/raw pelo perfil de pista.",
+    reason: "Entra para melhorar recomendacao de techno ritmico, seco e com groove moderno."
+  },
+  {
+    id: "berlin-20260711-berghain-delta-funktionen",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "Delta Funktionen",
+    country: "Paises Baixos",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "",
+    subgenre: "Techno / Electro / Acid",
+    setTitle: "Busca de set: Delta Funktionen",
+    setUrl: "https://www.youtube.com/results?search_query=Delta%20Funktionen%20DJ%20set",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtor no line-up; bom para ponte techno-electro.",
+    reason: "Ajuda o radar a sair do quatro-por-quatro puro quando o usuario pede acid/electro com DNA techno."
+  },
+  {
+    id: "berlin-20260711-berghain-kriz",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Kr!z",
+    country: "Belgica",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "",
+    subgenre: "Raw Techno / Groove Techno",
+    setTitle: "Busca de set: Kr!z",
+    setUrl: "https://www.youtube.com/results?search_query=Kr!z%20DJ%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtor no programa oficial; catalogado no eixo raw/groove.",
+    reason: "Referencia util para techno direto, tenso e sem excesso melodico."
+  },
+  {
+    id: "berlin-20260711-berghain-mary-lake",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Mary Lake",
+    country: "Paises Baixos",
+    scene: "Klubnacht 11/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 11.07",
+    time: "",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Busca de set: Mary Lake",
+    setUrl: "https://www.youtube.com/results?search_query=Mary%20Lake%20DJ%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ no programa oficial; perfilado para hipnose e profundidade.",
+    reason: "Boa sugestao para usuarios que salvam techno longo, limpo e de construcao gradual."
+  },
+  {
+    id: "berlin-20260718-berghain-aurora-halal",
+    lane: "berlin_hypnotic_deep",
+    style: "deep_techno",
+    name: "Aurora Halal",
+    country: "Estados Unidos",
+    scene: "Klubnacht 18/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 18.07",
+    time: "",
+    subgenre: "Deep Techno / Hypnotic Techno",
+    setTitle: "Busca de set: Aurora Halal",
+    setUrl: "https://www.youtube.com/results?search_query=Aurora%20Halal%20DJ%20set",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtora no programa oficial; entra no eixo deep/hypnotic.",
+    reason: "Excelente para recomendar techno enevoado, profundo e psicodelico sem trocar para psytrance."
+  },
+  {
+    id: "berlin-20260718-berghain-blasha-allatt",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Blasha & Allatt",
+    country: "Reino Unido",
+    scene: "Klubnacht 18/07/2026 - Berghain",
+    floor: "Berghain / Klubnacht 18.07",
+    time: "",
+    subgenre: "Raw Techno / Hardgroove",
+    setTitle: "Busca de set: Blasha & Allatt",
+    setUrl: "https://www.youtube.com/results?search_query=Blasha%20Allatt%20DJ%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Klubnacht / Berghain",
+    roleKind: "b2b",
+    roleNote: "Duo no line-up oficial; mantido como carta conjunta para preservar a identidade do booking.",
+    reason: "Boa carta para techno UK contemporaneo, bruto e com groove de pista."
+  },
+  {
+    id: "berlin-20260725-berghain-phase-fatale",
+    lane: "berlin_industrial_ebm",
+    style: "industrial_techno",
+    name: "Phase Fatale",
+    country: "Estados Unidos / Alemanha",
+    scene: "CSD Klubnacht 25/07/2026 - Berghain",
+    floor: "Berghain / CSD Klubnacht 25.07",
+    time: "",
+    subgenre: "Industrial Techno / EBM",
+    setTitle: "Busca de set: Phase Fatale",
+    setUrl: "https://www.youtube.com/results?search_query=Phase%20Fatale%20DJ%20set",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "CSD Klubnacht / Berghain",
+    roleKind: "dj",
+    roleNote: "DJ/produtor no programa oficial; classificado no eixo industrial/EBM.",
+    reason: "Melhora as sugestoes para techno sombrio, metalico e body-music sem virar hard techno comercial."
+  },
+  {
+    id: "berlin-20260731-berghain-aquarian-live",
+    lane: "berlin_bass_electro",
+    style: "broken_techno",
+    name: "Aquarian",
+    country: "Canada / Alemanha",
+    scene: "Tra Tra Trax 31/07/2026 - Berghain",
+    floor: "Berghain / Tra Tra Trax 31.07",
+    time: "Live",
+    subgenre: "Broken Techno / Bass / Live",
+    setTitle: "Busca de live: Aquarian",
+    setUrl: "https://www.youtube.com/results?search_query=Aquarian%20live%20set%20techno",
+    sourceUrl: "https://www.berghain.berlin/en/program/",
+    platform: "Busca",
+    sourceName: "Berghain program",
+    eventSignal: "Tra Tra Trax / Berghain",
+    roleKind: "live",
+    roleNote: "Live act no programa oficial; entra no radar bass/broken techno.",
+    reason: "Boa ponte para breakbeat, bass e techno fragmentado em contexto de clube berlinense."
+  },
+  {
+    id: "berlin-20260724-tresor-decka",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Decka",
+    country: "Reino Unido",
+    scene: "Tresor meets Unterwegs 24/07/2026",
+    floor: "Tresor / Unterwegs 24.07",
+    time: "",
+    subgenre: "Raw Techno / Deep Techno",
+    setTitle: "Busca de set: Decka",
+    setUrl: "https://www.youtube.com/results?search_query=Decka%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Unterwegs",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor; catalogado como techno bruto/profundo.",
+    reason: "Seed certeiro para usuarios que querem techno funcional e subterraneo de clubes de Berlim."
+  },
+  {
+    id: "berlin-20260724-tresor-radial",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Radial",
+    country: "Paises Baixos",
+    scene: "Tresor meets Unterwegs 24/07/2026",
+    floor: "Tresor / Unterwegs 24.07",
+    time: "",
+    subgenre: "Raw Techno / Warehouse Techno",
+    setTitle: "Busca de set: Radial",
+    setUrl: "https://www.youtube.com/results?search_query=Radial%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Unterwegs",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor; entra como raw/warehouse techno.",
+    reason: "Boa recomendacao para pressao de basement, sem melodrama e com foco no drive."
+  },
+  {
+    id: "berlin-20260724-tresor-the-lady-machine",
+    lane: "berlin_industrial_ebm",
+    style: "industrial_techno",
+    name: "The Lady Machine",
+    country: "Brasil / Alemanha",
+    scene: "Tresor meets Unterwegs 24/07/2026",
+    floor: "Tresor / Unterwegs 24.07",
+    time: "",
+    subgenre: "Industrial Techno / Raw Techno",
+    setTitle: "Busca de set: The Lady Machine",
+    setUrl: "https://www.youtube.com/results?search_query=The%20Lady%20Machine%20DJ%20set",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Unterwegs",
+    roleKind: "dj",
+    roleNote: "Listada por Tresor; perfilada no eixo industrial/raw.",
+    reason: "Referencia forte para techno severo, escuro e de arquitetura industrial."
+  },
+  {
+    id: "berlin-20260724-tresor-sedvs",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Sedvs",
+    country: "Italia",
+    scene: "Tresor meets Unterwegs 24/07/2026",
+    floor: "Tresor / Unterwegs 24.07",
+    time: "",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Busca de set: Sedvs",
+    setUrl: "https://www.youtube.com/results?search_query=Sedvs%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Unterwegs",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor; mapeado para techno hipnotico.",
+    reason: "Bom para usuarios que curtiram techno deep/hypnotic e precisam de nomes menos obvios."
+  },
+  {
+    id: "berlin-20260725-tresor-electric-indigo",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "Electric Indigo",
+    country: "Austria",
+    scene: "AFTERPRIDE 25/07/2026 - Tresor",
+    floor: "Tresor / AFTERPRIDE 25.07",
+    time: "",
+    subgenre: "Techno / Electro / Experimental",
+    setTitle: "Busca de set: Electric Indigo",
+    setUrl: "https://www.youtube.com/results?search_query=Electric%20Indigo%20DJ%20set",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "AFTERPRIDE / Tresor",
+    roleKind: "dj",
+    roleNote: "Listada por Tresor AFTERPRIDE; classificada como techno/electro experimental.",
+    reason: "Curadoria historica e profunda para quem quer electro/techno com pesquisa, nao so peak-time."
+  },
+  {
+    id: "berlin-20260725-tresor-erika",
+    lane: "berlin_hypnotic_deep",
+    style: "deep_techno",
+    name: "Erika",
+    country: "Estados Unidos",
+    scene: "AFTERPRIDE 25/07/2026 - Tresor",
+    floor: "Tresor / AFTERPRIDE 25.07",
+    time: "",
+    subgenre: "Deep Techno / Acid / Live-DJ",
+    setTitle: "Busca de set: Erika",
+    setUrl: "https://www.youtube.com/results?search_query=Erika%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "AFTERPRIDE / Tresor",
+    roleKind: "dj",
+    roleNote: "Listada por Tresor; perfilada para deep/acid techno.",
+    reason: "Ajuda o app a sugerir techno profundo com sensibilidade analogica e psicodelica."
+  },
+  {
+    id: "berlin-20260727-tresor-marcel-fengler",
+    lane: "berlin_raw_hardgroove",
+    style: "techno",
+    name: "Marcel Fengler",
+    country: "Alemanha",
+    scene: "Singularity 27/07/2026 - Tresor",
+    floor: "Tresor / Singularity 27.07",
+    time: "",
+    subgenre: "Techno / Raw Techno",
+    setTitle: "Busca de set: Marcel Fengler",
+    setUrl: "https://www.youtube.com/results?search_query=Marcel%20Fengler%20DJ%20set",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Singularity / Tresor",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor; residente/figura de techno berlinense.",
+    reason: "Nome essencial para calibrar recomendacoes de techno berlinense classico e contemporaneo."
+  },
+  {
+    id: "berlin-20260731-tresor-perc",
+    lane: "berlin_industrial_ebm",
+    style: "industrial_techno",
+    name: "Perc",
+    country: "Reino Unido",
+    scene: "Tresor meets Perc Trax 31/07/2026",
+    floor: "Tresor / Perc Trax 31.07",
+    time: "",
+    subgenre: "Industrial Techno / Perc Trax",
+    setTitle: "Busca de set: Perc",
+    setUrl: "https://www.youtube.com/results?search_query=Perc%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Perc Trax",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor no showcase Perc Trax; ancora industrial techno.",
+    reason: "Quando o usuario pede techno mais agressivo, industrial e sem cara de mainstage, Perc e uma ancora boa."
+  },
+  {
+    id: "berlin-20260731-tresor-lacchesi",
+    lane: "berlin_raw_hardgroove",
+    style: "hardgroove_techno",
+    name: "Lacchesi",
+    country: "Franca",
+    scene: "Tresor meets Perc Trax 31/07/2026",
+    floor: "Tresor / Perc Trax 31.07",
+    time: "",
+    subgenre: "Hardgroove Techno / Raw Techno",
+    setTitle: "Busca de set: Lacchesi",
+    setUrl: "https://www.youtube.com/results?search_query=Lacchesi%20DJ%20set%20techno",
+    sourceUrl: "https://tresorberlin.com/club/events/",
+    platform: "Busca",
+    sourceName: "Tresor events",
+    eventSignal: "Tresor meets Perc Trax",
+    roleKind: "dj",
+    roleNote: "Listado por Tresor/Perc Trax; entra como hardgroove/raw.",
+    reason: "Adiciona energia percussiva e atual para recomendacoes de techno de pista."
+  },
+  {
+    id: "berlin-20260703-rso-shxcxchcxsh-live",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "SHXCXCHCXSH",
+    country: "Suecia",
+    scene: "Deestricted 8Y 03/07/2026 - RSO.BERLIN",
+    floor: "RSO / Deestricted 8Y",
+    time: "Live",
+    subgenre: "Hypnotic Techno / Experimental Techno / Live",
+    setTitle: "Busca de live: SHXCXCHCXSH",
+    setUrl: "https://www.youtube.com/results?search_query=SHXCXCHCXSH%20live%20techno",
+    sourceUrl: "https://ra.co/events/2377740",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Deestricted 8Y / RSO.BERLIN",
+    roleKind: "live",
+    roleNote: "RA lista SHXCXCHCXSH como live no Deestricted 8Y em RSO.",
+    reason: "Serve para sugerir techno hipnotico, abstrato e textural com cara de sala grande."
+  },
+  {
+    id: "berlin-20260703-rso-wata-igarashi",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Wata Igarashi",
+    country: "Japao",
+    scene: "Deestricted 8Y 03/07/2026 - RSO.BERLIN",
+    floor: "RSO / Deestricted 8Y",
+    time: "",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Busca de set: Wata Igarashi",
+    setUrl: "https://www.youtube.com/results?search_query=Wata%20Igarashi%20DJ%20set",
+    sourceUrl: "https://ra.co/events/2377740",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Deestricted 8Y / RSO.BERLIN",
+    roleKind: "dj",
+    roleNote: "Listado pela RA no Deestricted 8Y; classificado como hypnotic/deep techno.",
+    reason: "Ancora essencial para techno japones hipnotico, preciso e de longa duracao."
+  },
+  {
+    id: "berlin-20260703-rso-hitam",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Hitam",
+    country: "Paises Baixos",
+    scene: "Deestricted 8Y 03/07/2026 - RSO.BERLIN",
+    floor: "RSO / Deestricted 8Y",
+    time: "",
+    subgenre: "Raw Techno / Hypnotic Techno",
+    setTitle: "Busca de set: Hitam",
+    setUrl: "https://www.youtube.com/results?search_query=Hitam%20DJ%20set%20techno",
+    sourceUrl: "https://ra.co/events/2377740",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Deestricted 8Y / RSO.BERLIN",
+    roleKind: "dj",
+    roleNote: "Listado pela RA no Deestricted 8Y; classificado como raw/hypnotic.",
+    reason: "Bom para quando o usuario quer techno seco, moderno e pouco melodico."
+  },
+  {
+    id: "berlin-20260724-rso-lsdxoxo",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "LSDXOXO",
+    country: "Estados Unidos / Alemanha",
+    scene: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    floor: "RSO / CSD Weekender 24-27.07",
+    time: "",
+    subgenre: "Electro / Techno / Queer Rave",
+    setTitle: "Busca de set: LSDXOXO",
+    setUrl: "https://www.youtube.com/results?search_query=LSDXOXO%20DJ%20set",
+    sourceUrl: "https://events.musicofourdesire.com/event/xehf-heshethey-x-spielraum-x-rso-csd-weekender-festival-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    roleKind: "dj",
+    roleNote: "Line-up do CSD Weekender em RSO; Mood marca electro/techno/acid/house.",
+    reason: "Abre a camada queer rave com electro e techno de alto impacto sem virar categoria de clube."
+  },
+  {
+    id: "berlin-20260724-rso-urtrax",
+    lane: "berlin_acid_electro",
+    style: "acid_techno",
+    name: "u.r.trax",
+    country: "Franca",
+    scene: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    floor: "RSO / CSD Weekender 24-27.07",
+    time: "",
+    subgenre: "Acid Techno / Electro",
+    setTitle: "Busca de set: u.r.trax",
+    setUrl: "https://www.youtube.com/results?search_query=u.r.trax%20DJ%20set",
+    sourceUrl: "https://events.musicofourdesire.com/event/xehf-heshethey-x-spielraum-x-rso-csd-weekender-festival-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    roleKind: "dj",
+    roleNote: "Mood lista u.r.trax no line-up e marca acid techno.",
+    reason: "Boa carta para acid techno novo, rapido e urbano dentro do radar Berlim."
+  },
+  {
+    id: "berlin-20260724-rso-jasss",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "JASSS",
+    country: "Espanha / Alemanha",
+    scene: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    floor: "RSO / CSD Weekender 24-27.07",
+    time: "",
+    subgenre: "Electro / Industrial / Experimental Techno",
+    setTitle: "Busca de set: JASSS",
+    setUrl: "https://www.youtube.com/results?search_query=JASSS%20DJ%20set",
+    sourceUrl: "https://events.musicofourdesire.com/event/xehf-heshethey-x-spielraum-x-rso-csd-weekender-festival-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    roleKind: "dj",
+    roleNote: "Line-up do CSD Weekender; catalogada no eixo electro/industrial experimental.",
+    reason: "Excelente para usuarios que querem electro mais escuro, experimental e com pressao de clube."
+  },
+  {
+    id: "berlin-20260724-rso-amanda-mussi",
+    lane: "berlin_raw_hardgroove",
+    style: "hardgroove_techno",
+    name: "Amanda Mussi",
+    country: "Brasil / Alemanha",
+    scene: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    floor: "RSO / CSD Weekender 24-27.07",
+    time: "",
+    subgenre: "Brazilian Techno / Hardgroove",
+    setTitle: "Busca de set: Amanda Mussi",
+    setUrl: "https://www.youtube.com/results?search_query=Amanda%20Mussi%20DJ%20set%20techno",
+    sourceUrl: "https://events.musicofourdesire.com/event/xehf-heshethey-x-spielraum-x-rso-csd-weekender-festival-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "HE.SHE.THEY x SPIELRAUM x RSO CSD Weekender",
+    roleKind: "dj",
+    roleNote: "Mood lista Amanda Mussi e marca Brazilian techno.",
+    reason: "Importante para dar cara brasileira/berlinense ao radar de hardgroove e techno rapido."
+  },
+  {
+    id: "berlin-20260710-ohm-john-t-gast",
+    lane: "berlin_bass_electro",
+    style: "dub_techno",
+    name: "John T. Gast",
+    country: "Reino Unido",
+    scene: "Pain Management 10/07/2026 - OHM Berlin",
+    floor: "OHM / Pain Management 10.07",
+    time: "",
+    subgenre: "Industrial Dub / Dub Techno / Experimental",
+    setTitle: "Busca de set: John T. Gast",
+    setUrl: "https://www.youtube.com/results?search_query=John%20T.%20Gast%20DJ%20set",
+    sourceUrl: "https://events.musicofourdesire.com/event/qq5i-pain-management-event-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "Pain Management / OHM",
+    roleKind: "dj",
+    roleNote: "Mood descreve a noite como dub, sound system, industrial e techno experimental.",
+    reason: "Abre um eixo mais sound-system: dub, baixa frequencia e techno dissolvido."
+  },
+  {
+    id: "berlin-20260710-ohm-trailcam",
+    lane: "berlin_bass_electro",
+    style: "dub_techno",
+    name: "Trailcam",
+    country: "Internacional",
+    scene: "Pain Management 10/07/2026 - OHM Berlin",
+    floor: "OHM / Pain Management 10.07",
+    time: "",
+    subgenre: "Dub Techno / Experimental Bass",
+    setTitle: "Busca de set: Trailcam",
+    setUrl: "https://www.youtube.com/results?search_query=Trailcam%20DJ%20set%20dub%20techno",
+    sourceUrl: "https://events.musicofourdesire.com/event/qq5i-pain-management-event-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "Pain Management / OHM",
+    roleKind: "dj",
+    roleNote: "Mood associa Trailcam a dub techno e murk de sound system.",
+    reason: "Reforca recomendacao de dub techno moderno, sujo e experimental."
+  },
+  {
+    id: "berlin-20260710-ohm-nap",
+    lane: "berlin_bass_electro",
+    style: "experimental_bass",
+    name: "NAP",
+    country: "Mexico",
+    scene: "Pain Management 10/07/2026 - OHM Berlin",
+    floor: "OHM / Pain Management 10.07",
+    time: "",
+    subgenre: "Experimental Bass / Dub Techno",
+    setTitle: "Busca de set: NAP",
+    setUrl: "https://www.youtube.com/results?search_query=NAP%20DJ%20set%20experimental%20bass",
+    sourceUrl: "https://events.musicofourdesire.com/event/qq5i-pain-management-event-berlin-germany",
+    platform: "Busca",
+    sourceName: "Mood / RA",
+    eventSignal: "Pain Management / OHM",
+    roleKind: "dj",
+    roleNote: "Mood descreve NAP como repeticao ritmica e mutacao dub.",
+    reason: "Bom para usuarios que pedem baixo, pressao e texturas sem cair em techno reto."
+  },
+  {
+    id: "berlin-20260723-aboutblank-ella-wax",
+    lane: "berlin_raw_hardgroove",
+    style: "hardgroove_techno",
+    name: "ELLA WAX",
+    country: "Alemanha",
+    scene: "Amsterdam Techno Records 23/07/2026 - ://about blank",
+    floor: "://about blank / ATR 23.07",
+    time: "",
+    subgenre: "Hypnotic Groove / Hardgroove",
+    setTitle: "Busca de set: ELLA WAX",
+    setUrl: "https://www.youtube.com/results?search_query=ELLA%20WAX%20DJ%20set%20techno",
+    sourceUrl: "https://ra.co/events/2460038",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Amsterdam Techno Records / ://about blank",
+    roleKind: "dj",
+    roleNote: "RA descreve a edicao como fusao de hypnotic groove e hardgroove.",
+    reason: "Seed util para nomes novos de hardgroove/hypnotic em festas menores de Berlim."
+  },
+  {
+    id: "berlin-20260723-aboutblank-takt130",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "TAKT130",
+    country: "Alemanha",
+    scene: "Amsterdam Techno Records 23/07/2026 - ://about blank",
+    floor: "://about blank / ATR 23.07",
+    time: "",
+    subgenre: "Hypnotic Groove / Techno",
+    setTitle: "Busca de set: TAKT130",
+    setUrl: "https://www.youtube.com/results?search_query=TAKT130%20DJ%20set%20techno",
+    sourceUrl: "https://ra.co/events/2460038",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Amsterdam Techno Records / ://about blank",
+    roleKind: "dj",
+    roleNote: "Line-up RA para ://about blank; mapeado para hypnotic groove.",
+    reason: "Ajuda o app a recomendar artistas de festa local, nao so headliners."
+  },
+  {
+    id: "berlin-20260703-third-eye-dj-nobu",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "DJ Nobu",
+    country: "Japao",
+    scene: "Third Eye Festival 03-06/07/2026 - perto de Berlim",
+    floor: "Third Eye Festival / Berlin region",
+    time: "",
+    subgenre: "Hypnotic Techno / Psychedelic Techno",
+    setTitle: "Busca de set: DJ Nobu",
+    setUrl: "https://www.youtube.com/results?search_query=DJ%20Nobu%20set%20hypnotic%20techno",
+    sourceUrl: "https://ra.co/events/2288806",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Third Eye Festival / near Berlin",
+    roleKind: "dj",
+    roleNote: "RA Pick descreve o festival como hypnotic techno perto de Berlim.",
+    reason: "Ancora de altissimo criterio para techno psicodelico/hipnotico no radar Berlin-region."
+  },
+  {
+    id: "berlin-20260703-third-eye-kangding-ray",
+    lane: "berlin_hypnotic_deep",
+    style: "deep_techno",
+    name: "Kangding Ray",
+    country: "Franca / Alemanha",
+    scene: "Third Eye Festival 03-06/07/2026 - perto de Berlim",
+    floor: "Third Eye Festival / Berlin region",
+    time: "",
+    subgenre: "Deep Techno / IDM / Experimental Techno",
+    setTitle: "Busca de set: Kangding Ray",
+    setUrl: "https://www.youtube.com/results?search_query=Kangding%20Ray%20DJ%20set%20techno",
+    sourceUrl: "https://ra.co/events/2288806",
+    platform: "Busca",
+    sourceName: "Resident Advisor",
+    eventSignal: "Third Eye Festival / near Berlin",
+    roleKind: "dj",
+    roleNote: "Listado pela RA no Third Eye Festival; perfilado para techno profundo/IDM.",
+    reason: "Boa recomendacao para usuarios que gostam de techno cerebral, elegante e experimental."
   }
 ];
 
@@ -1161,8 +2349,11 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20260705-ignez-hypnotic-techno-v1";
+const EXTERNAL_DATASET_CACHE_VERSION = "20260707-psy-festival-playable-v2";
 const EXTERNAL_DATASET_PRIORITY_FILES = [
+  "data/psy_festival_lineups_202607_artist_profiles.csv",
+  "data/berlin_club_radar_202607_artist_profiles.csv",
+  "data/berghain_klubnacht_20260704_artist_profiles.csv",
   "data/datasetlocal_hypnotic_techno_ignez_enrichment_v1_20260705.csv",
   "data/uk_garage_mattik_bridge_v1_20260704.csv",
   "data/indietronica_bridge_enrichment_v1_20260704.csv",
@@ -19633,8 +20824,8 @@ const I18N = {
     swipeShowAllStyles: "Ver todos os {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe da faixa",
-    discoverySequence: "#{number}",
-    heardTrackSequence: "Faixa ouvida #{number}",
+    discoverySequence: "Faixa #{number}",
+    heardTrackSequence: "Faixa apresentada #{number}",
     swipeEmptyTitle: "Abra uma faixa",
     swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
     swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
@@ -20363,7 +21554,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial em {style}. Usei uma rota local confiável enquanto continuo ampliando a base.",
     catalogFallbackSearching: "Cobertura parcial em {style}. Buscando sinais melhores antes de recomendar...",
     spiritPanelTitle: "Seu Sound System",
-    spiritIntro: "10 curtidas desbloqueiam a primeira leitura.",
+    spiritIntro: "10 faixas curtidas desbloqueiam a primeira leitura.",
     spiritBadge: "Sound System desbloqueado",
     spiritAvatarAlt: "Sound System pessoal {name}",
     spiritProgressLocked: "Músicas curtidas: {current}/{target}. Faltam {remaining} para liberar seu Sound System.",
@@ -20377,8 +21568,8 @@ const I18N = {
     spiritInsightTitle: "Calibração",
     spiritInsightLockedStatus: "Coletando",
     spiritInsightUnlockedStatus: "Ativo",
-    spiritInsightLockedText: "Faltam {remaining} curtidas para calibrar.",
-    spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} likes.",
+    spiritInsightLockedText: "Faltam {remaining} faixas curtidas para calibrar.",
+    spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} faixas curtidas.",
     spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
     spiritInsightSignalScore: "sinal {score}",
     spiritVitalDnaLabel: "DNA dominante",
@@ -20388,12 +21579,12 @@ const I18N = {
     spiritVitalNoSignal: "Sinais em coleta",
     spiritVitalDnaLocked: "Ainda estou somando pistas antes de montar seu sistema.",
     spiritVitalDnaUnlocked: "{name} guia a identidade sonora desse sistema.",
-    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleLocked: "{current}/{target} faixas curtidas",
     spiritVitalCycleUnlocked: "{current}/{target} no ciclo",
-    spiritVitalCycleRemaining: "Faltam {remaining} para a próxima leitura.",
+    spiritVitalCycleRemaining: "Faltam {remaining} faixas curtidas para a próxima leitura.",
     spiritVitalCycleReady: "Leitura pronta para revisar.",
     spiritVitalRankLocked: "Em formação",
-    spiritVitalRankNext: "Próximo nível: {rank} em {likes} likes.",
+    spiritVitalRankNext: "Próximo nível: {rank} em {likes} faixas curtidas.",
     spiritVitalRankLockedDetail: "O nível aparece quando a primeira leitura fechar.",
     spiritVitalRankMax: "Nível máximo atual do radar.",
     spiritVitalNextLocked: "Curta livremente",
@@ -20414,10 +21605,10 @@ const I18N = {
     spiritCollectiblePremiumLocked: "O Sound System IA está preparado. Gere novamente quando a imagem online estiver disponível.",
     premiumAvatarLimitReached: "O limite de geração IA deste perfil foi atingido. Evolua para um novo marco ou tente mais tarde.",
     premiumDiscoveryLimitReached: "Você chegou ao limite gratuito de {limit} músicas descobertas. Assine premium para continuar descobrindo.",
-    spiritCollectibleMilestone: "Arte desbloqueada no marco de {likes} likes",
-    spiritCollectibleNext: "Faltam {remaining} likes para {rank} ({current}/{nextLikes}).",
-    spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} likes.",
-    spiritCollectibleAlt: "Sound System de {spirit} no marco de {milestone} likes",
+    spiritCollectibleMilestone: "Arte desbloqueada no marco de {likes} faixas curtidas",
+    spiritCollectibleNext: "Faltam {remaining} faixas curtidas para {rank} ({current}/{nextLikes}).",
+    spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} faixas curtidas.",
+    spiritCollectibleAlt: "Sound System de {spirit} no marco de {milestone} faixas curtidas",
     spiritCollectibleRegenerate: "Gerar imagem",
     spiritCollectibleRegenerateAgain: "Gerar nova",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
@@ -20698,8 +21889,8 @@ const I18N = {
     swipeShowAllStyles: "Show all {count} styles",
     swipeShowFocusedStyles: "Show fewer styles",
     swipeKicker: "Track swipe",
-    discoverySequence: "#{number}",
-    heardTrackSequence: "Track heard #{number}",
+    discoverySequence: "Track #{number}",
+    heardTrackSequence: "Track shown #{number}",
     swipeEmptyTitle: "Open a track",
     swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
     swipeHint: "Drag with mouse or touch; release to save the signal.",
@@ -21425,7 +22616,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Partial coverage in {style}. I used a reliable local route while the base keeps expanding.",
     catalogFallbackSearching: "Partial coverage in {style}. Searching for stronger signals before recommending...",
     spiritPanelTitle: "Your Sound System",
-    spiritIntro: "10 likes unlock your first reading.",
+    spiritIntro: "10 liked tracks unlock your first reading.",
     spiritBadge: "Sound System unlocked",
     spiritAvatarAlt: "Personal Sound System {name}",
     spiritProgressLocked: "Liked tracks: {current}/{target}. {remaining} to unlock your Sound System.",
@@ -21439,8 +22630,8 @@ const I18N = {
     spiritInsightTitle: "Calibration",
     spiritInsightLockedStatus: "Collecting",
     spiritInsightUnlockedStatus: "Active",
-    spiritInsightLockedText: "{remaining} likes left to calibrate.",
-    spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} likes.",
+    spiritInsightLockedText: "{remaining} liked tracks left to calibrate.",
+    spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} liked tracks.",
     spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
     spiritInsightSignalScore: "signal {score}",
     spiritVitalDnaLabel: "Dominant DNA",
@@ -21450,12 +22641,12 @@ const I18N = {
     spiritVitalNoSignal: "Collecting signals",
     spiritVitalDnaLocked: "I am still adding clues before building your system.",
     spiritVitalDnaUnlocked: "{name} guides this system's sonic identity.",
-    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleLocked: "{current}/{target} liked tracks",
     spiritVitalCycleUnlocked: "{current}/{target} this cycle",
-    spiritVitalCycleRemaining: "{remaining} left until the next reading.",
+    spiritVitalCycleRemaining: "{remaining} liked tracks left until the next reading.",
     spiritVitalCycleReady: "Reading ready to review.",
     spiritVitalRankLocked: "Forming",
-    spiritVitalRankNext: "Next level: {rank} at {likes} likes.",
+    spiritVitalRankNext: "Next level: {rank} at {likes} liked tracks.",
     spiritVitalRankLockedDetail: "The level appears when the first reading closes.",
     spiritVitalRankMax: "Current maximum radar level.",
     spiritVitalNextLocked: "Like freely",
@@ -21476,10 +22667,10 @@ const I18N = {
     spiritCollectiblePremiumLocked: "The AI Sound System is prepared. Generate again when the online image is available.",
     premiumAvatarLimitReached: "The AI generation limit for this profile was reached. Evolve to a new milestone or try later.",
     premiumDiscoveryLimitReached: "You reached the free limit of {limit} discovered tracks. Subscribe to premium to keep discovering.",
-    spiritCollectibleMilestone: "Artwork unlocked at {likes}-like milestone",
-    spiritCollectibleNext: "{remaining} likes left to reach {rank} ({current}/{nextLikes}).",
-    spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} likes.",
-    spiritCollectibleAlt: "{spirit} Sound System at {milestone} likes milestone",
+    spiritCollectibleMilestone: "Artwork unlocked at {likes} liked tracks",
+    spiritCollectibleNext: "{remaining} liked tracks left to reach {rank} ({current}/{nextLikes}).",
+    spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} liked tracks.",
+    spiritCollectibleAlt: "{spirit} Sound System at {milestone} liked tracks",
     spiritCollectibleRegenerate: "Generate image",
     spiritCollectibleRegenerateAgain: "Generate new",
     spiritCollectibleAiLimitUsed: "AI image already created",
@@ -21760,8 +22951,8 @@ const I18N = {
     swipeShowAllStyles: "Ver los {count} estilos",
     swipeShowFocusedStyles: "Ver menos estilos",
     swipeKicker: "Swipe de la pista",
-    discoverySequence: "#{number}",
-    heardTrackSequence: "Pista escuchada #{number}",
+    discoverySequence: "Pista #{number}",
+    heardTrackSequence: "Pista presentada #{number}",
     swipeEmptyTitle: "Abre una pista",
     swipeEmptyMeta: "Toca Sorpresa, escucha y decide con swipe.",
     swipeHint: "Arrastra con mouse o dedo; suelta para guardar la señal.",
@@ -22484,7 +23675,7 @@ const I18N = {
     catalogFallbackUsingLocal: "Cobertura parcial en {style}. Usé una ruta local confiable mientras sigo ampliando la base.",
     catalogFallbackSearching: "Cobertura parcial en {style}. Buscando señales mejores antes de recomendar...",
     spiritPanelTitle: "Tu Sound System",
-    spiritIntro: "10 likes desbloquean tu primera lectura.",
+    spiritIntro: "10 pistas con like desbloquean tu primera lectura.",
     spiritBadge: "Sound System desbloqueado",
     spiritAvatarAlt: "Sound System personal {name}",
     spiritProgressLocked: "Canciones con like: {current}/{target}. Faltan {remaining} para desbloquear tu Sound System.",
@@ -22498,8 +23689,8 @@ const I18N = {
     spiritInsightTitle: "Calibración",
     spiritInsightLockedStatus: "Recopilando",
     spiritInsightUnlockedStatus: "Activo",
-    spiritInsightLockedText: "Faltan {remaining} likes para calibrar.",
-    spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} likes.",
+    spiritInsightLockedText: "Faltan {remaining} pistas con like para calibrar.",
+    spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} pistas con like.",
     spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
     spiritInsightSignalScore: "señal {score}",
     spiritVitalDnaLabel: "ADN dominante",
@@ -22509,12 +23700,12 @@ const I18N = {
     spiritVitalNoSignal: "Señales en recopilación",
     spiritVitalDnaLocked: "Aún estoy sumando pistas antes de montar tu sistema.",
     spiritVitalDnaUnlocked: "{name} guía la identidad sonora de este sistema.",
-    spiritVitalCycleLocked: "{current}/{target} likes",
+    spiritVitalCycleLocked: "{current}/{target} pistas con like",
     spiritVitalCycleUnlocked: "{current}/{target} en el ciclo",
-    spiritVitalCycleRemaining: "Faltan {remaining} para la próxima lectura.",
+    spiritVitalCycleRemaining: "Faltan {remaining} pistas con like para la próxima lectura.",
     spiritVitalCycleReady: "Lectura lista para revisar.",
     spiritVitalRankLocked: "En formación",
-    spiritVitalRankNext: "Próximo nivel: {rank} en {likes} likes.",
+    spiritVitalRankNext: "Próximo nivel: {rank} en {likes} pistas con like.",
     spiritVitalRankLockedDetail: "El nivel aparece cuando cierre la primera lectura.",
     spiritVitalRankMax: "Nivel máximo actual del radar.",
     spiritVitalNextLocked: "Dale like libremente",
@@ -22535,10 +23726,10 @@ const I18N = {
     spiritCollectiblePremiumLocked: "El Sound System IA está preparado. Genera de nuevo cuando la imagen online esté disponible.",
     premiumAvatarLimitReached: "Se alcanzó el límite de generación IA de este perfil. Evoluciona a un nuevo hito o intenta más tarde.",
     premiumDiscoveryLimitReached: "Llegaste al límite gratuito de {limit} canciones descubiertas. Suscríbete a premium para seguir descubriendo.",
-    spiritCollectibleMilestone: "Arte desbloqueado en el hito de {likes} likes",
-    spiritCollectibleNext: "Faltan {remaining} likes para {rank} ({current}/{nextLikes}).",
-    spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} likes.",
-    spiritCollectibleAlt: "Sound System de {spirit} en el hito de {milestone} likes",
+    spiritCollectibleMilestone: "Arte desbloqueado en el hito de {likes} pistas con like",
+    spiritCollectibleNext: "Faltan {remaining} pistas con like para {rank} ({current}/{nextLikes}).",
+    spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} pistas con like.",
+    spiritCollectibleAlt: "Sound System de {spirit} en el hito de {milestone} pistas con like",
     spiritCollectibleRegenerate: "Generar imagen",
     spiritCollectibleRegenerateAgain: "Generar nueva",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
@@ -43435,6 +44626,16 @@ function djRecommendationKey(seed = {}) {
 }
 
 function djLaneLabel(lane = "") {
+  if (lane === "techno_live_dj") return "Techno / Live";
+  if (lane === "berlin_hypnotic_deep") return "Hypnotic / Deep Techno";
+  if (lane === "berlin_raw_hardgroove") return "Raw / Hardgroove";
+  if (lane === "berlin_industrial_ebm") return "Industrial / EBM";
+  if (lane === "berlin_acid_electro") return "Acid / Electro";
+  if (lane === "berlin_bass_electro") return "Bass / Broken Techno";
+  if (lane === "house_selectors") return "House / Selectors";
+  if (lane === "minimal_deep_selectors") return "Minimal / Deep Tech";
+  if (lane === "disco_italo_selectors") return "Disco / Italo";
+  if (lane === "psy_festival_lineups") return "Psy festivals";
   if (lane === "hitech_psycore") return "Hi-Tech / Psycore";
   if (lane === "mop") return "Psy BR";
   if (lane === "global_psy") return "Psy global";
@@ -43443,16 +44644,27 @@ function djLaneLabel(lane = "") {
 }
 
 function djMetaLine(seed = {}) {
-  const scene = String(seed.scene || seed.eventSignal || djLaneLabel(seed.lane)).trim();
+  const slot = [seed.floor, seed.time].map((item) => String(item || "").trim()).filter(Boolean).join(" ");
+  const scene = String(slot || seed.scene || seed.eventSignal || djLaneLabel(seed.lane)).trim();
   const platform = String(seed.platform || "").trim();
   return [scene, platform].filter(Boolean).join(" • ") || "Set público selecionado por curadoria.";
 }
 
 function djContextItems(seed = {}) {
+  const roleLabel = seed.roleKind === "live"
+    ? "Live act"
+    : seed.roleKind === "b2b"
+      ? "B2B"
+      : seed.platform
+        ? "Set/busca"
+        : "Curadoria por set";
   return [
     { label: "Origem", value: seed.country },
+    { label: "Festa", value: seed.eventName || seed.eventSignal || seed.scene || seed.floor },
+    { label: "Data", value: seed.date },
+    { label: "Horario", value: seed.time },
     { label: "Som", value: seed.subgenre || seed.style },
-    { label: "Entrada", value: seed.platform ? "Set público" : "Curadoria por set" }
+    { label: "Entrada", value: roleLabel }
   ].filter((item) => String(item.value || "").trim());
 }
 
@@ -43503,9 +44715,17 @@ function djSetEmbedUrl(seed = {}) {
   return "";
 }
 
+function djSeedHasPlayablePreview(seed = {}) {
+  return Boolean(djSetEmbedUrl(seed));
+}
+
 function filteredDjRecommendationPool() {
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
   const pool = DJ_SET_RECOMMENDATION_SEEDS.filter((seed) => !lane || seed.lane === lane);
+  if (lane === "psy_festival_lineups") {
+    const playablePool = pool.filter(djSeedHasPlayablePreview);
+    if (playablePool.length) return playablePool;
+  }
   return pool.length ? pool : DJ_SET_RECOMMENDATION_SEEDS;
 }
 
@@ -43514,7 +44734,11 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
   const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
   if (!currentDjRecommendation && !lane) {
-    const starter = pool.find((seed) => seed.id === "hitech-psycore-anginha")
+    const starter = pool.find((seed) => seed.id === "berlin-20260703-rso-wata-igarashi")
+      || pool.find((seed) => seed.id === "berlin-20260711-berghain-adiel")
+      || pool.find((seed) => seed.id === "berghain-20260704-ignez-live")
+      || pool.find((seed) => seed.lane === "techno_live_dj")
+      || pool.find((seed) => seed.id === "hitech-psycore-anginha")
       || pool.find((seed) => seed.lane === "hitech_psycore" && normalize(seed.platform || "").includes("soundcloud"));
     if (starter) return starter;
   }
@@ -43561,20 +44785,31 @@ function loadDjRecommendationMemory() {
 }
 
 function renderDjRadarSummary() {
-  if (djRadarCount) djRadarCount.textContent = `${DJ_SET_RECOMMENDATION_SEEDS.length} sets verificados`;
+  if (djRadarCount) {
+    const lane = String(djDiscoverySceneFilter?.value || "").trim();
+    const count = lane ? filteredDjRecommendationPool().length : DJ_SET_RECOMMENDATION_SEEDS.length;
+    djRadarCount.textContent = `${count} cartas curadas`;
+  }
   if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
   if (djRadarScope) {
     const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Hi-Tech, psy e selectors";
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Techno, psy festivals e selectors";
   }
 }
 
 function renderDjRecommendationBadges(seed = null) {
   const key = djRecommendationKey(seed);
+  const hasEmbed = Boolean(seed && djSetEmbedUrl(seed));
+  const roleBadge = seed?.roleKind === "live"
+    ? { type: "good", label: "Live" }
+    : seed?.roleKind === "b2b"
+      ? { type: "good", label: "B2B" }
+      : null;
   const badges = seed
     ? [
         { type: seed.lane === "mop" ? "known" : "fresh", label: djLaneLabel(seed.lane) },
-        { type: "preview", label: "Set tocavel" },
+        roleBadge,
+        { type: hasEmbed ? "preview" : "known", label: hasEmbed ? "Set tocavel" : "Busca pronta" },
         { type: "good", label: seed.platform || "Preview" },
         likedDjRecommendationKeys.has(key) ? { type: "saved", label: "Salvo" } : null
       ]
@@ -43584,9 +44819,14 @@ function renderDjRecommendationBadges(seed = null) {
 
 function renderDjRecommendation(seed = currentDjRecommendation) {
   const hasSeed = Boolean(seed);
+  const roleKicker = seed?.roleKind === "live"
+    ? "Live recomendado"
+    : seed?.roleKind === "b2b"
+      ? "B2B recomendado"
+      : "Set recomendado";
   resetSwipeElementPosition(djSwipeCard);
   if (djSwipeCard) djSwipeCard.classList.toggle("is-empty", !hasSeed);
-  if (djSwipeKicker) djSwipeKicker.textContent = hasSeed ? "Set recomendado" : "Set recomendado";
+  if (djSwipeKicker) djSwipeKicker.textContent = hasSeed ? roleKicker : "Set recomendado";
   if (djSwipeName) djSwipeName.textContent = hasSeed ? seed.name : "Abra um DJ";
   if (djSwipeMeta) {
     djSwipeMeta.textContent = hasSeed
@@ -43606,8 +44846,10 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeSetChip) djSwipeSetChip.textContent = hasSeed ? seed.setTitle : "Set";
   if (djSwipeSourceChip) djSwipeSourceChip.textContent = hasSeed ? seed.sourceName || seed.platform : "Fonte";
   if (djSwipeSourceLink) {
-    djSwipeSourceLink.href = hasSeed ? seed.setUrl : "#";
-    djSwipeSourceLink.textContent = hasSeed ? `Abrir ${seed.platform || "set"}` : "Abrir set";
+    const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
+    const destinationLabel = seed?.platform === "Busca" ? "busca" : seed?.platform || "set";
+    djSwipeSourceLink.href = hasSeed ? destinationUrl : "#";
+    djSwipeSourceLink.textContent = hasSeed ? `Abrir ${destinationLabel}` : "Abrir set";
     djSwipeSourceLink.classList.toggle("is-disabled", !hasSeed);
     djSwipeSourceLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
@@ -43619,11 +44861,14 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : "Player pronto";
   if (djPreviewMeta) {
     djPreviewMeta.textContent = hasSeed
-      ? `${seed.name} • ${seed.subgenre} • ${seed.platform}`
+      ? embedUrl
+        ? `${seed.name} • ${seed.subgenre} • ${seed.platform}`
+        : `${seed.name} • ${seed.subgenre} • abre busca/fonte`
       : "O player aparece quando uma carta de DJ estiver ativa.";
   }
   if (djPreviewOpenLink) {
-    djPreviewOpenLink.href = hasSeed ? seed.setUrl : "#";
+    const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
+    djPreviewOpenLink.href = hasSeed ? destinationUrl : "#";
     djPreviewOpenLink.textContent = hasSeed ? seed.platform || "Abrir" : "YouTube";
     djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
     djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");

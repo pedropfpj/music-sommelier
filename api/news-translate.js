@@ -1,4 +1,4 @@
-const { callOpenAiJson, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
+const { callOpenAiJson, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("../lib/api/_openai");
 
 const NEWS_TRANSLATION_SCHEMA = {
   type: "object",

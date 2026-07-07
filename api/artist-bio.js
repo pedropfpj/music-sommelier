@@ -1,5 +1,5 @@
-const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("./_openai");
-const { envFirst, envFlag, envInt, envText } = require("./_music-apis");
+const { callOpenAiText, enforceDurableOpenAiDailyBudget, parseBody, requireOpenAiPost, sendJson, trimText } = require("../lib/api/_openai");
+const { envFirst, envFlag, envInt, envText } = require("../lib/api/_music-apis");
 
 const DEFAULT_REFERENCE_USER_AGENT = "SonicSearch/1.0 (+https://sonicsearch.app)";
 const ARTIST_LOOKUP_TIMEOUT_MS = 4500;

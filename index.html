@@ -23,7 +23,7 @@
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
     <link rel="preload" href="styles.css?v=20260705publicUi1" as="style" />
-    <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" as="image" type="image/png" />
+    <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script>
@@ -89,10 +89,10 @@
     </style>
     <style id="sonic-logo-upgrade-styles">
       .brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(80vw,560px);max-width:560px;margin-inline:auto}.brand-logo{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(46,215,255,.2))}
-      .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px}.intro-logo-mark{display:block;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22))}
+      .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px;min-height:clamp(72px,16vw,150px);display:grid;place-items:center;line-height:0}.intro-logo-mark{display:block;position:relative;z-index:2;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22));opacity:0;transition:opacity .18s ease}.intro-logo-mark[data-logo-loaded="true"]{opacity:1}.intro-logo-mark[data-logo-failed="true"]{display:none}.intro-logo-fallback{position:absolute;left:50%;top:50%;z-index:1;width:min(96%,560px);transform:translate(-50%,-50%);color:#3477b1;font-family:"Syne","Chakra Petch",sans-serif;font-size:clamp(2.2rem,10vw,5.5rem);font-weight:800;line-height:.82;text-align:center;text-shadow:0 0 1px rgba(255,255,255,.75),0 16px 34px rgba(43,158,255,.24),0 0 28px rgba(84,255,232,.16);opacity:1;transition:opacity .18s ease;pointer-events:none}.intro-logo-mark[data-logo-loaded="true"]+.intro-logo-fallback{opacity:0}
       .hero-logo-wrap{width:clamp(300px,32vw,520px);min-height:132px;display:grid;place-items:center;overflow:hidden;line-height:0}.hero-logo-mark{display:block;width:100%;max-width:100%;height:auto;max-height:176px;object-fit:contain;transform:none;filter:drop-shadow(0 18px 34px rgba(35,210,255,.18))}
       @media (min-width:1100px){.hero-brand{grid-template-columns:minmax(360px,520px) minmax(0,1fr);align-items:center}.hero-logo-wrap{justify-self:center}}
-      @media (max-width:760px){.welcome-screen{grid-template-columns:minmax(0,1fr);padding-inline:20px}.intro-card,.language-card,.auth-card,.usage-guide-card,#welcomeScreen .welcome-card{box-sizing:border-box;width:calc(100vw - 48px);max-width:calc(100vw - 48px)}.language-card{padding-inline:1rem}.brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(66vw,260px)}.intro-logo-system{width:min(100%,318px)}.intro-logo-wrap{width:min(62vw,232px)}.intro-logo-mark{transform:none}.hero-logo-wrap{width:clamp(112px,34vw,164px);min-height:44px}.hero-logo-mark{max-height:62px}}
+      @media (max-width:760px){.welcome-screen{grid-template-columns:minmax(0,1fr);padding-inline:20px}.intro-card,.language-card,.auth-card,.usage-guide-card,#welcomeScreen .welcome-card{box-sizing:border-box;width:calc(100vw - 48px);max-width:calc(100vw - 48px)}.language-card{padding-inline:1rem}.brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(66vw,260px)}.intro-logo-system{width:min(100%,318px)}.intro-logo-wrap{width:min(68vw,260px);min-height:96px}.intro-logo-mark{transform:none}.intro-logo-fallback{font-size:clamp(2rem,11vw,3.25rem)}.hero-logo-wrap{width:clamp(112px,34vw,164px);min-height:44px}.hero-logo-mark{max-height:62px}}
     </style>
     <style id="sonic-card-studio-polish">
       .swipe-hero-art,.artist-photo-frame{position:relative;overflow:hidden}.swipe-preview-pulse{position:absolute;inset:auto 12% 11% 12%;height:34px;display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;pointer-events:none;opacity:0;transform:translateY(10px);transition:opacity .22s ease,transform .22s ease}.swipe-preview-pulse span{display:block;min-height:7px;border-radius:999px;background:linear-gradient(180deg,#8dfff0,#79d8ff);box-shadow:0 0 15px rgba(110,255,220,.34);animation:sonicWavePulse 950ms ease-in-out infinite;animation-delay:calc(var(--i,0)*68ms)}.swipe-preview-pulse span:nth-child(3n){background:linear-gradient(180deg,#b9a5ff,#79d8ff)}.swipe-track-card.is-preview-searching .swipe-preview-pulse,.swipe-track-card.is-preview-playing .swipe-preview-pulse,.swipe-track-card.is-preview-ready .swipe-preview-pulse,.main-track.is-preview-searching .swipe-preview-pulse,.main-track.is-preview-playing .swipe-preview-pulse,.main-track.is-preview-ready .swipe-preview-pulse{opacity:.96;transform:translateY(0)}.swipe-track-card.is-preview-ready .swipe-preview-pulse span,.main-track.is-preview-ready .swipe-preview-pulse span{animation-duration:1.45s;opacity:.72}.swipe-track-card.is-preview-playing .swipe-hero-art,.main-track.is-preview-playing .artist-photo-frame{box-shadow:0 0 0 1px rgba(126,255,231,.44),0 0 34px rgba(75,231,255,.28),inset 0 0 28px rgba(110,255,220,.08)}
@@ -354,7 +354,8 @@
               <span class="intro-glyph glyph-c">⚡</span>
               <span class="intro-glyph glyph-d">◈</span>
               <div class="intro-logo-wrap">
-                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" fetchpriority="high" decoding="async" />
+                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" alt="" fetchpriority="high" decoding="sync" onload="this.dataset.logoLoaded='true'" onerror="this.dataset.logoFailed='true'" />
+                <span class="intro-logo-fallback" aria-hidden="true">Sonic Search</span>
               </div>
             </div>
             <div class="intro-symbol-cloud" aria-hidden="true">
@@ -638,8 +639,18 @@
             <label class="sr-only" for="djDiscoverySceneFilter">Cena</label>
             <select id="djDiscoverySceneFilter" aria-label="Filtrar DJs por cena">
               <option value="">Todos</option>
+              <option value="techno_live_dj">Techno / Live</option>
+              <option value="berlin_hypnotic_deep">Hypnotic / Deep Techno</option>
+              <option value="berlin_raw_hardgroove">Raw / Hardgroove</option>
+              <option value="berlin_industrial_ebm">Industrial / EBM</option>
+              <option value="berlin_acid_electro">Acid / Electro</option>
+              <option value="berlin_bass_electro">Bass / Broken Techno</option>
+              <option value="house_selectors">House / Selectors</option>
+              <option value="minimal_deep_selectors">Minimal / Deep Tech</option>
+              <option value="disco_italo_selectors">Disco / Italo</option>
               <option value="hitech_psycore">Hi-Tech / Psycore</option>
               <option value="global_psy">Psy global</option>
+              <option value="psy_festival_lineups">Psy festivals</option>
               <option value="global_club">Selectors globais</option>
             </select>
             <button id="djDiscoveryShuffleBtn" class="primary" type="button">Surpresa</button>
@@ -2434,6 +2445,6 @@
         syncBannerLayoutMode();
       })();
     </script>
-    <script defer src="app.js?v=20260702footer1"></script>
+    <script defer src="app.js?v=20260707psyplayable2"></script>
   </body>
 </html>
