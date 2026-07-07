@@ -7098,27 +7098,69 @@ input[type="range"] {
 .events-calendar {
   margin-top: 0.7rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.55rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.7rem;
 }
 
 .event-date-card {
-  border: 1px solid var(--line);
+  border: 1px solid rgba(126, 232, 198, 0.28);
   border-radius: 12px;
-  padding: 0.65rem;
-  background: rgba(7, 13, 30, 0.92);
+  padding: 0.72rem;
+  background:
+    linear-gradient(180deg, rgba(126, 232, 198, 0.08), rgba(138, 199, 255, 0.04)),
+    rgba(7, 13, 30, 0.92);
   display: grid;
-  gap: 0.2rem;
+  gap: 0.34rem;
+  align-content: start;
 }
 
 .event-date-card strong {
+  color: #eefaff;
+  font-size: clamp(0.98rem, 0.94rem + 0.26vw, 1.12rem);
+  line-height: 1.12;
+}
+
+.event-date-kicker {
   color: #7bf4d9;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.event-location {
+  color: rgba(230, 242, 255, 0.78);
+  font-size: 0.88rem;
+  line-height: 1.32;
 }
 
 .event-source {
   width: fit-content;
   color: #91b9e8;
   font-size: 0.72rem;
+}
+
+.event-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.event-badges span {
+  border: 1px solid rgba(155, 206, 255, 0.34);
+  border-radius: 999px;
+  padding: 0.18rem 0.48rem;
+  color: #d8efff;
+  background: rgba(9, 18, 37, 0.74);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.event-lineup-preview {
+  color: rgba(202, 224, 243, 0.78);
+  font-size: 0.78rem;
+  line-height: 1.34;
 }
 
 .events-list {
@@ -7130,12 +7172,23 @@ input[type="range"] {
 }
 
 .event-item {
-  border: 1px solid var(--line);
+  border: 1px solid rgba(141, 173, 214, 0.25);
   border-radius: 12px;
   padding: 0.7rem;
   background: rgba(7, 13, 30, 0.92);
   display: grid;
-  gap: 0.3rem;
+  gap: 0.38rem;
+}
+
+.event-item > strong {
+  color: #7bf4d9;
+  font-size: 0.86rem;
+}
+
+.event-item-title {
+  color: #eefaff;
+  font-weight: 900;
+  line-height: 1.16;
 }
 
 .event-item a {

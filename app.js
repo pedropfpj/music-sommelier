@@ -21470,8 +21470,11 @@ const I18N = {
     feedbackError: "Ocorreu um erro ao processar a ação. Tente novamente.",
     toastButtonFallback: "Ação registrada. Esse botão já está clicável.",
     eventNotFound: "Não encontrei datas futuras confirmadas para {artist} agora. Deixei buscas rápidas para checar a agenda ao vivo.",
-    eventRealLoaded: "Agenda real de {artist} carregada.",
-    eventFallbackLoaded: "Agenda de {artist} carregada em modo catálogo local.",
+    eventRealLoaded: "Datas confirmadas de {artist}, com festa, cidade, fonte e lineup quando disponível.",
+    eventFallbackLoaded: "Datas curadas de {artist} carregadas do catálogo local.",
+    eventUntitled: "Evento sem título",
+    eventLocationUnknown: "Local a confirmar",
+    eventLineupLabel: "Também no lineup",
     eventSearchTitle: "Checar agenda ao vivo",
     eventSearchHint: "Alguns artistas anunciam datas por promotoras, RA, Songkick ou postagens sociais antes das APIs públicas atualizarem.",
     eventSearchBandsintown: "Bandsintown",
@@ -22532,8 +22535,11 @@ const I18N = {
     feedbackError: "An error happened while processing this action. Please try again.",
     toastButtonFallback: "Action recorded. This button is clickable.",
     eventNotFound: "No confirmed upcoming dates found for {artist} right now. I added quick live searches to check the agenda.",
-    eventRealLoaded: "Live event schedule for {artist} loaded.",
-    eventFallbackLoaded: "Local fallback event schedule for {artist} loaded.",
+    eventRealLoaded: "Confirmed dates for {artist}, with event, city, source, and lineup when available.",
+    eventFallbackLoaded: "Curated dates for {artist} loaded from the local catalog.",
+    eventUntitled: "Untitled event",
+    eventLocationUnknown: "Location TBA",
+    eventLineupLabel: "Also in lineup",
     eventSearchTitle: "Check live agenda",
     eventSearchHint: "Some artists announce dates through promoters, RA, Songkick, or social posts before public APIs update.",
     eventSearchBandsintown: "Bandsintown",
@@ -23591,8 +23597,11 @@ const I18N = {
     feedbackError: "Ocurrió un error al procesar esta acción. Intenta nuevamente.",
     toastButtonFallback: "Acción registrada. Este botón ya es clicable.",
     eventNotFound: "No encontré fechas próximas confirmadas para {artist} ahora. Dejé búsquedas rápidas para revisar la agenda en vivo.",
-    eventRealLoaded: "Agenda real de {artist} cargada.",
-    eventFallbackLoaded: "Agenda local de {artist} cargada en modo catálogo.",
+    eventRealLoaded: "Fechas confirmadas de {artist}, con evento, ciudad, fuente y lineup cuando esté disponible.",
+    eventFallbackLoaded: "Fechas curadas de {artist} cargadas desde el catálogo local.",
+    eventUntitled: "Evento sin título",
+    eventLocationUnknown: "Lugar por confirmar",
+    eventLineupLabel: "También en el lineup",
     eventSearchTitle: "Consultar agenda en vivo",
     eventSearchHint: "Algunos artistas anuncian fechas por promotoras, RA, Songkick o redes antes de que las APIs públicas se actualicen.",
     eventSearchBandsintown: "Bandsintown",
@@ -42935,9 +42944,27 @@ function formatCatalogInfo(meta = {}, displayLabel = "") {
   return sourceLabel ? `${base} | ${t("trackDataPrefix")}: ${sourceLabel}` : base;
 }
 
+function eventLocalDateFromIso(isoDate, { dateOnly = false } = {}) {
+  const value = String(isoDate || "").trim();
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
+  if (!match) {
+    const fallback = new Date(value);
+    return Number.isFinite(fallback.getTime()) ? fallback : null;
+  }
+  return new Date(
+    Number(match[1]),
+    Number(match[2]) - 1,
+    Number(match[3]),
+    dateOnly ? 12 : Number(match[4] || 12),
+    dateOnly ? 0 : Number(match[5] || 0)
+  );
+}
+
 function formatEventDate(isoDate) {
   const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es-ES" : "en-US";
-  return new Date(isoDate).toLocaleString(locale, {
+  const date = eventLocalDateFromIso(isoDate);
+  if (!date) return "";
+  return date.toLocaleString(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -42949,7 +42976,8 @@ function formatEventDate(isoDate) {
 function formatEventDisplayDate(event) {
   if (!event?.datetime) return "";
   const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es-ES" : "en-US";
-  const date = new Date(event.dateOnly ? `${String(event.datetime).slice(0, 10)}T12:00:00` : event.datetime);
+  const date = eventLocalDateFromIso(event.datetime, { dateOnly: Boolean(event.dateOnly) });
+  if (!date) return "";
   if (event.dateOnly) {
     return date.toLocaleDateString(locale, {
       day: "2-digit",
@@ -42958,6 +42986,75 @@ function formatEventDisplayDate(event) {
     });
   }
   return formatEventDate(event.datetime);
+}
+
+function formatEventDateRange(event) {
+  const start = formatEventDisplayDate(event);
+  const endRaw = String(event?.dateEnd || event?.endAt || "").trim();
+  if (!start || !endRaw) return start;
+  const end = formatEventDate(endRaw);
+  if (!end || end === start) return start;
+  return `${start} - ${end}`;
+}
+
+function eventDisplayName(event = {}) {
+  return String(event.name || event.eventName || event.venue || "").trim() || t("eventUntitled");
+}
+
+function eventLocationText(event = {}) {
+  const city = String(event.city || "").trim();
+  const country = String(event.country || event.countryName || "").trim();
+  const venue = String(event.venue || "").trim();
+  const name = eventDisplayName(event);
+  const location = [city, country].filter(Boolean).join(", ");
+  if (venue && normalize(venue) !== normalize(name) && normalize(venue) !== normalize(location)) {
+    return location ? `${venue} - ${location}` : venue;
+  }
+  return location || venue || t("eventLocationUnknown");
+}
+
+function eventStyles(event = {}) {
+  const raw = Array.isArray(event.styles) ? event.styles : String(event.styles || "").split(/[;,|]/);
+  return raw
+    .map((style) => normalizeDatasetStyle(style || "") || normalize(style || "").replace(/\s+/g, "_"))
+    .filter((style, index, list) => style && list.indexOf(style) === index)
+    .slice(0, 4);
+}
+
+function eventStyleLabel(style = "") {
+  return styleLabelByValue(style) || String(style || "").replace(/_/g, " ");
+}
+
+function eventLineupArtists(event = {}, artist = "") {
+  const knownArtist = normalize(artist || event.artist || "");
+  const raw = Array.isArray(event.lineupArtists)
+    ? event.lineupArtists
+    : Array.isArray(event.artists)
+      ? event.artists.map((item) => item?.name || item)
+      : [];
+  return raw
+    .map((name) => String(name || "").trim())
+    .filter(Boolean)
+    .filter((name, index, list) => list.findIndex((item) => normalize(item) === normalize(name)) === index)
+    .filter((name) => !knownArtist || normalize(name) !== knownArtist)
+    .slice(0, 6);
+}
+
+function appendEventBadges(target, event = {}) {
+  const badges = [];
+  const type = String(event.eventType || "").trim();
+  if (type) badges.push(type);
+  eventStyles(event).forEach((style) => badges.push(eventStyleLabel(style)));
+  if (event.sourceName) badges.push(event.sourceName);
+  if (!badges.length) return;
+  const badgeWrap = document.createElement("div");
+  badgeWrap.className = "event-badges";
+  badges.slice(0, 5).forEach((badge) => {
+    const item = document.createElement("span");
+    item.textContent = badge;
+    badgeWrap.appendChild(item);
+  });
+  target.appendChild(badgeWrap);
 }
 
 function getFallbackEvents(artist) {
@@ -43063,19 +43160,22 @@ function renderEventsPanel(artist, events, source) {
     const card = document.createElement("article");
     card.className = "event-date-card";
 
+    const date = document.createElement("span");
+    date.className = "event-date-kicker";
+    date.textContent = formatEventDateRange(event);
     const title = document.createElement("strong");
-    title.textContent = formatEventDisplayDate(event);
+    title.textContent = eventDisplayName(event);
     const place = document.createElement("span");
-    place.textContent = `${event.city}${event.country ? `, ${event.country}` : ""}`;
-    const venue = document.createElement("span");
-    venue.textContent = event.venue;
-
-    card.append(title, place, venue);
-    if (event.sourceName) {
-      const source = document.createElement("small");
-      source.className = "event-source";
-      source.textContent = event.sourceName;
-      card.appendChild(source);
+    place.className = "event-location";
+    place.textContent = eventLocationText(event);
+    card.append(date, title, place);
+    appendEventBadges(card, event);
+    const lineup = eventLineupArtists(event, artist);
+    if (lineup.length) {
+      const lineupEl = document.createElement("small");
+      lineupEl.className = "event-lineup-preview";
+      lineupEl.textContent = `${t("eventLineupLabel")}: ${lineup.join(", ")}`;
+      card.appendChild(lineupEl);
     }
     eventsCalendar.appendChild(card);
   });
@@ -43085,16 +43185,22 @@ function renderEventsPanel(artist, events, source) {
     item.className = "event-item";
 
     const date = document.createElement("strong");
-    date.textContent = formatEventDisplayDate(event);
+    date.textContent = formatEventDateRange(event);
+    const title = document.createElement("span");
+    title.className = "event-item-title";
+    title.textContent = eventDisplayName(event);
     const details = document.createElement("span");
-    details.textContent = `${event.venue} - ${event.city}${event.country ? `, ${event.country}` : ""}`;
-    item.append(date, details);
+    details.className = "event-location";
+    details.textContent = eventLocationText(event);
+    item.append(date, title, details);
+    appendEventBadges(item, event);
 
-    if (event.sourceName) {
-      const source = document.createElement("small");
-      source.className = "event-source";
-      source.textContent = event.sourceName;
-      item.appendChild(source);
+    const lineup = eventLineupArtists(event, artist);
+    if (lineup.length) {
+      const lineupEl = document.createElement("small");
+      lineupEl.className = "event-lineup-preview";
+      lineupEl.textContent = `${t("eventLineupLabel")}: ${lineup.join(", ")}`;
+      item.appendChild(lineupEl);
     }
 
     if (event.url) {
