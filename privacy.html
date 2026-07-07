@@ -29,7 +29,7 @@
       <section class="legal-hero">
         <p class="legal-kicker">Privacidade</p>
         <h1>Política de Privacidade</h1>
-        <p class="legal-updated">Atualizada em 1 de julho de 2026.</p>
+        <p class="legal-updated">Atualizada em 7 de julho de 2026.</p>
         <p>
           Esta política explica como Sonic Search, produto Pedro Freire / CBK Labs, trata dados pessoais no site, no app web,
           nas rotas de API e na versão empacotada para iOS.
@@ -46,9 +46,24 @@
           <span>Contato, login social, comentários, reações e eventos do produto usam backend quando você aciona esses recursos.</span>
         </div>
         <div>
-          <strong>Analytics opcional</strong>
-          <span>Vercel Insights só carrega depois do aceite. Cookies essenciais continuam necessários para segurança e preferências.</span>
+          <strong>Sem tracking no iOS</strong>
+          <span>A versão iOS não usa IDFA, ATT, SDKs de anúncios, cookies de tracking ou Vercel Insights.</span>
         </div>
+      </section>
+
+      <section class="legal-section">
+        <h2>App Store e tracking</h2>
+        <p>
+          Na versão distribuída pela App Store, o Sonic Search não coleta cookies para tracking, não usa identificador de
+          publicidade, não integra SDKs de anúncios e não combina dados do app com dados de terceiros para publicidade,
+          mensuração de anúncios ou data brokers. Por isso, a versão iOS não exibe prompt de cookies/analytics e não usa
+          App Tracking Transparency.
+        </p>
+        <p>
+          Dados locais, cookies ou registros essenciais, quando existirem, são usados para funcionamento, segurança,
+          preferências e prevenção de abuso. Se uma versão futura passar a fazer tracking nos termos da Apple, o app será
+          atualizado antes para pedir a permissão exigida e refletir isso no App Store Connect.
+        </p>
       </section>
 
       <section class="legal-section">
@@ -122,7 +137,7 @@
       <section class="legal-section">
         <h2>5. Compartilhamento e fornecedores</h2>
         <p>
-          Podemos usar Vercel para hospedagem, logs e analytics opcional; Supabase para autenticação, banco e storage; Google
+          Podemos usar Vercel para hospedagem, logs e analytics opcional no site; Supabase para autenticação, banco e storage; Google
           para OAuth; OpenAI para IA; provedores musicais e de informação como Apple/iTunes, YouTube, SoundCloud, Bandcamp,
           Spotify, MusicBrainz, Wikipedia/Wikimedia, Cover Art Archive, Last.fm, Discogs, Radio Browser, Ticketmaster e
           Bandsintown quando integrações estiverem habilitadas. Esses serviços tratam dados conforme suas próprias políticas.
@@ -137,8 +152,9 @@
         <h2>6. Cookies, analytics e armazenamento local</h2>
         <p>
           O Sonic Search usa armazenamento local para manter idioma, áudio, perfil musical, progresso, preferência de analytics
-          e preferências. Cookies essenciais e registros locais mantêm sessão, segurança e funcionamento do app. Vercel Insights
-          é opcional e só carrega se você aceitar analytics no banner.
+          do site e preferências. Cookies essenciais e registros locais mantêm sessão, segurança e funcionamento do app.
+          Vercel Insights é opcional no site e só carrega se você aceitar analytics no banner. A versão iOS não carrega
+          Vercel Insights nem cookies de tracking.
         </p>
         <p>
           Veja a <a href="cookies.html">Política de Cookies</a> para a lista prática de categorias e formas de controle.

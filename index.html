@@ -64,7 +64,7 @@
           const protocol = String(window.location.protocol || "");
           const host = String(window.location.hostname || "");
           const localHost = /^(localhost|127\.0\.0\.1|::1)$/i.test(host);
-          if (!/^https?:$/.test(protocol) || localHost || window.__sonicAnalyticsLoaded) return;
+          if (!/^https?:$/.test(protocol) || localHost || window.SONIC_SEARCH_APP_STORE_MODE || window.__sonicAnalyticsLoaded) return;
           window.__sonicAnalyticsLoaded = true;
           const script = document.createElement("script");
           script.defer = true;
@@ -161,7 +161,7 @@
       <div>
         <p class="privacy-consent-title">Privacidade primeiro</p>
         <p class="privacy-consent-copy">
-          Usamos dados essenciais para segurança, preferências e perfil local. Analytics só entra se você aceitar.
+          Usamos dados essenciais para segurança, preferências e perfil local. Não usamos cookies de anúncio ou tracking. Analytics do site só entra se você aceitar.
           <a href="privacy.html">Privacidade</a>
           <span aria-hidden="true">·</span>
           <a href="cookies.html">Cookies</a>
@@ -2294,33 +2294,38 @@
         const settingsButtons = document.querySelectorAll("[data-privacy-settings]");
         const languageButtons = document.querySelectorAll("[data-lang]");
         const languageKey = "neonpulse:language:v1";
+        const appStoreMode = Boolean(
+          window.SONIC_SEARCH_APP_STORE_MODE ||
+          document.documentElement.classList.contains("app-store-mode") ||
+          document.documentElement.dataset.sonicNativeApp === "true"
+        );
         const copy = {
           pt: {
             aria: "Preferências de privacidade",
             title: "Privacidade primeiro",
-            body: "Usamos dados essenciais para segurança, preferências e perfil local. Analytics só entra se você aceitar.",
+            body: "Usamos dados essenciais para segurança, preferências e perfil local. Não usamos cookies de anúncio ou tracking. Analytics do site só entra se você aceitar.",
             privacy: "Privacidade",
             cookies: "Cookies",
             essential: "Só essenciais",
-            analytics: "Aceitar analytics"
+            analytics: "Aceitar analytics do site"
           },
           en: {
             aria: "Privacy preferences",
             title: "Privacy first",
-            body: "We use essential data for security, preferences, and your local profile. Analytics only loads if you accept.",
+            body: "We use essential data for security, preferences, and your local profile. We do not use advertising or tracking cookies. Site analytics only loads if you accept.",
             privacy: "Privacy",
             cookies: "Cookies",
             essential: "Essential only",
-            analytics: "Allow analytics"
+            analytics: "Allow site analytics"
           },
           es: {
             aria: "Preferencias de privacidad",
             title: "Privacidad primero",
-            body: "Usamos datos esenciales para seguridad, preferencias y tu perfil local. Analytics solo se activa si aceptas.",
+            body: "Usamos datos esenciales para seguridad, preferencias y tu perfil local. No usamos cookies de anuncios ni tracking. Analytics del sitio solo se activa si aceptas.",
             privacy: "Privacidad",
             cookies: "Cookies",
             essential: "Solo esenciales",
-            analytics: "Aceptar analytics"
+            analytics: "Aceptar analytics del sitio"
           }
         };
 
@@ -2398,6 +2403,16 @@
           if (value === "yes" && typeof window.loadSonicAnalytics === "function") {
             window.loadSonicAnalytics();
           }
+        }
+
+        if (appStoreMode) {
+          writeChoice("no");
+          hideBanner();
+          settingsButtons.forEach((button) => {
+            button.hidden = true;
+            button.setAttribute("aria-hidden", "true");
+          });
+          return;
         }
 
         if (!readChoice()) showBanner();
