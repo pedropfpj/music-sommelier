@@ -50161,7 +50161,6 @@ async function fetchSocialConfig() {
     socialState.ready = true;
     return null;
   }
-  if (!socialProfileCard) return null;
   try {
     const endpoint = resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT);
     if (!endpoint) throw new Error("social_config_endpoint_unavailable");
