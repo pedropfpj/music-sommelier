@@ -154,7 +154,7 @@ test("credentialed APIs require credentials when active", async () => {
     const soundcloud = await callHandler("api/soundcloud-search.js", {
       body: { query: "test", style: "techno" }
     });
-    const spotify = await callHandler("api/spotify-search.js", {
+    const spotify = await callMusicRoute("spotify-search", {
       body: { query: "ANNA Hidden Beauties", artist: "ANNA", song: "Hidden Beauties", style: "techno" }
     });
     const youtube = await callHandler("api/youtube-search.js", {
@@ -227,7 +227,7 @@ test("Spotify search returns verified track links through backend credentials", 
       }
       return jsonResponse({}, 404);
     }, async () => {
-      const res = await callHandler("api/spotify-search.js", {
+      const res = await callMusicRoute("spotify-search", {
         body: {
           artist: "ANNA",
           song: "Hidden Beauties",
