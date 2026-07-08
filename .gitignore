@@ -2,6 +2,10 @@
 .vendor/
 node_modules/
 *.log
+www/
+ios/App/App/public/
+ios/App/build/
+ios/App/CapApp-SPM/build/
 .env
 .env.*
 !.env.example

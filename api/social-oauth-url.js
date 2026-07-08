@@ -27,6 +27,18 @@ function cleanBaseUrl(value = "", fallback = "") {
   }
 }
 
+function cleanSupabaseAuthUrl(value = "", fallback = "") {
+  const authUrl = cleanBaseUrl(value, fallback);
+  if (!authUrl) return "";
+  try {
+    const url = new URL(authUrl);
+    if (url.hostname === "auth.sonicsearch.app") return cleanBaseUrl(fallback);
+    return authUrl;
+  } catch (_err) {
+    return cleanBaseUrl(fallback);
+  }
+}
+
 function configuredNativeRedirects() {
   return new Set(
     [
@@ -71,18 +83,44 @@ function decodeHtmlUrl(value = "") {
     .replace(/&quot;/g, "\"");
 }
 
-function parseGoogleUrlFromBody(body = "") {
+function parseOAuthUrlFromBody(body = "") {
   const match = String(body || "").match(/href=["']([^"']+)["']/i);
   return match ? decodeHtmlUrl(match[1]) : "";
 }
 
-function isGoogleOAuthUrl(value = "") {
+function parseOAuthErrorFromBody(body = "") {
+  try {
+    const payload = JSON.parse(String(body || ""));
+    return payload?.msg || payload?.message || payload?.error_description || payload?.error || "";
+  } catch (_err) {
+    return "";
+  }
+}
+
+function isExpectedProviderOAuthUrl(value = "", provider = "google") {
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && url.hostname === "accounts.google.com";
+    if (url.protocol !== "https:") return false;
+    if (provider === "apple") return url.hostname === "appleid.apple.com";
+    return url.hostname === "accounts.google.com";
   } catch (_err) {
     return false;
   }
+}
+
+function safePkceChallenge(value = "") {
+  const clean = String(value || "").trim();
+  return /^[A-Za-z0-9._~-]{43,128}$/.test(clean) ? clean : "";
+}
+
+function safePkceMethod(value = "") {
+  const clean = String(value || "").trim().toUpperCase();
+  return clean === "PLAIN" ? "plain" : clean === "S256" ? "S256" : "";
+}
+
+function safeOauthState(value = "") {
+  const clean = String(value || "").trim();
+  return /^[A-Za-z0-9._~-]{8,160}$/.test(clean) ? clean : "";
 }
 
 module.exports = async function handler(req, res) {
@@ -96,13 +134,13 @@ module.exports = async function handler(req, res) {
   })) return;
 
   const provider = queryValue(req, "provider") || "google";
-  if (provider !== "google") {
+  if (!["google", "apple"].includes(provider)) {
     sendJson(req, res, 400, { ok: false, error: "unsupported_provider" }, methods);
     return;
   }
 
   const supabaseUrl = cleanBaseUrl(envText("SUPABASE_URL"));
-  const supabaseAuthUrl = cleanBaseUrl(envText("SUPABASE_AUTH_URL"), supabaseUrl);
+  const supabaseAuthUrl = cleanSupabaseAuthUrl(envText("SUPABASE_AUTH_URL"), supabaseUrl);
   const supabaseAnonKey = envText("SUPABASE_ANON_KEY") || envText("NEXT_PUBLIC_SUPABASE_ANON_KEY");
   const enabled = envFlag("SONIC_SOCIAL_ENABLED", false) && Boolean(supabaseUrl && supabaseAuthUrl && supabaseAnonKey);
   if (!enabled) {
@@ -114,6 +152,12 @@ module.exports = async function handler(req, res) {
     provider,
     redirect_to: safeRedirectTo(req)
   });
+  const codeChallenge = safePkceChallenge(queryValue(req, "code_challenge"));
+  const codeChallengeMethod = safePkceMethod(queryValue(req, "code_challenge_method"));
+  const state = safeOauthState(queryValue(req, "state"));
+  if (codeChallenge) params.set("code_challenge", codeChallenge);
+  if (codeChallenge && codeChallengeMethod) params.set("code_challenge_method", codeChallengeMethod);
+  if (state) params.set("state", state);
   const authorizeUrl = `${supabaseAuthUrl}/auth/v1/authorize?${params.toString()}`;
 
   try {
@@ -125,12 +169,14 @@ module.exports = async function handler(req, res) {
       }
     });
     const body = await response.text().catch(() => "");
-    const location = response.headers.get("location") || parseGoogleUrlFromBody(body);
-    if (!isGoogleOAuthUrl(location)) {
+    const location = response.headers.get("location") || parseOAuthUrlFromBody(body);
+    if (!isExpectedProviderOAuthUrl(location, provider)) {
+      const message = parseOAuthErrorFromBody(body);
       sendJson(req, res, 502, {
         ok: false,
-        error: "missing_google_redirect",
-        status: response.status
+        error: `missing_${provider}_redirect`,
+        status: response.status,
+        message
       }, methods);
       return;
     }
@@ -146,7 +192,7 @@ module.exports = async function handler(req, res) {
     sendJson(req, res, 502, {
       ok: false,
       error: "oauth_url_failed",
-      message: error?.message || "Could not create Google OAuth URL"
+      message: error?.message || `Could not create ${provider} OAuth URL`
     }, methods);
   }
 };

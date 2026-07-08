@@ -12,6 +12,27 @@ function cleanBaseUrl(value = "", fallback = "") {
   }
 }
 
+function cleanSupabaseAuthUrl(value = "", fallback = "") {
+  const authUrl = cleanBaseUrl(value, fallback);
+  if (!authUrl) return "";
+  try {
+    const url = new URL(authUrl);
+    if (url.hostname === "auth.sonicsearch.app") return cleanBaseUrl(fallback);
+    return authUrl;
+  } catch (_err) {
+    return cleanBaseUrl(fallback);
+  }
+}
+
+function configuredSocialProviders() {
+  const raw = envText("SONIC_SOCIAL_PROVIDERS") || "google,apple";
+  const providers = raw
+    .split(",")
+    .map((entry) => entry.trim().toLowerCase())
+    .filter((entry) => ["google", "apple"].includes(entry));
+  return Array.from(new Set(providers.length ? providers : ["google", "apple"]));
+}
+
 module.exports = async function handler(req, res) {
   const methods = ["GET", "OPTIONS"];
   if (!requireMusicApi(req, res, {
@@ -23,7 +44,7 @@ module.exports = async function handler(req, res) {
   })) return;
 
   const supabaseUrl = cleanBaseUrl(envText("SUPABASE_URL"));
-  const supabaseAuthUrl = cleanBaseUrl(envText("SUPABASE_AUTH_URL"), supabaseUrl);
+  const supabaseAuthUrl = cleanSupabaseAuthUrl(envText("SUPABASE_AUTH_URL"), supabaseUrl);
   const supabaseAnonKey = envText("SUPABASE_ANON_KEY") || envText("NEXT_PUBLIC_SUPABASE_ANON_KEY");
   const enabled = envFlag("SONIC_SOCIAL_ENABLED", false) && Boolean(supabaseUrl && supabaseAuthUrl && supabaseAnonKey);
 
@@ -31,6 +52,7 @@ module.exports = async function handler(req, res) {
     ok: true,
     enabled,
     provider: "supabase",
+    providers: enabled ? configuredSocialProviders() : [],
     supabaseUrl: enabled ? supabaseUrl : "",
     supabaseAuthUrl: enabled ? supabaseAuthUrl : "",
     supabaseAnonKey: enabled ? supabaseAnonKey : ""

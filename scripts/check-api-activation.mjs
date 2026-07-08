@@ -11,6 +11,7 @@ const requiredProviders = [
   "catalogExtra",
   "artistEvents",
   "ticketmaster",
+  "spotify",
   "youtube",
   "artistBio",
   "trackInsight",
@@ -24,6 +25,15 @@ const requiredProviders = [
 ];
 
 const routeChecks = [
+  {
+    name: "spotify",
+    path: "/api/spotify-search",
+    method: "POST",
+    body: { artist: "Daft Punk", song: "One More Time", style: "house" },
+    ok(payload) {
+      return Boolean(payload?.bestTrack?.spotifyTrackUrl);
+    }
+  },
   {
     name: "trackMetadata",
     path: "/api/track-metadata",

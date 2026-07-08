@@ -40,6 +40,11 @@ module.exports = async function handler(req, res) {
   const ticketmasterConfigured = Boolean(envFirst(TICKETMASTER_KEY_ENVS));
   const ticketmasterSecretConfigured = Boolean(envFirst(TICKETMASTER_SECRET_ENVS));
   const bandsintownConfigured = Boolean(process.env.BANDSINTOWN_APP_ID);
+  const spotifyConfigured = Boolean(
+    (envText("SPOTIFY_CLIENT_ID") || envText("SONIC_SPOTIFY_CLIENT_ID")) &&
+    (envText("SPOTIFY_CLIENT_SECRET") || envText("SONIC_SPOTIFY_CLIENT_SECRET"))
+  );
+  const spotifyRouteEnabled = featureEnabled("SONIC_SPOTIFY_ENABLED", true, { allowGlobalFallback: false });
   const soundcloudConfigured = Boolean(process.env.SOUNDCLOUD_CLIENT_ID && process.env.SOUNDCLOUD_CLIENT_SECRET);
   const soundcloudRouteEnabled = featureEnabled("SONIC_SOUNDCLOUD_ENABLED", true, { allowGlobalFallback: false });
   const youtubeConfigured = Boolean(process.env.YOUTUBE_API_KEY || process.env.YOUTUBE_DATA_API_KEY);
@@ -121,6 +126,26 @@ module.exports = async function handler(req, res) {
           attributionVisible: true,
           userAgent: envText("SONIC_TRACK_METADATA_USER_AGENT", envText("SONIC_REFERENCE_USER_AGENT", "SonicSearch/1.0 (+https://sonicsearch.app)")),
           cacheSeconds: envInt("SONIC_TRACK_METADATA_CACHE_SECONDS", 3600, 60, 86400)
+        }
+      },
+      spotify: {
+        configured: spotifyConfigured,
+        routeEnabled: spotifyRouteEnabled,
+        enabled: spotifyConfigured && spotifyRouteEnabled,
+        ...providerState({
+          configured: spotifyConfigured,
+          routeEnabled: spotifyRouteEnabled,
+          enabled: spotifyConfigured && spotifyRouteEnabled,
+          disabledReason: "explicitly_disabled_until_official_spotify_credentials"
+        }),
+        compliance: {
+          backendOnly: true,
+          requiresCredentials: true,
+          requiresExplicitEnable: true,
+          attributionVisible: true,
+          tokenCached: true,
+          noAiTraining: true,
+          previewUrlOptional: true
         }
       },
       coverArt: {
@@ -389,6 +414,7 @@ module.exports = async function handler(req, res) {
       }
     },
     endpoints: {
+      spotifySearch: "/api/spotify-search",
       soundcloudSearch: "/api/soundcloud-search",
       youtubeSearch: "/api/youtube-search",
       trackMetadata: "/api/track-metadata",
@@ -409,6 +435,7 @@ module.exports = async function handler(req, res) {
     limits: {
       freeDailyDiscovery: envInt("SONIC_DAILY_FREE_DISCOVERY_LIMIT", 50, 1, 1000),
       freeSpiritLimit: envInt("SONIC_FREE_SPIRIT_LIMIT", 3, 0, 100),
+      spotifySearchDailyLimit: envInt("SONIC_SPOTIFY_SEARCH_DAILY_LIMIT", 80, 0, 10000),
       soundcloudSearchDailyLimit: envInt("SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT", 80, 0, 10000),
       youtubeSearchDailyLimit: envInt("SONIC_YOUTUBE_SEARCH_DAILY_LIMIT", 80, 0, 10000),
       trackMetadataDailyLimit: envInt("SONIC_TRACK_METADATA_DAILY_LIMIT", 120, 0, 10000),

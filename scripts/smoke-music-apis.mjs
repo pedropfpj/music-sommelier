@@ -120,6 +120,7 @@ const safeDefaults = {
   SONIC_AI_IMAGE_ENABLED: "true",
   SONIC_ARTIST_BIO_ENABLED: "true",
   SONIC_LASTFM_ENABLED: "true",
+  SONIC_SPOTIFY_ENABLED: "true",
   SONIC_SOUNDCLOUD_ENABLED: "true",
   SONIC_YOUTUBE_ENABLED: "true",
   SONIC_BANDSINTOWN_ENABLED: "true",
@@ -139,6 +140,10 @@ const safeDefaults = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
   LASTFM_API_KEY: "",
   SONIC_LASTFM_API_KEY: "",
+  SPOTIFY_CLIENT_ID: "",
+  SPOTIFY_CLIENT_SECRET: "",
+  SONIC_SPOTIFY_CLIENT_ID: "",
+  SONIC_SPOTIFY_CLIENT_SECRET: "",
   SUPABASE_SERVICE_ROLE_KEY: "",
   SUPABASE_SERVICE_KEY: "",
   SUPABASE_SERVICE_ROLE: ""
@@ -149,11 +154,16 @@ test("credentialed APIs require credentials when active", async () => {
     const soundcloud = await callHandler("api/soundcloud-search.js", {
       body: { query: "test", style: "techno" }
     });
+    const spotify = await callHandler("api/spotify-search.js", {
+      body: { query: "ANNA Hidden Beauties", artist: "ANNA", song: "Hidden Beauties", style: "techno" }
+    });
     const youtube = await callHandler("api/youtube-search.js", {
       body: { query: "test", artist: "ANNA", song: "Hidden Beauties" }
     });
     assert.equal(soundcloud.statusCode, 503);
     assert.equal(soundcloud.json().error, "missing_soundcloud_credentials");
+    assert.equal(spotify.statusCode, 503);
+    assert.equal(spotify.json().error, "missing_spotify_credentials");
     assert.equal(youtube.statusCode, 503);
     assert.equal(youtube.json().error, "missing_youtube_api_key");
   });
@@ -164,6 +174,7 @@ test("integration health reports provider state", async () => {
     const res = await callHandler("api/integration-health.js", { method: "GET" });
     const payload = res.json();
     assert.equal(res.statusCode, 200);
+    assert.equal(payload.providers.spotify.status, "needs_credentials");
     assert.equal(payload.providers.soundcloud.status, "needs_credentials");
     assert.equal(payload.providers.youtube.status, "needs_credentials");
     assert.equal(payload.providers.lastfm.status, "needs_credentials");
@@ -178,10 +189,66 @@ test("integration health reports provider state", async () => {
   });
 });
 
+test("Spotify search returns verified track links through backend credentials", async () => {
+  await withEnv({
+    ...safeDefaults,
+    SPOTIFY_CLIENT_ID: "spotify-client",
+    SPOTIFY_CLIENT_SECRET: "spotify-secret"
+  }, async () => {
+    await withFetchMock((url, options) => {
+      if (url.includes("accounts.spotify.com/api/token")) {
+        assert.equal(options.method, "POST");
+        assert.match(String(options.headers?.Authorization || ""), /^Basic /);
+        return jsonResponse({ access_token: "spotify-token", expires_in: 3600 });
+      }
+      if (url.includes("api.spotify.com/v1/search")) {
+        assert.match(String(options.headers?.Authorization || ""), /^Bearer spotify-token$/);
+        const parsedUrl = new URL(url);
+        assert.equal(parsedUrl.searchParams.get("type"), "track");
+        return jsonResponse({
+          tracks: {
+            items: [{
+              id: "spotify-track-1",
+              name: "Hidden Beauties",
+              duration_ms: 390000,
+              popularity: 64,
+              preview_url: null,
+              external_urls: { spotify: "https://open.spotify.com/track/spotify-track-1" },
+              external_ids: { isrc: "BR1234567890" },
+              artists: [{ name: "ANNA" }],
+              album: {
+                name: "Hidden Beauties",
+                release_date: "2018-01-01",
+                images: [{ url: "https://i.scdn.co/image/cover" }]
+              }
+            }]
+          }
+        });
+      }
+      return jsonResponse({}, 404);
+    }, async () => {
+      const res = await callHandler("api/spotify-search.js", {
+        body: {
+          artist: "ANNA",
+          song: "Hidden Beauties",
+          style: "techno",
+          limit: 3
+        }
+      });
+      const payload = res.json();
+      assert.equal(res.statusCode, 200);
+      assert.equal(payload.bestTrack.spotifyTrackUrl, "https://open.spotify.com/track/spotify-track-1");
+      assert.equal(payload.bestTrack.spotifyVerified, true);
+      assert.ok(payload.attribution.providers.includes("Spotify"));
+    });
+  });
+});
+
 test("explicit flags can still disable sensitive APIs", async () => {
   await withEnv({
     ...safeDefaults,
     SONIC_LASTFM_ENABLED: "false",
+    SONIC_SPOTIFY_ENABLED: "false",
     SONIC_SOUNDCLOUD_ENABLED: "false",
     SONIC_YOUTUBE_ENABLED: "false",
     SONIC_CATALOG_EXTRA_ENABLED: "false",
@@ -191,6 +258,7 @@ test("explicit flags can still disable sensitive APIs", async () => {
     const payload = res.json();
     assert.equal(res.statusCode, 200);
     assert.equal(payload.providers.lastfm.status, "disabled");
+    assert.equal(payload.providers.spotify.status, "disabled");
     assert.equal(payload.providers.soundcloud.status, "disabled");
     assert.equal(payload.providers.youtube.status, "disabled");
     assert.equal(payload.providers.catalogExtra.status, "disabled");
@@ -393,7 +461,7 @@ test("catalog enrichment persistence is safely no-op until enabled", async () =>
     await withFetchMock(() => {
       throw new Error("Supabase should not be called while enrichment is disabled");
     }, async () => {
-      const { persistCatalogEnrichments, supabaseConfig } = require(path.join(rootDir, "api/_catalog-enrichment-store.js"));
+      const { persistCatalogEnrichments, supabaseConfig } = require(path.join(rootDir, "lib/api/_catalog-enrichment-store.js"));
       assert.equal(supabaseConfig().enabled, false);
       const result = await persistCatalogEnrichments({
         entityType: "artist",

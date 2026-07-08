@@ -11,6 +11,7 @@ const handlers = {
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
   "news-feed": require("../lib/api/_news-feed"),
   "radio-browser": require("../lib/api/_radio-browser"),
+  "spotify-search": require("./spotify-search"),
   "track-metadata": require("../lib/api/_track-metadata"),
   waitlist: require("../lib/api/_waitlist")
 };

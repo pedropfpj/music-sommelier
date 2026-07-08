@@ -8,7 +8,13 @@ const {
   isProductionLike,
   requestBodyTooLarge,
   setCorsHeaders
-} = require("../api/_request-security.js");
+} = require("../lib/api/_request-security.js");
+const {
+  betaAccessRequired,
+  createGrantToken,
+  requestBetaGrant,
+  verifyGrantToken
+} = require("../lib/api/_beta-grants.js");
 
 const ENV_KEYS = [
   "NODE_ENV",
@@ -16,7 +22,11 @@ const ENV_KEYS = [
   "SONIC_ENV",
   "SONIC_AI_ALLOWED_ORIGINS",
   "SONIC_MUSIC_ALLOWED_ORIGINS",
-  "SONIC_ALLOW_ORIGINLESS_REQUESTS"
+  "SONIC_NATIVE_APP_ALLOWED_ORIGINS",
+  "SONIC_ALLOW_ORIGINLESS_REQUESTS",
+  "SONIC_BETA_ACCESS_CODES",
+  "SONIC_BETA_ACCESS_SECRET",
+  "SONIC_BETA_ACCESS_TTL_DAYS"
 ];
 const originalEnv = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[key]]));
 
@@ -69,6 +79,16 @@ try {
     "unconfigured production origin should be blocked"
   );
   assert.equal(
+    allowedOrigin(req({ origin: "capacitor://localhost", host: "api.sonicsearch.app" }), ["SONIC_AI_ALLOWED_ORIGINS"]),
+    true,
+    "native iOS Capacitor origin should be allowed in production"
+  );
+  assert.equal(
+    allowedOrigin(req({ origin: "ionic://localhost", host: "api.sonicsearch.app" }), ["SONIC_AI_ALLOWED_ORIGINS"]),
+    true,
+    "native iOS Ionic origin should be allowed in production"
+  );
+  assert.equal(
     allowedOrigin(req({ origin: "https://preview.example", host: "preview.example" }), ["SONIC_AI_ALLOWED_ORIGINS"]),
     true,
     "same-host preview origin should be allowed"
@@ -106,6 +126,28 @@ try {
   assert.equal(corsRes.headers["Access-Control-Allow-Methods"], "POST, OPTIONS");
   assert.equal(corsRes.headers["Access-Control-Allow-Headers"], "Content-Type");
   assert.equal(corsRes.headers.Vary, "Origin");
+
+  resetEnv({
+    NODE_ENV: "production",
+    SONIC_BETA_ACCESS_CODES: "ALPHA-ONE",
+    SONIC_BETA_ACCESS_SECRET: "test-secret-that-is-long-enough"
+  });
+  assert.equal(betaAccessRequired("track-metadata"), true, "protected APIs should require beta access in production by default");
+  assert.equal(betaAccessRequired("waitlist"), false, "waitlist should stay public for new access requests");
+  const grant = createGrantToken();
+  assert.equal(Boolean(grant.token), true, "beta grant should include a signed token");
+  assert.equal(verifyGrantToken(grant.token).ok, true, "signed beta grant should verify");
+  assert.equal(
+    requestBetaGrant(req({ "x-sonic-beta-token": grant.token })).ok,
+    true,
+    "beta grant should be accepted from request header"
+  );
+  assert.equal(
+    requestBetaGrant(req({ cookie: `sonic_beta_access=${encodeURIComponent(grant.token)}` })).ok,
+    true,
+    "beta grant should be accepted from the access cookie"
+  );
+  assert.equal(verifyGrantToken(`${grant.token}tampered`).ok, false, "tampered beta grant should fail");
 
   console.log("PASS request security tests");
 } finally {

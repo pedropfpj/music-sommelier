@@ -267,23 +267,27 @@ function isAppStoreRuntimeMode() {
 }
 
 function shouldHideSocialLoginForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().hideSocialLogin !== false);
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().hideSocialLogin === true);
 }
 
 function shouldDisableCommunityForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableCommunity !== false);
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableCommunity === true);
 }
 
 function shouldDisableSocialCommentsForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableSocialComments !== false);
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableSocialComments === true);
 }
 
 function shouldReadOnlyCommunityForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().readOnlyCommunity !== false);
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().readOnlyCommunity === true);
 }
 
 function shouldAutoEnterDiscoveryForAppStore() {
   return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().autoEnterDiscovery === true);
+}
+
+function shouldShowAuthOnBootForAppStore() {
+  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().showAuthOnBoot !== false);
 }
 
 function supportPaymentsAllowed() {
@@ -302,7 +306,9 @@ function configuredAppApiBaseUrl() {
   if (typeof window === "undefined") return "";
   const configured = String(window.SONIC_SEARCH_API_BASE_URL || "").trim().replace(/\/+$/, "");
   if (configured) return configured;
-  return isNativeAppRuntime() ? SONIC_PRODUCTION_ORIGIN : "";
+  const protocol = String(window.location?.protocol || "");
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode() || protocol === "file:") return SONIC_PRODUCTION_ORIGIN;
+  return "";
 }
 
 function resolveAppApiEndpoint(endpoint = "") {
@@ -923,7 +929,6 @@ function buildPsyFestivalLineupRecommendationSeeds() {
 }
 
 const DJ_SET_RECOMMENDATION_SEEDS = [
-  ...buildPsyFestivalLineupRecommendationSeeds(),
   {
     id: "hitech-psycore-paula",
     lane: "hitech_psycore",
@@ -1099,6 +1104,310 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     eventSignal: "Boiler Room / Rinse",
     roleNote: "DJ e apresentadora/curadora; recomendada por set tocavel.",
     reason: "Curadoria global acessivel para abrir a aba de DJs alem do eixo psy/dark."
+  },
+  {
+    id: "techno-live-dvs1-decibel-boiler-room",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "DVS1",
+    country: "Estados Unidos",
+    scene: "Boiler Room / Decibel Festival",
+    subgenre: "Techno / Long-form DJ set",
+    setTitle: "DVS1 Boiler Room DJ Set at Decibel Festival",
+    setUrl: "https://www.youtube.com/watch?v=XyUmOeBUasA",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "DJ-first, recomendado por narrativa longa de set.",
+    reason: "Techno direto e hipnotico, bom para calibrar gosto por selecao de pista sem depender de line-up de clube."
+  },
+  {
+    id: "techno-live-ignez-bassiani",
+    lane: "techno_live_dj",
+    style: "hypnotic_techno",
+    name: "Ignez",
+    country: "Paises Baixos",
+    scene: "Bassiani / Somov Records",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Ignez @ Bassiani 2024",
+    setUrl: "https://www.youtube.com/watch?v=cNTZ1z8ON-g",
+    platform: "YouTube",
+    sourceName: "Bassiani invites / Somov",
+    roleKind: "dj",
+    roleNote: "DJ/produtor com assinatura deep e hipnotica; entra por set tocavel.",
+    reason: "Mantem Ignez como recomendacao forte, mas agora com set direto em vez de aparecer sempre como slot de line-up."
+  },
+  {
+    id: "techno-live-temudo-section",
+    lane: "techno_live_dj",
+    style: "techno",
+    name: "Temudo",
+    country: "Portugal",
+    scene: "SECTION. / Techno DJ Set",
+    subgenre: "Techno / Groove Techno",
+    setTitle: "Temudo | Techno DJ Set | SECTION.",
+    setUrl: "https://www.youtube.com/watch?v=Wl1fTWg6LOo",
+    platform: "YouTube",
+    sourceName: "SECTION.",
+    roleKind: "dj",
+    roleNote: "DJ/produtor recomendado por set recente e direto.",
+    reason: "Techno funcional e moderno com pressao limpa, melhor como carta de set do que como agenda de clube."
+  },
+  {
+    id: "techno-live-philippa-pacho-section",
+    lane: "techno_live_dj",
+    style: "hardgroove_techno",
+    name: "Philippa Pacho",
+    country: "Suecia / Alemanha",
+    scene: "SECTION. / Techno DJ Set",
+    subgenre: "Techno / Hardgroove",
+    setTitle: "Philippa Pacho | Techno DJ Set | SECTION.",
+    setUrl: "https://www.youtube.com/watch?v=2G92E02sXhg",
+    platform: "YouTube",
+    sourceName: "SECTION.",
+    roleKind: "dj",
+    roleNote: "DJ/produtora recomendada por set direto.",
+    reason: "Boa carta para techno contemporaneo de energia alta, percussivo e fluido."
+  },
+  {
+    id: "berlin-hypnotic-wata-igarashi-boiler-room",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "Wata Igarashi",
+    country: "Japao",
+    scene: "Boiler Room Tokyo",
+    subgenre: "Hypnotic Techno / Deep Techno",
+    setTitle: "Wata Igarashi Boiler Room x TDME Tokyo DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=S0yP6ZOl4z0",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Selector hipnotico de longa construcao; recomendado por set tocavel.",
+    reason: "Referencia elegante para techno circular, preciso e psicodelico sem virar hard techno."
+  },
+  {
+    id: "berlin-hypnotic-dj-nobu-boiler-room",
+    lane: "berlin_hypnotic_deep",
+    style: "hypnotic_techno",
+    name: "DJ Nobu",
+    country: "Japao",
+    scene: "Boiler Room / BUDx Seoul",
+    subgenre: "Hypnotic Techno / Psychedelic Techno",
+    setTitle: "DJ Nobu Boiler Room BUDx Seoul DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=TOVGH2MEf18",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "DJ de criterio alto, recomendado por set inteiro.",
+    reason: "Ancora de techno hipnotico para usuarios que querem profundidade, paciencia e tensao gradual."
+  },
+  {
+    id: "berlin-raw-marcel-fengler-boiler-room",
+    lane: "berlin_raw_hardgroove",
+    style: "techno",
+    name: "Marcel Fengler",
+    country: "Alemanha",
+    scene: "Boiler Room Berlin",
+    subgenre: "Techno / Raw Techno",
+    setTitle: "Marcel Fengler Boiler Room Berlin Studio DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=PC3toK47YnQ",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Figura de techno berlinense; recomendado por set direto.",
+    reason: "Bom eixo para techno classico-contemporaneo, seco e de clube, sem mostrar agenda de Tresor."
+  },
+  {
+    id: "berlin-raw-kriz-hor",
+    lane: "berlin_raw_hardgroove",
+    style: "raw_techno",
+    name: "Kr!z",
+    country: "Belgica",
+    scene: "HOR Berlin / Token Records",
+    subgenre: "Raw Techno / Groove Techno",
+    setTitle: "Kr!z | HOR - Jul 27 / 2023",
+    setUrl: "https://www.youtube.com/watch?v=bfnN8EDR48Y",
+    platform: "YouTube",
+    sourceName: "HOR Berlin",
+    roleKind: "dj",
+    roleNote: "Label boss da Token, recomendado por set direto.",
+    reason: "Referencia util para techno tenso, bruto e com groove sem depender de line-up de clube."
+  },
+  {
+    id: "berlin-industrial-phase-fatale-boiler-room",
+    lane: "berlin_industrial_ebm",
+    style: "industrial_techno",
+    name: "Phase Fatale",
+    country: "Estados Unidos / Alemanha",
+    scene: "Boiler Room Warsaw",
+    subgenre: "Industrial Techno / EBM",
+    setTitle: "Phase Fatale | Boiler Room: Warsaw",
+    setUrl: "https://www.youtube.com/watch?v=K0BsVqZf85U",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "DJ/produtor recomendado pela intensidade industrial do set.",
+    reason: "Carta forte para techno sombrio, metalico e body-music com player pronto."
+  },
+  {
+    id: "berlin-industrial-perc-boiler-room",
+    lane: "berlin_industrial_ebm",
+    style: "industrial_techno",
+    name: "Perc",
+    country: "Reino Unido",
+    scene: "Boiler Room Toronto",
+    subgenre: "Industrial Techno / Perc Trax",
+    setTitle: "Perc | Boiler Room Toronto",
+    setUrl: "https://www.youtube.com/watch?v=uEXaRSzYxX4",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Ancora industrial/techno recomendada por set inteiro.",
+    reason: "Techno agressivo e seco para quem quer energia dura sem cair em recomendacao generica."
+  },
+  {
+    id: "berlin-acid-delta-funktionen-boiler-room",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "Delta Funktionen",
+    country: "Paises Baixos",
+    scene: "Boiler Room Berlin",
+    subgenre: "Techno / Electro / Acid",
+    setTitle: "Delta Funktionen Boiler Room Berlin DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=mzLGbluO83I",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Recomendado pela ponte entre techno, electro e acidez.",
+    reason: "Ajuda a aba a sugerir machine funk e electro-techno com set tocavel."
+  },
+  {
+    id: "berlin-acid-lsdxoxo-boiler-room",
+    lane: "berlin_acid_electro",
+    style: "electro",
+    name: "LSDXOXO",
+    country: "Estados Unidos / Alemanha",
+    scene: "Boiler Room x DGTL Amsterdam",
+    subgenre: "Electro / Techno / Queer Rave",
+    setTitle: "LSDXOXO | Boiler Room x DGTL Amsterdam",
+    setUrl: "https://www.youtube.com/watch?v=NwNhlIvFYxY",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "DJ/producer com leitura electro e club futurista.",
+    reason: "Abre electro/techno de alta energia com set direto e sem ficha de evento."
+  },
+  {
+    id: "berlin-bass-aquarian-hor",
+    lane: "berlin_bass_electro",
+    style: "broken_techno",
+    name: "Aquarian",
+    country: "Canada / Alemanha",
+    scene: "HOR Berlin",
+    subgenre: "Broken Techno / Bass / Club",
+    setTitle: "Aquarian | HOR - Nov 4 / 2022",
+    setUrl: "https://www.youtube.com/watch?v=Y_wYdu9QwXA",
+    platform: "YouTube",
+    sourceName: "HOR Berlin",
+    roleKind: "dj",
+    roleNote: "Selector bass/broken techno recomendado por set direto.",
+    reason: "Boa ponte entre breaks, baixo e techno fragmentado, com preview carregavel."
+  },
+  {
+    id: "house-moxie-boiler-room-bass-coast",
+    lane: "house_selectors",
+    style: "house",
+    name: "Moxie",
+    country: "Reino Unido",
+    scene: "Boiler Room x Bass Coast",
+    subgenre: "House / UK Club / Selector",
+    setTitle: "Moxie | Boiler Room x Bass Coast 2022",
+    setUrl: "https://www.youtube.com/watch?v=9njcB8m2bsc",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "DJ/selectora e curadora, recomendada por set publico.",
+    reason: "House e UK club com curadoria calorosa, ideal para a aba de selectors."
+  },
+  {
+    id: "house-sedef-adasi-boiler-room",
+    lane: "house_selectors",
+    style: "house",
+    name: "Sedef Adasi",
+    country: "Turquia / Alemanha",
+    scene: "Boiler Room Contemporary Scenes",
+    subgenre: "House / Acid / Electro",
+    setTitle: "Sedef Adasi | Boiler Room Contemporary Scenes: Istanbul",
+    setUrl: "https://www.youtube.com/watch?v=3ftXuppg_dM",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Selector house/acid/electro recomendada por set tocavel.",
+    reason: "Som aberto e colorido para sair de techno puro sem perder criterio de pista."
+  },
+  {
+    id: "house-djulz-boiler-room-paris",
+    lane: "house_selectors",
+    style: "tech_house",
+    name: "D'Julz",
+    country: "Franca",
+    scene: "Boiler Room Paris",
+    subgenre: "House / Tech House / Bass Culture",
+    setTitle: "D'Julz Boiler Room Paris DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=jtVnqzRzRq8",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Selector experiente recomendado por set completo.",
+    reason: "House/tech house de DJ's DJ, util para recomendacao mais madura e menos comercial."
+  },
+  {
+    id: "minimal-liquid-earth-hor",
+    lane: "minimal_deep_selectors",
+    style: "minimal_deep_tech",
+    name: "Liquid Earth",
+    country: "Estados Unidos / Espanha",
+    scene: "HOR Berlin",
+    subgenre: "Microhouse / Minimal Deep Tech",
+    setTitle: "Liquid Earth | HOR - April 5 / 2024",
+    setUrl: "https://www.youtube.com/watch?v=TbmLVluJO2k",
+    platform: "YouTube",
+    sourceName: "HOR Berlin",
+    roleKind: "dj",
+    roleNote: "Recomendado por groove minimal e set tocavel.",
+    reason: "Minimal deep tech elastico, bom para usuarios que querem groove de after sem virar tech house obvio."
+  },
+  {
+    id: "minimal-alexander-skancke-hor",
+    lane: "minimal_deep_selectors",
+    style: "minimal_deep_tech",
+    name: "Alexander Skancke",
+    country: "Noruega / Alemanha",
+    scene: "HOR Berlin",
+    subgenre: "Minimal House / Deep Tech",
+    setTitle: "Alexander Skancke / August 5 / 7pm-8pm",
+    setUrl: "https://www.youtube.com/watch?v=-_rLsVXLzd4",
+    platform: "YouTube",
+    sourceName: "HOR Berlin",
+    roleKind: "dj",
+    roleNote: "Selector minimal/deep recomendado por set direto.",
+    reason: "Carta de groove subterraneo para after, com menos cara de agenda e mais cara de set."
+  },
+  {
+    id: "disco-bell-towers-boiler-room",
+    lane: "disco_italo_selectors",
+    style: "italo_disco",
+    name: "Bell Towers",
+    country: "Australia / Alemanha",
+    scene: "Boiler Room London",
+    subgenre: "Italo Disco / Disco House",
+    setTitle: "Bell Towers Boiler Room London DJ Set",
+    setUrl: "https://www.youtube.com/watch?v=s2N3U3XS4SE",
+    platform: "YouTube",
+    sourceName: "Boiler Room",
+    roleKind: "dj",
+    roleNote: "Selector disco/italo recomendado por set inteiro.",
+    reason: "Boa carta para uma energia mais colorida, disco e italo sem perder a curadoria de DJ."
   },
   {
     id: "berghain-20260704-hiroko-yamamura",
@@ -7519,6 +7828,7 @@ const socialPasswordInput = document.getElementById("socialPasswordInput");
 const socialUsernameInput = document.getElementById("socialUsernameInput");
 const socialDisplayNameInput = document.getElementById("socialDisplayNameInput");
 const socialGoogleBtn = document.getElementById("socialGoogleBtn");
+const socialAppleBtn = document.getElementById("socialAppleBtn");
 const socialSignUpBtn = document.getElementById("socialSignUpBtn");
 const socialSignInBtn = document.getElementById("socialSignInBtn");
 const socialResendConfirmBtn = document.getElementById("socialResendConfirmBtn");
@@ -7829,12 +8139,15 @@ let communityState = {
 };
 let googleAuthReady = false;
 let googleAuthLoading = false;
-let appleAuthReady = false;
-let appleAuthLoading = false;
 let authConfigLoading = false;
 let socialOAuthNavigationTimer = 0;
 let pendingSocialOAuthUrl = "";
+let pendingSocialOAuthProvider = "google";
 let pendingNativeSocialAuthCallbackUrl = "";
+let editingSocialCommentId = "";
+let editingCommunityCommentId = "";
+let editingCommunityCommentPostId = "";
+let djPreviewFrameLoadTimer = 0;
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
@@ -8157,6 +8470,7 @@ const PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY = "neonpulse:profileBackup:lastExpo
 const PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS = 8;
 const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
+const SOCIAL_OAUTH_PKCE_STORAGE_KEY = "neonpulse:socialOauthPkce:v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
 const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 120000;
@@ -8418,7 +8732,9 @@ let apiHealthPayload = null;
 let apiHealthLoading = false;
 let apiHealthCheckedOnce = false;
 const soundCloudApiCache = new Map();
+const spotifyApiCache = new Map();
 const youtubeApiCache = new Map();
+let spotifyApiAvailable = true;
 let youtubeApiAvailable = true;
 const SOUNDCLOUD_PREVIEW_REFRESH_STYLES = new Set([
   "psycore",
@@ -15064,6 +15380,25 @@ function schedulePostBootIdleTask(callback, { delayMs = 0, timeoutMs = 1800 } = 
   window.setTimeout(runWhenIdle, Math.max(0, Number(delayMs) || 0));
 }
 
+function nativePerformanceDelayMs(baseDelayMs = 0, extraDelayMs = 0) {
+  const base = Math.max(0, Number(baseDelayMs) || 0);
+  if (!isNativeAppRuntime() && !isAppStoreRuntimeMode()) return base;
+  return base + Math.max(0, Number(extraDelayMs) || 0);
+}
+
+function swipeInteractionActive() {
+  return Boolean(
+    swipeDragState ||
+      djSwipeDragState ||
+      swipeFeedbackBusy ||
+      djSwipeBusy ||
+      topSwipeCard?.classList.contains("is-dragging") ||
+      swipeTrackCard?.classList.contains("is-dragging") ||
+      primaryTrackCard?.classList.contains("is-dragging") ||
+      djSwipeCard?.classList.contains("is-dragging")
+  );
+}
+
 async function hydrateExternalDatasetPackInBackground() {
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
 
@@ -15120,6 +15455,7 @@ function scheduleExternalDatasetWarmup(delayMs = BACKGROUND_CATALOG_WARMUP_DELAY
     if (
       recommendationRunBusy ||
       swipeFeedbackBusy ||
+      swipeInteractionActive() ||
       (searchOverlay && !searchOverlay.classList.contains("hidden"))
     ) {
       scheduleExternalDatasetWarmup(ACTIVE_DISCOVERY_WARMUP_RETRY_MS);
@@ -15145,6 +15481,7 @@ function scheduleCatalogMaintenance(delayMs = BACKGROUND_CATALOG_WARMUP_DELAY_MS
       if (
         recommendationRunBusy ||
         swipeFeedbackBusy ||
+        swipeInteractionActive() ||
         (searchOverlay && !searchOverlay.classList.contains("hidden"))
       ) {
         scheduleCatalogMaintenance(ACTIVE_DISCOVERY_WARMUP_RETRY_MS);
@@ -18673,6 +19010,7 @@ function apiProviderLabel(key = "") {
     catalogEnrichment: "Memória própria",
     artistBio: "Bio IA/Discogs",
     newsFeed: "News/RSS",
+    spotify: "Spotify",
     soundcloud: "SoundCloud",
     youtube: "YouTube",
     ticketmaster: "Ticketmaster",
@@ -18734,6 +19072,7 @@ function apiHealthProviderMeta(key = "", provider = {}, payload = {}) {
     lastfm: "lastfmDailyLimit",
     radioBrowser: "radioBrowserDailyLimit",
     newsFeed: "newsFeedDailyLimit",
+    spotify: "spotifySearchDailyLimit",
     soundcloud: "soundcloudSearchDailyLimit",
     youtube: "youtubeSearchDailyLimit",
     ticketmaster: "ticketmasterEventsDailyLimit",
@@ -18759,6 +19098,7 @@ function apiHealthItems(payload = {}) {
     "catalogEnrichment",
     "artistBio",
     "newsFeed",
+    "spotify",
     "soundcloud",
     "youtube",
     "ticketmaster",
@@ -20126,6 +20466,10 @@ async function warmupCatalogInBackground() {
     .slice(0, BACKGROUND_WARMUP_STYLE_LIMIT);
 
   for (const style of styles) {
+    if (swipeInteractionActive() || recommendationRunBusy) {
+      await waitForExternalDatasetIdleSlot();
+      if (swipeInteractionActive() || recommendationRunBusy) continue;
+    }
     const stats = await hydrateCatalogUntilCoverage(style, 2);
     if (feedbackMessage && style === (styleEl?.value || "")) {
       feedbackMessage.textContent = t("catalogUpdateProgress", {
@@ -20632,17 +20976,17 @@ const I18N = {
     showUsageGuideBtn: "Como usar",
     authKicker: "Acesso rápido",
     authTitle: "Comece pela descoberta",
-    authDesc: "Comece sem conta com uma descoberta limpa, ou entre com Google para sincronizar seu perfil entre aparelhos.",
+    authDesc: "Comece sem conta com uma descoberta limpa, ou entre com uma conta online disponível para sincronizar seu perfil entre aparelhos.",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Começar descoberta",
+    authGuestBtn: "Entrar sem login",
     authTestUserBtn: "Começar sem histórico",
     authNewUserHint: "Sem login, cada entrada começa sem histórico salvo.",
-    authRequired: "Entre com Google ou sem login.",
+    authRequired: "Entre com uma conta online ou continue sem login.",
     authLoggedAs: "Perfil carregado para {user}.",
     authGuestReady: "Descoberta limpa pronta. Vamos testar faixas do zero.",
     authLocalResumeReady: "Perfil local carregado para {user}.",
@@ -20652,19 +20996,20 @@ const I18N = {
     authGoogleBtn: "Entrar com Google",
     authContinueOnlineBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Google sincroniza seu perfil entre aparelhos quando a conta online está ativa.",
+    authProviderHint: "A conta online sincroniza seu perfil entre aparelhos quando estiver ativa.",
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
-    authProviderOpenTimeout: "O Google não abriu. Tente de novo ou continue sem login.",
+    authProviderOpenTimeout: "{provider} não abriu. Tente de novo ou continue sem login.",
+    authOnlineUnavailableEnvironment: "Login online indisponível neste ambiente. Tente no app instalado ou entre sem login.",
     authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "Não consegui entrar com {provider}. Confira a configuração e tente de novo.",
     authProviderGoogleReady: "Google pronto. Toque para entrar.",
     authProviderAppleHttps: "Apple precisa de um redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar com Google",
     authAppleComingSoon: "Apple em breve",
-    authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. Google pode ser ligado depois.",
-    authProviderHintAppStoreLocal: "Na versão iOS, a descoberta começa local neste aparelho. Sincronização online volta quando Apple e Google estiverem completos.",
+    authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. A conta online pode ser ligada depois.",
+    authProviderHintAppStoreLocal: "Na versão iOS, você pode entrar com uma conta online disponível ou continuar com perfil local neste aparelho.",
     welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
@@ -21414,6 +21759,11 @@ const I18N = {
     socialCommentsPosted: "Comentário publicado.",
     socialCommentsPostFailed: "Não consegui publicar agora.",
     socialCommentsReactionFailed: "Não consegui registrar a reação agora.",
+    socialCommentsUpdated: "Comentário atualizado.",
+    socialCommentsUpdateFailed: "Não consegui editar agora.",
+    socialCommentsEdit: "Editar",
+    socialCommentsSaveEdit: "Salvar",
+    socialCommentsCancelEdit: "Cancelar",
     socialCommentsDeleted: "Comentário removido.",
     socialCommentsDelete: "Remover",
     socialCommentsLike: "Curtir",
@@ -21700,17 +22050,17 @@ const I18N = {
     showUsageGuideBtn: "How to use",
     authKicker: "Quick access",
     authTitle: "Start with discovery",
-    authDesc: "Start without an account with a clean discovery run, or sign in with Google to sync your profile across devices.",
+    authDesc: "Start without an account with a clean discovery run, or sign in with an available online account to sync your profile across devices.",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Use local profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Start discovering",
+    authGuestBtn: "Continue without login",
     authTestUserBtn: "Start without history",
     authNewUserHint: "Without login, each entry starts without saved history.",
-    authRequired: "Sign in with Google or enter without login.",
+    authRequired: "Sign in with an online account or continue without login.",
     authLoggedAs: "Profile loaded for {user}.",
     authGuestReady: "Clean discovery ready. Let's test tracks from zero.",
     authLocalResumeReady: "Local profile loaded for {user}.",
@@ -21720,19 +22070,20 @@ const I18N = {
     authGoogleBtn: "Sign in with Google",
     authContinueOnlineBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "Google syncs your profile across devices when the online account is active.",
+    authProviderHint: "An online account syncs your profile across devices when active.",
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
-    authProviderOpenTimeout: "Google did not open. Try again or continue without login.",
+    authProviderOpenTimeout: "{provider} did not open. Try again or continue without login.",
+    authOnlineUnavailableEnvironment: "Online login is unavailable in this environment. Try the installed app or continue without login.",
     authProviderLoggedAs: "Online profile connected for {user}.",
     authProviderFailed: "I could not sign in with {provider}. Check the configuration and try again.",
     authProviderGoogleReady: "Google is ready. Tap to sign in.",
     authProviderAppleHttps: "Apple needs a configured HTTPS redirect to sign in.",
     authGoogleComingSoon: "Sign in with Google",
-    authAppleComingSoon: "Apple soon",
-    authProviderHintLocalBackup: "Without login, discovery starts clean on this device. Google can be enabled later.",
-    authProviderHintAppStoreLocal: "In the iOS version, discovery starts locally on this device. Online sync returns when Apple and Google are complete.",
+    authAppleComingSoon: "Apple coming soon",
+    authProviderHintLocalBackup: "Without login, discovery starts clean on this device. An online account can be enabled later.",
+    authProviderHintAppStoreLocal: "In the iOS version, you can sign in with an available online account or continue with a local profile on this device.",
     welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
@@ -22479,6 +22830,11 @@ const I18N = {
     socialCommentsPosted: "Comment posted.",
     socialCommentsPostFailed: "I could not post that right now.",
     socialCommentsReactionFailed: "I could not save that reaction right now.",
+    socialCommentsUpdated: "Comment updated.",
+    socialCommentsUpdateFailed: "I could not edit that right now.",
+    socialCommentsEdit: "Edit",
+    socialCommentsSaveEdit: "Save",
+    socialCommentsCancelEdit: "Cancel",
     socialCommentsDeleted: "Comment removed.",
     socialCommentsDelete: "Remove",
     socialCommentsLike: "Like",
@@ -22765,14 +23121,14 @@ const I18N = {
     showUsageGuideBtn: "Cómo usar",
     authKicker: "Acceso rápido",
     authTitle: "Empieza por descubrir",
-    authDesc: "Empieza sin cuenta con un descubrimiento limpio o entra con Google para sincronizar tu perfil entre dispositivos.",
+    authDesc: "Empieza sin cuenta con un descubrimiento limpio o entra con una cuenta online disponible para sincronizar tu perfil entre dispositivos.",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Empezar a descubrir",
+    authGuestBtn: "Entrar sin login",
     authTestUserBtn: "Empezar sin historial",
     authNewUserHint: "Sin login, cada entrada empieza sin historial guardado.",
     authRequired: "Entra con Google o sin login.",
@@ -22785,19 +23141,20 @@ const I18N = {
     authGoogleBtn: "Entrar con Google",
     authContinueOnlineBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "Google sincroniza tu perfil entre dispositivos cuando la cuenta online está activa.",
+    authProviderHint: "La cuenta online sincroniza tu perfil entre dispositivos cuando está activa.",
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
-    authProviderOpenTimeout: "Google no se abrió. Intenta de nuevo o continúa sin login.",
+    authProviderOpenTimeout: "{provider} no se abrió. Intenta de nuevo o continúa sin login.",
+    authOnlineUnavailableEnvironment: "El login online no está disponible en este entorno. Intenta en la app instalada o entra sin login.",
     authProviderLoggedAs: "Perfil online conectado para {user}.",
     authProviderFailed: "No pude entrar con {provider}. Revisa la configuración e intenta de nuevo.",
     authProviderGoogleReady: "Google listo. Toca para entrar.",
     authProviderAppleHttps: "Apple necesita un redirect HTTPS configurado para entrar.",
     authGoogleComingSoon: "Entrar con Google",
     authAppleComingSoon: "Apple pronto",
-    authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. Google puede activarse después.",
-    authProviderHintAppStoreLocal: "En la versión iOS, el descubrimiento empieza local en este dispositivo. La sincronización online vuelve cuando Apple y Google estén completos.",
+    authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. La cuenta online puede activarse después.",
+    authProviderHintAppStoreLocal: "En la versión iOS, puedes entrar con una cuenta online disponible o continuar con perfil local en este dispositivo.",
     welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
@@ -23541,6 +23898,11 @@ const I18N = {
     socialCommentsPosted: "Comentario publicado.",
     socialCommentsPostFailed: "No pude publicar ahora.",
     socialCommentsReactionFailed: "No pude guardar la reacción ahora.",
+    socialCommentsUpdated: "Comentario actualizado.",
+    socialCommentsUpdateFailed: "No pude editar ahora.",
+    socialCommentsEdit: "Editar",
+    socialCommentsSaveEdit: "Guardar",
+    socialCommentsCancelEdit: "Cancelar",
     socialCommentsDeleted: "Comentario eliminado.",
     socialCommentsDelete: "Eliminar",
     socialCommentsLike: "Me gusta",
@@ -26431,6 +26793,98 @@ function createAuthStateToken() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
+function base64UrlFromBytes(bytes) {
+  const array = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes || []);
+  let binary = "";
+  array.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+function createSocialCodeVerifier() {
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const bytes = new Uint8Array(48);
+    crypto.getRandomValues(bytes);
+    return base64UrlFromBytes(bytes);
+  }
+  let verifier = "";
+  while (verifier.length < 64) verifier += Math.random().toString(36).slice(2);
+  return verifier.slice(0, 64);
+}
+
+async function createSocialCodeChallenge(verifier = "") {
+  const cleanVerifier = String(verifier || "").trim();
+  if (
+    typeof crypto !== "undefined" &&
+    crypto.subtle?.digest &&
+    typeof TextEncoder !== "undefined"
+  ) {
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(cleanVerifier));
+    return {
+      codeChallenge: base64UrlFromBytes(digest),
+      codeChallengeMethod: "S256"
+    };
+  }
+  return {
+    codeChallenge: cleanVerifier,
+    codeChallengeMethod: "plain"
+  };
+}
+
+function storeSocialOAuthPkce(record = {}) {
+  try {
+    localStorage.setItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY, JSON.stringify({
+      provider: record.provider === "apple" ? "apple" : "google",
+      codeVerifier: String(record.codeVerifier || ""),
+      redirectTo: String(record.redirectTo || ""),
+      state: String(record.state || ""),
+      createdAt: Date.now()
+    }));
+  } catch (error) {
+    console.warn("Could not store social OAuth PKCE verifier", error);
+  }
+}
+
+function loadSocialOAuthPkce() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY) || "{}");
+    const createdAt = Number(parsed.createdAt || 0) || 0;
+    if (!parsed.codeVerifier || Date.now() - createdAt > 10 * 60 * 1000) return null;
+    return parsed;
+  } catch (error) {
+    console.warn("Could not read social OAuth PKCE verifier", error);
+    return null;
+  }
+}
+
+function clearSocialOAuthPkce() {
+  try {
+    localStorage.removeItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY);
+  } catch (_error) {
+    // ignore storage failures
+  }
+}
+
+async function prepareSocialOAuthPkce(provider = "google") {
+  const codeVerifier = createSocialCodeVerifier();
+  const challenge = await createSocialCodeChallenge(codeVerifier);
+  const redirectTo = socialAuthRedirectUrl();
+  const state = createAuthStateToken();
+  const record = {
+    provider: provider === "apple" ? "apple" : "google",
+    codeVerifier,
+    redirectTo,
+    state,
+    ...challenge
+  };
+  storeSocialOAuthPkce(record);
+  return record;
+}
+
 function setAuthProviderBusy(provider, isBusy) {
   if (AUTH_LOGIN_STANDBY) {
     syncAuthStandbyUi();
@@ -26439,19 +26893,12 @@ function setAuthProviderBusy(provider, isBusy) {
   const button = provider === "apple" ? authAppleBtn : authGoogleBtn;
   const label = provider === "apple" ? authAppleLabel : authGoogleLabel;
   const configured = provider === "apple" ? Boolean(appleClientId()) : Boolean(googleClientId());
-  if (!configured) {
-    if (button) {
-      button.disabled = true;
-      button.classList.add("is-unconfigured");
-      button.title = t("authProviderConfigMissing", { provider: authProviderDisplayName(provider) });
-    }
-    if (label) label.textContent = t(provider === "apple" ? "authAppleComingSoon" : "authGoogleComingSoon");
-    return;
-  }
-  if (button) button.disabled = isBusy;
   if (button) {
-    button.classList.remove("is-unconfigured");
-    button.removeAttribute("title");
+    button.disabled = isBusy;
+    button.classList.toggle("is-unconfigured", !configured);
+    button.title = configured
+      ? ""
+      : t("authProviderConfigMissing", { provider: authProviderDisplayName(provider) });
   }
   if (!label) return;
   label.textContent = isBusy
@@ -26464,35 +26911,51 @@ function updateAuthProviderUi() {
     syncAuthStandbyUi();
     return;
   }
-  const googleConfigured = socialConfigReady();
+  const socialConfigEndpointAvailable = Boolean(resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT));
+  const googleConfigured = !socialState.ready || socialProviderAvailable("google") || Boolean(googleClientId()) || socialConfigEndpointAvailable;
+  const appleConfigured = !socialState.ready || socialProviderAvailable("apple") || Boolean(appleClientId()) || socialConfigEndpointAvailable;
   const signed = authHasOnlineSession();
   const busy = Boolean(authConfigLoading || socialState.busy);
   const googleOAuthHref = socialOAuthStartUrl("google");
+  const appleOAuthHref = socialOAuthStartUrl("apple");
   const hideOnlineAuth = shouldHideSocialLoginForAppStore();
-  const showGoogleOption = Boolean(!hideOnlineAuth && (googleConfigured || signed || busy));
+  const showGoogleOption = Boolean(!hideOnlineAuth);
+  const showAppleOption = Boolean(!hideOnlineAuth);
   const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
   if (authEntryActions) {
-    authEntryActions.classList.toggle("has-online", showGoogleOption);
-    authEntryActions.classList.toggle("local-only", !showGoogleOption);
+    authEntryActions.classList.toggle("has-online", showGoogleOption || showAppleOption);
+    authEntryActions.classList.toggle("has-social-providers", showGoogleOption && showAppleOption);
+    authEntryActions.classList.toggle("local-only", !showGoogleOption && !showAppleOption);
   }
   if (authGoogleNativeSlot) {
     authGoogleNativeSlot.classList.add("hidden");
     authGoogleNativeSlot.innerHTML = "";
   }
   if (authAppleBtn) {
-    authAppleBtn.classList.add("hidden");
-    authAppleBtn.setAttribute("aria-hidden", "true");
-    authAppleBtn.disabled = true;
+    authAppleBtn.classList.toggle("hidden", !showAppleOption);
+    authAppleBtn.setAttribute("aria-hidden", showAppleOption ? "false" : "true");
+    authAppleBtn.disabled = !showAppleOption || busy;
+    if (authAppleBtn.tagName === "A") {
+      authAppleBtn.setAttribute("href", signed ? "#" : appleOAuthHref);
+      authAppleBtn.setAttribute(
+        "aria-disabled",
+        !showAppleOption || busy ? "true" : "false"
+      );
+    }
+    authAppleBtn.classList.toggle("is-unconfigured", !appleConfigured && !signed);
+    authAppleBtn.title = showAppleOption && !appleConfigured && !signed
+      ? t("authProviderConfigMissing", { provider: "Apple" })
+      : "";
   }
   if (authGoogleBtn) {
     authGoogleBtn.classList.toggle("hidden", !showGoogleOption);
     authGoogleBtn.setAttribute("aria-hidden", showGoogleOption ? "false" : "true");
-    authGoogleBtn.disabled = !showGoogleOption || busy || (!googleConfigured && !signed);
+    authGoogleBtn.disabled = !showGoogleOption || busy;
     if (authGoogleBtn.tagName === "A") {
       authGoogleBtn.setAttribute("href", signed ? "#" : googleOAuthHref);
       authGoogleBtn.setAttribute(
         "aria-disabled",
-        !showGoogleOption || busy || (!googleConfigured && !signed) ? "true" : "false"
+        !showGoogleOption || busy ? "true" : "false"
       );
     }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
@@ -26505,9 +26968,14 @@ function updateAuthProviderUi() {
       ? t("authContinueOnlineBtn")
       : busy
         ? t("authProviderLoading", { provider: "Google" })
-        : googleConfigured
-          ? t("authGoogleBtn")
-          : t("authGoogleComingSoon");
+        : t("authGoogleBtn");
+  }
+  if (authAppleLabel) {
+    authAppleLabel.textContent = signed
+      ? t("authAppleBtn")
+      : busy
+        ? t("authProviderLoading", { provider: "Apple" })
+        : t("authAppleBtn");
   }
   if (authGuestBtn) {
     authGuestBtn.classList.remove("hidden");
@@ -26522,7 +26990,7 @@ function updateAuthProviderUi() {
   if (authProviderHint) {
     authProviderHint.textContent = hideOnlineAuth
       ? t("authProviderHintAppStoreLocal")
-      : googleConfigured || signed
+      : googleConfigured || appleConfigured || signed
         ? t("authProviderHint")
         : t("authProviderHintLocalBackup");
   }
@@ -26645,9 +27113,24 @@ function authOnlineSessionUserLabel() {
   return socialSessionEmail() || socialSuggestedDisplayName() || socialSuggestedUsername() || "Google";
 }
 
+function onlineSocialProvider() {
+  const user = socialState.session?.user || {};
+  const appMetadata = user.app_metadata || {};
+  const identities = Array.isArray(user.identities) ? user.identities : [];
+  const provider = String(
+    appMetadata.provider ||
+      identities[0]?.provider ||
+      socialState.session?.provider ||
+      ""
+  ).trim().toLowerCase();
+  return provider === "apple" ? "apple" : "google";
+}
+
 function onlineSocialUserSession() {
   const user = socialState.session?.user || {};
   const metadata = user.user_metadata || user.raw_user_meta_data || {};
+  const provider = onlineSocialProvider();
+  const providerName = authProviderDisplayName(provider);
   const email = String(user.email || "").trim();
   const username = String(
     metadata.full_name ||
@@ -26655,11 +27138,11 @@ function onlineSocialUserSession() {
       metadata.display_name ||
       metadata.username ||
       email ||
-      "Google user"
+      `${providerName} user`
   ).trim();
   return normalizeUserSession({
-    mode: "google",
-    provider: "google",
+    mode: provider,
+    provider,
     providerId: user.id || user.sub || email || "",
     email,
     username,
@@ -26672,7 +27155,7 @@ async function continueWithOnlineSocialSession(options = {}) {
   const fresh = await ensureFreshSocialSession({ clearOnFailure: true });
   if (!fresh) {
     if (!options.silentFailure) {
-      setAuthFeedback("Sua sessao do Google expirou. Toque em Entrar com Google para conectar novamente.", true);
+      setAuthFeedback("Sua sessão online expirou. Toque em Entrar novamente para conectar.", true);
       playUiSfx("error");
     }
     updateAuthProviderUi();
@@ -26682,8 +27165,8 @@ async function continueWithOnlineSocialSession(options = {}) {
   activateUserSession(session);
   persistUserSession(session);
   setAuthFeedback(t("authProviderLoggedAs", {
-    provider: "Google",
-    user: session.username || session.email || "Google"
+    provider: authProviderDisplayName(session.provider),
+    user: session.username || session.email || authProviderDisplayName(session.provider)
   }));
   applyCloudLikedTrackSignals([]);
   updateStats();
@@ -26775,12 +27258,13 @@ async function loginWithGoogle(event) {
   if (shouldUseNativeLink) {
     event?.preventDefault?.();
     socialState.busy = true;
-    pendingSocialOAuthUrl = socialOAuthStartUrl("google") || authGoogleBtn.getAttribute("href") || "";
+    pendingSocialOAuthProvider = "google";
+    pendingSocialOAuthUrl = await prepareSocialOAuthStartUrl("google") || authGoogleBtn.getAttribute("href") || "";
     setAuthFeedback(t("authProviderLoading", { provider: "Google" }));
     socialSetStatus("Abrindo login do Google...");
     renderSocialUi({ preserveStatus: true });
     updateAuthProviderUi();
-    startSocialOAuthNavigation(pendingSocialOAuthUrl);
+    startSocialOAuthNavigation(pendingSocialOAuthUrl, "google");
     return;
   }
   if (pendingSocialOAuthUrl && !socialState.busy) {
@@ -26789,7 +27273,8 @@ async function loginWithGoogle(event) {
     socialSetStatus("Abrindo login do Google...");
     renderSocialUi({ preserveStatus: true });
     updateAuthProviderUi();
-    if (startSocialOAuthNavigation(pendingSocialOAuthUrl)) return;
+    pendingSocialOAuthProvider = "google";
+    if (startSocialOAuthNavigation(pendingSocialOAuthUrl, "google")) return;
   }
   if (socialState.session?.access_token) {
     const resumed = await continueWithOnlineSocialSession({ silentFailure: true, showGuide: false });
@@ -26809,10 +27294,14 @@ async function loginWithGoogle(event) {
   try {
     if (!socialState.ready || !socialConfigReady()) await fetchSocialConfig();
     if (!socialConfigReady()) {
-      showAuthProviderConfigMissing("google");
+      setAuthFeedback(t("authOnlineUnavailableEnvironment"), true);
+      socialSetStatus(t("authOnlineUnavailableEnvironment"), "error");
       return;
     }
-    await socialSignInWithGoogle();
+    const started = await socialSignInWithProvider("google");
+    if (!started && !socialConfigReady()) {
+      setAuthFeedback(t("authOnlineUnavailableEnvironment"), true);
+    }
   } catch (error) {
     console.warn("Could not start Google login", error);
     setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
@@ -26823,57 +27312,44 @@ async function loginWithGoogle(event) {
   }
 }
 
-async function loginWithApple() {
+async function loginWithApple(event) {
+  event?.preventDefault?.();
   if (AUTH_LOGIN_STANDBY) {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
     return;
   }
-  if (!appleClientId()) {
-    showAuthProviderConfigMissing("apple");
+  if (shouldHideSocialLoginForAppStore()) {
+    event?.preventDefault?.();
+    setAuthFeedback(t("authProviderHintAppStoreLocal"));
     return;
   }
-  const redirectURI = appleRedirectURI();
-  if (!redirectURI) {
-    setAuthFeedback(t("authProviderAppleHttps"), true);
-    playUiSfx("error");
+  if (socialState.session?.access_token) {
+    const resumed = await continueWithOnlineSocialSession({ silentFailure: true, showGuide: false });
+    if (resumed) return;
+  }
+  if (socialState.session?.access_token) {
+    socialStoreSession(null);
+    updateAuthProviderUi();
+  }
+  if (authHasOnlineSession()) {
+    await continueWithOnlineSocialSession({ showGuide: false });
     return;
   }
-
-  appleAuthLoading = true;
-  appleAuthReady = false;
+  authConfigLoading = true;
+  setAuthFeedback(t("authProviderLoading", { provider: "Apple" }));
   updateAuthProviderUi();
   try {
-    await loadExternalScript("https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js");
-    if (!window.AppleID?.auth) throw new Error("AppleID auth unavailable");
-    window.AppleID.auth.init({
-      clientId: appleClientId(),
-      scope: configuredAuthValue("appleScope") || AUTH_DEFAULT_CONFIG.appleScope,
-      redirectURI,
-      state: createAuthStateToken(),
-      nonce: createAuthStateToken(),
-      usePopup: true
-    });
-    appleAuthReady = true;
-    const response = await window.AppleID.auth.signIn();
-    const authorization = response?.authorization || {};
-    const tokenPayload = decodeJwtPayload(authorization.id_token || authorization.idToken || "") || {};
-    const appleUser = response?.user || {};
-    const appleName = appleUser?.name
-      ? [appleUser.name.firstName, appleUser.name.lastName].filter(Boolean).join(" ")
-      : "";
-    const ok = completeSocialLogin("apple", {
-      ...tokenPayload,
-      name: appleName || tokenPayload.name,
-      email: tokenPayload.email || appleUser.email || "",
-      user: tokenPayload.sub || appleUser.user || ""
-    });
-    if (!ok) throw new Error("Missing Apple identity");
-  } catch (_err) {
+    const started = await socialSignInWithProvider("apple");
+    if (!started && !socialConfigReady()) {
+      setAuthFeedback(t("authOnlineUnavailableEnvironment"), true);
+    }
+  } catch (error) {
+    console.warn("Could not start Apple login", error);
     setAuthFeedback(t("authProviderFailed", { provider: "Apple" }), true);
     playUiSfx("error");
   } finally {
-    appleAuthLoading = false;
+    authConfigLoading = false;
     updateAuthProviderUi();
   }
 }
@@ -28091,7 +28567,7 @@ async function showAuthScreen() {
   }
   if (onlineUser) {
     setAuthFeedback(t("authProviderLoggedAs", {
-      provider: "Google",
+      provider: authProviderDisplayName(onlineSocialProvider()),
       user: onlineUser
     }));
   } else if (storedUser && storedUser.mode !== "guest") {
@@ -28099,9 +28575,13 @@ async function showAuthScreen() {
   } else {
     setAuthFeedback("");
   }
-  const preferredAuthAction = onlineUser || socialConfigReady()
-    ? authGoogleBtn
-    : authGuestBtn;
+  const preferredAuthAction = onlineUser
+    ? (onlineSocialProvider() === "apple" ? authAppleBtn : authGoogleBtn)
+    : socialProviderAvailable("google") || googleClientId()
+      ? authGoogleBtn
+      : socialProviderAvailable("apple") || appleClientId()
+        ? authAppleBtn
+        : authGuestBtn;
   if (preferredAuthAction?.focus) preferredAuthAction.focus();
   else if (authUsername) authUsername.focus();
   refreshAmbientForUiState();
@@ -28253,7 +28733,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
 
   schedulePostBootIdleTask(() => {
     warmupCatalogInBackground();
-  }, { delayMs: BACKGROUND_CATALOG_WARMUP_DELAY_MS, timeoutMs: 2400 });
+  }, { delayMs: nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000), timeoutMs: 2400 });
   scheduleQuizChallengeEvaluation(220);
 
   if (!shouldAutoRecommend) return;
@@ -28391,7 +28871,7 @@ async function resumeStoredUserSession() {
   activateUserSession(storedUser);
   persistUserSession(storedUser);
   let restoredOnline = false;
-  if (storedUser.mode === "google") {
+  if (isOnlineSocialMode(storedUser.mode)) {
     authConfigLoading = true;
     updateAuthProviderUi();
     try {
@@ -28416,7 +28896,7 @@ async function resumeStoredUserSession() {
   }
   setAuthFeedback(restoredOnline
     ? t("authProviderLoggedAs", {
-      provider: "Google",
+      provider: authProviderDisplayName(storedUser.provider || storedUser.mode),
       user: storedUser.username || storedUser.email || t("summaryNoData")
     })
     : t("authLoggedAs", {
@@ -34173,6 +34653,98 @@ function buildSpotifyTrackLink(track) {
   if (hasSpotifyHost(track?.spotifyTrackUrl)) return String(track.spotifyTrackUrl).trim();
   if (hasSpotifyHost(track?.spotifyUrl)) return String(track.spotifyUrl).trim();
   return fallbackSearchUrl;
+}
+
+function spotifyApiTrackCacheKey(track) {
+  return recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
+}
+
+function spotifyApiCandidateMatchesTrack(candidate = {}, track = {}) {
+  const artist = String(track?.artist || "").trim();
+  const song = String(track?.song || track?.title || "").trim();
+  const candidateArtist = String(candidate.artist || "").trim();
+  const candidateTitle = String(candidate.song || candidate.title || "").trim();
+  if (artist && candidateArtist && !isArtistMatch(candidateArtist, artist)) return false;
+  if (!song || !candidateTitle) return Boolean(candidate?.spotifyTrackUrl || candidate?.spotifyUrl);
+  if (hasUnrequestedAlternateVersion(song, candidateTitle)) return false;
+  return titleConfidence(song, candidateTitle) >= 0.78 || strictTitleMatch(song, candidateTitle);
+}
+
+function applySpotifyApiTrack(track, candidate = {}) {
+  if (!track || !candidate) return false;
+  const url = String(candidate.spotifyTrackUrl || candidate.spotifyUrl || candidate.trackUrl || "").trim();
+  if (!url || !/spotify\.(com|link)/i.test(url)) return false;
+  if (!spotifyApiCandidateMatchesTrack(candidate, track)) return false;
+  track.spotifyTrackUrl = url;
+  track.spotifyUrl = url;
+  track.spotifyVerified = true;
+  track.existenceVerified = true;
+  if (candidate.coverArtUrl && !track.coverArtUrl) track.coverArtUrl = candidate.coverArtUrl;
+  if (candidate.album && !track.album) track.album = candidate.album;
+  if (candidate.releaseDate && !track.releaseDate) track.releaseDate = candidate.releaseDate;
+  if (candidate.durationSec && !track.durationSec) track.durationSec = candidate.durationSec;
+  if (Array.isArray(candidate.sourceDetails) && candidate.sourceDetails.length) {
+    track.spotifySourceDetails = candidate.sourceDetails;
+  }
+  return true;
+}
+
+async function resolveSpotifyTrackFromApi(track) {
+  if (!track || !spotifyApiAvailable || !track.artist || !(track.song || track.title)) return false;
+  const endpoint = resolveMusicApiEndpoint("SONIC_SPOTIFY_SEARCH_API_URL", "/api/spotify-search");
+  if (!endpoint) return false;
+  const cacheKey = spotifyApiTrackCacheKey(track);
+  if (cacheKey && spotifyApiCache.has(cacheKey)) {
+    const cached = spotifyApiCache.get(cacheKey);
+    return cached ? applySpotifyApiTrack(track, cached) : false;
+  }
+
+  try {
+    const response = await fetchWithTimeout(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        artist: track.artist || "",
+        song: track.song || track.title || "",
+        style: track.style || "",
+        album: coverArtReleaseName(track),
+        limit: 5
+      })
+    }, FAST_OPTIONAL_API_TIMEOUT_MS);
+    if (!response.ok) {
+      if ([403, 404, 503].includes(response.status)) spotifyApiAvailable = false;
+      if (cacheKey) spotifyApiCache.set(cacheKey, null);
+      return false;
+    }
+    const payload = await response.json();
+    const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
+    const best = [payload?.bestTrack, ...rows].find((candidate) => spotifyApiCandidateMatchesTrack(candidate, track));
+    if (!best) {
+      if (cacheKey) spotifyApiCache.set(cacheKey, null);
+      return false;
+    }
+    if (cacheKey) spotifyApiCache.set(cacheKey, best);
+    return applySpotifyApiTrack(track, best);
+  } catch (_err) {
+    if (cacheKey) spotifyApiCache.set(cacheKey, null);
+    return false;
+  }
+}
+
+async function hydrateSpotifyLinkForTrack(track) {
+  if (!spotifyLink || !track || !trackStillActive(track)) return;
+  const resolved = await resolveSpotifyTrackFromApi(track);
+  if (!resolved || !trackStillActive(track)) return;
+  const href = buildSpotifyTrackLink(track);
+  setListenLinkState(spotifyLink, {
+    href,
+    enabled: Boolean(href && href !== "#"),
+    title: ""
+  });
+  spotifyLink.classList.toggle("unverified-link", false);
 }
 
 function buildYouTubeTrackLink(track) {
@@ -42935,6 +43507,7 @@ function trackMetadataSourceLabel(sourceInfo = {}) {
   if (source === "itunes") return "iTunes";
   if (source === "deezer") return "Deezer";
   if (source === "soundcloud") return "SoundCloud";
+  if (source === "spotify" || source === "spotify_api") return "Spotify";
   return String(sourceInfo.source || "").trim();
 }
 
@@ -44747,7 +45320,7 @@ function djLaneLabel(lane = "") {
   if (lane === "house_selectors") return "House / Selectors";
   if (lane === "minimal_deep_selectors") return "Minimal / Deep Tech";
   if (lane === "disco_italo_selectors") return "Disco / Italo";
-  if (lane === "psy_festival_lineups") return "Psy festivals";
+  if (lane === "psy_festival_lineups") return "Psy sets";
   if (lane === "hitech_psycore") return "Hi-Tech / Psycore";
   if (lane === "mop") return "Psy BR";
   if (lane === "global_psy") return "Psy global";
@@ -44755,11 +45328,42 @@ function djLaneLabel(lane = "") {
   return "DJ set";
 }
 
+const DJ_PSY_SET_LANES = new Set(["hitech_psycore", "global_psy", "mop"]);
+
+function compactDjLabels(labels = []) {
+  const seen = new Set();
+  return labels.map((label) => String(label || "").trim()).filter((label) => {
+    if (!label) return false;
+    const key = normalize(label);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function djSeedIsSearchFallback(seed = {}) {
+  const platform = normalize(seed.platform || "");
+  const title = normalize(seed.setTitle || "");
+  const setUrl = String(seed.setUrl || "");
+  return platform === "busca"
+    || title.startsWith("busca de")
+    || /youtube\.com\/results/i.test(setUrl)
+    || /soundcloud\.com\/search/i.test(setUrl);
+}
+
+function djSeedMatchesLane(seed = {}, lane = "") {
+  if (!lane) return true;
+  if (lane === "psy_festival_lineups") return DJ_PSY_SET_LANES.has(seed.lane);
+  return seed.lane === lane;
+}
+
 function djMetaLine(seed = {}) {
-  const slot = [seed.floor, seed.time].map((item) => String(item || "").trim()).filter(Boolean).join(" ");
-  const scene = String(slot || seed.scene || seed.eventSignal || djLaneLabel(seed.lane)).trim();
-  const platform = String(seed.platform || "").trim();
-  return [scene, platform].filter(Boolean).join(" • ") || "Set público selecionado por curadoria.";
+  const isSearchFallback = djSeedIsSearchFallback(seed);
+  const lane = djLaneLabel(seed.lane);
+  const scene = isSearchFallback ? lane : seed.scene || seed.eventSignal || lane;
+  const platform = isSearchFallback ? "link externo" : seed.platform;
+  const labels = compactDjLabels([seed.subgenre || lane, platform, scene]);
+  return labels.slice(0, 3).join(" • ") || "Set público selecionado por curadoria.";
 }
 
 function djContextItems(seed = {}) {
@@ -44767,15 +45371,17 @@ function djContextItems(seed = {}) {
     ? "Live act"
     : seed.roleKind === "b2b"
       ? "B2B"
-      : seed.platform
-        ? "Set/busca"
-        : "Curadoria por set";
+      : djSeedIsSearchFallback(seed)
+        ? "Busca curada"
+        : "Set direto";
+  const lane = djLaneLabel(seed.lane);
+  const platform = djSeedIsSearchFallback(seed) ? "Link externo" : seed.platform;
   return [
     { label: "Origem", value: seed.country },
-    { label: "Festa", value: seed.eventName || seed.eventSignal || seed.scene || seed.floor },
-    { label: "Data", value: seed.date },
-    { label: "Horario", value: seed.time },
-    { label: "Som", value: seed.subgenre || seed.style },
+    { label: "Cena", value: seed.scene || lane },
+    { label: "Som", value: seed.subgenre || seed.style || lane },
+    { label: "Set", value: seed.setTitle },
+    { label: "Plataforma", value: platform },
     { label: "Entrada", value: roleLabel }
   ].filter((item) => String(item.value || "").trim());
 }
@@ -44833,27 +45439,30 @@ function djSeedHasPlayablePreview(seed = {}) {
 
 function filteredDjRecommendationPool() {
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
-  const pool = DJ_SET_RECOMMENDATION_SEEDS.filter((seed) => !lane || seed.lane === lane);
-  if (lane === "psy_festival_lineups") {
-    const playablePool = pool.filter(djSeedHasPlayablePreview);
-    if (playablePool.length) return playablePool;
+  const pool = DJ_SET_RECOMMENDATION_SEEDS.filter((seed) => djSeedMatchesLane(seed, lane));
+  const playablePool = pool.filter(djSeedHasPlayablePreview);
+  if (playablePool.length) return playablePool;
+  const directSetPool = pool.filter((seed) => !djSeedIsSearchFallback(seed));
+  if (directSetPool.length) return directSetPool;
+  const globalPlayablePool = DJ_SET_RECOMMENDATION_SEEDS.filter(djSeedHasPlayablePreview);
+  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : DJ_SET_RECOMMENDATION_SEEDS;
+}
+
+function randomDjPoolIndex(length = 0) {
+  const size = Math.max(0, Number(length) || 0);
+  if (!size) return 0;
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const value = new Uint32Array(1);
+    crypto.getRandomValues(value);
+    return value[0] % size;
   }
-  return pool.length ? pool : DJ_SET_RECOMMENDATION_SEEDS;
+  const salt = (Date.now() % 997) / 997;
+  return Math.floor(((Math.random() + salt) % 1) * size);
 }
 
 function pickDjRecommendation({ avoidKey = "" } = {}) {
   const pool = filteredDjRecommendationPool();
   const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
-  const lane = String(djDiscoverySceneFilter?.value || "").trim();
-  if (!currentDjRecommendation && !lane) {
-    const starter = pool.find((seed) => seed.id === "berlin-20260703-rso-wata-igarashi")
-      || pool.find((seed) => seed.id === "berlin-20260711-berghain-adiel")
-      || pool.find((seed) => seed.id === "berghain-20260704-ignez-live")
-      || pool.find((seed) => seed.lane === "techno_live_dj")
-      || pool.find((seed) => seed.id === "hitech-psycore-anginha")
-      || pool.find((seed) => seed.lane === "hitech_psycore" && normalize(seed.platform || "").includes("soundcloud"));
-    if (starter) return starter;
-  }
   const candidates = pool.filter((seed) => djRecommendationKey(seed) !== currentKey);
   const basePool = candidates.length ? candidates : pool;
   const freshPool = basePool.filter((seed) => {
@@ -44862,13 +45471,13 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
   });
   const lightlySeenPool = basePool.filter((seed) => !recentDjRecommendationKeys.includes(djRecommendationKey(seed)));
   const finalPool = freshPool.length ? freshPool : lightlySeenPool.length ? lightlySeenPool : basePool;
-  return finalPool[Math.floor(Math.random() * finalPool.length)] || pool[0] || null;
+  return finalPool[randomDjPoolIndex(finalPool.length)] || pool[randomDjPoolIndex(pool.length)] || null;
 }
 
 function rememberDjRecommendation(seed) {
   const key = djRecommendationKey(seed);
   if (!key) return;
-  recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 6);
+  recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 12);
 }
 
 function saveDjRecommendationMemory() {
@@ -44888,7 +45497,7 @@ function loadDjRecommendationMemory() {
     const parsed = JSON.parse(localStorage.getItem(DJ_RECOMMENDATION_STORAGE_KEY) || "{}");
     likedDjRecommendationKeys = new Set(Array.isArray(parsed.liked) ? parsed.liked.map(String) : []);
     passedDjRecommendationKeys = new Set(Array.isArray(parsed.passed) ? parsed.passed.map(String) : []);
-    recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 6) : [];
+    recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 12) : [];
   } catch (_err) {
     likedDjRecommendationKeys = new Set();
     passedDjRecommendationKeys = new Set();
@@ -44898,20 +45507,20 @@ function loadDjRecommendationMemory() {
 
 function renderDjRadarSummary() {
   if (djRadarCount) {
-    const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    const count = lane ? filteredDjRecommendationPool().length : DJ_SET_RECOMMENDATION_SEEDS.length;
+    const count = filteredDjRecommendationPool().length;
     djRadarCount.textContent = `${count} cartas curadas`;
   }
   if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
   if (djRadarScope) {
     const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Techno, psy festivals e selectors";
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Techno, psy e selectors";
   }
 }
 
 function renderDjRecommendationBadges(seed = null) {
   const key = djRecommendationKey(seed);
   const hasEmbed = Boolean(seed && djSetEmbedUrl(seed));
+  const isSearchFallback = Boolean(seed && djSeedIsSearchFallback(seed));
   const roleBadge = seed?.roleKind === "live"
     ? { type: "good", label: "Live" }
     : seed?.roleKind === "b2b"
@@ -44921,12 +45530,26 @@ function renderDjRecommendationBadges(seed = null) {
     ? [
         { type: seed.lane === "mop" ? "known" : "fresh", label: djLaneLabel(seed.lane) },
         roleBadge,
-        { type: hasEmbed ? "preview" : "known", label: hasEmbed ? "Set tocavel" : "Busca pronta" },
-        { type: "good", label: seed.platform || "Preview" },
+        { type: hasEmbed ? "preview" : "known", label: hasEmbed ? "Set tocavel" : "Link externo" },
+        { type: "good", label: isSearchFallback ? "Curadoria" : seed.platform || "Preview" },
         likedDjRecommendationKeys.has(key) ? { type: "saved", label: "Salvo" } : null
       ]
     : [];
   renderSonicBadgeList(djSwipeBadges, badges);
+}
+
+function scheduleDjPreviewFrame(embedUrl = "") {
+  if (!djPreviewFrame) return;
+  window.clearTimeout(djPreviewFrameLoadTimer);
+  djPreviewFrameLoadTimer = 0;
+  const cleanUrl = String(embedUrl || "").trim();
+  if (!cleanUrl) {
+    djPreviewFrame.removeAttribute("src");
+    return;
+  }
+  djPreviewFrameLoadTimer = window.setTimeout(() => {
+    if (djPreviewFrame.src !== cleanUrl) djPreviewFrame.src = cleanUrl;
+  }, 260);
 }
 
 function renderDjRecommendation(seed = currentDjRecommendation) {
@@ -44959,7 +45582,7 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeSourceChip) djSwipeSourceChip.textContent = hasSeed ? seed.sourceName || seed.platform : "Fonte";
   if (djSwipeSourceLink) {
     const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
-    const destinationLabel = seed?.platform === "Busca" ? "busca" : seed?.platform || "set";
+    const destinationLabel = djSeedIsSearchFallback(seed) ? "busca" : "set";
     djSwipeSourceLink.href = hasSeed ? destinationUrl : "#";
     djSwipeSourceLink.textContent = hasSeed ? `Abrir ${destinationLabel}` : "Abrir set";
     djSwipeSourceLink.classList.toggle("is-disabled", !hasSeed);
@@ -44975,23 +45598,17 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
     djPreviewMeta.textContent = hasSeed
       ? embedUrl
         ? `${seed.name} • ${seed.subgenre} • ${seed.platform}`
-        : `${seed.name} • ${seed.subgenre} • abre busca/fonte`
+        : `${seed.name} • ${seed.subgenre} • link externo pronto`
       : "O player aparece quando uma carta de DJ estiver ativa.";
   }
   if (djPreviewOpenLink) {
     const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
     djPreviewOpenLink.href = hasSeed ? destinationUrl : "#";
-    djPreviewOpenLink.textContent = hasSeed ? seed.platform || "Abrir" : "YouTube";
+    djPreviewOpenLink.textContent = hasSeed ? djSeedIsSearchFallback(seed) ? "Abrir busca" : "Abrir set" : "YouTube";
     djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
     djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
-  if (djPreviewFrame) {
-    if (embedUrl) {
-      if (djPreviewFrame.src !== embedUrl) djPreviewFrame.src = embedUrl;
-    } else {
-      djPreviewFrame.removeAttribute("src");
-    }
-  }
+  scheduleDjPreviewFrame(embedUrl);
   renderDjRadarSummary();
 }
 
@@ -45832,7 +46449,7 @@ function updateDiscoverySequenceBadges(track) {
     return;
   }
   const number = presentedCardNumberForTrack(track);
-  const label = t("discoverySequence", { number });
+  const label = `#${number}`;
   const ariaLabel = t("heardTrackSequence", { number });
   targets.forEach((badge) => {
     badge.textContent = label;
@@ -46509,6 +47126,7 @@ function renderRecommendation(track, prefs) {
   if (spotifyLink) {
     spotifyLink.classList.toggle("unverified-link", track.spotifyVerified === false && spotifyEnabled);
   }
+  void hydrateSpotifyLinkForTrack(track);
   const youtubeHref = buildYouTubeTrackLink(track);
   const youtubeEnabled = youtubeLinkTrusted(track);
   setListenLinkState(youtubeLink, {
@@ -48958,7 +49576,7 @@ async function socialRefreshSession(options = {}) {
     }
     if (!response.ok) {
       const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
-      throw new Error(String(detail || "Nao consegui renovar a sessao."));
+      throw new Error(String(detail || "Não consegui renovar a sessão."));
     }
     const expiresIn = Number(payload?.expires_in || socialState.session?.expires_in || 3600) || 3600;
     const nextSession = {
@@ -48974,7 +49592,7 @@ async function socialRefreshSession(options = {}) {
       nextSession.user = await socialFetchAuthUser(nextSession.access_token);
     }
     if (!nextSession.access_token || !nextSession.user?.id) {
-      throw new Error("Sessao Supabase incompleta.");
+      throw new Error("Sessão Supabase incompleta.");
     }
     socialStoreSession(nextSession);
     return true;
@@ -49018,22 +49636,32 @@ function socialAuthRedirectPath(path = "") {
   return `${path}${separator}redirect_to=${encodeURIComponent(socialAuthRedirectUrl())}`;
 }
 
-function socialOAuthAuthorizeUrl(provider = "google") {
+function applySocialOAuthPkceParams(params, pkce = null) {
+  if (!params || !pkce?.codeChallenge) return params;
+  params.set("code_challenge", pkce.codeChallenge);
+  params.set("code_challenge_method", pkce.codeChallengeMethod || "S256");
+  if (pkce.state) params.set("state", pkce.state);
+  return params;
+}
+
+function socialOAuthAuthorizeUrl(provider = "google", pkce = null) {
   if (!socialConfigReady()) return "";
   const params = new URLSearchParams({
     provider,
     redirect_to: socialAuthRedirectUrl()
   });
+  applySocialOAuthPkceParams(params, pkce);
   return socialAuthApiUrl(`/auth/v1/authorize?${params.toString()}`);
 }
 
-function socialOAuthEndpointUrl(provider = "google", { redirect = false } = {}) {
+function socialOAuthEndpointUrl(provider = "google", { redirect = false, pkce = null } = {}) {
   const endpoint = resolveAppApiEndpoint(SOCIAL_OAUTH_URL_ENDPOINT);
   if (!endpoint) return "";
   const params = new URLSearchParams({
     provider,
     redirect_to: socialAuthRedirectUrl()
   });
+  applySocialOAuthPkceParams(params, pkce);
   if (redirect) params.set("redirect", "1");
   return `${endpoint}?${params.toString()}`;
 }
@@ -49041,6 +49669,19 @@ function socialOAuthEndpointUrl(provider = "google", { redirect = false } = {}) 
 function socialOAuthStartUrl(provider = "google") {
   if (isNativeAppRuntime()) return socialOAuthAuthorizeUrl(provider);
   return socialOAuthEndpointUrl(provider, { redirect: true });
+}
+
+async function prepareSocialOAuthStartUrl(provider = "google") {
+  const pkce = await prepareSocialOAuthPkce(provider);
+  if (isNativeAppRuntime()) return socialOAuthAuthorizeUrl(provider, pkce);
+  const endpoint = socialOAuthEndpointUrl(provider, { pkce });
+  if (!endpoint) return socialOAuthAuthorizeUrl(provider, pkce);
+  const response = await fetch(endpoint, { cache: "no-store" });
+  const payload = await response.json().catch(() => null);
+  const url = String(payload?.url || "").trim();
+  if (response.ok && payload?.ok && url) return url;
+  const detail = payload?.message || payload?.msg || payload?.error_description || payload?.error || response.statusText;
+  throw new Error(String(detail || "oauth_url_unavailable"));
 }
 
 async function socialDirectOAuthUrl(provider = "google") {
@@ -49067,11 +49708,15 @@ function resetSocialOAuthNavigationState({ clearUrl = false } = {}) {
   clearSocialOAuthNavigationTimer();
   socialState.busy = false;
   authConfigLoading = false;
-  if (clearUrl) pendingSocialOAuthUrl = "";
+  if (clearUrl) {
+    pendingSocialOAuthUrl = "";
+    pendingSocialOAuthProvider = "google";
+  }
 }
 
 function showSocialOAuthNavigationRecovery() {
-  const message = t("authProviderOpenTimeout");
+  const providerName = authProviderDisplayName(pendingSocialOAuthProvider);
+  const message = t("authProviderOpenTimeout", { provider: providerName });
   setAuthFeedback(message, true);
   socialSetStatus(message, "error");
   renderSocialUi({ preserveStatus: true });
@@ -49089,18 +49734,21 @@ function scheduleSocialOAuthNavigationRecovery() {
   }, SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS);
 }
 
-function handleSocialOAuthNavigationFailure(error = null) {
-  if (error) console.warn("Could not navigate to Google OAuth", error);
+function handleSocialOAuthNavigationFailure(error = null, provider = pendingSocialOAuthProvider) {
+  const providerName = authProviderDisplayName(provider);
+  if (error) console.warn(`Could not navigate to ${providerName} OAuth`, error);
+  clearSocialOAuthPkce();
   resetSocialOAuthNavigationState();
-  setAuthFeedback(t("authProviderFailed", { provider: "Google" }), true);
-  socialSetStatus(t("authProviderFailed", { provider: "Google" }), "error");
+  setAuthFeedback(t("authProviderFailed", { provider: providerName }), true);
+  socialSetStatus(t("authProviderFailed", { provider: providerName }), "error");
   renderSocialUi({ preserveStatus: true });
   updateAuthProviderUi();
 }
 
-function startSocialOAuthNavigation(url = "") {
+function startSocialOAuthNavigation(url = "", provider = pendingSocialOAuthProvider || "google") {
   const cleanUrl = String(url || "").trim();
   if (!cleanUrl) return false;
+  pendingSocialOAuthProvider = provider || "google";
   pendingSocialOAuthUrl = cleanUrl;
   scheduleSocialOAuthNavigationRecovery();
   try {
@@ -49112,7 +49760,7 @@ function startSocialOAuthNavigation(url = "") {
           url: cleanUrl,
           presentationStyle: "fullscreen",
           windowName: "_blank"
-        })).catch((error) => handleSocialOAuthNavigationFailure(error));
+        })).catch((error) => handleSocialOAuthNavigationFailure(error, provider));
         return true;
       }
       throw new Error("Capacitor Browser plugin unavailable");
@@ -49124,7 +49772,7 @@ function startSocialOAuthNavigation(url = "") {
     }
     return true;
   } catch (error) {
-    handleSocialOAuthNavigationFailure(error);
+    handleSocialOAuthNavigationFailure(error, provider);
     return false;
   }
 }
@@ -49133,7 +49781,7 @@ function socialFriendlyAuthError(message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
   if (lower.includes("otp_expired") || lower.includes("expired")) {
-    return "Esse link de confirmacao expirou. Clique em Reenviar confirmacao e use o e-mail mais recente.";
+    return "Esse link de confirmação expirou. Clique em Reenviar confirmação e use o e-mail mais recente.";
   }
   if (lower.includes("email not confirmed") || lower.includes("not confirmed")) {
     return "Confirme o e-mail mais recente do Supabase antes de entrar.";
@@ -49142,7 +49790,7 @@ function socialFriendlyAuthError(message = "") {
     return "E-mail ou senha incorretos. Se acabou de criar a conta, confirme o e-mail mais recente antes de entrar.";
   }
   if (lower.includes("already registered") || lower.includes("user already registered")) {
-    return "Este e-mail ja tem uma conta. Use Entrar, ou reenvie a confirmacao se ainda nao confirmou.";
+    return "Este e-mail já tem uma conta. Use Entrar, ou reenvie a confirmação se ainda não confirmou.";
   }
   if (lower.includes("security purposes") || lower.includes("rate limit")) {
     return "O Supabase bloqueou novas tentativas por alguns instantes. Aguarde um minuto e tente de novo.";
@@ -49150,10 +49798,58 @@ function socialFriendlyAuthError(message = "") {
   return text || "Falha no Supabase.";
 }
 
+function socialFriendlyOAuthStartError(providerName = "Google", message = "") {
+  const text = String(message || "").trim();
+  const lower = text.toLowerCase();
+  if (lower.includes("unsupported provider") || lower.includes("provider is not enabled")) {
+    return `${providerName} ainda não está ativo no Supabase. Ative o provider em Authentication > Providers e tente novamente.`;
+  }
+  if (lower.includes("origin_not_allowed") || lower.includes("not allowed")) {
+    return "Este ambiente de teste não está liberado no backend. Use o app instalado ou adicione o redirect/origin no Supabase.";
+  }
+  return socialFriendlyAuthError(text || `Não consegui abrir o login com ${providerName}.`);
+}
+
 function socialConfigReady() {
   if (AUTH_LOGIN_STANDBY) return false;
   if (shouldHideSocialLoginForAppStore()) return false;
   return Boolean(socialState.enabled && socialState.config?.supabaseUrl && socialState.config?.supabaseAnonKey);
+}
+
+function socialConfiguredProviders() {
+  const rawProviders = socialState.config?.providers;
+  const providers = new Set();
+  if (Array.isArray(rawProviders)) {
+    rawProviders.forEach((provider) => {
+      const clean = String(provider || "").trim().toLowerCase();
+      if (clean === "google" || clean === "apple") providers.add(clean);
+    });
+  } else if (rawProviders && typeof rawProviders === "object") {
+    Object.entries(rawProviders).forEach(([provider, enabled]) => {
+      const clean = String(provider || "").trim().toLowerCase();
+      if ((clean === "google" || clean === "apple") && enabled !== false) providers.add(clean);
+    });
+  } else if (typeof rawProviders === "string") {
+    rawProviders.split(",").forEach((provider) => {
+      const clean = provider.trim().toLowerCase();
+      if (clean === "google" || clean === "apple") providers.add(clean);
+    });
+  }
+  if (!providers.size && socialConfigReady()) {
+    providers.add("google");
+    providers.add("apple");
+  }
+  return providers;
+}
+
+function socialProviderAvailable(provider = "google") {
+  if (!socialConfigReady()) return false;
+  const cleanProvider = provider === "apple" ? "apple" : "google";
+  return socialConfiguredProviders().has(cleanProvider);
+}
+
+function isOnlineSocialMode(mode = "") {
+  return mode === "google" || mode === "apple";
 }
 
 function socialApiUrl(path = "") {
@@ -49180,7 +49876,7 @@ function socialHeaders({ auth = true, prefer = "" } = {}) {
 }
 
 async function socialRequest(path, options = {}) {
-  if (!socialConfigReady()) throw new Error("Supabase social ainda nao esta configurado.");
+  if (!socialConfigReady()) throw new Error("Supabase social ainda não está configurado.");
   if (options.auth !== false && socialState.session?.access_token) {
     await ensureFreshSocialSession({ clearOnFailure: true });
   }
@@ -49209,7 +49905,7 @@ async function socialRequest(path, options = {}) {
 }
 
 async function socialFetchAuthUser(accessToken = "") {
-  if (!socialConfigReady() || !accessToken) throw new Error("Sessao Supabase ausente.");
+  if (!socialConfigReady() || !accessToken) throw new Error("Sessão Supabase ausente.");
   const response = await fetch(socialApiUrl("/auth/v1/user"), {
     method: "GET",
     headers: {
@@ -49228,9 +49924,52 @@ async function socialFetchAuthUser(accessToken = "") {
   }
   if (!response.ok) {
     const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
-    throw new Error(String(detail || "Nao consegui validar o usuario."));
+    throw new Error(String(detail || "Não consegui validar o usuário."));
   }
   return payload?.user || payload;
+}
+
+async function socialExchangeAuthCodeForSession(authCode = "") {
+  const code = String(authCode || "").trim();
+  if (!socialConfigReady() || !code) throw new Error("Código de login ausente.");
+  const pkce = loadSocialOAuthPkce();
+  const codeVerifier = String(pkce?.codeVerifier || "").trim();
+  if (!codeVerifier) throw new Error("Verifier de login ausente. Toque em entrar novamente.");
+  const response = await fetch(socialApiUrl("/auth/v1/token?grant_type=pkce"), {
+    method: "POST",
+    headers: socialHeaders({ auth: false }),
+    body: JSON.stringify({
+      auth_code: code,
+      code_verifier: codeVerifier
+    })
+  });
+  const text = await response.text();
+  let payload = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = text;
+    }
+  }
+  if (!response.ok) {
+    const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
+    throw new Error(String(detail || "Não consegui trocar o código de login."));
+  }
+  const expiresIn = Number(payload?.expires_in || 3600) || 3600;
+  const session = {
+    ...(payload || {}),
+    provider: pkce?.provider || pendingSocialOAuthProvider || "",
+    token_type: payload?.token_type || "bearer",
+    expires_in: expiresIn,
+    expires_at: Math.floor(Date.now() / 1000) + expiresIn,
+    user: payload?.user || null
+  };
+  if (!session.user?.id && session.access_token) {
+    session.user = await socialFetchAuthUser(session.access_token);
+  }
+  if (!session.access_token || !session.user?.id) throw new Error("Sessão Supabase incompleta.");
+  return session;
 }
 
 function socialParamsIncludeAuthSignal(params) {
@@ -49291,7 +50030,7 @@ function socialClearAuthHash() {
   try {
     if (window.history?.replaceState) {
       const params = new URLSearchParams(window.location.search || "");
-      ["access_token", "refresh_token", "expires_in", "token_type", "type", "provider_token", "provider_refresh_token", "error", "error_code", "error_description", "code"].forEach((key) => params.delete(key));
+      ["access_token", "refresh_token", "expires_in", "token_type", "type", "provider_token", "provider_refresh_token", "error", "error_code", "error_description", "code", "state"].forEach((key) => params.delete(key));
       const search = params.toString();
       window.history.replaceState(null, document.title, `${window.location.pathname}${search ? `?${search}` : ""}`);
     }
@@ -49313,8 +50052,27 @@ async function socialHandleAuthRedirect() {
   }
   const accessToken = params.get("access_token") || "";
   if (!accessToken && params.has("code")) {
-    socialSetStatus("Recebi o retorno do Google, mas a sessao nao veio completa. Tente Entrar com Google novamente.", "error");
-    socialClearAuthHash();
+    try {
+      const session = await socialExchangeAuthCodeForSession(params.get("code") || "");
+      socialStoreSession(session);
+      ensureOnlineSocialUserSession();
+      if (socialEmailInput && !socialEmailInput.value && session.user.email) socialEmailInput.value = session.user.email;
+      await loadSocialProfile({ silent: true });
+      await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
+      await upsertSocialProfile();
+      await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
+      socialSetStatus("Perfil conectado.", "ok");
+      await continueWithOnlineSocialSession({ sync: false, showGuide: false });
+    } catch (error) {
+      console.warn("Could not exchange social auth code", error);
+      socialSetStatus(`Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`, "error");
+    } finally {
+      clearSocialOAuthPkce();
+      resetSocialOAuthNavigationState({ clearUrl: true });
+      socialClearAuthHash();
+      renderSocialUi({ preserveStatus: true });
+      updateAuthProviderUi();
+    }
     return true;
   }
   if (!accessToken) return false;
@@ -49329,7 +50087,7 @@ async function socialHandleAuthRedirect() {
       expires_at: Math.floor(Date.now() / 1000) + expiresIn,
       user
     };
-    if (!session.user?.id) throw new Error("Nao consegui confirmar o usuario do Supabase.");
+    if (!session.user?.id) throw new Error("Não consegui confirmar o usuário do Supabase.");
     socialStoreSession(session);
     ensureOnlineSocialUserSession();
     if (socialEmailInput && !socialEmailInput.value && session.user.email) socialEmailInput.value = session.user.email;
@@ -49341,8 +50099,9 @@ async function socialHandleAuthRedirect() {
     await continueWithOnlineSocialSession({ sync: false, showGuide: false });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
-    socialSetStatus(`Recebi o login, mas nao consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente Entrar de novo.`, "error");
+    socialSetStatus(`Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`, "error");
   } finally {
+    clearSocialOAuthPkce();
     resetSocialOAuthNavigationState({ clearUrl: true });
     socialClearAuthHash();
     renderSocialUi({ preserveStatus: true });
@@ -49601,7 +50360,7 @@ function ensureOnlineSocialUserSession() {
   const session = onlineSocialUserSession();
   const currentKey = sessionProfileKey(currentAuthUser);
   const nextKey = sessionProfileKey(session);
-  if (currentKey === nextKey && normalizeUserSession(currentAuthUser).mode === "google") return false;
+  if (currentKey === nextKey && isOnlineSocialMode(normalizeUserSession(currentAuthUser).mode)) return false;
   activateUserSession(session);
   persistUserSession(session);
   return true;
@@ -49648,7 +50407,7 @@ async function restoreSocialLikedTracksFromCloud(options = {}) {
     return imported.length;
   } catch (error) {
     console.warn("Could not restore social liked tracks", error);
-    if (!options.silent) socialSetStatus(`Nao consegui baixar curtidas da nuvem: ${error.message}`, "error");
+    if (!options.silent) socialSetStatus(`Não consegui baixar curtidas da nuvem: ${error.message}`, "error");
     return 0;
   }
 }
@@ -49677,7 +50436,7 @@ async function loadSocialProfile(options = {}) {
     return profile;
   } catch (error) {
     console.warn("Could not load social profile", error);
-    if (!options.silent) socialSetStatus(`Nao consegui carregar o perfil: ${error.message}`, "error");
+    if (!options.silent) socialSetStatus(`Não consegui carregar o perfil: ${error.message}`, "error");
     return null;
   }
 }
@@ -49755,7 +50514,7 @@ async function syncSocialLikedTracks(options = {}) {
     return true;
   } catch (error) {
     console.warn("Social sync failed", error);
-    if (!options.silent) socialSetStatus(`Nao consegui sincronizar: ${error.message}`, "error");
+    if (!options.silent) socialSetStatus(`Não consegui sincronizar: ${error.message}`, "error");
     return false;
   } finally {
     socialState.busy = false;
@@ -49797,7 +50556,7 @@ async function loadSocialFeed(options = {}) {
     return socialState.feed;
   } catch (error) {
     console.warn("Could not load social feed", error);
-    if (!options.silent) socialSetStatus(`Nao consegui carregar o feed: ${error.message}`, "error");
+    if (!options.silent) socialSetStatus(`Não consegui carregar o feed: ${error.message}`, "error");
     return [];
   }
 }
@@ -49815,7 +50574,7 @@ function renderSocialFeed() {
   if (!socialConfigReady()) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Login com Google indisponível neste ambiente.";
+    empty.textContent = "Login online indisponível neste ambiente.";
     socialFeedList.appendChild(empty);
     return;
   }
@@ -49856,7 +50615,12 @@ function renderSocialFeed() {
 }
 
 function socialCommentsSignedIn() {
-  return Boolean(socialState.session?.access_token);
+  if (socialState.session?.access_token) return true;
+  const storedSession = socialLoadStoredSession();
+  if (!storedSession?.access_token) return false;
+  socialStoreSession(storedSession);
+  ensureOnlineSocialUserSession();
+  return true;
 }
 
 function socialCommentAuthorMeta() {
@@ -50000,10 +50764,40 @@ function renderSocialCommentItem(comment = {}) {
 
   item.appendChild(head);
 
-  const body = document.createElement("p");
-  body.className = "social-comment-body";
-  body.textContent = String(comment.body || "").trim();
-  item.appendChild(body);
+  const isEditing = Boolean(comment.mine && editingSocialCommentId && editingSocialCommentId === comment.id);
+  if (isEditing) {
+    const editor = document.createElement("div");
+    editor.className = "social-comment-edit";
+    const textarea = document.createElement("textarea");
+    textarea.maxLength = 800;
+    textarea.rows = 3;
+    textarea.dataset.commentEditInput = comment.id || "";
+    textarea.value = String(comment.body || "").trim();
+    editor.appendChild(textarea);
+    const editorActions = document.createElement("div");
+    editorActions.className = "social-comment-edit-actions";
+    const saveButton = document.createElement("button");
+    saveButton.type = "button";
+    saveButton.className = "social-comment-action";
+    saveButton.dataset.commentAction = "edit-save";
+    saveButton.dataset.commentId = comment.id || "";
+    saveButton.textContent = t("socialCommentsSaveEdit");
+    editorActions.appendChild(saveButton);
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.className = "social-comment-action";
+    cancelButton.dataset.commentAction = "edit-cancel";
+    cancelButton.dataset.commentId = comment.id || "";
+    cancelButton.textContent = t("socialCommentsCancelEdit");
+    editorActions.appendChild(cancelButton);
+    editor.appendChild(editorActions);
+    item.appendChild(editor);
+  } else {
+    const body = document.createElement("p");
+    body.className = "social-comment-body";
+    body.textContent = String(comment.body || "").trim();
+    item.appendChild(body);
+  }
 
   const actions = document.createElement("div");
   actions.className = "social-comment-actions";
@@ -50026,6 +50820,15 @@ function renderSocialCommentItem(comment = {}) {
   });
 
   if (comment.mine) {
+    if (!isEditing) {
+      const editButton = document.createElement("button");
+      editButton.type = "button";
+      editButton.className = "social-comment-action";
+      editButton.dataset.commentAction = "edit";
+      editButton.dataset.commentId = comment.id || "";
+      editButton.textContent = t("socialCommentsEdit");
+      actions.appendChild(editButton);
+    }
     const removeButton = document.createElement("button");
     removeButton.type = "button";
     removeButton.className = "social-comment-action danger";
@@ -50307,6 +51110,62 @@ async function reactSocialComment(commentId = "", desiredValue = 0) {
   }
 }
 
+function startEditingSocialComment(commentId = "") {
+  const id = String(commentId || "").trim();
+  if (!id) return false;
+  editingSocialCommentId = id;
+  renderSocialCommentsPanel();
+  window.requestAnimationFrame(() => {
+    const input = Array.from(socialCommentsList?.querySelectorAll("[data-comment-edit-input]") || [])
+      .find((element) => String(element.getAttribute("data-comment-edit-input") || "") === id);
+    input?.focus?.();
+  });
+  return true;
+}
+
+function cancelEditingSocialComment() {
+  editingSocialCommentId = "";
+  renderSocialCommentsPanel();
+}
+
+async function updateSocialComment(commentId = "") {
+  if (!socialCommentsSignedIn()) {
+    void showSocialCommentsLogin({ surface: "comments" });
+    return false;
+  }
+  const target = currentSocialCommentTarget(socialCommentsState.targetType);
+  const id = String(commentId || "").trim();
+  const input = id
+    ? Array.from(socialCommentsList?.querySelectorAll("[data-comment-edit-input]") || [])
+      .find((element) => String(element.getAttribute("data-comment-edit-input") || "") === id)
+    : null;
+  const text = String(input?.value || "").trim().slice(0, 800);
+  if (!target || !id || !text) {
+    input?.focus?.();
+    return false;
+  }
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "PATCH",
+      body: {
+        id,
+        targetType: target.targetType,
+        targetKey: target.targetKey,
+        body: text
+      }
+    });
+    if (payload?.ok === false) throw new Error(payload?.detail || payload?.error || "comment_update_failed");
+    editingSocialCommentId = "";
+    showToast(t("socialCommentsUpdated"));
+    await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
+    return true;
+  } catch (error) {
+    console.warn("Could not update social comment", error);
+    showToast(t("socialCommentsUpdateFailed"));
+    return false;
+  }
+}
+
 async function deleteSocialComment(commentId = "") {
   if (!socialCommentsSignedIn() || !commentId) return false;
   const target = currentSocialCommentTarget(socialCommentsState.targetType);
@@ -50332,7 +51191,7 @@ async function deleteSocialComment(commentId = "") {
 }
 
 function communitySignedIn() {
-  return Boolean(socialState.session?.access_token);
+  return socialCommentsSignedIn();
 }
 
 function normalizeCommunityTopic(topic = "track") {
@@ -50469,10 +51328,46 @@ function renderCommunityComment(comment = {}, postId = "") {
   meta.className = "community-comment-meta";
   meta.textContent = [displayName, socialCommentDateLabel(comment.createdAt)].filter(Boolean).join(" • ");
   item.appendChild(meta);
-  const body = document.createElement("p");
-  body.className = "social-comment-body";
-  body.textContent = String(comment.body || "").trim();
-  item.appendChild(body);
+  const isEditing = Boolean(
+    comment.mine &&
+      editingCommunityCommentId === comment.id &&
+      editingCommunityCommentPostId === postId
+  );
+  if (isEditing) {
+    const editor = document.createElement("div");
+    editor.className = "social-comment-edit";
+    const textarea = document.createElement("textarea");
+    textarea.maxLength = 800;
+    textarea.rows = 3;
+    textarea.dataset.communityCommentEditInput = comment.id || "";
+    textarea.value = String(comment.body || "").trim();
+    editor.appendChild(textarea);
+    const editorActions = document.createElement("div");
+    editorActions.className = "social-comment-edit-actions";
+    const save = document.createElement("button");
+    save.type = "button";
+    save.className = "social-comment-action";
+    save.dataset.communityAction = "comment-edit-save";
+    save.dataset.postId = postId;
+    save.dataset.commentId = comment.id || "";
+    save.textContent = t("socialCommentsSaveEdit");
+    editorActions.appendChild(save);
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "social-comment-action";
+    cancel.dataset.communityAction = "comment-edit-cancel";
+    cancel.dataset.postId = postId;
+    cancel.dataset.commentId = comment.id || "";
+    cancel.textContent = t("socialCommentsCancelEdit");
+    editorActions.appendChild(cancel);
+    editor.appendChild(editorActions);
+    item.appendChild(editor);
+  } else {
+    const body = document.createElement("p");
+    body.className = "social-comment-body";
+    body.textContent = String(comment.body || "").trim();
+    item.appendChild(body);
+  }
   const actions = document.createElement("div");
   actions.className = "community-comment-actions";
   const reactions = comment.reactions || {};
@@ -50493,6 +51388,16 @@ function renderCommunityComment(comment = {}, postId = "") {
     actions.appendChild(button);
   });
   if (comment.mine) {
+    if (!isEditing) {
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "social-comment-action";
+      edit.dataset.communityAction = "comment-edit";
+      edit.dataset.postId = postId;
+      edit.dataset.commentId = comment.id || "";
+      edit.textContent = t("socialCommentsEdit");
+      actions.appendChild(edit);
+    }
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "social-comment-action danger";
@@ -50946,6 +51851,60 @@ async function reactCommunityComment(postId = "", commentId = "", desiredValue =
   }
 }
 
+function startEditingCommunityComment(postId = "", commentId = "") {
+  if (!postId || !commentId) return false;
+  editingCommunityCommentPostId = postId;
+  editingCommunityCommentId = commentId;
+  renderCommunityPanel();
+  window.requestAnimationFrame(() => {
+    const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-edit-input]") || [])
+      .find((element) => String(element.getAttribute("data-community-comment-edit-input") || "") === commentId);
+    input?.focus?.();
+  });
+  return true;
+}
+
+function cancelEditingCommunityComment() {
+  editingCommunityCommentPostId = "";
+  editingCommunityCommentId = "";
+  renderCommunityPanel();
+}
+
+async function updateCommunityComment(postId = "", commentId = "") {
+  if (!communitySignedIn()) {
+    void showSocialCommentsLogin({ surface: "community" });
+    return false;
+  }
+  const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-edit-input]") || [])
+    .find((element) => String(element.getAttribute("data-community-comment-edit-input") || "") === commentId);
+  const text = String(input?.value || "").trim().slice(0, 800);
+  if (!postId || !commentId || !text) {
+    input?.focus?.();
+    return false;
+  }
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "PATCH",
+      body: {
+        id: commentId,
+        targetType: "post",
+        targetKey: postId,
+        body: text
+      }
+    });
+    if (payload?.ok === false) throw new Error(payload?.detail || payload?.error || "comment_update_failed");
+    editingCommunityCommentPostId = "";
+    editingCommunityCommentId = "";
+    showToast(t("socialCommentsUpdated"));
+    await loadCommunityPostComments(postId);
+    return true;
+  } catch (error) {
+    console.warn("Could not update community comment", error);
+    showToast(t("socialCommentsUpdateFailed"));
+    return false;
+  }
+}
+
 async function deleteCommunityComment(postId = "", commentId = "") {
   if (!communitySignedIn() || !postId || !commentId) return false;
   const params = new URLSearchParams({
@@ -50993,6 +51952,7 @@ function renderSocialUi(options = {}) {
     }
   }
   if (socialGoogleBtn) socialGoogleBtn.classList.toggle("hidden", signed);
+  if (socialAppleBtn) socialAppleBtn.classList.toggle("hidden", signed);
   [socialSignUpBtn, socialSignInBtn, socialResendConfirmBtn].forEach((button) => {
     if (!button) return;
     button.classList.add("hidden");
@@ -51002,7 +51962,8 @@ function renderSocialUi(options = {}) {
   });
   if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
   if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
-  if (socialGoogleBtn) socialGoogleBtn.disabled = signed || !configured || socialState.busy;
+  if (socialGoogleBtn) socialGoogleBtn.disabled = signed || socialState.busy;
+  if (socialAppleBtn) socialAppleBtn.disabled = signed || socialState.busy;
   if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
   if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
@@ -51023,13 +51984,15 @@ function renderSocialUi(options = {}) {
   renderSocialCommentsPanel();
   renderCommunityPanel();
   if (!options.preserveStatus) {
-    if (!configured) socialSetStatus("Login com Google indisponível neste ambiente. Seu perfil local continua funcionando.", "error");
-    else if (!signed) socialSetStatus("Entre com Google para sincronizar curtidas e participar da comunidade.");
+    if (!configured) socialSetStatus("Login online indisponível neste ambiente. Seu perfil local continua funcionando.", "error");
+    else if (!signed) socialSetStatus("Entre com uma conta online disponível para sincronizar curtidas e participar da comunidade.");
     else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
   }
 }
 
-async function socialSignInWithGoogle() {
+async function socialSignInWithProvider(provider = "google") {
+  const cleanProvider = provider === "apple" ? "apple" : "google";
+  const providerName = authProviderDisplayName(cleanProvider);
   if (AUTH_LOGIN_STANDBY) {
     socialSetStatus(socialStandbyMessage(), "ok");
     renderSocialUi({ preserveStatus: true });
@@ -51044,22 +52007,47 @@ async function socialSignInWithGoogle() {
     await fetchSocialConfig();
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Login com Google indisponível neste ambiente.", "error");
+    socialSetStatus(`Login com ${providerName} indisponível neste ambiente.`, "error");
+    updateAuthProviderUi();
+    return false;
+  }
+  if (!socialProviderAvailable(cleanProvider)) {
+    socialSetStatus(t("authProviderConfigMissing", { provider: providerName }), "error");
+    showAuthProviderConfigMissing(cleanProvider);
     updateAuthProviderUi();
     return false;
   }
   if (socialState.busy) return false;
-  const url = socialOAuthStartUrl("google");
+  let url = "";
+  try {
+    url = await prepareSocialOAuthStartUrl(cleanProvider);
+  } catch (error) {
+    const message = socialFriendlyOAuthStartError(providerName, error?.message || "");
+    socialSetStatus(message, "error");
+    setAuthFeedback(message, true);
+    clearSocialOAuthPkce();
+    updateAuthProviderUi();
+    return false;
+  }
   if (!url) {
-    socialSetStatus("Não consegui abrir o login do Google agora.", "error");
+    socialSetStatus(`Não consegui abrir o login com ${providerName} agora.`, "error");
     updateAuthProviderUi();
     return false;
   }
   socialState.busy = true;
-  socialSetStatus("Abrindo login do Google...");
+  pendingSocialOAuthProvider = cleanProvider;
+  socialSetStatus(t("authProviderLoading", { provider: providerName }));
   renderSocialUi({ preserveStatus: true });
   updateAuthProviderUi();
-  return startSocialOAuthNavigation(url);
+  return startSocialOAuthNavigation(url, cleanProvider);
+}
+
+async function socialSignInWithGoogle() {
+  return socialSignInWithProvider("google");
+}
+
+async function socialSignInWithApple() {
+  return socialSignInWithProvider("apple");
 }
 
 async function socialSignUp() {
@@ -51111,7 +52099,7 @@ async function socialSignUp() {
       socialSetStatus("Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.", "ok");
     }
   } catch (error) {
-    socialSetStatus(`Nao consegui criar o perfil: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(`Não consegui criar o perfil: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
@@ -51125,7 +52113,7 @@ async function socialSignIn() {
     return;
   }
   if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
-    socialSetStatus("Use Entrar com Google para conectar sua conta.", "error");
+    socialSetStatus("Use o login online disponível para conectar sua conta.", "error");
     return;
   }
   if (!socialConfigReady()) {
@@ -51157,7 +52145,7 @@ async function socialSignIn() {
     socialSetStatus("Perfil conectado.", "ok");
     void loadSocialComments({ silent: true });
   } catch (error) {
-    socialSetStatus(`Nao consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(`Não consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
@@ -51171,21 +52159,21 @@ async function socialResendConfirmation() {
     return;
   }
   if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
-    socialSetStatus("Confirmação por e-mail está desativada. Use Entrar com Google.", "error");
+    socialSetStatus("Confirmação por e-mail está desativada. Use o login online disponível.", "error");
     return;
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Confirmação por e-mail está desativada. Use Entrar com Google.", "error");
+    socialSetStatus("Confirmação por e-mail está desativada. Use o login online disponível.", "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
   if (!email) {
-    socialSetStatus("Informe o e-mail para reenviar a confirmacao.", "error");
+    socialSetStatus("Informe o e-mail para reenviar a confirmação.", "error");
     return;
   }
   if (socialState.busy) return;
   socialState.busy = true;
-  socialSetStatus("Enviando novo e-mail de confirmacao...");
+  socialSetStatus("Enviando novo e-mail de confirmação...");
   renderSocialUi({ preserveStatus: true });
   try {
     await socialRequest(socialAuthRedirectPath("/auth/v1/resend"), {
@@ -51196,9 +52184,9 @@ async function socialResendConfirmation() {
         email
       }
     });
-    socialSetStatus("Enviei um novo e-mail de confirmacao. Use o link mais recente e depois volte aqui.", "ok");
+    socialSetStatus("Enviei um novo e-mail de confirmação. Use o link mais recente e depois volte aqui.", "ok");
   } catch (error) {
-    socialSetStatus(`Nao consegui reenviar: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(`Não consegui reenviar: ${socialFriendlyAuthError(error.message)}`, "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
@@ -51293,21 +52281,21 @@ function schedulePostBootHydration() {
     }
     ensureVoiceLabUiReady();
   }, {
-    delayMs: POST_BOOT_HYDRATION_DELAY_MS,
+    delayMs: nativePerformanceDelayMs(POST_BOOT_HYDRATION_DELAY_MS, 1800),
     timeoutMs: 2200
   });
 
   schedulePostBootIdleTask(() => {
     void ensureSocialMvpReady();
   }, {
-    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS,
+    delayMs: nativePerformanceDelayMs(POST_BOOT_OPTIONAL_API_DELAY_MS, 2600),
     timeoutMs: 3200
   });
 
   schedulePostBootIdleTask(() => {
     void loadApiHealthPanel();
   }, {
-    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS + 1200,
+    delayMs: nativePerformanceDelayMs(POST_BOOT_OPTIONAL_API_DELAY_MS + 1200, 3400),
     timeoutMs: 3200
   });
 
@@ -51316,7 +52304,7 @@ function schedulePostBootHydration() {
       void refreshDailyNews({ silent: true, live: false });
     }
   }, {
-    delayMs: POST_BOOT_OPTIONAL_API_DELAY_MS + 2200,
+    delayMs: nativePerformanceDelayMs(POST_BOOT_OPTIONAL_API_DELAY_MS + 2200, 4200),
     timeoutMs: 3200
   });
 }
@@ -53351,6 +54339,9 @@ bind(profileDeleteDataBtn, "click", resetAppAsNewUser);
 bind(socialGoogleBtn, "click", () => {
   void socialSignInWithGoogle();
 });
+bind(socialAppleBtn, "click", () => {
+  void socialSignInWithApple();
+});
 bind(socialSignUpBtn, "click", () => {
   void socialSignUp();
 });
@@ -54302,6 +55293,18 @@ bind(socialCommentsList, "click", async (event) => {
   const action = String(target.getAttribute("data-comment-action") || "").trim();
   const commentId = String(target.getAttribute("data-comment-id") || "").trim();
   if (!commentId) return;
+  if (action === "edit") {
+    startEditingSocialComment(commentId);
+    return;
+  }
+  if (action === "edit-save") {
+    await updateSocialComment(commentId);
+    return;
+  }
+  if (action === "edit-cancel") {
+    cancelEditingSocialComment();
+    return;
+  }
   if (action === "delete") {
     await deleteSocialComment(commentId);
     return;
@@ -54603,6 +55606,18 @@ bind(communityFeedList, "click", async (event) => {
     await deleteCommunityComment(postId, commentId);
     return;
   }
+  if (action === "comment-edit") {
+    startEditingCommunityComment(postId, commentId);
+    return;
+  }
+  if (action === "comment-edit-save") {
+    await updateCommunityComment(postId, commentId);
+    return;
+  }
+  if (action === "comment-edit-cancel") {
+    cancelEditingCommunityComment();
+    return;
+  }
   if (action === "comment-like" || action === "comment-dislike") {
     await reactCommunityComment(postId, commentId, Number(target.getAttribute("data-reaction-value")) || 0);
     return;
@@ -54648,8 +55663,9 @@ async function bootSonicSearch() {
   injectLocalTrackSeedBoost();
   injectSoundCloudSupplementalSeeds();
   ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
-  scheduleCatalogMaintenance(BACKGROUND_CATALOG_WARMUP_DELAY_MS);
-  scheduleExternalDatasetWarmup(BACKGROUND_CATALOG_WARMUP_DELAY_MS);
+  const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
+  scheduleCatalogMaintenance(bootWarmupDelay);
+  scheduleExternalDatasetWarmup(bootWarmupDelay);
   window.neonpulseCoverageReport = buildCoverageReport;
   window.neonpulseCoverageGaps = () => buildCoverageReport().filter((row) => !row.healthy);
   window.neonpulseGenreAudit = buildCatalogGenreAudit;
@@ -54686,6 +55702,7 @@ async function bootSonicSearch() {
       }
     }
     else if (shouldAutoEnterDiscoveryForAppStore()) startLocalProfileFlow({ preferStored: true, showGuide: false });
+    else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();
     else if (qaPreviewMode) enterQaPreviewMode();
     else showIntroScreen();
   }

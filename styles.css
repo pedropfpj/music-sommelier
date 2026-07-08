@@ -3298,7 +3298,8 @@ textarea {
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
-.auth-google-entry-btn .auth-provider-mark {
+.auth-google-entry-btn .auth-provider-mark,
+.auth-apple-entry-btn .auth-provider-mark {
   width: 26px;
   height: 26px;
   flex-basis: 26px;
@@ -3346,7 +3347,8 @@ textarea {
   color: #05070d;
 }
 
-.social-profile-card .social-auth-actions .google-login-btn {
+.social-profile-card .social-auth-actions .google-login-btn,
+.social-profile-card .social-auth-actions .apple-login-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3361,13 +3363,15 @@ textarea {
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.social-profile-card .social-auth-actions .google-login-btn .auth-provider-mark {
+.social-profile-card .social-auth-actions .google-login-btn .auth-provider-mark,
+.social-profile-card .social-auth-actions .apple-login-btn .auth-provider-mark {
   width: 22px;
   height: 22px;
   flex: 0 0 22px;
 }
 
-.social-profile-card .social-auth-actions .google-login-btn:not(:disabled):hover {
+.social-profile-card .social-auth-actions .google-login-btn:not(:disabled):hover,
+.social-profile-card .social-auth-actions .apple-login-btn:not(:disabled):hover {
   border-color: rgba(110, 255, 220, 0.72);
   box-shadow:
     0 0 22px rgba(126, 205, 255, 0.2),
@@ -11050,6 +11054,9 @@ body {
   overflow: hidden;
   isolation: isolate;
   will-change: transform;
+  contain: layout paint;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transform: translate3d(var(--swipe-x), var(--swipe-y), 0) rotate(var(--swipe-rotate)) scale(var(--swipe-scale));
   transition:
     transform 260ms cubic-bezier(0.2, 0.85, 0.28, 1),
@@ -11132,6 +11139,10 @@ body {
 .main-track.is-dragging {
   cursor: grabbing;
   transition: none;
+}
+
+.swipe-track-card.is-dragging #topSwipeCount {
+  opacity: 0.72;
 }
 
 .swipe-track-card.is-returning,
@@ -14406,6 +14417,37 @@ iframe {
   white-space: pre-wrap;
 }
 
+.social-comment-edit {
+  display: grid;
+  gap: 0.44rem;
+}
+
+.social-comment-edit textarea {
+  width: 100%;
+  min-height: 92px;
+  resize: vertical;
+  border: 1px solid rgba(126, 205, 255, 0.28);
+  border-radius: 10px;
+  padding: 0.66rem 0.72rem;
+  color: #f4fbff;
+  background: rgba(2, 8, 22, 0.82);
+  font: inherit;
+  line-height: 1.42;
+  outline: none;
+}
+
+.social-comment-edit textarea:focus {
+  border-color: rgba(110, 255, 220, 0.68);
+  box-shadow: 0 0 0 3px rgba(110, 255, 220, 0.1);
+}
+
+.social-comment-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.38rem;
+}
+
 .social-comment-actions {
   display: flex;
   flex-wrap: wrap;
@@ -15177,8 +15219,17 @@ iframe {
 }
 
 #topSwipeCount {
-  align-self: stretch;
+  position: absolute;
+  left: clamp(0.74rem, 2.2vw, 1rem);
+  right: auto;
+  bottom: clamp(0.74rem, 2.2vw, 1rem);
+  z-index: 3;
+  min-height: 38px;
+  align-self: auto;
   border-color: rgba(126, 232, 198, 0.72);
+  pointer-events: none;
+  opacity: 0.92;
+  backdrop-filter: none;
 }
 
 #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
@@ -15384,7 +15435,7 @@ button,
 }
 
 #topSwipeCount:empty,
-#topSwipeCard.is-empty ~ .swipe-hero-actions #topSwipeCount {
+#topSwipeCard.is-empty > #topSwipeCount {
   display: none !important;
 }
 
@@ -15500,6 +15551,10 @@ button,
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.auth-entry-actions.has-social-providers {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .auth-entry-actions > :is(button, a) {
   width: 100%;
   min-width: 0;
@@ -15521,6 +15576,10 @@ button,
   overflow-wrap: anywhere;
   word-break: normal;
   text-wrap: balance;
+}
+
+.auth-entry-actions > :is(button, a).hidden {
+  display: none !important;
 }
 
 #authGuestBtn {
@@ -15558,13 +15617,15 @@ button,
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.auth-google-entry-btn .auth-provider-mark {
+.auth-google-entry-btn .auth-provider-mark,
+.auth-apple-entry-btn .auth-provider-mark {
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
 }
 
-.auth-google-entry-btn #authGoogleLabel {
+.auth-google-entry-btn #authGoogleLabel,
+.auth-apple-entry-btn #authAppleLabel {
   min-width: 0;
   max-width: 100%;
   white-space: normal;
@@ -15621,7 +15682,8 @@ button,
   }
 
   .auth-entry-actions,
-  .auth-entry-actions.has-online {
+  .auth-entry-actions.has-online,
+  .auth-entry-actions.has-social-providers {
     grid-template-columns: 1fr;
   }
 
@@ -17077,6 +17139,47 @@ button,
   #swipeStartPanel .swipe-card-count {
     min-height: 42px;
     align-self: stretch;
+  }
+
+  #swipeStartPanel #topSwipeCount {
+    left: auto;
+    right: clamp(0.62rem, 2.8vw, 0.86rem);
+    bottom: clamp(0.62rem, 2.8vw, 0.86rem);
+    max-width: min(46%, 10.8rem);
+    min-height: 38px;
+    align-self: auto;
+    padding-inline: clamp(0.58rem, 2.8vw, 0.78rem);
+    font-size: clamp(0.82rem, 3.3vw, 0.98rem);
+  }
+}
+
+#topSwipeCount:not(.hidden) {
+  display: inline-flex !important;
+}
+
+#topSwipeCard.swipe-hero-card > #topSwipeCount {
+  left: auto;
+  right: clamp(0.72rem, 2.6vw, 1rem);
+  bottom: clamp(0.72rem, 2.6vw, 1rem);
+  z-index: 48;
+  min-width: 48px;
+  min-height: 40px;
+  background:
+    linear-gradient(135deg, rgba(117, 255, 222, 0.42), rgba(126, 202, 255, 0.28)),
+    rgba(2, 7, 18, 0.92);
+  border-color: rgba(168, 255, 235, 0.82);
+  box-shadow:
+    0 14px 34px rgba(0, 6, 18, 0.48),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 760px) {
+  #topSwipeCard.swipe-hero-card > #topSwipeCount {
+    right: clamp(0.62rem, 2.8vw, 0.86rem);
+    bottom: clamp(0.62rem, 2.8vw, 0.86rem);
+    z-index: 48;
+    max-width: min(42%, 8.8rem);
   }
 }
 
