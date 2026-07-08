@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.css?v=20260708taste1" as="style" />
+    <link rel="preload" href="styles.css?v=20260708fastpass2" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,7 +55,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260708taste1" />
+    <link rel="stylesheet" href="styles.css?v=20260708fastpass2" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -439,7 +439,7 @@
         </div>
 
         <div class="usage-guide-note">
-          <p id="usageGuideNote">Quer ouvir agora? Use Surpresa. Quer acertar fino? Preencha estilo, momento e artistas conhecidos.</p>
+          <p id="usageGuideNote">Depois do acesso, a primeira faixa pode abrir sozinha. Use filtros quando quiser acertar fino.</p>
         </div>
 
         <div class="cta-row usage-guide-actions">
@@ -585,11 +585,11 @@
       <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
         <div class="swipe-start-head">
           <div>
-            <p id="swipeHeroKicker" class="section-kicker">Descoberta por swipe</p>
-            <h3 id="swipeHeroTitle">Escute, deslize, refine</h3>
+            <p id="swipeHeroKicker" class="section-kicker">Descoberta imediata</p>
+            <h3 id="swipeHeroTitle">Ouça primeiro, ajuste depois</h3>
           </div>
           <div class="swipe-start-cta">
-            <p id="swipeHeroHint" class="section-hint muted">A carta muda rápido; o radar aprende junto.</p>
+            <p id="swipeHeroHint" class="section-hint muted">Depois do acesso, a primeira carta chega sozinha; cada reação melhora a próxima.</p>
           </div>
         </div>
         <div class="swipe-start-stage">
@@ -605,8 +605,8 @@
             </div>
             <div class="swipe-hero-copy">
               <p id="topSwipeKicker" class="swipe-kicker">Swipe da faixa</p>
-              <h4 id="topSwipeTitle">Radar pronto para a próxima faixa</h4>
-              <p id="topSwipeMeta" class="muted">Toque em Surpresa, ouça o preview e deslize quando sentir.</p>
+              <h4 id="topSwipeTitle">Preparando sua primeira faixa</h4>
+              <p id="topSwipeMeta" class="muted">O Sonic Search abre uma carta para você ouvir, curtir ou passar.</p>
               <div id="topSwipeBadges" class="swipe-status-badges" aria-label="Sinais da recomendação"></div>
               <div id="topRecommendationTrustPanel" class="recommendation-trust-panel compact hidden" aria-label="Confiança da recomendação">
                 <span id="topRecommendationTrustLabel">Confiança</span>
@@ -624,7 +624,7 @@
           </article>
           <div class="swipe-hero-actions">
             <button id="topSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Não curti</button>
-            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Surpresa</button>
+            <button id="topSwipeSurpriseBtn" class="primary swipe-hero-surprise" type="button">Ouvir uma faixa</button>
             <div class="swipe-like-count-wrap">
               <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
@@ -1887,8 +1887,8 @@
         <p id="spiritIntro" class="muted">10 curtidas desbloqueiam a primeira leitura.</p>
         <div id="spiritInsightPanel" class="spirit-insight-panel">
           <div class="spirit-insight-head">
-            <p id="spiritInsightTitle" class="spirit-visual-title">Calibração</p>
-            <span id="spiritInsightStatus" class="chip alt">Em formação</span>
+            <p id="spiritInsightTitle" class="spirit-visual-title">Som em construção</p>
+            <span id="spiritInsightStatus" class="chip alt">Primeiros sinais</span>
           </div>
           <div class="spirit-progress-track" aria-hidden="true">
             <span id="spiritProgressFill"></span>
@@ -1897,18 +1897,18 @@
           <div id="spiritVitals" class="spirit-vitals-grid" aria-label="Resumo do Sound System musical">
             <article class="spirit-vital-card">
               <span id="spiritVitalDnaLabel">DNA dominante</span>
-              <strong id="spiritVitalDnaValue">Sinais em coleta</strong>
-              <small id="spiritVitalDnaDetail">Curta faixas para calibrar.</small>
+              <strong id="spiritVitalDnaValue">Primeiros sinais</strong>
+              <small id="spiritVitalDnaDetail">A primeira curtida começa a desenhar seu som.</small>
             </article>
             <article class="spirit-vital-card">
               <span id="spiritVitalCycleLabel">Ciclo de revisão</span>
-              <strong id="spiritVitalCycleValue">0/10 likes</strong>
+              <strong id="spiritVitalCycleValue">0/10 curtidas</strong>
               <small id="spiritVitalCycleDetail">Faltam 10 para revelar.</small>
             </article>
             <article class="spirit-vital-card">
               <span id="spiritVitalRankLabel">Nível do sistema</span>
-              <strong id="spiritVitalRankValue">Em formação</strong>
-              <small id="spiritVitalRankDetail">Somando primeiros sinais.</small>
+              <strong id="spiritVitalRankValue">Primeiro nível</strong>
+              <small id="spiritVitalRankDetail">Desbloqueia com a primeira leitura.</small>
             </article>
             <article class="spirit-vital-card">
               <span id="spiritVitalNextLabel">Próximo impulso</span>
@@ -2475,6 +2475,6 @@
         syncBannerLayoutMode();
       })();
     </script>
-    <script defer src="app.js?v=20260708taste1"></script>
+    <script defer src="app.js?v=20260708fastpass2"></script>
   </body>
 </html>

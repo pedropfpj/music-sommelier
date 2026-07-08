@@ -263,7 +263,11 @@ function sonicIosConfig() {
 
 function isAppStoreRuntimeMode() {
   if (typeof window === "undefined") return false;
-  return Boolean(window.SONIC_SEARCH_APP_STORE_MODE || sonicIosConfig().appStoreMode);
+  return Boolean(
+    window.SONIC_SEARCH_APP_STORE_MODE ||
+    sonicIosConfig().appStoreMode ||
+    document.documentElement?.classList?.contains("app-store-mode")
+  );
 }
 
 function shouldHideSocialLoginForAppStore() {
@@ -8001,6 +8005,8 @@ let recommendationMemoryQueue = [];
 let servedTrackCycleByStyle = new Map();
 let servedArtistCycleByStyle = new Map();
 let lastRejectedTrackKey = "";
+let fastFeedbackSwapToken = 0;
+let fastSuggestionQueueRefreshToken = 0;
 let pendingQuickKnownAdvance = null;
 let catalogWarmupRunning = false;
 let catalogMaintenanceTimer = 0;
@@ -21254,7 +21260,7 @@ const I18N = {
     usageGuideStep3Text: "Curti, não curti, novidade ou já conhecia: cada toque melhora a próxima carta.",
     usageGuideStep4Title: "Abra filtros só quando quiser precisão",
     usageGuideStep4Text: "Subgênero, BPM e vocal entram como ajuste fino, não como obrigação.",
-    usageGuideNote: "Quer ouvir agora? Use Surpresa. Quer acertar fino? Preencha estilo, momento e artistas conhecidos.",
+    usageGuideNote: "Depois do acesso, a primeira faixa pode abrir sozinha. Use filtros quando quiser acertar fino.",
     usageGuideContinueBtn: "Começar descoberta",
     showUsageGuideBtn: "Como usar",
     authKicker: "Acesso rápido",
@@ -21448,9 +21454,9 @@ const I18N = {
     communityDislike: "Descurtir",
     feedbackKicker: "Aprendizado",
     feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
-    swipeHeroKicker: "Descoberta por swipe",
-    swipeHeroTitle: "Escute, deslize, refine",
-    swipeHeroHint: "A carta muda rápido; o radar aprende junto.",
+    swipeHeroKicker: "Descoberta imediata",
+    swipeHeroTitle: "Ouça primeiro, ajuste depois",
+    swipeHeroHint: "Depois do acesso, a primeira carta chega sozinha; cada reação melhora a próxima.",
     swipeDeckKicker: "Rotas de descoberta",
     swipeDeckTitle: "Escolha uma direção sonora",
     swipeDeckHint: "Use um subgênero para abrir uma sequência mais coerente.",
@@ -21463,9 +21469,9 @@ const I18N = {
     swipeEmptyTitle: "Abra uma faixa",
     swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
     swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
-    topSwipeEmptyTitle: "Radar pronto para a próxima faixa",
-    topSwipeEmptyMeta: "Toque em Surpresa, ouça o preview e deslize quando sentir.",
-    topSwipeHint: "O fluxo principal fica leve; filtros e contexto estão nas outras abas.",
+    topSwipeEmptyTitle: "Preparando sua primeira faixa",
+    topSwipeEmptyMeta: "O Sonic Search abre uma carta para você ouvir, curtir ou passar.",
+    topSwipeHint: "Quer precisão? Abra Filtros depois da primeira escuta.",
     aboutKicker: "O que melhora",
     aboutTitle: "Descoberta sem busca cega",
     aboutBadge: "Radar",
@@ -21489,7 +21495,9 @@ const I18N = {
     aboutFlowStepFour: "Revise curtidas, descartes e seu Sound System no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
     aboutTrustText: "Confiança alta = fonte, player, BPM e perfil. Sem certeza, usamos o estilo amplo.",
-    swipeStartButton: "Surpresa",
+    swipeStartButton: "Ouvir uma faixa",
+    swipeStartBusy: "Preparando...",
+    swipeNextButton: "Outra faixa",
     quickKnownKicker: "Status rápido",
     quickKnownQuestion: "Este artista já estava no seu radar?",
     quickKnownArtistQuestion: "{artist} já estava no seu radar?",
@@ -22135,8 +22143,8 @@ const I18N = {
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Lendo catálogo, contexto e histórico...",
     catalogGenerating: "Montando uma rota confiável em {style}...",
-    recommendationGenerated: "Faixa pronta para ouvir.",
-    exploratoryGenerated: "Aposta exploratória pronta para ouvir.",
+    recommendationGenerated: "Faixa pronta. Ouça e decida no swipe.",
+    exploratoryGenerated: "Descoberta pronta. Ouça e decida no swipe.",
     styleExhaustedFallback: "Não encontrei artistas novos em {from} agora. Troquei para {to} para manter descoberta sem repetição.",
     surpriseCrossGenreGenerated: "Refino ativo: saí de {from} e abri uma rota nova em {to}.",
     surpriseAdaptiveGenerated: "Refino por perfil: seus sinais apontaram uma nova rota em {to}, saindo de {from}.",
@@ -22177,12 +22185,12 @@ const I18N = {
     skipAdjusted: "Descarte recebido. Recalculei o próximo match a partir desse não.",
     toastSkipAdjusted: "Seu descarte já pesou na próxima escolha.",
     catalogUpdateProgress: "Refinando {style} em segundo plano.",
-    searchOverlayTitle: "Procurando a faixa certa",
+    searchOverlayTitle: "Preparando uma faixa para você",
     searchOverlayStage: "Etapa {current} de {total}",
-    searchOverlayPreparing: "Lendo seu momento e histórico...",
-    searchOverlayCatalog: "Checando rotas no catálogo...",
-    searchOverlayGenerating: "Cruzando perfil, novidade e confiança...",
-    searchOverlayFinishing: "Preparando preview e contexto...",
+    searchOverlayPreparing: "Ligando momento e histórico...",
+    searchOverlayCatalog: "Escolhendo uma rota com material tocável...",
+    searchOverlayGenerating: "Fugindo do óbvio sem perder o subgênero...",
+    searchOverlayFinishing: "Abrindo player e contexto...",
     newArtistsBtn: "Buscar artistas novos (< 2 anos)",
     newArtistsTitle: "Artistas novos no subgênero",
     newArtistsSelectStyle: "Escolha um subgênero para buscar artistas novos.",
@@ -22208,31 +22216,31 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisão concluída: seu sistema permanece {name}.",
     spiritReviewStayedToast: "Revisão concluída: Sound System mantido em {name}.",
     spiritReviewShiftedToast: "Revisão concluída: Sound System atualizado para {name}.",
-    spiritInsightTitle: "Calibração",
-    spiritInsightLockedStatus: "Coletando",
-    spiritInsightUnlockedStatus: "Ativo",
-    spiritInsightLockedText: "Faltam {remaining} faixas curtidas para calibrar.",
+    spiritInsightTitle: "Som em construção",
+    spiritInsightLockedStatus: "Primeiros sinais",
+    spiritInsightUnlockedStatus: "Leitura ativa",
+    spiritInsightLockedText: "Curta {remaining} faixas para revelar seu Sound System.",
     spiritInsightUnlockedText: "Escolhi {name} porque seus sinais apontam para {signals}. Próxima revisão em {remaining} faixas curtidas.",
-    spiritInsightNoSignals: "Ainda sem sinais fortes. Curta faixas e artistas para calibrar melhor.",
-    spiritInsightSignalScore: "sinal {score}",
+    spiritInsightNoSignals: "Depois da primeira curtida, as direções mais fortes aparecem aqui.",
+    spiritInsightSignalScore: "em destaque",
     spiritVitalDnaLabel: "DNA dominante",
     spiritVitalCycleLabel: "Ciclo de revisão",
     spiritVitalRankLabel: "Nível do sistema",
     spiritVitalNextLabel: "Próximo impulso",
-    spiritVitalNoSignal: "Sinais em coleta",
-    spiritVitalDnaLocked: "Ainda estou somando pistas antes de montar seu sistema.",
+    spiritVitalNoSignal: "Primeiros sinais",
+    spiritVitalDnaLocked: "A primeira curtida começa a desenhar seu som.",
     spiritVitalDnaUnlocked: "{name} guia a identidade sonora desse sistema.",
-    spiritVitalCycleLocked: "{current}/{target} faixas curtidas",
+    spiritVitalCycleLocked: "{current}/{target} curtidas",
     spiritVitalCycleUnlocked: "{current}/{target} no ciclo",
     spiritVitalCycleRemaining: "Faltam {remaining} faixas curtidas para a próxima leitura.",
     spiritVitalCycleReady: "Leitura pronta para revisar.",
-    spiritVitalRankLocked: "Em formação",
+    spiritVitalRankLocked: "Primeiro nível",
     spiritVitalRankNext: "Próximo nível: {rank} em {likes} faixas curtidas.",
-    spiritVitalRankLockedDetail: "O nível aparece quando a primeira leitura fechar.",
+    spiritVitalRankLockedDetail: "Desbloqueia com a primeira leitura.",
     spiritVitalRankMax: "Nível máximo atual do radar.",
-    spiritVitalNextLocked: "Curta livremente",
+    spiritVitalNextLocked: "Ouça e salve",
     spiritVitalNextUnlocked: "Siga {style}",
-    spiritVitalNextDetailLocked: "O próximo sinal já muda a leitura.",
+    spiritVitalNextDetailLocked: "Cada curtida melhora a próxima carta.",
     spiritVitalNextDetailUnlocked: "Use filtros ou swipe para testar esse caminho.",
     spiritSpotlightTitle: "Faixa do sistema",
     spiritSpotlightHintFavorite: "Encontrei sua favorita com base no histórico de feedback.",
@@ -22329,7 +22337,7 @@ const I18N = {
     usageGuideStep3Text: "Like, pass, new to me, or already knew it: each tap improves the next card.",
     usageGuideStep4Title: "Open filters only when you want precision",
     usageGuideStep4Text: "Subgenre, BPM, and vocals work as fine-tuning, not homework.",
-    usageGuideNote: "Want to listen now? Use Surprise. Want a sharper hit? Add style, moment, and known artists.",
+    usageGuideNote: "After access, the first track can open by itself. Use filters when you want a sharper hit.",
     usageGuideContinueBtn: "Start discovering",
     showUsageGuideBtn: "How to use",
     authKicker: "Quick access",
@@ -22523,9 +22531,9 @@ const I18N = {
     communityDislike: "Dislike",
     feedbackKicker: "Learning",
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
-    swipeHeroKicker: "Swipe discovery",
-    swipeHeroTitle: "Listen, swipe, refine",
-    swipeHeroHint: "Cards move fast; the radar learns with them.",
+    swipeHeroKicker: "Instant discovery",
+    swipeHeroTitle: "Listen first, tune later",
+    swipeHeroHint: "After access, the first card loads by itself; every reaction sharpens the next one.",
     swipeDeckKicker: "Discovery routes",
     swipeDeckTitle: "Choose a sound direction",
     swipeDeckHint: "Use a subgenre to open a more coherent sequence.",
@@ -22538,9 +22546,9 @@ const I18N = {
     swipeEmptyTitle: "Open a track",
     swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
     swipeHint: "Drag with mouse or touch; release to save the signal.",
-    topSwipeEmptyTitle: "Radar ready for the next track",
-    topSwipeEmptyMeta: "Tap Surprise, hear the preview, then swipe when it clicks.",
-    topSwipeHint: "The main flow stays light; filters and context live in the other tabs.",
+    topSwipeEmptyTitle: "Preparing your first track",
+    topSwipeEmptyMeta: "Sonic Search opens a card to hear, like, or pass.",
+    topSwipeHint: "Want precision? Open Filters after the first listen.",
     aboutKicker: "What improves",
     aboutTitle: "Discovery without blind search",
     aboutBadge: "Radar",
@@ -22564,7 +22572,9 @@ const I18N = {
     aboutFlowStepFour: "Review likes, rejects, and your Sound System in Profile.",
     aboutTrustTitle: "How to read confidence",
     aboutTrustText: "High confidence = source, player, BPM, and profile. If unsure, we use the broader style.",
-    swipeStartButton: "Surprise",
+    swipeStartButton: "Find a track",
+    swipeStartBusy: "Preparing...",
+    swipeNextButton: "Another track",
     quickKnownKicker: "Quick status",
     quickKnownQuestion: "Was this artist already on your radar?",
     quickKnownArtistQuestion: "Was {artist} already on your radar?",
@@ -23207,8 +23217,8 @@ const I18N = {
     eventsLoading: "Searching upcoming events for {artist}...",
     searchingCatalog: "Reading catalog, context, and history...",
     catalogGenerating: "Building a reliable route in {style}...",
-    recommendationGenerated: "Track ready to hear.",
-    exploratoryGenerated: "Exploratory bet ready to hear.",
+    recommendationGenerated: "Track ready. Listen and decide with a swipe.",
+    exploratoryGenerated: "Discovery ready. Listen and decide with a swipe.",
     styleExhaustedFallback: "I did not find new artists in {from} right now. I switched to {to} to keep discovery without repeats.",
     surpriseCrossGenreGenerated: "Refinement active: moved from {from} and opened a new route in {to}.",
     surpriseAdaptiveGenerated: "Profile refinement: your signals pointed to a new route in {to}, moving out of {from}.",
@@ -23249,12 +23259,12 @@ const I18N = {
     skipAdjusted: "Pass received. I recalculated the next match from that no.",
     toastSkipAdjusted: "Your pass already shaped the next pick.",
     catalogUpdateProgress: "Refining {style} in the background.",
-    searchOverlayTitle: "Finding the right track",
+    searchOverlayTitle: "Preparing a track for you",
     searchOverlayStage: "Step {current} of {total}",
-    searchOverlayPreparing: "Reading your moment and history...",
-    searchOverlayCatalog: "Checking catalog routes...",
-    searchOverlayGenerating: "Matching profile, novelty, and confidence...",
-    searchOverlayFinishing: "Preparing preview and context...",
+    searchOverlayPreparing: "Connecting moment and history...",
+    searchOverlayCatalog: "Choosing a route with playable material...",
+    searchOverlayGenerating: "Dodging the obvious without losing the subgenre...",
+    searchOverlayFinishing: "Opening player and context...",
     newArtistsBtn: "Find new artists (< 2 years)",
     newArtistsTitle: "New artists in this subgenre",
     newArtistsSelectStyle: "Choose a subgenre to search for new artists.",
@@ -23280,31 +23290,31 @@ const I18N = {
     spiritReviewStayedFeedback: "Review complete: your system remains {name}.",
     spiritReviewStayedToast: "Review complete: Sound System stays as {name}.",
     spiritReviewShiftedToast: "Review complete: Sound System updated to {name}.",
-    spiritInsightTitle: "Calibration",
-    spiritInsightLockedStatus: "Collecting",
-    spiritInsightUnlockedStatus: "Active",
-    spiritInsightLockedText: "{remaining} liked tracks left to calibrate.",
+    spiritInsightTitle: "Sound taking shape",
+    spiritInsightLockedStatus: "First signals",
+    spiritInsightUnlockedStatus: "Reading active",
+    spiritInsightLockedText: "Like {remaining} tracks to reveal your Sound System.",
     spiritInsightUnlockedText: "I picked {name} because your signals point to {signals}. Next review in {remaining} liked tracks.",
-    spiritInsightNoSignals: "No strong signals yet. Like tracks and artists to calibrate better.",
-    spiritInsightSignalScore: "signal {score}",
+    spiritInsightNoSignals: "After the first like, your strongest directions appear here.",
+    spiritInsightSignalScore: "in focus",
     spiritVitalDnaLabel: "Dominant DNA",
     spiritVitalCycleLabel: "Review cycle",
     spiritVitalRankLabel: "System level",
     spiritVitalNextLabel: "Next impulse",
-    spiritVitalNoSignal: "Collecting signals",
-    spiritVitalDnaLocked: "I am still adding clues before building your system.",
+    spiritVitalNoSignal: "First signals",
+    spiritVitalDnaLocked: "The first like starts drawing your sound.",
     spiritVitalDnaUnlocked: "{name} guides this system's sonic identity.",
-    spiritVitalCycleLocked: "{current}/{target} liked tracks",
+    spiritVitalCycleLocked: "{current}/{target} likes",
     spiritVitalCycleUnlocked: "{current}/{target} this cycle",
     spiritVitalCycleRemaining: "{remaining} liked tracks left until the next reading.",
     spiritVitalCycleReady: "Reading ready to review.",
-    spiritVitalRankLocked: "Forming",
+    spiritVitalRankLocked: "First level",
     spiritVitalRankNext: "Next level: {rank} at {likes} liked tracks.",
-    spiritVitalRankLockedDetail: "The level appears when the first reading closes.",
+    spiritVitalRankLockedDetail: "Unlocks with the first reading.",
     spiritVitalRankMax: "Current maximum radar level.",
-    spiritVitalNextLocked: "Like freely",
+    spiritVitalNextLocked: "Listen and save",
     spiritVitalNextUnlocked: "Follow {style}",
-    spiritVitalNextDetailLocked: "The next signal already changes the reading.",
+    spiritVitalNextDetailLocked: "Every like improves the next card.",
     spiritVitalNextDetailUnlocked: "Use filters or swipe to test this path.",
     spiritSpotlightTitle: "System track",
     spiritSpotlightHintFavorite: "Picked from your favorite history and feedback signals.",
@@ -23401,7 +23411,7 @@ const I18N = {
     usageGuideStep3Text: "Like, no va, novedad o ya conocía: cada toque mejora la próxima carta.",
     usageGuideStep4Title: "Abre filtros solo cuando quieras precisión",
     usageGuideStep4Text: "Subgénero, BPM y vocal funcionan como ajuste fino, no como tarea.",
-    usageGuideNote: "¿Quieres escuchar ahora? Usa Sorpresa. ¿Quieres afinar? Agrega estilo, momento y artistas conocidos.",
+    usageGuideNote: "Después del acceso, la primera pista puede abrirse sola. Usa filtros cuando quieras afinar.",
     usageGuideContinueBtn: "Empezar a descubrir",
     showUsageGuideBtn: "Cómo usar",
     authKicker: "Acceso rápido",
@@ -23595,9 +23605,9 @@ const I18N = {
     communityDislike: "Dislike",
     feedbackKicker: "Aprendizaje",
     feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
-    swipeHeroKicker: "Descubrimiento por swipe",
-    swipeHeroTitle: "Escucha, desliza, afina",
-    swipeHeroHint: "La carta cambia rápido; el radar aprende contigo.",
+    swipeHeroKicker: "Descubrimiento inmediato",
+    swipeHeroTitle: "Escucha primero, ajusta después",
+    swipeHeroHint: "Después del acceso, la primera carta carga sola; cada reacción afina la siguiente.",
     swipeDeckKicker: "Rutas de descubrimiento",
     swipeDeckTitle: "Elige una dirección sonora",
     swipeDeckHint: "Usa un subgénero para abrir una secuencia más coherente.",
@@ -23610,9 +23620,9 @@ const I18N = {
     swipeEmptyTitle: "Abre una pista",
     swipeEmptyMeta: "Toca Sorpresa, escucha y decide con swipe.",
     swipeHint: "Arrastra con mouse o dedo; suelta para guardar la señal.",
-    topSwipeEmptyTitle: "Radar listo para la próxima pista",
-    topSwipeEmptyMeta: "Toca Sorpresa, escucha el preview y desliza cuando conecte.",
-    topSwipeHint: "El flujo principal queda ligero; filtros y contexto viven en otras pestañas.",
+    topSwipeEmptyTitle: "Preparando tu primera pista",
+    topSwipeEmptyMeta: "Sonic Search abre una carta para escuchar, guardar o pasar.",
+    topSwipeHint: "¿Quieres precisión? Abre Filtros después de la primera escucha.",
     aboutKicker: "Qué mejora",
     aboutTitle: "Descubrimiento sin búsqueda ciega",
     aboutBadge: "Radar",
@@ -23636,7 +23646,9 @@ const I18N = {
     aboutFlowStepFour: "Revisa likes, descartes y tu Sound System en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
     aboutTrustText: "Alta confianza = fuente, player, BPM y perfil. Sin certeza, usamos el estilo amplio.",
-    swipeStartButton: "Sorpresa",
+    swipeStartButton: "Encontrar pista",
+    swipeStartBusy: "Preparando...",
+    swipeNextButton: "Otra pista",
     quickKnownKicker: "Estado rápido",
     quickKnownQuestion: "¿Este artista ya estaba en tu radar?",
     quickKnownArtistQuestion: "¿{artist} ya estaba en tu radar?",
@@ -24276,8 +24288,8 @@ const I18N = {
     eventsLoading: "Buscando próximos eventos de {artist}...",
     searchingCatalog: "Leyendo catálogo, contexto e historial...",
     catalogGenerating: "Armando una ruta confiable en {style}...",
-    recommendationGenerated: "Pista lista para escuchar.",
-    exploratoryGenerated: "Apuesta exploratoria lista para escuchar.",
+    recommendationGenerated: "Pista lista. Escucha y decide con swipe.",
+    exploratoryGenerated: "Descubrimiento listo. Escucha y decide con swipe.",
     styleExhaustedFallback: "No encontré artistas nuevos en {from} por ahora. Cambié a {to} para mantener descubrimiento sin repeticiones.",
     surpriseCrossGenreGenerated: "Refinamiento activo: salí de {from} y abrí una ruta nueva en {to}.",
     surpriseAdaptiveGenerated: "Refinamiento por perfil: tus señales apuntaron una nueva ruta en {to}, saliendo de {from}.",
@@ -24318,12 +24330,12 @@ const I18N = {
     skipAdjusted: "Descarte recibido. Recalculé el próximo match a partir de ese no.",
     toastSkipAdjusted: "Tu descarte ya pesó en la próxima elección.",
     catalogUpdateProgress: "Refinando {style} en segundo plano.",
-    searchOverlayTitle: "Buscando la pista correcta",
+    searchOverlayTitle: "Preparando una pista para ti",
     searchOverlayStage: "Etapa {current} de {total}",
-    searchOverlayPreparing: "Leyendo tu momento e historial...",
-    searchOverlayCatalog: "Revisando rutas del catálogo...",
-    searchOverlayGenerating: "Cruzando perfil, novedad y confianza...",
-    searchOverlayFinishing: "Preparando preview y contexto...",
+    searchOverlayPreparing: "Conectando momento e historial...",
+    searchOverlayCatalog: "Eligiendo una ruta con material reproducible...",
+    searchOverlayGenerating: "Saliendo de lo obvio sin perder el subgénero...",
+    searchOverlayFinishing: "Abriendo player y contexto...",
     newArtistsBtn: "Buscar artistas nuevos (< 2 años)",
     newArtistsTitle: "Artistas nuevos en el subgénero",
     newArtistsSelectStyle: "Elige un subgénero para buscar artistas nuevos.",
@@ -24349,31 +24361,31 @@ const I18N = {
     spiritReviewStayedFeedback: "Revisión completa: tu sistema permanece {name}.",
     spiritReviewStayedToast: "Revisión completa: el Sound System se mantiene en {name}.",
     spiritReviewShiftedToast: "Revisión completa: Sound System actualizado a {name}.",
-    spiritInsightTitle: "Calibración",
-    spiritInsightLockedStatus: "Recopilando",
-    spiritInsightUnlockedStatus: "Activo",
-    spiritInsightLockedText: "Faltan {remaining} pistas con like para calibrar.",
+    spiritInsightTitle: "Sonido en construcción",
+    spiritInsightLockedStatus: "Primeras señales",
+    spiritInsightUnlockedStatus: "Lectura activa",
+    spiritInsightLockedText: "Da like a {remaining} pistas para revelar tu Sound System.",
     spiritInsightUnlockedText: "Elegí {name} porque tus señales apuntan a {signals}. Próxima revisión en {remaining} pistas con like.",
-    spiritInsightNoSignals: "Aún no hay señales fuertes. Da like a pistas y artistas para calibrar mejor.",
-    spiritInsightSignalScore: "señal {score}",
+    spiritInsightNoSignals: "Después del primer like, tus direcciones más fuertes aparecen aquí.",
+    spiritInsightSignalScore: "en foco",
     spiritVitalDnaLabel: "ADN dominante",
     spiritVitalCycleLabel: "Ciclo de revisión",
     spiritVitalRankLabel: "Nivel del sistema",
     spiritVitalNextLabel: "Próximo impulso",
-    spiritVitalNoSignal: "Señales en recopilación",
-    spiritVitalDnaLocked: "Aún estoy sumando pistas antes de montar tu sistema.",
+    spiritVitalNoSignal: "Primeras señales",
+    spiritVitalDnaLocked: "El primer like empieza a dibujar tu sonido.",
     spiritVitalDnaUnlocked: "{name} guía la identidad sonora de este sistema.",
-    spiritVitalCycleLocked: "{current}/{target} pistas con like",
+    spiritVitalCycleLocked: "{current}/{target} likes",
     spiritVitalCycleUnlocked: "{current}/{target} en el ciclo",
     spiritVitalCycleRemaining: "Faltan {remaining} pistas con like para la próxima lectura.",
     spiritVitalCycleReady: "Lectura lista para revisar.",
-    spiritVitalRankLocked: "En formación",
+    spiritVitalRankLocked: "Primer nivel",
     spiritVitalRankNext: "Próximo nivel: {rank} en {likes} pistas con like.",
-    spiritVitalRankLockedDetail: "El nivel aparece cuando cierre la primera lectura.",
+    spiritVitalRankLockedDetail: "Se desbloquea con la primera lectura.",
     spiritVitalRankMax: "Nivel máximo actual del radar.",
-    spiritVitalNextLocked: "Dale like libremente",
+    spiritVitalNextLocked: "Escucha y guarda",
     spiritVitalNextUnlocked: "Sigue {style}",
-    spiritVitalNextDetailLocked: "La próxima señal ya cambia la lectura.",
+    spiritVitalNextDetailLocked: "Cada like mejora la próxima carta.",
     spiritVitalNextDetailUnlocked: "Usa filtros o swipe para probar este camino.",
     spiritSpotlightTitle: "Pista del sistema",
     spiritSpotlightHintFavorite: "Elegida de tu historial favorito y señales de feedback.",
@@ -25518,7 +25530,7 @@ function applyLanguage() {
   setText("#swipeDeckKicker", t("swipeDeckKicker"));
   setText("#swipeDeckTitle", t("swipeDeckTitle"));
   setText("#swipeDeckHint", t("swipeDeckHint"));
-  setText("#swipeHeroSurpriseBtn", t("swipeStartButton"));
+  setText("#swipeHeroSurpriseBtn", currentRecommendation ? t("swipeNextButton") : t("swipeStartButton"));
   renderSwipeStyleRail();
   setText("#topSwipeHint", t("topSwipeHint"));
   setText("#swipeKicker", t("swipeKicker"));
@@ -25526,7 +25538,7 @@ function applyLanguage() {
   setText("#primarySwipeHint", t("primarySwipeHint"));
   setText("#topSwipeLikeBtn", t("swipeLike"));
   setText("#topSwipePassBtn", t("swipePass"));
-  setText("#topSwipeSurpriseBtn", t("swipeStartButton"));
+  setText("#topSwipeSurpriseBtn", currentRecommendation ? t("swipeNextButton") : t("swipeStartButton"));
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
   updateDiscoverySequenceBadges(currentRecommendation);
@@ -28851,7 +28863,7 @@ function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
 function continueFromUsageGuide() {
   markUsageGuideAcknowledged();
   if (usageGuideReturnTarget === "discover") {
-    enterAppFromWelcome({ surprise: false, autoRecommendation: false });
+    enterAppFromWelcome({ surprise: false, autoRecommendation: true });
     return;
   }
   if (usageGuideReturnTarget === "app") {
@@ -28972,7 +28984,7 @@ function continueFromAuthToDiscover({ showGuide = false } = {}) {
     showUsageGuideScreen({ returnTo: "discover" });
     return;
   }
-  enterAppFromWelcome({ surprise: false, autoRecommendation: false });
+  enterAppFromWelcome({ surprise: false, autoRecommendation: true });
 }
 
 function ensureLocalProfileSession({ preferStored = true } = {}) {
@@ -29106,7 +29118,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
       runSurpriseRecommendation().catch(() => {
         showToast(recommendationFailureMessage());
       });
-    }, 520);
+    }, 180);
     return;
   }
   window.setTimeout(() => {
@@ -32012,6 +32024,14 @@ function recommendationTriggerButtons() {
 function setRecommendationRunBusy(isBusy) {
   document.body.classList.toggle("is-recommending", Boolean(isBusy));
   if (appContent) appContent.setAttribute("aria-busy", isBusy ? "true" : "false");
+  const hasTrack = Boolean(currentRecommendation);
+  const swipeActionLabel = isBusy
+    ? t("swipeStartBusy")
+    : hasTrack
+      ? t("swipeNextButton")
+      : t("swipeStartButton");
+  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = swipeActionLabel;
+  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = swipeActionLabel;
   if (recommendBtn) {
     recommendBtn.textContent = isBusy ? t("recommendBtnBusy") : t("recommendBtn");
     recommendBtn.classList.toggle("is-loading", Boolean(isBusy));
@@ -32021,7 +32041,6 @@ function setRecommendationRunBusy(isBusy) {
     button.disabled = Boolean(isBusy);
   });
   if (!isBusy) {
-    const hasTrack = Boolean(currentRecommendation);
     if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = !hasTrack;
     if (topSwipePassBtn) topSwipePassBtn.disabled = !hasTrack;
     if (swipeLikeBtn) swipeLikeBtn.disabled = !hasTrack;
@@ -43136,6 +43155,16 @@ function renderSpiritVitals({
   );
 }
 
+function spiritSignalStrengthLabel(index = 0) {
+  if (currentLanguage === "en") {
+    return index === 0 ? "most present" : index === 1 ? "building up" : "being tested";
+  }
+  if (currentLanguage === "es") {
+    return index === 0 ? "más presente" : index === 1 ? "ganando cuerpo" : "en prueba";
+  }
+  return index === 0 ? "mais presente" : index === 1 ? "ganhando corpo" : "em teste";
+}
+
 function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   if (!spiritInsightPanel) return;
   const likedSongs = totalLikedSongs();
@@ -43174,13 +43203,15 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   renderSpiritVitals({ unlocked, likedSongs, progress, selectedSpirit, spiritText, signals, signalText });
   if (!spiritSignalList) return;
   spiritSignalList.innerHTML = "";
-  const visibleSignals = signals.filter((entry) => Number(entry.score) > 0);
+  const visibleSignals = likedSongs > 0
+    ? signals.filter((entry) => Number(entry.score) > 0.05)
+    : [];
   spiritSignalList.classList.toggle("hidden", !visibleSignals.length);
   if (!visibleSignals.length) {
     return;
   }
   const visibleMaxScore = Math.max(1, ...visibleSignals.map((entry) => Number(entry.score) || 0));
-  visibleSignals.forEach((entry) => {
+  visibleSignals.forEach((entry, index) => {
     const item = document.createElement("div");
     item.className = "spirit-signal-item";
     const label = document.createElement("span");
@@ -43188,10 +43219,7 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
     const meter = document.createElement("i");
     meter.style.width = `${Math.max(8, Math.min(100, (Number(entry.score) / visibleMaxScore) * 100))}%`;
     const value = document.createElement("strong");
-    value.textContent = t("spiritInsightSignalScore", {
-      label: entry.label,
-      score: Math.max(0, Number(entry.score) || 0).toFixed(1)
-    });
+    value.textContent = spiritSignalStrengthLabel(index);
     item.append(label, meter, value);
     spiritSignalList.appendChild(item);
   });
@@ -46228,6 +46256,19 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
   renderSuggestionQueue(prefs);
 }
 
+function scheduleSuggestionQueueRefresh(prefs = lastPrefs, anchorTrack = currentRecommendation, { delayMs = 700 } = {}) {
+  if (!prefs || !anchorTrack) return;
+  const contextKey = recommendationContextKey(prefs);
+  const anchorKey = recommendationTrackKey(anchorTrack);
+  const token = ++fastSuggestionQueueRefreshToken;
+  schedulePostBootIdleTask(() => {
+    if (token !== fastSuggestionQueueRefreshToken) return;
+    if (!lastPrefs || recommendationContextKey(lastPrefs) !== contextKey) return;
+    if (!currentRecommendation || recommendationTrackKey(currentRecommendation) !== anchorKey) return;
+    refreshSuggestionQueue(prefs, anchorTrack);
+  }, { delayMs, timeoutMs: 2200 });
+}
+
 function markRecommendationPresented(track) {
   if (!track) return;
   registerSeenArtist(track.artist);
@@ -46971,8 +47012,8 @@ function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   if (primarySwipeHint) primarySwipeHint.textContent = t("primarySwipeHint");
   if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
   if (topSwipePassBtn) topSwipePassBtn.textContent = t("swipePass");
-  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = t("swipeStartButton");
-  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = t("swipeStartButton");
+  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = hasTrack ? t("swipeNextButton") : t("swipeStartButton");
+  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = hasTrack ? t("swipeNextButton") : t("swipeStartButton");
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
@@ -47224,7 +47265,15 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   renderRecommendation(track, finalPrefs);
   renderDiscovery(currentDiscovery);
   registerRecommendationDelivery(track, finalPrefs);
-  refreshSuggestionQueue(finalPrefs, track);
+  const currentTrackKey = recommendationTrackKey(track);
+  if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
+    suggestionQueueTracks = suggestionQueueTracks
+      .filter((queueTrack) => recommendationTrackKey(queueTrack) !== currentTrackKey)
+      .slice(0, SUGGESTION_QUEUE_TARGET);
+    suggestionQueueContextKey = recommendationContextKey(finalPrefs);
+    renderSuggestionQueue(finalPrefs);
+  }
+  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 900 });
 
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
@@ -47242,6 +47291,265 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   savePreferences();
   void renderPreview(track, { fast: true }).catch(() => {});
   return true;
+}
+
+function negativeFeedbackBasePrefs(prefs = lastPrefs) {
+  return normalizeRecommendationPrefs(prefs || {});
+}
+
+const FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT = 180;
+const FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT = 140;
+const FAST_NEGATIVE_FEEDBACK_QUEUE_LIMIT = 24;
+
+function rotatedFastFeedbackPool(pool = [], limit = FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT) {
+  if (!Array.isArray(pool) || !pool.length) return [];
+  const safeLimit = Math.max(1, Math.min(pool.length, Number(limit) || FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT));
+  if (pool.length <= safeLimit) return pool.slice();
+  const offset = Math.floor(Math.random() * pool.length);
+  const rotated = [];
+  for (let index = 0; index < pool.length && rotated.length < safeLimit; index += 1) {
+    rotated.push(pool[(offset + index) % pool.length]);
+  }
+  return rotated;
+}
+
+function starterFastFeedbackPool(pool = []) {
+  if (!Array.isArray(pool) || !pool.length) return [];
+  return pool.filter((track) => {
+    const style = selectableSwipeStyle(track?.style || "");
+    if (!style || !DISCOVERY_STARTER_STYLE_SET.has(style)) return false;
+    const family = familyOf(style);
+    return family === "house" || family === "techno";
+  });
+}
+
+function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidArtistName = "", allowNoPreview = false } = {}) {
+  if (!track || !prefs) return false;
+  if (track === rejectedTrack) return false;
+  if (!isTrackEligibleForRecommendation(track)) return false;
+  if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) return false;
+  const hasFastRoute = trackHasFastListenRoute(track);
+  if (!hasFastRoute && !allowNoPreview) return false;
+  if (
+    !hasFastRoute &&
+    allowNoPreview &&
+    !isTrustedCuratedCatalogTrack(track) &&
+    !isTrustedCatalogExtraTrack(track) &&
+    track.existenceVerified !== true
+  ) {
+    return false;
+  }
+  if (!hasReliableBpmForTrack(track)) return false;
+  if (prefs.style && track.style !== prefs.style) return false;
+  if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
+  if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+  if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
+  const bpmValue = Number(track.bpmExact);
+  if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
+
+  const rejectedKey = recommendationTrackKey(rejectedTrack);
+  const activeKey = recommendationTrackKey(currentRecommendation);
+  const exclusions = buildGlobalTrackExclusionSet(
+    [rejectedKey, activeKey, lastRejectedTrackKey].filter(Boolean),
+    rejectedTrack?.song ? [rejectedTrack.song] : []
+  );
+  if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
+
+  const blockedArtists = buildGlobalArtistExclusionSet(
+    [avoidArtistName].filter(Boolean)
+  );
+  if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+
+  return true;
+}
+
+function fastNegativeFeedbackCandidatePools(prefs, rejectedTrack, avoidArtistName = "", { allowNoPreview = false } = {}) {
+  const contextKey = recommendationContextKey(prefs);
+  const basePool = prefs?.style ? catalogTracksForStyle(prefs.style) : catalog;
+  const pools = [];
+  if (suggestionQueueContextKey === contextKey && Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
+    pools.push(suggestionQueueTracks.slice(0, FAST_NEGATIVE_FEEDBACK_QUEUE_LIMIT));
+  }
+  if (!prefs?.style) {
+    pools.push(rotatedFastFeedbackPool(starterFastFeedbackPool(basePool), FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT));
+  }
+  pools.push(rotatedFastFeedbackPool(basePool, prefs?.style ? FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT : FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT + 40));
+  return pools.map((pool) =>
+    (Array.isArray(pool) ? pool : []).filter((track) =>
+      fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidArtistName, allowNoPreview })
+    )
+  );
+}
+
+function fastNegativeFeedbackScore(track, prefs, rejectedTrack) {
+  let score = 0;
+  const styleKey = selectableSwipeStyle(track?.style || "") || normalizeDatasetStyle(track?.style || "");
+  const family = familyOf(styleKey);
+
+  if (prefs?.style) {
+    score += track.style === prefs.style ? 9 : -999;
+    score += recommendationPrecisionScore(track, prefs) * 0.36;
+  } else {
+    if (DISCOVERY_STARTER_STYLE_SET.has(styleKey)) score += 5.2;
+    if (family === "house") score += 4.6;
+    else if (family === "techno") score += 4.2;
+    else if (styleKey === "uk_garage" || styleKey === "liquid_dnb") score += 1.7;
+    else if (family === "leftfield") score += 1.1;
+
+    const tier = styleMaturityTier(styleKey);
+    if (tier === "extreme") score -= 60;
+    else if (tier === "advanced") score -= 16;
+    score += clampScore(recommendationMaturityScore(styleKey, prefs, track), -14, 8) * 0.55;
+  }
+
+  if (prefs?.context) score += contextAffinityScore(track, prefs) * 0.42;
+  if (prefs?.energy) {
+    const distance = energyDistance(track.energy, prefs.energy);
+    score += Math.max(-2.5, 2.4 - distance * 1.25);
+  }
+  if (prefs?.vocals) score += track.vocals === prefs.vocals ? 1.2 : -0.7;
+  if (prefs?.bpm && trackMatchesBpmPreference(track, prefs.bpm)) score += 2.2;
+
+  score += trackHasReliableAudioPreview(track) ? 5.6 : trackHasFastListenRoute(track) ? 3.2 : -1.4;
+  score += hasReliableBpmForTrack(track) ? 1.4 : 0;
+  if (isTrustedCatalogExtraTrack(track)) score += 2.1;
+  else if (isTrustedCuratedCatalogTrack(track)) score += 1.6;
+  else if (track.existenceVerified === true) score += 0.8;
+  if (rejectedTrack?.style && track.style !== rejectedTrack.style && !prefs?.style) {
+    score += 0.9;
+  }
+  if (artistMatchKey(track.artist) === artistMatchKey(rejectedTrack?.artist || "")) {
+    score -= 12;
+  }
+  score += Math.random() * 0.08;
+  return score;
+}
+
+function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, prefs = lastPrefs, avoidArtistName = "" } = {}) {
+  const basePrefs = negativeFeedbackBasePrefs(prefs);
+  if (!rejectedTrack || !basePrefs) return null;
+  const previousArtistKey = artistMatchKey(avoidArtistName || rejectedTrack?.artist || "");
+
+  for (const allowNoPreview of [false, true]) {
+    const seenCandidateKeys = new Set();
+    for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
+      const candidates = pool.filter((track) => {
+        const key = recommendationTrackKey(track);
+        if (!key || seenCandidateKeys.has(key)) return false;
+        seenCandidateKeys.add(key);
+        return true;
+      });
+      if (!candidates.length) continue;
+      const scored = candidates.map((track) => ({
+        track,
+        score: fastNegativeFeedbackScore(track, basePrefs, rejectedTrack)
+      }));
+      const candidate = pickFromScoredRecommendations(scored, basePrefs, {
+        previousArtistKey,
+        maxWindow: basePrefs.style ? 10 : 16,
+        scoreBand: basePrefs.style ? 6.5 : 9.5
+      });
+      if (candidate) return { track: candidate, prefs: basePrefs };
+    }
+  }
+
+  return null;
+}
+
+function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" } = {}) {
+  if (!track || !prefs) return false;
+  recommendationStyleFallbackInfo = null;
+  recommendationBpmFallbackInfo = false;
+  const finalPrefs = negativeFeedbackBasePrefs(prefs);
+  const token = ++fastFeedbackSwapToken;
+
+  recommendationRunBusy = true;
+  setRecommendationRunBusy(true);
+
+  if (styleEl && finalPrefs.style) styleEl.value = finalPrefs.style;
+  if (contextEl) contextEl.value = finalPrefs.context || "";
+  if (energyEl) energyEl.value = finalPrefs.energy || "";
+  if (bpmEl) bpmEl.value = finalPrefs.bpm || "";
+  if (vocalsEl) vocalsEl.value = finalPrefs.vocals || "";
+
+  lastPrefs = finalPrefs;
+  styleInfoDismissed = false;
+  renderStyleInfoBubble(finalPrefs.style, { reveal: Boolean(finalPrefs.style) });
+  applyGenreVibeTheme(finalPrefs.style || track.style || "", { force: true });
+  renderSwipeStyleRail();
+
+  currentRecommendation = track;
+  const shouldRefreshDiscovery = Boolean(discoveryModeEl.checked);
+  currentDiscovery = null;
+  renderRecommendation(track, finalPrefs);
+  renderDiscovery(currentDiscovery);
+  registerRecommendationDelivery(track, finalPrefs);
+  const currentTrackKey = recommendationTrackKey(track);
+  if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
+    suggestionQueueTracks = suggestionQueueTracks
+      .filter((queueTrack) => recommendationTrackKey(queueTrack) !== currentTrackKey)
+      .slice(0, SUGGESTION_QUEUE_TARGET);
+    suggestionQueueContextKey = recommendationContextKey(finalPrefs);
+    renderSuggestionQueue(finalPrefs);
+  }
+  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 900 });
+
+  if (rerollBtn) rerollBtn.disabled = false;
+  if (eventsPanel) eventsPanel.classList.add("hidden");
+  if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
+  if (eventsCalendar) eventsCalendar.innerHTML = "";
+  if (eventsList) eventsList.innerHTML = "";
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  scrollResultPanelIntoView();
+
+  if (feedbackMessage && message) feedbackMessage.textContent = message;
+  savePreferences();
+  if (shouldRefreshDiscovery) {
+    const discoveryTrackKey = recommendationTrackKey(track);
+    schedulePostBootIdleTask(() => {
+      if (token !== fastFeedbackSwapToken) return;
+      if (recommendationTrackKey(currentRecommendation) !== discoveryTrackKey) return;
+      currentDiscovery = pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist);
+      renderDiscovery(currentDiscovery);
+    }, { delayMs: 260, timeoutMs: 1800 });
+  }
+  const previewTrackKey = recommendationTrackKey(track);
+  window.setTimeout(() => {
+    if (token !== fastFeedbackSwapToken) return;
+    if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
+    void renderPreview(track, {
+      fast: true,
+      probeTimeoutMs: 420,
+      resolveTimeoutMs: 220,
+      maxProbeCandidates: 1
+    }).catch(() => {});
+  }, 40);
+
+  window.setTimeout(() => {
+    if (token !== fastFeedbackSwapToken) return;
+    recommendationRunBusy = false;
+    setRecommendationRunBusy(false);
+  }, 120);
+
+  return true;
+}
+
+function tryAdvanceNegativeFeedbackInstantly({ rejectedTrack = currentRecommendation, avoidArtistName = "", message = "" } = {}) {
+  if (recommendationRunBusy || !lastPrefs || !rejectedTrack) return false;
+  if (!canUseMusicDiscovery()) return false;
+  const instant = pickFastNegativeFeedbackTrack({
+    rejectedTrack,
+    prefs: lastPrefs,
+    avoidArtistName
+  });
+  if (!instant) return false;
+  return presentFastNegativeFeedbackRecommendation({
+    track: instant.track,
+    prefs: instant.prefs,
+    message
+  });
 }
 
 function tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName = "", message = "", positive = true } = {}) {
@@ -47337,6 +47645,13 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     playUiSfx("error");
     showPremiumDiscoveryLimit();
     return false;
+  }
+  if (!positive && tryAdvanceNegativeFeedbackInstantly({
+    rejectedTrack: likedTrack,
+    avoidArtistName,
+    message
+  })) {
+    return true;
   }
   if (tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName, message, positive })) {
     return true;
@@ -54893,7 +55208,7 @@ bind(introContinueBtn, "click", () => {
 });
 
 bind(startBtn, "click", () => {
-  enterAppFromWelcome({ surprise: false });
+  enterAppFromWelcome({ surprise: false, autoRecommendation: true });
 });
 
 bind(startSurpriseBtn, "click", () => {
@@ -55725,6 +56040,29 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
   renderTrackCardSignals(rejectedTrack, lastPrefs);
   renderRecommendationTrust(rejectedTrack, lastPrefs);
+  const reasonMessage = appendSwipeLearningMessage(
+    feedbackReason === "preview_issue"
+      ? t("previewIssueLearned")
+      : RECOMMENDATION_ISSUE_REASONS.has(feedbackReason)
+        ? feedbackMessageForRecommendationIssue(feedbackReason)
+        : t("swappedNow")
+  );
+  if (tryAdvanceNegativeFeedbackInstantly({
+    rejectedTrack,
+    avoidArtistName: isPreviewIssue || isRecommendationIssue ? "" : rejectedTrack?.artist || "",
+    message: reasonMessage
+  })) {
+    playUiSfx("dislike");
+    showToast(
+      feedbackReason === "preview_issue"
+        ? t("toastPreviewIssueLearned")
+        : RECOMMENDATION_ISSUE_REASONS.has(feedbackReason)
+          ? t("toastRecommendationIssueLearned")
+          : t("toastSwapped")
+    );
+    updateStats();
+    return;
+  }
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: lastRejectedTrackKey,
@@ -55736,13 +56074,6 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
     return;
   }
   const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
-  const reasonMessage = appendSwipeLearningMessage(
-    feedbackReason === "preview_issue"
-      ? t("previewIssueLearned")
-      : RECOMMENDATION_ISSUE_REASONS.has(feedbackReason)
-        ? feedbackMessageForRecommendationIssue(feedbackReason)
-        : t("swappedNow")
-  );
   if (feedbackMessage) feedbackMessage.textContent = previewDislikeFallback || reasonMessage;
   playUiSfx("dislike");
   if (!previewDislikeFallback) {
@@ -55848,15 +56179,28 @@ bind(noveltyLikedBtn, "click", async () => {
 
 bind(noveltyNotYetBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
-  const feedbackReason = registerTrackFeedback(currentRecommendation, false, {
+  const rejectedTrack = currentRecommendation;
+  const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "novelty_not_yet",
     avoidRepeatArtist: true
   });
-  lastRejectedTrackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
+  lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
+  const reasonMessage = appendSwipeLearningMessage(
+    feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("refinedAfterNo")
+  );
+  if (tryAdvanceNegativeFeedbackInstantly({
+    rejectedTrack,
+    avoidArtistName: rejectedTrack?.artist || "",
+    message: reasonMessage
+  })) {
+    playUiSfx("dislike");
+    showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastTryBetter"));
+    return;
+  }
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: lastRejectedTrackKey,
-    avoidArtistName: currentRecommendation?.artist || ""
+    avoidArtistName: rejectedTrack?.artist || ""
   });
   if (!generated) {
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -55865,9 +56209,7 @@ bind(noveltyNotYetBtn, "click", async () => {
   }
   const noveltyNotYetFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
-    feedbackMessage.textContent = noveltyNotYetFallback || appendSwipeLearningMessage(
-      feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("refinedAfterNo")
-    );
+    feedbackMessage.textContent = noveltyNotYetFallback || reasonMessage;
   }
   playUiSfx("dislike");
   if (!noveltyNotYetFallback) {
@@ -56080,7 +56422,15 @@ bind(blockArtistBtn, "click", async () => {
   updateStats();
 
   if (!lastPrefs) return;
-  const blockedTrackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
+  const blockedTrack = currentRecommendation;
+  const blockedTrackKey = `${blockedTrack.artist}::${blockedTrack.song}`;
+  if (tryAdvanceNegativeFeedbackInstantly({
+    rejectedTrack: blockedTrack,
+    avoidArtistName: blockedArtistName,
+    message: `${blockedMessage} ${t("swappedNow")}`
+  })) {
+    return;
+  }
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: blockedTrackKey,
@@ -56141,16 +56491,30 @@ bind(newDiscoveryBtn, "click", () => {
 
 bind(skipBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
+  const rejectedTrack = currentRecommendation;
   userStats.skipped += 1;
-  const feedbackReason = registerTrackFeedback(currentRecommendation, false, {
+  const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "skip",
     avoidRepeatArtist: true
   });
-  lastRejectedTrackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
+  lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
+  const reasonMessage = appendSwipeLearningMessage(
+    feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("skipAdjusted")
+  );
+  if (tryAdvanceNegativeFeedbackInstantly({
+    rejectedTrack,
+    avoidArtistName: rejectedTrack?.artist || "",
+    message: reasonMessage
+  })) {
+    playUiSfx("dislike");
+    showToast(feedbackReason === "preview_issue" ? t("toastPreviewIssueLearned") : t("toastSkipAdjusted"));
+    updateStats();
+    return;
+  }
   const generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: lastRejectedTrackKey,
-    avoidArtistName: currentRecommendation?.artist || ""
+    avoidArtistName: rejectedTrack?.artist || ""
   });
   if (!generated) {
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
@@ -56159,9 +56523,7 @@ bind(skipBtn, "click", async () => {
   }
   const skipFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
   if (feedbackMessage) {
-    feedbackMessage.textContent = skipFallback || appendSwipeLearningMessage(
-      feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("skipAdjusted")
-    );
+    feedbackMessage.textContent = skipFallback || reasonMessage;
   }
   playUiSfx("dislike");
   if (!skipFallback) {
