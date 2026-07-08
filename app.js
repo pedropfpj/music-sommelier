@@ -26892,7 +26892,9 @@ function setAuthProviderBusy(provider, isBusy) {
   }
   const button = provider === "apple" ? authAppleBtn : authGoogleBtn;
   const label = provider === "apple" ? authAppleLabel : authGoogleLabel;
-  const configured = provider === "apple" ? Boolean(appleClientId()) : Boolean(googleClientId());
+  const configured = provider === "apple"
+    ? socialProviderAvailable("apple")
+    : socialProviderAvailable("google") || Boolean(googleClientId());
   if (button) {
     button.disabled = isBusy;
     button.classList.toggle("is-unconfigured", !configured);
@@ -26912,15 +26914,19 @@ function updateAuthProviderUi() {
     return;
   }
   const socialConfigEndpointAvailable = Boolean(resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT));
-  const googleConfigured = !socialState.ready || socialProviderAvailable("google") || Boolean(googleClientId()) || socialConfigEndpointAvailable;
-  const appleConfigured = !socialState.ready || socialProviderAvailable("apple") || Boolean(appleClientId()) || socialConfigEndpointAvailable;
+  const socialConfigLoading = Boolean(!socialState.ready && socialConfigEndpointAvailable);
+  const googleConfigured = socialConfigLoading || socialProviderAvailable("google") || Boolean(googleClientId());
+  const appleConfigured = socialConfigLoading || socialProviderAvailable("apple");
   const signed = authHasOnlineSession();
+  const signedProvider = onlineSocialProvider();
+  const signedWithGoogle = signed && signedProvider === "google";
+  const signedWithApple = signed && signedProvider === "apple";
   const busy = Boolean(authConfigLoading || socialState.busy);
   const googleOAuthHref = socialOAuthStartUrl("google");
   const appleOAuthHref = socialOAuthStartUrl("apple");
   const hideOnlineAuth = shouldHideSocialLoginForAppStore();
-  const showGoogleOption = Boolean(!hideOnlineAuth);
-  const showAppleOption = Boolean(!hideOnlineAuth);
+  const showGoogleOption = Boolean(!hideOnlineAuth && (googleConfigured || signedWithGoogle));
+  const showAppleOption = Boolean(!hideOnlineAuth && (appleConfigured || signedWithApple));
   const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
   if (authEntryActions) {
     authEntryActions.classList.toggle("has-online", showGoogleOption || showAppleOption);
@@ -26934,12 +26940,12 @@ function updateAuthProviderUi() {
   if (authAppleBtn) {
     authAppleBtn.classList.toggle("hidden", !showAppleOption);
     authAppleBtn.setAttribute("aria-hidden", showAppleOption ? "false" : "true");
-    authAppleBtn.disabled = !showAppleOption || busy;
+    authAppleBtn.disabled = !showAppleOption || busy || (!appleConfigured && !signedWithApple);
     if (authAppleBtn.tagName === "A") {
       authAppleBtn.setAttribute("href", signed ? "#" : appleOAuthHref);
       authAppleBtn.setAttribute(
         "aria-disabled",
-        !showAppleOption || busy ? "true" : "false"
+        !showAppleOption || busy || (!appleConfigured && !signedWithApple) ? "true" : "false"
       );
     }
     authAppleBtn.classList.toggle("is-unconfigured", !appleConfigured && !signed);
@@ -26950,12 +26956,12 @@ function updateAuthProviderUi() {
   if (authGoogleBtn) {
     authGoogleBtn.classList.toggle("hidden", !showGoogleOption);
     authGoogleBtn.setAttribute("aria-hidden", showGoogleOption ? "false" : "true");
-    authGoogleBtn.disabled = !showGoogleOption || busy;
+    authGoogleBtn.disabled = !showGoogleOption || busy || (!googleConfigured && !signedWithGoogle);
     if (authGoogleBtn.tagName === "A") {
       authGoogleBtn.setAttribute("href", signed ? "#" : googleOAuthHref);
       authGoogleBtn.setAttribute(
         "aria-disabled",
-        !showGoogleOption || busy ? "true" : "false"
+        !showGoogleOption || busy || (!googleConfigured && !signedWithGoogle) ? "true" : "false"
       );
     }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
@@ -28579,7 +28585,7 @@ async function showAuthScreen() {
     ? (onlineSocialProvider() === "apple" ? authAppleBtn : authGoogleBtn)
     : socialProviderAvailable("google") || googleClientId()
       ? authGoogleBtn
-      : socialProviderAvailable("apple") || appleClientId()
+      : socialProviderAvailable("apple")
         ? authAppleBtn
         : authGuestBtn;
   if (preferredAuthAction?.focus) preferredAuthAction.focus();
@@ -51951,8 +51957,10 @@ function renderSocialUi(options = {}) {
       socialEmailPasswordGrid.setAttribute("aria-hidden", "true");
     }
   }
-  if (socialGoogleBtn) socialGoogleBtn.classList.toggle("hidden", signed);
-  if (socialAppleBtn) socialAppleBtn.classList.toggle("hidden", signed);
+  const googleProviderAvailable = socialProviderAvailable("google");
+  const appleProviderAvailable = socialProviderAvailable("apple");
+  if (socialGoogleBtn) socialGoogleBtn.classList.toggle("hidden", signed || !googleProviderAvailable);
+  if (socialAppleBtn) socialAppleBtn.classList.toggle("hidden", signed || !appleProviderAvailable);
   [socialSignUpBtn, socialSignInBtn, socialResendConfirmBtn].forEach((button) => {
     if (!button) return;
     button.classList.add("hidden");
@@ -51962,8 +51970,8 @@ function renderSocialUi(options = {}) {
   });
   if (socialSignOutBtn) socialSignOutBtn.classList.toggle("hidden", !signed);
   if (socialSyncBtn) socialSyncBtn.classList.toggle("hidden", !signed);
-  if (socialGoogleBtn) socialGoogleBtn.disabled = signed || socialState.busy;
-  if (socialAppleBtn) socialAppleBtn.disabled = signed || socialState.busy;
+  if (socialGoogleBtn) socialGoogleBtn.disabled = signed || socialState.busy || !googleProviderAvailable;
+  if (socialAppleBtn) socialAppleBtn.disabled = signed || socialState.busy || !appleProviderAvailable;
   if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
   if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
