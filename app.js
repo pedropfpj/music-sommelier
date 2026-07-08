@@ -27253,6 +27253,10 @@ async function prepareSocialOAuthPkce(provider = "google") {
   return record;
 }
 
+function shouldUseSocialOAuthPkce() {
+  return isNativeAppRuntime();
+}
+
 function setAuthProviderBusy(provider, isBusy) {
   if (AUTH_LOGIN_STANDBY) {
     syncAuthStandbyUi();
@@ -27544,7 +27548,10 @@ async function continueWithOnlineSocialSession(options = {}) {
   }));
   applyCloudLikedTrackSignals([]);
   updateStats();
-  continueFromAuthToDiscover({ showGuide: options.showGuide ?? !hasUsageGuideAcknowledged() });
+  continueFromAuthToDiscover({
+    showGuide: options.showGuide ?? !hasUsageGuideAcknowledged(),
+    targetTab: options.targetTab || ""
+  });
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
 }
@@ -28962,7 +28969,7 @@ async function showAuthScreen() {
   playUiSfx("confirm");
 }
 
-function continueFromAuthToDiscover({ showGuide = false } = {}) {
+function continueFromAuthToDiscover({ showGuide = false, targetTab = "" } = {}) {
   hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -28984,7 +28991,12 @@ function continueFromAuthToDiscover({ showGuide = false } = {}) {
     showUsageGuideScreen({ returnTo: "discover" });
     return;
   }
-  enterAppFromWelcome({ surprise: false, autoRecommendation: true });
+  const safeTargetTab = safeAppTabName(targetTab || "");
+  enterAppFromWelcome({
+    surprise: false,
+    autoRecommendation: safeTargetTab === "discover",
+    initialTab: safeTargetTab
+  });
 }
 
 function ensureLocalProfileSession({ preferStored = true } = {}) {
@@ -29070,8 +29082,9 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   return true;
 }
 
-function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoRecommendation = null } = {}) {
+function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoRecommendation = null, initialTab = "" } = {}) {
   const shouldAutoRecommend = autoRecommendation === null ? Boolean(surprise) : Boolean(autoRecommendation);
+  const safeInitialTab = initialTab ? safeAppTabName(initialTab) : "";
   ensureLocalProfileSession({ preferStored: true });
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
@@ -29085,8 +29098,8 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
-  const initialTab = shouldAutoRecommend ? "discover" : requestedAppTabFromUrl("discover");
-  setActiveAppTab(initialTab);
+  const entryTab = safeInitialTab || (shouldAutoRecommend ? "discover" : requestedAppTabFromUrl("discover"));
+  setActiveAppTab(entryTab);
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
@@ -29110,7 +29123,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   }, { delayMs: nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000), timeoutMs: 2400 });
   scheduleQuizChallengeEvaluation(220);
 
-  if (!shouldAutoRecommend) return;
+  if (!shouldAutoRecommend || entryTab !== "discover") return;
 
   if (!surprise) {
     window.setTimeout(() => {
@@ -50455,6 +50468,8 @@ function socialAuthRedirectUrl() {
       const url = new URL(`${origin}${pathname || "/"}`);
       const lang = normalizeLanguageCode(currentLanguage) || readStoredLanguage() || DEFAULT_LANGUAGE;
       if (isSupportedLanguage(lang)) url.searchParams.set("lang", lang);
+      const tab = safeAppTabName(currentActiveAppTabName());
+      if (tab && tab !== "discover") url.searchParams.set("tab", tab);
       return url.toString();
     }
   } catch (error) {
@@ -50504,7 +50519,8 @@ function socialOAuthStartUrl(provider = "google") {
 }
 
 async function prepareSocialOAuthStartUrl(provider = "google") {
-  const pkce = await prepareSocialOAuthPkce(provider);
+  const pkce = shouldUseSocialOAuthPkce() ? await prepareSocialOAuthPkce(provider) : null;
+  if (!pkce) clearSocialOAuthPkce();
   if (isNativeAppRuntime()) return socialOAuthAuthorizeUrl(provider, pkce);
   const endpoint = socialOAuthEndpointUrl(provider, { pkce });
   if (!endpoint) return socialOAuthAuthorizeUrl(provider, pkce);
@@ -50582,7 +50598,7 @@ function startSocialOAuthNavigation(url = "", provider = pendingSocialOAuthProvi
   if (!cleanUrl) return false;
   pendingSocialOAuthProvider = provider || "google";
   pendingSocialOAuthUrl = cleanUrl;
-  if (!isNativeAppRuntime() && !loadSocialOAuthPkce()?.codeVerifier) {
+  if (shouldUseSocialOAuthPkce() && !loadSocialOAuthPkce()?.codeVerifier) {
     handleSocialOAuthNavigationFailure(new Error("Missing PKCE verifier before OAuth navigation"), provider);
     return false;
   }
@@ -50878,6 +50894,7 @@ function socialClearAuthHash() {
 async function socialHandleAuthRedirect() {
   const params = socialAuthHashParams();
   if (!params || !socialConfigReady()) return false;
+  const returnTab = requestedAppTabFromUrl("discover");
   const redirectError = [params.get("error_code"), params.get("error_description") || params.get("error")]
     .filter(Boolean)
     .join(" ");
@@ -50900,7 +50917,7 @@ async function socialHandleAuthRedirect() {
       await upsertSocialProfile();
       await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
       socialSetStatus("Perfil conectado.", "ok");
-      await continueWithOnlineSocialSession({ sync: false, showGuide: false });
+      await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
     } catch (error) {
       console.warn("Could not exchange social auth code", error);
       const message = `Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
@@ -50936,7 +50953,7 @@ async function socialHandleAuthRedirect() {
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
     socialSetStatus("Perfil conectado.", "ok");
-    await continueWithOnlineSocialSession({ sync: false, showGuide: false });
+    await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
     const message = `Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
@@ -56695,7 +56712,7 @@ async function bootSonicSearch() {
     if (welcomeScreen) welcomeScreen.classList.add("hidden");
     if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
     if (appContent) appContent.classList.remove("hidden");
-    setActiveAppTab("discover");
+    setActiveAppTab(requestedAppTabFromUrl("discover"));
     void ensureSocialMvpReady();
   } else if (!applySharedSpiritPayload(sharedSpiritPayload)) {
     if (shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) {
