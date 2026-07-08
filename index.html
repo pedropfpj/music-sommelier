@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.css?v=20260707eventcards1" as="style" />
+    <link rel="preload" href="styles.css?v=20260708taste1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,7 +55,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260707eventcards1" />
+    <link rel="stylesheet" href="styles.css?v=20260708taste1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -570,7 +570,7 @@
       </header>
 
       <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
-        <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true">Descobrir</button>
+        <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true" aria-current="page">Descobrir</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="djs" aria-pressed="false">DJs</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtros</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">Notícias</button>
@@ -1347,6 +1347,7 @@
           <p id="listeningNarrative" class="listening-narrative hidden"></p>
           <div class="listen-links">
             <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
+            <a id="spotifyArtistLink" class="listen-btn spotify-artist-btn" href="#" target="_blank" rel="noopener noreferrer">Abrir artista</a>
             <a id="youtubeLink" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
             <a id="soundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
             <a id="bandcampLink" class="listen-btn bandcamp-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Bandcamp</a>
@@ -2060,6 +2061,27 @@
             </div>
             <span id="socialConnectionBadge" class="social-connection-badge">Local</span>
           </div>
+          <div id="socialSessionState" class="social-session-state" role="status" aria-live="polite">
+            <strong id="socialSessionLabel">Perfil local</strong>
+            <p id="socialSessionHint" class="muted">Sem login online, comentarios e votos da comunidade ficam bloqueados.</p>
+          </div>
+          <div id="socialReadinessGrid" class="social-readiness-grid" aria-label="Estado da sincronização">
+            <div id="socialReadinessLocal" class="social-readiness-item ready">
+              <span>Local</span>
+              <strong id="socialReadinessLocalValue">Pronto</strong>
+              <small id="socialReadinessLocalHint">Salvo neste aparelho</small>
+            </div>
+            <div id="socialReadinessCloud" class="social-readiness-item waiting">
+              <span>Nuvem</span>
+              <strong id="socialReadinessCloudValue">Disponível</strong>
+              <small id="socialReadinessCloudHint">Entre para sincronizar</small>
+            </div>
+            <div id="socialReadinessCommunity" class="social-readiness-item locked">
+              <span>Comunidade</span>
+              <strong id="socialReadinessCommunityValue">Pausada</strong>
+              <small id="socialReadinessCommunityHint">Login libera comentários</small>
+            </div>
+          </div>
 
           <div id="socialAuthPanel" class="social-auth-panel">
             <div class="social-auth-actions">
@@ -2453,6 +2475,6 @@
         syncBannerLayoutMode();
       })();
     </script>
-    <script defer src="app.js?v=20260707eventcards1"></script>
+    <script defer src="app.js?v=20260708taste1"></script>
   </body>
 </html>

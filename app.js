@@ -7615,6 +7615,7 @@ const genreGuideTitle = document.getElementById("genreGuideTitle");
 const genreGuideText = document.getElementById("genreGuideText");
 const listeningNarrative = document.getElementById("listeningNarrative");
 const spotifyLink = document.getElementById("spotifyLink");
+const spotifyArtistLink = document.getElementById("spotifyArtistLink");
 const youtubeLink = document.getElementById("youtubeLink");
 const soundcloudLink = document.getElementById("soundcloudLink");
 const bandcampLink = document.getElementById("bandcampLink");
@@ -7822,6 +7823,19 @@ const profileBackupImportInput = document.getElementById("profileBackupImportInp
 const profileDeleteDataBtn = document.getElementById("profileDeleteDataBtn");
 const socialProfileCard = document.getElementById("socialProfileCard");
 const socialConnectionBadge = document.getElementById("socialConnectionBadge");
+const socialSessionState = document.getElementById("socialSessionState");
+const socialSessionLabel = document.getElementById("socialSessionLabel");
+const socialSessionHint = document.getElementById("socialSessionHint");
+const socialReadinessGrid = document.getElementById("socialReadinessGrid");
+const socialReadinessLocal = document.getElementById("socialReadinessLocal");
+const socialReadinessLocalValue = document.getElementById("socialReadinessLocalValue");
+const socialReadinessLocalHint = document.getElementById("socialReadinessLocalHint");
+const socialReadinessCloud = document.getElementById("socialReadinessCloud");
+const socialReadinessCloudValue = document.getElementById("socialReadinessCloudValue");
+const socialReadinessCloudHint = document.getElementById("socialReadinessCloudHint");
+const socialReadinessCommunity = document.getElementById("socialReadinessCommunity");
+const socialReadinessCommunityValue = document.getElementById("socialReadinessCommunityValue");
+const socialReadinessCommunityHint = document.getElementById("socialReadinessCommunityHint");
 const socialAuthPanel = document.getElementById("socialAuthPanel");
 const socialEmailInput = document.getElementById("socialEmailInput");
 const socialPasswordInput = document.getElementById("socialPasswordInput");
@@ -9181,14 +9195,18 @@ const OPENING_DISCOVERY_RAMP_STYLES = new Set([
   "disco_house",
   "garage_house",
   "tech_house",
+  "progressive_house",
   "organic_house",
   "afro_house",
+  "minimal_deep_tech",
   "dub_techno",
   "deep_techno",
   "minimal_techno",
   "techno",
   "detroit_techno",
   "ambient_techno",
+  "hypnotic_techno",
+  "melodic_techno",
   "downtempo",
   "ambient",
   "chillout",
@@ -9196,12 +9214,266 @@ const OPENING_DISCOVERY_RAMP_STYLES = new Set([
   "darkwave",
   "uk_garage",
   "liquid_dnb",
-  "psybient",
-  "progressive_psy",
-  "goa_trance"
+  "psybient"
 ]);
 
 const OPENING_DISCOVERY_FAST_FAMILIES = new Set(["psytrance", "dnb", "hard_dance"]);
+const DISCOVERY_STARTER_STYLE_SET = new Set([
+  "house",
+  "deep_house",
+  "soulful_house",
+  "disco_house",
+  "garage_house",
+  "jackin_house",
+  "tech_house",
+  "minimal_deep_tech",
+  "progressive_house",
+  "organic_house",
+  "afro_house",
+  "techno",
+  "detroit_techno",
+  "deep_techno",
+  "dub_techno",
+  "minimal_techno",
+  "hypnotic_techno",
+  "ambient_techno",
+  "melodic_techno",
+  "broken_techno",
+  "bleep_techno",
+  "downtempo",
+  "ambient",
+  "chillout",
+  "trip_hop",
+  "uk_garage",
+  "liquid_dnb",
+  "psybient"
+]);
+const DISCOVERY_PSY_ENTRY_STYLE_SET = new Set([
+  "psy_comercial",
+  "psybient",
+  "progressive_psy",
+  "goa_trance",
+  "full_on_morning"
+]);
+const DISCOVERY_ADVANCED_STYLE_SET = new Set([
+  "psytrance",
+  "full_on",
+  "full_on_night",
+  "forest_psy",
+  "dark_psy",
+  "dark_progressive",
+  "freeform",
+  "raw_techno",
+  "hard_techno",
+  "industrial_techno",
+  "schranz",
+  "peak_time_techno",
+  "neurofunk",
+  "jump_up",
+  "breakcore",
+  "riddim",
+  "hardstyle",
+  "rawstyle",
+  "hardcore",
+  "gabber",
+  "frenchcore"
+]);
+const DISCOVERY_EXTREME_STYLE_SET = new Set([
+  "psycore",
+  "hi_tech",
+  "dark_experimental",
+  "slambient",
+  "speedcore"
+]);
+const DISCOVERY_MATURITY_BLOCK_SCORE = -18;
+
+function styleHistoryEntryStyle(entry = {}) {
+  return normalizeDatasetStyle(
+    entry?.style ||
+    entry?.track?.style ||
+    entry?.data?.style ||
+    ""
+  );
+}
+
+function styleTasteSignal(style = "") {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (!styleKey) return { like: 0, dislike: 0, net: 0 };
+  let like = Number(adaptiveModel.likedStyles.get(styleKey) || 0);
+  let dislike = Number(adaptiveModel.dislikedStyles.get(styleKey) || 0);
+  const styleFamily = familyOf(styleKey);
+
+  likedTrackHistory.forEach((entry) => {
+    const entryStyle = styleHistoryEntryStyle(entry);
+    if (!entryStyle) return;
+    if (entryStyle === styleKey) like += 0.85;
+    else if (familyOf(entryStyle) === styleFamily) like += 0.12;
+  });
+  dislikedTrackHistory.forEach((entry) => {
+    const entryStyle = styleHistoryEntryStyle(entry);
+    if (!entryStyle) return;
+    if (entryStyle === styleKey) dislike += 0.95;
+    else if (familyOf(entryStyle) === styleFamily) dislike += 0.1;
+  });
+
+  return {
+    like,
+    dislike,
+    net: like * 1.08 - dislike * 1.22
+  };
+}
+
+function styleFamilyTasteSignal(targetFamily = "") {
+  if (!targetFamily) return 0;
+  let like = 0;
+  let dislike = 0;
+  adaptiveModel.likedStyles.forEach((value, styleKey) => {
+    if (familyOf(styleKey) === targetFamily) like += Math.min(3.2, Number(value) || 0);
+  });
+  adaptiveModel.dislikedStyles.forEach((value, styleKey) => {
+    if (familyOf(styleKey) === targetFamily) dislike += Math.min(3.4, Number(value) || 0);
+  });
+  likedTrackHistory.forEach((entry) => {
+    if (familyOf(styleHistoryEntryStyle(entry)) === targetFamily) like += 0.42;
+  });
+  dislikedTrackHistory.forEach((entry) => {
+    if (familyOf(styleHistoryEntryStyle(entry)) === targetFamily) dislike += 0.48;
+  });
+  return like * 0.72 - dislike * 0.92;
+}
+
+function explicitTasteStyleFromPrefs(prefs = {}) {
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  if (normalizedPrefs.style) return normalizedPrefs.style;
+  const controlStyle = normalizeDatasetStyle(styleEl?.value || "");
+  if (controlStyle && STYLE_BPM_RULES[controlStyle]) return controlStyle;
+  return "";
+}
+
+function explicitTasteStyleMatches(style = "", prefs = {}) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  const explicitStyle = explicitTasteStyleFromPrefs(prefs);
+  return Boolean(styleKey && explicitStyle && styleKey === explicitStyle);
+}
+
+function styleMaturityTier(style = "") {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (!styleKey) return "intermediate";
+  if (DISCOVERY_EXTREME_STYLE_SET.has(styleKey)) return "extreme";
+  if (DISCOVERY_STARTER_STYLE_SET.has(styleKey)) return "starter";
+  if (DISCOVERY_ADVANCED_STYLE_SET.has(styleKey)) return "advanced";
+  if (DISCOVERY_PSY_ENTRY_STYLE_SET.has(styleKey)) return "intermediate";
+  const family = familyOf(styleKey);
+  if (family === "psytrance" || family === "hard_dance") return "advanced";
+  if (family === "dnb" && !["liquid_dnb", "jungle"].includes(styleKey)) return "advanced";
+  return "intermediate";
+}
+
+function extremeTasteSignal() {
+  let signal = 0;
+  DISCOVERY_EXTREME_STYLE_SET.forEach((style) => {
+    const taste = styleTasteSignal(style);
+    signal += Math.max(0, taste.net) + Math.max(0, taste.like - 1) * 0.35;
+  });
+  return signal;
+}
+
+function userHasPsytranceTasteIntent(style = "", prefs = {}) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (explicitTasteStyleMatches(styleKey, prefs)) return true;
+  const signals = Math.max(0, Number(swipeTrainingSignalCount?.()) || 0);
+  const styleSignal = styleTasteSignal(styleKey);
+  const familySignal = styleFamilyTasteSignal("psytrance");
+  return (
+    styleSignal.net >= 1.25 ||
+    familySignal >= 2.1 ||
+    (signals >= 18 && familySignal >= 0.85)
+  );
+}
+
+function userHasExtremeTasteIntent(style = "", prefs = {}) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (explicitTasteStyleMatches(styleKey, prefs)) return true;
+  const signals = Math.max(0, Number(swipeTrainingSignalCount?.()) || 0);
+  const styleSignal = styleTasteSignal(styleKey);
+  const familySignal = styleFamilyTasteSignal("psytrance");
+  const extremeSignal = extremeTasteSignal();
+  return (
+    styleSignal.net >= 1.8 ||
+    extremeSignal >= 2.8 ||
+    (signals >= 32 && familySignal >= 3.2)
+  );
+}
+
+function recommendationMaturityScore(style = "", prefs = {}, track = null) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (!styleKey || !STYLE_BPM_RULES[styleKey]) return 0;
+  if (explicitTasteStyleMatches(styleKey, prefs)) return 0;
+
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  const hasExplicitFilters = Boolean(
+    normalizedPrefs.style ||
+    normalizedPrefs.context ||
+    normalizedPrefs.energy ||
+    normalizedPrefs.bpm ||
+    normalizedPrefs.vocals
+  );
+  const signals = Math.max(0, Number(swipeTrainingSignalCount?.()) || 0);
+  const tier = styleMaturityTier(styleKey);
+  const family = familyOf(styleKey);
+  const center = styleBpmCenter(styleKey);
+  const taste = styleTasteSignal(styleKey);
+  let score = 0;
+
+  if (DISCOVERY_STARTER_STYLE_SET.has(styleKey)) {
+    if (signals < 6) score += 7.4;
+    else if (signals < 14) score += 4.2;
+    else if (signals < 28) score += 1.7;
+  }
+  if (!normalizedPrefs.style && (family === "house" || family === "techno") && tier !== "advanced" && tier !== "extreme") {
+    score += signals < 6 ? 2.3 : signals < 14 ? 1.25 : 0.35;
+  }
+
+  if (signals < 6) {
+    if (tier === "extreme") score -= 42;
+    else if (tier === "advanced") score -= 25;
+    else if (family === "psytrance") score -= 15;
+    else if (!DISCOVERY_STARTER_STYLE_SET.has(styleKey)) score -= 4.8;
+  } else if (signals < 14) {
+    if (tier === "extreme") score -= 31;
+    else if (tier === "advanced" && !userHasPsytranceTasteIntent(styleKey, normalizedPrefs)) score -= 14;
+    else if (family === "psytrance" && !userHasPsytranceTasteIntent(styleKey, normalizedPrefs)) score -= 7.5;
+  } else if (signals < 28) {
+    if (tier === "extreme" && !userHasExtremeTasteIntent(styleKey, normalizedPrefs)) score -= 22;
+    else if (tier === "advanced" && !userHasPsytranceTasteIntent(styleKey, normalizedPrefs)) score -= 5.5;
+  } else if (tier === "extreme" && !userHasExtremeTasteIntent(styleKey, normalizedPrefs)) {
+    score -= 9.5;
+  }
+
+  if (!hasExplicitFilters) {
+    if (center > 172) score -= signals < 18 ? 8 : 2.4;
+    else if (center > 155) score -= signals < 10 ? 3.8 : 0.85;
+    if (String(track?.energy || "") === "extreme") score -= signals < 18 ? 6.5 : 1.8;
+  }
+
+  score += Math.max(-4.5, Math.min(5.5, taste.net * 2.2));
+  if (taste.dislike >= taste.like + 1.1) score -= 8.5;
+  return score;
+}
+
+function shouldDeferStyleForTasteMaturity(style = "", prefs = {}) {
+  const styleKey = normalizeDatasetStyle(style || "");
+  if (!styleKey) return false;
+  if (explicitTasteStyleMatches(styleKey, prefs)) return false;
+  return recommendationMaturityScore(styleKey, prefs) <= DISCOVERY_MATURITY_BLOCK_SCORE;
+}
+
+function trackAllowedByTasteMaturity(track = null, prefs = {}) {
+  if (!track) return false;
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  if (normalizedPrefs.style) return true;
+  return !shouldDeferStyleForTasteMaturity(track.style || "", normalizedPrefs);
+}
 
 function discoveryRampExposureCount() {
   const styleExposureTotal = Array.from(swipeStyleExposureCounts?.values?.() || [])
@@ -9227,8 +9499,12 @@ function openingDiscoveryRampScore(style = "") {
   if (family === "house") score += 1.55;
   if (family === "techno") score += 1.25;
   if (family === "leftfield") score += 0.75;
+  score += recommendationMaturityScore(styleKey, {}, null) * 1.05;
 
   if (exposureTotal < 6) {
+    if (DISCOVERY_STARTER_STYLE_SET.has(styleKey)) score += 5.8;
+    if (styleMaturityTier(styleKey) === "advanced") score -= 8.4;
+    if (styleMaturityTier(styleKey) === "extreme") score -= 18;
     if (center >= 96 && center <= 136) score += 4.8;
     else if (center > 70 && center < 96) score += 2.05;
     else if (center > 136 && center <= 145) score -= 0.8;
@@ -9236,12 +9512,15 @@ function openingDiscoveryRampScore(style = "") {
     else if (center > 170) score -= 7.6;
     if (OPENING_DISCOVERY_FAST_FAMILIES.has(family) && center > 132) score -= 2.4;
   } else if (exposureTotal < 14) {
+    if (styleMaturityTier(styleKey) === "extreme") score -= userHasExtremeTasteIntent(styleKey, {}) ? 3.8 : 12.5;
+    if (styleMaturityTier(styleKey) === "advanced" && !userHasPsytranceTasteIntent(styleKey, {})) score -= 5.6;
     if (center >= 100 && center <= 142) score += 3.1;
     else if (center > 142 && center <= 155) score += 0.35;
     else if (center > 155 && center <= 175) score -= 2.1;
     else if (center > 175) score -= 4.3;
     if (family === "psytrance" && center <= 148) score += 0.9;
   } else if (exposureTotal < 28) {
+    if (styleMaturityTier(styleKey) === "extreme" && !userHasExtremeTasteIntent(styleKey, {})) score -= 6.8;
     if (center >= 90 && center <= 156) score += 1.4;
     else if (center > 156 && center <= 180) score -= 0.45;
     else if (center > 180) score -= 1.7;
@@ -9256,12 +9535,15 @@ function openingDiscoveryRampScore(style = "") {
 function surpriseStyleHopScore(style = "", baseTrack = null) {
   const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
   if (!styleKey || !STYLE_BPM_RULES[styleKey]) return -1000000;
+  const maturityScore = recommendationMaturityScore(styleKey, {}, null);
+  if (shouldDeferStyleForTasteMaturity(styleKey, {}) && maturityScore <= -30) return -1000000;
   const baseStyle = selectableSwipeStyle(baseTrack?.style || "");
   const baseFamily = familyOf(baseStyle);
   const crossFamily = baseFamily && familyOf(styleKey) !== baseFamily;
   const exposureCount = Number(swipeStyleExposureCounts?.get?.(styleKey) || 0);
   return (
     openingDiscoveryRampScore(styleKey) * 0.85 +
+    maturityScore * 1.25 +
     styleDiscoveryReadinessScore(styleKey) * 0.36 +
     stylePreferenceSignal(styleKey) * 0.56 +
     (crossFamily ? 3.6 : 0.7) +
@@ -9276,7 +9558,7 @@ function orderSurpriseTrackPool(pool = [], baseTrack = null) {
   const baseArtistKey = artistMatchKey(baseTrack?.artist || "");
   const baseFamily = familyOf(baseTrack?.style || "");
   return pool
-    .filter(Boolean)
+    .filter((track) => track && trackAllowedByTasteMaturity(track, {}))
     .map((track, index) => {
       const trackKey = recommendationTrackKey(track);
       const artistKey = artistMatchKey(track.artist || "");
@@ -21814,6 +22096,7 @@ const I18N = {
     radioBrowserReady: "{station} pronta. Dê play no player se o navegador bloqueou.",
     radioBrowserStationUnavailable: "Essa estação não está tocável agora. Tente outra.",
     spotifyUnverified: "Link do Spotify não verificado: abrindo busca aproximada para esta faixa.",
+    spotifyArtistSearchHint: "Artista ainda não verificado: abrindo busca no Spotify.",
     youtubeUnverified: "Link do YouTube ainda não verificado para evitar abrir faixa errada.",
     soundcloudUnverified: "Link do SoundCloud ainda não verificado para evitar abrir faixa errada.",
     bandcampUnverified: "Link do Bandcamp abre uma busca segura por artista/faixa.",
@@ -22885,6 +23168,7 @@ const I18N = {
     radioBrowserReady: "{station} is ready. Press play if the browser blocked it.",
     radioBrowserStationUnavailable: "This station is not playable right now. Try another.",
     spotifyUnverified: "Spotify link is not fully verified yet: opening an approximate search for this track.",
+    spotifyArtistSearchHint: "Artist is not fully verified yet: opening Spotify search.",
     youtubeUnverified: "YouTube link not verified yet to avoid opening the wrong track.",
     soundcloudUnverified: "SoundCloud link not verified yet to avoid opening the wrong track.",
     bandcampUnverified: "Bandcamp link opens a safe artist/track search.",
@@ -23953,6 +24237,7 @@ const I18N = {
     radioBrowserReady: "{station} lista. Dale play si el navegador bloqueó el audio.",
     radioBrowserStationUnavailable: "Esta estación no se puede reproducir ahora. Prueba otra.",
     spotifyUnverified: "Enlace de Spotify no verificado: se abrirá una búsqueda aproximada para esta pista.",
+    spotifyArtistSearchHint: "Artista aún no verificado: se abrirá la búsqueda de Spotify.",
     youtubeUnverified: "Enlace de YouTube aún no verificado para evitar abrir la pista equivocada.",
     soundcloudUnverified: "Enlace de SoundCloud aún no verificado para evitar abrir la pista equivocada.",
     bandcampUnverified: "El enlace de Bandcamp abre una búsqueda segura por artista/pista.",
@@ -25165,6 +25450,8 @@ function applyLanguage() {
   setText("#quizRetryBtn", q("retryBtn"));
   setText("#quizCloseBtn", q("closeBtn"));
   setText("#spotifyLink", currentLanguage === "en" ? "Listen on Spotify" : currentLanguage === "es" ? "Escuchar en Spotify" : "Ouvir no Spotify");
+  setText("#spotifyArtistLink", currentLanguage === "en" ? "Open artist" : currentLanguage === "es" ? "Abrir artista" : "Abrir artista");
+  syncSpotifyActionLabels(currentRecommendation || {});
   setText("#youtubeLink", currentLanguage === "en" ? "Listen on YouTube" : currentLanguage === "es" ? "Escuchar en YouTube" : "Ouvir no YouTube");
   setText("#soundcloudLink", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
   setText("#bandcampLink", currentLanguage === "en" ? "Listen on Bandcamp" : currentLanguage === "es" ? "Escuchar en Bandcamp" : "Ouvir no Bandcamp");
@@ -32474,6 +32761,38 @@ function scrollActiveAppTabIntoView(button) {
   });
 }
 
+function scrollActiveAppPanelIntoView(tabName = currentActiveAppTabName()) {
+  const compactLayout =
+    window.matchMedia?.("(max-width: 760px)")?.matches ||
+    window.matchMedia?.("(hover: none)")?.matches;
+  if (!compactLayout) return;
+  const preferredPanel = tabName === "profile" ? document.getElementById("summaryPanel") : null;
+  const preferredPanelIsReady =
+    preferredPanel &&
+    !preferredPanel.hidden &&
+    !preferredPanel.classList.contains("hidden") &&
+    preferredPanel.classList.contains("active");
+  const targetPanel = preferredPanelIsReady
+    ? preferredPanel
+    : Array.from(appTabPanels).find((panel) => {
+        if (!panel || panel.hidden || panel.classList.contains("hidden")) return false;
+        return panel.classList.contains("active") && panelMatchesAppTab(panel, tabName);
+      });
+  if (!targetPanel) return;
+  const navHeight = Math.max(0, Math.round(appTabBar?.getBoundingClientRect?.().height || 0));
+  const offset = navHeight + 12;
+  const panelTop = targetPanel.getBoundingClientRect().top;
+  if (panelTop >= offset && panelTop <= offset + 36) return;
+  const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  window.requestAnimationFrame(() => {
+    const top = Math.max(0, targetPanel.getBoundingClientRect().top + window.scrollY - offset);
+    window.scrollTo({
+      top,
+      behavior: prefersReducedMotion ? "auto" : "smooth"
+    });
+  });
+}
+
 function updateSignatureBarForTab(tabName = currentActiveAppTabName()) {
   syncBetaTesterRibbonVisibility();
   if (!signatureBar) return;
@@ -32502,8 +32821,9 @@ function ensureEventsPanelActive() {
   setActiveAppTab("discover");
 }
 
-function setActiveAppTab(tabName = "discover") {
+function setActiveAppTab(tabName = "discover", options = {}) {
   const safeTab = safeAppTabName(tabName);
+  const focusPanel = Boolean(options.focusPanel);
   let activeTabButton = null;
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
@@ -32514,6 +32834,8 @@ function setActiveAppTab(tabName = "discover") {
       const isActive = !disabledForReview && targetTab === safeTab;
       button.classList.toggle("active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (isActive) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
       if (isActive) activeTabButton = button;
     });
   }
@@ -32524,6 +32846,7 @@ function setActiveAppTab(tabName = "discover") {
     panel.classList.toggle("active", !disabledForReview && panelMatchesAppTab(panel, safeTab));
   });
   scrollActiveAppTabIntoView(activeTabButton);
+  if (focusPanel) scrollActiveAppPanelIntoView(safeTab);
   updateSignatureBarForTab(safeTab);
   if (safeTab === "profile") {
     scheduleMusicalSpiritRefresh({ force: true });
@@ -33330,6 +33653,7 @@ function shouldPrioritizeSwipeStyleCoverage() {
 function swipeCoverageStyleScore(style = "", sourceTrack = null) {
   const styleKey = selectableSwipeStyle(style);
   if (!styleKey) return -1000000;
+  if (shouldDeferStyleForTasteMaturity(styleKey, {})) return -1000000;
   const exposureCount = Number(swipeStyleExposureCounts.get(styleKey) || 0);
   const styleSignal = swipeStyleSignal(styleKey);
   const currentStyle = selectableSwipeStyle(currentRecommendation?.style || "");
@@ -33345,7 +33669,8 @@ function swipeCoverageStyleScore(style = "", sourceTrack = null) {
     Math.min(artists, 28) * 0.072 +
     familyPreferenceSignal(styleKey) * 0.62 +
     styleSignal.net * 0.48 +
-    openingDiscoveryRampScore(styleKey) * 1.2;
+    openingDiscoveryRampScore(styleKey) * 1.2 +
+    recommendationMaturityScore(styleKey, {}, null) * 1.8;
 
   if (!exposureCount) score += 6.4;
   if (crossFamily) score += 2.1;
@@ -33419,6 +33744,7 @@ function dominantSwipeAffinityStyle(sourceTrack = null) {
 function addSwipeCandidate(candidateMap, style = "", base = 0, reason = "") {
   const cleanStyle = selectableSwipeStyle(style);
   if (!cleanStyle) return;
+  if (!explicitSwipeAnchorStyle() && shouldDeferStyleForTasteMaturity(cleanStyle, {})) return;
   const existing = candidateMap.get(cleanStyle) || {
     style: cleanStyle,
     base: 0,
@@ -33532,6 +33858,7 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
 
   return getAllSelectableStyles()
     .filter((style) => style && normalize(style) !== baseStyle)
+    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
     .map((style) => {
       const surpriseScope = {
         style,
@@ -33564,6 +33891,7 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
       const crossFamily = !baseFamily || familyOf(style) !== baseFamily;
       const exposureCount = Number(swipeStyleExposureCounts.get(style) || 0);
       const rampScore = openingDiscoveryRampScore(style);
+      const maturityScore = recommendationMaturityScore(style, {}, null);
       const likeScore = Number(adaptiveModel.likedStyles.get(normalize(style)) || 0);
       const dislikeScore = Number(adaptiveModel.dislikedStyles.get(normalize(style)) || 0);
       const dislikePenalty = Math.max(0, dislikeScore - likeScore - 0.2);
@@ -33571,6 +33899,7 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
       const score =
         adaptiveSignal * 3.6 +
         rampScore * 1.05 +
+        maturityScore * 1.35 +
         Math.min(availablePool.length, 22) * 0.26 +
         Math.min(uniqueArtists, 16) * 0.32 +
         (crossFamily ? 2.8 : 0.55) -
@@ -33636,6 +33965,7 @@ function pickSurpriseTrackFromAnotherGenre(
   const eligible = catalog.filter(
     (track) =>
       isTrackEligibleForRecommendation(track) &&
+      trackAllowedByTasteMaturity(track, surprisePrefs) &&
       styleIsDifferent(track) &&
       !artistSetHasMatch(blockedArtists, track.artist) &&
       trackAllowed(track)
@@ -33645,6 +33975,7 @@ function pickSurpriseTrackFromAnotherGenre(
       track?.style &&
       track?.artist &&
       track?.song &&
+      trackAllowedByTasteMaturity(track, surprisePrefs) &&
       styleIsDifferent(track) &&
       !artistSetHasMatch(blockedArtists, track.artist) &&
       trackAllowed(track)
@@ -33700,6 +34031,7 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
   const visitId = currentCurationVisitId();
   const userSeed = currentCurationUserSeed();
   const styleEntries = styles
+    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
     .map((style) => {
       const pool = catalogTracksForStyle(style).filter((track) => {
         if (!track) return false;
@@ -33721,9 +34053,11 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
       const seedNoise = hashUnit(`${userSeed}::${visitId}::${curationOpenSeed}::opening-style::${style}`) - 0.5;
       const adaptiveSignal = Number(adaptiveModel.likedStyles.get(style) || 0) - Number(adaptiveModel.dislikedStyles.get(style) || 0);
       const rampScore = openingDiscoveryRampScore(style);
+      const maturityScore = recommendationMaturityScore(style, {}, null);
       const score =
         seedNoise * 4.6 +
         rampScore * 2.35 +
+        maturityScore * 1.5 +
         readiness * 1.25 +
         adaptiveSignal * 0.9 +
         Math.min(pool.length, 28) * 0.11 +
@@ -33778,12 +34112,14 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
     return trackHasFastListenRoute(track);
   };
   const fastStyles = getAllSelectableStyles()
     .filter((style) => style && normalize(style) !== baseStyleKey)
+    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
     .sort((a, b) => {
       const aCross = baseFamily && familyOf(a) !== baseFamily ? 0 : 1;
       const bCross = baseFamily && familyOf(b) !== baseFamily ? 0 : 1;
@@ -33873,7 +34209,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   }
 
   const selectableStyles = getAllSelectableStyles().filter(
-    (style) => style && normalize(style) !== baseStyleKey
+    (style) => style && normalize(style) !== baseStyleKey && !shouldDeferStyleForTasteMaturity(style, {})
   );
   const crossGenreStyles = selectableStyles.filter(
     (style) => !baseFamily || familyOf(style) !== baseFamily
@@ -33906,6 +34242,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (baseFamily && familyOf(track.style) === baseFamily) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (strictCrossGenrePool.length) {
@@ -33921,6 +34258,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (strictDifferentStylePool.length) {
@@ -33971,6 +34309,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       if (baseArtistKey && artistMatchKey(candidate.artist) === baseArtistKey) continue;
       if (artistSetHasMatch(blockedArtists, candidate.artist)) continue;
       if (!trackAllowed(candidate)) continue;
+      if (!trackAllowedByTasteMaturity(candidate, { style: "", context: "", energy: "", bpm: "", vocals: "" })) continue;
       triedTrackKeys.add(key);
       if (!hasReliableBpmForTrack(candidate)) continue;
       if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
@@ -33988,6 +34327,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (baseFamily && familyOf(track.style) === baseFamily) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return true;
   });
   let candidate = await validatePool(strictCrossFamilyPool);
@@ -33999,13 +34339,14 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (!differentStyle(track)) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return true;
   });
   candidate = await validatePool(strictDifferentStylePool);
   if (candidate) return candidate;
 
   const selectableStyles = getAllSelectableStyles().filter(
-    (style) => style && normalize(style) !== baseStyleKey
+    (style) => style && normalize(style) !== baseStyleKey && !shouldDeferStyleForTasteMaturity(style, {})
   );
   const hydrationStyles = selectableStyles
     .slice()
@@ -34025,6 +34366,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     const stylePool = catalogTracksForStyle(style).filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" }) &&
         differentStyle(track) &&
         !artistSetHasMatch(blockedArtists, track.artist) &&
         trackAllowed(track)
@@ -34039,6 +34381,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (baseTrackKey && recommendationTrackKey(track) === baseTrackKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (lastChancePool.length) {
@@ -34707,27 +35050,75 @@ function renderGenreGuide(track) {
   genreGuideText.textContent = text;
 }
 
-function buildSpotifyTrackLink(track) {
-  const hasSpotifyHost = (rawUrl = "") => {
-    const value = String(rawUrl || "").trim();
-    if (!value) return false;
-    try {
-      const parsed = new URL(value);
-      const host = normalize(parsed.hostname || "");
-      return host.includes("spotify.com") || host.includes("spotify.link");
-    } catch (_err) {
-      return false;
-    }
-  };
+function hasSpotifyHost(rawUrl = "") {
+  const value = String(rawUrl || "").trim();
+  if (!value) return false;
+  try {
+    const parsed = new URL(value);
+    const host = normalize(parsed.hostname || "");
+    return host.includes("spotify.com") || host.includes("spotify.link");
+  } catch (_err) {
+    return false;
+  }
+}
 
+function spotifyUrlPathIncludes(rawUrl = "", segment = "") {
+  if (!hasSpotifyHost(rawUrl)) return false;
+  try {
+    return String(new URL(rawUrl).pathname || "").toLowerCase().includes(`/${segment}/`);
+  } catch (_err) {
+    return false;
+  }
+}
+
+function spotifySearchUrl(query = "") {
+  const cleanQuery = String(query || "").trim() || "electronic music";
+  return `https://open.spotify.com/search/${encodeURIComponent(cleanQuery)}`;
+}
+
+function buildSpotifyTrackLink(track) {
   const strictQuery = `track:\"${track?.song || ""}\" artist:\"${track?.artist || ""}\"`.trim();
   const artistQuery = String(track?.artist || "").trim();
   const fallbackQuery = strictQuery || artistQuery || "electronic music";
-  const fallbackSearchUrl = `https://open.spotify.com/search/${encodeURIComponent(fallbackQuery)}`;
+  const fallbackSearchUrl = spotifySearchUrl(fallbackQuery);
 
   if (hasSpotifyHost(track?.spotifyTrackUrl)) return String(track.spotifyTrackUrl).trim();
-  if (hasSpotifyHost(track?.spotifyUrl)) return String(track.spotifyUrl).trim();
+  if (hasSpotifyHost(track?.spotifyUrl) && !spotifyUrlPathIncludes(track.spotifyUrl, "artist")) return String(track.spotifyUrl).trim();
   return fallbackSearchUrl;
+}
+
+function buildSpotifyArtistLink(track) {
+  const artist = String(track?.artist || track?.name || "").trim();
+  const candidate = String(track?.spotifyArtistUrl || track?.artistSpotifyUrl || "").trim();
+  const legacyCandidate = String(track?.spotifyUrl || "").trim();
+  if (spotifyUrlPathIncludes(candidate, "artist")) return candidate;
+  if (spotifyUrlPathIncludes(legacyCandidate, "artist")) return legacyCandidate;
+  return artist ? spotifySearchUrl(artist) : "";
+}
+
+function spotifyTrackActionLabel(track) {
+  const href = buildSpotifyTrackLink(track);
+  const directTrack = spotifyUrlPathIncludes(href, "track");
+  if (directTrack && track?.spotifyVerified === true) {
+    return sonicTinyCopy("Abrir faixa no Spotify", "Open track on Spotify", "Abrir pista en Spotify");
+  }
+  if (directTrack) {
+    return sonicTinyCopy("Abrir no Spotify", "Open on Spotify", "Abrir en Spotify");
+  }
+  return sonicTinyCopy("Buscar faixa no Spotify", "Search track on Spotify", "Buscar pista en Spotify");
+}
+
+function spotifyArtistActionLabel(track) {
+  const href = buildSpotifyArtistLink(track);
+  if (!href) return sonicTinyCopy("Abrir artista", "Open artist", "Abrir artista");
+  return spotifyUrlPathIncludes(href, "artist")
+    ? sonicTinyCopy("Abrir artista no Spotify", "Open artist on Spotify", "Abrir artista en Spotify")
+    : sonicTinyCopy("Buscar artista no Spotify", "Search artist on Spotify", "Buscar artista en Spotify");
+}
+
+function syncSpotifyActionLabels(track) {
+  if (spotifyLink) spotifyLink.textContent = spotifyTrackActionLabel(track);
+  if (spotifyArtistLink) spotifyArtistLink.textContent = spotifyArtistActionLabel(track);
 }
 
 function spotifyApiTrackCacheKey(track) {
@@ -34750,10 +35141,13 @@ function applySpotifyApiTrack(track, candidate = {}) {
   const url = String(candidate.spotifyTrackUrl || candidate.spotifyUrl || candidate.trackUrl || "").trim();
   if (!url || !/spotify\.(com|link)/i.test(url)) return false;
   if (!spotifyApiCandidateMatchesTrack(candidate, track)) return false;
+  const artistUrl = String(candidate.spotifyArtistUrl || candidate.artistUrl || "").trim();
   track.spotifyTrackUrl = url;
   track.spotifyUrl = url;
+  if (spotifyUrlPathIncludes(artistUrl, "artist")) track.spotifyArtistUrl = artistUrl;
   track.spotifyVerified = true;
   track.existenceVerified = true;
+  if (candidate.previewUrl) promotePreviewCandidate(track, candidate.previewUrl);
   if (candidate.coverArtUrl && !track.coverArtUrl) track.coverArtUrl = candidate.coverArtUrl;
   if (candidate.album && !track.album) track.album = candidate.album;
   if (candidate.releaseDate && !track.releaseDate) track.releaseDate = candidate.releaseDate;
@@ -34819,6 +35213,13 @@ async function hydrateSpotifyLinkForTrack(track) {
     enabled: Boolean(href && href !== "#"),
     title: ""
   });
+  const artistHref = buildSpotifyArtistLink(track);
+  setListenLinkState(spotifyArtistLink, {
+    href: artistHref,
+    enabled: Boolean(artistHref),
+    title: ""
+  });
+  syncSpotifyActionLabels(track);
   spotifyLink.classList.toggle("unverified-link", false);
 }
 
@@ -35746,7 +36147,8 @@ function fixedPreviewStatusMessage({ audioReady = false, sources = [], fallbackK
 function showFixedPreviewPlayers(track, {
   includeYoutubeSearch = false,
   autoplayYoutube = false,
-  autoplaySoundCloud = false
+  autoplaySoundCloud = false,
+  expandEmbeds = true
 } = {}) {
   const sources = [];
   const hasDirectYoutube = trackHasDirectYouTubeVideo(track);
@@ -35754,7 +36156,7 @@ function showFixedPreviewPlayers(track, {
   const youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
   const soundcloudReady = trackHasDirectSoundCloudTrack(track)
-    ? showSoundCloudPreviewEmbed(track, { autoplay: autoplaySoundCloud })
+    ? (expandEmbeds ? showSoundCloudPreviewEmbed(track, { autoplay: autoplaySoundCloud }) : false)
     : false;
   if (soundcloudReady) {
     sources.push("SoundCloud");
@@ -35762,7 +36164,7 @@ function showFixedPreviewPlayers(track, {
     syncSoundCloudPreviewActionForTrack(track, { expanded: false });
   }
 
-  const bandcampReady = showBandcampPreviewEmbed(track);
+  const bandcampReady = expandEmbeds ? showBandcampPreviewEmbed(track) : false;
   if (bandcampReady) {
     sources.push("Bandcamp");
   } else {
@@ -35770,7 +36172,7 @@ function showFixedPreviewPlayers(track, {
   }
 
   const shouldShowYoutube = hasDirectYoutube;
-  const youtubeReady = shouldShowYoutube
+  const youtubeReady = shouldShowYoutube && expandEmbeds
     ? showYouTubePreviewEmbed(track, { autoplay: autoplayYoutube, attempt: youtubeAttempt })
     : false;
   if (youtubeReady) sources.push("YouTube");
@@ -44279,6 +44681,11 @@ function curationSelectionWeight(track, prefs = {}, index = 0) {
   if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) weight *= 0.34;
   if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) weight *= 1.55;
   if (trackReleaseFreshnessScore(track) > 0) weight *= 1.12;
+  if (!prefs?.style) {
+    const maturityScore = recommendationMaturityScore(track.style || "", prefs, track);
+    if (maturityScore < 0) weight *= Math.max(0.04, 1 + maturityScore / 36);
+    else if (maturityScore > 0) weight *= Math.min(1.32, 1 + maturityScore / 30);
+  }
   return Math.max(0.08, weight / (1 + Math.max(0, index) * 0.012));
 }
 
@@ -44447,10 +44854,12 @@ function styleDiscoveryReadinessScore(style = "") {
 function recommendationDiscoveryDiversityScore(track, prefs = {}) {
   prefs = normalizeRecommendationPrefs(prefs);
   if (!track?.style || prefs.style) return 0;
+  if (shouldDeferStyleForTasteMaturity(track.style, prefs)) return -18;
   let score = styleDiscoveryReadinessScore(track.style) * 0.62;
   const currentStyle = selectableSwipeStyle(currentRecommendation?.style || "");
   const trackStyle = selectableSwipeStyle(track.style || "");
   if (trackStyle) score += openingDiscoveryRampScore(trackStyle) * 1.15;
+  if (trackStyle) score += recommendationMaturityScore(trackStyle, prefs, track) * 0.85;
   if (currentStyle && trackStyle) {
     if (trackStyle === currentStyle) score -= 1.8;
     else if (familyOf(trackStyle) !== familyOf(currentStyle)) score += 1.35;
@@ -44478,6 +44887,7 @@ function findPrecisionReplacement(
   const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   const pool = basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
     if (prefs.bpm) {
       const bpmOk = trackMatchesBpmPreference(track, prefs.bpm);
       if (!bpmOk) return false;
@@ -44567,6 +44977,9 @@ function recommendationScore(track, prefs) {
     if (track.style !== prefs.style) return -1000000;
     if (track.style === prefs.style) score += 3 * weights.style;
   }
+  const maturityScore = recommendationMaturityScore(track.style || "", prefs, track);
+  if (!prefs.style && maturityScore <= -32) return -1000000;
+  score += maturityScore;
   const contexts = Array.isArray(track.context) ? track.context : [];
   if (prefs.context) {
     if (contexts.includes(prefs.context)) score += 2.25 * weights.context;
@@ -44710,6 +45123,7 @@ function styleScopedEligibleTracks(prefs = {}) {
   const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   return basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
@@ -45417,9 +45831,10 @@ function compactDjLabels(labels = []) {
 }
 
 function djSeedIsSearchFallback(seed = {}) {
-  const platform = normalize(seed.platform || "");
-  const title = normalize(seed.setTitle || "");
-  const setUrl = String(seed.setUrl || "");
+  const safeSeed = seed || {};
+  const platform = normalize(safeSeed.platform || "");
+  const title = normalize(safeSeed.setTitle || "");
+  const setUrl = String(safeSeed.setUrl || "");
   return platform === "busca"
     || title.startsWith("busca de")
     || /youtube\.com\/results/i.test(setUrl)
@@ -45427,35 +45842,38 @@ function djSeedIsSearchFallback(seed = {}) {
 }
 
 function djSeedMatchesLane(seed = {}, lane = "") {
+  const safeSeed = seed || {};
   if (!lane) return true;
-  if (lane === "psy_festival_lineups") return DJ_PSY_SET_LANES.has(seed.lane);
-  return seed.lane === lane;
+  if (lane === "psy_festival_lineups") return DJ_PSY_SET_LANES.has(safeSeed.lane);
+  return safeSeed.lane === lane;
 }
 
 function djMetaLine(seed = {}) {
-  const isSearchFallback = djSeedIsSearchFallback(seed);
-  const lane = djLaneLabel(seed.lane);
-  const scene = isSearchFallback ? lane : seed.scene || seed.eventSignal || lane;
-  const platform = isSearchFallback ? "link externo" : seed.platform;
-  const labels = compactDjLabels([seed.subgenre || lane, platform, scene]);
+  const safeSeed = seed || {};
+  const isSearchFallback = djSeedIsSearchFallback(safeSeed);
+  const lane = djLaneLabel(safeSeed.lane);
+  const scene = isSearchFallback ? lane : safeSeed.scene || safeSeed.eventSignal || lane;
+  const platform = isSearchFallback ? "link externo" : safeSeed.platform;
+  const labels = compactDjLabels([safeSeed.subgenre || lane, platform, scene]);
   return labels.slice(0, 3).join(" • ") || "Set público selecionado por curadoria.";
 }
 
 function djContextItems(seed = {}) {
-  const roleLabel = seed.roleKind === "live"
+  const safeSeed = seed || {};
+  const roleLabel = safeSeed.roleKind === "live"
     ? "Live act"
-    : seed.roleKind === "b2b"
+    : safeSeed.roleKind === "b2b"
       ? "B2B"
-      : djSeedIsSearchFallback(seed)
+      : djSeedIsSearchFallback(safeSeed)
         ? "Busca curada"
         : "Set direto";
-  const lane = djLaneLabel(seed.lane);
-  const platform = djSeedIsSearchFallback(seed) ? "Link externo" : seed.platform;
+  const lane = djLaneLabel(safeSeed.lane);
+  const platform = djSeedIsSearchFallback(safeSeed) ? "Link externo" : safeSeed.platform;
   return [
-    { label: "Origem", value: seed.country },
-    { label: "Cena", value: seed.scene || lane },
-    { label: "Som", value: seed.subgenre || seed.style || lane },
-    { label: "Set", value: seed.setTitle },
+    { label: "Origem", value: safeSeed.country },
+    { label: "Cena", value: safeSeed.scene || lane },
+    { label: "Som", value: safeSeed.subgenre || safeSeed.style || lane },
+    { label: "Set", value: safeSeed.setTitle },
     { label: "Plataforma", value: platform },
     { label: "Entrada", value: roleLabel }
   ].filter((item) => String(item.value || "").trim());
@@ -46078,11 +46496,17 @@ function pickRecommendation(
   excludedTrackTitles = new Set()
 ) {
   const baseCatalog = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
-  const eligibleCatalog = baseCatalog.filter((track) => {
+  let eligibleCatalog = baseCatalog.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     return true;
   });
+  if (!prefs.style && eligibleCatalog.length) {
+    const maturityScopedCatalog = eligibleCatalog.filter((track) => trackAllowedByTasteMaturity(track, prefs));
+    if (maturityScopedCatalog.length >= Math.min(6, eligibleCatalog.length)) {
+      eligibleCatalog = maturityScopedCatalog;
+    }
+  }
   const recentHistory = prefs.style ? new Set(getRecentTrackHistory(prefs.style)) : new Set();
   const servedCycle = prefs.style ? new Set(getServedCycle(prefs.style)) : new Set();
   const servedArtistCycle = prefs.style ? new Set(getServedArtistCycle(prefs.style)) : new Set();
@@ -47201,6 +47625,13 @@ function renderRecommendation(track, prefs) {
   if (spotifyLink) {
     spotifyLink.classList.toggle("unverified-link", track.spotifyVerified === false && spotifyEnabled);
   }
+  const spotifyArtistHref = buildSpotifyArtistLink(track);
+  setListenLinkState(spotifyArtistLink, {
+    href: spotifyArtistHref,
+    enabled: Boolean(spotifyArtistHref),
+    title: spotifyUrlPathIncludes(spotifyArtistHref, "artist") ? "" : t("spotifyArtistSearchHint")
+  });
+  syncSpotifyActionLabels(track);
   void hydrateSpotifyLinkForTrack(track);
   const youtubeHref = buildYouTubeTrackLink(track);
   const youtubeEnabled = youtubeLinkTrusted(track);
@@ -47373,7 +47804,8 @@ async function renderPreview(track, options = {}) {
     const fixedPlayers = showFixedPreviewPlayers(track, {
       includeYoutubeSearch: false,
       autoplayYoutube: false,
-      autoplaySoundCloud: false
+      autoplaySoundCloud: false,
+      expandEmbeds: false
     });
     previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
 
@@ -47598,7 +48030,17 @@ function renderDiscovery(discovery) {
   }
   const discoveryQuery = `${discovery.name} ${styleLabelByValue(discovery.style)}`.trim();
   if (discoverySpotifyLink) {
-    discoverySpotifyLink.href = discovery.spotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(discoveryQuery)}`;
+    const href = discovery.spotifyUrl || spotifySearchUrl(discoveryQuery);
+    setListenLinkState(discoverySpotifyLink, {
+      href,
+      enabled: Boolean(href),
+      title: spotifyUrlPathIncludes(href, "artist") ? "" : t("spotifyArtistSearchHint")
+    });
+    discoverySpotifyLink.textContent = spotifyArtistActionLabel({
+      artist: discovery.name,
+      name: discovery.name,
+      spotifyArtistUrl: spotifyUrlPathIncludes(href, "artist") ? href : ""
+    });
   }
   if (discoveryYoutubeLink) {
     discoveryYoutubeLink.href = discovery.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(discoveryQuery)}`;
@@ -50125,7 +50567,9 @@ async function socialHandleAuthRedirect() {
     .filter(Boolean)
     .join(" ");
   if (redirectError) {
-    socialSetStatus(socialFriendlyAuthError(redirectError), "error");
+    const message = socialFriendlyAuthError(redirectError);
+    socialSetStatus(message, "error");
+    setAuthFeedback(message, true);
     socialClearAuthHash();
     return true;
   }
@@ -50144,7 +50588,9 @@ async function socialHandleAuthRedirect() {
       await continueWithOnlineSocialSession({ sync: false, showGuide: false });
     } catch (error) {
       console.warn("Could not exchange social auth code", error);
-      socialSetStatus(`Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`, "error");
+      const message = `Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
+      socialSetStatus(message, "error");
+      setAuthFeedback(message, true);
     } finally {
       clearSocialOAuthPkce();
       resetSocialOAuthNavigationState({ clearUrl: true });
@@ -50178,7 +50624,9 @@ async function socialHandleAuthRedirect() {
     await continueWithOnlineSocialSession({ sync: false, showGuide: false });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
-    socialSetStatus(`Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`, "error");
+    const message = `Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
+    socialSetStatus(message, "error");
+    setAuthFeedback(message, true);
   } finally {
     clearSocialOAuthPkce();
     resetSocialOAuthNavigationState({ clearUrl: true });
@@ -50989,10 +51437,13 @@ function renderSocialCommentsPanel() {
     socialCommentsSubmitBtn.textContent = t("socialCommentsSubmit");
     socialCommentsSubmitBtn.disabled = socialCommentsState.loading || !socialCommentsState.enabled;
   }
-  if (socialCommentsLoginText) socialCommentsLoginText.textContent = t("socialCommentsLoginText");
-  if (socialCommentsLoginBtn) socialCommentsLoginBtn.textContent = t("socialCommentsLoginBtn");
-
   const signed = socialCommentsSignedIn();
+  if (socialCommentsLoginText) {
+    socialCommentsLoginText.textContent = signed
+      ? t("socialCommentsLoginText")
+      : socialSessionUiCopy({ configured: socialConfigReady(), signed }).hint;
+  }
+  if (socialCommentsLoginBtn) socialCommentsLoginBtn.textContent = t("socialCommentsLoginBtn");
   if (socialCommentsComposer) socialCommentsComposer.classList.toggle("hidden", !signed || !socialCommentsState.enabled);
   if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.toggle("hidden", signed || !socialCommentsState.enabled);
   if (socialCommentsStatus) socialCommentsStatus.textContent = socialCommentsStatusText(targetType);
@@ -51376,7 +51827,12 @@ function updateCommunityControlsText() {
       topic: communityTopicLabel(communityState.topic)
     });
   }
-  if (communityLoginText) communityLoginText.textContent = t("communityLoginText");
+  if (communityLoginText) {
+    const signed = communitySignedIn();
+    communityLoginText.textContent = signed
+      ? t("communityLoginText")
+      : socialSessionUiCopy({ configured: socialConfigReady(), signed }).hint;
+  }
   if (communityLoginBtn) communityLoginBtn.textContent = t("communityLoginBtn");
   if (communityPostSubmitBtn) communityPostSubmitBtn.textContent = t("communitySubmit");
   communityTopicTabs?.querySelectorAll("[data-community-filter]").forEach((button) => {
@@ -52001,6 +52457,107 @@ async function deleteCommunityComment(postId = "", commentId = "") {
   }
 }
 
+function socialSessionUiCopy({ configured = socialConfigReady(), signed = Boolean(socialState.session?.access_token) } = {}) {
+  const localSession = normalizeUserSession(currentAuthUser);
+  if (signed) {
+    const provider = authProviderDisplayName(onlineSocialProvider());
+    const user = socialSuggestedDisplayName() || socialSessionEmail() || provider;
+    return {
+      label: sonicTinyCopy(`Conta online: ${provider}`, `Online account: ${provider}`, `Cuenta online: ${provider}`),
+      hint: sonicTinyCopy(
+        `${user} pode comentar, editar os próprios comentários e sincronizar curtidas.`,
+        `${user} can comment, edit their own comments, and sync likes.`,
+        `${user} puede comentar, editar sus propios comentarios y sincronizar likes.`
+      ),
+      tone: "online"
+    };
+  }
+
+  const userLabel = localSession.username || localSession.email || "";
+  const localLabel = isEphemeralSession(localSession)
+    ? sonicTinyCopy("Sem login: convidado", "No login: guest", "Sin login: invitado")
+    : userLabel
+      ? sonicTinyCopy(`Perfil local: ${userLabel}`, `Local profile: ${userLabel}`, `Perfil local: ${userLabel}`)
+      : sonicTinyCopy("Perfil local neste aparelho", "Local profile on this device", "Perfil local en este dispositivo");
+  const hint = configured
+    ? sonicTinyCopy(
+      "Suas descobertas ficam neste aparelho. Para comentar, editar comentários e reagir na comunidade, entre com Google ou Apple.",
+      "Your discoveries stay on this device. To comment, edit comments, and react in the community, sign in with Google or Apple.",
+      "Tus descubrimientos quedan en este dispositivo. Para comentar, editar comentarios y reaccionar en la comunidad, entra con Google o Apple."
+    )
+    : sonicTinyCopy(
+      "Login online indisponível neste ambiente. Você ainda pode ouvir e salvar no perfil local.",
+      "Online login is unavailable here. You can still listen and save to the local profile.",
+      "Login online no disponible aquí. Aún puedes escuchar y guardar en el perfil local."
+    );
+  return {
+    label: localLabel,
+    hint,
+    tone: configured ? "local" : "offline"
+  };
+}
+
+function setSocialReadinessItem(item, valueElement, hintElement, state = "waiting", value = "", hint = "") {
+  if (!item) return;
+  item.classList.toggle("ready", state === "ready");
+  item.classList.toggle("waiting", state === "waiting");
+  item.classList.toggle("locked", state === "locked");
+  if (valueElement) valueElement.textContent = value;
+  if (hintElement) hintElement.textContent = hint;
+}
+
+function updateSocialReadiness({ configured = socialConfigReady(), signed = Boolean(socialState.session?.access_token) } = {}) {
+  if (!socialReadinessGrid) return;
+  setSocialReadinessItem(
+    socialReadinessLocal,
+    socialReadinessLocalValue,
+    socialReadinessLocalHint,
+    "ready",
+    sonicTinyCopy("Pronto", "Ready", "Listo"),
+    sonicTinyCopy("Salvo neste aparelho", "Saved on this device", "Guardado en este dispositivo")
+  );
+  setSocialReadinessItem(
+    socialReadinessCloud,
+    socialReadinessCloudValue,
+    socialReadinessCloudHint,
+    signed ? "ready" : configured ? "waiting" : "locked",
+    signed
+      ? sonicTinyCopy("Ativa", "Active", "Activa")
+      : configured
+        ? sonicTinyCopy("Disponível", "Available", "Disponible")
+        : sonicTinyCopy("Pausada", "Paused", "Pausada"),
+    signed
+      ? sonicTinyCopy("Curtidas prontas para sincronizar", "Likes ready to sync", "Likes listos para sincronizar")
+      : configured
+        ? sonicTinyCopy("Entre para sincronizar", "Sign in to sync", "Entra para sincronizar")
+        : sonicTinyCopy("Configuração ausente", "Configuration missing", "Configuración ausente")
+  );
+  setSocialReadinessItem(
+    socialReadinessCommunity,
+    socialReadinessCommunityValue,
+    socialReadinessCommunityHint,
+    signed ? "ready" : "locked",
+    signed
+      ? sonicTinyCopy("Liberada", "Open", "Libre")
+      : sonicTinyCopy("Pausada", "Paused", "Pausada"),
+    signed
+      ? sonicTinyCopy("Comentários e votos ativos", "Comments and votes active", "Comentarios y votos activos")
+      : sonicTinyCopy("Login libera comentários", "Sign in enables comments", "Login habilita comentarios")
+  );
+}
+
+function renderSocialSessionState({ configured = socialConfigReady(), signed = Boolean(socialState.session?.access_token) } = {}) {
+  const copy = socialSessionUiCopy({ configured, signed });
+  if (socialSessionState) {
+    socialSessionState.classList.toggle("online", copy.tone === "online");
+    socialSessionState.classList.toggle("offline", copy.tone === "offline");
+  }
+  if (socialSessionLabel) socialSessionLabel.textContent = copy.label;
+  if (socialSessionHint) socialSessionHint.textContent = copy.hint;
+  updateSocialReadiness({ configured, signed });
+  return copy;
+}
+
 function renderSocialUi(options = {}) {
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
@@ -52013,9 +52570,10 @@ function renderSocialUi(options = {}) {
   const configured = socialConfigReady();
   const signed = Boolean(socialState.session?.access_token);
   if (socialConnectionBadge) {
-    socialConnectionBadge.textContent = signed ? "online" : configured ? "pronto" : "offline";
+    socialConnectionBadge.textContent = signed ? "online" : configured ? "local" : "offline";
     socialConnectionBadge.classList.toggle("connected", signed);
   }
+  const sessionCopy = renderSocialSessionState({ configured, signed });
   if (socialAuthPanel) socialAuthPanel.classList.remove("hidden");
   if (socialSignedPanel) socialSignedPanel.classList.toggle("hidden", !signed);
   [socialEmailInput, socialPasswordInput, socialUsernameInput, socialDisplayNameInput].forEach((input) => {
@@ -52065,7 +52623,7 @@ function renderSocialUi(options = {}) {
   renderCommunityPanel();
   if (!options.preserveStatus) {
     if (!configured) socialSetStatus("Login online indisponível neste ambiente. Seu perfil local continua funcionando.", "error");
-    else if (!signed) socialSetStatus("Entre com uma conta online disponível para sincronizar curtidas e participar da comunidade.");
+    else if (!signed) socialSetStatus(sessionCopy.hint);
     else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
   }
 }
@@ -52881,6 +53439,7 @@ async function generateRecommendationFromPrefs(
       : catalog.filter(
           (track) =>
             isTrackEligibleForRecommendation(track) &&
+            trackAllowedByTasteMaturity(track, prefs) &&
             (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
             !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
             !excludedTrackKeys.has(recommendationTrackKey(track)) &&
@@ -52908,6 +53467,7 @@ async function generateRecommendationFromPrefs(
     const stylePool = stylePoolBase.filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackAllowedByTasteMaturity(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         trackAllowedInSession(track)
     );
@@ -52933,6 +53493,7 @@ async function generateRecommendationFromPrefs(
       const fallbackPool = stylePool.filter(
         (track) =>
           normalize(`${track.artist}::${track.song}`) !== normalizedAvoidTrack &&
+          trackAllowedByTasteMaturity(track, prefs) &&
           !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
           trackAllowedInSession(track)
       );
@@ -55719,7 +56280,7 @@ bind(appTabBar, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
   if (!target) return;
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
-  setActiveAppTab(nextTab);
+  setActiveAppTab(nextTab, { focusPanel: true });
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));

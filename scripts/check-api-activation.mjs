@@ -2,6 +2,7 @@
 
 const baseUrl = String(process.env.SONIC_API_AUDIT_BASE_URL || process.argv[2] || "https://sonicsearch.app")
   .replace(/\/+$/, "");
+const origin = String(process.env.SONIC_API_AUDIT_ORIGIN || "capacitor://localhost").trim();
 
 const requiredProviders = [
   "trackMetadata",
@@ -56,7 +57,7 @@ const routeChecks = [
     name: "artistProfile",
     path: "/api/artist-profile",
     method: "POST",
-    body: { artist: "Avalon", language: "en" },
+    body: { artist: "Daft Punk", language: "en" },
     ok(payload) {
       return Boolean(payload?.enabled && payload?.profile);
     }
@@ -101,9 +102,13 @@ function providerStatus(item = {}) {
 }
 
 async function fetchJson(path, options = {}) {
+  const headers = {
+    ...(origin ? { Origin: origin } : {}),
+    ...(options.body ? { "Content-Type": "application/json" } : {})
+  };
   const response = await fetch(`${baseUrl}${path}`, {
     method: options.method || "GET",
-    headers: options.body ? { "Content-Type": "application/json" } : undefined,
+    headers,
     body: options.body ? JSON.stringify(options.body) : undefined
   });
   const payload = await response.json().catch(() => ({}));
@@ -113,6 +118,7 @@ async function fetchJson(path, options = {}) {
 let failed = 0;
 
 console.log(`API activation audit: ${baseUrl}`);
+if (origin) console.log(`Origin: ${origin}`);
 
 const { response: healthResponse, payload: health } = await fetchJson("/api/integration-health");
 if (!healthResponse.ok || !health?.providers) {

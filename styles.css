@@ -3549,6 +3549,46 @@ button:disabled {
   display: none !important;
 }
 
+.social-session-state {
+  margin: 0.7rem 0 0;
+  display: grid;
+  gap: 0.28rem;
+  border: 1px solid rgba(124, 221, 255, 0.28);
+  border-left-color: rgba(255, 208, 125, 0.68);
+  border-radius: 8px;
+  padding: 0.72rem 0.78rem;
+  background:
+    linear-gradient(135deg, rgba(255, 208, 125, 0.1), rgba(126, 205, 255, 0.08)),
+    rgba(5, 13, 29, 0.62);
+}
+
+.social-session-state strong {
+  color: #fff7dc;
+  font-family: "Syne", sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.12;
+}
+
+.social-session-state p {
+  margin: 0;
+  line-height: 1.42;
+}
+
+.social-session-state.online {
+  border-left-color: rgba(105, 255, 196, 0.78);
+  background:
+    linear-gradient(135deg, rgba(105, 255, 196, 0.12), rgba(126, 205, 255, 0.08)),
+    rgba(5, 13, 29, 0.62);
+}
+
+.social-session-state.online strong {
+  color: #d8ffef;
+}
+
+.social-session-state.offline {
+  border-left-color: rgba(255, 117, 143, 0.66);
+}
+
 .quick-surprise-panel {
   margin-top: 0.65rem;
   border: 1px solid rgba(122, 211, 255, 0.36);
@@ -5545,6 +5585,15 @@ input[type="range"] {
   border-color: #1db954;
   color: #02160a;
   font-weight: 700;
+}
+
+.spotify-artist-btn {
+  border-color: rgba(30, 215, 96, 0.58);
+  color: #d9ffe7;
+  background:
+    linear-gradient(180deg, rgba(29, 185, 84, 0.18), rgba(29, 185, 84, 0.05)),
+    rgba(6, 16, 28, 0.72);
+  font-weight: 800;
 }
 
 .youtube-btn {
@@ -17445,5 +17494,175 @@ html.sonic-ios-app .voice-effects-card {
     min-width: clamp(5.7rem, 28vw, 7.3rem);
     min-height: 40px;
     padding: 0.48rem 0.78rem;
+  }
+}
+
+/* UX polish: clearer account state and sturdier compact navigation. */
+.hidden {
+  display: none !important;
+}
+
+#summaryPanel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+#summaryPanel .summary-panel-head {
+  order: 0;
+}
+
+#apiHealthPanel {
+  order: 1;
+}
+
+#socialProfileCard {
+  order: 2;
+  margin-top: 0;
+}
+
+#summaryPanel .profile-library-section {
+  order: 3;
+  margin-top: 0;
+}
+
+#profileBackupCard {
+  order: 4;
+  margin-top: 0;
+}
+
+#summaryPanel .profile-stats-grid {
+  order: 5;
+  margin-top: 0;
+}
+
+.app-tab-bar {
+  position: sticky;
+  top: max(0.55rem, env(safe-area-inset-top));
+  z-index: 8;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(12, 22, 46, 0.92), rgba(5, 12, 28, 0.88)),
+    rgba(5, 12, 28, 0.88);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 12px 30px rgba(0, 6, 18, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.app-tab-btn {
+  position: relative;
+  border-radius: 6px;
+}
+
+.app-tab-btn[aria-current="page"] {
+  color: #06152a;
+  background: linear-gradient(135deg, #80ffdc, #82cfff);
+}
+
+.app-tab-btn[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(6, 21, 42, 0.44);
+}
+
+.social-profile-card {
+  border-radius: 8px;
+}
+
+.social-profile-head {
+  align-items: start;
+}
+
+.social-readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.58rem;
+  margin-top: 0.72rem;
+}
+
+.social-readiness-item {
+  min-height: 86px;
+  display: grid;
+  align-content: start;
+  gap: 0.28rem;
+  padding: 0.68rem;
+  border: 1px solid rgba(126, 205, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(8, 17, 39, 0.78), rgba(3, 9, 24, 0.82)),
+    rgba(4, 10, 24, 0.74);
+}
+
+.social-readiness-item span,
+.social-readiness-item small {
+  color: rgba(205, 224, 248, 0.72);
+  font-size: 0.74rem;
+  line-height: 1.25;
+}
+
+.social-readiness-item span {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.social-readiness-item strong {
+  color: #f4fbff;
+  font-family: "Syne", sans-serif;
+  font-size: 1rem;
+  line-height: 1.08;
+}
+
+.social-readiness-item.ready {
+  border-color: rgba(110, 255, 220, 0.38);
+  background:
+    linear-gradient(145deg, rgba(23, 70, 60, 0.28), rgba(4, 12, 26, 0.84)),
+    rgba(4, 10, 24, 0.74);
+}
+
+.social-readiness-item.ready strong {
+  color: #cffff4;
+}
+
+.social-readiness-item.waiting {
+  border-color: rgba(255, 208, 125, 0.34);
+}
+
+.social-readiness-item.waiting strong {
+  color: #fff0c7;
+}
+
+.social-readiness-item.locked {
+  border-color: rgba(255, 117, 143, 0.28);
+  opacity: 0.86;
+}
+
+.social-readiness-item.locked strong {
+  color: #ffd5de;
+}
+
+@media (max-width: 760px) {
+  .social-readiness-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-bar {
+    border-radius: 8px;
+    margin-inline: -0.1rem;
+  }
+
+  html:not([data-sonic-store-screenshot="true"]) .app-tab-btn[aria-current="page"] {
+    flex-basis: clamp(6.9rem, 36vw, 9.1rem);
+  }
+
+  #summaryPanel {
+    gap: 0.72rem;
   }
 }

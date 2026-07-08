@@ -16,6 +16,7 @@ const roadmapJsonPath = path.join(reportsDir, "catalog-enrichment-roadmap-latest
 const strictMode = process.argv.includes("--strict");
 
 const BLOCKS = [
+  "EXTERNAL_DATASET_PRIORITY_FILES",
   "EXTERNAL_DATASET_FILES",
   "STYLE_SEARCH_TERMS",
   "SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS",
