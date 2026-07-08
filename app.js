@@ -8471,6 +8471,7 @@ const PROFILE_ARTIST_RECOMMENDATION_MIN_SIGNALS = 8;
 const PROFILE_ARTIST_RECOMMENDATION_LIMIT = 6;
 const SOCIAL_SESSION_STORAGE_KEY = "neonpulse:socialSession:v1";
 const SOCIAL_OAUTH_PKCE_STORAGE_KEY = "neonpulse:socialOauthPkce:v1";
+const SOCIAL_OAUTH_PKCE_COOKIE_NAME = "neonpulse_social_oauth_pkce_v1";
 const SOCIAL_CONFIG_ENDPOINT = "/api/social-config";
 const SOCIAL_OAUTH_URL_ENDPOINT = "/api/social-oauth-url";
 const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 120000;
@@ -26835,30 +26836,92 @@ async function createSocialCodeChallenge(verifier = "") {
   };
 }
 
-function storeSocialOAuthPkce(record = {}) {
+function socialOAuthPkcePayload(record = {}) {
+  return {
+    provider: record.provider === "apple" ? "apple" : "google",
+    codeVerifier: String(record.codeVerifier || ""),
+    redirectTo: String(record.redirectTo || ""),
+    state: String(record.state || ""),
+    createdAt: Number(record.createdAt || Date.now()) || Date.now()
+  };
+}
+
+function writeSocialOAuthPkceCookie(payload = null) {
+  if (typeof document === "undefined") return;
   try {
-    localStorage.setItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY, JSON.stringify({
-      provider: record.provider === "apple" ? "apple" : "google",
-      codeVerifier: String(record.codeVerifier || ""),
-      redirectTo: String(record.redirectTo || ""),
-      state: String(record.state || ""),
-      createdAt: Date.now()
-    }));
+    if (!payload) {
+      document.cookie = `${SOCIAL_OAUTH_PKCE_COOKIE_NAME}=; Max-Age=0; Path=/; SameSite=Lax; Secure`;
+      return;
+    }
+    document.cookie = `${SOCIAL_OAUTH_PKCE_COOKIE_NAME}=${encodeURIComponent(JSON.stringify(payload))}; Max-Age=600; Path=/; SameSite=Lax; Secure`;
   } catch (error) {
-    console.warn("Could not store social OAuth PKCE verifier", error);
+    console.warn("Could not update social OAuth PKCE cookie", error);
   }
 }
 
-function loadSocialOAuthPkce() {
+function readSocialOAuthPkceCookie() {
+  if (typeof document === "undefined") return null;
   try {
-    const parsed = JSON.parse(localStorage.getItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY) || "{}");
-    const createdAt = Number(parsed.createdAt || 0) || 0;
-    if (!parsed.codeVerifier || Date.now() - createdAt > 10 * 60 * 1000) return null;
-    return parsed;
+    const prefix = `${SOCIAL_OAUTH_PKCE_COOKIE_NAME}=`;
+    const cookie = String(document.cookie || "")
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith(prefix));
+    if (!cookie) return null;
+    return JSON.parse(decodeURIComponent(cookie.slice(prefix.length)));
   } catch (error) {
-    console.warn("Could not read social OAuth PKCE verifier", error);
+    console.warn("Could not read social OAuth PKCE cookie", error);
     return null;
   }
+}
+
+function validSocialOAuthPkcePayload(value = null) {
+  if (!value || typeof value !== "object") return null;
+  const createdAt = Number(value.createdAt || 0) || 0;
+  const codeVerifier = String(value.codeVerifier || "").trim();
+  if (!codeVerifier || Date.now() - createdAt > 10 * 60 * 1000) return null;
+  return {
+    provider: value.provider === "apple" ? "apple" : "google",
+    codeVerifier,
+    redirectTo: String(value.redirectTo || ""),
+    state: String(value.state || ""),
+    createdAt
+  };
+}
+
+function storeSocialOAuthPkce(record = {}) {
+  const payload = socialOAuthPkcePayload(record);
+  try {
+    localStorage.setItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY, JSON.stringify(payload));
+  } catch (error) {
+    console.warn("Could not store social OAuth PKCE verifier", error);
+  }
+  try {
+    sessionStorage.setItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY, JSON.stringify(payload));
+  } catch (error) {
+    console.warn("Could not store social OAuth PKCE verifier in session storage", error);
+  }
+  writeSocialOAuthPkceCookie(payload);
+}
+
+function loadSocialOAuthPkce() {
+  const sources = [
+    () => localStorage.getItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY),
+    () => sessionStorage.getItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY),
+    () => readSocialOAuthPkceCookie()
+  ];
+  for (const readSource of sources) {
+    try {
+      const raw = readSource();
+      const parsed = typeof raw === "string" ? JSON.parse(raw || "{}") : raw;
+      const payload = validSocialOAuthPkcePayload(parsed);
+      if (payload) return payload;
+    } catch (error) {
+      console.warn("Could not read social OAuth PKCE verifier", error);
+    }
+  }
+  clearSocialOAuthPkce();
+  return null;
 }
 
 function clearSocialOAuthPkce() {
@@ -26867,6 +26930,12 @@ function clearSocialOAuthPkce() {
   } catch (_error) {
     // ignore storage failures
   }
+  try {
+    sessionStorage.removeItem(SOCIAL_OAUTH_PKCE_STORAGE_KEY);
+  } catch (_error) {
+    // ignore storage failures
+  }
+  writeSocialOAuthPkceCookie(null);
 }
 
 async function prepareSocialOAuthPkce(provider = "google") {
@@ -49674,7 +49743,7 @@ function socialOAuthEndpointUrl(provider = "google", { redirect = false, pkce = 
 
 function socialOAuthStartUrl(provider = "google") {
   if (isNativeAppRuntime()) return socialOAuthAuthorizeUrl(provider);
-  return socialOAuthEndpointUrl(provider, { redirect: true });
+  return "#";
 }
 
 async function prepareSocialOAuthStartUrl(provider = "google") {
@@ -49756,6 +49825,10 @@ function startSocialOAuthNavigation(url = "", provider = pendingSocialOAuthProvi
   if (!cleanUrl) return false;
   pendingSocialOAuthProvider = provider || "google";
   pendingSocialOAuthUrl = cleanUrl;
+  if (!isNativeAppRuntime() && !loadSocialOAuthPkce()?.codeVerifier) {
+    handleSocialOAuthNavigationFailure(new Error("Missing PKCE verifier before OAuth navigation"), provider);
+    return false;
+  }
   scheduleSocialOAuthNavigationRecovery();
   try {
     if (typeof window === "undefined" || !window.location) throw new Error("Navigation unavailable");
