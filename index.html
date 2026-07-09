@@ -87,6 +87,23 @@
       .social-metrics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}.social-metrics-grid div{min-height:76px;padding:.75rem;border:1px solid rgba(126,205,255,.2);border-radius:8px;background:rgba(8,17,40,.56)}.social-metrics-grid span{display:block;color:#f4fbff;font-family:"Syne",sans-serif;font-size:1.05rem;font-weight:800;line-height:1.1;overflow-wrap:anywhere}.social-metrics-grid p{margin:.35rem 0 0;color:rgba(190,216,255,.7);font-size:.78rem}.social-feed-list{display:grid;gap:.62rem;margin-top:.8rem}.social-feed-empty,.social-feed-item{margin:0;padding:.78rem .82rem;border:1px solid rgba(126,205,255,.16);border-radius:8px;background:rgba(2,8,22,.46)}.social-feed-item{display:grid;gap:.25rem}.social-feed-item strong{color:#f4fbff}.social-feed-item span{color:rgba(179,214,255,.72);font-size:.82rem}
       @media (max-width:760px){.social-profile-head,.social-feed-head{align-items:flex-start;flex-direction:column}.social-auth-grid,.social-signed-panel,.social-metrics-grid{grid-template-columns:1fr}}
     </style>
+    <style id="sonic-mobile-menu-styles">
+      .app-menu-btn,.app-menu-backdrop{display:none}
+      @media (max-width:760px){
+        .app-menu-btn{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:220;display:inline-flex;align-items:center;gap:.64rem;min-height:44px;width:min(100%,360px);margin:.55rem auto .7rem;border:1px solid rgba(126,232,198,.34);border-radius:8px;padding:.48rem .72rem;color:#f4fbff;background:rgba(4,12,27,.92);box-shadow:0 16px 38px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.05);font-weight:900}
+        .app-menu-icon{width:1.15rem;display:grid;gap:.22rem;flex:0 0 auto}.app-menu-icon span{display:block;height:2px;border-radius:999px;background:#8fffe8;box-shadow:0 0 10px rgba(126,232,198,.35)}
+        .app-menu-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.app-menu-kicker{margin-left:auto;color:rgba(207,232,255,.7);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+        .app-menu-backdrop{position:fixed;inset:0;z-index:260;display:block;background:rgba(0,3,10,.54);opacity:0;pointer-events:none;transition:opacity .18s ease}
+        .app-tab-bar{position:fixed !important;z-index:270;top:0;left:0;width:min(82vw,318px);height:100dvh;max-height:none;margin:0 !important;padding:calc(env(safe-area-inset-top,0px) + 18px) 14px calc(env(safe-area-inset-bottom,0px) + 18px) !important;display:grid !important;grid-auto-rows:minmax(46px,auto);align-content:start;gap:.42rem;overflow-y:auto;overflow-x:hidden;transform:translateX(calc(-100% - 18px));transition:transform .2s ease;background:linear-gradient(180deg,rgba(4,12,27,.98),rgba(2,7,18,.98));border-right:1px solid rgba(126,232,198,.22);border-radius:0 8px 8px 0;box-shadow:24px 0 60px rgba(0,0,0,.42);-webkit-overflow-scrolling:touch;touch-action:pan-y}
+        .app-tab-bar::before{content:"Sonic Search";display:block;margin:.08rem .2rem .52rem;color:rgba(244,251,255,.78);font-family:"Syne","Chakra Petch",sans-serif;font-size:.82rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+        .app-tab-btn,.app-tab-btn:nth-child(5){width:100% !important;min-width:0 !important;min-height:46px !important;justify-content:flex-start;text-align:left;border-radius:8px !important;padding:.62rem .78rem !important;white-space:normal}
+        body.app-nav-open{overflow:hidden}
+        body.app-nav-open .app-menu-backdrop{opacity:1;pointer-events:auto}
+        body.app-nav-open .app-tab-bar{transform:translateX(0)}
+        html[data-sonic-store-screenshot="true"] .app-menu-btn,html[data-sonic-store-screenshot="true"] .app-menu-backdrop{display:none}
+      }
+      @media (prefers-reduced-motion:reduce){.app-menu-backdrop,.app-tab-bar{transition:none !important}}
+    </style>
     <style id="sonic-logo-upgrade-styles">
       .brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(80vw,560px);max-width:560px;margin-inline:auto}.brand-logo{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(46,215,255,.2))}
       .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px;min-height:clamp(72px,16vw,150px);display:grid;place-items:center;line-height:0}.intro-logo-mark{display:block;position:relative;z-index:2;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22));opacity:0;transition:opacity .18s ease}.intro-logo-mark[data-logo-loaded="true"]{opacity:1}.intro-logo-mark[data-logo-failed="true"]{display:none}.intro-logo-fallback{position:absolute;left:50%;top:50%;z-index:1;width:min(96%,560px);transform:translate(-50%,-50%);color:#3477b1;font-family:"Syne","Chakra Petch",sans-serif;font-size:clamp(2.2rem,10vw,5.5rem);font-weight:800;line-height:.82;text-align:center;text-shadow:0 0 1px rgba(255,255,255,.75),0 16px 34px rgba(43,158,255,.24),0 0 28px rgba(84,255,232,.16);opacity:1;transition:opacity .18s ease;pointer-events:none}.intro-logo-mark[data-logo-loaded="true"]+.intro-logo-fallback{opacity:0}
@@ -568,6 +585,13 @@
           </div>
         </div>
       </header>
+
+      <button id="appMenuBtn" class="app-menu-btn" type="button" aria-controls="appTabBar" aria-expanded="false">
+        <span class="app-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span id="appMenuLabel" class="app-menu-label">Descobrir</span>
+        <span class="app-menu-kicker">Menu</span>
+      </button>
+      <div id="appMenuBackdrop" class="app-menu-backdrop" aria-hidden="true"></div>
 
       <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
         <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true" aria-current="page">Descobrir</button>
@@ -2475,6 +2499,6 @@
         syncBannerLayoutMode();
       })();
     </script>
-    <script defer src="app.js?v=20260708fastpass2"></script>
+    <script defer src="app.js?v=20260708fastpass4"></script>
   </body>
 </html>

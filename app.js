@@ -7333,6 +7333,9 @@ const betaGateStatus = document.getElementById("betaGateStatus");
 const betaIntentButtons = Array.from(document.querySelectorAll("[data-beta-intent]"));
 const welcomeScreen = document.getElementById("welcomeScreen");
 const appContent = document.getElementById("appContent");
+const appMenuBtn = document.getElementById("appMenuBtn");
+const appMenuLabel = document.getElementById("appMenuLabel");
+const appMenuBackdrop = document.getElementById("appMenuBackdrop");
 const appTabBar = document.getElementById("appTabBar");
 const signatureBar = document.getElementById("signatureBar");
 const appTabPanels = document.querySelectorAll("[data-app-tab]");
@@ -32769,8 +32772,27 @@ function currentActiveAppTabName() {
   return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
 }
 
+function setAppMenuOpen(open = false) {
+  const isOpen = Boolean(open);
+  document.body?.classList.toggle("app-nav-open", isOpen);
+  if (appMenuBtn) appMenuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  if (appMenuBackdrop) appMenuBackdrop.setAttribute("aria-hidden", isOpen ? "false" : "true");
+}
+
+function toggleAppMenu() {
+  setAppMenuOpen(!document.body?.classList.contains("app-nav-open"));
+}
+
+function syncAppMenuLabel(activeButton = null, tabName = "discover") {
+  if (!appMenuLabel) return;
+  const label = String(activeButton?.textContent || "").trim() || tabName;
+  appMenuLabel.textContent = label;
+}
+
 function scrollActiveAppTabIntoView(button) {
   if (!appTabBar || !button || button.hidden) return;
+  if (window.matchMedia?.("(max-width: 760px)")?.matches) return;
+  if (document.body?.classList.contains("app-nav-open")) return;
   const compactNav =
     window.matchMedia?.("(max-width: 620px)")?.matches ||
     window.matchMedia?.("(hover: none)")?.matches;
@@ -32877,6 +32899,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     panel.setAttribute("aria-hidden", disabledForReview ? "true" : "false");
     panel.classList.toggle("active", !disabledForReview && panelMatchesAppTab(panel, safeTab));
   });
+  syncAppMenuLabel(activeTabButton, safeTab);
   scrollActiveAppTabIntoView(activeTabButton);
   if (focusPanel) scrollActiveAppPanelIntoView(safeTab);
   updateSignatureBarForTab(safeTab);
@@ -52549,6 +52572,26 @@ function replaceCommunityPost(updatedPost = {}) {
   communityState.posts = communityState.posts.map((post) => post.id === updatedPost.id ? updatedPost : post);
 }
 
+function applyLocalCommunityCommentReaction(postId = "", commentId = "", nextReaction = 0) {
+  const comments = communityState.commentsByPost.get(postId) || [];
+  const comment = comments.find((item) => item.id === commentId);
+  if (!comment) return false;
+  const reactions = {
+    likes: 0,
+    dislikes: 0,
+    myReaction: 0,
+    ...(comment.reactions || {})
+  };
+  const previous = Number(reactions.myReaction) || 0;
+  if (previous > 0) reactions.likes = Math.max(0, Number(reactions.likes) - 1);
+  if (previous < 0) reactions.dislikes = Math.max(0, Number(reactions.dislikes) - 1);
+  if (nextReaction > 0) reactions.likes = Number(reactions.likes) + 1;
+  if (nextReaction < 0) reactions.dislikes = Number(reactions.dislikes) + 1;
+  reactions.myReaction = nextReaction;
+  comment.reactions = reactions;
+  return true;
+}
+
 async function reactCommunityPost(postId = "", desiredValue = 0) {
   if (!communitySignedIn()) {
     void showSocialCommentsLogin({ surface: "community" });
@@ -52617,10 +52660,13 @@ async function deleteCommunityPost(postId = "") {
   }
 }
 
-async function loadCommunityPostComments(postId = "") {
+async function loadCommunityPostComments(postId = "", options = {}) {
   if (!postId) return false;
-  communityState.commentLoading.add(postId);
-  renderCommunityPanel();
+  const silent = Boolean(options.silent);
+  if (!silent) {
+    communityState.commentLoading.add(postId);
+    renderCommunityPanel();
+  }
   const params = new URLSearchParams({ targetType: "post", targetKey: postId });
   try {
     const payload = await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`);
@@ -52631,7 +52677,7 @@ async function loadCommunityPostComments(postId = "") {
     communityState.commentsByPost.set(postId, []);
     return false;
   } finally {
-    communityState.commentLoading.delete(postId);
+    if (!silent) communityState.commentLoading.delete(postId);
     renderCommunityPanel();
   }
 }
@@ -52697,6 +52743,8 @@ async function reactCommunityComment(postId = "", commentId = "", desiredValue =
   if (!comment) return false;
   const previous = Number(comment.reactions?.myReaction) || 0;
   const nextValue = previous === desiredValue ? 0 : desiredValue;
+  applyLocalCommunityCommentReaction(postId, commentId, nextValue);
+  renderCommunityPanel();
   try {
     await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
       method: "POST",
@@ -52708,9 +52756,11 @@ async function reactCommunityComment(postId = "", commentId = "", desiredValue =
         value: nextValue
       }
     });
-    await loadCommunityPostComments(postId);
+    void loadCommunityPostComments(postId, { silent: true });
     return true;
   } catch (error) {
+    applyLocalCommunityCommentReaction(postId, commentId, previous);
+    renderCommunityPanel();
     console.warn("Could not react to community comment", error);
     showToast(t("socialCommentsReactionFailed"));
     return false;
@@ -56655,11 +56705,20 @@ bind(communityFeedList, "click", async (event) => {
   }
 });
 bind(heroLogoBtn, "click", handleHeroLogoClick);
+bind(appMenuBtn, "click", toggleAppMenu);
+bind(appMenuBackdrop, "click", () => setAppMenuOpen(false));
+bind(document, "keydown", (event) => {
+  if (event.key === "Escape" && document.body?.classList.contains("app-nav-open")) {
+    setAppMenuOpen(false);
+    appMenuBtn?.focus?.();
+  }
+});
 bind(appTabBar, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
   if (!target) return;
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
   setActiveAppTab(nextTab, { focusPanel: true });
+  setAppMenuOpen(false);
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
