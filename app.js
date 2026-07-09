@@ -8160,6 +8160,7 @@ let communityState = {
   commentsByPost: new Map(),
   commentLoading: new Set()
 };
+let communityCommentsObserver = null;
 let googleAuthReady = false;
 let googleAuthLoading = false;
 let authConfigLoading = false;
@@ -8501,6 +8502,8 @@ const SOCIAL_OAUTH_NAVIGATION_TIMEOUT_MS = 120000;
 const SOCIAL_SYNC_LIMIT = 50;
 const SOCIAL_CLOUD_RESTORE_LIMIT = 200;
 const SOCIAL_FEED_LIMIT = 14;
+const COMMUNITY_COMMENT_PRELOAD_LIMIT = 4;
+const COMMUNITY_COMMENT_LAZY_ROOT_MARGIN = "360px 0px";
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
 const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
@@ -52128,6 +52131,69 @@ function communityActionText(label = "", count = 0) {
   return safeCount > 0 ? `${label} ${safeCount}` : label;
 }
 
+function communityPostCommentList(postId = "") {
+  return communityState.commentsByPost.get(postId) || [];
+}
+
+function communityPostCommentsReady(postId = "") {
+  return Boolean(postId && communityState.commentsByPost.has(postId));
+}
+
+function ensureCommunityPostCommentsLoaded(postId = "", options = {}) {
+  if (!postId) return false;
+  const force = Boolean(options.force);
+  if (!force && (communityPostCommentsReady(postId) || communityState.commentLoading.has(postId))) {
+    return false;
+  }
+  void loadCommunityPostComments(postId, { silent: true });
+  return true;
+}
+
+function focusCommunityCommentInput(postId = "") {
+  if (!postId) return;
+  window.requestAnimationFrame(() => {
+    const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-input]") || [])
+      .find((element) => String(element.getAttribute("data-community-comment-input") || "") === postId);
+    input?.focus?.();
+  });
+}
+
+function preloadVisibleCommunityPostComments(options = {}) {
+  const limit = Math.max(1, Number(options.limit) || COMMUNITY_COMMENT_PRELOAD_LIMIT);
+  communityState.posts
+    .slice(0, limit)
+    .map((post) => String(post?.id || "").trim())
+    .filter(Boolean)
+    .forEach((postId) => ensureCommunityPostCommentsLoaded(postId, options));
+}
+
+function connectCommunityCommentLazyLoader() {
+  if (communityCommentsObserver) {
+    communityCommentsObserver.disconnect();
+    communityCommentsObserver = null;
+  }
+  if (!communityFeedList || !communityState.posts.length) return;
+  preloadVisibleCommunityPostComments();
+  if (typeof IntersectionObserver === "undefined") return;
+  communityCommentsObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const postId = String(entry.target?.getAttribute?.("data-community-post-id") || "").trim();
+      if (postId) ensureCommunityPostCommentsLoaded(postId);
+      observer.unobserve(entry.target);
+    });
+  }, {
+    root: null,
+    rootMargin: COMMUNITY_COMMENT_LAZY_ROOT_MARGIN,
+    threshold: 0.01
+  });
+  communityFeedList.querySelectorAll("[data-community-post-id]").forEach((card) => {
+    const postId = String(card.getAttribute("data-community-post-id") || "").trim();
+    if (!postId || communityPostCommentsReady(postId) || communityState.commentLoading.has(postId)) return;
+    communityCommentsObserver.observe(card);
+  });
+}
+
 async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
   const endpoint = resolveConfiguredAppApiEndpoint(
     path,
@@ -52300,15 +52366,20 @@ function renderCommunityComment(comment = {}, postId = "") {
   return item;
 }
 
-function renderCommunityPostComments(container, post = {}) {
+function renderCommunityPostComments(container, post = {}, options = {}) {
   const postId = post.id || "";
+  const showComposer = Boolean(options.showComposer);
+  const commentsLoaded = communityPostCommentsReady(postId);
+  const comments = communityPostCommentList(postId);
+  const loading = communityState.commentLoading.has(postId);
+  if (!showComposer && !loading && (!commentsLoaded || !comments.length)) return false;
   const commentsWrap = document.createElement("div");
   commentsWrap.className = "community-post-comments";
   const title = document.createElement("strong");
   title.textContent = t("communityComments");
   commentsWrap.appendChild(title);
 
-  if (communitySignedIn()) {
+  if (communitySignedIn() && showComposer) {
     const box = document.createElement("div");
     box.className = "community-comment-box";
     const textarea = document.createElement("textarea");
@@ -52329,13 +52400,12 @@ function renderCommunityPostComments(container, post = {}) {
 
   const list = document.createElement("div");
   list.className = "community-comment-list";
-  if (communityState.commentLoading.has(postId)) {
-    const loading = document.createElement("p");
-    loading.className = "muted social-comments-empty";
-    loading.textContent = t("socialCommentsLoading");
-    list.appendChild(loading);
+  if (loading && !commentsLoaded) {
+    const loadingRow = document.createElement("p");
+    loadingRow.className = "muted social-comments-empty";
+    loadingRow.textContent = t("socialCommentsLoading");
+    list.appendChild(loadingRow);
   } else {
-    const comments = communityState.commentsByPost.get(postId) || [];
     if (!comments.length) {
       const empty = document.createElement("p");
       empty.className = "muted social-comments-empty";
@@ -52347,6 +52417,7 @@ function renderCommunityPostComments(container, post = {}) {
   }
   commentsWrap.appendChild(list);
   container.appendChild(commentsWrap);
+  return true;
 }
 
 function renderCommunityPost(post = {}) {
@@ -52414,6 +52485,7 @@ function renderCommunityPost(post = {}) {
   commentsButton.dataset.communityAction = "comments";
   commentsButton.dataset.postId = post.id || "";
   commentsButton.textContent = t("communityComment");
+  commentsButton.setAttribute("aria-expanded", communityState.expandedPostId === post.id ? "true" : "false");
   actions.appendChild(commentsButton);
   if (post.mine) {
     if (normalizeCommunityTopic(post.topic) !== "all") {
@@ -52435,14 +52507,18 @@ function renderCommunityPost(post = {}) {
   }
   card.appendChild(actions);
 
-  if (communityState.expandedPostId === post.id) {
-    renderCommunityPostComments(card, post);
-  }
+  renderCommunityPostComments(card, post, {
+    showComposer: communityState.expandedPostId === post.id
+  });
   return card;
 }
 
 function renderCommunityFeed() {
   if (!communityFeedList) return;
+  if (communityCommentsObserver) {
+    communityCommentsObserver.disconnect();
+    communityCommentsObserver = null;
+  }
   communityFeedList.innerHTML = "";
   if (communityState.loading) return;
   if (!communityState.enabled) {
@@ -52460,6 +52536,7 @@ function renderCommunityFeed() {
     return;
   }
   communityState.posts.forEach((post) => communityFeedList.appendChild(renderCommunityPost(post)));
+  connectCommunityCommentLazyLoader();
 }
 
 function renderCommunityPanel() {
@@ -52507,6 +52584,9 @@ async function loadCommunityPosts(options = {}) {
     communityState.posts = Array.isArray(payload.posts)
       ? payload.posts.map((post) => ({ ...post, topic: normalizeCommunityTopic(post?.topic || "track") }))
       : [];
+    if (communityState.expandedPostId && !communityState.posts.some((post) => post.id === communityState.expandedPostId)) {
+      communityState.expandedPostId = "";
+    }
     return true;
   } catch (error) {
     console.warn("Could not load community posts", error);
@@ -52663,8 +52743,11 @@ async function deleteCommunityPost(postId = "") {
 async function loadCommunityPostComments(postId = "", options = {}) {
   if (!postId) return false;
   const silent = Boolean(options.silent);
-  if (!silent) {
+  const trackLoading = options.trackLoading !== false;
+  if (trackLoading) {
     communityState.commentLoading.add(postId);
+  }
+  if (!silent) {
     renderCommunityPanel();
   }
   const params = new URLSearchParams({ targetType: "post", targetKey: postId });
@@ -52677,20 +52760,17 @@ async function loadCommunityPostComments(postId = "", options = {}) {
     communityState.commentsByPost.set(postId, []);
     return false;
   } finally {
-    if (!silent) communityState.commentLoading.delete(postId);
+    if (trackLoading) communityState.commentLoading.delete(postId);
     renderCommunityPanel();
   }
 }
 
 async function toggleCommunityComments(postId = "") {
   if (!postId) return false;
-  if (communityState.expandedPostId === postId) {
-    communityState.expandedPostId = "";
-    renderCommunityPanel();
-    return true;
-  }
   communityState.expandedPostId = postId;
   renderCommunityPanel();
+  focusCommunityCommentInput(postId);
+  if (communityPostCommentsReady(postId) || communityState.commentLoading.has(postId)) return true;
   return loadCommunityPostComments(postId);
 }
 
