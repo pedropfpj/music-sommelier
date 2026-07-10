@@ -8146,6 +8146,8 @@ let socialCommentsState = {
   reactionsEnabled: true,
   setupNeeded: false,
   enabled: true,
+  canModerate: false,
+  viewerRole: "anonymous",
   loadToken: 0
 };
 let communityState = {
@@ -8155,6 +8157,8 @@ let communityState = {
   posting: false,
   enabled: true,
   setupNeeded: false,
+  canModerate: false,
+  viewerRole: "anonymous",
   posts: [],
   expandedPostId: "",
   commentsByPost: new Map(),
@@ -21305,6 +21309,11 @@ const I18N = {
     authAppleComingSoon: "Apple em breve",
     authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. A conta online pode ser ligada depois.",
     authProviderHintAppStoreLocal: "Na versão iOS, você pode entrar com uma conta online disponível ou continuar com perfil local neste aparelho.",
+    socialMatchWaiting: "aguardando sinais",
+    socialStatusOfflineLocal: "Login online indisponível neste ambiente. Seu perfil local continua funcionando.",
+    socialStatusConnected: "Perfil conectado. Suas curtidas podem virar feed social.",
+    socialProviderUnavailable: "Login com {provider} indisponível neste ambiente.",
+    socialProviderOpenFailed: "Não consegui abrir o login com {provider} agora.",
     welcomeKicker: "Descoberta eletrônica",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encontre uma faixa eletrônica para o momento, com contexto e menos repetição.",
@@ -22382,6 +22391,11 @@ const I18N = {
     authAppleComingSoon: "Apple coming soon",
     authProviderHintLocalBackup: "Without login, discovery starts clean on this device. An online account can be enabled later.",
     authProviderHintAppStoreLocal: "In the iOS version, you can sign in with an available online account or continue with a local profile on this device.",
+    socialMatchWaiting: "waiting for signals",
+    socialStatusOfflineLocal: "Online login is unavailable here. Your local profile still works.",
+    socialStatusConnected: "Profile connected. Your likes can become social feed.",
+    socialProviderUnavailable: "{provider} sign-in is unavailable here.",
+    socialProviderOpenFailed: "I could not open {provider} sign-in right now.",
     welcomeKicker: "Electronic discovery",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Find an electronic track for the moment, with context and fewer repeats.",
@@ -23456,6 +23470,11 @@ const I18N = {
     authAppleComingSoon: "Apple pronto",
     authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. La cuenta online puede activarse después.",
     authProviderHintAppStoreLocal: "En la versión iOS, puedes entrar con una cuenta online disponible o continuar con perfil local en este dispositivo.",
+    socialMatchWaiting: "esperando señales",
+    socialStatusOfflineLocal: "El login online no está disponible aquí. Tu perfil local sigue funcionando.",
+    socialStatusConnected: "Perfil conectado. Tus likes pueden convertirse en feed social.",
+    socialProviderUnavailable: "Login con {provider} no disponible aquí.",
+    socialProviderOpenFailed: "No pude abrir el login con {provider} ahora.",
     welcomeKicker: "Descubrimiento electrónico",
     welcomeTitle: "SONIC SEARCH",
     welcomeDesc: "Encuentra una pista electrónica para el momento, con contexto y menos repetición.",
@@ -24473,6 +24492,48 @@ function t(key, vars = {}) {
   return text;
 }
 
+const DOCUMENT_LANGUAGE_METADATA = {
+  pt: {
+    title: "SONIC SEARCH - Descoberta eletrônica com contexto",
+    description: "Encontre uma faixa eletrônica para o momento com swipe, preview, contexto e menos repetição.",
+    ogTitle: "Sonic Search - descoberta eletrônica com contexto",
+    ogDescription: "Use o momento, o swipe e seu feedback para encontrar faixas eletrônicas com menos repetição.",
+    twitterTitle: "Sonic Search - descoberta eletrônica com contexto",
+    twitterDescription: "Encontre faixas eletrônicas pelo momento, com swipe, preview e explicação do match."
+  },
+  en: {
+    title: "SONIC SEARCH - Electronic discovery with context",
+    description: "Find an electronic track for the moment with swipe, preview, context, and fewer repeats.",
+    ogTitle: "Sonic Search - electronic discovery with context",
+    ogDescription: "Use the moment, swipe, and feedback to find electronic tracks with fewer repeats.",
+    twitterTitle: "Sonic Search - electronic discovery with context",
+    twitterDescription: "Find electronic tracks by moment, with swipe, preview, and match context."
+  },
+  es: {
+    title: "SONIC SEARCH - Descubrimiento electrónico con contexto",
+    description: "Encuentra una pista electrónica para el momento con swipe, preview, contexto y menos repetición.",
+    ogTitle: "Sonic Search - descubrimiento electrónico con contexto",
+    ogDescription: "Usa el momento, el swipe y tu feedback para encontrar pistas electrónicas con menos repetición.",
+    twitterTitle: "Sonic Search - descubrimiento electrónico con contexto",
+    twitterDescription: "Encuentra pistas electrónicas por momento, con swipe, preview y explicación del match."
+  }
+};
+
+function setDocumentMeta(selector, value = "") {
+  const node = document.querySelector(selector);
+  if (node && value) node.setAttribute("content", value);
+}
+
+function syncDocumentLanguageMetadata() {
+  const copy = DOCUMENT_LANGUAGE_METADATA[currentLanguage] || DOCUMENT_LANGUAGE_METADATA[DEFAULT_LANGUAGE];
+  document.title = copy.title;
+  setDocumentMeta("meta[name='description']", copy.description);
+  setDocumentMeta("meta[property='og:title']", copy.ogTitle);
+  setDocumentMeta("meta[property='og:description']", copy.ogDescription);
+  setDocumentMeta("meta[name='twitter:title']", copy.twitterTitle);
+  setDocumentMeta("meta[name='twitter:description']", copy.twitterDescription);
+}
+
 const QUIZ_TEXT = {
   pt: {
     overlayKicker: "Sonic Quiz IA",
@@ -25050,6 +25111,7 @@ function syncQuickSurpriseStyleOptions() {
 
 function applyLanguage() {
   document.documentElement.lang = currentLanguage === "pt" ? "pt-BR" : currentLanguage;
+  syncDocumentLanguageMetadata();
   const labels = {
     pt: {
       profileTitle: "Filtro manual",
@@ -27303,8 +27365,8 @@ function updateAuthProviderUi() {
   const googleOAuthHref = socialOAuthStartUrl("google");
   const appleOAuthHref = socialOAuthStartUrl("apple");
   const hideOnlineAuth = shouldHideSocialLoginForAppStore();
-  const showGoogleOption = Boolean(!hideOnlineAuth && (googleConfigured || signedWithGoogle));
-  const showAppleOption = Boolean(!hideOnlineAuth && (appleConfigured || signedWithApple));
+  const showGoogleOption = Boolean(!hideOnlineAuth && (signed ? signedWithGoogle : true));
+  const showAppleOption = Boolean(!hideOnlineAuth && (signed ? signedWithApple : true));
   const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
   if (authEntryActions) {
     authEntryActions.classList.toggle("has-online", showGoogleOption || showAppleOption);
@@ -27318,12 +27380,12 @@ function updateAuthProviderUi() {
   if (authAppleBtn) {
     authAppleBtn.classList.toggle("hidden", !showAppleOption);
     authAppleBtn.setAttribute("aria-hidden", showAppleOption ? "false" : "true");
-    authAppleBtn.disabled = !showAppleOption || busy || (!appleConfigured && !signedWithApple);
+    authAppleBtn.disabled = !showAppleOption || busy;
     if (authAppleBtn.tagName === "A") {
       authAppleBtn.setAttribute("href", signed ? "#" : appleOAuthHref);
       authAppleBtn.setAttribute(
         "aria-disabled",
-        !showAppleOption || busy || (!appleConfigured && !signedWithApple) ? "true" : "false"
+        !showAppleOption || busy ? "true" : "false"
       );
     }
     authAppleBtn.classList.toggle("is-unconfigured", !appleConfigured && !signed);
@@ -27334,12 +27396,12 @@ function updateAuthProviderUi() {
   if (authGoogleBtn) {
     authGoogleBtn.classList.toggle("hidden", !showGoogleOption);
     authGoogleBtn.setAttribute("aria-hidden", showGoogleOption ? "false" : "true");
-    authGoogleBtn.disabled = !showGoogleOption || busy || (!googleConfigured && !signedWithGoogle);
+    authGoogleBtn.disabled = !showGoogleOption || busy;
     if (authGoogleBtn.tagName === "A") {
       authGoogleBtn.setAttribute("href", signed ? "#" : googleOAuthHref);
       authGoogleBtn.setAttribute(
         "aria-disabled",
-        !showGoogleOption || busy || (!googleConfigured && !signedWithGoogle) ? "true" : "false"
+        !showGoogleOption || busy ? "true" : "false"
       );
     }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
@@ -47339,6 +47401,8 @@ function negativeFeedbackBasePrefs(prefs = lastPrefs) {
 const FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT = 180;
 const FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT = 140;
 const FAST_NEGATIVE_FEEDBACK_QUEUE_LIMIT = 24;
+const SWIPE_LIKE_COMMIT_DELAY_MS = 240;
+const SWIPE_PASS_COMMIT_DELAY_MS = 85;
 
 function rotatedFastFeedbackPool(pool = [], limit = FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT) {
   if (!Array.isArray(pool) || !pool.length) return [];
@@ -47378,7 +47442,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   ) {
     return false;
   }
-  if (!hasReliableBpmForTrack(track)) return false;
+  if (prefs.bpm && !hasReliableBpmForTrack(track)) return false;
   if (prefs.style && track.style !== prefs.style) return false;
   if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
   if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
@@ -47816,7 +47880,7 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   if (swipePassBtn) swipePassBtn.disabled = true;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
   if (topSwipePassBtn) topSwipePassBtn.disabled = true;
-  await waitMs(270);
+  await waitMs(direction === "pass" ? SWIPE_PASS_COMMIT_DELAY_MS : SWIPE_LIKE_COMMIT_DELAY_MS);
   try {
     if (direction === "like") await likeCurrentTrackFromSwipe(triggerEl);
     else await passCurrentTrackFromSwipe(triggerEl);
@@ -50447,7 +50511,11 @@ async function socialRefreshSession(options = {}) {
     }
     if (!response.ok) {
       const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
-      throw new Error(String(detail || "Não consegui renovar a sessão."));
+      throw new Error(String(detail || sonicTinyCopy(
+        "Não consegui renovar a sessão.",
+        "I could not renew the session.",
+        "No pude renovar la sesión."
+      )));
     }
     const expiresIn = Number(payload?.expires_in || socialState.session?.expires_in || 3600) || 3600;
     const nextSession = {
@@ -50659,33 +50727,65 @@ function socialFriendlyAuthError(message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
   if (lower.includes("otp_expired") || lower.includes("expired")) {
-    return "Esse link de confirmação expirou. Clique em Reenviar confirmação e use o e-mail mais recente.";
+    return sonicTinyCopy(
+      "Esse link de confirmação expirou. Clique em Reenviar confirmação e use o e-mail mais recente.",
+      "That confirmation link expired. Tap Resend confirmation and use the latest email.",
+      "Ese link de confirmación expiró. Toca Reenviar confirmación y usa el e-mail más reciente."
+    );
   }
   if (lower.includes("email not confirmed") || lower.includes("not confirmed")) {
-    return "Confirme o e-mail mais recente do Supabase antes de entrar.";
+    return sonicTinyCopy(
+      "Confirme o e-mail mais recente do Supabase antes de entrar.",
+      "Confirm the latest Supabase email before signing in.",
+      "Confirma el e-mail más reciente de Supabase antes de entrar."
+    );
   }
   if (lower.includes("invalid login credentials")) {
-    return "E-mail ou senha incorretos. Se acabou de criar a conta, confirme o e-mail mais recente antes de entrar.";
+    return sonicTinyCopy(
+      "E-mail ou senha incorretos. Se acabou de criar a conta, confirme o e-mail mais recente antes de entrar.",
+      "Incorrect email or password. If you just created the account, confirm the latest email before signing in.",
+      "E-mail o contraseña incorrectos. Si acabas de crear la cuenta, confirma el e-mail más reciente antes de entrar."
+    );
   }
   if (lower.includes("already registered") || lower.includes("user already registered")) {
-    return "Este e-mail já tem uma conta. Use Entrar, ou reenvie a confirmação se ainda não confirmou.";
+    return sonicTinyCopy(
+      "Este e-mail já tem uma conta. Use Entrar, ou reenvie a confirmação se ainda não confirmou.",
+      "This email already has an account. Use Sign in, or resend confirmation if it is not confirmed yet.",
+      "Este e-mail ya tiene una cuenta. Usa Entrar, o reenvía la confirmación si todavía no la confirmaste."
+    );
   }
   if (lower.includes("security purposes") || lower.includes("rate limit")) {
-    return "O Supabase bloqueou novas tentativas por alguns instantes. Aguarde um minuto e tente de novo.";
+    return sonicTinyCopy(
+      "O Supabase bloqueou novas tentativas por alguns instantes. Aguarde um minuto e tente de novo.",
+      "Supabase paused new attempts for a moment. Wait a minute and try again.",
+      "Supabase bloqueó nuevos intentos por unos instantes. Espera un minuto e intenta de nuevo."
+    );
   }
-  return text || "Falha no Supabase.";
+  return text || sonicTinyCopy("Falha no Supabase.", "Supabase failed.", "Fallo de Supabase.");
 }
 
 function socialFriendlyOAuthStartError(providerName = "Google", message = "") {
   const text = String(message || "").trim();
   const lower = text.toLowerCase();
   if (lower.includes("unsupported provider") || lower.includes("provider is not enabled")) {
-    return `${providerName} ainda não está ativo no Supabase. Ative o provider em Authentication > Providers e tente novamente.`;
+    return sonicTinyCopy(
+      `${providerName} ainda não está ativo no Supabase. Ative o provider em Authentication > Providers e tente novamente.`,
+      `${providerName} is not active in Supabase yet. Enable the provider in Authentication > Providers and try again.`,
+      `${providerName} todavía no está activo en Supabase. Activa el provider en Authentication > Providers e intenta de nuevo.`
+    );
   }
   if (lower.includes("origin_not_allowed") || lower.includes("not allowed")) {
-    return "Este ambiente de teste não está liberado no backend. Use o app instalado ou adicione o redirect/origin no Supabase.";
+    return sonicTinyCopy(
+      "Este ambiente de teste não está liberado no backend. Use o app instalado ou adicione o redirect/origin no Supabase.",
+      "This test environment is not allowed in the backend. Use the installed app or add the redirect/origin in Supabase.",
+      "Este entorno de prueba no está liberado en el backend. Usa la app instalada o agrega el redirect/origin en Supabase."
+    );
   }
-  return socialFriendlyAuthError(text || `Não consegui abrir o login com ${providerName}.`);
+  return socialFriendlyAuthError(text || sonicTinyCopy(
+    `Não consegui abrir o login com ${providerName}.`,
+    `I could not open ${providerName} sign-in.`,
+    `No pude abrir el login con ${providerName}.`
+  ));
 }
 
 function socialConfigReady() {
@@ -50802,17 +50902,33 @@ async function socialFetchAuthUser(accessToken = "") {
   }
   if (!response.ok) {
     const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
-    throw new Error(String(detail || "Não consegui validar o usuário."));
+    throw new Error(String(detail || sonicTinyCopy(
+      "Não consegui validar o usuário.",
+      "I could not validate the user.",
+      "No pude validar el usuario."
+    )));
   }
   return payload?.user || payload;
 }
 
 async function socialExchangeAuthCodeForSession(authCode = "") {
   const code = String(authCode || "").trim();
-  if (!socialConfigReady() || !code) throw new Error("Código de login ausente.");
+  if (!socialConfigReady() || !code) {
+    throw new Error(sonicTinyCopy(
+      "Código de login ausente.",
+      "Missing sign-in code.",
+      "Falta el código de login."
+    ));
+  }
   const pkce = loadSocialOAuthPkce();
   const codeVerifier = String(pkce?.codeVerifier || "").trim();
-  if (!codeVerifier) throw new Error("Verifier de login ausente. Toque em entrar novamente.");
+  if (!codeVerifier) {
+    throw new Error(sonicTinyCopy(
+      "Verifier de login ausente. Toque em entrar novamente.",
+      "Missing sign-in verifier. Tap sign in again.",
+      "Falta el verifier de login. Toca entrar de nuevo."
+    ));
+  }
   const response = await fetch(socialApiUrl("/auth/v1/token?grant_type=pkce"), {
     method: "POST",
     headers: socialHeaders({ auth: false }),
@@ -50832,7 +50948,11 @@ async function socialExchangeAuthCodeForSession(authCode = "") {
   }
   if (!response.ok) {
     const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
-    throw new Error(String(detail || "Não consegui trocar o código de login."));
+    throw new Error(String(detail || sonicTinyCopy(
+      "Não consegui trocar o código de login.",
+      "I could not exchange the sign-in code.",
+      "No pude cambiar el código de login."
+    )));
   }
   const expiresIn = Number(payload?.expires_in || 3600) || 3600;
   const session = {
@@ -50942,11 +51062,15 @@ async function socialHandleAuthRedirect() {
       await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
       await upsertSocialProfile();
       await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
-      socialSetStatus("Perfil conectado.", "ok");
+      socialSetStatus(sonicTinyCopy("Perfil conectado.", "Profile connected.", "Perfil conectado."), "ok");
       await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
     } catch (error) {
       console.warn("Could not exchange social auth code", error);
-      const message = `Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
+      const message = sonicTinyCopy(
+        `Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`,
+        `I received the sign-in, but could not create the session: ${socialFriendlyAuthError(error.message)} Try signing in again.`,
+        `Recibí el login, pero no pude crear la sesión: ${socialFriendlyAuthError(error.message)} Intenta entrar de nuevo.`
+      );
       socialSetStatus(message, "error");
       setAuthFeedback(message, true);
     } finally {
@@ -50970,7 +51094,13 @@ async function socialHandleAuthRedirect() {
       expires_at: Math.floor(Date.now() / 1000) + expiresIn,
       user
     };
-    if (!session.user?.id) throw new Error("Não consegui confirmar o usuário do Supabase.");
+    if (!session.user?.id) {
+      throw new Error(sonicTinyCopy(
+        "Não consegui confirmar o usuário do Supabase.",
+        "I could not confirm the Supabase user.",
+        "No pude confirmar el usuario de Supabase."
+      ));
+    }
     socialStoreSession(session);
     ensureOnlineSocialUserSession();
     if (socialEmailInput && !socialEmailInput.value && session.user.email) socialEmailInput.value = session.user.email;
@@ -50978,11 +51108,15 @@ async function socialHandleAuthRedirect() {
     await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
-    socialSetStatus("Perfil conectado.", "ok");
+    socialSetStatus(sonicTinyCopy("Perfil conectado.", "Profile connected.", "Perfil conectado."), "ok");
     await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
   } catch (error) {
     console.warn("Could not finish social auth redirect", error);
-    const message = `Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`;
+    const message = sonicTinyCopy(
+      `Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`,
+      `I received the sign-in, but could not connect automatically: ${socialFriendlyAuthError(error.message)} Try signing in again.`,
+      `Recibí el login, pero no pude conectar automáticamente: ${socialFriendlyAuthError(error.message)} Intenta entrar de nuevo.`
+    );
     socialSetStatus(message, "error");
     setAuthFeedback(message, true);
   } finally {
@@ -51287,11 +51421,23 @@ async function restoreSocialLikedTracksFromCloud(options = {}) {
     } else {
       saveProgress();
     }
-    if (!options.silent) socialSetStatus(`Restaurei ${imported.length} curtidas da nuvem.`, "ok");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Restaurei ${imported.length} curtidas da nuvem.`,
+        `Restored ${imported.length} likes from the cloud.`,
+        `Restauré ${imported.length} likes de la nube.`
+      ), "ok");
+    }
     return imported.length;
   } catch (error) {
     console.warn("Could not restore social liked tracks", error);
-    if (!options.silent) socialSetStatus(`Não consegui baixar curtidas da nuvem: ${error.message}`, "error");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Não consegui baixar curtidas da nuvem: ${error.message}`,
+        `I could not download cloud likes: ${error.message}`,
+        `No pude descargar likes de la nube: ${error.message}`
+      ), "error");
+    }
     return 0;
   }
 }
@@ -51320,7 +51466,13 @@ async function loadSocialProfile(options = {}) {
     return profile;
   } catch (error) {
     console.warn("Could not load social profile", error);
-    if (!options.silent) socialSetStatus(`Não consegui carregar o perfil: ${error.message}`, "error");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Não consegui carregar o perfil: ${error.message}`,
+        `I could not load the profile: ${error.message}`,
+        `No pude cargar el perfil: ${error.message}`
+      ), "error");
+    }
     return null;
   }
 }
@@ -51391,14 +51543,26 @@ async function syncSocialLikedTracks(options = {}) {
       if (options.activity !== false) await insertSocialActivity("liked_track", rows[0]);
     }
     socialState.lastSyncAt = Date.now();
-    if (!options.silent) socialSetStatus("Perfil e curtidas sincronizados.", "ok");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        "Perfil e curtidas sincronizados.",
+        "Profile and likes synced.",
+        "Perfil y likes sincronizados."
+      ), "ok");
+    }
     await loadSocialFeed({ silent: true });
     applyCloudLikedTrackSignals([]);
     updateStats();
     return true;
   } catch (error) {
     console.warn("Social sync failed", error);
-    if (!options.silent) socialSetStatus(`Não consegui sincronizar: ${error.message}`, "error");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Não consegui sincronizar: ${error.message}`,
+        `I could not sync: ${error.message}`,
+        `No pude sincronizar: ${error.message}`
+      ), "error");
+    }
     return false;
   } finally {
     socialState.busy = false;
@@ -51436,11 +51600,17 @@ async function loadSocialFeed(options = {}) {
     const rows = await socialRequest(`/rest/v1/activity_feed?${params.toString()}`);
     socialState.feed = Array.isArray(rows) ? rows : [];
     renderSocialFeed();
-    if (!options.silent) socialSetStatus("Feed atualizado.", "ok");
+    if (!options.silent) socialSetStatus(sonicTinyCopy("Feed atualizado.", "Feed refreshed.", "Feed actualizado."), "ok");
     return socialState.feed;
   } catch (error) {
     console.warn("Could not load social feed", error);
-    if (!options.silent) socialSetStatus(`Não consegui carregar o feed: ${error.message}`, "error");
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Não consegui carregar o feed: ${error.message}`,
+        `I could not load the feed: ${error.message}`,
+        `No pude cargar el feed: ${error.message}`
+      ), "error");
+    }
     return [];
   }
 }
@@ -51451,28 +51621,44 @@ function renderSocialFeed() {
   if (AUTH_LOGIN_STANDBY) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Feed social em standby. Curta faixas e use o Perfil local para revisar seu mapa musical.";
+    empty.textContent = sonicTinyCopy(
+      "Feed social em standby. Curta faixas e use o Perfil local para revisar seu mapa musical.",
+      "Social feed is on standby. Like tracks and use the local profile to review your music map.",
+      "Feed social en espera. Da like a pistas y usa el perfil local para revisar tu mapa musical."
+    );
     socialFeedList.appendChild(empty);
     return;
   }
   if (!socialConfigReady()) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Login online indisponível neste ambiente.";
+    empty.textContent = sonicTinyCopy(
+      "Login online indisponível neste ambiente.",
+      "Online login is unavailable here.",
+      "Login online no disponible aquí."
+    );
     socialFeedList.appendChild(empty);
     return;
   }
   if (!socialState.session?.access_token) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Entre com Google para ver o feed.";
+    empty.textContent = sonicTinyCopy(
+      "Entre com Google para ver o feed.",
+      "Sign in with Google to see the feed.",
+      "Entra con Google para ver el feed."
+    );
     socialFeedList.appendChild(empty);
     return;
   }
   if (!socialState.feed.length) {
     const empty = document.createElement("p");
     empty.className = "social-feed-empty muted";
-    empty.textContent = "Seu feed aparece aqui quando curtidas forem sincronizadas.";
+    empty.textContent = sonicTinyCopy(
+      "Seu feed aparece aqui quando curtidas forem sincronizadas.",
+      "Your feed appears here when likes are synced.",
+      "Tu feed aparece aquí cuando los likes se sincronicen."
+    );
     socialFeedList.appendChild(empty);
     return;
   }
@@ -51482,9 +51668,13 @@ function renderSocialFeed() {
     card.className = "social-feed-item";
     const title = document.createElement("strong");
     const displayName = metadata.displayName || metadata.username || "Sonic listener";
-    const song = metadata.song || "uma faixa";
-    const artist = metadata.artist ? ` de ${metadata.artist}` : "";
-    title.textContent = `${displayName} curtiu ${song}${artist}`;
+    const song = metadata.song || sonicTinyCopy("uma faixa", "a track", "una pista");
+    const artist = metadata.artist ? sonicTinyCopy(` de ${metadata.artist}`, ` by ${metadata.artist}`, ` de ${metadata.artist}`) : "";
+    title.textContent = sonicTinyCopy(
+      `${displayName} curtiu ${song}${artist}`,
+      `${displayName} liked ${song}${artist}`,
+      `${displayName} dio like a ${song}${artist}`
+    );
     const meta = document.createElement("span");
     const style = metadata.style ? styleLabelByValue(metadata.style) : "";
     const date = item?.created_at ? new Date(item.created_at) : null;
@@ -51559,6 +51749,17 @@ function currentSocialCommentTarget(targetType = socialCommentsState.targetType)
   return safeType === "artist"
     ? socialCommentsArtistTarget(currentRecommendation)
     : socialCommentsTrackTarget(currentRecommendation);
+}
+
+function applySocialViewerContext(payload = {}) {
+  const viewer = payload && typeof payload.viewer === "object" ? payload.viewer : {};
+  const canModerate = Boolean(viewer.canModerate || payload.canModerate);
+  const viewerRole = String(viewer.role || (canModerate ? "moderator" : "anonymous")).trim() || "anonymous";
+  socialCommentsState.canModerate = canModerate;
+  socialCommentsState.viewerRole = viewerRole;
+  communityState.canModerate = canModerate;
+  communityState.viewerRole = viewerRole;
+  return canModerate;
 }
 
 async function socialCommentsRequest(path = "", options = {}) {
@@ -51648,6 +51849,8 @@ function renderSocialCommentItem(comment = {}) {
 
   item.appendChild(head);
 
+  const canModerateComment = Boolean(socialCommentsState.canModerate);
+  const canManageComment = Boolean(comment.mine || canModerateComment);
   const isEditing = Boolean(comment.mine && editingSocialCommentId && editingSocialCommentId === comment.id);
   if (isEditing) {
     const editor = document.createElement("div");
@@ -51679,7 +51882,7 @@ function renderSocialCommentItem(comment = {}) {
   } else {
     const body = document.createElement("p");
     body.className = "social-comment-body";
-    body.textContent = String(comment.body || "").trim();
+    body.textContent = communityDisplayText(comment.body);
     item.appendChild(body);
   }
 
@@ -51703,15 +51906,17 @@ function renderSocialCommentItem(comment = {}) {
     actions.appendChild(button);
   });
 
-  if (comment.mine) {
+  if (canManageComment) {
     if (!isEditing) {
-      const editButton = document.createElement("button");
-      editButton.type = "button";
-      editButton.className = "social-comment-action";
-      editButton.dataset.commentAction = "edit";
-      editButton.dataset.commentId = comment.id || "";
-      editButton.textContent = t("socialCommentsEdit");
-      actions.appendChild(editButton);
+      if (comment.mine) {
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "social-comment-action";
+        editButton.dataset.commentAction = "edit";
+        editButton.dataset.commentId = comment.id || "";
+        editButton.textContent = t("socialCommentsEdit");
+        actions.appendChild(editButton);
+      }
     }
     const removeButton = document.createElement("button");
     removeButton.type = "button";
@@ -51813,6 +52018,8 @@ async function loadSocialComments(options = {}) {
   if (shouldDisableSocialCommentsForAppStore()) {
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
+    socialCommentsState.canModerate = false;
+    socialCommentsState.viewerRole = "anonymous";
     renderSocialCommentsPanel();
     return false;
   }
@@ -51845,6 +52052,7 @@ async function loadSocialComments(options = {}) {
     socialCommentsState.enabled = payload.enabled !== false;
     socialCommentsState.setupNeeded = Boolean(payload.setupNeeded);
     socialCommentsState.reactionsEnabled = payload.reactionsEnabled !== false && !payload.setupNeeded;
+    applySocialViewerContext(payload);
     socialCommentsState.comments = Array.isArray(payload.comments) ? payload.comments : [];
     return true;
   } catch (error) {
@@ -51857,6 +52065,8 @@ async function loadSocialComments(options = {}) {
     }
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
+    socialCommentsState.canModerate = false;
+    socialCommentsState.viewerRole = "anonymous";
     return false;
   } finally {
     if (token === socialCommentsState.loadToken) {
@@ -52277,6 +52487,8 @@ function renderCommunityComment(comment = {}, postId = "") {
   const item = document.createElement("article");
   item.className = "community-comment-item";
   if (comment.mine) item.classList.add("is-mine");
+  const canModerateComment = Boolean(communityState.canModerate || socialCommentsState.canModerate);
+  const canManageComment = Boolean(comment.mine || canModerateComment);
   const author = comment.author || {};
   const displayName = String(author.displayName || author.username || "Sonic listener").trim();
   const meta = document.createElement("div");
@@ -52320,7 +52532,7 @@ function renderCommunityComment(comment = {}, postId = "") {
   } else {
     const body = document.createElement("p");
     body.className = "social-comment-body";
-    body.textContent = String(comment.body || "").trim();
+    body.textContent = communityDisplayText(comment.body);
     item.appendChild(body);
   }
   const actions = document.createElement("div");
@@ -52342,16 +52554,18 @@ function renderCommunityComment(comment = {}, postId = "") {
     button.setAttribute("aria-label", communityActionText(data.label, data.count));
     actions.appendChild(button);
   });
-  if (comment.mine) {
+  if (canManageComment) {
     if (!isEditing) {
-      const edit = document.createElement("button");
-      edit.type = "button";
-      edit.className = "social-comment-action";
-      edit.dataset.communityAction = "comment-edit";
-      edit.dataset.postId = postId;
-      edit.dataset.commentId = comment.id || "";
-      edit.textContent = t("socialCommentsEdit");
-      actions.appendChild(edit);
+      if (comment.mine) {
+        const edit = document.createElement("button");
+        edit.type = "button";
+        edit.className = "social-comment-action";
+        edit.dataset.communityAction = "comment-edit";
+        edit.dataset.postId = postId;
+        edit.dataset.commentId = comment.id || "";
+        edit.textContent = t("socialCommentsEdit");
+        actions.appendChild(edit);
+      }
     }
     const remove = document.createElement("button");
     remove.type = "button";
@@ -52420,10 +52634,87 @@ function renderCommunityPostComments(container, post = {}, options = {}) {
   return true;
 }
 
+const COMMUNITY_DISPLAY_TRANSLATIONS = {
+  en: new Map([
+    ["qual seu proximo role", "What is your next night out?"],
+    ["qual o seu proximo role", "What is your next night out?"],
+    ["qual seu proximo role festa ou festival", "What is your next party or festival?"],
+    ["qual o seu proximo role festa ou festival", "What is your next party or festival?"],
+    ["festa ou festival", "Party or festival?"],
+    ["recomendacoes de faixa", "Track recommendations"],
+    ["recomendacao de faixa", "Track recommendation"],
+    ["dica de faixa", "Track tip"],
+    ["novidades da cena", "Scene updates"]
+  ]),
+  es: new Map([
+    ["qual seu proximo role", "¿Cuál es tu próxima salida?"],
+    ["qual o seu proximo role", "¿Cuál es tu próxima salida?"],
+    ["qual seu proximo role festa ou festival", "¿Cuál es tu próxima fiesta o festival?"],
+    ["qual o seu proximo role festa ou festival", "¿Cuál es tu próxima fiesta o festival?"],
+    ["festa ou festival", "¿Fiesta o festival?"],
+    ["recomendacoes de faixa", "Recomendaciones de pistas"],
+    ["recomendacao de faixa", "Recomendación de pista"],
+    ["dica de faixa", "Recomendación de pista"],
+    ["novidades da cena", "Novedades de la escena"]
+  ])
+};
+
+function communityDisplayTranslationKey(value = "") {
+  return normalize(String(value || "").replace(/[?!.,;:]+$/g, "")).replace(/\s+/g, " ").trim();
+}
+
+function textLooksLikePortugueseCommunityCopy(value = "") {
+  const key = communityDisplayTranslationKey(value);
+  return /\b(qual|proximo|proxima|role|festa|faixa|musica|noticia|noticias|comunidade|alguem|recomenda|recomendacao|curti|cidade|hoje|amanha)\b/.test(key);
+}
+
+function applyPortugueseCommunityGlossaryToEnglish(value = "") {
+  let text = String(value || "").trim();
+  if (!textLooksLikePortugueseCommunityCopy(text)) return text;
+  const replacements = [
+    [/\bqual o seu pr[oó]ximo rol[eê]\b/gi, "what is your next night out"],
+    [/\bqual seu pr[oó]ximo rol[eê]\b/gi, "what is your next night out"],
+    [/\bpr[oó]ximo rol[eê]\b/gi, "next night out"],
+    [/\bpr[oó]xima festa\b/gi, "next party"],
+    [/\brol[eê]\b/gi, "night out"],
+    [/\bfestas\b/gi, "parties"],
+    [/\bfesta\b/gi, "party"],
+    [/\bfaixas\b/gi, "tracks"],
+    [/\bfaixa\b/gi, "track"],
+    [/\bm[uú]sicas\b/gi, "songs"],
+    [/\bm[uú]sica\b/gi, "music"],
+    [/\bnot[ií]cias\b/gi, "news"],
+    [/\bnot[ií]cia\b/gi, "news"],
+    [/\bcomunidade\b/gi, "community"],
+    [/\balgu[eé]m\b/gi, "anyone"],
+    [/\brecomenda[cç][oõ]es\b/gi, "recommendations"],
+    [/\brecomenda[cç][aã]o\b/gi, "recommendation"],
+    [/\brecomenda\b/gi, "recommend"],
+    [/\bcidade\b/gi, "city"],
+    [/\bhoje\b/gi, "today"],
+    [/\bamanh[aã]\b/gi, "tomorrow"]
+  ];
+  replacements.forEach(([pattern, replacement]) => {
+    text = text.replace(pattern, replacement);
+  });
+  return text;
+}
+
+function communityDisplayText(value = "") {
+  const original = String(value || "").trim();
+  if (!original || currentLanguage === "pt") return original;
+  const key = communityDisplayTranslationKey(original);
+  const exact = COMMUNITY_DISPLAY_TRANSLATIONS[currentLanguage]?.get(key);
+  if (exact) return exact;
+  if (currentLanguage === "en") return applyPortugueseCommunityGlossaryToEnglish(original);
+  return original;
+}
+
 function renderCommunityPost(post = {}) {
   const card = document.createElement("article");
   card.className = "community-post-card";
   if (post.mine) card.classList.add("is-mine");
+  const canManagePost = Boolean(post.mine || communityState.canModerate);
   card.dataset.communityPostId = post.id || "";
 
   const head = document.createElement("div");
@@ -52435,12 +52726,12 @@ function renderCommunityPost(post = {}) {
   main.appendChild(topic);
   const title = document.createElement("h4");
   title.className = "community-post-title";
-  title.textContent = String(post.title || t("communityTitle")).trim();
+  title.textContent = communityDisplayText(post.title || t("communityTitle"));
   main.appendChild(title);
   if (post.context) {
     const context = document.createElement("div");
     context.className = "community-post-meta";
-    context.textContent = `${t("communityContextLabel")}: ${post.context}`;
+    context.textContent = `${t("communityContextLabel")}: ${communityDisplayText(post.context)}`;
     main.appendChild(context);
   }
   head.appendChild(main);
@@ -52454,7 +52745,7 @@ function renderCommunityPost(post = {}) {
 
   const body = document.createElement("p");
   body.className = "community-post-body";
-  body.textContent = String(post.body || "").trim();
+  body.textContent = communityDisplayText(post.body);
   card.appendChild(body);
 
   if (shouldReadOnlyCommunityForAppStore()) {
@@ -52487,7 +52778,7 @@ function renderCommunityPost(post = {}) {
   commentsButton.textContent = t("communityComment");
   commentsButton.setAttribute("aria-expanded", communityState.expandedPostId === post.id ? "true" : "false");
   actions.appendChild(commentsButton);
-  if (post.mine) {
+  if (canManagePost) {
     if (normalizeCommunityTopic(post.topic) !== "all") {
       const moveToAll = document.createElement("button");
       moveToAll.type = "button";
@@ -52568,6 +52859,8 @@ async function loadCommunityPosts(options = {}) {
   if (shouldDisableCommunityForAppStore()) {
     communityState.enabled = false;
     communityState.posts = [];
+    communityState.canModerate = false;
+    communityState.viewerRole = "anonymous";
     renderCommunityPanel();
     return false;
   }
@@ -52581,6 +52874,7 @@ async function loadCommunityPosts(options = {}) {
     const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`);
     communityState.enabled = payload.enabled !== false;
     communityState.setupNeeded = Boolean(payload.setupNeeded);
+    applySocialViewerContext(payload);
     communityState.posts = Array.isArray(payload.posts)
       ? payload.posts.map((post) => ({ ...post, topic: normalizeCommunityTopic(post?.topic || "track") }))
       : [];
@@ -52592,6 +52886,8 @@ async function loadCommunityPosts(options = {}) {
     console.warn("Could not load community posts", error);
     communityState.posts = [];
     communityState.enabled = false;
+    communityState.canModerate = false;
+    communityState.viewerRole = "anonymous";
     return false;
   } finally {
     communityState.loading = false;
@@ -52753,6 +53049,7 @@ async function loadCommunityPostComments(postId = "", options = {}) {
   const params = new URLSearchParams({ targetType: "post", targetKey: postId });
   try {
     const payload = await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`);
+    applySocialViewerContext(payload);
     communityState.commentsByPost.set(postId, Array.isArray(payload.comments) ? payload.comments : []);
     return true;
   } catch (error) {
@@ -53078,15 +53375,15 @@ function renderSocialUi(options = {}) {
   if (socialTopStyle) socialTopStyle.textContent = resolveFavoriteStyleLabel();
   if (socialMatchHint) {
     const styles = socialTopStyleValues(3).map((style) => styleLabelByValue(style)).filter(Boolean);
-    socialMatchHint.textContent = styles.length ? styles.join(" + ") : "aguardando sinais";
+    socialMatchHint.textContent = styles.length ? styles.join(" + ") : t("socialMatchWaiting");
   }
   renderSocialFeed();
   renderSocialCommentsPanel();
   renderCommunityPanel();
   if (!options.preserveStatus) {
-    if (!configured) socialSetStatus("Login online indisponível neste ambiente. Seu perfil local continua funcionando.", "error");
+    if (!configured) socialSetStatus(t("socialStatusOfflineLocal"), "error");
     else if (!signed) socialSetStatus(sessionCopy.hint);
-    else socialSetStatus("Perfil conectado. Suas curtidas podem virar feed social.", "ok");
+    else socialSetStatus(t("socialStatusConnected"), "ok");
   }
 }
 
@@ -53107,7 +53404,7 @@ async function socialSignInWithProvider(provider = "google") {
     await fetchSocialConfig();
   }
   if (!socialConfigReady()) {
-    socialSetStatus(`Login com ${providerName} indisponível neste ambiente.`, "error");
+    socialSetStatus(t("socialProviderUnavailable", { provider: providerName }), "error");
     updateAuthProviderUi();
     return false;
   }
@@ -53130,7 +53427,7 @@ async function socialSignInWithProvider(provider = "google") {
     return false;
   }
   if (!url) {
-    socialSetStatus(`Não consegui abrir o login com ${providerName} agora.`, "error");
+    socialSetStatus(t("socialProviderOpenFailed", { provider: providerName }), "error");
     updateAuthProviderUi();
     return false;
   }
@@ -53193,13 +53490,25 @@ async function socialSignUp() {
       await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
       await upsertSocialProfile();
       await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
-      socialSetStatus("Perfil criado e conectado.", "ok");
+      socialSetStatus(sonicTinyCopy(
+        "Perfil criado e conectado.",
+        "Profile created and connected.",
+        "Perfil creado y conectado."
+      ), "ok");
       void loadSocialComments({ silent: true });
     } else {
-      socialSetStatus("Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.", "ok");
+      socialSetStatus(sonicTinyCopy(
+        "Perfil criado. Abra o e-mail mais recente do Supabase para confirmar; o link volta para este site.",
+        "Profile created. Open the latest Supabase email to confirm it; the link comes back to this site.",
+        "Perfil creado. Abre el e-mail más reciente de Supabase para confirmarlo; el link vuelve a este sitio."
+      ), "ok");
     }
   } catch (error) {
-    socialSetStatus(`Não consegui criar o perfil: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(sonicTinyCopy(
+      `Não consegui criar o perfil: ${socialFriendlyAuthError(error.message)}`,
+      `I could not create the profile: ${socialFriendlyAuthError(error.message)}`,
+      `No pude crear el perfil: ${socialFriendlyAuthError(error.message)}`
+    ), "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
@@ -53242,10 +53551,14 @@ async function socialSignIn() {
     await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
     await upsertSocialProfile();
     await syncSocialLikedTracks({ silent: true, activity: false, force: true, restore: false });
-    socialSetStatus("Perfil conectado.", "ok");
+    socialSetStatus(sonicTinyCopy("Perfil conectado.", "Profile connected.", "Perfil conectado."), "ok");
     void loadSocialComments({ silent: true });
   } catch (error) {
-    socialSetStatus(`Não consegui entrar: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(sonicTinyCopy(
+      `Não consegui entrar: ${socialFriendlyAuthError(error.message)}`,
+      `I could not sign in: ${socialFriendlyAuthError(error.message)}`,
+      `No pude entrar: ${socialFriendlyAuthError(error.message)}`
+    ), "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
@@ -53259,21 +53572,37 @@ async function socialResendConfirmation() {
     return;
   }
   if (!SOCIAL_EMAIL_PASSWORD_LOGIN_ENABLED) {
-    socialSetStatus("Confirmação por e-mail está desativada. Use o login online disponível.", "error");
+    socialSetStatus(sonicTinyCopy(
+      "Confirmação por e-mail está desativada. Use o login online disponível.",
+      "Email confirmation is disabled. Use the available online login.",
+      "La confirmación por e-mail está desactivada. Usa el login online disponible."
+    ), "error");
     return;
   }
   if (!socialConfigReady()) {
-    socialSetStatus("Confirmação por e-mail está desativada. Use o login online disponível.", "error");
+    socialSetStatus(sonicTinyCopy(
+      "Confirmação por e-mail está desativada. Use o login online disponível.",
+      "Email confirmation is disabled. Use the available online login.",
+      "La confirmación por e-mail está desactivada. Usa el login online disponible."
+    ), "error");
     return;
   }
   const email = String(socialEmailInput?.value || "").trim();
   if (!email) {
-    socialSetStatus("Informe o e-mail para reenviar a confirmação.", "error");
+    socialSetStatus(sonicTinyCopy(
+      "Informe o e-mail para reenviar a confirmação.",
+      "Enter the email to resend confirmation.",
+      "Informa el e-mail para reenviar la confirmación."
+    ), "error");
     return;
   }
   if (socialState.busy) return;
   socialState.busy = true;
-  socialSetStatus("Enviando novo e-mail de confirmação...");
+  socialSetStatus(sonicTinyCopy(
+    "Enviando novo e-mail de confirmação...",
+    "Sending a new confirmation email...",
+    "Enviando nuevo e-mail de confirmación..."
+  ));
   renderSocialUi({ preserveStatus: true });
   try {
     await socialRequest(socialAuthRedirectPath("/auth/v1/resend"), {
@@ -53284,9 +53613,17 @@ async function socialResendConfirmation() {
         email
       }
     });
-    socialSetStatus("Enviei um novo e-mail de confirmação. Use o link mais recente e depois volte aqui.", "ok");
+    socialSetStatus(sonicTinyCopy(
+      "Enviei um novo e-mail de confirmação. Use o link mais recente e depois volte aqui.",
+      "I sent a new confirmation email. Use the latest link, then come back here.",
+      "Envié un nuevo e-mail de confirmación. Usa el link más reciente y vuelve aquí."
+    ), "ok");
   } catch (error) {
-    socialSetStatus(`Não consegui reenviar: ${socialFriendlyAuthError(error.message)}`, "error");
+    socialSetStatus(sonicTinyCopy(
+      `Não consegui reenviar: ${socialFriendlyAuthError(error.message)}`,
+      `I could not resend it: ${socialFriendlyAuthError(error.message)}`,
+      `No pude reenviar: ${socialFriendlyAuthError(error.message)}`
+    ), "error");
   } finally {
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
