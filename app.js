@@ -29125,7 +29125,7 @@ function continueFromAuthToDiscover({ showGuide = false, targetTab = "" } = {}) 
   const safeTargetTab = safeAppTabName(targetTab || "");
   enterAppFromWelcome({
     surprise: false,
-    autoRecommendation: safeTargetTab === "discover",
+    autoRecommendation: false,
     initialTab: safeTargetTab
   });
 }
@@ -55824,7 +55824,7 @@ bind(introContinueBtn, "click", () => {
 });
 
 bind(startBtn, "click", () => {
-  enterAppFromWelcome({ surprise: false, autoRecommendation: true });
+  enterAppFromWelcome({ surprise: false, autoRecommendation: false });
 });
 
 bind(startSurpriseBtn, "click", () => {
