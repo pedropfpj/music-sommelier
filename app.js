@@ -21309,6 +21309,10 @@ const I18N = {
     authAppleComingSoon: "Apple em breve",
     authProviderHintLocalBackup: "Sem login, a descoberta começa limpa neste aparelho. A conta online pode ser ligada depois.",
     authProviderHintAppStoreLocal: "Na versão iOS, você pode entrar com uma conta online disponível ou continuar com perfil local neste aparelho.",
+    authLegalPrefix: "Ao continuar, você aceita os",
+    authTermsLink: "Termos de Uso",
+    authLegalMiddle: "e a",
+    authPrivacyLink: "Política de Privacidade",
     socialMatchWaiting: "aguardando sinais",
     socialStatusOfflineLocal: "Login online indisponível neste ambiente. Seu perfil local continua funcionando.",
     socialStatusConnected: "Perfil conectado. Suas curtidas podem virar feed social.",
@@ -22391,6 +22395,10 @@ const I18N = {
     authAppleComingSoon: "Apple coming soon",
     authProviderHintLocalBackup: "Without login, discovery starts clean on this device. An online account can be enabled later.",
     authProviderHintAppStoreLocal: "In the iOS version, you can sign in with an available online account or continue with a local profile on this device.",
+    authLegalPrefix: "By continuing, you accept the",
+    authTermsLink: "Terms of Use",
+    authLegalMiddle: "and the",
+    authPrivacyLink: "Privacy Policy",
     socialMatchWaiting: "waiting for signals",
     socialStatusOfflineLocal: "Online login is unavailable here. Your local profile still works.",
     socialStatusConnected: "Profile connected. Your likes can become social feed.",
@@ -23470,6 +23478,10 @@ const I18N = {
     authAppleComingSoon: "Apple pronto",
     authProviderHintLocalBackup: "Sin login, el descubrimiento empieza limpio en este dispositivo. La cuenta online puede activarse después.",
     authProviderHintAppStoreLocal: "En la versión iOS, puedes entrar con una cuenta online disponible o continuar con perfil local en este dispositivo.",
+    authLegalPrefix: "Al continuar, aceptas los",
+    authTermsLink: "Términos de Uso",
+    authLegalMiddle: "y la",
+    authPrivacyLink: "Política de Privacidad",
     socialMatchWaiting: "esperando señales",
     socialStatusOfflineLocal: "El login online no está disponible aquí. Tu perfil local sigue funcionando.",
     socialStatusConnected: "Perfil conectado. Tus likes pueden convertirse en feed social.",
@@ -25285,6 +25297,10 @@ function applyLanguage() {
   setText("#authGoogleLabel", t("authGoogleBtn"));
   setText("#authAppleLabel", t("authAppleBtn"));
   setText("#authProviderHint", t("authProviderHint"));
+  setText("#authLegalPrefix", t("authLegalPrefix"));
+  setText("#authTermsLink", t("authTermsLink"));
+  setText("#authLegalMiddle", t("authLegalMiddle"));
+  setText("#authPrivacyLink", t("authPrivacyLink"));
   updateAuthProviderUi();
   if (authUsername) authUsername.placeholder = t("authUsernamePlaceholder");
   if (authPassword) authPassword.placeholder = t("authPasswordPlaceholder");
@@ -29206,7 +29222,10 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
-    if (urlRequestsScreenshotMode()) {
+    const shouldStartAtTop = urlRequestsScreenshotMode()
+      || isNativeAppRuntime()
+      || window.matchMedia?.("(max-width: 760px)")?.matches;
+    if (shouldStartAtTop) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     } else if (swipeStartPanel?.scrollIntoView) {
       swipeStartPanel.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
