@@ -25690,6 +25690,9 @@ function applyLanguage() {
   setText("#summaryKnownArtistsTitle", t("summaryKnownArtistsTitle"));
   setText("#summaryLikedArtistsTitle", t("summaryLikedArtistsTitle"));
   setText("#summaryDislikedArtistsTitle", t("summaryDislikedArtistsTitle"));
+  setText("#socialCommentsKicker", t("socialCommentsKicker"));
+  setText("#socialCommentsTitle", t("socialCommentsTitleTrack"));
+  setText("#socialCommentsSubtitle", t("socialCommentsSubtitleTrack"));
   setText("#quizHubTitle", t("quizHubTitle"));
   setText("#quizHubBadge", t("quizHubBadge"));
   setText("#quizHubHint", t("quizHubHint"));
