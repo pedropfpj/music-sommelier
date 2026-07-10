@@ -25376,6 +25376,34 @@ function applyLanguage() {
   setText("[data-app-tab-target='about']", t("tabAbout"));
   setText("[data-app-tab-target='support']", t("tabSupport"));
   setText("[data-app-tab-target='legal']", t("tabLegal"));
+  if (appTabBar) appTabBar.setAttribute("aria-label", sonicTinyCopy("Navegação principal do app", "Main app navigation", "Navegación principal de la app"));
+  setText("#djDiscoveryKicker", sonicTinyCopy("Radar de selectors", "Selector radar", "Radar de selectors"));
+  setText("#djDiscoveryTitle", sonicTinyCopy("DJs para ouvir por set", "DJs to hear by set", "DJs para escuchar por set"));
+  setText("label[for='djDiscoverySceneFilter']", sonicTinyCopy("Cena", "Scene", "Escena"));
+  if (djDiscoverySceneFilter) {
+    djDiscoverySceneFilter.setAttribute("aria-label", sonicTinyCopy("Filtrar DJs por cena", "Filter DJs by scene", "Filtrar DJs por escena"));
+    const djOptionLabels = {
+      "": sonicTinyCopy("Todos", "All", "Todo"),
+      global_psy: sonicTinyCopy("Psy global", "Global psy", "Psy global"),
+      global_club: sonicTinyCopy("Selectors globais", "Global selectors", "Selectors globales")
+    };
+    Array.from(djDiscoverySceneFilter.options).forEach((option) => {
+      if (Object.prototype.hasOwnProperty.call(djOptionLabels, option.value)) {
+        option.textContent = djOptionLabels[option.value];
+      }
+    });
+  }
+  setText("#djDiscoveryShuffleBtn", sonicTinyCopy("Surpresa", "Surprise", "Sorpresa"));
+  if (djSwipeCard) {
+    djSwipeCard.setAttribute("aria-label", sonicTinyCopy(
+      "Arraste para direita para curtir ou esquerda para passar este DJ",
+      "Drag right to like or left to pass this DJ",
+      "Arrastra a la derecha para dar like o a la izquierda para pasar este DJ"
+    ));
+  }
+  setText("#djSwipePassBtn", sonicTinyCopy("Passo", "Pass", "Paso"));
+  setText("#djSwipeLikeBtn", sonicTinyCopy("Curti", "Like", "Me gusta"));
+  renderDjRecommendation(currentDjRecommendation);
   updateCatalogStatsHero();
   setText("#aboutKicker", t("aboutKicker"));
   setText("#aboutTitle", t("aboutTitle"));
@@ -25847,6 +25875,10 @@ function applyLanguage() {
   if (quizPendingChallenge && quizOfferStateReady()) renderQuizChallengeBubble(quizPendingChallenge);
   else hideQuizChallengeBubble({ clearPending: false });
   updateStats();
+  syncAppMenuLabel(
+    appTabBar?.querySelector("[data-app-tab-target].active, [data-app-tab-target][aria-pressed='true']"),
+    currentActiveAppTabName()
+  );
 }
 
 function normalizeLanguageCode(lang = "") {
@@ -45982,9 +46014,13 @@ function djMetaLine(seed = {}) {
   const isSearchFallback = djSeedIsSearchFallback(safeSeed);
   const lane = djLaneLabel(safeSeed.lane);
   const scene = isSearchFallback ? lane : safeSeed.scene || safeSeed.eventSignal || lane;
-  const platform = isSearchFallback ? "link externo" : safeSeed.platform;
+  const platform = isSearchFallback ? sonicTinyCopy("link externo", "external link", "link externo") : safeSeed.platform;
   const labels = compactDjLabels([safeSeed.subgenre || lane, platform, scene]);
-  return labels.slice(0, 3).join(" • ") || "Set público selecionado por curadoria.";
+  return labels.slice(0, 3).join(" • ") || sonicTinyCopy(
+    "Set público selecionado por curadoria.",
+    "Public set selected by curation.",
+    "Set público seleccionado por curaduría."
+  );
 }
 
 function djContextItems(seed = {}) {
@@ -45994,17 +46030,17 @@ function djContextItems(seed = {}) {
     : safeSeed.roleKind === "b2b"
       ? "B2B"
       : djSeedIsSearchFallback(safeSeed)
-        ? "Busca curada"
-        : "Set direto";
+        ? sonicTinyCopy("Busca curada", "Curated search", "Búsqueda curada")
+        : sonicTinyCopy("Set direto", "Direct set", "Set directo");
   const lane = djLaneLabel(safeSeed.lane);
-  const platform = djSeedIsSearchFallback(safeSeed) ? "Link externo" : safeSeed.platform;
+  const platform = djSeedIsSearchFallback(safeSeed) ? sonicTinyCopy("Link externo", "External link", "Link externo") : safeSeed.platform;
   return [
-    { label: "Origem", value: safeSeed.country },
-    { label: "Cena", value: safeSeed.scene || lane },
-    { label: "Som", value: safeSeed.subgenre || safeSeed.style || lane },
+    { label: sonicTinyCopy("Origem", "Origin", "Origen"), value: safeSeed.country },
+    { label: sonicTinyCopy("Cena", "Scene", "Escena"), value: safeSeed.scene || lane },
+    { label: sonicTinyCopy("Som", "Sound", "Sonido"), value: safeSeed.subgenre || safeSeed.style || lane },
     { label: "Set", value: safeSeed.setTitle },
-    { label: "Plataforma", value: platform },
-    { label: "Entrada", value: roleLabel }
+    { label: sonicTinyCopy("Plataforma", "Platform", "Plataforma"), value: platform },
+    { label: sonicTinyCopy("Entrada", "Entry", "Entrada"), value: roleLabel }
   ].filter((item) => String(item.value || "").trim());
 }
 
@@ -46130,12 +46166,26 @@ function loadDjRecommendationMemory() {
 function renderDjRadarSummary() {
   if (djRadarCount) {
     const count = filteredDjRecommendationPool().length;
-    djRadarCount.textContent = `${count} cartas curadas`;
+    djRadarCount.textContent = sonicTinyCopy(
+      `${count} cartas curadas`,
+      `${count} curated cards`,
+      `${count} cartas curadas`
+    );
   }
-  if (djRadarLiked) djRadarLiked.textContent = `${likedDjRecommendationKeys.size} curtidos`;
+  if (djRadarLiked) {
+    djRadarLiked.textContent = sonicTinyCopy(
+      `${likedDjRecommendationKeys.size} curtidos`,
+      `${likedDjRecommendationKeys.size} liked`,
+      `${likedDjRecommendationKeys.size} con like`
+    );
+  }
   if (djRadarScope) {
     const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : "Techno, psy e selectors";
+    djRadarScope.textContent = lane ? djLaneLabel(lane) : sonicTinyCopy(
+      "Techno, psy e selectors",
+      "Techno, psy, and selectors",
+      "Techno, psy y selectors"
+    );
   }
 }
 
@@ -46152,9 +46202,9 @@ function renderDjRecommendationBadges(seed = null) {
     ? [
         { type: seed.lane === "mop" ? "known" : "fresh", label: djLaneLabel(seed.lane) },
         roleBadge,
-        { type: hasEmbed ? "preview" : "known", label: hasEmbed ? "Set tocavel" : "Link externo" },
-        { type: "good", label: isSearchFallback ? "Curadoria" : seed.platform || "Preview" },
-        likedDjRecommendationKeys.has(key) ? { type: "saved", label: "Salvo" } : null
+        { type: hasEmbed ? "preview" : "known", label: hasEmbed ? sonicTinyCopy("Set tocavel", "Playable set", "Set reproducible") : sonicTinyCopy("Link externo", "External link", "Link externo") },
+        { type: "good", label: isSearchFallback ? sonicTinyCopy("Curadoria", "Curation", "Curaduría") : seed.platform || "Preview" },
+        likedDjRecommendationKeys.has(key) ? { type: "saved", label: sonicTinyCopy("Salvo", "Saved", "Guardado") } : null
       ]
     : [];
   renderSonicBadgeList(djSwipeBadges, badges);
@@ -46177,18 +46227,22 @@ function scheduleDjPreviewFrame(embedUrl = "") {
 function renderDjRecommendation(seed = currentDjRecommendation) {
   const hasSeed = Boolean(seed);
   const roleKicker = seed?.roleKind === "live"
-    ? "Live recomendado"
+    ? sonicTinyCopy("Live recomendado", "Recommended live", "Live recomendado")
     : seed?.roleKind === "b2b"
-      ? "B2B recomendado"
-      : "Set recomendado";
+      ? sonicTinyCopy("B2B recomendado", "Recommended B2B", "B2B recomendado")
+      : sonicTinyCopy("Set recomendado", "Recommended set", "Set recomendado");
   resetSwipeElementPosition(djSwipeCard);
   if (djSwipeCard) djSwipeCard.classList.toggle("is-empty", !hasSeed);
-  if (djSwipeKicker) djSwipeKicker.textContent = hasSeed ? roleKicker : "Set recomendado";
-  if (djSwipeName) djSwipeName.textContent = hasSeed ? seed.name : "Abra um DJ";
+  if (djSwipeKicker) djSwipeKicker.textContent = hasSeed ? roleKicker : sonicTinyCopy("Set recomendado", "Recommended set", "Set recomendado");
+  if (djSwipeName) djSwipeName.textContent = hasSeed ? seed.name : sonicTinyCopy("Abra um DJ", "Open a DJ", "Abre un DJ");
   if (djSwipeMeta) {
     djSwipeMeta.textContent = hasSeed
       ? djMetaLine(seed)
-      : "Seletores com set público, separados do catálogo de produtores.";
+      : sonicTinyCopy(
+        "Seletores com set público, separados do catálogo de produtores.",
+        "Selectors with public sets, separate from the producer catalog.",
+        "Selectors con set público, separados del catálogo de productores."
+      );
   }
   renderDjContextList(hasSeed ? seed : null);
   if (djSwipeReason) {
@@ -46196,17 +46250,21 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
     djSwipeReason.classList.toggle("hidden", !hasSeed);
   }
   if (djSwipeStyleChip) {
-    djSwipeStyleChip.dataset.label = "Subgenero";
+    djSwipeStyleChip.dataset.label = sonicTinyCopy("Subgenero", "Subgenre", "Subgénero");
     djSwipeStyleChip.dataset.family = familyOf(seed?.style || "");
-    djSwipeStyleChip.textContent = hasSeed ? seed.subgenre : "Cena";
+    djSwipeStyleChip.textContent = hasSeed ? seed.subgenre : sonicTinyCopy("Cena", "Scene", "Escena");
   }
   if (djSwipeSetChip) djSwipeSetChip.textContent = hasSeed ? seed.setTitle : "Set";
-  if (djSwipeSourceChip) djSwipeSourceChip.textContent = hasSeed ? seed.sourceName || seed.platform : "Fonte";
+  if (djSwipeSourceChip) djSwipeSourceChip.textContent = hasSeed ? seed.sourceName || seed.platform : sonicTinyCopy("Fonte", "Source", "Fuente");
   if (djSwipeSourceLink) {
     const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
-    const destinationLabel = djSeedIsSearchFallback(seed) ? "busca" : "set";
+    const destinationLabel = djSeedIsSearchFallback(seed)
+      ? sonicTinyCopy("busca", "search", "búsqueda")
+      : "set";
     djSwipeSourceLink.href = hasSeed ? destinationUrl : "#";
-    djSwipeSourceLink.textContent = hasSeed ? `Abrir ${destinationLabel}` : "Abrir set";
+    djSwipeSourceLink.textContent = hasSeed
+      ? sonicTinyCopy(`Abrir ${destinationLabel}`, `Open ${destinationLabel}`, `Abrir ${destinationLabel}`)
+      : sonicTinyCopy("Abrir set", "Open set", "Abrir set");
     djSwipeSourceLink.classList.toggle("is-disabled", !hasSeed);
     djSwipeSourceLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
@@ -46215,18 +46273,26 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
 
   const embedUrl = hasSeed ? djSetEmbedUrl(seed) : "";
-  if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : "Player pronto";
+  if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : sonicTinyCopy("Player pronto", "Player ready", "Player listo");
   if (djPreviewMeta) {
     djPreviewMeta.textContent = hasSeed
       ? embedUrl
         ? `${seed.name} • ${seed.subgenre} • ${seed.platform}`
-        : `${seed.name} • ${seed.subgenre} • link externo pronto`
-      : "O player aparece quando uma carta de DJ estiver ativa.";
+        : `${seed.name} • ${seed.subgenre} • ${sonicTinyCopy("link externo pronto", "external link ready", "link externo listo")}`
+      : sonicTinyCopy(
+        "O player aparece quando uma carta de DJ estiver ativa.",
+        "The player appears when a DJ card is active.",
+        "El player aparece cuando una carta de DJ está activa."
+      );
   }
   if (djPreviewOpenLink) {
     const destinationUrl = seed?.setUrl || seed?.sourceUrl || "#";
     djPreviewOpenLink.href = hasSeed ? destinationUrl : "#";
-    djPreviewOpenLink.textContent = hasSeed ? djSeedIsSearchFallback(seed) ? "Abrir busca" : "Abrir set" : "YouTube";
+    djPreviewOpenLink.textContent = hasSeed
+      ? djSeedIsSearchFallback(seed)
+        ? sonicTinyCopy("Abrir busca", "Open search", "Abrir búsqueda")
+        : sonicTinyCopy("Abrir set", "Open set", "Abrir set")
+      : "YouTube";
     djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
     djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
@@ -46263,13 +46329,25 @@ async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
   if (direction === "like") {
     likedDjRecommendationKeys.add(key);
     passedDjRecommendationKeys.delete(key);
-    if (djSwipeStatus) djSwipeStatus.textContent = `${seed.name} salvo no radar de DJs.`;
+    if (djSwipeStatus) {
+      djSwipeStatus.textContent = sonicTinyCopy(
+        `${seed.name} salvo no radar de DJs.`,
+        `${seed.name} saved to the DJ radar.`,
+        `${seed.name} guardado en el radar de DJs.`
+      );
+    }
     playUiSfx("like");
     burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
-    showToast(`${seed.name} salvo nos DJs`);
+    showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
   } else {
     passedDjRecommendationKeys.add(key);
-    if (djSwipeStatus) djSwipeStatus.textContent = "Passei este set e trouxe outro DJ.";
+    if (djSwipeStatus) {
+      djSwipeStatus.textContent = sonicTinyCopy(
+        "Passei este set e trouxe outro DJ.",
+        "Passed this set and brought another DJ.",
+        "Pasé este set y traje otro DJ."
+      );
+    }
     playUiSfx("dislike");
   }
   saveDjRecommendationMemory();
@@ -53267,6 +53345,12 @@ function setSocialReadinessItem(item, valueElement, hintElement, state = "waitin
 
 function updateSocialReadiness({ configured = socialConfigReady(), signed = Boolean(socialState.session?.access_token) } = {}) {
   if (!socialReadinessGrid) return;
+  const localLabel = socialReadinessLocal?.querySelector("span");
+  const cloudLabel = socialReadinessCloud?.querySelector("span");
+  const communityLabel = socialReadinessCommunity?.querySelector("span");
+  if (localLabel) localLabel.textContent = sonicTinyCopy("Local", "Local", "Local");
+  if (cloudLabel) cloudLabel.textContent = sonicTinyCopy("Nuvem", "Cloud", "Nube");
+  if (communityLabel) communityLabel.textContent = sonicTinyCopy("Comunidade", "Community", "Comunidad");
   setSocialReadinessItem(
     socialReadinessLocal,
     socialReadinessLocalValue,
