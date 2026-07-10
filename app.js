@@ -11891,6 +11891,18 @@ const TRACK_STYLE_BLOCKLIST = [
   },
   {
     family: "psytrance",
+    artist: "Silent Horror",
+    song: "The Cabinet of Dr. Caligari",
+    reason: "Usuario validou que a importacao Deezer veio como Rock, nao psy/dark psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Silent Horror",
+    song: "17 Kills",
+    reason: "Usuario validou que a importacao Deezer veio como Rock, nao psy/dark psy."
+  },
+  {
+    family: "psytrance",
     artist: "Parus",
     song: "High Voltage",
     reason: "Usuario validou artista/faixa ambigua fora do recorte confiavel de psy."
@@ -29183,6 +29195,7 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   if (!generated) return false;
 
   lastPrefs = prefs;
+  swipeUserAnchoredStyle = currentRecommendation?.style || selectedStyle;
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
@@ -33932,8 +33945,16 @@ function addSwipeCandidate(candidateMap, style = "", base = 0, reason = "") {
 function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {}) {
   const explicitAnchor = explicitSwipeAnchorStyle();
   const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
-  const focusStyle = explicitAnchor || dominantSwipeAffinityStyle(sourceTrack);
-  const coveragePlan = !explicitAnchor ? buildSwipeCoverageStylePlan({ sourceTrack }) : null;
+  if (explicitAnchor) {
+    return {
+      focusStyle: explicitAnchor,
+      explicitAnchor: true,
+      sourceStyle,
+      styles: [explicitAnchor]
+    };
+  }
+  const focusStyle = dominantSwipeAffinityStyle(sourceTrack);
+  const coveragePlan = buildSwipeCoverageStylePlan({ sourceTrack });
   if (!focusStyle) return coveragePlan;
 
   const candidateMap = new Map();
@@ -47373,6 +47394,10 @@ function swipeInstantPrefsForStyle(basePrefs, plan, style) {
 
 function instantSwipeStyleCandidates(sourceTrack, plan) {
   const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const anchorStyle = plan?.explicitAnchor
+    ? selectableSwipeStyle(plan.focusStyle)
+    : explicitSwipeAnchorStyle();
+  if (anchorStyle) return [anchorStyle];
   const baseStyle = selectableSwipeStyle(lastPrefs?.style || "");
   const baseFamily = familyOf(sourceStyle || baseStyle);
   const rankedCoverageStyles = discoveryModeEl?.checked === false || explicitSwipeAnchorStyle()
@@ -47859,7 +47884,8 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
   if (tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName, message, positive })) {
     return true;
   }
-  const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false;
+  const hasExplicitSwipeAnchor = Boolean(explicitSwipeAnchorStyle());
+  const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false && !hasExplicitSwipeAnchor;
   const adaptiveResult = shouldExploreAcrossStyles
     ? await generateAdaptiveSwipeNext({
         sourceTrack: likedTrack,
@@ -56264,6 +56290,7 @@ bind(recommendBtn, "click", runRecommendation);
 bind(rerollBtn, "click", async () => {
   const targetPrefs = prefsForSameTargetAction();
   if (!targetPrefs) return;
+  const hadExplicitSwipeAnchor = Boolean(explicitSwipeAnchorStyle());
   const previousTrackKey = currentRecommendation
     ? normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`)
     : "";
@@ -56293,6 +56320,9 @@ bind(rerollBtn, "click", async () => {
   }
 
   lastPrefs = targetPrefs;
+  if (hadExplicitSwipeAnchor) {
+    swipeUserAnchoredStyle = targetPrefs.style ? (currentRecommendation?.style || targetPrefs.style) : "";
+  }
   if (eventsPanel) eventsPanel.classList.add("hidden");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
   if (eventsCalendar) eventsCalendar.innerHTML = "";
