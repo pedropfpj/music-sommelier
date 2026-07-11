@@ -17187,7 +17187,36 @@ function hasTrackStyleSignalConflict(style, trackLike = {}) {
   if (hasLowTempoIntegrityConflict(style, trackLike)) return true;
   if (hasPsytranceIntegrityConflict(style, trackLike)) return true;
   if (hasAmbiguousDynamicPsyHomonymConflict(style, trackLike)) return true;
+  if (hasNonElectronicReleaseConflict(trackLike)) return true;
   return false;
+}
+
+function hasNonElectronicReleaseConflict(track = {}) {
+  const label = normalize(track.label || "");
+  const song = normalize(track.song || "");
+  const albumSignals = normalize([
+    track.album,
+    track.collectionName,
+    track.albumKeywords,
+    catalogTrackMetadataText(track, "album_keywords"),
+    catalogTrackMetadataText(track, "album"),
+    catalogTrackMetadataText(track, "collection")
+  ].filter(Boolean).join(" "));
+  const releaseText = [label, song, albumSignals].filter(Boolean).join(" ");
+  const hardNonElectronicRelease = /\b(?:retro\s+r\s+b|r\s+b\s+(?:classics?|hits?|ballads?)|rhythm\s+(?:and|n)\s+blues|gospel\s+(?:classics?|hits?)|country\s+(?:classics?|hits?)|rock\s+(?:classics?|ballads?)|acoustic\s+(?:classics?|sessions?))\b/;
+  if (hardNonElectronicRelease.test(releaseText)) return true;
+
+  const sourceType = normalize([
+    track.sourceType,
+    catalogTrackMetadataText(track, "source_type")
+  ].filter(Boolean).join(" "));
+  const inheritedArtistDepth = sourceType.includes("deezer existing artist playable depth");
+  if (!inheritedArtistDepth || hasReliableBpmForTrack(track)) return false;
+
+  // Artist-level genre is deliberately excluded: this gate requires evidence
+  // from the recording/release itself, not from another part of the artist's career.
+  const electronicReleaseEvidence = /\b(?:house|techno|trance|electro|electronic|dance|club|garage|breaks?|drum\s+(?:and|n)\s+bass|dnb|dubstep|hardstyle|gabber|acid|ambient|downtempo|remix|rework|extended|dub\s+mix)\b/;
+  return !electronicReleaseEvidence.test(releaseText);
 }
 
 function titleConfidence(baseTitle, candidateTitle) {
