@@ -8492,6 +8492,7 @@ const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const LANGUAGE_STORAGE_KEY = "neonpulse:language:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
+const ANONYMOUS_EXPOSURE_STORAGE_KEY = "neonpulse:anonymousExposure:v1";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
@@ -9588,6 +9589,7 @@ function orderSurpriseTrackPool(pool = [], baseTrack = null) {
       if (artistKey && seenArtistsMemory?.has?.(artistKey)) score -= 1.6;
       if (artistKey && baseArtistKey && artistKey === baseArtistKey) score -= 5.5;
       if (trackKey && baseTrackKey && trackKey === baseTrackKey) score -= 8;
+      score -= anonymousExposurePenalty(track);
       if (hasReliableBpmForTrack(track)) score += 0.55;
       if (trackHasPlayablePreviewExperience(track)) score += 0.48;
       score += trackReleaseFreshnessScore(track) * 0.45;
@@ -44920,6 +44922,70 @@ function createRuntimeCurationSeed() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
+let anonymousExposureCache = null;
+
+function anonymousDiscoverySession() {
+  const mode = normalizeUserSession(currentAuthUser).mode;
+  return mode === "guest" || mode === "visitor" || mode === "test";
+}
+
+function readAnonymousExposureHistory() {
+  if (Array.isArray(anonymousExposureCache)) return anonymousExposureCache;
+  try {
+    const parsed = JSON.parse(localStorage.getItem(ANONYMOUS_EXPOSURE_STORAGE_KEY) || "[]");
+    anonymousExposureCache = Array.isArray(parsed)
+      ? parsed.slice(-160).filter((entry) => entry?.trackKey || entry?.artistKey)
+      : [];
+  } catch (_err) {
+    anonymousExposureCache = [];
+  }
+  return anonymousExposureCache;
+}
+
+function rememberAnonymousExposure(track) {
+  if (!track || !anonymousDiscoverySession()) return;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  if (!trackKey && !artistKey) return;
+  const history = readAnonymousExposureHistory();
+  history.push({ trackKey, artistKey, at: Date.now() });
+  anonymousExposureCache = history.slice(-160);
+  try {
+    localStorage.setItem(ANONYMOUS_EXPOSURE_STORAGE_KEY, JSON.stringify(anonymousExposureCache));
+  } catch (_err) {
+    // In private browsing the in-memory ledger still protects the active session.
+  }
+}
+
+function anonymousExposurePenalty(track) {
+  if (!track || !anonymousDiscoverySession()) return 0;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  const recent = readAnonymousExposureHistory().slice(-80);
+  if (!recent.length) return 0;
+  let trackCount = 0;
+  let artistCount = 0;
+  let trackRecentRank = Infinity;
+  let artistRecentRank = Infinity;
+  for (let index = recent.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
+    const entry = recent[index] || {};
+    if (trackKey && entry.trackKey === trackKey) {
+      trackCount += 1;
+      trackRecentRank = Math.min(trackRecentRank, rank);
+    }
+    if (artistKey && entry.artistKey === artistKey) {
+      artistCount += 1;
+      artistRecentRank = Math.min(artistRecentRank, rank);
+    }
+  }
+  let penalty = trackCount * 34 + Math.max(0, trackCount - 1) * 10 + Math.min(30, artistCount * 7);
+  if (trackRecentRank < 24) penalty += 70;
+  else if (trackRecentRank < 48) penalty += 28;
+  if (artistRecentRank < 8) penalty += 20;
+  else if (artistRecentRank < 18) penalty += 9;
+  return penalty;
+}
+
 function currentCurationUserSeed() {
   if (curationUserSeed) return curationUserSeed;
   try {
@@ -44990,6 +45056,7 @@ function curationDiversityScore(track, prefs = {}, rawIndex = 0) {
   if (prefs.style && artistKey && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 5.8;
   if (artistKey && seenArtistsMemory.has(artistKey)) score -= 4.6;
   if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 3.6;
+  score -= anonymousExposurePenalty(track);
 
   score += trackReleaseFreshnessScore(track) * 1.85;
   if (trackHasPlayablePreviewExperience(track)) score += 0.45;
@@ -45010,6 +45077,10 @@ function curationSelectionWeight(track, prefs = {}, index = 0) {
   if (artistKey && artistKey === artistMatchKey(currentRecommendation?.artist || "")) weight *= 0.34;
   if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) weight *= 1.55;
   if (trackReleaseFreshnessScore(track) > 0) weight *= 1.12;
+  const anonymousPenalty = anonymousExposurePenalty(track);
+  if (anonymousPenalty >= 70) weight *= 0.01;
+  else if (anonymousPenalty >= 30) weight *= 0.08;
+  else if (anonymousPenalty > 0) weight *= 0.28;
   if (!prefs?.style) {
     const maturityScore = recommendationMaturityScore(track.style || "", prefs, track);
     if (maturityScore < 0) weight *= Math.max(0.04, 1 + maturityScore / 36);
@@ -46648,6 +46719,7 @@ function registerRecommendationDelivery(track, prefs) {
   if (!track || !prefs) return;
   recordDailyMusicAction(track, "discovery");
   markRecommendationPresented(track);
+  rememberAnonymousExposure(track);
   registerSwipeStyleExposure(track.style);
   trackRecommendationEvent("discovery_started", track, prefs, {
     source: "recommendation_delivery"
