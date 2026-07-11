@@ -932,6 +932,63 @@ function buildPsyFestivalLineupRecommendationSeeds() {
   }));
 }
 
+function buildExpandedTechnoSetSeeds() {
+  const sets = [
+    ["techno-oscar-mulero-stone-2024", "berlin_hypnotic_deep", "hypnotic_techno", "Oscar Mulero", "Espanha", "Hypnotic Techno / Deep Techno", "Oscar Mulero - Stone Techno 2024", "Z7RfxEdtvrQ", "ARTE Concert"],
+    ["techno-rodhad-glitch-2023", "berlin_hypnotic_deep", "hypnotic_techno", "RØDHÅD", "Alemanha", "Hypnotic Techno / Deep Techno", "RØDHÅD | Boiler Room x Glitch Festival 2023", "oNYarqQNev0", "Boiler Room"],
+    ["techno-luigi-tozzi-awakenings-2025", "berlin_hypnotic_deep", "deep_techno", "Luigi Tozzi", "Italia", "Deep Techno / Hypnotic Techno", "Luigi Tozzi @ Awakenings Upclose 2025", "v9S2_ugYcsM", "Awakenings"],
+    ["techno-dasha-rush-stone-2023", "berlin_hypnotic_deep", "hypnotic_techno", "Dasha Rush", "Russia / Alemanha", "Hypnotic Techno / Experimental Techno", "Dasha Rush - Stone Techno 2023", "b2EC5KzcWqY", "ARTE Concert"],
+    ["techno-donato-dozzy-boiler-room-rome", "berlin_hypnotic_deep", "hypnotic_techno", "Donato Dozzy", "Italia", "Hypnotic Techno / Deep Techno", "Donato Dozzy | Boiler Room: Rome", "Dhzp6esYfeY", "Boiler Room"],
+    ["techno-feral-modem-2024", "berlin_hypnotic_deep", "hypnotic_techno", "Feral", "Italia", "Hypnotic Techno / Psychedelic Techno", "MNMT Live: Feral @ The Seed - Mo:Dem 2024", "9pX-wvd2xXY", "Monument"],
+
+    ["techno-ben-sims-hor-2022", "berlin_raw_hardgroove", "hardgroove_techno", "Ben Sims", "Reino Unido", "Hardgroove / Tribal Techno", "Ben Sims | HÖR - Nov 1 / 2022", "W1TfHDQ1HOQ", "HÖR Berlin"],
+    ["techno-chlar-glitch-2023", "berlin_raw_hardgroove", "hardgroove_techno", "Chlär", "Suica", "Hardgroove / Groove Techno", "Chlär | Boiler Room x Glitch Festival 2023", "Xy_YQtgzFY0", "Boiler Room"],
+    ["techno-alarico-section-2025", "berlin_raw_hardgroove", "raw_techno", "Alarico", "Italia", "Raw Techno / Groove Techno", "Alarico | Techno DJ Set | SECTION.", "_6R97mDQP3Q", "SECTION."],
+    ["techno-rene-wise-hor", "berlin_raw_hardgroove", "techno", "Rene Wise", "Reino Unido", "Groove Techno / Raw Techno", "Rene Wise | Planet X at HÖR", "fZAEJ-jqvHc", "HÖR Berlin"],
+    ["techno-lady-machine-section-2025", "berlin_raw_hardgroove", "techno", "The Lady Machine", "Brasil / Alemanha", "Vinyl Techno / Groove Techno", "The Lady Machine | Vinyl DJ Set | SECTION.", "Umo5tNjRpAA", "SECTION."],
+    ["techno-dj-rush-beats-for-love-2025", "berlin_raw_hardgroove", "hardgroove_techno", "DJ Rush", "Estados Unidos", "Chicago Techno / Hardgroove", "DJ Rush - Beats For Love 2025", "vSufpiLxvKM", "Beats For Love"],
+
+    ["techno-surgeon-dekmantel-live", "berlin_industrial_ebm", "industrial_techno", "Surgeon", "Reino Unido", "Industrial Techno / Live", "Surgeon Boiler Room x Dekmantel Live Set", "Ww9VtKqprUY", "Boiler Room"],
+    ["techno-blawan-hor-2023", "berlin_industrial_ebm", "industrial_techno", "Blawan", "Reino Unido", "Industrial Techno / Experimental Techno", "Blawan | TTT x HÖR", "oSsLsnsJ-5I", "HÖR Berlin"],
+    ["techno-paula-temple-time-warp-2018", "berlin_industrial_ebm", "industrial_techno", "Paula Temple", "Reino Unido", "Industrial Techno / Hard Techno", "Paula Temple - Time Warp 2018", "L7PrP_6dPcw", "ARTE Concert"],
+    ["techno-ancient-methods-boiler-room", "berlin_industrial_ebm", "industrial_techno", "Ancient Methods", "Alemanha", "Industrial Techno / EBM", "Ancient Methods Boiler Room Berlin DJ Set", "pEOhnkjEpqE", "Boiler Room"],
+    ["techno-snts-a38", "berlin_industrial_ebm", "industrial_techno", "SNTS", "Alemanha", "Industrial Techno / Dark Techno", "SNTS | Technokunst at A38", "KyZpzihgjs0", "Technokunst"],
+    ["techno-tommy-four-seven-section-2026", "berlin_industrial_ebm", "industrial_techno", "Tommy Four Seven", "Reino Unido / Alemanha", "Industrial Techno / Experimental Techno", "Tommy Four Seven | SECTION.", "eDHUfxddQl8", "SECTION."],
+
+    ["techno-helena-hauff-dekmantel-2024", "berlin_acid_electro", "electro", "Helena Hauff", "Alemanha", "Electro / Acid / Techno", "Helena Hauff & Marcel Dettmann | Dekmantel Ten", "2WFc7gmPOjY", "Dekmantel"],
+    ["techno-umwelt-ombra-live-2023", "berlin_acid_electro", "electro", "Umwelt", "Franca", "Electro / Acid Techno / Live", "Umwelt Live | Ombra Festival 2023", "btt0_LV7uTE", "Ombra Festival"],
+    ["techno-dj-stingray-section-2026", "berlin_acid_electro", "electro", "DJ Stingray 313", "Estados Unidos", "Detroit Electro / Techno", "DJ Stingray 313 | SECTION.", "g4-sacPhr_g", "SECTION."],
+    ["techno-jensen-interceptor-glitch", "berlin_acid_electro", "electro", "Jensen Interceptor", "Australia", "Electro / Techno / EBM", "Jensen Interceptor | Boiler Room x Glitch", "HB_bsu9UHU8", "Boiler Room"],
+    ["techno-ellen-allien-hor", "berlin_acid_electro", "acid_techno", "Ellen Allien", "Alemanha", "Acid Techno / Electro", "Ellen Allien | TTT x HÖR", "GG2IQguY-J0", "HÖR Berlin"],
+    ["techno-cem-section-2026", "berlin_acid_electro", "electro", "CEM", "Alemanha", "Techno / Electro / UK Bass", "CEM | SECTION.", "DfrZ_Ud0Qgc", "SECTION."],
+
+    ["techno-skee-mask-dj-set", "berlin_bass_electro", "broken_techno", "Skee Mask", "Alemanha", "Broken Techno / IDM / Bass", "Skee Mask - DJ Set", "8ZVymyPq2uc", "Public DJ set"],
+    ["techno-batu-dekmantel-2025", "berlin_bass_electro", "broken_techno", "Batu", "Reino Unido", "Bass / Broken Techno", "Batu at RADAR | Dekmantel 2025", "sXC5LauY4EM", "Dekmantel"],
+    ["techno-objekt-section-2026", "berlin_bass_electro", "broken_techno", "Objekt", "Reino Unido / Alemanha", "Experimental Club / Broken Techno", "Objekt | SECTION.", "3dcirZfs79o", "SECTION."],
+    ["techno-peder-mannerfelt-hor-live", "berlin_bass_electro", "broken_techno", "Peder Mannerfelt", "Suecia", "Experimental Techno / Bass / Live", "Peder Mannerfelt Live | HÖR", "MpsBo1neqI0", "HÖR Berlin"],
+    ["techno-laksa-medium-rare", "berlin_bass_electro", "broken_techno", "Laksa", "Reino Unido", "UK Bass / Broken Techno", "Medium Rare - Guest Mix by Laksa", "RVu4XVqrOHg", "Medium Rare"],
+    ["techno-tsvi-boiler-room-primavera", "berlin_bass_electro", "broken_techno", "TSVI", "Italia / Reino Unido", "UK Bass / Percussive Club", "TSVI | Boiler Room x Primavera Sound", "6Z6l2ewKnsg", "Boiler Room"]
+  ];
+
+  return sets.map(([id, lane, style, name, country, subgenre, setTitle, videoId, sourceName]) => ({
+    id,
+    lane,
+    style,
+    name,
+    country,
+    scene: sourceName,
+    subgenre,
+    setTitle,
+    setUrl: `https://www.youtube.com/watch?v=${videoId}`,
+    platform: "YouTube",
+    sourceName,
+    eventSignal: sourceName,
+    roleKind: setTitle.toLowerCase().includes("live") ? "live" : "dj",
+    roleNote: "Set publico completo selecionado para ampliar a rotacao de techno com player direto.",
+    reason: `Set direto de ${name} para diversificar o eixo ${subgenre} sem repetir o mesmo artista.`
+  }));
+}
+
 const DJ_SET_RECOMMENDATION_SEEDS = [
   {
     id: "hitech-psycore-paula",
@@ -2393,7 +2450,8 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     roleNote: "Listado pela RA no Third Eye Festival; perfilado para techno profundo/IDM.",
     reason: "Boa recomendacao para usuarios que gostam de techno cerebral, elegante e experimental."
   },
-  ...buildPsyFestivalLineupRecommendationSeeds()
+  ...buildPsyFestivalLineupRecommendationSeeds(),
+  ...buildExpandedTechnoSetSeeds()
 ];
 
 const STYLE_SEARCH_TERMS = {
@@ -46219,6 +46277,14 @@ function djLaneLabel(lane = "") {
 }
 
 const DJ_PSY_SET_LANES = new Set(["psy_festival_lineups", "hitech_psycore", "global_psy", "mop"]);
+const DJ_TECHNO_SET_LANES = new Set([
+  "techno_live_dj",
+  "berlin_hypnotic_deep",
+  "berlin_raw_hardgroove",
+  "berlin_industrial_ebm",
+  "berlin_acid_electro",
+  "berlin_bass_electro"
+]);
 
 function compactDjLabels(labels = []) {
   const seen = new Set();
@@ -46246,6 +46312,7 @@ function djSeedMatchesLane(seed = {}, lane = "") {
   const safeSeed = seed || {};
   if (!lane) return true;
   if (lane === "psy_festival_lineups") return DJ_PSY_SET_LANES.has(safeSeed.lane);
+  if (lane === "techno_live_dj") return DJ_TECHNO_SET_LANES.has(safeSeed.lane);
   return safeSeed.lane === lane;
 }
 
