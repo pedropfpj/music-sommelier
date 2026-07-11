@@ -125,9 +125,39 @@ p {
   margin: 0;
 }
 
+.instagram-profile-cta-global {
+  position: fixed;
+  z-index: 320;
+  top: calc(0.9rem + env(safe-area-inset-top));
+  right: max(0.9rem, env(safe-area-inset-right));
+  width: auto;
+  margin: 0;
+  backdrop-filter: blur(12px);
+}
+
 @media (max-width: 640px) {
   .instagram-profile-cta {
     width: 100%;
+  }
+
+  .instagram-profile-cta-global {
+    top: calc(0.65rem + env(safe-area-inset-top));
+    right: max(0.65rem, env(safe-area-inset-right));
+    width: auto;
+    min-height: 40px;
+    padding: 0.55rem 0.68rem;
+  }
+
+  .instagram-profile-cta-global > span[data-instagram-profile-text] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .hero-actions .instagram-profile-cta-compact {
