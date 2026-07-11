@@ -47508,17 +47508,19 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
 
   // The queue is resolved while the current track is playing. Reusing it here
   // removes a full catalog scan and usually gives the next card a warm audio URL.
-  const plannedStyles = new Set(styles.filter(Boolean));
-  for (const queuedTrack of suggestionQueueTracks.slice(1, 4)) {
+  const queuedCandidates = suggestionQueueTracks
+    .filter((track) => recommendationTrackKey(track) !== sourceKey)
+    .slice(0, 4);
+  for (const queuedTrack of queuedCandidates) {
     const queuedStyle = selectableSwipeStyle(queuedTrack?.style || "");
-    if (plannedStyles.size && queuedStyle && !plannedStyles.has(queuedStyle)) continue;
     const queuedPrefs = swipeInstantPrefsForStyle(basePrefs, plan, queuedStyle || basePrefs.style);
     if (candidateAllowed(queuedTrack, queuedPrefs)) {
       return { track: queuedTrack, prefs: queuedPrefs, plan };
     }
   }
 
-  for (const style of styles.length ? styles : [basePrefs.style || ""]) {
+  const stylesToScan = (styles.length ? styles : [basePrefs.style || ""]).slice(0, 3);
+  for (const style of stylesToScan) {
     const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
     const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
     const pool = basePool.filter((track) => candidateAllowed(track, prefs));
@@ -47567,7 +47569,7 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
     suggestionQueueContextKey = recommendationContextKey(finalPrefs);
     renderSuggestionQueue(finalPrefs);
   }
-  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 900 });
+  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 120 });
 
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
@@ -47800,7 +47802,7 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
     suggestionQueueContextKey = recommendationContextKey(finalPrefs);
     renderSuggestionQueue(finalPrefs);
   }
-  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 900 });
+  scheduleSuggestionQueueRefresh(finalPrefs, track, { delayMs: 120 });
 
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
@@ -47890,7 +47892,9 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
   const avoidTrackTitles = sourceTrack?.song ? [sourceTrack.song] : [];
   const basePrefs = normalizeRecommendationPrefs(lastPrefs);
   const triedStyles = new Set();
-  const stylesToTry = plan.styles.slice(0, 5);
+  // Keep the synchronous fallback bounded on mobile. The prepared queue is the
+  // primary path; two adaptive attempts are enough before the general fallback.
+  const stylesToTry = plan.styles.slice(0, 2);
 
   for (const style of stylesToTry) {
     const cleanStyle = selectableSwipeStyle(style);
