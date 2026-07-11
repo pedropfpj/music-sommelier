@@ -23459,6 +23459,8 @@ const I18N = {
     legalDataText: "Cookies essenciais mantêm segurança, sessão e preferências. Não usamos cookies de anúncio ou tracking; analytics do site só carrega depois do aceite.",
     legalLinksTitle: "Documentos completos",
     legalPrivacyPolicyLink: "Política de Privacidade",
+    instagramProfileText: "Siga no Instagram",
+    instagramProfileAria: "Siga a jornada sonora no Instagram: @sonicsearch.app",
     legalTermsLink: "Termos de Uso",
     legalCookiesLink: "Política de Cookies",
     legalDisclaimer: "Aviso informativo; não substitui contrato ou orientação jurídica.",
@@ -24545,6 +24547,8 @@ const I18N = {
     legalDataText: "Essential cookies keep security, session, and preferences. We do not use advertising or tracking cookies; site analytics only loads after consent.",
     legalLinksTitle: "Full documents",
     legalPrivacyPolicyLink: "Privacy Policy",
+    instagramProfileText: "Follow on Instagram",
+    instagramProfileAria: "Follow the sonic journey on Instagram: @sonicsearch.app",
     legalTermsLink: "Terms of Use",
     legalCookiesLink: "Cookie Policy",
     legalDisclaimer: "Informational notice; not legal advice.",
@@ -25628,6 +25632,8 @@ const I18N = {
     legalDataText: "Las cookies esenciales mantienen seguridad, sesión y preferencias. No usamos cookies de anuncios ni tracking; analytics del sitio solo carga después del consentimiento.",
     legalLinksTitle: "Documentos completos",
     legalPrivacyPolicyLink: "Política de Privacidad",
+    instagramProfileText: "Síguenos en Instagram",
+    instagramProfileAria: "Sigue el viaje sonoro en Instagram: @sonicsearch.app",
     legalTermsLink: "Términos de Uso",
     legalCookiesLink: "Política de Cookies",
     legalDisclaimer: "Aviso informativo; no sustituye asesoría jurídica.",
@@ -27327,6 +27333,9 @@ function applyLanguage() {
   setText("#legalDataText", t("legalDataText"));
   setText("#legalLinksTitle", t("legalLinksTitle"));
   setText("#legalPrivacyPolicyLink", t("legalPrivacyPolicyLink"));
+  setText("#instagramProfileText", t("instagramProfileText"));
+  const instagramProfileLink = document.getElementById("instagramProfileLink");
+  if (instagramProfileLink) instagramProfileLink.setAttribute("aria-label", t("instagramProfileAria"));
   setText("#legalTermsLink", t("legalTermsLink"));
   setText("#legalCookiesLink", t("legalCookiesLink"));
   setText("#legalDisclaimer", t("legalDisclaimer"));
