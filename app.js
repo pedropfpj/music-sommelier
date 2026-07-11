@@ -20830,6 +20830,17 @@ function soundCloudDirectUrlFromRow(row) {
   return isDirectSoundCloudTrackUrl(url) ? url : "";
 }
 
+function soundCloudComparableTitle(title = "", artist = "") {
+  const rawTitle = String(title || "").trim();
+  const artistKey = normalize(artist || "");
+  if (!rawTitle || !artistKey) return rawTitle;
+  const separator = rawTitle.match(/\s(?:-|–|—|:)\s/);
+  if (!separator || typeof separator.index !== "number") return rawTitle;
+  const prefix = rawTitle.slice(0, separator.index);
+  if (!normalize(prefix).includes(artistKey)) return rawTitle;
+  return rawTitle.slice(separator.index + separator[0].length).trim() || rawTitle;
+}
+
 function rankedSoundCloudRowsForTrack(track, rows = []) {
   const currentDirectUrl = canonicalExternalTrackUrl(directSoundCloudTrackUrl(track));
   return rows
@@ -20838,8 +20849,12 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
       const rowUrl = canonicalExternalTrackUrl(directUrl);
       const previewUrl = soundCloudPreviewUrlFromRow(row);
       const candidateTitle = row.song || row.title || "";
+      const comparableTitle = soundCloudComparableTitle(candidateTitle, track.artist);
       const sameDirectUrl = Boolean(currentDirectUrl && rowUrl && currentDirectUrl === rowUrl);
-      const titleScore = titleConfidence(track.song, candidateTitle);
+      const titleScore = Math.max(
+        titleConfidence(track.song, candidateTitle),
+        titleConfidence(track.song, comparableTitle)
+      );
       const artistOk = isArtistMatch(row.artist || "", track.artist || "");
       const normalizedArtist = normalize(track.artist || "");
       const titleArtistOk = Boolean(normalizedArtist && normalize(candidateTitle).includes(normalizedArtist));
@@ -20852,8 +20867,8 @@ function rankedSoundCloudRowsForTrack(track, rows = []) {
           normalize([row.description, row.tags, row.genre].filter(Boolean).join(" ")).replace(/\s+/g, "").includes(compactArtist)
         )
       );
-      const titleOk = strictTitleMatch(track.song, candidateTitle);
-      const alternateVersionConflict = hasUnrequestedAlternateVersion(track.song, candidateTitle);
+      const titleOk = strictTitleMatch(track.song, candidateTitle) || strictTitleMatch(track.song, comparableTitle);
+      const alternateVersionConflict = hasUnrequestedAlternateVersion(track.song, comparableTitle);
       const score =
         (directUrl ? 2.5 : 0) +
         (previewUrl ? 2.2 : 0) +
