@@ -48633,13 +48633,21 @@ async function renderPreview(track, options = {}) {
     !trackHasDirectSoundCloudTrack(track) &&
     Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
-    const resolvedSoundCloud = await waitForPromiseWithTimeout(
+    const soundCloudLookup = waitForPromiseWithTimeout(
       resolveSoundCloudEmbedForTrack(track, { force: false }),
       resolveTimeoutMs,
       false
     );
-    if (!isStillCurrentPreviewTrack()) return false;
-    if (resolvedSoundCloud) syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+    if (fastMode) {
+      void soundCloudLookup.then((resolvedSoundCloud) => {
+        if (!resolvedSoundCloud || !isStillCurrentPreviewTrack()) return;
+        syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+      });
+    } else {
+      const resolvedSoundCloud = await soundCloudLookup;
+      if (!isStillCurrentPreviewTrack()) return false;
+      if (resolvedSoundCloud) syncSoundCloudPreviewActionForTrack(track, { expanded: false });
+    }
   }
   let hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   let hasDirectYoutube = trackHasDirectYouTubeVideo(track);
