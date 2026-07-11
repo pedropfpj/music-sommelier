@@ -36297,6 +36297,7 @@ function showSoundCloudPreviewEmbed(track, { autoplay = false } = {}) {
   if (!soundcloudPreviewWrap || !soundcloudPreviewFrame || !track) return false;
   const embedUrl = buildSoundCloudEmbedUrl(track, { autoplay });
   if (!embedUrl) return false;
+  soundcloudPreviewFrame.loading = autoplay ? "eager" : "lazy";
   if (soundcloudPreviewFrame.getAttribute("src") !== embedUrl) {
     soundcloudPreviewFrame.setAttribute("src", embedUrl);
   }
@@ -36305,10 +36306,15 @@ function showSoundCloudPreviewEmbed(track, { autoplay = false } = {}) {
   return true;
 }
 
-function buildBandcampEmbedUrl(track) {
+function previewAutoplayRequested() {
+  return Boolean(audioEnabled && audioUnlocked && !audioUnavailable && audioVolume > 0.001);
+}
+
+function buildBandcampEmbedUrl(track, { autoplay = false } = {}) {
   const trackId = bandcampTrackIdForEmbed(track);
   if (!trackId) return "";
-  return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/transparent=true/`;
+  const autoplayPart = autoplay ? "autoplay=true/" : "";
+  return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/${autoplayPart}transparent=true/`;
 }
 
 function resetBandcampPreviewEmbed({ keepActions = false, track = null } = {}) {
@@ -36324,10 +36330,11 @@ function resetBandcampPreviewEmbed({ keepActions = false, track = null } = {}) {
   }
 }
 
-function showBandcampPreviewEmbed(track) {
+function showBandcampPreviewEmbed(track, { autoplay = false } = {}) {
   if (!bandcampPreviewWrap || !bandcampPreviewFrame || !track) return false;
-  const embedUrl = buildBandcampEmbedUrl(track);
+  const embedUrl = buildBandcampEmbedUrl(track, { autoplay });
   if (!embedUrl) return false;
+  bandcampPreviewFrame.loading = autoplay ? "eager" : "lazy";
   if (bandcampPreviewFrame.getAttribute("src") !== embedUrl) {
     bandcampPreviewFrame.setAttribute("src", embedUrl);
   }
@@ -36340,6 +36347,7 @@ function showYouTubePreviewEmbed(track, { autoplay = false, attempt = 0 } = {}) 
   if (!youtubePreviewWrap || !youtubePreviewFrame || !track) return false;
   const embedUrl = buildYouTubeEmbedUrl(track, { autoplay, attempt });
   if (!embedUrl) return false;
+  youtubePreviewFrame.loading = autoplay ? "eager" : "lazy";
   if (youtubePreviewFrame.getAttribute("src") !== embedUrl) {
     youtubePreviewFrame.setAttribute("src", embedUrl);
   }
@@ -36366,6 +36374,7 @@ function showFixedPreviewPlayers(track, {
   includeYoutubeSearch = false,
   autoplayYoutube = false,
   autoplaySoundCloud = false,
+  autoplayBandcamp = false,
   expandEmbeds = true
 } = {}) {
   const sources = [];
@@ -36382,7 +36391,7 @@ function showFixedPreviewPlayers(track, {
     syncSoundCloudPreviewActionForTrack(track, { expanded: false });
   }
 
-  const bandcampReady = expandEmbeds ? showBandcampPreviewEmbed(track) : false;
+  const bandcampReady = expandEmbeds ? showBandcampPreviewEmbed(track, { autoplay: autoplayBandcamp }) : false;
   if (bandcampReady) {
     sources.push("Bandcamp");
   } else {
@@ -48072,6 +48081,7 @@ function animateSwipeCommit(element, direction = "like") {
 async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   const animatedEl = swipeAnimationElement(triggerEl);
   if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
+  primeAudioForDiscoveryGesture();
   swipeFeedbackBusy = true;
   animatedEl.classList.remove("is-dragging", "is-returning");
   animateSwipeCommit(animatedEl, direction);
@@ -48426,6 +48436,7 @@ async function renderPreview(track, options = {}) {
       includeYoutubeSearch: false,
       autoplayYoutube: false,
       autoplaySoundCloud: false,
+      autoplayBandcamp: false,
       expandEmbeds: false
     });
     previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
@@ -48489,8 +48500,9 @@ async function renderPreview(track, options = {}) {
     track.previewMissing = true;
     const fixedPlayers = showFixedPreviewPlayers(track, {
       includeYoutubeSearch: false,
-      autoplayYoutube: false,
-      autoplaySoundCloud: false
+      autoplayYoutube: previewAutoplayRequested(),
+      autoplaySoundCloud: previewAutoplayRequested(),
+      autoplayBandcamp: previewAutoplayRequested()
     });
     previewPanel.classList.toggle("has-fixed-embeds", fixedPlayers.anyReady);
     if (fixedPlayers.anyReady) {
@@ -48506,8 +48518,9 @@ async function renderPreview(track, options = {}) {
     } else {
       const youtubeSearchFallbackReady = showFixedPreviewPlayers(track, {
         includeYoutubeSearch: true,
-        autoplayYoutube: true,
-        autoplaySoundCloud: false
+        autoplayYoutube: previewAutoplayRequested(),
+        autoplaySoundCloud: previewAutoplayRequested(),
+        autoplayBandcamp: previewAutoplayRequested()
       });
       previewPanel.classList.toggle("has-fixed-embeds", youtubeSearchFallbackReady.anyReady);
       if (youtubeSearchFallbackReady.anyReady) {
@@ -56264,6 +56277,7 @@ bind(youtubePreviewToggleBtn, "click", () => {
 
 bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (!currentRecommendation) return;
+  primeAudioForDiscoveryGesture();
   const expanded = Boolean(soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden"));
   if (expanded) {
     resetSoundCloudPreviewEmbed({ keepActions: true, track: currentRecommendation });
@@ -56279,7 +56293,7 @@ bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (trackPreview && !trackPreview.paused) {
     trackPreview.pause();
   }
-  const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: false });
+  const opened = showSoundCloudPreviewEmbed(currentRecommendation, { autoplay: previewAutoplayRequested() });
   if (opened) {
     setTrackPreviewVisualState("embed");
     if (previewStatus) previewStatus.textContent = t("previewSoundcloudFallback");
@@ -56335,6 +56349,7 @@ bind(youtubePreviewRetryBtn, "click", () => {
 
 bind(bandcampPreviewToggleBtn, "click", () => {
   if (!currentRecommendation) return;
+  primeAudioForDiscoveryGesture();
   const expanded = Boolean(bandcampPreviewWrap && !bandcampPreviewWrap.classList.contains("hidden"));
   if (expanded) {
     resetBandcampPreviewEmbed({ keepActions: true, track: currentRecommendation });
@@ -56345,7 +56360,7 @@ bind(bandcampPreviewToggleBtn, "click", () => {
   if (trackPreview && !trackPreview.paused) {
     trackPreview.pause();
   }
-  const opened = showBandcampPreviewEmbed(currentRecommendation);
+  const opened = showBandcampPreviewEmbed(currentRecommendation, { autoplay: previewAutoplayRequested() });
   if (opened) {
     setTrackPreviewVisualState("embed");
     if (previewStatus) previewStatus.textContent = t("previewBandcampFallback");
