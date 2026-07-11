@@ -36309,12 +36309,50 @@ function buildSoundCloudEmbedUrl(track, { autoplay = false } = {}) {
   return `https://w.soundcloud.com/player/?${params.toString()}`;
 }
 
+let soundcloudWidgetController = null;
+let soundcloudWidgetTrackUrl = "";
+
+function soundcloudWidgetOptions({ autoplay = false } = {}) {
+  return {
+    auto_play: Boolean(autoplay),
+    color: "#66d8ff",
+    hide_related: true,
+    show_comments: false,
+    show_user: true,
+    show_reposts: false,
+    show_teaser: false,
+    visual: false
+  };
+}
+
+function getSoundCloudWidgetController() {
+  if (soundcloudWidgetController) return soundcloudWidgetController;
+  if (!soundcloudPreviewFrame || !window.SC?.Widget) return null;
+  try {
+    soundcloudWidgetController = window.SC.Widget(soundcloudPreviewFrame);
+  } catch (_err) {
+    soundcloudWidgetController = null;
+  }
+  return soundcloudWidgetController;
+}
+
+function syncSoundCloudWidgetPlayback(widget, { autoplay = false } = {}) {
+  if (!widget) return;
+  try {
+    widget.setVolume(Math.round(Math.max(0, Math.min(1, audioVolume)) * 100));
+    if (autoplay) widget.play();
+  } catch (_err) {
+    // The visible widget remains the manual fallback if Safari declines playback.
+  }
+}
+
 function resetSoundCloudPreviewEmbed({ keepActions = false, track = null } = {}) {
   if (!soundcloudPreviewWrap || !soundcloudPreviewFrame) return;
   soundcloudPreviewWrap.classList.add("hidden");
-  if (soundcloudPreviewFrame.getAttribute("src")) {
-    soundcloudPreviewFrame.removeAttribute("src");
-  }
+  const widget = getSoundCloudWidgetController();
+  try {
+    widget?.pause();
+  } catch (_err) {}
   if (keepActions && track) {
     syncSoundCloudPreviewActionForTrack(track, { expanded: false });
   } else if (!keepActions) {
@@ -36324,11 +36362,33 @@ function resetSoundCloudPreviewEmbed({ keepActions = false, track = null } = {})
 
 function showSoundCloudPreviewEmbed(track, { autoplay = false } = {}) {
   if (!soundcloudPreviewWrap || !soundcloudPreviewFrame || !track) return false;
+  const directUrl = directSoundCloudTrackUrl(track);
   const embedUrl = buildSoundCloudEmbedUrl(track, { autoplay });
   if (!embedUrl) return false;
   soundcloudPreviewFrame.loading = autoplay ? "eager" : "lazy";
-  if (soundcloudPreviewFrame.getAttribute("src") !== embedUrl) {
+  const widget = getSoundCloudWidgetController();
+  if (widget && soundcloudWidgetTrackUrl && soundcloudWidgetTrackUrl !== directUrl) {
+    const options = soundcloudWidgetOptions({ autoplay });
+    options.callback = () => syncSoundCloudWidgetPlayback(widget, { autoplay });
+    try {
+      widget.load(directUrl, options);
+      soundcloudWidgetTrackUrl = directUrl;
+    } catch (_err) {
+      soundcloudPreviewFrame.setAttribute("src", embedUrl);
+      soundcloudWidgetController = null;
+      soundcloudWidgetTrackUrl = directUrl;
+    }
+  } else if (soundcloudPreviewFrame.getAttribute("src") !== embedUrl && soundcloudWidgetTrackUrl !== directUrl) {
     soundcloudPreviewFrame.setAttribute("src", embedUrl);
+    soundcloudWidgetTrackUrl = directUrl;
+    const initializedWidget = getSoundCloudWidgetController();
+    if (initializedWidget && window.SC?.Widget?.Events?.READY) {
+      initializedWidget.bind(window.SC.Widget.Events.READY, () => {
+        syncSoundCloudWidgetPlayback(initializedWidget, { autoplay });
+      });
+    }
+  } else {
+    syncSoundCloudWidgetPlayback(widget || getSoundCloudWidgetController(), { autoplay });
   }
   soundcloudPreviewWrap.classList.remove("hidden");
   syncSoundCloudPreviewActionForTrack(track, { expanded: true });
