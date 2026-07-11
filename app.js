@@ -36391,18 +36391,22 @@ function showFixedPreviewPlayers(track, {
     syncSoundCloudPreviewActionForTrack(track, { expanded: false });
   }
 
-  const bandcampReady = expandEmbeds ? showBandcampPreviewEmbed(track, { autoplay: autoplayBandcamp }) : false;
+  const shouldShowYoutube = hasDirectYoutube;
+  const youtubeReady = !soundcloudReady && shouldShowYoutube && expandEmbeds
+    ? showYouTubePreviewEmbed(track, { autoplay: autoplayYoutube, attempt: youtubeAttempt })
+    : false;
+  if (youtubeReady) sources.push("YouTube");
+
+  // Keep Bandcamp as the final verified fallback because its embedded player
+  // often requires a tap even when autoplay=true.
+  const bandcampReady = !soundcloudReady && !youtubeReady && expandEmbeds
+    ? showBandcampPreviewEmbed(track, { autoplay: autoplayBandcamp })
+    : false;
   if (bandcampReady) {
     sources.push("Bandcamp");
   } else {
     syncBandcampPreviewActionForTrack(track, { expanded: false });
   }
-
-  const shouldShowYoutube = hasDirectYoutube;
-  const youtubeReady = shouldShowYoutube && expandEmbeds
-    ? showYouTubePreviewEmbed(track, { autoplay: autoplayYoutube, attempt: youtubeAttempt })
-    : false;
-  if (youtubeReady) sources.push("YouTube");
 
   setYouTubePreviewActionState({
     visible: hasDirectYoutube,
@@ -47825,7 +47829,7 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
     void renderPreview(track, {
       fast: true,
       probeTimeoutMs: 420,
-      resolveTimeoutMs: 220,
+      resolveTimeoutMs: 2600,
       maxProbeCandidates: 1
     })
       .then((ready) => {
@@ -48387,15 +48391,13 @@ async function renderPreview(track, options = {}) {
     !trackHasDirectSoundCloudTrack(track) &&
     Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
-    void resolveSoundCloudEmbedForTrack(track, { force: false })
-      .then((resolved) => {
-        if (!resolved || !isStillCurrentPreviewTrack()) return;
-        syncSoundCloudPreviewActionForTrack(track, { expanded: false });
-        if (previewStatus && trackPreview?.classList.contains("hidden")) {
-          previewStatus.textContent = t("previewSoundcloudFallback");
-        }
-      })
-      .catch(() => null);
+    const resolvedSoundCloud = await waitForPromiseWithTimeout(
+      resolveSoundCloudEmbedForTrack(track, { force: false }),
+      resolveTimeoutMs,
+      false
+    );
+    if (!isStillCurrentPreviewTrack()) return false;
+    if (resolvedSoundCloud) syncSoundCloudPreviewActionForTrack(track, { expanded: false });
   }
   let hasDirectSoundCloud = trackHasDirectSoundCloudTrack(track);
   let hasDirectYoutube = trackHasDirectYouTubeVideo(track);
