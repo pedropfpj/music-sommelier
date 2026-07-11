@@ -47,7 +47,17 @@ function selectPlayableTranscoding(row) {
   });
   if (progressiveMp3) return progressiveMp3;
 
-  return playable.find((item) => String(item?.format?.protocol || "").toLowerCase() === "progressive") || null;
+  const progressive = playable.find((item) =>
+    String(item?.format?.protocol || "").toLowerCase() === "progressive"
+  );
+  if (progressive) return progressive;
+
+  // Most current SoundCloud tracks expose HLS rather than a progressive MP3.
+  // iOS/WebKit plays the signed m3u8 URL natively, and retaining it also gives
+  // the client enough evidence to fall back to the universal SoundCloud embed.
+  return playable.find((item) =>
+    String(item?.format?.protocol || "").toLowerCase() === "hls"
+  ) || null;
 }
 
 async function resolvePreviewUrl(row, token) {

@@ -2764,7 +2764,9 @@ const FAST_COVERAGE_WAIT_MS = 420;
 const PREVIEW_PROBE_TIMEOUT_MS = 1800;
 const FAST_PREVIEW_PROBE_TIMEOUT_MS = 620;
 const FAST_PREVIEW_PROBE_LIMIT = 2;
-const FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS = 900;
+// Provider resolution normally takes 1–2.6s in production. A 900ms cutoff
+// abandoned valid SoundCloud/iTunes routes and surfaced metadata-only cards.
+const FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS = 3200;
 const OPTIONAL_API_TIMEOUT_MS = 3600;
 const FAST_OPTIONAL_API_TIMEOUT_MS = 2600;
 const JSONP_LATE_CALLBACK_GRACE_MS = 120000;
