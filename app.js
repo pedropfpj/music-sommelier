@@ -2392,7 +2392,8 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
     roleKind: "dj",
     roleNote: "Listado pela RA no Third Eye Festival; perfilado para techno profundo/IDM.",
     reason: "Boa recomendacao para usuarios que gostam de techno cerebral, elegante e experimental."
-  }
+  },
+  ...buildPsyFestivalLineupRecommendationSeeds()
 ];
 
 const STYLE_SEARCH_TERMS = {
@@ -46217,7 +46218,7 @@ function djLaneLabel(lane = "") {
   return "DJ set";
 }
 
-const DJ_PSY_SET_LANES = new Set(["hitech_psycore", "global_psy", "mop"]);
+const DJ_PSY_SET_LANES = new Set(["psy_festival_lineups", "hitech_psycore", "global_psy", "mop"]);
 
 function compactDjLabels(labels = []) {
   const seen = new Set();
@@ -46367,14 +46368,20 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
     return !likedDjRecommendationKeys.has(key) && !passedDjRecommendationKeys.has(key) && !recentDjRecommendationKeys.includes(key);
   });
   const lightlySeenPool = basePool.filter((seed) => !recentDjRecommendationKeys.includes(djRecommendationKey(seed)));
-  const finalPool = freshPool.length ? freshPool : lightlySeenPool.length ? lightlySeenPool : basePool;
+  const recentArtists = new Set(recentDjRecommendationKeys.map((key) => {
+    const recentSeed = DJ_SET_RECOMMENDATION_SEEDS.find((seed) => djRecommendationKey(seed) === key);
+    return normalize(recentSeed?.name || "");
+  }).filter(Boolean));
+  const preferredPool = freshPool.length ? freshPool : lightlySeenPool.length ? lightlySeenPool : basePool;
+  const artistFreshPool = preferredPool.filter((seed) => !recentArtists.has(normalize(seed?.name || "")));
+  const finalPool = artistFreshPool.length ? artistFreshPool : preferredPool;
   return finalPool[randomDjPoolIndex(finalPool.length)] || pool[randomDjPoolIndex(pool.length)] || null;
 }
 
 function rememberDjRecommendation(seed) {
   const key = djRecommendationKey(seed);
   if (!key) return;
-  recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 12);
+  recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 24);
 }
 
 function saveDjRecommendationMemory() {
@@ -46394,7 +46401,7 @@ function loadDjRecommendationMemory() {
     const parsed = JSON.parse(localStorage.getItem(DJ_RECOMMENDATION_STORAGE_KEY) || "{}");
     likedDjRecommendationKeys = new Set(Array.isArray(parsed.liked) ? parsed.liked.map(String) : []);
     passedDjRecommendationKeys = new Set(Array.isArray(parsed.passed) ? parsed.passed.map(String) : []);
-    recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 12) : [];
+    recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 24) : [];
   } catch (_err) {
     likedDjRecommendationKeys = new Set();
     passedDjRecommendationKeys = new Set();
