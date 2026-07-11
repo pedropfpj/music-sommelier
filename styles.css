@@ -69,99 +69,50 @@ p {
   margin: 0;
 }
 
-.instagram-profile-cta {
-  width: fit-content;
-  max-width: 100%;
-  margin: 0.9rem auto 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.65rem 0.82rem;
-  border: 1px solid rgba(255, 137, 193, 0.36);
-  border-radius: 999px;
-  color: #fff;
-  background: linear-gradient(110deg, rgba(255, 65, 125, 0.16), rgba(153, 80, 255, 0.18)), rgba(3, 10, 24, 0.7);
-  box-shadow: 0 12px 30px rgba(4, 8, 24, 0.26), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-  font: 700 0.76rem/1 "Syne", sans-serif;
-  text-decoration: none;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+.instagram-page-footer {
+  width: min(1120px, calc(100% - 36px));
+  margin: 0 auto 0.8rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.instagram-profile-cta:hover,
-.instagram-profile-cta:focus-visible {
-  border-color: rgba(255, 157, 210, 0.7);
-  box-shadow: 0 14px 34px rgba(130, 47, 177, 0.25), 0 0 24px rgba(255, 85, 158, 0.12);
-  transform: translateY(-2px);
+.instagram-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.52rem 0.68rem;
+  color: rgba(232, 244, 255, 0.86);
+  font: 700 0.74rem/1 "Syne", sans-serif;
+  text-decoration: none;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.instagram-footer-link:hover,
+.instagram-footer-link:focus-visible {
+  color: #ffbde0;
+  transform: translateY(-1px);
   outline: none;
 }
 
-.instagram-profile-cta svg {
-  width: 1.15rem;
-  height: 1.15rem;
+.instagram-footer-link svg {
+  width: 1.1rem;
+  height: 1.1rem;
   flex: 0 0 auto;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
 }
 
-.instagram-profile-cta .instagram-profile-dot {
+.instagram-footer-link .instagram-profile-dot {
   fill: currentColor;
   stroke: none;
 }
 
-.instagram-profile-cta strong {
-  color: #ffbde0;
-  font: inherit;
-}
-
-.instagram-profile-arrow {
-  color: #8ffff0;
-  font-size: 0.94rem;
-}
-
-.hero-actions .instagram-profile-cta-compact {
-  margin: 0;
-}
-
-.instagram-profile-cta-global {
-  position: fixed;
-  z-index: 320;
-  top: calc(0.9rem + env(safe-area-inset-top));
-  right: max(0.9rem, env(safe-area-inset-right));
-  width: auto;
-  margin: 0;
-  backdrop-filter: blur(12px);
-}
-
 @media (max-width: 640px) {
-  .instagram-profile-cta {
-    width: 100%;
-  }
-
-  .instagram-profile-cta-global {
-    top: calc(0.65rem + env(safe-area-inset-top));
-    right: max(0.65rem, env(safe-area-inset-right));
-    width: auto;
-    min-height: 40px;
-    padding: 0.55rem 0.68rem;
-  }
-
-  .instagram-profile-cta-global > span[data-instagram-profile-text] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .hero-actions .instagram-profile-cta-compact {
-    flex-basis: 100%;
+  .instagram-page-footer {
+    width: calc(100% - 24px);
+    margin-bottom: calc(0.65rem + env(safe-area-inset-bottom));
   }
 }
 
@@ -249,37 +200,6 @@ p {
   text-transform: uppercase;
 }
 
-.signature-legal-links .instagram-profile-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.38rem;
-  padding: 0.38rem 0.62rem;
-  border-radius: 999px;
-  color: #fff;
-  background: linear-gradient(105deg, rgba(255, 68, 128, 0.2), rgba(152, 84, 255, 0.2));
-  box-shadow: inset 0 0 0 1px rgba(255, 137, 193, 0.3);
-  text-transform: none;
-}
-
-.instagram-profile-link svg {
-  width: 1rem;
-  height: 1rem;
-  flex: 0 0 auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-}
-
-.instagram-profile-link .instagram-profile-dot {
-  fill: currentColor;
-  stroke: none;
-}
-
-.instagram-profile-link strong {
-  color: #ffbde0;
-  font: inherit;
-}
-
 .signature-legal-links a:hover,
 .signature-legal-links button:hover,
 .signature-legal-links a:focus-visible,
@@ -320,17 +240,6 @@ p {
     font-size: 0.66rem;
   }
 
-  .instagram-profile-link #instagramProfileText {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 }
 
 .privacy-consent-banner {
