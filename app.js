@@ -47521,7 +47521,16 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
     : message;
   if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
   savePreferences();
-  void renderPreview(track, { fast: true }).catch(() => {});
+  void renderPreview(track, { fast: true })
+    .then((ready) => {
+      if (ready) return;
+      if (recommendationTrackKey(currentRecommendation) !== currentTrackKey) return;
+      return recoverCurrentPreviewAfterPlaybackIssue("missing");
+    })
+    .catch(() => {
+      if (recommendationTrackKey(currentRecommendation) !== currentTrackKey) return;
+      return recoverCurrentPreviewAfterPlaybackIssue("missing");
+    });
   return true;
 }
 
@@ -47665,7 +47674,9 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
   if (!rejectedTrack || !basePrefs) return null;
   const previousArtistKey = artistMatchKey(avoidArtistName || rejectedTrack?.artist || "");
 
-  for (const allowNoPreview of [false, true]) {
+  // Never fill the swipe deck with metadata-only tracks. Cover art, BPM and a
+  // search URL are not a listening route; the product promises audio first.
+  for (const allowNoPreview of [false]) {
     const seenCandidateKeys = new Set();
     for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
       const candidates = pool.filter((track) => {
@@ -47758,7 +47769,18 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
       probeTimeoutMs: 420,
       resolveTimeoutMs: 220,
       maxProbeCandidates: 1
-    }).catch(() => {});
+    })
+      .then((ready) => {
+        if (ready) return;
+        if (token !== fastFeedbackSwapToken) return;
+        if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
+        return recoverCurrentPreviewAfterPlaybackIssue("missing");
+      })
+      .catch(() => {
+        if (token !== fastFeedbackSwapToken) return;
+        if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
+        return recoverCurrentPreviewAfterPlaybackIssue("missing");
+      });
   }, 40);
 
   window.setTimeout(() => {
@@ -55365,7 +55387,10 @@ async function runSurpriseRecommendation() {
     renderDiscovery(currentDiscovery);
     let previewReady = await renderPreview(surpriseTrack, { fast: true });
     sonicPerfMark("render-preview", { previewReady });
-    if (!previewReady && !trackHasFastListenRoute(surpriseTrack)) {
+    // A catalog route is only a hint. In-app browsers (notably Instagram's)
+    // can reject stale/blocked preview URLs, so only deliver a card after the
+    // current playback probe has actually succeeded.
+    if (!previewReady) {
       const rejectedKey = recommendationTrackKey(surpriseTrack);
       const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
       surpriseTrack.previewChecked = true;
@@ -55395,7 +55420,7 @@ async function runSurpriseRecommendation() {
       renderDiscovery(currentDiscovery);
       previewReady = await renderPreview(playableReplacement, { fast: true });
       sonicPerfMark("replacement-preview", { previewReady });
-      if (!previewReady && !trackHasFastListenRoute(playableReplacement)) {
+      if (!previewReady) {
         clearFailedRecommendationSurface();
         playUiSfx("notice");
         if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();

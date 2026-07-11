@@ -17107,8 +17107,9 @@ button,
   }
 }
 
-/* iPhone swipe controls: the decision controls must sit above the card, not
-   below the deck. This block intentionally comes last in the cascade. */
+/* Swipe feedback stamps stay on the card while the actionable controls remain
+   in normal flow. Keeping buttons out of the artwork prevents long cover text
+   and titles from being obscured in Instagram's compact iOS browser. */
 .swipe-stamp {
   z-index: 36;
   display: inline-flex;
@@ -17162,32 +17163,35 @@ button,
   }
 
   #swipeStartPanel .swipe-hero-actions {
-    grid-template-areas: "surprise";
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "pass like"
+      "surprise surprise";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
     max-width: 100%;
     margin-top: 0.44rem;
-    pointer-events: none;
+    gap: 0.38rem;
+    pointer-events: auto;
   }
 
   #topSwipePassBtn,
   #swipeStartPanel .swipe-like-count-wrap {
-    position: absolute;
-    top: clamp(0.74rem, 2.6vw, 0.96rem);
-    z-index: 38;
-    width: min(42%, 9.4rem) !important;
-    max-width: calc(50% - 1rem) !important;
+    position: static;
+    top: auto;
+    z-index: auto;
+    width: 100% !important;
+    max-width: 100% !important;
     pointer-events: auto;
   }
 
   #topSwipePassBtn {
-    left: clamp(0.74rem, 2.8vw, 1rem);
-    grid-area: auto;
+    left: auto;
+    grid-area: pass;
   }
 
   #swipeStartPanel .swipe-like-count-wrap {
-    right: clamp(0.74rem, 2.8vw, 1rem);
-    grid-area: auto;
+    right: auto;
+    grid-area: like;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     justify-items: stretch;
