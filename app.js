@@ -47605,8 +47605,10 @@ function negativeFeedbackBasePrefs(prefs = lastPrefs) {
 const FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT = 180;
 const FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT = 140;
 const FAST_NEGATIVE_FEEDBACK_QUEUE_LIMIT = 24;
-const SWIPE_LIKE_COMMIT_DELAY_MS = 160;
-const SWIPE_PASS_COMMIT_DELAY_MS = 60;
+// Creating the next audible iframe must stay in the original tap call stack on
+// mobile Safari. Delaying here causes the browser to discard user activation.
+const SWIPE_LIKE_COMMIT_DELAY_MS = 0;
+const SWIPE_PASS_COMMIT_DELAY_MS = 0;
 
 function rotatedFastFeedbackPool(pool = [], limit = FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT) {
   if (!Array.isArray(pool) || !pool.length) return [];
@@ -48101,7 +48103,8 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   if (swipePassBtn) swipePassBtn.disabled = true;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;
   if (topSwipePassBtn) topSwipePassBtn.disabled = true;
-  await waitMs(direction === "pass" ? SWIPE_PASS_COMMIT_DELAY_MS : SWIPE_LIKE_COMMIT_DELAY_MS);
+  const commitDelay = direction === "pass" ? SWIPE_PASS_COMMIT_DELAY_MS : SWIPE_LIKE_COMMIT_DELAY_MS;
+  if (commitDelay > 0) await waitMs(commitDelay);
   try {
     if (direction === "like") await likeCurrentTrackFromSwipe(triggerEl);
     else await passCurrentTrackFromSwipe(triggerEl);
@@ -48409,7 +48412,12 @@ async function renderPreview(track, options = {}) {
   let youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
   const hasExternalPlaybackRoute = trackHasExternalPlayableFallback(track);
-  let playablePreview = await resolvePlayablePreview(false);
+  const hasPreviewCandidates = previewCandidatesForTrack(track).length > 0;
+  // Do not cross an async boundary before creating a verified external player.
+  // Safari preserves autoplay permission only within the initiating tap.
+  let playablePreview = hasPreviewCandidates
+    ? await resolvePlayablePreview(false)
+    : "";
   if (!isStillCurrentPreviewTrack()) return false;
   let artistPreviewFallback = null;
   if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
