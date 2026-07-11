@@ -8292,6 +8292,8 @@ let recentDjRecommendationKeys = [];
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
+const prewarmedSwipeAudioByTrack = new Map();
+const prewarmedSwipeTrackKeys = new Set();
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
 let curationUserSeed = "";
@@ -46928,7 +46930,8 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
   const anchorKey = recommendationTrackKey(anchorTrack);
   const candidates = suggestionQueueTracks
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
-    .slice(0, 2);
+    .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
+    .slice(0, 4);
   candidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
     if (imageUrl && typeof Image === "function") {
@@ -46936,8 +46939,41 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
       image.decoding = "async";
       image.src = imageUrl;
     }
-    if (trackHasReliableAudioPreview(track) && track.previewChecked && !track.previewMissing) return;
-    void resolvePreviewForTrack(track).catch(() => {});
+    const warmResolvedPreview = () => {
+      const trackKey = recommendationTrackKey(track);
+      const previewUrl = previewCandidatesForTrack(track)[0] || "";
+      if (!trackKey || !previewUrl || typeof Audio !== "function" || prewarmedSwipeAudioByTrack.has(trackKey)) return;
+      const audio = new Audio();
+      audio.preload = "auto";
+      const markReady = () => prewarmedSwipeTrackKeys.add(trackKey);
+      const release = () => {
+        if (prewarmedSwipeAudioByTrack.get(trackKey) === audio) prewarmedSwipeAudioByTrack.delete(trackKey);
+        prewarmedSwipeTrackKeys.delete(trackKey);
+      };
+      audio.addEventListener("canplay", markReady, { once: true });
+      audio.addEventListener("loadeddata", markReady, { once: true });
+      audio.addEventListener("error", release, { once: true });
+      audio.src = previewUrl;
+      audio.load();
+      prewarmedSwipeAudioByTrack.set(trackKey, audio);
+      while (prewarmedSwipeAudioByTrack.size > 4) {
+        const oldestKey = prewarmedSwipeAudioByTrack.keys().next().value;
+        const oldestAudio = prewarmedSwipeAudioByTrack.get(oldestKey);
+        try {
+          oldestAudio?.removeAttribute("src");
+          oldestAudio?.load();
+        } catch (_err) {}
+        prewarmedSwipeAudioByTrack.delete(oldestKey);
+        prewarmedSwipeTrackKeys.delete(oldestKey);
+      }
+    };
+    if (trackHasReliableAudioPreview(track) && track.previewChecked && !track.previewMissing) {
+      warmResolvedPreview();
+      return;
+    }
+    void resolvePreviewForTrack(track)
+      .then(warmResolvedPreview)
+      .catch(() => {});
   });
 }
 
@@ -47920,25 +47956,40 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
   // removes a full catalog scan and usually gives the next card a warm audio URL.
   const queuedCandidates = suggestionQueueTracks
     .filter((track) => recommendationTrackKey(track) !== sourceKey)
-    .slice(0, 4);
-  for (const queuedTrack of queuedCandidates) {
-    const queuedStyle = selectableSwipeStyle(queuedTrack?.style || "");
-    const queuedPrefs = swipeInstantPrefsForStyle(basePrefs, plan, queuedStyle || basePrefs.style);
-    if (candidateAllowed(queuedTrack, queuedPrefs)) {
-      return { track: queuedTrack, prefs: queuedPrefs, plan };
+    .sort((a, b) => {
+      const aKey = recommendationTrackKey(a);
+      const bKey = recommendationTrackKey(b);
+      return (
+        Number(prewarmedSwipeTrackKeys.has(bKey)) - Number(prewarmedSwipeTrackKeys.has(aKey)) ||
+        Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
+      );
+    })
+    .slice(0, 8);
+  for (const requireDirectAudio of [true, false]) {
+    for (const queuedTrack of queuedCandidates) {
+      if (requireDirectAudio && !trackHasReliableAudioPreview(queuedTrack)) continue;
+      const queuedStyle = selectableSwipeStyle(queuedTrack?.style || "");
+      const queuedPrefs = swipeInstantPrefsForStyle(basePrefs, plan, queuedStyle || basePrefs.style);
+      if (candidateAllowed(queuedTrack, queuedPrefs)) {
+        return { track: queuedTrack, prefs: queuedPrefs, plan };
+      }
     }
   }
 
   const stylesToScan = (styles.length ? styles : [basePrefs.style || ""]).slice(0, 3);
-  for (const style of stylesToScan) {
-    const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
-    const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
-    const pool = basePool.filter((track) => candidateAllowed(track, prefs));
-    const candidate = pickBestRecommendationCandidate(pool, prefs, {
-      maxWindow: 14,
-      scoreBand: 8.5
-    });
-    if (candidate) return { track: candidate, prefs, plan };
+  for (const requireDirectAudio of [true, false]) {
+    for (const style of stylesToScan) {
+      const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
+      const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+      const pool = basePool.filter((track) =>
+        candidateAllowed(track, prefs) && (!requireDirectAudio || trackHasReliableAudioPreview(track))
+      );
+      const candidate = pickBestRecommendationCandidate(pool, prefs, {
+        maxWindow: 14,
+        scoreBand: 8.5
+      });
+      if (candidate) return { track: candidate, prefs, plan };
+    }
   }
 
   return null;
@@ -48153,25 +48204,28 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
   // Never fill the swipe deck with metadata-only tracks. Cover art, BPM and a
   // search URL are not a listening route; the product promises audio first.
   for (const allowNoPreview of [false]) {
-    const seenCandidateKeys = new Set();
-    for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
-      const candidates = pool.filter((track) => {
-        const key = recommendationTrackKey(track);
-        if (!key || seenCandidateKeys.has(key)) return false;
-        seenCandidateKeys.add(key);
-        return true;
-      });
-      if (!candidates.length) continue;
-      const scored = candidates.map((track) => ({
-        track,
-        score: fastNegativeFeedbackScore(track, basePrefs, rejectedTrack)
-      }));
-      const candidate = pickFromScoredRecommendations(scored, basePrefs, {
-        previousArtistKey,
-        maxWindow: basePrefs.style ? 10 : 16,
-        scoreBand: basePrefs.style ? 6.5 : 9.5
-      });
-      if (candidate) return { track: candidate, prefs: basePrefs };
+    for (const requireDirectAudio of [true, false]) {
+      const seenCandidateKeys = new Set();
+      for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
+        const candidates = pool.filter((track) => {
+          const key = recommendationTrackKey(track);
+          if (!key || seenCandidateKeys.has(key)) return false;
+          seenCandidateKeys.add(key);
+          return !requireDirectAudio || trackHasReliableAudioPreview(track);
+        });
+        if (!candidates.length) continue;
+        const scored = candidates.map((track) => ({
+          track,
+          score: fastNegativeFeedbackScore(track, basePrefs, rejectedTrack) +
+            (prewarmedSwipeTrackKeys.has(recommendationTrackKey(track)) ? 12 : 0)
+        }));
+        const candidate = pickFromScoredRecommendations(scored, basePrefs, {
+          previousArtistKey,
+          maxWindow: basePrefs.style ? 10 : 16,
+          scoreBand: basePrefs.style ? 6.5 : 9.5
+        });
+        if (candidate) return { track: candidate, prefs: basePrefs };
+      }
     }
   }
 
@@ -48237,27 +48291,23 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
     }, { delayMs: 260, timeoutMs: 1800 });
   }
   const previewTrackKey = recommendationTrackKey(track);
-  window.setTimeout(() => {
-    if (token !== fastFeedbackSwapToken) return;
-    if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
-    void renderPreview(track, {
-      fast: true,
-      probeTimeoutMs: 420,
-      resolveTimeoutMs: 2600,
-      maxProbeCandidates: 1
+  void renderPreview(track, {
+    fast: true,
+    probeTimeoutMs: 420,
+    resolveTimeoutMs: 900,
+    maxProbeCandidates: 1
+  })
+    .then((ready) => {
+      if (ready) return;
+      if (token !== fastFeedbackSwapToken) return;
+      if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
+      return recoverCurrentPreviewAfterPlaybackIssue("missing");
     })
-      .then((ready) => {
-        if (ready) return;
-        if (token !== fastFeedbackSwapToken) return;
-        if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
-        return recoverCurrentPreviewAfterPlaybackIssue("missing");
-      })
-      .catch(() => {
-        if (token !== fastFeedbackSwapToken) return;
-        if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
-        return recoverCurrentPreviewAfterPlaybackIssue("missing");
-      });
-  }, 40);
+    .catch(() => {
+      if (token !== fastFeedbackSwapToken) return;
+      if (recommendationTrackKey(currentRecommendation) !== previewTrackKey) return;
+      return recoverCurrentPreviewAfterPlaybackIssue("missing");
+    });
 
   window.setTimeout(() => {
     if (token !== fastFeedbackSwapToken) return;
