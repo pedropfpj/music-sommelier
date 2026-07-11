@@ -28591,6 +28591,37 @@ function createVisitorSession() {
   };
 }
 
+const ANONYMOUS_OPENING_HISTORY_KEY = "sonic_search:anonymous_openings:v1";
+const ANONYMOUS_OPENING_HISTORY_LIMIT = 8;
+
+function readAnonymousOpeningHistory() {
+  try {
+    const parsed = JSON.parse(sessionStorage.getItem(ANONYMOUS_OPENING_HISTORY_KEY) || "[]");
+    return Array.isArray(parsed)
+      ? parsed.map((key) => String(key || "").trim()).filter(Boolean).slice(0, ANONYMOUS_OPENING_HISTORY_LIMIT)
+      : [];
+  } catch (_err) {
+    return [];
+  }
+}
+
+function seedAnonymousOpeningExclusions() {
+  readAnonymousOpeningHistory().forEach((key) => recommendationMemory.add(key));
+}
+
+function rememberAnonymousOpeningTrack(track = null) {
+  if (!track || normalizeUserSession(currentAuthUser).mode !== "visitor") return;
+  const key = recommendationTrackKey(track);
+  if (!key) return;
+  const history = [key, ...readAnonymousOpeningHistory().filter((item) => item !== key)]
+    .slice(0, ANONYMOUS_OPENING_HISTORY_LIMIT);
+  try {
+    sessionStorage.setItem(ANONYMOUS_OPENING_HISTORY_KEY, JSON.stringify(history));
+  } catch (_err) {
+    // A recomendacao continua funcionando mesmo sem sessionStorage.
+  }
+}
+
 function isEphemeralSession(session = currentAuthUser) {
   const normalizedSession = normalizeUserSession(session);
   return Boolean(ephemeralProfileMode || normalizedSession.mode === "visitor");
@@ -31260,6 +31291,7 @@ async function continueWithoutLogin() {
   clearAnonymousDiscoveryStorage();
   const session = createVisitorSession();
   activateUserSession(session);
+  seedAnonymousOpeningExclusions();
   setAuthFeedback(t("authGuestReady"));
   continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
@@ -57510,6 +57542,7 @@ async function runSurpriseRecommendation() {
     }
 
     registerRecommendationDelivery(surpriseTrack, surprisePrefs);
+    rememberAnonymousOpeningTrack(surpriseTrack);
     refreshSuggestionQueue(surprisePrefs, surpriseTrack);
 
     lastPrefs = surprisePrefs;
