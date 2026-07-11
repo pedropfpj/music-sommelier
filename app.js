@@ -27333,9 +27333,12 @@ function applyLanguage() {
   setText("#legalDataText", t("legalDataText"));
   setText("#legalLinksTitle", t("legalLinksTitle"));
   setText("#legalPrivacyPolicyLink", t("legalPrivacyPolicyLink"));
-  setText("#instagramProfileText", t("instagramProfileText"));
-  const instagramProfileLink = document.getElementById("instagramProfileLink");
-  if (instagramProfileLink) instagramProfileLink.setAttribute("aria-label", t("instagramProfileAria"));
+  document.querySelectorAll("[data-instagram-profile-text]").forEach((element) => {
+    element.textContent = t("instagramProfileText");
+  });
+  document.querySelectorAll("[data-instagram-profile-link]").forEach((element) => {
+    element.setAttribute("aria-label", t("instagramProfileAria"));
+  });
   setText("#legalTermsLink", t("legalTermsLink"));
   setText("#legalCookiesLink", t("legalCookiesLink"));
   setText("#legalDisclaimer", t("legalDisclaimer"));

@@ -69,6 +69,72 @@ p {
   margin: 0;
 }
 
+.instagram-profile-cta {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0.9rem auto 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 0.82rem;
+  border: 1px solid rgba(255, 137, 193, 0.36);
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(110deg, rgba(255, 65, 125, 0.16), rgba(153, 80, 255, 0.18)), rgba(3, 10, 24, 0.7);
+  box-shadow: 0 12px 30px rgba(4, 8, 24, 0.26), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  font: 700 0.76rem/1 "Syne", sans-serif;
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.instagram-profile-cta:hover,
+.instagram-profile-cta:focus-visible {
+  border-color: rgba(255, 157, 210, 0.7);
+  box-shadow: 0 14px 34px rgba(130, 47, 177, 0.25), 0 0 24px rgba(255, 85, 158, 0.12);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.instagram-profile-cta svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.instagram-profile-cta .instagram-profile-dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.instagram-profile-cta strong {
+  color: #ffbde0;
+  font: inherit;
+}
+
+.instagram-profile-arrow {
+  color: #8ffff0;
+  font-size: 0.94rem;
+}
+
+.hero-actions .instagram-profile-cta-compact {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .instagram-profile-cta {
+    width: 100%;
+  }
+
+  .hero-actions .instagram-profile-cta-compact {
+    flex-basis: 100%;
+  }
+}
+
 .signature-bar {
   position: fixed;
   left: 0;
