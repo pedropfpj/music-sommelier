@@ -25660,6 +25660,12 @@ function applyLanguage() {
   setText("#swipeKicker", t("swipeKicker"));
   setText("#swipeHint", t("swipeHint"));
   setText("#primarySwipeHint", t("primarySwipeHint"));
+  document.querySelectorAll(".swipe-stamp-like").forEach((stamp) => {
+    stamp.textContent = t("swipeLike");
+  });
+  document.querySelectorAll(".swipe-stamp-pass").forEach((stamp) => {
+    stamp.textContent = t("swipePass");
+  });
   setText("#topSwipeLikeBtn", t("swipeLike"));
   setText("#topSwipePassBtn", t("swipePass"));
   setText("#topSwipeSurpriseBtn", currentRecommendation ? t("swipeNextButton") : t("swipeStartButton"));
