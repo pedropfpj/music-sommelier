@@ -46499,6 +46499,24 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
   suggestionQueueTracks = buildSuggestionQueueFromPrefs(prefs, anchorTrack);
   suggestionQueueContextKey = recommendationContextKey(prefs);
   renderSuggestionQueue(prefs);
+  prewarmSuggestionQueue(anchorTrack);
+}
+
+function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
+  const anchorKey = recommendationTrackKey(anchorTrack);
+  const candidates = suggestionQueueTracks
+    .filter((track) => recommendationTrackKey(track) !== anchorKey)
+    .slice(0, 2);
+  candidates.forEach((track) => {
+    const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
+    if (imageUrl && typeof Image === "function") {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = imageUrl;
+    }
+    if (trackHasReliableAudioPreview(track) && track.previewChecked && !track.previewMissing) return;
+    void resolvePreviewForTrack(track).catch(() => {});
+  });
 }
 
 function scheduleSuggestionQueueRefresh(prefs = lastPrefs, anchorTrack = currentRecommendation, { delayMs = 700 } = {}) {
@@ -47460,23 +47478,37 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
   );
 
+  const candidateAllowed = (track, prefs) => {
+    if (!track || track === sourceTrack) return false;
+    if (!isTrackEligibleForRecommendation(track)) return false;
+    if (prefs.style && track.style !== prefs.style) return false;
+    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
+    const bpmValue = Number(track.bpmExact);
+    if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+    if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
+    if (!hasReliableBpmForTrack(track)) return false;
+    return trackHasFastListenRoute(track);
+  };
+
+  // The queue is resolved while the current track is playing. Reusing it here
+  // removes a full catalog scan and usually gives the next card a warm audio URL.
+  const plannedStyles = new Set(styles.filter(Boolean));
+  for (const queuedTrack of suggestionQueueTracks.slice(1, 4)) {
+    const queuedStyle = selectableSwipeStyle(queuedTrack?.style || "");
+    if (plannedStyles.size && queuedStyle && !plannedStyles.has(queuedStyle)) continue;
+    const queuedPrefs = swipeInstantPrefsForStyle(basePrefs, plan, queuedStyle || basePrefs.style);
+    if (candidateAllowed(queuedTrack, queuedPrefs)) {
+      return { track: queuedTrack, prefs: queuedPrefs, plan };
+    }
+  }
+
   for (const style of styles.length ? styles : [basePrefs.style || ""]) {
     const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
     const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
-    const pool = basePool.filter((track) => {
-      if (!track || track === sourceTrack) return false;
-      if (!isTrackEligibleForRecommendation(track)) return false;
-      if (prefs.style && track.style !== prefs.style) return false;
-      if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-      if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
-      if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
-      const bpmValue = Number(track.bpmExact);
-      if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
-      if (artistSetHasMatch(blockedArtists, track.artist)) return false;
-      if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
-      if (!hasReliableBpmForTrack(track)) return false;
-      return trackHasFastListenRoute(track);
-    });
+    const pool = basePool.filter((track) => candidateAllowed(track, prefs));
     const candidate = pickBestRecommendationCandidate(pool, prefs, {
       maxWindow: 14,
       scoreBand: 8.5
@@ -47558,8 +47590,8 @@ function negativeFeedbackBasePrefs(prefs = lastPrefs) {
 const FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT = 180;
 const FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT = 140;
 const FAST_NEGATIVE_FEEDBACK_QUEUE_LIMIT = 24;
-const SWIPE_LIKE_COMMIT_DELAY_MS = 240;
-const SWIPE_PASS_COMMIT_DELAY_MS = 85;
+const SWIPE_LIKE_COMMIT_DELAY_MS = 160;
+const SWIPE_PASS_COMMIT_DELAY_MS = 60;
 
 function rotatedFastFeedbackPool(pool = [], limit = FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT) {
   if (!Array.isArray(pool) || !pool.length) return [];
