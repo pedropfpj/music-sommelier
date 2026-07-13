@@ -49615,16 +49615,128 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
   savePreferences();
   void renderPreview(track, { fast: true })
-    .then((ready) => {
-      if (ready) return;
-      if (recommendationTrackKey(currentRecommendation) !== currentTrackKey) return;
-      return recoverCurrentPreviewAfterPlaybackIssue("missing");
-    })
-    .catch(() => {
-      if (recommendationTrackKey(currentRecommendation) !== currentTrackKey) return;
-      return recoverCurrentPreviewAfterPlaybackIssue("missing");
-    });
+    .catch(() => null);
   return true;
+}
+
+function pickInstantOpeningTrack() {
+  const rankedStyles = getAllSelectableStyles()
+    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+    .sort((a, b) => openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a))
+    .slice(0, 6);
+
+  for (const requireDirectAudio of [true, false]) {
+    for (const style of rankedStyles) {
+      const prefs = normalizeRecommendationPrefs({
+        style,
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      });
+      const pool = catalogTracksForStyle(style).filter((track) => {
+        if (!track || !isTrackEligibleForRecommendation(track)) return false;
+        if (!artistAllowedForStyle(style, track.artist)) return false;
+        if (!labelAllowedForStyle(style, track.label)) return false;
+        if (!trackHasFastListenRoute(track)) return false;
+        if (requireDirectAudio && !trackHasReliableAudioPreview(track)) return false;
+        return anonymousExposurePenalty(track) < 70;
+      });
+      const candidate = pickBestRecommendationCandidate(pool, prefs, {
+        maxWindow: 16,
+        scoreBand: 9
+      });
+      if (candidate) return { track: candidate, prefs };
+    }
+  }
+  return null;
+}
+
+function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requiredStyle = "") {
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
+  const lockedStyle = selectableSwipeStyle(requiredStyle);
+  const candidateAllowed = (track) => {
+    if (!track || track === sourceTrack) return false;
+    const trackKey = recommendationTrackKey(track);
+    if (!trackKey || trackKey === sourceKey) return false;
+    if (sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
+    if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
+    if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackHasFastListenRoute(track)) return false;
+    if (trackBlockedByKnownSignals(track)) return false;
+    return anonymousExposurePenalty(track) < 70;
+  };
+
+  const queued = suggestionQueueTracks
+    .filter(candidateAllowed)
+    .sort((a, b) => {
+      const aKey = recommendationTrackKey(a);
+      const bKey = recommendationTrackKey(b);
+      return (
+        Number(prewarmedSwipeTrackKeys.has(bKey)) - Number(prewarmedSwipeTrackKeys.has(aKey)) ||
+        Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
+      );
+    });
+  if (queued.length) return queued[0];
+
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const styles = (lockedStyle ? [lockedStyle] : getAllSelectableStyles())
+    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+    .sort((a, b) => {
+      const aSame = a === sourceStyle ? 1 : 0;
+      const bSame = b === sourceStyle ? 1 : 0;
+      return aSame - bSame || openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a);
+    })
+    .slice(0, 8);
+  for (const style of styles) {
+    const candidate = catalogTracksForStyle(style).find(candidateAllowed);
+    if (candidate) return candidate;
+  }
+  return null;
+}
+
+function tryRunInstantPrimaryRecommendation() {
+  if (recommendationRunBusy || !canUseMusicDiscovery()) return false;
+  primeAudioForDiscoveryGesture();
+
+  if (currentRecommendation && lastPrefs) {
+    const anchoredStyle = explicitSwipeAnchorStyle();
+    if (!anchoredStyle) swipeUserAnchoredStyle = "";
+    const nextTrack = pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle);
+    if (!nextTrack) return false;
+    const nextPrefs = normalizeRecommendationPrefs({
+      style: anchoredStyle || selectableSwipeStyle(nextTrack.style || ""),
+      context: "",
+      energy: "",
+      bpm: "",
+      vocals: ""
+    });
+    playUiSfx("search-start");
+    const presented = presentInstantSwipeRecommendation({
+      track: nextTrack,
+      prefs: nextPrefs,
+      message: t("exploratoryGenerated")
+    });
+    if (presented) playUiSfx("search-done");
+    return presented;
+  }
+
+  const opening = pickInstantOpeningTrack();
+  if (!opening) return false;
+  playUiSfx("search-start");
+  const presented = presentInstantSwipeRecommendation({
+    track: opening.track,
+    prefs: opening.prefs,
+    message: t("exploratoryGenerated")
+  });
+  if (presented) playUiSfx("search-done");
+  return presented;
+}
+
+async function runPrimaryRecommendationAction() {
+  if (tryRunInstantPrimaryRecommendation()) return true;
+  return runSurpriseRecommendation();
 }
 
 function negativeFeedbackBasePrefs(prefs = lastPrefs) {
@@ -59000,11 +59112,11 @@ bind(topSwipePassBtn, "click", () => {
 });
 
 bind(topSwipeSurpriseBtn, "click", async () => {
-  await runSurpriseRecommendation();
+  await runPrimaryRecommendationAction();
 });
 
 bind(swipeHeroSurpriseBtn, "click", async () => {
-  await runSurpriseRecommendation();
+  await runPrimaryRecommendationAction();
 });
 
 bind(swipeStyleRail, "click", async (event) => {
@@ -59434,13 +59546,27 @@ const qaPreviewMode = !sharedSpiritViewMode && urlRequestsQaPreviewMode();
 
 const freshTestResetPending = publicVisitorMode ? false : consumeFreshTestResetParam();
 
+let localBootCatalogHydrated = false;
+
+function scheduleLocalBootCatalogHydration() {
+  if (localBootCatalogHydrated) return;
+  localBootCatalogHydrated = true;
+  schedulePostBootIdleTask(() => {
+    syncDiscoveryFromSeeds();
+    ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
+    syncDiscoveryFromSeeds();
+  }, {
+    delayMs: nativePerformanceDelayMs(6000, 6000),
+    timeoutMs: 3200
+  });
+}
+
 async function bootSonicSearch() {
   if (freshTestResetPending) return;
-  syncDiscoveryFromSeeds();
   loadDynamicCatalogCache();
   injectLocalTrackSeedBoost();
   injectSoundCloudSupplementalSeeds();
-  ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
+  scheduleLocalBootCatalogHydration();
   const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
   scheduleCatalogMaintenance(bootWarmupDelay);
   scheduleExternalDatasetWarmup(bootWarmupDelay);
