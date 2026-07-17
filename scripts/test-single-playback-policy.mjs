@@ -79,20 +79,20 @@ function assertSourcePolicy() {
   const continueFromUsageGuideSource = extractFunction("continueFromUsageGuide");
   const enterAppFromWelcomeSource = extractFunction("enterAppFromWelcome");
 
-  assert.match(appSource, /const AUTOMATIC_MUSIC_PLAYBACK_ENABLED = false;/);
+  assert.match(appSource, /const AUTOMATIC_TRACK_PLAYBACK_ENABLED = true;/);
   assert.match(
     continueFromUsageGuideSource,
     /enterAppFromWelcome\(\{ surprise: false, autoRecommendation: false \}\)/
   );
   assert.doesNotMatch(continueFromUsageGuideSource, /autoRecommendation:\s*true/);
   assert.match(enterAppFromWelcomeSource, /stopAllActivePlayback\(\{ reason: "app_entry" \}\)/);
-  assert.doesNotMatch(bootstrapAudioSource, /registerAudioUnlockGestures\(\)/);
-  assert.match(previewAutoplaySource, /return false;/);
+  assert.match(bootstrapAudioSource, /registerAudioUnlockGestures\(\)/);
+  assert.match(previewAutoplaySource, /AUTOMATIC_TRACK_PLAYBACK_ENABLED/);
+  assert.match(previewAutoplaySource, /audioEnabled/);
   assert.match(renderPreviewSource, /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/);
-  assert.doesNotMatch(renderPreviewSource, /startTrackPreviewPlayback\s*\(/);
-  assert.doesNotMatch(renderPreviewSource, /autoplay(?:Youtube|SoundCloud|Bandcamp):\s*previewAutoplayRequested/);
+  assert.match(renderPreviewSource, /attemptRenderedPreviewAutoplay/);
   assert.match(renderPreviewSource, /setPreviewPrimaryPlaybackState\("ready"\)/);
-  assert.match(startPreviewSource, /!userInitiated/);
+  assert.match(startPreviewSource, /!userInitiated && !automatic/);
   assert.equal((startPreviewSource.match(/\.play\s*\(/g) || []).length, 1);
   assert.doesNotMatch(startPreviewSource, /mutedFallback|setTimeout|audioEl\.muted\s*=\s*true/);
 
@@ -244,25 +244,32 @@ function createPreviewHarness() {
   return { context, audio, playResolvers };
 }
 
-async function testExplicitGestureAndRapidRequests() {
+async function testAutomaticPlaybackAndRapidRequests() {
   const harness = createPreviewHarness();
   const blocked = await harness.context.startTrackPreviewPlayback(harness.audio);
   assert.equal(blocked.ok, false);
-  assert.equal(blocked.reason, "user_gesture_required");
+  assert.equal(blocked.reason, "playback_not_requested");
   assert.equal(harness.audio.playCalls, 0);
   assert.equal(activePlaybackCount(harness.context), 0);
 
+  const automatic = harness.context.startTrackPreviewPlayback(harness.audio, { automatic: true });
+  assert.equal(harness.audio.playCalls, 1);
+  harness.playResolvers[0].resolve();
+  const automaticResult = await automatic;
+  assert.equal(automaticResult.ok, true);
+  assert.equal(activePlaybackCount(harness.context), 1);
+
   const first = harness.context.startTrackPreviewPlayback(harness.audio, { userInitiated: true });
   const second = harness.context.startTrackPreviewPlayback(harness.audio, { userInitiated: true });
-  assert.equal(harness.audio.playCalls, 2);
-  harness.playResolvers[0].resolve();
+  assert.equal(harness.audio.playCalls, 3);
   harness.playResolvers[1].resolve();
+  harness.playResolvers[2].resolve();
   const [firstResult, secondResult] = await Promise.all([first, second]);
   assert.equal(firstResult.ok, false);
   assert.equal(firstResult.reason, "stale_playback");
   assert.equal(secondResult.ok, true);
   assert.equal(activePlaybackCount(harness.context), 1);
-  assert.equal(harness.context.activePlayback.generation, 2);
+  assert.equal(harness.context.activePlayback.generation, 3);
 }
 
 function testStaleSoundCloudReadyCannotPlay() {
@@ -298,10 +305,10 @@ function testStaleSoundCloudReadyCannotPlay() {
 }
 
 const tests = [
-  ["source policy has no recommendation autoplay", assertSourcePolicy],
+  ["source policy enables safe recommendation autoplay", assertSourcePolicy],
   ["central stop is idempotent and isolates failures", testStopAllIsIdempotentAndIsolated],
   ["all source transitions keep one active authority", testEveryTransitionKeepsOneAuthority],
-  ["explicit gesture is required and rapid requests stay singular", testExplicitGestureAndRapidRequests],
+  ["automatic playback works and rapid requests stay singular", testAutomaticPlaybackAndRapidRequests],
   ["stale SoundCloud READY callback cannot restart playback", testStaleSoundCloudReadyCannotPlay]
 ];
 

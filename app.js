@@ -10354,6 +10354,7 @@ const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const SEARCH_AUDIO_STANDBY = true;
 const AUTOMATIC_MUSIC_PLAYBACK_ENABLED = false;
+const AUTOMATIC_TRACK_PLAYBACK_ENABLED = true;
 const AUDIO_GAIN_PROFILE = {
   masterTarget: 1.68,
   fxBusGain: 1.18,
@@ -29915,8 +29916,13 @@ function syncPreviewAudioState() {
   }
 }
 
-async function startTrackPreviewPlayback(audioEl = trackPreview, { userInitiated = false } = {}) {
-  if (!audioEl || !userInitiated) return { ok: false, reason: "user_gesture_required" };
+async function startTrackPreviewPlayback(audioEl = trackPreview, {
+  userInitiated = false,
+  automatic = false
+} = {}) {
+  if (!audioEl || (!userInitiated && !automatic)) {
+    return { ok: false, reason: "playback_not_requested" };
+  }
   const previewSource = String(
     audioEl.currentSrc ||
     audioEl.getAttribute?.("src") ||
@@ -30852,6 +30858,7 @@ function bootstrapAudio() {
   audioEnabled = readStoredAudioPreference();
   audioVolume = readStoredAudioVolume();
   updateAudioToggleUi();
+  registerAudioUnlockGestures();
   if (audioEnabled && initAudioEngine() && audioContext) {
     if (audioContext.state === "running") {
       audioUnlocked = true;
@@ -38642,7 +38649,13 @@ function showSoundCloudPreviewEmbed(track, {
 }
 
 function previewAutoplayRequested() {
-  return false;
+  return Boolean(
+    AUTOMATIC_TRACK_PLAYBACK_ENABLED &&
+    audioEnabled &&
+    !audioUnavailable &&
+    audioVolume > 0.001 &&
+    (typeof document === "undefined" || document.visibilityState !== "hidden")
+  );
 }
 
 function buildBandcampEmbedUrl(track, { autoplay = false } = {}) {
@@ -38899,6 +38912,49 @@ function startEmbeddedPreviewPlaybackFromUserGesture(track, preferredSource = ""
     });
   } catch (_err) {}
   return true;
+}
+
+async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false } = {}) {
+  if (!track || !previewAutoplayRequested()) return false;
+  const trackKey = recommendationTrackKey(track);
+  const isStillCurrentTrack = () =>
+    Boolean(trackKey) && recommendationTrackKey(currentRecommendation) === trackKey;
+  if (!isStillCurrentTrack()) return false;
+
+  if (!hasDirectPreview) {
+    return startEmbeddedPreviewPlaybackFromUserGesture(track);
+  }
+
+  setPreviewPrimaryPlaybackState("loading");
+  try {
+    trackRecommendationEvent("preview_play_attempted", track, lastPrefs || {}, {
+      source: "audio_preview_autoplay",
+      previewKind: "direct_audio",
+      automatic: true
+    });
+  } catch (_err) {}
+
+  try {
+    const playback = await startTrackPreviewPlayback(trackPreview, { automatic: true });
+    if (!playback?.ok || !isStillCurrentTrack()) return false;
+    setTrackPreviewVisualState("playing");
+    setPreviewPrimaryPlaybackState("playing");
+    if (previewStatus) previewStatus.textContent = t("previewLoaded");
+    listeningPrompt?.classList.remove("hidden");
+    return true;
+  } catch (error) {
+    if (!isStillCurrentTrack()) return false;
+    trackPlaybackLifecycleEvent("preview_play_failed", "audio_preview_autoplay", {
+      previewKind: "direct_audio",
+      automatic: true,
+      reason: String(error?.name || error?.message || "autoplay_blocked").slice(0, 80)
+    });
+    restorePreviewSourceActions(track);
+    setTrackPreviewVisualState("ready");
+    setPreviewPrimaryPlaybackState("ready");
+    if (previewStatus) previewStatus.textContent = t("previewReady");
+    return false;
+  }
 }
 
 function artistOriginLookupKeys(artistName = "") {
@@ -51645,6 +51701,12 @@ async function renderPreview(track, options = {}) {
           : t("previewUnavailable");
       }
     }
+  }
+  if (isStillCurrentPreviewTrack() && previewAutoplayRequested()) {
+    await attemptRenderedPreviewAutoplay(track, {
+      hasDirectPreview: Boolean(playablePreview)
+    });
+    if (!isStillCurrentPreviewTrack()) return false;
   }
   const playbackReady = renderedPreviewHasPlaybackRoute(track);
   renderTrackCardSignals(track, lastPrefs || {});
