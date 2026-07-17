@@ -83,6 +83,7 @@ const STYLE_TO_FAMILY = {
   ragga_jungle: "dnb",
   sambass: "dnb",
   drumfunk: "dnb",
+  big_beat: "bass_music",
   breakbeat: "bass_music",
   uk_garage: "bass_music",
   future_garage: "bass_music",
@@ -371,6 +372,7 @@ const ACCESS_DEFAULT_CONFIG = {
   betaAccessCodes: [],
   betaAccessApiEndpoint: "",
   betaEventsEndpoint: "/api/beta-events",
+  adminAnalyticsEndpoint: "/api/admin-analytics",
   waitlistEmail: "pedropfpj@gmail.com"
 };
 const ACCESS_CONFIG = {
@@ -589,7 +591,10 @@ const DAILY_NEWS_FALLBACK_SOURCES = [
   }
 ];
 
-const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
+let soundCloudSupplementalDjSeedsCache = null;
+
+function buildSoundCloudSupplementalDjSeeds() {
+  return [
   {
     style: "psycore",
     artist: "Vutt'un",
@@ -722,7 +727,15 @@ const SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [
     artistBio: "Evil Oil Man pertence ao eixo dark progressive/zenonesque; site de label, SoundCloud e descrições ajudam a complementar origem, roster e contexto.",
     labelBio: "Zenon Records é fonte de contexto para dark progressive, rosters e lançamentos que melhoram a curadoria além do Deezer."
   }
-];
+  ];
+}
+
+function ensureSoundCloudSupplementalDjSeeds() {
+  if (!soundCloudSupplementalDjSeedsCache) {
+    soundCloudSupplementalDjSeedsCache = buildSoundCloudSupplementalDjSeeds();
+  }
+  return soundCloudSupplementalDjSeedsCache;
+}
 
 const DJ_RECOMMENDATION_STORAGE_KEY = "sonic_search_dj_recommendations_v1";
 function buildPsyFestivalLineupRecommendationSeeds() {
@@ -2684,7 +2697,10 @@ function buildExpandedTechnoSetSeeds() {
   }));
 }
 
-const DJ_SET_RECOMMENDATION_SEEDS = [
+let djSetRecommendationSeedsCache = null;
+
+function buildDjSetRecommendationSeeds() {
+  return [
   {
     id: "hitech-psycore-paula",
     lane: "hitech_psycore",
@@ -4151,7 +4167,15 @@ const DJ_SET_RECOMMENDATION_SEEDS = [
   ...buildArtistLedDjSetExpansionSeeds(),
   ...buildStrictArtistReplacementSetSeeds(),
   ...buildExpandedTechnoSetSeeds()
-];
+  ];
+}
+
+function ensureDjSetRecommendationSeeds() {
+  if (!djSetRecommendationSeedsCache) {
+    djSetRecommendationSeedsCache = buildDjSetRecommendationSeeds();
+  }
+  return djSetRecommendationSeedsCache;
+}
 
 const STYLE_SEARCH_TERMS = {
   forest_psy: "forest psytrance",
@@ -4204,6 +4228,7 @@ const STYLE_SEARCH_TERMS = {
   experimental_bass: "experimental bass leftfield bass",
   wave: "wave bass music hardwave",
   breakcore: "breakcore jungle hardcore",
+  big_beat: "big beat electronic breaks",
   chillout: "chillout downtempo lounge",
   trip_hop: "trip hop downtempo beats",
   darkwave: "darkwave electronic post punk",
@@ -4271,6 +4296,7 @@ const STYLE_ADVANCED_SEARCH_TERMS = {
   neurofunk: ["neurofunk", "neuro drum and bass", "dark dnb"],
   jump_up: ["jump up dnb", "jump up drum and bass", "roller dnb"],
   jungle: ["jungle", "ragga jungle", "breakbeat jungle"],
+  big_beat: ["big beat", "chemical breaks", "90s big beat"],
   breakbeat: ["breakbeat", "breaks", "nu skool breaks"],
   uk_garage: ["uk garage", "2 step garage", "garage bassline"],
   future_garage: ["future garage", "post dubstep garage", "ambient garage"],
@@ -4358,6 +4384,7 @@ const STYLE_TO_VIBE_THEME = {
   soulful_house: "house",
   disco_house: "house",
   garage_house: "house",
+  big_beat: "bass",
   breakbeat: "bass",
   uk_garage: "bass",
   future_garage: "bass",
@@ -4420,8 +4447,9 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20260707-psy-festival-playable-v2";
+const EXTERNAL_DATASET_CACHE_VERSION = "20260713-big-beat-v1";
 const EXTERNAL_DATASET_PRIORITY_FILES = [
+  "data/big_beat_chemical_brothers_v1_20260713.csv",
   "data/psy_festival_lineups_202607_artist_profiles.csv",
   "data/berlin_club_radar_202607_artist_profiles.csv",
   "data/berghain_klubnacht_20260704_artist_profiles.csv",
@@ -4547,7 +4575,10 @@ if (typeof window !== "undefined") {
   }
 }
 
-const LOCAL_TRACK_SEED_BOOST = [
+let localTrackSeedBoostCache = null;
+
+function buildLocalTrackSeedBoost() {
+  return [
   {
     style: "psytrance",
     artist: "Astrix",
@@ -5764,7 +5795,15 @@ const LOCAL_TRACK_SEED_BOOST = [
     artistGenre: "Electro",
     artistProfileHint: "Electro de Detroit com baixo aquatico e imaginario futurista."
   }
-];
+  ];
+}
+
+function ensureLocalTrackSeedBoost() {
+  if (!localTrackSeedBoostCache) {
+    localTrackSeedBoostCache = buildLocalTrackSeedBoost();
+  }
+  return localTrackSeedBoostCache;
+}
 
 const ARTIST_GENRE_HINT_OVERRIDES = {
   alok: {
@@ -6168,6 +6207,8 @@ const DATASET_STYLE_ALIASES = {
   drumstep: "drumstep",
   nuskoolbreaks: "nu_skool_breaks",
   nuskoolbreakbeat: "nu_skool_breaks",
+  bigbeat: "big_beat",
+  big_beat: "big_beat",
   floridabreaks: "florida_breaks",
   bassline: "bassline",
   ukbass: "uk_bass",
@@ -8737,9 +8778,7 @@ function ensureTrackDiscoveryLinks(track = {}) {
   return track;
 }
 
-[catalog, LOCAL_TRACK_SEED_BOOST].forEach((items) => {
-  if (Array.isArray(items)) items.forEach(ensureTrackDiscoveryLinks);
-});
+catalog.forEach(ensureTrackDiscoveryLinks);
 
 const discoveryCatalog = [
   { name: "Ajja", style: "forest_psy", bio: "Forest psy detalhista e psicodelico.", spotifyUrl: "https://open.spotify.com/search/Ajja", youtubeUrl: "https://www.youtube.com/results?search_query=Ajja" },
@@ -9097,6 +9136,14 @@ const appMenuBtn = document.getElementById("appMenuBtn");
 const appMenuLabel = document.getElementById("appMenuLabel");
 const appMenuBackdrop = document.getElementById("appMenuBackdrop");
 const appTabBar = document.getElementById("appTabBar");
+const adminAnalyticsTabBtn = document.getElementById("adminAnalyticsTabBtn");
+const adminAnalyticsPanel = document.getElementById("adminAnalyticsPanel");
+const adminAnalyticsRefreshBtn = document.getElementById("adminAnalyticsRefreshBtn");
+const adminAnalyticsStatus = document.getElementById("adminAnalyticsStatus");
+const adminAnalyticsStatusText = document.getElementById("adminAnalyticsStatusText");
+const adminAnalyticsViewer = document.getElementById("adminAnalyticsViewer");
+const adminTrendChart = document.getElementById("adminTrendChart");
+const adminRetentionRing = document.getElementById("adminRetentionRing");
 const signatureBar = document.getElementById("signatureBar");
 const appTabPanels = document.querySelectorAll("[data-app-tab]");
 const catalogStatsKicker = document.getElementById("catalogStatsKicker");
@@ -9864,7 +9911,7 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
-const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 168;
+const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 169;
 const SWIPE_LEARNING_MILESTONES = [10, 20, 30];
 const BACKGROUND_WARMUP_STYLE_LIMIT = 4;
 let trackInsightCache = new Map();
@@ -9872,6 +9919,10 @@ let currentTrackInsightTrackKey = "";
 let styleInfoDismissed = false;
 let recommendationBlockedByKnown = false;
 let recommendationRunBusy = false;
+let firstRecommendationPromise = null;
+let firstRecommendationCompleted = false;
+let firstRecommendationRetryAvailable = false;
+let firstRecommendationBusy = false;
 let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
 let recommendationPreviewRenderToken = 0;
@@ -9899,6 +9950,12 @@ let socialState = {
   busy: false,
   syncTimer: null,
   lastSyncAt: 0
+};
+let adminAnalyticsState = {
+  loading: false,
+  data: null,
+  viewerEmail: "",
+  lastLoadedAt: 0
 };
 let socialCommentsState = {
   targetType: "track",
@@ -10749,6 +10806,7 @@ const STYLE_BPM_RULES = {
   ragga_jungle: { min: 160, max: 174 },
   sambass: { min: 170, max: 176 },
   drumfunk: { min: 165, max: 175 },
+  big_beat: { min: 100, max: 140 },
   breakbeat: { min: 125, max: 150 },
   uk_garage: { min: 128, max: 140 },
   future_garage: { min: 130, max: 142 },
@@ -10832,6 +10890,7 @@ const STYLE_BPM_RULES = {
 
 const PERCEPTUAL_BPM_AMBIGUOUS_STYLES = new Set([
   "psybreaks",
+  "big_beat",
   "breakbeat",
   "future_garage",
   "dubstep",
@@ -10894,7 +10953,8 @@ const STYLE_SIMILAR_FALLBACKS = {
   neurofunk: ["drum_and_bass", "jump_up", "halftime_bass", "dark_psy"],
   jump_up: ["drum_and_bass", "neurofunk", "jungle", "dubstep"],
   jungle: ["drum_and_bass", "breakbeat", "footwork_juke", "breakcore"],
-  breakbeat: ["psybreaks", "uk_garage", "jungle", "experimental_bass"],
+  big_beat: ["breakbeat", "trip_hop", "electro", "house"],
+  breakbeat: ["big_beat", "psybreaks", "uk_garage", "jungle", "experimental_bass"],
   uk_garage: ["garage_house", "future_garage", "breakbeat", "bass_house"],
   future_garage: ["uk_garage", "wave", "downtempo", "dubstep"],
   dubstep: ["riddim", "halftime_bass", "experimental_bass", "trap"],
@@ -11411,6 +11471,7 @@ const STYLE_INFO_PT = {
   neurofunk: "DnB tecnico e sombrio, com bass design complexo e muita tensao ritmica.",
   jump_up: "DnB mais direto e divertido, com basslines saltadas e resposta imediata de pista.",
   jungle: "Raiz breakbeat do DnB, com breaks picotados, subgrave forte e heranca soundsystem.",
+  big_beat: "Big Beat combina breakbeats pesados, samples de rock/funk, linhas acidas e energia de rave dos anos 1990.",
   breakbeat: "Batida quebrada (nao 4x4), groove sincopado e pegada hibrida entre club e bass.",
   uk_garage: "Groove quebrado com swing britanico, linhas de baixo elasticas e vocal chops.",
   future_garage: "Vertente atmosferica do garage, com espacamento, texturas etereas e clima introspectivo.",
@@ -12289,6 +12350,7 @@ const STYLE_ARTIST_SEEDS = {
   neurofunk: ["Noisia", "Ed Rush & Optical", "Black Sun Empire", "Mefjus", "Phace", "Spor", "Neonlight", "Agressor Bunx"],
   jump_up: ["Bou", "Serum", "Hedex", "Turno", "Profile", "Sota", "Captain Bass", "Taxman"],
   jungle: ["Shy FX", "Congo Natty", "Nia Archives", "Tim Reaper", "DJ Hype", "DJ Zinc", "Krust", "Aphrodite"],
+  big_beat: ["The Chemical Brothers", "Fatboy Slim", "The Prodigy", "The Crystal Method", "Propellerheads", "Lo Fidelity Allstars", "Bentley Rhythm Ace"],
   breakbeat: ["Bicep", "Overmono", "Plump DJs", "Leftfield", "Stanton Warriors", "Freestylers", "Aquasky", "Sasha Carassi", "The Crystal Method"],
   uk_garage: ["Mattik", "Sammy Virji", "Interplanetary Criminal", "Conducta", "MJ Cole", "Wookie", "El-B", "DJ EZ", "Disclosure", "Oppidan", "Y U QT", "MPH", "Main Phase"],
   bassline: ["Mattik", "Flava D", "Champion", "Oppidan", "Sammy Virji", "Conducta", "MPH", "TQD"],
@@ -12400,6 +12462,8 @@ const STYLE_STRICT_WHITELISTS = {
 };
 
 const ARTIST_STYLE_OVERRIDES = {
+  "the chemical brothers": ["big_beat", "breakbeat"],
+  "chemical brothers": ["big_beat", "breakbeat"],
   "kindzadza": ["dark_psy", "psycore"],
   "psykovsky": ["dark_psy", "psycore"],
   "orestis": ["dark_psy", "psycore", "hi_tech"],
@@ -12592,6 +12656,8 @@ const ARTIST_STYLE_OVERRIDES = {
 };
 
 const LOCKED_ARTIST_STYLE_OVERRIDES = new Set([
+  "the chemical brothers",
+  "chemical brothers",
   "astrix",
   "alpha portal",
   "moonclipse",
@@ -12602,6 +12668,11 @@ const LOCKED_ARTIST_STYLE_OVERRIDES = new Set([
 ]);
 
 const ARTIST_CANONICAL_ORIGINS = {
+  "the chemical brothers": {
+    country: "United Kingdom",
+    area: "Manchester",
+    disambiguation: "Duo britanico de musica eletronica ligado principalmente ao big beat e ao breakbeat; nao reclassificar por resultados dinamicos de APIs."
+  },
   "astrix": {
     country: "Israel",
     area: "",
@@ -13698,6 +13769,7 @@ const TRACK_STYLE_BLOCKLIST = [
 ];
 
 const STRICT_DYNAMIC_BPM_STYLES = new Set([
+  "big_beat",
   "psycore",
   "psytrance",
   "psy_comercial",
@@ -13757,6 +13829,7 @@ const STRICT_DYNAMIC_BPM_STYLES = new Set([
 ]);
 
 const FINE_SUBGENRE_EVIDENCE_STYLES = new Set([
+  "big_beat",
   "forest_psy",
   "dark_psy",
   "twilight_psy",
@@ -13831,6 +13904,7 @@ const STRICT_FAMILY_SEED_STYLES = new Set([
   ...EXPANDED_NICHE_DISCOVERY_STYLES
 ]);
 const STRICT_ARTIST_MATCH_STYLES = new Set([
+  "big_beat",
   "dark_progressive",
   "dark_psy",
   "dark_experimental",
@@ -13849,6 +13923,7 @@ const STRICT_ARTIST_MATCH_STYLES = new Set([
   ...EXPANDED_NICHE_DISCOVERY_STYLES
 ]);
 const LOCK_SEED_FROM_CATALOG_STYLES = new Set([
+  "big_beat",
   "dark_progressive",
   "dark_psy",
   "dark_experimental",
@@ -14005,6 +14080,7 @@ const BASS_REQUIRED_SIGNAL_TERMS = {
   neurofunk: ["neurofunk", "drum and bass", "dnb"],
   jump_up: ["jump up", "drum and bass", "dnb"],
   jungle: ["jungle", "drum and bass", "dnb", "amen"],
+  big_beat: ["big beat", "bigbeat", "breakbeat", "breaks", "electronic"],
   breakbeat: ["breakbeat", "breaks"],
   uk_garage: ["uk garage", "garage", "2 step", "2step"],
   future_garage: ["future garage", "garage"],
@@ -17204,6 +17280,9 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const energyBand = pickDatasetValue(fields, ["energy_band", "energy_profile", "energy"]);
     const catalogRole = pickDatasetValue(fields, ["catalog_role", "role", "editorial_role"]);
     const sourceNote = pickDatasetValue(fields, ["source_note", "note", "curation_note"]);
+    const datasetRowSource = pickDatasetValue(fields, ["source", "source_name", "catalog_source"]);
+    const explicitSourceType = pickDatasetValue(fields, ["source_type", "catalog_source_type", "track_source_type"]);
+    const sourceType = explicitSourceType || (/deezer.*(?:artist.*depth|playable[_\s-]*depth)/i.test(datasetRowSource) ? datasetRowSource : "");
     const hasPlayablePath = Boolean(
       previewUrl ||
       deezerTrackId ||
@@ -17238,7 +17317,8 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
       social_discovery_links: socialDiscoveryLinks,
       energy_band: energyBand,
       catalog_role: catalogRole,
-      source_note: sourceNote
+      source_note: sourceNote,
+      source_type: sourceType
     }).filter(([, value]) => String(value ?? "").trim()));
     if (previewUrl || bandcampTrackId || bandcampTrackUrl || soundcloudTrackUrl || youtubeTrackUrl || deezerTrackId) {
       catalogMetadata.playback_policy = "published_requires_in_app_playback";
@@ -17285,6 +17365,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         labelLinks,
         socialDiscoveryLinks,
         sourceNote,
+        sourceType,
         catalogConfidence
       },
       existingKeys
@@ -18920,6 +19001,7 @@ function hasTrackStyleSignalConflict(style, trackLike = {}) {
 function hasNonElectronicReleaseConflict(track = {}) {
   const label = normalize(track.label || "");
   const song = normalize(track.song || "");
+  const rawSong = String(track.song || "");
   const albumSignals = normalize([
     track.album,
     track.collectionName,
@@ -18928,20 +19010,27 @@ function hasNonElectronicReleaseConflict(track = {}) {
     catalogTrackMetadataText(track, "album"),
     catalogTrackMetadataText(track, "collection")
   ].filter(Boolean).join(" "));
+  const releaseTitleText = [label, albumSignals].filter(Boolean).join(" ");
   const releaseText = [label, song, albumSignals].filter(Boolean).join(" ");
-  const hardNonElectronicRelease = /\b(?:retro\s+r\s+b|r\s+b\s+(?:classics?|hits?|ballads?)|rhythm\s+(?:and|n)\s+blues|gospel\s+(?:classics?|hits?)|country\s+(?:classics?|hits?)|rock\s+(?:classics?|ballads?)|acoustic\s+(?:classics?|sessions?))\b/;
-  if (hardNonElectronicRelease.test(releaseText)) return true;
+  const hardNonElectronicRelease = /\b(?:indie\s+rock|alternative\s+rock|classic\s+rock|retro\s+r\s*b|r\s*b\s+(?:classics?|hits?|ballads?)|r\s+and\s+b|rhythm\s+(?:and|n)\s+blues|hip\s*hop|rap|gospel\s+(?:classics?|hits?)|country\s+(?:classics?|hits?)|folk\s+(?:classics?|sessions?)|motown(?:\s+years?)?|death\s+pop|acoustic|unplugged|classical|orchestral)\b/;
+  const electronicVersionEvidence = /\b(?:remix|rework|extended|club\s+mix|dub\s+mix|electronic\s+mix|dance\s+mix)\b/;
+  const explicitAcousticSongVersion = /(?:\(|\[|-)\s*acoustic\b|\bacoustic\s+(?:version|edit|session)\b/i.test(rawSong);
+  if ((hardNonElectronicRelease.test(releaseTitleText) || explicitAcousticSongVersion) && !electronicVersionEvidence.test(releaseText)) return true;
 
   const sourceType = normalize([
     track.sourceType,
     catalogTrackMetadataText(track, "source_type")
-  ].filter(Boolean).join(" "));
-  const inheritedArtistDepth = sourceType.includes("deezer existing artist playable depth");
+  ].filter(Boolean).join(" ")).replace(/[\s_]+/g, " ");
+  const inheritedArtistDepth =
+    sourceType.includes("deezer existing artist playable depth") ||
+    sourceType.includes("deezer artist top track depth") ||
+    /\bdeezer\b.*\bartist\b.*\bdepth\b/.test(sourceType) ||
+    /\bdeezer\b.*\bplayable\b.*\bdepth\b/.test(sourceType);
   if (!inheritedArtistDepth || hasReliableBpmForTrack(track)) return false;
 
   // Artist-level genre is deliberately excluded: this gate requires evidence
   // from the recording/release itself, not from another part of the artist's career.
-  const electronicReleaseEvidence = /\b(?:house|techno|trance|electro|electronic|dance|club|garage|breaks?|drum\s+(?:and|n)\s+bass|dnb|dubstep|hardstyle|gabber|acid|ambient|downtempo|remix|rework|extended|dub\s+mix)\b/;
+  const electronicReleaseEvidence = /\b(?:psytrance|psy\s+trance|goa|full\s+on|hitech|hi\s+tech|psycore|house|techno|trance|electro|electronic|electronica|dance|club|garage|breaks?|breakbeat|drum\s+(?:and|n)\s+bass|dnb|jungle|dubstep|bass\s+music|hardstyle|gabber|hardcore|acid|ambient|downtempo|chillout|trip\s+hop|disco|edm|synth(?:wave|pop)?|industrial|ebm|futurepop|idm|rave|footwork|juke|gqom|amapiano|baile\s+funk|brazilian\s+funk|remix|rework|extended|original\s+mix|club\s+mix|dub\s+mix)\b/;
   return !electronicReleaseEvidence.test(releaseText);
 }
 
@@ -21926,6 +22015,7 @@ function addDynamicTrackToCatalog({
   labelLinks = [],
   socialDiscoveryLinks = [],
   sourceNote = "",
+  sourceType = "",
   catalogConfidence = ""
 }, existingKeys) {
   const artistName = (artist || "").trim();
@@ -21949,7 +22039,13 @@ function addDynamicTrackToCatalog({
     artistGenre: artistGenre || "",
     artistProfileHint,
     vibe: [artistBio, labelBio].filter(Boolean).join(" "),
-    source
+    source,
+    sourceType,
+    catalogMetadata,
+    sourceTags,
+    albumKeywords,
+    bpmExact,
+    style
   })) return false;
   if (isLikelyChannelStyleArtistName(artistName)) return false;
   if (isLikelyGeneratedTrackTitle(songName)) return false;
@@ -22052,6 +22148,7 @@ function addDynamicTrackToCatalog({
     labelLinks: Array.isArray(labelLinks) ? labelLinks.map((item) => String(item || "").trim()).filter(Boolean) : [],
     socialDiscoveryLinks: Array.isArray(socialDiscoveryLinks) ? socialDiscoveryLinks.map((item) => String(item || "").trim()).filter(Boolean) : [],
     sourceNote: String(sourceNote || safeCatalogMetadata.source_note || "").trim(),
+    sourceType: String(sourceType || safeCatalogMetadata.source_type || "").trim(),
     catalogConfidence: String(catalogConfidence || safeCatalogMetadata.confidence || "").trim(),
     source
   };
@@ -22071,7 +22168,7 @@ function addDynamicTrackToCatalog({
 function injectLocalTrackSeedBoost() {
   const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)));
   let added = 0;
-  LOCAL_TRACK_SEED_BOOST.forEach((seed) => {
+  ensureLocalTrackSeedBoost().forEach((seed) => {
     const releaseDate = normalizeDatasetReleaseDate(seed.releaseDate || "Catálogo local");
     const inserted = addDynamicTrackToCatalog(
       {
@@ -22115,7 +22212,7 @@ function injectLocalTrackSeedBoost() {
 function injectSoundCloudSupplementalSeeds() {
   const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)));
   let added = 0;
-  SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS.forEach((seed) => {
+  ensureSoundCloudSupplementalDjSeeds().forEach((seed) => {
     const inserted = addDynamicTrackToCatalog(
       {
         style: seed.style,
@@ -23209,6 +23306,7 @@ const I18N = {
     tabCommunity: "Comunidade",
     tabStudio: "Estúdio",
     tabProfile: "Perfil",
+    tabAdmin: "Painel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contato",
     tabLegal: "Avisos",
@@ -24297,6 +24395,7 @@ const I18N = {
     tabCommunity: "Community",
     tabStudio: "Studio",
     tabProfile: "Profile",
+    tabAdmin: "Admin dashboard",
     tabAbout: "About",
     tabSupport: "Contact",
     tabLegal: "Legal",
@@ -25382,6 +25481,7 @@ const I18N = {
     tabCommunity: "Comunidad",
     tabStudio: "Estudio",
     tabProfile: "Perfil",
+    tabAdmin: "Panel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contacto",
     tabLegal: "Avisos",
@@ -26468,16 +26568,16 @@ function q(key, vars = {}) {
 
 function noVerifiedTrackMessage() {
   if (currentLanguage === "en") {
-    return "Radar is still calibrating: I could not find a reliable next track right now. Try Surprise again or pick another style.";
+    return "I could not find a playable track right now. Try again.";
   }
   if (currentLanguage === "es") {
-    return "Radar todavía calibrando: no encontré una pista confiable ahora. Prueba Sorpresa otra vez o elige otro subgénero.";
+    return "No encontré una pista reproducible ahora. Inténtalo de nuevo.";
   }
-  return "Radar ainda calibrando: não achei uma faixa confiável agora. Tente Surpresa de novo ou escolha outro subgênero.";
+  return "Não encontrei uma faixa reproduzível agora. Tente novamente.";
 }
 
 function recommendationFailureMessage() {
-  if (recommendationBlockedByKnown) return t("noUnknownOption");
+  if (recommendationBlockedByKnown && firstRecommendationCompleted) return t("noUnknownOption");
   return noVerifiedTrackMessage();
 }
 
@@ -27179,9 +27279,11 @@ function applyLanguage() {
   setText("[data-app-tab-target='community']", t("tabCommunity"));
   setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
+  setText("[data-app-tab-target='admin']", t("tabAdmin"));
   setText("[data-app-tab-target='about']", t("tabAbout"));
   setText("[data-app-tab-target='support']", t("tabSupport"));
   setText("[data-app-tab-target='legal']", t("tabLegal"));
+  renderAdminAnalyticsCopy();
   if (appTabBar) appTabBar.setAttribute("aria-label", sonicTinyCopy("Navegação principal do app", "Main app navigation", "Navegación principal de la app"));
   setText("#djDiscoveryKicker", sonicTinyCopy("Radar de selectors", "Selector radar", "Radar de selectors"));
   setText("#djDiscoveryTitle", sonicTinyCopy("DJs para ouvir por set", "DJs to hear by set", "DJs para escuchar por set"));
@@ -27438,7 +27540,7 @@ function applyLanguage() {
   setText("#swipeDeckKicker", t("swipeDeckKicker"));
   setText("#swipeDeckTitle", t("swipeDeckTitle"));
   setText("#swipeDeckHint", t("swipeDeckHint"));
-  setText("#swipeHeroSurpriseBtn", currentRecommendation ? t("swipeNextButton") : t("swipeStartButton"));
+  setText("#swipeHeroSurpriseBtn", primaryRecommendationActionLabel());
   renderSwipeStyleRail();
   setText("#topSwipeHint", t("topSwipeHint"));
   setText("#swipeKicker", t("swipeKicker"));
@@ -27452,7 +27554,7 @@ function applyLanguage() {
   });
   setText("#topSwipeLikeBtn", t("swipeLike"));
   setText("#topSwipePassBtn", t("swipePass"));
-  setText("#topSwipeSurpriseBtn", currentRecommendation ? t("swipeNextButton") : t("swipeStartButton"));
+  setText("#topSwipeSurpriseBtn", primaryRecommendationActionLabel());
   setText("#swipeLikeBtn", t("swipeLike"));
   setText("#swipePassBtn", t("swipePass"));
   updateDiscoverySequenceBadges(currentRecommendation);
@@ -27784,8 +27886,17 @@ function urlBooleanParam(url, names = []) {
 function requestedAppTabFromUrl(fallback = "discover") {
   const url = currentAppUrl();
   if (!url) return safeAppTabName(fallback);
-  const rawTab = String(url.searchParams.get("tab") || fallback || "discover").trim().toLowerCase();
+  const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
+  const routeTab = pathname === "/admin/analytics" ? "admin" : "";
+  const rawTab = String(url.searchParams.get("tab") || routeTab || fallback || "discover").trim().toLowerCase();
   return safeAppTabName(rawTab);
+}
+
+function urlRequestsAdminAnalytics() {
+  const url = currentAppUrl();
+  if (!url) return false;
+  const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
+  return pathname === "/admin/analytics" || String(url.searchParams.get("tab") || "").trim().toLowerCase() === "admin";
 }
 
 function parseSharedSpiritPayloadFromUrl() {
@@ -28026,6 +28137,16 @@ function trackBetaGateViewed() {
   }, { source: "beta_gate" });
 }
 
+function betaRuntimePlatform() {
+  if (!isNativeAppRuntime()) return "web";
+  try {
+    const platform = String(window.Capacitor?.getPlatform?.() || "native").trim().toLowerCase();
+    return ["android", "ios"].includes(platform) ? platform : "native";
+  } catch (_error) {
+    return "native";
+  }
+}
+
 function trackBetaAppSession() {
   if (betaAppSessionTracked || typeof window === "undefined") return;
   betaAppSessionTracked = true;
@@ -28036,20 +28157,23 @@ function trackBetaAppSession() {
   const daysSinceFirstVisit = Math.max(0, Math.floor((now - firstSeenAt) / 86400000));
   const daysSinceLastVisit = lastSeenAt ? Math.max(0, Math.floor((now - lastSeenAt) / 86400000)) : 0;
   const returning = Boolean(lastSeenAt && now - lastSeenAt > 6 * 60 * 60 * 1000);
+  const platform = betaRuntimePlatform();
 
   trackBetaEvent("app_session_started", {
     returning,
     daysSinceFirstVisit,
     daysSinceLastVisit,
-    betaGranted: betaAccessGranted()
-  }, { source: "app_session" });
+    betaGranted: betaAccessGranted(),
+    platform
+  }, { source: `app_session_${platform}` });
 
   if (returning) {
     trackBetaEvent("returning_user", {
       daysSinceFirstVisit,
       daysSinceLastVisit,
-      betaGranted: betaAccessGranted()
-    }, { source: "retention" });
+      betaGranted: betaAccessGranted(),
+      platform
+    }, { source: `retention_${platform}` });
   }
 
   writeBetaJsonStorage(BETA_VISIT_STORAGE_KEY, {
@@ -30793,7 +30917,7 @@ function showIntroScreen() {
   clearIntroAutoAdvance();
   introAutoAdvanceTimer = window.setTimeout(() => {
     if (!introDismissed) showLanguageScreen();
-  }, 5200);
+  }, 700);
   refreshAmbientForUiState({ immediate: true });
   requestOpeningSting();
 }
@@ -30975,7 +31099,7 @@ function closeQuickSurprisePanel() {
   quickSurprisePanel.classList.add("hidden");
 }
 
-async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", knownTracks = "" } = {}) {
+async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", knownTracks = "", manageBusyUi = true } = {}) {
   const selectedStyle = String(style || "").trim();
   if (!selectedStyle) return false;
   const knownTracksText = String(knownTracks || "").trim();
@@ -31010,7 +31134,8 @@ async function runFocusedOnboardingSurprise({ style = "", knownArtists = "", kno
   const generated = await generateRecommendationWithOverlay(prefs, {
     resetRejected: false,
     allowKnownFallback: false,
-    avoidTrackTitles: Array.from(typedKnownTracks)
+    avoidTrackTitles: Array.from(typedKnownTracks),
+    manageBusyUi
   });
 
   if (!generated) return false;
@@ -31083,10 +31208,8 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
 
   if (!surprise) {
     window.setTimeout(() => {
-      if (currentRecommendation || recommendationRunBusy) return;
-      runSurpriseRecommendation().catch(() => {
-        showToast(recommendationFailureMessage());
-      });
+      if (currentRecommendation) return;
+      void runPrimaryRecommendationAction({ source: "auto" });
     }, 180);
     return;
   }
@@ -31095,21 +31218,27 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
     const knownArtists = String(surprisePreset?.knownArtists || "").trim();
     const knownTracks = String(surprisePreset?.knownTracks || "").trim();
     if (selectedStyle) {
-      runFocusedOnboardingSurprise({ style: selectedStyle, knownArtists, knownTracks })
-        .then((ok) => {
-          if (ok) return;
-          return runSurpriseRecommendation();
-        })
-        .catch(() => {
-          runSurpriseRecommendation().catch(() => {
-            showToast(recommendationFailureMessage());
+      void runPrimaryRecommendationAction({
+        source: "auto",
+        initialRunner: async ({ onFallback }) => {
+          const focusedReady = await runFocusedOnboardingSurprise({
+            style: selectedStyle,
+            knownArtists,
+            knownTracks,
+            manageBusyUi: false
           });
-        });
+          if (focusedReady) return true;
+          onFallback("focused_onboarding");
+          return runSurpriseRecommendation({
+            manageBusyUi: false,
+            onFallback,
+            skipInitialGuard: true
+          });
+        }
+      });
       return;
     }
-    runSurpriseRecommendation().catch(() => {
-      showToast(recommendationFailureMessage());
-    });
+    void runPrimaryRecommendationAction({ source: "auto" });
   }, 320);
 }
 
@@ -33991,15 +34120,35 @@ function recommendationTriggerButtons() {
   return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, styleIssueBtn, bpmIssueBtn, imageIssueBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
+function firstRecommendationRetryLabel() {
+  if (currentLanguage === "en") return "Try again";
+  if (currentLanguage === "es") return "Intentar de nuevo";
+  return "Tentar novamente";
+}
+
+function primaryRecommendationActionLabel({ hasTrack = Boolean(currentRecommendation), isBusy = false } = {}) {
+  if (isBusy) return t("swipeStartBusy");
+  if (hasTrack) return t("swipeNextButton");
+  if (firstRecommendationRetryAvailable) return firstRecommendationRetryLabel();
+  return t("swipeStartButton");
+}
+
+function setInitialRecommendationBusy(isBusy) {
+  firstRecommendationBusy = Boolean(isBusy);
+  const actionLabel = primaryRecommendationActionLabel({ isBusy });
+  [topSwipeSurpriseBtn, swipeHeroSurpriseBtn].forEach((button) => {
+    if (!button) return;
+    button.textContent = actionLabel;
+    button.disabled = Boolean(isBusy);
+    button.classList.toggle("is-loading", Boolean(isBusy));
+  });
+}
+
 function setRecommendationRunBusy(isBusy) {
   document.body.classList.toggle("is-recommending", Boolean(isBusy));
   if (appContent) appContent.setAttribute("aria-busy", isBusy ? "true" : "false");
   const hasTrack = Boolean(currentRecommendation);
-  const swipeActionLabel = isBusy
-    ? t("swipeStartBusy")
-    : hasTrack
-      ? t("swipeNextButton")
-      : t("swipeStartButton");
+  const swipeActionLabel = primaryRecommendationActionLabel({ hasTrack, isBusy });
   if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = swipeActionLabel;
   if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = swipeActionLabel;
   if (recommendBtn) {
@@ -34716,6 +34865,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "community" && shouldDisableCommunityForAppStore()) return "discover";
+  if (requestedTab === "admin") return hasOwnerAccess() ? "admin" : "discover";
   return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(requestedTab)
     ? requestedTab
     : "discover";
@@ -34837,9 +34987,12 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const targetTab = button.getAttribute("data-app-tab-target") || "";
       const disabledForReview = targetTab === "community" && shouldDisableCommunityForAppStore();
-      button.hidden = disabledForReview;
-      button.setAttribute("aria-hidden", disabledForReview ? "true" : "false");
-      const isActive = !disabledForReview && targetTab === safeTab;
+      const privateForOwner = targetTab === "admin" && !hasOwnerAccess();
+      const disabled = disabledForReview || privateForOwner;
+      button.hidden = disabled;
+      button.classList.toggle("hidden", disabled);
+      button.setAttribute("aria-hidden", disabled ? "true" : "false");
+      const isActive = !disabled && targetTab === safeTab;
       button.classList.toggle("active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
       if (isActive) button.setAttribute("aria-current", "page");
@@ -34849,9 +35002,12 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   }
   appTabPanels.forEach((panel) => {
     const disabledForReview = panelMatchesAppTab(panel, "community") && shouldDisableCommunityForAppStore();
-    panel.hidden = disabledForReview;
-    panel.setAttribute("aria-hidden", disabledForReview ? "true" : "false");
-    panel.classList.toggle("active", !disabledForReview && panelMatchesAppTab(panel, safeTab));
+    const privateForOwner = panelMatchesAppTab(panel, "admin") && !hasOwnerAccess();
+    const disabled = disabledForReview || privateForOwner;
+    const isActive = !disabled && panelMatchesAppTab(panel, safeTab);
+    panel.hidden = disabled;
+    panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+    panel.classList.toggle("active", isActive);
   });
   syncAppMenuLabel(activeTabButton, safeTab);
   scrollActiveAppTabIntoView(activeTabButton);
@@ -34862,6 +35018,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     void ensureSocialMvpReady();
     void loadApiHealthPanel();
   }
+  if (safeTab === "admin") void loadAdminAnalytics();
   if (safeTab === "djs") ensureDjDiscoveryReady();
   if (safeTab === "studio") ensureVoiceLabUiReady();
   if (safeTab === "news") void refreshDailyNews({ silent: false });
@@ -42332,6 +42489,322 @@ function hasOwnerAccess() {
   );
 }
 
+function adminAnalyticsEndpoint() {
+  return resolveAppApiEndpoint(ACCESS_CONFIG.adminAnalyticsEndpoint || "/api/admin-analytics");
+}
+
+function adminAnalyticsLocale() {
+  if (currentLanguage === "en") return "en-US";
+  if (currentLanguage === "es") return "es-ES";
+  return "pt-BR";
+}
+
+function adminAnalyticsNumber(value = 0) {
+  const number = Math.max(0, Number(value) || 0);
+  try {
+    return new Intl.NumberFormat(adminAnalyticsLocale()).format(number);
+  } catch (_error) {
+    return String(number);
+  }
+}
+
+function adminAnalyticsDateLabel(value = "", options = {}) {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))
+    ? new Date(`${value}T12:00:00Z`)
+    : new Date(value);
+  if (!Number.isFinite(date.getTime())) return "—";
+  try {
+    return new Intl.DateTimeFormat(adminAnalyticsLocale(), options).format(date);
+  } catch (_error) {
+    return String(value || "—");
+  }
+}
+
+function setAdminAnalyticsStatus(message = "", tone = "") {
+  if (adminAnalyticsStatusText) adminAnalyticsStatusText.textContent = message;
+  if (!adminAnalyticsStatus) return;
+  adminAnalyticsStatus.classList.toggle("is-error", tone === "error");
+  adminAnalyticsStatus.classList.toggle("is-ready", tone === "ready");
+}
+
+function renderAdminAnalyticsCopy() {
+  const copy = [
+    ["adminAnalyticsKicker", "CENTRAL PRIVADA", "PRIVATE CONTROL", "CENTRAL PRIVADA"],
+    ["adminAnalyticsPrivateLabel", "Somente proprietário", "Owner only", "Solo propietario"],
+    ["adminAnalyticsTitle", "Pessoas usando o Sonic Search", "People using Sonic Search", "Personas usando Sonic Search"],
+    ["adminAnalyticsIntro", "Leitura anônima de uso, retorno e plataforma — sem expor dados pessoais.", "Anonymous view of usage, return, and platform — without exposing personal data.", "Lectura anónima de uso, retorno y plataforma — sin exponer datos personales."],
+    ["adminAnalyticsRefreshLabel", "Atualizar", "Refresh", "Actualizar"],
+    ["adminKpiDayLabel", "Hoje", "Today", "Hoy"],
+    ["adminKpiWeekLabel", "7 dias", "7 days", "7 días"],
+    ["adminKpiMonthLabel", "30 dias", "30 days", "30 días"],
+    ["adminKpiAllLabel", "Desde o início", "All time", "Desde el inicio"],
+    ["adminSessionsDayLabel", "sessões", "sessions", "sesiones"],
+    ["adminSessionsWeekLabel", "sessões", "sessions", "sesiones"],
+    ["adminSessionsMonthLabel", "sessões", "sessions", "sesiones"],
+    ["adminSessionsAllLabel", "sessões", "sessions", "sesiones"],
+    ["adminTrendKicker", "MOVIMENTO", "MOVEMENT", "MOVIMIENTO"],
+    ["adminTrendTitle", "Pessoas por dia", "People by day", "Personas por día"],
+    ["adminTrendUsersLegend", "pessoas aproximadas", "approximate people", "personas aproximadas"],
+    ["adminPlatformKicker", "PLATAFORMAS · 30 DIAS", "PLATFORMS · 30 DAYS", "PLATAFORMAS · 30 DÍAS"],
+    ["adminPlatformTitle", "Onde estão usando", "Where they use it", "Dónde lo usan"],
+    ["adminPlatformNote", "Android é estimado pelo app e pelo navegador do aparelho.", "Android is estimated from the app and the device browser.", "Android se estima por la app y el navegador del dispositivo."],
+    ["adminRetentionKicker", "RETORNO · 30 DIAS", "RETURN · 30 DAYS", "RETORNO · 30 DÍAS"],
+    ["adminRetentionTitle", "Quem voltou ao app", "Who came back", "Quién volvió a la app"],
+    ["adminReturningUsersLabel", "aparelhos retornaram após pelo menos 6 horas.", "devices returned after at least 6 hours.", "dispositivos volvieron después de al menos 6 horas."],
+    ["adminEngagementKicker", "SINAIS · 30 DIAS", "SIGNALS · 30 DAYS", "SEÑALES · 30 DÍAS"],
+    ["adminEngagementTitle", "Ações importantes", "Important actions", "Acciones importantes"],
+    ["adminSignalReactionsLabel", "3 reações", "3 reactions", "3 reacciones"],
+    ["adminSignalLikesLabel", "artistas curtidos", "artists liked", "artistas con like"],
+    ["adminSignalDiscoveriesLabel", "novos artistas", "new artists", "nuevos artistas"],
+    ["adminSignalSharesLabel", "compartilhamentos", "shares", "compartidos"],
+    ["adminPrivacyTitle", "Como interpretar estes números", "How to read these numbers", "Cómo interpretar estos números"],
+    ["adminPrivacyText", "“Pessoa” é uma aproximação por identificador anônimo salvo no aparelho ou navegador. A mesma pessoa em dois aparelhos pode aparecer duas vezes. Nenhum nome ou e-mail de usuário é mostrado.", "“Person” is an approximation based on an anonymous identifier stored on the device or browser. One person on two devices may appear twice. No user names or emails are shown.", "“Persona” es una aproximación por identificador anónimo guardado en el dispositivo o navegador. La misma persona en dos dispositivos puede aparecer dos veces. No se muestran nombres ni e-mails."]
+  ];
+  copy.forEach(([id, pt, en, es]) => setText(`#${id}`, sonicTinyCopy(pt, en, es)));
+  if (!adminAnalyticsState.data && !adminAnalyticsState.loading) {
+    setAdminAnalyticsStatus(sonicTinyCopy(
+      "Entre com sua conta de proprietário para carregar os dados.",
+      "Sign in with the owner account to load the data.",
+      "Entra con la cuenta de propietario para cargar los datos."
+    ));
+  }
+  if (adminAnalyticsState.data) renderAdminAnalyticsData(adminAnalyticsState.data);
+}
+
+function svgElement(name, attributes = {}) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+  Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+  return node;
+}
+
+function renderAdminAnalyticsTrend(trend = []) {
+  if (!adminTrendChart) return;
+  const rows = Array.isArray(trend) ? trend.slice(-30) : [];
+  adminTrendChart.replaceChildren();
+  const title = svgElement("title", { id: "adminTrendChartTitle" });
+  title.textContent = sonicTinyCopy(
+    "Pessoas aproximadas por dia nos últimos 30 dias",
+    "Approximate people by day over the last 30 days",
+    "Personas aproximadas por día en los últimos 30 días"
+  );
+  const peak = Math.max(0, ...rows.map((row) => Number(row?.users) || 0));
+  const description = svgElement("desc", { id: "adminTrendChartDesc" });
+  description.textContent = sonicTinyCopy(
+    `O maior dia teve ${adminAnalyticsNumber(peak)} pessoas aproximadas.`,
+    `The busiest day had ${adminAnalyticsNumber(peak)} approximate people.`,
+    `El día mayor tuvo ${adminAnalyticsNumber(peak)} personas aproximadas.`
+  );
+  adminTrendChart.append(title, description);
+
+  const defs = svgElement("defs");
+  const gradient = svgElement("linearGradient", { id: "adminChartAreaGradient", x1: "0", y1: "0", x2: "0", y2: "1" });
+  gradient.append(
+    svgElement("stop", { offset: "0%", "stop-color": "#b4ff6b", "stop-opacity": "0.23" }),
+    svgElement("stop", { offset: "100%", "stop-color": "#64e8ff", "stop-opacity": "0" })
+  );
+  defs.append(gradient);
+  adminTrendChart.append(defs);
+
+  const width = 640;
+  const left = 34;
+  const right = 18;
+  const top = 16;
+  const bottom = 154;
+  const chartWidth = width - left - right;
+  const ceiling = Math.max(1, peak);
+  [0, 0.33, 0.66, 1].forEach((ratio) => {
+    const y = bottom - (bottom - top) * ratio;
+    adminTrendChart.append(svgElement("line", {
+      class: "admin-chart-grid",
+      x1: left,
+      x2: width - right,
+      y1: y.toFixed(2),
+      y2: y.toFixed(2)
+    }));
+  });
+  if (!rows.length) return;
+  const points = rows.map((row, index) => {
+    const x = left + (rows.length === 1 ? chartWidth / 2 : (chartWidth * index) / (rows.length - 1));
+    const y = bottom - ((Math.max(0, Number(row?.users) || 0) / ceiling) * (bottom - top));
+    return { x, y, row };
+  });
+  const pointText = points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+  const areaPath = `M ${points[0].x.toFixed(2)} ${bottom} L ${pointText.replaceAll(",", " ")} L ${points[points.length - 1].x.toFixed(2)} ${bottom} Z`;
+  adminTrendChart.append(svgElement("path", { class: "admin-chart-area", d: areaPath }));
+  adminTrendChart.append(svgElement("polyline", { class: "admin-chart-line", points: pointText }));
+  points.forEach((point, index) => {
+    if (index !== points.length - 1 && Number(point.row?.users) !== peak) return;
+    const circle = svgElement("circle", {
+      class: "admin-chart-point",
+      cx: point.x.toFixed(2),
+      cy: point.y.toFixed(2),
+      r: 4
+    });
+    const pointTitle = svgElement("title");
+    pointTitle.textContent = `${adminAnalyticsDateLabel(point.row?.date, { day: "2-digit", month: "short" })}: ${adminAnalyticsNumber(point.row?.users)} ` + sonicTinyCopy("pessoas", "people", "personas");
+    circle.append(pointTitle);
+    adminTrendChart.append(circle);
+  });
+  [...new Set([0, Math.floor((rows.length - 1) / 2), rows.length - 1])].forEach((index) => {
+    const point = points[index];
+    const label = svgElement("text", {
+      class: "admin-chart-label",
+      x: point.x.toFixed(2),
+      y: 180,
+      "text-anchor": index === 0 ? "start" : index === rows.length - 1 ? "end" : "middle"
+    });
+    label.textContent = adminAnalyticsDateLabel(point.row?.date, { day: "2-digit", month: "short" });
+    adminTrendChart.append(label);
+  });
+  const peakEl = document.getElementById("adminTrendPeak");
+  if (peakEl) peakEl.textContent = `${sonicTinyCopy("Pico", "Peak", "Pico")} ${adminAnalyticsNumber(peak)}`;
+}
+
+function renderAdminAnalyticsData(data = {}) {
+  if (!data || typeof data !== "object") return;
+  const periods = data.periods || {};
+  const metrics = [
+    ["Day", periods.day],
+    ["Week", periods.week],
+    ["Month", periods.month],
+    ["All", periods.all]
+  ];
+  metrics.forEach(([suffix, metric = {}]) => {
+    const users = document.getElementById(`adminUsers${suffix}`);
+    const sessions = document.getElementById(`adminSessions${suffix}`);
+    if (users) users.textContent = adminAnalyticsNumber(metric.users);
+    if (sessions) sessions.textContent = adminAnalyticsNumber(metric.sessions);
+  });
+
+  const platforms = data.platforms || {};
+  const platformValues = {
+    Android: Math.max(0, Number(platforms.android) || 0),
+    Ios: Math.max(0, Number(platforms.ios) || 0),
+    Web: Math.max(0, Number(platforms.web) || 0)
+  };
+  const platformMax = Math.max(1, ...Object.values(platformValues));
+  Object.entries(platformValues).forEach(([name, value]) => {
+    const valueEl = document.getElementById(`admin${name}Users`);
+    const barEl = document.getElementById(`admin${name}Bar`);
+    if (valueEl) valueEl.textContent = adminAnalyticsNumber(value);
+    if (barEl) barEl.style.width = `${Math.round((value / platformMax) * 100)}%`;
+  });
+
+  const retentionRate = Math.max(0, Math.min(100, Number(data.retention?.rate) || 0));
+  const retentionRateEl = document.getElementById("adminRetentionRate");
+  const returningUsersEl = document.getElementById("adminReturningUsers");
+  if (retentionRateEl) retentionRateEl.textContent = `${adminAnalyticsNumber(retentionRate)}%`;
+  if (returningUsersEl) returningUsersEl.textContent = adminAnalyticsNumber(data.retention?.returningUsers);
+  if (adminRetentionRing) {
+    const circumference = 2 * Math.PI * 49;
+    adminRetentionRing.style.strokeDashoffset = String(circumference * (1 - retentionRate / 100));
+  }
+
+  const engagement = data.engagement || {};
+  const signals = {
+    adminSignalReactions: engagement.three_reactions_session?.users,
+    adminSignalLikes: engagement.discovery_artist_liked?.users,
+    adminSignalDiscoveries: engagement.new_artist_confirmed?.users,
+    adminSignalShares: engagement.share_card_clicked?.users
+  };
+  Object.entries(signals).forEach(([id, value]) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = adminAnalyticsNumber(value);
+  });
+
+  renderAdminAnalyticsTrend(data.trend || []);
+  const updatedEl = document.getElementById("adminTrendUpdated");
+  if (updatedEl) {
+    const time = adminAnalyticsDateLabel(data.generatedAt, { dateStyle: "short", timeStyle: "short" });
+    updatedEl.textContent = `${sonicTinyCopy("Atualizado", "Updated", "Actualizado")} ${time}`;
+  }
+}
+
+function syncAdminAnalyticsAccess() {
+  const allowed = hasOwnerAccess();
+  if (adminAnalyticsTabBtn) {
+    adminAnalyticsTabBtn.hidden = !allowed;
+    adminAnalyticsTabBtn.classList.toggle("hidden", !allowed);
+    adminAnalyticsTabBtn.setAttribute("aria-hidden", allowed ? "false" : "true");
+  }
+  if (adminAnalyticsPanel && !allowed) {
+    adminAnalyticsPanel.hidden = true;
+    adminAnalyticsPanel.setAttribute("aria-hidden", "true");
+  }
+  if (!allowed && currentActiveAppTabName() === "admin") {
+    setActiveAppTab("profile");
+    return false;
+  }
+  const requestedAdmin = urlRequestsAdminAnalytics();
+  const appVisible = Boolean(appContent && !appContent.classList.contains("hidden"));
+  if (allowed && requestedAdmin && appVisible && currentActiveAppTabName() !== "admin") {
+    setActiveAppTab("admin");
+  }
+  return allowed;
+}
+
+async function loadAdminAnalytics(options = {}) {
+  if (!adminAnalyticsPanel || !hasOwnerAccess() || adminAnalyticsState.loading) return false;
+  const force = options.force === true;
+  if (!force && adminAnalyticsState.data && Date.now() - adminAnalyticsState.lastLoadedAt < 60000) {
+    renderAdminAnalyticsData(adminAnalyticsState.data);
+    return true;
+  }
+  const endpoint = adminAnalyticsEndpoint();
+  if (!endpoint) {
+    setAdminAnalyticsStatus(sonicTinyCopy("Painel não configurado.", "Dashboard is not configured.", "Panel no configurado."), "error");
+    return false;
+  }
+
+  adminAnalyticsState.loading = true;
+  if (adminAnalyticsRefreshBtn) {
+    adminAnalyticsRefreshBtn.disabled = true;
+    adminAnalyticsRefreshBtn.classList.add("is-loading");
+  }
+  setAdminAnalyticsStatus(sonicTinyCopy("Lendo os dados com segurança...", "Loading data securely...", "Leyendo los datos de forma segura..."));
+  try {
+    const accessToken = await currentApiAccessToken();
+    if (!accessToken) throw new Error("login_required");
+    const response = await fetch(endpoint, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload?.ok || !payload?.analytics) {
+      const error = new Error(String(payload?.error || `analytics_http_${response.status}`));
+      error.status = response.status;
+      throw error;
+    }
+    adminAnalyticsState.data = payload.analytics;
+    adminAnalyticsState.viewerEmail = String(payload.viewer?.email || currentAccessEmail() || "");
+    adminAnalyticsState.lastLoadedAt = Date.now();
+    if (adminAnalyticsViewer) adminAnalyticsViewer.textContent = adminAnalyticsState.viewerEmail || sonicTinyCopy("Conta protegida", "Protected account", "Cuenta protegida");
+    renderAdminAnalyticsData(payload.analytics);
+    setAdminAnalyticsStatus(payload.analytics.partial
+      ? sonicTinyCopy("Dados carregados. O histórico excedeu o limite desta consulta.", "Data loaded. History exceeded this query limit.", "Datos cargados. El historial superó el límite de esta consulta.")
+      : sonicTinyCopy("Dados atualizados com segurança.", "Data securely updated.", "Datos actualizados de forma segura."), "ready");
+    return true;
+  } catch (error) {
+    const code = String(error?.message || "");
+    const denied = ["login_required", "owner_required"].includes(code) || [401, 403].includes(Number(error?.status));
+    setAdminAnalyticsStatus(denied
+      ? sonicTinyCopy("Acesso negado. Entre com a conta do proprietário.", "Access denied. Sign in with the owner account.", "Acceso denegado. Entra con la cuenta del propietario.")
+      : sonicTinyCopy("Não foi possível carregar agora. Tente atualizar em instantes.", "Could not load right now. Try refreshing shortly.", "No fue posible cargar ahora. Intenta actualizar en unos instantes."), "error");
+    console.warn("Admin analytics could not be loaded", error);
+    return false;
+  } finally {
+    adminAnalyticsState.loading = false;
+    if (adminAnalyticsRefreshBtn) {
+      adminAnalyticsRefreshBtn.disabled = false;
+      adminAnalyticsRefreshBtn.classList.remove("is-loading");
+    }
+  }
+}
+
 function hasPremiumAccess() {
   return hasOwnerAccess() || aiConfigFlag("premiumUnlocked", false);
 }
@@ -47982,15 +48455,31 @@ function djSeedHasPlayablePreview(seed = {}) {
   return Boolean(djSetEmbedUrl(seed));
 }
 
+function djSeedHasNonElectronicConflict(seed = {}) {
+  const text = normalize([
+    seed?.setTitle,
+    seed?.reason,
+    seed?.roleNote,
+    seed?.scene,
+    seed?.eventSignal
+  ].filter(Boolean).join(" "));
+  if (!text) return false;
+  return /\b(?:hip\s*hop|r\s*b|r\s+and\s+b|rhythm\s+(?:and|n)\s+blues|jazz(?:\s*funk)?|dancehall|reggae|indie\s+rock|alternative\s+rock|classic\s+rock|gospel|country|folk|acoustic|unplugged|motown)\b/.test(text) ||
+    /\bde\s+la\s+soul\b/.test(text) ||
+    /\bsoul(?:\s+mix|\s+classics?|\s+set|\s+takeover|\s*,|\s*&|$)/.test(text);
+}
+
 function filteredDjRecommendationPool() {
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
-  const pool = DJ_SET_RECOMMENDATION_SEEDS.filter((seed) => djSeedMatchesLane(seed, lane));
+  const recommendationSeeds = ensureDjSetRecommendationSeeds();
+  const electronicSeeds = recommendationSeeds.filter((seed) => !djSeedHasNonElectronicConflict(seed));
+  const pool = electronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
   const playablePool = pool.filter(djSeedHasPlayablePreview);
   if (playablePool.length) return playablePool;
   const directSetPool = pool.filter((seed) => !djSeedIsSearchFallback(seed));
   if (directSetPool.length) return directSetPool;
-  const globalPlayablePool = DJ_SET_RECOMMENDATION_SEEDS.filter(djSeedHasPlayablePreview);
-  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : DJ_SET_RECOMMENDATION_SEEDS;
+  const globalPlayablePool = electronicSeeds.filter(djSeedHasPlayablePreview);
+  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : electronicSeeds;
 }
 
 function randomDjPoolIndex(length = 0) {
@@ -48007,6 +48496,7 @@ function randomDjPoolIndex(length = 0) {
 
 function pickDjRecommendation({ avoidKey = "" } = {}) {
   const pool = filteredDjRecommendationPool();
+  const recommendationSeeds = ensureDjSetRecommendationSeeds();
   const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
   const candidates = pool.filter((seed) => djRecommendationKey(seed) !== currentKey);
   const basePool = candidates.length ? candidates : pool;
@@ -48016,7 +48506,7 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
   });
   const lightlySeenPool = basePool.filter((seed) => !recentDjRecommendationKeys.includes(djRecommendationKey(seed)));
   const recentArtists = new Set(recentDjRecommendationKeys.map((key) => {
-    const recentSeed = DJ_SET_RECOMMENDATION_SEEDS.find((seed) => djRecommendationKey(seed) === key);
+    const recentSeed = recommendationSeeds.find((seed) => djRecommendationKey(seed) === key);
     return normalize(recentSeed?.name || "");
   }).filter(Boolean));
   const preferredPool = freshPool.length ? freshPool : lightlySeenPool.length ? lightlySeenPool : basePool;
@@ -48404,7 +48894,7 @@ function markRecommendationPresented(track) {
 }
 
 function registerRecommendationDelivery(track, prefs) {
-  if (!track || !prefs) return;
+  if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return;
   recordDailyMusicAction(track, "discovery");
   markRecommendationPresented(track);
   rememberAnonymousExposure(track);
@@ -49137,8 +49627,8 @@ function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   if (primarySwipeHint) primarySwipeHint.textContent = t("primarySwipeHint");
   if (topSwipeLikeBtn) topSwipeLikeBtn.textContent = t("swipeLike");
   if (topSwipePassBtn) topSwipePassBtn.textContent = t("swipePass");
-  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = hasTrack ? t("swipeNextButton") : t("swipeStartButton");
-  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = hasTrack ? t("swipeNextButton") : t("swipeStartButton");
+  if (topSwipeSurpriseBtn) topSwipeSurpriseBtn.textContent = primaryRecommendationActionLabel({ hasTrack });
+  if (swipeHeroSurpriseBtn) swipeHeroSurpriseBtn.textContent = primaryRecommendationActionLabel({ hasTrack });
   if (swipeLikeBtn) swipeLikeBtn.textContent = t("swipeLike");
   if (swipePassBtn) swipePassBtn.textContent = t("swipePass");
   if (topSwipeCard) topSwipeCard.classList.toggle("is-empty", !hasTrack);
@@ -49399,7 +49889,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
 }
 
 function presentInstantSwipeRecommendation({ track, prefs, plan = null, message = "" } = {}) {
-  if (!track || !prefs) return false;
+  if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const finalPrefs = normalizeRecommendationPrefs({
@@ -49569,7 +50059,196 @@ function tryRunInstantPrimaryRecommendation() {
   return presented;
 }
 
-async function runPrimaryRecommendationAction() {
+function catalogHasMinimumRecommendationState() {
+  return getAllSelectableStyles()
+    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+    .some((style) => catalogTracksForStyle(style).some((track) => (
+      track &&
+      isTrackEligibleForRecommendation(track) &&
+      artistAllowedForStyle(style, track.artist) &&
+      labelAllowedForStyle(style, track.label) &&
+      trackHasFastListenRoute(track) &&
+      anonymousExposurePenalty(track) < 70
+    )));
+}
+
+async function waitForMinimumCatalogReady({ timeoutMs = 3200 } = {}) {
+  if (catalogHasMinimumRecommendationState()) {
+    return { ready: true, status: "already_ready" };
+  }
+  const hydrationResult = await waitForPromiseWithTimeout(
+    startLocalBootCatalogHydration(),
+    timeoutMs,
+    "timeout"
+  );
+  const ready = catalogHasMinimumRecommendationState();
+  return {
+    ready,
+    status: ready
+      ? "hydrated"
+      : hydrationResult === "timeout"
+        ? "timeout"
+        : "unavailable"
+  };
+}
+
+function trackFirstRecommendationEvent(eventName = "", source = "initial", extra = {}) {
+  try {
+    trackBetaEvent(eventName, {
+      source: safeBetaPayloadValue(source, 40),
+      ...extra
+    }, { source: "first_recommendation" });
+    return true;
+  } catch (_error) {
+    return false;
+  }
+}
+
+function safeFirstRecommendationWarning(message = "", details = {}) {
+  try {
+    console.warn(message, details);
+  } catch (_error) {
+    // Diagnostics must never affect recommendation recovery.
+  }
+}
+
+function showFirstRecommendationFailureSafely() {
+  let failureMessage = "";
+  try {
+    failureMessage = recommendationFailureMessage();
+  } catch (_error) {
+    failureMessage = noVerifiedTrackMessage();
+  }
+  try {
+    if (feedbackMessage) feedbackMessage.textContent = failureMessage;
+  } catch (_error) {
+    // The retry CTA remains the primary recovery path.
+  }
+  try {
+    showToast(failureMessage);
+  } catch (_error) {
+    // Toast failures must not hold the recommendation lock.
+  }
+}
+
+function restoreInitialRecommendationUiSafely() {
+  firstRecommendationBusy = false;
+  try {
+    setInitialRecommendationBusy(false);
+    return true;
+  } catch (error) {
+    safeFirstRecommendationWarning("[first-recommendation] CTA restore fallback", {
+      reason: String(error?.message || "unexpected_error").slice(0, 160)
+    });
+  }
+
+  let restored = false;
+  [topSwipeSurpriseBtn, swipeHeroSurpriseBtn].forEach((button) => {
+    if (!button) return;
+    try {
+      button.disabled = false;
+      restored = true;
+    } catch (_error) {
+      // Continue restoring the remaining button state.
+    }
+    try {
+      button.classList.remove("is-loading");
+    } catch (_error) {
+      // A cosmetic failure must not keep the action disabled.
+    }
+    try {
+      button.textContent = primaryRecommendationActionLabel();
+    } catch (_error) {
+      // Keep the existing label if localized copy cannot be resolved.
+    }
+  });
+  return restored;
+}
+
+function runInitialRecommendation({ source = "manual", initialRunner = null } = {}) {
+  if (firstRecommendationPromise) return firstRecommendationPromise;
+
+  let attempt = null;
+  attempt = Promise.resolve().then(async () => {
+    let readiness = { ready: false, status: "unknown" };
+    try {
+      const isRetry = source === "retry" || firstRecommendationRetryAvailable;
+      firstRecommendationRetryAvailable = false;
+      setInitialRecommendationBusy(true);
+      trackFirstRecommendationEvent("first_recommendation_requested", source, { retry: isRetry });
+      if (isRetry) trackFirstRecommendationEvent("first_recommendation_retry", source);
+
+      readiness = await waitForMinimumCatalogReady();
+      if (!readiness.ready) {
+        trackFirstRecommendationEvent("first_recommendation_fallback", source, {
+          reason: `catalog_${readiness.status}`
+        });
+      }
+      const onFallback = (reason = "unknown") => {
+        trackFirstRecommendationEvent("first_recommendation_fallback", source, {
+          reason: safeBetaPayloadValue(reason, 80)
+        });
+      };
+      const runner = typeof initialRunner === "function"
+        ? initialRunner
+        : ({ onFallback: notifyFallback }) => runSurpriseRecommendation({
+            manageBusyUi: false,
+            onFallback: notifyFallback,
+            skipInitialGuard: true
+          });
+      const ready = await runner({ onFallback, readiness });
+      if (ready) {
+        firstRecommendationCompleted = true;
+        trackFirstRecommendationEvent("first_recommendation_ready", source, {
+          catalogState: readiness.status
+        });
+        return true;
+      }
+      firstRecommendationRetryAvailable = true;
+      safeFirstRecommendationWarning("[first-recommendation] no playable route", {
+        catalogState: readiness.status,
+        reason: "no_playable_route"
+      });
+      trackFirstRecommendationEvent("first_recommendation_failed", source, {
+        catalogState: readiness.status,
+        reason: "no_playable_route"
+      });
+      return false;
+    } catch (error) {
+      firstRecommendationRetryAvailable = true;
+      safeFirstRecommendationWarning("[first-recommendation] attempt failed", {
+        catalogState: readiness.status,
+        reason: String(error?.message || "unexpected_error").slice(0, 160)
+      });
+      showFirstRecommendationFailureSafely();
+      trackFirstRecommendationEvent("first_recommendation_failed", source, {
+        catalogState: readiness.status,
+        reason: "unexpected_error"
+      });
+      return false;
+    } finally {
+      if (firstRecommendationPromise === attempt) firstRecommendationPromise = null;
+      firstRecommendationBusy = false;
+      try {
+        restoreInitialRecommendationUiSafely();
+      } catch (error) {
+        safeFirstRecommendationWarning("[first-recommendation] CTA restore failed", {
+          reason: String(error?.message || "unexpected_error").slice(0, 160)
+        });
+      }
+    }
+  });
+
+  firstRecommendationPromise = attempt;
+  return attempt;
+}
+
+async function runPrimaryRecommendationAction({ source = "manual", initialRunner = null } = {}) {
+  if (firstRecommendationPromise) return firstRecommendationPromise;
+  if (!firstRecommendationCompleted && !currentRecommendation) {
+    const requestSource = firstRecommendationRetryAvailable ? "retry" : source;
+    return runInitialRecommendation({ source: requestSource, initialRunner });
+  }
   if (tryRunInstantPrimaryRecommendation()) return true;
   return runSurpriseRecommendation();
 }
@@ -50205,6 +50884,7 @@ function scheduleRecommendationDetailRender(track, prefs) {
 
 function renderRecommendation(track, prefs) {
   track = applyCuratedTrackMetadata(track);
+  if (!track || !isTrackEligibleForRecommendation(track)) return false;
   setActiveAppTab("discover");
   pendingQuickKnownAdvance = null;
   const meta = getTrackMetadata(track);
@@ -55537,6 +56217,7 @@ function renderSocialSessionState({ configured = socialConfigReady(), signed = B
 }
 
 function renderSocialUi(options = {}) {
+  syncAdminAnalyticsAccess();
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
     socialProfileCard.classList.add("hidden");
@@ -56353,20 +57034,7 @@ async function generateRecommendationFromPrefs(
         trackAllowedInSession(track)
     );
 
-    let stylePool = strictStylePool.length
-      ? strictStylePool
-      : styleCatalog.filter((track) => {
-          if (!track) return false;
-          if (!track.artist || !track.song) return false;
-          if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-          if (!artistAllowedForStyle(prefs.style, track.artist)) return false;
-          if (!labelAllowedForStyle(prefs.style, track.label)) return false;
-          const bpmValue = Number(track.bpmExact);
-          if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
-          if (artistSetHasMatch(sessionExcludedArtists, track.artist)) return false;
-          if (!trackAllowedInSession(track)) return false;
-          return true;
-        });
+    let stylePool = strictStylePool;
     if (!stylePool.length && allowKnownFallback) {
       stylePool = styleCatalog.filter((track) => {
         if (!track) return false;
@@ -56740,6 +57408,12 @@ async function generateRecommendationFromPrefs(
     currentDiscovery = null;
     return false;
   }
+  if (!isTrackEligibleForRecommendation(currentRecommendation)) {
+    markRecommendationBlockedByKnown();
+    currentRecommendation = null;
+    currentDiscovery = null;
+    return false;
+  }
 
   let recommendationSnapshot = currentRecommendation;
   let discoverySnapshot = discoveryModeEl.checked
@@ -56874,13 +57548,16 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
   }
   primeAudioForDiscoveryGesture();
   playUiSfx("search-start");
+  const manageBusyUi = options.manageBusyUi !== false;
+  const recommendationOptions = { ...options };
+  delete recommendationOptions.manageBusyUi;
   recommendationRunBusy = true;
-  setRecommendationRunBusy(true);
+  if (manageBusyUi) setRecommendationRunBusy(true);
   try {
     const generated = await withSearchOverlay(t("searchOverlayPreparing"), async (update) => {
       if (mode === "catalog") update(18, t("searchOverlayCatalog"));
       else update(24, t("searchOverlayGenerating"));
-      const generatedResult = await generateRecommendationFromPrefs(prefs, options);
+      const generatedResult = await generateRecommendationFromPrefs(prefs, recommendationOptions);
       update(92, t("searchOverlayFinishing"));
       return generatedResult;
     });
@@ -56892,7 +57569,7 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
     return generated;
   } finally {
     recommendationRunBusy = false;
-    setRecommendationRunBusy(false);
+    if (manageBusyUi) setRecommendationRunBusy(false);
   }
 }
 
@@ -56911,6 +57588,10 @@ async function activateSuggestionQueueIndex(index) {
   if (!Number.isFinite(safeIndex) || safeIndex < 0 || safeIndex > 2) return false;
   const selectedTrack = suggestionQueueTracks[safeIndex];
   if (!selectedTrack) return false;
+  if (!isTrackEligibleForRecommendation(selectedTrack)) {
+    refreshSuggestionQueue(lastPrefs, currentRecommendation);
+    return false;
+  }
 
   const selectedKey = recommendationTrackKey(selectedTrack);
   if (!selectedKey || selectedKey === recommendationTrackKey(currentRecommendation)) return false;
@@ -57366,7 +58047,18 @@ async function runManualFilterSurprise() {
   return true;
 }
 
-async function runSurpriseRecommendation() {
+async function runSurpriseRecommendation({
+  manageBusyUi = true,
+  onFallback = null,
+  skipInitialGuard = false,
+  source = "surprise"
+} = {}) {
+  if (!skipInitialGuard) {
+    if (firstRecommendationPromise) return firstRecommendationPromise;
+    if (!firstRecommendationCompleted && !currentRecommendation) {
+      return runInitialRecommendation({ source });
+    }
+  }
   if (recommendationRunBusy) return false;
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
@@ -57379,7 +58071,7 @@ async function runSurpriseRecommendation() {
   swipeUserAnchoredStyle = "";
   playUiSfx("search-start");
   recommendationRunBusy = true;
-  setRecommendationRunBusy(true);
+  if (manageBusyUi) setRecommendationRunBusy(true);
   try {
     const knownTyped = parseKnownArtists(knownArtistsEl ? knownArtistsEl.value : "");
     knownTyped.forEach((artist) => knownArtistsMemory.add(artist));
@@ -57395,6 +58087,7 @@ async function runSurpriseRecommendation() {
       surpriseTrack = await pickValidatedSurpriseTrack(previousTrack, update);
       sonicPerfMark("pick-validated", { found: Boolean(surpriseTrack) });
       if (!surpriseTrack) {
+        if (typeof onFallback === "function") onFallback("emergency_catalog");
         surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
         sonicPerfMark("pick-emergency", { found: Boolean(surpriseTrack) });
       }
@@ -57450,6 +58143,7 @@ async function runSurpriseRecommendation() {
     // can reject stale/blocked preview URLs, so only deliver a card after the
     // current playback probe has actually succeeded.
     if (!previewReady) {
+      if (typeof onFallback === "function") onFallback("playable_replacement");
       const rejectedKey = recommendationTrackKey(surpriseTrack);
       const excludedTrackKeys = new Set(rejectedKey ? [rejectedKey] : []);
       surpriseTrack.previewChecked = true;
@@ -57514,7 +58208,7 @@ async function runSurpriseRecommendation() {
     return true;
   } finally {
     recommendationRunBusy = false;
-    setRecommendationRunBusy(false);
+    if (manageBusyUi) setRecommendationRunBusy(false);
   }
 }
 
@@ -59366,6 +60060,9 @@ bind(appTabBar, "click", (event) => {
   setActiveAppTab(nextTab, { focusPanel: true });
   setAppMenuOpen(false);
 });
+bind(adminAnalyticsRefreshBtn, "click", () => {
+  void loadAdminAnalytics({ force: true });
+});
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
 bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
@@ -59381,15 +60078,47 @@ const qaPreviewMode = !sharedSpiritViewMode && urlRequestsQaPreviewMode();
 
 const freshTestResetPending = publicVisitorMode ? false : consumeFreshTestResetParam();
 
-let localBootCatalogHydrated = false;
+let localBootCatalogHydrationState = "idle";
+let localBootCatalogHydrationPromise = null;
+let localBootCatalogHydrationScheduled = false;
+
+function startLocalBootCatalogHydration() {
+  if (localBootCatalogHydrationState === "ready") return Promise.resolve(true);
+  if (localBootCatalogHydrationPromise) return localBootCatalogHydrationPromise;
+
+  localBootCatalogHydrationState = "pending";
+  const attempt = Promise.resolve()
+    .then(() => {
+      injectLocalTrackSeedBoost();
+      injectSoundCloudSupplementalSeeds();
+      syncDiscoveryFromSeeds();
+      ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
+      syncDiscoveryFromSeeds();
+      localBootCatalogHydrationState = "ready";
+      return true;
+    })
+    .catch((error) => {
+      localBootCatalogHydrationState = "failed";
+      console.warn("[catalog-hydration] local catalog hydration failed", {
+        reason: String(error?.message || "unexpected_error").slice(0, 160)
+      });
+      return false;
+    })
+    .finally(() => {
+      if (localBootCatalogHydrationState === "failed" && localBootCatalogHydrationPromise === attempt) {
+        localBootCatalogHydrationPromise = null;
+      }
+    });
+  localBootCatalogHydrationPromise = attempt;
+  return attempt;
+}
 
 function scheduleLocalBootCatalogHydration() {
-  if (localBootCatalogHydrated) return;
-  localBootCatalogHydrated = true;
+  if (localBootCatalogHydrationScheduled || localBootCatalogHydrationState !== "idle") return;
+  localBootCatalogHydrationScheduled = true;
   schedulePostBootIdleTask(() => {
-    syncDiscoveryFromSeeds();
-    ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
-    syncDiscoveryFromSeeds();
+    localBootCatalogHydrationScheduled = false;
+    void startLocalBootCatalogHydration();
   }, {
     delayMs: nativePerformanceDelayMs(6000, 6000),
     timeoutMs: 3200
@@ -59399,8 +60128,6 @@ function scheduleLocalBootCatalogHydration() {
 async function bootSonicSearch() {
   if (freshTestResetPending) return;
   loadDynamicCatalogCache();
-  injectLocalTrackSeedBoost();
-  injectSoundCloudSupplementalSeeds();
   scheduleLocalBootCatalogHydration();
   const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
   scheduleCatalogMaintenance(bootWarmupDelay);
