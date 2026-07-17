@@ -10659,42 +10659,6 @@ const COVERAGE_MAX_PASSES = 5;
 const FAST_COVERAGE_MAX_PASSES = 2;
 const FAST_COVERAGE_TIMEOUT_MS = 12000;
 const DEFAULT_COVERAGE_TIMEOUT_MS = 26000;
-const RECENT_LISTENERS_TARGET = 6;
-const RECENT_LISTENER_NAMES = [
-  "ravepilot_77",
-  "techno.nina",
-  "psysonic.br",
-  "clubrunner",
-  "bpm_hunter",
-  "hitechdrive",
-  "nightshift.dj",
-  "forestsignal",
-  "loopvoyager",
-  "acidframe",
-  "deepgrid",
-  "dropalchemy"
-];
-const RECENT_LISTENER_CITIES = [
-  "Sao Paulo",
-  "Goiania",
-  "Belo Horizonte",
-  "Curitiba",
-  "Berlin",
-  "Lisboa",
-  "Mexico City",
-  "Tel Aviv",
-  "London",
-  "Buenos Aires"
-];
-const RECENT_LISTENER_REACTIONS = [
-  { pt: "curtiu o groove", en: "liked the groove", es: "le gusto el groove" },
-  { pt: "salvou na playlist", en: "saved to playlist", es: "lo guardo en su playlist" },
-  { pt: "curtiu no preview", en: "liked in preview", es: "le gusto en el preview" },
-  { pt: "marcou como descoberta", en: "marked as discovery", es: "la marco como descubrimiento" },
-  { pt: "ouviu ate o drop", en: "listened until the drop", es: "la escucho hasta el drop" },
-  { pt: "quer ouvir de novo", en: "wants to replay it", es: "quiere escucharla de nuevo" }
-];
-
 const STYLE_BPM_RULES = {
   psytrance: { min: 138, max: 148 },
   forest_psy: { min: 145, max: 154 },
@@ -45588,145 +45552,16 @@ function hashString(value) {
   return Math.abs(hash);
 }
 
-function generateRecentListeners(track, target = RECENT_LISTENERS_TARGET) {
-  if (!track) return [];
-  const seed = hashString(`${track.artist}::${track.song}::${track.style}::${track.bpm}`);
-  const used = new Set();
-  const listeners = [];
-
-  for (let i = 0; i < target; i += 1) {
-    const nameIndex = (seed + i * 7) % RECENT_LISTENER_NAMES.length;
-    const cityIndex = (seed + i * 11) % RECENT_LISTENER_CITIES.length;
-    const reactionIndex = (seed + i * 13) % RECENT_LISTENER_REACTIONS.length;
-    const name = RECENT_LISTENER_NAMES[nameIndex];
-    if (used.has(name)) continue;
-    used.add(name);
-
-    const minutesAgo = ((seed + i * 17) % 58) + 2;
-    listeners.push({
-      name,
-      city: RECENT_LISTENER_CITIES[cityIndex],
-      reaction: RECENT_LISTENER_REACTIONS[reactionIndex][currentLanguage] || RECENT_LISTENER_REACTIONS[reactionIndex].pt,
-      minutesAgo
-    });
-  }
-
-  return listeners;
+function renderRecentListeners() {
+  if (recentListenersList) recentListenersList.innerHTML = "";
+  if (listenersSubtitle) listenersSubtitle.textContent = "";
+  if (recentListenersPanel) recentListenersPanel.classList.add("hidden");
 }
 
-function generateTopListeners(track, target = 5) {
-  if (!track) return [];
-  const styleKey = normalize(track.style || "");
-  const styleSeed = hashString(`${styleKey}::${track.bpm}::${track.energy}`);
-
-  const ranked = RECENT_LISTENER_NAMES.map((name, index) => {
-    const nameSeed = hashString(`${name}::${styleKey}`);
-    const songSeed = hashString(`${track.song}::${name}`);
-    const score = 90 + ((nameSeed + styleSeed + index * 17) % 180);
-    const plays = 8 + ((songSeed + index * 3) % 42);
-    const cityIndex = (styleSeed + index * 9) % RECENT_LISTENER_CITIES.length;
-    return {
-      name,
-      score,
-      plays,
-      city: RECENT_LISTENER_CITIES[cityIndex]
-    };
-  });
-
-  return ranked
-    .sort((a, b) => (b.score - a.score) || (b.plays - a.plays))
-    .slice(0, Math.max(1, target))
-    .map((item, index) => ({
-      ...item,
-      rank: index + 1
-    }));
-}
-
-function renderRecentListeners(track) {
-  if (!recentListenersPanel || !recentListenersList || !listenersSubtitle) return;
-  if (!track) {
-    recentListenersPanel.classList.add("hidden");
-    return;
-  }
-
-  const listeners = generateRecentListeners(track, RECENT_LISTENERS_TARGET);
-  if (!listeners.length) {
-    recentListenersPanel.classList.add("hidden");
-    return;
-  }
-
-  recentListenersPanel.classList.remove("hidden");
-  listenersSubtitle.textContent = t("listenersSubtitle", { count: listeners.length });
-  recentListenersList.innerHTML = "";
-
-  listeners.forEach((listener, index) => {
-    const item = document.createElement("li");
-    item.className = "listener-item";
-    item.style.animationDelay = `${index * 45}ms`;
-
-    const nameEl = document.createElement("p");
-    nameEl.className = "listener-name";
-    nameEl.textContent = listener.name;
-
-    const metaEl = document.createElement("p");
-    metaEl.className = "listener-meta";
-    metaEl.textContent =
-      currentLanguage === "en"
-        ? `${listener.reaction} - ${listener.minutesAgo} min ago - ${listener.city}`
-        : currentLanguage === "es"
-          ? `${listener.reaction} - hace ${listener.minutesAgo} min - ${listener.city}`
-          : `${listener.reaction} - ha ${listener.minutesAgo} min - ${listener.city}`;
-
-    item.appendChild(nameEl);
-    item.appendChild(metaEl);
-    recentListenersList.appendChild(item);
-  });
-}
-
-function renderTopListeners(track) {
-  if (!topListenersPanel || !topListenersList || !topListenersSubtitle) return;
-  if (!track) {
-    topListenersPanel.classList.add("hidden");
-    return;
-  }
-
-  const ranking = generateTopListeners(track, 5);
-  if (!ranking.length) {
-    topListenersPanel.classList.add("hidden");
-    return;
-  }
-
-  topListenersPanel.classList.remove("hidden");
-  if (topListenersTitle) topListenersTitle.textContent = t("topListenersTitle");
-  topListenersSubtitle.textContent = t("topListenersSubtitle", {
-    style: recommendationStyleDisplayLabel(track)
-  });
-  topListenersList.innerHTML = "";
-
-  ranking.forEach((listener, index) => {
-    const item = document.createElement("li");
-    item.className = "top-listener-item";
-    item.style.animationDelay = `${index * 45}ms`;
-
-    const rankEl = document.createElement("span");
-    rankEl.className = "top-listener-rank";
-    rankEl.textContent = t("topListenerRank", { rank: listener.rank });
-
-    const main = document.createElement("div");
-    main.className = "top-listener-main";
-
-    const nameEl = document.createElement("p");
-    nameEl.className = "top-listener-name";
-    nameEl.textContent = listener.name;
-
-    const metaEl = document.createElement("p");
-    metaEl.className = "top-listener-meta";
-    metaEl.textContent = `${t("topListenerScore", { score: listener.score })} • ${t("topListenerPlays", { plays: listener.plays })} • ${listener.city}`;
-
-    main.append(nameEl, metaEl);
-    item.append(rankEl, main);
-    topListenersList.appendChild(item);
-  });
+function renderTopListeners() {
+  if (topListenersList) topListenersList.innerHTML = "";
+  if (topListenersSubtitle) topListenersSubtitle.textContent = "";
+  if (topListenersPanel) topListenersPanel.classList.add("hidden");
 }
 
 function setListenLinkState(linkEl, { href, enabled = true, title = "" }) {
