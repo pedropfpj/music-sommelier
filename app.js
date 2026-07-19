@@ -4553,6 +4553,7 @@ const FAST_PREVIEW_PROBE_LIMIT = 2;
 // User-triggered discovery actions must present the next card well before the
 // public 2s promise. Preview enrichment may continue after the card is ready.
 const DISCOVERY_INTERACTION_TARGET_MS = 1800;
+const DISCOVERY_INITIAL_CATALOG_WAIT_MS = 720;
 const INTERACTION_FALLBACK_STYLE_LIMIT = 12;
 const INTERACTION_FALLBACK_POOL_LIMIT = 240;
 // Provider resolution normally takes 1–2.6s in production. A 900ms cutoff
@@ -4570,7 +4571,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260719discovery2s13";
+const SONIC_APP_BUILD_ID = "20260719discovery2s14";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -50445,6 +50446,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
   const plan = buildSwipeAdaptiveStylePlan({ sourceTrack, positive });
   const styles = instantSwipeStyleCandidates(sourceTrack, plan);
   const sourceKey = recommendationTrackKey(sourceTrack);
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const sourceTitle = sourceTrack?.song || "";
   const exclusions = buildGlobalTrackExclusionSet(
     [sourceKey, lastRejectedTrackKey].filter(Boolean),
@@ -50464,6 +50466,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     const bpmValue = Number(track.bpmExact);
     if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+    if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
     return trackHasReadyPlaybackRoute(track);
@@ -50471,8 +50474,14 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
 
   // The queue is resolved while the current track is playing. Reusing it here
   // removes a full catalog scan and usually gives the next card a warm audio URL.
+  const coverageQueueStyles = new Set(plan?.fullCoverage ? (plan.styles || []).slice(0, 4) : []);
   const queuedCandidates = suggestionQueueTracks
-    .filter((track) => recommendationTrackKey(track) !== sourceKey)
+    .filter((track) => {
+      if (recommendationTrackKey(track) === sourceKey) return false;
+      if (!plan?.fullCoverage) return true;
+      const queuedStyle = selectableSwipeStyle(track?.style || "");
+      return Boolean(queuedStyle && queuedStyle !== sourceStyle && coverageQueueStyles.has(queuedStyle));
+    })
     .sort((a, b) => {
       const aKey = recommendationTrackKey(a);
       const bKey = recommendationTrackKey(b);
@@ -50604,12 +50613,14 @@ function pickInstantOpeningTrack() {
 function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requiredStyle = "") {
   const sourceKey = recommendationTrackKey(sourceTrack);
   const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const lockedStyle = selectableSwipeStyle(requiredStyle);
   const candidateAllowed = (track) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
     if (sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
+    if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!trackHasReadyPlaybackRoute(track)) return false;
@@ -50627,9 +50638,11 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
         Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
       );
     });
-  if (queued.length) return queued[0];
+  const diverseQueued = lockedStyle
+    ? queued
+    : queued.filter((track) => selectableSwipeStyle(track?.style || "") !== sourceStyle);
+  if (diverseQueued.length) return diverseQueued[0];
 
-  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const styles = (lockedStyle ? [lockedStyle] : getAllSelectableStyles())
     .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
     .sort((a, b) => {
@@ -50716,7 +50729,7 @@ function catalogHasMinimumRecommendationState() {
     )));
 }
 
-async function waitForMinimumCatalogReady({ timeoutMs = 3200 } = {}) {
+async function waitForMinimumCatalogReady({ timeoutMs = DISCOVERY_INITIAL_CATALOG_WAIT_MS } = {}) {
   if (catalogHasMinimumRecommendationState()) {
     return { ready: true, status: "already_ready" };
   }
@@ -50822,11 +50835,27 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       trackFirstRecommendationEvent("first_recommendation_requested", source, { retry: isRetry });
       if (isRetry) trackFirstRecommendationEvent("first_recommendation_retry", source);
 
+      if (tryRunInstantPrimaryRecommendation()) {
+        firstRecommendationCompleted = true;
+        trackFirstRecommendationEvent("first_recommendation_ready", source, {
+          catalogState: "instant_local"
+        });
+        return true;
+      }
+
       readiness = await waitForMinimumCatalogReady();
       if (!readiness.ready) {
         trackFirstRecommendationEvent("first_recommendation_fallback", source, {
           reason: `catalog_${readiness.status}`
         });
+      }
+      if (tryRunInstantPrimaryRecommendation()) {
+        firstRecommendationCompleted = true;
+        trackFirstRecommendationEvent("first_recommendation_ready", source, {
+          catalogState: readiness.status,
+          route: "local_after_short_wait"
+        });
+        return true;
       }
       const onFallback = (reason = "unknown") => {
         trackFirstRecommendationEvent("first_recommendation_fallback", source, {
@@ -50898,7 +50927,15 @@ async function runPrimaryRecommendationAction({ source = "manual", initialRunner
 }
 
 function negativeFeedbackBasePrefs(prefs = lastPrefs) {
-  return normalizeRecommendationPrefs(prefs || {});
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  if (discoveryModeEl?.checked !== false && !explicitSwipeAnchorStyle()) {
+    return normalizeRecommendationPrefs({
+      ...normalizedPrefs,
+      style: "",
+      bpm: ""
+    });
+  }
+  return normalizedPrefs;
 }
 
 const FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT = 180;
@@ -50968,6 +51005,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
     [avoidArtistName].filter(Boolean)
   );
   if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+  if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
 
   return true;
 }
@@ -51074,7 +51112,11 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
   if (!track || !prefs) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
-  const finalPrefs = negativeFeedbackBasePrefs(prefs);
+  const basePrefs = negativeFeedbackBasePrefs(prefs);
+  const finalPrefs = normalizeRecommendationPrefs({
+    ...basePrefs,
+    style: selectableSwipeStyle(track?.style || "") || basePrefs.style || ""
+  });
   const token = ++fastFeedbackSwapToken;
 
   recommendationRunBusy = true;
@@ -51199,6 +51241,14 @@ function reportDiscoveryInteractionLatency(action = "discovery", startedAt = 0, 
     targetMs: DISCOVERY_INTERACTION_TARGET_MS,
     presented: Boolean(presented)
   };
+  if (typeof window !== "undefined") {
+    const history = Array.isArray(window.__sonicDiscoveryTimings)
+      ? window.__sonicDiscoveryTimings
+      : [];
+    history.push({ ...payload, recordedAt: Date.now() });
+    while (history.length > 60) history.shift();
+    window.__sonicDiscoveryTimings = history;
+  }
   if (elapsedMs > DISCOVERY_INTERACTION_TARGET_MS) {
     console.warn(`[sonic-perf] discovery interaction exceeded target ${JSON.stringify(payload)}`);
   } else if (typeof console !== "undefined" && typeof console.info === "function") {
@@ -51251,6 +51301,7 @@ function interactionFallbackTrackAllowed(
   const bpmValue = Number(track.bpmExact);
   if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
   if (avoidArtistName && artistMatchKey(track.artist) === artistMatchKey(avoidArtistName)) return false;
+  if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
   if (!allowSeen && trackBlockedByKnownSignals(track)) return false;
   return true;
 }

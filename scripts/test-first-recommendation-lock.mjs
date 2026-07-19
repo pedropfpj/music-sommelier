@@ -82,10 +82,11 @@ function buttonFixture() {
   };
 }
 
-function createHarness({ analyticsThrows = false, trackingThrows = false, restoreThrows = false, readiness = null } = {}) {
+function createHarness({ analyticsThrows = false, trackingThrows = false, restoreThrows = false, readiness = null, instantReady = false } = {}) {
   const state = {
     runnerCount: 0,
     analyticsCalls: 0,
+    instantCalls: 0,
     warnings: 0,
     busyTransitions: []
   };
@@ -121,6 +122,10 @@ function createHarness({ analyticsThrows = false, trackingThrows = false, restor
     trackBetaEvent() {
       state.analyticsCalls += 1;
       if (analyticsThrows) throw new Error("analytics_fixture");
+    },
+    tryRunInstantPrimaryRecommendation() {
+      state.instantCalls += 1;
+      return instantReady;
     },
     waitForMinimumCatalogReady: async () => readiness || { ready: true, status: "already_ready" },
     runSurpriseRecommendation: async () => true
@@ -275,13 +280,30 @@ async function testConcurrentRequestsShareOneAttempt() {
   await assertReleased(harness);
 }
 
+async function testInstantLocalRecommendationSkipsSlowRunner() {
+  const harness = createHarness({ instantReady: true });
+  const result = await harness.context.runInitialRecommendation({
+    source: "manual",
+    initialRunner: async () => {
+      harness.state.runnerCount += 1;
+      return true;
+    }
+  });
+  assert.equal(result, true);
+  assert.equal(harness.state.instantCalls, 1);
+  assert.equal(harness.state.runnerCount, 0);
+  assert.equal(harness.context.firstRecommendationCompleted, true);
+  await assertReleased(harness);
+}
+
 const tests = [
   ["analytics failure is non-blocking", testAnalyticsFailureIsNonBlocking],
   ["tracking failure is non-blocking", testTrackingFailureIsNonBlocking],
   ["recommendation failure allows retry", testRecommendationFailureAllowsRetry],
   ["CTA restoration failure uses direct fallback", testRestoreFailureUsesDirectFallback],
   ["catalog timeout allows fallback and retry", testTimeoutAllowsFallbackAndRetry],
-  ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt]
+  ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt],
+  ["instant local recommendation skips slow runner", testInstantLocalRecommendationSkipsSlowRunner]
 ];
 
 for (const [name, test] of tests) {
