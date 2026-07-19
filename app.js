@@ -19111,6 +19111,21 @@ function artistMatchKey(nameLike = "") {
   return normalize(nameLike || "").replace(/\s+/g, " ").trim();
 }
 
+function artistContributorKeys(nameLike = "") {
+  const raw = String(nameLike || "")
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/\baka\b.*$/i, " ")
+    .trim();
+  if (!raw) return new Set();
+
+  const contributors = raw
+    .split(/\s*(?:&|\+|\/|,|\bfeat(?:uring)?\b|\bft\.?\b|\bvs\.?\b|\bwith\b|\bx\b)\s*/i)
+    .map((name) => canonicalArtistIdentity(name))
+    .filter((name) => name.length >= 3);
+
+  return contributors.length > 1 ? new Set(contributors) : new Set();
+}
+
 function artistMatchingKeys(nameLike = "") {
   const keys = new Set();
   const normalized = normalize(nameLike || "").replace(/\s+/g, " ").trim();
@@ -19119,6 +19134,7 @@ function artistMatchingKeys(nameLike = "") {
   if (normalized) keys.add(normalized);
   if (canonical) keys.add(canonical);
   if (compact) keys.add(compact);
+  artistContributorKeys(nameLike).forEach((key) => keys.add(key));
   return keys;
 }
 
@@ -19129,8 +19145,7 @@ function addArtistKeysToSet(setRef, nameLike = "") {
 
 function addArtistIdentityToSet(setRef, nameLike = "") {
   if (!setRef) return;
-  const key = artistMatchKey(nameLike || "");
-  if (key) setRef.add(key);
+  artistMatchingKeys(nameLike).forEach((key) => setRef.add(key));
 }
 
 function removeArtistIdentityFromSet(setRef, nameLike = "") {

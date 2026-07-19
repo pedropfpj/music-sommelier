@@ -296,6 +296,28 @@ async function testInstantLocalRecommendationSkipsSlowRunner() {
   await assertReleased(harness);
 }
 
+async function testCollaborationContributorsAreNotRepeated() {
+  const context = vm.createContext({ Set, String });
+  vm.runInContext(`
+    ${extractFunction("normalize")}
+    ${extractFunction("canonicalArtistIdentity")}
+    ${extractFunction("artistMatchKey")}
+    ${extractFunction("artistContributorKeys")}
+    ${extractFunction("artistMatchingKeys")}
+    ${extractFunction("addArtistIdentityToSet")}
+    ${extractFunction("artistSetHasMatch")}
+    var seenArtists = new Set();
+  `, context);
+
+  context.addArtistIdentityToSet(context.seenArtists, "ALPSCORE & INFRA");
+  assert.equal(context.artistSetHasMatch(context.seenArtists, "Alpscore & Crone"), true);
+  assert.equal(context.artistSetHasMatch(context.seenArtists, "Astral Labyrinth Vs Zamurah"), false);
+
+  context.addArtistIdentityToSet(context.seenArtists, "Astral Labyrinth Vs Zamurah");
+  assert.equal(context.artistSetHasMatch(context.seenArtists, "Astral Labyrinth"), true);
+  assert.equal(context.artistSetHasMatch(context.seenArtists, "Glitchy Jungle"), false);
+}
+
 const tests = [
   ["analytics failure is non-blocking", testAnalyticsFailureIsNonBlocking],
   ["tracking failure is non-blocking", testTrackingFailureIsNonBlocking],
@@ -303,7 +325,8 @@ const tests = [
   ["CTA restoration failure uses direct fallback", testRestoreFailureUsesDirectFallback],
   ["catalog timeout allows fallback and retry", testTimeoutAllowsFallbackAndRetry],
   ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt],
-  ["instant local recommendation skips slow runner", testInstantLocalRecommendationSkipsSlowRunner]
+  ["instant local recommendation skips slow runner", testInstantLocalRecommendationSkipsSlowRunner],
+  ["collaboration contributors are not repeated", testCollaborationContributorsAreNotRepeated]
 ];
 
 for (const [name, test] of tests) {
