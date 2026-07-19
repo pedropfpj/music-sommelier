@@ -73,8 +73,12 @@ function assertSourcePolicy() {
   const startPreviewSource = extractFunction("startTrackPreviewPlayback");
   const soundCloudSyncSource = extractFunction("syncSoundCloudWidgetPlayback");
   const soundCloudResetSource = extractFunction("resetSoundCloudPreviewEmbed");
+  const soundCloudBindingSource = extractFunction("scheduleSoundCloudWidgetPlaybackBinding");
+  const preferredEmbedSource = extractFunction("preferredEmbeddedAutoplaySource");
+  const resumeCurrentPreviewSource = extractFunction("resumeCurrentPreviewFromUserGesture");
   const youtubeShowSource = extractFunction("showYouTubePreviewEmbed");
   const bandcampShowSource = extractFunction("showBandcampPreviewEmbed");
+  const bandcampUrlSource = extractFunction("buildBandcampEmbedUrl");
   const soundcloudShowSource = extractFunction("showSoundCloudPreviewEmbed");
   const continueFromUsageGuideSource = extractFunction("continueFromUsageGuide");
   const enterAppFromWelcomeSource = extractFunction("enterAppFromWelcome");
@@ -91,6 +95,11 @@ function assertSourcePolicy() {
   assert.match(previewAutoplaySource, /audioEnabled/);
   assert.match(renderPreviewSource, /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/);
   assert.match(renderPreviewSource, /attemptRenderedPreviewAutoplay/);
+  assert.ok(
+    renderPreviewSource.indexOf("startPreferredEmbeddedPreviewAutoplay(track)") <
+      renderPreviewSource.indexOf("await waitForPromiseWithTimeout(resolvePreviewForTrack"),
+    "external autoplay should be created before the first asynchronous lookup"
+  );
   assert.match(renderPreviewSource, /setPreviewPrimaryPlaybackState\("ready"\)/);
   assert.match(startPreviewSource, /!userInitiated && !automatic/);
   assert.equal((startPreviewSource.match(/\.play\s*\(/g) || []).length, 1);
@@ -100,6 +109,8 @@ function assertSourcePolicy() {
     assert.match(source, /userInitiated/);
     assert.match(source, /playbackToken === playbackGeneration/);
   });
+  assert.doesNotMatch(bandcampUrlSource, /autoplay=true/);
+  assert.match(appSource, /const requiresExplicitPlayerTap = source === "bandcamp"/);
   assert.match(soundCloudSyncSource, /widgetGeneration !== soundcloudWidgetGeneration/);
   assert.match(soundCloudSyncSource, /userInitiated/);
   assert.match(soundCloudSyncSource, /activePlaybackMatches/);
@@ -107,6 +118,17 @@ function assertSourcePolicy() {
   assert.match(soundCloudResetSource, /removeAttribute\("src"\)/);
   assert.match(soundCloudResetSource, /soundcloudWidgetController = null/);
   assert.match(soundCloudResetSource, /\.unbind/);
+  assert.match(soundCloudBindingSource, /SOUNDCLOUD_WIDGET_BIND_TIMEOUT_MS/);
+  assert.match(soundCloudBindingSource, /SOUNDCLOUD_WIDGET_BIND_RETRY_MS/);
+  assert.match(soundCloudBindingSource, /bindSoundCloudWidgetPlaybackEvents/);
+  assert.match(soundCloudBindingSource, /syncSoundCloudWidgetPlayback/);
+  assert.ok(
+    preferredEmbedSource.indexOf("trackHasDirectSoundCloudTrack") <
+      preferredEmbedSource.indexOf("trackHasEmbeddableBandcampTrack"),
+    "SoundCloud should be the first automatic embedded source"
+  );
+  assert.match(resumeCurrentPreviewSource, /startPreferredEmbeddedPreviewAutoplay/);
+  assert.match(resumeCurrentPreviewSource, /attemptRenderedPreviewAutoplay/);
 
   assert.match(appSource, /btnPreviewPlay: "Ouvir faixa"/);
   assert.match(appSource, /btnPreviewPlay: "Listen to track"/);

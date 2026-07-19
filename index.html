@@ -26,6 +26,10 @@
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://w.soundcloud.com" crossorigin />
+    <link rel="preconnect" href="https://bandcamp.com" crossorigin />
+    <link rel="dns-prefetch" href="//w.soundcloud.com" />
+    <link rel="dns-prefetch" href="//bandcamp.com" />
     <script>
       try {
         const sonicSearchParams = new URLSearchParams(window.location.search);
@@ -1388,7 +1392,7 @@
                 id="soundcloudPreviewFrame"
                 class="soundcloud-preview-frame"
                 title="Preview SoundCloud"
-                loading="lazy"
+                loading="eager"
                 allow="autoplay"
               ></iframe>
             </div>
@@ -1397,7 +1401,7 @@
                 id="bandcampPreviewFrame"
                 class="bandcamp-preview-frame"
                 title="Preview Bandcamp"
-                loading="lazy"
+                loading="eager"
                 allow="autoplay"
               ></iframe>
             </div>
@@ -2514,6 +2518,6 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.js?v=20260717autoplay2"></script>
+    <script defer src="app.min.js?v=20260719discovery2s13"></script>
   </body>
 </html>
