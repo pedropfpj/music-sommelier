@@ -386,6 +386,10 @@ const BETA_WAITLIST_STORAGE_KEY = "sonic_search:waitlist_request:v1";
 const BETA_EVENT_SESSION_STORAGE_KEY = "sonic_search:beta_event_session:v1";
 const BETA_EVENT_ONCE_STORAGE_KEY = "sonic_search:beta_event_once:v1";
 const BETA_VISIT_STORAGE_KEY = "sonic_search:beta_visit:v1";
+const BETA_ANALYTICS_ANONYMOUS_STORAGE_KEY = "sonic_search:analytics_anonymous:v2";
+const BETA_ANALYTICS_SESSION_STORAGE_KEY = "sonic_search:analytics_session:v2";
+const BETA_ANALYTICS_SESSION_LOCK_NAME = "sonic_search:analytics_session:v2";
+const BETA_ANALYTICS_SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const BETA_INTENT_STORAGE_KEY = "sonic_search:beta_intent:v1";
 const COMPLIANCE_DEFAULT_CONFIG = {
   clientMusicCatalogApisEnabled: true,
@@ -28033,6 +28037,207 @@ function createBetaEventSessionId() {
   return `ss-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
+function isBetaAnalyticsUuid(value = "") {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    .test(String(value || "").trim());
+}
+
+function createBetaAnalyticsUuid() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let index = 0; index < bytes.length; index += 1) {
+      bytes[index] = Math.floor(Math.random() * 256);
+    }
+  }
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (value) => value.toString(16).padStart(2, "0"));
+  return `${hex.slice(0, 4).join("")}-${hex.slice(4, 6).join("")}-${hex.slice(6, 8).join("")}-${hex.slice(8, 10).join("")}-${hex.slice(10).join("")}`;
+}
+
+function sanitizeBetaAnalyticsPathname(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return "/";
+  let pathname = "/";
+  try {
+    pathname = new URL(raw, "https://sonic-search.invalid").pathname || "/";
+  } catch (_error) {
+    pathname = raw.split(/[?#]/, 1)[0] || "/";
+  }
+  if (!pathname.startsWith("/")) pathname = `/${pathname}`;
+  let decodedPathname = pathname;
+  try {
+    decodedPathname = decodeURIComponent(pathname);
+  } catch (_error) {
+    // Keep the encoded pathname when malformed escape sequences are present.
+  }
+  if (/(?:access_token|refresh_token|provider_token|provider_refresh_token|beta_access_token)/i.test(decodedPathname)) {
+    return "/";
+  }
+  return pathname.replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 600) || "/";
+}
+
+function betaAnalyticsAnonymousId() {
+  try {
+    const stored = String(localStorage.getItem(BETA_ANALYTICS_ANONYMOUS_STORAGE_KEY) || "").trim();
+    if (isBetaAnalyticsUuid(stored)) return stored;
+    const created = createBetaAnalyticsUuid();
+    localStorage.setItem(BETA_ANALYTICS_ANONYMOUS_STORAGE_KEY, created);
+    const confirmed = String(localStorage.getItem(BETA_ANALYTICS_ANONYMOUS_STORAGE_KEY) || "").trim();
+    return isBetaAnalyticsUuid(confirmed) ? confirmed : created;
+  } catch (_error) {
+    return createBetaAnalyticsUuid();
+  }
+}
+
+function normalizeBetaAnalyticsSessionState(value = null) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const sessionId = String(value.session_id || "").trim();
+  const eventId = String(value.session_start_event_id || "").trim();
+  const sessionStartedAt = String(value.session_started_at || "").trim();
+  const lastActivityAt = String(value.last_activity_at || "").trim();
+  const previousSessionAt = value.previous_session_at === null
+    ? null
+    : String(value.previous_session_at || "").trim() || null;
+  if (!isBetaAnalyticsUuid(sessionId) || !isBetaAnalyticsUuid(eventId)) return null;
+  if (!Number.isFinite(Date.parse(sessionStartedAt)) || !Number.isFinite(Date.parse(lastActivityAt))) return null;
+  if (previousSessionAt && !Number.isFinite(Date.parse(previousSessionAt))) return null;
+  return {
+    session_id: sessionId,
+    session_started_at: new Date(sessionStartedAt).toISOString(),
+    last_activity_at: new Date(lastActivityAt).toISOString(),
+    session_start_event_id: eventId,
+    session_start_acknowledged: value.session_start_acknowledged === true,
+    previous_session_at: previousSessionAt ? new Date(previousSessionAt).toISOString() : null
+  };
+}
+
+function readBetaAnalyticsSessionState() {
+  return normalizeBetaAnalyticsSessionState(
+    readBetaJsonStorage(BETA_ANALYTICS_SESSION_STORAGE_KEY, null)
+  );
+}
+
+function writeBetaAnalyticsSessionState(value = null) {
+  const normalized = normalizeBetaAnalyticsSessionState(value);
+  return normalized && writeBetaJsonStorage(BETA_ANALYTICS_SESSION_STORAGE_KEY, normalized)
+    ? normalized
+    : null;
+}
+
+function legacyBetaPreviousSessionAt() {
+  const previous = readBetaJsonStorage(BETA_VISIT_STORAGE_KEY, null);
+  const timestamp = Number(previous?.lastSeenAt || 0);
+  return Number.isFinite(timestamp) && timestamp > 0 ? new Date(timestamp).toISOString() : null;
+}
+
+function resolveBetaAnalyticsSession(now = Date.now()) {
+  const timestamp = Number.isFinite(Number(now)) ? Number(now) : Date.now();
+  const nowIso = new Date(timestamp).toISOString();
+  const previous = readBetaAnalyticsSessionState();
+  const lastActivityAt = previous ? Date.parse(previous.last_activity_at) : 0;
+  if (previous && timestamp - lastActivityAt < BETA_ANALYTICS_SESSION_TIMEOUT_MS) {
+    return writeBetaAnalyticsSessionState({
+      ...previous,
+      last_activity_at: nowIso
+    }) || previous;
+  }
+  const created = {
+    session_id: createBetaAnalyticsUuid(),
+    session_started_at: nowIso,
+    last_activity_at: nowIso,
+    session_start_event_id: createBetaAnalyticsUuid(),
+    session_start_acknowledged: false,
+    previous_session_at: previous?.session_started_at || legacyBetaPreviousSessionAt()
+  };
+  return writeBetaAnalyticsSessionState(created) || created;
+}
+
+function betaAnalyticsAuthenticatedUserId() {
+  const liveUserId = typeof socialState !== "undefined" && socialState?.session?.access_token
+    ? String(socialState.session.user?.id || "").trim()
+    : "";
+  if (isBetaAnalyticsUuid(liveUserId)) return liveUserId;
+  try {
+    const stored = JSON.parse(localStorage.getItem(SOCIAL_SESSION_STORAGE_KEY) || "null");
+    const storedUserId = stored?.access_token ? String(stored.user?.id || "").trim() : "";
+    return isBetaAnalyticsUuid(storedUserId) ? storedUserId : null;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function betaAnalyticsEnvironment() {
+  const hostname = String(window.location?.hostname || "").trim().toLowerCase();
+  if (!hostname || ["localhost", "127.0.0.1", "::1"].includes(hostname)) return "development";
+  if (hostname.endsWith(".vercel.app")) return "preview";
+  return "production";
+}
+
+function buildBetaAppSessionEvent(state) {
+  const normalized = normalizeBetaAnalyticsSessionState(state);
+  if (!normalized) return null;
+  const platform = betaRuntimePlatform();
+  return {
+    event_name: "app_session_started",
+    schema_version: 2,
+    event_id: normalized.session_start_event_id,
+    occurred_at: normalized.session_started_at,
+    anonymous_id: betaAnalyticsAnonymousId(),
+    user_id: betaAnalyticsAuthenticatedUserId(),
+    session_id: normalized.session_id,
+    platform,
+    app_version: SONIC_APP_BUILD_ID,
+    environment: betaAnalyticsEnvironment(),
+    is_first_session: !normalized.previous_session_at,
+    previous_session_at: normalized.previous_session_at,
+    pathname: sanitizeBetaAnalyticsPathname(window.location?.href || window.location?.pathname || "/")
+  };
+}
+
+async function sendBetaAppSessionEvent(body = null) {
+  const endpoint = betaEventsEndpoint();
+  if (!endpoint || !body || typeof fetch !== "function") return false;
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      keepalive: true
+    });
+    const result = await response.json().catch(() => ({}));
+    return response.ok && (result?.stored === true || result?.duplicate === true);
+  } catch (_error) {
+    return false;
+  }
+}
+
+function acknowledgeBetaAnalyticsSession(state = null) {
+  const expected = normalizeBetaAnalyticsSessionState(state);
+  const current = readBetaAnalyticsSessionState();
+  if (!expected || !current) return false;
+  if (
+    current.session_id !== expected.session_id ||
+    current.session_start_event_id !== expected.session_start_event_id
+  ) return false;
+  return Boolean(writeBetaAnalyticsSessionState({
+    ...current,
+    session_start_acknowledged: true
+  }));
+}
+
+function withBetaAnalyticsSessionLock(callback) {
+  if (typeof navigator !== "undefined" && typeof navigator.locks?.request === "function") {
+    return navigator.locks.request(BETA_ANALYTICS_SESSION_LOCK_NAME, { mode: "exclusive" }, callback);
+  }
+  return Promise.resolve().then(callback);
+}
+
 function betaEventSessionId() {
   try {
     const stored = cleanBetaField(localStorage.getItem(BETA_EVENT_SESSION_STORAGE_KEY) || "", 80)
@@ -28184,39 +28389,16 @@ function betaRuntimePlatform() {
 }
 
 function trackBetaAppSession() {
-  if (betaAppSessionTracked || typeof window === "undefined") return;
+  if (betaAppSessionTracked || typeof window === "undefined") return Promise.resolve(false);
   betaAppSessionTracked = true;
-  const now = Date.now();
-  const previous = readBetaJsonStorage(BETA_VISIT_STORAGE_KEY, {});
-  const firstSeenAt = Number(previous.firstSeenAt || 0) || now;
-  const lastSeenAt = Number(previous.lastSeenAt || 0) || 0;
-  const daysSinceFirstVisit = Math.max(0, Math.floor((now - firstSeenAt) / 86400000));
-  const daysSinceLastVisit = lastSeenAt ? Math.max(0, Math.floor((now - lastSeenAt) / 86400000)) : 0;
-  const returning = Boolean(lastSeenAt && now - lastSeenAt > 6 * 60 * 60 * 1000);
-  const platform = betaRuntimePlatform();
-
-  trackBetaEvent("app_session_started", {
-    returning,
-    daysSinceFirstVisit,
-    daysSinceLastVisit,
-    betaGranted: betaAccessGranted(),
-    platform
-  }, { source: `app_session_${platform}` });
-
-  if (returning) {
-    trackBetaEvent("returning_user", {
-      daysSinceFirstVisit,
-      daysSinceLastVisit,
-      betaGranted: betaAccessGranted(),
-      platform
-    }, { source: `retention_${platform}` });
-  }
-
-  writeBetaJsonStorage(BETA_VISIT_STORAGE_KEY, {
-    firstSeenAt,
-    lastSeenAt: now,
-    visits: Math.max(0, Number(previous.visits || 0)) + 1
-  });
+  return withBetaAnalyticsSessionLock(async () => {
+    const state = resolveBetaAnalyticsSession();
+    if (!state || state.session_start_acknowledged) return true;
+    const body = buildBetaAppSessionEvent(state);
+    const acknowledged = await sendBetaAppSessionEvent(body);
+    if (acknowledged) acknowledgeBetaAnalyticsSession(state);
+    return acknowledged;
+  }).catch(() => false);
 }
 
 function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
@@ -60719,7 +60901,7 @@ async function bootSonicSearch() {
   window.neonpulseArtistDepthGaps = (style = "") => buildCatalogArtistDepthAudit({ style, minimum: MIN_TRACKS_PER_ARTIST }).sample;
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
-  trackBetaAppSession();
+  void trackBetaAppSession();
   setupNativeSocialAuthBridge();
   loadDjRecommendationMemory();
   bootstrapAudio();
