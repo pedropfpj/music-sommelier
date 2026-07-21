@@ -51024,6 +51024,13 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
   const guidedRamp = !lockedStyle && guidedDiscoveryRampActive();
   const guidedStyles = guidedRamp ? guidedDiscoveryStyleDeck() : [];
   const guidedStyleRank = new Map(guidedStyles.map((style, index) => [style, index]));
+  const primaryNextVariationSeed = [
+    currentCurationUserSeed(),
+    currentCurationVisitId(),
+    curationOpenSeed,
+    guidedDiscoveryOtherTrackCount,
+    sourceKey
+  ].join("::");
   const candidateAllowed = (track, { requireFastRoute = true } = {}) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
@@ -51036,6 +51043,25 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
     if (requireFastRoute && !trackHasFastListenRoute(track)) return false;
     if (trackBlockedByKnownSignals(track)) return false;
     return anonymousExposurePenalty(track) < 70;
+  };
+  const pickVariedPrimaryCandidate = (pool = [], tag = "primary") => {
+    if (!Array.isArray(pool) || !pool.length) return null;
+    const scored = pool.map((track) => {
+      const trackKey = recommendationTrackKey(track);
+      const style = selectableSwipeStyle(track?.style || "");
+      const sessionNoise = hashUnit(
+        `${primaryNextVariationSeed}::primary-next-variation::${tag}::${trackKey}`
+      ) - 0.5;
+      const score =
+        sessionNoise * 9.4 +
+        Number(prewarmedSwipeTrackKeys.has(trackKey)) * 3.6 +
+        Number(trackHasReliableAudioPreview(track)) * 2.2 +
+        Number(trackHasFastListenRoute(track)) * 0.6 -
+        Number(swipeStyleExposureCounts.get(style) || 0) * 0.35 -
+        anonymousExposurePenalty(track) * 0.04;
+      return { track, score };
+    }).sort((a, b) => b.score - a.score);
+    return scored[0]?.track || null;
   };
 
   const queued = suggestionQueueTracks
@@ -51058,7 +51084,23 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
   const diverseQueued = lockedStyle
     ? queued
     : queued.filter((track) => selectableSwipeStyle(track?.style || "") !== sourceStyle);
-  if (diverseQueued.length) return diverseQueued[0];
+  if (diverseQueued.length) {
+    const bestStyleRank = guidedRamp
+      ? Math.min(...diverseQueued.map((track) => Number(
+          guidedStyleRank.get(selectableSwipeStyle(track?.style || "")) ?? guidedStyles.length
+        )))
+      : 0;
+    const stagedQueued = guidedRamp
+      ? diverseQueued.filter((track) => Number(
+          guidedStyleRank.get(selectableSwipeStyle(track?.style || "")) ?? guidedStyles.length
+        ) === bestStyleRank)
+      : diverseQueued;
+    const audioReadyQueued = stagedQueued.filter((track) => trackHasReliableAudioPreview(track));
+    return pickVariedPrimaryCandidate(
+      audioReadyQueued.length ? audioReadyQueued : stagedQueued,
+      "queue"
+    );
+  }
 
   const styles = (lockedStyle ? [lockedStyle] : guidedRamp ? guidedStyles : getAllSelectableStyles())
     .filter((style) => style && (guidedRamp || !shouldDeferStyleForTasteMaturity(style, {})))
@@ -51072,13 +51114,19 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
     })
     .slice(0, 8);
   for (const style of styles) {
-    const candidate = catalogTracksForStyle(style).find(candidateAllowed);
+    const candidate = pickVariedPrimaryCandidate(
+      catalogTracksForStyle(style).filter(candidateAllowed),
+      `ready:${style}`
+    );
     if (candidate) return candidate;
   }
   // If the visitor has already heard the starter styles, keep the interaction
   // alive with any trusted playable track instead of clearing the current card.
   // An explicit style lock still applies through candidateAllowed.
-  const globalReadyCandidate = catalog.find(candidateAllowed);
+  const globalReadyCandidate = pickVariedPrimaryCandidate(
+    catalog.filter(candidateAllowed),
+    "global-ready"
+  );
   if (globalReadyCandidate) return globalReadyCandidate;
 
   // A recommendation card must never wait for a provider lookup. If every
@@ -51087,13 +51135,17 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
   // background. This keeps "Outra faixa" inside the interaction budget even
   // when Deezer, SoundCloud or iTunes is throttling requests.
   for (const style of (guidedRamp ? guidedStyles : styles)) {
-    const localCandidate = catalogTracksForStyle(style)
-      .find((track) => candidateAllowed(track, { requireFastRoute: false }));
+    const localCandidate = pickVariedPrimaryCandidate(
+      catalogTracksForStyle(style)
+        .filter((track) => candidateAllowed(track, { requireFastRoute: false })),
+      `local:${style}`
+    );
     if (localCandidate) return localCandidate;
   }
-  const globalLocalCandidate = catalog.find((track) => (
-    candidateAllowed(track, { requireFastRoute: false })
-  ));
+  const globalLocalCandidate = pickVariedPrimaryCandidate(
+    catalog.filter((track) => candidateAllowed(track, { requireFastRoute: false })),
+    "global-local"
+  );
   if (globalLocalCandidate) return globalLocalCandidate;
   return null;
 }

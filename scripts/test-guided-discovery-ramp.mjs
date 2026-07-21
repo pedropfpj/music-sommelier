@@ -136,6 +136,8 @@ assert.match(openingSource, /curationOpenSeed/);
 assert.match(openingSource, /anonymousExposurePenalty\(track\) < 70/);
 assert.doesNotMatch(openingSource, /\bawait\b|\bfetch\s*\(|\/api\//);
 assert.match(primaryNextSource, /requireFastRoute: false/);
+assert.match(primaryNextSource, /primary-next-variation/);
+assert.match(primaryNextSource, /currentCurationUserSeed\(\)/);
 assert.doesNotMatch(primaryNextSource, /\bawait\b|\bfetch\s*\(|\/api\//);
 assert.match(instantSwipeSource, /requireFastRoute: false/);
 assert.match(instantSwipeSource, /requireReliableBpm/);
@@ -146,6 +148,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260721guidedramp2/);
+assert.match(indexSource, /app\.min\.js\?v=20260721guidedramp3/);
 
 console.log("Guided discovery ramp tests passed: varied safe opening, Psy bridge, DnB bridge, wide catalog, no early Psycore.");
