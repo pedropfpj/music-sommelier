@@ -18857,6 +18857,37 @@ function trackHasVerifiedPlayablePreview(track) {
   );
 }
 
+function isExactBandcampTrackUrl(value = "") {
+  const raw = String(value || "").trim();
+  if (!raw) return false;
+  try {
+    const parsed = new URL(raw);
+    const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+    return (
+      (host === "bandcamp.com" || host.endsWith(".bandcamp.com")) &&
+      /^\/track\/[^/]+\/?$/i.test(parsed.pathname)
+    );
+  } catch (_err) {
+    return false;
+  }
+}
+
+function trackHasVerifiedEmbeddedPreview(track) {
+  if (!track || track.existenceVerified === false) return false;
+  return Boolean(
+    isTrustedCuratedCatalogTrack(track) &&
+    trackHasEmbeddableBandcampTrack(track) &&
+    isExactBandcampTrackUrl(track.bandcampTrackUrl)
+  );
+}
+
+function trackHasVerifiedPlaybackRoute(track) {
+  return Boolean(
+    trackHasVerifiedPlayablePreview(track) ||
+    trackHasVerifiedEmbeddedPreview(track)
+  );
+}
+
 async function ensureTrackHasVerifiedPlayablePreview(
   track,
   {
@@ -18901,6 +18932,11 @@ async function ensureTrackHasVerifiedPlayablePreview(
   markTrackPreviewVerified(track, playable);
   resetTrackPreviewElement(audio);
   return true;
+}
+
+async function ensureTrackHasVerifiedPlaybackRoute(track, options = {}) {
+  if (trackHasVerifiedPlaybackRoute(track)) return true;
+  return ensureTrackHasVerifiedPlayablePreview(track, options);
 }
 
 let openingPreviewPrewarmPromise = null;
@@ -36410,7 +36446,7 @@ function surpriseTrackHasExactBpmAndPreview(track) {
   if (!track) return false;
   if (track.existenceVerified === false) return false;
   if (!hasReliableBpmForTrack(track)) return false;
-  return trackHasVerifiedPlayablePreview(track);
+  return trackHasVerifiedPlaybackRoute(track);
 }
 
 function stylePreferenceSignal(style = "") {
@@ -36939,7 +36975,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
-    return trackHasVerifiedPlayablePreview(track);
+    return trackHasVerifiedPlaybackRoute(track);
   };
   const fastStyles = getAllSelectableStyles()
     .filter((style) => style && normalize(style) !== baseStyleKey)
@@ -36995,7 +37031,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!trackAllowed(track)) return null;
     triedTrackKeys.add(key);
     if (!hasReliableBpmForTrack(track)) return null;
-    const verified = await ensureTrackHasVerifiedPlayablePreview(track, {
+    const verified = await ensureTrackHasVerifiedPlaybackRoute(track, {
       forceLookup: !previewCandidatesForTrack(track).length,
       timeoutMs: 560,
       maxCandidates: 2,
@@ -37101,7 +37137,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   }
 
   if (exactBpmFallbackTrack) {
-    const verified = await ensureTrackHasVerifiedPlayablePreview(exactBpmFallbackTrack, {
+    const verified = await ensureTrackHasVerifiedPlaybackRoute(exactBpmFallbackTrack, {
       forceLookup: !previewCandidatesForTrack(exactBpmFallbackTrack).length,
       timeoutMs: 560,
       maxCandidates: 2,
@@ -37149,7 +37185,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       if (!trackAllowedByTasteMaturity(candidate, { style: "", context: "", energy: "", bpm: "", vocals: "" })) continue;
       triedTrackKeys.add(key);
       if (!hasReliableBpmForTrack(candidate)) continue;
-      const verified = await ensureTrackHasVerifiedPlayablePreview(candidate, {
+      const verified = await ensureTrackHasVerifiedPlaybackRoute(candidate, {
         forceLookup: !previewCandidatesForTrack(candidate).length,
         timeoutMs: 560,
         maxCandidates: 2,
@@ -51040,7 +51076,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
     if (requireReliableBpm && !hasReliableBpmForTrack(track)) return false;
-    return !requireFastRoute || trackHasVerifiedPlayablePreview(track);
+    return !requireFastRoute || trackHasVerifiedPlaybackRoute(track);
   };
 
   // The queue is resolved while the current track is playing. Reusing it here
@@ -51097,7 +51133,7 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
     !track ||
     !prefs ||
     !isTrackEligibleForRecommendation(track) ||
-    !trackHasVerifiedPlayablePreview(track)
+    !trackHasVerifiedPlaybackRoute(track)
   ) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
@@ -51179,7 +51215,7 @@ function pickInstantOpeningTrack(options = null) {
       if (!artistAllowedForStyle(style, track.artist)) return false;
       if (!labelAllowedForStyle(style, track.label)) return false;
       if (requireVerified) {
-        if (!trackHasVerifiedPlayablePreview(track)) return false;
+        if (!trackHasVerifiedPlaybackRoute(track)) return false;
       } else if (!trackHasReliableAudioPreview(track)) {
         return false;
       }
@@ -51251,23 +51287,27 @@ function pickInstantPrimaryNextTrack(
     guidedDiscoveryOtherTrackCount,
     sourceKey
   ].join("::");
-  const candidateAllowed = (track, { requireFastRoute = true } = {}) => {
+  const candidateAllowed = (track, {
+    requireFastRoute = true,
+    allowSeenArtist = false,
+    allowSeenTrack = false
+  } = {}) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
-    if (sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
-    if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+    if (!allowSeenArtist && sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
+    if (!allowSeenArtist && artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
     if (guidedRamp && !guidedDiscoveryStyleAllowed(track.style || "")) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (
       requireFastRoute &&
       (requireVerified
-        ? !trackHasVerifiedPlayablePreview(track)
+        ? !trackHasVerifiedPlaybackRoute(track)
         : !trackHasReliableAudioPreview(track))
     ) return false;
-    if (trackBlockedByKnownSignals(track)) return false;
-    return anonymousExposurePenalty(track) < 70;
+    if (!allowSeenTrack && trackBlockedByKnownSignals(track)) return false;
+    return allowSeenTrack || anonymousExposurePenalty(track) < 70;
   };
   const pickVariedPrimaryCandidate = (pool = [], tag = "primary") => {
     if (!Array.isArray(pool) || !pool.length) return null;
@@ -51280,7 +51320,7 @@ function pickInstantPrimaryNextTrack(
       const score =
         sessionNoise * 9.4 +
         Number(prewarmedSwipeTrackKeys.has(trackKey)) * 3.6 +
-        Number(trackHasVerifiedPlayablePreview(track)) * 2.8 -
+        Number(trackHasVerifiedPlaybackRoute(track)) * 2.8 -
         Number(swipeStyleExposureCounts.get(style) || 0) * 0.35 -
         anonymousExposurePenalty(track) * 0.04;
       return { track, score };
@@ -51352,6 +51392,25 @@ function pickInstantPrimaryNextTrack(
     "global-ready"
   );
   if (globalReadyCandidate) return globalReadyCandidate;
+
+  if (lockedStyle) {
+    const relaxedArtistCandidate = pickVariedPrimaryCandidate(
+      catalogTracksForStyle(lockedStyle).filter((track) => candidateAllowed(track, {
+        allowSeenArtist: true
+      })),
+      `locked-style-artist-recycle:${lockedStyle}`
+    );
+    if (relaxedArtistCandidate) return relaxedArtistCandidate;
+
+    const exhaustedStyleCandidate = pickVariedPrimaryCandidate(
+      catalogTracksForStyle(lockedStyle).filter((track) => candidateAllowed(track, {
+        allowSeenArtist: true,
+        allowSeenTrack: true
+      })),
+      `locked-style-track-recycle:${lockedStyle}`
+    );
+    if (exhaustedStyleCandidate) return exhaustedStyleCandidate;
+  }
 
   return null;
 }
@@ -51469,7 +51528,7 @@ async function tryRunValidatedPrimaryRecommendation({ source = "validated_local"
         let pending = validationPool.length;
         let settled = false;
         validationPool.forEach((candidate) => {
-          ensureTrackHasVerifiedPlayablePreview(candidate, {
+          ensureTrackHasVerifiedPlaybackRoute(candidate, {
             forceLookup: false,
             timeoutMs: 1450,
             maxCandidates: 1,
@@ -51801,12 +51860,17 @@ function starterFastFeedbackPool(pool = []) {
   });
 }
 
-function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidArtistName = "", allowNoPreview = false } = {}) {
+function fastNegativeFeedbackTrackAllowed(
+  track,
+  prefs,
+  rejectedTrack,
+  { avoidArtistName = "", allowNoPreview = false, allowSeenArtist = false } = {}
+) {
   if (!track || !prefs) return false;
   if (track === rejectedTrack) return false;
   if (!isTrackEligibleForRecommendation(track)) return false;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) return false;
-  if (!trackHasVerifiedPlayablePreview(track)) return false;
+  if (!trackHasVerifiedPlaybackRoute(track)) return false;
   if (prefs.bpm && !hasReliableBpmForTrack(track)) return false;
   if (prefs.style && track.style !== prefs.style) return false;
   if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
@@ -51824,16 +51888,18 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   );
   if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
 
-  const blockedArtists = buildGlobalArtistExclusionSet(
-    [avoidArtistName].filter(Boolean)
-  );
-  if (artistSetHasMatch(blockedArtists, track.artist)) return false;
-  if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+  if (avoidArtistName && artistMatchKey(track.artist) === artistMatchKey(avoidArtistName)) return false;
+  if (!allowSeenArtist && artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
 
   return true;
 }
 
-function fastNegativeFeedbackCandidatePools(prefs, rejectedTrack, avoidArtistName = "", { allowNoPreview = false } = {}) {
+function fastNegativeFeedbackCandidatePools(
+  prefs,
+  rejectedTrack,
+  avoidArtistName = "",
+  { allowNoPreview = false, allowSeenArtist = false } = {}
+) {
   const contextKey = recommendationContextKey(prefs);
   const basePool = prefs?.style ? catalogTracksForStyle(prefs.style) : catalog;
   const pools = [];
@@ -51846,7 +51912,11 @@ function fastNegativeFeedbackCandidatePools(prefs, rejectedTrack, avoidArtistNam
   pools.push(rotatedFastFeedbackPool(basePool, prefs?.style ? FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT : FAST_NEGATIVE_FEEDBACK_SCAN_LIMIT + 40));
   return pools.map((pool) =>
     (Array.isArray(pool) ? pool : []).filter((track) =>
-      fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidArtistName, allowNoPreview })
+      fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, {
+        avoidArtistName,
+        allowNoPreview,
+        allowSeenArtist
+      })
     )
   );
 }
@@ -51900,31 +51970,36 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
   if (!rejectedTrack || !basePrefs) return null;
   const previousArtistKey = artistMatchKey(avoidArtistName || rejectedTrack?.artist || "");
 
-  // The instant path is reserved for audio that already reached canplay.
-  // If the warm queue is empty, the async recommendation path validates a
-  // replacement before presenting its card.
-  for (const allowNoPreview of [false]) {
-    for (const requireDirectAudio of [true, false]) {
-      const seenCandidateKeys = new Set();
-      for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
-        const candidates = pool.filter((track) => {
-          const key = recommendationTrackKey(track);
-          if (!key || seenCandidateKeys.has(key)) return false;
-          seenCandidateKeys.add(key);
-          return !requireDirectAudio || trackHasReliableAudioPreview(track);
-        });
-        if (!candidates.length) continue;
-        const scored = candidates.map((track) => ({
-          track,
-          score: fastNegativeFeedbackScore(track, basePrefs, rejectedTrack) +
-            (prewarmedSwipeTrackKeys.has(recommendationTrackKey(track)) ? 12 : 0)
-        }));
-        const candidate = pickFromScoredRecommendations(scored, basePrefs, {
-          previousArtistKey,
-          maxWindow: basePrefs.style ? 10 : 16,
-          scoreBand: basePrefs.style ? 6.5 : 9.5
-        });
-        if (candidate) return { track: candidate, prefs: basePrefs };
+  // Prefer a canplay-verified audio URL, then an exact curated embed. If a
+  // niche style runs out of unseen artists, keep rotating unseen tracks before
+  // falling back to the slower asynchronous path.
+  for (const allowSeenArtist of [false, true]) {
+    for (const allowNoPreview of [false]) {
+      for (const requireDirectAudio of [true, false]) {
+        const seenCandidateKeys = new Set();
+        for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, {
+          allowNoPreview,
+          allowSeenArtist
+        })) {
+          const candidates = pool.filter((track) => {
+            const key = recommendationTrackKey(track);
+            if (!key || seenCandidateKeys.has(key)) return false;
+            seenCandidateKeys.add(key);
+            return !requireDirectAudio || trackHasReliableAudioPreview(track);
+          });
+          if (!candidates.length) continue;
+          const scored = candidates.map((track) => ({
+            track,
+            score: fastNegativeFeedbackScore(track, basePrefs, rejectedTrack) +
+              (prewarmedSwipeTrackKeys.has(recommendationTrackKey(track)) ? 12 : 0)
+          }));
+          const candidate = pickFromScoredRecommendations(scored, basePrefs, {
+            previousArtistKey,
+            maxWindow: basePrefs.style ? 10 : 16,
+            scoreBand: basePrefs.style ? 6.5 : 9.5
+          });
+          if (candidate) return { track: candidate, prefs: basePrefs };
+        }
       }
     }
   }
@@ -51933,7 +52008,7 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
 }
 
 function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" } = {}) {
-  if (!track || !prefs || !trackHasVerifiedPlayablePreview(track)) return false;
+  if (!track || !prefs || !trackHasVerifiedPlaybackRoute(track)) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const basePrefs = negativeFeedbackBasePrefs(prefs);
@@ -52113,9 +52188,9 @@ function interactionFallbackTrackAllowed(
   const sourceKey = recommendationTrackKey(sourceTrack);
   if (!trackKey || (sourceKey && trackKey === sourceKey)) return false;
   if (!isTrackEligibleForRecommendation(track)) return false;
-  // The no-overlay path may only paint a card whose audio already reached
-  // canplay/loadeddata during prewarm.
-  if (!trackHasVerifiedPlayablePreview(track)) return false;
+  // The no-overlay path may only paint a card whose direct audio reached
+  // canplay/loadeddata or whose exact curated Bandcamp embed is available.
+  if (!trackHasVerifiedPlaybackRoute(track)) return false;
   if (prefs.style && track.style !== prefs.style) return false;
   if (!prefs.style && guidedDiscoveryRampActive() && !guidedDiscoveryStyleAllowed(track.style || "")) return false;
   if (!prefs.style && !allowMatureStyle && !trackAllowedByTasteMaturity(track, prefs)) return false;
@@ -52125,7 +52200,7 @@ function interactionFallbackTrackAllowed(
   const bpmValue = Number(track.bpmExact);
   if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
   if (avoidArtistName && artistMatchKey(track.artist) === artistMatchKey(avoidArtistName)) return false;
-  if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+  if (!allowSeen && artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
   if (!allowSeen && trackBlockedByKnownSignals(track)) return false;
   return true;
 }
@@ -52305,6 +52380,23 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     playUiSfx("error");
     showPremiumDiscoveryLimit();
     return false;
+  }
+  const anchoredStyle = explicitSwipeAnchorStyle();
+  if (anchoredStyle) {
+    const anchoredTrack = pickInstantPrimaryNextTrack(likedTrack, anchoredStyle);
+    if (anchoredTrack) {
+      const anchoredPrefs = normalizeRecommendationPrefs({
+        ...lastPrefs,
+        style: anchoredStyle
+      });
+      if (presentInstantSwipeRecommendation({
+        track: anchoredTrack,
+        prefs: anchoredPrefs,
+        message
+      })) {
+        return true;
+      }
+    }
   }
   if (!positive && tryAdvanceNegativeFeedbackInstantly({
     rejectedTrack: likedTrack,
@@ -58491,8 +58583,8 @@ async function pickPlayableReplacementForPrefs(
     if (!candidate || !key || tried.has(key)) continue;
     tried.add(key);
     attempts += 1;
-    if (trackHasVerifiedPlayablePreview(candidate)) return candidate;
-    const verified = await ensureTrackHasVerifiedPlayablePreview(candidate, {
+    if (trackHasVerifiedPlaybackRoute(candidate)) return candidate;
+    const verified = await ensureTrackHasVerifiedPlaybackRoute(candidate, {
       forceLookup: attempts <= 2 && !previewCandidatesForTrack(candidate).length,
       timeoutMs: 520,
       maxCandidates: 2,
@@ -58529,7 +58621,7 @@ async function ensureCurrentRecommendationPlayable(
   } = {}
 ) {
   if (!currentRecommendation) return false;
-  const currentVerified = await ensureTrackHasVerifiedPlayablePreview(currentRecommendation, {
+  const currentVerified = await ensureTrackHasVerifiedPlaybackRoute(currentRecommendation, {
     forceLookup: !previewCandidatesForTrack(currentRecommendation).length,
     timeoutMs: 620,
     maxCandidates: 2,
@@ -59553,6 +59645,25 @@ async function runSwipeStyleRecommendation(style = "") {
   renderSwipeStyleRail();
 
   const previousTrack = currentRecommendation;
+  const interactionStartedAt = discoveryInteractionNow();
+  swipeUserAnchoredStyle = safeStyle;
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs,
+    sourceTrack: previousTrack,
+    avoidArtistName: previousTrack?.artist || "",
+    message: t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) }),
+    action: "style_deck",
+    startedAt: interactionStartedAt
+  })) {
+    swipeUserAnchoredStyle = currentRecommendation?.style || safeStyle;
+    lastPrefs = {
+      ...prefs,
+      style: swipeUserAnchoredStyle
+    };
+    showToast(t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) }));
+    savePreferences();
+    return true;
+  }
   const generated = await generateRecommendationWithOverlay(
     prefs,
     {

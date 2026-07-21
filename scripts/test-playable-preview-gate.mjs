@@ -66,13 +66,21 @@ assert.match(verificationGate, /pickPlayablePreviewSource\(audio, candidates/);
 assert.match(verificationGate, /markTrackPreviewVerified\(track, playable\)/);
 assert.match(verificationGate, /track\.previewMissing = true/);
 assert.match(verificationGate, /prewarmedSwipeTrackKeys\.has\(trackKey\)/);
+assert.match(verificationGate, /function trackHasVerifiedEmbeddedPreview/);
+assert.match(verificationGate, /isExactBandcampTrackUrl\(track\.bandcampTrackUrl\)/);
+assert.match(verificationGate, /isTrustedCuratedCatalogTrack\(track\)/);
+assert.match(verificationGate, /trackHasEmbeddableBandcampTrack\(track\)/);
+assert.match(verificationGate, /function trackHasVerifiedPlaybackRoute/);
+assert.match(verificationGate, /async function ensureTrackHasVerifiedPlaybackRoute/);
 assert.match(verificationGate, /function prewarmOpeningPreviewGate/);
 assert.match(verificationGate, /Promise\.allSettled/);
 assert.match(verificationGate, /timeoutMs: 2400/);
 assert.doesNotMatch(verificationGate, /track\.previewCandidates = \[\]/);
 
-assert.match(instantPresenter, /!trackHasVerifiedPlayablePreview\(track\)/);
-assert.match(primaryPicker, /trackHasVerifiedPlayablePreview\(track\)/);
+assert.match(instantPresenter, /!trackHasVerifiedPlaybackRoute\(track\)/);
+assert.match(primaryPicker, /trackHasVerifiedPlaybackRoute\(track\)/);
+assert.match(primaryPicker, /locked-style-artist-recycle/);
+assert.match(primaryPicker, /locked-style-track-recycle/);
 assert.doesNotMatch(primaryPicker, /global-local|`local:/);
 assert.match(validatedPrimary, /validationCandidates\.slice\(0, 3\)/);
 assert.match(validatedPrimary, /timeoutMs: 1450/);
@@ -88,10 +96,10 @@ assert.ok(
   "The compact starter pool must keep enough playable artists for varied no-login sessions."
 );
 assert.doesNotMatch(source, /hydrateFastPlayableDataset|FAST_PLAYABLE_DATASET_FILES|fastPlayableDatasetPromise/);
-assert.match(negativePicker, /trackHasVerifiedPlayablePreview\(track\)/);
-assert.doesNotMatch(negativePicker, /\[false, true\]/);
+assert.match(negativePicker, /trackHasVerifiedPlaybackRoute\(track\)/);
+assert.match(negativePicker, /allowSeenArtist/);
 
-assert.match(replacementPicker, /ensureTrackHasVerifiedPlayablePreview\(candidate/);
+assert.match(replacementPicker, /ensureTrackHasVerifiedPlaybackRoute\(candidate/);
 assert.doesNotMatch(replacementPicker, /if \(trackHasPlayablePreviewExperience\(candidate\)\) return candidate/);
 assert.match(previewRenderer, /markTrackPreviewVerified\(track, playable\)/);
 assert.match(previewRenderer, /verifiedPreviewUrlForTrack\(track\)/);
@@ -110,9 +118,14 @@ assert.match(source, /if \(trackPreview\?\.dataset\.previewProbing === "true"\) 
 assert.match(source, /previewTrackKey !== currentTrackKey/);
 assert.match(swipeAdvance, /await tryRunValidatedPrimaryRecommendation/);
 assert.match(swipeAdvance, /positive \? "like_validated" : "dislike_validated"/);
+assert.match(swipeAdvance, /pickInstantPrimaryNextTrack\(likedTrack, anchoredStyle\)/);
+assert.ok(
+  swipeAdvance.indexOf("pickInstantPrimaryNextTrack(likedTrack, anchoredStyle)") < swipeAdvance.indexOf("tryAdvanceNegativeFeedbackInstantly"),
+  "Locked subgenres must reuse the instant verified route before slower feedback fallbacks."
+);
 assert.ok(
   swipeLike.indexOf("await advanceAfterSwipeFeedback") < swipeLike.indexOf("burstConfetti"),
   "The next playable card must render before non-critical celebration work."
 );
 
-console.log("Playable preview gate tests passed: every instant card requires a canplay-verified audio source and failed previews auto-skip.");
+console.log("Playable preview gate tests passed: instant cards require verified direct audio or an exact curated Bandcamp embed, and failed previews auto-skip.");
