@@ -9885,6 +9885,7 @@ const prewarmedSwipeAudioByTrack = new Map();
 const prewarmedSwipeTrackKeys = new Set();
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
+let guidedDiscoveryOtherTrackCount = 0;
 let curationUserSeed = "";
 let curationVisitId = "";
 const curationOpenSeed = createRuntimeCurationSeed();
@@ -11112,6 +11113,122 @@ const DISCOVERY_EXTREME_STYLE_SET = new Set([
 ]);
 const DISCOVERY_MATURITY_BLOCK_SCORE = -18;
 
+const GUIDED_OPENING_STYLE_DECK = [
+  "tech_house",
+  "house",
+  "techno",
+  "deep_house",
+  "minimal_techno",
+  "deep_techno",
+  "disco_house",
+  "dub_techno",
+  "soulful_house",
+  "hypnotic_techno",
+  "garage_house",
+  "detroit_techno"
+];
+const GUIDED_PSY_BRIDGE_STYLE_DECK = [
+  "progressive_psy",
+  "psy_comercial",
+  "goa_trance",
+  "full_on_morning",
+  "psybient"
+];
+const GUIDED_DNB_BRIDGE_STYLE_DECK = [
+  "liquid_dnb",
+  "drum_and_bass",
+  "jungle",
+  "uk_garage",
+  "future_garage"
+];
+const GUIDED_WIDE_STYLE_DECK = [
+  "neurofunk",
+  "jump_up",
+  "breakbeat",
+  "electro",
+  "trip_hop",
+  "ambient",
+  "melodic_techno",
+  "progressive_house",
+  "afro_house",
+  "organic_house",
+  "trance_uplifting",
+  "twilight_psy",
+  "full_on"
+];
+const GUIDED_PSY_UNLOCK_REROLLS = 4;
+const GUIDED_DNB_UNLOCK_REROLLS = 7;
+const GUIDED_WIDE_UNLOCK_REROLLS = 10;
+const GUIDED_CATALOG_UNLOCK_REROLLS = 14;
+
+function guidedDiscoveryRampActive() {
+  if (explicitSwipeAnchorStyle()) return false;
+  if (anonymousDiscoverySession()) return true;
+  return Math.max(0, Number(swipeTrainingSignalCount?.()) || 0) < 6;
+}
+
+function guidedDiscoveryRampStage() {
+  const rerolls = Math.max(0, Number(guidedDiscoveryOtherTrackCount) || 0);
+  if (rerolls < GUIDED_PSY_UNLOCK_REROLLS) return "opening";
+  if (rerolls < GUIDED_DNB_UNLOCK_REROLLS) return "psy_bridge";
+  if (rerolls < GUIDED_WIDE_UNLOCK_REROLLS) return "dnb_bridge";
+  if (rerolls < GUIDED_CATALOG_UNLOCK_REROLLS) return "wide";
+  return "catalog";
+}
+
+function guidedDiscoveryStyleDeck() {
+  const stage = guidedDiscoveryRampStage();
+  let styles = GUIDED_OPENING_STYLE_DECK.slice();
+  if (stage === "psy_bridge") {
+    styles = [...GUIDED_PSY_BRIDGE_STYLE_DECK, ...styles];
+  } else if (stage === "dnb_bridge") {
+    styles = [...GUIDED_DNB_BRIDGE_STYLE_DECK, ...GUIDED_PSY_BRIDGE_STYLE_DECK, ...styles];
+  } else if (stage === "wide") {
+    styles = [
+      ...GUIDED_WIDE_STYLE_DECK,
+      ...GUIDED_DNB_BRIDGE_STYLE_DECK,
+      ...GUIDED_PSY_BRIDGE_STYLE_DECK,
+      ...styles
+    ];
+  } else if (stage === "catalog") {
+    styles = [
+      ...GUIDED_WIDE_STYLE_DECK,
+      ...GUIDED_DNB_BRIDGE_STYLE_DECK,
+      ...GUIDED_PSY_BRIDGE_STYLE_DECK,
+      ...styles,
+      ...getAllSelectableStyles()
+    ];
+  }
+  return [...new Set(styles)]
+    .map((style) => selectableSwipeStyle(style))
+    .filter(Boolean)
+    .filter((style) => !DISCOVERY_EXTREME_STYLE_SET.has(style) || userHasExtremeTasteIntent(style, {}));
+}
+
+function guidedDiscoveryStyleAllowed(style = "") {
+  const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
+  if (!styleKey) return false;
+  if (!guidedDiscoveryRampActive()) return true;
+  if (DISCOVERY_EXTREME_STYLE_SET.has(styleKey)) {
+    return userHasExtremeTasteIntent(styleKey, {});
+  }
+  if (GUIDED_OPENING_STYLE_DECK.includes(styleKey)) return true;
+  const stage = guidedDiscoveryRampStage();
+  if (stage === "opening") return false;
+  if (GUIDED_PSY_BRIDGE_STYLE_DECK.includes(styleKey)) return true;
+  if (stage === "psy_bridge") return false;
+  if (GUIDED_DNB_BRIDGE_STYLE_DECK.includes(styleKey)) return true;
+  if (stage === "dnb_bridge") return false;
+  if (GUIDED_WIDE_STYLE_DECK.includes(styleKey)) return true;
+  return stage === "catalog" && getAllSelectableStyles().includes(styleKey);
+}
+
+function registerGuidedDiscoveryOtherTrack() {
+  if (explicitSwipeAnchorStyle()) return guidedDiscoveryOtherTrackCount;
+  guidedDiscoveryOtherTrackCount += 1;
+  return guidedDiscoveryOtherTrackCount;
+}
+
 function styleHistoryEntryStyle(entry = {}) {
   return normalizeDatasetStyle(
     entry?.style ||
@@ -11297,6 +11414,9 @@ function trackAllowedByTasteMaturity(track = null, prefs = {}) {
   if (!track) return false;
   const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
   if (normalizedPrefs.style) return true;
+  if (guidedDiscoveryRampActive()) {
+    return guidedDiscoveryStyleAllowed(track.style || "");
+  }
   return !shouldDeferStyleForTasteMaturity(track.style || "", normalizedPrefs);
 }
 
@@ -23026,6 +23146,17 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     return true;
   };
 
+  const finishWithResolvedPreview = () => {
+    const resolvedCandidates = previewCandidatesForTrack(track);
+    if (!resolvedCandidates.length) return false;
+    track.previewUrl = resolvedCandidates[0];
+    track.previewChecked = true;
+    track.previewMissing = false;
+    track.previewLookupAttempted = true;
+    if (track.existenceVerified === undefined) track.existenceVerified = true;
+    return true;
+  };
+
   const metadataDeezerTrackId =
     catalogTrackMetadataText(track, "deezer_track_id") ||
     catalogTrackMetadataText(track, "deezerTrackId") ||
@@ -23037,12 +23168,14 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       // If the direct Deezer id lookup fails, the text search below can still recover a preview.
     }
   }
+  if (finishWithResolvedPreview()) return;
 
   try {
     applyTrackMetadataApiMatch(await fetchTrackMetadataFromApi(track));
   } catch (_err) {
     // Optional server-side metadata enrichment; local catalog still works without it.
   }
+  if (finishWithResolvedPreview()) return;
 
   if (deezerLookupAllowed) {
     try {
@@ -23117,6 +23250,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       // tenta iTunes abaixo
     }
   }
+  if (finishWithResolvedPreview()) return;
 
   try {
     const term = encodeURIComponent(`${track.artist} ${track.song}`);
@@ -23166,6 +23300,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   } catch (_err) {
     // sem fallback adicional
   }
+  if (finishWithResolvedPreview()) return;
 
   try {
     const shouldTrySoundCloud =
@@ -36508,12 +36643,14 @@ function pickSurpriseTrackFromAnotherGenre(
 }
 
 function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set() } = {}) {
-  const styles = getAllSelectableStyles();
+  const styles = (guidedDiscoveryRampActive() ? GUIDED_OPENING_STYLE_DECK : getAllSelectableStyles())
+    .map((style) => selectableSwipeStyle(style))
+    .filter((style, index, list) => style && list.indexOf(style) === index);
   if (!styles.length) return null;
   const visitId = currentCurationVisitId();
   const userSeed = currentCurationUserSeed();
   const styleEntries = styles
-    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
+    .filter((style) => guidedDiscoveryRampActive() || !shouldDeferStyleForTasteMaturity(style, {}))
     .map((style) => {
       const pool = catalogTracksForStyle(style).filter((track) => {
         if (!track) return false;
@@ -36597,7 +36734,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
-    return trackHasReadyPlaybackRoute(track);
+    return trackHasFastListenRoute(track);
   };
   const fastStyles = getAllSelectableStyles()
     .filter((style) => style && normalize(style) !== baseStyleKey)
@@ -49650,6 +49787,7 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
     .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
     .slice(0, 4);
+  let refreshablePreviewScheduled = false;
   candidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
     if (imageUrl && typeof Image === "function") {
@@ -49689,6 +49827,8 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
       warmResolvedPreview();
       return;
     }
+    if (refreshablePreviewScheduled || !trackHasFastListenRoute(track)) return;
+    refreshablePreviewScheduled = true;
     void resolvePreviewForTrack(track)
       .then(warmResolvedPreview)
       .catch(() => {});
@@ -50590,6 +50730,7 @@ function uniqueSwipeStyleList(styles = []) {
     .map((style) => selectableSwipeStyle(style))
     .filter((style) => {
       if (!style || seen.has(style)) return false;
+      if (guidedDiscoveryRampActive() && !guidedDiscoveryStyleAllowed(style)) return false;
       seen.add(style);
       return true;
     });
@@ -50615,9 +50756,12 @@ function instantSwipeStyleCandidates(sourceTrack, plan) {
   if (anchorStyle) return [anchorStyle];
   const baseStyle = selectableSwipeStyle(lastPrefs?.style || "");
   const baseFamily = familyOf(sourceStyle || baseStyle);
+  const coverageSourceStyles = guidedDiscoveryRampActive()
+    ? guidedDiscoveryStyleDeck()
+    : getAllSelectableStyles();
   const rankedCoverageStyles = discoveryModeEl?.checked === false || explicitSwipeAnchorStyle()
     ? []
-    : getAllSelectableStyles()
+    : coverageSourceStyles
         .filter((style) => style && style !== sourceStyle)
         .sort((a, b) => {
           const aCross = baseFamily && familyOf(a) !== baseFamily ? 0 : 1;
@@ -50653,9 +50797,13 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
   );
 
-  const candidateAllowed = (track, prefs) => {
+  const candidateAllowed = (track, prefs, {
+    requireFastRoute = true,
+    requireReliableBpm = true
+  } = {}) => {
     if (!track || track === sourceTrack) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!plan?.explicitAnchor && guidedDiscoveryRampActive() && !guidedDiscoveryStyleAllowed(track.style || "")) return false;
     if (prefs.style && track.style !== prefs.style) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
@@ -50665,8 +50813,8 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
-    if (!hasReliableBpmForTrack(track)) return false;
-    return trackHasReadyPlaybackRoute(track);
+    if (requireReliableBpm && !hasReliableBpmForTrack(track)) return false;
+    return !requireFastRoute || trackHasFastListenRoute(track);
   };
 
   // The queue is resolved while the current track is playing. Reusing it here
@@ -50707,6 +50855,27 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
       const pool = basePool.filter((track) =>
         candidateAllowed(track, prefs) && (!requireDirectAudio || trackHasReliableAudioPreview(track))
       );
+      const candidate = pickBestRecommendationCandidate(pool, prefs, {
+        maxWindow: 14,
+        scoreBand: 8.5
+      });
+      if (candidate) return { track: candidate, prefs, plan };
+    }
+  }
+
+  // Provider APIs are an audio enhancement, not a gate for the next card.
+  // Preserve the same style/artist/exclusion precision, then relax only the
+  // already-resolved route and BPM requirements so likes and dislikes can
+  // always advance immediately from the local catalog.
+  const localFallbackStyles = (styles.length ? styles : [basePrefs.style || ""]).slice(0, 8);
+  for (const requireReliableBpm of [true, false]) {
+    for (const style of localFallbackStyles) {
+      const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
+      const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
+      const pool = basePool.filter((track) => candidateAllowed(track, prefs, {
+        requireFastRoute: false,
+        requireReliableBpm
+      }));
       const candidate = pickBestRecommendationCandidate(pool, prefs, {
         maxWindow: 14,
         scoreBand: 8.5
@@ -50775,36 +50944,76 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
 }
 
 function pickInstantOpeningTrack() {
-  const rankedStyles = getAllSelectableStyles()
-    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
-    .sort((a, b) => openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a))
-    .slice(0, 6);
+  const guidedOpening = guidedDiscoveryRampActive();
+  const styles = (guidedOpening ? GUIDED_OPENING_STYLE_DECK : getAllSelectableStyles())
+    .map((style) => selectableSwipeStyle(style))
+    .filter((style, index, list) => style && list.indexOf(style) === index)
+    .filter((style) => guidedOpening || !shouldDeferStyleForTasteMaturity(style, {}));
+  const userSeed = currentCurationUserSeed();
+  const visitId = currentCurationVisitId();
+  const entries = [];
 
-  for (const requireDirectAudio of [true, false]) {
-    for (const style of rankedStyles) {
-      const prefs = normalizeRecommendationPrefs({
-        style,
-        context: "",
-        energy: "",
-        bpm: "",
-        vocals: ""
-      });
-      const pool = catalogTracksForStyle(style).filter((track) => {
-        if (!track || !isTrackEligibleForRecommendation(track)) return false;
-        if (!artistAllowedForStyle(style, track.artist)) return false;
-        if (!labelAllowedForStyle(style, track.label)) return false;
-        if (!trackHasReadyPlaybackRoute(track)) return false;
-        if (requireDirectAudio && !trackHasReliableAudioPreview(track)) return false;
-        return anonymousExposurePenalty(track) < 70;
-      });
-      const candidate = pickBestRecommendationCandidate(pool, prefs, {
-        maxWindow: 16,
-        scoreBand: 9
-      });
-      if (candidate) return { track: candidate, prefs };
-    }
+  styles.forEach((style) => {
+    const prefs = normalizeRecommendationPrefs({
+      style,
+      context: "",
+      energy: "",
+      bpm: "",
+      vocals: ""
+    });
+    const pool = catalogTracksForStyle(style).filter((track) => {
+      if (!track || !isTrackEligibleForRecommendation(track)) return false;
+      const trackKey = recommendationTrackKey(track);
+      if (trackKey && recommendationMemory.has(trackKey)) return false;
+      if (!artistAllowedForStyle(style, track.artist)) return false;
+      if (!labelAllowedForStyle(style, track.label)) return false;
+      if (!trackHasFastListenRoute(track)) return false;
+      if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+      return anonymousExposurePenalty(track) < 70;
+    });
+    if (!pool.length) return;
+
+    const candidate = pickDiverseTrackFromPool(pool, prefs, {
+      maxWindow: 22,
+      scoreBand: 11
+    }) || pickBestRecommendationCandidate(pool, prefs, {
+      maxWindow: 22,
+      scoreBand: 11
+    });
+    if (!candidate) return;
+
+    const sessionNoise = hashUnit(
+      `${userSeed}::${visitId}::${curationOpenSeed}::guided-opening::${style}::${recommendationTrackKey(candidate)}`
+    ) - 0.5;
+    const score =
+      openingDiscoveryRampScore(style) * 0.34 +
+      styleDiscoveryReadinessScore(style) * 0.68 +
+      sessionNoise * 9.2 +
+      (trackHasReliableAudioPreview(candidate) ? 2.4 : 0.45) -
+      Number(swipeStyleExposureCounts.get(style) || 0) * 1.8;
+    entries.push({ track: candidate, prefs, score });
+  });
+
+  if (!entries.length) return null;
+  entries.sort((a, b) => b.score - a.score);
+  const bestScore = entries[0].score;
+  const selectionPool = entries
+    .filter((entry) => entry.score >= bestScore - 10)
+    .slice(0, Math.min(10, entries.length));
+  if (selectionPool.length === 1) return selectionPool[0];
+
+  const minScore = Math.min(...selectionPool.map((entry) => entry.score));
+  const weighted = selectionPool.map((entry) => ({
+    entry,
+    weight: Math.max(0.2, entry.score - minScore + 0.8)
+  }));
+  const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let cursor = hashUnit(`${userSeed}::${visitId}::${curationOpenSeed}::guided-opening-choice`) * totalWeight;
+  for (const item of weighted) {
+    cursor -= item.weight;
+    if (cursor <= 0) return item.entry;
   }
-  return null;
+  return weighted[0].entry;
 }
 
 function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requiredStyle = "") {
@@ -50812,15 +51021,19 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
   const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
   const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const lockedStyle = selectableSwipeStyle(requiredStyle);
-  const candidateAllowed = (track) => {
+  const guidedRamp = !lockedStyle && guidedDiscoveryRampActive();
+  const guidedStyles = guidedRamp ? guidedDiscoveryStyleDeck() : [];
+  const guidedStyleRank = new Map(guidedStyles.map((style, index) => [style, index]));
+  const candidateAllowed = (track, { requireFastRoute = true } = {}) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
     if (sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
     if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
+    if (guidedRamp && !guidedDiscoveryStyleAllowed(track.style || "")) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (!trackHasReadyPlaybackRoute(track)) return false;
+    if (requireFastRoute && !trackHasFastListenRoute(track)) return false;
     if (trackBlockedByKnownSignals(track)) return false;
     return anonymousExposurePenalty(track) < 70;
   };
@@ -50830,7 +51043,14 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
     .sort((a, b) => {
       const aKey = recommendationTrackKey(a);
       const bKey = recommendationTrackKey(b);
+      const aStyleRank = guidedRamp
+        ? Number(guidedStyleRank.get(selectableSwipeStyle(a?.style || "")) ?? guidedStyles.length)
+        : 0;
+      const bStyleRank = guidedRamp
+        ? Number(guidedStyleRank.get(selectableSwipeStyle(b?.style || "")) ?? guidedStyles.length)
+        : 0;
       return (
+        aStyleRank - bStyleRank ||
         Number(prewarmedSwipeTrackKeys.has(bKey)) - Number(prewarmedSwipeTrackKeys.has(aKey)) ||
         Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
       );
@@ -50840,9 +51060,12 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
     : queued.filter((track) => selectableSwipeStyle(track?.style || "") !== sourceStyle);
   if (diverseQueued.length) return diverseQueued[0];
 
-  const styles = (lockedStyle ? [lockedStyle] : getAllSelectableStyles())
-    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+  const styles = (lockedStyle ? [lockedStyle] : guidedRamp ? guidedStyles : getAllSelectableStyles())
+    .filter((style) => style && (guidedRamp || !shouldDeferStyleForTasteMaturity(style, {})))
     .sort((a, b) => {
+      if (guidedRamp) {
+        return Number(guidedStyleRank.get(a) ?? guidedStyles.length) - Number(guidedStyleRank.get(b) ?? guidedStyles.length);
+      }
       const aSame = a === sourceStyle ? 1 : 0;
       const bSame = b === sourceStyle ? 1 : 0;
       return aSame - bSame || openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a);
@@ -50857,6 +51080,21 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
   // An explicit style lock still applies through candidateAllowed.
   const globalReadyCandidate = catalog.find(candidateAllowed);
   if (globalReadyCandidate) return globalReadyCandidate;
+
+  // A recommendation card must never wait for a provider lookup. If every
+  // pre-resolved route in the current stage was consumed, paint the best local
+  // catalog candidate now and let renderPreview resolve its audio in the
+  // background. This keeps "Outra faixa" inside the interaction budget even
+  // when Deezer, SoundCloud or iTunes is throttling requests.
+  for (const style of (guidedRamp ? guidedStyles : styles)) {
+    const localCandidate = catalogTracksForStyle(style)
+      .find((track) => candidateAllowed(track, { requireFastRoute: false }));
+    if (localCandidate) return localCandidate;
+  }
+  const globalLocalCandidate = catalog.find((track) => (
+    candidateAllowed(track, { requireFastRoute: false })
+  ));
+  if (globalLocalCandidate) return globalLocalCandidate;
   return null;
 }
 
@@ -50908,6 +51146,7 @@ function tryRunInstantPrimaryRecommendation() {
     prefs: openingPrefs,
     message: t("exploratoryGenerated")
   });
+  if (presented) rememberAnonymousOpeningTrack(fallbackTrack);
   reportDiscoveryInteractionLatency("first_track", interactionStartedAt, presented);
   if (presented) playUiSfx("search-done");
   return presented;
@@ -50921,7 +51160,7 @@ function catalogHasMinimumRecommendationState() {
       isTrackEligibleForRecommendation(track) &&
       artistAllowedForStyle(style, track.artist) &&
       labelAllowedForStyle(style, track.label) &&
-      trackHasReadyPlaybackRoute(track) &&
+      trackHasFastListenRoute(track) &&
       anonymousExposurePenalty(track) < 70
     )));
 }
@@ -51170,7 +51409,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   if (track === rejectedTrack) return false;
   if (!isTrackEligibleForRecommendation(track)) return false;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) return false;
-  const hasFastRoute = trackHasReadyPlaybackRoute(track);
+  const hasFastRoute = trackHasFastListenRoute(track);
   if (!hasFastRoute && !allowNoPreview) return false;
   if (
     !hasFastRoute &&
@@ -51274,9 +51513,10 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
   if (!rejectedTrack || !basePrefs) return null;
   const previousArtistKey = artistMatchKey(avoidArtistName || rejectedTrack?.artist || "");
 
-  // Never fill the swipe deck with metadata-only tracks. Cover art, BPM and a
-  // search URL are not a listening route; the product promises audio first.
-  for (const allowNoPreview of [false]) {
+  // Prefer audio-ready candidates. If providers are throttled or every warm
+  // route was consumed, keep the card interaction instant with a trusted local
+  // candidate and resolve its preview after the card is already visible.
+  for (const allowNoPreview of [false, true]) {
     for (const requireDirectAudio of [true, false]) {
       const seenCandidateKeys = new Set();
       for (const pool of fastNegativeFeedbackCandidatePools(basePrefs, rejectedTrack, avoidArtistName, { allowNoPreview })) {
@@ -51486,11 +51726,12 @@ function interactionFallbackTrackAllowed(
   const sourceKey = recommendationTrackKey(sourceTrack);
   if (!trackKey || (sourceKey && trackKey === sourceKey)) return false;
   if (!isTrackEligibleForRecommendation(track)) return false;
-  // Fast interaction cards must already have a real playback route. A track
-  // ID that might resolve later is not enough: Opera exposed that gap as a
-  // disabled player after an otherwise fast recommendation.
-  if (!trackHasReadyPlaybackRoute(track)) return false;
+  // Keep a real local listening route in the tap path. Refreshable previews
+  // render the next card immediately and resolve audio in the background,
+  // while direct audio and embeds remain preferred by the scorer.
+  if (!trackHasFastListenRoute(track)) return false;
   if (prefs.style && track.style !== prefs.style) return false;
+  if (!prefs.style && guidedDiscoveryRampActive() && !guidedDiscoveryStyleAllowed(track.style || "")) return false;
   if (!prefs.style && !allowMatureStyle && !trackAllowedByTasteMaturity(track, prefs)) return false;
   if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
   if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
@@ -60867,10 +61108,12 @@ bind(topSwipePassBtn, "click", () => {
 });
 
 bind(topSwipeSurpriseBtn, "click", async () => {
+  if (currentRecommendation) registerGuidedDiscoveryOtherTrack();
   await runPrimaryRecommendationAction();
 });
 
 bind(swipeHeroSurpriseBtn, "click", async () => {
+  if (currentRecommendation) registerGuidedDiscoveryOtherTrack();
   await runPrimaryRecommendationAction();
 });
 
