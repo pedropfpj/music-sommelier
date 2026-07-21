@@ -57,6 +57,10 @@ const swipeAdvance = section(
   "async function advanceAfterSwipeFeedback",
   "async function likeCurrentTrackFromSwipe"
 );
+const swipeLike = section(
+  "async function likeCurrentTrackFromSwipe",
+  "async function passCurrentTrackFromSwipe"
+);
 
 assert.match(verificationGate, /pickPlayablePreviewSource\(audio, candidates/);
 assert.match(verificationGate, /markTrackPreviewVerified\(track, playable\)/);
@@ -106,5 +110,9 @@ assert.match(source, /if \(trackPreview\?\.dataset\.previewProbing === "true"\) 
 assert.match(source, /previewTrackKey !== currentTrackKey/);
 assert.match(swipeAdvance, /await tryRunValidatedPrimaryRecommendation/);
 assert.match(swipeAdvance, /positive \? "like_validated" : "dislike_validated"/);
+assert.ok(
+  swipeLike.indexOf("await advanceAfterSwipeFeedback") < swipeLike.indexOf("burstConfetti"),
+  "The next playable card must render before non-critical celebration work."
+);
 
 console.log("Playable preview gate tests passed: every instant card requires a canplay-verified audio source and failed previews auto-skip.");

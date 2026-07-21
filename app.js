@@ -52378,8 +52378,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   const nextMessage = appendSwipeLearningMessage(t("swipeLikedNext"));
   registerSpiritSignal(likedTrack.style, 1.25);
   playUiSfx("like");
-  burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
-  showToast(t("toastSongLiked"));
+  const celebrationTarget = triggerEl || swipeTrackCard;
   const followupOptions = {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
@@ -52388,17 +52387,19 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   };
   pendingQuickKnownAdvance = null;
   syncQuickKnownDecision(null);
-  await advanceAfterSwipeFeedback({
+  const advanced = await advanceAfterSwipeFeedback({
     likedTrack,
     message: nextMessage,
     positive: true
   });
+  showToast(t("toastSongLiked"));
   schedulePostBootIdleTask(() => {
+    burstConfetti(celebrationTarget, ["#6effdc", "#7de0ff", "#ffd07d"]);
     registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
     updateStats();
-    void runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, followupOptions).catch(() => {});
+    void runPositiveFeedbackFollowups(celebrationTarget, followupOptions).catch(() => {});
   }, { delayMs: 180, timeoutMs: 5000 });
-  return true;
+  return advanced;
 }
 
 async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
