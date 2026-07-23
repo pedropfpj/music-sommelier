@@ -9555,6 +9555,10 @@ const communityKicker = document.getElementById("communityKicker");
 const communityTitle = document.getElementById("communityTitle");
 const communityIntro = document.getElementById("communityIntro");
 const communityRefreshBtn = document.getElementById("communityRefreshBtn");
+const communityStoryKicker = document.getElementById("communityStoryKicker");
+const communityStoryTitle = document.getElementById("communityStoryTitle");
+const communityStoryText = document.getElementById("communityStoryText");
+const communityStoryCta = document.getElementById("communityStoryCta");
 const communityTopicTabs = document.getElementById("communityTopicTabs");
 const communityComposer = document.getElementById("communityComposer");
 const communityPostTitle = document.getElementById("communityPostTitle");
@@ -23806,6 +23810,10 @@ const I18N = {
     communityTitle: "Conversa de pista",
     communityIntro: "Fale de faixas, DJs, festas, festivais e perguntas da cena.",
     communityRefresh: "Atualizar",
+    communityStoryKicker: "Pergunta para a comunidade",
+    communityStoryTitle: "Qual evento marcou você — pelo melhor ou pelo pior motivo?",
+    communityStoryText: "Conte como foi estar lá: o que surpreendeu, o que funcionou e o que poderia ter sido diferente. Experiências incríveis, frustrantes ou inesperadas são bem-vindas — aqui, todo relato tem espaço quando é compartilhado com respeito.",
+    communityStoryCta: "Compartilhar meu relato",
     communityFilterAll: "Tudo",
     communityFilterTrack: "Faixas",
     communityFilterArtist: "DJs",
@@ -24895,6 +24903,10 @@ const I18N = {
     communityTitle: "Floor talk",
     communityIntro: "Talk tracks, DJs, parties, festivals, and scene questions.",
     communityRefresh: "Refresh",
+    communityStoryKicker: "Question for the community",
+    communityStoryTitle: "Which event stayed with you — for the best or worst reasons?",
+    communityStoryText: "Tell us what it was like to be there: what surprised you, what worked, and what could have been different. Amazing, frustrating, or unexpected experiences are all welcome — every story has a place here when shared with respect.",
+    communityStoryCta: "Share my story",
     communityFilterAll: "All",
     communityFilterTrack: "Tracks",
     communityFilterArtist: "DJs",
@@ -25981,6 +25993,10 @@ const I18N = {
     communityTitle: "Charla de pista",
     communityIntro: "Habla de pistas, DJs, fiestas, festivales y preguntas de la escena.",
     communityRefresh: "Actualizar",
+    communityStoryKicker: "Pregunta para la comunidad",
+    communityStoryTitle: "¿Qué evento te marcó — por el mejor o por el peor motivo?",
+    communityStoryText: "Cuéntanos cómo fue estar allí: qué te sorprendió, qué funcionó y qué podría haber sido diferente. Las experiencias increíbles, frustrantes o inesperadas son bienvenidas — aquí, cada relato tiene su espacio cuando se comparte con respeto.",
+    communityStoryCta: "Compartir mi relato",
     communityFilterAll: "Todo",
     communityFilterTrack: "Pistas",
     communityFilterArtist: "DJs",
@@ -57391,6 +57407,10 @@ function updateCommunityControlsText() {
   if (communityTitle) communityTitle.textContent = t("communityTitle");
   if (communityIntro) communityIntro.textContent = t("communityIntro");
   if (communityRefreshBtn) communityRefreshBtn.textContent = t("communityRefresh");
+  if (communityStoryKicker) communityStoryKicker.textContent = t("communityStoryKicker");
+  if (communityStoryTitle) communityStoryTitle.textContent = t("communityStoryTitle");
+  if (communityStoryText) communityStoryText.textContent = t("communityStoryText");
+  if (communityStoryCta?.firstElementChild) communityStoryCta.firstElementChild.textContent = t("communityStoryCta");
   if (communityPostTitle) communityPostTitle.placeholder = t("communityTitlePlaceholder");
   if (communityPostBody) communityPostBody.placeholder = t("communityBodyPlaceholder");
   if (communityPostMeta) communityPostMeta.placeholder = t("communityMetaPlaceholder");
@@ -62228,6 +62248,17 @@ bind(dailyNewsRefreshBtn, "click", () => {
 });
 bind(communityRefreshBtn, "click", () => {
   void loadCommunityPosts({ silent: false });
+});
+bind(communityStoryCta, "click", () => {
+  communityState.filter = "event";
+  communityState.topic = "event";
+  renderCommunityPanel();
+  void loadCommunityPosts({ silent: true });
+  const participationTarget = communitySignedIn() ? communityPostBody : communityLoginBtn;
+  const participationCard = communityComposer?.closest(".community-composer-card")
+    || communityLoginPrompt?.closest(".community-composer-card");
+  participationCard?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+  window.requestAnimationFrame(() => participationTarget?.focus?.({ preventScroll: true }));
 });
 bind(communityTopicTabs, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
