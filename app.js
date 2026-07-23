@@ -48920,8 +48920,12 @@ async function recordGlobalDiscoveryExposure(track) {
     if (!response.ok) return false;
     const result = await response.json();
     if (!result?.ok) return false;
-    globalTrackExposureCounts.set(trackKey, Math.max(0, Number(result.trackCount) || 0));
-    globalArtistExposureCounts.set(artistKey, Math.max(0, Number(result.artistCount) || 0));
+    if (result.trackCount !== null && result.trackCount !== undefined) {
+      globalTrackExposureCounts.set(trackKey, Math.max(0, Number(result.trackCount) || 0));
+    }
+    if (result.artistCount !== null && result.artistCount !== undefined) {
+      globalArtistExposureCounts.set(artistKey, Math.max(0, Number(result.artistCount) || 0));
+    }
     globalRecentTrackExposureAt.set(trackKey, Date.now());
     return true;
   } catch (_err) {

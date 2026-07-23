@@ -281,6 +281,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery8/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery9/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");

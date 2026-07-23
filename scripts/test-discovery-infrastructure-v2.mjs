@@ -37,6 +37,8 @@ assert.match(exposureApi, /MAX_SNAPSHOT_ITEMS = 48/);
 assert.match(exposureApi, /RECENT_EXPOSURE_TTL_SECONDS = 120/);
 assert.match(exposureApi, /incrementCounter/);
 assert.match(exposureApi, /readMany/);
+assert.match(exposureApi, /recordSupabaseExposure/);
+assert.match(exposureApi, /supabaseExposureSnapshot/);
 
 console.log(
   "Discovery infrastructure v2 tests passed: bounded anonymous history, global exposure rotation, "

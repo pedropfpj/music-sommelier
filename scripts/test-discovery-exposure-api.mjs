@@ -78,4 +78,62 @@ await handler(request({ action: "record", anonymousId: "", trackKey: "x" }), inv
 assert.equal(invalidResponse.statusCode, 400);
 assert.equal(invalidResponse.payload.error, "invalid_anonymous_id");
 
-console.log("Discovery exposure API tests passed: global track/artist counters and snapshots are bounded and anonymous.");
+const originalFetch = globalThis.fetch;
+const originalSupabaseUrl = process.env.SUPABASE_URL;
+const originalSupabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+process.env.SUPABASE_URL = "https://sonic-test.supabase.co";
+process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-key";
+const supabaseCalls = [];
+globalThis.fetch = async (url, options = {}) => {
+  supabaseCalls.push({ url: String(url), method: options.method || "GET" });
+  if (options.method === "POST") return { ok: true };
+  return {
+    ok: true,
+    async json() {
+      return [{
+        created_at: new Date().toISOString(),
+        payload: {
+          track_key: "artist-s::track-s",
+          artist_key: "artist-s"
+        }
+      }];
+    }
+  };
+};
+
+const durableRecordResponse = response();
+await handler(request({
+  action: "record",
+  anonymousId,
+  trackKey: "artist-s::track-s",
+  artistKey: "artist-s"
+}), durableRecordResponse);
+assert.equal(durableRecordResponse.statusCode, 200);
+assert.equal(durableRecordResponse.payload.durable, true);
+assert.equal(durableRecordResponse.payload.store, "supabase");
+assert.equal(durableRecordResponse.payload.trackCount, null);
+
+const durableSnapshotResponse = response();
+await handler(request({
+  action: "snapshot",
+  anonymousId,
+  trackKeys: ["artist-s::track-s"],
+  artistKeys: ["artist-s"]
+}), durableSnapshotResponse);
+assert.equal(durableSnapshotResponse.payload.storeConfigured, true);
+assert.equal(durableSnapshotResponse.payload.store, "supabase");
+assert.equal(durableSnapshotResponse.payload.tracks["artist-s::track-s"], 1);
+assert.equal(durableSnapshotResponse.payload.artists["artist-s"], 1);
+assert(Number(durableSnapshotResponse.payload.recentTracks["artist-s::track-s"]) > 0);
+assert(supabaseCalls.some((call) => call.method === "POST"));
+assert(supabaseCalls.some((call) => call.method === "GET"));
+
+globalThis.fetch = originalFetch;
+if (originalSupabaseUrl === undefined) delete process.env.SUPABASE_URL;
+else process.env.SUPABASE_URL = originalSupabaseUrl;
+if (originalSupabaseServiceKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+else process.env.SUPABASE_SERVICE_ROLE_KEY = originalSupabaseServiceKey;
+
+console.log(
+  "Discovery exposure API tests passed: bounded anonymous counters use Redis, Supabase, or memory fallback."
+);
