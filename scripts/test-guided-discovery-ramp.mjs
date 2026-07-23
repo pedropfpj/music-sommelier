@@ -110,6 +110,7 @@ vm.runInContext(`
   function userHasExtremeTasteIntent() { return false; }
   ${extractFunction("guidedDiscoveryRampStage")}
   ${extractFunction("guidedDiscoveryCurrentStageStyles")}
+  ${extractFunction("guidedDiscoveryPrewarmStyles")}
   ${extractFunction("guidedDiscoveryRecentDeliveries")}
   ${extractFunction("guidedDiscoveryDiversityWindowActive")}
   ${extractFunction("guidedDiscoveryStyleSaturated")}
@@ -127,6 +128,10 @@ assert.equal(context.guidedDiscoveryRampStage(), "opening");
 let deck = Array.from(context.guidedDiscoveryStyleDeck());
 assert(deck.includes("house") && deck.includes("tech_house") && deck.includes("techno"));
 assert.deepEqual(deck, ["tech_house", "house", "techno", "deep_house"]);
+const openingPrewarmStyles = Array.from(context.guidedDiscoveryPrewarmStyles());
+assert(openingPrewarmStyles.includes("progressive_psy"));
+assert(openingPrewarmStyles.includes("dubstep"));
+assert(openingPrewarmStyles.includes("neurofunk"));
 assert.equal(context.guidedDiscoveryStyleAllowed("psycore"), false);
 assert.equal(context.guidedDiscoveryStyleAllowed("neurofunk"), false);
 
@@ -222,6 +227,7 @@ const negativeSwipeSource = extractSection("pickFastNegativeFeedbackTrack", "pre
 const prewarmSource = extractFunction("prewarmSuggestionQueue");
 const refreshQueueSource = extractFunction("refreshSuggestionQueue");
 const guidedWarmQueueSource = extractSection("buildGuidedDiscoveryWarmQueue", "recommendationMetaLine");
+const guidedPrewarmStylesSource = extractFunction("guidedDiscoveryPrewarmStyles");
 const validatedSource = extractSection("tryRunValidatedPrimaryRecommendation", "runInitialRecommendation");
 const advanceSource = extractSection("advanceAfterSwipeFeedback", "likeCurrentTrackFromSwipe");
 const previewResolverSource = extractSection("resolvePreviewForTrack", "renderPreview");
@@ -242,11 +248,17 @@ assert.match(negativeSwipeSource, /allowSeenArtist/);
 assert.match(prewarmSource, /refreshablePreviewScheduled/);
 assert.match(prewarmSource, /trackHasReliableAudioPreview\(track\) && !track\.previewMissing/);
 assert.doesNotMatch(prewarmSource, /trackHasReliableAudioPreview\(track\) && track\.previewChecked/);
+assert.match(prewarmSource, /prewarmedSwipeAudioByTrack\.delete\(trackKey\)/);
+assert.match(prewarmSource, /prewarmedSwipeAudioByTrack\.set\(trackKey, existingAudio\)/);
 assert.match(refreshQueueSource, /style:\s*""/);
 assert.match(refreshQueueSource, /buildGuidedDiscoveryWarmQueue/);
 assert.match(guidedWarmQueueSource, /guidedDiscoveryPrewarmStyles/);
 assert.match(guidedWarmQueueSource, /trackHasFastListenRoute/);
 assert.match(guidedWarmQueueSource, /trackHasPlayablePreviewExperience/);
+assert.match(guidedPrewarmStylesSource, /GUIDED_PSY_BRIDGE_STYLE_DECK\[0\]/);
+assert.match(guidedPrewarmStylesSource, /GUIDED_DNB_BRIDGE_STYLE_DECK\[0\]/);
+assert.match(guidedPrewarmStylesSource, /GUIDED_WIDE_STYLE_DECK\[0\]/);
+assert.doesNotMatch(guidedPrewarmStylesSource, /uniqueSwipeStyleList/);
 assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Skream"[\s\S]*?previewUrl:/);
 assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Benga & Coki"[\s\S]*?previewUrl:/);
 assert.match(validatedSource, /trackHasVerifiedPlaybackRoute/);
@@ -257,6 +269,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery3/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery4/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");

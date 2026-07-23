@@ -49153,6 +49153,11 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
 
 function guidedDiscoveryPrewarmStyles() {
   const stage = guidedDiscoveryRampStage();
+  const milestoneStyles = [
+    GUIDED_PSY_BRIDGE_STYLE_DECK[0],
+    GUIDED_DNB_BRIDGE_STYLE_DECK[0],
+    GUIDED_WIDE_STYLE_DECK[0]
+  ];
   const upcoming = stage === "opening"
     ? GUIDED_PSY_BRIDGE_STYLE_DECK
     : stage === "psy_bridge"
@@ -49160,11 +49165,19 @@ function guidedDiscoveryPrewarmStyles() {
       : stage === "dnb_bridge"
         ? GUIDED_WIDE_STYLE_DECK
         : [];
-  return uniqueSwipeStyleList([
+  const seen = new Set();
+  return [
     ...guidedDiscoveryCurrentStageStyles(),
+    ...milestoneStyles,
     ...upcoming,
     ...guidedDiscoveryStyleDeck()
-  ]);
+  ]
+    .map((style) => selectableSwipeStyle(style))
+    .filter((style) => {
+      if (!style || seen.has(style)) return false;
+      seen.add(style);
+      return true;
+    });
 }
 
 function buildGuidedDiscoveryWarmQueue(prefs = {}, anchorTrack = null, fallbackQueue = []) {
@@ -50347,7 +50360,13 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
     const warmResolvedPreview = () => {
       const trackKey = recommendationTrackKey(track);
       const previewUrl = previewCandidatesForTrack(track)[0] || "";
-      if (!trackKey || !previewUrl || typeof Audio !== "function" || prewarmedSwipeAudioByTrack.has(trackKey)) return;
+      if (!trackKey || !previewUrl || typeof Audio !== "function") return;
+      if (prewarmedSwipeAudioByTrack.has(trackKey)) {
+        const existingAudio = prewarmedSwipeAudioByTrack.get(trackKey);
+        prewarmedSwipeAudioByTrack.delete(trackKey);
+        prewarmedSwipeAudioByTrack.set(trackKey, existingAudio);
+        return;
+      }
       const audio = new Audio();
       audio.preload = "auto";
       const markReady = () => markTrackPreviewVerified(track, previewUrl);
