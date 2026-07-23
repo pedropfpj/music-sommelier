@@ -221,6 +221,7 @@ const instantSwipeSource = extractSection("pickInstantSwipeTrack", "presentInsta
 const negativeSwipeSource = extractSection("pickFastNegativeFeedbackTrack", "presentFastNegativeFeedbackRecommendation");
 const prewarmSource = extractFunction("prewarmSuggestionQueue");
 const refreshQueueSource = extractFunction("refreshSuggestionQueue");
+const guidedWarmQueueSource = extractSection("buildGuidedDiscoveryWarmQueue", "recommendationMetaLine");
 const validatedSource = extractSection("tryRunValidatedPrimaryRecommendation", "runInitialRecommendation");
 const advanceSource = extractSection("advanceAfterSwipeFeedback", "likeCurrentTrackFromSwipe");
 const previewResolverSource = extractSection("resolvePreviewForTrack", "renderPreview");
@@ -240,7 +241,12 @@ assert.match(instantSwipeSource, /requireReliableBpm/);
 assert.match(negativeSwipeSource, /allowSeenArtist/);
 assert.match(prewarmSource, /refreshablePreviewScheduled/);
 assert.match(refreshQueueSource, /style:\s*""/);
-assert.match(refreshQueueSource, /rankGuidedDiscoveryStyles/);
+assert.match(refreshQueueSource, /buildGuidedDiscoveryWarmQueue/);
+assert.match(guidedWarmQueueSource, /guidedDiscoveryPrewarmStyles/);
+assert.match(guidedWarmQueueSource, /trackHasFastListenRoute/);
+assert.match(guidedWarmQueueSource, /trackHasPlayablePreviewExperience/);
+assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Skream"[\s\S]*?previewUrl:/);
+assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Benga & Coki"[\s\S]*?previewUrl:/);
 assert.match(validatedSource, /trackHasVerifiedPlaybackRoute/);
 assert.doesNotMatch(validatedSource, /requireVerified:\s*false/);
 assert.match(advanceSource, /pickInstantPrimaryNextTrack\(likedTrack,\s*""\)/);
@@ -249,6 +255,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery1/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery2/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");

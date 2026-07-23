@@ -8798,6 +8798,8 @@ const FAST_PLAYABLE_STARTERS = [
   { style: "progressive_psy", artist: "Astrix", song: "Deep Jungle Walk", label: "HOMmega", bpmExact: 138, durationSec: 556, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5c/79/3b/5c793b54-c627-cba4-5a0a-50c3e59fde48/mzaf_5288025958588413772.plus.aac.p.m4a" },
   { style: "progressive_psy", artist: "Ace Ventura & Symbolic", song: "The World That You Know", label: "Iboga Records", bpmExact: 138, durationSec: 501, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/43/15/e4/4315e491-a2ff-27ed-76bb-95230a0bcd45/mzaf_8189740808563572514.plus.aac.p.m4a" },
   { style: "progressive_psy", artist: "Captain Hook", song: "Origin", label: "Iboga Records", bpmExact: 138, durationSec: 610, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/37/55/d8/3755d840-f825-b186-532b-68b308bed2cc/mzaf_3276670025941160569.plus.aac.p.m4a" },
+  { style: "dubstep", artist: "Skream", song: "Midnight Request Line", label: "Tempa", bpmExact: 140, durationSec: 304, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/52/6a/8f/526a8f33-b381-cf50-02f7-b6a36e700f81/mzaf_1577837983957886350.plus.aac.p.m4a" },
+  { style: "dubstep", artist: "Benga & Coki", song: "Night", label: "Tempa", bpmExact: 140, durationSec: 356, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/51/a9/6d51a98c-aac0-6cbe-c3be-bb62cd9790c4/mzaf_1997875170034130576.plus.aac.p.m4a" },
   { style: "liquid_dnb", artist: "Calibre & High Contrast", song: "Mr Majestic", label: "Signature", bpmExact: 174, durationSec: 321, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/7e/39/65/7e39654e-1b35-a446-9dbc-68de28609c26/mzaf_4064807290906212021.plus.aac.p.m4a" },
   { style: "liquid_dnb", artist: "Logistics", song: "Together", label: "Hospital Records", bpmExact: 174, durationSec: 357, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e7/9e/66/e79e6632-58d2-0c70-b02c-20d665d85d4b/mzaf_286908375292661363.plus.aac.p.m4a" },
   { style: "liquid_dnb", artist: "Hybrid Minds & Catching Cairo", song: "Touch", label: "Hybrid Music", bpmExact: 174, durationSec: 314, previewUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0e/34/c1/0e34c105-5a6f-b673-29c2-a234e1077a8d/mzaf_18424083741722621206.plus.aac.p.m4a" },
@@ -49149,6 +49151,85 @@ function buildSuggestionQueueFromPrefs(prefs = {}, anchorTrack = null) {
   return queue.slice(0, SUGGESTION_QUEUE_TARGET);
 }
 
+function guidedDiscoveryPrewarmStyles() {
+  const stage = guidedDiscoveryRampStage();
+  const upcoming = stage === "opening"
+    ? GUIDED_PSY_BRIDGE_STYLE_DECK
+    : stage === "psy_bridge"
+      ? GUIDED_DNB_BRIDGE_STYLE_DECK
+      : stage === "dnb_bridge"
+        ? GUIDED_WIDE_STYLE_DECK
+        : [];
+  return uniqueSwipeStyleList([
+    ...guidedDiscoveryCurrentStageStyles(),
+    ...upcoming,
+    ...guidedDiscoveryStyleDeck()
+  ]);
+}
+
+function buildGuidedDiscoveryWarmQueue(prefs = {}, anchorTrack = null, fallbackQueue = []) {
+  const normalizedPrefs = normalizeRecommendationPrefs({
+    ...prefs,
+    style: "",
+    bpm: ""
+  });
+  const anchorKey = recommendationTrackKey(anchorTrack);
+  const queue = [];
+  const queuedTrackKeys = new Set();
+  const queuedArtistKeys = new Set();
+  const visitSeed = `${currentCurationUserSeed()}::${currentCurationVisitId()}::${curationOpenSeed}`;
+  const maybeAdd = (track) => {
+    const trackKey = recommendationTrackKey(track);
+    const artistKey = artistMatchKey(track?.artist || "");
+    if (!trackKey || !artistKey || trackKey === anchorKey) return false;
+    if (queuedTrackKeys.has(trackKey) || queuedArtistKeys.has(artistKey)) return false;
+    if (!isTrackEligibleForRecommendation(track) || !trackHasFastListenRoute(track)) return false;
+    if (!trackHasPlayablePreviewExperience(track)) return false;
+    if (!guidedDiscoveryTrackPreservesDiversity(track)) return false;
+    if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+    if (trackBlockedByKnownSignals(track)) return false;
+    queuedTrackKeys.add(trackKey);
+    queuedArtistKeys.add(artistKey);
+    queue.push(track);
+    return true;
+  };
+
+  const deferredByStyle = [];
+  guidedDiscoveryPrewarmStyles().forEach((style) => {
+    const stylePrefs = normalizeRecommendationPrefs({
+      ...normalizedPrefs,
+      style
+    });
+    const candidates = catalogTracksForStyle(style)
+      .filter((track) => (
+        isTrackEligibleForRecommendation(track) &&
+        trackHasFastListenRoute(track) &&
+        trackHasPlayablePreviewExperience(track) &&
+        !artistSetHasMatch(seenArtistsMemory, track.artist) &&
+        !trackBlockedByKnownSignals(track)
+      ))
+      .map((track) => ({
+        track,
+        score:
+          Number(trackHasReliableAudioPreview(track)) * 8 +
+          recommendationScore(track, stylePrefs) * 0.08 +
+          hashUnit(`${visitSeed}::guided-prewarm::${style}::${recommendationTrackKey(track)}`) * 4
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((entry) => entry.track);
+    if (candidates[0]) maybeAdd(candidates[0]);
+    if (candidates.length > 1) deferredByStyle.push(...candidates.slice(1, 3));
+  });
+
+  deferredByStyle.forEach((track) => {
+    if (queue.length < SUGGESTION_QUEUE_TARGET) maybeAdd(track);
+  });
+  (Array.isArray(fallbackQueue) ? fallbackQueue : []).forEach((track) => {
+    if (queue.length < SUGGESTION_QUEUE_TARGET) maybeAdd(track);
+  });
+  return queue.slice(0, SUGGESTION_QUEUE_TARGET);
+}
+
 function recommendationMetaLine(track) {
   const bpmData = resolveBpmDisplay(track);
   const bpmText = bpmData.reasonText || bpmData.lineText;
@@ -50238,16 +50319,11 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
     : prefs;
   suggestionQueueTracks = buildSuggestionQueueFromPrefs(queuePrefs, anchorTrack);
   if (guidedQueue) {
-    const rankedStyles = rankGuidedDiscoveryStyles(
-      guidedDiscoveryStyleDeck(),
-      anchorTrack?.style || ""
+    suggestionQueueTracks = buildGuidedDiscoveryWarmQueue(
+      queuePrefs,
+      anchorTrack,
+      suggestionQueueTracks
     );
-    const styleRank = new Map(rankedStyles.map((style, index) => [style, index]));
-    suggestionQueueTracks.sort((a, b) => (
-      Number(styleRank.get(selectableSwipeStyle(a?.style || "")) ?? rankedStyles.length) -
-        Number(styleRank.get(selectableSwipeStyle(b?.style || "")) ?? rankedStyles.length) ||
-      Number(trackHasVerifiedPlaybackRoute(b)) - Number(trackHasVerifiedPlaybackRoute(a))
-    ));
   }
   suggestionQueueContextKey = recommendationContextKey(prefs);
   renderSuggestionQueue(prefs);
