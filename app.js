@@ -9930,6 +9930,8 @@ let recentDjRecommendationKeys = [];
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
+let preparedPlayableQueue = [];
+let preparedPlayableQueueToken = 0;
 const prewarmedSwipeAudioByTrack = new Map();
 const prewarmedSwipeTrackKeys = new Set();
 let swipeUserAnchoredStyle = "";
@@ -9941,6 +9943,7 @@ const curationOpenSeed = createRuntimeCurationSeed();
 let swipeStyleRailExpanded = false;
 let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
+const PREPARED_PLAYABLE_QUEUE_TARGET = 3;
 const SWIPE_STYLE_RAIL_COMPACT_LIMIT = 24;
 const SWIPE_DISCOVERY_STYLE_DECK = [
   "deep_house",
@@ -10067,6 +10070,9 @@ const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
 let externalDatasetImportPromise = null;
+let discoveryPlayableInventoryPromise = null;
+let discoveryPlayableInventoryReady = false;
+let discoveryInventoryMaintenanceTimer = 0;
 let catalogExtraImportDoneAll = false;
 let catalogExtraImportPromises = new Map();
 let catalogExtraImportedStyles = new Set();
@@ -10378,6 +10384,9 @@ const LANGUAGE_STORAGE_KEY = "neonpulse:language:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 const ANONYMOUS_EXPOSURE_STORAGE_KEY = "neonpulse:anonymousExposure:v1";
+const PREVIEW_HEALTH_STORAGE_KEY = "neonpulse:previewHealth:v1";
+const DISCOVERY_EXPOSURE_ENDPOINT = "/api/discovery-exposure";
+const DISCOVERY_PLAYABLE_INVENTORY_PATH = "data/discovery_playable_inventory_v1.json";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
@@ -11208,7 +11217,7 @@ const GUIDED_PSY_UNLOCK_CARDS = 4;
 const GUIDED_DNB_UNLOCK_CARDS = 7;
 const GUIDED_WIDE_UNLOCK_CARDS = 10;
 const GUIDED_CATALOG_UNLOCK_CARDS = 15;
-const GUIDED_DIVERSITY_WINDOW_CARDS = 15;
+const GUIDED_DIVERSITY_WINDOW_CARDS = 20;
 
 function guidedDiscoveryRampActive() {
   if (explicitSwipeAnchorStyle()) return false;
@@ -17840,6 +17849,89 @@ function hydrateFastPlayableStarters() {
   return hydrated;
 }
 
+async function hydrateDiscoveryPlayableInventory() {
+  if (discoveryPlayableInventoryReady) return { imported: 0, ready: true };
+  if (discoveryPlayableInventoryPromise) return discoveryPlayableInventoryPromise;
+
+  discoveryPlayableInventoryPromise = (async () => {
+    const response = await fetchWithTimeout(
+      `${DISCOVERY_PLAYABLE_INVENTORY_PATH}?v=20260723-preview-inventory-1`,
+      { cache: "force-cache" },
+      2400
+    );
+    if (!response.ok) return { imported: 0, ready: false };
+    const payload = await response.json();
+    const rows = Array.isArray(payload?.tracks) ? payload.tracks : [];
+    const existingKeys = new Set(catalog.map((track) => recommendationTrackKey(track)));
+    let imported = 0;
+
+    rows.forEach((row) => {
+      const style = normalizeDatasetStyle(row?.style || "");
+      const artist = String(row?.artist || "").trim();
+      const song = String(row?.song || "").trim();
+      if (!style || !artist || !song || !STYLE_BPM_RULES[style]) return;
+      const rawBpm = Number(row.bpmExact) || 0;
+      const verifiedBpm = rawBpm && bpmFitsStyle(style, rawBpm) ? rawBpm : 0;
+      const trackKey = normalize(`${artist}::${song}`);
+      const existing = catalog.find((track) => recommendationTrackKey(track) === trackKey);
+      if (existing) {
+        const previewUrl = normalizePreviewUrl(row.previewUrl || "");
+        if (previewUrl) registerPreviewCandidate(existing, previewUrl);
+        (Array.isArray(row.previewCandidates) ? row.previewCandidates : [])
+          .forEach((candidate) => registerPreviewCandidate(existing, candidate));
+        existing.deezerTrackId = row.deezerTrackId || existing.deezerTrackId;
+        existing.appleTrackId = row.appleTrackId || existing.appleTrackId;
+        existing.appleTrackUrl = row.appleTrackUrl || existing.appleTrackUrl;
+        existing.previewProvider = row.previewProvider || existing.previewProvider;
+        existing.bpmExact = verifiedBpm || existing.bpmExact;
+        existing.durationSec = Number(row.durationSec) || existing.durationSec;
+        existing.existenceVerified = true;
+        existing.catalogConfidence = "1";
+        imported += 1;
+        return;
+      }
+
+      const added = addDynamicTrackToCatalog({
+        style,
+        artist,
+        song,
+        label: row.label || "Catálogo verificado",
+        bpmExact: verifiedBpm,
+        durationSec: Number(row.durationSec) || 0,
+        previewUrl: row.previewUrl || "",
+        previewCandidates: Array.isArray(row.previewCandidates) ? row.previewCandidates : [],
+        deezerTrackId: row.deezerTrackId || "",
+        appleTrackId: row.appleTrackId || "",
+        appleTrackUrl: row.appleTrackUrl || "",
+        previewProvider: row.previewProvider || "",
+        existenceVerified: true,
+        catalogConfidence: "1",
+        source: "curated_discovery_playable_inventory_v1",
+        sourceType: "verified_preview_inventory",
+        sourceTags: [style, "playable_inventory", row.previewProvider || "verified"]
+      }, existingKeys);
+      if (added) imported += 1;
+    });
+
+    if (imported) {
+      dedupeCatalogByTrackKey();
+      catalogIndexLength = -1;
+      catalogTracksByStyle = new Map();
+    }
+    discoveryPlayableInventoryReady = true;
+    return {
+      imported,
+      ready: true,
+      counts: payload?.counts || {}
+    };
+  })()
+    .catch(() => ({ imported: 0, ready: false }))
+    .finally(() => {
+      if (!discoveryPlayableInventoryReady) discoveryPlayableInventoryPromise = null;
+    });
+  return discoveryPlayableInventoryPromise;
+}
+
 async function hydrateExternalDatasetPackInBackground() {
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
 
@@ -18540,6 +18632,61 @@ function normalizePreviewUrl(value = "") {
   }
 }
 
+function readPreviewHealthInventory() {
+  if (previewHealthCache && typeof previewHealthCache === "object") return previewHealthCache;
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PREVIEW_HEALTH_STORAGE_KEY) || "{}");
+    previewHealthCache = parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch (_err) {
+    previewHealthCache = {};
+  }
+  return previewHealthCache;
+}
+
+function persistPreviewHealthInventory() {
+  if (previewHealthSaveTimer) window.clearTimeout(previewHealthSaveTimer);
+  previewHealthSaveTimer = window.setTimeout(() => {
+    previewHealthSaveTimer = 0;
+    try {
+      const inventory = readPreviewHealthInventory();
+      const entries = Object.entries(inventory)
+        .sort((left, right) => Number(right[1]?.checkedAt || 0) - Number(left[1]?.checkedAt || 0))
+        .slice(0, 600);
+      previewHealthCache = Object.fromEntries(entries);
+      localStorage.setItem(PREVIEW_HEALTH_STORAGE_KEY, JSON.stringify(previewHealthCache));
+    } catch (_err) {
+      // The active tab still keeps the health cache when storage is unavailable.
+    }
+  }, 140);
+}
+
+function rememberPreviewHealth(track, previewUrl = "", playable = false, reason = "") {
+  const trackKey = recommendationTrackKey(track);
+  if (!trackKey) return;
+  const inventory = readPreviewHealthInventory();
+  const previous = inventory[trackKey] || {};
+  const checkedAt = Date.now();
+  inventory[trackKey] = {
+    checkedAt,
+    lastPlayableAt: playable ? checkedAt : Number(previous.lastPlayableAt) || 0,
+    lastFailureAt: playable ? Number(previous.lastFailureAt) || 0 : checkedAt,
+    previewUrl: playable ? normalizePreviewUrl(previewUrl) : "",
+    provider: String(track?.previewProvider || track?.previewSource || previous.provider || "").slice(0, 48),
+    reason: String(reason || (playable ? "playable" : "unavailable")).slice(0, 48)
+  };
+  previewHealthCache = inventory;
+  persistPreviewHealthInventory();
+}
+
+function previewHealthCheckDue(track, maxAgeMs = 12 * 60 * 60 * 1000) {
+  const trackKey = recommendationTrackKey(track);
+  if (!trackKey) return true;
+  const entry = readPreviewHealthInventory()[trackKey];
+  return !entry?.checkedAt || Date.now() - Number(entry.checkedAt) > Math.max(60000, Number(maxAgeMs) || 0);
+}
+
 function registerPreviewCandidate(track, previewUrl = "") {
   if (!track) return;
   const normalized = normalizePreviewUrl(previewUrl);
@@ -18963,6 +19110,7 @@ function markTrackPreviewVerified(track, previewUrl = "") {
   track.previewChecked = true;
   track.previewMissing = false;
   prewarmedSwipeTrackKeys.add(trackKey);
+  rememberPreviewHealth(track, normalized, true, "audio_probe");
   return true;
 }
 
@@ -18974,6 +19122,7 @@ function clearTrackPreviewVerification(track, previewUrl = "") {
     track.previewVerifiedUrl = "";
     const trackKey = recommendationTrackKey(track);
     if (trackKey) prewarmedSwipeTrackKeys.delete(trackKey);
+    rememberPreviewHealth(track, failed || verified, false, "audio_probe_failed");
   }
 }
 
@@ -19140,6 +19289,68 @@ function prewarmOpeningPreviewGate({ perStyle = 2, styleLimit = 3 } = {}) {
   ).then((results) => results.filter((result) => result.status === "fulfilled" && result.value).length)
     .catch(() => 0);
   return openingPreviewPrewarmPromise;
+}
+
+async function refreshDiscoveryInventoryHealthBatch({ limit = 6 } = {}) {
+  if (typeof Audio !== "function" || swipeInteractionActive()) return 0;
+  const prioritizedStyles = uniqueSwipeStyleList([
+    ...guidedDiscoveryPrewarmStyles(),
+    ...GUIDED_OPENING_STYLE_DECK,
+    ...GUIDED_DNB_BRIDGE_STYLE_DECK,
+    ...GUIDED_WIDE_STYLE_DECK
+  ]);
+  const candidates = prioritizedStyles
+    .flatMap((style) => catalogTracksForStyle(style))
+    .filter((track) => (
+      track &&
+      isTrackEligibleForRecommendation(track) &&
+      trackHasFastListenRoute(track) &&
+      previewHealthCheckDue(track)
+    ))
+    .sort((left, right) => {
+      const leftEntry = readPreviewHealthInventory()[recommendationTrackKey(left)] || {};
+      const rightEntry = readPreviewHealthInventory()[recommendationTrackKey(right)] || {};
+      return (
+        Number(leftEntry.checkedAt || 0) - Number(rightEntry.checkedAt || 0) ||
+        Number(trackHasReliableAudioPreview(right)) - Number(trackHasReliableAudioPreview(left))
+      );
+    })
+    .slice(0, Math.max(1, Number(limit) || 6));
+  if (!candidates.length) return 0;
+
+  const results = await Promise.allSettled(
+    candidates.map((track) => ensureTrackHasVerifiedPlaybackRoute(track, {
+      forceLookup: !previewCandidatesForTrack(track).length,
+      timeoutMs: 1500,
+      maxCandidates: 2,
+      resolveTimeoutMs: 1500
+    }))
+  );
+  return results.filter((result) => result.status === "fulfilled" && result.value).length;
+}
+
+function scheduleDiscoveryInventoryMaintenance(delayMs = 45000) {
+  window.clearTimeout(discoveryInventoryMaintenanceTimer);
+  discoveryInventoryMaintenanceTimer = window.setTimeout(() => {
+    const run = async () => {
+      if (
+        recommendationRunBusy ||
+        swipeFeedbackBusy ||
+        swipeInteractionActive() ||
+        (searchOverlay && !searchOverlay.classList.contains("hidden"))
+      ) {
+        scheduleDiscoveryInventoryMaintenance(30000);
+        return;
+      }
+      await refreshDiscoveryInventoryHealthBatch({ limit: 6 }).catch(() => 0);
+      scheduleDiscoveryInventoryMaintenance(6 * 60 * 1000);
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(() => void run(), { timeout: 2200 });
+    } else {
+      void run();
+    }
+  }, Math.max(1000, Number(delayMs) || 45000));
 }
 
 function isLikelyCompilationEntry({ song = "", artist = "", label = "", durationSec = 0 } = {}) {
@@ -19897,6 +20108,13 @@ function isDynamicSource(source) {
     compactSource.includes("soundcloudapi") ||
     compactSource.includes("soundclouddynamic")
   );
+}
+
+function isVerifiedDiscoveryInventoryTrack(trackOrSource = "") {
+  const source = typeof trackOrSource === "string"
+    ? trackOrSource
+    : trackOrSource?.source;
+  return source === "curated_discovery_playable_inventory_v1";
 }
 
 function isTrustedSlambientCatalogTrack(track) {
@@ -22596,6 +22814,11 @@ function addDynamicTrackToCatalog({
   youtubeUrl = "",
   youtubeTrackUrl = "",
   deezerTrackId = "",
+  appleTrackId = "",
+  appleTrackUrl = "",
+  previewCandidates = [],
+  previewProvider = "",
+  existenceVerified = false,
   catalogMetadata = null,
   sourceTags = [],
   albumKeywords = [],
@@ -22653,14 +22876,20 @@ function addDynamicTrackToCatalog({
   if (existingKeys.has(key)) return false;
 
   const bpmNumber = Number(bpmExact) || 0;
-  if (requiresExactBpmForDynamic(style, source) && !bpmNumber) return false;
+  const verifiedInventorySource = isVerifiedDiscoveryInventoryTrack(source);
+  if (!verifiedInventorySource && requiresExactBpmForDynamic(style, source) && !bpmNumber) return false;
   if (bpmNumber && !bpmFitsStyle(style, bpmNumber)) return false;
   const fineStyleNeedsVerifiedTrack = dynamicFineStyleNeedsVerifiedTrack(style, source);
-  if (fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
+  if (!verifiedInventorySource && fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
 
   const fallbackBpm = Math.round((STYLE_BPM_RULES[style]?.min + STYLE_BPM_RULES[style]?.max || 130) / 2);
   const duration = Number(durationSec) || 0;
   const normalizedPreview = normalizePreviewUrl(previewUrl);
+  const normalizedPreviewCandidates = Array.from(new Set(
+    [normalizedPreview, ...(Array.isArray(previewCandidates) ? previewCandidates : [])]
+      .map((candidate) => normalizePreviewUrl(candidate))
+      .filter(Boolean)
+  ));
   const safeSpotifyUrl = String(spotifyUrl || "").trim();
   const safeSpotifyTrackUrl = String(spotifyTrackUrl || "").trim();
   const safeYoutubeUrl = String(youtubeUrl || "").trim();
@@ -22709,16 +22938,19 @@ function addDynamicTrackToCatalog({
     bandcampTrackUrl: safeBandcampTrackUrl,
     bandcampTrackId: safeBandcampTrackId,
     deezerTrackId: safeDeezerTrackId,
+    appleTrackId: String(appleTrackId || "").trim(),
+    appleTrackUrl: String(appleTrackUrl || "").trim(),
     beatportUrl: `https://www.beatport.com/search?q=${encodeURIComponent(`${artistName} ${songName}`)}`,
     youtubeTrackUrl: safeYoutubeTrackUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(`"${songName}" "${artistName}"`)}`,
     deezerTrackId: safeDeezerTrackId,
     previewUrl: normalizedPreview,
-    previewCandidates: normalizedPreview ? [normalizedPreview] : [],
+    previewCandidates: normalizedPreviewCandidates,
+    previewProvider: String(previewProvider || "").trim(),
     spotifyVerified: Boolean(safeSpotifyTrackUrl),
     youtubeVerified: hasDirectYoutube,
     soundcloudVerified: hasDirectSoundcloud,
     bandcampVerified: hasBandcampPreview,
-    existenceVerified: (normalizedPreview || hasPlayableFallback || hasRefreshablePreview) ? true : undefined,
+    existenceVerified: existenceVerified || normalizedPreview || hasPlayableFallback || hasRefreshablePreview ? true : undefined,
     previewChecked: Boolean(normalizedPreview),
     previewMissing: !normalizedPreview && !hasPlayableFallback && !hasRefreshablePreview,
     previewLookupAttempted: Boolean(normalizedPreview || hasPlayableFallback || hasRefreshablePreview),
@@ -29758,6 +29990,8 @@ function resetSessionStateInMemory() {
   quizNextOfferCountByStyle = new Map();
   suggestionQueueTracks = [];
   suggestionQueueContextKey = "";
+  preparedPlayableQueue = [];
+  preparedPlayableQueueToken += 1;
   trackInsightCache = new Map();
   currentTrackInsightTrackKey = "";
   styleInfoDismissed = false;
@@ -48450,23 +48684,75 @@ function createRuntimeCurationSeed() {
 }
 
 let anonymousExposureCache = null;
+let previewHealthCache = null;
+let previewHealthSaveTimer = 0;
+let globalTrackExposureCounts = new Map();
+let globalArtistExposureCounts = new Map();
+let globalRecentTrackExposureAt = new Map();
+let globalExposureSnapshotPromise = null;
+let globalExposureSnapshotAt = 0;
 
 function anonymousDiscoverySession() {
   const mode = normalizeUserSession(currentAuthUser).mode;
   return mode === "guest" || mode === "visitor" || mode === "test";
 }
 
-function readAnonymousExposureHistory() {
-  if (Array.isArray(anonymousExposureCache)) return anonymousExposureCache;
+function emptyAnonymousExposureLedger() {
+  return {
+    version: 2,
+    tracks: [],
+    artists: []
+  };
+}
+
+function readAnonymousExposureLedger() {
+  if (anonymousExposureCache?.version === 2) return anonymousExposureCache;
   try {
     const parsed = JSON.parse(localStorage.getItem(ANONYMOUS_EXPOSURE_STORAGE_KEY) || "[]");
-    anonymousExposureCache = Array.isArray(parsed)
-      ? parsed.slice(-160).filter((entry) => entry?.trackKey || entry?.artistKey)
-      : [];
+    if (parsed?.version === 2) {
+      anonymousExposureCache = {
+        version: 2,
+        tracks: Array.isArray(parsed.tracks)
+          ? parsed.tracks.slice(-50).filter((entry) => entry?.trackKey)
+          : [],
+        artists: Array.isArray(parsed.artists)
+          ? parsed.artists.slice(-20).filter((entry) => entry?.artistKey)
+          : []
+      };
+    } else if (Array.isArray(parsed)) {
+      anonymousExposureCache = {
+        version: 2,
+        tracks: parsed
+          .filter((entry) => entry?.trackKey)
+          .slice(-50)
+          .map((entry) => ({
+            trackKey: entry.trackKey,
+            artistKey: entry.artistKey || "",
+            at: Number(entry.at) || 0
+          })),
+        artists: parsed
+          .filter((entry) => entry?.artistKey)
+          .slice(-20)
+          .map((entry) => ({
+            artistKey: entry.artistKey,
+            at: Number(entry.at) || 0
+          }))
+      };
+    } else {
+      anonymousExposureCache = emptyAnonymousExposureLedger();
+    }
   } catch (_err) {
-    anonymousExposureCache = [];
+    anonymousExposureCache = emptyAnonymousExposureLedger();
   }
   return anonymousExposureCache;
+}
+
+function persistAnonymousExposureLedger() {
+  try {
+    localStorage.setItem(ANONYMOUS_EXPOSURE_STORAGE_KEY, JSON.stringify(readAnonymousExposureLedger()));
+  } catch (_err) {
+    // Private browsing still keeps the in-memory windows for the active tab.
+  }
 }
 
 function rememberAnonymousExposure(track) {
@@ -48474,32 +48760,66 @@ function rememberAnonymousExposure(track) {
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
   if (!trackKey && !artistKey) return;
-  const history = readAnonymousExposureHistory();
-  history.push({ trackKey, artistKey, at: Date.now() });
-  anonymousExposureCache = history.slice(-160);
-  try {
-    localStorage.setItem(ANONYMOUS_EXPOSURE_STORAGE_KEY, JSON.stringify(anonymousExposureCache));
-  } catch (_err) {
-    // In private browsing the in-memory ledger still protects the active session.
+  const ledger = readAnonymousExposureLedger();
+  const at = Date.now();
+  if (trackKey) {
+    ledger.tracks = [
+      ...ledger.tracks.filter((entry) => entry.trackKey !== trackKey),
+      { trackKey, artistKey, at }
+    ].slice(-50);
   }
+  if (artistKey) {
+    ledger.artists = [
+      ...ledger.artists.filter((entry) => entry.artistKey !== artistKey),
+      { artistKey, at }
+    ].slice(-20);
+  }
+  anonymousExposureCache = ledger;
+  persistAnonymousExposureLedger();
+  void recordGlobalDiscoveryExposure(track);
+}
+
+function globalExposurePenalty(track) {
+  if (!track || !anonymousDiscoverySession()) return 0;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  const trackCount = Math.max(0, Number(globalTrackExposureCounts.get(trackKey) || 0));
+  const artistCount = Math.max(0, Number(globalArtistExposureCounts.get(artistKey) || 0));
+  const recentAt = Math.max(0, Number(globalRecentTrackExposureAt.get(trackKey) || 0));
+  const recentAgeMs = recentAt ? Math.max(0, Date.now() - recentAt) : Infinity;
+  const recentPenalty = recentAgeMs < 120000
+    ? 36 * (1 - recentAgeMs / 120000)
+    : 0;
+  if (!trackCount && !artistCount && !recentPenalty) return 0;
+  return Math.min(
+    82,
+    Math.log2(trackCount + 1) * 13 +
+      Math.log2(artistCount + 1) * 4.5 +
+      recentPenalty
+  );
 }
 
 function anonymousExposurePenalty(track) {
   if (!track || !anonymousDiscoverySession()) return 0;
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
-  const recent = readAnonymousExposureHistory().slice(-80);
-  if (!recent.length) return 0;
+  const ledger = readAnonymousExposureLedger();
+  const recentTracks = ledger.tracks.slice(-50);
+  const recentArtists = ledger.artists.slice(-20);
+  if (!recentTracks.length && !recentArtists.length) return globalExposurePenalty(track);
   let trackCount = 0;
   let artistCount = 0;
   let trackRecentRank = Infinity;
   let artistRecentRank = Infinity;
-  for (let index = recent.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
-    const entry = recent[index] || {};
+  for (let index = recentTracks.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
+    const entry = recentTracks[index] || {};
     if (trackKey && entry.trackKey === trackKey) {
       trackCount += 1;
       trackRecentRank = Math.min(trackRecentRank, rank);
     }
+  }
+  for (let index = recentArtists.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
+    const entry = recentArtists[index] || {};
     if (artistKey && entry.artistKey === artistKey) {
       artistCount += 1;
       artistRecentRank = Math.min(artistRecentRank, rank);
@@ -48510,7 +48830,103 @@ function anonymousExposurePenalty(track) {
   else if (trackRecentRank < 48) penalty += 28;
   if (artistRecentRank < 8) penalty += 20;
   else if (artistRecentRank < 18) penalty += 9;
-  return penalty;
+  return penalty + globalExposurePenalty(track);
+}
+
+function discoveryExposureCandidatePayload(tracks = []) {
+  const trackKeys = [];
+  const artistKeys = [];
+  const seenTracks = new Set();
+  const seenArtists = new Set();
+  (Array.isArray(tracks) ? tracks : []).forEach((track) => {
+    const trackKey = recommendationTrackKey(track);
+    const artistKey = artistMatchKey(track?.artist || "");
+    if (trackKey && !seenTracks.has(trackKey) && trackKeys.length < 48) {
+      seenTracks.add(trackKey);
+      trackKeys.push(trackKey);
+    }
+    if (artistKey && !seenArtists.has(artistKey) && artistKeys.length < 48) {
+      seenArtists.add(artistKey);
+      artistKeys.push(artistKey);
+    }
+  });
+  return { trackKeys, artistKeys };
+}
+
+async function refreshGlobalDiscoveryExposure(tracks = []) {
+  if (!anonymousDiscoverySession() || typeof fetch !== "function") return false;
+  const payload = discoveryExposureCandidatePayload(tracks);
+  if (!payload.trackKeys.length && !payload.artistKeys.length) return false;
+  if (
+    globalExposureSnapshotPromise &&
+    Date.now() - globalExposureSnapshotAt < 8000
+  ) return globalExposureSnapshotPromise;
+
+  globalExposureSnapshotAt = Date.now();
+  globalExposureSnapshotPromise = fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      action: "snapshot",
+      anonymousId: betaAnalyticsAnonymousId(),
+      ...payload
+    }),
+    keepalive: true
+  })
+    .then((response) => response.ok ? response.json() : null)
+    .then((result) => {
+      if (!result?.ok) return false;
+      Object.entries(result.tracks || {}).forEach(([key, count]) => {
+        globalTrackExposureCounts.set(key, Math.max(0, Number(count) || 0));
+      });
+      Object.entries(result.artists || {}).forEach(([key, count]) => {
+        globalArtistExposureCounts.set(key, Math.max(0, Number(count) || 0));
+      });
+      Object.entries(result.recentTracks || {}).forEach(([key, at]) => {
+        globalRecentTrackExposureAt.set(key, Math.max(0, Number(at) || 0));
+      });
+      return true;
+    })
+    .catch(() => false)
+    .finally(() => {
+      globalExposureSnapshotPromise = null;
+    });
+  return globalExposureSnapshotPromise;
+}
+
+async function recordGlobalDiscoveryExposure(track) {
+  if (!track || !anonymousDiscoverySession() || typeof fetch !== "function") return false;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  if (!trackKey && !artistKey) return false;
+  try {
+    const response = await fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        action: "record",
+        anonymousId: betaAnalyticsAnonymousId(),
+        trackKey,
+        artistKey
+      }),
+      keepalive: true
+    });
+    if (!response.ok) return false;
+    const result = await response.json();
+    if (!result?.ok) return false;
+    globalTrackExposureCounts.set(trackKey, Math.max(0, Number(result.trackCount) || 0));
+    globalArtistExposureCounts.set(artistKey, Math.max(0, Number(result.artistCount) || 0));
+    globalRecentTrackExposureAt.set(trackKey, Date.now());
+    return true;
+  } catch (_err) {
+    return false;
+  }
 }
 
 function currentCurationUserSeed() {
@@ -48549,6 +48965,28 @@ function hashUnit(value = "") {
   return (hashString(value) % 10000) / 10000;
 }
 
+function anonymousRotationScore(track) {
+  if (!track || !anonymousDiscoverySession()) return 0;
+  const trackKey = recommendationTrackKey(track);
+  if (!trackKey) return 0;
+  const cohortCount = 6;
+  const userBucket = Math.floor(
+    hashUnit(`${currentCurationUserSeed()}::anonymous-cohort`) * cohortCount
+  ) % cohortCount;
+  const visitNumber = Math.max(1, Number.parseInt(currentCurationVisitId(), 10) || 1);
+  const targetBucket = (userBucket + visitNumber - 1) % cohortCount;
+  const trackBucket = Math.floor(
+    hashUnit(`track-cohort::${trackKey}`) * cohortCount
+  ) % cohortCount;
+  const distance = Math.min(
+    Math.abs(trackBucket - targetBucket),
+    cohortCount - Math.abs(trackBucket - targetBucket)
+  );
+  if (distance === 0) return 11;
+  if (distance === 1) return 3.2;
+  return -2.4;
+}
+
 function curationContextSignature(prefs = {}) {
   prefs = normalizeRecommendationPrefs(prefs);
   return [
@@ -48584,6 +49022,7 @@ function curationDiversityScore(track, prefs = {}, rawIndex = 0) {
   if (artistKey && seenArtistsMemory.has(artistKey)) score -= 4.6;
   if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 3.6;
   score -= anonymousExposurePenalty(track);
+  score += anonymousRotationScore(track);
 
   score += trackReleaseFreshnessScore(track) * 1.85;
   if (trackHasPlayablePreviewExperience(track)) score += 0.45;
@@ -48608,6 +49047,10 @@ function curationSelectionWeight(track, prefs = {}, index = 0) {
   if (anonymousPenalty >= 70) weight *= 0.01;
   else if (anonymousPenalty >= 30) weight *= 0.08;
   else if (anonymousPenalty > 0) weight *= 0.28;
+  const rotationScore = anonymousRotationScore(track);
+  if (rotationScore >= 10) weight *= 2.8;
+  else if (rotationScore > 0) weight *= 1.35;
+  else if (rotationScore < 0) weight *= 0.72;
   if (!prefs?.style) {
     const maturityScore = recommendationMaturityScore(track.style || "", prefs, track);
     if (maturityScore < 0) weight *= Math.max(0.04, 1 + maturityScore / 36);
@@ -50351,12 +50794,65 @@ function refreshSuggestionQueue(prefs = lastPrefs, anchorTrack = currentRecommen
   prewarmSuggestionQueue(anchorTrack);
 }
 
+async function prepareNextPlayableCards(candidates = [], anchorTrack = currentRecommendation) {
+  const token = ++preparedPlayableQueueToken;
+  const anchorKey = recommendationTrackKey(anchorTrack);
+  const candidateKeys = new Set();
+  const candidateArtists = new Set();
+  const queue = (Array.isArray(candidates) ? candidates : [])
+    .filter((track) => {
+      const trackKey = recommendationTrackKey(track);
+      const artistKey = artistMatchKey(track?.artist || "");
+      if (!trackKey || trackKey === anchorKey || candidateKeys.has(trackKey)) return false;
+      if (artistKey && candidateArtists.has(artistKey)) return false;
+      if (!isTrackEligibleForRecommendation(track) || !trackHasFastListenRoute(track)) return false;
+      if (!guidedDiscoveryTrackPreservesDiversity(track)) return false;
+      if (anonymousExposurePenalty(track) >= 90) return false;
+      candidateKeys.add(trackKey);
+      if (artistKey) candidateArtists.add(artistKey);
+      return true;
+    })
+    .slice(0, 12);
+  if (!queue.length) {
+    if (token === preparedPlayableQueueToken) preparedPlayableQueue = [];
+    return [];
+  }
+
+  const ready = [];
+  for (
+    let offset = 0;
+    offset < queue.length && ready.length < PREPARED_PLAYABLE_QUEUE_TARGET;
+    offset += 3
+  ) {
+    const batch = queue.slice(offset, offset + 3);
+    const results = await Promise.all(batch.map(async (track) => ({
+      track,
+      verified: await ensureTrackHasVerifiedPlaybackRoute(track, {
+        forceLookup: !previewCandidatesForTrack(track).length,
+        timeoutMs: 1150,
+        maxCandidates: 2,
+        resolveTimeoutMs: 1150
+      }).catch(() => false)
+    })));
+    if (token !== preparedPlayableQueueToken) return [];
+    results.forEach((result) => {
+      if (result.verified && ready.length < PREPARED_PLAYABLE_QUEUE_TARGET) {
+        ready.push(result.track);
+      }
+    });
+  }
+  if (token === preparedPlayableQueueToken) preparedPlayableQueue = ready;
+  return ready;
+}
+
 function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
   const anchorKey = recommendationTrackKey(anchorTrack);
   const candidates = suggestionQueueTracks
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
     .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
     .slice(0, 12);
+  void refreshGlobalDiscoveryExposure(candidates);
+  void prepareNextPlayableCards(candidates, anchorTrack);
   let refreshablePreviewScheduled = 0;
   candidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
@@ -51473,13 +51969,20 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
-    if (requireReliableBpm && !hasReliableBpmForTrack(track)) return false;
+    if (
+      requireReliableBpm &&
+      !hasReliableBpmForTrack(track) &&
+      !(isVerifiedDiscoveryInventoryTrack(track) && !prefs.bpm)
+    ) return false;
     return !requireFastRoute || trackHasVerifiedPlaybackRoute(track);
   };
 
   // The queue is resolved while the current track is playing. Reusing it here
   // removes a full catalog scan and usually gives the next card a warm audio URL.
   const coverageQueueStyles = new Set(plan?.fullCoverage ? (plan.styles || []).slice(0, 4) : []);
+  const preparedPlayableKeys = new Set(
+    preparedPlayableQueue.map((track) => recommendationTrackKey(track)).filter(Boolean)
+  );
   const queuedCandidates = suggestionQueueTracks
     .filter((track) => {
       if (recommendationTrackKey(track) === sourceKey) return false;
@@ -51491,6 +51994,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
       const aKey = recommendationTrackKey(a);
       const bKey = recommendationTrackKey(b);
       return (
+        Number(preparedPlayableKeys.has(bKey)) - Number(preparedPlayableKeys.has(aKey)) ||
         Number(prewarmedSwipeTrackKeys.has(bKey)) - Number(prewarmedSwipeTrackKeys.has(aKey)) ||
         Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
       );
@@ -51577,6 +52081,9 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   }, 0);
   registerRecommendationDelivery(track, finalPrefs);
   const currentTrackKey = recommendationTrackKey(track);
+  preparedPlayableQueue = preparedPlayableQueue.filter(
+    (queueTrack) => recommendationTrackKey(queueTrack) !== currentTrackKey
+  );
   if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
     suggestionQueueTracks = suggestionQueueTracks
       .filter((queueTrack) => recommendationTrackKey(queueTrack) !== currentTrackKey)
@@ -51660,6 +52167,7 @@ function pickInstantOpeningTrack(options = null) {
     const score =
       openingDiscoveryRampScore(style) * 0.34 +
       styleDiscoveryReadinessScore(style) * 0.68 +
+      anonymousRotationScore(candidate) +
       sessionNoise * 9.2 +
       2.4 -
       Number(swipeStyleExposureCounts.get(style) || 0) * 1.8;
@@ -51753,6 +52261,8 @@ function pickInstantPrimaryNextTrack(
       ) - 0.5;
       const score =
         sessionNoise * 9.4 +
+        anonymousRotationScore(track) +
+        Number(preparedPrimaryKeys?.has?.(trackKey)) * 6.2 +
         Number(prewarmedSwipeTrackKeys.has(trackKey)) * 3.6 +
         Number(trackHasVerifiedPlaybackRoute(track)) * 2.8 -
         Number(swipeStyleExposureCounts.get(style) || 0) * 0.35 -
@@ -51762,6 +52272,9 @@ function pickInstantPrimaryNextTrack(
     return scored[0]?.track || null;
   };
 
+  const preparedPrimaryKeys = new Set(
+    preparedPlayableQueue.map((track) => recommendationTrackKey(track)).filter(Boolean)
+  );
   const queued = suggestionQueueTracks
     .filter(candidateAllowed)
     .sort((a, b) => {
@@ -51775,6 +52288,7 @@ function pickInstantPrimaryNextTrack(
         : 0;
       return (
         aStyleRank - bStyleRank ||
+        Number(preparedPrimaryKeys.has(bKey)) - Number(preparedPrimaryKeys.has(aKey)) ||
         Number(prewarmedSwipeTrackKeys.has(bKey)) - Number(prewarmedSwipeTrackKeys.has(aKey)) ||
         Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a))
       );
@@ -62746,11 +63260,21 @@ async function bootSonicSearch() {
   if (freshTestResetPending) return;
   loadDynamicCatalogCache();
   hydrateFastPlayableStarters();
+  const playableInventoryLoad = hydrateDiscoveryPlayableInventory();
+  void refreshGlobalDiscoveryExposure(FAST_PLAYABLE_STARTERS);
   // Keep a small, curated set of embeddable tracks ready before the first
   // user click. This avoids waiting for the full catalog hydration when a
   // private/no-login Opera session starts cold.
   injectSoundCloudSupplementalSeeds();
   void prewarmOpeningPreviewGate();
+  void playableInventoryLoad.then(() => {
+    const exposureCandidates = [
+      ...GUIDED_OPENING_STYLE_DECK,
+      ...guidedDiscoveryPrewarmStyles()
+    ].flatMap((style) => catalogTracksForStyle(style).slice(0, 12));
+    void refreshGlobalDiscoveryExposure(exposureCandidates);
+    scheduleDiscoveryInventoryMaintenance(12000);
+  });
   scheduleLocalBootCatalogHydration();
   const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
   scheduleCatalogMaintenance(bootWarmupDelay);
