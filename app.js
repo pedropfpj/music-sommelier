@@ -50375,7 +50375,7 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
         prewarmedSwipeTrackKeys.delete(oldestKey);
       }
     };
-    if (trackHasReliableAudioPreview(track) && track.previewChecked && !track.previewMissing) {
+    if (trackHasReliableAudioPreview(track) && !track.previewMissing) {
       warmResolvedPreview();
       return;
     }
