@@ -49190,6 +49190,11 @@ function buildGuidedDiscoveryWarmQueue(prefs = {}, anchorTrack = null, fallbackQ
   const queue = [];
   const queuedTrackKeys = new Set();
   const queuedArtistKeys = new Set();
+  const milestoneStyleSet = new Set([
+    GUIDED_PSY_BRIDGE_STYLE_DECK[0],
+    GUIDED_DNB_BRIDGE_STYLE_DECK[0],
+    GUIDED_WIDE_STYLE_DECK[0]
+  ]);
   const visitSeed = `${currentCurationUserSeed()}::${currentCurationVisitId()}::${curationOpenSeed}`;
   const maybeAdd = (track) => {
     const trackKey = recommendationTrackKey(track);
@@ -49231,7 +49236,10 @@ function buildGuidedDiscoveryWarmQueue(prefs = {}, anchorTrack = null, fallbackQ
       .sort((a, b) => b.score - a.score)
       .map((entry) => entry.track);
     if (candidates[0]) maybeAdd(candidates[0]);
-    if (candidates.length > 1) deferredByStyle.push(...candidates.slice(1, 3));
+    if (candidates[1] && milestoneStyleSet.has(style)) maybeAdd(candidates[1]);
+    if (candidates.length > 1) {
+      deferredByStyle.push(...candidates.slice(milestoneStyleSet.has(style) ? 2 : 1, 3));
+    }
   });
 
   deferredByStyle.forEach((track) => {

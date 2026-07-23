@@ -256,6 +256,8 @@ assert.match(refreshQueueSource, /buildGuidedDiscoveryWarmQueue/);
 assert.match(guidedWarmQueueSource, /guidedDiscoveryPrewarmStyles/);
 assert.match(guidedWarmQueueSource, /trackHasFastListenRoute/);
 assert.match(guidedWarmQueueSource, /trackHasPlayablePreviewExperience/);
+assert.match(guidedWarmQueueSource, /milestoneStyleSet/);
+assert.match(guidedWarmQueueSource, /maybeAdd\(candidates\[1\]\)/);
 assert.match(guidedPrewarmStylesSource, /GUIDED_PSY_BRIDGE_STYLE_DECK\[0\]/);
 assert.match(guidedPrewarmStylesSource, /GUIDED_DNB_BRIDGE_STYLE_DECK\[0\]/);
 assert.match(guidedPrewarmStylesSource, /GUIDED_WIDE_STYLE_DECK\[0\]/);
@@ -270,6 +272,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery5/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery6/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");
