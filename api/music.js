@@ -9,6 +9,7 @@ const handlers = {
   "cover-art": require("../lib/api/_cover-art"),
   "event-radar": require("../lib/api/_event-radar"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
+  "news-editor": require("../lib/api/_news-editor"),
   "news-feed": require("../lib/api/_news-feed"),
   "radio-browser": require("../lib/api/_radio-browser"),
   "spotify-search": require("../lib/api/_spotify-search"),

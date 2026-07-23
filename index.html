@@ -60,6 +60,7 @@
       }
     </style>
     <link rel="stylesheet" href="styles.css?v=20260723community1" />
+    <link rel="stylesheet" href="newsroom.css?v=20260723newsroom2" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -747,6 +748,19 @@
         <p id="dailyNewsIntro" class="section-hint muted daily-news-intro">
           Atualizações do Brasil e do mundo com foco em cenas, artistas, festivais e pistas.
         </p>
+        <section class="sonic-editorial-section" aria-labelledby="sonicEditorialTitle">
+          <header class="sonic-editorial-heading">
+            <div>
+              <p>EDIÇÃO SEMANAL · CEARÁ E CENA ELETRÔNICA</p>
+              <h4 id="sonicEditorialTitle">Jornal Sonic</h4>
+            </div>
+            <span>Histórias, entrevistas e festas escolhidas pela redação.</span>
+          </header>
+          <div id="sonicEditorialStatus" class="sonic-editorial-status" role="status" aria-live="polite">
+            Buscando a edição mais recente…
+          </div>
+          <div id="sonicEditorialList" class="sonic-editorial-list"></div>
+        </section>
         <div id="dailyNewsStatus" class="daily-news-status muted" aria-live="polite">Carregando notícias...</div>
         <div id="dailyNewsProgress" class="daily-news-progress" role="progressbar" aria-label="Atualizando notícias" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
           <span id="dailyNewsProgressFill" class="daily-news-progress-fill"></span>
@@ -761,6 +775,38 @@
           <a href="https://dancingastronaut.com/" target="_blank" rel="noopener noreferrer">Dancing Astronaut</a>
         </div>
       </section>
+
+      <dialog id="sonicNewsReader" class="sonic-news-reader" aria-labelledby="sonicNewsReaderTitle">
+        <div class="sonic-news-reader-sheet">
+          <button id="sonicNewsReaderClose" class="sonic-news-reader-close" type="button" aria-label="Fechar matéria">×</button>
+          <div id="sonicNewsReaderHero" class="sonic-news-reader-hero hidden">
+            <img id="sonicNewsReaderImage" alt="" />
+          </div>
+          <article class="sonic-news-reader-article">
+            <div class="sonic-news-reader-brand">
+              <span id="sonicNewsReaderCategory">Jornal Sonic</span>
+              <b>SONIC SEARCH</b>
+            </div>
+            <p id="sonicNewsReaderDisclosure" class="sonic-news-reader-disclosure hidden"></p>
+            <h2 id="sonicNewsReaderTitle">Matéria</h2>
+            <p id="sonicNewsReaderExcerpt" class="sonic-news-reader-excerpt"></p>
+            <div id="sonicNewsReaderByline" class="sonic-news-reader-byline"></div>
+            <div id="sonicNewsReaderBody" class="sonic-news-reader-body"></div>
+            <section id="sonicNewsReaderLineupSection" class="sonic-news-reader-service hidden">
+              <span>LINE-UP</span>
+              <h3>Quem toca</h3>
+              <div id="sonicNewsReaderLineup" class="sonic-news-reader-lineup"></div>
+            </section>
+            <section id="sonicNewsReaderService" class="sonic-news-reader-service hidden">
+              <span>SERVIÇO</span>
+              <h3>Programe-se</h3>
+              <dl id="sonicNewsReaderServiceList"></dl>
+            </section>
+            <div id="sonicNewsReaderActions" class="sonic-news-reader-actions"></div>
+            <p id="sonicNewsReaderCredit" class="sonic-news-reader-credit"></p>
+          </article>
+        </div>
+      </dialog>
 
       <section id="communityPanel" class="panel community-panel app-tab-panel" data-app-tab="community" aria-labelledby="communityTitle">
         <div class="section-head community-head">
@@ -2530,5 +2576,6 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="app.min.js?v=20260723discovery4"></script>
+    <script defer src="newsroom.js?v=20260723newsroom2"></script>
   </body>
 </html>
