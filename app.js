@@ -52846,6 +52846,75 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
   return false;
 }
 
+async function tryPresentGuidedMilestoneRecommendation({ sourceTrack = null, message = "" } = {}) {
+  if (!sourceTrack || explicitSwipeAnchorStyle() || !guidedDiscoveryRampActive()) return false;
+  const stage = guidedDiscoveryRampStage();
+  if (stage === "opening" || stage === "catalog") return false;
+  const signatureStyle = selectableSwipeStyle(guidedDiscoveryCurrentStageStyles()[0] || "");
+  if (!signatureStyle || Number(swipeStyleExposureCounts.get(signatureStyle) || 0) > 0) return false;
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  const candidates = catalogTracksForStyle(signatureStyle)
+    .filter((track) => {
+      const trackKey = recommendationTrackKey(track);
+      if (!trackKey || trackKey === sourceKey) return false;
+      if (!isTrackEligibleForRecommendation(track) || !trackHasFastListenRoute(track)) return false;
+      if (!guidedDiscoveryTrackPreservesDiversity(track)) return false;
+      if (artistSetHasMatch(seenArtistsMemory, track.artist)) return false;
+      if (trackBlockedByKnownSignals(track)) return false;
+      return anonymousExposurePenalty(track) < 70;
+    })
+    .sort((a, b) => {
+      const aKey = recommendationTrackKey(a);
+      const bKey = recommendationTrackKey(b);
+      return (
+        Number(trackHasVerifiedPlaybackRoute(b)) - Number(trackHasVerifiedPlaybackRoute(a)) ||
+        Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)) ||
+        hashUnit(`${currentCurationVisitId()}::milestone::${signatureStyle}::${aKey}`) -
+          hashUnit(`${currentCurationVisitId()}::milestone::${signatureStyle}::${bKey}`)
+      );
+    })
+    .slice(0, 2);
+  if (!candidates.length) return false;
+
+  const readyCandidate = candidates.find((track) => trackHasVerifiedPlaybackRoute(track));
+  const selectedTrack = readyCandidate || await new Promise((resolve) => {
+    let pending = candidates.length;
+    let settled = false;
+    candidates.forEach((candidate) => {
+      ensureTrackHasVerifiedPlaybackRoute(candidate, {
+        forceLookup: false,
+        timeoutMs: 1150,
+        maxCandidates: 1,
+        resolveTimeoutMs: 1150
+      }).then((verified) => {
+        if (verified && !settled) {
+          settled = true;
+          resolve(candidate);
+          return;
+        }
+        pending -= 1;
+        if (!pending && !settled) resolve(null);
+      }).catch(() => {
+        pending -= 1;
+        if (!pending && !settled) resolve(null);
+      });
+    });
+  });
+  if (!selectedTrack) return false;
+  const milestonePrefs = normalizeRecommendationPrefs({
+    style: signatureStyle,
+    context: "",
+    energy: "",
+    bpm: "",
+    vocals: ""
+  });
+  return presentInstantSwipeRecommendation({
+    track: selectedTrack,
+    prefs: milestonePrefs,
+    message
+  });
+}
+
 async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "", positive = true } = {}) {
   if (!lastPrefs) {
     if (feedbackMessage && message) feedbackMessage.textContent = message;
@@ -52872,6 +52941,16 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
         return true;
       }
     }
+  }
+  if (
+    !anchoredStyle &&
+    positive &&
+    await tryPresentGuidedMilestoneRecommendation({
+      sourceTrack: likedTrack,
+      message
+    })
+  ) {
+    return true;
   }
   if (!anchoredStyle && positive) {
     const discoveryTrack = pickInstantPrimaryNextTrack(likedTrack, "");

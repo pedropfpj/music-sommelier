@@ -231,6 +231,7 @@ const guidedWarmQueueSource = extractSection("buildGuidedDiscoveryWarmQueue", "r
 const guidedPrewarmStylesSource = extractFunction("guidedDiscoveryPrewarmStyles");
 const validatedSource = extractSection("tryRunValidatedPrimaryRecommendation", "runInitialRecommendation");
 const advanceSource = extractSection("advanceAfterSwipeFeedback", "likeCurrentTrackFromSwipe");
+const milestoneSource = extractSection("tryPresentGuidedMilestoneRecommendation", "advanceAfterSwipeFeedback");
 const previewResolverSource = extractSection("resolvePreviewForTrack", "renderPreview");
 assert.match(openingSource, /GUIDED_OPENING_STYLE_DECK/);
 assert.match(openingSource, /curationOpenSeed/);
@@ -266,12 +267,20 @@ assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Skream"[\s\S]*?preview
 assert.match(appSource, /style:\s*"dubstep",\s*artist:\s*"Benga & Coki"[\s\S]*?previewUrl:/);
 assert.match(validatedSource, /trackHasVerifiedPlaybackRoute/);
 assert.doesNotMatch(validatedSource, /requireVerified:\s*false/);
+assert.match(milestoneSource, /guidedDiscoveryCurrentStageStyles\(\)\[0\]/);
+assert.match(milestoneSource, /ensureTrackHasVerifiedPlaybackRoute/);
+assert.match(milestoneSource, /timeoutMs:\s*1150/);
+assert.match(milestoneSource, /\.slice\(0,\s*2\)/);
+assert(
+  advanceSource.indexOf("tryPresentGuidedMilestoneRecommendation") <
+    advanceSource.indexOf('pickInstantPrimaryNextTrack(likedTrack, "")')
+);
 assert.match(advanceSource, /pickInstantPrimaryNextTrack\(likedTrack,\s*""\)/);
 assert.match(previewResolverSource, /finishWithResolvedPreview\(\)\) return/);
 assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.style \|\| ""\)/);
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery6/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery7/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");
