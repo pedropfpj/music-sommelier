@@ -60,7 +60,7 @@ const selectableStyles = [
   "disco_house", "dub_techno", "soulful_house", "hypnotic_techno", "garage_house",
   "detroit_techno", "progressive_psy", "psy_comercial", "goa_trance", "full_on_morning",
   "psybient", "liquid_dnb", "drum_and_bass", "jungle", "uk_garage", "future_garage",
-  "neurofunk", "jump_up", "breakbeat", "electro", "trip_hop", "ambient",
+  "neurofunk", "dubstep", "bass_house", "breakbeat", "electro", "trip_hop", "ambient",
   "melodic_techno", "progressive_house", "afro_house", "organic_house",
   "trance_uplifting", "twilight_psy", "full_on", "hard_techno", "psycore", "hi_tech"
 ];
@@ -72,11 +72,15 @@ vm.runInContext(`
   ${extractConst("GUIDED_PSY_BRIDGE_STYLE_DECK")}
   ${extractConst("GUIDED_DNB_BRIDGE_STYLE_DECK")}
   ${extractConst("GUIDED_WIDE_STYLE_DECK")}
-  ${extractConst("GUIDED_PSY_UNLOCK_REROLLS")}
-  ${extractConst("GUIDED_DNB_UNLOCK_REROLLS")}
-  ${extractConst("GUIDED_WIDE_UNLOCK_REROLLS")}
-  ${extractConst("GUIDED_CATALOG_UNLOCK_REROLLS")}
+  ${extractConst("GUIDED_PSY_UNLOCK_CARDS")}
+  ${extractConst("GUIDED_DNB_UNLOCK_CARDS")}
+  ${extractConst("GUIDED_WIDE_UNLOCK_CARDS")}
+  ${extractConst("GUIDED_CATALOG_UNLOCK_CARDS")}
+  ${extractConst("GUIDED_DIVERSITY_WINDOW_CARDS")}
   var guidedDiscoveryOtherTrackCount = 0;
+  var recentRecommendationDeliveryMetaQueue = [];
+  var swipeStyleExposureCounts = new Map();
+  var curationOpenSeed = "test-open";
   var anchoredStyle = "";
   var guidedActive = true;
   function explicitSwipeAnchorStyle() { return anchoredStyle; }
@@ -84,41 +88,127 @@ vm.runInContext(`
   function getAllSelectableStyles() { return ${JSON.stringify(selectableStyles)}; }
   function selectableSwipeStyle(style) { return getAllSelectableStyles().includes(style) ? style : ""; }
   function normalizeDatasetStyle(style) { return String(style || ""); }
+  function currentCurationUserSeed() { return "test-user"; }
+  function currentCurationVisitId() { return "test-visit"; }
+  function hashUnit(value) {
+    let hash = 2166136261;
+    for (const char of String(value || "")) {
+      hash ^= char.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0) / 4294967296;
+  }
+  function recommendationTrackKey(track) { return track ? String(track.artist) + "::" + String(track.song) : ""; }
+  function artistMatchKey(artist) { return String(artist || "").toLowerCase(); }
+  function familyOf(style) {
+    if (["house", "deep_house", "tech_house", "bass_house"].includes(style)) return "house";
+    if (["techno", "dub_techno", "melodic_techno"].includes(style)) return "techno";
+    if (["progressive_psy", "psy_comercial"].includes(style)) return "psytrance";
+    if (["liquid_dnb", "drum_and_bass", "neurofunk", "jungle"].includes(style)) return "dnb";
+    return "bass_music";
+  }
   function userHasExtremeTasteIntent() { return false; }
   ${extractFunction("guidedDiscoveryRampStage")}
+  ${extractFunction("guidedDiscoveryCurrentStageStyles")}
+  ${extractFunction("guidedDiscoveryRecentDeliveries")}
+  ${extractFunction("guidedDiscoveryDiversityWindowActive")}
+  ${extractFunction("guidedDiscoveryStyleSaturated")}
+  ${extractFunction("guidedDiscoveryTrackPreservesDiversity")}
   ${extractFunction("guidedDiscoveryStyleDeck")}
   ${extractFunction("guidedDiscoveryStyleAllowed")}
+  function uniqueSwipeStyleList(styles) {
+    return [...new Set(styles.map(selectableSwipeStyle).filter(Boolean))];
+  }
+  ${extractFunction("rankGuidedDiscoveryStyles")}
   ${extractFunction("registerGuidedDiscoveryOtherTrack")}
 `, context);
 
 assert.equal(context.guidedDiscoveryRampStage(), "opening");
 let deck = Array.from(context.guidedDiscoveryStyleDeck());
 assert(deck.includes("house") && deck.includes("tech_house") && deck.includes("techno"));
-assert(deck.every((style) => ["house", "tech_house", "techno", "deep_house", "minimal_techno", "deep_techno", "disco_house", "dub_techno", "soulful_house", "hypnotic_techno", "garage_house", "detroit_techno"].includes(style)));
+assert.deepEqual(deck, ["tech_house", "house", "techno", "deep_house"]);
 assert.equal(context.guidedDiscoveryStyleAllowed("psycore"), false);
 assert.equal(context.guidedDiscoveryStyleAllowed("neurofunk"), false);
 
-for (let index = 0; index < 4; index += 1) context.registerGuidedDiscoveryOtherTrack();
+context.recentRecommendationDeliveryMetaQueue = Array.from({ length: 4 }, (_, index) => ({
+  trackKey: `opening-${index}`,
+  artistKey: `artist-${index}`,
+  style: index % 2 ? "techno" : "house",
+  family: index % 2 ? "techno" : "house"
+}));
 assert.equal(context.guidedDiscoveryRampStage(), "psy_bridge");
 deck = Array.from(context.guidedDiscoveryStyleDeck());
-assert(deck.includes("progressive_psy") && deck.includes("goa_trance"));
+assert(deck.includes("progressive_psy") && deck.includes("uk_garage") && deck.includes("bass_house"));
 assert.equal(deck[0], "progressive_psy");
 assert.equal(deck.includes("drum_and_bass"), false);
 assert.equal(deck.includes("psycore"), false);
 
-for (let index = 0; index < 3; index += 1) context.registerGuidedDiscoveryOtherTrack();
+context.recentRecommendationDeliveryMetaQueue.push(
+  { trackKey: "bridge-1", artistKey: "bridge-a", style: "progressive_psy", family: "psytrance" },
+  { trackKey: "bridge-2", artistKey: "bridge-b", style: "uk_garage", family: "bass_music" },
+  { trackKey: "bridge-3", artistKey: "bridge-c", style: "dub_techno", family: "techno" }
+);
 assert.equal(context.guidedDiscoveryRampStage(), "dnb_bridge");
 deck = Array.from(context.guidedDiscoveryStyleDeck());
-assert(deck.includes("liquid_dnb") && deck.includes("drum_and_bass") && deck.includes("jungle"));
-assert.equal(deck[0], "liquid_dnb");
+assert(deck.includes("dubstep") && deck.includes("liquid_dnb") && deck.includes("drum_and_bass"));
+assert.equal(deck[0], "dubstep");
 assert.equal(deck.includes("neurofunk"), false);
 
-for (let index = 0; index < 3; index += 1) context.registerGuidedDiscoveryOtherTrack();
+context.recentRecommendationDeliveryMetaQueue.push(
+  { trackKey: "bass-1", artistKey: "bass-a", style: "dubstep", family: "bass_music" },
+  { trackKey: "bass-2", artistKey: "bass-b", style: "liquid_dnb", family: "dnb" },
+  { trackKey: "bass-3", artistKey: "bass-c", style: "drum_and_bass", family: "dnb" }
+);
 assert.equal(context.guidedDiscoveryRampStage(), "wide");
 deck = Array.from(context.guidedDiscoveryStyleDeck());
-assert(deck.includes("neurofunk") && deck.includes("jump_up"));
+assert(deck.includes("neurofunk") && deck.includes("goa_trance"));
 assert.equal(deck[0], "neurofunk");
 assert.equal(deck.includes("psycore"), false);
+
+context.recentRecommendationDeliveryMetaQueue = [
+  { trackKey: "one::a", artistKey: "one", style: "house", family: "house" },
+  { trackKey: "two::b", artistKey: "two", style: "house", family: "house" }
+];
+assert.equal(context.guidedDiscoveryStyleSaturated("house"), true);
+assert.equal(context.guidedDiscoveryTrackPreservesDiversity({ artist: "One", song: "A", style: "techno" }), false);
+assert.equal(context.guidedDiscoveryTrackPreservesDiversity({ artist: "Three", song: "C", style: "techno" }), true);
+
+context.recentRecommendationDeliveryMetaQueue = [];
+context.swipeStyleExposureCounts.clear();
+const simulatedStyles = [];
+for (let index = 0; index < 15; index += 1) {
+  const previousStyle = simulatedStyles.at(-1) || "";
+  const ranked = Array.from(context.rankGuidedDiscoveryStyles(context.guidedDiscoveryStyleDeck(), previousStyle));
+  const selectedStyle = ranked.find((style) => !context.guidedDiscoveryStyleSaturated(style));
+  assert(selectedStyle, `expected a style for simulated card ${index + 1}`);
+  simulatedStyles.push(selectedStyle);
+  context.swipeStyleExposureCounts.set(
+    selectedStyle,
+    Number(context.swipeStyleExposureCounts.get(selectedStyle) || 0) + 1
+  );
+  context.recentRecommendationDeliveryMetaQueue.push({
+    trackKey: `artist-${index}::track-${index}`,
+    artistKey: `artist-${index}`,
+    style: selectedStyle,
+    family: context.familyOf(selectedStyle)
+  });
+}
+assert(simulatedStyles.slice(0, 4).every((style) => ["tech_house", "house", "techno", "deep_house"].includes(style)));
+assert.equal(simulatedStyles[4], "progressive_psy");
+assert.equal(simulatedStyles[7], "dubstep");
+assert.equal(simulatedStyles[10], "neurofunk");
+assert(new Set(simulatedStyles).size >= 10);
+for (let index = 2; index < simulatedStyles.length; index += 1) {
+  assert.notEqual(
+    simulatedStyles[index - 2] === simulatedStyles[index - 1] && simulatedStyles[index - 1] === simulatedStyles[index],
+    true,
+    "same style must never appear three times in a row"
+  );
+}
+for (let index = 4; index < simulatedStyles.length; index += 1) {
+  const familyWindow = simulatedStyles.slice(index - 4, index + 1).map(context.familyOf);
+  assert(new Set(familyWindow).size > 1, "same family must never occupy five consecutive cards");
+}
 
 context.anchoredStyle = "psycore";
 const beforeAnchored = context.guidedDiscoveryOtherTrackCount;
@@ -130,12 +220,16 @@ const primaryNextSource = extractFunction("pickInstantPrimaryNextTrack");
 const instantSwipeSource = extractSection("pickInstantSwipeTrack", "presentInstantSwipeRecommendation");
 const negativeSwipeSource = extractSection("pickFastNegativeFeedbackTrack", "presentFastNegativeFeedbackRecommendation");
 const prewarmSource = extractFunction("prewarmSuggestionQueue");
+const refreshQueueSource = extractFunction("refreshSuggestionQueue");
+const validatedSource = extractSection("tryRunValidatedPrimaryRecommendation", "runInitialRecommendation");
+const advanceSource = extractSection("advanceAfterSwipeFeedback", "likeCurrentTrackFromSwipe");
 const previewResolverSource = extractSection("resolvePreviewForTrack", "renderPreview");
 assert.match(openingSource, /GUIDED_OPENING_STYLE_DECK/);
 assert.match(openingSource, /curationOpenSeed/);
 assert.match(openingSource, /anonymousExposurePenalty\(track\) < 70/);
 assert.doesNotMatch(openingSource, /\bawait\b|\bfetch\s*\(|\/api\//);
 assert.match(primaryNextSource, /trackHasVerifiedPlaybackRoute/);
+assert.match(primaryNextSource, /guidedDiscoveryTrackPreservesDiversity/);
 assert.doesNotMatch(primaryNextSource, /requireFastRoute: false/);
 assert.match(primaryNextSource, /primary-next-variation/);
 assert.match(primaryNextSource, /currentCurationUserSeed\(\)/);
@@ -145,11 +239,16 @@ assert.doesNotMatch(instantSwipeSource, /requireFastRoute: false/);
 assert.match(instantSwipeSource, /requireReliableBpm/);
 assert.match(negativeSwipeSource, /allowSeenArtist/);
 assert.match(prewarmSource, /refreshablePreviewScheduled/);
+assert.match(refreshQueueSource, /style:\s*""/);
+assert.match(refreshQueueSource, /rankGuidedDiscoveryStyles/);
+assert.match(validatedSource, /trackHasVerifiedPlaybackRoute/);
+assert.doesNotMatch(validatedSource, /requireVerified:\s*false/);
+assert.match(advanceSource, /pickInstantPrimaryNextTrack\(likedTrack,\s*""\)/);
 assert.match(previewResolverSource, /finishWithResolvedPreview\(\)\) return/);
 assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.style \|\| ""\)/);
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723transaction5/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery1/);
 
-console.log("Guided discovery ramp tests passed: varied safe opening, Psy bridge, DnB bridge, wide catalog, no early Psycore.");
+console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");
