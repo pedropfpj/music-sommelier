@@ -49167,8 +49167,8 @@ function guidedDiscoveryPrewarmStyles() {
         : [];
   const seen = new Set();
   return [
-    ...guidedDiscoveryCurrentStageStyles(),
     ...milestoneStyles,
+    ...guidedDiscoveryCurrentStageStyles(),
     ...upcoming,
     ...guidedDiscoveryStyleDeck()
   ]

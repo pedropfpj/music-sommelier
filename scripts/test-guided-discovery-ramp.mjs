@@ -132,6 +132,7 @@ const openingPrewarmStyles = Array.from(context.guidedDiscoveryPrewarmStyles());
 assert(openingPrewarmStyles.includes("progressive_psy"));
 assert(openingPrewarmStyles.includes("dubstep"));
 assert(openingPrewarmStyles.includes("neurofunk"));
+assert.deepEqual(openingPrewarmStyles.slice(0, 3), ["progressive_psy", "dubstep", "neurofunk"]);
 assert.equal(context.guidedDiscoveryStyleAllowed("psycore"), false);
 assert.equal(context.guidedDiscoveryStyleAllowed("neurofunk"), false);
 
@@ -269,6 +270,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260723discovery4/);
+assert.match(indexSource, /app\.min\.js\?v=20260723discovery5/);
 
 console.log("Guided discovery ramp tests passed: card-driven stages, artist/track diversity, playable fast path, no early Psycore.");
