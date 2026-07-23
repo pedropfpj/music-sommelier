@@ -33,6 +33,7 @@
     { "source": "/api/cover-art", "destination": "/api/music?route=cover-art" },
     { "source": "/api/event-radar", "destination": "/api/music?route=event-radar" },
     { "source": "/api/lastfm-artist", "destination": "/api/music?route=lastfm-artist" },
+    { "source": "/api/news-editor", "destination": "/api/music?route=news-editor" },
     { "source": "/api/news-feed", "destination": "/api/music?route=news-feed" },
     { "source": "/api/radio-browser", "destination": "/api/music?route=radio-browser" },
     { "source": "/api/spotify-search", "destination": "/api/music?route=spotify-search" },
