@@ -5361,7 +5361,9 @@ function buildLocalTrackSeedBoost() {
     bpmExact: 124,
     artistCountry: "United States",
     artistGenre: "Tech House",
-    artistProfileHint: "Tech house vocal e percussivo com assinatura irreverente."
+    artistProfileHint: "Tech house vocal e percussivo com assinatura irreverente.",
+    bandcampTrackUrl: "https://circusrecordings.bandcamp.com/track/bigger-than-prince-original-mix",
+    bandcampTrackId: "183678930"
   },
   {
     style: "tech_house",
@@ -7275,7 +7277,9 @@ const catalog = [
     youtubeUrl: "https://www.youtube.com/results?search_query=PAWSA+The+Groovy+Cat",
     beatportUrl: "https://www.beatport.com/search?q=PAWSA%20The%20Groovy%20Cat",
     artistBio: "PAWSA e nome forte da escola tech house groove orientada por club.",
-    labelBio: "Solid Grooves e base para parte da sonoridade tech house atual."
+    labelBio: "Solid Grooves e base para parte da sonoridade tech house atual.",
+    bandcampTrackUrl: "https://pawsa.bandcamp.com/track/the-groovy-cat-2",
+    bandcampTrackId: "2475692937"
   },
   {
     style: "tech_house",
@@ -9841,6 +9845,8 @@ const userStats = {
 let lastPrefs = null;
 let currentRecommendation = null;
 let currentDiscovery = null;
+let lastStableRecommendationSurface = null;
+let recommendationSurfaceCommitRevision = 0;
 let postBootHydrationScheduled = false;
 let voiceLabUiReady = false;
 let socialMvpInitPromise = null;
@@ -9857,6 +9863,7 @@ let catalogTracksByStyle = new Map();
 let recommendationMemory = new Set();
 let recentTrackHistoryByStyle = new Map();
 let recommendationMemoryQueue = [];
+let recentRecommendationDeliveryQueue = [];
 let servedTrackCycleByStyle = new Map();
 let servedArtistCycleByStyle = new Map();
 let lastRejectedTrackKey = "";
@@ -18040,6 +18047,16 @@ function registerGlobalRecommendation(trackKey) {
   }
 }
 
+function registerRecentRecommendationDelivery(trackKey) {
+  const key = normalize(trackKey || "");
+  if (!key) return;
+  recentRecommendationDeliveryQueue = recentRecommendationDeliveryQueue.filter((item) => item !== key);
+  recentRecommendationDeliveryQueue.push(key);
+  while (recentRecommendationDeliveryQueue.length > 24) {
+    recentRecommendationDeliveryQueue.shift();
+  }
+}
+
 function clearRecentHistoryIfExhausted(style) {
   if (!style) return;
   const stylePoolKeys = catalogTracksForStyle(style).map((track) => normalize(`${track.artist}::${track.song}`));
@@ -18872,10 +18889,47 @@ function isExactBandcampTrackUrl(value = "") {
   }
 }
 
+const CURATED_EXACT_BANDCAMP_ROUTES = new Map([
+  [
+    normalize("PAWSA::The Groovy Cat"),
+    {
+      style: "tech_house",
+      bandcampTrackUrl: "https://pawsa.bandcamp.com/track/the-groovy-cat-2",
+      bandcampTrackId: "2475692937"
+    }
+  ],
+  [
+    normalize("Green Velvet::Bigger Than Prince"),
+    {
+      style: "tech_house",
+      bandcampTrackUrl: "https://circusrecordings.bandcamp.com/track/bigger-than-prince-original-mix",
+      bandcampTrackId: "183678930"
+    }
+  ]
+]);
+
+function curatedExactBandcampRouteForTrack(track) {
+  if (!track) return null;
+  const route = CURATED_EXACT_BANDCAMP_ROUTES.get(recommendationTrackKey(track));
+  if (!route || (route.style && track.style !== route.style)) return null;
+  return route;
+}
+
+function restoreCuratedExactBandcampRoute(track) {
+  const route = curatedExactBandcampRouteForTrack(track);
+  if (!route) return null;
+  track.bandcampTrackUrl = route.bandcampTrackUrl;
+  track.bandcampTrackId = route.bandcampTrackId;
+  track.bandcampVerified = true;
+  track.existenceVerified = true;
+  return route;
+}
+
 function trackHasVerifiedEmbeddedPreview(track) {
   if (!track || track.existenceVerified === false) return false;
+  const curatedExactRoute = restoreCuratedExactBandcampRoute(track);
   return Boolean(
-    isTrustedCuratedCatalogTrack(track) &&
+    (curatedExactRoute || isTrustedCuratedCatalogTrack(track)) &&
     trackHasEmbeddableBandcampTrack(track) &&
     isExactBandcampTrackUrl(track.bandcampTrackUrl)
   );
@@ -29526,6 +29580,7 @@ function resetSessionStateInMemory() {
   rejectedArtists = new Set();
   recommendationMemory = new Set();
   recommendationMemoryQueue = [];
+  recentRecommendationDeliveryQueue = [];
   recentTrackHistoryByStyle = new Map();
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
@@ -31867,6 +31922,16 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
     const knownArtists = String(surprisePreset?.knownArtists || "").trim();
     const knownTracks = String(surprisePreset?.knownTracks || "").trim();
     if (selectedStyle) {
+      const focusedPrefs = normalizeRecommendationPrefs({
+        style: selectedStyle,
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      });
+      if (styleEl) styleEl.value = focusedPrefs.style;
+      swipeUserAnchoredStyle = focusedPrefs.style;
+      lastPrefs = focusedPrefs;
       void runPrimaryRecommendationAction({
         source: "auto",
         initialRunner: async ({ onFallback }) => {
@@ -31878,10 +31943,11 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
           });
           if (focusedReady) return true;
           onFallback("focused_onboarding");
-          return runSurpriseRecommendation({
+          return generateRecommendationWithOverlay(focusedPrefs, {
+            resetRejected: false,
+            allowKnownFallback: true,
             manageBusyUi: false,
-            onFallback,
-            skipInitialGuard: true
+            failureSfx: false
           });
         }
       });
@@ -36309,6 +36375,7 @@ function clearFilters() {
   seenTrackKeysMemory = new Set();
   recommendationMemory = new Set();
   recommendationMemoryQueue = [];
+  recentRecommendationDeliveryQueue = [];
   recentTrackHistoryByStyle = new Map();
   servedTrackCycleByStyle = new Map();
   servedArtistCycleByStyle = new Map();
@@ -50045,8 +50112,8 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
   const candidates = suggestionQueueTracks
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
     .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
-    .slice(0, 3);
-  let refreshablePreviewScheduled = false;
+    .slice(0, 12);
+  let refreshablePreviewScheduled = 0;
   candidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
     if (imageUrl && typeof Image === "function") {
@@ -50074,7 +50141,7 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
       audio.src = previewUrl;
       audio.load();
       prewarmedSwipeAudioByTrack.set(trackKey, audio);
-      while (prewarmedSwipeAudioByTrack.size > 4) {
+      while (prewarmedSwipeAudioByTrack.size > 14) {
         const oldestKey = prewarmedSwipeAudioByTrack.keys().next().value;
         const oldestAudio = prewarmedSwipeAudioByTrack.get(oldestKey);
         try {
@@ -50089,8 +50156,8 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
       warmResolvedPreview();
       return;
     }
-    if (refreshablePreviewScheduled || !trackHasFastListenRoute(track)) return;
-    refreshablePreviewScheduled = true;
+    if (refreshablePreviewScheduled >= 10 || !trackHasFastListenRoute(track)) return;
+    refreshablePreviewScheduled += 1;
     void resolvePreviewForTrack(track)
       .then(warmResolvedPreview)
       .catch(() => {});
@@ -50137,6 +50204,7 @@ function registerRecommendationDelivery(track, prefs) {
   }), { source: "activation" });
   const trackKey = `${track.artist}::${track.song}`;
   registerGlobalRecommendation(trackKey);
+  registerRecentRecommendationDelivery(trackKey);
   if (prefs.style && track?.style === prefs.style) {
     const styleTracks = catalog.filter((item) => item.style === prefs.style);
     const stylePoolSize = styleTracks.length;
@@ -50908,7 +50976,81 @@ function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   syncQuickKnownDecision(track);
 }
 
+function captureRecommendationSurface() {
+  if (!currentRecommendation || !isTrackEligibleForRecommendation(currentRecommendation)) return null;
+  return {
+    track: currentRecommendation,
+    discovery: currentDiscovery,
+    prefs: normalizeRecommendationPrefs(lastPrefs || {
+      style: currentRecommendation.style || "",
+      context: "",
+      energy: "",
+      bpm: "",
+      vocals: ""
+    }),
+    lockedStyle: explicitSwipeAnchorStyle(),
+    revision: recommendationSurfaceCommitRevision
+  };
+}
+
+function rememberStableRecommendationSurface(
+  track = currentRecommendation,
+  prefs = lastPrefs,
+  discovery = currentDiscovery
+) {
+  if (
+    !track ||
+    !prefs ||
+    !isTrackEligibleForRecommendation(track) ||
+    !trackHasReadyPlaybackRoute(track)
+  ) return false;
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs);
+  const lockedStyle = explicitSwipeAnchorStyle();
+  if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
+  if (normalizedPrefs.style && selectableSwipeStyle(track.style || "") !== normalizedPrefs.style) return false;
+  recommendationSurfaceCommitRevision += 1;
+  lastStableRecommendationSurface = {
+    track,
+    discovery: discovery || null,
+    prefs: normalizedPrefs,
+    lockedStyle,
+    revision: recommendationSurfaceCommitRevision
+  };
+  return true;
+}
+
+function restoreStableRecommendationSurface(snapshot = lastStableRecommendationSurface) {
+  const stable = snapshot?.track ? snapshot : lastStableRecommendationSurface;
+  if (
+    !stable?.track ||
+    !isTrackEligibleForRecommendation(stable.track) ||
+    !trackHasReadyPlaybackRoute(stable.track)
+  ) return false;
+
+  const requestedLock = explicitSwipeAnchorStyle();
+  const stablePrefs = normalizeRecommendationPrefs(stable.prefs || {});
+  const nextPrefs = normalizeRecommendationPrefs({
+    ...stablePrefs,
+    style: requestedLock || stablePrefs.style || selectableSwipeStyle(stable.track.style || "")
+  });
+
+  currentRecommendation = stable.track;
+  currentDiscovery = stable.discovery || null;
+  lastPrefs = nextPrefs;
+  pendingQuickKnownAdvance = null;
+  renderRecommendation(stable.track, stablePrefs);
+  renderDiscovery(currentDiscovery);
+  if (resultPanel) resultPanel.classList.remove("hidden");
+  if (detailsPanel) detailsPanel.classList.add("hidden");
+  if (rerollBtn) rerollBtn.disabled = false;
+  syncQuickKnownDecision(stable.track);
+  scheduleSuggestionQueueRefresh(nextPrefs, stable.track, { delayMs: 80 });
+  void renderPreview(stable.track, { fast: true }).catch(() => false);
+  return true;
+}
+
 function clearFailedRecommendationSurface() {
+  if (restoreStableRecommendationSurface()) return true;
   stopAllActivePlayback({ reason: "recommendation_surface_cleared" });
   currentRecommendation = null;
   currentDiscovery = null;
@@ -50922,6 +51064,7 @@ function clearFailedRecommendationSurface() {
   suggestionQueueContextKey = "";
   renderSuggestionQueue(null);
   syncQuickKnownDecision(null);
+  return false;
 }
 
 function swipeThresholds(element) {
@@ -51129,17 +51272,22 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
 }
 
 function presentInstantSwipeRecommendation({ track, prefs, plan = null, message = "" } = {}) {
+  const requestedPrefs = normalizeRecommendationPrefs(prefs || {});
+  const lockedStyle = explicitSwipeAnchorStyle();
+  const trackStyle = selectableSwipeStyle(track?.style || "");
   if (
     !track ||
     !prefs ||
     !isTrackEligibleForRecommendation(track) ||
-    !trackHasVerifiedPlaybackRoute(track)
+    !trackHasVerifiedPlaybackRoute(track) ||
+    (requestedPrefs.style && trackStyle !== requestedPrefs.style) ||
+    (lockedStyle && trackStyle !== lockedStyle)
   ) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const finalPrefs = normalizeRecommendationPrefs({
-    ...prefs,
-    style: selectableSwipeStyle(track.style || prefs.style) || prefs.style || ""
+    ...requestedPrefs,
+    style: lockedStyle || requestedPrefs.style || trackStyle
   });
 
   if (styleEl) styleEl.value = finalPrefs.style;
@@ -51154,11 +51302,24 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
 
   lastPrefs = finalPrefs;
   currentRecommendation = track;
-  currentDiscovery = discoveryModeEl.checked
-    ? pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist)
-    : null;
+  currentDiscovery = null;
   renderRecommendation(track, finalPrefs);
   renderDiscovery(currentDiscovery);
+  rememberStableRecommendationSurface(track, finalPrefs, currentDiscovery);
+  const discoveryTrackKey = recommendationTrackKey(track);
+  window.setTimeout(() => {
+    if (recommendationTrackKey(currentRecommendation) !== discoveryTrackKey) return;
+    currentDiscovery = discoveryModeEl.checked
+      ? pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist)
+      : null;
+    renderDiscovery(currentDiscovery);
+    if (
+      lastStableRecommendationSurface &&
+      recommendationTrackKey(lastStableRecommendationSurface.track) === discoveryTrackKey
+    ) {
+      lastStableRecommendationSurface.discovery = currentDiscovery;
+    }
+  }, 0);
   registerRecommendationDelivery(track, finalPrefs);
   const currentTrackKey = recommendationTrackKey(track);
   if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
@@ -51191,11 +51352,16 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
 
 function pickInstantOpeningTrack(options = null) {
   const requireVerified = options?.requireVerified !== false;
+  const requestedStyle = selectableSwipeStyle(options?.style || "");
   const guidedOpening = guidedDiscoveryRampActive();
-  const styles = (guidedOpening ? GUIDED_OPENING_STYLE_DECK : getAllSelectableStyles())
+  const styles = (requestedStyle
+    ? [requestedStyle]
+    : guidedOpening
+      ? GUIDED_OPENING_STYLE_DECK
+      : getAllSelectableStyles())
     .map((style) => selectableSwipeStyle(style))
     .filter((style, index, list) => style && list.indexOf(style) === index)
-    .filter((style) => guidedOpening || !shouldDeferStyleForTasteMaturity(style, {}));
+    .filter((style) => requestedStyle || guidedOpening || !shouldDeferStyleForTasteMaturity(style, {}));
   const userSeed = currentCurationUserSeed();
   const visitId = currentCurationVisitId();
   const entries = [];
@@ -51287,6 +51453,15 @@ function pickInstantPrimaryNextTrack(
     guidedDiscoveryOtherTrackCount,
     sourceKey
   ].join("::");
+  const lockedFastRoutePoolSize = lockedStyle
+    ? catalogTracksForStyle(lockedStyle).filter((track) => trackHasVerifiedPlaybackRoute(track)).length
+    : 0;
+  const recentRecycleWindow = Math.max(0, Math.min(9, lockedFastRoutePoolSize - 1));
+  const recentlyDeliveredKeys = new Set(
+    recentRecycleWindow
+      ? recentRecommendationDeliveryQueue.slice(-recentRecycleWindow)
+      : []
+  );
   const candidateAllowed = (track, {
     requireFastRoute = true,
     allowSeenArtist = false,
@@ -51307,6 +51482,7 @@ function pickInstantPrimaryNextTrack(
         : !trackHasReliableAudioPreview(track))
     ) return false;
     if (!allowSeenTrack && trackBlockedByKnownSignals(track)) return false;
+    if (allowSeenTrack && recentlyDeliveredKeys.has(trackKey)) return false;
     return allowSeenTrack || anonymousExposurePenalty(track) < 70;
   };
   const pickVariedPrimaryCandidate = (pool = [], tag = "primary") => {
@@ -51443,9 +51619,12 @@ function tryRunInstantPrimaryRecommendation() {
     return presented;
   }
 
-  const opening = pickInstantOpeningTrack();
+  const openingStyle = explicitSwipeAnchorStyle();
+  const opening = pickInstantOpeningTrack({
+    style: openingStyle
+  });
   const fallbackTrack = opening?.track || pickInteractionBudgetTrack({
-    prefs: { style: "", context: "", energy: "", bpm: "", vocals: "" },
+    prefs: { style: openingStyle, context: "", energy: "", bpm: "", vocals: "" },
     sourceTrack: null,
     avoidArtistName: ""
   });
@@ -51483,7 +51662,10 @@ async function tryRunValidatedPrimaryRecommendation({ source = "validated_local"
   try {
     const opening = sourceTrack
       ? null
-      : pickInstantOpeningTrack({ requireVerified: false });
+      : pickInstantOpeningTrack({
+          requireVerified: false,
+          style: anchoredStyle
+        });
     const primaryCandidate = sourceTrack
       ? pickInstantPrimaryNextTrack(sourceTrack, anchoredStyle, { requireVerified: false })
       : opening?.track;
@@ -51809,12 +51991,37 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
 
 async function runPrimaryRecommendationAction({ source = "manual", initialRunner = null } = {}) {
   if (firstRecommendationPromise) return firstRecommendationPromise;
+  if (swipeFeedbackBusy) return false;
   if (!firstRecommendationCompleted && !currentRecommendation) {
     const requestSource = firstRecommendationRetryAvailable ? "retry" : source;
     return runInitialRecommendation({ source: requestSource, initialRunner });
   }
   if (tryRunInstantPrimaryRecommendation()) return true;
   if (await tryRunValidatedPrimaryRecommendation({ source: "other_track_validated" })) return true;
+  const lockedStyle = explicitSwipeAnchorStyle();
+  if (lockedStyle && lastPrefs) {
+    const previousTrack = currentRecommendation;
+    const lockedPrefs = normalizeRecommendationPrefs({
+      ...lastPrefs,
+      style: lockedStyle
+    });
+    const generated = await generateRecommendationWithOverlay(
+      lockedPrefs,
+      {
+        resetRejected: false,
+        avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
+        avoidArtistName: previousTrack?.artist || "",
+        allowKnownFallback: true,
+        failureSfx: false
+      },
+      "catalog"
+    );
+    if (!generated) {
+      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+      showToast(recommendationFailureMessage());
+    }
+    return generated;
+  }
   return runSurpriseRecommendation();
 }
 
@@ -52008,13 +52215,21 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
 }
 
 function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" } = {}) {
-  if (!track || !prefs || !trackHasVerifiedPlaybackRoute(track)) return false;
+  const requestedPrefs = negativeFeedbackBasePrefs(prefs);
+  const lockedStyle = explicitSwipeAnchorStyle();
+  const trackStyle = selectableSwipeStyle(track?.style || "");
+  if (
+    !track ||
+    !prefs ||
+    !trackHasVerifiedPlaybackRoute(track) ||
+    (requestedPrefs.style && trackStyle !== requestedPrefs.style) ||
+    (lockedStyle && trackStyle !== lockedStyle)
+  ) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
-  const basePrefs = negativeFeedbackBasePrefs(prefs);
   const finalPrefs = normalizeRecommendationPrefs({
-    ...basePrefs,
-    style: selectableSwipeStyle(track?.style || "") || basePrefs.style || ""
+    ...requestedPrefs,
+    style: lockedStyle || requestedPrefs.style || trackStyle
   });
   const token = ++fastFeedbackSwapToken;
 
@@ -52038,6 +52253,7 @@ function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" 
   currentDiscovery = null;
   renderRecommendation(track, finalPrefs);
   renderDiscovery(currentDiscovery);
+  rememberStableRecommendationSurface(track, finalPrefs, currentDiscovery);
   registerRecommendationDelivery(track, finalPrefs);
   const currentTrackKey = recommendationTrackKey(track);
   if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
@@ -53135,6 +53351,7 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
         renderDiscovery(currentDiscovery);
         const replacementReady = await renderPreview(replacement);
         if (replacementReady) {
+          rememberStableRecommendationSurface(replacement, lastPrefs, currentDiscovery);
           registerRecommendationDelivery(replacement, lastPrefs);
           refreshSuggestionQueue(lastPrefs, replacement);
         } else {
@@ -58650,7 +58867,7 @@ async function ensureCurrentRecommendationPlayable(
   return true;
 }
 
-async function generateRecommendationFromPrefs(
+async function generateRecommendationFromPrefsInternal(
   prefs,
   {
     resetRejected = false,
@@ -58725,9 +58942,9 @@ async function generateRecommendationFromPrefs(
     recycleKnownStyleCatalog
       ? !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
       : !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  // If the selected style is exhausted, only adjacent styles from the similarity map may be used.
-  const isStyleFallbackLocked = () =>
-    NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
+  // An explicit style is a user contract. Exhaustion may recycle known tracks
+  // inside that style, but it must never silently cross into another style.
+  const isStyleFallbackLocked = () => Boolean(prefs?.style);
 
   const hasEligibleInCurrentScope = () =>
     (prefs.style ? catalogTracksForStyle(prefs.style) : catalog).some(
@@ -59378,7 +59595,29 @@ async function generateRecommendationFromPrefs(
   }
   registerRecommendationDelivery(recommendationSnapshot, prefs);
   refreshSuggestionQueue(prefs, recommendationSnapshot);
+  rememberStableRecommendationSurface(recommendationSnapshot, prefs, discoverySnapshot);
   return true;
+}
+
+async function generateRecommendationFromPrefs(prefs, options = {}) {
+  const surfaceBeforeRequest = captureRecommendationSurface();
+  const surfaceRevisionBeforeRequest = recommendationSurfaceCommitRevision;
+  const restoreIfStillCurrent = () => {
+    if (
+      surfaceBeforeRequest &&
+      recommendationSurfaceCommitRevision === surfaceRevisionBeforeRequest
+    ) {
+      restoreStableRecommendationSurface(surfaceBeforeRequest);
+    }
+  };
+  try {
+    const generated = await generateRecommendationFromPrefsInternal(prefs, options);
+    if (!generated) restoreIfStillCurrent();
+    return generated;
+  } catch (error) {
+    restoreIfStillCurrent();
+    throw error;
+  }
 }
 
 async function generateRecommendationWithOverlay(prefs, options = {}, mode = "default") {
@@ -59478,6 +59717,7 @@ async function activateSuggestionQueueIndex(index) {
         return false;
       }
     }
+    rememberStableRecommendationSurface(activatedTrack, lastPrefs, currentDiscovery);
     registerRecommendationDelivery(activatedTrack, lastPrefs);
     refreshSuggestionQueue(lastPrefs, activatedTrack);
 
@@ -59655,10 +59895,10 @@ async function runSwipeStyleRecommendation(style = "") {
     action: "style_deck",
     startedAt: interactionStartedAt
   })) {
-    swipeUserAnchoredStyle = currentRecommendation?.style || safeStyle;
+    swipeUserAnchoredStyle = safeStyle;
     lastPrefs = {
       ...prefs,
-      style: swipeUserAnchoredStyle
+      style: safeStyle
     };
     showToast(t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) }));
     savePreferences();
@@ -59682,10 +59922,17 @@ async function runSwipeStyleRecommendation(style = "") {
     return false;
   }
 
-  swipeUserAnchoredStyle = currentRecommendation?.style || safeStyle;
+  if (selectableSwipeStyle(currentRecommendation?.style || "") !== safeStyle) {
+    restoreStableRecommendationSurface();
+    const fallback = recommendationFailureMessage();
+    if (feedbackMessage) feedbackMessage.textContent = fallback;
+    showToast(fallback);
+    return false;
+  }
+  swipeUserAnchoredStyle = safeStyle;
   const finalSwipeStylePrefs = {
     ...prefs,
-    style: swipeUserAnchoredStyle
+    style: safeStyle
   };
   lastPrefs = finalSwipeStylePrefs;
   if (rerollBtn) rerollBtn.disabled = false;
@@ -59705,7 +59952,7 @@ async function runSwipeStyleRecommendation(style = "") {
 }
 
 async function runRecommendation() {
-  if (recommendationRunBusy) return;
+  if (recommendationRunBusy || swipeFeedbackBusy) return;
   const interactionStartedAt = discoveryInteractionNow();
   stopAllActivePlayback({ reason: "manual_recommendation" });
   if (!canUseMusicDiscovery()) {
@@ -59720,6 +59967,7 @@ async function runRecommendation() {
     bpm: bpmEl.value,
     vocals: vocalsEl.value
   };
+  swipeUserAnchoredStyle = prefs.style ? selectableSwipeStyle(prefs.style) : "";
   playUiSfx("search-start");
   if (tryPresentInteractionBudgetRecommendation({
     prefs,
@@ -59795,27 +60043,31 @@ async function runRecommendation() {
     });
     if (blockedByCoverage) {
       playUiSfx("notice");
-      if (resultPanel) resultPanel.classList.add("hidden");
-      suggestionQueueTracks = [];
-      suggestionQueueContextKey = "";
-      renderSuggestionQueue(prefs);
-      renderTrackInsightPanel(null);
+      if (!currentRecommendation) {
+        if (resultPanel) resultPanel.classList.add("hidden");
+        suggestionQueueTracks = [];
+        suggestionQueueContextKey = "";
+        renderSuggestionQueue(prefs);
+        renderTrackInsightPanel(null);
+      }
       return;
     }
     if (!recommendationGenerated) {
       playUiSfx("notice");
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
-      if (resultPanel) resultPanel.classList.add("hidden");
-      suggestionQueueTracks = [];
-      suggestionQueueContextKey = "";
-      renderSuggestionQueue(prefs);
-      renderTrackInsightPanel(null);
+      if (!currentRecommendation) {
+        if (resultPanel) resultPanel.classList.add("hidden");
+        suggestionQueueTracks = [];
+        suggestionQueueContextKey = "";
+        renderSuggestionQueue(prefs);
+        renderTrackInsightPanel(null);
+      }
       return;
     }
     savePreferences();
 
-    swipeUserAnchoredStyle = prefs.style ? (currentRecommendation?.style || prefs.style) : "";
+    swipeUserAnchoredStyle = prefs.style ? selectableSwipeStyle(prefs.style) : "";
     lastPrefs = prefs;
     if (rerollBtn) rerollBtn.disabled = false;
     const styleFallbackMessage = applyStyleFallbackMessage({ setFeedback: false });
@@ -59878,6 +60130,7 @@ async function runManualFilterSurprise() {
 
   const previousTrack = currentRecommendation;
   const interactionStartedAt = discoveryInteractionNow();
+  swipeUserAnchoredStyle = prefs.style ? selectableSwipeStyle(prefs.style) : "";
   stopAllActivePlayback({ reason: "manual_filter_surprise" });
   if (tryPresentInteractionBudgetRecommendation({
     prefs,
@@ -59889,7 +60142,7 @@ async function runManualFilterSurprise() {
     action: "filtered_surprise",
     startedAt: interactionStartedAt
   })) {
-    swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
+    swipeUserAnchoredStyle = prefs.style ? selectableSwipeStyle(prefs.style) : "";
     playUiSfx("search-done");
     return true;
   }
@@ -59909,11 +60162,11 @@ async function runManualFilterSurprise() {
     const fallback = recommendationFailureMessage();
     if (feedbackMessage) feedbackMessage.textContent = fallback;
     showToast(fallback);
-    return true;
+    return false;
   }
 
   lastPrefs = prefs;
-  swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
+  swipeUserAnchoredStyle = prefs.style ? selectableSwipeStyle(prefs.style) : "";
   if (rerollBtn) rerollBtn.disabled = false;
   if (eventsPanel) eventsPanel.classList.add("hidden");
   if (eventsIntro) eventsIntro.textContent = t("eventsPrompt");
@@ -60073,6 +60326,7 @@ async function runSurpriseRecommendation({
       }
     }
 
+    rememberStableRecommendationSurface(surpriseTrack, surprisePrefs, currentDiscovery);
     registerRecommendationDelivery(surpriseTrack, surprisePrefs);
     rememberAnonymousOpeningTrack(surpriseTrack);
     refreshSuggestionQueue(surprisePrefs, surpriseTrack);
@@ -61246,12 +61500,10 @@ async function handleKnownArtistYes() {
     allowKnownFallback: false
   });
   if (!generated) {
-    currentRecommendation = null;
-    currentDiscovery = null;
-    if (resultPanel) resultPanel.classList.add("hidden");
     if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
     if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-    syncQuickKnownDecision(null);
+    restoreStableRecommendationSurface();
+    syncQuickKnownDecision(currentRecommendation);
     if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
     showToast(recommendationFailureMessage());
     return;
@@ -61267,12 +61519,10 @@ async function handleKnownArtistYes() {
       allowKnownFallback: false
     });
     if (!generated) {
-      currentRecommendation = null;
-      currentDiscovery = null;
-      if (resultPanel) resultPanel.classList.add("hidden");
       if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
       if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-      syncQuickKnownDecision(null);
+      restoreStableRecommendationSurface();
+      syncQuickKnownDecision(currentRecommendation);
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
       return;
@@ -61280,12 +61530,10 @@ async function handleKnownArtistYes() {
   }
 
   if (artistMatchKey(currentRecommendation.artist) === artistKey) {
-    currentRecommendation = null;
-    currentDiscovery = null;
-    if (resultPanel) resultPanel.classList.add("hidden");
     if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
     if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-    syncQuickKnownDecision(null);
+    restoreStableRecommendationSurface();
+    syncQuickKnownDecision(currentRecommendation);
     if (feedbackMessage) {
       feedbackMessage.textContent = t("noUnknownOption");
     }

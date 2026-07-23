@@ -150,6 +150,6 @@ assert.match(appSource, /guidedRamp && !guidedDiscoveryStyleAllowed\(track\.styl
 assert.match(appSource, /bind\(topSwipeSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(appSource, /bind\(swipeHeroSurpriseBtn[\s\S]*?registerGuidedDiscoveryOtherTrack\(\)/);
 assert.match(minifiedSource, /guided-opening-choice/);
-assert.match(indexSource, /app\.min\.js\?v=20260721slambient1/);
+assert.match(indexSource, /app\.min\.js\?v=20260723transaction5/);
 
 console.log("Guided discovery ramp tests passed: varied safe opening, Psy bridge, DnB bridge, wide catalog, no early Psycore.");

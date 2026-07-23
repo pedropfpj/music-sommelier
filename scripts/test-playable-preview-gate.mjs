@@ -67,6 +67,9 @@ assert.match(verificationGate, /markTrackPreviewVerified\(track, playable\)/);
 assert.match(verificationGate, /track\.previewMissing = true/);
 assert.match(verificationGate, /prewarmedSwipeTrackKeys\.has\(trackKey\)/);
 assert.match(verificationGate, /function trackHasVerifiedEmbeddedPreview/);
+assert.match(verificationGate, /CURATED_EXACT_BANDCAMP_ROUTES/);
+assert.match(verificationGate, /restoreCuratedExactBandcampRoute\(track\)/);
+assert.match(verificationGate, /\(curatedExactRoute \|\| isTrustedCuratedCatalogTrack\(track\)\)/);
 assert.match(verificationGate, /isExactBandcampTrackUrl\(track\.bandcampTrackUrl\)/);
 assert.match(verificationGate, /isTrustedCuratedCatalogTrack\(track\)/);
 assert.match(verificationGate, /trackHasEmbeddableBandcampTrack\(track\)/);
@@ -81,6 +84,8 @@ assert.match(instantPresenter, /!trackHasVerifiedPlaybackRoute\(track\)/);
 assert.match(primaryPicker, /trackHasVerifiedPlaybackRoute\(track\)/);
 assert.match(primaryPicker, /locked-style-artist-recycle/);
 assert.match(primaryPicker, /locked-style-track-recycle/);
+assert.match(primaryPicker, /recentRecommendationDeliveryQueue\.slice\(-recentRecycleWindow\)/);
+assert.match(primaryPicker, /allowSeenTrack && recentlyDeliveredKeys\.has\(trackKey\)/);
 assert.doesNotMatch(primaryPicker, /global-local|`local:/);
 assert.match(validatedPrimary, /validationCandidates\.slice\(0, 3\)/);
 assert.match(validatedPrimary, /timeoutMs: 1450/);
@@ -95,6 +100,10 @@ assert.ok(
   (source.match(/audio-ssl\.itunes\.apple\.com\/itunes-assets\/AudioPreview/g) || []).length >= 25,
   "The compact starter pool must keep enough playable artists for varied no-login sessions."
 );
+assert.match(source, /circusrecordings\.bandcamp\.com\/track\/bigger-than-prince-original-mix/);
+assert.match(source, /bandcampTrackId: "183678930"/);
+assert.match(source, /pawsa\.bandcamp\.com\/track\/the-groovy-cat-2/);
+assert.match(source, /bandcampTrackId: "2475692937"/);
 assert.doesNotMatch(source, /hydrateFastPlayableDataset|FAST_PLAYABLE_DATASET_FILES|fastPlayableDatasetPromise/);
 assert.match(negativePicker, /trackHasVerifiedPlaybackRoute\(track\)/);
 assert.match(negativePicker, /allowSeenArtist/);
@@ -109,7 +118,9 @@ assert.match(previewRenderer, /normalizePreviewUrl\(playablePreview\)/);
 assert.doesNotMatch(previewRenderer, /previewSoundcloudSearchHint/);
 
 assert.match(suggestionPrewarm, /markTrackPreviewVerified\(track, previewUrl\)/);
-assert.match(suggestionPrewarm, /\.slice\(0, 3\)/);
+assert.match(suggestionPrewarm, /\.slice\(0, 12\)/);
+assert.match(suggestionPrewarm, /refreshablePreviewScheduled >= 10/);
+assert.match(suggestionPrewarm, /prewarmedSwipeAudioByTrack\.size > 14/);
 assert.doesNotMatch(source, /prewarmGuidedPreviewPool|guidedPreviewPrewarmPromise/);
 assert.match(previewPlayback, /preserve: "preview"/);
 assert.match(previewPlayback, /loadedSource !== normalizePreviewUrl\(previewSource\)/);
