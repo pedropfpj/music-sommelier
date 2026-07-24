@@ -172,6 +172,7 @@ const STYLE_TO_FAMILY = {
 
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v2";
+const SONIC_EDITORIAL_CACHE_KEY = "sonic_search_editorial_cache_v1";
 const DAILY_NEWS_MAX_ITEMS = 8;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 9000;
 const DAILY_NEWS_MAX_AGE_DAYS = 45;
@@ -372,6 +373,7 @@ const ACCESS_DEFAULT_CONFIG = {
   betaAccessCodes: [],
   betaAccessApiEndpoint: "",
   betaEventsEndpoint: "/api/beta-events",
+  adminAccessEndpoint: "/api/access-context",
   adminAnalyticsEndpoint: "/api/admin-analytics",
   waitlistEmail: "pedropfpj@gmail.com"
 };
@@ -992,7 +994,7 @@ function buildExpandedPsytranceFullSetSeeds() {
     ["global_psy", "psytrance", "Psytrance / Festival", "tGvWMBWHgiw", "Durs at Universo Paralello 2024/25 | Full Set", "Durs", "Universo Paralello"],
     ["global_psy", "psytrance", "Psytrance / Festival", "z465P9sk0PA", "AJJA's full set at Psy-Fi 2018", "AJJA's", "Psy-Fi Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "f4CKrwmFPWA", "DigiCult Full set recording at Psy-Fi 2018", "DigiCult Full set recording", "Psy-Fi Festival"],
-    ["global_psy", "psytrance", "Psytrance / Festival", "TcT8-CVHBgw", "Fungus Funk full set recording at Psy-Fi 2017", "Fungus Funk full set recording", "Psy-Fi Festival"],
+    ["global_psy", "full_on_night", "Full-On Night", "TcT8-CVHBgw", "Fungus Funk full set recording at Psy-Fi 2017", "Fungus Funk", "Psy-Fi Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "K4_uRrhQzOw", "Drip Drop full live set at Psy-Fi 2017", "Drip Drop full live set", "Psy-Fi Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "SbIIj06bvnU", "OXIDAKSI Full set at Psy-Fi Festival 2018", "OXIDAKSI", "Psy-Fi Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "LhhogVZ7Rlo", "Liquid Soul full closing set at Psy-Fi 2018", "Liquid Soul full closing set", "Psy-Fi Festival"],
@@ -1026,7 +1028,7 @@ function buildExpandedPsytranceFullSetSeeds() {
     ["global_psy", "psytrance", "Psytrance / Festival", "-DUZ3l1aUvo", "Atmos Full Live Set @ Shankra Festival 2018", "Atmos Full Live Set", "Shankra Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "otW_flPF4SQ", "Perfect Stranger -  Shankra Festival (Full Set ) 2023", "Perfect Stranger", "Shankra Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "2-PJVOxOJPg", "Protonica Live @ Shankra Festival 2019", "Protonica", "Shankra Festival"],
-    ["global_psy", "psytrance", "Psytrance / Festival", "raHuutp0lhw", "Fungus Funk Full Live Set @ Shankra Festival 2018", "Fungus Funk Full Live Set", "Shankra Festival"],
+    ["global_psy", "full_on_night", "Full-On Night", "raHuutp0lhw", "Fungus Funk Full Live Set @ Shankra Festival 2018", "Fungus Funk", "Shankra Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "EieUsx2lsF8", "Estefano Haze Live @ Shankra Festival 2019", "Estefano Haze", "Shankra Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "zlBkOUIYIwI", "Makumba Full Set @ Shankra Festival 2018", "Makumba", "Shankra Festival"],
     ["global_psy", "psytrance", "Psytrance / Festival", "1D_3DZmw49s", "Shankra 2018 (Full on/Morning Set)", "Shankra 2018 (Full on/Morning Set", "Shankra Festival"],
@@ -2288,11 +2290,11 @@ function buildArtistLedDjSetExpansionSeeds() {
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "o8e7nX5U3r0", "Psykovsky (FULL SET 4hs) @ Gaia Connection 2019 - like BSTV", "Psykovsky", "YouTube Artist Full Set"],
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "jp-KRwXmMBA", "Psykovsky - Debut (Vertigo Records) @ Sefirot DJ Set", "Psykovsky", "YouTube Artist Full Set"],
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "h4vOQzD9jyM", "ॐ Maestro Psykovsky | Best Original Psytrance | 3 Hour Set 4K | Anatman 2024 ॐ", "Psykovsky", "YouTube Artist Full Set"],
-    ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "TcT8-CVHBgw", "Fungus Funk full set recording at Psy-Fi 2017", "Fungus Funk hitech", "YouTube Artist Full Set"],
-    ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "raHuutp0lhw", "Fungus Funk Full Live Set @ Shankra Festival 2018", "Fungus Funk hitech", "YouTube Artist Full Set"],
-    ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "ZmefSTpG3Yg", "Fungus Funk Live Set @ Unite - Psytrance Sessions", "Fungus Funk hitech", "YouTube Artist Full Set"],
-    ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "Or4l2usWjOY", "Fungus Funk Full Live @ Trance Odyssey 2022", "Fungus Funk hitech", "YouTube Artist Full Set"],
-    ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "WxUwIL6WK3Y", "Fungus Funk - Emergency Dancefloor Kit [Full Album Mix]", "Fungus Funk hitech", "YouTube Artist Full Set"],
+    ["global_psy", "full_on_night", "Full-On Night", "TcT8-CVHBgw", "Fungus Funk full set recording at Psy-Fi 2017", "Fungus Funk", "YouTube Artist Full Set"],
+    ["global_psy", "full_on_night", "Full-On Night", "raHuutp0lhw", "Fungus Funk Full Live Set @ Shankra Festival 2018", "Fungus Funk", "YouTube Artist Full Set"],
+    ["global_psy", "full_on_night", "Full-On Night", "ZmefSTpG3Yg", "Fungus Funk Live Set @ Unite - Psytrance Sessions", "Fungus Funk", "YouTube Artist Full Set"],
+    ["global_psy", "full_on_night", "Full-On Night", "Or4l2usWjOY", "Fungus Funk Full Live @ Trance Odyssey 2022", "Fungus Funk", "YouTube Artist Full Set"],
+    ["global_psy", "full_on_night", "Full-On Night", "WxUwIL6WK3Y", "Fungus Funk - Emergency Dancefloor Kit [Full Album Mix]", "Fungus Funk", "YouTube Artist Full Set"],
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "XO4id1OGPZk", "Junxpunx & Enichkin live set Kamino Floor Stream", "JunxPunx", "YouTube Artist Full Set"],
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "PwNlaDfba2E", "Junx Punx (Osom Music/Galactic crew) ∥ Live", "JunxPunx", "YouTube Artist Full Set"],
     ["hitech_psycore", "hi_tech", "Hi-Tech / Psycore", "ziZxHsMMJgg", "MAD TRIBE Special Live SET 2020 - Will O Wisp - Fullon Psytrance with Psychedelic Animations", "Will O Wisp psytrance", "YouTube Artist Full Set"],
@@ -4176,7 +4178,16 @@ function buildDjSetRecommendationSeeds() {
 
 function ensureDjSetRecommendationSeeds() {
   if (!djSetRecommendationSeedsCache) {
-    djSetRecommendationSeedsCache = buildDjSetRecommendationSeeds();
+    const normalizedSeeds = buildDjSetRecommendationSeeds()
+      .map(normalizeDjRecommendationTaxonomy)
+      .filter(Boolean);
+    const uniqueSeeds = new Map();
+    normalizedSeeds.forEach((seed) => {
+      const directUrl = String(seed?.setUrl || "").trim();
+      const key = directUrl || djRecommendationKey(seed);
+      if (key && !uniqueSeeds.has(key)) uniqueSeeds.set(key, seed);
+    });
+    djSetRecommendationSeedsCache = Array.from(uniqueSeeds.values());
   }
   return djSetRecommendationSeedsCache;
 }
@@ -4554,6 +4565,11 @@ const FAST_COVERAGE_WAIT_MS = 420;
 const PREVIEW_PROBE_TIMEOUT_MS = 1800;
 const FAST_PREVIEW_PROBE_TIMEOUT_MS = 620;
 const FAST_PREVIEW_PROBE_LIMIT = 2;
+// User-triggered discovery actions must present the next card well before the
+// public 2s promise. Preview enrichment may continue after the card is ready.
+const DISCOVERY_INTERACTION_TARGET_MS = 1800;
+const INTERACTION_FALLBACK_STYLE_LIMIT = 12;
+const INTERACTION_FALLBACK_POOL_LIMIT = 240;
 // Provider resolution normally takes 1–2.6s in production. A 900ms cutoff
 // abandoned valid SoundCloud/iTunes routes and surfaced metadata-only cards.
 const FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS = 3200;
@@ -4569,7 +4585,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260630betaTester1";
+const SONIC_APP_BUILD_ID = "20260721adminOps1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -6669,7 +6685,267 @@ const CURATED_TECHNO_SUBGENRE_EXPANSION = [
   };
 });
 
+// The first card is a product promise, not a catalog stress test. Keep a
+// compact, refreshable deck of approachable tracks available before the
+// heavier catalog hydration starts. Deezer ids refresh expiring previews at
+// playback time, while the curated BPM/style evidence keeps the card honest.
+const CURATED_FRIENDLY_OPENING_TRACKS = [
+  {
+    style: "house",
+    artist: "Frankie Knuckles",
+    song: "Your Love",
+    label: "Trax Records",
+    bpmExact: 122,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["warmup", "social", "casa"],
+    deezerTrackId: "1600906202",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/d50cc0c3e9c59e8e63fb773b4f7c4501/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "house",
+    artist: "Peggy Gou",
+    song: "It Makes You Forget (Itgehane) (Edit)",
+    label: "Ninja Tune",
+    bpmExact: 124.91,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["social", "casa", "estrada"],
+    deezerTrackId: "453070462",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/bac67a09b08bb7b999f673eb01257b37/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "deep_house",
+    artist: "Larry Heard",
+    song: "Can You Feel It (Instrumental)",
+    label: "Alleviated Records",
+    bpmExact: 122,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["casa", "foco", "relaxar"],
+    deezerTrackId: "3118726241",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/10aae559e2bc6cd72957a39a2d129122/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "deep_house",
+    artist: "Nora En Pure",
+    song: "Come with Me (Radio Mix)",
+    label: "Enormous Tunes",
+    bpmExact: 119.8,
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["estrada", "relaxar", "casa"],
+    deezerTrackId: "64627716",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/c6636594e5c8b2ac8af2f7741b4c762b/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "tech_house",
+    artist: "FISHER",
+    song: "Losing It",
+    label: "Catch & Release",
+    bpmExact: 124.91,
+    energy: "high",
+    vocals: "light_vocals",
+    context: ["social", "treino", "peak"],
+    deezerTrackId: "525334532",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/b62a06ef55ce19c91c67f1ebaa098886/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "progressive_house",
+    artist: "deadmau5",
+    song: "Strobe (Radio Edit)",
+    label: "mau5trap",
+    bpmExact: 128,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["estrada", "foco", "criar"],
+    deezerTrackId: "5150299",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/fb96300330027d5e4706a948c1bbe05a/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "progressive_house",
+    artist: "Lane 8",
+    song: "Atlas",
+    label: "This Never Happened",
+    bpmExact: 122,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["estrada", "foco", "relaxar"],
+    deezerTrackId: "855289062",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/c55292e572bb1b1da2b2aefe82e3b0ef/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "organic_house",
+    artist: "Satori",
+    song: "Umama",
+    label: "Crosstown Rebels",
+    bpmExact: 116,
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["relaxar", "casa", "social"],
+    deezerTrackId: "2195572697",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/3577181f889c6bc3f4ffb6b112aa2621/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "afro_house",
+    artist: "Rampa",
+    song: "Muyè",
+    label: "Keinemusik",
+    bpmExact: 119.84,
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["social", "casa", "estrada"],
+    deezerTrackId: "419089892",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/260eb8ba908cf6d2bfbe4ee6af4d4284/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "soulful_house",
+    artist: "Louie Vega",
+    song: "Diamond Life (Dance Ritual Mix)",
+    label: "Vega Records",
+    bpmExact: 124.2,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["social", "casa", "warmup"],
+    deezerTrackId: "3155517111",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/4bdef8cb8df0c6479cd02aea01765dbe/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "disco_house",
+    artist: "Purple Disco Machine",
+    song: "Body Funk (Edit)",
+    label: "Club Sweat",
+    bpmExact: 124,
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["social", "casa", "treino"],
+    deezerTrackId: "1474600932",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/b6839794d401b47d7b2854d8968d2836/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "garage_house",
+    artist: "MK",
+    song: "Burning (Vibe Mix Edit)",
+    label: "Defected",
+    bpmExact: 127,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["social", "warmup", "casa"],
+    deezerTrackId: "3155622451",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/90e2b2be04717da6671be9f927ebf9e1/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "melodic_techno",
+    artist: "Anyma",
+    song: "Consciousness",
+    label: "Afterlife",
+    bpmExact: 126,
+    energy: "mid",
+    vocals: "light_vocals",
+    context: ["estrada", "noite", "foco"],
+    deezerTrackId: "2395988015",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/c295e6f1c8ac6f09ecab8215fd16f197/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "minimal_techno",
+    artist: "Plastikman",
+    song: "Spastik",
+    label: "Plus 8",
+    bpmExact: 128,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["foco", "noite", "warmup"],
+    deezerTrackId: "932289392",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/e2da7d9dc11d4c9b70bb56dbecc67df1/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "deep_techno",
+    artist: "Luigi Tozzi",
+    song: "Tender Is The Night",
+    label: "Hypnus Records",
+    bpmExact: 128,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["foco", "noite", "after"],
+    deezerTrackId: "621474212",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/d6db3f9cdb82a3435520bb0cb45ef1d6/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "dub_techno",
+    artist: "Basic Channel",
+    song: "Phylyps Trak Ii/I",
+    label: "Basic Channel",
+    bpmExact: 127,
+    energy: "mid",
+    vocals: "instrumental",
+    context: ["foco", "relaxar", "after"],
+    deezerTrackId: "486261282",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/eb9a6740bceead61b9fb1bf15b0dbc8f/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "ambient_techno",
+    artist: "Biosphere",
+    song: "Novelty Waves",
+    label: "Apollo",
+    bpmExact: 123.8,
+    energy: "low",
+    vocals: "instrumental",
+    context: ["foco", "relaxar", "criar"],
+    deezerTrackId: "6333480",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/e0feac3b660551e782925a0caed1552e/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "downtempo",
+    artist: "Bonobo",
+    song: "Kiara",
+    label: "Ninja Tune",
+    bpmExact: 97.1,
+    energy: "low",
+    vocals: "instrumental",
+    context: ["foco", "relaxar", "criar"],
+    deezerTrackId: "10235994",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/2d7466fa488d38bc56ac9da0bdbc0082/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "uk_garage",
+    artist: "Sammy Virji",
+    song: "If U Need It",
+    label: "Astralwerks",
+    bpmExact: 132,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["social", "treino", "estrada"],
+    deezerTrackId: "2516525761",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/46e3bc5f8b650454c205803bdc65cd29/500x500-000000-80-0-0.jpg"
+  },
+  {
+    style: "liquid_dnb",
+    artist: "Hybrid Minds",
+    song: "Touch",
+    label: "Hybrid Music",
+    bpmExact: 174,
+    energy: "mid",
+    vocals: "vocal",
+    context: ["estrada", "treino", "foco"],
+    deezerTrackId: "499984752",
+    coverArtUrl: "https://cdn-images.dzcdn.net/images/cover/5a4724ba17c97c1bc97069673d2189b9/500x500-000000-80-0-0.jpg"
+  }
+].map((track) => ({
+  ...track,
+  bpm: mapBpmToRange(track.bpmExact),
+  vibe: `Faixa de entrada curada para apresentar ${track.style.replace(/_/g, " ")} sem prender o primeiro contato a um único artista.`,
+  spotifyUrl: `https://open.spotify.com/search/${encodeURIComponent(`${track.artist} ${track.song}`)}`,
+  youtubeUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(`${track.artist} ${track.song}`)}`,
+  artistGenre: track.style.replace(/_/g, " "),
+  artistProfileHint: `Faixa confirmada para a abertura amigável de ${track.style.replace(/_/g, " ")}.`,
+  existenceVerified: true,
+  spotifyVerified: false,
+  youtubeVerified: true,
+  source: "friendly_opening_curated_v1"
+}));
+
 const catalog = [
+  ...CURATED_FRIENDLY_OPENING_TRACKS,
   ...CURATED_BANDCAMP_TRACK_EXPANSION,
   ...CURATED_TECHNO_SUBGENRE_EXPANSION,
   {
@@ -9148,6 +9424,41 @@ const adminAnalyticsStatusText = document.getElementById("adminAnalyticsStatusTe
 const adminAnalyticsViewer = document.getElementById("adminAnalyticsViewer");
 const adminTrendChart = document.getElementById("adminTrendChart");
 const adminRetentionRing = document.getElementById("adminRetentionRing");
+const adminMeasurementBadge = document.getElementById("adminMeasurementBadge");
+const adminFunnelList = document.getElementById("adminFunnelList");
+const adminIssueTotal = document.getElementById("adminIssueTotal");
+const adminIssuePreview = document.getElementById("adminIssuePreview");
+const adminIssueStyle = document.getElementById("adminIssueStyle");
+const adminIssueBpm = document.getElementById("adminIssueBpm");
+const adminIssueImage = document.getElementById("adminIssueImage");
+const adminIssueList = document.getElementById("adminIssueList");
+const adminHealthRefreshBtn = document.getElementById("adminHealthRefreshBtn");
+const adminHealthStatus = document.getElementById("adminHealthStatus");
+const adminHealthGrid = document.getElementById("adminHealthGrid");
+const adminModerationRefreshBtn = document.getElementById("adminModerationRefreshBtn");
+const adminModerationStatus = document.getElementById("adminModerationStatus");
+const adminModerationList = document.getElementById("adminModerationList");
+const adminNewsroom = document.getElementById("adminNewsroom");
+const adminNewsForm = document.getElementById("adminNewsForm");
+const adminNewsId = document.getElementById("adminNewsId");
+const adminNewsStatus = document.getElementById("adminNewsStatus");
+const adminNewsStatusField = document.getElementById("adminNewsStatusField");
+const adminNewsFormMode = document.getElementById("adminNewsFormMode");
+const adminNewsNewBtn = document.getElementById("adminNewsNewBtn");
+const adminNewsRefreshBtn = document.getElementById("adminNewsRefreshBtn");
+const adminNewsList = document.getElementById("adminNewsList");
+const adminNewsSaveDraftBtn = document.getElementById("adminNewsSaveDraftBtn");
+const adminNewsPublishBtn = document.getElementById("adminNewsPublishBtn");
+const adminNewsArchiveBtn = document.getElementById("adminNewsArchiveBtn");
+const adminNewsCoverFile = document.getElementById("adminNewsCoverFile");
+const adminNewsMediaOneFile = document.getElementById("adminNewsMediaOneFile");
+const adminNewsMediaTwoFile = document.getElementById("adminNewsMediaTwoFile");
+const adminNewsMediaThreeFile = document.getElementById("adminNewsMediaThreeFile");
+const adminNewsSponsored = document.getElementById("adminNewsSponsored");
+const adminNewsDisclosureWrap = document.getElementById("adminNewsDisclosureWrap");
+const adminNewsPreview = document.getElementById("adminNewsPreview");
+const adminNewsPreviewImage = document.getElementById("adminNewsPreviewImage");
+const adminNewsPreviewFallback = document.getElementById("adminNewsPreviewFallback");
 const signatureBar = document.getElementById("signatureBar");
 const appTabPanels = document.querySelectorAll("[data-app-tab]");
 const catalogStatsKicker = document.getElementById("catalogStatsKicker");
@@ -9169,6 +9480,10 @@ const dailyNewsStatus = document.getElementById("dailyNewsStatus");
 const dailyNewsProgress = document.getElementById("dailyNewsProgress");
 const dailyNewsProgressFill = document.getElementById("dailyNewsProgressFill");
 const dailyNewsList = document.getElementById("dailyNewsList");
+const sonicEditorialStatus = document.getElementById("sonicEditorialStatus");
+const sonicEditorialList = document.getElementById("sonicEditorialList");
+const sonicNewsReader = document.getElementById("sonicNewsReader");
+const sonicNewsReaderClose = document.getElementById("sonicNewsReaderClose");
 const supportPanel = document.getElementById("supportPanel");
 const supportKicker = document.getElementById("supportKicker");
 const supportTitle = document.getElementById("supportTitle");
@@ -9510,6 +9825,10 @@ const communityKicker = document.getElementById("communityKicker");
 const communityTitle = document.getElementById("communityTitle");
 const communityIntro = document.getElementById("communityIntro");
 const communityRefreshBtn = document.getElementById("communityRefreshBtn");
+const communityStoryKicker = document.getElementById("communityStoryKicker");
+const communityStoryTitle = document.getElementById("communityStoryTitle");
+const communityStoryText = document.getElementById("communityStoryText");
+const communityStoryCta = document.getElementById("communityStoryCta");
 const communityTopicTabs = document.getElementById("communityTopicTabs");
 const communityComposer = document.getElementById("communityComposer");
 const communityPostTitle = document.getElementById("communityPostTitle");
@@ -9563,6 +9882,19 @@ const djModeGenerateBtn = document.getElementById("djModeGenerateBtn");
 const djModeList = document.getElementById("djModeList");
 const djModeStatus = document.getElementById("djModeStatus");
 const djDiscoveryPanel = document.getElementById("djDiscoveryPanel");
+const djIntentPanel = document.getElementById("djIntentPanel");
+const djIntentTitle = document.getElementById("djIntentTitle");
+const djIntentFamilyOptions = document.getElementById("djIntentFamilyOptions");
+const djIntentFamilyButtons = Array.from(document.querySelectorAll("[data-dj-intent-family]"));
+const djIntentRefinement = document.getElementById("djIntentRefinement");
+const djIntentRefinementTitle = document.getElementById("djIntentRefinementTitle");
+const djIntentStyleOptions = document.getElementById("djIntentStyleOptions");
+const djIntentBackBtn = document.getElementById("djIntentBackBtn");
+const djIntentSurpriseBtn = document.getElementById("djIntentSurpriseBtn");
+const djIntentStatus = document.getElementById("djIntentStatus");
+const djDiscoveryResults = document.getElementById("djDiscoveryResults");
+const djActiveChoiceLabel = document.getElementById("djActiveChoiceLabel");
+const djChangeIntentBtn = document.getElementById("djChangeIntentBtn");
 const djDiscoverySceneFilter = document.getElementById("djDiscoverySceneFilter");
 const djDiscoveryShuffleBtn = document.getElementById("djDiscoveryShuffleBtn");
 const djSwipeCard = document.getElementById("djSwipeCard");
@@ -9867,6 +10199,9 @@ let dislikedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
 let currentDjRecommendation = null;
+let currentDjIntent = null;
+let pendingDjIntentFamily = "";
+let djIntentBusy = false;
 let djSwipeBusy = false;
 let djSwipeDragState = null;
 let likedDjRecommendationKeys = new Set();
@@ -9882,6 +10217,9 @@ let swipeStyleExposureCounts = new Map();
 let curationUserSeed = "";
 let curationVisitId = "";
 const curationOpenSeed = createRuntimeCurationSeed();
+let openingRotationSlot = null;
+let openingRotationSlotPromise = null;
+let openingRotationSlotSource = "";
 let swipeStyleRailExpanded = false;
 let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
@@ -9923,6 +10261,79 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
+const RECOMMENDATION_MODEL_VERSION = "hybrid-hierarchical-v1";
+const SWIPE_CROSS_FAMILY_EXPLORATION_MIN_SIGNALS = 6;
+const SWIPE_CROSS_FAMILY_EXPLORATION_STEP = 4;
+const SWIPE_CROSS_FAMILY_EXPLORATION_LIMIT = 4;
+const STYLE_FAMILY_DISCOVERY_BRIDGES = {
+  house: [
+    "uk_garage",
+    "dub_techno",
+    "liquid_dnb",
+    "dubstep",
+    "jungle",
+    "neurofunk",
+    "progressive_psy"
+  ],
+  techno: [
+    "uk_garage",
+    "liquid_dnb",
+    "dubstep",
+    "jungle",
+    "neurofunk",
+    "progressive_psy",
+    "deep_house"
+  ],
+  psytrance: [
+    "techno",
+    "dub_techno",
+    "uk_garage",
+    "liquid_dnb",
+    "dubstep",
+    "neurofunk"
+  ],
+  dnb: [
+    "dubstep",
+    "uk_garage",
+    "techno",
+    "deep_house",
+    "progressive_psy",
+    "experimental_bass"
+  ],
+  bass_music: [
+    "uk_garage",
+    "liquid_dnb",
+    "jungle",
+    "neurofunk",
+    "techno",
+    "deep_house",
+    "progressive_psy"
+  ],
+  leftfield: [
+    "dub_techno",
+    "deep_house",
+    "uk_garage",
+    "liquid_dnb",
+    "progressive_psy",
+    "dubstep"
+  ],
+  trance: [
+    "progressive_psy",
+    "techno",
+    "deep_house",
+    "liquid_dnb",
+    "uk_garage",
+    "dubstep"
+  ],
+  hard_dance: [
+    "techno",
+    "neurofunk",
+    "dubstep",
+    "progressive_psy",
+    "uk_garage",
+    "jungle"
+  ]
+};
 const SWIPE_FULL_STYLE_COVERAGE_LIMIT = 169;
 const SWIPE_LEARNING_MILESTONES = [10, 20, 30];
 const BACKGROUND_WARMUP_STYLE_LIMIT = 4;
@@ -9969,6 +10380,37 @@ let adminAnalyticsState = {
   viewerEmail: "",
   lastLoadedAt: 0
 };
+let adminOperationsState = {
+  healthLoading: false,
+  health: null,
+  healthLoadedAt: 0,
+  moderationLoading: false,
+  moderationPosts: [],
+  moderationLoadedAt: 0
+};
+let adminNewsroomState = {
+  loading: false,
+  saving: false,
+  uploading: false,
+  articles: [],
+  loadedAt: 0
+};
+let sonicEditorialState = {
+  loading: false,
+  articles: [],
+  loadedAt: 0
+};
+let adminAccessState = {
+  loading: false,
+  verified: false,
+  allowed: false,
+  owner: false,
+  role: "anonymous",
+  email: "",
+  sessionKey: "",
+  lastCheckedAt: 0,
+  promise: null
+};
 let socialCommentsState = {
   targetType: "track",
   targetKey: "",
@@ -9995,6 +10437,7 @@ let communityState = {
   commentsByPost: new Map(),
   commentLoading: new Set()
 };
+let ugcBlockedUserIds = new Set();
 let communityCommentsObserver = null;
 let googleAuthReady = false;
 let googleAuthLoading = false;
@@ -10322,6 +10765,8 @@ const LANGUAGE_STORAGE_KEY = "neonpulse:language:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 const ANONYMOUS_EXPOSURE_STORAGE_KEY = "neonpulse:anonymousExposure:v1";
+const OPENING_ROTATION_ENDPOINT = "/api/opening-slot";
+const DISCOVERY_EXPOSURE_ENDPOINT = "/api/discovery-exposure";
 const USAGE_GUIDE_ACK_STORAGE_KEY = "neonpulse:usageGuideAcknowledged:v1";
 const PROFILE_BACKUP_APP_ID = "sonic-search-profile-backup";
 const PROFILE_BACKUP_VERSION = 1;
@@ -10359,6 +10804,8 @@ const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
 const SEARCH_AUDIO_STANDBY = true;
 const AUTOMATIC_MUSIC_PLAYBACK_ENABLED = false;
 const AUTOMATIC_TRACK_PLAYBACK_ENABLED = true;
+const SOUNDCLOUD_WIDGET_BIND_RETRY_MS = 80;
+const SOUNDCLOUD_WIDGET_BIND_TIMEOUT_MS = 2400;
 const AUDIO_GAIN_PROFILE = {
   masterTarget: 1.68,
   fxBusGain: 1.18,
@@ -10395,6 +10842,7 @@ let spiritStoryPrepareTimer = 0;
 const artistDepthScoreCache = new Map();
 const discoveryArtistStatsCache = new Map();
 const styleDiscoveryScoreCache = new Map();
+const hierarchicalStyleScoreCache = new Map();
 
 const INTRO_QUOTE_CLASSES = [
   "intro-quote-flare",
@@ -11065,6 +11513,26 @@ const DISCOVERY_STARTER_STYLE_SET = new Set([
   "liquid_dnb",
   "psybient"
 ]);
+const FRIENDLY_FIRST_IMPRESSION_STYLE_SET = new Set([
+  "house",
+  "deep_house",
+  "soulful_house",
+  "disco_house",
+  "garage_house",
+  "tech_house",
+  "progressive_house",
+  "organic_house",
+  "afro_house",
+  "minimal_deep_tech",
+  "minimal_techno",
+  "melodic_techno",
+  "deep_techno",
+  "dub_techno",
+  "ambient_techno",
+  "downtempo",
+  "uk_garage",
+  "liquid_dnb"
+]);
 const DISCOVERY_PSY_ENTRY_STYLE_SET = new Set([
   "psy_comercial",
   "psybient",
@@ -11292,6 +11760,16 @@ function trackAllowedByTasteMaturity(track = null, prefs = {}) {
   return !shouldDeferStyleForTasteMaturity(track.style || "", normalizedPrefs);
 }
 
+function trackAllowedForFriendlyFirstImpression(track = null) {
+  if (!track) return false;
+  const styleKey = normalizeDatasetStyle(track.style || "");
+  if (!FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(styleKey)) return false;
+  if (!DISCOVERY_STARTER_STYLE_SET.has(styleKey)) return false;
+  if (DISCOVERY_ADVANCED_STYLE_SET.has(styleKey) || DISCOVERY_EXTREME_STYLE_SET.has(styleKey)) return false;
+  if (String(track.energy || "").trim().toLowerCase() === "extreme") return false;
+  return true;
+}
+
 function discoveryRampExposureCount() {
   const styleExposureTotal = Array.from(swipeStyleExposureCounts?.values?.() || [])
     .reduce((sum, value) => sum + Math.max(0, Number(value) || 0), 0);
@@ -11375,7 +11853,10 @@ function orderSurpriseTrackPool(pool = [], baseTrack = null) {
   const baseArtistKey = artistMatchKey(baseTrack?.artist || "");
   const baseFamily = familyOf(baseTrack?.style || "");
   return pool
-    .filter((track) => track && trackAllowedByTasteMaturity(track, {}))
+    .filter((track) =>
+      track &&
+      (baseTrack ? trackAllowedByTasteMaturity(track, {}) : trackAllowedForFriendlyFirstImpression(track))
+    )
     .map((track, index) => {
       const trackKey = recommendationTrackKey(track);
       const artistKey = artistMatchKey(track.artist || "");
@@ -19728,6 +20209,13 @@ function trackHasPlayablePreviewExperience(track) {
   );
 }
 
+function trackHasReadyPlaybackRoute(track) {
+  return Boolean(
+    trackHasReliableAudioPreview(track) ||
+    trackHasExternalPlayableFallback(track)
+  );
+}
+
 function trackHasFastListenRoute(track) {
   return trackHasPlayablePreviewExperience(track);
 }
@@ -19779,6 +20267,7 @@ function previewPenaltyForTrack(track) {
 
 function registerTrackFeedback(track, liked, options = {}) {
   if (!track) return;
+  hierarchicalStyleScoreCache.clear();
   recordSwipeTrainingSignal(options);
   const delta = liked ? 1 : 1.2;
   if (liked) {
@@ -19916,6 +20405,7 @@ function ratingSignalFromStars(stars) {
 
 function applyRatingSignal(track, signalDelta = 0) {
   if (!track || !Number.isFinite(signalDelta) || signalDelta === 0) return;
+  hierarchicalStyleScoreCache.clear();
   const amount = Math.abs(signalDelta);
   registerTrackPreferenceSignal(track, signalDelta * 0.72);
   if (signalDelta > 0) {
@@ -23352,8 +23842,12 @@ const I18N = {
     tabLegal: "Avisos",
     communityKicker: "Comunidade",
     communityTitle: "Conversa de pista",
-    communityIntro: "Fale de faixas, DJs, festas, festivais e perguntas da cena.",
+    communityIntro: "Fale de faixas, DJs, festas, festivais e perguntas da cena. Use Denunciar ou Bloquear em conteúdo impróprio; o suporte está no menu Contato.",
     communityRefresh: "Atualizar",
+    communityStoryKicker: "Pergunta para a comunidade",
+    communityStoryTitle: "Qual evento marcou você — pelo melhor ou pelo pior motivo?",
+    communityStoryText: "Conte como foi estar lá: o que surpreendeu, o que funcionou e o que poderia ter sido diferente. Experiências incríveis, frustrantes ou inesperadas são bem-vindas — aqui, todo relato tem espaço quando é compartilhado com respeito.",
+    communityStoryCta: "Compartilhar meu relato",
     communityFilterAll: "Tudo",
     communityFilterTrack: "Faixas",
     communityFilterArtist: "DJs",
@@ -23393,6 +23887,15 @@ const I18N = {
     communityDelete: "Remover",
     communityLike: "Curtir",
     communityDislike: "Descurtir",
+    communityReport: "Denunciar",
+    communityBlockUser: "Bloquear usuário",
+    communityReportConfirm: "Denunciar este conteúdo para a moderação do Sonic Search?",
+    communityBlockConfirm: "Bloquear este usuário? As publicações e os comentários dele deixarão de aparecer para você.",
+    communityReported: "Denúncia enviada à moderação.",
+    communityBlocked: "Usuário bloqueado. O conteúdo dele foi ocultado.",
+    communityReportFailed: "Não foi possível enviar a denúncia agora.",
+    communityBlockFailed: "Não foi possível bloquear este usuário agora.",
+    communityContentNotAllowed: "Esse conteúdo não pode ser publicado porque viola as regras de segurança da comunidade.",
     feedbackKicker: "Aprendizado",
     feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
     swipeHeroKicker: "Descoberta imediata",
@@ -24027,7 +24530,7 @@ const I18N = {
     previewArtistFallbackLoaded: "Prévia tocável do artista: {song} ({artist}). A recomendação continua sendo {original}.",
     previewYoutubeFallback: "Preview em áudio indisponível. Carreguei player do YouTube para você avaliar sem sair da tela.",
     previewSoundcloudFallback: "Preview em áudio aberto via SoundCloud. Se não iniciar sozinho, toque no player.",
-    previewBandcampFallback: "Preview aberto via Bandcamp com fonte validada. Se não iniciar sozinho, toque no player.",
+    previewBandcampFallback: "Bandcamp pronto. Toque no play do player para ouvir.",
     previewUnavailable: "Não achei preview seguro aqui. Use Spotify, YouTube ou SoundCloud para ouvir.",
     previewUnavailableWithLinks: "Não achei preview seguro aqui. Use {platforms} para ouvir.",
     radioBrowserKicker: "Rádio do subgênero",
@@ -24441,8 +24944,12 @@ const I18N = {
     tabLegal: "Legal",
     communityKicker: "Community",
     communityTitle: "Floor talk",
-    communityIntro: "Talk tracks, DJs, parties, festivals, and scene questions.",
+    communityIntro: "Talk tracks, DJs, parties, festivals, and scene questions. Use Report or Block for inappropriate content; support is available in the Contact menu.",
     communityRefresh: "Refresh",
+    communityStoryKicker: "Question for the community",
+    communityStoryTitle: "Which event stayed with you — for the best or worst reasons?",
+    communityStoryText: "Tell us what it was like to be there: what surprised you, what worked, and what could have been different. Amazing, frustrating, or unexpected experiences are all welcome — every story has a place here when shared with respect.",
+    communityStoryCta: "Share my story",
     communityFilterAll: "All",
     communityFilterTrack: "Tracks",
     communityFilterArtist: "DJs",
@@ -24482,6 +24989,15 @@ const I18N = {
     communityDelete: "Remove",
     communityLike: "Like",
     communityDislike: "Dislike",
+    communityReport: "Report",
+    communityBlockUser: "Block user",
+    communityReportConfirm: "Report this content to Sonic Search moderation?",
+    communityBlockConfirm: "Block this user? Their posts and comments will no longer appear for you.",
+    communityReported: "Report sent to moderation.",
+    communityBlocked: "User blocked. Their content is now hidden.",
+    communityReportFailed: "The report could not be sent right now.",
+    communityBlockFailed: "This user could not be blocked right now.",
+    communityContentNotAllowed: "This content cannot be posted because it violates the community safety rules.",
     feedbackKicker: "Learning",
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Instant discovery",
@@ -25113,7 +25629,7 @@ const I18N = {
     previewArtistFallbackLoaded: "Playable artist preview: {song} ({artist}). The recommendation is still {original}.",
     previewYoutubeFallback: "Audio preview is unavailable. I loaded a YouTube player so you can evaluate without leaving this screen.",
     previewSoundcloudFallback: "Audio preview opened through SoundCloud. If it does not start by itself, tap the player.",
-    previewBandcampFallback: "Preview opened through a verified Bandcamp source. If it does not start by itself, tap the player.",
+    previewBandcampFallback: "Bandcamp is ready. Tap play in the embedded player to listen.",
     previewUnavailable: "I could not find a safe preview here. Use Spotify, YouTube, or SoundCloud to listen.",
     previewUnavailableWithLinks: "I could not find a safe preview here. Use {platforms} to listen.",
     radioBrowserKicker: "Subgenre radio",
@@ -25527,8 +26043,12 @@ const I18N = {
     tabLegal: "Avisos",
     communityKicker: "Comunidad",
     communityTitle: "Charla de pista",
-    communityIntro: "Habla de pistas, DJs, fiestas, festivales y preguntas de la escena.",
+    communityIntro: "Habla de pistas, DJs, fiestas, festivales y preguntas de la escena. Usa Denunciar o Bloquear para contenido inapropiado; el soporte está en el menú Contacto.",
     communityRefresh: "Actualizar",
+    communityStoryKicker: "Pregunta para la comunidad",
+    communityStoryTitle: "¿Qué evento te marcó — por el mejor o por el peor motivo?",
+    communityStoryText: "Cuéntanos cómo fue estar allí: qué te sorprendió, qué funcionó y qué podría haber sido diferente. Las experiencias increíbles, frustrantes o inesperadas son bienvenidas — aquí, cada relato tiene su espacio cuando se comparte con respeto.",
+    communityStoryCta: "Compartir mi relato",
     communityFilterAll: "Todo",
     communityFilterTrack: "Pistas",
     communityFilterArtist: "DJs",
@@ -25568,6 +26088,15 @@ const I18N = {
     communityDelete: "Remover",
     communityLike: "Like",
     communityDislike: "Dislike",
+    communityReport: "Denunciar",
+    communityBlockUser: "Bloquear usuario",
+    communityReportConfirm: "¿Denunciar este contenido a la moderación de Sonic Search?",
+    communityBlockConfirm: "¿Bloquear a este usuario? Sus publicaciones y comentarios dejarán de aparecer para ti.",
+    communityReported: "Denuncia enviada a moderación.",
+    communityBlocked: "Usuario bloqueado. Su contenido quedó oculto.",
+    communityReportFailed: "No fue posible enviar la denuncia ahora.",
+    communityBlockFailed: "No fue posible bloquear a este usuario ahora.",
+    communityContentNotAllowed: "Este contenido no puede publicarse porque incumple las reglas de seguridad de la comunidad.",
     feedbackKicker: "Aprendizaje",
     feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
     swipeHeroKicker: "Descubrimiento inmediato",
@@ -26196,7 +26725,7 @@ const I18N = {
     previewArtistFallbackLoaded: "Preview reproducible del artista: {song} ({artist}). La recomendación sigue siendo {original}.",
     previewYoutubeFallback: "Preview en audio no disponible. Cargué un player de YouTube para que evalúes sin salir de esta pantalla.",
     previewSoundcloudFallback: "Preview de audio abierto vía SoundCloud. Si no empieza solo, toca el player.",
-    previewBandcampFallback: "Preview abierto vía Bandcamp con fuente validada. Si no empieza solo, toca el player.",
+    previewBandcampFallback: "Bandcamp está listo. Toca play en el reproductor para escuchar.",
     previewUnavailable: "No encontré preview seguro aquí. Usa Spotify, YouTube o SoundCloud para escuchar.",
     previewUnavailableWithLinks: "No encontré preview seguro aquí. Usa {platforms} para escuchar.",
     radioBrowserKicker: "Radio del subgénero",
@@ -27326,22 +27855,12 @@ function applyLanguage() {
   renderAdminAnalyticsCopy();
   if (appTabBar) appTabBar.setAttribute("aria-label", sonicTinyCopy("Navegação principal do app", "Main app navigation", "Navegación principal de la app"));
   setText("#djDiscoveryKicker", sonicTinyCopy("Radar de selectors", "Selector radar", "Radar de selectors"));
-  setText("#djDiscoveryTitle", sonicTinyCopy("DJs para ouvir por set", "DJs to hear by set", "DJs para escuchar por set"));
-  setText("label[for='djDiscoverySceneFilter']", sonicTinyCopy("Cena", "Scene", "Escena"));
-  if (djDiscoverySceneFilter) {
-    djDiscoverySceneFilter.setAttribute("aria-label", sonicTinyCopy("Filtrar DJs por cena", "Filter DJs by scene", "Filtrar DJs por escena"));
-    const djOptionLabels = {
-      "": sonicTinyCopy("Todos", "All", "Todo"),
-      global_psy: sonicTinyCopy("Psy global", "Global psy", "Psy global"),
-      global_club: sonicTinyCopy("Selectors globais", "Global selectors", "Selectors globales")
-    };
-    Array.from(djDiscoverySceneFilter.options).forEach((option) => {
-      if (Object.prototype.hasOwnProperty.call(djOptionLabels, option.value)) {
-        option.textContent = djOptionLabels[option.value];
-      }
-    });
-  }
-  setText("#djDiscoveryShuffleBtn", sonicTinyCopy("Surpresa", "Surprise", "Sorpresa"));
+  setText("#djDiscoveryTitle", sonicTinyCopy(
+    "Encontre o DJ certo para o momento",
+    "Find the right DJ for the moment",
+    "Encuentra al DJ adecuado para el momento"
+  ));
+  renderDjIntentCopy();
   if (djSwipeCard) {
     djSwipeCard.setAttribute("aria-label", sonicTinyCopy(
       "Arraste para direita para curtir ou esquerda para passar este DJ",
@@ -27927,7 +28446,7 @@ function requestedAppTabFromUrl(fallback = "discover") {
   const url = currentAppUrl();
   if (!url) return safeAppTabName(fallback);
   const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
-  const routeTab = pathname === "/admin/analytics" ? "admin" : "";
+  const routeTab = ["/admin/analytics", "/admin/noticias"].includes(pathname) ? "admin" : "";
   const rawTab = String(url.searchParams.get("tab") || routeTab || fallback || "discover").trim().toLowerCase();
   return safeAppTabName(rawTab);
 }
@@ -27936,7 +28455,14 @@ function urlRequestsAdminAnalytics() {
   const url = currentAppUrl();
   if (!url) return false;
   const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
-  return pathname === "/admin/analytics" || String(url.searchParams.get("tab") || "").trim().toLowerCase() === "admin";
+  return ["/admin/analytics", "/admin/noticias"].includes(pathname) || String(url.searchParams.get("tab") || "").trim().toLowerCase() === "admin";
+}
+
+function urlRequestsNewsroom() {
+  const url = currentAppUrl();
+  if (!url) return false;
+  const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
+  return pathname === "/admin/noticias" || String(url.searchParams.get("section") || "").trim().toLowerCase() === "newsroom";
 }
 
 function parseSharedSpiritPayloadFromUrl() {
@@ -28281,11 +28807,19 @@ function trackBetaEvent(eventName = "", payload = {}, options = {}) {
   if (!endpoint || typeof window === "undefined") return;
   const safeEventName = cleanBetaField(eventName, 80).toLowerCase();
   if (!/^[a-z0-9][a-z0-9_.:-]{1,79}$/.test(safeEventName)) return;
+  const analyticsSession = resolveBetaAnalyticsSession();
   const body = {
     event: safeEventName,
-    sessionId: betaEventSessionId(),
+    schema_version: 1,
+    event_id: createBetaAnalyticsUuid(),
+    anonymous_id: betaAnalyticsAnonymousId(),
+    occurred_at: new Date().toISOString(),
+    sessionId: analyticsSession?.session_id || betaEventSessionId(),
+    platform: betaRuntimePlatform(),
+    environment: betaAnalyticsEnvironment(),
+    app_version: SONIC_APP_BUILD_ID,
     source: cleanBetaField(options.source || payload.source || "app", 80),
-    pageUrl: window.location?.href || "",
+    pageUrl: sanitizeBetaAnalyticsPathname(window.location?.href || window.location?.pathname || "/"),
     payload: {
       build: SONIC_APP_BUILD_ID,
       language: typeof currentLanguage !== "undefined" ? currentLanguage : "",
@@ -28897,34 +29431,83 @@ function createVisitorSession() {
   };
 }
 
-const ANONYMOUS_OPENING_HISTORY_KEY = "sonic_search:anonymous_openings:v1";
-const ANONYMOUS_OPENING_HISTORY_LIMIT = 8;
+const ANONYMOUS_OPENING_HISTORY_KEY = "sonic_search:anonymous_openings:v2";
+const LEGACY_ANONYMOUS_OPENING_HISTORY_KEY = "sonic_search:anonymous_openings:v1";
+const PROFILE_OPENING_HISTORY_KEY = "sonic_search:opening_history:v3";
+const ANONYMOUS_OPENING_HISTORY_LIMIT = 96;
+
+function openingHistoryStorageKey(session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  if (["login", "google", "apple"].includes(normalizedSession.mode)) {
+    return storageKeyForSession(PROFILE_OPENING_HISTORY_KEY, normalizedSession);
+  }
+  return ANONYMOUS_OPENING_HISTORY_KEY;
+}
+
+function normalizeAnonymousOpeningHistory(entries = []) {
+  if (!Array.isArray(entries)) return [];
+  return entries
+    .map((entry) => {
+      if (typeof entry === "string") {
+        const trackKey = String(entry || "").trim();
+        return trackKey ? { trackKey, artistKey: "", style: "", at: 0 } : null;
+      }
+      const trackKey = String(entry?.trackKey || "").trim();
+      const artistKey = String(entry?.artistKey || "").trim();
+      const style = normalizeDatasetStyle(entry?.style || "");
+      if (!trackKey && !artistKey) return null;
+      return {
+        trackKey,
+        artistKey,
+        style,
+        at: Math.max(0, Number(entry?.at) || 0)
+      };
+    })
+    .filter(Boolean)
+    .slice(0, ANONYMOUS_OPENING_HISTORY_LIMIT);
+}
 
 function readAnonymousOpeningHistory() {
   try {
-    const parsed = JSON.parse(sessionStorage.getItem(ANONYMOUS_OPENING_HISTORY_KEY) || "[]");
-    return Array.isArray(parsed)
-      ? parsed.map((key) => String(key || "").trim()).filter(Boolean).slice(0, ANONYMOUS_OPENING_HISTORY_LIMIT)
-      : [];
+    const storageKey = openingHistoryStorageKey();
+    const current = storageKey ? localStorage.getItem(storageKey) : "";
+    if (current) return normalizeAnonymousOpeningHistory(JSON.parse(current));
+    const legacy = normalizeUserSession(currentAuthUser).mode === "guest"
+      ? sessionStorage.getItem(LEGACY_ANONYMOUS_OPENING_HISTORY_KEY)
+      : "";
+    return normalizeAnonymousOpeningHistory(JSON.parse(legacy || "[]"));
   } catch (_err) {
     return [];
   }
 }
 
 function seedAnonymousOpeningExclusions() {
-  readAnonymousOpeningHistory().forEach((key) => recommendationMemory.add(key));
+  readAnonymousOpeningHistory().forEach((entry) => {
+    if (entry.trackKey) recommendationMemory.add(entry.trackKey);
+  });
 }
 
 function rememberAnonymousOpeningTrack(track = null) {
-  if (!track || normalizeUserSession(currentAuthUser).mode !== "visitor") return;
-  const key = recommendationTrackKey(track);
-  if (!key) return;
-  const history = [key, ...readAnonymousOpeningHistory().filter((item) => item !== key)]
+  if (!track) return;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  const style = normalizeDatasetStyle(track.style || "");
+  if (!trackKey && !artistKey) return;
+  const history = [
+    { trackKey, artistKey, style, at: Date.now() },
+    ...readAnonymousOpeningHistory().filter((entry) => entry.trackKey !== trackKey)
+  ]
     .slice(0, ANONYMOUS_OPENING_HISTORY_LIMIT);
   try {
-    sessionStorage.setItem(ANONYMOUS_OPENING_HISTORY_KEY, JSON.stringify(history));
+    const storageKey = openingHistoryStorageKey();
+    if (!storageKey) return;
+    localStorage.setItem(storageKey, JSON.stringify(history));
   } catch (_err) {
-    // A recomendacao continua funcionando mesmo sem sessionStorage.
+    try {
+      sessionStorage.setItem(openingHistoryStorageKey() || ANONYMOUS_OPENING_HISTORY_KEY, JSON.stringify(history));
+    } catch (_sessionError) {
+      // A recomendação continua funcionando em memória mesmo sem storage.
+    }
   }
 }
 
@@ -29294,6 +29877,11 @@ function resetSessionUiState() {
 function activateUserSession(session) {
   currentAuthUser = normalizeUserSession(session);
   resetSessionStateInMemory();
+  currentDjRecommendation = null;
+  likedDjRecommendationKeys = new Set();
+  passedDjRecommendationKeys = new Set();
+  recentDjRecommendationKeys = [];
+  loadDjRecommendationMemory();
   resetSessionUiState();
   progressStorageReady = false;
   resetPreferenceInputsToDefault();
@@ -29825,6 +30413,7 @@ async function continueWithOnlineSocialSession(options = {}) {
   const session = onlineSocialUserSession();
   activateUserSession(session);
   persistUserSession(session);
+  await refreshAdminAccess({ force: true });
   setAuthFeedback(t("authProviderLoggedAs", {
     provider: authProviderDisplayName(session.provider),
     user: session.username || session.email || authProviderDisplayName(session.provider)
@@ -29833,7 +30422,7 @@ async function continueWithOnlineSocialSession(options = {}) {
   updateStats();
   continueFromAuthToDiscover({
     showGuide: options.showGuide ?? !hasUsageGuideAcknowledged(),
-    targetTab: options.targetTab || ""
+    targetTab: options.targetTab || (urlRequestsAdminAnalytics() ? "admin" : "")
   });
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
@@ -35138,7 +35727,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "community" && shouldDisableCommunityForAppStore()) return "discover";
-  if (requestedTab === "admin") return hasOwnerAccess() ? "admin" : "discover";
+  if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
   return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(requestedTab)
     ? requestedTab
     : "discover";
@@ -35264,8 +35853,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const targetTab = button.getAttribute("data-app-tab-target") || "";
       const disabledForReview = targetTab === "community" && shouldDisableCommunityForAppStore();
-      const privateForOwner = targetTab === "admin" && !hasOwnerAccess();
-      const disabled = disabledForReview || privateForOwner;
+      const privateForAdmin = targetTab === "admin" && !hasAdminAccess();
+      const disabled = disabledForReview || privateForAdmin;
       button.hidden = disabled;
       button.classList.toggle("hidden", disabled);
       button.setAttribute("aria-hidden", disabled ? "true" : "false");
@@ -35279,8 +35868,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   }
   appTabPanels.forEach((panel) => {
     const disabledForReview = panelMatchesAppTab(panel, "community") && shouldDisableCommunityForAppStore();
-    const privateForOwner = panelMatchesAppTab(panel, "admin") && !hasOwnerAccess();
-    const disabled = disabledForReview || privateForOwner;
+    const privateForAdmin = panelMatchesAppTab(panel, "admin") && !hasAdminAccess();
+    const disabled = disabledForReview || privateForAdmin;
     const isActive = !disabled && panelMatchesAppTab(panel, safeTab);
     panel.hidden = disabled;
     panel.setAttribute("aria-hidden", isActive ? "false" : "true");
@@ -35295,10 +35884,17 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     void ensureSocialMvpReady();
     void loadApiHealthPanel();
   }
-  if (safeTab === "admin") void loadAdminAnalytics();
+  if (safeTab === "admin") {
+    void loadAdminAnalytics();
+    void loadAdminOperations();
+    void loadAdminNewsroom();
+  }
   if (safeTab === "djs") ensureDjDiscoveryReady();
   if (safeTab === "studio") ensureVoiceLabUiReady();
-  if (safeTab === "news") void refreshDailyNews({ silent: false });
+  if (safeTab === "news") {
+    void refreshSonicEditorial();
+    void refreshDailyNews({ silent: false });
+  }
   if (safeTab === "community" && !shouldDisableCommunityForAppStore()) {
     void ensureSocialMvpReady();
     void loadCommunityPosts({ silent: false });
@@ -35573,6 +36169,12 @@ function loadProgress() {
   if (!dislikedTrackHistory.length) {
     dislikedTrackHistory = backfillDislikedTrackHistoryFromSignals();
   }
+  [...likedTrackHistory, ...dislikedTrackHistory].forEach((entry) => {
+    const trackKey = likedTrackKeyFromEntry(entry);
+    const trackTitle = normalizeTitle(entry?.song || "");
+    if (trackKey) seenTrackKeysMemory.add(trackKey);
+    if (trackTitle) knownTrackTitlesMemory.add(trackTitle);
+  });
   recalculateRatingStats();
   updateStats();
   updateSwipeFeedbackCard(currentRecommendation);
@@ -36052,6 +36654,177 @@ function stylePreferenceSignal(style = "") {
   return likeScore * 1.22 - dislikeScore * 1.35 + previewSignal * 0.12;
 }
 
+function styleFamilyExposureCount(styleFamily = "") {
+  if (!styleFamily) return 0;
+  let total = 0;
+  swipeStyleExposureCounts.forEach((value, style) => {
+    if (familyOf(style) === styleFamily) total += Math.max(0, Number(value) || 0);
+  });
+  return total;
+}
+
+function hierarchicalStyleAffinityScore(style = "", prefs = {}) {
+  const styleKey = selectableSwipeStyle(style) || normalizeDatasetStyle(style || "");
+  if (!styleKey || !STYLE_BPM_RULES[styleKey]) return -1000000;
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  if (normalizedPrefs.style && normalizedPrefs.style !== styleKey) return -1000000;
+
+  const signals = swipeTrainingSignalCount();
+  const exposureTotal = Math.max(1, discoveryRampExposureCount());
+  const exposureCount = Math.max(0, Number(swipeStyleExposureCounts.get(styleKey) || 0));
+  const cacheKey = [
+    styleKey,
+    normalizedPrefs.style || "",
+    signals,
+    exposureTotal,
+    exposureCount,
+    adaptiveModel.likedStyles.size,
+    adaptiveModel.dislikedStyles.size
+  ].join("::");
+  if (hierarchicalStyleScoreCache.has(cacheKey)) return hierarchicalStyleScoreCache.get(cacheKey);
+  if (hierarchicalStyleScoreCache.size > 520) hierarchicalStyleScoreCache.clear();
+
+  const styleFamily = familyOf(styleKey);
+  const direct = styleTasteSignal(styleKey);
+  const familySignal = styleFamilyTasteSignal(styleFamily);
+  const neighbors = new Set(similarFallbackStylesFor(styleKey).slice(0, 8));
+  let neighborSignal = 0;
+  let neighborWeight = 0;
+  adaptiveModel.likedStyles.forEach((value, learnedStyle) => {
+    const learnedKey = normalizeDatasetStyle(learnedStyle || "");
+    if (!learnedKey || learnedKey === styleKey) return;
+    const reciprocalNeighbor =
+      neighbors.has(learnedKey) ||
+      similarFallbackStylesFor(learnedKey).slice(0, 8).includes(styleKey);
+    if (!reciprocalNeighbor) return;
+    neighborSignal += Math.min(4, Math.max(0, Number(value) || 0)) * 0.72;
+    neighborWeight += 0.72;
+  });
+  adaptiveModel.dislikedStyles.forEach((value, learnedStyle) => {
+    const learnedKey = normalizeDatasetStyle(learnedStyle || "");
+    if (!learnedKey || learnedKey === styleKey) return;
+    const reciprocalNeighbor =
+      neighbors.has(learnedKey) ||
+      similarFallbackStylesFor(learnedKey).slice(0, 8).includes(styleKey);
+    if (!reciprocalNeighbor) return;
+    neighborSignal -= Math.min(4, Math.max(0, Number(value) || 0)) * 0.84;
+    neighborWeight += 0.84;
+  });
+
+  const exploration =
+    Math.sqrt(Math.log(exposureTotal + 2) / (exposureCount + 1)) *
+    (signals < 6 ? 0.35 : signals < 20 ? 1.05 : 0.78);
+  let score =
+    direct.net * 1.38 +
+    familySignal * 0.74 +
+    (neighborWeight ? neighborSignal / Math.max(1, neighborWeight * 0.55) : 0) +
+    exploration;
+
+  if (normalizedPrefs.style === styleKey) score += 4.2;
+  if (styleStronglyDisliked(styleKey) && normalizedPrefs.style !== styleKey) score -= 18;
+  score += clampScore(recommendationMaturityScore(styleKey, normalizedPrefs, null), -12, 8) * 0.32;
+  score = clampScore(score, -18, 14);
+  hierarchicalStyleScoreCache.set(cacheKey, score);
+  return score;
+}
+
+function crossFamilyExplorationDue() {
+  const signals = swipeTrainingSignalCount();
+  if (signals < SWIPE_CROSS_FAMILY_EXPLORATION_MIN_SIGNALS) return false;
+  return (
+    (signals - SWIPE_CROSS_FAMILY_EXPLORATION_MIN_SIGNALS) %
+    SWIPE_CROSS_FAMILY_EXPLORATION_STEP
+  ) === 0;
+}
+
+function rankCrossFamilyExplorationStyles(focusStyle = "", sourceTrack = null) {
+  const focusKey = selectableSwipeStyle(focusStyle);
+  if (!focusKey || explicitSwipeAnchorStyle()) return [];
+  const focusFamily = familyOf(focusKey);
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const sourceCenter = styleBpmCenter(sourceStyle || focusKey);
+  const preferred = STYLE_FAMILY_DISCOVERY_BRIDGES[focusFamily] || [];
+  const preferredRank = new Map(preferred.map((style, index) => [style, index]));
+  const signals = swipeTrainingSignalCount();
+
+  return getAllSelectableStyles()
+    .filter((style) => style && familyOf(style) !== focusFamily)
+    .filter((style) => !styleStronglyDisliked(style))
+    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
+    .map((style) => {
+      const exposureCount = Math.max(0, Number(swipeStyleExposureCounts.get(style) || 0));
+      const familyExposure = styleFamilyExposureCount(familyOf(style));
+      const readiness = styleDiscoveryReadinessScore(style);
+      const bridgeIndex = preferredRank.has(style) ? preferredRank.get(style) : -1;
+      const bridgeBoost = bridgeIndex >= 0 ? Math.max(0.8, 5.6 - bridgeIndex * 0.62) : 0;
+      const bpmDistance = Math.abs(styleBpmCenter(style) - sourceCenter);
+      const bpmBridgeScore = Math.max(-2.4, 1.8 - bpmDistance / 24);
+      const coldStyleBoost = exposureCount === 0 ? 4.6 : Math.max(-1.4, 1.8 - exposureCount * 0.72);
+      const coldFamilyBoost = familyExposure === 0 ? 3.2 : Math.max(-1, 1.1 - familyExposure * 0.24);
+      const score =
+        bridgeBoost +
+        bpmBridgeScore +
+        coldStyleBoost +
+        coldFamilyBoost +
+        readiness * 1.25 +
+        hierarchicalStyleAffinityScore(style, {}) * 0.58 +
+        openingDiscoveryRampScore(style) * 0.7 +
+        (signals >= 14 && ["neurofunk", "dubstep", "jungle"].includes(style) ? 1.9 : 0);
+      return { style, score, exposureCount, familyExposure };
+    })
+    .filter((entry) => Number.isFinite(entry.score))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        a.exposureCount - b.exposureCount ||
+        a.familyExposure - b.familyExposure
+    )
+    .slice(0, SWIPE_CROSS_FAMILY_EXPLORATION_LIMIT);
+}
+
+function trackStyleConfidenceValue(track = null) {
+  const certainty = trackStyleCertainty(track);
+  if (certainty === "confirmed") return 1;
+  if (certainty === "probable") return 0.72;
+  if (certainty === "estimated") return 0.34;
+  if (certainty === "unsafe") return 0;
+  return 0.18;
+}
+
+function artistDiscoveryConfidenceScore(track = null, prefs = {}) {
+  if (!track?.artist) return -12;
+  const artistKey = artistMatchKey(track.artist || "");
+  if (!artistKey) return -12;
+  const trackKey = recommendationTrackKey(track);
+  const styleConfidence = trackStyleConfidenceValue(track);
+  const seenArtist = seenArtistsMemory.has(artistKey) || discoveredArtistsInApp.has(artistKey);
+  let score = seenArtist ? -4.8 : 4.4;
+
+  if (artistKey === artistMatchKey(currentRecommendation?.artist || "")) score -= 5.2;
+  if (prefs?.style && getServedArtistCycle(prefs.style).includes(artistKey)) score -= 4.4;
+  if (trackKey && seenTrackKeysMemory.has(trackKey)) score -= 8;
+  if (!seenArtist && styleConfidence >= 0.72) score += 2.1;
+  if (!seenArtist && trackHasPlayablePreviewExperience(track)) score += 1.4;
+  if (!seenArtist && hasReliableBpmForTrack(track)) score += 0.8;
+  if (styleConfidence < 0.34) score -= 10;
+  else if (styleConfidence < 0.72) score -= 1.8;
+  return clampScore(score, -18, 10);
+}
+
+function recommendationDecisionDiagnostics(track = null, prefs = {}) {
+  const style = selectableSwipeStyle(track?.style || "") || normalizeDatasetStyle(track?.style || "");
+  const artistKey = artistMatchKey(track?.artist || "");
+  return {
+    modelVersion: RECOMMENDATION_MODEL_VERSION,
+    styleCertainty: trackStyleCertainty(track),
+    styleAffinity: Number(hierarchicalStyleAffinityScore(style, prefs).toFixed(3)),
+    styleExposure: Number(swipeStyleExposureCounts.get(style) || 0),
+    artistNovel: Boolean(artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)),
+    artistDiscoveryScore: Number(artistDiscoveryConfidenceScore(track, prefs).toFixed(3)),
+    playableRoute: Boolean(trackHasReadyPlaybackRoute(track))
+  };
+}
+
 function styleStronglyDisliked(style = "") {
   const styleKey = normalize(style || "");
   if (!styleKey) return false;
@@ -36076,6 +36849,7 @@ function registerSwipeStyleExposure(style = "") {
   const styleKey = selectableSwipeStyle(style);
   if (!styleKey) return;
   swipeStyleExposureCounts.set(styleKey, Number(swipeStyleExposureCounts.get(styleKey) || 0) + 1);
+  hierarchicalStyleScoreCache.clear();
   if (swipeStyleExposureCounts.size > SWIPE_FULL_STYLE_COVERAGE_LIMIT + 12) {
     const allowed = new Set(getAllSelectableStyles());
     Array.from(swipeStyleExposureCounts.keys()).forEach((key) => {
@@ -36113,6 +36887,7 @@ function swipeCoverageStyleScore(style = "", sourceTrack = null) {
     Math.min(artists, 28) * 0.072 +
     familyPreferenceSignal(styleKey) * 0.62 +
     styleSignal.net * 0.48 +
+    hierarchicalStyleAffinityScore(styleKey, {}) * 1.12 +
     openingDiscoveryRampScore(styleKey) * 1.2 +
     recommendationMaturityScore(styleKey, {}, null) * 1.8;
 
@@ -36232,6 +37007,15 @@ function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {
     .forEach((style) => {
       addSwipeCandidate(candidateMap, style, 2.2, "family");
     });
+  const crossFamilyExploration = rankCrossFamilyExplorationStyles(focusStyle, sourceTrack);
+  crossFamilyExploration.forEach((entry, index) => {
+    addSwipeCandidate(
+      candidateMap,
+      entry.style,
+      (crossFamilyExplorationDue() ? 6.8 : 3.15) - index * 0.42,
+      "cross_family_exploration"
+    );
+  });
 
   const ranked = Array.from(candidateMap.values())
     .map((entry) => {
@@ -36244,6 +37028,7 @@ function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {
         signal.net * 2.1 +
         stylePreferenceSignal(entry.style) * 1.28 +
         familyPreferenceSignal(entry.style) * 0.78 +
+        hierarchicalStyleAffinityScore(entry.style, {}) * 0.88 +
         Math.min(tracks, 32) * 0.035 +
         Math.min(artists, 22) * 0.075;
 
@@ -36275,6 +37060,15 @@ function buildSwipeAdaptiveStylePlan({ sourceTrack = null, positive = true } = {
     if (bestNeighborIndex > 0) {
       const [neighbor] = ranked.splice(bestNeighborIndex, 1);
       ranked.unshift(neighbor);
+    }
+  }
+  if (crossFamilyExplorationDue()) {
+    const bestExplorationIndex = ranked.findIndex((entry) =>
+      entry.reasons?.has?.("cross_family_exploration")
+    );
+    if (bestExplorationIndex > 0) {
+      const [exploration] = ranked.splice(bestExplorationIndex, 1);
+      ranked.unshift(exploration);
     }
   }
 
@@ -36412,12 +37206,17 @@ function pickSurpriseTrackFromAnotherGenre(
   const styleIsDifferent = (track) =>
     !requireDifferentStyle || !baseStyleKey || normalize(track?.style || "") !== baseStyleKey;
   const surprisePrefs = { style: "", context: "", energy: "", bpm: "", vocals: "" };
+  const firstImpression = !baseTrack;
 
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles);
+  const trackAllowedByPhase = (track) =>
+    firstImpression
+      ? trackAllowedForFriendlyFirstImpression(track)
+      : trackAllowedByTasteMaturity(track, surprisePrefs);
   const eligible = catalog.filter(
     (track) =>
       isTrackEligibleForRecommendation(track) &&
-      trackAllowedByTasteMaturity(track, surprisePrefs) &&
+      trackAllowedByPhase(track) &&
       styleIsDifferent(track) &&
       !artistSetHasMatch(blockedArtists, track.artist) &&
       trackAllowed(track)
@@ -36427,7 +37226,7 @@ function pickSurpriseTrackFromAnotherGenre(
       track?.style &&
       track?.artist &&
       track?.song &&
-      trackAllowedByTasteMaturity(track, surprisePrefs) &&
+      trackAllowedByPhase(track) &&
       styleIsDifferent(track) &&
       !artistSetHasMatch(blockedArtists, track.artist) &&
       trackAllowed(track)
@@ -36478,20 +37277,34 @@ function pickSurpriseTrackFromAnotherGenre(
 }
 
 function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set() } = {}) {
-  const styles = getAllSelectableStyles();
+  const openingHistory = readAnonymousOpeningHistory();
+  const recentTrackKeys = new Set(openingHistory.map((entry) => entry.trackKey).filter(Boolean));
+  const recentArtistKeys = new Set(openingHistory.slice(0, 10).map((entry) => entry.artistKey).filter(Boolean));
+  const recentStyleRank = new Map();
+  openingHistory.forEach((entry, index) => {
+    if (entry.style && !recentStyleRank.has(entry.style)) recentStyleRank.set(entry.style, index);
+  });
+  const styles = getAllSelectableStyles().filter((style) => FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style));
   if (!styles.length) return null;
   const visitId = currentCurationVisitId();
   const userSeed = currentCurationUserSeed();
   const styleEntries = styles
-    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
     .map((style) => {
-      const pool = catalogTracksForStyle(style).filter((track) => {
+      const available = catalogTracksForStyle(style).filter((track) => {
         if (!track) return false;
+        if (!trackAllowedForFriendlyFirstImpression(track)) return false;
         if (!isTrackEligibleForRecommendation(track)) return false;
         if (artistSetHasMatch(blockedArtists, track.artist)) return false;
         if (trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles)) return false;
         return surpriseTrackHasExactBpmAndPreview(track);
       });
+      const curated = available.filter((track) => track.source === "friendly_opening_curated_v1");
+      const basePool = Array.from(new Map(
+        [...curated, ...available].map((track) => [recommendationTrackKey(track), track])
+      ).values());
+      const unseenTracks = basePool.filter((track) => !recentTrackKeys.has(recommendationTrackKey(track)));
+      const unseenArtists = unseenTracks.filter((track) => !recentArtistKeys.has(artistMatchKey(track.artist || "")));
+      const pool = unseenArtists.length ? unseenArtists : unseenTracks.length ? unseenTracks : basePool;
       if (!pool.length) return null;
       const uniqueArtists = new Set(pool.map((track) => artistMatchKey(track.artist)).filter(Boolean)).size;
       const exposureCount = Number(swipeStyleExposureCounts.get(style) || 0);
@@ -36506,25 +37319,61 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
       const adaptiveSignal = Number(adaptiveModel.likedStyles.get(style) || 0) - Number(adaptiveModel.dislikedStyles.get(style) || 0);
       const rampScore = openingDiscoveryRampScore(style);
       const maturityScore = recommendationMaturityScore(style, {}, null);
+      const recentRank = recentStyleRank.has(style) ? recentStyleRank.get(style) : Infinity;
+      const recentStylePenalty =
+        recentRank === 0 ? 34 :
+        recentRank === 1 ? 22 :
+        recentRank < 5 ? 10 :
+        recentRank < 10 ? 3.5 : 0;
       const score =
-        seedNoise * 4.6 +
-        rampScore * 2.35 +
-        maturityScore * 1.5 +
+        seedNoise * 10.5 +
+        rampScore * 1.25 +
+        maturityScore * 0.65 +
         readiness * 1.25 +
         adaptiveSignal * 0.9 +
         Math.min(pool.length, 28) * 0.11 +
         Math.min(uniqueArtists, 18) * 0.24 -
-        exposureCount * 2.8;
+        exposureCount * 2.8 -
+        recentStylePenalty;
       return { style, pool, score };
     })
     .filter(Boolean)
     .sort((a, b) => b.score - a.score);
 
   if (!styleEntries.length) return null;
+  const rotationDeck = Array.from(new Map(
+    styleEntries
+      .flatMap((entry) => entry.pool)
+      .map((track) => [recommendationTrackKey(track), track])
+  ).values()).sort((a, b) => {
+    const aKey = recommendationTrackKey(a);
+    const bKey = recommendationTrackKey(b);
+    return (
+      hashString(`friendly-opening-v3::${aKey}`) -
+      hashString(`friendly-opening-v3::${bKey}`)
+    ) || aKey.localeCompare(bKey);
+  });
+  if (rotationDeck.length) {
+    if (!Number.isFinite(openingRotationSlot)) {
+      openingRotationSlot = localOpeningRotationSlot();
+      openingRotationSlotSource = "local_crypto";
+    }
+    const startIndex = Math.abs(Math.trunc(openingRotationSlot)) % rotationDeck.length;
+    const rotatedDeck = [
+      ...rotationDeck.slice(startIndex),
+      ...rotationDeck.slice(0, startIndex)
+    ];
+    const styleFreshCandidate = rotatedDeck.find((track) => {
+      const recentRank = recentStyleRank.get(normalizeDatasetStyle(track.style || ""));
+      return !Number.isFinite(recentRank) || recentRank >= 3;
+    });
+    return styleFreshCandidate || rotatedDeck[0];
+  }
+
   const bestScore = styleEntries[0].score;
   const stylePool = styleEntries
-    .filter((entry) => entry.score >= bestScore - 8.5)
-    .slice(0, Math.min(9, styleEntries.length));
+    .filter((entry) => entry.score >= bestScore - 11)
+    .slice(0, Math.min(12, styleEntries.length));
   const minScore = Math.min(...stylePool.map((entry) => entry.score));
   const totalWeight = stylePool.reduce((sum, entry) => sum + Math.max(0.1, entry.score - minScore + 0.6), 0);
   let cursor = Math.random() * totalWeight;
@@ -36558,19 +37407,35 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     [...recommendationMemory, baseTrackKey].filter(Boolean)
   );
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
+  if (!baseTrack) {
+    const openingCandidate = pickOpeningSurpriseTrack({
+      blockedArtists,
+      blockedTrackKeys: knownTrackSignals.keys,
+      blockedTrackTitles: knownTrackSignals.titles
+    });
+    if (openingCandidate) {
+      update(86, t("searchOverlayFinishing"));
+      return openingCandidate;
+    }
+  }
   const fastCandidateAllowed = (track) => {
     const key = trackKeyOf(track);
     if (!key || (baseTrackKey && key === baseTrackKey)) return false;
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
-    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
+    if (
+      baseTrack
+        ? !trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })
+        : !trackAllowedForFriendlyFirstImpression(track)
+    ) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
-    return trackHasFastListenRoute(track);
+    return trackHasReadyPlaybackRoute(track);
   };
   const fastStyles = getAllSelectableStyles()
     .filter((style) => style && normalize(style) !== baseStyleKey)
+    .filter((style) => baseTrack || FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style))
     .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
     .sort((a, b) => {
       const aCross = baseFamily && familyOf(a) !== baseFamily ? 0 : 1;
@@ -36633,15 +37498,6 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   };
 
   update(24, t("searchOverlayGenerating"));
-  if (!baseTrack) {
-    const openingCandidate = pickOpeningSurpriseTrack({
-      blockedArtists,
-      blockedTrackKeys: knownTrackSignals.keys,
-      blockedTrackTitles: knownTrackSignals.titles
-    });
-    const openingValidated = await validateCandidate(openingCandidate);
-    if (openingValidated) return openingValidated;
-  }
   const fastAttempts = Math.min(28, Math.max(12, Math.floor(catalog.length * 0.12)));
   for (let attempt = 0; attempt < fastAttempts; attempt += 1) {
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
@@ -36661,7 +37517,11 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   }
 
   const selectableStyles = getAllSelectableStyles().filter(
-    (style) => style && normalize(style) !== baseStyleKey && !shouldDeferStyleForTasteMaturity(style, {})
+    (style) =>
+      style &&
+      normalize(style) !== baseStyleKey &&
+      (baseTrack || FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style)) &&
+      !shouldDeferStyleForTasteMaturity(style, {})
   );
   const crossGenreStyles = selectableStyles.filter(
     (style) => !baseFamily || familyOf(style) !== baseFamily
@@ -36694,6 +37554,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (baseFamily && familyOf(track.style) === baseFamily) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!baseTrack && !trackAllowedForFriendlyFirstImpression(track)) return false;
     if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
@@ -36710,6 +37571,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     if (baseStyleKey && normalize(track.style || "") === baseStyleKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
+    if (!baseTrack && !trackAllowedForFriendlyFirstImpression(track)) return false;
     if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
@@ -36742,6 +37604,10 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     [...recommendationMemory, baseTrackKey].filter(Boolean)
   );
   const trackAllowed = (track) => !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles);
+  const trackAllowedByPhase = (track) =>
+    baseTrack
+      ? trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })
+      : trackAllowedForFriendlyFirstImpression(track);
   const triedTrackKeys = new Set();
 
   const differentStyle = (track) =>
@@ -36761,7 +37627,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       if (baseArtistKey && artistMatchKey(candidate.artist) === baseArtistKey) continue;
       if (artistSetHasMatch(blockedArtists, candidate.artist)) continue;
       if (!trackAllowed(candidate)) continue;
-      if (!trackAllowedByTasteMaturity(candidate, { style: "", context: "", energy: "", bpm: "", vocals: "" })) continue;
+      if (!trackAllowedByPhase(candidate)) continue;
       triedTrackKeys.add(key);
       if (!hasReliableBpmForTrack(candidate)) continue;
       if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
@@ -36779,7 +37645,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (baseFamily && familyOf(track.style) === baseFamily) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
-    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
+    if (!trackAllowedByPhase(track)) return false;
     return true;
   });
   let candidate = await validatePool(strictCrossFamilyPool);
@@ -36791,14 +37657,18 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (!differentStyle(track)) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
-    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
+    if (!trackAllowedByPhase(track)) return false;
     return true;
   });
   candidate = await validatePool(strictDifferentStylePool);
   if (candidate) return candidate;
 
   const selectableStyles = getAllSelectableStyles().filter(
-    (style) => style && normalize(style) !== baseStyleKey && !shouldDeferStyleForTasteMaturity(style, {})
+    (style) =>
+      style &&
+      normalize(style) !== baseStyleKey &&
+      (baseTrack || FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style)) &&
+      !shouldDeferStyleForTasteMaturity(style, {})
   );
   const hydrationStyles = selectableStyles
     .slice()
@@ -36818,7 +37688,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     const stylePool = catalogTracksForStyle(style).filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
-        trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" }) &&
+        trackAllowedByPhase(track) &&
         differentStyle(track) &&
         !artistSetHasMatch(blockedArtists, track.artist) &&
         trackAllowed(track)
@@ -36833,7 +37703,7 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     if (baseTrackKey && recommendationTrackKey(track) === baseTrackKey) return false;
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (!trackAllowed(track)) return false;
-    if (!trackAllowedByTasteMaturity(track, { style: "", context: "", energy: "", bpm: "", vocals: "" })) return false;
+    if (!trackAllowedByPhase(track)) return false;
     return surpriseTrackHasExactBpmAndPreview(track);
   });
   if (lastChancePool.length) {
@@ -36919,6 +37789,10 @@ function trackBlockedByKnownSignals(track, excludedTrackKeys = new Set(), exclud
   if (!track) return true;
   const trackKey = recommendationTrackKey(track);
   const trackTitle = normalizeTitle(track.song || "");
+  if (
+    trackKey &&
+    dislikedTrackHistory.some((entry) => likedTrackKeyFromEntry(entry) === trackKey)
+  ) return true;
   if (trackKey && seenTrackKeysMemory.has(trackKey)) return true;
   if (trackTitle && knownTrackTitlesMemory.has(trackTitle)) return true;
   if (trackKey && excludedTrackKeys.has(trackKey)) return true;
@@ -36981,6 +37855,7 @@ function unseenTrackCandidatesForStyle(
   return catalogTracksForStyle(style).filter((track) => {
     if (!track) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, { ...prefs, style })) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm) && !trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
     const artistKey = artistMatchKey(track.artist);
     if (!artistKey || artistSetHasMatch(blockedArtists, track.artist)) return false;
@@ -38655,6 +39530,7 @@ function buildSoundCloudEmbedUrl(track, { autoplay = false } = {}) {
 let soundcloudWidgetController = null;
 let soundcloudWidgetTrackUrl = "";
 let soundcloudWidgetGeneration = 0;
+let soundcloudWidgetBindRetryTimer = 0;
 
 function soundcloudWidgetOptions({ autoplay = false } = {}) {
   return {
@@ -38678,6 +39554,11 @@ function getSoundCloudWidgetController() {
     soundcloudWidgetController = null;
   }
   return soundcloudWidgetController;
+}
+
+function clearSoundCloudWidgetBindRetry() {
+  window.clearTimeout(soundcloudWidgetBindRetryTimer);
+  soundcloudWidgetBindRetryTimer = 0;
 }
 
 function syncSoundCloudWidgetPlayback(widget, {
@@ -38705,6 +39586,7 @@ function syncSoundCloudWidgetPlayback(widget, {
 function resetSoundCloudPreviewEmbed({ keepActions = false, track = null } = {}) {
   if (!soundcloudPreviewWrap || !soundcloudPreviewFrame) return;
   soundcloudWidgetGeneration += 1;
+  clearSoundCloudWidgetBindRetry();
   soundcloudPreviewWrap.classList.add("hidden");
   const widget = getSoundCloudWidgetController();
   try {
@@ -38780,6 +39662,62 @@ function bindSoundCloudWidgetPlaybackEvents(widget, { widgetGeneration = 0, play
   });
 }
 
+function scheduleSoundCloudWidgetPlaybackBinding({
+  autoplay = false,
+  userInitiated = false,
+  playbackToken = 0,
+  widgetGeneration = soundcloudWidgetGeneration
+} = {}) {
+  clearSoundCloudWidgetBindRetry();
+  const startedAt = Date.now();
+  const bindWhenReady = () => {
+    if (widgetGeneration !== soundcloudWidgetGeneration) return;
+    const widget = getSoundCloudWidgetController();
+    if (!widget) {
+      if (Date.now() - startedAt >= SOUNDCLOUD_WIDGET_BIND_TIMEOUT_MS) return;
+      soundcloudWidgetBindRetryTimer = window.setTimeout(
+        bindWhenReady,
+        SOUNDCLOUD_WIDGET_BIND_RETRY_MS
+      );
+      return;
+    }
+
+    bindSoundCloudWidgetPlaybackEvents(widget, { widgetGeneration, playbackToken });
+    if (activePlaybackMatches({ type: "soundcloud", generation: playbackToken })) {
+      setActivePlayback({
+        type: "soundcloud",
+        trackKey: recommendationTrackKey(currentRecommendation),
+        generation: playbackToken,
+        player: widget,
+        state: activePlayback.state || "loading"
+      });
+    }
+
+    const readyEvent = window.SC?.Widget?.Events?.READY;
+    if (readyEvent) {
+      try {
+        widget.unbind?.(readyEvent);
+        widget.bind?.(readyEvent, () => {
+          if (widgetGeneration !== soundcloudWidgetGeneration) return;
+          syncSoundCloudWidgetPlayback(widget, {
+            autoplay,
+            userInitiated,
+            playbackToken,
+            widgetGeneration
+          });
+        });
+      } catch (_err) {}
+    }
+    syncSoundCloudWidgetPlayback(widget, {
+      autoplay,
+      userInitiated,
+      playbackToken,
+      widgetGeneration
+    });
+  };
+  bindWhenReady();
+}
+
 function showSoundCloudPreviewEmbed(track, {
   autoplay = false,
   userInitiated = false,
@@ -38802,26 +39740,9 @@ function showSoundCloudPreviewEmbed(track, {
     soundcloudWidgetTrackUrl = directUrl;
     soundcloudWidgetController = null;
   }
-  const widget = getSoundCloudWidgetController();
-  bindSoundCloudWidgetPlaybackEvents(widget, { widgetGeneration, playbackToken });
-  const readyEvent = window.SC?.Widget?.Events?.READY;
-  if (widget && readyEvent) {
-    try {
-      widget.unbind?.(readyEvent);
-      widget.bind?.(readyEvent, () => {
-        if (widgetGeneration !== soundcloudWidgetGeneration) return;
-        syncSoundCloudWidgetPlayback(widget, {
-          autoplay: shouldAutoplay,
-          userInitiated,
-          playbackToken,
-          widgetGeneration
-        });
-      });
-    } catch (_err) {}
-  }
-  syncSoundCloudWidgetPlayback(widget, {
-    autoplay: false,
-    userInitiated: false,
+  scheduleSoundCloudWidgetPlaybackBinding({
+    autoplay: shouldAutoplay,
+    userInitiated,
     playbackToken,
     widgetGeneration
   });
@@ -38840,11 +39761,10 @@ function previewAutoplayRequested() {
   );
 }
 
-function buildBandcampEmbedUrl(track, { autoplay = false } = {}) {
+function buildBandcampEmbedUrl(track) {
   const trackId = bandcampTrackIdForEmbed(track);
   if (!trackId) return "";
-  const autoplayPart = autoplay ? "autoplay=true/" : "";
-  return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/${autoplayPart}transparent=true/`;
+  return `https://bandcamp.com/EmbeddedPlayer/v=2/track=${trackId}/size=large/bgcol=0b1220/linkcol=66d8ff/tracklist=false/artwork=small/transparent=true/`;
 }
 
 function resetBandcampPreviewEmbed({ keepActions = false, track = null } = {}) {
@@ -38866,15 +39786,15 @@ function showBandcampPreviewEmbed(track, {
   playbackToken = 0
 } = {}) {
   if (!bandcampPreviewWrap || !bandcampPreviewFrame || !track) return false;
-  const shouldAutoplay = Boolean(
+  const immediateLoad = Boolean(
     autoplay &&
     userInitiated &&
     playbackToken &&
     playbackToken === playbackGeneration
   );
-  const embedUrl = buildBandcampEmbedUrl(track, { autoplay: shouldAutoplay });
+  const embedUrl = buildBandcampEmbedUrl(track);
   if (!embedUrl) return false;
-  bandcampPreviewFrame.loading = userInitiated ? "eager" : "lazy";
+  bandcampPreviewFrame.loading = immediateLoad ? "eager" : "lazy";
   if (bandcampPreviewFrame.getAttribute("src") !== embedUrl) {
     bandcampPreviewFrame.setAttribute("src", embedUrl);
   }
@@ -38996,6 +39916,38 @@ function restorePreviewSourceActions(track = currentRecommendation) {
   });
 }
 
+function preferredEmbeddedAutoplaySource(track) {
+  if (trackHasDirectSoundCloudTrack(track)) return "soundcloud";
+  if (trackHasEmbeddableBandcampTrack(track)) return "bandcamp";
+  return "";
+}
+
+function startPreferredEmbeddedPreviewAutoplay(track) {
+  const source = preferredEmbeddedAutoplaySource(track);
+  if (!source) return { opened: false, source: "" };
+  return {
+    opened: startEmbeddedPreviewPlaybackFromUserGesture(track, source),
+    source
+  };
+}
+
+function resumeCurrentPreviewFromUserGesture() {
+  const track = currentRecommendation;
+  if (!track || !previewAutoplayRequested()) return false;
+  const embedded = startPreferredEmbeddedPreviewAutoplay(track);
+  if (embedded.opened) return true;
+  const previewSource = normalizePreviewUrl(
+    trackPreview?.currentSrc ||
+    trackPreview?.src ||
+    track?.previewUrl ||
+    track?.artistPreviewFallback?.previewUrl ||
+    ""
+  );
+  if (!previewSource) return false;
+  void attemptRenderedPreviewAutoplay(track, { hasDirectPreview: true });
+  return true;
+}
+
 function startEmbeddedPreviewPlaybackFromUserGesture(track, preferredSource = "", { youtubeAttempt = null } = {}) {
   if (!track) return false;
   const available = showFixedPreviewPlayers(track, { expandEmbeds: false });
@@ -39084,13 +40036,18 @@ function startEmbeddedPreviewPlaybackFromUserGesture(track, preferredSource = ""
     return false;
   }
 
-  setPreviewPrimaryPlaybackState("playing");
+  const requiresExplicitPlayerTap = source === "bandcamp";
+  if (requiresExplicitPlayerTap) {
+    clearActivePlayback(generation);
+  }
+  setPreviewPrimaryPlaybackState(requiresExplicitPlayerTap ? "ready" : "playing");
   setTrackPreviewVisualState("embed");
   listeningPrompt?.classList.remove("hidden");
   try {
     trackRecommendationEvent("preview_play_attempted", track, lastPrefs || {}, {
       source: `${source}_embed`,
-      previewKind: `${source}_embed`
+      previewKind: `${source}_embed`,
+      manualStartRequired: requiresExplicitPlayerTap
     });
   } catch (_err) {}
   return true;
@@ -39104,7 +40061,7 @@ async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false 
   if (!isStillCurrentTrack()) return false;
 
   if (!hasDirectPreview) {
-    return startEmbeddedPreviewPlaybackFromUserGesture(track);
+    return startPreferredEmbeddedPreviewAutoplay(track).opened;
   }
 
   setPreviewPrimaryPlaybackState("loading");
@@ -39118,7 +40075,10 @@ async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false 
 
   try {
     const playback = await startTrackPreviewPlayback(trackPreview, { automatic: true });
-    if (!playback?.ok || !isStillCurrentTrack()) return false;
+    if (!isStillCurrentTrack()) return false;
+    if (!playback?.ok) {
+      return startPreferredEmbeddedPreviewAutoplay(track).opened;
+    }
     setTrackPreviewVisualState("playing");
     setPreviewPrimaryPlaybackState("playing");
     if (previewStatus) previewStatus.textContent = t("previewLoaded");
@@ -39131,6 +40091,15 @@ async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false 
       automatic: true,
       reason: String(error?.name || error?.message || "autoplay_blocked").slice(0, 80)
     });
+    const embeddedFallback = startPreferredEmbeddedPreviewAutoplay(track);
+    if (embeddedFallback.opened) {
+      if (previewStatus) {
+        previewStatus.textContent = embeddedFallback.source === "soundcloud"
+          ? t("previewSoundcloudFallback")
+          : t("previewBandcampFallback");
+      }
+      return true;
+    }
     restorePreviewSourceActions(track);
     setTrackPreviewVisualState("ready");
     setPreviewPrimaryPlaybackState("ready");
@@ -40415,6 +41384,844 @@ async function refreshDailyNews({ silent = false, live = true } = {}) {
     await renderDailyNewsItems(dailyNewsFallbackItems(), { fallback: true });
   }
   if (showProgress) finishDailyNewsProgress();
+}
+
+function newsroomApiEndpoint() {
+  return resolveConfiguredAppApiEndpoint(
+    "/api/news-editor",
+    ["SONIC_NEWSROOM_API_URL"],
+    "/api/news-editor"
+  );
+}
+
+function newsroomErrorMessage(code = "") {
+  const messages = {
+    login_required: "Entre novamente com a conta administradora.",
+    admin_required: "Esta conta não possui acesso à redação.",
+    newsroom_not_configured: "A redação ainda não está conectada ao Supabase.",
+    newsroom_setup_required: "A estrutura do Jornal Sonic ainda precisa ser aplicada no Supabase.",
+    title_required: "Adicione um título antes de salvar.",
+    excerpt_required_for_publication: "Adicione um resumo antes de publicar.",
+    body_required_for_publication: "Escreva o texto da matéria antes de publicar.",
+    publication_date_required: "Escolha a data de publicação.",
+    event_end_before_start: "O encerramento não pode acontecer antes do início.",
+    invalid_image: "Escolha uma imagem JPG, PNG ou WebP válida.",
+    image_too_large: "A capa ficou grande demais. Escolha outra imagem e tente novamente.",
+    request_body_too_large: "A imagem ficou grande demais para o envio.",
+    article_slug_conflict: "Já existe uma matéria com esse endereço. Tente salvar novamente.",
+    article_not_found: "Essa matéria não foi encontrada. Atualize a biblioteca."
+  };
+  return messages[String(code || "")] || "Não foi possível concluir agora. Tente novamente em instantes.";
+}
+
+async function requestNewsroomApi({ method = "GET", params = null, body = null, admin = false } = {}) {
+  const endpoint = newsroomApiEndpoint();
+  if (!endpoint) throw new Error("newsroom_not_configured");
+  const url = resolveAppApiUrl(endpoint, params);
+  const headers = { Accept: "application/json" };
+  if (body) headers["Content-Type"] = "application/json";
+  if (admin) {
+    const accessToken = await currentApiAccessToken();
+    if (!accessToken) throw new Error("login_required");
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+  const response = await fetch(url, {
+    method,
+    cache: "no-store",
+    headers,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload?.ok) {
+    const error = new Error(String(payload?.error || `newsroom_http_${response.status}`));
+    error.status = response.status;
+    throw error;
+  }
+  return payload;
+}
+
+function saveSonicEditorialCache(articles = []) {
+  try {
+    localStorage.setItem(SONIC_EDITORIAL_CACHE_KEY, JSON.stringify({
+      updatedAt: new Date().toISOString(),
+      articles: Array.isArray(articles) ? articles.slice(0, 30) : []
+    }));
+  } catch (_error) {
+    // The public feed still works without local cache.
+  }
+}
+
+function loadSonicEditorialCache() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SONIC_EDITORIAL_CACHE_KEY) || "{}");
+    return Array.isArray(parsed?.articles) ? parsed.articles : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
+function sonicNewsLocale() {
+  if (currentLanguage === "en") return "en-US";
+  if (currentLanguage === "es") return "es-ES";
+  return "pt-BR";
+}
+
+function sonicNewsDate(value = "", options = {}) {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "";
+  try {
+    return new Intl.DateTimeFormat(sonicNewsLocale(), options).format(date);
+  } catch (_error) {
+    return "";
+  }
+}
+
+function sonicArticleLocation(article = {}) {
+  return [article.venueName, article.city, article.state].map((value) => String(value || "").trim()).filter(Boolean).join(" · ");
+}
+
+function sonicArticleMeta(article = {}) {
+  const location = sonicArticleLocation(article);
+  const date = sonicNewsDate(article.eventStartsAt || article.publishedAt, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+  return [location, date].filter(Boolean).join(" · ") || "Jornal Sonic";
+}
+
+function renderSonicEditorialArticles(articles = []) {
+  if (!sonicEditorialList || !sonicEditorialStatus) return;
+  sonicEditorialState.articles = Array.isArray(articles) ? articles : [];
+  sonicEditorialList.innerHTML = "";
+  if (!sonicEditorialState.articles.length) {
+    sonicEditorialStatus.textContent = "A primeira edição está sendo preparada pela redação.";
+    return;
+  }
+  sonicEditorialState.articles.forEach((article) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "sonic-editorial-card";
+    card.dataset.sonicArticleId = String(article.id || "");
+
+    const imageWrap = document.createElement("div");
+    imageWrap.className = "sonic-editorial-image-wrap";
+    const imageUrl = safeExternalUrl(article.coverImageUrl || "");
+    if (imageUrl) {
+      const image = document.createElement("img");
+      image.src = imageUrl;
+      image.alt = article.coverImageAlt || "";
+      image.loading = "lazy";
+      image.addEventListener("error", () => {
+        image.remove();
+        const fallback = document.createElement("span");
+        fallback.textContent = "SS";
+        imageWrap.appendChild(fallback);
+      }, { once: true });
+      imageWrap.appendChild(image);
+    } else {
+      const fallback = document.createElement("span");
+      fallback.textContent = "SS";
+      imageWrap.appendChild(fallback);
+    }
+
+    const copy = document.createElement("div");
+    copy.className = "sonic-editorial-copy";
+    const kicker = document.createElement("p");
+    const category = document.createElement("span");
+    category.textContent = article.category || "Jornal Sonic";
+    const brand = document.createElement("b");
+    brand.textContent = article.isSponsored ? "CONTEÚDO EM PARCERIA" : "JORNAL SONIC";
+    kicker.append(category, brand);
+    const title = document.createElement("h5");
+    title.textContent = article.title || "Matéria do Jornal Sonic";
+    const excerpt = document.createElement("span");
+    excerpt.textContent = article.excerpt || "";
+    const meta = document.createElement("div");
+    meta.className = "sonic-editorial-meta";
+    meta.textContent = sonicArticleMeta(article);
+    copy.append(kicker, title, excerpt, meta);
+    card.append(imageWrap, copy);
+    sonicEditorialList.appendChild(card);
+  });
+  sonicEditorialStatus.textContent = sonicEditorialState.articles.length === 1
+    ? "1 matéria publicada pela redação."
+    : `${sonicEditorialState.articles.length} matérias publicadas pela redação.`;
+  sonicEditorialStatus.classList.remove("is-error");
+}
+
+async function refreshSonicEditorial({ force = false } = {}) {
+  if (!sonicEditorialList || !sonicEditorialStatus || sonicEditorialState.loading) return false;
+  if (!force && sonicEditorialState.articles.length && Date.now() - sonicEditorialState.loadedAt < 60000) return true;
+  sonicEditorialState.loading = true;
+  sonicEditorialStatus.textContent = "Buscando a edição mais recente…";
+  sonicEditorialStatus.classList.remove("is-error");
+  try {
+    const params = new URLSearchParams({ limit: "20" });
+    const payload = await requestNewsroomApi({ params });
+    const articles = Array.isArray(payload.articles) ? payload.articles : [];
+    sonicEditorialState.loadedAt = Date.now();
+    saveSonicEditorialCache(articles);
+    renderSonicEditorialArticles(articles);
+    return true;
+  } catch (error) {
+    const cached = loadSonicEditorialCache();
+    if (cached.length) {
+      renderSonicEditorialArticles(cached);
+      sonicEditorialStatus.textContent = "Mostrando a última edição salva neste aparelho.";
+      return true;
+    }
+    sonicEditorialStatus.textContent = String(error?.message || "") === "newsroom_setup_required"
+      ? "A primeira edição será publicada em breve."
+      : "O Jornal Sonic está temporariamente indisponível.";
+    sonicEditorialStatus.classList.add("is-error");
+    return false;
+  } finally {
+    sonicEditorialState.loading = false;
+  }
+}
+
+function appendNewsReaderServiceItem(list, label, value) {
+  const safeValue = String(value || "").trim();
+  if (!list || !safeValue) return;
+  const term = document.createElement("dt");
+  term.textContent = label;
+  const detail = document.createElement("dd");
+  detail.textContent = safeValue;
+  list.append(term, detail);
+}
+
+function closeSonicNewsReader() {
+  if (!sonicNewsReader) return;
+  if (typeof sonicNewsReader.close === "function" && sonicNewsReader.open) sonicNewsReader.close();
+  else sonicNewsReader.removeAttribute("open");
+  document.body.classList.remove("sonic-news-reader-open");
+}
+
+function sonicArticleMedia(article = {}) {
+  const media = Array.isArray(article.serviceInfo?.media) ? article.serviceInfo.media : [];
+  return media.map((entry, index) => ({
+    id: `${index}-${String(entry?.url || "")}`,
+    url: safeExternalUrl(entry?.url || ""),
+    alt: String(entry?.alt || "").trim(),
+    caption: String(entry?.caption || "").trim(),
+    credit: String(entry?.credit || "").trim(),
+    afterParagraph: Math.max(1, Number.parseInt(entry?.afterParagraph, 10) || 1)
+  })).filter((entry) => entry.url);
+}
+
+function createSonicNewsMediaFigure(media = {}) {
+  const figure = document.createElement("figure");
+  figure.className = "sonic-news-reader-media";
+  const link = document.createElement("a");
+  link.href = media.url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.setAttribute("aria-label", media.caption ? `Abrir imagem: ${media.caption}` : "Abrir imagem em tamanho maior");
+  const image = document.createElement("img");
+  image.src = media.url;
+  image.alt = media.alt || "";
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.addEventListener("error", () => figure.remove(), { once: true });
+  link.appendChild(image);
+  figure.appendChild(link);
+  if (media.caption || media.credit) {
+    const caption = document.createElement("figcaption");
+    if (media.caption) {
+      const text = document.createElement("span");
+      text.textContent = media.caption;
+      caption.appendChild(text);
+    }
+    if (media.credit) {
+      const credit = document.createElement("small");
+      credit.textContent = media.credit;
+      caption.appendChild(credit);
+    }
+    figure.appendChild(caption);
+  }
+  return figure;
+}
+
+function openSonicNewsReader(article = {}) {
+  if (!sonicNewsReader || !article?.id) return;
+  const imageUrl = safeExternalUrl(article.coverImageUrl || "");
+  const hero = document.getElementById("sonicNewsReaderHero");
+  const image = document.getElementById("sonicNewsReaderImage");
+  if (hero && image) {
+    hero.classList.toggle("hidden", !imageUrl);
+    image.src = imageUrl || "";
+    image.alt = article.coverImageAlt || "";
+  }
+  const setText = (id, value) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = String(value || "");
+  };
+  setText("sonicNewsReaderCategory", article.category || "Jornal Sonic");
+  setText("sonicNewsReaderTitle", article.title || "Matéria");
+  setText("sonicNewsReaderExcerpt", article.excerpt || "");
+  setText("sonicNewsReaderByline", [
+    `Por ${article.authorName || "Redação Sonic Search"}`,
+    sonicNewsDate(article.publishedAt, { dateStyle: "long" })
+  ].filter(Boolean).join(" · "));
+  setText("sonicNewsReaderCredit", article.imageCredit || "");
+
+  const disclosure = document.getElementById("sonicNewsReaderDisclosure");
+  if (disclosure) {
+    disclosure.textContent = article.disclosure || (article.isSponsored ? "Conteúdo em parceria" : "");
+    disclosure.classList.toggle("hidden", !disclosure.textContent);
+  }
+
+  const body = document.getElementById("sonicNewsReaderBody");
+  if (body) {
+    body.innerHTML = "";
+    const blocks = String(article.body || "").split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
+    const media = sonicArticleMedia(article);
+    const insertedMedia = new Set();
+    let paragraphNumber = 0;
+    blocks.forEach((block) => {
+      const headingMatch = block.match(/^##\s+(.+)$/s);
+      if (headingMatch) {
+        const heading = document.createElement("h3");
+        heading.textContent = headingMatch[1].replace(/\s+/g, " ").trim();
+        body.appendChild(heading);
+        return;
+      }
+      paragraphNumber += 1;
+      const node = document.createElement("p");
+      node.textContent = block;
+      body.appendChild(node);
+      media.filter((entry) => entry.afterParagraph === paragraphNumber).forEach((entry) => {
+        body.appendChild(createSonicNewsMediaFigure(entry));
+        insertedMedia.add(entry.id);
+      });
+    });
+    media.filter((entry) => !insertedMedia.has(entry.id)).forEach((entry) => {
+      body.appendChild(createSonicNewsMediaFigure(entry));
+    });
+  }
+
+  const lineupSection = document.getElementById("sonicNewsReaderLineupSection");
+  const lineupList = document.getElementById("sonicNewsReaderLineup");
+  const lineup = Array.isArray(article.lineup) ? article.lineup.filter((entry) => entry?.name) : [];
+  if (lineupList) {
+    lineupList.innerHTML = "";
+    lineup.forEach((entry) => {
+      const row = document.createElement("div");
+      const name = document.createElement("strong");
+      name.textContent = entry.name;
+      const time = document.createElement("span");
+      time.textContent = entry.time || entry.role || "";
+      row.append(name, time);
+      lineupList.appendChild(row);
+    });
+  }
+  lineupSection?.classList.toggle("hidden", !lineup.length);
+
+  const serviceSection = document.getElementById("sonicNewsReaderService");
+  const serviceList = document.getElementById("sonicNewsReaderServiceList");
+  if (serviceList) {
+    serviceList.innerHTML = "";
+    appendNewsReaderServiceItem(serviceList, "Quando", sonicNewsDate(article.eventStartsAt, { dateStyle: "full", timeStyle: "short" }));
+    appendNewsReaderServiceItem(serviceList, "Horários", article.serviceInfo?.doorsTime);
+    appendNewsReaderServiceItem(serviceList, "Onde", sonicArticleLocation(article));
+    appendNewsReaderServiceItem(serviceList, "Endereço", article.serviceInfo?.address);
+    appendNewsReaderServiceItem(serviceList, "Ingressos", article.serviceInfo?.price);
+    appendNewsReaderServiceItem(serviceList, "Classificação", article.serviceInfo?.ageRating);
+    appendNewsReaderServiceItem(serviceList, "Informações", article.serviceInfo?.notes);
+  }
+  serviceSection?.classList.toggle("hidden", !serviceList?.children.length);
+
+  const actions = document.getElementById("sonicNewsReaderActions");
+  if (actions) {
+    actions.innerHTML = "";
+    const relatedLinks = Array.isArray(article.serviceInfo?.relatedLinks) ? article.serviceInfo.relatedLinks : [];
+    const links = [
+      { url: safeExternalUrl(article.ticketUrl || ""), label: article.ctaLabel || "Ver evento", secondary: false },
+      {
+        url: safeExternalUrl(article.instagramUrl || ""),
+        label: String(article.serviceInfo?.instagramLabel || "Instagram oficial").trim(),
+        secondary: true
+      },
+      ...relatedLinks.map((item) => ({
+        url: safeExternalUrl(item?.url || ""),
+        label: String(item?.label || "").trim(),
+        secondary: true
+      }))
+    ].filter((item, index, input) => item.url && item.label && input.findIndex((candidate) => candidate.url === item.url) === index);
+    links.forEach((item) => {
+      const anchor = document.createElement("a");
+      anchor.href = item.url;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      anchor.textContent = item.label;
+      if (item.secondary) anchor.classList.add("secondary");
+      actions.appendChild(anchor);
+    });
+  }
+  document.body.classList.add("sonic-news-reader-open");
+  if (typeof sonicNewsReader.showModal === "function") sonicNewsReader.showModal();
+  else sonicNewsReader.setAttribute("open", "");
+}
+
+function newsFormElement(id) {
+  return document.getElementById(id);
+}
+
+function newsFormValue(id) {
+  return String(newsFormElement(id)?.value || "").trim();
+}
+
+function setNewsFormValue(id, value = "") {
+  const element = newsFormElement(id);
+  if (element) element.value = String(value ?? "");
+}
+
+function localDateTimeInputValue(value = "") {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "";
+  const pad = (number) => String(number).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function isoFromLocalInput(value = "") {
+  const date = new Date(String(value || ""));
+  return Number.isFinite(date.getTime()) ? date.toISOString() : "";
+}
+
+function parseNewsLineup(value = "") {
+  return String(value || "").split(/\n+/).map((line) => line.trim()).filter(Boolean).map((line) => {
+    const parts = line.split(/\s+(?:—|–|-|\|)\s+/).map((part) => part.trim()).filter(Boolean);
+    return { name: parts[0] || "", time: parts.slice(1).join(" · "), role: "" };
+  }).filter((entry) => entry.name);
+}
+
+function newsLineupText(lineup = []) {
+  return (Array.isArray(lineup) ? lineup : []).map((entry) => [entry?.name, entry?.time || entry?.role].filter(Boolean).join(" — ")).filter(Boolean).join("\n");
+}
+
+function parseNewsRelatedLinks(value = "") {
+  return String(value || "").split(/\n+/).map((line) => line.trim()).filter(Boolean).map((line) => {
+    const match = line.match(/^(.+?)\s+(?:—|–|\|)\s+(https?:\/\/\S+)$/i);
+    return match ? { label: match[1].trim(), url: match[2].trim() } : null;
+  }).filter(Boolean);
+}
+
+function newsRelatedLinksText(links = []) {
+  return (Array.isArray(links) ? links : []).map((entry) => {
+    const label = String(entry?.label || "").trim();
+    const url = String(entry?.url || "").trim();
+    return label && url ? `${label} — ${url}` : "";
+  }).filter(Boolean).join("\n");
+}
+
+const ADMIN_NEWS_MEDIA_SLOTS = [
+  {
+    fileId: "adminNewsMediaOneFile",
+    urlId: "adminNewsMediaOneUrl",
+    altId: "adminNewsMediaOneAlt",
+    captionId: "adminNewsMediaOneCaption",
+    creditId: "adminNewsMediaOneCredit",
+    paragraphId: "adminNewsMediaOneParagraph",
+    defaultParagraph: 4
+  },
+  {
+    fileId: "adminNewsMediaTwoFile",
+    urlId: "adminNewsMediaTwoUrl",
+    altId: "adminNewsMediaTwoAlt",
+    captionId: "adminNewsMediaTwoCaption",
+    creditId: "adminNewsMediaTwoCredit",
+    paragraphId: "adminNewsMediaTwoParagraph",
+    defaultParagraph: 8
+  },
+  {
+    fileId: "adminNewsMediaThreeFile",
+    urlId: "adminNewsMediaThreeUrl",
+    altId: "adminNewsMediaThreeAlt",
+    captionId: "adminNewsMediaThreeCaption",
+    creditId: "adminNewsMediaThreeCredit",
+    paragraphId: "adminNewsMediaThreeParagraph",
+    defaultParagraph: 1
+  }
+];
+
+function collectAdminNewsMedia() {
+  return ADMIN_NEWS_MEDIA_SLOTS.map((slot) => ({
+    url: newsFormValue(slot.urlId),
+    alt: newsFormValue(slot.altId),
+    caption: newsFormValue(slot.captionId),
+    credit: newsFormValue(slot.creditId),
+    afterParagraph: Math.max(1, Number.parseInt(newsFormValue(slot.paragraphId), 10) || slot.defaultParagraph)
+  })).filter((entry) => entry.url);
+}
+
+function fillAdminNewsMedia(media = []) {
+  const entries = Array.isArray(media) ? media : [];
+  ADMIN_NEWS_MEDIA_SLOTS.forEach((slot, index) => {
+    const entry = entries[index] || {};
+    setNewsFormValue(slot.urlId, entry.url);
+    setNewsFormValue(slot.altId, entry.alt);
+    setNewsFormValue(slot.captionId, entry.caption);
+    setNewsFormValue(slot.creditId, entry.credit);
+    setNewsFormValue(slot.paragraphId, entry.afterParagraph || slot.defaultParagraph);
+  });
+}
+
+function collectAdminNewsArticle({ intent = "draft" } = {}) {
+  const scheduledAt = isoFromLocalInput(newsFormValue("adminNewsPublishedAt"));
+  const shouldSchedule = intent === "publish" && scheduledAt && new Date(scheduledAt).getTime() > Date.now() + 60000;
+  const title = newsFormValue("adminNewsTitleField");
+  return {
+    status: intent === "draft" ? "draft" : shouldSchedule ? "scheduled" : "published",
+    category: newsFormValue("adminNewsCategory") || "Agenda",
+    title,
+    excerpt: newsFormValue("adminNewsExcerpt"),
+    body: newsFormValue("adminNewsBody"),
+    coverImageUrl: newsFormValue("adminNewsCoverUrl"),
+    coverImageAlt: newsFormValue("adminNewsCoverAlt") || (title ? `Imagem de capa da matéria ${title}` : ""),
+    imageCredit: newsFormValue("adminNewsImageCredit"),
+    authorName: "Redação Sonic Search",
+    venueName: newsFormValue("adminNewsVenue"),
+    city: newsFormValue("adminNewsCity"),
+    state: newsFormValue("adminNewsState"),
+    eventStartsAt: isoFromLocalInput(newsFormValue("adminNewsEventStartsAt")),
+    lineup: parseNewsLineup(newsFormValue("adminNewsLineup")),
+    serviceInfo: {
+      address: newsFormValue("adminNewsAddress"),
+      price: newsFormValue("adminNewsPrice"),
+      ageRating: newsFormValue("adminNewsAgeRating"),
+      instagramLabel: newsFormValue("adminNewsInstagramLabel"),
+      media: collectAdminNewsMedia(),
+      relatedLinks: parseNewsRelatedLinks(newsFormValue("adminNewsRelatedLinks"))
+    },
+    ticketUrl: newsFormValue("adminNewsTicketUrl"),
+    instagramUrl: newsFormValue("adminNewsInstagramUrl"),
+    ctaLabel: "Ver evento",
+    isSponsored: Boolean(adminNewsSponsored?.checked),
+    disclosure: newsFormValue("adminNewsDisclosure"),
+    publishedAt: shouldSchedule ? scheduledAt : intent === "publish" ? new Date().toISOString() : ""
+  };
+}
+
+function setAdminNewsStatus(message = "", tone = "") {
+  if (!adminNewsStatus) return;
+  adminNewsStatus.textContent = message;
+  adminNewsStatus.classList.toggle("is-ready", tone === "ready");
+  adminNewsStatus.classList.toggle("is-error", tone === "error");
+}
+
+function setAdminNewsBusy(busy = false) {
+  adminNewsroomState.saving = Boolean(busy);
+  [adminNewsSaveDraftBtn, adminNewsPublishBtn, adminNewsArchiveBtn, adminNewsNewBtn].forEach((button) => {
+    if (button) button.disabled = Boolean(busy);
+  });
+}
+
+function updateAdminNewsPreview() {
+  if (!adminNewsPreview) return;
+  const title = newsFormValue("adminNewsTitleField") || "Sua próxima manchete começa aqui";
+  const excerpt = newsFormValue("adminNewsExcerpt") || "Preencha o formulário para visualizar como a matéria aparecerá no Sonic Search.";
+  const category = newsFormValue("adminNewsCategory") || "Agenda";
+  const titleCount = newsFormElement("adminNewsTitleCount");
+  if (titleCount) titleCount.textContent = String(newsFormValue("adminNewsTitleField").length);
+  const setText = (id, value) => {
+    const element = newsFormElement(id);
+    if (element) element.textContent = value;
+  };
+  setText("adminNewsPreviewTitle", title);
+  setText("adminNewsPreviewExcerpt", excerpt);
+  setText("adminNewsPreviewCategory", category);
+  const previewArticle = {
+    venueName: newsFormValue("adminNewsVenue"),
+    city: newsFormValue("adminNewsCity"),
+    state: newsFormValue("adminNewsState"),
+    eventStartsAt: isoFromLocalInput(newsFormValue("adminNewsEventStartsAt"))
+  };
+  setText("adminNewsPreviewMeta", sonicArticleMeta(previewArticle));
+  const imageUrl = safeExternalUrl(newsFormValue("adminNewsCoverUrl"));
+  if (adminNewsPreviewImage && adminNewsPreviewFallback) {
+    adminNewsPreviewImage.classList.toggle("hidden", !imageUrl);
+    adminNewsPreviewFallback.classList.toggle("hidden", Boolean(imageUrl));
+    if (imageUrl) {
+      adminNewsPreviewImage.src = imageUrl;
+      adminNewsPreviewImage.alt = newsFormValue("adminNewsCoverAlt");
+    }
+  }
+  adminNewsDisclosureWrap?.classList.toggle("hidden", !adminNewsSponsored?.checked);
+}
+
+function resetAdminNewsForm() {
+  adminNewsForm?.reset();
+  setNewsFormValue("adminNewsId", "");
+  setNewsFormValue("adminNewsState", "Ceará");
+  setNewsFormValue("adminNewsStatusField", "draft");
+  if (adminNewsFormMode) adminNewsFormMode.textContent = "NOVA MATÉRIA";
+  adminNewsArchiveBtn?.classList.add("hidden");
+  updateAdminNewsPreview();
+}
+
+function fillAdminNewsForm(article = {}) {
+  setNewsFormValue("adminNewsId", article.id);
+  setNewsFormValue("adminNewsStatusField", article.status || "draft");
+  setNewsFormValue("adminNewsCategory", article.category || "Agenda");
+  setNewsFormValue("adminNewsPublishedAt", localDateTimeInputValue(article.publishedAt));
+  setNewsFormValue("adminNewsTitleField", article.title);
+  setNewsFormValue("adminNewsExcerpt", article.excerpt);
+  setNewsFormValue("adminNewsCoverUrl", article.coverImageUrl);
+  setNewsFormValue("adminNewsCoverAlt", article.coverImageAlt);
+  setNewsFormValue("adminNewsImageCredit", article.imageCredit);
+  setNewsFormValue("adminNewsVenue", article.venueName);
+  setNewsFormValue("adminNewsEventStartsAt", localDateTimeInputValue(article.eventStartsAt));
+  setNewsFormValue("adminNewsCity", article.city);
+  setNewsFormValue("adminNewsState", article.state || "Ceará");
+  setNewsFormValue("adminNewsTicketUrl", article.ticketUrl);
+  setNewsFormValue("adminNewsInstagramUrl", article.instagramUrl);
+  setNewsFormValue("adminNewsInstagramLabel", article.serviceInfo?.instagramLabel);
+  setNewsFormValue("adminNewsPrice", article.serviceInfo?.price);
+  setNewsFormValue("adminNewsAgeRating", article.serviceInfo?.ageRating);
+  setNewsFormValue("adminNewsAddress", article.serviceInfo?.address);
+  setNewsFormValue("adminNewsRelatedLinks", newsRelatedLinksText(article.serviceInfo?.relatedLinks));
+  fillAdminNewsMedia(article.serviceInfo?.media);
+  setNewsFormValue("adminNewsLineup", newsLineupText(article.lineup));
+  setNewsFormValue("adminNewsBody", article.body);
+  if (adminNewsSponsored) adminNewsSponsored.checked = Boolean(article.isSponsored);
+  setNewsFormValue("adminNewsDisclosure", article.disclosure);
+  if (adminNewsFormMode) adminNewsFormMode.textContent = "EDITANDO MATÉRIA";
+  adminNewsArchiveBtn?.classList.toggle("hidden", !article.id || article.status === "archived");
+  updateAdminNewsPreview();
+  adminNewsForm?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+}
+
+function renderAdminNewsList() {
+  if (!adminNewsList) return;
+  adminNewsList.innerHTML = "";
+  if (!adminNewsroomState.articles.length) {
+    const empty = document.createElement("p");
+    empty.className = "admin-news-list-empty";
+    empty.textContent = "Nenhuma matéria salva. Crie a primeira edição do Jornal Sonic.";
+    adminNewsList.appendChild(empty);
+    return;
+  }
+  const statusLabel = { draft: "Rascunho", scheduled: "Agendada", published: "Publicada", archived: "Arquivada" };
+  adminNewsroomState.articles.forEach((article) => {
+    const row = document.createElement("article");
+    row.className = "admin-news-list-item";
+    row.dataset.status = article.status || "draft";
+    const marker = document.createElement("i");
+    marker.setAttribute("aria-hidden", "true");
+    const copy = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = article.title || "Sem título";
+    const meta = document.createElement("span");
+    meta.textContent = [statusLabel[article.status] || article.status, article.category, sonicNewsDate(article.updatedAt, { dateStyle: "short", timeStyle: "short" })].filter(Boolean).join(" · ");
+    copy.append(title, meta);
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.dataset.adminNewsEdit = String(article.id || "");
+    edit.textContent = "Editar";
+    row.append(marker, copy, edit);
+    adminNewsList.appendChild(row);
+  });
+}
+
+async function loadAdminNewsroom({ force = false } = {}) {
+  if (!adminNewsroom || !hasAdminAccess() || adminNewsroomState.loading) return false;
+  if (!force && adminNewsroomState.loadedAt && Date.now() - adminNewsroomState.loadedAt < 60000) {
+    renderAdminNewsList();
+    return true;
+  }
+  adminNewsroomState.loading = true;
+  setAdminNewsStatus("Carregando rascunhos e matérias publicadas…");
+  try {
+    const params = new URLSearchParams({ scope: "admin", limit: "100" });
+    const payload = await requestNewsroomApi({ params, admin: true });
+    adminNewsroomState.articles = Array.isArray(payload.articles) ? payload.articles : [];
+    adminNewsroomState.loadedAt = Date.now();
+    renderAdminNewsList();
+    setAdminNewsStatus("Redação sincronizada. Suas mudanças aparecem no app assim que forem publicadas.", "ready");
+    if (urlRequestsNewsroom()) {
+      window.requestAnimationFrame(() => adminNewsroom.scrollIntoView?.({ behavior: "smooth", block: "start" }));
+    }
+    return true;
+  } catch (error) {
+    setAdminNewsStatus(newsroomErrorMessage(error?.message), "error");
+    return false;
+  } finally {
+    adminNewsroomState.loading = false;
+  }
+}
+
+async function saveAdminNewsArticle(intent = "draft") {
+  if (!adminNewsForm || adminNewsroomState.saving) return false;
+  const article = collectAdminNewsArticle({ intent });
+  if (!article.title) {
+    setAdminNewsStatus(newsroomErrorMessage("title_required"), "error");
+    newsFormElement("adminNewsTitleField")?.focus();
+    return false;
+  }
+  const id = newsFormValue("adminNewsId");
+  setAdminNewsBusy(true);
+  setAdminNewsStatus(intent === "publish" ? "Publicando a matéria…" : "Salvando o rascunho…");
+  try {
+    const payload = await requestNewsroomApi({
+      method: id ? "PATCH" : "POST",
+      admin: true,
+      body: id ? { id, article } : { article }
+    });
+    const saved = payload.article;
+    const existingIndex = adminNewsroomState.articles.findIndex((item) => item.id === saved.id);
+    if (existingIndex >= 0) adminNewsroomState.articles.splice(existingIndex, 1, saved);
+    else adminNewsroomState.articles.unshift(saved);
+    adminNewsroomState.articles.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+    adminNewsroomState.loadedAt = Date.now();
+    renderAdminNewsList();
+    fillAdminNewsForm(saved);
+    const publicationMessage = saved.status === "scheduled"
+      ? `Matéria agendada para ${sonicNewsDate(saved.publishedAt, { dateStyle: "short", timeStyle: "short" })}.`
+      : saved.status === "published"
+        ? "Matéria publicada. Ela já pode aparecer no site e no aplicativo."
+        : "Rascunho salvo com segurança.";
+    setAdminNewsStatus(publicationMessage, "ready");
+    if (["published", "scheduled"].includes(saved.status)) await refreshSonicEditorial({ force: true });
+    return true;
+  } catch (error) {
+    setAdminNewsStatus(newsroomErrorMessage(error?.message), "error");
+    return false;
+  } finally {
+    setAdminNewsBusy(false);
+  }
+}
+
+async function archiveAdminNewsArticle() {
+  const id = newsFormValue("adminNewsId");
+  if (!id || adminNewsroomState.saving) return false;
+  setAdminNewsBusy(true);
+  setAdminNewsStatus("Arquivando a matéria…");
+  try {
+    const payload = await requestNewsroomApi({ method: "PATCH", admin: true, body: { id, article: { status: "archived" } } });
+    const saved = payload.article;
+    const index = adminNewsroomState.articles.findIndex((item) => item.id === saved.id);
+    if (index >= 0) adminNewsroomState.articles.splice(index, 1, saved);
+    renderAdminNewsList();
+    fillAdminNewsForm(saved);
+    setAdminNewsStatus("Matéria arquivada e retirada da área pública.", "ready");
+    await refreshSonicEditorial({ force: true });
+    return true;
+  } catch (error) {
+    setAdminNewsStatus(newsroomErrorMessage(error?.message), "error");
+    return false;
+  } finally {
+    setAdminNewsBusy(false);
+  }
+}
+
+function canvasBlob(canvas, type = "image/jpeg", quality = 0.84) {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
+function blobDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(reader.error || new Error("invalid_image"));
+    reader.readAsDataURL(blob);
+  });
+}
+
+function imageFromFile(file) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("invalid_image"));
+    };
+    image.src = objectUrl;
+  });
+}
+
+async function optimizedNewsImage(file) {
+  if (!file || !/^image\/(?:jpeg|png|webp)$/i.test(file.type || "")) throw new Error("invalid_image");
+  const image = await imageFromFile(file);
+  const maxDimension = 1600;
+  const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth || 1, image.naturalHeight || 1));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  const context = canvas.getContext("2d", { alpha: false });
+  if (!context) throw new Error("invalid_image");
+  context.fillStyle = "#07101f";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  let quality = 0.86;
+  let blob = await canvasBlob(canvas, "image/jpeg", quality);
+  while (blob && blob.size > 1100000 && quality > 0.54) {
+    quality -= 0.08;
+    blob = await canvasBlob(canvas, "image/jpeg", quality);
+  }
+  if (!blob || blob.size > 1500000) throw new Error("image_too_large");
+  return { dataUrl: await blobDataUrl(blob), fileName: String(file.name || "capa.jpg").replace(/\.[^.]+$/, ".jpg") };
+}
+
+async function uploadAdminNewsImage(file, {
+  fileInput = null,
+  urlFieldId = "adminNewsCoverUrl",
+  altFieldId = "adminNewsCoverAlt",
+  label = "capa"
+} = {}) {
+  if (!file || adminNewsroomState.uploading) return false;
+  adminNewsroomState.uploading = true;
+  if (fileInput) fileInput.disabled = true;
+  setAdminNewsStatus(`Otimizando e enviando ${label === "capa" ? "a capa" : `a ${label}`}…`);
+  try {
+    const optimized = await optimizedNewsImage(file);
+    const payload = await requestNewsroomApi({
+      method: "POST",
+      admin: true,
+      body: { action: "upload-cover", fileDataUrl: optimized.dataUrl, fileName: optimized.fileName }
+    });
+    setNewsFormValue(urlFieldId, payload.url);
+    if (!newsFormValue(altFieldId)) {
+      const title = newsFormValue("adminNewsTitleField") || "do Jornal Sonic";
+      setNewsFormValue(altFieldId, label === "capa" ? `Imagem de capa da matéria ${title}` : `${label} da matéria ${title}`);
+    }
+    updateAdminNewsPreview();
+    setAdminNewsStatus(`${label === "capa" ? "Capa enviada" : `${label[0].toUpperCase()}${label.slice(1)} enviada`}. Salve ou publique a matéria para concluir.`, "ready");
+    return true;
+  } catch (error) {
+    setAdminNewsStatus(newsroomErrorMessage(error?.message), "error");
+    return false;
+  } finally {
+    adminNewsroomState.uploading = false;
+    if (fileInput) {
+      fileInput.disabled = false;
+      fileInput.value = "";
+    }
+  }
+}
+
+async function uploadAdminNewsCover(file) {
+  return uploadAdminNewsImage(file, {
+    fileInput: adminNewsCoverFile,
+    urlFieldId: "adminNewsCoverUrl",
+    altFieldId: "adminNewsCoverAlt",
+    label: "capa"
+  });
+}
+
+async function uploadAdminNewsMedia(file, slotIndex = 0) {
+  const slot = ADMIN_NEWS_MEDIA_SLOTS[slotIndex];
+  if (!slot) return false;
+  return uploadAdminNewsImage(file, {
+    fileInput: newsFormElement(slot.fileId),
+    urlFieldId: slot.urlId,
+    altFieldId: slot.altId,
+    label: `imagem interna ${slotIndex + 1}`
+  });
 }
 
 async function fetchArtistBioFromWikipedia(artistName, preferredLanguage = currentLanguage) {
@@ -43177,7 +44984,7 @@ function currentAccessEmail() {
   return normalizeAccessEmail(socialSessionEmail() || normalizeUserSession(currentAuthUser).email || "");
 }
 
-function hasOwnerAccess() {
+function hasLegacyOwnerAccess() {
   const session = normalizeUserSession(currentAuthUser);
   const email = currentAccessEmail();
   return Boolean(
@@ -43188,8 +44995,129 @@ function hasOwnerAccess() {
   );
 }
 
+function adminAccessSessionKey() {
+  if (!authHasOnlineSession()) return "";
+  const user = socialState.session?.user || {};
+  return String(user.id || user.sub || currentAccessEmail() || "").trim().toLowerCase();
+}
+
+function resetAdminAccessState(sessionKey = "") {
+  adminAccessState.loading = false;
+  adminAccessState.verified = false;
+  adminAccessState.allowed = false;
+  adminAccessState.owner = false;
+  adminAccessState.role = "anonymous";
+  adminAccessState.email = "";
+  adminAccessState.sessionKey = sessionKey;
+  adminAccessState.lastCheckedAt = 0;
+  adminAccessState.promise = null;
+}
+
+function hasAdminAccess() {
+  if (!authHasOnlineSession()) return false;
+  const sessionKey = adminAccessSessionKey();
+  if (
+    adminAccessState.verified &&
+    sessionKey &&
+    adminAccessState.sessionKey === sessionKey
+  ) {
+    return Boolean(adminAccessState.allowed);
+  }
+  return hasLegacyOwnerAccess();
+}
+
+function hasOwnerAccess() {
+  if (!authHasOnlineSession()) return false;
+  const sessionKey = adminAccessSessionKey();
+  if (
+    adminAccessState.verified &&
+    sessionKey &&
+    adminAccessState.sessionKey === sessionKey
+  ) {
+    return Boolean(adminAccessState.owner);
+  }
+  return hasLegacyOwnerAccess();
+}
+
+function adminAccessEndpoint() {
+  return resolveAppApiEndpoint(ACCESS_CONFIG.adminAccessEndpoint || "/api/access-context");
+}
+
 function adminAnalyticsEndpoint() {
   return resolveAppApiEndpoint(ACCESS_CONFIG.adminAnalyticsEndpoint || "/api/admin-analytics");
+}
+
+async function refreshAdminAccess(options = {}) {
+  const sessionKey = adminAccessSessionKey();
+  if (!sessionKey) {
+    resetAdminAccessState();
+    syncAdminAnalyticsAccess();
+    return false;
+  }
+  if (adminAccessState.sessionKey !== sessionKey) resetAdminAccessState(sessionKey);
+  if (adminAccessState.loading && adminAccessState.promise) return adminAccessState.promise;
+  const maxAgeMs = 5 * 60 * 1000;
+  if (
+    options.force !== true &&
+    adminAccessState.verified &&
+    Date.now() - adminAccessState.lastCheckedAt < maxAgeMs
+  ) {
+    return adminAccessState.allowed;
+  }
+
+  const endpoint = adminAccessEndpoint();
+  if (!endpoint) {
+    syncAdminAnalyticsAccess();
+    return hasAdminAccess();
+  }
+
+  adminAccessState.loading = true;
+  const requestSessionKey = sessionKey;
+  adminAccessState.promise = (async () => {
+    try {
+      const accessToken = await currentApiAccessToken();
+      if (!accessToken) throw new Error("login_required");
+      const response = await fetch(endpoint, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          "X-Sonic-Auth-Token": accessToken
+        }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload?.ok || !payload?.viewer) {
+        throw new Error(String(payload?.error || `access_context_http_${response.status}`));
+      }
+      if (adminAccessSessionKey() !== requestSessionKey) return false;
+      const viewer = payload.viewer || {};
+      adminAccessState.verified = true;
+      adminAccessState.allowed = Boolean(viewer.canAccessAdmin || viewer.admin || viewer.owner);
+      adminAccessState.owner = Boolean(viewer.owner || viewer.role === "owner");
+      adminAccessState.role = String(viewer.role || (adminAccessState.allowed ? "admin" : "free"));
+      adminAccessState.email = normalizeAccessEmail(viewer.email || currentAccessEmail());
+      adminAccessState.lastCheckedAt = Date.now();
+      return adminAccessState.allowed;
+    } catch (error) {
+      if (adminAccessSessionKey() === requestSessionKey) {
+        adminAccessState.verified = false;
+        adminAccessState.allowed = false;
+        adminAccessState.owner = false;
+        adminAccessState.role = "anonymous";
+        adminAccessState.email = "";
+      }
+      console.warn("Could not verify administrative access", error);
+      return hasLegacyOwnerAccess();
+    } finally {
+      if (adminAccessSessionKey() === requestSessionKey) {
+        adminAccessState.loading = false;
+        adminAccessState.promise = null;
+        syncAdminAnalyticsAccess();
+      }
+    }
+  })();
+  return adminAccessState.promise;
 }
 
 function adminAnalyticsLocale() {
@@ -43229,7 +45157,7 @@ function setAdminAnalyticsStatus(message = "", tone = "") {
 function renderAdminAnalyticsCopy() {
   const copy = [
     ["adminAnalyticsKicker", "CENTRAL PRIVADA", "PRIVATE CONTROL", "CENTRAL PRIVADA"],
-    ["adminAnalyticsPrivateLabel", "Somente proprietário", "Owner only", "Solo propietario"],
+    ["adminAnalyticsPrivateLabel", "Somente administradores", "Admins only", "Solo administradores"],
     ["adminAnalyticsTitle", "Pessoas usando o Sonic Search", "People using Sonic Search", "Personas usando Sonic Search"],
     ["adminAnalyticsIntro", "Leitura anônima de uso, retorno e plataforma — sem expor dados pessoais.", "Anonymous view of usage, return, and platform — without exposing personal data.", "Lectura anónima de uso, retorno y plataforma — sin exponer datos personales."],
     ["adminAnalyticsRefreshLabel", "Atualizar", "Refresh", "Actualizar"],
@@ -43256,18 +45184,38 @@ function renderAdminAnalyticsCopy() {
     ["adminSignalLikesLabel", "artistas curtidos", "artists liked", "artistas con like"],
     ["adminSignalDiscoveriesLabel", "novos artistas", "new artists", "nuevos artistas"],
     ["adminSignalSharesLabel", "compartilhamentos", "shares", "compartidos"],
+    ["adminOperationsKicker", "OPERAÇÃO · 30 DIAS", "OPERATIONS · 30 DAYS", "OPERACIÓN · 30 DÍAS"],
+    ["adminOperationsTitle", "Do uso à ação", "From use to action", "Del uso a la acción"],
+    ["adminOperationsIntro", "Funil, qualidade musical e integrações em uma leitura operacional.", "Funnel, music quality, and integrations in one operational view.", "Embudo, calidad musical e integraciones en una vista operativa."],
+    ["adminFunnelKicker", "FUNIL", "FUNNEL", "EMBUDO"],
+    ["adminFunnelTitle", "Como as pessoas avançam", "How people progress", "Cómo avanzan las personas"],
+    ["adminFunnelNote", "Percentuais usam as pessoas que abriram o app como base.", "Percentages use people who opened the app as the baseline.", "Los porcentajes usan como base a las personas que abrieron la app."],
+    ["adminQualityKicker", "QUALIDADE MUSICAL", "MUSIC QUALITY", "CALIDAD MUSICAL"],
+    ["adminQualityTitle", "Problemas sinalizados", "Reported issues", "Problemas señalados"],
+    ["adminIssuePreviewLabel", "preview", "preview", "preview"],
+    ["adminIssueStyleLabel", "estilo", "style", "estilo"],
+    ["adminIssueBpmLabel", "BPM", "BPM", "BPM"],
+    ["adminIssueImageLabel", "imagem", "image", "imagen"],
+    ["adminHealthKicker", "SISTEMA", "SYSTEM", "SISTEMA"],
+    ["adminHealthTitle", "Saúde das integrações", "Integration health", "Salud de las integraciones"],
+    ["adminHealthRefreshBtn", "Verificar", "Check", "Verificar"],
+    ["adminModerationKicker", "COMUNIDADE", "COMMUNITY", "COMUNIDAD"],
+    ["adminModerationTitle", "Moderação recente", "Recent moderation", "Moderación reciente"],
+    ["adminModerationRefreshBtn", "Atualizar", "Refresh", "Actualizar"],
     ["adminPrivacyTitle", "Como interpretar estes números", "How to read these numbers", "Cómo interpretar estos números"],
-    ["adminPrivacyText", "“Pessoa” é uma aproximação por identificador anônimo salvo no aparelho ou navegador. A mesma pessoa em dois aparelhos pode aparecer duas vezes. Nenhum nome ou e-mail de usuário é mostrado.", "“Person” is an approximation based on an anonymous identifier stored on the device or browser. One person on two devices may appear twice. No user names or emails are shown.", "“Persona” es una aproximación por identificador anónimo guardado en el dispositivo o navegador. La misma persona en dos dispositivos puede aparecer dos veces. No se muestran nombres ni e-mails."]
+    ["adminPrivacyText", "“Pessoa” é uma aproximação por identificador anônimo salvo no aparelho ou navegador. Sessões são separadas após cerca de 30 minutos de inatividade. A mesma pessoa em dois aparelhos pode aparecer duas vezes. Nenhum nome ou e-mail de visitante é mostrado.", "“Person” is an approximation based on an anonymous identifier stored on the device or browser. Sessions are separated after about 30 minutes of inactivity. One person on two devices may appear twice. No visitor names or emails are shown.", "“Persona” es una aproximación por identificador anónimo guardado en el dispositivo o navegador. Las sesiones se separan después de unos 30 minutos de inactividad. La misma persona en dos dispositivos puede aparecer dos veces. No se muestran nombres ni e-mails de visitantes."]
   ];
   copy.forEach(([id, pt, en, es]) => setText(`#${id}`, sonicTinyCopy(pt, en, es)));
   if (!adminAnalyticsState.data && !adminAnalyticsState.loading) {
     setAdminAnalyticsStatus(sonicTinyCopy(
-      "Entre com sua conta de proprietário para carregar os dados.",
-      "Sign in with the owner account to load the data.",
-      "Entra con la cuenta de propietario para cargar los datos."
+      "Entre com uma conta administradora para carregar os dados.",
+      "Sign in with an administrator account to load the data.",
+      "Entra con una cuenta administradora para cargar los datos."
     ));
   }
   if (adminAnalyticsState.data) renderAdminAnalyticsData(adminAnalyticsState.data);
+  if (adminOperationsState.health) renderAdminIntegrationHealth(adminOperationsState.health);
+  if (adminOperationsState.moderationLoadedAt) renderAdminModeration(adminOperationsState.moderationPosts);
 }
 
 function svgElement(name, attributes = {}) {
@@ -43359,6 +45307,292 @@ function renderAdminAnalyticsTrend(trend = []) {
   if (peakEl) peakEl.textContent = `${sonicTinyCopy("Pico", "Peak", "Pico")} ${adminAnalyticsNumber(peak)}`;
 }
 
+function renderAdminMeasurement(measurement = {}) {
+  if (!adminMeasurementBadge) return;
+  const rate = Math.max(0, Math.min(100, Number(measurement.preciseRate) || 0));
+  const roundedRate = adminAnalyticsNumber(rate);
+  adminMeasurementBadge.textContent = sonicTinyCopy(
+    `${roundedRate}% das sessões com medição precisa`,
+    `${roundedRate}% of sessions measured precisely`,
+    `${roundedRate}% de las sesiones con medición precisa`
+  );
+  adminMeasurementBadge.classList.toggle("is-precise", rate >= 90);
+  adminMeasurementBadge.title = rate >= 90
+    ? sonicTinyCopy("A maior parte do histórico usa o novo identificador anônimo.", "Most history uses the new anonymous identifier.", "La mayor parte del historial usa el nuevo identificador anónimo.")
+    : sonicTinyCopy("A medição nova já está ativa; parte do histórico ainda usa o método anterior.", "The new measurement is active; part of the history still uses the previous method.", "La nueva medición ya está activa; parte del historial aún usa el método anterior.");
+}
+
+function renderAdminFunnel(funnel = {}) {
+  if (!adminFunnelList) return;
+  const stages = funnel.stages || {};
+  const definitions = [
+    ["opened", sonicTinyCopy("Abriu o app", "Opened the app", "Abrió la app")],
+    ["recommended", sonicTinyCopy("Recebeu recomendação", "Got a recommendation", "Recibió recomendación")],
+    ["listened", sonicTinyCopy("Ouviu um preview", "Played a preview", "Escuchó un preview")],
+    ["reacted", sonicTinyCopy("Reagiu à faixa", "Reacted to a track", "Reaccionó a la pista")],
+    ["valued", sonicTinyCopy("Salvou ou compartilhou", "Saved or shared", "Guardó o compartió")]
+  ];
+  const fragment = document.createDocumentFragment();
+  definitions.forEach(([key, label]) => {
+    const stage = stages[key] || {};
+    const users = Math.max(0, Number(stage.users) || 0);
+    const rate = Math.max(0, Math.min(100, Number(stage.rate) || 0));
+    const row = document.createElement("div");
+    row.className = "admin-funnel-row";
+
+    const labelEl = document.createElement("span");
+    labelEl.className = "admin-funnel-label";
+    labelEl.textContent = label;
+    labelEl.title = label;
+
+    const valueEl = document.createElement("strong");
+    valueEl.className = "admin-funnel-value";
+    valueEl.textContent = adminAnalyticsNumber(users);
+
+    const meter = document.createElement("span");
+    meter.className = "admin-funnel-meter";
+    meter.setAttribute("aria-hidden", "true");
+    const fill = document.createElement("span");
+    fill.style.width = `${rate}%`;
+    meter.append(fill);
+
+    const rateEl = document.createElement("span");
+    rateEl.className = "admin-funnel-rate";
+    rateEl.textContent = `${adminAnalyticsNumber(rate)}%`;
+    row.append(labelEl, valueEl, meter, rateEl);
+    fragment.append(row);
+  });
+  adminFunnelList.replaceChildren(fragment);
+}
+
+function adminIssueReasonLabel(reason = "") {
+  const labels = {
+    preview_issue: sonicTinyCopy("preview", "preview", "preview"),
+    style_issue: sonicTinyCopy("estilo", "style", "estilo"),
+    bpm_issue: "BPM",
+    image_issue: sonicTinyCopy("imagem", "image", "imagen")
+  };
+  return labels[reason] || sonicTinyCopy("outro", "other", "otro");
+}
+
+function renderAdminIssues(issues = {}) {
+  const counts = issues.byReason || {};
+  const values = {
+    preview: Math.max(0, Number(counts.preview_issue) || 0),
+    style: Math.max(0, Number(counts.style_issue) || 0),
+    bpm: Math.max(0, Number(counts.bpm_issue) || 0),
+    image: Math.max(0, Number(counts.image_issue) || 0)
+  };
+  if (adminIssuePreview) adminIssuePreview.textContent = adminAnalyticsNumber(values.preview);
+  if (adminIssueStyle) adminIssueStyle.textContent = adminAnalyticsNumber(values.style);
+  if (adminIssueBpm) adminIssueBpm.textContent = adminAnalyticsNumber(values.bpm);
+  if (adminIssueImage) adminIssueImage.textContent = adminAnalyticsNumber(values.image);
+  const total = Math.max(0, Number(issues.total) || 0);
+  if (adminIssueTotal) {
+    adminIssueTotal.textContent = total === 1
+      ? sonicTinyCopy("1 relato", "1 report", "1 reporte")
+      : sonicTinyCopy(`${adminAnalyticsNumber(total)} relatos`, `${adminAnalyticsNumber(total)} reports`, `${adminAnalyticsNumber(total)} reportes`);
+  }
+  if (!adminIssueList) return;
+  const top = Array.isArray(issues.top) ? issues.top.slice(0, 6) : [];
+  if (!top.length) {
+    const empty = document.createElement("p");
+    empty.className = "admin-inline-status";
+    empty.textContent = sonicTinyCopy(
+      "Nenhum problema musical sinalizado nos últimos 30 dias.",
+      "No music issues reported in the last 30 days.",
+      "Ningún problema musical señalado en los últimos 30 días."
+    );
+    adminIssueList.replaceChildren(empty);
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  top.forEach((issue) => {
+    const item = document.createElement("div");
+    item.className = "admin-issue-item";
+    const body = document.createElement("div");
+    const title = document.createElement("strong");
+    const artist = String(issue.artist || "").trim();
+    const song = String(issue.song || "").trim();
+    title.textContent = [artist, song].filter(Boolean).join(" — ") || sonicTinyCopy("Faixa sem identificação", "Unidentified track", "Pista sin identificación");
+    title.title = title.textContent;
+    const meta = document.createElement("span");
+    meta.textContent = [adminIssueReasonLabel(issue.reason), String(issue.style || "").trim()].filter(Boolean).join(" · ");
+    body.append(title, meta);
+    const count = document.createElement("b");
+    count.textContent = `×${adminAnalyticsNumber(issue.reports)}`;
+    item.append(body, count);
+    fragment.append(item);
+  });
+  adminIssueList.replaceChildren(fragment);
+}
+
+function renderAdminIntegrationHealth(payload = {}) {
+  if (!adminHealthGrid || !adminHealthStatus) return;
+  const items = apiHealthItems(payload);
+  let active = 0;
+  let attention = 0;
+  const fragment = document.createDocumentFragment();
+  items.forEach(({ key, provider }) => {
+    const status = apiHealthStatusFor(provider);
+    if (status === "active") active += 1;
+    else attention += 1;
+    const item = document.createElement("article");
+    item.className = `admin-health-item ${status === "active" ? "is-active" : "is-attention"}`;
+    const heading = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = apiProviderLabel(key);
+    title.title = title.textContent;
+    const dot = document.createElement("span");
+    dot.className = "admin-health-dot";
+    dot.setAttribute("aria-hidden", "true");
+    heading.append(title, dot);
+    const detail = document.createElement("small");
+    detail.textContent = apiHealthProviderDetail(key, provider) || apiHealthStatusLabel(status);
+    item.append(heading, detail);
+    fragment.append(item);
+  });
+  adminHealthGrid.replaceChildren(fragment);
+  if (!items.length) {
+    adminHealthStatus.textContent = sonicTinyCopy("Nenhuma integração retornou estado.", "No integration returned a status.", "Ninguna integración devolvió estado.");
+    return;
+  }
+  adminHealthStatus.textContent = sonicTinyCopy(
+    `${adminAnalyticsNumber(active)} ativas · ${adminAnalyticsNumber(attention)} requerem atenção`,
+    `${adminAnalyticsNumber(active)} active · ${adminAnalyticsNumber(attention)} need attention`,
+    `${adminAnalyticsNumber(active)} activas · ${adminAnalyticsNumber(attention)} requieren atención`
+  );
+}
+
+async function loadAdminIntegrationHealth(options = {}) {
+  if (!adminHealthGrid || !hasAdminAccess() || adminOperationsState.healthLoading) return false;
+  const force = options.force === true;
+  if (!force && adminOperationsState.health && Date.now() - adminOperationsState.healthLoadedAt < 60000) {
+    renderAdminIntegrationHealth(adminOperationsState.health);
+    return true;
+  }
+  adminOperationsState.healthLoading = true;
+  if (adminHealthRefreshBtn) adminHealthRefreshBtn.disabled = true;
+  if (adminHealthStatus) adminHealthStatus.textContent = sonicTinyCopy("Verificando integrações…", "Checking integrations…", "Verificando integraciones…");
+  try {
+    const response = await fetchWithTimeout(apiHealthEndpoint(), {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      cache: "no-store"
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok || !payload?.ok) throw new Error(payload?.error || `health_http_${response.status}`);
+    adminOperationsState.health = payload;
+    adminOperationsState.healthLoadedAt = Date.now();
+    renderAdminIntegrationHealth(payload);
+    return true;
+  } catch (error) {
+    if (adminHealthStatus) adminHealthStatus.textContent = sonicTinyCopy("Não foi possível verificar agora.", "Could not check right now.", "No fue posible verificar ahora.");
+    console.warn("Admin integration health could not be loaded", error);
+    return false;
+  } finally {
+    adminOperationsState.healthLoading = false;
+    if (adminHealthRefreshBtn) adminHealthRefreshBtn.disabled = false;
+  }
+}
+
+function renderAdminModeration(posts = []) {
+  if (!adminModerationList || !adminModerationStatus) return;
+  const rows = Array.isArray(posts) ? posts.slice(0, 12) : [];
+  adminModerationStatus.textContent = rows.length
+    ? sonicTinyCopy(`${adminAnalyticsNumber(rows.length)} publicações recentes`, `${adminAnalyticsNumber(rows.length)} recent posts`, `${adminAnalyticsNumber(rows.length)} publicaciones recientes`)
+    : sonicTinyCopy("Nenhuma publicação para moderar.", "No posts to moderate.", "Ninguna publicación para moderar.");
+  const fragment = document.createDocumentFragment();
+  rows.forEach((post) => {
+    const item = document.createElement("article");
+    item.className = "admin-moderation-item";
+    const body = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = String(post.title || "").trim() || sonicTinyCopy("Publicação sem título", "Untitled post", "Publicación sin título");
+    title.title = title.textContent;
+    const excerpt = document.createElement("p");
+    excerpt.textContent = String(post.body || "").trim();
+    const meta = document.createElement("div");
+    meta.className = "admin-moderation-meta";
+    const author = String(post.author?.displayName || post.author?.username || "Sonic listener").trim();
+    const date = adminAnalyticsDateLabel(post.createdAt, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+    meta.textContent = [author, String(post.topic || "").trim(), date].filter(Boolean).join(" · ");
+    body.append(title, excerpt, meta);
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "admin-danger-btn";
+    remove.dataset.adminDeletePost = String(post.id || "");
+    remove.dataset.adminPostTitle = title.textContent.slice(0, 120);
+    remove.textContent = sonicTinyCopy("Remover", "Remove", "Eliminar");
+    item.append(body, remove);
+    fragment.append(item);
+  });
+  adminModerationList.replaceChildren(fragment);
+}
+
+async function loadAdminModerationQueue(options = {}) {
+  if (!adminModerationList || !hasAdminAccess() || adminOperationsState.moderationLoading) return false;
+  const force = options.force === true;
+  if (!force && adminOperationsState.moderationLoadedAt && Date.now() - adminOperationsState.moderationLoadedAt < 60000) {
+    renderAdminModeration(adminOperationsState.moderationPosts);
+    return true;
+  }
+  adminOperationsState.moderationLoading = true;
+  if (adminModerationRefreshBtn) adminModerationRefreshBtn.disabled = true;
+  if (adminModerationStatus) adminModerationStatus.textContent = sonicTinyCopy("Carregando publicações recentes…", "Loading recent posts…", "Cargando publicaciones recientes…");
+  try {
+    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?filter=all`);
+    if (!payload?.ok || payload.enabled === false) throw new Error(payload?.error || "community_unavailable");
+    if (!payload.viewer?.canModerate) throw new Error("moderator_required");
+    adminOperationsState.moderationPosts = Array.isArray(payload.posts) ? payload.posts : [];
+    adminOperationsState.moderationLoadedAt = Date.now();
+    renderAdminModeration(adminOperationsState.moderationPosts);
+    return true;
+  } catch (error) {
+    if (adminModerationStatus) adminModerationStatus.textContent = sonicTinyCopy("Não foi possível carregar a moderação agora.", "Could not load moderation right now.", "No fue posible cargar la moderación ahora.");
+    console.warn("Admin moderation could not be loaded", error);
+    return false;
+  } finally {
+    adminOperationsState.moderationLoading = false;
+    if (adminModerationRefreshBtn) adminModerationRefreshBtn.disabled = false;
+  }
+}
+
+async function deleteAdminCommunityPost(postId = "", title = "") {
+  const safePostId = String(postId || "").trim();
+  if (!safePostId || !hasAdminAccess()) return false;
+  const label = String(title || "").trim();
+  const confirmed = window.confirm(sonicTinyCopy(
+    `Remover esta publicação${label ? `: “${label}”` : ""}? Esta ação não aparece mais para a comunidade.`,
+    `Remove this post${label ? `: “${label}”` : ""}? It will no longer appear in the community.`,
+    `¿Eliminar esta publicación${label ? `: “${label}”` : ""}? Ya no aparecerá en la comunidad.`
+  ));
+  if (!confirmed) return false;
+  try {
+    const params = new URLSearchParams({ id: safePostId });
+    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
+    if (!payload?.ok) throw new Error(payload?.error || "community_delete_failed");
+    adminOperationsState.moderationPosts = adminOperationsState.moderationPosts.filter((post) => String(post.id || "") !== safePostId);
+    communityState.posts = communityState.posts.filter((post) => String(post.id || "") !== safePostId);
+    renderAdminModeration(adminOperationsState.moderationPosts);
+    renderCommunityPanel();
+    showToast(sonicTinyCopy("Publicação removida.", "Post removed.", "Publicación eliminada."));
+    return true;
+  } catch (error) {
+    console.warn("Admin could not remove community post", error);
+    showToast(sonicTinyCopy("Não foi possível remover agora.", "Could not remove it right now.", "No fue posible eliminarla ahora."));
+    return false;
+  }
+}
+
+function loadAdminOperations(options = {}) {
+  if (!hasAdminAccess()) return Promise.resolve([]);
+  return Promise.all([
+    loadAdminIntegrationHealth(options),
+    loadAdminModerationQueue(options)
+  ]);
+}
+
 function renderAdminAnalyticsData(data = {}) {
   if (!data || typeof data !== "object") return;
   const periods = data.periods || {};
@@ -43411,6 +45645,9 @@ function renderAdminAnalyticsData(data = {}) {
     if (element) element.textContent = adminAnalyticsNumber(value);
   });
 
+  renderAdminMeasurement(data.measurement || {});
+  renderAdminFunnel(data.funnel || {});
+  renderAdminIssues(data.issues || {});
   renderAdminAnalyticsTrend(data.trend || []);
   const updatedEl = document.getElementById("adminTrendUpdated");
   if (updatedEl) {
@@ -43420,7 +45657,7 @@ function renderAdminAnalyticsData(data = {}) {
 }
 
 function syncAdminAnalyticsAccess() {
-  const allowed = hasOwnerAccess();
+  const allowed = hasAdminAccess();
   if (adminAnalyticsTabBtn) {
     adminAnalyticsTabBtn.hidden = !allowed;
     adminAnalyticsTabBtn.classList.toggle("hidden", !allowed);
@@ -43443,7 +45680,7 @@ function syncAdminAnalyticsAccess() {
 }
 
 async function loadAdminAnalytics(options = {}) {
-  if (!adminAnalyticsPanel || !hasOwnerAccess() || adminAnalyticsState.loading) return false;
+  if (!adminAnalyticsPanel || !hasAdminAccess() || adminAnalyticsState.loading) return false;
   const force = options.force === true;
   if (!force && adminAnalyticsState.data && Date.now() - adminAnalyticsState.lastLoadedAt < 60000) {
     renderAdminAnalyticsData(adminAnalyticsState.data);
@@ -43489,9 +45726,9 @@ async function loadAdminAnalytics(options = {}) {
     return true;
   } catch (error) {
     const code = String(error?.message || "");
-    const denied = ["login_required", "owner_required"].includes(code) || [401, 403].includes(Number(error?.status));
+    const denied = ["login_required", "owner_required", "admin_required"].includes(code) || [401, 403].includes(Number(error?.status));
     setAdminAnalyticsStatus(denied
-      ? sonicTinyCopy("Acesso negado. Entre com a conta do proprietário.", "Access denied. Sign in with the owner account.", "Acceso denegado. Entra con la cuenta del propietario.")
+      ? sonicTinyCopy("Acesso negado. Entre com uma conta administradora.", "Access denied. Sign in with an administrator account.", "Acceso denegado. Entra con una cuenta administradora.")
       : sonicTinyCopy("Não foi possível carregar agora. Tente atualizar em instantes.", "Could not load right now. Try refreshing shortly.", "No fue posible cargar ahora. Intenta actualizar en unos instantes."), "error");
     console.warn("Admin analytics could not be loaded", error);
     return false;
@@ -46939,6 +49176,17 @@ function recommendationStyleDisplayLabel(track = null, { allowProbable = false }
   return styleFamilyLabel(style);
 }
 
+function trackMatchesRequestedSubgenreEvidence(track = null, prefs = {}) {
+  if (!track) return false;
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  const requestedStyle = normalizedPrefs.style;
+  if (!requestedStyle) return true;
+  const trackStyle = normalizeDatasetStyle(track.style || "");
+  if (trackStyle !== requestedStyle) return false;
+  if (!FINE_SUBGENRE_EVIDENCE_STYLES.has(requestedStyle)) return true;
+  return trackStyleCertainty(track) === "confirmed";
+}
+
 function setGenreSignalChip(chip, track = null) {
   if (!chip) return;
   const style = normalize(track?.style || "");
@@ -47733,24 +49981,125 @@ function createRuntimeCurationSeed() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
 }
 
+function localOpeningRotationSlot() {
+  try {
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      const values = new Uint32Array(2);
+      crypto.getRandomValues(values);
+      const combined = (BigInt(values[0]) << 32n) | BigInt(values[1]);
+      return Number(combined % BigInt(Number.MAX_SAFE_INTEGER));
+    }
+  } catch (_err) {
+    // Hash fallback below still varies by installation, visit, and page load.
+  }
+  return hashString(`${currentCurationUserSeed()}::${currentCurationVisitId()}::${curationOpenSeed}::opening-slot`);
+}
+
+async function ensureOpeningRotationSlot({ timeoutMs = 950 } = {}) {
+  if (Number.isFinite(openingRotationSlot)) return openingRotationSlot;
+  if (openingRotationSlotPromise) return openingRotationSlotPromise;
+
+  openingRotationSlotPromise = Promise.resolve().then(async () => {
+    const fallbackSlot = localOpeningRotationSlot();
+    const endpoint = resolveAppApiEndpoint(OPENING_ROTATION_ENDPOINT);
+    if (!endpoint || typeof fetch !== "function") {
+      openingRotationSlot = fallbackSlot;
+      openingRotationSlotSource = "local_crypto";
+      return openingRotationSlot;
+    }
+
+    try {
+      const response = await fetchWithTimeout(endpoint, {
+        method: "GET",
+        cache: "no-store",
+        credentials: "omit",
+        headers: { Accept: "application/json" }
+      }, timeoutMs);
+      const payload = response?.ok ? await response.json() : null;
+      const serverSlot = Number(payload?.slot);
+      if (payload?.ok && payload?.durable === true && Number.isSafeInteger(serverSlot) && serverSlot >= 0) {
+        openingRotationSlot = serverSlot;
+        openingRotationSlotSource = "global_durable";
+        return openingRotationSlot;
+      }
+    } catch (_err) {
+      // Offline/native fallback below keeps discovery instant and diverse.
+    }
+
+    openingRotationSlot = fallbackSlot;
+    openingRotationSlotSource = "local_crypto";
+    return openingRotationSlot;
+  }).finally(() => {
+    openingRotationSlotPromise = null;
+  });
+
+  return openingRotationSlotPromise;
+}
+
 let anonymousExposureCache = null;
+let globalTrackExposureCounts = new Map();
+let globalArtistExposureCounts = new Map();
+let globalRecentTrackExposureAt = new Map();
+let globalExposureSnapshotPromise = null;
+let globalExposureSnapshotAt = 0;
 
 function anonymousDiscoverySession() {
   const mode = normalizeUserSession(currentAuthUser).mode;
   return mode === "guest" || mode === "visitor" || mode === "test";
 }
 
-function readAnonymousExposureHistory() {
-  if (Array.isArray(anonymousExposureCache)) return anonymousExposureCache;
+function emptyAnonymousExposureLedger() {
+  return { version: 2, tracks: [], artists: [] };
+}
+
+function readAnonymousExposureLedger() {
+  if (anonymousExposureCache?.version === 2) return anonymousExposureCache;
   try {
     const parsed = JSON.parse(localStorage.getItem(ANONYMOUS_EXPOSURE_STORAGE_KEY) || "[]");
-    anonymousExposureCache = Array.isArray(parsed)
-      ? parsed.slice(-160).filter((entry) => entry?.trackKey || entry?.artistKey)
-      : [];
+    if (parsed?.version === 2) {
+      anonymousExposureCache = {
+        version: 2,
+        tracks: Array.isArray(parsed.tracks)
+          ? parsed.tracks.filter((entry) => entry?.trackKey).slice(-50)
+          : [],
+        artists: Array.isArray(parsed.artists)
+          ? parsed.artists.filter((entry) => entry?.artistKey).slice(-20)
+          : []
+      };
+    } else if (Array.isArray(parsed)) {
+      anonymousExposureCache = {
+        version: 2,
+        tracks: parsed
+          .filter((entry) => entry?.trackKey)
+          .slice(-50)
+          .map((entry) => ({
+            trackKey: entry.trackKey,
+            artistKey: entry.artistKey || "",
+            at: Number(entry.at) || 0
+          })),
+        artists: parsed
+          .filter((entry) => entry?.artistKey)
+          .slice(-20)
+          .map((entry) => ({
+            artistKey: entry.artistKey,
+            at: Number(entry.at) || 0
+          }))
+      };
+    } else {
+      anonymousExposureCache = emptyAnonymousExposureLedger();
+    }
   } catch (_err) {
-    anonymousExposureCache = [];
+    anonymousExposureCache = emptyAnonymousExposureLedger();
   }
   return anonymousExposureCache;
+}
+
+function persistAnonymousExposureLedger() {
+  try {
+    localStorage.setItem(ANONYMOUS_EXPOSURE_STORAGE_KEY, JSON.stringify(readAnonymousExposureLedger()));
+  } catch (_err) {
+    // Private browsing still keeps the in-memory windows for the active tab.
+  }
 }
 
 function rememberAnonymousExposure(track) {
@@ -47758,32 +50107,66 @@ function rememberAnonymousExposure(track) {
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
   if (!trackKey && !artistKey) return;
-  const history = readAnonymousExposureHistory();
-  history.push({ trackKey, artistKey, at: Date.now() });
-  anonymousExposureCache = history.slice(-160);
-  try {
-    localStorage.setItem(ANONYMOUS_EXPOSURE_STORAGE_KEY, JSON.stringify(anonymousExposureCache));
-  } catch (_err) {
-    // In private browsing the in-memory ledger still protects the active session.
+  const ledger = readAnonymousExposureLedger();
+  const at = Date.now();
+  if (trackKey) {
+    ledger.tracks = [
+      ...ledger.tracks.filter((entry) => entry.trackKey !== trackKey),
+      { trackKey, artistKey, at }
+    ].slice(-50);
   }
+  if (artistKey) {
+    ledger.artists = [
+      ...ledger.artists.filter((entry) => entry.artistKey !== artistKey),
+      { artistKey, at }
+    ].slice(-20);
+  }
+  anonymousExposureCache = ledger;
+  persistAnonymousExposureLedger();
+  void recordGlobalDiscoveryExposure(track);
+}
+
+function globalExposurePenalty(track) {
+  if (!track || !anonymousDiscoverySession()) return 0;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  const trackCount = Math.max(0, Number(globalTrackExposureCounts.get(trackKey) || 0));
+  const artistCount = Math.max(0, Number(globalArtistExposureCounts.get(artistKey) || 0));
+  const recentAt = Math.max(0, Number(globalRecentTrackExposureAt.get(trackKey) || 0));
+  const recentAgeMs = recentAt ? Math.max(0, Date.now() - recentAt) : Infinity;
+  const recentPenalty = recentAgeMs < 120000
+    ? 36 * (1 - recentAgeMs / 120000)
+    : 0;
+  if (!trackCount && !artistCount && !recentPenalty) return 0;
+  return Math.min(
+    82,
+    Math.log2(trackCount + 1) * 13 +
+      Math.log2(artistCount + 1) * 4.5 +
+      recentPenalty
+  );
 }
 
 function anonymousExposurePenalty(track) {
   if (!track || !anonymousDiscoverySession()) return 0;
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
-  const recent = readAnonymousExposureHistory().slice(-80);
-  if (!recent.length) return 0;
+  const ledger = readAnonymousExposureLedger();
+  const recentTracks = ledger.tracks.slice(-50);
+  const recentArtists = ledger.artists.slice(-20);
+  if (!recentTracks.length && !recentArtists.length) return globalExposurePenalty(track);
   let trackCount = 0;
   let artistCount = 0;
   let trackRecentRank = Infinity;
   let artistRecentRank = Infinity;
-  for (let index = recent.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
-    const entry = recent[index] || {};
+  for (let index = recentTracks.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
+    const entry = recentTracks[index] || {};
     if (trackKey && entry.trackKey === trackKey) {
       trackCount += 1;
       trackRecentRank = Math.min(trackRecentRank, rank);
     }
+  }
+  for (let index = recentArtists.length - 1, rank = 0; index >= 0; index -= 1, rank += 1) {
+    const entry = recentArtists[index] || {};
     if (artistKey && entry.artistKey === artistKey) {
       artistCount += 1;
       artistRecentRank = Math.min(artistRecentRank, rank);
@@ -47794,7 +50177,107 @@ function anonymousExposurePenalty(track) {
   else if (trackRecentRank < 48) penalty += 28;
   if (artistRecentRank < 8) penalty += 20;
   else if (artistRecentRank < 18) penalty += 9;
-  return penalty;
+  return penalty + globalExposurePenalty(track);
+}
+
+function discoveryExposureCandidatePayload(tracks = []) {
+  const trackKeys = [];
+  const artistKeys = [];
+  const seenTracks = new Set();
+  const seenArtists = new Set();
+  (Array.isArray(tracks) ? tracks : []).forEach((track) => {
+    const trackKey = recommendationTrackKey(track);
+    const artistKey = artistMatchKey(track?.artist || "");
+    if (trackKey && !seenTracks.has(trackKey) && trackKeys.length < 48) {
+      seenTracks.add(trackKey);
+      trackKeys.push(trackKey);
+    }
+    if (artistKey && !seenArtists.has(artistKey) && artistKeys.length < 48) {
+      seenArtists.add(artistKey);
+      artistKeys.push(artistKey);
+    }
+  });
+  return { trackKeys, artistKeys };
+}
+
+async function refreshGlobalDiscoveryExposure(tracks = []) {
+  if (!anonymousDiscoverySession() || typeof fetch !== "function") return false;
+  const payload = discoveryExposureCandidatePayload(tracks);
+  if (!payload.trackKeys.length && !payload.artistKeys.length) return false;
+  if (
+    globalExposureSnapshotPromise &&
+    Date.now() - globalExposureSnapshotAt < 8000
+  ) return globalExposureSnapshotPromise;
+
+  globalExposureSnapshotAt = Date.now();
+  globalExposureSnapshotPromise = fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      action: "snapshot",
+      anonymousId: betaAnalyticsAnonymousId(),
+      ...payload
+    }),
+    keepalive: true
+  })
+    .then((response) => response.ok ? response.json() : null)
+    .then((result) => {
+      if (!result?.ok) return false;
+      Object.entries(result.tracks || {}).forEach(([key, count]) => {
+        globalTrackExposureCounts.set(key, Math.max(0, Number(count) || 0));
+      });
+      Object.entries(result.artists || {}).forEach(([key, count]) => {
+        globalArtistExposureCounts.set(key, Math.max(0, Number(count) || 0));
+      });
+      Object.entries(result.recentTracks || {}).forEach(([key, at]) => {
+        globalRecentTrackExposureAt.set(key, Math.max(0, Number(at) || 0));
+      });
+      return true;
+    })
+    .catch(() => false)
+    .finally(() => {
+      globalExposureSnapshotPromise = null;
+    });
+  return globalExposureSnapshotPromise;
+}
+
+async function recordGlobalDiscoveryExposure(track) {
+  if (!track || !anonymousDiscoverySession() || typeof fetch !== "function") return false;
+  const trackKey = recommendationTrackKey(track);
+  const artistKey = artistMatchKey(track.artist || "");
+  if (!trackKey && !artistKey) return false;
+  try {
+    const response = await fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        action: "record",
+        anonymousId: betaAnalyticsAnonymousId(),
+        trackKey,
+        artistKey
+      }),
+      keepalive: true
+    });
+    if (!response.ok) return false;
+    const result = await response.json();
+    if (!result?.ok) return false;
+    if (result.trackCount !== null && result.trackCount !== undefined) {
+      globalTrackExposureCounts.set(trackKey, Math.max(0, Number(result.trackCount) || 0));
+    }
+    if (result.artistCount !== null && result.artistCount !== undefined) {
+      globalArtistExposureCounts.set(artistKey, Math.max(0, Number(result.artistCount) || 0));
+    }
+    globalRecentTrackExposureAt.set(trackKey, Date.now());
+    return true;
+  } catch (_err) {
+    return false;
+  }
 }
 
 function currentCurationUserSeed() {
@@ -47932,6 +50415,7 @@ function recommendationPrecisionScore(track, prefs = {}) {
 
   if (prefs.style) {
     if (track.style !== prefs.style) return -1000000;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return -1000000;
     score += 4.8;
     if (weakFineSubgenre) score -= 9.5;
   } else if (track.style) {
@@ -48098,6 +50582,7 @@ function findPrecisionReplacement(
   const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   const pool = basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
     if (prefs.bpm) {
       const bpmOk = trackMatchesBpmPreference(track, prefs.bpm);
@@ -48186,6 +50671,7 @@ function recommendationScore(track, prefs) {
   if (prefs.style) {
     // Guard rail: com estilo selecionado, faixas fora do estilo nunca devem vencer.
     if (track.style !== prefs.style) return -1000000;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return -1000000;
     if (track.style === prefs.style) score += 3 * weights.style;
   }
   const maturityScore = recommendationMaturityScore(track.style || "", prefs, track);
@@ -48225,6 +50711,8 @@ function recommendationScore(track, prefs) {
   score += recommendationQualityScore(track, prefs);
   score += trackRecommendationReliabilityScore(track) * 0.45;
   score += recommendationDiscoveryDiversityScore(track, prefs) * 0.85;
+  score += hierarchicalStyleAffinityScore(track.style || "", prefs) * (prefs.style ? 0.18 : 0.92);
+  score += artistDiscoveryConfidenceScore(track, prefs) * (prefs.style ? 0.72 : 0.88);
   score += clampScore(recommendationPrecisionScore(track, prefs), -8, 12) * (preferenceCount >= 2 ? 0.72 : 0.42);
   score += getAdaptiveScore(track);
   score += Math.random() * (preferenceCount ? 0.015 : 0.06);
@@ -48334,6 +50822,7 @@ function styleScopedEligibleTracks(prefs = {}) {
   const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   return basePool.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
@@ -49011,7 +51500,20 @@ function djRecommendationKey(seed = {}) {
 }
 
 function djLaneLabel(lane = "") {
-  if (lane === "techno_live_dj") return "Techno / Live";
+  if ([
+    "other_all",
+    "psy_progressive_fullon",
+    "psy_full_on_night",
+    "psy_forest_dark",
+    "psy_hi_tech",
+    "psy_psycore",
+    "psy_goa_festival",
+    "house_deep_minimal"
+  ].includes(lane)) {
+    const guidedOption = allDjIntentRefinementOptions().find((option) => option.value === lane);
+    if (guidedOption) return guidedOption.label;
+  }
+  if (lane === "techno_live_dj") return "Techno / House";
   if (lane === "berlin_hypnotic_deep") return "Hypnotic / Deep Techno";
   if (lane === "berlin_raw_hardgroove") return "Raw / Hardgroove";
   if (lane === "berlin_industrial_ebm") return "Industrial / EBM";
@@ -49021,7 +51523,7 @@ function djLaneLabel(lane = "") {
   if (lane === "minimal_deep_selectors") return "Minimal / Deep Tech";
   if (lane === "disco_italo_selectors") return "Disco / Italo";
   if (lane === "psy_festival_lineups") return "Psy sets";
-  if (lane === "hitech_psycore") return "Hi-Tech / Psycore";
+  if (lane === "hitech_psycore") return "Psy extremo";
   if (lane === "mop") return "Psy BR";
   if (lane === "global_psy") return "Psy global";
   if (lane === "global_club") return "Selector global";
@@ -49035,8 +51537,524 @@ const DJ_TECHNO_SET_LANES = new Set([
   "berlin_raw_hardgroove",
   "berlin_industrial_ebm",
   "berlin_acid_electro",
-  "berlin_bass_electro"
+  "berlin_bass_electro",
+  "house_selectors",
+  "minimal_deep_selectors"
 ]);
+const DJ_PSY_PROGRESSIVE_FULLON_STYLES = new Set([
+  "progressive_psy",
+  "full_on",
+  "full_on_morning"
+]);
+const DJ_PSY_FOREST_DARK_STYLES = new Set([
+  "forest_psy",
+  "dark_psy",
+  "twilight_psy",
+  "dark_progressive",
+  "dark_experimental"
+]);
+const DJ_PSY_GOA_FESTIVAL_STYLES = new Set(["goa_trance"]);
+const DJ_UNTRUSTED_EXTREME_PSY_SEED_ID = /^(?:multi|artist-set|strict-set)-hitech_psycore-/;
+const DJ_CANONICAL_PSY_ARTISTS = new Map([
+  ["fungus funk", {
+    name: "Fungus Funk",
+    lane: "global_psy",
+    style: "full_on_night",
+    subgenre: "Full-On Night"
+  }]
+]);
+
+function explicitPsySetTaxonomy(seed = {}) {
+  const title = normalize(seed?.setTitle || "");
+  if (!title) return null;
+  if (/\bfull\s*on\s*night\b|\bnight\s*groove\b/.test(title)) {
+    return { lane: "global_psy", style: "full_on_night", subgenre: "Full-On Night" };
+  }
+  if (/\btwilight\b/.test(title)) {
+    return { lane: "global_psy", style: "twilight_psy", subgenre: "Twilight Psytrance" };
+  }
+  if (/\bforest\b/.test(title) && !/\bhi\s*tech\b|\bhitech\b|\bpsycore\b/.test(title)) {
+    return { lane: "global_psy", style: "forest_psy", subgenre: "Forest Psytrance" };
+  }
+  if (/\bdark\s*psy\b|\bdarkpsy\b/.test(title) && !/\bhi\s*tech\b|\bhitech\b|\bpsycore\b/.test(title)) {
+    return { lane: "global_psy", style: "dark_psy", subgenre: "Dark Psy" };
+  }
+  if (/\bpsycore\b/.test(title) && !/\bhi\s*tech\b|\bhitech\b/.test(title)) {
+    return { lane: "hitech_psycore", style: "psycore", subgenre: "Psycore" };
+  }
+  if (/\bhi\s*tech\b|\bhitech\b/.test(title)) {
+    return { lane: "hitech_psycore", style: "hi_tech", subgenre: "Hi-Tech" };
+  }
+  if (/\bfull\s*on\b/.test(title)) {
+    return { lane: "global_psy", style: "full_on", subgenre: "Full-On" };
+  }
+  if (/\bprogressive\b/.test(title)) {
+    return { lane: "global_psy", style: "progressive_psy", subgenre: "Progressive Psytrance" };
+  }
+  return null;
+}
+
+function normalizeDjRecommendationTaxonomy(seed = {}) {
+  if (!seed || typeof seed !== "object") return null;
+  const safeSeed = { ...seed };
+  const artistKey = normalize(safeSeed.name || "")
+    .replace(/\s+(?:hitech|hi\s*tech|psytrance)$/i, "")
+    .trim();
+  const canonicalArtist = DJ_CANONICAL_PSY_ARTISTS.get(artistKey);
+  if (canonicalArtist) {
+    return {
+      ...safeSeed,
+      ...canonicalArtist,
+      taxonomyConfidence: "confirmed",
+      taxonomyNote: "Classificação de gênero revisada por curadoria."
+    };
+  }
+
+  if (safeSeed.lane !== "hitech_psycore") {
+    if (DJ_PSY_SET_LANES.has(safeSeed.lane) && safeSeed.style === "hi_tech") {
+      return {
+        ...safeSeed,
+        subgenre: "Hi-Tech",
+        taxonomyConfidence: safeSeed.taxonomyConfidence || "curated",
+        taxonomyNote: safeSeed.taxonomyNote || "Classificação de gênero revisada por curadoria."
+      };
+    }
+    if (DJ_PSY_SET_LANES.has(safeSeed.lane) && safeSeed.style === "psycore") {
+      return {
+        ...safeSeed,
+        subgenre: "Psycore",
+        taxonomyConfidence: safeSeed.taxonomyConfidence || "curated",
+        taxonomyNote: safeSeed.taxonomyNote || "Classificação de gênero revisada por curadoria."
+      };
+    }
+    return safeSeed;
+  }
+
+  const explicitTaxonomy = explicitPsySetTaxonomy(safeSeed);
+  if (explicitTaxonomy) {
+    return {
+      ...safeSeed,
+      ...explicitTaxonomy,
+      taxonomyConfidence: "title_explicit",
+      taxonomyNote: "Vertente indicada explicitamente no set."
+    };
+  }
+
+  if (DJ_UNTRUSTED_EXTREME_PSY_SEED_ID.test(String(safeSeed.id || ""))) {
+    return null;
+  }
+
+  const curatedStyle = safeSeed.style === "psycore"
+    ? { style: "psycore", subgenre: "Psycore" }
+    : safeSeed.style === "hi_tech"
+      ? { style: "hi_tech", subgenre: "Hi-Tech" }
+      : null;
+  if (!curatedStyle) return null;
+  return {
+    ...safeSeed,
+    ...curatedStyle,
+    taxonomyConfidence: "curated",
+    taxonomyNote: "Classificação de gênero revisada por curadoria."
+  };
+}
+
+function djIntentFamilyCopy(family = "") {
+  if (family === "techno") {
+    return {
+      kicker: sonicTinyCopy("Pista", "Dancefloor", "Pista"),
+      label: "Techno / House",
+      hint: sonicTinyCopy(
+        "Do hipnótico ao hardgroove, house e minimal",
+        "From hypnotic to hardgroove, house, and minimal",
+        "De lo hipnótico al hardgroove, house y minimal"
+      )
+    };
+  }
+  if (family === "psy") {
+    return {
+      kicker: sonicTinyCopy("Trance", "Trance", "Trance"),
+      label: "Psytrance",
+      hint: sonicTinyCopy(
+        "Progressive, Full-On, Forest, Hi-Tech, Psycore e mais",
+        "Progressive, Full-On, Forest, Hi-Tech, Psycore, and more",
+        "Progressive, Full-On, Forest, Hi-Tech, Psycore y más"
+      )
+    };
+  }
+  return {
+    kicker: sonicTinyCopy("Fora do eixo", "Off axis", "Fuera del eje"),
+    label: sonicTinyCopy("Outros", "Other", "Otros"),
+    hint: sonicTinyCopy(
+      "Disco, club, bass e seleções livres",
+      "Disco, club, bass, and open selections",
+      "Disco, club, bass y selecciones libres"
+    )
+  };
+}
+
+function djIntentRefinementOptions(family = "") {
+  if (family === "techno") {
+    return [
+      {
+        family,
+        value: "techno_live_dj",
+        label: sonicTinyCopy("Qualquer Techno / House", "Any Techno / House", "Cualquier Techno / House"),
+        hint: sonicTinyCopy("Explore toda a família", "Explore the whole family", "Explora toda la familia")
+      },
+      {
+        family,
+        value: "berlin_hypnotic_deep",
+        label: "Hypnotic / Deep",
+        hint: sonicTinyCopy("Profundo e imersivo", "Deep and immersive", "Profundo e inmersivo")
+      },
+      {
+        family,
+        value: "berlin_raw_hardgroove",
+        label: "Raw / Hardgroove",
+        hint: sonicTinyCopy("Groove seco e pressão", "Dry groove and pressure", "Groove seco y presión")
+      },
+      {
+        family,
+        value: "berlin_industrial_ebm",
+        label: "Industrial / EBM",
+        hint: sonicTinyCopy("Máquina, peso e tensão", "Machine, weight, and tension", "Máquina, peso y tensión")
+      },
+      {
+        family,
+        value: "berlin_acid_electro",
+        label: "Acid / Electro",
+        hint: sonicTinyCopy("Ácido e linhas quebradas", "Acid and broken lines", "Ácido y líneas quebradas")
+      },
+      {
+        family,
+        value: "berlin_bass_electro",
+        label: "Bass / Broken",
+        hint: sonicTinyCopy("Ritmo torto e subgrave", "Twisted rhythm and sub-bass", "Ritmo torcido y subgrave")
+      },
+      {
+        family,
+        value: "house_deep_minimal",
+        label: "House / Deep / Minimal",
+        hint: sonicTinyCopy("Groove, espaço e balanço", "Groove, space, and swing", "Groove, espacio y balance")
+      }
+    ];
+  }
+  if (family === "psy") {
+    return [
+      {
+        family,
+        value: "psy_festival_lineups",
+        label: sonicTinyCopy("Qualquer Psytrance", "Any Psytrance", "Cualquier Psytrance"),
+        hint: sonicTinyCopy("Explore toda a família", "Explore the whole family", "Explora toda la familia")
+      },
+      {
+        family,
+        value: "psy_progressive_fullon",
+        label: "Progressive / Full-On",
+        hint: sonicTinyCopy("Viagem, melodia e pista", "Journey, melody, and dancefloor", "Viaje, melodía y pista")
+      },
+      {
+        family,
+        value: "psy_full_on_night",
+        label: "Full-On Night",
+        hint: sonicTinyCopy("Groove noturno e pressão", "Nocturnal groove and pressure", "Groove nocturno y presión")
+      },
+      {
+        family,
+        value: "psy_forest_dark",
+        label: "Forest / Dark Psy",
+        hint: sonicTinyCopy("Noturno, orgânico e denso", "Nocturnal, organic, and dense", "Nocturno, orgánico y denso")
+      },
+      {
+        family,
+        value: "psy_hi_tech",
+        label: "Hi-Tech",
+        hint: sonicTinyCopy("Alta velocidade e precisão", "High speed and precision", "Alta velocidad y precisión")
+      },
+      {
+        family,
+        value: "psy_psycore",
+        label: "Psycore",
+        hint: sonicTinyCopy("Extremo, denso e experimental", "Extreme, dense, and experimental", "Extremo, denso y experimental")
+      },
+      {
+        family,
+        value: "psy_goa_festival",
+        label: "Goa / Old School",
+        hint: sonicTinyCopy("Clássico, solar e expansivo", "Classic, bright, and expansive", "Clásico, solar y expansivo")
+      }
+    ];
+  }
+  return [
+    {
+      family: "other",
+      value: "other_all",
+      label: sonicTinyCopy("Todos os outros", "All other sounds", "Todos los otros"),
+      hint: sonicTinyCopy("Explore fora de Psy e Techno / House", "Explore beyond Psy and Techno / House", "Explora fuera de Psy y Techno / House")
+    },
+    {
+      family: "other",
+      value: "disco_italo_selectors",
+      label: "Disco / Italo",
+      hint: sonicTinyCopy("Sintetizadores e brilho", "Synths and shine", "Sintetizadores y brillo")
+    },
+    {
+      family: "other",
+      value: "global_club",
+      label: "Club / Bass / Global",
+      hint: sonicTinyCopy("Bass, breaks e seleções livres", "Bass, breaks, and open selections", "Bass, breaks y selecciones libres")
+    }
+  ];
+}
+
+function allDjIntentRefinementOptions() {
+  return ["psy", "techno", "other"].flatMap(djIntentRefinementOptions);
+}
+
+function djIntentFromFilterValue(filterValue = "") {
+  const value = String(filterValue || "").trim();
+  if (!value) {
+    return {
+      family: "surprise",
+      filterValue: "",
+      label: sonicTinyCopy("Me surpreenda", "Surprise me", "Sorpréndeme"),
+      surprise: true
+    };
+  }
+  const option = allDjIntentRefinementOptions().find((item) => item.value === value);
+  if (option) {
+    return {
+      family: option.family,
+      filterValue: option.value,
+      label: option.label,
+      surprise: false
+    };
+  }
+  return {
+    family: "other",
+    filterValue: value,
+    label: djLaneLabel(value),
+    surprise: false
+  };
+}
+
+function currentDjFilterValue() {
+  if (currentDjIntent) return String(currentDjIntent.filterValue || "").trim();
+  return String(djDiscoverySceneFilter?.value || "").trim();
+}
+
+function renderDjIntentRefinement(family = pendingDjIntentFamily) {
+  if (!djIntentRefinement || !djIntentStyleOptions) return;
+  const safeFamily = ["techno", "psy", "other"].includes(family) ? family : "";
+  pendingDjIntentFamily = safeFamily;
+  const isOpen = Boolean(safeFamily);
+  djIntentRefinement.hidden = !isOpen;
+  djIntentRefinement.classList.toggle("hidden", !isOpen);
+  djIntentFamilyButtons.forEach((button) => {
+    button.setAttribute("aria-expanded", button.dataset.djIntentFamily === safeFamily ? "true" : "false");
+  });
+  djIntentStyleOptions.innerHTML = "";
+  if (!isOpen) return;
+  const familyCopy = djIntentFamilyCopy(safeFamily);
+  if (djIntentRefinementTitle) {
+    djIntentRefinementTitle.textContent = sonicTinyCopy(
+      `Qual vertente de ${familyCopy.label} combina com agora?`,
+      `Which ${familyCopy.label} lane fits right now?`,
+      `¿Qué vertiente de ${familyCopy.label} encaja ahora?`
+    );
+  }
+  djIntentRefinementOptions(safeFamily).forEach((option) => {
+    const button = document.createElement("button");
+    button.className = "dj-intent-style-btn";
+    button.type = "button";
+    button.dataset.djIntentFilter = option.value;
+    const label = document.createElement("strong");
+    label.textContent = option.label;
+    const hint = document.createElement("small");
+    hint.textContent = option.hint;
+    button.append(label, hint);
+    djIntentStyleOptions.appendChild(button);
+  });
+}
+
+function renderDjIntentUi() {
+  const hasIntent = Boolean(currentDjIntent);
+  if (djIntentPanel) {
+    djIntentPanel.hidden = hasIntent;
+    djIntentPanel.classList.toggle("hidden", hasIntent);
+  }
+  if (djDiscoveryResults) {
+    djDiscoveryResults.hidden = !hasIntent;
+    djDiscoveryResults.classList.toggle("hidden", !hasIntent);
+  }
+  if (djDiscoveryPanel) djDiscoveryPanel.dataset.intentState = hasIntent ? "results" : "chooser";
+  if (hasIntent) {
+    currentDjIntent = djIntentFromFilterValue(currentDjIntent.filterValue);
+    if (djActiveChoiceLabel) djActiveChoiceLabel.textContent = currentDjIntent.label;
+    if (djDiscoverySceneFilter) djDiscoverySceneFilter.value = currentDjIntent.filterValue;
+  } else {
+    scheduleDjPreviewFrame("");
+  }
+  renderDjIntentRefinement(hasIntent ? "" : pendingDjIntentFamily);
+}
+
+function renderDjIntentCopy() {
+  setText("#djIntentStep", sonicTinyCopy("Escolha rápida · 3 famílias", "Quick choice · 3 families", "Elección rápida · 3 familias"));
+  setText("#djIntentTitle", sonicTinyCopy("O que você quer ouvir agora?", "What do you want to hear right now?", "¿Qué quieres escuchar ahora?"));
+  setText("#djIntentHint", sonicTinyCopy(
+    "Escolha uma família e, se quiser, uma vertente. O Sonic encontra um set disponível.",
+    "Choose a family and, if you want, a lane. Sonic finds a playable set.",
+    "Elige una familia y, si quieres, una vertiente. Sonic encuentra un set reproducible."
+  ));
+  setText("#djIntentAccuracy", sonicTinyCopy(
+    "Subgêneros específicos só aparecem quando a classificação é confiável.",
+    "Specific subgenres only appear when the classification is reliable.",
+    "Los subgéneros específicos solo aparecen cuando la clasificación es confiable."
+  ));
+  const familyIds = {
+    techno: ["#djIntentTechnoKicker", "#djIntentTechnoTitle", "#djIntentTechnoHint"],
+    psy: ["#djIntentPsyKicker", "#djIntentPsyTitle", "#djIntentPsyHint"],
+    other: ["#djIntentOtherKicker", "#djIntentOtherTitle", "#djIntentOtherHint"]
+  };
+  Object.entries(familyIds).forEach(([family, ids]) => {
+    const copy = djIntentFamilyCopy(family);
+    setText(ids[0], copy.kicker);
+    setText(ids[1], copy.label);
+    setText(ids[2], copy.hint);
+  });
+  setText("#djIntentRefinementStep", sonicTinyCopy("Só mais uma escolha", "One more choice", "Solo una elección más"));
+  setText("#djIntentBackBtn", sonicTinyCopy("Voltar", "Back", "Volver"));
+  setText("#djIntentSurpriseTitle", sonicTinyCopy("Me surpreenda", "Surprise me", "Sorpréndeme"));
+  setText("#djIntentSurpriseHint", sonicTinyCopy(
+    "Escolha por mim entre todos os estilos",
+    "Choose for me across every style",
+    "Elige por mí entre todos los estilos"
+  ));
+  setText("#djActiveChoiceKicker", sonicTinyCopy("Ouvindo agora", "Listening now", "Escuchando ahora"));
+  setText("#djChangeIntentBtn", sonicTinyCopy("Trocar estilo", "Change style", "Cambiar estilo"));
+  setText("#djDiscoverySceneLabel", sonicTinyCopy("Refinar a cena", "Refine the scene", "Refinar la escena"));
+  setText("#djDiscoveryShuffleBtn", sonicTinyCopy("Outro set", "Another set", "Otro set"));
+  if (djIntentFamilyOptions) {
+    djIntentFamilyOptions.setAttribute("aria-label", sonicTinyCopy(
+      "Escolha uma direção musical",
+      "Choose a musical direction",
+      "Elige una dirección musical"
+    ));
+  }
+  if (djIntentStyleOptions) {
+    djIntentStyleOptions.setAttribute("aria-label", sonicTinyCopy("Escolha uma vertente", "Choose a lane", "Elige una vertiente"));
+  }
+  if (djDiscoverySceneFilter) {
+    djDiscoverySceneFilter.setAttribute("aria-label", sonicTinyCopy("Refinar DJs por cena", "Refine DJs by scene", "Refinar DJs por escena"));
+    const optionLabels = new Map([["", sonicTinyCopy("Todos os estilos", "All styles", "Todos los estilos")]]);
+    allDjIntentRefinementOptions().forEach((option) => optionLabels.set(option.value, option.label));
+    Array.from(djDiscoverySceneFilter.options).forEach((option) => {
+      if (optionLabels.has(option.value)) option.textContent = optionLabels.get(option.value);
+    });
+    const groupLabels = {
+      techno: "Techno / House",
+      psy: "Psytrance",
+      other: sonicTinyCopy("Outros", "Other", "Otros")
+    };
+    Array.from(djDiscoverySceneFilter.querySelectorAll("optgroup[data-dj-filter-group]")).forEach((group) => {
+      group.label = groupLabels[group.dataset.djFilterGroup] || group.label;
+    });
+  }
+  renderDjIntentUi();
+}
+
+function setDjIntentLoading(isLoading = false) {
+  djIntentBusy = Boolean(isLoading);
+  [djIntentPanel, djDiscoveryResults].filter(Boolean).forEach((element) => {
+    element.classList.toggle("is-loading", djIntentBusy);
+    element.setAttribute("aria-busy", djIntentBusy ? "true" : "false");
+  });
+  [
+    ...djIntentFamilyButtons,
+    ...Array.from(djIntentStyleOptions?.querySelectorAll("button") || []),
+    djIntentBackBtn,
+    djIntentSurpriseBtn,
+    djDiscoverySceneFilter,
+    djDiscoveryShuffleBtn,
+    djChangeIntentBtn
+  ].filter(Boolean).forEach((element) => {
+    element.disabled = djIntentBusy;
+  });
+}
+
+function waitForDjIntentPaint() {
+  return new Promise((resolve) => {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
+  });
+}
+
+async function activateDjIntent(filterValue = "", { source = "chooser" } = {}) {
+  if (djIntentBusy) return false;
+  const nextIntent = djIntentFromFilterValue(filterValue);
+  const choosingFromIntro = !currentDjIntent;
+  if (choosingFromIntro && djIntentStatus) {
+    djIntentStatus.textContent = sonicTinyCopy(
+      `Preparando um set em ${nextIntent.label}...`,
+      `Preparing a set in ${nextIntent.label}...`,
+      `Preparando un set de ${nextIntent.label}...`
+    );
+  } else if (djSwipeStatus) {
+    djSwipeStatus.textContent = sonicTinyCopy("Preparando outro set...", "Preparing another set...", "Preparando otro set...");
+  }
+  setDjIntentLoading(true);
+  await waitForDjIntentPaint();
+  try {
+    currentDjIntent = nextIntent;
+    pendingDjIntentFamily = "";
+    if (djDiscoverySceneFilter) djDiscoverySceneFilter.value = nextIntent.filterValue;
+    const pool = filteredDjRecommendationPool();
+    if (!pool.length) {
+      currentDjIntent = null;
+      pendingDjIntentFamily = nextIntent.family === "surprise" ? "" : nextIntent.family;
+      renderDjIntentUi();
+      if (djIntentStatus) {
+        djIntentStatus.textContent = sonicTinyCopy(
+          "Ainda não há um set tocável nessa vertente. Escolha uma direção mais ampla.",
+          "There is no playable set in this lane yet. Choose a broader direction.",
+          "Aún no hay un set reproducible en esta vertiente. Elige una dirección más amplia."
+        );
+      }
+      return false;
+    }
+    if (djIntentStatus) djIntentStatus.textContent = "";
+    renderDjIntentUi();
+    selectDjRecommendation(pickDjRecommendation());
+    if (djSwipeStatus) {
+      djSwipeStatus.textContent = sonicTinyCopy(
+        `Direção escolhida: ${nextIntent.label}. Trouxemos um set tocável.`,
+        `Direction selected: ${nextIntent.label}. We brought a playable set.`,
+        `Dirección elegida: ${nextIntent.label}. Trajimos un set reproducible.`
+      );
+    }
+    trackBetaEvent("dj_intent_selected", {
+      family: nextIntent.family,
+      refinement: nextIntent.filterValue || "surprise",
+      source
+    });
+    playUiSfx("confirm");
+    return true;
+  } finally {
+    setDjIntentLoading(false);
+  }
+}
+
+function resetDjIntentChoice({ focus = true } = {}) {
+  stopAllActivePlayback({ reason: "dj_intent_change" });
+  currentDjIntent = null;
+  pendingDjIntentFamily = "";
+  if (djDiscoverySceneFilter) djDiscoverySceneFilter.value = "";
+  if (djIntentStatus) djIntentStatus.textContent = "";
+  scheduleDjPreviewFrame("");
+  renderDjIntentUi();
+  if (focus && djIntentTitle) {
+    window.requestAnimationFrame(() => djIntentTitle.focus({ preventScroll: true }));
+  }
+}
 
 function compactDjLabels(labels = []) {
   const seen = new Set();
@@ -49063,8 +52081,32 @@ function djSeedIsSearchFallback(seed = {}) {
 function djSeedMatchesLane(seed = {}, lane = "") {
   const safeSeed = seed || {};
   if (!lane) return true;
+  if (lane === "other_all") {
+    return !DJ_PSY_SET_LANES.has(safeSeed.lane) && !DJ_TECHNO_SET_LANES.has(safeSeed.lane);
+  }
+  if (lane === "psy_progressive_fullon") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && DJ_PSY_PROGRESSIVE_FULLON_STYLES.has(safeSeed.style);
+  }
+  if (lane === "psy_full_on_night") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && safeSeed.style === "full_on_night";
+  }
+  if (lane === "psy_forest_dark") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && DJ_PSY_FOREST_DARK_STYLES.has(safeSeed.style);
+  }
+  if (lane === "psy_hi_tech") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && safeSeed.style === "hi_tech";
+  }
+  if (lane === "psy_psycore") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && safeSeed.style === "psycore";
+  }
+  if (lane === "psy_goa_festival") {
+    return DJ_PSY_SET_LANES.has(safeSeed.lane) && DJ_PSY_GOA_FESTIVAL_STYLES.has(safeSeed.style);
+  }
   if (lane === "psy_festival_lineups") return DJ_PSY_SET_LANES.has(safeSeed.lane);
   if (lane === "techno_live_dj") return DJ_TECHNO_SET_LANES.has(safeSeed.lane);
+  if (lane === "house_deep_minimal") {
+    return safeSeed.lane === "house_selectors" || safeSeed.lane === "minimal_deep_selectors";
+  }
   return safeSeed.lane === lane;
 }
 
@@ -49163,13 +52205,14 @@ function djSeedHasNonElectronicConflict(seed = {}) {
     seed?.eventSignal
   ].filter(Boolean).join(" "));
   if (!text) return false;
+  if (normalize(seed?.name || "") === "hitech" && /\bboiler\s+room\s+chicago\b/.test(text)) return true;
   return /\b(?:hip\s*hop|r\s*b|r\s+and\s+b|rhythm\s+(?:and|n)\s+blues|jazz(?:\s*funk)?|dancehall|reggae|indie\s+rock|alternative\s+rock|classic\s+rock|gospel|country|folk|acoustic|unplugged|motown)\b/.test(text) ||
     /\bde\s+la\s+soul\b/.test(text) ||
     /\bsoul(?:\s+mix|\s+classics?|\s+set|\s+takeover|\s*,|\s*&|$)/.test(text);
 }
 
 function filteredDjRecommendationPool() {
-  const lane = String(djDiscoverySceneFilter?.value || "").trim();
+  const lane = currentDjFilterValue();
   const recommendationSeeds = ensureDjSetRecommendationSeeds();
   const electronicSeeds = recommendationSeeds.filter((seed) => !djSeedHasNonElectronicConflict(seed));
   const pool = electronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
@@ -49177,6 +52220,7 @@ function filteredDjRecommendationPool() {
   if (playablePool.length) return playablePool;
   const directSetPool = pool.filter((seed) => !djSeedIsSearchFallback(seed));
   if (directSetPool.length) return directSetPool;
+  if (currentDjIntent) return pool;
   const globalPlayablePool = electronicSeeds.filter(djSeedHasPlayablePreview);
   return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : electronicSeeds;
 }
@@ -49198,7 +52242,15 @@ function pickDjRecommendation({ avoidKey = "" } = {}) {
   const recommendationSeeds = ensureDjSetRecommendationSeeds();
   const currentKey = avoidKey || djRecommendationKey(currentDjRecommendation);
   const candidates = pool.filter((seed) => djRecommendationKey(seed) !== currentKey);
-  const basePool = candidates.length ? candidates : pool;
+  let basePool = candidates.length ? candidates : pool;
+  if (currentDjIntent?.surprise && basePool.length) {
+    const surpriseBuckets = [
+      basePool.filter((seed) => DJ_TECHNO_SET_LANES.has(seed.lane)),
+      basePool.filter((seed) => DJ_PSY_SET_LANES.has(seed.lane)),
+      basePool.filter((seed) => !DJ_TECHNO_SET_LANES.has(seed.lane) && !DJ_PSY_SET_LANES.has(seed.lane))
+    ].filter((bucket) => bucket.length);
+    basePool = surpriseBuckets[randomDjPoolIndex(surpriseBuckets.length)] || basePool;
+  }
   const freshPool = basePool.filter((seed) => {
     const key = djRecommendationKey(seed);
     return !likedDjRecommendationKeys.has(key) && !passedDjRecommendationKeys.has(key) && !recentDjRecommendationKeys.includes(key);
@@ -49220,9 +52272,13 @@ function rememberDjRecommendation(seed) {
   recentDjRecommendationKeys = [key, ...recentDjRecommendationKeys.filter((item) => item !== key)].slice(0, 150);
 }
 
+function djRecommendationStorageKey(session = currentAuthUser) {
+  return storageKeyForSession(DJ_RECOMMENDATION_STORAGE_KEY, session) || DJ_RECOMMENDATION_STORAGE_KEY;
+}
+
 function saveDjRecommendationMemory() {
   try {
-    localStorage.setItem(DJ_RECOMMENDATION_STORAGE_KEY, JSON.stringify({
+    localStorage.setItem(djRecommendationStorageKey(), JSON.stringify({
       liked: Array.from(likedDjRecommendationKeys),
       passed: Array.from(passedDjRecommendationKeys),
       recent: recentDjRecommendationKeys
@@ -49234,7 +52290,9 @@ function saveDjRecommendationMemory() {
 
 function loadDjRecommendationMemory() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(DJ_RECOMMENDATION_STORAGE_KEY) || "{}");
+    const storageKey = djRecommendationStorageKey();
+    const raw = localStorage.getItem(storageKey) || localStorage.getItem(DJ_RECOMMENDATION_STORAGE_KEY) || "{}";
+    const parsed = JSON.parse(raw);
     likedDjRecommendationKeys = new Set(Array.isArray(parsed.liked) ? parsed.liked.map(String) : []);
     passedDjRecommendationKeys = new Set(Array.isArray(parsed.passed) ? parsed.passed.map(String) : []);
     recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 150) : [];
@@ -49262,12 +52320,12 @@ function renderDjRadarSummary() {
     );
   }
   if (djRadarScope) {
-    const lane = String(djDiscoverySceneFilter?.value || "").trim();
-    djRadarScope.textContent = lane ? djLaneLabel(lane) : sonicTinyCopy(
+    const lane = currentDjFilterValue();
+    djRadarScope.textContent = currentDjIntent?.label || (lane ? djLaneLabel(lane) : sonicTinyCopy(
       "Techno, psy e selectors",
       "Techno, psy, and selectors",
       "Techno, psy y selectors"
-    );
+    ));
   }
 }
 
@@ -49275,6 +52333,11 @@ function renderDjRecommendationBadges(seed = null) {
   const key = djRecommendationKey(seed);
   const hasEmbed = Boolean(seed && djSetEmbedUrl(seed));
   const isSearchFallback = Boolean(seed && djSeedIsSearchFallback(seed));
+  const taxonomyBadge = seed?.taxonomyConfidence === "title_explicit"
+    ? { type: "good", label: sonicTinyCopy("Gênero no set", "Genre in set", "Género en el set") }
+    : seed?.taxonomyConfidence
+      ? { type: "good", label: sonicTinyCopy("Gênero revisado", "Reviewed genre", "Género revisado") }
+      : null;
   const roleBadge = seed?.roleKind === "live"
     ? { type: "good", label: "Live" }
     : seed?.roleKind === "b2b"
@@ -49284,6 +52347,7 @@ function renderDjRecommendationBadges(seed = null) {
     ? [
         { type: seed.lane === "mop" ? "known" : "fresh", label: djLaneLabel(seed.lane) },
         roleBadge,
+        taxonomyBadge,
         { type: hasEmbed ? "preview" : "known", label: hasEmbed ? sonicTinyCopy("Set tocavel", "Playable set", "Set reproducible") : sonicTinyCopy("Link externo", "External link", "Link externo") },
         { type: "good", label: isSearchFallback ? sonicTinyCopy("Curadoria", "Curation", "Curaduría") : seed.platform || "Preview" },
         likedDjRecommendationKeys.has(key) ? { type: "saved", label: sonicTinyCopy("Salvo", "Saved", "Guardado") } : null
@@ -49391,6 +52455,12 @@ function selectDjRecommendation(seed = null) {
 }
 
 function ensureDjDiscoveryReady({ force = false } = {}) {
+  if (!currentDjIntent) {
+    renderDjIntentUi();
+    renderDjRadarSummary();
+    return;
+  }
+  renderDjIntentUi();
   const poolKeys = new Set(filteredDjRecommendationPool().map(djRecommendationKey));
   if (force || !currentDjRecommendation || !poolKeys.has(djRecommendationKey(currentDjRecommendation))) {
     selectDjRecommendation(pickDjRecommendation());
@@ -49526,6 +52596,7 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
     .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
     .slice(0, 4);
+  void refreshGlobalDiscoveryExposure(candidates);
   candidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
     if (imageUrl && typeof Image === "function") {
@@ -49596,15 +52667,19 @@ function markRecommendationPresented(track) {
 
 function registerRecommendationDelivery(track, prefs) {
   if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return;
+  const decisionDiagnostics = recommendationDecisionDiagnostics(track, prefs);
   recordDailyMusicAction(track, "discovery");
   markRecommendationPresented(track);
   rememberAnonymousExposure(track);
+  rememberAnonymousOpeningTrack(track);
   registerSwipeStyleExposure(track.style);
   trackRecommendationEvent("discovery_started", track, prefs, {
-    source: "recommendation_delivery"
+    source: "recommendation_delivery",
+    ...decisionDiagnostics
   });
   trackRecommendationEvent("recommendation_generated", track, prefs, {
-    source: "recommendation_delivery"
+    source: "recommendation_delivery",
+    ...decisionDiagnostics
   });
   trackBetaEventOnce("first_recommendation", "first_recommendation", recommendationBetaPayload(track, prefs, {
     source: "recommendation_delivery"
@@ -49855,6 +52930,7 @@ function pickRecommendation(
   const baseCatalog = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   let eligibleCatalog = baseCatalog.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     return true;
   });
@@ -50532,6 +53608,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (!track || track === sourceTrack) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (prefs.style && track.style !== prefs.style) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
@@ -50540,7 +53617,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
     if (!hasReliableBpmForTrack(track)) return false;
-    return trackHasFastListenRoute(track);
+    return trackHasReadyPlaybackRoute(track);
   };
 
   // The queue is resolved while the current track is playing. Reusing it here
@@ -50588,11 +53665,17 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
 
 function presentInstantSwipeRecommendation({ track, prefs, plan = null, message = "" } = {}) {
   if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return false;
+  const requestedPrefs = normalizeRecommendationPrefs(prefs);
+  if (requestedPrefs.style && selectableSwipeStyle(track.style || "") !== requestedPrefs.style) {
+    return false;
+  }
+  if (!trackMatchesRequestedSubgenreEvidence(track, requestedPrefs)) return false;
+  if (trackBlockedByKnownSignals(track)) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const finalPrefs = normalizeRecommendationPrefs({
-    ...prefs,
-    style: selectableSwipeStyle(track.style || prefs.style) || prefs.style || ""
+    ...requestedPrefs,
+    style: requestedPrefs.style || selectableSwipeStyle(track.style || "") || ""
   });
 
   if (styleEl) styleEl.value = finalPrefs.style;
@@ -50607,11 +53690,16 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
 
   lastPrefs = finalPrefs;
   currentRecommendation = track;
-  currentDiscovery = discoveryModeEl.checked
-    ? pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist)
-    : null;
+  currentDiscovery = null;
   renderRecommendation(track, finalPrefs);
-  renderDiscovery(currentDiscovery);
+  const discoveryTrackKey = recommendationTrackKey(track);
+  window.setTimeout(() => {
+    if (recommendationTrackKey(currentRecommendation) !== discoveryTrackKey) return;
+    currentDiscovery = discoveryModeEl.checked
+      ? pickDiscovery(finalPrefs, buildGlobalArtistExclusionSet(), track.artist)
+      : null;
+    renderDiscovery(currentDiscovery);
+  }, 0);
   registerRecommendationDelivery(track, finalPrefs);
   const currentTrackKey = recommendationTrackKey(track);
   if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
@@ -50643,8 +53731,26 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
 }
 
 function pickInstantOpeningTrack() {
+  const knownTrackSignals = buildGlobalTrackExclusionSet([...recommendationMemory]);
+  const openingTrack = pickOpeningSurpriseTrack({
+    blockedArtists: buildGlobalArtistExclusionSet(),
+    blockedTrackKeys: knownTrackSignals.keys,
+    blockedTrackTitles: knownTrackSignals.titles
+  });
+  if (openingTrack) {
+    return {
+      track: openingTrack,
+      prefs: normalizeRecommendationPrefs({
+        style: openingTrack.style,
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      })
+    };
+  }
   const rankedStyles = getAllSelectableStyles()
-    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+    .filter((style) => style && FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style))
     .sort((a, b) => openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a))
     .slice(0, 6);
 
@@ -50659,6 +53765,7 @@ function pickInstantOpeningTrack() {
       });
       const pool = catalogTracksForStyle(style).filter((track) => {
         if (!track || !isTrackEligibleForRecommendation(track)) return false;
+        if (!trackAllowedForFriendlyFirstImpression(track)) return false;
         if (!artistAllowedForStyle(style, track.artist)) return false;
         if (!labelAllowedForStyle(style, track.label)) return false;
         if (!trackHasFastListenRoute(track)) return false;
@@ -50675,20 +53782,28 @@ function pickInstantOpeningTrack() {
   return null;
 }
 
-function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requiredStyle = "") {
+function pickInstantPrimaryNextTrack(
+  sourceTrack = currentRecommendation,
+  requiredStyle = "",
+  { allowSeenArtist = false, allowSeenTrack = false } = {}
+) {
   const sourceKey = recommendationTrackKey(sourceTrack);
   const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
   const lockedStyle = selectableSwipeStyle(requiredStyle);
-  const candidateAllowed = (track) => {
+  const candidateAllowed = (track, {
+    allowSeenArtist: relaxSeenArtist = allowSeenArtist,
+    allowSeenTrack: relaxSeenTrack = allowSeenTrack
+  } = {}) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
-    if (sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
+    if (!relaxSeenArtist && sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (!trackHasFastListenRoute(track)) return false;
-    if (trackBlockedByKnownSignals(track)) return false;
-    return anonymousExposurePenalty(track) < 70;
+    if (lockedStyle && !trackMatchesRequestedSubgenreEvidence(track, { style: lockedStyle })) return false;
+    if (!trackHasReadyPlaybackRoute(track)) return false;
+    if (!relaxSeenTrack && trackBlockedByKnownSignals(track)) return false;
+    return relaxSeenTrack || anonymousExposurePenalty(track) < 70;
   };
 
   const queued = suggestionQueueTracks
@@ -50716,11 +53831,27 @@ function pickInstantPrimaryNextTrack(sourceTrack = currentRecommendation, requir
     const candidate = catalogTracksForStyle(style).find(candidateAllowed);
     if (candidate) return candidate;
   }
+  // If the visitor has already heard the starter styles, keep the interaction
+  // alive with any trusted playable track instead of clearing the current card.
+  // An explicit style lock still applies through candidateAllowed.
+  const globalReadyCandidate = catalog.find(candidateAllowed);
+  if (globalReadyCandidate) return globalReadyCandidate;
+
+  if (lockedStyle) {
+    const relaxedArtistCandidate = catalogTracksForStyle(lockedStyle).find((track) => (
+      candidateAllowed(track, {
+        allowSeenArtist: true,
+        allowSeenTrack: false
+      })
+    ));
+    if (relaxedArtistCandidate) return relaxedArtistCandidate;
+  }
   return null;
 }
 
 function tryRunInstantPrimaryRecommendation() {
   if (recommendationRunBusy || !canUseMusicDiscovery()) return false;
+  const interactionStartedAt = discoveryInteractionNow();
   stopAllActivePlayback({ reason: "instant_recommendation" });
 
   if (currentRecommendation && lastPrefs) {
@@ -50741,18 +53872,32 @@ function tryRunInstantPrimaryRecommendation() {
       prefs: nextPrefs,
       message: t("exploratoryGenerated")
     });
+    reportDiscoveryInteractionLatency("other_track", interactionStartedAt, presented);
     if (presented) playUiSfx("search-done");
     return presented;
   }
 
   const opening = pickInstantOpeningTrack();
-  if (!opening) return false;
+  const fallbackTrack = opening?.track || pickInteractionBudgetTrack({
+    prefs: { style: "", context: "", energy: "", bpm: "", vocals: "" },
+    sourceTrack: null,
+    avoidArtistName: ""
+  });
+  if (!fallbackTrack) return false;
+  const openingPrefs = opening?.prefs || normalizeRecommendationPrefs({
+    style: selectableSwipeStyle(fallbackTrack.style || ""),
+    context: "",
+    energy: "",
+    bpm: "",
+    vocals: ""
+  });
   playUiSfx("search-start");
   const presented = presentInstantSwipeRecommendation({
-    track: opening.track,
-    prefs: opening.prefs,
+    track: fallbackTrack,
+    prefs: openingPrefs,
     message: t("exploratoryGenerated")
   });
+  reportDiscoveryInteractionLatency("first_track", interactionStartedAt, presented);
   if (presented) playUiSfx("search-done");
   return presented;
 }
@@ -50765,7 +53910,7 @@ function catalogHasMinimumRecommendationState() {
       isTrackEligibleForRecommendation(track) &&
       artistAllowedForStyle(style, track.artist) &&
       labelAllowedForStyle(style, track.label) &&
-      trackHasFastListenRoute(track) &&
+      trackHasReadyPlaybackRoute(track) &&
       anonymousExposurePenalty(track) < 70
     )));
 }
@@ -50871,12 +54016,14 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
     let readiness = { ready: false, status: "unknown" };
     try {
       const isRetry = source === "retry" || firstRecommendationRetryAvailable;
+      const openingSlotRequest = ensureOpeningRotationSlot();
       firstRecommendationRetryAvailable = false;
       setInitialRecommendationBusy(true);
       trackFirstRecommendationEvent("first_recommendation_requested", source, { retry: isRetry });
       if (isRetry) trackFirstRecommendationEvent("first_recommendation_retry", source);
 
       readiness = await waitForMinimumCatalogReady();
+      await openingSlotRequest;
       if (!readiness.ready) {
         trackFirstRecommendationEvent("first_recommendation_fallback", source, {
           reason: `catalog_${readiness.status}`
@@ -50943,6 +54090,20 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
 
 async function runPrimaryRecommendationAction({ source = "manual", initialRunner = null } = {}) {
   if (firstRecommendationPromise) return firstRecommendationPromise;
+  const manualPrefs = prefsFromManualControls();
+  if (manualPrefsAreActive(manualPrefs)) {
+    const currentPrefs = normalizeRecommendationPrefs(lastPrefs || {});
+    const manualContextChanged = recommendationContextKey(manualPrefs) !== recommendationContextKey(currentPrefs);
+    const manualStyleMismatch = Boolean(
+      manualPrefs.style &&
+      currentRecommendation &&
+      selectableSwipeStyle(currentRecommendation.style || "") !== manualPrefs.style
+    );
+    if (!currentRecommendation || manualContextChanged || manualStyleMismatch) {
+      return runManualFilterSurprise();
+    }
+    swipeUserAnchoredStyle = manualPrefs.style || "";
+  }
   if (!firstRecommendationCompleted && !currentRecommendation) {
     const requestSource = firstRecommendationRetryAvailable ? "retry" : source;
     return runInitialRecommendation({ source: requestSource, initialRunner });
@@ -50990,7 +54151,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   if (track === rejectedTrack) return false;
   if (!isTrackEligibleForRecommendation(track)) return false;
   if (track.existenceVerified === false && !isTrustedCuratedCatalogTrack(track)) return false;
-  const hasFastRoute = trackHasFastListenRoute(track);
+  const hasFastRoute = trackHasReadyPlaybackRoute(track);
   if (!hasFastRoute && !allowNoPreview) return false;
   if (
     !hasFastRoute &&
@@ -51003,6 +54164,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   }
   if (prefs.bpm && !hasReliableBpmForTrack(track)) return false;
   if (prefs.style && track.style !== prefs.style) return false;
+  if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
   if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
   if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
   if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
@@ -51237,6 +54399,173 @@ function tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName = "", message = 
   });
 }
 
+function discoveryInteractionNow() {
+  return typeof performance !== "undefined" && typeof performance.now === "function"
+    ? performance.now()
+    : Date.now();
+}
+
+function reportDiscoveryInteractionLatency(action = "discovery", startedAt = 0, presented = true) {
+  const start = Number(startedAt) || 0;
+  if (!start) return 0;
+  const elapsedMs = Math.max(0, Math.round(discoveryInteractionNow() - start));
+  const payload = {
+    action: String(action || "discovery"),
+    elapsedMs,
+    targetMs: DISCOVERY_INTERACTION_TARGET_MS,
+    presented: Boolean(presented)
+  };
+  if (elapsedMs > DISCOVERY_INTERACTION_TARGET_MS) {
+    console.warn(`[sonic-perf] discovery interaction exceeded target ${JSON.stringify(payload)}`);
+  } else if (typeof console !== "undefined" && typeof console.info === "function") {
+    console.info(`[sonic-perf] discovery interaction ${JSON.stringify(payload)}`);
+  }
+  return elapsedMs;
+}
+
+function interactionFallbackStyleCandidates(prefs = {}, sourceTrack = null) {
+  if (prefs.style) return [prefs.style];
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  const sourceFamily = familyOf(sourceStyle);
+  return uniqueSwipeStyleList([
+    ...getAllSelectableStyles()
+      .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, prefs))
+      .sort((a, b) => {
+        const aCrossFamily = sourceFamily && familyOf(a) !== sourceFamily ? 0 : 1;
+        const bCrossFamily = sourceFamily && familyOf(b) !== sourceFamily ? 0 : 1;
+        return (
+          aCrossFamily - bCrossFamily ||
+          Number(swipeStyleExposureCounts.get(a) || 0) - Number(swipeStyleExposureCounts.get(b) || 0) ||
+          openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a)
+        );
+      }),
+    sourceStyle
+  ]).slice(0, INTERACTION_FALLBACK_STYLE_LIMIT);
+}
+
+function interactionFallbackTrackAllowed(
+  track,
+  prefs,
+  sourceTrack,
+  avoidArtistName = "",
+  { allowSeen = false, allowMatureStyle = false } = {}
+) {
+  if (!track || !prefs || track === sourceTrack) return false;
+  const trackKey = recommendationTrackKey(track);
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  if (!trackKey || (sourceKey && trackKey === sourceKey)) return false;
+  if (!isTrackEligibleForRecommendation(track)) return false;
+  // Fast interaction cards must already have a real playback route. A track
+  // ID that might resolve later is not enough: Opera exposed that gap as a
+  // disabled player after an otherwise fast recommendation.
+  if (!trackHasReadyPlaybackRoute(track)) return false;
+  if (prefs.style && track.style !== prefs.style) return false;
+  if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
+  if (!prefs.style && !allowMatureStyle && !trackAllowedByTasteMaturity(track, prefs)) return false;
+  if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+  if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
+  const bpmValue = Number(track.bpmExact);
+  if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
+  if (avoidArtistName && artistMatchKey(track.artist) === artistMatchKey(avoidArtistName)) return false;
+  if (!allowSeen && trackBlockedByKnownSignals(track)) return false;
+  return true;
+}
+
+function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRecommendation, avoidArtistName = "" } = {}) {
+  const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  const pools = [];
+  if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
+    pools.push(suggestionQueueTracks.slice(0, SUGGESTION_QUEUE_TARGET));
+  }
+  interactionFallbackStyleCandidates(normalizedPrefs, sourceTrack).forEach((style) => {
+    pools.push(catalogTracksForStyle(style));
+  });
+  // The ranked style deck is intentionally small for normal interaction work.
+  // For an unfiltered first card, one final indexed catalog pass is still far
+  // cheaper than a provider request and guarantees a local trusted fallback.
+  if (!normalizedPrefs.style) pools.push(catalog);
+
+  for (const allowSeen of [false]) {
+    for (const requireDirectAudio of [true, false]) {
+      const seenKeys = new Set();
+      for (const pool of pools) {
+        const candidates = [];
+        for (const track of Array.isArray(pool) ? pool : []) {
+          const key = recommendationTrackKey(track);
+          if (!key || seenKeys.has(key)) continue;
+          seenKeys.add(key);
+          if (!interactionFallbackTrackAllowed(track, normalizedPrefs, sourceTrack, avoidArtistName, { allowSeen })) continue;
+          if (requireDirectAudio && !trackHasReliableAudioPreview(track)) continue;
+          candidates.push(track);
+          if (candidates.length >= INTERACTION_FALLBACK_POOL_LIMIT) break;
+        }
+        if (!candidates.length) continue;
+        const candidate = pickBestRecommendationCandidate(candidates, normalizedPrefs, {
+          maxWindow: normalizedPrefs.style ? 12 : 18,
+          scoreBand: normalizedPrefs.style ? 7 : 10
+        });
+        if (candidate) return candidate;
+      }
+    }
+  }
+
+  // Widening to the global catalog is allowed only when the listener did not
+  // explicitly choose a subgenre. Manual filters are a hard product contract.
+  if (!normalizedPrefs.style) {
+    const relaxedPrefs = normalizeRecommendationPrefs({
+      ...normalizedPrefs,
+      style: "",
+      bpm: ""
+    });
+    for (const allowSeen of [false]) {
+      for (const requireDirectAudio of [true, false]) {
+        const candidates = [];
+        for (const track of catalog) {
+          if (!interactionFallbackTrackAllowed(track, relaxedPrefs, sourceTrack, avoidArtistName, {
+            allowSeen,
+            allowMatureStyle: true
+          })) continue;
+          if (requireDirectAudio && !trackHasReliableAudioPreview(track)) continue;
+          candidates.push(track);
+          if (candidates.length >= INTERACTION_FALLBACK_POOL_LIMIT) break;
+        }
+        if (!candidates.length) continue;
+        const candidate = pickBestRecommendationCandidate(candidates, relaxedPrefs, {
+          maxWindow: 18,
+          scoreBand: 10
+        });
+        if (candidate) return candidate;
+      }
+    }
+  }
+  return null;
+}
+
+function tryPresentInteractionBudgetRecommendation({
+  prefs = lastPrefs,
+  sourceTrack = currentRecommendation,
+  avoidArtistName = "",
+  message = "",
+  action = "discovery",
+  startedAt = discoveryInteractionNow()
+} = {}) {
+  if (recommendationRunBusy || !prefs || !canUseMusicDiscovery()) return false;
+  const track = pickInteractionBudgetTrack({ prefs, sourceTrack, avoidArtistName });
+  if (!track) return false;
+  const finalPrefs = normalizeRecommendationPrefs({
+    ...prefs,
+    style: selectableSwipeStyle(track.style || "") || prefs?.style || ""
+  });
+  const presented = presentInstantSwipeRecommendation({
+    track,
+    prefs: finalPrefs,
+    message
+  });
+  reportDiscoveryInteractionLatency(action, startedAt, presented);
+  return presented;
+}
+
 async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, avoidArtistName = "", message = "" } = {}) {
   if (!lastPrefs) return null;
   const plan = buildSwipeAdaptiveStylePlan({ sourceTrack, positive });
@@ -51322,6 +54651,23 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     showPremiumDiscoveryLimit();
     return false;
   }
+  const anchoredStyle = explicitSwipeAnchorStyle();
+  if (anchoredStyle) {
+    const anchoredTrack = pickInstantPrimaryNextTrack(likedTrack, anchoredStyle);
+    if (anchoredTrack) {
+      const anchoredPrefs = normalizeRecommendationPrefs({
+        ...lastPrefs,
+        style: anchoredStyle
+      });
+      if (presentInstantSwipeRecommendation({
+        track: anchoredTrack,
+        prefs: anchoredPrefs,
+        message
+      })) {
+        return true;
+      }
+    }
+  }
   if (!positive && tryAdvanceNegativeFeedbackInstantly({
     rejectedTrack: likedTrack,
     avoidArtistName,
@@ -51330,6 +54676,15 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     return true;
   }
   if (tryAdvanceSwipeInstantly({ likedTrack, avoidArtistName, message, positive })) {
+    return true;
+  }
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs: lastPrefs,
+    sourceTrack: likedTrack,
+    avoidArtistName,
+    message,
+    action: positive ? "like" : "dislike"
+  })) {
     return true;
   }
   const hasExplicitSwipeAnchor = Boolean(explicitSwipeAnchorStyle());
@@ -51376,39 +54731,36 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   if (!currentRecommendation) return false;
   const likedTrack = currentRecommendation;
   userStats.likedSongs += 1;
-  registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
   const nextMessage = appendSwipeLearningMessage(t("swipeLikedNext"));
   registerSpiritSignal(likedTrack.style, 1.25);
   playUiSfx("like");
   burstConfetti(triggerEl || swipeTrackCard, ["#6effdc", "#7de0ff", "#ffd07d"]);
   showToast(t("toastSongLiked"));
-  markCurrentTrackSaved(likedTrack);
-  updateStats();
-  const followups = runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, {
+  const followupOptions = {
     celebrate: shouldCelebrateSpiritUnlockOnSongs(),
     forceAnimation: true,
     animateBio: false,
     loadEvents: false
-  });
+  };
   pendingQuickKnownAdvance = null;
   syncQuickKnownDecision(null);
-  void followups.catch(() => {});
   await advanceAfterSwipeFeedback({
     likedTrack,
     message: nextMessage,
     positive: true
   });
+  schedulePostBootIdleTask(() => {
+    registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
+    updateStats();
+    void runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, followupOptions).catch(() => {});
+  }, { delayMs: 180, timeoutMs: 5000 });
   return true;
 }
 
 async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   if (!currentRecommendation || !lastPrefs) return false;
   const rejectedTrack = currentRecommendation;
-  userStats.skipped += 1;
-  const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
-    source: "swipe_pass",
-    avoidRepeatArtist: true
-  });
+  const feedbackReason = inferNegativeFeedbackReason(rejectedTrack, { source: "swipe_pass" });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
   const reasonMessage = appendSwipeLearningMessage(
     feedbackReason === "preview_issue" ? t("previewIssueLearned") : t("swipePassedNext")
@@ -51423,7 +54775,15 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   });
   playUiSfx("dislike");
   if (generated) showToast(t("toastSwapped"));
-  updateStats();
+  schedulePostBootIdleTask(() => {
+    userStats.skipped += 1;
+    registerTrackFeedback(rejectedTrack, false, {
+      source: "swipe_pass",
+      reason: feedbackReason,
+      avoidRepeatArtist: true
+    });
+    updateStats();
+  }, { delayMs: 180, timeoutMs: 5000 });
   return generated;
 }
 
@@ -51443,6 +54803,8 @@ function animateSwipeCommit(element, direction = "like") {
 async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   const animatedEl = swipeAnimationElement(triggerEl);
   if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
+  const interactionStartedAt = discoveryInteractionNow();
+  const previousTrackKey = recommendationTrackKey(currentRecommendation);
   stopAllActivePlayback({ reason: "swipe_feedback" });
   swipeFeedbackBusy = true;
   animatedEl.classList.remove("is-dragging", "is-returning");
@@ -51462,7 +54824,22 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
     else await passCurrentTrackFromSwipe(triggerEl);
   } finally {
     swipeFeedbackBusy = false;
-    updateSwipeFeedbackCard(currentRecommendation);
+    // renderRecommendation already painted the replacement card. Re-rendering
+    // the whole feedback surface here repeats its expensive signal calculation
+    // and used to keep the click pending for several seconds after the card was
+    // visible. Only clear the gesture state and restore the action controls.
+    resetSwipeCardPosition();
+    const hasCurrentTrack = Boolean(currentRecommendation);
+    if (swipeLikeBtn) swipeLikeBtn.disabled = !hasCurrentTrack;
+    if (swipePassBtn) swipePassBtn.disabled = !hasCurrentTrack;
+    if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = !hasCurrentTrack;
+    if (topSwipePassBtn) topSwipePassBtn.disabled = !hasCurrentTrack;
+    const currentTrackKey = recommendationTrackKey(currentRecommendation);
+    reportDiscoveryInteractionLatency(
+      direction === "like" ? "like" : "dislike",
+      interactionStartedAt,
+      Boolean(currentTrackKey && currentTrackKey !== previousTrackKey)
+    );
   }
 }
 
@@ -51688,6 +55065,34 @@ async function renderPreview(track, options = {}) {
   const isStillCurrentPreviewTrack = () =>
     renderToken === recommendationPreviewRenderToken &&
     recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
+  const preferredImmediateEmbed = preferredEmbeddedAutoplaySource(track);
+  const shouldStartImmediateEmbed = Boolean(
+    previewAutoplayRequested() &&
+    preferredImmediateEmbed &&
+    (
+      preferredImmediateEmbed === "soundcloud" ||
+      !trackHasReliableAudioPreview(track)
+    )
+  );
+  if (shouldStartImmediateEmbed) {
+    const instantEmbed = startPreferredEmbeddedPreviewAutoplay(track);
+    if (instantEmbed.opened && isStillCurrentPreviewTrack()) {
+      trackPreview.classList.add("hidden");
+      if (previewPlayBtn) {
+        previewPlayBtn.disabled = false;
+        previewPlayBtn.classList.toggle("hidden", instantEmbed.source === "bandcamp");
+      }
+      previewPanel.classList.add("has-fixed-embeds");
+      setTrackPreviewVisualState("embed");
+      previewStatus.textContent = instantEmbed.source === "soundcloud"
+        ? t("previewSoundcloudFallback")
+        : t("previewBandcampFallback");
+      listeningPrompt.classList.remove("hidden");
+      renderTrackCardSignals(track, lastPrefs || {});
+      renderRecommendationTrust(track, lastPrefs || {});
+      return true;
+    }
+  }
   const hasImmediatePlaybackRoute =
     trackHasReliableAudioPreview(track) ||
     trackHasExternalPlayableFallback(track) ||
@@ -53779,6 +57184,9 @@ function rememberLikedTrack(track, source = "liked") {
 function rememberDislikedTrack(track, source = "disliked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  if (entry.key) seenTrackKeysMemory.add(entry.key);
+  const normalizedTitle = normalizeTitle(entry.song || "");
+  if (normalizedTitle) knownTrackTitlesMemory.add(normalizedTitle);
   removeLikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
   dislikedTrackHistory = [
     entry,
@@ -53786,6 +57194,7 @@ function rememberDislikedTrack(track, source = "disliked") {
   ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
   renderLikedTrackHistory();
   renderDislikedTrackHistory();
+  queueSocialSync("disliked_track");
 }
 
 function likedTrackDateLabel(value = "") {
@@ -54017,6 +57426,7 @@ function socialSetStatus(message = "", tone = "") {
 
 function socialStoreSession(session = null) {
   socialState.session = session || null;
+  if (!session) resetAdminAccessState();
   try {
     if (session) localStorage.setItem(SOCIAL_SESSION_STORAGE_KEY, JSON.stringify(session));
     else localStorage.removeItem(SOCIAL_SESSION_STORAGE_KEY);
@@ -54888,6 +58298,32 @@ function socialTrackRowsForSync() {
   })).filter((row) => row.target_key);
 }
 
+function socialDislikedTrackRowsForSync() {
+  const userId = socialState.session?.user?.id;
+  if (!userId) return [];
+  return dislikedTrackHistory.slice(0, SOCIAL_SYNC_LIMIT).map((entry) => ({
+    user_id: userId,
+    target_key: likedTrackKeyFromEntry(entry),
+    sentiment: "disliked",
+    artist: entry.artist || "",
+    song: entry.song || "",
+    style: normalize(entry.style || ""),
+    reason: entry.source || "disliked",
+    source: entry.source || "disliked",
+    metadata: {
+      bpm: entry.bpm || "",
+      energy: entry.energy || "",
+      label: entry.label || "",
+      spotifyUrl: entry.spotifyUrl || "",
+      youtubeUrl: entry.youtubeUrl || "",
+      soundcloudUrl: entry.soundcloudUrl || "",
+      dislikedAt: entry.likedAt || ""
+    },
+    first_seen_at: entry.likedAt || new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  })).filter((row) => row.target_key);
+}
+
 function socialParseMetadata(value) {
   if (value && typeof value === "object" && !Array.isArray(value)) return value;
   if (typeof value !== "string") return {};
@@ -54916,6 +58352,27 @@ function socialLikedTrackFromRow(row = {}) {
   return likedTrackHistoryEntry(track, row.source || "cloud_like", metadata.likedAt || row.created_at || "");
 }
 
+function socialDislikedTrackFromRow(row = {}) {
+  const metadata = socialParseMetadata(row.metadata);
+  const track = {
+    key: row.target_key || metadata.key || "",
+    artist: row.artist || metadata.artist || "",
+    song: row.song || metadata.song || "",
+    style: row.style || metadata.style || "",
+    bpm: metadata.bpm || "",
+    energy: metadata.energy || "",
+    label: metadata.label || "",
+    spotifyUrl: metadata.spotifyUrl || "",
+    youtubeUrl: metadata.youtubeUrl || "",
+    soundcloudUrl: metadata.soundcloudUrl || ""
+  };
+  return likedTrackHistoryEntry(
+    track,
+    row.source || row.reason || "cloud_dislike",
+    metadata.dislikedAt || row.updated_at || row.first_seen_at || ""
+  );
+}
+
 function applyCloudLikedTrackSignals(entries = []) {
   const signalEntries = entries.length ? entries : likedTrackHistory;
   const replayingHistory = !entries.length;
@@ -54939,6 +58396,30 @@ function applyCloudLikedTrackSignals(entries = []) {
   if (likedTrackHistory.length) {
     userStats.likedSongs = Math.max(Number(userStats.likedSongs) || 0, likedTrackHistory.length);
     userStats.swipeTrainingSignals = Math.max(Number(userStats.swipeTrainingSignals) || 0, likedTrackHistory.length);
+  }
+}
+
+function applyCloudDislikedTrackSignals(entries = []) {
+  entries.forEach((entry) => {
+    if (!entry) return;
+    const trackKey = likedTrackKeyFromEntry(entry);
+    const trackTitle = normalizeTitle(entry.song || "");
+    ensureMapScoreAtLeast(adaptiveModel.dislikedStyles, entry.style, 1);
+    ensureMapScoreAtLeast(adaptiveModel.dislikedArtists, entry.artist, 1);
+    ensureMapScoreAtLeast(adaptiveModel.dislikedEnergies, entry.energy, 0.45);
+    if (trackKey) {
+      seenTrackKeysMemory.add(trackKey);
+      trackPreferenceSignals.set(trackKey, Math.min(-0.95, Number(trackPreferenceSignals.get(trackKey)) || 0));
+    }
+    if (trackTitle) knownTrackTitlesMemory.add(trackTitle);
+    registerSeenArtist(entry.artist);
+  });
+  if (entries.length) {
+    userStats.skipped = Math.max(Number(userStats.skipped) || 0, dislikedTrackHistory.length);
+    userStats.swipeTrainingSignals = Math.max(
+      Number(userStats.swipeTrainingSignals) || 0,
+      likedTrackHistory.length + dislikedTrackHistory.length
+    );
   }
 }
 
@@ -55005,6 +58486,70 @@ async function restoreSocialLikedTracksFromCloud(options = {}) {
         `Não consegui baixar curtidas da nuvem: ${error.message}`,
         `I could not download cloud likes: ${error.message}`,
         `No pude descargar likes de la nube: ${error.message}`
+      ), "error");
+    }
+    return 0;
+  }
+}
+
+async function restoreSocialDislikedTracksFromCloud(options = {}) {
+  const userId = socialState.session?.user?.id;
+  if (!userId || !socialConfigReady()) return 0;
+  try {
+    const params = new URLSearchParams({
+      user_id: `eq.${userId}`,
+      sentiment: "eq.disliked",
+      select: "target_key,artist,song,style,reason,source,metadata,first_seen_at,updated_at",
+      order: "updated_at.desc",
+      limit: String(SOCIAL_CLOUD_RESTORE_LIMIT)
+    });
+    const rows = await socialRequest(`/rest/v1/track_feedback?${params.toString()}`);
+    const existing = new Set(dislikedTrackHistory.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean));
+    const imported = [];
+    const allCloudEntries = [];
+    (Array.isArray(rows) ? rows : []).forEach((row) => {
+      const entry = socialDislikedTrackFromRow(row);
+      const key = likedTrackKeyFromEntry(entry);
+      if (!entry || !key) return;
+      allCloudEntries.push(entry);
+      if (existing.has(key)) return;
+      existing.add(key);
+      imported.push(entry);
+    });
+    const cloudDislikedKeys = new Set(
+      allCloudEntries.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean)
+    );
+    if (cloudDislikedKeys.size) {
+      likedTrackHistory = likedTrackHistory.filter(
+        (entry) => !cloudDislikedKeys.has(likedTrackKeyFromEntry(entry))
+      );
+    }
+    if (imported.length) {
+      dislikedTrackHistory = sanitizeLikedTrackHistory([...imported, ...dislikedTrackHistory]);
+    }
+    applyCloudDislikedTrackSignals(allCloudEntries);
+    if (options.render !== false) {
+      updateStats();
+      renderLikedTrackHistory();
+      renderDislikedTrackHistory();
+    } else {
+      saveProgress();
+    }
+    if (imported.length && !options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Restaurei ${imported.length} descartes da nuvem.`,
+        `Restored ${imported.length} rejected tracks from the cloud.`,
+        `Restauré ${imported.length} pistas descartadas de la nube.`
+      ), "ok");
+    }
+    return imported.length;
+  } catch (error) {
+    console.warn("Could not restore disliked tracks", error);
+    if (!options.silent) {
+      socialSetStatus(sonicTinyCopy(
+        `Não consegui baixar os descartes da nuvem: ${error.message}`,
+        `I could not download rejected tracks from the cloud: ${error.message}`,
+        `No pude descargar las pistas descartadas de la nube: ${error.message}`
       ), "error");
     }
     return 0;
@@ -55100,6 +58645,7 @@ async function syncSocialLikedTracks(options = {}) {
     if (options.restore !== false) {
       await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
     }
+    await restoreSocialDislikedTracksFromCloud({ silent: true, render: false });
     await loadSocialProfile({ silent: true });
     await upsertSocialProfile();
     const rows = socialTrackRowsForSync();
@@ -55110,6 +58656,14 @@ async function syncSocialLikedTracks(options = {}) {
         body: rows
       });
       if (options.activity !== false) await insertSocialActivity("liked_track", rows[0]);
+    }
+    const dislikedRows = socialDislikedTrackRowsForSync();
+    if (dislikedRows.length) {
+      await socialRequest("/rest/v1/track_feedback?on_conflict=user_id,target_key", {
+        method: "POST",
+        prefer: "resolution=merge-duplicates,return=minimal",
+        body: dislikedRows
+      });
     }
     socialState.lastSyncAt = Date.now();
     if (!options.silent) {
@@ -55328,7 +58882,108 @@ function applySocialViewerContext(payload = {}) {
   socialCommentsState.viewerRole = viewerRole;
   communityState.canModerate = canModerate;
   communityState.viewerRole = viewerRole;
+  if (Array.isArray(viewer.blockedUserIds)) {
+    ugcBlockedUserIds = new Set(
+      viewer.blockedUserIds
+        .map((value) => String(value || "").trim())
+        .filter(Boolean)
+    );
+  }
   return canModerate;
+}
+
+function ugcAuthorId(item = {}) {
+  return String(item?.author?.id || item?.userId || item?.user_id || "").trim();
+}
+
+function isUgcItemBlocked(item = {}) {
+  const authorId = ugcAuthorId(item);
+  return Boolean(authorId && ugcBlockedUserIds.has(authorId));
+}
+
+function hideBlockedUgcContentLocally() {
+  socialCommentsState.comments = socialCommentsState.comments.filter((item) => !isUgcItemBlocked(item));
+  communityState.posts = communityState.posts.filter((item) => !isUgcItemBlocked(item));
+  communityState.commentsByPost.forEach((comments, postId) => {
+    communityState.commentsByPost.set(
+      postId,
+      (Array.isArray(comments) ? comments : []).filter((item) => !isUgcItemBlocked(item))
+    );
+  });
+}
+
+async function reportUgcContent(options = {}) {
+  if (!socialCommentsSignedIn()) {
+    void showSocialCommentsLogin({ surface: options.surface === "community" ? "community" : "comments" });
+    return false;
+  }
+  if (!window.confirm(t("communityReportConfirm"))) return false;
+  const kind = options.kind === "post" ? "post" : "comment";
+  const id = String(options.id || "").trim();
+  if (!id) return false;
+  try {
+    const metadata = socialCommentAuthorMeta();
+    const payload = kind === "post"
+      ? await communityRequest(COMMUNITY_ENDPOINT, {
+        method: "POST",
+        body: {
+          action: "report",
+          postId: id,
+          reason: "inappropriate_content",
+          metadata
+        }
+      })
+      : await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+        method: "POST",
+        body: {
+          action: "report",
+          commentId: id,
+          targetType: options.targetType || "post",
+          targetKey: options.targetKey || "",
+          reason: "inappropriate_content",
+          metadata
+        }
+      });
+    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "report_failed");
+    showToast(t("communityReported"));
+    return true;
+  } catch (error) {
+    console.warn("Could not report community content", error);
+    showToast(t("communityReportFailed"));
+    return false;
+  }
+}
+
+async function blockUgcAuthor(authorId = "") {
+  if (!socialCommentsSignedIn()) {
+    void showSocialCommentsLogin({ surface: "community" });
+    return false;
+  }
+  const targetUserId = String(authorId || "").trim();
+  if (!targetUserId || ugcBlockedUserIds.has(targetUserId)) return false;
+  if (!window.confirm(t("communityBlockConfirm"))) return false;
+  try {
+    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "block",
+        userId: targetUserId,
+        blocked: true
+      }
+    });
+    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "block_failed");
+    applySocialViewerContext(payload);
+    ugcBlockedUserIds.add(targetUserId);
+    hideBlockedUgcContentLocally();
+    renderSocialCommentsPanel();
+    renderCommunityPanel();
+    showToast(t("communityBlocked"));
+    return true;
+  } catch (error) {
+    console.warn("Could not block community user", error);
+    showToast(t("communityBlockFailed"));
+    return false;
+  }
 }
 
 async function socialCommentsRequest(path = "", options = {}) {
@@ -55496,6 +59151,26 @@ function renderSocialCommentItem(comment = {}) {
     actions.appendChild(removeButton);
   }
 
+  const authorId = ugcAuthorId(comment);
+  if (socialCommentsSignedIn() && !comment.mine && authorId) {
+    const reportButton = document.createElement("button");
+    reportButton.type = "button";
+    reportButton.className = "social-comment-action";
+    reportButton.dataset.commentAction = "report";
+    reportButton.dataset.commentId = comment.id || "";
+    reportButton.textContent = t("communityReport");
+    actions.appendChild(reportButton);
+
+    const blockButton = document.createElement("button");
+    blockButton.type = "button";
+    blockButton.className = "social-comment-action danger";
+    blockButton.dataset.commentAction = "block-user";
+    blockButton.dataset.commentId = comment.id || "";
+    blockButton.dataset.authorId = authorId;
+    blockButton.textContent = t("communityBlockUser");
+    actions.appendChild(blockButton);
+  }
+
   item.appendChild(actions);
   return item;
 }
@@ -55515,7 +59190,7 @@ function renderSocialCommentsList() {
     socialCommentsList.appendChild(empty);
     return;
   }
-  socialCommentsState.comments.forEach((comment) => {
+  socialCommentsState.comments.filter((comment) => !isUgcItemBlocked(comment)).forEach((comment) => {
     socialCommentsList.appendChild(renderSocialCommentItem(comment));
   });
 }
@@ -55709,8 +59384,11 @@ async function submitSocialComment() {
     return true;
   } catch (error) {
     console.warn("Could not submit social comment", error);
-    if (socialCommentsStatus) socialCommentsStatus.textContent = t("socialCommentsPostFailed");
-    showToast(t("socialCommentsPostFailed"));
+    const message = /content_not_allowed/i.test(String(error?.message || ""))
+      ? t("communityContentNotAllowed")
+      : t("socialCommentsPostFailed");
+    if (socialCommentsStatus) socialCommentsStatus.textContent = message;
+    showToast(message);
     window.setTimeout(() => {
       void loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
     }, 1600);
@@ -55827,7 +59505,11 @@ async function updateSocialComment(commentId = "") {
     return true;
   } catch (error) {
     console.warn("Could not update social comment", error);
-    showToast(t("socialCommentsUpdateFailed"));
+    showToast(
+      /content_not_allowed/i.test(String(error?.message || ""))
+        ? t("communityContentNotAllowed")
+        : t("socialCommentsUpdateFailed")
+    );
     return false;
   }
 }
@@ -56019,6 +59701,10 @@ function updateCommunityControlsText() {
   if (communityTitle) communityTitle.textContent = t("communityTitle");
   if (communityIntro) communityIntro.textContent = t("communityIntro");
   if (communityRefreshBtn) communityRefreshBtn.textContent = t("communityRefresh");
+  if (communityStoryKicker) communityStoryKicker.textContent = t("communityStoryKicker");
+  if (communityStoryTitle) communityStoryTitle.textContent = t("communityStoryTitle");
+  if (communityStoryText) communityStoryText.textContent = t("communityStoryText");
+  if (communityStoryCta?.firstElementChild) communityStoryCta.firstElementChild.textContent = t("communityStoryCta");
   if (communityPostTitle) communityPostTitle.placeholder = t("communityTitlePlaceholder");
   if (communityPostBody) communityPostBody.placeholder = t("communityBodyPlaceholder");
   if (communityPostMeta) communityPostMeta.placeholder = t("communityMetaPlaceholder");
@@ -56145,6 +59831,27 @@ function renderCommunityComment(comment = {}, postId = "") {
     remove.textContent = t("communityDelete");
     actions.appendChild(remove);
   }
+  const authorId = ugcAuthorId(comment);
+  if (communitySignedIn() && !comment.mine && authorId) {
+    const report = document.createElement("button");
+    report.type = "button";
+    report.className = "social-comment-action";
+    report.dataset.communityAction = "comment-report";
+    report.dataset.postId = postId;
+    report.dataset.commentId = comment.id || "";
+    report.textContent = t("communityReport");
+    actions.appendChild(report);
+
+    const block = document.createElement("button");
+    block.type = "button";
+    block.className = "social-comment-action danger";
+    block.dataset.communityAction = "block-user";
+    block.dataset.postId = postId;
+    block.dataset.commentId = comment.id || "";
+    block.dataset.authorId = authorId;
+    block.textContent = t("communityBlockUser");
+    actions.appendChild(block);
+  }
   item.appendChild(actions);
   return item;
 }
@@ -56195,7 +59902,9 @@ function renderCommunityPostComments(container, post = {}, options = {}) {
       empty.textContent = t("communityCommentEmpty");
       list.appendChild(empty);
     } else {
-      comments.forEach((comment) => list.appendChild(renderCommunityComment(comment, postId)));
+      comments
+        .filter((comment) => !isUgcItemBlocked(comment))
+        .forEach((comment) => list.appendChild(renderCommunityComment(comment, postId)));
     }
   }
   commentsWrap.appendChild(list);
@@ -56365,6 +60074,25 @@ function renderCommunityPost(post = {}) {
     remove.textContent = t("communityDelete");
     actions.appendChild(remove);
   }
+  const authorId = ugcAuthorId(post);
+  if (communitySignedIn() && !post.mine && authorId) {
+    const report = document.createElement("button");
+    report.type = "button";
+    report.className = "social-comment-action";
+    report.dataset.communityAction = "report";
+    report.dataset.postId = post.id || "";
+    report.textContent = t("communityReport");
+    actions.appendChild(report);
+
+    const block = document.createElement("button");
+    block.type = "button";
+    block.className = "social-comment-action danger";
+    block.dataset.communityAction = "block-user";
+    block.dataset.postId = post.id || "";
+    block.dataset.authorId = authorId;
+    block.textContent = t("communityBlockUser");
+    actions.appendChild(block);
+  }
   card.appendChild(actions);
 
   renderCommunityPostComments(card, post, {
@@ -56395,7 +60123,9 @@ function renderCommunityFeed() {
     communityFeedList.appendChild(empty);
     return;
   }
-  communityState.posts.forEach((post) => communityFeedList.appendChild(renderCommunityPost(post)));
+  communityState.posts
+    .filter((post) => !isUgcItemBlocked(post))
+    .forEach((post) => communityFeedList.appendChild(renderCommunityPost(post)));
   connectCommunityCommentLazyLoader();
 }
 
@@ -56503,8 +60233,11 @@ async function submitCommunityPost() {
     return true;
   } catch (error) {
     console.warn("Could not submit community post", error);
-    communitySetStatus(t("communityPostFailed"), "error");
-    showToast(t("communityPostFailed"));
+    const message = /content_not_allowed/i.test(String(error?.message || ""))
+      ? t("communityContentNotAllowed")
+      : t("communityPostFailed");
+    communitySetStatus(message, "error");
+    showToast(message);
     return false;
   } finally {
     communityState.posting = false;
@@ -56674,7 +60407,11 @@ async function submitCommunityComment(postId = "") {
     return true;
   } catch (error) {
     console.warn("Could not submit community comment", error);
-    showToast(t("socialCommentsPostFailed"));
+    showToast(
+      /content_not_allowed/i.test(String(error?.message || ""))
+        ? t("communityContentNotAllowed")
+        : t("socialCommentsPostFailed")
+    );
     return false;
   }
 }
@@ -56762,7 +60499,11 @@ async function updateCommunityComment(postId = "", commentId = "") {
     return true;
   } catch (error) {
     console.warn("Could not update community comment", error);
-    showToast(t("socialCommentsUpdateFailed"));
+    showToast(
+      /content_not_allowed/i.test(String(error?.message || ""))
+        ? t("communityContentNotAllowed")
+        : t("socialCommentsUpdateFailed")
+    );
     return false;
   }
 }
@@ -56894,6 +60635,7 @@ function renderSocialSessionState({ configured = socialConfigReady(), signed = B
 
 function renderSocialUi(options = {}) {
   syncAdminAnalyticsAccess();
+  if (authHasOnlineSession()) void refreshAdminAccess();
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
     socialProfileCard.classList.add("hidden");
@@ -57261,6 +61003,7 @@ async function initSocialMvp() {
     : false;
   if (hasFreshSession) {
     ensureOnlineSocialUserSession();
+    await refreshAdminAccess({ force: true });
     await loadSocialProfile({ silent: true });
     await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
   }
@@ -57394,6 +61137,7 @@ async function pickPlayableReplacementForPrefs(
   const pool = basePool.filter((track) => {
     if (!track || track === currentTrack) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
+    if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
@@ -57560,20 +61304,22 @@ async function generateRecommendationFromPrefs(
     recycleKnownStyleCatalog
       ? !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
       : !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
-  // If the selected style is exhausted, only adjacent styles from the similarity map may be used.
-  const isStyleFallbackLocked = () =>
-    NO_CROSS_STYLE_FALLBACK_STYLES.has(String(prefs?.style || ""));
+  // An explicit style choice is a hard user contract. If its verified pool is
+  // exhausted, report that honestly instead of silently switching genres.
+  const isStyleFallbackLocked = () => Boolean(prefs?.style);
 
   const hasEligibleInCurrentScope = () =>
     (prefs.style ? catalogTracksForStyle(prefs.style) : catalog).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm))
     );
   const hasEligibleUnknownInCurrentScope = () =>
     (prefs.style ? catalogTracksForStyle(prefs.style) : catalog).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
         trackAllowedInSession(track)
@@ -57587,6 +61333,7 @@ async function generateRecommendationFromPrefs(
     catalogTracksForStyle(prefs.style).some(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !trackBlockedByKnownSignals(track, hardExcludedTrackKeys, hardExcludedTrackTitles)
     );
@@ -57691,7 +61438,11 @@ async function generateRecommendationFromPrefs(
       recycleStyleCatalog ? hardExcludedTrackKeys : excludedTrackKeys,
       recycleStyleCatalog ? hardExcludedTrackTitles : excludedTrackTitles
     );
-    if (!candidate || !isTrackEligibleForRecommendation(candidate)) return false;
+    if (
+      !candidate ||
+      !isTrackEligibleForRecommendation(candidate) ||
+      !trackMatchesRequestedSubgenreEvidence(candidate, prefs)
+    ) return false;
     currentRecommendation = candidate;
     usedKnownFallback = true;
     recommendationBlockedByKnown = false;
@@ -57706,6 +61457,7 @@ async function generateRecommendationFromPrefs(
     const strictStylePool = styleCatalog.filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
         trackAllowedInSession(track)
@@ -57716,6 +61468,7 @@ async function generateRecommendationFromPrefs(
       stylePool = styleCatalog.filter((track) => {
         if (!track) return false;
         if (!isTrackEligibleForRecommendation(track)) return false;
+        if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
         if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
         if (!trackAllowedInSession(track)) return false;
         return true;
@@ -57756,6 +61509,7 @@ async function generateRecommendationFromPrefs(
     const scopedBasePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
     const scopedPool = scopedBasePool.filter((track) => {
       if (!isTrackEligibleForRecommendation(track)) return false;
+      if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
       if (!trackAllowedInSession(track)) return false;
       if (!trackBpmRangeOverlapsPreference(track, prefs.bpm)) return false;
       return true;
@@ -57791,6 +61545,9 @@ async function generateRecommendationFromPrefs(
     excludedTrackTitles
   );
   if (prefs.style && currentRecommendation && currentRecommendation.style !== prefs.style) {
+    currentRecommendation = null;
+  }
+  if (currentRecommendation && !trackMatchesRequestedSubgenreEvidence(currentRecommendation, prefs)) {
     currentRecommendation = null;
   }
   if (!currentRecommendation || !isTrackEligibleForRecommendation(currentRecommendation)) {
@@ -57830,6 +61587,7 @@ async function generateRecommendationFromPrefs(
     const stylePool = stylePoolBase.filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         trackAllowedByTasteMaturity(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         trackAllowedInSession(track)
@@ -57877,6 +61635,7 @@ async function generateRecommendationFromPrefs(
     const strictPool = catalogTracksForStyle(prefs.style).filter(
       (track) =>
         isTrackEligibleForRecommendation(track) &&
+        trackMatchesRequestedSubgenreEvidence(track, prefs) &&
         (!prefs.bpm || trackMatchesBpmPreference(track, prefs.bpm)) &&
         !artistSetHasMatch(sessionExcludedArtists, track.artist) &&
         trackAllowedInSession(track)
@@ -57923,6 +61682,14 @@ async function generateRecommendationFromPrefs(
   }
   // Segurança final de consistência: não renderiza faixa de estilo diferente.
   if (prefs.style && currentRecommendation && currentRecommendation.style !== prefs.style) {
+    currentRecommendation = null;
+    if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
+      markRecommendationBlockedByKnown();
+      currentDiscovery = null;
+      return false;
+    }
+  }
+  if (currentRecommendation && !trackMatchesRequestedSubgenreEvidence(currentRecommendation, prefs)) {
     currentRecommendation = null;
     if (!tryBpmFallbackRecommendation() && !(await tryCrossStyleFallbackRecommendation()) && !tryEmergencyStyleRecommendation()) {
       markRecommendationBlockedByKnown();
@@ -58091,6 +61858,12 @@ async function generateRecommendationFromPrefs(
     currentDiscovery = null;
     return false;
   }
+  if (!trackMatchesRequestedSubgenreEvidence(currentRecommendation, prefs)) {
+    markRecommendationBlockedByKnown();
+    currentRecommendation = null;
+    currentDiscovery = null;
+    return false;
+  }
 
   let recommendationSnapshot = currentRecommendation;
   let discoverySnapshot = discoveryModeEl.checked
@@ -58120,6 +61893,7 @@ async function generateRecommendationFromPrefs(
     prefs.style &&
     (
       recommendationSnapshot.style !== prefs.style ||
+      !trackMatchesRequestedSubgenreEvidence(recommendationSnapshot, prefs) ||
       !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist) ||
       !labelAllowedForStyle(prefs.style, recommendationSnapshot.label) ||
       (() => {
@@ -58191,6 +61965,7 @@ async function generateRecommendationFromPrefs(
     prefs.style &&
     (
       recommendationSnapshot.style !== prefs.style ||
+      !trackMatchesRequestedSubgenreEvidence(recommendationSnapshot, prefs) ||
       !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist)
     )
   ) {
@@ -58266,6 +62041,10 @@ async function activateSuggestionQueueIndex(index) {
   const selectedTrack = suggestionQueueTracks[safeIndex];
   if (!selectedTrack) return false;
   if (!isTrackEligibleForRecommendation(selectedTrack)) {
+    refreshSuggestionQueue(lastPrefs, currentRecommendation);
+    return false;
+  }
+  if (!trackMatchesRequestedSubgenreEvidence(selectedTrack, lastPrefs)) {
     refreshSuggestionQueue(lastPrefs, currentRecommendation);
     return false;
   }
@@ -58480,6 +62259,25 @@ async function runSwipeStyleRecommendation(style = "") {
   renderSwipeStyleRail();
 
   const previousTrack = currentRecommendation;
+  const interactionStartedAt = discoveryInteractionNow();
+  swipeUserAnchoredStyle = safeStyle;
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs,
+    sourceTrack: previousTrack,
+    avoidArtistName: previousTrack?.artist || "",
+    message: t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) }),
+    action: "style_deck",
+    startedAt: interactionStartedAt
+  })) {
+    swipeUserAnchoredStyle = currentRecommendation?.style || safeStyle;
+    lastPrefs = {
+      ...prefs,
+      style: swipeUserAnchoredStyle
+    };
+    showToast(t("swipeStyleDeckGenerated", { style: styleLabelByValue(safeStyle) }));
+    savePreferences();
+    return true;
+  }
   const generated = await generateRecommendationWithOverlay(
     prefs,
     {
@@ -58522,24 +62320,36 @@ async function runSwipeStyleRecommendation(style = "") {
 
 async function runRecommendation() {
   if (recommendationRunBusy) return;
+  const interactionStartedAt = discoveryInteractionNow();
   stopAllActivePlayback({ reason: "manual_recommendation" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
     showPremiumDiscoveryLimit();
     return;
   }
+  const prefs = {
+    style: styleEl.value,
+    context: contextEl.value,
+    energy: energyEl.value,
+    bpm: bpmEl.value,
+    vocals: vocalsEl.value
+  };
   playUiSfx("search-start");
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs,
+    sourceTrack: currentRecommendation,
+    avoidArtistName: currentRecommendation?.artist || "",
+    message: Object.values(prefs).some(Boolean) ? t("recommendationGenerated") : t("exploratoryGenerated"),
+    action: "find_track",
+    startedAt: interactionStartedAt
+  })) {
+    swipeUserAnchoredStyle = prefs.style ? (currentRecommendation?.style || prefs.style) : "";
+    playUiSfx("search-done");
+    return;
+  }
   recommendationRunBusy = true;
   setRecommendationRunBusy(true);
   try {
-    const prefs = {
-      style: styleEl.value,
-      context: contextEl.value,
-      energy: energyEl.value,
-      bpm: bpmEl.value,
-      vocals: vocalsEl.value
-    };
-
     if (feedbackMessage) feedbackMessage.textContent = t("searchingCatalog");
     let blockedByCoverage = false;
     let usedCoverageFallback = false;
@@ -58681,6 +62491,22 @@ async function runManualFilterSurprise() {
   if (!manualPrefsAreActive(prefs)) return false;
 
   const previousTrack = currentRecommendation;
+  const interactionStartedAt = discoveryInteractionNow();
+  stopAllActivePlayback({ reason: "manual_filter_surprise" });
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs,
+    sourceTrack: previousTrack,
+    avoidArtistName: previousTrack?.artist || "",
+    message: prefs.style
+      ? t("quickSurpriseGenerated", { style: styleLabelByValue(prefs.style) })
+      : t("recommendationGenerated"),
+    action: "filtered_surprise",
+    startedAt: interactionStartedAt
+  })) {
+    swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
+    playUiSfx("search-done");
+    return true;
+  }
   const generated = await generateRecommendationWithOverlay(
     prefs,
     {
@@ -58738,6 +62564,7 @@ async function runSurpriseRecommendation({
     }
   }
   if (recommendationRunBusy) return false;
+  if (tryRunInstantPrimaryRecommendation()) return true;
   stopAllActivePlayback({ reason: "surprise_recommendation" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
@@ -58861,7 +62688,6 @@ async function runSurpriseRecommendation({
     }
 
     registerRecommendationDelivery(surpriseTrack, surprisePrefs);
-    rememberAnonymousOpeningTrack(surpriseTrack);
     refreshSuggestionQueue(surprisePrefs, surpriseTrack);
 
     lastPrefs = surprisePrefs;
@@ -59014,6 +62840,7 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
+        swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
         const bpmWasReset = updateBpmOptionsForSelectedStyle();
         if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;
@@ -59031,6 +62858,7 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
+        swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
         const bpmWasReset = updateBpmOptionsForSelectedStyle();
         if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;
@@ -59055,6 +62883,9 @@ bind(audioToggleBtn, "click", () => {
   );
   if (recentlyUnlockedByGlobalTap) audioGlobalUnlockAt = 0;
   setAudioEnabled(needsActivation, { persist: true, fromUser: true });
+  if (needsActivation && audioEnabled && currentRecommendation) {
+    resumeCurrentPreviewFromUserGesture();
+  }
   setAudioVolumePanelOpen(true);
   scheduleAudioVolumePanelClose(2200);
 });
@@ -59837,9 +63668,11 @@ bind(bandcampPreviewToggleBtn, "click", () => {
 bind(recommendBtn, "click", runRecommendation);
 
 bind(rerollBtn, "click", async () => {
+  const interactionStartedAt = discoveryInteractionNow();
   const targetPrefs = prefsForSameTargetAction();
   if (!targetPrefs) return;
   const hadExplicitSwipeAnchor = Boolean(explicitSwipeAnchorStyle());
+  const previousTrack = currentRecommendation;
   const previousTrackKey = currentRecommendation
     ? normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`)
     : "";
@@ -59850,6 +63683,22 @@ bind(rerollBtn, "click", async () => {
     ? `${currentRecommendation.artist}::${currentRecommendation.song}`
     : "";
   const avoidDiscoveryName = currentDiscovery?.name || "";
+
+  stopAllActivePlayback({ reason: "reroll_recommendation" });
+  if (tryPresentInteractionBudgetRecommendation({
+    prefs: targetPrefs,
+    sourceTrack: previousTrack,
+    avoidArtistName: previousTrack?.artist || "",
+    message: t("rerollGenerated"),
+    action: "reroll",
+    startedAt: interactionStartedAt
+  })) {
+    if (hadExplicitSwipeAnchor) {
+      swipeUserAnchoredStyle = targetPrefs.style ? (currentRecommendation?.style || targetPrefs.style) : "";
+    }
+    playUiSfx("swap");
+    return;
+  }
 
   if (currentRecommendation) {
     addArtistIdentityToSet(rejectedArtists, currentRecommendation.artist);
@@ -60456,6 +64305,22 @@ bind(socialCommentsList, "click", async (event) => {
     await deleteSocialComment(commentId);
     return;
   }
+  if (action === "report") {
+    const comment = socialCommentsState.comments.find((item) => item.id === commentId);
+    const targetContext = currentSocialCommentTarget(socialCommentsState.targetType);
+    await reportUgcContent({
+      kind: "comment",
+      id: commentId,
+      surface: "comments",
+      targetType: targetContext?.targetType || comment?.targetType || "track",
+      targetKey: targetContext?.targetKey || comment?.targetKey || ""
+    });
+    return;
+  }
+  if (action === "block-user") {
+    await blockUgcAuthor(target.getAttribute("data-author-id") || "");
+    return;
+  }
   const value = Number(target.getAttribute("data-reaction-value")) || 0;
   if (value) await reactSocialComment(commentId, value);
 });
@@ -60711,12 +64576,44 @@ bind(moreInfoBtn, "click", () => {
 });
 
 bind(djModeGenerateBtn, "click", generateDjModeJourney);
+djIntentFamilyButtons.forEach((button) => {
+  bind(button, "click", () => {
+    const family = String(button.dataset.djIntentFamily || "").trim();
+    if (djIntentStatus) djIntentStatus.textContent = "";
+    renderDjIntentRefinement(family);
+    window.requestAnimationFrame(() => {
+      const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+      djIntentRefinement?.scrollIntoView?.({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "nearest"
+      });
+      djIntentRefinementTitle?.focus?.({ preventScroll: true });
+    });
+  });
+});
+bind(djIntentStyleOptions, "click", (event) => {
+  const button = event.target?.closest?.("[data-dj-intent-filter]");
+  if (!button || !djIntentStyleOptions?.contains(button)) return;
+  void activateDjIntent(button.dataset.djIntentFilter || "", { source: "guided_refinement" });
+});
+bind(djIntentBackBtn, "click", () => {
+  const previousFamily = pendingDjIntentFamily;
+  renderDjIntentRefinement("");
+  const familyButton = djIntentFamilyButtons.find((button) => button.dataset.djIntentFamily === previousFamily);
+  familyButton?.focus?.({ preventScroll: true });
+});
+bind(djIntentSurpriseBtn, "click", () => {
+  void activateDjIntent("", { source: "guided_surprise" });
+});
+bind(djChangeIntentBtn, "click", () => {
+  resetDjIntentChoice({ focus: true });
+});
 bind(djDiscoveryShuffleBtn, "click", () => {
   ensureDjDiscoveryReady({ force: true });
   playUiSfx("confirm");
 });
 bind(djDiscoverySceneFilter, "change", () => {
-  ensureDjDiscoveryReady({ force: true });
+  void activateDjIntent(djDiscoverySceneFilter?.value || "", { source: "result_refine" });
 });
 bind(djSwipeLikeBtn, "click", () => {
   void completeDjSwipe("like", djSwipeCard);
@@ -60736,10 +64633,37 @@ bind(djSwipeCard, "pointercancel", (event) => {
 });
 bind(djSwipeCard, "keydown", handleDjSwipeKeyboard);
 bind(dailyNewsRefreshBtn, "click", () => {
+  void refreshSonicEditorial({ force: true });
   void refreshDailyNews({ silent: false });
+});
+bind(sonicEditorialList, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-sonic-article-id]") : null;
+  if (!target) return;
+  const articleId = String(target.getAttribute("data-sonic-article-id") || "");
+  const article = sonicEditorialState.articles.find((item) => String(item.id || "") === articleId);
+  if (article) openSonicNewsReader(article);
+});
+bind(sonicNewsReaderClose, "click", closeSonicNewsReader);
+bind(sonicNewsReader, "click", (event) => {
+  if (event.target === sonicNewsReader) closeSonicNewsReader();
+});
+bind(sonicNewsReader, "cancel", (event) => {
+  event.preventDefault();
+  closeSonicNewsReader();
 });
 bind(communityRefreshBtn, "click", () => {
   void loadCommunityPosts({ silent: false });
+});
+bind(communityStoryCta, "click", () => {
+  communityState.filter = "event";
+  communityState.topic = "event";
+  renderCommunityPanel();
+  void loadCommunityPosts({ silent: true });
+  const participationTarget = communitySignedIn() ? communityPostBody : communityLoginBtn;
+  const participationCard = communityComposer?.closest(".community-composer-card")
+    || communityLoginPrompt?.closest(".community-composer-card");
+  participationCard?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+  window.requestAnimationFrame(() => participationTarget?.focus?.({ preventScroll: true }));
 });
 bind(communityTopicTabs, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
@@ -60773,6 +64697,16 @@ bind(communityFeedList, "click", async (event) => {
     await deleteCommunityComment(postId, commentId);
     return;
   }
+  if (action === "comment-report") {
+    await reportUgcContent({
+      kind: "comment",
+      id: commentId,
+      surface: "community",
+      targetType: "post",
+      targetKey: postId
+    });
+    return;
+  }
   if (action === "comment-edit") {
     startEditingCommunityComment(postId, commentId);
     return;
@@ -60791,6 +64725,18 @@ bind(communityFeedList, "click", async (event) => {
   }
   if (action === "delete") {
     await deleteCommunityPost(postId);
+    return;
+  }
+  if (action === "report") {
+    await reportUgcContent({
+      kind: "post",
+      id: postId,
+      surface: "community"
+    });
+    return;
+  }
+  if (action === "block-user") {
+    await blockUgcAuthor(target.getAttribute("data-author-id") || "");
     return;
   }
   if (action === "topic-all") {
@@ -60819,6 +64765,69 @@ bind(appTabBar, "click", (event) => {
 });
 bind(adminAnalyticsRefreshBtn, "click", () => {
   void loadAdminAnalytics({ force: true });
+  void loadAdminOperations({ force: true });
+  void loadAdminNewsroom({ force: true });
+});
+bind(adminNewsNewBtn, "click", () => {
+  resetAdminNewsForm();
+  adminNewsForm?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+  newsFormElement("adminNewsTitleField")?.focus?.({ preventScroll: true });
+});
+bind(adminNewsRefreshBtn, "click", () => {
+  void loadAdminNewsroom({ force: true });
+});
+bind(adminNewsForm, "input", updateAdminNewsPreview);
+bind(adminNewsForm, "change", updateAdminNewsPreview);
+bind(adminNewsForm, "submit", (event) => {
+  event.preventDefault();
+  void saveAdminNewsArticle("publish");
+});
+bind(adminNewsSaveDraftBtn, "click", () => {
+  void saveAdminNewsArticle("draft");
+});
+bind(adminNewsArchiveBtn, "click", () => {
+  void archiveAdminNewsArticle();
+});
+bind(adminNewsCoverFile, "change", () => {
+  const file = adminNewsCoverFile?.files?.[0];
+  if (file) void uploadAdminNewsCover(file);
+});
+bind(adminNewsMediaOneFile, "change", () => {
+  const file = adminNewsMediaOneFile?.files?.[0];
+  if (file) void uploadAdminNewsMedia(file, 0);
+});
+bind(adminNewsMediaTwoFile, "change", () => {
+  const file = adminNewsMediaTwoFile?.files?.[0];
+  if (file) void uploadAdminNewsMedia(file, 1);
+});
+bind(adminNewsMediaThreeFile, "change", () => {
+  const file = adminNewsMediaThreeFile?.files?.[0];
+  if (file) void uploadAdminNewsMedia(file, 2);
+});
+bind(adminNewsList, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-admin-news-edit]") : null;
+  if (!target) return;
+  const articleId = String(target.getAttribute("data-admin-news-edit") || "");
+  const article = adminNewsroomState.articles.find((item) => String(item.id || "") === articleId);
+  if (article) fillAdminNewsForm(article);
+});
+bind(adminHealthRefreshBtn, "click", () => {
+  void loadAdminIntegrationHealth({ force: true });
+});
+bind(adminModerationRefreshBtn, "click", () => {
+  void loadAdminModerationQueue({ force: true });
+});
+bind(adminModerationList, "click", async (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-admin-delete-post]") : null;
+  if (!target) return;
+  const postId = String(target.getAttribute("data-admin-delete-post") || "").trim();
+  const postTitle = String(target.getAttribute("data-admin-post-title") || "").trim();
+  target.disabled = true;
+  try {
+    await deleteAdminCommunityPost(postId, postTitle);
+  } finally {
+    target.disabled = false;
+  }
 });
 bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
 bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
@@ -60885,6 +64894,12 @@ function scheduleLocalBootCatalogHydration() {
 async function bootSonicSearch() {
   if (freshTestResetPending) return;
   loadDynamicCatalogCache();
+  void ensureOpeningRotationSlot();
+  // Keep a small, curated set of embeddable tracks ready before the first
+  // user click. This avoids waiting for the full catalog hydration when a
+  // private/no-login Opera session starts cold.
+  injectSoundCloudSupplementalSeeds();
+  void refreshGlobalDiscoveryExposure(CURATED_FRIENDLY_OPENING_TRACKS);
   scheduleLocalBootCatalogHydration();
   const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
   scheduleCatalogMaintenance(bootWarmupDelay);

@@ -1,15 +1,20 @@
 const { sendJson } = require("../lib/api/_music-apis");
 
 const handlers = {
+  "access-context": require("../lib/api/_access-context"),
+  "admin-analytics": require("../lib/api/_admin-analytics"),
   "artist-profile": require("../lib/api/_artist-profile"),
   "beta-access": require("../lib/api/_beta-access"),
   "beta-events": require("../lib/api/_beta-events"),
   comments: require("../lib/api/_comments"),
   community: require("../lib/api/_community"),
   "cover-art": require("../lib/api/_cover-art"),
+  "discovery-exposure": require("../lib/api/_discovery-exposure"),
   "event-radar": require("../lib/api/_event-radar"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
+  "news-editor": require("../lib/api/_news-editor"),
   "news-feed": require("../lib/api/_news-feed"),
+  "opening-slot": require("../lib/api/_opening-slot"),
   "radio-browser": require("../lib/api/_radio-browser"),
   "spotify-search": require("../lib/api/_spotify-search"),
   "track-metadata": require("../lib/api/_track-metadata"),

@@ -4,6 +4,8 @@
 node_modules/
 .vendor/
 www/
+android/
+mobile/
 *.log
 *.unreadable-*
 api/* 2.js

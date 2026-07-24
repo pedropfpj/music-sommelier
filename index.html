@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Find an electronic track for the moment with swipe, preview, context, and fewer repeats." />
     <meta name="theme-color" content="#06111f" />
@@ -22,14 +23,25 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.css?v=20260711instagram4" as="style" />
-    <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
+    <link rel="preload" href="styles.min.css?v=20260724djControls1" as="style" />
+    <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://w.soundcloud.com" crossorigin />
+    <link rel="preconnect" href="https://bandcamp.com" crossorigin />
+    <link rel="dns-prefetch" href="//w.soundcloud.com" />
+    <link rel="dns-prefetch" href="//bandcamp.com" />
     <script>
       try {
         const sonicSearchParams = new URLSearchParams(window.location.search);
         const sonicNativeProtocol = window.location.protocol === "capacitor:" || window.location.protocol === "ionic:";
+        const sonicEfficientVisuals = sonicNativeProtocol
+          || window.matchMedia?.("(pointer: coarse)").matches
+          || (Number(navigator.deviceMemory || 8) <= 4)
+          || (Number(navigator.hardwareConcurrency || 8) <= 4);
+        if (sonicEfficientVisuals) {
+          document.documentElement.dataset.sonicPerformance = "efficient";
+        }
         if (sonicNativeProtocol || sonicSearchParams.has("iosApp")) {
           document.documentElement.classList.add("sonic-ios-app", "app-store-mode");
           document.documentElement.dataset.sonicNativeApp = "true";
@@ -55,7 +67,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260711instagram4" />
+    <link rel="stylesheet" href="styles.min.css?v=20260724djControls1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -106,7 +118,7 @@
     </style>
     <style id="sonic-logo-upgrade-styles">
       .brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(80vw,560px);max-width:560px;margin-inline:auto}.brand-logo{display:block;width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 16px 34px rgba(46,215,255,.2))}
-      .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px;min-height:clamp(72px,16vw,150px);display:grid;place-items:center;line-height:0}.intro-logo-mark{display:block;position:relative;z-index:2;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22));opacity:0;transition:opacity .18s ease}.intro-logo-mark[data-logo-loaded="true"]{opacity:1}.intro-logo-mark[data-logo-failed="true"]{display:none}.intro-logo-fallback{position:absolute;left:50%;top:50%;z-index:1;width:min(96%,560px);transform:translate(-50%,-50%);color:#3477b1;font-family:"Syne","Chakra Petch",sans-serif;font-size:clamp(2.2rem,10vw,5.5rem);font-weight:800;line-height:.82;text-align:center;text-shadow:0 0 1px rgba(255,255,255,.75),0 16px 34px rgba(43,158,255,.24),0 0 28px rgba(84,255,232,.16);opacity:1;transition:opacity .18s ease;pointer-events:none}.intro-logo-mark[data-logo-loaded="true"]+.intro-logo-fallback{opacity:0}
+      .intro-logo-system{width:min(100%,680px)}.intro-logo-wrap{width:min(78vw,640px);max-width:640px;min-height:clamp(72px,16vw,150px);display:grid;place-items:center;line-height:0}.intro-logo-mark{display:block;position:relative;z-index:2;width:100%;height:auto;object-fit:contain;transform:scale(1.06);filter:drop-shadow(0 20px 38px rgba(49,219,255,.22));opacity:1}.intro-logo-mark[data-logo-failed="true"]{display:none}.intro-logo-fallback{position:absolute;left:50%;top:50%;z-index:1;width:min(96%,560px);transform:translate(-50%,-50%);color:#3477b1;font-family:"Syne","Chakra Petch",sans-serif;font-size:clamp(2.2rem,10vw,5.5rem);font-weight:800;line-height:.82;text-align:center;text-shadow:0 0 1px rgba(255,255,255,.75),0 16px 34px rgba(43,158,255,.24),0 0 28px rgba(84,255,232,.16);opacity:0;pointer-events:none}.intro-logo-mark[data-logo-failed="true"]+.intro-logo-fallback{opacity:1}
       .hero-logo-wrap{width:clamp(300px,32vw,520px);min-height:132px;display:grid;place-items:center;overflow:hidden;line-height:0}.hero-logo-mark{display:block;width:100%;max-width:100%;height:auto;max-height:176px;object-fit:contain;transform:none;filter:drop-shadow(0 18px 34px rgba(35,210,255,.18))}
       @media (min-width:1100px){.hero-brand{grid-template-columns:minmax(360px,520px) minmax(0,1fr);align-items:center}.hero-logo-wrap{justify-self:center}}
       @media (max-width:760px){.welcome-screen{grid-template-columns:minmax(0,1fr);padding-inline:20px}.intro-card,.language-card,.auth-card,.usage-guide-card,#welcomeScreen .welcome-card{box-sizing:border-box;width:calc(100vw - 48px);max-width:calc(100vw - 48px)}.language-card{padding-inline:1rem}.brand-logo-wrap,.language-card .brand-logo-wrap,.auth-card .brand-logo-wrap,.usage-guide-card .brand-logo-wrap,#welcomeScreen .brand-logo-wrap{width:min(66vw,260px)}.intro-logo-system{width:min(100%,318px)}.intro-logo-wrap{width:min(68vw,260px);min-height:96px}.intro-logo-mark{transform:none}.intro-logo-fallback{font-size:clamp(2rem,11vw,3.25rem)}.hero-logo-wrap{width:clamp(112px,34vw,164px);min-height:44px}.hero-logo-mark{max-height:62px}}
@@ -254,7 +266,7 @@
       <div class="beta-gate-shell">
         <div class="beta-gate-copy">
           <div class="beta-gate-logo-wrap" aria-hidden="true">
-            <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" fetchpriority="high" decoding="async" />
+            <img class="beta-gate-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </div>
           <p id="betaGateKicker" class="brand-kicker beta-gate-kicker">Beta privado para cena eletrônica</p>
           <h1 id="betaGateTitle">Descoberta eletrônica fora do óbvio.</h1>
@@ -267,7 +279,7 @@
             <span><strong>98k+</strong> <span id="betaMetricSearchable">músicas buscáveis</span></span>
             <span><strong>16.484</strong> <span id="betaMetricAudited">faixas auditadas</span></span>
             <span><strong>5.179</strong> <span id="betaMetricArtists">artistas indexados</span></span>
-            <span><strong>168</strong> <span id="betaMetricStyles">subgêneros</span></span>
+            <span><strong>169</strong> <span id="betaMetricStyles">subgêneros</span></span>
           </div>
           <div id="betaProofGrid" class="beta-proof-grid" aria-label="Por que testar agora">
             <div>
@@ -371,7 +383,7 @@
               <span class="intro-glyph glyph-c">⚡</span>
               <span class="intro-glyph glyph-d">◈</span>
               <div class="intro-logo-wrap">
-                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" alt="" fetchpriority="high" decoding="sync" onload="this.dataset.logoLoaded='true'" onerror="this.dataset.logoFailed='true'" />
+                <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" fetchpriority="high" decoding="async" onerror="this.dataset.logoFailed='true'" />
                 <span class="intro-logo-fallback" aria-hidden="true">Sonic Search</span>
               </div>
             </div>
@@ -408,7 +420,7 @@
       <div class="welcome-card language-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </div>
           <p id="langKicker" class="brand-kicker">Before you start</p>
           <h1 id="langTitle">Choose your language</h1>
@@ -425,7 +437,7 @@
       <div class="welcome-card usage-guide-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </div>
           <p id="usageGuideKicker" class="brand-kicker">Guia rápido</p>
           <h1 id="usageGuideTitle">Encontre uma boa faixa em poucos toques</h1>
@@ -469,7 +481,7 @@
       <div class="welcome-card auth-card auth-entry-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </div>
           <p id="authKicker" class="brand-kicker">Acesso rápido</p>
           <h1 id="authTitle">Entre no Sonic Search</h1>
@@ -508,7 +520,7 @@
       <div class="welcome-card">
         <div class="brand-wrap">
           <div class="brand-logo-wrap" aria-hidden="true">
-            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </div>
           <p id="welcomeKicker" class="brand-kicker">Descoberta eletrônica</p>
           <h1 id="welcomeTitle">SONIC SEARCH</h1>
@@ -559,7 +571,7 @@
       <header class="hero panel">
         <div class="hero-brand">
           <button id="heroLogoBtn" class="hero-logo-wrap hero-logo-btn" type="button" aria-label="Voltar ao início" title="Voltar ao início">
-            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260609logo1" alt="" decoding="async" />
+            <img class="hero-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
           </button>
           <div>
             <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
@@ -604,10 +616,513 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="community" aria-pressed="false">Comunidade</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
+        <button id="adminAnalyticsTabBtn" class="app-tab-btn admin-analytics-tab hidden" type="button" data-app-tab-target="admin" aria-pressed="false" aria-hidden="true" hidden>Painel administrativo</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Contato</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
       </nav>
+
+      <section id="adminAnalyticsPanel" class="panel admin-analytics-panel app-tab-panel" data-app-tab="admin" aria-labelledby="adminAnalyticsTitle" aria-hidden="true" hidden>
+        <div class="admin-analytics-aurora" aria-hidden="true"></div>
+        <header class="admin-analytics-header">
+          <div>
+            <div class="admin-analytics-kicker-row">
+              <p id="adminAnalyticsKicker" class="section-kicker">CENTRAL PRIVADA</p>
+              <span class="admin-live-pill"><i aria-hidden="true"></i><span id="adminAnalyticsPrivateLabel">Somente administradores</span></span>
+            </div>
+            <h3 id="adminAnalyticsTitle">Pessoas usando o Sonic Search</h3>
+            <p id="adminAnalyticsIntro" class="muted">Leitura anônima de uso, retorno e plataforma — sem expor dados pessoais.</p>
+          </div>
+          <div class="admin-analytics-actions">
+            <span id="adminAnalyticsViewer" class="admin-viewer-chip">Conta protegida</span>
+            <button id="adminAnalyticsRefreshBtn" class="admin-refresh-btn" type="button">
+              <span aria-hidden="true">↻</span>
+              <span id="adminAnalyticsRefreshLabel">Atualizar</span>
+            </button>
+          </div>
+        </header>
+
+        <div id="adminAnalyticsStatus" class="admin-analytics-status" role="status" aria-live="polite">
+          <span class="admin-status-pulse" aria-hidden="true"></span>
+          <span id="adminAnalyticsStatusText">Entre com uma conta administradora para carregar os dados.</span>
+        </div>
+
+        <section id="adminNewsroom" class="admin-newsroom" aria-labelledby="adminNewsroomTitle">
+          <header class="admin-newsroom-heading">
+            <div>
+              <p>JORNAL SONIC · PUBLICAÇÃO REMOTA</p>
+              <h4 id="adminNewsroomTitle">Editor de notícias</h4>
+              <span>Escreva uma vez e publique no site e no aplicativo sem uma nova versão na App Store.</span>
+            </div>
+            <button id="adminNewsNewBtn" class="admin-compact-btn" type="button">+ Nova matéria</button>
+          </header>
+
+          <div id="adminNewsStatus" class="admin-news-status" role="status" aria-live="polite">
+            Carregando a redação…
+          </div>
+
+          <div class="admin-news-workspace">
+            <form id="adminNewsForm" class="admin-news-form" autocomplete="off">
+              <input id="adminNewsId" type="hidden" />
+              <div class="admin-news-form-head">
+                <div>
+                  <span id="adminNewsFormMode">NOVA MATÉRIA</span>
+                  <strong>Informações editoriais</strong>
+                </div>
+                <label>
+                  Estado atual
+                  <select id="adminNewsStatusField" disabled>
+                    <option value="draft">Rascunho</option>
+                    <option value="scheduled">Agendada</option>
+                    <option value="published">Publicada</option>
+                    <option value="archived">Arquivada</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="admin-news-field-grid compact">
+                <label>
+                  Categoria
+                  <select id="adminNewsCategory">
+                    <option>Agenda</option>
+                    <option>Entrevista</option>
+                    <option>Cena local</option>
+                    <option>Lançamento</option>
+                    <option>Cobertura</option>
+                  </select>
+                </label>
+                <label>
+                  Publicar em
+                  <input id="adminNewsPublishedAt" type="datetime-local" />
+                </label>
+              </div>
+
+              <label class="admin-news-field admin-news-title-field">
+                Título
+                <input id="adminNewsTitleField" type="text" maxlength="180" placeholder="Ex.: Festa reúne novos nomes da cena na Naturaiz" required />
+                <small><span id="adminNewsTitleCount">0</span>/180</small>
+              </label>
+
+              <label class="admin-news-field">
+                Resumo
+                <textarea id="adminNewsExcerpt" rows="3" maxlength="520" placeholder="Uma introdução curta que faça a pessoa querer abrir a matéria."></textarea>
+              </label>
+
+              <fieldset class="admin-news-fieldset">
+                <legend>Capa da matéria</legend>
+                <div class="admin-news-cover-tools">
+                  <label class="admin-news-upload">
+                    <span>Escolher imagem</span>
+                    <input id="adminNewsCoverFile" type="file" accept="image/jpeg,image/png,image/webp" />
+                  </label>
+                  <span>JPG, PNG ou WebP. A imagem será otimizada antes do envio.</span>
+                </div>
+                <label class="admin-news-field">
+                  Ou cole a URL da imagem
+                  <input id="adminNewsCoverUrl" type="url" placeholder="https://…" />
+                </label>
+                <div class="admin-news-field-grid compact">
+                  <label>
+                    Texto alternativo
+                    <input id="adminNewsCoverAlt" type="text" maxlength="240" placeholder="Descreva o que aparece na imagem" />
+                  </label>
+                  <label>
+                    Crédito da foto
+                    <input id="adminNewsImageCredit" type="text" maxlength="180" placeholder="Foto: nome do fotógrafo" />
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="admin-news-fieldset">
+                <legend>Imagens dentro da matéria</legend>
+                <p class="admin-news-fieldset-intro">
+                  Use artes ou fotos autorizadas. Escolha depois de qual parágrafo cada imagem deve aparecer.
+                </p>
+                <div class="admin-news-media-grid">
+                  <section class="admin-news-media-item" aria-labelledby="adminNewsMediaOneTitle">
+                    <header>
+                      <strong id="adminNewsMediaOneTitle">Imagem interna 1</strong>
+                      <span>Naturaíz, line-up ou contexto</span>
+                    </header>
+                    <label class="admin-news-upload">
+                      <span>Escolher imagem</span>
+                      <input id="adminNewsMediaOneFile" type="file" accept="image/jpeg,image/png,image/webp" />
+                    </label>
+                    <label class="admin-news-field">
+                      URL da imagem
+                      <input id="adminNewsMediaOneUrl" type="url" placeholder="https://…" />
+                    </label>
+                    <label class="admin-news-field">
+                      Texto alternativo
+                      <input id="adminNewsMediaOneAlt" type="text" maxlength="240" placeholder="Descreva o que aparece na imagem" />
+                    </label>
+                    <label class="admin-news-field">
+                      Legenda
+                      <input id="adminNewsMediaOneCaption" type="text" maxlength="320" placeholder="Explique por que esta imagem importa" />
+                    </label>
+                    <div class="admin-news-field-grid compact">
+                      <label>
+                        Crédito
+                        <input id="adminNewsMediaOneCredit" type="text" maxlength="180" placeholder="Divulgação / Evento" />
+                      </label>
+                      <label>
+                        Após o parágrafo
+                        <input id="adminNewsMediaOneParagraph" type="number" min="1" max="100" value="4" />
+                      </label>
+                    </div>
+                  </section>
+
+                  <section class="admin-news-media-item" aria-labelledby="adminNewsMediaTwoTitle">
+                    <header>
+                      <strong id="adminNewsMediaTwoTitle">Imagem interna 2</strong>
+                      <span>Próximo evento ou desdobramento</span>
+                    </header>
+                    <label class="admin-news-upload">
+                      <span>Escolher imagem</span>
+                      <input id="adminNewsMediaTwoFile" type="file" accept="image/jpeg,image/png,image/webp" />
+                    </label>
+                    <label class="admin-news-field">
+                      URL da imagem
+                      <input id="adminNewsMediaTwoUrl" type="url" placeholder="https://…" />
+                    </label>
+                    <label class="admin-news-field">
+                      Texto alternativo
+                      <input id="adminNewsMediaTwoAlt" type="text" maxlength="240" placeholder="Descreva o que aparece na imagem" />
+                    </label>
+                    <label class="admin-news-field">
+                      Legenda
+                      <input id="adminNewsMediaTwoCaption" type="text" maxlength="320" placeholder="Explique por que esta imagem importa" />
+                    </label>
+                    <div class="admin-news-field-grid compact">
+                      <label>
+                        Crédito
+                        <input id="adminNewsMediaTwoCredit" type="text" maxlength="180" placeholder="Divulgação / Evento" />
+                      </label>
+                      <label>
+                        Após o parágrafo
+                        <input id="adminNewsMediaTwoParagraph" type="number" min="1" max="100" value="8" />
+                      </label>
+                    </div>
+                  </section>
+
+                  <section class="admin-news-media-item" aria-labelledby="adminNewsMediaThreeTitle">
+                    <header>
+                      <strong id="adminNewsMediaThreeTitle">Imagem interna 3</strong>
+                      <span>Infográfico, serviço ou linha do tempo</span>
+                    </header>
+                    <label class="admin-news-upload">
+                      <span>Escolher imagem</span>
+                      <input id="adminNewsMediaThreeFile" type="file" accept="image/jpeg,image/png,image/webp" />
+                    </label>
+                    <label class="admin-news-field">
+                      URL da imagem
+                      <input id="adminNewsMediaThreeUrl" type="url" placeholder="https://…" />
+                    </label>
+                    <label class="admin-news-field">
+                      Texto alternativo
+                      <input id="adminNewsMediaThreeAlt" type="text" maxlength="240" placeholder="Descreva o que aparece na imagem" />
+                    </label>
+                    <label class="admin-news-field">
+                      Legenda
+                      <input id="adminNewsMediaThreeCaption" type="text" maxlength="320" placeholder="Explique por que esta imagem importa" />
+                    </label>
+                    <div class="admin-news-field-grid compact">
+                      <label>
+                        Crédito
+                        <input id="adminNewsMediaThreeCredit" type="text" maxlength="180" placeholder="Arte: Sonic Search" />
+                      </label>
+                      <label>
+                        Após o parágrafo
+                        <input id="adminNewsMediaThreeParagraph" type="number" min="1" max="100" value="1" />
+                      </label>
+                    </div>
+                  </section>
+                </div>
+              </fieldset>
+
+              <fieldset class="admin-news-fieldset">
+                <legend>Serviço do evento</legend>
+                <div class="admin-news-field-grid">
+                  <label>
+                    Local
+                    <input id="adminNewsVenue" type="text" maxlength="180" placeholder="Naturaiz" />
+                  </label>
+                  <label>
+                    Data e horário
+                    <input id="adminNewsEventStartsAt" type="datetime-local" />
+                  </label>
+                  <label>
+                    Cidade
+                    <input id="adminNewsCity" type="text" maxlength="100" placeholder="Fortaleza" />
+                  </label>
+                  <label>
+                    Estado
+                    <input id="adminNewsState" type="text" maxlength="80" value="Ceará" />
+                  </label>
+                  <label>
+                    Ingressos
+                    <input id="adminNewsTicketUrl" type="url" placeholder="https://…" />
+                  </label>
+                  <label>
+                    Instagram oficial
+                    <input id="adminNewsInstagramUrl" type="url" placeholder="https://instagram.com/…" />
+                  </label>
+                  <label>
+                    Nome do botão do Instagram
+                    <input id="adminNewsInstagramLabel" type="text" maxlength="80" placeholder="Instagram FCME" />
+                  </label>
+                  <label>
+                    Valor
+                    <input id="adminNewsPrice" type="text" maxlength="160" placeholder="A partir de R$ …" />
+                  </label>
+                  <label>
+                    Classificação
+                    <input id="adminNewsAgeRating" type="text" maxlength="80" placeholder="18 anos" />
+                  </label>
+                </div>
+                <label class="admin-news-field">
+                  Endereço
+                  <input id="adminNewsAddress" type="text" maxlength="280" placeholder="Endereço completo e orientação de chegada" />
+                </label>
+                <label class="admin-news-field">
+                  Links adicionais <small>um por linha: Nome do evento — https://…</small>
+                  <textarea id="adminNewsRelatedLinks" rows="3" placeholder="Ingressos Naturaíz — https://…&#10;Ingressos Cosmic Crew — https://…"></textarea>
+                </label>
+              </fieldset>
+
+              <label class="admin-news-field">
+                Line-up <small>um artista por linha; use “Artista — 23h” se houver horário</small>
+                <textarea id="adminNewsLineup" rows="5" placeholder="Artista 1 — 22h&#10;Artista 2 — 00h&#10;Artista 3 — 02h"></textarea>
+              </label>
+
+              <label class="admin-news-field">
+                Texto da matéria
+                <textarea id="adminNewsBody" rows="14" maxlength="24000" placeholder="Conte a história em parágrafos. Uma linha em branco separa cada parágrafo."></textarea>
+                <small>Uma linha em branco separa parágrafos. Comece uma linha com “## ” para criar um intertítulo.</small>
+              </label>
+
+              <label class="admin-news-partnership">
+                <input id="adminNewsSponsored" type="checkbox" />
+                <span><strong>Conteúdo em parceria ou patrocinado</strong><small>Ative quando houver pagamento, permuta ou participação comercial.</small></span>
+              </label>
+              <label id="adminNewsDisclosureWrap" class="admin-news-field hidden">
+                Identificação da parceria
+                <input id="adminNewsDisclosure" type="text" maxlength="320" placeholder="Conteúdo em parceria com…" />
+              </label>
+
+              <div class="admin-news-actions">
+                <button id="adminNewsSaveDraftBtn" class="secondary" type="button">Salvar rascunho</button>
+                <button id="adminNewsPublishBtn" class="primary" type="submit">Publicar agora</button>
+                <button id="adminNewsArchiveBtn" class="admin-news-danger hidden" type="button">Arquivar</button>
+              </div>
+            </form>
+
+            <aside class="admin-news-preview-shell" aria-labelledby="adminNewsPreviewLabel">
+              <div class="admin-news-preview-bar">
+                <span id="adminNewsPreviewLabel">PRÉVIA NO APP</span>
+                <i aria-hidden="true"></i>
+              </div>
+              <article id="adminNewsPreview" class="sonic-editorial-card is-preview">
+                <div class="sonic-editorial-image-wrap">
+                  <img id="adminNewsPreviewImage" class="hidden" alt="" />
+                  <span id="adminNewsPreviewFallback">SS</span>
+                </div>
+                <div class="sonic-editorial-copy">
+                  <p><span id="adminNewsPreviewCategory">Agenda</span><b>JORNAL SONIC</b></p>
+                  <h5 id="adminNewsPreviewTitle">Sua próxima manchete começa aqui</h5>
+                  <span id="adminNewsPreviewExcerpt">Preencha o formulário para visualizar como a matéria aparecerá no Sonic Search.</span>
+                  <div id="adminNewsPreviewMeta" class="sonic-editorial-meta">Ceará · em breve</div>
+                </div>
+              </article>
+            </aside>
+          </div>
+
+          <div class="admin-news-library">
+            <header>
+              <div><span>ARQUIVO EDITORIAL</span><strong>Matérias salvas</strong></div>
+              <button id="adminNewsRefreshBtn" class="admin-compact-btn" type="button">Atualizar</button>
+            </header>
+            <div id="adminNewsList" class="admin-news-list"></div>
+          </div>
+        </section>
+
+        <div class="admin-kpi-grid" aria-label="Resumo de usuários e sessões">
+          <article class="admin-kpi-card is-primary">
+            <span id="adminKpiDayLabel" class="admin-kpi-label">Hoje</span>
+            <strong id="adminUsersDay">—</strong>
+            <small><span id="adminSessionsDay">—</span> <span id="adminSessionsDayLabel">sessões</span></small>
+          </article>
+          <article class="admin-kpi-card">
+            <span id="adminKpiWeekLabel" class="admin-kpi-label">7 dias</span>
+            <strong id="adminUsersWeek">—</strong>
+            <small><span id="adminSessionsWeek">—</span> <span id="adminSessionsWeekLabel">sessões</span></small>
+          </article>
+          <article class="admin-kpi-card">
+            <span id="adminKpiMonthLabel" class="admin-kpi-label">30 dias</span>
+            <strong id="adminUsersMonth">—</strong>
+            <small><span id="adminSessionsMonth">—</span> <span id="adminSessionsMonthLabel">sessões</span></small>
+          </article>
+          <article class="admin-kpi-card">
+            <span id="adminKpiAllLabel" class="admin-kpi-label">Desde o início</span>
+            <strong id="adminUsersAll">—</strong>
+            <small><span id="adminSessionsAll">—</span> <span id="adminSessionsAllLabel">sessões</span></small>
+          </article>
+        </div>
+
+        <div class="admin-analytics-main-grid">
+          <article class="admin-data-card admin-trend-card">
+            <div class="admin-card-heading">
+              <div>
+                <p id="adminTrendKicker">MOVIMENTO</p>
+                <h4 id="adminTrendTitle">Pessoas por dia</h4>
+              </div>
+              <span id="adminTrendPeak" class="admin-card-badge">Pico —</span>
+            </div>
+            <div class="admin-trend-wrap">
+              <svg id="adminTrendChart" class="admin-trend-chart" viewBox="0 0 640 190" role="img" aria-labelledby="adminTrendChartTitle adminTrendChartDesc">
+                <title id="adminTrendChartTitle">Pessoas aproximadas por dia nos últimos 30 dias</title>
+                <desc id="adminTrendChartDesc">Aguardando os dados.</desc>
+              </svg>
+            </div>
+            <div class="admin-trend-legend">
+              <span><i class="is-users" aria-hidden="true"></i><span id="adminTrendUsersLegend">pessoas aproximadas</span></span>
+              <span id="adminTrendUpdated">Ainda não atualizado</span>
+            </div>
+          </article>
+
+          <article class="admin-data-card admin-platform-card">
+            <div class="admin-card-heading">
+              <div>
+                <p id="adminPlatformKicker">PLATAFORMAS · 30 DIAS</p>
+                <h4 id="adminPlatformTitle">Onde estão usando</h4>
+              </div>
+            </div>
+            <div class="admin-platform-list">
+              <div class="admin-platform-row">
+                <div><span class="admin-platform-icon is-android" aria-hidden="true">A</span><strong>Android</strong></div>
+                <div class="admin-platform-meter"><span id="adminAndroidBar"></span></div>
+                <b id="adminAndroidUsers">—</b>
+              </div>
+              <div class="admin-platform-row">
+                <div><span class="admin-platform-icon is-ios" aria-hidden="true">i</span><strong>iOS</strong></div>
+                <div class="admin-platform-meter"><span id="adminIosBar"></span></div>
+                <b id="adminIosUsers">—</b>
+              </div>
+              <div class="admin-platform-row">
+                <div><span class="admin-platform-icon is-web" aria-hidden="true">W</span><strong>Web</strong></div>
+                <div class="admin-platform-meter"><span id="adminWebBar"></span></div>
+                <b id="adminWebUsers">—</b>
+              </div>
+            </div>
+            <p id="adminPlatformNote" class="admin-card-note">Android é estimado pelo app e pelo navegador do aparelho.</p>
+          </article>
+        </div>
+
+        <div class="admin-analytics-secondary-grid">
+          <article class="admin-data-card admin-retention-card">
+            <div class="admin-retention-orbit" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="49"></circle>
+                <circle id="adminRetentionRing" class="admin-retention-ring" cx="60" cy="60" r="49"></circle>
+              </svg>
+              <strong id="adminRetentionRate">—</strong>
+            </div>
+            <div>
+              <p id="adminRetentionKicker">RETORNO · 30 DIAS</p>
+              <h4 id="adminRetentionTitle">Quem voltou ao app</h4>
+              <p class="muted"><strong id="adminReturningUsers">—</strong> <span id="adminReturningUsersLabel">aparelhos retornaram após pelo menos 6 horas.</span></p>
+            </div>
+          </article>
+
+          <article class="admin-data-card admin-engagement-card">
+            <div class="admin-card-heading">
+              <div>
+                <p id="adminEngagementKicker">SINAIS · 30 DIAS</p>
+                <h4 id="adminEngagementTitle">Ações importantes</h4>
+              </div>
+            </div>
+            <div class="admin-signal-grid">
+              <div><span id="adminSignalReactionsLabel">3 reações</span><strong id="adminSignalReactions">—</strong></div>
+              <div><span id="adminSignalLikesLabel">artistas curtidos</span><strong id="adminSignalLikes">—</strong></div>
+              <div><span id="adminSignalDiscoveriesLabel">novos artistas</span><strong id="adminSignalDiscoveries">—</strong></div>
+              <div><span id="adminSignalSharesLabel">compartilhamentos</span><strong id="adminSignalShares">—</strong></div>
+            </div>
+          </article>
+        </div>
+
+        <section class="admin-operations-board" aria-labelledby="adminOperationsTitle">
+          <header class="admin-operations-heading">
+            <div>
+              <p id="adminOperationsKicker">OPERAÇÃO · 30 DIAS</p>
+              <h4 id="adminOperationsTitle">Do uso à ação</h4>
+              <p id="adminOperationsIntro" class="muted">Funil, qualidade musical e integrações em uma leitura operacional.</p>
+            </div>
+            <span id="adminMeasurementBadge" class="admin-measurement-badge">Medição verificando…</span>
+          </header>
+
+          <div class="admin-operations-grid">
+            <article class="admin-data-card admin-funnel-card">
+              <div class="admin-card-heading">
+                <div>
+                  <p id="adminFunnelKicker">FUNIL</p>
+                  <h4 id="adminFunnelTitle">Como as pessoas avançam</h4>
+                </div>
+              </div>
+              <div id="adminFunnelList" class="admin-funnel-list" aria-live="polite"></div>
+              <p id="adminFunnelNote" class="admin-card-note">Percentuais usam as pessoas que abriram o app como base.</p>
+            </article>
+
+            <article class="admin-data-card admin-quality-card">
+              <div class="admin-card-heading">
+                <div>
+                  <p id="adminQualityKicker">QUALIDADE MUSICAL</p>
+                  <h4 id="adminQualityTitle">Problemas sinalizados</h4>
+                </div>
+                <span id="adminIssueTotal" class="admin-card-badge">0 relatos</span>
+              </div>
+              <div class="admin-issue-grid">
+                <div><span id="adminIssuePreviewLabel">preview</span><strong id="adminIssuePreview">0</strong></div>
+                <div><span id="adminIssueStyleLabel">estilo</span><strong id="adminIssueStyle">0</strong></div>
+                <div><span id="adminIssueBpmLabel">BPM</span><strong id="adminIssueBpm">0</strong></div>
+                <div><span id="adminIssueImageLabel">imagem</span><strong id="adminIssueImage">0</strong></div>
+              </div>
+              <div id="adminIssueList" class="admin-issue-list"></div>
+            </article>
+
+            <article class="admin-data-card admin-health-card">
+              <div class="admin-card-heading">
+                <div>
+                  <p id="adminHealthKicker">SISTEMA</p>
+                  <h4 id="adminHealthTitle">Saúde das integrações</h4>
+                </div>
+                <button id="adminHealthRefreshBtn" class="admin-compact-btn" type="button">Verificar</button>
+              </div>
+              <p id="adminHealthStatus" class="admin-inline-status">Aguardando verificação.</p>
+              <div id="adminHealthGrid" class="admin-health-grid"></div>
+            </article>
+          </div>
+
+          <article class="admin-data-card admin-moderation-card">
+            <div class="admin-card-heading">
+              <div>
+                <p id="adminModerationKicker">COMUNIDADE</p>
+                <h4 id="adminModerationTitle">Moderação recente</h4>
+              </div>
+              <button id="adminModerationRefreshBtn" class="admin-compact-btn" type="button">Atualizar</button>
+            </div>
+            <p id="adminModerationStatus" class="admin-inline-status">Carregando publicações recentes…</p>
+            <div id="adminModerationList" class="admin-moderation-list"></div>
+          </article>
+        </section>
+
+        <aside class="admin-privacy-note">
+          <span aria-hidden="true">◎</span>
+          <div>
+            <strong id="adminPrivacyTitle">Como interpretar estes números</strong>
+            <p id="adminPrivacyText">“Pessoa” é uma aproximação por identificador anônimo salvo no aparelho ou navegador. Sessões são separadas após cerca de 30 minutos de inatividade. A mesma pessoa em dois aparelhos pode aparecer duas vezes. Nenhum nome ou e-mail de visitante é mostrado.</p>
+          </div>
+        </aside>
+      </section>
 
       <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
         <div class="swipe-start-head">
@@ -664,71 +1179,140 @@
         <div class="section-head dj-discovery-head">
           <div>
             <p id="djDiscoveryKicker" class="section-kicker">Radar de selectors</p>
-            <h3 id="djDiscoveryTitle">DJs para ouvir por set</h3>
-          </div>
-          <div class="dj-discovery-controls">
-            <label class="sr-only" for="djDiscoverySceneFilter">Cena</label>
-            <select id="djDiscoverySceneFilter" aria-label="Filtrar DJs por cena">
-              <option value="">Todos</option>
-              <option value="techno_live_dj">Techno / Live</option>
-              <option value="berlin_hypnotic_deep">Hypnotic / Deep Techno</option>
-              <option value="berlin_raw_hardgroove">Raw / Hardgroove</option>
-              <option value="berlin_industrial_ebm">Industrial / EBM</option>
-              <option value="berlin_acid_electro">Acid / Electro</option>
-              <option value="berlin_bass_electro">Bass / Broken Techno</option>
-              <option value="house_selectors">House / Selectors</option>
-              <option value="minimal_deep_selectors">Minimal / Deep Tech</option>
-              <option value="disco_italo_selectors">Disco / Italo</option>
-              <option value="hitech_psycore">Hi-Tech / Psycore</option>
-              <option value="global_psy">Psy global</option>
-              <option value="psy_festival_lineups">Psy sets</option>
-              <option value="global_club">Selectors globais</option>
-            </select>
-            <button id="djDiscoveryShuffleBtn" class="primary" type="button">Surpresa</button>
+            <h3 id="djDiscoveryTitle">Encontre o DJ certo para o momento</h3>
           </div>
         </div>
-        <div class="dj-discovery-grid">
-          <div class="dj-swipe-column">
-            <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
-              <span class="swipe-stamp swipe-stamp-like">Curti</span>
-              <span class="swipe-stamp swipe-stamp-pass">Não curti</span>
-              <p id="djSwipeKicker" class="swipe-kicker">Set recomendado</p>
-              <h4 id="djSwipeName">Abra um DJ</h4>
-              <p id="djSwipeMeta" class="muted">Seletores com set público, separados do catálogo de produtores.</p>
-              <div id="djSwipeContext" class="dj-context-list hidden" aria-label="Contexto do set recomendado"></div>
-              <div id="djSwipeBadges" class="swipe-status-badges" aria-label="Sinais do DJ"></div>
-              <p id="djSwipeReason" class="swipe-card-reason hidden"></p>
-              <div class="swipe-track-signals dj-swipe-signals">
-                <span id="djSwipeStyleChip" class="genre-signal">Cena</span>
-                <span id="djSwipeSetChip">Set</span>
-                <span id="djSwipeSourceChip">Fonte</span>
-              </div>
-              <a id="djSwipeSourceLink" class="dj-source-link" href="#" target="_blank" rel="noopener noreferrer">Abrir set</a>
-            </article>
-            <div class="swipe-actions dj-swipe-actions">
-              <button id="djSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Passo</button>
-              <button id="djSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
-            </div>
-            <p id="djSwipeStatus" class="muted swipe-hint">Curadoria por set público, separando DJs/selectors do catálogo de produtores.</p>
+
+        <div id="djIntentPanel" class="dj-intent-panel" aria-labelledby="djIntentTitle">
+          <div class="dj-intent-copy">
+            <p id="djIntentStep" class="dj-intent-step">ESCOLHA RÁPIDA · 3 FAMÍLIAS</p>
+            <h4 id="djIntentTitle" tabindex="-1">O que você quer ouvir agora?</h4>
+            <p id="djIntentHint" class="muted">Escolha uma família e, se quiser, uma vertente. O Sonic encontra um set disponível.</p>
+            <p id="djIntentAccuracy" class="dj-intent-accuracy">Subgêneros específicos só aparecem quando a classificação é confiável.</p>
           </div>
-          <aside class="dj-preview-panel" aria-labelledby="djPreviewTitle">
-            <div class="dj-preview-head">
+
+          <div id="djIntentFamilyOptions" class="dj-intent-family-grid" role="group" aria-label="Escolha uma direção musical">
+            <button class="dj-intent-family-btn" type="button" data-dj-intent-family="psy" aria-expanded="false" aria-controls="djIntentRefinement">
+              <span id="djIntentPsyKicker" class="dj-intent-family-kicker">TRANCE</span>
+              <strong id="djIntentPsyTitle">Psytrance</strong>
+              <small id="djIntentPsyHint">Progressive, Full‑On, Forest, Hi‑Tech, Psycore e mais</small>
+            </button>
+            <button class="dj-intent-family-btn" type="button" data-dj-intent-family="techno" aria-expanded="false" aria-controls="djIntentRefinement">
+              <span id="djIntentTechnoKicker" class="dj-intent-family-kicker">PISTA</span>
+              <strong id="djIntentTechnoTitle">Techno / House</strong>
+              <small id="djIntentTechnoHint">Do hipnótico ao hardgroove, house e minimal</small>
+            </button>
+            <button class="dj-intent-family-btn" type="button" data-dj-intent-family="other" aria-expanded="false" aria-controls="djIntentRefinement">
+              <span id="djIntentOtherKicker" class="dj-intent-family-kicker">FORA DO EIXO</span>
+              <strong id="djIntentOtherTitle">Outros</strong>
+              <small id="djIntentOtherHint">Disco, club, bass e seleções livres</small>
+            </button>
+          </div>
+
+          <div id="djIntentRefinement" class="dj-intent-refinement hidden" aria-labelledby="djIntentRefinementTitle" hidden>
+            <div class="dj-intent-refinement-head">
               <div>
-                <p id="djPreviewKicker" class="section-kicker">Preview do set</p>
-                <h4 id="djPreviewTitle">Player pronto</h4>
+                <p id="djIntentRefinementStep" class="dj-intent-step">SÓ MAIS UMA ESCOLHA</p>
+                <h5 id="djIntentRefinementTitle" tabindex="-1">Qual vertente combina com agora?</h5>
               </div>
-              <a id="djPreviewOpenLink" class="secondary dj-preview-open" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
+              <button id="djIntentBackBtn" class="dj-intent-back-btn" type="button">Voltar</button>
             </div>
-            <p id="djPreviewMeta" class="muted">O player aparece quando uma carta de DJ estiver ativa.</p>
-            <div id="djPreviewFrameWrap" class="dj-preview-frame-wrap">
-              <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-          </aside>
+            <div id="djIntentStyleOptions" class="dj-intent-style-grid" role="group" aria-label="Escolha uma vertente"></div>
+          </div>
+
+          <button id="djIntentSurpriseBtn" class="dj-intent-surprise-btn" type="button">
+            <span aria-hidden="true" class="dj-intent-surprise-mark"></span>
+            <span>
+              <strong id="djIntentSurpriseTitle">Me surpreenda</strong>
+              <small id="djIntentSurpriseHint">Escolha por mim entre todos os estilos</small>
+            </span>
+          </button>
+          <p id="djIntentStatus" class="dj-intent-status muted" role="status" aria-live="polite"></p>
         </div>
-        <div class="dj-radar-strip" aria-label="Resumo da curadoria de DJs">
-          <span id="djRadarCount">11 sets verificados</span>
-          <span id="djRadarLiked">0 curtidos</span>
-          <span id="djRadarScope">Hi-Tech, psy e selectors</span>
+
+        <div id="djDiscoveryResults" class="dj-discovery-results hidden" hidden>
+          <div class="dj-active-choice-bar">
+            <div>
+              <span id="djActiveChoiceKicker">OUVINDO AGORA</span>
+              <strong id="djActiveChoiceLabel">Me surpreenda</strong>
+            </div>
+            <button id="djChangeIntentBtn" type="button">Trocar estilo</button>
+          </div>
+
+          <div class="dj-discovery-controls">
+            <label id="djDiscoverySceneLabel" for="djDiscoverySceneFilter">Refinar a cena</label>
+            <select id="djDiscoverySceneFilter" aria-label="Refinar DJs por cena">
+              <option value="">Todos os estilos</option>
+              <optgroup data-dj-filter-group="psy" label="Psytrance">
+                <option value="psy_festival_lineups">Qualquer Psytrance</option>
+                <option value="psy_progressive_fullon">Progressive / Full-On</option>
+                <option value="psy_full_on_night">Full-On Night</option>
+                <option value="psy_forest_dark">Forest / Dark Psy</option>
+                <option value="psy_hi_tech">Hi-Tech</option>
+                <option value="psy_psycore">Psycore</option>
+                <option value="psy_goa_festival">Goa / Old School</option>
+              </optgroup>
+              <optgroup data-dj-filter-group="techno" label="Techno / House">
+                <option value="techno_live_dj">Qualquer Techno / House</option>
+                <option value="berlin_hypnotic_deep">Hypnotic / Deep Techno</option>
+                <option value="berlin_raw_hardgroove">Raw / Hardgroove</option>
+                <option value="berlin_industrial_ebm">Industrial / EBM</option>
+                <option value="berlin_acid_electro">Acid / Electro</option>
+                <option value="berlin_bass_electro">Bass / Broken Techno</option>
+                <option value="house_deep_minimal">House / Deep / Minimal</option>
+              </optgroup>
+              <optgroup data-dj-filter-group="other" label="Outros">
+                <option value="other_all">Todos os outros</option>
+                <option value="disco_italo_selectors">Disco / Italo</option>
+                <option value="global_club">Club / Bass / Global</option>
+              </optgroup>
+            </select>
+            <button id="djDiscoveryShuffleBtn" class="primary" type="button">Outro set</button>
+          </div>
+
+          <div class="dj-discovery-grid">
+            <section class="dj-preview-panel" aria-labelledby="djPreviewTitle">
+              <div class="dj-preview-head">
+                <div>
+                  <p id="djPreviewKicker" class="section-kicker">Preview do set</p>
+                  <h4 id="djPreviewTitle">Player pronto</h4>
+                </div>
+                <a id="djPreviewOpenLink" class="secondary dj-preview-open" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
+              </div>
+              <div id="djPreviewFrameWrap" class="dj-preview-frame-wrap">
+                <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+              <p id="djPreviewMeta" class="muted dj-preview-meta">O player aparece quando uma carta de DJ estiver ativa.</p>
+            </section>
+            <div class="dj-swipe-column">
+              <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
+                <span class="swipe-stamp swipe-stamp-like">Curti</span>
+                <span class="swipe-stamp swipe-stamp-pass">Não curti</span>
+                <p id="djSwipeKicker" class="swipe-kicker">Set recomendado</p>
+                <h4 id="djSwipeName">Abra um DJ</h4>
+                <p id="djSwipeMeta" class="muted">Seletores com set público, separados do catálogo de produtores.</p>
+                <div id="djSwipeContext" class="dj-context-list hidden" aria-label="Contexto do set recomendado"></div>
+                <div id="djSwipeBadges" class="swipe-status-badges" aria-label="Sinais do DJ"></div>
+                <p id="djSwipeReason" class="swipe-card-reason hidden"></p>
+                <div class="swipe-track-signals dj-swipe-signals">
+                  <span id="djSwipeStyleChip" class="genre-signal">Cena</span>
+                  <span id="djSwipeSetChip">Set</span>
+                  <span id="djSwipeSourceChip">Fonte</span>
+                </div>
+                <a id="djSwipeSourceLink" class="dj-source-link" href="#" target="_blank" rel="noopener noreferrer">Abrir set</a>
+              </article>
+              <div class="swipe-actions dj-swipe-actions">
+                <button id="djSwipePassBtn" class="swipe-action-btn pass" type="button" disabled>Passo</button>
+                <button id="djSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
+              </div>
+              <p id="djSwipeStatus" class="muted swipe-hint">Curadoria por set público, separando DJs/selectors do catálogo de produtores.</p>
+            </div>
+          </div>
+          <div class="dj-radar-strip" aria-label="Resumo da curadoria de DJs">
+            <span id="djRadarCount">Sets verificados</span>
+            <span id="djRadarLiked">0 curtidos</span>
+            <span id="djRadarScope">Techno, psy e selectors</span>
+          </div>
         </div>
       </section>
 
@@ -743,6 +1327,22 @@
         <p id="dailyNewsIntro" class="section-hint muted daily-news-intro">
           Atualizações do Brasil e do mundo com foco em cenas, artistas, festivais e pistas.
         </p>
+        <section class="sonic-editorial-section" aria-labelledby="sonicEditorialTitle">
+          <header class="sonic-editorial-heading">
+            <div>
+              <p>EDIÇÃO SEMANAL · CEARÁ E CENA ELETRÔNICA</p>
+              <h4 id="sonicEditorialTitle">Jornal Sonic</h4>
+            </div>
+            <span>Histórias, entrevistas e festas escolhidas pela redação.</span>
+          </header>
+          <div id="sonicEditorialStatus" class="sonic-editorial-status" role="status" aria-live="polite">Buscando a edição mais recente…</div>
+          <div id="sonicEditorialList" class="sonic-editorial-list"></div>
+        </section>
+
+        <div class="daily-news-divider">
+          <span>RADAR DE OUTRAS FONTES</span>
+          <i aria-hidden="true"></i>
+        </div>
         <div id="dailyNewsStatus" class="daily-news-status muted" aria-live="polite">Carregando notícias...</div>
         <div id="dailyNewsProgress" class="daily-news-progress" role="progressbar" aria-label="Atualizando notícias" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
           <span id="dailyNewsProgressFill" class="daily-news-progress-fill"></span>
@@ -758,6 +1358,35 @@
         </div>
       </section>
 
+      <dialog id="sonicNewsReader" class="sonic-news-reader" aria-labelledby="sonicNewsReaderTitle">
+        <div class="sonic-news-reader-sheet">
+          <button id="sonicNewsReaderClose" class="sonic-news-reader-close" type="button" aria-label="Fechar matéria">×</button>
+          <div id="sonicNewsReaderHero" class="sonic-news-reader-hero hidden">
+            <img id="sonicNewsReaderImage" alt="" />
+          </div>
+          <article class="sonic-news-reader-article">
+            <div class="sonic-news-reader-brand"><span id="sonicNewsReaderCategory">Jornal Sonic</span><b>SONIC SEARCH</b></div>
+            <p id="sonicNewsReaderDisclosure" class="sonic-news-reader-disclosure hidden"></p>
+            <h2 id="sonicNewsReaderTitle">Matéria</h2>
+            <p id="sonicNewsReaderExcerpt" class="sonic-news-reader-excerpt"></p>
+            <div id="sonicNewsReaderByline" class="sonic-news-reader-byline"></div>
+            <div id="sonicNewsReaderBody" class="sonic-news-reader-body"></div>
+            <section id="sonicNewsReaderLineupSection" class="sonic-news-reader-service hidden">
+              <span>LINE-UP</span>
+              <h3>Quem toca</h3>
+              <div id="sonicNewsReaderLineup" class="sonic-news-reader-lineup"></div>
+            </section>
+            <section id="sonicNewsReaderService" class="sonic-news-reader-service hidden">
+              <span>SERVIÇO</span>
+              <h3>Programe-se</h3>
+              <dl id="sonicNewsReaderServiceList"></dl>
+            </section>
+            <div id="sonicNewsReaderActions" class="sonic-news-reader-actions"></div>
+            <p id="sonicNewsReaderCredit" class="sonic-news-reader-credit"></p>
+          </article>
+        </div>
+      </dialog>
+
       <section id="communityPanel" class="panel community-panel app-tab-panel" data-app-tab="community" aria-labelledby="communityTitle">
         <div class="section-head community-head">
           <div>
@@ -767,6 +1396,17 @@
           </div>
           <button id="communityRefreshBtn" class="secondary" type="button">Atualizar</button>
         </div>
+        <article class="community-story-prompt" aria-labelledby="communityStoryTitle">
+          <div class="community-story-copy">
+            <p id="communityStoryKicker" class="community-story-kicker">Pergunta para a comunidade</p>
+            <h4 id="communityStoryTitle">Qual evento marcou você — pelo melhor ou pelo pior motivo?</h4>
+            <p id="communityStoryText">Conte como foi estar lá: o que surpreendeu, o que funcionou e o que poderia ter sido diferente. Experiências incríveis, frustrantes ou inesperadas são bem-vindas — aqui, todo relato tem espaço quando é compartilhado com respeito.</p>
+          </div>
+          <button id="communityStoryCta" class="community-story-cta" type="button">
+            <span>Compartilhar meu relato</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </article>
         <div id="communityTopicTabs" class="community-topic-tabs" role="tablist" aria-label="Filtrar comunidade">
           <button class="community-topic-tab active" type="button" data-community-filter="all" aria-pressed="true">Tudo</button>
           <button class="community-topic-tab" type="button" data-community-filter="track" aria-pressed="false">Faixas</button>
@@ -1113,6 +1753,7 @@
                 <option value="ragga_jungle">Ragga Jungle</option>
                 <option value="sambass">Sambass</option>
                 <option value="drumfunk">Drumfunk</option>
+                <option value="big_beat">Big Beat</option>
                 <option value="breakbeat">Breakbeat</option>
                 <option value="brazilian_funk">Brazilian Funk</option>
                 <option value="uk_garage">UK Garage</option>
@@ -1388,7 +2029,7 @@
                 id="soundcloudPreviewFrame"
                 class="soundcloud-preview-frame"
                 title="Preview SoundCloud"
-                loading="lazy"
+                loading="eager"
                 allow="autoplay"
               ></iframe>
             </div>
@@ -1397,7 +2038,7 @@
                 id="bandcampPreviewFrame"
                 class="bandcamp-preview-frame"
                 title="Preview Bandcamp"
-                loading="lazy"
+                loading="eager"
                 allow="autoplay"
               ></iframe>
             </div>
@@ -2342,6 +2983,8 @@
         betaAccessCodes: [],
         betaAccessApiEndpoint: "/api/beta-access",
         betaEventsEndpoint: "/api/beta-events",
+        adminAccessEndpoint: "/api/access-context",
+        adminAnalyticsEndpoint: "/api/admin-analytics",
         waitlistEmail: "pedropfpj@gmail.com"
       };
       window.SONIC_SEARCH_AI_CONFIG = {
@@ -2514,6 +3157,6 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.js?v=20260717autoplay2"></script>
+    <script defer src="app.min.js?v=20260724hybrid1"></script>
   </body>
 </html>
