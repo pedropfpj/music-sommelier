@@ -48,8 +48,8 @@ assert.match(
 );
 assert.match(
   appSource,
-  /function interactionFallbackTrackAllowed[\s\S]*?trackHasReadyPlaybackRoute\(track\)/,
-  "deadline-safe cards must already have an audio or embeddable playback route"
+  /function interactionFallbackTrackAllowed[\s\S]*?trackHasInstantPlaybackRoute\(track\)/,
+  "deadline-safe cards must already have a verified direct, browser-prewarmed, or embeddable playback route"
 );
 assert.match(
   appSource,
@@ -101,8 +101,8 @@ assert.ok(
 );
 assert.match(
   appSource,
-  /async function prewarmFriendlyOpeningTrack[\s\S]*?ensureOpeningRotationSlot\(\)[\s\S]*?pickInstantOpeningTrack\(\)[\s\S]*?prewarmPlaybackCandidates/,
-  "the exact opening candidate must resolve and preload its preview during onboarding"
+  /async function prewarmFriendlyOpeningTrack[\s\S]*?prewarmPlaybackCandidates[\s\S]*?ensureOpeningRotationSlot\(\)[\s\S]*?pickOpeningSurpriseTrack[\s\S]*?prewarmPlaybackCandidates/,
+  "friendly backups must start preloading immediately and the exact rotation candidate must follow during onboarding"
 );
 assert.match(
   appSource,
@@ -111,8 +111,58 @@ assert.match(
 );
 assert.match(
   renderPreviewSource,
-  /prewarmedSwipeTrackKeys\.has\(renderPreviewTrackKey\)[\s\S]*?trackPreview\.src = prewarmedPreview[\s\S]*?else if \(hasPreviewCandidates\)/,
-  "prewarmed previews must skip the redundant audio probe"
+  /prewarmedSwipeTrackKeys\.has\(renderPreviewTrackKey\)[\s\S]*?trackHasVerifiedImmediateAudioPreview\(track\)[\s\S]*?trustedImmediatePreview[\s\S]*?commitTrackPreviewSource\(track, playablePreview, renderToken\)[\s\S]*?else if \(hasPreviewCandidates\)/,
+  "browser-prewarmed and inventory-verified previews may skip the isolated audio probe"
+);
+assert.match(
+  appSource,
+  /function trackHasVerifiedImmediateAudioPreview[\s\S]*?track\?\.previewChecked[\s\S]*?!track\?\.previewMissing[\s\S]*?normalizePreviewUrl\(track\?\.previewUrl/,
+  "only explicitly checked, non-missing direct previews may use the instant inventory route"
+);
+assert.match(
+  renderPreviewSource,
+  /createTrackPreviewProbeElement\(\)[\s\S]*?pickPlayablePreviewSource\(previewProbe,[\s\S]*?resetTrackPreviewElement\(previewProbe\)/,
+  "candidate verification must use an isolated audio element instead of mutating the visible player"
+);
+assert.match(
+  appSource,
+  /function commitTrackPreviewSource[\s\S]*?previewTrackKey = trackKey[\s\S]*?previewRenderToken = String\(renderToken\)/,
+  "the visible player must be owned by the current card and render generation"
+);
+assert.match(
+  appSource,
+  /function renderedPreviewHasPlaybackRoute[\s\S]*?trackPreviewElementMatchesTrack\(track\)/,
+  "playback readiness must reject an audio source owned by another card"
+);
+assert.match(
+  appSource,
+  /async function generateRecommendationFromPrefs[\s\S]*?captureRecommendationSurfaceSnapshot\(\)[\s\S]*?finally[\s\S]*?restoreRecommendationSurfaceSnapshot\(previousSurfaceSnapshot\)/,
+  "failed recommendation generation must restore the previous playable card atomically"
+);
+assert.match(
+  appSource,
+  /function trackBlockedByKnownSignals[\s\S]*?anonymousTrackWasRecentlyExposed\(trackKey, 50\)/,
+  "anonymous visitors must not receive an exact track from their last 50 exposures"
+);
+assert.match(
+  appSource,
+  /function recommendationArtistBlockedForPresentation[\s\S]*?anonymousArtistWasRecentlyExposed\(candidateArtist, 8\)/,
+  "anonymous visitors must rotate away from recently exposed artists"
+);
+assert.match(
+  appSource,
+  /function tryPresentInteractionBudgetRecommendation[\s\S]*?requestedStyle[\s\S]*?selectableSwipeStyle\(track\.style[\s\S]*?!== requestedStyle[\s\S]*?return false/,
+  "the local fast path must preserve the exact manually selected subgenre"
+);
+assert.match(
+  appSource,
+  /function interactionFallbackTrackAllowed[\s\S]*?trackHasInstantPlaybackRoute\(track\)/,
+  "instant swaps must require a verified direct preview, browser-prewarmed preview, or embeddable player"
+);
+assert.match(
+  appSource,
+  /function reportDiscoveryInteractionLatency[\s\S]*?window\.__sonicDiscoveryTimings[\s\S]*?timings\.slice\(-80\)/,
+  "browser regression runs need a bounded timing buffer for card and playable latency"
 );
 assert.match(
   appSource,
@@ -128,7 +178,7 @@ assert.match(indexSource, /rel="preconnect" href="https:\/\/w\.soundcloud\.com"/
 assert.match(indexSource, /rel="preconnect" href="https:\/\/bandcamp\.com"/, "Bandcamp must be preconnected");
 assert.match(indexSource, /id="soundcloudPreviewFrame"[\s\S]*?loading="eager"/, "SoundCloud iframe must load eagerly once a card assigns its URL");
 assert.match(indexSource, /id="bandcampPreviewFrame"[\s\S]*?loading="eager"/, "Bandcamp iframe must load eagerly once a card assigns its URL");
-assert.match(indexSource, /app\.min\.js\?v=20260724hybrid8/, "HTML must cache-bust the optimized bundle");
+assert.match(indexSource, /app\.min\.js\?v=20260724preview9/, "HTML must cache-bust the optimized bundle");
 
 const rebuiltBundle = await minifyJavaScript(appSource, "app.js");
 assert.equal(shippedBundle, rebuiltBundle, "app.min.js is stale; run npm run web:build");

@@ -164,7 +164,8 @@ assert.match(
 const artistGuardContext = {
   RECENT_PRESENTED_ARTIST_LIMIT: 12,
   recentPresentedArtists: [],
-  currentRecommendation: null
+  currentRecommendation: null,
+  anonymousArtistWasRecentlyExposed: () => false
 };
 vm.runInNewContext(
   [
