@@ -3,6 +3,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -87,6 +88,11 @@ assert.match(
   /trackMatchesRequestedSubgenreEvidence\(track,\s*requestedPrefs\)[\s\S]*return false/,
   "Instant cards must reject unproven fine-subgenre classifications"
 );
+assert.match(
+  instantPresenter,
+  /recommendationArtistBlockedForPresentation\(track\)[\s\S]*return false/,
+  "The final instant-card gate must reject a recently presented artist"
+);
 
 const subgenreEvidenceGate = functionSource("trackMatchesRequestedSubgenreEvidence");
 assert.match(
@@ -129,6 +135,92 @@ assert.doesNotMatch(
   instantPrimaryPicker,
   /allowSeenTrack:\s*true/,
   "Other-track must not recycle a seen track when a subgenre is exhausted"
+);
+assert.doesNotMatch(
+  instantPrimaryPicker,
+  /allowSeenArtist:\s*true/,
+  "Other-track must never relax the artist-repeat guard"
+);
+assert.match(
+  instantPrimaryPicker,
+  /buildGlobalArtistExclusionSet\(sourceTrack\?\.artist[\s\S]*artistSetHasMatch\(blockedArtists,\s*track\.artist\)/,
+  "Other-track must exclude every artist already presented in the session"
+);
+
+const recentArtistGuard = functionSource("recommendationArtistBlockedForPresentation");
+assert.match(
+  recentArtistGuard,
+  /artistsShareIdentity\(currentTrack\.artist,\s*candidateArtist\)[\s\S]*artistWasRecentlyPresented\(candidateArtist\)/,
+  "Artist repeat protection must cover both the current card and the persisted recent window"
+);
+
+const playableReplacement = functionSource("pickPlayableReplacementForPrefs");
+assert.match(
+  playableReplacement,
+  /buildRecentArtistExclusionSet\(currentTrack\?\.artist[\s\S]*artistSetHasMatch\(hardRecentArtists,\s*track\.artist\)/,
+  "Preview recovery must not replace a failed track with another track by the same recent artist"
+);
+
+const artistGuardContext = {
+  RECENT_PRESENTED_ARTIST_LIMIT: 12,
+  recentPresentedArtists: [],
+  currentRecommendation: null
+};
+vm.runInNewContext(
+  [
+    "normalize",
+    "canonicalArtistIdentity",
+    "artistMatchKey",
+    "artistCreditComponents",
+    "artistMatchingKeys",
+    "addArtistKeysToSet",
+    "artistSetHasMatch",
+    "artistsShareIdentity",
+    "sanitizeRecentPresentedArtists",
+    "rememberRecentlyPresentedArtist",
+    "buildRecentArtistExclusionSet",
+    "artistWasRecentlyPresented",
+    "recommendationArtistBlockedForPresentation"
+  ].map(functionSource).join("\n") +
+    "; this.remember = rememberRecentlyPresentedArtist;" +
+    " this.blocked = recommendationArtistBlockedForPresentation;" +
+    " this.sameArtist = artistsShareIdentity;",
+  artistGuardContext
+);
+assert.equal(
+  artistGuardContext.sameArtist("Amelie Lens", "Amelie Lens x Farrago"),
+  true,
+  "A collaboration credit must still match the already presented lead artist"
+);
+artistGuardContext.remember("Amelie Lens");
+assert.equal(
+  artistGuardContext.blocked({ artist: "Amelie Lens", song: "Another Track" }),
+  true,
+  "A different track by Amelie Lens must be rejected inside the recent-artist window"
+);
+assert.equal(
+  artistGuardContext.blocked({ artist: "Charlotte de Witte", song: "Fresh Track" }),
+  false,
+  "A genuinely different artist must remain eligible"
+);
+[
+  "Charlotte de Witte",
+  "ANNA",
+  "Adam Beyer",
+  "Enrico Sangiuliano",
+  "FJAAK",
+  "Dax J",
+  "Paula Temple",
+  "Rene Wise",
+  "Regal",
+  "UMEK",
+  "Layton Giordani",
+  "Sama Abdulhadi"
+].forEach(artistGuardContext.remember);
+assert.equal(
+  artistGuardContext.blocked({ artist: "Amelie Lens", song: "Later Discovery" }),
+  false,
+  "An artist may return after twelve genuinely different artists, but never in a consecutive burst"
 );
 
 const knownSignalGate = functionSource("trackBlockedByKnownSignals");

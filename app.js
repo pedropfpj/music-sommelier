@@ -10139,6 +10139,7 @@ let knownArtistsMemory = new Set();
 let knownTrackTitlesMemory = new Set();
 let discoveredArtistsInApp = new Set();
 let seenArtistsMemory = new Set();
+let recentPresentedArtists = [];
 let seenTrackKeysMemory = new Set();
 let blockedArtistsMemory = new Set();
 let rejectedArtists = new Set();
@@ -10262,7 +10263,8 @@ const SWIPE_DISCOVERY_STYLE_DECK = [
 const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
-const RECOMMENDATION_MODEL_VERSION = "hybrid-hierarchical-v1";
+const RECENT_PRESENTED_ARTIST_LIMIT = 12;
+const RECOMMENDATION_MODEL_VERSION = "hybrid-hierarchical-v2-artist-diversity";
 const SWIPE_CROSS_FAMILY_EXPLORATION_MIN_SIGNALS = 6;
 const SWIPE_CROSS_FAMILY_EXPLORATION_STEP = 4;
 const SWIPE_CROSS_FAMILY_EXPLORATION_LIMIT = 4;
@@ -19589,6 +19591,18 @@ function artistMatchKey(nameLike = "") {
   return normalize(nameLike || "").replace(/\s+/g, " ").trim();
 }
 
+function artistCreditComponents(nameLike = "") {
+  const raw = String(nameLike || "")
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!raw) return [];
+  return raw
+    .split(/\s+(?:feat(?:uring)?\.?|ft\.?|x|vs\.?|with)\s+|[,;/]+/i)
+    .map((part) => canonicalArtistIdentity(part))
+    .filter((part) => part && part.length > 1);
+}
+
 function artistMatchingKeys(nameLike = "") {
   const keys = new Set();
   const normalized = normalize(nameLike || "").replace(/\s+/g, " ").trim();
@@ -19597,6 +19611,9 @@ function artistMatchingKeys(nameLike = "") {
   if (normalized) keys.add(normalized);
   if (canonical) keys.add(canonical);
   if (compact) keys.add(compact);
+  artistCreditComponents(nameLike).forEach((component) => {
+    if (component) keys.add(component);
+  });
   return keys;
 }
 
@@ -19624,6 +19641,55 @@ function artistSetHasMatch(setRef, nameLike = "") {
     if (setRef.has(key)) return true;
   }
   return false;
+}
+
+function artistsShareIdentity(firstArtist = "", secondArtist = "") {
+  const firstKeys = artistMatchingKeys(firstArtist);
+  if (!firstKeys.size) return false;
+  return artistSetHasMatch(firstKeys, secondArtist);
+}
+
+function sanitizeRecentPresentedArtists(values = []) {
+  const sanitized = [];
+  (Array.isArray(values) ? values : []).forEach((artistLike) => {
+    const artist = String(artistLike || "").trim();
+    if (!artist) return;
+    const duplicateIndex = sanitized.findIndex((knownArtist) => artistsShareIdentity(knownArtist, artist));
+    if (duplicateIndex >= 0) sanitized.splice(duplicateIndex, 1);
+    sanitized.push(artist);
+  });
+  return sanitized.slice(-RECENT_PRESENTED_ARTIST_LIMIT);
+}
+
+function rememberRecentlyPresentedArtist(artistName = "") {
+  recentPresentedArtists = sanitizeRecentPresentedArtists([
+    ...recentPresentedArtists,
+    artistName
+  ]);
+}
+
+function buildRecentArtistExclusionSet(extraArtists = [], windowSize = RECENT_PRESENTED_ARTIST_LIMIT) {
+  const excluded = new Set();
+  const safeWindow = Math.max(
+    1,
+    Math.min(RECENT_PRESENTED_ARTIST_LIMIT, Number(windowSize) || RECENT_PRESENTED_ARTIST_LIMIT)
+  );
+  recentPresentedArtists.slice(-safeWindow).forEach((artist) => addArtistKeysToSet(excluded, artist));
+  (Array.isArray(extraArtists) ? extraArtists : [extraArtists]).forEach((artist) => {
+    addArtistKeysToSet(excluded, artist);
+  });
+  return excluded;
+}
+
+function artistWasRecentlyPresented(artistName = "", windowSize = RECENT_PRESENTED_ARTIST_LIMIT) {
+  return artistSetHasMatch(buildRecentArtistExclusionSet([], windowSize), artistName);
+}
+
+function recommendationArtistBlockedForPresentation(track, currentTrack = currentRecommendation) {
+  const candidateArtist = String(track?.artist || "").trim();
+  if (!candidateArtist) return true;
+  if (currentTrack?.artist && artistsShareIdentity(currentTrack.artist, candidateArtist)) return true;
+  return artistWasRecentlyPresented(candidateArtist);
 }
 
 function isAmbiguousArtistImageName(nameLike = "") {
@@ -29708,6 +29774,7 @@ function resetSessionStateInMemory() {
   knownTrackTitlesMemory = new Set();
   discoveredArtistsInApp = new Set();
   seenArtistsMemory = new Set();
+  recentPresentedArtists = [];
   blockedArtistsMemory = new Set();
   rejectedArtists = new Set();
   recommendationMemory = new Set();
@@ -35999,14 +36066,13 @@ function hydrateSetFromStorage(setRef, values, maxEntries = PROGRESS_MAP_LIMIT) 
 }
 
 function registerDiscoveredArtist(artistName) {
-  const key = artistMatchKey(artistName || "");
-  if (!key) return;
-  discoveredArtistsInApp.add(key);
-  seenArtistsMemory.add(key);
+  if (!artistMatchKey(artistName || "")) return;
+  addArtistIdentityToSet(discoveredArtistsInApp, artistName);
+  addArtistKeysToSet(seenArtistsMemory, artistName);
 }
 
 function registerSeenArtist(artistName) {
-  addArtistIdentityToSet(seenArtistsMemory, artistName);
+  addArtistKeysToSet(seenArtistsMemory, artistName);
 }
 
 function saveProgress() {
@@ -36043,6 +36109,7 @@ function saveProgress() {
       blockedArtists: setValuesForStorage(blockedArtistsMemory),
       discoveredArtistsInApp: setValuesForStorage(discoveredArtistsInApp),
       seenArtistsMemory: setValuesForStorage(seenArtistsMemory),
+      recentPresentedArtists: recentPresentedArtists.slice(-RECENT_PRESENTED_ARTIST_LIMIT),
       seenTrackKeysMemory: setValuesForStorage(seenTrackKeysMemory),
       knownTrackTitlesMemory: setValuesForStorage(knownTrackTitlesMemory),
       trackRatings: mapEntriesForStorage(trackRatings),
@@ -36089,6 +36156,7 @@ function loadProgress() {
   blockedArtistsMemory = new Set();
   discoveredArtistsInApp = new Set();
   seenArtistsMemory = new Set();
+  recentPresentedArtists = [];
   seenTrackKeysMemory = new Set();
   knownTrackTitlesMemory = new Set();
   trackRatings = new Map();
@@ -36137,6 +36205,7 @@ function loadProgress() {
         hydrateSetFromStorage(blockedArtistsMemory, parsed?.blockedArtists);
         hydrateSetFromStorage(discoveredArtistsInApp, parsed?.discoveredArtistsInApp);
         hydrateSetFromStorage(seenArtistsMemory, parsed?.seenArtistsMemory);
+        recentPresentedArtists = sanitizeRecentPresentedArtists(parsed?.recentPresentedArtists);
         hydrateSetFromStorage(seenTrackKeysMemory, parsed?.seenTrackKeysMemory);
         hydrateSetFromStorage(knownTrackTitlesMemory, parsed?.knownTrackTitlesMemory);
         compactArtistIdentitySet(blockedArtistsMemory);
@@ -52686,6 +52755,7 @@ function scheduleSuggestionQueueRefresh(prefs = lastPrefs, anchorTrack = current
 function markRecommendationPresented(track) {
   if (!track) return;
   registerSeenArtist(track.artist);
+  rememberRecentlyPresentedArtist(track.artist);
   const normalizedTrackKey = recommendationTrackKey(track);
   const normalizedTrackTitle = normalizeTitle(track.song || "");
   if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
@@ -53759,6 +53829,7 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   }
   if (!trackMatchesRequestedSubgenreEvidence(track, requestedPrefs)) return false;
   if (trackBlockedByKnownSignals(track)) return false;
+  if (recommendationArtistBlockedForPresentation(track)) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const finalPrefs = normalizeRecommendationPrefs({
@@ -53875,19 +53946,18 @@ function pickInstantOpeningTrack() {
 function pickInstantPrimaryNextTrack(
   sourceTrack = currentRecommendation,
   requiredStyle = "",
-  { allowSeenArtist = false, allowSeenTrack = false } = {}
+  { allowSeenTrack = false } = {}
 ) {
   const sourceKey = recommendationTrackKey(sourceTrack);
-  const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
   const lockedStyle = selectableSwipeStyle(requiredStyle);
+  const blockedArtists = buildGlobalArtistExclusionSet(sourceTrack?.artist || "");
   const candidateAllowed = (track, {
-    allowSeenArtist: relaxSeenArtist = allowSeenArtist,
     allowSeenTrack: relaxSeenTrack = allowSeenTrack
   } = {}) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
-    if (!relaxSeenArtist && sourceArtistKey && artistMatchKey(track.artist || "") === sourceArtistKey) return false;
+    if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (lockedStyle && !trackMatchesRequestedSubgenreEvidence(track, { style: lockedStyle })) return false;
@@ -53927,15 +53997,6 @@ function pickInstantPrimaryNextTrack(
   const globalReadyCandidate = catalog.find(candidateAllowed);
   if (globalReadyCandidate) return globalReadyCandidate;
 
-  if (lockedStyle) {
-    const relaxedArtistCandidate = catalogTracksForStyle(lockedStyle).find((track) => (
-      candidateAllowed(track, {
-        allowSeenArtist: true,
-        allowSeenTrack: false
-      })
-    ));
-    if (relaxedArtistCandidate) return relaxedArtistCandidate;
-  }
   return null;
 }
 
@@ -54341,7 +54402,7 @@ function fastNegativeFeedbackScore(track, prefs, rejectedTrack) {
   if (rejectedTrack?.style && track.style !== rejectedTrack.style && !prefs?.style) {
     score += 0.9;
   }
-  if (artistMatchKey(track.artist) === artistMatchKey(rejectedTrack?.artist || "")) {
+  if (artistsShareIdentity(track.artist, rejectedTrack?.artist || "")) {
     score -= 12;
   }
   score += Math.random() * 0.08;
@@ -54386,6 +54447,7 @@ function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, 
 
 function presentFastNegativeFeedbackRecommendation({ track, prefs, message = "" } = {}) {
   if (!track || !prefs) return false;
+  if (recommendationArtistBlockedForPresentation(track)) return false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
   const finalPrefs = negativeFeedbackBasePrefs(prefs);
@@ -54546,7 +54608,7 @@ function interactionFallbackTrackAllowed(
   prefs,
   sourceTrack,
   avoidArtistName = "",
-  { allowSeen = false, allowMatureStyle = false } = {}
+  { allowSeen = false, allowMatureStyle = false, blockedArtists = new Set() } = {}
 ) {
   if (!track || !prefs || track === sourceTrack) return false;
   const trackKey = recommendationTrackKey(track);
@@ -54565,13 +54627,17 @@ function interactionFallbackTrackAllowed(
   if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
   const bpmValue = Number(track.bpmExact);
   if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
-  if (avoidArtistName && artistMatchKey(track.artist) === artistMatchKey(avoidArtistName)) return false;
+  if (artistSetHasMatch(blockedArtists, track.artist)) return false;
+  if (recommendationArtistBlockedForPresentation(track, sourceTrack)) return false;
   if (!allowSeen && trackBlockedByKnownSignals(track)) return false;
   return true;
 }
 
 function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRecommendation, avoidArtistName = "" } = {}) {
   const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  const blockedArtists = buildGlobalArtistExclusionSet(
+    [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
+  );
   const pools = [];
   if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
     pools.push(suggestionQueueTracks.slice(0, SUGGESTION_QUEUE_TARGET));
@@ -54593,7 +54659,10 @@ function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRe
           const key = recommendationTrackKey(track);
           if (!key || seenKeys.has(key)) continue;
           seenKeys.add(key);
-          if (!interactionFallbackTrackAllowed(track, normalizedPrefs, sourceTrack, avoidArtistName, { allowSeen })) continue;
+          if (!interactionFallbackTrackAllowed(track, normalizedPrefs, sourceTrack, avoidArtistName, {
+            allowSeen,
+            blockedArtists
+          })) continue;
           if (requireDirectAudio && !trackHasReliableAudioPreview(track)) continue;
           candidates.push(track);
           if (candidates.length >= INTERACTION_FALLBACK_POOL_LIMIT) break;
@@ -54622,7 +54691,8 @@ function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRe
         for (const track of catalog) {
           if (!interactionFallbackTrackAllowed(track, relaxedPrefs, sourceTrack, avoidArtistName, {
             allowSeen,
-            allowMatureStyle: true
+            allowMatureStyle: true,
+            blockedArtists
           })) continue;
           if (requireDirectAudio && !trackHasReliableAudioPreview(track)) continue;
           candidates.push(track);
@@ -61258,6 +61328,7 @@ async function pickPlayableReplacementForPrefs(
   prefs = normalizeRecommendationPrefs(prefs);
   const currentKey = recommendationTrackKey(currentTrack);
   const knownArtists = allowKnownFallback ? new Set() : excludedArtists;
+  const hardRecentArtists = buildRecentArtistExclusionSet(currentTrack?.artist || "");
   const trackAllowed = (track) =>
     !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles);
   const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
@@ -61270,6 +61341,7 @@ async function pickPlayableReplacementForPrefs(
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
     if (currentKey && recommendationTrackKey(track) === currentKey) return false;
     if (!trackAllowed(track)) return false;
+    if (artistSetHasMatch(hardRecentArtists, track.artist)) return false;
     if (!allowKnownFallback && artistSetHasMatch(knownArtists, track.artist)) return false;
     return true;
   });
@@ -61370,6 +61442,9 @@ async function generateRecommendationFromPrefs(
   } = {}
 ) {
   prefs = normalizeRecommendationPrefs(prefs);
+  const hardRecentArtistExclusions = buildRecentArtistExclusionSet(
+    currentRecommendation?.artist || ""
+  );
   recommendationBlockedByKnown = false;
   recommendationStyleFallbackInfo = null;
   recommendationBpmFallbackInfo = false;
@@ -61556,7 +61631,7 @@ async function generateRecommendationFromPrefs(
       servedTrackCycleByStyle.set(prefs.style, []);
       servedArtistCycleByStyle.set(prefs.style, []);
     }
-    const relaxedExcludedArtists = new Set([...rejectedArtists]);
+    const relaxedExcludedArtists = new Set([...rejectedArtists, ...hardRecentArtistExclusions]);
     if (avoidArtistName) addArtistKeysToSet(relaxedExcludedArtists, avoidArtistName);
     const candidate = pickRecommendation(
       prefs,
@@ -61597,6 +61672,7 @@ async function generateRecommendationFromPrefs(
         if (!isTrackEligibleForRecommendation(track)) return false;
         if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
         if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
+        if (artistSetHasMatch(hardRecentArtistExclusions, track.artist)) return false;
         if (!trackAllowedInSession(track)) return false;
         return true;
       });
@@ -61652,8 +61728,11 @@ async function generateRecommendationFromPrefs(
     };
     const pools = [
       exactPool.filter((track) => !artistSetHasMatch(sessionExcludedArtists, track.artist)),
-      exactPool.filter((track) => !avoidArtistKey || artistMatchKey(track.artist) !== avoidArtistKey),
-      exactPool
+      exactPool.filter(
+        (track) =>
+          !artistSetHasMatch(hardRecentArtistExclusions, track.artist) &&
+          (!avoidArtistKey || !artistsShareIdentity(track.artist, avoidArtistName))
+      )
     ];
     const candidate = pools.map((pool) => pickBest(pool)).find(Boolean);
     if (!candidate) return false;
@@ -61991,6 +62070,12 @@ async function generateRecommendationFromPrefs(
     currentDiscovery = null;
     return false;
   }
+  if (artistSetHasMatch(hardRecentArtistExclusions, currentRecommendation.artist)) {
+    markRecommendationBlockedByKnown();
+    currentRecommendation = null;
+    currentDiscovery = null;
+    return false;
+  }
 
   let recommendationSnapshot = currentRecommendation;
   let discoverySnapshot = discoveryModeEl.checked
@@ -62167,6 +62252,10 @@ async function activateSuggestionQueueIndex(index) {
   if (!Number.isFinite(safeIndex) || safeIndex < 0 || safeIndex > 2) return false;
   const selectedTrack = suggestionQueueTracks[safeIndex];
   if (!selectedTrack) return false;
+  if (recommendationArtistBlockedForPresentation(selectedTrack)) {
+    refreshSuggestionQueue(lastPrefs, currentRecommendation);
+    return false;
+  }
   if (!isTrackEligibleForRecommendation(selectedTrack)) {
     refreshSuggestionQueue(lastPrefs, currentRecommendation);
     return false;
@@ -62739,6 +62828,12 @@ async function runSurpriseRecommendation({
       if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
       showToast(recommendationFailureMessage());
       if (resultPanel) resultPanel.classList.add("hidden");
+      return false;
+    }
+    if (recommendationArtistBlockedForPresentation(surpriseTrack, previousTrack)) {
+      playUiSfx("notice");
+      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
+      showToast(recommendationFailureMessage());
       return false;
     }
 
