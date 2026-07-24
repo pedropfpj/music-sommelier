@@ -10212,6 +10212,7 @@ let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
 const prewarmedSwipeAudioByTrack = new Map();
 const prewarmedSwipeTrackKeys = new Set();
+const FAST_PREWARM_AUDIO_CACHE_LIMIT = 8;
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
 let curationUserSeed = "";
@@ -52632,7 +52633,7 @@ function prewarmPlaybackCandidates(candidates = []) {
       audio.src = previewUrl;
       audio.load();
       prewarmedSwipeAudioByTrack.set(trackKey, audio);
-      while (prewarmedSwipeAudioByTrack.size > 4) {
+      while (prewarmedSwipeAudioByTrack.size > FAST_PREWARM_AUDIO_CACHE_LIMIT) {
         const oldestKey = prewarmedSwipeAudioByTrack.keys().next().value;
         const oldestAudio = prewarmedSwipeAudioByTrack.get(oldestKey);
         try {

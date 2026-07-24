@@ -116,6 +116,11 @@ assert.match(
 );
 assert.match(
   appSource,
+  /const FAST_PREWARM_AUDIO_CACHE_LIMIT = 8;[\s\S]*?prewarmedSwipeAudioByTrack\.size > FAST_PREWARM_AUDIO_CACHE_LIMIT/,
+  "opening and next-card previews must coexist in the bounded prewarm cache"
+);
+assert.match(
+  appSource,
   /bind\(audioToggleBtn,[\s\S]*?resumeCurrentPreviewFromUserGesture\(\)/,
   "the explicit sound-unlock tap must immediately retry the current player"
 );
@@ -123,7 +128,7 @@ assert.match(indexSource, /rel="preconnect" href="https:\/\/w\.soundcloud\.com"/
 assert.match(indexSource, /rel="preconnect" href="https:\/\/bandcamp\.com"/, "Bandcamp must be preconnected");
 assert.match(indexSource, /id="soundcloudPreviewFrame"[\s\S]*?loading="eager"/, "SoundCloud iframe must load eagerly once a card assigns its URL");
 assert.match(indexSource, /id="bandcampPreviewFrame"[\s\S]*?loading="eager"/, "Bandcamp iframe must load eagerly once a card assigns its URL");
-assert.match(indexSource, /app\.min\.js\?v=20260724hybrid7/, "HTML must cache-bust the optimized bundle");
+assert.match(indexSource, /app\.min\.js\?v=20260724hybrid8/, "HTML must cache-bust the optimized bundle");
 
 const rebuiltBundle = await minifyJavaScript(appSource, "app.js");
 assert.equal(shippedBundle, rebuiltBundle, "app.min.js is stale; run npm run web:build");
