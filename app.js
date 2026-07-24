@@ -54105,6 +54105,14 @@ async function runPrimaryRecommendationAction({ source = "manual", initialRunner
     swipeUserAnchoredStyle = manualPrefs.style || "";
   }
   if (!firstRecommendationCompleted && !currentRecommendation) {
+    if (tryRunInstantPrimaryRecommendation()) {
+      firstRecommendationCompleted = true;
+      firstRecommendationRetryAvailable = false;
+      trackFirstRecommendationEvent("first_recommendation_ready", source, {
+        catalogState: "instant_local"
+      });
+      return true;
+    }
     const requestSource = firstRecommendationRetryAvailable ? "retry" : source;
     return runInitialRecommendation({ source: requestSource, initialRunner });
   }

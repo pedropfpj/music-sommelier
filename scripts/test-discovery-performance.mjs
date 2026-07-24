@@ -77,6 +77,11 @@ assert.match(
 );
 assert.match(
   appSource,
+  /async function runPrimaryRecommendationAction[\s\S]*?!firstRecommendationCompleted && !currentRecommendation[\s\S]*?tryRunInstantPrimaryRecommendation\(\)[\s\S]*?catalogState: "instant_local"/,
+  "the first anonymous card must use the playable local fast path before full catalog hydration"
+);
+assert.match(
+  appSource,
   /bind\(audioToggleBtn,[\s\S]*?resumeCurrentPreviewFromUserGesture\(\)/,
   "the explicit sound-unlock tap must immediately retry the current player"
 );
@@ -84,7 +89,7 @@ assert.match(indexSource, /rel="preconnect" href="https:\/\/w\.soundcloud\.com"/
 assert.match(indexSource, /rel="preconnect" href="https:\/\/bandcamp\.com"/, "Bandcamp must be preconnected");
 assert.match(indexSource, /id="soundcloudPreviewFrame"[\s\S]*?loading="eager"/, "SoundCloud iframe must load eagerly once a card assigns its URL");
 assert.match(indexSource, /id="bandcampPreviewFrame"[\s\S]*?loading="eager"/, "Bandcamp iframe must load eagerly once a card assigns its URL");
-assert.match(indexSource, /app\.min\.js\?v=20260724hybrid1/, "HTML must cache-bust the optimized bundle");
+assert.match(indexSource, /app\.min\.js\?v=20260724hybrid2/, "HTML must cache-bust the optimized bundle");
 
 const rebuiltBundle = await minifyJavaScript(appSource, "app.js");
 assert.equal(shippedBundle, rebuiltBundle, "app.min.js is stale; run npm run web:build");
