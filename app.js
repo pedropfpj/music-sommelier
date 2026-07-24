@@ -55273,12 +55273,22 @@ async function renderPreview(track, options = {}) {
   let youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
 
   const hasExternalPlaybackRoute = trackHasExternalPlayableFallback(track);
-  const hasPreviewCandidates = previewCandidatesForTrack(track).length > 0;
+  const directPreviewCandidates = previewCandidatesForTrack(track);
+  const hasPreviewCandidates = directPreviewCandidates.length > 0;
+  const prewarmedPreview = prewarmedSwipeTrackKeys.has(renderPreviewTrackKey)
+    ? directPreviewCandidates[0] || ""
+    : "";
   // Do not cross an async boundary before creating a verified external player.
   // Safari preserves autoplay permission only within the initiating tap.
-  let playablePreview = hasPreviewCandidates
-    ? await resolvePlayablePreview(false)
-    : "";
+  let playablePreview = "";
+  if (prewarmedPreview) {
+    resetTrackPreviewElement(trackPreview);
+    trackPreview.src = prewarmedPreview;
+    trackPreview.load();
+    playablePreview = prewarmedPreview;
+  } else if (hasPreviewCandidates) {
+    playablePreview = await resolvePlayablePreview(false);
+  }
   if (!isStillCurrentPreviewTrack()) return false;
   let artistPreviewFallback = null;
   if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
