@@ -53752,6 +53752,10 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   currentRecommendation = track;
   currentDiscovery = null;
   renderRecommendation(track, finalPrefs);
+  // Start the player in the same interaction task as the card paint. History,
+  // analytics, discovery copy, and queue preparation must not delay autoplay.
+  void renderPreview(track, { fast: true })
+    .catch(() => null);
   const discoveryTrackKey = recommendationTrackKey(track);
   window.setTimeout(() => {
     if (recommendationTrackKey(currentRecommendation) !== discoveryTrackKey) return;
@@ -53785,8 +53789,6 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
     : message;
   if (feedbackMessage && deckMessage) feedbackMessage.textContent = deckMessage;
   savePreferences();
-  void renderPreview(track, { fast: true })
-    .catch(() => null);
   return true;
 }
 
