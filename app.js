@@ -54785,6 +54785,25 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     return true;
   }
   const hasExplicitSwipeAnchor = Boolean(explicitSwipeAnchorStyle());
+  if (!hasExplicitSwipeAnchor) {
+    const globalInstantTrack = pickInstantPrimaryNextTrack(likedTrack);
+    if (globalInstantTrack) {
+      const globalInstantPrefs = normalizeRecommendationPrefs({
+        style: selectableSwipeStyle(globalInstantTrack.style || ""),
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      });
+      if (presentInstantSwipeRecommendation({
+        track: globalInstantTrack,
+        prefs: globalInstantPrefs,
+        message
+      })) {
+        return true;
+      }
+    }
+  }
   const shouldExploreAcrossStyles = discoveryModeEl?.checked !== false && !hasExplicitSwipeAnchor;
   const adaptiveResult = shouldExploreAcrossStyles
     ? await generateAdaptiveSwipeNext({

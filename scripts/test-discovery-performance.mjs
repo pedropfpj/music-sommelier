@@ -85,6 +85,11 @@ assert.match(
   /function pickInstantSwipeTrack[\s\S]*?buildFastSwipeStylePlan[\s\S]*?rotatedFastFeedbackPool\(basePool, FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT\)/,
   "like and dislike must use the bounded hierarchical plan before any full-catalog scoring"
 );
+assert.match(
+  appSource,
+  /async function advanceAfterSwipeFeedback[\s\S]*?tryPresentInteractionBudgetRecommendation[\s\S]*?!hasExplicitSwipeAnchor[\s\S]*?pickInstantPrimaryNextTrack\(likedTrack\)[\s\S]*?presentInstantSwipeRecommendation[\s\S]*?generateAdaptiveSwipeNext/,
+  "unfiltered feedback must use a global local-playable fallback before asynchronous generation"
+);
 const instantPresentationSource = appSource.slice(
   appSource.indexOf("function presentInstantSwipeRecommendation"),
   appSource.indexOf("function pickInstantOpeningTrack")
@@ -118,7 +123,7 @@ assert.match(indexSource, /rel="preconnect" href="https:\/\/w\.soundcloud\.com"/
 assert.match(indexSource, /rel="preconnect" href="https:\/\/bandcamp\.com"/, "Bandcamp must be preconnected");
 assert.match(indexSource, /id="soundcloudPreviewFrame"[\s\S]*?loading="eager"/, "SoundCloud iframe must load eagerly once a card assigns its URL");
 assert.match(indexSource, /id="bandcampPreviewFrame"[\s\S]*?loading="eager"/, "Bandcamp iframe must load eagerly once a card assigns its URL");
-assert.match(indexSource, /app\.min\.js\?v=20260724hybrid6/, "HTML must cache-bust the optimized bundle");
+assert.match(indexSource, /app\.min\.js\?v=20260724hybrid7/, "HTML must cache-bust the optimized bundle");
 
 const rebuiltBundle = await minifyJavaScript(appSource, "app.js");
 assert.equal(shippedBundle, rebuiltBundle, "app.min.js is stale; run npm run web:build");
