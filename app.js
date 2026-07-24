@@ -9866,6 +9866,10 @@ let rejectedArtists = new Set();
 let dynamicCatalogByStyle = new Map();
 let catalogIndexLength = -1;
 let catalogTracksByStyle = new Map();
+let fastPlayableStarterTracks = [];
+let fastPlayableStarterTrackKeys = new Set();
+let discoveryPlayableInventoryTrackKeys = new Set();
+let fastPrimaryTracksByStyle = new Map();
 let recommendationMemory = new Set();
 let recentTrackHistoryByStyle = new Map();
 let recommendationMemoryQueue = [];
@@ -17846,7 +17850,38 @@ function hydrateFastPlayableStarters() {
     if (added) hydrated += 1;
   });
 
+  fastPlayableStarterTrackKeys = new Set(
+    FAST_PLAYABLE_STARTERS.map((starter) => normalize(`${starter.artist}::${starter.song}`))
+  );
+  fastPlayableStarterTracks = catalog.filter((track) =>
+    fastPlayableStarterTrackKeys.has(recommendationTrackKey(track))
+  );
+  rebuildFastPrimaryTrackIndex();
   return hydrated;
+}
+
+function rebuildFastPrimaryTrackIndex() {
+  const nextIndex = new Map();
+  catalog.forEach((track) => {
+    const trackKey = recommendationTrackKey(track);
+    if (
+      !trackKey ||
+      (
+        !fastPlayableStarterTrackKeys.has(trackKey) &&
+        !discoveryPlayableInventoryTrackKeys.has(trackKey)
+      )
+    ) return;
+    const style = selectableSwipeStyle(track?.style || "");
+    if (!style) return;
+    const tracks = nextIndex.get(style) || [];
+    tracks.push(track);
+    nextIndex.set(style, tracks);
+  });
+  fastPrimaryTracksByStyle = nextIndex;
+  fastPlayableStarterTracks = catalog.filter((track) =>
+    fastPlayableStarterTrackKeys.has(recommendationTrackKey(track))
+  );
+  return fastPrimaryTracksByStyle;
 }
 
 async function hydrateDiscoveryPlayableInventory() {
@@ -17873,6 +17908,7 @@ async function hydrateDiscoveryPlayableInventory() {
       const rawBpm = Number(row.bpmExact) || 0;
       const verifiedBpm = rawBpm && bpmFitsStyle(style, rawBpm) ? rawBpm : 0;
       const trackKey = normalize(`${artist}::${song}`);
+      discoveryPlayableInventoryTrackKeys.add(trackKey);
       const existing = catalog.find((track) => recommendationTrackKey(track) === trackKey);
       if (existing) {
         const previewUrl = normalizePreviewUrl(row.previewUrl || "");
@@ -17918,6 +17954,7 @@ async function hydrateDiscoveryPlayableInventory() {
       catalogIndexLength = -1;
       catalogTracksByStyle = new Map();
     }
+    rebuildFastPrimaryTrackIndex();
     discoveryPlayableInventoryReady = true;
     return {
       imported,
@@ -19005,7 +19042,44 @@ function resetTrackPreviewElement(audioEl) {
     delete audioEl.dataset.previewTrackKey;
   } catch (_err) {
     // ignore preview reset failures
+  } finally {
+    delete audioEl.dataset.previewTrackKey;
+    delete audioEl.dataset.previewRenderToken;
   }
+}
+
+function createTrackPreviewProbeElement() {
+  const probe = document.createElement("audio");
+  probe.preload = "metadata";
+  probe.muted = true;
+  probe.setAttribute("playsinline", "");
+  probe.setAttribute("aria-hidden", "true");
+  return probe;
+}
+
+function commitTrackPreviewSource(track, previewUrl = "", renderToken = 0) {
+  if (!trackPreview || !track || !previewUrl) return false;
+  const trackKey = recommendationTrackKey(track);
+  if (
+    !trackKey ||
+    renderToken !== recommendationPreviewRenderToken ||
+    recommendationTrackKey(currentRecommendation) !== trackKey
+  ) {
+    return false;
+  }
+  resetTrackPreviewElement(trackPreview);
+  trackPreview.dataset.previewTrackKey = trackKey;
+  trackPreview.dataset.previewRenderToken = String(renderToken);
+  trackPreview.src = previewUrl;
+  trackPreview.load();
+  return true;
+}
+
+function trackPreviewElementMatchesTrack(track = currentRecommendation) {
+  if (!trackPreview || !track) return false;
+  const trackKey = recommendationTrackKey(track);
+  const ownerKey = normalize(trackPreview.dataset.previewTrackKey || "");
+  return Boolean(trackKey && ownerKey && ownerKey === trackKey);
 }
 
 function probeAudioSource(audioEl, previewUrl, timeoutMs = PREVIEW_PROBE_TIMEOUT_MS) {
@@ -30929,6 +31003,8 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
   ).trim();
   if (!previewSource) return { ok: false, reason: "missing_source" };
 
+  const playbackTrackKey = recommendationTrackKey(currentRecommendation);
+  const playbackRenderToken = recommendationPreviewRenderToken;
   // Preserve the source that was just validated. Removing and reloading it
   // inside the same click can abort the media play request on Chromium/Opera.
   const generation = stopAllActivePlayback({
@@ -30940,6 +31016,10 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
     if (!loadedSource || loadedSource !== normalizePreviewUrl(previewSource)) {
       audioEl.src = previewSource;
       audioEl.load();
+    }
+    if (audioEl === trackPreview && playbackTrackKey) {
+      audioEl.dataset.previewTrackKey = playbackTrackKey;
+      audioEl.dataset.previewRenderToken = String(playbackRenderToken);
     }
     audioEl.currentTime = 0;
   } catch (_err) {
@@ -30976,6 +31056,10 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
       clearActivePlayback(generation);
       try {
         audioEl.src = previewSource;
+        if (audioEl === trackPreview && playbackTrackKey) {
+          audioEl.dataset.previewTrackKey = playbackTrackKey;
+          audioEl.dataset.previewRenderToken = String(playbackRenderToken);
+        }
         audioEl.load();
       } catch (_err) {}
     }
@@ -37775,6 +37859,7 @@ function trackBlockedByKnownSignals(track, excludedTrackKeys = new Set(), exclud
   const trackKey = recommendationTrackKey(track);
   const trackTitle = normalizeTitle(track.song || "");
   if (trackKey && seenTrackKeysMemory.has(trackKey)) return true;
+  if (trackKey && anonymousTrackWasRecentlyExposed(trackKey, 50)) return true;
   if (trackTitle && knownTrackTitlesMemory.has(trackTitle)) return true;
   if (trackKey && excludedTrackKeys.has(trackKey)) return true;
   return trackMatchesKnownTitle(track, excludedTrackTitles);
@@ -37793,6 +37878,9 @@ function buildGlobalArtistExclusionSet(extraArtists = []) {
   addAll(collectSuppressedArtistsFromAdaptiveModel());
   addAll(discoveredArtistsInApp);
   addAll(seenArtistsMemory);
+  if (anonymousDiscoverySession()) {
+    addAll(readAnonymousExposureLedger().artists.slice(-8).map((entry) => entry?.artistKey || ""));
+  }
   addAll(Array.isArray(extraArtists) ? extraArtists : [extraArtists]);
   return union;
 }
@@ -48833,6 +48921,28 @@ function anonymousExposurePenalty(track) {
   return penalty + globalExposurePenalty(track);
 }
 
+function anonymousTrackWasRecentlyExposed(trackLike = "", windowSize = 50) {
+  if (!anonymousDiscoverySession()) return false;
+  const trackKey = typeof trackLike === "string"
+    ? normalize(trackLike)
+    : recommendationTrackKey(trackLike);
+  if (!trackKey) return false;
+  const safeWindow = Math.max(1, Math.min(50, Number(windowSize) || 50));
+  return readAnonymousExposureLedger().tracks
+    .slice(-safeWindow)
+    .some((entry) => normalize(entry?.trackKey || "") === trackKey);
+}
+
+function anonymousArtistWasRecentlyExposed(artistLike = "", windowSize = 8) {
+  if (!anonymousDiscoverySession()) return false;
+  const artistKey = artistMatchKey(artistLike || "");
+  if (!artistKey) return false;
+  const safeWindow = Math.max(1, Math.min(20, Number(windowSize) || 8));
+  return readAnonymousExposureLedger().artists
+    .slice(-safeWindow)
+    .some((entry) => String(entry?.artistKey || "") === artistKey);
+}
+
 function discoveryExposureCandidatePayload(tracks = []) {
   const trackKeys = [];
   const artistKeys = [];
@@ -52116,6 +52226,73 @@ function presentInstantSwipeRecommendation({ track, prefs, plan = null, message 
   return true;
 }
 
+function pickFastPlayableOpeningTrack({
+  requestedStyle = "",
+  styles = [],
+  userSeed = "",
+  visitId = ""
+} = {}) {
+  if (!fastPlayableStarterTracks.length) return null;
+  const allowedStyles = new Set((styles || []).filter(Boolean));
+  const blockedArtists = buildGlobalArtistExclusionSet();
+  const ledger = anonymousDiscoverySession()
+    ? readAnonymousExposureLedger()
+    : emptyAnonymousExposureLedger();
+  const recentTrackKeys = new Set(
+    ledger.tracks.slice(-50).map((entry) => normalize(entry?.trackKey || "")).filter(Boolean)
+  );
+  const recentArtistKeys = new Set(
+    ledger.artists.slice(-8).map((entry) => String(entry?.artistKey || "")).filter(Boolean)
+  );
+  const entries = [];
+
+  fastPlayableStarterTracks.forEach((track) => {
+    const style = selectableSwipeStyle(track?.style || "");
+    const trackKey = recommendationTrackKey(track);
+    const artistKey = artistMatchKey(track?.artist || "");
+    if (!style || !trackKey || !artistKey || !allowedStyles.has(style)) return;
+    if (requestedStyle && style !== requestedStyle) return;
+    if (!trackHasVerifiedPlaybackRoute(track)) return;
+    if (recommendationMemory.has(trackKey) || seenTrackKeysMemory.has(trackKey) || recentTrackKeys.has(trackKey)) return;
+    if (artistSetHasMatch(blockedArtists, track.artist) || recentArtistKeys.has(artistKey)) return;
+
+    const sessionNoise = hashUnit(
+      `${userSeed}::${visitId}::${curationOpenSeed}::fast-opening::${style}::${trackKey}`
+    ) - 0.5;
+    const score =
+      openingDiscoveryRampScore(style) * 0.34 +
+      styleDiscoveryReadinessScore(style) * 0.68 +
+      sessionNoise * 12.4 +
+      2.4 -
+      Number(swipeStyleExposureCounts.get(style) || 0) * 1.8 -
+      globalExposurePenalty(track) * 0.08;
+    entries.push({ track, score });
+  });
+
+  if (!entries.length) return null;
+  entries.sort((left, right) => right.score - left.score);
+  const bestScore = entries[0].score;
+  const selectionPool = entries
+    .filter((entry) => entry.score >= bestScore - 10)
+    .slice(0, Math.min(12, entries.length));
+  if (selectionPool.length === 1) return selectionPool[0].track;
+
+  const minScore = Math.min(...selectionPool.map((entry) => entry.score));
+  const weighted = selectionPool.map((entry) => ({
+    track: entry.track,
+    weight: Math.max(0.2, entry.score - minScore + 0.8)
+  }));
+  const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let cursor = hashUnit(
+    `${userSeed}::${visitId}::${curationOpenSeed}::fast-opening-choice`
+  ) * totalWeight;
+  for (const item of weighted) {
+    cursor -= item.weight;
+    if (cursor <= 0) return item.track;
+  }
+  return weighted[0].track;
+}
+
 function pickInstantOpeningTrack(options = null) {
   const requireVerified = options?.requireVerified !== false;
   const requestedStyle = selectableSwipeStyle(options?.style || "");
@@ -52130,6 +52307,27 @@ function pickInstantOpeningTrack(options = null) {
     .filter((style) => requestedStyle || guidedOpening || !shouldDeferStyleForTasteMaturity(style, {}));
   const userSeed = currentCurationUserSeed();
   const visitId = currentCurationVisitId();
+  const fastTrack = requireVerified
+    ? pickFastPlayableOpeningTrack({
+        requestedStyle,
+        styles,
+        userSeed,
+        visitId
+      })
+    : null;
+  if (fastTrack) {
+    return {
+      track: fastTrack,
+      prefs: normalizeRecommendationPrefs({
+        style: selectableSwipeStyle(fastTrack.style || ""),
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      }),
+      score: Number.POSITIVE_INFINITY
+    };
+  }
   const entries = [];
 
   styles.forEach((style) => {
@@ -52198,6 +52396,64 @@ function pickInstantOpeningTrack(options = null) {
     if (cursor <= 0) return item.entry;
   }
   return weighted[0].entry;
+}
+
+function pickFastIndexedPrimaryTrack({
+  sourceTrack = null,
+  styles = [],
+  lockedStyle = "",
+  guidedRamp = false,
+  preparedKeys = new Set()
+} = {}) {
+  if (!fastPrimaryTracksByStyle.size) return null;
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  const sourceArtistKey = artistMatchKey(sourceTrack?.artist || "");
+  const blockedArtists = buildGlobalArtistExclusionSet(sourceTrack?.artist || "");
+  const orderedStyles = uniqueSwipeStyleList(styles).slice(0, 10);
+  const styleRank = new Map(orderedStyles.map((style, index) => [style, index]));
+  const variationSeed = [
+    currentCurationUserSeed(),
+    currentCurationVisitId(),
+    curationOpenSeed,
+    recentRecommendationDeliveryMetaQueue.length,
+    sourceKey
+  ].join("::");
+  const entries = [];
+
+  orderedStyles.forEach((style) => {
+    const pool = fastPrimaryTracksByStyle.get(style) || [];
+    pool.forEach((track) => {
+      const trackKey = recommendationTrackKey(track);
+      const artistKey = artistMatchKey(track?.artist || "");
+      if (!trackKey || !artistKey || trackKey === sourceKey) return;
+      if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return;
+      if (guidedRamp && !guidedDiscoveryStyleAllowed(track.style || "")) return;
+      if (guidedRamp && !guidedDiscoveryTrackPreservesDiversity(track)) return;
+      if (!trackHasVerifiedPlaybackRoute(track)) return;
+      if (recommendationMemory.has(trackKey) || seenTrackKeysMemory.has(trackKey)) return;
+      if (sourceArtistKey && artistKey === sourceArtistKey) return;
+      if (artistSetHasMatch(blockedArtists, track.artist)) return;
+      if (!artistAllowedForStyle(style, track.artist) || !labelAllowedForStyle(style, track.label)) return;
+      if (trackBlockedByKnownSignals(track)) return;
+
+      const sessionNoise = hashUnit(
+        `${variationSeed}::fast-primary::${style}::${trackKey}`
+      ) - 0.5;
+      const score =
+        sessionNoise * 10.8 +
+        Number(preparedKeys.has(trackKey)) * 5.8 +
+        Number(prewarmedSwipeTrackKeys.has(trackKey)) * 3.4 +
+        Number(trackHasReliableAudioPreview(track)) * 3.2 -
+        Number(styleRank.get(style) || 0) * 2.4 -
+        Number(swipeStyleExposureCounts.get(style) || 0) * 1.7 -
+        globalExposurePenalty(track) * 0.08;
+      entries.push({ track, score });
+    });
+  });
+
+  if (!entries.length) return null;
+  entries.sort((left, right) => right.score - left.score);
+  return entries[0].track;
 }
 
 function pickInstantPrimaryNextTrack(
@@ -52327,6 +52583,14 @@ function pickInstantPrimaryNextTrack(
       return aSame - bSame || openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a);
     })
     .slice(0, 8);
+  const fastIndexedCandidate = pickFastIndexedPrimaryTrack({
+    sourceTrack,
+    styles,
+    lockedStyle,
+    guidedRamp,
+    preparedKeys: preparedPrimaryKeys
+  });
+  if (fastIndexedCandidate) return fastIndexedCandidate;
   for (const style of styles) {
     const candidate = pickVariedPrimaryCandidate(
       catalogTracksForStyle(style).filter(candidateAllowed),
@@ -52368,7 +52632,6 @@ function pickInstantPrimaryNextTrack(
 function tryRunInstantPrimaryRecommendation() {
   if (recommendationRunBusy || !canUseMusicDiscovery()) return false;
   const interactionStartedAt = discoveryInteractionNow();
-  stopAllActivePlayback({ reason: "instant_recommendation" });
 
   if (currentRecommendation && lastPrefs) {
     const anchoredStyle = explicitSwipeAnchorStyle();
@@ -53633,7 +53896,6 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
   const interactionStartedAt = discoveryInteractionNow();
   const previousTrackKey = recommendationTrackKey(currentRecommendation);
-  stopAllActivePlayback({ reason: "swipe_feedback" });
   swipeFeedbackBusy = true;
   animatedEl.classList.remove("is-dragging", "is-returning");
   animateSwipeCommit(animatedEl, direction);
@@ -53886,11 +54148,9 @@ async function renderPreview(track, options = {}) {
   }
   setPreviewPrimaryPlaybackState("loading");
   setTrackPreviewVisualState("searching");
-  stopAllActivePlayback({ reason: "render_preview" });
   track.artistPreviewFallback = null;
   syncYouTubePreviewAttemptForTrack(track);
   const renderPreviewTrackKey = recommendationTrackKey(track);
-  trackPreview.dataset.previewTrackKey = renderPreviewTrackKey;
   const isStillCurrentPreviewTrack = () =>
     renderToken === recommendationPreviewRenderToken &&
     recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
@@ -53940,10 +54200,16 @@ async function renderPreview(track, options = {}) {
     }
     const candidates = previewCandidatesForTrack(track);
     if (!candidates.length) return "";
-    const playable = await pickPlayablePreviewSource(trackPreview, candidates, {
-      timeoutMs: probeTimeoutMs,
-      maxCandidates: maxProbeCandidates
-    });
+    const previewProbe = createTrackPreviewProbeElement();
+    let playable = "";
+    try {
+      playable = await pickPlayablePreviewSource(previewProbe, candidates, {
+        timeoutMs: probeTimeoutMs,
+        maxCandidates: maxProbeCandidates
+      });
+    } finally {
+      resetTrackPreviewElement(previewProbe);
+    }
     if (!isStillCurrentPreviewTrack()) return "";
     if (!playable) return "";
     markTrackPreviewVerified(track, playable);
@@ -54008,12 +54274,10 @@ async function renderPreview(track, options = {}) {
   // Do not cross an async boundary before creating a verified external player.
   // Safari preserves autoplay permission only within the initiating tap.
   let playablePreview = "";
-  if (verifiedPreview) {
-    resetTrackPreviewElement(trackPreview);
-    trackPreview.preload = "auto";
-    trackPreview.src = verifiedPreview;
-    trackPreview.load();
+  let previewSourceCommitted = false;
+  if (verifiedPreview && isStillCurrentPreviewTrack()) {
     playablePreview = verifiedPreview;
+    previewSourceCommitted = commitTrackPreviewSource(track, playablePreview, renderToken);
   } else if (hasPreviewCandidates) {
     playablePreview = await resolvePlayablePreview(false);
   }
@@ -54028,7 +54292,12 @@ async function renderPreview(track, options = {}) {
     youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
   if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
-    artistPreviewFallback = await pickPlayableArtistPreviewFallback(trackPreview, track, { forceLookup: true });
+    const artistProbe = createTrackPreviewProbeElement();
+    try {
+      artistPreviewFallback = await pickPlayableArtistPreviewFallback(artistProbe, track, { forceLookup: true });
+    } finally {
+      resetTrackPreviewElement(artistProbe);
+    }
     if (!isStillCurrentPreviewTrack()) return false;
     if (artistPreviewFallback?.previewUrl) playablePreview = artistPreviewFallback.previewUrl;
   }
@@ -54040,14 +54309,10 @@ async function renderPreview(track, options = {}) {
   }
 
   if (playablePreview) {
-    trackPreview.dataset.previewTrackKey = renderPreviewTrackKey;
-    if (normalizePreviewUrl(trackPreview.getAttribute("src") || trackPreview.src || trackPreview.currentSrc || "") !== normalizePreviewUrl(playablePreview)) {
-      resetTrackPreviewElement(trackPreview);
-      trackPreview.dataset.previewTrackKey = renderPreviewTrackKey;
-      trackPreview.preload = "auto";
-      trackPreview.src = playablePreview;
-      trackPreview.load();
+    if (!previewSourceCommitted) {
+      previewSourceCommitted = commitTrackPreviewSource(track, playablePreview, renderToken);
     }
+    if (!previewSourceCommitted || !isStillCurrentPreviewTrack()) return false;
     trackPreview.classList.remove("hidden");
     if (previewPlayBtn) {
       previewPlayBtn.disabled = false;
@@ -54076,9 +54341,8 @@ async function renderPreview(track, options = {}) {
         ? fixedPreviewStatusMessage({ audioReady: true, sources: fixedPlayers.availableSources })
         : hasDirectYoutube
           ? `${readyMessage} ${t("previewYoutubeOptionalHint")}`
-          : readyMessage);
+        : readyMessage);
   } else {
-    trackPreview.classList.add("hidden");
     clearTrackPreviewVerification(track);
     track.previewUrl = "";
     track.previewMissing = true;
@@ -54091,6 +54355,9 @@ async function renderPreview(track, options = {}) {
     });
     previewPanel.classList.remove("has-fixed-embeds");
     if (fixedPlayers.anyAvailable) {
+      stopAllActivePlayback({ reason: "external_preview_ready" });
+      resetTrackPreviewElement(trackPreview);
+      trackPreview.classList.add("hidden");
       if (previewPlayBtn) previewPlayBtn.classList.remove("hidden");
       setPreviewPrimaryPlaybackState("ready");
       setTrackPreviewVisualState("ready");
@@ -54111,6 +54378,9 @@ async function renderPreview(track, options = {}) {
         expandEmbeds: false
       });
       if (youtubeSearchFallbackReady.anyAvailable) {
+        stopAllActivePlayback({ reason: "youtube_preview_ready" });
+        resetTrackPreviewElement(trackPreview);
+        trackPreview.classList.add("hidden");
         if (previewPlayBtn) previewPlayBtn.classList.remove("hidden");
         setPreviewPrimaryPlaybackState("ready");
         setTrackPreviewVisualState("ready");
@@ -54154,13 +54424,12 @@ function renderedPreviewHasPlaybackRoute(track = currentRecommendation) {
     trackPreview?.getAttribute?.("src") ||
     trackPreview?.src ||
     trackPreview?.currentSrc ||
-    track?.previewUrl ||
-    track?.artistPreviewFallback?.previewUrl ||
     ""
   );
   const audioReady = Boolean(
     trackPreview &&
     audioSource &&
+    trackPreviewElementMatchesTrack(track) &&
     !trackPreview.classList.contains("hidden")
   );
   return Boolean(
@@ -60501,7 +60770,6 @@ async function generateRecommendationFromPrefs(prefs, options = {}) {
 
 async function generateRecommendationWithOverlay(prefs, options = {}, mode = "default") {
   if (recommendationRunBusy) return false;
-  stopAllActivePlayback({ reason: "recommendation_requested" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
     showPremiumDiscoveryLimit();
@@ -60535,7 +60803,6 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
 
 async function activateSuggestionQueueIndex(index) {
   if (recommendationRunBusy || !lastPrefs) return false;
-  stopAllActivePlayback({ reason: "suggestion_queue_change" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
     showPremiumDiscoveryLimit();
@@ -60833,7 +61100,6 @@ async function runSwipeStyleRecommendation(style = "") {
 async function runRecommendation() {
   if (recommendationRunBusy || swipeFeedbackBusy) return;
   const interactionStartedAt = discoveryInteractionNow();
-  stopAllActivePlayback({ reason: "manual_recommendation" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
     showPremiumDiscoveryLimit();
@@ -61083,7 +61349,6 @@ async function runSurpriseRecommendation({
   }
   if (recommendationRunBusy) return false;
   if (tryRunInstantPrimaryRecommendation()) return true;
-  stopAllActivePlayback({ reason: "surprise_recommendation" });
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
     showPremiumDiscoveryLimit();
@@ -61924,15 +62189,20 @@ bind(quizCloseBtn, "click", () => {
 
 bind(trackPreview, "error", () => {
   if (trackPreview?.dataset.previewProbing === "true") return;
-  const previewTrackKey = String(trackPreview?.dataset.previewTrackKey || "");
-  const currentTrackKey = recommendationTrackKey(currentRecommendation);
-  if (previewTrackKey && currentTrackKey && previewTrackKey !== currentTrackKey) return;
+  if (!trackPreviewElementMatchesTrack(currentRecommendation)) {
+    resetTrackPreviewElement(trackPreview);
+    return;
+  }
   stopAllActivePlayback({ reason: "preview_error" });
   void recoverCurrentPreviewAfterPlaybackIssue("error");
 });
 
 bind(trackPreview, "play", () => {
   if (!trackPreview) return;
+  if (!trackPreviewElementMatchesTrack(currentRecommendation)) {
+    resetTrackPreviewElement(trackPreview);
+    return;
+  }
   let generation = activePlaybackMatches({ type: "preview", player: trackPreview })
     ? activePlayback.generation
     : 0;
@@ -61958,6 +62228,7 @@ bind(trackPreview, "play", () => {
 });
 
 const finishDirectPreviewPlayback = () => {
+  if (!trackPreviewElementMatchesTrack(currentRecommendation)) return;
   if (!activePlaybackMatches({ type: "preview", player: trackPreview })) return;
   clearActivePlayback(activePlayback.generation);
   setPreviewPrimaryPlaybackState("ready");
@@ -61977,8 +62248,17 @@ bind(previewPlayBtn, "click", async () => {
     if (previewStatus) previewStatus.textContent = t("previewReady");
     return;
   }
-  const previewSource = normalizePreviewUrl(trackPreview.getAttribute("src") || trackPreview.src || trackPreview.currentSrc || currentRecommendation?.previewUrl || currentRecommendation?.artistPreviewFallback?.previewUrl || "");
+  const previewSource = trackPreviewElementMatchesTrack(currentRecommendation)
+    ? normalizePreviewUrl(trackPreview.getAttribute("src") || trackPreview.src || trackPreview.currentSrc || "")
+    : "";
   if (!previewSource) {
+    if (
+      trackHasVerifiedPlayablePreview(currentRecommendation) ||
+      previewCandidatesForTrack(currentRecommendation).length
+    ) {
+      void renderPreview(currentRecommendation, { fast: true }).catch(() => {});
+      return;
+    }
     const opened = startEmbeddedPreviewPlaybackFromUserGesture(currentRecommendation);
     if (!opened && previewStatus) previewStatus.textContent = t("previewReady");
     return;
@@ -62206,7 +62486,6 @@ bind(rerollBtn, "click", async () => {
     : "";
   const avoidDiscoveryName = currentDiscovery?.name || "";
 
-  stopAllActivePlayback({ reason: "reroll_recommendation" });
   if (tryPresentInteractionBudgetRecommendation({
     prefs: targetPrefs,
     sourceTrack: previousTrack,

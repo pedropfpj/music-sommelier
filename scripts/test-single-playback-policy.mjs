@@ -93,7 +93,13 @@ function assertSourcePolicy() {
   assert.match(bootstrapAudioSource, /registerAudioUnlockGestures\(\)/);
   assert.match(previewAutoplaySource, /AUTOMATIC_TRACK_PLAYBACK_ENABLED/);
   assert.match(previewAutoplaySource, /audioEnabled/);
-  assert.match(renderPreviewSource, /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/);
+  assert.doesNotMatch(
+    renderPreviewSource,
+    /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/,
+    "the current preview must keep playing until the replacement source is ready"
+  );
+  assert.match(renderPreviewSource, /commitTrackPreviewSource/);
+  assert.match(renderPreviewSource, /createTrackPreviewProbeElement/);
   assert.match(renderPreviewSource, /attemptRenderedPreviewAutoplay/);
   assert.ok(
     renderPreviewSource.indexOf("startPreferredEmbeddedPreviewAutoplay(track)") <
@@ -229,6 +235,7 @@ function testEveryTransitionKeepsOneAuthority() {
 function createPreviewHarness() {
   const playResolvers = [];
   const audio = {
+    dataset: {},
     currentSrc: "https://audio.example/fixture.m4a",
     src: "https://audio.example/fixture.m4a",
     currentTime: 8,
@@ -246,6 +253,7 @@ function createPreviewHarness() {
     Promise,
     String,
     currentRecommendation: { artist: "Fixture", song: "Track", previewUrl: audio.src },
+    recommendationPreviewRenderToken: 1,
     recommendationTrackKey: () => "fixture::track",
     syncPreviewAudioState() {},
     trackPreview: audio

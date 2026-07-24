@@ -112,9 +112,9 @@ assert.match(replacementPicker, /ensureTrackHasVerifiedPlaybackRoute\(candidate/
 assert.doesNotMatch(replacementPicker, /if \(trackHasPlayablePreviewExperience\(candidate\)\) return candidate/);
 assert.match(previewRenderer, /markTrackPreviewVerified\(track, playable\)/);
 assert.match(previewRenderer, /verifiedPreviewUrlForTrack\(track\)/);
-assert.match(previewRenderer, /trackPreview\.src = verifiedPreview/);
-assert.match(previewRenderer, /trackPreview\.dataset\.previewTrackKey = renderPreviewTrackKey/);
-assert.match(previewRenderer, /normalizePreviewUrl\(playablePreview\)/);
+assert.match(previewRenderer, /commitTrackPreviewSource\(track, playablePreview, renderToken\)/);
+assert.match(previewRenderer, /createTrackPreviewProbeElement\(\)/);
+assert.doesNotMatch(previewRenderer, /pickPlayablePreviewSource\(trackPreview/);
 assert.doesNotMatch(previewRenderer, /previewSoundcloudSearchHint/);
 
 assert.match(suggestionPrewarm, /markTrackPreviewVerified\(track, previewUrl\)/);
@@ -126,7 +126,7 @@ assert.match(previewPlayback, /preserve: "preview"/);
 assert.match(previewPlayback, /loadedSource !== normalizePreviewUrl\(previewSource\)/);
 assert.match(previewPlayback, /audioEl\.getAttribute\?\.\("src"\) \|\|\s*audioEl\.src \|\|\s*audioEl\.currentSrc/);
 assert.match(source, /if \(trackPreview\?\.dataset\.previewProbing === "true"\) return/);
-assert.match(source, /previewTrackKey !== currentTrackKey/);
+assert.match(source, /trackPreviewElementMatchesTrack\(currentRecommendation\)/);
 assert.match(swipeAdvance, /await tryRunValidatedPrimaryRecommendation/);
 assert.match(swipeAdvance, /positive \? "like_validated" : "dislike_validated"/);
 assert.match(swipeAdvance, /pickInstantPrimaryNextTrack\(likedTrack, anchoredStyle\)/);
