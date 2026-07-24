@@ -52596,8 +52596,19 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
     .filter((track) => recommendationTrackKey(track) !== anchorKey)
     .sort((a, b) => Number(trackHasReliableAudioPreview(b)) - Number(trackHasReliableAudioPreview(a)))
     .slice(0, 4);
-  void refreshGlobalDiscoveryExposure(candidates);
-  candidates.forEach((track) => {
+  prewarmPlaybackCandidates(candidates);
+}
+
+function prewarmPlaybackCandidates(candidates = []) {
+  const uniqueCandidates = Array.from(new Map(
+    (Array.isArray(candidates) ? candidates : [])
+      .filter(Boolean)
+      .map((track) => [recommendationTrackKey(track), track])
+      .filter(([trackKey]) => Boolean(trackKey))
+  ).values()).slice(0, 4);
+  if (!uniqueCandidates.length) return;
+  void refreshGlobalDiscoveryExposure(uniqueCandidates);
+  uniqueCandidates.forEach((track) => {
     const imageUrl = String(track?.coverArtUrl || track?.coverUrl || track?.artworkUrl || "").trim();
     if (imageUrl && typeof Image === "function") {
       const image = new Image();
@@ -52640,6 +52651,22 @@ function prewarmSuggestionQueue(anchorTrack = currentRecommendation) {
       .then(warmResolvedPreview)
       .catch(() => {});
   });
+}
+
+async function prewarmFriendlyOpeningTrack() {
+  try {
+    await ensureOpeningRotationSlot();
+    const opening = pickInstantOpeningTrack();
+    if (!opening?.track) return;
+    prewarmPlaybackCandidates([
+      opening.track,
+      ...CURATED_FRIENDLY_OPENING_TRACKS.filter(
+        (track) => recommendationTrackKey(track) !== recommendationTrackKey(opening.track)
+      ).slice(0, 3)
+    ]);
+  } catch (_err) {
+    // Opening prewarm is opportunistic; the synchronous playable fallback remains available.
+  }
 }
 
 function scheduleSuggestionQueueRefresh(prefs = lastPrefs, anchorTrack = currentRecommendation, { delayMs = 700 } = {}) {
@@ -64970,6 +64997,7 @@ async function bootSonicSearch() {
   // private/no-login Opera session starts cold.
   injectSoundCloudSupplementalSeeds();
   void refreshGlobalDiscoveryExposure(CURATED_FRIENDLY_OPENING_TRACKS);
+  void prewarmFriendlyOpeningTrack();
   scheduleLocalBootCatalogHydration();
   const bootWarmupDelay = nativePerformanceDelayMs(BACKGROUND_CATALOG_WARMUP_DELAY_MS, 18000);
   scheduleCatalogMaintenance(bootWarmupDelay);
