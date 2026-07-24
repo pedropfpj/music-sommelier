@@ -53559,6 +53559,66 @@ function swipeInstantPrefsForStyle(basePrefs, plan, style) {
   return normalizeRecommendationPrefs(nextPrefs);
 }
 
+function buildFastSwipeStylePlan({ sourceTrack = null, positive = true } = {}) {
+  const explicitAnchor = explicitSwipeAnchorStyle();
+  const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
+  if (explicitAnchor) {
+    return {
+      focusStyle: explicitAnchor,
+      explicitAnchor: true,
+      sourceStyle,
+      styles: [explicitAnchor]
+    };
+  }
+
+  const focusStyle =
+    dominantSwipeAffinityStyle(sourceTrack) ||
+    sourceStyle ||
+    selectableSwipeStyle(lastPrefs?.style || "");
+  const focusFamily = familyOf(focusStyle);
+  const bridgeStyles = (STYLE_FAMILY_DISCOVERY_BRIDGES[focusFamily] || [])
+    .filter((style) => style && !shouldDeferStyleForTasteMaturity(style, {}))
+    .slice(0, 4);
+  const familyStyles = getAllSelectableStyles()
+    .filter((style) => style && familyOf(style) === focusFamily && style !== focusStyle)
+    .filter((style) => !styleStronglyDisliked(style))
+    .sort(
+      (a, b) =>
+        Number(swipeStyleExposureCounts.get(a) || 0) -
+        Number(swipeStyleExposureCounts.get(b) || 0)
+    )
+    .slice(0, 4);
+  const approachableCoverageStyles = getAllSelectableStyles()
+    .filter((style) => style && style !== focusStyle)
+    .filter((style) => !shouldDeferStyleForTasteMaturity(style, {}))
+    .filter((style) => !styleStronglyDisliked(style))
+    .sort(
+      (a, b) =>
+        Number(swipeStyleExposureCounts.get(a) || 0) -
+          Number(swipeStyleExposureCounts.get(b) || 0) ||
+        openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a)
+    )
+    .slice(0, 5);
+  const explorationFirst = crossFamilyExplorationDue() ? bridgeStyles : [];
+  const styles = uniqueSwipeStyleList([
+    ...explorationFirst,
+    focusStyle,
+    ...(positive ? similarFallbackStylesFor(focusStyle).slice(0, 4) : familyStyles),
+    ...familyStyles,
+    ...bridgeStyles,
+    ...approachableCoverageStyles,
+    sourceStyle
+  ]);
+
+  return {
+    focusStyle: styles[0] || focusStyle || sourceStyle,
+    explicitAnchor: false,
+    sourceStyle,
+    fast: true,
+    styles
+  };
+}
+
 function instantSwipeStyleCandidates(sourceTrack, plan) {
   const sourceStyle = selectableSwipeStyle(sourceTrack?.style || "");
   const anchorStyle = plan?.explicitAnchor
@@ -53567,7 +53627,7 @@ function instantSwipeStyleCandidates(sourceTrack, plan) {
   if (anchorStyle) return [anchorStyle];
   const baseStyle = selectableSwipeStyle(lastPrefs?.style || "");
   const baseFamily = familyOf(sourceStyle || baseStyle);
-  const rankedCoverageStyles = discoveryModeEl?.checked === false || explicitSwipeAnchorStyle()
+  const rankedCoverageStyles = plan?.fast || discoveryModeEl?.checked === false || explicitSwipeAnchorStyle()
     ? []
     : getAllSelectableStyles()
         .filter((style) => style && style !== sourceStyle)
@@ -53592,7 +53652,7 @@ function instantSwipeStyleCandidates(sourceTrack, plan) {
 function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtistName = "" } = {}) {
   if (!lastPrefs) return null;
   const basePrefs = normalizeRecommendationPrefs(lastPrefs);
-  const plan = buildSwipeAdaptiveStylePlan({ sourceTrack, positive });
+  const plan = buildFastSwipeStylePlan({ sourceTrack, positive });
   const styles = instantSwipeStyleCandidates(sourceTrack, plan);
   const sourceKey = recommendationTrackKey(sourceTrack);
   const sourceTitle = sourceTrack?.song || "";
@@ -53649,7 +53709,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     for (const style of stylesToScan) {
       const prefs = swipeInstantPrefsForStyle(basePrefs, plan, style);
       const basePool = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
-      const pool = basePool.filter((track) =>
+      const pool = rotatedFastFeedbackPool(basePool, FAST_NEGATIVE_FEEDBACK_STARTER_SCAN_LIMIT).filter((track) =>
         candidateAllowed(track, prefs) && (!requireDirectAudio || trackHasReliableAudioPreview(track))
       );
       const candidate = pickBestRecommendationCandidate(pool, prefs, {
