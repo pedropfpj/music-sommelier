@@ -308,6 +308,61 @@ function capacitorPlugin(name = "") {
   return window.Capacitor?.Plugins?.[name] || null;
 }
 
+function isNativeIosRuntime() {
+  if (!isNativeAppRuntime()) return false;
+  try {
+    if (String(window.Capacitor?.getPlatform?.() || "").trim().toLowerCase() === "ios") return true;
+  } catch (_error) {
+    // The explicit iOS runtime flag below remains available before Capacitor finishes booting.
+  }
+  return Boolean(window.SONIC_SEARCH_IOS_APP || document.documentElement?.classList?.contains("sonic-ios-app"));
+}
+
+function shouldUseNativeYouTubePlayer() {
+  return isNativeIosRuntime();
+}
+
+async function openNativeYouTubeVideo(videoId = "", {
+  title = "",
+  url = ""
+} = {}) {
+  const safeVideoId = String(videoId || "").trim();
+  const watchUrl = String(url || "").trim() ||
+    (/^[A-Za-z0-9_-]{11}$/.test(safeVideoId)
+      ? `https://www.youtube.com/watch?v=${encodeURIComponent(safeVideoId)}`
+      : "");
+  if (!/^[A-Za-z0-9_-]{11}$/.test(safeVideoId)) return false;
+
+  const player = capacitorPlugin("YouTubePlayer");
+  if (typeof player?.open === "function") {
+    try {
+      await player.open({
+        videoId: safeVideoId,
+        title: String(title || "").trim().slice(0, 180)
+      });
+      return true;
+    } catch (_error) {
+      // Fall through to Capacitor Browser so a native plugin failure never revives the broken iframe.
+    }
+  }
+
+  const browser = capacitorPlugin("Browser");
+  if (watchUrl && typeof browser?.open === "function") {
+    try {
+      await browser.open({ url: watchUrl, presentationStyle: "fullscreen" });
+      return true;
+    } catch (_error) {
+      // The final web fallback below remains useful in development shells.
+    }
+  }
+
+  if (watchUrl && typeof window?.open === "function") {
+    window.open(watchUrl, "_blank");
+    return true;
+  }
+  return false;
+}
+
 function configuredAppApiBaseUrl() {
   if (typeof window === "undefined") return "";
   const configured = String(window.SONIC_SEARCH_API_BASE_URL || "").trim().replace(/\/+$/, "");
@@ -9918,6 +9973,7 @@ const djActiveChoiceLabel = document.getElementById("djActiveChoiceLabel");
 const djChangeIntentBtn = document.getElementById("djChangeIntentBtn");
 const djDiscoverySceneFilter = document.getElementById("djDiscoverySceneFilter");
 const djDiscoveryShuffleBtn = document.getElementById("djDiscoveryShuffleBtn");
+const djSwipeGestureHint = document.getElementById("djSwipeGestureHint");
 const djSwipeCard = document.getElementById("djSwipeCard");
 const djSwipeKicker = document.getElementById("djSwipeKicker");
 const djSwipeName = document.getElementById("djSwipeName");
@@ -9935,6 +9991,11 @@ const djSwipeStatus = document.getElementById("djSwipeStatus");
 const djPreviewTitle = document.getElementById("djPreviewTitle");
 const djPreviewMeta = document.getElementById("djPreviewMeta");
 const djPreviewFrame = document.getElementById("djPreviewFrame");
+const djPreviewYoutubeShell = document.getElementById("djPreviewYoutubeShell");
+const djPreviewNativeBtn = document.getElementById("djPreviewNativeBtn");
+const djPreviewRecovery = document.getElementById("djPreviewRecovery");
+const djPreviewRecoveryTitle = document.getElementById("djPreviewRecoveryTitle");
+const djPreviewRecoveryHint = document.getElementById("djPreviewRecoveryHint");
 const djPreviewOpenLink = document.getElementById("djPreviewOpenLink");
 const djRadarCount = document.getElementById("djRadarCount");
 const djRadarLiked = document.getElementById("djRadarLiked");
@@ -10226,6 +10287,13 @@ let pendingDjIntentFamily = "";
 let djIntentBusy = false;
 let djSwipeBusy = false;
 let djSwipeDragState = null;
+let djYoutubeIframeApiPromise = null;
+let djYoutubePlayer = null;
+let djYoutubePlayerReady = false;
+let djYoutubePendingVideoId = "";
+let djYoutubeRenderToken = 0;
+let djYoutubeRecoveryBusy = false;
+const unavailableDjPreviewKeys = new Set();
 let likedDjRecommendationKeys = new Set();
 let passedDjRecommendationKeys = new Set();
 let recentDjRecommendationKeys = [];
@@ -10238,11 +10306,15 @@ const FAST_PREWARM_AUDIO_CACHE_LIMIT = 8;
 let swipeUserAnchoredStyle = "";
 let swipeStyleExposureCounts = new Map();
 let curationUserSeed = "";
+let curationUserSeedStorageKey = "";
 let curationVisitId = "";
+let curationVisitStorageKey = "";
 const curationOpenSeed = createRuntimeCurationSeed();
 let openingRotationSlot = null;
 let openingRotationSlotPromise = null;
 let openingRotationSlotSource = "";
+let openingRotationGeneration = 0;
+let openingRotationSessionIdentity = "";
 let swipeStyleRailExpanded = false;
 let pendingSwipeLearningMessage = "";
 const SUGGESTION_QUEUE_TARGET = 25;
@@ -10370,6 +10442,8 @@ let firstRecommendationPromise = null;
 let firstRecommendationCompleted = false;
 let firstRecommendationRetryAvailable = false;
 let firstRecommendationBusy = false;
+let recommendationSessionGeneration = 0;
+let activeRecommendationSessionIdentity = "";
 let recommendationStyleFallbackInfo = null;
 let recommendationBpmFallbackInfo = false;
 let recommendationPreviewRenderToken = 0;
@@ -23971,7 +24045,7 @@ const I18N = {
     betaAccessGrantedStatus: "Acesso liberado. Entrando no Sonic Search...",
     betaExitStatus: "Você está vendo a tela pública do beta fechado.",
     heroTitle: "A faixa certa para agora",
-    heroDesc: "Diga o momento, marque o que já conhece e deixe o Sonic Search trazer uma faixa com motivo, preview e contexto.",
+    heroDesc: "Seu momento dá o tom. O Sonic Search encontra uma faixa nova e mostra por que ela combina com você.",
     tabDiscover: "Descobrir",
     tabDjs: "DJs",
     tabFilters: "Filtros",
@@ -25073,7 +25147,7 @@ const I18N = {
     betaAccessGrantedStatus: "Access granted. Entering Sonic Search...",
     betaExitStatus: "You are viewing the public closed-beta page.",
     heroTitle: "The right track for now",
-    heroDesc: "Set the moment, mark what you already know, and let Sonic Search bring a track with a reason, preview, and context.",
+    heroDesc: "Your moment sets the tone. Sonic Search finds a new track and shows why it fits you.",
     tabDiscover: "Discover",
     tabDjs: "DJs",
     tabFilters: "Filters",
@@ -26171,7 +26245,7 @@ const I18N = {
     betaAccessGrantedStatus: "Acceso liberado. Entrando en Sonic Search...",
     betaExitStatus: "Estás viendo la página pública del beta cerrado.",
     heroTitle: "La pista correcta para ahora",
-    heroDesc: "Marca el momento, indica lo que ya conoces y deja que Sonic Search traiga una pista con motivo, preview y contexto.",
+    heroDesc: "Tu momento marca el tono. Sonic Search encuentra una pista nueva y te muestra por qué encaja contigo.",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
     tabDjs: "DJs",
@@ -29696,6 +29770,64 @@ function sessionProfileKey(session = currentAuthUser) {
   return "guest:default";
 }
 
+function recommendationSessionIdentityKey(session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  const profileKey = sessionProfileKey(normalizedSession);
+  if (profileKey) return profileKey;
+  const ephemeralKey = normalize(
+    normalizedSession.providerId ||
+      normalizedSession.email ||
+      normalizedSession.username
+  );
+  return `${normalizedSession.mode}:${ephemeralKey || "ephemeral"}`;
+}
+
+function recommendationSessionIsCurrent(generation = recommendationSessionGeneration) {
+  return Number(generation) === recommendationSessionGeneration;
+}
+
+function recommendationSessionChangedError() {
+  const error = new Error("recommendation_session_changed");
+  error.code = "recommendation_session_changed";
+  return error;
+}
+
+function assertRecommendationSessionCurrent(generation = recommendationSessionGeneration) {
+  if (!recommendationSessionIsCurrent(generation)) throw recommendationSessionChangedError();
+  return true;
+}
+
+function isRecommendationSessionChangedError(error) {
+  return String(error?.code || error?.message || "") === "recommendation_session_changed";
+}
+
+function beginRecommendationSession(session) {
+  const nextIdentity = recommendationSessionIdentityKey(session);
+  const identityChanged = nextIdentity !== activeRecommendationSessionIdentity;
+  activeRecommendationSessionIdentity = nextIdentity;
+  recommendationSessionGeneration += 1;
+
+  firstRecommendationPromise = null;
+  firstRecommendationCompleted = false;
+  firstRecommendationRetryAvailable = false;
+  firstRecommendationBusy = false;
+  recommendationRunBusy = false;
+  fastFeedbackSwapToken += 1;
+  fastSuggestionQueueRefreshToken += 1;
+  previewRecoveryToken += 1;
+  recommendationDetailRenderToken += 1;
+  recommendationPreviewRenderToken += 1;
+
+  if (identityChanged) {
+    curationUserSeed = "";
+    curationUserSeedStorageKey = "";
+    curationVisitId = "";
+    curationVisitStorageKey = "";
+    resetOpeningRotationForIdentity(nextIdentity);
+  }
+  return identityChanged;
+}
+
 function storageKeyForSession(baseKey, session = currentAuthUser) {
   const profileKey = sessionProfileKey(session);
   if (!profileKey) return "";
@@ -29709,15 +29841,21 @@ function uniqueStorageKeys(keys = []) {
 function storageFallbackKeys(baseKey, session = currentAuthUser) {
   const normalizedSession = normalizeUserSession(session);
   if (isEphemeralSession(normalizedSession)) return [];
-  if (normalizedSession.mode === "test") {
+  if (["login", "google", "apple", "test"].includes(normalizedSession.mode)) {
     return uniqueStorageKeys([storageKeyForSession(baseKey, session)]);
   }
   const keys = [storageKeyForSession(baseKey, session)];
   if (baseKey) keys.push(baseKey);
-  if (normalizedSession.mode !== "guest") {
-    keys.push(storageKeyForSession(baseKey, { mode: "guest", username: "" }));
-  }
   return uniqueStorageKeys(keys);
+}
+
+function curationStorageKey(baseKey, session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  if (isEphemeralSession(normalizedSession)) return "";
+  if (["login", "google", "apple", "test"].includes(normalizedSession.mode)) {
+    return storageKeyForSession(baseKey, normalizedSession);
+  }
+  return baseKey;
 }
 
 function localStorageKeysMatching(predicate) {
@@ -30019,7 +30157,9 @@ function resetSessionUiState() {
 }
 
 function activateUserSession(session) {
-  currentAuthUser = normalizeUserSession(session);
+  const normalizedSession = normalizeUserSession(session);
+  beginRecommendationSession(normalizedSession);
+  currentAuthUser = normalizedSession;
   resetSessionStateInMemory();
   currentDjRecommendation = null;
   likedDjRecommendationKeys = new Set();
@@ -30558,6 +30698,8 @@ async function continueWithOnlineSocialSession(options = {}) {
   activateUserSession(session);
   persistUserSession(session);
   await refreshAdminAccess({ force: true });
+  await loadSocialProfile({ silent: true });
+  await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
   setAuthFeedback(t("authProviderLoggedAs", {
     provider: authProviderDisplayName(session.provider),
     user: session.username || session.email || authProviderDisplayName(session.provider)
@@ -39508,8 +39650,6 @@ function syncSoundCloudPreviewActionForTrack(track, { expanded = false } = {}) {
 
 function buildYouTubeEmbedUrl(track, { autoplay = false, attempt = 0 } = {}) {
   if (!track) return "";
-  const autoplayParam = autoplay ? "&autoplay=1" : "";
-  const commonParams = `rel=0&modestbranding=1&playsinline=1&enablejsapi=1${autoplayParam}`;
   const safeAttempt = Math.max(0, Number(attempt) || 0);
   const candidates = youtubeVideoCandidatesForTrack(track);
   const candidate = candidates.length ? candidates[safeAttempt % candidates.length] : null;
@@ -39518,9 +39658,47 @@ function buildYouTubeEmbedUrl(track, { autoplay = false, attempt = 0 } = {}) {
     extractYouTubeVideoId(track.youtubeTrackUrl) ||
     extractYouTubeVideoId(track.youtubeUrl);
   if (directVideoId) {
-    return `https://www.youtube-nocookie.com/embed/${directVideoId}?${commonParams}&retry=${safeAttempt}`;
+    const pageOrigin = shouldUseNativeYouTubePlayer()
+      ? "https://app.sonicsearch.ios"
+      : /^https?:$/i.test(String(window.location?.protocol || ""))
+        ? String(window.location.origin || SONIC_PRODUCTION_ORIGIN)
+        : SONIC_PRODUCTION_ORIGIN;
+    const params = new URLSearchParams({
+      rel: "0",
+      modestbranding: "1",
+      playsinline: "1",
+      enablejsapi: "1",
+      origin: pageOrigin,
+      retry: String(safeAttempt)
+    });
+    if (autoplay) params.set("autoplay", "1");
+    return `https://www.youtube-nocookie.com/embed/${directVideoId}?${params.toString()}`;
   }
   return "";
+}
+
+function youtubeVideoSelectionForTrack(track, attempt = 0) {
+  if (!track) return null;
+  const safeAttempt = Math.max(0, Number(attempt) || 0);
+  const candidates = youtubeVideoCandidatesForTrack(track);
+  const candidate = candidates.length ? candidates[safeAttempt % candidates.length] : null;
+  const videoId =
+    candidate?.videoId ||
+    extractYouTubeVideoId(track.youtubeTrackUrl) ||
+    extractYouTubeVideoId(track.youtubeUrl);
+  if (!/^[A-Za-z0-9_-]{11}$/.test(String(videoId || ""))) return null;
+  return {
+    videoId,
+    url: candidate?.youtubeTrackUrl || `https://www.youtube.com/watch?v=${videoId}`,
+    title: [track.song || track.title, track.artist].filter(Boolean).join(" — ")
+  };
+}
+
+async function openNativeYouTubeTrack(track, attempt = 0) {
+  const selection = youtubeVideoSelectionForTrack(track, attempt);
+  if (!selection) return false;
+  stopAllActivePlayback({ reason: "native_youtube_player_opened" });
+  return openNativeYouTubeVideo(selection.videoId, selection);
 }
 
 function setActivePlayback(next = {}) {
@@ -39970,6 +40148,7 @@ function showYouTubePreviewEmbed(track, {
   playbackToken = 0
 } = {}) {
   if (!youtubePreviewWrap || !youtubePreviewFrame || !track) return false;
+  if (shouldUseNativeYouTubePlayer()) return false;
   const shouldAutoplay = Boolean(
     autoplay &&
     userInitiated &&
@@ -50155,17 +50334,39 @@ function localOpeningRotationSlot() {
   return hashString(`${currentCurationUserSeed()}::${currentCurationVisitId()}::${curationOpenSeed}::opening-slot`);
 }
 
+function resetOpeningRotationForIdentity(identity = recommendationSessionIdentityKey()) {
+  openingRotationGeneration += 1;
+  openingRotationSessionIdentity = String(identity || "");
+  openingRotationSlot = null;
+  openingRotationSlotPromise = null;
+  openingRotationSlotSource = "";
+}
+
 async function ensureOpeningRotationSlot({ timeoutMs = 950 } = {}) {
+  const requestIdentity = activeRecommendationSessionIdentity || recommendationSessionIdentityKey();
+  if (openingRotationSessionIdentity !== requestIdentity) {
+    resetOpeningRotationForIdentity(requestIdentity);
+  }
   if (Number.isFinite(openingRotationSlot)) return openingRotationSlot;
   if (openingRotationSlotPromise) return openingRotationSlotPromise;
 
-  openingRotationSlotPromise = Promise.resolve().then(async () => {
+  const requestGeneration = openingRotationGeneration;
+  const commitSlot = (slot, source) => {
+    if (
+      requestGeneration !== openingRotationGeneration ||
+      requestIdentity !== openingRotationSessionIdentity ||
+      requestIdentity !== activeRecommendationSessionIdentity
+    ) return null;
+    openingRotationSlot = slot;
+    openingRotationSlotSource = source;
+    return openingRotationSlot;
+  };
+  let requestPromise = null;
+  requestPromise = Promise.resolve().then(async () => {
     const fallbackSlot = localOpeningRotationSlot();
     const endpoint = resolveAppApiEndpoint(OPENING_ROTATION_ENDPOINT);
     if (!endpoint || typeof fetch !== "function") {
-      openingRotationSlot = fallbackSlot;
-      openingRotationSlotSource = "local_crypto";
-      return openingRotationSlot;
+      return commitSlot(fallbackSlot, "local_crypto");
     }
 
     try {
@@ -50178,20 +50379,17 @@ async function ensureOpeningRotationSlot({ timeoutMs = 950 } = {}) {
       const payload = response?.ok ? await response.json() : null;
       const serverSlot = Number(payload?.slot);
       if (payload?.ok && payload?.durable === true && Number.isSafeInteger(serverSlot) && serverSlot >= 0) {
-        openingRotationSlot = serverSlot;
-        openingRotationSlotSource = "global_durable";
-        return openingRotationSlot;
+        return commitSlot(serverSlot, "global_durable");
       }
     } catch (_err) {
       // Offline/native fallback below keeps discovery instant and diverse.
     }
 
-    openingRotationSlot = fallbackSlot;
-    openingRotationSlotSource = "local_crypto";
-    return openingRotationSlot;
+    return commitSlot(fallbackSlot, "local_crypto");
   }).finally(() => {
-    openingRotationSlotPromise = null;
+    if (openingRotationSlotPromise === requestPromise) openingRotationSlotPromise = null;
   });
+  openingRotationSlotPromise = requestPromise;
 
   return openingRotationSlotPromise;
 }
@@ -50463,15 +50661,18 @@ async function recordGlobalDiscoveryExposure(track) {
 }
 
 function currentCurationUserSeed() {
-  if (curationUserSeed) return curationUserSeed;
+  const storageKey = curationStorageKey(CURATION_SEED_STORAGE_KEY);
+  if (curationUserSeed && curationUserSeedStorageKey === storageKey) return curationUserSeed;
+  curationUserSeed = "";
+  curationUserSeedStorageKey = storageKey;
   try {
-    const stored = String(localStorage.getItem(CURATION_SEED_STORAGE_KEY) || "").trim();
+    const stored = storageKey ? String(localStorage.getItem(storageKey) || "").trim() : "";
     if (stored) {
       curationUserSeed = stored;
       return curationUserSeed;
     }
     curationUserSeed = createRuntimeCurationSeed();
-    localStorage.setItem(CURATION_SEED_STORAGE_KEY, curationUserSeed);
+    if (storageKey) localStorage.setItem(storageKey, curationUserSeed);
     return curationUserSeed;
   } catch (_err) {
     if (!curationUserSeed) curationUserSeed = createRuntimeCurationSeed();
@@ -50480,13 +50681,18 @@ function currentCurationUserSeed() {
 }
 
 function currentCurationVisitId() {
-  if (curationVisitId) return curationVisitId;
+  const storageKey = curationStorageKey(CURATION_VISIT_STORAGE_KEY);
+  if (curationVisitId && curationVisitStorageKey === storageKey) return curationVisitId;
+  curationVisitId = "";
+  curationVisitStorageKey = storageKey;
   try {
-    const stored = Number.parseInt(String(localStorage.getItem(CURATION_VISIT_STORAGE_KEY) || "0"), 10);
+    const stored = storageKey
+      ? Number.parseInt(String(localStorage.getItem(storageKey) || "0"), 10)
+      : 0;
     const nextVisit = Number.isFinite(stored) && stored >= 0 ? stored + 1 : 1;
     const boundedVisit = nextVisit > 1000000 ? 1 : nextVisit;
-    localStorage.setItem(CURATION_VISIT_STORAGE_KEY, String(boundedVisit));
-    curationVisitId = `${boundedVisit}`;
+    if (storageKey) localStorage.setItem(storageKey, String(boundedVisit));
+    curationVisitId = storageKey ? `${boundedVisit}` : createRuntimeCurationSeed();
     return curationVisitId;
   } catch (_err) {
     curationVisitId = createRuntimeCurationSeed();
@@ -52116,6 +52322,16 @@ function renderDjIntentCopy() {
   setText("#djChangeIntentBtn", sonicTinyCopy("Trocar estilo", "Change style", "Cambiar estilo"));
   setText("#djDiscoverySceneLabel", sonicTinyCopy("Refinar a cena", "Refine the scene", "Refinar la escena"));
   setText("#djDiscoveryShuffleBtn", sonicTinyCopy("Outro set", "Another set", "Otro set"));
+  setText("#djSwipeGesturePass", sonicTinyCopy("← Passar", "← Pass", "← Pasar"));
+  setText("#djSwipeGestureTitle", sonicTinyCopy("Arraste a carta", "Swipe the card", "Desliza la carta"));
+  setText("#djSwipeGestureLike", sonicTinyCopy("Curtir →", "Like →", "Me gusta →"));
+  if (djSwipeGestureHint) {
+    djSwipeGestureHint.setAttribute("aria-label", sonicTinyCopy(
+      "Arraste a carta para a esquerda para passar ou para a direita para curtir",
+      "Swipe the card left to pass or right to like",
+      "Desliza la carta a la izquierda para pasar o a la derecha para indicar que te gusta"
+    ));
+  }
   if (djIntentFamilyOptions) {
     djIntentFamilyOptions.setAttribute("aria-label", sonicTinyCopy(
       "Escolha uma direção musical",
@@ -52366,7 +52582,20 @@ function djSetEmbedUrl(seed = {}) {
   const platform = normalize(seed.platform || "");
   if (platform.includes("youtube")) {
     const id = youtubeVideoIdFromUrl(seed.setUrl);
-    return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : "";
+    if (!id) return "";
+    const pageOrigin = shouldUseNativeYouTubePlayer()
+      ? "https://app.sonicsearch.ios"
+      : /^https?:$/i.test(String(window.location?.protocol || ""))
+        ? String(window.location.origin || SONIC_PRODUCTION_ORIGIN)
+        : SONIC_PRODUCTION_ORIGIN;
+    const params = new URLSearchParams({
+      rel: "0",
+      modestbranding: "1",
+      playsinline: "1",
+      enablejsapi: "1",
+      origin: pageOrigin
+    });
+    return `https://www.youtube.com/embed/${id}?${params.toString()}`;
   }
   if (platform.includes("soundcloud") && seed.setUrl) {
     return `https://w.soundcloud.com/player/?url=${encodeURIComponent(seed.setUrl)}&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=true`;
@@ -52376,6 +52605,11 @@ function djSetEmbedUrl(seed = {}) {
 
 function djSeedHasPlayablePreview(seed = {}) {
   return Boolean(djSetEmbedUrl(seed));
+}
+
+function djSeedPreviewUnavailable(seed = {}) {
+  const key = djRecommendationKey(seed);
+  return Boolean(key && unavailableDjPreviewKeys.has(key));
 }
 
 function djSeedHasNonElectronicConflict(seed = {}) {
@@ -52397,14 +52631,15 @@ function filteredDjRecommendationPool() {
   const lane = currentDjFilterValue();
   const recommendationSeeds = ensureDjSetRecommendationSeeds();
   const electronicSeeds = recommendationSeeds.filter((seed) => !djSeedHasNonElectronicConflict(seed));
-  const pool = electronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
+  const availableElectronicSeeds = electronicSeeds.filter((seed) => !djSeedPreviewUnavailable(seed));
+  const pool = availableElectronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
   const playablePool = pool.filter(djSeedHasPlayablePreview);
   if (playablePool.length) return playablePool;
   const directSetPool = pool.filter((seed) => !djSeedIsSearchFallback(seed));
   if (directSetPool.length) return directSetPool;
   if (currentDjIntent) return pool;
-  const globalPlayablePool = electronicSeeds.filter(djSeedHasPlayablePreview);
-  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : electronicSeeds;
+  const globalPlayablePool = availableElectronicSeeds.filter(djSeedHasPlayablePreview);
+  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : availableElectronicSeeds;
 }
 
 function randomDjPoolIndex(length = 0) {
@@ -52538,6 +52773,224 @@ function renderDjRecommendationBadges(seed = null) {
   renderSonicBadgeList(djSwipeBadges, badges);
 }
 
+function djYoutubePlayerOrigin() {
+  return /^https?:$/i.test(String(window.location?.protocol || ""))
+    ? String(window.location.origin || SONIC_PRODUCTION_ORIGIN)
+    : SONIC_PRODUCTION_ORIGIN;
+}
+
+function setDjPreviewRecovery({ visible = false, title = "", hint = "", tone = "loading" } = {}) {
+  if (!djPreviewRecovery) return;
+  djPreviewRecovery.classList.toggle("hidden", !visible);
+  djPreviewRecovery.dataset.tone = tone;
+  if (djPreviewRecoveryTitle && title) djPreviewRecoveryTitle.textContent = title;
+  if (djPreviewRecoveryHint && hint) djPreviewRecoveryHint.textContent = hint;
+}
+
+function setDjPreviewWebSurface(surface = "frame") {
+  const showYoutube = surface === "youtube";
+  const showFrame = surface === "frame";
+  djPreviewYoutubeShell?.classList.toggle("hidden", !showYoutube);
+  djPreviewFrame?.classList.toggle("hidden", !showFrame);
+}
+
+function loadDjYoutubeIframeApi() {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (djYoutubeIframeApiPromise) return djYoutubeIframeApiPromise;
+
+  djYoutubeIframeApiPromise = new Promise((resolve, reject) => {
+    let settled = false;
+    let timeoutId = 0;
+    const finish = (value, error = null) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      if (error) reject(error);
+      else resolve(value);
+    };
+    const previousReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      try {
+        if (typeof previousReady === "function") previousReady();
+      } finally {
+        if (window.YT?.Player) finish(window.YT);
+        else finish(null, new Error("youtube_iframe_api_missing"));
+      }
+    };
+
+    let script = document.querySelector("script[data-sonic-dj-youtube-api]");
+    if (!script) {
+      script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.async = true;
+      script.referrerPolicy = "strict-origin-when-cross-origin";
+      script.dataset.sonicDjYoutubeApi = "true";
+      script.addEventListener("error", () => finish(null, new Error("youtube_iframe_api_failed")), { once: true });
+      document.head.appendChild(script);
+    }
+
+    timeoutId = window.setTimeout(() => {
+      if (window.YT?.Player) finish(window.YT);
+      else finish(null, new Error("youtube_iframe_api_timeout"));
+    }, 10000);
+  }).catch((error) => {
+    djYoutubeIframeApiPromise = null;
+    throw error;
+  });
+  return djYoutubeIframeApiPromise;
+}
+
+function djYoutubePlayerVideoId(player = djYoutubePlayer) {
+  try {
+    return String(player?.getVideoData?.()?.video_id || "").trim();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function djPreviewBlockedCopy(code = 0) {
+  if (Number(code) === 100) {
+    return sonicTinyCopy(
+      "Este vídeo foi removido ou ficou privado.",
+      "This video was removed or made private.",
+      "Este video fue eliminado o pasó a privado."
+    );
+  }
+  return sonicTinyCopy(
+    "Este vídeo não permite reprodução incorporada.",
+    "This video does not allow embedded playback.",
+    "Este video no permite reproducción incorporada."
+  );
+}
+
+async function recoverDjPreviewAfterYoutubeError(code = 0, failedVideoId = "") {
+  if (djYoutubeRecoveryBusy || !currentDjRecommendation) return false;
+  const seed = currentDjRecommendation;
+  const key = djRecommendationKey(seed);
+  const activeVideoId = youtubeVideoIdFromUrl(seed?.setUrl || "");
+  if (failedVideoId && activeVideoId && failedVideoId !== activeVideoId) return false;
+
+  if (Number(code) === 153) {
+    setDjPreviewRecovery({
+      visible: true,
+      tone: "blocked",
+      title: sonicTinyCopy("Player bloqueado neste navegador", "Player blocked in this browser", "Player bloqueado en este navegador"),
+      hint: sonicTinyCopy("Use Abrir set para assistir diretamente no YouTube.", "Use Open set to watch directly on YouTube.", "Usa Abrir set para verlo directamente en YouTube.")
+    });
+    if (djPreviewMeta) djPreviewMeta.textContent = `${seed.name} • ${djPreviewBlockedCopy(code)}`;
+    return false;
+  }
+
+  if (key) unavailableDjPreviewKeys.add(key);
+  djYoutubeRecoveryBusy = true;
+  setDjPreviewRecovery({
+    visible: true,
+    tone: "recovering",
+    title: djPreviewBlockedCopy(code),
+    hint: sonicTinyCopy("Buscando automaticamente outro set que toque aqui…", "Automatically finding another set that plays here…", "Buscando automáticamente otro set que funcione aquí…")
+  });
+  if (djSwipeStatus) {
+    djSwipeStatus.textContent = sonicTinyCopy(
+      "O vídeo não abriu no player. Estou trocando por outro set verificado.",
+      "The video did not open in the player. I am replacing it with another verified set.",
+      "El video no abrió en el player. Lo estoy cambiando por otro set verificado."
+    );
+  }
+
+  await waitMs(420);
+  if (currentDjRecommendation !== seed) {
+    djYoutubeRecoveryBusy = false;
+    return false;
+  }
+  const replacement = pickDjRecommendation({ avoidKey: key });
+  if (!replacement || djRecommendationKey(replacement) === key) {
+    setDjPreviewRecovery({
+      visible: true,
+      tone: "blocked",
+      title: djPreviewBlockedCopy(code),
+      hint: sonicTinyCopy("Não encontrei outro set nesta seleção. Use Abrir set ou troque o estilo.", "No other set was found in this selection. Use Open set or change the style.", "No encontré otro set en esta selección. Usa Abrir set o cambia el estilo.")
+    });
+    djYoutubeRecoveryBusy = false;
+    return false;
+  }
+
+  selectDjRecommendation(replacement);
+  if (djSwipeStatus) {
+    djSwipeStatus.textContent = sonicTinyCopy(
+      "Vídeo bloqueado removido da rodada. Outro set pronto para tocar.",
+      "Blocked video removed from this round. Another set is ready to play.",
+      "Video bloqueado eliminado de esta ronda. Otro set está listo para reproducirse."
+    );
+  }
+  showToast(sonicTinyCopy("Troquei o vídeo bloqueado", "Blocked video replaced", "Cambié el video bloqueado"));
+  djYoutubeRecoveryBusy = false;
+  return true;
+}
+
+function handleDjYoutubePlayerError(event) {
+  const code = Number(event?.data || 0);
+  if (![2, 5, 100, 101, 150, 153].includes(code)) return;
+  const failedVideoId = djYoutubePlayerVideoId(event?.target) || djYoutubePendingVideoId;
+  void recoverDjPreviewAfterYoutubeError(code, failedVideoId);
+}
+
+async function renderDjYoutubePreview(seed = currentDjRecommendation, videoId = "", renderToken = djYoutubeRenderToken) {
+  const safeVideoId = String(videoId || "").trim();
+  if (!/^[A-Za-z0-9_-]{11}$/.test(safeVideoId)) return false;
+  djYoutubePendingVideoId = safeVideoId;
+  setDjPreviewRecovery({
+    visible: true,
+    tone: "loading",
+    title: sonicTinyCopy("Verificando o player", "Checking the player", "Verificando el player"),
+    hint: sonicTinyCopy("Se este vídeo estiver bloqueado, outro set entra automaticamente.", "If this video is blocked, another set will load automatically.", "Si este video está bloqueado, otro set entrará automáticamente.")
+  });
+
+  try {
+    const YT = await loadDjYoutubeIframeApi();
+    if (renderToken !== djYoutubeRenderToken || currentDjRecommendation !== seed) return false;
+    if (djYoutubePlayer && djYoutubePlayerReady) {
+      if (djYoutubePlayerVideoId() !== safeVideoId) djYoutubePlayer.cueVideoById(safeVideoId);
+      setDjPreviewRecovery({ visible: false });
+      return true;
+    }
+    if (djYoutubePlayer) return true;
+
+    djYoutubePlayer = new YT.Player("djPreviewYoutubeMount", {
+      width: "100%",
+      height: "100%",
+      videoId: safeVideoId,
+      playerVars: {
+        rel: 0,
+        playsinline: 1,
+        origin: djYoutubePlayerOrigin()
+      },
+      events: {
+        onReady: (event) => {
+          djYoutubePlayer = event.target;
+          djYoutubePlayerReady = true;
+          if (djYoutubePendingVideoId && djYoutubePlayerVideoId(event.target) !== djYoutubePendingVideoId) {
+            event.target.cueVideoById(djYoutubePendingVideoId);
+          }
+          setDjPreviewRecovery({ visible: false });
+        },
+        onStateChange: (event) => {
+          if ([-1, 1, 2, 3, 5].includes(Number(event?.data))) {
+            setDjPreviewRecovery({ visible: false });
+          }
+        },
+        onError: handleDjYoutubePlayerError
+      }
+    });
+    return true;
+  } catch (_error) {
+    if (renderToken !== djYoutubeRenderToken || currentDjRecommendation !== seed) return false;
+    setDjPreviewWebSurface("frame");
+    scheduleDjPreviewFrame(djSetEmbedUrl(seed));
+    setDjPreviewRecovery({ visible: false });
+    return false;
+  }
+}
+
 function scheduleDjPreviewFrame(embedUrl = "") {
   if (!djPreviewFrame) return;
   window.clearTimeout(djPreviewFrameLoadTimer);
@@ -52601,6 +53054,13 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
 
   const embedUrl = hasSeed ? djSetEmbedUrl(seed) : "";
+  const isYoutubeSeed = hasSeed && normalize(seed?.platform || "").includes("youtube");
+  const youtubeVideoId = isYoutubeSeed ? youtubeVideoIdFromUrl(seed?.setUrl || "") : "";
+  const nativeYoutubeVideoId = isYoutubeSeed && shouldUseNativeYouTubePlayer() ? youtubeVideoId : "";
+  const usesNativeYoutubePlayer = Boolean(/^[A-Za-z0-9_-]{11}$/.test(nativeYoutubeVideoId));
+  const usesYoutubeApiPlayer = Boolean(
+    !usesNativeYoutubePlayer && /^[A-Za-z0-9_-]{11}$/.test(youtubeVideoId)
+  );
   if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : sonicTinyCopy("Player pronto", "Player ready", "Player listo");
   if (djPreviewMeta) {
     djPreviewMeta.textContent = hasSeed
@@ -52624,7 +53084,40 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
     djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
     djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
-  scheduleDjPreviewFrame(embedUrl);
+  if (djPreviewNativeBtn) {
+    djPreviewNativeBtn.classList.toggle("hidden", !usesNativeYoutubePlayer);
+    djPreviewNativeBtn.disabled = !usesNativeYoutubePlayer;
+    djPreviewNativeBtn.dataset.youtubeVideoId = usesNativeYoutubePlayer ? nativeYoutubeVideoId : "";
+    djPreviewNativeBtn.querySelector("span").textContent = sonicTinyCopy(
+      "Player protegido",
+      "Protected player",
+      "Player protegido"
+    );
+    djPreviewNativeBtn.querySelector("strong").textContent = sonicTinyCopy(
+      "Assistir set no app",
+      "Watch set in the app",
+      "Ver set en la app"
+    );
+    djPreviewNativeBtn.querySelector("small").textContent = sonicTinyCopy(
+      "Abre o vídeo sem sair do Sonic Search",
+      "Opens the video without leaving Sonic Search",
+      "Abre el video sin salir de Sonic Search"
+    );
+  }
+  const youtubeRenderToken = ++djYoutubeRenderToken;
+  if (usesNativeYoutubePlayer) {
+    setDjPreviewWebSurface("none");
+    scheduleDjPreviewFrame("");
+    setDjPreviewRecovery({ visible: false });
+  } else if (usesYoutubeApiPlayer) {
+    setDjPreviewWebSurface("youtube");
+    scheduleDjPreviewFrame("");
+    void renderDjYoutubePreview(seed, youtubeVideoId, youtubeRenderToken);
+  } else {
+    setDjPreviewWebSurface("frame");
+    scheduleDjPreviewFrame(embedUrl);
+    setDjPreviewRecovery({ visible: false });
+  }
   renderDjRadarSummary();
 }
 
@@ -52657,38 +53150,46 @@ async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
   const seed = currentDjRecommendation;
   const key = djRecommendationKey(seed);
   djSwipeBusy = true;
-  djSwipeCard.classList.remove("is-dragging");
+  djSwipeCard.classList.remove("is-dragging", "is-returning");
+  animateSwipeCommit(djSwipeCard, direction);
   djSwipeCard.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
   if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = true;
   if (djSwipePassBtn) djSwipePassBtn.disabled = true;
-  await waitMs(180);
-  if (direction === "like") {
-    likedDjRecommendationKeys.add(key);
-    passedDjRecommendationKeys.delete(key);
-    if (djSwipeStatus) {
-      djSwipeStatus.textContent = sonicTinyCopy(
-        `${seed.name} salvo no radar de DJs.`,
-        `${seed.name} saved to the DJ radar.`,
-        `${seed.name} guardado en el radar de DJs.`
-      );
+  try {
+    await waitMs(direction === "pass" ? 150 : 190);
+    if (direction === "like") {
+      likedDjRecommendationKeys.add(key);
+      passedDjRecommendationKeys.delete(key);
+      if (djSwipeStatus) {
+        djSwipeStatus.textContent = sonicTinyCopy(
+          `${seed.name} salvo no radar de DJs.`,
+          `${seed.name} saved to the DJ radar.`,
+          `${seed.name} guardado en el radar de DJs.`
+        );
+      }
+      playUiSfx("like");
+      burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
+      showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
+    } else {
+      passedDjRecommendationKeys.add(key);
+      if (djSwipeStatus) {
+        djSwipeStatus.textContent = sonicTinyCopy(
+          "Passei este set e trouxe outro DJ.",
+          "Passed this set and brought another DJ.",
+          "Pasé este set y traje otro DJ."
+        );
+      }
+      playUiSfx("dislike");
     }
-    playUiSfx("like");
-    burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
-    showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
-  } else {
-    passedDjRecommendationKeys.add(key);
-    if (djSwipeStatus) {
-      djSwipeStatus.textContent = sonicTinyCopy(
-        "Passei este set e trouxe outro DJ.",
-        "Passed this set and brought another DJ.",
-        "Pasé este set y traje otro DJ."
-      );
-    }
-    playUiSfx("dislike");
+    saveDjRecommendationMemory();
+    selectDjRecommendation(pickDjRecommendation({ avoidKey: key }));
+  } finally {
+    djSwipeBusy = false;
+    resetSwipeElementPosition(djSwipeCard);
+    const hasSeed = Boolean(currentDjRecommendation);
+    if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
+    if (djSwipePassBtn) djSwipePassBtn.disabled = !hasSeed;
   }
-  saveDjRecommendationMemory();
-  selectDjRecommendation(pickDjRecommendation({ avoidKey: key }));
-  djSwipeBusy = false;
 }
 
 function finishDjSwipePointer(event, canceled = false) {
@@ -52711,7 +53212,7 @@ function finishDjSwipePointer(event, canceled = false) {
     void completeDjSwipe(decision.direction, element);
     return;
   }
-  resetSwipeElementPosition(element);
+  returnSwipeElementToCenter(element);
 }
 
 function handleDjSwipePointerMove(event) {
@@ -52724,6 +53225,7 @@ function handleDjSwipePointerMove(event) {
     finishDjSwipePointer(event, true);
     return;
   }
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) event.preventDefault();
   setSwipeDragVisual(dx, djSwipeDragState.element, dy);
 }
 
@@ -52731,6 +53233,7 @@ function beginDjSwipePointer(event, element = djSwipeCard) {
   if (!element || !currentDjRecommendation || djSwipeBusy) return;
   if (typeof event.button === "number" && event.button > 0) return;
   if (shouldIgnoreSwipePointerStart(event)) return;
+  element.classList.remove("is-returning", "is-accepted", "is-rejected");
   djSwipeDragState = {
     element,
     pointerId: event.pointerId,
@@ -54373,11 +54876,13 @@ function restoreInitialRecommendationUiSafely() {
 
 function runInitialRecommendation({ source = "manual", initialRunner = null } = {}) {
   if (firstRecommendationPromise) return firstRecommendationPromise;
+  const sessionGeneration = recommendationSessionGeneration;
 
   let attempt = null;
   attempt = Promise.resolve().then(async () => {
     let readiness = { ready: false, status: "unknown" };
     try {
+      assertRecommendationSessionCurrent(sessionGeneration);
       const isRetry = source === "retry" || firstRecommendationRetryAvailable;
       const openingSlotRequest = ensureOpeningRotationSlot();
       firstRecommendationRetryAvailable = false;
@@ -54387,6 +54892,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
 
       readiness = await waitForMinimumCatalogReady();
       await openingSlotRequest;
+      assertRecommendationSessionCurrent(sessionGeneration);
       if (!readiness.ready) {
         trackFirstRecommendationEvent("first_recommendation_fallback", source, {
           reason: `catalog_${readiness.status}`
@@ -54405,6 +54911,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
             skipInitialGuard: true
           });
       const ready = await runner({ onFallback, readiness });
+      assertRecommendationSessionCurrent(sessionGeneration);
       if (ready) {
         firstRecommendationCompleted = true;
         trackFirstRecommendationEvent("first_recommendation_ready", source, {
@@ -54423,6 +54930,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       });
       return false;
     } catch (error) {
+      if (isRecommendationSessionChangedError(error)) return false;
       firstRecommendationRetryAvailable = true;
       safeFirstRecommendationWarning("[first-recommendation] attempt failed", {
         catalogState: readiness.status,
@@ -54436,13 +54944,15 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       return false;
     } finally {
       if (firstRecommendationPromise === attempt) firstRecommendationPromise = null;
-      firstRecommendationBusy = false;
-      try {
-        restoreInitialRecommendationUiSafely();
-      } catch (error) {
-        safeFirstRecommendationWarning("[first-recommendation] CTA restore failed", {
-          reason: String(error?.message || "unexpected_error").slice(0, 160)
-        });
+      if (recommendationSessionIsCurrent(sessionGeneration)) {
+        firstRecommendationBusy = false;
+        try {
+          restoreInitialRecommendationUiSafely();
+        } catch (error) {
+          safeFirstRecommendationWarning("[first-recommendation] CTA restore failed", {
+            reason: String(error?.message || "unexpected_error").slice(0, 160)
+          });
+        }
       }
     }
   });
@@ -61646,11 +62156,14 @@ async function ensureCurrentRecommendationPlayable(
     excludedTrackKeys = new Set(),
     excludedTrackTitles = new Set(),
     excludedArtists = new Set(),
-    allowKnownFallback = false
+    allowKnownFallback = false,
+    sessionGeneration = recommendationSessionGeneration
   } = {}
 ) {
+  assertRecommendationSessionCurrent(sessionGeneration);
   if (!currentRecommendation) return false;
   await resolvePreviewForTrack(currentRecommendation);
+  assertRecommendationSessionCurrent(sessionGeneration);
   if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
   if (trackHasPlayablePreviewExperience(currentRecommendation)) return true;
 
@@ -61669,6 +62182,7 @@ async function ensureCurrentRecommendationPlayable(
     excludedArtists,
     allowKnownFallback
   });
+  assertRecommendationSessionCurrent(sessionGeneration);
   if (!replacement) return false;
   currentRecommendation = replacement;
   return true;
@@ -61684,9 +62198,11 @@ async function generateRecommendationFromPrefs(
     knownTracksText = "",
     avoidDiscoveryName = "",
     avoidArtistName = "",
-    allowKnownFallback = false
+    allowKnownFallback = false,
+    sessionGeneration = recommendationSessionGeneration
   } = {}
 ) {
+  assertRecommendationSessionCurrent(sessionGeneration);
   const previousSurfaceSnapshot = captureRecommendationSurfaceSnapshot();
   let recommendationCommitted = false;
   try {
@@ -61700,6 +62216,7 @@ async function generateRecommendationFromPrefs(
   let usedKnownFallback = false;
   if (resetRejected) rejectedArtists = new Set();
   await prepareCatalogForFastRecommendation(prefs);
+  assertRecommendationSessionCurrent(sessionGeneration);
   if (prefs?.style === "slambient" || !prefs?.style) normalizeTrustedSlambientCatalog();
   sanitizeCatalogByStyleRules();
   if (prefs?.style) purgeDynamicMismatches(prefs.style);
@@ -61822,6 +62339,7 @@ async function generateRecommendationFromPrefs(
     if (freshCandidates.length) return;
 
     await ensureStyleCoverageFast(prefs.style, 1);
+    assertRecommendationSessionCurrent(sessionGeneration);
     freshCandidates = unseenTrackCandidatesForStyle(
       prefs.style,
       prefs,
@@ -61841,11 +62359,13 @@ async function generateRecommendationFromPrefs(
     if (!fallbackStyle) return;
     applyStyleSwitch(fallbackStyle);
     await ensureStyleCoverageFast(fallbackStyle, 1);
+    assertRecommendationSessionCurrent(sessionGeneration);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
   };
 
   await ensureFreshStyleOrSwitch();
+  assertRecommendationSessionCurrent(sessionGeneration);
 
   const tryCrossStyleFallbackRecommendation = async () => {
     if (!prefs?.style) return false;
@@ -61859,6 +62379,7 @@ async function generateRecommendationFromPrefs(
     if (!fallbackStyle) return false;
     if (!applyStyleSwitch(fallbackStyle)) return false;
     await ensureStyleCoverageFast(fallbackStyle, 1);
+    assertRecommendationSessionCurrent(sessionGeneration);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
     currentRecommendation = pickRecommendation(
@@ -62114,6 +62635,7 @@ async function generateRecommendationFromPrefs(
     while (currentRecommendation && apiValidationAttempts < 6) {
       if (artistSeedAnchoredForStyle("psycore", currentRecommendation.artist)) break;
       const profile = await fetchArtistApiProfile(currentRecommendation.artist);
+      assertRecommendationSessionCurrent(sessionGeneration);
       if (!shouldRejectPsycoreByApi(profile)) break;
       const rejectedTrackKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
       excludedTrackKeys.add(rejectedTrackKey);
@@ -62159,6 +62681,7 @@ async function generateRecommendationFromPrefs(
   const maxIntegrityAttempts = prefs.style ? 10 : 6;
   while (currentRecommendation && integrityAttempts < maxIntegrityAttempts) {
     await resolvePreviewForTrack(currentRecommendation);
+    assertRecommendationSessionCurrent(sessionGeneration);
     if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
     const currentKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
     const exists =
@@ -62210,6 +62733,7 @@ async function generateRecommendationFromPrefs(
       excludedArtists: sessionExcludedArtists,
       allowKnownFallback: usedKnownFallback
     });
+    assertRecommendationSessionCurrent(sessionGeneration);
     currentRecommendation = playableReplacement || null;
   }
   if (currentRecommendation && currentRecommendation.existenceVerified === false) {
@@ -62292,16 +62816,18 @@ async function generateRecommendationFromPrefs(
     await expandCatalogForArtistDepth(currentRecommendation.artist, currentRecommendation.style, {
       target: ARTIST_CATALOG_DEPTH_TARGET
     });
+    assertRecommendationSessionCurrent(sessionGeneration);
   }
 
-  if (
-    !(await ensureCurrentRecommendationPlayable(prefs, {
-      excludedTrackKeys,
-      excludedTrackTitles,
-      excludedArtists: sessionExcludedArtists,
-      allowKnownFallback: usedKnownFallback
-    }))
-  ) {
+  const currentRecommendationPlayable = await ensureCurrentRecommendationPlayable(prefs, {
+    excludedTrackKeys,
+    excludedTrackTitles,
+    excludedArtists: sessionExcludedArtists,
+    allowKnownFallback: usedKnownFallback,
+    sessionGeneration
+  });
+  assertRecommendationSessionCurrent(sessionGeneration);
+  if (!currentRecommendationPlayable) {
     markRecommendationBlockedByKnown();
     currentRecommendation = null;
     currentDiscovery = null;
@@ -62386,6 +62912,7 @@ async function generateRecommendationFromPrefs(
   renderRecommendation(recommendationSnapshot, prefs);
   renderDiscovery(discoverySnapshot);
   let previewReady = await renderPreview(recommendationSnapshot);
+  assertRecommendationSessionCurrent(sessionGeneration);
   if (!previewReady) {
     const rejectedSnapshot = recommendationSnapshot;
     const rejectedKey = recommendationTrackKey(rejectedSnapshot);
@@ -62402,6 +62929,7 @@ async function generateRecommendationFromPrefs(
       excludedArtists: sessionExcludedArtists,
       allowKnownFallback: usedKnownFallback
     });
+    assertRecommendationSessionCurrent(sessionGeneration);
     if (!playableReplacement) {
       markRecommendationBlockedByKnown();
       clearFailedRecommendationSurface({ fallbackSnapshot: previousSurfaceSnapshot });
@@ -62415,6 +62943,7 @@ async function generateRecommendationFromPrefs(
     renderRecommendation(recommendationSnapshot, prefs);
     renderDiscovery(discoverySnapshot);
     previewReady = await renderPreview(recommendationSnapshot);
+    assertRecommendationSessionCurrent(sessionGeneration);
     if (!previewReady) {
       markRecommendationBlockedByKnown();
       clearFailedRecommendationSurface({ fallbackSnapshot: previousSurfaceSnapshot });
@@ -62455,6 +62984,7 @@ async function generateRecommendationFromPrefs(
     const previousTrackKey = recommendationTrackKey(previousSurfaceSnapshot?.track);
     const currentTrackKey = recommendationTrackKey(currentRecommendation);
     if (
+      recommendationSessionIsCurrent(sessionGeneration) &&
       !recommendationCommitted &&
       previousSurfaceSnapshot?.track &&
       (!currentTrackKey || currentTrackKey !== previousTrackKey)
@@ -62471,10 +63001,12 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
     showPremiumDiscoveryLimit();
     return false;
   }
+  const sessionGeneration = recommendationSessionGeneration;
   playUiSfx("search-start");
   const manageBusyUi = options.manageBusyUi !== false;
   const recommendationOptions = { ...options };
   delete recommendationOptions.manageBusyUi;
+  recommendationOptions.sessionGeneration = sessionGeneration;
   recommendationRunBusy = true;
   if (manageBusyUi) setRecommendationRunBusy(true);
   try {
@@ -62482,18 +63014,25 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
       if (mode === "catalog") update(18, t("searchOverlayCatalog"));
       else update(24, t("searchOverlayGenerating"));
       const generatedResult = await generateRecommendationFromPrefs(prefs, recommendationOptions);
+      assertRecommendationSessionCurrent(sessionGeneration);
       update(92, t("searchOverlayFinishing"));
       return generatedResult;
     });
+    assertRecommendationSessionCurrent(sessionGeneration);
     if (generated) {
       playUiSfx("search-done");
     } else if (options.failureSfx !== false) {
       playUiSfx(options.failureSfx || "notice");
     }
     return generated;
+  } catch (error) {
+    if (isRecommendationSessionChangedError(error)) return false;
+    throw error;
   } finally {
-    recommendationRunBusy = false;
-    if (manageBusyUi) setRecommendationRunBusy(false);
+    if (recommendationSessionIsCurrent(sessionGeneration)) {
+      recommendationRunBusy = false;
+      if (manageBusyUi) setRecommendationRunBusy(false);
+    }
   }
 }
 
@@ -63061,6 +63600,7 @@ async function runSurpriseRecommendation({
     showPremiumDiscoveryLimit();
     return false;
   }
+  const sessionGeneration = recommendationSessionGeneration;
   sonicPerfReset("surprise");
   sonicPerfMark("start");
   swipeUserAnchoredStyle = "";
@@ -63082,10 +63622,12 @@ async function runSurpriseRecommendation({
     await withSearchOverlay(t("searchOverlayPreparing"), async (update) => {
       sonicPerfMark("pick-start", { hasPrevious: Boolean(previousTrack) });
       surpriseTrack = await pickValidatedSurpriseTrack(previousTrack, update);
+      assertRecommendationSessionCurrent(sessionGeneration);
       sonicPerfMark("pick-validated", { found: Boolean(surpriseTrack) });
       if (!surpriseTrack) {
         if (typeof onFallback === "function") onFallback("emergency_catalog");
         surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        assertRecommendationSessionCurrent(sessionGeneration);
         sonicPerfMark("pick-emergency", { found: Boolean(surpriseTrack) });
       }
       if (
@@ -63094,10 +63636,12 @@ async function runSurpriseRecommendation({
         normalize(surpriseTrack.style || "") === normalize(previousTrack.style || "")
       ) {
         surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        assertRecommendationSessionCurrent(sessionGeneration);
         sonicPerfMark("pick-emergency-same-style", { found: Boolean(surpriseTrack) });
       }
       update(96, t("searchOverlayFinishing"));
     });
+    assertRecommendationSessionCurrent(sessionGeneration);
     sonicPerfMark("overlay-done", { found: Boolean(surpriseTrack) });
     if (!surpriseTrack) {
       playUiSfx("notice");
@@ -63142,6 +63686,7 @@ async function runSurpriseRecommendation({
     sonicPerfMark("render-recommendation");
     renderDiscovery(currentDiscovery);
     let previewReady = await renderPreview(surpriseTrack, { fast: true });
+    assertRecommendationSessionCurrent(sessionGeneration);
     sonicPerfMark("render-preview", { previewReady });
     // A catalog route is only a hint. In-app browsers (notably Instagram's)
     // can reject stale/blocked preview URLs, so only deliver a card after the
@@ -63160,6 +63705,7 @@ async function runSurpriseRecommendation({
         excludedTrackKeys,
         allowKnownFallback: true
       });
+      assertRecommendationSessionCurrent(sessionGeneration);
       sonicPerfMark("replacement-picked", { found: Boolean(playableReplacement) });
       if (!playableReplacement) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
@@ -63176,6 +63722,7 @@ async function runSurpriseRecommendation({
       renderRecommendation(playableReplacement, surprisePrefs);
       renderDiscovery(currentDiscovery);
       previewReady = await renderPreview(playableReplacement, { fast: true });
+      assertRecommendationSessionCurrent(sessionGeneration);
       sonicPerfMark("replacement-preview", { previewReady });
       if (!previewReady) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
@@ -63210,15 +63757,20 @@ async function runSurpriseRecommendation({
     sonicPerfMark("done");
     surpriseCommitted = true;
     return true;
+  } catch (error) {
+    if (isRecommendationSessionChangedError(error)) return false;
+    throw error;
   } finally {
-    if (!surpriseCommitted && surfaceSnapshot?.track) {
+    if (recommendationSessionIsCurrent(sessionGeneration) && !surpriseCommitted && surfaceSnapshot?.track) {
       const snapshotKey = recommendationTrackKey(surfaceSnapshot.track);
       if (recommendationTrackKey(currentRecommendation) !== snapshotKey) {
         restoreRecommendationSurfaceSnapshot(surfaceSnapshot);
       }
     }
-    recommendationRunBusy = false;
-    if (manageBusyUi) setRecommendationRunBusy(false);
+    if (recommendationSessionIsCurrent(sessionGeneration)) {
+      recommendationRunBusy = false;
+      if (manageBusyUi) setRecommendationRunBusy(false);
+    }
   }
 }
 
@@ -63976,6 +64528,18 @@ bind(previewPlayBtn, "click", async () => {
   }
   const previewSource = assignedDirectPreviewSource;
   if (!previewSource) {
+    if (shouldUseNativeYouTubePlayer() && trackHasDirectYouTubeVideo(currentRecommendation)) {
+      syncYouTubePreviewAttemptForTrack(currentRecommendation);
+      const opened = await openNativeYouTubeTrack(
+        currentRecommendation,
+        trackHasDirectYouTubeVideo(currentRecommendation) ? 0 : youtubePreviewSearchAttempt
+      );
+      setPreviewPrimaryPlaybackState("ready");
+      if (previewStatus) {
+        previewStatus.textContent = opened ? t("previewYoutubeFallback") : t("previewUnavailable");
+      }
+      return;
+    }
     const opened = startEmbeddedPreviewPlaybackFromUserGesture(currentRecommendation);
     if (!opened && previewStatus) previewStatus.textContent = t("previewReady");
     return;
@@ -64040,7 +64604,7 @@ bind(radioBrowserPlayer, "pause", finishRadioBrowserPlayback);
 bind(radioBrowserPlayer, "ended", finishRadioBrowserPlayback);
 bind(radioBrowserPlayer, "error", finishRadioBrowserPlayback);
 
-bind(youtubePreviewToggleBtn, "click", () => {
+bind(youtubePreviewToggleBtn, "click", async () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
   const hasDirectYoutube = trackHasDirectYouTubeVideo(currentRecommendation);
@@ -64066,6 +64630,19 @@ bind(youtubePreviewToggleBtn, "click", () => {
   }
 
   const attempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
+  if (shouldUseNativeYouTubePlayer()) {
+    const opened = await openNativeYouTubeTrack(currentRecommendation, attempt);
+    setYouTubePreviewActionState({
+      visible: true,
+      canToggle: true,
+      canRetry,
+      expanded: false
+    });
+    if (previewStatus) {
+      previewStatus.textContent = opened ? t("previewYoutubeFallback") : t("previewUnavailable");
+    }
+    return;
+  }
   const opened = startEmbeddedPreviewPlaybackFromUserGesture(currentRecommendation, "youtube", {
     youtubeAttempt: attempt
   });
@@ -64113,7 +64690,7 @@ bind(soundcloudPreviewToggleBtn, "click", async () => {
   if (previewStatus) previewStatus.textContent = t("previewSoundcloudSearchHint");
 });
 
-bind(youtubePreviewRetryBtn, "click", () => {
+bind(youtubePreviewRetryBtn, "click", async () => {
   if (!currentRecommendation) return;
   syncYouTubePreviewAttemptForTrack(currentRecommendation);
 
@@ -64121,6 +64698,19 @@ bind(youtubePreviewRetryBtn, "click", () => {
   if (attemptCount < 2) return;
   youtubePreviewSearchAttempt = (youtubePreviewSearchAttempt + 1) % attemptCount;
 
+  if (shouldUseNativeYouTubePlayer()) {
+    const opened = await openNativeYouTubeTrack(currentRecommendation, youtubePreviewSearchAttempt);
+    setYouTubePreviewActionState({
+      visible: true,
+      canToggle: true,
+      canRetry: attemptCount > 1,
+      expanded: false
+    });
+    if (previewStatus) {
+      previewStatus.textContent = opened ? t("previewYoutubeFallback") : t("previewUnavailable");
+    }
+    return;
+  }
   const opened = startEmbeddedPreviewPlaybackFromUserGesture(currentRecommendation, "youtube", {
     youtubeAttempt: youtubePreviewSearchAttempt
   });
@@ -64168,6 +64758,22 @@ bind(bandcampPreviewToggleBtn, "click", () => {
     previewStatus.textContent = platforms.length
       ? t("previewUnavailableWithLinks", { platforms: platforms.join("/") })
       : t("previewUnavailable");
+  }
+});
+
+bind(djPreviewNativeBtn, "click", async () => {
+  const videoId = String(djPreviewNativeBtn?.dataset?.youtubeVideoId || "").trim();
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) return;
+  const opened = await openNativeYouTubeVideo(videoId, {
+    title: [currentDjRecommendation?.setTitle, currentDjRecommendation?.name].filter(Boolean).join(" — "),
+    url: currentDjRecommendation?.setUrl || `https://www.youtube.com/watch?v=${videoId}`
+  });
+  if (!opened && djSwipeStatus) {
+    djSwipeStatus.textContent = sonicTinyCopy(
+      "Não foi possível abrir este set agora.",
+      "This set could not be opened right now.",
+      "No fue posible abrir este set ahora."
+    );
   }
 });
 
@@ -65150,6 +65756,12 @@ bind(djSwipeCard, "pointercancel", (event) => {
   finishDjSwipePointer(event, true);
 });
 bind(djSwipeCard, "keydown", handleDjSwipeKeyboard);
+bind(window, "pointerup", (event) => {
+  finishDjSwipePointer(event);
+});
+bind(window, "pointercancel", (event) => {
+  finishDjSwipePointer(event, true);
+});
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshSonicEditorial({ force: true });
   void refreshDailyNews({ silent: false });

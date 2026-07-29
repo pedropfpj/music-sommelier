@@ -2,8 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <base href="/" />
+    <base id="sonicDocumentBase" href="/" />
+    <script>
+      if (window.location.protocol === "file:") {
+        document.getElementById("sonicDocumentBase")?.setAttribute("href", "./");
+        document.documentElement.dataset.sonicLocalFile = "true";
+        window.SONIC_SEARCH_LOCAL_FILE_MODE = true;
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="Find an electronic track for the moment with swipe, preview, context, and fewer repeats." />
     <meta name="theme-color" content="#06111f" />
     <meta property="og:site_name" content="Sonic Search" />
@@ -23,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260724djControls1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260729djSwipeVideo2" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260724djControls1" />
+    <link rel="stylesheet" href="styles.min.css?v=20260729djSwipeVideo2" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -579,7 +587,7 @@
           </div>
         </div>
         <p id="heroDesc" class="muted">
-          Diga o momento, marque o que já conhece e deixe o Sonic Search trazer uma faixa com motivo, preview e contexto.
+          Seu momento dá o tom. O Sonic Search encontra uma faixa nova e mostra por que ela combina com você.
         </p>
         <div class="hero-actions">
           <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
@@ -1280,12 +1288,30 @@
                 <a id="djPreviewOpenLink" class="secondary dj-preview-open" href="#" target="_blank" rel="noopener noreferrer">YouTube</a>
               </div>
               <div id="djPreviewFrameWrap" class="dj-preview-frame-wrap">
-                <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <div id="djPreviewYoutubeShell" class="dj-preview-youtube-shell hidden" aria-label="Player do YouTube">
+                  <div id="djPreviewYoutubeMount"></div>
+                </div>
+                <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <button id="djPreviewNativeBtn" class="dj-preview-native-btn hidden" type="button">
+                  <span>Player protegido</span>
+                  <strong>Assistir set no app</strong>
+                  <small>Abre o vídeo sem sair do Sonic Search</small>
+                </button>
+                <div id="djPreviewRecovery" class="dj-preview-recovery hidden" role="status" aria-live="polite">
+                  <span class="dj-preview-recovery-pulse" aria-hidden="true"></span>
+                  <strong id="djPreviewRecoveryTitle">Verificando o player</strong>
+                  <small id="djPreviewRecoveryHint">Se este vídeo estiver bloqueado, outro set entra automaticamente.</small>
+                </div>
               </div>
               <p id="djPreviewMeta" class="muted dj-preview-meta">O player aparece quando uma carta de DJ estiver ativa.</p>
             </section>
             <div class="dj-swipe-column">
-              <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
+              <div id="djSwipeGestureHint" class="dj-swipe-gesture-hint" role="note">
+                <span id="djSwipeGesturePass">← Passar</span>
+                <strong id="djSwipeGestureTitle">Arraste a carta</strong>
+                <span id="djSwipeGestureLike">Curtir →</span>
+              </div>
+              <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-describedby="djSwipeGestureHint" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
                 <span class="swipe-stamp swipe-stamp-like">Curti</span>
                 <span class="swipe-stamp swipe-stamp-pass">Não curti</span>
                 <p id="djSwipeKicker" class="swipe-kicker">Set recomendado</p>
@@ -3157,6 +3183,6 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.min.js?v=20260724preview9"></script>
+    <script defer src="app.min.js?v=20260729heroCopy1"></script>
   </body>
 </html>
