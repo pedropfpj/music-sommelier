@@ -9616,6 +9616,7 @@ const djModeStatus = document.getElementById("djModeStatus");
 const djDiscoveryPanel = document.getElementById("djDiscoveryPanel");
 const djDiscoverySceneFilter = document.getElementById("djDiscoverySceneFilter");
 const djDiscoveryShuffleBtn = document.getElementById("djDiscoveryShuffleBtn");
+const djSwipeGestureHint = document.getElementById("djSwipeGestureHint");
 const djSwipeCard = document.getElementById("djSwipeCard");
 const djSwipeKicker = document.getElementById("djSwipeKicker");
 const djSwipeName = document.getElementById("djSwipeName");
@@ -9633,6 +9634,10 @@ const djSwipeStatus = document.getElementById("djSwipeStatus");
 const djPreviewTitle = document.getElementById("djPreviewTitle");
 const djPreviewMeta = document.getElementById("djPreviewMeta");
 const djPreviewFrame = document.getElementById("djPreviewFrame");
+const djPreviewYoutubeShell = document.getElementById("djPreviewYoutubeShell");
+const djPreviewRecovery = document.getElementById("djPreviewRecovery");
+const djPreviewRecoveryTitle = document.getElementById("djPreviewRecoveryTitle");
+const djPreviewRecoveryHint = document.getElementById("djPreviewRecoveryHint");
 const djPreviewOpenLink = document.getElementById("djPreviewOpenLink");
 const djRadarCount = document.getElementById("djRadarCount");
 const djRadarLiked = document.getElementById("djRadarLiked");
@@ -9928,6 +9933,13 @@ let swipeDragState = null;
 let currentDjRecommendation = null;
 let djSwipeBusy = false;
 let djSwipeDragState = null;
+let djYoutubeIframeApiPromise = null;
+let djYoutubePlayer = null;
+let djYoutubePlayerReady = false;
+let djYoutubePendingVideoId = "";
+let djYoutubeRenderToken = 0;
+let djYoutubeRecoveryBusy = false;
+const unavailableDjPreviewKeys = new Set();
 let likedDjRecommendationKeys = new Set();
 let passedDjRecommendationKeys = new Set();
 let recentDjRecommendationKeys = [];
@@ -28225,6 +28237,16 @@ function applyLanguage() {
     });
   }
   setText("#djDiscoveryShuffleBtn", sonicTinyCopy("Surpresa", "Surprise", "Sorpresa"));
+  setText("#djSwipeGesturePass", sonicTinyCopy("← Passar", "← Pass", "← Pasar"));
+  setText("#djSwipeGestureTitle", sonicTinyCopy("Arraste a carta", "Swipe the card", "Desliza la carta"));
+  setText("#djSwipeGestureLike", sonicTinyCopy("Curtir →", "Like →", "Me gusta →"));
+  if (djSwipeGestureHint) {
+    djSwipeGestureHint.setAttribute("aria-label", sonicTinyCopy(
+      "Arraste a carta para a esquerda para passar ou para a direita para curtir",
+      "Swipe the card left to pass or right to like",
+      "Desliza la carta a la izquierda para pasar o a la derecha para indicar que te gusta"
+    ));
+  }
   if (djSwipeCard) {
     djSwipeCard.setAttribute("aria-label", sonicTinyCopy(
       "Arraste para direita para curtir ou esquerda para passar este DJ",
@@ -39542,6 +39564,7 @@ function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
     try {
       window.clearTimeout(djPreviewFrameLoadTimer);
       djPreviewFrameLoadTimer = 0;
+      djYoutubePlayer?.stopVideo?.();
       djPreviewFrame?.contentWindow?.postMessage?.(JSON.stringify({ event: "command", func: "stopVideo", args: [] }), "*");
       djPreviewFrame?.removeAttribute("src");
     } catch (_err) {}
@@ -50515,7 +50538,18 @@ function djSetEmbedUrl(seed = {}) {
   const platform = normalize(seed.platform || "");
   if (platform.includes("youtube")) {
     const id = youtubeVideoIdFromUrl(seed.setUrl);
-    return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : "";
+    if (!id) return "";
+    const pageOrigin = /^https?:$/i.test(String(window.location?.protocol || ""))
+      ? String(window.location.origin || SONIC_PRODUCTION_ORIGIN)
+      : SONIC_PRODUCTION_ORIGIN;
+    const params = new URLSearchParams({
+      rel: "0",
+      modestbranding: "1",
+      playsinline: "1",
+      enablejsapi: "1",
+      origin: pageOrigin
+    });
+    return `https://www.youtube.com/embed/${id}?${params.toString()}`;
   }
   if (platform.includes("soundcloud") && seed.setUrl) {
     return `https://w.soundcloud.com/player/?url=${encodeURIComponent(seed.setUrl)}&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=true`;
@@ -50525,6 +50559,11 @@ function djSetEmbedUrl(seed = {}) {
 
 function djSeedHasPlayablePreview(seed = {}) {
   return Boolean(djSetEmbedUrl(seed));
+}
+
+function djSeedPreviewUnavailable(seed = {}) {
+  const key = djRecommendationKey(seed);
+  return Boolean(key && unavailableDjPreviewKeys.has(key));
 }
 
 function djSeedHasNonElectronicConflict(seed = {}) {
@@ -50545,13 +50584,14 @@ function filteredDjRecommendationPool() {
   const lane = String(djDiscoverySceneFilter?.value || "").trim();
   const recommendationSeeds = ensureDjSetRecommendationSeeds();
   const electronicSeeds = recommendationSeeds.filter((seed) => !djSeedHasNonElectronicConflict(seed));
-  const pool = electronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
+  const availableElectronicSeeds = electronicSeeds.filter((seed) => !djSeedPreviewUnavailable(seed));
+  const pool = availableElectronicSeeds.filter((seed) => djSeedMatchesLane(seed, lane));
   const playablePool = pool.filter(djSeedHasPlayablePreview);
   if (playablePool.length) return playablePool;
   const directSetPool = pool.filter((seed) => !djSeedIsSearchFallback(seed));
   if (directSetPool.length) return directSetPool;
-  const globalPlayablePool = electronicSeeds.filter(djSeedHasPlayablePreview);
-  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : electronicSeeds;
+  const globalPlayablePool = availableElectronicSeeds.filter(djSeedHasPlayablePreview);
+  return pool.length ? pool : globalPlayablePool.length ? globalPlayablePool : availableElectronicSeeds;
 }
 
 function randomDjPoolIndex(length = 0) {
@@ -50665,6 +50705,221 @@ function renderDjRecommendationBadges(seed = null) {
   renderSonicBadgeList(djSwipeBadges, badges);
 }
 
+function djYoutubePlayerOrigin() {
+  return /^https?:$/i.test(String(window.location?.protocol || ""))
+    ? String(window.location.origin || SONIC_PRODUCTION_ORIGIN)
+    : SONIC_PRODUCTION_ORIGIN;
+}
+
+function setDjPreviewRecovery({ visible = false, title = "", hint = "", tone = "loading" } = {}) {
+  if (!djPreviewRecovery) return;
+  djPreviewRecovery.classList.toggle("hidden", !visible);
+  djPreviewRecovery.dataset.tone = tone;
+  if (djPreviewRecoveryTitle && title) djPreviewRecoveryTitle.textContent = title;
+  if (djPreviewRecoveryHint && hint) djPreviewRecoveryHint.textContent = hint;
+}
+
+function setDjPreviewWebSurface(surface = "frame") {
+  const showYoutube = surface === "youtube";
+  const showFrame = surface === "frame";
+  djPreviewYoutubeShell?.classList.toggle("hidden", !showYoutube);
+  djPreviewFrame?.classList.toggle("hidden", !showFrame);
+}
+
+function loadDjYoutubeIframeApi() {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (djYoutubeIframeApiPromise) return djYoutubeIframeApiPromise;
+
+  djYoutubeIframeApiPromise = new Promise((resolve, reject) => {
+    let settled = false;
+    let timeoutId = 0;
+    const finish = (value, error = null) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      if (error) reject(error);
+      else resolve(value);
+    };
+    const previousReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      try {
+        if (typeof previousReady === "function") previousReady();
+      } finally {
+        if (window.YT?.Player) finish(window.YT);
+        else finish(null, new Error("youtube_iframe_api_missing"));
+      }
+    };
+
+    let script = document.querySelector("script[data-sonic-dj-youtube-api]");
+    if (!script) {
+      script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.async = true;
+      script.referrerPolicy = "strict-origin-when-cross-origin";
+      script.dataset.sonicDjYoutubeApi = "true";
+      script.addEventListener("error", () => finish(null, new Error("youtube_iframe_api_failed")), { once: true });
+      document.head.appendChild(script);
+    }
+
+    timeoutId = window.setTimeout(() => {
+      if (window.YT?.Player) finish(window.YT);
+      else finish(null, new Error("youtube_iframe_api_timeout"));
+    }, 10000);
+  }).catch((error) => {
+    djYoutubeIframeApiPromise = null;
+    throw error;
+  });
+  return djYoutubeIframeApiPromise;
+}
+
+function djYoutubePlayerVideoId(player = djYoutubePlayer) {
+  try {
+    return String(player?.getVideoData?.()?.video_id || "").trim();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function djPreviewBlockedCopy(code = 0) {
+  if (Number(code) === 100) {
+    return sonicTinyCopy(
+      "Este vídeo foi removido ou ficou privado.",
+      "This video was removed or made private.",
+      "Este video fue eliminado o pasó a privado."
+    );
+  }
+  return sonicTinyCopy(
+    "Este vídeo não permite reprodução incorporada.",
+    "This video does not allow embedded playback.",
+    "Este video no permite reproducción incorporada."
+  );
+}
+
+async function recoverDjPreviewAfterYoutubeError(code = 0, failedVideoId = "") {
+  if (djYoutubeRecoveryBusy || !currentDjRecommendation) return false;
+  const seed = currentDjRecommendation;
+  const key = djRecommendationKey(seed);
+  const activeVideoId = youtubeVideoIdFromUrl(seed?.setUrl || "");
+  if (failedVideoId && activeVideoId && failedVideoId !== activeVideoId) return false;
+
+  if (Number(code) === 153) {
+    setDjPreviewRecovery({
+      visible: true,
+      tone: "blocked",
+      title: sonicTinyCopy("Player bloqueado neste navegador", "Player blocked in this browser", "Player bloqueado en este navegador"),
+      hint: sonicTinyCopy("Use Abrir set para assistir diretamente no YouTube.", "Use Open set to watch directly on YouTube.", "Usa Abrir set para verlo directamente en YouTube.")
+    });
+    if (djPreviewMeta) djPreviewMeta.textContent = `${seed.name} • ${djPreviewBlockedCopy(code)}`;
+    return false;
+  }
+
+  if (key) unavailableDjPreviewKeys.add(key);
+  djYoutubeRecoveryBusy = true;
+  try {
+    setDjPreviewRecovery({
+      visible: true,
+      tone: "recovering",
+      title: djPreviewBlockedCopy(code),
+      hint: sonicTinyCopy("Buscando automaticamente outro set que toque aqui…", "Automatically finding another set that plays here…", "Buscando automáticamente otro set que funcione aquí…")
+    });
+    if (djSwipeStatus) {
+      djSwipeStatus.textContent = sonicTinyCopy(
+        "O vídeo não abriu no player. Estou trocando por outro set verificado.",
+        "The video did not open in the player. I am replacing it with another verified set.",
+        "El video no abrió en el player. Lo estoy cambiando por otro set verificado."
+      );
+    }
+
+    await waitMs(420);
+    if (currentDjRecommendation !== seed) return false;
+    const replacement = pickDjRecommendation({ avoidKey: key });
+    if (!replacement || djRecommendationKey(replacement) === key) {
+      setDjPreviewRecovery({
+        visible: true,
+        tone: "blocked",
+        title: djPreviewBlockedCopy(code),
+        hint: sonicTinyCopy("Não encontrei outro set nesta seleção. Use Abrir set ou troque o estilo.", "No other set was found in this selection. Use Open set or change the style.", "No encontré otro set en esta selección. Usa Abrir set o cambia el estilo.")
+      });
+      return false;
+    }
+
+    selectDjRecommendation(replacement);
+    if (djSwipeStatus) {
+      djSwipeStatus.textContent = sonicTinyCopy(
+        "Vídeo bloqueado removido da rodada. Outro set pronto para tocar.",
+        "Blocked video removed from this round. Another set is ready to play.",
+        "Video bloqueado eliminado de esta ronda. Otro set está listo para reproducirse."
+      );
+    }
+    showToast(sonicTinyCopy("Troquei o vídeo bloqueado", "Blocked video replaced", "Cambié el video bloqueado"));
+    return true;
+  } finally {
+    djYoutubeRecoveryBusy = false;
+  }
+}
+
+function handleDjYoutubePlayerError(event) {
+  const code = Number(event?.data || 0);
+  if (![2, 5, 100, 101, 150, 153].includes(code)) return;
+  const failedVideoId = djYoutubePlayerVideoId(event?.target) || djYoutubePendingVideoId;
+  void recoverDjPreviewAfterYoutubeError(code, failedVideoId);
+}
+
+async function renderDjYoutubePreview(seed = currentDjRecommendation, videoId = "", renderToken = djYoutubeRenderToken) {
+  const safeVideoId = String(videoId || "").trim();
+  if (!/^[A-Za-z0-9_-]{11}$/.test(safeVideoId)) return false;
+  djYoutubePendingVideoId = safeVideoId;
+  setDjPreviewRecovery({
+    visible: true,
+    tone: "loading",
+    title: sonicTinyCopy("Verificando o player", "Checking the player", "Verificando el player"),
+    hint: sonicTinyCopy("Se este vídeo estiver bloqueado, outro set entra automaticamente.", "If this video is blocked, another set will load automatically.", "Si este video está bloqueado, otro set entrará automáticamente.")
+  });
+
+  try {
+    const YT = await loadDjYoutubeIframeApi();
+    if (renderToken !== djYoutubeRenderToken || currentDjRecommendation !== seed) return false;
+    if (djYoutubePlayer && djYoutubePlayerReady) {
+      if (djYoutubePlayerVideoId() !== safeVideoId) djYoutubePlayer.cueVideoById(safeVideoId);
+      setDjPreviewRecovery({ visible: false });
+      return true;
+    }
+    if (djYoutubePlayer) return true;
+
+    djYoutubePlayer = new YT.Player("djPreviewYoutubeMount", {
+      width: "100%",
+      height: "100%",
+      videoId: safeVideoId,
+      playerVars: {
+        rel: 0,
+        playsinline: 1,
+        origin: djYoutubePlayerOrigin()
+      },
+      events: {
+        onReady: (event) => {
+          djYoutubePlayer = event.target;
+          djYoutubePlayerReady = true;
+          if (djYoutubePendingVideoId && djYoutubePlayerVideoId(event.target) !== djYoutubePendingVideoId) {
+            event.target.cueVideoById(djYoutubePendingVideoId);
+          }
+          setDjPreviewRecovery({ visible: false });
+        },
+        onStateChange: (event) => {
+          if ([-1, 1, 2, 3, 5].includes(Number(event?.data))) setDjPreviewRecovery({ visible: false });
+        },
+        onError: handleDjYoutubePlayerError
+      }
+    });
+    return true;
+  } catch (_error) {
+    if (renderToken !== djYoutubeRenderToken || currentDjRecommendation !== seed) return false;
+    setDjPreviewWebSurface("frame");
+    scheduleDjPreviewFrame(djSetEmbedUrl(seed));
+    setDjPreviewRecovery({ visible: false });
+    return false;
+  }
+}
+
 function scheduleDjPreviewFrame(embedUrl = "") {
   if (!djPreviewFrame) return;
   window.clearTimeout(djPreviewFrameLoadTimer);
@@ -50728,6 +50983,9 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
 
   const embedUrl = hasSeed ? djSetEmbedUrl(seed) : "";
+  const isYoutubeSeed = hasSeed && normalize(seed?.platform || "").includes("youtube");
+  const youtubeVideoId = isYoutubeSeed ? youtubeVideoIdFromUrl(seed?.setUrl || "") : "";
+  const usesYoutubeApiPlayer = Boolean(/^[A-Za-z0-9_-]{11}$/.test(youtubeVideoId));
   if (djPreviewTitle) djPreviewTitle.textContent = hasSeed ? seed.setTitle : sonicTinyCopy("Player pronto", "Player ready", "Player listo");
   if (djPreviewMeta) {
     djPreviewMeta.textContent = hasSeed
@@ -50751,7 +51009,16 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
     djPreviewOpenLink.classList.toggle("is-disabled", !hasSeed);
     djPreviewOpenLink.setAttribute("aria-disabled", hasSeed ? "false" : "true");
   }
-  scheduleDjPreviewFrame(embedUrl);
+  const youtubeRenderToken = ++djYoutubeRenderToken;
+  if (usesYoutubeApiPlayer) {
+    setDjPreviewWebSurface("youtube");
+    scheduleDjPreviewFrame("");
+    void renderDjYoutubePreview(seed, youtubeVideoId, youtubeRenderToken);
+  } else {
+    setDjPreviewWebSurface("frame");
+    scheduleDjPreviewFrame(embedUrl);
+    setDjPreviewRecovery({ visible: false });
+  }
   renderDjRadarSummary();
 }
 
@@ -50778,38 +51045,46 @@ async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
   const seed = currentDjRecommendation;
   const key = djRecommendationKey(seed);
   djSwipeBusy = true;
-  djSwipeCard.classList.remove("is-dragging");
+  djSwipeCard.classList.remove("is-dragging", "is-returning");
+  animateSwipeCommit(djSwipeCard, direction);
   djSwipeCard.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
   if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = true;
   if (djSwipePassBtn) djSwipePassBtn.disabled = true;
-  await waitMs(180);
-  if (direction === "like") {
-    likedDjRecommendationKeys.add(key);
-    passedDjRecommendationKeys.delete(key);
-    if (djSwipeStatus) {
-      djSwipeStatus.textContent = sonicTinyCopy(
-        `${seed.name} salvo no radar de DJs.`,
-        `${seed.name} saved to the DJ radar.`,
-        `${seed.name} guardado en el radar de DJs.`
-      );
+  try {
+    await waitMs(direction === "pass" ? 150 : 190);
+    if (direction === "like") {
+      likedDjRecommendationKeys.add(key);
+      passedDjRecommendationKeys.delete(key);
+      if (djSwipeStatus) {
+        djSwipeStatus.textContent = sonicTinyCopy(
+          `${seed.name} salvo no radar de DJs.`,
+          `${seed.name} saved to the DJ radar.`,
+          `${seed.name} guardado en el radar de DJs.`
+        );
+      }
+      playUiSfx("like");
+      burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
+      showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
+    } else {
+      passedDjRecommendationKeys.add(key);
+      if (djSwipeStatus) {
+        djSwipeStatus.textContent = sonicTinyCopy(
+          "Passei este set e trouxe outro DJ.",
+          "Passed this set and brought another DJ.",
+          "Pasé este set y traje otro DJ."
+        );
+      }
+      playUiSfx("dislike");
     }
-    playUiSfx("like");
-    burstConfetti(triggerEl || djSwipeLikeBtn, ["#9bffb7", "#6effdc", "#7de0ff"]);
-    showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
-  } else {
-    passedDjRecommendationKeys.add(key);
-    if (djSwipeStatus) {
-      djSwipeStatus.textContent = sonicTinyCopy(
-        "Passei este set e trouxe outro DJ.",
-        "Passed this set and brought another DJ.",
-        "Pasé este set y traje otro DJ."
-      );
-    }
-    playUiSfx("dislike");
+    saveDjRecommendationMemory();
+    selectDjRecommendation(pickDjRecommendation({ avoidKey: key }));
+  } finally {
+    djSwipeBusy = false;
+    resetSwipeElementPosition(djSwipeCard);
+    const hasSeed = Boolean(currentDjRecommendation);
+    if (djSwipeLikeBtn) djSwipeLikeBtn.disabled = !hasSeed;
+    if (djSwipePassBtn) djSwipePassBtn.disabled = !hasSeed;
   }
-  saveDjRecommendationMemory();
-  selectDjRecommendation(pickDjRecommendation({ avoidKey: key }));
-  djSwipeBusy = false;
 }
 
 function finishDjSwipePointer(event, canceled = false) {
@@ -50832,7 +51107,7 @@ function finishDjSwipePointer(event, canceled = false) {
     void completeDjSwipe(decision.direction, element);
     return;
   }
-  resetSwipeElementPosition(element);
+  returnSwipeElementToCenter(element);
 }
 
 function handleDjSwipePointerMove(event) {
@@ -50845,6 +51120,7 @@ function handleDjSwipePointerMove(event) {
     finishDjSwipePointer(event, true);
     return;
   }
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) event.preventDefault();
   setSwipeDragVisual(dx, djSwipeDragState.element, dy);
 }
 
@@ -50852,6 +51128,7 @@ function beginDjSwipePointer(event, element = djSwipeCard) {
   if (!element || !currentDjRecommendation || djSwipeBusy) return;
   if (typeof event.button === "number" && event.button > 0) return;
   if (shouldIgnoreSwipePointerStart(event)) return;
+  element.classList.remove("is-returning", "is-accepted", "is-rejected");
   djSwipeDragState = {
     element,
     pointerId: event.pointerId,
@@ -63381,6 +63658,12 @@ bind(djSwipeCard, "pointercancel", (event) => {
   finishDjSwipePointer(event, true);
 });
 bind(djSwipeCard, "keydown", handleDjSwipeKeyboard);
+bind(window, "pointerup", (event) => {
+  finishDjSwipePointer(event);
+});
+bind(window, "pointercancel", (event) => {
+  finishDjSwipePointer(event, true);
+});
 bind(dailyNewsRefreshBtn, "click", () => {
   void refreshDailyNews({ silent: false });
 });

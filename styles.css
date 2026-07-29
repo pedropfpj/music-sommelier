@@ -18011,3 +18011,268 @@ html.sonic-ios-app .voice-effects-card {
     grid-column: 3 / -1 !important;
   }
 }
+
+/* DJ cinema player + reliable, touch-first swipe flow. */
+.dj-discovery-grid {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+.dj-preview-panel {
+  order: -1;
+  grid-template-rows: auto auto auto;
+  width: 100%;
+  gap: clamp(0.68rem, 1vw, 0.92rem);
+  padding: clamp(0.82rem, 1.35vw, 1.3rem);
+  border-color: rgba(126, 255, 231, 0.28);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(126, 255, 231, 0.14), transparent 34%),
+    radial-gradient(circle at 92% 18%, rgba(126, 178, 255, 0.1), transparent 32%),
+    linear-gradient(145deg, rgba(8, 18, 40, 0.99), rgba(3, 9, 24, 0.97));
+  box-shadow: 0 28px 68px rgba(0, 4, 16, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.dj-preview-head {
+  align-items: center;
+}
+
+.dj-preview-head > div {
+  min-width: 0;
+}
+
+.dj-preview-head h4 {
+  max-width: 42ch;
+  font-size: clamp(1.18rem, 2.1vw, 1.92rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.dj-preview-frame-wrap {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+  border-color: rgba(126, 255, 231, 0.38);
+  border-radius: 12px;
+  background: #02050d;
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.44), 0 0 0 1px rgba(126, 255, 231, 0.06);
+}
+
+.dj-preview-youtube-shell,
+.dj-preview-youtube-shell > div,
+.dj-preview-youtube-shell > iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dj-preview-youtube-shell {
+  z-index: 1;
+  overflow: hidden;
+  background: #02050d;
+}
+
+.dj-preview-youtube-shell iframe {
+  display: block;
+  border: 0;
+}
+
+.dj-preview-recovery {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.48rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #f3fbff;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(126, 255, 231, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(3, 11, 26, 0.92), rgba(2, 6, 17, 0.88));
+  backdrop-filter: blur(9px);
+  pointer-events: none;
+}
+
+.dj-preview-recovery[data-tone="blocked"] {
+  background:
+    radial-gradient(circle at 50% 36%, rgba(255, 186, 112, 0.15), transparent 34%),
+    linear-gradient(145deg, rgba(18, 12, 19, 0.94), rgba(4, 7, 17, 0.9));
+}
+
+.dj-preview-recovery strong {
+  max-width: 32ch;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.38rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.dj-preview-recovery small {
+  max-width: 48ch;
+  color: #b8cadb;
+  font-size: clamp(0.76rem, 1.6vw, 0.9rem);
+  line-height: 1.4;
+}
+
+.dj-preview-recovery-pulse {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 0.32rem;
+  border: 2px solid rgba(126, 255, 231, 0.2);
+  border-top-color: #7effe7;
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(126, 255, 231, 0.16);
+  animation: dj-preview-recovery-spin 820ms linear infinite;
+}
+
+.dj-preview-recovery[data-tone="blocked"] .dj-preview-recovery-pulse {
+  border-color: rgba(255, 190, 120, 0.42);
+  animation: none;
+}
+
+@keyframes dj-preview-recovery-spin {
+  to { transform: rotate(1turn); }
+}
+
+.dj-swipe-column {
+  width: 100%;
+  align-content: start;
+  overflow-x: clip;
+}
+
+.dj-swipe-gesture-hint {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.58rem;
+  min-height: 38px;
+  border: 1px solid rgba(126, 205, 255, 0.18);
+  border-radius: 999px;
+  padding: 0.32rem 0.7rem;
+  color: #b9cddd;
+  background: rgba(4, 12, 28, 0.72);
+  font-size: 0.72rem;
+  font-weight: 820;
+}
+
+.dj-swipe-gesture-hint strong {
+  color: #f2fbff;
+  font-family: "Syne", sans-serif;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.dj-swipe-gesture-hint span:first-child { color: #ffb1ca; }
+.dj-swipe-gesture-hint span:last-child { color: #9fffea; text-align: right; }
+
+.dj-swipe-card {
+  min-height: 0;
+  gap: 0.72rem;
+  border-radius: 14px;
+  padding: clamp(1rem, 1.55vw, 1.35rem);
+}
+
+.dj-swipe-card h4 {
+  max-width: 100%;
+  font-size: clamp(2rem, 3.2vw, 3.45rem);
+  line-height: 0.98;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.dj-swipe-actions .swipe-action-btn {
+  min-height: 54px;
+}
+
+@media (min-width: 1180px) {
+  html:not(.sonic-ios-app):not([data-sonic-native-app="true"]):not([data-sonic-store-screenshot="true"]) .app-shell > #djDiscoveryPanel {
+    width: 100%;
+    max-width: 1320px;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 620px) {
+  .dj-discovery-grid { gap: 0.9rem; }
+
+  .dj-swipe-column {
+    order: -2;
+    gap: 0.54rem;
+  }
+
+  .dj-preview-panel {
+    order: -1;
+    gap: 0.62rem;
+    border-radius: 14px;
+    padding: 0.78rem;
+  }
+
+  .dj-preview-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: flex-start;
+  }
+
+  .dj-preview-open { width: 100%; }
+
+  .dj-swipe-gesture-hint {
+    min-height: 36px;
+    gap: 0.36rem;
+    padding: 0.28rem 0.62rem;
+    font-size: 0.66rem;
+  }
+
+  .dj-swipe-gesture-hint strong {
+    font-size: 0.68rem;
+    white-space: nowrap;
+  }
+
+  .dj-swipe-card {
+    min-height: 310px;
+    gap: 0.58rem;
+    padding: 0.92rem;
+    contain: paint;
+  }
+
+  .dj-swipe-card h4 {
+    font-size: clamp(1.72rem, 9vw, 2.65rem);
+  }
+
+  .dj-swipe-card > .muted,
+  .dj-swipe-card .swipe-card-reason {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+  }
+
+  .dj-swipe-card > .muted { -webkit-line-clamp: 2; }
+  .dj-swipe-card .swipe-card-reason { -webkit-line-clamp: 3; }
+  .dj-context-list { display: none; }
+
+  .dj-swipe-actions {
+    position: relative;
+    z-index: 2;
+    gap: 0.5rem;
+    border: 1px solid rgba(126, 205, 255, 0.16);
+    border-radius: 12px;
+    padding: 0.42rem;
+    background: rgba(3, 10, 24, 0.84);
+    box-shadow: 0 14px 32px rgba(0, 4, 16, 0.2);
+  }
+
+  .dj-swipe-actions .swipe-action-btn { min-height: 52px; }
+  .dj-preview-frame-wrap { border-radius: 10px; }
+  .dj-preview-recovery { gap: 0.34rem; padding: 0.84rem; }
+  .dj-preview-recovery-pulse { width: 36px; height: 36px; margin-bottom: 0.16rem; }
+  .dj-preview-recovery strong { font-size: 0.98rem; }
+  .dj-preview-recovery small { font-size: 0.74rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dj-preview-recovery-pulse { animation: none; }
+}

@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.css?v=20260723community1" as="style" />
+    <link rel="preload" href="styles.css?v=20260729djSwipeVideo2" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260707introLogo1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,7 +59,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.css?v=20260723community1" />
+    <link rel="stylesheet" href="styles.css?v=20260729djSwipeVideo2" />
     <link rel="stylesheet" href="newsroom.css?v=20260723newsroom2" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -694,7 +694,12 @@
         </div>
         <div class="dj-discovery-grid">
           <div class="dj-swipe-column">
-            <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
+            <div id="djSwipeGestureHint" class="dj-swipe-gesture-hint" role="note">
+              <span id="djSwipeGesturePass">← Passar</span>
+              <strong id="djSwipeGestureTitle">Arraste a carta</strong>
+              <span id="djSwipeGestureLike">Curtir →</span>
+            </div>
+            <article id="djSwipeCard" class="swipe-track-card dj-swipe-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para passar este DJ" aria-describedby="djSwipeGestureHint" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
               <span class="swipe-stamp swipe-stamp-like">Curti</span>
               <span class="swipe-stamp swipe-stamp-pass">Não curti</span>
               <p id="djSwipeKicker" class="swipe-kicker">Set recomendado</p>
@@ -726,7 +731,15 @@
             </div>
             <p id="djPreviewMeta" class="muted">O player aparece quando uma carta de DJ estiver ativa.</p>
             <div id="djPreviewFrameWrap" class="dj-preview-frame-wrap">
-              <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <div id="djPreviewYoutubeShell" class="dj-preview-youtube-shell hidden" aria-label="Player do YouTube">
+                <div id="djPreviewYoutubeMount"></div>
+              </div>
+              <iframe id="djPreviewFrame" title="Preview do set recomendado" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <div id="djPreviewRecovery" class="dj-preview-recovery hidden" role="status" aria-live="polite">
+                <span class="dj-preview-recovery-pulse" aria-hidden="true"></span>
+                <strong id="djPreviewRecoveryTitle">Verificando o player</strong>
+                <small id="djPreviewRecoveryHint">Se este vídeo estiver bloqueado, outro set entra automaticamente.</small>
+              </div>
             </div>
           </aside>
         </div>
@@ -2575,7 +2588,7 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.min.js?v=20260724preview9"></script>
+    <script defer src="app.min.js?v=20260729djSwipeVideo2"></script>
     <script defer src="newsroom.js?v=20260723newsroom2"></script>
   </body>
 </html>
