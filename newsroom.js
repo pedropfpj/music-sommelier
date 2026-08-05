@@ -66,26 +66,85 @@
     }
   }
 
-  function coverNode(article = {}) {
+  function visualKey(value = "") {
+    const url = safeUrl(value);
+    if (!url) return "";
+    try {
+      const parsed = new URL(url);
+      return `${parsed.origin}${parsed.pathname}`.replace(/\/+$/, "").toLowerCase();
+    } catch (_error) {
+      return url.split("?")[0].replace(/\/+$/, "").toLowerCase();
+    }
+  }
+
+  function articleMonogram(article = {}) {
+    const words = String(article.title || article.eyebrow || article.category || "Sonic Search")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .split(/[^a-z0-9]+/i)
+      .filter(Boolean);
+    if (!words.length) return "SS";
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return `${words[0][0]}${words[1][0]}`.toUpperCase();
+  }
+
+  function articleVisualCandidates(article = {}) {
+    const localKeys = new Set();
+    return [
+      { url: article.coverImageUrl, alt: article.coverImageAlt || "" },
+      ...mediaEntries(article).map((entry) => ({ url: entry.url, alt: entry.alt || "" }))
+    ].map((candidate) => ({
+      ...candidate,
+      url: safeUrl(candidate.url),
+      key: visualKey(candidate.url)
+    })).filter((candidate) => {
+      if (!candidate.url || !candidate.key || localKeys.has(candidate.key)) return false;
+      localKeys.add(candidate.key);
+      return true;
+    });
+  }
+
+  function selectArticleVisual(article = {}, usedImageKeys = new Set()) {
+    const candidates = articleVisualCandidates(article);
+    const selected = candidates.find((candidate) => !usedImageKeys.has(candidate.key)) || null;
+    if (selected) usedImageKeys.add(selected.key);
+    return {
+      url: selected?.url || "",
+      alt: selected?.alt || "",
+      deduplicated: Boolean(candidates.length && !selected)
+    };
+  }
+
+  function coverNode(article = {}, usedImageKeys = new Set()) {
     const wrap = document.createElement("div");
     wrap.className = "sonic-editorial-image-wrap";
-    const url = safeUrl(article.coverImageUrl);
-    if (!url) {
-      const fallback = document.createElement("span");
-      fallback.textContent = "SS";
+    const visual = selectArticleVisual(article, usedImageKeys);
+    const appendFallback = ({ deduplicated = false } = {}) => {
+      wrap.dataset.visualState = deduplicated ? "deduplicated" : "missing";
+      const fallback = document.createElement("div");
+      fallback.className = "sonic-editorial-fallback";
+      fallback.setAttribute("aria-hidden", "true");
+      const kicker = document.createElement("span");
+      kicker.textContent = deduplicated ? "OUTRA LEITURA" : "CAPA EDITORIAL";
+      const monogram = document.createElement("strong");
+      monogram.textContent = articleMonogram(article);
+      const label = document.createElement("small");
+      label.textContent = String(article.eyebrow || article.category || "Jornal Sonic").trim();
+      fallback.append(kicker, monogram, label);
       wrap.appendChild(fallback);
+    };
+    if (!visual.url) {
+      appendFallback({ deduplicated: visual.deduplicated });
       return wrap;
     }
     const image = document.createElement("img");
-    image.src = url;
-    image.alt = article.coverImageAlt || "";
+    image.src = visual.url;
+    image.alt = visual.alt;
     image.loading = "lazy";
     image.decoding = "async";
     image.addEventListener("error", () => {
       image.remove();
-      const fallback = document.createElement("span");
-      fallback.textContent = "SS";
-      wrap.appendChild(fallback);
+      appendFallback();
     }, { once: true });
     wrap.appendChild(image);
     return wrap;
@@ -99,6 +158,7 @@
       return;
     }
 
+    const usedImageKeys = new Set();
     state.articles.forEach((article) => {
       const card = document.createElement("button");
       card.type = "button";
@@ -122,7 +182,7 @@
       meta.className = "sonic-editorial-meta";
       meta.textContent = articleMeta(article);
       copy.append(kicker, title, excerpt, meta);
-      card.append(coverNode(article), copy);
+      card.append(coverNode(article, usedImageKeys), copy);
       list.appendChild(card);
     });
 

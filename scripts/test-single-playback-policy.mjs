@@ -82,6 +82,9 @@ function assertSourcePolicy() {
   const soundcloudShowSource = extractFunction("showSoundCloudPreviewEmbed");
   const continueFromUsageGuideSource = extractFunction("continueFromUsageGuide");
   const enterAppFromWelcomeSource = extractFunction("enterAppFromWelcome");
+  const feedbackTransitionStopSource = extractFunction("stopPlaybackForFeedbackTransition");
+  const swipePassSource = extractFunction("passCurrentTrackFromSwipe");
+  const previewDislikeSource = extractFunction("swapAfterPreviewFeedback");
 
   assert.match(appSource, /const AUTOMATIC_TRACK_PLAYBACK_ENABLED = true;/);
   assert.match(
@@ -97,6 +100,19 @@ function assertSourcePolicy() {
     renderPreviewSource,
     /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/,
     "the current preview must keep playing until the replacement source is ready"
+  );
+  assert.match(feedbackTransitionStopSource, /recommendationPreviewRenderToken \+= 1/);
+  assert.match(feedbackTransitionStopSource, /previewRecoveryToken \+= 1/);
+  assert.match(feedbackTransitionStopSource, /stopAllActivePlayback/);
+  assert.ok(
+    swipePassSource.indexOf("stopPlaybackForFeedbackTransition") <
+      swipePassSource.indexOf("await advanceAfterSwipeFeedback"),
+    "swipe dislike must stop playback before selecting the next card"
+  );
+  assert.ok(
+    previewDislikeSource.indexOf("stopPlaybackForFeedbackTransition") <
+      previewDislikeSource.indexOf("tryAdvanceNegativeFeedbackInstantly"),
+    "preview dislike must stop playback before selecting the replacement"
   );
   assert.match(renderPreviewSource, /commitTrackPreviewSource/);
   assert.match(renderPreviewSource, /createTrackPreviewProbeElement/);
@@ -161,6 +177,7 @@ function createStopHarness({ throwSource = "" } = {}) {
     trackPreview: {},
     voicePlayback: { pause: fixture("voice_recording"), currentTime: 7 },
     djPreviewFrameLoadTimer: 9,
+    djYoutubePlayer: { stopVideo: fixture("dj_youtube") },
     djPreviewFrame: {
       contentWindow: { postMessage: fixture("dj_message") },
       removeAttribute: fixture("dj_frame")

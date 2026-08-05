@@ -116,11 +116,66 @@
   object-fit: cover;
 }
 
-.sonic-editorial-image-wrap > span {
-  color: rgba(255, 255, 255, 0.72);
+.sonic-editorial-image-wrap[data-visual-state="deduplicated"] {
+  background:
+    linear-gradient(115deg, transparent 0 48%, rgba(255, 207, 131, 0.1) 48% 48.6%, transparent 48.6%),
+    radial-gradient(circle at 76% 22%, rgba(255, 92, 157, 0.24), transparent 25%),
+    linear-gradient(145deg, #111b2d, #050a13 68%);
+}
+
+.sonic-editorial-fallback {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  width: min(78%, 360px);
+  padding: clamp(1rem, 3vw, 1.6rem) 0;
+}
+
+.sonic-editorial-fallback::before,
+.sonic-editorial-fallback::after {
+  width: 100%;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, #67e8df, rgba(255, 207, 131, 0.42), transparent);
+}
+
+.sonic-editorial-fallback::before {
+  margin-bottom: 0.72rem;
+}
+
+.sonic-editorial-fallback::after {
+  margin-top: 0.76rem;
+  transform: scaleX(0.42);
+  transform-origin: left;
+}
+
+.sonic-editorial-fallback span {
+  color: #67e8df;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.sonic-editorial-fallback strong {
+  color: rgba(255, 237, 199, 0.9);
   font-family: "Syne", sans-serif;
-  font-size: 3rem;
+  font-size: clamp(3.3rem, 9vw, 6.6rem);
   font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.1em;
+  text-shadow: 0 0 34px rgba(255, 205, 115, 0.22);
+}
+
+.sonic-editorial-fallback small {
+  max-width: 30ch;
+  margin-top: 0.45rem;
+  color: rgba(225, 234, 241, 0.7);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
 .sonic-editorial-copy {

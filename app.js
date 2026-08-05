@@ -39586,6 +39586,14 @@ function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
   return generation;
 }
 
+function stopPlaybackForFeedbackTransition(reason = "feedback_transition") {
+  // Prevent a pending preview lookup from restarting the rejected track while
+  // the next recommendation is being selected.
+  recommendationPreviewRenderToken += 1;
+  previewRecoveryToken += 1;
+  return stopAllActivePlayback({ reason });
+}
+
 function resetYouTubePreviewEmbed() {
   if (!youtubePreviewWrap || !youtubePreviewFrame) return;
   youtubePreviewWrap.classList.add("hidden");
@@ -54128,6 +54136,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
 async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   if (!currentRecommendation || !lastPrefs) return false;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("swipe_pass");
   const feedbackReason = inferNegativeFeedbackReason(rejectedTrack, { source: "swipe_pass" });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
   const reasonMessage = appendSwipeLearningMessage(
@@ -63114,6 +63123,7 @@ function feedbackMessageForRecommendationIssue(reason = "") {
 async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition(source || "preview_dislike");
   userStats.skipped += 1;
   const isPreviewIssue = reason === "preview_issue";
   const isRecommendationIssue = RECOMMENDATION_ISSUE_REASONS.has(reason);
@@ -63265,6 +63275,7 @@ bind(noveltyLikedBtn, "click", async () => {
 bind(noveltyNotYetBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("novelty_not_yet");
   const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "novelty_not_yet",
     avoidRepeatArtist: true
@@ -63497,6 +63508,7 @@ bind(blockArtistBtn, "click", async () => {
   const blockedArtistName = String(currentRecommendation.artist || "").trim();
   const blockedArtistKey = artistMatchKey(blockedArtistName);
   if (!blockedArtistKey) return;
+  stopPlaybackForFeedbackTransition("artist_blocked");
 
   addArtistIdentityToSet(blockedArtistsMemory, blockedArtistName);
   addArtistIdentityToSet(rejectedArtists, blockedArtistName);
@@ -63579,6 +63591,7 @@ bind(newDiscoveryBtn, "click", () => {
 bind(skipBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("skip");
   userStats.skipped += 1;
   const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "skip",
