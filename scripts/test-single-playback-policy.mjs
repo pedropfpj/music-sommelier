@@ -73,6 +73,9 @@ function assertSourcePolicy() {
   const startPreviewSource = extractFunction("startTrackPreviewPlayback");
   const soundCloudSyncSource = extractFunction("syncSoundCloudWidgetPlayback");
   const soundCloudResetSource = extractFunction("resetSoundCloudPreviewEmbed");
+  const youtubeResetSource = extractFunction("resetYouTubePreviewEmbed");
+  const bandcampResetSource = extractFunction("resetBandcampPreviewEmbed");
+  const embeddedFrameResetSource = extractFunction("resetEmbeddedPreviewFrame");
   const soundCloudBindingSource = extractFunction("scheduleSoundCloudWidgetPlaybackBinding");
   const preferredEmbedSource = extractFunction("preferredEmbeddedAutoplaySource");
   const resumeCurrentPreviewSource = extractFunction("resumeCurrentPreviewFromUserGesture");
@@ -141,9 +144,13 @@ function assertSourcePolicy() {
   assert.match(soundCloudSyncSource, /userInitiated/);
   assert.match(soundCloudSyncSource, /activePlaybackMatches/);
   assert.match(soundCloudResetSource, /soundcloudWidgetGeneration \+= 1/);
-  assert.match(soundCloudResetSource, /removeAttribute\("src"\)/);
   assert.match(soundCloudResetSource, /soundcloudWidgetController = null/);
   assert.match(soundCloudResetSource, /\.unbind/);
+  assert.match(soundCloudResetSource, /resetEmbeddedPreviewFrame/);
+  assert.match(youtubeResetSource, /resetEmbeddedPreviewFrame/);
+  assert.match(bandcampResetSource, /resetEmbeddedPreviewFrame/);
+  assert.match(embeddedFrameResetSource, /about:blank/);
+  assert.match(embeddedFrameResetSource, /replaceChild/);
   assert.match(soundCloudBindingSource, /SOUNDCLOUD_WIDGET_BIND_TIMEOUT_MS/);
   assert.match(soundCloudBindingSource, /SOUNDCLOUD_WIDGET_BIND_RETRY_MS/);
   assert.match(soundCloudBindingSource, /bindSoundCloudWidgetPlaybackEvents/);
@@ -276,7 +283,7 @@ function createPreviewHarness() {
   const playResolvers = [];
   const audio = {
     dataset: {},
-    currentSrc: "https://audio.example/fixture.m4a",
+    currentSrc: "https://audio.example/stale-previous.m4a",
     src: "https://audio.example/fixture.m4a",
     currentTime: 8,
     playCalls: 0,
@@ -295,6 +302,7 @@ function createPreviewHarness() {
     currentRecommendation: { artist: "Fixture", song: "Track", previewUrl: audio.src },
     recommendationPreviewRenderToken: 1,
     recommendationTrackKey: () => "fixture::track",
+    trackPreviewElementMatchesTrack: () => true,
     syncPreviewAudioState() {},
     trackPreview: audio
   });
@@ -304,6 +312,8 @@ function createPreviewHarness() {
     ${extractFunction("setActivePlayback")}
     ${extractFunction("activePlaybackMatches")}
     ${extractFunction("clearActivePlayback")}
+    ${extractFunction("declaredMediaElementSource")}
+    ${extractFunction("ownedTrackPreviewSource")}
     function stopAllActivePlayback() {
       playbackGeneration += 1;
       setActivePlayback({ type: "none", generation: playbackGeneration, state: "stopped" });
@@ -324,6 +334,7 @@ async function testAutomaticPlaybackAndRapidRequests() {
 
   const automatic = harness.context.startTrackPreviewPlayback(harness.audio, { automatic: true });
   assert.equal(harness.audio.playCalls, 1);
+  assert.equal(harness.audio.src, "https://audio.example/fixture.m4a");
   harness.playResolvers[0].resolve();
   const automaticResult = await automatic;
   assert.equal(automaticResult.ok, true);

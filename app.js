@@ -10066,11 +10066,11 @@ const previewStatus = document.getElementById("previewStatus");
 const trackPreview = document.getElementById("trackPreview");
 const previewPlayBtn = document.getElementById("previewPlayBtn");
 const soundcloudPreviewWrap = document.getElementById("soundcloudPreviewWrap");
-const soundcloudPreviewFrame = document.getElementById("soundcloudPreviewFrame");
+let soundcloudPreviewFrame = document.getElementById("soundcloudPreviewFrame");
 const bandcampPreviewWrap = document.getElementById("bandcampPreviewWrap");
-const bandcampPreviewFrame = document.getElementById("bandcampPreviewFrame");
+let bandcampPreviewFrame = document.getElementById("bandcampPreviewFrame");
 const youtubePreviewWrap = document.getElementById("youtubePreviewWrap");
-const youtubePreviewFrame = document.getElementById("youtubePreviewFrame");
+let youtubePreviewFrame = document.getElementById("youtubePreviewFrame");
 const youtubePreviewActions = document.getElementById("youtubePreviewActions");
 const youtubePreviewToggleBtn = document.getElementById("youtubePreviewToggleBtn");
 const youtubePreviewRetryBtn = document.getElementById("youtubePreviewRetryBtn");
@@ -19187,6 +19187,21 @@ function trackPreviewElementMatchesTrack(track = currentRecommendation) {
   const trackKey = recommendationTrackKey(track);
   const ownerKey = normalize(trackPreview.dataset.previewTrackKey || "");
   return Boolean(trackKey && ownerKey && ownerKey === trackKey);
+}
+
+function declaredMediaElementSource(audioEl) {
+  if (!audioEl) return "";
+  return String(audioEl.getAttribute?.("src") || audioEl.src || "").trim();
+}
+
+function ownedTrackPreviewSource(track = currentRecommendation, audioEl = trackPreview) {
+  if (!audioEl) return "";
+  const declaredSource = declaredMediaElementSource(audioEl);
+  if (audioEl === trackPreview && !trackPreviewElementMatchesTrack(track)) return "";
+  // WebKit (including Opera on iOS) can leave currentSrc pointing at the
+  // previous resource while a newly assigned src is already authoritative.
+  // Prefer the declared URL so a card transition cannot replay stale audio.
+  return declaredSource || String(audioEl.currentSrc || "").trim();
 }
 
 function probeAudioSource(audioEl, previewUrl, timeoutMs = PREVIEW_PROBE_TIMEOUT_MS) {
@@ -30389,9 +30404,9 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
     return { ok: false, reason: "playback_not_requested" };
   }
   const previewSource = String(
-    audioEl.currentSrc ||
-    audioEl.getAttribute?.("src") ||
-    audioEl.src ||
+    (audioEl === trackPreview
+      ? ownedTrackPreviewSource(currentRecommendation, audioEl)
+      : declaredMediaElementSource(audioEl) || audioEl.currentSrc) ||
     currentRecommendation?.previewUrl ||
     currentRecommendation?.artistPreviewFallback?.previewUrl ||
     ""
@@ -36770,6 +36785,27 @@ function stopPlaybackForFeedbackTransition(reason = "feedback_transition") {
   return stopAllActivePlayback({ reason });
 }
 
+function resetEmbeddedPreviewFrame(frame) {
+  if (!frame) return frame;
+  try {
+    // Navigating first forces WebKit to tear down its remote media document.
+    frame.setAttribute?.("src", "about:blank");
+  } catch (_err) {}
+  try {
+    const parent = frame.parentNode;
+    if (parent && typeof frame.cloneNode === "function" && typeof parent.replaceChild === "function") {
+      const replacement = frame.cloneNode(false);
+      replacement.removeAttribute?.("src");
+      parent.replaceChild(replacement, frame);
+      return replacement;
+    }
+  } catch (_err) {}
+  try {
+    frame.removeAttribute?.("src");
+  } catch (_err) {}
+  return frame;
+}
+
 function resetYouTubePreviewEmbed() {
   if (!youtubePreviewWrap || !youtubePreviewFrame) return;
   youtubePreviewWrap.classList.add("hidden");
@@ -36779,9 +36815,7 @@ function resetYouTubePreviewEmbed() {
       "*"
     );
   } catch (_err) {}
-  if (youtubePreviewFrame.getAttribute("src")) {
-    youtubePreviewFrame.removeAttribute("src");
-  }
+  youtubePreviewFrame = resetEmbeddedPreviewFrame(youtubePreviewFrame);
   setYouTubePreviewActionState({ visible: false, canToggle: false, canRetry: false, expanded: false });
 }
 
@@ -36873,9 +36907,7 @@ function resetSoundCloudPreviewEmbed({ keepActions = false, track = null } = {})
   try {
     widget?.pause();
   } catch (_err) {}
-  try {
-    soundcloudPreviewFrame.removeAttribute("src");
-  } catch (_err) {}
+  soundcloudPreviewFrame = resetEmbeddedPreviewFrame(soundcloudPreviewFrame);
   soundcloudWidgetController = null;
   soundcloudWidgetTrackUrl = "";
   if (keepActions && track) {
@@ -37045,9 +37077,7 @@ function buildBandcampEmbedUrl(track) {
 function resetBandcampPreviewEmbed({ keepActions = false, track = null } = {}) {
   if (!bandcampPreviewWrap || !bandcampPreviewFrame) return;
   bandcampPreviewWrap.classList.add("hidden");
-  if (bandcampPreviewFrame.getAttribute("src")) {
-    bandcampPreviewFrame.removeAttribute("src");
-  }
+  bandcampPreviewFrame = resetEmbeddedPreviewFrame(bandcampPreviewFrame);
   if (keepActions && track) {
     syncBandcampPreviewActionForTrack(track, { expanded: false });
   } else if (!keepActions) {
@@ -37213,8 +37243,7 @@ function resumeCurrentPreviewFromUserGesture() {
   const embedded = startPreferredEmbeddedPreviewAutoplay(track);
   if (embedded.opened) return true;
   const previewSource = normalizePreviewUrl(
-    trackPreview?.currentSrc ||
-    trackPreview?.src ||
+    ownedTrackPreviewSource(track, trackPreview) ||
     track?.previewUrl ||
     track?.artistPreviewFallback?.previewUrl ||
     ""
@@ -53729,9 +53758,7 @@ function visiblePreviewFrameHasSource(wrap, frame) {
 
 function renderedPreviewHasPlaybackRoute(track = currentRecommendation) {
   const audioSource = normalizePreviewUrl(
-    trackPreview?.currentSrc ||
-    trackPreview?.src ||
-    ""
+    ownedTrackPreviewSource(track, trackPreview)
   );
   const audioReady = Boolean(
     trackPreview &&
@@ -53767,7 +53794,7 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
   const track = currentRecommendation;
   const surfaceSnapshot = captureRecommendationSurfaceSnapshot();
   const trackKey = recommendationTrackKey(track);
-  const failedPreview = normalizePreviewUrl(trackPreview.currentSrc || trackPreview.src || track.previewUrl);
+  const failedPreview = normalizePreviewUrl(ownedTrackPreviewSource(track, trackPreview) || track.previewUrl);
   if (!failedPreview && !trackKey) return;
   stopAllActivePlayback({ reason: `preview_recovery_${reason}` });
 
@@ -60874,12 +60901,12 @@ bind(previewPlayBtn, "click", async () => {
     if (previewStatus) previewStatus.textContent = t("previewReady");
     return;
   }
-  const assignedDirectPreviewSource = normalizePreviewUrl(trackPreview.currentSrc || trackPreview.src || "");
+  const assignedDirectPreviewSource = normalizePreviewUrl(declaredMediaElementSource(trackPreview));
   if (assignedDirectPreviewSource && !trackPreviewElementMatchesTrack(currentRecommendation)) {
     void renderPreview(currentRecommendation, { fast: true }).catch(() => null);
     return;
   }
-  const previewSource = assignedDirectPreviewSource;
+  const previewSource = normalizePreviewUrl(ownedTrackPreviewSource(currentRecommendation, trackPreview));
   if (!previewSource) {
     if (shouldUseNativeYouTubePlayer() && trackHasDirectYouTubeVideo(currentRecommendation)) {
       syncYouTubePreviewAttemptForTrack(currentRecommendation);

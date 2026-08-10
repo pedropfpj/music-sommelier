@@ -102,10 +102,13 @@ vm.runInNewContext(
     "recommendationTrackKey",
     "resetTrackPreviewElement",
     "commitTrackPreviewSource",
-    "trackPreviewElementMatchesTrack"
+    "trackPreviewElementMatchesTrack",
+    "declaredMediaElementSource",
+    "ownedTrackPreviewSource"
   ].map(functionSource).join("\n") +
     "; this.commit = commitTrackPreviewSource;" +
     " this.matches = trackPreviewElementMatchesTrack;" +
+    " this.source = ownedTrackPreviewSource;" +
     " this.reset = resetTrackPreviewElement;",
   context
 );
@@ -125,6 +128,14 @@ assert.equal(
 assert.equal(player.currentSrc, "https://audio.example/track-b.mp3");
 assert.equal(context.matches(trackB), true, "The committed player must belong to the visible card");
 assert.equal(context.matches(trackA), false, "A different card must never inherit the committed player");
+
+player.currentSrc = "https://audio.example/stale-track-a.mp3";
+assert.equal(
+  context.source(trackB, player),
+  "https://audio.example/track-b.mp3",
+  "The declared source owned by the visible card must win over stale WebKit currentSrc"
+);
+player.currentSrc = player.src;
 
 context.currentRecommendation = trackA;
 context.recommendationPreviewRenderToken = 3;
