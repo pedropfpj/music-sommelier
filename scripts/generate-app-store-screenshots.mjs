@@ -39,10 +39,10 @@ const devices = {
 
 const shots = [
   ["01-descobrir", "discover"],
-  ["02-noticias", "news"],
-  ["03-perfil", "profile"],
-  ["04-comunidade", "community"],
-  ["05-djs", "djs"]
+  ["02-jornal-sonic", "news"],
+  ["03-djs", "djs"],
+  ["04-filtros", "filters"],
+  ["05-perfil", "profile"]
 ];
 
 const newsScreenshotItems = screenshotLanguage === "en"
@@ -259,6 +259,29 @@ function newsScreenshotStatements() {
     const progress = document.getElementById("dailyNewsProgress");
     const list = document.getElementById("dailyNewsList");
     const items = ${JSON.stringify(newsScreenshotItems)};
+    const editorialArticles = ${JSON.stringify(screenshotLanguage === "en"
+      ? [{
+          id: "app-store-sonic-journal-en",
+          category: "CULTURE & DISCOVERY",
+          title: "Inside the scenes shaping electronic music now",
+          excerpt: "Independent curation connects new releases, dancefloors, artists, and the stories behind the sound.",
+          publishedAt: "2026-08-10T12:00:00.000Z"
+        }]
+      : [{
+          id: "app-store-sonic-journal-pt",
+          category: "CULTURA & DESCOBERTA",
+          title: "Por dentro das cenas que movimentam a música eletrônica",
+          excerpt: "Curadoria independente conecta lançamentos, pistas, artistas e as histórias por trás do som.",
+          publishedAt: "2026-08-10T12:00:00.000Z"
+        }])};
+    if (typeof renderSonicEditorialArticles === "function") {
+      renderSonicEditorialArticles(editorialArticles, {
+        storeSource: false,
+        pagination: { hasMore: false, nextOffset: editorialArticles.length }
+      });
+    }
+    const editorialStatus = document.getElementById("sonicEditorialStatus");
+    if (editorialStatus) editorialStatus.textContent = "";
     if (status) {
       status.textContent = ${JSON.stringify(screenshotLanguage === "en" ? "Updated now · verified sources" : "Atualizado agora · fontes verificadas")};
       status.classList.remove("is-loading");
