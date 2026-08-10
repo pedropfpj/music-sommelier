@@ -65,11 +65,11 @@ assert.doesNotMatch(
 );
 assert.match(primaryPicker, /buildGlobalArtistExclusionSet/);
 assert.match(primaryPicker, /artistSetHasMatch\(blockedArtists,\s*track\.artist\)/);
-assert.match(primaryPicker, /trackHasReadyPlaybackRoute/);
+assert.match(primaryPicker, /trackHasInstantPlaybackRoute/);
 assert.ok(
   instantPresenter.indexOf("renderRecommendation(track, finalPrefs)") < instantPresenter.indexOf("pickDiscovery(finalPrefs"),
   "Opera must paint the replacement card before calculating secondary discovery content."
 );
 assert.match(instantPresenter, /window\.setTimeout\(\(\) =>/);
 
-console.log(`Opera Slambient fast-path tests passed: ${slambientTrackCount} curated Bandcamp tracks and no overlay on the ready route.`);
+console.log(`Opera Slambient fast-path tests passed: ${slambientTrackCount} curated Bandcamp tracks and no overlay on the instant route.`);

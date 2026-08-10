@@ -82,7 +82,7 @@ function buttonFixture() {
   };
 }
 
-function createHarness({ analyticsThrows = false, trackingThrows = false, restoreThrows = false, readiness = null } = {}) {
+function createHarness({ analyticsThrows = false, trackingThrows = false, restoreThrows = false, readiness = null, instantAfterReady = false } = {}) {
   const state = {
     runnerCount: 0,
     analyticsCalls: 0,
@@ -137,6 +137,7 @@ function createHarness({ analyticsThrows = false, trackingThrows = false, restor
     },
     ensureOpeningRotationSlot: async () => 1,
     waitForMinimumCatalogReady: async () => readiness || { ready: true, status: "already_ready" },
+    tryRunInstantPrimaryRecommendation: () => instantAfterReady,
     runSurpriseRecommendation: async () => true
   });
 
@@ -289,6 +290,21 @@ async function testConcurrentRequestsShareOneAttempt() {
   await assertReleased(harness);
 }
 
+async function testHydratedCatalogUsesInstantLocalTrack() {
+  const harness = createHarness({ instantAfterReady: true });
+  const result = await harness.context.runInitialRecommendation({
+    source: "manual",
+    initialRunner: async () => {
+      harness.state.runnerCount += 1;
+      return true;
+    }
+  });
+  assert.equal(result, true);
+  assert.equal(harness.context.firstRecommendationCompleted, true);
+  assert.equal(harness.state.runnerCount, 0);
+  await assertReleased(harness);
+}
+
 async function testSessionSwitchDiscardsPendingAttempt() {
   const harness = createHarness();
   let releaseRunner;
@@ -328,6 +344,7 @@ const tests = [
   ["CTA restoration failure uses direct fallback", testRestoreFailureUsesDirectFallback],
   ["catalog timeout allows fallback and retry", testTimeoutAllowsFallbackAndRetry],
   ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt],
+  ["hydrated catalog uses instant local track", testHydratedCatalogUsesInstantLocalTrack],
   ["session switch discards pending attempt", testSessionSwitchDiscardsPendingAttempt]
 ];
 

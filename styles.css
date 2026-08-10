@@ -20091,3 +20091,90 @@ html[data-sonic-performance="efficient"] .intro-logo-wrap::before {
     animation: none;
   }
 }
+
+/* Keep the DJ header actions legible when the app shell narrows. */
+.dj-discovery-head > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dj-discovery-controls {
+  flex: 0 1 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  min-width: min(100%, 320px);
+}
+
+.dj-discovery-controls select {
+  width: 100%;
+  min-width: 0;
+}
+
+#djDiscoveryShuffleBtn,
+#djPreviewOpenLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  flex: 0 0 auto;
+  min-height: 46px;
+  border-radius: 10px;
+  padding: 0.68rem 1rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+#djDiscoveryShuffleBtn {
+  min-width: 7.5rem;
+  box-shadow:
+    0 12px 28px rgba(84, 220, 216, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+#djDiscoveryShuffleBtn::before {
+  content: "✦";
+  font-size: 0.82em;
+  line-height: 1;
+}
+
+#djPreviewOpenLink {
+  min-width: 7rem;
+  min-height: 44px;
+  color: #17110a;
+  text-decoration: none;
+  background: linear-gradient(110deg, #ffd18b, #ffb86b);
+  box-shadow:
+    0 12px 28px rgba(255, 174, 105, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+#djPreviewOpenLink::after {
+  content: "↗";
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+@media (max-width: 900px) {
+  .dj-discovery-head {
+    flex-wrap: wrap;
+  }
+
+  .dj-discovery-controls {
+    flex-basis: 100%;
+    grid-template-columns: minmax(0, 1fr) 7.5rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .dj-discovery-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #djDiscoveryShuffleBtn,
+  #djPreviewOpenLink {
+    width: 100%;
+  }
+}

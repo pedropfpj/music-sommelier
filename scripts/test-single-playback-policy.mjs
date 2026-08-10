@@ -111,6 +111,10 @@ function assertSourcePolicy() {
     "preview dislike must stop and invalidate playback before selecting the replacement"
   );
   assert.match(renderPreviewSource, /attemptRenderedPreviewAutoplay/);
+  assert.match(renderPreviewSource, /if \(!autoplayStarted && activePlayback\?\.type === "none"\)/);
+  assert.match(renderPreviewSource, /setPreviewPrimaryPlaybackState\("ready"\)/);
+  assert.match(appSource, /Keep the deck's "Agora" slot anchored/);
+  assert.match(appSource, /track,\s*\.\.\.suggestionQueueTracks\.filter/);
   assert.ok(
     renderPreviewSource.indexOf("startPreferredEmbeddedPreviewAutoplay(track)") <
       renderPreviewSource.indexOf("await waitForPromiseWithTimeout(resolvePreviewForTrack"),
@@ -171,6 +175,7 @@ function createStopHarness({ throwSource = "" } = {}) {
     trackPreview: {},
     voicePlayback: { pause: fixture("voice_recording"), currentTime: 7 },
     djPreviewFrameLoadTimer: 9,
+    djYoutubePlayer: { stopVideo: fixture("dj_youtube") },
     djPreviewFrame: {
       contentWindow: { postMessage: fixture("dj_message") },
       removeAttribute: fixture("dj_frame")
@@ -217,7 +222,7 @@ function testStopAllIsIdempotentAndIsolated() {
   });
   harness.context.stopAllActivePlayback({ reason: "transition" });
   assert.equal(activePlaybackCount(harness.context), 0);
-  ["preview", "soundcloud", "youtube", "bandcamp", "radio", "voice_recording", "voice_effect", "voice_mini", "dj_frame", "ambient", "search_audio"]
+  ["preview", "soundcloud", "youtube", "bandcamp", "radio", "voice_recording", "voice_effect", "voice_mini", "dj_youtube", "dj_frame", "ambient", "search_audio"]
     .forEach((source) => assert(harness.stopped.includes(source), `${source} was not stopped`));
 
   assert.doesNotThrow(() => harness.context.stopAllActivePlayback({ reason: "idempotent" }));

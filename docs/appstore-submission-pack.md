@@ -1,6 +1,6 @@
 # Sonic Search App Store Submission Pack
 
-Date: 2026-07-29
+Date: 2026-08-10
 
 ## App Store Connect Metadata
 
@@ -8,7 +8,7 @@ Date: 2026-07-29
 - Bundle ID: app.sonicsearch.ios
 - SKU: sonic-search-ios
 - Version: 1.0.7
-- Build: 20
+- Build: 21
 - Primary category: Music
 - Secondary category: Entertainment
 - Age rating suggestion: 12+
@@ -83,25 +83,25 @@ electronic music,techno,house,psytrance,DJ,sets,tracks,BPM,festivals,news
 Portuguese (Brazil):
 
 ```text
-Corrigimos a abertura no iOS: a tela de acesso agora aparece ao iniciar, com as opções Apple, Google e continuar sem login. O Estúdio foi removido temporariamente enquanto aprimoramos essa experiência.
+As recomendações ficaram mais rápidas e estáveis, com uma primeira faixa local quando a rede demora, previews sem travar e um deck que evita repetir músicas já descartadas. Também melhoramos o Jornal Sonic, o catálogo eletrônico, a descoberta de DJs e a segurança da comunidade.
 ```
 
 English:
 
 ```text
-We fixed iOS startup: the access screen now appears on launch with Apple, Google, and continue-without-login options. Studio has been temporarily removed while we improve that experience.
+Recommendations are now faster and more stable, with a local first track when the network is slow, previews that no longer get stuck, and a deck that avoids tracks you already passed. We also improved Sonic Journal, the electronic catalog, DJ discovery, and community safety.
 ```
 
 ## Release Gate
 
 Do not submit a build that exposes Google login unless Sign in with Apple is also enabled and verified.
 
-Verified on 2026-07-29:
+Verified on 2026-08-10:
 
 - Google OAuth through Supabase redirects correctly.
 - Sign in with Apple through Supabase redirects correctly.
 - The iOS callback uses the registered `sonicsearch://auth/callback` URL and PKCE.
-- Build 20 was uploaded successfully to App Store Connect. Select build 20 for review; build 19 is superseded and still contains Studio.
+- Build 21 is the current release candidate. Build 20 remains superseded after build 21 is uploaded.
 
 ## Review Notes
 
@@ -184,7 +184,7 @@ Use this as the App Store Connect privacy worksheet, then verify against current
 pnpm run check
 pnpm run ios:copy
 xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -derivedDataPath /tmp/sonic-ios-release-build build
-xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath /tmp/SonicSearch-AppStore-1.0.7-20.xcarchive archive
+xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath /tmp/SonicSearch-AppStore-1.0.7-21.xcarchive archive
 ```
 
 Universal iPhone/iPad confirmation:

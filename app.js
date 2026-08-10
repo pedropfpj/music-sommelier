@@ -36719,10 +36719,27 @@ function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
       stopRadioBrowserPlayer();
     } catch (_err) {}
   }
+  if (preserve !== "voice-recording") {
+    try {
+      voicePlayback?.pause();
+      if (voicePlayback) voicePlayback.currentTime = 0;
+    } catch (_err) {}
+  }
+  if (preserve !== "voice-effect") {
+    try {
+      stopActiveVoicePlayback();
+    } catch (_err) {}
+  }
+  if (preserve !== "voice-mini") {
+    try {
+      stopVoiceMiniTrack({ silent: true });
+    } catch (_err) {}
+  }
   if (preserve !== "dj") {
     try {
       window.clearTimeout(djPreviewFrameLoadTimer);
       djPreviewFrameLoadTimer = 0;
+      djYoutubePlayer?.stopVideo?.();
       djPreviewFrame?.contentWindow?.postMessage?.(JSON.stringify({ event: "command", func: "stopVideo", args: [] }), "*");
       djPreviewFrame?.removeAttribute("src");
     } catch (_err) {}
@@ -52297,6 +52314,16 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       readiness = await waitForMinimumCatalogReady();
       await openingSlotRequest;
       assertRecommendationSessionCurrent(sessionGeneration);
+      // The first tap can arrive before the deferred local catalog hydration
+      // finishes. Retry the zero-network path now that the local seeds are
+      // ready, instead of entering the slower provider-validation pipeline.
+      if (tryRunInstantPrimaryRecommendation()) {
+        firstRecommendationCompleted = true;
+        trackFirstRecommendationEvent("first_recommendation_ready", source, {
+          catalogState: `${readiness.status}_instant_local`
+        });
+        return true;
+      }
       if (!readiness.ready) {
         trackFirstRecommendationEvent("first_recommendation_fallback", source, {
           reason: `catalog_${readiness.status}`
@@ -53308,6 +53335,24 @@ function renderRecommendation(track, prefs) {
   if (catalogInfo) catalogInfo.textContent = formatCatalogInfo(meta, displayLabel);
   if (songVibe) songVibe.textContent = currentLanguage === "pt" ? track.vibe : t("genericVibe", { style: recommendationStyleDisplayLabel(track) });
   updateSwipeFeedbackCard(track, prefs);
+  // A late preview recovery can replace the painted recommendation after the
+  // deck was already prepared. Keep the deck's "Agora" slot anchored to the
+  // track the listener is actually seeing, so a stale card is never presented
+  // as current or reused by the next swipe.
+  if (Array.isArray(suggestionQueueTracks) && suggestionQueueTracks.length) {
+    const renderedTrackKey = recommendationTrackKey(track);
+    const queueAnchorKey = recommendationTrackKey(suggestionQueueTracks[0]);
+    if (renderedTrackKey && renderedTrackKey !== queueAnchorKey) {
+      suggestionQueueTracks = [
+        track,
+        ...suggestionQueueTracks.filter(
+          (queueTrack) => recommendationTrackKey(queueTrack) !== renderedTrackKey
+        )
+      ].slice(0, SUGGESTION_QUEUE_TARGET);
+      suggestionQueueContextKey = recommendationContextKey(prefs);
+      renderSuggestionQueue(prefs);
+    }
+  }
 
   if (matchReason) {
     const selectedStyle = prefs.style ? styleLabelByValue(prefs.style) : t("freeStyle");
@@ -53645,10 +53690,17 @@ async function renderPreview(track, options = {}) {
     }
   }
   if (isStillCurrentPreviewTrack() && previewAutoplayRequested()) {
-    await attemptRenderedPreviewAutoplay(track, {
+    const autoplayStarted = await attemptRenderedPreviewAutoplay(track, {
       hasDirectPreview: Boolean(playablePreview)
     });
     if (!isStillCurrentPreviewTrack()) return false;
+    if (!autoplayStarted && activePlayback?.type === "none") {
+      setPreviewPrimaryPlaybackState("ready");
+      if (!renderedPreviewHasPlaybackRoute(track) && previewPlayBtn) {
+        previewPlayBtn.disabled = true;
+        previewPlayBtn.classList.add("hidden");
+      }
+    }
   }
   const playbackReady = renderedPreviewHasPlaybackRoute(track);
   renderTrackCardSignals(track, lastPrefs || {});
