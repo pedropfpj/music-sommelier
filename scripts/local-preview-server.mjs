@@ -7,6 +7,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
+const staticRoot = process.env.SONIC_PREVIEW_STATIC_ROOT
+  ? path.resolve(rootDir, process.env.SONIC_PREVIEW_STATIC_ROOT)
+  : rootDir;
 const require = createRequire(import.meta.url);
 
 const MIME_BY_EXT = {
@@ -87,8 +90,8 @@ function send(res, statusCode, body, headers = {}) {
 function safeStaticPath(urlPath = "/") {
   const cleanPath = decodeURIComponent(urlPath.split("?")[0] || "/");
   const relativePath = cleanPath === "/" ? "index.html" : cleanPath.replace(/^\/+/, "");
-  const resolved = path.resolve(rootDir, relativePath);
-  if (!resolved.startsWith(rootDir + path.sep) && resolved !== rootDir) return "";
+  const resolved = path.resolve(staticRoot, relativePath);
+  if (!resolved.startsWith(staticRoot + path.sep) && resolved !== staticRoot) return "";
   return resolved;
 }
 
@@ -215,5 +218,5 @@ const server = http.createServer(async (req, res) => {
 server.listen(port, host, () => {
   const url = `http://${host === "0.0.0.0" ? "localhost" : host}:${port}/`;
   console.log(`Sonic Search local preview: ${url}`);
-  console.log(`Root: ${pathToFileURL(rootDir).href}`);
+  console.log(`Root: ${pathToFileURL(staticRoot).href}`);
 });

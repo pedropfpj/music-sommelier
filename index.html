@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260729djSwipeVideo2" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260807focus3" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260729djSwipeVideo2" />
+    <link rel="stylesheet" href="styles.min.css?v=20260807focus3" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -136,8 +136,7 @@
       @keyframes sonicWavePulse{0%,100%{height:8px;opacity:.58}42%{height:32px;opacity:1}72%{height:16px;opacity:.82}}
       .swipe-status-badges{display:flex;flex-wrap:wrap;gap:.45rem;margin:.72rem 0 .2rem}.swipe-status-badge{display:inline-flex;align-items:center;min-height:1.75rem;padding:.28rem .62rem;border:1px solid rgba(126,205,255,.24);border-radius:999px;background:rgba(3,10,25,.62);color:#dff8ff;font-size:.72rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase}.swipe-status-badge.good{border-color:rgba(110,255,220,.62);color:#c9fff2;background:rgba(29,116,98,.22)}.swipe-status-badge.fresh{border-color:rgba(125,224,255,.6);color:#d9f7ff}.swipe-status-badge.known{border-color:rgba(255,208,125,.52);color:#ffe4ae}.swipe-status-badge.explore{border-color:rgba(190,160,255,.55);color:#efe4ff}.swipe-status-badge.preview{border-color:rgba(117,205,255,.48);color:#d9f4ff}.swipe-status-badge.saved{border-color:rgba(144,255,175,.7);color:#d7ffe1;background:rgba(31,117,55,.2)}
       .swipe-card-reason,.track-micro-reason{margin:.55rem 0 0;color:rgba(218,239,255,.78);font-size:.9rem;line-height:1.45}.track-status-badges{margin:.35rem 0 .7rem}.track-micro-reason{max-width:52rem;color:rgba(190,221,255,.8)}.main-track.is-saved,.swipe-track-card.is-saved{outline:1px solid rgba(144,255,175,.42);box-shadow:0 0 0 1px rgba(144,255,175,.16),0 22px 60px rgba(73,255,145,.08)}
-      .voice-layer-signature{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.5rem}.voice-layer-pill{display:inline-flex;align-items:center;min-height:1.65rem;padding:.24rem .56rem;border:1px solid rgba(126,205,255,.24);border-radius:999px;background:rgba(5,12,31,.62);color:#dff8ff;font-size:.72rem;font-weight:800;text-transform:uppercase}.voice-layer-pill.primary{border-color:rgba(110,255,220,.62);color:#cafff3;background:rgba(17,92,84,.28)}.voice-synth-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.55rem;margin-top:.78rem}.voice-synth-chip{min-height:64px;padding:.7rem;border:1px solid rgba(126,205,255,.22);border-radius:8px;background:linear-gradient(145deg,rgba(3,10,24,.8),rgba(12,24,54,.58));color:#eaf8ff;text-align:left;box-shadow:inset 0 0 0 1px rgba(151,219,255,.04)}.voice-synth-chip strong{display:block;font-family:"Syne",sans-serif;font-size:.9rem;line-height:1.1}.voice-synth-chip span{display:block;margin-top:.32rem;color:rgba(190,220,255,.7);font-size:.72rem}.voice-synth-chip.active{border-color:rgba(110,255,220,.64);box-shadow:0 0 24px rgba(92,255,222,.12),inset 0 0 0 1px rgba(110,255,220,.14)}
-      @media (max-width:760px){.swipe-preview-pulse{inset:auto 14% 9% 14%;height:28px}.swipe-status-badge{font-size:.66rem}.voice-synth-strip{grid-template-columns:1fr 1fr}.voice-synth-chip{min-height:56px}}
+      @media (max-width:760px){.swipe-preview-pulse{inset:auto 14% 9% 14%;height:28px}.swipe-status-badge{font-size:.66rem}}
     </style>
   </head>
   <body>
@@ -587,7 +586,7 @@
           </div>
         </div>
         <p id="heroDesc" class="muted">
-          Seu momento dá o tom. O Sonic Search encontra uma faixa nova e mostra por que ela combina com você.
+          Pronto para descobrir algo novo?
         </p>
         <div class="hero-actions">
           <button id="showUsageGuideBtn" class="hero-help-btn" type="button">Como usar</button>
@@ -621,8 +620,6 @@
         <button class="app-tab-btn" type="button" data-app-tab-target="djs" aria-pressed="false">DJs</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtros</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">Notícias</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="community" aria-pressed="false">Comunidade</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="studio" aria-pressed="false">Estúdio</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button id="adminAnalyticsTabBtn" class="app-tab-btn admin-analytics-tab hidden" type="button" data-app-tab-target="admin" aria-pressed="false" aria-hidden="true" hidden>Painel administrativo</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
@@ -1110,17 +1107,6 @@
             </article>
           </div>
 
-          <article class="admin-data-card admin-moderation-card">
-            <div class="admin-card-heading">
-              <div>
-                <p id="adminModerationKicker">COMUNIDADE</p>
-                <h4 id="adminModerationTitle">Moderação recente</h4>
-              </div>
-              <button id="adminModerationRefreshBtn" class="admin-compact-btn" type="button">Atualizar</button>
-            </div>
-            <p id="adminModerationStatus" class="admin-inline-status">Carregando publicações recentes…</p>
-            <div id="adminModerationList" class="admin-moderation-list"></div>
-          </article>
         </section>
 
         <aside class="admin-privacy-note">
@@ -1356,17 +1342,53 @@
         <section class="sonic-editorial-section" aria-labelledby="sonicEditorialTitle">
           <header class="sonic-editorial-heading">
             <div>
-              <p>EDIÇÃO SEMANAL · CEARÁ E CENA ELETRÔNICA</p>
+              <p id="sonicEditorialKicker">EDIÇÃO DIGITAL · CURADORIA INDEPENDENTE</p>
               <h4 id="sonicEditorialTitle">Jornal Sonic</h4>
             </div>
-            <span>Histórias, entrevistas e festas escolhidas pela redação.</span>
+            <span id="sonicEditorialIntro">A notícia mais recente abre a edição. Todo o histórico continua disponível no Arquivo Sonic.</span>
           </header>
+          <div id="sonicEditorialGuide" class="sonic-editorial-guide" aria-label="Como as matérias estão organizadas">
+            <span><b id="sonicEditorialGuideNowLabel">AGORA</b> <span id="sonicEditorialGuideNowText">Última publicação em destaque</span></span>
+            <span><b id="sonicEditorialGuideArchiveLabel">ARQUIVO</b> <span id="sonicEditorialGuideArchiveText">Notícias anteriores organizadas</span></span>
+            <span><b id="sonicEditorialGuideRadarLabel">RADAR</b> <span id="sonicEditorialGuideRadarText">Cobertura de outras fontes</span></span>
+          </div>
           <div id="sonicEditorialStatus" class="sonic-editorial-status" role="status" aria-live="polite">Buscando a edição mais recente…</div>
-          <div id="sonicEditorialList" class="sonic-editorial-list"></div>
+          <div id="sonicEditorialList" class="sonic-editorial-list">
+            <section class="sonic-editorial-latest" aria-labelledby="sonicEditorialLatestTitle" hidden>
+              <header class="sonic-editorial-latest-head">
+                <p id="sonicEditorialLatestTitle"><i aria-hidden="true"></i> <span id="sonicEditorialLatestTitleText">Última notícia</span></p>
+                <time id="sonicEditorialLatestDate"></time>
+              </header>
+              <div id="sonicEditorialLatest"></div>
+            </section>
+            <details id="sonicEditorialArchive" class="sonic-editorial-archive" hidden>
+              <summary>
+                <div>
+                  <span id="sonicEditorialArchiveKicker">ARQUIVO SONIC</span>
+                  <strong id="sonicEditorialArchiveTitle">Notícias anteriores</strong>
+                  <small id="sonicEditorialArchiveIntro">Consulte as edições que já saíram da capa.</small>
+                </div>
+                <div class="sonic-editorial-archive-summary-meta">
+                  <span id="sonicEditorialArchiveCount">0 matérias</span>
+                  <i aria-hidden="true"></i>
+                </div>
+              </summary>
+              <div class="sonic-editorial-archive-body">
+                <label class="sonic-editorial-archive-search">
+                  <span id="sonicEditorialArchiveSearchLabel" class="sr-only">Buscar no arquivo do Jornal Sonic</span>
+                  <i aria-hidden="true">⌕</i>
+                  <input id="sonicEditorialArchiveFilter" type="search" placeholder="Buscar por assunto, cidade ou evento" autocomplete="off" />
+                </label>
+                <p id="sonicEditorialArchiveEmpty" class="sonic-editorial-archive-empty" hidden>Nenhuma notícia anterior corresponde a essa busca.</p>
+                <div id="sonicEditorialArchiveList" class="sonic-editorial-archive-list"></div>
+                <button id="sonicEditorialArchiveMore" class="sonic-editorial-archive-more" type="button" hidden>Carregar mais notícias</button>
+              </div>
+            </details>
+          </div>
         </section>
 
         <div class="daily-news-divider">
-          <span>RADAR DE OUTRAS FONTES</span>
+          <span id="sonicEditorialExternalSourcesLabel">RADAR EM TEMPO REAL · OUTRAS FONTES</span>
           <i aria-hidden="true"></i>
         </div>
         <div id="dailyNewsStatus" class="daily-news-status muted" aria-live="polite">Carregando notícias...</div>
@@ -1396,15 +1418,16 @@
             <h2 id="sonicNewsReaderTitle">Matéria</h2>
             <p id="sonicNewsReaderExcerpt" class="sonic-news-reader-excerpt"></p>
             <div id="sonicNewsReaderByline" class="sonic-news-reader-byline"></div>
+            <div id="sonicNewsReaderFacts" class="sonic-news-reader-facts" aria-label="Resumo da matéria"></div>
             <div id="sonicNewsReaderBody" class="sonic-news-reader-body"></div>
             <section id="sonicNewsReaderLineupSection" class="sonic-news-reader-service hidden">
-              <span>LINE-UP</span>
-              <h3>Quem toca</h3>
+              <span id="sonicNewsReaderLineupKicker">LINE-UP</span>
+              <h3 id="sonicNewsReaderLineupTitle">Quem toca</h3>
               <div id="sonicNewsReaderLineup" class="sonic-news-reader-lineup"></div>
             </section>
             <section id="sonicNewsReaderService" class="sonic-news-reader-service hidden">
-              <span>SERVIÇO</span>
-              <h3>Programe-se</h3>
+              <span id="sonicNewsReaderServiceKicker">SERVIÇO</span>
+              <h3 id="sonicNewsReaderServiceTitle">Programe-se</h3>
               <dl id="sonicNewsReaderServiceList"></dl>
             </section>
             <div id="sonicNewsReaderActions" class="sonic-news-reader-actions"></div>
@@ -1413,55 +1436,6 @@
         </div>
       </dialog>
 
-      <section id="communityPanel" class="panel community-panel app-tab-panel" data-app-tab="community" aria-labelledby="communityTitle">
-        <div class="section-head community-head">
-          <div>
-            <p id="communityKicker" class="section-kicker">Comunidade</p>
-            <h3 id="communityTitle">Conversa de pista</h3>
-            <p id="communityIntro" class="muted">Fale de faixas, DJs, festas, festivais e perguntas da cena.</p>
-          </div>
-          <button id="communityRefreshBtn" class="secondary" type="button">Atualizar</button>
-        </div>
-        <article class="community-story-prompt" aria-labelledby="communityStoryTitle">
-          <div class="community-story-copy">
-            <p id="communityStoryKicker" class="community-story-kicker">Pergunta para a comunidade</p>
-            <h4 id="communityStoryTitle">Qual evento marcou você — pelo melhor ou pelo pior motivo?</h4>
-            <p id="communityStoryText">Conte como foi estar lá: o que surpreendeu, o que funcionou e o que poderia ter sido diferente. Experiências incríveis, frustrantes ou inesperadas são bem-vindas — aqui, todo relato tem espaço quando é compartilhado com respeito.</p>
-          </div>
-          <button id="communityStoryCta" class="community-story-cta" type="button">
-            <span>Compartilhar meu relato</span>
-            <span aria-hidden="true">→</span>
-          </button>
-        </article>
-        <div id="communityTopicTabs" class="community-topic-tabs" role="tablist" aria-label="Filtrar comunidade">
-          <button class="community-topic-tab active" type="button" data-community-filter="all" aria-pressed="true">Tudo</button>
-          <button class="community-topic-tab" type="button" data-community-filter="track" aria-pressed="false">Faixas</button>
-          <button class="community-topic-tab" type="button" data-community-filter="artist" aria-pressed="false">DJs</button>
-          <button class="community-topic-tab" type="button" data-community-filter="event" aria-pressed="false">Festas</button>
-          <button class="community-topic-tab" type="button" data-community-filter="festival" aria-pressed="false">Festivais</button>
-          <button class="community-topic-tab" type="button" data-community-filter="question" aria-pressed="false">Perguntas</button>
-        </div>
-        <article class="community-composer-card">
-          <div id="communityComposer" class="community-composer hidden">
-            <label class="sr-only" for="communityPostTitle">Título do post</label>
-            <input id="communityPostTitle" type="text" maxlength="120" placeholder="Título curto da conversa" />
-            <label class="sr-only" for="communityPostBody">Mensagem para a comunidade</label>
-            <textarea id="communityPostBody" maxlength="1000" rows="4" placeholder="O que você quer perguntar, recomendar ou contar?"></textarea>
-            <label class="sr-only" for="communityPostMeta">Contexto opcional</label>
-            <input id="communityPostMeta" type="text" maxlength="160" placeholder="Cidade, festa, artista, faixa ou link de contexto" />
-            <div class="community-compose-actions">
-              <p id="communityComposerHint" class="muted">Categoria: Faixa</p>
-              <button id="communityPostSubmitBtn" class="primary" type="button">Publicar</button>
-            </div>
-          </div>
-          <div id="communityLoginPrompt" class="social-comments-login-prompt hidden">
-            <p id="communityLoginText" class="muted">Faça login para comentar, curtir ou publicar. Sem login, a descoberta e o perfil local continuam funcionando.</p>
-            <button id="communityLoginBtn" class="primary" type="button">Entrar para participar</button>
-          </div>
-        </article>
-        <p id="communityStatus" class="muted community-status" role="status" aria-live="polite"></p>
-        <div id="communityFeedList" class="community-feed-list"></div>
-      </section>
 
       <section id="supportPanel" class="panel support-panel app-tab-panel" data-app-tab="support" aria-labelledby="supportTitle">
         <div class="section-head support-head">
@@ -2133,7 +2107,7 @@
             <ul id="recentListenersList" class="listeners-list"></ul>
           </div>
           <div id="topListenersPanel" class="listeners-panel top-listeners-panel hidden">
-            <p id="topListenersTitle" class="listeners-title">Top listeners da comunidade</p>
+            <p id="topListenersTitle" class="listeners-title">Ouvintes mais ativos</p>
             <p id="topListenersSubtitle" class="muted listeners-subtitle"></p>
             <ol id="topListenersList" class="top-listeners-list"></ol>
           </div>
@@ -2150,7 +2124,7 @@
         <article id="socialCommentsCard" class="result-card social-comments-card hidden" aria-labelledby="socialCommentsTitle">
           <div class="social-comments-head">
             <div>
-              <p id="socialCommentsKicker" class="section-kicker">Comunidade</p>
+              <p id="socialCommentsKicker" class="section-kicker">Conversa</p>
               <h4 id="socialCommentsTitle">Discussão da faixa</h4>
               <p id="socialCommentsSubtitle" class="muted">Comente o que a faixa entrega na pista.</p>
             </div>
@@ -2338,243 +2312,6 @@
         <ul id="eventsList" class="events-list"></ul>
       </section>
 
-      <section id="voiceLabPanel" class="panel voice-lab-panel app-tab-panel" data-app-tab="studio" aria-labelledby="voiceLabTitle">
-        <div class="voice-lab-head">
-          <div>
-            <p id="voiceLabKicker" class="section-kicker">Estúdio rápido</p>
-            <h3 id="voiceLabTitle">Monte um loop tocável em segundos</h3>
-          </div>
-          <p id="voiceLabHint" class="section-hint muted">Escolha uma vibe, aperte play, ajuste camadas e baixe.</p>
-        </div>
-
-        <div class="voice-lab-grid">
-          <div class="voice-mini-card">
-            <div class="voice-mini-intro">
-              <p id="voiceMiniEyebrow" class="voice-mini-eyebrow">Beat maker simples</p>
-              <p id="voiceMiniTitle" class="voice-effects-title">Escolha a vibe. Aperte play.</p>
-              <p id="voiceMiniHint" class="muted voice-mini-hint">O loop já começa tocável. Ajuste camadas, BPM e exporte.</p>
-              <div class="voice-studio-steps" aria-label="Fluxo rápido do estúdio">
-                <span><strong>1</strong><em id="voiceStudioStepOne">Escolha o clima</em></span>
-                <span><strong>2</strong><em id="voiceStudioStepTwo">Aperte play</em></span>
-                <span><strong>3</strong><em id="voiceStudioStepThree">Ajuste camadas</em></span>
-              </div>
-              <div id="voiceStudioSessionPanel" class="voice-studio-session" aria-label="Resumo da sessão do estúdio">
-                <div>
-                  <span id="voiceStudioSessionStateLabel">Estado</span>
-                  <strong id="voiceStudioSessionStateValue">Pronto</strong>
-                </div>
-                <div>
-                  <span id="voiceStudioSessionLayersLabel">Camadas</span>
-                  <strong id="voiceStudioSessionLayersValue">5/6</strong>
-                </div>
-                <div>
-                  <span id="voiceStudioSessionLengthLabel">Export</span>
-                  <strong id="voiceStudioSessionLengthValue">8 compassos</strong>
-                </div>
-                <div>
-                  <span id="voiceStudioSessionFormatLabel">Arquivo</span>
-                  <strong id="voiceStudioSessionFormatValue">WAV local</strong>
-                </div>
-              </div>
-            </div>
-            <div class="voice-mini-transport">
-              <span id="voiceMiniNoVoiceBadge" class="voice-mini-badge">Sem cadastro</span>
-              <div class="voice-mini-controls">
-                <button id="voiceMiniRandomBtn" class="secondary voice-mini-idea-btn" type="button">Gerar ideia</button>
-                <button id="voiceMiniPlayBtn" class="primary" type="button">Tocar mini música</button>
-                <button id="voiceMiniStopBtn" class="secondary" type="button" disabled>Parar loop</button>
-                <button id="voiceMiniExportBtn" class="secondary voice-mini-export-btn" type="button">Baixar mini música</button>
-              </div>
-            </div>
-            <div class="voice-mini-live-board">
-              <div class="voice-mini-orbit" aria-hidden="true">
-                <span data-voice-mini-layer="kick">K</span>
-                <span data-voice-mini-layer="bass">B</span>
-                <span data-voice-mini-layer="hat">H</span>
-                <span data-voice-mini-layer="clap">C</span>
-                <span data-voice-mini-layer="synth">S</span>
-                <span data-voice-mini-layer="voice">V</span>
-              </div>
-              <div class="voice-mini-recipe">
-                <p id="voiceMiniRecipeLabel" class="voice-mini-recipe-label">Receita atual</p>
-                <strong id="voiceMiniRecipeTitle">Techno • 132 BPM</strong>
-                <p id="voiceMiniRecipeMeta" class="muted">Kick, Bass, Hat, Clap e Synth ativos.</p>
-                <div id="voiceMiniLayerSignature" class="voice-layer-signature" aria-label="Assinatura da receita"></div>
-                <div id="voiceMiniInsightPanel" class="voice-mini-insight" aria-label="Leitura da ideia">
-                  <p id="voiceMiniInsightKicker">Leitura local</p>
-                  <strong id="voiceMiniInsightTitle">Com pressão de pista</strong>
-                  <div class="voice-mini-insight-grid">
-                    <span>
-                      <small id="voiceMiniInsightEnergyLabel">Energia</small>
-                      <b id="voiceMiniInsightEnergyValue">pista</b>
-                    </span>
-                    <span>
-                      <small id="voiceMiniInsightShapeLabel">Forma</small>
-                      <b id="voiceMiniInsightShapeValue">equilibrada</b>
-                    </span>
-                    <span>
-                      <small id="voiceMiniInsightMoveLabel">Próximo gesto</small>
-                      <b id="voiceMiniInsightMoveValue">varie o sequencer</b>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="voice-mini-section voice-mini-preset-section">
-              <p id="voiceMiniPresetTitle" class="voice-mini-section-title">Clima da ideia</p>
-              <div id="voiceMiniPresetGrid" class="voice-mini-preset-grid" aria-label="Presets de groove">
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="techno">Techno</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="psy">Psy</button>
-                <button class="voice-mini-preset-btn" type="button" data-bound="1" data-voice-mini-preset="house">House</button>
-              </div>
-            </div>
-            <div class="voice-mini-section voice-mini-morph-section">
-              <p id="voiceMiniMorphTitle" class="voice-mini-section-title">Macromovimentos</p>
-              <div id="voiceMiniMorphGrid" class="voice-mini-morph-grid" aria-label="Macromovimentos do estúdio">
-                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="floor">Mais pista</button>
-                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="deep">Mais profundo</button>
-                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="weird">Mais estranho</button>
-                <button class="voice-mini-morph-btn" type="button" data-bound="1" data-voice-mini-morph="open">Mais aberto</button>
-              </div>
-            </div>
-            <label class="voice-bpm-control voice-primary-bpm-control" for="voiceMiniBpmSlider">
-              <span id="voiceMiniBpmLabel">Velocidade</span>
-              <strong id="voiceMiniBpmValue">128 BPM</strong>
-              <input id="voiceMiniBpmSlider" type="range" min="90" max="180" step="1" value="128" aria-valuemin="90" aria-valuemax="180" aria-valuenow="128" />
-            </label>
-            <div class="voice-mini-section voice-mini-layer-section">
-              <p id="voiceMiniLayerTitle" class="voice-mini-section-title">Camadas</p>
-              <div class="voice-daw-pad-grid" aria-label="Mini DAW">
-                <button id="voicePadKickBtn" class="voice-daw-pad" type="button" aria-pressed="false">Kick</button>
-                <button id="voicePadBassBtn" class="voice-daw-pad" type="button" aria-pressed="false">Bass</button>
-                <button id="voicePadHatBtn" class="voice-daw-pad" type="button" aria-pressed="false">Hat</button>
-                <button id="voicePadClapBtn" class="voice-daw-pad" type="button" aria-pressed="false">Clap</button>
-                <button id="voicePadSynthBtn" class="voice-daw-pad" type="button" aria-pressed="false">Synth</button>
-                <button id="voicePadVoiceBtn" class="voice-daw-pad" type="button" aria-pressed="false" disabled>Voz</button>
-              </div>
-              <div id="voiceMiniQuickSynthStrip" class="voice-synth-strip" aria-label="Camadas do synth"></div>
-            </div>
-            <details class="voice-advanced-panel">
-              <summary>
-                <span id="voiceMiniAdvancedTitle">Ajustes avançados</span>
-                <small id="voiceMiniAdvancedHint">voz, mixer e sequencer</small>
-              </summary>
-              <div class="voice-advanced-grid">
-                <label class="voice-bpm-control voice-presence-control" for="voiceMiniVoiceLevelSlider">
-                  <span id="voiceMiniVoiceLevelLabel">Presença da voz</span>
-                  <strong id="voiceMiniVoiceLevelValue">110%</strong>
-                  <input id="voiceMiniVoiceLevelSlider" type="range" min="60" max="180" step="5" value="110" aria-valuemin="60" aria-valuemax="180" aria-valuenow="110" />
-                </label>
-                <label class="voice-bpm-control voice-length-control" for="voiceMiniVoiceLengthSlider">
-                  <span id="voiceMiniVoiceLengthLabel">Comprimento da voz</span>
-                  <strong id="voiceMiniVoiceLengthValue">100%</strong>
-                  <input id="voiceMiniVoiceLengthSlider" type="range" min="30" max="150" step="5" value="100" aria-valuemin="30" aria-valuemax="150" aria-valuenow="100" />
-                </label>
-                <label class="voice-bpm-control voice-groove-control" for="voiceMiniSwingSlider">
-                  <span id="voiceMiniSwingLabel">Swing</span>
-                  <strong id="voiceMiniSwingValue">12%</strong>
-                  <input id="voiceMiniSwingSlider" type="range" min="0" max="35" step="1" value="12" aria-valuemin="0" aria-valuemax="35" aria-valuenow="12" />
-                </label>
-                <label class="voice-bpm-control voice-select-control" for="voiceMiniSynthTypeSelect">
-                  <span id="voiceMiniSynthTypeLabel">Tipo de synth</span>
-                  <strong id="voiceMiniSynthTypeValue">Glow lead</strong>
-                  <select id="voiceMiniSynthTypeSelect">
-                    <option value="glow">Glow lead</option>
-                    <option value="acid">Acid line</option>
-                    <option value="pluck">Pluck limpo</option>
-                    <option value="pad">Pad aberto</option>
-                    <option value="stab">Stab de pista</option>
-                    <option value="sub">Sub macio</option>
-                  </select>
-                </label>
-                <label class="voice-bpm-control voice-select-control" for="voiceMiniGrooveModeSelect">
-                  <span id="voiceMiniGrooveModeLabel">Encaixe do groove</span>
-                  <strong id="voiceMiniGrooveModeValue">Swing natural</strong>
-                  <select id="voiceMiniGrooveModeSelect">
-                    <option value="swing">Swing natural</option>
-                    <option value="tight">Grid certinho</option>
-                    <option value="counter">Contratempo</option>
-                    <option value="late">Mais atrasado</option>
-                    <option value="floating">Flutuante</option>
-                  </select>
-                </label>
-                <div class="voice-mini-mixer-grid" aria-label="Controles da mini música">
-                  <label class="voice-knob-control" for="voiceMiniMasterSlider">
-                    <span id="voiceMiniMasterLabel">Master</span>
-                    <strong id="voiceMiniMasterValue">112%</strong>
-                    <input id="voiceMiniMasterSlider" type="range" min="70" max="150" step="5" value="112" aria-valuemin="70" aria-valuemax="150" aria-valuenow="112" />
-                  </label>
-                  <label class="voice-knob-control" for="voiceMiniDriveSlider">
-                    <span id="voiceMiniDriveLabel">Drive</span>
-                    <strong id="voiceMiniDriveValue">16%</strong>
-                    <input id="voiceMiniDriveSlider" type="range" min="0" max="100" step="5" value="16" aria-valuemin="0" aria-valuemax="100" aria-valuenow="16" />
-                  </label>
-                  <label class="voice-knob-control" for="voiceMiniDelaySlider">
-                    <span id="voiceMiniDelayLabel">Delay</span>
-                    <strong id="voiceMiniDelayValue">14%</strong>
-                    <input id="voiceMiniDelaySlider" type="range" min="0" max="80" step="5" value="14" aria-valuemin="0" aria-valuemax="80" aria-valuenow="14" />
-                  </label>
-                  <label class="voice-knob-control" for="voiceMiniPhaserSlider">
-                    <span id="voiceMiniPhaserLabel">Phaser</span>
-                    <strong id="voiceMiniPhaserValue">18%</strong>
-                    <input id="voiceMiniPhaserSlider" type="range" min="0" max="80" step="5" value="18" aria-valuemin="0" aria-valuemax="80" aria-valuenow="18" />
-                  </label>
-                  <label class="voice-knob-control" for="voiceMiniBeatmasherSlider">
-                    <span id="voiceMiniBeatmasherLabel">Beatmasher</span>
-                    <strong id="voiceMiniBeatmasherValue">8%</strong>
-                    <input id="voiceMiniBeatmasherSlider" type="range" min="0" max="100" step="5" value="8" aria-valuemin="0" aria-valuemax="100" aria-valuenow="8" />
-                  </label>
-                  <label class="voice-knob-control" for="voiceMiniSynthSlider">
-                    <span id="voiceMiniSynthLabel">Synth</span>
-                    <strong id="voiceMiniSynthValue">48%</strong>
-                    <input id="voiceMiniSynthSlider" type="range" min="0" max="100" step="5" value="48" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48" />
-                  </label>
-                </div>
-                <div id="voiceStepSequencer" class="voice-step-sequencer" aria-label="Sequencer da mini música"></div>
-              </div>
-            </details>
-            <p id="voiceMiniStatus" class="muted voice-mini-status">Escolha um clima ou gere uma ideia para ouvir o primeiro loop.</p>
-            <a id="voiceMiniExportLink" class="listen-btn voice-mini-export-link hidden" href="#" download="sonic-search-mini-musica.wav">Arquivo pronto para baixar</a>
-          </div>
-
-          <div class="voice-recorder-card">
-            <div class="voice-visual" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <p id="voiceStatus" class="voice-status">Microfone em espera. Grave só se quiser usar sua voz no loop.</p>
-            <div class="voice-meter" aria-hidden="true">
-              <span id="voiceTimerBar"></span>
-            </div>
-            <div class="voice-controls">
-              <button id="voiceRecordBtn" class="primary" type="button">Gravar voz</button>
-              <button id="voiceStopBtn" class="danger" type="button" disabled>Parar</button>
-              <button id="voicePlayBtn" type="button" disabled>Ouvir efeito</button>
-              <button id="voiceResetBtn" class="secondary" type="button" disabled>Limpar</button>
-            </div>
-            <audio id="voicePlayback" class="auto-audio hidden" controls preload="none"></audio>
-            <a id="voiceDownloadBtn" class="listen-btn voice-download hidden" href="#" download="sonic-search-voz.webm">Baixar gravação</a>
-          </div>
-
-          <div class="voice-effects-card">
-            <p id="voiceEffectsTitle" class="voice-effects-title">Escolha o efeito</p>
-            <div id="voiceEffectButtons" class="voice-effect-grid" role="radiogroup" aria-label="Efeitos de voz">
-              <button class="voice-effect-btn active" type="button" data-voice-effect="robot" aria-pressed="true">Robô</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="chipmunk" aria-pressed="false">Engraçada</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="telephone" aria-pressed="false">Telefone</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="alien" aria-pressed="false">Alienígena</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="deep" aria-pressed="false">Voz grave</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="echo" aria-pressed="false">Eco espacial</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="vocoder" aria-pressed="false">Vocoder</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="wide" aria-pressed="false">Sala larga</button>
-              <button class="voice-effect-btn" type="button" data-voice-effect="tape" aria-pressed="false">Fita quente</button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section id="spiritPanel" class="panel spirit-panel hidden app-tab-panel" data-app-tab="profile" aria-live="polite">
         <h3 id="spiritPanelTitle">Seu Sound System</h3>
@@ -2757,7 +2494,7 @@
           </div>
           <div id="socialSessionState" class="social-session-state" role="status" aria-live="polite">
             <strong id="socialSessionLabel">Perfil local</strong>
-            <p id="socialSessionHint" class="muted">Sem login online, comentarios e votos da comunidade ficam bloqueados.</p>
+            <p id="socialSessionHint" class="muted">Sem login online, comentários e reações ficam bloqueados.</p>
           </div>
           <div id="socialReadinessGrid" class="social-readiness-grid" aria-label="Estado da sincronização">
             <div id="socialReadinessLocal" class="social-readiness-item ready">
@@ -2770,10 +2507,10 @@
               <strong id="socialReadinessCloudValue">Disponível</strong>
               <small id="socialReadinessCloudHint">Entre para sincronizar</small>
             </div>
-            <div id="socialReadinessCommunity" class="social-readiness-item locked">
-              <span>Comunidade</span>
-              <strong id="socialReadinessCommunityValue">Pausada</strong>
-              <small id="socialReadinessCommunityHint">Login libera comentários</small>
+            <div id="socialReadinessInteractions" class="social-readiness-item locked">
+              <span>Interações</span>
+              <strong id="socialReadinessInteractionsValue">Pausada</strong>
+              <small id="socialReadinessInteractionsHint">Login libera comentários</small>
             </div>
           </div>
 
@@ -3183,6 +2920,6 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.min.js?v=20260729heroCopy1"></script>
+    <script defer src="app.min.js?v=20260807focus3"></script>
   </body>
 </html>

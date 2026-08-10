@@ -178,7 +178,7 @@ assert.match(indexSource, /rel="preconnect" href="https:\/\/w\.soundcloud\.com"/
 assert.match(indexSource, /rel="preconnect" href="https:\/\/bandcamp\.com"/, "Bandcamp must be preconnected");
 assert.match(indexSource, /id="soundcloudPreviewFrame"[\s\S]*?loading="eager"/, "SoundCloud iframe must load eagerly once a card assigns its URL");
 assert.match(indexSource, /id="bandcampPreviewFrame"[\s\S]*?loading="eager"/, "Bandcamp iframe must load eagerly once a card assigns its URL");
-assert.match(indexSource, /app\.min\.js\?v=20260724preview9/, "HTML must cache-bust the optimized bundle");
+assert.match(indexSource, /app\.min\.js\?v=[A-Za-z0-9._-]+/, "HTML must cache-bust the optimized bundle");
 
 const rebuiltBundle = await minifyJavaScript(appSource, "app.js");
 assert.equal(shippedBundle, rebuiltBundle, "app.min.js is stale; run npm run web:build");

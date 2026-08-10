@@ -6,6 +6,8 @@ www/
 ios/App/App/public/
 ios/App/build/
 ios/App/CapApp-SPM/build/
+ios/build/
+ios/App/App/capacitor.config *.json
 .env
 .env.*
 !.env.example
@@ -18,6 +20,20 @@ reports/ui-*.png
 reports/*-latest.json
 reports/*-inventory-latest.*
 reports/hive_festival_2026_musicbrainz_cache.json
+reports/*.rows.json
+reports/android-emulator/
+reports/app-store-build/
+reports/app-store-screenshots/
+reports/google-play/
+reports/newsroom/
+reports/postman/
+reports/social/
+supabase/.temp/
+android/.idea/
+
+# Accidental Finder/iCloud conflict copies kept locally for manual comparison.
+* 2.*
+* 2
 
 # One-off local import helper pages; keep them out of commits/deploys.
 importar-club-styles-v2.html

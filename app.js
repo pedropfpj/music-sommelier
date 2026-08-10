@@ -173,6 +173,254 @@ const STYLE_TO_FAMILY = {
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v2";
 const SONIC_EDITORIAL_CACHE_KEY = "sonic_search_editorial_cache_v1";
+const SONIC_NEWS_I18N = {
+  pt: {
+    headingKicker: "EDIÇÃO DIGITAL · CURADORIA INDEPENDENTE",
+    headingTitle: "Jornal Sonic",
+    headingIntro: "A notícia mais recente abre a edição. Todo o histórico continua disponível no Arquivo Sonic.",
+    guideAria: "Como as matérias estão organizadas",
+    guideNowLabel: "AGORA",
+    guideNowText: "Última publicação em destaque",
+    guideArchiveLabel: "ARQUIVO",
+    guideArchiveText: "Notícias anteriores organizadas",
+    guideRadarLabel: "RADAR",
+    guideRadarText: "Cobertura de outras fontes",
+    latestTitle: "Última notícia",
+    archiveKicker: "ARQUIVO SONIC",
+    archiveTitle: "Notícias anteriores",
+    archiveIntro: "Consulte as edições que já saíram da capa.",
+    archiveSearchLabel: "Buscar no arquivo do Jornal Sonic",
+    archiveSearchPlaceholder: "Buscar por assunto, cidade ou evento",
+    archiveLoadMore: "Carregar mais notícias",
+    archiveLoadingMore: "Buscando outras edições…",
+    archiveLoadError: "Não foi possível carregar mais. Tentar novamente",
+    externalSources: "RADAR EM TEMPO REAL · OUTRAS FONTES",
+    anotherReading: "OUTRA LEITURA",
+    editorialCover: "CAPA EDITORIAL",
+    published: "PUBLICADO",
+    partnership: "CONTEÚDO EM PARCERIA",
+    brand: "JORNAL SONIC",
+    articleTitleFallback: "Matéria do Jornal Sonic",
+    information: "INFORMAÇÃO",
+    publishedOn: "Publicada em {date}",
+    event: "EVENTO",
+    when: "Quando",
+    where: "Onde",
+    noEventDate: "Sem data de evento",
+    noLocation: "Local não informado",
+    news: "Notícia",
+    upcoming: "Próximo evento",
+    ongoing: "Em andamento",
+    ended: "Evento encerrado",
+    editorialContext: "Contexto editorial",
+    readArticle: "Ler: {title}",
+    noDate: "Sem data",
+    publicationDateMissing: "Data de publicação não informada",
+    archiveFuture: "As próximas edições serão guardadas aqui assim que saírem da capa.",
+    archiveNoMatch: "Nenhuma notícia anterior corresponde a essa busca.",
+    firstEdition: "A primeira edição está sendo preparada pela redação.",
+    oneArticle: "1 matéria",
+    manyArticles: "{count} matérias",
+    manyArticlesMore: "{count}+ matérias",
+    currentOne: "A edição atual tem 1 notícia em destaque.",
+    currentArchiveOne: "Edição atual: 1 notícia em destaque e 1 matéria anterior no Arquivo Sonic.",
+    currentArchiveMany: "Edição atual: 1 notícia em destaque e {count} matérias anteriores no Arquivo Sonic.",
+    loading: "Buscando a edição mais recente…",
+    cached: "Mostrando a última edição salva neste aparelho.",
+    comingSoon: "A primeira edição será publicada em breve.",
+    unavailable: "O Jornal Sonic está temporariamente indisponível.",
+    closeArticle: "Fechar matéria",
+    openImage: "Abrir imagem: {caption}",
+    openImageLarge: "Abrir imagem em tamanho maior",
+    articleFallback: "Matéria",
+    byline: "Por {author}",
+    authorFallback: "Redação Sonic Search",
+    factPublished: "PUBLICADO",
+    factEvent: "EVENTO",
+    factLocation: "LOCAL",
+    factsAria: "Resumo da matéria",
+    dateMissing: "Data não informada",
+    partnershipDisclosure: "Conteúdo em parceria",
+    lineupKicker: "LINE-UP",
+    lineupTitle: "Quem toca",
+    serviceKicker: "SERVIÇO",
+    serviceEnded: "Informações do evento",
+    serviceOngoing: "Acontecendo agora",
+    serviceUpcoming: "Programe-se",
+    serviceGeneral: "Informações úteis",
+    hours: "Horários",
+    address: "Endereço",
+    tickets: "Ingressos",
+    ageRating: "Classificação",
+    notes: "Informações",
+    eventCta: "Ver evento",
+    officialInstagram: "Instagram oficial"
+  },
+  en: {
+    headingKicker: "DIGITAL EDITION · INDEPENDENT CURATION",
+    headingTitle: "Sonic Journal",
+    headingIntro: "The latest story leads the edition. The full history remains available in the Sonic Archive.",
+    guideAria: "How the stories are organized",
+    guideNowLabel: "NOW",
+    guideNowText: "Latest publication in focus",
+    guideArchiveLabel: "ARCHIVE",
+    guideArchiveText: "Previous stories, organized",
+    guideRadarLabel: "RADAR",
+    guideRadarText: "Coverage from other sources",
+    latestTitle: "Latest story",
+    archiveKicker: "SONIC ARCHIVE",
+    archiveTitle: "Previous stories",
+    archiveIntro: "Browse editions that have already left the front page.",
+    archiveSearchLabel: "Search the Sonic Journal archive",
+    archiveSearchPlaceholder: "Search by topic, city or event",
+    archiveLoadMore: "Load more stories",
+    archiveLoadingMore: "Loading more editions…",
+    archiveLoadError: "Could not load more. Try again",
+    externalSources: "LIVE RADAR · OTHER SOURCES",
+    anotherReading: "ANOTHER READ",
+    editorialCover: "EDITORIAL COVER",
+    published: "PUBLISHED",
+    partnership: "PARTNER CONTENT",
+    brand: "SONIC JOURNAL",
+    articleTitleFallback: "Sonic Journal story",
+    information: "INFORMATION",
+    publishedOn: "Published on {date}",
+    event: "EVENT",
+    when: "When",
+    where: "Where",
+    noEventDate: "No event date",
+    noLocation: "Location not provided",
+    news: "News",
+    upcoming: "Upcoming event",
+    ongoing: "Happening now",
+    ended: "Event ended",
+    editorialContext: "Editorial context",
+    readArticle: "Read: {title}",
+    noDate: "No date",
+    publicationDateMissing: "Publication date not provided",
+    archiveFuture: "Future editions will be stored here once they leave the front page.",
+    archiveNoMatch: "No previous story matches this search.",
+    firstEdition: "The newsroom is preparing the first edition.",
+    oneArticle: "1 story",
+    manyArticles: "{count} stories",
+    manyArticlesMore: "{count}+ stories",
+    currentOne: "The current edition has 1 featured story.",
+    currentArchiveOne: "Current edition: 1 featured story and 1 previous story in the Sonic Archive.",
+    currentArchiveMany: "Current edition: 1 featured story and {count} previous stories in the Sonic Archive.",
+    loading: "Loading the latest edition…",
+    cached: "Showing the latest edition saved on this device.",
+    comingSoon: "The first edition will be published soon.",
+    unavailable: "Sonic Journal is temporarily unavailable.",
+    closeArticle: "Close story",
+    openImage: "Open image: {caption}",
+    openImageLarge: "Open full-size image",
+    articleFallback: "Story",
+    byline: "By {author}",
+    authorFallback: "Sonic Search Newsroom",
+    factPublished: "PUBLISHED",
+    factEvent: "EVENT",
+    factLocation: "LOCATION",
+    factsAria: "Story summary",
+    dateMissing: "Date not provided",
+    partnershipDisclosure: "Partner content",
+    lineupKicker: "LINE-UP",
+    lineupTitle: "Who is playing",
+    serviceKicker: "EVENT INFO",
+    serviceEnded: "Event information",
+    serviceOngoing: "Happening now",
+    serviceUpcoming: "Plan your visit",
+    serviceGeneral: "Useful information",
+    hours: "Times",
+    address: "Address",
+    tickets: "Tickets",
+    ageRating: "Age rating",
+    notes: "Information",
+    eventCta: "View event",
+    officialInstagram: "Official Instagram"
+  },
+  es: {
+    headingKicker: "EDICIÓN DIGITAL · CURADURÍA INDEPENDIENTE",
+    headingTitle: "Periódico Sonic",
+    headingIntro: "La noticia más reciente abre la edición. Todo el historial sigue disponible en el Archivo Sonic.",
+    guideAria: "Cómo están organizadas las noticias",
+    guideNowLabel: "AHORA",
+    guideNowText: "Última publicación destacada",
+    guideArchiveLabel: "ARCHIVO",
+    guideArchiveText: "Noticias anteriores organizadas",
+    guideRadarLabel: "RADAR",
+    guideRadarText: "Cobertura de otras fuentes",
+    latestTitle: "Última noticia",
+    archiveKicker: "ARCHIVO SONIC",
+    archiveTitle: "Noticias anteriores",
+    archiveIntro: "Consulta las ediciones que ya dejaron la portada.",
+    archiveSearchLabel: "Buscar en el archivo del Periódico Sonic",
+    archiveSearchPlaceholder: "Buscar por tema, ciudad o evento",
+    archiveLoadMore: "Cargar más noticias",
+    archiveLoadingMore: "Buscando otras ediciones…",
+    archiveLoadError: "No fue posible cargar más. Intentar de nuevo",
+    externalSources: "RADAR EN TIEMPO REAL · OTRAS FUENTES",
+    anotherReading: "OTRA LECTURA",
+    editorialCover: "PORTADA EDITORIAL",
+    published: "PUBLICADO",
+    partnership: "CONTENIDO EN COLABORACIÓN",
+    brand: "PERIÓDICO SONIC",
+    articleTitleFallback: "Noticia del Periódico Sonic",
+    information: "INFORMACIÓN",
+    publishedOn: "Publicada el {date}",
+    event: "EVENTO",
+    when: "Cuándo",
+    where: "Dónde",
+    noEventDate: "Sin fecha del evento",
+    noLocation: "Lugar no informado",
+    news: "Noticia",
+    upcoming: "Próximo evento",
+    ongoing: "En curso",
+    ended: "Evento finalizado",
+    editorialContext: "Contexto editorial",
+    readArticle: "Leer: {title}",
+    noDate: "Sin fecha",
+    publicationDateMissing: "Fecha de publicación no informada",
+    archiveFuture: "Las próximas ediciones se guardarán aquí cuando dejen la portada.",
+    archiveNoMatch: "Ninguna noticia anterior coincide con esta búsqueda.",
+    firstEdition: "La redacción está preparando la primera edición.",
+    oneArticle: "1 noticia",
+    manyArticles: "{count} noticias",
+    manyArticlesMore: "{count}+ noticias",
+    currentOne: "La edición actual tiene 1 noticia destacada.",
+    currentArchiveOne: "Edición actual: 1 noticia destacada y 1 noticia anterior en el Archivo Sonic.",
+    currentArchiveMany: "Edición actual: 1 noticia destacada y {count} noticias anteriores en el Archivo Sonic.",
+    loading: "Buscando la edición más reciente…",
+    cached: "Mostrando la última edición guardada en este dispositivo.",
+    comingSoon: "La primera edición se publicará pronto.",
+    unavailable: "El Periódico Sonic no está disponible temporalmente.",
+    closeArticle: "Cerrar noticia",
+    openImage: "Abrir imagen: {caption}",
+    openImageLarge: "Abrir imagen a tamaño completo",
+    articleFallback: "Noticia",
+    byline: "Por {author}",
+    authorFallback: "Redacción Sonic Search",
+    factPublished: "PUBLICADO",
+    factEvent: "EVENTO",
+    factLocation: "LUGAR",
+    factsAria: "Resumen de la noticia",
+    dateMissing: "Fecha no informada",
+    partnershipDisclosure: "Contenido en colaboración",
+    lineupKicker: "LINE-UP",
+    lineupTitle: "Quién toca",
+    serviceKicker: "DATOS DEL EVENTO",
+    serviceEnded: "Información del evento",
+    serviceOngoing: "Sucede ahora",
+    serviceUpcoming: "Organiza tu visita",
+    serviceGeneral: "Información útil",
+    hours: "Horarios",
+    address: "Dirección",
+    tickets: "Entradas",
+    ageRating: "Clasificación por edad",
+    notes: "Información",
+    eventCta: "Ver evento",
+    officialInstagram: "Instagram oficial"
+  }
+};
 const DAILY_NEWS_MAX_ITEMS = 8;
 const DAILY_NEWS_FETCH_TIMEOUT_MS = 9000;
 const DAILY_NEWS_MAX_AGE_DAYS = 45;
@@ -276,16 +524,8 @@ function shouldHideSocialLoginForAppStore() {
   return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().hideSocialLogin === true);
 }
 
-function shouldDisableCommunityForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableCommunity === true);
-}
-
 function shouldDisableSocialCommentsForAppStore() {
   return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableSocialComments === true);
-}
-
-function shouldReadOnlyCommunityForAppStore() {
-  return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().readOnlyCommunity === true);
 }
 
 function shouldAutoEnterDiscoveryForAppStore() {
@@ -4609,7 +4849,6 @@ const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
 const API_HEALTH_ENDPOINT = "/api/integration-health";
 const SOCIAL_COMMENTS_ENDPOINT = "/api/comments";
-const COMMUNITY_ENDPOINT = "/api/community";
 const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
@@ -7020,10 +7259,78 @@ const CURATED_FRIENDLY_OPENING_TRACKS = [
   source: "friendly_opening_curated_v1"
 }));
 
+const CURATED_PREVIEW_ORIGIN = (
+  typeof window !== "undefined" && /^https?:\/\//i.test(String(window.location?.origin || ""))
+    ? window.location.origin
+    : "https://sonicsearch.app"
+);
+
+const CURATED_STRESS_RESILIENT_TRACKS = [
+  { style: "acid_techno", artist: "Phuture", song: "Acid Tracks", label: "Trax Records", bpmExact: 124, deezerTrackId: "1600909272" },
+  { style: "acid_techno", artist: "Hardfloor", song: "Acperience 1", label: "Harthouse", bpmExact: 130, deezerTrackId: "2480462" },
+  { style: "acid_techno", artist: "Emmanuel Top", song: "Turkish Bazar (Chris Liebing Remake)", label: "Attack Records", bpmExact: 129, deezerTrackId: "3104949971" },
+  { style: "acid_techno", artist: "Tin Man", song: "Nonneo (Donato Dozzy Remix)", label: "Acid Test", bpmExact: 124, deezerTrackId: "2633745342" },
+  { style: "acid_techno", artist: "Regal", song: "Acid Is The Answer", label: "Involve", bpmExact: 133, deezerTrackId: "1418401492" },
+  { style: "acid_techno", artist: "Kink", song: "Perth", label: "Running Back", bpmExact: 124, deezerTrackId: "398042712" },
+  { style: "acid_techno", artist: "Josh Wink", song: "Higher State of Consciousness (Dex & Jonesey's Higher Stated Mix)", label: "Strictly Rhythm", bpmExact: 126, deezerTrackId: "3786800482" },
+  { style: "acid_techno", artist: "A*S*Y*S", song: "Acid Nightmare", label: "Fe Chrome", bpmExact: 145, deezerTrackId: "2500699591" },
+  { style: "acid_techno", artist: "Thomas P. Heckmann", song: "Amphetamine (Original Remaster)", label: "Drax", bpmExact: 142.1, deezerTrackId: "62830702" },
+  { style: "acid_techno", artist: "DJ Misjah", song: "Access (Extended Mix)", label: "X-Trax", bpmExact: 140.6, deezerTrackId: "517679742" },
+
+  { style: "techno", artist: "Ben Klock", song: "Subzero (Original Mix)", label: "Ostgut Ton", bpmExact: 130, deezerTrackId: "978183732" },
+  { style: "techno", artist: "Len Faki", song: "BX 3 (Original Mix)", label: "Ostgut Ton", bpmExact: 132, deezerTrackId: "963692492" },
+  { style: "techno", artist: "Surgeon", song: "Atol (2014 Remaster)", label: "Dynamic Tension", bpmExact: 128, deezerTrackId: "407070972" },
+  { style: "techno", artist: "Oscar Mulero", song: "Grey Fades To Green", label: "Warm Up", bpmExact: 132, deezerTrackId: "127780579" },
+  { style: "techno", artist: "Luke Slater", song: "Love", label: "NovaMute", bpmExact: 128, deezerTrackId: "73105677" },
+  { style: "techno", artist: "Function", song: "Against The Wall", label: "Infrastructure", bpmExact: 132, deezerTrackId: "951036842" },
+  { style: "techno", artist: "Regis", song: "Blood Witness (Restructured)", label: "Downwards", bpmExact: 132, deezerTrackId: "1117773062" },
+  { style: "techno", artist: "Rødhåd", song: "Kinder der Ringwelt", label: "Dystopian", bpmExact: 132, deezerTrackId: "2762051711" },
+  { style: "techno", artist: "Marcel Dettmann", song: "Corebox (James Ruskin Blueprint Mix)", label: "MDR", bpmExact: 132, deezerTrackId: "486419782" },
+  { style: "techno", artist: "Robert Hood", song: "Minus", label: "M-Plant", bpmExact: 132, deezerTrackId: "1736628267" },
+
+  { style: "hard_techno", artist: "Alignment", song: "1992", label: "Involve", bpmExact: 150, deezerTrackId: "1418401592" },
+  { style: "hard_techno", artist: "Sara Landry", song: "Heaven", label: "HEKATE", bpmExact: 150, deezerTrackId: "2785441732" },
+  { style: "hard_techno", artist: "I Hate Models", song: "Werewolf Disco Club", label: "Disco Inferno", bpmExact: 150, deezerTrackId: "3039575351" },
+  { style: "hard_techno", artist: "Klangkuenstler", song: "Untergang (Original Mix)", label: "Weltschmerz", bpmExact: 150, deezerTrackId: "1258662742" },
+  { style: "hard_techno", artist: "Shlømo", song: "Mercurial Skin (Original)", label: "Taapion", bpmExact: 150, deezerTrackId: "2756614211" },
+  { style: "hard_techno", artist: "Airod", song: "Rave Cycle", label: "Molekül", bpmExact: 150, deezerTrackId: "762171532" },
+  { style: "hard_techno", artist: "Nico Moreno", song: "Purple Widow", label: "Insolent Rave", bpmExact: 150, deezerTrackId: "943265622" },
+  { style: "hard_techno", artist: "Trym", song: "Sparkling System", label: "Possession", bpmExact: 150, deezerTrackId: "1446420532" },
+  { style: "hard_techno", artist: "Charlie Sparks (UK)", song: "Welcome To London", label: "EXHALE", bpmExact: 150, deezerTrackId: "3685629212" },
+  { style: "hard_techno", artist: "Kobosil", song: "300G", label: "44 Label Group", bpmExact: 150, deezerTrackId: "4045850731" }
+].map((track) => {
+  const styleText = STYLE_SEARCH_TERMS[track.style] || track.style.replace(/_/g, " ");
+  const searchQuery = encodeURIComponent(`${track.artist} ${track.song}`);
+  return {
+    ...track,
+    bpm: mapBpmToRange(track.bpmExact),
+    energy: track.style === "hard_techno" ? "high" : "mid",
+    vocals: "instrumental",
+    context: track.style === "hard_techno" ? ["peak", "treino", "noite"] : ["noite", "foco", "after"],
+    vibe: `Faixa verificada para sustentar variedade reproduzível no teste de ${styleText}.`,
+    spotifyUrl: `https://open.spotify.com/search/${searchQuery}`,
+    youtubeUrl: `https://www.youtube.com/results?search_query=${searchQuery}`,
+    youtubeTrackUrl: `https://www.youtube.com/results?search_query=${searchQuery}`,
+    beatportUrl: `https://www.beatport.com/search?q=${searchQuery}`,
+    artistGenre: styleText,
+    artistProfileHint: `Artista curado e faixa identificada por ID oficial para ${styleText}.`,
+    existenceVerified: true,
+    previewUrl: `${CURATED_PREVIEW_ORIGIN}/api/deezer-preview?id=${encodeURIComponent(track.deezerTrackId)}`,
+    previewSource: "deezer_id_redirect",
+    previewLookupAttempted: true,
+    previewChecked: true,
+    previewMissing: false,
+    spotifyVerified: false,
+    youtubeVerified: true,
+    source: "curated_stress_resilient_v1"
+  };
+});
+
 const catalog = [
   ...CURATED_FRIENDLY_OPENING_TRACKS,
   ...CURATED_BANDCAMP_TRACK_EXPANSION,
   ...CURATED_TECHNO_SUBGENRE_EXPANSION,
+  ...CURATED_STRESS_RESILIENT_TRACKS,
   {
     style: "psytrance",
     song: "Deep Jungle Walk",
@@ -9511,9 +9818,6 @@ const adminIssueList = document.getElementById("adminIssueList");
 const adminHealthRefreshBtn = document.getElementById("adminHealthRefreshBtn");
 const adminHealthStatus = document.getElementById("adminHealthStatus");
 const adminHealthGrid = document.getElementById("adminHealthGrid");
-const adminModerationRefreshBtn = document.getElementById("adminModerationRefreshBtn");
-const adminModerationStatus = document.getElementById("adminModerationStatus");
-const adminModerationList = document.getElementById("adminModerationList");
 const adminNewsroom = document.getElementById("adminNewsroom");
 const adminNewsForm = document.getElementById("adminNewsForm");
 const adminNewsId = document.getElementById("adminNewsId");
@@ -9558,6 +9862,14 @@ const dailyNewsProgressFill = document.getElementById("dailyNewsProgressFill");
 const dailyNewsList = document.getElementById("dailyNewsList");
 const sonicEditorialStatus = document.getElementById("sonicEditorialStatus");
 const sonicEditorialList = document.getElementById("sonicEditorialList");
+const sonicEditorialLatest = document.getElementById("sonicEditorialLatest");
+const sonicEditorialLatestDate = document.getElementById("sonicEditorialLatestDate");
+const sonicEditorialArchive = document.getElementById("sonicEditorialArchive");
+const sonicEditorialArchiveCount = document.getElementById("sonicEditorialArchiveCount");
+const sonicEditorialArchiveFilter = document.getElementById("sonicEditorialArchiveFilter");
+const sonicEditorialArchiveEmpty = document.getElementById("sonicEditorialArchiveEmpty");
+const sonicEditorialArchiveList = document.getElementById("sonicEditorialArchiveList");
+const sonicEditorialArchiveMore = document.getElementById("sonicEditorialArchiveMore");
 const sonicNewsReader = document.getElementById("sonicNewsReader");
 const sonicNewsReaderClose = document.getElementById("sonicNewsReaderClose");
 const supportPanel = document.getElementById("supportPanel");
@@ -9622,94 +9934,6 @@ const searchTitle = document.getElementById("searchTitle");
 const searchStageLabel = document.getElementById("searchStageLabel");
 const searchStatusText = document.getElementById("searchStatusText");
 const searchProgressFill = document.getElementById("searchProgressFill");
-const voiceLabPanel = document.getElementById("voiceLabPanel");
-const voiceLabKicker = document.getElementById("voiceLabKicker");
-const voiceLabTitle = document.getElementById("voiceLabTitle");
-const voiceLabHint = document.getElementById("voiceLabHint");
-const voiceStatus = document.getElementById("voiceStatus");
-const voiceTimerBar = document.getElementById("voiceTimerBar");
-const voiceRecordBtn = document.getElementById("voiceRecordBtn");
-const voiceStopBtn = document.getElementById("voiceStopBtn");
-const voicePlayBtn = document.getElementById("voicePlayBtn");
-const voiceResetBtn = document.getElementById("voiceResetBtn");
-const voicePlayback = document.getElementById("voicePlayback");
-const voiceDownloadBtn = document.getElementById("voiceDownloadBtn");
-const voiceEffectsTitle = document.getElementById("voiceEffectsTitle");
-const voiceEffectButtons = document.getElementById("voiceEffectButtons");
-const voiceMiniTitle = document.getElementById("voiceMiniTitle");
-const voiceMiniHint = document.getElementById("voiceMiniHint");
-const voiceStudioSessionStateLabel = document.getElementById("voiceStudioSessionStateLabel");
-const voiceStudioSessionStateValue = document.getElementById("voiceStudioSessionStateValue");
-const voiceStudioSessionLayersLabel = document.getElementById("voiceStudioSessionLayersLabel");
-const voiceStudioSessionLayersValue = document.getElementById("voiceStudioSessionLayersValue");
-const voiceStudioSessionLengthLabel = document.getElementById("voiceStudioSessionLengthLabel");
-const voiceStudioSessionLengthValue = document.getElementById("voiceStudioSessionLengthValue");
-const voiceStudioSessionFormatLabel = document.getElementById("voiceStudioSessionFormatLabel");
-const voiceStudioSessionFormatValue = document.getElementById("voiceStudioSessionFormatValue");
-const voiceMiniRandomBtn = document.getElementById("voiceMiniRandomBtn");
-const voiceMiniPlayBtn = document.getElementById("voiceMiniPlayBtn");
-const voiceMiniStopBtn = document.getElementById("voiceMiniStopBtn");
-const voiceMiniExportBtn = document.getElementById("voiceMiniExportBtn");
-const voiceMiniExportLink = document.getElementById("voiceMiniExportLink");
-const voiceMiniRecipeLabel = document.getElementById("voiceMiniRecipeLabel");
-const voiceMiniRecipeTitle = document.getElementById("voiceMiniRecipeTitle");
-const voiceMiniRecipeMeta = document.getElementById("voiceMiniRecipeMeta");
-const voiceMiniLayerSignature = document.getElementById("voiceMiniLayerSignature");
-const voiceMiniInsightKicker = document.getElementById("voiceMiniInsightKicker");
-const voiceMiniInsightTitle = document.getElementById("voiceMiniInsightTitle");
-const voiceMiniInsightEnergyLabel = document.getElementById("voiceMiniInsightEnergyLabel");
-const voiceMiniInsightEnergyValue = document.getElementById("voiceMiniInsightEnergyValue");
-const voiceMiniInsightShapeLabel = document.getElementById("voiceMiniInsightShapeLabel");
-const voiceMiniInsightShapeValue = document.getElementById("voiceMiniInsightShapeValue");
-const voiceMiniInsightMoveLabel = document.getElementById("voiceMiniInsightMoveLabel");
-const voiceMiniInsightMoveValue = document.getElementById("voiceMiniInsightMoveValue");
-const voiceMiniBpmLabel = document.getElementById("voiceMiniBpmLabel");
-const voiceMiniBpmValue = document.getElementById("voiceMiniBpmValue");
-const voiceMiniBpmSlider = document.getElementById("voiceMiniBpmSlider");
-const voiceMiniVoiceLevelLabel = document.getElementById("voiceMiniVoiceLevelLabel");
-const voiceMiniVoiceLevelValue = document.getElementById("voiceMiniVoiceLevelValue");
-const voiceMiniVoiceLevelSlider = document.getElementById("voiceMiniVoiceLevelSlider");
-const voiceMiniVoiceLengthLabel = document.getElementById("voiceMiniVoiceLengthLabel");
-const voiceMiniVoiceLengthValue = document.getElementById("voiceMiniVoiceLengthValue");
-const voiceMiniVoiceLengthSlider = document.getElementById("voiceMiniVoiceLengthSlider");
-const voiceMiniSwingLabel = document.getElementById("voiceMiniSwingLabel");
-const voiceMiniSwingValue = document.getElementById("voiceMiniSwingValue");
-const voiceMiniSwingSlider = document.getElementById("voiceMiniSwingSlider");
-const voiceMiniSynthTypeLabel = document.getElementById("voiceMiniSynthTypeLabel");
-const voiceMiniSynthTypeValue = document.getElementById("voiceMiniSynthTypeValue");
-const voiceMiniSynthTypeSelect = document.getElementById("voiceMiniSynthTypeSelect");
-const voiceMiniGrooveModeLabel = document.getElementById("voiceMiniGrooveModeLabel");
-const voiceMiniGrooveModeValue = document.getElementById("voiceMiniGrooveModeValue");
-const voiceMiniGrooveModeSelect = document.getElementById("voiceMiniGrooveModeSelect");
-const voiceMiniMasterLabel = document.getElementById("voiceMiniMasterLabel");
-const voiceMiniMasterValue = document.getElementById("voiceMiniMasterValue");
-const voiceMiniMasterSlider = document.getElementById("voiceMiniMasterSlider");
-const voiceMiniDriveLabel = document.getElementById("voiceMiniDriveLabel");
-const voiceMiniDriveValue = document.getElementById("voiceMiniDriveValue");
-const voiceMiniDriveSlider = document.getElementById("voiceMiniDriveSlider");
-const voiceMiniDelayLabel = document.getElementById("voiceMiniDelayLabel");
-const voiceMiniDelayValue = document.getElementById("voiceMiniDelayValue");
-const voiceMiniDelaySlider = document.getElementById("voiceMiniDelaySlider");
-const voiceMiniPhaserLabel = document.getElementById("voiceMiniPhaserLabel");
-const voiceMiniPhaserValue = document.getElementById("voiceMiniPhaserValue");
-const voiceMiniPhaserSlider = document.getElementById("voiceMiniPhaserSlider");
-const voiceMiniBeatmasherLabel = document.getElementById("voiceMiniBeatmasherLabel");
-const voiceMiniBeatmasherValue = document.getElementById("voiceMiniBeatmasherValue");
-const voiceMiniBeatmasherSlider = document.getElementById("voiceMiniBeatmasherSlider");
-const voiceMiniSynthLabel = document.getElementById("voiceMiniSynthLabel");
-const voiceMiniSynthValue = document.getElementById("voiceMiniSynthValue");
-const voiceMiniSynthSlider = document.getElementById("voiceMiniSynthSlider");
-const voiceMiniPresetGrid = document.getElementById("voiceMiniPresetGrid");
-const voiceMiniMorphGrid = document.getElementById("voiceMiniMorphGrid");
-const voiceMiniStatus = document.getElementById("voiceMiniStatus");
-const voiceStepSequencer = document.getElementById("voiceStepSequencer");
-const voicePadKickBtn = document.getElementById("voicePadKickBtn");
-const voicePadBassBtn = document.getElementById("voicePadBassBtn");
-const voicePadHatBtn = document.getElementById("voicePadHatBtn");
-const voicePadClapBtn = document.getElementById("voicePadClapBtn");
-const voicePadSynthBtn = document.getElementById("voicePadSynthBtn");
-const voicePadVoiceBtn = document.getElementById("voicePadVoiceBtn");
-const voiceMiniQuickSynthStrip = document.getElementById("voiceMiniQuickSynthStrip");
 const quizChallengeBubble = document.getElementById("quizChallengeBubble");
 const quizBubbleText = document.getElementById("quizBubbleText");
 const quizStartBtn = document.getElementById("quizStartBtn");
@@ -9896,27 +10120,6 @@ const socialCommentsLoginText = document.getElementById("socialCommentsLoginText
 const socialCommentsLoginBtn = document.getElementById("socialCommentsLoginBtn");
 const socialCommentsStatus = document.getElementById("socialCommentsStatus");
 const socialCommentsList = document.getElementById("socialCommentsList");
-const communityPanel = document.getElementById("communityPanel");
-const communityKicker = document.getElementById("communityKicker");
-const communityTitle = document.getElementById("communityTitle");
-const communityIntro = document.getElementById("communityIntro");
-const communityRefreshBtn = document.getElementById("communityRefreshBtn");
-const communityStoryKicker = document.getElementById("communityStoryKicker");
-const communityStoryTitle = document.getElementById("communityStoryTitle");
-const communityStoryText = document.getElementById("communityStoryText");
-const communityStoryCta = document.getElementById("communityStoryCta");
-const communityTopicTabs = document.getElementById("communityTopicTabs");
-const communityComposer = document.getElementById("communityComposer");
-const communityPostTitle = document.getElementById("communityPostTitle");
-const communityPostBody = document.getElementById("communityPostBody");
-const communityPostMeta = document.getElementById("communityPostMeta");
-const communityComposerHint = document.getElementById("communityComposerHint");
-const communityPostSubmitBtn = document.getElementById("communityPostSubmitBtn");
-const communityLoginPrompt = document.getElementById("communityLoginPrompt");
-const communityLoginText = document.getElementById("communityLoginText");
-const communityLoginBtn = document.getElementById("communityLoginBtn");
-const communityStatus = document.getElementById("communityStatus");
-const communityFeedList = document.getElementById("communityFeedList");
 const swipeStartPanel = document.getElementById("swipeStartPanel");
 const swipeHeroKicker = document.getElementById("swipeHeroKicker");
 const swipeHeroTitle = document.getElementById("swipeHeroTitle");
@@ -10065,9 +10268,9 @@ const socialReadinessLocalHint = document.getElementById("socialReadinessLocalHi
 const socialReadinessCloud = document.getElementById("socialReadinessCloud");
 const socialReadinessCloudValue = document.getElementById("socialReadinessCloudValue");
 const socialReadinessCloudHint = document.getElementById("socialReadinessCloudHint");
-const socialReadinessCommunity = document.getElementById("socialReadinessCommunity");
-const socialReadinessCommunityValue = document.getElementById("socialReadinessCommunityValue");
-const socialReadinessCommunityHint = document.getElementById("socialReadinessCommunityHint");
+const socialReadinessInteractions = document.getElementById("socialReadinessInteractions");
+const socialReadinessInteractionsValue = document.getElementById("socialReadinessInteractionsValue");
+const socialReadinessInteractionsHint = document.getElementById("socialReadinessInteractionsHint");
 const socialAuthPanel = document.getElementById("socialAuthPanel");
 const socialEmailInput = document.getElementById("socialEmailInput");
 const socialPasswordInput = document.getElementById("socialPasswordInput");
@@ -10215,7 +10418,6 @@ let lastPrefs = null;
 let currentRecommendation = null;
 let currentDiscovery = null;
 let postBootHydrationScheduled = false;
-let voiceLabUiReady = false;
 let socialMvpInitPromise = null;
 let knownArtistsMemory = new Set();
 let knownTrackTitlesMemory = new Set();
@@ -10481,10 +10683,7 @@ let adminAnalyticsState = {
 let adminOperationsState = {
   healthLoading: false,
   health: null,
-  healthLoadedAt: 0,
-  moderationLoading: false,
-  moderationPosts: [],
-  moderationLoadedAt: 0
+  healthLoadedAt: 0
 };
 let adminNewsroomState = {
   loading: false,
@@ -10495,7 +10694,14 @@ let adminNewsroomState = {
 };
 let sonicEditorialState = {
   loading: false,
+  loadingMore: false,
+  rawArticles: [],
   articles: [],
+  archiveQuery: "",
+  activeArticleId: "",
+  hasMore: false,
+  nextOffset: 0,
+  loadMoreError: false,
   loadedAt: 0
 };
 let adminAccessState = {
@@ -10521,22 +10727,7 @@ let socialCommentsState = {
   viewerRole: "anonymous",
   loadToken: 0
 };
-let communityState = {
-  filter: "all",
-  topic: "track",
-  loading: false,
-  posting: false,
-  enabled: true,
-  setupNeeded: false,
-  canModerate: false,
-  viewerRole: "anonymous",
-  posts: [],
-  expandedPostId: "",
-  commentsByPost: new Map(),
-  commentLoading: new Set()
-};
 let ugcBlockedUserIds = new Set();
-let communityCommentsObserver = null;
 let googleAuthReady = false;
 let googleAuthLoading = false;
 let authConfigLoading = false;
@@ -10545,8 +10736,6 @@ let pendingSocialOAuthUrl = "";
 let pendingSocialOAuthProvider = "google";
 let pendingNativeSocialAuthCallbackUrl = "";
 let editingSocialCommentId = "";
-let editingCommunityCommentId = "";
-let editingCommunityCommentPostId = "";
 let djPreviewFrameLoadTimer = 0;
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
@@ -10578,258 +10767,6 @@ let audioGlobalUnlockAt = 0;
 let openingStingPlayed = false;
 let openingStingPending = false;
 let searchAudioPulseTimer = 0;
-let voiceRecorder = null;
-let voiceRecordingStream = null;
-let voiceRecordingChunks = [];
-let voiceRecordingBlob = null;
-let voiceRecordingUrl = "";
-let voiceRecordingNormalizedBuffer = null;
-let voiceRecordingNormalizedSampleRate = 0;
-let voiceRecordingStartedAt = 0;
-let voiceRecordingTimer = 0;
-let selectedVoiceEffect = "robot";
-let activeVoiceSource = null;
-let voiceMiniTrackNodes = [];
-let voiceMiniNodeBucket = null;
-let voiceMiniTrackTimers = [];
-let voiceMiniTrackPlaying = false;
-let voiceMiniRendering = false;
-let voiceMiniExportUrl = "";
-let voiceMiniTrackScheduler = 0;
-let voiceMiniNextBarTime = 0;
-let voiceMiniBarIndex = 0;
-let voiceMiniVoiceBuffer = null;
-let voiceMiniOutputBus = null;
-let voiceMiniBpm = 128;
-let voiceMiniVoiceLevel = 110;
-let voiceMiniVoiceLength = 100;
-let voiceMiniSwingAmount = 12;
-let voiceMiniSynthType = "glow";
-let voiceMiniGrooveMode = "swing";
-let voiceMiniMasterLevel = 112;
-let voiceMiniDriveAmount = 16;
-let voiceMiniDelayAmount = 14;
-let voiceMiniPhaserAmount = 18;
-let voiceMiniBeatmasherAmount = 8;
-let voiceMiniSynthLevel = 48;
-let voiceMiniPadState = {
-  kick: false,
-  bass: false,
-  hat: false,
-  clap: false,
-  synth: false,
-  voice: false
-};
-let voiceMiniActivePreset = "techno";
-const VOICE_MINI_START_LATENCY_SEC = 0.18;
-const VOICE_MINI_SCHEDULE_LOOKAHEAD_SEC = 0.24;
-const VOICE_MINI_SCHEDULE_INTERVAL_MS = 36;
-const VOICE_MINI_EXPORT_BARS = 8;
-const VOICE_MINI_PATTERN_KINDS = ["kick", "bass", "hat", "clap", "synth", "voice"];
-const VOICE_MINI_DEFAULT_PATTERN = {
-  kick: [1, 0, 1, 0, 1, 0, 1, 0],
-  bass: [1, 0, 0, 1, 1, 0, 0, 1],
-  hat: [1, 1, 1, 1, 1, 1, 1, 1],
-  clap: [0, 0, 1, 0, 0, 0, 1, 0],
-  synth: [1, 0, 0, 0, 1, 0, 0, 0],
-  voice: [1, 0, 0, 0, 1, 0, 0, 0]
-};
-const VOICE_MINI_SYNTH_TYPES = {
-  glow: {
-    labelKey: "voiceMiniSynthTypeGlow",
-    osc: "sawtooth",
-    shimmer: "triangle",
-    filter: "lowpass",
-    attack: 0.07,
-    release: 1,
-    cutoff: 680,
-    resonance: 1.4,
-    shimmerRatio: 2.005,
-    detune: 7,
-    width: 0.26
-  },
-  acid: {
-    labelKey: "voiceMiniSynthTypeAcid",
-    osc: "sawtooth",
-    shimmer: "square",
-    filter: "bandpass",
-    attack: 0.018,
-    release: 0.52,
-    cutoff: 920,
-    resonance: 5.2,
-    shimmerRatio: 1.995,
-    detune: 3,
-    width: 0.18
-  },
-  pluck: {
-    labelKey: "voiceMiniSynthTypePluck",
-    osc: "triangle",
-    shimmer: "sine",
-    filter: "lowpass",
-    attack: 0.012,
-    release: 0.38,
-    cutoff: 1320,
-    resonance: 1.6,
-    shimmerRatio: 2,
-    detune: 4,
-    width: 0.2
-  },
-  pad: {
-    labelKey: "voiceMiniSynthTypePad",
-    osc: "sine",
-    shimmer: "triangle",
-    filter: "lowpass",
-    attack: 0.18,
-    release: 1.5,
-    cutoff: 760,
-    resonance: 0.9,
-    shimmerRatio: 1.5,
-    detune: 11,
-    width: 0.34
-  },
-  stab: {
-    labelKey: "voiceMiniSynthTypeStab",
-    osc: "square",
-    shimmer: "sawtooth",
-    filter: "lowpass",
-    attack: 0.025,
-    release: 0.56,
-    cutoff: 1040,
-    resonance: 2.4,
-    shimmerRatio: 2.01,
-    detune: 5,
-    width: 0.22
-  },
-  sub: {
-    labelKey: "voiceMiniSynthTypeSub",
-    osc: "sine",
-    shimmer: "triangle",
-    filter: "lowpass",
-    attack: 0.02,
-    release: 0.72,
-    cutoff: 420,
-    resonance: 1.1,
-    shimmerRatio: 2,
-    detune: 2,
-    width: 0.1
-  }
-};
-const VOICE_MINI_GROOVE_MODES = {
-  swing: { labelKey: "voiceMiniGrooveModeSwing" },
-  tight: { labelKey: "voiceMiniGrooveModeTight" },
-  counter: { labelKey: "voiceMiniGrooveModeCounter" },
-  late: { labelKey: "voiceMiniGrooveModeLate" },
-  floating: { labelKey: "voiceMiniGrooveModeFloating" }
-};
-const VOICE_MINI_PRESETS = {
-  techno: {
-    bpm: 132,
-    swing: 8,
-    synthType: "stab",
-    grooveMode: "tight",
-    pattern: VOICE_MINI_DEFAULT_PATTERN
-  },
-  breaks: {
-    bpm: 138,
-    swing: 14,
-    synthType: "pluck",
-    grooveMode: "swing",
-    pattern: {
-      kick: [1, 0, 0, 1, 0, 1, 0, 0],
-      bass: [1, 0, 0, 0, 1, 0, 0, 1],
-      hat: [1, 0, 1, 1, 0, 1, 1, 0],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [0, 1, 0, 0, 0, 1, 0, 0],
-      voice: [1, 0, 0, 0, 0, 0, 1, 0]
-    }
-  },
-  trap: {
-    bpm: 150,
-    swing: 16,
-    synthType: "sub",
-    grooveMode: "late",
-    pattern: {
-      kick: [1, 0, 0, 1, 0, 0, 0, 1],
-      bass: [1, 0, 0, 0, 1, 0, 0, 1],
-      hat: [1, 1, 1, 0, 1, 1, 0, 1],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [1, 0, 0, 0, 0, 0, 1, 0],
-      voice: [1, 0, 0, 0, 0, 0, 0, 0]
-    }
-  },
-  psy: {
-    bpm: 145,
-    swing: 4,
-    synthType: "acid",
-    grooveMode: "counter",
-    pattern: {
-      kick: [1, 0, 1, 0, 1, 0, 1, 0],
-      bass: [0, 1, 0, 1, 0, 1, 0, 1],
-      hat: [1, 1, 1, 1, 1, 1, 1, 1],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [1, 0, 1, 0, 0, 0, 1, 0],
-      voice: [1, 0, 0, 0, 1, 0, 0, 0]
-    }
-  },
-  ambient: {
-    bpm: 104,
-    swing: 10,
-    synthType: "pad",
-    grooveMode: "floating",
-    pattern: {
-      kick: [1, 0, 0, 0, 1, 0, 0, 0],
-      bass: [1, 0, 0, 0, 0, 0, 1, 0],
-      hat: [0, 0, 1, 0, 0, 0, 1, 0],
-      clap: [0, 0, 0, 0, 0, 0, 1, 0],
-      synth: [1, 0, 1, 0, 1, 0, 1, 0],
-      voice: [1, 0, 0, 0, 0, 0, 0, 0]
-    }
-  },
-  house: {
-    bpm: 124,
-    swing: 18,
-    synthType: "stab",
-    grooveMode: "swing",
-    pattern: {
-      kick: [1, 0, 1, 0, 1, 0, 1, 0],
-      bass: [1, 0, 0, 1, 0, 1, 0, 1],
-      hat: [0, 1, 1, 1, 0, 1, 1, 1],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [0, 1, 0, 0, 1, 0, 1, 0],
-      voice: [1, 0, 0, 0, 0, 0, 1, 0]
-    }
-  },
-  dnb: {
-    bpm: 172,
-    swing: 6,
-    synthType: "sub",
-    grooveMode: "counter",
-    pattern: {
-      kick: [1, 0, 0, 1, 0, 0, 1, 0],
-      bass: [1, 0, 1, 0, 0, 1, 0, 1],
-      hat: [1, 1, 1, 1, 1, 1, 1, 1],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [1, 0, 0, 0, 1, 0, 0, 1],
-      voice: [0, 0, 1, 0, 0, 0, 1, 0]
-    }
-  },
-  darkprog: {
-    bpm: 136,
-    swing: 5,
-    synthType: "acid",
-    grooveMode: "late",
-    pattern: {
-      kick: [1, 0, 1, 0, 1, 0, 1, 0],
-      bass: [0, 1, 0, 1, 0, 1, 0, 1],
-      hat: [1, 0, 1, 1, 1, 0, 1, 1],
-      clap: [0, 0, 1, 0, 0, 0, 1, 0],
-      synth: [1, 0, 0, 1, 0, 0, 1, 0],
-      voice: [1, 0, 0, 0, 1, 0, 0, 0]
-    }
-  }
-};
-const VOICE_MINI_IDEA_PRESETS = ["techno", "psy", "house"];
-let voiceMiniPattern = cloneVoiceMiniPattern(VOICE_MINI_DEFAULT_PATTERN);
 let quizOfferTimer = 0;
 let quizPendingChallenge = null;
 let quizSession = null;
@@ -10850,7 +10787,7 @@ const adaptiveModel = {
 };
 
 const STORAGE_KEY = "neonpulse:preferences:v2";
-const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v20";
+const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v21";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
 const SPIRIT_IMAGE_PROMPT_VERSION = "personal-sound-system-v1";
@@ -12874,7 +12811,11 @@ const STYLE_ARTIST_SEEDS = {
   tech_trance: ["John Askew", "Bryan Kearney", "Indecent Noise", "Simon Patterson", "Jordan Suckley", "Scot Project", "Mark Sherry", "Sneijder"],
   hard_trance: ["Scot Project", "Kai Tracid", "Yoji Biomehanika", "Lab4", "A*S*Y*S", "Cosmic Gate", "Derb", "Alphazone"],
   techno: ["ANNA", "Charlotte de Witte", "Amelie Lens", "Enrico Sangiuliano", "Adam Beyer", "Maceo Plex", "Sama Abdulhadi", "FJAAK"],
-  acid_techno: ["999999999", "Emmanuel Top", "Regal", "Dax J", "Parfait", "A*S*Y*S", "Perc", "Airod"],
+  acid_techno: [
+    "Phuture", "Hardfloor", "Josh Wink", "Emmanuel Top", "Tin Man", "Boston 168", "Regal",
+    "Kink", "Luke Vibert", "A*S*Y*S", "Thomas P. Heckmann", "DJ Misjah", "999999999",
+    "D.A.V.E. The Drummer", "Chris Liberator", "Sterling Moss", "Benji303"
+  ],
   hard_techno: [
     "Alignment",
     "DYEN",
@@ -12883,7 +12824,9 @@ const STYLE_ARTIST_SEEDS = {
     "Kobosil",
     "SPFDJ",
     "Shlomo",
+    "Shlømo",
     "Charlie Sparks",
+    "Charlie Sparks (UK)",
     "Nico Moreno",
     "Airod",
     "Trym",
@@ -14135,8 +14078,24 @@ const AMBIGUOUS_ARTIST_IMAGE_KEYS = new Set([
 
 const DYNAMIC_PSY_HOMONYM_RISK_ARTIST_KEYS = new Set([
   "cosmo",
+  "furious",
   "nom"
 ]);
+
+const VERIFIED_PSYTRANCE_HOMONYM_TRACKS = [
+  {
+    artist: "Furious",
+    song: "Cat Returns",
+    label: "OSOM Music",
+    deezerTrackIds: ["16178746"]
+  },
+  {
+    artist: "Furious",
+    song: "Something Special",
+    label: "Kali Yuga",
+    deezerTrackIds: ["6305453"]
+  }
+];
 
 const CURATED_FINE_STYLE_NO_BPM_ARTIST_PROOF = {
   "baphomet engine": ["dark_psy", "twilight_psy"],
@@ -14272,6 +14231,36 @@ const STYLE_ARTIST_BLOCKLIST = {
 const TRACK_STYLE_BLOCKLIST = [
   {
     family: "psytrance",
+    artist: "Furious",
+    song: "Don't Change Your Style",
+    reason: "Homônimo rockabilly do Deezer; não pertence ao projeto dark psy Furious."
+  },
+  {
+    family: "psytrance",
+    artist: "Furious",
+    song: "Hang Your Head",
+    reason: "Faixa rockabilly da Nervous Records; não pertence ao projeto dark psy Furious."
+  },
+  {
+    family: "psytrance",
+    artist: "Furious",
+    song: "Punk Bashin' Boogie",
+    reason: "Faixa de rock de artista homônimo; não pertence ao projeto dark psy Furious."
+  },
+  {
+    family: "psytrance",
+    artist: "Furious",
+    song: "Wet",
+    reason: "Faixa de hip-hop/R&B de artista homônimo; não pertence ao projeto dark psy Furious."
+  },
+  {
+    family: "psytrance",
+    artist: "Furious",
+    song: "Who to Trust",
+    reason: "Faixa de reggae de artista homônimo; não pertence ao projeto dark psy Furious."
+  },
+  {
+    family: "psytrance",
     song: "Silver Screen",
     reason: "Usuario validou que a faixa nao deve ser classificada como psy/dark psy."
   },
@@ -14292,6 +14281,12 @@ const TRACK_STYLE_BLOCKLIST = [
     artist: "Silent Horror",
     song: "17 Kills",
     reason: "Usuario validou que a importacao Deezer veio como Rock, nao psy/dark psy."
+  },
+  {
+    family: "psytrance",
+    artist: "Silent Horror",
+    song: "Murder Castle",
+    reason: "Importacao Deezer confirmada como Rock; nao pertence ao projeto psy esperado."
   },
   {
     family: "psytrance",
@@ -14343,6 +14338,12 @@ const TRACK_STYLE_BLOCKLIST = [
   },
   {
     family: "psytrance",
+    artist: "Cosmo",
+    song: "DEN SOMMER ÜBERLEBEN",
+    reason: "Homônimo Dance/Pop de Deezer fora do projeto psy/hi-tech esperado."
+  },
+  {
+    family: "psytrance",
     artist: "N.O.M",
     song: "MEGA PUNCH",
     reason: "Homônimo de Deezer fora do recorte dark psy confiavel."
@@ -14358,6 +14359,36 @@ const TRACK_STYLE_BLOCKLIST = [
     artist: "N.O.M",
     song: "I can't Wait",
     reason: "Homônimo de Deezer fora do recorte dark psy confiavel."
+  },
+  {
+    family: "psytrance",
+    artist: "Quasar",
+    song: "Be My Lover (TECHNO)",
+    reason: "Faixa techno de homônimo; nao pertence ao recorte psy selecionado."
+  },
+  {
+    family: "psytrance",
+    artist: "Quasar",
+    song: "Drenagem",
+    reason: "Faixa Rock de homônimo; nao pertence ao recorte psy selecionado."
+  },
+  {
+    family: "psytrance",
+    artist: "Quasar",
+    song: "Em Seu Lugar",
+    reason: "Faixa Indie Rock de homônimo; nao pertence ao recorte psy selecionado."
+  },
+  {
+    family: "psytrance",
+    artist: "Quasar",
+    song: "Termo",
+    reason: "Faixa Alternative/Indie Rock de homônimo; nao pertence ao recorte psy selecionado."
+  },
+  {
+    family: "psytrance",
+    artist: "Loke",
+    song: "plata ou nada (feat. dogga dogga)",
+    reason: "Faixa Rap/Hip Hop de homônimo; nao pertence ao recorte forest psy."
   }
 ];
 
@@ -16912,6 +16943,15 @@ function parseDatasetBpm(value = "") {
   return 0;
 }
 
+function explicitTrackTitleBpm(value = "") {
+  const match = String(value || "")
+    .replace(",", ".")
+    .match(/(?:^|[\s([_-])(\d{2,3}(?:\.\d+)?)\s*bpm\b/i);
+  if (!match) return 0;
+  const bpm = Number(match[1]);
+  return Number.isFinite(bpm) && bpm >= 40 && bpm <= 400 ? bpm : 0;
+}
+
 function parseDatasetDurationSeconds(value = "") {
   const raw = String(value || "").trim();
   if (!raw) return 0;
@@ -17598,8 +17638,11 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
     if (!style || !STYLE_BPM_RULES[style] || !artist || !song) return;
     if (!catalogExtraRowHasPlayablePath(row)) return;
 
+    const catalogSource = catalogExtraRowText(row, "source");
+    const importedSource = [sourceTag, catalogSource].filter(Boolean).join(":");
     const metadata = {
       ...catalogExtraRowMetadata(row),
+      catalog_extra_source: catalogSource,
       playback_policy: "published_requires_in_app_playback",
       playable_sources: catalogExtraPlayableSources(row)
     };
@@ -17618,7 +17661,7 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
         previewUrl: catalogExtraRowText(row, "preview_url"),
         releaseDate,
         durationSec,
-        source: sourceTag,
+        source: importedSource || sourceTag,
         artistCountry: catalogExtraRowText(row, "country"),
         artistGenre: catalogExtraRowText(row, "artist_genre") || styleLabelByValue(style),
         artistProfileHint:
@@ -17671,7 +17714,7 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
       importedTrack.artistProfileHint = catalogExtraRowText(row, "artist_profile_hint") || importedTrack.artistProfileHint;
     }
     if (releaseDate && releaseDate !== "Catálogo dinâmico" && releaseDate !== "Supabase catalog") {
-      registerRecentArtistSignal(style, artist, releaseDate, sourceTag);
+      registerRecentArtistSignal(style, artist, releaseDate, importedSource || sourceTag);
     }
   });
 
@@ -18295,6 +18338,9 @@ function requiresExactBpmForDynamic(style, source = "") {
   // Psycore em APIs abertas quase nunca vem com BPM exato; mantemos filtro por artista seed/estilo e liberamos fallback de BPM.
   if (style === "psycore") return false;
   const sourceKey = normalize(source || "").replace(/[\s_]+/g, "");
+  // Catalog Extra já passou pelo gate eletrônico em nível de gravação. Exigir BPM
+  // novamente aqui esvazia subgêneros extremos cujas plataformas não publicam tempo.
+  if (sourceKey.includes("supabasecatalogextra") && isTrustedSourceForFineStyle(source)) return false;
   const isExpansionSource =
     sourceKey.includes("verifieddeezerexpansion") ||
     sourceKey.includes("verifiedtrackexpansion") ||
@@ -19564,6 +19610,31 @@ function hasPsytranceIntegrityConflict(style, trackLike = {}) {
   return true;
 }
 
+function hasVerifiedPsytranceHomonymTrackIdentity(style, trackLike = {}) {
+  const cleanStyle = normalizeDatasetStyle(style || trackLike?.style || "");
+  if (!cleanStyle || familyOf(cleanStyle) !== "psytrance" || !trackLike) return false;
+  const artistKey = artistMatchKey(trackLike.artist || "");
+  const songKey = normalizeTitle(trackLike.song || trackLike.title || "");
+  const labelKey = normalize(trackLike.label || "");
+  const deezerTrackId = String(
+    trackLike.deezerTrackId ||
+    catalogTrackMetadataText(trackLike, "deezer_track_id") ||
+    catalogTrackMetadataText(trackLike, "deezerTrackId") ||
+    ""
+  ).replace(/[^\d]/g, "");
+  if (!artistKey || !songKey || !labelKey) return false;
+
+  return VERIFIED_PSYTRANCE_HOMONYM_TRACKS.some((entry) => {
+    if (artistKey !== artistMatchKey(entry.artist || "")) return false;
+    if (songKey !== normalizeTitle(entry.song || "")) return false;
+    if (labelKey !== normalize(entry.label || "")) return false;
+    const allowedIds = Array.isArray(entry.deezerTrackIds)
+      ? entry.deezerTrackIds.map((value) => String(value || "").replace(/[^\d]/g, "")).filter(Boolean)
+      : [];
+    return !deezerTrackId || !allowedIds.length || allowedIds.includes(deezerTrackId);
+  });
+}
+
 function textHasPsytranceSceneLabelSignal(rawText = "") {
   const text = normalize(rawText || "");
   if (!text) return false;
@@ -19584,6 +19655,7 @@ function isGenericDynamicPsyLabel(label = "", artistName = "", songName = "") {
 function hasAmbiguousDynamicPsyHomonymConflict(style, trackLike = {}) {
   const cleanStyle = normalizeDatasetStyle(style || trackLike?.style || "");
   if (!cleanStyle || familyOf(cleanStyle) !== "psytrance" || !trackLike) return false;
+  if (hasVerifiedPsytranceHomonymTrackIdentity(cleanStyle, trackLike)) return false;
 
   const sourceRaw = String(trackLike.source || "").trim();
   const sourceCompact = normalize(sourceRaw).replace(/[\s_]+/g, "");
@@ -19635,6 +19707,38 @@ function hasNonElectronicReleaseConflict(track = {}) {
   const label = normalize(track.label || "");
   const song = normalize(track.song || "");
   const rawSong = String(track.song || "");
+  const styleKey = String(track.style || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+  const psytranceStyle = new Set([
+    "psytrance",
+    "forest_psy",
+    "dark_psy",
+    "twilight_psy",
+    "dark_experimental",
+    "psycore",
+    "psybreaks",
+    "psybient",
+    "freeform",
+    "full_on",
+    "full_on_night",
+    "full_on_morning",
+    "progressive_psy",
+    "hi_tech",
+    "dark_progressive",
+    "goa_trance",
+    "psy_comercial",
+    "slambient"
+  ]).has(styleKey);
+  const verifiedReleaseGenres = normalize([
+    track.albumGenres,
+    track.releaseGenres,
+    catalogTrackMetadataText(track, "album_genres"),
+    catalogTrackMetadataText(track, "release_genres")
+  ].filter(Boolean).join(" "));
+  if (psytranceStyle && verifiedReleaseGenres) {
+    const hardWrongPsyGenre = /\b(?:alternative|alternativo|rock|rockabilly|reggae|hip\s*hop|rap|r\s*and\s*b|rhythm\s+and\s+blues|country|folk|sertanejo|gospel|classical|classico|orchestral)\b/;
+    const positivePsyGenre = /\b(?:psytrance|psy\s+trance|trance|goa|electro|electronic|electronica|dance|techno|ambient)\b/;
+    if (hardWrongPsyGenre.test(verifiedReleaseGenres) && !positivePsyGenre.test(verifiedReleaseGenres)) return true;
+  }
   const albumSignals = normalize([
     track.album,
     track.collectionName,
@@ -19977,6 +20081,7 @@ function isTrustedSourceForFineStyle(source = "") {
   return (
     sourceKey.includes("datasetlocal") ||
     sourceKey.includes("localseed") ||
+    sourceKey.includes("supabasecatalogextra") ||
     sourceKey.includes("verifiedtrackexpansion") ||
     sourceKey.includes("verifieddeezerexpansion")
   );
@@ -20029,6 +20134,7 @@ function isDynamicSource(source) {
     compactSource.includes("verifieddeezerexpansion") ||
     compactSource.includes("verifiedtrackexpansion") ||
     compactSource.includes("artistexpansion") ||
+    compactSource.includes("supabasecatalogextra") ||
     compactSource.includes("dataset") ||
     compactSource.includes("soundcloudapi") ||
     compactSource.includes("soundclouddynamic")
@@ -21178,6 +21284,10 @@ function buildCatalogGenreAudit({ sampleLimit = 80 } = {}) {
     if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(style, bpmValue)) {
       registerIssue(track, "bpm_out_of_style_range", `BPM ${Math.round(bpmValue)} outside ${style}.`);
     }
+    const titleBpm = explicitTrackTitleBpm(track.song);
+    if (titleBpm && !bpmFitsStyle(style, titleBpm)) {
+      registerIssue(track, "title_bpm_out_of_style_range", `Title declares ${Math.round(titleBpm)} BPM outside ${style}.`);
+    }
 
     if (hasTrackStyleSignalConflict(style, track)) {
       registerIssue(track, "style_signal_conflict", "Artist/label/genre text signals conflict with selected style.");
@@ -21273,6 +21383,8 @@ function isTrackEligibleForRecommendation(track) {
   if (!dynamicPsyHomonymHasStrongIdentityProof(track)) return false;
   const bpmValue = Number(track.bpmExact);
   if (Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(track.style, bpmValue)) return false;
+  const titleBpm = explicitTrackTitleBpm(track.song);
+  if (titleBpm && !bpmFitsStyle(track.style, titleBpm)) return false;
   if (isDynamicSource(track.source)) {
     if (requiresExactBpmForDynamic(track.style, track.source) && !hasReliableBpmForTrack(track)) {
       return false;
@@ -24045,74 +24157,25 @@ const I18N = {
     betaAccessGrantedStatus: "Acesso liberado. Entrando no Sonic Search...",
     betaExitStatus: "Você está vendo a tela pública do beta fechado.",
     heroTitle: "A faixa certa para agora",
-    heroDesc: "Seu momento dá o tom. O Sonic Search encontra uma faixa nova e mostra por que ela combina com você.",
+    heroDesc: "Pronto para descobrir algo novo?",
     tabDiscover: "Descobrir",
     tabDjs: "DJs",
     tabFilters: "Filtros",
     tabNews: "Notícias",
-    tabCommunity: "Comunidade",
-    tabStudio: "Estúdio",
     tabProfile: "Perfil",
     tabAdmin: "Painel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contato",
     tabLegal: "Avisos",
-    communityKicker: "Comunidade",
-    communityTitle: "Conversa de pista",
-    communityIntro: "Fale de faixas, DJs, festas, festivais e perguntas da cena. Use Denunciar ou Bloquear em conteúdo impróprio; o suporte está no menu Contato.",
-    communityRefresh: "Atualizar",
-    communityStoryKicker: "Pergunta para a comunidade",
-    communityStoryTitle: "Qual evento marcou você — pelo melhor ou pelo pior motivo?",
-    communityStoryText: "Conte como foi estar lá: o que surpreendeu, o que funcionou e o que poderia ter sido diferente. Experiências incríveis, frustrantes ou inesperadas são bem-vindas — aqui, todo relato tem espaço quando é compartilhado com respeito.",
-    communityStoryCta: "Compartilhar meu relato",
-    communityFilterAll: "Tudo",
-    communityFilterTrack: "Faixas",
-    communityFilterArtist: "DJs",
-    communityFilterEvent: "Festas",
-    communityFilterFestival: "Festivais",
-    communityFilterQuestion: "Perguntas",
-    communityTypeTrack: "Faixa",
-    communityTypeArtist: "Artista/DJ",
-    communityTypeEvent: "Festa",
-    communityTypeFestival: "Festival",
-    communityTypeQuestion: "Pergunta",
-    communityComposerTopicHint: "Categoria: {topic}",
-    communityTitlePlaceholder: "Título curto da conversa",
-    communityBodyPlaceholder: "O que você quer perguntar, recomendar ou contar?",
-    communityMetaPlaceholder: "Cidade, festa, artista, faixa ou link de contexto",
-    communityComposerHint: "Abra uma conversa sobre faixa, artista, festa, festival ou dúvida da cena.",
-    communityLoginText: "Faça login para comentar, curtir ou publicar. Sem login, a descoberta e o perfil local continuam funcionando.",
-    communityLoginBtn: "Entrar para participar",
-    communitySubmit: "Publicar",
-    communityLoading: "Carregando comunidade...",
-    communityEmpty: "Ainda não há conversas nesse filtro.",
-    communityDisabled: "Comunidade indisponível agora. Tente atualizar em instantes.",
-    communityPostMissing: "Escreva uma mensagem para publicar.",
-    communityPosted: "Post publicado na comunidade.",
-    communityPostFailed: "Não consegui publicar agora.",
-    communityReactionFailed: "Não consegui registrar a reação agora.",
-    communityDeleted: "Post removido.",
-    communityUpdated: "Post atualizado.",
-    communityMoveToAll: "Mover para Tudo",
-    communityComment: "Comentar",
-    communityComments: "Comentários",
-    communityCommentPlaceholder: "Responder nessa conversa",
-    communityCommentSubmit: "Responder",
-    communityCommentEmpty: "Ainda não há comentários nesse post.",
-    communityCommentPosted: "Comentário publicado.",
-    communityContextLabel: "Contexto",
-    communityDelete: "Remover",
-    communityLike: "Curtir",
-    communityDislike: "Descurtir",
-    communityReport: "Denunciar",
-    communityBlockUser: "Bloquear usuário",
-    communityReportConfirm: "Denunciar este conteúdo para a moderação do Sonic Search?",
-    communityBlockConfirm: "Bloquear este usuário? As publicações e os comentários dele deixarão de aparecer para você.",
-    communityReported: "Denúncia enviada à moderação.",
-    communityBlocked: "Usuário bloqueado. O conteúdo dele foi ocultado.",
-    communityReportFailed: "Não foi possível enviar a denúncia agora.",
-    communityBlockFailed: "Não foi possível bloquear este usuário agora.",
-    communityContentNotAllowed: "Esse conteúdo não pode ser publicado porque viola as regras de segurança da comunidade.",
+    socialCommentsReport: "Denunciar",
+    socialCommentsBlockUser: "Bloquear usuário",
+    socialCommentsReportConfirm: "Denunciar este comentário para a moderação do Sonic Search?",
+    socialCommentsBlockConfirm: "Bloquear este usuário? Os comentários dele deixarão de aparecer para você.",
+    socialCommentsReported: "Denúncia enviada à moderação.",
+    socialCommentsBlocked: "Usuário bloqueado. Os comentários dele foram ocultados.",
+    socialCommentsReportFailed: "Não foi possível enviar a denúncia agora.",
+    socialCommentsBlockFailed: "Não foi possível bloquear este usuário agora.",
+    socialCommentsContentNotAllowed: "Esse comentário não pode ser publicado porque viola as regras de segurança.",
     feedbackKicker: "Aprendizado",
     feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
     swipeHeroKicker: "Descoberta imediata",
@@ -24407,18 +24470,6 @@ const I18N = {
     djModeStepPeak: "Peak",
     djModeStepCurve: "Variação",
     djModeStepClose: "Fechamento",
-    voicePadKick: "Kick",
-    voicePadBass: "Bass",
-    voicePadHat: "Hat",
-    voicePadClap: "Clap",
-    voicePadSynth: "Synth",
-    voicePadVoice: "Voz",
-    voiceMiniPadHint: "Pad acionado: {pad}.",
-    voiceMiniPadLoopOn: "{pad} armado. Entra limpo no próximo compasso.",
-    voiceMiniPadLoopOff: "{pad} saiu do loop. O próximo compasso já vem sem essa camada.",
-    voiceMiniLayerOn: "Armado",
-    voiceMiniLayerOff: "Livre",
-    voiceMiniLayerDisabled: "Grave voz",
     artistHubIntro: "Bio, label e links para continuar a descoberta.",
     discogsArtistTitle: "Bio completa no Discogs",
     discogsArtistHint: "Veja bio, aliases e discografia completa.",
@@ -24436,150 +24487,6 @@ const I18N = {
     trackAiLocalSource: "Leitura do Sonic Search baseada no som, no contexto e no seu histórico.",
     trackAiFallback: "Ouça o primeiro minuto. Se conectar, salve; se não, troque.",
     trackAiUpdatedToast: "Leitura IA atualizada.",
-    voiceLabKicker: "Estúdio rápido",
-    voiceLabTitle: "Monte um loop tocável em segundos",
-    voiceLabHint: "Escolha uma vibe, aperte play, ajuste camadas e baixe.",
-    voiceEffectsTitle: "Efeito da voz",
-    voiceEffectRobot: "Robô",
-    voiceEffectChipmunk: "Engraçada",
-    voiceEffectTelephone: "Telefone",
-    voiceEffectAlien: "Alienígena",
-    voiceEffectDeep: "Voz grave",
-    voiceEffectEcho: "Eco espacial",
-    voiceEffectVocoder: "Vocoder",
-    voiceEffectWide: "Sala amplia",
-    voiceEffectTape: "Cinta cálida",
-    voiceEffectVocoder: "Vocoder",
-    voiceEffectWide: "Sala larga",
-    voiceEffectTape: "Fita quente",
-    voiceRecordBtn: "Gravar voz opcional",
-    voiceStopBtn: "Parar",
-    voicePlayBtn: "Ouvir efeito",
-    voiceResetBtn: "Limpar",
-    voiceDownloadBtn: "Baixar gravação",
-    voiceReady: "Microfone em espera. Grave só se quiser usar sua voz no loop.",
-    voiceRecording: "Gravando... {seconds}s",
-    voiceRecorded: "Voz pronta. Escolha um efeito ou ligue a camada Voz no loop.",
-    voiceNeedRecording: "Grave uma voz para usar esta camada.",
-    voiceMicUnsupported: "Seu navegador não liberou gravação de voz aqui.",
-    voiceMicDenied: "Não consegui acessar o microfone. Verifique a permissão do navegador.",
-    voicePlaying: "Tocando com efeito: {effect}.",
-    voiceCleared: "Gravação apagada.",
-    voiceMiniEyebrow: "Beat maker simples",
-    voiceMiniTitle: "Escolha a vibe. Aperte play.",
-    voiceMiniHint: "O loop já começa tocável. Ajuste camadas, BPM e exporte.",
-    voiceStudioStepOne: "Escolha o clima",
-    voiceStudioStepTwo: "Dê play",
-    voiceStudioStepThree: "Ajuste camadas",
-    voiceStudioSessionStateLabel: "Estado",
-    voiceStudioSessionLayersLabel: "Camadas",
-    voiceStudioSessionLengthLabel: "Export",
-    voiceStudioSessionFormatLabel: "Arquivo",
-    voiceStudioStateReady: "Em espera",
-    voiceStudioStatePlaying: "Tocando",
-    voiceStudioStateRecording: "Gravando voz",
-    voiceStudioStateRendering: "Exportando",
-    voiceStudioStateVoiceReady: "Voz pronta",
-    voiceStudioLayersValue: "{count}/{total} camadas",
-    voiceStudioLengthValue: "{bars} compassos • {seconds}s",
-    voiceStudioFormatLocal: "WAV local",
-    voiceStudioFormatVoice: "Voz + WAV",
-    voiceMiniNoVoiceBadge: "Sem cadastro",
-    voiceMiniRandomBtn: "Gerar ideia",
-    voiceMiniPlayBtn: "Tocar mini música",
-    voiceMiniStopBtn: "Parar loop",
-    voiceMiniExportBtn: "Baixar mini música",
-    voiceMiniPresetTitle: "Clima da ideia",
-    voiceMiniMorphTitle: "Macromovimentos",
-    voiceMiniMorphFloor: "Mais pista",
-    voiceMiniMorphDeep: "Mais profundo",
-    voiceMiniMorphWeird: "Mais estranho",
-    voiceMiniMorphOpen: "Mais aberto",
-    voiceMiniMorphApplied: "Movimento aplicado: {move}. O próximo compasso muda de direção.",
-    voiceMiniLayerTitle: "Camadas",
-    voiceMiniRecipeLabel: "Receita atual",
-    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
-    voiceMiniRecipeMeta: "{layers} ativos.",
-    voiceMiniRecipeMetaEmpty: "Escolha uma ideia ou toque em Gerar ideia para começar com som.",
-    voiceMiniInsightKicker: "Leitura local",
-    voiceMiniInsightEnergyLabel: "Energia",
-    voiceMiniInsightShapeLabel: "Forma",
-    voiceMiniInsightMoveLabel: "Próximo gesto",
-    voiceMiniInsightTitlePeak: "Com pressão de pista",
-    voiceMiniInsightTitleGroove: "Groove em construção",
-    voiceMiniInsightTitleDeep: "Textura profunda",
-    voiceMiniInsightTitleExperimental: "Ideia mutante",
-    voiceMiniEnergyLow: "baixa",
-    voiceMiniEnergyGroove: "groove",
-    voiceMiniEnergyClub: "pista",
-    voiceMiniEnergyHigh: "alta",
-    voiceMiniEnergySprint: "sprint",
-    voiceMiniShapeMinimal: "minimal",
-    voiceMiniShapeBalanced: "equilibrada",
-    voiceMiniShapeAcid: "ácida",
-    voiceMiniShapeWide: "aberta",
-    voiceMiniShapeHeavy: "pesada",
-    voiceMiniShapeBroken: "quebrada",
-    voiceMiniNextMoveKick: "arme o kick",
-    voiceMiniNextMoveBass: "reforce o grave",
-    voiceMiniNextMoveSynth: "abra o synth",
-    voiceMiniNextMoveSpace: "adicione espaço",
-    voiceMiniNextMoveVoice: "grave voz",
-    voiceMiniNextMoveVariation: "varie o sequencer",
-    voiceMiniAnd: "e",
-    voiceMiniCustomPreset: "Desenho próprio",
-    voiceMiniAdvancedTitle: "Ajustes avançados",
-    voiceMiniAdvancedHint: "voz, mixer e sequencer",
-    voiceMiniBpmLabel: "Velocidade",
-    voiceMiniBpmValue: "{bpm} BPM",
-    voiceMiniBpmChanged: "BPM ajustado para {bpm}. O próximo compasso entra nessa velocidade.",
-    voiceMiniVoiceLevelLabel: "Presença da voz",
-    voiceMiniVoiceLevelValue: "{level}%",
-    voiceMiniVoiceLevelChanged: "Voz em {level}%. O próximo compasso entra com essa presença.",
-    voiceMiniVoiceLengthLabel: "Comprimento da voz",
-    voiceMiniSwingLabel: "Swing",
-    voiceMiniSynthTypeLabel: "Tipo de synth",
-    voiceMiniSynthTypeGlow: "Glow lead",
-    voiceMiniSynthTypeAcid: "Acid line",
-    voiceMiniSynthTypePluck: "Pluck limpo",
-    voiceMiniSynthTypePad: "Pad aberto",
-    voiceMiniSynthTypeStab: "Stab de pista",
-    voiceMiniSynthTypeSub: "Sub macio",
-    voiceMiniGrooveModeLabel: "Encaixe do groove",
-    voiceMiniGrooveModeSwing: "Swing natural",
-    voiceMiniGrooveModeTight: "Grid certinho",
-    voiceMiniGrooveModeCounter: "Contratempo",
-    voiceMiniGrooveModeLate: "Mais atrasado",
-    voiceMiniGrooveModeFloating: "Flutuante",
-    voiceMiniMasterLabel: "Master",
-    voiceMiniDriveLabel: "Drive",
-    voiceMiniDelayLabel: "Delay",
-    voiceMiniPhaserLabel: "Phaser",
-    voiceMiniBeatmasherLabel: "Beatmasher",
-    voiceMiniSynthLabel: "Synth",
-    voiceMiniPercentValue: "{value}%",
-    voiceMiniControlChanged: "{control} em {value}%. O próximo compasso já usa esse ajuste.",
-    voiceMiniSelectChanged: "{control}: {value}. O próximo compasso já entra assim.",
-    voiceMiniReady: "Escolha um clima ou gere uma ideia para ouvir o primeiro loop.",
-    voiceMiniPlaying: "Loop rodando no tempo. Toque nas camadas para armar ou remover no próximo compasso.",
-    voiceMiniDone: "Loop parado. Toque a mini música ou um pad para começar de novo.",
-    voiceMiniAudioBlocked: "Não consegui iniciar o áudio aqui. Toque de novo ou confira se o som do navegador está liberado.",
-    voiceMiniStepChanged: "{pad} no passo {step}. O próximo compasso segue esse desenho.",
-    voiceMiniPresetApplied: "Ideia {preset} pronta. Toque a mini música ou ajuste as camadas.",
-    voiceMiniIdeaGenerated: "Ideia criada: {preset}, {bpm} BPM. Agora ajuste as camadas se quiser.",
-    voiceMiniExportBusy: "Gerando arquivo...",
-    voiceMiniExportReady: "Arquivo pronto para baixar",
-    voiceMiniExportDone: "Mini música gerada em WAV.",
-    voiceMiniExportUnsupported: "Este navegador não consegue baixar a mini música aqui.",
-    voiceMiniExportFailed: "Não consegui gerar o arquivo agora. Tente de novo.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Breaks elástico",
-    voiceMiniPresetTrap: "Trap mutante",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Ambient pulsante",
-    voiceMiniPresetHouse: "House",
-    voiceMiniPresetDnb: "DnB líquido",
-    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Seu mapa musical",
     summaryStatusLabel: "Status do perfil",
     summaryKnownCountLabel: "Artistas conhecidos",
@@ -24683,13 +24590,13 @@ const I18N = {
     summaryEmptyKnown: "Marque artistas conhecidos para o app fugir do óbvio.",
     summaryEmptyLiked: "Salve artistas quando quiser reforçar essa direção.",
     summaryEmptyDisliked: "Artistas recusados aparecem aqui para evitar insistência.",
-    listenersSubtitle: "{count} ouvintes da comunidade nas últimas horas (feed local).",
-    topListenersTitle: "Top listeners da comunidade",
+    listenersSubtitle: "{count} ouvintes nas últimas horas (feed local).",
+    topListenersTitle: "Ouvintes mais ativos",
     topListenersSubtitle: "Quem mais ouviu {style} nas últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} pontos",
     topListenerPlays: "{plays} plays",
-    socialCommentsKicker: "Comunidade",
+    socialCommentsKicker: "Conversa",
     socialCommentsTitleTrack: "Discussão da faixa",
     socialCommentsTitleArtist: "Discussão do artista",
     socialCommentsSubtitleTrack: "Comente o que a faixa entrega na pista.",
@@ -25147,74 +25054,25 @@ const I18N = {
     betaAccessGrantedStatus: "Access granted. Entering Sonic Search...",
     betaExitStatus: "You are viewing the public closed-beta page.",
     heroTitle: "The right track for now",
-    heroDesc: "Your moment sets the tone. Sonic Search finds a new track and shows why it fits you.",
+    heroDesc: "Ready to discover something new?",
     tabDiscover: "Discover",
     tabDjs: "DJs",
     tabFilters: "Filters",
     tabNews: "News",
-    tabCommunity: "Community",
-    tabStudio: "Studio",
     tabProfile: "Profile",
     tabAdmin: "Admin dashboard",
     tabAbout: "About",
     tabSupport: "Contact",
     tabLegal: "Legal",
-    communityKicker: "Community",
-    communityTitle: "Floor talk",
-    communityIntro: "Talk tracks, DJs, parties, festivals, and scene questions. Use Report or Block for inappropriate content; support is available in the Contact menu.",
-    communityRefresh: "Refresh",
-    communityStoryKicker: "Question for the community",
-    communityStoryTitle: "Which event stayed with you — for the best or worst reasons?",
-    communityStoryText: "Tell us what it was like to be there: what surprised you, what worked, and what could have been different. Amazing, frustrating, or unexpected experiences are all welcome — every story has a place here when shared with respect.",
-    communityStoryCta: "Share my story",
-    communityFilterAll: "All",
-    communityFilterTrack: "Tracks",
-    communityFilterArtist: "DJs",
-    communityFilterEvent: "Parties",
-    communityFilterFestival: "Festivals",
-    communityFilterQuestion: "Questions",
-    communityTypeTrack: "Track",
-    communityTypeArtist: "Artist/DJ",
-    communityTypeEvent: "Party",
-    communityTypeFestival: "Festival",
-    communityTypeQuestion: "Question",
-    communityComposerTopicHint: "Category: {topic}",
-    communityTitlePlaceholder: "Short conversation title",
-    communityBodyPlaceholder: "What do you want to ask, recommend, or report?",
-    communityMetaPlaceholder: "City, party, artist, track, or context link",
-    communityComposerHint: "Start a conversation about a track, artist, party, festival, or scene question.",
-    communityLoginText: "Sign in to comment, like, or post. Without login, discovery and your local profile still work.",
-    communityLoginBtn: "Sign in to join",
-    communitySubmit: "Post",
-    communityLoading: "Loading community...",
-    communityEmpty: "No conversations in this filter yet.",
-    communityDisabled: "Community is unavailable right now. Try refreshing in a moment.",
-    communityPostMissing: "Write a message before posting.",
-    communityPosted: "Posted to the community.",
-    communityPostFailed: "I could not post that right now.",
-    communityReactionFailed: "I could not save that reaction right now.",
-    communityDeleted: "Post removed.",
-    communityUpdated: "Post updated.",
-    communityMoveToAll: "Move to All",
-    communityComment: "Comment",
-    communityComments: "Comments",
-    communityCommentPlaceholder: "Reply in this conversation",
-    communityCommentSubmit: "Reply",
-    communityCommentEmpty: "No comments on this post yet.",
-    communityCommentPosted: "Comment posted.",
-    communityContextLabel: "Context",
-    communityDelete: "Remove",
-    communityLike: "Like",
-    communityDislike: "Dislike",
-    communityReport: "Report",
-    communityBlockUser: "Block user",
-    communityReportConfirm: "Report this content to Sonic Search moderation?",
-    communityBlockConfirm: "Block this user? Their posts and comments will no longer appear for you.",
-    communityReported: "Report sent to moderation.",
-    communityBlocked: "User blocked. Their content is now hidden.",
-    communityReportFailed: "The report could not be sent right now.",
-    communityBlockFailed: "This user could not be blocked right now.",
-    communityContentNotAllowed: "This content cannot be posted because it violates the community safety rules.",
+    socialCommentsReport: "Report",
+    socialCommentsBlockUser: "Block user",
+    socialCommentsReportConfirm: "Report this comment to Sonic Search moderation?",
+    socialCommentsBlockConfirm: "Block this user? Their comments will no longer appear for you.",
+    socialCommentsReported: "Report sent to moderation.",
+    socialCommentsBlocked: "User blocked. Their comments are now hidden.",
+    socialCommentsReportFailed: "The report could not be sent right now.",
+    socialCommentsBlockFailed: "This user could not be blocked right now.",
+    socialCommentsContentNotAllowed: "This comment cannot be posted because it violates the safety rules.",
     feedbackKicker: "Learning",
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Instant discovery",
@@ -25509,18 +25367,6 @@ const I18N = {
     djModeStepPeak: "Peak",
     djModeStepCurve: "Twist",
     djModeStepClose: "Close",
-    voicePadKick: "Kick",
-    voicePadBass: "Bass",
-    voicePadHat: "Hat",
-    voicePadClap: "Clap",
-    voicePadSynth: "Synth",
-    voicePadVoice: "Voice",
-    voiceMiniPadHint: "Pad triggered: {pad}.",
-    voiceMiniPadLoopOn: "{pad} armed. It lands cleanly on the next bar.",
-    voiceMiniPadLoopOff: "{pad} left the loop. The next bar plays without that layer.",
-    voiceMiniLayerOn: "Armed",
-    voiceMiniLayerOff: "Free",
-    voiceMiniLayerDisabled: "Record voice",
     artistHubIntro: "Bio, label, and links to continue the discovery.",
     discogsArtistTitle: "Full bio on Discogs",
     discogsArtistHint: "See bio, aliases, and full discography.",
@@ -25538,147 +25384,6 @@ const I18N = {
     trackAiLocalSource: "Sonic Search read based on the sound, context, and your history.",
     trackAiFallback: "Play the first minute. If it connects, save it; if not, swap.",
     trackAiUpdatedToast: "AI insight updated.",
-    voiceLabKicker: "Quick studio",
-    voiceLabTitle: "Build a playable loop in seconds",
-    voiceLabHint: "Pick a vibe, hit play, adjust layers, and download.",
-    voiceEffectsTitle: "Voice effect",
-    voiceEffectRobot: "Robot",
-    voiceEffectChipmunk: "Funny",
-    voiceEffectTelephone: "Telephone",
-    voiceEffectAlien: "Alien",
-    voiceEffectDeep: "Deep voice",
-    voiceEffectEcho: "Space echo",
-    voiceEffectVocoder: "Vocoder",
-    voiceEffectWide: "Wide room",
-    voiceEffectTape: "Warm tape",
-    voiceRecordBtn: "Record optional voice",
-    voiceStopBtn: "Stop",
-    voicePlayBtn: "Play effect",
-    voiceResetBtn: "Clear",
-    voiceDownloadBtn: "Download recording",
-    voiceReady: "Mic on standby. Record only if you want your voice in the loop.",
-    voiceRecording: "Recording... {seconds}s",
-    voiceRecorded: "Voice ready. Choose an effect or turn on the Voice layer in the loop.",
-    voiceNeedRecording: "Record a voice to use this layer.",
-    voiceMicUnsupported: "Your browser did not enable voice recording here.",
-    voiceMicDenied: "I could not access the microphone. Check browser permission.",
-    voicePlaying: "Playing with effect: {effect}.",
-    voiceCleared: "Recording cleared.",
-    voiceMiniEyebrow: "Simple beat maker",
-    voiceMiniTitle: "Pick the vibe. Hit play.",
-    voiceMiniHint: "The loop starts playable. Adjust layers, BPM, and export.",
-    voiceStudioStepOne: "Pick the mood",
-    voiceStudioStepTwo: "Hit play",
-    voiceStudioStepThree: "Adjust layers",
-    voiceStudioSessionStateLabel: "State",
-    voiceStudioSessionLayersLabel: "Layers",
-    voiceStudioSessionLengthLabel: "Export",
-    voiceStudioSessionFormatLabel: "File",
-    voiceStudioStateReady: "Standby",
-    voiceStudioStatePlaying: "Playing",
-    voiceStudioStateRecording: "Recording voice",
-    voiceStudioStateRendering: "Exporting",
-    voiceStudioStateVoiceReady: "Voice ready",
-    voiceStudioLayersValue: "{count}/{total} layers",
-    voiceStudioLengthValue: "{bars} bars • {seconds}s",
-    voiceStudioFormatLocal: "Local WAV",
-    voiceStudioFormatVoice: "Voice + WAV",
-    voiceMiniNoVoiceBadge: "No mic or signup needed",
-    voiceMiniRandomBtn: "Generate idea",
-    voiceMiniPlayBtn: "Play mini track",
-    voiceMiniStopBtn: "Stop loop",
-    voiceMiniExportBtn: "Download mini track",
-    voiceMiniPresetTitle: "Idea mood",
-    voiceMiniMorphTitle: "Macro moves",
-    voiceMiniMorphFloor: "More floor",
-    voiceMiniMorphDeep: "Deeper",
-    voiceMiniMorphWeird: "Weirder",
-    voiceMiniMorphOpen: "More open",
-    voiceMiniMorphApplied: "Move applied: {move}. The next bar changes direction.",
-    voiceMiniLayerTitle: "Layers",
-    voiceMiniRecipeLabel: "Current recipe",
-    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
-    voiceMiniRecipeMeta: "{layers} active.",
-    voiceMiniRecipeMetaEmpty: "Pick an idea or tap Generate idea to start with sound.",
-    voiceMiniInsightKicker: "Local read",
-    voiceMiniInsightEnergyLabel: "Energy",
-    voiceMiniInsightShapeLabel: "Shape",
-    voiceMiniInsightMoveLabel: "Next move",
-    voiceMiniInsightTitlePeak: "Floor pressure on",
-    voiceMiniInsightTitleGroove: "Groove forming",
-    voiceMiniInsightTitleDeep: "Deep texture",
-    voiceMiniInsightTitleExperimental: "Mutant idea",
-    voiceMiniEnergyLow: "low",
-    voiceMiniEnergyGroove: "groove",
-    voiceMiniEnergyClub: "club",
-    voiceMiniEnergyHigh: "high",
-    voiceMiniEnergySprint: "sprint",
-    voiceMiniShapeMinimal: "minimal",
-    voiceMiniShapeBalanced: "balanced",
-    voiceMiniShapeAcid: "acidic",
-    voiceMiniShapeWide: "open",
-    voiceMiniShapeHeavy: "heavy",
-    voiceMiniShapeBroken: "broken",
-    voiceMiniNextMoveKick: "arm kick",
-    voiceMiniNextMoveBass: "push low end",
-    voiceMiniNextMoveSynth: "open synth",
-    voiceMiniNextMoveSpace: "add space",
-    voiceMiniNextMoveVoice: "record voice",
-    voiceMiniNextMoveVariation: "vary sequencer",
-    voiceMiniAnd: "and",
-    voiceMiniCustomPreset: "Custom pattern",
-    voiceMiniAdvancedTitle: "Advanced tweaks",
-    voiceMiniAdvancedHint: "voice, mixer, sequencer",
-    voiceMiniBpmLabel: "Speed",
-    voiceMiniBpmValue: "{bpm} BPM",
-    voiceMiniBpmChanged: "BPM set to {bpm}. The next bar follows this speed.",
-    voiceMiniVoiceLevelLabel: "Voice presence",
-    voiceMiniVoiceLevelValue: "{level}%",
-    voiceMiniVoiceLevelChanged: "Voice at {level}%. The next bar uses this presence.",
-    voiceMiniVoiceLengthLabel: "Voice length",
-    voiceMiniSwingLabel: "Swing",
-    voiceMiniSynthTypeLabel: "Synth type",
-    voiceMiniSynthTypeGlow: "Glow lead",
-    voiceMiniSynthTypeAcid: "Acid line",
-    voiceMiniSynthTypePluck: "Clean pluck",
-    voiceMiniSynthTypePad: "Open pad",
-    voiceMiniSynthTypeStab: "Club stab",
-    voiceMiniSynthTypeSub: "Soft sub",
-    voiceMiniGrooveModeLabel: "Groove feel",
-    voiceMiniGrooveModeSwing: "Natural swing",
-    voiceMiniGrooveModeTight: "Locked grid",
-    voiceMiniGrooveModeCounter: "Offbeat",
-    voiceMiniGrooveModeLate: "Laid-back",
-    voiceMiniGrooveModeFloating: "Floating",
-    voiceMiniMasterLabel: "Master",
-    voiceMiniDriveLabel: "Drive",
-    voiceMiniDelayLabel: "Delay",
-    voiceMiniPhaserLabel: "Phaser",
-    voiceMiniBeatmasherLabel: "Beatmasher",
-    voiceMiniSynthLabel: "Synth",
-    voiceMiniPercentValue: "{value}%",
-    voiceMiniControlChanged: "{control} at {value}%. The next bar uses this setting.",
-    voiceMiniSelectChanged: "{control}: {value}. The next bar uses this feel.",
-    voiceMiniReady: "Choose a mood or generate an idea to hear the first loop.",
-    voiceMiniPlaying: "Loop locked in time. Tap layers to arm or remove them on the next bar.",
-    voiceMiniDone: "Loop stopped. Play the mini track or tap a pad to start again.",
-    voiceMiniAudioBlocked: "I could not start audio here. Tap again or check that browser sound is allowed.",
-    voiceMiniStepChanged: "{pad} on step {step}. The next bar follows this pattern.",
-    voiceMiniPresetApplied: "{preset} idea ready. Play the mini track or adjust the layers.",
-    voiceMiniIdeaGenerated: "Idea created: {preset}, {bpm} BPM. Adjust the layers if you want.",
-    voiceMiniExportBusy: "Generating file...",
-    voiceMiniExportReady: "File ready to download",
-    voiceMiniExportDone: "Mini track generated as WAV.",
-    voiceMiniExportUnsupported: "This browser cannot download the mini track here.",
-    voiceMiniExportFailed: "I could not generate the file right now. Try again.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Elastic breaks",
-    voiceMiniPresetTrap: "Mutant trap",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Pulsing ambient",
-    voiceMiniPresetHouse: "House",
-    voiceMiniPresetDnb: "Liquid DnB",
-    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Your music map",
     summaryStatusLabel: "Profile status",
     summaryKnownCountLabel: "Known artists",
@@ -25782,13 +25487,13 @@ const I18N = {
     summaryEmptyKnown: "Mark known artists so the app can dodge the obvious.",
     summaryEmptyLiked: "Save artists when you want to reinforce that direction.",
     summaryEmptyDisliked: "Rejected artists appear here so the radar stops insisting.",
-    listenersSubtitle: "{count} community listeners in the last hours (local feed).",
-    topListenersTitle: "Top community listeners",
+    listenersSubtitle: "{count} listeners in the last hours (local feed).",
+    topListenersTitle: "Most active listeners",
     topListenersSubtitle: "Who listened to {style} the most in the last 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} points",
     topListenerPlays: "{plays} plays",
-    socialCommentsKicker: "Community",
+    socialCommentsKicker: "Discussion",
     socialCommentsTitleTrack: "Track discussion",
     socialCommentsTitleArtist: "Artist discussion",
     socialCommentsSubtitleTrack: "Comment on what this track brings to the floor.",
@@ -26245,75 +25950,26 @@ const I18N = {
     betaAccessGrantedStatus: "Acceso liberado. Entrando en Sonic Search...",
     betaExitStatus: "Estás viendo la página pública del beta cerrado.",
     heroTitle: "La pista correcta para ahora",
-    heroDesc: "Tu momento marca el tono. Sonic Search encuentra una pista nueva y te muestra por qué encaja contigo.",
+    heroDesc: "¿Listo para descubrir algo nuevo?",
     floatingSurpriseBtn: "Sorpresa",
     tabDiscover: "Descubrir",
     tabDjs: "DJs",
     tabFilters: "Filtros",
     tabNews: "Noticias",
-    tabCommunity: "Comunidad",
-    tabStudio: "Estudio",
     tabProfile: "Perfil",
     tabAdmin: "Panel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contacto",
     tabLegal: "Avisos",
-    communityKicker: "Comunidad",
-    communityTitle: "Charla de pista",
-    communityIntro: "Habla de pistas, DJs, fiestas, festivales y preguntas de la escena. Usa Denunciar o Bloquear para contenido inapropiado; el soporte está en el menú Contacto.",
-    communityRefresh: "Actualizar",
-    communityStoryKicker: "Pregunta para la comunidad",
-    communityStoryTitle: "¿Qué evento te marcó — por el mejor o por el peor motivo?",
-    communityStoryText: "Cuéntanos cómo fue estar allí: qué te sorprendió, qué funcionó y qué podría haber sido diferente. Las experiencias increíbles, frustrantes o inesperadas son bienvenidas — aquí, cada relato tiene su espacio cuando se comparte con respeto.",
-    communityStoryCta: "Compartir mi relato",
-    communityFilterAll: "Todo",
-    communityFilterTrack: "Pistas",
-    communityFilterArtist: "DJs",
-    communityFilterEvent: "Fiestas",
-    communityFilterFestival: "Festivales",
-    communityFilterQuestion: "Preguntas",
-    communityTypeTrack: "Pista",
-    communityTypeArtist: "Artista/DJ",
-    communityTypeEvent: "Fiesta",
-    communityTypeFestival: "Festival",
-    communityTypeQuestion: "Pregunta",
-    communityComposerTopicHint: "Categoría: {topic}",
-    communityTitlePlaceholder: "Título corto de la conversación",
-    communityBodyPlaceholder: "¿Qué quieres preguntar, recomendar o contar?",
-    communityMetaPlaceholder: "Ciudad, fiesta, artista, pista o link de contexto",
-    communityComposerHint: "Abre una conversación sobre una pista, artista, fiesta, festival o pregunta de la escena.",
-    communityLoginText: "Entra para comentar, dar like o publicar. Sin login, el descubrimiento y tu perfil local siguen funcionando.",
-    communityLoginBtn: "Entrar para participar",
-    communitySubmit: "Publicar",
-    communityLoading: "Cargando comunidad...",
-    communityEmpty: "Aún no hay conversaciones en este filtro.",
-    communityDisabled: "La comunidad no está disponible ahora. Intenta actualizar en un momento.",
-    communityPostMissing: "Escribe un mensaje antes de publicar.",
-    communityPosted: "Post publicado en la comunidad.",
-    communityPostFailed: "No pude publicar ahora.",
-    communityReactionFailed: "No pude guardar esa reacción ahora.",
-    communityDeleted: "Post removido.",
-    communityUpdated: "Post actualizado.",
-    communityMoveToAll: "Mover a Todo",
-    communityComment: "Comentar",
-    communityComments: "Comentarios",
-    communityCommentPlaceholder: "Responder en esta conversación",
-    communityCommentSubmit: "Responder",
-    communityCommentEmpty: "Aún no hay comentarios en este post.",
-    communityCommentPosted: "Comentario publicado.",
-    communityContextLabel: "Contexto",
-    communityDelete: "Remover",
-    communityLike: "Like",
-    communityDislike: "Dislike",
-    communityReport: "Denunciar",
-    communityBlockUser: "Bloquear usuario",
-    communityReportConfirm: "¿Denunciar este contenido a la moderación de Sonic Search?",
-    communityBlockConfirm: "¿Bloquear a este usuario? Sus publicaciones y comentarios dejarán de aparecer para ti.",
-    communityReported: "Denuncia enviada a moderación.",
-    communityBlocked: "Usuario bloqueado. Su contenido quedó oculto.",
-    communityReportFailed: "No fue posible enviar la denuncia ahora.",
-    communityBlockFailed: "No fue posible bloquear a este usuario ahora.",
-    communityContentNotAllowed: "Este contenido no puede publicarse porque incumple las reglas de seguridad de la comunidad.",
+    socialCommentsReport: "Denunciar",
+    socialCommentsBlockUser: "Bloquear usuario",
+    socialCommentsReportConfirm: "¿Denunciar este comentario a la moderación de Sonic Search?",
+    socialCommentsBlockConfirm: "¿Bloquear a este usuario? Sus comentarios dejarán de aparecer para ti.",
+    socialCommentsReported: "Denuncia enviada a moderación.",
+    socialCommentsBlocked: "Usuario bloqueado. Sus comentarios quedaron ocultos.",
+    socialCommentsReportFailed: "No fue posible enviar la denuncia ahora.",
+    socialCommentsBlockFailed: "No fue posible bloquear a este usuario ahora.",
+    socialCommentsContentNotAllowed: "Este comentario no puede publicarse porque incumple las reglas de seguridad.",
     feedbackKicker: "Aprendizaje",
     feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
     swipeHeroKicker: "Descubrimiento inmediato",
@@ -26608,18 +26264,6 @@ const I18N = {
     djModeStepPeak: "Peak",
     djModeStepCurve: "Variación",
     djModeStepClose: "Cierre",
-    voicePadKick: "Kick",
-    voicePadBass: "Bass",
-    voicePadHat: "Hat",
-    voicePadClap: "Clap",
-    voicePadSynth: "Synth",
-    voicePadVoice: "Voz",
-    voiceMiniPadHint: "Pad accionado: {pad}.",
-    voiceMiniPadLoopOn: "{pad} armado. Entra limpio en el próximo compás.",
-    voiceMiniPadLoopOff: "{pad} salió del loop. El próximo compás va sin esa capa.",
-    voiceMiniLayerOn: "Armado",
-    voiceMiniLayerOff: "Libre",
-    voiceMiniLayerDisabled: "Graba voz",
     artistHubIntro: "Bio, sello y links para continuar el descubrimiento.",
     discogsArtistTitle: "Bio completa en Discogs",
     discogsArtistHint: "Ve bio, alias y discografía completa.",
@@ -26637,144 +26281,6 @@ const I18N = {
     trackAiLocalSource: "Lectura de Sonic Search basada en el sonido, el contexto y tu historial.",
     trackAiFallback: "Escucha el primer minuto. Si conecta, guarda; si no, cambia.",
     trackAiUpdatedToast: "Lectura IA actualizada.",
-    voiceLabKicker: "Estudio rápido",
-    voiceLabTitle: "Monta un loop tocable en segundos",
-    voiceLabHint: "Elige una vibe, dale play, ajusta capas y descarga.",
-    voiceEffectsTitle: "Efecto de voz",
-    voiceEffectRobot: "Robot",
-    voiceEffectChipmunk: "Graciosa",
-    voiceEffectTelephone: "Teléfono",
-    voiceEffectAlien: "Alienígena",
-    voiceEffectDeep: "Voz grave",
-    voiceEffectEcho: "Eco espacial",
-    voiceRecordBtn: "Grabar voz opcional",
-    voiceStopBtn: "Parar",
-    voicePlayBtn: "Oír efecto",
-    voiceResetBtn: "Limpiar",
-    voiceDownloadBtn: "Descargar grabación",
-    voiceReady: "Micrófono en espera. Graba solo si quieres usar tu voz en el loop.",
-    voiceRecording: "Grabando... {seconds}s",
-    voiceRecorded: "Voz lista. Elige un efecto o activa la capa Voz en el loop.",
-    voiceNeedRecording: "Graba una voz para usar esta capa.",
-    voiceMicUnsupported: "Tu navegador no habilitó grabación de voz aquí.",
-    voiceMicDenied: "No pude acceder al micrófono. Revisa el permiso del navegador.",
-    voicePlaying: "Sonando con efecto: {effect}.",
-    voiceCleared: "Grabación borrada.",
-    voiceMiniEyebrow: "Beat maker simple",
-    voiceMiniTitle: "Elige la vibe. Dale play.",
-    voiceMiniHint: "El loop ya empieza tocable. Ajusta capas, BPM y exporta.",
-    voiceStudioStepOne: "Elige el clima",
-    voiceStudioStepTwo: "Dale play",
-    voiceStudioStepThree: "Ajusta capas",
-    voiceStudioSessionStateLabel: "Estado",
-    voiceStudioSessionLayersLabel: "Capas",
-    voiceStudioSessionLengthLabel: "Export",
-    voiceStudioSessionFormatLabel: "Archivo",
-    voiceStudioStateReady: "En espera",
-    voiceStudioStatePlaying: "Sonando",
-    voiceStudioStateRecording: "Grabando voz",
-    voiceStudioStateRendering: "Exportando",
-    voiceStudioStateVoiceReady: "Voz lista",
-    voiceStudioLayersValue: "{count}/{total} capas",
-    voiceStudioLengthValue: "{bars} compases • {seconds}s",
-    voiceStudioFormatLocal: "WAV local",
-    voiceStudioFormatVoice: "Voz + WAV",
-    voiceMiniNoVoiceBadge: "Sin registro",
-    voiceMiniRandomBtn: "Generar idea",
-    voiceMiniPlayBtn: "Tocar mini canción",
-    voiceMiniStopBtn: "Parar loop",
-    voiceMiniExportBtn: "Descargar mini canción",
-    voiceMiniPresetTitle: "Clima de la idea",
-    voiceMiniMorphTitle: "Macromovimientos",
-    voiceMiniMorphFloor: "Más pista",
-    voiceMiniMorphDeep: "Más profundo",
-    voiceMiniMorphWeird: "Más extraño",
-    voiceMiniMorphOpen: "Más abierto",
-    voiceMiniMorphApplied: "Movimiento aplicado: {move}. El próximo compás cambia de dirección.",
-    voiceMiniLayerTitle: "Capas",
-    voiceMiniRecipeLabel: "Receta actual",
-    voiceMiniRecipeTitle: "{preset} • {bpm} BPM",
-    voiceMiniRecipeMeta: "{layers} activos.",
-    voiceMiniRecipeMetaEmpty: "Elige una idea o toca Generar idea para empezar con sonido.",
-    voiceMiniInsightKicker: "Lectura local",
-    voiceMiniInsightEnergyLabel: "Energía",
-    voiceMiniInsightShapeLabel: "Forma",
-    voiceMiniInsightMoveLabel: "Próximo gesto",
-    voiceMiniInsightTitlePeak: "Con presión de pista",
-    voiceMiniInsightTitleGroove: "Groove en construcción",
-    voiceMiniInsightTitleDeep: "Textura profunda",
-    voiceMiniInsightTitleExperimental: "Idea mutante",
-    voiceMiniEnergyLow: "baja",
-    voiceMiniEnergyGroove: "groove",
-    voiceMiniEnergyClub: "pista",
-    voiceMiniEnergyHigh: "alta",
-    voiceMiniEnergySprint: "sprint",
-    voiceMiniShapeMinimal: "minimal",
-    voiceMiniShapeBalanced: "equilibrada",
-    voiceMiniShapeAcid: "ácida",
-    voiceMiniShapeWide: "abierta",
-    voiceMiniShapeHeavy: "pesada",
-    voiceMiniShapeBroken: "quebrada",
-    voiceMiniNextMoveKick: "arma el kick",
-    voiceMiniNextMoveBass: "refuerza el grave",
-    voiceMiniNextMoveSynth: "abre el synth",
-    voiceMiniNextMoveSpace: "agrega espacio",
-    voiceMiniNextMoveVoice: "graba voz",
-    voiceMiniNextMoveVariation: "varía el sequencer",
-    voiceMiniAnd: "y",
-    voiceMiniCustomPreset: "Patrón propio",
-    voiceMiniAdvancedTitle: "Ajustes avanzados",
-    voiceMiniAdvancedHint: "voz, mixer y sequencer",
-    voiceMiniBpmLabel: "Velocidad",
-    voiceMiniBpmValue: "{bpm} BPM",
-    voiceMiniBpmChanged: "BPM ajustado a {bpm}. El próximo compás entra con esa velocidad.",
-    voiceMiniVoiceLevelLabel: "Presencia de voz",
-    voiceMiniVoiceLevelValue: "{level}%",
-    voiceMiniVoiceLevelChanged: "Voz al {level}%. El próximo compás entra con esa presencia.",
-    voiceMiniVoiceLengthLabel: "Duración de voz",
-    voiceMiniSwingLabel: "Swing",
-    voiceMiniSynthTypeLabel: "Tipo de synth",
-    voiceMiniSynthTypeGlow: "Glow lead",
-    voiceMiniSynthTypeAcid: "Acid line",
-    voiceMiniSynthTypePluck: "Pluck limpio",
-    voiceMiniSynthTypePad: "Pad abierto",
-    voiceMiniSynthTypeStab: "Stab de pista",
-    voiceMiniSynthTypeSub: "Sub suave",
-    voiceMiniGrooveModeLabel: "Encaje del groove",
-    voiceMiniGrooveModeSwing: "Swing natural",
-    voiceMiniGrooveModeTight: "Grid exacto",
-    voiceMiniGrooveModeCounter: "Contratiempo",
-    voiceMiniGrooveModeLate: "Más atrasado",
-    voiceMiniGrooveModeFloating: "Flotante",
-    voiceMiniMasterLabel: "Master",
-    voiceMiniDriveLabel: "Drive",
-    voiceMiniDelayLabel: "Delay",
-    voiceMiniPhaserLabel: "Phaser",
-    voiceMiniBeatmasherLabel: "Beatmasher",
-    voiceMiniSynthLabel: "Synth",
-    voiceMiniPercentValue: "{value}%",
-    voiceMiniControlChanged: "{control} al {value}%. El próximo compás usa ese ajuste.",
-    voiceMiniSelectChanged: "{control}: {value}. El próximo compás entra así.",
-    voiceMiniReady: "Elige un clima o genera una idea para oír el primer loop.",
-    voiceMiniPlaying: "Loop corriendo a tempo. Toca capas para armarlas o quitarlas en el próximo compás.",
-    voiceMiniDone: "Loop parado. Toca la mini canción o un pad para empezar otra vez.",
-    voiceMiniAudioBlocked: "No pude iniciar el audio aquí. Toca de nuevo o verifica que el sonido del navegador esté permitido.",
-    voiceMiniStepChanged: "{pad} en el paso {step}. El próximo compás sigue ese patrón.",
-    voiceMiniPresetApplied: "Idea {preset} lista. Toca la mini canción o ajusta las capas.",
-    voiceMiniIdeaGenerated: "Idea creada: {preset}, {bpm} BPM. Ajusta las capas si quieres.",
-    voiceMiniExportBusy: "Generando archivo...",
-    voiceMiniExportReady: "Archivo listo para descargar",
-    voiceMiniExportDone: "Mini canción generada en WAV.",
-    voiceMiniExportUnsupported: "Este navegador no puede descargar la mini canción aquí.",
-    voiceMiniExportFailed: "No pude generar el archivo ahora. Intenta de nuevo.",
-    voiceMiniPresetTechno: "Techno",
-    voiceMiniPresetBreaks: "Breaks elástico",
-    voiceMiniPresetTrap: "Trap mutante",
-    voiceMiniPresetPsy: "Psy",
-    voiceMiniPresetAmbient: "Ambient pulsante",
-    voiceMiniPresetHouse: "House",
-    voiceMiniPresetDnb: "DnB líquido",
-    voiceMiniPresetDarkprog: "Dark prog",
     summaryPanelTitle: "Tu mapa musical",
     summaryStatusLabel: "Estado del perfil",
     summaryKnownCountLabel: "Artistas conocidos",
@@ -26878,13 +26384,13 @@ const I18N = {
     summaryEmptyKnown: "Marca artistas conocidos para que la app evite lo obvio.",
     summaryEmptyLiked: "Guarda artistas cuando quieras reforzar esa dirección.",
     summaryEmptyDisliked: "Los artistas rechazados aparecen aquí para evitar insistencia.",
-    listenersSubtitle: "{count} oyentes de la comunidad en las últimas horas (feed local).",
-    topListenersTitle: "Top listeners de la comunidad",
+    listenersSubtitle: "{count} oyentes en las últimas horas (feed local).",
+    topListenersTitle: "Oyentes más activos",
     topListenersSubtitle: "Quién más escuchó {style} en las últimas 24h.",
     topListenerRank: "TOP {rank}",
     topListenerScore: "{score} puntos",
     topListenerPlays: "{plays} reproducciones",
-    socialCommentsKicker: "Comunidad",
+    socialCommentsKicker: "Conversación",
     socialCommentsTitleTrack: "Discusión de la pista",
     socialCommentsTitleArtist: "Discusión del artista",
     socialCommentsSubtitleTrack: "Comenta qué entrega esta pista en la pista.",
@@ -28062,8 +27568,6 @@ function applyLanguage() {
   setText("[data-app-tab-target='djs']", t("tabDjs"));
   setText("[data-app-tab-target='filters']", t("tabFilters"));
   setText("[data-app-tab-target='news']", t("tabNews"));
-  setText("[data-app-tab-target='community']", t("tabCommunity"));
-  setText("[data-app-tab-target='studio']", t("tabStudio"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
   setText("[data-app-tab-target='admin']", t("tabAdmin"));
   setText("[data-app-tab-target='about']", t("tabAbout"));
@@ -28118,7 +27622,6 @@ function applyLanguage() {
   setText("#dailyNewsRefreshBtn", t("dailyNewsRefreshBtn"));
   if (dailyNewsProgress) dailyNewsProgress.setAttribute("aria-label", t("dailyNewsProgressLabel"));
   if (dailyNewsStatus && !dailyNewsList?.children.length) dailyNewsStatus.textContent = t("dailyNewsLoading");
-  renderCommunityPanel();
   if (dailyNewsList?.children.length) {
     const cache = loadDailyNewsCache();
     const cachedItems = cache?.items?.length ? cache.items : dailyNewsFallbackItems();
@@ -28414,102 +27917,6 @@ function applyLanguage() {
   setText("#ratingCelebration", t("ratingCelebration"));
   setText("#trackAiTitle", t("trackAiTitle"));
   setText("#trackAiRefreshBtn", t("trackAiRefreshBtn"));
-  setText("#voiceLabKicker", t("voiceLabKicker"));
-  setText("#voiceLabTitle", t("voiceLabTitle"));
-  setText("#voiceLabHint", t("voiceLabHint"));
-  setText("#voiceEffectsTitle", t("voiceEffectsTitle"));
-  setText("[data-voice-effect='robot']", t("voiceEffectRobot"));
-  setText("[data-voice-effect='chipmunk']", t("voiceEffectChipmunk"));
-  setText("[data-voice-effect='telephone']", t("voiceEffectTelephone"));
-  setText("[data-voice-effect='alien']", t("voiceEffectAlien"));
-  setText("[data-voice-effect='deep']", t("voiceEffectDeep"));
-  setText("[data-voice-effect='echo']", t("voiceEffectEcho"));
-  setText("[data-voice-effect='vocoder']", t("voiceEffectVocoder"));
-  setText("[data-voice-effect='wide']", t("voiceEffectWide"));
-  setText("[data-voice-effect='tape']", t("voiceEffectTape"));
-  setText("#voiceRecordBtn", t("voiceRecordBtn"));
-  setText("#voiceStopBtn", t("voiceStopBtn"));
-  setText("#voicePlayBtn", t("voicePlayBtn"));
-  setText("#voiceResetBtn", t("voiceResetBtn"));
-  setText("#voiceDownloadBtn", t("voiceDownloadBtn"));
-  setText("#voiceMiniEyebrow", t("voiceMiniEyebrow"));
-  setText("#voiceMiniTitle", t("voiceMiniTitle"));
-  setText("#voiceMiniHint", t("voiceMiniHint"));
-  setText("#voiceStudioStepOne", t("voiceStudioStepOne"));
-  setText("#voiceStudioStepTwo", t("voiceStudioStepTwo"));
-  setText("#voiceStudioStepThree", t("voiceStudioStepThree"));
-  setText("#voiceStudioSessionStateLabel", t("voiceStudioSessionStateLabel"));
-  setText("#voiceStudioSessionLayersLabel", t("voiceStudioSessionLayersLabel"));
-  setText("#voiceStudioSessionLengthLabel", t("voiceStudioSessionLengthLabel"));
-  setText("#voiceStudioSessionFormatLabel", t("voiceStudioSessionFormatLabel"));
-  setText("#voiceMiniNoVoiceBadge", t("voiceMiniNoVoiceBadge"));
-  setText("#voiceMiniRandomBtn", t("voiceMiniRandomBtn"));
-  setText("#voiceMiniPlayBtn", t("voiceMiniPlayBtn"));
-  setText("#voiceMiniStopBtn", t("voiceMiniStopBtn"));
-  setText("#voiceMiniExportBtn", voiceMiniRendering ? t("voiceMiniExportBusy") : t("voiceMiniExportBtn"));
-  setText("#voiceMiniExportLink", t("voiceMiniExportReady"));
-  setText("#voiceMiniPresetTitle", t("voiceMiniPresetTitle"));
-  setText("#voiceMiniMorphTitle", t("voiceMiniMorphTitle"));
-  setText("[data-voice-mini-morph='floor']", t("voiceMiniMorphFloor"));
-  setText("[data-voice-mini-morph='deep']", t("voiceMiniMorphDeep"));
-  setText("[data-voice-mini-morph='weird']", t("voiceMiniMorphWeird"));
-  setText("[data-voice-mini-morph='open']", t("voiceMiniMorphOpen"));
-  setText("#voiceMiniLayerTitle", t("voiceMiniLayerTitle"));
-  setText("#voiceMiniRecipeLabel", t("voiceMiniRecipeLabel"));
-  setText("#voiceMiniInsightKicker", t("voiceMiniInsightKicker"));
-  setText("#voiceMiniInsightEnergyLabel", t("voiceMiniInsightEnergyLabel"));
-  setText("#voiceMiniInsightShapeLabel", t("voiceMiniInsightShapeLabel"));
-  setText("#voiceMiniInsightMoveLabel", t("voiceMiniInsightMoveLabel"));
-  setText("#voiceMiniAdvancedTitle", t("voiceMiniAdvancedTitle"));
-  setText("#voiceMiniAdvancedHint", t("voiceMiniAdvancedHint"));
-  setText("#voiceMiniBpmLabel", t("voiceMiniBpmLabel"));
-  if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
-  setText("#voiceMiniVoiceLevelLabel", t("voiceMiniVoiceLevelLabel"));
-  if (voiceMiniVoiceLevelValue) {
-    voiceMiniVoiceLevelValue.textContent = t("voiceMiniVoiceLevelValue", { level: voiceMiniVoiceLevel });
-  }
-  setText("#voiceMiniVoiceLengthLabel", t("voiceMiniVoiceLengthLabel"));
-  if (voiceMiniVoiceLengthValue) {
-    voiceMiniVoiceLengthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniVoiceLength });
-  }
-  setText("#voiceMiniSwingLabel", t("voiceMiniSwingLabel"));
-  if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
-  setText("#voiceMiniSynthTypeLabel", t("voiceMiniSynthTypeLabel"));
-  updateVoiceMiniSynthType(voiceMiniSynthType, { announce: false });
-  setText("#voiceMiniGrooveModeLabel", t("voiceMiniGrooveModeLabel"));
-  updateVoiceMiniGrooveMode(voiceMiniGrooveMode, { announce: false });
-  setText("#voiceMiniMasterLabel", t("voiceMiniMasterLabel"));
-  if (voiceMiniMasterValue) voiceMiniMasterValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniMasterLevel });
-  setText("#voiceMiniDriveLabel", t("voiceMiniDriveLabel"));
-  if (voiceMiniDriveValue) voiceMiniDriveValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniDriveAmount });
-  setText("#voiceMiniDelayLabel", t("voiceMiniDelayLabel"));
-  if (voiceMiniDelayValue) voiceMiniDelayValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniDelayAmount });
-  setText("#voiceMiniPhaserLabel", t("voiceMiniPhaserLabel"));
-  if (voiceMiniPhaserValue) voiceMiniPhaserValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniPhaserAmount });
-  setText("#voiceMiniBeatmasherLabel", t("voiceMiniBeatmasherLabel"));
-  if (voiceMiniBeatmasherValue) {
-    voiceMiniBeatmasherValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniBeatmasherAmount });
-  }
-  setText("#voiceMiniSynthLabel", t("voiceMiniSynthLabel"));
-  if (voiceMiniSynthValue) voiceMiniSynthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSynthLevel });
-  setText("[data-voice-mini-preset='techno']", t("voiceMiniPresetTechno"));
-  setText("[data-voice-mini-preset='psy']", t("voiceMiniPresetPsy"));
-  setText("[data-voice-mini-preset='house']", t("voiceMiniPresetHouse"));
-  syncVoiceMiniPresetButtons();
-  updateVoiceMiniRecipe();
-  setText("#voicePadKickBtn", t("voicePadKick"));
-  setText("#voicePadBassBtn", t("voicePadBass"));
-  setText("#voicePadHatBtn", t("voicePadHat"));
-  setText("#voicePadClapBtn", t("voicePadClap"));
-  setText("#voicePadSynthBtn", t("voicePadSynth"));
-  setText("#voicePadVoiceBtn", t("voicePadVoice"));
-  renderVoiceMiniSequencer();
-  if (voiceMiniStatus && !voiceRecordingBlob && !voiceMiniTrackPlaying) {
-    voiceMiniStatus.textContent = t("voiceMiniReady");
-  }
-  if (voiceStatus && !voiceRecordingBlob && (!voiceRecorder || voiceRecorder.state !== "recording")) {
-    voiceStatus.textContent = t("voiceReady");
-  }
   setText("#artistHubIntro", t("artistHubIntro"));
   if (starRating) starRating.setAttribute("aria-label", t("ratingAriaGroup"));
   starButtons.forEach((button, index) => {
@@ -28563,6 +27970,7 @@ function applyLanguage() {
   } else if (!styleInfoDismissed) {
     renderStyleInfoBubble(styleEl.value, { reveal: !styleInfoBubble?.classList.contains("hidden") });
   }
+  rerenderSonicEditorialLanguage();
   syncLanguageButtons();
   if (introScreen && !introScreen.classList.contains("hidden")) {
     introQuoteIndex = 0;
@@ -32668,2483 +32076,10 @@ function showToast(message) {
 }
 showToast.timer = 0;
 
-function voiceEffectLabel(effect = selectedVoiceEffect) {
-  const labels = {
-    robot: t("voiceEffectRobot"),
-    chipmunk: t("voiceEffectChipmunk"),
-    telephone: t("voiceEffectTelephone"),
-    alien: t("voiceEffectAlien"),
-    deep: t("voiceEffectDeep"),
-    echo: t("voiceEffectEcho"),
-    vocoder: t("voiceEffectVocoder"),
-    wide: t("voiceEffectWide"),
-    tape: t("voiceEffectTape")
-  };
-  return labels[effect] || labels.robot;
-}
-
-function setVoiceStatus(message) {
-  if (voiceStatus) voiceStatus.textContent = message;
-}
-
-function clampVoiceMiniBpm(value) {
-  return Math.max(90, Math.min(180, Math.round(Number(value) || 128)));
-}
-
-function clampVoiceMiniPercent(value, min, max, fallback) {
-  return Math.max(min, Math.min(max, Math.round(Number(value) || fallback)));
-}
-
-function voiceMiniBeatDuration() {
-  return 60 / clampVoiceMiniBpm(voiceMiniBpm);
-}
-
-function clampVoiceMiniSwing(value) {
-  return clampVoiceMiniPercent(value, 0, 35, 12);
-}
-
-function voiceMiniSwingOffset(beat) {
-  return beat * 0.34 * (clampVoiceMiniSwing(voiceMiniSwingAmount) / 100);
-}
-
-function voiceMiniGrooveOffset(beat, step = 0) {
-  const safeStep = Math.max(0, Math.round(Number(step) || 0));
-  const swing = voiceMiniSwingOffset(beat);
-  if (voiceMiniGrooveMode === "tight") return 0;
-  if (voiceMiniGrooveMode === "counter") {
-    const offbeat = safeStep % 2 === 1 ? swing + beat * 0.025 : 0;
-    const stepMod = safeStep % 8;
-    const pushPull = [2, 6].includes(stepMod)
-      ? beat * 0.018
-      : [3, 7].includes(stepMod)
-        ? -beat * 0.012
-        : 0;
-    return offbeat + pushPull;
-  }
-  if (voiceMiniGrooveMode === "late") {
-    return (safeStep % 2 === 1 ? swing : 0) + beat * 0.018;
-  }
-  if (voiceMiniGrooveMode === "floating") {
-    return Math.sin((safeStep + 1) * 0.9) * beat * 0.018 + (safeStep % 2 === 1 ? swing * 0.58 : 0);
-  }
-  return safeStep % 2 === 1 ? swing : 0;
-}
-
-function voiceMiniStepTime(start, beat, step, subdivision = 1) {
-  const base = start + step * beat * subdivision;
-  return base + voiceMiniGrooveOffset(beat, step);
-}
-
-function cloneVoiceMiniPattern(pattern = VOICE_MINI_DEFAULT_PATTERN) {
-  return VOICE_MINI_PATTERN_KINDS.reduce((copy, kind) => {
-    const source = Array.isArray(pattern?.[kind]) ? pattern[kind] : VOICE_MINI_DEFAULT_PATTERN[kind];
-    copy[kind] = Array.from({ length: 8 }, (_, index) => Number(source?.[index]) ? 1 : 0);
-    return copy;
-  }, {});
-}
-
-function voiceMiniPatternSteps(kind = "kick") {
-  if (!voiceMiniPattern || !Array.isArray(voiceMiniPattern[kind])) {
-    voiceMiniPattern = cloneVoiceMiniPattern();
-  }
-  return voiceMiniPattern[kind] || VOICE_MINI_DEFAULT_PATTERN[kind] || [];
-}
-
-function voiceMiniPatternActive(kind = "kick", step = 0) {
-  const steps = voiceMiniPatternSteps(kind);
-  return Boolean(steps[((Number(step) || 0) % 8 + 8) % 8]);
-}
-
-function voiceMiniStepBeatTime(start, beat, step = 0) {
-  return voiceMiniStepTime(start, beat, step, 0.5);
-}
-
-function renderVoiceMiniSequencer() {
-  if (!voiceStepSequencer) return;
-  const rows = VOICE_MINI_PATTERN_KINDS.map((kind) => {
-    const label = t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`);
-    const steps = voiceMiniPatternSteps(kind);
-    const buttons = steps.map((active, index) => `
-      <button class="voice-step-btn${active ? " active" : ""}" type="button" data-bound="1" data-voice-step-kind="${kind}" data-voice-step-index="${index}" aria-pressed="${active ? "true" : "false"}">
-        ${index + 1}
-      </button>
-    `).join("");
-    return `
-      <div class="voice-step-row" data-voice-step-row="${kind}">
-        <span>${label}</span>
-        <div class="voice-step-buttons">${buttons}</div>
-      </div>
-    `;
-  }).join("");
-  voiceStepSequencer.innerHTML = rows;
-}
-
-function syncVoiceMiniPresetButtons() {
-  if (!voiceMiniPresetGrid) return;
-  voiceMiniPresetGrid.querySelectorAll("[data-voice-mini-preset]").forEach((button) => {
-    const active = String(button.getAttribute("data-voice-mini-preset") || "") === voiceMiniActivePreset;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", active ? "true" : "false");
-  });
-}
-
-function voiceMiniPresetDisplayLabel(presetName = voiceMiniActivePreset) {
-  if (!presetName || !VOICE_MINI_PRESETS[presetName]) return t("voiceMiniCustomPreset");
-  const key = String(presetName);
-  const translationKey = `voiceMiniPreset${key.charAt(0).toUpperCase()}${key.slice(1)}`;
-  const translated = t(translationKey);
-  return translated && translated !== translationKey ? translated : t("voiceMiniCustomPreset");
-}
-
-function voiceMiniLayerLabel(kind = "") {
-  const normalized = String(kind || "");
-  const key = `voicePad${normalized.charAt(0).toUpperCase()}${normalized.slice(1)}`;
-  const translated = t(key);
-  return translated && translated !== key ? translated : normalized;
-}
-
-function voiceMiniHumanList(items = []) {
-  const list = items.filter(Boolean);
-  if (!list.length) return "";
-  if (typeof Intl !== "undefined" && typeof Intl.ListFormat === "function") {
-    const locale = currentLanguage === "pt" ? "pt-BR" : currentLanguage === "es" ? "es" : "en";
-    return new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(list);
-  }
-  return list.length > 1 ? `${list.slice(0, -1).join(", ")} ${t("voiceMiniAnd")} ${list[list.length - 1]}` : list[0];
-}
-
 function sonicTinyCopy(pt = "", en = pt, es = pt) {
   if (currentLanguage === "en") return en;
   if (currentLanguage === "es") return es;
   return pt;
-}
-
-function voiceMiniActiveLayerLabels() {
-  return VOICE_MINI_PATTERN_KINDS
-    .filter((kind) => Boolean(voiceMiniPadState[kind]))
-    .map((kind) => voiceMiniLayerLabel(kind));
-}
-
-function voiceMiniActiveLayerCount() {
-  return VOICE_MINI_PATTERN_KINDS.filter((kind) => Boolean(voiceMiniPadState[kind])).length;
-}
-
-function voiceMiniArrangementSeconds() {
-  const seconds = voiceMiniBeatDuration() * 4 * VOICE_MINI_EXPORT_BARS;
-  return Math.max(1, Math.round(seconds));
-}
-
-function updateVoiceStudioSession() {
-  const isRecording = voiceRecorder && voiceRecorder.state === "recording";
-  const hasRecording = Boolean(voiceRecordingBlob);
-  const stateKey = voiceMiniRendering
-    ? "voiceStudioStateRendering"
-    : isRecording
-      ? "voiceStudioStateRecording"
-      : voiceMiniTrackPlaying
-        ? "voiceStudioStatePlaying"
-        : hasRecording
-          ? "voiceStudioStateVoiceReady"
-          : "voiceStudioStateReady";
-  const activeLayers = voiceMiniActiveLayerCount();
-
-  if (voiceStudioSessionStateValue) {
-    voiceStudioSessionStateValue.textContent = t(stateKey);
-    voiceStudioSessionStateValue.dataset.state = stateKey.replace(/^voiceStudioState/, "").toLowerCase();
-  }
-  if (voiceStudioSessionLayersValue) {
-    voiceStudioSessionLayersValue.textContent = t("voiceStudioLayersValue", {
-      count: activeLayers,
-      total: VOICE_MINI_PATTERN_KINDS.length
-    });
-  }
-  if (voiceStudioSessionLengthValue) {
-    voiceStudioSessionLengthValue.textContent = t("voiceStudioLengthValue", {
-      bars: VOICE_MINI_EXPORT_BARS,
-      seconds: voiceMiniArrangementSeconds()
-    });
-  }
-  if (voiceStudioSessionFormatValue) {
-    voiceStudioSessionFormatValue.textContent = t(hasRecording ? "voiceStudioFormatVoice" : "voiceStudioFormatLocal");
-  }
-}
-
-function voiceMiniPatternHitCount(kind = "kick") {
-  return voiceMiniPatternSteps(kind).reduce((sum, step) => sum + (step ? 1 : 0), 0);
-}
-
-function voiceMiniPatternDensity(kind = "kick") {
-  const steps = voiceMiniPatternSteps(kind);
-  if (!steps.length) return 0;
-  return voiceMiniPatternHitCount(kind) / steps.length;
-}
-
-function voiceMiniAveragePatternDensity() {
-  const relevantKinds = VOICE_MINI_PATTERN_KINDS.filter((kind) => kind !== "voice" && Boolean(voiceMiniPadState[kind]));
-  const kinds = relevantKinds.length ? relevantKinds : ["kick", "bass", "hat", "synth"];
-  const total = kinds.reduce((sum, kind) => sum + voiceMiniPatternDensity(kind), 0);
-  return total / Math.max(1, kinds.length);
-}
-
-function voiceMiniStudioInsight() {
-  const activeLayers = voiceMiniActiveLayerCount();
-  const spaceAmount = voiceMiniDelayAmount + voiceMiniPhaserAmount;
-  const weightAmount = voiceMiniDriveAmount + voiceMiniBeatmasherAmount;
-  const density = voiceMiniAveragePatternDensity();
-  const isBroken = voiceMiniGrooveMode === "counter" || voiceMiniActivePreset === "breaks" || voiceMiniPatternDensity("kick") < 0.42;
-
-  const energyKey = voiceMiniBpm >= 165
-    ? "voiceMiniEnergySprint"
-    : voiceMiniBpm >= 142
-      ? "voiceMiniEnergyHigh"
-      : voiceMiniBpm >= 124
-        ? "voiceMiniEnergyClub"
-        : voiceMiniBpm >= 112
-          ? "voiceMiniEnergyGroove"
-          : "voiceMiniEnergyLow";
-
-  let shapeKey = "voiceMiniShapeBalanced";
-  if (isBroken) shapeKey = "voiceMiniShapeBroken";
-  if (voiceMiniSynthType === "acid" || voiceMiniDriveAmount >= 26) shapeKey = "voiceMiniShapeAcid";
-  if (spaceAmount >= 58 || voiceMiniSynthType === "pad") shapeKey = "voiceMiniShapeWide";
-  if (weightAmount >= 54 && voiceMiniSynthType !== "pad") shapeKey = "voiceMiniShapeHeavy";
-  if (activeLayers <= 3 || density < 0.34) shapeKey = "voiceMiniShapeMinimal";
-
-  const titleKey = shapeKey === "voiceMiniShapeWide" && (voiceMiniBpm < 120 || voiceMiniSynthType === "pad")
-    ? "voiceMiniInsightTitleDeep"
-    : (shapeKey === "voiceMiniShapeBroken" || shapeKey === "voiceMiniShapeAcid") && weightAmount >= 34
-      ? "voiceMiniInsightTitleExperimental"
-      : activeLayers >= 5 && voiceMiniBpm >= 122
-        ? "voiceMiniInsightTitlePeak"
-        : "voiceMiniInsightTitleGroove";
-
-  const moveKey = !voiceMiniPadState.kick || voiceMiniPatternHitCount("kick") < 2
-    ? "voiceMiniNextMoveKick"
-    : !voiceMiniPadState.bass || voiceMiniPatternHitCount("bass") < 2
-      ? "voiceMiniNextMoveBass"
-      : !voiceMiniPadState.synth || voiceMiniSynthLevel < 36
-        ? "voiceMiniNextMoveSynth"
-        : spaceAmount < 34
-          ? "voiceMiniNextMoveSpace"
-          : !voiceRecordingBlob && activeLayers >= 5
-            ? "voiceMiniNextMoveVoice"
-            : "voiceMiniNextMoveVariation";
-
-  return { titleKey, energyKey, shapeKey, moveKey };
-}
-
-function updateVoiceMiniInsight() {
-  const insight = voiceMiniStudioInsight();
-  if (voiceMiniInsightKicker) voiceMiniInsightKicker.textContent = t("voiceMiniInsightKicker");
-  if (voiceMiniInsightTitle) voiceMiniInsightTitle.textContent = t(insight.titleKey);
-  if (voiceMiniInsightEnergyLabel) voiceMiniInsightEnergyLabel.textContent = t("voiceMiniInsightEnergyLabel");
-  if (voiceMiniInsightEnergyValue) voiceMiniInsightEnergyValue.textContent = t(insight.energyKey);
-  if (voiceMiniInsightShapeLabel) voiceMiniInsightShapeLabel.textContent = t("voiceMiniInsightShapeLabel");
-  if (voiceMiniInsightShapeValue) voiceMiniInsightShapeValue.textContent = t(insight.shapeKey);
-  if (voiceMiniInsightMoveLabel) voiceMiniInsightMoveLabel.textContent = t("voiceMiniInsightMoveLabel");
-  if (voiceMiniInsightMoveValue) voiceMiniInsightMoveValue.textContent = t(insight.moveKey);
-}
-
-function voiceMiniSynthStackLayers(type = voiceMiniSynthType) {
-  const map = {
-    glow: [
-      { name: "Lead glow", role: sonicTinyCopy("melodia", "melody", "melodia"), primary: true },
-      { name: "Pad brilho", role: sonicTinyCopy("sustenta", "bed", "base") },
-      { name: "Arp curto", role: sonicTinyCopy("movimento", "motion", "movimiento") },
-      { name: "Sub sombra", role: sonicTinyCopy("peso", "weight", "peso") },
-      { name: "Delay FX", role: sonicTinyCopy("cauda", "tail", "cola") }
-    ],
-    acid: [
-      { name: "Acid 303", role: sonicTinyCopy("frase", "line", "frase"), primary: true },
-      { name: "Reso sweep", role: sonicTinyCopy("tensao", "tension", "tension") },
-      { name: "Ghost note", role: sonicTinyCopy("rebote", "bounce", "rebote") },
-      { name: "Sub pulso", role: sonicTinyCopy("grave", "low end", "grave") },
-      { name: "Ping FX", role: sonicTinyCopy("espaco", "space", "espacio") }
-    ],
-    pluck: [
-      { name: "Pluck limpo", role: sonicTinyCopy("gancho", "hook", "gancho"), primary: true },
-      { name: "Octava alta", role: sonicTinyCopy("brilho", "shine", "brillo") },
-      { name: "Eco curto", role: sonicTinyCopy("groove", "groove", "groove") },
-      { name: "Sub macio", role: sonicTinyCopy("corpo", "body", "cuerpo") },
-      { name: "Width FX", role: sonicTinyCopy("largura", "width", "anchura") }
-    ],
-    pad: [
-      { name: "Pad aberto", role: sonicTinyCopy("textura", "texture", "textura"), primary: true },
-      { name: "Drone grave", role: sonicTinyCopy("chao", "floor", "suelo") },
-      { name: "Shimmer", role: sonicTinyCopy("ar", "air", "aire") },
-      { name: "Chord bed", role: sonicTinyCopy("harmonia", "harmony", "armonia") },
-      { name: "Wash FX", role: sonicTinyCopy("nevoa", "mist", "niebla") }
-    ],
-    stab: [
-      { name: "Club stab", role: sonicTinyCopy("ataque", "attack", "ataque"), primary: true },
-      { name: "Chord hit", role: sonicTinyCopy("impacto", "impact", "impacto") },
-      { name: "Octave pop", role: sonicTinyCopy("lift", "lift", "lift") },
-      { name: "Sub snap", role: sonicTinyCopy("punch", "punch", "punch") },
-      { name: "Room FX", role: sonicTinyCopy("sala", "room", "sala") }
-    ],
-    sub: [
-      { name: "Sub macio", role: sonicTinyCopy("grave", "low end", "grave"), primary: true },
-      { name: "Octave ghost", role: sonicTinyCopy("definicao", "definition", "definicion") },
-      { name: "Low pad", role: sonicTinyCopy("sustenta", "bed", "base") },
-      { name: "Pulse click", role: sonicTinyCopy("ataque", "attack", "ataque") },
-      { name: "Filter FX", role: sonicTinyCopy("movimento", "motion", "movimiento") }
-    ]
-  };
-  return map[type] || map.glow;
-}
-
-function renderVoiceMiniSynthStack() {
-  const layers = voiceMiniSynthStackLayers();
-  if (voiceMiniLayerSignature) {
-    voiceMiniLayerSignature.innerHTML = "";
-    const type = document.createElement("span");
-    type.className = "voice-layer-pill primary";
-    type.textContent = voiceMiniSynthTypeLabelFor(voiceMiniSynthType);
-    voiceMiniLayerSignature.appendChild(type);
-    layers.slice(0, 3).forEach((layer) => {
-      const pill = document.createElement("span");
-      pill.className = "voice-layer-pill";
-      pill.textContent = layer.name;
-      voiceMiniLayerSignature.appendChild(pill);
-    });
-  }
-  if (voiceMiniQuickSynthStrip) {
-    voiceMiniQuickSynthStrip.innerHTML = "";
-    layers.forEach((layer) => {
-      const chip = document.createElement("div");
-      chip.className = `voice-synth-chip${layer.primary ? " active" : ""}`;
-      const title = document.createElement("strong");
-      title.textContent = layer.name;
-      const role = document.createElement("span");
-      role.textContent = layer.role;
-      chip.append(title, role);
-      voiceMiniQuickSynthStrip.appendChild(chip);
-    });
-  }
-}
-
-function syncVoiceMiniVisual() {
-  voiceLabPanel?.querySelectorAll("[data-voice-mini-layer]").forEach((item) => {
-    const kind = String(item.getAttribute("data-voice-mini-layer") || "");
-    item.classList.toggle("active", Boolean(voiceMiniPadState[kind]));
-  });
-}
-
-function updateVoiceMiniRecipe() {
-  if (voiceMiniRecipeLabel) voiceMiniRecipeLabel.textContent = t("voiceMiniRecipeLabel");
-  if (voiceMiniRecipeTitle) {
-    voiceMiniRecipeTitle.textContent = t("voiceMiniRecipeTitle", {
-      preset: voiceMiniPresetDisplayLabel(voiceMiniActivePreset),
-      bpm: voiceMiniBpm
-    });
-  }
-  if (voiceMiniRecipeMeta) {
-    const activeLayers = voiceMiniActiveLayerLabels();
-    voiceMiniRecipeMeta.textContent = activeLayers.length
-      ? t("voiceMiniRecipeMeta", { layers: voiceMiniHumanList(activeLayers) })
-      : t("voiceMiniRecipeMetaEmpty");
-  }
-  syncVoiceMiniVisual();
-  renderVoiceMiniSynthStack();
-  updateVoiceStudioSession();
-  updateVoiceMiniInsight();
-}
-
-function toggleVoiceMiniStep(kind = "", step = 0) {
-  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
-  voiceMiniActivePreset = "";
-  const index = Math.max(0, Math.min(7, Math.round(Number(step) || 0)));
-  const steps = voiceMiniPatternSteps(kind);
-  steps[index] = steps[index] ? 0 : 1;
-  renderVoiceMiniSequencer();
-  syncVoiceMiniPresetButtons();
-  updateVoiceMiniRecipe();
-  if (voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniStepChanged", {
-      pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`),
-      step: index + 1
-    });
-  }
-}
-
-function applyVoiceMiniPreset(presetName = "techno") {
-  const preset = VOICE_MINI_PRESETS[presetName] || VOICE_MINI_PRESETS.techno;
-  voiceMiniActivePreset = VOICE_MINI_PRESETS[presetName] ? presetName : "techno";
-  voiceMiniPattern = cloneVoiceMiniPattern(preset.pattern);
-  updateVoiceMiniBpm(preset.bpm, { announce: false });
-  updateVoiceMiniSwing(preset.swing, { announce: false });
-  updateVoiceMiniSynthType(preset.synthType || voiceMiniSynthType, { announce: false });
-  updateVoiceMiniGrooveMode(preset.grooveMode || voiceMiniGrooveMode, { announce: false });
-  renderVoiceMiniSequencer();
-  syncVoiceMiniPresetButtons();
-  voiceMiniPadState = voiceMiniBasePadState(presetName);
-  syncVoicePadButtons();
-  updateVoiceMiniRecipe();
-  if (voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniPresetApplied", {
-      preset: t(`voiceMiniPreset${presetName.charAt(0).toUpperCase()}${presetName.slice(1)}`)
-    });
-  }
-  if (voiceMiniTrackPlaying) {
-    refreshVoiceMiniOutputBus();
-  }
-}
-
-function updateVoiceMiniBpm(value = voiceMiniBpm, { announce = false } = {}) {
-  voiceMiniBpm = clampVoiceMiniBpm(value);
-  if (voiceMiniBpmSlider) {
-    voiceMiniBpmSlider.value = String(voiceMiniBpm);
-    voiceMiniBpmSlider.setAttribute("aria-valuenow", String(voiceMiniBpm));
-  }
-  if (voiceMiniBpmValue) voiceMiniBpmValue.textContent = t("voiceMiniBpmValue", { bpm: voiceMiniBpm });
-  updateVoiceMiniRecipe();
-  if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniBpmChanged", { bpm: voiceMiniBpm });
-}
-
-function updateVoiceMiniSwing(value = voiceMiniSwingAmount, { announce = false } = {}) {
-  voiceMiniSwingAmount = clampVoiceMiniSwing(value);
-  if (voiceMiniSwingSlider) {
-    voiceMiniSwingSlider.value = String(voiceMiniSwingAmount);
-    voiceMiniSwingSlider.setAttribute("aria-valuenow", String(voiceMiniSwingAmount));
-  }
-  if (voiceMiniSwingValue) voiceMiniSwingValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniSwingAmount });
-  updateVoiceMiniInsight();
-  if (announce && voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
-      control: t("voiceMiniSwingLabel"),
-      value: voiceMiniSwingAmount
-    });
-  }
-}
-
-function voiceMiniSynthProfile(type = voiceMiniSynthType) {
-  return VOICE_MINI_SYNTH_TYPES[String(type || "").trim()] || VOICE_MINI_SYNTH_TYPES.glow;
-}
-
-function voiceMiniSynthTypeLabelFor(type = voiceMiniSynthType) {
-  const profile = voiceMiniSynthProfile(type);
-  const translated = t(profile.labelKey);
-  return translated && translated !== profile.labelKey ? translated : t("voiceMiniSynthTypeGlow");
-}
-
-function syncVoiceMiniSynthTypeOptions() {
-  voiceMiniSynthTypeSelect?.querySelectorAll("option").forEach((option) => {
-    option.textContent = voiceMiniSynthTypeLabelFor(option.value);
-  });
-}
-
-function updateVoiceMiniSynthType(value = voiceMiniSynthType, { announce = false } = {}) {
-  const next = VOICE_MINI_SYNTH_TYPES[String(value || "").trim()] ? String(value).trim() : "glow";
-  voiceMiniSynthType = next;
-  syncVoiceMiniSynthTypeOptions();
-  if (voiceMiniSynthTypeSelect) voiceMiniSynthTypeSelect.value = next;
-  if (voiceMiniSynthTypeValue) voiceMiniSynthTypeValue.textContent = voiceMiniSynthTypeLabelFor(next);
-  renderVoiceMiniSynthStack();
-  updateVoiceMiniInsight();
-  if (announce && voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
-      control: t("voiceMiniSynthTypeLabel"),
-      value: voiceMiniSynthTypeLabelFor(next)
-    });
-  }
-  if (voiceMiniTrackPlaying) refreshVoiceMiniOutputBus();
-}
-
-function voiceMiniGrooveModeLabelFor(mode = voiceMiniGrooveMode) {
-  const profile = VOICE_MINI_GROOVE_MODES[String(mode || "").trim()] || VOICE_MINI_GROOVE_MODES.swing;
-  const translated = t(profile.labelKey);
-  return translated && translated !== profile.labelKey ? translated : t("voiceMiniGrooveModeSwing");
-}
-
-function syncVoiceMiniGrooveModeOptions() {
-  voiceMiniGrooveModeSelect?.querySelectorAll("option").forEach((option) => {
-    option.textContent = voiceMiniGrooveModeLabelFor(option.value);
-  });
-}
-
-function updateVoiceMiniGrooveMode(value = voiceMiniGrooveMode, { announce = false } = {}) {
-  const next = VOICE_MINI_GROOVE_MODES[String(value || "").trim()] ? String(value).trim() : "swing";
-  voiceMiniGrooveMode = next;
-  syncVoiceMiniGrooveModeOptions();
-  if (voiceMiniGrooveModeSelect) voiceMiniGrooveModeSelect.value = next;
-  if (voiceMiniGrooveModeValue) voiceMiniGrooveModeValue.textContent = voiceMiniGrooveModeLabelFor(next);
-  updateVoiceMiniInsight();
-  if (announce && voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniSelectChanged", {
-      control: t("voiceMiniGrooveModeLabel"),
-      value: voiceMiniGrooveModeLabelFor(next)
-    });
-  }
-}
-
-function clampVoiceMiniVoiceLevel(value) {
-  return clampVoiceMiniPercent(value, 60, 180, 120);
-}
-
-function voiceMiniVoiceLevelGain() {
-  return clampVoiceMiniVoiceLevel(voiceMiniVoiceLevel) / 100;
-}
-
-function clampVoiceMiniVoiceLength(value) {
-  return clampVoiceMiniPercent(value, 30, 150, 100);
-}
-
-function voiceMiniVoiceLengthRatio() {
-  return clampVoiceMiniVoiceLength(voiceMiniVoiceLength) / 100;
-}
-
-function clampVoiceMiniSynthLevel(value) {
-  return clampVoiceMiniPercent(value, 0, 100, 48);
-}
-
-function voiceMiniSynthGain() {
-  return clampVoiceMiniSynthLevel(voiceMiniSynthLevel) / 100;
-}
-
-function refreshVoiceMiniOutputBus(ctx = audioContext) {
-  if (!voiceMiniOutputBus || !ctx) return;
-  const now = ctx.currentTime || 0;
-  const phaserAmount = clampVoiceMiniPercent(voiceMiniPhaserAmount, 0, 80, 30) / 100;
-  const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
-  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
-  const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
-  const preview = Boolean(voiceMiniOutputBus.preview);
-  const baseInputGain = voiceMiniBaseMusicInputGain(preview);
-
-  if (voiceMiniOutputBus.input?.gain) {
-    voiceMiniOutputBus.input.gain.setTargetAtTime(baseInputGain, now, 0.035);
-    voiceMiniOutputBus.baseInputGain = baseInputGain;
-  }
-  if (voiceMiniOutputBus.post?.gain) {
-    voiceMiniOutputBus.post.gain.setTargetAtTime(masterAmount * globalVolume * (preview ? 0.76 : 0.88), now, 0.045);
-  }
-  if (voiceMiniOutputBus.voiceInput?.gain) {
-    voiceMiniOutputBus.voiceInput.gain.setTargetAtTime(preview ? 0.96 : 1.02, now, 0.035);
-  }
-  if (voiceMiniOutputBus.voicePost?.gain) {
-    voiceMiniOutputBus.voicePost.gain.setTargetAtTime(preview ? 0.9 : 0.96, now, 0.045);
-  }
-  if (voiceMiniOutputBus.shaper) {
-    voiceMiniOutputBus.shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
-  }
-  if (voiceMiniOutputBus.delay?.delayTime) {
-    voiceMiniOutputBus.delay.delayTime.setTargetAtTime(0.11 + delayAmount * 0.18, now, 0.04);
-  }
-  if (voiceMiniOutputBus.feedback?.gain) {
-    voiceMiniOutputBus.feedback.gain.setTargetAtTime(delayAmount * 0.24, now, 0.04);
-  }
-  if (voiceMiniOutputBus.delayWet?.gain) {
-    voiceMiniOutputBus.delayWet.gain.setTargetAtTime(delayAmount * 0.2, now, 0.04);
-  }
-  if (voiceMiniOutputBus.phaser?.frequency) {
-    voiceMiniOutputBus.phaser.frequency.setTargetAtTime(430 + phaserAmount * 620, now, 0.04);
-  }
-  if (voiceMiniOutputBus.phaser?.Q) {
-    voiceMiniOutputBus.phaser.Q.setTargetAtTime(1.6 + phaserAmount * 2.4, now, 0.04);
-  }
-  if (voiceMiniOutputBus.phaserDepth?.gain) {
-    voiceMiniOutputBus.phaserDepth.gain.setTargetAtTime(48 + phaserAmount * 360, now, 0.04);
-  }
-  if (voiceMiniOutputBus.phaserLfo?.frequency) {
-    voiceMiniOutputBus.phaserLfo.frequency.setTargetAtTime(0.14 + phaserAmount * 0.54, now, 0.04);
-  }
-}
-
-function updateVoiceMiniVoiceLevel(value = voiceMiniVoiceLevel, { announce = false } = {}) {
-  voiceMiniVoiceLevel = clampVoiceMiniVoiceLevel(value);
-  if (voiceMiniVoiceLevelSlider) {
-    voiceMiniVoiceLevelSlider.value = String(voiceMiniVoiceLevel);
-    voiceMiniVoiceLevelSlider.setAttribute("aria-valuenow", String(voiceMiniVoiceLevel));
-  }
-  if (voiceMiniVoiceLevelValue) {
-    voiceMiniVoiceLevelValue.textContent = t("voiceMiniVoiceLevelValue", { level: voiceMiniVoiceLevel });
-  }
-  if (announce && voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniVoiceLevelChanged", { level: voiceMiniVoiceLevel });
-  }
-}
-
-function updateVoiceMiniVoiceLength(value = voiceMiniVoiceLength, { announce = false } = {}) {
-  voiceMiniVoiceLength = clampVoiceMiniVoiceLength(value);
-  if (voiceMiniVoiceLengthSlider) {
-    voiceMiniVoiceLengthSlider.value = String(voiceMiniVoiceLength);
-    voiceMiniVoiceLengthSlider.setAttribute("aria-valuenow", String(voiceMiniVoiceLength));
-  }
-  if (voiceMiniVoiceLengthValue) {
-    voiceMiniVoiceLengthValue.textContent = t("voiceMiniPercentValue", { value: voiceMiniVoiceLength });
-  }
-  if (announce && voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
-      control: t("voiceMiniVoiceLengthLabel"),
-      value: voiceMiniVoiceLength
-    });
-  }
-}
-
-function updateVoiceMiniPercentControl({
-  value,
-  setter,
-  slider,
-  valueEl,
-  min,
-  max,
-  fallback,
-  labelKey,
-  announce = false
-}) {
-  const nextValue = clampVoiceMiniPercent(value, min, max, fallback);
-  setter(nextValue);
-  if (slider) {
-    slider.value = String(nextValue);
-    slider.setAttribute("aria-valuenow", String(nextValue));
-  }
-  if (valueEl) valueEl.textContent = t("voiceMiniPercentValue", { value: nextValue });
-  refreshVoiceMiniOutputBus();
-  updateVoiceMiniInsight();
-  if (announce && voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniControlChanged", {
-    control: t(labelKey),
-    value: nextValue
-  });
-}
-
-function updateVoiceMiniMaster(value = voiceMiniMasterLevel, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniMasterLevel = next; },
-    slider: voiceMiniMasterSlider,
-    valueEl: voiceMiniMasterValue,
-    min: 70,
-    max: 150,
-    fallback: 112,
-    labelKey: "voiceMiniMasterLabel",
-    ...options
-  });
-}
-
-function updateVoiceMiniDrive(value = voiceMiniDriveAmount, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniDriveAmount = next; },
-    slider: voiceMiniDriveSlider,
-    valueEl: voiceMiniDriveValue,
-    min: 0,
-    max: 100,
-    fallback: 16,
-    labelKey: "voiceMiniDriveLabel",
-    ...options
-  });
-}
-
-function updateVoiceMiniDelay(value = voiceMiniDelayAmount, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniDelayAmount = next; },
-    slider: voiceMiniDelaySlider,
-    valueEl: voiceMiniDelayValue,
-    min: 0,
-    max: 80,
-    fallback: 14,
-    labelKey: "voiceMiniDelayLabel",
-    ...options
-  });
-}
-
-function updateVoiceMiniPhaser(value = voiceMiniPhaserAmount, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniPhaserAmount = next; },
-    slider: voiceMiniPhaserSlider,
-    valueEl: voiceMiniPhaserValue,
-    min: 0,
-    max: 80,
-    fallback: 18,
-    labelKey: "voiceMiniPhaserLabel",
-    ...options
-  });
-}
-
-function updateVoiceMiniBeatmasher(value = voiceMiniBeatmasherAmount, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniBeatmasherAmount = next; },
-    slider: voiceMiniBeatmasherSlider,
-    valueEl: voiceMiniBeatmasherValue,
-    min: 0,
-    max: 100,
-    fallback: 8,
-    labelKey: "voiceMiniBeatmasherLabel",
-    ...options
-  });
-}
-
-function updateVoiceMiniSynth(value = voiceMiniSynthLevel, options = {}) {
-  updateVoiceMiniPercentControl({
-    value,
-    setter: (next) => { voiceMiniSynthLevel = next; },
-    slider: voiceMiniSynthSlider,
-    valueEl: voiceMiniSynthValue,
-    min: 0,
-    max: 100,
-    fallback: 48,
-    labelKey: "voiceMiniSynthLabel",
-    ...options
-  });
-}
-
-function updateVoiceLabUi() {
-  const isRecording = voiceRecorder && voiceRecorder.state === "recording";
-  const hasRecording = Boolean(voiceRecordingBlob);
-  voiceLabPanel?.classList.toggle("is-recording", Boolean(isRecording));
-  voiceLabPanel?.classList.toggle("is-mini-playing", Boolean(voiceMiniTrackPlaying));
-  if (voiceRecordBtn) voiceRecordBtn.disabled = Boolean(isRecording);
-  if (voiceStopBtn) voiceStopBtn.disabled = !isRecording;
-  if (voicePlayBtn) voicePlayBtn.disabled = isRecording || !hasRecording;
-  if (voiceResetBtn) voiceResetBtn.disabled = isRecording || !hasRecording;
-  if (voiceMiniRandomBtn) voiceMiniRandomBtn.disabled = Boolean(isRecording) || voiceMiniRendering;
-  if (voiceMiniPlayBtn) voiceMiniPlayBtn.disabled = Boolean(isRecording) || voiceMiniTrackPlaying;
-  if (voiceMiniStopBtn) voiceMiniStopBtn.disabled = !voiceMiniTrackPlaying;
-  if (voiceMiniExportBtn) voiceMiniExportBtn.disabled = Boolean(isRecording) || voiceMiniRendering;
-  if (voicePadVoiceBtn) voicePadVoiceBtn.disabled = isRecording || !hasRecording;
-  syncVoicePadButtons();
-  voiceDownloadBtn?.classList.toggle("hidden", !hasRecording);
-  voicePlayback?.classList.toggle("hidden", !hasRecording);
-  if (voiceMiniStatus && !voiceMiniStatus.textContent.trim()) voiceMiniStatus.textContent = t("voiceMiniReady");
-  updateVoiceStudioSession();
-}
-
-function ensureVoiceLabUiReady() {
-  if (voiceLabUiReady) return;
-  voiceLabUiReady = true;
-  applyVoiceMiniPreset("techno");
-  updateVoiceLabUi();
-}
-
-function syncVoicePadButtons() {
-  const buttons = {
-    kick: voicePadKickBtn,
-    bass: voicePadBassBtn,
-    hat: voicePadHatBtn,
-    clap: voicePadClapBtn,
-    synth: voicePadSynthBtn,
-    voice: voicePadVoiceBtn
-  };
-  Object.entries(buttons).forEach(([kind, button]) => {
-    if (!button) return;
-    const active = Boolean(voiceMiniPadState[kind]);
-    const label = voiceMiniLayerLabel(kind);
-    const stateLabel = button.disabled
-      ? t("voiceMiniLayerDisabled")
-      : active ? t("voiceMiniLayerOn") : t("voiceMiniLayerOff");
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", active ? "true" : "false");
-    button.dataset.stateLabel = stateLabel;
-    button.setAttribute("aria-label", `${label}: ${stateLabel}`);
-  });
-  updateVoiceMiniRecipe();
-}
-
-function supportedVoiceRecorderMimeType() {
-  if (typeof window.MediaRecorder !== "function" || typeof window.MediaRecorder.isTypeSupported !== "function") return "";
-  return ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find((type) => window.MediaRecorder.isTypeSupported(type)) || "";
-}
-
-function stopVoiceRecordingStream() {
-  if (!voiceRecordingStream) return;
-  voiceRecordingStream.getTracks().forEach((track) => track.stop());
-  voiceRecordingStream = null;
-}
-
-function clearVoiceRecordingTimer() {
-  window.clearInterval(voiceRecordingTimer);
-  voiceRecordingTimer = 0;
-}
-
-function updateVoiceRecordingTimer() {
-  const elapsed = Math.max(0, Math.floor((Date.now() - voiceRecordingStartedAt) / 1000));
-  setVoiceStatus(t("voiceRecording", { seconds: elapsed }));
-  if (voiceTimerBar) voiceTimerBar.style.width = `${Math.min(100, (elapsed / 20) * 100)}%`;
-  if (elapsed >= 20) stopVoiceRecording();
-}
-
-function resetVoiceRecording() {
-  stopActiveVoicePlayback();
-  stopVoiceMiniTrack({ silent: true });
-  clearVoiceRecordingTimer();
-  stopVoiceRecordingStream();
-  if (voiceRecorder && voiceRecorder.state === "recording") {
-    try {
-      voiceRecorder.stop();
-    } catch (_err) {
-      // ignore stale recorder state
-    }
-  }
-  voiceRecorder = null;
-  voiceRecordingChunks = [];
-  voiceRecordingBlob = null;
-  voiceRecordingNormalizedBuffer = null;
-  voiceRecordingNormalizedSampleRate = 0;
-  if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
-  voiceRecordingUrl = "";
-  if (voicePlayback) {
-    voicePlayback.removeAttribute("src");
-    voicePlayback.load();
-  }
-  if (voiceDownloadBtn) voiceDownloadBtn.href = "#";
-  if (voiceTimerBar) voiceTimerBar.style.width = "0%";
-  setVoiceStatus(t("voiceCleared"));
-  updateVoiceLabUi();
-}
-
-function finishVoiceRecording() {
-  clearVoiceRecordingTimer();
-  stopVoiceRecordingStream();
-  const mimeType = voiceRecordingChunks[0]?.type || "audio/webm";
-  voiceRecordingBlob = new Blob(voiceRecordingChunks, { type: mimeType });
-  voiceRecordingChunks = [];
-  voiceRecordingNormalizedBuffer = null;
-  voiceRecordingNormalizedSampleRate = 0;
-  if (voiceRecordingUrl) URL.revokeObjectURL(voiceRecordingUrl);
-  voiceRecordingUrl = URL.createObjectURL(voiceRecordingBlob);
-  if (voicePlayback) {
-    voicePlayback.src = voiceRecordingUrl;
-    voicePlayback.load();
-  }
-  if (voiceDownloadBtn) {
-    voiceDownloadBtn.href = voiceRecordingUrl;
-    voiceDownloadBtn.download = mimeType.includes("mp4") ? "sonic-search-voz.m4a" : "sonic-search-voz.webm";
-  }
-  if (voiceTimerBar) voiceTimerBar.style.width = "100%";
-  setVoiceStatus(t("voiceRecorded"));
-  updateVoiceLabUi();
-}
-
-async function startVoiceRecording() {
-  if (!navigator.mediaDevices?.getUserMedia || typeof window.MediaRecorder !== "function") {
-    setVoiceStatus(t("voiceMicUnsupported"));
-    showToast(t("voiceMicUnsupported"));
-    return;
-  }
-  resetVoiceRecording();
-  try {
-    voiceRecordingStream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        channelCount: 1,
-        echoCancellation: false,
-        noiseSuppression: false,
-        autoGainControl: true
-      }
-    });
-    const mimeType = supportedVoiceRecorderMimeType();
-    voiceRecorder = mimeType
-      ? new window.MediaRecorder(voiceRecordingStream, { mimeType })
-      : new window.MediaRecorder(voiceRecordingStream);
-    voiceRecordingChunks = [];
-    voiceRecorder.addEventListener("dataavailable", (event) => {
-      if (event.data && event.data.size > 0) voiceRecordingChunks.push(event.data);
-    });
-    voiceRecorder.addEventListener("stop", finishVoiceRecording, { once: true });
-    voiceRecordingStartedAt = Date.now();
-    voiceRecorder.start();
-    updateVoiceRecordingTimer();
-    voiceRecordingTimer = window.setInterval(updateVoiceRecordingTimer, 250);
-    updateVoiceLabUi();
-  } catch (_err) {
-    stopVoiceRecordingStream();
-    setVoiceStatus(t("voiceMicDenied"));
-    showToast(t("voiceMicDenied"));
-    updateVoiceLabUi();
-  }
-}
-
-function stopVoiceRecording() {
-  if (!voiceRecorder || voiceRecorder.state !== "recording") return;
-  voiceRecorder.stop();
-  clearVoiceRecordingTimer();
-  updateVoiceLabUi();
-}
-
-function stopActiveVoicePlayback() {
-  if (!activeVoiceSource) return;
-  const stoppedSource = activeVoiceSource;
-  try {
-    activeVoiceSource.stop();
-  } catch (_err) {
-    // ignore already-stopped source
-  }
-  activeVoiceSource = null;
-  if (activePlaybackMatches({ type: "voice-effect", player: stoppedSource })) {
-    clearActivePlayback(activePlayback.generation);
-  }
-}
-
-function trackVoiceMiniNode(node) {
-  if (!node) return node;
-  if (Array.isArray(voiceMiniNodeBucket)) {
-    voiceMiniNodeBucket.push(node);
-  } else {
-    voiceMiniTrackNodes.push(node);
-  }
-  return node;
-}
-
-async function getNormalizedVoiceBuffer(ctx) {
-  if (!voiceRecordingBlob) return null;
-  if (voiceRecordingNormalizedBuffer && voiceRecordingNormalizedSampleRate === ctx.sampleRate) {
-    return voiceRecordingNormalizedBuffer;
-  }
-  const arrayBuffer = await voiceRecordingBlob.arrayBuffer();
-  const decoded = await ctx.decodeAudioData(arrayBuffer.slice(0));
-  const normalized = ctx.createBuffer(decoded.numberOfChannels, decoded.length, decoded.sampleRate);
-  let peak = 0;
-  let sumSquares = 0;
-  let sampleCount = 0;
-  for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
-    const data = decoded.getChannelData(channel);
-    for (let i = 0; i < data.length; i += 1) {
-      const sample = data[i];
-      peak = Math.max(peak, Math.abs(sample));
-      sumSquares += sample * sample;
-      sampleCount += 1;
-    }
-  }
-  const rms = sampleCount > 0 ? Math.sqrt(sumSquares / sampleCount) : 0;
-  const peakBoost = peak > 0.0001 ? 0.76 / peak : 1;
-  const rmsBoost = rms > 0.0001 ? 0.18 / rms : 1;
-  const boost = Math.max(1, Math.min(6, peakBoost, rmsBoost));
-  for (let channel = 0; channel < decoded.numberOfChannels; channel += 1) {
-    const source = decoded.getChannelData(channel);
-    const target = normalized.getChannelData(channel);
-    for (let i = 0; i < source.length; i += 1) {
-      const amplified = source[i] * boost;
-      target[i] = Math.tanh(amplified * 0.72) * 0.96;
-    }
-  }
-  voiceRecordingNormalizedBuffer = normalized;
-  voiceRecordingNormalizedSampleRate = ctx.sampleRate;
-  return normalized;
-}
-
-function connectMiniNode(ctx, node, destination, pan = 0) {
-  if (typeof ctx.createStereoPanner === "function") {
-    const panner = trackVoiceMiniNode(ctx.createStereoPanner());
-    panner.pan.value = Math.max(-0.85, Math.min(0.85, pan));
-    node.connect(panner);
-    panner.connect(destination);
-    return panner;
-  }
-  node.connect(destination);
-  return node;
-}
-
-function stopVoiceMiniTrack({ silent = false } = {}) {
-  window.clearInterval(voiceMiniTrackScheduler);
-  voiceMiniTrackScheduler = 0;
-  voiceMiniTrackTimers.forEach((timer) => window.clearTimeout(timer));
-  voiceMiniTrackTimers = [];
-  voiceMiniTrackNodes.forEach((node) => {
-    try {
-      if (typeof node.stop === "function") node.stop();
-    } catch (_err) {
-      // ignore already-stopped mini music node
-    }
-    try {
-      if (typeof node.disconnect === "function") node.disconnect();
-    } catch (_err) {
-      // ignore disconnected node
-    }
-  });
-  voiceMiniTrackNodes = [];
-  voiceMiniTrackPlaying = false;
-  voiceMiniVoiceBuffer = null;
-  voiceMiniOutputBus = null;
-  voiceMiniNextBarTime = 0;
-  voiceMiniBarIndex = 0;
-  voiceMiniPadState = {
-    kick: false,
-    bass: false,
-    hat: false,
-    clap: false,
-    synth: false,
-    voice: false
-  };
-  updateVoiceMiniRecipe();
-  if (activePlaybackMatches({ type: "voice-mini" })) {
-    clearActivePlayback(activePlayback.generation);
-  }
-  if (!silent && voiceMiniStatus) voiceMiniStatus.textContent = voiceRecordingBlob ? t("voiceMiniDone") : t("voiceMiniReady");
-  updateVoiceLabUi();
-}
-
-function createMiniNoiseBuffer(ctx, duration = 0.12) {
-  const length = Math.max(1, Math.floor(ctx.sampleRate * duration));
-  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  let previous = 0;
-  for (let i = 0; i < length; i += 1) {
-    const raw = Math.random() * 2 - 1;
-    previous = previous * 0.58 + raw * 0.42;
-    const envelope = Math.pow(1 - i / length, 1.55);
-    data[i] = previous * envelope;
-  }
-  return buffer;
-}
-
-function createMiniDriveCurve(amount = 0) {
-  const samples = 256;
-  const curve = new Float32Array(samples);
-  const normalizedAmount = clampVoiceMiniPercent(amount, 0, 100, 0) / 100;
-  const drive = 1 + normalizedAmount * 7.5;
-  for (let i = 0; i < samples; i += 1) {
-    const x = (i * 2) / (samples - 1) - 1;
-    curve[i] = normalizedAmount <= 0.01 ? x : Math.tanh(x * drive) * (0.96 - normalizedAmount * 0.08);
-  }
-  return curve;
-}
-
-function voiceMiniBaseMusicInputGain(preview = false) {
-  return preview ? 0.78 : 0.66;
-}
-
-function voiceMiniVoiceDestination(destination) {
-  return destination?.__voiceMiniVoiceInput || voiceMiniOutputBus?.voiceInput || destination;
-}
-
-function connectVoiceMiniOutputBus(ctx, { preview = false, assign = !preview } = {}) {
-  const input = trackVoiceMiniNode(ctx.createGain());
-  const voiceInput = trackVoiceMiniNode(ctx.createGain());
-  const master = trackVoiceMiniNode(ctx.createGain());
-  const shaper = trackVoiceMiniNode(ctx.createWaveShaper());
-  const phaser = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const delay = trackVoiceMiniNode(ctx.createDelay(0.8));
-  const feedback = trackVoiceMiniNode(ctx.createGain());
-  const delayWet = trackVoiceMiniNode(ctx.createGain());
-  const compressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
-  const masterHighpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const masterLowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const post = trackVoiceMiniNode(ctx.createGain());
-  const voiceHighpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const voicePresence = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const voiceCompressor = trackVoiceMiniNode(ctx.createDynamicsCompressor());
-  const voicePost = trackVoiceMiniNode(ctx.createGain());
-  const mixLimiter = trackVoiceMiniNode(ctx.createDynamicsCompressor());
-  const phaserAmount = clampVoiceMiniPercent(voiceMiniPhaserAmount, 0, 80, 30) / 100;
-  const delayAmount = clampVoiceMiniPercent(voiceMiniDelayAmount, 0, 80, 20) / 100;
-  const masterAmount = clampVoiceMiniPercent(voiceMiniMasterLevel, 70, 150, 112) / 100;
-  const globalVolume = Math.max(0.62, Math.min(1.08, audioVolume || 0.92));
-  const baseInputGain = voiceMiniBaseMusicInputGain(preview);
-
-  input.gain.value = baseInputGain;
-  voiceInput.gain.value = preview ? 0.96 : 1.02;
-  shaper.curve = createMiniDriveCurve(voiceMiniDriveAmount);
-  shaper.oversample = "4x";
-  phaser.type = "allpass";
-  phaser.frequency.value = 430 + phaserAmount * 620;
-  phaser.Q.value = 1.6 + phaserAmount * 2.4;
-  delay.delayTime.value = 0.11 + delayAmount * 0.18;
-  feedback.gain.value = delayAmount * 0.24;
-  delayWet.gain.value = delayAmount * (preview ? 0.12 : 0.2);
-  compressor.threshold.value = preview ? -16 : -14;
-  compressor.knee.value = 20;
-  compressor.ratio.value = preview ? 2.2 : 2.8;
-  compressor.attack.value = 0.008;
-  compressor.release.value = 0.22;
-  masterHighpass.type = "highpass";
-  masterHighpass.frequency.value = 28;
-  masterHighpass.Q.value = 0.58;
-  masterLowpass.type = "lowpass";
-  masterLowpass.frequency.value = 14800;
-  masterLowpass.Q.value = 0.42;
-  post.gain.value = (preview ? 0.76 : 0.88) * masterAmount * globalVolume;
-  voiceHighpass.type = "highpass";
-  voiceHighpass.frequency.value = 105;
-  voiceHighpass.Q.value = 0.62;
-  voicePresence.type = "peaking";
-  voicePresence.frequency.value = 2450;
-  voicePresence.Q.value = 0.92;
-  voicePresence.gain.value = 2.8;
-  voiceCompressor.threshold.value = -20;
-  voiceCompressor.knee.value = 16;
-  voiceCompressor.ratio.value = 2.6;
-  voiceCompressor.attack.value = 0.004;
-  voiceCompressor.release.value = 0.18;
-  voicePost.gain.value = preview ? 0.9 : 0.96;
-  mixLimiter.threshold.value = -5.5;
-  mixLimiter.knee.value = 6;
-  mixLimiter.ratio.value = 7.5;
-  mixLimiter.attack.value = 0.002;
-  mixLimiter.release.value = 0.12;
-
-  input.connect(master);
-  master.connect(shaper);
-  shaper.connect(phaser);
-  phaser.connect(compressor);
-  input.connect(delay);
-  delay.connect(feedback);
-  feedback.connect(delay);
-  delay.connect(delayWet);
-  delayWet.connect(compressor);
-  compressor.connect(masterHighpass);
-  masterHighpass.connect(masterLowpass);
-  masterLowpass.connect(post);
-  voiceInput.connect(voiceHighpass);
-  voiceHighpass.connect(voicePresence);
-  voicePresence.connect(voiceCompressor);
-  voiceCompressor.connect(voicePost);
-  post.connect(mixLimiter);
-  voicePost.connect(mixLimiter);
-  mixLimiter.connect(ctx.destination);
-
-  input.__voiceMiniVoiceInput = voiceInput;
-
-  const outputBus = {
-    preview,
-    baseInputGain,
-    input,
-    voiceInput,
-    shaper,
-    phaser,
-    delay,
-    feedback,
-    delayWet,
-    masterHighpass,
-    masterLowpass,
-    post,
-    voiceHighpass,
-    voicePresence,
-    voiceCompressor,
-    voicePost,
-    mixLimiter,
-    phaserLfo: null,
-    phaserDepth: null
-  };
-
-  if (phaserAmount > 0.02) {
-    const lfo = trackVoiceMiniNode(ctx.createOscillator());
-    const depth = trackVoiceMiniNode(ctx.createGain());
-    lfo.type = "sine";
-    lfo.frequency.value = 0.14 + phaserAmount * 0.54;
-    depth.gain.value = 48 + phaserAmount * 360;
-    lfo.connect(depth);
-    depth.connect(phaser.frequency);
-    lfo.start();
-    outputBus.phaserLfo = lfo;
-    outputBus.phaserDepth = depth;
-  }
-
-  if (assign) voiceMiniOutputBus = outputBus;
-  return input;
-}
-
-function scheduleVoiceMiniKick(ctx, destination, time, { accent = false } = {}) {
-  const end = time + 0.34;
-  const osc = trackVoiceMiniNode(ctx.createOscillator());
-  const bodyGain = trackVoiceMiniNode(ctx.createGain());
-  const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const click = trackVoiceMiniNode(ctx.createBufferSource());
-  const clickGain = trackVoiceMiniNode(ctx.createGain());
-  const clickFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (accent ? 0.86 : 0.72) * Math.max(0.62, Math.min(1.08, audioVolume || 0.95));
-
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(132, time);
-  osc.frequency.exponentialRampToValueAtTime(54, time + 0.054);
-  osc.frequency.exponentialRampToValueAtTime(42, end);
-  bodyFilter.type = "lowpass";
-  bodyFilter.frequency.value = 420;
-  bodyFilter.Q.value = 0.68;
-  bodyGain.gain.setValueAtTime(0.0001, time);
-  bodyGain.gain.exponentialRampToValueAtTime(level, time + 0.006);
-  bodyGain.gain.exponentialRampToValueAtTime(level * 0.34, time + 0.09);
-  bodyGain.gain.exponentialRampToValueAtTime(0.0001, end);
-
-  click.buffer = createMiniNoiseBuffer(ctx, 0.026);
-  clickFilter.type = "highpass";
-  clickFilter.frequency.value = 3800;
-  clickGain.gain.setValueAtTime(0.0001, time);
-  clickGain.gain.exponentialRampToValueAtTime(level * 0.12, time + 0.003);
-  clickGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.022);
-
-  osc.connect(bodyFilter);
-  bodyFilter.connect(bodyGain);
-  bodyGain.connect(destination);
-  click.connect(clickFilter);
-  clickFilter.connect(clickGain);
-  clickGain.connect(destination);
-  osc.start(time);
-  osc.stop(end + 0.02);
-  click.start(time);
-  click.stop(time + 0.05);
-}
-
-function scheduleVoiceMiniHat(ctx, destination, time, { open = false, pan = 0 } = {}) {
-  const duration = open ? 0.14 : 0.045;
-  const source = trackVoiceMiniNode(ctx.createBufferSource());
-  const gain = trackVoiceMiniNode(ctx.createGain());
-  const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const lowpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const level = (open ? 0.21 : 0.14) * Math.max(0.56, Math.min(1.08, audioVolume || 0.95));
-
-  source.buffer = createMiniNoiseBuffer(ctx, duration);
-  highpass.type = "highpass";
-  highpass.frequency.value = open ? 4600 : 5600;
-  lowpass.type = "lowpass";
-  lowpass.frequency.value = open ? 9800 : 8200;
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(level, time + 0.004);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-  source.connect(highpass);
-  highpass.connect(lowpass);
-  lowpass.connect(gain);
-  connectMiniNode(ctx, gain, destination, pan);
-  source.start(time);
-  source.stop(time + duration + 0.02);
-}
-
-function scheduleVoiceMiniClap(ctx, destination, time, { accent = false, pan = 0 } = {}) {
-  const source = trackVoiceMiniNode(ctx.createBufferSource());
-  const gain = trackVoiceMiniNode(ctx.createGain());
-  const highpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const bandpass = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const duration = 0.12;
-  const level = (accent ? 0.34 : 0.26) * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
-
-  source.buffer = createMiniNoiseBuffer(ctx, duration);
-  highpass.type = "highpass";
-  highpass.frequency.value = 1100;
-  bandpass.type = "bandpass";
-  bandpass.frequency.value = 1680;
-  bandpass.Q.value = 0.84;
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(level, time + 0.008);
-  gain.gain.exponentialRampToValueAtTime(level * 0.24, time + 0.046);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-  source.connect(highpass);
-  highpass.connect(bandpass);
-  bandpass.connect(gain);
-  connectMiniNode(ctx, gain, destination, pan);
-  source.start(time);
-  source.stop(time + duration + 0.02);
-}
-
-function scheduleVoiceMiniDrums(ctx, destination, start, beat, duration) {
-  for (let i = 0; i * beat < duration; i += 1) {
-    const time = start + i * beat;
-    scheduleVoiceMiniKick(ctx, destination, time, { accent: i % 8 === 0 });
-    scheduleVoiceMiniHat(ctx, destination, time + beat * 0.5, { open: true, pan: i % 2 ? -0.2 : 0.22 });
-    scheduleVoiceMiniHat(ctx, destination, time + beat * 0.25, { pan: i % 4 === 0 ? -0.16 : 0.12 });
-    if (i % 2 === 1) scheduleVoiceMiniHat(ctx, destination, time + beat * 0.75, { pan: 0.18 });
-  }
-}
-
-function scheduleVoiceMiniKickLoop(ctx, destination, start, beat, barIndex = 0) {
-  for (let step = 0; step < 8; step += 1) {
-    if (!voiceMiniPatternActive("kick", step)) continue;
-    scheduleVoiceMiniKick(ctx, destination, voiceMiniStepBeatTime(start, beat, step), {
-      accent: step === 0 && barIndex % 4 === 0
-    });
-  }
-}
-
-function scheduleVoiceMiniHatLoop(ctx, destination, start, beat, barIndex = 0) {
-  for (let step = 0; step < 8; step += 1) {
-    if (!voiceMiniPatternActive("hat", step)) continue;
-    const time = voiceMiniStepBeatTime(start, beat, step);
-    const open = step % 2 === 1 || (barIndex % 4 === 3 && step === 7);
-    const pan = step % 4 === 1 ? -0.22 : step % 4 === 3 ? 0.22 : 0;
-    scheduleVoiceMiniHat(ctx, destination, time, { open, pan });
-  }
-}
-
-function scheduleVoiceMiniClapLoop(ctx, destination, start, beat, barIndex = 0) {
-  for (let step = 0; step < 8; step += 1) {
-    if (!voiceMiniPatternActive("clap", step)) continue;
-    scheduleVoiceMiniClap(ctx, destination, voiceMiniStepBeatTime(start, beat, step), {
-      accent: step === 2 && barIndex % 4 === 0,
-      pan: step % 4 === 2 ? -0.08 : 0.08
-    });
-  }
-}
-
-function scheduleVoiceMiniBass(ctx, destination, start, beat, duration) {
-  const notes = [49, 49, 55, 49, 65.41, 55, 73.42, 55];
-  for (let i = 0; i * beat < duration; i += 1) {
-    const time = start + i * beat;
-    const note = notes[i % notes.length];
-    const sub = trackVoiceMiniNode(ctx.createOscillator());
-    const grit = trackVoiceMiniNode(ctx.createOscillator());
-    const gain = trackVoiceMiniNode(ctx.createGain());
-    const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
-    const subGain = trackVoiceMiniNode(ctx.createGain());
-    const gritGain = trackVoiceMiniNode(ctx.createGain());
-    const level = 0.34 * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
-
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(i % 4 === 0 ? 340 : 250, time);
-    filter.frequency.exponentialRampToValueAtTime(112, time + beat * 0.58);
-    filter.Q.value = 0.92;
-    sub.type = "sine";
-    grit.type = i % 3 === 0 ? "sawtooth" : "square";
-    sub.frequency.value = note;
-    grit.frequency.value = note * 2;
-    subGain.gain.value = 0.88;
-    gritGain.gain.value = 0.12;
-    gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime(level * 0.72, time + 0.018);
-    gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.13);
-    gain.gain.exponentialRampToValueAtTime(level * 0.3, time + beat * 0.34);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.62);
-    sub.connect(subGain);
-    grit.connect(gritGain);
-    subGain.connect(filter);
-    gritGain.connect(filter);
-    filter.connect(gain);
-    gain.connect(destination);
-    sub.start(time);
-    grit.start(time);
-    sub.stop(time + beat * 0.68);
-    grit.stop(time + beat * 0.68);
-  }
-}
-
-function scheduleVoiceMiniBassHit(ctx, destination, time, beat, note, { accent = false, step = 0 } = {}) {
-  const sub = trackVoiceMiniNode(ctx.createOscillator());
-  const grit = trackVoiceMiniNode(ctx.createOscillator());
-  const gain = trackVoiceMiniNode(ctx.createGain());
-  const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const subGain = trackVoiceMiniNode(ctx.createGain());
-  const gritGain = trackVoiceMiniNode(ctx.createGain());
-  const level = (accent ? 0.42 : 0.31) * Math.max(0.58, Math.min(1.08, audioVolume || 0.95));
-
-  filter.type = "lowpass";
-  filter.frequency.setValueAtTime(accent ? 380 : 260, time);
-  filter.frequency.exponentialRampToValueAtTime(112, time + beat * 0.48);
-  filter.Q.value = 0.98;
-  sub.type = "sine";
-  grit.type = step % 3 === 0 ? "sawtooth" : "square";
-  sub.frequency.value = note;
-  grit.frequency.value = note * 2;
-  subGain.gain.value = 0.94;
-  gritGain.gain.value = 0.11;
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(level * 0.68, time + 0.014);
-  gain.gain.exponentialRampToValueAtTime(level, time + beat * 0.1);
-  gain.gain.exponentialRampToValueAtTime(level * 0.28, time + beat * 0.3);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + beat * 0.48);
-  sub.connect(subGain);
-  grit.connect(gritGain);
-  subGain.connect(filter);
-  gritGain.connect(filter);
-  filter.connect(gain);
-  gain.connect(destination);
-  sub.start(time);
-  grit.start(time);
-  sub.stop(time + beat * 0.54);
-  grit.stop(time + beat * 0.54);
-}
-
-function scheduleVoiceMiniBassLoop(ctx, destination, start, beat, barIndex = 0) {
-  const notes = barIndex % 4 === 3
-    ? [49, 55, 49, 65.41, 49, 55, 73.42, 55]
-    : [49, 49, 55, 49, 49, 65.41, 55, 49];
-  for (let step = 0; step < 8; step += 1) {
-    if (!voiceMiniPatternActive("bass", step)) continue;
-    scheduleVoiceMiniBassHit(ctx, destination, voiceMiniStepBeatTime(start, beat, step), beat, notes[step % notes.length], {
-      accent: step === 0,
-      step
-    });
-  }
-}
-
-function scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, { level = 0.44, pan = 0, detune = 0 } = {}) {
-  const profile = voiceMiniSynthProfile();
-  const osc = trackVoiceMiniNode(ctx.createOscillator());
-  const shimmer = trackVoiceMiniNode(ctx.createOscillator());
-  const gain = trackVoiceMiniNode(ctx.createGain());
-  const filter = trackVoiceMiniNode(ctx.createBiquadFilter());
-  const width = trackVoiceMiniNode(ctx.createGain());
-  const synthAmount = voiceMiniSynthGain();
-  const duration = Math.max(beat * 0.24, Math.min(beat * 1.6, beat * ((profile.release || 0.82) + synthAmount * 0.36)));
-  const globalLevel = Math.max(0.54, Math.min(1.04, audioVolume || 0.95));
-  const baseCutoff = profile.cutoff || 680;
-  const openCutoff = baseCutoff + synthAmount * (voiceMiniSynthType === "acid" ? 1900 : 1450);
-  const closeCutoff = Math.max(90, baseCutoff * 0.38 + synthAmount * 360);
-  const attack = Math.min(profile.attack || 0.07, beat * 0.25);
-  const sustainPoint = Math.max(attack + 0.04, duration - Math.min(0.18, beat * 0.34));
-
-  osc.type = profile.osc || "sawtooth";
-  shimmer.type = profile.shimmer || "triangle";
-  osc.frequency.value = frequency;
-  shimmer.frequency.value = frequency * (profile.shimmerRatio || 2.005);
-  osc.detune.value = detune - (profile.detune || 4);
-  shimmer.detune.value = detune + (profile.detune || 7);
-  width.gain.value = profile.width ?? 0.24;
-  filter.type = profile.filter || "lowpass";
-  filter.frequency.setValueAtTime(openCutoff, time);
-  filter.frequency.exponentialRampToValueAtTime(closeCutoff, time + duration);
-  filter.Q.value = (profile.resonance || 1.2) + synthAmount * (voiceMiniSynthType === "acid" ? 3.8 : 1.8);
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.linearRampToValueAtTime(level * synthAmount * globalLevel, time + attack);
-  gain.gain.setValueAtTime(level * synthAmount * globalLevel * 0.82, time + sustainPoint);
-  gain.gain.linearRampToValueAtTime(0.0001, time + duration);
-
-  osc.connect(filter);
-  shimmer.connect(width);
-  width.connect(filter);
-  filter.connect(gain);
-  connectMiniNode(ctx, gain, destination, pan);
-  osc.start(time);
-  shimmer.start(time);
-  osc.stop(time + duration + 0.04);
-  shimmer.stop(time + duration + 0.04);
-}
-
-function scheduleVoiceMiniSynthLoop(ctx, destination, start, beat, barIndex = 0) {
-  const synthAmount = voiceMiniSynthGain();
-  if (synthAmount <= 0.02) return;
-  const profile = voiceMiniSynthProfile();
-  const progressions = [
-    [220, 261.63, 329.63],
-    [196, 246.94, 329.63],
-    [164.81, 220, 261.63],
-    [196, 246.94, 293.66]
-  ];
-  const chord = progressions[barIndex % progressions.length];
-  const root = chord[0] / 2;
-  for (let step = 0; step < 8; step += 1) {
-    if (!voiceMiniPatternActive("synth", step)) continue;
-    const time = voiceMiniStepBeatTime(start, beat, step);
-    if (voiceMiniSynthType === "pad" || step % 4 === 0) {
-      if (voiceMiniSynthType === "pad" && ![0, 4].includes(step)) continue;
-      chord.forEach((frequency, index) => {
-        scheduleVoiceMiniSynthVoice(ctx, destination, time, frequency, beat, {
-          level: voiceMiniSynthType === "pad" ? (index === 0 ? 0.12 : 0.09) : (index === 0 ? 0.14 : 0.1),
-          pan: index === 1 ? -0.18 : index === 2 ? 0.2 : 0,
-          detune: index * (profile.detune || 3)
-        });
-      });
-      if (voiceMiniSynthType === "pad" && synthAmount > 0.24) {
-        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * 0.08, root, beat, {
-          level: 0.07,
-          pan: -0.26,
-          detune: -10
-        });
-      } else if (synthAmount > 0.3) {
-        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * 0.48, chord[(barIndex + 2) % chord.length] * 2, beat, {
-          level: 0.04 + synthAmount * 0.028,
-          pan: 0.28,
-          detune: 12
-        });
-      }
-    } else {
-      const acidLine = [root * 2, root * 3, chord[1] * 1.5, root * 2.5, chord[2], root * 3, chord[1] * 2, root * 4];
-      const note = voiceMiniSynthType === "acid"
-        ? acidLine[(step + barIndex) % acidLine.length]
-        : voiceMiniSynthType === "sub"
-          ? root * (step % 2 ? 1.5 : 1)
-          : step % 2 ? root * 3 : chord[(step + barIndex) % chord.length] * 1.5;
-      scheduleVoiceMiniSynthVoice(ctx, destination, time, note, beat, {
-        level: voiceMiniSynthType === "sub" ? 0.16 : 0.1 + synthAmount * 0.05,
-        pan: step % 2 ? 0.22 : -0.18,
-        detune: step % 2 ? 6 : -6
-      });
-      if (synthAmount > 0.24) {
-        const ghostDelay = voiceMiniSynthType === "acid" ? 0.375 : 0.25;
-        const ghostNote = voiceMiniSynthType === "sub"
-          ? note * 2
-          : voiceMiniSynthType === "acid"
-            ? acidLine[(step + barIndex + 3) % acidLine.length]
-            : note * (voiceMiniSynthType === "pluck" ? 1.25 : 1.5);
-        scheduleVoiceMiniSynthVoice(ctx, destination, time + beat * ghostDelay, ghostNote, beat, {
-          level: voiceMiniSynthType === "sub" ? 0.045 : 0.035 + synthAmount * 0.026,
-          pan: step % 2 ? -0.26 : 0.24,
-          detune: voiceMiniSynthType === "acid" ? 9 : 14
-        });
-      }
-    }
-  }
-}
-
-function scheduleVoiceMiniChops(ctx, voiceBuffer, destination, start, beat, duration) {
-  const safeDuration = Math.max(0.1, Number(voiceBuffer?.duration) || 0.1);
-  const phraseDuration = Math.min(safeDuration, beat * 7.4);
-  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
-  const voiceDestination = voiceMiniVoiceDestination(destination);
-  const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  voiceBus.gain.value = 0.88;
-  voiceBus.connect(voiceDestination);
-
-  const phrase = trackVoiceMiniNode(ctx.createBufferSource());
-  const phraseGain = trackVoiceMiniNode(ctx.createGain());
-  phrase.buffer = voiceBuffer;
-  phraseGain.gain.setValueAtTime(0.0001, start);
-  phraseGain.gain.linearRampToValueAtTime(0.74 * voicePresence, start + 0.035);
-  phraseGain.gain.setValueAtTime(0.66 * voicePresence, start + Math.max(0.05, phraseDuration - 0.14));
-  phraseGain.gain.linearRampToValueAtTime(0.0001, start + phraseDuration);
-  connectVoiceEffectGraph(ctx, phrase, selectedVoiceEffect, phraseGain);
-  phraseGain.connect(voiceBus);
-  phrase.start(start, 0, phraseDuration);
-  phrase.stop(start + phraseDuration + 0.04);
-
-  const sliceDuration = Math.min(0.34, Math.max(0.14, beat * 0.56));
-  const offsets = [0, 0.18, 0.46, 0.68, 0.08, 0.58, 0.82, 0.3, 0.72, 0.12, 0.52, 0.38];
-  for (let i = 0; i * beat < duration; i += 1) {
-    const time = start + beat * 4 + i * beat * 0.5;
-    if (time >= start + duration - sliceDuration) break;
-    const source = trackVoiceMiniNode(ctx.createBufferSource());
-    const chopGain = trackVoiceMiniNode(ctx.createGain());
-    source.buffer = voiceBuffer;
-    source.playbackRate.value = i % 5 === 0 ? 1.18 : i % 4 === 0 ? 0.92 : 1.04;
-    const availableOffset = Math.max(0, safeDuration - sliceDuration);
-    const offset = availableOffset * offsets[i % offsets.length];
-    const accent = i % 4 === 0 ? 0.36 : 0.24;
-    chopGain.gain.setValueAtTime(0.0001, time);
-    chopGain.gain.linearRampToValueAtTime(accent * voicePresence, time + 0.014);
-    chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
-    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, chopGain);
-    connectMiniNode(ctx, chopGain, voiceBus, i % 2 ? -0.24 : 0.2);
-    source.start(time, offset, Math.min(sliceDuration, safeDuration));
-    source.stop(time + sliceDuration + 0.04);
-  }
-}
-
-function scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, start, beat, barIndex = 0) {
-  if (!voiceBuffer) return;
-  const activeVoiceSteps = voiceMiniPatternSteps("voice")
-    .map((active, index) => active ? index : -1)
-    .filter((index) => index >= 0);
-  if (!activeVoiceSteps.length) return;
-  const safeDuration = Math.max(0.1, Number(voiceBuffer.duration) || 0.1);
-  const barDuration = beat * 4;
-  const lengthRatio = voiceMiniVoiceLengthRatio();
-  const phraseBars = safeDuration * lengthRatio > barDuration * 1.08 ? 2 : 1;
-  const shouldPlayMainPhrase = phraseBars === 1 || barIndex % 2 === 0;
-  const phraseDuration = Math.min(
-    safeDuration,
-    Math.max(beat * 1.2, barDuration * (phraseBars === 2 ? 1.82 : 0.94) * lengthRatio)
-  );
-  const availableOffset = Math.max(0, safeDuration - phraseDuration);
-  const phraseOffset = availableOffset > 0 ? availableOffset * ((Math.floor(barIndex / phraseBars) % 4) / 4) : 0;
-  const sourceDuration = Math.max(0.08, Math.min(phraseDuration, safeDuration - phraseOffset));
-  const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
-  const beatmasherAmount = clampVoiceMiniPercent(voiceMiniBeatmasherAmount, 0, 100, 20) / 100;
-  const voiceDestination = voiceMiniVoiceDestination(destination);
-  const voiceBus = trackVoiceMiniNode(ctx.createGain());
-  const firstVoiceStep = activeVoiceSteps[0] || 0;
-  const phraseStart = voiceMiniStepBeatTime(start, beat, firstVoiceStep);
-
-  voiceBus.gain.value = 0.86;
-  voiceBus.connect(voiceDestination);
-  if (shouldPlayMainPhrase) {
-    const source = trackVoiceMiniNode(ctx.createBufferSource());
-    const bodyFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-    const presenceFilter = trackVoiceMiniNode(ctx.createBiquadFilter());
-    const gain = trackVoiceMiniNode(ctx.createGain());
-
-    bodyFilter.type = "highpass";
-    bodyFilter.frequency.value = 72;
-    bodyFilter.Q.value = 0.52;
-    presenceFilter.type = "peaking";
-    presenceFilter.frequency.value = 2800;
-    presenceFilter.Q.value = 1.1;
-    presenceFilter.gain.value = 1.6;
-    source.buffer = voiceBuffer;
-    source.playbackRate.value = barIndex % 4 === 2 ? 1.015 : 1;
-    gain.gain.setValueAtTime(0.0001, phraseStart);
-    gain.gain.linearRampToValueAtTime(0.72 * voicePresence, phraseStart + 0.035);
-    gain.gain.setValueAtTime(0.64 * voicePresence, phraseStart + Math.max(0.08, sourceDuration - 0.16));
-    gain.gain.linearRampToValueAtTime(0.0001, phraseStart + sourceDuration);
-    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, bodyFilter);
-    bodyFilter.connect(presenceFilter);
-    presenceFilter.connect(gain);
-    connectMiniNode(ctx, gain, voiceBus, barIndex % 2 ? -0.08 : 0.08);
-    source.start(phraseStart, phraseOffset, sourceDuration);
-    source.stop(phraseStart + sourceDuration + 0.05);
-  }
-
-  if (safeDuration > beat * 0.7 && barIndex % 2 === 1 && lengthRatio <= 1.25 && activeVoiceSteps.length > 1) {
-    const sliceDuration = Math.min(0.42, Math.max(0.12, beat * 0.6 * Math.max(0.72, lengthRatio)));
-    const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
-    activeVoiceSteps.slice(1, 4).forEach((step, index) => {
-      const time = voiceMiniStepBeatTime(start, beat, step);
-      if (time + sliceDuration > start + barDuration) return;
-      const chop = trackVoiceMiniNode(ctx.createBufferSource());
-      const chopGain = trackVoiceMiniNode(ctx.createGain());
-      const offset = availableChopOffset * ((index + 1) / Math.max(2, activeVoiceSteps.length));
-      chop.buffer = voiceBuffer;
-      chop.playbackRate.value = index ? 0.96 : 1.06;
-      chopGain.gain.setValueAtTime(0.0001, time);
-      chopGain.gain.linearRampToValueAtTime(0.32 * voicePresence, time + 0.018);
-      chopGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
-      connectVoiceEffectGraph(ctx, chop, selectedVoiceEffect, chopGain);
-      connectMiniNode(ctx, chopGain, voiceBus, index ? -0.16 : 0.18);
-      chop.start(time, offset, Math.min(sliceDuration, safeDuration));
-      chop.stop(time + sliceDuration + 0.04);
-    });
-  }
-
-  if (safeDuration > beat * 0.35 && beatmasherAmount > 0.04) {
-    const sliceDuration = Math.min(0.18, Math.max(0.07, beat * 0.28));
-    const repeats = beatmasherAmount > 0.7 ? 3 : beatmasherAmount > 0.32 ? 2 : 1;
-    const availableChopOffset = Math.max(0, safeDuration - sliceDuration);
-    const baseOffset = availableChopOffset * ((barIndex % 3) / 3);
-    for (let i = 0; i < repeats; i += 1) {
-      const anchorStep = activeVoiceSteps[(i + 1) % activeVoiceSteps.length] || 7;
-      const time = voiceMiniStepBeatTime(start, beat, anchorStep) + beat * 0.05 * i;
-      if (time + sliceDuration > start + barDuration) break;
-      const mash = trackVoiceMiniNode(ctx.createBufferSource());
-      const mashGain = trackVoiceMiniNode(ctx.createGain());
-      mash.buffer = voiceBuffer;
-      mash.playbackRate.value = 1 + beatmasherAmount * 0.28;
-      mashGain.gain.setValueAtTime(0.0001, time);
-      mashGain.gain.linearRampToValueAtTime((0.16 + beatmasherAmount * 0.22) * voicePresence, time + 0.014);
-      mashGain.gain.linearRampToValueAtTime(0.0001, time + sliceDuration);
-      connectVoiceEffectGraph(ctx, mash, selectedVoiceEffect, mashGain);
-      connectMiniNode(ctx, mashGain, voiceBus, i % 2 ? -0.22 : 0.22);
-      mash.start(time, baseOffset, Math.min(sliceDuration, safeDuration));
-      mash.stop(time + sliceDuration + 0.03);
-    }
-  }
-}
-
-function createVoicePadBus(ctx) {
-  return connectVoiceMiniOutputBus(ctx, { preview: true });
-}
-
-function primeVoiceMiniAudioFromGesture(ctx = audioContext) {
-  if (!ctx || ctx.state === "closed") return false;
-  try {
-    audioUnlocked = true;
-    applyAudioMasterVolume({ immediate: true });
-    const unlockOsc = trackVoiceMiniNode(ctx.createOscillator());
-    const unlockGain = trackVoiceMiniNode(ctx.createGain());
-    const now = ctx.currentTime || 0;
-    unlockOsc.type = "sine";
-    unlockOsc.frequency.value = 58;
-    unlockGain.gain.setValueAtTime(0.0001, now);
-    unlockGain.gain.setValueAtTime(0.0001, now + 0.04);
-    unlockOsc.connect(unlockGain);
-    unlockGain.connect(ctx.destination);
-    unlockOsc.start(now);
-    unlockOsc.stop(now + 0.04);
-    voiceMiniTrackTimers.push(window.setTimeout(() => {
-      try {
-        unlockOsc.disconnect();
-        unlockGain.disconnect();
-      } catch (_err) {
-        // The unlock pulse may already be disconnected by stopVoiceMiniTrack.
-      }
-    }, 180));
-    return true;
-  } catch (_err) {
-    return false;
-  }
-}
-
-async function resumeVoiceMiniAudioContext(ctx) {
-  if (!ctx || ctx.state === "closed") return false;
-  if (ctx.state !== "suspended") return true;
-  const timeout = new Promise((resolve) => {
-    window.setTimeout(() => resolve(false), 1200);
-  });
-  const resumed = ctx.resume()
-    .then(() => true)
-    .catch(() => false);
-  await Promise.race([resumed, timeout]);
-  return ctx.state !== "suspended" && ctx.state !== "closed";
-}
-
-async function ensureVoiceMiniLoop({ requireVoice = false } = {}) {
-  if (!initAudioEngine() || !audioContext) {
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
-    setVoiceStatus(t("voiceMiniAudioBlocked"));
-    return false;
-  }
-  audioUnlocked = true;
-  primeVoiceMiniAudioFromGesture(audioContext);
-  const audioReady = await resumeVoiceMiniAudioContext(audioContext);
-  if (!audioReady) {
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
-    setVoiceStatus(t("voiceMiniAudioBlocked"));
-    return false;
-  }
-  applyAudioMasterVolume({ immediate: true });
-  updateAudioToggleUi();
-  if (requireVoice && !voiceRecordingBlob) {
-    setVoiceStatus(t("voiceNeedRecording"));
-    showToast(t("voiceNeedRecording"));
-    return false;
-  }
-  if (voiceRecordingBlob && !voiceMiniVoiceBuffer) {
-    voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
-  }
-  if (voiceMiniTrackPlaying) return true;
-  const ctx = audioContext;
-  const master = connectVoiceMiniOutputBus(ctx);
-
-  voiceMiniNextBarTime = ctx.currentTime + VOICE_MINI_START_LATENCY_SEC;
-  voiceMiniBarIndex = 0;
-  voiceMiniTrackPlaying = true;
-  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPlaying");
-  setVoiceStatus(t("voiceMiniPlaying"));
-  updateVoiceLabUi();
-
-  const scheduleAhead = () => {
-    if (!voiceMiniTrackPlaying) return;
-    const lookAhead = VOICE_MINI_SCHEDULE_LOOKAHEAD_SEC;
-    while (voiceMiniNextBarTime < ctx.currentTime + lookAhead) {
-      const barBeat = voiceMiniBeatDuration();
-      if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      if (voiceMiniPadState.clap) scheduleVoiceMiniClapLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      if (voiceMiniPadState.synth) scheduleVoiceMiniSynthLoop(ctx, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      if (voiceMiniPadState.voice && voiceMiniVoiceBuffer) {
-        scheduleVoiceMiniVoiceLoop(ctx, voiceMiniVoiceBuffer, master, voiceMiniNextBarTime, barBeat, voiceMiniBarIndex);
-      }
-      voiceMiniNextBarTime += barBeat * 4;
-      voiceMiniBarIndex += 1;
-    }
-  };
-
-  scheduleAhead();
-  voiceMiniTrackScheduler = window.setInterval(scheduleAhead, VOICE_MINI_SCHEDULE_INTERVAL_MS);
-  return true;
-}
-
-async function triggerVoiceDawPad(kind = "kick") {
-  if (kind === "voice" && !voiceRecordingBlob) {
-    setVoiceStatus(t("voiceNeedRecording"));
-    showToast(t("voiceNeedRecording"));
-    return;
-  }
-  const nextActive = !voiceMiniPadState[kind];
-  voiceMiniPadState[kind] = nextActive;
-  if (kind === "voice" && voiceMiniPadState.voice && audioContext) {
-    voiceMiniVoiceBuffer = await getNormalizedVoiceBuffer(audioContext);
-  }
-  syncVoicePadButtons();
-  if (!Object.values(voiceMiniPadState).some(Boolean)) {
-    stopVoiceMiniTrack();
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadLoopOff", {
-      pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`)
-    });
-    return;
-  }
-  const loopReady = await ensureVoiceMiniLoop({ requireVoice: kind === "voice" && voiceMiniPadState.voice });
-  if (!loopReady && nextActive) {
-    voiceMiniPadState[kind] = false;
-    syncVoicePadButtons();
-    if (!Object.values(voiceMiniPadState).some(Boolean)) stopVoiceMiniTrack({ silent: true });
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniAudioBlocked");
-    showToast(t("voiceMiniAudioBlocked"));
-    return;
-  }
-  if (voiceMiniStatus) {
-    const padLabel = t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`);
-    voiceMiniStatus.textContent = t(voiceMiniPadState[kind] ? "voiceMiniPadLoopOn" : "voiceMiniPadLoopOff", { pad: padLabel });
-  }
-}
-
-async function previewVoiceDawPad(kind = "kick") {
-  if (!initAudioEngine() || !audioContext) return;
-  audioUnlocked = true;
-  await audioContext.resume().catch(() => {});
-  const ctx = audioContext;
-  const bus = createVoicePadBus(ctx);
-  const now = ctx.currentTime + 0.035;
-  const beat = voiceMiniBeatDuration();
-  if (kind === "kick") {
-    scheduleVoiceMiniKick(ctx, bus, now, { accent: true });
-  } else if (kind === "bass") {
-    scheduleVoiceMiniBass(ctx, bus, now, beat, beat);
-  } else if (kind === "hat") {
-    scheduleVoiceMiniHat(ctx, bus, now, { open: true, pan: 0.18 });
-  } else if (kind === "clap") {
-    scheduleVoiceMiniClap(ctx, bus, now, { accent: true, pan: 0.08 });
-  } else if (kind === "synth") {
-    scheduleVoiceMiniSynthLoop(ctx, bus, now, beat, 0);
-  } else if (kind === "voice") {
-    if (!voiceRecordingBlob) {
-      setVoiceStatus(t("voiceNeedRecording"));
-      showToast(t("voiceNeedRecording"));
-      return;
-    }
-    const voiceBuffer = await getNormalizedVoiceBuffer(ctx);
-    if (!voiceBuffer) return;
-    const source = trackVoiceMiniNode(ctx.createBufferSource());
-    const gain = trackVoiceMiniNode(ctx.createGain());
-    const previewDuration = Math.min(2.6, Math.max(0.12, voiceBuffer.duration * voiceMiniVoiceLengthRatio()));
-    const voicePresence = voiceMiniVoiceLevelGain() * Math.max(0.62, Math.min(1.08, audioVolume || 0.96));
-    source.buffer = voiceBuffer;
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.linearRampToValueAtTime(0.74 * voicePresence, now + 0.02);
-    gain.gain.setValueAtTime(0.64 * voicePresence, now + Math.max(0.04, previewDuration - 0.08));
-    gain.gain.linearRampToValueAtTime(0.0001, now + previewDuration);
-    connectVoiceEffectGraph(ctx, source, selectedVoiceEffect, gain);
-    gain.connect(voiceMiniVoiceDestination(bus));
-    source.start(now, 0, previewDuration);
-    source.stop(now + previewDuration + 0.04);
-  }
-  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniPadHint", { pad: t(`voicePad${kind.charAt(0).toUpperCase()}${kind.slice(1)}`) });
-}
-
-function voiceMiniBasePadState(presetName = voiceMiniActivePreset) {
-  const normalized = String(presetName || "techno");
-  return {
-    kick: true,
-    bass: true,
-    hat: true,
-    clap: normalized !== "ambient",
-    synth: true,
-    voice: Boolean(voiceRecordingBlob)
-  };
-}
-
-function ensureVoiceMiniAudiblePadState() {
-  const hasAudibleLayer = ["kick", "bass", "hat", "clap", "synth", "voice"].some((kind) => Boolean(voiceMiniPadState[kind]));
-  if (hasAudibleLayer) return;
-  voiceMiniPadState = voiceMiniBasePadState();
-  syncVoicePadButtons();
-}
-
-function voiceMiniNormalizeSteps(values = []) {
-  const fallback = Array.isArray(values) && values.length ? values : VOICE_MINI_DEFAULT_PATTERN.kick;
-  return Array.from({ length: 8 }, (_, index) => Number(fallback[index % fallback.length]) ? 1 : 0);
-}
-
-function setVoiceMiniPatternKind(kind = "kick", steps = []) {
-  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
-  voiceMiniPattern[kind] = voiceMiniNormalizeSteps(steps);
-}
-
-function rotateVoiceMiniSteps(steps = [], offset = 0) {
-  const normalized = voiceMiniNormalizeSteps(steps);
-  const safeOffset = ((Math.round(Number(offset) || 0) % 8) + 8) % 8;
-  return normalized.map((_, index) => normalized[(index - safeOffset + 8) % 8]);
-}
-
-function rotateVoiceMiniPatternKind(kind = "kick", offset = 0) {
-  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
-  voiceMiniPattern[kind] = rotateVoiceMiniSteps(voiceMiniPatternSteps(kind), offset);
-}
-
-function ensureVoiceMiniPatternHit(kind = "kick", fallbackIndex = 0) {
-  if (!VOICE_MINI_PATTERN_KINDS.includes(kind)) return;
-  if (voiceMiniPatternHitCount(kind) > 0) return;
-  const steps = voiceMiniPatternSteps(kind);
-  steps[((Math.round(Number(fallbackIndex) || 0) % 8) + 8) % 8] = 1;
-}
-
-function finalizeVoiceMiniPatternChange() {
-  renderVoiceMiniSequencer();
-  syncVoiceMiniPresetButtons();
-  syncVoicePadButtons();
-  updateVoiceMiniRecipe();
-  if (voiceMiniTrackPlaying) refreshVoiceMiniOutputBus();
-}
-
-function mutateVoiceMiniPatternForIdea(presetName = voiceMiniActivePreset) {
-  const preset = VOICE_MINI_PRESETS[presetName] || VOICE_MINI_PRESETS.techno;
-  voiceMiniPattern = cloneVoiceMiniPattern(preset.pattern);
-  const rotationChoices = [-3, -2, -1, 1, 2, 3];
-  ["bass", "hat", "synth", "voice"].forEach((kind) => {
-    if (Math.random() < 0.72) {
-      rotateVoiceMiniPatternKind(kind, rotationChoices[Math.floor(Math.random() * rotationChoices.length)]);
-    }
-  });
-
-  const accentKinds = presetName === "ambient"
-    ? ["synth", "synth", "hat", "bass"]
-    : presetName === "dnb"
-      ? ["kick", "bass", "hat", "hat", "synth"]
-      : presetName === "trap"
-        ? ["hat", "hat", "bass", "synth", "kick"]
-        : ["bass", "hat", "synth", "clap", "kick"];
-  const mutationCount = 3 + Math.floor(Math.random() * 4);
-  for (let i = 0; i < mutationCount; i += 1) {
-    const kind = accentKinds[Math.floor(Math.random() * accentKinds.length)];
-    const steps = voiceMiniPatternSteps(kind);
-    const index = Math.floor(Math.random() * 8);
-    if (kind === "kick" && presetName !== "breaks" && presetName !== "trap" && index % 2 === 0) continue;
-    if (kind === "clap" && [2, 6].includes(index)) continue;
-    steps[index] = steps[index] ? 0 : 1;
-  }
-
-  if (presetName === "techno" || presetName === "psy" || presetName === "darkprog") {
-    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 1, 0, 1, Math.random() < 0.45 ? 1 : 0]);
-  }
-  if (presetName === "ambient") {
-    setVoiceMiniPatternKind("kick", [1, 0, 0, 0, Math.random() < 0.38 ? 1 : 0, 0, 0, 0]);
-    setVoiceMiniPatternKind("hat", [0, 0, 1, 0, 0, Math.random() < 0.5 ? 1 : 0, 1, 0]);
-  }
-
-  ensureVoiceMiniPatternHit("kick", 0);
-  ensureVoiceMiniPatternHit("bass", presetName === "psy" ? 1 : 0);
-  ensureVoiceMiniPatternHit("hat", 2);
-  ensureVoiceMiniPatternHit("synth", 0);
-  renderVoiceMiniSequencer();
-  updateVoiceMiniRecipe();
-}
-
-function applyVoiceMiniIdeaVariation(presetName = voiceMiniActivePreset) {
-  const variations = {
-    techno: { drive: 18, delay: 12, phaser: 16, beatmasher: 8, synth: 44, master: 112 },
-    breaks: { drive: 14, delay: 18, phaser: 20, beatmasher: 14, synth: 50, master: 110 },
-    trap: { drive: 20, delay: 20, phaser: 14, beatmasher: 18, synth: 54, master: 108 },
-    psy: { drive: 24, delay: 10, phaser: 24, beatmasher: 10, synth: 48, master: 114 },
-    ambient: { drive: 8, delay: 32, phaser: 34, beatmasher: 4, synth: 70, master: 104 },
-    house: { drive: 12, delay: 18, phaser: 18, beatmasher: 6, synth: 46, master: 110 },
-    dnb: { drive: 18, delay: 12, phaser: 14, beatmasher: 18, synth: 42, master: 112 },
-    darkprog: { drive: 22, delay: 14, phaser: 28, beatmasher: 10, synth: 52, master: 113 }
-  };
-  const base = variations[presetName] || variations.techno;
-  const drift = () => Math.round((Math.random() - 0.5) * 8);
-  const synthAlternates = {
-    techno: ["stab", "acid", "pluck"],
-    breaks: ["pluck", "glow", "stab"],
-    trap: ["sub", "pluck", "acid"],
-    psy: ["acid", "stab", "glow"],
-    ambient: ["pad", "glow", "sub"],
-    house: ["stab", "glow", "pluck"],
-    dnb: ["sub", "acid", "pluck"],
-    darkprog: ["acid", "pad", "stab"]
-  };
-  const grooveAlternates = {
-    techno: ["tight", "late"],
-    breaks: ["swing", "counter"],
-    trap: ["late", "counter"],
-    psy: ["counter", "tight"],
-    ambient: ["floating", "late"],
-    house: ["swing", "late"],
-    dnb: ["counter", "tight"],
-    darkprog: ["late", "counter"]
-  };
-  const pick = (list = []) => list[Math.floor(Math.random() * list.length)];
-  if (Math.random() < 0.68) updateVoiceMiniSynthType(pick(synthAlternates[presetName] || synthAlternates.techno), { announce: false });
-  if (Math.random() < 0.62) updateVoiceMiniGrooveMode(pick(grooveAlternates[presetName] || grooveAlternates.techno), { announce: false });
-  updateVoiceMiniSwing(voiceMiniSwingAmount + Math.round(drift() * 0.75), { announce: false });
-  updateVoiceMiniDrive(base.drive + drift(), { announce: false });
-  updateVoiceMiniDelay(base.delay + drift(), { announce: false });
-  updateVoiceMiniPhaser(base.phaser + drift(), { announce: false });
-  updateVoiceMiniBeatmasher(base.beatmasher + drift(), { announce: false });
-  updateVoiceMiniSynth(base.synth + drift(), { announce: false });
-  updateVoiceMiniMaster(base.master + Math.round(drift() * 0.5), { announce: false });
-}
-
-async function generateVoiceMiniIdea() {
-  const presets = VOICE_MINI_IDEA_PRESETS;
-  const currentIndex = Math.max(0, presets.indexOf(voiceMiniActivePreset));
-  const offset = 1 + Math.floor(Math.random() * Math.max(1, presets.length - 1));
-  const nextPreset = presets[(currentIndex + offset) % presets.length] || "techno";
-  const wasPlaying = voiceMiniTrackPlaying;
-  applyVoiceMiniPreset(nextPreset);
-  mutateVoiceMiniPatternForIdea(nextPreset);
-  applyVoiceMiniIdeaVariation(nextPreset);
-  ensureVoiceMiniAudiblePadState();
-  if (voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniIdeaGenerated", {
-      preset: voiceMiniPresetDisplayLabel(nextPreset),
-      bpm: voiceMiniBpm
-    });
-  }
-  if (!wasPlaying) {
-    await playVoiceMiniTrack();
-  }
-}
-
-function voiceMiniMorphLabel(mode = "") {
-  const labels = {
-    floor: t("voiceMiniMorphFloor"),
-    deep: t("voiceMiniMorphDeep"),
-    weird: t("voiceMiniMorphWeird"),
-    open: t("voiceMiniMorphOpen")
-  };
-  return labels[mode] || labels.floor;
-}
-
-function applyVoiceMiniMorph(mode = "floor") {
-  const normalized = ["floor", "deep", "weird", "open"].includes(mode) ? mode : "floor";
-  voiceMiniActivePreset = "";
-  voiceMiniPattern = cloneVoiceMiniPattern(voiceMiniPattern);
-
-  if (normalized === "floor") {
-    voiceMiniPadState = {
-      kick: true,
-      bass: true,
-      hat: true,
-      clap: true,
-      synth: true,
-      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
-    };
-    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 1, 0, 1, 0]);
-    setVoiceMiniPatternKind("bass", [1, 0, 0, 1, 1, 0, 0, 1]);
-    setVoiceMiniPatternKind("hat", [1, 1, 1, 1, 1, 1, 1, 1]);
-    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 0, 1, 0]);
-    setVoiceMiniPatternKind("synth", [1, 0, 0, 0, 1, 0, 1, 0]);
-    updateVoiceMiniBpm(Math.max(124, Math.min(138, voiceMiniBpm + 2)), { announce: false });
-    updateVoiceMiniSwing(Math.max(4, voiceMiniSwingAmount - 4), { announce: false });
-    updateVoiceMiniSynthType(voiceMiniSynthType === "pad" ? "stab" : voiceMiniSynthType, { announce: false });
-    updateVoiceMiniGrooveMode("tight", { announce: false });
-    updateVoiceMiniDrive(voiceMiniDriveAmount + 10, { announce: false });
-    updateVoiceMiniMaster(voiceMiniMasterLevel + 6, { announce: false });
-    updateVoiceMiniDelay(Math.max(8, voiceMiniDelayAmount - 6), { announce: false });
-    updateVoiceMiniBeatmasher(Math.max(0, voiceMiniBeatmasherAmount - 4), { announce: false });
-  } else if (normalized === "deep") {
-    voiceMiniPadState = {
-      kick: true,
-      bass: true,
-      hat: true,
-      clap: false,
-      synth: true,
-      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
-    };
-    setVoiceMiniPatternKind("kick", [1, 0, 0, 0, 1, 0, 0, 0]);
-    setVoiceMiniPatternKind("bass", [1, 0, 0, 0, 0, 0, 1, 0]);
-    setVoiceMiniPatternKind("hat", [0, 0, 1, 0, 0, 1, 0, 0]);
-    setVoiceMiniPatternKind("clap", [0, 0, 0, 0, 0, 0, 1, 0]);
-    setVoiceMiniPatternKind("synth", [1, 0, 1, 0, 1, 0, 1, 0]);
-    updateVoiceMiniBpm(Math.max(98, voiceMiniBpm - 6), { announce: false });
-    updateVoiceMiniSwing(Math.min(24, voiceMiniSwingAmount + 4), { announce: false });
-    updateVoiceMiniSynthType(voiceMiniSynthType === "acid" ? "pad" : "pad", { announce: false });
-    updateVoiceMiniGrooveMode("floating", { announce: false });
-    updateVoiceMiniDelay(voiceMiniDelayAmount + 18, { announce: false });
-    updateVoiceMiniPhaser(voiceMiniPhaserAmount + 16, { announce: false });
-    updateVoiceMiniSynth(voiceMiniSynthLevel + 18, { announce: false });
-    updateVoiceMiniMaster(voiceMiniMasterLevel - 4, { announce: false });
-  } else if (normalized === "weird") {
-    voiceMiniPadState = {
-      kick: true,
-      bass: true,
-      hat: true,
-      clap: true,
-      synth: true,
-      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
-    };
-    setVoiceMiniPatternKind("kick", [1, 0, 0, 1, 0, 1, 0, 0]);
-    setVoiceMiniPatternKind("bass", [0, 1, 0, 0, 1, 0, 1, 0]);
-    setVoiceMiniPatternKind("hat", [1, 1, 0, 1, 1, 0, 1, 1]);
-    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 1, 0, 0]);
-    setVoiceMiniPatternKind("synth", [1, 0, 1, 0, 0, 1, 0, 1]);
-    updateVoiceMiniBpm(Math.min(176, voiceMiniBpm + 4), { announce: false });
-    updateVoiceMiniSwing(Math.min(32, voiceMiniSwingAmount + 8), { announce: false });
-    updateVoiceMiniSynthType("acid", { announce: false });
-    updateVoiceMiniGrooveMode("counter", { announce: false });
-    updateVoiceMiniDrive(voiceMiniDriveAmount + 16, { announce: false });
-    updateVoiceMiniBeatmasher(voiceMiniBeatmasherAmount + 22, { announce: false });
-    updateVoiceMiniDelay(voiceMiniDelayAmount + 6, { announce: false });
-  } else {
-    voiceMiniPadState = {
-      kick: true,
-      bass: true,
-      hat: true,
-      clap: voiceMiniActivePreset !== "ambient",
-      synth: true,
-      voice: Boolean(voiceRecordingBlob && voiceMiniPadState.voice)
-    };
-    setVoiceMiniPatternKind("kick", [1, 0, 1, 0, 0, 0, 1, 0]);
-    setVoiceMiniPatternKind("bass", [1, 0, 0, 0, 1, 0, 0, 1]);
-    setVoiceMiniPatternKind("hat", [0, 1, 1, 0, 0, 1, 1, 0]);
-    setVoiceMiniPatternKind("clap", [0, 0, 1, 0, 0, 0, 1, 0]);
-    setVoiceMiniPatternKind("synth", [1, 1, 0, 0, 1, 0, 1, 0]);
-    updateVoiceMiniSwing(Math.min(26, voiceMiniSwingAmount + 5), { announce: false });
-    updateVoiceMiniSynthType(voiceMiniSynthType === "sub" ? "glow" : "glow", { announce: false });
-    updateVoiceMiniGrooveMode("swing", { announce: false });
-    updateVoiceMiniDelay(voiceMiniDelayAmount + 16, { announce: false });
-    updateVoiceMiniPhaser(voiceMiniPhaserAmount + 12, { announce: false });
-    updateVoiceMiniSynth(voiceMiniSynthLevel + 14, { announce: false });
-  }
-
-  ensureVoiceMiniPatternHit("kick", 0);
-  ensureVoiceMiniPatternHit("bass", 0);
-  ensureVoiceMiniPatternHit("synth", 0);
-  finalizeVoiceMiniPatternChange();
-  if (voiceMiniStatus) {
-    voiceMiniStatus.textContent = t("voiceMiniMorphApplied", { move: voiceMiniMorphLabel(normalized) });
-  }
-}
-
-function cleanupVoiceMiniNodeBucket(bucket = []) {
-  bucket.forEach((node) => {
-    try {
-      if (typeof node.stop === "function") node.stop();
-    } catch (_err) {
-      // ignore already-rendered node
-    }
-    try {
-      if (typeof node.disconnect === "function") node.disconnect();
-    } catch (_err) {
-      // ignore disconnected node
-    }
-  });
-}
-
-async function withVoiceMiniNodeBucket(callback) {
-  const previousBucket = voiceMiniNodeBucket;
-  const bucket = [];
-  voiceMiniNodeBucket = bucket;
-  try {
-    return await callback(bucket);
-  } finally {
-    voiceMiniNodeBucket = previousBucket;
-    cleanupVoiceMiniNodeBucket(bucket);
-  }
-}
-
-function scheduleVoiceMiniArrangement(ctx, destination, start, beat, bars, voiceBuffer = null) {
-  for (let bar = 0; bar < bars; bar += 1) {
-    const barStart = start + beat * 4 * bar;
-    if (voiceMiniPadState.kick) scheduleVoiceMiniKickLoop(ctx, destination, barStart, beat, bar);
-    if (voiceMiniPadState.hat) scheduleVoiceMiniHatLoop(ctx, destination, barStart, beat, bar);
-    if (voiceMiniPadState.clap) scheduleVoiceMiniClapLoop(ctx, destination, barStart, beat, bar);
-    if (voiceMiniPadState.bass) scheduleVoiceMiniBassLoop(ctx, destination, barStart, beat, bar);
-    if (voiceMiniPadState.synth) scheduleVoiceMiniSynthLoop(ctx, destination, barStart, beat, bar);
-    if (voiceMiniPadState.voice && voiceBuffer) {
-      scheduleVoiceMiniVoiceLoop(ctx, voiceBuffer, destination, barStart, beat, bar);
-    }
-  }
-}
-
-function audioBufferToWavBlob(buffer) {
-  const channelCount = Math.min(2, Math.max(1, buffer.numberOfChannels || 1));
-  const sampleRate = buffer.sampleRate || 44100;
-  const bytesPerSample = 2;
-  const blockAlign = channelCount * bytesPerSample;
-  const dataSize = buffer.length * blockAlign;
-  const arrayBuffer = new ArrayBuffer(44 + dataSize);
-  const view = new DataView(arrayBuffer);
-  const writeString = (offset, value) => {
-    for (let i = 0; i < value.length; i += 1) {
-      view.setUint8(offset + i, value.charCodeAt(i));
-    }
-  };
-
-  writeString(0, "RIFF");
-  view.setUint32(4, 36 + dataSize, true);
-  writeString(8, "WAVE");
-  writeString(12, "fmt ");
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, channelCount, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * blockAlign, true);
-  view.setUint16(32, blockAlign, true);
-  view.setUint16(34, 16, true);
-  writeString(36, "data");
-  view.setUint32(40, dataSize, true);
-
-  const channels = Array.from({ length: channelCount }, (_, index) => buffer.getChannelData(index));
-  let offset = 44;
-  for (let i = 0; i < buffer.length; i += 1) {
-    for (let channel = 0; channel < channelCount; channel += 1) {
-      const sample = Math.max(-1, Math.min(1, channels[channel][i] || 0));
-      view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
-      offset += bytesPerSample;
-    }
-  }
-
-  return new Blob([arrayBuffer], { type: "audio/wav" });
-}
-
-async function exportVoiceMiniTrack() {
-  const OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  if (!OfflineContext) {
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportUnsupported");
-    showToast(t("voiceMiniExportUnsupported"));
-    return;
-  }
-  if (voiceMiniRendering) return;
-  ensureVoiceMiniAudiblePadState();
-  voiceMiniRendering = true;
-  if (voiceMiniExportBtn) voiceMiniExportBtn.textContent = t("voiceMiniExportBusy");
-  if (voiceMiniExportLink) voiceMiniExportLink.classList.add("hidden");
-  updateVoiceLabUi();
-  if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportBusy");
-
-  try {
-    const sampleRate = 44100;
-    const beat = voiceMiniBeatDuration();
-    const bars = VOICE_MINI_EXPORT_BARS;
-    const renderDuration = beat * 4 * bars + 1.2;
-    let voiceBuffer = null;
-    if (voiceMiniPadState.voice && voiceRecordingBlob) {
-      if (initAudioEngine() && audioContext) {
-        await resumeVoiceMiniAudioContext(audioContext);
-        voiceBuffer = await getNormalizedVoiceBuffer(audioContext);
-      }
-    }
-
-    const renderedBuffer = await withVoiceMiniNodeBucket(async () => {
-      const offlineCtx = new OfflineContext(2, Math.ceil(sampleRate * renderDuration), sampleRate);
-      const bus = connectVoiceMiniOutputBus(offlineCtx, { assign: false });
-      scheduleVoiceMiniArrangement(offlineCtx, bus, 0.08, beat, bars, voiceBuffer);
-      return offlineCtx.startRendering();
-    });
-    const wavBlob = audioBufferToWavBlob(renderedBuffer);
-    if (voiceMiniExportUrl) URL.revokeObjectURL(voiceMiniExportUrl);
-    voiceMiniExportUrl = URL.createObjectURL(wavBlob);
-    const filename = `sonic-search-${voiceMiniActivePreset || "mini"}-${voiceMiniBpm}bpm.wav`;
-    if (voiceMiniExportLink) {
-      voiceMiniExportLink.href = voiceMiniExportUrl;
-      voiceMiniExportLink.download = filename;
-      voiceMiniExportLink.textContent = t("voiceMiniExportReady");
-      voiceMiniExportLink.classList.remove("hidden");
-      voiceMiniExportLink.click();
-    }
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportDone");
-    showToast(t("voiceMiniExportDone"));
-  } catch (_err) {
-    if (voiceMiniStatus) voiceMiniStatus.textContent = t("voiceMiniExportFailed");
-    showToast(t("voiceMiniExportFailed"));
-  } finally {
-    voiceMiniRendering = false;
-    if (voiceMiniExportBtn) voiceMiniExportBtn.textContent = t("voiceMiniExportBtn");
-    updateVoiceLabUi();
-  }
-}
-
-async function playVoiceMiniTrack() {
-  const generation = stopAllActivePlayback({ reason: "voice_mini_start" });
-  if (!initAudioEngine() || !audioContext) {
-    setVoiceStatus(t("voiceMicUnsupported"));
-    return;
-  }
-  stopActiveVoicePlayback();
-  stopVoiceMiniTrack({ silent: true });
-  audioUnlocked = true;
-  primeVoiceMiniAudioFromGesture(audioContext);
-  await resumeVoiceMiniAudioContext(audioContext);
-
-  ensureVoiceMiniAudiblePadState();
-  const loopReady = await ensureVoiceMiniLoop({ requireVoice: voiceMiniPadState.voice });
-  if (generation !== playbackGeneration) {
-    stopVoiceMiniTrack({ silent: true });
-    return;
-  }
-  if (!loopReady) {
-    voiceMiniPadState.kick = false;
-    voiceMiniPadState.bass = false;
-    voiceMiniPadState.hat = false;
-    voiceMiniPadState.clap = false;
-    voiceMiniPadState.synth = false;
-    voiceMiniPadState.voice = false;
-    syncVoicePadButtons();
-    updateVoiceLabUi();
-    clearActivePlayback(generation);
-    return;
-  }
-  setActivePlayback({
-    type: "voice-mini",
-    trackKey: "voice-mini",
-    generation,
-    player: voiceMiniOutputBus,
-    state: "playing"
-  });
-}
-
-function connectVoiceEffectGraph(ctx, source, effect, output) {
-  const filter = ctx.createBiquadFilter();
-  const delay = ctx.createDelay(1.2);
-  const feedback = ctx.createGain();
-  const wet = ctx.createGain();
-  const dry = ctx.createGain();
-
-  if (effect === "chipmunk") {
-    source.playbackRate.value = 1.55;
-    filter.type = "highpass";
-    filter.frequency.value = 420;
-    source.connect(filter);
-    filter.connect(output);
-    return;
-  }
-
-  if (effect === "deep") {
-    source.playbackRate.value = 0.72;
-    filter.type = "lowpass";
-    filter.frequency.value = 1800;
-    source.connect(filter);
-    filter.connect(output);
-    return;
-  }
-
-  if (effect === "telephone") {
-    const highpass = ctx.createBiquadFilter();
-    const lowpass = ctx.createBiquadFilter();
-    highpass.type = "highpass";
-    highpass.frequency.value = 620;
-    lowpass.type = "lowpass";
-    lowpass.frequency.value = 2500;
-    source.connect(highpass);
-    highpass.connect(lowpass);
-    lowpass.connect(output);
-    return;
-  }
-
-  if (effect === "alien") {
-    source.playbackRate.value = 1.18;
-    filter.type = "bandpass";
-    filter.frequency.value = 880;
-    filter.Q.value = 5.8;
-    delay.delayTime.value = 0.08;
-    feedback.gain.value = 0.28;
-    wet.gain.value = 0.42;
-    dry.gain.value = 0.78;
-    source.connect(filter);
-    filter.connect(dry);
-    filter.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(wet);
-    dry.connect(output);
-    wet.connect(output);
-    return;
-  }
-
-  if (effect === "echo") {
-    delay.delayTime.value = 0.23;
-    feedback.gain.value = 0.38;
-    wet.gain.value = 0.48;
-    dry.gain.value = 0.82;
-    source.connect(dry);
-    source.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(wet);
-    dry.connect(output);
-    wet.connect(output);
-    return;
-  }
-
-  if (effect === "vocoder") {
-    source.playbackRate.value = 1.02;
-    filter.type = "bandpass";
-    filter.frequency.value = 960;
-    filter.Q.value = 7;
-    delay.delayTime.value = 0.045;
-    feedback.gain.value = 0.12;
-    wet.gain.value = 0.28;
-    dry.gain.value = 0.78;
-    source.connect(filter);
-    filter.connect(dry);
-    filter.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(wet);
-    dry.connect(output);
-    wet.connect(output);
-    return;
-  }
-
-  if (effect === "wide") {
-    filter.type = "highshelf";
-    filter.frequency.value = 2800;
-    filter.gain.value = 3.5;
-    delay.delayTime.value = 0.035;
-    feedback.gain.value = 0.08;
-    wet.gain.value = 0.24;
-    dry.gain.value = 0.9;
-    source.connect(filter);
-    filter.connect(dry);
-    filter.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(wet);
-    dry.connect(output);
-    wet.connect(output);
-    return;
-  }
-
-  if (effect === "tape") {
-    source.playbackRate.value = 0.94;
-    filter.type = "lowpass";
-    filter.frequency.value = 2900;
-    filter.Q.value = 0.7;
-    delay.delayTime.value = 0.12;
-    feedback.gain.value = 0.18;
-    wet.gain.value = 0.26;
-    dry.gain.value = 0.86;
-    source.connect(filter);
-    filter.connect(dry);
-    filter.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(wet);
-    dry.connect(output);
-    wet.connect(output);
-    return;
-  }
-
-  const modulatedGain = ctx.createGain();
-  const oscillator = ctx.createOscillator();
-  const depth = ctx.createGain();
-  filter.type = "bandpass";
-  filter.frequency.value = 1050;
-  filter.Q.value = 8;
-  oscillator.type = "square";
-  oscillator.frequency.value = 38;
-  depth.gain.value = 0.22;
-  modulatedGain.gain.value = 0.72;
-  oscillator.connect(depth);
-  depth.connect(modulatedGain.gain);
-  source.connect(modulatedGain);
-  modulatedGain.connect(filter);
-  filter.connect(output);
-  oscillator.start();
-  source.addEventListener("ended", () => {
-    try {
-      oscillator.stop();
-    } catch (_err) {
-      // oscillator may already be stopped
-    }
-  }, { once: true });
-}
-
-async function playVoiceEffect() {
-  if (!voiceRecordingBlob) {
-    setVoiceStatus(t("voiceNeedRecording"));
-    showToast(t("voiceNeedRecording"));
-    return;
-  }
-  if (!initAudioEngine() || !audioContext) {
-    setVoiceStatus(t("voiceMicUnsupported"));
-    return;
-  }
-  const generation = stopAllActivePlayback({ reason: "voice_effect_start" });
-  audioUnlocked = true;
-  await audioContext.resume().catch(() => {});
-  const decoded = await getNormalizedVoiceBuffer(audioContext);
-  if (!decoded || generation !== playbackGeneration) return;
-  const source = audioContext.createBufferSource();
-  const output = audioContext.createGain();
-  source.buffer = decoded;
-  output.gain.value = Math.max(0.72, Math.min(1.32, audioVolume || 0.92)) * 1.22;
-  output.connect(audioContext.destination);
-  connectVoiceEffectGraph(audioContext, source, selectedVoiceEffect, output);
-  activeVoiceSource = source;
-  setActivePlayback({
-    type: "voice-effect",
-    trackKey: "voice-effect",
-    generation,
-    player: source,
-    state: "playing"
-  });
-  setVoiceStatus(t("voicePlaying", { effect: voiceEffectLabel(selectedVoiceEffect) }));
-  source.addEventListener("ended", () => {
-    if (activeVoiceSource === source) activeVoiceSource = null;
-    if (activePlaybackMatches({ type: "voice-effect", generation, player: source })) {
-      clearActivePlayback(generation);
-    }
-    if (voiceRecordingBlob) setVoiceStatus(t("voiceRecorded"));
-  }, { once: true });
-  source.start();
-}
-
-function setVoiceEffect(effect) {
-  selectedVoiceEffect = effect || "robot";
-  voiceEffectButtons?.querySelectorAll("button[data-voice-effect]").forEach((button) => {
-    const active = button.dataset.voiceEffect === selectedVoiceEffect;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
 }
 
 function setSearchProgress(percent) {
@@ -36022,9 +32957,8 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
-  if (requestedTab === "community" && shouldDisableCommunityForAppStore()) return "discover";
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "community", "studio", "profile", "about", "support", "legal"].includes(requestedTab)
+  return ["discover", "djs", "filters", "news", "profile", "about", "support", "legal"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -36148,9 +33082,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (appTabBar) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const targetTab = button.getAttribute("data-app-tab-target") || "";
-      const disabledForReview = targetTab === "community" && shouldDisableCommunityForAppStore();
       const privateForAdmin = targetTab === "admin" && !hasAdminAccess();
-      const disabled = disabledForReview || privateForAdmin;
+      const disabled = privateForAdmin;
       button.hidden = disabled;
       button.classList.toggle("hidden", disabled);
       button.setAttribute("aria-hidden", disabled ? "true" : "false");
@@ -36163,9 +33096,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     });
   }
   appTabPanels.forEach((panel) => {
-    const disabledForReview = panelMatchesAppTab(panel, "community") && shouldDisableCommunityForAppStore();
     const privateForAdmin = panelMatchesAppTab(panel, "admin") && !hasAdminAccess();
-    const disabled = disabledForReview || privateForAdmin;
+    const disabled = privateForAdmin;
     const isActive = !disabled && panelMatchesAppTab(panel, safeTab);
     panel.hidden = disabled;
     panel.setAttribute("aria-hidden", isActive ? "false" : "true");
@@ -36186,14 +33118,9 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     void loadAdminNewsroom();
   }
   if (safeTab === "djs") ensureDjDiscoveryReady();
-  if (safeTab === "studio") ensureVoiceLabUiReady();
   if (safeTab === "news") {
     void refreshSonicEditorial();
     void refreshDailyNews({ silent: false });
-  }
-  if (safeTab === "community" && !shouldDisableCommunityForAppStore()) {
-    void ensureSocialMvpReady();
-    void loadCommunityPosts({ silent: false });
   }
 }
 
@@ -39792,22 +36719,6 @@ function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
       stopRadioBrowserPlayer();
     } catch (_err) {}
   }
-  if (preserve !== "voice-recording") {
-    try {
-      voicePlayback?.pause();
-      if (voicePlayback) voicePlayback.currentTime = 0;
-    } catch (_err) {}
-  }
-  if (preserve !== "voice-effect") {
-    try {
-      stopActiveVoicePlayback();
-    } catch (_err) {}
-  }
-  if (preserve !== "voice-mini") {
-    try {
-      stopVoiceMiniTrack({ silent: true });
-    } catch (_err) {}
-  }
   if (preserve !== "dj") {
     try {
       window.clearTimeout(djPreviewFrameLoadTimer);
@@ -39831,6 +36742,15 @@ function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
     });
   }
   return generation;
+}
+
+function stopPlaybackForFeedbackTransition(reason = "feedback_transition") {
+  // Invalidate preview/recovery work before stopping the players. Otherwise an
+  // async lookup from the rejected card can finish during the recommendation
+  // swap and start that old track again.
+  recommendationPreviewRenderToken += 1;
+  previewRecoveryToken += 1;
+  return stopAllActivePlayback({ reason });
 }
 
 function resetYouTubePreviewEmbed() {
@@ -41799,6 +38719,119 @@ function loadSonicEditorialCache() {
   }
 }
 
+function sonicNewsCopy(key = "", replacements = {}) {
+  const table = SONIC_NEWS_I18N[currentLanguage] || SONIC_NEWS_I18N.pt;
+  const fallback = SONIC_NEWS_I18N.pt;
+  let value = String(table?.[key] || fallback?.[key] || key);
+  Object.entries(replacements).forEach(([name, replacement]) => {
+    value = value.replaceAll(`{${name}}`, String(replacement ?? ""));
+  });
+  return value;
+}
+
+function sonicLocalizedText(localizedValue, fallbackValue) {
+  return typeof localizedValue === "string" && localizedValue.trim()
+    ? localizedValue.trim()
+    : fallbackValue;
+}
+
+function mergeSonicLocalizedEntries(baseEntries = [], localizedEntries = []) {
+  const base = Array.isArray(baseEntries) ? baseEntries : [];
+  const localized = Array.isArray(localizedEntries) ? localizedEntries : [];
+  return base.map((entry, index) => {
+    const translation = localized[index] && typeof localized[index] === "object" ? localized[index] : {};
+    const merged = { ...(entry || {}) };
+    Object.entries(translation).forEach(([key, value]) => {
+      if (typeof value === "string" && value.trim()) merged[key] = value.trim();
+    });
+    return merged;
+  });
+}
+
+function localizeSonicArticle(article = {}, language = currentLanguage) {
+  const locale = ["pt", "en", "es"].includes(language) ? language : "pt";
+  const translation = locale === "pt" || !article.translations || typeof article.translations !== "object"
+    ? null
+    : article.translations[locale];
+  if (!translation || typeof translation !== "object") {
+    return { ...article, resolvedLanguage: "pt", requestedLanguage: locale };
+  }
+
+  const localized = { ...article, resolvedLanguage: locale, requestedLanguage: locale };
+  [
+    "category",
+    "eyebrow",
+    "title",
+    "excerpt",
+    "body",
+    "coverImageAlt",
+    "imageCredit",
+    "authorName",
+    "venueName",
+    "city",
+    "state",
+    "ctaLabel",
+    "disclosure"
+  ].forEach((key) => {
+    localized[key] = sonicLocalizedText(translation[key], article[key]);
+  });
+
+  const baseService = article.serviceInfo && typeof article.serviceInfo === "object" ? article.serviceInfo : {};
+  const translatedService = translation.serviceInfo && typeof translation.serviceInfo === "object"
+    ? translation.serviceInfo
+    : {};
+  localized.serviceInfo = { ...baseService };
+  ["address", "price", "ageRating", "doorsTime", "instagramLabel", "notes"].forEach((key) => {
+    localized.serviceInfo[key] = sonicLocalizedText(translatedService[key], baseService[key]);
+  });
+  localized.serviceInfo.media = mergeSonicLocalizedEntries(baseService.media, translatedService.media);
+  localized.serviceInfo.relatedLinks = mergeSonicLocalizedEntries(baseService.relatedLinks, translatedService.relatedLinks);
+  localized.lineup = mergeSonicLocalizedEntries(article.lineup, translation.lineup);
+  return localized;
+}
+
+function applySonicNewsInterfaceCopy() {
+  setText("#sonicEditorialKicker", sonicNewsCopy("headingKicker"));
+  setText("#sonicEditorialTitle", sonicNewsCopy("headingTitle"));
+  setText("#sonicEditorialIntro", sonicNewsCopy("headingIntro"));
+  setText("#sonicEditorialGuideNowLabel", sonicNewsCopy("guideNowLabel"));
+  setText("#sonicEditorialGuideNowText", sonicNewsCopy("guideNowText"));
+  setText("#sonicEditorialGuideArchiveLabel", sonicNewsCopy("guideArchiveLabel"));
+  setText("#sonicEditorialGuideArchiveText", sonicNewsCopy("guideArchiveText"));
+  setText("#sonicEditorialGuideRadarLabel", sonicNewsCopy("guideRadarLabel"));
+  setText("#sonicEditorialGuideRadarText", sonicNewsCopy("guideRadarText"));
+  setText("#sonicEditorialLatestTitleText", sonicNewsCopy("latestTitle"));
+  setText("#sonicEditorialArchiveKicker", sonicNewsCopy("archiveKicker"));
+  setText("#sonicEditorialArchiveTitle", sonicNewsCopy("archiveTitle"));
+  setText("#sonicEditorialArchiveIntro", sonicNewsCopy("archiveIntro"));
+  setText("#sonicEditorialArchiveSearchLabel", sonicNewsCopy("archiveSearchLabel"));
+  setText("#sonicEditorialExternalSourcesLabel", sonicNewsCopy("externalSources"));
+  setText("#sonicNewsReaderLineupKicker", sonicNewsCopy("lineupKicker"));
+  setText("#sonicNewsReaderLineupTitle", sonicNewsCopy("lineupTitle"));
+  setText("#sonicNewsReaderServiceKicker", sonicNewsCopy("serviceKicker"));
+  const guide = document.getElementById("sonicEditorialGuide");
+  if (guide) guide.setAttribute("aria-label", sonicNewsCopy("guideAria"));
+  if (sonicEditorialArchiveFilter) {
+    sonicEditorialArchiveFilter.placeholder = sonicNewsCopy("archiveSearchPlaceholder");
+  }
+  updateSonicEditorialArchiveMore();
+  if (sonicNewsReaderClose) sonicNewsReaderClose.setAttribute("aria-label", sonicNewsCopy("closeArticle"));
+  const readerFacts = document.getElementById("sonicNewsReaderFacts");
+  if (readerFacts) readerFacts.setAttribute("aria-label", sonicNewsCopy("factsAria"));
+}
+
+function rerenderSonicEditorialLanguage() {
+  applySonicNewsInterfaceCopy();
+  if (!sonicEditorialState.rawArticles.length) return;
+  const readerWasOpen = Boolean(sonicNewsReader?.open);
+  const activeArticleId = sonicEditorialState.activeArticleId;
+  renderSonicEditorialArticles(sonicEditorialState.rawArticles, { storeSource: false });
+  if (readerWasOpen && activeArticleId) {
+    const activeArticle = sonicEditorialState.articles.find((article) => String(article.id || "") === activeArticleId);
+    if (activeArticle) openSonicNewsReader(activeArticle);
+  }
+}
+
 function sonicNewsLocale() {
   if (currentLanguage === "en") return "en-US";
   if (currentLanguage === "es") return "es-ES";
@@ -41819,73 +38852,471 @@ function sonicArticleLocation(article = {}) {
   return [article.venueName, article.city, article.state].map((value) => String(value || "").trim()).filter(Boolean).join(" · ");
 }
 
-function sonicArticleMeta(article = {}) {
-  const location = sonicArticleLocation(article);
-  const date = sonicNewsDate(article.eventStartsAt || article.publishedAt, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
-  });
-  return [location, date].filter(Boolean).join(" · ") || "Jornal Sonic";
+function sonicArticleDateValue(value = "") {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) ? date : null;
 }
 
-function renderSonicEditorialArticles(articles = []) {
-  if (!sonicEditorialList || !sonicEditorialStatus) return;
-  sonicEditorialState.articles = Array.isArray(articles) ? articles : [];
-  sonicEditorialList.innerHTML = "";
+function sonicSameCalendarDay(firstDate, secondDate) {
+  return Boolean(firstDate && secondDate
+    && firstDate.getFullYear() === secondDate.getFullYear()
+    && firstDate.getMonth() === secondDate.getMonth()
+    && firstDate.getDate() === secondDate.getDate());
+}
+
+function sonicPublicationDayKey(value = "") {
+  const date = sonicArticleDateValue(value);
+  if (!date) return "sem-data";
+  const pad = (number) => String(number).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function sonicPublicationDayLabel(value = "") {
+  const date = sonicArticleDateValue(value);
+  if (!date) return sonicNewsCopy("publicationDateMissing");
+  return sonicNewsDate(date, {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function sonicArticlePublishedLabel(article = {}) {
+  return sonicNewsDate(article.publishedAt, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  }) || sonicNewsCopy("dateMissing");
+}
+
+function sonicArticleEventDate(article = {}, { includeTime = false } = {}) {
+  const startsAt = sonicArticleDateValue(article.eventStartsAt);
+  const endsAt = sonicArticleDateValue(article.eventEndsAt);
+  if (!startsAt) return "";
+  if (includeTime && endsAt && sonicSameCalendarDay(startsAt, endsAt)) {
+    const date = sonicNewsDate(startsAt, { dateStyle: "long" });
+    const startTime = sonicNewsDate(startsAt, { timeStyle: "short" });
+    const endTime = sonicNewsDate(endsAt, { timeStyle: "short" });
+    return `${date} · ${startTime}–${endTime}`;
+  }
+  const options = includeTime
+    ? { dateStyle: "medium", timeStyle: "short" }
+    : { day: "2-digit", month: "short", year: "numeric" };
+  const startLabel = sonicNewsDate(startsAt, options);
+  const endLabel = endsAt ? sonicNewsDate(endsAt, options) : "";
+  return endLabel && endLabel !== startLabel ? `${startLabel} — ${endLabel}` : startLabel;
+}
+
+function sonicArticleEventStatus(article = {}) {
+  const startsAt = sonicArticleDateValue(article.eventStartsAt);
+  const endsAt = sonicArticleDateValue(article.eventEndsAt);
+  const now = Date.now();
+  if (!startsAt) return { key: "news", label: sonicNewsCopy("news") };
+  if (startsAt.getTime() > now) return { key: "upcoming", label: sonicNewsCopy("upcoming") };
+  if (endsAt && endsAt.getTime() >= now) return { key: "ongoing", label: sonicNewsCopy("ongoing") };
+  return { key: "ended", label: sonicNewsCopy("ended") };
+}
+
+function sonicArticleEventName(article = {}) {
+  return String(article.eyebrow || article.venueName || article.category || sonicNewsCopy("editorialContext")).trim();
+}
+
+function sonicArticleMonogram(article = {}) {
+  const words = String(article.title || article.eyebrow || article.category || "Sonic Search")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .split(/[^a-z0-9]+/i)
+    .filter(Boolean);
+  if (!words.length) return "SS";
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return `${words[0][0]}${words[1][0]}`.toUpperCase();
+}
+
+function sonicArticleVisualCandidates(article = {}) {
+  const candidates = [
+    {
+      url: article.coverImageUrl,
+      alt: article.coverImageAlt || "",
+      source: "cover"
+    },
+    ...sonicArticleMedia(article).map((entry) => ({
+      url: entry.url,
+      alt: entry.alt || "",
+      source: "media"
+    }))
+  ];
+  const localKeys = new Set();
+  return candidates.map((candidate) => {
+    const url = safeExternalUrl(candidate.url || "");
+    const key = normalizeNewsUrl(url);
+    return { ...candidate, url, key };
+  }).filter((candidate) => {
+    if (!candidate.url || !candidate.key || localKeys.has(candidate.key)) return false;
+    localKeys.add(candidate.key);
+    return true;
+  });
+}
+
+function pickSonicArticleVisual(article = {}, usedImageKeys = new Set()) {
+  const candidates = sonicArticleVisualCandidates(article);
+  const selected = candidates.find((candidate) => !usedImageKeys.has(candidate.key)) || null;
+  if (selected) usedImageKeys.add(selected.key);
+  return {
+    url: selected?.url || "",
+    alt: selected?.alt || "",
+    source: selected?.source || "fallback",
+    deduplicated: Boolean(candidates.length && !selected)
+  };
+}
+
+function sonicArticleMeta(article = {}) {
+  const location = sonicArticleLocation(article);
+  const date = sonicArticleEventDate(article) || sonicArticlePublishedLabel(article);
+  return [location, date].filter(Boolean).join(" · ") || sonicNewsCopy("headingTitle");
+}
+
+function appendSonicEditorialFact(list, label, value) {
+  if (!list || !value) return;
+  const item = document.createElement("div");
+  const term = document.createElement("dt");
+  const detail = document.createElement("dd");
+  term.textContent = label;
+  detail.textContent = value;
+  item.append(term, detail);
+  list.appendChild(item);
+}
+
+function createSonicEditorialCard(article = {}, articleIndex = 0, { usedImageKeys = new Set() } = {}) {
+  const eventStatus = sonicArticleEventStatus(article);
+  const visual = pickSonicArticleVisual(article, usedImageKeys);
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className = "sonic-editorial-card";
+  card.classList.toggle("is-lead", articleIndex === 0);
+  card.dataset.sonicArticleId = String(article.id || "");
+  card.dataset.eventState = eventStatus.key;
+  card.style.setProperty("--news-index", String(Math.min(articleIndex, 8)));
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "sonic-editorial-image-wrap";
+  const appendFallback = ({ deduplicated = false } = {}) => {
+    card.classList.add("has-editorial-fallback");
+    imageWrap.dataset.visualState = deduplicated ? "deduplicated" : "missing";
+    const fallback = document.createElement("div");
+    fallback.className = "sonic-editorial-fallback";
+    fallback.setAttribute("aria-hidden", "true");
+    const fallbackKicker = document.createElement("span");
+    fallbackKicker.className = "sonic-editorial-fallback-kicker";
+    fallbackKicker.textContent = deduplicated ? sonicNewsCopy("anotherReading") : sonicNewsCopy("editorialCover");
+    const monogram = document.createElement("strong");
+    monogram.className = "sonic-editorial-monogram";
+    monogram.textContent = sonicArticleMonogram(article);
+    const fallbackCategory = document.createElement("small");
+    fallbackCategory.textContent = String(article.eyebrow || article.category || sonicNewsCopy("headingTitle")).trim();
+    fallback.append(fallbackKicker, monogram, fallbackCategory);
+    imageWrap.appendChild(fallback);
+  };
+  if (visual.url) {
+    const image = document.createElement("img");
+    image.src = visual.url;
+    image.alt = visual.alt;
+    image.loading = articleIndex === 0 ? "eager" : "lazy";
+    image.decoding = "async";
+    image.addEventListener("error", () => {
+      image.remove();
+      appendFallback();
+    }, { once: true });
+    imageWrap.appendChild(image);
+  } else {
+    appendFallback({ deduplicated: visual.deduplicated });
+  }
+
+  const editionMark = document.createElement("div");
+  editionMark.className = "sonic-editorial-edition-mark";
+  const editionLabel = document.createElement("span");
+  editionLabel.textContent = sonicNewsCopy("published");
+  const editionTime = document.createElement("time");
+  editionTime.dateTime = article.publishedAt || "";
+  editionTime.textContent = sonicNewsDate(article.publishedAt, { hour: "2-digit", minute: "2-digit" }) || "—";
+  editionMark.append(editionLabel, editionTime);
+  imageWrap.appendChild(editionMark);
+
+  const copy = document.createElement("div");
+  copy.className = "sonic-editorial-copy";
+  const kicker = document.createElement("p");
+  const category = document.createElement("span");
+  category.textContent = article.category || sonicNewsCopy("headingTitle");
+  const brand = document.createElement("b");
+  brand.textContent = article.isSponsored ? sonicNewsCopy("partnership") : sonicNewsCopy("brand");
+  kicker.append(category, brand);
+  const title = document.createElement("h5");
+  title.textContent = article.title || sonicNewsCopy("articleTitleFallback");
+  const excerpt = document.createElement("span");
+  excerpt.textContent = article.excerpt || "";
+
+  const publication = document.createElement("div");
+  publication.className = "sonic-editorial-publication";
+  const publicationLabel = document.createElement("span");
+  publicationLabel.textContent = sonicNewsCopy("information");
+  const publicationDate = document.createElement("time");
+  publicationDate.dateTime = article.publishedAt || "";
+  publicationDate.textContent = sonicNewsCopy("publishedOn", { date: sonicArticlePublishedLabel(article) });
+  publication.append(publicationLabel, publicationDate);
+
+  const event = document.createElement("section");
+  event.className = "sonic-editorial-event";
+  const eventHead = document.createElement("div");
+  const eventLabel = document.createElement("span");
+  eventLabel.textContent = sonicNewsCopy("event");
+  const eventState = document.createElement("strong");
+  eventState.textContent = eventStatus.label;
+  eventHead.append(eventLabel, eventState);
+  const eventName = document.createElement("h6");
+  eventName.textContent = sonicArticleEventName(article);
+  const eventFacts = document.createElement("dl");
+  appendSonicEditorialFact(eventFacts, sonicNewsCopy("when"), sonicArticleEventDate(article) || sonicNewsCopy("noEventDate"));
+  appendSonicEditorialFact(eventFacts, sonicNewsCopy("where"), sonicArticleLocation(article) || sonicNewsCopy("noLocation"));
+  event.append(eventHead, eventName, eventFacts);
+
+  copy.append(kicker, title, excerpt, publication, event);
+  card.append(imageWrap, copy);
+  return card;
+}
+
+function normalizeSonicEditorialSearchValue(value = "") {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function sonicEditorialArchiveSearchValue(article = {}) {
+  return normalizeSonicEditorialSearchValue([
+    article.title,
+    article.excerpt,
+    article.category,
+    article.eyebrow,
+    article.venueName,
+    article.city,
+    article.state,
+    sonicArticleEventStatus(article).label,
+    sonicArticlePublishedLabel(article)
+  ].filter(Boolean).join(" "));
+}
+
+function sonicPublicationMonthKey(value = "") {
+  const date = sonicArticleDateValue(value);
+  if (!date) return "sem-data";
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function sonicPublicationMonthLabel(value = "") {
+  const date = sonicArticleDateValue(value);
+  if (!date) return sonicNewsCopy("dateMissing");
+  return sonicNewsDate(date, { month: "long", year: "numeric" });
+}
+
+function createSonicEditorialArchiveCard(article = {}, articleIndex = 1, { usedImageKeys = new Set() } = {}) {
+  const eventStatus = sonicArticleEventStatus(article);
+  const visual = pickSonicArticleVisual(article, usedImageKeys);
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className = "sonic-editorial-archive-card";
+  card.dataset.sonicArticleId = String(article.id || "");
+  card.dataset.eventState = eventStatus.key;
+  card.dataset.archiveSearch = sonicEditorialArchiveSearchValue(article);
+  card.style.setProperty("--news-index", String(Math.min(articleIndex, 10)));
+  card.setAttribute("aria-label", sonicNewsCopy("readArticle", {
+    title: article.title || sonicNewsCopy("articleTitleFallback")
+  }));
+
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "sonic-editorial-archive-image";
+  const appendFallback = () => {
+    imageWrap.dataset.visualState = visual.deduplicated ? "deduplicated" : "missing";
+    const fallback = document.createElement("strong");
+    fallback.textContent = sonicArticleMonogram(article);
+    fallback.setAttribute("aria-hidden", "true");
+    imageWrap.appendChild(fallback);
+  };
+  if (visual.url) {
+    const image = document.createElement("img");
+    image.src = visual.url;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.addEventListener("error", () => {
+      image.remove();
+      appendFallback();
+    }, { once: true });
+    imageWrap.appendChild(image);
+  } else {
+    appendFallback();
+  }
+
+  const copy = document.createElement("div");
+  copy.className = "sonic-editorial-archive-copy";
+  const meta = document.createElement("div");
+  const date = document.createElement("time");
+  date.dateTime = article.publishedAt || "";
+  date.textContent = sonicNewsDate(article.publishedAt, { day: "2-digit", month: "short", year: "numeric" }) || sonicNewsCopy("noDate");
+  const category = document.createElement("span");
+  category.textContent = article.category || sonicNewsCopy("headingTitle");
+  meta.append(date, category);
+
+  const title = document.createElement("h5");
+  title.textContent = article.title || sonicNewsCopy("articleTitleFallback");
+  const excerpt = document.createElement("p");
+  excerpt.textContent = article.excerpt || "";
+
+  const context = document.createElement("div");
+  context.className = "sonic-editorial-archive-context";
+  const place = document.createElement("span");
+  place.textContent = sonicArticleLocation(article) || sonicArticleEventName(article);
+  const action = document.createElement("span");
+  action.textContent = `${eventStatus.label}  →`;
+  context.append(place, action);
+
+  copy.append(meta, title);
+  if (excerpt.textContent) copy.appendChild(excerpt);
+  copy.appendChild(context);
+  card.append(imageWrap, copy);
+  return card;
+}
+
+function applySonicEditorialArchiveFilter(value = "") {
+  if (!sonicEditorialArchiveList || !sonicEditorialArchiveEmpty) return;
+  const query = normalizeSonicEditorialSearchValue(value);
+  sonicEditorialState.archiveQuery = query;
+  let visibleCount = 0;
+  sonicEditorialArchiveList.querySelectorAll(".sonic-editorial-archive-card").forEach((card) => {
+    const visible = !query || String(card.dataset.archiveSearch || "").includes(query);
+    card.hidden = !visible;
+    if (visible) visibleCount += 1;
+  });
+  sonicEditorialArchiveList.querySelectorAll(".sonic-editorial-archive-group").forEach((group) => {
+    group.hidden = !group.querySelector(".sonic-editorial-archive-card:not([hidden])");
+  });
+  const archiveTotal = Math.max(0, sonicEditorialState.articles.length - 1);
+  sonicEditorialArchiveEmpty.hidden = visibleCount > 0;
+  sonicEditorialArchiveEmpty.textContent = archiveTotal === 0
+    ? sonicNewsCopy("archiveFuture")
+    : sonicNewsCopy("archiveNoMatch");
+}
+
+function updateSonicEditorialArchiveMore() {
+  if (!sonicEditorialArchiveMore) return;
+  sonicEditorialArchiveMore.hidden = !sonicEditorialState.hasMore;
+  sonicEditorialArchiveMore.disabled = sonicEditorialState.loadingMore;
+  sonicEditorialArchiveMore.textContent = sonicEditorialState.loadingMore
+    ? sonicNewsCopy("archiveLoadingMore")
+    : sonicEditorialState.loadMoreError
+      ? sonicNewsCopy("archiveLoadError")
+      : sonicNewsCopy("archiveLoadMore");
+}
+
+function mergeSonicEditorialArticles(current = [], incoming = []) {
+  const merged = [];
+  const seen = new Set();
+  [...current, ...incoming].forEach((article) => {
+    const key = String(article?.id || article?.slug || "").trim();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    merged.push(article);
+  });
+  return merged;
+}
+
+function renderSonicEditorialArticles(articles = [], { storeSource = true, pagination = null } = {}) {
+  if (!sonicEditorialList || !sonicEditorialStatus || !sonicEditorialLatest || !sonicEditorialArchiveList) return;
+  const sourceArticles = (Array.isArray(articles) ? articles : []).slice();
+  if (storeSource) sonicEditorialState.rawArticles = sourceArticles;
+  if (pagination && typeof pagination === "object") {
+    sonicEditorialState.hasMore = Boolean(pagination.hasMore);
+    sonicEditorialState.nextOffset = Math.max(0, Number(pagination.nextOffset) || sourceArticles.length);
+    sonicEditorialState.loadMoreError = false;
+  }
+  sonicEditorialState.articles = sourceArticles.map((article) => localizeSonicArticle(article)).sort((first, second) => {
+    const firstTime = sonicArticleDateValue(first?.publishedAt)?.getTime() || 0;
+    const secondTime = sonicArticleDateValue(second?.publishedAt)?.getTime() || 0;
+    return secondTime - firstTime;
+  });
+  sonicEditorialLatest.innerHTML = "";
+  sonicEditorialArchiveList.innerHTML = "";
   if (!sonicEditorialState.articles.length) {
-    sonicEditorialStatus.textContent = "A primeira edição está sendo preparada pela redação.";
+    sonicEditorialStatus.textContent = sonicNewsCopy("firstEdition");
+    const latestSection = sonicEditorialLatest.closest(".sonic-editorial-latest");
+    if (latestSection) latestSection.hidden = true;
+    if (sonicEditorialArchive) sonicEditorialArchive.hidden = true;
+    updateSonicEditorialArchiveMore();
     return;
   }
-  sonicEditorialState.articles.forEach((article) => {
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = "sonic-editorial-card";
-    card.dataset.sonicArticleId = String(article.id || "");
 
-    const imageWrap = document.createElement("div");
-    imageWrap.className = "sonic-editorial-image-wrap";
-    const imageUrl = safeExternalUrl(article.coverImageUrl || "");
-    if (imageUrl) {
-      const image = document.createElement("img");
-      image.src = imageUrl;
-      image.alt = article.coverImageAlt || "";
-      image.loading = "lazy";
-      image.addEventListener("error", () => {
-        image.remove();
-        const fallback = document.createElement("span");
-        fallback.textContent = "SS";
-        imageWrap.appendChild(fallback);
-      }, { once: true });
-      imageWrap.appendChild(image);
-    } else {
-      const fallback = document.createElement("span");
-      fallback.textContent = "SS";
-      imageWrap.appendChild(fallback);
-    }
+  const latestSection = sonicEditorialLatest.closest(".sonic-editorial-latest");
+  if (latestSection) latestSection.hidden = false;
+  if (sonicEditorialArchive) sonicEditorialArchive.hidden = false;
+  const usedImageKeys = new Set();
+  const article = sonicEditorialState.articles[0];
+  sonicEditorialLatest.appendChild(createSonicEditorialCard(article, 0, { usedImageKeys }));
+  if (sonicEditorialLatestDate) {
+    sonicEditorialLatestDate.dateTime = article.publishedAt || "";
+    sonicEditorialLatestDate.textContent = sonicArticlePublishedLabel(article);
+  }
 
-    const copy = document.createElement("div");
-    copy.className = "sonic-editorial-copy";
-    const kicker = document.createElement("p");
-    const category = document.createElement("span");
-    category.textContent = article.category || "Jornal Sonic";
-    const brand = document.createElement("b");
-    brand.textContent = article.isSponsored ? "CONTEÚDO EM PARCERIA" : "JORNAL SONIC";
-    kicker.append(category, brand);
-    const title = document.createElement("h5");
-    title.textContent = article.title || "Matéria do Jornal Sonic";
-    const excerpt = document.createElement("span");
-    excerpt.textContent = article.excerpt || "";
-    const meta = document.createElement("div");
-    meta.className = "sonic-editorial-meta";
-    meta.textContent = sonicArticleMeta(article);
-    copy.append(kicker, title, excerpt, meta);
-    card.append(imageWrap, copy);
-    sonicEditorialList.appendChild(card);
+  const archiveArticles = sonicEditorialState.articles.slice(1);
+  if (sonicEditorialArchiveCount) {
+    sonicEditorialArchiveCount.textContent = sonicEditorialState.hasMore
+      ? sonicNewsCopy("manyArticlesMore", { count: archiveArticles.length })
+      : archiveArticles.length === 1
+      ? sonicNewsCopy("oneArticle")
+      : sonicNewsCopy("manyArticles", { count: archiveArticles.length });
+  }
+  if (sonicEditorialArchiveFilter) sonicEditorialArchiveFilter.disabled = archiveArticles.length === 0;
+  const groups = new Map();
+  archiveArticles.forEach((archiveArticle) => {
+    const key = sonicPublicationMonthKey(archiveArticle.publishedAt);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(archiveArticle);
   });
-  sonicEditorialStatus.textContent = sonicEditorialState.articles.length === 1
-    ? "1 matéria publicada pela redação."
-    : `${sonicEditorialState.articles.length} matérias publicadas pela redação.`;
+  let articleIndex = 1;
+  groups.forEach((groupArticles, key) => {
+    const day = document.createElement("section");
+    day.className = "sonic-editorial-archive-group";
+    const headingId = `sonicEditorialArchiveMonth-${key.replace(/[^a-z0-9-]/gi, "")}`;
+    day.setAttribute("aria-labelledby", headingId);
+    const dayHead = document.createElement("header");
+    dayHead.className = "sonic-editorial-archive-month";
+    const date = document.createElement("time");
+    date.id = headingId;
+    date.dateTime = groupArticles[0]?.publishedAt || "";
+    date.textContent = sonicPublicationMonthLabel(groupArticles[0]?.publishedAt);
+    const count = document.createElement("span");
+    count.textContent = groupArticles.length === 1
+      ? sonicNewsCopy("oneArticle")
+      : sonicNewsCopy("manyArticles", { count: groupArticles.length });
+    dayHead.append(date, count);
+    const grid = document.createElement("div");
+    grid.className = "sonic-editorial-archive-grid";
+    groupArticles.forEach((archiveArticle) => {
+      grid.appendChild(createSonicEditorialArchiveCard(archiveArticle, articleIndex, { usedImageKeys }));
+      articleIndex += 1;
+    });
+    day.append(dayHead, grid);
+    sonicEditorialArchiveList.appendChild(day);
+  });
+  if (sonicEditorialArchiveFilter) sonicEditorialArchiveFilter.value = sonicEditorialState.archiveQuery;
+  applySonicEditorialArchiveFilter(sonicEditorialState.archiveQuery);
+  updateSonicEditorialArchiveMore();
+  sonicEditorialStatus.textContent = archiveArticles.length === 0
+    ? sonicNewsCopy("currentOne")
+    : archiveArticles.length === 1
+      ? sonicNewsCopy("currentArchiveOne")
+      : sonicNewsCopy("currentArchiveMany", { count: archiveArticles.length });
   sonicEditorialStatus.classList.remove("is-error");
 }
 
@@ -41893,30 +39324,66 @@ async function refreshSonicEditorial({ force = false } = {}) {
   if (!sonicEditorialList || !sonicEditorialStatus || sonicEditorialState.loading) return false;
   if (!force && sonicEditorialState.articles.length && Date.now() - sonicEditorialState.loadedAt < 60000) return true;
   sonicEditorialState.loading = true;
-  sonicEditorialStatus.textContent = "Buscando a edição mais recente…";
+  sonicEditorialStatus.textContent = sonicNewsCopy("loading");
   sonicEditorialStatus.classList.remove("is-error");
   try {
     const params = new URLSearchParams({ limit: "20" });
     const payload = await requestNewsroomApi({ params });
     const articles = Array.isArray(payload.articles) ? payload.articles : [];
+    const pagination = payload.pagination && typeof payload.pagination === "object"
+      ? payload.pagination
+      : { hasMore: articles.length >= 20, nextOffset: articles.length };
     sonicEditorialState.loadedAt = Date.now();
     saveSonicEditorialCache(articles);
-    renderSonicEditorialArticles(articles);
+    renderSonicEditorialArticles(articles, { pagination });
     return true;
   } catch (error) {
     const cached = loadSonicEditorialCache();
     if (cached.length) {
-      renderSonicEditorialArticles(cached);
-      sonicEditorialStatus.textContent = "Mostrando a última edição salva neste aparelho.";
+      renderSonicEditorialArticles(cached, {
+        pagination: { hasMore: cached.length >= 20, nextOffset: cached.length }
+      });
+      sonicEditorialStatus.textContent = sonicNewsCopy("cached");
       return true;
     }
     sonicEditorialStatus.textContent = String(error?.message || "") === "newsroom_setup_required"
-      ? "A primeira edição será publicada em breve."
-      : "O Jornal Sonic está temporariamente indisponível.";
+      ? sonicNewsCopy("comingSoon")
+      : sonicNewsCopy("unavailable");
     sonicEditorialStatus.classList.add("is-error");
     return false;
   } finally {
     sonicEditorialState.loading = false;
+  }
+}
+
+async function loadMoreSonicEditorialArticles() {
+  if (sonicEditorialState.loadingMore || !sonicEditorialState.hasMore) return false;
+  sonicEditorialState.loadingMore = true;
+  sonicEditorialState.loadMoreError = false;
+  updateSonicEditorialArchiveMore();
+  try {
+    const offset = Math.max(0, sonicEditorialState.nextOffset || sonicEditorialState.rawArticles.length);
+    const params = new URLSearchParams({ limit: "20", offset: String(offset) });
+    const payload = await requestNewsroomApi({ params });
+    const incoming = Array.isArray(payload.articles) ? payload.articles : [];
+    const merged = mergeSonicEditorialArticles(sonicEditorialState.rawArticles, incoming);
+    const addedCount = merged.length - sonicEditorialState.rawArticles.length;
+    const pagination = payload.pagination && typeof payload.pagination === "object"
+      ? payload.pagination
+      : {
+          hasMore: incoming.length >= 20 && addedCount > 0,
+          nextOffset: offset + incoming.length
+        };
+    if (addedCount === 0) pagination.hasMore = false;
+    sonicEditorialState.loadingMore = false;
+    saveSonicEditorialCache(merged);
+    renderSonicEditorialArticles(merged, { pagination });
+    return addedCount > 0;
+  } catch (_error) {
+    sonicEditorialState.loadingMore = false;
+    sonicEditorialState.loadMoreError = true;
+    updateSonicEditorialArchiveMore();
+    return false;
   }
 }
 
@@ -41934,6 +39401,7 @@ function closeSonicNewsReader() {
   if (!sonicNewsReader) return;
   if (typeof sonicNewsReader.close === "function" && sonicNewsReader.open) sonicNewsReader.close();
   else sonicNewsReader.removeAttribute("open");
+  sonicEditorialState.activeArticleId = "";
   document.body.classList.remove("sonic-news-reader-open");
 }
 
@@ -41956,7 +39424,9 @@ function createSonicNewsMediaFigure(media = {}) {
   link.href = media.url;
   link.target = "_blank";
   link.rel = "noopener noreferrer";
-  link.setAttribute("aria-label", media.caption ? `Abrir imagem: ${media.caption}` : "Abrir imagem em tamanho maior");
+  link.setAttribute("aria-label", media.caption
+    ? sonicNewsCopy("openImage", { caption: media.caption })
+    : sonicNewsCopy("openImageLarge"));
   const image = document.createElement("img");
   image.src = media.url;
   image.alt = media.alt || "";
@@ -41984,6 +39454,7 @@ function createSonicNewsMediaFigure(media = {}) {
 
 function openSonicNewsReader(article = {}) {
   if (!sonicNewsReader || !article?.id) return;
+  sonicEditorialState.activeArticleId = String(article.id || "");
   const imageUrl = safeExternalUrl(article.coverImageUrl || "");
   const hero = document.getElementById("sonicNewsReaderHero");
   const image = document.getElementById("sonicNewsReaderImage");
@@ -41996,18 +39467,35 @@ function openSonicNewsReader(article = {}) {
     const element = document.getElementById(id);
     if (element) element.textContent = String(value || "");
   };
-  setText("sonicNewsReaderCategory", article.category || "Jornal Sonic");
-  setText("sonicNewsReaderTitle", article.title || "Matéria");
+  setText("sonicNewsReaderCategory", article.category || sonicNewsCopy("headingTitle"));
+  setText("sonicNewsReaderTitle", article.title || sonicNewsCopy("articleFallback"));
   setText("sonicNewsReaderExcerpt", article.excerpt || "");
-  setText("sonicNewsReaderByline", [
-    `Por ${article.authorName || "Redação Sonic Search"}`,
-    sonicNewsDate(article.publishedAt, { dateStyle: "long" })
-  ].filter(Boolean).join(" · "));
+  setText("sonicNewsReaderByline", sonicNewsCopy("byline", {
+    author: article.authorName || sonicNewsCopy("authorFallback")
+  }));
   setText("sonicNewsReaderCredit", article.imageCredit || "");
+
+  const facts = document.getElementById("sonicNewsReaderFacts");
+  if (facts) {
+    facts.innerHTML = "";
+    [
+      [sonicNewsCopy("factPublished"), sonicNewsDate(article.publishedAt, { dateStyle: "long", timeStyle: "short" }) || sonicNewsCopy("dateMissing")],
+      [sonicNewsCopy("factEvent"), sonicArticleEventDate(article, { includeTime: true }) || sonicNewsCopy("noEventDate")],
+      [sonicNewsCopy("factLocation"), sonicArticleLocation(article) || sonicNewsCopy("noLocation")]
+    ].forEach(([label, value]) => {
+      const item = document.createElement("div");
+      const itemLabel = document.createElement("span");
+      const itemValue = document.createElement("strong");
+      itemLabel.textContent = label;
+      itemValue.textContent = value;
+      item.append(itemLabel, itemValue);
+      facts.appendChild(item);
+    });
+  }
 
   const disclosure = document.getElementById("sonicNewsReaderDisclosure");
   if (disclosure) {
-    disclosure.textContent = article.disclosure || (article.isSponsored ? "Conteúdo em parceria" : "");
+    disclosure.textContent = article.disclosure || (article.isSponsored ? sonicNewsCopy("partnershipDisclosure") : "");
     disclosure.classList.toggle("hidden", !disclosure.textContent);
   }
 
@@ -42059,15 +39547,26 @@ function openSonicNewsReader(article = {}) {
 
   const serviceSection = document.getElementById("sonicNewsReaderService");
   const serviceList = document.getElementById("sonicNewsReaderServiceList");
+  const serviceTitle = document.getElementById("sonicNewsReaderServiceTitle");
+  const eventStatus = sonicArticleEventStatus(article);
+  if (serviceTitle) {
+    serviceTitle.textContent = eventStatus.key === "ended"
+      ? sonicNewsCopy("serviceEnded")
+      : eventStatus.key === "ongoing"
+        ? sonicNewsCopy("serviceOngoing")
+        : eventStatus.key === "upcoming"
+          ? sonicNewsCopy("serviceUpcoming")
+          : sonicNewsCopy("serviceGeneral");
+  }
   if (serviceList) {
     serviceList.innerHTML = "";
-    appendNewsReaderServiceItem(serviceList, "Quando", sonicNewsDate(article.eventStartsAt, { dateStyle: "full", timeStyle: "short" }));
-    appendNewsReaderServiceItem(serviceList, "Horários", article.serviceInfo?.doorsTime);
-    appendNewsReaderServiceItem(serviceList, "Onde", sonicArticleLocation(article));
-    appendNewsReaderServiceItem(serviceList, "Endereço", article.serviceInfo?.address);
-    appendNewsReaderServiceItem(serviceList, "Ingressos", article.serviceInfo?.price);
-    appendNewsReaderServiceItem(serviceList, "Classificação", article.serviceInfo?.ageRating);
-    appendNewsReaderServiceItem(serviceList, "Informações", article.serviceInfo?.notes);
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("when"), sonicArticleEventDate(article, { includeTime: true }));
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("hours"), article.serviceInfo?.doorsTime);
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("where"), sonicArticleLocation(article));
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("address"), article.serviceInfo?.address);
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("tickets"), article.serviceInfo?.price);
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("ageRating"), article.serviceInfo?.ageRating);
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("notes"), article.serviceInfo?.notes);
   }
   serviceSection?.classList.toggle("hidden", !serviceList?.children.length);
 
@@ -42076,10 +39575,10 @@ function openSonicNewsReader(article = {}) {
     actions.innerHTML = "";
     const relatedLinks = Array.isArray(article.serviceInfo?.relatedLinks) ? article.serviceInfo.relatedLinks : [];
     const links = [
-      { url: safeExternalUrl(article.ticketUrl || ""), label: article.ctaLabel || "Ver evento", secondary: false },
+      { url: safeExternalUrl(article.ticketUrl || ""), label: article.ctaLabel || sonicNewsCopy("eventCta"), secondary: false },
       {
         url: safeExternalUrl(article.instagramUrl || ""),
-        label: String(article.serviceInfo?.instagramLabel || "Instagram oficial").trim(),
+        label: String(article.serviceInfo?.instagramLabel || sonicNewsCopy("officialInstagram")).trim(),
         secondary: true
       },
       ...relatedLinks.map((item) => ({
@@ -42099,7 +39598,7 @@ function openSonicNewsReader(article = {}) {
     });
   }
   document.body.classList.add("sonic-news-reader-open");
-  if (typeof sonicNewsReader.showModal === "function") sonicNewsReader.showModal();
+  if (!sonicNewsReader.open && typeof sonicNewsReader.showModal === "function") sonicNewsReader.showModal();
   else sonicNewsReader.setAttribute("open", "");
 }
 
@@ -45538,9 +43037,6 @@ function renderAdminAnalyticsCopy() {
     ["adminHealthKicker", "SISTEMA", "SYSTEM", "SISTEMA"],
     ["adminHealthTitle", "Saúde das integrações", "Integration health", "Salud de las integraciones"],
     ["adminHealthRefreshBtn", "Verificar", "Check", "Verificar"],
-    ["adminModerationKicker", "COMUNIDADE", "COMMUNITY", "COMUNIDAD"],
-    ["adminModerationTitle", "Moderação recente", "Recent moderation", "Moderación reciente"],
-    ["adminModerationRefreshBtn", "Atualizar", "Refresh", "Actualizar"],
     ["adminPrivacyTitle", "Como interpretar estes números", "How to read these numbers", "Cómo interpretar estos números"],
     ["adminPrivacyText", "“Pessoa” é uma aproximação por identificador anônimo salvo no aparelho ou navegador. Sessões são separadas após cerca de 30 minutos de inatividade. A mesma pessoa em dois aparelhos pode aparecer duas vezes. Nenhum nome ou e-mail de visitante é mostrado.", "“Person” is an approximation based on an anonymous identifier stored on the device or browser. Sessions are separated after about 30 minutes of inactivity. One person on two devices may appear twice. No visitor names or emails are shown.", "“Persona” es una aproximación por identificador anónimo guardado en el dispositivo o navegador. Las sesiones se separan después de unos 30 minutos de inactividad. La misma persona en dos dispositivos puede aparecer dos veces. No se muestran nombres ni e-mails de visitantes."]
   ];
@@ -45554,7 +43050,6 @@ function renderAdminAnalyticsCopy() {
   }
   if (adminAnalyticsState.data) renderAdminAnalyticsData(adminAnalyticsState.data);
   if (adminOperationsState.health) renderAdminIntegrationHealth(adminOperationsState.health);
-  if (adminOperationsState.moderationLoadedAt) renderAdminModeration(adminOperationsState.moderationPosts);
 }
 
 function svgElement(name, attributes = {}) {
@@ -45835,101 +43330,9 @@ async function loadAdminIntegrationHealth(options = {}) {
   }
 }
 
-function renderAdminModeration(posts = []) {
-  if (!adminModerationList || !adminModerationStatus) return;
-  const rows = Array.isArray(posts) ? posts.slice(0, 12) : [];
-  adminModerationStatus.textContent = rows.length
-    ? sonicTinyCopy(`${adminAnalyticsNumber(rows.length)} publicações recentes`, `${adminAnalyticsNumber(rows.length)} recent posts`, `${adminAnalyticsNumber(rows.length)} publicaciones recientes`)
-    : sonicTinyCopy("Nenhuma publicação para moderar.", "No posts to moderate.", "Ninguna publicación para moderar.");
-  const fragment = document.createDocumentFragment();
-  rows.forEach((post) => {
-    const item = document.createElement("article");
-    item.className = "admin-moderation-item";
-    const body = document.createElement("div");
-    const title = document.createElement("strong");
-    title.textContent = String(post.title || "").trim() || sonicTinyCopy("Publicação sem título", "Untitled post", "Publicación sin título");
-    title.title = title.textContent;
-    const excerpt = document.createElement("p");
-    excerpt.textContent = String(post.body || "").trim();
-    const meta = document.createElement("div");
-    meta.className = "admin-moderation-meta";
-    const author = String(post.author?.displayName || post.author?.username || "Sonic listener").trim();
-    const date = adminAnalyticsDateLabel(post.createdAt, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
-    meta.textContent = [author, String(post.topic || "").trim(), date].filter(Boolean).join(" · ");
-    body.append(title, excerpt, meta);
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "admin-danger-btn";
-    remove.dataset.adminDeletePost = String(post.id || "");
-    remove.dataset.adminPostTitle = title.textContent.slice(0, 120);
-    remove.textContent = sonicTinyCopy("Remover", "Remove", "Eliminar");
-    item.append(body, remove);
-    fragment.append(item);
-  });
-  adminModerationList.replaceChildren(fragment);
-}
-
-async function loadAdminModerationQueue(options = {}) {
-  if (!adminModerationList || !hasAdminAccess() || adminOperationsState.moderationLoading) return false;
-  const force = options.force === true;
-  if (!force && adminOperationsState.moderationLoadedAt && Date.now() - adminOperationsState.moderationLoadedAt < 60000) {
-    renderAdminModeration(adminOperationsState.moderationPosts);
-    return true;
-  }
-  adminOperationsState.moderationLoading = true;
-  if (adminModerationRefreshBtn) adminModerationRefreshBtn.disabled = true;
-  if (adminModerationStatus) adminModerationStatus.textContent = sonicTinyCopy("Carregando publicações recentes…", "Loading recent posts…", "Cargando publicaciones recientes…");
-  try {
-    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?filter=all`);
-    if (!payload?.ok || payload.enabled === false) throw new Error(payload?.error || "community_unavailable");
-    if (!payload.viewer?.canModerate) throw new Error("moderator_required");
-    adminOperationsState.moderationPosts = Array.isArray(payload.posts) ? payload.posts : [];
-    adminOperationsState.moderationLoadedAt = Date.now();
-    renderAdminModeration(adminOperationsState.moderationPosts);
-    return true;
-  } catch (error) {
-    if (adminModerationStatus) adminModerationStatus.textContent = sonicTinyCopy("Não foi possível carregar a moderação agora.", "Could not load moderation right now.", "No fue posible cargar la moderación ahora.");
-    console.warn("Admin moderation could not be loaded", error);
-    return false;
-  } finally {
-    adminOperationsState.moderationLoading = false;
-    if (adminModerationRefreshBtn) adminModerationRefreshBtn.disabled = false;
-  }
-}
-
-async function deleteAdminCommunityPost(postId = "", title = "") {
-  const safePostId = String(postId || "").trim();
-  if (!safePostId || !hasAdminAccess()) return false;
-  const label = String(title || "").trim();
-  const confirmed = window.confirm(sonicTinyCopy(
-    `Remover esta publicação${label ? `: “${label}”` : ""}? Esta ação não aparece mais para a comunidade.`,
-    `Remove this post${label ? `: “${label}”` : ""}? It will no longer appear in the community.`,
-    `¿Eliminar esta publicación${label ? `: “${label}”` : ""}? Ya no aparecerá en la comunidad.`
-  ));
-  if (!confirmed) return false;
-  try {
-    const params = new URLSearchParams({ id: safePostId });
-    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
-    if (!payload?.ok) throw new Error(payload?.error || "community_delete_failed");
-    adminOperationsState.moderationPosts = adminOperationsState.moderationPosts.filter((post) => String(post.id || "") !== safePostId);
-    communityState.posts = communityState.posts.filter((post) => String(post.id || "") !== safePostId);
-    renderAdminModeration(adminOperationsState.moderationPosts);
-    renderCommunityPanel();
-    showToast(sonicTinyCopy("Publicação removida.", "Post removed.", "Publicación eliminada."));
-    return true;
-  } catch (error) {
-    console.warn("Admin could not remove community post", error);
-    showToast(sonicTinyCopy("Não foi possível remover agora.", "Could not remove it right now.", "No fue posible eliminarla ahora."));
-    return false;
-  }
-}
-
 function loadAdminOperations(options = {}) {
-  if (!hasAdminAccess()) return Promise.resolve([]);
-  return Promise.all([
-    loadAdminIntegrationHealth(options),
-    loadAdminModerationQueue(options)
-  ]);
+  if (!hasAdminAccess()) return Promise.resolve(false);
+  return loadAdminIntegrationHealth(options);
 }
 
 function renderAdminAnalyticsData(data = {}) {
@@ -49425,6 +46828,7 @@ function trackFineSubgenreHasRecommendationProof(track = null) {
 function dynamicPsyHomonymHasStrongIdentityProof(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || familyOf(style) !== "psytrance") return true;
+  if (hasVerifiedPsytranceHomonymTrackIdentity(style, track)) return true;
   if (!isDynamicSource(track.source || "")) return true;
   const artistKey = artistMatchKey(track.artist || "");
   const riskyArtist =
@@ -55685,6 +53089,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
 async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   if (!currentRecommendation || !lastPrefs) return false;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("swipe_pass");
   const feedbackReason = inferNegativeFeedbackReason(rejectedTrack, { source: "swipe_pass" });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
   const reasonMessage = appendSwipeLearningMessage(
@@ -59833,8 +57238,6 @@ function applySocialViewerContext(payload = {}) {
   const viewerRole = String(viewer.role || (canModerate ? "moderator" : "anonymous")).trim() || "anonymous";
   socialCommentsState.canModerate = canModerate;
   socialCommentsState.viewerRole = viewerRole;
-  communityState.canModerate = canModerate;
-  communityState.viewerRole = viewerRole;
   if (Array.isArray(viewer.blockedUserIds)) {
     ugcBlockedUserIds = new Set(
       viewer.blockedUserIds
@@ -59856,67 +57259,49 @@ function isUgcItemBlocked(item = {}) {
 
 function hideBlockedUgcContentLocally() {
   socialCommentsState.comments = socialCommentsState.comments.filter((item) => !isUgcItemBlocked(item));
-  communityState.posts = communityState.posts.filter((item) => !isUgcItemBlocked(item));
-  communityState.commentsByPost.forEach((comments, postId) => {
-    communityState.commentsByPost.set(
-      postId,
-      (Array.isArray(comments) ? comments : []).filter((item) => !isUgcItemBlocked(item))
-    );
-  });
 }
 
 async function reportUgcContent(options = {}) {
   if (!socialCommentsSignedIn()) {
-    void showSocialCommentsLogin({ surface: options.surface === "community" ? "community" : "comments" });
+    void showSocialCommentsLogin({ surface: "comments" });
     return false;
   }
-  if (!window.confirm(t("communityReportConfirm"))) return false;
-  const kind = options.kind === "post" ? "post" : "comment";
+  if (!window.confirm(t("socialCommentsReportConfirm"))) return false;
   const id = String(options.id || "").trim();
   if (!id) return false;
   try {
     const metadata = socialCommentAuthorMeta();
-    const payload = kind === "post"
-      ? await communityRequest(COMMUNITY_ENDPOINT, {
-        method: "POST",
-        body: {
-          action: "report",
-          postId: id,
-          reason: "inappropriate_content",
-          metadata
-        }
-      })
-      : await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
-        method: "POST",
-        body: {
-          action: "report",
-          commentId: id,
-          targetType: options.targetType || "post",
-          targetKey: options.targetKey || "",
-          reason: "inappropriate_content",
-          metadata
-        }
-      });
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST",
+      body: {
+        action: "report",
+        commentId: id,
+        targetType: options.targetType || "track",
+        targetKey: options.targetKey || "",
+        reason: "inappropriate_content",
+        metadata
+      }
+    });
     if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "report_failed");
-    showToast(t("communityReported"));
+    showToast(t("socialCommentsReported"));
     return true;
   } catch (error) {
-    console.warn("Could not report community content", error);
-    showToast(t("communityReportFailed"));
+    console.warn("Could not report comment", error);
+    showToast(t("socialCommentsReportFailed"));
     return false;
   }
 }
 
 async function blockUgcAuthor(authorId = "") {
   if (!socialCommentsSignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
+    void showSocialCommentsLogin({ surface: "comments" });
     return false;
   }
   const targetUserId = String(authorId || "").trim();
   if (!targetUserId || ugcBlockedUserIds.has(targetUserId)) return false;
-  if (!window.confirm(t("communityBlockConfirm"))) return false;
+  if (!window.confirm(t("socialCommentsBlockConfirm"))) return false;
   try {
-    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
       method: "POST",
       body: {
         action: "block",
@@ -59929,12 +57314,11 @@ async function blockUgcAuthor(authorId = "") {
     ugcBlockedUserIds.add(targetUserId);
     hideBlockedUgcContentLocally();
     renderSocialCommentsPanel();
-    renderCommunityPanel();
-    showToast(t("communityBlocked"));
+    showToast(t("socialCommentsBlocked"));
     return true;
   } catch (error) {
-    console.warn("Could not block community user", error);
-    showToast(t("communityBlockFailed"));
+    console.warn("Could not block comment author", error);
+    showToast(t("socialCommentsBlockFailed"));
     return false;
   }
 }
@@ -60059,7 +57443,7 @@ function renderSocialCommentItem(comment = {}) {
   } else {
     const body = document.createElement("p");
     body.className = "social-comment-body";
-    body.textContent = communityDisplayText(comment.body);
+    body.textContent = String(comment.body || "").trim();
     item.appendChild(body);
   }
 
@@ -60111,7 +57495,7 @@ function renderSocialCommentItem(comment = {}) {
     reportButton.className = "social-comment-action";
     reportButton.dataset.commentAction = "report";
     reportButton.dataset.commentId = comment.id || "";
-    reportButton.textContent = t("communityReport");
+    reportButton.textContent = t("socialCommentsReport");
     actions.appendChild(reportButton);
 
     const blockButton = document.createElement("button");
@@ -60120,7 +57504,7 @@ function renderSocialCommentItem(comment = {}) {
     blockButton.dataset.commentAction = "block-user";
     blockButton.dataset.commentId = comment.id || "";
     blockButton.dataset.authorId = authorId;
-    blockButton.textContent = t("communityBlockUser");
+    blockButton.textContent = t("socialCommentsBlockUser");
     actions.appendChild(blockButton);
   }
 
@@ -60273,15 +57657,10 @@ async function loadSocialComments(options = {}) {
   }
 }
 
-async function showSocialCommentsLogin({ surface = "comments", startLogin = false } = {}) {
+async function showSocialCommentsLogin({ startLogin = false } = {}) {
   const setLoginMessage = (message, configured = true) => {
-    if (surface === "community") {
-      if (communityLoginPrompt) communityLoginPrompt.classList.remove("hidden");
-      communitySetStatus(message, configured ? "" : "error");
-    } else {
-      if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.remove("hidden");
-      if (socialCommentsStatus) socialCommentsStatus.textContent = message;
-    }
+    if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.remove("hidden");
+    if (socialCommentsStatus) socialCommentsStatus.textContent = message;
   };
   const waitingMessage = t("socialCommentsLoginRequired");
   setLoginMessage(waitingMessage, true);
@@ -60338,7 +57717,7 @@ async function submitSocialComment() {
   } catch (error) {
     console.warn("Could not submit social comment", error);
     const message = /content_not_allowed/i.test(String(error?.message || ""))
-      ? t("communityContentNotAllowed")
+      ? t("socialCommentsContentNotAllowed")
       : t("socialCommentsPostFailed");
     if (socialCommentsStatus) socialCommentsStatus.textContent = message;
     showToast(message);
@@ -60460,7 +57839,7 @@ async function updateSocialComment(commentId = "") {
     console.warn("Could not update social comment", error);
     showToast(
       /content_not_allowed/i.test(String(error?.message || ""))
-        ? t("communityContentNotAllowed")
+        ? t("socialCommentsContentNotAllowed")
         : t("socialCommentsUpdateFailed")
     );
     return false;
@@ -60491,994 +57870,6 @@ async function deleteSocialComment(commentId = "") {
   }
 }
 
-function communitySignedIn() {
-  return socialCommentsSignedIn();
-}
-
-function normalizeCommunityTopic(topic = "track") {
-  const value = String(topic || "").trim();
-  if (value === "id") return "track";
-  return ["all", "track", "artist", "event", "festival", "question"].includes(value) ? value : "track";
-}
-
-function normalizeCommunityFilter(filter = "all") {
-  const value = String(filter || "").trim();
-  if (value === "id") return "track";
-  return ["all", "track", "artist", "event", "festival", "question"].includes(value) ? value : "all";
-}
-
-function communityTopicLabel(topic = "question") {
-  const normalizedTopic = normalizeCommunityTopic(topic);
-  const key = {
-    all: "communityFilterAll",
-    track: "communityTypeTrack",
-    artist: "communityTypeArtist",
-    event: "communityTypeEvent",
-    festival: "communityTypeFestival",
-    question: "communityTypeQuestion"
-  }[normalizedTopic] || "communityTypeQuestion";
-  return t(key);
-}
-
-function communityFilterLabel(filter = "all") {
-  const normalizedFilter = normalizeCommunityFilter(filter);
-  const key = {
-    all: "communityFilterAll",
-    track: "communityFilterTrack",
-    artist: "communityFilterArtist",
-    event: "communityFilterEvent",
-    festival: "communityFilterFestival",
-    question: "communityFilterQuestion"
-  }[normalizedFilter] || "communityFilterAll";
-  return t(key);
-}
-
-function communitySetStatus(message = "", tone = "") {
-  if (!communityStatus) return;
-  communityStatus.textContent = message;
-  communityStatus.classList.toggle("error", tone === "error");
-  communityStatus.classList.toggle("ok", tone === "ok");
-}
-
-function communityActionText(label = "", count = 0) {
-  const safeCount = Number(count) || 0;
-  return safeCount > 0 ? `${label} ${safeCount}` : label;
-}
-
-function communityPostCommentList(postId = "") {
-  return communityState.commentsByPost.get(postId) || [];
-}
-
-function communityPostCommentsReady(postId = "") {
-  return Boolean(postId && communityState.commentsByPost.has(postId));
-}
-
-function ensureCommunityPostCommentsLoaded(postId = "", options = {}) {
-  if (!postId) return false;
-  const force = Boolean(options.force);
-  if (!force && (communityPostCommentsReady(postId) || communityState.commentLoading.has(postId))) {
-    return false;
-  }
-  void loadCommunityPostComments(postId, { silent: true });
-  return true;
-}
-
-function focusCommunityCommentInput(postId = "") {
-  if (!postId) return;
-  window.requestAnimationFrame(() => {
-    const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-input]") || [])
-      .find((element) => String(element.getAttribute("data-community-comment-input") || "") === postId);
-    input?.focus?.();
-  });
-}
-
-function preloadVisibleCommunityPostComments(options = {}) {
-  const limit = Math.max(1, Number(options.limit) || COMMUNITY_COMMENT_PRELOAD_LIMIT);
-  communityState.posts
-    .slice(0, limit)
-    .map((post) => String(post?.id || "").trim())
-    .filter(Boolean)
-    .forEach((postId) => ensureCommunityPostCommentsLoaded(postId, options));
-}
-
-function connectCommunityCommentLazyLoader() {
-  if (communityCommentsObserver) {
-    communityCommentsObserver.disconnect();
-    communityCommentsObserver = null;
-  }
-  if (!communityFeedList || !communityState.posts.length) return;
-  preloadVisibleCommunityPostComments();
-  if (typeof IntersectionObserver === "undefined") return;
-  communityCommentsObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const postId = String(entry.target?.getAttribute?.("data-community-post-id") || "").trim();
-      if (postId) ensureCommunityPostCommentsLoaded(postId);
-      observer.unobserve(entry.target);
-    });
-  }, {
-    root: null,
-    rootMargin: COMMUNITY_COMMENT_LAZY_ROOT_MARGIN,
-    threshold: 0.01
-  });
-  communityFeedList.querySelectorAll("[data-community-post-id]").forEach((card) => {
-    const postId = String(card.getAttribute("data-community-post-id") || "").trim();
-    if (!postId || communityPostCommentsReady(postId) || communityState.commentLoading.has(postId)) return;
-    communityCommentsObserver.observe(card);
-  });
-}
-
-async function communityRequest(path = COMMUNITY_ENDPOINT, options = {}) {
-  const endpoint = resolveConfiguredAppApiEndpoint(
-    path,
-    ["SONIC_COMMUNITY_API_URL", "SONIC_SEARCH_COMMUNITY_API_URL"],
-    COMMUNITY_ENDPOINT
-  );
-  if (!endpoint) throw new Error("community_endpoint_unavailable");
-  const headers = {
-    Accept: "application/json",
-    ...(options.headers || {})
-  };
-  if (options.body !== undefined) headers["Content-Type"] = "application/json";
-  const accessToken = await currentApiAccessToken();
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-    headers["X-Sonic-Auth-Token"] = accessToken;
-  }
-  const response = await fetchWithTimeout(endpoint, {
-    method: options.method || "GET",
-    headers,
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    cache: "no-store"
-  }, SOCIAL_COMMENTS_API_TIMEOUT_MS);
-  const text = await response.text();
-  let payload = null;
-  if (text) {
-    try {
-      payload = JSON.parse(text);
-    } catch {
-      payload = null;
-    }
-  }
-  if (!response.ok) {
-    const detail = payload?.detail || payload?.error || response.statusText;
-    throw new Error(String(detail || "community_request_failed"));
-  }
-  return payload || {};
-}
-
-function updateCommunityControlsText() {
-  communityState.filter = normalizeCommunityFilter(communityState.filter);
-  communityState.topic = normalizeCommunityTopic(communityState.topic);
-  if (communityKicker) communityKicker.textContent = t("communityKicker");
-  if (communityTitle) communityTitle.textContent = t("communityTitle");
-  if (communityIntro) communityIntro.textContent = t("communityIntro");
-  if (communityRefreshBtn) communityRefreshBtn.textContent = t("communityRefresh");
-  if (communityStoryKicker) communityStoryKicker.textContent = t("communityStoryKicker");
-  if (communityStoryTitle) communityStoryTitle.textContent = t("communityStoryTitle");
-  if (communityStoryText) communityStoryText.textContent = t("communityStoryText");
-  if (communityStoryCta?.firstElementChild) communityStoryCta.firstElementChild.textContent = t("communityStoryCta");
-  if (communityPostTitle) communityPostTitle.placeholder = t("communityTitlePlaceholder");
-  if (communityPostBody) communityPostBody.placeholder = t("communityBodyPlaceholder");
-  if (communityPostMeta) communityPostMeta.placeholder = t("communityMetaPlaceholder");
-  if (communityComposerHint) {
-    communityComposerHint.textContent = t("communityComposerTopicHint", {
-      topic: communityTopicLabel(communityState.topic)
-    });
-  }
-  if (communityLoginText) {
-    const signed = communitySignedIn();
-    communityLoginText.textContent = signed
-      ? t("communityLoginText")
-      : socialSessionUiCopy({ configured: socialConfigReady(), signed }).hint;
-  }
-  if (communityLoginBtn) communityLoginBtn.textContent = t("communityLoginBtn");
-  if (communityPostSubmitBtn) communityPostSubmitBtn.textContent = t("communitySubmit");
-  communityTopicTabs?.querySelectorAll("[data-community-filter]").forEach((button) => {
-    const rawFilter = String(button.getAttribute("data-community-filter") || "all");
-    if (rawFilter === "id") {
-      button.classList.add("hidden");
-      button.setAttribute("hidden", "");
-      button.setAttribute("aria-hidden", "true");
-      button.setAttribute("aria-pressed", "false");
-      return;
-    }
-    const filter = normalizeCommunityFilter(rawFilter);
-    button.textContent = communityFilterLabel(filter);
-    const active = communityState.filter === filter;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", active ? "true" : "false");
-  });
-}
-
-function renderCommunityComment(comment = {}, postId = "") {
-  const item = document.createElement("article");
-  item.className = "community-comment-item";
-  if (comment.mine) item.classList.add("is-mine");
-  const canModerateComment = Boolean(communityState.canModerate || socialCommentsState.canModerate);
-  const canManageComment = Boolean(comment.mine || canModerateComment);
-  const author = comment.author || {};
-  const displayName = String(author.displayName || author.username || "Sonic listener").trim();
-  const meta = document.createElement("div");
-  meta.className = "community-comment-meta";
-  meta.textContent = [displayName, socialCommentDateLabel(comment.createdAt)].filter(Boolean).join(" • ");
-  item.appendChild(meta);
-  const isEditing = Boolean(
-    comment.mine &&
-      editingCommunityCommentId === comment.id &&
-      editingCommunityCommentPostId === postId
-  );
-  if (isEditing) {
-    const editor = document.createElement("div");
-    editor.className = "social-comment-edit";
-    const textarea = document.createElement("textarea");
-    textarea.maxLength = 800;
-    textarea.rows = 3;
-    textarea.dataset.communityCommentEditInput = comment.id || "";
-    textarea.value = String(comment.body || "").trim();
-    editor.appendChild(textarea);
-    const editorActions = document.createElement("div");
-    editorActions.className = "social-comment-edit-actions";
-    const save = document.createElement("button");
-    save.type = "button";
-    save.className = "social-comment-action";
-    save.dataset.communityAction = "comment-edit-save";
-    save.dataset.postId = postId;
-    save.dataset.commentId = comment.id || "";
-    save.textContent = t("socialCommentsSaveEdit");
-    editorActions.appendChild(save);
-    const cancel = document.createElement("button");
-    cancel.type = "button";
-    cancel.className = "social-comment-action";
-    cancel.dataset.communityAction = "comment-edit-cancel";
-    cancel.dataset.postId = postId;
-    cancel.dataset.commentId = comment.id || "";
-    cancel.textContent = t("socialCommentsCancelEdit");
-    editorActions.appendChild(cancel);
-    editor.appendChild(editorActions);
-    item.appendChild(editor);
-  } else {
-    const body = document.createElement("p");
-    body.className = "social-comment-body";
-    body.textContent = communityDisplayText(comment.body);
-    item.appendChild(body);
-  }
-  const actions = document.createElement("div");
-  actions.className = "community-comment-actions";
-  const reactions = comment.reactions || {};
-  [
-    { action: "comment-like", value: 1, label: t("communityLike"), count: Number(reactions.likes) || 0 },
-    { action: "comment-dislike", value: -1, label: t("communityDislike"), count: Number(reactions.dislikes) || 0 }
-  ].forEach((data) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "social-comment-action";
-    button.dataset.communityAction = data.action;
-    button.dataset.postId = postId;
-    button.dataset.commentId = comment.id || "";
-    button.dataset.reactionValue = String(data.value);
-    button.classList.toggle("active", Number(reactions.myReaction) === data.value);
-    button.textContent = communityActionText(data.label, data.count);
-    button.setAttribute("aria-label", communityActionText(data.label, data.count));
-    actions.appendChild(button);
-  });
-  if (canManageComment) {
-    if (!isEditing) {
-      if (comment.mine) {
-        const edit = document.createElement("button");
-        edit.type = "button";
-        edit.className = "social-comment-action";
-        edit.dataset.communityAction = "comment-edit";
-        edit.dataset.postId = postId;
-        edit.dataset.commentId = comment.id || "";
-        edit.textContent = t("socialCommentsEdit");
-        actions.appendChild(edit);
-      }
-    }
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "social-comment-action danger";
-    remove.dataset.communityAction = "comment-delete";
-    remove.dataset.postId = postId;
-    remove.dataset.commentId = comment.id || "";
-    remove.textContent = t("communityDelete");
-    actions.appendChild(remove);
-  }
-  const authorId = ugcAuthorId(comment);
-  if (communitySignedIn() && !comment.mine && authorId) {
-    const report = document.createElement("button");
-    report.type = "button";
-    report.className = "social-comment-action";
-    report.dataset.communityAction = "comment-report";
-    report.dataset.postId = postId;
-    report.dataset.commentId = comment.id || "";
-    report.textContent = t("communityReport");
-    actions.appendChild(report);
-
-    const block = document.createElement("button");
-    block.type = "button";
-    block.className = "social-comment-action danger";
-    block.dataset.communityAction = "block-user";
-    block.dataset.postId = postId;
-    block.dataset.commentId = comment.id || "";
-    block.dataset.authorId = authorId;
-    block.textContent = t("communityBlockUser");
-    actions.appendChild(block);
-  }
-  item.appendChild(actions);
-  return item;
-}
-
-function renderCommunityPostComments(container, post = {}, options = {}) {
-  const postId = post.id || "";
-  const showComposer = Boolean(options.showComposer);
-  const commentsLoaded = communityPostCommentsReady(postId);
-  const comments = communityPostCommentList(postId);
-  const loading = communityState.commentLoading.has(postId);
-  if (!showComposer && !loading && (!commentsLoaded || !comments.length)) return false;
-  const commentsWrap = document.createElement("div");
-  commentsWrap.className = "community-post-comments";
-  const title = document.createElement("strong");
-  title.textContent = t("communityComments");
-  commentsWrap.appendChild(title);
-
-  if (communitySignedIn() && showComposer) {
-    const box = document.createElement("div");
-    box.className = "community-comment-box";
-    const textarea = document.createElement("textarea");
-    textarea.maxLength = 800;
-    textarea.rows = 2;
-    textarea.placeholder = t("communityCommentPlaceholder");
-    textarea.dataset.communityCommentInput = postId;
-    box.appendChild(textarea);
-    const submit = document.createElement("button");
-    submit.type = "button";
-    submit.className = "secondary community-comment-submit";
-    submit.dataset.communityAction = "comment-submit";
-    submit.dataset.postId = postId;
-    submit.textContent = t("communityCommentSubmit");
-    box.appendChild(submit);
-    commentsWrap.appendChild(box);
-  }
-
-  const list = document.createElement("div");
-  list.className = "community-comment-list";
-  if (loading && !commentsLoaded) {
-    const loadingRow = document.createElement("p");
-    loadingRow.className = "muted social-comments-empty";
-    loadingRow.textContent = t("socialCommentsLoading");
-    list.appendChild(loadingRow);
-  } else {
-    if (!comments.length) {
-      const empty = document.createElement("p");
-      empty.className = "muted social-comments-empty";
-      empty.textContent = t("communityCommentEmpty");
-      list.appendChild(empty);
-    } else {
-      comments
-        .filter((comment) => !isUgcItemBlocked(comment))
-        .forEach((comment) => list.appendChild(renderCommunityComment(comment, postId)));
-    }
-  }
-  commentsWrap.appendChild(list);
-  container.appendChild(commentsWrap);
-  return true;
-}
-
-const COMMUNITY_DISPLAY_TRANSLATIONS = {
-  en: new Map([
-    ["qual seu proximo role", "What is your next night out?"],
-    ["qual o seu proximo role", "What is your next night out?"],
-    ["qual seu proximo role festa ou festival", "What is your next party or festival?"],
-    ["qual o seu proximo role festa ou festival", "What is your next party or festival?"],
-    ["festa ou festival", "Party or festival?"],
-    ["recomendacoes de faixa", "Track recommendations"],
-    ["recomendacao de faixa", "Track recommendation"],
-    ["dica de faixa", "Track tip"],
-    ["novidades da cena", "Scene updates"]
-  ]),
-  es: new Map([
-    ["qual seu proximo role", "¿Cuál es tu próxima salida?"],
-    ["qual o seu proximo role", "¿Cuál es tu próxima salida?"],
-    ["qual seu proximo role festa ou festival", "¿Cuál es tu próxima fiesta o festival?"],
-    ["qual o seu proximo role festa ou festival", "¿Cuál es tu próxima fiesta o festival?"],
-    ["festa ou festival", "¿Fiesta o festival?"],
-    ["recomendacoes de faixa", "Recomendaciones de pistas"],
-    ["recomendacao de faixa", "Recomendación de pista"],
-    ["dica de faixa", "Recomendación de pista"],
-    ["novidades da cena", "Novedades de la escena"]
-  ])
-};
-
-function communityDisplayTranslationKey(value = "") {
-  return normalize(String(value || "").replace(/[?!.,;:]+$/g, "")).replace(/\s+/g, " ").trim();
-}
-
-function textLooksLikePortugueseCommunityCopy(value = "") {
-  const key = communityDisplayTranslationKey(value);
-  return /\b(qual|proximo|proxima|role|festa|faixa|musica|noticia|noticias|comunidade|alguem|recomenda|recomendacao|curti|cidade|hoje|amanha)\b/.test(key);
-}
-
-function applyPortugueseCommunityGlossaryToEnglish(value = "") {
-  let text = String(value || "").trim();
-  if (!textLooksLikePortugueseCommunityCopy(text)) return text;
-  const replacements = [
-    [/\bqual o seu pr[oó]ximo rol[eê]\b/gi, "what is your next night out"],
-    [/\bqual seu pr[oó]ximo rol[eê]\b/gi, "what is your next night out"],
-    [/\bpr[oó]ximo rol[eê]\b/gi, "next night out"],
-    [/\bpr[oó]xima festa\b/gi, "next party"],
-    [/\brol[eê]\b/gi, "night out"],
-    [/\bfestas\b/gi, "parties"],
-    [/\bfesta\b/gi, "party"],
-    [/\bfaixas\b/gi, "tracks"],
-    [/\bfaixa\b/gi, "track"],
-    [/\bm[uú]sicas\b/gi, "songs"],
-    [/\bm[uú]sica\b/gi, "music"],
-    [/\bnot[ií]cias\b/gi, "news"],
-    [/\bnot[ií]cia\b/gi, "news"],
-    [/\bcomunidade\b/gi, "community"],
-    [/\balgu[eé]m\b/gi, "anyone"],
-    [/\brecomenda[cç][oõ]es\b/gi, "recommendations"],
-    [/\brecomenda[cç][aã]o\b/gi, "recommendation"],
-    [/\brecomenda\b/gi, "recommend"],
-    [/\bcidade\b/gi, "city"],
-    [/\bhoje\b/gi, "today"],
-    [/\bamanh[aã]\b/gi, "tomorrow"]
-  ];
-  replacements.forEach(([pattern, replacement]) => {
-    text = text.replace(pattern, replacement);
-  });
-  return text;
-}
-
-function communityDisplayText(value = "") {
-  const original = String(value || "").trim();
-  if (!original || currentLanguage === "pt") return original;
-  const key = communityDisplayTranslationKey(original);
-  const exact = COMMUNITY_DISPLAY_TRANSLATIONS[currentLanguage]?.get(key);
-  if (exact) return exact;
-  if (currentLanguage === "en") return applyPortugueseCommunityGlossaryToEnglish(original);
-  return original;
-}
-
-function renderCommunityPost(post = {}) {
-  const card = document.createElement("article");
-  card.className = "community-post-card";
-  if (post.mine) card.classList.add("is-mine");
-  const canManagePost = Boolean(post.mine || communityState.canModerate);
-  card.dataset.communityPostId = post.id || "";
-
-  const head = document.createElement("div");
-  head.className = "community-post-head";
-  const main = document.createElement("div");
-  const topic = document.createElement("span");
-  topic.className = "community-post-topic";
-  topic.textContent = communityTopicLabel(post.topic);
-  main.appendChild(topic);
-  const title = document.createElement("h4");
-  title.className = "community-post-title";
-  title.textContent = communityDisplayText(post.title || t("communityTitle"));
-  main.appendChild(title);
-  if (post.context) {
-    const context = document.createElement("div");
-    context.className = "community-post-meta";
-    context.textContent = `${t("communityContextLabel")}: ${communityDisplayText(post.context)}`;
-    main.appendChild(context);
-  }
-  head.appendChild(main);
-  const author = document.createElement("div");
-  author.className = "community-post-author";
-  const authorInfo = post.author || {};
-  const displayName = String(authorInfo.displayName || authorInfo.username || "Sonic listener").trim();
-  author.textContent = [displayName, socialCommentDateLabel(post.createdAt)].filter(Boolean).join(" • ");
-  head.appendChild(author);
-  card.appendChild(head);
-
-  const body = document.createElement("p");
-  body.className = "community-post-body";
-  body.textContent = communityDisplayText(post.body);
-  card.appendChild(body);
-
-  if (shouldReadOnlyCommunityForAppStore()) {
-    return card;
-  }
-
-  const actions = document.createElement("div");
-  actions.className = "community-post-actions";
-  const reactions = post.reactions || {};
-  [
-    { action: "like", value: 1, label: t("communityLike"), count: Number(reactions.likes) || 0 },
-    { action: "dislike", value: -1, label: t("communityDislike"), count: Number(reactions.dislikes) || 0 }
-  ].forEach((data) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "social-comment-action";
-    button.dataset.communityAction = data.action;
-    button.dataset.postId = post.id || "";
-    button.dataset.reactionValue = String(data.value);
-    button.classList.toggle("active", Number(reactions.myReaction) === data.value);
-    button.textContent = communityActionText(data.label, data.count);
-    button.setAttribute("aria-label", communityActionText(data.label, data.count));
-    actions.appendChild(button);
-  });
-  const commentsButton = document.createElement("button");
-  commentsButton.type = "button";
-  commentsButton.className = "social-comment-action";
-  commentsButton.dataset.communityAction = "comments";
-  commentsButton.dataset.postId = post.id || "";
-  commentsButton.textContent = t("communityComment");
-  commentsButton.setAttribute("aria-expanded", communityState.expandedPostId === post.id ? "true" : "false");
-  actions.appendChild(commentsButton);
-  if (canManagePost) {
-    if (normalizeCommunityTopic(post.topic) !== "all") {
-      const moveToAll = document.createElement("button");
-      moveToAll.type = "button";
-      moveToAll.className = "social-comment-action";
-      moveToAll.dataset.communityAction = "topic-all";
-      moveToAll.dataset.postId = post.id || "";
-      moveToAll.textContent = t("communityMoveToAll");
-      actions.appendChild(moveToAll);
-    }
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "social-comment-action danger";
-    remove.dataset.communityAction = "delete";
-    remove.dataset.postId = post.id || "";
-    remove.textContent = t("communityDelete");
-    actions.appendChild(remove);
-  }
-  const authorId = ugcAuthorId(post);
-  if (communitySignedIn() && !post.mine && authorId) {
-    const report = document.createElement("button");
-    report.type = "button";
-    report.className = "social-comment-action";
-    report.dataset.communityAction = "report";
-    report.dataset.postId = post.id || "";
-    report.textContent = t("communityReport");
-    actions.appendChild(report);
-
-    const block = document.createElement("button");
-    block.type = "button";
-    block.className = "social-comment-action danger";
-    block.dataset.communityAction = "block-user";
-    block.dataset.postId = post.id || "";
-    block.dataset.authorId = authorId;
-    block.textContent = t("communityBlockUser");
-    actions.appendChild(block);
-  }
-  card.appendChild(actions);
-
-  renderCommunityPostComments(card, post, {
-    showComposer: communityState.expandedPostId === post.id
-  });
-  return card;
-}
-
-function renderCommunityFeed() {
-  if (!communityFeedList) return;
-  if (communityCommentsObserver) {
-    communityCommentsObserver.disconnect();
-    communityCommentsObserver = null;
-  }
-  communityFeedList.innerHTML = "";
-  if (communityState.loading) return;
-  if (!communityState.enabled) {
-    const disabled = document.createElement("p");
-    disabled.className = "community-empty muted";
-    disabled.textContent = t("communityDisabled");
-    communityFeedList.appendChild(disabled);
-    return;
-  }
-  if (!communityState.posts.length) {
-    const empty = document.createElement("p");
-    empty.className = "community-empty muted";
-    empty.textContent = t("communityEmpty");
-    communityFeedList.appendChild(empty);
-    return;
-  }
-  communityState.posts
-    .filter((post) => !isUgcItemBlocked(post))
-    .forEach((post) => communityFeedList.appendChild(renderCommunityPost(post)));
-  connectCommunityCommentLazyLoader();
-}
-
-function renderCommunityPanel() {
-  if (!communityPanel) return;
-  if (shouldDisableCommunityForAppStore()) {
-    communityState.enabled = false;
-    communityState.posts = [];
-    communityPanel.hidden = true;
-    communityPanel.setAttribute("aria-hidden", "true");
-    communityPanel.classList.remove("active");
-    return;
-  }
-  communityPanel.hidden = false;
-  communityPanel.setAttribute("aria-hidden", "false");
-  updateCommunityControlsText();
-  const signed = communitySignedIn();
-  const readOnly = shouldReadOnlyCommunityForAppStore();
-  if (communityComposer) communityComposer.classList.toggle("hidden", readOnly || !signed || !communityState.enabled);
-  if (communityLoginPrompt) communityLoginPrompt.classList.toggle("hidden", readOnly || signed || !communityState.enabled);
-  if (communityPostSubmitBtn) communityPostSubmitBtn.disabled = readOnly || communityState.posting || !communityState.enabled;
-  if (communityRefreshBtn) communityRefreshBtn.disabled = communityState.loading;
-  if (communityState.loading) communitySetStatus(t("communityLoading"));
-  else communitySetStatus("");
-  renderCommunityFeed();
-}
-
-async function loadCommunityPosts(options = {}) {
-  if (!communityPanel) return false;
-  if (shouldDisableCommunityForAppStore()) {
-    communityState.enabled = false;
-    communityState.posts = [];
-    communityState.canModerate = false;
-    communityState.viewerRole = "anonymous";
-    renderCommunityPanel();
-    return false;
-  }
-  communityState.filter = normalizeCommunityFilter(communityState.filter);
-  communityState.topic = normalizeCommunityTopic(communityState.topic);
-  communityState.loading = true;
-  communityState.setupNeeded = false;
-  if (!options.silent) renderCommunityPanel();
-  const params = new URLSearchParams({ topic: communityState.filter });
-  try {
-    const payload = await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`);
-    communityState.enabled = payload.enabled !== false;
-    communityState.setupNeeded = Boolean(payload.setupNeeded);
-    applySocialViewerContext(payload);
-    communityState.posts = Array.isArray(payload.posts)
-      ? payload.posts.map((post) => ({ ...post, topic: normalizeCommunityTopic(post?.topic || "track") }))
-      : [];
-    if (communityState.expandedPostId && !communityState.posts.some((post) => post.id === communityState.expandedPostId)) {
-      communityState.expandedPostId = "";
-    }
-    return true;
-  } catch (error) {
-    console.warn("Could not load community posts", error);
-    communityState.posts = [];
-    communityState.enabled = false;
-    communityState.canModerate = false;
-    communityState.viewerRole = "anonymous";
-    return false;
-  } finally {
-    communityState.loading = false;
-    renderCommunityPanel();
-  }
-}
-
-async function submitCommunityPost() {
-  if (!communitySignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
-    return false;
-  }
-  const body = String(communityPostBody?.value || "").trim().slice(0, 1000);
-  if (!body) {
-    communitySetStatus(t("communityPostMissing"), "error");
-    communityPostBody?.focus();
-    return false;
-  }
-  communityState.posting = true;
-  renderCommunityPanel();
-  try {
-    const topic = normalizeCommunityTopic(communityState.topic);
-    communityState.topic = topic;
-    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
-      method: "POST",
-      body: {
-        topic,
-        title: String(communityPostTitle?.value || "").trim().slice(0, 120),
-        body,
-        context: String(communityPostMeta?.value || "").trim().slice(0, 160),
-        metadata: socialCommentAuthorMeta()
-      }
-    });
-    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "community_create_failed");
-    if (communityPostTitle) communityPostTitle.value = "";
-    if (communityPostBody) communityPostBody.value = "";
-    if (communityPostMeta) communityPostMeta.value = "";
-    const postedTopic = normalizeCommunityTopic(payload?.post?.topic || communityState.topic || "track");
-    if (postedTopic && communityState.filter !== "all" && communityState.filter !== postedTopic) {
-      communityState.filter = postedTopic;
-    }
-    showToast(t("communityPosted"));
-    await loadCommunityPosts({ silent: true });
-    return true;
-  } catch (error) {
-    console.warn("Could not submit community post", error);
-    const message = /content_not_allowed/i.test(String(error?.message || ""))
-      ? t("communityContentNotAllowed")
-      : t("communityPostFailed");
-    communitySetStatus(message, "error");
-    showToast(message);
-    return false;
-  } finally {
-    communityState.posting = false;
-    renderCommunityPanel();
-  }
-}
-
-function replaceCommunityPost(updatedPost = {}) {
-  if (!updatedPost?.id) return;
-  communityState.posts = communityState.posts.map((post) => post.id === updatedPost.id ? updatedPost : post);
-}
-
-function applyLocalCommunityCommentReaction(postId = "", commentId = "", nextReaction = 0) {
-  const comments = communityState.commentsByPost.get(postId) || [];
-  const comment = comments.find((item) => item.id === commentId);
-  if (!comment) return false;
-  const reactions = {
-    likes: 0,
-    dislikes: 0,
-    myReaction: 0,
-    ...(comment.reactions || {})
-  };
-  const previous = Number(reactions.myReaction) || 0;
-  if (previous > 0) reactions.likes = Math.max(0, Number(reactions.likes) - 1);
-  if (previous < 0) reactions.dislikes = Math.max(0, Number(reactions.dislikes) - 1);
-  if (nextReaction > 0) reactions.likes = Number(reactions.likes) + 1;
-  if (nextReaction < 0) reactions.dislikes = Number(reactions.dislikes) + 1;
-  reactions.myReaction = nextReaction;
-  comment.reactions = reactions;
-  return true;
-}
-
-async function reactCommunityPost(postId = "", desiredValue = 0) {
-  if (!communitySignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
-    return false;
-  }
-  const post = communityState.posts.find((item) => item.id === postId);
-  if (!post) return false;
-  const previous = Number(post.reactions?.myReaction) || 0;
-  const nextValue = previous === desiredValue ? 0 : desiredValue;
-  try {
-    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
-      method: "POST",
-      body: {
-        action: "react",
-        postId,
-        value: nextValue
-      }
-    });
-    if (payload?.post) replaceCommunityPost(payload.post);
-    renderCommunityPanel();
-    return true;
-  } catch (error) {
-    console.warn("Could not react to community post", error);
-    showToast(t("communityReactionFailed"));
-    return false;
-  }
-}
-
-async function updateCommunityPostTopic(postId = "", topic = "all") {
-  if (!communitySignedIn() || !postId) return false;
-  try {
-    const payload = await communityRequest(COMMUNITY_ENDPOINT, {
-      method: "POST",
-      body: {
-        action: "update",
-        postId,
-        topic: normalizeCommunityTopic(topic)
-      }
-    });
-    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "community_update_failed");
-    if (payload?.post) replaceCommunityPost(payload.post);
-    showToast(t("communityUpdated"));
-    renderCommunityPanel();
-    return true;
-  } catch (error) {
-    console.warn("Could not update community post", error);
-    showToast(t("communityPostFailed"));
-    return false;
-  }
-}
-
-async function deleteCommunityPost(postId = "") {
-  if (!communitySignedIn() || !postId) return false;
-  try {
-    const params = new URLSearchParams({ id: postId });
-    await communityRequest(`${COMMUNITY_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
-    communityState.posts = communityState.posts.filter((post) => post.id !== postId);
-    if (communityState.expandedPostId === postId) communityState.expandedPostId = "";
-    showToast(t("communityDeleted"));
-    renderCommunityPanel();
-    return true;
-  } catch (error) {
-    console.warn("Could not delete community post", error);
-    showToast(t("socialCommentsUnavailable"));
-    return false;
-  }
-}
-
-async function loadCommunityPostComments(postId = "", options = {}) {
-  if (!postId) return false;
-  const silent = Boolean(options.silent);
-  const trackLoading = options.trackLoading !== false;
-  if (trackLoading) {
-    communityState.commentLoading.add(postId);
-  }
-  if (!silent) {
-    renderCommunityPanel();
-  }
-  const params = new URLSearchParams({ targetType: "post", targetKey: postId });
-  try {
-    const payload = await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`);
-    applySocialViewerContext(payload);
-    communityState.commentsByPost.set(postId, Array.isArray(payload.comments) ? payload.comments : []);
-    return true;
-  } catch (error) {
-    console.warn("Could not load community post comments", error);
-    communityState.commentsByPost.set(postId, []);
-    return false;
-  } finally {
-    if (trackLoading) communityState.commentLoading.delete(postId);
-    renderCommunityPanel();
-  }
-}
-
-async function toggleCommunityComments(postId = "") {
-  if (!postId) return false;
-  communityState.expandedPostId = postId;
-  renderCommunityPanel();
-  focusCommunityCommentInput(postId);
-  if (communityPostCommentsReady(postId) || communityState.commentLoading.has(postId)) return true;
-  return loadCommunityPostComments(postId);
-}
-
-async function submitCommunityComment(postId = "") {
-  if (!communitySignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
-    return false;
-  }
-  const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-input]") || [])
-    .find((element) => String(element.getAttribute("data-community-comment-input") || "") === postId);
-  const text = String(input?.value || "").trim().slice(0, 800);
-  if (!text) {
-    input?.focus();
-    return false;
-  }
-  const post = communityState.posts.find((item) => item.id === postId);
-  try {
-    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
-      method: "POST",
-      body: {
-        targetType: "post",
-        targetKey: postId,
-        body: text,
-        metadata: {
-          ...socialCommentAuthorMeta(),
-          targetLabel: post?.title || t("communityTitle"),
-          topic: post?.topic || "question"
-        }
-      }
-    });
-    if (!payload?.ok) throw new Error(payload?.detail || payload?.error || "comment_create_failed");
-    if (input) input.value = "";
-    showToast(t("communityCommentPosted"));
-    await loadCommunityPostComments(postId);
-    return true;
-  } catch (error) {
-    console.warn("Could not submit community comment", error);
-    showToast(
-      /content_not_allowed/i.test(String(error?.message || ""))
-        ? t("communityContentNotAllowed")
-        : t("socialCommentsPostFailed")
-    );
-    return false;
-  }
-}
-
-async function reactCommunityComment(postId = "", commentId = "", desiredValue = 0) {
-  if (!communitySignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
-    return false;
-  }
-  const comments = communityState.commentsByPost.get(postId) || [];
-  const comment = comments.find((item) => item.id === commentId);
-  if (!comment) return false;
-  const previous = Number(comment.reactions?.myReaction) || 0;
-  const nextValue = previous === desiredValue ? 0 : desiredValue;
-  applyLocalCommunityCommentReaction(postId, commentId, nextValue);
-  renderCommunityPanel();
-  try {
-    await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
-      method: "POST",
-      body: {
-        action: "react",
-        commentId,
-        targetType: "post",
-        targetKey: postId,
-        value: nextValue
-      }
-    });
-    void loadCommunityPostComments(postId, { silent: true });
-    return true;
-  } catch (error) {
-    applyLocalCommunityCommentReaction(postId, commentId, previous);
-    renderCommunityPanel();
-    console.warn("Could not react to community comment", error);
-    showToast(t("socialCommentsReactionFailed"));
-    return false;
-  }
-}
-
-function startEditingCommunityComment(postId = "", commentId = "") {
-  if (!postId || !commentId) return false;
-  editingCommunityCommentPostId = postId;
-  editingCommunityCommentId = commentId;
-  renderCommunityPanel();
-  window.requestAnimationFrame(() => {
-    const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-edit-input]") || [])
-      .find((element) => String(element.getAttribute("data-community-comment-edit-input") || "") === commentId);
-    input?.focus?.();
-  });
-  return true;
-}
-
-function cancelEditingCommunityComment() {
-  editingCommunityCommentPostId = "";
-  editingCommunityCommentId = "";
-  renderCommunityPanel();
-}
-
-async function updateCommunityComment(postId = "", commentId = "") {
-  if (!communitySignedIn()) {
-    void showSocialCommentsLogin({ surface: "community" });
-    return false;
-  }
-  const input = Array.from(communityFeedList?.querySelectorAll("[data-community-comment-edit-input]") || [])
-    .find((element) => String(element.getAttribute("data-community-comment-edit-input") || "") === commentId);
-  const text = String(input?.value || "").trim().slice(0, 800);
-  if (!postId || !commentId || !text) {
-    input?.focus?.();
-    return false;
-  }
-  try {
-    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
-      method: "PATCH",
-      body: {
-        id: commentId,
-        targetType: "post",
-        targetKey: postId,
-        body: text
-      }
-    });
-    if (payload?.ok === false) throw new Error(payload?.detail || payload?.error || "comment_update_failed");
-    editingCommunityCommentPostId = "";
-    editingCommunityCommentId = "";
-    showToast(t("socialCommentsUpdated"));
-    await loadCommunityPostComments(postId);
-    return true;
-  } catch (error) {
-    console.warn("Could not update community comment", error);
-    showToast(
-      /content_not_allowed/i.test(String(error?.message || ""))
-        ? t("communityContentNotAllowed")
-        : t("socialCommentsUpdateFailed")
-    );
-    return false;
-  }
-}
-
-async function deleteCommunityComment(postId = "", commentId = "") {
-  if (!communitySignedIn() || !postId || !commentId) return false;
-  const params = new URLSearchParams({
-    id: commentId,
-    targetType: "post",
-    targetKey: postId
-  });
-  try {
-    await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`, { method: "DELETE" });
-    await loadCommunityPostComments(postId);
-    return true;
-  } catch (error) {
-    console.warn("Could not delete community comment", error);
-    showToast(t("socialCommentsUnavailable"));
-    return false;
-  }
-}
-
 function socialSessionUiCopy({ configured = socialConfigReady(), signed = Boolean(socialState.session?.access_token) } = {}) {
   const localSession = normalizeUserSession(currentAuthUser);
   if (signed) {
@@ -61503,9 +57894,9 @@ function socialSessionUiCopy({ configured = socialConfigReady(), signed = Boolea
       : sonicTinyCopy("Perfil local neste aparelho", "Local profile on this device", "Perfil local en este dispositivo");
   const hint = configured
     ? sonicTinyCopy(
-      "Suas descobertas ficam neste aparelho. Para comentar, editar comentários e reagir na comunidade, entre com Google ou Apple.",
-      "Your discoveries stay on this device. To comment, edit comments, and react in the community, sign in with Google or Apple.",
-      "Tus descubrimientos quedan en este dispositivo. Para comentar, editar comentarios y reaccionar en la comunidad, entra con Google o Apple."
+      "Suas descobertas ficam neste aparelho. Para comentar, editar comentários e reagir, entre com Google ou Apple.",
+      "Your discoveries stay on this device. To comment, edit comments, and react, sign in with Google or Apple.",
+      "Tus descubrimientos quedan en este dispositivo. Para comentar, editar comentarios y reaccionar, entra con Google o Apple."
     )
     : sonicTinyCopy(
       "Login online indisponível neste ambiente. Você ainda pode ouvir e salvar no perfil local.",
@@ -61532,10 +57923,10 @@ function updateSocialReadiness({ configured = socialConfigReady(), signed = Bool
   if (!socialReadinessGrid) return;
   const localLabel = socialReadinessLocal?.querySelector("span");
   const cloudLabel = socialReadinessCloud?.querySelector("span");
-  const communityLabel = socialReadinessCommunity?.querySelector("span");
+  const interactionsLabel = socialReadinessInteractions?.querySelector("span");
   if (localLabel) localLabel.textContent = sonicTinyCopy("Local", "Local", "Local");
   if (cloudLabel) cloudLabel.textContent = sonicTinyCopy("Nuvem", "Cloud", "Nube");
-  if (communityLabel) communityLabel.textContent = sonicTinyCopy("Comunidade", "Community", "Comunidad");
+  if (interactionsLabel) interactionsLabel.textContent = sonicTinyCopy("Interações", "Interactions", "Interacciones");
   setSocialReadinessItem(
     socialReadinessLocal,
     socialReadinessLocalValue,
@@ -61561,15 +57952,15 @@ function updateSocialReadiness({ configured = socialConfigReady(), signed = Bool
         : sonicTinyCopy("Configuração ausente", "Configuration missing", "Configuración ausente")
   );
   setSocialReadinessItem(
-    socialReadinessCommunity,
-    socialReadinessCommunityValue,
-    socialReadinessCommunityHint,
+    socialReadinessInteractions,
+    socialReadinessInteractionsValue,
+    socialReadinessInteractionsHint,
     signed ? "ready" : "locked",
     signed
       ? sonicTinyCopy("Liberada", "Open", "Libre")
       : sonicTinyCopy("Pausada", "Paused", "Pausada"),
     signed
-      ? sonicTinyCopy("Comentários e votos ativos", "Comments and votes active", "Comentarios y votos activos")
+      ? sonicTinyCopy("Comentários e reações ativas", "Comments and reactions active", "Comentarios y reacciones activos")
       : sonicTinyCopy("Login libera comentários", "Sign in enables comments", "Login habilita comentarios")
   );
 }
@@ -61650,7 +58041,6 @@ function renderSocialUi(options = {}) {
   }
   renderSocialFeed();
   renderSocialCommentsPanel();
-  renderCommunityPanel();
   if (!options.preserveStatus) {
     if (!configured) socialSetStatus(t("socialStatusOfflineLocal"), "error");
     else if (!signed) socialSetStatus(sessionCopy.hint);
@@ -61989,7 +58379,6 @@ function schedulePostBootHydration() {
       renderDjRadarSummary();
       renderDjRecommendation(null);
     }
-    ensureVoiceLabUiReady();
   }, {
     delayMs: nativePerformanceDelayMs(POST_BOOT_HYDRATION_DELAY_MS, 1800),
     timeoutMs: 2200
@@ -64005,104 +60394,6 @@ bind(audioVolumeSlider, "change", () => {
   playUiSfx("tap");
 });
 
-bind(voiceRecordBtn, "click", startVoiceRecording);
-bind(voiceStopBtn, "click", stopVoiceRecording);
-bind(voicePlayBtn, "click", playVoiceEffect);
-bind(voiceResetBtn, "click", resetVoiceRecording);
-bind(voiceMiniPlayBtn, "click", playVoiceMiniTrack);
-bind(voiceMiniStopBtn, "click", () => stopVoiceMiniTrack());
-bind(voicePlayback, "play", () => {
-  const generation = stopAllActivePlayback({ reason: "voice_recording_play", preserve: "voice-recording" });
-  setActivePlayback({
-    type: "voice-recording",
-    trackKey: "voice-recording",
-    generation,
-    player: voicePlayback,
-    state: "playing"
-  });
-});
-const finishVoiceRecordingPlayback = () => {
-  if (activePlaybackMatches({ type: "voice-recording", player: voicePlayback })) {
-    clearActivePlayback(activePlayback.generation);
-  }
-};
-bind(voicePlayback, "pause", finishVoiceRecordingPlayback);
-bind(voicePlayback, "ended", finishVoiceRecordingPlayback);
-bind(voiceMiniRandomBtn, "click", generateVoiceMiniIdea);
-bind(voiceMiniExportBtn, "click", exportVoiceMiniTrack);
-bind(voiceMiniPresetGrid, "click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-voice-mini-preset]") : null;
-  if (!target) return;
-  applyVoiceMiniPreset(String(target.getAttribute("data-voice-mini-preset") || "techno"));
-});
-bind(voiceMiniMorphGrid, "click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-voice-mini-morph]") : null;
-  if (!target) return;
-  applyVoiceMiniMorph(String(target.getAttribute("data-voice-mini-morph") || "floor"));
-});
-bind(voiceStepSequencer, "click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-voice-step-kind][data-voice-step-index]") : null;
-  if (!target) return;
-  toggleVoiceMiniStep(
-    String(target.getAttribute("data-voice-step-kind") || ""),
-    Number(target.getAttribute("data-voice-step-index") || 0)
-  );
-});
-bind(voiceMiniBpmSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniBpm(target?.value || voiceMiniBpm, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniVoiceLevelSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniVoiceLevel(target?.value || voiceMiniVoiceLevel, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniVoiceLengthSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniVoiceLength(target?.value || voiceMiniVoiceLength, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniSwingSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniSwing(target?.value || voiceMiniSwingAmount, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniSynthTypeSelect, "change", (event) => {
-  const target = event.target instanceof HTMLSelectElement ? event.target : null;
-  updateVoiceMiniSynthType(target?.value || voiceMiniSynthType, { announce: true });
-});
-bind(voiceMiniGrooveModeSelect, "change", (event) => {
-  const target = event.target instanceof HTMLSelectElement ? event.target : null;
-  updateVoiceMiniGrooveMode(target?.value || voiceMiniGrooveMode, { announce: true });
-});
-bind(voiceMiniMasterSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniMaster(target?.value || voiceMiniMasterLevel, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniDriveSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniDrive(target?.value || voiceMiniDriveAmount, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniDelaySlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniDelay(target?.value || voiceMiniDelayAmount, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniPhaserSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniPhaser(target?.value || voiceMiniPhaserAmount, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniBeatmasherSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniBeatmasher(target?.value || voiceMiniBeatmasherAmount, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceMiniSynthSlider, "input", (event) => {
-  const target = event.target instanceof HTMLInputElement ? event.target : null;
-  updateVoiceMiniSynth(target?.value || voiceMiniSynthLevel, { announce: Boolean(voiceMiniTrackPlaying) });
-});
-bind(voiceEffectButtons, "click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("button[data-voice-effect]") : null;
-  if (!target) return;
-  setVoiceEffect(String(target.dataset.voiceEffect || "robot"));
-  if (voiceRecordingBlob) return playVoiceEffect();
-});
-
 supportAmountButtons.forEach((button) => {
   bind(button, "click", () => {
     supportTipAmount = Number(button.getAttribute("data-tip-amount")) || SUPPORT_DEFAULT_AMOUNT;
@@ -65166,6 +61457,7 @@ function feedbackMessageForRecommendationIssue(reason = "") {
 async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition(source || "preview_dislike");
   userStats.skipped += 1;
   const isPreviewIssue = reason === "preview_issue";
   const isRecommendationIssue = RECOMMENDATION_ISSUE_REASONS.has(reason);
@@ -65317,6 +61609,7 @@ bind(noveltyLikedBtn, "click", async () => {
 bind(noveltyNotYetBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("novelty_not_yet");
   const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "novelty_not_yet",
     avoidRepeatArtist: true
@@ -65563,6 +61856,7 @@ bind(blockArtistBtn, "click", async () => {
   const blockedArtistName = String(currentRecommendation.artist || "").trim();
   const blockedArtistKey = artistMatchKey(blockedArtistName);
   if (!blockedArtistKey) return;
+  stopPlaybackForFeedbackTransition("artist_blocked");
 
   addArtistIdentityToSet(blockedArtistsMemory, blockedArtistName);
   addArtistIdentityToSet(rejectedArtists, blockedArtistName);
@@ -65645,6 +61939,7 @@ bind(newDiscoveryBtn, "click", () => {
 bind(skipBtn, "click", async () => {
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
+  stopPlaybackForFeedbackTransition("skip");
   userStats.skipped += 1;
   const feedbackReason = registerTrackFeedback(rejectedTrack, false, {
     source: "skip",
@@ -65773,6 +62068,12 @@ bind(sonicEditorialList, "click", (event) => {
   const article = sonicEditorialState.articles.find((item) => String(item.id || "") === articleId);
   if (article) openSonicNewsReader(article);
 });
+bind(sonicEditorialArchiveFilter, "input", () => {
+  applySonicEditorialArchiveFilter(sonicEditorialArchiveFilter.value);
+});
+bind(sonicEditorialArchiveMore, "click", () => {
+  void loadMoreSonicEditorialArticles();
+});
 bind(sonicNewsReaderClose, "click", closeSonicNewsReader);
 bind(sonicNewsReader, "click", (event) => {
   if (event.target === sonicNewsReader) closeSonicNewsReader();
@@ -65780,102 +62081,6 @@ bind(sonicNewsReader, "click", (event) => {
 bind(sonicNewsReader, "cancel", (event) => {
   event.preventDefault();
   closeSonicNewsReader();
-});
-bind(communityRefreshBtn, "click", () => {
-  void loadCommunityPosts({ silent: false });
-});
-bind(communityStoryCta, "click", () => {
-  communityState.filter = "event";
-  communityState.topic = "event";
-  renderCommunityPanel();
-  void loadCommunityPosts({ silent: true });
-  const participationTarget = communitySignedIn() ? communityPostBody : communityLoginBtn;
-  const participationCard = communityComposer?.closest(".community-composer-card")
-    || communityLoginPrompt?.closest(".community-composer-card");
-  participationCard?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-  window.requestAnimationFrame(() => participationTarget?.focus?.({ preventScroll: true }));
-});
-bind(communityTopicTabs, "click", (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-community-filter]") : null;
-  if (!target) return;
-  const nextFilter = normalizeCommunityFilter(target.getAttribute("data-community-filter") || "all");
-  communityState.filter = nextFilter;
-  communityState.topic = normalizeCommunityTopic(nextFilter);
-  void loadCommunityPosts({ silent: false });
-});
-bind(communityPostSubmitBtn, "click", () => {
-  void submitCommunityPost();
-});
-bind(communityLoginBtn, "click", () => {
-  void showSocialCommentsLogin({ surface: "community", startLogin: true });
-});
-bind(communityFeedList, "click", async (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-community-action]") : null;
-  if (!target) return;
-  const action = String(target.getAttribute("data-community-action") || "").trim();
-  const postId = String(target.getAttribute("data-post-id") || "").trim();
-  const commentId = String(target.getAttribute("data-comment-id") || "").trim();
-  if (action === "comments") {
-    await toggleCommunityComments(postId);
-    return;
-  }
-  if (action === "comment-submit") {
-    await submitCommunityComment(postId);
-    return;
-  }
-  if (action === "comment-delete") {
-    await deleteCommunityComment(postId, commentId);
-    return;
-  }
-  if (action === "comment-report") {
-    await reportUgcContent({
-      kind: "comment",
-      id: commentId,
-      surface: "community",
-      targetType: "post",
-      targetKey: postId
-    });
-    return;
-  }
-  if (action === "comment-edit") {
-    startEditingCommunityComment(postId, commentId);
-    return;
-  }
-  if (action === "comment-edit-save") {
-    await updateCommunityComment(postId, commentId);
-    return;
-  }
-  if (action === "comment-edit-cancel") {
-    cancelEditingCommunityComment();
-    return;
-  }
-  if (action === "comment-like" || action === "comment-dislike") {
-    await reactCommunityComment(postId, commentId, Number(target.getAttribute("data-reaction-value")) || 0);
-    return;
-  }
-  if (action === "delete") {
-    await deleteCommunityPost(postId);
-    return;
-  }
-  if (action === "report") {
-    await reportUgcContent({
-      kind: "post",
-      id: postId,
-      surface: "community"
-    });
-    return;
-  }
-  if (action === "block-user") {
-    await blockUgcAuthor(target.getAttribute("data-author-id") || "");
-    return;
-  }
-  if (action === "topic-all") {
-    await updateCommunityPostTopic(postId, "all");
-    return;
-  }
-  if (action === "like" || action === "dislike") {
-    await reactCommunityPost(postId, Number(target.getAttribute("data-reaction-value")) || 0);
-  }
 });
 bind(heroLogoBtn, "click", handleHeroLogoClick);
 bind(appMenuBtn, "click", toggleAppMenu);
@@ -65944,28 +62149,6 @@ bind(adminNewsList, "click", (event) => {
 bind(adminHealthRefreshBtn, "click", () => {
   void loadAdminIntegrationHealth({ force: true });
 });
-bind(adminModerationRefreshBtn, "click", () => {
-  void loadAdminModerationQueue({ force: true });
-});
-bind(adminModerationList, "click", async (event) => {
-  const target = event.target instanceof Element ? event.target.closest("[data-admin-delete-post]") : null;
-  if (!target) return;
-  const postId = String(target.getAttribute("data-admin-delete-post") || "").trim();
-  const postTitle = String(target.getAttribute("data-admin-post-title") || "").trim();
-  target.disabled = true;
-  try {
-    await deleteAdminCommunityPost(postId, postTitle);
-  } finally {
-    target.disabled = false;
-  }
-});
-bind(voicePadKickBtn, "click", () => triggerVoiceDawPad("kick"));
-bind(voicePadBassBtn, "click", () => triggerVoiceDawPad("bass"));
-bind(voicePadHatBtn, "click", () => triggerVoiceDawPad("hat"));
-bind(voicePadClapBtn, "click", () => triggerVoiceDawPad("clap"));
-bind(voicePadSynthBtn, "click", () => triggerVoiceDawPad("synth"));
-bind(voicePadVoiceBtn, "click", () => triggerVoiceDawPad("voice"));
-
 sharedSpiritPayload = parseSharedSpiritPayloadFromUrl();
 sharedSpiritViewMode = Boolean(sharedSpiritPayload);
 publicVisitorMode = sharedSpiritViewMode || urlRequestsPublicVisitorMode();

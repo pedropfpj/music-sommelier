@@ -14,6 +14,7 @@ const indexPath = path.join(rootDir, "index.html");
 const styleBiblePath = path.join(rootDir, "docs/style-bible-2026-06-17.md");
 const baselinePath = path.join(rootDir, "docs/product-baseline-2026-06-17.md");
 const layersPath = path.join(rootDir, "docs/improvement-layers-2026-06-17.md");
+const electronicRecommendationAuditPath = path.join(rootDir, "scripts", "audit-electronic-recommendations.mjs");
 const reportsDir = path.join(rootDir, "reports");
 const screenshotMode = process.argv.includes("--screenshots");
 const strictScreenshots = process.argv.includes("--strict-screenshots");
@@ -262,6 +263,21 @@ function runNodeCheck() {
   fail("app.js syntax", (result.stderr || result.stdout || "").trim() || "node --check failed");
 }
 
+function runElectronicRecommendationAudit() {
+  const result = spawnSync(process.execPath, [electronicRecommendationAuditPath], {
+    cwd: rootDir,
+    encoding: "utf8"
+  });
+  if (result.status === 0) {
+    pass("electronic-only recommendation gate");
+    return;
+  }
+  fail(
+    "electronic-only recommendation gate",
+    String(result.stderr || result.stdout || "Electronic recommendation audit failed.").trim()
+  );
+}
+
 function verifyDocs() {
   const missing = [styleBiblePath, baselinePath, layersPath]
     .filter((filePath) => !fs.existsSync(filePath))
@@ -439,7 +455,7 @@ function verifyBpmRules(source) {
 function verifyCacheAndScriptVersion(appSource, indexSource) {
   const storageKey = getConstString(appSource, "SPIRIT_COLLECTIBLE_STORAGE_KEY");
   const localVersion = getConstString(appSource, "SPIRIT_LOCAL_COLLECTIBLE_VERSION");
-  const scriptVersionMatch = indexSource.match(/app\.js\?v=([^"']+)/);
+  const scriptVersionMatch = indexSource.match(/app(?:\.min)?\.js\?v=([^"']+)/);
   const hits = [];
 
   if (!storageKey || !/spiritCollectible:v\d+/.test(storageKey)) {
@@ -452,7 +468,7 @@ function verifyCacheAndScriptVersion(appSource, indexSource) {
     hits.push("SPIRIT_LOCAL_COLLECTIBLE_VERSION should mark the copy-sensitive card generation");
   }
   if (!scriptVersionMatch) {
-    hits.push("index.html script tag must cache-bust app.js with ?v=");
+    hits.push("index.html script tag must cache-bust app.js or app.min.js with ?v=");
   } else if (scriptVersionMatch[1] === "20260616share1") {
     hits.push("index.html still references the old app.js cache token");
   }
@@ -729,6 +745,7 @@ async function main() {
 
   pass("required files readable");
   runNodeCheck();
+  runElectronicRecommendationAudit();
   verifyDocs();
   verifyStyleBible(styleBibleSource);
   verifyOldBadStringsAbsent(appSource);

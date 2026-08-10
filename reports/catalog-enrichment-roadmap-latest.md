@@ -1,16 +1,16 @@
 # Catalog Enrichment Roadmap - Sonic Search
 
-Gerado em: 21/06/2026, 21:59:38
+Gerado em: 13/07/2026, 18:39:30
 
 ## Resumo executivo
 
-- Faixas auditadas: 8892
-- Artistas unicos: 3544
-- Estilos auditados: 168
+- Faixas auditadas: 16533
+- Artistas unicos: 3648
+- Estilos auditados: 169
 - Criticos atuais: 0
-- Avisos atuais: 81
-- Subgeneros com cobertura abaixo do alvo: 81
-- Subgeneros com lacuna de fontes tocaveis: 18
+- Avisos atuais: 82
+- Subgeneros com cobertura abaixo do alvo: 82
+- Subgeneros com lacuna de fontes tocaveis: 7
 
 ## Proximos lotes
 
@@ -18,97 +18,86 @@ Gerado em: 21/06/2026, 21:59:38
 
 melhora a experiencia agora: recomendacao aparece com mais chance de tocar/abrir direto.
 
-Prioridade: bleep_techno, broken_techno, slambient, tribal_techno, deep_techno, hardgroove_techno, ambient_techno, acid_techno
+Prioridade: bleep_techno, slambient, tribal_techno, broken_techno, acid_techno, deep_techno, chillout
 
 ### Lote B - subgeneros com pouca base
 
 evita que estilos de cauda longa fiquem com dois artistas genericos.
 
-Prioridade: extratone, lowercase, shangaan_electro, electroacoustic, berlin_school, kosmische_musik, microsound, vocal_trance
+Prioridade: big_beat, extratone, lowercase, shangaan_electro, berlin_school, kosmische_musik, electroacoustic, microsound
 
 ### Lote C - DNA psy/techno prioritario
 
 mantem o diferencial do Sonic Search em psicodelia extrema e musica de pista.
 
-Prioridade: hi_tech, psycore, techno, forest_psy, tech_house, dark_psy
+Prioridade: forest_psy, hi_tech, tech_house, techno, dark_psy, psycore
 
 ## Prioridades gerais
 
 | Score | Subgenero | Status | Faixas | Artistas | Tocaveis | Proxima acao |
 | --- | --- | --- | --- | --- | --- | --- |
-| 103.2 | extratone | Cobertura | 8/2 | 2/50 | 0/8 (0%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 6 faixas; revisar avisos de cobertura/classificacao |
-| 95.4 | lowercase | Cobertura | 8/2 | 2/50 | 2/8 (25%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas; revisar avisos de cobertura/classificacao |
-| 91.7 | shangaan_electro | Cobertura | 8/2 | 2/50 | 4/8 (50%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 2 faixas; revisar avisos de cobertura/classificacao |
-| 91.3 | electroacoustic | Cobertura | 9/2 | 2/50 | 6/9 (67%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; revisar avisos de cobertura/classificacao |
-| 90.7 | berlin_school | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.7 | kosmische_musik | Cobertura | 16/2 | 2/50 | 15/16 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.6 | microsound | Cobertura | 15/2 | 2/50 | 15/15 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.6 | vocal_trance | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | acid_trance | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ambient_dub | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ambient_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | atmospheric_jungle | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ballroom_vogue_beats | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | bassline | Cobertura | 16/2 | 2/50 | 15/16 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | big_room_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | big_room_techno | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | brostep | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | chicago_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | chillstep | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | complextro | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | darksynth | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | deconstructed_club | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | drumfunk | Cobertura | 16/2 | 2/50 | 15/16 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | drumstep | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | edm | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 173.1 | big_beat | Cobertura | 6/20 | 1/50 | 6/6 (100%) | completar cobertura minima (14 faixas, 49 artistas, 6 labels faltando); revisar avisos de cobertura/classificacao |
+| 111.6 | extratone | Cobertura | 16/2 | 2/50 | 0/16 (0%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 12 faixas; revisar avisos de cobertura/classificacao |
+| 101.9 | lowercase | Cobertura | 16/2 | 2/50 | 4/16 (25%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 8 faixas; revisar avisos de cobertura/classificacao |
+| 94.6 | shangaan_electro | Cobertura | 16/2 | 2/50 | 8/16 (50%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas; revisar avisos de cobertura/classificacao |
+| 92.6 | berlin_school | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao; enriquecer bios, origem, links sociais e fonte editorial |
+| 92.6 | kosmische_musik | Cobertura | 32/2 | 2/50 | 30/32 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao; enriquecer bios, origem, links sociais e fonte editorial |
+| 92.4 | electroacoustic | Cobertura | 18/2 | 2/50 | 12/18 (67%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; revisar avisos de cobertura/classificacao |
+| 92.4 | microsound | Cobertura | 30/2 | 2/50 | 30/30 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.4 | tropical_house | Cobertura | 34/2 | 2/50 | 34/34 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.4 | vocal_trance | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | acid_trance | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ambient_dub | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ambient_house | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | atmospheric_jungle | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ballroom_vogue_beats | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | big_room_house | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | big_room_techno | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | brostep | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | chillstep | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | complextro | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | darksynth | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | deconstructed_club | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | drumfunk | Cobertura | 32/2 | 2/50 | 30/32 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | drumstep | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | edm_trap | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
 
 ## Lacuna de fontes tocaveis
 
 | Score | Subgenero | Status | Faixas | Artistas | Tocaveis | Proxima acao |
 | --- | --- | --- | --- | --- | --- | --- |
-| 51 | bleep_techno | OK | 78/14 | 53/50 | 25/78 (32%) | trocar links de busca por fontes tocaveis diretas em pelo menos 30 faixas |
-| 41.4 | broken_techno | OK | 85/16 | 54/50 | 38/85 (45%) | trocar links de busca por fontes tocaveis diretas em pelo menos 22 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 37.9 | slambient | OK | 70/24 | 149/50 | 28/70 (40%) | trocar links de busca por fontes tocaveis diretas em pelo menos 21 faixas |
-| 39.4 | tribal_techno | OK | 77/16 | 56/50 | 33/77 (43%) | trocar links de busca por fontes tocaveis diretas em pelo menos 21 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 31.7 | deep_techno | OK | 77/20 | 52/50 | 39/77 (51%) | trocar links de busca por fontes tocaveis diretas em pelo menos 15 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 33.2 | hardgroove_techno | OK | 95/20 | 55/50 | 52/95 (55%) | trocar links de busca por fontes tocaveis diretas em pelo menos 15 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 32.1 | ambient_techno | OK | 96/16 | 52/50 | 54/96 (56%) | trocar links de busca por fontes tocaveis diretas em pelo menos 14 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 23.1 | acid_techno | OK | 50/20 | 113/50 | 24/50 (48%) | trocar links de busca por fontes tocaveis diretas em pelo menos 11 faixas |
-| 39 | hi_tech | OK | 127/28 | 152/50 | 78/127 (61%) | trocar links de busca por fontes tocaveis diretas em pelo menos 11 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 16.1 | downtempo | OK | 25/24 | 60/50 | 12/25 (48%) | trocar links de busca por fontes tocaveis diretas em pelo menos 6 faixas |
-| 27.4 | psycore | OK | 147/22 | 271/50 | 97/147 (66%) | trocar links de busca por fontes tocaveis diretas em pelo menos 6 faixas; enriquecer bios, origem, links sociais e fonte editorial |
-| 14.9 | chillout | OK | 25/20 | 61/50 | 13/25 (52%) | trocar links de busca por fontes tocaveis diretas em pelo menos 5 faixas |
-| 12.8 | raw_techno | OK | 36/20 | 68/50 | 23/36 (64%) | trocar links de busca por fontes tocaveis diretas em pelo menos 3 faixas |
-| 11.3 | ebm | OK | 36/20 | 70/50 | 24/36 (67%) | trocar links de busca por fontes tocaveis diretas em pelo menos 2 faixas |
-| 19.7 | hypnotic_techno | OK | 37/20 | 73/50 | 24/37 (65%) | trocar links de busca por fontes tocaveis diretas em pelo menos 2 faixas |
-| 12.7 | afro_house | OK | 63/20 | 62/50 | 44/63 (70%) | trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; enriquecer bios, origem, links sociais e fonte editorial |
-| 9 | idm | OK | 35/20 | 60/50 | 24/35 (69%) | trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa |
-| 27.4 | techno | OK | 207/20 | 99/50 | 144/207 (70%) | trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; enriquecer bios, origem, links sociais e fonte editorial |
+| 44.2 | bleep_techno | OK | 103/14 | 53/50 | 50/103 (49%) | trocar links de busca por fontes tocaveis diretas em pelo menos 23 faixas; enriquecer bios, origem, links sociais e fonte editorial |
+| 37.9 | slambient | OK | 70/24 | 151/50 | 28/70 (40%) | trocar links de busca por fontes tocaveis diretas em pelo menos 21 faixas |
+| 29.3 | tribal_techno | OK | 110/16 | 56/50 | 66/110 (60%) | trocar links de busca por fontes tocaveis diretas em pelo menos 11 faixas; enriquecer bios, origem, links sociais e fonte editorial |
+| 29.4 | broken_techno | OK | 125/16 | 55/50 | 78/125 (62%) | trocar links de busca por fontes tocaveis diretas em pelo menos 10 faixas; enriquecer bios, origem, links sociais e fonte editorial |
+| 15 | acid_techno | OK | 74/20 | 114/50 | 48/74 (65%) | trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas |
+| 21 | deep_techno | OK | 116/20 | 56/50 | 78/116 (67%) | trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas; enriquecer bios, origem, links sociais e fonte editorial |
+| 11 | chillout | OK | 39/20 | 85/50 | 27/39 (69%) | trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa |
 
 ## Lacuna de cobertura
 
 | Score | Subgenero | Status | Faixas | Artistas | Tocaveis | Proxima acao |
 | --- | --- | --- | --- | --- | --- | --- |
-| 103.2 | extratone | Cobertura | 8/2 | 2/50 | 0/8 (0%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 6 faixas; revisar avisos de cobertura/classificacao |
-| 95.4 | lowercase | Cobertura | 8/2 | 2/50 | 2/8 (25%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas; revisar avisos de cobertura/classificacao |
-| 91.7 | shangaan_electro | Cobertura | 8/2 | 2/50 | 4/8 (50%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 2 faixas; revisar avisos de cobertura/classificacao |
-| 91.3 | electroacoustic | Cobertura | 9/2 | 2/50 | 6/9 (67%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; revisar avisos de cobertura/classificacao |
-| 90.7 | berlin_school | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.7 | kosmische_musik | Cobertura | 16/2 | 2/50 | 15/16 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.6 | microsound | Cobertura | 15/2 | 2/50 | 15/15 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.6 | vocal_trance | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | acid_trance | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ambient_dub | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ambient_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | atmospheric_jungle | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | ballroom_vogue_beats | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | bassline | Cobertura | 16/2 | 2/50 | 15/16 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | big_room_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | big_room_techno | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | brostep | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | chicago_house | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | chillstep | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
-| 90.5 | complextro | Cobertura | 16/2 | 2/50 | 16/16 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 173.1 | big_beat | Cobertura | 6/20 | 1/50 | 6/6 (100%) | completar cobertura minima (14 faixas, 49 artistas, 6 labels faltando); revisar avisos de cobertura/classificacao |
+| 111.6 | extratone | Cobertura | 16/2 | 2/50 | 0/16 (0%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 12 faixas; revisar avisos de cobertura/classificacao |
+| 101.9 | lowercase | Cobertura | 16/2 | 2/50 | 4/16 (25%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 8 faixas; revisar avisos de cobertura/classificacao |
+| 94.6 | shangaan_electro | Cobertura | 16/2 | 2/50 | 8/16 (50%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 4 faixas; revisar avisos de cobertura/classificacao |
+| 92.6 | berlin_school | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao; enriquecer bios, origem, links sociais e fonte editorial |
+| 92.6 | kosmische_musik | Cobertura | 32/2 | 2/50 | 30/32 (94%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao; enriquecer bios, origem, links sociais e fonte editorial |
+| 92.4 | electroacoustic | Cobertura | 18/2 | 2/50 | 12/18 (67%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); trocar links de busca por fontes tocaveis diretas em pelo menos 1 faixa; revisar avisos de cobertura/classificacao |
+| 92.4 | microsound | Cobertura | 30/2 | 2/50 | 30/30 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.4 | tropical_house | Cobertura | 34/2 | 2/50 | 34/34 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.4 | vocal_trance | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | acid_trance | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ambient_dub | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ambient_house | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | atmospheric_jungle | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | ballroom_vogue_beats | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | big_room_house | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | big_room_techno | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | brostep | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | chillstep | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
+| 92.2 | complextro | Cobertura | 32/2 | 2/50 | 32/32 (100%) | completar cobertura minima (0 faixas, 48 artistas, 0 labels faltando); revisar avisos de cobertura/classificacao |
 
 ## Como usar
 

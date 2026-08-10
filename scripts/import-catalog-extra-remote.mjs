@@ -42,6 +42,7 @@ function loadEnv() {
 function parseArgs(argv) {
   const args = {
     dryRun: false,
+    requireElectronicGate: false,
     rowsFile: DEFAULT_ROWS,
     sqlFile: DEFAULT_SQL,
     chunkSize: DEFAULT_CHUNK_SIZE
@@ -50,6 +51,7 @@ function parseArgs(argv) {
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === "--dry-run") args.dryRun = true;
+    else if (arg === "--require-electronic-gate") args.requireElectronicGate = true;
     else if (arg === "--rows") args.rowsFile = path.resolve(ROOT, argv[++index] || "");
     else if (arg.startsWith("--rows=")) args.rowsFile = path.resolve(ROOT, arg.slice("--rows=".length));
     else if (arg === "--sql") args.sqlFile = path.resolve(ROOT, argv[++index] || "");
@@ -96,7 +98,31 @@ function loadRows(rowsFile) {
   const payload = JSON.parse(readText(rowsFile));
   const artists = Array.isArray(payload.artists) ? payload.artists : [];
   const tracks = Array.isArray(payload.tracks) ? payload.tracks : [];
-  return { artists, tracks };
+  return {
+    artists,
+    tracks,
+    batch: String(payload.batch || "").trim(),
+    gateVersion: String(payload.gateVersion || "").trim(),
+    summary: payload.summary && typeof payload.summary === "object" ? payload.summary : {}
+  };
+}
+
+function validateElectronicGate(rows, rowsFile) {
+  const publishedArtistsWithoutGate = rows.artists.filter(
+    (row) => row.status === "published" && row.metadata?.electronic_gate !== "passed"
+  );
+  const publishedTracksWithoutGate = rows.tracks.filter(
+    (row) => row.status === "published" && row.metadata?.electronic_gate !== "passed"
+  );
+  if (!rows.gateVersion) {
+    throw new Error(`Lote ${relative(rowsFile)} nao declara gateVersion.`);
+  }
+  if (publishedArtistsWithoutGate.length || publishedTracksWithoutGate.length) {
+    throw new Error(
+      `Lote eletronico invalido: ${publishedArtistsWithoutGate.length} artistas e ` +
+      `${publishedTracksWithoutGate.length} faixas publicadas sem electronic_gate=passed.`
+    );
+  }
 }
 
 function writeStatusReport(report) {
@@ -209,9 +235,11 @@ async function upsertRows({ supabaseUrl, serviceKey, table, rows, conflict, chun
   }
 }
 
-async function importViaRest({ supabaseUrl, serviceKey, rowsFile, chunkSize, dryRun }) {
+async function importViaRest({ supabaseUrl, serviceKey, rowsFile, chunkSize, dryRun, requireElectronicGate }) {
   if (!supabaseUrl || !serviceKey) return false;
-  const { artists, tracks } = loadRows(rowsFile);
+  const rows = loadRows(rowsFile);
+  if (requireElectronicGate) validateElectronicGate(rows, rowsFile);
+  const { artists, tracks } = rows;
   console.log(`Linhas prontas: ${artists.length} artistas, ${tracks.length} faixas.`);
   if (dryRun) {
     console.log(`[dry-run] SUPABASE_SERVICE_ROLE_KEY encontrada. Nenhum dado foi gravado.`);
@@ -233,6 +261,32 @@ async function importViaRest({ supabaseUrl, serviceKey, rowsFile, chunkSize, dry
     conflict: "style,track_key",
     chunkSize
   });
+  const summary = rows.summary || {};
+  await upsertRows({
+    supabaseUrl,
+    serviceKey,
+    table: "electronic_ingestion_runs",
+    rows: [{
+      source: "catalog_extra_remote_import",
+      batch_key: rows.batch || path.basename(rowsFile).replace(/\.rows\.json$/i, ""),
+      run_status: Number(summary.reviewArtistRows || 0) + Number(summary.reviewTrackRows || 0) > 0
+        ? "completed_with_review"
+        : "completed",
+      artists_seen: Number(summary.artistRows || artists.length),
+      artists_published: Number(summary.publishedArtistRows || artists.filter((row) => row.status === "published").length),
+      recordings_seen: Number(summary.trackRows || tracks.length),
+      recordings_published: Number(summary.publishedTrackRows || tracks.filter((row) => row.status === "published").length),
+      quarantined: Number(summary.reviewArtistRows || 0) + Number(summary.reviewTrackRows || 0),
+      finished_at: new Date().toISOString(),
+      metadata: {
+        gate_version: rows.gateVersion || "",
+        rows_file: relative(rowsFile),
+        summary
+      }
+    }],
+    conflict: "batch_key",
+    chunkSize: 1
+  });
   return true;
 }
 
@@ -243,7 +297,7 @@ async function main() {
   const supabaseUrl = getSupabaseUrl(env);
   const serviceKey = getServiceRoleKey(env);
   const publicKey = getPublicKey(env);
-  const readKey = serviceKey || publicKey;
+  const readKey = publicKey || serviceKey;
 
   console.log("Sonic Search remote catalog import");
   console.log(`- SQL: ${relative(args.sqlFile)}`);
@@ -253,8 +307,10 @@ async function main() {
   console.log(`- Modo: ${args.dryRun ? "dry-run" : "importacao real se houver permissao"}`);
 
   const localRows = loadRows(args.rowsFile);
+  if (args.requireElectronicGate) validateElectronicGate(localRows, args.rowsFile);
+  const batch = localRows.batch || path.basename(args.rowsFile).replace(/\.rows\.json$/i, "");
   const report = {
-    batch: BATCH,
+    batch,
     generatedAt: new Date().toISOString(),
     files: {
       sql: relative(args.sqlFile),
@@ -272,12 +328,46 @@ async function main() {
     },
     remoteBefore: [],
     remoteAfter: [],
+    electronicGate: {
+      required: args.requireElectronicGate,
+      version: localRows.gateVersion || "",
+      summary: localRows.summary
+    },
     status: "started"
   };
 
   report.remoteBefore = await printCounts("Antes", supabaseUrl, readKey);
 
-  if (importViaPsql(databaseUrl, args.sqlFile, args.dryRun)) {
+  if (supabaseUrl && serviceKey) {
+    const serviceProbe = await countTable(supabaseUrl, serviceKey, "catalog_artists");
+    if (serviceProbe.error) {
+      console.log("");
+      console.log(`Bloqueio: a credencial administrativa foi recusada (${serviceProbe.error}).`);
+      console.log("Renove SUPABASE_SERVICE_ROLE_KEY ou forneca DATABASE_URL/POSTGRES_URL antes de importar.");
+      report.status = "blocked_invalid_admin_credential";
+      report.remoteAfter = report.remoteBefore;
+      report.adminCredentialProbe = serviceProbe;
+      writeStatusReport(report);
+      process.exitCode = args.dryRun ? 0 : 2;
+      return;
+    }
+    if (args.requireElectronicGate) {
+      const migrationProbe = await countTable(supabaseUrl, serviceKey, "electronic_artists");
+      if (migrationProbe.error) {
+        console.log("");
+        console.log(`Bloqueio: a migracao do catalogo eletronico v2 ainda nao esta acessivel (${migrationProbe.error}).`);
+        console.log("Aplique supabase/migrations/20260713000200_electronic_catalog_v2.sql antes do lote filtrado.");
+        report.status = "blocked_missing_electronic_v2_migration";
+        report.remoteAfter = report.remoteBefore;
+        report.migrationProbe = migrationProbe;
+        writeStatusReport(report);
+        process.exitCode = args.dryRun ? 0 : 2;
+        return;
+      }
+    }
+  }
+
+  if (!args.requireElectronicGate && importViaPsql(databaseUrl, args.sqlFile, args.dryRun)) {
     report.remoteAfter = await printCounts("Depois", supabaseUrl, readKey);
     report.status = args.dryRun ? "dry_run_ready_psql" : "imported_via_psql";
     writeStatusReport(report);
@@ -289,7 +379,8 @@ async function main() {
     serviceKey,
     rowsFile: args.rowsFile,
     chunkSize: args.chunkSize,
-    dryRun: args.dryRun
+    dryRun: args.dryRun,
+    requireElectronicGate: args.requireElectronicGate
   })) {
     report.remoteAfter = await printCounts("Depois", supabaseUrl, readKey);
     report.status = args.dryRun ? "dry_run_ready_rest" : "imported_via_rest";

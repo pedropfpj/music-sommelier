@@ -1,0 +1,50 @@
+{
+  "name": "sonic-search",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sonic Search web app packaged for iOS with Capacitor.",
+  "scripts": {
+    "beta:check": "node scripts/check-beta-storage.mjs",
+    "audit:electronic": "node scripts/audit-electronic-recommendations.mjs",
+    "catalog:v2:generate": "node scripts/generate-electronic-catalog-v2-import.mjs",
+    "catalog:v2:import": "node scripts/import-catalog-extra-remote.mjs --rows reports/catalog_extra_electronic_v2.rows.json --require-electronic-gate",
+    "catalog:musicbrainz:generate": "node scripts/generate-musicbrainz-electronic-import.mjs",
+    "check": "node --check app.js",
+    "web:build": "node scripts/build-web-assets.mjs",
+    "ios:build-web": "node scripts/build-ios-web.mjs",
+    "ios:copy": "node scripts/build-ios-web.mjs && node scripts/copy-ios-native.mjs",
+    "ios:sync": "node scripts/build-ios-web.mjs && cap sync ios",
+    "ios:open": "node scripts/build-ios-web.mjs && node scripts/copy-ios-native.mjs && open ios/App/App.xcodeproj",
+    "android:build-web": "node scripts/build-android-web.mjs",
+    "android:copy": "node scripts/build-android-web.mjs && node scripts/copy-android-native.mjs",
+    "android:open": "node scripts/build-android-web.mjs && node scripts/copy-android-native.mjs && open -a \"Android Studio\" android",
+    "android:bundle": "node scripts/build-android-web.mjs && node scripts/copy-android-native.mjs && cd android && ./gradlew bundleRelease",
+    "appstore:smoke": "node scripts/appstore-public-smoke.mjs",
+    "test:admin-access": "node scripts/test-admin-access.mjs",
+    "test:newsroom": "node scripts/test-newsroom.mjs",
+    "test:newsroom-visuals": "node scripts/test-newsroom-visuals.mjs",
+    "test:community-email": "node scripts/test-community-email-notifications.mjs",
+    "test:ugc-safety": "node scripts/test-ugc-safety.mjs",
+    "test:discovery-performance": "node scripts/test-discovery-performance.mjs",
+    "test:first-impression": "node scripts/test-friendly-first-impression.mjs",
+    "test:auth-recommendation-isolation": "node scripts/test-auth-recommendation-isolation.mjs",
+    "test:opening-rotation": "node scripts/test-opening-rotation.mjs",
+    "test:dj-player-swipe": "node scripts/test-dj-player-swipe.mjs",
+    "test:psytrance-integrity": "node scripts/test-psytrance-integrity.mjs",
+    "test:subgenre-stress": "node scripts/test-subgenre-stress.mjs",
+    "test:recommendation-safety": "node scripts/test-recommendation-safety.mjs",
+    "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/app": "8.1.0",
+    "@capacitor/browser": "8.0.3",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.4.1",
+    "clean-css": "^5.3.3",
+    "terser": "^5.49.0"
+  }
+}

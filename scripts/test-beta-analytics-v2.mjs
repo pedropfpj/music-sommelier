@@ -490,7 +490,9 @@ async function testBackendContract() {
     const legacyRow = JSON.parse(fetchCalls.at(-1)[1].body)[0];
     assert.equal(legacyRow.page_url, "/login");
     assert.deepEqual(legacyRow.payload, { compatible: true });
-    assert.equal(Object.hasOwn(legacyRow, "schema_version"), false);
+    assert.equal(legacyRow.schema_version, 1);
+    assert.equal(legacyRow.event_id, null);
+    assert.equal(legacyRow.anonymous_id, null);
 
     global.fetch = async () => ({
       ok: false,

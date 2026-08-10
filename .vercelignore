@@ -9,6 +9,7 @@ mobile/
 *.log
 *.unreadable-*
 api/* 2.js
+api/deezer-preview.js
 
 docs/
 scripts/

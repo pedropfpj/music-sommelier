@@ -82,6 +82,9 @@ function assertSourcePolicy() {
   const soundcloudShowSource = extractFunction("showSoundCloudPreviewEmbed");
   const continueFromUsageGuideSource = extractFunction("continueFromUsageGuide");
   const enterAppFromWelcomeSource = extractFunction("enterAppFromWelcome");
+  const feedbackTransitionStopSource = extractFunction("stopPlaybackForFeedbackTransition");
+  const swipePassSource = extractFunction("passCurrentTrackFromSwipe");
+  const previewDislikeSource = extractFunction("swapAfterPreviewFeedback");
 
   assert.match(appSource, /const AUTOMATIC_TRACK_PLAYBACK_ENABLED = true;/);
   assert.match(
@@ -94,6 +97,19 @@ function assertSourcePolicy() {
   assert.match(previewAutoplaySource, /AUTOMATIC_TRACK_PLAYBACK_ENABLED/);
   assert.match(previewAutoplaySource, /audioEnabled/);
   assert.match(renderPreviewSource, /stopAllActivePlayback\(\{ reason: "render_preview" \}\)/);
+  assert.match(feedbackTransitionStopSource, /recommendationPreviewRenderToken \+= 1/);
+  assert.match(feedbackTransitionStopSource, /previewRecoveryToken \+= 1/);
+  assert.match(feedbackTransitionStopSource, /stopAllActivePlayback/);
+  assert.ok(
+    swipePassSource.indexOf("stopPlaybackForFeedbackTransition") <
+      swipePassSource.indexOf("await advanceAfterSwipeFeedback"),
+    "swipe dislike must stop and invalidate the rejected preview before selecting the next card"
+  );
+  assert.ok(
+    previewDislikeSource.indexOf("stopPlaybackForFeedbackTransition") <
+      previewDislikeSource.indexOf("tryAdvanceNegativeFeedbackInstantly"),
+    "preview dislike must stop and invalidate playback before selecting the replacement"
+  );
   assert.match(renderPreviewSource, /attemptRenderedPreviewAutoplay/);
   assert.ok(
     renderPreviewSource.indexOf("startPreferredEmbeddedPreviewAutoplay(track)") <
@@ -226,6 +242,25 @@ function testEveryTransitionKeepsOneAuthority() {
   assert.equal(activePlaybackCount(harness.context), 0);
 }
 
+function testNegativeFeedbackInvalidatesRejectedPreviewWork() {
+  const stoppedReasons = [];
+  const context = vm.createContext({
+    recommendationPreviewRenderToken: 4,
+    previewRecoveryToken: 7,
+    stopAllActivePlayback({ reason }) {
+      stoppedReasons.push(reason);
+      return 12;
+    }
+  });
+  vm.runInContext(extractFunction("stopPlaybackForFeedbackTransition"), context);
+
+  const generation = context.stopPlaybackForFeedbackTransition("swipe_pass");
+  assert.equal(context.recommendationPreviewRenderToken, 5);
+  assert.equal(context.previewRecoveryToken, 8);
+  assert.deepEqual(stoppedReasons, ["swipe_pass"]);
+  assert.equal(generation, 12);
+}
+
 function createPreviewHarness() {
   const playResolvers = [];
   const audio = {
@@ -332,6 +367,7 @@ const tests = [
   ["source policy enables safe recommendation autoplay", assertSourcePolicy],
   ["central stop is idempotent and isolates failures", testStopAllIsIdempotentAndIsolated],
   ["all source transitions keep one active authority", testEveryTransitionKeepsOneAuthority],
+  ["negative feedback invalidates rejected preview work", testNegativeFeedbackInvalidatesRejectedPreviewWork],
   ["automatic playback works and rapid requests stay singular", testAutomaticPlaybackAndRapidRequests],
   ["stale SoundCloud READY callback cannot restart playback", testStaleSoundCloudReadyCannotPlay]
 ];

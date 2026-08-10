@@ -104,6 +104,19 @@ function createHarness({ analyticsThrows = false, trackingThrows = false, restor
     feedbackMessage: { textContent: "" },
     currentRecommendation: null,
     currentLanguage: "pt",
+    recommendationSessionGeneration: 0,
+    recommendationSessionIsCurrent(generation) {
+      return Number(generation) === context.recommendationSessionGeneration;
+    },
+    assertRecommendationSessionCurrent(generation) {
+      if (Number(generation) === context.recommendationSessionGeneration) return true;
+      const error = new Error("recommendation_session_changed");
+      error.code = "recommendation_session_changed";
+      throw error;
+    },
+    isRecommendationSessionChangedError(error) {
+      return String(error?.code || error?.message || "") === "recommendation_session_changed";
+    },
     noVerifiedTrackMessage() {
       return "Não encontrei uma faixa reproduzível agora. Tente novamente.";
     },
@@ -122,6 +135,7 @@ function createHarness({ analyticsThrows = false, trackingThrows = false, restor
       state.analyticsCalls += 1;
       if (analyticsThrows) throw new Error("analytics_fixture");
     },
+    ensureOpeningRotationSlot: async () => 1,
     waitForMinimumCatalogReady: async () => readiness || { ready: true, status: "already_ready" },
     runSurpriseRecommendation: async () => true
   });
@@ -275,13 +289,46 @@ async function testConcurrentRequestsShareOneAttempt() {
   await assertReleased(harness);
 }
 
+async function testSessionSwitchDiscardsPendingAttempt() {
+  const harness = createHarness();
+  let releaseRunner;
+  let markRunnerStarted;
+  const runnerGate = new Promise((resolve) => {
+    releaseRunner = resolve;
+  });
+  const runnerStarted = new Promise((resolve) => {
+    markRunnerStarted = resolve;
+  });
+  const attempt = harness.context.runInitialRecommendation({
+    source: "auto",
+    initialRunner: async () => {
+      harness.state.runnerCount += 1;
+      markRunnerStarted();
+      await runnerGate;
+      return true;
+    }
+  });
+  await runnerStarted;
+  harness.context.recommendationSessionGeneration += 1;
+  harness.topButton.disabled = false;
+  harness.heroButton.disabled = false;
+  harness.topButton.classList.loading = false;
+  harness.heroButton.classList.loading = false;
+  releaseRunner();
+  assert.equal(await attempt, false);
+  assert.equal(harness.context.firstRecommendationCompleted, false);
+  assert.equal(harness.context.firstRecommendationRetryAvailable, false);
+  assert.equal(harness.state.runnerCount, 1);
+}
+
 const tests = [
   ["analytics failure is non-blocking", testAnalyticsFailureIsNonBlocking],
   ["tracking failure is non-blocking", testTrackingFailureIsNonBlocking],
   ["recommendation failure allows retry", testRecommendationFailureAllowsRetry],
   ["CTA restoration failure uses direct fallback", testRestoreFailureUsesDirectFallback],
   ["catalog timeout allows fallback and retry", testTimeoutAllowsFallbackAndRetry],
-  ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt]
+  ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt],
+  ["session switch discards pending attempt", testSessionSwitchDiscardsPendingAttempt]
 ];
 
 for (const [name, test] of tests) {

@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1600, initial-scale=1" />
+    <title>Sonic Search — três festas, três linhas do tempo</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f4efe4;
+        --muted: #a8a9ad;
+        --paper: #090b0f;
+        --line: rgba(255, 255, 255, 0.14);
+        --fcme: #70e8ff;
+        --naturaiz: #b7ff46;
+        --cosmic: #ee75ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1600px;
+        min-width: 1600px;
+        margin: 0;
+        background: var(--paper);
+      }
+
+      body {
+        font-family: "Avenir Next Condensed", "Arial Narrow", Arial, sans-serif;
+        color: var(--ink);
+      }
+
+      body.is-slice {
+        height: var(--slice-height);
+        overflow: hidden;
+      }
+
+      body.is-slice #poster {
+        transform: translateY(calc(var(--slice-offset) * -1px));
+        transform-origin: top left;
+      }
+
+      #poster {
+        width: 1600px;
+        height: 4300px;
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: 430px 930px 1540px 1220px 180px;
+        background:
+          radial-gradient(circle at 83% 8%, rgba(112, 232, 255, 0.12), transparent 18%),
+          radial-gradient(circle at 17% 49%, rgba(183, 255, 70, 0.09), transparent 20%),
+          radial-gradient(circle at 82% 83%, rgba(238, 117, 255, 0.11), transparent 23%),
+          repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 36px),
+          #090b0f;
+      }
+
+      .masthead {
+        position: relative;
+        padding: 64px 88px 50px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .masthead::after {
+        content: "";
+        position: absolute;
+        right: 88px;
+        bottom: 54px;
+        width: 232px;
+        height: 12px;
+        background: linear-gradient(90deg, var(--fcme) 0 33%, var(--naturaiz) 33% 66%, var(--cosmic) 66%);
+      }
+
+      .brandline,
+      .kicker,
+      .day-label,
+      .micro {
+        text-transform: uppercase;
+        letter-spacing: 0.17em;
+        font-weight: 800;
+      }
+
+      .brandline {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 30px;
+        color: #d2d3d5;
+      }
+
+      .brandmark {
+        width: 24px;
+        height: 24px;
+        border: 5px solid currentColor;
+        border-radius: 50%;
+        box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.08);
+      }
+
+      h1 {
+        max-width: 1260px;
+        margin: 36px 0 10px;
+        font-family: "Avenir Next Condensed", "Arial Narrow", Arial, sans-serif;
+        font-size: 112px;
+        line-height: 0.87;
+        letter-spacing: -0.045em;
+        text-transform: uppercase;
+      }
+
+      .masthead p {
+        margin: 20px 0 0;
+        font-size: 38px;
+        color: var(--muted);
+      }
+
+      .event {
+        position: relative;
+        padding: 62px 88px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .event::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 14px;
+        background: var(--accent);
+        box-shadow: 0 0 42px color-mix(in srgb, var(--accent) 50%, transparent);
+      }
+
+      .fcme {
+        --accent: var(--fcme);
+      }
+
+      .naturaiz {
+        --accent: var(--naturaiz);
+      }
+
+      .cosmic {
+        --accent: var(--cosmic);
+      }
+
+      .event-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 48px;
+        align-items: end;
+        padding-bottom: 34px;
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .kicker {
+        margin-bottom: 10px;
+        font-size: 26px;
+        color: var(--accent);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 82px;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        text-transform: uppercase;
+      }
+
+      .event-meta {
+        max-width: 640px;
+        margin: 14px 0 0;
+        font-size: 31px;
+        line-height: 1.2;
+        color: #d4d4d5;
+      }
+
+      .event-date {
+        min-width: 380px;
+        padding: 24px 26px 20px;
+        border: 2px solid var(--accent);
+        text-align: right;
+        color: var(--accent);
+      }
+
+      .event-date strong {
+        display: block;
+        font-size: 48px;
+        line-height: 1;
+      }
+
+      .event-date span {
+        display: block;
+        margin-top: 10px;
+        font-size: 25px;
+        letter-spacing: 0.08em;
+      }
+
+      .day-label {
+        margin: 34px 0 22px;
+        font-size: 24px;
+        color: var(--accent);
+      }
+
+      .pair-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .pair {
+        min-height: 118px;
+        padding: 24px 24px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(112, 232, 255, 0.35);
+        background: rgba(112, 232, 255, 0.045);
+        font-size: 35px;
+        font-weight: 800;
+        line-height: 1.05;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .pair span {
+        padding: 0 10px;
+        color: var(--accent);
+      }
+
+      .event-note {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 24px;
+        align-items: start;
+        margin-top: 26px;
+        padding-top: 24px;
+        border-top: 1px solid var(--line);
+        font-size: 27px;
+        color: var(--muted);
+      }
+
+      .event-note strong {
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .timeline-grid {
+        display: grid;
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 58px;
+      }
+
+      .timeline-day {
+        position: relative;
+      }
+
+      .timeline-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .slot {
+        position: relative;
+        min-height: 76px;
+        display: grid;
+        grid-template-columns: 108px 26px minmax(0, 1fr);
+        gap: 16px;
+        align-items: center;
+        font-size: 36px;
+        font-weight: 750;
+      }
+
+      .slot::before {
+        content: "";
+        position: absolute;
+        left: 120px;
+        top: 38px;
+        bottom: -38px;
+        width: 2px;
+        background: color-mix(in srgb, var(--accent) 38%, transparent);
+      }
+
+      .slot:last-child::before {
+        display: none;
+      }
+
+      .slot time {
+        color: var(--accent);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .slot i {
+        z-index: 1;
+        width: 20px;
+        height: 20px;
+        border: 4px solid var(--paper);
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 2px var(--accent);
+      }
+
+      .slot small {
+        margin-left: 10px;
+        font-size: 22px;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .slot.featured {
+        margin: 5px 0;
+        padding: 7px 16px 7px 0;
+        border: 1px solid rgba(183, 255, 70, 0.48);
+        background: rgba(183, 255, 70, 0.07);
+      }
+
+      .slot.featured strong {
+        color: var(--accent);
+      }
+
+      .spotlight {
+        margin-top: 34px;
+        padding: 28px 34px;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 30px;
+        border: 1px solid rgba(183, 255, 70, 0.42);
+        background: linear-gradient(90deg, rgba(183, 255, 70, 0.09), rgba(183, 255, 70, 0.025));
+      }
+
+      .spotlight-label {
+        color: var(--accent);
+        font-size: 23px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 900;
+      }
+
+      .spotlight strong {
+        display: block;
+        margin-top: 7px;
+        font-size: 42px;
+        text-transform: uppercase;
+      }
+
+      .spotlight p {
+        margin: 0;
+        font-size: 27px;
+        line-height: 1.3;
+        color: #d8d8d1;
+      }
+
+      .cosmic .timeline-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 70px;
+      }
+
+      .cosmic .slot {
+        min-height: 64px;
+        grid-template-columns: 118px 26px minmax(0, 1fr);
+        font-size: 32px;
+      }
+
+      .cosmic .slot::before {
+        left: 130px;
+        top: 32px;
+        bottom: -32px;
+      }
+
+      .footer {
+        padding: 34px 88px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        color: #b8b9bc;
+      }
+
+      .footer strong {
+        font-size: 33px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      .footer p {
+        max-width: 930px;
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.35;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="poster" aria-label="Agenda de três festivais de música eletrônica">
+      <header class="masthead">
+        <div class="brandline"><span class="brandmark"></span> Jornal Sonic · guia de pista</div>
+        <h1>Três festas.<br />Três linhas do tempo.</h1>
+        <p>Ceará neste fim de semana · São Paulo na próxima parada</p>
+      </header>
+
+      <section class="event fcme">
+        <div class="event-head">
+          <div>
+            <div class="kicker">01 · Fortaleza / CE</div>
+            <h2>FCME</h2>
+            <p class="event-meta">Túnel Pintor Antônio Bandeira · @fcmefestival</p>
+          </div>
+          <div class="event-date">
+            <strong>25 JUL</strong>
+            <span>22H → 08H · 2 PALCOS</span>
+          </div>
+        </div>
+        <div class="day-label">Encontros anunciados no line-up</div>
+        <div class="pair-grid">
+          <div class="pair">Insana <span>×</span> Laboratório</div>
+          <div class="pair">Eletronikkka <span>×</span> Ovo Frito</div>
+          <div class="pair">Fritaria <span>×</span> João Rave</div>
+          <div class="pair">Calúnia <span>×</span> Melange</div>
+          <div class="pair">Kolaje <span>×</span> Gasguita</div>
+          <div class="pair">Pacific Discs <span>×</span> Disco Voador</div>
+          <div class="pair">Papoco <span>×</span> Tubulosa</div>
+          <div class="pair">Monic <span>×</span> Lobbão</div>
+          <div class="pair">Radio Nix <span>×</span> Bunker</div>
+        </div>
+        <div class="event-note">
+          <strong>10 horas</strong>
+          <span>A produção anunciou os encontros e a divisão em dois palcos, mas não publicou horários individuais de cada set.</span>
+        </div>
+      </section>
+
+      <section class="event naturaiz">
+        <div class="event-head">
+          <div>
+            <div class="kicker">02 · Caucaia / CE</div>
+            <h2>Naturaíz · Memento Mori</h2>
+            <p class="event-meta">Sítio Lauriana, Guararu · @naturaizceara</p>
+          </div>
+          <div class="event-date">
+            <strong>25–26 JUL</strong>
+            <span>14H → 20H · 30 HORAS</span>
+          </div>
+        </div>
+
+        <div class="timeline-grid">
+          <div class="timeline-day">
+            <div class="day-label">Sábado · 25 de julho</div>
+            <ol class="timeline-list">
+              <li class="slot"><time>14H</time><i></i><strong>Abertura dos portões</strong></li>
+              <li class="slot"><time>15H</time><i></i><strong>Baile Freak Jam <small>BR</small></strong></li>
+              <li class="slot"><time>18H</time><i></i><strong>Karapanã <small>BR</small></strong></li>
+              <li class="slot"><time>20H</time><i></i><strong>Groark <small>BR</small></strong></li>
+              <li class="slot"><time>22H</time><i></i><strong>Surke <small>BR</small></strong></li>
+            </ol>
+          </div>
+
+          <div class="timeline-day">
+            <div class="day-label">Domingo · 26 de julho</div>
+            <ol class="timeline-list">
+              <li class="slot"><time>00H</time><i></i><strong>May <small>BR</small></strong></li>
+              <li class="slot"><time>02H</time><i></i><strong>Isiteshi <small>HU</small></strong></li>
+              <li class="slot"><time>04H</time><i></i><strong>Yara <small>CO</small></strong></li>
+              <li class="slot"><time>07H</time><i></i><strong>Varazsló <small>HU</small></strong></li>
+              <li class="slot"><time>10H</time><i></i><strong>Arkhos <small>BR</small></strong></li>
+              <li class="slot"><time>12H</time><i></i><strong>Adrian <small>BR</small></strong></li>
+              <li class="slot"><time>14H</time><i></i><strong>Neutralizer <small>GR</small></strong></li>
+              <li class="slot featured"><time>16H</time><i></i><strong>DJ Lonchar <small>UZ · HiTech</small></strong></li>
+              <li class="slot"><time>18H</time><i></i><strong>Varazsló vs Neutralizer <small>HU × GR</small></strong></li>
+              <li class="slot"><time>20H</time><i></i><strong>Fim</strong></li>
+            </ol>
+          </div>
+        </div>
+
+        <aside class="spotlight">
+          <div>
+            <span class="spotlight-label">No radar</span>
+            <strong>DJ Lonchar</strong>
+          </div>
+          <p>Svetlana Lonchar, de Tashkent, começou a discotecar aos 59 anos depois de 24 anos como professora de geografia. Aos 63, apresenta HiTech a partir de 185 BPM e chega ao Ceará após duas datas em São Paulo.</p>
+        </aside>
+      </section>
+
+      <section class="event cosmic">
+        <div class="event-head">
+          <div>
+            <div class="kicker">03 · Nazaré Paulista / SP</div>
+            <h2>Cosmic Crew · 23 anos</h2>
+            <p class="event-meta">Estância Nazaré Paulista · @cosmic.crew</p>
+          </div>
+          <div class="event-date">
+            <strong>31 JUL–02 AGO</strong>
+            <span>DARKPSY · WEST PSY · FREEFORM</span>
+          </div>
+        </div>
+
+        <div class="timeline-grid">
+          <div class="timeline-day">
+            <div class="day-label">Sexta 31 → sábado 1</div>
+            <ol class="timeline-list">
+              <li class="slot"><time>22H</time><i></i><strong>Thaty</strong></li>
+              <li class="slot"><time>00H</time><i></i><strong>Indacoruna</strong></li>
+              <li class="slot"><time>03H</time><i></i><strong>Radiruna</strong></li>
+              <li class="slot"><time>07H</time><i></i><strong>Radice</strong></li>
+              <li class="slot"><time>10H</time><i></i><strong>Umbra Lumen</strong></li>
+              <li class="slot"><time>12H</time><i></i><strong>Paula</strong></li>
+              <li class="slot"><time>14H</time><i></i><strong>Salakavala</strong></li>
+              <li class="slot"><time>16H</time><i></i><strong>Igor Swamp</strong></li>
+              <li class="slot"><time>17:30</time><i></i><strong>Gaida</strong></li>
+              <li class="slot"><time>19H</time><i></i><strong>Minimal Criminal</strong></li>
+              <li class="slot"><time>20:30</time><i></i><strong>Traxon</strong></li>
+              <li class="slot"><time>22H</time><i></i><strong>Sutemi</strong></li>
+            </ol>
+          </div>
+
+          <div class="timeline-day">
+            <div class="day-label">Domingo · 2 de agosto</div>
+            <ol class="timeline-list">
+              <li class="slot"><time>00H</time><i></i><strong>Elowinz</strong></li>
+              <li class="slot"><time>03H</time><i></i><strong>Umber Vamber</strong></li>
+              <li class="slot"><time>06H</time><i></i><strong>Paralocks</strong></li>
+              <li class="slot"><time>08H</time><i></i><strong>Paralocks Retro</strong></li>
+              <li class="slot"><time>09H</time><i></i><strong>Alcohbata</strong></li>
+              <li class="slot"><time>11H</time><i></i><strong>Ipotocaticac</strong></li>
+              <li class="slot"><time>14H</time><i></i><strong>Booo</strong></li>
+              <li class="slot"><time>15:30</time><i></i><strong>At Work vs Mielikki</strong></li>
+              <li class="slot"><time>17H</time><i></i><strong>Dylalien</strong></li>
+              <li class="slot"><time>20H</time><i></i><strong>Fim</strong></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <strong>Sonic Search</strong>
+        <p>Cronogramas divulgados pelas produções e atualizados em 24/07/2026. Horários podem mudar: confirme o comunicado mais recente antes de sair.</p>
+      </footer>
+    </main>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const sliceOffset = Number.parseInt(params.get("offset") || "", 10);
+      const sliceHeight = Number.parseInt(params.get("height") || "", 10);
+      if (Number.isFinite(sliceOffset) && Number.isFinite(sliceHeight)) {
+        document.body.classList.add("is-slice");
+        document.body.style.setProperty("--slice-offset", String(Math.max(0, sliceOffset)));
+        document.body.style.setProperty("--slice-height", `${Math.max(1, sliceHeight)}px`);
+      }
+    </script>
+  </body>
+</html>

@@ -252,6 +252,32 @@ Para auditar o dominio publicado depois do deploy/envs de producao, rode:
 node scripts/check-api-activation.mjs https://sonicsearch.app
 ```
 
+## Painel administrativo
+
+O app confirma o papel da conta autenticada em `/api/access-context` e mostra a aba **Painel administrativo** automaticamente para proprietarios e administradores. Configure as contas somente no backend da Vercel:
+
+```bash
+SONIC_OWNER_EMAILS=pedropfpj@gmail.com
+SONIC_ADMIN_EMAILS=admin2@example.com,admin3@example.com
+```
+
+`SONIC_ADMIN_EMAILS` aceita varios e-mails separados por virgula. Moderadores configurados apenas em `SONIC_MODERATOR_EMAILS` continuam com permissao de moderacao, mas nao recebem acesso ao painel de analytics.
+
+## Banco global de festas e festivais
+
+O projeto inclui um banco normalizado para festivais, franquias e grandes series de festas eletronicas. A carga inicial possui 60 marcas globais, 22 generos normalizados e 46 posicoes do DJ Mag Top 100 Festivals 2026 com fonte auditavel.
+
+- Modelo Supabase/PostgreSQL: `supabase/migrations/20260713000100_global_electronic_events.sql`
+- Base editavel: `data/global_electronic_events_seed_20260713.csv`
+- Carga SQL: `supabase/seeds/global_electronic_events_seed_20260713.sql`
+- Guia e dicionario: `docs/global-electronic-events-database.md`
+
+Valide a base depois de editar o CSV:
+
+```bash
+node scripts/generate-global-electronic-events-seed.mjs --check
+```
+
 ## iOS / TestFlight
 
 O app pode ser empacotado para iOS com Capacitor. O projeto nativo fica em `ios/App/App.xcodeproj` e o bundle web e gerado em `www/`.
@@ -282,13 +308,13 @@ node scripts/quality-audit.mjs --strict
 
 ## Subgeneros incluidos
 
-O app tem 168 subgeneros selecionaveis no motor de curadoria.
+O app tem 169 subgeneros selecionaveis no motor de curadoria.
 
 - Psytrance / Trance: psytrance, forest psy, dark psy, twilight psy, dark experimental, psycore, psybreaks, psybient/psychill, freeform psy, full-on, full-on night, full-on morning, psy comercial/chacotas, progressive psy, slambient, hi-tech, dark progressive (PROG DARK / zenonesque), goa trance, uplifting trance, tech trance, hard trance, progressive trance, acid trance, balearic trance, dream trance, vocal trance
 - Techno: techno, acid techno, hard techno, dub techno, hypnotic techno, raw techno, detroit techno, schranz, EBM / industrial body music, minimal techno, melodic techno, industrial techno, peak time techno, deep techno, ambient techno, bleep techno, tribal techno, hardgroove techno, broken techno, gabber
 - EDM / Festival: EDM, progressive EDM, big room house, future house, slap house, tropical house, complextro, electronic dance-pop, eurodance, EDM trap, melodic dubstep, brostep, big room techno, mainstage techno
 - House: house, deep house, tech house, progressive house, afro house, organic house, bass house, electro house, minimal/deep tech, jackin house, soulful house, disco house, garage house, chicago house, french/filter house, funky house, tribal house, latin house, piano house, melodic house, microhouse, ghetto house
-- DnB/Bass/Club: drum and bass, liquid dnb, neurofunk, jump up, jungle, darkstep, techstep, hardstep, atmospheric jungle, ragga jungle, sambass, drumfunk, breakbeat, brazilian funk, uk garage, future garage, dubstep, chillstep, post-dubstep, drumstep, halftime bass, footwork/juke, trap, future bass, riddim, experimental bass, wave, hardwave, breakcore, nu skool breaks, florida breaks, bassline, UK bass, wonky, glitch hop, neurohop, jersey club, baltimore club, ballroom/vogue beats, kuduro eletronico, batida, singeli, shangaan electro, ghettotech
+- DnB/Bass/Club: drum and bass, liquid dnb, neurofunk, jump up, jungle, darkstep, techstep, hardstep, atmospheric jungle, ragga jungle, sambass, drumfunk, big beat, breakbeat, brazilian funk, uk garage, future garage, dubstep, chillstep, post-dubstep, drumstep, halftime bass, footwork/juke, trap, future bass, riddim, experimental bass, wave, hardwave, breakcore, nu skool breaks, florida breaks, bassline, UK bass, wonky, glitch hop, neurohop, jersey club, baltimore club, ballroom/vogue beats, kuduro eletronico, batida, singeli, shangaan electro, ghettotech
 - Hard Dance: hardstyle, hardcore, frenchcore, speedcore, rawstyle, crossbreed, euphoric hardstyle, reverse bass, hard dance, UK hardcore, terrorcore, extratone, makina
 - Outros: downtempo, ambient, chillout, trip hop, darkwave, coldwave, synthwave, witch house, idm, electro, dark ambient, space ambient, ambient house, ambient dub, lowercase, microsound, electroacoustic, musique concrete, berlin school, kosmische musik, italo disco, hi-NRG, retrowave, outrun, darksynth, minimal wave, futurepop, industrial dance, deconstructed club
 

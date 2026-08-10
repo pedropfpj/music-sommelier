@@ -8,6 +8,149 @@ const {
 } = require("../lib/api/_music-apis");
 
 const CATALOG_LIMIT_MAX = 200;
+const PSYTRANCE_CATALOG_STYLES = new Set([
+  "psytrance", "forest_psy", "dark_psy", "twilight_psy", "dark_experimental",
+  "psycore", "psybreaks", "psybient", "freeform", "full_on", "full_on_night",
+  "full_on_morning", "progressive_psy", "hi_tech", "dark_progressive", "goa_trance",
+  "psy_comercial", "slambient"
+]);
+const BLOCKED_PSYTRANCE_TRACK_KEYS = new Set([
+  "furious::don't change your style",
+  "furious::hang your head",
+  "furious::punk bashin' boogie",
+  "furious::wet",
+  "furious::who to trust",
+  "silent horror::17 kills",
+  "silent horror::murder castle",
+  "silent horror::silver screen",
+  "silent horror::the cabinet of dr. caligari",
+  "cosmo::alle meine nachbarn",
+  "cosmo::den sommer uberleben",
+  "cosmo::du machst mich high",
+  "cosmo::tanzschein",
+  "n.o.m::i can't wait",
+  "n.o.m::look",
+  "n.o.m::mega punch",
+  "parus::high voltage",
+  "parus::laboom",
+  "parus::legend",
+  "quasar::be my lover (techno)",
+  "quasar::drenagem",
+  "quasar::em seu lugar",
+  "quasar::termo",
+  "loke::plata ou nada (feat. dogga dogga)"
+]);
+
+const CATALOG_STYLE_BPM_RANGES = {
+  full_on_night: { min: 146, max: 154 },
+  forest_psy: { min: 145, max: 154 },
+  dark_psy: { min: 154, max: 175 },
+  hi_tech: { min: 176, max: 230 },
+  psycore: { min: 175, max: 300 },
+  techno: { min: 128, max: 136 },
+  acid_techno: { min: 124, max: 145 },
+  hard_techno: { min: 145, max: 160 },
+  industrial_techno: { min: 130, max: 150 },
+  dub_techno: { min: 118, max: 128 }
+};
+
+const STRICT_TECHNO_STYLE_ARTISTS = Object.fromEntries(Object.entries({
+  acid_techno: [
+    "Phuture", "Hardfloor", "Josh Wink", "Emmanuel Top", "Tin Man", "Boston 168",
+    "Regal", "Kink", "Luke Vibert", "A*S*Y*S", "Thomas P. Heckmann", "DJ Misjah",
+    "999999999", "D.A.V.E. The Drummer", "Chris Liberator", "Sterling Moss", "Benji303"
+  ],
+  hard_techno: [
+    "Alignment", "Sara Landry", "I Hate Models", "Klangkuenstler", "Shlomo", "Shlømo",
+    "Airod", "Nico Moreno", "Trym", "Charlie Sparks", "Charlie Sparks (UK)", "Kobosil",
+    "999999999", "DYEN", "Rebekah", "Paula Temple", "Perc", "Viper Diva", "SPFDJ",
+    "Onlynumbers", "CLTX", "Basswell", "Brutalismus 3000", "6EJOU", "Fantasm"
+  ],
+  dub_techno: [
+    "Andy Stott", "Basic Channel", "bvdub", "cv313", "Deadbeat", "Deepchord", "Echospace",
+    "Fluxion", "Intrusion", "Maurizio", "Monolake", "Porter Ricks", "Quantec",
+    "Rhythm & Sound", "Rod Modell", "STL", "Swayzak", "Vladislav Delay", "Yagya"
+  ]
+}).map(([style, artists]) => [style, new Set(artists.map(normalizedCatalogIdentity))]));
+
+function normalizedCatalogText(value = "") {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizedCatalogIdentity(value = "") {
+  return normalizedCatalogText(value)
+    .replace(/ø/g, "o")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function explicitCatalogTitleBpm(value = "") {
+  const match = String(value || "")
+    .replace(",", ".")
+    .match(/(?:^|[\s([_-])(\d{2,3}(?:\.\d+)?)\s*bpm\b/i);
+  if (!match) return 0;
+  const bpm = Number(match[1]);
+  return Number.isFinite(bpm) && bpm >= 40 && bpm <= 400 ? bpm : 0;
+}
+
+function catalogBpmFitsStyle(style = "", bpm = 0) {
+  const range = CATALOG_STYLE_BPM_RANGES[String(style || "").trim().toLowerCase()];
+  if (!range || !Number.isFinite(Number(bpm)) || Number(bpm) <= 0) return true;
+  return Number(bpm) >= range.min && Number(bpm) <= range.max;
+}
+
+function catalogTrackPassesTechnoIdentity(row = {}) {
+  const style = String(row.style || "").trim().toLowerCase();
+  const allowedArtists = STRICT_TECHNO_STYLE_ARTISTS[style];
+  if (!allowedArtists) return true;
+  const artist = normalizedCatalogIdentity(row.artist);
+  if (!artist) return false;
+  return Array.from(allowedArtists).some((seed) => (
+    artist === seed ||
+    artist.startsWith(`${seed} feat `) ||
+    artist.startsWith(`${seed} ft `) ||
+    artist.startsWith(`${seed} x `) ||
+    artist.startsWith(`${seed} and `)
+  ));
+}
+
+function catalogTrackPassesStyleBpm(row = {}) {
+  const style = String(row.style || "").trim().toLowerCase();
+  const exactBpm = Number(row.bpm_exact) || 0;
+  const titleBpm = explicitCatalogTitleBpm(row.song);
+  return catalogBpmFitsStyle(style, exactBpm) && catalogBpmFitsStyle(style, titleBpm);
+}
+
+function catalogMetadata(row = {}) {
+  if (row.metadata && typeof row.metadata === "object" && !Array.isArray(row.metadata)) return row.metadata;
+  if (typeof row.metadata !== "string" || !row.metadata.trim()) return {};
+  try {
+    const parsed = JSON.parse(row.metadata);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (_error) {
+    return {};
+  }
+}
+
+function catalogTrackPassesPsytranceIntegrity(row = {}) {
+  const style = String(row.style || "").trim().toLowerCase();
+  if (!PSYTRANCE_CATALOG_STYLES.has(style)) return true;
+  const trackKey = `${normalizedCatalogText(row.artist)}::${normalizedCatalogText(row.song)}`;
+  if (BLOCKED_PSYTRANCE_TRACK_KEYS.has(trackKey)) return false;
+
+  const metadata = catalogMetadata(row);
+  const releaseGenres = normalizedCatalogText(metadata.album_genres || metadata.release_genres || "");
+  if (!releaseGenres) return true;
+  const hardWrongGenre = /\b(?:alternative|alternativo|rock|rockabilly|reggae|hip\s*hop|rap|r\s*and\s*b|rhythm\s+and\s+blues|country|folk|sertanejo|gospel|classical|classico|orchestral)\b/;
+  const electronicGenre = /\b(?:psytrance|psy\s+trance|trance|goa|electro|electronic|electronica|dance|techno|ambient)\b/;
+  return !hardWrongGenre.test(releaseGenres) || electronicGenre.test(releaseGenres);
+}
 
 function supabaseConfig() {
   const supabaseUrl = envText("SUPABASE_URL").replace(/\/+$/, "");
@@ -58,6 +201,7 @@ function baseParams({ limit, style, offset = 0 }) {
     limit: String(limit),
     offset: String(offset)
   });
+  params.set("metadata->>electronic_gate", "eq.passed");
   if (style) params.set("style", `eq.${style}`);
   return params;
 }
@@ -82,7 +226,12 @@ async function fetchTracks(config, { style, q, limit, offset }) {
     const clean = safeIlikeValue(q);
     params.set("or", `(artist.ilike.*${clean}*,song.ilike.*${clean}*)`);
   }
-  return fetchCatalogTable(config, "catalog_tracks", params);
+  const rows = await fetchCatalogTable(config, "catalog_tracks", params);
+  return rows.filter((row) => (
+    catalogTrackPassesPsytranceIntegrity(row) &&
+    catalogTrackPassesTechnoIdentity(row) &&
+    catalogTrackPassesStyleBpm(row)
+  ));
 }
 
 module.exports = async function handler(req, res) {

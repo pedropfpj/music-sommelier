@@ -34,6 +34,11 @@ const BLOCKS = [
   "COUNTRY_BY_ORIGIN_AREA"
 ];
 
+const LAZY_ARRAY_BUILDERS = {
+  SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS: "buildSoundCloudSupplementalDjSeeds",
+  LOCAL_TRACK_SEED_BOOST: "buildLocalTrackSeedBoost"
+};
+
 const GENERIC_SOURCE_PATTERNS = [
   /catalogo dinamico/i,
   /cat[aá]logo din[aâ]mico/i,
@@ -104,7 +109,11 @@ function normalize(value) {
 function findLiteralStart(source, name) {
   const declarationIndex = source.indexOf(`const ${name} =`);
   if (declarationIndex < 0) {
-    throw new Error(`Bloco ${name} nao encontrado`);
+    const builderName = LAZY_ARRAY_BUILDERS[name];
+    const builderIndex = builderName ? source.indexOf(`function ${builderName}(`) : -1;
+    const returnIndex = builderIndex >= 0 ? source.indexOf("return [", builderIndex) : -1;
+    if (returnIndex < 0) throw new Error(`Bloco ${name} nao encontrado`);
+    return source.indexOf("[", returnIndex);
   }
 
   const afterEquals = source.indexOf("=", declarationIndex);
