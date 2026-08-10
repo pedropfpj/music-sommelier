@@ -83,6 +83,7 @@ function assertSourcePolicy() {
   const continueFromUsageGuideSource = extractFunction("continueFromUsageGuide");
   const enterAppFromWelcomeSource = extractFunction("enterAppFromWelcome");
   const feedbackTransitionStopSource = extractFunction("stopPlaybackForFeedbackTransition");
+  const swipeLikeSource = extractFunction("likeCurrentTrackFromSwipe");
   const swipePassSource = extractFunction("passCurrentTrackFromSwipe");
   const previewDislikeSource = extractFunction("swapAfterPreviewFeedback");
 
@@ -100,6 +101,11 @@ function assertSourcePolicy() {
   assert.match(feedbackTransitionStopSource, /recommendationPreviewRenderToken \+= 1/);
   assert.match(feedbackTransitionStopSource, /previewRecoveryToken \+= 1/);
   assert.match(feedbackTransitionStopSource, /stopAllActivePlayback/);
+  assert.ok(
+    swipeLikeSource.indexOf("stopPlaybackForFeedbackTransition") <
+      swipeLikeSource.indexOf("await advanceAfterSwipeFeedback"),
+    "swipe like must stop and invalidate the liked preview before selecting the next card"
+  );
   assert.ok(
     swipePassSource.indexOf("stopPlaybackForFeedbackTransition") <
       swipePassSource.indexOf("await advanceAfterSwipeFeedback"),

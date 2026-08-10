@@ -53091,6 +53091,11 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
 async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   if (!currentRecommendation) return false;
   const likedTrack = currentRecommendation;
+  // Stop the liked card before selecting its replacement. Besides silencing
+  // the current player immediately, this invalidates late preview/recovery
+  // callbacks that could otherwise restart the previous track over the new
+  // recommendation.
+  stopPlaybackForFeedbackTransition("swipe_like");
   userStats.likedSongs += 1;
   const nextMessage = appendSwipeLearningMessage(t("swipeLikedNext"));
   registerSpiritSignal(likedTrack.style, 1.25);
