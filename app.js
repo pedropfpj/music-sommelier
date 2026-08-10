@@ -24180,7 +24180,7 @@ const I18N = {
     feedbackHint: "Cada like, descarte ou correção deixa a próxima recomendação mais precisa.",
     swipeHeroKicker: "Descoberta imediata",
     swipeHeroTitle: "Ouça primeiro, ajuste depois",
-    swipeHeroHint: "Depois do acesso, a primeira carta chega sozinha; cada reação melhora a próxima.",
+    swipeHeroHint: "Toque em Ouvir uma faixa para abrir a primeira carta; cada reação melhora a próxima.",
     swipeDeckKicker: "Rotas de descoberta",
     swipeDeckTitle: "Escolha uma direção sonora",
     swipeDeckHint: "Use um subgênero para abrir uma sequência mais coerente.",
@@ -24193,8 +24193,8 @@ const I18N = {
     swipeEmptyTitle: "Abra uma faixa",
     swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
     swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
-    topSwipeEmptyTitle: "Preparando sua primeira faixa",
-    topSwipeEmptyMeta: "O Sonic Search abre uma carta para você ouvir, curtir ou passar.",
+    topSwipeEmptyTitle: "Pronto para sua primeira faixa",
+    topSwipeEmptyMeta: "Toque em Ouvir uma faixa para abrir uma carta, curtir ou passar.",
     topSwipeHint: "Quer precisão? Abra Filtros depois da primeira escuta.",
     aboutKicker: "O que melhora",
     aboutTitle: "Descoberta sem busca cega",
@@ -25077,7 +25077,7 @@ const I18N = {
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Instant discovery",
     swipeHeroTitle: "Listen first, tune later",
-    swipeHeroHint: "After access, the first card loads by itself; every reaction sharpens the next one.",
+    swipeHeroHint: "Tap Listen to a track to open the first card; every reaction sharpens the next one.",
     swipeDeckKicker: "Discovery routes",
     swipeDeckTitle: "Choose a sound direction",
     swipeDeckHint: "Use a subgenre to open a more coherent sequence.",
@@ -25090,8 +25090,8 @@ const I18N = {
     swipeEmptyTitle: "Open a track",
     swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
     swipeHint: "Drag with mouse or touch; release to save the signal.",
-    topSwipeEmptyTitle: "Preparing your first track",
-    topSwipeEmptyMeta: "Sonic Search opens a card to hear, like, or pass.",
+    topSwipeEmptyTitle: "Ready for your first track",
+    topSwipeEmptyMeta: "Tap Listen to a track to open a card, like, or pass.",
     topSwipeHint: "Want precision? Open Filters after the first listen.",
     aboutKicker: "What improves",
     aboutTitle: "Discovery without blind search",
@@ -25974,7 +25974,7 @@ const I18N = {
     feedbackHint: "Cada like, descarte o corrección vuelve la próxima recomendación más precisa.",
     swipeHeroKicker: "Descubrimiento inmediato",
     swipeHeroTitle: "Escucha primero, ajusta después",
-    swipeHeroHint: "Después del acceso, la primera carta carga sola; cada reacción afina la siguiente.",
+    swipeHeroHint: "Toca Escuchar una pista para abrir la primera carta; cada reacción afina la siguiente.",
     swipeDeckKicker: "Rutas de descubrimiento",
     swipeDeckTitle: "Elige una dirección sonora",
     swipeDeckHint: "Usa un subgénero para abrir una secuencia más coherente.",
@@ -25987,8 +25987,8 @@ const I18N = {
     swipeEmptyTitle: "Abre una pista",
     swipeEmptyMeta: "Toca Sorpresa, escucha y decide con swipe.",
     swipeHint: "Arrastra con mouse o dedo; suelta para guardar la señal.",
-    topSwipeEmptyTitle: "Preparando tu primera pista",
-    topSwipeEmptyMeta: "Sonic Search abre una carta para escuchar, guardar o pasar.",
+    topSwipeEmptyTitle: "Listo para tu primera pista",
+    topSwipeEmptyMeta: "Toca Escuchar una pista para abrir una carta, guardarla o pasar.",
     topSwipeHint: "¿Quieres precisión? Abre Filtros después de la primera escucha.",
     aboutKicker: "Qué mejora",
     aboutTitle: "Descubrimiento sin búsqueda ciega",
@@ -42782,6 +42782,7 @@ function isStaticPreviewHost() {
 }
 
 function canUseRelativeApiEndpoint() {
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode()) return false;
   return ["http:", "https:"].includes(String(window?.location?.protocol || "")) && !isStaticPreviewHost();
 }
 
@@ -48005,13 +48006,15 @@ async function refreshGlobalDiscoveryExposure(tracks = []) {
   if (!anonymousDiscoverySession() || typeof fetch !== "function") return false;
   const payload = discoveryExposureCandidatePayload(tracks);
   if (!payload.trackKeys.length && !payload.artistKeys.length) return false;
+  const endpoint = resolveAppApiEndpoint(DISCOVERY_EXPOSURE_ENDPOINT);
+  if (!endpoint) return false;
   if (
     globalExposureSnapshotPromise &&
     Date.now() - globalExposureSnapshotAt < 8000
   ) return globalExposureSnapshotPromise;
 
   globalExposureSnapshotAt = Date.now();
-  globalExposureSnapshotPromise = fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+  globalExposureSnapshotPromise = fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48050,8 +48053,10 @@ async function recordGlobalDiscoveryExposure(track) {
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
   if (!trackKey && !artistKey) return false;
+  const endpoint = resolveAppApiEndpoint(DISCOVERY_EXPOSURE_ENDPOINT);
+  if (!endpoint) return false;
   try {
-    const response = await fetch(DISCOVERY_EXPOSURE_ENDPOINT, {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

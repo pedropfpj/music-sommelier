@@ -2,7 +2,7 @@
   "name": "sonic-search",
   "version": "0.1.0",
   "private": true,
-  "description": "Sonic Search web app packaged for iOS with Capacitor.",
+  "description": "Sonic Search web app packaged for iOS and Android with Capacitor.",
   "scripts": {
     "beta:check": "node scripts/check-beta-storage.mjs",
     "audit:electronic": "node scripts/audit-electronic-recommendations.mjs",
@@ -33,6 +33,7 @@
     "test:psytrance-integrity": "node scripts/test-psytrance-integrity.mjs",
     "test:subgenre-stress": "node scripts/test-subgenre-stress.mjs",
     "test:recommendation-safety": "node scripts/test-recommendation-safety.mjs",
+    "test:android-runtime": "node scripts/test-android-runtime.mjs",
     "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs"
   },
   "dependencies": {
