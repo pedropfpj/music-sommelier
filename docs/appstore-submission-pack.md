@@ -83,25 +83,25 @@ electronic music,techno,house,psytrance,DJ,sets,tracks,BPM,festivals,news
 Portuguese (Brazil):
 
 ```text
-As recomendações ficaram mais rápidas e estáveis, com uma primeira faixa local quando a rede demora, previews sem travar e um deck que evita repetir músicas já descartadas. Também melhoramos o Jornal Sonic, o catálogo eletrônico, a descoberta de DJs e a segurança da comunidade.
+As recomendações ficaram mais rápidas e estáveis. Esta atualização corrige um problema de áudio no iOS em que curtir ou passar uma recomendação podia manter a faixa anterior tocando, e reforça as transições para que cada novo card controle somente o seu próprio áudio. Também melhoramos o Jornal Sonic, o catálogo eletrônico, a descoberta de DJs e a segurança da comunidade.
 ```
 
 English:
 
 ```text
-Recommendations are now faster and more stable, with a local first track when the network is slow, previews that no longer get stuck, and a deck that avoids tracks you already passed. We also improved Sonic Journal, the electronic catalog, DJ discovery, and community safety.
+Recommendations are now faster and more stable. This update fixes an iOS playback issue where liking or passing a recommendation could leave the previous track playing, and strengthens preview transitions so each new card owns its audio. We also improved Sonic Journal, the electronic catalog, DJ discovery, and community safety.
 ```
 
 ## Release Gate
 
 Do not submit a build that exposes Google login unless Sign in with Apple is also enabled and verified.
 
-Verified on 2026-08-10:
+Verified on 2026-08-11:
 
 - Google OAuth through Supabase redirects correctly.
 - Sign in with Apple through Supabase redirects correctly.
 - The iOS callback uses the registered `sonicsearch://auth/callback` URL and PKCE.
-- Build 21 is the current release candidate. Build 20 remains superseded after build 21 is uploaded.
+- Build 22 is the current release candidate for version 1.0.8. Build 21 remains the released 1.0.7 binary and is superseded by this playback fix.
 
 ## Review Notes
 

@@ -192,7 +192,7 @@ function buildIosIndexHtml(html) {
 }
 
 function buildIosAppJs(js) {
-  const appStoreBuildId = "20260729studiooff1";
+  const appStoreBuildId = "20260811iosaudio2";
   const buildIdPattern = /const SONIC_APP_BUILD_ID = "[^"]+";/;
   if (!buildIdPattern.test(js)) {
     throw new Error("Could not apply iOS App Store transform for app.js: missing SONIC_APP_BUILD_ID");
