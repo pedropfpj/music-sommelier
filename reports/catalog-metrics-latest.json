@@ -1,35 +1,35 @@
 {
-  "generatedAt": "2026-07-13T21:39:30.061Z",
+  "generatedAt": "2026-09-02T16:22:52.116Z",
   "current": {
-    "auditedTracks": 16533,
-    "uniqueArtists": 3648,
+    "auditedTracks": 10030,
+    "uniqueArtists": 3841,
     "indexedArtists": 5179,
     "searchableTracks": 98401,
-    "labels": 5533,
+    "labels": 6314,
     "styles": 169,
-    "externalArtists": 3616,
+    "externalArtists": 3815,
     "criticalCount": 0,
     "warningCount": 82,
-    "noteCount": 21981
+    "noteCount": 9313
   },
   "previous": {
-    "auditedTracks": 16527,
-    "uniqueArtists": 3647,
+    "auditedTracks": 10030,
+    "uniqueArtists": 3841,
     "indexedArtists": 5179,
     "searchableTracks": 98401,
-    "labels": 5533,
-    "styles": 168,
-    "externalArtists": 3615,
-    "criticalCount": 1,
-    "warningCount": 81,
-    "noteCount": 21975
+    "labels": 6314,
+    "styles": 169,
+    "externalArtists": 3815,
+    "criticalCount": 2,
+    "warningCount": 82,
+    "noteCount": 9313
   },
   "delta": {
     "auditedTracks": {
-      "previous": 16527,
-      "current": 16533,
-      "delta": 6,
-      "added": 6,
+      "previous": 10030,
+      "current": 10030,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     },
     "searchableTracks": {
@@ -40,10 +40,10 @@
       "removed": 0
     },
     "uniqueArtists": {
-      "previous": 3647,
-      "current": 3648,
-      "delta": 1,
-      "added": 1,
+      "previous": 3841,
+      "current": 3841,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     },
     "indexedArtists": {
@@ -54,45 +54,45 @@
       "removed": 0
     },
     "labels": {
-      "previous": 5533,
-      "current": 5533,
+      "previous": 6314,
+      "current": 6314,
       "delta": 0,
       "added": 0,
       "removed": 0
     },
     "styles": {
-      "previous": 168,
+      "previous": 169,
       "current": 169,
-      "delta": 1,
-      "added": 1,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     },
     "externalArtists": {
-      "previous": 3615,
-      "current": 3616,
-      "delta": 1,
-      "added": 1,
+      "previous": 3815,
+      "current": 3815,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     },
     "criticalCount": {
-      "previous": 1,
+      "previous": 2,
       "current": 0,
-      "delta": -1,
+      "delta": -2,
       "added": 0,
-      "removed": 1
+      "removed": 2
     },
     "warningCount": {
-      "previous": 81,
+      "previous": 82,
       "current": 82,
-      "delta": 1,
-      "added": 1,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     },
     "noteCount": {
-      "previous": 21975,
-      "current": 21981,
-      "delta": 6,
-      "added": 6,
+      "previous": 9313,
+      "current": 9313,
+      "delta": 0,
+      "added": 0,
       "removed": 0
     }
   }

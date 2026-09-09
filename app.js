@@ -649,9 +649,9 @@ const AI_DEFAULT_CONFIG = {
   premiumUnlocked: false,
   dailyTextLimit: 10,
   dailyFreeDiscoveryLimit: 80,
-  imageLimitPerProfile: 7,
-  premiumImageLimitPerProfile: 14,
-  allowImageRegeneration: true,
+  imageLimitPerProfile: 1,
+  premiumImageLimitPerProfile: 1,
+  allowImageRegeneration: false,
   textCacheMaxEntries: 120
 };
 const AI_FEATURE_CONFIG = {
@@ -662,8 +662,10 @@ const AI_FEATURE_CONFIG = {
 };
 const ACCESS_DEFAULT_CONFIG = {
   ownerEmails: ["pedropfpj@gmail.com"],
-  freeDiscoveryLimit: 50,
-  imageGenerationRequiresTrustedUser: false,
+  // Free discovery stays open so unlimited likes are truly usable end to end.
+  // Sonic Premium is differentiated by the daily radar and synced memory.
+  freeDiscoveryLimit: 0,
+  imageGenerationRequiresTrustedUser: true,
   betaGateEnabled: false,
   betaAccessCodes: [],
   betaAccessApiEndpoint: "",
@@ -703,7 +705,7 @@ const COMPLIANCE_CONFIG = {
     ? window.SONIC_SEARCH_COMPLIANCE_CONFIG
     : {})
 };
-const PREMIUM_ART_PROMPT_MIN_LIKES = 50;
+const PREMIUM_ART_PROMPT_MIN_LIKES = 10;
 const SUPPORT_DEFAULT_AMOUNT = 5;
 const DAILY_NEWS_SOURCES = [
   {
@@ -1039,6 +1041,7 @@ function ensureSoundCloudSupplementalDjSeeds() {
 }
 
 const DJ_RECOMMENDATION_STORAGE_KEY = "sonic_search_dj_recommendations_v1";
+const WEEKLY_DJ_ACTIVITY_LIMIT = 420;
 function buildPsyFestivalLineupRecommendationSeeds() {
   const searchUrlFor = (name = "", subgenre = "", roleKind = "live") => {
     const roleSearch = roleKind === "b2b" ? "B2B set" : roleKind === "dj" ? "DJ set" : "live set";
@@ -4757,93 +4760,9 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20260713-big-beat-v1";
-const EXTERNAL_DATASET_PRIORITY_FILES = [
-  "data/big_beat_chemical_brothers_v1_20260713.csv",
-  "data/psy_festival_lineups_202607_artist_profiles.csv",
-  "data/berlin_club_radar_202607_artist_profiles.csv",
-  "data/berghain_klubnacht_20260704_artist_profiles.csv",
-  "data/datasetlocal_hypnotic_techno_ignez_enrichment_v1_20260705.csv",
-  "data/uk_garage_mattik_bridge_v1_20260704.csv",
-  "data/indietronica_bridge_enrichment_v1_20260704.csv",
-  "data/catalog_playable_focus_club_v17_20260622.csv",
-  "data/catalog_playable_depth_v16_20260622.csv",
-  "data/electronic_subgenre_expansion_v15_20260621.csv",
-  "data/verified_track_expansion_v10.csv",
-  "data/verified_track_expansion_v9.csv",
-  "data/verified_track_expansion_v8.csv",
-  "data/verified_track_expansion_v7.csv",
-  "data/verified_track_expansion_v6.csv",
-  "data/verified_track_expansion_v5.csv",
-  "data/festival_2026_2027_recommendations_20260622.csv",
-  "reports/catalog_extra_bulk_local_20260621.rows.json"
-];
-const EXTERNAL_DATASET_FILES = [
-  ...EXTERNAL_DATASET_PRIORITY_FILES,
-  "data/artist_expansion_seeds_v1.csv",
-  "data/artist_expansion_seeds_v2.csv",
-  "data/artist_expansion_seeds_v3.csv",
-  "data/artist_expansion_seeds_v4.csv",
-  "data/artist_expansion_seeds_v5.csv",
-  "data/artist_expansion_seeds_v6.csv",
-  "data/artist_expansion_seeds_v7.csv",
-  "data/artist_expansion_seeds_v8.csv",
-  "data/artist_expansion_seeds_v9.csv",
-  "data/artist_expansion_seeds_v10.csv",
-  "data/artist_expansion_seeds_v11.csv",
-  "data/artist_expansion_seeds_v12.csv",
-  "data/artist_expansion_seeds_v13.csv",
-  "data/verified_track_expansion_v1.csv",
-  "data/verified_track_expansion_v2.csv",
-  "data/verified_track_expansion_v3.csv",
-  "data/verified_track_expansion_v4.csv",
-  "data/verified_track_expansion_v5.csv",
-  "data/verified_track_expansion_v6.csv",
-  "data/verified_track_expansion_v7.csv",
-  "data/verified_track_expansion_v8.csv",
-  "data/varazslo_absurdus_playable_tracks_20260622.csv",
-  "data/moonclipse_astrix_techno_project_20260622.csv",
-  "data/verified_track_expansion_v9.csv",
-  "data/verified_track_expansion_v10.csv",
-  "data/club_styles_enrichment_v1_20260620.csv",
-  "data/club_styles_enrichment_v2_20260621.csv",
-  "data/club_styles_artist_profiles_v2_20260621.csv",
-  "data/electronic_subgenre_expansion_v15_20260621.csv",
-  "data/electronic_subgenre_artist_profiles_v15_20260621.csv",
-  "data/catalog_playable_depth_v16_20260622.csv",
-  "data/catalog_playable_focus_club_v17_20260622.csv",
-  "data/michael_bibi_artist_profile_20260621.csv",
-  "data/michael_bibi_playable_tracks_20260621.csv",
-  "data/psycore_artist_profiles_v4_20260621.csv",
-  "data/psycore_artist_profiles_v5_20260621.csv",
-  "data/techno_enrichment_v3_20260621.csv",
-  "data/michael_bibi_artist_profile_20260621.csv",
-  "data/michael_bibi_playable_tracks_20260621.csv",
-  "data/techno_enrichment_v4_20260621.csv",
-  "data/techno_enrichment_v5_20260621.csv",
-  "data/techno_artist_profiles_v3_20260621.csv",
-  "data/techno_artist_profiles_v4_20260621.csv",
-  "data/hive_festival_2026_artist_profiles.csv",
-  "data/cosmic_crew_2026_artist_profiles.csv",
-  "data/cosmic_crew_2026_playable_tracks.csv",
-  "data/mop_brasil_2026_rage_artist_profiles.csv",
-  "data/mop_brasil_2026_rage_playable_tracks.csv",
-  "data/pachamama_2026_artist_profiles.csv",
-  "data/pachamama_2026_playable_tracks.csv",
-  "data/festival_2026_2027_recommendations_20260622.csv",
-  "data/hive_festival_2026_artist_subgenres.csv",
-  "data/codex_dataset_pack_v14/tracks.json",
-  "data/codex_dataset_pack_v14/tracks.csv",
-  "data/codex_dataset_pack_v14/prog_dark_tracks.csv",
-  "data/codex_dataset_pack_v14/artists.json",
-  "data/codex_dataset_pack_v14/artists.csv",
-  "data/codex_dataset_pack_v14/recent_artist_signals.json",
-  "data/codex_dataset_pack_v14/data/psytrance_db_v14.jsonl",
-  "data/codex_dataset_pack_v14/data/psycore_db_v14.jsonl",
-  "data/codex_dataset_pack_v14/psytrance_artist_enriched_bios.csv",
-  "data/codex_dataset_pack_v14/psytrance_artist_seed_subset.csv",
-  "reports/catalog_extra_bulk_local_20260621.rows.json"
-].filter((path, index, list) => list.indexOf(path) === index);
+const EXTERNAL_DATASET_CACHE_VERSION = "20260820-low-coverage-v21";
+const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
+const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
@@ -4879,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260721adminOps1";
+const SONIC_APP_BUILD_ID = "20260909weeklyhighlights1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -9754,6 +9673,9 @@ const audioVolumeSlider = document.getElementById("audioVolumeSlider");
 const audioVolumeValue = document.getElementById("audioVolumeValue");
 const audioControlGroup = audioToggleBtn?.closest(".audio-control-group");
 const audioActionsGroup = audioControlGroup?.parentElement;
+const dailyLikeQuota = document.getElementById("dailyLikeQuota");
+const dailyLikeQuotaText = document.getElementById("dailyLikeQuotaText");
+const dailyLikeQuotaCompact = document.getElementById("dailyLikeQuotaCompact");
 const heroLogoBtn = document.getElementById("heroLogoBtn");
 const languageScreen = document.getElementById("languageScreen");
 const languageButtons = document.querySelectorAll(".lang-btn");
@@ -9780,6 +9702,20 @@ const authAppleBtn = document.getElementById("authAppleBtn");
 const authAppleLabel = document.getElementById("authAppleLabel");
 const authProviderHint = document.getElementById("authProviderHint");
 const authFeedback = document.getElementById("authFeedback");
+const tasteCalibrationScreen = document.getElementById("tasteCalibrationScreen");
+const tasteCalibrationForm = document.getElementById("tasteCalibrationForm");
+const tasteCalibrationKicker = document.getElementById("tasteCalibrationKicker");
+const tasteCalibrationTitle = document.getElementById("tasteCalibrationTitle");
+const tasteCalibrationIntro = document.getElementById("tasteCalibrationIntro");
+const tasteCalibrationProgress = document.getElementById("tasteCalibrationProgress");
+const tasteCalibrationProgressFill = document.getElementById("tasteCalibrationProgressFill");
+const tasteCalibrationProgressLabel = document.getElementById("tasteCalibrationProgressLabel");
+const tasteCalibrationSteps = Array.from(document.querySelectorAll("[data-taste-step]"));
+const tasteCalibrationOptionButtons = Array.from(document.querySelectorAll("[data-taste-field][data-taste-value]"));
+const tasteCalibrationStatus = document.getElementById("tasteCalibrationStatus");
+const tasteCalibrationBackBtn = document.getElementById("tasteCalibrationBackBtn");
+const tasteCalibrationSkipBtn = document.getElementById("tasteCalibrationSkipBtn");
+const tasteCalibrationNextBtn = document.getElementById("tasteCalibrationNextBtn");
 const betaGateScreen = document.getElementById("betaGateScreen");
 const betaTesterRibbon = document.getElementById("betaTesterRibbon");
 const betaWaitlistForm = document.getElementById("betaWaitlistForm");
@@ -9900,6 +9836,9 @@ const supportCryptoStatus = document.getElementById("supportCryptoStatus");
 const supportCryptoQr = document.getElementById("supportCryptoQr");
 const supportCryptoPlaceholder = document.getElementById("supportCryptoPlaceholder");
 const supportCryptoHint = document.getElementById("supportCryptoHint");
+const supportBitcoinAddressRow = document.getElementById("supportBitcoinAddressRow");
+const supportBitcoinAddressLabel = document.getElementById("supportBitcoinAddressLabel");
+const supportBitcoinAddressValue = document.getElementById("supportBitcoinAddressValue");
 const supportCryptoPayload = document.getElementById("supportCryptoPayload");
 const supportCopyCryptoBtn = document.getElementById("supportCopyCryptoBtn");
 const supportContactKicker = document.getElementById("supportContactKicker");
@@ -10256,6 +10195,62 @@ const profileBackupImportHint = document.getElementById("profileBackupImportHint
 const profileBackupImportBtn = document.getElementById("profileBackupImportBtn");
 const profileBackupImportInput = document.getElementById("profileBackupImportInput");
 const profileDeleteDataBtn = document.getElementById("profileDeleteDataBtn");
+const membershipCard = document.getElementById("membershipCard");
+const membershipKicker = document.getElementById("membershipKicker");
+const membershipTitle = document.getElementById("membershipTitle");
+const membershipBadge = document.getElementById("membershipBadge");
+const membershipDescription = document.getElementById("membershipDescription");
+const membershipFeatureList = document.getElementById("membershipFeatureList");
+const membershipStatus = document.getElementById("membershipStatus");
+const membershipPrimaryBtn = document.getElementById("membershipPrimaryBtn");
+const membershipRefreshBtn = document.getElementById("membershipRefreshBtn");
+const weeklyHighlightsCard = document.getElementById("weeklyHighlightsCard");
+const weeklyHighlightsKicker = document.getElementById("weeklyHighlightsKicker");
+const weeklyHighlightsTitle = document.getElementById("weeklyHighlightsTitle");
+const weeklyHighlightsIntro = document.getElementById("weeklyHighlightsIntro");
+const weeklyHighlightsBadge = document.getElementById("weeklyHighlightsBadge");
+const weeklyHighlightsPeriod = document.getElementById("weeklyHighlightsPeriod");
+const weeklyHighlightsContent = document.getElementById("weeklyHighlightsContent");
+const weeklyHighlightsDiscoveredLabel = document.getElementById("weeklyHighlightsDiscoveredLabel");
+const weeklyHighlightsDiscovered = document.getElementById("weeklyHighlightsDiscovered");
+const weeklyHighlightsLikedLabel = document.getElementById("weeklyHighlightsLikedLabel");
+const weeklyHighlightsLiked = document.getElementById("weeklyHighlightsLiked");
+const weeklyHighlightsPassedLabel = document.getElementById("weeklyHighlightsPassedLabel");
+const weeklyHighlightsPassed = document.getElementById("weeklyHighlightsPassed");
+const weeklyHighlightsTracksLabel = document.getElementById("weeklyHighlightsTracksLabel");
+const weeklyHighlightsTracks = document.getElementById("weeklyHighlightsTracks");
+const weeklyHighlightsSpotlightKicker = document.getElementById("weeklyHighlightsSpotlightKicker");
+const weeklyHighlightsSpotlight = document.getElementById("weeklyHighlightsSpotlight");
+const weeklyHighlightsStyle = document.getElementById("weeklyHighlightsStyle");
+const weeklyHighlightsEmpty = document.getElementById("weeklyHighlightsEmpty");
+const weeklyHighlightsEmptyTitle = document.getElementById("weeklyHighlightsEmptyTitle");
+const weeklyHighlightsEmptyText = document.getElementById("weeklyHighlightsEmptyText");
+const weeklyHighlightsProgress = document.getElementById("weeklyHighlightsProgress");
+const weeklyHighlightsLocked = document.getElementById("weeklyHighlightsLocked");
+const weeklyHighlightsLockedTitle = document.getElementById("weeklyHighlightsLockedTitle");
+const weeklyHighlightsLockedText = document.getElementById("weeklyHighlightsLockedText");
+const weeklyHighlightsPrimaryBtn = document.getElementById("weeklyHighlightsPrimaryBtn");
+const weeklyHighlightsShareBtn = document.getElementById("weeklyHighlightsShareBtn");
+const tasteCalibrationProfileCard = document.getElementById("tasteCalibrationProfileCard");
+const tasteCalibrationProfileKicker = document.getElementById("tasteCalibrationProfileKicker");
+const tasteCalibrationProfileTitle = document.getElementById("tasteCalibrationProfileTitle");
+const tasteCalibrationProfileSummary = document.getElementById("tasteCalibrationProfileSummary");
+const tasteCalibrationReopenBtn = document.getElementById("tasteCalibrationReopenBtn");
+const premiumDialog = document.getElementById("premiumDialog");
+const premiumDialogClose = document.getElementById("premiumDialogClose");
+const premiumDialogKicker = document.getElementById("premiumDialogKicker");
+const premiumDialogTitle = document.getElementById("premiumDialogTitle");
+const premiumDialogIntro = document.getElementById("premiumDialogIntro");
+const premiumProfileKicker = document.getElementById("premiumProfileKicker");
+const premiumProfileTitle = document.getElementById("premiumProfileTitle");
+const premiumProfileBody = document.getElementById("premiumProfileBody");
+const premiumProfileSignals = document.getElementById("premiumProfileSignals");
+const premiumBenefitList = document.getElementById("premiumBenefitList");
+const premiumOfferGrid = document.getElementById("premiumOfferGrid");
+const premiumBillingStatus = document.getElementById("premiumBillingStatus");
+const premiumRestoreBtn = document.getElementById("premiumRestoreBtn");
+const premiumManageBtn = document.getElementById("premiumManageBtn");
+const premiumLegalNote = document.getElementById("premiumLegalNote");
 const socialProfileCard = document.getElementById("socialProfileCard");
 const socialConnectionBadge = document.getElementById("socialConnectionBadge");
 const socialSessionState = document.getElementById("socialSessionState");
@@ -10370,6 +10365,12 @@ const spiritSpotlightSoundcloud = document.getElementById("spiritSpotlightSoundc
 const spiritCollectiblePanel = document.getElementById("spiritCollectiblePanel");
 const spiritCollectibleTitle = document.getElementById("spiritCollectibleTitle");
 const spiritCollectibleHint = document.getElementById("spiritCollectibleHint");
+const spiritPremiumGate = document.getElementById("spiritPremiumGate");
+const spiritPremiumGateKicker = document.getElementById("spiritPremiumGateKicker");
+const spiritPremiumGateTitle = document.getElementById("spiritPremiumGateTitle");
+const spiritPremiumGateBody = document.getElementById("spiritPremiumGateBody");
+const spiritPremiumBenefitList = document.getElementById("spiritPremiumBenefitList");
+const spiritPremiumCta = document.getElementById("spiritPremiumCta");
 const spiritCollectibleGenerationPanel = document.getElementById("spiritCollectibleGenerationPanel");
 const spiritCollectibleGenerationLabel = document.getElementById("spiritCollectibleGenerationLabel");
 const spiritCollectibleGenerationPercent = document.getElementById("spiritCollectibleGenerationPercent");
@@ -10484,6 +10485,7 @@ let dislikedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
 let currentDjRecommendation = null;
+let currentDjRecommendationSource = "manual";
 let currentDjIntent = null;
 let pendingDjIntentFamily = "";
 let djIntentBusy = false;
@@ -10499,6 +10501,7 @@ const unavailableDjPreviewKeys = new Set();
 let likedDjRecommendationKeys = new Set();
 let passedDjRecommendationKeys = new Set();
 let recentDjRecommendationKeys = [];
+let djRecommendationHistory = [];
 let previewReliabilityByStyle = new Map();
 let suggestionQueueTracks = [];
 let suggestionQueueContextKey = "";
@@ -10669,11 +10672,13 @@ let socialState = {
   config: null,
   session: null,
   profile: null,
+  tasteSnapshot: null,
   feed: [],
   busy: false,
   syncTimer: null,
   lastSyncAt: 0
 };
+let weeklyHighlightsCloudSyncTimer = 0;
 let adminAnalyticsState = {
   loading: false,
   data: null,
@@ -10709,11 +10714,21 @@ let adminAccessState = {
   verified: false,
   allowed: false,
   owner: false,
+  premium: false,
   role: "anonymous",
   email: "",
+  membership: null,
   sessionKey: "",
   lastCheckedAt: 0,
   promise: null
+};
+let premiumBillingState = {
+  loading: false,
+  busy: false,
+  server: null,
+  offers: [],
+  channel: "web",
+  checkoutReady: false
 };
 let socialCommentsState = {
   targetType: "track",
@@ -10741,6 +10756,8 @@ const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
 let externalDatasetImportDone = false;
 let externalDatasetImportPromise = null;
+let externalDatasetImportedStyles = new Set();
+let externalDatasetStylePromises = new Map();
 let catalogExtraImportDoneAll = false;
 let catalogExtraImportPromises = new Map();
 let catalogExtraImportedStyles = new Set();
@@ -10789,6 +10806,26 @@ const adaptiveModel = {
 const STORAGE_KEY = "neonpulse:preferences:v2";
 const DYNAMIC_CATALOG_CACHE_KEY = "neonpulse:dynamicCatalog:v21";
 const PROGRESS_STORAGE_KEY = "neonpulse:progress:v2";
+const DAILY_DJ_STORAGE_KEY = "neonpulse:dailyDjs:v1";
+const DAILY_RADAR_STORAGE_KEY = "sonic:dailyRadar:v1";
+const DAILY_LIKE_STORAGE_KEY = "neonpulse:dailyLikes:v1";
+const INITIAL_TASTE_CALIBRATION_STORAGE_KEY = "sonic_search:initialTasteCalibration:v1";
+const INITIAL_TASTE_CALIBRATION_VERSION = 1;
+const INITIAL_TASTE_CALIBRATION_FINAL_STATES = new Set(["completed", "skipped"]);
+let initialTasteCalibrationState = null;
+let initialTasteCalibrationStep = 0;
+let initialTasteCalibrationMode = "initial";
+let initialTasteCalibrationBusy = false;
+let initialTasteCalibrationContinuation = { showGuide: false, targetTab: "" };
+// Keep the former quota behind one explicit switch so it can be restored later
+// without leaving any active limit in the current presentation build.
+const DAILY_LIKE_LIMIT_ENABLED = false;
+const DAILY_LIKE_LIMIT = 20;
+let dailyLikeMemoryKey = "";
+let dailyLikeMemoryState = null;
+let dailyDjController = null;
+let dailyRadarController = null;
+let dailyDjReminderLaunchPending = false;
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
 const SPIRIT_IMAGE_PROMPT_VERSION = "personal-sound-system-v1";
 const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "local-personal-sound-system-v1-copy";
@@ -10824,7 +10861,12 @@ const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
 const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
 const PROFILE_DATA_STORAGE_KEYS = [
+  DJ_RECOMMENDATION_STORAGE_KEY,
+  DAILY_DJ_STORAGE_KEY,
+  DAILY_RADAR_STORAGE_KEY,
+  DAILY_LIKE_STORAGE_KEY,
   STORAGE_KEY,
+  INITIAL_TASTE_CALIBRATION_STORAGE_KEY,
   PROGRESS_STORAGE_KEY,
   SPIRIT_COLLECTIBLE_STORAGE_KEY,
   SPIRIT_ART_SEED_STORAGE_KEY,
@@ -11261,14 +11303,14 @@ const STYLE_BPM_RULES = {
   house: { min: 122, max: 128 },
   deep_house: { min: 110, max: 124 },
   tech_house: { min: 124, max: 128 },
-  progressive_house: { min: 124, max: 130 },
+  progressive_house: { min: 122, max: 130 },
   afro_house: { min: 118, max: 126 },
   organic_house: { min: 112, max: 122 },
   bass_house: { min: 126, max: 132 },
   electro_house: { min: 126, max: 132 },
   minimal_deep_tech: { min: 122, max: 128 },
   jackin_house: { min: 122, max: 128 },
-  soulful_house: { min: 118, max: 124 },
+  soulful_house: { min: 118, max: 126 },
   disco_house: { min: 118, max: 126 },
   garage_house: { min: 124, max: 130 },
   edm: { min: 124, max: 132 },
@@ -18155,52 +18197,59 @@ function swipeInteractionActive() {
   );
 }
 
-async function hydrateExternalDatasetPackInBackground() {
+function finalizeExternalDatasetRuntimeMerge(merged = {}) {
+  const tracksImported = Number(merged.tracksImported) || 0;
+  const artistsImported = Number(merged.artistsImported) || 0;
+  const seedsAdded = Number(merged.artistSeedsAdded) || 0;
+  if (tracksImported <= 0 && artistsImported <= 0 && seedsAdded <= 0) return merged;
+  dedupeCatalogByTrackKey();
+  syncDiscoveryFromSeeds();
+  ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
+  normalizeTrustedSlambientCatalog();
+  sanitizeCatalogByStyleRules();
+  Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
+  saveDynamicCatalogCache();
+  return merged;
+}
+
+async function loadExternalDatasetRuntimeRows(style = "") {
+  const runtime = typeof window !== "undefined" ? window.SonicCatalogRuntime : null;
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (runtime && typeof runtime.loadCore === "function" && typeof runtime.loadStyle === "function") {
+    return cleanStyle ? runtime.loadStyle(cleanStyle) : runtime.loadCore();
+  }
+  const path = cleanStyle
+    ? `${EXTERNAL_DATASET_RUNTIME_STYLE_PATH}/${encodeURIComponent(cleanStyle)}.json`
+    : EXTERNAL_DATASET_RUNTIME_CORE_PATH;
+  return readExternalDatasetRowsFromPath(path);
+}
+
+async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
+  const cleanStyle = normalizeDatasetStyle(style || "");
+  if (cleanStyle) {
+    if (externalDatasetImportedStyles.has(cleanStyle)) return null;
+    if (externalDatasetStylePromises.has(cleanStyle)) return externalDatasetStylePromises.get(cleanStyle);
+    const stylePromise = loadExternalDatasetRuntimeRows(cleanStyle)
+      .then((rows) => {
+        const merged = mergeExternalDatasetRows(rows, `runtime_catalog_v1_${cleanStyle}`);
+        externalDatasetImportedStyles.add(cleanStyle);
+        return finalizeExternalDatasetRuntimeMerge(merged);
+      })
+      .finally(() => externalDatasetStylePromises.delete(cleanStyle));
+    externalDatasetStylePromises.set(cleanStyle, stylePromise);
+    return stylePromise;
+  }
+
+  if (externalDatasetImportDone) return null;
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
-
-  externalDatasetImportPromise = (async () => {
-    externalDatasetImportStarted = true;
-
-    let tracksImported = 0;
-    let artistsImported = 0;
-    let seedsAdded = 0;
-
-    for (let index = 0; index < EXTERNAL_DATASET_FILES.length; index += 1) {
-      const path = EXTERNAL_DATASET_FILES[index];
-      const rows = await readExternalDatasetRowsFromPath(path);
-      if (!rows.length) continue;
-      const merged = mergeExternalDatasetRows(rows, `dataset_v14_${path.split("/").pop()}`);
-      tracksImported += merged.tracksImported;
-      artistsImported += merged.artistsImported;
-      seedsAdded += merged.artistSeedsAdded;
-      if (index % 3 === 2) await waitForMainThreadBreath();
-      if (index < EXTERNAL_DATASET_FILES.length - 1) {
-        await waitForExternalDatasetIdleSlot();
-      }
-    }
-
-    if (tracksImported > 0 || artistsImported > 0 || seedsAdded > 0) {
-      dedupeCatalogByTrackKey();
-      syncDiscoveryFromSeeds();
-      ensureMinimumArtistSeedsPerStyle(MIN_ARTISTS_PER_STYLE);
-      normalizeTrustedSlambientCatalog();
-      sanitizeCatalogByStyleRules();
-      Object.keys(STYLE_BPM_RULES).forEach((style) => purgeDynamicMismatches(style));
-      saveDynamicCatalogCache();
+  externalDatasetImportStarted = true;
+  externalDatasetImportPromise = loadExternalDatasetRuntimeRows()
+    .then((rows) => finalizeExternalDatasetRuntimeMerge(
+      mergeExternalDatasetRows(rows, "runtime_catalog_v1_core")
+    ))
+    .finally(() => {
       externalDatasetImportDone = true;
-
-      const message = externalDatasetImportedMessage(tracksImported, artistsImported);
-      const appVisible = appContent && !appContent.classList.contains("hidden");
-      if (feedbackMessage && appVisible) {
-        feedbackMessage.textContent = message;
-        showToast(message);
-      }
-      return;
-    }
-
-    externalDatasetImportDone = true;
-  })();
-
+    });
   return externalDatasetImportPromise;
 }
 
@@ -18259,13 +18308,13 @@ function scheduleCatalogMaintenance(delayMs = BACKGROUND_CATALOG_WARMUP_DELAY_MS
 }
 
 async function prepareLocalDatasetForRecommendation(prefs = {}) {
-  if (externalDatasetImportDone) return;
   const style = normalizeDatasetStyle(prefs?.style || "");
   if (!style) {
-    scheduleExternalDatasetWarmup(0);
+    if (!externalDatasetImportDone) scheduleExternalDatasetWarmup(0);
     return;
   }
-  const promise = hydrateExternalDatasetPackInBackground();
+  if (externalDatasetImportedStyles.has(style)) return;
+  const promise = hydrateExternalDatasetPackInBackground({ style });
   const stats = styleCoverageStats(style);
   const target = styleCoverageTarget(style);
   const shouldWait =
@@ -24334,12 +24383,13 @@ const I18N = {
     supportCopyPix: "Copiar código Pix",
     supportCopying: "Copiando...",
     supportCryptoKicker: "Crypto",
-    supportCryptoTitle: "Bitcoin / Lightning",
-    supportCryptoReady: "Crypto ativo",
+    supportCryptoTitle: "Bitcoin",
+    supportCryptoReady: "Endereço ativo",
     supportCryptoMissing: "Opcional",
-    supportCryptoHintReady: "Use o QR ou copie o endereço.",
-    supportCryptoHintMissing: "Crypto ainda não configurado.",
-    supportCopyCrypto: "Copiar crypto",
+    supportCryptoHintReady: "O QR e o campo abaixo usam exatamente o mesmo endereço Bitcoin.",
+    supportCryptoHintMissing: "Endereço Bitcoin ainda não configurado.",
+    supportBitcoinAddressLabel: "Endereço Bitcoin",
+    supportCopyCrypto: "Copiar endereço Bitcoin",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configure esse método de apoio antes de copiar.",
     supportPaymentsUnavailable: "Na versão iOS, apoio financeiro fica fora do app. Use o contato para falar com Pedro.",
@@ -24838,7 +24888,19 @@ const I18N = {
     spiritCollectibleHintLocal: "A imagem aparece aqui quando estiver pronta.",
     spiritCollectibleHintLocalReady: "Imagem pronta. Compartilhe ou baixe.",
     spiritCollectibleHintApi: "Visual escolhido automaticamente pelo seu gosto.",
-    spiritCollectiblePremiumLocked: "O Sound System IA está preparado. Gere novamente quando a imagem online estiver disponível.",
+    spiritCollectiblePremiumLocked: "Seu perfil musical está ativo. A arte exclusiva por IA faz parte do Sonic Premium.",
+    spiritPremiumGateKicker: "EXCLUSIVO PREMIUM",
+    spiritPremiumGateTitle: "Transforme seu gosto em uma arte única.",
+    spiritPremiumGateBody: "Seu Sound System continua evoluindo gratuitamente. O Premium libera a versão criada por IA para cada novo marco.",
+    spiritPremiumGateBenefitsLabel: "Benefícios da arte Premium",
+    spiritPremiumBenefitDna: "Visual criado a partir do seu Sonic DNA",
+    spiritPremiumBenefitMilestone: "Uma nova evolução em cada marco",
+    spiritPremiumBenefitQuality: "Imagem em alta qualidade para guardar",
+    spiritPremiumCta: "Conhecer Sonic Premium",
+    spiritPremiumExistingHint: "Esta arte continua sua. O Premium ativo libera a próxima evolução.",
+    spiritPremiumPlaceholderKicker: "ARTE PREMIUM",
+    spiritPremiumPlaceholderTitle: "Seu visual exclusivo espera aqui.",
+    spiritPremiumPlaceholderText: "Ative o Premium para criar a imagem do seu Sound System neste marco.",
     premiumAvatarLimitReached: "O limite de geração IA deste perfil foi atingido. Evolua para um novo marco ou tente mais tarde.",
     premiumDiscoveryLimitReached: "Você chegou ao limite gratuito de {limit} músicas descobertas. Assine premium para continuar descobrindo.",
     spiritCollectibleMilestone: "Arte desbloqueada no marco de {likes} faixas curtidas",
@@ -25230,12 +25292,13 @@ const I18N = {
     supportCopyPixKey: "Copy key",
     supportCopyPix: "Copy Pix code",
     supportCryptoKicker: "Crypto",
-    supportCryptoTitle: "Bitcoin / Lightning",
-    supportCryptoReady: "Crypto active",
+    supportCryptoTitle: "Bitcoin",
+    supportCryptoReady: "Address active",
     supportCryptoMissing: "Optional",
-    supportCryptoHintReady: "Use the QR or copy the address.",
-    supportCryptoHintMissing: "Crypto is not configured yet.",
-    supportCopyCrypto: "Copy crypto",
+    supportCryptoHintReady: "The QR and the field below use exactly the same Bitcoin address.",
+    supportCryptoHintMissing: "The Bitcoin address is not configured yet.",
+    supportBitcoinAddressLabel: "Bitcoin address",
+    supportCopyCrypto: "Copy Bitcoin address",
     supportCopying: "Copying...",
     supportCopied: "Copied.",
     supportMissingPayment: "Configure this support method before copying.",
@@ -25735,7 +25798,19 @@ const I18N = {
     spiritCollectibleHintLocal: "The image appears here when it is ready.",
     spiritCollectibleHintLocalReady: "Image ready. Share or download it.",
     spiritCollectibleHintApi: "Look picked automatically from your taste.",
-    spiritCollectiblePremiumLocked: "The AI Sound System is prepared. Generate again when the online image is available.",
+    spiritCollectiblePremiumLocked: "Your music profile is active. Exclusive AI artwork is part of Sonic Premium.",
+    spiritPremiumGateKicker: "EXCLUSIVE TO PREMIUM",
+    spiritPremiumGateTitle: "Turn your taste into one-of-a-kind artwork.",
+    spiritPremiumGateBody: "Your Sound System keeps evolving for free. Premium unlocks the AI-created version at each new milestone.",
+    spiritPremiumGateBenefitsLabel: "Premium artwork benefits",
+    spiritPremiumBenefitDna: "Visual created from your Sonic DNA",
+    spiritPremiumBenefitMilestone: "A new evolution at every milestone",
+    spiritPremiumBenefitQuality: "High-quality image to keep",
+    spiritPremiumCta: "Explore Sonic Premium",
+    spiritPremiumExistingHint: "This artwork remains yours. Active Premium unlocks the next evolution.",
+    spiritPremiumPlaceholderKicker: "PREMIUM ARTWORK",
+    spiritPremiumPlaceholderTitle: "Your exclusive visual is waiting here.",
+    spiritPremiumPlaceholderText: "Activate Premium to create your Sound System image for this milestone.",
     premiumAvatarLimitReached: "The AI generation limit for this profile was reached. Evolve to a new milestone or try later.",
     premiumDiscoveryLimitReached: "You reached the free limit of {limit} discovered tracks. Subscribe to premium to keep discovering.",
     spiritCollectibleMilestone: "Artwork unlocked at {likes} liked tracks",
@@ -26127,12 +26202,13 @@ const I18N = {
     supportCopyPixKey: "Copiar clave",
     supportCopyPix: "Copiar código Pix",
     supportCryptoKicker: "Crypto",
-    supportCryptoTitle: "Bitcoin / Lightning",
-    supportCryptoReady: "Crypto activo",
+    supportCryptoTitle: "Bitcoin",
+    supportCryptoReady: "Dirección activa",
     supportCryptoMissing: "Opcional",
-    supportCryptoHintReady: "Usa el QR o copia la dirección.",
-    supportCryptoHintMissing: "Crypto aún no configurado.",
-    supportCopyCrypto: "Copiar crypto",
+    supportCryptoHintReady: "El QR y el campo de abajo usan exactamente la misma dirección Bitcoin.",
+    supportCryptoHintMissing: "La dirección Bitcoin aún no está configurada.",
+    supportBitcoinAddressLabel: "Dirección Bitcoin",
+    supportCopyCrypto: "Copiar dirección Bitcoin",
     supportCopying: "Copiando...",
     supportCopied: "Copiado.",
     supportMissingPayment: "Configura este método de apoyo antes de copiar.",
@@ -26632,7 +26708,19 @@ const I18N = {
     spiritCollectibleHintLocal: "La imagen aparece aquí cuando esté lista.",
     spiritCollectibleHintLocalReady: "Imagen lista. Compártela o descárgala.",
     spiritCollectibleHintApi: "Visual elegido automáticamente por tu gusto.",
-    spiritCollectiblePremiumLocked: "El Sound System IA está preparado. Genera de nuevo cuando la imagen online esté disponible.",
+    spiritCollectiblePremiumLocked: "Tu perfil musical está activo. El arte exclusivo por IA forma parte de Sonic Premium.",
+    spiritPremiumGateKicker: "EXCLUSIVO PREMIUM",
+    spiritPremiumGateTitle: "Convierte tu gusto en una obra única.",
+    spiritPremiumGateBody: "Tu Sound System sigue evolucionando gratis. Premium libera la versión creada por IA en cada nuevo hito.",
+    spiritPremiumGateBenefitsLabel: "Beneficios del arte Premium",
+    spiritPremiumBenefitDna: "Visual creado a partir de tu Sonic DNA",
+    spiritPremiumBenefitMilestone: "Una nueva evolución en cada hito",
+    spiritPremiumBenefitQuality: "Imagen en alta calidad para guardar",
+    spiritPremiumCta: "Conocer Sonic Premium",
+    spiritPremiumExistingHint: "Esta obra sigue siendo tuya. Premium activo libera la próxima evolución.",
+    spiritPremiumPlaceholderKicker: "ARTE PREMIUM",
+    spiritPremiumPlaceholderTitle: "Tu visual exclusivo te espera aquí.",
+    spiritPremiumPlaceholderText: "Activa Premium para crear la imagen de tu Sound System en este hito.",
     premiumAvatarLimitReached: "Se alcanzó el límite de generación IA de este perfil. Evoluciona a un nuevo hito o intenta más tarde.",
     premiumDiscoveryLimitReached: "Llegaste al límite gratuito de {limit} canciones descubiertas. Suscríbete a premium para seguir descubriendo.",
     spiritCollectibleMilestone: "Arte desbloqueado en el hito de {likes} pistas con like",
@@ -27577,6 +27665,18 @@ function applyLanguage() {
   setText("#betaExitAccessBtn", t("betaExitAccessBtn"));
   setText("#heroTitle", t("heroTitle"));
   setText("#heroDesc", t("heroDesc"));
+  renderDailyLikeQuota();
+  renderMembershipUi();
+  setText(".skip-link", sonicTinyCopy(
+    "Pular para o conteúdo principal",
+    "Skip to main content",
+    "Saltar al contenido principal"
+  ));
+  setText("#resultMoreSummary", sonicTinyCopy(
+    "Mais sobre esta faixa",
+    "More about this track",
+    "Más sobre esta pista"
+  ));
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
@@ -27597,6 +27697,8 @@ function applyLanguage() {
     "Encuentra al DJ adecuado para el momento"
   ));
   renderDjIntentCopy();
+  dailyDjController?.refresh();
+  dailyRadarController?.refresh();
   if (djSwipeCard) {
     djSwipeCard.setAttribute("aria-label", sonicTinyCopy(
       "Arraste para direita para curtir ou esquerda para passar este DJ",
@@ -27658,6 +27760,7 @@ function applyLanguage() {
   setText("#supportCopyPixBtn", t("supportCopyPix"));
   setText("#supportCryptoKicker", t("supportCryptoKicker"));
   setText("#supportCryptoTitle", t("supportCryptoTitle"));
+  setText("#supportBitcoinAddressLabel", t("supportBitcoinAddressLabel"));
   setText("#supportCopyCryptoBtn", t("supportCopyCrypto"));
   setText("#supportContactKicker", t("supportContactKicker"));
   setText("#supportContactTitle", t("supportContactTitle"));
@@ -27746,6 +27849,22 @@ function applyLanguage() {
   setText("#spiritSpotlightSoundcloud", currentLanguage === "en" ? "Listen on SoundCloud" : currentLanguage === "es" ? "Escuchar en SoundCloud" : "Ouvir no SoundCloud");
   setText("#spiritCollectibleTitle", t("spiritCollectibleTitle"));
   setText("#spiritCollectibleHint", aiImagePremiumLockedByLimit() ? premiumAvatarLimitMessage() : supportsAiCollectibleApi() ? t("spiritCollectibleHintApi") : t("spiritCollectibleHintLocal"));
+  setText("#spiritPremiumGateKicker", t("spiritPremiumGateKicker"));
+  setText("#spiritPremiumGateTitle", t("spiritPremiumGateTitle"));
+  setText("#spiritPremiumGateBody", t("spiritPremiumGateBody"));
+  setText("#spiritPremiumCta", t("spiritPremiumCta"));
+  if (spiritPremiumBenefitList) {
+    spiritPremiumBenefitList.setAttribute("aria-label", t("spiritPremiumGateBenefitsLabel"));
+    spiritPremiumBenefitList.replaceChildren(...[
+      t("spiritPremiumBenefitDna"),
+      t("spiritPremiumBenefitMilestone"),
+      t("spiritPremiumBenefitQuality")
+    ].map((benefit) => {
+      const item = document.createElement("li");
+      item.textContent = benefit;
+      return item;
+    }));
+  }
   setText("#spiritCollectibleRegenerateBtn", t("spiritCollectibleRegenerate"));
   setText("#spiritCollectibleDownload", t("spiritCollectibleDownload"));
   setText("#spiritCollectibleShareInstagramBtn", t("spiritCollectibleShareInstagram"));
@@ -28053,6 +28172,7 @@ function setLanguage(lang, options = {}) {
   currentLanguage = normalized;
   if (options.persist !== false) persistLanguage(normalized);
   applyLanguage();
+  renderInitialTasteCalibrationUi();
 }
 
 function loadLanguage() {
@@ -28063,6 +28183,7 @@ function loadLanguage() {
     DEFAULT_LANGUAGE;
   persistLanguage(currentLanguage);
   applyLanguage();
+  renderInitialTasteCalibrationUi();
 }
 
 function currentAppUrl() {
@@ -28096,6 +28217,13 @@ function urlRequestsAdminAnalytics() {
   if (!url) return false;
   const pathname = String(url.pathname || "/").replace(/\/+$/, "") || "/";
   return ["/admin/analytics", "/admin/noticias"].includes(pathname) || String(url.searchParams.get("tab") || "").trim().toLowerCase() === "admin";
+}
+
+function urlRequestsTasteCalibrationQa() {
+  const url = currentAppUrl();
+  if (!url) return false;
+  const localHost = ["localhost", "127.0.0.1", "::1"].includes(String(url.hostname || "").toLowerCase());
+  return localHost && url.searchParams.has("tasteCalibrationQa");
 }
 
 function urlRequestsNewsroom() {
@@ -28764,6 +28892,7 @@ function showBetaGateScreen() {
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (betaGateScreen) betaGateScreen.classList.remove("hidden");
@@ -29257,6 +29386,681 @@ function storageKeyForSession(baseKey, session = currentAuthUser) {
   return `${baseKey}:${profileKey}`;
 }
 
+function normalizeInitialTasteCalibration(value = {}) {
+  const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const allowed = {
+    status: new Set(["pending", "completed", "skipped"]),
+    experience: new Set(["beginner", "familiar", "expert"]),
+    goal: new Set(["track", "dj", "set"]),
+    mood: new Set(["melodic", "groovy", "hypnotic", "intense"]),
+    exploration: new Set(["", "safe", "balanced", "surprise"])
+  };
+  const select = (key, fallback = "") => allowed[key].has(String(source[key] || ""))
+    ? String(source[key] || "")
+    : fallback;
+  return {
+    version: INITIAL_TASTE_CALIBRATION_VERSION,
+    status: select("status", "pending"),
+    experience: select("experience"),
+    goal: select("goal"),
+    mood: select("mood"),
+    exploration: select("exploration"),
+    completedAt: String(source.completedAt || ""),
+    skippedAt: String(source.skippedAt || ""),
+    updatedAt: String(source.updatedAt || "")
+  };
+}
+
+function initialTasteCalibrationIsFinal(value = initialTasteCalibrationState) {
+  return INITIAL_TASTE_CALIBRATION_FINAL_STATES.has(normalizeInitialTasteCalibration(value).status);
+}
+
+function initialTasteCalibrationEligibleSession(session = currentAuthUser) {
+  const mode = normalizeUserSession(session).mode;
+  return (mode === "google" || mode === "apple") && !publicVisitorMode && !sharedSpiritViewMode;
+}
+
+function initialTasteCalibrationStorageKey(session = currentAuthUser) {
+  return storageKeyForSession(INITIAL_TASTE_CALIBRATION_STORAGE_KEY, session);
+}
+
+function readInitialTasteCalibrationLocal(session = currentAuthUser) {
+  const key = initialTasteCalibrationStorageKey(session);
+  if (!key) return normalizeInitialTasteCalibration();
+  try {
+    const raw = localStorage.getItem(key);
+    return normalizeInitialTasteCalibration(raw ? JSON.parse(raw) : {});
+  } catch (_error) {
+    return normalizeInitialTasteCalibration();
+  }
+}
+
+function writeInitialTasteCalibrationLocal(value, session = currentAuthUser) {
+  const calibration = normalizeInitialTasteCalibration(value);
+  const key = initialTasteCalibrationStorageKey(session);
+  initialTasteCalibrationState = calibration;
+  if (!key) return calibration;
+  try {
+    localStorage.setItem(key, JSON.stringify(calibration));
+  } catch (_error) {
+    // The in-memory copy still prevents a repeated prompt in the current session.
+  }
+  return calibration;
+}
+
+function initialTasteCalibrationCopy() {
+  const copies = {
+    pt: {
+      kicker: "CALIBRAR MEU SONIC",
+      title: "Vamos acertar sua primeira descoberta",
+      intro: "Quatro respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.",
+      progress: (step) => `Pergunta ${step} de 4`,
+      back: "Voltar",
+      skip: "Pular por enquanto",
+      cancel: "Cancelar",
+      next: "Continuar",
+      finish: "Ver minha recomendação",
+      required: "Escolha uma opção para continuar.",
+      saving: "Preparando seu ponto de partida…",
+      profileKicker: "PREFERÊNCIAS MUSICAIS",
+      profileTitle: "Seu ponto de partida",
+      profileEmpty: "Responda quatro perguntas rápidas para personalizar suas próximas descobertas.",
+      profileSkipped: "A calibração inicial foi pulada. Você pode fazê-la quando quiser.",
+      recalibrate: "Recalibrar meu Sonic",
+      questions: [
+        ["Você já conhece música eletrônica?", "Isso define quanto contexto o Sonic deve trazer."],
+        ["O que você quer encontrar agora?", "O primeiro resultado já será aberto nesse formato."],
+        ["Qual clima combina com você agora?", "Escolha pela sensação, sem precisar saber o nome do gênero."],
+        ["Quanto você quer explorar?", "Opcional — você pode concluir sem responder."]
+      ],
+      options: [
+        [["Estou começando", "Quero uma entrada simples e bem guiada."], ["Já conheço um pouco", "Quero ampliar meu radar sem me perder."], ["Conheço bem", "Pode ir mais fundo e fugir do óbvio."]],
+        [["Uma música", "Uma faixa certeira para ouvir agora."], ["Um DJ", "Um artista alinhado ao seu momento."], ["Um set para ouvir", "Uma sessão completa para dar play."]],
+        [["Leve e melódico", "Atmosfera, emoção e espaço."], ["Groovado", "Ritmo envolvente e movimento."], ["Hipnótico", "Repetição profunda e imersiva."], ["Intenso", "Pressão, impacto e energia alta."]],
+        [["Algo certeiro", "Mais familiaridade e menos risco."], ["Equilibrar familiaridade e novidade", "Um pé no conhecido e outro no novo."], ["Me tire completamente da bolha", "Priorize caminhos menos óbvios."]]
+      ],
+      labels: {
+        experience: { beginner: "começando", familiar: "alguma experiência", expert: "experiência avançada" },
+        goal: { track: "música", dj: "DJ", set: "set" },
+        mood: { melodic: "leve e melódico", groovy: "groovado", hypnotic: "hipnótico", intense: "intenso" },
+        exploration: { "": "exploração equilibrada", safe: "algo certeiro", balanced: "equilíbrio entre familiaridade e novidade", surprise: "fora da bolha" }
+      }
+    },
+    en: {
+      kicker: "CALIBRATE MY SONIC", title: "Let's tune your first discovery", intro: "Four quick answers. Then Sonic opens with something picked for you.",
+      progress: (step) => `Question ${step} of 4`, back: "Back", skip: "Skip for now", cancel: "Cancel", next: "Continue", finish: "See my recommendation", required: "Choose an option to continue.", saving: "Preparing your starting point…",
+      profileKicker: "MUSIC PREFERENCES", profileTitle: "Your starting point", profileEmpty: "Answer four quick questions to personalize your next discoveries.", profileSkipped: "You skipped the initial calibration. You can do it whenever you like.", recalibrate: "Recalibrate my Sonic",
+      questions: [["How well do you know electronic music?", "This sets how much context Sonic should provide."], ["What do you want to find right now?", "Your first result will open in this format."], ["What mood fits you right now?", "Choose by feeling; no genre knowledge needed."], ["How far do you want to explore?", "Optional — you can finish without answering."]],
+      options: [[["I'm just starting", "Give me a simple, guided entry."], ["I know a little", "Expand my radar without losing me."], ["I know it well", "Go deeper and beyond the obvious."]], [["A track", "One focused track to hear now."], ["A DJ", "An artist aligned with your moment."], ["A set to hear", "A full session ready to play."]], [["Light and melodic", "Atmosphere, emotion and space."], ["Groovy", "Engaging rhythm and movement."], ["Hypnotic", "Deep, immersive repetition."], ["Intense", "Pressure, impact and high energy."]], [["A safe bet", "More familiarity and less risk."], ["Balance familiarity and novelty", "One foot in the known, one in the new."], ["Take me completely outside my bubble", "Prioritize less obvious paths."]]],
+      labels: { experience: { beginner: "beginner", familiar: "some experience", expert: "advanced experience" }, goal: { track: "track", dj: "DJ", set: "set" }, mood: { melodic: "light and melodic", groovy: "groovy", hypnotic: "hypnotic", intense: "intense" }, exploration: { "": "balanced exploration", safe: "a safe bet", balanced: "familiarity and novelty balanced", surprise: "outside your bubble" } }
+    },
+    es: {
+      kicker: "CALIBRAR MI SONIC", title: "Afinemos tu primer descubrimiento", intro: "Cuatro respuestas rápidas. Después, Sonic abre con algo elegido para ti.",
+      progress: (step) => `Pregunta ${step} de 4`, back: "Volver", skip: "Omitir por ahora", cancel: "Cancelar", next: "Continuar", finish: "Ver mi recomendación", required: "Elige una opción para continuar.", saving: "Preparando tu punto de partida…",
+      profileKicker: "PREFERENCIAS MUSICALES", profileTitle: "Tu punto de partida", profileEmpty: "Responde cuatro preguntas rápidas para personalizar tus próximos descubrimientos.", profileSkipped: "Omitiste la calibración inicial. Puedes hacerla cuando quieras.", recalibrate: "Recalibrar mi Sonic",
+      questions: [["¿Cuánto conoces la música electrónica?", "Esto define cuánto contexto debe ofrecer Sonic."], ["¿Qué quieres encontrar ahora?", "El primer resultado se abrirá en ese formato."], ["¿Qué clima combina contigo ahora?", "Elige por la sensación, sin saber nombres de géneros."], ["¿Cuánto quieres explorar?", "Opcional — puedes terminar sin responder."]],
+      options: [[["Estoy empezando", "Quiero una entrada simple y guiada."], ["Ya conozco un poco", "Quiero ampliar mi radar sin perderme."], ["Conozco bien", "Puede ir más profundo y evitar lo obvio."]], [["Una canción", "Una pista precisa para escuchar ahora."], ["Un DJ", "Un artista alineado con tu momento."], ["Un set para escuchar", "Una sesión completa lista para reproducir."]], [["Ligero y melódico", "Atmósfera, emoción y espacio."], ["Groovero", "Ritmo envolvente y movimiento."], ["Hipnótico", "Repetición profunda e inmersiva."], ["Intenso", "Presión, impacto y energía alta."]], [["Algo seguro", "Más familiaridad y menos riesgo."], ["Equilibrar familiaridad y novedad", "Un pie en lo conocido y otro en lo nuevo."], ["Sácame completamente de mi burbuja", "Prioriza caminos menos obvios."]]],
+      labels: { experience: { beginner: "empezando", familiar: "algo de experiencia", expert: "experiencia avanzada" }, goal: { track: "canción", dj: "DJ", set: "set" }, mood: { melodic: "ligero y melódico", groovy: "groovero", hypnotic: "hipnótico", intense: "intenso" }, exploration: { "": "exploración equilibrada", safe: "algo seguro", balanced: "familiaridad y novedad equilibradas", surprise: "fuera de tu burbuja" } }
+    }
+  };
+  return copies[currentLanguage] || copies.pt;
+}
+
+function renderInitialTasteCalibrationUi() {
+  const copy = initialTasteCalibrationCopy();
+  if (tasteCalibrationKicker) tasteCalibrationKicker.textContent = copy.kicker;
+  if (tasteCalibrationTitle) tasteCalibrationTitle.textContent = copy.title;
+  if (tasteCalibrationIntro) tasteCalibrationIntro.textContent = copy.intro;
+  if (tasteCalibrationBackBtn) tasteCalibrationBackBtn.textContent = copy.back;
+  if (tasteCalibrationSkipBtn) tasteCalibrationSkipBtn.textContent = initialTasteCalibrationMode === "recalibrate" ? copy.cancel : copy.skip;
+  tasteCalibrationSteps.forEach((step, stepIndex) => {
+    const question = copy.questions[stepIndex] || [];
+    const legend = step.querySelector("legend");
+    const help = step.querySelector(".taste-calibration-help");
+    if (legend) legend.textContent = question[0] || "";
+    if (help) help.textContent = question[1] || "";
+    const buttons = Array.from(step.querySelectorAll("[data-taste-field][data-taste-value]"));
+    buttons.forEach((button, buttonIndex) => {
+      const option = copy.options[stepIndex]?.[buttonIndex] || [];
+      const title = button.querySelector("strong");
+      const description = button.querySelector("span");
+      if (title) title.textContent = option[0] || "";
+      if (description) description.textContent = option[1] || "";
+    });
+  });
+  renderInitialTasteCalibrationStep();
+  renderInitialTasteCalibrationProfileCard();
+}
+
+function renderInitialTasteCalibrationStep() {
+  const calibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
+  const copy = initialTasteCalibrationCopy();
+  const safeStep = Math.max(0, Math.min(3, Number(initialTasteCalibrationStep) || 0));
+  initialTasteCalibrationStep = safeStep;
+  tasteCalibrationSteps.forEach((step, index) => {
+    const active = index === safeStep;
+    step.classList.toggle("hidden", !active);
+    step.hidden = !active;
+    step.setAttribute("aria-hidden", active ? "false" : "true");
+  });
+  tasteCalibrationOptionButtons.forEach((button) => {
+    const selected = calibration[button.dataset.tasteField || ""] === button.dataset.tasteValue;
+    button.classList.toggle("selected", selected);
+    button.setAttribute("aria-pressed", selected ? "true" : "false");
+  });
+  if (tasteCalibrationProgressFill) tasteCalibrationProgressFill.style.width = `${(safeStep + 1) * 25}%`;
+  const progressText = copy.progress(safeStep + 1);
+  if (tasteCalibrationProgressLabel) tasteCalibrationProgressLabel.textContent = progressText;
+  if (tasteCalibrationProgress) {
+    tasteCalibrationProgress.setAttribute("aria-valuenow", String(safeStep + 1));
+    tasteCalibrationProgress.setAttribute("aria-valuetext", progressText);
+  }
+  if (tasteCalibrationForm) tasteCalibrationForm.setAttribute("aria-busy", initialTasteCalibrationBusy ? "true" : "false");
+  if (tasteCalibrationScreen) tasteCalibrationScreen.dataset.step = String(safeStep + 1);
+  if (tasteCalibrationBackBtn) {
+    tasteCalibrationBackBtn.disabled = safeStep === 0 || initialTasteCalibrationBusy;
+    tasteCalibrationBackBtn.setAttribute("aria-controls", `tasteCalibrationStep${Math.max(0, safeStep - 1)}`);
+  }
+  if (tasteCalibrationSkipBtn) tasteCalibrationSkipBtn.disabled = initialTasteCalibrationBusy;
+  const stepField = ["experience", "goal", "mood", "exploration"][safeStep];
+  const requiredReady = safeStep === 3 || Boolean(calibration[stepField]);
+  if (tasteCalibrationNextBtn) {
+    tasteCalibrationNextBtn.disabled = initialTasteCalibrationBusy || !requiredReady;
+    tasteCalibrationNextBtn.textContent = safeStep === 3 ? copy.finish : copy.next;
+    tasteCalibrationNextBtn.setAttribute("aria-controls", safeStep === 3 ? "appContent" : `tasteCalibrationStep${safeStep + 1}`);
+  }
+}
+
+function focusInitialTasteCalibrationChoice(stepIndex = initialTasteCalibrationStep) {
+  const step = tasteCalibrationSteps[Math.max(0, Math.min(3, Number(stepIndex) || 0))];
+  if (!step) return;
+  const target = step.querySelector("button.selected") || step.querySelector("button");
+  target?.focus({ preventScroll: true });
+}
+
+function resetInitialTasteCalibrationViewport() {
+  if (tasteCalibrationScreen) tasteCalibrationScreen.scrollTop = 0;
+  const calibrationBody = tasteCalibrationScreen?.querySelector(".taste-calibration-body");
+  if (calibrationBody) calibrationBody.scrollTop = 0;
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}
+
+function initialTasteCalibrationSummary(value = initialTasteCalibrationState) {
+  const calibration = normalizeInitialTasteCalibration(value);
+  const copy = initialTasteCalibrationCopy();
+  if (calibration.status === "skipped") return copy.profileSkipped;
+  if (calibration.status !== "completed") return copy.profileEmpty;
+  return `${copy.labels.goal[calibration.goal]}, ${copy.labels.mood[calibration.mood]}, ${copy.labels.exploration[calibration.exploration]}.`;
+}
+
+function renderInitialTasteCalibrationProfileCard() {
+  if (!tasteCalibrationProfileCard) return;
+  const visible = initialTasteCalibrationEligibleSession() && authHasOnlineSession();
+  tasteCalibrationProfileCard.classList.toggle("hidden", !visible);
+  tasteCalibrationProfileCard.setAttribute("aria-hidden", visible ? "false" : "true");
+  if (!visible) return;
+  const copy = initialTasteCalibrationCopy();
+  if (tasteCalibrationProfileKicker) tasteCalibrationProfileKicker.textContent = copy.profileKicker;
+  if (tasteCalibrationProfileTitle) tasteCalibrationProfileTitle.textContent = copy.profileTitle;
+  if (tasteCalibrationProfileSummary) tasteCalibrationProfileSummary.textContent = initialTasteCalibrationSummary();
+  if (tasteCalibrationReopenBtn) tasteCalibrationReopenBtn.textContent = copy.recalibrate;
+}
+
+function initialTasteCalibrationPreferences(value = initialTasteCalibrationState) {
+  const calibration = normalizeInitialTasteCalibration(value);
+  const styles = {
+    melodic: { beginner: "organic_house", familiar: "melodic_house", expert: "melodic_techno" },
+    groovy: { beginner: "house", familiar: "tech_house", expert: "hardgroove_techno" },
+    hypnotic: { beginner: "deep_house", familiar: "hypnotic_techno", expert: "deep_techno" },
+    intense: { beginner: "peak_time_techno", familiar: "techno", expert: "hard_techno" }
+  };
+  const contexts = { melodic: "relaxar", groovy: "social", hypnotic: "noite", intense: "peak" };
+  const energies = { melodic: "low", groovy: "mid", hypnotic: "mid", intense: "high" };
+  const selectedStyle = styles[calibration.mood]?.[calibration.experience] || "";
+  return {
+    style: calibration.exploration === "surprise" ? "" : selectedStyle,
+    context: contexts[calibration.mood] || "",
+    energy: energies[calibration.mood] || "",
+    discoveryMode: calibration.exploration !== "safe"
+  };
+}
+
+function initialTasteCalibrationDjFilter(value = initialTasteCalibrationState) {
+  const calibration = normalizeInitialTasteCalibration(value);
+  if (calibration.mood === "melodic") return "house_deep_minimal";
+  if (calibration.mood === "groovy") return calibration.experience === "expert" ? "berlin_raw_hardgroove" : "house_deep_minimal";
+  if (calibration.mood === "hypnotic") return "berlin_hypnotic_deep";
+  if (calibration.mood === "intense") {
+    if (calibration.experience === "expert") return "berlin_industrial_ebm";
+    if (calibration.experience === "familiar") return "berlin_raw_hardgroove";
+    return "techno_live_dj";
+  }
+  return "";
+}
+
+function applyInitialTasteCalibrationPreferences(value = initialTasteCalibrationState) {
+  const preferences = initialTasteCalibrationPreferences(value);
+  updateControlValue(styleEl, preferences.style);
+  updateControlValue(contextEl, preferences.context);
+  updateControlValue(energyEl, preferences.energy);
+  updateControlValue(bpmEl, "");
+  updateControlValue(vocalsEl, "");
+  if (discoveryModeEl) discoveryModeEl.checked = preferences.discoveryMode;
+  updateBpmOptionsForSelectedStyle();
+  styleInfoDismissed = false;
+  renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
+  applyGenreVibeTheme(styleEl?.value || "", { force: true });
+  savePreferences();
+  return preferences;
+}
+
+async function loadInitialTasteCalibrationFromCloud() {
+  const userId = String(socialState.session?.user?.id || "").trim();
+  if (!userId || !socialConfigReady()) return null;
+  const params = new URLSearchParams({
+    user_id: `eq.${userId}`,
+    select: "profile_key,preferences,progress,schema_version,client_updated_at,updated_at",
+    limit: "1"
+  });
+  const rows = await socialRequest(`/rest/v1/taste_snapshots?${params.toString()}`);
+  const row = Array.isArray(rows) ? rows[0] || null : null;
+  socialState.tasteSnapshot = row;
+  const cloudValue = row?.preferences?.initialTasteCalibration;
+  return cloudValue ? normalizeInitialTasteCalibration(cloudValue) : null;
+}
+
+async function saveInitialTasteCalibrationToCloud(value = initialTasteCalibrationState) {
+  const userId = String(socialState.session?.user?.id || "").trim();
+  if (!userId || !socialConfigReady()) return false;
+  if (!socialState.tasteSnapshot) {
+    await loadInitialTasteCalibrationFromCloud();
+  }
+  const calibration = normalizeInitialTasteCalibration(value);
+  const existingPreferences = socialState.tasteSnapshot?.preferences && typeof socialState.tasteSnapshot.preferences === "object"
+    ? socialState.tasteSnapshot.preferences
+    : {};
+  const body = [{
+    user_id: userId,
+    profile_key: sessionProfileKey(currentAuthUser),
+    preferences: { ...existingPreferences, initialTasteCalibration: calibration },
+    schema_version: INITIAL_TASTE_CALIBRATION_VERSION,
+    client_updated_at: calibration.updatedAt || new Date().toISOString()
+  }];
+  const rows = await socialRequest("/rest/v1/taste_snapshots?on_conflict=user_id", {
+    method: "POST",
+    prefer: "resolution=merge-duplicates,return=representation",
+    body
+  });
+  socialState.tasteSnapshot = Array.isArray(rows) ? rows[0] || body[0] : body[0];
+  return true;
+}
+
+function queueWeeklyHighlightsCloudSync() {
+  if (!socialConfigReady() || !socialState.session?.user?.id) return;
+  if (weeklyHighlightsCloudSyncTimer) window.clearTimeout(weeklyHighlightsCloudSyncTimer);
+  const profileKey = sessionProfileKey(currentAuthUser);
+  weeklyHighlightsCloudSyncTimer = window.setTimeout(() => {
+    weeklyHighlightsCloudSyncTimer = 0;
+    if (profileKey !== sessionProfileKey(currentAuthUser)) return;
+    void saveWeeklyHighlightsToCloud().catch((error) => {
+      console.warn("Weekly highlights cloud sync failed", error);
+    });
+  }, 1200);
+}
+
+async function saveWeeklyHighlightsToCloud() {
+  const userId = String(socialState.session?.user?.id || "").trim();
+  if (!userId || !socialConfigReady()) return false;
+  if (!socialState.tasteSnapshot) await loadInitialTasteCalibrationFromCloud();
+  const existingProgress = socialState.tasteSnapshot?.progress && typeof socialState.tasteSnapshot.progress === "object"
+    ? socialState.tasteSnapshot.progress
+    : {};
+  const updatedAt = new Date().toISOString();
+  const body = [{
+    user_id: userId,
+    profile_key: sessionProfileKey(currentAuthUser),
+    progress: {
+      ...existingProgress,
+      weeklyDjActivity: sanitizeDjRecommendationHistory(djRecommendationHistory)
+    },
+    schema_version: Math.max(1, Number(socialState.tasteSnapshot?.schema_version) || 1),
+    client_updated_at: updatedAt
+  }];
+  const rows = await socialRequest("/rest/v1/taste_snapshots?on_conflict=user_id", {
+    method: "POST",
+    prefer: "resolution=merge-duplicates,return=representation",
+    body
+  });
+  socialState.tasteSnapshot = Array.isArray(rows) ? rows[0] || body[0] : body[0];
+  return true;
+}
+
+async function restoreWeeklyHighlightsFromCloud({ silent = true } = {}) {
+  const userId = String(socialState.session?.user?.id || "").trim();
+  if (!userId || !socialConfigReady()) return false;
+  try {
+    if (!socialState.tasteSnapshot) await loadInitialTasteCalibrationFromCloud();
+    const cloudHistory = socialState.tasteSnapshot?.progress?.weeklyDjActivity;
+    if (!Array.isArray(cloudHistory) || !cloudHistory.length) return false;
+    djRecommendationHistory = sanitizeDjRecommendationHistory([...cloudHistory, ...djRecommendationHistory]);
+    saveDjRecommendationMemory();
+    renderWeeklyHighlights();
+    return true;
+  } catch (error) {
+    if (!silent) console.warn("Weekly highlights cloud restore failed", error);
+    return false;
+  }
+}
+
+function hideInitialTasteCalibrationScreen() {
+  if (tasteCalibrationScreen) tasteCalibrationScreen.classList.add("hidden");
+  document.body?.classList.remove("taste-calibration-open");
+  if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
+}
+
+function showInitialTasteCalibration({ mode = "initial", calibration = null, showGuide = false, targetTab = "" } = {}) {
+  if (!tasteCalibrationScreen) return false;
+  initialTasteCalibrationMode = mode === "recalibrate" ? "recalibrate" : "initial";
+  initialTasteCalibrationContinuation = { showGuide: Boolean(showGuide), targetTab: String(targetTab || "") };
+  initialTasteCalibrationStep = 0;
+  initialTasteCalibrationBusy = false;
+  initialTasteCalibrationState = normalizeInitialTasteCalibration(calibration || readInitialTasteCalibrationLocal());
+  hideBetaGateScreen();
+  if (introScreen) introScreen.classList.add("hidden");
+  if (languageScreen) languageScreen.classList.add("hidden");
+  if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  if (authScreen) authScreen.classList.add("hidden");
+  if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  if (appContent) appContent.classList.add("hidden");
+  document.body?.classList.add("taste-calibration-open");
+  tasteCalibrationScreen.classList.remove("hidden");
+  renderInitialTasteCalibrationUi();
+  updateSignatureBarForTab();
+  trackBetaEvent("initial_taste_calibration_viewed", { mode: initialTasteCalibrationMode }, { source: "initial_taste_calibration" });
+  resetInitialTasteCalibrationViewport();
+  window.requestAnimationFrame(() => {
+    tasteCalibrationScreen.focus({ preventScroll: true });
+  });
+  refreshAmbientForUiState({ immediate: true });
+  return true;
+}
+
+async function maybeShowInitialTasteCalibration({ showGuide = false, targetTab = "" } = {}) {
+  if (!initialTasteCalibrationEligibleSession()) return false;
+  const localValue = readInitialTasteCalibrationLocal();
+  initialTasteCalibrationState = localValue;
+  let cloudValue = null;
+  if (socialState.session?.access_token && socialConfigReady()) {
+    try {
+      cloudValue = await loadInitialTasteCalibrationFromCloud();
+    } catch (error) {
+      console.warn("Could not load taste calibration", error);
+    }
+  }
+  const localFinal = initialTasteCalibrationIsFinal(localValue);
+  const cloudFinal = cloudValue ? initialTasteCalibrationIsFinal(cloudValue) : false;
+  if (localFinal || cloudFinal) {
+    const localUpdatedAt = Number(new Date(localValue.updatedAt || localValue.completedAt || localValue.skippedAt || 0)) || 0;
+    const cloudUpdatedAt = Number(new Date(cloudValue?.updatedAt || cloudValue?.completedAt || cloudValue?.skippedAt || 0)) || 0;
+    const finalValue = cloudFinal && (!localFinal || cloudUpdatedAt >= localUpdatedAt) ? cloudValue : localValue;
+    initialTasteCalibrationState = writeInitialTasteCalibrationLocal(finalValue);
+    if (finalValue === localValue && socialState.session?.access_token && socialConfigReady()) {
+      void saveInitialTasteCalibrationToCloud(finalValue).catch((error) => {
+        console.warn("Could not sync local taste calibration", error);
+      });
+    }
+    renderInitialTasteCalibrationProfileCard();
+    return false;
+  }
+  if (cloudValue) {
+    initialTasteCalibrationState = writeInitialTasteCalibrationLocal(cloudValue);
+  }
+  return showInitialTasteCalibration({
+    mode: "initial",
+    calibration: cloudValue || localValue,
+    showGuide,
+    targetTab
+  });
+}
+
+function continueAfterInitialTasteCalibration(value, { personalized = false } = {}) {
+  const calibration = normalizeInitialTasteCalibration(value);
+  const requestedTab = calibration.goal === "dj" || calibration.goal === "set" ? "djs" : "discover";
+  const fallbackTab = safeAppTabName(initialTasteCalibrationContinuation.targetTab || "");
+  hideInitialTasteCalibrationScreen();
+  markUsageGuideAcknowledged();
+  enterAppFromWelcome({
+    surprise: false,
+    autoRecommendation: false,
+    initialTab: personalized ? requestedTab : fallbackTab
+  });
+  if (!personalized) return;
+  window.setTimeout(() => {
+    if (calibration.goal === "dj" || calibration.goal === "set") {
+      void activateDjIntent(initialTasteCalibrationDjFilter(calibration), { source: "initial_calibration" });
+      return;
+    }
+    void runPrimaryRecommendationAction({ source: "initial_calibration" });
+  }, 320);
+}
+
+async function completeInitialTasteCalibration() {
+  const calibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
+  if (!calibration.experience || !calibration.goal || !calibration.mood) {
+    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().required;
+    return false;
+  }
+  initialTasteCalibrationBusy = true;
+  if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().saving;
+  renderInitialTasteCalibrationStep();
+  const now = new Date().toISOString();
+  const completed = writeInitialTasteCalibrationLocal({
+    ...calibration,
+    status: "completed",
+    completedAt: now,
+    skippedAt: "",
+    updatedAt: now
+  });
+  applyInitialTasteCalibrationPreferences(completed);
+  trackBetaEvent("initial_taste_calibration_completed", {
+    experience: completed.experience,
+    goal: completed.goal,
+    mood: completed.mood,
+    exploration: completed.exploration || "optional_skipped",
+    mode: initialTasteCalibrationMode
+  }, { source: "initial_taste_calibration" });
+  if (socialState.session?.access_token && socialConfigReady()) {
+    void saveInitialTasteCalibrationToCloud(completed).catch((error) => {
+      console.warn("Could not save taste calibration", error);
+    });
+  }
+  initialTasteCalibrationBusy = false;
+  renderInitialTasteCalibrationProfileCard();
+  continueAfterInitialTasteCalibration(completed, { personalized: true });
+  return true;
+}
+
+function skipOrCancelInitialTasteCalibration() {
+  if (initialTasteCalibrationMode === "recalibrate") {
+    hideInitialTasteCalibrationScreen();
+    if (appContent) appContent.classList.remove("hidden");
+    setActiveAppTab("profile");
+    renderInitialTasteCalibrationProfileCard();
+    return;
+  }
+  const now = new Date().toISOString();
+  const skipped = writeInitialTasteCalibrationLocal({
+    ...normalizeInitialTasteCalibration(initialTasteCalibrationState),
+    status: "skipped",
+    skippedAt: now,
+    updatedAt: now
+  });
+  trackBetaEvent("initial_taste_calibration_skipped", {}, { source: "initial_taste_calibration" });
+  if (socialState.session?.access_token && socialConfigReady()) {
+    void saveInitialTasteCalibrationToCloud(skipped).catch((error) => {
+      console.warn("Could not save skipped taste calibration", error);
+    });
+  }
+  renderInitialTasteCalibrationProfileCard();
+  continueAfterInitialTasteCalibration(skipped, { personalized: false });
+}
+
+function dailyLikeLocalDayKey(now = new Date()) {
+  const date = new Date(now);
+  if (!Number.isFinite(date.getTime())) return "";
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function dailyLikeStorageBucket() {
+  if (!publicVisitorMode && isEphemeralSession(currentAuthUser)) return `${DAILY_LIKE_STORAGE_KEY}:device`;
+  return storageKeyForSession(DAILY_LIKE_STORAGE_KEY) || `${DAILY_LIKE_STORAGE_KEY}:device`;
+}
+
+function readDailyLikeState(now = new Date()) {
+  const key = dailyLikeStorageBucket();
+  const date = dailyLikeLocalDayKey(now);
+  if (dailyLikeMemoryKey !== key) {
+    dailyLikeMemoryKey = key;
+    dailyLikeMemoryState = null;
+  }
+  if (dailyLikeMemoryState?.date === date) return dailyLikeMemoryState;
+  let stored = null;
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw && raw.length < 2000) stored = JSON.parse(raw);
+  } catch (_err) {
+    // The in-memory counter still enforces the limit for the current session.
+  }
+  const count = stored?.version === 1 && stored?.date === date
+    ? Math.max(0, Math.min(DAILY_LIKE_LIMIT, Math.floor(Number(stored.count) || 0)))
+    : 0;
+  dailyLikeMemoryState = { version: 1, date, count };
+  return dailyLikeMemoryState;
+}
+
+function writeDailyLikeState(state) {
+  dailyLikeMemoryState = state;
+  try {
+    localStorage.setItem(dailyLikeMemoryKey || dailyLikeStorageBucket(), JSON.stringify(state));
+  } catch (_err) {
+    // Keep enforcing in memory if essential storage is temporarily unavailable.
+  }
+}
+
+function dailyLikeLimitMessage() {
+  return sonicTinyCopy(
+    "Você chegou a 20 curtidas hoje. O limite renova amanhã, no horário local.",
+    "You reached 20 likes today. The limit resets tomorrow in local time.",
+    "Llegaste a 20 Me gusta hoy. El límite se renueva mañana, en horario local."
+  );
+}
+
+function unlimitedLikesMessage() {
+  return sonicTinyCopy(
+    "Curtidas ilimitadas",
+    "Unlimited likes",
+    "Me gusta ilimitados"
+  );
+}
+
+function dailyLikeActionControls() {
+  return [
+    topSwipeLikeBtn,
+    swipeLikeBtn,
+    previewLikeBtn,
+    noveltyLikedBtn,
+    likeSongBtn,
+    likeArtistBtn,
+    likeDiscoveryBtn,
+    djSwipeLikeBtn
+  ].filter(Boolean);
+}
+
+function renderDailyLikeQuota() {
+  if (!DAILY_LIKE_LIMIT_ENABLED) {
+    const label = unlimitedLikesMessage();
+    if (dailyLikeQuotaText) dailyLikeQuotaText.textContent = label;
+    if (dailyLikeQuotaCompact) {
+      dailyLikeQuotaCompact.textContent = "∞";
+      dailyLikeQuotaCompact.dataset.limitReached = "false";
+      dailyLikeQuotaCompact.dataset.unlimited = "true";
+    }
+    if (dailyLikeQuota) {
+      dailyLikeQuota.dataset.limitReached = "false";
+      dailyLikeQuota.dataset.unlimited = "true";
+      dailyLikeQuota.setAttribute("aria-label", sonicTinyCopy(
+        "Curtidas ilimitadas. Curta quantas músicas quiser.",
+        "Unlimited likes. Like as many tracks as you want.",
+        "Me gusta ilimitados. Marca todas las pistas que quieras."
+      ));
+    }
+    dailyLikeActionControls().forEach((button) => {
+      if (button.dataset.dailyLikeLimit === "blocked") delete button.dataset.dailyLikeLimit;
+      button.removeAttribute("aria-disabled");
+      if (button.title === dailyLikeLimitMessage()) button.removeAttribute("title");
+    });
+    return {
+      version: 1,
+      date: dailyLikeLocalDayKey(),
+      count: 0,
+      remaining: Number.POSITIVE_INFINITY,
+      reached: false,
+      unlimited: true
+    };
+  }
+  const state = readDailyLikeState();
+  const reached = state.count >= DAILY_LIKE_LIMIT;
+  const label = reached
+    ? sonicTinyCopy("20/20 curtidas hoje · renova amanhã", "20/20 likes today · resets tomorrow", "20/20 Me gusta hoy · se renueva mañana")
+    : sonicTinyCopy(`${state.count}/20 curtidas hoje`, `${state.count}/20 likes today`, `${state.count}/20 Me gusta hoy`);
+  if (dailyLikeQuotaText) dailyLikeQuotaText.textContent = label;
+  if (dailyLikeQuotaCompact) {
+    dailyLikeQuotaCompact.textContent = `${state.count}/20`;
+    dailyLikeQuotaCompact.dataset.limitReached = String(reached);
+  }
+  if (dailyLikeQuota) {
+    dailyLikeQuota.dataset.limitReached = String(reached);
+    dailyLikeQuota.setAttribute("aria-label", reached ? dailyLikeLimitMessage() : label);
+  }
+  dailyLikeActionControls().forEach((button) => {
+    if (reached) {
+      button.dataset.dailyLikeLimit = "blocked";
+      button.setAttribute("aria-disabled", "true");
+      button.title = dailyLikeLimitMessage();
+    } else if (button.dataset.dailyLikeLimit === "blocked") {
+      delete button.dataset.dailyLikeLimit;
+      button.removeAttribute("aria-disabled");
+      button.removeAttribute("title");
+    }
+  });
+  return { ...state, remaining: DAILY_LIKE_LIMIT - state.count, reached };
+}
+
+function consumeDailyLike() {
+  if (!DAILY_LIKE_LIMIT_ENABLED) {
+    renderDailyLikeQuota();
+    return true;
+  }
+  const state = readDailyLikeState();
+  if (state.count >= DAILY_LIKE_LIMIT) {
+    const message = dailyLikeLimitMessage();
+    renderDailyLikeQuota();
+    showToast(message);
+    if (feedbackMessage) feedbackMessage.textContent = message;
+    if (djSwipeStatus) djSwipeStatus.textContent = message;
+    return false;
+  }
+  writeDailyLikeState({ ...state, count: state.count + 1 });
+  renderDailyLikeQuota();
+  return true;
+}
+
+function resetDailyLikeQuotaState() {
+  dailyLikeMemoryKey = "";
+  dailyLikeMemoryState = null;
+  renderDailyLikeQuota();
+}
+
 function uniqueStorageKeys(keys = []) {
   return Array.from(new Set(keys.filter(Boolean)));
 }
@@ -29303,6 +30107,7 @@ function removeLocalStorageKeys(keys = []) {
 }
 
 function clearAllSonicLocalData() {
+  void capacitorPlugin("DailyDjReminder")?.cancel?.().catch(() => {});
   removeLocalStorageKeys(localStorageKeysMatching((key) => (
     key.startsWith("neonpulse:") ||
     key.startsWith("neonpulse_") ||
@@ -29344,6 +30149,8 @@ function readFirstStoredJson(keys = []) {
 
 function clearSessionProfileData(session) {
   clearSessionStorageBuckets(session, PROFILE_DATA_STORAGE_KEYS);
+  dailyDjController?.reset();
+  dailyRadarController?.reset();
 }
 
 function clearAnonymousDiscoveryStorage() {
@@ -29550,7 +30357,15 @@ function resetSessionUiState() {
   setListenLinkState(spiritSpotlightSpotify, { href: "#", enabled: false, title: t("previewUnavailable") });
   setListenLinkState(spiritSpotlightYoutube, { href: "#", enabled: false, title: t("previewUnavailable") });
   setListenLinkState(spiritSpotlightSoundcloud, { href: "#", enabled: false, title: t("previewUnavailable") });
-  if (spiritCollectiblePanel) spiritCollectiblePanel.classList.add("hidden");
+  if (spiritCollectiblePanel) {
+    spiritCollectiblePanel.classList.add("hidden");
+    spiritCollectiblePanel.classList.remove("is-premium-locked", "awaiting-image", "is-generating");
+  }
+  if (spiritPremiumGate) {
+    spiritPremiumGate.classList.add("hidden");
+    spiritPremiumGate.setAttribute("aria-hidden", "true");
+  }
+  if (spiritPremiumCta) spiritPremiumCta.disabled = false;
   if (spiritCollectibleImage) {
     spiritCollectibleImage.removeAttribute("src");
     spiritCollectibleImage.removeAttribute("data-asset-ready");
@@ -29566,6 +30381,7 @@ function resetSessionUiState() {
   if (spiritCollectibleRegenerateBtn) {
     spiritCollectibleRegenerateBtn.disabled = true;
     spiritCollectibleRegenerateBtn.textContent = t("spiritCollectibleRegenerate");
+    spiritCollectibleRegenerateBtn.classList.remove("hidden");
   }
   if (spiritCollectibleShareInstagramBtn) {
     spiritCollectibleShareInstagramBtn.disabled = true;
@@ -29581,22 +30397,31 @@ function resetSessionUiState() {
 
 function activateUserSession(session) {
   const normalizedSession = normalizeUserSession(session);
+  if (weeklyHighlightsCloudSyncTimer) window.clearTimeout(weeklyHighlightsCloudSyncTimer);
+  weeklyHighlightsCloudSyncTimer = 0;
   beginRecommendationSession(normalizedSession);
   currentAuthUser = normalizedSession;
+  socialState.tasteSnapshot = null;
   resetSessionStateInMemory();
   currentDjRecommendation = null;
+  currentDjRecommendationSource = "manual";
   likedDjRecommendationKeys = new Set();
   passedDjRecommendationKeys = new Set();
   recentDjRecommendationKeys = [];
+  djRecommendationHistory = [];
   loadDjRecommendationMemory();
   resetSessionUiState();
   progressStorageReady = false;
   resetPreferenceInputsToDefault();
   loadPreferences();
   loadProgress();
+  initialTasteCalibrationState = readInitialTasteCalibrationLocal(normalizedSession);
   updateWeightLabels();
   styleInfoDismissed = false;
   renderStyleInfoBubble(styleEl?.value || "", { reveal: Boolean(styleEl?.value) });
+  dailyDjController?.reset();
+  dailyRadarController?.reset();
+  resetDailyLikeQuotaState();
 }
 
 function setAuthFeedback(message = "", isError = false) {
@@ -30033,7 +30858,7 @@ function socialSessionFromPayload(provider, payload = {}) {
   });
 }
 
-function completeSocialLogin(provider, payload = {}) {
+async function completeSocialLogin(provider, payload = {}) {
   if (AUTH_LOGIN_STANDBY) {
     setAuthFeedback(t("authStandbyFeedback"), true);
     playUiSfx("error");
@@ -30056,7 +30881,8 @@ function completeSocialLogin(provider, payload = {}) {
     provider: authProviderDisplayName(provider),
     user: session.username || session.email
   }));
-  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
+  const calibrationShown = await maybeShowInitialTasteCalibration({ showGuide: shouldShowUsageGuide });
+  if (!calibrationShown) continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
   return true;
 }
 
@@ -30129,10 +30955,12 @@ async function continueWithOnlineSocialSession(options = {}) {
   }));
   applyCloudLikedTrackSignals([]);
   updateStats();
-  continueFromAuthToDiscover({
+  const continuation = {
     showGuide: options.showGuide ?? !hasUsageGuideAcknowledged(),
     targetTab: options.targetTab || (urlRequestsAdminAnalytics() ? "admin" : "")
-  });
+  };
+  const calibrationShown = await maybeShowInitialTasteCalibration(continuation);
+  if (!calibrationShown) continueFromAuthToDiscover(continuation);
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
 }
@@ -30144,7 +30972,7 @@ function handleGoogleCredentialResponse(response) {
     playUiSfx("error");
     return;
   }
-  completeSocialLogin("google", payload);
+  void completeSocialLogin("google", payload);
 }
 
 async function initializeGoogleSignIn({ silent = false } = {}) {
@@ -30563,8 +31391,9 @@ function preAppScreensVisible() {
   const languageVisible = languageScreen && !languageScreen.classList.contains("hidden");
   const usageGuideVisible = usageGuideScreen && !usageGuideScreen.classList.contains("hidden");
   const authVisible = authScreen && !authScreen.classList.contains("hidden");
+  const calibrationVisible = tasteCalibrationScreen && !tasteCalibrationScreen.classList.contains("hidden");
   const welcomeVisible = welcomeScreen && !welcomeScreen.classList.contains("hidden");
-  return Boolean(introVisible || languageVisible || usageGuideVisible || authVisible || welcomeVisible);
+  return Boolean(introVisible || languageVisible || usageGuideVisible || authVisible || calibrationVisible || welcomeVisible);
 }
 
 function syncFloatingSurpriseButton() {
@@ -31433,6 +32262,7 @@ function showLanguageScreen() {
   if (introScreen) introScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (languageScreen) languageScreen.classList.remove("hidden");
@@ -31457,6 +32287,7 @@ function showIntroScreen() {
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (introScreen) introScreen.focus();
@@ -31482,6 +32313,7 @@ function showUsageGuideScreen({ returnTo = "welcome" } = {}) {
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.remove("hidden");
@@ -31535,6 +32367,7 @@ async function showAuthScreen() {
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.add("hidden");
   if (authScreen) authScreen.classList.remove("hidden");
@@ -31602,6 +32435,7 @@ function continueFromAuthToDiscover({ showGuide = false, targetTab = "" } = {}) 
   if (languageScreen) languageScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   hideQuizChallengeBubble({ clearPending: false });
   closeQuizOverlay({ skipSnooze: true });
   if (quickSurprisePanel) quickSurprisePanel.classList.add("hidden");
@@ -31723,6 +32557,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   if (authScreen) authScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   closeQuickSurprisePanel();
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
@@ -31822,6 +32657,7 @@ function applySharedSpiritPayload(payload = sharedSpiritPayload) {
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (appContent) appContent.classList.remove("hidden");
@@ -31925,7 +32761,10 @@ async function resumeStoredUserSession() {
     : t("authLoggedAs", {
       user: storedUser.username || storedUser.email || t("summaryNoData")
     }));
-  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
+  const calibrationShown = restoredOnline
+    ? await maybeShowInitialTasteCalibration({ showGuide: shouldShowUsageGuide })
+    : false;
+  if (!calibrationShown) continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
 }
 
 async function continueWithoutLogin() {
@@ -31975,6 +32814,7 @@ function enterQaPreviewMode() {
   if (introScreen) introScreen.classList.add("hidden");
   if (languageScreen) languageScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
+  hideInitialTasteCalibrationScreen();
   if (welcomeScreen) welcomeScreen.classList.add("hidden");
   if (usageGuideScreen) usageGuideScreen.classList.add("hidden");
   hideBetaGateScreen();
@@ -32398,16 +33238,15 @@ function buildPixPayload(amount = activeSupportAmount()) {
   return `${basePayload}${crc16Ccitt(basePayload)}`;
 }
 
-function buildCryptoPayload() {
+function configuredBitcoinAddress() {
   const bitcoin = SUPPORT_PAYMENT_CONFIG.bitcoin || {};
-  const uri = String(bitcoin.uri || "").trim();
-  if (uri) return uri;
-  const lightning = String(bitcoin.lightning || "").trim();
   const address = String(bitcoin.address || "").trim();
-  if (lightning) return lightning;
-  if (!address) return "";
-  const brlNote = currentLanguage === "pt" ? "Tip Sonic Search" : "Sonic Search tip";
-  return `bitcoin:${address}?message=${encodeURIComponent(brlNote)}`;
+  return /^(?:bc1[a-z0-9]{25,87}|[13][a-km-zA-HJ-NP-Z1-9]{25,34})$/.test(address) ? address : "";
+}
+
+function buildCryptoPayload() {
+  // Keep one exact value across the visible address, copy action and QR.
+  return configuredBitcoinAddress();
 }
 
 const LOCAL_QR_L_CONFIG = {
@@ -32495,8 +33334,12 @@ function localQrGeneratorPolynomial(degree) {
   for (let index = 0; index < degree; index += 1) {
     const next = new Array(coefficients.length + 1).fill(0);
     coefficients.forEach((coefficient, coefficientIndex) => {
-      next[coefficientIndex] ^= localQrGfMultiply(coefficient, exp[index]);
-      next[coefficientIndex + 1] ^= coefficient;
+      // Polynomial coefficients are ordered from the highest power down.
+      // Multiply by (x + alpha^index): keep the x term first and the
+      // finite-field constant second. Reversing these yields a QR-looking
+      // matrix with invalid Reed-Solomon error correction.
+      next[coefficientIndex] ^= coefficient;
+      next[coefficientIndex + 1] ^= localQrGfMultiply(coefficient, exp[index]);
     });
     coefficients = next;
   }
@@ -32684,8 +33527,9 @@ function supportQrUrl(payload = "") {
   return "";
 }
 
-function setSupportQr(imageEl, placeholderEl, payload = "", alt = "") {
-  const qrUrl = supportQrUrl(payload);
+function setSupportQr(imageEl, placeholderEl, payload = "", alt = "", options = {}) {
+  const qrUrl = String(options.assetUrl || "").trim()
+    || (options.allowGenerated === false ? "" : supportQrUrl(payload));
   if (imageEl) {
     imageEl.classList.toggle("hidden", !qrUrl);
     if (qrUrl) {
@@ -32793,6 +33637,8 @@ function renderSupportPanel() {
       field.value = "";
       field.classList.add("hidden");
     });
+    if (supportBitcoinAddressRow) supportBitcoinAddressRow.classList.add("hidden");
+    if (supportBitcoinAddressValue) supportBitcoinAddressValue.textContent = "";
     [supportCopyPixKeyBtn, supportCopyPixBtn, supportCopyCryptoBtn].forEach((button) => {
       if (button) button.disabled = true;
     });
@@ -32819,12 +33665,27 @@ function renderSupportPanel() {
 
   if (supportCryptoStatus) supportCryptoStatus.textContent = hasCrypto ? t("supportCryptoReady") : t("supportCryptoMissing");
   if (supportCryptoHint) supportCryptoHint.textContent = hasCrypto ? t("supportCryptoHintReady") : t("supportCryptoHintMissing");
+  if (supportBitcoinAddressRow) supportBitcoinAddressRow.classList.toggle("hidden", !hasCrypto);
+  if (supportBitcoinAddressValue) supportBitcoinAddressValue.textContent = cryptoPayload;
   if (supportCryptoPayload) {
     supportCryptoPayload.value = cryptoPayload;
     supportCryptoPayload.classList.toggle("hidden", !hasCrypto);
   }
   if (supportCopyCryptoBtn) supportCopyCryptoBtn.disabled = !hasCrypto;
-  setSupportQr(supportCryptoQr, supportCryptoPlaceholder, cryptoPayload, "QR Code crypto para apoiar o Sonic Search");
+  const verifiedBitcoinQr = cryptoPayload === SUPPORT_DEFAULT_CONFIG.bitcoin.address
+    ? "assets/payments/bitcoin-address-qr.png?v=20260828btc1"
+    : "";
+  setSupportQr(
+    supportCryptoQr,
+    supportCryptoPlaceholder,
+    cryptoPayload,
+    sonicTinyCopy(
+      "QR Code do endereço Bitcoin para apoiar o Sonic Search",
+      "QR code for the Sonic Search Bitcoin support address",
+      "Código QR de la dirección Bitcoin para apoyar Sonic Search"
+    ),
+    { assetUrl: verifiedBitcoinQr, allowGenerated: false }
+  );
   renderSupportContact();
 }
 
@@ -33087,7 +33948,8 @@ function ensureEventsPanelActive() {
 }
 
 function setActiveAppTab(tabName = "discover", options = {}) {
-  const safeTab = safeAppTabName(tabName);
+  const openDailyReminder = dailyDjReminderLaunchPending && !appContent?.classList.contains("hidden");
+  const safeTab = safeAppTabName(openDailyReminder ? "djs" : tabName);
   const previousTab = currentActiveAppTabName();
   if (previousTab !== safeTab) {
     stopAllActivePlayback({ reason: `tab_change_${previousTab}_to_${safeTab}` });
@@ -33123,16 +33985,27 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (focusPanel) scrollActiveAppPanelIntoView(safeTab);
   updateSignatureBarForTab(safeTab);
   if (safeTab === "profile") {
+    renderWeeklyHighlights();
     scheduleMusicalSpiritRefresh({ force: true });
     void ensureSocialMvpReady();
     void loadApiHealthPanel();
+  }
+  if (safeTab === "discover") {
+    ensureDailyRadarReady();
   }
   if (safeTab === "admin") {
     void loadAdminAnalytics();
     void loadAdminOperations();
     void loadAdminNewsroom();
   }
-  if (safeTab === "djs") ensureDjDiscoveryReady();
+  if (safeTab === "djs") {
+    ensureDailyDjRecommendationReady();
+    if (openDailyReminder) {
+      dailyDjReminderLaunchPending = false;
+      dailyDjController?.open();
+    }
+    ensureDjDiscoveryReady();
+  }
   if (safeTab === "news") {
     void refreshSonicEditorial();
     void refreshDailyNews({ silent: false });
@@ -33447,6 +34320,7 @@ function profileBackupSignalCount() {
     (Number(userStats.ratingCount) || 0) +
     likedTrackHistory.length +
     dislikedTrackHistory.length +
+    djRecommendationHistory.length +
     knownArtistsMemory.size +
     discoveredArtistsInApp.size +
     seenTrackKeysMemory.size
@@ -33504,6 +34378,8 @@ function buildProfileBackupPayload() {
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
   const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
   const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
+  const calibrationKey = storageKeyForSession(INITIAL_TASTE_CALIBRATION_STORAGE_KEY);
+  const djRecommendationsKey = djRecommendationStorageKey(session);
   const exportedAt = new Date().toISOString();
   return {
     app: PROFILE_BACKUP_APP_ID,
@@ -33521,6 +34397,8 @@ function buildProfileBackupPayload() {
       progress: safeReadJsonStorage(progressKey),
       collectible: safeReadJsonStorage(collectibleKey),
       artSeed: artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : "",
+      initialTasteCalibration: safeReadJsonStorage(calibrationKey),
+      djRecommendations: safeReadJsonStorage(djRecommendationsKey),
       usageGuideAcknowledged: true
     }
   };
@@ -33567,6 +34445,8 @@ function restoreProfileBackupPayload(payload) {
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY, targetSession);
   const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY, targetSession);
   const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY, targetSession);
+  const calibrationKey = storageKeyForSession(INITIAL_TASTE_CALIBRATION_STORAGE_KEY, targetSession);
+  const djRecommendationsKey = djRecommendationStorageKey(targetSession);
   const data = payload.data || {};
   if (preferencesKey && data.preferences && typeof data.preferences === "object") {
     localStorage.setItem(preferencesKey, JSON.stringify(data.preferences));
@@ -33579,6 +34459,12 @@ function restoreProfileBackupPayload(payload) {
   }
   if (artSeedKey && typeof data.artSeed === "string" && data.artSeed.trim()) {
     localStorage.setItem(artSeedKey, data.artSeed.trim());
+  }
+  if (calibrationKey && data.initialTasteCalibration && typeof data.initialTasteCalibration === "object") {
+    localStorage.setItem(calibrationKey, JSON.stringify(normalizeInitialTasteCalibration(data.initialTasteCalibration)));
+  }
+  if (djRecommendationsKey && data.djRecommendations && typeof data.djRecommendations === "object") {
+    localStorage.setItem(djRecommendationsKey, JSON.stringify(data.djRecommendations));
   }
   if (data.usageGuideAcknowledged) {
     localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
@@ -35432,10 +36318,8 @@ async function searchNewArtistsByStyle() {
       showToast(t("catalogFallbackToast"));
     }
 
-    if (!externalDatasetImportDone) {
-      update(38, t("searchOverlayCatalog"));
-      await prepareLocalDatasetForRecommendation({ style });
-    }
+    update(38, t("searchOverlayCatalog"));
+    await prepareLocalDatasetForRecommendation({ style });
 
     update(48, t("newArtistsSearching"));
     const fromCatalog = collectNewArtistsFromCatalog(style, knownSet);
@@ -42891,8 +43775,10 @@ function resetAdminAccessState(sessionKey = "") {
   adminAccessState.verified = false;
   adminAccessState.allowed = false;
   adminAccessState.owner = false;
+  adminAccessState.premium = false;
   adminAccessState.role = "anonymous";
   adminAccessState.email = "";
+  adminAccessState.membership = null;
   adminAccessState.sessionKey = sessionKey;
   adminAccessState.lastCheckedAt = 0;
   adminAccessState.promise = null;
@@ -42980,8 +43866,12 @@ async function refreshAdminAccess(options = {}) {
       adminAccessState.verified = true;
       adminAccessState.allowed = Boolean(viewer.canAccessAdmin || viewer.admin || viewer.owner);
       adminAccessState.owner = Boolean(viewer.owner || viewer.role === "owner");
+      adminAccessState.premium = Boolean(viewer.premium || viewer.membership?.premium);
       adminAccessState.role = String(viewer.role || (adminAccessState.allowed ? "admin" : "free"));
       adminAccessState.email = normalizeAccessEmail(viewer.email || currentAccessEmail());
+      adminAccessState.membership = viewer.membership && typeof viewer.membership === "object"
+        ? viewer.membership
+        : null;
       adminAccessState.lastCheckedAt = Date.now();
       return adminAccessState.allowed;
     } catch (error) {
@@ -42989,8 +43879,10 @@ async function refreshAdminAccess(options = {}) {
         adminAccessState.verified = false;
         adminAccessState.allowed = false;
         adminAccessState.owner = false;
+        adminAccessState.premium = false;
         adminAccessState.role = "anonymous";
         adminAccessState.email = "";
+        adminAccessState.membership = null;
       }
       console.warn("Could not verify administrative access", error);
       return hasLegacyOwnerAccess();
@@ -42999,6 +43891,7 @@ async function refreshAdminAccess(options = {}) {
         adminAccessState.loading = false;
         adminAccessState.promise = null;
         syncAdminAnalyticsAccess();
+        renderMembershipUi();
       }
     }
   })();
@@ -43531,7 +44424,691 @@ async function loadAdminAnalytics(options = {}) {
 }
 
 function hasPremiumAccess() {
-  return hasOwnerAccess() || aiConfigFlag("premiumUnlocked", false);
+  if (hasOwnerAccess()) return true;
+  if (
+    authHasOnlineSession() &&
+    adminAccessState.verified &&
+    adminAccessState.sessionKey === adminAccessSessionKey() &&
+    adminAccessState.premium
+  ) return true;
+  // A client flag remains useful for local UI development, but can never unlock
+  // production features or stand in for a verified subscription.
+  return isLocalDevelopmentHost() && aiConfigFlag("premiumUnlocked", false);
+}
+
+function weeklyHighlightsStart(now = new Date()) {
+  const start = new Date(now);
+  start.setHours(0, 0, 0, 0);
+  const daysSinceMonday = (start.getDay() + 6) % 7;
+  start.setDate(start.getDate() - daysSinceMonday);
+  return start;
+}
+
+function weeklyHighlightsDateLabel(start, end) {
+  const formatter = new Intl.DateTimeFormat(currentLocale(), { day: "2-digit", month: "short" });
+  return `${formatter.format(start)} — ${formatter.format(end)}`;
+}
+
+function weeklyHighlightsSnapshot(now = new Date()) {
+  const start = weeklyHighlightsStart(now);
+  const startTime = start.getTime();
+  const events = sanitizeDjRecommendationHistory(djRecommendationHistory).filter((entry) => {
+    const time = new Date(entry.at).getTime();
+    return time >= startTime && time <= now.getTime();
+  });
+  const discoveredKeys = new Set(events.map((entry) => entry.key));
+  const latestDecision = new Map();
+  events.forEach((entry) => {
+    if (latestDecision.has(entry.key) || entry.action === "view") return;
+    latestDecision.set(entry.key, entry.action === "undo" ? "" : entry.action);
+  });
+  const likedKeys = new Set([...latestDecision].filter(([, action]) => action === "like").map(([key]) => key));
+  const passedKeys = new Set([...latestDecision].filter(([, action]) => action === "pass").map(([key]) => key));
+  const knownKeys = new Set([...latestDecision].filter(([, action]) => action === "known").map(([key]) => key));
+  const inWeek = (entry) => {
+    const time = new Date(entry?.likedAt || "").getTime();
+    return Number.isFinite(time) && time >= startTime && time <= now.getTime();
+  };
+  const likedTracks = likedTrackHistory.filter(inWeek);
+  const passedTracks = dislikedTrackHistory.filter(inWeek);
+  const styleScores = new Map();
+  const styleLabels = new Map();
+  const addStyle = (style = "", label = "", score = 0) => {
+    const key = String(style || "").trim();
+    if (!key || !score) return;
+    styleScores.set(key, Number(styleScores.get(key) || 0) + score);
+    styleLabels.set(key, normalizeInlineText(label || "") || styleLabelByValue(key));
+  };
+  events.forEach((entry) => {
+    const decision = latestDecision.get(entry.key);
+    const weight = decision === "like" ? 2.6 : decision === "known" ? 1.1 : decision === "pass" ? 0.3 : 0.2;
+    addStyle(entry.style, entry.subgenre, weight);
+  });
+  likedTracks.forEach((entry) => addStyle(entry.style, styleLabelByValue(entry.style), 2));
+  passedTracks.forEach((entry) => addStyle(entry.style, styleLabelByValue(entry.style), 0.25));
+  const dominantStyleKey = [...styleScores.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+  const djScores = new Map();
+  events.forEach((entry) => {
+    if (!likedKeys.has(entry.key)) return;
+    const score = entry.action === "like" ? 4 : entry.action === "view" ? 1 : 0;
+    djScores.set(entry.key, Number(djScores.get(entry.key) || 0) + score);
+  });
+  const topDjKey = [...djScores.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+  const topDjEvent = topDjKey ? events.find((entry) => entry.key === topDjKey && entry.artist) || null : null;
+  const decisionCount = likedKeys.size + passedKeys.size + knownKeys.size;
+  return {
+    start,
+    end: now,
+    discoveredCount: discoveredKeys.size,
+    likedCount: likedKeys.size,
+    passedCount: passedKeys.size,
+    knownCount: knownKeys.size,
+    likedTracksCount: likedTracks.length,
+    passedTracksCount: passedTracks.length,
+    signalCount: decisionCount + likedTracks.length + passedTracks.length,
+    topDj: topDjEvent?.artist || "",
+    dominantStyle: dominantStyleKey ? styleLabels.get(dominantStyleKey) || styleLabelByValue(dominantStyleKey) : ""
+  };
+}
+
+function weeklyHighlightsCopy() {
+  return {
+    kicker: sonicTinyCopy("MINHA SEMANA SONIC", "MY SONIC WEEK", "MI SEMANA SONIC"),
+    title: sonicTinyCopy("O que marcou seu radar", "What shaped your radar", "Lo que marcó tu radar"),
+    intro: sonicTinyCopy("Um retrato semanal das descobertas que ensinaram seu perfil.", "A weekly view of the discoveries that taught your profile.", "Un retrato semanal de los descubrimientos que enseñaron a tu perfil."),
+    active: sonicTinyCopy("ATIVO", "ACTIVE", "ACTIVO"),
+    premium: "PREMIUM",
+    discovered: sonicTinyCopy("DJs descobertos", "DJs discovered", "DJs descubiertos"),
+    liked: sonicTinyCopy("DJs curtidos", "DJs liked", "DJs con me gusta"),
+    passed: sonicTinyCopy("DJs que você passou", "DJs you passed", "DJs que descartaste"),
+    tracks: sonicTinyCopy("Faixas curtidas", "Tracks liked", "Pistas con me gusta"),
+    spotlight: sonicTinyCopy("DJ DA SEMANA", "DJ OF THE WEEK", "DJ DE LA SEMANA"),
+    noSpotlight: sonicTinyCopy("Seu destaque aparece com as próximas curtidas.", "Your highlight appears with your next likes.", "Tu destacado aparece con tus próximos me gusta."),
+    topDj: (artist) => sonicTinyCopy(`${artist} foi o destaque do seu radar.`, `${artist} was the highlight of your radar.`, `${artist} fue lo más destacado de tu radar.`),
+    noStyle: sonicTinyCopy("O estilo mais presente também será revelado aqui.", "Your most present style will also appear here.", "Tu estilo más presente también aparecerá aquí."),
+    topStyle: (style) => sonicTinyCopy(`${style} foi a direção mais presente.`, `${style} was your strongest direction.`, `${style} fue tu dirección más presente.`),
+    emptyTitle: sonicTinyCopy("Sua semana está começando.", "Your week is just beginning.", "Tu semana está comenzando."),
+    emptyText: (remaining) => sonicTinyCopy(
+      `Avalie mais ${remaining} ${remaining === 1 ? "DJ ou faixa" : "DJs ou faixas"} para revelar seus destaques.`,
+      `Rate ${remaining} more ${remaining === 1 ? "DJ or track" : "DJs or tracks"} to reveal your highlights.`,
+      `Evalúa ${remaining} ${remaining === 1 ? "DJ o pista más" : "DJs o pistas más"} para revelar tus destacados.`
+    ),
+    lockedTitle: sonicTinyCopy("Seu resumo pessoal faz parte do Premium.", "Your personal recap is part of Premium.", "Tu resumen personal forma parte de Premium."),
+    lockedText: sonicTinyCopy("Veja quem marcou sua semana, quantos DJs você descobriu e como seu gosto evoluiu.", "See who shaped your week, how many DJs you discovered, and how your taste evolved.", "Mira quién marcó tu semana, cuántos DJs descubriste y cómo evolucionó tu gusto."),
+    upgrade: sonicTinyCopy("Conhecer Sonic Premium", "Explore Sonic Premium", "Conocer Sonic Premium"),
+    discover: sonicTinyCopy("Descobrir mais DJs", "Discover more DJs", "Descubrir más DJs"),
+    share: sonicTinyCopy("Compartilhar resumo", "Share recap", "Compartir resumen"),
+    shared: sonicTinyCopy("Resumo compartilhado.", "Recap shared.", "Resumen compartido."),
+    copied: sonicTinyCopy("Resumo copiado.", "Recap copied.", "Resumen copiado.")
+  };
+}
+
+function renderWeeklyHighlights() {
+  if (!weeklyHighlightsCard) return;
+  const copy = weeklyHighlightsCopy();
+  const snapshot = weeklyHighlightsSnapshot();
+  const premium = hasPremiumAccess();
+  const ready = snapshot.signalCount >= 3;
+  weeklyHighlightsCard.dataset.access = premium ? "premium" : "locked";
+  if (weeklyHighlightsKicker) weeklyHighlightsKicker.textContent = copy.kicker;
+  if (weeklyHighlightsTitle) weeklyHighlightsTitle.textContent = copy.title;
+  if (weeklyHighlightsIntro) weeklyHighlightsIntro.textContent = copy.intro;
+  if (weeklyHighlightsBadge) weeklyHighlightsBadge.textContent = premium ? copy.active : copy.premium;
+  if (weeklyHighlightsPeriod) weeklyHighlightsPeriod.textContent = weeklyHighlightsDateLabel(snapshot.start, snapshot.end);
+  if (weeklyHighlightsDiscoveredLabel) weeklyHighlightsDiscoveredLabel.textContent = copy.discovered;
+  if (weeklyHighlightsLikedLabel) weeklyHighlightsLikedLabel.textContent = copy.liked;
+  if (weeklyHighlightsPassedLabel) weeklyHighlightsPassedLabel.textContent = copy.passed;
+  if (weeklyHighlightsTracksLabel) weeklyHighlightsTracksLabel.textContent = copy.tracks;
+  if (weeklyHighlightsSpotlightKicker) weeklyHighlightsSpotlightKicker.textContent = copy.spotlight;
+  if (weeklyHighlightsDiscovered) weeklyHighlightsDiscovered.textContent = premium ? String(snapshot.discoveredCount) : "—";
+  if (weeklyHighlightsLiked) weeklyHighlightsLiked.textContent = premium ? String(snapshot.likedCount) : "—";
+  if (weeklyHighlightsPassed) weeklyHighlightsPassed.textContent = premium ? String(snapshot.passedCount) : "—";
+  if (weeklyHighlightsTracks) weeklyHighlightsTracks.textContent = premium ? String(snapshot.likedTracksCount) : "—";
+  if (weeklyHighlightsSpotlight) weeklyHighlightsSpotlight.textContent = premium && snapshot.topDj ? copy.topDj(snapshot.topDj) : copy.noSpotlight;
+  if (weeklyHighlightsStyle) weeklyHighlightsStyle.textContent = premium && snapshot.dominantStyle ? copy.topStyle(snapshot.dominantStyle) : copy.noStyle;
+  weeklyHighlightsContent?.classList.toggle("hidden", premium && !ready);
+  weeklyHighlightsEmpty?.classList.toggle("hidden", !premium || ready);
+  weeklyHighlightsLocked?.classList.toggle("hidden", premium);
+  if (weeklyHighlightsEmptyTitle) weeklyHighlightsEmptyTitle.textContent = copy.emptyTitle;
+  if (weeklyHighlightsEmptyText) weeklyHighlightsEmptyText.textContent = copy.emptyText(Math.max(1, 3 - snapshot.signalCount));
+  if (weeklyHighlightsProgress) weeklyHighlightsProgress.style.width = `${Math.min(100, Math.round((snapshot.signalCount / 3) * 100))}%`;
+  if (weeklyHighlightsLockedTitle) weeklyHighlightsLockedTitle.textContent = copy.lockedTitle;
+  if (weeklyHighlightsLockedText) weeklyHighlightsLockedText.textContent = copy.lockedText;
+  if (weeklyHighlightsPrimaryBtn) weeklyHighlightsPrimaryBtn.textContent = premium ? copy.discover : copy.upgrade;
+  if (weeklyHighlightsShareBtn) {
+    weeklyHighlightsShareBtn.textContent = copy.share;
+    weeklyHighlightsShareBtn.classList.toggle("hidden", !premium || !ready);
+  }
+}
+
+function weeklyHighlightsShareText(snapshot = weeklyHighlightsSnapshot()) {
+  const rows = [
+    sonicTinyCopy("Minha Semana Sonic", "My Sonic Week", "Mi Semana Sonic"),
+    weeklyHighlightsDateLabel(snapshot.start, snapshot.end),
+    sonicTinyCopy(
+      `${snapshot.discoveredCount} DJs descobertos · ${snapshot.likedCount} curtidos · ${snapshot.passedCount} descartados`,
+      `${snapshot.discoveredCount} DJs discovered · ${snapshot.likedCount} liked · ${snapshot.passedCount} passed`,
+      `${snapshot.discoveredCount} DJs descubiertos · ${snapshot.likedCount} con me gusta · ${snapshot.passedCount} descartados`
+    )
+  ];
+  if (snapshot.topDj) rows.push(sonicTinyCopy(`DJ da semana: ${snapshot.topDj}`, `DJ of the week: ${snapshot.topDj}`, `DJ de la semana: ${snapshot.topDj}`));
+  if (snapshot.dominantStyle) rows.push(sonicTinyCopy(`Direção da semana: ${snapshot.dominantStyle}`, `Direction of the week: ${snapshot.dominantStyle}`, `Dirección de la semana: ${snapshot.dominantStyle}`));
+  rows.push("sonicsearch.app");
+  return rows.join("\n");
+}
+
+async function shareWeeklyHighlights() {
+  const snapshot = weeklyHighlightsSnapshot();
+  if (!hasPremiumAccess() || snapshot.signalCount < 3) return;
+  const copy = weeklyHighlightsCopy();
+  const text = weeklyHighlightsShareText(snapshot);
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: copy.kicker, text });
+      showToast(copy.shared);
+    } else {
+      await writeTextToClipboard(text);
+      showToast(copy.copied);
+    }
+  } catch (error) {
+    if (error?.name !== "AbortError") showToast(t("toastError"));
+  }
+}
+
+function membershipUiCopy() {
+  const signed = authHasOnlineSession();
+  const premium = hasPremiumAccess();
+  const checking = signed && adminAccessState.loading && !adminAccessState.verified;
+  if (premium) {
+    const paidProvider = ["stripe", "apple"].includes(adminAccessState.membership?.provider);
+    return {
+      plan: "premium",
+      kicker: sonicTinyCopy("SEU PLANO", "YOUR PLAN", "TU PLAN"),
+      title: "Sonic Premium",
+      badge: sonicTinyCopy("Ativo", "Active", "Activo"),
+      description: sonicTinyCopy(
+        "Seu perfil aprende com cada reação e transforma esses sinais em descobertas feitas para você.",
+        "Your profile learns from every reaction and turns those signals into discoveries made for you.",
+        "Tu perfil aprende de cada reacción y convierte esas señales en descubrimientos hechos para ti."
+      ),
+      features: [
+        sonicTinyCopy("Radar diário moldado pelo seu perfil", "Daily radar shaped by your profile", "Radar diario moldeado por tu perfil"),
+        sonicTinyCopy("Minha Semana Sonic com seus destaques", "My Sonic Week with your highlights", "Mi Semana Sonic con tus destacados"),
+        sonicTinyCopy("Arte exclusiva do Sound System criada por IA", "Exclusive AI-created Sound System artwork", "Arte exclusiva del Sound System creada por IA"),
+        sonicTinyCopy("Memória sincronizada entre aparelhos", "Memory synced across devices", "Memoria sincronizada entre dispositivos"),
+        sonicTinyCopy("Explicação por trás de cada escolha", "The reason behind every pick", "La razón detrás de cada elección")
+      ],
+      status: adminAccessState.membership?.cancelAtPeriodEnd
+        ? sonicTinyCopy("Plano ativo até o fim do período atual.", "Plan active until the current period ends.", "Plan activo hasta el final del período actual.")
+        : sonicTinyCopy("Acesso confirmado com segurança pelo servidor.", "Access securely confirmed by the server.", "Acceso confirmado de forma segura por el servidor."),
+      action: paidProvider
+        ? sonicTinyCopy("Gerenciar assinatura", "Manage subscription", "Gestionar suscripción")
+        : sonicTinyCopy("Premium ativo", "Premium active", "Premium activo"),
+      disabled: !paidProvider,
+      refresh: signed
+    };
+  }
+  if (checking) {
+    return {
+      plan: "free",
+      kicker: sonicTinyCopy("SEU PLANO", "YOUR PLAN", "TU PLAN"),
+      title: sonicTinyCopy("Verificando acesso…", "Checking access…", "Verificando acceso…"),
+      badge: sonicTinyCopy("Conta", "Account", "Cuenta"),
+      description: sonicTinyCopy("Estamos confirmando seu plano com o servidor.", "We are confirming your plan with the server.", "Estamos confirmando tu plan con el servidor."),
+      features: [
+        sonicTinyCopy("Curtidas ilimitadas", "Unlimited likes", "Me gusta ilimitados"),
+        sonicTinyCopy("Descoberta eletrônica essencial", "Essential electronic discovery", "Descubrimiento electrónico esencial")
+      ],
+      status: sonicTinyCopy("Isso leva apenas alguns segundos.", "This only takes a few seconds.", "Esto tarda solo unos segundos."),
+      action: sonicTinyCopy("Verificando…", "Checking…", "Verificando…"),
+      disabled: true,
+      refresh: false
+    };
+  }
+  return {
+    plan: "free",
+    kicker: sonicTinyCopy("SEU PLANO", "YOUR PLAN", "TU PLAN"),
+    title: "Sonic Free",
+    badge: sonicTinyCopy("Gratuito", "Free", "Gratis"),
+    description: sonicTinyCopy(
+      "A descoberta continua aberta, com curtidas ilimitadas. O Premium transforma seus sinais em um radar pessoal que evolui com você.",
+      "Discovery stays open with unlimited likes. Premium turns your signals into a personal radar that evolves with you.",
+      "El descubrimiento sigue abierto, con me gusta ilimitados. Premium convierte tus señales en un radar personal que evoluciona contigo."
+    ),
+    features: [
+      sonicTinyCopy("Descoberta eletrônica essencial", "Essential electronic discovery", "Descubrimiento electrónico esencial"),
+      sonicTinyCopy("Curtidas ilimitadas", "Unlimited likes", "Me gusta ilimitados"),
+      sonicTinyCopy("Perfil local e compartilhamentos", "Local profile and sharing", "Perfil local y contenidos compartidos")
+    ],
+    status: signed
+      ? sonicTinyCopy("Sua conta está no plano gratuito. Veja as opções do Sonic Premium.", "Your account is on the Free plan. See Sonic Premium options.", "Tu cuenta está en el plan gratuito. Mira las opciones de Sonic Premium.")
+      : sonicTinyCopy("Conheça o Premium e veja o preço antes de criar sua conta.", "Explore Premium and see the price before creating an account.", "Conoce Premium y consulta el precio antes de crear tu cuenta."),
+    action: sonicTinyCopy("Ver Sonic Premium", "See Sonic Premium", "Ver Sonic Premium"),
+    disabled: false,
+    refresh: signed
+  };
+}
+
+function renderMembershipUi() {
+  if (!membershipCard) return;
+  const copy = membershipUiCopy();
+  membershipCard.dataset.plan = copy.plan;
+  if (membershipKicker) membershipKicker.textContent = copy.kicker;
+  if (membershipTitle) membershipTitle.textContent = copy.title;
+  if (membershipBadge) membershipBadge.textContent = copy.badge;
+  if (membershipDescription) membershipDescription.textContent = copy.description;
+  if (membershipStatus) membershipStatus.textContent = copy.status;
+  if (membershipPrimaryBtn) {
+    membershipPrimaryBtn.textContent = copy.action;
+    membershipPrimaryBtn.disabled = copy.disabled;
+  }
+  if (membershipRefreshBtn) {
+    membershipRefreshBtn.textContent = sonicTinyCopy("Verificar plano", "Check plan", "Verificar plan");
+    membershipRefreshBtn.classList.toggle("hidden", !copy.refresh);
+    membershipRefreshBtn.disabled = adminAccessState.loading;
+  }
+  if (membershipFeatureList) {
+    membershipFeatureList.replaceChildren(...copy.features.map((feature) => {
+      const item = document.createElement("li");
+      item.textContent = feature;
+      return item;
+    }));
+  }
+  renderWeeklyHighlights();
+}
+
+async function refreshMembershipAccess() {
+  if (!authHasOnlineSession()) {
+    resetAdminAccessState();
+    renderMembershipUi();
+    return false;
+  }
+  renderMembershipUi();
+  const refreshed = await refreshAdminAccess({ force: true });
+  renderMembershipUi();
+  if (dailyDjController?.refreshAccess) await dailyDjController.refreshAccess();
+  if (dailyRadarController?.refreshAccess) await dailyRadarController.refreshAccess();
+  return refreshed || hasPremiumAccess();
+}
+
+function premiumBillingCopy() {
+  return {
+    kicker: "SONIC PREMIUM",
+    title: sonicTinyCopy("Pare de procurar. Comece a descobrir.", "Stop searching. Start discovering.", "Deja de buscar. Empieza a descubrir."),
+    intro: sonicTinyCopy(
+      "Seleções de faixas, DJs e sets guiadas pelo seu perfil, com um resumo pessoal a cada semana.",
+      "Track, DJ, and set selections guided by your profile, with a personal recap every week.",
+      "Selecciones de pistas, DJs y sets guiadas por tu perfil, con un resumen personal cada semana."
+    ),
+    profileKicker: sonicTinyCopy("INTELIGÊNCIA QUE APRENDE", "INTELLIGENCE THAT LEARNS", "INTELIGENCIA QUE APRENDE"),
+    profileTitle: sonicTinyCopy("Seu perfil guia cada descoberta.", "Your profile guides every discovery.", "Tu perfil guía cada descubrimiento."),
+    profileEmpty: sonicTinyCopy(
+      "Curtidas, descartes e faixas já conhecidas afinam seu Sonic DNA.",
+      "Likes, passes, and tracks you already know fine-tune your Sonic DNA.",
+      "Me gusta, descartes y pistas que ya conoces afinan tu Sonic DNA."
+    ),
+    profileActive: (count) => sonicTinyCopy(
+      `Seu perfil já reuniu ${count} ${count === 1 ? "sinal" : "sinais"}. O Premium usa essa leitura para escolher o próximo passo, não apenas repetir o que você já gosta.`,
+      `Your profile already has ${count} ${count === 1 ? "signal" : "signals"}. Premium uses that read to choose your next step, not just repeat what you already like.`,
+      `Tu perfil ya reunió ${count} ${count === 1 ? "señal" : "señales"}. Premium usa esa lectura para elegir el próximo paso, no solo repetir lo que ya te gusta.`
+    ),
+    profileSignalsLabel: sonicTinyCopy("Sinais usados na personalização", "Signals used for personalization", "Señales usadas en la personalización"),
+    profileSignals: [
+      sonicTinyCopy("Estilo", "Style", "Estilo"),
+      sonicTinyCopy("Energia", "Energy", "Energía"),
+      sonicTinyCopy("Contexto", "Context", "Contexto")
+    ],
+    monthly: sonicTinyCopy("MENSAL", "MONTHLY", "MENSUAL"),
+    yearly: sonicTinyCopy("ANUAL", "YEARLY", "ANUAL"),
+    monthHint: sonicTinyCopy("Flexível, com renovação mensal.", "Flexible, billed monthly.", "Flexible, con renovación mensual."),
+    yearHint: sonicTinyCopy("Um ano de radar e memória contínua.", "A year of daily radar and continuous memory.", "Un año de radar y memoria continua."),
+    bestValue: sonicTinyCopy("MELHOR VALOR", "BEST VALUE", "MEJOR VALOR"),
+    choose: sonicTinyCopy("Escolher", "Choose", "Elegir"),
+    startTrial: sonicTinyCopy("Começar teste grátis", "Start free trial", "Empezar prueba gratis"),
+    signInToStart: sonicTinyCopy("Entrar para começar", "Sign in to start", "Entrar para empezar"),
+    comingSoon: sonicTinyCopy("Em breve", "Coming soon", "Muy pronto"),
+    trial: (days) => sonicTinyCopy(`${days} dias grátis`, `${days}-day free trial`, `${days} días gratis`),
+    loading: sonicTinyCopy("Buscando opções disponíveis…", "Loading available options…", "Buscando opciones disponibles…"),
+    unavailable: sonicTinyCopy(
+      "Não foi possível consultar a oferta agora. Tente novamente em instantes.",
+      "The offer could not be loaded right now. Please try again in a moment.",
+      "No se pudo consultar la oferta ahora. Inténtalo de nuevo en unos instantes."
+    ),
+    preview: sonicTinyCopy(
+      "Oferta de lançamento. A compra será liberada aqui depois dos testes seguros de pagamento — nenhuma cobrança é feita agora.",
+      "Launch offer. Purchase will be enabled here after secure payment testing — no charge is made now.",
+      "Oferta de lanzamiento. La compra se habilitará aquí después de las pruebas seguras de pago; no se cobra nada ahora."
+    ),
+    ready: sonicTinyCopy(
+      "Escolha o período. A confirmação acontece no canal seguro de pagamento.",
+      "Choose a billing period. Confirmation happens in the secure payment channel.",
+      "Elige el período. La confirmación ocurre en el canal de pago seguro."
+    ),
+    benefitsLabel: sonicTinyCopy("Benefícios do Sonic Premium", "Sonic Premium benefits", "Beneficios de Sonic Premium"),
+    benefits: [
+      {
+        title: sonicTinyCopy("Radar Diário", "Daily Radar", "Radar Diario"),
+        body: sonicTinyCopy("Indicações moldadas pelo seu perfil, com até três descobertas por dia", "Picks shaped by your profile, with up to three discoveries a day", "Recomendaciones moldeadas por tu perfil, con hasta tres descubrimientos al día")
+      },
+      {
+        title: sonicTinyCopy("Minha Semana Sonic", "My Sonic Week", "Mi Semana Sonic"),
+        body: sonicTinyCopy("DJs, faixas e estilos que marcaram sua semana", "The DJs, tracks, and styles that shaped your week", "Los DJs, pistas y estilos que marcaron tu semana")
+      },
+      {
+        title: sonicTinyCopy("Sound System por IA", "AI Sound System", "Sound System con IA"),
+        body: sonicTinyCopy("Arte exclusiva do seu Sound System criada por IA", "Exclusive AI-created artwork for your Sound System", "Arte exclusiva de tu Sound System creada por IA")
+      },
+      {
+        title: sonicTinyCopy("Memória contínua", "Continuous memory", "Memoria continua"),
+        body: sonicTinyCopy("Histórico completo sincronizado entre aparelhos", "Full history synced across devices", "Historial completo sincronizado entre dispositivos")
+      }
+    ],
+    processing: sonicTinyCopy("Abrindo compra segura…", "Opening secure purchase…", "Abriendo compra segura…"),
+    pending: sonicTinyCopy("A compra está pendente de aprovação na App Store.", "The purchase is pending App Store approval.", "La compra está pendiente de aprobación en App Store."),
+    canceled: sonicTinyCopy("Compra cancelada. Nenhuma cobrança foi concluída.", "Purchase canceled. No charge was completed.", "Compra cancelada. No se completó ningún cobro."),
+    success: sonicTinyCopy("Premium ativado. Seu radar já está liberado.", "Premium activated. Your radar is ready.", "Premium activado. Tu radar ya está listo."),
+    error: sonicTinyCopy("Não foi possível concluir agora. Tente novamente ou restaure a compra.", "Could not complete this right now. Try again or restore purchases.", "No se pudo completar ahora. Inténtalo de nuevo o restaura la compra."),
+    restore: sonicTinyCopy("Restaurar compras", "Restore purchases", "Restaurar compras"),
+    manage: sonicTinyCopy("Gerenciar assinatura", "Manage subscription", "Gestionar suscripción"),
+    legal: sonicTinyCopy(
+      "Quando elegível, o teste grátis vira assinatura paga ao terminar. A renovação é automática até o cancelamento; o acesso continua até o fim do período pago.",
+      "When eligible, the free trial becomes a paid subscription when it ends. Renewal is automatic until canceled; access continues through the paid period.",
+      "Cuando corresponde, la prueba gratis pasa a ser una suscripción paga al terminar. La renovación es automática hasta la cancelación; el acceso continúa durante el período pagado."
+    )
+  };
+}
+
+function premiumProfileSnapshot(copy) {
+  const signalCount = Math.max(
+    totalPositiveLikes() + Math.max(0, Number(userStats.skipped) || 0) + Math.max(0, Number(userStats.alreadyKnew) || 0) + Math.max(0, Number(userStats.ratingCount) || 0),
+    likedTrackHistory.length + trackPreferenceSignals.size + trackRatingSignals.size
+  );
+  const profileStyles = spiritProfileStyleEntries(3).map((entry) => entry.label).filter(Boolean);
+  const labels = [...new Set([...profileStyles, ...copy.profileSignals])].slice(0, 3);
+  return {
+    signalCount,
+    body: signalCount > 0 ? copy.profileActive(signalCount) : copy.profileEmpty,
+    labels
+  };
+}
+
+function billingChannel() {
+  return isNativeIosRuntime() && capacitorPlugin("SonicSubscriptions")?.products ? "apple" : "web";
+}
+
+function setPremiumBillingStatus(message = "", error = false) {
+  if (!premiumBillingStatus) return;
+  premiumBillingStatus.textContent = message;
+  premiumBillingStatus.classList.toggle("is-error", Boolean(error));
+}
+
+function renderPremiumDialogCopy() {
+  const copy = premiumBillingCopy();
+  const profile = premiumProfileSnapshot(copy);
+  if (premiumDialogKicker) premiumDialogKicker.textContent = copy.kicker;
+  if (premiumDialogTitle) premiumDialogTitle.textContent = copy.title;
+  if (premiumDialogIntro) premiumDialogIntro.textContent = copy.intro;
+  if (premiumProfileKicker) premiumProfileKicker.textContent = copy.profileKicker;
+  if (premiumProfileTitle) premiumProfileTitle.textContent = copy.profileTitle;
+  if (premiumProfileBody) premiumProfileBody.textContent = profile.body;
+  if (premiumProfileSignals) {
+    premiumProfileSignals.setAttribute("aria-label", copy.profileSignalsLabel);
+    premiumProfileSignals.replaceChildren(...profile.labels.map((label) => {
+      const signal = document.createElement("span");
+      signal.textContent = label;
+      return signal;
+    }));
+  }
+  if (premiumBenefitList) {
+    premiumBenefitList.setAttribute("aria-label", copy.benefitsLabel);
+    premiumBenefitList.replaceChildren(...copy.benefits.map((benefit) => {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      const body = document.createElement("span");
+      title.textContent = benefit.title;
+      body.textContent = benefit.body;
+      item.append(title, body);
+      return item;
+    }));
+  }
+  if (premiumDialogClose) premiumDialogClose.setAttribute("aria-label", sonicTinyCopy("Fechar", "Close", "Cerrar"));
+  if (premiumRestoreBtn) premiumRestoreBtn.textContent = copy.restore;
+  if (premiumManageBtn) premiumManageBtn.textContent = copy.manage;
+  if (premiumLegalNote) premiumLegalNote.textContent = copy.legal;
+}
+
+async function billingServerRequest(route = "plans", { method = "GET", body = null, authenticated = false } = {}) {
+  const headers = { Accept: "application/json" };
+  if (body) headers["Content-Type"] = "application/json";
+  if (authenticated) {
+    const token = await currentApiAccessToken();
+    if (!token) throw new Error("login_required");
+    headers.Authorization = `Bearer ${token}`;
+    headers["X-Sonic-Auth-Token"] = token;
+  }
+  const response = await fetch(resolveAppApiEndpoint(`/api/billing?route=${encodeURIComponent(route)}`), {
+    method,
+    cache: "no-store",
+    headers,
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload?.ok) throw new Error(String(payload?.error || `billing_http_${response.status}`));
+  return payload;
+}
+
+function renderPremiumOffers() {
+  if (!premiumOfferGrid) return;
+  const copy = premiumBillingCopy();
+  premiumOfferGrid.replaceChildren();
+  premiumBillingState.offers.forEach((offer) => {
+    const cadence = offer.cadence === "yearly" ? "yearly" : "monthly";
+    const trialDays = Math.max(0, Number.parseInt(String(offer.trialDays ?? premiumBillingState.server?.trialDays ?? 0), 10) || 0);
+    const hasTrial = trialDays > 0 && offer.trialEligible !== false;
+    const card = document.createElement("article");
+    const isPreview = offer.preview === true || !premiumBillingState.checkoutReady;
+    card.className = `premium-offer-card is-${cadence}${isPreview ? " is-preview" : ""}`;
+    const label = document.createElement("span");
+    label.textContent = cadence === "yearly" ? `${copy.yearly} · ${copy.bestValue}` : copy.monthly;
+    const trial = document.createElement("em");
+    trial.className = "premium-offer-trial";
+    trial.textContent = hasTrial ? copy.trial(trialDays) : "";
+    trial.hidden = !hasTrial;
+    const price = document.createElement("strong");
+    price.textContent = premiumOfferDisplayPrice(offer);
+    const hint = document.createElement("small");
+    hint.textContent = cadence === "yearly" ? copy.yearHint : copy.monthHint;
+    const action = document.createElement("button");
+    action.type = "button";
+    action.dataset.premiumCadence = cadence;
+    const actionLabel = !premiumBillingState.checkoutReady
+      ? copy.comingSoon
+      : !authHasOnlineSession()
+        ? copy.signInToStart
+        : hasTrial ? copy.startTrial : copy.choose;
+    action.textContent = `${actionLabel} · ${price.textContent}`;
+    action.disabled = premiumBillingState.busy || !premiumBillingState.checkoutReady;
+    card.append(label, trial, price, hint, action);
+    premiumOfferGrid.append(card);
+  });
+}
+
+function premiumOfferDisplayPrice(offer = {}) {
+  if (offer.displayPrice || offer.formattedPrice) return offer.displayPrice || offer.formattedPrice;
+  const regionalPrices = offer.regionalPrices && typeof offer.regionalPrices === "object" ? offer.regionalPrices : {};
+  const euroRegions = new Set(["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PT", "SI", "SK"]);
+  const languageTags = Array.isArray(navigator.languages) && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || ""];
+  let region = "";
+  for (const languageTag of languageTags) {
+    try {
+      region = new Intl.Locale(languageTag).region || "";
+    } catch (_) { /* Keep checking browser languages. */ }
+    if (region) break;
+  }
+  const currency = region === "BR" || (!region && currentLanguage === "pt")
+    ? "BRL"
+    : euroRegions.has(region) ? "EUR" : "USD";
+  return regionalPrices[currency] || regionalPrices.USD || regionalPrices.EUR || regionalPrices.BRL || "—";
+}
+
+async function loadPremiumOffers() {
+  if (premiumBillingState.loading) return;
+  premiumBillingState.loading = true;
+  premiumBillingState.channel = billingChannel();
+  premiumBillingState.checkoutReady = false;
+  premiumBillingState.offers = [];
+  renderPremiumOffers();
+  setPremiumBillingStatus(premiumBillingCopy().loading);
+  try {
+    const server = await billingServerRequest("plans");
+    premiumBillingState.server = server;
+    if (premiumBillingState.channel === "apple") {
+      premiumBillingState.checkoutReady = Boolean(server.enabled && server.appleConfigured);
+      if (premiumBillingState.checkoutReady) {
+        const result = await capacitorPlugin("SonicSubscriptions").products();
+        premiumBillingState.offers = Array.isArray(result?.products) ? result.products : [];
+        if (!premiumBillingState.offers.length) throw new Error("apple_products_unavailable");
+      }
+    } else {
+      premiumBillingState.checkoutReady = Boolean(server.enabled && server.webConfigured);
+      if (premiumBillingState.checkoutReady) premiumBillingState.offers = Array.isArray(server.plans) ? server.plans : [];
+    }
+    if (!premiumBillingState.checkoutReady) {
+      premiumBillingState.offers = Array.isArray(server.previewPlans) ? server.previewPlans : [];
+    }
+    if (!premiumBillingState.offers.length) throw new Error("premium_products_unavailable");
+    renderPremiumOffers();
+    setPremiumBillingStatus(premiumBillingState.checkoutReady ? premiumBillingCopy().ready : premiumBillingCopy().preview);
+  } catch (_) {
+    premiumBillingState.offers = [];
+    premiumBillingState.checkoutReady = false;
+    renderPremiumOffers();
+    setPremiumBillingStatus(premiumBillingCopy().unavailable, true);
+  } finally {
+    premiumBillingState.loading = false;
+    const isApple = premiumBillingState.channel === "apple";
+    if (premiumRestoreBtn) premiumRestoreBtn.classList.toggle("hidden", !isApple || !premiumBillingState.checkoutReady);
+    const paidProvider = adminAccessState.membership?.provider;
+    if (premiumManageBtn) premiumManageBtn.classList.toggle("hidden", !["apple", "stripe"].includes(paidProvider));
+  }
+}
+
+async function openPremiumDialog() {
+  if (!premiumDialog) return;
+  renderPremiumDialogCopy();
+  if (!premiumDialog.open) {
+    premiumDialog.showModal();
+    window.requestAnimationFrame(() => premiumDialogTitle?.focus({ preventScroll: true }));
+  }
+  document.documentElement.classList.add("premium-dialog-open");
+  await loadPremiumOffers();
+}
+
+async function syncApplePurchase(result = {}) {
+  if (!result?.signedTransaction) return false;
+  await billingServerRequest("apple-transaction", {
+    method: "POST",
+    authenticated: true,
+    body: { signedTransaction: result.signedTransaction }
+  });
+  return true;
+}
+
+async function startPremiumPurchase(cadence = "monthly") {
+  if (premiumBillingState.busy || !premiumBillingState.checkoutReady) return;
+  if (!authHasOnlineSession()) {
+    persistBetaIntent("sonic_pro");
+    premiumDialog?.close();
+    await showAuthScreen();
+    return;
+  }
+  premiumBillingState.busy = true;
+  renderPremiumOffers();
+  setPremiumBillingStatus(premiumBillingCopy().processing);
+  try {
+    if (premiumBillingState.channel === "apple") {
+      const offer = premiumBillingState.offers.find((item) => item.cadence === cadence);
+      const userId = String(socialState.session?.user?.id || socialState.session?.user?.sub || "").trim();
+      if (!offer?.id || !userId) throw new Error("apple_purchase_context_missing");
+      const result = await capacitorPlugin("SonicSubscriptions").purchase({ productId: offer.id, appAccountToken: userId });
+      if (result?.cancelled) { setPremiumBillingStatus(premiumBillingCopy().canceled); return; }
+      if (result?.pending) { setPremiumBillingStatus(premiumBillingCopy().pending); return; }
+      await syncApplePurchase(result);
+    } else {
+      const result = await billingServerRequest("checkout", { method: "POST", authenticated: true, body: { cadence } });
+      if (!/^https:\/\//.test(String(result.url || ""))) throw new Error("checkout_url_missing");
+      window.location.assign(result.url);
+      return;
+    }
+    await refreshMembershipAccess();
+    setPremiumBillingStatus(premiumBillingCopy().success);
+    dailyRadarController?.open();
+  } catch (error) {
+    console.warn("Premium purchase could not be completed", error);
+    setPremiumBillingStatus(premiumBillingCopy().error, true);
+  } finally {
+    premiumBillingState.busy = false;
+    renderPremiumOffers();
+  }
+}
+
+async function restorePremiumPurchase() {
+  const plugin = capacitorPlugin("SonicSubscriptions");
+  if (premiumBillingState.busy || !plugin?.restore) return;
+  premiumBillingState.busy = true;
+  setPremiumBillingStatus(premiumBillingCopy().processing);
+  try {
+    const result = await plugin.restore();
+    if (!result?.active) throw new Error("no_active_purchase");
+    await syncApplePurchase(result);
+    await refreshMembershipAccess();
+    setPremiumBillingStatus(premiumBillingCopy().success);
+  } catch (_) {
+    setPremiumBillingStatus(premiumBillingCopy().error, true);
+  } finally {
+    premiumBillingState.busy = false;
+    renderPremiumOffers();
+  }
+}
+
+async function managePremiumSubscription() {
+  try {
+    if (adminAccessState.membership?.provider === "apple") {
+      const nativeSubscriptions = capacitorPlugin("SonicSubscriptions");
+      if (nativeSubscriptions?.manage) {
+        await nativeSubscriptions.manage();
+      } else {
+        window.open("https://apps.apple.com/account/subscriptions", "_blank", "noopener,noreferrer");
+      }
+      return;
+    }
+    if (adminAccessState.membership?.provider === "stripe") {
+      const result = await billingServerRequest("portal", { method: "POST", authenticated: true });
+      if (result.url) window.location.assign(result.url);
+    }
+  } catch (_) {
+    setPremiumBillingStatus(premiumBillingCopy().error, true);
+  }
+}
+
+async function handleMembershipPrimaryAction() {
+  if (membershipPrimaryBtn?.disabled) return;
+  if (!authHasOnlineSession()) {
+    persistBetaIntent("sonic_pro");
+    trackBetaEvent("premium_checkout_viewed", { source: "profile_membership", plan: "premium", signed_in: false }, { source: "profile_membership" });
+    await openPremiumDialog();
+    return;
+  }
+  if (hasPremiumAccess() && ["apple", "stripe"].includes(adminAccessState.membership?.provider)) {
+    await openPremiumDialog();
+    await managePremiumSubscription();
+    return;
+  }
+  persistBetaIntent("sonic_pro");
+  trackBetaEvent("premium_checkout_viewed", { source: "profile_membership", plan: "premium", signed_in: true }, { source: "profile_membership" });
+  await openPremiumDialog();
 }
 
 function aiImageRequiresTrustedUser() {
@@ -43683,7 +45260,8 @@ function recordDailyMusicAction(track, source = "discovery") {
 }
 
 function aiImageProfileKey() {
-  return spiritCollectibleUserSignature();
+  const milestoneLikes = collectibleMilestoneForLikes(totalLikedSongs()).likes;
+  return `${spiritCollectibleUserSignature()}::${milestoneLikes}`;
 }
 
 function aiImageCallsForProfile() {
@@ -43694,11 +45272,13 @@ function aiImageCallsForProfile() {
 
 function hasApiSpiritImageForCurrentProfile() {
   const userSignature = spiritCollectibleUserSignature();
+  const milestoneLikes = collectibleMilestoneForLikes(totalLikedSongs()).likes;
   const store = readSpiritCollectibleStore();
   return Object.values(store).some((item) => (
     item &&
     item.source === "api" &&
-    item.userSignature === userSignature
+    item.userSignature === userSignature &&
+    Number(item.milestoneLikes) === Number(milestoneLikes)
   ));
 }
 
@@ -43721,6 +45301,10 @@ function aiImageLimitReachedForProfile() {
 
 function aiImagePremiumLockedByLimit() {
   return aiImageEnabled() && !hasPremiumAccess() && aiImageLimitReachedForProfile();
+}
+
+function aiImagePremiumRequiredForCurrentUser() {
+  return aiImageEnabled() && aiImageRequiresTrustedUser() && !hasPremiumAccess();
 }
 
 function premiumAvatarLimitMessage() {
@@ -45432,7 +47016,11 @@ async function requestSpiritCollectibleFromApi(payload) {
     return "";
   }
   if (!aiImageAccessUnlockedForRequest() || aiImageLimitReachedForProfile()) {
-    spiritCollectibleLastApiError = t("spiritCollectibleErrorLoginRequired");
+    spiritCollectibleLastApiError = aiImagePremiumRequiredForCurrentUser()
+      ? t("spiritCollectibleErrorPremiumRequired")
+      : aiImageLimitReachedForProfile()
+      ? premiumAvatarLimitMessage()
+      : t("spiritCollectibleErrorLoginRequired");
     return "";
   }
   const token = String(window?.NEONPULSE_IMAGE_API_TOKEN || "").trim();
@@ -45941,6 +47529,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
     prompt,
     userSignature,
     profileSignature,
+    milestoneLikes,
     artParams,
     error: source === "error" ? (spiritCollectibleLastApiError || t("spiritCollectibleError")) : "",
     fallbackVersion: SPIRIT_LOCAL_COLLECTIBLE_VERSION
@@ -45986,6 +47575,7 @@ async function generateSpiritCollectibleAsset(spirit, spiritText, likes, milesto
       prompt,
       userSignature,
       profileSignature,
+      milestoneLikes,
       artParams
     };
   }
@@ -46010,6 +47600,11 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const likes = totalLikedSongs();
   if (likes < SPIRIT_UNLOCK_TARGET) {
     spiritCollectiblePanel.classList.add("hidden");
+    spiritCollectiblePanel.classList.remove("is-premium-locked");
+    if (spiritPremiumGate) {
+      spiritPremiumGate.classList.add("hidden");
+      spiritPremiumGate.setAttribute("aria-hidden", "true");
+    }
     if (spiritCollectibleDetails) spiritCollectibleDetails.textContent = "";
     if (spiritCollectibleRegenerateBtn) spiritCollectibleRegenerateBtn.disabled = true;
     if (spiritCollectibleShareInstagramBtn) spiritCollectibleShareInstagramBtn.disabled = true;
@@ -46032,6 +47627,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const renderCollectibleState = (asset = collectible) => {
     const hasImage = Boolean(asset?.imageUrl);
     const requestAvailable = canRequestAiImage();
+    const premiumLocked = aiImagePremiumRequiredForCurrentUser();
     const imageUrl = hasImage ? asset.imageUrl : "";
     const baseFilename = spiritCollectibleFilename(spirit.id, milestone.likes, imageUrl);
     const shareFilename = spiritStoryFilename(baseFilename);
@@ -46039,6 +47635,24 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     spiritCollectiblePanel.classList.remove("hidden");
     spiritCollectiblePanel.classList.toggle("awaiting-image", !hasImage);
     spiritCollectiblePanel.classList.toggle("is-generating", spiritCollectibleBusy);
+    spiritCollectiblePanel.classList.toggle("is-premium-locked", premiumLocked);
+    if (spiritPremiumGate) {
+      spiritPremiumGate.classList.toggle("hidden", !premiumLocked);
+      spiritPremiumGate.setAttribute("aria-hidden", premiumLocked ? "false" : "true");
+    }
+    if (spiritPremiumCta) {
+      spiritPremiumCta.textContent = t("spiritPremiumCta");
+      spiritPremiumCta.disabled = false;
+    }
+    if (spiritCollectiblePlaceholderKicker) {
+      spiritCollectiblePlaceholderKicker.textContent = t(premiumLocked ? "spiritPremiumPlaceholderKicker" : "spiritCollectiblePlaceholderKicker");
+    }
+    if (spiritCollectiblePlaceholderTitle) {
+      spiritCollectiblePlaceholderTitle.textContent = t(premiumLocked ? "spiritPremiumPlaceholderTitle" : "spiritCollectiblePlaceholderTitle");
+    }
+    if (spiritCollectiblePlaceholderText) {
+      spiritCollectiblePlaceholderText.textContent = t(premiumLocked ? "spiritPremiumPlaceholderText" : "spiritCollectiblePlaceholderText");
+    }
     if (spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: true });
     else if (!spiritCollectibleProgressTimer && !spiritCollectibleProgressSettling) updateSpiritCollectibleGenerationProgress({ active: false, percent: spiritCollectibleProgressValue });
     if (spiritCollectibleTitle) spiritCollectibleTitle.textContent = t("spiritCollectibleTitle");
@@ -46047,10 +47661,12 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
       } else if (!hasImage && asset?.error) {
         spiritCollectibleHint.textContent = asset.error;
+      } else if (premiumLocked && hasImage) {
+        spiritCollectibleHint.textContent = t("spiritPremiumExistingHint");
+      } else if (premiumLocked) {
+        spiritCollectibleHint.textContent = t("spiritCollectiblePremiumLocked");
       } else if (!hasImage && !aiImageAccessUnlockedForRequest()) {
-        spiritCollectibleHint.textContent = aiImageRequiresTrustedUser()
-          ? t("spiritCollectibleErrorLoginRequired")
-          : premiumAvatarLimitMessage();
+        spiritCollectibleHint.textContent = premiumAvatarLimitMessage();
       } else if (!hasImage && !requestAvailable) {
         spiritCollectibleHint.textContent = t("spiritCollectibleErrorUnavailable");
       } else if (!hasImage) {
@@ -46131,6 +47747,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
         ? t("spiritCollectibleRegenerateAgain")
         : t("spiritCollectibleRegenerate");
       spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || (!hasImage && !requestAvailable);
+      spiritCollectibleRegenerateBtn.classList.toggle("hidden", premiumLocked);
       if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
       else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
     }
@@ -46151,7 +47768,11 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
 
   renderCollectibleState(collectible);
 
-  if ((forceRegenerate || (autoGenerate && !collectible?.imageUrl)) && !spiritCollectibleBusy) {
+  if (
+    (forceRegenerate || (autoGenerate && !collectible?.imageUrl)) &&
+    !spiritCollectibleBusy &&
+    !aiImagePremiumRequiredForCurrentUser()
+  ) {
     const previousCollectible = collectible?.imageUrl ? collectible : null;
     let keptPreviousCollectible = false;
     const apiAvailableForAttempt = supportsAiCollectibleApi();
@@ -49337,6 +50958,249 @@ function generateDjModeJourney() {
   playUiSfx("confirm");
 }
 
+function dailyRadarCatalog() {
+  return catalog
+    .filter((track) => (
+      track &&
+      isTrackEligibleForRecommendation(track) &&
+      track.existenceVerified !== false &&
+      trackHasReadyPlaybackRoute(track) &&
+      !trackBlockedForStyle(track.style, track)
+    ))
+    .map((track) => ({
+      key: recommendationTrackKey(track),
+      artist: track.artist,
+      song: track.song,
+      style: track.style,
+      styleLabel: recommendationStyleDisplayLabel(track),
+      family: familyOf(track.style),
+      bpm: resolveBpmDisplay(track).range || track.bpm || "",
+      energy: energyLabelByValue(track.energy),
+      label: sanitizeLabel(track.label, track.artist, track.song)
+    }))
+    .filter((item) => item.key && item.artist && item.song && item.style);
+}
+
+function dailyRadarSignals() {
+  const likedStyles = likedTrackHistory.map((entry) => entry.style).filter(Boolean);
+  const dislikedStyles = dislikedTrackHistory.map((entry) => entry.style).filter(Boolean);
+  const preferredStyles = [
+    lastPrefs?.style || "",
+    styleEl?.value || "",
+    ...likedStyles.slice(0, 12)
+  ].filter(Boolean);
+  return {
+    likedStyles,
+    dislikedStyles,
+    preferredStyles,
+    // The radar owns its own 30-day repetition window. Global swipe history can
+    // contain most of the catalog, so only explicit preference decisions belong
+    // in this hard exclusion set.
+    knownTrackKeys: [
+      ...likedTrackHistory.map((entry) => entry.key),
+      ...dislikedTrackHistory.map((entry) => entry.key)
+    ].filter(Boolean),
+    blockedTrackKeys: dislikedTrackHistory.map((entry) => entry.key).filter(Boolean),
+    blockedArtists: Array.from(blockedArtistsMemory)
+  };
+}
+
+async function dailyRadarAccess() {
+  if (authHasOnlineSession() && !adminAccessState.verified) await refreshAdminAccess({ force: true });
+  if (hasPremiumAccess()) return "premium";
+  if (!isNativeAppRuntime() && !isAppStoreRuntimeMode() && (isLocalDevelopmentHost() || window.location.protocol === "file:")) return "preview";
+  return "unavailable";
+}
+
+async function dailyRadarCloudRequest(method = "GET", state = null) {
+  if (!authHasOnlineSession()) return null;
+  const accessToken = await currentApiAccessToken();
+  if (!accessToken) throw new Error("login_required");
+  const response = await fetch(resolveAppApiEndpoint("/api/daily-radar"), {
+    method,
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Sonic-Auth-Token": accessToken
+    },
+    body: method === "PUT" ? JSON.stringify({ state }) : undefined
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload?.ok) throw new Error(String(payload?.error || `daily_radar_http_${response.status}`));
+  return method === "GET" ? payload.state || null : true;
+}
+
+function trackFromDailyRadarItem(item = {}) {
+  return catalog.find((track) => recommendationTrackKey(track) === item.key) || null;
+}
+
+function openDailyRadarTrack(item = {}) {
+  const track = trackFromDailyRadarItem(item);
+  if (!track) return false;
+  const prefs = normalizeRecommendationPrefs({
+    style: selectableSwipeStyle(track.style || ""),
+    context: "",
+    energy: "",
+    bpm: "",
+    vocals: ""
+  });
+  const presented = restoreRecommendationSurfaceSnapshot({ track, prefs, discovery: null }, { restartPreview: true });
+  if (presented) {
+    trackRecommendationEvent("daily_radar_track_opened", track, prefs, { source: "daily_radar" });
+    trackBetaEvent("daily_radar_opened", { trackKey: recommendationTrackKey(track), lane: item.lane || "" }, { source: "daily_radar" });
+  }
+  return presented;
+}
+
+function recordDailyRadarFeedback(item = {}, action = "", previous = "") {
+  const track = trackFromDailyRadarItem(item);
+  if (!track || previous === action) return;
+  if (action === "like") {
+    if (!consumeDailyLike()) return;
+    userStats.likedSongs += 1;
+    registerTrackFeedback(track, true, { source: "daily_radar_like" });
+    registerSpiritSignal(track.style, 1.2);
+  } else if (action === "known") {
+    const title = normalizeTitle(track.song || "");
+    if (title) knownTrackTitlesMemory.add(title);
+    markArtistKnownStatus(track.artist);
+  } else if (action === "pass") {
+    userStats.skipped += 1;
+    registerTrackFeedback(track, false, { source: "daily_radar_pass", reason: "taste_mismatch" });
+  }
+  updateStats();
+  saveProgress();
+  trackRecommendationEvent("daily_radar_feedback", track, lastPrefs || {}, { source: "daily_radar", action });
+}
+
+function openPremiumFromDailyRadar() {
+  trackBetaEvent("premium_cta_clicked", { source: "daily_radar", signedIn: authHasOnlineSession() }, { source: "daily_radar" });
+  persistBetaIntent("sonic_pro");
+  void openPremiumDialog();
+}
+
+function ensureDailyRadarReady() {
+  if (dailyRadarController) { dailyRadarController.refresh(); return; }
+  dailyRadarController = window.SonicDailyRadarUi?.create({
+    root: document.getElementById("dailyRadarPanel"),
+    getLanguage: () => currentLanguage,
+    getIdentity: () => !publicVisitorMode && isEphemeralSession() ? "radar:device-preview" : recommendationSessionIdentityKey(currentAuthUser),
+    getStorageKey: () => !publicVisitorMode && isEphemeralSession() ? `${DAILY_RADAR_STORAGE_KEY}:device-preview` : storageKeyForSession(DAILY_RADAR_STORAGE_KEY),
+    getCatalog: dailyRadarCatalog,
+    getSignals: dailyRadarSignals,
+    getAccess: dailyRadarAccess,
+    loadCloud: () => dailyRadarCloudRequest("GET"),
+    saveCloud: (state) => dailyRadarCloudRequest("PUT", state),
+    onOpen: openDailyRadarTrack,
+    onFeedback: recordDailyRadarFeedback,
+    onUpgrade: openPremiumFromDailyRadar
+  }) || null;
+}
+
+function setupDailyDjReminderRouting() {
+  const native = isNativeIosRuntime() ? capacitorPlugin("DailyDjReminder") : null;
+  if (!native?.addListener) return;
+  void Promise.resolve(native.addListener("openDailySelection", () => {
+    dailyDjReminderLaunchPending = true;
+    if (!appContent?.classList.contains("hidden")) setActiveAppTab("djs", { focusPanel: true });
+  })).catch(() => {});
+}
+
+function dailyDjCatalog() {
+  return ensureDjSetRecommendationSeeds()
+    .filter((seed) => !djSeedHasNonElectronicConflict(seed) && !djSeedIsSearchFallback(seed) && !djSeedPreviewUnavailable(seed))
+    .map((seed) => ({
+      key: djRecommendationKey(seed), artist: seed.name, title: seed.setTitle,
+      url: seed.setUrl, style: seed.style, styleLabel: seed.subgenre || seed.style,
+      family: DJ_PSY_SET_LANES.has(seed.lane) ? "psy" : DJ_TECHNO_SET_LANES.has(seed.lane) ? "techno-house" : "other",
+      platform: seed.platform
+    })).filter((item) => window.SonicDailyDjs?.safeSetUrl(item.url));
+}
+
+function dailyDjSignals() {
+  const catalog = ensureDjSetRecommendationSeeds();
+  const liked = catalog.filter((seed) => likedDjRecommendationKeys.has(djRecommendationKey(seed)));
+  const passed = catalog.filter((seed) => passedDjRecommendationKeys.has(djRecommendationKey(seed)));
+  return {
+    likedStyles: [...likedTrackHistory.map((entry) => entry.style), ...liked.map((seed) => seed.style)],
+    knownArtists: [...knownArtistsMemory, ...liked.map((seed) => seed.name)],
+    blockedArtists: [...blockedArtistsMemory, ...passed.map((seed) => seed.name)]
+  };
+}
+
+function recordDailyDjFeedback(item = {}, action = "", previous = "") {
+  if (!item?.key || action === previous) return;
+  const seed = ensureDjSetRecommendationSeeds().find((entry) => djRecommendationKey(entry) === item.key) || {
+    id: item.key,
+    name: item.artist,
+    setTitle: item.title,
+    style: item.style,
+    subgenre: item.styleLabel
+  };
+  const key = djRecommendationKey(seed);
+  likedDjRecommendationKeys.delete(key);
+  passedDjRecommendationKeys.delete(key);
+  if (action === "like") likedDjRecommendationKeys.add(key);
+  if (action === "pass") passedDjRecommendationKeys.add(key);
+  recordDjRecommendationActivity(seed, action || "undo", { source: "daily", persist: false });
+  saveDjRecommendationMemory();
+  renderDjRadarSummary();
+}
+
+async function dailyDjPreviewAccess() {
+  // Production access comes from a verified server-side membership. Local web
+  // and iOS Debug keep a no-charge preview for product development.
+  if (authHasOnlineSession() && !adminAccessState.verified) await refreshAdminAccess({ force: true });
+  if (hasPremiumAccess()) return "premium";
+  if (!isNativeAppRuntime() && !isAppStoreRuntimeMode() && (isLocalDevelopmentHost() || window.location.protocol === "file:")) return "preview";
+  const native = capacitorPlugin("DailyDjReminder");
+  if (isNativeIosRuntime() && native?.status) {
+    try { return (await native.status()).developmentPreview === true ? "preview" : "unavailable"; }
+    catch (_) { return "unavailable"; }
+  }
+  return "unavailable";
+}
+
+function ensureDailyDjRecommendationReady() {
+  if (dailyDjController) { dailyDjController.refresh(); return; }
+  const native = isNativeIosRuntime() ? capacitorPlugin("DailyDjReminder") : null;
+  dailyDjController = window.SonicDailyDjsUi?.create({
+    root: document.getElementById("dailyDjPanel"),
+    getLanguage: () => currentLanguage,
+    // The explicitly opened daily preview has its own device profile. Anonymous
+    // music discovery remains ephemeral; signed-in profiles never share this key.
+    getIdentity: () => !publicVisitorMode && isEphemeralSession() ? "daily:device-preview" : recommendationSessionIdentityKey(currentAuthUser),
+    getStorageKey: () => !publicVisitorMode && isEphemeralSession() ? `${DAILY_DJ_STORAGE_KEY}:device-preview` : storageKeyForSession(DAILY_DJ_STORAGE_KEY),
+    getCatalog: dailyDjCatalog,
+    getSignals: dailyDjSignals,
+    getAccess: dailyDjPreviewAccess,
+    getLikeUsage: renderDailyLikeQuota,
+    consumeLike: consumeDailyLike,
+    onFeedback: recordDailyDjFeedback,
+    onExternalOpen: () => stopAllActivePlayback({ reason: "daily_dj_external_source" }),
+    onOpen: (item) => {
+      const seed = ensureDjSetRecommendationSeeds().find((entry) => djRecommendationKey(entry) === item.key);
+      if (!seed || djSeedPreviewUnavailable(seed)) return false;
+      currentDjIntent = djIntentFromFilterValue("");
+      pendingDjIntentFamily = "";
+      if (djDiscoverySceneFilter) djDiscoverySceneFilter.value = "";
+      renderDjIntentUi();
+      selectDjRecommendation(seed, { source: "daily" });
+      djPreviewTitle?.setAttribute("tabindex", "-1");
+      djPreviewTitle?.focus({ preventScroll: true });
+      djPreviewTitle?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+      return true;
+    },
+    reminder: native?.status ? {
+      status: () => native.status(),
+      configure: (time, language) => native.configure({ time, language }),
+      cancel: () => native.cancel()
+    } : null
+  }) || null;
+}
+
 function djRecommendationKey(seed = {}) {
   const safeSeed = seed || {};
   return normalize(safeSeed.id || `${safeSeed.name || ""}::${safeSeed.setTitle || ""}`);
@@ -50153,7 +52017,8 @@ function saveDjRecommendationMemory() {
     localStorage.setItem(djRecommendationStorageKey(), JSON.stringify({
       liked: Array.from(likedDjRecommendationKeys),
       passed: Array.from(passedDjRecommendationKeys),
-      recent: recentDjRecommendationKeys
+      recent: recentDjRecommendationKeys,
+      history: sanitizeDjRecommendationHistory(djRecommendationHistory)
     }));
   } catch (_err) {
     // A aba segue funcional mesmo se o navegador bloquear localStorage.
@@ -50168,11 +52033,93 @@ function loadDjRecommendationMemory() {
     likedDjRecommendationKeys = new Set(Array.isArray(parsed.liked) ? parsed.liked.map(String) : []);
     passedDjRecommendationKeys = new Set(Array.isArray(parsed.passed) ? parsed.passed.map(String) : []);
     recentDjRecommendationKeys = Array.isArray(parsed.recent) ? parsed.recent.map(String).slice(0, 150) : [];
+    djRecommendationHistory = sanitizeDjRecommendationHistory(parsed.history);
   } catch (_err) {
     likedDjRecommendationKeys = new Set();
     passedDjRecommendationKeys = new Set();
     recentDjRecommendationKeys = [];
+    djRecommendationHistory = [];
   }
+}
+
+function sanitizeDjRecommendationHistory(values = []) {
+  if (!Array.isArray(values)) return [];
+  const allowedActions = new Set(["view", "like", "pass", "known", "undo"]);
+  const seen = new Set();
+  return values
+    .map((value) => {
+      const key = normalize(value?.key || "");
+      const action = String(value?.action || "").trim().toLowerCase();
+      const parsedDate = new Date(value?.at || "");
+      if (!key || !allowedActions.has(action) || Number.isNaN(parsedDate.getTime())) return null;
+      const at = parsedDate.toISOString();
+      return {
+        id: String(value?.id || `${at}::${action}::${key}`).slice(0, 240),
+        key,
+        artist: normalizeInlineText(value?.artist || "").slice(0, 120),
+        setTitle: normalizeInlineText(value?.setTitle || "").slice(0, 180),
+        style: String(value?.style || "").trim().slice(0, 80),
+        subgenre: normalizeInlineText(value?.subgenre || "").slice(0, 100),
+        action,
+        source: normalizeInlineText(value?.source || "manual").slice(0, 40),
+        at
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime())
+    .filter((entry) => {
+      if (seen.has(entry.id)) return false;
+      seen.add(entry.id);
+      return true;
+    })
+    .slice(0, WEEKLY_DJ_ACTIVITY_LIMIT);
+}
+
+function djRecommendationEventSeed(seed = {}) {
+  return {
+    key: djRecommendationKey(seed),
+    artist: seed?.name || seed?.artist || "",
+    setTitle: seed?.setTitle || seed?.title || "",
+    style: seed?.style || "",
+    subgenre: seed?.subgenre || seed?.styleLabel || ""
+  };
+}
+
+function weeklyHighlightsLocalDayKey(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function recordDjRecommendationActivity(seed = {}, action = "view", { source = "manual", persist = true } = {}) {
+  const eventSeed = djRecommendationEventSeed(seed);
+  if (!eventSeed.key) return false;
+  const normalizedAction = String(action || "").trim().toLowerCase();
+  if (!["view", "like", "pass", "known", "undo"].includes(normalizedAction)) return false;
+  const now = new Date();
+  if (normalizedAction === "view") {
+    const today = weeklyHighlightsLocalDayKey(now);
+    const alreadyRecorded = djRecommendationHistory.some((entry) => (
+      entry.key === eventSeed.key && entry.action === "view" && weeklyHighlightsLocalDayKey(entry.at) === today
+    ));
+    if (alreadyRecorded) return false;
+  }
+  const at = now.toISOString();
+  const randomPart = window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
+  djRecommendationHistory = sanitizeDjRecommendationHistory([{
+    ...eventSeed,
+    id: `${at}::${normalizedAction}::${eventSeed.key}::${randomPart}`,
+    action: normalizedAction,
+    source,
+    at
+  }, ...djRecommendationHistory]);
+  if (persist) saveDjRecommendationMemory();
+  renderWeeklyHighlights();
+  queueWeeklyHighlightsCloudSync();
+  return true;
 }
 
 function renderDjRadarSummary() {
@@ -50319,11 +52266,27 @@ function djPreviewBlockedCopy(code = 0) {
 }
 
 async function recoverDjPreviewAfterYoutubeError(code = 0, failedVideoId = "") {
-  if (djYoutubeRecoveryBusy || !currentDjRecommendation) return false;
+  if (!currentDjRecommendation) return false;
   const seed = currentDjRecommendation;
   const key = djRecommendationKey(seed);
   const activeVideoId = youtubeVideoIdFromUrl(seed?.setUrl || "");
   if (failedVideoId && activeVideoId && failedVideoId !== activeVideoId) return false;
+
+  // A published daily pick must not silently turn into a different artist.
+  // Keep the chosen card and its source link; manual discovery retains recovery.
+  if (currentDjRecommendationSource === "daily") {
+    if (key && Number(code) !== 153) unavailableDjPreviewKeys.add(key);
+    const hint = sonicTinyCopy(
+      "Mantivemos o DJ escolhido. Use Abrir set para conferir o vídeo na fonte.",
+      "Your chosen DJ is unchanged. Use Open set to check the video at its source.",
+      "Conservamos el DJ elegido. Usa Abrir set para consultar el video en su fuente."
+    );
+    setDjPreviewRecovery({ visible: true, tone: "blocked", title: djPreviewBlockedCopy(code), hint });
+    if (djPreviewMeta) djPreviewMeta.textContent = `${seed.name} • ${djPreviewBlockedCopy(code)}`;
+    if (djSwipeStatus) djSwipeStatus.textContent = hint;
+    return false;
+  }
+  if (djYoutubeRecoveryBusy) return false;
 
   if (Number(code) === 153) {
     setDjPreviewRecovery({
@@ -50353,7 +52316,7 @@ async function recoverDjPreviewAfterYoutubeError(code = 0, failedVideoId = "") {
   }
 
   await waitMs(420);
-  if (currentDjRecommendation !== seed) {
+  if (currentDjRecommendation !== seed || currentDjRecommendationSource === "daily") {
     djYoutubeRecoveryBusy = false;
     return false;
   }
@@ -50397,7 +52360,9 @@ async function renderDjYoutubePreview(seed = currentDjRecommendation, videoId = 
     visible: true,
     tone: "loading",
     title: sonicTinyCopy("Verificando o player", "Checking the player", "Verificando el player"),
-    hint: sonicTinyCopy("Se este vídeo estiver bloqueado, outro set entra automaticamente.", "If this video is blocked, another set will load automatically.", "Si este video está bloqueado, otro set entrará automáticamente.")
+    hint: currentDjRecommendationSource === "daily"
+      ? sonicTinyCopy("Se o vídeo não abrir, use o link da fonte. O DJ escolhido será mantido.", "If the video does not open, use the source link. Your chosen DJ will stay the same.", "Si el video no abre, usa el enlace de la fuente. Se conservará el DJ elegido.")
+      : sonicTinyCopy("Se este vídeo estiver bloqueado, outro set entra automaticamente.", "If this video is blocked, another set will load automatically.", "Si este video está bloqueado, otro set entrará automáticamente.")
   });
 
   try {
@@ -50576,10 +52541,13 @@ function renderDjRecommendation(seed = currentDjRecommendation) {
   renderDjRadarSummary();
 }
 
-function selectDjRecommendation(seed = null) {
+function selectDjRecommendation(seed = null, { source = "manual" } = {}) {
   stopAllActivePlayback({ reason: "dj_recommendation_change" });
   currentDjRecommendation = seed || pickDjRecommendation();
+  currentDjRecommendationSource = source;
+  if (source === "daily" && djSwipeStatus) djSwipeStatus.textContent = "";
   rememberDjRecommendation(currentDjRecommendation);
+  recordDjRecommendationActivity(currentDjRecommendation, "view", { source, persist: false });
   saveDjRecommendationMemory();
   renderDjRecommendation(currentDjRecommendation);
 }
@@ -50592,7 +52560,8 @@ function ensureDjDiscoveryReady({ force = false } = {}) {
   }
   renderDjIntentUi();
   const poolKeys = new Set(filteredDjRecommendationPool().map(djRecommendationKey));
-  if (force || !currentDjRecommendation || !poolKeys.has(djRecommendationKey(currentDjRecommendation))) {
+  const keepDailySelection = currentDjRecommendationSource === "daily" && currentDjRecommendation;
+  if (force || !currentDjRecommendation || (!keepDailySelection && !poolKeys.has(djRecommendationKey(currentDjRecommendation)))) {
     selectDjRecommendation(pickDjRecommendation());
     return;
   }
@@ -50601,6 +52570,7 @@ function ensureDjDiscoveryReady({ force = false } = {}) {
 
 async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
   if (djSwipeBusy || !currentDjRecommendation || !djSwipeCard) return;
+  if (direction === "like" && !consumeDailyLike()) return;
   stopAllActivePlayback({ reason: "dj_swipe" });
   const seed = currentDjRecommendation;
   const key = djRecommendationKey(seed);
@@ -50615,6 +52585,7 @@ async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
     if (direction === "like") {
       likedDjRecommendationKeys.add(key);
       passedDjRecommendationKeys.delete(key);
+      recordDjRecommendationActivity(seed, "like", { source: currentDjRecommendationSource, persist: false });
       if (djSwipeStatus) {
         djSwipeStatus.textContent = sonicTinyCopy(
           `${seed.name} salvo no radar de DJs.`,
@@ -50627,6 +52598,8 @@ async function completeDjSwipe(direction, triggerEl = djSwipeCard) {
       showToast(sonicTinyCopy(`${seed.name} salvo nos DJs`, `${seed.name} saved to DJs`, `${seed.name} guardado en DJs`));
     } else {
       passedDjRecommendationKeys.add(key);
+      likedDjRecommendationKeys.delete(key);
+      recordDjRecommendationActivity(seed, "pass", { source: currentDjRecommendationSource, persist: false });
       if (djSwipeStatus) {
         djSwipeStatus.textContent = sonicTinyCopy(
           "Passei este set e trouxe outro DJ.",
@@ -52072,6 +54045,26 @@ function pickInstantOpeningTrack() {
       })
     };
   }
+  const curatedOpening = CURATED_FRIENDLY_OPENING_TRACKS.find((track) => (
+    track &&
+    isTrackEligibleForRecommendation(track) &&
+    trackAllowedForFriendlyFirstImpression(track) &&
+    trackHasInstantPlaybackRoute(track) &&
+    !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles) &&
+    !recommendationArtistBlockedForPresentation(track, null)
+  ));
+  if (curatedOpening) {
+    return {
+      track: curatedOpening,
+      prefs: normalizeRecommendationPrefs({
+        style: curatedOpening.style,
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      })
+    };
+  }
   const rankedStyles = getAllSelectableStyles()
     .filter((style) => style && FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style))
     .sort((a, b) => openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a))
@@ -52344,6 +54337,16 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       setInitialRecommendationBusy(true);
       trackFirstRecommendationEvent("first_recommendation_requested", source, { retry: isRetry });
       if (isRetry) trackFirstRecommendationEvent("first_recommendation_retry", source);
+
+      // The curated opening deck is already part of the shipped bundle. Give
+      // it a second, immediate chance before any catalog or rotation wait.
+      if (tryRunInstantPrimaryRecommendation()) {
+        firstRecommendationCompleted = true;
+        trackFirstRecommendationEvent("first_recommendation_ready", source, {
+          catalogState: "instant_curated"
+        });
+        return true;
+      }
 
       readiness = await waitForMinimumCatalogReady();
       await openingSlotRequest;
@@ -53199,6 +55202,7 @@ function animateSwipeCommit(element, direction = "like") {
 async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   const animatedEl = swipeAnimationElement(triggerEl);
   if (swipeFeedbackBusy || !currentRecommendation || !animatedEl) return;
+  if (direction === "like" && !consumeDailyLike()) return;
   const interactionStartedAt = discoveryInteractionNow();
   const previousTrackKey = recommendationTrackKey(currentRecommendation);
   swipeFeedbackBusy = true;
@@ -55625,6 +57629,7 @@ function rememberLikedTrack(track, source = "liked") {
   ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
   renderLikedTrackHistory();
   renderDislikedTrackHistory();
+  renderWeeklyHighlights();
   queueSocialSync("liked_track");
 }
 
@@ -55641,6 +57646,7 @@ function rememberDislikedTrack(track, source = "disliked") {
   ].slice(0, LIKED_TRACK_HISTORY_LIMIT);
   renderLikedTrackHistory();
   renderDislikedTrackHistory();
+  renderWeeklyHighlights();
   queueSocialSync("disliked_track");
 }
 
@@ -55745,6 +57751,7 @@ function removeLikedTrackFromHistory(trackKey = "", options = {}) {
   likedTrackHistory = likedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (likedTrackHistory.length === before) return false;
   if (options.render !== false) renderLikedTrackHistory();
+  if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
   if (!options.silent) showToast(t("summaryLikedTrackRemoved"));
   return true;
@@ -55754,6 +57761,7 @@ function clearLikedTrackHistory() {
   if (!likedTrackHistory.length) return;
   likedTrackHistory = [];
   renderLikedTrackHistory();
+  renderWeeklyHighlights();
   saveProgress();
   queueSocialSync("profile");
   showToast(t("summaryLikedTracksCleared"));
@@ -55846,6 +57854,7 @@ function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
   dislikedTrackHistory = dislikedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (dislikedTrackHistory.length === before) return false;
   if (options.render !== false) renderDislikedTrackHistory();
+  if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
   if (!options.silent) showToast(t("summaryDislikedTrackRemoved"));
   return true;
@@ -55855,6 +57864,7 @@ function clearDislikedTrackHistory() {
   if (!dislikedTrackHistory.length) return;
   dislikedTrackHistory = [];
   renderDislikedTrackHistory();
+  renderWeeklyHighlights();
   saveProgress();
   showToast(t("summaryDislikedTracksCleared"));
 }
@@ -58069,6 +60079,8 @@ function renderSocialSessionState({ configured = socialConfigReady(), signed = B
 function renderSocialUi(options = {}) {
   syncAdminAnalyticsAccess();
   if (authHasOnlineSession()) void refreshAdminAccess();
+  renderMembershipUi();
+  renderInitialTasteCalibrationProfileCard();
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
     socialProfileCard.classList.add("hidden");
@@ -58399,6 +60411,7 @@ async function socialSignOut() {
   }
   socialStoreSession(null);
   socialState.profile = null;
+  socialState.tasteSnapshot = null;
   socialState.feed = [];
   socialSetStatus("Voce saiu do perfil social.");
   renderSocialUi({ preserveStatus: true });
@@ -58437,6 +60450,7 @@ async function initSocialMvp() {
     ensureOnlineSocialUserSession();
     await refreshAdminAccess({ force: true });
     await loadSocialProfile({ silent: true });
+    await restoreWeeklyHighlightsFromCloud({ silent: true });
     await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
   }
   renderSocialUi({ preserveStatus: handledAuthRedirect });
@@ -58534,6 +60548,7 @@ function updateStats() {
   renderLikedTrackHistory();
   renderDislikedTrackHistory();
   renderProfileArtistRecommendations();
+  renderWeeklyHighlights();
   renderSummaryTags(summaryFiveStarTracks, fiveStarTracks, t("summaryEmptyFiveStarTracks"));
   renderSummaryTags(summaryKnownArtists, knownArtistsTop, t("summaryEmptyKnown"));
   renderSummaryTags(summaryLikedArtists, likedArtistsTop, t("summaryEmptyLiked"));
@@ -60638,6 +62653,64 @@ languageButtons.forEach((button) => {
 
 bind(usageGuideContinueBtn, "click", continueFromUsageGuide);
 bind(showUsageGuideBtn, "click", () => showUsageGuideScreen({ returnTo: "app" }));
+bind(tasteCalibrationForm, "submit", (event) => event.preventDefault());
+tasteCalibrationOptionButtons.forEach((button) => {
+  bind(button, "click", () => {
+    if (initialTasteCalibrationBusy) return;
+    const field = String(button.dataset.tasteField || "");
+    const value = String(button.dataset.tasteValue || "");
+    const currentCalibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
+    const nextValue = field === "exploration" && currentCalibration[field] === value ? "" : value;
+    initialTasteCalibrationState = normalizeInitialTasteCalibration({
+      ...currentCalibration,
+      [field]: nextValue,
+      status: "pending",
+      updatedAt: new Date().toISOString()
+    });
+    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
+    renderInitialTasteCalibrationStep();
+    playUiSfx("confirm");
+    if (tasteCalibrationNextBtn && !tasteCalibrationNextBtn.disabled) {
+      tasteCalibrationNextBtn.focus({ preventScroll: true });
+    }
+  });
+});
+bind(tasteCalibrationBackBtn, "click", () => {
+  if (initialTasteCalibrationBusy || initialTasteCalibrationStep <= 0) return;
+  initialTasteCalibrationStep -= 1;
+  if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
+  renderInitialTasteCalibrationStep();
+  resetInitialTasteCalibrationViewport();
+  focusInitialTasteCalibrationChoice();
+});
+bind(tasteCalibrationSkipBtn, "click", skipOrCancelInitialTasteCalibration);
+bind(tasteCalibrationNextBtn, "click", () => {
+  if (initialTasteCalibrationBusy) return;
+  const calibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
+  const requiredField = ["experience", "goal", "mood"][initialTasteCalibrationStep];
+  if (requiredField && !calibration[requiredField]) {
+    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().required;
+    focusInitialTasteCalibrationChoice();
+    return;
+  }
+  if (initialTasteCalibrationStep < 3) {
+    initialTasteCalibrationStep += 1;
+    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
+    renderInitialTasteCalibrationStep();
+    resetInitialTasteCalibrationViewport();
+    focusInitialTasteCalibrationChoice();
+    return;
+  }
+  void completeInitialTasteCalibration();
+});
+bind(tasteCalibrationReopenBtn, "click", () => {
+  if (!initialTasteCalibrationEligibleSession() || !authHasOnlineSession()) return;
+  showInitialTasteCalibration({
+    mode: "recalibrate",
+    calibration: readInitialTasteCalibrationLocal(),
+    targetTab: "profile"
+  });
+});
 bind(authResumeBtn, "click", resumeStoredUserSession);
 bind(authLoginBtn, "click", loginWithCredentials);
 bind(authGuestBtn, "click", continueWithoutLogin);
@@ -60657,6 +62730,36 @@ bind(profileBackupImportInput, "change", (event) => {
   void importProfileBackupFile(file);
 });
 bind(profileDeleteDataBtn, "click", resetAppAsNewUser);
+bind(membershipPrimaryBtn, "click", () => {
+  void handleMembershipPrimaryAction();
+});
+bind(membershipRefreshBtn, "click", () => {
+  void refreshMembershipAccess();
+});
+bind(weeklyHighlightsPrimaryBtn, "click", () => {
+  if (!hasPremiumAccess()) {
+    void openPremiumDialog();
+    return;
+  }
+  setActiveAppTab("djs", { focusPanel: true });
+});
+bind(weeklyHighlightsShareBtn, "click", () => {
+  void shareWeeklyHighlights();
+});
+bind(premiumDialog, "close", () => {
+  document.documentElement.classList.remove("premium-dialog-open");
+});
+bind(premiumOfferGrid, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-premium-cadence]") : null;
+  if (!target || target.disabled) return;
+  void startPremiumPurchase(target.dataset.premiumCadence || "monthly");
+});
+bind(premiumRestoreBtn, "click", () => {
+  void restorePremiumPurchase();
+});
+bind(premiumManageBtn, "click", () => {
+  void managePremiumSubscription();
+});
 bind(socialGoogleBtn, "click", () => {
   void socialSignInWithGoogle();
 });
@@ -60779,6 +62882,15 @@ bind(spiritCollectibleRegenerateBtn, "click", async () => {
     forceRegenerate: hasReadyImage,
     autoGenerate: true
   });
+});
+bind(spiritPremiumCta, "click", async () => {
+  trackBetaEvent("premium_checkout_viewed", {
+    source: "sound_system_ai",
+    plan: "premium",
+    signed_in: authHasOnlineSession()
+  }, { source: "sound_system_ai" });
+  persistBetaIntent("sonic_pro");
+  await openPremiumDialog();
 });
 bind(spiritCollectibleShareInstagramBtn, "click", async () => {
   await shareSpiritCollectibleToInstagram();
@@ -61515,6 +63627,7 @@ bind(starRating, "keydown", async (event) => {
 
 bind(previewLikeBtn, "click", async () => {
   if (!currentRecommendation) return;
+  if (!consumeDailyLike()) return;
   userStats.likedSongs += 1;
   registerTrackFeedback(currentRecommendation, true, { rewardPreview: true, source: "preview_like" });
   registerSpiritSignal(currentRecommendation.style, 1.2);
@@ -61672,6 +63785,7 @@ bind(imageIssueBtn, "click", async () => {
 
 bind(noveltyLikedBtn, "click", async () => {
   if (!currentRecommendation) return;
+  if (!consumeDailyLike()) return;
   userStats.likedSongs += 1;
   registerTrackFeedback(currentRecommendation, true, { source: "novelty_like" });
   registerSpiritSignal(currentRecommendation.style, 1.1);
@@ -61901,6 +64015,7 @@ bind(window, "pointercancel", (event) => {
 
 bind(likeSongBtn, "click", async () => {
   if (!currentRecommendation) return;
+  if (!consumeDailyLike()) return;
   userStats.likedSongs += 1;
   registerTrackFeedback(currentRecommendation, true, { source: "button_like" });
   registerSpiritSignal(currentRecommendation.style, 1.25);
@@ -61918,6 +64033,7 @@ bind(likeSongBtn, "click", async () => {
 
 bind(likeArtistBtn, "click", async () => {
   if (!currentRecommendation) return;
+  if (!consumeDailyLike()) return;
   userStats.likedArtists += 1;
   recordSwipeTrainingSignal({ source: "artist_like" });
   boost(adaptiveModel.likedArtists, currentRecommendation.artist, 1.4);
@@ -61986,6 +64102,7 @@ bind(likeDiscoveryBtn, "click", async () => {
     if (feedbackMessage) feedbackMessage.textContent = t("enableDiscoveryMode");
     return;
   }
+  if (!consumeDailyLike()) return;
   userStats.likedDiscoveries += 1;
   recordSwipeTrainingSignal({ source: "discovery_like" });
   registerDiscoveredArtist(currentDiscovery.name);
@@ -62321,6 +64438,7 @@ async function bootSonicSearch() {
   loadLanguage();
   void trackBetaAppSession();
   setupNativeSocialAuthBridge();
+  setupDailyDjReminderRouting();
   loadDjRecommendationMemory();
   bootstrapAudio();
   const pendingSocialAuthRedirect = hasPendingSocialAuthRedirect();
@@ -62336,7 +64454,12 @@ async function bootSonicSearch() {
     setActiveAppTab(requestedAppTabFromUrl("discover"));
     void ensureSocialMvpReady();
   } else if (!applySharedSpiritPayload(sharedSpiritPayload)) {
-    if (shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) {
+    if (urlRequestsTasteCalibrationQa()) {
+      const session = createTestUserSession();
+      activateUserSession(session);
+      showInitialTasteCalibration({ mode: "initial", calibration: {} });
+    }
+    else if (shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) {
       showBetaGateScreen();
       if (betaUrlAccess.attempted && !betaUrlAccess.ok) {
         setBetaGateStatus(t("betaAccessInvalid"), "error");

@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260811iosaudio2" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260909weeklyhighlights1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,9 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260811iosaudio2" />
+    <link rel="stylesheet" href="styles.min.css?v=20260909weeklyhighlights1" />
+    <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
+    <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -140,6 +142,7 @@
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#appContent">Pular para o conteúdo principal</a>
     <div class="floating-sonic-layer" aria-hidden="true">
       <span class="sonic-note note-a">♪</span>
       <span class="sonic-note note-b">♫</span>
@@ -527,6 +530,91 @@
       </div>
     </section>
 
+    <section id="tasteCalibrationScreen" class="welcome-screen taste-calibration-screen hidden" tabindex="-1" aria-labelledby="tasteCalibrationTitle" aria-describedby="tasteCalibrationIntro">
+      <form id="tasteCalibrationForm" class="welcome-card taste-calibration-card" novalidate>
+        <header class="taste-calibration-head">
+          <div class="brand-logo-wrap" aria-hidden="true">
+            <img class="brand-logo" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" decoding="async" />
+          </div>
+          <p id="tasteCalibrationKicker" class="brand-kicker">CALIBRAR MEU SONIC</p>
+          <h1 id="tasteCalibrationTitle">Vamos acertar sua primeira descoberta</h1>
+          <p id="tasteCalibrationIntro" class="muted">Quatro respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.</p>
+          <div id="tasteCalibrationProgress" class="taste-calibration-progress" role="progressbar" aria-labelledby="tasteCalibrationProgressLabel" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-valuetext="Pergunta 1 de 4">
+            <span id="tasteCalibrationProgressFill"></span>
+          </div>
+          <p id="tasteCalibrationProgressLabel" class="taste-calibration-progress-label">Pergunta 1 de 4</p>
+        </header>
+
+        <div class="taste-calibration-body">
+          <fieldset id="tasteCalibrationStep0" class="taste-calibration-step" data-taste-step="0">
+            <legend>Você já conhece música eletrônica?</legend>
+            <p class="taste-calibration-help">Isso define quanto contexto o Sonic deve trazer.</p>
+            <div class="taste-calibration-options">
+              <button type="button" data-taste-field="experience" data-taste-value="beginner" aria-pressed="false">
+                <strong>Estou começando</strong><span>Quero uma entrada simples e bem guiada.</span>
+              </button>
+              <button type="button" data-taste-field="experience" data-taste-value="familiar" aria-pressed="false">
+                <strong>Já conheço um pouco</strong><span>Quero ampliar meu radar sem me perder.</span>
+              </button>
+              <button type="button" data-taste-field="experience" data-taste-value="expert" aria-pressed="false">
+                <strong>Conheço bem</strong><span>Pode ir mais fundo e fugir do óbvio.</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <fieldset id="tasteCalibrationStep1" class="taste-calibration-step hidden" data-taste-step="1" hidden>
+            <legend>O que você quer encontrar agora?</legend>
+            <p class="taste-calibration-help">O primeiro resultado já será aberto nesse formato.</p>
+            <div class="taste-calibration-options">
+              <button type="button" data-taste-field="goal" data-taste-value="track" aria-pressed="false">
+                <strong>Uma música</strong><span>Uma faixa certeira para ouvir agora.</span>
+              </button>
+              <button type="button" data-taste-field="goal" data-taste-value="dj" aria-pressed="false">
+                <strong>Um DJ</strong><span>Um artista alinhado ao seu momento.</span>
+              </button>
+              <button type="button" data-taste-field="goal" data-taste-value="set" aria-pressed="false">
+                <strong>Um set para ouvir</strong><span>Uma sessão completa para dar play.</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <fieldset id="tasteCalibrationStep2" class="taste-calibration-step hidden" data-taste-step="2" hidden>
+            <legend>Qual clima combina com você agora?</legend>
+            <p class="taste-calibration-help">Escolha pela sensação, sem precisar saber o nome do gênero.</p>
+            <div class="taste-calibration-options taste-calibration-options-grid">
+              <button type="button" data-taste-field="mood" data-taste-value="melodic" aria-pressed="false"><strong>Leve e melódico</strong><span>Atmosfera, emoção e espaço.</span></button>
+              <button type="button" data-taste-field="mood" data-taste-value="groovy" aria-pressed="false"><strong>Groovado</strong><span>Ritmo envolvente e movimento.</span></button>
+              <button type="button" data-taste-field="mood" data-taste-value="hypnotic" aria-pressed="false"><strong>Hipnótico</strong><span>Repetição profunda e imersiva.</span></button>
+              <button type="button" data-taste-field="mood" data-taste-value="intense" aria-pressed="false"><strong>Intenso</strong><span>Pressão, impacto e energia alta.</span></button>
+            </div>
+          </fieldset>
+
+          <fieldset id="tasteCalibrationStep3" class="taste-calibration-step hidden" data-taste-step="3" hidden>
+            <legend>Quanto você quer explorar?</legend>
+            <p class="taste-calibration-help">Opcional — você pode concluir sem responder.</p>
+            <div class="taste-calibration-options">
+              <button type="button" data-taste-field="exploration" data-taste-value="safe" aria-pressed="false">
+                <strong>Algo certeiro</strong><span>Mais familiaridade e menos risco.</span>
+              </button>
+              <button type="button" data-taste-field="exploration" data-taste-value="balanced" aria-pressed="false">
+                <strong>Equilibrar familiaridade e novidade</strong><span>Um pé no conhecido e outro no novo.</span>
+              </button>
+              <button type="button" data-taste-field="exploration" data-taste-value="surprise" aria-pressed="false">
+                <strong>Me tire completamente da bolha</strong><span>Priorize caminhos menos óbvios.</span>
+              </button>
+            </div>
+          </fieldset>
+        </div>
+
+        <p id="tasteCalibrationStatus" class="taste-calibration-status" role="status" aria-live="polite"></p>
+        <footer class="taste-calibration-actions">
+          <button id="tasteCalibrationBackBtn" class="secondary" type="button" aria-controls="tasteCalibrationStep0">Voltar</button>
+          <button id="tasteCalibrationSkipBtn" class="taste-calibration-skip" type="button">Pular por enquanto</button>
+          <button id="tasteCalibrationNextBtn" class="primary" type="button" aria-controls="tasteCalibrationStep1" disabled>Continuar</button>
+        </footer>
+      </form>
+    </section>
+
     <section id="welcomeScreen" class="welcome-screen hidden">
       <div class="welcome-card">
         <div class="brand-wrap">
@@ -571,7 +659,7 @@
       </div>
     </section>
 
-    <main id="appContent" class="app-shell hidden">
+    <main id="appContent" class="app-shell hidden" tabindex="-1">
       <aside id="betaTesterRibbon" class="beta-tester-ribbon hidden" aria-label="Status do beta privado" aria-hidden="true">
         <div>
           <span id="betaTesterEyebrow" class="beta-tester-eyebrow">Beta privado</span>
@@ -586,7 +674,7 @@
           </button>
           <div>
             <p id="heroKicker" class="brand-kicker">SONIC SEARCH</p>
-            <h2 id="heroTitle">A faixa certa para agora</h2>
+            <h1 id="heroTitle">A faixa certa para agora</h1>
           </div>
         </div>
         <p id="heroDesc" class="muted">
@@ -615,20 +703,24 @@
       <button id="appMenuBtn" class="app-menu-btn" type="button" aria-controls="appTabBar" aria-expanded="false">
         <span class="app-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
         <span id="appMenuLabel" class="app-menu-label">Descobrir</span>
-        <span class="app-menu-kicker">Menu</span>
+        <span id="dailyLikeQuotaCompact" class="app-menu-kicker daily-like-quota-compact" aria-hidden="true">∞</span>
       </button>
       <div id="appMenuBackdrop" class="app-menu-backdrop" aria-hidden="true"></div>
 
       <nav id="appTabBar" class="app-tab-bar" aria-label="Navegação principal do app">
+        <div id="dailyLikeQuota" class="daily-like-quota" role="status" aria-live="polite">
+          <span class="daily-like-quota-dot" aria-hidden="true"></span>
+          <strong id="dailyLikeQuotaText">Curtidas ilimitadas</strong>
+        </div>
         <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true" aria-current="page">Descobrir</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="djs" aria-pressed="false">DJs</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtros</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">Notícias</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
         <button id="adminAnalyticsTabBtn" class="app-tab-btn admin-analytics-tab hidden" type="button" data-app-tab-target="admin" aria-pressed="false" aria-hidden="true" hidden>Painel administrativo</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="support" aria-pressed="false">Contato</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
+        <button class="app-tab-btn app-tab-btn-secondary app-tab-btn-secondary-start" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
+        <button class="app-tab-btn app-tab-btn-secondary" type="button" data-app-tab-target="support" aria-pressed="false">Contato</button>
+        <button class="app-tab-btn app-tab-btn-secondary" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
       </nav>
 
       <section id="adminAnalyticsPanel" class="panel admin-analytics-panel app-tab-panel" data-app-tab="admin" aria-labelledby="adminAnalyticsTitle" aria-hidden="true" hidden>
@@ -1122,6 +1214,8 @@
         </aside>
       </section>
 
+      <section id="dailyRadarPanel" class="daily-radar-panel app-tab-panel active" data-app-tab="discover" aria-label="Radar diário de faixas" hidden></section>
+
       <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
         <div class="swipe-start-head">
           <div>
@@ -1180,6 +1274,8 @@
             <h3 id="djDiscoveryTitle">Encontre o DJ certo para o momento</h3>
           </div>
         </div>
+
+        <section id="dailyDjPanel" class="daily-dj-panel" aria-labelledby="dailyDjTitle" hidden></section>
 
         <div id="djIntentPanel" class="dj-intent-panel" aria-labelledby="djIntentTitle">
           <div class="dj-intent-copy">
@@ -1538,7 +1634,7 @@
             <div class="support-payment-head">
               <div>
                 <p id="supportCryptoKicker" class="section-kicker">Crypto</p>
-                <h4 id="supportCryptoTitle">Bitcoin / Lightning</h4>
+                <h4 id="supportCryptoTitle">Bitcoin</h4>
               </div>
               <span id="supportCryptoStatus" class="support-payment-status">Opcional</span>
             </div>
@@ -1546,9 +1642,13 @@
               <img id="supportCryptoQr" class="support-qr hidden" src="" alt="" loading="lazy" />
               <div id="supportCryptoPlaceholder" class="support-qr-placeholder">BTC</div>
             </div>
-            <p id="supportCryptoHint" class="muted support-payment-hint">Crypto ainda não configurado.</p>
-            <textarea id="supportCryptoPayload" class="support-copy-field" readonly rows="3" aria-label="Endereço crypto para apoio"></textarea>
-            <button id="supportCopyCryptoBtn" class="secondary support-copy-btn" type="button">Copiar crypto</button>
+            <p id="supportCryptoHint" class="muted support-payment-hint">Endereço Bitcoin ainda não configurado.</p>
+            <div id="supportBitcoinAddressRow" class="support-pix-key-row hidden">
+              <span id="supportBitcoinAddressLabel">Endereço Bitcoin</span>
+              <code id="supportBitcoinAddressValue"></code>
+            </div>
+            <textarea id="supportCryptoPayload" class="support-copy-field" readonly rows="2" aria-label="Endereço Bitcoin para apoio"></textarea>
+            <button id="supportCopyCryptoBtn" class="secondary support-copy-btn" type="button">Copiar endereço Bitcoin</button>
           </article>
         </div>
         <p id="supportLegalNote" class="muted support-legal-note">
@@ -2125,6 +2225,9 @@
           </div>
         </article>
 
+        <details id="resultMoreDetails" class="result-more-details">
+          <summary id="resultMoreSummary">Mais sobre esta faixa</summary>
+
         <article id="socialCommentsCard" class="result-card social-comments-card hidden" aria-labelledby="socialCommentsTitle">
           <div class="social-comments-head">
             <div>
@@ -2199,6 +2302,8 @@
             <a id="discoverySoundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
           </div>
         </article>
+
+        </details>
 
         <div class="feedback-grid">
           <div class="feedback-section-head">
@@ -2369,6 +2474,28 @@
               <span id="spiritRankBadge" class="chip alt">Sistema básico</span>
             </div>
             <p id="spiritCollectibleHint" class="muted spirit-visual-hint">O app escolhe o visual automaticamente pelo seu gosto.</p>
+            <section id="spiritPremiumGate" class="spirit-premium-gate hidden" aria-labelledby="spiritPremiumGateTitle" aria-hidden="true">
+              <div class="spirit-premium-gate-head">
+                <span class="spirit-premium-lock" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M7.5 10V7.8a4.5 4.5 0 0 1 9 0V10"></path>
+                    <rect x="5" y="10" width="14" height="10" rx="3"></rect>
+                    <path d="M12 14v2.5"></path>
+                  </svg>
+                </span>
+                <div>
+                  <p id="spiritPremiumGateKicker">EXCLUSIVO PREMIUM</p>
+                  <h5 id="spiritPremiumGateTitle">Transforme seu gosto em uma arte única.</h5>
+                  <p id="spiritPremiumGateBody">Seu Sound System continua evoluindo gratuitamente. O Premium libera a versão criada por IA para cada novo marco.</p>
+                </div>
+              </div>
+              <ul id="spiritPremiumBenefitList" class="spirit-premium-benefits" aria-label="Benefícios da arte Premium">
+                <li>Visual criado a partir do seu Sonic DNA</li>
+                <li>Uma nova evolução em cada marco</li>
+                <li>Imagem em alta qualidade para guardar</li>
+              </ul>
+              <button id="spiritPremiumCta" class="listen-btn spirit-premium-cta" type="button">Conhecer Sonic Premium</button>
+            </section>
             <div id="spiritCollectibleGenerationPanel" class="spirit-generation-progress hidden" role="status" aria-live="polite" aria-atomic="true">
               <div class="spirit-generation-progress-head">
                 <span id="spiritCollectibleGenerationLabel">Preparando briefing eletrônico...</span>
@@ -2422,6 +2549,98 @@
             <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
           </div>
         </div>
+        <article id="membershipCard" class="membership-card" data-plan="free" aria-labelledby="membershipTitle">
+          <div class="membership-card-signal" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="membership-card-main">
+            <div class="membership-card-heading">
+              <div>
+                <p id="membershipKicker" class="summary-kicker">SEU PLANO</p>
+                <h4 id="membershipTitle">Sonic Free</h4>
+              </div>
+              <span id="membershipBadge" class="membership-badge">Gratuito</span>
+            </div>
+            <p id="membershipDescription" class="membership-description">Descoberta eletrônica essencial, com curtidas ilimitadas.</p>
+            <ul id="membershipFeatureList" class="membership-feature-list" aria-label="Recursos do plano">
+              <li>Descoberta eletrônica essencial</li>
+              <li>Curtidas ilimitadas</li>
+              <li>Perfil local e compartilhamentos</li>
+            </ul>
+          </div>
+          <div class="membership-card-action">
+            <p id="membershipStatus" class="membership-status" role="status" aria-live="polite">Conheça o Premium e veja o preço antes de criar sua conta.</p>
+            <div class="membership-actions">
+              <button id="membershipPrimaryBtn" class="listen-btn membership-primary-btn" type="button">Ver Sonic Premium</button>
+              <button id="membershipRefreshBtn" class="listen-btn secondary membership-refresh-btn hidden" type="button">Verificar plano</button>
+            </div>
+          </div>
+        </article>
+        <section id="weeklyHighlightsCard" class="weekly-highlights-card" data-access="locked" aria-labelledby="weeklyHighlightsTitle">
+          <header class="weekly-highlights-head">
+            <div>
+              <p id="weeklyHighlightsKicker" class="summary-kicker">MINHA SEMANA SONIC</p>
+              <h4 id="weeklyHighlightsTitle">O que marcou seu radar</h4>
+              <p id="weeklyHighlightsIntro" class="muted">Um retrato semanal das descobertas que ensinaram seu perfil.</p>
+            </div>
+            <span id="weeklyHighlightsBadge" class="weekly-highlights-badge">PREMIUM</span>
+          </header>
+          <p id="weeklyHighlightsPeriod" class="weekly-highlights-period">Esta semana</p>
+          <div id="weeklyHighlightsContent" class="weekly-highlights-content" aria-live="polite">
+            <div class="weekly-highlights-grid" aria-label="Resumo semanal">
+              <article class="weekly-highlight-stat">
+                <span id="weeklyHighlightsDiscoveredLabel">DJs descobertos</span>
+                <strong id="weeklyHighlightsDiscovered">—</strong>
+              </article>
+              <article class="weekly-highlight-stat is-positive">
+                <span id="weeklyHighlightsLikedLabel">DJs curtidos</span>
+                <strong id="weeklyHighlightsLiked">—</strong>
+              </article>
+              <article class="weekly-highlight-stat">
+                <span id="weeklyHighlightsPassedLabel">DJs que você passou</span>
+                <strong id="weeklyHighlightsPassed">—</strong>
+              </article>
+              <article class="weekly-highlight-stat">
+                <span id="weeklyHighlightsTracksLabel">Faixas curtidas</span>
+                <strong id="weeklyHighlightsTracks">—</strong>
+              </article>
+            </div>
+            <article class="weekly-highlight-spotlight">
+              <div class="weekly-highlight-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+              <div>
+                <p id="weeklyHighlightsSpotlightKicker">DJ DA SEMANA</p>
+                <h5 id="weeklyHighlightsSpotlight">Seu destaque aparece com as próximas curtidas.</h5>
+                <p id="weeklyHighlightsStyle" class="muted">O estilo mais presente também será revelado aqui.</p>
+              </div>
+            </article>
+          </div>
+          <div id="weeklyHighlightsEmpty" class="weekly-highlights-empty hidden" role="status">
+            <strong id="weeklyHighlightsEmptyTitle">Sua semana está começando.</strong>
+            <p id="weeklyHighlightsEmptyText">Avalie pelo menos três DJs ou faixas para revelar seus destaques.</p>
+            <div class="weekly-highlights-progress" aria-hidden="true"><span id="weeklyHighlightsProgress"></span></div>
+          </div>
+          <div id="weeklyHighlightsLocked" class="weekly-highlights-locked">
+            <span class="weekly-highlights-lock-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false"><path d="M7.5 10V7.8a4.5 4.5 0 0 1 9 0V10"></path><rect x="5" y="10" width="14" height="10" rx="3"></rect></svg>
+            </span>
+            <div>
+              <strong id="weeklyHighlightsLockedTitle">Seu resumo pessoal faz parte do Premium.</strong>
+              <p id="weeklyHighlightsLockedText">Veja quem marcou sua semana, quantos DJs você descobriu e como seu gosto evoluiu.</p>
+            </div>
+          </div>
+          <footer class="weekly-highlights-actions">
+            <button id="weeklyHighlightsPrimaryBtn" class="listen-btn weekly-highlights-primary" type="button">Conhecer Sonic Premium</button>
+            <button id="weeklyHighlightsShareBtn" class="listen-btn secondary weekly-highlights-share hidden" type="button">Compartilhar resumo</button>
+          </footer>
+        </section>
+        <article id="tasteCalibrationProfileCard" class="taste-calibration-profile-card hidden" aria-labelledby="tasteCalibrationProfileTitle" aria-hidden="true">
+          <div>
+            <p id="tasteCalibrationProfileKicker" class="summary-kicker">PREFERÊNCIAS MUSICAIS</p>
+            <h4 id="tasteCalibrationProfileTitle">Seu ponto de partida</h4>
+            <p id="tasteCalibrationProfileSummary" class="muted">Responda quatro perguntas rápidas para personalizar suas próximas descobertas.</p>
+          </div>
+          <button id="tasteCalibrationReopenBtn" class="listen-btn" type="button">Recalibrar meu Sonic</button>
+        </article>
         <section id="apiHealthPanel" class="api-health-panel hidden" aria-labelledby="apiHealthTitle" aria-hidden="true">
           <div class="api-health-head">
             <div>
@@ -2708,6 +2927,45 @@
       </section>
     </main>
 
+    <dialog id="premiumDialog" class="premium-dialog" aria-labelledby="premiumDialogTitle">
+      <form method="dialog" class="premium-dialog-shell">
+        <button id="premiumDialogClose" class="premium-dialog-close" type="submit" value="cancel" aria-label="Fechar">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"></path></svg>
+        </button>
+        <header class="premium-dialog-head">
+          <p id="premiumDialogKicker">SONIC PREMIUM</p>
+          <h3 id="premiumDialogTitle" tabindex="-1">Pare de procurar. Comece a descobrir.</h3>
+          <p id="premiumDialogIntro">Seleções de faixas, DJs e sets guiadas pelo seu perfil, com um resumo pessoal a cada semana.</p>
+        </header>
+        <ul id="premiumBenefitList" class="premium-benefit-list" aria-label="Benefícios do Sonic Premium">
+          <li><strong>Radar Diário</strong><span>Até três descobertas personalizadas por dia</span></li>
+          <li><strong>Minha Semana Sonic</strong><span>DJs, faixas e estilos que marcaram sua semana</span></li>
+          <li><strong>Sound System por IA</strong><span>Uma arte exclusiva criada a partir do seu perfil</span></li>
+          <li><strong>Memória contínua</strong><span>Histórico completo sincronizado entre aparelhos</span></li>
+        </ul>
+        <div id="premiumOfferGrid" class="premium-offer-grid" aria-live="polite"></div>
+        <p id="premiumBillingStatus" class="premium-billing-status" role="status" aria-live="polite">Buscando opções disponíveis…</p>
+        <section id="premiumProfilePreview" class="premium-profile-preview" aria-labelledby="premiumProfileTitle">
+          <div class="premium-profile-orbit" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="premium-profile-copy">
+            <p id="premiumProfileKicker">INTELIGÊNCIA QUE APRENDE</p>
+            <h4 id="premiumProfileTitle">Seu perfil guia cada descoberta.</h4>
+            <p id="premiumProfileBody">Curtidas, descartes e faixas já conhecidas afinam seu Sonic DNA.</p>
+            <div id="premiumProfileSignals" class="premium-profile-signals" aria-label="Sinais usados na personalização">
+              <span>Estilo</span><span>Energia</span><span>Contexto</span>
+            </div>
+          </div>
+        </section>
+        <div class="premium-dialog-actions">
+          <button id="premiumRestoreBtn" class="listen-btn secondary hidden" type="button">Restaurar compras</button>
+          <button id="premiumManageBtn" class="listen-btn secondary hidden" type="button">Gerenciar assinatura</button>
+        </div>
+        <p id="premiumLegalNote" class="premium-legal-note">Quando elegível, o teste grátis vira assinatura paga ao terminar. A renovação é automática até o cancelamento.</p>
+      </form>
+    </dialog>
+
     <footer id="signatureBar" class="signature-bar" aria-label="Créditos do projeto">
       <div class="signature-track" aria-hidden="true">
         <span class="signature-pill">CBK Labs</span>
@@ -2748,8 +3006,8 @@
       };
       window.SONIC_SEARCH_ACCESS_CONFIG = {
         ownerEmails: ["pedropfpj@gmail.com"],
-        freeDiscoveryLimit: 50,
-        imageGenerationRequiresTrustedUser: false,
+        freeDiscoveryLimit: 0,
+        imageGenerationRequiresTrustedUser: true,
         betaGateEnabled: false,
         betaAccessCodes: [],
         betaAccessApiEndpoint: "/api/beta-access",
@@ -2763,10 +3021,10 @@
         imageEnabled: true,
         premiumUnlocked: false,
         dailyTextLimit: 25,
-        dailyFreeDiscoveryLimit: 50,
-        imageLimitPerProfile: 7,
-        premiumImageLimitPerProfile: 14,
-        allowImageRegeneration: true
+        dailyFreeDiscoveryLimit: 0,
+        imageLimitPerProfile: 1,
+        premiumImageLimitPerProfile: 1,
+        allowImageRegeneration: false
       };
       window.SONIC_SEARCH_COMPLIANCE_CONFIG = {
         clientMusicCatalogApisEnabled: true,
@@ -2928,6 +3186,11 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="app.min.js?v=20260811iosaudio2"></script>
+    <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
+    <script defer src="daily-djs.js?v=20260909weeklyhighlights1"></script>
+    <script defer src="daily-djs-ui.js?v=20260909weeklyhighlights1"></script>
+    <script defer src="daily-radar.js?v=20260909weeklyhighlights1"></script>
+    <script defer src="daily-radar-ui.js?v=20260909weeklyhighlights1"></script>
+    <script defer src="app.min.js?v=20260909weeklyhighlights1"></script>
   </body>
 </html>

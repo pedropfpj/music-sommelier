@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sonic Search — verificação responsiva local</title>
+<style>
+  body { margin: 0; padding: 16px; font: 16px system-ui; background: #172128; color: #edf8f5; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  button { min-height: 44px; padding: 8px 16px; cursor: pointer; }
+  iframe { display: block; width: 375px; height: 900px; max-width: 100%; border: 1px solid #617780; background: #060813; }
+</style>
+<nav aria-label="Tamanho da tela de teste">
+  <button data-width="375">Celular 375</button>
+  <button data-width="820">Paisagem 820</button>
+  <button data-width="1024">Tablet 1024</button>
+</nav>
+<iframe id="preview" title="Sonic Search em tela de teste" src="/?tab=djs"></iframe>
+<script>
+  document.querySelectorAll('[data-width]').forEach(button => button.addEventListener('click', () => {
+    document.getElementById('preview').style.width = `${button.dataset.width}px`;
+    document.getElementById('preview').style.height = button.dataset.width === '820' ? '420px' : '900px';
+  }));
+</script>
+</html>

@@ -2,6 +2,12 @@
   "functions": {
     "api/spirit-image.js": {
       "maxDuration": 60
+    },
+    "api/billing.js": {
+      "includeFiles": "assets/apple-pki/**"
+    },
+    "api/billing-webhook.mjs": {
+      "includeFiles": "assets/apple-pki/**"
     }
   },
   "headers": [
@@ -32,19 +38,27 @@
     { "source": "/api/artist-profile", "destination": "/api/music?route=artist-profile" },
     { "source": "/api/beta-access", "destination": "/api/music?route=beta-access" },
     { "source": "/api/beta-events", "destination": "/api/music?route=beta-events" },
+    { "source": "/api/billing/checkout", "destination": "/api/billing?route=checkout" },
+    { "source": "/api/billing/portal", "destination": "/api/billing?route=portal" },
+    { "source": "/api/billing/apple-transaction", "destination": "/api/billing?route=apple-transaction" },
+    { "source": "/api/webhooks/stripe", "destination": "/api/billing-webhook?provider=stripe" },
+    { "source": "/api/webhooks/apple", "destination": "/api/billing-webhook?provider=apple" },
     { "source": "/api/comments", "destination": "/api/music?route=comments" },
     { "source": "/api/community", "destination": "/api/music?route=community" },
     { "source": "/api/cover-art", "destination": "/api/music?route=cover-art" },
+    { "source": "/api/daily-radar", "destination": "/api/music?route=daily-radar" },
     { "source": "/api/deezer-preview", "destination": "/api/music?route=deezer-preview" },
     { "source": "/api/discovery-exposure", "destination": "/api/music?route=discovery-exposure" },
     { "source": "/api/event-radar", "destination": "/api/music?route=event-radar" },
     { "source": "/api/lastfm-artist", "destination": "/api/music?route=lastfm-artist" },
     { "source": "/api/news-editor", "destination": "/api/music?route=news-editor" },
     { "source": "/api/news-feed", "destination": "/api/music?route=news-feed" },
+    { "source": "/api/news-translate", "destination": "/api/music?route=news-translate" },
     { "source": "/api/opening-slot", "destination": "/api/music?route=opening-slot" },
     { "source": "/api/radio-browser", "destination": "/api/music?route=radio-browser" },
     { "source": "/api/spotify-search", "destination": "/api/music?route=spotify-search" },
     { "source": "/api/track-metadata", "destination": "/api/music?route=track-metadata" },
+    { "source": "/api/track-insight", "destination": "/api/music?route=track-insight" },
     { "source": "/api/waitlist", "destination": "/api/music?route=waitlist" }
   ]
 }

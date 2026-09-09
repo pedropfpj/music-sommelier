@@ -3,12 +3,26 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { minifyCss, minifyJavaScript } from "./web-build-utils.mjs";
+import { buildRuntimeCatalog } from "./build-runtime-catalog.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "www");
 const apiBaseUrl = "https://sonicsearch.app";
 const runtimeScriptName = "sonic-ios-runtime.js";
+const appStoreBuildId = "20260909weeklyhighlights1ios1";
+const iosRuntimeAssetNames = [
+  "styles.min.css",
+  "daily-djs.css",
+  "daily-radar.css",
+  "catalog-runtime.min.js",
+  "daily-djs.js",
+  "daily-djs-ui.js",
+  "daily-radar.js",
+  "daily-radar-ui.js",
+  runtimeScriptName,
+  "app.min.js"
+];
 const appStoreModeCss = `
 html.app-store-mode #authSocialDivider,
 html.app-store-mode #authGoogleNativeSlot,
@@ -175,7 +189,7 @@ function buildIosIndexHtml(html) {
     ],
     [
       "Seu perfil pode ficar salvo neste aparelho. Links e integrações externas seguem suas próprias políticas. Tips são apoio voluntário.",
-      "Seu perfil pode ficar salvo neste aparelho. Links e integrações externas seguem suas próprias políticas. A versão iOS não tem compra ou desbloqueio pago."
+      "Seu perfil pode ficar salvo neste aparelho. Assinaturas do Sonic Premium, quando disponíveis, são processadas pela App Store."
     ]
   ], "index.html");
 
@@ -188,11 +202,18 @@ function buildIosIndexHtml(html) {
     throw new Error(`Could not inject ${runtimeScriptName} before app.js`);
   }
 
+  for (const assetName of iosRuntimeAssetNames) {
+    const versionPattern = new RegExp(`(${assetName.replaceAll(".", "\\.")}\\?v=)[^\"]+`, "g");
+    if (!versionPattern.test(output)) {
+      throw new Error(`Could not version iOS runtime asset: ${assetName}`);
+    }
+    output = output.replace(versionPattern, `$1${appStoreBuildId}`);
+  }
+
   return output;
 }
 
 function buildIosAppJs(js) {
-  const appStoreBuildId = "20260811iosaudio2";
   const buildIdPattern = /const SONIC_APP_BUILD_ID = "[^"]+";/;
   if (!buildIdPattern.test(js)) {
     throw new Error("Could not apply iOS App Store transform for app.js: missing SONIC_APP_BUILD_ID");
@@ -215,7 +236,7 @@ function buildIosAppJs(js) {
     ],
     [
       "Apoio voluntário ao projeto. Não é assinatura, compra de música ou garantia de benefício.",
-      "Contato informativo. Não há assinatura, compra de música ou desbloqueio pago na versão iOS."
+      "Gorjetas não são oferecidas no iOS. Assinaturas do Sonic Premium são processadas pela App Store."
     ],
     [
       "Sonic Search é um produto Pedro Freire / CBK Labs. Os documentos completos explicam dados, cookies, uso permitido e responsabilidade.",
@@ -249,7 +270,7 @@ function buildIosAppJs(js) {
     ],
     [
       "Voluntary project support. It is not a subscription, music purchase, or guaranteed benefit.",
-      "Informational contact. There is no subscription, music purchase, or paid unlock in the iOS version."
+      "Tips are not offered on iOS. Sonic Premium subscriptions are processed by the App Store."
     ],
     [
       "Sonic Search is a Pedro Freire / CBK Labs product. The full documents explain data, cookies, permitted use, and responsibility.",
@@ -283,7 +304,7 @@ function buildIosAppJs(js) {
     ],
     [
       "Apoyo voluntario al proyecto. No es suscripción, compra de música ni garantía de beneficio.",
-      "Contacto informativo. No hay suscripción, compra de música ni desbloqueo pago en la versión iOS."
+      "No se ofrecen propinas en iOS. Las suscripciones a Sonic Premium se procesan en la App Store."
     ],
     [
       "Sonic Search es un producto de Pedro Freire / CBK Labs. Los documentos completos explican datos, cookies, uso permitido y responsabilidad.",
@@ -329,8 +350,8 @@ function buildIosPrivacyHtml(html) {
       "<strong>Contato</strong>\n            <span>O formulário de contato prepara um e-mail local; os dados só são enviados se você confirmar no app de e-mail.</span>"
     ],
     [
-      "Podemos usar Vercel para hospedagem, logs e analytics opcional no site; Supabase para autenticação, banco e storage; Google",
-      "Podemos usar Vercel para hospedagem e logs; Supabase para autenticação, banco e storage; Google"
+      "Podemos usar Vercel para hospedagem, logs e analytics opcional no site; Supabase para autenticação, banco e storage;",
+      "Podemos usar Vercel para hospedagem e logs; Supabase para autenticação, banco e storage;"
     ]
   ], "privacy.html");
 
@@ -339,10 +360,10 @@ function buildIosPrivacyHtml(html) {
 
 function buildIosTermsHtml(html) {
   return replaceAllRequired(html, [
-    ["<h2>9. Apoios voluntários, Pix e crypto</h2>", "<h2>9. Compras e apoios</h2>"],
+    ["<h2>9. Sonic Premium, pagamentos e cancelamento</h2>", "<h2>9. Assinaturas do Sonic Premium</h2>"],
     [
-      "Apoios por Pix, Bitcoin ou Lightning são contribuições voluntárias ao projeto. Eles não constituem assinatura, compra\n          de música, ingresso, investimento, garantia de acesso vitalício ou promessa de benefício futuro, salvo se uma oferta\n          específica informar o contrário.",
-      "A versão iOS não oferece apoio financeiro dentro do app, assinatura, moeda digital, desbloqueio pago ou compra de\n          recursos digitais fora do sistema da Apple. Se recursos digitais pagos forem oferecidos no futuro, eles seguirão as\n          regras da plataforma aplicável."
+      "O Sonic Premium é uma assinatura renovável que libera os recursos indicados na oferta, como o Radar Diário e a\n          sincronização do histórico. No site, a contratação e o gerenciamento são processados pela Stripe. No iOS, a\n          contratação, renovação, restauração e o cancelamento são processados pela App Store. O acesso fica associado à mesma\n          conta usada no Sonic Search e permanece ativo até o fim do período pago, inclusive após o cancelamento da renovação.",
+      "Na versão iOS, o Sonic Premium é oferecido como assinatura renovável pela App Store. A cobrança ocorre na conta Apple\n          após a confirmação da compra; compras podem ser restauradas e a renovação automática pode ser cancelada nos ajustes de\n          assinaturas da Apple. O acesso fica associado à conta do Sonic Search e permanece ativo até o fim do período pago."
     ]
   ], "terms.html");
 }
@@ -381,6 +402,7 @@ function buildIosCookiesHtml(html) {
 }
 
 assertAssetsMaterialized();
+await buildRuntimeCatalog();
 
 await rm(webDir, { recursive: true, force: true });
 await mkdir(webDir, { recursive: true });
@@ -390,8 +412,15 @@ await writeFile(path.join(webDir, "index.html"), buildIosIndexHtml(indexHtml));
 
 await Promise.all([
   writeOptimizedPath("app.js", "app.min.js", buildIosAppJs, minifyJavaScript),
+  writeOptimizedPath("catalog-runtime.js", "catalog-runtime.min.js", (source) => source, minifyJavaScript),
   writeOptimizedPath("styles.css", "styles.min.css", buildIosStylesCss, minifyCss),
   copyPath("legal.css"),
+  copyPath("daily-djs.js"),
+  copyPath("daily-djs-ui.js"),
+  copyPath("daily-djs.css"),
+  copyPath("daily-radar.js"),
+  copyPath("daily-radar-ui.js"),
+  copyPath("daily-radar.css"),
   writeTransformedPath("privacy.html", "privacy.html", buildIosPrivacyHtml),
   writeTransformedPath("terms.html", "terms.html", buildIosTermsHtml),
   writeTransformedPath("cookies.html", "cookies.html", buildIosCookiesHtml),

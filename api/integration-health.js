@@ -433,7 +433,7 @@ module.exports = async function handler(req, res) {
       newsFeed: "/api/news-feed"
     },
     limits: {
-      freeDailyDiscovery: envInt("SONIC_DAILY_FREE_DISCOVERY_LIMIT", 50, 1, 1000),
+      freeDailyDiscovery: envInt("SONIC_DAILY_FREE_DISCOVERY_LIMIT", 0, 0, 1000),
       freeSpiritLimit: envInt("SONIC_FREE_SPIRIT_LIMIT", 3, 0, 100),
       spotifySearchDailyLimit: envInt("SONIC_SPOTIFY_SEARCH_DAILY_LIMIT", 80, 0, 10000),
       soundcloudSearchDailyLimit: envInt("SONIC_SOUNDCLOUD_SEARCH_DAILY_LIMIT", 80, 0, 10000),

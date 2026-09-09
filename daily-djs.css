@@ -1,0 +1,87 @@
+/* Sonic's editorial daily edition: existing Syne/Chakra type and mint accents. */
+.daily-dj-panel {
+  --daily-surface: #0b1722;
+  --daily-ink: #edf8f5;
+  --daily-muted: #b5c7d0;
+  --daily-accent: #a8f6d4;
+  --daily-line: #344f55;
+  margin: 0 0 28px;
+  padding: clamp(20px, 4vw, 36px);
+  color: var(--daily-ink);
+  background: var(--daily-surface);
+  border: 1px solid var(--daily-line);
+  border-top: 3px solid var(--daily-accent);
+  border-radius: 8px;
+  min-width: 0;
+  container-type: inline-size;
+}
+.daily-dj-panel [hidden] { display: none !important; }
+.daily-dj-panel *, .daily-dj-panel *::before, .daily-dj-panel *::after { box-sizing: border-box; }
+.daily-dj-heading { display: flex; justify-content: space-between; align-items: start; gap: 24px; }
+.daily-dj-kicker, .daily-dj-kind, .daily-dj-date { font: 600 0.75rem/1.5 "Chakra Petch", sans-serif; letter-spacing: 0.12em; text-transform: uppercase; color: var(--daily-accent); }
+.daily-dj-kicker { margin: 0 0 8px; }
+.daily-dj-panel h4 { font: 700 clamp(1.65rem, 4vw, 2.4rem)/1.1 "Syne", sans-serif; margin: 0; letter-spacing: -0.035em; }
+.daily-dj-tagline { margin: 12px 0 0; font-size: 1.05rem; line-height: 1.5; }
+.daily-dj-badge { flex-shrink: 0; max-width: 190px; padding: 6px 10px; color: var(--daily-accent); border: 1px solid var(--daily-line); border-radius: 4px; font-size: 0.75rem; line-height: 1.5; }
+.daily-dj-description { max-width: 62ch; margin: 20px 0 8px; line-height: 1.65; font-size: 1rem; }
+.daily-dj-muted, .daily-dj-footnote { color: var(--daily-muted); font-size: 0.9rem; line-height: 1.6; }
+.daily-dj-footnote { margin: 20px 0 0; font-size: 0.8rem; max-width: 80ch; }
+.daily-dj-panel button, .daily-dj-panel input, .daily-dj-panel select, .daily-dj-panel summary { min-height: 44px; font: inherit; }
+.daily-dj-panel button { padding: 10px 16px; border: 1px solid var(--daily-line); border-radius: 5px; color: var(--daily-ink); background: transparent; cursor: pointer; touch-action: manipulation; transition: background 160ms, border-color 160ms; }
+.daily-dj-panel button:hover { background: #172e38; border-color: var(--daily-accent); transform: none; }
+.daily-dj-panel button:active { background: #26434a; transform: none; }
+.daily-dj-panel button:disabled { opacity: 0.5; cursor: wait; }
+.daily-dj-panel :is(button, input, select, summary, a):focus-visible { outline: 3px solid var(--daily-accent); outline-offset: 3px; }
+.daily-dj-panel .daily-dj-primary { background: var(--daily-accent); color: #0b201a; border-color: var(--daily-accent); font-weight: 700; margin-top: 12px; }
+.daily-dj-panel .daily-dj-primary:hover { background: #cfffe9; }
+.daily-dj-collapse { margin-top: 8px; }
+.daily-dj-body { border-top: 1px solid var(--daily-line); margin-top: 24px; padding-top: 24px; }
+.daily-dj-navigation { display: flex; gap: 8px; margin-bottom: 24px; }
+.daily-dj-panel [aria-pressed="true"] { color: var(--daily-accent); border-color: var(--daily-accent); background: #183832; }
+.daily-dj-preferences fieldset { padding: 0; border: 0; min-width: 0; }
+.daily-dj-preferences legend { padding: 0; font: 700 1.15rem/1.4 "Syne", sans-serif; }
+.daily-dj-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.daily-dj-panel label { display: grid; gap: 8px; color: var(--daily-ink); font-size: 0.9rem; min-width: 0; }
+.daily-dj-panel select, .daily-dj-panel input { width: 100%; max-width: 100%; padding: 10px 12px; color: var(--daily-ink); background: #101f2c; border: 1px solid var(--daily-line); border-radius: 5px; font-size: 16px; color-scheme: dark; }
+.daily-dj-settings { border-block: 1px solid var(--daily-line); margin: 16px 0; }
+.daily-dj-settings summary, .daily-dj-history-entry summary { padding: 12px 0; cursor: pointer; line-height: 1.5; color: var(--daily-ink); }
+.daily-dj-settings[open] { padding-bottom: 20px; }
+.daily-dj-settings .daily-dj-preferences { margin-top: 12px; }
+.daily-dj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+.daily-dj-card { min-width: 0; display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--daily-line); background: #101f2c; border-radius: 5px; }
+.daily-dj-card-top { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; }
+.daily-dj-number { font: 500 2.6rem/1 "Chakra Petch", sans-serif; color: var(--daily-accent); letter-spacing: -0.08em; }
+.daily-dj-kind { font-size: 0.7rem; letter-spacing: 0.08em; }
+.daily-dj-explore { border-top: 3px solid #e6d6a1; }
+.daily-dj-explore :is(.daily-dj-number, .daily-dj-kind) { color: #e6d6a1; }
+.daily-dj-panel h5 { font: 700 clamp(1.3rem, 2.6vw, 1.7rem)/1.2 "Syne", sans-serif; overflow-wrap: anywhere; margin: 0 0 12px; color: var(--daily-ink); }
+.daily-dj-style { font-size: 0.8rem; line-height: 1.5; color: var(--daily-accent); margin: 0 0 16px; }
+.daily-dj-set { font-size: 0.9rem; line-height: 1.55; margin: 0 0 16px; overflow-wrap: anywhere; }
+.daily-dj-reason { margin: 0 0 24px; color: var(--daily-muted); font-size: 0.9rem; line-height: 1.6; }
+.daily-dj-card-actions { margin-top: auto; display: grid; gap: 8px; }
+.daily-dj-panel .daily-dj-listen { background: var(--daily-accent); color: #0b201a; font-weight: 700; border-color: var(--daily-accent); }
+.daily-dj-panel .daily-dj-listen:hover { background: #cfffe9; }
+.daily-dj-source { color: var(--daily-muted); font-size: 0.8rem; line-height: 1.5; min-height: 44px; display: flex; align-items: center; justify-content: center; text-underline-offset: 4px; }
+.daily-dj-feedback { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 16px; margin-top: 8px; border-top: 1px solid var(--daily-line); }
+.daily-dj-feedback button { font-size: 0.75rem; padding: 8px 10px; flex-grow: 1; }
+.daily-dj-status { min-height: 24px; line-height: 1.5; color: var(--daily-accent); font-size: 0.9rem; }
+.daily-dj-history-entry { border-bottom: 1px solid var(--daily-line); padding: 0 0 12px; }
+.daily-dj-reminder { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.daily-dj-reminder p { flex-basis: 100%; }
+.daily-dj-reminder label { min-width: 150px; }
+@media (max-width: 1000px) { .daily-dj-card-top { margin-bottom: 16px; } }
+@container (max-width: 560px) {
+  .daily-dj-heading { flex-direction: column-reverse; gap: 16px; }
+  .daily-dj-badge { max-width: 100%; }
+  .daily-dj-fields { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .daily-dj-heading { flex-direction: column-reverse; gap: 16px; }
+  .daily-dj-badge { max-width: 100%; }
+  .daily-dj-fields { grid-template-columns: 1fr; }
+  .daily-dj-panel { padding: 20px 16px; }
+  .daily-dj-card { padding: 20px 16px; }
+  .daily-dj-panel .daily-dj-primary { width: 100%; }
+  .daily-dj-feedback button { font-size: 0.8rem; }
+}
+@media (prefers-reduced-motion: reduce) { .daily-dj-panel *, .daily-dj-panel *::before, .daily-dj-panel *::after { transition: none !important; animation: none !important; } }

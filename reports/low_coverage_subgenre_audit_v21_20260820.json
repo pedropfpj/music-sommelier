@@ -1,0 +1,416 @@
+{
+  "generatedAt": "2026-08-20T16:13:52.838Z",
+  "selectionRule": "not in the previous 24-style expansion, at most 19 direct tracks, and fewer than 5 playable artists",
+  "maximumPlayableTracks": 19,
+  "minimumPlayableArtists": 5,
+  "stylesAudited": 145,
+  "stylesNeedingRepair": 58,
+  "perStyle": {
+    "darkstep": {
+      "beforeTracks": 13,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 12,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "drumfunk": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ghettotech": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "hardstep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "hardwave": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "hi_nrg": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "kosmische_musik": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "kuduro_eletronico": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "microsound": {
+      "beforeTracks": 15,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "outrun": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ragga_jungle": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "reverse_bass": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "terrorcore": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "wonky": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 15,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "acid_trance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ambient_dub": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ambient_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "atmospheric_jungle": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ballroom_vogue_beats": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "berlin_school": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "big_room_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "big_room_techno": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "brostep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "chicago_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "chillstep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "complextro": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "darksynth": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "deconstructed_club": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "drumstep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "edm_trap": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "euphoric_hardstyle": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "eurodance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "funky_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "future_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "futurepop": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "ghetto_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "glitch_hop": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "hard_dance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "industrial_dance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "jersey_club": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "melodic_dubstep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "melodic_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "nu_skool_breaks": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "piano_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "post_dubstep": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "progressive_trance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "retrowave": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "tribal_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "tropical_house": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "uk_bass": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "uk_hardcore": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "vocal_trance": {
+      "beforeTracks": 16,
+      "beforeArtists": 2,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 2,
+      "needsRepair": true
+    },
+    "slap_house": {
+      "beforeTracks": 17,
+      "beforeArtists": 3,
+      "beforePlayableTracks": 16,
+      "beforePlayableArtists": 3,
+      "needsRepair": true
+    },
+    "edm": {
+      "beforeTracks": 17,
+      "beforeArtists": 3,
+      "beforePlayableTracks": 17,
+      "beforePlayableArtists": 3,
+      "needsRepair": true
+    },
+    "mainstage_techno": {
+      "beforeTracks": 17,
+      "beforeArtists": 3,
+      "beforePlayableTracks": 17,
+      "beforePlayableArtists": 3,
+      "needsRepair": true
+    },
+    "chillout": {
+      "beforeTracks": 14,
+      "beforeArtists": 4,
+      "beforePlayableTracks": 14,
+      "beforePlayableArtists": 4,
+      "needsRepair": true
+    },
+    "electronic_dance_pop": {
+      "beforeTracks": 18,
+      "beforeArtists": 4,
+      "beforePlayableTracks": 18,
+      "beforePlayableArtists": 4,
+      "needsRepair": true
+    },
+    "bassline": {
+      "beforeTracks": 20,
+      "beforeArtists": 4,
+      "beforePlayableTracks": 19,
+      "beforePlayableArtists": 4,
+      "needsRepair": true
+    }
+  }
+}

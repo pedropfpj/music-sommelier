@@ -358,6 +358,52 @@ test("cover art resolves MusicBrainz/Cover Art Archive through backend", async (
   });
 });
 
+test("cover art falls back to Deezer when Cover Art Archive is unavailable", async () => {
+  await withEnv(safeDefaults, async () => {
+    await withFetchMock((url) => {
+      if (url.includes("musicbrainz.org/ws/2/release-group")) {
+        return jsonResponse({
+          "release-groups": [{
+            id: "rg-fallback",
+            title: "Fallback Album",
+            score: 100,
+            "artist-credit-phrase": "Fallback Artist",
+            "primary-type": "Album",
+            "first-release-date": "2026-01-01"
+          }]
+        });
+      }
+      if (url.includes("coverartarchive.org/release-group/rg-fallback")) return jsonResponse({}, 500);
+      if (url.includes("api.deezer.com/search")) {
+        return jsonResponse({
+          data: [{
+            id: 42,
+            title: "Fallback Song",
+            title_short: "Fallback Song",
+            link: "https://www.deezer.com/track/42",
+            artist: { name: "Fallback Artist" },
+            album: {
+              id: 84,
+              title: "Fallback Album",
+              cover_xl: "https://cdn-images.dzcdn.net/images/cover/fallback/1000x1000.jpg"
+            }
+          }]
+        });
+      }
+      return jsonResponse({}, 404);
+    }, async () => {
+      const res = await callMusicRoute("cover-art", {
+        body: { artist: "Fallback Artist", song: "Fallback Song", album: "Fallback Album", releaseYear: 2026 }
+      });
+      const payload = res.json();
+      assert.equal(res.statusCode, 200);
+      assert.equal(payload.imageUrl, "https://cdn-images.dzcdn.net/images/cover/fallback/1000x1000.jpg");
+      assert.equal(payload.source, "deezer");
+      assert.equal(payload.cover.type, "deezer-album");
+    });
+  });
+});
+
 test("artist profile merges MusicBrainz, Wikipedia and iTunes signals", async () => {
   await withEnv(safeDefaults, async () => {
     await withFetchMock((url) => {

@@ -1,14 +1,22 @@
 # Sonic Search App Store Submission Pack
 
-Date: 2026-08-10
+Date: 2026-09-02
+
+## Submission Status
+
+- Version **1.1.0**, build **24**, uploaded successfully to App Store Connect on 2026-09-02 and awaiting Apple processing.
+- Apple App ID: `6786758494`.
+- Paid Applications Agreement: active.
+- Production backend: `https://sonicsearch.app`, deployment `dpl_DDFB4caZFKSChcgn51cZMrhxDu6o`, public smoke test passed.
+- Billing remains disabled until the subscription products and sandbox purchase flow pass verification.
 
 ## App Store Connect Metadata
 
 - App name: Sonic Search
 - Bundle ID: app.sonicsearch.ios
 - SKU: sonic-search-ios
-- Version: 1.0.7
-- Build: 21
+- Version: 1.1.0
+- Build: 24
 - Primary category: Music
 - Secondary category: Entertainment
 - Age rating suggestion: 12+
@@ -24,7 +32,7 @@ Descubra música eletrônica
 
 ### Promotional Text
 
-Descubra faixas e DJs, acompanhe notícias e conversas da cena eletrônica e receba recomendações mais rápidas com filtros por estilo, BPM, energia e momento.
+Descubra faixas e DJs e conheça o Radar Diário do Sonic Premium: três escolhas pessoais para aprofundar seu gosto e sair da bolha.
 
 ### Description
 
@@ -41,6 +49,8 @@ Com o Sonic Search, você pode:
 - organizar curtidas, descartes e seu perfil musical local;
 - abrir links oficiais para ouvir artistas e faixas nas plataformas disponíveis.
 
+No Sonic Premium, usuários conectados recebem um Radar Diário com três faixas personalizadas, histórico sincronizado e memória musical contínua. A assinatura é renovável e pode ser gerenciada ou restaurada pela App Store.
+
 O Sonic Search não hospeda um catálogo próprio de streaming. Ele recomenda, contextualiza e direciona você a previews, sets e fontes oficiais quando disponíveis.
 
 ### Keywords
@@ -55,7 +65,7 @@ Electronic music discovery
 
 ### Promotional Text
 
-Discover tracks and DJs, follow electronic music news and community conversations, and get faster recommendations with filters for style, BPM, energy, and mood.
+Discover tracks and DJs and meet Sonic Premium's Daily Radar: three personal picks designed to deepen your taste and move beyond your bubble.
 
 ### Description
 
@@ -72,6 +82,8 @@ With Sonic Search, you can:
 - organize likes, passes, and your local music profile;
 - open official links to hear artists and tracks on available platforms.
 
+With Sonic Premium, signed-in users get a three-track Daily Radar, synced history, and continuous music memory. The renewable subscription can be managed or restored through the App Store.
+
 Sonic Search does not host its own streaming catalog. It recommends, adds context, and links to previews, sets, and official sources when available.
 
 ### Keywords
@@ -83,13 +95,13 @@ electronic music,techno,house,psytrance,DJ,sets,tracks,BPM,festivals,news
 Portuguese (Brazil):
 
 ```text
-As recomendações ficaram mais rápidas e estáveis. Esta atualização corrige um problema de áudio no iOS em que curtir ou passar uma recomendação podia manter a faixa anterior tocando, e reforça as transições para que cada novo card controle somente o seu próprio áudio. Também melhoramos o Jornal Sonic, o catálogo eletrônico, a descoberta de DJs e a segurança da comunidade.
+Ampliamos o catálogo para 9.163 faixas e reforçamos dezenas de subgêneros nichados com mais artistas e rotas de áudio. As recomendações estão mais variadas e estáveis, com melhorias nas transições de playback do iOS, no Jornal Sonic, na descoberta de DJs e na segurança da comunidade.
 ```
 
 English:
 
 ```text
-Recommendations are now faster and more stable. This update fixes an iOS playback issue where liking or passing a recommendation could leave the previous track playing, and strengthens preview transitions so each new card owns its audio. We also improved Sonic Journal, the electronic catalog, DJ discovery, and community safety.
+We expanded the catalog to 9,163 tracks and strengthened dozens of niche subgenres with more artists and audio routes. Recommendations are now more varied and stable, with improvements to iOS playback transitions, Sonic Journal, DJ discovery, and community safety.
 ```
 
 ## Release Gate
@@ -101,7 +113,7 @@ Verified on 2026-08-11:
 - Google OAuth through Supabase redirects correctly.
 - Sign in with Apple through Supabase redirects correctly.
 - The iOS callback uses the registered `sonicsearch://auth/callback` URL and PKCE.
-- Build 22 is the current release candidate for version 1.0.8. Build 21 remains the released 1.0.7 binary and is superseded by this playback fix.
+- Build 24 is the current release candidate for version 1.1.0. Version 1.0.9 is the previously approved release; 1.1.0 adds the expanded niche catalog, refreshed playback routes, resilient cover-art fallback, unlimited discovery, and the Sonic Premium foundation.
 
 ## Review Notes
 
@@ -119,14 +131,15 @@ Reviewer flow:
 8. Open "Notícias" / "News" to review source links.
 9. Open "Comunidade" / "Community" to browse public conversations. After signing in with Apple or Google, users can publish, comment, and react.
 10. Open "Perfil" / "Profile" to review the local music profile.
+11. Sign in with the review account, open **Profile → See Sonic Premium**, select a sandbox subscription, and verify the Daily Radar in Discover. Use **Restore purchases** to test restoration.
 
 Important:
 
-- No demo account is required.
+- Most of the app can be reviewed without an account. A signed-in sandbox review account is required to test Sonic Premium and will be supplied in App Review Information.
 - Apple and Google login are available. Signed-in users can publish, comment, and react in Community.
 - User-generated content is filtered before publication. Every post and comment from another user offers Report and Block controls. Reports are saved in the private moderation store and notify the moderation contact; blocking immediately hides that user's posts and comments.
 - The public Contact screen publishes the support channel for safety and moderation requests.
-- In-app payments, Pix, crypto, subscriptions, and paid digital unlocks are disabled in the iOS build.
+- Sonic Premium uses Apple auto-renewable subscriptions through StoreKit 2. The iOS build does not offer Pix, crypto, tips, Stripe checkout, or another external purchase method.
 - App Tracking Transparency is not shown because the iOS build does not track users. It does not use IDFA, ad SDKs, advertising cookies, tracking cookies, tracking domains, Vercel Insights, or cross-app/cross-site advertising measurement.
 - The app uses remote APIs at https://sonicsearch.app for metadata, news, covers, AI text/image features, and optional enrichment. Backend services must remain live during review.
 - Studio is temporarily unavailable in this build, and the app does not request microphone access.
@@ -151,7 +164,8 @@ Use this as the App Store Connect privacy worksheet, then verify against current
 - Contact Info: Name and email are collected for optional Apple/Google account login and may also be provided in support requests. Purposes: App Functionality and Customer Support. Linked to the user. Not used for tracking.
 - User Content: Community posts, comments, moderation reports, and optional support messages. Purposes: App Functionality, Safety, and Customer Support. Community and moderation content are linked to the signed-in user. Not used for tracking.
 - Identifiers: Internal user ID for authentication, account security, Community ownership, moderation, and synchronization. Purpose: App Functionality. Linked to the user. Not used for tracking.
-- Usage Data: Reactions, likes, blocks, synced preferences, and feature interaction may be stored or appear in backend logs. Purposes: App Functionality and Safety. Account activity is linked when the user is signed in. Not used for tracking.
+- Purchases: Product ID, subscription status, transaction/original transaction identifiers, purchase and expiration dates, and App Account Token are processed to provide and restore Sonic Premium. Payment credentials are handled by Apple. Purpose: App Functionality. Linked to the signed-in account. Not used for tracking.
+- Usage Data: Reactions, likes, blocks, Daily Radar feedback/history, synced preferences, and feature interaction may be stored or appear in backend logs. Purposes: App Functionality and Safety. Account activity is linked when the user is signed in. Not used for tracking.
 - Diagnostics: Error/performance logs may be collected by hosting/backend providers. Purposes: App Functionality. Not used for tracking.
 - Search/Browsing style data: Music query context such as artist, track, style, BPM, and selected filters may be sent to backend APIs to provide recommendations and metadata. Purpose: App Functionality.
 - Audio Data: No. Studio is unavailable in this build and microphone permission is not declared.
@@ -170,7 +184,20 @@ Use this as the App Store Connect privacy worksheet, then verify against current
   - ionic://localhost
 - Ensure music/news/AI routes accept the native origin and return stable JSON.
 - Run `pnpm run appstore:smoke https://sonicsearch.app` after the production environment change and before submitting.
-- Keep the beta gate, Pix, crypto, and paid digital unlocks disabled in the iOS bundle. Keep Apple/Google login and the moderated Community enabled.
+- Keep the beta gate, Pix, crypto, tips, and Stripe checkout disabled in the iOS bundle. Keep StoreKit subscriptions, Apple/Google login, and the moderated Community enabled.
+
+## Subscription Release Gate
+
+- Create one auto-renewable subscription group in App Store Connect.
+- Create `app.sonicsearch.ios.premium.monthly` and `app.sonicsearch.ios.premium.yearly` with localized name, description and selected price.
+- Configure a **2-week free-trial introductory offer** on both products. Apple enforces one introductory offer per eligible customer in the subscription group.
+- Launch prices: EUR 2.99 monthly / EUR 24.99 yearly; BRL 9.90 monthly / BRL 79.90 yearly; USD 2.99 monthly / USD 24.99 yearly, using the closest available App Store price points.
+- Add the Terms of Use and Privacy Policy links to the subscription metadata and app listing.
+- Configure App Store Server Notifications V2 for sandbox and production at `https://sonicsearch.app/api/webhooks/apple`.
+- Apple App ID `6786758494` is configured in Vercel; keep `SONIC_BILLING_ENABLED=false` until sandbox verification passes.
+- Test purchase, pending approval, restore, cancellation, renewal, expiration and refund with sandbox accounts.
+- Add an active sandbox review account and precise Premium navigation steps to App Review Information.
+- The first subscription must be selected in the app version submission before sending the build for review.
 
 ## Screenshots To Capture
 
@@ -184,7 +211,7 @@ Use this as the App Store Connect privacy worksheet, then verify against current
 pnpm run check
 pnpm run ios:copy
 xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -derivedDataPath /tmp/sonic-ios-release-build build
-xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath /tmp/SonicSearch-AppStore-1.0.7-21.xcarchive archive
+xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' -archivePath /tmp/SonicSearch-AppStore-1.1.0-24.xcarchive archive
 ```
 
 Universal iPhone/iPad confirmation:

@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { CATALOG_RUNTIME_SOURCE_FILES } from "./catalog-runtime-sources.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -16,13 +17,11 @@ const roadmapJsonPath = path.join(reportsDir, "catalog-enrichment-roadmap-latest
 const strictMode = process.argv.includes("--strict");
 
 const BLOCKS = [
-  "EXTERNAL_DATASET_PRIORITY_FILES",
-  "EXTERNAL_DATASET_FILES",
   "STYLE_SEARCH_TERMS",
-  "SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS",
-  "LOCAL_TRACK_SEED_BOOST",
+  "CURATED_FRIENDLY_OPENING_TRACKS",
   "CURATED_BANDCAMP_TRACK_EXPANSION",
   "CURATED_TECHNO_SUBGENRE_EXPANSION",
+  "CURATED_STRESS_RESILIENT_TRACKS",
   "catalog",
   "discoveryCatalog",
   "INDEXED_DATASET_ARTIST_COUNT",
@@ -33,11 +32,6 @@ const BLOCKS = [
   "COUNTRY_CODE_BY_NAME",
   "COUNTRY_BY_ORIGIN_AREA"
 ];
-
-const LAZY_ARRAY_BUILDERS = {
-  SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS: "buildSoundCloudSupplementalDjSeeds",
-  LOCAL_TRACK_SEED_BOOST: "buildLocalTrackSeedBoost"
-};
 
 const GENERIC_SOURCE_PATTERNS = [
   /catalogo dinamico/i,
@@ -108,13 +102,7 @@ function normalize(value) {
 
 function findLiteralStart(source, name) {
   const declarationIndex = source.indexOf(`const ${name} =`);
-  if (declarationIndex < 0) {
-    const builderName = LAZY_ARRAY_BUILDERS[name];
-    const builderIndex = builderName ? source.indexOf(`function ${builderName}(`) : -1;
-    const returnIndex = builderIndex >= 0 ? source.indexOf("return [", builderIndex) : -1;
-    if (returnIndex < 0) throw new Error(`Bloco ${name} nao encontrado`);
-    return source.indexOf("[", returnIndex);
-  }
+  if (declarationIndex < 0) throw new Error(`Bloco ${name} nao encontrado`);
 
   const afterEquals = source.indexOf("=", declarationIndex);
   const firstValueMatch = source.slice(afterEquals + 1).match(/\S/);
@@ -221,6 +209,11 @@ function loadBlocks(source) {
     }
     blocks[name] = evalLiteral(literal, name, blocks);
   }
+  // The production catalog moved from app.js constants to build-time shards.
+  // Keep the audit pointed at the same source manifest instead of a stale copy.
+  blocks.EXTERNAL_DATASET_FILES = [...CATALOG_RUNTIME_SOURCE_FILES];
+  blocks.LOCAL_TRACK_SEED_BOOST = [];
+  blocks.SOUNDCLOUD_SUPPLEMENTAL_DJ_SEEDS = [];
   return blocks;
 }
 

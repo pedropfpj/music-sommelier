@@ -22,10 +22,16 @@
 
   window.SONIC_SEARCH_ACCESS_CONFIG = {
     ...(window.SONIC_SEARCH_ACCESS_CONFIG || {}),
+    freeDiscoveryLimit: 0,
     betaGateEnabled: false,
     betaAccessCodes: ["SONIC-BETA"],
     betaAccessApiEndpoint: "",
     betaEventsEndpoint: ""
+  };
+
+  window.SONIC_SEARCH_AI_CONFIG = {
+    ...(window.SONIC_SEARCH_AI_CONFIG || {}),
+    dailyFreeDiscoveryLimit: 0
   };
 
   window.SONIC_SEARCH_SUPPORT_CONFIG = {

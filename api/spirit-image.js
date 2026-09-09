@@ -141,15 +141,12 @@ function spiritImageOwnerKey(body = {}) {
   );
   if (!userIdentity) return "";
   const promptVersion = trimText(body.promptVersion || SPIRIT_IMAGE_PROMPT_VERSION, 80);
-  const spiritId = trimText(body.spiritId, 80) || "spirit";
   const milestoneLikes = Math.max(0, Number(body.milestoneLikes) || 0);
-  const profileSignature = trimText(body.profileSignature || "", 240);
   const scope = [
     promptVersion,
     userIdentity,
-    spiritId,
-    milestoneLikes,
-    profileSignature || "profile"
+    "milestone",
+    milestoneLikes
   ].join(":");
   return `${SPIRIT_IMAGE_STORE_PREFIX}:${hashStoreKey(scope)}`;
 }
@@ -206,7 +203,7 @@ module.exports = async function handler(req, res) {
   })) return;
 
   const body = parseBody(req);
-  const accessContext = await resolveAccessContext(req, body);
+  const accessContext = await resolveAccessContext(req, body, { includeMembership: true });
   const ownerUnlimited = accessContext.owner && envFlag("SONIC_OWNER_UNLIMITED_ACCESS", true);
   const freeSoundSystemUnlocked = soundSystemFreeUnlock(body);
   const requireTrustedUser = envFlag("SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER", false) && !freeSoundSystemUnlocked;
@@ -220,7 +217,7 @@ module.exports = async function handler(req, res) {
     });
     return;
   }
-  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false) && !freeSoundSystemUnlocked;
+  const requirePremium = envFlag("SONIC_AI_IMAGE_REQUIRE_PREMIUM", false);
   if (requirePremium && !accessContext.premium) {
     sendJson(res, 402, { error: "premium_required", role: accessContext.role });
     return;

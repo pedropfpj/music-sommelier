@@ -32,9 +32,28 @@ const buildId = buildScript.match(/const appStoreBuildId = "([^"]+)";/)?.[1] || 
 assert.ok(buildId, "The iOS build must declare an App Store build id");
 assert.ok(nativeApp.includes(buildId), "The copied App Store JavaScript must contain the current build id");
 
-const assetVersions = [...nativeIndex.matchAll(/(?:styles\.min\.css|sonic-ios-runtime\.js|app\.min\.js)\?v=([^"]+)/g)]
+const runtimeAssetNames = [
+  "styles.min.css",
+  "daily-djs.css",
+  "daily-radar.css",
+  "catalog-runtime.min.js",
+  "daily-djs.js",
+  "daily-djs-ui.js",
+  "daily-radar.js",
+  "daily-radar-ui.js",
+  "sonic-ios-runtime.js",
+  "app.min.js"
+];
+const runtimeAssetPattern = new RegExp(
+  `(?:${runtimeAssetNames.map((name) => name.replaceAll(".", "\\.")).join("|")})\\?v=([^\"]+)`,
+  "g"
+);
+const assetVersions = [...nativeIndex.matchAll(runtimeAssetPattern)]
   .map((match) => match[1]);
-assert.ok(assetVersions.length >= 4, "The iOS index must version every shipped runtime asset");
+assert.ok(
+  assetVersions.length >= runtimeAssetNames.length,
+  "The iOS index must version every shipped runtime asset"
+);
 assert.deepEqual(
   [...new Set(assetVersions)],
   [buildId],

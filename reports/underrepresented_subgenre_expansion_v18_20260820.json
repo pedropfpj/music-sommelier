@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-08-20T16:03:31.354Z",
+  "batch": "underrepresented_subgenre_expansion_v18_20260820",
+  "priorityRule": "runtime styles with fewer than 13 tracks at the start of the expansion",
+  "targetTracksPerArtist": 4,
+  "stylesExpanded": 24,
+  "tracksAdded": 463,
+  "artistsAdded": 122,
+  "diversityBaselineTracks": 276,
+  "diversityIncrementalTracks": 187,
+  "diversityBaselineArtists": 72,
+  "diversityIncrementalArtists": 50,
+  "previousTracks": 463,
+  "incrementalTracks": 10,
+  "previousArtists": 122,
+  "incrementalArtists": 0,
+  "providerCounts": {
+    "apple": 241,
+    "deezer": 105,
+    "both": 116,
+    "preserved": 1
+  },
+  "missingArtists": [],
+  "perStyle": {
+    "big_beat": {
+      "beforeTracks": 6,
+      "addedTracks": 24,
+      "projectedTracks": 30,
+      "addedArtists": 6
+    },
+    "extratone": {
+      "beforeTracks": 8,
+      "addedTracks": 19,
+      "projectedTracks": 27,
+      "addedArtists": 5
+    },
+    "lowercase": {
+      "beforeTracks": 8,
+      "addedTracks": 20,
+      "projectedTracks": 28,
+      "addedArtists": 5
+    },
+    "shangaan_electro": {
+      "beforeTracks": 8,
+      "addedTracks": 12,
+      "projectedTracks": 20,
+      "addedArtists": 5
+    },
+    "dark_ambient": {
+      "beforeTracks": 9,
+      "addedTracks": 20,
+      "projectedTracks": 29,
+      "addedArtists": 5
+    },
+    "electroacoustic": {
+      "beforeTracks": 9,
+      "addedTracks": 20,
+      "projectedTracks": 29,
+      "addedArtists": 5
+    },
+    "baltimore_club": {
+      "beforeTracks": 10,
+      "addedTracks": 17,
+      "projectedTracks": 27,
+      "addedArtists": 5
+    },
+    "latin_house": {
+      "beforeTracks": 10,
+      "addedTracks": 20,
+      "projectedTracks": 30,
+      "addedArtists": 5
+    },
+    "french_house": {
+      "beforeTracks": 11,
+      "addedTracks": 24,
+      "projectedTracks": 35,
+      "addedArtists": 6
+    },
+    "italo_disco": {
+      "beforeTracks": 11,
+      "addedTracks": 20,
+      "projectedTracks": 31,
+      "addedArtists": 5
+    },
+    "balearic_trance": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "batida": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "crossbreed": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "dream_trance": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "florida_breaks": {
+      "beforeTracks": 12,
+      "addedTracks": 17,
+      "projectedTracks": 29,
+      "addedArtists": 5
+    },
+    "makina": {
+      "beforeTracks": 12,
+      "addedTracks": 17,
+      "projectedTracks": 29,
+      "addedArtists": 5
+    },
+    "microhouse": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "minimal_wave": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "musique_concrete": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "neurohop": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "sambass": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "singeli": {
+      "beforeTracks": 12,
+      "addedTracks": 15,
+      "projectedTracks": 27,
+      "addedArtists": 5
+    },
+    "space_ambient": {
+      "beforeTracks": 12,
+      "addedTracks": 20,
+      "projectedTracks": 32,
+      "addedArtists": 5
+    },
+    "techstep": {
+      "beforeTracks": 12,
+      "addedTracks": 18,
+      "projectedTracks": 30,
+      "addedArtists": 5
+    }
+  }
+}

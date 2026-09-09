@@ -9,15 +9,18 @@ const handlers = {
   comments: require("../lib/api/_comments"),
   community: require("../lib/api/_community"),
   "cover-art": require("../lib/api/_cover-art"),
+  "daily-radar": require("../lib/api/_daily-radar"),
   "deezer-preview": require("../lib/api/_deezer-preview"),
   "discovery-exposure": require("../lib/api/_discovery-exposure"),
   "event-radar": require("../lib/api/_event-radar"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
   "news-editor": require("../lib/api/_news-editor"),
   "news-feed": require("../lib/api/_news-feed"),
+  "news-translate": require("../lib/api/_news-translate"),
   "opening-slot": require("../lib/api/_opening-slot"),
   "radio-browser": require("../lib/api/_radio-browser"),
   "spotify-search": require("../lib/api/_spotify-search"),
+  "track-insight": require("../lib/api/_track-insight"),
   "track-metadata": require("../lib/api/_track-metadata"),
   waitlist: require("../lib/api/_waitlist")
 };

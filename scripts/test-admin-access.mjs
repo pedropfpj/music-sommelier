@@ -15,7 +15,8 @@ const envKeys = [
   "SUPABASE_SERVICE_ROLE_KEY",
   "SONIC_OWNER_EMAILS",
   "SONIC_ADMIN_EMAILS",
-  "SONIC_MODERATOR_EMAILS"
+  "SONIC_MODERATOR_EMAILS",
+  "SONIC_PAID_USER_EMAILS"
 ];
 const originalEnv = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]));
 const originalFetch = global.fetch;
@@ -57,12 +58,14 @@ async function main() {
   process.env.SONIC_OWNER_EMAILS = "owner@example.com";
   process.env.SONIC_ADMIN_EMAILS = " ADMIN@example.com ";
   process.env.SONIC_MODERATOR_EMAILS = "moderator@example.com";
+  process.env.SONIC_PAID_USER_EMAILS = "paid@example.com";
 
   const emails = {
     owner: "owner@example.com",
     admin: "admin@example.com",
     moderator: "moderator@example.com",
-    free: "free@example.com"
+    free: "free@example.com",
+    paid: "paid@example.com"
   };
   global.fetch = async (url, options = {}) => {
     if (String(url).includes("/auth/v1/user")) {
@@ -73,6 +76,9 @@ async function main() {
         : { ok: false, json: async () => ({ message: "invalid" }) };
     }
     if (String(url).includes("/rest/v1/beta_events")) {
+      return { ok: true, statusText: "OK", json: async () => [] };
+    }
+    if (String(url).includes("/rest/v1/sonic_memberships")) {
       return { ok: true, statusText: "OK", json: async () => [] };
     }
     throw new Error(`Unexpected URL: ${url}`);
@@ -87,6 +93,7 @@ async function main() {
   const admin = await resolveAccessContext(request("admin"));
   const moderator = await resolveAccessContext(request("moderator"));
   const free = await resolveAccessContext(request("free"));
+  const paid = await resolveAccessContext(request("paid"), {}, { includeMembership: true });
   assert.equal(owner.role, "owner");
   assert.equal(owner.canAccessAdmin, true);
   assert.equal(admin.role, "admin");
@@ -97,11 +104,20 @@ async function main() {
   assert.equal(moderator.canModerate, true);
   assert.equal(free.role, "free");
   assert.equal(free.canAccessAdmin, false);
+  assert.equal(paid.role, "premium");
+  assert.equal(paid.premium, true);
+  assert.equal(paid.membership.provider, "manual");
 
   const accessResponse = responseHarness();
   await accessHandler(request("admin"), accessResponse);
   assert.equal(accessResponse.statusCode, 200);
   assert.equal(accessResponse.body.viewer.canAccessAdmin, true);
+  assert.equal(accessResponse.body.viewer.membership.plan.code, "free");
+
+  const paidAccessResponse = responseHarness();
+  await accessHandler(request("paid"), paidAccessResponse);
+  assert.equal(paidAccessResponse.statusCode, 200);
+  assert.equal(paidAccessResponse.body.viewer.premium, true);
 
   const deniedResponse = responseHarness();
   await analyticsHandler(request("moderator"), deniedResponse);
