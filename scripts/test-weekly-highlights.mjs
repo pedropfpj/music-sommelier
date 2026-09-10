@@ -13,6 +13,8 @@ const [html, app, css, dailyDjsUi, iosBuild] = await Promise.all([
 ]);
 
 assert.match(html, /id="weeklyHighlightsCard"[^>]+aria-labelledby="weeklyHighlightsTitle"/);
+assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="weeklyHighlightsBody"/);
+assert.match(html, /id="weeklyHighlightsBody"[^>]+class="weekly-highlights-body"/);
 for (const id of [
   "weeklyHighlightsDiscovered",
   "weeklyHighlightsLiked",
@@ -43,8 +45,9 @@ assert.match(app, /premiumDialogTitle\?\.focus\(\{ preventScroll: true \}\)/);
 assert.match(css, /\.premium-dialog-close\s*\{[\s\S]*?width: 44px;[\s\S]*?height: 44px;/);
 assert.match(css, /\.premium-dialog-close:focus-visible\s*\{[\s\S]*?outline: 2px solid/);
 assert.match(css, /\.weekly-highlights-card\s*\{/);
+assert.match(css, /\.weekly-highlights-card\.is-collapsed\s*\{/);
 assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.weekly-highlights-actions,[\s\S]*?width: 100%;/);
-assert.match(app, /20260910premiumdismiss1/);
-assert.match(iosBuild, /20260910premiumdismiss1ios1/);
+assert.match(app, /20260910premiumcollapse2/);
+assert.match(iosBuild, /20260910premiumcollapse2ios1/);
 
 console.log("Weekly Highlights and Premium modal checks passed.");

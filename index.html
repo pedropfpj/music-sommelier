@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260910premiumdismiss1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260910premiumcollapse2" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260910premiumdismiss1" />
+    <link rel="stylesheet" href="styles.min.css?v=20260910premiumcollapse2" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
@@ -2549,17 +2549,6 @@
             <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
           </div>
         </div>
-        <aside id="premiumPromoCollapsed" class="premium-promo-collapsed hidden" aria-labelledby="premiumPromoCollapsedTitle" aria-live="polite">
-          <span class="premium-promo-collapsed-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3v18M3 12h18M6.3 6.3l11.4 11.4M17.7 6.3 6.3 17.7"></path></svg>
-          </span>
-          <div class="premium-promo-collapsed-copy">
-            <p id="premiumPromoCollapsedKicker" class="summary-kicker">SONIC PREMIUM</p>
-            <strong id="premiumPromoCollapsedTitle">Oferta recolhida</strong>
-            <span id="premiumPromoCollapsedText">Você pode mostrar os benefícios quando quiser.</span>
-          </div>
-          <button id="premiumPromoShowBtn" class="listen-btn secondary premium-promo-show-btn" type="button" aria-controls="membershipCard weeklyHighlightsCard">Mostrar</button>
-        </aside>
         <article id="membershipCard" class="membership-card" data-plan="free" aria-labelledby="membershipTitle">
           <div class="membership-card-signal" aria-hidden="true">
             <span></span><span></span><span></span><span></span><span></span>
@@ -2570,13 +2559,7 @@
                 <p id="membershipKicker" class="summary-kicker">SEU PLANO</p>
                 <h4 id="membershipTitle">Sonic Free</h4>
               </div>
-              <div class="membership-card-heading-actions">
-                <span id="membershipBadge" class="membership-badge">Gratuito</span>
-                <button id="membershipHideBtn" class="membership-hide-btn" type="button" aria-controls="membershipCard weeklyHighlightsCard" aria-label="Ocultar a oferta do Sonic Premium">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 10 5 5 5-5"></path></svg>
-                  <span id="membershipHideLabel">Ocultar Premium</span>
-                </button>
-              </div>
+              <span id="membershipBadge" class="membership-badge">Gratuito</span>
             </div>
             <p id="membershipDescription" class="membership-description">Descoberta eletrônica essencial, com curtidas ilimitadas.</p>
             <ul id="membershipFeatureList" class="membership-feature-list" aria-label="Recursos do plano">
@@ -2595,60 +2578,68 @@
         </article>
         <section id="weeklyHighlightsCard" class="weekly-highlights-card" data-access="locked" aria-labelledby="weeklyHighlightsTitle">
           <header class="weekly-highlights-head">
-            <div>
+            <div class="weekly-highlights-heading-copy">
               <p id="weeklyHighlightsKicker" class="summary-kicker">MINHA SEMANA SONIC</p>
               <h4 id="weeklyHighlightsTitle">O que marcou seu radar</h4>
               <p id="weeklyHighlightsIntro" class="muted">Um retrato semanal das descobertas que ensinaram seu perfil.</p>
             </div>
-            <span id="weeklyHighlightsBadge" class="weekly-highlights-badge">PREMIUM</span>
+            <div class="weekly-highlights-head-actions">
+              <span id="weeklyHighlightsBadge" class="weekly-highlights-badge">PREMIUM</span>
+              <button id="weeklyHighlightsToggleBtn" class="weekly-highlights-toggle-btn" type="button" aria-controls="weeklyHighlightsBody" aria-expanded="true" aria-label="Ocultar detalhes do Sonic Premium">
+                <span id="weeklyHighlightsToggleLabel">Ocultar</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 10 5 5 5-5"></path></svg>
+              </button>
+            </div>
           </header>
-          <p id="weeklyHighlightsPeriod" class="weekly-highlights-period">Esta semana</p>
-          <div id="weeklyHighlightsContent" class="weekly-highlights-content" aria-live="polite">
-            <div class="weekly-highlights-grid" aria-label="Resumo semanal">
-              <article class="weekly-highlight-stat">
-                <span id="weeklyHighlightsDiscoveredLabel">DJs descobertos</span>
-                <strong id="weeklyHighlightsDiscovered">—</strong>
-              </article>
-              <article class="weekly-highlight-stat is-positive">
-                <span id="weeklyHighlightsLikedLabel">DJs curtidos</span>
-                <strong id="weeklyHighlightsLiked">—</strong>
-              </article>
-              <article class="weekly-highlight-stat">
-                <span id="weeklyHighlightsPassedLabel">DJs que você passou</span>
-                <strong id="weeklyHighlightsPassed">—</strong>
-              </article>
-              <article class="weekly-highlight-stat">
-                <span id="weeklyHighlightsTracksLabel">Faixas curtidas</span>
-                <strong id="weeklyHighlightsTracks">—</strong>
-              </article>
-            </div>
-            <article class="weekly-highlight-spotlight">
-              <div class="weekly-highlight-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
-              <div>
-                <p id="weeklyHighlightsSpotlightKicker">DJ DA SEMANA</p>
-                <h5 id="weeklyHighlightsSpotlight">Seu destaque aparece com as próximas curtidas.</h5>
-                <p id="weeklyHighlightsStyle" class="muted">O estilo mais presente também será revelado aqui.</p>
+          <div id="weeklyHighlightsBody" class="weekly-highlights-body">
+            <p id="weeklyHighlightsPeriod" class="weekly-highlights-period">Esta semana</p>
+            <div id="weeklyHighlightsContent" class="weekly-highlights-content" aria-live="polite">
+              <div class="weekly-highlights-grid" aria-label="Resumo semanal">
+                <article class="weekly-highlight-stat">
+                  <span id="weeklyHighlightsDiscoveredLabel">DJs descobertos</span>
+                  <strong id="weeklyHighlightsDiscovered">—</strong>
+                </article>
+                <article class="weekly-highlight-stat is-positive">
+                  <span id="weeklyHighlightsLikedLabel">DJs curtidos</span>
+                  <strong id="weeklyHighlightsLiked">—</strong>
+                </article>
+                <article class="weekly-highlight-stat">
+                  <span id="weeklyHighlightsPassedLabel">DJs que você passou</span>
+                  <strong id="weeklyHighlightsPassed">—</strong>
+                </article>
+                <article class="weekly-highlight-stat">
+                  <span id="weeklyHighlightsTracksLabel">Faixas curtidas</span>
+                  <strong id="weeklyHighlightsTracks">—</strong>
+                </article>
               </div>
-            </article>
-          </div>
-          <div id="weeklyHighlightsEmpty" class="weekly-highlights-empty hidden" role="status">
-            <strong id="weeklyHighlightsEmptyTitle">Sua semana está começando.</strong>
-            <p id="weeklyHighlightsEmptyText">Avalie pelo menos três DJs ou faixas para revelar seus destaques.</p>
-            <div class="weekly-highlights-progress" aria-hidden="true"><span id="weeklyHighlightsProgress"></span></div>
-          </div>
-          <div id="weeklyHighlightsLocked" class="weekly-highlights-locked">
-            <span class="weekly-highlights-lock-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false"><path d="M7.5 10V7.8a4.5 4.5 0 0 1 9 0V10"></path><rect x="5" y="10" width="14" height="10" rx="3"></rect></svg>
-            </span>
-            <div>
-              <strong id="weeklyHighlightsLockedTitle">Seu resumo pessoal faz parte do Premium.</strong>
-              <p id="weeklyHighlightsLockedText">Veja quem marcou sua semana, quantos DJs você descobriu e como seu gosto evoluiu.</p>
+              <article class="weekly-highlight-spotlight">
+                <div class="weekly-highlight-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+                <div>
+                  <p id="weeklyHighlightsSpotlightKicker">DJ DA SEMANA</p>
+                  <h5 id="weeklyHighlightsSpotlight">Seu destaque aparece com as próximas curtidas.</h5>
+                  <p id="weeklyHighlightsStyle" class="muted">O estilo mais presente também será revelado aqui.</p>
+                </div>
+              </article>
             </div>
+            <div id="weeklyHighlightsEmpty" class="weekly-highlights-empty hidden" role="status">
+              <strong id="weeklyHighlightsEmptyTitle">Sua semana está começando.</strong>
+              <p id="weeklyHighlightsEmptyText">Avalie pelo menos três DJs ou faixas para revelar seus destaques.</p>
+              <div class="weekly-highlights-progress" aria-hidden="true"><span id="weeklyHighlightsProgress"></span></div>
+            </div>
+            <div id="weeklyHighlightsLocked" class="weekly-highlights-locked">
+              <span class="weekly-highlights-lock-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M7.5 10V7.8a4.5 4.5 0 0 1 9 0V10"></path><rect x="5" y="10" width="14" height="10" rx="3"></rect></svg>
+              </span>
+              <div>
+                <strong id="weeklyHighlightsLockedTitle">Seu resumo pessoal faz parte do Premium.</strong>
+                <p id="weeklyHighlightsLockedText">Veja quem marcou sua semana, quantos DJs você descobriu e como seu gosto evoluiu.</p>
+              </div>
+            </div>
+            <footer class="weekly-highlights-actions">
+              <button id="weeklyHighlightsPrimaryBtn" class="listen-btn weekly-highlights-primary" type="button">Conhecer Sonic Premium</button>
+              <button id="weeklyHighlightsShareBtn" class="listen-btn secondary weekly-highlights-share hidden" type="button">Compartilhar resumo</button>
+            </footer>
           </div>
-          <footer class="weekly-highlights-actions">
-            <button id="weeklyHighlightsPrimaryBtn" class="listen-btn weekly-highlights-primary" type="button">Conhecer Sonic Premium</button>
-            <button id="weeklyHighlightsShareBtn" class="listen-btn secondary weekly-highlights-share hidden" type="button">Compartilhar resumo</button>
-          </footer>
         </section>
         <article id="tasteCalibrationProfileCard" class="taste-calibration-profile-card hidden" aria-labelledby="tasteCalibrationProfileTitle" aria-hidden="true">
           <div>
@@ -3205,10 +3196,10 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
-    <script defer src="daily-djs.js?v=20260910premiumdismiss1"></script>
-    <script defer src="daily-djs-ui.js?v=20260910premiumdismiss1"></script>
-    <script defer src="daily-radar.js?v=20260910premiumdismiss1"></script>
-    <script defer src="daily-radar-ui.js?v=20260910premiumdismiss1"></script>
-    <script defer src="app.min.js?v=20260910premiumdismiss1"></script>
+    <script defer src="daily-djs.js?v=20260910premiumcollapse2"></script>
+    <script defer src="daily-djs-ui.js?v=20260910premiumcollapse2"></script>
+    <script defer src="daily-radar.js?v=20260910premiumcollapse2"></script>
+    <script defer src="daily-radar-ui.js?v=20260910premiumcollapse2"></script>
+    <script defer src="app.min.js?v=20260910premiumcollapse2"></script>
   </body>
 </html>

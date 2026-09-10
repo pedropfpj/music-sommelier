@@ -9,33 +9,32 @@ const [html, css, app, iosBuild] = await Promise.all([
 ]);
 
 for (const id of [
-  "membershipHideBtn",
-  "membershipHideLabel",
-  "premiumPromoCollapsed",
-  "premiumPromoCollapsedTitle",
-  "premiumPromoShowBtn",
+  "weeklyHighlightsToggleBtn",
+  "weeklyHighlightsToggleLabel",
+  "weeklyHighlightsBody",
   "premiumDismissBtn"
 ]) {
   assert.match(html, new RegExp(`id=["']${id}["']`), `missing #${id}`);
   assert.match(app, new RegExp(`getElementById\\(["']${id}["']\\)`), `missing DOM binding for #${id}`);
 }
 
-assert.match(html, /id="membershipHideBtn"[^>]+aria-controls="membershipCard weeklyHighlightsCard"/);
-assert.match(html, /id="premiumPromoCollapsed"[^>]+class="premium-promo-collapsed hidden"/);
+assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="weeklyHighlightsBody"[^>]+aria-expanded="true"/);
+assert.match(html, /id="weeklyHighlightsBody"[^>]+class="weekly-highlights-body"/);
+assert.doesNotMatch(html, /id="membershipHideBtn"/);
+assert.doesNotMatch(html, /id="premiumPromoCollapsed"/);
 assert.match(html, /id="premiumDismissBtn"[^>]+type="submit"[^>]+value="cancel"/);
 assert.match(app, /PREMIUM_PROMO_VISIBILITY_STORAGE_KEY\s*=\s*"neonpulse:premiumPromoVisibility:v1"/);
 assert.match(app, /PROFILE_DATA_STORAGE_KEYS\.filter\(\(key\) => key !== PREMIUM_PROMO_VISIBILITY_STORAGE_KEY\)/);
 assert.match(app, /isEphemeralSession\(normalizedSession\)[\s\S]*?PREMIUM_PROMO_VISIBILITY_STORAGE_KEY}:device/);
 assert.match(app, /function setPremiumPromoCollapsed\(collapsed\)[\s\S]*?if \(hasPremiumAccess\(\)\) return;/);
-assert.match(app, /membershipCard\?\.classList\.toggle\("hidden", collapsed\)/);
-assert.match(app, /weeklyHighlightsCard\?\.classList\.toggle\("hidden", collapsed\)/);
-assert.match(app, /premiumPromoCollapsed\?\.classList\.toggle\("hidden", !collapsed\)/);
-assert.match(app, /bind\(membershipHideBtn, "click",[\s\S]*?setPremiumPromoCollapsed\(true\)/);
-assert.match(app, /bind\(premiumPromoShowBtn, "click",[\s\S]*?setPremiumPromoCollapsed\(false\)/);
+assert.match(app, /weeklyHighlightsCard\?\.classList\.toggle\("is-collapsed", collapsed\)/);
+assert.match(app, /weeklyHighlightsBody\?\.classList\.toggle\("hidden", collapsed\)/);
+assert.match(app, /weeklyHighlightsToggleBtn\?\.classList\.toggle\("hidden", premium\)/);
+assert.match(app, /bind\(weeklyHighlightsToggleBtn, "click",[\s\S]*?setPremiumPromoCollapsed\(!readPremiumPromoCollapsed\(\)\)/);
 assert.match(app, /sonicTinyCopy\("Agora não", "Not now", "Ahora no"\)/);
-assert.match(css, /\.membership-hide-btn\s*\{[\s\S]*?min-height:\s*44px/);
-assert.match(css, /\.premium-promo-show-btn\s*\{[\s\S]*?min-height:\s*44px/);
-assert.match(app, /20260910premiumdismiss1/);
-assert.match(iosBuild, /20260910premiumdismiss1ios1/);
+assert.match(css, /\.weekly-highlights-toggle-btn\s*\{[\s\S]*?min-height:\s*44px/);
+assert.match(css, /\.weekly-highlights-toggle-btn:focus-visible\s*\{[\s\S]*?outline:\s*3px solid/);
+assert.match(app, /20260910premiumcollapse2/);
+assert.match(iosBuild, /20260910premiumcollapse2ios1/);
 
 console.log("Premium visibility checks passed.");

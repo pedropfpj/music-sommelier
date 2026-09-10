@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260910premiumdismiss1";
+const SONIC_APP_BUILD_ID = "20260910premiumcollapse2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10204,18 +10204,14 @@ const membershipFeatureList = document.getElementById("membershipFeatureList");
 const membershipStatus = document.getElementById("membershipStatus");
 const membershipPrimaryBtn = document.getElementById("membershipPrimaryBtn");
 const membershipRefreshBtn = document.getElementById("membershipRefreshBtn");
-const membershipHideBtn = document.getElementById("membershipHideBtn");
-const membershipHideLabel = document.getElementById("membershipHideLabel");
-const premiumPromoCollapsed = document.getElementById("premiumPromoCollapsed");
-const premiumPromoCollapsedKicker = document.getElementById("premiumPromoCollapsedKicker");
-const premiumPromoCollapsedTitle = document.getElementById("premiumPromoCollapsedTitle");
-const premiumPromoCollapsedText = document.getElementById("premiumPromoCollapsedText");
-const premiumPromoShowBtn = document.getElementById("premiumPromoShowBtn");
 const weeklyHighlightsCard = document.getElementById("weeklyHighlightsCard");
 const weeklyHighlightsKicker = document.getElementById("weeklyHighlightsKicker");
 const weeklyHighlightsTitle = document.getElementById("weeklyHighlightsTitle");
 const weeklyHighlightsIntro = document.getElementById("weeklyHighlightsIntro");
 const weeklyHighlightsBadge = document.getElementById("weeklyHighlightsBadge");
+const weeklyHighlightsToggleBtn = document.getElementById("weeklyHighlightsToggleBtn");
+const weeklyHighlightsToggleLabel = document.getElementById("weeklyHighlightsToggleLabel");
+const weeklyHighlightsBody = document.getElementById("weeklyHighlightsBody");
 const weeklyHighlightsPeriod = document.getElementById("weeklyHighlightsPeriod");
 const weeklyHighlightsContent = document.getElementById("weeklyHighlightsContent");
 const weeklyHighlightsDiscoveredLabel = document.getElementById("weeklyHighlightsDiscoveredLabel");
@@ -44560,17 +44556,10 @@ function weeklyHighlightsCopy() {
 
 function premiumPromoVisibilityCopy() {
   return {
-    kicker: "SONIC PREMIUM",
-    title: sonicTinyCopy("Oferta recolhida", "Offer collapsed", "Oferta contraída"),
-    text: sonicTinyCopy(
-      "Você pode mostrar os benefícios quando quiser.",
-      "You can show the benefits whenever you want.",
-      "Puedes mostrar los beneficios cuando quieras."
-    ),
-    hide: sonicTinyCopy("Ocultar Premium", "Hide Premium", "Ocultar Premium"),
-    hideLabel: sonicTinyCopy("Ocultar a oferta do Sonic Premium", "Hide the Sonic Premium offer", "Ocultar la oferta de Sonic Premium"),
+    hide: sonicTinyCopy("Ocultar", "Hide", "Ocultar"),
+    hideLabel: sonicTinyCopy("Ocultar detalhes do Sonic Premium", "Hide Sonic Premium details", "Ocultar detalles de Sonic Premium"),
     show: sonicTinyCopy("Mostrar", "Show", "Mostrar"),
-    showLabel: sonicTinyCopy("Mostrar novamente a oferta do Sonic Premium", "Show the Sonic Premium offer again", "Volver a mostrar la oferta de Sonic Premium")
+    showLabel: sonicTinyCopy("Mostrar detalhes do Sonic Premium", "Show Sonic Premium details", "Mostrar detalles de Sonic Premium")
   };
 }
 
@@ -44611,29 +44600,22 @@ function renderPremiumPromoVisibility() {
   const copy = premiumPromoVisibilityCopy();
   const premium = hasPremiumAccess();
   const collapsed = !premium && readPremiumPromoCollapsed();
-  membershipCard?.classList.toggle("hidden", collapsed);
-  weeklyHighlightsCard?.classList.toggle("hidden", collapsed);
-  premiumPromoCollapsed?.classList.toggle("hidden", !collapsed);
-  membershipHideBtn?.classList.toggle("hidden", premium);
-  if (membershipHideBtn) membershipHideBtn.setAttribute("aria-label", copy.hideLabel);
-  if (membershipHideLabel) membershipHideLabel.textContent = copy.hide;
-  if (premiumPromoCollapsedKicker) premiumPromoCollapsedKicker.textContent = copy.kicker;
-  if (premiumPromoCollapsedTitle) premiumPromoCollapsedTitle.textContent = copy.title;
-  if (premiumPromoCollapsedText) premiumPromoCollapsedText.textContent = copy.text;
-  if (premiumPromoShowBtn) {
-    premiumPromoShowBtn.textContent = copy.show;
-    premiumPromoShowBtn.setAttribute("aria-label", copy.showLabel);
-    premiumPromoShowBtn.setAttribute("aria-expanded", String(!collapsed));
+  weeklyHighlightsCard?.classList.toggle("is-collapsed", collapsed);
+  weeklyHighlightsBody?.classList.toggle("hidden", collapsed);
+  weeklyHighlightsToggleBtn?.classList.toggle("hidden", premium);
+  if (weeklyHighlightsToggleBtn) {
+    weeklyHighlightsToggleBtn.setAttribute("aria-expanded", String(!collapsed));
+    weeklyHighlightsToggleBtn.setAttribute("aria-label", collapsed ? copy.showLabel : copy.hideLabel);
   }
+  if (weeklyHighlightsToggleLabel) weeklyHighlightsToggleLabel.textContent = collapsed ? copy.show : copy.hide;
 }
 
 function setPremiumPromoCollapsed(collapsed) {
   if (hasPremiumAccess()) return;
   writePremiumPromoCollapsed(collapsed);
-  renderMembershipUi();
+  renderPremiumPromoVisibility();
   window.requestAnimationFrame(() => {
-    if (collapsed) premiumPromoShowBtn?.focus();
-    else membershipHideBtn?.focus();
+    weeklyHighlightsToggleBtn?.focus();
   });
 }
 
@@ -62832,11 +62814,8 @@ bind(membershipPrimaryBtn, "click", () => {
 bind(membershipRefreshBtn, "click", () => {
   void refreshMembershipAccess();
 });
-bind(membershipHideBtn, "click", () => {
-  setPremiumPromoCollapsed(true);
-});
-bind(premiumPromoShowBtn, "click", () => {
-  setPremiumPromoCollapsed(false);
+bind(weeklyHighlightsToggleBtn, "click", () => {
+  setPremiumPromoCollapsed(!readPremiumPromoCollapsed());
 });
 bind(weeklyHighlightsPrimaryBtn, "click", () => {
   if (!hasPremiumAccess()) {
