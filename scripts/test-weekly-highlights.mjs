@@ -44,7 +44,7 @@ assert.match(css, /\.premium-dialog-close\s*\{[\s\S]*?width: 44px;[\s\S]*?height
 assert.match(css, /\.premium-dialog-close:focus-visible\s*\{[\s\S]*?outline: 2px solid/);
 assert.match(css, /\.weekly-highlights-card\s*\{/);
 assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.weekly-highlights-actions,[\s\S]*?width: 100%;/);
-assert.match(app, /20260909weeklyhighlights1/);
-assert.match(iosBuild, /20260909weeklyhighlights1ios1/);
+assert.match(app, /20260910premiumdismiss1/);
+assert.match(iosBuild, /20260910premiumdismiss1ios1/);
 
 console.log("Weekly Highlights and Premium modal checks passed.");

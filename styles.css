@@ -18762,6 +18762,10 @@ html.sonic-ios-app .app-tab-btn {
   order: 1;
 }
 
+#premiumPromoCollapsed {
+  order: 1;
+}
+
 #weeklyHighlightsCard {
   order: 2;
 }
@@ -18867,6 +18871,132 @@ html.sonic-ios-app .app-tab-btn {
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.8rem;
+}
+
+.membership-card-heading-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+}
+
+.membership-hide-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  padding: 0.48rem 0.66rem;
+  border: 1px solid rgba(190, 219, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(3, 12, 27, 0.52);
+  color: rgba(216, 235, 250, 0.76);
+  font: 800 0.72rem/1 "Chakra Petch", sans-serif;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.membership-hide-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.9;
+  transform: rotate(180deg);
+}
+
+.membership-hide-btn:hover {
+  border-color: rgba(128, 255, 220, 0.42);
+  background: rgba(128, 255, 220, 0.08);
+  color: #edfffb;
+}
+
+.membership-hide-btn:focus-visible,
+.premium-promo-show-btn:focus-visible {
+  outline: 3px solid rgba(128, 255, 220, 0.68);
+  outline-offset: 3px;
+}
+
+.premium-promo-collapsed {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.78rem;
+  padding: 0.74rem 0.78rem;
+  border: 1px solid rgba(128, 255, 220, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(128, 255, 220, 0.075), transparent 34%),
+    rgba(4, 13, 29, 0.9);
+  box-shadow: inset 3px 0 rgba(128, 255, 220, 0.72);
+}
+
+.premium-promo-collapsed-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(128, 255, 220, 0.26);
+  border-radius: 50%;
+  color: #80ffdc;
+  background: rgba(128, 255, 220, 0.07);
+}
+
+.premium-promo-collapsed-mark svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.35;
+}
+
+.premium-promo-collapsed-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.12rem;
+}
+
+.premium-promo-collapsed-copy p,
+.premium-promo-collapsed-copy strong,
+.premium-promo-collapsed-copy span {
+  margin: 0;
+}
+
+.premium-promo-collapsed-copy strong {
+  color: #f0f9ff;
+  font-size: 0.9rem;
+}
+
+.premium-promo-collapsed-copy > span {
+  overflow: hidden;
+  color: rgba(198, 222, 241, 0.64);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.premium-promo-show-btn {
+  min-width: 96px;
+  min-height: 44px;
+  border: 1px solid rgba(128, 255, 220, 0.38);
+  color: #041713;
+  background: linear-gradient(120deg, #80ffdc, #86ceff);
+  font-weight: 900;
+}
+
+.premium-promo-show-btn:hover {
+  border-color: rgba(217, 255, 247, 0.82);
+  color: #03100e;
+  background: linear-gradient(120deg, #a7ffe8, #a5dcff);
 }
 
 .membership-card-heading h4 {
@@ -18992,12 +19122,26 @@ html.sonic-ios-app .app-tab-btn {
     display: grid;
   }
 
-  .membership-badge {
+  .membership-card-heading-actions {
     justify-self: start;
+    justify-content: flex-start;
   }
 
   .membership-actions {
     grid-template-columns: 1fr;
+  }
+
+  .premium-promo-collapsed {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .premium-promo-collapsed-copy > span {
+    white-space: normal;
+  }
+
+  .premium-promo-show-btn {
+    grid-column: 1 / -1;
+    width: 100%;
   }
 }
 
@@ -21554,6 +21698,10 @@ html.premium-dialog-open body {
   gap: 0.55rem;
 }
 
+.premium-dismiss-btn {
+  min-height: 44px;
+}
+
 .premium-profile-preview + .premium-dialog-actions {
   margin-top: 0.85rem;
 }
@@ -21924,6 +22072,7 @@ body.taste-calibration-open .taste-calibration-screen {
   outline-offset: 3px;
 }
 
+#premiumPromoCollapsed { order: 1; }
 #weeklyHighlightsCard { order: 2; }
 #tasteCalibrationProfileCard { order: 3; }
 #apiHealthPanel { order: 4; }

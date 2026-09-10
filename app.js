@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260909weeklyhighlights1";
+const SONIC_APP_BUILD_ID = "20260910premiumdismiss1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10204,6 +10204,13 @@ const membershipFeatureList = document.getElementById("membershipFeatureList");
 const membershipStatus = document.getElementById("membershipStatus");
 const membershipPrimaryBtn = document.getElementById("membershipPrimaryBtn");
 const membershipRefreshBtn = document.getElementById("membershipRefreshBtn");
+const membershipHideBtn = document.getElementById("membershipHideBtn");
+const membershipHideLabel = document.getElementById("membershipHideLabel");
+const premiumPromoCollapsed = document.getElementById("premiumPromoCollapsed");
+const premiumPromoCollapsedKicker = document.getElementById("premiumPromoCollapsedKicker");
+const premiumPromoCollapsedTitle = document.getElementById("premiumPromoCollapsedTitle");
+const premiumPromoCollapsedText = document.getElementById("premiumPromoCollapsedText");
+const premiumPromoShowBtn = document.getElementById("premiumPromoShowBtn");
 const weeklyHighlightsCard = document.getElementById("weeklyHighlightsCard");
 const weeklyHighlightsKicker = document.getElementById("weeklyHighlightsKicker");
 const weeklyHighlightsTitle = document.getElementById("weeklyHighlightsTitle");
@@ -10248,6 +10255,7 @@ const premiumProfileSignals = document.getElementById("premiumProfileSignals");
 const premiumBenefitList = document.getElementById("premiumBenefitList");
 const premiumOfferGrid = document.getElementById("premiumOfferGrid");
 const premiumBillingStatus = document.getElementById("premiumBillingStatus");
+const premiumDismissBtn = document.getElementById("premiumDismissBtn");
 const premiumRestoreBtn = document.getElementById("premiumRestoreBtn");
 const premiumManageBtn = document.getElementById("premiumManageBtn");
 const premiumLegalNote = document.getElementById("premiumLegalNote");
@@ -10860,6 +10868,7 @@ const COMMUNITY_COMMENT_LAZY_ROOT_MARGIN = "360px 0px";
 const AI_USAGE_STORAGE_KEY = "neonpulse:aiUsage:v1";
 const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
+const PREMIUM_PROMO_VISIBILITY_STORAGE_KEY = "neonpulse:premiumPromoVisibility:v1";
 const PROFILE_DATA_STORAGE_KEYS = [
   DJ_RECOMMENDATION_STORAGE_KEY,
   DAILY_DJ_STORAGE_KEY,
@@ -10874,7 +10883,8 @@ const PROFILE_DATA_STORAGE_KEYS = [
   PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY,
   AI_USAGE_STORAGE_KEY,
   DAILY_PRODUCT_USAGE_STORAGE_KEY,
-  AI_TEXT_CACHE_STORAGE_KEY
+  AI_TEXT_CACHE_STORAGE_KEY,
+  PREMIUM_PROMO_VISIBILITY_STORAGE_KEY
 ];
 const AUDIO_STORAGE_KEY = "neonpulse:audio:v2";
 const AUDIO_VOLUME_STORAGE_KEY = "neonpulse:audioVolume:v1";
@@ -10911,6 +10921,8 @@ const YOUTUBE_SEARCH_RESULTS_PER_QUERY = 3;
 const SPIRIT_AVATAR_FALLBACK = "assets/image-bank/png/logos/neonpulse-logo-mark.png?v=20260223a";
 const SPIRIT_COLLECTIBLE_FALLBACK = "assets/image-bank/png/social/share_card_1.png?v=20260223a";
 let currentLanguage = DEFAULT_LANGUAGE;
+let premiumPromoStorageScope = "";
+let premiumPromoCollapsedMemory = false;
 let progressStorageReady = false;
 let spiritStoryPreparedAsset = null;
 let spiritStoryPreparedKey = "";
@@ -30119,6 +30131,8 @@ function clearAllSonicLocalData() {
   } catch (_err) {
     // ignore session failures
   }
+  premiumPromoStorageScope = "";
+  premiumPromoCollapsedMemory = false;
 }
 
 function clearSessionStorageBuckets(session, baseKeys = []) {
@@ -30154,6 +30168,7 @@ function clearSessionProfileData(session) {
 }
 
 function clearAnonymousDiscoveryStorage() {
+  const anonymousDiscoveryKeys = PROFILE_DATA_STORAGE_KEYS.filter((key) => key !== PREMIUM_PROMO_VISIBILITY_STORAGE_KEY);
   const storedUser = readStoredUserSession();
   [
     { mode: "guest", username: "" },
@@ -30162,10 +30177,10 @@ function clearAnonymousDiscoveryStorage() {
   ].forEach((session) => {
     const normalizedSession = normalizeUserSession(session || {});
     if (["guest", "test", "visitor"].includes(normalizedSession.mode)) {
-      clearSessionStorageBuckets(normalizedSession, PROFILE_DATA_STORAGE_KEYS);
+      clearSessionStorageBuckets(normalizedSession, anonymousDiscoveryKeys);
     }
   });
-  removeLocalStorageKeys(PROFILE_DATA_STORAGE_KEYS);
+  removeLocalStorageKeys(anonymousDiscoveryKeys);
   try {
     localStorage.removeItem(USER_SESSION_STORAGE_KEY);
   } catch (_err) {
@@ -44543,6 +44558,85 @@ function weeklyHighlightsCopy() {
   };
 }
 
+function premiumPromoVisibilityCopy() {
+  return {
+    kicker: "SONIC PREMIUM",
+    title: sonicTinyCopy("Oferta recolhida", "Offer collapsed", "Oferta contraída"),
+    text: sonicTinyCopy(
+      "Você pode mostrar os benefícios quando quiser.",
+      "You can show the benefits whenever you want.",
+      "Puedes mostrar los beneficios cuando quieras."
+    ),
+    hide: sonicTinyCopy("Ocultar Premium", "Hide Premium", "Ocultar Premium"),
+    hideLabel: sonicTinyCopy("Ocultar a oferta do Sonic Premium", "Hide the Sonic Premium offer", "Ocultar la oferta de Sonic Premium"),
+    show: sonicTinyCopy("Mostrar", "Show", "Mostrar"),
+    showLabel: sonicTinyCopy("Mostrar novamente a oferta do Sonic Premium", "Show the Sonic Premium offer again", "Volver a mostrar la oferta de Sonic Premium")
+  };
+}
+
+function premiumPromoVisibilityKey(session = currentAuthUser) {
+  const normalizedSession = normalizeUserSession(session);
+  if (isEphemeralSession(normalizedSession)) return `${PREMIUM_PROMO_VISIBILITY_STORAGE_KEY}:device`;
+  return curationStorageKey(PREMIUM_PROMO_VISIBILITY_STORAGE_KEY, normalizedSession);
+}
+
+function readPremiumPromoCollapsed(session = currentAuthUser) {
+  const storageKey = premiumPromoVisibilityKey(session);
+  if (storageKey === premiumPromoStorageScope) return premiumPromoCollapsedMemory;
+  premiumPromoStorageScope = storageKey;
+  premiumPromoCollapsedMemory = false;
+  if (!storageKey) return premiumPromoCollapsedMemory;
+  try {
+    premiumPromoCollapsedMemory = localStorage.getItem(storageKey) === "collapsed";
+  } catch (_err) {
+    // Keep an in-memory preference if local storage is unavailable.
+  }
+  return premiumPromoCollapsedMemory;
+}
+
+function writePremiumPromoCollapsed(collapsed, session = currentAuthUser) {
+  const storageKey = premiumPromoVisibilityKey(session);
+  premiumPromoStorageScope = storageKey;
+  premiumPromoCollapsedMemory = Boolean(collapsed);
+  if (!storageKey) return;
+  try {
+    if (premiumPromoCollapsedMemory) localStorage.setItem(storageKey, "collapsed");
+    else localStorage.removeItem(storageKey);
+  } catch (_err) {
+    // The UI still behaves correctly for the current session.
+  }
+}
+
+function renderPremiumPromoVisibility() {
+  const copy = premiumPromoVisibilityCopy();
+  const premium = hasPremiumAccess();
+  const collapsed = !premium && readPremiumPromoCollapsed();
+  membershipCard?.classList.toggle("hidden", collapsed);
+  weeklyHighlightsCard?.classList.toggle("hidden", collapsed);
+  premiumPromoCollapsed?.classList.toggle("hidden", !collapsed);
+  membershipHideBtn?.classList.toggle("hidden", premium);
+  if (membershipHideBtn) membershipHideBtn.setAttribute("aria-label", copy.hideLabel);
+  if (membershipHideLabel) membershipHideLabel.textContent = copy.hide;
+  if (premiumPromoCollapsedKicker) premiumPromoCollapsedKicker.textContent = copy.kicker;
+  if (premiumPromoCollapsedTitle) premiumPromoCollapsedTitle.textContent = copy.title;
+  if (premiumPromoCollapsedText) premiumPromoCollapsedText.textContent = copy.text;
+  if (premiumPromoShowBtn) {
+    premiumPromoShowBtn.textContent = copy.show;
+    premiumPromoShowBtn.setAttribute("aria-label", copy.showLabel);
+    premiumPromoShowBtn.setAttribute("aria-expanded", String(!collapsed));
+  }
+}
+
+function setPremiumPromoCollapsed(collapsed) {
+  if (hasPremiumAccess()) return;
+  writePremiumPromoCollapsed(collapsed);
+  renderMembershipUi();
+  window.requestAnimationFrame(() => {
+    if (collapsed) premiumPromoShowBtn?.focus();
+    else membershipHideBtn?.focus();
+  });
+}
+
 function renderWeeklyHighlights() {
   if (!weeklyHighlightsCard) return;
   const copy = weeklyHighlightsCopy();
@@ -44715,6 +44809,7 @@ function renderMembershipUi() {
     }));
   }
   renderWeeklyHighlights();
+  renderPremiumPromoVisibility();
 }
 
 async function refreshMembershipAccess() {
@@ -44872,6 +44967,7 @@ function renderPremiumDialogCopy() {
     }));
   }
   if (premiumDialogClose) premiumDialogClose.setAttribute("aria-label", sonicTinyCopy("Fechar", "Close", "Cerrar"));
+  if (premiumDismissBtn) premiumDismissBtn.textContent = sonicTinyCopy("Agora não", "Not now", "Ahora no");
   if (premiumRestoreBtn) premiumRestoreBtn.textContent = copy.restore;
   if (premiumManageBtn) premiumManageBtn.textContent = copy.manage;
   if (premiumLegalNote) premiumLegalNote.textContent = copy.legal;
@@ -62735,6 +62831,12 @@ bind(membershipPrimaryBtn, "click", () => {
 });
 bind(membershipRefreshBtn, "click", () => {
   void refreshMembershipAccess();
+});
+bind(membershipHideBtn, "click", () => {
+  setPremiumPromoCollapsed(true);
+});
+bind(premiumPromoShowBtn, "click", () => {
+  setPremiumPromoCollapsed(false);
 });
 bind(weeklyHighlightsPrimaryBtn, "click", () => {
   if (!hasPremiumAccess()) {

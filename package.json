@@ -29,6 +29,7 @@
     "test:billing": "node scripts/test-billing-foundation.mjs",
     "test:sound-system-premium": "node scripts/test-sound-system-premium.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
+    "test:premium-visibility": "node scripts/test-premium-promo-visibility.mjs",
     "test:newsroom": "node scripts/test-newsroom.mjs",
     "test:newsroom-visuals": "node scripts/test-newsroom-visuals.mjs",
     "test:community-email": "node scripts/test-community-email-notifications.mjs",
