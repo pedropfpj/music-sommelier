@@ -602,91 +602,170 @@ function stopChromeProcess(child) {
   }
 }
 
-function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function createCdpClient(wsUrl) {
+  const socket = new WebSocket(wsUrl);
+  const pending = new Map();
+  const eventWaiters = new Map();
+  let nextId = 1;
+
+  socket.addEventListener("message", (event) => {
+    const message = JSON.parse(event.data);
+    if (message.id && pending.has(message.id)) {
+      const { resolve, reject } = pending.get(message.id);
+      pending.delete(message.id);
+      if (message.error) reject(new Error(message.error.message || "Chrome DevTools command failed"));
+      else resolve(message.result || {});
+      return;
+    }
+    if (!message.method || !eventWaiters.has(message.method)) return;
+    const waiters = eventWaiters.get(message.method);
+    eventWaiters.delete(message.method);
+    waiters.forEach((resolve) => resolve(message.params || {}));
+  });
+
+  const open = new Promise((resolve, reject) => {
+    socket.addEventListener("open", resolve, { once: true });
+    socket.addEventListener("error", reject, { once: true });
+  });
+
+  return {
+    open,
+    send(method, params = {}) {
+      const id = nextId;
+      nextId += 1;
+      return new Promise((resolve, reject) => {
+        pending.set(id, { resolve, reject });
+        socket.send(JSON.stringify({ id, method, params }));
+      });
+    },
+    waitForEvent(method, timeoutMs = 12000) {
+      return new Promise((resolve, reject) => {
+        const waiters = eventWaiters.get(method) || [];
+        waiters.push(resolve);
+        eventWaiters.set(method, waiters);
+        const timer = setTimeout(() => {
+          const active = eventWaiters.get(method) || [];
+          const index = active.indexOf(resolve);
+          if (index >= 0) active.splice(index, 1);
+          if (active.length) eventWaiters.set(method, active);
+          else eventWaiters.delete(method);
+          reject(new Error(`Timed out waiting for ${method}`));
+        }, timeoutMs);
+        timer.unref?.();
+      });
+    },
+    close() {
+      socket.close();
+    }
+  };
+}
+
+async function captureChromeScreenshot(chromePath, url, outputPath, width, height) {
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonic-product-verify-"));
   fs.rmSync(outputPath, { force: true });
-  return new Promise((resolve, reject) => {
-    const args = [
-      "--headless=new",
-      "--disable-gpu",
-      "--no-sandbox",
-      "--hide-scrollbars",
-      "--disable-background-networking",
-      "--disable-breakpad",
-      "--disable-component-update",
-      "--disable-crash-reporter",
-      "--disable-default-apps",
-      "--disable-dev-shm-usage",
-      "--disable-extensions",
-      "--disable-sync",
-      "--no-first-run",
-      "--no-default-browser-check",
-      "--run-all-compositor-stages-before-draw",
-      "--disable-features=Translate,OptimizationHints,MediaRouter",
-      `--user-data-dir=${profileDir}`,
-      `--virtual-time-budget=${SCREENSHOT_VIRTUAL_TIME_BUDGET_MS}`,
-      `--screenshot=${outputPath}`,
-      `--window-size=${width},${height}`,
-      url
-    ];
-
-    let settled = false;
-    let stdout = "";
-    let stderr = "";
-    const child = spawn(chromePath, args, {
-      cwd: rootDir,
-      detached: true,
-      stdio: ["ignore", "pipe", "pipe"]
-    });
-
-    const cleanup = () => {
-      fs.rmSync(profileDir, { recursive: true, force: true });
-    };
-    const readyTimer = setInterval(() => {
-      if (settled || !fs.existsSync(outputPath)) return;
-      settled = true;
-      clearTimeout(timer);
-      clearInterval(readyTimer);
-      stopChromeProcess(child);
-      cleanup();
-      resolve();
-    }, 250);
-    const timer = setTimeout(() => {
-      if (settled) return;
-      settled = true;
-      clearInterval(readyTimer);
-      stopChromeProcess(child);
-      cleanup();
-      reject(new Error(`Chrome screenshot timed out for ${path.relative(rootDir, outputPath)}`));
-    }, SCREENSHOT_TIMEOUT_MS);
-
-    child.stdout.on("data", (chunk) => {
-      stdout = `${stdout}${chunk}`.slice(-6000);
-    });
-    child.stderr.on("data", (chunk) => {
-      stderr = `${stderr}${chunk}`.slice(-6000);
-    });
-    child.on("error", (error) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      clearInterval(readyTimer);
-      cleanup();
-      reject(error);
-    });
-    child.on("close", (code) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      clearInterval(readyTimer);
-      cleanup();
-      if (code === 0 && fs.existsSync(outputPath)) {
-        resolve();
-        return;
-      }
-      reject(new Error((stderr || stdout || `Chrome screenshot failed for ${outputPath}`).trim()));
-    });
+  const child = spawn(chromePath, [
+    "--headless=new",
+    "--disable-gpu",
+    "--no-sandbox",
+    "--hide-scrollbars",
+    "--disable-background-networking",
+    "--disable-breakpad",
+    "--disable-component-update",
+    "--disable-crash-reporter",
+    "--disable-default-apps",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    "--disable-sync",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--run-all-compositor-stages-before-draw",
+    "--disable-features=Translate,OptimizationHints,MediaRouter",
+    "--remote-debugging-port=0",
+    `--user-data-dir=${profileDir}`,
+    "about:blank"
+  ], {
+    cwd: rootDir,
+    detached: true,
+    stdio: ["ignore", "ignore", "pipe"]
   });
+  let stderr = "";
+  child.stderr.on("data", (chunk) => {
+    stderr = `${stderr}${chunk}`.slice(-6000);
+  });
+
+  let client;
+  try {
+    const activePortPath = path.join(profileDir, "DevToolsActivePort");
+    const deadline = Date.now() + SCREENSHOT_TIMEOUT_MS;
+    while (!fs.existsSync(activePortPath) && Date.now() < deadline) await wait(100);
+    if (!fs.existsSync(activePortPath)) {
+      throw new Error(`Chrome DevTools did not start: ${stderr || "timeout"}`);
+    }
+    const [port] = fs.readFileSync(activePortPath, "utf8").trim().split("\n");
+    const targetResponse = await fetch(`http://127.0.0.1:${port}/json/new?${encodeURIComponent("about:blank")}`, {
+      method: "PUT"
+    });
+    if (!targetResponse.ok) throw new Error(`Could not create Chrome target: ${targetResponse.status}`);
+    const target = await targetResponse.json();
+    if (!target.webSocketDebuggerUrl) throw new Error("Chrome target did not expose a debugger websocket URL");
+
+    client = createCdpClient(target.webSocketDebuggerUrl);
+    await client.open;
+    await client.send("Page.enable");
+    await client.send("Runtime.enable");
+    await client.send("Emulation.setDeviceMetricsOverride", {
+      width,
+      height,
+      deviceScaleFactor: 1,
+      mobile: width <= 780,
+      screenWidth: width,
+      screenHeight: height,
+      positionX: 0,
+      positionY: 0
+    });
+    if (width <= 780) {
+      await client.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+    }
+    const loaded = client.waitForEvent("Page.loadEventFired").catch(() => null);
+    await client.send("Page.navigate", { url });
+    await loaded;
+    await wait(SCREENSHOT_VIRTUAL_TIME_BUDGET_MS);
+
+    const metrics = await client.send("Runtime.evaluate", {
+      expression: `(() => {
+        const card = document.querySelector('.taste-calibration-screen:not(.hidden) .taste-calibration-card');
+        const rect = card?.getBoundingClientRect();
+        return {
+          innerWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          card: rect ? { left: rect.left, right: rect.right, width: rect.width } : null
+        };
+      })()`,
+      returnByValue: true
+    });
+    const layout = metrics.result?.value || {};
+    if (layout.innerWidth !== width || layout.scrollWidth > width + 1) {
+      throw new Error(`Viewport overflow at ${width}px: ${JSON.stringify(layout)}`);
+    }
+    if (layout.card && (layout.card.left < -1 || layout.card.right > width + 1)) {
+      throw new Error(`Sonic Start card is clipped at ${width}px: ${JSON.stringify(layout.card)}`);
+    }
+
+    const result = await client.send("Page.captureScreenshot", {
+      format: "png",
+      fromSurface: true,
+      captureBeyondViewport: false
+    });
+    fs.writeFileSync(outputPath, Buffer.from(result.data, "base64"));
+  } finally {
+    client?.close();
+    stopChromeProcess(child);
+    fs.rmSync(profileDir, { recursive: true, force: true });
+  }
 }
 
 async function captureUiScreenshots() {
@@ -700,11 +779,14 @@ async function captureUiScreenshots() {
   fs.mkdirSync(reportsDir, { recursive: true });
   const { server, url } = await startStaticServer();
   try {
+    const sonicStartUrl = new URL(url);
+    sonicStartUrl.searchParams.set("tasteCalibrationQa", "1");
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-desktop-latest.png"), 1440, 960);
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-mobile-latest.png"), 393, 852);
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-mobile-375-latest.png"), 375, 812);
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-landscape-latest.png"), 852, 393);
-    pass("UI screenshots captured for desktop, iPhone, small phone, and landscape");
+    await captureChromeScreenshot(chromePath, sonicStartUrl.toString(), path.join(reportsDir, "ui-sonic-start-latest.png"), 393, 852);
+    pass("UI screenshots captured for desktop, iPhone, small phone, landscape, and Sonic Start");
   } catch (error) {
     const message = `UI screenshots unavailable: ${error.message}`;
     if (strictScreenshots) fail("UI screenshots", message);

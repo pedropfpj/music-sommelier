@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260911reliability1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260911sonicstart1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260911reliability1" />
+    <link rel="stylesheet" href="styles.min.css?v=20260911sonicstart1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
@@ -404,7 +404,7 @@
               <span class="intro-spark spark-c">*</span>
               <span class="intro-glyph glyph-a">♪</span>
               <span class="intro-glyph glyph-b">♬</span>
-              <span class="intro-glyph glyph-c">⚡</span>
+              <span class="intro-glyph glyph-c">⌁</span>
               <span class="intro-glyph glyph-d">◈</span>
               <div class="intro-logo-wrap">
                 <img class="intro-logo-mark" src="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" alt="" fetchpriority="high" decoding="async" onerror="this.dataset.logoFailed='true'" />
@@ -412,15 +412,15 @@
               </div>
             </div>
             <div class="intro-symbol-cloud" aria-hidden="true">
-              <span class="intro-symbol sym-a">☠</span>
-              <span class="intro-symbol sym-b">🔊</span>
-              <span class="intro-symbol sym-c">🎚</span>
+              <span class="intro-symbol sym-a">◌</span>
+              <span class="intro-symbol sym-b">◉</span>
+              <span class="intro-symbol sym-c">≋</span>
               <span class="intro-symbol sym-d">♫</span>
-              <span class="intro-symbol sym-e">⚡</span>
+              <span class="intro-symbol sym-e">⌁</span>
               <span class="intro-symbol sym-f">♬</span>
               <span class="intro-symbol sym-g">⬡</span>
               <span class="intro-symbol sym-h">✧</span>
-              <span class="intro-symbol sym-i">🎛</span>
+              <span class="intro-symbol sym-i">▦</span>
               <span class="intro-symbol sym-j intro-symbol-eq">▁▃▅▇</span>
               <span class="intro-symbol sym-k intro-symbol-eq">█▆▃▁</span>
               <span class="intro-symbol sym-l">◉</span>
@@ -511,6 +511,12 @@
           <h1 id="authTitle">Entre no Sonic Search</h1>
           <p id="authDesc">Comece sem conta com uma descoberta limpa, ou entre com uma conta online disponível para sincronizar seu perfil entre aparelhos.</p>
         </div>
+        <div class="auth-language-switch" role="group" aria-labelledby="authLanguageLabel">
+          <span id="authLanguageLabel">Idioma</span>
+          <button class="auth-language-btn" type="button" data-auth-lang="pt" aria-pressed="false">PT</button>
+          <button class="auth-language-btn" type="button" data-auth-lang="en" aria-pressed="false">EN</button>
+          <button class="auth-language-btn" type="button" data-auth-lang="es" aria-pressed="false">ES</button>
+        </div>
         <div class="cta-row auth-entry-actions">
           <button id="authGuestBtn" class="primary auth-guest-entry-btn" type="button">Entrar sem login</button>
           <button id="authGoogleBtn" class="secondary auth-google-entry-btn" type="button">
@@ -552,11 +558,11 @@
           </div>
           <p id="tasteCalibrationKicker" class="brand-kicker">CALIBRAR MEU SONIC</p>
           <h1 id="tasteCalibrationTitle">Vamos acertar sua primeira descoberta</h1>
-          <p id="tasteCalibrationIntro" class="muted">Quatro respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.</p>
-          <div id="tasteCalibrationProgress" class="taste-calibration-progress" role="progressbar" aria-labelledby="tasteCalibrationProgressLabel" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-valuetext="Pergunta 1 de 4">
+          <p id="tasteCalibrationIntro" class="muted">Três respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.</p>
+          <div id="tasteCalibrationProgress" class="taste-calibration-progress" role="progressbar" aria-labelledby="tasteCalibrationProgressLabel" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" aria-valuetext="Pergunta 1 de 3">
             <span id="tasteCalibrationProgressFill"></span>
           </div>
-          <p id="tasteCalibrationProgressLabel" class="taste-calibration-progress-label">Pergunta 1 de 4</p>
+          <p id="tasteCalibrationProgressLabel" class="taste-calibration-progress-label">Pergunta 1 de 3</p>
         </header>
 
         <div class="taste-calibration-body">
@@ -603,28 +609,13 @@
             </div>
           </fieldset>
 
-          <fieldset id="tasteCalibrationStep3" class="taste-calibration-step hidden" data-taste-step="3" hidden>
-            <legend>Quanto você quer explorar?</legend>
-            <p class="taste-calibration-help">Opcional — você pode concluir sem responder.</p>
-            <div class="taste-calibration-options">
-              <button type="button" data-taste-field="exploration" data-taste-value="safe" aria-pressed="false">
-                <strong>Algo certeiro</strong><span>Mais familiaridade e menos risco.</span>
-              </button>
-              <button type="button" data-taste-field="exploration" data-taste-value="balanced" aria-pressed="false">
-                <strong>Equilibrar familiaridade e novidade</strong><span>Um pé no conhecido e outro no novo.</span>
-              </button>
-              <button type="button" data-taste-field="exploration" data-taste-value="surprise" aria-pressed="false">
-                <strong>Me tire completamente da bolha</strong><span>Priorize caminhos menos óbvios.</span>
-              </button>
-            </div>
-          </fieldset>
         </div>
 
         <p id="tasteCalibrationStatus" class="taste-calibration-status" role="status" aria-live="polite"></p>
         <footer class="taste-calibration-actions">
           <button id="tasteCalibrationBackBtn" class="secondary" type="button" aria-controls="tasteCalibrationStep0">Voltar</button>
+          <p id="tasteCalibrationTapHint" class="taste-calibration-tap-hint">Toque em uma opção para avançar</p>
           <button id="tasteCalibrationSkipBtn" class="taste-calibration-skip" type="button">Pular por enquanto</button>
-          <button id="tasteCalibrationNextBtn" class="primary" type="button" aria-controls="tasteCalibrationStep1" disabled>Continuar</button>
         </footer>
       </form>
     </section>
@@ -2705,7 +2696,7 @@
           <div>
             <p id="tasteCalibrationProfileKicker" class="summary-kicker">PREFERÊNCIAS MUSICAIS</p>
             <h4 id="tasteCalibrationProfileTitle">Seu ponto de partida</h4>
-            <p id="tasteCalibrationProfileSummary" class="muted">Responda quatro perguntas rápidas para personalizar suas próximas descobertas.</p>
+            <p id="tasteCalibrationProfileSummary" class="muted">Responda três perguntas rápidas para personalizar suas próximas descobertas.</p>
           </div>
           <button id="tasteCalibrationReopenBtn" class="listen-btn" type="button">Recalibrar meu Sonic</button>
         </article>
@@ -3257,10 +3248,10 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
-    <script defer src="daily-djs.js?v=20260911reliability1"></script>
-    <script defer src="daily-djs-ui.js?v=20260911reliability1"></script>
-    <script defer src="daily-radar.js?v=20260911reliability1"></script>
-    <script defer src="daily-radar-ui.js?v=20260911reliability1"></script>
-    <script defer src="app.min.js?v=20260911reliability1"></script>
+    <script defer src="daily-djs.js?v=20260911sonicstart1"></script>
+    <script defer src="daily-djs-ui.js?v=20260911sonicstart1"></script>
+    <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
+    <script defer src="daily-radar-ui.js?v=20260911sonicstart1"></script>
+    <script defer src="app.min.js?v=20260911sonicstart1"></script>
   </body>
 </html>

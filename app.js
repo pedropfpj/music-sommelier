@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911reliability1";
+const SONIC_APP_BUILD_ID = "20260911sonicstart1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -9702,6 +9702,8 @@ const authAppleBtn = document.getElementById("authAppleBtn");
 const authAppleLabel = document.getElementById("authAppleLabel");
 const authProviderHint = document.getElementById("authProviderHint");
 const authFeedback = document.getElementById("authFeedback");
+const authLanguageLabel = document.getElementById("authLanguageLabel");
+const authLanguageButtons = Array.from(document.querySelectorAll("[data-auth-lang]"));
 const tasteCalibrationScreen = document.getElementById("tasteCalibrationScreen");
 const tasteCalibrationForm = document.getElementById("tasteCalibrationForm");
 const tasteCalibrationKicker = document.getElementById("tasteCalibrationKicker");
@@ -9715,7 +9717,7 @@ const tasteCalibrationOptionButtons = Array.from(document.querySelectorAll("[dat
 const tasteCalibrationStatus = document.getElementById("tasteCalibrationStatus");
 const tasteCalibrationBackBtn = document.getElementById("tasteCalibrationBackBtn");
 const tasteCalibrationSkipBtn = document.getElementById("tasteCalibrationSkipBtn");
-const tasteCalibrationNextBtn = document.getElementById("tasteCalibrationNextBtn");
+const tasteCalibrationTapHint = document.getElementById("tasteCalibrationTapHint");
 const betaGateScreen = document.getElementById("betaGateScreen");
 const betaTesterRibbon = document.getElementById("betaTesterRibbon");
 const betaWaitlistForm = document.getElementById("betaWaitlistForm");
@@ -10834,11 +10836,14 @@ const DAILY_LIKE_STORAGE_KEY = "neonpulse:dailyLikes:v1";
 const INITIAL_TASTE_CALIBRATION_STORAGE_KEY = "sonic_search:initialTasteCalibration:v1";
 const INITIAL_TASTE_CALIBRATION_VERSION = 1;
 const INITIAL_TASTE_CALIBRATION_FINAL_STATES = new Set(["completed", "skipped"]);
+const SONIC_FIRST_VALUE_WINDOW_MS = 30_000;
 let initialTasteCalibrationState = null;
 let initialTasteCalibrationStep = 0;
 let initialTasteCalibrationMode = "initial";
 let initialTasteCalibrationBusy = false;
+let initialTasteCalibrationAdvanceTimer = 0;
 let initialTasteCalibrationContinuation = { showGuide: false, targetTab: "" };
+let sonicFirstValueWindowTimer = 0;
 // Keep the former quota behind one explicit switch so it can be restored later
 // without leaving any active limit in the current presentation build.
 const DAILY_LIKE_LIMIT_ENABLED = false;
@@ -24105,16 +24110,17 @@ const I18N = {
     usageGuideNote: "Depois do acesso, a primeira faixa pode abrir sozinha. Use filtros quando quiser acertar fino.",
     usageGuideContinueBtn: "Começar descoberta",
     showUsageGuideBtn: "Como usar",
-    authKicker: "Acesso rápido",
-    authTitle: "Comece pela descoberta",
-    authDesc: "Comece sem conta com uma descoberta limpa, ou entre com uma conta online disponível para sincronizar seu perfil entre aparelhos.",
+    authKicker: "SEU SONIC EM 20 SEGUNDOS",
+    authTitle: "Descubra algo que combina com você",
+    authDesc: "Entre para criar um perfil pessoal em três respostas, ou experimente agora sem conta.",
+    authLanguageLabel: "Idioma",
     authUsernameLabel: "Usuário",
     authPasswordLabel: "Senha",
     authUsernamePlaceholder: "Digite seu usuário",
     authPasswordPlaceholder: "Digite sua senha",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Entrar sem login",
+    authGuestBtn: "Experimentar sem conta",
     authTestUserBtn: "Começar sem histórico",
     authNewUserHint: "Sem login, cada entrada começa sem histórico salvo.",
     authRequired: "Entre com uma conta online ou continue sem login.",
@@ -24127,7 +24133,7 @@ const I18N = {
     authGoogleBtn: "Entrar com Google",
     authContinueOnlineBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "A conta online sincroniza seu perfil entre aparelhos quando estiver ativa.",
+    authProviderHint: "Com uma conta, suas descobertas aprendem com você e continuam em todos os aparelhos.",
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
@@ -25016,16 +25022,17 @@ const I18N = {
     usageGuideNote: "After access, the first track can open by itself. Use filters when you want a sharper hit.",
     usageGuideContinueBtn: "Start discovering",
     showUsageGuideBtn: "How to use",
-    authKicker: "Quick access",
-    authTitle: "Start with discovery",
-    authDesc: "Start without an account with a clean discovery run, or sign in with an available online account to sync your profile across devices.",
+    authKicker: "YOUR SONIC IN 20 SECONDS",
+    authTitle: "Discover something that fits you",
+    authDesc: "Sign in to create a personal profile in three answers, or try it now without an account.",
+    authLanguageLabel: "Language",
     authUsernameLabel: "Username",
     authPasswordLabel: "Password",
     authUsernamePlaceholder: "Enter your username",
     authPasswordPlaceholder: "Enter your password",
     authResumeSavedBtn: "Use local profile",
     authLoginBtn: "Sign in",
-    authGuestBtn: "Continue without login",
+    authGuestBtn: "Try without an account",
     authTestUserBtn: "Start without history",
     authNewUserHint: "Without login, each entry starts without saved history.",
     authRequired: "Sign in with an online account or continue without login.",
@@ -25038,7 +25045,7 @@ const I18N = {
     authGoogleBtn: "Sign in with Google",
     authContinueOnlineBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "An online account syncs your profile across devices when active.",
+    authProviderHint: "With an account, your discoveries learn from you and continue across devices.",
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
@@ -25927,16 +25934,17 @@ const I18N = {
     usageGuideNote: "Después del acceso, la primera pista puede abrirse sola. Usa filtros cuando quieras afinar.",
     usageGuideContinueBtn: "Empezar a descubrir",
     showUsageGuideBtn: "Cómo usar",
-    authKicker: "Acceso rápido",
-    authTitle: "Empieza por descubrir",
-    authDesc: "Empieza sin cuenta con un descubrimiento limpio o entra con una cuenta online disponible para sincronizar tu perfil entre dispositivos.",
+    authKicker: "TU SONIC EN 20 SEGUNDOS",
+    authTitle: "Descubre algo que encaje contigo",
+    authDesc: "Entra para crear un perfil personal en tres respuestas o pruébalo ahora sin cuenta.",
+    authLanguageLabel: "Idioma",
     authUsernameLabel: "Usuario",
     authPasswordLabel: "Contraseña",
     authUsernamePlaceholder: "Escribe tu usuario",
     authPasswordPlaceholder: "Escribe tu contraseña",
     authResumeSavedBtn: "Usar perfil local",
     authLoginBtn: "Entrar",
-    authGuestBtn: "Entrar sin login",
+    authGuestBtn: "Probar sin cuenta",
     authTestUserBtn: "Empezar sin historial",
     authNewUserHint: "Sin login, cada entrada empieza sin historial guardado.",
     authRequired: "Entra con Google o sin login.",
@@ -25949,7 +25957,7 @@ const I18N = {
     authGoogleBtn: "Entrar con Google",
     authContinueOnlineBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "La cuenta online sincroniza tu perfil entre dispositivos cuando está activa.",
+    authProviderHint: "Con una cuenta, tus descubrimientos aprenden de ti y continúan entre dispositivos.",
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
@@ -27425,6 +27433,11 @@ function syncLanguageButtons() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
+  authLanguageButtons.forEach((button) => {
+    const isActive = button.dataset.authLang === currentLanguage;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 }
 
 function syncQuickSurpriseStyleOptions() {
@@ -27603,6 +27616,7 @@ function applyLanguage() {
   setText("#authKicker", t("authKicker"));
   setText("#authTitle", t("authTitle"));
   setText("#authDesc", t("authDesc"));
+  setText("#authLanguageLabel", t("authLanguageLabel"));
   setText("#authUsernameLabel", t("authUsernameLabel"));
   setText("#authPasswordLabel", t("authPasswordLabel"));
   setText("#authResumeBtn", t("authResumeSavedBtn"));
@@ -29483,7 +29497,7 @@ function normalizeInitialTasteCalibration(value = {}) {
     experience: new Set(["beginner", "familiar", "expert"]),
     goal: new Set(["track", "dj", "set"]),
     mood: new Set(["melodic", "groovy", "hypnotic", "intense"]),
-    exploration: new Set(["", "safe", "balanced", "surprise"])
+    exploration: new Set(["safe", "balanced", "surprise"])
   };
   const select = (key, fallback = "") => allowed[key].has(String(source[key] || ""))
     ? String(source[key] || "")
@@ -29494,7 +29508,7 @@ function normalizeInitialTasteCalibration(value = {}) {
     experience: select("experience"),
     goal: select("goal"),
     mood: select("mood"),
-    exploration: select("exploration"),
+    exploration: select("exploration", "balanced"),
     completedAt: String(source.completedAt || ""),
     skippedAt: String(source.skippedAt || ""),
     updatedAt: String(source.updatedAt || "")
@@ -29543,31 +29557,29 @@ function initialTasteCalibrationCopy() {
     pt: {
       kicker: "CALIBRAR MEU SONIC",
       title: "Vamos acertar sua primeira descoberta",
-      intro: "Quatro respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.",
-      progress: (step) => `Pergunta ${step} de 4`,
+      intro: "Três respostas rápidas. Depois, o Sonic já abre com algo escolhido para você.",
+      progress: (step) => `Pergunta ${step} de 3`,
       back: "Voltar",
       skip: "Pular por enquanto",
       cancel: "Cancelar",
-      next: "Continuar",
-      finish: "Ver minha recomendação",
+      tapHint: "Toque em uma opção para avançar",
       required: "Escolha uma opção para continuar.",
       saving: "Preparando seu ponto de partida…",
+      ready: (goal, mood) => `Seu primeiro resultado combina ${mood} com ${goal}.`,
       profileKicker: "PREFERÊNCIAS MUSICAIS",
       profileTitle: "Seu ponto de partida",
-      profileEmpty: "Responda quatro perguntas rápidas para personalizar suas próximas descobertas.",
+      profileEmpty: "Responda três perguntas rápidas para personalizar suas próximas descobertas.",
       profileSkipped: "A calibração inicial foi pulada. Você pode fazê-la quando quiser.",
       recalibrate: "Recalibrar meu Sonic",
       questions: [
         ["Você já conhece música eletrônica?", "Isso define quanto contexto o Sonic deve trazer."],
         ["O que você quer encontrar agora?", "O primeiro resultado já será aberto nesse formato."],
-        ["Qual clima combina com você agora?", "Escolha pela sensação, sem precisar saber o nome do gênero."],
-        ["Quanto você quer explorar?", "Opcional — você pode concluir sem responder."]
+        ["Qual clima combina com você agora?", "Escolha pela sensação, sem precisar saber o nome do gênero."]
       ],
       options: [
         [["Estou começando", "Quero uma entrada simples e bem guiada."], ["Já conheço um pouco", "Quero ampliar meu radar sem me perder."], ["Conheço bem", "Pode ir mais fundo e fugir do óbvio."]],
         [["Uma música", "Uma faixa certeira para ouvir agora."], ["Um DJ", "Um artista alinhado ao seu momento."], ["Um set para ouvir", "Uma sessão completa para dar play."]],
-        [["Leve e melódico", "Atmosfera, emoção e espaço."], ["Groovado", "Ritmo envolvente e movimento."], ["Hipnótico", "Repetição profunda e imersiva."], ["Intenso", "Pressão, impacto e energia alta."]],
-        [["Algo certeiro", "Mais familiaridade e menos risco."], ["Equilibrar familiaridade e novidade", "Um pé no conhecido e outro no novo."], ["Me tire completamente da bolha", "Priorize caminhos menos óbvios."]]
+        [["Leve e melódico", "Atmosfera, emoção e espaço."], ["Groovado", "Ritmo envolvente e movimento."], ["Hipnótico", "Repetição profunda e imersiva."], ["Intenso", "Pressão, impacto e energia alta."]]
       ],
       labels: {
         experience: { beginner: "começando", familiar: "alguma experiência", expert: "experiência avançada" },
@@ -29577,19 +29589,19 @@ function initialTasteCalibrationCopy() {
       }
     },
     en: {
-      kicker: "CALIBRATE MY SONIC", title: "Let's tune your first discovery", intro: "Four quick answers. Then Sonic opens with something picked for you.",
-      progress: (step) => `Question ${step} of 4`, back: "Back", skip: "Skip for now", cancel: "Cancel", next: "Continue", finish: "See my recommendation", required: "Choose an option to continue.", saving: "Preparing your starting point…",
-      profileKicker: "MUSIC PREFERENCES", profileTitle: "Your starting point", profileEmpty: "Answer four quick questions to personalize your next discoveries.", profileSkipped: "You skipped the initial calibration. You can do it whenever you like.", recalibrate: "Recalibrate my Sonic",
-      questions: [["How well do you know electronic music?", "This sets how much context Sonic should provide."], ["What do you want to find right now?", "Your first result will open in this format."], ["What mood fits you right now?", "Choose by feeling; no genre knowledge needed."], ["How far do you want to explore?", "Optional — you can finish without answering."]],
-      options: [[["I'm just starting", "Give me a simple, guided entry."], ["I know a little", "Expand my radar without losing me."], ["I know it well", "Go deeper and beyond the obvious."]], [["A track", "One focused track to hear now."], ["A DJ", "An artist aligned with your moment."], ["A set to hear", "A full session ready to play."]], [["Light and melodic", "Atmosphere, emotion and space."], ["Groovy", "Engaging rhythm and movement."], ["Hypnotic", "Deep, immersive repetition."], ["Intense", "Pressure, impact and high energy."]], [["A safe bet", "More familiarity and less risk."], ["Balance familiarity and novelty", "One foot in the known, one in the new."], ["Take me completely outside my bubble", "Prioritize less obvious paths."]]],
+      kicker: "CALIBRATE MY SONIC", title: "Let's tune your first discovery", intro: "Three quick answers. Then Sonic opens with something picked for you.",
+      progress: (step) => `Question ${step} of 3`, back: "Back", skip: "Skip for now", cancel: "Cancel", tapHint: "Tap an option to continue", required: "Choose an option to continue.", saving: "Preparing your starting point…", ready: (goal, mood) => `Your first result combines ${mood} with ${goal}.`,
+      profileKicker: "MUSIC PREFERENCES", profileTitle: "Your starting point", profileEmpty: "Answer three quick questions to personalize your next discoveries.", profileSkipped: "You skipped the initial calibration. You can do it whenever you like.", recalibrate: "Recalibrate my Sonic",
+      questions: [["How well do you know electronic music?", "This sets how much context Sonic should provide."], ["What do you want to find right now?", "Your first result will open in this format."], ["What mood fits you right now?", "Choose by feeling; no genre knowledge needed."]],
+      options: [[["I'm just starting", "Give me a simple, guided entry."], ["I know a little", "Expand my radar without losing me."], ["I know it well", "Go deeper and beyond the obvious."]], [["A track", "One focused track to hear now."], ["A DJ", "An artist aligned with your moment."], ["A set to hear", "A full session ready to play."]], [["Light and melodic", "Atmosphere, emotion and space."], ["Groovy", "Engaging rhythm and movement."], ["Hypnotic", "Deep, immersive repetition."], ["Intense", "Pressure, impact and high energy."]]],
       labels: { experience: { beginner: "beginner", familiar: "some experience", expert: "advanced experience" }, goal: { track: "track", dj: "DJ", set: "set" }, mood: { melodic: "light and melodic", groovy: "groovy", hypnotic: "hypnotic", intense: "intense" }, exploration: { "": "balanced exploration", safe: "a safe bet", balanced: "familiarity and novelty balanced", surprise: "outside your bubble" } }
     },
     es: {
-      kicker: "CALIBRAR MI SONIC", title: "Afinemos tu primer descubrimiento", intro: "Cuatro respuestas rápidas. Después, Sonic abre con algo elegido para ti.",
-      progress: (step) => `Pregunta ${step} de 4`, back: "Volver", skip: "Omitir por ahora", cancel: "Cancelar", next: "Continuar", finish: "Ver mi recomendación", required: "Elige una opción para continuar.", saving: "Preparando tu punto de partida…",
-      profileKicker: "PREFERENCIAS MUSICALES", profileTitle: "Tu punto de partida", profileEmpty: "Responde cuatro preguntas rápidas para personalizar tus próximos descubrimientos.", profileSkipped: "Omitiste la calibración inicial. Puedes hacerla cuando quieras.", recalibrate: "Recalibrar mi Sonic",
-      questions: [["¿Cuánto conoces la música electrónica?", "Esto define cuánto contexto debe ofrecer Sonic."], ["¿Qué quieres encontrar ahora?", "El primer resultado se abrirá en ese formato."], ["¿Qué clima combina contigo ahora?", "Elige por la sensación, sin saber nombres de géneros."], ["¿Cuánto quieres explorar?", "Opcional — puedes terminar sin responder."]],
-      options: [[["Estoy empezando", "Quiero una entrada simple y guiada."], ["Ya conozco un poco", "Quiero ampliar mi radar sin perderme."], ["Conozco bien", "Puede ir más profundo y evitar lo obvio."]], [["Una canción", "Una pista precisa para escuchar ahora."], ["Un DJ", "Un artista alineado con tu momento."], ["Un set para escuchar", "Una sesión completa lista para reproducir."]], [["Ligero y melódico", "Atmósfera, emoción y espacio."], ["Groovero", "Ritmo envolvente y movimiento."], ["Hipnótico", "Repetición profunda e inmersiva."], ["Intenso", "Presión, impacto y energía alta."]], [["Algo seguro", "Más familiaridad y menos riesgo."], ["Equilibrar familiaridad y novedad", "Un pie en lo conocido y otro en lo nuevo."], ["Sácame completamente de mi burbuja", "Prioriza caminos menos obvios."]]],
+      kicker: "CALIBRAR MI SONIC", title: "Afinemos tu primer descubrimiento", intro: "Tres respuestas rápidas. Después, Sonic abre con algo elegido para ti.",
+      progress: (step) => `Pregunta ${step} de 3`, back: "Volver", skip: "Omitir por ahora", cancel: "Cancelar", tapHint: "Toca una opción para continuar", required: "Elige una opción para continuar.", saving: "Preparando tu punto de partida…", ready: (goal, mood) => `Tu primer resultado combina ${mood} con ${goal}.`,
+      profileKicker: "PREFERENCIAS MUSICALES", profileTitle: "Tu punto de partida", profileEmpty: "Responde tres preguntas rápidas para personalizar tus próximos descubrimientos.", profileSkipped: "Omitiste la calibración inicial. Puedes hacerla cuando quieras.", recalibrate: "Recalibrar mi Sonic",
+      questions: [["¿Cuánto conoces la música electrónica?", "Esto define cuánto contexto debe ofrecer Sonic."], ["¿Qué quieres encontrar ahora?", "El primer resultado se abrirá en ese formato."], ["¿Qué clima combina contigo ahora?", "Elige por la sensación, sin saber nombres de géneros."]],
+      options: [[["Estoy empezando", "Quiero una entrada simple y guiada."], ["Ya conozco un poco", "Quiero ampliar mi radar sin perderme."], ["Conozco bien", "Puede ir más profundo y evitar lo obvio."]], [["Una canción", "Una pista precisa para escuchar ahora."], ["Un DJ", "Un artista alineado con tu momento."], ["Un set para escuchar", "Una sesión completa lista para reproducir."]], [["Ligero y melódico", "Atmósfera, emoción y espacio."], ["Groovero", "Ritmo envolvente y movimiento."], ["Hipnótico", "Repetición profunda e inmersiva."], ["Intenso", "Presión, impacto y energía alta."]]],
       labels: { experience: { beginner: "empezando", familiar: "algo de experiencia", expert: "experiencia avanzada" }, goal: { track: "canción", dj: "DJ", set: "set" }, mood: { melodic: "ligero y melódico", groovy: "groovero", hypnotic: "hipnótico", intense: "intenso" }, exploration: { "": "exploración equilibrada", safe: "algo seguro", balanced: "familiaridad y novedad equilibradas", surprise: "fuera de tu burbuja" } }
     }
   };
@@ -29603,6 +29615,7 @@ function renderInitialTasteCalibrationUi() {
   if (tasteCalibrationIntro) tasteCalibrationIntro.textContent = copy.intro;
   if (tasteCalibrationBackBtn) tasteCalibrationBackBtn.textContent = copy.back;
   if (tasteCalibrationSkipBtn) tasteCalibrationSkipBtn.textContent = initialTasteCalibrationMode === "recalibrate" ? copy.cancel : copy.skip;
+  if (tasteCalibrationTapHint) tasteCalibrationTapHint.textContent = copy.tapHint;
   tasteCalibrationSteps.forEach((step, stepIndex) => {
     const question = copy.questions[stepIndex] || [];
     const legend = step.querySelector("legend");
@@ -29625,7 +29638,7 @@ function renderInitialTasteCalibrationUi() {
 function renderInitialTasteCalibrationStep() {
   const calibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
   const copy = initialTasteCalibrationCopy();
-  const safeStep = Math.max(0, Math.min(3, Number(initialTasteCalibrationStep) || 0));
+  const safeStep = Math.max(0, Math.min(2, Number(initialTasteCalibrationStep) || 0));
   initialTasteCalibrationStep = safeStep;
   tasteCalibrationSteps.forEach((step, index) => {
     const active = index === safeStep;
@@ -29638,7 +29651,7 @@ function renderInitialTasteCalibrationStep() {
     button.classList.toggle("selected", selected);
     button.setAttribute("aria-pressed", selected ? "true" : "false");
   });
-  if (tasteCalibrationProgressFill) tasteCalibrationProgressFill.style.width = `${(safeStep + 1) * 25}%`;
+  if (tasteCalibrationProgressFill) tasteCalibrationProgressFill.style.width = `${((safeStep + 1) / 3) * 100}%`;
   const progressText = copy.progress(safeStep + 1);
   if (tasteCalibrationProgressLabel) tasteCalibrationProgressLabel.textContent = progressText;
   if (tasteCalibrationProgress) {
@@ -29652,17 +29665,14 @@ function renderInitialTasteCalibrationStep() {
     tasteCalibrationBackBtn.setAttribute("aria-controls", `tasteCalibrationStep${Math.max(0, safeStep - 1)}`);
   }
   if (tasteCalibrationSkipBtn) tasteCalibrationSkipBtn.disabled = initialTasteCalibrationBusy;
-  const stepField = ["experience", "goal", "mood", "exploration"][safeStep];
-  const requiredReady = safeStep === 3 || Boolean(calibration[stepField]);
-  if (tasteCalibrationNextBtn) {
-    tasteCalibrationNextBtn.disabled = initialTasteCalibrationBusy || !requiredReady;
-    tasteCalibrationNextBtn.textContent = safeStep === 3 ? copy.finish : copy.next;
-    tasteCalibrationNextBtn.setAttribute("aria-controls", safeStep === 3 ? "appContent" : `tasteCalibrationStep${safeStep + 1}`);
+  if (tasteCalibrationTapHint) {
+    tasteCalibrationTapHint.textContent = initialTasteCalibrationBusy ? copy.saving : copy.tapHint;
+    tasteCalibrationTapHint.classList.toggle("is-preparing", initialTasteCalibrationBusy);
   }
 }
 
 function focusInitialTasteCalibrationChoice(stepIndex = initialTasteCalibrationStep) {
-  const step = tasteCalibrationSteps[Math.max(0, Math.min(3, Number(stepIndex) || 0))];
+  const step = tasteCalibrationSteps[Math.max(0, Math.min(2, Number(stepIndex) || 0))];
   if (!step) return;
   const target = step.querySelector("button.selected") || step.querySelector("button");
   target?.focus({ preventScroll: true });
@@ -29843,6 +29853,10 @@ async function restoreWeeklyHighlightsFromCloud({ silent = true } = {}) {
 }
 
 function hideInitialTasteCalibrationScreen() {
+  if (initialTasteCalibrationAdvanceTimer) {
+    window.clearTimeout(initialTasteCalibrationAdvanceTimer);
+    initialTasteCalibrationAdvanceTimer = 0;
+  }
   if (tasteCalibrationScreen) tasteCalibrationScreen.classList.add("hidden");
   document.body?.classList.remove("taste-calibration-open");
   if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
@@ -29854,6 +29868,10 @@ function showInitialTasteCalibration({ mode = "initial", calibration = null, sho
   initialTasteCalibrationContinuation = { showGuide: Boolean(showGuide), targetTab: String(targetTab || "") };
   initialTasteCalibrationStep = 0;
   initialTasteCalibrationBusy = false;
+  if (initialTasteCalibrationAdvanceTimer) {
+    window.clearTimeout(initialTasteCalibrationAdvanceTimer);
+    initialTasteCalibrationAdvanceTimer = 0;
+  }
   initialTasteCalibrationState = normalizeInitialTasteCalibration(calibration || readInitialTasteCalibrationLocal());
   hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
@@ -29872,6 +29890,8 @@ function showInitialTasteCalibration({ mode = "initial", calibration = null, sho
     tasteCalibrationScreen.focus({ preventScroll: true });
   });
   refreshAmbientForUiState({ immediate: true });
+  void ensureOpeningRotationSlot();
+  void prewarmFriendlyOpeningTrack();
   return true;
 }
 
@@ -29913,10 +29933,20 @@ async function maybeShowInitialTasteCalibration({ showGuide = false, targetTab =
   });
 }
 
+function beginSonicFirstValueWindow() {
+  if (sonicFirstValueWindowTimer) window.clearTimeout(sonicFirstValueWindowTimer);
+  document.body?.classList.add("sonic-first-value-window");
+  sonicFirstValueWindowTimer = window.setTimeout(() => {
+    sonicFirstValueWindowTimer = 0;
+    document.body?.classList.remove("sonic-first-value-window");
+  }, SONIC_FIRST_VALUE_WINDOW_MS);
+}
+
 function continueAfterInitialTasteCalibration(value, { personalized = false } = {}) {
   const calibration = normalizeInitialTasteCalibration(value);
   const requestedTab = calibration.goal === "dj" || calibration.goal === "set" ? "djs" : "discover";
   const fallbackTab = safeAppTabName(initialTasteCalibrationContinuation.targetTab || "");
+  beginSonicFirstValueWindow();
   hideInitialTasteCalibrationScreen();
   markUsageGuideAcknowledged();
   enterAppFromWelcome({
@@ -29926,12 +29956,22 @@ function continueAfterInitialTasteCalibration(value, { personalized = false } = 
   });
   if (!personalized) return;
   window.setTimeout(() => {
+    const announceReady = () => {
+      const copy = initialTasteCalibrationCopy();
+      const message = copy.ready(copy.labels.goal[calibration.goal], copy.labels.mood[calibration.mood]);
+      if (feedbackMessage) feedbackMessage.textContent = message;
+      showToast(message);
+    };
     if (calibration.goal === "dj" || calibration.goal === "set") {
-      void activateDjIntent(initialTasteCalibrationDjFilter(calibration), { source: "initial_calibration" });
+      void activateDjIntent(initialTasteCalibrationDjFilter(calibration), { source: "initial_calibration" }).then((ready) => {
+        if (ready !== false) announceReady();
+      });
       return;
     }
-    void runPrimaryRecommendationAction({ source: "initial_calibration" });
-  }, 320);
+    void runPrimaryRecommendationAction({ source: "initial_calibration" }).then((ready) => {
+      if (ready) announceReady();
+    });
+  }, 180);
 }
 
 async function completeInitialTasteCalibration() {
@@ -29946,6 +29986,7 @@ async function completeInitialTasteCalibration() {
   const now = new Date().toISOString();
   const completed = writeInitialTasteCalibrationLocal({
     ...calibration,
+    exploration: calibration.exploration || "balanced",
     status: "completed",
     completedAt: now,
     skippedAt: "",
@@ -29964,6 +30005,7 @@ async function completeInitialTasteCalibration() {
       console.warn("Could not save taste calibration", error);
     });
   }
+  await new Promise((resolve) => window.setTimeout(resolve, 360));
   initialTasteCalibrationBusy = false;
   renderInitialTasteCalibrationProfileCard();
   continueAfterInitialTasteCalibration(completed, { personalized: true });
@@ -30805,6 +30847,11 @@ function updateAuthProviderUi() {
   const hideOnlineAuth = shouldHideSocialLoginForAppStore();
   const showGoogleOption = Boolean(!hideOnlineAuth && (signed ? signedWithGoogle : true));
   const showAppleOption = Boolean(!hideOnlineAuth && (signed ? signedWithApple : true));
+  const primaryProvider = isNativeIosRuntime() && showAppleOption && (appleConfigured || socialConfigLoading)
+    ? "apple"
+    : showGoogleOption && (googleConfigured || socialConfigLoading)
+      ? "google"
+      : showAppleOption ? "apple" : "";
   const authEntryActions = authGuestBtn?.closest(".auth-entry-actions") || authGoogleBtn?.closest(".auth-entry-actions");
   if (authEntryActions) {
     authEntryActions.classList.toggle("has-online", showGoogleOption || showAppleOption);
@@ -30827,6 +30874,7 @@ function updateAuthProviderUi() {
       );
     }
     authAppleBtn.classList.toggle("is-unconfigured", !appleConfigured && !signed);
+    authAppleBtn.classList.toggle("is-primary-provider", primaryProvider === "apple");
     authAppleBtn.title = showAppleOption && !appleConfigured && !signed
       ? t("authProviderConfigMissing", { provider: "Apple" })
       : "";
@@ -30843,6 +30891,7 @@ function updateAuthProviderUi() {
       );
     }
     authGoogleBtn.classList.toggle("is-unconfigured", !googleConfigured && !signed);
+    authGoogleBtn.classList.toggle("is-primary-provider", primaryProvider === "google");
     authGoogleBtn.title = showGoogleOption && !googleConfigured && !signed
       ? t("authProviderConfigMissing", { provider: "Google" })
       : "";
@@ -32400,8 +32449,8 @@ function showIntroScreen() {
   startIntroQuoteLoop();
   clearIntroAutoAdvance();
   introAutoAdvanceTimer = window.setTimeout(() => {
-    if (!introDismissed) showLanguageScreen();
-  }, 700);
+    if (!introDismissed) void showAuthScreen();
+  }, 900);
   refreshAmbientForUiState({ immediate: true });
   requestOpeningSting();
 }
@@ -32531,7 +32580,7 @@ async function showAuthScreen() {
   playUiSfx("confirm");
 }
 
-function continueFromAuthToDiscover({ showGuide = false, targetTab = "" } = {}) {
+function continueFromAuthToDiscover({ showGuide = false, targetTab = "", autoRecommendation = false } = {}) {
   hideBetaGateScreen();
   if (introScreen) introScreen.classList.add("hidden");
   if (authScreen) authScreen.classList.add("hidden");
@@ -32557,7 +32606,7 @@ function continueFromAuthToDiscover({ showGuide = false, targetTab = "" } = {}) 
   const safeTargetTab = safeAppTabName(targetTab || "");
   enterAppFromWelcome({
     surprise: false,
-    autoRecommendation: false,
+    autoRecommendation,
     initialTab: safeTargetTab
   });
 }
@@ -32881,7 +32930,6 @@ async function resumeStoredUserSession() {
 }
 
 async function continueWithoutLogin() {
-  const shouldShowUsageGuide = !hasUsageGuideAcknowledged();
   resetSocialOAuthNavigationState({ clearUrl: true });
   if (socialState.session?.access_token) await socialSignOut();
   clearAnonymousDiscoveryStorage();
@@ -32889,7 +32937,9 @@ async function continueWithoutLogin() {
   activateUserSession(session);
   seedAnonymousOpeningExclusions();
   setAuthFeedback(t("authGuestReady"));
-  continueFromAuthToDiscover({ showGuide: shouldShowUsageGuide });
+  trackBetaEvent("sonic_start_guest_selected", {}, { source: "sonic_start" });
+  beginSonicFirstValueWindow();
+  continueFromAuthToDiscover({ showGuide: false, autoRecommendation: true });
 }
 
 function createTestUserSession() {
@@ -62966,7 +63016,7 @@ bind(topSwipeImage, "error", () => {
 });
 
 bind(introContinueBtn, "click", () => {
-  showLanguageScreen();
+  void showAuthScreen();
 });
 
 bind(startBtn, "click", () => {
@@ -63033,28 +63083,47 @@ languageButtons.forEach((button) => {
   });
 });
 
+authLanguageButtons.forEach((button) => {
+  bind(button, "click", () => {
+    const lang = button.dataset.authLang || DEFAULT_LANGUAGE;
+    setLanguage(lang);
+    playUiSfx("confirm");
+  });
+});
+
 bind(usageGuideContinueBtn, "click", continueFromUsageGuide);
 bind(showUsageGuideBtn, "click", () => showUsageGuideScreen({ returnTo: "app" }));
 bind(tasteCalibrationForm, "submit", (event) => event.preventDefault());
 tasteCalibrationOptionButtons.forEach((button) => {
   bind(button, "click", () => {
     if (initialTasteCalibrationBusy) return;
+    primeAudioForDiscoveryGesture();
     const field = String(button.dataset.tasteField || "");
     const value = String(button.dataset.tasteValue || "");
     const currentCalibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
-    const nextValue = field === "exploration" && currentCalibration[field] === value ? "" : value;
     initialTasteCalibrationState = normalizeInitialTasteCalibration({
       ...currentCalibration,
-      [field]: nextValue,
+      [field]: value,
       status: "pending",
       updatedAt: new Date().toISOString()
     });
     if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
     renderInitialTasteCalibrationStep();
     playUiSfx("confirm");
-    if (tasteCalibrationNextBtn && !tasteCalibrationNextBtn.disabled) {
-      tasteCalibrationNextBtn.focus({ preventScroll: true });
-    }
+    if (initialTasteCalibrationAdvanceTimer) window.clearTimeout(initialTasteCalibrationAdvanceTimer);
+    const selectedStep = initialTasteCalibrationStep;
+    initialTasteCalibrationAdvanceTimer = window.setTimeout(() => {
+      initialTasteCalibrationAdvanceTimer = 0;
+      if (initialTasteCalibrationBusy || initialTasteCalibrationStep !== selectedStep) return;
+      if (selectedStep >= 2) {
+        void completeInitialTasteCalibration();
+        return;
+      }
+      initialTasteCalibrationStep = selectedStep + 1;
+      renderInitialTasteCalibrationStep();
+      resetInitialTasteCalibrationViewport();
+      focusInitialTasteCalibrationChoice();
+    }, 180);
   });
 });
 bind(tasteCalibrationBackBtn, "click", () => {
@@ -63066,25 +63135,6 @@ bind(tasteCalibrationBackBtn, "click", () => {
   focusInitialTasteCalibrationChoice();
 });
 bind(tasteCalibrationSkipBtn, "click", skipOrCancelInitialTasteCalibration);
-bind(tasteCalibrationNextBtn, "click", () => {
-  if (initialTasteCalibrationBusy) return;
-  const calibration = normalizeInitialTasteCalibration(initialTasteCalibrationState);
-  const requiredField = ["experience", "goal", "mood"][initialTasteCalibrationStep];
-  if (requiredField && !calibration[requiredField]) {
-    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().required;
-    focusInitialTasteCalibrationChoice();
-    return;
-  }
-  if (initialTasteCalibrationStep < 3) {
-    initialTasteCalibrationStep += 1;
-    if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
-    renderInitialTasteCalibrationStep();
-    resetInitialTasteCalibrationViewport();
-    focusInitialTasteCalibrationChoice();
-    return;
-  }
-  void completeInitialTasteCalibration();
-});
 bind(tasteCalibrationReopenBtn, "click", () => {
   if (!initialTasteCalibrationEligibleSession() || !authHasOnlineSession()) return;
   showInitialTasteCalibration({

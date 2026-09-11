@@ -14,12 +14,13 @@ const [indexSource, appSource, stylesSource] = await Promise.all([
 
 assert.match(indexSource, /id="tasteCalibrationScreen"[^>]*aria-labelledby="tasteCalibrationTitle"/, "Calibration needs an accessible screen");
 assert.match(indexSource, /id="tasteCalibrationScreen"[^>]*aria-describedby="tasteCalibrationIntro"/, "Calibration introduction must be associated with the screen");
-assert.match(indexSource, /id="tasteCalibrationProgress"[^>]*role="progressbar"[^>]*aria-valuemax="4"/, "Calibration progress needs accessible progress semantics");
+assert.match(indexSource, /id="tasteCalibrationProgress"[^>]*role="progressbar"[^>]*aria-valuemax="3"/, "Calibration progress needs accessible progress semantics");
 assert.match(indexSource, /id="tasteCalibrationStatus"[^>]*aria-live="polite"/, "Calibration needs an announced status region");
-assert.equal((indexSource.match(/data-taste-step=/g) || []).length, 4, "Calibration must stay at four short steps");
+assert.equal((indexSource.match(/data-taste-step=/g) || []).length, 3, "Calibration must stay at three short steps");
 assert.equal((indexSource.match(/data-taste-field="experience"/g) || []).length, 3, "Experience step needs three choices");
 assert.equal((indexSource.match(/data-taste-field="goal"/g) || []).length, 3, "Goal step needs track, DJ and set choices");
 assert.equal((indexSource.match(/data-taste-field="mood"/g) || []).length, 4, "Mood step needs four choices");
+assert.doesNotMatch(indexSource, /data-taste-field="exploration"/, "Exploration must default to balanced instead of adding a fourth onboarding step");
 assert.match(indexSource, /data-taste-value="intense"[^>]*><strong>Intenso<\/strong>/, "The intense choice must use the requested concise label");
 assert.doesNotMatch(indexSource, /Intenso e de pista/i, "The old intense label must not return");
 assert.match(indexSource, /id="tasteCalibrationReopenBtn"/, "Profile needs a recalibration control");
@@ -42,6 +43,10 @@ assert.match(appSource, /const calibrationShown = await maybeShowInitialTasteCal
 assert.match(appSource, /restoredOnline[\s\S]*?await maybeShowInitialTasteCalibration/, "Stored online sessions must check the one-time calibration");
 assert.match(appSource, /document\.body\?\.classList\.add\("taste-calibration-open"\)/, "Calibration must isolate the focused onboarding viewport");
 assert.match(appSource, /calibrationBody\.scrollTop = 0/, "Every calibration step must start at the top of its question");
+assert.match(appSource, /exploration: select\("exploration", "balanced"\)/, "The removed exploration step must receive a balanced default");
+assert.match(appSource, /initialTasteCalibrationAdvanceTimer = window\.setTimeout/, "Each choice must advance the short calibration automatically");
+assert.match(appSource, /if \(selectedStep >= 2\)[\s\S]*?completeInitialTasteCalibration/, "The third choice must complete calibration without another CTA tap");
+assert.doesNotMatch(appSource, /tasteCalibrationNextBtn/, "The redundant Continue button must not return");
 
 assert.match(appSource, /goal === "dj" \|\| calibration\.goal === "set" \? "djs" : "discover"/, "The result must route to the requested content type");
 assert.match(appSource, /runPrimaryRecommendationAction\(\{ source: "initial_calibration" \}\)/, "Track calibration must generate a first recommendation");
@@ -54,6 +59,7 @@ assert.match(stylesSource, /\.taste-calibration-options button[\s\S]*?min-height
 assert.match(stylesSource, /@media \(max-width: 680px\)[\s\S]*?\.taste-calibration-options[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/, "Calibration choices must stack on phones");
 assert.match(stylesSource, /\.taste-calibration-options button:focus-visible/, "Calibration choices need visible keyboard focus");
 assert.match(stylesSource, /\.taste-calibration-actions button:disabled/, "Calibration actions need an explicit disabled state");
+assert.match(stylesSource, /\.taste-calibration-tap-hint/, "One-tap progression needs a visible instruction");
 assert.match(stylesSource, /body\.taste-calibration-open[\s\S]*?overflow:\s*hidden/, "Calibration must prevent competing page scroll");
 assert.match(stylesSource, /@media \(max-width: 680px\) and \(max-height: 650px\)[\s\S]*?min-height:\s*48px/, "Short phones need compact, touch-safe choices");
 assert.match(stylesSource, /@media \(max-height: 560px\)[\s\S]*?grid-template-areas:/, "Calibration needs a dedicated compact landscape layout");
