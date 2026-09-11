@@ -26,9 +26,9 @@
       likeLimit: "Não foi possível registrar esta curtida agora. Tente novamente.",
       unavailableSet: "Este set não está disponível no player agora. Você pode conferir o link da fonte.",
       storageError: "Não foi possível salvar neste navegador. Sua seleção funciona nesta sessão, mas pode não ser mantida ao sair.",
-      reminder: "Lembrete diário", reminderHint: "Um convite para abrir o app, no horário que você escolher. Não envia nomes de DJs na notificação.",
+      reminder: "Curadoria no seu tempo", reminderHint: "Receba um aviso para abrir a seleção do dia, no horário que você escolher. A permissão só é pedida depois do seu toque.",
       time: "Horário local", enable: "Ativar lembrete", disable: "Desativar lembrete", reminderOn: "Lembrete diário ativo às {time} neste aparelho.",
-      reminderOff: "Lembrete desativado.", reminderUnsupported: "Lembretes com o app fechado estão disponíveis na versão de desenvolvimento para iPhone. No navegador, a seleção se atualiza quando você volta.",
+      reminderOff: "Lembrete desativado.", reminderUnsupported: "Avisos com o app fechado estão disponíveis no app para iPhone. No navegador, a seleção se atualiza quando você volta.",
       reminderDenied: "Notificações não autorizadas. Você pode permitir nas configurações do iPhone.", reminderError: "Não foi possível alterar o lembrete. Tente novamente.",
       working: "Salvando…", next: "Amanhã tem uma nova seleção.", summary: "{count} DJs · {date}"
     },
@@ -52,9 +52,9 @@
       feedbackSaved: "Feedback saved for future selections.", feedbackRemoved: "Feedback removed.", unavailableSet: "This set is not available in the player right now. You can check its source link.",
       likeLimit: "This like could not be saved right now. Please try again.",
       storageError: "Could not save in this browser. Your selection works this session but may not persist after leaving.",
-      reminder: "Daily reminder", reminderHint: "An invitation to open the app at your chosen time. DJ names are not sent in the notification.",
+      reminder: "Curation on your time", reminderHint: "Get an alert to open the daily selection at your chosen time. Permission is only requested after your tap.",
       time: "Local time", enable: "Enable reminder", disable: "Disable reminder", reminderOn: "Daily reminder enabled at {time} on this device.", reminderOff: "Reminder disabled.",
-      reminderUnsupported: "Reminders while the app is closed are available in the development iPhone version. In the browser, your selection updates when you return.",
+      reminderUnsupported: "Alerts while the app is closed are available in the iPhone app. In the browser, your selection updates when you return.",
       reminderDenied: "Notifications were not allowed. You can enable them in iPhone settings.", reminderError: "Could not change the reminder. Please try again.",
       working: "Saving…", next: "A new selection awaits tomorrow.", summary: "{count} DJs · {date}"
     },
@@ -78,9 +78,9 @@
       feedbackSaved: "Evaluación guardada para próximas selecciones.", feedbackRemoved: "Evaluación eliminada.", unavailableSet: "Este set no está disponible en el reproductor ahora. Puedes consultar el enlace de la fuente.",
       likeLimit: "No se pudo guardar este Me gusta ahora. Inténtalo de nuevo.",
       storageError: "No se pudo guardar en este navegador. La selección funciona en esta sesión, pero puede perderse al salir.",
-      reminder: "Recordatorio diario", reminderHint: "Una invitación para abrir la app a la hora que elijas. No envía nombres de DJs en la notificación.",
+      reminder: "Curaduría a tu tiempo", reminderHint: "Recibe un aviso para abrir la selección diaria a la hora que elijas. El permiso solo se solicita después de tu toque.",
       time: "Hora local", enable: "Activar recordatorio", disable: "Desactivar recordatorio", reminderOn: "Recordatorio diario activo a las {time} en este dispositivo.", reminderOff: "Recordatorio desactivado.",
-      reminderUnsupported: "Los recordatorios con la app cerrada están disponibles en la versión de desarrollo para iPhone. En el navegador, la selección se actualiza cuando vuelves.",
+      reminderUnsupported: "Los avisos con la app cerrada están disponibles en la app para iPhone. En el navegador, la selección se actualiza cuando vuelves.",
       reminderDenied: "Notificaciones no autorizadas. Puedes permitirlas en los ajustes del iPhone.", reminderError: "No se pudo cambiar el recordatorio. Inténtalo de nuevo.",
       working: "Guardando…", next: "Mañana hay una nueva selección.", summary: "{count} DJs · {date}"
     }
@@ -218,7 +218,7 @@
       const details = element("details", "daily-dj-settings");
       details.id = "dailyDjReminderSettings";
       details.append(element("summary", "", message("reminder")));
-      if (!options.reminder || !reminder || reminder.developmentPreview !== true) {
+      if (!options.reminder || !reminder || (reminder.available !== true && reminder.developmentPreview !== true)) {
         details.append(element("p", "daily-dj-muted", message("reminderUnsupported")));
         return details;
       }
@@ -305,7 +305,7 @@
     }
     function findItem(key) { return state.history.flatMap((entry) => entry.items).find((item) => item.key === key); }
     async function updateReminder(time) {
-      if (!options.reminder || reminder?.developmentPreview !== true || busy || (access !== "preview" && access !== "premium")) return;
+      if (!options.reminder || (reminder?.available !== true && reminder?.developmentPreview !== true) || busy || (access !== "preview" && access !== "premium")) return;
       const context = identity;
       busy = true;
       render();

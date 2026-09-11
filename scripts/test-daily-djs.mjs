@@ -152,10 +152,13 @@ assert.equal(await access({ isNativeAppRuntime: () => true, isNativeIosRuntime: 
 assert.equal(await access({ isNativeAppRuntime: () => true, isNativeIosRuntime: () => true, capacitorPlugin: () => ({ status: async () => { throw new Error("offline"); } }) }), "unavailable");
 console.log("✓ access accepts verified memberships, fails closed in production, and ignores old premium flags");
 assert.match(native, /#if DEBUG\s+return true\s+#else\s+return false/);
-assert.match(native, /guard developmentPreview else/);
+assert.doesNotMatch(native, /guard developmentPreview else/);
+assert.match(native, /CAPPluginMethod\(name: "configureWeekly"/);
+assert.match(native, /"available": true/);
 assert.match(native, /UNCalendarNotificationTrigger\(dateMatching: components, repeats: true\)/);
-assert.match(native, /removePendingNotificationRequests\(withIdentifiers: \[self.reminderID\]\)/);
-console.log("✓ native reminder is opt-in, cancellable, and development-only");
+assert.match(native, /removePendingNotificationRequests\(withIdentifiers: \[self.dailyReminderID\]\)/);
+assert.match(native, /removePendingNotificationRequests\(withIdentifiers: \[self.weeklyReminderID\]\)/);
+console.log("✓ native curation reminders are opt-in, cancellable, and release-ready");
 
 const recoveryStart = app.indexOf("async function recoverDjPreviewAfterYoutubeError(");
 const recoveryEnd = app.indexOf("function handleDjYoutubePlayerError(", recoveryStart);

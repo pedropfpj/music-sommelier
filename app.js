@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911navsimple1";
+const SONIC_APP_BUILD_ID = "20260911premiumcuration1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10237,6 +10237,10 @@ const weeklyHighlightsLockedTitle = document.getElementById("weeklyHighlightsLoc
 const weeklyHighlightsLockedText = document.getElementById("weeklyHighlightsLockedText");
 const weeklyHighlightsPrimaryBtn = document.getElementById("weeklyHighlightsPrimaryBtn");
 const weeklyHighlightsShareBtn = document.getElementById("weeklyHighlightsShareBtn");
+const weeklyHighlightsNotification = document.getElementById("weeklyHighlightsNotification");
+const weeklyHighlightsNotificationTitle = document.getElementById("weeklyHighlightsNotificationTitle");
+const weeklyHighlightsNotificationText = document.getElementById("weeklyHighlightsNotificationText");
+const weeklyHighlightsNotificationBtn = document.getElementById("weeklyHighlightsNotificationBtn");
 const tasteCalibrationProfileCard = document.getElementById("tasteCalibrationProfileCard");
 const tasteCalibrationProfileKicker = document.getElementById("tasteCalibrationProfileKicker");
 const tasteCalibrationProfileTitle = document.getElementById("tasteCalibrationProfileTitle");
@@ -10686,6 +10690,14 @@ let socialState = {
   lastSyncAt: 0
 };
 let weeklyHighlightsCloudSyncTimer = 0;
+let weeklyHighlightsReminderState = {
+  loading: false,
+  loaded: false,
+  available: false,
+  enabled: false,
+  denied: false,
+  time: "19:00"
+};
 let adminAnalyticsState = {
   loading: false,
   data: null,
@@ -10833,6 +10845,7 @@ let dailyLikeMemoryState = null;
 let dailyDjController = null;
 let dailyRadarController = null;
 let dailyDjReminderLaunchPending = false;
+let weeklyHighlightsReminderLaunchPending = false;
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
 const SPIRIT_IMAGE_PROMPT_VERSION = "personal-sound-system-v1";
 const SPIRIT_LOCAL_COLLECTIBLE_VERSION = "local-personal-sound-system-v1-copy";
@@ -30180,7 +30193,9 @@ function removeLocalStorageKeys(keys = []) {
 }
 
 function clearAllSonicLocalData() {
-  void capacitorPlugin("DailyDjReminder")?.cancel?.().catch(() => {});
+  const reminder = capacitorPlugin("DailyDjReminder");
+  void reminder?.cancel?.().catch(() => {});
+  void reminder?.cancelWeekly?.().catch(() => {});
   removeLocalStorageKeys(localStorageKeysMatching((key) => (
     key.startsWith("neonpulse:") ||
     key.startsWith("neonpulse_") ||
@@ -30194,6 +30209,14 @@ function clearAllSonicLocalData() {
   }
   premiumPromoStorageScope = "";
   premiumPromoCollapsedMemory = false;
+  weeklyHighlightsReminderState = {
+    loading: false,
+    loaded: false,
+    available: false,
+    enabled: false,
+    denied: false,
+    time: "19:00"
+  };
 }
 
 function clearSessionStorageBuckets(session, baseKeys = []) {
@@ -34052,7 +34075,8 @@ function ensureEventsPanelActive() {
 
 function setActiveAppTab(tabName = "discover", options = {}) {
   const openDailyReminder = dailyDjReminderLaunchPending && !appContent?.classList.contains("hidden");
-  const safeTab = safeAppTabName(openDailyReminder ? "djs" : tabName);
+  const openWeeklyReminder = weeklyHighlightsReminderLaunchPending && !appContent?.classList.contains("hidden");
+  const safeTab = safeAppTabName(openDailyReminder ? "djs" : openWeeklyReminder ? "profile" : tabName);
   const previousTab = currentActiveAppTabName();
   if (previousTab !== safeTab) {
     stopAllActivePlayback({ reason: `tab_change_${previousTab}_to_${safeTab}` });
@@ -34091,9 +34115,19 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   updateSignatureBarForTab(safeTab);
   if (safeTab === "profile") {
     renderWeeklyHighlights();
+    void refreshWeeklyHighlightsReminder();
     scheduleMusicalSpiritRefresh({ force: true });
     void ensureSocialMvpReady();
     void loadApiHealthPanel();
+    if (openWeeklyReminder) {
+      weeklyHighlightsReminderLaunchPending = false;
+      window.requestAnimationFrame(() => {
+        weeklyHighlightsCard?.scrollIntoView({
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+          block: "center"
+        });
+      });
+    }
   }
   if (safeTab === "discover") {
     ensureDailyRadarReady();
@@ -44643,6 +44677,35 @@ function weeklyHighlightsCopy() {
     upgrade: sonicTinyCopy("Conhecer Sonic Premium", "Explore Sonic Premium", "Conocer Sonic Premium"),
     discover: sonicTinyCopy("Descobrir mais DJs", "Discover more DJs", "Descubrir más DJs"),
     share: sonicTinyCopy("Compartilhar resumo", "Share recap", "Compartir resumen"),
+    reminderTitle: sonicTinyCopy("Curadoria no seu tempo", "Curation on your time", "Curaduría a tu tiempo"),
+    reminderWeb: sonicTinyCopy(
+      "No app para iPhone, você pode receber um aviso opcional quando o resumo da semana estiver pronto.",
+      "In the iPhone app, you can get an optional alert when your weekly recap is ready.",
+      "En la app para iPhone, puedes recibir un aviso opcional cuando tu resumen semanal esté listo."
+    ),
+    reminderReady: sonicTinyCopy(
+      "Receba um aviso aos domingos às 19h. O Sonic só pede permissão depois do seu toque.",
+      "Get an alert Sundays at 7 PM. Sonic only asks permission after your tap.",
+      "Recibe un aviso los domingos a las 19 h. Sonic solo pide permiso después de tu toque."
+    ),
+    reminderOn: sonicTinyCopy(
+      "Aviso semanal ativo aos domingos às 19h neste iPhone.",
+      "Weekly alert is active Sundays at 7 PM on this iPhone.",
+      "El aviso semanal está activo los domingos a las 19 h en este iPhone."
+    ),
+    reminderDenied: sonicTinyCopy(
+      "As notificações estão bloqueadas. Você pode liberá-las nos Ajustes do iPhone.",
+      "Notifications are blocked. You can allow them in iPhone Settings.",
+      "Las notificaciones están bloqueadas. Puedes permitirlas en Ajustes del iPhone."
+    ),
+    reminderEnable: sonicTinyCopy("Ativar aviso semanal", "Enable weekly alert", "Activar aviso semanal"),
+    reminderDisable: sonicTinyCopy("Desativar aviso", "Turn off alert", "Desactivar aviso"),
+    reminderWorking: sonicTinyCopy("Salvando…", "Saving…", "Guardando…"),
+    reminderError: sonicTinyCopy(
+      "Não foi possível alterar o aviso agora.",
+      "The alert could not be changed right now.",
+      "No se pudo cambiar el aviso ahora."
+    ),
     shared: sonicTinyCopy("Resumo compartilhado.", "Recap shared.", "Resumen compartido."),
     copied: sonicTinyCopy("Resumo copiado.", "Recap copied.", "Resumen copiado.")
   };
@@ -44713,6 +44776,80 @@ function setPremiumPromoCollapsed(collapsed) {
   });
 }
 
+function weeklyHighlightsReminderPlugin() {
+  return isNativeIosRuntime() ? capacitorPlugin("DailyDjReminder") : null;
+}
+
+function renderWeeklyHighlightsReminder(copy = weeklyHighlightsCopy()) {
+  if (!weeklyHighlightsNotification) return;
+  const premium = hasPremiumAccess();
+  weeklyHighlightsNotification.classList.toggle("hidden", !premium);
+  weeklyHighlightsNotification.setAttribute("aria-hidden", premium ? "false" : "true");
+  if (!premium) return;
+  if (weeklyHighlightsNotificationTitle) weeklyHighlightsNotificationTitle.textContent = copy.reminderTitle;
+
+  const nativeIos = isNativeIosRuntime();
+  const available = nativeIos && weeklyHighlightsReminderState.available;
+  const pendingStatus = nativeIos && !weeklyHighlightsReminderState.loaded;
+  let status = copy.reminderWeb;
+  if (pendingStatus) status = sonicTinyCopy("Verificando avisos do iPhone…", "Checking iPhone alerts…", "Verificando avisos del iPhone…");
+  else if (available && weeklyHighlightsReminderState.denied) status = copy.reminderDenied;
+  else if (available && weeklyHighlightsReminderState.enabled) status = copy.reminderOn;
+  else if (available) status = copy.reminderReady;
+  if (weeklyHighlightsNotificationText) weeklyHighlightsNotificationText.textContent = status;
+  if (weeklyHighlightsNotificationBtn) {
+    weeklyHighlightsNotificationBtn.classList.toggle("hidden", !available);
+    weeklyHighlightsNotificationBtn.disabled = weeklyHighlightsReminderState.loading || weeklyHighlightsReminderState.denied;
+    weeklyHighlightsNotificationBtn.textContent = weeklyHighlightsReminderState.loading
+      ? copy.reminderWorking
+      : weeklyHighlightsReminderState.enabled ? copy.reminderDisable : copy.reminderEnable;
+    weeklyHighlightsNotificationBtn.setAttribute("aria-pressed", String(weeklyHighlightsReminderState.enabled));
+  }
+}
+
+async function refreshWeeklyHighlightsReminder() {
+  const native = weeklyHighlightsReminderPlugin();
+  if (!hasPremiumAccess() || !native?.status) {
+    weeklyHighlightsReminderState = { ...weeklyHighlightsReminderState, loaded: true, available: false, enabled: false, denied: false };
+    renderWeeklyHighlightsReminder();
+    return weeklyHighlightsReminderState;
+  }
+  try {
+    const result = await native.status();
+    const weekly = result?.weekly && typeof result.weekly === "object" ? result.weekly : {};
+    weeklyHighlightsReminderState = {
+      loading: false,
+      loaded: true,
+      available: result?.available === true || result?.developmentPreview === true,
+      enabled: weekly.enabled === true,
+      denied: result?.denied === true,
+      time: String(weekly.time || "19:00")
+    };
+  } catch (_) {
+    weeklyHighlightsReminderState = { ...weeklyHighlightsReminderState, loading: false, loaded: true, available: false, enabled: false };
+  }
+  renderWeeklyHighlightsReminder();
+  return weeklyHighlightsReminderState;
+}
+
+async function toggleWeeklyHighlightsReminder() {
+  if (!hasPremiumAccess() || weeklyHighlightsReminderState.loading) return;
+  const native = weeklyHighlightsReminderPlugin();
+  if (!native?.status || !native?.configureWeekly || !native?.cancelWeekly) return;
+  const copy = weeklyHighlightsCopy();
+  weeklyHighlightsReminderState.loading = true;
+  renderWeeklyHighlightsReminder(copy);
+  try {
+    if (weeklyHighlightsReminderState.enabled) await native.cancelWeekly();
+    else await native.configureWeekly({ time: "19:00", weekday: 1, language: currentLanguage });
+    await refreshWeeklyHighlightsReminder();
+  } catch (_) {
+    weeklyHighlightsReminderState.loading = false;
+    renderWeeklyHighlightsReminder(copy);
+    showToast(copy.reminderError);
+  }
+}
+
 function renderWeeklyHighlights() {
   if (!weeklyHighlightsCard) return;
   const copy = weeklyHighlightsCopy();
@@ -44749,6 +44886,7 @@ function renderWeeklyHighlights() {
     weeklyHighlightsShareBtn.textContent = copy.share;
     weeklyHighlightsShareBtn.classList.toggle("hidden", !premium || !ready);
   }
+  renderWeeklyHighlightsReminder(copy);
 }
 
 function weeklyHighlightsShareText(snapshot = weeklyHighlightsSnapshot()) {
@@ -44802,8 +44940,9 @@ function membershipUiCopy() {
         "Tu perfil aprende de cada reacción y convierte esas señales en descubrimientos hechos para ti."
       ),
       features: [
-        sonicTinyCopy("Radar diário moldado pelo seu perfil", "Daily radar shaped by your profile", "Radar diario moldeado por tu perfil"),
+        sonicTinyCopy("Seleções exclusivas: afinidade, expansão e surpresa", "Exclusive picks: affinity, expansion, and surprise", "Selecciones exclusivas: afinidad, expansión y sorpresa"),
         sonicTinyCopy("Minha Semana Sonic com seus destaques", "My Sonic Week with your highlights", "Mi Semana Sonic con tus destacados"),
+        sonicTinyCopy("Avisos opcionais de curadoria no iPhone", "Optional curation alerts on iPhone", "Avisos opcionales de curaduría en iPhone"),
         sonicTinyCopy("Arte exclusiva do Sound System criada por IA", "Exclusive AI-created Sound System artwork", "Arte exclusiva del Sound System creada por IA"),
         sonicTinyCopy("Memória sincronizada entre aparelhos", "Memory synced across devices", "Memoria sincronizada entre dispositivos"),
         sonicTinyCopy("Explicação por trás de cada escolha", "The reason behind every pick", "La razón detrás de cada elección")
@@ -44899,6 +45038,7 @@ async function refreshMembershipAccess() {
   renderMembershipUi();
   if (dailyDjController?.refreshAccess) await dailyDjController.refreshAccess();
   if (dailyRadarController?.refreshAccess) await dailyRadarController.refreshAccess();
+  await refreshWeeklyHighlightsReminder();
   return refreshed || hasPremiumAccess();
 }
 
@@ -44958,12 +45098,16 @@ function premiumBillingCopy() {
     benefitsLabel: sonicTinyCopy("Benefícios do Sonic Premium", "Sonic Premium benefits", "Beneficios de Sonic Premium"),
     benefits: [
       {
-        title: sonicTinyCopy("Radar Diário", "Daily Radar", "Radar Diario"),
-        body: sonicTinyCopy("Indicações moldadas pelo seu perfil, com até três descobertas por dia", "Picks shaped by your profile, with up to three discoveries a day", "Recomendaciones moldeadas por tu perfil, con hasta tres descubrimientos al día")
+        title: sonicTinyCopy("Seleções exclusivas", "Exclusive picks", "Selecciones exclusivas"),
+        body: sonicTinyCopy("Alta afinidade, expansão e surpresa, com um motivo para cada escolha", "High affinity, expansion, and surprise, with a reason for every pick", "Alta afinidad, expansión y sorpresa, con una razón para cada elección")
       },
       {
         title: sonicTinyCopy("Minha Semana Sonic", "My Sonic Week", "Mi Semana Sonic"),
         body: sonicTinyCopy("DJs, faixas e estilos que marcaram sua semana", "The DJs, tracks, and styles that shaped your week", "Los DJs, pistas y estilos que marcaron tu semana")
+      },
+      {
+        title: sonicTinyCopy("Curadoria no seu tempo", "Curation on your time", "Curaduría a tu tiempo"),
+        body: sonicTinyCopy("Avisos opcionais no iPhone quando suas seleções estiverem prontas", "Optional iPhone alerts when your selections are ready", "Avisos opcionales en iPhone cuando tus selecciones estén listas")
       },
       {
         title: sonicTinyCopy("Sound System por IA", "AI Sound System", "Sound System con IA"),
@@ -51277,6 +51421,10 @@ function setupDailyDjReminderRouting() {
   void Promise.resolve(native.addListener("openDailySelection", () => {
     dailyDjReminderLaunchPending = true;
     if (!appContent?.classList.contains("hidden")) setActiveAppTab("djs", { focusPanel: true });
+  })).catch(() => {});
+  void Promise.resolve(native.addListener("openWeeklyHighlights", () => {
+    weeklyHighlightsReminderLaunchPending = true;
+    if (!appContent?.classList.contains("hidden")) setActiveAppTab("profile", { focusPanel: true });
   })).catch(() => {});
 }
 
@@ -62920,6 +63068,9 @@ bind(weeklyHighlightsPrimaryBtn, "click", () => {
 });
 bind(weeklyHighlightsShareBtn, "click", () => {
   void shareWeeklyHighlights();
+});
+bind(weeklyHighlightsNotificationBtn, "click", () => {
+  void toggleWeeklyHighlightsReminder();
 });
 bind(premiumDialog, "close", () => {
   document.documentElement.classList.remove("premium-dialog-open");

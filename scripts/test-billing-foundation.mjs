@@ -80,7 +80,8 @@ try {
   assert.ok(index.indexOf('id="premiumDialog"') > index.indexOf("</main>"), "Premium dialog must stay outside hidden tab panels");
   assert.match(index, /id="premiumProfilePreview"/);
   assert.match(index, /id="premiumProfileSignals"/);
-  assert.match(app, /Indicações moldadas pelo seu perfil/);
+  assert.match(app, /Seleções exclusivas/);
+  assert.match(app, /Alta afinidade, expansão e surpresa/);
   assert.match(app, /function premiumProfileSnapshot/);
   assert.match(app, /classList\.add\("premium-dialog-open"\)/);
   assert.match(app, /bind\(premiumDialog, "close", \(\) => \{[\s\S]{0,160}classList\.remove\("premium-dialog-open"\)/);

@@ -204,8 +204,9 @@ public final class SonicSubscriptionsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 }
 
-/// Device-local, opt-in reminder. Release builds keep the reminder disabled;
-/// subscription access is handled separately through verified StoreKit data.
+/// Device-local, opt-in curation reminders. JavaScript only exposes these
+/// controls after the Premium entitlement has been verified. iOS permission is
+/// always requested from a direct user action, never during app startup.
 @objc(DailyDjReminderPlugin)
 public final class DailyDjReminderPlugin: CAPPlugin, CAPBridgedPlugin, NotificationHandlerProtocol {
     public let identifier = "DailyDjReminderPlugin"
@@ -213,9 +214,13 @@ public final class DailyDjReminderPlugin: CAPPlugin, CAPBridgedPlugin, Notificat
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "status", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "configure", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "configureWeekly", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cancelWeekly", returnType: CAPPluginReturnPromise)
     ]
-    private let reminderID = "sonic.daily-dj.reminder"
+    private let dailyReminderID = "sonic.daily-curation.reminder"
+    private let weeklyReminderID = "sonic.weekly-highlights.reminder"
+    private let legacyDailyReminderID = "sonic.daily-dj.reminder"
     private var generation = 0
     private var configuring = false
 
@@ -229,45 +234,60 @@ public final class DailyDjReminderPlugin: CAPPlugin, CAPBridgedPlugin, Notificat
 
     public override func load() {
         bridge?.notificationRouter.localNotificationHandler = self
-        if !developmentPreview {
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminderID])
-        }
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [legacyDailyReminderID])
     }
 
     public func willPresent(notification: UNNotification) -> UNNotificationPresentationOptions {
-        guard developmentPreview, notification.request.identifier == reminderID else { return [] }
+        guard [dailyReminderID, weeklyReminderID].contains(notification.request.identifier) else { return [] }
         return [.banner, .sound]
     }
 
     public func didReceive(response: UNNotificationResponse) {
-        guard developmentPreview,
-              response.notification.request.identifier == reminderID,
-              response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
-        notifyListeners("openDailySelection", data: [:], retainUntilConsumed: true)
+        guard response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
+        let identifier = response.notification.request.identifier
+        if identifier == dailyReminderID {
+            notifyListeners("openDailySelection", data: [:], retainUntilConsumed: true)
+        } else if identifier == weeklyReminderID {
+            notifyListeners("openWeeklyHighlights", data: [:], retainUntilConsumed: true)
+        }
+    }
+
+    private func timeValue(from request: UNNotificationRequest?, fallback: String) -> String {
+        let date = (request?.trigger as? UNCalendarNotificationTrigger)?.dateComponents
+        guard let hour = date?.hour, let minute = date?.minute else { return fallback }
+        return String(format: "%02d:%02d", hour, minute)
     }
 
     @objc public func status(_ call: CAPPluginCall) {
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { settings in
             center.getPendingNotificationRequests { requests in
-                let request = requests.first { $0.identifier == self.reminderID }
-                let date = (request?.trigger as? UNCalendarNotificationTrigger)?.dateComponents
+                let dailyRequest = requests.first { $0.identifier == self.dailyReminderID }
+                let weeklyRequest = requests.first { $0.identifier == self.weeklyReminderID }
                 let allowed = settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional
                 call.resolve([
+                    "available": true,
                     "developmentPreview": self.developmentPreview,
-                    "enabled": request != nil && allowed,
+                    "enabled": dailyRequest != nil && allowed,
                     "denied": settings.authorizationStatus == .denied,
-                    "time": String(format: "%02d:%02d", date?.hour ?? 19, date?.minute ?? 0)
+                    "time": self.timeValue(from: dailyRequest, fallback: "19:00"),
+                    "weekly": [
+                        "enabled": weeklyRequest != nil && allowed,
+                        "time": self.timeValue(from: weeklyRequest, fallback: "19:00"),
+                        "weekday": 1
+                    ]
                 ])
             }
         }
     }
 
-    @objc public func configure(_ call: CAPPluginCall) {
-        guard developmentPreview else {
-            call.reject("Daily recommendations are not available for purchase yet.")
-            return
-        }
+    private func configureReminder(
+        _ call: CAPPluginCall,
+        identifier: String,
+        weekday: Int?,
+        title: @escaping (String) -> String,
+        body: @escaping (String) -> String
+    ) {
         let time = call.getString("time") ?? ""
         guard time.range(of: #"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"#, options: .regularExpression) != nil else {
             call.reject("Choose a valid local time.")
@@ -292,20 +312,21 @@ public final class DailyDjReminderPlugin: CAPPlugin, CAPBridgedPlugin, Notificat
                     if let error = error { self.configuring = false; call.reject(error.localizedDescription); return }
                     guard allowed else { self.configuring = false; self.status(call); return }
                     let content = UNMutableNotificationContent()
-                    content.title = language == "pt" ? "Recomendação Premium" : language == "es" ? "Recomendación Premium" : "Premium Recommendations"
-                    content.body = language == "pt" ? "Reserve um momento para descobrir DJs no Sonic Search." : language == "es" ? "Reserva un momento para descubrir DJs en Sonic Search." : "Take a moment to discover DJs in Sonic Search."
+                    content.title = title(language)
+                    content.body = body(language)
                     content.sound = .default
                     var components = DateComponents()
                     components.hour = parts[0]
                     components.minute = parts[1]
+                    if let weekday { components.weekday = weekday }
                     // Calendar matching follows the device's local clock, including DST.
                     let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-                    let request = UNNotificationRequest(identifier: self.reminderID, content: content, trigger: trigger)
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                     center.add(request) { error in
                         DispatchQueue.main.async {
                             self.configuring = false
                             if self.generation != requestGeneration {
-                                center.removePendingNotificationRequests(withIdentifiers: [self.reminderID])
+                                center.removePendingNotificationRequests(withIdentifiers: [identifier])
                                 call.reject("Reminder update was cancelled.")
                             } else if let error = error {
                                 call.reject(error.localizedDescription)
@@ -319,13 +340,52 @@ public final class DailyDjReminderPlugin: CAPPlugin, CAPBridgedPlugin, Notificat
         }
     }
 
+    @objc public func configure(_ call: CAPPluginCall) {
+        configureReminder(
+            call,
+            identifier: dailyReminderID,
+            weekday: nil,
+            title: { language in
+                language == "pt" ? "Sua curadoria está pronta" : language == "es" ? "Tu curaduría está lista" : "Your curation is ready"
+            },
+            body: { language in
+                language == "pt" ? "Abra o Sonic Search para descobrir a seleção de hoje." : language == "es" ? "Abre Sonic Search para descubrir la selección de hoy." : "Open Sonic Search to discover today's selection."
+            }
+        )
+    }
+
+    @objc public func configureWeekly(_ call: CAPPluginCall) {
+        let weekday = min(7, max(1, call.getInt("weekday") ?? 1))
+        configureReminder(
+            call,
+            identifier: weeklyReminderID,
+            weekday: weekday,
+            title: { language in
+                language == "pt" ? "Sua Semana Sonic está pronta" : language == "es" ? "Tu Semana Sonic está lista" : "Your Sonic Week is ready"
+            },
+            body: { language in
+                language == "pt" ? "Veja o DJ, as faixas e o estilo que marcaram sua semana." : language == "es" ? "Mira el DJ, las pistas y el estilo que marcaron tu semana." : "See the DJ, tracks, and style that shaped your week."
+            }
+        )
+    }
+
     @objc public func cancel(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             self.generation += 1
             let center = UNUserNotificationCenter.current()
-            center.removePendingNotificationRequests(withIdentifiers: [self.reminderID])
-            center.removeDeliveredNotifications(withIdentifiers: [self.reminderID])
-            call.resolve(["enabled": false, "time": "19:00", "developmentPreview": self.developmentPreview])
+            center.removePendingNotificationRequests(withIdentifiers: [self.dailyReminderID])
+            center.removeDeliveredNotifications(withIdentifiers: [self.dailyReminderID])
+            call.resolve(["available": true, "enabled": false, "time": "19:00", "developmentPreview": self.developmentPreview])
+        }
+    }
+
+    @objc public func cancelWeekly(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            self.generation += 1
+            let center = UNUserNotificationCenter.current()
+            center.removePendingNotificationRequests(withIdentifiers: [self.weeklyReminderID])
+            center.removeDeliveredNotifications(withIdentifiers: [self.weeklyReminderID])
+            call.resolve(["available": true, "enabled": false, "time": "19:00", "weekday": 1])
         }
     }
 }

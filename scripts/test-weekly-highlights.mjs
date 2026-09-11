@@ -4,12 +4,13 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const [html, app, css, dailyDjsUi, iosBuild] = await Promise.all([
+const [html, app, css, dailyDjsUi, iosBuild, native] = await Promise.all([
   readFile(path.join(root, "index.html"), "utf8"),
   readFile(path.join(root, "app.js"), "utf8"),
   readFile(path.join(root, "styles.css"), "utf8"),
   readFile(path.join(root, "daily-djs-ui.js"), "utf8"),
-  readFile(path.join(root, "scripts/build-ios-web.mjs"), "utf8")
+  readFile(path.join(root, "scripts/build-ios-web.mjs"), "utf8"),
+  readFile(path.join(root, "ios/App/App/SonicBridgeViewController.swift"), "utf8")
 ]);
 
 assert.match(html, /id="weeklyHighlightsCard"[^>]+aria-labelledby="weeklyHighlightsTitle"/);
@@ -23,7 +24,9 @@ for (const id of [
   "weeklyHighlightsSpotlight",
   "weeklyHighlightsEmpty",
   "weeklyHighlightsLocked",
-  "weeklyHighlightsShareBtn"
+  "weeklyHighlightsShareBtn",
+  "weeklyHighlightsNotification",
+  "weeklyHighlightsNotificationBtn"
 ]) assert.match(html, new RegExp(`id="${id}"`));
 
 assert.match(html, /id="premiumDialogClose"[\s\S]*?<svg[^>]+viewBox="0 0 24 24"/);
@@ -41,11 +44,19 @@ assert.match(app, /select: "profile_key,preferences,progress,schema_version,clie
 assert.match(app, /const premium = hasPremiumAccess\(\);[\s\S]*weeklyHighlightsCard\.dataset\.access = premium \? "premium" : "locked"/);
 assert.match(app, /navigator\.share\(\{ title: copy\.kicker, text \}\)/);
 assert.match(app, /premiumDialogTitle\?\.focus\(\{ preventScroll: true \}\)/);
+assert.match(app, /async function toggleWeeklyHighlightsReminder\(\)/);
+assert.match(app, /native\.configureWeekly\(\{ time: "19:00", weekday: 1, language: currentLanguage \}\)/);
+assert.match(app, /native\.addListener\("openWeeklyHighlights"/);
+assert.match(native, /CAPPluginMethod\(name: "configureWeekly"/);
+assert.match(native, /requestAuthorization\(options: \[\.alert, \.sound\]\)/);
+assert.match(native, /notifyListeners\("openWeeklyHighlights"/);
 
 assert.match(css, /\.premium-dialog-close\s*\{[\s\S]*?width: 44px;[\s\S]*?height: 44px;/);
 assert.match(css, /\.premium-dialog-close:focus-visible\s*\{[\s\S]*?outline: 2px solid/);
 assert.match(css, /\.weekly-highlights-card\s*\{/);
 assert.match(css, /\.weekly-highlights-card\.is-collapsed\s*\{/);
+assert.match(css, /\.weekly-highlights-notification\s*\{/);
+assert.match(css, /\.weekly-highlights-notification-btn:focus-visible\s*\{/);
 assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.weekly-highlights-actions,[\s\S]*?width: 100%;/);
 const webBuildId = app.match(/const SONIC_APP_BUILD_ID = "([^"]+)";/)?.[1] || "";
 const iosBuildId = iosBuild.match(/const appStoreBuildId = "([^"]+)";/)?.[1] || "";

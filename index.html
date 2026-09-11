@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260911navsimple1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260911premiumcuration1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260911navsimple1" />
+    <link rel="stylesheet" href="styles.min.css?v=20260911premiumcuration1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
@@ -2671,6 +2671,16 @@
                 <p id="weeklyHighlightsLockedText">Veja quem marcou sua semana, quantos DJs você descobriu e como seu gosto evoluiu.</p>
               </div>
             </div>
+            <section id="weeklyHighlightsNotification" class="weekly-highlights-notification hidden" aria-labelledby="weeklyHighlightsNotificationTitle" aria-live="polite">
+              <span class="weekly-highlights-notification-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+              </span>
+              <div class="weekly-highlights-notification-copy">
+                <strong id="weeklyHighlightsNotificationTitle">Curadoria no seu tempo</strong>
+                <p id="weeklyHighlightsNotificationText">No iPhone, receba um aviso quando o resumo da semana estiver pronto.</p>
+              </div>
+              <button id="weeklyHighlightsNotificationBtn" class="listen-btn secondary weekly-highlights-notification-btn hidden" type="button">Ativar aviso semanal</button>
+            </section>
             <footer class="weekly-highlights-actions">
               <button id="weeklyHighlightsPrimaryBtn" class="listen-btn weekly-highlights-primary" type="button">Conhecer Sonic Premium</button>
               <button id="weeklyHighlightsShareBtn" class="listen-btn secondary weekly-highlights-share hidden" type="button">Compartilhar resumo</button>
@@ -2982,8 +2992,9 @@
           <p id="premiumDialogIntro">Seleções de faixas, DJs e sets guiadas pelo seu perfil, com um resumo pessoal a cada semana.</p>
         </header>
         <ul id="premiumBenefitList" class="premium-benefit-list" aria-label="Benefícios do Sonic Premium">
-          <li><strong>Radar Diário</strong><span>Até três descobertas personalizadas por dia</span></li>
+          <li><strong>Seleções exclusivas</strong><span>Alta afinidade, expansão e surpresa com um motivo para cada escolha</span></li>
           <li><strong>Minha Semana Sonic</strong><span>DJs, faixas e estilos que marcaram sua semana</span></li>
+          <li><strong>Curadoria no seu tempo</strong><span>Avisos opcionais no iPhone quando suas seleções estiverem prontas</span></li>
           <li><strong>Sound System por IA</strong><span>Uma arte exclusiva criada a partir do seu perfil</span></li>
           <li><strong>Memória contínua</strong><span>Histórico completo sincronizado entre aparelhos</span></li>
         </ul>
@@ -3232,10 +3243,10 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
-    <script defer src="daily-djs.js?v=20260911navsimple1"></script>
-    <script defer src="daily-djs-ui.js?v=20260911navsimple1"></script>
-    <script defer src="daily-radar.js?v=20260911navsimple1"></script>
-    <script defer src="daily-radar-ui.js?v=20260911navsimple1"></script>
-    <script defer src="app.min.js?v=20260911navsimple1"></script>
+    <script defer src="daily-djs.js?v=20260911premiumcuration1"></script>
+    <script defer src="daily-djs-ui.js?v=20260911premiumcuration1"></script>
+    <script defer src="daily-radar.js?v=20260911premiumcuration1"></script>
+    <script defer src="daily-radar-ui.js?v=20260911premiumcuration1"></script>
+    <script defer src="app.min.js?v=20260911premiumcuration1"></script>
   </body>
 </html>
