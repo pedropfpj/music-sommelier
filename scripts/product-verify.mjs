@@ -702,7 +702,9 @@ async function captureUiScreenshots() {
   try {
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-desktop-latest.png"), 1440, 960);
     await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-mobile-latest.png"), 393, 852);
-    pass("UI screenshots captured");
+    await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-mobile-375-latest.png"), 375, 812);
+    await captureChromeScreenshot(chromePath, url, path.join(reportsDir, "ui-landscape-latest.png"), 852, 393);
+    pass("UI screenshots captured for desktop, iPhone, small phone, and landscape");
   } catch (error) {
     const message = `UI screenshots unavailable: ${error.message}`;
     if (strictScreenshots) fail("UI screenshots", message);

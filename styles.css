@@ -7807,6 +7807,93 @@ input[type="range"] {
   animation: toast-in-out 2600ms ease forwards;
 }
 
+.network-status-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+  z-index: 9996;
+  width: min(calc(100vw - 2rem), 660px);
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.78rem 0.9rem;
+  border: 1px solid rgba(255, 184, 107, 0.48);
+  border-radius: 12px;
+  color: #fff3df;
+  background:
+    linear-gradient(110deg, rgba(255, 184, 107, 0.13), transparent 58%),
+    rgba(8, 15, 31, 0.97);
+  box-shadow: 0 18px 46px rgba(0, 4, 16, 0.58);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.network-status-banner.is-online {
+  border-color: rgba(128, 255, 230, 0.46);
+  color: #d9fff6;
+  background:
+    linear-gradient(110deg, rgba(128, 255, 230, 0.13), transparent 58%),
+    rgba(8, 15, 31, 0.97);
+}
+
+.network-status-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.92;
+}
+
+.network-status-icon svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.9;
+}
+
+.network-status-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.network-status-copy strong {
+  color: inherit;
+  font-size: 0.92rem;
+}
+
+.network-status-copy > span {
+  color: rgba(235, 244, 255, 0.78);
+}
+
+@media (max-width: 780px) {
+  .network-status-banner {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 5.5rem);
+    width: min(calc(100vw - 1.5rem), 520px);
+    padding: 0.72rem 0.78rem;
+    border-radius: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .network-status-banner:not(.hidden) {
+    animation: network-status-enter 220ms ease-out both;
+  }
+}
+
+@keyframes network-status-enter {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
 .search-overlay {
   position: fixed;
   inset: 0;
@@ -17529,7 +17616,7 @@ button,
 
   .app-tab-bar {
     top: 0.35rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(130px, 1.15fr) repeat(5, minmax(76px, 1fr)) !important;
     gap: 0.28rem;
   }
 

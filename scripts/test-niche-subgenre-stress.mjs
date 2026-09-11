@@ -6,9 +6,13 @@ import path from "node:path";
 import vm from "node:vm";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
+import { startTestPreviewServer } from "./test-preview-server.mjs";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const baseUrl = String(process.env.SONIC_STRESS_BASE_URL || "http://127.0.0.1:4174").replace(/\/+$/, "");
+const previewSession = await startTestPreviewServer({ envName: "SONIC_STRESS_BASE_URL" });
+const baseUrl = previewSession.baseUrl;
+
+try {
 const httpRounds = Math.max(1, Number(process.env.SONIC_STRESS_HTTP_ROUNDS) || 20);
 const recommendationRounds = Math.max(25, Number(process.env.SONIC_STRESS_RECOMMENDATION_ROUNDS) || 250);
 const minimumPlayableArtists = Math.max(1, Number(process.env.SONIC_STRESS_MIN_PLAYABLE_ARTISTS) || 5);
@@ -460,3 +464,6 @@ console.log(
   `Subgenre stress passed: ${summary.totalRecommendations} recommendations, ${summary.httpRequests} concurrent shard requests (p95 ${summary.httpP95Ms}ms), ${summary.audioProbes} artist-distinct audio probes, zero immediate repeats or style leaks.`
 );
 console.log(`Report: ${path.relative(rootDir, reportPath)}`);
+} finally {
+  await previewSession.stop();
+}

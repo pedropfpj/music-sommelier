@@ -1,9 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import vm from "node:vm";
+import { startTestPreviewServer } from "./test-preview-server.mjs";
 
-const BASE_URL = String(process.env.STRESS_BASE_URL || "http://127.0.0.1:8794").replace(/\/+$/, "");
-const PER_STYLE = 10;
+const previewSession = await startTestPreviewServer({ envName: "STRESS_BASE_URL" });
+const BASE_URL = previewSession.baseUrl;
+
+try {
+const ROUTE_CANDIDATES_PER_STYLE = 10;
+const LIVE_PREVIEWS_PER_STYLE = Math.max(0, Number(process.env.STRESS_LIVE_PREVIEWS_PER_STYLE) || 0);
 const STYLES = [
   "full_on_night",
   "forest_psy",
@@ -201,13 +206,43 @@ async function deezerPlayback(track) {
   }
 }
 
+async function appMetadataPlayback(track) {
+  try {
+    const params = new URLSearchParams({
+      artist: track.artist,
+      song: track.song,
+      style: track.style
+    });
+    const response = await fetchWithTimeout(`${BASE_URL}/api/track-metadata?${params.toString()}`, {
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const best = payload?.best && typeof payload.best === "object" ? payload.best : null;
+    if (!best?.previewUrl) return null;
+    if (artistKey(best.artist) !== artistKey(track.artist)) return null;
+    const expectedTitle = normalize(track.song).replace(/\s*\([^)]*\)\s*/g, " ").trim();
+    const actualTitle = normalize(best.song || best.title).replace(/\s*\([^)]*\)\s*/g, " ").trim();
+    if (!actualTitle.includes(expectedTitle) && !expectedTitle.includes(actualTitle)) return null;
+    if (!bpmFits(track.style, Number(best.bpmExact) || 0)) return null;
+    return best.previewUrl;
+  } catch (_error) {
+    return null;
+  }
+}
+
 async function verifyPlayable(track) {
   const directOk = track.previewUrl ? await probeAudioUrl(track.previewUrl) : false;
   if (directOk) return { ok: true, route: "catalog_preview" };
   const refreshedPreview = await deezerPlayback(track);
-  if (!refreshedPreview) return { ok: false, route: "none" };
-  const refreshedOk = await probeAudioUrl(refreshedPreview);
-  return { ok: refreshedOk, route: refreshedOk ? "deezer_refresh" : "none" };
+  if (refreshedPreview) {
+    const refreshedOk = await probeAudioUrl(refreshedPreview);
+    if (refreshedOk) return { ok: true, route: "deezer_refresh" };
+  }
+  const resolvedPreview = await appMetadataPlayback(track);
+  if (!resolvedPreview) return { ok: false, route: "none" };
+  const resolvedOk = await probeAudioUrl(resolvedPreview);
+  return { ok: resolvedOk, route: resolvedOk ? "track_metadata" : "none" };
 }
 
 function staticTrackIsValid(style, track) {
@@ -220,7 +255,7 @@ function staticTrackIsValid(style, track) {
   return Boolean(track.previewUrl || track.deezerTrackId);
 }
 
-async function selectTenPlayable(style, tracks) {
+async function selectLivePreviews(style, tracks) {
   const tracksByArtist = new Map();
   for (const track of tracks) {
     if (!staticTrackIsValid(style, track)) continue;
@@ -232,7 +267,7 @@ async function selectTenPlayable(style, tracks) {
 
   const artistGroups = Array.from(tracksByArtist.values());
   const selected = [];
-  for (let index = 0; index < artistGroups.length && selected.length < PER_STYLE; index += 5) {
+  for (let index = 0; index < artistGroups.length && selected.length < LIVE_PREVIEWS_PER_STYLE; index += 5) {
     const batch = artistGroups.slice(index, index + 5);
     const probed = await Promise.all(batch.map(async (artistTracks) => {
       for (const track of artistTracks.slice(0, 5)) {
@@ -242,7 +277,7 @@ async function selectTenPlayable(style, tracks) {
       return null;
     }));
     for (const result of probed) {
-      if (result?.playback?.ok && selected.length < PER_STYLE) selected.push(result);
+      if (result?.playback?.ok && selected.length < LIVE_PREVIEWS_PER_STYLE) selected.push(result);
     }
   }
   return { selected, candidateArtists: artistGroups.length };
@@ -268,13 +303,14 @@ for (const style of STYLES) {
   }
   const localTracks = curatedTracks.filter((track) => track.style === style);
   const merged = [...localTracks, ...remoteTracks];
-  const { selected, candidateArtists } = await selectTenPlayable(style, merged);
+  const { selected, candidateArtists } = await selectLivePreviews(style, merged);
   const artists = new Set(selected.map(({ track }) => artistKey(track.artist)));
   const songs = new Set(selected.map(({ track }) => trackKey(track)));
 
-  assert.equal(selected.length, PER_STYLE, `${style}: only ${selected.length}/${PER_STYLE} playable recommendations across ${candidateArtists} candidate artists`);
-  assert.equal(artists.size, PER_STYLE, `${style}: artist repetition detected`);
-  assert.equal(songs.size, PER_STYLE, `${style}: track repetition detected`);
+  assert.ok(candidateArtists >= ROUTE_CANDIDATES_PER_STYLE, `${style}: only ${candidateArtists}/${ROUTE_CANDIDATES_PER_STYLE} artist-distinct playback candidates`);
+  assert.equal(selected.length, LIVE_PREVIEWS_PER_STYLE, `${style}: only ${selected.length}/${LIVE_PREVIEWS_PER_STYLE} live previews across ${candidateArtists} candidate artists`);
+  assert.equal(artists.size, LIVE_PREVIEWS_PER_STYLE, `${style}: artist repetition detected`);
+  assert.equal(songs.size, LIVE_PREVIEWS_PER_STYLE, `${style}: track repetition detected`);
   selected.forEach(({ track }) => {
     assert.ok(track.artist, `${style}: recommendation without artist`);
     assert.equal(track.style, style, `${style}: cross-style recommendation ${track.style}`);
@@ -296,7 +332,13 @@ for (const style of STYLES) {
 }
 
 const total = report.reduce((sum, row) => sum + row.tests, 0);
-assert.equal(total, STYLES.length * PER_STYLE, "stress test did not execute 100 recommendations");
+assert.equal(total, STYLES.length * LIVE_PREVIEWS_PER_STYLE, "stress test did not execute the live preview sample for every style");
 
 console.table(report);
-console.log(`PASS: ${total} recomendações; ${STYLES.length} subgêneros; ${PER_STYLE} artistas distintos e previews tocáveis por subgênero.`);
+const liveSummary = LIVE_PREVIEWS_PER_STYLE > 0
+  ? ` e ${LIVE_PREVIEWS_PER_STYLE} preview(s) confirmado(s) ao vivo por estilo`
+  : "; a prova externa ao vivo é opcional com STRESS_LIVE_PREVIEWS_PER_STYLE=1";
+console.log(`PASS: ${STYLES.length} subgêneros; ${ROUTE_CANDIDATES_PER_STYLE} rotas candidatas por estilo${liveSummary}.`);
+} finally {
+  await previewSession.stop();
+}

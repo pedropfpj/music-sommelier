@@ -4,9 +4,13 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { startTestPreviewServer } from "./test-preview-server.mjs";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const baseUrl = String(process.env.SONIC_TEST_BASE_URL || "http://127.0.0.1:4173").replace(/\/+$/, "");
+const previewSession = await startTestPreviewServer({ envName: "SONIC_TEST_BASE_URL" });
+const baseUrl = previewSession.baseUrl;
+
+try {
 const report = JSON.parse(fs.readFileSync(path.join(rootDir, "reports", "underrepresented_subgenre_expansion_v18_20260820.json"), "utf8"));
 const appSource = fs.readFileSync(path.join(rootDir, "app.js"), "utf8");
 const appBuildId = appSource.match(/const SONIC_APP_BUILD_ID = "([^"]+)";/)?.[1] || "";
@@ -79,3 +83,6 @@ assert.match(appSource, /async function runRecommendation[\s\S]{0,6000}ensureSty
 console.log(
   `Niche recommendation runtime passed: HTTP app healthy, ${styles.length} styles, ${recommendationsChecked} playable artist-distinct samples, minimum ${minimumArtistDepth} playable artists and ${minimumDirectRoutes} direct routes/style.`
 );
+} finally {
+  await previewSession.stop();
+}

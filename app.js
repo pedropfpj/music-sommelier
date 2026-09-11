@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911premiumcuration1";
+const SONIC_APP_BUILD_ID = "20260911reliability1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -9871,6 +9871,9 @@ const quickSurpriseKnownTracksEl = document.getElementById("quickSurpriseKnownTr
 const quickSurpriseRunBtn = document.getElementById("quickSurpriseRunBtn");
 const quickSurpriseCancelBtn = document.getElementById("quickSurpriseCancelBtn");
 const toastEl = document.getElementById("toast");
+const networkStatusBanner = document.getElementById("networkStatusBanner");
+const networkStatusTitle = document.getElementById("networkStatusTitle");
+const networkStatusText = document.getElementById("networkStatusText");
 const searchOverlay = document.getElementById("searchOverlay");
 const searchTitle = document.getElementById("searchTitle");
 const searchStageLabel = document.getElementById("searchStageLabel");
@@ -27437,6 +27440,7 @@ function syncQuickSurpriseStyleOptions() {
 function applyLanguage() {
   document.documentElement.lang = currentLanguage === "pt" ? "pt-BR" : currentLanguage;
   syncDocumentLanguageMetadata();
+  renderNetworkStatus();
   const labels = {
     pt: {
       profileTitle: "Filtro manual",
@@ -33044,6 +33048,64 @@ function sonicTinyCopy(pt = "", en = pt, es = pt) {
   if (currentLanguage === "en") return en;
   if (currentLanguage === "es") return es;
   return pt;
+}
+
+let networkStatusHideTimer = 0;
+let networkStatusListenersReady = false;
+
+function networkStatusCopy(online = false) {
+  if (online) {
+    return {
+      title: sonicTinyCopy("Conexão restabelecida", "Back online", "Conexión restablecida"),
+      text: sonicTinyCopy(
+        "Os recursos online estão disponíveis novamente.",
+        "Online features are available again.",
+        "Las funciones online están disponibles de nuevo."
+      )
+    };
+  }
+  return {
+    title: sonicTinyCopy("Sem internet", "You're offline", "Sin conexión"),
+    text: sonicTinyCopy(
+      "Curtidas e seu perfil continuam salvos neste aparelho. Áudio e recursos online voltam ao reconectar.",
+      "Likes and your profile stay saved on this device. Audio and online features return when you reconnect.",
+      "Tus Me gusta y tu perfil siguen guardados en este dispositivo. El audio y las funciones online vuelven al reconectarte."
+    )
+  };
+}
+
+function renderNetworkStatus({ recovered = false } = {}) {
+  if (!networkStatusBanner) return;
+  const online = typeof navigator === "undefined" || navigator.onLine !== false;
+  window.clearTimeout(networkStatusHideTimer);
+  networkStatusHideTimer = 0;
+  if (online && !recovered) {
+    networkStatusBanner.classList.add("hidden");
+    networkStatusBanner.classList.remove("is-online");
+    networkStatusBanner.setAttribute("aria-hidden", "true");
+    return;
+  }
+  const copy = networkStatusCopy(online);
+  if (networkStatusTitle) networkStatusTitle.textContent = copy.title;
+  if (networkStatusText) networkStatusText.textContent = copy.text;
+  networkStatusBanner.classList.toggle("is-online", online);
+  networkStatusBanner.classList.remove("hidden");
+  networkStatusBanner.setAttribute("aria-hidden", "false");
+  if (online) {
+    networkStatusHideTimer = window.setTimeout(() => {
+      networkStatusBanner.classList.add("hidden");
+      networkStatusBanner.classList.remove("is-online");
+      networkStatusBanner.setAttribute("aria-hidden", "true");
+    }, 2600);
+  }
+}
+
+function setupNetworkStatusAwareness() {
+  if (networkStatusListenersReady) return;
+  networkStatusListenersReady = true;
+  window.addEventListener("offline", () => renderNetworkStatus());
+  window.addEventListener("online", () => renderNetworkStatus({ recovered: true }));
+  renderNetworkStatus();
 }
 
 function setSearchProgress(percent) {
@@ -64771,6 +64833,7 @@ async function bootSonicSearch() {
   window.neonpulseArtistDepthGaps = (style = "") => buildCatalogArtistDepthAudit({ style, minimum: MIN_TRACKS_PER_ARTIST }).sample;
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
+  setupNetworkStatusAwareness();
   void trackBetaAppSession();
   setupNativeSocialAuthBridge();
   setupDailyDjReminderRouting();
