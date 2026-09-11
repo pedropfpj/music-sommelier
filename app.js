@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911smartentry1";
+const SONIC_APP_BUILD_ID = "20260911smartentry2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -64579,9 +64579,9 @@ async function bootSonicSearch() {
       }
     }
     else if (shouldAutoEnterDiscoveryForAppStore()) startLocalProfileFlow({ preferStored: true, showGuide: false });
-    else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();
     else if (qaPreviewMode) enterQaPreviewMode();
     else if (hasCompletedInitialEntry()) await resumeReturningUserExperience();
+    else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();
     else showIntroScreen();
   }
   updateWeightLabels();

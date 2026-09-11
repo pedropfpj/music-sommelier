@@ -57,13 +57,18 @@ assert.match(
 const bootSource = appSource.slice(appSource.indexOf("async function bootSonicSearch"));
 assert.match(
   bootSource,
-  /else if \(hasCompletedInitialEntry\(\)\) await resumeReturningUserExperience\(\);\s*else showIntroScreen\(\);/,
+  /else if \(hasCompletedInitialEntry\(\)\) await resumeReturningUserExperience\(\);\s*else if \(shouldShowAuthOnBootForAppStore\(\)\) await showAuthScreen\(\);\s*else showIntroScreen\(\);/,
   "Normal returning visits must bypass intro, language and auth screens"
 );
 assert.ok(
   bootSource.indexOf("else if (qaPreviewMode) enterQaPreviewMode();") <
     bootSource.indexOf("else if (hasCompletedInitialEntry()) await resumeReturningUserExperience();"),
   "QA previews must keep their deterministic entry path"
+);
+assert.ok(
+  bootSource.indexOf("else if (hasCompletedInitialEntry()) await resumeReturningUserExperience();") <
+    bootSource.indexOf("else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();"),
+  "Returning iOS users must resume before the App Store first-access gate"
 );
 
 console.log("Smart returning-entry contract passed: first visit stays guided and returning users enter directly.");
