@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260910premiumcollapse2";
+const SONIC_APP_BUILD_ID = "20260911smartentry1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10838,6 +10838,7 @@ const SPIRIT_REGENERATION_COUNT_STORAGE_KEY = "neonpulse:spiritRegenerationCount
 const SPIRIT_IMAGE_REQUEST_TIMEOUT_MS = 120000;
 const USER_SESSION_STORAGE_KEY = "neonpulse:user:v1";
 const LANGUAGE_STORAGE_KEY = "neonpulse:language:v1";
+const INITIAL_ENTRY_COMPLETED_STORAGE_KEY = "neonpulse:initialEntryCompleted:v1";
 const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
 const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 const ANONYMOUS_EXPOSURE_STORAGE_KEY = "neonpulse:anonymousExposure:v1";
@@ -28174,6 +28175,27 @@ function persistLanguage(lang) {
   } catch (_err) {}
 }
 
+function hasCompletedInitialEntry() {
+  if (publicVisitorMode || sharedSpiritViewMode) return true;
+  try {
+    if (localStorage.getItem(INITIAL_ENTRY_COMPLETED_STORAGE_KEY) === "yes") return true;
+  } catch (_err) {
+    // The app still works in private browsing when storage is unavailable.
+  }
+  // Existing installations predate the explicit marker. Their acknowledged
+  // guide, session or profile data is enough evidence that onboarding ended.
+  return hasUsageGuideAcknowledged();
+}
+
+function markInitialEntryCompleted() {
+  if (publicVisitorMode || sharedSpiritViewMode) return;
+  try {
+    localStorage.setItem(INITIAL_ENTRY_COMPLETED_STORAGE_KEY, "yes");
+  } catch (_err) {
+    // A blocked storage write should never prevent entry into discovery.
+  }
+}
+
 function setLanguage(lang, options = {}) {
   const normalized = normalizeLanguageCode(lang);
   if (!isSupportedLanguage(normalized)) return;
@@ -32560,6 +32582,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   const safeInitialTab = initialTab ? safeAppTabName(initialTab) : "";
   stopAllActivePlayback({ reason: "app_entry" });
   ensureLocalProfileSession({ preferStored: true });
+  markInitialEntryCompleted();
   clearIntroAutoAdvance();
   stopIntroQuoteLoop();
   hideBetaGateScreen();
@@ -32637,6 +32660,15 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
     }
     void runPrimaryRecommendationAction({ source: "auto" });
   }, 320);
+}
+
+async function resumeReturningUserExperience() {
+  const storedUser = readStoredUserSession();
+  if (storedUser && storedUser.mode !== "guest") {
+    await resumeStoredUserSession();
+    return;
+  }
+  startLocalProfileFlow({ preferStored: true, showGuide: false });
 }
 
 function applySharedSpiritPayload(payload = sharedSpiritPayload) {
@@ -64549,6 +64581,7 @@ async function bootSonicSearch() {
     else if (shouldAutoEnterDiscoveryForAppStore()) startLocalProfileFlow({ preferStored: true, showGuide: false });
     else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();
     else if (qaPreviewMode) enterQaPreviewMode();
+    else if (hasCompletedInitialEntry()) await resumeReturningUserExperience();
     else showIntroScreen();
   }
   updateWeightLabels();

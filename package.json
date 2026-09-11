@@ -37,6 +37,7 @@
     "test:discovery-performance": "node scripts/test-discovery-performance.mjs",
     "test:first-impression": "node scripts/test-friendly-first-impression.mjs",
     "test:first-experience": "node scripts/test-first-experience.mjs",
+    "test:smart-entry": "node scripts/test-smart-returning-entry.mjs",
     "test:taste-calibration": "node scripts/test-initial-taste-calibration.mjs",
     "test:catalog-expansion": "node scripts/test-underrepresented-catalog-expansion.mjs",
     "test:low-coverage-expansion": "node scripts/test-low-coverage-subgenre-expansion-v21.mjs",
