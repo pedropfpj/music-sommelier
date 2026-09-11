@@ -38,16 +38,34 @@ orchestra and performance are not collapsed into one generic artist field.
 - Existing verified electronic catalog migration into the universal model.
 - Web, iPhone and Android bundles include the same universal runtime.
 
+## Production state — 2026-09-11
+
+The additive foundation migration is applied to the Sonic Search production
+database. A read-only verification after the commit returned:
+
+- 13 music universes;
+- 262 genres;
+- 3,550 canonical artists;
+- 8,210 recordings;
+- 21,166 provider links;
+- 4,795 recordings that already satisfy the public playable view;
+- 20 duplicated legacy provider identifiers isolated in quarantine.
+
+The provider collisions were not deleted or silently merged. The migration
+keeps the highest-confidence mapping out of the public ambiguity path and
+records every collision for later review. `SONIC_UNIVERSAL_CATALOG_ENABLED`
+and the multi-universe onboarding UI remain disabled until non-electronic
+pilots pass the quality gate below.
+
 ## Safe rollout order
 
-1. Apply `supabase/migrations/20260911000100_universal_music_foundation.sql`.
-2. Keep `SONIC_UNIVERSAL_CATALOG_ENABLED=false`.
-3. Import a small reviewed pilot for each universe, with playable official provider links.
-4. Reject or quarantine ambiguous identity, genre and rights data.
-5. Run catalog, playback, mobile and recommendation tests.
-6. Enable the universal catalog API in Preview only.
-7. Add the progressive universe selector to onboarding and profile.
-8. Release to Production after the pilot passes quality targets.
+1. Keep `SONIC_UNIVERSAL_CATALOG_ENABLED=false`.
+2. Import a small reviewed pilot for each universe, with playable official provider links.
+3. Reject or quarantine ambiguous identity, genre and rights data.
+4. Run catalog, playback, mobile and recommendation tests.
+5. Enable the universal catalog API in Preview only.
+6. Add the progressive universe selector to onboarding and profile.
+7. Release to Production after the pilot passes quality targets.
 
 Do not expose an empty universe. A universe becomes selectable only when it has
 enough diverse, playable and reviewed recordings. The current electronic
