@@ -51,6 +51,7 @@
     { "source": "/api/discovery-exposure", "destination": "/api/music?route=discovery-exposure" },
     { "source": "/api/event-radar", "destination": "/api/music?route=event-radar" },
     { "source": "/api/lastfm-artist", "destination": "/api/music?route=lastfm-artist" },
+    { "source": "/api/music-universes", "destination": "/api/music?route=music-universes" },
     { "source": "/api/news-editor", "destination": "/api/music?route=news-editor" },
     { "source": "/api/news-feed", "destination": "/api/music?route=news-feed" },
     { "source": "/api/news-translate", "destination": "/api/music?route=news-translate" },
@@ -58,6 +59,7 @@
     { "source": "/api/radio-browser", "destination": "/api/music?route=radio-browser" },
     { "source": "/api/spotify-search", "destination": "/api/music?route=spotify-search" },
     { "source": "/api/track-metadata", "destination": "/api/music?route=track-metadata" },
+    { "source": "/api/universal-catalog", "destination": "/api/music?route=universal-catalog" },
     { "source": "/api/track-insight", "destination": "/api/music?route=track-insight" },
     { "source": "/api/waitlist", "destination": "/api/music?route=waitlist" }
   ]

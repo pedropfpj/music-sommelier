@@ -57,6 +57,7 @@
     "test:niche-stress": "node scripts/test-niche-subgenre-stress.mjs",
     "audit:low-coverage": "node scripts/audit-low-coverage-subgenres-v21.mjs",
     "test:recommendation-safety": "node scripts/test-recommendation-safety.mjs",
+    "test:universal-music": "node scripts/test-universal-music-foundation.mjs",
     "test:android-runtime": "node scripts/test-android-runtime.mjs",
     "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs"
   },

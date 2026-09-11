@@ -137,6 +137,7 @@ function valueFrom(fields, aliases) {
 }
 
 const FIELD_ALIASES = {
+  universe: ["universe", "universe_slug", "music_universe"],
   style: ["style", "subgenre", "sub_genre", "genre", "primary_genre", "main_style"],
   artist: ["artist", "artist_name", "name", "project", "dj", "act"],
   song: ["song", "track", "track_name", "title", "faixa", "music"],
@@ -166,6 +167,8 @@ const FIELD_ALIASES = {
 function compactRow(row, sourceFile) {
   const fields = rowFields(row);
   const output = Object.fromEntries(Object.entries(FIELD_ALIASES).map(([key, aliases]) => [key, valueFrom(fields, aliases)]));
+  output.universe = token(output.universe);
+  if (!output.universe) delete output.universe;
   output.style = normalizeStyle(output.style);
   output.source = output.source || path.basename(sourceFile);
   if (!output.style || !output.artist || !output.song) return null;

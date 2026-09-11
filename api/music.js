@@ -14,6 +14,7 @@ const handlers = {
   "discovery-exposure": require("../lib/api/_discovery-exposure"),
   "event-radar": require("../lib/api/_event-radar"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
+  "music-universes": require("../lib/api/_music-universes"),
   "news-editor": require("../lib/api/_news-editor"),
   "news-feed": require("../lib/api/_news-feed"),
   "news-translate": require("../lib/api/_news-translate"),
@@ -22,6 +23,7 @@ const handlers = {
   "spotify-search": require("../lib/api/_spotify-search"),
   "track-insight": require("../lib/api/_track-insight"),
   "track-metadata": require("../lib/api/_track-metadata"),
+  "universal-catalog": require("../lib/api/_universal-catalog"),
   waitlist: require("../lib/api/_waitlist")
 };
 

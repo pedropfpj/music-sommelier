@@ -170,6 +170,43 @@ const STYLE_TO_FAMILY = {
   vocal_trance: "trance"
 };
 
+const SONIC_UNIVERSAL_MUSIC = typeof globalThis !== "undefined"
+  ? globalThis.SonicUniversalMusic || null
+  : null;
+// The universal data model can ship before its discovery UI. This keeps the
+// verified electronic experience intact until every new universe has enough
+// playable, reviewed catalog coverage.
+const SONIC_MULTI_UNIVERSE_UI_ENABLED = typeof window !== "undefined" && window.SONIC_MULTI_UNIVERSE_UI_ENABLED === true;
+
+function musicUniverseOfStyle(style = "", fallback = "electronic") {
+  const normalizedStyle = SONIC_UNIVERSAL_MUSIC?.normalizeKey
+    ? SONIC_UNIVERSAL_MUSIC.normalizeKey(style)
+    : String(style || "").trim().toLowerCase();
+  if (!normalizedStyle || Object.prototype.hasOwnProperty.call(STYLE_TO_FAMILY, normalizedStyle)) return fallback;
+  return SONIC_UNIVERSAL_MUSIC?.universeForGenre
+    ? SONIC_UNIVERSAL_MUSIC.universeForGenre(normalizedStyle, fallback)
+    : fallback;
+}
+
+function musicUniverseOfTrack(track = {}, fallback = "electronic") {
+  const source = track && typeof track === "object" ? track : {};
+  const explicit = source.universe || source.universeSlug || source.universe_slug || source.metadata?.universe;
+  if (explicit && SONIC_UNIVERSAL_MUSIC?.isKnownUniverse?.(explicit)) {
+    return SONIC_UNIVERSAL_MUSIC.normalizeUniverse(explicit);
+  }
+  return musicUniverseOfStyle(source.genre || source.genre_slug || source.style || "", fallback);
+}
+
+function musicUniverseWeightsFromHistory(entries = []) {
+  const weights = {};
+  (Array.isArray(entries) ? entries : []).forEach((entry) => {
+    const universe = musicUniverseOfTrack(entry);
+    weights[universe] = Number(weights[universe] || 0) + 1;
+  });
+  if (!Object.keys(weights).length) weights.electronic = 1;
+  return weights;
+}
+
 const DAILY_NEWS_CACHE_KEY = "neonpulse_daily_news_cache_v2";
 const DAILY_NEWS_TRANSLATION_CACHE_KEY = "neonpulse_daily_news_translation_cache_v2";
 const SONIC_EDITORIAL_CACHE_KEY = "sonic_search_editorial_cache_v1";
@@ -4798,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911sonicstart1";
+const SONIC_APP_BUILD_ID = "20260911universal1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10834,7 +10871,7 @@ const DAILY_DJ_STORAGE_KEY = "neonpulse:dailyDjs:v1";
 const DAILY_RADAR_STORAGE_KEY = "sonic:dailyRadar:v1";
 const DAILY_LIKE_STORAGE_KEY = "neonpulse:dailyLikes:v1";
 const INITIAL_TASTE_CALIBRATION_STORAGE_KEY = "sonic_search:initialTasteCalibration:v1";
-const INITIAL_TASTE_CALIBRATION_VERSION = 1;
+const INITIAL_TASTE_CALIBRATION_VERSION = 2;
 const INITIAL_TASTE_CALIBRATION_FINAL_STATES = new Set(["completed", "skipped"]);
 const SONIC_FIRST_VALUE_WINDOW_MS = 30_000;
 let initialTasteCalibrationState = null;
@@ -28738,6 +28775,7 @@ function recommendationBetaPayload(track = null, prefs = {}, extra = {}) {
   return {
     artist: safeBetaPayloadValue(track?.artist || ""),
     song: safeBetaPayloadValue(track?.song || ""),
+    universe: safeBetaPayloadValue(musicUniverseOfTrack(track || { style: prefs?.style || "" })),
     style: safeBetaPayloadValue(track?.style || prefs?.style || ""),
     bpm: safeBetaPayloadValue(track?.bpm || prefs?.bpm || ""),
     energy: safeBetaPayloadValue(track?.energy || prefs?.energy || ""),
@@ -29502,9 +29540,23 @@ function normalizeInitialTasteCalibration(value = {}) {
   const select = (key, fallback = "") => allowed[key].has(String(source[key] || ""))
     ? String(source[key] || "")
     : fallback;
+  const requestedUniverses = Array.isArray(source.universes)
+    ? source.universes
+    : [source.primaryUniverse || "electronic"];
+  const universes = Array.from(new Set(requestedUniverses
+    .filter((item) => !SONIC_UNIVERSAL_MUSIC?.isKnownUniverse || SONIC_UNIVERSAL_MUSIC.isKnownUniverse(item))
+    .map((item) => SONIC_UNIVERSAL_MUSIC?.normalizeUniverse?.(item) || "electronic")))
+    .slice(0, 5);
+  if (!universes.length) universes.push("electronic");
+  const primaryUniverse = SONIC_UNIVERSAL_MUSIC?.isKnownUniverse?.(source.primaryUniverse)
+    ? SONIC_UNIVERSAL_MUSIC.normalizeUniverse(source.primaryUniverse)
+    : universes[0];
+  if (!universes.includes(primaryUniverse)) universes.unshift(primaryUniverse);
   return {
     version: INITIAL_TASTE_CALIBRATION_VERSION,
     status: select("status", "pending"),
+    primaryUniverse,
+    universes: universes.slice(0, 5),
     experience: select("experience"),
     goal: select("goal"),
     mood: select("mood"),
@@ -29718,6 +29770,7 @@ function initialTasteCalibrationPreferences(value = initialTasteCalibrationState
   const energies = { melodic: "low", groovy: "mid", hypnotic: "mid", intense: "high" };
   const selectedStyle = styles[calibration.mood]?.[calibration.experience] || "";
   return {
+    universe: calibration.primaryUniverse || "electronic",
     style: calibration.exploration === "surprise" ? "" : selectedStyle,
     context: contexts[calibration.mood] || "",
     energy: energies[calibration.mood] || "",
@@ -29994,6 +30047,7 @@ async function completeInitialTasteCalibration() {
   });
   applyInitialTasteCalibrationPreferences(completed);
   trackBetaEvent("initial_taste_calibration_completed", {
+    primaryUniverse: completed.primaryUniverse,
     experience: completed.experience,
     goal: completed.goal,
     mood: completed.mood,
@@ -57960,6 +58014,7 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
     key,
     artist,
     song,
+    universe: musicUniverseOfTrack(base),
     style: normalizedTrack.style,
     bpm: normalizedTrack.bpm,
     energy: normalizedTrack.energy,
@@ -59144,6 +59199,9 @@ function socialCurrentProfilePayload() {
     ? (!inputUsesDefaultName ? inputDisplayName : (suggestedDisplayName || profileDisplayName || username))
     : profileDisplayName;
   const favoriteStyles = socialTopStyleValues(6);
+  const universeWeights = musicUniverseWeightsFromHistory(likedTrackHistory);
+  const primaryUniverse = Object.entries(universeWeights)
+    .sort((a, b) => Number(b[1]) - Number(a[1]) || a[0].localeCompare(b[0]))[0]?.[0] || "electronic";
   return {
     id: userId,
     username,
@@ -59153,6 +59211,9 @@ function socialCurrentProfilePayload() {
     favorite_styles: favoriteStyles,
     liked_track_count: likedTrackHistory.length,
     sonic_dna: {
+      schemaVersion: 2,
+      primaryUniverse,
+      universeWeights,
       favoriteStyle: resolveFavoriteStyleLabel(),
       likedTracks: likedTrackHistory.length,
       likedArtists: adaptiveModel.likedArtists.size,
@@ -59175,6 +59236,7 @@ function socialTrackRowsForSync() {
     style: normalize(entry.style || ""),
     source: entry.source || "liked",
     metadata: {
+      universe: musicUniverseOfTrack(entry),
       bpm: entry.bpm || "",
       energy: entry.energy || "",
       label: entry.label || "",
@@ -59200,6 +59262,7 @@ function socialDislikedTrackRowsForSync() {
     reason: entry.source || "disliked",
     source: entry.source || "disliked",
     metadata: {
+      universe: musicUniverseOfTrack(entry),
       bpm: entry.bpm || "",
       energy: entry.energy || "",
       label: entry.label || "",
@@ -59231,6 +59294,7 @@ function socialLikedTrackFromRow(row = {}) {
     artist: row.artist || metadata.artist || "",
     song: row.song || metadata.song || "",
     style: row.style || metadata.style || "",
+    universe: metadata.universe || "electronic",
     bpm: metadata.bpm || "",
     energy: metadata.energy || "",
     label: metadata.label || "",
@@ -59248,6 +59312,7 @@ function socialDislikedTrackFromRow(row = {}) {
     artist: row.artist || metadata.artist || "",
     song: row.song || metadata.song || "",
     style: row.style || metadata.style || "",
+    universe: metadata.universe || "electronic",
     bpm: metadata.bpm || "",
     energy: metadata.energy || "",
     label: metadata.label || "",
@@ -59514,6 +59579,7 @@ async function insertSocialActivity(action = "liked_track", track = null) {
         artist: track.artist || "",
         song: track.song || "",
         style: track.style || "",
+        universe: musicUniverseOfTrack(track),
         source: track.source || "liked"
       }
     }]

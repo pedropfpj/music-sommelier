@@ -10,11 +10,12 @@ const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "www");
 const apiBaseUrl = "https://sonicsearch.app";
 const runtimeScriptName = "sonic-ios-runtime.js";
-const appStoreBuildId = "20260911sonicstart1ios1";
+const appStoreBuildId = "20260911universal1ios1";
 const iosRuntimeAssetNames = [
   "styles.min.css",
   "daily-djs.css",
   "daily-radar.css",
+  "universal-music.js",
   "catalog-runtime.min.js",
   "daily-djs.js",
   "daily-djs-ui.js",
@@ -412,6 +413,7 @@ await writeFile(path.join(webDir, "index.html"), buildIosIndexHtml(indexHtml));
 
 await Promise.all([
   writeOptimizedPath("app.js", "app.min.js", buildIosAppJs, minifyJavaScript),
+  copyPath("universal-music.js"),
   writeOptimizedPath("catalog-runtime.js", "catalog-runtime.min.js", (source) => source, minifyJavaScript),
   writeOptimizedPath("styles.css", "styles.min.css", buildIosStylesCss, minifyCss),
   copyPath("legal.css"),
