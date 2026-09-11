@@ -4798,7 +4798,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911smartentry2";
+const SONIC_APP_BUILD_ID = "20260911navsimple1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -9735,6 +9735,9 @@ const appMenuBtn = document.getElementById("appMenuBtn");
 const appMenuLabel = document.getElementById("appMenuLabel");
 const appMenuBackdrop = document.getElementById("appMenuBackdrop");
 const appTabBar = document.getElementById("appTabBar");
+const morePanel = document.getElementById("morePanel");
+const moreRouteGrid = document.getElementById("moreRouteGrid");
+const discoverFiltersBtn = document.getElementById("discoverFiltersBtn");
 const adminAnalyticsTabBtn = document.getElementById("adminAnalyticsTabBtn");
 const adminAnalyticsPanel = document.getElementById("adminAnalyticsPanel");
 const adminAnalyticsRefreshBtn = document.getElementById("adminAnalyticsRefreshBtn");
@@ -24234,8 +24237,9 @@ const I18N = {
     tabDiscover: "Descobrir",
     tabDjs: "DJs",
     tabFilters: "Filtros",
-    tabNews: "Notícias",
+    tabNews: "Jornal",
     tabProfile: "Perfil",
+    tabMore: "Mais",
     tabAdmin: "Painel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contato",
@@ -25144,8 +25148,9 @@ const I18N = {
     tabDiscover: "Discover",
     tabDjs: "DJs",
     tabFilters: "Filters",
-    tabNews: "News",
+    tabNews: "Journal",
     tabProfile: "Profile",
+    tabMore: "More",
     tabAdmin: "Admin dashboard",
     tabAbout: "About",
     tabSupport: "Contact",
@@ -26054,8 +26059,9 @@ const I18N = {
     tabDiscover: "Descubrir",
     tabDjs: "DJs",
     tabFilters: "Filtros",
-    tabNews: "Noticias",
+    tabNews: "Periódico",
     tabProfile: "Perfil",
+    tabMore: "Más",
     tabAdmin: "Panel administrativo",
     tabAbout: "Sobre",
     tabSupport: "Contacto",
@@ -27690,13 +27696,50 @@ function applyLanguage() {
   setText("#heroMission", t("appMission"));
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
   setText("[data-app-tab-target='djs']", t("tabDjs"));
-  setText("[data-app-tab-target='filters']", t("tabFilters"));
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='profile']", t("tabProfile"));
-  setText("[data-app-tab-target='admin']", t("tabAdmin"));
-  setText("[data-app-tab-target='about']", t("tabAbout"));
-  setText("[data-app-tab-target='support']", t("tabSupport"));
-  setText("[data-app-tab-target='legal']", t("tabLegal"));
+  setText("[data-app-tab-target='more']", t("tabMore"));
+  setText("#moreKicker", sonicTinyCopy("Sonic Search", "Sonic Search", "Sonic Search"));
+  setText("#moreTitle", sonicTinyCopy("Mais opções", "More options", "Más opciones"));
+  setText("#moreIntro", sonicTinyCopy(
+    "Ajuda, contato e informações importantes em um só lugar.",
+    "Help, contact and important information in one place.",
+    "Ayuda, contacto e información importante en un solo lugar."
+  ));
+  if (moreRouteGrid) moreRouteGrid.setAttribute("aria-label", sonicTinyCopy(
+    "Outras áreas do Sonic Search",
+    "Other Sonic Search areas",
+    "Otras áreas de Sonic Search"
+  ));
+  setText("#moreAboutKicker", sonicTinyCopy("CONHEÇA", "LEARN", "CONOCE"));
+  setText("#moreAboutTitle", sonicTinyCopy("Sobre o Sonic", "About Sonic", "Sobre Sonic"));
+  setText("#moreAboutDescription", sonicTinyCopy(
+    "Entenda como a curadoria e as recomendações funcionam.",
+    "See how curation and recommendations work.",
+    "Descubre cómo funcionan la curaduría y las recomendaciones."
+  ));
+  setText("#moreSupportKicker", sonicTinyCopy("FALE COM A GENTE", "GET IN TOUCH", "HABLEMOS"));
+  setText("#moreSupportTitle", sonicTinyCopy("Contato e apoio", "Contact and support", "Contacto y apoyo"));
+  setText("#moreSupportDescription", sonicTinyCopy(
+    "Envie feedback, relate um problema ou apoie o projeto.",
+    "Send feedback, report a problem or support the project.",
+    "Envía comentarios, informa un problema o apoya el proyecto."
+  ));
+  setText("#moreLegalKicker", sonicTinyCopy("TRANSPARÊNCIA", "TRANSPARENCY", "TRANSPARENCIA"));
+  setText("#moreLegalTitle", sonicTinyCopy("Privacidade e avisos", "Privacy and notices", "Privacidad y avisos"));
+  setText("#moreLegalDescription", sonicTinyCopy(
+    "Consulte direitos autorais, uso, dados e documentos legais.",
+    "Review copyright, usage, data and legal documents.",
+    "Consulta derechos de autor, uso, datos y documentos legales."
+  ));
+  setText("#moreAdminKicker", sonicTinyCopy("ÁREA PRIVADA", "PRIVATE AREA", "ÁREA PRIVADA"));
+  setText("#moreAdminTitle", t("tabAdmin"));
+  setText("#moreAdminDescription", sonicTinyCopy(
+    "Acompanhe uso, conteúdo e saúde das integrações.",
+    "Monitor usage, content and integration health.",
+    "Supervisa uso, contenido y estado de las integraciones."
+  ));
+  setText("#discoverFiltersBtnLabel", sonicTinyCopy("Ajustar descoberta", "Tune discovery", "Ajustar descubrimiento"));
   renderAdminAnalyticsCopy();
   if (appTabBar) appTabBar.setAttribute("aria-label", sonicTinyCopy("Navegação principal do app", "Main app navigation", "Navegación principal de la app"));
   setText("#djDiscoveryKicker", sonicTinyCopy("Radar de selectors", "Selector radar", "Radar de selectors"));
@@ -33877,14 +33920,22 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "profile", "about", "support", "legal"].includes(requestedTab)
+  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
 
+let activeAppTabName = "discover";
+
 function currentActiveAppTabName() {
-  const activeButton = appTabBar?.querySelector("[data-app-tab-target].active, [data-app-tab-target][aria-pressed='true']");
-  return String(activeButton?.getAttribute("data-app-tab-target") || "discover");
+  return activeAppTabName;
+}
+
+function primaryAppTabName(tabName = "discover") {
+  const safeTab = safeAppTabName(tabName);
+  if (safeTab === "filters") return "discover";
+  if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return "more";
+  return safeTab;
 }
 
 function setAppMenuOpen(open = false) {
@@ -33900,7 +33951,14 @@ function toggleAppMenu() {
 
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
-  const label = String(activeButton?.textContent || "").trim() || tabName;
+  const secondaryLabels = {
+    filters: t("tabFilters"),
+    about: t("tabAbout"),
+    support: t("tabSupport"),
+    legal: t("tabLegal"),
+    admin: t("tabAdmin")
+  };
+  const label = secondaryLabels[tabName] || String(activeButton?.textContent || "").trim() || tabName;
   appMenuLabel.textContent = label;
 }
 
@@ -33948,7 +34006,9 @@ function scrollActiveAppPanelIntoView(tabName = currentActiveAppTabName()) {
         return panel.classList.contains("active") && panelMatchesAppTab(panel, tabName);
       });
   if (!targetPanel) return;
-  const navHeight = Math.max(0, Math.round(appTabBar?.getBoundingClientRect?.().height || 0));
+  const compactNav = window.matchMedia?.("(max-width: 760px)")?.matches;
+  const navElement = compactNav ? appMenuBtn : appTabBar;
+  const navHeight = Math.max(0, Math.round(navElement?.getBoundingClientRect?.().height || 0));
   const offset = navHeight + 12;
   const panelTop = targetPanel.getBoundingClientRect().top;
   if (panelTop >= offset && panelTop <= offset + 36) return;
@@ -33997,6 +34057,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (previousTab !== safeTab) {
     stopAllActivePlayback({ reason: `tab_change_${previousTab}_to_${safeTab}` });
   }
+  activeAppTabName = safeTab;
+  const primaryTab = primaryAppTabName(safeTab);
   const focusPanel = Boolean(options.focusPanel);
   let activeTabButton = null;
   if (appTabBar) {
@@ -34007,7 +34069,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
       button.hidden = disabled;
       button.classList.toggle("hidden", disabled);
       button.setAttribute("aria-hidden", disabled ? "true" : "false");
-      const isActive = !disabled && targetTab === safeTab;
+      const isActive = !disabled && targetTab === primaryTab;
       button.classList.toggle("active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
       if (isActive) button.setAttribute("aria-current", "page");
@@ -64414,8 +64476,17 @@ bind(appTabBar, "click", (event) => {
   const target = event.target instanceof Element ? event.target.closest("[data-app-tab-target]") : null;
   if (!target) return;
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
-  setActiveAppTab(nextTab, { focusPanel: true });
   setAppMenuOpen(false);
+  setActiveAppTab(nextTab, { focusPanel: true });
+});
+bind(discoverFiltersBtn, "click", () => {
+  setActiveAppTab("filters", { focusPanel: true });
+});
+bind(morePanel, "click", (event) => {
+  const target = event.target instanceof Element ? event.target.closest("[data-more-tab-target]") : null;
+  if (!target || !morePanel?.contains(target)) return;
+  const nextTab = String(target.getAttribute("data-more-tab-target") || "more");
+  setActiveAppTab(nextTab, { focusPanel: true });
 });
 bind(adminAnalyticsRefreshBtn, "click", () => {
   void loadAdminAnalytics({ force: true });

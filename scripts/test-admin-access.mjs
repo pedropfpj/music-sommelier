@@ -162,7 +162,7 @@ async function main() {
   assert.match(appSource, /refreshAdminAccess\(\{ force: true \}\)/);
   assert.match(appSource, /function loadAdminOperations\(options = \{\}\)/);
   assert.doesNotMatch(appSource, /data-admin-delete-post/);
-  assert.match(indexSource, /data-app-tab-target="admin"/);
+  assert.match(indexSource, /data-more-tab-target="admin"/);
   assert.match(indexSource, /id="adminFunnelList"/);
   assert.match(indexSource, /id="adminHealthGrid"/);
   assert.doesNotMatch(indexSource, /id="adminModerationList"/);

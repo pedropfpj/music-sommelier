@@ -19,7 +19,10 @@ const [indexSource, stylesSource, appSource, runtimeSource, manifestSource, core
 assert.match(indexSource, /<a class="skip-link" href="#appContent">/, "App needs a keyboard skip link");
 assert.match(indexSource, /<main id="appContent"[^>]*tabindex="-1"/, "Main content must be a focus target");
 assert.match(indexSource, /<h1 id="heroTitle">/, "Visible app hero must be the main heading");
-assert.match(indexSource, /app-tab-btn-secondary-start[^>]*data-app-tab-target="about"/, "Institutional navigation must start a secondary group");
+assert.equal((indexSource.match(/data-primary-app-tab/g) || []).length, 5, "Primary navigation must expose exactly five destinations");
+assert.match(indexSource, /data-app-tab-target="more"[^>]*data-primary-app-tab/, "Primary navigation must include More");
+assert.match(indexSource, /id="morePanel"[\s\S]*?data-more-tab-target="about"[\s\S]*?data-more-tab-target="support"[\s\S]*?data-more-tab-target="legal"/, "Institutional areas must live inside More");
+assert.match(indexSource, /id="swipeStartPanel"[\s\S]*?id="discoverFiltersBtn"/, "Manual filters must be reachable from Discover");
 assert.match(indexSource, /<details id="resultMoreDetails"[\s\S]*?<summary id="resultMoreSummary">/, "Secondary track tools must use progressive disclosure");
 
 const finalExperienceCss = stylesSource.slice(stylesSource.lastIndexOf("/* First-experience pass:"));

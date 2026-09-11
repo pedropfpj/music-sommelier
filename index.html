@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260911smartentry2" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260911navsimple1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260911smartentry2" />
+    <link rel="stylesheet" href="styles.min.css?v=20260911navsimple1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
@@ -712,16 +712,48 @@
           <span class="daily-like-quota-dot" aria-hidden="true"></span>
           <strong id="dailyLikeQuotaText">Curtidas ilimitadas</strong>
         </div>
-        <button class="app-tab-btn active" type="button" data-app-tab-target="discover" aria-pressed="true" aria-current="page">Descobrir</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="djs" aria-pressed="false">DJs</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="filters" aria-pressed="false">Filtros</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="news" aria-pressed="false">Notícias</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="profile" aria-pressed="false">Perfil</button>
-        <button id="adminAnalyticsTabBtn" class="app-tab-btn admin-analytics-tab hidden" type="button" data-app-tab-target="admin" aria-pressed="false" aria-hidden="true" hidden>Painel administrativo</button>
-        <button class="app-tab-btn app-tab-btn-secondary app-tab-btn-secondary-start" type="button" data-app-tab-target="about" aria-pressed="false">Sobre</button>
-        <button class="app-tab-btn app-tab-btn-secondary" type="button" data-app-tab-target="support" aria-pressed="false">Contato</button>
-        <button class="app-tab-btn app-tab-btn-secondary" type="button" data-app-tab-target="legal" aria-pressed="false">Avisos</button>
+        <button class="app-tab-btn active" type="button" data-app-tab-target="discover" data-primary-app-tab aria-pressed="true" aria-current="page">Descobrir</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="djs" data-primary-app-tab aria-pressed="false">DJs</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="news" data-primary-app-tab aria-pressed="false">Jornal</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="profile" data-primary-app-tab aria-pressed="false">Perfil</button>
+        <button class="app-tab-btn" type="button" data-app-tab-target="more" data-primary-app-tab aria-pressed="false">Mais</button>
       </nav>
+
+      <section id="morePanel" class="panel more-panel app-tab-panel" data-app-tab="more" aria-labelledby="moreTitle" aria-hidden="true" hidden>
+        <header class="more-panel-head">
+          <div>
+            <p id="moreKicker" class="section-kicker">Sonic Search</p>
+            <h3 id="moreTitle">Mais opções</h3>
+          </div>
+          <p id="moreIntro" class="section-hint muted">Ajuda, contato e informações importantes em um só lugar.</p>
+        </header>
+        <div id="moreRouteGrid" class="more-route-grid" aria-label="Outras áreas do Sonic Search">
+          <button class="more-route-card" type="button" data-more-tab-target="about" aria-describedby="moreAboutDescription">
+            <span id="moreAboutKicker" class="more-route-kicker">CONHEÇA</span>
+            <strong id="moreAboutTitle">Sobre o Sonic</strong>
+            <span id="moreAboutDescription">Entenda como a curadoria e as recomendações funcionam.</span>
+            <i aria-hidden="true">→</i>
+          </button>
+          <button class="more-route-card" type="button" data-more-tab-target="support" aria-describedby="moreSupportDescription">
+            <span id="moreSupportKicker" class="more-route-kicker">FALE COM A GENTE</span>
+            <strong id="moreSupportTitle">Contato e apoio</strong>
+            <span id="moreSupportDescription">Envie feedback, relate um problema ou apoie o projeto.</span>
+            <i aria-hidden="true">→</i>
+          </button>
+          <button class="more-route-card" type="button" data-more-tab-target="legal" aria-describedby="moreLegalDescription">
+            <span id="moreLegalKicker" class="more-route-kicker">TRANSPARÊNCIA</span>
+            <strong id="moreLegalTitle">Privacidade e avisos</strong>
+            <span id="moreLegalDescription">Consulte direitos autorais, uso, dados e documentos legais.</span>
+            <i aria-hidden="true">→</i>
+          </button>
+          <button id="adminAnalyticsTabBtn" class="more-route-card admin-analytics-tab hidden" type="button" data-more-tab-target="admin" aria-describedby="moreAdminDescription" aria-hidden="true" hidden>
+            <span id="moreAdminKicker" class="more-route-kicker">ÁREA PRIVADA</span>
+            <strong id="moreAdminTitle">Painel administrativo</strong>
+            <span id="moreAdminDescription">Acompanhe uso, conteúdo e saúde das integrações.</span>
+            <i aria-hidden="true">→</i>
+          </button>
+        </div>
+      </section>
 
       <section id="adminAnalyticsPanel" class="panel admin-analytics-panel app-tab-panel" data-app-tab="admin" aria-labelledby="adminAnalyticsTitle" aria-hidden="true" hidden>
         <div class="admin-analytics-aurora" aria-hidden="true"></div>
@@ -1225,6 +1257,10 @@
           <div class="swipe-start-cta">
             <p id="swipeHeroHint" class="section-hint muted">Toque em Ouvir uma faixa para abrir a primeira carta; cada reação melhora a próxima.</p>
           </div>
+          <button id="discoverFiltersBtn" class="discover-filters-btn" type="button">
+            <span id="discoverFiltersBtnLabel">Ajustar descoberta</span>
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
         <div class="swipe-start-stage">
           <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para não curtir" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
@@ -3196,10 +3232,10 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
-    <script defer src="daily-djs.js?v=20260911smartentry2"></script>
-    <script defer src="daily-djs-ui.js?v=20260911smartentry2"></script>
-    <script defer src="daily-radar.js?v=20260911smartentry2"></script>
-    <script defer src="daily-radar-ui.js?v=20260911smartentry2"></script>
-    <script defer src="app.min.js?v=20260911smartentry2"></script>
+    <script defer src="daily-djs.js?v=20260911navsimple1"></script>
+    <script defer src="daily-djs-ui.js?v=20260911navsimple1"></script>
+    <script defer src="daily-radar.js?v=20260911navsimple1"></script>
+    <script defer src="daily-radar-ui.js?v=20260911navsimple1"></script>
+    <script defer src="app.min.js?v=20260911navsimple1"></script>
   </body>
 </html>

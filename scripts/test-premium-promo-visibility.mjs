@@ -34,7 +34,9 @@ assert.match(app, /bind\(weeklyHighlightsToggleBtn, "click",[\s\S]*?setPremiumPr
 assert.match(app, /sonicTinyCopy\("Agora não", "Not now", "Ahora no"\)/);
 assert.match(css, /\.weekly-highlights-toggle-btn\s*\{[\s\S]*?min-height:\s*44px/);
 assert.match(css, /\.weekly-highlights-toggle-btn:focus-visible\s*\{[\s\S]*?outline:\s*3px solid/);
-assert.match(app, /20260910premiumcollapse2/);
-assert.match(iosBuild, /20260910premiumcollapse2ios1/);
+const webBuildId = app.match(/const SONIC_APP_BUILD_ID = "([^"]+)";/)?.[1] || "";
+const iosBuildId = iosBuild.match(/const appStoreBuildId = "([^"]+)";/)?.[1] || "";
+assert.ok(webBuildId, "Web build ID must be defined");
+assert.equal(iosBuildId, `${webBuildId}ios1`, "iOS and web build IDs must stay aligned");
 
 console.log("Premium visibility checks passed.");

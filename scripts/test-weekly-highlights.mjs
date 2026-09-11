@@ -47,7 +47,9 @@ assert.match(css, /\.premium-dialog-close:focus-visible\s*\{[\s\S]*?outline: 2px
 assert.match(css, /\.weekly-highlights-card\s*\{/);
 assert.match(css, /\.weekly-highlights-card\.is-collapsed\s*\{/);
 assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.weekly-highlights-actions,[\s\S]*?width: 100%;/);
-assert.match(app, /20260910premiumcollapse2/);
-assert.match(iosBuild, /20260910premiumcollapse2ios1/);
+const webBuildId = app.match(/const SONIC_APP_BUILD_ID = "([^"]+)";/)?.[1] || "";
+const iosBuildId = iosBuild.match(/const appStoreBuildId = "([^"]+)";/)?.[1] || "";
+assert.ok(webBuildId, "Web build ID must be defined");
+assert.equal(iosBuildId, `${webBuildId}ios1`, "iOS and web build IDs must stay aligned");
 
 console.log("Weekly Highlights and Premium modal checks passed.");
