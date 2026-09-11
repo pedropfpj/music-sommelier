@@ -72,6 +72,9 @@ assert.match(migration, /jsonb_array_length\(coalesce\(links\.provider_links/);
 assert.match(migration, /'funk_soul', 'funk', 'en'/);
 assert.match(migration, /'funk_brasileiro', 'funk', 'pt-BR'/);
 assert.match(migration, /add column if not exists universe_slug/);
+assert.match(migration, /duplicate_provider_external_id/);
+assert.match(migration, /partition by legacy\.provider, legacy\.external_id/);
+assert.match(migration, /where provider_rank = 1/);
 
 const universalScriptIndex = index.indexOf("universal-music.js");
 const appScriptIndex = index.indexOf("app.min.js");

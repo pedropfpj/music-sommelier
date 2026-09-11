@@ -407,9 +407,57 @@ on conflict (artist_id, alias_key) do update set
   is_primary = public.music_artist_aliases.is_primary or excluded.is_primary,
   source = coalesce(excluded.source, public.music_artist_aliases.source);
 
+-- Some legacy providers reused one external ID across more than one artist.
+-- Preserve those collisions for review, then import only the most trustworthy
+-- mapping so a bad legacy link cannot merge two artists in the public catalog.
+insert into public.music_catalog_quarantine (
+  entity_type, entity_key, reason_code, reason_detail, source, payload
+)
+select
+  'artist',
+  legacy.provider || ':' || legacy.external_id,
+  'duplicate_provider_external_id',
+  'One provider artist identifier is linked to more than one legacy artist.',
+  'electronic_artist_external_ids',
+  jsonb_build_object(
+    'provider', legacy.provider,
+    'external_id', legacy.external_id,
+    'artist_ids', jsonb_agg(distinct legacy.artist_id::text order by legacy.artist_id::text)
+  )
+from public.electronic_artist_external_ids legacy
+group by legacy.provider, legacy.external_id
+having count(distinct legacy.artist_id) > 1
+on conflict (entity_type, entity_key, reason_code) do update set
+  reason_detail = excluded.reason_detail,
+  source = excluded.source,
+  payload = excluded.payload,
+  review_status = 'pending',
+  updated_at = now();
+
+with ranked_external_ids as (
+  select
+    legacy.*,
+    row_number() over (
+      partition by legacy.provider, legacy.external_id
+      order by
+        case artist.electronic_status
+          when 'recommendable' then 0
+          when 'verified' then 1
+          when 'candidate' then 2
+          when 'needs_review' then 3
+          else 4
+        end,
+        artist.verification_confidence desc,
+        legacy.updated_at desc,
+        legacy.artist_id
+    ) as provider_rank
+  from public.electronic_artist_external_ids legacy
+  join public.electronic_artists artist on artist.id = legacy.artist_id
+)
 insert into public.music_artist_external_ids (artist_id, provider, external_id, external_url, source, metadata, created_at, updated_at)
 select artist_id, provider, external_id, external_url, source, metadata, created_at, updated_at
-from public.electronic_artist_external_ids
+from ranked_external_ids
+where provider_rank = 1
 on conflict (artist_id, provider) do update set
   external_id = excluded.external_id,
   external_url = coalesce(excluded.external_url, public.music_artist_external_ids.external_url),
