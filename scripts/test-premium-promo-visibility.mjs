@@ -12,24 +12,29 @@ for (const id of [
   "weeklyHighlightsToggleBtn",
   "weeklyHighlightsToggleLabel",
   "weeklyHighlightsBody",
+  "membershipHideBtn",
+  "premiumPromoShowBtn",
   "premiumDismissBtn"
 ]) {
   assert.match(html, new RegExp(`id=["']${id}["']`), `missing #${id}`);
   assert.match(app, new RegExp(`getElementById\\(["']${id}["']\\)`), `missing DOM binding for #${id}`);
 }
 
-assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="weeklyHighlightsBody"[^>]+aria-expanded="true"/);
+assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="membershipCard weeklyHighlightsCard"[^>]+aria-expanded="true"/);
 assert.match(html, /id="weeklyHighlightsBody"[^>]+class="weekly-highlights-body"/);
-assert.doesNotMatch(html, /id="membershipHideBtn"/);
+assert.match(html, /id="premiumPromoShowBtn"[^>]+aria-controls="membershipCard weeklyHighlightsCard"[^>]+aria-expanded="false"/);
 assert.doesNotMatch(html, /id="premiumPromoCollapsed"/);
 assert.match(html, /id="premiumDismissBtn"[^>]+type="submit"[^>]+value="cancel"/);
 assert.match(app, /PREMIUM_PROMO_VISIBILITY_STORAGE_KEY\s*=\s*"neonpulse:premiumPromoVisibility:v1"/);
 assert.match(app, /PROFILE_DATA_STORAGE_KEYS\.filter\(\(key\) => key !== PREMIUM_PROMO_VISIBILITY_STORAGE_KEY\)/);
 assert.match(app, /isEphemeralSession\(normalizedSession\)[\s\S]*?PREMIUM_PROMO_VISIBILITY_STORAGE_KEY}:device/);
-assert.match(app, /function setPremiumPromoCollapsed\(collapsed\)[\s\S]*?if \(hasPremiumAccess\(\)\) return;/);
+assert.match(app, /function setPremiumPromoCollapsed\(collapsed\)\s*\{\s*writePremiumPromoCollapsed\(collapsed\)/);
 assert.match(app, /weeklyHighlightsCard\?\.classList\.toggle\("is-collapsed", collapsed\)/);
+assert.match(app, /membershipCard\?\.classList\.toggle\("hidden", collapsed\)/);
+assert.match(app, /weeklyHighlightsCard\?\.classList\.toggle\("hidden", collapsed\)/);
+assert.match(app, /premiumPromoShowBtn\?\.classList\.toggle\("hidden", !collapsed\)/);
 assert.match(app, /weeklyHighlightsBody\?\.classList\.toggle\("hidden", collapsed\)/);
-assert.match(app, /weeklyHighlightsToggleBtn\?\.classList\.toggle\("hidden", premium\)/);
+assert.match(app, /const collapsed = readPremiumPromoCollapsed\(\);/);
 assert.match(app, /bind\(weeklyHighlightsToggleBtn, "click",[\s\S]*?setPremiumPromoCollapsed\(!readPremiumPromoCollapsed\(\)\)/);
 assert.match(app, /sonicTinyCopy\("Agora não", "Not now", "Ahora no"\)/);
 assert.match(css, /\.weekly-highlights-toggle-btn\s*\{[\s\S]*?min-height:\s*44px/);

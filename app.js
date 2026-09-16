@@ -4835,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260911universal1";
+const SONIC_APP_BUILD_ID = "20260916premiumhide1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10249,6 +10249,8 @@ const membershipFeatureList = document.getElementById("membershipFeatureList");
 const membershipStatus = document.getElementById("membershipStatus");
 const membershipPrimaryBtn = document.getElementById("membershipPrimaryBtn");
 const membershipRefreshBtn = document.getElementById("membershipRefreshBtn");
+const membershipHideBtn = document.getElementById("membershipHideBtn");
+const premiumPromoShowBtn = document.getElementById("premiumPromoShowBtn");
 const weeklyHighlightsCard = document.getElementById("weeklyHighlightsCard");
 const weeklyHighlightsKicker = document.getElementById("weeklyHighlightsKicker");
 const weeklyHighlightsTitle = document.getElementById("weeklyHighlightsTitle");
@@ -44879,10 +44881,10 @@ function weeklyHighlightsCopy() {
 
 function premiumPromoVisibilityCopy() {
   return {
-    hide: sonicTinyCopy("Ocultar", "Hide", "Ocultar"),
-    hideLabel: sonicTinyCopy("Ocultar detalhes do Sonic Premium", "Hide Sonic Premium details", "Ocultar detalles de Sonic Premium"),
-    show: sonicTinyCopy("Mostrar", "Show", "Mostrar"),
-    showLabel: sonicTinyCopy("Mostrar detalhes do Sonic Premium", "Show Sonic Premium details", "Mostrar detalles de Sonic Premium")
+    hide: sonicTinyCopy("Ocultar Premium", "Hide Premium", "Ocultar Premium"),
+    hideLabel: sonicTinyCopy("Ocultar seção Sonic Premium no perfil", "Hide the Sonic Premium section in your profile", "Ocultar la sección Sonic Premium en el perfil"),
+    show: sonicTinyCopy("Mostrar Premium", "Show Premium", "Mostrar Premium"),
+    showLabel: sonicTinyCopy("Mostrar seção Sonic Premium no perfil", "Show the Sonic Premium section in your profile", "Mostrar la sección Sonic Premium en el perfil")
   };
 }
 
@@ -44921,11 +44923,22 @@ function writePremiumPromoCollapsed(collapsed, session = currentAuthUser) {
 
 function renderPremiumPromoVisibility() {
   const copy = premiumPromoVisibilityCopy();
-  const premium = hasPremiumAccess();
-  const collapsed = !premium && readPremiumPromoCollapsed();
+  const collapsed = readPremiumPromoCollapsed();
+  membershipCard?.classList.toggle("hidden", collapsed);
+  weeklyHighlightsCard?.classList.toggle("hidden", collapsed);
   weeklyHighlightsCard?.classList.toggle("is-collapsed", collapsed);
   weeklyHighlightsBody?.classList.toggle("hidden", collapsed);
-  weeklyHighlightsToggleBtn?.classList.toggle("hidden", premium);
+  premiumPromoShowBtn?.classList.toggle("hidden", !collapsed);
+  if (membershipHideBtn) {
+    membershipHideBtn.textContent = copy.hide;
+    membershipHideBtn.setAttribute("aria-expanded", String(!collapsed));
+    membershipHideBtn.setAttribute("aria-label", copy.hideLabel);
+  }
+  if (premiumPromoShowBtn) {
+    premiumPromoShowBtn.textContent = copy.show;
+    premiumPromoShowBtn.setAttribute("aria-expanded", String(!collapsed));
+    premiumPromoShowBtn.setAttribute("aria-label", copy.showLabel);
+  }
   if (weeklyHighlightsToggleBtn) {
     weeklyHighlightsToggleBtn.setAttribute("aria-expanded", String(!collapsed));
     weeklyHighlightsToggleBtn.setAttribute("aria-label", collapsed ? copy.showLabel : copy.hideLabel);
@@ -44934,11 +44947,11 @@ function renderPremiumPromoVisibility() {
 }
 
 function setPremiumPromoCollapsed(collapsed) {
-  if (hasPremiumAccess()) return;
   writePremiumPromoCollapsed(collapsed);
   renderPremiumPromoVisibility();
   window.requestAnimationFrame(() => {
-    weeklyHighlightsToggleBtn?.focus();
+    const focusTarget = collapsed ? premiumPromoShowBtn : membershipHideBtn;
+    focusTarget?.focus({ preventScroll: true });
   });
 }
 
@@ -63233,6 +63246,12 @@ bind(membershipPrimaryBtn, "click", () => {
 });
 bind(membershipRefreshBtn, "click", () => {
   void refreshMembershipAccess();
+});
+bind(membershipHideBtn, "click", () => {
+  setPremiumPromoCollapsed(true);
+});
+bind(premiumPromoShowBtn, "click", () => {
+  setPremiumPromoCollapsed(false);
 });
 bind(weeklyHighlightsToggleBtn, "click", () => {
   setPremiumPromoCollapsed(!readPremiumPromoCollapsed());

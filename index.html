@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260911sonicstart1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20260916premiumhide1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260911sonicstart1" />
+    <link rel="stylesheet" href="styles.min.css?v=20260916premiumhide1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260902radarcommerce1" />
     <script>
@@ -2590,7 +2590,8 @@
             <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
           </div>
         </div>
-        <article id="membershipCard" class="membership-card" data-plan="free" aria-labelledby="membershipTitle">
+        <button id="premiumPromoShowBtn" class="premium-visibility-btn premium-promo-show-btn hidden" type="button" aria-controls="membershipCard weeklyHighlightsCard" aria-expanded="false">Mostrar Premium</button>
+        <article id="membershipCard" class="membership-card hidden" data-plan="free" aria-labelledby="membershipTitle">
           <div class="membership-card-signal" aria-hidden="true">
             <span></span><span></span><span></span><span></span><span></span>
           </div>
@@ -2600,7 +2601,10 @@
                 <p id="membershipKicker" class="summary-kicker">SEU PLANO</p>
                 <h4 id="membershipTitle">Sonic Free</h4>
               </div>
-              <span id="membershipBadge" class="membership-badge">Gratuito</span>
+              <div class="membership-heading-actions">
+                <span id="membershipBadge" class="membership-badge">Gratuito</span>
+                <button id="membershipHideBtn" class="premium-visibility-btn" type="button" aria-controls="membershipCard weeklyHighlightsCard" aria-expanded="true">Ocultar Premium</button>
+              </div>
             </div>
             <p id="membershipDescription" class="membership-description">Descoberta eletrônica essencial, com curtidas ilimitadas.</p>
             <ul id="membershipFeatureList" class="membership-feature-list" aria-label="Recursos do plano">
@@ -2617,7 +2621,7 @@
             </div>
           </div>
         </article>
-        <section id="weeklyHighlightsCard" class="weekly-highlights-card" data-access="locked" aria-labelledby="weeklyHighlightsTitle">
+        <section id="weeklyHighlightsCard" class="weekly-highlights-card hidden" data-access="locked" aria-labelledby="weeklyHighlightsTitle">
           <header class="weekly-highlights-head">
             <div class="weekly-highlights-heading-copy">
               <p id="weeklyHighlightsKicker" class="summary-kicker">MINHA SEMANA SONIC</p>
@@ -2626,9 +2630,9 @@
             </div>
             <div class="weekly-highlights-head-actions">
               <span id="weeklyHighlightsBadge" class="weekly-highlights-badge">PREMIUM</span>
-              <button id="weeklyHighlightsToggleBtn" class="weekly-highlights-toggle-btn" type="button" aria-controls="weeklyHighlightsBody" aria-expanded="true" aria-label="Ocultar detalhes do Sonic Premium">
-                <span id="weeklyHighlightsToggleLabel">Ocultar</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 10 5 5 5-5"></path></svg>
+              <button id="weeklyHighlightsToggleBtn" class="weekly-highlights-toggle-btn" type="button" aria-controls="membershipCard weeklyHighlightsCard" aria-expanded="true" aria-label="Ocultar seção Sonic Premium no perfil">
+                <span id="weeklyHighlightsToggleLabel">Ocultar Premium</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"></path></svg>
               </button>
             </div>
           </header>
@@ -3253,6 +3257,6 @@
     <script defer src="daily-djs-ui.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260911sonicstart1"></script>
-    <script defer src="app.min.js?v=20260911universal1"></script>
+    <script defer src="app.min.js?v=20260916premiumhide1"></script>
   </body>
 </html>

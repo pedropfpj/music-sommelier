@@ -14,7 +14,7 @@ const [html, app, css, dailyDjsUi, iosBuild, native] = await Promise.all([
 ]);
 
 assert.match(html, /id="weeklyHighlightsCard"[^>]+aria-labelledby="weeklyHighlightsTitle"/);
-assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="weeklyHighlightsBody"/);
+assert.match(html, /id="weeklyHighlightsToggleBtn"[^>]+aria-controls="membershipCard weeklyHighlightsCard"/);
 assert.match(html, /id="weeklyHighlightsBody"[^>]+class="weekly-highlights-body"/);
 for (const id of [
   "weeklyHighlightsDiscovered",

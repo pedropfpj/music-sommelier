@@ -10,7 +10,7 @@ const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "www");
 const apiBaseUrl = "https://sonicsearch.app";
 const runtimeScriptName = "sonic-ios-runtime.js";
-const appStoreBuildId = "20260911universal1ios1";
+const appStoreBuildId = "20260916premiumhide1ios1";
 const iosRuntimeAssetNames = [
   "styles.min.css",
   "daily-djs.css",
