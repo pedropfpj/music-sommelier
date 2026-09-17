@@ -203,7 +203,7 @@
       visibility.setAttribute("title", visibilityLabel);
       visibility.setAttribute("aria-expanded", String(!collapsed));
       visibility.setAttribute("aria-controls", "dailyRadarContent");
-      const icon = element("span", "daily-radar-visibility-icon", collapsed ? "+" : "−");
+      const icon = element("span", "daily-radar-visibility-icon");
       icon.setAttribute("aria-hidden", "true");
       if (collapsed) visibility.append(element("span", "", visibilityLabel));
       visibility.append(icon);
