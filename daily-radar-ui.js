@@ -205,8 +205,8 @@
       visibility.setAttribute("aria-controls", "dailyRadarContent");
       const icon = element("span", "daily-radar-visibility-icon", collapsed ? "+" : "−");
       icon.setAttribute("aria-hidden", "true");
-      visibility.append(icon);
       if (collapsed) visibility.append(element("span", "", visibilityLabel));
+      visibility.append(icon);
       const content = element("div", "daily-radar-content");
       content.id = "dailyRadarContent";
       content.hidden = collapsed;

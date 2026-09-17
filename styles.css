@@ -22781,3 +22781,40 @@ body.sonic-first-value-window #dailyRadarPanel {
 .app-tab-btn:nth-child(5) {
   grid-column: auto;
 }
+
+/* Mobile control alignment: paired hero actions keep the same visual weight. */
+@media (max-width: 780px) {
+  .hero-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .hero-actions > .hero-help-btn,
+  .hero-actions > .audio-control-group,
+  .hero-actions .audio-toggle {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .hero-actions .hero-help-btn,
+  .hero-actions .audio-toggle {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-actions .audio-toggle-bars {
+    flex: 0 0 auto;
+  }
+
+  .app-menu-btn {
+    width: 100% !important;
+    max-width: none;
+    margin-inline: 0 !important;
+    box-sizing: border-box;
+  }
+}
