@@ -27,11 +27,15 @@ try {
     waitUntil: "domcontentloaded"
   });
   await page.locator("#showUsageGuideBtn").waitFor({ state: "visible" });
+  await page.locator(".daily-radar-upgrade, .daily-radar-toggle").first().waitFor({ state: "visible" });
+  await page.locator("#discoverFiltersBtn").waitFor({ state: "visible" });
+  await page.locator("#topSwipeSurpriseBtn").waitFor({ state: "visible" });
 
   for (const viewport of [
     { width: 320, height: 740 },
     { width: 375, height: 812 },
     { width: 393, height: 852 },
+    { width: 430, height: 932 },
     { width: 852, height: 393 }
   ]) {
     await page.setViewportSize(viewport);
@@ -49,8 +53,13 @@ try {
       return {
         help: rect("#showUsageGuideBtn"),
         audio: rect("#audioToggleBtn"),
+        logo: rect("#heroLogoBtn"),
+        heroCopy: rect(".hero-brand > div"),
         hero: rect(".hero"),
         menu: rect("#appMenuBtn"),
+        premiumAction: rect(".daily-radar-upgrade, .daily-radar-toggle"),
+        discoveryAction: rect("#discoverFiltersBtn"),
+        listenAction: rect("#topSwipeSurpriseBtn"),
         bodyWidth: document.body.getBoundingClientRect().width,
         scrollWidth: document.documentElement.scrollWidth
       };
@@ -66,8 +75,15 @@ try {
       assert.ok(Math.abs(metrics.help.width - metrics.audio.width) <= 1, JSON.stringify({ viewport, metrics }));
       assert.ok(Math.abs(metrics.help.y - metrics.audio.y) <= 1, JSON.stringify({ viewport, metrics }));
       assert.ok(Math.abs(metrics.help.height - metrics.audio.height) <= 1, JSON.stringify({ viewport, metrics }));
+      assert.ok(Math.abs((metrics.logo.x + metrics.logo.width / 2) - (metrics.help.x + metrics.help.width / 2)) <= 1, JSON.stringify({ viewport, metrics }));
+      assert.ok(Math.abs(metrics.heroCopy.x - metrics.audio.x) <= 1, JSON.stringify({ viewport, metrics }));
+      assert.ok(Math.abs((metrics.heroCopy.x + metrics.heroCopy.width) - (metrics.audio.x + metrics.audio.width)) <= 1, JSON.stringify({ viewport, metrics }));
       assert.ok(Math.abs(metrics.hero.x - metrics.menu.x) <= 1, JSON.stringify({ viewport, metrics }));
       assert.ok(Math.abs((metrics.hero.x + metrics.hero.width) - (metrics.menu.x + metrics.menu.width)) <= 1, JSON.stringify({ viewport, metrics }));
+      for (const action of [metrics.premiumAction, metrics.discoveryAction, metrics.listenAction]) {
+        assert.ok(Math.abs(metrics.help.x - action.x) <= 1, JSON.stringify({ viewport, metrics }));
+        assert.ok(Math.abs((metrics.audio.x + metrics.audio.width) - (action.x + action.width)) <= 1, JSON.stringify({ viewport, metrics }));
+      }
     }
     assert.ok(metrics.scrollWidth <= Math.ceil(metrics.bodyWidth) + 1, JSON.stringify({ viewport, metrics }));
   }
@@ -101,10 +117,12 @@ try {
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator(".daily-radar-visibility").waitFor({ state: "visible" });
   const expanded = await page.evaluate(() => {
+    const audio = document.querySelector("#audioToggleBtn").getBoundingClientRect();
     const button = document.querySelector(".daily-radar-visibility");
     const control = button.getBoundingClientRect();
     const icon = button.querySelector(".daily-radar-visibility-icon").getBoundingClientRect();
     return {
+      railRight: audio.right,
       controlHeight: control.height,
       iconRight: icon.right,
       controlCenterY: control.top + control.height / 2,
@@ -115,12 +133,14 @@ try {
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator(".daily-radar-visibility").waitFor({ state: "visible" });
   const collapsed = await page.evaluate(() => {
+    const audio = document.querySelector("#audioToggleBtn").getBoundingClientRect();
     const panel = document.querySelector("#dailyRadarPanel").getBoundingClientRect();
     const button = document.querySelector(".daily-radar-visibility");
     const control = button.getBoundingClientRect();
     const icon = button.querySelector(".daily-radar-visibility-icon").getBoundingClientRect();
     const label = button.querySelector("span:not(.daily-radar-visibility-icon)").getBoundingClientRect();
     return {
+      railRight: audio.right,
       panelRight: panel.right,
       controlRight: control.right,
       controlHeight: control.height,
@@ -132,12 +152,13 @@ try {
       paddingRight: parseFloat(getComputedStyle(button).paddingRight)
     };
   });
-  assert.ok(Math.abs(collapsed.panelRight - collapsed.controlRight) <= 1, JSON.stringify(collapsed));
+  assert.ok(Math.abs(expanded.iconRight - expanded.railRight) <= 1, JSON.stringify(expanded));
+  assert.ok(Math.abs(collapsed.iconRight - collapsed.railRight) <= 1, JSON.stringify(collapsed));
   assert.ok(Math.abs(collapsed.controlCenterY - collapsed.iconCenterY) <= 1, JSON.stringify(collapsed));
   assert.ok(Math.abs(expanded.controlCenterY - expanded.iconCenterY) <= 1, JSON.stringify(expanded));
   assert.ok(Math.abs(expanded.iconRight - collapsed.iconRight) <= 1, JSON.stringify({ expanded, collapsed }));
   assert.ok(collapsed.labelRight < collapsed.iconLeft, JSON.stringify(collapsed));
-  assert.ok(expanded.controlHeight >= 44 && collapsed.controlHeight >= 44 && collapsed.paddingRight >= 16, JSON.stringify({ expanded, collapsed }));
+  assert.ok(expanded.controlHeight >= 44 && collapsed.controlHeight >= 44 && collapsed.paddingRight >= 7, JSON.stringify({ expanded, collapsed }));
   assert.deepEqual(errors, []);
   console.log("Mobile controls aligned: equal hero actions, centered content, 44px touch targets and a stable Premium toggle.");
 } finally {

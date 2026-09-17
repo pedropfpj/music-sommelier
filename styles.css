@@ -22818,3 +22818,53 @@ body.sonic-first-value-window #dailyRadarPanel {
     box-sizing: border-box;
   }
 }
+
+/* Mobile control grid: every primary control shares the same card gutter. */
+@media (max-width: 780px) {
+  .app-shell {
+    --sonic-mobile-control-gutter: 12px;
+  }
+
+  .app-shell > .hero .hero-brand {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .app-shell > .hero .hero-logo-wrap {
+    max-width: 100%;
+    justify-self: center;
+  }
+
+  .app-shell > .hero .hero-brand > div {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .app-shell > .hero,
+  #dailyRadarPanel.daily-radar-panel:not(.is-collapsed),
+  #swipeStartPanel.swipe-start-panel[data-app-tab="discover"] {
+    padding-left: var(--sonic-mobile-control-gutter);
+    padding-right: var(--sonic-mobile-control-gutter);
+  }
+
+  #dailyRadarPanel.daily-radar-panel:not(.is-collapsed) .daily-radar-visibility {
+    top: var(--sonic-mobile-control-gutter);
+    right: calc(var(--sonic-mobile-control-gutter) - 7px);
+  }
+
+  #dailyRadarPanel.daily-radar-panel.is-collapsed {
+    padding-left: var(--sonic-mobile-control-gutter);
+    padding-right: var(--sonic-mobile-control-gutter);
+  }
+
+  #dailyRadarPanel.daily-radar-panel.is-collapsed .daily-radar-visibility {
+    padding: 0 7px 0 var(--sonic-mobile-control-gutter);
+    transform: translateX(6px);
+  }
+
+  #topSwipeCard.is-empty + .swipe-hero-actions #topSwipeSurpriseBtn {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+}
