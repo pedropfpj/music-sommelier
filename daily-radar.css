@@ -7,7 +7,7 @@
 .daily-radar-visibility-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border:1px solid rgba(131,255,233,.32);border-radius:50%;background:rgba(5,16,34,.7);font:400 1.3rem/1 sans-serif}
 .daily-radar-visibility:hover{color:#d6fff7}.daily-radar-visibility:hover .daily-radar-visibility-icon{border-color:#83ffe9;background:rgba(116,255,230,.12)}
 .daily-radar-panel.is-collapsed{display:flex;justify-content:flex-end;margin-bottom:.6rem;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;content-visibility:visible;contain-intrinsic-size:none}
-.daily-radar-panel.is-collapsed::before{display:none}.daily-radar-panel.is-collapsed .daily-radar-visibility{position:static;padding:0 .25rem}
+.daily-radar-panel.is-collapsed::before{display:none}.daily-radar-panel.is-collapsed .daily-radar-visibility{position:static;padding:0 1.0875rem 0 .75rem;line-height:1.2}
 @media(max-width:900px){.daily-radar-grid{grid-template-columns:1fr}.daily-radar-reason{min-height:0}.daily-radar-history .daily-radar-grid{grid-template-columns:1fr}}
 @media(max-width:560px){.daily-radar-panel{padding:1rem;border-radius:20px}.daily-radar-heading{display:grid}.daily-radar-badge{justify-self:start}.daily-radar-toggle,.daily-radar-upgrade{width:100%}.daily-radar-feedback button{font-size:.68rem}.daily-radar-title{font-size:1.45rem}}
 @media(prefers-reduced-motion:reduce){.daily-radar-panel *{scroll-behavior:auto!important}}
