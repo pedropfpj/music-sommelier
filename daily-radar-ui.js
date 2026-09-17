@@ -1,12 +1,15 @@
 (function (root) {
   "use strict";
 
+  const COLLAPSED_STORAGE_KEY = "sonic:dailyRadarCollapsed:v1";
+
   const COPY = {
     pt: {
       kicker: "SONIC PREMIUM · RADAR DIÁRIO", title: "Seu perfil vira descoberta.",
       description: "O radar aprende com suas reações e entrega afinidade, expansão e surpresa — com um motivo para cada escolha.",
       premium: "Premium ativo", preview: "Prévia local", locked: "Incluído no Premium", open: "Abrir o radar de hoje", close: "Recolher radar",
       upgrade: "Conhecer Sonic Premium", today: "Hoje", history: "Histórico", emptyHistory: "O histórico aparece conforme você abre novos radares.",
+      hideCard: "Ocultar card do Sonic Premium", showCard: "Mostrar Premium",
       anchor: "ALTA AFINIDADE", bridge: "EXPANSÃO", wildcard: "FORA DA BOLHA", refresh: "REVISITA INTELIGENTE",
       tasteReason: "Segue a direção que você escolheu no seu perfil.", likesReason: "Aprendeu com as faixas que você curtiu.",
       bridgeReason: "Amplia seu gosto sem sair da mesma família sonora.", wildcardReason: "Uma aposta de outra família para evitar uma bolha musical.",
@@ -21,6 +24,7 @@
       description: "The radar learns from your reactions and delivers affinity, expansion, and surprise — with a reason for every pick.",
       premium: "Premium active", preview: "Local preview", locked: "Included with Premium", open: "Open today's radar", close: "Collapse radar",
       upgrade: "Meet Sonic Premium", today: "Today", history: "History", emptyHistory: "History appears as you open new daily radars.",
+      hideCard: "Hide the Sonic Premium card", showCard: "Show Premium",
       anchor: "HIGH AFFINITY", bridge: "EXPANSION", wildcard: "OUTSIDE THE BUBBLE", refresh: "SMART REVISIT",
       tasteReason: "Follows the direction you chose in your profile.", likesReason: "Learned from tracks you liked.",
       bridgeReason: "Expands your taste while staying in the same sonic family.", wildcardReason: "A pick from another family to avoid a music bubble.",
@@ -35,6 +39,7 @@
       description: "El radar aprende de tus reacciones y entrega afinidad, expansión y sorpresa, con una razón para cada elección.",
       premium: "Premium activo", preview: "Vista previa local", locked: "Incluido en Premium", open: "Abrir el radar de hoy", close: "Ocultar radar",
       upgrade: "Conocer Sonic Premium", today: "Hoy", history: "Historial", emptyHistory: "El historial aparece a medida que abres nuevos radares.",
+      hideCard: "Ocultar tarjeta de Sonic Premium", showCard: "Mostrar Premium",
       anchor: "ALTA AFINIDAD", bridge: "EXPANSIÓN", wildcard: "FUERA DE LA BURBUJA", refresh: "REVISITA INTELIGENTE",
       tasteReason: "Sigue la dirección que elegiste en tu perfil.", likesReason: "Aprendió de las pistas que te gustaron.",
       bridgeReason: "Amplía tu gusto sin salir de la misma familia sonora.", wildcardReason: "Una apuesta de otra familia para evitar una burbuja musical.",
@@ -60,6 +65,10 @@
     let cloudState = "local";
     let syncTimer = 0;
     let destroyed = false;
+    let collapsed = false;
+    try {
+      collapsed = root.localStorage.getItem(COLLAPSED_STORAGE_KEY) === "collapsed";
+    } catch (_) { /* The card can still be hidden for the current session. */ }
 
     const message = (key, vars = {}) => {
       let result = (COPY[options.getLanguage()] || COPY.en)[key] || key;
@@ -78,6 +87,14 @@
       node.dataset.radarAction = action;
       return node;
     };
+
+    function setCollapsed(value) {
+      collapsed = value;
+      try {
+        if (collapsed) root.localStorage.setItem(COLLAPSED_STORAGE_KEY, "collapsed");
+        else root.localStorage.removeItem(COLLAPSED_STORAGE_KEY);
+      } catch (_) { /* Keep the in-memory preference when storage is unavailable. */ }
+    }
 
     function syncIdentity() {
       const nextIdentity = options.getIdentity();
@@ -178,24 +195,41 @@
     function render() {
       syncIdentity();
       host.hidden = false;
+      host.classList.toggle("is-collapsed", collapsed);
       host.replaceChildren();
+      const visibility = button("", "visibility", "daily-radar-visibility");
+      const visibilityLabel = message(collapsed ? "showCard" : "hideCard");
+      visibility.setAttribute("aria-label", visibilityLabel);
+      visibility.setAttribute("title", visibilityLabel);
+      visibility.setAttribute("aria-expanded", String(!collapsed));
+      visibility.setAttribute("aria-controls", "dailyRadarContent");
+      const icon = element("span", "daily-radar-visibility-icon", collapsed ? "+" : "−");
+      icon.setAttribute("aria-hidden", "true");
+      visibility.append(icon);
+      if (collapsed) visibility.append(element("span", "", visibilityLabel));
+      const content = element("div", "daily-radar-content");
+      content.id = "dailyRadarContent";
+      content.hidden = collapsed;
+      host.append(visibility, content);
+      if (collapsed) return;
+
       const heading = element("div", "daily-radar-heading");
       const headingCopy = element("div", "daily-radar-heading-copy");
       headingCopy.append(element("p", "daily-radar-kicker", message("kicker")), element("h3", "daily-radar-title", message("title")));
       const badgeKey = access === "premium" ? "premium" : access === "preview" ? "preview" : "locked";
       heading.append(headingCopy, element("span", "daily-radar-badge", message(badgeKey)));
-      host.append(heading, element("p", "daily-radar-description", message("description")));
+      content.append(heading, element("p", "daily-radar-description", message("description")));
 
       const canUse = access === "premium" || access === "preview";
       if (!canUse) {
-        host.append(button(message("upgrade"), "upgrade", "daily-radar-upgrade"));
+        content.append(button(message("upgrade"), "upgrade", "daily-radar-upgrade"));
         return;
       }
 
       const toggle = button(message(opened ? "close" : "open"), "toggle", "daily-radar-toggle");
       toggle.setAttribute("aria-expanded", String(opened));
       toggle.setAttribute("aria-controls", "dailyRadarBody");
-      host.append(toggle);
+      content.append(toggle);
       if (!opened) return;
 
       const body = element("div", "daily-radar-body");
@@ -237,7 +271,7 @@
       status.setAttribute("role", "status");
       status.setAttribute("aria-live", "polite");
       body.append(status);
-      host.append(body);
+      content.append(body);
       renderStatus();
     }
 
@@ -249,6 +283,12 @@
       const target = event.target.closest("[data-radar-action]");
       if (!target || !host.contains(target)) return;
       const action = target.dataset.radarAction;
+      if (action === "visibility") {
+        setCollapsed(!collapsed);
+        render();
+        host.querySelector(".daily-radar-visibility")?.focus({ preventScroll: true });
+        return;
+      }
       if (action === "upgrade") { options.onUpgrade?.(); return; }
       if (access !== "premium" && access !== "preview") return;
       if (action === "toggle") { opened = !opened; render(); return; }
@@ -296,7 +336,7 @@
     return {
       refresh: render,
       refreshAccess: resolveAccess,
-      open() { opened = true; view = "today"; render(); },
+      open() { setCollapsed(false); opened = true; view = "today"; render(); },
       reset() { identity = ""; state = null; selection = null; render(); },
       destroy() { destroyed = true; root.clearTimeout(syncTimer); }
     };
