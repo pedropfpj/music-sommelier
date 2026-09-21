@@ -9,6 +9,36 @@ class SonicBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(YouTubePlayerPlugin())
         bridge?.registerPluginInstance(DailyDjReminderPlugin())
         bridge?.registerPluginInstance(SonicSubscriptionsPlugin())
+        bridge?.registerPluginInstance(SonicAppReviewsPlugin())
+    }
+}
+
+/// The web layer determines a neutral usage milestone and calls this only
+/// after the app returns to the foreground. StoreKit decides whether to show
+/// the system review sheet; the app never presents a custom rating prompt.
+@objc(SonicAppReviewsPlugin)
+public final class SonicAppReviewsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "SonicAppReviewsPlugin"
+    public let jsName = "SonicAppReviews"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "request", returnType: CAPPluginReturnPromise)
+    ]
+
+    @objc public func request(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            guard let scene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive }) else {
+                call.resolve(["requested": false])
+                return
+            }
+            if #available(iOS 16.0, *) {
+                AppStore.requestReview(in: scene)
+            } else {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+            call.resolve(["requested": true])
+        }
     }
 }
 

@@ -28785,8 +28785,128 @@ function recommendationBetaPayload(track = null, prefs = {}, extra = {}) {
   };
 }
 
+// StoreKit review requests are deliberately separate from reaction buttons.
+// These device-local counters are neutral (likes and passes count equally),
+// contain no music or account data, and never run on the web app.
+const NATIVE_REVIEW_STORAGE_KEY = "sonic_search:appReviewMilestones:v1";
+const NATIVE_REVIEW_COOLDOWN_MS = 180 * 24 * 60 * 60 * 1000;
+const nativeReviewPreviewKeys = new Set();
+let nativeReviewSessionStartedAt = 0;
+let nativeReviewWasBackgrounded = false;
+let nativeReviewTimer = 0;
+
+function readNativeReviewMilestones() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(NATIVE_REVIEW_STORAGE_KEY) || "{}");
+    return stored && typeof stored === "object" ? stored : {};
+  } catch (_error) {
+    return {};
+  }
+}
+
+function saveNativeReviewMilestones(state) {
+  try {
+    localStorage.setItem(NATIVE_REVIEW_STORAGE_KEY, JSON.stringify(state));
+  } catch (_error) {
+    // Review requests are optional; unavailable storage must not affect music discovery.
+  }
+}
+
+function updateNativeReviewEligibility(state, now = Date.now()) {
+  const firstUseAt = Number(state.firstUseAt) || 0;
+  if (
+    !state.qualifiedAt &&
+    (Number(state.sessions) || 0) >= 3 &&
+    (Number(state.previews) || 0) >= 5 &&
+    (Number(state.reactions) || 0) >= 3 &&
+    firstUseAt > 0 && now - firstUseAt >= 48 * 60 * 60 * 1000
+  ) state.qualifiedAt = now;
+  return state;
+}
+
+function recordNativeReviewMilestone(eventName = "", track = null) {
+  if (!isNativeIosRuntime()) return;
+  if (!["preview_played", "track_liked", "track_disliked"].includes(eventName)) return;
+  if (eventName === "preview_played") {
+    const key = recommendationTrackKey(track);
+    if (!key || nativeReviewPreviewKeys.has(key)) return;
+    nativeReviewPreviewKeys.add(key);
+  }
+  const now = Date.now();
+  const state = readNativeReviewMilestones();
+  if (!state.firstUseAt) state.firstUseAt = now;
+  if (eventName === "preview_played") state.previews = Math.min(50, (Number(state.previews) || 0) + 1);
+  else state.reactions = Math.min(50, (Number(state.reactions) || 0) + 1);
+  saveNativeReviewMilestones(updateNativeReviewEligibility(state, now));
+}
+
+function scheduleNativeReviewRequest() {
+  if (!isNativeIosRuntime() || nativeReviewTimer) return;
+  const plugin = capacitorPlugin("SonicAppReviews");
+  if (typeof plugin?.request !== "function") return;
+  const state = readNativeReviewMilestones();
+  const qualifiedAt = Number(state.qualifiedAt) || 0;
+  const lastAttemptAt = Number(state.lastAttemptAt) || 0;
+  if (!qualifiedAt || qualifiedAt >= nativeReviewSessionStartedAt) return;
+  if (lastAttemptAt && Date.now() - lastAttemptAt < NATIVE_REVIEW_COOLDOWN_MS) return;
+
+  nativeReviewTimer = window.setTimeout(async () => {
+    nativeReviewTimer = 0;
+    if (document.hidden || appContent?.classList.contains("hidden")) return;
+    if (activePlayback?.state === "playing") return;
+    if (document.querySelector("dialog[open], #quizOverlay:not(.hidden), #searchOverlay:not(.hidden)")) return;
+    const latest = readNativeReviewMilestones();
+    if ((Number(latest.lastAttemptAt) || 0) > lastAttemptAt) return;
+    try {
+      const result = await plugin.request();
+      if (result?.requested) {
+        latest.lastAttemptAt = Date.now();
+        saveNativeReviewMilestones(latest);
+      }
+    } catch (_error) {
+      // A StoreKit failure must never interrupt the listening experience.
+    }
+  }, 20000);
+}
+
+function startNativeReviewMilestones() {
+  if (!isNativeIosRuntime()) return;
+  const now = Date.now();
+  nativeReviewSessionStartedAt = now;
+  const state = readNativeReviewMilestones();
+  if (!state.lastSessionAt || now - Number(state.lastSessionAt) >= 4 * 60 * 60 * 1000) {
+    state.sessions = Math.min(30, (Number(state.sessions) || 0) + 1);
+    state.lastSessionAt = now;
+  }
+  saveNativeReviewMilestones(updateNativeReviewEligibility(state, now));
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      nativeReviewWasBackgrounded = true;
+      if (nativeReviewTimer) window.clearTimeout(nativeReviewTimer);
+      nativeReviewTimer = 0;
+    } else if (nativeReviewWasBackgrounded) {
+      nativeReviewWasBackgrounded = false;
+      scheduleNativeReviewRequest();
+    }
+  });
+  const appPlugin = capacitorPlugin("App");
+  if (typeof appPlugin?.addListener === "function") {
+    void appPlugin.addListener("appStateChange", ({ isActive }) => {
+      if (!isActive) {
+        nativeReviewWasBackgrounded = true;
+        if (nativeReviewTimer) window.clearTimeout(nativeReviewTimer);
+        nativeReviewTimer = 0;
+      } else if (nativeReviewWasBackgrounded) {
+        nativeReviewWasBackgrounded = false;
+        scheduleNativeReviewRequest();
+      }
+    }).catch(() => {});
+  }
+}
+
 function trackRecommendationEvent(eventName = "", track = null, prefs = {}, extra = {}) {
   if (!track) return;
+  recordNativeReviewMilestone(eventName, track);
   trackBetaEvent(eventName, recommendationBetaPayload(track, prefs, extra), {
     source: extra.source || "recommendation"
   });
@@ -64950,6 +65070,7 @@ async function bootSonicSearch() {
   window.neonpulseEnsureArtistDepth = expandCatalogForArtistDepth;
   loadLanguage();
   setupNetworkStatusAwareness();
+  startNativeReviewMilestones();
   void trackBetaAppSession();
   setupNativeSocialAuthBridge();
   setupDailyDjReminderRouting();

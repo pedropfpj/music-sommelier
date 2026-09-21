@@ -2,6 +2,11 @@
 
 Date: 2026-09-02
 
+> Historical release packet. The public App Store listing was still 1.0.9 on
+> 2026-09-21, and the multi-genre iOS positioning must not be copied from this
+> document. See [the current growth and metadata draft](appstore-growth-2026-09.md)
+> before preparing a new build or changing App Store Connect.
+
 ## Submission Status
 
 - Version **1.1.0**, build **24**, uploaded successfully to App Store Connect on 2026-09-02 and awaiting Apple processing.
