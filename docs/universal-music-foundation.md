@@ -59,6 +59,10 @@ pilots pass the quality gate below.
 
 ## Safe rollout order
 
+The first non-electronic editorial pilot is tracked in
+[`universal-catalog-pilot.md`](universal-catalog-pilot.md). Its provider-matched
+recordings remain review candidates, not a released listening catalog.
+
 1. Keep `SONIC_UNIVERSAL_CATALOG_ENABLED=false`.
 2. Import a small reviewed pilot for each universe, with playable official provider links.
 3. Reject or quarantine ambiguous identity, genre and rights data.

@@ -1,0 +1,97 @@
+{
+  "scope": "local remediation only; not deployed",
+  "files": [
+    {
+      "path": "privacy-controls.js",
+      "sha256": "2b77cb1ccb6dad7cdd62bc04e68eb9b0106b3cd203956b65dbaac723d8d6666c"
+    },
+    {
+      "path": "privacy-requests.js",
+      "sha256": "6282afb9f24e605cf21d013118dca6359a470be8f41f6762d66494dd5263623b"
+    },
+    {
+      "path": "privacy-requests.css",
+      "sha256": "f6ec7f411c86a640a61a7276dabeb5b7ecef41cee74cb4adfc7adc82909580b7"
+    },
+    {
+      "path": "account-deletion.html",
+      "sha256": "de844489ffa2d1cff0d46b50505c13a142f50c39412b4732c8915aaa99b4e2ed"
+    },
+    {
+      "path": "app.js",
+      "sha256": "93f545d2aa9f1c203250415216a43164988639efd31accb7d0b4d864f5e2dba7"
+    },
+    {
+      "path": "app.min.js",
+      "sha256": "47288941f5e095d4c4a2c1bbf00fa19881d3c81a1862e7a1b195b9f836d79e06"
+    },
+    {
+      "path": "index.html",
+      "sha256": "1d28f65e477731106cbe1759630b2d9c02a3bd951e77f1a29a8f85393f843fc1"
+    },
+    {
+      "path": "privacy.html",
+      "sha256": "775927b55d6c9b18f1654921a828fa3c1565cd7a4c2fe49665ce756c5d6aa19d"
+    },
+    {
+      "path": "terms.html",
+      "sha256": "a19999fb681d4fbec8ae4dac035a63d78d205e11d18eee6f8f732e965db44db4"
+    },
+    {
+      "path": "cookies.html",
+      "sha256": "c9a6d296b24224f7d7ec4dc0fb00ded638eea087c27afb94908001d63556dcd6"
+    },
+    {
+      "path": "lib/api/_privacy-requests.js",
+      "sha256": "e0faced74f323eb63c9b2c41e4a461ec7c095918290226bc4edcc7a68bae964d"
+    },
+    {
+      "path": "lib/api/_beta-events.js",
+      "sha256": "08b818601908de3540fd91376b03730327228e85a1c850e33ec08fa9a0868ecb"
+    },
+    {
+      "path": "lib/api/_discovery-exposure.js",
+      "sha256": "b667581222d95d152e5090d07c94e9a96d8f552b0080bc1bb4ec72c4c4238adc"
+    },
+    {
+      "path": "lib/api/_deezer-preview.js",
+      "sha256": "242a792420633574e86717dbccf05d99326b0c9968f3d75cf713e893d6e14d29"
+    },
+    {
+      "path": "lib/api/_billing-store.js",
+      "sha256": "765cea9d790651c98dc4c73bdf73fdc584c9a28b1d1bcd829500d1cb804b4183"
+    },
+    {
+      "path": "lib/api/_artist-profile.js",
+      "sha256": "cef61a6d4e9fd6c3c4248c8ea878ace9a8daa5b0e0e738a8c06b3a7286a60f18"
+    },
+    {
+      "path": "api/artist-bio.js",
+      "sha256": "e31e6577a9f42bb7ff571a49c3fc9fdf57b35fe3418215ca27ba34c1c7dbff52"
+    },
+    {
+      "path": "api/integration-health.js",
+      "sha256": "16f78814571b9dcff489f12b7c55c0813475c21c34d40271ff04590b1cc841c7"
+    },
+    {
+      "path": "api/music.js",
+      "sha256": "e6a404e76feebba0ee18ea6b7ad4aef6627255a85c448e34a6089a6e6c44ff8a"
+    },
+    {
+      "path": "vercel.json",
+      "sha256": "e081c8e0a3b490af037ac939e5ddaf57e083cf41c9b0ece1c75026bee8d1c5da"
+    },
+    {
+      "path": "scripts/build-ios-web.mjs",
+      "sha256": "44f44cf8e13ee660fd12ee97aa9473fb874248fb352f9fdb0550121591bdd547"
+    },
+    {
+      "path": "scripts/generate-musicbrainz-electronic-import.mjs",
+      "sha256": "2061106aa2490f8d1d9837158225c0a4a07d7e429e521682d251c3558b6490ba"
+    },
+    {
+      "path": "supabase/migrations/20260922120000_privacy_requests.sql",
+      "sha256": "aff9d03078093147377509a7de7e252278b04694b9322f040362cf37c3873f80"
+    }
+  ]
+}

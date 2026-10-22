@@ -1,0 +1,2404 @@
+{
+  "schemaVersion": 1,
+  "batch": "universal_pilot_20260912_v1",
+  "status": "curatorial_candidates",
+  "recordingsPerArtist": 6,
+  "description": "Artist and recording research targets, not a published catalog. Tiers are editorial starting points, not objective popularity labels. Provider identity and genre review are required before release.",
+  "artists": [
+    {
+      "artist": "Taylor Swift",
+      "universe": "pop",
+      "genre": "contemporary_pop",
+      "tier": "reference",
+      "songs": [
+        "Anti-Hero",
+        "Cruel Summer"
+      ]
+    },
+    {
+      "artist": "Dua Lipa",
+      "universe": "pop",
+      "genre": "contemporary_pop",
+      "tier": "reference",
+      "songs": [
+        "Levitating",
+        "Don't Start Now"
+      ]
+    },
+    {
+      "artist": "Caroline Polachek",
+      "universe": "pop",
+      "genre": "art_pop",
+      "tier": "deep_cut",
+      "songs": [
+        "Bunny Is a Rider",
+        "Welcome to My Island"
+      ]
+    },
+    {
+      "artist": "Robyn",
+      "universe": "pop",
+      "genre": "synth_pop",
+      "tier": "deep_cut",
+      "songs": [
+        "Dancing On My Own",
+        "Call Your Girlfriend"
+      ]
+    },
+    {
+      "artist": "Magdalena Bay",
+      "universe": "pop",
+      "genre": "synth_pop",
+      "tier": "discovery",
+      "songs": [
+        "You Lose!",
+        "Image"
+      ]
+    },
+    {
+      "artist": "Rina Sawayama",
+      "universe": "pop",
+      "genre": "art_pop",
+      "tier": "discovery",
+      "songs": [
+        "XS",
+        "Comme Des Garçons (Like the Boys)"
+      ]
+    },
+    {
+      "artist": "Radiohead",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "reference",
+      "songs": [
+        "Weird Fishes/Arpeggi",
+        "Paranoid Android"
+      ]
+    },
+    {
+      "artist": "Metallica",
+      "universe": "rock_metal",
+      "genre": "metal",
+      "tier": "reference",
+      "songs": [
+        "Master of Puppets",
+        "Nothing Else Matters"
+      ]
+    },
+    {
+      "artist": "King Gizzard & The Lizard Wizard",
+      "universe": "rock_metal",
+      "genre": "rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Robot Stop",
+        "Iron Lung"
+      ]
+    },
+    {
+      "artist": "Gojira",
+      "universe": "rock_metal",
+      "genre": "progressive_metal",
+      "tier": "deep_cut",
+      "songs": [
+        "Flying Whales",
+        "Silvera"
+      ]
+    },
+    {
+      "artist": "Wednesday",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Chosen to Deserve",
+        "Bull Believer"
+      ]
+    },
+    {
+      "artist": "Black Country, New Road",
+      "universe": "rock_metal",
+      "genre": "post_punk",
+      "tier": "discovery",
+      "songs": [
+        "Sunglasses",
+        "Concorde"
+      ]
+    },
+    {
+      "artist": "Kendrick Lamar",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "Alright",
+        "DNA."
+      ]
+    },
+    {
+      "artist": "Nas",
+      "universe": "hip_hop_rap",
+      "genre": "boom_bap",
+      "tier": "reference",
+      "songs": [
+        "N.Y. State of Mind",
+        "The World Is Yours"
+      ]
+    },
+    {
+      "artist": "Little Simz",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "Point and Kill",
+        "Mood Swings"
+      ],
+      "deferredSongs": [
+        "Introvert",
+        "Woman"
+      ]
+    },
+    {
+      "artist": "MF DOOM",
+      "universe": "hip_hop_rap",
+      "genre": "boom_bap",
+      "tier": "deep_cut",
+      "songs": [
+        "Coffin Nails",
+        "Lavender Buds"
+      ],
+      "deferredSongs": [
+        "Doomsday",
+        "Rapp Snitch Knishes"
+      ]
+    },
+    {
+      "artist": "billy woods",
+      "universe": "hip_hop_rap",
+      "genre": "experimental_hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "Asylum",
+        "Remorseless"
+      ],
+      "deferredSongs": [
+        "Soft Landing",
+        "Spongebob"
+      ]
+    },
+    {
+      "artist": "Sampa the Great",
+      "universe": "hip_hop_rap",
+      "genre": "hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "Final Form",
+        "Energy"
+      ]
+    },
+    {
+      "artist": "Stevie Wonder",
+      "universe": "rnb_soul_funk",
+      "genre": "soul",
+      "tier": "reference",
+      "songs": [
+        "Superstition",
+        "As"
+      ]
+    },
+    {
+      "artist": "Erykah Badu",
+      "universe": "rnb_soul_funk",
+      "genre": "neo_soul",
+      "tier": "reference",
+      "songs": [
+        "On & On",
+        "Didn't Cha Know"
+      ]
+    },
+    {
+      "artist": "D'Angelo",
+      "universe": "rnb_soul_funk",
+      "genre": "neo_soul",
+      "tier": "deep_cut",
+      "songs": [
+        "Brown Sugar",
+        "Untitled (How Does It Feel)"
+      ]
+    },
+    {
+      "artist": "Parliament",
+      "universe": "rnb_soul_funk",
+      "genre": "p_funk",
+      "tier": "deep_cut",
+      "songs": [
+        "Flash Light",
+        "Give Up the Funk (Tear the Roof Off the Sucker)"
+      ]
+    },
+    {
+      "artist": "SAULT",
+      "universe": "rnb_soul_funk",
+      "genre": "soul",
+      "tier": "discovery",
+      "songs": [
+        "Wildfires",
+        "Free"
+      ]
+    },
+    {
+      "artist": "Cleo Sol",
+      "universe": "rnb_soul_funk",
+      "genre": "soul",
+      "tier": "discovery",
+      "songs": [
+        "When I'm in Your Arms",
+        "Why Don't You"
+      ]
+    },
+    {
+      "artist": "Caetano Veloso",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "reference",
+      "songs": [
+        "O Leãozinho",
+        "Sampa"
+      ]
+    },
+    {
+      "artist": "Cartola",
+      "universe": "brazilian",
+      "genre": "samba",
+      "tier": "reference",
+      "songs": [
+        "O Mundo É um Moinho",
+        "As Rosas Não Falam"
+      ]
+    },
+    {
+      "artist": "João Gilberto",
+      "universe": "brazilian",
+      "genre": "bossa_nova",
+      "tier": "reference",
+      "songs": [
+        "Chega de Saudade",
+        "Desafinado"
+      ]
+    },
+    {
+      "artist": "Luiz Gonzaga",
+      "aliases": [
+        "Gonzagão"
+      ],
+      "universe": "brazilian",
+      "genre": "forro",
+      "tier": "reference",
+      "songs": [
+        "Asa Branca",
+        "Xote das Meninas"
+      ]
+    },
+    {
+      "artist": "Marília Mendonça",
+      "universe": "brazilian",
+      "genre": "sertanejo",
+      "tier": "reference",
+      "songs": [
+        "Infiel (Ao Vivo)",
+        "Todo Mundo Vai Sofrer (Ao Vivo)"
+      ]
+    },
+    {
+      "artist": "MC Kevinho",
+      "aliases": [
+        "Kevinho"
+      ],
+      "universe": "brazilian",
+      "genre": "funk_brasileiro",
+      "tier": "reference",
+      "songs": [
+        "Olha a Explosão",
+        "O Grave Bater"
+      ]
+    },
+    {
+      "artist": "Djavan",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "deep_cut",
+      "songs": [
+        "Samurai",
+        "Oceano"
+      ]
+    },
+    {
+      "artist": "Fundo de Quintal",
+      "universe": "brazilian",
+      "genre": "pagode",
+      "tier": "deep_cut",
+      "songs": [
+        "A Amizade",
+        "O Show Tem Que Continuar"
+      ]
+    },
+    {
+      "artist": "Dominguinhos",
+      "universe": "brazilian",
+      "genre": "forro",
+      "tier": "deep_cut",
+      "songs": [
+        "Eu Só Quero um Xodó",
+        "De Volta pro Aconchego"
+      ]
+    },
+    {
+      "artist": "Falamansa",
+      "universe": "brazilian",
+      "genre": "forro",
+      "tier": "reference",
+      "songs": [
+        "Xote dos Milagres",
+        "Xote da Alegria"
+      ]
+    },
+    {
+      "artist": "Mestrinho",
+      "universe": "brazilian",
+      "genre": "forro",
+      "tier": "discovery",
+      "songs": [
+        "Te Faço um Cafuné",
+        "Bom Danado"
+      ]
+    },
+    {
+      "artist": "Paulinho da Viola",
+      "universe": "brazilian",
+      "genre": "samba",
+      "tier": "reference",
+      "songs": [
+        "Foi um Rio Que Passou em Minha Vida",
+        "Dança da Solidão"
+      ]
+    },
+    {
+      "artist": "Roberta Sá",
+      "universe": "brazilian",
+      "genre": "samba",
+      "tier": "deep_cut",
+      "songs": [
+        "Samba de um Minuto",
+        "Interessa"
+      ]
+    },
+    {
+      "artist": "Teresa Cristina",
+      "universe": "brazilian",
+      "genre": "samba",
+      "tier": "discovery",
+      "songs": [
+        "Coração Leviano",
+        "O Mundo É um Moinho"
+      ]
+    },
+    {
+      "artist": "Teto",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "deep_cut",
+      "songs": [
+        "M4",
+        "Fim de Semana no Rio",
+        "Paypal",
+        "Dia Azul",
+        "YES OR NO",
+        "Manha",
+        "Mais Um Vôo",
+        "Fashion"
+      ],
+      "youtubeChannels": [
+        {
+          "name": "30PRAUM",
+          "url": "https://www.youtube.com/@30PRAUM",
+          "sourceUrl": "https://linktr.ee/MatuePRAUM30"
+        }
+      ],
+      "providerArtistId": 1561735451,
+      "providerLookup": true,
+      "collaborations": [
+        {
+          "name": "Teto & Matuê",
+          "credits": [
+            {
+              "artist": "Matuê",
+              "role": "featured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "artist": "Chico Science & Nação Zumbi",
+      "universe": "brazilian",
+      "genre": "manguebeat",
+      "tier": "deep_cut",
+      "songs": [
+        "A Cidade",
+        "Da Lama ao Caos"
+      ]
+    },
+    {
+      "artist": "MC Carol",
+      "universe": "brazilian",
+      "genre": "funk_brasileiro",
+      "tier": "deep_cut",
+      "songs": [
+        "Liga pro Samu",
+        "Bateu uma Onda Forte"
+      ]
+    },
+    {
+      "artist": "Luedji Luna",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Banho de Folhas",
+        "Um Corpo no Mundo"
+      ]
+    },
+    {
+      "artist": "Juçara Marçal",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Vi de Relance",
+        "Ciranda do Aborto"
+      ]
+    },
+    {
+      "artist": "Metá Metá",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "São Jorge",
+        "Oyá"
+      ]
+    },
+    {
+      "artist": "Ana Frango Elétrico",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Electric Fish",
+        "Insista em Mim"
+      ]
+    },
+    {
+      "artist": "MC Tha",
+      "universe": "brazilian",
+      "genre": "funk_brasileiro",
+      "tier": "discovery",
+      "songs": [
+        "Rito de Passá",
+        "Valente"
+      ]
+    },
+    {
+      "artist": "Rachel Reis",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Desfruta",
+        "Motinha"
+      ],
+      "deferredSongs": [
+        "Maresia",
+        "Brasa"
+      ]
+    },
+    {
+      "artist": "Bad Bunny",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "reference",
+      "songs": [
+        "MIA",
+        "Neverita"
+      ],
+      "deferredSongs": [
+        "Tití Me Preguntó",
+        "Yo Perreo Sola"
+      ]
+    },
+    {
+      "artist": "Daddy Yankee",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "reference",
+      "songs": [
+        "Gasolina",
+        "Lo Que Pasó, Pasó"
+      ]
+    },
+    {
+      "artist": "Ivy Queen",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "deep_cut",
+      "songs": [
+        "Quiero Bailar",
+        "Te He Querido, Te He Llorado"
+      ]
+    },
+    {
+      "artist": "Álvaro Díaz",
+      "aliases": [
+        "Alvaro Diaz"
+      ],
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "discovery",
+      "songs": [
+        "LENTITO",
+        "YOKO"
+      ]
+    },
+    {
+      "artist": "Celia Cruz",
+      "universe": "latin_caribbean",
+      "genre": "salsa",
+      "tier": "reference",
+      "songs": [
+        "La Vida Es un Carnaval",
+        "Quimbara"
+      ]
+    },
+    {
+      "artist": "Natalia Lafourcade",
+      "universe": "latin_caribbean",
+      "genre": "latin_pop",
+      "tier": "deep_cut",
+      "songs": [
+        "Hasta la Raíz",
+        "Nunca Es Suficiente"
+      ]
+    },
+    {
+      "artist": "Bomba Estéreo",
+      "universe": "latin_caribbean",
+      "genre": "cumbia",
+      "tier": "deep_cut",
+      "songs": [
+        "To My Love",
+        "Fuego"
+      ]
+    },
+    {
+      "artist": "Lido Pimienta",
+      "universe": "latin_caribbean",
+      "genre": "latin_pop",
+      "tier": "discovery",
+      "songs": [
+        "Nada",
+        "Eso Que Tu Haces"
+      ]
+    },
+    {
+      "artist": "Meridian Brothers",
+      "universe": "latin_caribbean",
+      "genre": "cumbia",
+      "tier": "discovery",
+      "songs": [
+        "Guaracha U.F.O (No Estamos Solos...)",
+        "Cumbia de la Fuente"
+      ],
+      "deferredSongs": [
+        "Metamorfosis"
+      ]
+    },
+    {
+      "artist": "Yo-Yo Ma",
+      "universe": "classical",
+      "genre": "baroque",
+      "tier": "reference",
+      "searchTerm": "Yo-Yo Ma Bach Cello Suite",
+      "songs": [
+        "Cello Suite No. 1 in G Major, BWV 1007: I. Prélude",
+        "Cello Suite No. 1 in G Major, BWV 1007: II. Allemande"
+      ],
+      "work": {
+        "title": "Cello Suite No. 1 in G Major",
+        "composer": "Johann Sebastian Bach",
+        "catalogNumber": "BWV 1007"
+      }
+    },
+    {
+      "artist": "Lang Lang",
+      "universe": "classical",
+      "genre": "baroque",
+      "tier": "reference",
+      "searchTerm": "Lang Lang Goldberg Variations",
+      "songs": [
+        "Goldberg Variations, BWV 988: Aria",
+        "Goldberg Variations, BWV 988: Var. 1 a 1 Clav."
+      ],
+      "work": {
+        "title": "Goldberg Variations",
+        "composer": "Johann Sebastian Bach",
+        "catalogNumber": "BWV 988"
+      }
+    },
+    {
+      "artist": "Víkingur Ólafsson",
+      "universe": "classical",
+      "genre": "contemporary_classical",
+      "tier": "deep_cut",
+      "searchTerm": "Vikingur Olafsson Philip Glass Etudes",
+      "songs": [
+        "Études: No. 2",
+        "Études: No. 6"
+      ],
+      "composer": "Philip Glass"
+    },
+    {
+      "artist": "Hilary Hahn",
+      "universe": "classical",
+      "genre": "baroque",
+      "tier": "deep_cut",
+      "searchTerm": "Hilary Hahn Bach Partita BWV 1004",
+      "songs": [
+        "Partita No. 2 in D Minor, BWV 1004: V. Chaconne",
+        "Violin Partita No. 2 in D Minor, BWV 1004: V. Chaconne"
+      ],
+      "work": {
+        "title": "Violin Partita No. 2 in D Minor",
+        "composer": "Johann Sebastian Bach",
+        "catalogNumber": "BWV 1004"
+      }
+    },
+    {
+      "artist": "Hania Rani",
+      "universe": "classical",
+      "genre": "contemporary_classical",
+      "tier": "discovery",
+      "songs": [
+        "Glass",
+        "F Major"
+      ],
+      "composer": "Hania Rani"
+    },
+    {
+      "artist": "Roomful of Teeth",
+      "providerArtistId": "563914352",
+      "collaborations": [
+        {
+          "name": "Roomful of Teeth & Brad Wells",
+          "credits": [
+            {
+              "artist": "Brad Wells",
+              "role": "conductor"
+            }
+          ]
+        }
+      ],
+      "universe": "classical",
+      "genre": "choral",
+      "tier": "discovery",
+      "songs": [
+        "Partita for 8 Singers: 1. Allemande",
+        "Partita for 8 Singers: 2. Sarabande"
+      ],
+      "work": {
+        "title": "Partita for 8 Voices",
+        "composer": "Caroline Shaw",
+        "catalogNumber": ""
+      }
+    },
+    {
+      "artist": "Miles Davis",
+      "universe": "jazz_blues",
+      "genre": "cool_jazz",
+      "tier": "reference",
+      "songs": [
+        "So What",
+        "Freddie Freeloader"
+      ]
+    },
+    {
+      "artist": "B.B. King",
+      "universe": "jazz_blues",
+      "genre": "electric_blues",
+      "tier": "reference",
+      "songs": [
+        "The Thrill Is Gone",
+        "Every Day I Have the Blues"
+      ]
+    },
+    {
+      "artist": "Kamasi Washington",
+      "universe": "jazz_blues",
+      "genre": "spiritual_jazz",
+      "tier": "deep_cut",
+      "songs": [
+        "Change of the Guard",
+        "Truth"
+      ]
+    },
+    {
+      "artist": "Esperanza Spalding",
+      "providerArtistId": "73212782",
+      "collaborations": [
+        {
+          "name": "Esperanza Spalding & Leo Genovese",
+          "credits": [
+            {
+              "artist": "Leo Genovese",
+              "role": "performer"
+            }
+          ]
+        },
+        {
+          "name": "Esperanza Spalding & Algebra Blessett",
+          "credits": [
+            {
+              "artist": "Algebra Blessett",
+              "role": "featured"
+            }
+          ]
+        }
+      ],
+      "universe": "jazz_blues",
+      "genre": "jazz",
+      "tier": "deep_cut",
+      "songs": [
+        "I Know You Know",
+        "Black Gold (with Special Guest Algebra Blessett)"
+      ]
+    },
+    {
+      "artist": "Nubya Garcia",
+      "universe": "jazz_blues",
+      "genre": "jazz",
+      "tier": "discovery",
+      "songs": [
+        "Pace",
+        "Source"
+      ]
+    },
+    {
+      "artist": "Nduduzo Makhathini",
+      "universe": "jazz_blues",
+      "genre": "spiritual_jazz",
+      "tier": "discovery",
+      "songs": [
+        "eMini",
+        "Unyazi"
+      ]
+    },
+    {
+      "artist": "Bob Marley & The Wailers",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "reference",
+      "songs": [
+        "Three Little Birds",
+        "Is This Love"
+      ]
+    },
+    {
+      "artist": "Jimmy Cliff",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "Many Rivers to Cross",
+        "The Harder They Come"
+      ]
+    },
+    {
+      "artist": "Burning Spear",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Marcus Garvey",
+        "Slavery Days"
+      ]
+    },
+    {
+      "artist": "King Tubby",
+      "universe": "reggae_dub",
+      "genre": "dub",
+      "tier": "deep_cut",
+      "songs": [
+        "African Roots",
+        "Dub You Can Feel"
+      ],
+      "deferredSongs": [
+        "King Tubby Meets Rockers Uptown",
+        "Psalms of Drums"
+      ]
+    },
+    {
+      "artist": "Hollie Cook",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Milk",
+        "Angel Fire"
+      ]
+    },
+    {
+      "artist": "Lila Iké",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Where I'm Coming From",
+        "Second Chance"
+      ]
+    },
+    {
+      "artist": "Fela Kuti",
+      "universe": "african_global",
+      "genre": "afrobeat",
+      "tier": "reference",
+      "songs": [
+        "Water No Get Enemy",
+        "Zombie"
+      ]
+    },
+    {
+      "artist": "Burna Boy",
+      "universe": "african_global",
+      "genre": "afrobeats",
+      "tier": "reference",
+      "songs": [
+        "On the Low",
+        "Ye"
+      ]
+    },
+    {
+      "artist": "Ebo Taylor",
+      "universe": "african_global",
+      "genre": "highlife",
+      "tier": "deep_cut",
+      "songs": [
+        "Love and Death",
+        "Heaven"
+      ]
+    },
+    {
+      "artist": "Kabza De Small",
+      "universe": "african_global",
+      "genre": "amapiano",
+      "tier": "deep_cut",
+      "songs": [
+        "Sponono",
+        "Asibe Happy"
+      ]
+    },
+    {
+      "artist": "KOKOROKO",
+      "universe": "african_global",
+      "genre": "afrobeat",
+      "tier": "discovery",
+      "songs": [
+        "Abusey Junction",
+        "Baba Ayoola"
+      ]
+    },
+    {
+      "artist": "The Cavemen.",
+      "universe": "african_global",
+      "genre": "highlife",
+      "tier": "discovery",
+      "songs": [
+        "Me You I",
+        "Beautiful Rain"
+      ]
+    },
+    {
+      "artist": "Johnny Cash",
+      "universe": "folk_country_traditional",
+      "genre": "country",
+      "tier": "reference",
+      "songs": [
+        "Hurt",
+        "Ring of Fire"
+      ]
+    },
+    {
+      "artist": "Bob Dylan",
+      "universe": "folk_country_traditional",
+      "genre": "folk",
+      "tier": "reference",
+      "songs": [
+        "Blowin' in the Wind",
+        "Tangled Up in Blue"
+      ]
+    },
+    {
+      "artist": "Gillian Welch",
+      "universe": "folk_country_traditional",
+      "genre": "americana",
+      "tier": "deep_cut",
+      "songs": [
+        "Look at Miss Ohio",
+        "Everything Is Free"
+      ]
+    },
+    {
+      "artist": "Mariza",
+      "universe": "folk_country_traditional",
+      "genre": "fado",
+      "tier": "deep_cut",
+      "songs": [
+        "Ó Gente da Minha Terra",
+        "Chuva"
+      ]
+    },
+    {
+      "artist": "Arooj Aftab",
+      "universe": "folk_country_traditional",
+      "genre": "traditional_music",
+      "tier": "discovery",
+      "songs": [
+        "Mohabbat",
+        "Last Night"
+      ]
+    },
+    {
+      "artist": "Yasmin Williams",
+      "universe": "folk_country_traditional",
+      "genre": "folk",
+      "tier": "discovery",
+      "songs": [
+        "Urban Driftwood",
+        "Juvenescence"
+      ]
+    },
+    {
+      "artist": "Brian Eno",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "ambient",
+      "tier": "reference",
+      "songs": [
+        "An Ending (Ascent)",
+        "1/1"
+      ]
+    },
+    {
+      "artist": "Hans Zimmer",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "film_score",
+      "tier": "reference",
+      "songs": [
+        "Time",
+        "Cornfield Chase"
+      ]
+    },
+    {
+      "artist": "Nils Frahm",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "ambient",
+      "tier": "deep_cut",
+      "songs": [
+        "Says",
+        "Some"
+      ]
+    },
+    {
+      "artist": "Tim Hecker",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "experimental",
+      "tier": "deep_cut",
+      "songs": [
+        "Virginal I",
+        "Black Refraction"
+      ]
+    },
+    {
+      "artist": "Kali Malone",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "drone",
+      "tier": "discovery",
+      "songs": [
+        "Spectacle of Ritual",
+        "Sacrificial Code"
+      ]
+    },
+    {
+      "artist": "Hildur Guðnadóttir",
+      "universe": "ambient_experimental_soundtracks",
+      "genre": "film_score",
+      "tier": "discovery",
+      "songs": [
+        "Bathroom Dance",
+        "Bridge of Death"
+      ]
+    },
+    {
+      "artist": "Nirvana",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "reference",
+      "songs": [
+        "Come As You Are",
+        "Lithium"
+      ]
+    },
+    {
+      "artist": "Pearl Jam",
+      "universe": "rock_metal",
+      "genre": "rock",
+      "tier": "reference",
+      "songs": [
+        "Black",
+        "Alive"
+      ]
+    },
+    {
+      "artist": "Foo Fighters",
+      "universe": "rock_metal",
+      "genre": "rock",
+      "tier": "reference",
+      "songs": [
+        "Everlong",
+        "The Pretender"
+      ]
+    },
+    {
+      "artist": "Linkin Park",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "reference",
+      "songs": [
+        "In the End",
+        "Numb"
+      ]
+    },
+    {
+      "artist": "Green Day",
+      "universe": "rock_metal",
+      "genre": "punk",
+      "tier": "reference",
+      "songs": [
+        "Basket Case",
+        "American Idiot"
+      ]
+    },
+    {
+      "artist": "Red Hot Chili Peppers",
+      "universe": "rock_metal",
+      "genre": "rock",
+      "tier": "reference",
+      "songs": [
+        "Californication",
+        "Scar Tissue"
+      ]
+    },
+    {
+      "artist": "System Of A Down",
+      "aliases": [
+        "System of a Down"
+      ],
+      "universe": "rock_metal",
+      "genre": "metal",
+      "tier": "deep_cut",
+      "songs": [
+        "Chop Suey!",
+        "Toxicity"
+      ]
+    },
+    {
+      "artist": "Deftones",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Change (In the House of Flies)",
+        "Be Quiet and Drive (Far Away)"
+      ]
+    },
+    {
+      "artist": "Queens of the Stone Age",
+      "universe": "rock_metal",
+      "genre": "rock",
+      "tier": "deep_cut",
+      "songs": [
+        "No One Knows",
+        "Go With the Flow"
+      ]
+    },
+    {
+      "artist": "Muse",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Hysteria",
+        "Knights of Cydonia"
+      ]
+    },
+    {
+      "artist": "Arctic Monkeys",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "reference",
+      "songs": [
+        "Do I Wanna Know?",
+        "505"
+      ]
+    },
+    {
+      "artist": "The Strokes",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "reference",
+      "songs": [
+        "Last Nite",
+        "Reptilia"
+      ]
+    },
+    {
+      "artist": "Tame Impala",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "The Less I Know the Better",
+        "Feels Like We Only Go Backwards"
+      ]
+    },
+    {
+      "artist": "Interpol",
+      "universe": "rock_metal",
+      "genre": "post_punk",
+      "tier": "deep_cut",
+      "songs": [
+        "Obstacle 1",
+        "Evil"
+      ]
+    },
+    {
+      "artist": "Bloc Party",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Banquet",
+        "Helicopter"
+      ]
+    },
+    {
+      "artist": "Sonic Youth",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Teen Age Riot",
+        "Kool Thing"
+      ]
+    },
+    {
+      "artist": "Pavement",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Cut Your Hair",
+        "Gold Soundz"
+      ]
+    },
+    {
+      "artist": "Slowdive",
+      "universe": "rock_metal",
+      "genre": "alternative_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Alison",
+        "Sugar for the Pill"
+      ]
+    },
+    {
+      "artist": "Beach House",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "Space Song",
+        "Myth"
+      ]
+    },
+    {
+      "artist": "Fleet Foxes",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "deep_cut",
+      "songs": [
+        "White Winter Hymnal",
+        "Mykonos"
+      ]
+    },
+    {
+      "artist": "Big Thief",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Not",
+        "Simulation Swarm"
+      ]
+    },
+    {
+      "artist": "Fontaines D.C.",
+      "universe": "rock_metal",
+      "genre": "post_punk",
+      "tier": "discovery",
+      "songs": [
+        "I Love You",
+        "Starburster"
+      ]
+    },
+    {
+      "artist": "IDLES",
+      "universe": "rock_metal",
+      "genre": "post_punk",
+      "tier": "discovery",
+      "songs": [
+        "Danny Nedelko",
+        "Never Fight a Man With a Perm"
+      ]
+    },
+    {
+      "artist": "Wet Leg",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Chaise Longue",
+        "Wet Dream"
+      ]
+    },
+    {
+      "artist": "Alvvays",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Archie, Marry Me",
+        "Dreams Tonite"
+      ]
+    },
+    {
+      "artist": "Men I Trust",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Show Me How",
+        "Tailwhip"
+      ]
+    },
+    {
+      "artist": "The Beths",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Expert In A Dying Field",
+        "Future Me Hates Me"
+      ]
+    },
+    {
+      "artist": "Turnstile",
+      "universe": "rock_metal",
+      "genre": "hardcore_punk",
+      "tier": "discovery",
+      "songs": [
+        "BLACKOUT",
+        "HOLIDAY"
+      ]
+    },
+    {
+      "artist": "Geese",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "3D Country",
+        "Cowboy Nudes"
+      ]
+    },
+    {
+      "artist": "Dry Cleaning",
+      "universe": "rock_metal",
+      "genre": "post_punk",
+      "tier": "discovery",
+      "songs": [
+        "Scratchcard Lanyard",
+        "Strong Feelings"
+      ]
+    },
+    {
+      "artist": "Eminem",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "Lose Yourself",
+        "Stan"
+      ]
+    },
+    {
+      "artist": "JAY-Z",
+      "aliases": [
+        "Jay-Z"
+      ],
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "99 Problems",
+        "Public Service Announcement (Interlude)"
+      ]
+    },
+    {
+      "artist": "Outkast",
+      "aliases": [
+        "OutKast"
+      ],
+      "universe": "hip_hop_rap",
+      "genre": "hip_hop",
+      "tier": "reference",
+      "songs": [
+        "Ms. Jackson",
+        "Rosa Parks"
+      ]
+    },
+    {
+      "artist": "Wu-Tang Clan",
+      "universe": "hip_hop_rap",
+      "genre": "boom_bap",
+      "tier": "reference",
+      "songs": [
+        "C.R.E.A.M.",
+        "Protect Ya Neck"
+      ]
+    },
+    {
+      "artist": "2Pac",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "Changes",
+        "Dear Mama"
+      ]
+    },
+    {
+      "artist": "Travis Scott",
+      "universe": "hip_hop_rap",
+      "genre": "trap_rap",
+      "tier": "reference",
+      "songs": [
+        "goosebumps",
+        "SICKO MODE"
+      ]
+    },
+    {
+      "artist": "Future",
+      "universe": "hip_hop_rap",
+      "genre": "trap_rap",
+      "tier": "reference",
+      "songs": [
+        "Mask Off",
+        "March Madness"
+      ],
+      "providerArtistId": 128050210,
+      "providerLookup": true
+    },
+    {
+      "artist": "Playboi Carti",
+      "universe": "hip_hop_rap",
+      "genre": "trap_rap",
+      "tier": "deep_cut",
+      "songs": [
+        "ALL RED"
+      ],
+      "deferredSongs": [
+        "Magnolia",
+        "Sky"
+      ]
+    },
+    {
+      "artist": "21 Savage",
+      "universe": "hip_hop_rap",
+      "genre": "trap_rap",
+      "tier": "deep_cut",
+      "songs": [
+        "a lot",
+        "Bank Account"
+      ]
+    },
+    {
+      "artist": "Tyler, The Creator",
+      "universe": "hip_hop_rap",
+      "genre": "hip_hop",
+      "tier": "deep_cut",
+      "songs": [
+        "EARFQUAKE",
+        "See You Again"
+      ]
+    },
+    {
+      "artist": "JID",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "151 Rum",
+        "Surround Sound"
+      ]
+    },
+    {
+      "artist": "Vince Staples",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "Norf Norf",
+        "Big Fish"
+      ]
+    },
+    {
+      "artist": "Denzel Curry",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "ULT",
+        "Walkin"
+      ]
+    },
+    {
+      "artist": "Danny Brown",
+      "universe": "hip_hop_rap",
+      "genre": "experimental_hip_hop",
+      "tier": "deep_cut",
+      "songs": [
+        "Ain't It Funny",
+        "Really Doe"
+      ]
+    },
+    {
+      "artist": "Freddie Gibbs",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "1985",
+        "Crime Pays"
+      ]
+    },
+    {
+      "artist": "Skepta",
+      "universe": "hip_hop_rap",
+      "genre": "grime",
+      "tier": "deep_cut",
+      "songs": [
+        "Shutdown",
+        "That's Not Me"
+      ]
+    },
+    {
+      "artist": "Stormzy",
+      "universe": "hip_hop_rap",
+      "genre": "grime",
+      "tier": "reference",
+      "songs": [
+        "Vossi Bop",
+        "Big For Your Boots"
+      ]
+    },
+    {
+      "artist": "Central Cee",
+      "universe": "hip_hop_rap",
+      "genre": "drill",
+      "tier": "deep_cut",
+      "songs": [
+        "Doja",
+        "Loading"
+      ]
+    },
+    {
+      "artist": "Dave",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "Black",
+        "Location"
+      ]
+    },
+    {
+      "artist": "JPEGMAFIA",
+      "universe": "hip_hop_rap",
+      "genre": "experimental_hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "1539 N. Calvert",
+        "HAZARD DUTY PAY!"
+      ]
+    },
+    {
+      "artist": "Doechii",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "DENIAL IS A RIVER",
+        "NISSAN ALTIMA"
+      ]
+    },
+    {
+      "artist": "Noname",
+      "universe": "hip_hop_rap",
+      "genre": "hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "Diddy Bop",
+        "Sunny Duet"
+      ]
+    },
+    {
+      "artist": "Saba",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "LIFE",
+        "Photosynthesis"
+      ]
+    },
+    {
+      "artist": "Earl Sweatshirt",
+      "universe": "hip_hop_rap",
+      "genre": "experimental_hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "Chum",
+        "Riot!"
+      ]
+    },
+    {
+      "artist": "MIKE",
+      "universe": "hip_hop_rap",
+      "genre": "experimental_hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "nuthin i can do is wrng",
+        "Hunger"
+      ]
+    },
+    {
+      "artist": "redveil",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "weight",
+        "pg baby"
+      ]
+    },
+    {
+      "artist": "Racionais MC's",
+      "aliases": [
+        "Racionais MC’s"
+      ],
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "Vida Loka, Pt. 2",
+        "Negro Drama"
+      ]
+    },
+    {
+      "artist": "Emicida",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "reference",
+      "songs": [
+        "AmarElo",
+        "Levanta e Anda"
+      ]
+    },
+    {
+      "artist": "Criolo",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "deep_cut",
+      "songs": [
+        "Não Existe Amor em SP",
+        "Subirusdoistiozin"
+      ]
+    },
+    {
+      "artist": "BK'",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "Planos",
+        "Só Me Ligar"
+      ]
+    },
+    {
+      "artist": "Djonga",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "Leal",
+        "Junho de 94"
+      ]
+    },
+    {
+      "artist": "Baco Exu do Blues",
+      "universe": "hip_hop_rap",
+      "genre": "rap",
+      "tier": "discovery",
+      "songs": [
+        "Te Amo Disgraça",
+        "Girassóis de Van Gogh"
+      ]
+    },
+    {
+      "artist": "Matuê",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "reference",
+      "songs": [
+        "Anos Luz",
+        "A Morte do Autotune"
+      ],
+      "deferredSongs": [
+        "Máquina do Tempo",
+        "Quer Voar"
+      ],
+      "youtubeChannels": [
+        {
+          "name": "30PRAUM",
+          "url": "https://www.youtube.com/@30PRAUM",
+          "sourceUrl": "https://linktr.ee/MatuePRAUM30"
+        }
+      ]
+    },
+    {
+      "artist": "Veigh",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "deep_cut",
+      "songs": [
+        "Mônaco Freestyle",
+        "O Justo Não Treme"
+      ],
+      "deferredSongs": [
+        "Novo Balanço",
+        "Engana Dizendo Que Ama"
+      ]
+    },
+    {
+      "artist": "WIU",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "deep_cut",
+      "songs": [
+        "Pitbull",
+        "Lealdade"
+      ],
+      "deferredSongs": [
+        "Coração de Gelo",
+        "Felina"
+      ],
+      "youtubeChannels": [
+        {
+          "name": "30PRAUM",
+          "url": "https://www.youtube.com/@30PRAUM",
+          "sourceUrl": "https://linktr.ee/MatuePRAUM30"
+        }
+      ]
+    },
+    {
+      "artist": "Orochi",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "deep_cut",
+      "songs": [
+        "Amor de Fim de Noite",
+        "Balão"
+      ]
+    },
+    {
+      "artist": "Filipe Ret",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "discovery",
+      "songs": [
+        "Invicto",
+        "Vivendo Avançado"
+      ]
+    },
+    {
+      "artist": "Peter Tosh",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "reference",
+      "songs": [
+        "Legalize It",
+        "Equal Rights"
+      ]
+    },
+    {
+      "artist": "Toots & The Maytals",
+      "aliases": [
+        "Toots and The Maytals"
+      ],
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "Pressure Drop",
+        "54-46 Was My Number"
+      ]
+    },
+    {
+      "artist": "Steel Pulse",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "reference",
+      "songs": [
+        "Your House",
+        "Roller Skates"
+      ]
+    },
+    {
+      "artist": "Black Uhuru",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Guess Who's Coming to Dinner",
+        "Sponji Reggae"
+      ]
+    },
+    {
+      "artist": "Gregory Isaacs",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "Night Nurse",
+        "Cool Down the Pace"
+      ]
+    },
+    {
+      "artist": "Dennis Brown",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Money in My Pocket",
+        "Here I Come"
+      ]
+    },
+    {
+      "artist": "Bunny Wailer",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Blackheart Man",
+        "Dreamland"
+      ]
+    },
+    {
+      "artist": "Desmond Dekker",
+      "universe": "reggae_dub",
+      "genre": "ska",
+      "tier": "deep_cut",
+      "songs": [
+        "Israelites",
+        "007 (Shanty Town)"
+      ]
+    },
+    {
+      "artist": "Chronixx",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Here Comes Trouble",
+        "Skankin' Sweet"
+      ]
+    },
+    {
+      "artist": "Protoje",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Who Knows",
+        "Kingston Be Wise"
+      ]
+    },
+    {
+      "artist": "Koffee",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Toast",
+        "Rapture"
+      ]
+    },
+    {
+      "artist": "Kabaka Pyramid",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Well Done",
+        "Can't Breathe"
+      ]
+    },
+    {
+      "artist": "Jesse Royal",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Modern Day Judas",
+        "Rich Forever"
+      ]
+    },
+    {
+      "artist": "Groundation",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Picture on the Wall",
+        "Babylon Rule Dem"
+      ]
+    },
+    {
+      "artist": "Alborosie",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "deep_cut",
+      "songs": [
+        "Kingston Town",
+        "Herbalist"
+      ]
+    },
+    {
+      "artist": "SOJA",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "Rest of My Life",
+        "You and Me"
+      ]
+    },
+    {
+      "artist": "Rebelution",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "discovery",
+      "songs": [
+        "Safe and Sound",
+        "Feeling Alright"
+      ]
+    },
+    {
+      "artist": "Natiruts",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "Sorri, Sou Rei",
+        "Quero Ser Feliz Também"
+      ]
+    },
+    {
+      "artist": "Cidade Negra",
+      "universe": "reggae_dub",
+      "genre": "reggae",
+      "tier": "reference",
+      "songs": [
+        "A Estrada",
+        "Onde Você Mora?"
+      ]
+    },
+    {
+      "artist": "Edson Gomes",
+      "universe": "reggae_dub",
+      "genre": "roots_reggae",
+      "tier": "discovery",
+      "songs": [
+        "Malandrinha",
+        "Árvore"
+      ]
+    },
+    {
+      "artist": "Lana Del Rey",
+      "universe": "pop",
+      "genre": "art_pop",
+      "tier": "reference",
+      "songs": [
+        "Video Games",
+        "West Coast"
+      ]
+    },
+    {
+      "artist": "Billie Eilish",
+      "universe": "pop",
+      "genre": "contemporary_pop",
+      "tier": "reference",
+      "songs": [
+        "bad guy",
+        "BIRDS OF A FEATHER"
+      ]
+    },
+    {
+      "artist": "Charli xcx",
+      "aliases": [
+        "Charli XCX"
+      ],
+      "universe": "pop",
+      "genre": "art_pop",
+      "tier": "deep_cut",
+      "songs": [
+        "360",
+        "Von dutch"
+      ]
+    },
+    {
+      "artist": "Japanese Breakfast",
+      "universe": "pop",
+      "genre": "indie_pop",
+      "tier": "discovery",
+      "songs": [
+        "Be Sweet",
+        "Road Head"
+      ]
+    },
+    {
+      "artist": "Clairo",
+      "universe": "pop",
+      "genre": "indie_pop",
+      "tier": "discovery",
+      "songs": [
+        "Bags",
+        "Sofia"
+      ]
+    },
+    {
+      "artist": "The Marías",
+      "universe": "pop",
+      "genre": "indie_pop",
+      "tier": "discovery",
+      "songs": [
+        "Hush",
+        "No One Noticed"
+      ]
+    },
+    {
+      "artist": "SZA",
+      "universe": "rnb_soul_funk",
+      "genre": "rnb",
+      "tier": "reference",
+      "songs": [
+        "Good Days",
+        "Snooze"
+      ]
+    },
+    {
+      "artist": "Frank Ocean",
+      "universe": "rnb_soul_funk",
+      "genre": "rnb",
+      "tier": "reference",
+      "songs": [
+        "Thinkin Bout You",
+        "Pink + White"
+      ]
+    },
+    {
+      "artist": "Anderson .Paak",
+      "universe": "rnb_soul_funk",
+      "genre": "neo_soul",
+      "tier": "deep_cut",
+      "songs": [
+        "Come Down",
+        "Am I Wrong"
+      ]
+    },
+    {
+      "artist": "Michael Kiwanuka",
+      "universe": "rnb_soul_funk",
+      "genre": "soul",
+      "tier": "deep_cut",
+      "songs": [
+        "Cold Little Heart",
+        "Love & Hate"
+      ]
+    },
+    {
+      "artist": "Hiatus Kaiyote",
+      "universe": "rnb_soul_funk",
+      "genre": "neo_soul",
+      "tier": "discovery",
+      "songs": [
+        "Nakamarra",
+        "Breathing Underwater"
+      ]
+    },
+    {
+      "artist": "Yussef Dayes",
+      "universe": "jazz_blues",
+      "genre": "jazz_fusion",
+      "tier": "discovery",
+      "songs": [
+        "Black Classical Music",
+        "Tioga Pass"
+      ]
+    },
+    {
+      "artist": "Ezra Collective",
+      "universe": "jazz_blues",
+      "genre": "jazz_fusion",
+      "tier": "discovery",
+      "songs": [
+        "Victory Dance",
+        "No Confusion"
+      ]
+    },
+    {
+      "artist": "John Coltrane",
+      "universe": "jazz_blues",
+      "genre": "jazz",
+      "tier": "reference",
+      "songs": [
+        "My Favorite Things",
+        "Naima"
+      ]
+    },
+    {
+      "artist": "Nina Simone",
+      "universe": "jazz_blues",
+      "genre": "jazz",
+      "tier": "reference",
+      "songs": [
+        "Feeling Good",
+        "I Put a Spell On You"
+      ]
+    },
+    {
+      "artist": "Khruangbin",
+      "universe": "rnb_soul_funk",
+      "genre": "funk_soul",
+      "tier": "discovery",
+      "songs": [
+        "Time (You and I)",
+        "Friday Morning"
+      ]
+    },
+    {
+      "artist": "Gilberto Gil",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "reference",
+      "songs": [
+        "Aquele Abraço",
+        "Palco"
+      ]
+    },
+    {
+      "artist": "Jorge Ben Jor",
+      "aliases": [
+        "Jorge Ben"
+      ],
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "reference",
+      "songs": [
+        "Taj Mahal",
+        "País Tropical"
+      ]
+    },
+    {
+      "artist": "Elza Soares",
+      "universe": "brazilian",
+      "genre": "samba",
+      "tier": "deep_cut",
+      "songs": [
+        "A Mulher do Fim do Mundo",
+        "Lata D'Água"
+      ]
+    },
+    {
+      "artist": "Duda Beat",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Bixinho",
+        "Bolo de Rolo"
+      ]
+    },
+    {
+      "artist": "Liniker",
+      "universe": "brazilian",
+      "genre": "mpb",
+      "tier": "discovery",
+      "songs": [
+        "Baby 95",
+        "Tudo"
+      ]
+    },
+    {
+      "artist": "ROSALÍA",
+      "aliases": [
+        "Rosalía"
+      ],
+      "universe": "latin_caribbean",
+      "genre": "latin_pop",
+      "tier": "deep_cut",
+      "songs": [
+        "SAOKO",
+        "DESPECHÁ"
+      ]
+    },
+    {
+      "artist": "KAROL G",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "reference",
+      "songs": [
+        "PROVENZA",
+        "BICHOTA"
+      ]
+    },
+    {
+      "artist": "Rauw Alejandro",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "deep_cut",
+      "songs": [
+        "Todo De Ti",
+        "Desesperados"
+      ]
+    },
+    {
+      "artist": "Feid",
+      "universe": "latin_caribbean",
+      "genre": "reggaeton",
+      "tier": "discovery",
+      "songs": [
+        "Feliz Cumpleaños Ferxxo",
+        "Normal"
+      ]
+    },
+    {
+      "artist": "Tems",
+      "universe": "african_global",
+      "genre": "afrobeats",
+      "tier": "deep_cut",
+      "songs": [
+        "Free Mind",
+        "Higher"
+      ]
+    },
+    {
+      "artist": "Wizkid",
+      "universe": "african_global",
+      "genre": "afrobeats",
+      "tier": "reference",
+      "songs": [
+        "Essence",
+        "Ojuelegba"
+      ]
+    },
+    {
+      "artist": "Seun Kuti & Egypt 80",
+      "universe": "african_global",
+      "genre": "afrobeat",
+      "tier": "discovery",
+      "songs": [
+        "Black Times",
+        "African Soldier"
+      ]
+    },
+    {
+      "artist": "Joni Mitchell",
+      "universe": "folk_country_traditional",
+      "genre": "folk",
+      "tier": "reference",
+      "songs": [
+        "A Case of You",
+        "Both Sides Now"
+      ]
+    },
+    {
+      "artist": "Nick Drake",
+      "universe": "folk_country_traditional",
+      "genre": "folk",
+      "tier": "deep_cut",
+      "songs": [
+        "Pink Moon",
+        "Northern Sky"
+      ]
+    },
+    {
+      "artist": "Adrianne Lenker",
+      "universe": "folk_country_traditional",
+      "genre": "singer_songwriter",
+      "tier": "discovery",
+      "songs": [
+        "anything",
+        "not a lot, just forever"
+      ]
+    },
+    {
+      "artist": "Sufjan Stevens",
+      "universe": "folk_country_traditional",
+      "genre": "singer_songwriter",
+      "tier": "deep_cut",
+      "songs": [
+        "Mystery of Love",
+        "Should Have Known Better"
+      ]
+    },
+    {
+      "artist": "Ulrika Spacek",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Mimi Pretend",
+        "Silvertonic"
+      ],
+      "editorialSourceUrl": "https://ulrikaspacek.bandcamp.com/album/modern-english-decoration-2"
+    },
+    {
+      "artist": "feeble little horse",
+      "universe": "rock_metal",
+      "genre": "indie_rock",
+      "tier": "discovery",
+      "songs": [
+        "Tin Man"
+      ],
+      "editorialSourceUrl": "https://feeblelittlehorse.bandcamp.com/track/tin-man"
+    },
+    {
+      "artist": "McKinley Dixon",
+      "universe": "hip_hop_rap",
+      "genre": "hip_hop",
+      "tier": "discovery",
+      "songs": [
+        "Run, Run, Run",
+        "Sun, I Rise"
+      ],
+      "editorialSourceUrl": "https://mckinleydixon.bandcamp.com/track/run-run-run"
+    },
+    {
+      "artist": "Pachyman",
+      "universe": "reggae_dub",
+      "genre": "dub",
+      "tier": "discovery",
+      "songs": [
+        "Goldline"
+      ],
+      "editorialSourceUrl": "https://pachyman.bandcamp.com/music"
+    },
+    {
+      "artist": "The Frightnrs",
+      "universe": "reggae_dub",
+      "genre": "rocksteady",
+      "tier": "discovery",
+      "songs": [
+        "Nothing More to Say"
+      ],
+      "editorialSourceUrl": "https://daptonerecords.com/artists/the-frightnrs/"
+    },
+    {
+      "artist": "Bktherula",
+      "universe": "hip_hop_rap",
+      "genre": "trap_rap",
+      "tier": "discovery",
+      "songs": [
+        "Summer",
+        "Tweakin' Together"
+      ],
+      "editorialSourceUrl": "https://www.bktherula.com/"
+    },
+    {
+      "artist": "Yunk Vino",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "discovery",
+      "songs": [
+        "Leans, Pt. 2",
+        "Campari"
+      ],
+      "providerArtistId": 1439167778,
+      "providerLookup": true,
+      "editorialSourceUrl": "https://music.apple.com/br/artist/yunk-vino/1439167778"
+    },
+    {
+      "artist": "Ryu, the Runner",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "discovery",
+      "songs": [
+        "Pura Adrenalina",
+        "Sua Inveja Eu Não Vejo"
+      ],
+      "providerArtistId": 1652768066,
+      "providerLookup": true,
+      "editorialSourceUrl": "https://music.apple.com/br/artist/ryu-the-runner/1652768066",
+      "youtubeChannels": [
+        {
+          "name": "SALVE CRAZY REC",
+          "url": "https://www.youtube.com/@salvecrazyrec",
+          "sourceUrl": "https://music.apple.com/us/album/business-single/1675530221"
+        }
+      ]
+    },
+    {
+      "artist": "Sidoka",
+      "universe": "brazilian",
+      "genre": "trap_brasileiro",
+      "tier": "discovery",
+      "songs": [
+        "Mi'adama",
+        "Não Me Sinto Mal Mais"
+      ],
+      "providerArtistId": 1360121009,
+      "providerLookup": true,
+      "editorialSourceUrl": "https://www.shazam.com/pt-br/artist/sidoka/1360121009"
+    }
+  ]
+}

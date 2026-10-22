@@ -9,6 +9,13 @@
 
   const SCHEMA_VERSION = 2;
   const DEFAULT_UNIVERSE = "electronic";
+  const EXPERIENCE_LEVELS = ["beginner", "familiar", "expert"];
+  const DISCOVERY_TIERS = ["reference", "deep_cut", "discovery"];
+  const TIER_WEIGHTS = {
+    beginner: { reference: 1.2, deep_cut: 0.4, discovery: 0.1 },
+    familiar: { reference: 0.2, deep_cut: 0.8, discovery: 0.6 },
+    expert: { reference: -0.7, deep_cut: 0.8, discovery: 1.9 }
+  };
 
   const UNIVERSES = Object.freeze([
     {
@@ -146,6 +153,15 @@
     const universes = Array.from(new Set(rawUniverses.map((item) => normalizeUniverse(item)).filter(Boolean))).slice(0, 5);
     const primaryUniverse = normalizeUniverse(source.primaryUniverse || universes[0] || DEFAULT_UNIVERSE);
     if (!universes.includes(primaryUniverse)) universes.unshift(primaryUniverse);
+    const experience = EXPERIENCE_LEVELS.includes(source.experience) ? source.experience : "familiar";
+    const experienceByUniverse = {};
+    Object.entries(source.experienceByUniverse || {}).forEach(([key, level]) => {
+      if (isKnownUniverse(key) && EXPERIENCE_LEVELS.includes(level)) experienceByUniverse[normalizeUniverse(key)] = level;
+    });
+    // Knowing techno does not automatically make someone an expert in opera.
+    if (!experienceByUniverse[primaryUniverse]) experienceByUniverse[primaryUniverse] = experience;
+    const novelty = source.novelty !== undefined && source.novelty !== null && source.novelty !== ""
+      ? Number(source.novelty) : 0.5;
     return {
       schemaVersion: SCHEMA_VERSION,
       primaryUniverse,
@@ -155,7 +171,9 @@
       artistWeights: normalizeWeightMap(source.artistWeights),
       moodWeights: normalizeWeightMap(source.moodWeights),
       contextWeights: normalizeWeightMap(source.contextWeights),
-      novelty: Math.max(0, Math.min(1, Number(source.novelty) || 0.5))
+      experience,
+      experienceByUniverse,
+      novelty: Math.max(0, Math.min(1, Number.isFinite(novelty) ? novelty : 0.5))
     };
   }
 
@@ -163,25 +181,38 @@
     const source = value && typeof value === "object" && !Array.isArray(value) ? value : {};
     const genre = normalizeKey(source.genre || source.style || "");
     const universe = normalizeUniverse(source.universe || universeForGenre(genre));
+    const tier = source.discoveryTier || source.metadata?.discovery_tier;
+    const confidence = source.confidence !== undefined && source.confidence !== null && source.confidence !== ""
+      ? Number(source.confidence) : 0.5;
     return {
       ...source,
       key: normalizeKey(source.key || `${source.artist || ""}_${source.song || source.title || ""}`),
       artistKey: normalizeKey(source.artistKey || source.artist || ""),
       genre,
       universe,
+      discoveryTier: DISCOVERY_TIERS.includes(tier) ? tier : "",
       moods: Array.isArray(source.moods) ? source.moods.map(normalizeKey).filter(Boolean) : [],
       contexts: Array.isArray(source.contexts) ? source.contexts.map(normalizeKey).filter(Boolean) : [],
-      playable: source.playable !== false && Boolean(source.previewUrl || source.providerLinks?.length || source.youtubeUrl || source.soundcloudUrl || source.appleMusicUrl),
-      confidence: Math.max(0, Math.min(1, Number(source.confidence) || 0.5))
+      playable: source.playable !== false && !["candidate", "needs_review", "blocked"].includes(source.status)
+        && Boolean(source.previewUrl || source.providerLinks?.length || source.youtubeUrl || source.soundcloudUrl || source.appleMusicUrl),
+      confidence: Math.max(0, Math.min(1, Number.isFinite(confidence) ? confidence : 0.5))
     };
   }
 
-  function candidateScore(candidate, rawProfile = {}, options = {}) {
-    const item = canonicalCandidate(candidate);
+  function scoringContext(options = {}) {
+    const keySet = (values) => new Set((values instanceof Set || Array.isArray(values) ? Array.from(values) : []).map(normalizeKey));
+    return {
+      rejected: keySet(options.rejectedKeys), excluded: keySet(options.excludedKeys), knownTracks: keySet(options.knownKeys),
+      rejectedArtists: keySet(options.rejectedArtistKeys), knownArtists: keySet(options.knownArtistKeys),
+      discoverNewArtists: options.discoverNewArtists === true
+    };
+  }
+
+  function scoreCanonicalCandidate(item, profile, context) {
     if (!item.key || !item.playable) return Number.NEGATIVE_INFINITY;
-    const rejected = options.rejectedKeys instanceof Set ? options.rejectedKeys : new Set(options.rejectedKeys || []);
-    if (rejected.has(item.key)) return Number.NEGATIVE_INFINITY;
-    const profile = normalizeTasteProfile(rawProfile);
+    const { rejected, excluded, knownTracks, rejectedArtists, knownArtists } = context;
+    if (rejected.has(item.key) || excluded.has(item.key) || knownTracks.has(item.key) || rejectedArtists.has(item.artistKey)) return Number.NEGATIVE_INFINITY;
+    if (context.discoverNewArtists && knownArtists.has(item.artistKey)) return Number.NEGATIVE_INFINITY;
     const universeWeight = Number(profile.universeWeights[item.universe] || 0);
     const genreWeight = Number(profile.genreWeights[item.genre] || 0);
     const artistWeight = Number(profile.artistWeights[item.artistKey] || 0);
@@ -189,15 +220,28 @@
     const contextScore = item.contexts.reduce((sum, context) => sum + Number(profile.contextWeights[context] || 0), 0);
     const preferredUniverse = profile.universes.includes(item.universe) ? 2.4 : 0;
     const explorationBoost = profile.novelty * (profile.primaryUniverse === item.universe ? 0.3 : 1.4);
-    return preferredUniverse + universeWeight * 1.25 + genreWeight * 1.1 + artistWeight * 1.35 + moodScore * 0.7 + contextScore * 0.55 + explorationBoost + item.confidence;
+    const experience = profile.experienceByUniverse[item.universe] || "familiar";
+    const discoveryBoost = item.discoveryTier ? TIER_WEIGHTS[experience][item.discoveryTier] : 0;
+    const familiarityPenalty = knownArtists.has(item.artistKey) ? profile.novelty * 1.5 : 0;
+    return preferredUniverse + universeWeight * 1.25 + genreWeight * 1.1 + artistWeight * 1.35 + moodScore * 0.7 + contextScore * 0.55 + explorationBoost + discoveryBoost - familiarityPenalty + item.confidence;
   }
 
-  function rankCandidates(candidates = [], profile = {}, options = {}) {
+  function candidateScore(candidate, rawProfile = {}, options = {}) {
+    return scoreCanonicalCandidate(canonicalCandidate(candidate), normalizeTasteProfile(rawProfile), scoringContext(options));
+  }
+
+  function rankCandidates(candidates = [], rawProfile = {}, options = {}) {
     const limit = Math.max(1, Math.min(100, Number(options.limit) || 24));
     const perArtistLimit = Math.max(1, Math.min(5, Number(options.perArtistLimit) || 2));
     const artistCounts = new Map();
+    // Compile taste weights and history once, not once for every recording in a large catalog.
+    const profile = normalizeTasteProfile(rawProfile);
+    const context = scoringContext(options);
     return (Array.isArray(candidates) ? candidates : [])
-      .map((candidate) => ({ candidate: canonicalCandidate(candidate), score: candidateScore(candidate, profile, options) }))
+      .map((value) => {
+        const candidate = canonicalCandidate(value);
+        return { candidate, score: scoreCanonicalCandidate(candidate, profile, context) };
+      })
       .filter((entry) => Number.isFinite(entry.score))
       .sort((a, b) => b.score - a.score || a.candidate.key.localeCompare(b.candidate.key))
       .filter((entry) => {

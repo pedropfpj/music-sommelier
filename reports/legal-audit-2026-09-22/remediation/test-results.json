@@ -1,0 +1,63 @@
+[
+  {
+    "test": "test-compliance-controls.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 1.4,
+    "output": "PASS consent: no choice, legacy yes, rejection, native, app guards, grant, revoke, abort and cross-tab\nPASS server collection refusal and all Deezer switch combinations\nPASS requests: auth, deletion confirmation, identity isolation, receipt, owner listing and failed storage\nPASS MusicBrainz supplementary gate and cache isolation; core identity preserved\nPASS new-sales gate and existing-customer portal while billing disabled\n"
+  },
+  {
+    "test": "test-privacy-requests-sql.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 1.5,
+    "output": "PASS SQL migration: repeatable, private permissions, idempotency, account isolation, quota, retained receipt after account deletion\n"
+  },
+  {
+    "test": "test-beta-analytics-v2.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.12,
+    "output": "PASS beta analytics v2 foundation tests\n"
+  },
+  {
+    "test": "test-discovery-exposure-api.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.04,
+    "output": "Discovery exposure API tests passed: bounded anonymous counters use Redis, Supabase, or memory fallback.\n"
+  },
+  {
+    "test": "test-request-security.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.04,
+    "output": "PASS request security tests\n"
+  },
+  {
+    "test": "test-user-profile-privacy-surfaces.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.04,
+    "output": "Profile privacy surfaces passed: comments, fallback storage, post creation and legacy feed snapshots never replay client-provided or OAuth photo URLs.\n"
+  },
+  {
+    "test": "test-ugc-safety.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 0.04,
+    "output": "UGC safety filter tests passed.\n"
+  },
+  {
+    "test": "verify-compliance-ui.mjs",
+    "status": "passed",
+    "exitCode": 0,
+    "seconds": 3.13,
+    "output": "PASS native source transforms, privacy disable and versioned request assets\nPASS Chromium request form: login, confirmation, receipt, retry, failure, logout, 390px layout; no external requests\nPASS real consent banner/bootstrap in Chromium: no choice, no, legacy yes, accept, revoke/reload and native\n"
+  },
+  {
+    "test": "test-billing-foundation.mjs",
+    "status": "inconclusive_interrupted",
+    "note": "No completion after more than 3m46s; process terminated. Existing audit also timed out this suite twice at 120s. New billing gate/portal cases passed using mocked provider SDKs in test-compliance-controls.mjs."
+  }
+]

@@ -205,7 +205,7 @@ async function fetchMusicBrainzArtist(artistName = "") {
     };
   }
 
-  return cachedReferenceLookup(`musicbrainz:${normalizeText(artist)}`, async () => {
+  return cachedReferenceLookup(`musicbrainz:${envFlag("SONIC_MUSICBRAINZ_SUPPLEMENTARY_APPROVED", false)}:${normalizeText(artist)}`, async () => {
     const query = `artist:"${artist.replace(/"/g, "")}"`;
     const url = `https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(query)}&fmt=json&limit=5`;
     const result = await fetchJson(url, {
@@ -223,7 +223,7 @@ async function fetchMusicBrainzArtist(artistName = "") {
         source: { ...searchSource, note: "sem match exato" }
       };
     }
-    const tags = Array.isArray(best.tags)
+    const tags = envFlag("SONIC_MUSICBRAINZ_SUPPLEMENTARY_APPROVED", false) && Array.isArray(best.tags)
       ? best.tags
           .sort((a, b) => (Number(b.count) || 0) - (Number(a.count) || 0))
           .map((tag) => trimText(tag?.name, 60))
@@ -246,7 +246,7 @@ async function fetchMusicBrainzArtist(artistName = "") {
       source: {
         name: "MusicBrainz",
         url: `https://musicbrainz.org/artist/${best.id}`,
-        note: "identidade, pais/area e tags"
+        note: tags.length ? "identidade, pais/area e tags autorizadas" : "identidade e pais/area (dados principais CC0)"
       }
     };
   });

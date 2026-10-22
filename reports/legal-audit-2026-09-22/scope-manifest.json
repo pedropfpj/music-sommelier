@@ -1,0 +1,78 @@
+{
+  "at": "2026-09-22T21:18:47.871Z",
+  "head": "db67b727664676d372382bce7bfef3563f749bba",
+  "workingTree": "existing uncommitted changes; findings apply to hashes, not HEAD alone",
+  "files": [
+    {
+      "file": "app.js",
+      "sha256": "b30d3399b371f5888897239cafc18b7e3a6dfb8aaf06aee1b3fe8a4ab91f4908"
+    },
+    {
+      "file": "app.min.js",
+      "sha256": "0fc917f2117fcdda66300485b800bf8c6b7c4fd831f3660bedee5b0bb271a41c"
+    },
+    {
+      "file": "index.html",
+      "sha256": "607dc8e7b090766f28a7f5586a5f24e6a4dc86e1c52e61a592b9b9d458cec0ae"
+    },
+    {
+      "file": "privacy.html",
+      "sha256": "06708231b7f97b816cf99ab9c31563a9073f7b6106cd09b69992037d979be174"
+    },
+    {
+      "file": "terms.html",
+      "sha256": "a487df505d98b6c3a9dcf7e85e13378123ae1b7425f98cf7fd4a39043949f4f3"
+    },
+    {
+      "file": "cookies.html",
+      "sha256": "16b3fba561ad06f978c9720e0a0c13a8b59475f39201675e76b0428345cc5673"
+    },
+    {
+      "file": "api/billing.js",
+      "sha256": "06006b18b63a7e94598c8e87dd4355f352284c04e9598186914f6d9d1e8540ec"
+    },
+    {
+      "file": "lib/api/_billing-store.js",
+      "sha256": "bd2d69b94578f94d319472b603e45dad133c66ed8a0d27eefc1782d71a798dd3"
+    },
+    {
+      "file": "lib/api/_deezer-preview.js",
+      "sha256": "5892caaa7744ae35f205144556a1ff57109de824d353c076b35767b4cebeb407"
+    },
+    {
+      "file": "lib/api/_beta-events.js",
+      "sha256": "6725d5e1068f5d1d520e64ab2d8e17a105c51b36c4df59fe8a187dc1a9d7de5b"
+    },
+    {
+      "file": "lib/api/_ugc-safety.js",
+      "sha256": "3fa9d31825389219d028955bfb4c98efec0e253ecae53d6a5d1a802fe05f0f61"
+    },
+    {
+      "file": "lib/api/_artist-profile.js",
+      "sha256": "f88165ff7beb57ee68ec1edbb9e71bf771d7694a3cbc469f47165fe7c5ce8398"
+    },
+    {
+      "file": "scripts/build-android-web.mjs",
+      "sha256": "76cc9ad30dff5fd20846cdd080e17d90d095e93998c97b8caf16217e36977fbb"
+    },
+    {
+      "file": "ios/App/App/PrivacyInfo.xcprivacy",
+      "sha256": "74b0cd72fc23c1ef302f22ee2753f61817cdc5af0ff7a7f2d0632b524fb8acea"
+    }
+  ],
+  "limitedFrontendSecretScan": {
+    "files": [
+      "app.js",
+      "app.min.js",
+      "index.html"
+    ],
+    "patterns": [
+      "openai_secret",
+      "stripe_secret",
+      "private_key",
+      "github_token"
+    ],
+    "findings": [],
+    "limitation": "No history, credentials, production env, token validation or comprehensive secret scan."
+  }
+}

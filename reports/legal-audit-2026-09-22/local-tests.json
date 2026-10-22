@@ -1,0 +1,44 @@
+[
+  {
+    "test": "test-request-security.mjs",
+    "code": 0,
+    "signal": null,
+    "durationMs": 35324,
+    "output": "PASS request security tests\n"
+  },
+  {
+    "test": "test-billing-foundation.mjs",
+    "code": null,
+    "signal": "SIGTERM",
+    "durationMs": 120012,
+    "output": ""
+  },
+  {
+    "test": "test-ugc-safety.mjs",
+    "code": 0,
+    "signal": null,
+    "durationMs": 22319,
+    "output": "UGC safety filter tests passed.\n"
+  },
+  {
+    "test": "test-user-profile.mjs",
+    "code": null,
+    "signal": "SIGTERM",
+    "durationMs": 120011,
+    "output": ""
+  },
+  {
+    "test": "test-user-profile-sql.mjs",
+    "code": null,
+    "signal": "SIGTERM",
+    "durationMs": 120010,
+    "output": ""
+  },
+  {
+    "test": "test-user-profile-privacy-surfaces.mjs",
+    "code": 0,
+    "signal": null,
+    "durationMs": 94,
+    "output": "Profile privacy surfaces passed: comments, fallback storage, post creation and legacy feed snapshots never replay client-provided or OAuth photo URLs.\n"
+  }
+]

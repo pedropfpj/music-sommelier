@@ -16,11 +16,15 @@ ios/App/App/capacitor.config *.json
 .vercel/
 
 # Generated local verification/report artifacts.
+reports/profile-walkthrough-*.png
+reports/user-profile-readiness-latest.json
 reports/ui-*.png
 reports/*-latest.json
 reports/*-inventory-latest.*
 reports/hive_festival_2026_musicbrainz_cache.json
 reports/*.rows.json
+reports/universal-catalog-provider-snapshot-*.json
+reports/universal-listening-provider-snapshot.json
 reports/android-emulator/
 reports/app-store-build/
 reports/app-store-screenshots/

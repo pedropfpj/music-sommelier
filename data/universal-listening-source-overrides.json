@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "artist": "Bktherula",
+      "song": "Summer",
+      "url": "https://www.youtube.com/watch?v=SzpBi_nm0H4",
+      "channelUrl": "https://www.youtube.com/@BKTHERULA",
+      "sourceUrl": "https://www.youtube.com/watch?v=SzpBi_nm0H4",
+      "recordingVersion": "official_audio_video",
+      "displaySong": "Summer"
+    },
+    {
+      "artist": "Bktherula",
+      "song": "Summer",
+      "url": "https://www.youtube.com/watch?v=0gMvEkJWms8",
+      "channelUrl": "https://www.youtube.com/channel/UCMlwqYpddGEuBmabul_iOtg",
+      "sourceUrl": "https://www.youtube.com/watch?v=SzpBi_nm0H4",
+      "recordingVersion": "provider_video",
+      "displaySong": "Summer"
+    },
+    {
+      "artist": "Roberta Sá",
+      "song": "Samba de um Minuto",
+      "url": "https://www.youtube.com/watch?v=wWAaUU9_6tk",
+      "channelUrl": "https://www.youtube.com/@canalrobertasa",
+      "sourceUrl": "https://robertasa.com.br/sambasa/",
+      "recordingVersion": "live",
+      "displaySong": "Samba de um Minuto — Sambasá (ao vivo)"
+    },
+    {
+      "artist": "Nirvana",
+      "song": "Smells Like Teen Spirit",
+      "url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+      "channelUrl": "https://www.youtube.com/@NirvanaVEVO",
+      "sourceUrl": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Smells Like Teen Spirit"
+    },
+    {
+      "artist": "Arctic Monkeys",
+      "song": "Do I Wanna Know?",
+      "url": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+      "channelUrl": "https://www.youtube.com/@arcticmonkeys",
+      "sourceUrl": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Do I Wanna Know?"
+    },
+    {
+      "artist": "Eminem",
+      "song": "Without Me",
+      "url": "https://www.youtube.com/watch?v=YVkUvmDQ3HY",
+      "channelUrl": "https://www.youtube.com/@EminemVEVO",
+      "sourceUrl": "https://www.eminem.com/video/eminem-without-me/",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Without Me"
+    },
+    {
+      "artist": "Travis Scott",
+      "song": "goosebumps",
+      "url": "https://www.youtube.com/watch?v=Dst9gZkq1a8",
+      "channelUrl": "https://www.youtube.com/@TravisScottVEVO",
+      "sourceUrl": "https://www.youtube.com/watch?v=Dst9gZkq1a8",
+      "recordingVersion": "official_music_video",
+      "displaySong": "goosebumps"
+    },
+    {
+      "artist": "Chronixx",
+      "song": "Here Comes Trouble",
+      "url": "https://www.youtube.com/watch?v=LfeIfiiBTfY",
+      "channelUrl": "https://www.youtube.com/@ChronixxMusic",
+      "sourceUrl": "https://www.youtube.com/watch?v=LfeIfiiBTfY",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Here Comes Trouble"
+    },
+    {
+      "artist": "Linkin Park",
+      "song": "In the End",
+      "url": "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
+      "channelUrl": "https://www.youtube.com/@LinkinPark",
+      "sourceUrl": "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
+      "recordingVersion": "official_music_video",
+      "displaySong": "In the End"
+    },
+    {
+      "artist": "Tame Impala",
+      "song": "Let It Happen",
+      "url": "https://www.youtube.com/watch?v=pFptt7Cargc",
+      "channelUrl": "https://www.youtube.com/@tameimpalaVEVO",
+      "sourceUrl": "https://www.youtube.com/watch?v=pFptt7Cargc",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Let It Happen"
+    },
+    {
+      "artist": "Billie Eilish",
+      "song": "bad guy",
+      "url": "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+      "channelUrl": "https://www.youtube.com/@BillieEilishVEVO",
+      "sourceUrl": "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+      "recordingVersion": "official_music_video",
+      "displaySong": "bad guy"
+    },
+    {
+      "artist": "Lana Del Rey",
+      "song": "Video Games",
+      "url": "https://www.youtube.com/watch?v=cE6wxDqdOV0",
+      "channelUrl": "https://www.youtube.com/@LanaDelReyVEVO",
+      "sourceUrl": "https://www.youtube.com/watch?v=cE6wxDqdOV0",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Video Games"
+    },
+    {
+      "artist": "Alvvays",
+      "song": "Archie, Marry Me",
+      "url": "https://www.youtube.com/watch?v=ZAn3JdtSrnY",
+      "channelUrl": "https://www.youtube.com/@alvvaysband",
+      "sourceUrl": "https://www.youtube.com/watch?v=ZAn3JdtSrnY",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Archie, Marry Me"
+    },
+    {
+      "artist": "Men I Trust",
+      "song": "Show Me How",
+      "url": "https://www.youtube.com/watch?v=OZRYzH0Q0pU",
+      "channelUrl": "https://www.youtube.com/@MenITrust",
+      "sourceUrl": "https://www.youtube.com/watch?v=OZRYzH0Q0pU",
+      "recordingVersion": "official_music_video",
+      "displaySong": "Show Me How"
+    }
+  ]
+}

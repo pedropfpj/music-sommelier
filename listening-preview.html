@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#07131d" />
+    <title>Sonic Search — expansão em teste</title>
+    <link rel="stylesheet" href="listening-preview.css?v=20260912listening1" />
+    <script defer src="universal-music.js?v=20260912listening1"></script>
+    <script defer src="universal-listening.js?v=20260912listening1"></script>
+    <script defer src="listening-preview.js?v=20260912listening1"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#tracks-heading">Ir para as músicas</a>
+    <header class="masthead">
+      <a class="brand" href="index.html">Sonic Search<span>Voltar ao app</span></a>
+      <span class="preview-badge">Expansão em teste</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="intro-heading">
+        <p class="eyebrow">Seu gosto vai além de um gênero.</p>
+        <h1 id="intro-heading">Outros sons.<br /><em>O mesmo Sonic.</em></h1>
+        <p>Rock, indie, hip-hop, rap, trap, reggae, música brasileira e outros caminhos. Comece por uma referência ou encontre um nome novo.</p>
+      </section>
+      <nav id="genre-nav" class="genre-nav" aria-label="Escolher estilo musical"></nav>
+      <section class="listening-room" aria-labelledby="room-heading">
+        <div class="room-heading">
+          <div>
+            <p class="eyebrow">Seleção para ouvir</p>
+            <h2 id="room-heading">Carregando o catálogo…</h2>
+            <p id="coverage-note" class="muted"></p>
+          </div>
+          <div class="experience-field">
+            <label for="experience">Como você conhece este estilo?</label>
+            <select id="experience">
+              <option value="beginner">Estou começando</option>
+              <option value="familiar">Já conheço e quero explorar</option>
+              <option value="expert">Quero nomes menos óbvios</option>
+            </select>
+          </div>
+        </div>
+        <section id="player-section" class="player-section" aria-labelledby="playing-title" hidden>
+          <div class="player-heading"><div><p class="eyebrow">Você escolheu</p><h3 id="playing-title" tabindex="-1"></h3><p id="playing-credits" class="muted"></p></div><button id="stop-player" type="button">Fechar player</button></div>
+          <div id="player-host" class="player-host"></div>
+          <p id="player-status" role="status" aria-live="polite"></p>
+          <a id="provider-link" target="_blank" rel="noopener noreferrer">Abrir esta música no YouTube</a>
+          <p class="provider-note">O YouTube fornece o vídeo e os controles. Se não iniciar, toque em reproduzir no player. A disponibilidade pode variar por país.</p>
+        </section>
+        <h3 id="tracks-heading" class="sr-only">Músicas da seleção</h3>
+        <p id="load-status" role="status" aria-live="polite">Conferindo as fontes de reprodução…</p>
+        <button id="retry-load" type="button" hidden>Tentar novamente</button>
+        <ol id="track-list" class="track-list"></ol>
+      </section>
+      <footer class="notes">
+        <p>Esta é uma seleção pequena para testar a expansão, não o catálogo completo. Os gêneros e as recomendações ainda estão em revisão editorial.</p>
+        <p>Nenhum áudio foi copiado. Esta tela não ativa Premium, não altera seu perfil e não registra curtidas no catálogo público.</p>
+        <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">Termos do YouTube</a>
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Privacidade do Google</a>
+      </footer>
+    </main>
+  </body>
+</html>

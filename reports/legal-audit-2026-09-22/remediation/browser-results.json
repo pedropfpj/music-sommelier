@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "tested": [
+    "native transforms",
+    "unauthenticated form hidden",
+    "explicit deletion confirmation",
+    "durable receipt rendering",
+    "idempotent retry",
+    "error does not claim receipt",
+    "logout clears private state",
+    "mobile overflow"
+  ],
+  "externalRequests": 0,
+  "syntheticRequests": 2
+}

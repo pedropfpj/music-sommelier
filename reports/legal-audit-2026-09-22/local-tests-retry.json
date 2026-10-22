@@ -1,0 +1,23 @@
+[
+  {
+    "test": "test-billing-foundation.mjs",
+    "code": null,
+    "signal": "SIGTERM",
+    "durationMs": 120018,
+    "output": ""
+  },
+  {
+    "test": "test-user-profile.mjs",
+    "code": null,
+    "signal": "SIGTERM",
+    "durationMs": 120014,
+    "output": ""
+  },
+  {
+    "test": "test-user-profile-sql.mjs",
+    "code": 0,
+    "signal": null,
+    "durationMs": 17969,
+    "output": "Profile privacy migration passed in PostgreSQL: idempotency, preserved data, owner-only rows, cross-account denial, anonymous denial, safe public projection and private photo bucket.\n"
+  }
+]

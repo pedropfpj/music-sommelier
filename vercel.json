@@ -45,6 +45,8 @@
     { "source": "/api/webhooks/apple", "destination": "/api/billing-webhook?provider=apple" },
     { "source": "/api/comments", "destination": "/api/music?route=comments" },
     { "source": "/api/community", "destination": "/api/music?route=community" },
+    { "source": "/api/user-profile", "destination": "/api/music?route=user-profile" },
+    { "source": "/api/privacy-requests", "destination": "/api/music?route=privacy-requests" },
     { "source": "/api/cover-art", "destination": "/api/music?route=cover-art" },
     { "source": "/api/daily-radar", "destination": "/api/music?route=daily-radar" },
     { "source": "/api/deezer-preview", "destination": "/api/music?route=deezer-preview" },

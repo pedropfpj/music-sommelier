@@ -76,8 +76,13 @@
       }
     </style>
     <link rel="stylesheet" href="styles.min.css?v=20260917mobilegrid2" />
+    <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
+    <link rel="stylesheet" href="user-profile.css?v=20260914profile1" />
+    <link rel="stylesheet" href="universal-discovery.css?v=20260914discovery2" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
+    <link rel="stylesheet" href="weekly-recommends.css?v=20260916weekly1" />
+    <script src="privacy-controls.js?v=20260922privacy1"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
@@ -86,7 +91,8 @@
           const protocol = String(window.location.protocol || "");
           const host = String(window.location.hostname || "");
           const localHost = /^(localhost|127\.0\.0\.1|::1)$/i.test(host);
-          if (!/^https?:$/.test(protocol) || localHost || window.SONIC_SEARCH_APP_STORE_MODE || window.__sonicAnalyticsLoaded) return;
+          if (!window.SonicPrivacy?.allowed() || !/^https?:$/.test(protocol) || localHost || window.SONIC_SEARCH_APP_STORE_MODE || window.__sonicAnalyticsLoaded) return;
+          window.va("beforeSend", (event) => window.SonicPrivacy?.allowed() ? event : null);
           window.__sonicAnalyticsLoaded = true;
           const script = document.createElement("script");
           script.defer = true;
@@ -214,7 +220,7 @@
       <div>
         <p class="privacy-consent-title">Privacidade primeiro</p>
         <p class="privacy-consent-copy">
-          Usamos dados essenciais para segurança, preferências e perfil local. Não usamos cookies de anúncio ou tracking. Analytics do site só entra se você aceitar.
+          Usamos dados essenciais para o app funcionar. Se aceitar, mediremos visitas, sessões e descobertas com identificadores aleatórios e Vercel Insights. Você pode recusar ou mudar sua escolha em Privacidade.
           <a href="privacy.html">Privacidade</a>
           <span aria-hidden="true">·</span>
           <a href="cookies.html">Cookies</a>
@@ -733,6 +739,12 @@
           <p id="moreIntro" class="section-hint muted">Ajuda, contato e informações importantes em um só lugar.</p>
         </header>
         <div id="moreRouteGrid" class="more-route-grid" aria-label="Outras áreas do Sonic Search">
+          <button class="more-route-card" type="button" data-more-tab-target="recommends" aria-describedby="moreRecommendsDescription">
+            <span id="moreRecommendsKicker" class="more-route-kicker">DESCOBERTAS DA SEMANA</span>
+            <strong id="moreRecommendsTitle">SonicSearch Recomenda</strong>
+            <span id="moreRecommendsDescription">Seu encontro de quarta com novas frequências.</span>
+            <i aria-hidden="true">→</i>
+          </button>
           <button class="more-route-card" type="button" data-more-tab-target="about" aria-describedby="moreAboutDescription">
             <span id="moreAboutKicker" class="more-route-kicker">CONHEÇA</span>
             <strong id="moreAboutTitle">Sobre o Sonic</strong>
@@ -1253,6 +1265,8 @@
 
       <section id="dailyRadarPanel" class="daily-radar-panel app-tab-panel active" data-app-tab="discover" aria-label="Radar diário de faixas" hidden></section>
 
+      <section id="universalDiscoveryPanel" class="panel universal-discovery-panel app-tab-panel active hidden" data-app-tab="discover" aria-label="Expansão musical em teste" hidden></section>
+
       <section id="swipeStartPanel" class="panel swipe-start-panel app-tab-panel active" data-app-tab="discover" aria-labelledby="swipeHeroTitle">
         <div class="swipe-start-head">
           <div>
@@ -1307,6 +1321,16 @@
           <p id="topSwipeHint" class="muted swipe-hint">O fluxo principal fica leve; filtros e contexto estão nas outras abas.</p>
         </div>
       </section>
+
+      <section id="weeklyTeaser" class="panel app-tab-panel active" data-app-tab="discover" aria-labelledby="weeklyTeaserTitle">
+        <button id="weeklyTeaserButton" class="weekly-teaser-button" type="button" aria-controls="weeklyRecommendsPanel">
+          <span class="weekly-teaser-mark" aria-hidden="true">SS</span>
+          <span class="weekly-teaser-copy"><small id="weeklyTeaserKicker">TODA QUARTA</small><strong id="weeklyTeaserTitle">SonicSearch Recomenda</strong><span id="weeklyTeaserText">Seu encontro de quarta com novas frequências.</span></span>
+          <span class="weekly-teaser-cta"><span id="weeklyTeaserOpen">Explorar a semana</span><span aria-hidden="true">↗</span></span>
+        </button>
+      </section>
+
+      <section id="weeklyRecommendsPanel" class="panel app-tab-panel" data-app-tab="recommends" aria-labelledby="weeklyRecommendsTitle" aria-hidden="true" hidden></section>
 
       <section id="djDiscoveryPanel" class="panel dj-discovery-panel app-tab-panel" data-app-tab="djs" aria-labelledby="djDiscoveryTitle">
         <div class="section-head dj-discovery-head">
@@ -2769,6 +2793,88 @@
             <input id="profileBackupImportInput" class="hidden" type="file" accept="application/json,.json" />
           </div>
         </article>
+        <article id="privacyRequestsCard" class="profile-backup-card privacy-requests-card">
+          <div>
+            <h4 data-request-copy="title">Conta, dados e atendimento</h4>
+            <p data-request-copy="intro">Solicite exclusão da conta online, cópia ou correção dos dados e análise de reembolso.</p>
+            <p data-request-copy="notice">O registro inicia o atendimento; a exclusão ou o reembolso depende do processamento.</p>
+            <a href="account-deletion.html">Exclusão de conta e contato alternativo</a>
+          </div>
+          <div>
+            <div data-request-login><p data-request-copy="login">Entre na sua conta para registrar ou consultar solicitações.</p><button type="button" data-request-signin data-request-copy="signIn">Entrar na conta</button></div>
+            <form hidden>
+              <label><span data-request-copy="kind">Tipo de solicitação</span><select name="kind">
+                <option value="delete_account" data-request-copy="delete_account">Excluir minha conta e dados online</option>
+                <option value="export" data-request-copy="export">Receber cópia dos dados online</option>
+                <option value="correction" data-request-copy="correction">Corrigir dados</option>
+                <option value="refund" data-request-copy="refund">Cancelamento, arrependimento ou reembolso</option>
+              </select></label>
+              <label><span data-request-copy="message">Detalhes (opcional, até 2.000 caracteres). Não envie senhas, CPF ou dados de cartão.</span><textarea name="message" maxlength="2000" rows="3"></textarea></label>
+              <label data-request-confirm><input type="checkbox" name="confirmDeletion" required /><span data-request-copy="confirm">Confirmo que quero solicitar a exclusão da minha conta e dos dados online associados.</span></label>
+              <button type="submit" data-request-copy="send">Registrar solicitação</button>
+              <button type="button" data-request-refresh data-request-copy="refresh">Consultar meus protocolos</button>
+            </form>
+            <p role="status" aria-live="polite" data-request-status></p>
+            <ul data-request-list></ul>
+          </div>
+        </article>
+        <article id="userProfileCard" class="user-profile-card">
+          <header>
+            <div><p class="profile-kicker" data-profile-copy="kicker">SUA PRESENÇA NO SONIC</p>
+              <h4 data-profile-copy="title">Um perfil. Novas conexões.</h4>
+              <p class="profile-intro" data-profile-copy="intro">Apresente-se pelo que você gosta de ouvir. Você escolhe o que compartilhar.</p>
+            </div><span class="user-profile-badge" data-profile-badge>Privado</span>
+          </header>
+          <p class="user-profile-demo" data-profile-demo data-profile-copy="demo" hidden></p>
+          <div data-profile-login-panel><p data-profile-copy="loginHint">Use sua conta online para guardar foto e bio no site e no iPhone.</p>
+            <button type="button" data-profile-login data-profile-copy="login">Entre para criar seu perfil</button>
+          </div>
+          <p class="user-profile-status" data-profile-status role="status" aria-live="polite"></p>
+          <button type="button" data-profile-retry data-profile-copy="retry" hidden>Tentar novamente</button>
+          <div data-profile-content hidden>
+            <div class="user-profile-identity"><div class="user-profile-avatar" data-profile-avatar aria-hidden="true">S</div>
+              <div><strong data-profile-own-name></strong><p data-profile-own-handle></p>
+                <button type="button" data-profile-edit data-profile-copy="edit">Editar perfil</button>
+              </div>
+            </div>
+            <p data-profile-own-bio hidden></p>
+            <div class="user-profile-layout">
+              <form novalidate hidden>
+                <div class="user-profile-actions"><button type="button" data-profile-photo data-profile-copy="photo">Escolher foto</button>
+                  <button type="button" data-profile-remove data-profile-copy="remove">Remover foto</button>
+                  <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Escolher foto" hidden />
+                </div><small data-profile-copy="photoHint">JPG, PNG ou WebP, até 8 MB. Recorte quadrado automático.</small>
+                <div class="user-profile-fields">
+                  <label for="userProfileName"><span data-profile-copy="name">Como você quer ser chamado?</span><input id="userProfileName" name="displayName" type="text" maxlength="80" autocomplete="nickname" required /></label>
+                  <label for="userProfileUsername"><span data-profile-copy="handle">Seu nome de usuário</span>
+                    <input id="userProfileUsername" name="username" type="text" maxlength="30" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" aria-describedby="userProfileUsernameHint" required />
+                    <small id="userProfileUsernameHint" data-profile-copy="handleHint">De 3 a 30 caracteres: letras sem acento, números e _.</small>
+                  </label>
+                  <label for="userProfileBio"><span data-profile-copy="bio">Sua bio</span>
+                    <textarea id="userProfileBio" name="bio" maxlength="280" rows="4" aria-describedby="userProfileBioHint userProfileBioCount"></textarea>
+                    <small id="userProfileBioHint" data-profile-copy="bioHint">Conte um pouco sobre você e o som que te move.</small><small id="userProfileBioCount" data-profile-bio-count>0/280</small>
+                  </label>
+                </div>
+                <fieldset><legend data-profile-copy="privacy">Quem pode ver seu perfil?</legend>
+                  <label class="profile-choice"><input name="public" type="checkbox" aria-describedby="userProfileVisibilityHint" /><span data-profile-copy="public">Aparecer para outras pessoas no Sonic</span></label>
+                  <small id="userProfileVisibilityHint" data-profile-copy="publicHint">Quem tem uma conta no Sonic poderá ver seu nome e @usuário.</small>
+                  <label class="profile-choice"><input name="sharePhoto" type="checkbox" /><span data-profile-copy="sharePhoto">Mostrar minha foto</span></label>
+                  <label class="profile-choice"><input name="shareBio" type="checkbox" /><span data-profile-copy="shareBio">Mostrar minha bio</span></label>
+                  <label class="profile-choice"><input name="shareStyles" type="checkbox" /><span data-profile-copy="shareStyles">Mostrar meus estilos favoritos</span></label>
+                </fieldset>
+                <div class="user-profile-actions"><button type="submit" data-profile-save data-profile-copy="save">Salvar perfil</button>
+                  <button type="button" data-profile-cancel data-profile-copy="cancel">Descartar alterações</button>
+                </div>
+              </form>
+              <aside class="user-profile-preview"><h5 data-profile-copy="preview">É assim que as outras pessoas verão você</h5>
+                <div data-profile-private-preview><strong data-profile-copy="privateTitle">Por enquanto, só você.</strong><p data-profile-copy="privateHint">Ative a visibilidade para fazer parte da comunidade com este perfil.</p></div>
+                <div data-profile-public-preview hidden><div class="user-profile-avatar" data-profile-preview-avatar aria-hidden="true">S</div>
+                  <p><strong data-profile-preview-name></strong></p><p data-profile-preview-handle></p><p data-profile-preview-bio hidden></p><div class="user-profile-styles" data-profile-preview-styles></div>
+                </div>
+              </aside>
+            </div><p class="legal-inline-note" data-profile-copy="privateNote">Seu histórico, descartes, dados da conta e Sonic DNA não fazem parte do perfil público. Publicações que você fizer na comunidade continuam visíveis por suas próprias regras.</p>
+          </div>
+        </article>
         <article id="socialProfileCard" class="social-profile-card hidden" aria-hidden="true">
           <div class="social-profile-head">
             <div>
@@ -3119,7 +3225,7 @@
           pt: {
             aria: "Preferências de privacidade",
             title: "Privacidade primeiro",
-            body: "Usamos dados essenciais para segurança, preferências e perfil local. Não usamos cookies de anúncio ou tracking. Analytics do site só entra se você aceitar.",
+            body: "Usamos dados essenciais para o app funcionar. Se aceitar, mediremos visitas, sessões e descobertas com identificadores aleatórios e Vercel Insights. Você pode recusar ou mudar sua escolha em Privacidade.",
             privacy: "Privacidade",
             cookies: "Cookies",
             essential: "Só essenciais",
@@ -3128,7 +3234,7 @@
           en: {
             aria: "Privacy preferences",
             title: "Privacy first",
-            body: "We use essential data for security, preferences, and your local profile. We do not use advertising or tracking cookies. Site analytics only loads if you accept.",
+            body: "We use essential data to run the app. If you accept, we measure visits, sessions and discoveries with random identifiers and Vercel Insights. You can decline or change your choice in Privacy.",
             privacy: "Privacy",
             cookies: "Cookies",
             essential: "Essential only",
@@ -3137,7 +3243,7 @@
           es: {
             aria: "Preferencias de privacidad",
             title: "Privacidad primero",
-            body: "Usamos datos esenciales para seguridad, preferencias y tu perfil local. No usamos cookies de anuncios ni tracking. Analytics del sitio solo se activa si aceptas.",
+            body: "Usamos datos esenciales para el funcionamiento. Si aceptas, medimos visitas, sesiones y descubrimientos con identificadores aleatorios y Vercel Insights. Puedes rechazarlo o cambiar tu elección en Privacidad.",
             privacy: "Privacidad",
             cookies: "Cookies",
             essential: "Solo esenciales",
@@ -3182,17 +3288,7 @@
         }
 
         function readChoice() {
-          try {
-            return localStorage.getItem(key) || "";
-          } catch (_) {
-            return "no";
-          }
-        }
-
-        function writeChoice(value) {
-          try {
-            localStorage.setItem(key, value);
-          } catch (_) {}
+          return window.SonicPrivacy?.choice() || "";
         }
 
         function syncBannerLayoutMode() {
@@ -3214,7 +3310,7 @@
         }
 
         function choose(value) {
-          writeChoice(value);
+          if (!window.SonicPrivacy?.setChoice(value)) return;
           hideBanner();
           if (value === "yes" && typeof window.loadSonicAnalytics === "function") {
             window.loadSonicAnalytics();
@@ -3251,12 +3347,18 @@
       })();
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
-    <script defer src="universal-music.js?v=20260911universal1"></script>
+    <script defer src="universal-music.js?v=20260912catalogpilot1"></script>
+    <script defer src="universal-listening.js?v=20260914discovery2"></script>
+    <script defer src="universal-discovery.js?v=20260914discovery2"></script>
+    <script defer src="universal-discovery-ui.js?v=20260914discovery2"></script>
+    <script defer src="user-profile.js?v=20260914profile1"></script>
+    <script defer src="privacy-requests.js?v=20260922privacy1"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
     <script defer src="daily-djs.js?v=20260911sonicstart1"></script>
     <script defer src="daily-djs-ui.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
-    <script defer src="app.min.js?v=20260916premiumhide1"></script>
+    <script defer src="weekly-recommends.js?v=20260916weekly1"></script>
+    <script defer src="app.min.js?v=20260922privacy1"></script>
   </body>
 </html>

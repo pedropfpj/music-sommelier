@@ -10,10 +10,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const require = createRequire(import.meta.url);
 const billing = require("../lib/api/_billing-store.js");
-const trackedEnv = ["SONIC_BILLING_ENABLED", "SONIC_STRIPE_WEBHOOKS_ENABLED", "SONIC_PREMIUM_TRIAL_DAYS", "APPLE_APP_ID", "VERCEL_ENV", "SONIC_APP_ORIGIN"];
+const trackedEnv = ["SONIC_COMMERCIAL_RELEASE_APPROVED", "SONIC_BILLING_ENABLED", "SONIC_STRIPE_WEBHOOKS_ENABLED", "SONIC_PREMIUM_TRIAL_DAYS", "APPLE_APP_ID", "VERCEL_ENV", "SONIC_APP_ORIGIN"];
 const originalEnv = Object.fromEntries(trackedEnv.map((key) => [key, process.env[key]]));
 
 try {
+  process.env.SONIC_COMMERCIAL_RELEASE_APPROVED = "false";
   process.env.SONIC_BILLING_ENABLED = "false";
   process.env.SONIC_STRIPE_WEBHOOKS_ENABLED = "false";
   process.env.SONIC_PREMIUM_TRIAL_DAYS = "14";
@@ -33,6 +34,8 @@ try {
   assert.equal(billing.stripeWebhooksEnabled(), true);
 
   process.env.SONIC_BILLING_ENABLED = "true";
+  assert.equal(billing.billingAvailability().enabled, false);
+  process.env.SONIC_COMMERCIAL_RELEASE_APPROVED = "true";
   process.env.SONIC_PREMIUM_TRIAL_DAYS = "14";
   assert.equal(billing.premiumTrialDays(), 14);
   process.env.SONIC_PREMIUM_TRIAL_DAYS = "90";

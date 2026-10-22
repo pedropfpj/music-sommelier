@@ -9,6 +9,8 @@
     "catalog:v2:generate": "node scripts/generate-electronic-catalog-v2-import.mjs",
     "catalog:v2:import": "node scripts/import-catalog-extra-remote.mjs --rows reports/catalog_extra_electronic_v2.rows.json --require-electronic-gate",
     "catalog:musicbrainz:generate": "node scripts/generate-musicbrainz-electronic-import.mjs",
+    "catalog:universal:pilot": "node scripts/generate-universal-catalog-pilot.mjs",
+    "catalog:universal:listening": "node scripts/generate-universal-listening-pilot.mjs",
     "catalog:expand-underrepresented": "node scripts/generate-underrepresented-subgenre-expansion-v18.mjs",
     "catalog:expand-low-coverage": "node scripts/generate-low-coverage-subgenre-expansion-v21.mjs",
     "catalog:runtime:build": "node scripts/build-runtime-catalog.mjs",
@@ -29,6 +31,8 @@
     "test:admin-access": "node scripts/test-admin-access.mjs",
     "test:membership": "node scripts/test-membership-foundation.mjs",
     "test:daily-radar": "node scripts/test-daily-radar.mjs",
+    "test:compliance": "node scripts/test-compliance-controls.mjs && node scripts/test-privacy-requests-sql.mjs",
+    "verify:compliance-ui": "node scripts/verify-compliance-ui.mjs",
     "test:billing": "node scripts/test-billing-foundation.mjs",
     "test:sound-system-premium": "node scripts/test-sound-system-premium.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
@@ -37,6 +41,8 @@
     "test:newsroom-visuals": "node scripts/test-newsroom-visuals.mjs",
     "test:community-email": "node scripts/test-community-email-notifications.mjs",
     "test:ugc-safety": "node scripts/test-ugc-safety.mjs",
+    "test:user-profile": "node scripts/test-user-profile.mjs && node scripts/test-user-profile-sql.mjs && node scripts/test-user-profile-privacy-surfaces.mjs",
+    "verify:user-profile": "node scripts/verify-user-profile-ui.mjs",
     "test:discovery-performance": "node scripts/test-discovery-performance.mjs",
     "test:first-impression": "node scripts/test-friendly-first-impression.mjs",
     "test:first-experience": "node scripts/test-first-experience.mjs",
@@ -58,8 +64,15 @@
     "audit:low-coverage": "node scripts/audit-low-coverage-subgenres-v21.mjs",
     "test:recommendation-safety": "node scripts/test-recommendation-safety.mjs",
     "test:universal-music": "node scripts/test-universal-music-foundation.mjs",
+    "test:universal-pilot": "node scripts/test-universal-catalog-pilot.mjs",
+    "test:universal-pilot-sql": "node scripts/test-universal-catalog-pilot-sql.mjs",
+    "test:universal-discovery": "node scripts/test-universal-discovery.mjs",
+    "test:universal-listening": "node scripts/test-universal-listening.mjs",
+    "verify:universal-discovery": "node scripts/verify-universal-discovery-ui.mjs",
     "test:android-runtime": "node scripts/test-android-runtime.mjs",
-    "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs"
+    "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs",
+    "test:weekly-recommends": "node scripts/test-weekly-recommends.mjs",
+    "verify:weekly-recommends": "node scripts/verify-weekly-recommends-ui.mjs"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",
@@ -68,10 +81,12 @@
     "@capacitor/browser": "8.0.3",
     "@capacitor/core": "^8.4.1",
     "@capacitor/ios": "^8.4.1",
+    "sharp": "^0.35.4",
     "stripe": "^22.6.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.4.1",
+    "@electric-sql/pglite": "^0.5.8",
     "clean-css": "^5.3.3",
     "terser": "^5.49.0"
   }
