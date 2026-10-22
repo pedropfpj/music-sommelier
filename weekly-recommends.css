@@ -1,0 +1,79 @@
+/* Weekly selections share the app's type and color system, with a record-sleeve layout. */
+#weeklyTeaser { padding: 0; border: 0; background: transparent; box-shadow: none; }
+.weekly-teaser-button { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.3rem; border: 1px solid #3effcf55; border-radius: 10px; background: #0c1c28; color: var(--text); text-align: left; cursor: pointer; }
+.weekly-teaser-mark { flex: 0 0 48px; height: 48px; border: 1px solid #3effcf88; border-radius: 50%; display: grid; place-items: center; font: 800 .8rem "Syne", sans-serif; color: #3effcf; box-shadow: inset 0 0 0 6px #102e33, inset 0 0 0 7px #3effcf33; }
+.weekly-teaser-copy { display: grid; gap: .2rem; flex: 1; min-width: 0; }
+.weekly-teaser-copy small { color: #81e7c9; font-size: .64rem; letter-spacing: .13em; }
+.weekly-teaser-copy strong { font-family: "Syne", sans-serif; font-size: 1.04rem; }
+.weekly-teaser-copy > span { color: #afc2d5; font-size: .82rem; }
+.weekly-teaser-cta { color: #9dffe3; font-size: .82rem; display: flex; align-items: center; gap: .6rem; }
+#weeklyRecommendsPanel { padding: clamp(1rem, 3vw, 2rem); background: #08131f; border-color: #263c4a; overflow: hidden; }
+#weeklyRecommendsPanel * { box-sizing: border-box; }
+.weekly-back { color: #b6c7d7; min-height: 44px; padding: .5rem 0; background: none; border: 0; margin-bottom: .6rem; font: inherit; cursor: pointer; }
+.weekly-hero { position: relative; display: grid; grid-template-columns: 1fr 220px; gap: 1.5rem; padding: 2rem 0 0; overflow: hidden; border-top: 1px solid #30414e; }
+.weekly-hero-copy { position: relative; z-index: 1; }
+.weekly-kicker { margin: 0 0 .85rem; color: #8defd4; font-size: .68rem; letter-spacing: .19em; font-weight: 700; }
+#weeklyRecommendsTitle { margin: 0; font: 700 clamp(1.05rem, 2vw, 1.4rem)/1.3 "Syne", sans-serif; color: #d2e1eb; }
+.weekly-headline { margin: 1.15rem 0 1rem; font: 800 clamp(1.85rem, 4vw, 2.8rem)/1.1 "Syne", sans-serif; letter-spacing: -.04em; color: #f2f7f5; }
+.weekly-intro { margin: 0; color: #adc1d1; max-width: 52ch; font-size: .95rem; line-height: 1.6; }
+.weekly-record { position: relative; align-self: center; width: 210px; height: 210px; border: 1px solid #488e8588; border-radius: 50%; background: repeating-radial-gradient(circle, transparent 0 8px, #56a59a33 9px, transparent 10px), conic-gradient(from 20deg, #142935, #255957, #132838, #152a36, #397468, #142935); transform: rotate(-17deg); box-shadow: 0 0 55px #3effcf0c; }
+.weekly-record > span { position: absolute; inset: 30%; border-radius: 50%; background: #abf2d5; color: #102e2e; display: flex; flex-direction: column; align-items: center; justify-content: center; font: 800 2.4rem/.85 "Syne", sans-serif; }
+.weekly-record span span { font: 700 .5rem "Chakra Petch", sans-serif; letter-spacing: .15em; margin-top: .65rem; }
+.weekly-record i { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #0a1521; left: calc(50% - 6px); top: 61%; }
+.weekly-cadence { grid-column: 1 / -1; display: flex; align-items: center; gap: .65rem; padding: 1.1rem 0; border-bottom: 1px solid #30414e; color: #b9d3d1; font-size: .65rem; letter-spacing: .1em; }
+.weekly-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #96ffd8; box-shadow: 0 0 10px #96ffd855; }
+.weekly-toolbar { display: flex; justify-content: space-between; gap: 1rem; align-items: end; padding: 1.65rem 0; }
+.weekly-toolbar > div { width: min(100%, 390px); min-width: 0; }
+.weekly-toolbar label { display: block; color: #adc1d1; font-size: .75rem; margin-bottom: .45rem; }
+#weeklyStyleSelect { width: 100%; min-height: 48px; padding: .7rem 2rem .7rem .8rem; background: #122532; color: #f0faf6; border: 1px solid #4a716c; border-radius: 6px; font: inherit; text-overflow: ellipsis; }
+#weeklyStyleSelect option, #weeklyStyleSelect optgroup { background: #122532; color: #f0faf6; }
+.weekly-share { min-height: 44px; border: 1px solid #405861; padding: .6rem .85rem; background: transparent; color: #d3e5df; border-radius: 6px; cursor: pointer; font: inherit; font-size: .8rem; }
+.weekly-edition { display: flex; align-items: center; gap: 1rem; padding: .5rem 0 1.1rem; }
+.weekly-edition > div:first-child { flex: 1; }
+.weekly-edition p { margin: 0 0 .3rem; color: #8defd4; font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; }
+.weekly-edition h4 { margin: 0; font: 700 1.15rem "Syne", sans-serif; color: #f0faf6; }
+.weekly-edition > span { font-size: .75rem; color: #a4b7c6; }
+.weekly-edition-nav { display: flex; gap: .4rem; }
+.weekly-edition-nav button { width: 44px; height: 44px; background: #14232e; color: #c7e6de; border: 1px solid #3e545b; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+#weeklyRecommendsPanel button:disabled { opacity: .4; cursor: default; }
+.weekly-status { color: #b5cbd9; font-size: .85rem; }
+.weekly-status:empty { display: none; }
+.weekly-track-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+.weekly-track { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 1.2rem; padding: 1.5rem 0; border-top: 1px solid #283b48; }
+.weekly-track-number { align-self: start; padding-top: .08rem; color: hsl(var(--weekly-track-hue) 65% 72%); font: 500 1.85rem/1 "Chakra Petch", sans-serif; }
+.weekly-track-copy { min-width: 0; }
+.weekly-track-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; margin-bottom: .65rem; }
+.weekly-track-meta > span { color: hsl(var(--weekly-track-hue) 65% 78%); font-size: .66rem; font-weight: 700; letter-spacing: .06em; }
+.weekly-track-meta small { color: #9aaebe; font-size: .64rem; }
+.weekly-artist { color: #c6d9e2; margin: 0 0 .3rem; font-size: .84rem; }
+.weekly-track h5 { margin: 0; color: #f2f7f5; font: 700 clamp(1.05rem, 2vw, 1.35rem)/1.35 "Syne", sans-serif; overflow-wrap: anywhere; }
+.weekly-reason { margin: .55rem 0 0; max-width: 68ch; font-size: .85rem; line-height: 1.55; color: #a8bdce; }
+.weekly-listen { display: inline-flex; align-items: center; justify-content: space-between; gap: .8rem; min-height: 44px; min-width: 158px; padding: .6rem .8rem; border: 1px solid #3e655c; border-radius: 6px; color: #aeefd4; background: #132b29; text-decoration: none; font-size: .75rem; }
+.weekly-listen:hover, .weekly-share:hover { background: #1a3935; border-color: #84c7ac; }
+.weekly-footer { display: flex; justify-content: space-between; align-items: start; gap: 2rem; padding: 1.2rem 0 0; border-top: 1px solid #354e53; }
+.weekly-footer > p { color: #9eafbf; font-size: .73rem; line-height: 1.6; max-width: 70ch; margin: 0; }
+.weekly-footer > div { display: grid; flex-shrink: 0; gap: .3rem; color: #dcf4e8; }
+.weekly-footer span { color: #9eafbf; font-size: .68rem; }
+.weekly-footer strong { font-size: .82rem; }
+#weeklyCopyFallback { margin: 1rem 0; color: #b9d0da; }
+#weeklyCopyText { display: block; width: 100%; margin-top: .6rem; color: #eaf1ff; background: #122532; padding: 1rem; font: inherit; }
+.weekly-teaser-button:focus-visible, #weeklyRecommendsPanel :is(button, a, select, textarea):focus-visible { outline: 2px solid #a6fddd; outline-offset: 4px; }
+@media (max-width: 680px) {
+  .weekly-hero { grid-template-columns: 1fr 90px; gap: .75rem; padding-top: 1.4rem; }
+  .weekly-record { width: 150px; height: 150px; opacity: .75; margin-left: -5px; }
+  .weekly-hero-copy { grid-column: 1 / -1; }
+  .weekly-record { position: absolute; right: -55px; top: 8px; opacity: .16; }
+  .weekly-cadence { font-size: .56rem; gap: .45rem; }
+  .weekly-toolbar { align-items: stretch; flex-direction: column; gap: .75rem; }
+  .weekly-toolbar > div { width: 100%; }
+  .weekly-share { align-self: start; }
+  .weekly-edition { flex-wrap: wrap; gap: .7rem; }
+  .weekly-edition > span { order: 3; flex-basis: 100%; }
+  .weekly-track { grid-template-columns: 30px minmax(0, 1fr); gap: .75rem; padding: 1.2rem 0; }
+  .weekly-track-number { font-size: 1.4rem; }
+  .weekly-listen { grid-column: 2; justify-self: start; }
+  .weekly-track-meta { gap: .35rem .6rem; }
+  .weekly-footer { flex-direction: column; gap: 1rem; }
+  .weekly-teaser-button { padding: .9rem; gap: .7rem; flex-wrap: wrap; }
+  .weekly-teaser-cta { margin-left: calc(48px + .7rem); }
+}

@@ -1,0 +1,1996 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "url": "https://www.youtube.com/watch?v=doWWHQDWe2k",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=NOyRsPDPfMM",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=pmc5H6zAi6M",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=x0T_GIQGqM4",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=E--IBhs85fM",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=f31UHYEXvFw",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=L9Ag-4b3HSg",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=yXQF8MWebIE",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=mOqkOiA07Jc",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=WnlKFrMStC8",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=8MpVPbN3_eE",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ARWg160eaX4",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=aZmHDSZgyes",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=OSUxrSe5GbI",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=0CMHQpiOUfE",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=9jTVyT5Xj3E",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=jOXSgG5YI08",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=kMAl8nub4ao",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=4hBmHs0-f14",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=9HrG2BUGWig",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=P6cP1rUfyNo",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=qMjXfiG-obQ",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=-TtyDHOWYSM",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=wBw8m6rrZtg",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=F4RK4uNf2vU",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=PpE-lAfqR1g",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Pj6APF9krN0",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=1R4ryoy9OZ8",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ggFjK4ph8vo",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=-4WUHJRhvrM",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=linQUK6jNmg",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=QNvYontdk2A",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=4XS8kPQMjqU",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=sZffgf4GoMQ",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=FnlL3Lk95_4",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=mneDuKb3BT8",
+      "checkedAt": "2026-09-12T18:05:07.074Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; BR research; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=wWAaUU9_6tk",
+      "checkedAt": "2026-09-12T18:06:46.460Z",
+      "result": "played",
+      "errorCode": null,
+      "environment": "Chrome desktop headless; actual playback country not asserted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=67vr-3kpX3Q",
+      "artist": "Kendrick Lamar",
+      "song": "Alright",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:14.440Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=RCb_xve0Lbo",
+      "artist": "Kendrick Lamar",
+      "song": "Alright",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:14.441Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=JocAXINz-YE",
+      "artist": "Kendrick Lamar",
+      "song": "Alright",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:14.432Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=FhTtYSU7Q7g",
+      "artist": "Travis Scott",
+      "song": "goosebumps",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:15.443Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=XqN2qFvY64U",
+      "artist": "Taylor Swift",
+      "song": "Anti-Hero",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:15.450Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=b1kbLwvqugk",
+      "artist": "Taylor Swift",
+      "song": "Anti-Hero",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:15.516Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=egqv1mtos6A",
+      "artist": "Stevie Wonder",
+      "song": "Superstition",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:16.009Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=_O4yRbS_FoM",
+      "artist": "Stevie Wonder",
+      "song": "Superstition",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:15.993Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ftdZ363R9kQ",
+      "artist": "Stevie Wonder",
+      "song": "Superstition",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:15.968Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=f8_EpxhNEsA",
+      "artist": "Tame Impala",
+      "song": "Feels Like We Only Go Backwards",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:16.417Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=X3Q4a5Eaqcg",
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Robot Stop",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:16.415Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ax9P994zuLQ",
+      "artist": "Caroline Polachek",
+      "song": "Bunny Is a Rider",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:16.880Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=tvY31eN3gtE",
+      "artist": "Little Simz",
+      "song": "Point and Kill (feat. Obongjayar)",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:16.878Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=mQAmOkb5KHM",
+      "artist": "Caroline Polachek",
+      "song": "Bunny Is a Rider",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:17.486Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=7yeFrm8C0KU",
+      "artist": "Caroline Polachek",
+      "song": "Bunny Is a Rider",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:17.486Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=6QPQtguRdDs",
+      "artist": "D'Angelo",
+      "song": "Untitled (How Does It Feel)",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:17.830Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=a9T5GBbksno",
+      "artist": "D'Angelo",
+      "song": "Untitled (How Does It Feel)",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:17.879Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=YtGRLKVzzdg",
+      "artist": "Turnstile",
+      "song": "BLACKOUT",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:18.204Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=j6vgO7K66OM",
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Robot Stop",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:16.416Z",
+      "result": "played",
+      "observedTimeSec": 1.2688491564025879,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=xgAtVh8Ko-I",
+      "artist": "Filipe Ret",
+      "song": "Invicto",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:20.000Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=RkSLQ6sguFI",
+      "artist": "Wednesday",
+      "song": "Chosen to Deserve",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:18.268Z",
+      "result": "played",
+      "observedTimeSec": 1.230171020980835,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=8KcI1lp90GA",
+      "artist": "billy woods",
+      "song": "Asylum",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:18.604Z",
+      "result": "played",
+      "observedTimeSec": 1.244221927520752,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=FQPXX_eZZAk",
+      "artist": "Magdalena Bay",
+      "song": "You Lose!",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:21.047Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=NLPKG78lWTQ",
+      "artist": "Magdalena Bay",
+      "song": "You Lose!",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:21.255Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=VamN4rlv9bI",
+      "artist": "Magdalena Bay",
+      "song": "You Lose!",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:21.412Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=6xjJ2XIbGRk",
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:21.760Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=N24A-z5974Q",
+      "artist": "Filipe Ret",
+      "song": "Invicto",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:20.516Z",
+      "result": "played",
+      "observedTimeSec": 1.235026979019165,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=E0ozmU9cJDg",
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:22.667Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=zg7qAaFOxq0",
+      "artist": "The Strokes",
+      "song": "Last Nite",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:23.046Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=sV2t3tW_JTQ",
+      "artist": "21 Savage",
+      "song": "Bank Account",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:23.415Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=GRC4Ac6IB1w",
+      "artist": "SAULT",
+      "song": "Wildfires",
+      "group": "soul",
+      "checkedAt": "2026-09-12T19:20:21.623Z",
+      "result": "played",
+      "observedTimeSec": 1.243555186920166,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=H1KBHFXm2Bg",
+      "artist": "21 Savage",
+      "song": "Bank Account",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:23.791Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rSD0Fa23JT0",
+      "artist": "21 Savage",
+      "song": "Bank Account",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:20:23.913Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=WHuBW3qKm9g",
+      "artist": "Dua Lipa",
+      "song": "Levitating",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:24.190Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=TUVcZfQe-Kw",
+      "artist": "Dua Lipa",
+      "song": "Levitating",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:24.292Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=kV-2Q8QtCY4",
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:22.128Z",
+      "result": "played",
+      "observedTimeSec": 1.23826495803833,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=N000qglmmY0",
+      "artist": "Dua Lipa",
+      "song": "Levitating",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:20:24.559Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=OC5zHACynR4",
+      "artist": "Interpol",
+      "song": "Obstacle 1",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:24.653Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=NwYKAsbx8SU",
+      "artist": "Interpol",
+      "song": "Obstacle 1",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:24.826Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=PZ8spJLaN_g",
+      "artist": "Interpol",
+      "song": "Obstacle 1",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:20:24.993Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=f1IdyrhOrGs",
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:25.552Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=zudQm-twCI4",
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:26.057Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=5BUOdyGcJ8U",
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:20:26.570Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=kzIU5Pij3MQ",
+      "artist": "MF DOOM",
+      "song": "Coffin Nails",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:25.029Z",
+      "result": "played",
+      "observedTimeSec": 1.2285769790191652,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=c7SzmyozGCk",
+      "artist": "MF DOOM",
+      "song": "Coffin Nails",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:20:25.230Z",
+      "result": "played",
+      "observedTimeSec": 1.232262062942505,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=hTWKbfoikeg",
+      "artist": "Nirvana",
+      "song": "Smells Like Teen Spirit",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:26:37.628Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=YVkUvmDQ3HY",
+      "artist": "Eminem",
+      "song": "Without Me",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:26:37.633Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Dst9gZkq1a8",
+      "artist": "Travis Scott",
+      "song": "goosebumps",
+      "group": "trap",
+      "checkedAt": "2026-09-12T19:26:38.220Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=LfeIfiiBTfY",
+      "artist": "Chronixx",
+      "song": "Here Comes Trouble",
+      "group": "reggae",
+      "checkedAt": "2026-09-12T19:26:38.286Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
+      "artist": "Linkin Park",
+      "song": "In the End",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:26:38.651Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=pFptt7Cargc",
+      "artist": "Tame Impala",
+      "song": "Let It Happen",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:26:38.814Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=cE6wxDqdOV0",
+      "artist": "Lana Del Rey",
+      "song": "Video Games",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:26:39.342Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=DyDfgMOUjCI",
+      "artist": "Billie Eilish",
+      "song": "bad guy",
+      "group": "pop",
+      "checkedAt": "2026-09-12T19:26:39.103Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=bpOSxM0rNPM",
+      "artist": "Arctic Monkeys",
+      "song": "Do I Wanna Know?",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:26:37.630Z",
+      "result": "played",
+      "observedTimeSec": 1.150682984741211,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ZAn3JdtSrnY",
+      "artist": "Alvvays",
+      "song": "Archie, Marry Me",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:26:39.493Z",
+      "result": "played",
+      "observedTimeSec": 1.218790020980835,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=OZRYzH0Q0pU",
+      "artist": "Men I Trust",
+      "song": "Show Me How",
+      "group": "indie",
+      "checkedAt": "2026-09-12T19:26:39.683Z",
+      "result": "played",
+      "observedTimeSec": 1.2304138760223389,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=KqBTEF7pviQ",
+      "artist": "Eminem",
+      "song": "Lose Yourself",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:27:57.368Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=IpwHB2U3J1s",
+      "artist": "Pearl Jam",
+      "song": "Black",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:57.368Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Wj7lL6eDOqc",
+      "artist": "Eminem",
+      "song": "Lose Yourself",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:27:57.367Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=TnV7lwNXahI",
+      "artist": "JID",
+      "song": "Surround Sound (feat. 21 Savage & Baby Tate)",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:27:58.177Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=o5KDteNbcBI",
+      "artist": "Pearl Jam",
+      "song": "Black",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:58.176Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Wi8ahP6ADFU",
+      "artist": "JID",
+      "song": "Surround Sound (feat. 21 Savage & Baby Tate)",
+      "group": "rap",
+      "checkedAt": "2026-09-12T19:27:58.178Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=WPpDyIJdasg",
+      "artist": "Deftones",
+      "song": "Change (In the House of Flies)",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:58.588Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rPQwr3rtBQQ",
+      "artist": "Deftones",
+      "song": "Change (In the House of Flies)",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:58.645Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=YLRlOvzs-XU",
+      "artist": "Foo Fighters",
+      "song": "Everlong",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:58.969Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=hq0rZ3IiyWw",
+      "artist": "Foo Fighters",
+      "song": "Everlong",
+      "group": "rock",
+      "checkedAt": "2026-09-12T19:27:58.739Z",
+      "result": "played",
+      "observedTimeSec": 1.1427118493194581,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=pUbiphxxRsU",
+      "artist": "McKinley Dixon",
+      "song": "Run, Run, Run (feat. Blu)",
+      "group": "rap",
+      "checkedAt": "2026-09-14T07:36:13.330Z",
+      "result": "played",
+      "observedTimeSec": 1.1700157634887696,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=nNbCpYoHOfc",
+      "artist": "McKinley Dixon",
+      "song": "Run, Run, Run (feat. Blu)",
+      "group": "rap",
+      "checkedAt": "2026-09-14T07:36:13.328Z",
+      "result": "played",
+      "observedTimeSec": 1.1914310114440918,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=x1zrZrHyI_w",
+      "artist": "McKinley Dixon",
+      "song": "Run, Run, Run (feat. Blu)",
+      "group": "rap",
+      "checkedAt": "2026-09-14T07:36:13.329Z",
+      "result": "played",
+      "observedTimeSec": 1.2130340724792479,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=CbzDZxmJypQ",
+      "artist": "Nubya Garcia",
+      "song": "Pace",
+      "group": "jazz",
+      "checkedAt": "2026-09-14T07:36:16.650Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=CrUCCuUsDgU",
+      "artist": "Luedji Luna",
+      "song": "Banho de Folhas",
+      "group": "brazilian",
+      "checkedAt": "2026-09-14T07:36:17.153Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=bmWm6I3aAqw",
+      "artist": "Luedji Luna",
+      "song": "Banho de Folhas",
+      "group": "brazilian",
+      "checkedAt": "2026-09-14T07:36:17.556Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=iRZ98HX1MO8",
+      "artist": "Arooj Aftab",
+      "song": "Mohabbat",
+      "group": "folk",
+      "checkedAt": "2026-09-14T07:36:17.899Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=jIWQyWCzK3Q",
+      "artist": "Hiatus Kaiyote",
+      "song": "Nakamarra",
+      "group": "soul",
+      "checkedAt": "2026-09-14T07:36:16.344Z",
+      "result": "played",
+      "observedTimeSec": 1.2427939694824217,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=MvB77oYXlvU",
+      "artist": "Hiatus Kaiyote",
+      "song": "Nakamarra",
+      "group": "soul",
+      "checkedAt": "2026-09-14T07:36:16.362Z",
+      "result": "played",
+      "observedTimeSec": 1.2490251049041747,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=j5np3Qkwp90",
+      "artist": "The Frightnrs",
+      "song": "Nothing More to Say",
+      "group": "reggae",
+      "checkedAt": "2026-09-14T07:36:19.843Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=sU1JXOB52ZI",
+      "artist": "Turnstile",
+      "song": "HOLIDAY",
+      "group": "rock",
+      "checkedAt": "2026-09-14T07:36:19.967Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=D6yaJur9JUE",
+      "artist": "Turnstile",
+      "song": "HOLIDAY",
+      "group": "rock",
+      "checkedAt": "2026-09-14T07:36:20.302Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Nbdgl2TYKno",
+      "artist": "Kali Malone",
+      "song": "Spectacle Of Ritual",
+      "group": "ambient",
+      "checkedAt": "2026-09-14T07:36:18.254Z",
+      "result": "played",
+      "observedTimeSec": 1.2499348970031738,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=80JrkpmxJzY",
+      "artist": "Pachyman",
+      "song": "Big Energy",
+      "group": "reggae",
+      "checkedAt": "2026-09-14T07:36:20.496Z",
+      "result": "played",
+      "observedTimeSec": 1.232713,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=DfcWOPpmw14",
+      "artist": "Magdalena Bay",
+      "song": "Image",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:20.678Z",
+      "result": "played",
+      "observedTimeSec": 1.218765114440918,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=FDcTE8IdjVQ",
+      "artist": "Magdalena Bay",
+      "song": "Image",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:20.880Z",
+      "result": "played",
+      "observedTimeSec": 1.2177330419616699,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ZsZh0azKrEY",
+      "artist": "Hiatus Kaiyote",
+      "song": "Breathing Underwater",
+      "group": "soul",
+      "checkedAt": "2026-09-14T07:36:22.790Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=DCRGhNfAi60",
+      "artist": "Hiatus Kaiyote",
+      "song": "Breathing Underwater",
+      "group": "soul",
+      "checkedAt": "2026-09-14T07:36:23.142Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=r811nPAv2kc",
+      "artist": "Nubya Garcia",
+      "song": "Source (feat. Ms Maurice, Cassie Kinoshi & Richie Seivwright)",
+      "group": "jazz",
+      "checkedAt": "2026-09-14T07:36:23.165Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=9WYnjuk9anI",
+      "artist": "Luedji Luna",
+      "song": "Um Corpo no Mundo",
+      "group": "brazilian",
+      "checkedAt": "2026-09-14T07:36:23.293Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=XX1ResoIGc8",
+      "artist": "Arooj Aftab",
+      "song": "Last Night",
+      "group": "folk",
+      "checkedAt": "2026-09-14T07:36:23.611Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=mbmR6SwEeOg",
+      "artist": "Arooj Aftab",
+      "song": "Last Night",
+      "group": "folk",
+      "checkedAt": "2026-09-14T07:36:23.672Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=UDb2bkl1nkU",
+      "artist": "Kali Malone",
+      "song": "Sacrificial Code",
+      "group": "ambient",
+      "checkedAt": "2026-09-14T07:36:23.730Z",
+      "result": "played",
+      "observedTimeSec": 1.22923004196167,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=t56THoKmMrM",
+      "artist": "Kali Malone",
+      "song": "Sacrificial Code",
+      "group": "ambient",
+      "checkedAt": "2026-09-14T07:36:24.032Z",
+      "result": "played",
+      "observedTimeSec": 1.250531135421753,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Go6lm99yKhg",
+      "artist": "Kali Malone",
+      "song": "Sacrificial Code",
+      "group": "ambient",
+      "checkedAt": "2026-09-14T07:36:24.068Z",
+      "result": "played",
+      "observedTimeSec": 1.2315341354217528,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=1mQHt8Eo6dc",
+      "artist": "The Frightnrs",
+      "song": "Admiration",
+      "group": "reggae",
+      "checkedAt": "2026-09-14T07:36:26.689Z",
+      "result": "played",
+      "observedTimeSec": 1.227957897003174,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rmd21czLZFw",
+      "artist": "feeble little horse",
+      "song": "Doorway",
+      "group": "indie",
+      "checkedAt": "2026-09-14T07:36:26.315Z",
+      "result": "played",
+      "observedTimeSec": 1.234890906539917,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=z2B2VFZ0nus",
+      "artist": "The Frightnrs",
+      "song": "Admiration",
+      "group": "reggae",
+      "checkedAt": "2026-09-14T07:36:26.774Z",
+      "result": "played",
+      "observedTimeSec": 1.1603249980926513,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=El0AfTkxfyM",
+      "artist": "Magdalena Bay",
+      "song": "Killshot (Slowed + Reverb)",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:29.828Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=lhfs1CzzUPM",
+      "artist": "Magdalena Bay",
+      "song": "Killshot",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:29.974Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=JAe2faaZ3sY",
+      "artist": "Magdalena Bay",
+      "song": "Second Sleep",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:30.160Z",
+      "result": "played",
+      "observedTimeSec": 1.2316451754760742,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Xcq3xMCcGlI",
+      "artist": "Magdalena Bay",
+      "song": "Cry for Me",
+      "group": "pop",
+      "checkedAt": "2026-09-14T07:36:30.273Z",
+      "result": "played",
+      "observedTimeSec": 1.227607207901001,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=t7Uz6LAEFcM",
+      "artist": "Mestrinho",
+      "song": "Sete Meninas",
+      "group": "forro",
+      "checkedAt": "2026-09-14T07:36:30.394Z",
+      "result": "played",
+      "observedTimeSec": 1.227602207901001,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=rnt_JJirZPY",
+      "artist": "Mestrinho",
+      "song": "Sete Meninas",
+      "group": "forro",
+      "checkedAt": "2026-09-14T07:36:32.640Z",
+      "result": "played",
+      "observedTimeSec": 1.2387160305175782,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=SzpBi_nm0H4",
+      "artist": "Bktherula",
+      "song": "Summer",
+      "group": "trap",
+      "checkedAt": "2026-09-14T07:36:47.807Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=0gMvEkJWms8",
+      "artist": "Bktherula",
+      "song": "Summer",
+      "group": "trap",
+      "checkedAt": "2026-09-14T07:36:47.829Z",
+      "result": "blocked",
+      "errorCode": 150,
+      "environment": "headless Google Chrome; real YouTube player; browser test only, not physical iPhone or all territories"
+    },
+    {
+      "artist": "Teto",
+      "song": "Paypal",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=DsdjqBfTpaI",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Mask Off",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=-68Y711xMGY",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Mask Off",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=aWb8z-KhZdo",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Playboi Carti",
+      "song": "ALL RED",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=0age3DSgqQk",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Playboi Carti",
+      "song": "ALL RED",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=F6iYcXynA4s",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Playboi Carti",
+      "song": "ALL RED",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=g41EEFZQH0U",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Bktherula",
+      "song": "Summer",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=RU93pTr0msw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "Anos Luz",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=EHqa2In-EtY",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Leans, Pt. 2 (feat. Volp)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=Wumlxf-_pSU",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Veigh",
+      "song": "Mônaco Freestyle",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=1Ax8BWwW7jE",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Veigh",
+      "song": "Mônaco Freestyle",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=KQoZMAuFhww",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Pitbull",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=X6URGPNnHWk",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Pitbull",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=4vzEyNYZXAE",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Dia Azul",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=5kyPzVuiFgU",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Dia Azul",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=3lUDyq2MfEo",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Filipe Ret",
+      "song": "Acima De Mim Só Deus",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=zBVV7GNsjeM",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Filipe Ret",
+      "song": "Acima De Mim Só Deus",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=ctashVx5ecQ",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Filipe Ret",
+      "song": "Acima De Mim Só Deus",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=UYKrwYJzZFw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Life Is Good (feat. Drake)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=nyRJVkgutDQ",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Life Is Good (feat. Drake)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=B0pYyece218",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Life Is Good (feat. Drake)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=SF8AEjxMYuQ",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Bktherula",
+      "song": "THE WAY",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=lR9eMr37ik8",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "A Morte do Autotune",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=CUFMfGu1yQc",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "21 Savage",
+      "song": "redrum",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=U4mADkt6o-M",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "21 Savage",
+      "song": "redrum",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=Um0KtuGFLKg",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Campari (feat. 808 Luke)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=Sna2mb5s7LY",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Veigh",
+      "song": "O Justo Não Treme",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=YgJN7__UwFw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Lealdade",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=PDwaX6N-wp8",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "YES OR NO",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=21XWVPwMcas",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "YES OR NO",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=lxNS0yOZr1Q",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Manha",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=bwpin8Y7yZ0",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Mais Um Vôo",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=fuN7IV4Mh08",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Fashion",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=5w_vDgwto1s",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "Fashion",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=CbuD7asuEQw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Travis Scott",
+      "song": "YOSEMITE",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=qX0ugtjo398",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Travis Scott",
+      "song": "DELRESTO (ECHOES) [feat. Beyoncé]",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=lFY4ZN0Xn4U",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Travis Scott",
+      "song": "PARASAIL (feat. Yung Lean & Dave Chappelle)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=uJsZMweonnA",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Low Life (feat. The Weeknd)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=0O1dYlP5xxI",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Selfish (feat. Rihanna)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=l4me7LlSTVw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Selfish (feat. Rihanna)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=34JMze2auWs",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Turn On The Lights",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=oLjI-izY280",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Future",
+      "song": "Turn On The Lights",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=4rnkNwFXSNw",
+      "checkedAt": "2026-09-16T23:32:43.000Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "blocked",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "Anos Luz",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=m226f2reF28",
+      "checkedAt": "2026-09-16T23:32:19.038Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "played",
+      "observedTimeSec": 1.4955700953674316,
+      "advancedTimeSec": 1.4812681678466797
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Leans, Pt. 2 (feat. Volp)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=ZRMxYBz40hE",
+      "checkedAt": "2026-09-16T23:32:21.277Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "played",
+      "observedTimeSec": 1.2394000629425048,
+      "advancedTimeSec": 1.200310135421753
+    },
+    {
+      "artist": "Veigh",
+      "song": "O Justo Não Treme",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=1uIJiXFQENA",
+      "checkedAt": "2026-09-16T23:32:31.197Z",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "result": "played",
+      "observedTimeSec": 1.2403598760223389,
+      "advancedTimeSec": 1.2018897825622559
+    },
+    {
+      "artist": "Matuê",
+      "song": "Lama No Copo",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=FLfHuZHRLn0",
+      "checkedAt": "2026-09-16T23:33:35.348Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "Lama No Copo",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=tzu-2DUpK5A",
+      "checkedAt": "2026-09-16T23:33:36.170Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "De Alta",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=orn1YppDaw4",
+      "checkedAt": "2026-09-16T23:33:36.555Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "De Alta",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=bUoJKBUNy9I",
+      "checkedAt": "2026-09-16T23:33:37.003Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.5056211678466798,
+      "advancedTimeSec": 1.4846960743865967
+    },
+    {
+      "artist": "Matuê",
+      "song": "Reza do Milhão",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=LSAuLm-uZ2g",
+      "checkedAt": "2026-09-16T23:33:39.384Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Matuê",
+      "song": "Rbn",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=Y8JFq5eGeO8",
+      "checkedAt": "2026-09-16T23:33:39.779Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.5388239599456788,
+      "advancedTimeSec": 1.4999498664855957
+    },
+    {
+      "artist": "WIU",
+      "song": "Angelina",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=dSgQTXXZ6Ow",
+      "checkedAt": "2026-09-16T23:33:42.222Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Oração",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=9l7E42BO57c",
+      "checkedAt": "2026-09-16T23:33:42.647Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Frio",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=aIBXOTXJSdU",
+      "checkedAt": "2026-09-16T23:33:43.034Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "WIU",
+      "song": "Limão",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=pFHGhL3t5BQ",
+      "checkedAt": "2026-09-16T23:33:43.434Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Só Quando Ela Me Quer (feat. JayA Luuck, Duzz & Rubro)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=WTaIZ7_3d8Y",
+      "checkedAt": "2026-09-16T23:33:43.825Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Bad Shawty (feat. mathinvoker)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=_CEqwDO2I8M",
+      "checkedAt": "2026-09-16T23:33:44.246Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Bad Shawty (feat. mathinvoker)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=BwySVjnzxEo",
+      "checkedAt": "2026-09-16T23:33:44.740Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.2299598035430908,
+      "advancedTimeSec": 1.2022416376037597
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Interludio (feat. Ursão)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=zhESOnaHLCU",
+      "checkedAt": "2026-09-16T23:33:47.226Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Yunk Vino",
+      "song": "Cap Way (feat. Felipe Artioli & Tibery)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=a1Z6TYU3meg",
+      "checkedAt": "2026-09-16T23:33:47.640Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Teto",
+      "song": "M4",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=DHYd4EyCE9M",
+      "checkedAt": "2026-09-16T23:34:59.612Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.2639140076293944,
+      "advancedTimeSec": 1.2022749866485594
+    },
+    {
+      "artist": "Teto",
+      "song": "M4",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=cMTrUCasbss",
+      "checkedAt": "2026-09-16T23:35:02.253Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.4580329771118163,
+      "advancedTimeSec": 1.4530679561309814
+    },
+    {
+      "artist": "Teto",
+      "song": "Fim de Semana no Rio",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=7AlAYttGnAg",
+      "checkedAt": "2026-09-16T23:35:04.521Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Ryu, the Runner",
+      "song": "Sua Inveja Eu Não Vejo",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=CDau5lWfFKg",
+      "checkedAt": "2026-09-16T23:35:05.058Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Ryu, the Runner",
+      "song": "Pura Adrenalina (feat. dvrkness13)",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=JtdTO-57Cak",
+      "checkedAt": "2026-09-16T23:35:56.759Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.4946438874664307,
+      "advancedTimeSec": 1.477997104904175
+    },
+    {
+      "artist": "Sidoka",
+      "song": "Mi'adama",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=tGSAJi32seU",
+      "checkedAt": "2026-09-16T23:35:59.716Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.2220520514984132,
+      "advancedTimeSec": 1.2023179580383303
+    },
+    {
+      "artist": "Ryu, the Runner",
+      "song": "Sua Inveja Eu Não Vejo",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=u7WMmeHcSZU",
+      "checkedAt": "2026-09-16T23:36:01.798Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    },
+    {
+      "artist": "Sidoka",
+      "song": "Louis V, Menina Linda",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=kCLyivl080g",
+      "checkedAt": "2026-09-16T23:36:02.272Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.2602619599456788,
+      "advancedTimeSec": 1.2016898664855957
+    },
+    {
+      "artist": "Sidoka",
+      "song": "Qq cê tá insinuando",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=XoqaMk6fJYA",
+      "checkedAt": "2026-09-16T23:36:04.285Z",
+      "result": "played",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "observedTimeSec": 1.5398638569488525,
+      "advancedTimeSec": 1.5031450019073487
+    },
+    {
+      "artist": "Sidoka",
+      "song": "Quadro",
+      "group": "trap",
+      "url": "https://www.youtube.com/watch?v=mWQsiK0hAxI",
+      "checkedAt": "2026-09-16T23:36:06.840Z",
+      "result": "blocked",
+      "environment": "Codex in-app browser; real visible YouTube player; muted; desktop only",
+      "errorCode": 150
+    }
+  ]
+}

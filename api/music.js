@@ -24,6 +24,8 @@ const handlers = {
   "track-insight": require("../lib/api/_track-insight"),
   "track-metadata": require("../lib/api/_track-metadata"),
   "universal-catalog": require("../lib/api/_universal-catalog"),
+  "user-profile": require("../lib/api/_user-profile"),
+  "privacy-requests": require("../lib/api/_privacy-requests"),
   waitlist: require("../lib/api/_waitlist")
 };
 

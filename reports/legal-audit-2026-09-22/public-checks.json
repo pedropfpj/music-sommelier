@@ -1,0 +1,480 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "url": "https://sonicsearch.app/",
+    "at": "2026-09-22T21:15:00.359Z",
+    "headers": {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "a6ec6d87b60bfafa65fe19ce40f5a016cbb1012a4557b9ede5fdc2f588dc6874",
+    "localMatch": false
+  },
+  {
+    "path": "/privacy.html",
+    "status": 200,
+    "url": "https://sonicsearch.app/privacy.html",
+    "at": "2026-09-22T21:15:00.605Z",
+    "headers": {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "197da90dff70008c17a38255d983a8554341fca1a7e5219ba86b00990e864152",
+    "localMatch": false
+  },
+  {
+    "path": "/terms.html",
+    "status": 200,
+    "url": "https://sonicsearch.app/terms.html",
+    "at": "2026-09-22T21:15:00.408Z",
+    "headers": {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "a487df505d98b6c3a9dcf7e85e13378123ae1b7425f98cf7fd4a39043949f4f3",
+    "localMatch": true
+  },
+  {
+    "path": "/cookies.html",
+    "status": 200,
+    "url": "https://sonicsearch.app/cookies.html",
+    "at": "2026-09-22T21:15:00.548Z",
+    "headers": {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=0, must-revalidate",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "16b3fba561ad06f978c9720e0a0c13a8b59475f39201675e76b0428345cc5673",
+    "localMatch": true
+  },
+  {
+    "path": "/api/billing",
+    "status": 200,
+    "url": "https://sonicsearch.app/api/billing",
+    "at": "2026-09-22T21:15:01.261Z",
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "53f4a5c982b009b259f5f2d1a1d62aef9b36c2e32a27c03af95739c3cc73833c",
+    "body": {
+      "ok": true,
+      "enabled": false,
+      "webConfigured": false,
+      "appleConfigured": false,
+      "appleProductIds": {
+        "monthly": "app.sonicsearch.ios.premium.monthly",
+        "yearly": "app.sonicsearch.ios.premium.yearly"
+      },
+      "trialDays": 14,
+      "previewPlans": [
+        {
+          "cadence": "monthly",
+          "interval": "month",
+          "trialDays": 14,
+          "trialEligible": true,
+          "preview": true,
+          "regionalPrices": {
+            "BRL": "R$ 9,90",
+            "EUR": "€ 2,99",
+            "USD": "US$ 2.99"
+          }
+        },
+        {
+          "cadence": "yearly",
+          "interval": "year",
+          "trialDays": 14,
+          "trialEligible": true,
+          "preview": true,
+          "regionalPrices": {
+            "BRL": "R$ 79,90",
+            "EUR": "€ 24,99",
+            "USD": "US$ 24.99"
+          }
+        }
+      ],
+      "plans": []
+    }
+  },
+  {
+    "path": "/api/integration-health",
+    "status": 200,
+    "url": "https://sonicsearch.app/api/integration-health",
+    "at": "2026-09-22T21:15:00.989Z",
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "b8a2ed2d7cc21eba3e1a63295d33938d4af92be885091ffc353a2c892d947b69",
+    "body": {
+      "ok": true,
+      "musicApisEnabled": true,
+      "providers": {
+        "soundcloud": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "attributionVisible": true,
+            "tokenCached": true
+          }
+        },
+        "youtube": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "attributionVisible": true,
+            "safeEmbeds": true,
+            "minQualityScore": 7
+          }
+        },
+        "trackMetadata": {
+          "configured": true,
+          "enabled": true,
+          "providers": {
+            "deezer": false,
+            "itunes": true
+          },
+          "compliance": {
+            "defaultProvider": "itunes",
+            "deezerOptIn": true,
+            "attributionVisible": true,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "cacheSeconds": 3600
+          }
+        },
+        "spotify": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "attributionVisible": true,
+            "tokenCached": true,
+            "noAiTraining": true,
+            "previewUrlOptional": true
+          }
+        },
+        "coverArt": {
+          "configured": true,
+          "enabled": true,
+          "providers": {
+            "musicbrainz": true,
+            "coverArtArchive": true
+          },
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": false,
+            "attributionVisible": true,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "musicbrainzMinIntervalMs": 1100,
+            "cacheSeconds": 86400
+          }
+        },
+        "artistProfile": {
+          "configured": true,
+          "enabled": true,
+          "providers": {
+            "musicbrainz": true,
+            "wikipedia": true,
+            "itunes": true
+          },
+          "compliance": {
+            "backendOnly": true,
+            "attributionVisible": true,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "musicbrainzMinIntervalMs": 1100,
+            "cacheSeconds": 86400
+          }
+        },
+        "artistBio": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "providers": {
+            "openai": true,
+            "musicbrainz": true,
+            "discogs": true
+          },
+          "compliance": {
+            "backendOnly": true,
+            "attributionVisible": true,
+            "discogsOptIn": true,
+            "discogsConfigured": true,
+            "discogsEnabled": true,
+            "discogsStatus": "active",
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "discogsUserAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "cacheSeconds": 86400
+          }
+        },
+        "trackInsight": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "dailyLimit": 24
+          }
+        },
+        "newsTranslate": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "dailyLimit": 24
+          }
+        },
+        "spiritImage": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "premiumGateAvailable": true,
+            "guestUnlockAvailable": true,
+            "guestUnlockLikes": 10,
+            "uniquePerUser": true,
+            "dailyLimit": 5
+          }
+        },
+        "lastfm": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "optIn": true,
+            "attributionVisible": true,
+            "cacheSeconds": 86400
+          }
+        },
+        "catalogExtra": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "publicSelectOnly": true,
+            "table": "catalog_artists/catalog_tracks"
+          }
+        },
+        "radioBrowser": {
+          "configured": true,
+          "enabled": true,
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": false,
+            "attributionVisible": true,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "cacheSeconds": 21600
+          }
+        },
+        "catalogEnrichment": {
+          "configured": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "serviceRoleServerOnly": true,
+            "publicSelectOnly": true,
+            "table": "catalog_enrichments"
+          }
+        },
+        "newsFeed": {
+          "configured": true,
+          "enabled": true,
+          "routeEnabled": true,
+          "feedEnabled": true,
+          "compliance": {
+            "backendOnly": true,
+            "attributionVisible": true,
+            "directBrowserFetchBlocked": true,
+            "publicProxyFree": true,
+            "durableUsageStore": false,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "cacheSeconds": 900,
+            "timeoutMs": 5200
+          }
+        },
+        "goabase": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": false,
+            "attributionVisible": true,
+            "backlinkRequired": true,
+            "publicJsonApi": true,
+            "userAgent": "SonicSearch/1.0 (+https://sonicsearch.app)",
+            "listLimit": 40,
+            "detailLimit": 20
+          }
+        },
+        "ticketmaster": {
+          "configured": true,
+          "consumerKeyConfigured": true,
+          "consumerSecretConfigured": false,
+          "enabled": true
+        },
+        "bandsintown": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "status": "active",
+          "reason": "ready",
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": true,
+            "requiresExplicitEnable": true,
+            "attributionVisible": true
+          }
+        },
+        "localEvents": {
+          "configured": true,
+          "enabled": true
+        },
+        "artistEvents": {
+          "configured": true,
+          "enabled": true
+        },
+        "eventRadar": {
+          "configured": true,
+          "routeEnabled": true,
+          "enabled": true,
+          "compliance": {
+            "backendOnly": true,
+            "requiresCredentials": false,
+            "source": "Goabase snapshot",
+            "attributionVisible": true
+          }
+        }
+      },
+      "endpoints": {
+        "spotifySearch": "/api/spotify-search",
+        "soundcloudSearch": "/api/soundcloud-search",
+        "youtubeSearch": "/api/youtube-search",
+        "trackMetadata": "/api/track-metadata",
+        "coverArt": "/api/cover-art",
+        "artistProfile": "/api/artist-profile",
+        "artistEvents": "/api/ticketmaster-events",
+        "eventRadar": "/api/event-radar",
+        "artistBio": "/api/artist-bio",
+        "trackInsight": "/api/track-insight",
+        "newsTranslate": "/api/news-translate",
+        "spiritImage": "/api/spirit-image",
+        "lastfmArtist": "/api/lastfm-artist",
+        "radioBrowser": "/api/radio-browser",
+        "catalogExtra": "/api/catalog-extra",
+        "catalogEnrichment": "supabase/rest/v1/catalog_enrichments",
+        "newsFeed": "/api/news-feed"
+      },
+      "limits": {
+        "freeDailyDiscovery": 0,
+        "freeSpiritLimit": 3,
+        "spotifySearchDailyLimit": 80,
+        "soundcloudSearchDailyLimit": 80,
+        "youtubeSearchDailyLimit": 80,
+        "trackMetadataDailyLimit": 120,
+        "coverArtDailyLimit": 100,
+        "artistProfileDailyLimit": 80,
+        "artistBioDailyLimit": 10,
+        "lastfmDailyLimit": 80,
+        "radioBrowserDailyLimit": 120,
+        "newsFeedDailyLimit": 80,
+        "ticketmasterEventsDailyLimit": 80,
+        "eventRadarDailyLimit": 160
+      }
+    }
+  },
+  {
+    "path": "/api/access-context",
+    "status": 401,
+    "url": "https://sonicsearch.app/api/access-context",
+    "at": "2026-09-22T21:15:01.262Z",
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "private, no-store, max-age=0",
+      "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+      "content-security-policy": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://accounts.google.com https://appleid.cdn-apple.com https://api.deezer.com https://itunes.apple.com https://w.soundcloud.com https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://w.soundcloud.com https://bandcamp.com https://accounts.google.com; worker-src 'self' blob:; upgrade-insecure-requests",
+      "x-frame-options": "DENY",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "sha256": "f0b7bd6c4928b23c4c0003ec531503ac1ca13487dd022ee7cd83aa9aa2791ae6",
+    "body": {
+      "ok": false,
+      "error": "login_required"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+.privacy-requests-card { align-items: start; }
+.privacy-requests-card > div { min-width: 0; }
+.privacy-requests-card a { color: #8de9ff; }
+.privacy-requests-card form { display: grid; gap: 14px; }
+.privacy-requests-card [hidden] { display: none !important; }
+.privacy-requests-card label { display: grid; gap: 8px; line-height: 1.5; }
+.privacy-requests-card select,
+.privacy-requests-card textarea { width: 100%; min-width: 0; box-sizing: border-box; color: inherit; background: #101827; border: 1px solid #69798f; border-radius: 8px; padding: 12px; font: inherit; }
+.privacy-requests-card button { min-height: 44px; white-space: normal; }
+.privacy-requests-card [data-request-confirm] { grid-template-columns: 24px 1fr; align-items: start; }
+.privacy-requests-card input[type=checkbox] { width: 20px; height: 20px; }
+.privacy-requests-card [data-request-list],
+.privacy-requests-card [data-request-status] { overflow-wrap: anywhere; line-height: 1.6; }
+.privacy-requests-card :focus-visible { outline: 2px solid #79e9ff; outline-offset: 4px; }

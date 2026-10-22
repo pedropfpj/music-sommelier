@@ -1,0 +1,1345 @@
+# Piloto de escuta — expansão multigênero
+
+209 fontes oficiais/Topic com identidade e oEmbed conferidos. **53 reproduziram no teste real de navegador; 156 falharam e ficam sem botão Ouvir.** Busca/oEmbed não comprovam reprodução em todos os aparelhos/países, nem transferem licença da gravação. Nenhum arquivo de mídia foi copiado.
+
+Tela de teste: `listening-preview.html`. Catálogo público e cobrança continuam desligados.
+
+| Estilo | Fontes | Artistas pesquisados | Vídeos que reproduziram | Artistas que reproduziram |
+| --- | ---: | ---: | ---: | ---: |
+| Rock e metal | 19 | 8 | 3 | 3 |
+| Indie e post-punk | 11 | 8 | 5 | 5 |
+| Hip-hop e rap | 15 | 7 | 6 | 3 |
+| Trap | 79 | 13 | 13 | 7 |
+| Reggae, dub e ska | 15 | 9 | 6 | 4 |
+| Reggaeton | 8 | 4 | 1 | 1 |
+| Forró | 8 | 4 | 5 | 3 |
+| Samba | 6 | 3 | 1 | 1 |
+| Música clássica | 7 | 5 | 2 | 2 |
+| Pop | 19 | 6 | 4 | 1 |
+| R&B, soul e funk | 10 | 4 | 3 | 2 |
+| Jazz e blues | 2 | 1 | 0 | 0 |
+| Música brasileira | 3 | 1 | 0 | 0 |
+| Latina e caribenha | 0 | 0 | 0 | 0 |
+| Africana e global | 0 | 0 | 0 | 0 |
+| Folk, country e tradições | 3 | 1 | 0 | 0 |
+| Ambient e trilhas | 4 | 1 | 4 | 1 |
+
+## Rock e metal
+
+- King Gizzard & The Lizard Wizard — [Robot Stop](<https://www.youtube.com/watch?v=X3Q4a5Eaqcg>) · King Gizzard & The Lizard Wizard - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- King Gizzard & The Lizard Wizard — [Robot Stop](<https://www.youtube.com/watch?v=j6vgO7K66OM>) · King Gizzard & The Lizard Wizard - Topic · reproduziu no navegador
+- Turnstile — [BLACKOUT](<https://www.youtube.com/watch?v=YtGRLKVzzdg>) · Turnstile · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Metallica — [Master of Puppets](<https://www.youtube.com/watch?v=6xjJ2XIbGRk>) · Metallica · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Metallica — [Master of Puppets](<https://www.youtube.com/watch?v=kV-2Q8QtCY4>) · MetallicaVEVO · reproduziu no navegador
+- Metallica — [Master of Puppets](<https://www.youtube.com/watch?v=E0ozmU9cJDg>) · Metallica - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Nirvana — [Come As You Are](<https://www.youtube.com/watch?v=f1IdyrhOrGs>) · Nirvana - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Nirvana — [Come As You Are](<https://www.youtube.com/watch?v=zudQm-twCI4>) · Nirvana - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Nirvana — [Come As You Are](<https://www.youtube.com/watch?v=5BUOdyGcJ8U>) · Nirvana - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Pearl Jam — [Black](<https://www.youtube.com/watch?v=IpwHB2U3J1s>) · Pearl Jam - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Pearl Jam — [Black](<https://www.youtube.com/watch?v=o5KDteNbcBI>) · Pearl Jam - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Deftones — [Change (In the House of Flies)](<https://www.youtube.com/watch?v=WPpDyIJdasg>) · Deftones · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Deftones — [Change (In the House of Flies)](<https://www.youtube.com/watch?v=rPQwr3rtBQQ>) · Deftones - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Foo Fighters — [Everlong](<https://www.youtube.com/watch?v=hq0rZ3IiyWw>) · Foo Fighters · reproduziu no navegador
+- Foo Fighters — [Everlong](<https://www.youtube.com/watch?v=YLRlOvzs-XU>) · Foo Fighters - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Turnstile — [HOLIDAY](<https://www.youtube.com/watch?v=sU1JXOB52ZI>) · Turnstile · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Turnstile — [HOLIDAY](<https://www.youtube.com/watch?v=D6yaJur9JUE>) · Turnstile · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Nirvana — [Smells Like Teen Spirit](<https://www.youtube.com/watch?v=hTWKbfoikeg>) · NirvanaVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Linkin Park — [In the End](<https://www.youtube.com/watch?v=eVTXPUF4Oz4>) · Linkin Park · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Indie e post-punk
+
+- Tame Impala — [Feels Like We Only Go Backwards](<https://www.youtube.com/watch?v=f8_EpxhNEsA>) · Tame Impala - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Wednesday — [Chosen to Deserve](<https://www.youtube.com/watch?v=RkSLQ6sguFI>) · Wednesday - Topic · reproduziu no navegador
+- The Strokes — [Last Nite](<https://www.youtube.com/watch?v=zg7qAaFOxq0>) · The Strokes - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Interpol — [Obstacle 1](<https://www.youtube.com/watch?v=OC5zHACynR4>) · Interpol · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Interpol — [Obstacle 1](<https://www.youtube.com/watch?v=NwYKAsbx8SU>) · Interpol - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Interpol — [Obstacle 1](<https://www.youtube.com/watch?v=PZ8spJLaN_g>) · Interpol - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- feeble little horse — [Doorway](<https://www.youtube.com/watch?v=rmd21czLZFw>) · feeble little horse - Topic · reproduziu no navegador
+- Arctic Monkeys — [Do I Wanna Know?](<https://www.youtube.com/watch?v=bpOSxM0rNPM>) · Official Arctic Monkeys · reproduziu no navegador
+- Tame Impala — [Let It Happen](<https://www.youtube.com/watch?v=pFptt7Cargc>) · tameimpalaVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Alvvays — [Archie, Marry Me](<https://www.youtube.com/watch?v=ZAn3JdtSrnY>) · Alvvays · reproduziu no navegador
+- Men I Trust — [Show Me How](<https://www.youtube.com/watch?v=OZRYzH0Q0pU>) · Men I Trust · reproduziu no navegador
+
+## Hip-hop e rap
+
+- Kendrick Lamar — [Alright](<https://www.youtube.com/watch?v=JocAXINz-YE>) · Kendrick Lamar - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Kendrick Lamar — [Alright](<https://www.youtube.com/watch?v=67vr-3kpX3Q>) · Kendrick Lamar - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Kendrick Lamar — [Alright](<https://www.youtube.com/watch?v=RCb_xve0Lbo>) · Kendrick Lamar - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Little Simz — [Point and Kill (feat. Obongjayar)](<https://www.youtube.com/watch?v=tvY31eN3gtE>) · Little Simz · bloqueada no teste de incorporação; não recebe botão Ouvir
+- billy woods — [Asylum](<https://www.youtube.com/watch?v=8KcI1lp90GA>) · billy woods · reproduziu no navegador
+- MF DOOM — [Coffin Nails](<https://www.youtube.com/watch?v=kzIU5Pij3MQ>) · MF Doom - Topic · reproduziu no navegador
+- MF DOOM — [Coffin Nails](<https://www.youtube.com/watch?v=c7SzmyozGCk>) · MF Doom - Topic · reproduziu no navegador
+- Eminem — [Lose Yourself](<https://www.youtube.com/watch?v=Wj7lL6eDOqc>) · Eminem - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Eminem — [Lose Yourself](<https://www.youtube.com/watch?v=KqBTEF7pviQ>) · Eminem - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- JID — [Surround Sound (feat. 21 Savage & Baby Tate)](<https://www.youtube.com/watch?v=TnV7lwNXahI>) · JID - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- JID — [Surround Sound (feat. 21 Savage & Baby Tate)](<https://www.youtube.com/watch?v=Wi8ahP6ADFU>) · JID - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- McKinley Dixon — [Run, Run, Run (feat. Blu)](<https://www.youtube.com/watch?v=nNbCpYoHOfc>) · McKinley Dixon · reproduziu no navegador
+- McKinley Dixon — [Run, Run, Run (feat. Blu)](<https://www.youtube.com/watch?v=x1zrZrHyI_w>) · McKinley Dixon · reproduziu no navegador
+- McKinley Dixon — [Run, Run, Run (feat. Blu)](<https://www.youtube.com/watch?v=pUbiphxxRsU>) · McKinley Dixon - Topic · reproduziu no navegador
+- Eminem — [Without Me](<https://www.youtube.com/watch?v=YVkUvmDQ3HY>) · EminemVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Trap
+
+- Travis Scott — [goosebumps](<https://www.youtube.com/watch?v=FhTtYSU7Q7g>) · Travis Scott - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [M4](<https://www.youtube.com/watch?v=DHYd4EyCE9M>) · Teto - Topic · reproduziu no navegador
+- Teto — [M4](<https://www.youtube.com/watch?v=cMTrUCasbss>) · 30PRAUM · reproduziu no navegador
+- Filipe Ret — [Invicto](<https://www.youtube.com/watch?v=xgAtVh8Ko-I>) · Filipe Ret · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Filipe Ret — [Invicto](<https://www.youtube.com/watch?v=N24A-z5974Q>) · Filipe Ret - Topic · reproduziu no navegador
+- Future — [Mask Off](<https://www.youtube.com/watch?v=-68Y711xMGY>) · Future · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Mask Off](<https://www.youtube.com/watch?v=aWb8z-KhZdo>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Playboi Carti — [ALL RED](<https://www.youtube.com/watch?v=0age3DSgqQk>) · Playboi Carti · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Playboi Carti — [ALL RED](<https://www.youtube.com/watch?v=F6iYcXynA4s>) · Playboi Carti · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Playboi Carti — [ALL RED](<https://www.youtube.com/watch?v=g41EEFZQH0U>) · Playboi Carti - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bktherula — [Summer](<https://www.youtube.com/watch?v=SzpBi_nm0H4>) · BKTHERULA · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bktherula — [Summer](<https://www.youtube.com/watch?v=RU93pTr0msw>) · BKTHERULA · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [Anos Luz](<https://www.youtube.com/watch?v=EHqa2In-EtY>) · Matuê - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [Anos Luz](<https://www.youtube.com/watch?v=m226f2reF28>) · 30PRAUM · reproduziu no navegador
+- 21 Savage — [Bank Account](<https://www.youtube.com/watch?v=sV2t3tW_JTQ>) · 21 Savage · bloqueada no teste de incorporação; não recebe botão Ouvir
+- 21 Savage — [Bank Account](<https://www.youtube.com/watch?v=H1KBHFXm2Bg>) · 21 Savage · bloqueada no teste de incorporação; não recebe botão Ouvir
+- 21 Savage — [Bank Account](<https://www.youtube.com/watch?v=rSD0Fa23JT0>) · 21 Savage - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Leans, Pt. 2 (feat. Volp)](<https://www.youtube.com/watch?v=ZRMxYBz40hE>) · Yunk Vino · reproduziu no navegador
+- Yunk Vino — [Leans, Pt. 2 (feat. Volp)](<https://www.youtube.com/watch?v=Wumlxf-_pSU>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Veigh — [Mônaco Freestyle](<https://www.youtube.com/watch?v=1Ax8BWwW7jE>) · VEIGH · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Veigh — [Mônaco Freestyle](<https://www.youtube.com/watch?v=KQoZMAuFhww>) · VEIGH · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Ryu, the Runner — [Pura Adrenalina (feat. dvrkness13)](<https://www.youtube.com/watch?v=JtdTO-57Cak>) · SALVE CRAZY REC · reproduziu no navegador
+- WIU — [Pitbull](<https://www.youtube.com/watch?v=X6URGPNnHWk>) · WIU - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- WIU — [Pitbull](<https://www.youtube.com/watch?v=4vzEyNYZXAE>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Sidoka — [Mi'adama](<https://www.youtube.com/watch?v=tGSAJi32seU>) · Sidoka · reproduziu no navegador
+- Teto — [Fim de Semana no Rio](<https://www.youtube.com/watch?v=7AlAYttGnAg>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Filipe Ret — [Acima De Mim Só Deus](<https://www.youtube.com/watch?v=zBVV7GNsjeM>) · Filipe Ret · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Filipe Ret — [Acima De Mim Só Deus](<https://www.youtube.com/watch?v=ctashVx5ecQ>) · Filipe Ret · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Filipe Ret — [Acima De Mim Só Deus](<https://www.youtube.com/watch?v=UYKrwYJzZFw>) · Filipe Ret · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Life Is Good (feat. Drake)](<https://www.youtube.com/watch?v=nyRJVkgutDQ>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Life Is Good (feat. Drake)](<https://www.youtube.com/watch?v=B0pYyece218>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Life Is Good (feat. Drake)](<https://www.youtube.com/watch?v=SF8AEjxMYuQ>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bktherula — [THE WAY](<https://www.youtube.com/watch?v=lR9eMr37ik8>) · BKTHERULA · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [A Morte do Autotune](<https://www.youtube.com/watch?v=CUFMfGu1yQc>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- 21 Savage — [redrum](<https://www.youtube.com/watch?v=U4mADkt6o-M>) · 21 Savage · bloqueada no teste de incorporação; não recebe botão Ouvir
+- 21 Savage — [redrum](<https://www.youtube.com/watch?v=Um0KtuGFLKg>) · 21 Savage - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Campari (feat. 808 Luke)](<https://www.youtube.com/watch?v=Sna2mb5s7LY>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Veigh — [O Justo Não Treme](<https://www.youtube.com/watch?v=1uIJiXFQENA>) · VEIGH · reproduziu no navegador
+- Veigh — [O Justo Não Treme](<https://www.youtube.com/watch?v=YgJN7__UwFw>) · Veigh - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Ryu, the Runner — [Sua Inveja Eu Não Vejo](<https://www.youtube.com/watch?v=u7WMmeHcSZU>) · SALVE CRAZY REC · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Ryu, the Runner — [Sua Inveja Eu Não Vejo](<https://www.youtube.com/watch?v=CDau5lWfFKg>) · Ryu, the Runner - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- WIU — [Lealdade](<https://www.youtube.com/watch?v=PDwaX6N-wp8>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Paypal](<https://www.youtube.com/watch?v=DsdjqBfTpaI>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Dia Azul](<https://www.youtube.com/watch?v=5kyPzVuiFgU>) · Teto - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Dia Azul](<https://www.youtube.com/watch?v=3lUDyq2MfEo>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [YES OR NO](<https://www.youtube.com/watch?v=21XWVPwMcas>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [YES OR NO](<https://www.youtube.com/watch?v=lxNS0yOZr1Q>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Manha](<https://www.youtube.com/watch?v=bwpin8Y7yZ0>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Mais Um Vôo](<https://www.youtube.com/watch?v=fuN7IV4Mh08>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Fashion](<https://www.youtube.com/watch?v=5w_vDgwto1s>) · Teto - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teto — [Fashion](<https://www.youtube.com/watch?v=CbuD7asuEQw>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Travis Scott — [YOSEMITE](<https://www.youtube.com/watch?v=qX0ugtjo398>) · Travis Scott - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Travis Scott — [DELRESTO (ECHOES) \[feat. Beyoncé\]](<https://www.youtube.com/watch?v=lFY4ZN0Xn4U>) · Travis Scott - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Travis Scott — [PARASAIL (feat. Yung Lean & Dave Chappelle)](<https://www.youtube.com/watch?v=uJsZMweonnA>) · Travis Scott - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Low Life (feat. The Weeknd)](<https://www.youtube.com/watch?v=0O1dYlP5xxI>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Selfish (feat. Rihanna)](<https://www.youtube.com/watch?v=l4me7LlSTVw>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Selfish (feat. Rihanna)](<https://www.youtube.com/watch?v=34JMze2auWs>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Turn On The Lights](<https://www.youtube.com/watch?v=oLjI-izY280>) · Future · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Future — [Turn On The Lights](<https://www.youtube.com/watch?v=4rnkNwFXSNw>) · Future - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [Lama No Copo](<https://www.youtube.com/watch?v=FLfHuZHRLn0>) · Matuê - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [Lama No Copo](<https://www.youtube.com/watch?v=tzu-2DUpK5A>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [De Alta](<https://www.youtube.com/watch?v=orn1YppDaw4>) · Matuê - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [De Alta](<https://www.youtube.com/watch?v=bUoJKBUNy9I>) · 30PRAUM · reproduziu no navegador
+- Matuê — [Reza do Milhão](<https://www.youtube.com/watch?v=LSAuLm-uZ2g>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Matuê — [Rbn](<https://www.youtube.com/watch?v=Y8JFq5eGeO8>) · Matuê - Topic · reproduziu no navegador
+- WIU — [Angelina](<https://www.youtube.com/watch?v=dSgQTXXZ6Ow>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- WIU — [Oração](<https://www.youtube.com/watch?v=9l7E42BO57c>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- WIU — [Frio](<https://www.youtube.com/watch?v=aIBXOTXJSdU>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- WIU — [Limão](<https://www.youtube.com/watch?v=pFHGhL3t5BQ>) · 30PRAUM · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Só Quando Ela Me Quer (feat. JayA Luuck, Duzz & Rubro)](<https://www.youtube.com/watch?v=WTaIZ7_3d8Y>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Bad Shawty (feat. mathinvoker)](<https://www.youtube.com/watch?v=_CEqwDO2I8M>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Bad Shawty (feat. mathinvoker)](<https://www.youtube.com/watch?v=BwySVjnzxEo>) · Yunk Vino · reproduziu no navegador
+- Yunk Vino — [Interludio (feat. Ursão)](<https://www.youtube.com/watch?v=zhESOnaHLCU>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Yunk Vino — [Cap Way (feat. Felipe Artioli & Tibery)](<https://www.youtube.com/watch?v=a1Z6TYU3meg>) · Yunk Vino · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Sidoka — [Louis V, Menina Linda](<https://www.youtube.com/watch?v=kCLyivl080g>) · Sidoka · reproduziu no navegador
+- Sidoka — [Qq cê tá insinuando](<https://www.youtube.com/watch?v=XoqaMk6fJYA>) · Sidoka · reproduziu no navegador
+- Sidoka — [Quadro](<https://www.youtube.com/watch?v=mWQsiK0hAxI>) · Sidoka · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bktherula — [Summer](<https://www.youtube.com/watch?v=0gMvEkJWms8>) · Bktherula - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Travis Scott — [goosebumps](<https://www.youtube.com/watch?v=Dst9gZkq1a8>) · TravisScottVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Reggae, dub e ska
+
+- Bob Marley & The Wailers — [Three Little Birds](<https://www.youtube.com/watch?v=NOyRsPDPfMM>) · Bob Marley · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Burning Spear — [Marcus Garvey](<https://www.youtube.com/watch?v=E--IBhs85fM>) · Burning Spear - Topic · reproduziu no navegador
+- Hollie Cook — [Angel Fire](<https://www.youtube.com/watch?v=mOqkOiA07Jc>) · Hollie Cook - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Jimmy Cliff — [Many Rivers To Cross](<https://www.youtube.com/watch?v=doWWHQDWe2k>) · Jimmy Cliff - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- King Tubby — [African Roots](<https://www.youtube.com/watch?v=yXQF8MWebIE>) · King Tubby - Topic · reproduziu no navegador
+- The Frightnrs — [Nothing More to Say](<https://www.youtube.com/watch?v=j5np3Qkwp90>) · The Frightnrs - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bob Marley & The Wailers — [Is This Love](<https://www.youtube.com/watch?v=x0T_GIQGqM4>) · Bob Marley · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Burning Spear — [Slavery Days](<https://www.youtube.com/watch?v=L9Ag-4b3HSg>) · Burning Spear - Topic · reproduziu no navegador
+- Jimmy Cliff — [The Harder They Come](<https://www.youtube.com/watch?v=pmc5H6zAi6M>) · Jimmy Cliff - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- King Tubby — [Dub You Can Feel](<https://www.youtube.com/watch?v=f31UHYEXvFw>) · King Tubby - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Lila Iké — [Second Chance](<https://www.youtube.com/watch?v=WnlKFrMStC8>) · Lila Iké · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Pachyman — [Big Energy](<https://www.youtube.com/watch?v=80JrkpmxJzY>) · Pachyman - Topic · reproduziu no navegador
+- The Frightnrs — [Admiration](<https://www.youtube.com/watch?v=1mQHt8Eo6dc>) · The Frightnrs - Topic · reproduziu no navegador
+- The Frightnrs — [Admiration](<https://www.youtube.com/watch?v=z2B2VFZ0nus>) · The Frightnrs - Topic · reproduziu no navegador
+- Chronixx — [Here Comes Trouble](<https://www.youtube.com/watch?v=LfeIfiiBTfY>) · ChronixxMusic · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Reggaeton
+
+- Bad Bunny — [MIA (feat. Drake)](<https://www.youtube.com/watch?v=OSUxrSe5GbI>) · Bad Bunny · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Ivy Queen — [Quiero Bailar](<https://www.youtube.com/watch?v=9jTVyT5Xj3E>) · Ivy Queen - Topic · reproduziu no navegador
+- Álvaro Díaz — [LENTITO](<https://www.youtube.com/watch?v=kMAl8nub4ao>) · Alvaro Diaz · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Daddy Yankee — [Gasolina](<https://www.youtube.com/watch?v=aZmHDSZgyes>) · Daddy Yankee · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Bad Bunny — [Neverita](<https://www.youtube.com/watch?v=ARWg160eaX4>) · Bad Bunny · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Ivy Queen — [Te He Querido, Te He Llorado](<https://www.youtube.com/watch?v=0CMHQpiOUfE>) · Ivy Queen - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Álvaro Díaz — [YOKO](<https://www.youtube.com/watch?v=jOXSgG5YI08>) · Alvaro Diaz - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Daddy Yankee — [Lo Que Pasó, Pasó](<https://www.youtube.com/watch?v=8MpVPbN3_eE>) · Daddy Yankee · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Forró
+
+- Luiz Gonzaga — [Asa Branca](<https://www.youtube.com/watch?v=P6cP1rUfyNo>) · Luiz Gonzaga - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Mestrinho — [Te Faço um Cafuné](<https://www.youtube.com/watch?v=wBw8m6rrZtg>) · Mestrinho - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Falamansa — [Xote Dos Milagres](<https://www.youtube.com/watch?v=qMjXfiG-obQ>) · BandaFalamansa · reproduziu no navegador
+- Luiz Gonzaga — [Xote Das Meninas](<https://www.youtube.com/watch?v=4hBmHs0-f14>) · Luiz Gonzaga - Topic · reproduziu no navegador
+- Dominguinhos — [De Volta pro Aconchego](<https://www.youtube.com/watch?v=-TtyDHOWYSM>) · Dominguinhos - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Falamansa — [Xote Da Alegria](<https://www.youtube.com/watch?v=9HrG2BUGWig>) · BandaFalamansa · reproduziu no navegador
+- Mestrinho — [Sete Meninas](<https://www.youtube.com/watch?v=t7Uz6LAEFcM>) · Mestrinho - Topic · reproduziu no navegador
+- Mestrinho — [Sete Meninas](<https://www.youtube.com/watch?v=rnt_JJirZPY>) · Mestrinho - Topic · reproduziu no navegador
+
+## Samba
+
+- Cartola — [O Mundo É um Moinho](<https://www.youtube.com/watch?v=F4RK4uNf2vU>) · Cartola - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Roberta Sá — [Samba de um Minuto](<https://www.youtube.com/watch?v=Pj6APF9krN0>) · Roberta Sá - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teresa Cristina — [Coração Leviano (feat. Grupo Semente)](<https://www.youtube.com/watch?v=1R4ryoy9OZ8>) · Teresa Cristina - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Cartola — [As Rosas Não Falam](<https://www.youtube.com/watch?v=PpE-lAfqR1g>) · Cartola - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Teresa Cristina — [O Mundo É Um Moinho](<https://www.youtube.com/watch?v=ggFjK4ph8vo>) · Teresa Cristina - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Roberta Sá — [Samba de um Minuto — Sambasá (ao vivo)](<https://www.youtube.com/watch?v=wWAaUU9_6tk>) · Roberta Sá Oficial · reproduziu no navegador
+
+## Música clássica
+
+- Yo-Yo Ma — [Cello Suite No. 1 in G Major, BWV 1007: I. Prélude](<https://www.youtube.com/watch?v=-4WUHJRhvrM>) · Yo-Yo Ma - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir · compositor: Johann Sebastian Bach
+- Víkingur Ólafsson — [Études: No. 2](<https://www.youtube.com/watch?v=4XS8kPQMjqU>) · Víkingur Ólafsson - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir · compositor: Philip Glass
+- Hania Rani — [Glass](<https://www.youtube.com/watch?v=mneDuKb3BT8>) · Hania Rani - Topic · reproduziu no navegador · compositor: Hania Rani
+- Lang Lang — [Goldberg Variations, BWV 988: Aria](<https://www.youtube.com/watch?v=linQUK6jNmg>) · Lang Lang - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir · compositor: Johann Sebastian Bach
+- Yo-Yo Ma — [Cello Suite No. 1 in G Major, BWV 1007: II. Allemande](<https://www.youtube.com/watch?v=QNvYontdk2A>) · Yo-Yo Ma - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir · compositor: Johann Sebastian Bach
+- Víkingur Ólafsson — [Études: No. 6](<https://www.youtube.com/watch?v=sZffgf4GoMQ>) · Víkingur Ólafsson - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir · compositor: Philip Glass
+- Roomful of Teeth — [Partita for 8 Singers: 2. Sarabande](<https://www.youtube.com/watch?v=FnlL3Lk95_4>) · Roomful of Teeth - Topic · reproduziu no navegador · compositor: Caroline Shaw
+
+## Pop
+
+- Taylor Swift — [Anti-Hero](<https://www.youtube.com/watch?v=XqN2qFvY64U>) · Taylor Swift · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Taylor Swift — [Anti-Hero](<https://www.youtube.com/watch?v=b1kbLwvqugk>) · Taylor Swift · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Caroline Polachek — [Bunny Is a Rider](<https://www.youtube.com/watch?v=ax9P994zuLQ>) · Caroline Polachek - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Caroline Polachek — [Bunny Is a Rider](<https://www.youtube.com/watch?v=7yeFrm8C0KU>) · Caroline Polachek - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Caroline Polachek — [Bunny Is a Rider](<https://www.youtube.com/watch?v=mQAmOkb5KHM>) · Caroline Polachek - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [You Lose!](<https://www.youtube.com/watch?v=FQPXX_eZZAk>) · Magdalena Bay · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [You Lose!](<https://www.youtube.com/watch?v=NLPKG78lWTQ>) · Magdalena Bay · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [You Lose!](<https://www.youtube.com/watch?v=VamN4rlv9bI>) · Magdalena Bay · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Dua Lipa — [Levitating](<https://www.youtube.com/watch?v=WHuBW3qKm9g>) · Dua Lipa · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Dua Lipa — [Levitating](<https://www.youtube.com/watch?v=TUVcZfQe-Kw>) · Dua Lipa · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Dua Lipa — [Levitating](<https://www.youtube.com/watch?v=N000qglmmY0>) · Dua Lipa · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [Image](<https://www.youtube.com/watch?v=DfcWOPpmw14>) · Magdalena Bay · reproduziu no navegador
+- Magdalena Bay — [Image](<https://www.youtube.com/watch?v=FDcTE8IdjVQ>) · Magdalena Bay · reproduziu no navegador
+- Magdalena Bay — [Killshot (Slowed + Reverb)](<https://www.youtube.com/watch?v=El0AfTkxfyM>) · Magdalena Bay · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [Killshot](<https://www.youtube.com/watch?v=lhfs1CzzUPM>) · Magdalena Bay · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Magdalena Bay — [Second Sleep](<https://www.youtube.com/watch?v=JAe2faaZ3sY>) · Magdalena Bay · reproduziu no navegador
+- Magdalena Bay — [Cry for Me](<https://www.youtube.com/watch?v=Xcq3xMCcGlI>) · Magdalena Bay · reproduziu no navegador
+- Billie Eilish — [bad guy](<https://www.youtube.com/watch?v=DyDfgMOUjCI>) · BillieEilishVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Lana Del Rey — [Video Games](<https://www.youtube.com/watch?v=cE6wxDqdOV0>) · LanaDelReyVEVO · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## R&B, soul e funk
+
+- Stevie Wonder — [Superstition](<https://www.youtube.com/watch?v=ftdZ363R9kQ>) · Stevie Wonder - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Stevie Wonder — [Superstition](<https://www.youtube.com/watch?v=_O4yRbS_FoM>) · Stevie Wonder - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Stevie Wonder — [Superstition](<https://www.youtube.com/watch?v=egqv1mtos6A>) · Stevie Wonder - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- D'Angelo — [Untitled (How Does It Feel)](<https://www.youtube.com/watch?v=6QPQtguRdDs>) · D'Angelo - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- D'Angelo — [Untitled (How Does It Feel)](<https://www.youtube.com/watch?v=a9T5GBbksno>) · D'Angelo - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- SAULT — [Wildfires](<https://www.youtube.com/watch?v=GRC4Ac6IB1w>) · SAULT - Topic · reproduziu no navegador
+- Hiatus Kaiyote — [Nakamarra](<https://www.youtube.com/watch?v=jIWQyWCzK3Q>) · Hiatus Kaiyote - Topic · reproduziu no navegador
+- Hiatus Kaiyote — [Nakamarra](<https://www.youtube.com/watch?v=MvB77oYXlvU>) · Hiatus Kaiyote - Topic · reproduziu no navegador
+- Hiatus Kaiyote — [Breathing Underwater](<https://www.youtube.com/watch?v=ZsZh0azKrEY>) · Hiatus Kaiyote - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Hiatus Kaiyote — [Breathing Underwater](<https://www.youtube.com/watch?v=DCRGhNfAi60>) · Hiatus Kaiyote - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Jazz e blues
+
+- Nubya Garcia — [Pace](<https://www.youtube.com/watch?v=CbzDZxmJypQ>) · Nubya Garcia - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Nubya Garcia — [Source (feat. Ms Maurice, Cassie Kinoshi & Richie Seivwright)](<https://www.youtube.com/watch?v=r811nPAv2kc>) · Nubya Garcia - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Música brasileira
+
+- Luedji Luna — [Banho de Folhas](<https://www.youtube.com/watch?v=CrUCCuUsDgU>) · Luedji Luna · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Luedji Luna — [Banho de Folhas](<https://www.youtube.com/watch?v=bmWm6I3aAqw>) · Luedji Luna · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Luedji Luna — [Um Corpo no Mundo](<https://www.youtube.com/watch?v=9WYnjuk9anI>) · Luedji Luna · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Latina e caribenha
+
+
+
+## Africana e global
+
+
+
+## Folk, country e tradições
+
+- Arooj Aftab — [Mohabbat](<https://www.youtube.com/watch?v=iRZ98HX1MO8>) · Arooj Aftab · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Arooj Aftab — [Last Night](<https://www.youtube.com/watch?v=XX1ResoIGc8>) · Arooj Aftab - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+- Arooj Aftab — [Last Night](<https://www.youtube.com/watch?v=mbmR6SwEeOg>) · Arooj Aftab - Topic · bloqueada no teste de incorporação; não recebe botão Ouvir
+
+## Ambient e trilhas
+
+- Kali Malone — [Spectacle Of Ritual](<https://www.youtube.com/watch?v=Nbdgl2TYKno>) · Kali Malone - Topic · reproduziu no navegador
+- Kali Malone — [Sacrificial Code](<https://www.youtube.com/watch?v=UDb2bkl1nkU>) · Kali Malone - Topic · reproduziu no navegador
+- Kali Malone — [Sacrificial Code](<https://www.youtube.com/watch?v=t56THoKmMrM>) · Kali Malone - Topic · reproduziu no navegador
+- Kali Malone — [Sacrificial Code](<https://www.youtube.com/watch?v=Go6lm99yKhg>) · Kali Malone - Topic · reproduziu no navegador
+
+## Pendências
+
+- Radiohead — Weird Fishes / Arpeggi: no_official_embeddable_match
+- Arctic Monkeys — Do I Wanna Know?: no_official_embeddable_match
+- Miles Davis — So What: research_required
+- Caetano Veloso — O Leaozinho: research_required
+- Celia Cruz — La Vida Es un Carnaval: research_required
+- Fela Kuti — Water No Get Enemy: research_required
+- Johnny Cash — Hurt: research_required
+- Brian Eno — An Ending (Ascent): research_required
+- Dominguinhos — Eu Só Quero Um Xodó: no_official_embeddable_match
+- Kamasi Washington — Change of the Guard: research_required
+- Djavan — Oceano: research_required
+- Natalia Lafourcade — Hasta la Raíz: research_required
+- Ebo Taylor — Love & Death: research_required
+- Gillian Welch — Look at Miss Ohio: research_required
+- Nils Frahm — Says: research_required
+- Lido Pimienta — Nada (feat. Li Saumet): research_required
+- Kokoroko — Abusey Junction: no_official_embeddable_match
+- Nas — N.Y. State of Mind: youtube_search_failed
+- Paulinho da Viola — Foi Um Rio Que Passou Em Minha Vida: no_official_embeddable_match
+- Erykah Badu — Didn't Cha Know: youtube_search_failed
+- B.B. King — The Thrill Is Gone: research_required
+- João Gilberto — Chega De Saudade: research_required
+- Bomba Estéreo — To My Love: research_required
+- Burna Boy — On the Low: research_required
+- Bob Dylan — Blowin' In the Wind: research_required
+- Hans Zimmer — Time: research_required
+- GOJIRA — Flying Whales: youtube_search_failed
+- Feid — Feliz Cumpleaños Ferxxo: research_required
+- Elza Soares — Lata d'Água: research_required
+- Hilary Hahn — Violin Partita No. 2 in D Minor, BWV 1004: V. Chaconne: no_official_embeddable_match
+- Robyn — Dancing On My Own: youtube_search_failed
+- Parliament — Flash Light: youtube_search_failed
+- Esperanza Spalding — I Know You Know: research_required
+- Fundo De Quintal — A Amizade: research_required
+- Meridian Brothers — Guaracha U.F.O (No Estamos Solos...): research_required
+- Kabza De Small — Sponono (feat. Wizkid, Burna Boy, Cassper Nyovest & Madumane): research_required
+- Mariza — Ó Gente da Minha Terra: research_required
+- Tim Hecker — Virginal I: research_required
+- Black Country, New Road — Sunglasses: youtube_search_failed
+- Sampa the Great — Energy (feat. Nadeem Din-Gabisi): youtube_search_failed
+- Lila Iké — Where I'm Coming From: no_official_embeddable_match
+- KAROL G — PROVENZA: research_required
+- Roomful of Teeth — Partita for 8 Singers: 1. Allemande: no_official_embeddable_match
+- Rina Sawayama — XS: research_required
+- Cleo Sol — When I'm in Your Arms: research_required
+- Nduduzo Makhathini — Unyazi: research_required
+- Juçara Marçal — Ciranda do Aborto: research_required
+- The Cavemen. — Me You I: research_required
+- Yasmin Williams — Urban Driftwood (feat. Amadou Kouyate): research_required
+- Hildur Guðnadóttir — Bathroom Dance: research_required
+- System Of A Down — Chop Suey!: youtube_search_failed
+- Bloc Party — Banquet: youtube_search_failed
+- Peter Tosh — Legalize It: youtube_search_failed
+- Lana Del Rey — Video Games: research_required
+- SZA — Good Days: research_required
+- John Coltrane — My Favorite Things: research_required
+- Marília Mendonça — Infiel (Ao Vivo): research_required
+- Wizkid — Essence (feat. Tems): research_required
+- Joni Mitchell — A Case of You: research_required
+- Big Thief — Not: youtube_search_failed
+- Black Uhuru — Guess Who's Coming to Dinner: youtube_search_failed
+- Charli xcx — 360: research_required
+- Anderson .Paak — Come Down: research_required
+- Yussef Dayes — Black Classical Music (feat. Venna & Charlie Stacey): research_required
+- Chico Science & Nação Zumbi — A Cidade: research_required
+- Tems — Free Mind: research_required
+- Nick Drake — Pink Moon: research_required
+- Pavement — Cut Your Hair: youtube_search_failed
+- Doechii — DENIAL IS A RIVER: youtube_search_failed
+- Koffee — Toast: youtube_search_failed
+- Japanese Breakfast — Be Sweet: research_required
+- Nina Simone — Feeling Good: research_required
+- Metá Metá — São Jorge: research_required
+- Seun Kuti & Egypt 80' — Black Times (feat. Carlos Santana): research_required
+- Adrianne Lenker — anything: research_required
+- IDLES — Danny Nedelko: youtube_search_failed
+- JAŸ-Z — 99 Problems: youtube_search_failed
+- Toots & The Maytals — Pressure Drop: youtube_search_failed
+- Billie Eilish — bad guy: research_required
+- Frank Ocean — Thinkin Bout You: research_required
+- Ezra Collective — Victory Dance: research_required
+- Kevinho — Olha a Explosão (feat. Wesley Safadão): research_required
+- Sufjan Stevens — Mystery of Love: research_required
+- Queens of the Stone Age — No One Knows: youtube_search_failed
+- Beach House — Space Song: youtube_search_failed
+- Vince Staples — Big Fish: research_required
+- Dennis Brown — Money In My Pocket: research_required
+- Clairo — Bags: research_required
+- Michael Kiwanuka — Cold Little Heart: research_required
+- MC Carol — Liga pro Samu: research_required
+- LINKIN PARK — In the End: research_required
+- Wet Leg — Chaise Longue: research_required
+- Noname — Sunny Duet (feat. theMIND): research_required
+- Kabaka Pyramid — Well Done: research_required
+- The Marías — Hush: research_required
+- Khruangbin — Time (You and I): research_required
+- Ana Frango Elétrico — Electric Fish: research_required
+- Muse — Hysteria: research_required
+- Fleet Foxes — White Winter Hymnal: research_required
+- OutKast — Rosa Parks: research_required
+- Steel Pulse — Your House: research_required
+- Gilberto Gil — Aquele Abraço: research_required
+- Green Day — Basket Case: research_required
+- Alvvays — Archie, Marry Me: research_required
+- Denzel Curry — Walkin: research_required
+- Bunny Wailer — Blackheart Man: research_required
+- Mc Tha — Rito de Passá: research_required
+- Sonic Youth — Teen Age Riot: research_required
+- Men I Trust — Show Me How: research_required
+- Earl Sweatshirt — Riot!: research_required
+- Jesse Royal — Modern Day Judas: research_required
+- Jorge Ben Jor — Taj Mahal: research_required
+- Red Hot Chili Peppers — Californication: research_required
+- The Beths — Expert in a Dying Field: research_required
+- Wu-Tang Clan — C.R.E.A.M. (feat. Method Man, Raekwon, Inspectah Deck & Buddha Monk): research_required
+- Gregory Isaacs — Night Nurse: research_required
+- Rachel Reis — Desfruta: research_required
+- Slowdive — Alison: research_required
+- Geese — Cowboy Nudes: research_required
+- Skepta — Shutdown: research_required
+- Desmond Dekker — Israelites: research_required
+- DUDA BEAT — Bixinho: research_required
+- Dry Cleaning — Scratchcard Lanyard: research_required
+- BK — Planos (feat. Luccas Carlos): research_required
+- Rebelution — Safe And Sound: research_required
+- Liniker — Baby 95: research_required
+- Ulrika Spacek — Mimi Pretend: no_official_embeddable_match
+- 2Pac — Dear Mama: research_required
+- SOJA — Rest of My Life: research_required
+- feeble little horse — Tin Man: no_official_embeddable_match
+- Criolo — Não Existe Amor em SP: research_required
+- Chronixx — Here Comes Trouble: research_required
+- Djonga — JUNHO DE 94 (feat. Coyote Beatz): research_required
+- Edson Gomes — Malandrinha: research_required
+- Stormzy — Vossi Bop: research_required
+- Natiruts — Sorri, Sou Rei: research_required
+- Baco Exu do Blues — Girassóis de Van Gogh: research_required
+- Protoje — Kingston Be Wise: research_required
+- Racionais MC's — Vida Loka, Pt. 2: research_required
+- Pachyman — Goldline: no_official_embeddable_match
+- Cidade Negra — A Estrada: research_required
+- Emicida — Levanta e Anda (feat. Rael): research_required
+- Alborosie — Kingston Town: research_required
+- Radiohead — Paranoid Android: research_required
+- Arctic Monkeys — 505: research_required
+- Kendrick Lamar — DNA.: research_required
+- Travis Scott — BUTTERFLY EFFECT: no_official_embeddable_match
+- Taylor Swift — Cruel Summer: research_required
+- Stevie Wonder — As: research_required
+- Miles Davis — Freddie Freeloader: research_required
+- Caetano Veloso — Sampa: research_required
+- Celia Cruz — Quimbara: research_required
+- Fela Kuti — Zombie: research_required
+- Johnny Cash — Ring of Fire: research_required
+- Brian Eno — 1/1: research_required
+- King Gizzard & The Lizard Wizard — Iron Lung: research_required
+- Tame Impala — The Less I Know the Better: research_required
+- Little Simz — Mood Swings: research_required
+- Roberta Sá — Interessa (feat. Zé da Velha & Silvério Pontes): no_official_embeddable_match
+- Caroline Polachek — Welcome to My Island: research_required
+- D'Angelo — Brown Sugar: research_required
+- Kamasi Washington — Truth: research_required
+- Djavan — Samurai: research_required
+- Natalia Lafourcade — Nunca Es Suficiente: research_required
+- Ebo Taylor — Heaven: research_required
+- Gillian Welch — Everything Is Free: research_required
+- Nils Frahm — Some: research_required
+- Wednesday — Bull Believer: research_required
+- billy woods — Remorseless: research_required
+- Hollie Cook — Milk & Honey: research_required
+- Mestrinho — Bom Danado: no_official_embeddable_match
+- Hania Rani — F Major: no_official_embeddable_match
+- Sault — Free: research_required
+- Lido Pimienta — Eso Que Tu Haces: research_required
+- Kokoroko — Baba Ayoola: no_official_embeddable_match
+- Metallica — Nothing Else Matters: research_required
+- The Strokes — Reptilia: research_required
+- Nas — The World Is Yours: research_required
+- Paulinho da Viola — Danca da Solidao: no_official_embeddable_match
+- Dua Lipa — Don't Start Now: research_required
+- Erykah Badu — Window Seat: research_required
+- B.B. King — Every Day I Have the Blues: research_required
+- João Gilberto — Desafinado: research_required
+- Bomba Estéreo — Fuego: research_required
+- Burna Boy — Last Last: research_required
+- Bob Dylan — Tangled Up In Blue: research_required
+- Hans Zimmer — Cornfield Chase: research_required
+- GOJIRA — Silvera: research_required
+- Interpol — Evil: research_required
+- MF DOOM — Lavender Buds: research_required
+- Feid — Ferxxo 100: research_required
+- Elza Soares — Maria da Vila Matilde: research_required
+- Robyn — Call Your Girlfriend: research_required
+- Parliament — Give up the Funk (Tear the Roof Off the Sucker): research_required
+- Esperanza Spalding — Black Gold (with Special Guest Algebra Blessett): research_required
+- Fundo De Quintal — O Show Tem Que Continuar: research_required
+- Meridian Brothers — Cumbia de la Fuente: research_required
+- Kabza De Small — Khusela (feat. Msaki): research_required
+- Mariza — Chuva: research_required
+- Tim Hecker — Black Refraction: research_required
+- Nirvana — Lithium: research_required
+- Black Country, New Road — Concorde: research_required
+- Sampa the Great — Simon Says: research_required
+- KAROL G — Si Antes Te Hubiera Conocido: research_required
+- Rina Sawayama — Akasaka Sad: research_required
+- Cleo Sol — Why Don't You: research_required
+- Nduduzo Makhathini — Water Spirits: Izinkonjana: research_required
+- Juçara Marçal — Sem Cais: research_required
+- The Cavemen. — Beautiful Rain: research_required
+- Yasmin Williams — Juvenescence: research_required
+- Hildur Guðnadóttir — Bridge of Death: research_required
+- System Of A Down — Toxicity: research_required
+- Bloc Party — Helicopter: research_required
+- Eminem — Stan (feat. Dido): research_required
+- Peter Tosh — Equal Rights: research_required
+- Lana Del Rey — West Coast: research_required
+- SZA — Snooze: research_required
+- John Coltrane — Naima: research_required
+- Marília Mendonça — Todo Mundo Vai Sofrer (Ao Vivo): research_required
+- Wizkid — Ojuelegba: research_required
+- Joni Mitchell — Both Sides Now: research_required
+- Pearl Jam — Alive: research_required
+- Big Thief — Simulation Swarm: research_required
+- JID — Glory: research_required
+- Black Uhuru — Sponji Reggae: research_required
+- Charli xcx — B2b: research_required
+- Anderson .Paak — Am I Wrong (feat. ScHoolboy Q): research_required
+- Yussef Dayes — Tioga Pass (feat. Rocco Palladino): research_required
+- Chico Science & Nação Zumbi — Da Lama ao Caos: research_required
+- Tems — Higher: research_required
+- Nick Drake — Northern Sky: research_required
+- Deftones — Be Quiet and Drive (Far Away): research_required
+- Pavement — Gold Soundz: research_required
+- Doechii — NISSAN ALTIMA: research_required
+- Koffee — The Harder They Fall: research_required
+- Japanese Breakfast — Road Head: research_required
+- Nina Simone — I Put a Spell On You: research_required
+- Metá Metá — Oya: research_required
+- Seun Kuti & Egypt 80' — African Soldier: research_required
+- Adrianne Lenker — not a lot, just forever: research_required
+- Foo Fighters — The Pretender: research_required
+- IDLES — Never Fight A Man With A Perm: research_required
+- JAŸ-Z — Public Service Announcement (Interlude): research_required
+- Toots & The Maytals — 54-46 Was My Number: research_required
+- Billie Eilish — BIRDS OF A FEATHER: research_required
+- Frank Ocean — Pink + White: research_required
+- Ezra Collective — No Confusion (feat. Kojey Radical): research_required
+- Kevinho — O Grave Bater: research_required
+- Sufjan Stevens — Should Have Known Better: research_required
+- Queens of the Stone Age — Go With The Flow: research_required
+- Beach House — Myth: research_required
+- Vince Staples — Sheet Music (Episode 02): research_required
+- Dennis Brown — Here I Come: research_required
+- Clairo — Sofia: research_required
+- Michael Kiwanuka — Love & Hate: research_required
+- MC Carol — Bateu uma Onda Forte: research_required
+- LINKIN PARK — Numb: research_required
+- Wet Leg — Wet Dream: research_required
+- Noname — Bye Bye Baby: research_required
+- Kabaka Pyramid — Can't Breathe: research_required
+- The Marías — No One Noticed: research_required
+- Khruangbin — Friday Morning: research_required
+- Ana Frango Elétrico — Insista Em Mim: research_required
+- Muse — Knights of Cydonia: research_required
+- Fleet Foxes — Mykonos: research_required
+- OutKast — Ms. Jackson (Radio Mix): research_required
+- Sidoka — Não Me Sinto Mal Mais: no_official_embeddable_match
+- Steel Pulse — Roller Skates: research_required
+- Gilberto Gil — Palco: research_required
+- Green Day — Holiday: research_required
+- Alvvays — Dreams Tonite: research_required
+- Denzel Curry — Him: research_required
+- Bunny Wailer — Dreamland: research_required
+- Mc Tha — Despedida: research_required
+- Sonic Youth — Kool Thing: research_required
+- Men I Trust — Tailwhip: research_required
+- Earl Sweatshirt — INFATUATION: research_required
+- Jesse Royal — Rich Forever (feat. Vybz Kartel): research_required
+- Jorge Ben Jor — País Tropical: research_required
+- Red Hot Chili Peppers — Scar Tissue: research_required
+- The Beths — Future Me Hates Me: research_required
+- Wu-Tang Clan — Protect Ya Neck (feat. RZA, Method Man, Inspectah Deck, Raekwon, U-God, Ol' Dirty Bastard, Ghostface Killah & GZA): research_required
+- Gregory Isaacs — Cool Down the Pace: research_required
+- Rachel Reis — Motinha: research_required
+- Slowdive — Sugar for the Pill: research_required
+- Geese — Cobra: research_required
+- Skepta — Shutdown (Preditah Remix): research_required
+- Desmond Dekker — 007 (Shanty Town): research_required
+- DUDA BEAT — Bolo de Rolo: research_required
+- Dry Cleaning — Strong Feelings: research_required
+- BK — Cacos De Vidro: research_required
+- Rebelution — Feeling Alright: research_required
+- Liniker — TUDO: research_required
+- Ulrika Spacek — Silvertonic: no_official_embeddable_match
+- 2Pac — All Eyez On Me (feat. Big Syke): research_required
+- SOJA — You and Me (feat. Chris Boomer): research_required
+- Criolo — Subirusdoistiozin: research_required
+- Chronixx — Skankin' Sweet: research_required
+- Djonga — SOLTO (feat. Hot & Coyote Beatz): research_required
+- Edson Gomes — Árvore: research_required
+- Stormzy — Own It (feat. Ed Sheeran & Burna Boy): research_required
+- Natiruts — Quero Ser Feliz Também: research_required
+- Baco Exu do Blues — Flamingos (feat. Tuyo): research_required
+- Protoje — Rasta Love (feat. Ky-Mani Marley): research_required
+- Racionais MC's — Negro Drama: research_required
+- McKinley Dixon — Sun, I Rise (feat. Angélica Garcia): no_official_embeddable_match
+- Cidade Negra — Onde Você Mora?: research_required
+- Emicida — Hoje Cedo (feat. Pitty): research_required
+- Alborosie — Herbalist: research_required
+- Taylor Swift — Shake It Off: research_required
+- Taylor Swift — Blank Space: research_required
+- Taylor Swift — Style: research_required
+- Taylor Swift — Wildest Dreams: research_required
+- Dua Lipa — New Rules: research_required
+- Dua Lipa — Training Season: research_required
+- Dua Lipa — Training Season (Live From Mexico): research_required
+- Dua Lipa — Dance The Night: research_required
+- Caroline Polachek — So Hot You're Hurting My Feelings: research_required
+- Caroline Polachek — Sunset: research_required
+- Caroline Polachek — Hit Me Where It Hurts: research_required
+- Caroline Polachek — I Believe: research_required
+- Robyn — Talk To Me: research_required
+- Robyn — Honey: research_required
+- Robyn — Missing U: research_required
+- Robyn — Indestructible: research_required
+- Rina Sawayama — LUCID: research_required
+- Rina Sawayama — Frankenstein: research_required
+- Rina Sawayama — Catch Me In The Air: research_required
+- Rina Sawayama — Cherry: research_required
+- Radiohead — Let Down: research_required
+- Radiohead — Fake Plastic Trees: research_required
+- Radiohead — No Surprises: research_required
+- Radiohead — Karma Police: research_required
+- Metallica — Enter Sandman: research_required
+- Metallica — The Unforgiven: research_required
+- Metallica — One: research_required
+- Metallica — Whiskey In the Jar: research_required
+- King Gizzard & The Lizard Wizard — Mars For The Rich: research_required
+- King Gizzard & The Lizard Wizard — Gila Monster: research_required
+- King Gizzard & The Lizard Wizard — Work This Time: research_required
+- King Gizzard & The Lizard Wizard — Dragon: research_required
+- GOJIRA — Stranded: research_required
+- GOJIRA — Amazonia: research_required
+- GOJIRA — The Art of Dying: research_required
+- GOJIRA — L'enfant Sauvage: research_required
+- Wednesday — Quarry: research_required
+- Black Country, New Road — For the Cold Country: research_required
+- Black Country, New Road — Athens, France: research_required
+- Black Country, New Road — Science Fair: research_required
+- Black Country, New Road — Chaos Space Marine: research_required
+- Kendrick Lamar — luther: research_required
+- Kendrick Lamar — LOVE. (feat. Zacari): research_required
+- Kendrick Lamar — LOYALTY. (FEAT. RIHANNA.): research_required
+- Kendrick Lamar — Not Like Us: research_required
+- Nas — Nas Is Like: research_required
+- Little Simz — Little Q, Pt. 1 (Interlude): research_required
+- Little Simz — Fever: research_required
+- Little Simz — Backseat: research_required
+- Little Simz — Picture Perfect: research_required
+- MF DOOM — Doomsday (Instrumental): research_required
+- MF DOOM — High John: research_required
+- MF DOOM — Arrow Root: research_required
+- MF DOOM — I Hear Voices Pt. 1 (12" Version): research_required
+- billy woods — Waterproof Mascara (feat. Preservation): research_required
+- billy woods — No Hard Feelings: research_required
+- billy woods — Misery (feat. Kenny Segal): research_required
+- billy woods — Born Alone (feat. Kenny Segal): research_required
+- Sampa the Great — Can’t Hold Us (feat. Mwanje): research_required
+- Sampa the Great — Diamond in the Ruff (feat. Thando & Krown): research_required
+- Sampa the Great — Healing: research_required
+- Sampa the Great — Flowers (feat. REMI): research_required
+- Stevie Wonder — Isn't She Lovely: research_required
+- Stevie Wonder — I Just Called to Say I Love You (Single Version): research_required
+- Stevie Wonder — For Once in My Life: research_required
+- Stevie Wonder — Part-Time Lover: research_required
+- Erykah Badu — Next Lifetime: research_required
+- Erykah Badu — Orange Moon: research_required
+- Erykah Badu — My Life: research_required
+- Erykah Badu — Appletree: research_required
+- D'Angelo — The Line: research_required
+- D'Angelo — Spanish Joint: research_required
+- D'Angelo — One Mo'Gin: research_required
+- D'Angelo — I Found My Smile Again (Radio Edit): research_required
+- Parliament — P-Funk (Wants to Get Funked Up): research_required
+- Parliament — Up For The Down Stroke: research_required
+- Parliament — Flashlight: research_required
+- Parliament — Unfunky UFO: research_required
+- Sault — Why Why Why Why Why: research_required
+- Sault — Uncomfortable: research_required
+- Sault — Little Boy: research_required
+- Sault — Fearless: research_required
+- Cleo Sol — Life Will Be: research_required
+- Cleo Sol — Fear When You Fly: research_required
+- Cleo Sol — Go Baby: research_required
+- Cleo Sol — Promises: research_required
+- Caetano Veloso — Sozinho: research_required
+- Caetano Veloso — Você e Linda: research_required
+- Caetano Veloso — Samba de Verão: research_required
+- Caetano Veloso — Qualquer Coisa: research_required
+- Cartola — Preciso Me Encontrar: research_required
+- Cartola — Alvorada: research_required
+- Cartola — Peito Vazio: research_required
+- Cartola — O Sol Nascerá (A Sorrir): research_required
+- João Gilberto — Wave: research_required
+- João Gilberto — Insensatez: research_required
+- João Gilberto — Tin Tin Por Tin Tin: research_required
+- João Gilberto — Sampa: research_required
+- Gonzagão — A Morte do Vaqueiro: research_required
+- Gonzagão — Pagôde Russó: research_required
+- Gonzagão — Numa Sala de Reboco: research_required
+- Gonzagão — Vem Morena: research_required
+- Marília Mendonça — De Quem É a Culpa? (Ao Vivo): research_required
+- Marília Mendonça — Foi por Conveniência: research_required
+- Marília Mendonça — Leão: research_required
+- Marília Mendonça — Intenção (feat. GAAB) \[Ao Vivo\]: research_required
+- Kevinho — Tumbalatum: research_required
+- Kevinho — Tô Apaixonado Nessa Mina: research_required
+- Kevinho — Rabiola: research_required
+- Kevinho — Uma Nora pra Cada Dia: research_required
+- Djavan — Eu Te Devoro: research_required
+- Djavan — Se...: research_required
+- Djavan — Um Amor Puro (Ao Vivo): research_required
+- Djavan — Linha do Equador: research_required
+- Fundo De Quintal — A Batucada dos Nossos Tantãs: research_required
+- Fundo De Quintal — Conselho / Insensato Destino / Coisa de Pele (Ao Vivo): research_required
+- Fundo De Quintal — Lucidez / Falso Herói (Ao Vivo): research_required
+- Fundo De Quintal — Nosso Grito (Ao Vivo): research_required
+- Dominguinhos — Isso Aqui Tá Bom Demais: research_required
+- Dominguinhos — O Xote das Meninas (feat. João Bosco): research_required
+- Dominguinhos — Lamento Sertanejo (Forro Do Dominguinhos): research_required
+- Dominguinhos — Pout-Pourri: Numa Sala de Reboco / Quando Chega o Verão / Eu Só Quero um Xodó: research_required
+- Falamansa — Oh! Chuva: research_required
+- Falamansa — Rindo À Toa: research_required
+- Falamansa — Avisa: research_required
+- Falamansa — Confidência: research_required
+- Mestrinho — Eu e Você: no_official_embeddable_match
+- Mestrinho — Bom Dia: research_required
+- Mestrinho — Forró em Vitória: research_required
+- Paulinho da Viola — Coração Leviano: research_required
+- Paulinho da Viola — Timoneiro: research_required
+- Paulinho da Viola — Pecado Capital: research_required
+- Paulinho da Viola — No Pagode do Vava: research_required
+- Roberta Sá — Pot-Pourri: Me Faz um Dengo / Disritmia (feat. Martinho da Vila) \[Ao Vivo\]: research_required
+- Roberta Sá — Pra Você: research_required
+- Roberta Sá — Delírio: research_required
+- Roberta Sá — Meu Novo Ilê: research_required
+- Teresa Cristina — Alvorada: research_required
+- Teresa Cristina — Conversa de Botequim: research_required
+- Teresa Cristina — Beijo Sem (feat. Marisa Monte & Pedro Baby) \[Ao Vivo\]: research_required
+- Teresa Cristina — Senhora Tentação (Meu Drama): research_required
+- Chico Science & Nação Zumbi — A Praieira: research_required
+- Chico Science & Nação Zumbi — Manguetown: research_required
+- Chico Science & Nação Zumbi — O Cidadão Do Mundo: research_required
+- Chico Science & Nação Zumbi — Rios, Pontes e Overdrives: research_required
+- MC Carol — 100% Feminista (feat. Karol Conka, Leo Justi & Tropkillaz): research_required
+- MC Carol — Delação Premiada (feat. Leo Justi): research_required
+- MC Carol — Não Foi Cabral (Heavy Baile Mix): research_required
+- MC Carol — Marielle Franco (Desabafo) (feat. Heavy Baile): research_required
+- Luedji Luna — Acalanto: research_required
+- Luedji Luna — Asas: research_required
+- Luedji Luna — Bom Mesmo É Estar Debaixo D'Água: research_required
+- Luedji Luna — Dentro Ali: research_required
+- Juçara Marçal — Delta Estácio Blues: research_required
+- Juçara Marçal — Baleia: research_required
+- Juçara Marçal — Vi de Relance a Coroa: research_required
+- Juçara Marçal — Crash: research_required
+- Metá Metá — Obatalá: research_required
+- Metá Metá — Trovoa: research_required
+- Metá Metá — Vias de Fato: research_required
+- Metá Metá — Rainha das Cabeças: research_required
+- Ana Frango Elétrico — Mulher Homem Bicho: research_required
+- Ana Frango Elétrico — Camelo Azul: research_required
+- Ana Frango Elétrico — Coisa Maluca: research_required
+- Ana Frango Elétrico — Nuvem Vermelha: research_required
+- Mc Tha — Coração Vagabundo: research_required
+- Mc Tha — Clima Quente: research_required
+- Mc Tha — Figa de Guiné (feat. Comunidade Jongo Dito Ribeiro): research_required
+- Mc Tha — Comigo Ninguém Pode: research_required
+- Rachel Reis — Caju (Noda): research_required
+- Rachel Reis — Casca: research_required
+- Rachel Reis — Sossego: research_required
+- Rachel Reis — Lovezinho: research_required
+- Bad Bunny — NUEVAYoL: research_required
+- Bad Bunny — PIToRRO DE COCO: research_required
+- Bad Bunny — TURiSTA: research_required
+- Bad Bunny — LO QUE LE PASÓ A HAWAii: research_required
+- Daddy Yankee — Limbo: research_required
+- Daddy Yankee — Po'Encima: research_required
+- Daddy Yankee — Switchea: research_required
+- Daddy Yankee — La Máquina De Baile: research_required
+- Ivy Queen — Quiero Saber: research_required
+- Ivy Queen — Llegó la Queen: research_required
+- Ivy Queen — Next: research_required
+- Ivy Queen — La Roca: research_required
+- Álvaro Díaz — PIENSO EN TI.: research_required
+- Álvaro Díaz — Bbysita </3: research_required
+- Álvaro Díaz — NO PODEMOS SER AMIGOS.: research_required
+- Álvaro Díaz — JPN: research_required
+- Celia Cruz — La Negra Tiene Tumbao: research_required
+- Celia Cruz — Quizás, Quizás, Quizás: research_required
+- Celia Cruz — Bemba Colorá (Remastered 2025): research_required
+- Celia Cruz — Guantanamera: research_required
+- Natalia Lafourcade — Tú Sí Sabes Quererme (feat. Los Macorinos): research_required
+- Natalia Lafourcade — Lo Que Construimos: research_required
+- Natalia Lafourcade — Soledad y el Mar (feat. Los Macorinos): research_required
+- Natalia Lafourcade — De todas las flores: research_required
+- Bomba Estéreo — El Alma y el Cuerpo: research_required
+- Bomba Estéreo — Algo Está Cambiando: research_required
+- Bomba Estéreo — Fiesta: research_required
+- Bomba Estéreo — Internacionales: research_required
+- Lido Pimienta — Marea: research_required
+- Lido Pimienta — Te Quería: research_required
+- Lido Pimienta — Para Transcribir (Sol): research_required
+- Lido Pimienta — No Pude: research_required
+- Meridian Brothers — Salsa Caliente (Versión Aumentada): research_required
+- Meridian Brothers — Desesperanza: research_required
+- Meridian Brothers — La Gitana Me Ha Dejado (Salsa Electrónica): research_required
+- Meridian Brothers — Salsa del Zombie (Perseguido por Alegres Buitres): research_required
+- Miles Davis — All Blues: research_required
+- Miles Davis — Time After Time: research_required
+- Miles Davis — 'Round Midnight: research_required
+- Miles Davis — Summertime: research_required
+- B.B. King — Lucille: research_required
+- B.B. King — Blues Man: research_required
+- B.B. King — Please Love Me: research_required
+- B.B. King — Better Not Look Down (Single): research_required
+- Kamasi Washington — Street Fighter Mas: research_required
+- Kamasi Washington — Fists of Fury: research_required
+- Kamasi Washington — The Rhythm Changes: research_required
+- Kamasi Washington — Testify: research_required
+- Esperanza Spalding — Crowned & Kissed: research_required
+- Esperanza Spalding — Formwela 4: research_required
+- Esperanza Spalding — Samba Em Preludio: research_required
+- Esperanza Spalding — She Got to You: research_required
+- Nubya Garcia — Set It Free (feat. Richie): research_required
+- Nubya Garcia — Boundless Beings (feat. Akenya): research_required
+- Nubya Garcia — Lost Kingdoms: research_required
+- Nubya Garcia — Together Is A Beautiful Place To Be: research_required
+- Nduduzo Makhathini — Senze' Nina: research_required
+- Nduduzo Makhathini — Amathongo: research_required
+- Nduduzo Makhathini — King Fela: research_required
+- Nduduzo Makhathini — Yehlisan'uMoya: research_required
+- Bob Marley & The Wailers — Could You Be Loved: research_required
+- Bob Marley & The Wailers — Buffalo Soldier: research_required
+- Bob Marley & The Wailers — One Love / People Get Ready (Medley): research_required
+- Bob Marley & The Wailers — Stir It Up: research_required
+- Jimmy Cliff — I Can See Clearly Now: research_required
+- Jimmy Cliff — Reggae Night: research_required
+- Jimmy Cliff — Love I Need: research_required
+- Jimmy Cliff — You Can Get It If You Really Want: research_required
+- Burning Spear — Columbus (2002 Remastered Version): research_required
+- Burning Spear — Cry Blood Africa (2002 Remastered Version): research_required
+- Burning Spear — Hail H.I.M (2002 Remastered Version): research_required
+- Burning Spear — African Teacher (2002 Remastered Version): research_required
+- King Tubby — Hijack the Barber: research_required
+- King Tubby — Satta Dread Dub: research_required
+- King Tubby — Take Five: research_required
+- King Tubby — The Duke of Earl Dub: research_required
+- Hollie Cook — Sugar Water: research_required
+- Hollie Cook — 99: research_required
+- Hollie Cook — Shadow Kissing: research_required
+- Hollie Cook — Postman: research_required
+- Lila Iké — Wanted: research_required
+- Lila Iké — Solitude: research_required
+- Lila Iké — I Spy: research_required
+- Lila Iké — Stars Align: research_required
+- Fela Kuti — Let's Start (Live): research_required
+- Fela Kuti — Fefe Naa Efe: research_required
+- Fela Kuti — Lady: research_required
+- Fela Kuti — Sorrow Tears and Blood: research_required
+- Burna Boy — Alone: research_required
+- Burna Boy — For My Hand (feat. Ed Sheeran): research_required
+- Burna Boy — JA ARA E: research_required
+- Burna Boy — Don't Let Me Drown: research_required
+- Ebo Taylor — Will You Promise: research_required
+- Ebo Taylor — My Love and Music: research_required
+- Ebo Taylor — Mind Your Own Business: research_required
+- Ebo Taylor — Nga Nga: research_required
+- Kabza De Small — Eningi (feat. Njelic, Simmy & Mhaw Keys): research_required
+- Kabza De Small — Kabza Chant (feat. Young Stunna, Nkosazana Daughter, Mthunzi, Nokwazi, Anzo, Mashudu, Murumba Pitch & Tman Xpress): research_required
+- Kabza De Small — Ufunani (feat. Aymos, Kelvin Momo & Jay Sax): research_required
+- Kabza De Small — Siyabonga (feat. Nontokozo Mkhize & Mthunzi): research_required
+- Kokoroko — Da Du Dah: research_required
+- Kokoroko — Carry Me Home: research_required
+- Kokoroko — Sweetie: research_required
+- Kokoroko — Ewà Inú: research_required
+- The Cavemen. — Stranger: research_required
+- The Cavemen. — Obiageri (with Mama): research_required
+- The Cavemen. — Osondu: research_required
+- The Cavemen. — Fall: research_required
+- Johnny Cash — (Ghost) Riders In the Sky: research_required
+- Johnny Cash — You Are My Sunshine: research_required
+- Johnny Cash — I Won't Back Down: research_required
+- Johnny Cash — The Man Comes Around: research_required
+- Bob Dylan — Knockin' On Heaven's Door: research_required
+- Bob Dylan — Like a Rolling Stone: research_required
+- Bob Dylan — Lay, Lady, Lay: research_required
+- Bob Dylan — Mr. Tambourine Man: research_required
+- Gillian Welch — Revelator: research_required
+- Gillian Welch — The Way It Goes: research_required
+- Gillian Welch — I'm Not Afraid to Die: research_required
+- Gillian Welch — The Way It WIll Be: research_required
+- Mariza — Melhor de Mim: research_required
+- Mariza — Quem Me Dera: research_required
+- Mariza — O Tempo Não Pára: research_required
+- Mariza — Sem Ti: research_required
+- Arooj Aftab — Whiskey: research_required
+- Arooj Aftab — Aey Nehin: research_required
+- Arooj Aftab — Autumn Leaves (feat. James Francies): research_required
+- Arooj Aftab — Baghon Main (feat. Darian Donovan Thomas): research_required
+- Yasmin Williams — Sunshowers: research_required
+- Yasmin Williams — Through the Woods: research_required
+- Yasmin Williams — I Wonder (Song for Michael): research_required
+- Yasmin Williams — Dragonfly: research_required
+- Brian Eno — By This River: research_required
+- Brian Eno — Caught Between: research_required
+- Brian Eno — Golden Hours: research_required
+- Brian Eno — First Light: research_required
+- Hans Zimmer — A Way of Life: research_required
+- Hans Zimmer — Day One (Interstellar Theme): research_required
+- Hans Zimmer — Rise: research_required
+- Hans Zimmer — Hoist the Colours: research_required
+- Nils Frahm — My Friend the Forest: research_required
+- Nils Frahm — Ambre: research_required
+- Nils Frahm — Canton: research_required
+- Nils Frahm — Late: research_required
+- Tim Hecker — Music of the Air: research_required
+- Tim Hecker — Chimeras: research_required
+- Tim Hecker — In the Fog I: research_required
+- Tim Hecker — The Piano Drop: research_required
+- Kali Malone — Living Torch I: research_required
+- Kali Malone — Passage Through The Spheres: research_required
+- Kali Malone — Bondage To Formula: research_required
+- Kali Malone — All Life Long (for Organ): research_required
+- Hildur Guðnadóttir — Following Sophie: research_required
+- Hildur Guðnadóttir — Meeting Bruce Wayne: research_required
+- Hildur Guðnadóttir — Young Penny: research_required
+- Hildur Guðnadóttir — Penny in the Hospital: research_required
+- Nirvana — Smells Like Teen Spirit: research_required
+- Nirvana — Something In The Way: research_required
+- Nirvana — In Bloom: research_required
+- Nirvana — Heart-Shaped Box: research_required
+- Pearl Jam — Last Kiss: research_required
+- Pearl Jam — Yellow Ledbetter: research_required
+- Pearl Jam — Sirens: research_required
+- Pearl Jam — Soldier of Love: research_required
+- Foo Fighters — Learn to Fly: research_required
+- Foo Fighters — My Hero: research_required
+- Foo Fighters — Best of You: research_required
+- Foo Fighters — Times Like These: research_required
+- LINKIN PARK — Faint - Unshatter Film Soundtrack (Live in São Paulo): research_required
+- LINKIN PARK — What I've Done: research_required
+- LINKIN PARK — Somewhere I Belong: research_required
+- LINKIN PARK — BURN IT DOWN: research_required
+- Green Day — When I Come Around: research_required
+- Green Day — Wake Me Up When September Ends: research_required
+- Green Day — 21 Guns: research_required
+- Green Day — She: research_required
+- Red Hot Chili Peppers — Can't Stop: research_required
+- Red Hot Chili Peppers — Otherside: research_required
+- Red Hot Chili Peppers — Dark Necessities: research_required
+- Red Hot Chili Peppers — By the Way: research_required
+- System Of A Down — Aerials: research_required
+- System Of A Down — Lonely Day: research_required
+- System Of A Down — ATWA: research_required
+- System Of A Down — Hypnotize: research_required
+- Deftones — My Own Summer (Shove It): research_required
+- Deftones — Rosemary: research_required
+- Deftones — Cherry Waves: research_required
+- Deftones — Sextape: research_required
+- Queens of the Stone Age — I Sat by the Ocean: research_required
+- Queens of the Stone Age — Little Sister: research_required
+- Queens of the Stone Age — Insignificant Other: research_required
+- Queens of the Stone Age — In My Head: research_required
+- Muse — Supermassive Black Hole: research_required
+- Muse — Uprising: research_required
+- Muse — Starlight: research_required
+- Muse — Madness: research_required
+- Arctic Monkeys — Why'd You Only Call Me When You're High?: research_required
+- Arctic Monkeys — I Wanna Be Yours: research_required
+- Arctic Monkeys — R U Mine?: research_required
+- Arctic Monkeys — Fluorescent Adolescent: research_required
+- The Strokes — You Only Live Once: research_required
+- The Strokes — Someday: research_required
+- The Strokes — The Adults Are Talking: research_required
+- The Strokes — Under Cover of Darkness: research_required
+- Tame Impala — Let It Happen: research_required
+- Tame Impala — New Person, Same Old Mistakes: research_required
+- Tame Impala — Borderline: research_required
+- Tame Impala — The Moment: research_required
+- Interpol — All the Rage Back Home: research_required
+- Interpol — PDA: research_required
+- Interpol — Wounded Soldier: research_required
+- Interpol — See Out Loud: research_required
+- Bloc Party — 22.01.22: research_required
+- Bloc Party — Muscleworks: research_required
+- Bloc Party — Clark Kent: research_required
+- Bloc Party — Worst Birthday Ever: research_required
+- Sonic Youth — Incinerate: research_required
+- Sonic Youth — Teen Age Riot (2012 Remastered Version): research_required
+- Sonic Youth — 100%: research_required
+- Sonic Youth — Schizophrenia: research_required
+- Pavement — Harness Your Hopes (B-side): research_required
+- Pavement — Spit on a Stranger: research_required
+- Pavement — Cut Your Hair (Remastered): research_required
+- Pavement — Shady Lane / J Vs. S: research_required
+- Slowdive — When the Sun Hits: research_required
+- Slowdive — Dagger: research_required
+- Slowdive — 40 Days: research_required
+- Slowdive — Machine Gun: research_required
+- Beach House — Master of None: research_required
+- Beach House — Silver Soul: research_required
+- Beach House — Ppp: research_required
+- Beach House — Lemon Glow: research_required
+- Fleet Foxes — Helplessness Blues: research_required
+- Fleet Foxes — Blue Ridge Mountains: research_required
+- Fleet Foxes — Sun It Rises: research_required
+- Fleet Foxes — Ragged Wood: research_required
+- Big Thief — Velvet Ring: research_required
+- Big Thief — Shark Smile: research_required
+- Big Thief — Vampire Empire: research_required
+- Big Thief — Change: research_required
+- IDLES — I'm Scum: research_required
+- IDLES — POP POP POP: research_required
+- IDLES — MTT 420 RR: research_required
+- IDLES — The Beachland Ballroom: research_required
+- Wet Leg — CPR: research_required
+- Wet Leg — catch these fists: research_required
+- Wet Leg — 11: 21: research_required
+- Wet Leg — pokemon: research_required
+- Alvvays — Easy on Your Own?: research_required
+- Alvvays — In Undertow: research_required
+- Alvvays — Pharmacist: research_required
+- Alvvays — Tile by Tile: research_required
+- Men I Trust — Lauren: research_required
+- Men I Trust — I Hope to Be Around: research_required
+- Men I Trust — Numb: research_required
+- Men I Trust — I Come With Mud: research_required
+- The Beths — Not Running: research_required
+- The Beths — Til My Heart Stops: research_required
+- The Beths — Out of Sight: research_required
+- The Beths — Straight Line Was a Lie: research_required
+- Turnstile — NEVER ENOUGH: research_required
+- Turnstile — BIRDS: research_required
+- Turnstile — LOOK OUT FOR ME: research_required
+- Turnstile — I CARE: research_required
+- Geese — Au Pays du Cocaine: research_required
+- Geese — Taxes: research_required
+- Geese — Islands of Men: research_required
+- Geese — Husbands: research_required
+- Dry Cleaning — Hit My Head All Day: research_required
+- Dry Cleaning — Unsmart Lady: research_required
+- Dry Cleaning — Her Hippo: research_required
+- Dry Cleaning — New Long Leg: research_required
+- Eminem — Mockingbird: research_required
+- Eminem — Not Afraid: research_required
+- Eminem — Without Me: research_required
+- Eminem — Superman (feat. Dina Rae): research_required
+- JAŸ-Z — Empire State Of Mind (feat. Alicia Keys): research_required
+- JAŸ-Z — Holy Grail (feat. Justin Timberlake): research_required
+- JAŸ-Z — F\*Ckwithmeyouknowigotit (feat. Rick Ross): research_required
+- JAŸ-Z — Part II (On the Run) \[feat. Beyoncé\]: research_required
+- OutKast — Hey Ya!: research_required
+- OutKast — The Way You Move (feat. Sleepy Brown) \[Radio Mix\]: research_required
+- OutKast — The Love Below (Intro): research_required
+- OutKast — Roses: research_required
+- Wu-Tang Clan — C.R.E.A.M. (Cash Rules Everything Around Me) \[A Cappella\]: research_required
+- Wu-Tang Clan — Wu-Tang Clan Ain't Nuthing Ta F' Wit (feat. RZA, Inspectah Deck & Method Man): research_required
+- Wu-Tang Clan — Method Man (feat. Method Man, Raekwon, GZA, RZA & Ghostface Killah): research_required
+- Wu-Tang Clan — Never Let Go: research_required
+- 2Pac — Life Goes On: research_required
+- 2Pac — Ambitionz Az A Ridah: research_required
+- 2Pac — Hit 'Em Up: research_required
+- 2Pac — Picture Me Rollin' (feat. Big Syke, CPO & Danny Boy): research_required
+- Travis Scott — FE!N (feat. Playboi Carti): no_official_embeddable_match
+- Future — Fuck Up Some Commas: no_official_embeddable_match
+- 21 Savage — sneaky: research_required
+- 21 Savage — all of me: research_required
+- JID — Cludder: research_required
+- JID — Ambassel: research_required
+- Vince Staples — Home: research_required
+- Vince Staples — 745: research_required
+- Vince Staples — Alyssa Interlude: research_required
+- Vince Staples — Cotton: research_required
+- Denzel Curry — The Ills: research_required
+- Denzel Curry — Let It All Hang Out (feat. PlayThatBoiZay): research_required
+- Denzel Curry — Shawshank (feat. Tate Kobang): research_required
+- Denzel Curry — The Ills (Cold Blooded Soul Version): research_required
+- Skepta — I Spy: research_required
+- Skepta — Reflecting: research_required
+- Skepta — Too Many Man (feat. BBK): research_required
+- Skepta — Look Out (feat. Giggs): research_required
+- Stormzy — Blinded By Your Grace, Pt. 2 (feat. MNEK): research_required
+- Stormzy — Crown: research_required
+- Stormzy — Interlude: research_required
+- Stormzy — Own It (feat. Burna Boy & Stylo G) \[Toddla T Remix\]: research_required
+- Doechii — Anxiety: research_required
+- Doechii — ROCKET: research_required
+- Doechii — What It Is (Block Boy) \[feat. Kodak Black\]: research_required
+- Doechii — Stressed: research_required
+- Noname — Freedom Interlude: research_required
+- Noname — All I Need (feat. Xavier Omär): research_required
+- Earl Sweatshirt — Heavy Metal aka ejecto seato!: research_required
+- Earl Sweatshirt — WELL DONE!: research_required
+- Earl Sweatshirt — 523: research_required
+- Earl Sweatshirt — Titanic: research_required
+- Racionais MC's — Vida Loka, Pt. 1: research_required
+- Racionais MC's — Diário de um Detento: research_required
+- Racionais MC's — Jesus Chorou: research_required
+- Racionais MC's — Capítulo 4, Versículo 3: research_required
+- Emicida — Eu Gosto Dela (feat. Cohen): research_required
+- Emicida — Passarinhos (feat. Vanessa da Mata): research_required
+- Emicida — Principia (feat. Fabiana Cozza, Pastor Henrique Vieira & Pastoras do Rosário): research_required
+- Emicida — Baiana (feat. Caetano Veloso): research_required
+- Criolo — Grajauex: research_required
+- Criolo — Cartão de Visita (feat. Tulipa Ruiz): research_required
+- Criolo — Duas de Cinco: research_required
+- Criolo — Lion Man: research_required
+- BK — Amores, Vícios e Obsessões: research_required
+- BK — Só Quero Ver: research_required
+- BK — Só Eu Sei: research_required
+- BK — Castelos & Ruínas: research_required
+- Djonga — O Mundo é Nosso (feat. BK): research_required
+- Djonga — CORRA (feat. Paige & Coyote Beatz): research_required
+- Djonga — CANÇÃO PRO MEU FILHO (feat. Coyote Beatz): research_required
+- Djonga — UFA (feat. Sidoka, Sant & Coyote Beatz): research_required
+- Baco Exu do Blues — Me Desculpa Jay Z (feat. 1LUM3): research_required
+- Baco Exu do Blues — Última Noite: research_required
+- Baco Exu do Blues — Tardes Que Nunca Acabam: research_required
+- Baco Exu do Blues — Ela É Gostosa Pra Caralho (feat. Muse Maya): research_required
+- Filipe Ret — Isso Que É Vida: research_required
+- Filipe Ret — Rap da Lealdade: research_required
+- Filipe Ret — Só Pra Você Lembrar: research_required
+- Filipe Ret — Chefe do Crime Perfeito (feat. MC Cidinho): research_required
+- Peter Tosh — Johnny B Goode: research_required
+- Peter Tosh — Bush Doctor: research_required
+- Peter Tosh — Reggaemylitis: research_required
+- Peter Tosh — Coming in Hot: research_required
+- Toots & The Maytals — Funky Kingston: research_required
+- Toots & The Maytals — In the Dark (Remastered) \[Live\]: research_required
+- Toots & The Maytals — Time Tough (Live): research_required
+- Toots & The Maytals — Intro / Monkey Man (Remastered) \[Live\]: research_required
+- Steel Pulse — Steppin' Out: research_required
+- Steel Pulse — Handsworth Revolution: research_required
+- Steel Pulse — Reggae Fever: research_required
+- Steel Pulse — Bodyguard: research_required
+- Black Uhuru — Shine Eye Gal / Plastic Smile (Remastered) \[Live\]: research_required
+- Black Uhuru — Sinsemilla: research_required
+- Black Uhuru — Leaving to Zion: research_required
+- Black Uhuru — Whole World Is Africa: research_required
+- Gregory Isaacs — House of the Rising Sun: research_required
+- Gregory Isaacs — If I Don’t Have You: research_required
+- Gregory Isaacs — Not The Way: research_required
+- Gregory Isaacs — Number One: research_required
+- Dennis Brown — Wolf & Leopards: research_required
+- Dennis Brown — Revolution, Pt. 1: research_required
+- Dennis Brown — Promised Land: research_required
+- Dennis Brown — How Can I Leave You: research_required
+- Bunny Wailer — Dream Land: research_required
+- Bunny Wailer — Rastaman: research_required
+- Bunny Wailer — Mellow Mood: research_required
+- Bunny Wailer — Hypocrite: research_required
+- Desmond Dekker — Beware: research_required
+- Desmond Dekker — Intensified: research_required
+- Desmond Dekker — You Can Get It If You Really Want: research_required
+- Desmond Dekker — Jamaican Ska: research_required
+- Chronixx — Spanish Town Rockin': research_required
+- Chronixx — Ghetto Paradise: research_required
+- Chronixx — Smile Jamaica: research_required
+- Chronixx — I Can: research_required
+- Protoje — Protection (feat. Mortimer): research_required
+- Protoje — All Will Have to Change: research_required
+- Protoje — Bout Noon: research_required
+- Protoje — Stylin': research_required
+- Koffee — Raggamuffin: research_required
+- Kabaka Pyramid — Blessed Is the Man (feat. Chronixx): research_required
+- Kabaka Pyramid — Make Way (feat. Pressure Busspipe): research_required
+- Kabaka Pyramid — Borders (feat. Stonebwoy): research_required
+- Kabaka Pyramid — Trample Dem: research_required
+- Jesse Royal — Raising Your Voices for Freedom: research_required
+- Jesse Royal — Cops and Robbers: research_required
+- Jesse Royal — LionOrder (feat. Protoje): research_required
+- Jesse Royal — Finally: research_required
+- Alborosie — Diversity: research_required
+- Alborosie — No Cocaine: research_required
+- Alborosie — The Unforgiven (feat. Raging Fyah): research_required
+- Alborosie — Real Story: research_required
+- SOJA — True Love: research_required
+- SOJA — Rasta Courage: research_required
+- SOJA — I Don't Wanna Wait: research_required
+- SOJA — Not Done Yet: research_required
+- Rebelution — Attention Span: research_required
+- Rebelution — Celebrate: research_required
+- Rebelution — Sky Is The Limit: research_required
+- Rebelution — So High (feat. Zumbi): research_required
+- Natiruts — Presente de um Beija-Flor: research_required
+- Natiruts — Andei Só: research_required
+- Natiruts — Me Namora (feat. Edu Ribeiro) \[Ao Vivo\]: research_required
+- Natiruts — Liberdade pra Dentro da Cabeça: research_required
+- Cidade Negra — Girassol (Acústico): research_required
+- Cidade Negra — Onde Você Mora? (Acústico): research_required
+- Cidade Negra — Querem Meu Sangue (The Harder They Come): research_required
+- Cidade Negra — A Sombra da Maldade: research_required
+- Edson Gomes — Camelo: research_required
+- Edson Gomes — Perdido de Amor: research_required
+- Edson Gomes — Ovelha: research_required
+- Edson Gomes — Samarina: research_required
+- Lana Del Rey — Summertime Sadness: research_required
+- Lana Del Rey — Young and Beautiful: research_required
+- Lana Del Rey — Cinnamon Girl: research_required
+- Lana Del Rey — Born to Die: research_required
+- Billie Eilish — WILDFLOWER: research_required
+- Billie Eilish — CHIHIRO: research_required
+- Billie Eilish — What Was I Made For? (From The Motion Picture "Barbie"): research_required
+- Billie Eilish — idontwannabeyouanymore: research_required
+- Charli xcx — party 4 u: research_required
+- Charli xcx — Boom Clap: research_required
+- Charli xcx — Apple: research_required
+- Charli xcx — Boys: research_required
+- Japanese Breakfast — Paprika: research_required
+- Japanese Breakfast — Machinist: research_required
+- Japanese Breakfast — Posing For Cars: research_required
+- Japanese Breakfast — Sit: research_required
+- Clairo — Juna: research_required
+- Clairo — Flaming Hot Cheetos: research_required
+- Clairo — Pretty Girl: research_required
+- Clairo — Sexy to Someone: research_required
+- The Marías — Sienna: research_required
+- The Marías — Heavy: research_required
+- The Marías — Run Your Mouth: research_required
+- The Marías — Back To Me: research_required
+- SZA — Kill Bill: research_required
+- SZA — Saturn: research_required
+- SZA — Open Arms (feat. Travis Scott): research_required
+- SZA — Used (feat. Don Toliver): research_required
+- Frank Ocean — White Ferrari: research_required
+- Frank Ocean — Seigfried: research_required
+- Frank Ocean — Moon River: research_required
+- Frank Ocean — Self Control: research_required
+- Anderson .Paak — Make It Better (feat. Smokey Robinson): research_required
+- Anderson .Paak — 'Til It's Over: research_required
+- Anderson .Paak — Fire In The Sky: research_required
+- Anderson .Paak — Might Be: research_required
+- Michael Kiwanuka — Cold Little Heart (Radio Edit): research_required
+- Michael Kiwanuka — Hero: research_required
+- Michael Kiwanuka — Black Man in a White World: research_required
+- Michael Kiwanuka — Tell Me a Tale: research_required
+- Hiatus Kaiyote — Shaolin Monk Motherfunk: research_required
+- Hiatus Kaiyote — Molasses: research_required
+- Hiatus Kaiyote — Borderline with My Atoms: research_required
+- Hiatus Kaiyote — Laputa: research_required
+- Yussef Dayes — Rust (feat. Tom Misch): research_required
+- Yussef Dayes — Pon di Plaza (feat. Chronixx): research_required
+- Yussef Dayes — The Light (feat. Bahia Dayes): research_required
+- Yussef Dayes — Raisins Under the Sun (feat. Shabaka Hutchings): research_required
+- Ezra Collective — No One's Watching Me (feat. Olivia Dean): research_required
+- Ezra Collective — Part 1: research_required
+- Ezra Collective — Blow Your Trumpet: research_required
+- Ezra Collective — Sweet Echo: research_required
+- John Coltrane — Blue Train: research_required
+- John Coltrane — Everytime We Say Goodbye: research_required
+- John Coltrane — A Love Supreme, Pt. 1: Acknowledgement: research_required
+- John Coltrane — A Love Supreme, Pt. I – Acknowledgement: research_required
+- Nina Simone — Sinnerman: research_required
+- Nina Simone — Ain't Got No, I Got Life (From the Musical Production "Hair"): research_required
+- Nina Simone — I Wish I Knew How It Would Feel to Be Free: research_required
+- Nina Simone — Don't Let Me Be Misunderstood: research_required
+- Khruangbin — August 10: research_required
+- Khruangbin — A Love International: research_required
+- Khruangbin — May Ninth: research_required
+- Khruangbin — Hold Me Up (Thank You): research_required
+- Gilberto Gil — Andar com fé: research_required
+- Gilberto Gil — Tempo Rei: research_required
+- Gilberto Gil — Drão: research_required
+- Gilberto Gil — Toda Menina Baiana: research_required
+- Jorge Ben Jor — O Telefone Tocou Novamente (feat. Trio Mocotó): research_required
+- Jorge Ben Jor — Me Chamando de Paixão: research_required
+- Jorge Ben Jor — Oba, Lá Vem Ela (feat. Trio Mocotó): research_required
+- Jorge Ben Jor — Fio Maravilha: research_required
+- Elza Soares — Mulher do Fim do Mundo: research_required
+- Elza Soares — Espumas ao Vento: research_required
+- Elza Soares — Malandro: research_required
+- Elza Soares — A Carne: research_required
+- DUDA BEAT — Meu Pisêro: research_required
+- DUDA BEAT — Tu e Eu (feat. Cila do Coco): research_required
+- DUDA BEAT — teu beijo: research_required
+- DUDA BEAT — SAUDADE DE VOCÊ: research_required
+- Liniker — CAJU: research_required
+- Liniker — VELUDO MARROM: research_required
+- Liniker — Psiu: research_required
+- Liniker — Zero: research_required
+- KAROL G — Bandida Entrenada: research_required
+- KAROL G — Papasito: research_required
+- KAROL G — MI EX TENÍA RAZÓN: research_required
+- KAROL G — S91: research_required
+- Feid — FERXXO 30: research_required
+- Feid — Prohibidox: research_required
+- Feid — SE LO JURO MOR: research_required
+- Feid — Ferxxo 500: research_required
+- Tems — Me & U: research_required
+- Tems — What You Need: research_required
+- Tems — Big Daddy: research_required
+- Tems — First: research_required
+- Wizkid — Joro: research_required
+- Wizkid — Mood (feat. Buju): research_required
+- Wizkid — 2 Sugar (feat. Ayra Starr): research_required
+- Wizkid — Ginger (feat. Burna Boy): research_required
+- Seun Kuti & Egypt 80' — Black Woman: research_required
+- Seun Kuti & Egypt 80' — Kuku Kee Me: research_required
+- Seun Kuti & Egypt 80' — Move (feat. Kamasi Washington) \[Keep Moving Version\]: research_required
+- Seun Kuti & Egypt 80' — African Dreams: research_required
+- Joni Mitchell — California: research_required
+- Joni Mitchell — Big Yellow Taxi: research_required
+- Joni Mitchell — River: research_required
+- Joni Mitchell — Little Green: research_required
+- Nick Drake — River Man: research_required
+- Nick Drake — Time Has Told Me: research_required
+- Nick Drake — Hazey Jane II: research_required
+- Nick Drake — Saturday Sun: research_required
+- Adrianne Lenker — forwards beckon rebound: research_required
+- Adrianne Lenker — half return: research_required
+- Adrianne Lenker — ingydar: research_required
+- Adrianne Lenker — zombie girl: research_required
+- Sufjan Stevens — Futile Devices (Doveman Remix): research_required
+- Sufjan Stevens — Fourth of July: research_required
+- Sufjan Stevens — Visions of Gideon: research_required
+- Sufjan Stevens — Futile Devices: research_required
+- Ulrika Spacek — Victorian Acid: research_required
+- Ulrika Spacek — Square Root of None: research_required
+- Ulrika Spacek — The Sheer Drop: research_required
+- Ulrika Spacek — Build a Box Then Break It: research_required
+- feeble little horse — Dior: research_required
+- feeble little horse — Shady: research_required
+- feeble little horse — Freak: research_required
+- feeble little horse — Paces: research_required
+- McKinley Dixon — Dedicated to Tar Feather (feat. Anjimile): research_required
+- McKinley Dixon — Tyler, Forever: research_required
+- McKinley Dixon — Hanif Reads Toni (feat. Hanif): research_required
+- McKinley Dixon — The Story so Far (Interlude): research_required
+- Pachyman — Destroy the Empire: research_required
+- Pachyman — El Benson: research_required
+- Pachyman — Trago Coqueto: research_required
+- Pachyman — Toyota Nuevo: research_required
+- The Frightnrs — Gotta Find a Way: research_required
+- The Frightnrs — All My Tears: research_required
+- The Frightnrs — Gonna Make Time: research_required
+- The Frightnrs — Till Then: research_required
+- BKTHERULA — Coupe: research_required
+- BKTHERULA — ABSTRACT: research_required
+- BKTHERULA — BIG FEELING: research_required
+- BKTHERULA — LEFT RIGHT: research_required
+- Ryu, the Runner — Mecaniota: no_official_embeddable_match
+- Sidoka — Café da Manhã ;7: no_official_embeddable_match
+
+Ainda falta ampliar as fontes aprovadas, testar Safari/iPhone e países de lançamento, revisar a curadoria e promover a integração local ao perfil sincronizado, Radar e Premium.

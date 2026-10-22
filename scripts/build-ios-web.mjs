@@ -10,12 +10,23 @@ const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "www");
 const apiBaseUrl = "https://sonicsearch.app";
 const runtimeScriptName = "sonic-ios-runtime.js";
-const appStoreBuildId = "20260916premiumhide1ios1";
+const appStoreBuildId = "20260922privacy1ios1";
 const iosRuntimeAssetNames = [
   "styles.min.css",
   "daily-djs.css",
   "daily-radar.css",
+  "weekly-recommends.js",
+  "weekly-recommends.css",
   "universal-music.js",
+  "universal-listening.js",
+  "universal-discovery.js",
+  "universal-discovery-ui.js",
+  "universal-discovery.css",
+  "user-profile.js",
+  "user-profile.css",
+  "privacy-controls.js",
+  "privacy-requests.js",
+  "privacy-requests.css",
   "catalog-runtime.min.js",
   "daily-djs.js",
   "daily-djs-ui.js",
@@ -144,6 +155,7 @@ function buildIosIndexHtml(html) {
       window.va = window.va || function () {};
       window.SONIC_PRIVACY_ANALYTICS_STORAGE_KEY = "sonic_search:privacy:analytics:v1";
       window.SONIC_SEARCH_DISABLE_ANALYTICS = true;
+      window.SonicPrivacy?.clearIdentifiers();
       window.loadSonicAnalytics = function noopSonicIosAnalytics() {};
     </script>`
   );
@@ -372,7 +384,7 @@ function buildIosTermsHtml(html) {
 function buildIosCookiesHtml(html) {
   return replaceAllRequired(html, [
     [
-      "<strong>Preferência de analytics</strong>\n            <span><code>sonic_search:privacy:analytics:v1</code>: salva \"yes\" ou \"no\" para lembrar sua escolha sobre Vercel Insights.</span>",
+      "<strong>Preferência de analytics</strong>\n            <span><code>sonic_search:privacy:analytics:v1</code>: salva \"yes\" ou \"no\" para lembrar sua escolha sobre analytics opcional.</span>",
       "<strong>Analytics desativado no iOS</strong>\n            <span>A versão iOS não carrega Vercel Insights, não exibe prompt de analytics e não usa cookies de tracking.</span>"
     ],
     [
@@ -414,6 +426,19 @@ await writeFile(path.join(webDir, "index.html"), buildIosIndexHtml(indexHtml));
 await Promise.all([
   writeOptimizedPath("app.js", "app.min.js", buildIosAppJs, minifyJavaScript),
   copyPath("universal-music.js"),
+  copyPath("privacy-controls.js"),
+  copyPath("privacy-requests.js"),
+  copyPath("privacy-requests.css"),
+  copyPath("account-deletion.html"),
+  copyPath("universal-listening.js"),
+  copyPath("universal-discovery.js"),
+  copyPath("universal-discovery-ui.js"),
+  copyPath("universal-discovery.css"),
+  copyPath("user-profile.js"),
+  copyPath("user-profile.css"),
+  copyPath("listening-preview.html"),
+  copyPath("listening-preview.js"),
+  copyPath("listening-preview.css"),
   writeOptimizedPath("catalog-runtime.js", "catalog-runtime.min.js", (source) => source, minifyJavaScript),
   writeOptimizedPath("styles.css", "styles.min.css", buildIosStylesCss, minifyCss),
   copyPath("legal.css"),
@@ -423,6 +448,8 @@ await Promise.all([
   copyPath("daily-radar.js"),
   copyPath("daily-radar-ui.js"),
   copyPath("daily-radar.css"),
+  copyPath("weekly-recommends.js"),
+  copyPath("weekly-recommends.css"),
   writeTransformedPath("privacy.html", "privacy.html", buildIosPrivacyHtml),
   writeTransformedPath("terms.html", "terms.html", buildIosTermsHtml),
   writeTransformedPath("cookies.html", "cookies.html", buildIosCookiesHtml),

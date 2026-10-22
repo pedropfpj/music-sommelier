@@ -9,7 +9,7 @@ const handler = require("../lib/api/_discovery-exposure");
 function request(body) {
   return {
     method: "POST",
-    body,
+    body: { analytics_consent: true, consent_version: "2026-09-22", platform: "web", ...body },
     url: "/api/discovery-exposure",
     headers: {
       host: "sonicsearch.app",

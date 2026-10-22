@@ -4835,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260916premiumhide1";
+const SONIC_APP_BUILD_ID = "20260922privacy1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10891,6 +10891,9 @@ let dailyLikeMemoryKey = "";
 let dailyLikeMemoryState = null;
 let dailyDjController = null;
 let dailyRadarController = null;
+let userProfileController = null;
+let privacyRequestsController = null;
+let weeklyRecommendsController = null;
 let dailyDjReminderLaunchPending = false;
 let weeklyHighlightsReminderLaunchPending = false;
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
@@ -27491,6 +27494,7 @@ function syncQuickSurpriseStyleOptions() {
 
 function applyLanguage() {
   document.documentElement.lang = currentLanguage === "pt" ? "pt-BR" : currentLanguage;
+  weeklyRecommendsController?.refresh();
   syncDocumentLanguageMetadata();
   renderNetworkStatus();
   const labels = {
@@ -28316,6 +28320,9 @@ function setLanguage(lang, options = {}) {
   if (options.persist !== false) persistLanguage(normalized);
   applyLanguage();
   renderInitialTasteCalibrationUi();
+  if (typeof window.dispatchEvent === "function" && typeof window.CustomEvent === "function") {
+    window.dispatchEvent(new window.CustomEvent("sonic:language-changed"));
+  }
 }
 
 function loadLanguage() {
@@ -28463,6 +28470,10 @@ function betaAccessApiEndpoint() {
   return cleanBetaField(resolveAppApiEndpoint(ACCESS_CONFIG.betaAccessApiEndpoint || ""), 220);
 }
 
+function analyticsCollectionAllowed() {
+  return typeof window !== "undefined" && window.SonicPrivacy?.allowed() === true;
+}
+
 function betaEventsEndpoint() {
   return cleanBetaField(resolveAppApiEndpoint(ACCESS_CONFIG.betaEventsEndpoint || ""), 220);
 }
@@ -28520,6 +28531,7 @@ function sanitizeBetaAnalyticsPathname(value = "") {
 }
 
 function betaAnalyticsAnonymousId() {
+  if (!analyticsCollectionAllowed()) return "";
   try {
     const stored = String(localStorage.getItem(BETA_ANALYTICS_ANONYMOUS_STORAGE_KEY) || "").trim();
     if (isBetaAnalyticsUuid(stored)) return stored;
@@ -28574,6 +28586,7 @@ function legacyBetaPreviousSessionAt() {
 }
 
 function resolveBetaAnalyticsSession(now = Date.now()) {
+  if (!analyticsCollectionAllowed()) return null;
   const timestamp = Number.isFinite(Number(now)) ? Number(now) : Date.now();
   const nowIso = new Date(timestamp).toISOString();
   const previous = readBetaAnalyticsSessionState();
@@ -28626,7 +28639,7 @@ function buildBetaAppSessionEvent(state) {
     event_id: normalized.session_start_event_id,
     occurred_at: normalized.session_started_at,
     anonymous_id: betaAnalyticsAnonymousId(),
-    user_id: betaAnalyticsAuthenticatedUserId(),
+    user_id: null,
     session_id: normalized.session_id,
     platform,
     app_version: SONIC_APP_BUILD_ID,
@@ -28638,14 +28651,16 @@ function buildBetaAppSessionEvent(state) {
 }
 
 async function sendBetaAppSessionEvent(body = null) {
+  if (!analyticsCollectionAllowed()) return false;
   const endpoint = betaEventsEndpoint();
   if (!endpoint || !body || typeof fetch !== "function") return false;
   try {
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      keepalive: true
+      body: JSON.stringify({ ...body, analytics_consent: true, consent_version: window.SonicPrivacy.version }),
+      signal: window.SonicPrivacy.signal(),
+    keepalive: true
     });
     const result = await response.json().catch(() => ({}));
     return response.ok && (result?.stored === true || result?.duplicate === true);
@@ -28655,6 +28670,7 @@ async function sendBetaAppSessionEvent(body = null) {
 }
 
 function acknowledgeBetaAnalyticsSession(state = null) {
+  if (!analyticsCollectionAllowed()) return false;
   const expected = normalizeBetaAnalyticsSessionState(state);
   const current = readBetaAnalyticsSessionState();
   if (!expected || !current) return false;
@@ -28676,6 +28692,7 @@ function withBetaAnalyticsSessionLock(callback) {
 }
 
 function betaEventSessionId() {
+  if (!analyticsCollectionAllowed()) return "";
   try {
     const stored = cleanBetaField(localStorage.getItem(BETA_EVENT_SESSION_STORAGE_KEY) || "", 80)
       .replace(/[^a-zA-Z0-9_.:-]/g, "");
@@ -28714,6 +28731,7 @@ function writeBetaJsonStorage(key = "", value = {}) {
 }
 
 function trackBetaEvent(eventName = "", payload = {}, options = {}) {
+  if (!analyticsCollectionAllowed()) return;
   const endpoint = betaEventsEndpoint();
   if (!endpoint || typeof window === "undefined") return;
   const safeEventName = cleanBetaField(eventName, 80).toLowerCase();
@@ -28738,25 +28756,19 @@ function trackBetaEvent(eventName = "", payload = {}, options = {}) {
       ...payload
     }
   };
-  const serialized = JSON.stringify(body);
-  if (
-    options.beacon !== false &&
-    typeof navigator !== "undefined" &&
-    typeof navigator.sendBeacon === "function"
-  ) {
-    const sent = navigator.sendBeacon(endpoint, new Blob([serialized], { type: "application/json" }));
-    if (sent) return;
-  }
+  const serialized = JSON.stringify({ ...body, analytics_consent: true, consent_version: window.SonicPrivacy.version });
   if (typeof fetch !== "function") return;
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: serialized,
+    signal: window.SonicPrivacy.signal(),
     keepalive: true
   }).catch(() => {});
 }
 
 function markBetaEventOnce(key = "") {
+  if (!analyticsCollectionAllowed()) return false;
   const safeKey = cleanBetaField(key, 120).toLowerCase();
   if (!safeKey) return false;
   if (betaEventOnceMemory.has(safeKey)) return false;
@@ -28802,6 +28814,7 @@ function trackRecommendationEventOnce(eventName = "", track = null, prefs = {}, 
 }
 
 function trackBetaReactionMilestone(action = "", track = null, extra = {}) {
+  if (!analyticsCollectionAllowed()) return;
   betaGrowthReactionCount += 1;
   if (betaGrowthThreeReactionsTracked || betaGrowthReactionCount < 3) return;
   betaGrowthThreeReactionsTracked = true;
@@ -28816,6 +28829,7 @@ function trackBetaReactionMilestone(action = "", track = null, extra = {}) {
 }
 
 function trackBetaGateViewed() {
+  if (!analyticsCollectionAllowed()) return;
   if (betaGateViewTracked) return;
   betaGateViewTracked = true;
   trackBetaEvent("beta_gate_viewed", {
@@ -28835,9 +28849,11 @@ function betaRuntimePlatform() {
 }
 
 function trackBetaAppSession() {
+  if (!analyticsCollectionAllowed()) return Promise.resolve(false);
   if (betaAppSessionTracked || typeof window === "undefined") return Promise.resolve(false);
   betaAppSessionTracked = true;
   return withBetaAnalyticsSessionLock(async () => {
+    if (!analyticsCollectionAllowed()) return false;
     const state = resolveBetaAnalyticsSession();
     if (!state || state.session_start_acknowledged) return true;
     const body = buildBetaAppSessionEvent(state);
@@ -28846,6 +28862,15 @@ function trackBetaAppSession() {
     return acknowledged;
   }).catch(() => false);
 }
+
+if (typeof window !== "undefined") window.addEventListener("sonic:privacy-change", () => {
+  betaAppSessionTracked = false;
+  betaGateViewTracked = false;
+  betaGrowthReactionCount = 0;
+  betaGrowthThreeReactionsTracked = false;
+  betaEventOnceMemory.clear();
+  if (analyticsCollectionAllowed()) void trackBetaAppSession();
+});
 
 function storeBetaAccessGrant(code = "", source = "manual", grant = {}) {
   try {
@@ -30602,6 +30627,9 @@ function activateUserSession(session) {
   weeklyHighlightsCloudSyncTimer = 0;
   beginRecommendationSession(normalizedSession);
   currentAuthUser = normalizedSession;
+  if (typeof window.dispatchEvent === "function" && typeof window.CustomEvent === "function") {
+    window.dispatchEvent(new window.CustomEvent("sonic:profile-changed"));
+  }
   socialState.tasteSnapshot = null;
   resetSessionStateInMemory();
   currentDjRecommendation = null;
@@ -34111,7 +34139,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal"].includes(requestedTab)
+  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -34125,6 +34153,7 @@ function currentActiveAppTabName() {
 function primaryAppTabName(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
   if (safeTab === "filters") return "discover";
+  if (safeTab === "recommends") return "discover";
   if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return "more";
   return safeTab;
 }
@@ -34143,6 +34172,7 @@ function toggleAppMenu() {
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
   const secondaryLabels = {
+    recommends: sonicTinyCopy("SonicSearch Recomenda", "SonicSearch Recommends", "SonicSearch Recomienda"),
     filters: t("tabFilters"),
     about: t("tabAbout"),
     support: t("tabSupport"),
@@ -34299,6 +34329,9 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   }
   if (safeTab === "discover") {
     ensureDailyRadarReady();
+  }
+  if (safeTab === "recommends") {
+    void weeklyRecommendsController?.open();
   }
   if (safeTab === "admin") {
     void loadAdminAnalytics();
@@ -37890,6 +37923,9 @@ function setPreviewPrimaryPlaybackState(state = "ready") {
 }
 
 function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
+  if (typeof window.dispatchEvent === "function" && typeof window.CustomEvent === "function") {
+    window.dispatchEvent(new window.CustomEvent("sonic:stop-universal-playback"));
+  }
   const previousPlayback = activePlayback;
   const generation = ++playbackGeneration;
   setActivePlayback({
@@ -45484,7 +45520,7 @@ async function loadPremiumOffers() {
   } finally {
     premiumBillingState.loading = false;
     const isApple = premiumBillingState.channel === "apple";
-    if (premiumRestoreBtn) premiumRestoreBtn.classList.toggle("hidden", !isApple || !premiumBillingState.checkoutReady);
+    if (premiumRestoreBtn) premiumRestoreBtn.classList.toggle("hidden", !isApple);
     const paidProvider = adminAccessState.membership?.provider;
     if (premiumManageBtn) premiumManageBtn.classList.toggle("hidden", !["apple", "stripe"].includes(paidProvider));
   }
@@ -50148,6 +50184,7 @@ function discoveryExposureCandidatePayload(tracks = []) {
 }
 
 async function refreshGlobalDiscoveryExposure(tracks = []) {
+  if (!analyticsCollectionAllowed()) return false;
   if (!anonymousDiscoverySession() || typeof fetch !== "function") return false;
   const payload = discoveryExposureCandidatePayload(tracks);
   if (!payload.trackKeys.length && !payload.artistKeys.length) return false;
@@ -50168,8 +50205,12 @@ async function refreshGlobalDiscoveryExposure(tracks = []) {
     body: JSON.stringify({
       action: "snapshot",
       anonymousId: betaAnalyticsAnonymousId(),
+      analytics_consent: true,
+      consent_version: window.SonicPrivacy.version,
+      platform: betaRuntimePlatform(),
       ...payload
     }),
+    signal: window.SonicPrivacy.signal(),
     keepalive: true
   })
     .then((response) => response.ok ? response.json() : null)
@@ -50194,6 +50235,7 @@ async function refreshGlobalDiscoveryExposure(tracks = []) {
 }
 
 async function recordGlobalDiscoveryExposure(track) {
+  if (!analyticsCollectionAllowed()) return false;
   if (!track || !anonymousDiscoverySession() || typeof fetch !== "function") return false;
   const trackKey = recommendationTrackKey(track);
   const artistKey = artistMatchKey(track.artist || "");
@@ -50210,9 +50252,13 @@ async function recordGlobalDiscoveryExposure(track) {
       body: JSON.stringify({
         action: "record",
         anonymousId: betaAnalyticsAnonymousId(),
+        analytics_consent: true,
+        consent_version: window.SonicPrivacy.version,
+        platform: betaRuntimePlatform(),
         trackKey,
         artistKey
       }),
+      signal: window.SonicPrivacy.signal(),
       keepalive: true
     });
     if (!response.ok) return false;
@@ -58382,7 +58428,14 @@ function socialSetStatus(message = "", tone = "") {
 }
 
 function socialStoreSession(session = null) {
+  if (socialState.session?.user?.id !== session?.user?.id) {
+    socialState.profile = null;
+    socialState.profileAvatarUrl = "";
+  }
   socialState.session = session || null;
+  if (typeof window.CustomEvent === "function") {
+    window.dispatchEvent(new window.CustomEvent("sonic:online-session-changed"));
+  }
   if (!session) resetAdminAccessState();
   try {
     if (session) localStorage.setItem(SOCIAL_SESSION_STORAGE_KEY, JSON.stringify(session));
@@ -59219,7 +59272,10 @@ function socialCurrentProfilePayload() {
     id: userId,
     username,
     display_name: displayName,
-    avatar_url: normalizeUserSession(currentAuthUser).avatar || socialState.profile?.avatar_url || null,
+    // A custom photo/removal is deliberate; OAuth sync must never overwrite it.
+    avatar_url: socialState.profile?.avatar_customized
+      ? null
+      : socialState.profile?.avatar_url || normalizeUserSession(currentAuthUser).avatar || null,
     bio: socialState.profile?.bio || "",
     favorite_styles: favoriteStyles,
     liked_track_count: likedTrackHistory.length,
@@ -59561,11 +59617,21 @@ async function loadSocialProfile(options = {}) {
 async function upsertSocialProfile() {
   const payload = socialCurrentProfilePayload();
   if (!payload) return null;
-  const [profile] = await socialRequest("/rest/v1/profiles?on_conflict=id", {
-    method: "POST",
-    prefer: "resolution=merge-duplicates,return=representation",
-    body: [payload]
-  });
+  let profile;
+  if (socialState.profile?.id === payload.id) {
+    // Sync taste only. A background sync cannot revert an explicit profile edit.
+    const { favorite_styles, liked_track_count, sonic_dna, updated_at } = payload;
+    [profile] = await socialRequest(`/rest/v1/profiles?id=eq.${encodeURIComponent(payload.id)}`, {
+      method: "PATCH", prefer: "return=representation",
+      body: { favorite_styles, liked_track_count, sonic_dna, updated_at }
+    });
+  } else {
+    await socialRequest("/rest/v1/profiles?on_conflict=id", {
+      method: "POST", prefer: "resolution=ignore-duplicates,return=minimal", body: [payload]
+    });
+    // A simultaneous editor save wins; never merge defaults over its identity.
+    profile = await loadSocialProfile({ silent: true });
+  }
   socialState.profile = profile || payload;
   hydrateSocialProfileInputs(socialState.profile);
   return socialState.profile;
@@ -60592,6 +60658,8 @@ function renderSocialUi(options = {}) {
   if (authHasOnlineSession()) void refreshAdminAccess();
   renderMembershipUi();
   renderInitialTasteCalibrationProfileCard();
+  userProfileController?.sync();
+  privacyRequestsController?.sync();
   if (!socialProfileCard) return;
   if (!SOCIAL_PROFILE_ENABLED) {
     socialProfileCard.classList.add("hidden");
@@ -60642,7 +60710,16 @@ function renderSocialUi(options = {}) {
   const profile = socialState.profile || socialCurrentProfilePayload();
   const displayName = profile?.display_name || socialSuggestedDisplayName();
   const username = profile?.username || socialSuggestedUsername();
-  if (socialAvatar) socialAvatar.textContent = (displayName || username || "S").slice(0, 1).toUpperCase();
+  if (socialAvatar) {
+    socialAvatar.textContent = (displayName || username || "S").slice(0, 1).toUpperCase();
+    if (signed && socialState.profileAvatarUrl && profile?.avatar_path) {
+      const photo = document.createElement("img");
+      photo.src = socialState.profileAvatarUrl; photo.alt = ""; photo.referrerPolicy = "no-referrer";
+      photo.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:inherit";
+      photo.onerror = () => { socialAvatar.textContent = (displayName || "S").slice(0, 1).toUpperCase(); };
+      socialAvatar.replaceChildren(photo);
+    }
+  }
   if (socialDisplayName) socialDisplayName.textContent = displayName;
   if (socialHandle) socialHandle.textContent = username ? `@${username}` : "@sonic";
   if (socialCloudLikesCount) socialCloudLikesCount.textContent = String(likedTrackHistory.length);
@@ -65010,6 +65087,50 @@ async function bootSonicSearch() {
   bindPreferenceAutosave();
   ensureAllButtonsHaveAction();
   applyGenreVibeTheme("", { force: true });
+  weeklyRecommendsController = window.SonicWeeklyRecommends?.mount(document.getElementById("weeklyRecommendsPanel"), {
+    getLanguage: () => currentLanguage,
+    navigate: tab => setActiveAppTab(tab, { focusPanel: true }),
+    beforeListen: () => stopAllActivePlayback({ reason: "weekly_recommendation" })
+  });
+  if (currentActiveAppTabName() === "recommends") void weeklyRecommendsController?.open();
+  window.SonicUniversalDiscoveryUi?.mount(document.getElementById("universalDiscoveryPanel"), {
+    getProfileKey: () => sessionProfileKey(),
+    getLanguage: () => currentLanguage,
+    beforePlay: () => stopAllActivePlayback({ reason: "universal_preview" })
+  });
+  privacyRequestsController = window.SonicPrivacyRequests?.mount(document.getElementById("privacyRequestsCard"), {
+    session: () => socialState.session,
+    freshSession: async () => {
+      await ensureFreshSocialSession({ clearOnFailure: true });
+      return authHasOnlineSession() ? socialState.session : null;
+    },
+    endpoint: () => resolveAppApiUrl("/api/privacy-requests"),
+    language: () => currentLanguage,
+    signIn: () => void showAuthScreen()
+  });
+  userProfileController = window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
+    session: () => socialState.session,
+    freshSession: async () => {
+      await ensureFreshSocialSession({ clearOnFailure: true });
+      return authHasOnlineSession() ? socialState.session : null;
+    },
+    endpoint: () => resolveAppApiUrl("/api/user-profile"),
+    language: () => currentLanguage,
+    suggestName: () => socialSuggestedDisplayName(),
+    suggestUsername: () => socialCleanUsername(socialSuggestedUsername()).slice(0, 30),
+    styleLabel: styleLabelByValue,
+    signIn: () => void showAuthScreen(),
+    onLoaded: (profile, avatarUrl) => {
+      if (profile?.id === socialState.session?.user?.id) socialState.profile = { ...socialState.profile, ...profile };
+      socialState.profileAvatarUrl = avatarUrl;
+    },
+    onSaved: (profile, avatarUrl) => {
+      socialState.profile = { ...socialState.profile, ...profile };
+      socialState.profileAvatarUrl = avatarUrl;
+      hydrateSocialProfileInputs(socialState.profile);
+      renderSocialUi({ preserveStatus: true });
+    }
+  });
   if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
 }
 

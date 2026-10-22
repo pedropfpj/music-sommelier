@@ -118,6 +118,7 @@ module.exports = async function handler(req, res) {
         enabled: featureEnabled("SONIC_TRACK_METADATA_ENABLED", true, { allowGlobalFallback: false }),
         providers: {
           deezer: envFlag("SONIC_DEEZER_ENABLED", false),
+          deezerPreview: envFlag("SONIC_DEEZER_ENABLED", false) && envFlag("SONIC_DEEZER_PREVIEW_ROUTE_ENABLED", false),
           itunes: envFlag("SONIC_ITUNES_ENABLED", true)
         },
         compliance: {

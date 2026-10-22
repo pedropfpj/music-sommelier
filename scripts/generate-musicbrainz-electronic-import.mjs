@@ -245,7 +245,7 @@ ${rows || "| — | — | 0 |"}
 - Arquivo \`artist_tag\`: \`${files.artistTag}\`
 - Arquivo \`artist\`: \`${files.artist}\`
 - Arquivo \`artist_alias\`: ${files.artistAlias ? `\`${files.artistAlias}\`` : "não encontrado (opcional)"}
-- Licença declarada no lote: CC0 1.0 (dados centrais do MusicBrainz)
+- Licenças no lote: dados centrais CC0 1.0; tags suplementares CC BY-NC-SA 3.0. O uso das tags requer revisão específica, inclusive para uso comercial.
 
 ## Próxima etapa segura
 
@@ -256,6 +256,9 @@ ${rows || "| — | — | 0 |"}
 }
 
 async function main() {
+  if (process.env.SONIC_MUSICBRAINZ_SUPPLEMENTARY_APPROVED !== "true") {
+    throw new Error("Importação de tags bloqueada: registre a revisão da licença suplementar do MusicBrainz antes de definir SONIC_MUSICBRAINZ_SUPPLEMENTARY_APPROVED=true.");
+  }
   const args = parseArgs(process.argv.slice(2));
   if (!args.dumpDir) {
     throw new Error("Informe --dump-dir com o diretório extraído de mbdump.tar.bz2.");
@@ -360,7 +363,7 @@ async function main() {
             sort_name: sortName,
             aliases: aliasesByArtist.get(artistId) || [],
             source_type: "musicbrainz_artist_tag_candidate",
-            source_license: "CC0-1.0"
+            source_license: "Core CC0-1.0; supplementary tags CC-BY-NC-SA-3.0; usage approval required"
           }
         };
         await writeChunk(writer, `${first ? "" : ","}${JSON.stringify(row)}`);

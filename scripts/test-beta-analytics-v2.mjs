@@ -114,6 +114,7 @@ function nextUuid() {
 }
 
 const analyticsFunctionNames = [
+  "analyticsCollectionAllowed",
   "isBetaAnalyticsUuid",
   "createBetaAnalyticsUuid",
   "sanitizeBetaAnalyticsPathname",
@@ -156,6 +157,7 @@ function createClientHarness({
     crypto: { randomUUID: nextUuid },
     navigator: locks ? { locks } : {},
     window: {
+      SonicPrivacy: { allowed: () => true, version: "2026-09-22", signal: () => undefined },
       location: {
         href,
         pathname: parsedUrl.pathname,
@@ -256,7 +258,7 @@ async function testClientAuthenticationPrivacyAndRetry() {
   });
   const state = harness.context.resolveBetaAnalyticsSession(Date.parse("2026-07-19T14:00:00.000Z"));
   const event = harness.context.buildBetaAppSessionEvent(state);
-  assert.equal(event.user_id, userId);
+  assert.equal(event.user_id, null, "Analytics no longer links to the account ID");
   assert.equal(event.anonymous_id, harness.context.betaAnalyticsAnonymousId());
   assert.equal(event.pathname, "/callback");
   assert.deepEqual(Object.keys(event).sort(), [
@@ -353,6 +355,7 @@ function restoreEnv() {
 
 function validV2Body(overrides = {}) {
   return {
+    analytics_consent: true, consent_version: "2026-09-22",
     event_name: "app_session_started",
     schema_version: 2,
     event_id: "20000000-0000-4000-8000-000000000001",
@@ -423,7 +426,7 @@ async function testBackendContract() {
     assert.equal(Object.hasOwn(row, "client_hash"), false);
     assert.equal(Object.hasOwn(row, "user_agent"), false);
     assert.equal(Object.hasOwn(row, "source"), false);
-    assert.deepEqual(row.payload, { is_first_session: true, previous_session_at: null });
+    assert.deepEqual(row.payload, { consent_version: "2026-09-22", is_first_session: true, previous_session_at: null });
     const serializedRow = JSON.stringify(row);
     ["server-secret", "server-invite", "fragment-secret", "ignored-payload-secret", "ignored@example.com", "203.0.113.8", "Analytics Test Agent"]
       .forEach((secret) => assert.doesNotMatch(serializedRow, new RegExp(secret, "i")));
@@ -439,7 +442,7 @@ async function testBackendContract() {
       user_id: authenticatedUserId
     }));
     assert.equal(authenticated.statusCode, 200);
-    assert.equal(JSON.parse(fetchCalls.at(-1)[1].body)[0].user_id, authenticatedUserId);
+    assert.equal(JSON.parse(fetchCalls.at(-1)[1].body)[0].user_id, null);
 
     global.fetch = async () => ({
       ok: false,
@@ -481,6 +484,7 @@ async function testBackendContract() {
     };
     const legacy = await callHandler(handler, {
       event: "legacy_event",
+      analytics_consent: true, consent_version: "2026-09-22", platform: "web",
       sessionId: "legacy-session",
       pageUrl: "https://sonic.example/login?access_token=legacy-secret#refresh_token=legacy-fragment",
       payload: { compatible: true }
@@ -489,7 +493,7 @@ async function testBackendContract() {
     assert.equal(legacy.body.stored, true);
     const legacyRow = JSON.parse(fetchCalls.at(-1)[1].body)[0];
     assert.equal(legacyRow.page_url, "/login");
-    assert.deepEqual(legacyRow.payload, { compatible: true });
+    assert.deepEqual(legacyRow.payload, { compatible: true, consent_version: "2026-09-22" });
     assert.equal(legacyRow.schema_version, 1);
     assert.equal(legacyRow.event_id, null);
     assert.equal(legacyRow.anonymous_id, null);
