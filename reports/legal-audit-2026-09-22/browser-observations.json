@@ -1,0 +1,214 @@
+{
+  "at": "2026-09-22T21:16:49.843Z",
+  "mode": "public page, fresh browser with analytics choice no; API and third-party calls intercepted and aborted",
+  "choice": "no",
+  "analyticsIdentifiers": [
+    "sonic_search:analytics_anonymous:v2",
+    "sonic_search:analytics_session:v2",
+    "sonic_search:privacy:analytics:v1"
+  ],
+  "events": [
+    {
+      "host": "sonicsearch.app",
+      "path": "/api/beta-events",
+      "method": "POST",
+      "event": "app_session_started",
+      "blocked": true
+    }
+  ],
+  "otherAttemptedRequests": [
+    {
+      "host": "fonts.googleapis.com",
+      "path": "/css2",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "w.soundcloud.com",
+      "path": "/player/api.js",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "sonicsearch.app",
+      "path": "/api/discovery-exposure",
+      "method": "POST",
+      "blocked": true
+    },
+    {
+      "host": "sonicsearch.app",
+      "path": "/api/opening-slot",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/d50cc0c3e9c59e8e63fb773b4f7c4501/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/bac67a09b08bb7b999f673eb01257b37/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/10aae559e2bc6cd72957a39a2d129122/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/b62a06ef55ce19c91c67f1ebaa098886/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/c55292e572bb1b1da2b2aefe82e3b0ef/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/3577181f889c6bc3f4ffb6b112aa2621/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/260eb8ba908cf6d2bfbe4ee6af4d4284/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/b6839794d401b47d7b2854d8968d2836/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview116/v4/80/c2/e8/80c2e8e3-95d3-3d41-3e7d-8bbf1416d873/mzaf_6956652735442226964.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview211/v4/ac/b3/80/acb3801b-057f-1a9f-fb40-9176cb150ab4/mzaf_9931704336493673288.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview211/v4/81/1e/07/811e0724-41f1-bd08-00b3-f044cd9ab956/mzaf_8016861442782075358.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview221/v4/ba/ab/09/baab098b-7ed7-52c2-6a60-55b3d51ffc71/mzaf_15738876229197099582.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview125/v4/01/63/51/01635120-c956-6906-54c0-0866f8913689/mzaf_15334282776476339653.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview126/v4/ad/78/9c/ad789c9b-b9b1-e3c6-7abc-f448ea26c854/mzaf_1141513163607346773.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview125/v4/15/90/d0/1590d055-547d-2bfa-1365-87d09d6fbe40/mzaf_12883680752812747346.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview115/v4/37/a8/c0/37a8c07d-3261-a59e-2001-9a5ce98cfe38/mzaf_10430132016295414745.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "sonicsearch.app",
+      "path": "/api/discovery-exposure",
+      "method": "POST",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/3577181f889c6bc3f4ffb6b112aa2621/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/d50cc0c3e9c59e8e63fb773b4f7c4501/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/bac67a09b08bb7b999f673eb01257b37/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/10aae559e2bc6cd72957a39a2d129122/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/c6636594e5c8b2ac8af2f7741b4c762b/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/b62a06ef55ce19c91c67f1ebaa098886/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/fb96300330027d5e4706a948c1bbe05a/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "cdn-images.dzcdn.net",
+      "path": "/images/cover/c55292e572bb1b1da2b2aefe82e3b0ef/500x500-000000-80-0-0.jpg",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview115/v4/62/a5/98/62a598e6-a881-2b2b-e4e8-376db33805c2/mzaf_269845481958460888.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "audio-ssl.itunes.apple.com",
+      "path": "/itunes-assets/AudioPreview211/v4/ec/41/79/ec41790e-8b0c-3418-028d-0cfb9d705c3e/mzaf_8018997154252000334.plus.aac.p.m4a",
+      "method": "GET",
+      "blocked": true
+    },
+    {
+      "host": "sonicsearch.app",
+      "path": "/api/social-config",
+      "method": "GET",
+      "blocked": true
+    }
+  ],
+  "title": "SONIC SEARCH - Electronic discovery with context"
+}

@@ -1,0 +1,14 @@
+{
+  "environment": "local isolated mock; no external API requests",
+  "SONIC_DEEZER_ENABLED": false,
+  "SONIC_DEEZER_PREVIEW_ROUTE_ENABLED": "unset",
+  "statusCode": 302,
+  "providerCalls": [
+    "api.deezer.com"
+  ],
+  "headers": {
+    "Location": "https://example.invalid/preview.mp3",
+    "Cache-Control": "public, max-age=300, stale-while-revalidate=900",
+    "Access-Control-Allow-Origin": "*"
+  }
+}
