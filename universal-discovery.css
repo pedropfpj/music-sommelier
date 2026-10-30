@@ -14,6 +14,8 @@
 .universal-discovery-panel button.primary { color: #07131d; background: var(--u-accent); font-weight: 700; }
 .universal-discovery-panel button:hover { border-color: var(--u-accent); }
 .universal-discovery-panel button:active { opacity: .8; }
+.universal-discovery-panel button:disabled, .universal-discovery-panel select:disabled { opacity: .55; cursor: not-allowed; }
+.universal-discovery-panel .universal-retry { margin-top: 16px; }
 .universal-discovery-panel :focus-visible { outline: 3px solid var(--u-accent); outline-offset: 3px; }
 .universal-discovery-panel .universal-title:focus { outline: none; }
 .universal-muted { color: var(--u-muted); font-size: 1em; }

@@ -2,10 +2,14 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { createRequire } from "node:module";
+import { mock } from "node:test";
 const require = createRequire(import.meta.url);
 const model = require("../universal-discovery.js"), listening = require("../universal-listening.js");
 const dataset = JSON.parse(await fs.readFile(new URL("../data/universal-listening-pilot.json", import.meta.url), "utf8"));
 const catalog = JSON.parse(await fs.readFile(new URL("../data/universal-catalog-pilot.json", import.meta.url), "utf8"));
+// Exercise this recorded catalog at its capture date. This does not refresh
+// provider evidence; expiry is tested separately below at explicit future dates.
+mock.timers.enable({ apis: ["Date"], now: Date.parse(dataset.generatedAt) });
 assert.equal(model.previewEnabled({ hostname: "sonicsearch.app", search: "?universalPreview=1" }), false);
 assert.equal(model.previewEnabled({ hostname: "127.0.0.1", search: "?universalPreview=1" }), true);
 assert.equal(model.previewEnabled({ hostname: "127.0.0.1", search: "" }), false);
@@ -122,4 +126,13 @@ const app = await fs.readFile(new URL("../app.js", import.meta.url), "utf8");
 assert.match(app, /SonicUniversalDiscoveryUi\?\.mount/);
 const ios = await fs.readFile(new URL("../scripts/build-ios-web.mjs", import.meta.url), "utf8");
 for (const asset of ["universal-discovery.js", "universal-discovery-ui.js", "universal-discovery.css"]) assert.ok(ios.includes(`copyPath("${asset}")`));
+const expiredAt = now + 31 * 86400000;
+assert.equal(model.ranked(dataset.tracks, state, { now: expiredAt }).length, 0, "Expired provider evidence must never produce recommendations");
+assert.equal(model.react(state, played, "like", "invalid date").history.length, 0);
+assert.equal(model.react(state, played, "like", new Date(expiredAt).toISOString()).history.length, 0, "Reject reactions to sources expired at the supplied time");
+mock.timers.setTime(expiredAt);
+assert.equal(model.ranked(dataset.tracks, state).length, 0, "Default runtime clock must enforce expiry too");
+assert.equal(model.react(state, played, "like").history.length, 0);
+assert.equal(model.react(state, played, "like", dataset.generatedAt).history.length, 1, "Explicit reaction timestamps must use the same clock as delivery and ranking");
+mock.timers.reset();
 console.log("Universal discovery passed: experience-specific reference budgets, affinity/expansion/surprise, new-artist learning, artist diversity, reload-safe seven-day delivery history, strict style, tested sources only, profile-local reactions and iPhone assets.");

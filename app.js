@@ -4835,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20260922privacy1";
+const SONIC_APP_BUILD_ID = "20261030discovery1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -24332,7 +24332,7 @@ const I18N = {
     discoverySequence: "Faixa #{number}",
     heardTrackSequence: "Faixa apresentada #{number}",
     swipeEmptyTitle: "Abra uma faixa",
-    swipeEmptyMeta: "Toque em Surpresa, escute e decida no swipe.",
+    swipeEmptyMeta: "Ouça uma faixa e use Curti ou Não curti para afinar o radar.",
     swipeHint: "Arraste com mouse ou dedo; solte para registrar.",
     topSwipeEmptyTitle: "Pronto para sua primeira faixa",
     topSwipeEmptyMeta: "Toque em Ouvir uma faixa para abrir uma carta, curtir ou passar.",
@@ -24354,7 +24354,7 @@ const I18N = {
     aboutReasonFourTitle: "Erro vira ajuste",
     aboutReasonFourText: "Marque subgênero, BPM, imagem ou preview ruim para o radar corrigir a próxima rota.",
     aboutFlowTitle: "Como usar",
-    aboutFlowStepOne: "Toque em Surpresa e escute o preview.",
+    aboutFlowStepOne: "Toque em Ouvir uma faixa e escute o preview.",
     aboutFlowStepTwo: "Curta, passe ou marque se já conhecia.",
     aboutFlowStepThree: "Use o Filtro manual quando quiser subgênero, BPM ou contexto específico.",
     aboutFlowStepFour: "Revise curtidas, descartes e seu Sound System no Perfil.",
@@ -25233,7 +25233,7 @@ const I18N = {
     feedbackHint: "Every like, pass, or correction makes the next recommendation sharper.",
     swipeHeroKicker: "Instant discovery",
     swipeHeroTitle: "Listen first, tune later",
-    swipeHeroHint: "Tap Listen to a track to open the first card; every reaction sharpens the next one.",
+    swipeHeroHint: "Tap Find a track to open the first card; every reaction sharpens the next one.",
     swipeDeckKicker: "Discovery routes",
     swipeDeckTitle: "Choose a sound direction",
     swipeDeckHint: "Use a subgenre to open a more coherent sequence.",
@@ -25247,7 +25247,7 @@ const I18N = {
     swipeEmptyMeta: "Tap Surprise, listen, and decide with a swipe.",
     swipeHint: "Drag with mouse or touch; release to save the signal.",
     topSwipeEmptyTitle: "Ready for your first track",
-    topSwipeEmptyMeta: "Tap Listen to a track to open a card, like, or pass.",
+    topSwipeEmptyMeta: "Tap Find a track to open a card, like, or pass.",
     topSwipeHint: "Want precision? Open Filters after the first listen.",
     aboutKicker: "What improves",
     aboutTitle: "Discovery without blind search",
@@ -37913,6 +37913,7 @@ function trackPlaybackLifecycleEvent(eventName = "", source = "", extra = {}) {
 function setPreviewPrimaryPlaybackState(state = "ready") {
   if (!previewPlayBtn) return;
   const normalized = ["ready", "loading", "playing"].includes(state) ? state : "ready";
+  if (previewPanel) previewPanel.dataset.directAudio = String(Boolean(ownedTrackPreviewSource(currentRecommendation, trackPreview)));
   previewPlayBtn.dataset.playbackState = normalized;
   previewPlayBtn.disabled = normalized === "loading";
   previewPlayBtn.textContent = normalized === "playing"
@@ -51247,33 +51248,19 @@ function emptySwipeProfileCopy() {
   const likedSongs = totalLikedSongs();
   const shownTracks = Math.max(0, Number(seenTrackKeysMemory?.size) || 0);
   const hasProfileHistory = likedSongs > 0 || shownTracks > 0 || likedTrackHistory.length > 0;
-  if (!hasProfileHistory) {
-    return {
-      title: t("topSwipeEmptyTitle"),
-      meta: t("topSwipeEmptyMeta")
-    };
-  }
-  if (currentLanguage === "en") {
-    return {
-      title: likedSongs > 0 ? "Radar calibrated" : "Radar ready",
-      meta: likedSongs > 0
-        ? `${likedSongs} liked tracks in your history. Tap Surprise for the next suggestion.`
-        : `${shownTracks} tracks mapped. Tap Surprise for the next suggestion.`
-    };
-  }
-  if (currentLanguage === "es") {
-    return {
-      title: likedSongs > 0 ? "Radar calibrado" : "Radar listo",
-      meta: likedSongs > 0
-        ? `${likedSongs} likes en tu historial. Toca Sorpresa para la próxima sugerencia.`
-        : `${shownTracks} pistas mapeadas. Toca Sorpresa para la próxima sugerencia.`
-    };
-  }
+  if (!hasProfileHistory) return { title: t("topSwipeEmptyTitle"), meta: t("topSwipeEmptyMeta") };
+  const count = likedSongs || shownTracks;
+  if (currentLanguage === "en") return {
+    title: likedSongs > 0 ? "Your taste, new discoveries" : "Ready for another discovery",
+    meta: `${count} ${likedSongs ? (count === 1 ? "saved track" : "saved tracks") : (count === 1 ? "track explored" : "tracks explored")}. Tap Find a track to keep exploring.`
+  };
+  if (currentLanguage === "es") return {
+    title: likedSongs > 0 ? "Tu gusto, nuevos descubrimientos" : "Tu próxima pista te espera",
+    meta: `${count} ${likedSongs ? (count === 1 ? "pista guardada" : "pistas guardadas") : (count === 1 ? "pista explorada" : "pistas exploradas")}. Toca Escuchar una pista para continuar.`
+  };
   return {
-    title: likedSongs > 0 ? "Radar calibrado" : "Radar pronto",
-    meta: likedSongs > 0
-      ? `${likedSongs} curtidas no histórico. Toque em Surpresa para ouvir a próxima sugestão.`
-      : `${shownTracks} faixas mapeadas. Toque em Surpresa para ouvir a próxima sugestão.`
+    title: likedSongs > 0 ? "Seu gosto, novas descobertas" : "Sua próxima faixa espera por você",
+    meta: `${count} ${likedSongs ? (count === 1 ? "faixa salva" : "faixas salvas") : (count === 1 ? "faixa explorada" : "faixas exploradas")}. Toque em Ouvir uma faixa para continuar.`
   };
 }
 
@@ -58220,11 +58207,58 @@ function likedTrackMetaParts(entry = {}) {
   return parts;
 }
 
+function discoveryExperienceCopy() {
+  return window.SonicDiscoveryExperience.copy[currentLanguage] || window.SonicDiscoveryExperience.copy.pt;
+}
+
+function selectLibraryTracks(entries) {
+  return window.SonicDiscoveryExperience.selectTracks(entries,
+    document.getElementById("librarySearch")?.value || "",
+    document.getElementById("libraryOrder")?.value || "recent",
+    currentLocale(), styleLabelByValue);
+}
+
+async function openSavedLibraryTrack(entry, button) {
+  if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return;
+  const profileKey = sessionProfileKey();
+  const previousTrack = currentRecommendation;
+  recommendationRunBusy = true;
+  button.disabled = true;
+  button.textContent = discoveryExperienceCopy().opening;
+  primeAudioForDiscoveryGesture();
+  try {
+    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog]
+      .find(candidate => candidate && recommendationTrackKey(candidate) === normalize(entry.key) && isTrackEligibleForRecommendation(candidate));
+    let track = resolveTrack();
+    if (!track) {
+      await hydrateExternalDatasetPackInBackground({ style: entry.style || "" });
+      track = resolveTrack();
+    }
+    if (profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation) return;
+    if (!track || !isTrackEligibleForRecommendation(track)) {
+      showToast(discoveryExperienceCopy().unavailable);
+      return;
+    }
+    stopAllActivePlayback({ reason: "saved_library_replay" });
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null });
+    trackRecommendationEvent("saved_track_replayed", track, lastPrefs || {}, { source: "library" });
+    document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
+  } catch (_) {
+    if (profileKey === sessionProfileKey()) showToast(discoveryExperienceCopy().unavailable);
+  } finally {
+    recommendationRunBusy = false;
+    button.disabled = false;
+    button.textContent = discoveryExperienceCopy().play;
+  }
+}
+
 function renderLikedTrackHistory() {
   if (!summaryLikedTracksList) return;
   summaryLikedTracksList.innerHTML = "";
   if (summaryLikedTracksClearBtn) summaryLikedTracksClearBtn.disabled = likedTrackHistory.length <= 0;
 
+  const countLabel = document.getElementById("libraryLikedCount");
+  if (countLabel) countLabel.textContent = "";
   if (!likedTrackHistory.length) {
     const empty = document.createElement("p");
     empty.className = "liked-track-empty muted";
@@ -58233,7 +58267,16 @@ function renderLikedTrackHistory() {
     return;
   }
 
-  likedTrackHistory.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
+  const visibleEntries = selectLibraryTracks(likedTrackHistory);
+  const count = document.getElementById("libraryLikedCount");
+  if (count) count.textContent = discoveryExperienceCopy().count(visibleEntries.length, likedTrackHistory.length);
+  if (!visibleEntries.length) {
+    const empty = document.createElement("p");
+    empty.className = "liked-track-empty muted";
+    empty.textContent = discoveryExperienceCopy().empty;
+    summaryLikedTracksList.appendChild(empty);
+  }
+  visibleEntries.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
     const item = document.createElement("article");
     item.className = "liked-track-item";
 
@@ -58257,6 +58300,13 @@ function renderLikedTrackHistory() {
 
     const actions = document.createElement("div");
     actions.className = "liked-track-actions";
+    const play = document.createElement("button");
+    play.type = "button";
+    play.className = "library-play";
+    play.textContent = discoveryExperienceCopy().play;
+    play.setAttribute("aria-label", `${discoveryExperienceCopy().play}: ${entry.song}, ${entry.artist}`);
+    play.addEventListener("click", () => void openSavedLibraryTrack(entry, play));
+    actions.appendChild(play);
     [
       { label: t("summaryLikedTrackOpenSpotify"), url: entry.spotifyUrl },
       { label: t("summaryLikedTrackOpenYoutube"), url: entry.youtubeUrl },
@@ -58328,6 +58378,8 @@ function renderDislikedTrackHistory() {
   summaryDislikedTracksList.innerHTML = "";
   if (summaryDislikedTracksClearBtn) summaryDislikedTracksClearBtn.disabled = dislikedTrackHistory.length <= 0;
 
+  const countLabel = document.getElementById("libraryDislikedCount");
+  if (countLabel) countLabel.textContent = "";
   if (!dislikedTrackHistory.length) {
     const empty = document.createElement("p");
     empty.className = "liked-track-empty muted";
@@ -58336,7 +58388,16 @@ function renderDislikedTrackHistory() {
     return;
   }
 
-  dislikedTrackHistory.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
+  const visibleEntries = selectLibraryTracks(dislikedTrackHistory);
+  const count = document.getElementById("libraryDislikedCount");
+  if (count) count.textContent = discoveryExperienceCopy().count(visibleEntries.length, dislikedTrackHistory.length);
+  if (!visibleEntries.length) {
+    const empty = document.createElement("p");
+    empty.className = "liked-track-empty muted";
+    empty.textContent = discoveryExperienceCopy().empty;
+    summaryDislikedTracksList.appendChild(empty);
+  }
+  visibleEntries.slice(0, LIKED_TRACK_HISTORY_LIMIT).forEach((entry) => {
     const item = document.createElement("article");
     item.className = "liked-track-item is-disliked";
 
@@ -63602,6 +63663,16 @@ const finishDirectPreviewPlayback = () => {
 };
 bind(trackPreview, "pause", finishDirectPreviewPlayback);
 bind(trackPreview, "ended", finishDirectPreviewPlayback);
+bind(trackPreview, "ended", () => {
+  if (!isNativeIosRuntime() || urlRequestsScreenshotMode() || !trackPreviewElementMatchesTrack(currentRecommendation)) return;
+  let seconds = 0;
+  try {
+    for (let index = 0; index < trackPreview.played.length; index += 1) {
+      seconds += trackPreview.played.end(index) - trackPreview.played.start(index);
+    }
+  } catch (_) { return; }
+  if (seconds >= 20) void capacitorPlugin("SonicReviews")?.completedListening({ seconds }).catch(() => null);
+});
 
 bind(previewPlayBtn, "click", async () => {
   if (!trackPreview || previewPlayBtn?.disabled || !currentRecommendation) return;
@@ -65130,6 +65201,12 @@ async function bootSonicSearch() {
       hydrateSocialProfileInputs(socialState.profile);
       renderSocialUi({ preserveStatus: true });
     }
+  });
+  window.SonicDiscoveryExperience?.mount({
+    language: () => currentLanguage,
+    renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
+    openLibrary: () => setActiveAppTab("profile", { focusPanel: true }),
+    trackDownload: () => trackBetaEvent("app_store_clicked", { placement: "discovery" }, { source: "web" })
   });
   if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
 }

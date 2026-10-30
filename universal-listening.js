@@ -74,7 +74,15 @@
     const artists = new Set(eligible.map(t => t.artistKey || t.artist)).size;
     const tiers = new Set(eligible.map(t => t.discoveryTier));
     const played = eligible.filter(t => playbackResult(t, now) === "played");
+    const expiredPlayableTracks = tracks.filter(t => {
+      if (t?.group !== group) return false;
+      const evidenceAt = Date.parse(t.evidence?.checkedAt), playbackAt = Date.parse(t.playbackCheck?.checkedAt);
+      const verifiedAt = Math.max(evidenceAt, playbackAt);
+      return Number.isFinite(verifiedAt) && verifiedAt <= now && now - Math.min(evidenceAt, playbackAt) >= MAX_AGE_MS
+        && previewEligible(t, verifiedAt) && playbackResult(t, verifiedAt) === "played";
+    }).length;
     return { tracks: eligible.length, artists, testedPlayableTracks: played.length,
+      expiredPlayableTracks,
       testedPlayableRecordings: new Set(played.map(t => t.referenceKey || t.key)).size,
       testedPlayableArtists: new Set(played.map(t => t.artistKey || t.artist)).size,
       previewReady: eligible.length >= 3 && artists >= 3 && tiers.size >= 2 };

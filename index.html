@@ -25,6 +25,7 @@
     <meta name="twitter:description" content="Find electronic tracks by moment, with swipe, preview, and match context." />
     <meta name="twitter:image" content="https://sonicsearch.app/assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="canonical" href="https://sonicsearch.app/" />
+    <meta name="apple-itunes-app" content="app-id=6786758494" />
     <title>SONIC SEARCH - Electronic discovery with context</title>
     <link rel="icon" type="image/png" sizes="512x512" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="icon" type="image/svg+xml" href="assets/image-bank/logos/sonic-search-tab-icon.svg?v=20260618tabicon1" />
@@ -78,10 +79,11 @@
     <link rel="stylesheet" href="styles.min.css?v=20260917mobilegrid2" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
     <link rel="stylesheet" href="user-profile.css?v=20260914profile1" />
-    <link rel="stylesheet" href="universal-discovery.css?v=20260914discovery2" />
+    <link rel="stylesheet" href="universal-discovery.css?v=20261023recovery1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
     <link rel="stylesheet" href="weekly-recommends.css?v=20260916weekly1" />
+    <link rel="stylesheet" href="discovery-experience.css?v=20261030discovery1" />
     <script src="privacy-controls.js?v=20260922privacy1"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -1263,7 +1265,10 @@
         </aside>
       </section>
 
-      <section id="dailyRadarPanel" class="daily-radar-panel app-tab-panel active" data-app-tab="discover" aria-label="Radar diário de faixas" hidden></section>
+      <aside class="web-app-invite" aria-label="Sonic Search para iPhone">
+        <div><strong data-experience-copy="inviteTitle">Seu próximo achado vai com você.</strong><p data-experience-copy="inviteText">Descoberta eletrônica no iPhone. Grátis para começar, sem criar conta.</p><a class="invite-learn" href="iphone.html" data-experience-copy="learn">Conheça o app →</a></div>
+        <a id="webAppDownload" href="https://apps.apple.com/app/id6786758494" target="_blank" rel="noopener noreferrer" data-experience-copy="download">Baixar para iPhone</a>
+      </aside>
 
       <section id="universalDiscoveryPanel" class="panel universal-discovery-panel app-tab-panel active hidden" data-app-tab="discover" aria-label="Expansão musical em teste" hidden></section>
 
@@ -1318,6 +1323,68 @@
               <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
           </div>
+          <div id="previewPanel" class="preview-panel hidden">
+            <p id="previewStatus" class="muted">Procurando um preview tocável...</p>
+            <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
+            <button id="previewPlayBtn" class="preview-play-btn" type="button">Tocar preview</button>
+            <div id="soundcloudPreviewWrap" class="soundcloud-preview hidden">
+              <iframe
+                id="soundcloudPreviewFrame"
+                class="soundcloud-preview-frame"
+                title="Preview SoundCloud"
+                loading="eager"
+                allow="autoplay"
+              ></iframe>
+            </div>
+            <div id="bandcampPreviewWrap" class="bandcamp-preview hidden">
+              <iframe
+                id="bandcampPreviewFrame"
+                class="bandcamp-preview-frame"
+                title="Preview Bandcamp"
+                loading="eager"
+                allow="autoplay"
+              ></iframe>
+            </div>
+            <div id="youtubePreviewWrap" class="youtube-preview hidden">
+              <iframe
+                id="youtubePreviewFrame"
+                class="youtube-preview-frame"
+                title="Preview YouTube"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div id="youtubePreviewActions" class="youtube-preview-actions preview-source-actions hidden">
+              <button id="youtubePreviewToggleBtn" class="secondary" type="button">Abrir player no app</button>
+              <button id="youtubePreviewRetryBtn" class="secondary hidden" type="button">Tentar outro vídeo</button>
+              <button id="soundcloudPreviewToggleBtn" class="secondary soundcloud-inline-btn hidden" type="button">Tocar SoundCloud no app</button>
+              <button id="bandcampPreviewToggleBtn" class="secondary bandcamp-inline-btn hidden" type="button">Tocar Bandcamp no app</button>
+              <a id="soundcloudPreviewSearchLink" class="secondary soundcloud-search-link hidden" href="#" target="_blank" rel="noopener noreferrer">Buscar no SoundCloud</a>
+            </div>
+            <div id="listeningPrompt" class="known-prompt hidden">
+            <p>O som conectou?</p>
+              <div class="feedback-buttons">
+                <button id="previewLikeBtn">Conectou</button>
+                <button id="previewIssueBtn" class="secondary">Não tocou</button>
+                <button id="previewDislikeBtn" class="secondary">Não conectou, troca</button>
+              </div>
+              <div class="feedback-buttons recommendation-issue-buttons hidden" aria-label="Corrigir recomendação" aria-hidden="true">
+                <button id="styleIssueBtn" class="secondary" type="button">Subgênero errado</button>
+                <button id="bpmIssueBtn" class="secondary" type="button">BPM estranho</button>
+                <button id="imageIssueBtn" class="secondary" type="button">Imagem errada</button>
+              </div>
+            </div>
+          </div>
+          <details class="listening-platforms"><summary data-experience-copy="outside">Ouvir nas plataformas</summary><div class="listen-links">
+            <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
+            <a id="spotifyArtistLink" class="listen-btn spotify-artist-btn" href="#" target="_blank" rel="noopener noreferrer">Abrir artista</a>
+            <a id="youtubeLink" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
+            <a id="soundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
+            <a id="bandcampLink" class="listen-btn bandcamp-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Bandcamp</a>
+          </div></details>
+          <button id="discoveryLibraryBtn" class="discovery-library-shortcut" type="button" data-experience-copy="library">Minhas faixas</button>
           <p id="topSwipeHint" class="muted swipe-hint">O fluxo principal fica leve; filtros e contexto estão nas outras abas.</p>
         </div>
       </section>
@@ -1329,6 +1396,8 @@
           <span class="weekly-teaser-cta"><span id="weeklyTeaserOpen">Explorar a semana</span><span aria-hidden="true">↗</span></span>
         </button>
       </section>
+
+      <section id="dailyRadarPanel" class="daily-radar-panel app-tab-panel active" data-app-tab="discover" aria-label="Radar diário de faixas" hidden></section>
 
       <section id="weeklyRecommendsPanel" class="panel app-tab-panel" data-app-tab="recommends" aria-labelledby="weeklyRecommendsTitle" aria-hidden="true" hidden></section>
 
@@ -1758,7 +1827,7 @@
           <article>
             <h4 id="aboutFlowTitle">Como usar</h4>
             <ol class="about-flow-list">
-              <li id="aboutFlowStepOne">Toque em Surpresa e escute o preview.</li>
+              <li id="aboutFlowStepOne">Toque em Ouvir uma faixa e escute o preview.</li>
               <li id="aboutFlowStepTwo">Curta, passe ou marque se já conhecia.</li>
               <li id="aboutFlowStepThree">Use o Filtro manual quando quiser subgênero, BPM ou contexto específico.</li>
               <li id="aboutFlowStepFour">Revise curtidas, descartes e seu Sound System no Perfil.</li>
@@ -2127,6 +2196,7 @@
       </section>
 
       <section id="resultPanel" class="panel hidden app-tab-panel active" data-app-tab="discover" aria-live="polite">
+        <details class="discovery-detail-drawer" id="discoveryDetailDrawer"><summary data-experience-copy="details">Sobre esta faixa e mais opções</summary>
         <h3>Sua faixa</h3>
         <article id="primaryTrackCard" class="result-card main-track" role="group" aria-label="Arraste para direita para curtir ou esquerda para não curtir" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
           <p class="chip" id="matchReason"></p>
@@ -2182,67 +2252,6 @@
             <p id="genreGuideText" class="genre-guide-text muted"></p>
           </div>
           <p id="listeningNarrative" class="listening-narrative hidden"></p>
-          <div class="listen-links">
-            <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
-            <a id="spotifyArtistLink" class="listen-btn spotify-artist-btn" href="#" target="_blank" rel="noopener noreferrer">Abrir artista</a>
-            <a id="youtubeLink" class="listen-btn youtube-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no YouTube</a>
-            <a id="soundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
-            <a id="bandcampLink" class="listen-btn bandcamp-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Bandcamp</a>
-          </div>
-          <div id="previewPanel" class="preview-panel hidden">
-            <p id="previewStatus" class="muted">Procurando um preview tocável...</p>
-            <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
-            <button id="previewPlayBtn" class="preview-play-btn" type="button">Tocar preview</button>
-            <div id="soundcloudPreviewWrap" class="soundcloud-preview hidden">
-              <iframe
-                id="soundcloudPreviewFrame"
-                class="soundcloud-preview-frame"
-                title="Preview SoundCloud"
-                loading="eager"
-                allow="autoplay"
-              ></iframe>
-            </div>
-            <div id="bandcampPreviewWrap" class="bandcamp-preview hidden">
-              <iframe
-                id="bandcampPreviewFrame"
-                class="bandcamp-preview-frame"
-                title="Preview Bandcamp"
-                loading="eager"
-                allow="autoplay"
-              ></iframe>
-            </div>
-            <div id="youtubePreviewWrap" class="youtube-preview hidden">
-              <iframe
-                id="youtubePreviewFrame"
-                class="youtube-preview-frame"
-                title="Preview YouTube"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <div id="youtubePreviewActions" class="youtube-preview-actions preview-source-actions hidden">
-              <button id="youtubePreviewToggleBtn" class="secondary" type="button">Abrir player no app</button>
-              <button id="youtubePreviewRetryBtn" class="secondary hidden" type="button">Tentar outro vídeo</button>
-              <button id="soundcloudPreviewToggleBtn" class="secondary soundcloud-inline-btn hidden" type="button">Tocar SoundCloud no app</button>
-              <button id="bandcampPreviewToggleBtn" class="secondary bandcamp-inline-btn hidden" type="button">Tocar Bandcamp no app</button>
-              <a id="soundcloudPreviewSearchLink" class="secondary soundcloud-search-link hidden" href="#" target="_blank" rel="noopener noreferrer">Buscar no SoundCloud</a>
-            </div>
-            <div id="listeningPrompt" class="known-prompt hidden">
-            <p>O som conectou?</p>
-              <div class="feedback-buttons">
-                <button id="previewLikeBtn">Conectou</button>
-                <button id="previewIssueBtn" class="secondary">Não tocou</button>
-                <button id="previewDislikeBtn" class="secondary">Não conectou, troca</button>
-              </div>
-              <div class="feedback-buttons recommendation-issue-buttons hidden" aria-label="Corrigir recomendação" aria-hidden="true">
-                <button id="styleIssueBtn" class="secondary" type="button">Subgênero errado</button>
-                <button id="bpmIssueBtn" class="secondary" type="button">BPM estranho</button>
-                <button id="imageIssueBtn" class="secondary" type="button">Imagem errada</button>
-              </div>
-            </div>
-          </div>
           <div id="radioBrowserPanel" class="radio-browser-panel hidden" aria-live="polite">
             <div class="radio-browser-head">
               <div>
@@ -2384,7 +2393,7 @@
               <span class="swipe-stamp swipe-stamp-pass">Não curti</span>
               <p id="swipeKicker" class="swipe-kicker">Swipe da track</p>
               <h4 id="swipeTrackTitle">Abra a primeira carta</h4>
-              <p id="swipeTrackMeta" class="muted">Toque em Surpresa, escute e decida no swipe.</p>
+              <p id="swipeTrackMeta" class="muted">Ouça uma faixa e use Curti ou Não curti para afinar o radar.</p>
               <div class="swipe-track-signals">
                 <span id="swipeStyleChip" class="genre-signal">Estilo</span>
                 <span id="swipeBpmChip">BPM</span>
@@ -2444,6 +2453,7 @@
           </div>
           <p id="feedbackMessage" class="feedback-message" role="status" aria-live="polite"></p>
         </div>
+        </details>
       </section>
 
       <section id="detailsPanel" class="panel artist-hub-panel hidden app-tab-panel active" data-app-tab="discover">
@@ -2748,6 +2758,10 @@
               <p id="profileLibraryHint" class="muted">Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.</p>
             </div>
           </div>
+          <div class="library-tools">
+            <label><span data-experience-copy="search">Buscar nas suas faixas</span><input id="librarySearch" type="search" maxlength="120" placeholder="Faixa, artista ou estilo" autocomplete="off" /></label>
+            <label><span data-experience-copy="sort">Ordenar faixas</span><select id="libraryOrder"><option value="recent" data-experience-copy="recent">Mais recentes</option><option value="title" data-experience-copy="title">Nome da faixa</option><option value="artist" data-experience-copy="artist">Artista</option></select></label>
+          </div>
           <div class="profile-library-grid">
             <article class="profile-stat-card wide liked-track-history-card">
               <div class="liked-track-history-head">
@@ -2757,6 +2771,7 @@
                 </div>
                 <button id="summaryLikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
               </div>
+              <p id="libraryLikedCount" class="library-result-count" role="status" aria-live="polite"></p>
               <div id="summaryLikedTracksList" class="liked-track-list"></div>
             </article>
             <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
@@ -2767,6 +2782,7 @@
                 </div>
                 <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
               </div>
+              <p id="libraryDislikedCount" class="library-result-count" role="status" aria-live="polite"></p>
               <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
             </article>
           </div>
@@ -3348,9 +3364,9 @@
     </script>
     <script async src="https://w.soundcloud.com/player/api.js"></script>
     <script defer src="universal-music.js?v=20260912catalogpilot1"></script>
-    <script defer src="universal-listening.js?v=20260914discovery2"></script>
-    <script defer src="universal-discovery.js?v=20260914discovery2"></script>
-    <script defer src="universal-discovery-ui.js?v=20260914discovery2"></script>
+    <script defer src="universal-listening.js?v=20261023recovery1"></script>
+    <script defer src="universal-discovery.js?v=20261023recovery1"></script>
+    <script defer src="universal-discovery-ui.js?v=20261023recovery1"></script>
     <script defer src="user-profile.js?v=20260914profile1"></script>
     <script defer src="privacy-requests.js?v=20260922privacy1"></script>
     <script defer src="catalog-runtime.min.js?v=20260820catalog21"></script>
@@ -3359,6 +3375,7 @@
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
     <script defer src="weekly-recommends.js?v=20260916weekly1"></script>
-    <script defer src="app.min.js?v=20260922privacy1"></script>
+    <script defer src="discovery-experience.js?v=20261030discovery1"></script>
+    <script defer src="app.min.js?v=20261030discovery1"></script>
   </body>
 </html>

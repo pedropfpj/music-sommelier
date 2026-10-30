@@ -10,8 +10,10 @@ const rootDir = path.resolve(__dirname, "..");
 const webDir = path.join(rootDir, "www");
 const apiBaseUrl = "https://sonicsearch.app";
 const runtimeScriptName = "sonic-ios-runtime.js";
-const appStoreBuildId = "20260922privacy1ios1";
+const appStoreBuildId = "20261030discovery1ios1";
 const iosRuntimeAssetNames = [
+  "discovery-experience.js",
+  "discovery-experience.css",
   "styles.min.css",
   "daily-djs.css",
   "daily-radar.css",
@@ -434,6 +436,8 @@ await Promise.all([
   copyPath("universal-discovery.js"),
   copyPath("universal-discovery-ui.js"),
   copyPath("universal-discovery.css"),
+  copyPath("discovery-experience.js"),
+  copyPath("discovery-experience.css"),
   copyPath("user-profile.js"),
   copyPath("user-profile.css"),
   copyPath("listening-preview.html"),

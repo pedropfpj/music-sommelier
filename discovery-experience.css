@@ -1,0 +1,55 @@
+/* Listening desk: artwork and playback first; context stays a deliberate choice. */
+.web-app-invite { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 22px; border:1px solid #3c645f; border-radius:16px; background:#102622; margin:12px 0; }
+.web-app-invite strong { display:block; color:#f2faf6; font-family:Syne,sans-serif; font-size:18px; }
+.web-app-invite p { margin:5px 0 0; color:#c0d4cf; font-size:14px; }
+.web-app-invite a { flex-shrink:0; background:#c7ff6b; color:#10231e; border-radius:10px; padding:13px 17px; font-weight:700; text-decoration:none; min-height:44px; box-sizing:border-box; }
+.web-app-invite .invite-learn { display:inline-block; min-height:44px; padding:10px 0 0; background:none; color:#c7ff6b; font-size:13px; text-decoration:underline; }
+html.app-store-mode .web-app-invite, html.sonic-ios-app .web-app-invite, html[data-sonic-native-app="true"] .web-app-invite { display:none !important; }
+#swipeStartPanel .swipe-start-stage { max-width:700px; margin-inline:auto; }
+#swipeStartPanel { scroll-margin-top:72px; }
+#topSwipeCard.is-empty ~ .listening-platforms { display:none; }
+#swipeStartPanel .swipe-hero-actions button { border-radius:12px; font-family:'Chakra Petch',sans-serif; font-weight:600; box-shadow:none; }
+#topSwipeCard:not(.is-empty) + .swipe-hero-actions #topSwipeSurpriseBtn { background:#203537; border:1px solid #537375; color:#e4f1ed; }
+#swipeStartPanel #previewPanel[data-direct-audio="true"] #previewPlayBtn { display:none; }
+#swipeStartPanel #previewPanel[data-direct-audio="true"] #youtubePreviewActions { display:none; }
+#swipeStartPanel #previewPanel[data-direct-audio="false"] #trackPreview { display:none; }
+#swipeStartPanel #previewPanel { width:100%; box-sizing:border-box; border-radius:16px; background:#0c191d; border:1px solid #344b50; padding:16px; margin-top:16px; text-align:left; }
+#swipeStartPanel #previewPanel.hidden { display:none; }
+#swipeStartPanel #previewStatus { font-size:14px; line-height:1.5; color:#c5d8d9; margin:0 0 12px; }
+#swipeStartPanel #trackPreview { width:100%; margin-bottom:10px; }
+#swipeStartPanel #previewPlayBtn { width:100%; min-height:48px; border-radius:10px; font-family:inherit; }
+#swipeStartPanel #listeningPrompt > p, #swipeStartPanel #previewLikeBtn, #swipeStartPanel #previewDislikeBtn { display:none; }
+#swipeStartPanel #listeningPrompt { border:0; margin:8px 0 0; padding:0; background:transparent; }
+#swipeStartPanel #previewIssueBtn { font-size:13px; min-height:44px; background:transparent; color:#c5d8d9; border-color:#456369; }
+#swipeStartPanel .preview-source-actions { margin-top:12px; }
+#swipeStartPanel .discovery-library-shortcut { display:block; margin:14px auto 0; min-height:44px; background:transparent; border:1px solid #456369; color:#d1e5e3; font-family:inherit; }
+.discovery-detail-drawer > summary, .listening-platforms > summary { min-height:48px; padding:14px 2px; box-sizing:border-box; cursor:pointer; font-weight:600; color:#d6e9e7; }
+.discovery-detail-drawer > summary:focus-visible, .listening-platforms > summary:focus-visible { outline:2px solid #9effcc; outline-offset:4px; }
+.discovery-detail-drawer:not([open]) > :not(summary) { display:none !important; }
+#resultPanel .discovery-detail-drawer > h3 { display:none; }
+#resultPanel { padding-block:6px; }
+.listening-platforms { margin-top:10px; }
+.library-tools { display:grid; grid-template-columns:minmax(0,1fr) 180px; gap:14px; margin:18px 0; text-align:left; }
+.library-tools label { display:grid; gap:7px; color:#c1d6d3; font-size:14px; }
+.library-tools input, .library-tools select { width:100%; min-width:0; min-height:48px; padding:11px 12px; box-sizing:border-box; font:inherit; font-size:16px; border:1px solid #456369; border-radius:10px; background:#0b171b; color:#f5faf8; }
+.library-tools input:focus-visible, .library-tools select:focus-visible { outline:2px solid #9effcc; outline-offset:2px; }
+.library-result-count { font-size:13px; color:#b2c7c5; margin:0 0 12px; }
+.liked-track-actions .library-play { min-height:44px; background:#baf3d8; color:#10231e; font-weight:700; border-color:transparent; }
+#profileLibraryTitle { scroll-margin-top:85px; }
+@media (min-width:1000px) { .web-app-invite { grid-column:2; } }
+@media (max-width:600px) { .web-app-invite { align-items:flex-start; flex-direction:column; gap:12px; padding:16px; } .web-app-invite a { width:100%; text-align:center; } .library-tools { grid-template-columns:1fr; } #swipeStartPanel #previewPanel { padding:12px; } }
+@media (max-width:780px) {
+  #topSwipeCard.swipe-hero-card:not(.is-empty) { display:grid; grid-template-rows:min(29svh,260px) auto; min-height:0; height:auto; }
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art { position:relative; inset:auto; height:100%; min-height:0; }
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-image { object-fit:contain; transform:none; background:#091310; }
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy { position:relative; inset:auto; min-height:0; padding:14px 58px 14px 14px; background:#0b181c; }
+  #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 { font-size:24px; line-height:1.15; }
+  #topSwipeCard.swipe-hero-card.is-empty { min-height:280px; }
+  #swipeStartPanel .swipe-hero-actions { grid-template-areas:"pass surprise like"; grid-template-columns:1fr 1fr 1fr; }
+  #swipeStartPanel .swipe-hero-actions button { font-size:14px; min-height:48px; padding:8px; }
+  #swipeStartPanel #topSwipeCard.is-empty + .swipe-hero-actions { grid-template-areas:"surprise"; grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce) { .discovery-detail-drawer, .web-app-invite { scroll-behavior:auto; } }
+
+#summaryPanel .profile-library-section { order:-1; }
+#summaryPanel .liked-track-clear-btn { width:auto; min-width:60px; min-height:44px; border-radius:10px; justify-self:end; }

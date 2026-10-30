@@ -36,6 +36,12 @@ const runtimeAssetNames = [
   "styles.min.css",
   "daily-djs.css",
   "daily-radar.css",
+  "discovery-experience.js",
+  "discovery-experience.css",
+  "universal-listening.js",
+  "universal-discovery.js",
+  "universal-discovery-ui.js",
+  "universal-discovery.css",
   "catalog-runtime.min.js",
   "daily-djs.js",
   "daily-djs-ui.js",
@@ -44,6 +50,10 @@ const runtimeAssetNames = [
   "sonic-ios-runtime.js",
   "app.min.js"
 ];
+for (const asset of ["discovery-experience.js", "discovery-experience.css"]) {
+  assert.equal(await read(`www/${asset}`), await read(`ios/App/App/public/${asset}`), `Native ${asset} must match the web build`);
+}
+
 const runtimeAssetPattern = new RegExp(
   `(?:${runtimeAssetNames.map((name) => name.replaceAll(".", "\\.")).join("|")})\\?v=([^\"]+)`,
   "g"

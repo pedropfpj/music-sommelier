@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">Sonic Search — alternativa de ícone para teste</title>
+  <rect width="1024" height="1024" fill="#0b1b1c"/>
+  <circle cx="464" cy="444" r="242" fill="none" stroke="#a0ffe1" stroke-width="62"/>
+  <path d="M643 632 811 800" stroke="#a0ffe1" stroke-width="88" stroke-linecap="round"/>
+  <g fill="none" stroke="#a0ffe1" stroke-width="43" stroke-linecap="round">
+    <path d="M346 412v65"/><path d="M425 347v193"/><path d="M504 383v121"/><path d="M583 423v42"/>
+  </g>
+</svg>

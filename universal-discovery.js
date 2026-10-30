@@ -37,8 +37,9 @@
       experienceByGroup: experiences, history: history.slice(-500), deliveries, deliveryCounts };
   }
   function react(state, track, action, now = new Date().toISOString()) {
-    const safe = normalizeState(state);
-    if (!["like", "pass", "known", "block"].includes(action) || !listening.previewEligible(track) || listening.playbackResult(track) !== "played") return safe;
+    const safe = normalizeState(state), timestamp = Date.parse(now);
+    if (!Number.isFinite(timestamp) || !["like", "pass", "known", "block"].includes(action)
+      || !listening.previewEligible(track, timestamp) || listening.playbackResult(track, timestamp) !== "played") return safe;
     const entry = { key: track.key, artistKey: key(track.artistKey || track.artist), artist: track.artist,
       referenceKey: recordingKey(track), song: track.song, group: track.group, universe: track.universe, genre: track.genre,
       url: track.evidence.url, action, reactedAt: now };

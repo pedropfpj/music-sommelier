@@ -8,9 +8,19 @@ const preview = await startTestPreviewServer();
 const browser = await chromium.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true,
   args: ["--autoplay-policy=no-user-gesture-required"] });
 try {
+  const dataset = JSON.parse(await fs.readFile(new URL("../data/universal-listening-pilot.json", import.meta.url), "utf8"));
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, reducedMotion: "reduce" });
+  // Mocked players verify UI policy at the snapshot date, never live availability.
+  // The optional real-provider page below deliberately keeps the real clock.
+  await page.clock.setFixedTime(new Date(dataset.generatedAt));
   const errors = []; page.on("pageerror", e => errors.push(e.message));
   await page.route("**/api/**", r => r.fulfill({ json: { ok: true, enabled: false, tracks: [], count: 0 } }));
+  let catalogLoads = 0, failOnce = true;
+  await page.route("**/data/universal-listening-pilot.json", route => {
+    catalogLoads++;
+    if (failOnce) { failOnce = false; return route.fulfill({ status: 503, body: "unavailable" }); }
+    return route.continue();
+  });
   await page.addInitScript(() => {
     localStorage.setItem("neonpulse_privacy_consent_v1", "essential");
     window.YT = { Player: class MockPlayer {
@@ -26,6 +36,17 @@ try {
   if (await essential.isVisible()) await essential.click();
   const root = page.locator("#universalDiscoveryPanel");
   assert.ok(await root.isVisible());
+  await root.getByText("Não foi possível carregar a seleção. Confira sua conexão e tente novamente.", { exact: true }).waitFor();
+  assert.equal(await root.getAttribute("aria-busy"), "false");
+  assert.ok(await page.locator("#universalGenreSelect").isDisabled());
+  assert.ok(await root.locator(".universal-track-card").isHidden(), "Network errors cannot look like an exhausted catalog");
+  await page.evaluate(() => setLanguage("en"));
+  await root.getByText("Could not load this selection. Check your connection and retry.", { exact: true }).waitFor();
+  await page.evaluate(() => setLanguage("pt"));
+  await root.getByRole("button", { name: "Tentar novamente", exact: true }).click();
+  await root.getByRole("button", { name: "Ouvir no player", exact: true }).waitFor();
+  assert.equal(catalogLoads, 2);
+  assert.equal(await root.getAttribute("aria-busy"), "false");
   assert.ok(await page.locator("#universalGenreSelect option").count() >= 14);
   assert.equal(await root.locator("iframe").count(), 0);
   await page.selectOption("#universalGenreSelect", "reggae");
@@ -78,8 +99,41 @@ try {
   // previous recording again. Stubs check policy; actual provider checks differ.
   const beforeReload = await root.locator(".universal-track-card").getAttribute("data-track-key");
   await page.reload({ waitUntil: "domcontentloaded" });
-  await page.waitForSelector("#universalGenreSelect");
+  await root.getByRole("button", { name: "Ouvir no player", exact: true }).waitFor();
   assert.notEqual(await root.locator(".universal-track-card").getAttribute("data-track-key"), beforeReload);
+  // Stored checks eventually expire. Reloading must explain why, retain the
+  // user's history, and recover only when genuinely refreshed data is supplied.
+  const expiredAt = Date.parse(dataset.generatedAt) + 31 * 86400000;
+  await page.clock.setFixedTime(new Date(expiredAt));
+  const storedBeforeExpiry = await page.evaluate(() => Object.fromEntries(Object.keys(localStorage)
+    .filter(k => k.startsWith("sonic_search:universalDiscoveryPreview:v1:")).map(k => [k, localStorage.getItem(k)])));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  const refresh = root.getByRole("button", { name: "Buscar seleção atualizada", exact: true });
+  await refresh.waitFor();
+  await root.getByText(/As verificações de reprodução deste estilo venceram/).waitFor();
+  assert.equal(await root.getByRole("button", { name: "Ouvir no player", exact: true }).count(), 0);
+  assert.ok(await page.locator("#universalExperienceSelect").isDisabled());
+  assert.equal(await root.locator("iframe").count(), 0);
+  await refresh.click();
+  await refresh.waitFor();
+  assert.equal(await root.getByRole("button", { name: "Ouvir no player", exact: true }).count(), 0, "Retry cannot relabel stale evidence as fresh");
+  assert.deepEqual(await page.evaluate(() => Object.fromEntries(Object.keys(localStorage)
+    .filter(k => k.startsWith("sonic_search:universalDiscoveryPreview:v1:")).map(k => [k, localStorage.getItem(k)]))), storedBeforeExpiry);
+  await refresh.focus();
+  await root.scrollIntoViewIfNeeded();
+  await root.screenshot({ path: fileURLToPath(new URL("../reports/ui-universal-discovery-expired-latest.png", import.meta.url)) });
+  // Only this browser test receives synthetic refreshed evidence; the actual
+  // checked-in catalog and real provider checks are never rewritten.
+  const refreshed = structuredClone(dataset);
+  for (const track of refreshed.tracks) {
+    track.evidence.checkedAt = new Date(expiredAt).toISOString();
+    if (track.playbackCheck) track.playbackCheck.checkedAt = new Date(expiredAt).toISOString();
+  }
+  await page.route("**/data/universal-listening-pilot.json", route => route.fulfill({ json: refreshed }));
+  await refresh.click();
+  await root.getByRole("button", { name: "Ouvir no player", exact: true }).waitFor();
+  assert.equal(await root.getAttribute("aria-busy"), "false");
+  assert.ok(await page.locator("#universalGenreSelect").isEnabled());
   assert.deepEqual(errors, []);
   if (process.argv.includes("--provider-smoke") || process.argv.includes("--discovery-smoke")) {
     const discoverySmoke = process.argv.includes("--discovery-smoke");
@@ -106,5 +160,5 @@ try {
     await actual.close();
     assert.ok(results.every(r => r.playedStateObserved), "Every requested style must reach real provider playback in the main webapp");
   }
-  console.log("Universal main app UI passed: main Discover entry, source gating, editable reactions/next card, per-group experience, profile isolation, mobile/landscape/desktop layout, reduced motion, large text, mocked iOS dispatch and default-disabled rollout.");
+  console.log("Universal main app UI passed: network retry, persistent localized errors, expired-source recovery without history loss, source gating, reactions, profile isolation, mobile/landscape/desktop layout, reduced motion, large text, mocked iOS dispatch and default-disabled rollout.");
 } finally { await browser.close(); await preview.stop(); }

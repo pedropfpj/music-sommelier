@@ -34,12 +34,20 @@ assert.equal(listening.previewEligible(altered({ providerLinks: [{ provider: "ap
 assert.equal(listening.previewEligible(altered({ evidence: { ...original.evidence, officialChannelMatch: false } }), now), false);
 assert.equal(listening.previewEligible(altered({ evidence: { ...original.evidence, videoId: "aaaaaaaaaaa" } }), now), false);
 assert.equal(listening.previewEligible(original, now + 31 * 86400000), false, "Stored YouTube metadata needs refresh within 30 days");
+const staleCoverage = listening.coverage(dataset.tracks, "rock", now + 31 * 86400000);
+assert.equal(staleCoverage.testedPlayableTracks, 0);
+assert.ok(staleCoverage.expiredPlayableTracks > 0, "Distinguish expired playback evidence from an exhausted selection");
+assert.equal(listening.coverage(dataset.tracks, "rock", now).expiredPlayableTracks, 0);
+assert.equal(listening.coverage([{ ...original, evidence: { ...original.evidence, identityMatch: false } }], original.group, now + 31 * 86400000).expiredPlayableTracks, 0, "Invalid identity is not previously verified playback");
 assert.equal(listening.fresh("invalid", now), false);
 assert.equal(listening.previewEligible(null), false);
 assert.equal(listening.previewEligible({ providerLinks: "invalid" }), false);
 assert.equal(listening.playbackResult(null), "unconfirmed");
 assert.equal(listening.playbackResult(original, now), original.playbackCheck?.result || "unconfirmed");
 const playable = dataset.tracks.find(t => listening.playbackResult(t, now) === "played");
+const firstExpiry = Math.min(Date.parse(playable.evidence.checkedAt), Date.parse(playable.playbackCheck.checkedAt)) + 30 * 86400000;
+assert.equal(listening.coverage([playable], playable.group, firstExpiry - 1).testedPlayableTracks, 1);
+assert.equal(listening.coverage([playable], playable.group, firstExpiry).expiredPlayableTracks, 1, "Either identity or playback evidence expiry requires reverification");
 const sameRecording = { ...playable, key: "youtube:aaaaaaaaaaa", evidence: { ...playable.evidence, videoId: "aaaaaaaaaaa", url: "https://www.youtube.com/watch?v=aaaaaaaaaaa" },
   providerLinks: [{ ...playable.providerLinks[0], externalId: "aaaaaaaaaaa", url: "https://www.youtube.com/watch?v=aaaaaaaaaaa" }],
   playbackCheck: { ...playable.playbackCheck, url: "https://www.youtube.com/watch?v=aaaaaaaaaaa" } };

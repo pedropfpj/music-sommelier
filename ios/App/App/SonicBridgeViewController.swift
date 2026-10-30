@@ -9,6 +9,51 @@ class SonicBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(YouTubePlayerPlugin())
         bridge?.registerPluginInstance(DailyDjReminderPlugin())
         bridge?.registerPluginInstance(SonicSubscriptionsPlugin())
+        bridge?.registerPluginInstance(SonicReviewsPlugin())
+    }
+}
+
+@objc(SonicReviewsPlugin)
+public final class SonicReviewsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "SonicReviewsPlugin"
+    public let jsName = "SonicReviews"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "completedListening", returnType: CAPPluginReturnPromise)
+    ]
+
+    // All counters stay on device. Eligibility depends on use, never on likes or ratings.
+    @objc public func completedListening(_ call: CAPPluginCall) {
+        guard (call.getDouble("seconds") ?? 0) >= 20 else {
+            call.resolve(["requested": false])
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            let defaults = UserDefaults.standard
+            let prefix = "sonic.review."
+            let now = Date()
+            let first = defaults.object(forKey: prefix + "firstListening") as? Date ?? now
+            defaults.set(first, forKey: prefix + "firstListening")
+            let today = Calendar.current.startOfDay(for: now).timeIntervalSince1970
+            var days = defaults.array(forKey: prefix + "listeningDays") as? [Double] ?? []
+            if !days.contains(today) { days.append(today) }
+            days = Array(days.sorted().suffix(14))
+            defaults.set(days, forKey: prefix + "listeningDays")
+            let last = defaults.object(forKey: prefix + "lastRequest") as? Date ?? .distantPast
+            guard days.count >= 3,
+                  now.timeIntervalSince(first) >= 7 * 24 * 3600,
+                  now.timeIntervalSince(last) >= 120 * 24 * 3600,
+                  let presenter = self?.bridge?.viewController,
+                  presenter.presentedViewController == nil,
+                  let scene = presenter.view.window?.windowScene,
+                  scene.activationState == .foregroundActive else {
+                call.resolve(["requested": false])
+                return
+            }
+            defaults.set(now, forKey: prefix + "lastRequest")
+            SKStoreReviewController.requestReview(in: scene)
+            // StoreKit decides whether to show the prompt; requested is not shown.
+            call.resolve(["requested": true])
+        }
     }
 }
 
