@@ -1,4 +1,5 @@
 export const CATALOG_RUNTIME_SOURCE_FILES = Array.from(new Set([
+  "data/curated_diversity_v22_20261030.csv",
   "data/low_coverage_subgenre_expansion_v21_20260820.csv",
   "data/underrepresented_subgenre_expansion_v18_20260820.csv",
   "data/big_beat_chemical_brothers_v1_20260713.csv",

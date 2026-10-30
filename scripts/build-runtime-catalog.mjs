@@ -195,6 +195,28 @@ function mergeRows(current, candidate) {
   );
 }
 
+export function selectCoreTracks(rows, limit = CORE_TRACKS_PER_STYLE) {
+  const artists = new Map();
+  for (const row of rows) {
+    const key = token(row.artist);
+    if (!artists.has(key)) artists.set(key, []);
+    artists.get(key).push(row);
+  }
+  const selected = [];
+  // Keep each artist's best audio routes first, but give other artists a turn.
+  for (let depth = 0; selected.length < limit; depth += 1) {
+    let added = false;
+    for (const tracks of artists.values()) {
+      if (!tracks[depth]) continue;
+      selected.push(tracks[depth]);
+      added = true;
+      if (selected.length === limit) break;
+    }
+    if (!added) break;
+  }
+  return selected;
+}
+
 export async function buildRuntimeCatalog() {
   const deduped = new Map();
   let sourceBytes = 0;
@@ -235,7 +257,7 @@ export async function buildRuntimeCatalog() {
     runtimeBytes += Buffer.byteLength(payload);
     manifest.styles[style] = `styles/${fileName}`;
     manifest.counts[style] = rows.length;
-    core.push(...rows.slice(0, CORE_TRACKS_PER_STYLE));
+    core.push(...selectCoreTracks(rows));
   }
   const corePayload = `${JSON.stringify(core)}\n`;
   await writeFile(path.join(outputDir, "core.json"), corePayload);

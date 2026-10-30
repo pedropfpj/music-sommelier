@@ -1,0 +1,1179 @@
+{
+  "schemaVersion": 1,
+  "version": "20261030rock2",
+  "status": "preview",
+  "checkedAt": "2026-10-30T16:59:38.285Z",
+  "source": "Apple Music public recording metadata and promotional previews; no audio hosted by Sonic Search",
+  "tracks": [
+    {
+      "key": "apple:1097861770",
+      "artistKey": "radiohead",
+      "artist": "Radiohead",
+      "song": "Paranoid Android",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/67/6c/04/676c04b5-624a-6101-2d63-dc9c971e2a4e/mzaf_14148414942735566986.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/paranoid-android/1097861770",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/07/60/ba/0760ba0f-148c-b18f-d0ff-169ee96f3af5/634904078164.png/486x486bb.png",
+      "releaseTitle": "OK Computer",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Repare nas mudanças de andamento: a canção se abre em pequenos movimentos.",
+        "en": "Listen for the changes of pace as the song unfolds in small movements.",
+        "es": "Escucha los cambios de ritmo: la canción se abre en pequeños movimientos."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/paranoid-android/1097861387?i=1097861770&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Listen for the changes of pace as the song unfolds in small movements."
+      }
+    },
+    {
+      "key": "apple:1440783636",
+      "artistKey": "nirvana",
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/55/17/88551793-f12c-c809-2657-bea5256c7aa0/mzaf_3880800635733347308.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/come-as-you-are/1440783636",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/95/fd/b9/95fdb9b2-6d2b-92a6-97f2-51c1a6d77f1a/00602527874609.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Nevermind",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O riff circular aproxima melodia e tensão sem precisar acelerar.",
+        "en": "The circular riff brings melody and tension together without speeding up.",
+        "es": "El riff circular acerca melodía y tensión sin acelerar."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/come-as-you-are/1440783617?i=1440783636&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. The circular riff brings melody and tension together without speeding up."
+      }
+    },
+    {
+      "key": "apple:425465351",
+      "artistKey": "pearljam",
+      "artist": "Pearl Jam",
+      "song": "Black",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/98/a4/a798a4a2-dc88-1dcc-8afa-c14998734b1c/mzaf_10691968041469613196.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/black/425465351",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/e1/7c/e0e17cf0-62e5-6312-f3df-2462960cc8f1/884977724745.jpg/486x486bb.png",
+      "releaseTitle": "Ten",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "A guitarra deixa espaço para a voz crescer: intensidade também pode vir da contenção.",
+        "en": "The guitar makes room for the voice to grow: restraint can create intensity.",
+        "es": "La guitarra deja espacio para que crezca la voz: la contención también crea intensidad."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/black/425465247?i=425465351&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. The guitar makes room for the voice to grow: restraint can create intensity."
+      }
+    },
+    {
+      "key": "apple:362133505",
+      "artistKey": "foofighters",
+      "artist": "Foo Fighters",
+      "song": "Everlong",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/35/25/c7/3525c700-8776-5b4d-fdd2-7754b26c7fbf/mzaf_4390385370578627076.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/everlong/362133505",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/f5/86/68f586ca-a375-9965-a864-9e227e77ef5b/884977570328.jpg/486x486bb.png",
+      "releaseTitle": "The Colour And The Shape",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Uma referência para comparar guitarras em camadas e impulso rítmico com os próximos achados.",
+        "en": "A reference for comparing layered guitars and rhythmic drive with your next discoveries.",
+        "es": "Una referencia para comparar guitarras en capas e impulso rítmico con tus próximos hallazgos."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/everlong/362133451?i=362133505&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. A reference for comparing layered guitars and rhythmic drive with your next discoveries."
+      }
+    },
+    {
+      "key": "apple:1440910536",
+      "artistKey": "queensofthestoneage",
+      "artist": "Queens of the Stone Age",
+      "song": "No One Knows",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/8d/ee/f38dee84-48ff-96d0-31c3-e9e4e3ea7e64/mzaf_4669303527189500864.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/no-one-knows/1440910536",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/77/fc/cb/77fccb6d-96d8-3a6b-a71b-66c76b1fe4d3/00606949343521.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Songs For The Deaf",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O riff seco e o balanço da bateria mostram um lado dançante do rock pesado.",
+        "en": "The dry riff and swinging drums reveal a danceable side of heavy rock.",
+        "es": "El riff seco y el balanceo de la batería muestran un lado bailable del rock pesado."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/no-one-knows/1440909901?i=1440910536&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. The dry riff and swinging drums reveal a danceable side of heavy rock."
+      }
+    },
+    {
+      "key": "apple:1716097098",
+      "artistKey": "muse",
+      "artist": "Muse",
+      "song": "Hysteria",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/2b/cd/012bcd29-e307-6001-b04c-adb2d812b15f/mzaf_11503667054915665989.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/hysteria/1716097098",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/4a/73/ab/4a73abdf-1d55-b3fe-484d-e023a507428e/5054197904233.jpg/486x486bb.png",
+      "releaseTitle": "Absolution",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Siga o baixo: ele conduz a tensão enquanto a guitarra abre o refrão.",
+        "en": "Follow the bass: it drives the tension while the guitar opens up the chorus.",
+        "es": "Sigue el bajo: conduce la tensión mientras la guitarra abre el estribillo."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/hysteria/1716096819?i=1716097098&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Follow the bass: it drives the tension while the guitar opens up the chorus."
+      }
+    },
+    {
+      "key": "apple:1473013069",
+      "artistKey": "bigthief",
+      "artist": "Big Thief",
+      "song": "Not",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/99/66/57/996657b0-d3e0-633d-22f2-19ea9f65308c/mzaf_14314953802047138842.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/not/1473013069",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/44/1e/68/441e686c-9276-b50c-ad68-f7d3e2d53b38/cover.jpg/486x486bb.png",
+      "releaseTitle": "Two Hands",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Escute como a repetição ganha peso até a guitarra assumir o discurso.",
+        "en": "Hear repetition gather weight until the guitar takes over the conversation.",
+        "es": "Escucha cómo la repetición gana peso hasta que la guitarra toma la palabra."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/not/1473012904?i=1473013069&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. Hear repetition gather weight until the guitar takes over the conversation."
+      }
+    },
+    {
+      "key": "apple:1591285796",
+      "artistKey": "bigthief",
+      "artist": "Big Thief",
+      "song": "Simulation Swarm",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4d/9b/d3/4d9bd358-190b-1ee2-7e0a-985d2a33274c/mzaf_3839435108543168693.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/simulation-swarm/1591285796",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/14/c8/ea/14c8ea65-2155-8d44-f0c5-6faa8f51f95d/191400040878.png/486x486bb.png",
+      "releaseTitle": "Dragon New Warm Mountain I Believe In You",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O desenho da guitarra mantém movimento sob uma voz quase conversada.",
+        "en": "The guitar pattern keeps moving beneath an almost conversational vocal.",
+        "es": "El dibujo de la guitarra mantiene el movimiento bajo una voz casi conversada."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/simulation-swarm/1591284600?i=1591285796&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. The guitar pattern keeps moving beneath an almost conversational vocal."
+      }
+    },
+    {
+      "key": "apple:1660028844",
+      "artistKey": "wednesday",
+      "artist": "Wednesday",
+      "song": "Chosen to Deserve",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4a/f2/92/4af292a9-151f-20de-194c-870a1ba8ecb6/mzaf_9608284185870611692.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/chosen-to-deserve/1660028844",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bc/75/67/bc7567af-115a-ca47-4937-ce1695f7e2e3/37105.jpg/486x486bb.png",
+      "releaseTitle": "Rat Saw God",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A narrativa de country encontra guitarras ásperas: procure o atrito entre as duas.",
+        "en": "Country storytelling meets rough guitars: listen for the friction between them.",
+        "es": "La narrativa del country encuentra guitarras ásperas: escucha la fricción entre ambas."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/chosen-to-deserve/1660028568?i=1660028844&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. Country storytelling meets rough guitars: listen for the friction between them."
+      }
+    },
+    {
+      "key": "apple:1660028580",
+      "artistKey": "wednesday",
+      "artist": "Wednesday",
+      "song": "Bull Believer",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/a2/29/6aa229d8-dd9a-f584-5f45-50eb3225bb51/mzaf_17964213928635354604.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/bull-believer/1660028580",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/bc/75/67/bc7567af-115a-ca47-4937-ce1695f7e2e3/37105.jpg/486x486bb.png",
+      "releaseTitle": "Rat Saw God",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Uma construção longa que transforma contenção em descarga de ruído.",
+        "en": "A long build that turns restraint into a release of noise.",
+        "es": "Una construcción larga que convierte la contención en una descarga de ruido."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/bull-believer/1660028568?i=1660028580&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. A long build that turns restraint into a release of noise."
+      }
+    },
+    {
+      "key": "apple:1832810345",
+      "artistKey": "kinggizzardthelizardwizard",
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Robot Stop",
+      "genre": "psychedelic",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4c/8a/ba/4c8aba97-20cf-b416-0d33-e592625f54b2/mzaf_8561476492481557727.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/robot-stop/1832810345",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/fb/05/d0/fb05d0a0-f494-c51c-64d8-ed214d486485/63.jpg/486x486bb.png",
+      "releaseTitle": "Nonagon Infinity",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A repetição do riff funciona como motor para uma psicodelia acelerada.",
+        "en": "The repeating riff drives a fast-moving strain of psychedelia.",
+        "es": "La repetición del riff impulsa una psicodelia acelerada."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/robot-stop/1832810339?i=1832810345&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: psychedelic. The repeating riff drives a fast-moving strain of psychedelia."
+      }
+    },
+    {
+      "key": "apple:1640761914",
+      "artistKey": "kinggizzardthelizardwizard",
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Iron Lung",
+      "genre": "psychedelic",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9b/1b/4e/9b1b4e0f-bdc1-39fd-b116-ea7a4a6194b6/mzaf_16561464240059169951.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/iron-lung/1640761914",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/af/6b/96/af6b965d-a1c8-7652-58ed-be34a81c0be3/22UMGIM47432.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Ice, Death, Planets, Lungs, Mushrooms And Lava",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Preste atenção à passagem do groove solto para uma intensidade mais densa.",
+        "en": "Listen for the shift from a loose groove to a denser intensity.",
+        "es": "Escucha el paso de un groove suelto a una intensidad más densa."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/iron-lung/1640761260?i=1640761914&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: psychedelic. Listen for the shift from a loose groove to a denser intensity."
+      }
+    },
+    {
+      "key": "apple:1576430194",
+      "artistKey": "turnstile",
+      "artist": "Turnstile",
+      "song": "BLACKOUT",
+      "genre": "punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/55/72/96/55729631-b8bb-9bb4-eed1-2ef01d77768d/mzaf_4038329023564106944.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/blackout/1576430194",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/bd/ed/05/bded05c9-3355-c885-3840-b9a4b427b118/075679792839.jpg/486x486bb.png",
+      "releaseTitle": "GLOW ON",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O impulso hardcore encontra espaço e balanço entre os ataques.",
+        "en": "Hardcore drive meets space and swing between the attacks.",
+        "es": "El impulso hardcore encuentra espacio y balanceo entre los ataques."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/blackout/1576430192?i=1576430194&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: punk. Hardcore drive meets space and swing between the attacks."
+      }
+    },
+    {
+      "key": "apple:1576430737",
+      "artistKey": "turnstile",
+      "artist": "Turnstile",
+      "song": "HOLIDAY",
+      "genre": "punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/a0/56/5fa056f8-454e-7c73-b25a-1509177e8a2e/mzaf_13644061481167065882.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/holiday/1576430737",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/bd/ed/05/bded05c9-3355-c885-3840-b9a4b427b118/075679792839.jpg/486x486bb.png",
+      "releaseTitle": "GLOW ON",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A guitarra percussiva torna o peso físico sem perder o movimento.",
+        "en": "Percussive guitar makes the weight physical without losing movement.",
+        "es": "La guitarra percusiva hace físico el peso sin perder movimiento."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/holiday/1576430192?i=1576430737&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: punk. Percussive guitar makes the weight physical without losing movement."
+      }
+    },
+    {
+      "key": "apple:1442993961",
+      "artistKey": "metallica",
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/41/0d/45410d76-5a71-aa65-fb64-77df22ac615c/mzaf_4547853143052251744.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/master-of-puppets/1442993961",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/94/f7/1b/94f71ba1-a4d5-1f97-9438-1694dd2a3490/17UM1IM19945.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Master of Puppets (Deluxe Box Set)",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Observe como os riffs mudam de função entre ataque, pausa e desenvolvimento.",
+        "en": "Notice how the riffs shift between attack, pause and development.",
+        "es": "Observa cómo los riffs cambian entre ataque, pausa y desarrollo."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/master-of-puppets/1442993557?i=1442993961&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. Notice how the riffs shift between attack, pause and development."
+      }
+    },
+    {
+      "key": "apple:273714640",
+      "artistKey": "systemofadown",
+      "artist": "System Of A Down",
+      "song": "Chop Suey!",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/1f/74/991f74a5-0f17-bf20-7c10-7150ccb452de/mzaf_5343840477634119165.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/chop-suey/273714640",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/82/51/52/825152b4-9423-b23b-c036-cc67ead732d4/888888046775.jpg/486x486bb.png",
+      "releaseTitle": "Toxicity",
+      "explicit": false,
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O contraste entre ataques curtos e melodia sustentada é o centro desta referência.",
+        "en": "The contrast between short attacks and sustained melody anchors this reference.",
+        "es": "El contraste entre ataques breves y melodía sostenida guía esta referencia."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/chop-suey/273714443?i=273714640&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. The contrast between short attacks and sustained melody anchors this reference."
+      }
+    },
+    {
+      "key": "apple:1542276080",
+      "artistKey": "idles",
+      "artist": "IDLES",
+      "song": "Danny Nedelko",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/89/34/d1/8934d10e-20d4-c1d6-6b4b-93ac9427985e/mzaf_7997529387552464199.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/danny-nedelko/1542276080",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/46/5b/7c/465b7c9c-faad-1aef-8144-8adf08d1ecf7/4059473316206_cover.jpg/486x486bb.png",
+      "releaseTitle": "Sounds Like LiBella Vol. 1",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O pulso direto e a voz coletiva transformam tensão em encontro.",
+        "en": "The direct pulse and collective vocal turn tension into togetherness.",
+        "es": "El pulso directo y la voz colectiva convierten tensión en encuentro."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/danny-nedelko/1542276067?i=1542276080&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. The direct pulse and collective vocal turn tension into togetherness."
+      }
+    },
+    {
+      "key": "apple:1525580284",
+      "artistKey": "idles",
+      "artist": "IDLES",
+      "song": "Never Fight A Man With A Perm",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview114/v4/c2/af/23/c2af23ef-28d2-8632-add9-66c5aa23f91c/mzaf_17323822593748118697.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/never-fight-a-man-with-a-perm/1525580284",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/8d/b2/3e/8db23e11-41d2-808a-f4c7-4d1ee546145a/19UMGIM94613.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Peaky Blinders (Original Music From The TV Series)",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Baixo insistente e voz cortante criam tensão antes das explosões da banda.",
+        "en": "Insistent bass and a cutting vocal build tension before the band's bursts.",
+        "es": "Bajo insistente y voz cortante crean tensión antes de las explosiones de la banda."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/never-fight-a-man-with-a-perm/1525579780?i=1525580284&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. Insistent bass and a cutting vocal build tension before the band's bursts."
+      }
+    },
+    {
+      "key": "apple:1549505089",
+      "artistKey": "drycleaning",
+      "artist": "Dry Cleaning",
+      "song": "Scratchcard Lanyard",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/55/ed/f455ed14-255c-0277-832a-ae438856125d/mzaf_15125382992812813096.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/scratchcard-lanyard/1549505089",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/97/88/77/978877e3-628d-3b5a-4108-e8112e3df12e/191400025479.png/486x486bb.png",
+      "releaseTitle": "New Long Leg",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O baixo conduz enquanto a voz falada desvia da melodia esperada.",
+        "en": "The bass leads while the spoken vocal avoids the expected melody.",
+        "es": "El bajo guía mientras la voz hablada se aparta de la melodía esperada."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/scratchcard-lanyard/1549505079?i=1549505089&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. The bass leads while the spoken vocal avoids the expected melody."
+      }
+    },
+    {
+      "key": "apple:1549505356",
+      "artistKey": "drycleaning",
+      "artist": "Dry Cleaning",
+      "song": "Strong Feelings",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e7/b0/38/e7b03875-9da2-f9eb-7b78-465727fdadbc/mzaf_2930750422193286916.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/strong-feelings/1549505356",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/97/88/77/978877e3-628d-3b5a-4108-e8112e3df12e/191400025479.png/486x486bb.png",
+      "releaseTitle": "New Long Leg",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Escute o contraste entre guitarras luminosas e uma voz deliberadamente contida.",
+        "en": "Hear the contrast between bright guitars and a deliberately restrained voice.",
+        "es": "Escucha el contraste entre guitarras luminosas y una voz deliberadamente contenida."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/strong-feelings/1549505079?i=1549505356&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. Hear the contrast between bright guitars and a deliberately restrained voice."
+      }
+    },
+    {
+      "key": "apple:1533822065",
+      "artistKey": "blackcountrynewroad",
+      "artist": "Black Country, New Road",
+      "song": "Sunglasses",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f8/8a/9c/f88a9cdc-1eb7-04e8-2043-5a7c2aa7090b/mzaf_9965519104034475775.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/sunglasses/1533822065",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/18/aa/41/18aa41e4-084e-d08c-d2ad-57a00bbe24be/5054429142419.png/486x486bb.png",
+      "releaseTitle": "For the First Time",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Uma narrativa inquieta cresce com a banda, entre repetição e ruptura.",
+        "en": "A restless narrative grows with the band, between repetition and rupture.",
+        "es": "Una narrativa inquieta crece con la banda, entre repetición y ruptura."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/sunglasses/1533822061?i=1533822065&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. A restless narrative grows with the band, between repetition and rupture."
+      }
+    },
+    {
+      "key": "apple:1533822064",
+      "artistKey": "blackcountrynewroad",
+      "artist": "Black Country, New Road",
+      "song": "Science Fair",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/30/85/a7/3085a76e-37e3-f89a-3db5-b547b213c3db/mzaf_4905231260258521399.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/science-fair/1533822064",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/18/aa/41/18aa41e4-084e-d08c-d2ad-57a00bbe24be/5054429142419.png/486x486bb.png",
+      "releaseTitle": "For the First Time",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Saxofone e guitarra deixam o pulso instável: siga como a tensão se acumula.",
+        "en": "Saxophone and guitar unsettle the pulse: follow the accumulating tension.",
+        "es": "Saxofón y guitarra desestabilizan el pulso: sigue cómo se acumula la tensión."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/science-fair/1533822061?i=1533822064&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. Saxophone and guitar unsettle the pulse: follow the accumulating tension."
+      }
+    },
+    {
+      "key": "apple:1672079965",
+      "artistKey": "feeblelittlehorse",
+      "artist": "feeble little horse",
+      "song": "Tin Man",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ef/5b/87/ef5b877b-28d1-2a8f-0ce2-35a47e5fe037/mzaf_9583134231348972909.plus.aac.p.m4a",
+      "providerUrl": "https://music.apple.com/br/song/tin-man/1672079965",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b7/7a/81/b77a8126-957d-7501-5eeb-c29739f2f5c9/334.jpg/486x486bb.png",
+      "releaseTitle": "Girl with Fish",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A melodia aparece entre guitarras distorcidas e pequenas quebras de textura.",
+        "en": "Melody emerges between distorted guitars and small breaks in texture.",
+        "es": "La melodía aparece entre guitarras distorsionadas y pequeños cambios de textura."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/tin-man/1672079958?i=1672079965&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Melody emerges between distorted guitars and small breaks in texture."
+      }
+    },
+    {
+      "key": "apple:1672079963",
+      "artistKey": "feeblelittlehorse",
+      "artist": "feeble little horse",
+      "song": "Freak",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fb/e4/60/fbe46030-d2e0-3cf2-dc53-e65ed61f409e/mzaf_9932154222662001599.plus.aac.p.m4a",
+      "providerUrl": "https://music.apple.com/br/song/freak/1672079963",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b7/7a/81/b77a8126-957d-7501-5eeb-c29739f2f5c9/334.jpg/486x486bb.png",
+      "releaseTitle": "Girl with Fish",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Procure o gancho pop escondido na distorção compacta e nos cortes bruscos.",
+        "en": "Find the pop hook inside compact distortion and abrupt cuts.",
+        "es": "Busca el gancho pop dentro de la distorsión compacta y los cortes bruscos."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/freak/1672079958?i=1672079963&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Find the pop hook inside compact distortion and abrupt cuts."
+      }
+    },
+    {
+      "key": "apple:1887366119",
+      "artistKey": "ulrikaspacek",
+      "artist": "Ulrika Spacek",
+      "song": "Mimi Pretend",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4b/e8/21/4be82170-51b0-7976-7f68-581014d45449/mzaf_209180461354204917.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/mimi-pretend/1887366119",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/48/e8/a2/48e8a2bd-a5cb-2576-67a2-f25d2427c8b7/5060626469907_cover.jpg/486x486bb.png",
+      "releaseTitle": "Modern English Decoration",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Guitarras que se entrelaçam fazem a repetição soar em constante deslocamento.",
+        "en": "Interlocking guitars keep repetition feeling constantly in motion.",
+        "es": "Guitarras entrelazadas hacen que la repetición parezca siempre en movimiento."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/mimi-pretend/1887365979?i=1887366119&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. Interlocking guitars keep repetition feeling constantly in motion."
+      }
+    },
+    {
+      "key": "apple:1887366123",
+      "artistKey": "ulrikaspacek",
+      "artist": "Ulrika Spacek",
+      "song": "Silvertonic",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0c/f9/af/0cf9af0a-8603-3946-3879-a9d841eb1cc8/mzaf_3834354672346916505.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/silvertonic/1887366123",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/48/e8/a2/48e8a2bd-a5cb-2576-67a2-f25d2427c8b7/5060626469907_cover.jpg/486x486bb.png",
+      "releaseTitle": "Modern English Decoration",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O pulso constante sustenta uma trama de guitarras que se adensa aos poucos.",
+        "en": "A steady pulse supports a guitar texture that gradually grows denser.",
+        "es": "Un pulso constante sostiene una trama de guitarras que se vuelve más densa."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/silvertonic/1887365979?i=1887366123&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. A steady pulse supports a guitar texture that gradually grows denser."
+      }
+    },
+    {
+      "key": "apple:1620095927",
+      "artistKey": "thebeths",
+      "artist": "The Beths",
+      "song": "Expert in a Dying Field",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/54/9f/a4/549fa483-2cb1-f049-a664-f1470890853a/mzaf_2188043480129588150.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/expert-in-a-dying-field/1620095927",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/81/08/a8/8108a8ba-4b40-71d8-321b-6fe110a96bcb/677517016451.png/486x486bb.png",
+      "releaseTitle": "Expert in a Dying Field",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Ouça como harmonias vocais e guitarras claras dão forma à inquietação.",
+        "en": "Hear how vocal harmonies and clear guitars give shape to unease.",
+        "es": "Escucha cómo las armonías vocales y las guitarras claras dan forma a la inquietud."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/expert-in-a-dying-field/1620095921?i=1620095927&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. Hear how vocal harmonies and clear guitars give shape to unease."
+      }
+    },
+    {
+      "key": "apple:1583598816",
+      "artistKey": "thebeths",
+      "artist": "The Beths",
+      "song": "Out of Sight",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/e9/5f/a7e95f2a-e1e4-a3e3-9ae5-8d4672223ae8/mzaf_9535679792108700139.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/out-of-sight/1583598816",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/84/ae/0a/84ae0a01-17b7-44df-33e6-185519587aa9/96356.jpg/486x486bb.png",
+      "releaseTitle": "Jump Rope Gazers",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A melodia cresce sem abandonar a delicadeza das guitarras.",
+        "en": "The melody grows without losing the delicacy of the guitars.",
+        "es": "La melodía crece sin perder la delicadeza de las guitarras."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/out-of-sight/1583598530?i=1583598816&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. The melody grows without losing the delicacy of the guitars."
+      }
+    },
+    {
+      "key": "apple:1651269400",
+      "artistKey": "alvvays",
+      "artist": "Alvvays",
+      "song": "Tile by Tile",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a4/2c/6f/a42c6f81-e437-663d-fee7-df8cf7b2eba7/mzaf_83013030870639551.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/tile-by-tile/1651269400",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/57/d1/be/57d1be08-4faf-06b5-3de6-165b194e0091/5400863086077.png/486x486bb.png",
+      "releaseTitle": "Blue Rev",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "As camadas de voz e guitarra criam profundidade por trás da melodia.",
+        "en": "Layers of voice and guitar create depth behind the melody.",
+        "es": "Las capas de voz y guitarra crean profundidad detrás de la melodía."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/tile-by-tile/1651269389?i=1651269400&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. Layers of voice and guitar create depth behind the melody."
+      }
+    },
+    {
+      "key": "apple:1651269390",
+      "artistKey": "alvvays",
+      "artist": "Alvvays",
+      "song": "Pharmacist",
+      "genre": "indie_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/d3/35/4ed33573-8a0c-b7c1-2ded-f95871554592/mzaf_17681839132784039937.plus.aac.p.m4a",
+      "providerUrl": "https://music.apple.com/br/song/pharmacist/1651269390",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/57/d1/be/57d1be08-4faf-06b5-3de6-165b194e0091/5400863086077.png/486x486bb.png",
+      "releaseTitle": "Blue Rev",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A canção curta abre espaço para guitarras que expandem o refrão.",
+        "en": "A compact song makes room for guitars that expand the chorus.",
+        "es": "Una canción breve abre espacio a guitarras que expanden el estribillo."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/pharmacist/1651269389?i=1651269390&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: indie_rock. A compact song makes room for guitars that expand the chorus."
+      }
+    },
+    {
+      "key": "apple:520274631",
+      "artistKey": "sonicyouth",
+      "artist": "Sonic Youth",
+      "song": "Schizophrenia",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/18/6a/88/186a8830-98ab-2498-9405-c54cc8806a52/mzaf_7214945211839961751.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/schizophrenia/520274631",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/0c/72/98/0c729889-cc68-0b8a-65d1-075847c8f0ed/818756010941_cover.jpg/486x486bb.png",
+      "releaseTitle": "Sister",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Afinações e guitarras em tensão fazem a harmonia parecer sempre aberta.",
+        "en": "Tuning and tense guitars make the harmony feel continually open.",
+        "es": "Afinaciones y guitarras en tensión hacen que la armonía parezca siempre abierta."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/schizophrenia/520274588?i=520274631&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Tuning and tense guitars make the harmony feel continually open."
+      }
+    },
+    {
+      "key": "apple:1443129418",
+      "artistKey": "sonicyouth",
+      "artist": "Sonic Youth",
+      "song": "Incinerate",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/8a/c8/078ac8e5-0f9e-3687-fc1c-3d7126cf655c/mzaf_617596329860055487.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/incinerate/1443129418",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/77/14/c3/7714c3c1-e61b-a743-7571-0e881a9e0646/00602547866653.rgb.jpg/486x486bb.png",
+      "releaseTitle": "Rather Ripped",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Um riff claro organiza as guitarras ásperas sem apagar suas bordas.",
+        "en": "A clear riff organizes rough guitars without smoothing their edges.",
+        "es": "Un riff claro organiza guitarras ásperas sin alisar sus bordes."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/incinerate/1443129175?i=1443129418&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. A clear riff organizes rough guitars without smoothing their edges."
+      }
+    },
+    {
+      "key": "apple:399211831",
+      "artistKey": "slowdive",
+      "artist": "Slowdive",
+      "song": "Dagger",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a5/88/d9/a588d952-baa4-4057-899b-55476a9489ff/mzaf_7611805214329961350.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/dagger/399211831",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c2/a0/a4/c2a0a495-ec33-27f1-c6db-0dff1c3ba15d/dj.pzrqoswp.jpg/486x486bb.png",
+      "releaseTitle": "Souvlaki",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Uma pausa acústica para perceber quanto peso cabe em poucos elementos.",
+        "en": "An acoustic pause to hear how much weight a few elements can carry.",
+        "es": "Una pausa acústica para escuchar cuánto peso cabe en pocos elementos."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/dagger/399211729?i=399211831&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. An acoustic pause to hear how much weight a few elements can carry."
+      }
+    },
+    {
+      "key": "apple:399211759",
+      "artistKey": "slowdive",
+      "artist": "Slowdive",
+      "song": "Machine Gun",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/75/95/06/7595060d-6214-9d10-9bc5-6930e6d458ce/mzaf_8396134800436228928.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/machine-gun/399211759",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c2/a0/a4/c2a0a495-ec33-27f1-c6db-0dff1c3ba15d/dj.pzrqoswp.jpg/486x486bb.png",
+      "releaseTitle": "Souvlaki",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Voz e guitarra se misturam numa textura suspensa; escute as camadas.",
+        "en": "Voice and guitar blend into a suspended texture; listen to the layers.",
+        "es": "Voz y guitarra se mezclan en una textura suspendida; escucha las capas."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/machine-gun/399211729?i=399211759&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Voice and guitar blend into a suspended texture; listen to the layers."
+      }
+    },
+    {
+      "key": "apple:291261425",
+      "artistKey": "gojira",
+      "artist": "GOJIRA",
+      "song": "The Art of Dying",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/e6/c6/b4e6c674-1a56-428a-947e-efea5af85523/mzaf_7563492045779129852.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/the-art-of-dying/291261425",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/15/59/13/15591303-aa8d-e2aa-d8ac-cf561b959c63/cover.jpg/486x486bb.png",
+      "releaseTitle": "The Way of All Flesh",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "A percussão e as acentuações irregulares conduzem um peso que muda de forma.",
+        "en": "Percussion and irregular accents drive a heaviness that keeps changing shape.",
+        "es": "La percusión y los acentos irregulares conducen un peso que cambia de forma."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/the-art-of-dying/291261388?i=291261425&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. Percussion and irregular accents drive a heaviness that keeps changing shape."
+      }
+    },
+    {
+      "key": "apple:213374170",
+      "artistKey": "gojira",
+      "artist": "GOJIRA",
+      "song": "Flying Whales",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/81/14/d9/8114d93b-b31b-0651-7617-cc420d899dbf/mzaf_13577706280837039029.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/br/song/flying-whales/213374170",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/09/5d/88/095d8807-90bf-1668-f164-aad880c9fb0d/cover.jpg/486x486bb.png",
+      "releaseTitle": "From Mars to Sirius",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "A abertura atmosférica prepara o contraste com o riff de peso marcado.",
+        "en": "The atmospheric opening sets up the contrast with the weighty riff.",
+        "es": "La apertura atmosférica prepara el contraste con el riff de peso marcado."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/br/album/flying-whales/213374112?i=213374170&uo=4",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. The atmospheric opening sets up the contrast with the weighty riff."
+      }
+    },
+    {
+      "key": "apple:949086190",
+      "artistKey": "elder",
+      "artist": "Elder",
+      "song": "Compendium",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/00/62/c0/0062c0e5-08ef-09cb-5c22-4f9c7893d539/mzaf_3337050160679044887.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/compendium/949086190",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/ab/0b/64/ab0b64b6-47ff-fa04-a6eb-a4c72ba4cfd1/889176232121.jpg/486x486bb.png",
+      "releaseTitle": "Lore",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O riff pesado vai mudando de cenário: acompanhe as transições progressivas.",
+        "en": "The heavy riff keeps changing its setting: follow the progressive transitions.",
+        "es": "El riff pesado cambia de escenario: sigue las transiciones progresivas."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/compendium/949086179?i=949086190",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. The heavy riff keeps changing its setting: follow the progressive transitions."
+      }
+    },
+    {
+      "key": "apple:1229922198",
+      "artistKey": "elder",
+      "artist": "Elder",
+      "song": "The Falling Veil",
+      "genre": "metal",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cc/8e/67/cc8e6777-0814-a734-ba4c-7aca7b4be606/mzaf_3221201760567382211.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/the-falling-veil/1229922198",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/08/65/09/08650997-063a-fe3b-c7b9-3b11e59b97f4/191773052058.jpg/486x486bb.png",
+      "releaseTitle": "Reflections of a Floating World",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Peso e passagens abertas se alternam numa construção de fôlego longo.",
+        "en": "Weight and open passages alternate in a long-form construction.",
+        "es": "Peso y pasajes abiertos se alternan en una construcción de largo aliento."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/the-falling-veil/1229922129?i=1229922198",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: metal. Weight and open passages alternate in a long-form construction."
+      }
+    },
+    {
+      "key": "apple:1109293574",
+      "artistKey": "kingbuffalo",
+      "artist": "King Buffalo",
+      "song": "Orion",
+      "genre": "psychedelic",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dd/1d/f3/dd1df3e6-d494-0a3e-6c62-98581c8690fb/mzaf_8277328210578093802.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/orion/1109293574",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1c/cb/5e/1ccb5e33-032c-e31a-3bf2-1e2a1968d464/859717192986_cover.jpg/486x486bb.png",
+      "releaseTitle": "Orion",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O groove paciente cria espaço para a guitarra expandir a paisagem.",
+        "en": "A patient groove gives the guitar room to expand the landscape.",
+        "es": "Un groove paciente deja espacio para que la guitarra amplíe el paisaje."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/orion/1109293209?i=1109293574",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: psychedelic. A patient groove gives the guitar room to expand the landscape."
+      }
+    },
+    {
+      "key": "apple:1109293578",
+      "artistKey": "kingbuffalo",
+      "artist": "King Buffalo",
+      "song": "Sleeps on a Vine",
+      "genre": "psychedelic",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c7/26/d1/c726d12c-ad2c-e3aa-e9ce-2f9383ce3d23/mzaf_7013796101740953764.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/sleeps-on-a-vine/1109293578",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/1c/cb/5e/1ccb5e33-032c-e31a-3bf2-1e2a1968d464/859717192986_cover.jpg/486x486bb.png",
+      "releaseTitle": "Orion",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A repetição espaçosa aproxima o peso do riff de uma sensação hipnótica.",
+        "en": "Spacious repetition brings the riff's weight toward a hypnotic feel.",
+        "es": "La repetición espaciosa acerca el peso del riff a una sensación hipnótica."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/sleeps-on-a-vine/1109293209?i=1109293578",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: psychedelic. Spacious repetition brings the riff's weight toward a hypnotic feel."
+      }
+    },
+    {
+      "key": "apple:1798573966",
+      "artistKey": "drugchurch",
+      "artist": "Drug Church",
+      "song": "Weed Pin",
+      "genre": "punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/e0/09/3de009a3-01ac-e3de-4311-ee32dec72434/mzaf_16910083139066498006.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/weed-pin/1798573966",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/80/69/40/806940a5-90f8-34fd-f5d8-899493df5b65/192562768235.png/486x486bb.png",
+      "releaseTitle": "Cheer",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Voz áspera e guitarras melódicas puxam em direções diferentes sem perder o impacto.",
+        "en": "Rough vocals and melodic guitars pull in different directions without losing impact.",
+        "es": "Voz áspera y guitarras melódicas tiran en distintas direcciones sin perder impacto."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/weed-pin/1798573960?i=1798573966",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: punk. Rough vocals and melodic guitars pull in different directions without losing impact."
+      }
+    },
+    {
+      "key": "apple:1798573967",
+      "artistKey": "drugchurch",
+      "artist": "Drug Church",
+      "song": "Unlicensed Hall Monitor",
+      "genre": "punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/5f/ed/fe5fed67-0468-5ea8-c6bf-7b03bb90ff34/mzaf_6056096479454281631.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/unlicensed-hall-monitor/1798573967",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/80/69/40/806940a5-90f8-34fd-f5d8-899493df5b65/192562768235.png/486x486bb.png",
+      "releaseTitle": "Cheer",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A urgência do hardcore ganha contornos melódicos no desenho das guitarras.",
+        "en": "Hardcore urgency takes on melodic contours in the guitar patterns.",
+        "es": "La urgencia del hardcore gana contornos melódicos en el dibujo de las guitarras."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/unlicensed-hall-monitor/1798573960?i=1798573967",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: punk. Hardcore urgency takes on melodic contours in the guitar patterns."
+      }
+    },
+    {
+      "key": "apple:1251529463",
+      "artistKey": "protomartyr",
+      "artist": "Protomartyr",
+      "song": "A Private Understanding",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/78/15/9c/78159c09-a3dc-d062-9a3b-8ade5a0c7de7/mzaf_1247793492210648238.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/a-private-understanding/1251529463",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5e/8d/04/5e8d04ef-dbce-8f7a-325c-2771de31a1f3/887828040261.png/486x486bb.png",
+      "releaseTitle": "Relatives in Descent",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A bateria inquieta sustenta uma voz quase falada até a tensão se abrir.",
+        "en": "Restless drums support an almost spoken voice until the tension opens up.",
+        "es": "La batería inquieta sostiene una voz casi hablada hasta que se abre la tensión."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/a-private-understanding/1251529452?i=1251529463",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. Restless drums support an almost spoken voice until the tension opens up."
+      }
+    },
+    {
+      "key": "apple:1251529471",
+      "artistKey": "protomartyr",
+      "artist": "Protomartyr",
+      "song": "The Chuckler",
+      "genre": "post_punk",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/96/2b/d7962bbf-8f99-951b-f01a-997cdbf705ff/mzaf_12420012061123975413.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/the-chuckler/1251529471",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5e/8d/04/5e8d04ef-dbce-8f7a-325c-2771de31a1f3/887828040261.png/486x486bb.png",
+      "releaseTitle": "Relatives in Descent",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Repare como a insistência rítmica mantém a tensão mesmo quando a melodia aparece.",
+        "en": "Notice how rhythmic insistence sustains tension even as melody appears.",
+        "es": "Observa cómo la insistencia rítmica mantiene la tensión incluso cuando aparece la melodía."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/album/the-chuckler/1251529452?i=1251529471",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: post_punk. Notice how rhythmic insistence sustains tension even as melody appears."
+      }
+    },
+    {
+      "key": "apple:278229659",
+      "artistKey": "foofighters",
+      "artist": "Foo Fighters",
+      "song": "Aurora",
+      "genre": "alternative_rock",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/05/59/a0/0559a0b2-d09d-3a03-7d0b-b6d86eb53233/mzaf_15096507156244621082.plus.aac.ep.m4a",
+      "providerUrl": "https://music.apple.com/us/song/aurora/278229659",
+      "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ef/02/55/ef025575-aa1d-efc2-f789-04f592275b8a/888880335630.jpg/486x486bb.png",
+      "releaseTitle": "There Is Nothing Left to Lose",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Guitarras abertas e andamento espaçoso revelam um Foo Fighters mais contemplativo.",
+        "en": "Open guitars and a spacious pace reveal a more contemplative Foo Fighters.",
+        "es": "Guitarras abiertas y un ritmo espacioso revelan un Foo Fighters más contemplativo."
+      },
+      "evidence": {
+        "sourceUrl": "https://music.apple.com/us/song/278229659",
+        "checkedAt": "2026-10-30T16:59:38.285Z",
+        "identityMatch": true,
+        "audioHttpChecked": true,
+        "classification": "editorial",
+        "classificationNote": "Editorial track-level selection: alternative_rock. Open guitars and a spacious pace reveal a more contemplative Foo Fighters."
+      }
+    }
+  ]
+}

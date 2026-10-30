@@ -36,6 +36,8 @@ const runtimeAssetNames = [
   "styles.min.css",
   "daily-djs.css",
   "daily-radar.css",
+  "rock-preview.js",
+  "rock-preview.css",
   "discovery-experience.js",
   "discovery-experience.css",
   "universal-listening.js",
@@ -50,7 +52,7 @@ const runtimeAssetNames = [
   "sonic-ios-runtime.js",
   "app.min.js"
 ];
-for (const asset of ["discovery-experience.js", "discovery-experience.css"]) {
+for (const asset of ["discovery-experience.js", "discovery-experience.css", "rock-preview.js", "rock-preview.css"]) {
   assert.equal(await read(`www/${asset}`), await read(`ios/App/App/public/${asset}`), `Native ${asset} must match the web build`);
 }
 

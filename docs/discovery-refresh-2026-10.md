@@ -43,3 +43,17 @@ Executar `node scripts/audit-catalog-coverage.mjs` para classificar todos os 169
 A auditoria desta rodada encontrou zero duplicatas por artista+título normalizados dentro de cada estilo, mas forte concentração: IDM tem 24 faixas de dois artistas (23 do mesmo artista), Electro House tem 25 de dois artistas (24 do mesmo artista). Diversidade de artistas é a prioridade.
 
 Trabalhar em lotes: confirmar identidade e evidência de subgênero, limitar faixas por artista novo, eliminar versões duplicadas, verificar preview e capa, importar no catálogo e testar repetição/exaustão. Nunca reclassificar músicas apenas para preencher cotas.
+
+## Catálogo e prévia de rock — segunda entrega
+
+A expansão v22 acrescenta 69 gravações de eletrônica em seis estilos prioritários. A fonte é a página pública da gravação no Apple Music, com correspondência de artista/título e resposta HTTP de áudio verificadas. A disponibilidade futura e regional não é garantida. Quatro candidatas foram retiradas por dúvida de classificação: Viper, One Click Headshot, Gassed Up e Pon Di Bill.
+
+O núcleo inicial do catálogo agora intercala artistas antes de preencher outras vagas com gravações do mesmo nome. O histórico continua impedindo repetição involuntária; esgotar uma seleção pede uma nova rodada explícita.
+
+A prévia de rock segue uma seleção editorial por faixa. O padrão prioriza descobertas e outros lados de artistas conhecidos. Hits familiares só entram ao ativar “Incluir clássicos conhecidos”. São categorias editoriais, não medidas de popularidade. Foo Fighters aparece também com Aurora; artistas como feeble little horse, Ulrika Spacek, Drug Church, King Buffalo e Elder abrem novos caminhos. Cada gravação tem uma nota curta de escuta em português, inglês e espanhol. As notas orientam a escuta, sem alegar avaliação humana de áudio feita nesta sessão.
+
+Curtidas, histórico e a preferência por referências são isolados por perfil e incluídos no backup. Trocar a seleção interrompe o áudio; os controles globais de volume e silêncio também valem para rock. Carregar uma faixa não inicia o áudio automaticamente. Os previews continuam no fornecedor; nenhum arquivo de áudio é hospedado no projeto.
+
+A landing page identifica rock como prévia do web app. A versão da App Store exige seu próprio envio e revisão; a publicação na Vercel não atualiza o aplicativo já instalado.
+
+Validação final da curadoria: 45 faixas de rock de 26 artistas; 37 faixas de 19 artistas no padrão e oito referências opcionais. As 114 gravações novas (69 eletrônicas e 45 de rock) passaram na correspondência de identidade e na resposta de áudio. Cem rodadas completas do modelo de rock passaram sem repetir gravações. Revisão móvel em 390 e 320 px sem transbordamento horizontal; controles de áudio com pelo menos 48 px. Reprodução, curtida, troca de faixa e opção de referências verificadas no navegador. Os quinze testes de regressão passaram; o teste de bundle foi repetido após finalizar a compilação, pois a execução concorrente havia lido o arquivo anterior. Pacote web iOS atualizado e teste de equivalência aprovado.

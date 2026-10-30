@@ -4797,7 +4797,7 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20260820-low-coverage-v21";
+const EXTERNAL_DATASET_CACHE_VERSION = "20261030-diversity-v22";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
@@ -4835,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20261030discovery1";
+const SONIC_APP_BUILD_ID = "20261030discovery3";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10894,6 +10894,7 @@ let dailyRadarController = null;
 let userProfileController = null;
 let privacyRequestsController = null;
 let weeklyRecommendsController = null;
+let rockPreviewController = null;
 let dailyDjReminderLaunchPending = false;
 let weeklyHighlightsReminderLaunchPending = false;
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
@@ -10933,6 +10934,7 @@ const DAILY_PRODUCT_USAGE_STORAGE_KEY = "neonpulse:dailyProductUsage:v1";
 const AI_TEXT_CACHE_STORAGE_KEY = "neonpulse:aiTextCache:v1";
 const PREMIUM_PROMO_VISIBILITY_STORAGE_KEY = "neonpulse:premiumPromoVisibility:v1";
 const PROFILE_DATA_STORAGE_KEYS = [
+  "sonic_search:rock_preview:v1",
   DJ_RECOMMENDATION_STORAGE_KEY,
   DAILY_DJ_STORAGE_KEY,
   DAILY_RADAR_STORAGE_KEY,
@@ -31452,8 +31454,9 @@ function audioVolumePercent() {
 }
 
 function syncPreviewAudioState() {
-  if (!trackPreview) return;
   const shouldMute = !audioEnabled || audioUnavailable || audioVolume <= 0.001;
+  rockPreviewController?.syncAudio({ muted: shouldMute, volume: audioVolume });
+  if (!trackPreview) return;
   trackPreview.muted = shouldMute;
   if (!shouldMute) {
     trackPreview.volume = Math.max(0, Math.min(1, audioVolume));
@@ -32799,7 +32802,8 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
-  const entryTab = safeInitialTab || (shouldAutoRecommend ? "discover" : requestedAppTabFromUrl("discover"));
+  const requestedTab = requestedAppTabFromUrl("discover");
+  const entryTab = requestedTab === "rock" ? "rock" : safeInitialTab || (shouldAutoRecommend ? "discover" : requestedTab);
   setActiveAppTab(entryTab);
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
@@ -34139,7 +34143,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
+  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends", "rock"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -34154,6 +34158,7 @@ function primaryAppTabName(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
   if (safeTab === "filters") return "discover";
   if (safeTab === "recommends") return "discover";
+  if (safeTab === "rock") return "discover";
   if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return "more";
   return safeTab;
 }
@@ -34172,6 +34177,7 @@ function toggleAppMenu() {
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
   const secondaryLabels = {
+    rock: sonicTinyCopy("Rock · Prévia", "Rock · Preview", "Rock · Vista previa"),
     recommends: sonicTinyCopy("SonicSearch Recomenda", "SonicSearch Recommends", "SonicSearch Recomienda"),
     filters: t("tabFilters"),
     about: t("tabAbout"),
@@ -34333,6 +34339,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (safeTab === "recommends") {
     void weeklyRecommendsController?.open();
   }
+  if (safeTab === "rock") void rockPreviewController?.open();
   if (safeTab === "admin") {
     void loadAdminAnalytics();
     void loadAdminOperations();
@@ -34653,6 +34660,7 @@ function profileBackupLastExportKey() {
 function profileBackupSignalCount() {
   return Math.max(0,
     totalLikedSongs() +
+    (window.SonicRockPreview?.readState(localStorage, sessionProfileKey())?.likes?.length || 0) +
     (Number(userStats.likedArtists) || 0) +
     (Number(userStats.likedDiscoveries) || 0) +
     (Number(userStats.alreadyKnew) || 0) +
@@ -34739,6 +34747,7 @@ function buildProfileBackupPayload() {
       artSeed: artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : "",
       initialTasteCalibration: safeReadJsonStorage(calibrationKey),
       djRecommendations: safeReadJsonStorage(djRecommendationsKey),
+      rockPreview: safeReadJsonStorage(window.SonicRockPreview?.storageKey(sessionProfileKey(session))),
       usageGuideAcknowledged: true
     }
   };
@@ -34805,6 +34814,9 @@ function restoreProfileBackupPayload(payload) {
   }
   if (djRecommendationsKey && data.djRecommendations && typeof data.djRecommendations === "object") {
     localStorage.setItem(djRecommendationsKey, JSON.stringify(data.djRecommendations));
+  }
+  if (data.rockPreview && window.SonicRockPreview) {
+    window.SonicRockPreview.writeState(localStorage, sessionProfileKey(targetSession), data.rockPreview);
   }
   if (data.usageGuideAcknowledged) {
     localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
@@ -63083,7 +63095,7 @@ bind(audioToggleBtn, "click", () => {
   );
   if (recentlyUnlockedByGlobalTap) audioGlobalUnlockAt = 0;
   setAudioEnabled(needsActivation, { persist: true, fromUser: true });
-  if (needsActivation && audioEnabled && currentRecommendation) {
+  if (needsActivation && audioEnabled && currentRecommendation && currentActiveAppTabName() !== "rock") {
     resumeCurrentPreviewFromUserGesture();
   }
   setAudioVolumePanelOpen(true);
@@ -65202,6 +65214,18 @@ async function bootSonicSearch() {
       renderSocialUi({ preserveStatus: true });
     }
   });
+  rockPreviewController = window.SonicRockPreview?.mount(document.getElementById("rockPanel"), {
+    getProfileKey: () => sessionProfileKey(),
+    getLanguage: () => currentLanguage,
+    navigate: tab => setActiveAppTab(tab, { focusPanel: true }),
+    beforePlay: () => {
+      stopAllActivePlayback({ reason: "rock_preview" });
+      setAudioEnabled(true, { persist: false, fromUser: true });
+    },
+    getAudioState: () => ({ muted: !audioEnabled || audioUnavailable || audioVolume <= 0.001, volume: audioVolume }),
+    onChange: () => updateProfileBackupStatus()
+  });
+  if (currentActiveAppTabName() === "rock") void rockPreviewController?.open();
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },

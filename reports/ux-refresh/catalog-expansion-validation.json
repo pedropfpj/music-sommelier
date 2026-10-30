@@ -1,0 +1,1038 @@
+{
+  "checkedAt": "2026-10-30T16:59:38.285Z",
+  "passed": [
+    {
+      "artist": "Autechre",
+      "song": "Eutow",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/eutow/281109010?i=281109018",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/52/63/4a/52634afd-15e1-1964-33ea-fa8f3c31b714/mzaf_16072939623434121142.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Autechre",
+      "song": "Clipper",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/clipper/281109010?i=281109013",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0e/93/0b/0e930ba5-41cd-9b55-bad2-d2ae80007dd0/mzaf_9365850016234059246.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Autechre",
+      "song": "Bike",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/bike/281042835?i=281042843",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b9/56/54/b9565461-60c8-fb26-efa5-3adb3e7c1b07/mzaf_18426160834452851959.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Alberto Balsalm (1994)",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/alberto-balsalm-1994/281829991?i=281830075",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/b1/bf/4ab1bfdc-0127-5d09-cd67-9fbd7bae44c2/mzaf_1352686733056741678.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Flim",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/flim/282478739?i=282478754",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/ab/95/44ab9515-2a3a-4236-d30a-75dcc5aeba08/mzaf_6351338929558019689.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Windowlicker",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/windowlicker/281953326?i=281953327",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/26/ad/ef/26adefa9-3d0d-c4c2-cc90-9592074831d5/mzaf_5773556647483596188.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Turquoise Hexagon Sun",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/turquoise-hexagon-sun/281116024?i=281116078",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/91/2e/d3/912ed3b4-d723-2fc4-2b70-cb70aa6abfd8/mzaf_17413531304935588040.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Roygbiv",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/roygbiv/281116024?i=281116081",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/e0/de/f3e0def5-52bf-f0e1-beea-523cbf8f6c1e/mzaf_7622614421989800518.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Music Is Math",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/music-is-math/281208446?i=281208448",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a3/12/7c/a3127cb5-cab0-d201-4833-26c688687bf7/mzaf_7877861477750748861.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Plaid",
+      "song": "Melifer",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/melifer/1104321742?i=1104321956",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/a5/db/a9a5db70-682b-7c67-74ff-3a95b1abc421/mzaf_9580635131468118561.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Plaid",
+      "song": "Clock",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/clock/1104321742?i=1104321952",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b7/97/d6/b797d676-963a-4557-111a-f3ac768c65fb/mzaf_8218137098894132016.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Plaid",
+      "song": "Dancers",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/dancers/1458136233?i=1458136240",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3f/49/7f/3f497f34-f5bf-5795-1807-c65185cde83a/mzaf_117801743863504554.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "Beep Street",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/beep-street/78495631?i=78495561",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/aa/28/3aaa28f7-8b1e-fc77-ef37-121e377e6616/mzaf_7309524183684410448.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "My Red Hot Car",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/my-red-hot-car/281864519?i=281864569",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ca/98/72/ca9872a4-4a32-a03d-604b-49f1f61bd695/mzaf_18417911904128430345.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "Do You Know Squarepusher",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/do-you-know-squarepusher/200914293?i=200914296",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ec/e5/e7/ece5e7b0-ebad-ec07-d36c-1b037554932a/mzaf_12847791154444070809.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Clark",
+      "song": "Winter Linn",
+      "style": "idm",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/winter-linn/917623350?i=917623424",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/91/f0/1291f014-608a-1689-eb81-cdc7b130352a/mzaf_16486270726929304573.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hedex",
+      "song": "MHITR (Semi-Automatic) [feat. Eksman]",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/mhitr-semi-automatic-feat-eksman/1680227798?i=1680227803",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b2/19/30/b21930d8-6f55-7feb-1ca9-388790442373/mzaf_2432972340130846552.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hedex & Tion Wayne",
+      "song": "Lowkey (LDN Drift) [feat. Takura]",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/lowkey-ldn-drift-feat-takura/1726426439?i=1726426447",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5b/d6/77/5bd6776f-0eec-a652-44d3-c26b744cf98d/mzaf_16311143436459896266.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Macky Gee",
+      "song": "Tour",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/tour/1282939022?i=1282939530",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/eb/11/47/eb114716-c5cb-3ab5-e489-2e328e30deb1/mzaf_11411737346061475512.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Macky Gee & Leo Wood",
+      "song": "Power",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/power/1752189237?i=1752189238",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d5/d1/ee/d5d1eef0-c3ac-f11b-5880-dd09d174b2ff/mzaf_598948327262094306.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Macky Gee",
+      "song": "Black Widow",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/black-widow/1482677291?i=1482677293",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/bd/b8/3bbdb8f6-d2dc-697c-909b-e0bc11bb3353/mzaf_12304249837358703023.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Turno & Kanine",
+      "song": "Polarity",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/polarity/1481988508?i=1481988511",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/23/1f/36/231f360a-214f-f199-fbe4-668a49016675/mzaf_15827488930702569961.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Bou",
+      "song": "All U Gotta Do",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/all-u-gotta-do/1654045490?i=1654045491",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/24/e4/b9/24e4b951-141c-7494-6056-50697cf1fc60/mzaf_1358443982736371701.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Bou & MC Spyda",
+      "song": "Magic Carpet",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/magic-carpet/1497399574?i=1497399575",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/68/06/8d6806e3-f35f-cd82-3fdc-8c48938d8c32/mzaf_16199839306780471450.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Bou & B Live",
+      "song": "Nan Slapper",
+      "style": "jump_up",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/nan-slapper/1713567536?i=1713567539",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c2/26/2a/c2262a4b-8421-ac04-325e-190130ef43c3/mzaf_1456216025197311846.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy J",
+      "song": "Lost & Found",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/lost-found/797475908?i=797475924",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/83/30/31/83303120-cc49-4903-b8e6-f42dbf5c3fd6/mzaf_10832875337441747275.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy J",
+      "song": "Airborne",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/airborne/1347133717?i=1347133719",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/a9/7e/10a97e13-2bb8-68f5-f5d0-fb6f53b2a823/mzaf_1985182027211522582.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy J",
+      "song": "Worlds Apart",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/worlds-apart/1840610376?i=1840610377",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e8/66/67/e8666777-ffa8-26a9-fe5a-dffcc716f631/mzaf_9755168917815771453.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy Mantzur",
+      "song": "Tremolo Man",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/tremolo-man/1436158192?i=1436158196",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cd/e1/4e/cde14eb9-2bc9-e494-3371-431089cc6271/mzaf_15256308247743268314.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy Mantzur & Khen",
+      "song": "Where Is Home",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/where-is-home/1688166003?i=1688166005",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/a3/9e/03/a39e03b9-c808-e200-a301-cbf07565c4e1/mzaf_2861010870147993684.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Guy Mantzur & Khen",
+      "song": "Nothing Lasts",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/nothing-lasts/1785232989?i=1785232991",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/82/8f/d2/828fd2fb-5788-799f-84b5-531bbb632246/mzaf_17732713259941067571.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hernán Cattáneo & Khen",
+      "song": "Rogelito",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/rogelito/6785332755?i=6785332758",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a0/3b/d6/a03bd690-240e-fe2c-a83f-dad92835b4d3/mzaf_12163501842199583355.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hernán Cattáneo & Soundexile",
+      "song": "Altair (Guy J Remix)",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/altair-guy-j-remix/821851273?i=821851278",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ad/2f/2b/ad2f2b63-60bf-2e03-a4a7-a5b1d2d674bf/mzaf_15060268219346593773.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hernán Cattáneo & Audio Junkies",
+      "song": "A Major Minor",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/a-major-minor/1703091713?i=1703091724",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6a/8a/60/6a8a60ce-fe9f-f7c1-c756-0614f8756a23/mzaf_16310951527143615337.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Nick Warren",
+      "song": "Rumbletump",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/rumbletump/572206425?i=572206471",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/29/b1/82/29b182d3-1b4c-78d1-17e4-a4f246662a47/mzaf_2564852433731853115.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Nick Warren",
+      "song": "Buenos Aires",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/buenos-aires/1538167160?i=1538167161",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ba/95/89/ba958988-9296-8f19-6891-4ddc07f15b26/mzaf_15913412211644290112.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Nick Warren & Tripswitch",
+      "song": "Savannah",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/savannah/1204284728?i=1204285136",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/03/1c/39/031c39ea-bc5f-678e-b070-6c073e803404/mzaf_15695087459107297321.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Henry Saiz",
+      "song": "Lucero Del Alba",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/lucero-del-alba/6789091243?i=6789091320",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d6/df/e0/d6dfe0a2-3c9a-b55f-e843-37f40ec6c7b9/mzaf_10130760679044558106.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "HOT DRUM",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/hot-drum/1174125407?i=1174125420",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/db/b4/f2/dbb4f238-d6f1-7f5e-8367-0f2c95c29d74/mzaf_8407054906278846749.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "I WARE HOUSE",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/i-ware-house/1214062525?i=1214062528",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/25/9e/14/259e14db-36af-93e5-89a9-2bc17a0b6b1b/mzaf_13128995657936521109.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "THE BOX",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/the-box/1170619973?i=1170619982",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/fc/5b/8bfc5bf4-ca72-0e99-d16c-cff391d75d1f/mzaf_14214266743539979541.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Habstrakt",
+      "song": "Show Me",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/show-me/1659086726?i=1659086727",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/79/08/1d/79081de4-38c3-4b1d-b33f-d490e3488813/mzaf_16975582600284417603.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Habstrakt & Roderick Porter",
+      "song": "Outer Space",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/outer-space/1650533071?i=1650533072",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1c/d0/27/1cd027ac-654e-9154-b74f-acb654539341/mzaf_987130761256136524.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Habstrakt",
+      "song": "The One",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/the-one/1473897164?i=1473897165",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/07/59/f3075977-1e89-26d7-cb3d-d2fa872e1ba4/mzaf_11127424648681996733.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Jauz",
+      "song": "Feel the Volume",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/feel-the-volume/935889923?i=935889931",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/8e/e4/718ee471-27eb-eb49-4f8a-e2df40355409/mzaf_10024694306870919516.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Jauz & Ephwurd",
+      "song": "Rock The Party",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/rock-the-party/1336097005?i=1336097462",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9b/b6/3a/9bb63a89-f0e0-e393-cb93-c87d383628b6/mzaf_10148840028272489410.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Bass Inside",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/bass-inside/1096868355?i=1096868527",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8f/3b/e0/8f3be063-02dc-02d0-6f2b-7804736a1a7d/mzaf_696458111245000304.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Laid Off",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/laid-off/1690680440?i=1690680464",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/01/2d/f7/012df7e9-1890-48fc-704a-dfd8a613ade3/mzaf_2811251841706604790.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Work Your Body",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/work-your-body/6797651339?i=6797651341",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/a8/36/f8a836f3-5fae-7daa-4183-82c8342eeaba/mzaf_6057428112021851848.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Moksi",
+      "song": "Lights Down Low",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/lights-down-low/1124032621?i=1124032817",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c2/8b/07/c28b07e9-0f59-0449-f6ad-81a19d5014e9/mzaf_4649648135953984819.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Moksi",
+      "song": "Doorman (feat. Chace)",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/doorman-feat-chace/1471292437?i=1471292446",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a2/e4/6b/a2e46b89-db53-e4d9-cabb-0cdbe6cf5e1e/mzaf_5372487877228968499.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Taiki Nulight & Eloise Keeble",
+      "song": "Don't Wanna Let Go",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/dont-wanna-let-go/1691175562?i=1691175563",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b1/fd/66/b1fd66d7-e349-e17c-4788-fa4323db62a0/mzaf_9221623640879799605.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Taiki Nulight",
+      "song": "Primal",
+      "style": "bass_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/primal/1690838372?i=1690838921",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6b/b2/fd/6bb2fdfb-cfc5-9a4e-12bc-b34a4bc2965f/mzaf_18321017796537198094.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Illmerica",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/illmerica/1713785601?i=1713786291",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/c4/e7/4bc4e7ec-af40-c580-cbda-54b46fbf1aa3/mzaf_2867047915394747541.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Wolfgang's 5th Symphony",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/wolfgangs-5th-symphony/1714694709?i=1714694927",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/ad/46/b4/ad46b4ed-6445-bf9b-8707-14ff0696cb0c/mzaf_1277467942366867110.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Space Junk",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/space-junk/1713785601?i=1713785621",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ac/a3/1e/aca31e83-5a98-a066-5778-cacc1f5c429c/mzaf_11303425325673353256.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Feed Me",
+      "song": "Pink Lady",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/pink-lady/1731115199?i=1731115203",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d4/ac/4b/d4ac4b36-74fd-317a-1ce8-dda004945842/mzaf_2097043136350489393.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Feed Me",
+      "song": "Death By Robot",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/death-by-robot/695730740?i=695730906",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4c/4c/26/4c4c2629-2aeb-9397-7afe-76e66de3da6f/mzaf_1254170641518768948.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Lick the Rainbow",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/lick-the-rainbow/1188805849?i=1188806532",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/45/61/0e/45610e72-27a1-8a37-e0ef-fa60edc0d743/mzaf_17494308511756756921.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Super Meat Freeze",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/super-meat-freeze/1133167121?i=1133168219",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview18/v4/e7/b7/c5/e7b7c5a6-a8e2-3891-c389-3409cddd9b5a/mzaf_3789594835002546189.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4a"
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Milky Way",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/milky-way/1133167121?i=1133168346",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dc/d1/e1/dcd1e13c-3848-4058-8b15-2577921a464c/mzaf_12140109330890544545.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Happy Violence",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/happy-violence/1648190860?i=1648191136",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/53/8d/8f/538d8f49-fdee-fcb7-71be-a13e98ee1a2e/mzaf_13984075160878970674.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Rolling Stones T-Shirt",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/rolling-stones-t-shirt/1224256639?i=1224256646",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1e/d2/30/1ed230f9-128f-c568-872c-2550e435ad2a/mzaf_13060815148908482066.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Feed the Dada",
+      "style": "electro_house",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/feed-the-dada/1224256639?i=1224256641",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/99/c7/f5/99c7f5e3-b8fb-b98e-ba32-3b1071601117/mzaf_3259843398966836807.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Emmanuel Top",
+      "song": "Acid Phase",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/acid-phase/409359809?i=409359822",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/94/80/4e/94804eb4-391e-4c69-85ca-3dc4dd16aa67/mzaf_3196181685111090502.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Emmanuel Top",
+      "song": "Turkish Bazar",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/album/turkish-bazar/409359809?i=409359816",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9c/40/df/9c40df4a-8b62-fb1d-1af8-60851f0b7030/mzaf_4860282592008185271.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hardfloor",
+      "song": "Acperience 1 (Original Version)",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/song/484913534",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a2/37/10/a23710ba-0924-dfd2-0ebc-368c1f929f43/mzaf_4134334065568037101.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Hardfloor",
+      "song": "Acperience 7",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/us/song/1593873990",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3b/0c/43/3b0c43f2-e81f-ed7c-03ba-04f54e8f415c/mzaf_5622589607700488773.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Miss Djax & Junk Project",
+      "song": "Acid Queen (Miss Djax vs. Junk Project)",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "sourceUrl": "https://music.apple.com/gb/song/1491041751",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a8/1e/cc/a81eccda-0a15-f50e-f5fe-307552201baf/mzaf_7513829577088687428.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Radiohead",
+      "song": "Paranoid Android",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/paranoid-android/1097861387?i=1097861770&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/67/6c/04/676c04b5-624a-6101-2d63-dc9c971e2a4e/mzaf_14148414942735566986.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/come-as-you-are/1440783617?i=1440783636&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/55/17/88551793-f12c-c809-2657-bea5256c7aa0/mzaf_3880800635733347308.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Pearl Jam",
+      "song": "Black",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/black/425465247?i=425465351&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/98/a4/a798a4a2-dc88-1dcc-8afa-c14998734b1c/mzaf_10691968041469613196.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Foo Fighters",
+      "song": "Everlong",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/everlong/362133451?i=362133505&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/35/25/c7/3525c700-8776-5b4d-fdd2-7754b26c7fbf/mzaf_4390385370578627076.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Queens of the Stone Age",
+      "song": "No One Knows",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/no-one-knows/1440909901?i=1440910536&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/8d/ee/f38dee84-48ff-96d0-31c3-e9e4e3ea7e64/mzaf_4669303527189500864.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Muse",
+      "song": "Hysteria",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/hysteria/1716096819?i=1716097098&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/2b/cd/012bcd29-e307-6001-b04c-adb2d812b15f/mzaf_11503667054915665989.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Big Thief",
+      "song": "Not",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/not/1473012904?i=1473013069&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/99/66/57/996657b0-d3e0-633d-22f2-19ea9f65308c/mzaf_14314953802047138842.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Big Thief",
+      "song": "Simulation Swarm",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/simulation-swarm/1591284600?i=1591285796&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4d/9b/d3/4d9bd358-190b-1ee2-7e0a-985d2a33274c/mzaf_3839435108543168693.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Wednesday",
+      "song": "Chosen to Deserve",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/chosen-to-deserve/1660028568?i=1660028844&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4a/f2/92/4af292a9-151f-20de-194c-870a1ba8ecb6/mzaf_9608284185870611692.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Wednesday",
+      "song": "Bull Believer",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/bull-believer/1660028568?i=1660028580&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6a/a2/29/6aa229d8-dd9a-f584-5f45-50eb3225bb51/mzaf_17964213928635354604.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Robot Stop",
+      "style": "psychedelic",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/robot-stop/1832810339?i=1832810345&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4c/8a/ba/4c8aba97-20cf-b416-0d33-e592625f54b2/mzaf_8561476492481557727.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Iron Lung",
+      "style": "psychedelic",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/iron-lung/1640761260?i=1640761914&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9b/1b/4e/9b1b4e0f-bdc1-39fd-b116-ea7a4a6194b6/mzaf_16561464240059169951.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Turnstile",
+      "song": "BLACKOUT",
+      "style": "punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/blackout/1576430192?i=1576430194&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/55/72/96/55729631-b8bb-9bb4-eed1-2ef01d77768d/mzaf_4038329023564106944.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Turnstile",
+      "song": "HOLIDAY",
+      "style": "punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/holiday/1576430192?i=1576430737&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/a0/56/5fa056f8-454e-7c73-b25a-1509177e8a2e/mzaf_13644061481167065882.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/master-of-puppets/1442993557?i=1442993961&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/41/0d/45410d76-5a71-aa65-fb64-77df22ac615c/mzaf_4547853143052251744.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "System Of A Down",
+      "song": "Chop Suey!",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/chop-suey/273714443?i=273714640&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/1f/74/991f74a5-0f17-bf20-7c10-7150ccb452de/mzaf_5343840477634119165.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "IDLES",
+      "song": "Danny Nedelko",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/danny-nedelko/1542276067?i=1542276080&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/89/34/d1/8934d10e-20d4-c1d6-6b4b-93ac9427985e/mzaf_7997529387552464199.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "IDLES",
+      "song": "Never Fight A Man With A Perm",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/never-fight-a-man-with-a-perm/1525579780?i=1525580284&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview114/v4/c2/af/23/c2af23ef-28d2-8632-add9-66c5aa23f91c/mzaf_17323822593748118697.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4a"
+    },
+    {
+      "artist": "Dry Cleaning",
+      "song": "Scratchcard Lanyard",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/scratchcard-lanyard/1549505079?i=1549505089&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/55/ed/f455ed14-255c-0277-832a-ae438856125d/mzaf_15125382992812813096.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Dry Cleaning",
+      "song": "Strong Feelings",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/strong-feelings/1549505079?i=1549505356&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e7/b0/38/e7b03875-9da2-f9eb-7b78-465727fdadbc/mzaf_2930750422193286916.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Black Country, New Road",
+      "song": "Sunglasses",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/sunglasses/1533822061?i=1533822065&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f8/8a/9c/f88a9cdc-1eb7-04e8-2043-5a7c2aa7090b/mzaf_9965519104034475775.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Black Country, New Road",
+      "song": "Science Fair",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/science-fair/1533822061?i=1533822064&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/30/85/a7/3085a76e-37e3-f89a-3db5-b547b213c3db/mzaf_4905231260258521399.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "feeble little horse",
+      "song": "Tin Man",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/tin-man/1672079958?i=1672079965&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ef/5b/87/ef5b877b-28d1-2a8f-0ce2-35a47e5fe037/mzaf_9583134231348972909.plus.aac.p.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "feeble little horse",
+      "song": "Freak",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/freak/1672079958?i=1672079963&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fb/e4/60/fbe46030-d2e0-3cf2-dc53-e65ed61f409e/mzaf_9932154222662001599.plus.aac.p.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Ulrika Spacek",
+      "song": "Mimi Pretend",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/mimi-pretend/1887365979?i=1887366119&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4b/e8/21/4be82170-51b0-7976-7f68-581014d45449/mzaf_209180461354204917.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Ulrika Spacek",
+      "song": "Silvertonic",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/silvertonic/1887365979?i=1887366123&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0c/f9/af/0cf9af0a-8603-3946-3879-a9d841eb1cc8/mzaf_3834354672346916505.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "The Beths",
+      "song": "Expert in a Dying Field",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/expert-in-a-dying-field/1620095921?i=1620095927&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/54/9f/a4/549fa483-2cb1-f049-a664-f1470890853a/mzaf_2188043480129588150.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "The Beths",
+      "song": "Out of Sight",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/out-of-sight/1583598530?i=1583598816&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/e9/5f/a7e95f2a-e1e4-a3e3-9ae5-8d4672223ae8/mzaf_9535679792108700139.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Alvvays",
+      "song": "Tile by Tile",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/tile-by-tile/1651269389?i=1651269400&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a4/2c/6f/a42c6f81-e437-663d-fee7-df8cf7b2eba7/mzaf_83013030870639551.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Alvvays",
+      "song": "Pharmacist",
+      "style": "indie_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/pharmacist/1651269389?i=1651269390&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/d3/35/4ed33573-8a0c-b7c1-2ded-f95871554592/mzaf_17681839132784039937.plus.aac.p.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Sonic Youth",
+      "song": "Schizophrenia",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/schizophrenia/520274588?i=520274631&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/18/6a/88/186a8830-98ab-2498-9405-c54cc8806a52/mzaf_7214945211839961751.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Sonic Youth",
+      "song": "Incinerate",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/incinerate/1443129175?i=1443129418&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/8a/c8/078ac8e5-0f9e-3687-fc1c-3d7126cf655c/mzaf_617596329860055487.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Slowdive",
+      "song": "Dagger",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/dagger/399211729?i=399211831&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a5/88/d9/a588d952-baa4-4057-899b-55476a9489ff/mzaf_7611805214329961350.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Slowdive",
+      "song": "Machine Gun",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/machine-gun/399211729?i=399211759&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/75/95/06/7595060d-6214-9d10-9bc5-6930e6d458ce/mzaf_8396134800436228928.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "GOJIRA",
+      "song": "The Art of Dying",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/the-art-of-dying/291261388?i=291261425&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/e6/c6/b4e6c674-1a56-428a-947e-efea5af85523/mzaf_7563492045779129852.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "GOJIRA",
+      "song": "Flying Whales",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/br/album/flying-whales/213374112?i=213374170&uo=4",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/81/14/d9/8114d93b-b31b-0651-7617-cc420d899dbf/mzaf_13577706280837039029.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Elder",
+      "song": "Compendium",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/compendium/949086179?i=949086190",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/00/62/c0/0062c0e5-08ef-09cb-5c22-4f9c7893d539/mzaf_3337050160679044887.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Elder",
+      "song": "The Falling Veil",
+      "style": "metal",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/the-falling-veil/1229922129?i=1229922198",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cc/8e/67/cc8e6777-0814-a734-ba4c-7aca7b4be606/mzaf_3221201760567382211.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "King Buffalo",
+      "song": "Orion",
+      "style": "psychedelic",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/orion/1109293209?i=1109293574",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dd/1d/f3/dd1df3e6-d494-0a3e-6c62-98581c8690fb/mzaf_8277328210578093802.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "King Buffalo",
+      "song": "Sleeps on a Vine",
+      "style": "psychedelic",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/sleeps-on-a-vine/1109293209?i=1109293578",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c7/26/d1/c726d12c-ad2c-e3aa-e9ce-2f9383ce3d23/mzaf_7013796101740953764.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Drug Church",
+      "song": "Weed Pin",
+      "style": "punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/weed-pin/1798573960?i=1798573966",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/e0/09/3de009a3-01ac-e3de-4311-ee32dec72434/mzaf_16910083139066498006.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Drug Church",
+      "song": "Unlicensed Hall Monitor",
+      "style": "punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/unlicensed-hall-monitor/1798573960?i=1798573967",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/5f/ed/fe5fed67-0468-5ea8-c6bf-7b03bb90ff34/mzaf_6056096479454281631.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Protomartyr",
+      "song": "A Private Understanding",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/a-private-understanding/1251529452?i=1251529463",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/78/15/9c/78159c09-a3dc-d062-9a3b-8ade5a0c7de7/mzaf_1247793492210648238.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Protomartyr",
+      "song": "The Chuckler",
+      "style": "post_punk",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/album/the-chuckler/1251529452?i=1251529471",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/96/2b/d7962bbf-8f99-951b-f01a-997cdbf705ff/mzaf_12420012061123975413.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    },
+    {
+      "artist": "Foo Fighters",
+      "song": "Aurora",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "sourceUrl": "https://music.apple.com/us/song/278229659",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/05/59/a0/0559a0b2-d09d-3a03-7d0b-b6d86eb53233/mzaf_15096507156244621082.plus.aac.ep.m4a",
+      "mediaType": "audio/x-m4p"
+    }
+  ],
+  "failed": [],
+  "deferredForGenreReview": [
+    "Viper",
+    "One Click Headshot",
+    "Gassed Up",
+    "Pon Di Bill"
+  ]
+}

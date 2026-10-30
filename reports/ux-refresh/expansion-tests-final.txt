@@ -1,0 +1,84 @@
+rock-preview
+Rock preview passed: 45 recordings, 6 styles, 100 complete no-repeat rounds, artist diversity, explicit restart, profile isolation, storage failure, unsafe URL rejection and balanced core selection.
+
+discovery-experience
+Discovery experience passed: accented search, multi-term match, localized style search, stable saved data, replay and profile isolation.
+
+first-experience
+First-experience contract passed: 2028 core tracks, 169 on-demand style shards, 340453 gzip bytes.
+
+simplified-navigation
+Simplified navigation contract passed: five primary destinations with contextual Filters and More routes.
+
+auth-recommendation-isolation
+Auth recommendation isolation contract passed.
+
+single-playback-policy
+✓ source policy enables safe recommendation autoplay
+✓ central stop is idempotent and isolates failures
+✓ all source transitions keep one active authority
+✓ negative feedback invalidates rejected preview work
+✓ automatic playback works and rapid requests stay singular
+✓ stale SoundCloud READY callback cannot restart playback
+Single playback policy tests passed.
+
+preview-card-ownership
+Preview ownership contract passed: stale async results cannot cross-wire card audio.
+
+opening-rotation
+PASS opening rotation route: slots 0 -> 1
+
+recommendation-safety
+Recommendation safety contract passed: manual subgenres and rejection history are hard constraints.
+
+niche-recommendation-runtime
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The served app bundle is stale
+    at file:///Users/pedrofreire/Documents/New%20project/scripts/test-niche-recommendation-runtime.mjs:43:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+
+
+Retest after optimized bundle build completed:
+niche-recommendation-runtime
+Niche recommendation runtime passed: HTTP app healthy, 24 styles, 120 playable artist-distinct samples, minimum 5 playable artists and 16 direct routes/style.
+
+low-coverage-subgenre-expansion-v21
+Low-coverage expansion passed: 9232 tracks, 58 repaired styles, minimum 21 playable tracks and 5 playable artists/style.
+
+underrepresented-catalog-expansion
+Underrepresented catalog expansion passed: 9232 tracks, 24 expanded styles, 122 diversified style-artist pairs, minimum depth 7 artists/style.
+
+subgenre-stress
+┌─────────┬─────────────────────┬───────┬─────────┬──────────┬────────────────┬───────────────┬──────────────────┐
+│ (index) │ style               │ tests │ artists │ playable │ catalogPreview │ deezerRefresh │ candidateArtists │
+├─────────┼─────────────────────┼───────┼─────────┼──────────┼────────────────┼───────────────┼──────────────────┤
+│ 0       │ 'full_on_night'     │ 0     │ 0       │ 0        │ 0              │ 0             │ 21               │
+│ 1       │ 'forest_psy'        │ 0     │ 0       │ 0        │ 0              │ 0             │ 46               │
+│ 2       │ 'dark_psy'          │ 0     │ 0       │ 0        │ 0              │ 0             │ 50               │
+│ 3       │ 'hi_tech'           │ 0     │ 0       │ 0        │ 0              │ 0             │ 16               │
+│ 4       │ 'psycore'           │ 0     │ 0       │ 0        │ 0              │ 0             │ 19               │
+│ 5       │ 'techno'            │ 0     │ 0       │ 0        │ 0              │ 0             │ 13               │
+│ 6       │ 'hard_techno'       │ 0     │ 0       │ 0        │ 0              │ 0             │ 12               │
+│ 7       │ 'industrial_techno' │ 0     │ 0       │ 0        │ 0              │ 0             │ 18               │
+│ 8       │ 'acid_techno'       │ 0     │ 0       │ 0        │ 0              │ 0             │ 10               │
+│ 9       │ 'dub_techno'        │ 0     │ 0       │ 0        │ 0              │ 0             │ 18               │
+└─────────┴─────────────────────┴───────┴─────────┴──────────┴────────────────┴───────────────┴──────────────────┘
+PASS: 10 subgêneros; 10 rotas candidatas por estilo; a prova externa ao vivo é opcional com STRESS_LIVE_PREVIEWS_PER_STYLE=1.
+
+premium-promo-visibility
+Premium visibility checks passed.
+
+smart-returning-entry
+Smart returning-entry contract passed: first visit stays guided and returning users enter directly.

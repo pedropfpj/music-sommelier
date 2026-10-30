@@ -15,7 +15,7 @@ const runtimeSource = fs.readFileSync(path.join(rootDir, "catalog-runtime.js"), 
 const sourceList = fs.readFileSync(path.join(rootDir, "scripts", "catalog-runtime-sources.mjs"), "utf8");
 
 assert.ok(sourceList.includes("data/low_coverage_subgenre_expansion_v21_20260820.csv"), "Low-coverage expansion must feed the runtime build");
-assert.ok(runtimeSource.includes('VERSION = "20260820-catalog-v21"'), "Catalog loader cache version must expose v21");
+assert.ok(runtimeSource.includes('VERSION = "20261030-catalog-v22"'), "Catalog loader cache version must expose the current catalog revision");
 assert.equal(report.stylesExpanded, 58, "Expansion must retain all 58 low-coverage subgenres");
 assert.ok(report.tracksAdded >= 675, "Expansion must retain at least 675 verified playable rows");
 assert.ok(report.artistsAdded >= 173, "Expansion must retain all curated style-artist pairs");

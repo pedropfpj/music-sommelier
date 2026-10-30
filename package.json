@@ -73,7 +73,9 @@
     "test:android-runtime": "node scripts/test-android-runtime.mjs",
     "supabase:apple-auth": "node scripts/configure-supabase-apple-auth.mjs",
     "test:weekly-recommends": "node scripts/test-weekly-recommends.mjs",
-    "verify:weekly-recommends": "node scripts/verify-weekly-recommends-ui.mjs"
+    "verify:weekly-recommends": "node scripts/verify-weekly-recommends-ui.mjs",
+    "test:rock-preview": "node scripts/test-rock-preview.mjs",
+    "catalog:curated-diversity": "node scripts/curate-discovery-catalog.mjs"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",

@@ -1,0 +1,1290 @@
+{
+  "schemaVersion": 1,
+  "note": "Explicit editorial selection. Provider identity and audio are checked by the generator; genre is an editorial assertion, not inferred from popularity or the full artist catalog.",
+  "tracks": [
+    {
+      "artist": "Autechre",
+      "song": "Eutow",
+      "url": "https://music.apple.com/us/album/eutow/281109010?i=281109018",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/autechre/4526913",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Autechre",
+      "song": "Clipper",
+      "url": "https://music.apple.com/us/album/clipper/281109010?i=281109013",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/autechre/4526913",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Autechre",
+      "song": "Bike",
+      "url": "https://music.apple.com/us/album/bike/281042835?i=281042843",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/autechre/4526913",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Alberto Balsalm (1994)",
+      "url": "https://music.apple.com/us/album/alberto-balsalm-1994/281829991?i=281830075",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/aphex-twin/39883194",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Flim",
+      "url": "https://music.apple.com/us/album/flim/282478739?i=282478754",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/aphex-twin/39883194",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Aphex Twin",
+      "song": "Windowlicker",
+      "url": "https://music.apple.com/us/album/windowlicker/281953326?i=281953327",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/aphex-twin/39883194",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Turquoise Hexagon Sun",
+      "url": "https://music.apple.com/us/album/turquoise-hexagon-sun/281116024?i=281116078",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/boards-of-canada/2989314",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Roygbiv",
+      "url": "https://music.apple.com/us/album/roygbiv/281116024?i=281116081",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/boards-of-canada/2989314",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Boards of Canada",
+      "song": "Music Is Math",
+      "url": "https://music.apple.com/us/album/music-is-math/281208446?i=281208448",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/boards-of-canada/2989314",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Plaid",
+      "song": "Melifer",
+      "url": "https://music.apple.com/us/album/melifer/1104321742?i=1104321956",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/plaid/4514151",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Plaid",
+      "song": "Clock",
+      "url": "https://music.apple.com/us/album/clock/1104321742?i=1104321952",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/plaid/4514151",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Plaid",
+      "song": "Dancers",
+      "url": "https://music.apple.com/us/album/dancers/1458136233?i=1458136240",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/plaid/4514151",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "Beep Street",
+      "url": "https://music.apple.com/us/album/beep-street/78495631?i=78495561",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/squarepusher/4514377",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "My Red Hot Car",
+      "url": "https://music.apple.com/us/album/my-red-hot-car/281864519?i=281864569",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/squarepusher/4514377",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Squarepusher",
+      "song": "Do You Know Squarepusher",
+      "url": "https://music.apple.com/us/album/do-you-know-squarepusher/200914293?i=200914296",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/squarepusher/4514377",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Clark",
+      "song": "Winter Linn",
+      "url": "https://music.apple.com/us/album/winter-linn/917623350?i=917623424",
+      "style": "idm",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/clark/136731821",
+      "reason": "IDM: programação rítmica e texturas eletrônicas; seleção editorial de gravações específicas."
+    },
+    {
+      "artist": "Hedex",
+      "song": "MHITR (Semi-Automatic) [feat. Eksman]",
+      "url": "https://music.apple.com/us/album/mhitr-semi-automatic-feat-eksman/1680227798?i=1680227803",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/hedex/643104515",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Hedex",
+      "song": "Lowkey (LDN Drift) [feat. Takura]",
+      "url": "https://music.apple.com/us/album/lowkey-ldn-drift-feat-takura/1726426439?i=1726426447",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/hedex/643104515",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Macky Gee",
+      "song": "Tour",
+      "url": "https://music.apple.com/us/album/tour/1282939022?i=1282939530",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/macky-gee/324475931",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Macky Gee",
+      "song": "Power",
+      "url": "https://music.apple.com/us/album/power/1752189237?i=1752189238",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/macky-gee/324475931",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Macky Gee",
+      "song": "Black Widow",
+      "url": "https://music.apple.com/us/album/black-widow/1482677291?i=1482677293",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/macky-gee/324475931",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Turno",
+      "song": "Polarity",
+      "url": "https://music.apple.com/us/album/polarity/1481988508?i=1481988511",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/turno/354009444",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Bou",
+      "song": "All U Gotta Do",
+      "url": "https://music.apple.com/us/album/all-u-gotta-do/1654045490?i=1654045491",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/bou/1648132782",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Bou",
+      "song": "Magic Carpet",
+      "url": "https://music.apple.com/us/album/magic-carpet/1497399574?i=1497399575",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/bou/1648132782",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Bou",
+      "song": "Nan Slapper",
+      "url": "https://music.apple.com/us/album/nan-slapper/1713567536?i=1713567539",
+      "style": "jump_up",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/bou/1648132782",
+      "reason": "Jump Up: seleção de faixas de drum and bass orientadas ao baixo e à pista."
+    },
+    {
+      "artist": "Guy J",
+      "song": "Lost & Found",
+      "url": "https://music.apple.com/us/album/lost-found/797475908?i=797475924",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-j/201100629",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Guy J",
+      "song": "Airborne",
+      "url": "https://music.apple.com/us/album/airborne/1347133717?i=1347133719",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-j/201100629",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Guy J",
+      "song": "Worlds Apart",
+      "url": "https://music.apple.com/us/album/worlds-apart/1840610376?i=1840610377",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-j/201100629",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Guy Mantzur",
+      "song": "Tremolo Man",
+      "url": "https://music.apple.com/us/album/tremolo-man/1436158192?i=1436158196",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-mantzur/260502132",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Guy Mantzur",
+      "song": "Where Is Home",
+      "url": "https://music.apple.com/us/album/where-is-home/1688166003?i=1688166005",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-mantzur/260502132",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Guy Mantzur",
+      "song": "Nothing Lasts",
+      "url": "https://music.apple.com/us/album/nothing-lasts/1785232989?i=1785232991",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/guy-mantzur/260502132",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Hernan Cattaneo",
+      "song": "Rogelito",
+      "url": "https://music.apple.com/us/album/rogelito/6785332755?i=6785332758",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/hern%C3%A1n-catt%C3%A1neo/44974489",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Hernan Cattaneo",
+      "song": "Altair (Guy J Remix)",
+      "url": "https://music.apple.com/us/album/altair-guy-j-remix/821851273?i=821851278",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/hern%C3%A1n-catt%C3%A1neo/44974489",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Hernan Cattaneo",
+      "song": "A Major Minor",
+      "url": "https://music.apple.com/us/album/a-major-minor/1703091713?i=1703091724",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/hern%C3%A1n-catt%C3%A1neo/44974489",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Nick Warren",
+      "song": "Rumbletump",
+      "url": "https://music.apple.com/us/album/rumbletump/572206425?i=572206471",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/nick-warren/33105355",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Nick Warren",
+      "song": "Buenos Aires",
+      "url": "https://music.apple.com/us/album/buenos-aires/1538167160?i=1538167161",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/nick-warren/33105355",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Nick Warren",
+      "song": "Savannah",
+      "url": "https://music.apple.com/us/album/savannah/1204284728?i=1204285136",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/nick-warren/33105355",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "Henry Saiz",
+      "song": "Lucero Del Alba",
+      "url": "https://music.apple.com/us/album/lucero-del-alba/6789091243?i=6789091320",
+      "style": "progressive_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/henry-saiz/274314838",
+      "reason": "Progressive House: construção gradual, arranjos longos e melodias de pista."
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "HOT DRUM",
+      "url": "https://music.apple.com/us/album/hot-drum/1174125407?i=1174125420",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/joyryde/408931289",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "I WARE HOUSE",
+      "url": "https://music.apple.com/us/album/i-ware-house/1214062525?i=1214062528",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/joyryde/408931289",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "JOYRYDE",
+      "song": "THE BOX",
+      "url": "https://music.apple.com/us/album/the-box/1170619973?i=1170619982",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/joyryde/408931289",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Habstrakt",
+      "song": "Show Me",
+      "url": "https://music.apple.com/us/album/show-me/1659086726?i=1659086727",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/habstrakt/423290831",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Habstrakt",
+      "song": "Outer Space",
+      "url": "https://music.apple.com/us/album/outer-space/1650533071?i=1650533072",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/habstrakt/423290831",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Habstrakt",
+      "song": "The One",
+      "url": "https://music.apple.com/us/album/the-one/1473897164?i=1473897165",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/habstrakt/423290831",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Jauz",
+      "song": "Feel the Volume",
+      "url": "https://music.apple.com/us/album/feel-the-volume/935889923?i=935889931",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/jauz/815194034",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Jauz",
+      "song": "Rock The Party",
+      "url": "https://music.apple.com/us/album/rock-the-party/1336097005?i=1336097462",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/jauz/815194034",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Bass Inside",
+      "url": "https://music.apple.com/us/album/bass-inside/1096868355?i=1096868527",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/ac-slater/253002292",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Laid Off",
+      "url": "https://music.apple.com/us/album/laid-off/1690680440?i=1690680464",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/ac-slater/253002292",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "AC Slater",
+      "song": "Work Your Body",
+      "url": "https://music.apple.com/us/album/work-your-body/6797651339?i=6797651341",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/ac-slater/253002292",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Moksi",
+      "song": "Lights Down Low",
+      "url": "https://music.apple.com/us/album/lights-down-low/1124032621?i=1124032817",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/moksi/977616949",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Moksi",
+      "song": "Doorman (feat. Chace)",
+      "url": "https://music.apple.com/us/album/doorman-feat-chace/1471292437?i=1471292446",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/moksi/977616949",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Taiki Nulight",
+      "song": "Don't Wanna Let Go",
+      "url": "https://music.apple.com/us/album/dont-wanna-let-go/1691175562?i=1691175563",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/taiki-nulight/536216768",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Taiki Nulight",
+      "song": "Primal",
+      "url": "https://music.apple.com/us/album/primal/1690838372?i=1690838921",
+      "style": "bass_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/taiki-nulight/536216768",
+      "reason": "Bass House: batida de house com baixos marcantes."
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Illmerica",
+      "url": "https://music.apple.com/us/album/illmerica/1713785601?i=1713786291",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/wolfgang-gartner/269315952",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Wolfgang's 5th Symphony",
+      "url": "https://music.apple.com/us/album/wolfgangs-5th-symphony/1714694709?i=1714694927",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/wolfgang-gartner/269315952",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Wolfgang Gartner",
+      "song": "Space Junk",
+      "url": "https://music.apple.com/us/album/space-junk/1713785601?i=1713785621",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/wolfgang-gartner/269315952",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Feed Me",
+      "song": "Pink Lady",
+      "url": "https://music.apple.com/us/album/pink-lady/1731115199?i=1731115203",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/feed-me/294992333",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Feed Me",
+      "song": "Death By Robot",
+      "url": "https://music.apple.com/us/album/death-by-robot/695730740?i=695730906",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/feed-me/294992333",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Lick the Rainbow",
+      "url": "https://music.apple.com/us/album/lick-the-rainbow/1188805849?i=1188806532",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/mord-fustang/426559393",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Super Meat Freeze",
+      "url": "https://music.apple.com/us/album/super-meat-freeze/1133167121?i=1133168219",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/mord-fustang/426559393",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Mord Fustang",
+      "song": "Milky Way",
+      "url": "https://music.apple.com/us/album/milky-way/1133167121?i=1133168346",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/mord-fustang/426559393",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Happy Violence",
+      "url": "https://music.apple.com/us/album/happy-violence/1648190860?i=1648191136",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/dada-life/147103030",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Rolling Stones T-Shirt",
+      "url": "https://music.apple.com/us/album/rolling-stones-t-shirt/1224256639?i=1224256646",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/dada-life/147103030",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Dada Life",
+      "song": "Feed the Dada",
+      "url": "https://music.apple.com/us/album/feed-the-dada/1224256639?i=1224256641",
+      "style": "electro_house",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/dada-life/147103030",
+      "reason": "Electro House: sintetizadores incisivos e estrutura de pista."
+    },
+    {
+      "artist": "Emmanuel Top",
+      "song": "Acid Phase",
+      "url": "https://music.apple.com/us/album/acid-phase/409359809?i=409359822",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/emmanuel-top/36044671",
+      "reason": "Acid Techno: linhas de sintetizador acid e estrutura de techno."
+    },
+    {
+      "artist": "Emmanuel Top",
+      "song": "Turkish Bazar",
+      "url": "https://music.apple.com/us/album/turkish-bazar/409359809?i=409359816",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "genreSource": "https://music.apple.com/us/artist/emmanuel-top/36044671",
+      "reason": "Acid Techno: linhas de sintetizador acid e estrutura de techno."
+    },
+    {
+      "artist": "Hardfloor",
+      "song": "Acperience 1 (Original Version)",
+      "url": "https://music.apple.com/us/song/484913534",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "reason": "Acid Techno: linhas de sintetizador acid e estrutura de techno."
+    },
+    {
+      "artist": "Hardfloor",
+      "song": "Acperience 7",
+      "url": "https://music.apple.com/us/song/1593873990",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "reason": "Acid Techno: linhas de sintetizador acid e estrutura de techno."
+    },
+    {
+      "artist": "Miss Djax",
+      "song": "Acid Queen (Miss Djax vs. Junk Project)",
+      "url": "https://music.apple.com/gb/song/1491041751",
+      "style": "acid_techno",
+      "universe": "electronic",
+      "reason": "Acid Techno: linhas de sintetizador acid e estrutura de techno."
+    },
+    {
+      "artist": "Radiohead",
+      "song": "Paranoid Android",
+      "url": "https://music.apple.com/br/album/paranoid-android/1097861387?i=1097861770&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. Listen for the changes of pace as the song unfolds in small movements.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Repare nas mudanças de andamento: a canção se abre em pequenos movimentos.",
+        "en": "Listen for the changes of pace as the song unfolds in small movements.",
+        "es": "Escucha los cambios de ritmo: la canción se abre en pequeños movimientos."
+      }
+    },
+    {
+      "artist": "Nirvana",
+      "song": "Come As You Are",
+      "url": "https://music.apple.com/br/album/come-as-you-are/1440783617?i=1440783636&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. The circular riff brings melody and tension together without speeding up.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O riff circular aproxima melodia e tensão sem precisar acelerar.",
+        "en": "The circular riff brings melody and tension together without speeding up.",
+        "es": "El riff circular acerca melodía y tensión sin acelerar."
+      }
+    },
+    {
+      "artist": "Pearl Jam",
+      "song": "Black",
+      "url": "https://music.apple.com/br/album/black/425465247?i=425465351&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. The guitar makes room for the voice to grow: restraint can create intensity.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "A guitarra deixa espaço para a voz crescer: intensidade também pode vir da contenção.",
+        "en": "The guitar makes room for the voice to grow: restraint can create intensity.",
+        "es": "La guitarra deja espacio para que crezca la voz: la contención también crea intensidad."
+      }
+    },
+    {
+      "artist": "Foo Fighters",
+      "song": "Everlong",
+      "url": "https://music.apple.com/br/album/everlong/362133451?i=362133505&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. A reference for comparing layered guitars and rhythmic drive with your next discoveries.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Uma referência para comparar guitarras em camadas e impulso rítmico com os próximos achados.",
+        "en": "A reference for comparing layered guitars and rhythmic drive with your next discoveries.",
+        "es": "Una referencia para comparar guitarras en capas e impulso rítmico con tus próximos hallazgos."
+      }
+    },
+    {
+      "artist": "Queens of the Stone Age",
+      "song": "No One Knows",
+      "url": "https://music.apple.com/br/album/no-one-knows/1440909901?i=1440910536&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. The dry riff and swinging drums reveal a danceable side of heavy rock.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O riff seco e o balanço da bateria mostram um lado dançante do rock pesado.",
+        "en": "The dry riff and swinging drums reveal a danceable side of heavy rock.",
+        "es": "El riff seco y el balanceo de la batería muestran un lado bailable del rock pesado."
+      }
+    },
+    {
+      "artist": "Muse",
+      "song": "Hysteria",
+      "url": "https://music.apple.com/br/album/hysteria/1716096819?i=1716097098&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: alternative_rock. Follow the bass: it drives the tension while the guitar opens up the chorus.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Siga o baixo: ele conduz a tensão enquanto a guitarra abre o refrão.",
+        "en": "Follow the bass: it drives the tension while the guitar opens up the chorus.",
+        "es": "Sigue el bajo: conduce la tensión mientras la guitarra abre el estribillo."
+      }
+    },
+    {
+      "artist": "Big Thief",
+      "song": "Not",
+      "url": "https://music.apple.com/br/album/not/1473012904?i=1473013069&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: indie_rock. Hear repetition gather weight until the guitar takes over the conversation.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Escute como a repetição ganha peso até a guitarra assumir o discurso.",
+        "en": "Hear repetition gather weight until the guitar takes over the conversation.",
+        "es": "Escucha cómo la repetición gana peso hasta que la guitarra toma la palabra."
+      }
+    },
+    {
+      "artist": "Big Thief",
+      "song": "Simulation Swarm",
+      "url": "https://music.apple.com/br/album/simulation-swarm/1591284600?i=1591285796&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: indie_rock. The guitar pattern keeps moving beneath an almost conversational vocal.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O desenho da guitarra mantém movimento sob uma voz quase conversada.",
+        "en": "The guitar pattern keeps moving beneath an almost conversational vocal.",
+        "es": "El dibujo de la guitarra mantiene el movimiento bajo una voz casi conversada."
+      }
+    },
+    {
+      "artist": "Wednesday",
+      "song": "Chosen to Deserve",
+      "url": "https://music.apple.com/br/album/chosen-to-deserve/1660028568?i=1660028844&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: indie_rock. Country storytelling meets rough guitars: listen for the friction between them.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A narrativa de country encontra guitarras ásperas: procure o atrito entre as duas.",
+        "en": "Country storytelling meets rough guitars: listen for the friction between them.",
+        "es": "La narrativa del country encuentra guitarras ásperas: escucha la fricción entre ambas."
+      }
+    },
+    {
+      "artist": "Wednesday",
+      "song": "Bull Believer",
+      "url": "https://music.apple.com/br/album/bull-believer/1660028568?i=1660028580&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: indie_rock. A long build that turns restraint into a release of noise.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Uma construção longa que transforma contenção em descarga de ruído.",
+        "en": "A long build that turns restraint into a release of noise.",
+        "es": "Una construcción larga que convierte la contención en una descarga de ruido."
+      }
+    },
+    {
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Robot Stop",
+      "url": "https://music.apple.com/br/album/robot-stop/1832810339?i=1832810345&uo=4",
+      "style": "psychedelic",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: psychedelic. The repeating riff drives a fast-moving strain of psychedelia.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A repetição do riff funciona como motor para uma psicodelia acelerada.",
+        "en": "The repeating riff drives a fast-moving strain of psychedelia.",
+        "es": "La repetición del riff impulsa una psicodelia acelerada."
+      }
+    },
+    {
+      "artist": "King Gizzard & The Lizard Wizard",
+      "song": "Iron Lung",
+      "url": "https://music.apple.com/br/album/iron-lung/1640761260?i=1640761914&uo=4",
+      "style": "psychedelic",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: psychedelic. Listen for the shift from a loose groove to a denser intensity.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Preste atenção à passagem do groove solto para uma intensidade mais densa.",
+        "en": "Listen for the shift from a loose groove to a denser intensity.",
+        "es": "Escucha el paso de un groove suelto a una intensidad más densa."
+      }
+    },
+    {
+      "artist": "Turnstile",
+      "song": "BLACKOUT",
+      "url": "https://music.apple.com/br/album/blackout/1576430192?i=1576430194&uo=4",
+      "style": "punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: punk. Hardcore drive meets space and swing between the attacks.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O impulso hardcore encontra espaço e balanço entre os ataques.",
+        "en": "Hardcore drive meets space and swing between the attacks.",
+        "es": "El impulso hardcore encuentra espacio y balanceo entre los ataques."
+      }
+    },
+    {
+      "artist": "Turnstile",
+      "song": "HOLIDAY",
+      "url": "https://music.apple.com/br/album/holiday/1576430192?i=1576430737&uo=4",
+      "style": "punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: punk. Percussive guitar makes the weight physical without losing movement.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A guitarra percussiva torna o peso físico sem perder o movimento.",
+        "en": "Percussive guitar makes the weight physical without losing movement.",
+        "es": "La guitarra percusiva hace físico el peso sin perder movimiento."
+      }
+    },
+    {
+      "artist": "Metallica",
+      "song": "Master of Puppets",
+      "url": "https://music.apple.com/br/album/master-of-puppets/1442993557?i=1442993961&uo=4",
+      "style": "metal",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: metal. Notice how the riffs shift between attack, pause and development.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "Observe como os riffs mudam de função entre ataque, pausa e desenvolvimento.",
+        "en": "Notice how the riffs shift between attack, pause and development.",
+        "es": "Observa cómo los riffs cambian entre ataque, pausa y desarrollo."
+      }
+    },
+    {
+      "artist": "System Of A Down",
+      "song": "Chop Suey!",
+      "url": "https://music.apple.com/br/album/chop-suey/273714443?i=273714640&uo=4",
+      "style": "metal",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: metal. The contrast between short attacks and sustained melody anchors this reference.",
+      "discoveryTier": "reference",
+      "listeningNote": {
+        "pt": "O contraste entre ataques curtos e melodia sustentada é o centro desta referência.",
+        "en": "The contrast between short attacks and sustained melody anchors this reference.",
+        "es": "El contraste entre ataques breves y melodía sostenida guía esta referencia."
+      }
+    },
+    {
+      "artist": "IDLES",
+      "song": "Danny Nedelko",
+      "url": "https://music.apple.com/br/album/danny-nedelko/1542276067?i=1542276080&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. The direct pulse and collective vocal turn tension into togetherness.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O pulso direto e a voz coletiva transformam tensão em encontro.",
+        "en": "The direct pulse and collective vocal turn tension into togetherness.",
+        "es": "El pulso directo y la voz colectiva convierten tensión en encuentro."
+      }
+    },
+    {
+      "artist": "IDLES",
+      "song": "Never Fight A Man With A Perm",
+      "url": "https://music.apple.com/br/album/never-fight-a-man-with-a-perm/1525579780?i=1525580284&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. Insistent bass and a cutting vocal build tension before the band's bursts.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Baixo insistente e voz cortante criam tensão antes das explosões da banda.",
+        "en": "Insistent bass and a cutting vocal build tension before the band's bursts.",
+        "es": "Bajo insistente y voz cortante crean tensión antes de las explosiones de la banda."
+      }
+    },
+    {
+      "artist": "Dry Cleaning",
+      "song": "Scratchcard Lanyard",
+      "url": "https://music.apple.com/br/album/scratchcard-lanyard/1549505079?i=1549505089&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. The bass leads while the spoken vocal avoids the expected melody.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O baixo conduz enquanto a voz falada desvia da melodia esperada.",
+        "en": "The bass leads while the spoken vocal avoids the expected melody.",
+        "es": "El bajo guía mientras la voz hablada se aparta de la melodía esperada."
+      }
+    },
+    {
+      "artist": "Dry Cleaning",
+      "song": "Strong Feelings",
+      "url": "https://music.apple.com/br/album/strong-feelings/1549505079?i=1549505356&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. Hear the contrast between bright guitars and a deliberately restrained voice.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Escute o contraste entre guitarras luminosas e uma voz deliberadamente contida.",
+        "en": "Hear the contrast between bright guitars and a deliberately restrained voice.",
+        "es": "Escucha el contraste entre guitarras luminosas y una voz deliberadamente contenida."
+      }
+    },
+    {
+      "artist": "Black Country, New Road",
+      "song": "Sunglasses",
+      "url": "https://music.apple.com/br/album/sunglasses/1533822061?i=1533822065&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. A restless narrative grows with the band, between repetition and rupture.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Uma narrativa inquieta cresce com a banda, entre repetição e ruptura.",
+        "en": "A restless narrative grows with the band, between repetition and rupture.",
+        "es": "Una narrativa inquieta crece con la banda, entre repetición y ruptura."
+      }
+    },
+    {
+      "artist": "Black Country, New Road",
+      "song": "Science Fair",
+      "url": "https://music.apple.com/br/album/science-fair/1533822061?i=1533822064&uo=4",
+      "style": "post_punk",
+      "universe": "rock",
+      "explicit": false,
+      "reason": "Editorial track-level selection: post_punk. Saxophone and guitar unsettle the pulse: follow the accumulating tension.",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Saxofone e guitarra deixam o pulso instável: siga como a tensão se acumula.",
+        "en": "Saxophone and guitar unsettle the pulse: follow the accumulating tension.",
+        "es": "Saxofón y guitarra desestabilizan el pulso: sigue cómo se acumula la tensión."
+      }
+    },
+    {
+      "artist": "feeble little horse",
+      "song": "Tin Man",
+      "url": "https://music.apple.com/br/album/tin-man/1672079958?i=1672079965&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A melodia aparece entre guitarras distorcidas e pequenas quebras de textura.",
+        "en": "Melody emerges between distorted guitars and small breaks in texture.",
+        "es": "La melodía aparece entre guitarras distorsionadas y pequeños cambios de textura."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. Melody emerges between distorted guitars and small breaks in texture."
+    },
+    {
+      "artist": "feeble little horse",
+      "song": "Freak",
+      "url": "https://music.apple.com/br/album/freak/1672079958?i=1672079963&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Procure o gancho pop escondido na distorção compacta e nos cortes bruscos.",
+        "en": "Find the pop hook inside compact distortion and abrupt cuts.",
+        "es": "Busca el gancho pop dentro de la distorsión compacta y los cortes bruscos."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. Find the pop hook inside compact distortion and abrupt cuts."
+    },
+    {
+      "artist": "Ulrika Spacek",
+      "song": "Mimi Pretend",
+      "url": "https://music.apple.com/br/album/mimi-pretend/1887365979?i=1887366119&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Guitarras que se entrelaçam fazem a repetição soar em constante deslocamento.",
+        "en": "Interlocking guitars keep repetition feeling constantly in motion.",
+        "es": "Guitarras entrelazadas hacen que la repetición parezca siempre en movimiento."
+      },
+      "reason": "Editorial track-level selection: indie_rock. Interlocking guitars keep repetition feeling constantly in motion."
+    },
+    {
+      "artist": "Ulrika Spacek",
+      "song": "Silvertonic",
+      "url": "https://music.apple.com/br/album/silvertonic/1887365979?i=1887366123&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O pulso constante sustenta uma trama de guitarras que se adensa aos poucos.",
+        "en": "A steady pulse supports a guitar texture that gradually grows denser.",
+        "es": "Un pulso constante sostiene una trama de guitarras que se vuelve más densa."
+      },
+      "reason": "Editorial track-level selection: indie_rock. A steady pulse supports a guitar texture that gradually grows denser."
+    },
+    {
+      "artist": "The Beths",
+      "song": "Expert in a Dying Field",
+      "url": "https://music.apple.com/br/album/expert-in-a-dying-field/1620095921?i=1620095927&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Ouça como harmonias vocais e guitarras claras dão forma à inquietação.",
+        "en": "Hear how vocal harmonies and clear guitars give shape to unease.",
+        "es": "Escucha cómo las armonías vocales y las guitarras claras dan forma a la inquietud."
+      },
+      "reason": "Editorial track-level selection: indie_rock. Hear how vocal harmonies and clear guitars give shape to unease."
+    },
+    {
+      "artist": "The Beths",
+      "song": "Out of Sight",
+      "url": "https://music.apple.com/br/album/out-of-sight/1583598530?i=1583598816&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A melodia cresce sem abandonar a delicadeza das guitarras.",
+        "en": "The melody grows without losing the delicacy of the guitars.",
+        "es": "La melodía crece sin perder la delicadeza de las guitarras."
+      },
+      "reason": "Editorial track-level selection: indie_rock. The melody grows without losing the delicacy of the guitars."
+    },
+    {
+      "artist": "Alvvays",
+      "song": "Tile by Tile",
+      "url": "https://music.apple.com/br/album/tile-by-tile/1651269389?i=1651269400&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "As camadas de voz e guitarra criam profundidade por trás da melodia.",
+        "en": "Layers of voice and guitar create depth behind the melody.",
+        "es": "Las capas de voz y guitarra crean profundidad detrás de la melodía."
+      },
+      "reason": "Editorial track-level selection: indie_rock. Layers of voice and guitar create depth behind the melody."
+    },
+    {
+      "artist": "Alvvays",
+      "song": "Pharmacist",
+      "url": "https://music.apple.com/br/album/pharmacist/1651269389?i=1651269390&uo=4",
+      "style": "indie_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A canção curta abre espaço para guitarras que expandem o refrão.",
+        "en": "A compact song makes room for guitars that expand the chorus.",
+        "es": "Una canción breve abre espacio a guitarras que expanden el estribillo."
+      },
+      "reason": "Editorial track-level selection: indie_rock. A compact song makes room for guitars that expand the chorus."
+    },
+    {
+      "artist": "Sonic Youth",
+      "song": "Schizophrenia",
+      "url": "https://music.apple.com/br/album/schizophrenia/520274588?i=520274631&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Afinações e guitarras em tensão fazem a harmonia parecer sempre aberta.",
+        "en": "Tuning and tense guitars make the harmony feel continually open.",
+        "es": "Afinaciones y guitarras en tensión hacen que la armonía parezca siempre abierta."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. Tuning and tense guitars make the harmony feel continually open."
+    },
+    {
+      "artist": "Sonic Youth",
+      "song": "Incinerate",
+      "url": "https://music.apple.com/br/album/incinerate/1443129175?i=1443129418&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Um riff claro organiza as guitarras ásperas sem apagar suas bordas.",
+        "en": "A clear riff organizes rough guitars without smoothing their edges.",
+        "es": "Un riff claro organiza guitarras ásperas sin alisar sus bordes."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. A clear riff organizes rough guitars without smoothing their edges."
+    },
+    {
+      "artist": "Slowdive",
+      "song": "Dagger",
+      "url": "https://music.apple.com/br/album/dagger/399211729?i=399211831&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Uma pausa acústica para perceber quanto peso cabe em poucos elementos.",
+        "en": "An acoustic pause to hear how much weight a few elements can carry.",
+        "es": "Una pausa acústica para escuchar cuánto peso cabe en pocos elementos."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. An acoustic pause to hear how much weight a few elements can carry."
+    },
+    {
+      "artist": "Slowdive",
+      "song": "Machine Gun",
+      "url": "https://music.apple.com/br/album/machine-gun/399211729?i=399211759&uo=4",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Voz e guitarra se misturam numa textura suspensa; escute as camadas.",
+        "en": "Voice and guitar blend into a suspended texture; listen to the layers.",
+        "es": "Voz y guitarra se mezclan en una textura suspendida; escucha las capas."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. Voice and guitar blend into a suspended texture; listen to the layers."
+    },
+    {
+      "artist": "GOJIRA",
+      "song": "The Art of Dying",
+      "url": "https://music.apple.com/br/album/the-art-of-dying/291261388?i=291261425&uo=4",
+      "style": "metal",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "A percussão e as acentuações irregulares conduzem um peso que muda de forma.",
+        "en": "Percussion and irregular accents drive a heaviness that keeps changing shape.",
+        "es": "La percusión y los acentos irregulares conducen un peso que cambia de forma."
+      },
+      "reason": "Editorial track-level selection: metal. Percussion and irregular accents drive a heaviness that keeps changing shape."
+    },
+    {
+      "artist": "GOJIRA",
+      "song": "Flying Whales",
+      "url": "https://music.apple.com/br/album/flying-whales/213374112?i=213374170&uo=4",
+      "style": "metal",
+      "universe": "rock",
+      "explicit": false,
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "A abertura atmosférica prepara o contraste com o riff de peso marcado.",
+        "en": "The atmospheric opening sets up the contrast with the weighty riff.",
+        "es": "La apertura atmosférica prepara el contraste con el riff de peso marcado."
+      },
+      "reason": "Editorial track-level selection: metal. The atmospheric opening sets up the contrast with the weighty riff."
+    },
+    {
+      "artist": "Elder",
+      "song": "Compendium",
+      "url": "https://music.apple.com/us/album/compendium/949086179?i=949086190",
+      "style": "metal",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O riff pesado vai mudando de cenário: acompanhe as transições progressivas.",
+        "en": "The heavy riff keeps changing its setting: follow the progressive transitions.",
+        "es": "El riff pesado cambia de escenario: sigue las transiciones progresivas."
+      },
+      "reason": "Editorial track-level selection: metal. The heavy riff keeps changing its setting: follow the progressive transitions."
+    },
+    {
+      "artist": "Elder",
+      "song": "The Falling Veil",
+      "url": "https://music.apple.com/us/album/the-falling-veil/1229922129?i=1229922198",
+      "style": "metal",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Peso e passagens abertas se alternam numa construção de fôlego longo.",
+        "en": "Weight and open passages alternate in a long-form construction.",
+        "es": "Peso y pasajes abiertos se alternan en una construcción de largo aliento."
+      },
+      "reason": "Editorial track-level selection: metal. Weight and open passages alternate in a long-form construction."
+    },
+    {
+      "artist": "King Buffalo",
+      "song": "Orion",
+      "url": "https://music.apple.com/us/album/orion/1109293209?i=1109293574",
+      "style": "psychedelic",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "O groove paciente cria espaço para a guitarra expandir a paisagem.",
+        "en": "A patient groove gives the guitar room to expand the landscape.",
+        "es": "Un groove paciente deja espacio para que la guitarra amplíe el paisaje."
+      },
+      "reason": "Editorial track-level selection: psychedelic. A patient groove gives the guitar room to expand the landscape."
+    },
+    {
+      "artist": "King Buffalo",
+      "song": "Sleeps on a Vine",
+      "url": "https://music.apple.com/us/album/sleeps-on-a-vine/1109293209?i=1109293578",
+      "style": "psychedelic",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A repetição espaçosa aproxima o peso do riff de uma sensação hipnótica.",
+        "en": "Spacious repetition brings the riff's weight toward a hypnotic feel.",
+        "es": "La repetición espaciosa acerca el peso del riff a una sensación hipnótica."
+      },
+      "reason": "Editorial track-level selection: psychedelic. Spacious repetition brings the riff's weight toward a hypnotic feel."
+    },
+    {
+      "artist": "Drug Church",
+      "song": "Weed Pin",
+      "url": "https://music.apple.com/us/album/weed-pin/1798573960?i=1798573966",
+      "style": "punk",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Voz áspera e guitarras melódicas puxam em direções diferentes sem perder o impacto.",
+        "en": "Rough vocals and melodic guitars pull in different directions without losing impact.",
+        "es": "Voz áspera y guitarras melódicas tiran en distintas direcciones sin perder impacto."
+      },
+      "reason": "Editorial track-level selection: punk. Rough vocals and melodic guitars pull in different directions without losing impact."
+    },
+    {
+      "artist": "Drug Church",
+      "song": "Unlicensed Hall Monitor",
+      "url": "https://music.apple.com/us/album/unlicensed-hall-monitor/1798573960?i=1798573967",
+      "style": "punk",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A urgência do hardcore ganha contornos melódicos no desenho das guitarras.",
+        "en": "Hardcore urgency takes on melodic contours in the guitar patterns.",
+        "es": "La urgencia del hardcore gana contornos melódicos en el dibujo de las guitarras."
+      },
+      "reason": "Editorial track-level selection: punk. Hardcore urgency takes on melodic contours in the guitar patterns."
+    },
+    {
+      "artist": "Protomartyr",
+      "song": "A Private Understanding",
+      "url": "https://music.apple.com/us/album/a-private-understanding/1251529452?i=1251529463",
+      "style": "post_punk",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "A bateria inquieta sustenta uma voz quase falada até a tensão se abrir.",
+        "en": "Restless drums support an almost spoken voice until the tension opens up.",
+        "es": "La batería inquieta sostiene una voz casi hablada hasta que se abre la tensión."
+      },
+      "reason": "Editorial track-level selection: post_punk. Restless drums support an almost spoken voice until the tension opens up."
+    },
+    {
+      "artist": "Protomartyr",
+      "song": "The Chuckler",
+      "url": "https://music.apple.com/us/album/the-chuckler/1251529452?i=1251529471",
+      "style": "post_punk",
+      "universe": "rock",
+      "discoveryTier": "discovery",
+      "listeningNote": {
+        "pt": "Repare como a insistência rítmica mantém a tensão mesmo quando a melodia aparece.",
+        "en": "Notice how rhythmic insistence sustains tension even as melody appears.",
+        "es": "Observa cómo la insistencia rítmica mantiene la tensión incluso cuando aparece la melodía."
+      },
+      "reason": "Editorial track-level selection: post_punk. Notice how rhythmic insistence sustains tension even as melody appears."
+    },
+    {
+      "artist": "Foo Fighters",
+      "song": "Aurora",
+      "url": "https://music.apple.com/us/song/278229659",
+      "style": "alternative_rock",
+      "universe": "rock",
+      "discoveryTier": "deep_cut",
+      "listeningNote": {
+        "pt": "Guitarras abertas e andamento espaçoso revelam um Foo Fighters mais contemplativo.",
+        "en": "Open guitars and a spacious pace reveal a more contemplative Foo Fighters.",
+        "es": "Guitarras abiertas y un ritmo espacioso revelan un Foo Fighters más contemplativo."
+      },
+      "reason": "Editorial track-level selection: alternative_rock. Open guitars and a spacious pace reveal a more contemplative Foo Fighters."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+/* Rock remains a small editorial doorway alongside electronic discovery. */
+#rockTeaser { border-color:#668171; background:#142820; }
+.rock-teaser-button { display:flex; align-items:center; justify-content:space-between; gap:20px; width:100%; text-align:left; border:0; background:transparent; color:#edf6e8; padding:6px; box-shadow:none; border-radius:8px; font:inherit; }
+.rock-teaser-button > span:first-child { display:grid; gap:6px; }
+.rock-teaser-button small { font:600 11px 'Chakra Petch',sans-serif; letter-spacing:.12em; color:#c7ff6b; }
+.rock-teaser-button strong { font:700 clamp(20px,3vw,28px) Syne,sans-serif; }
+.rock-teaser-button .rock-teaser-description { color:#becfc4; font-size:14px; max-width:44ch; }
+.rock-teaser-cta { color:#c7ff6b; font-weight:700; flex-shrink:0; font-size:14px; }
+#rockPanel { max-width:900px; margin:18px auto; width:100%; box-sizing:border-box; background:#0e1c1c; border:1px solid #41564a; border-radius:22px; padding:clamp(18px,4vw,38px); }
+#rockPanel [hidden] { display:none!important; }
+#rockPanel button, #rockPanel a { min-height:44px; font-family:inherit; }
+#rockPanel button:focus-visible, #rockPanel a:focus-visible, .rock-teaser-button:focus-visible, .rock-saved summary:focus-visible { outline:3px solid #c7ff6b; outline-offset:4px; }
+.rock-back { padding:8px 0; background:transparent; border:0; color:#bfd4c5; box-shadow:none; font-size:14px; }
+.rock-heading { margin:28px 0 24px; }
+.rock-kicker { color:#c7ff6b; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin:0 0 12px; }
+.rock-heading h2 { font:700 clamp(32px,6vw,52px)/1.03 Syne,sans-serif; letter-spacing:-.04em; color:#f1f4e8; margin:0 0 16px; }
+.rock-intro { color:#ccdad1; font-size:16px; line-height:1.6; max-width:48ch; margin:0; }
+.rock-count,.rock-progress { color:#a4c0b2; font-size:12px; }
+.rock-filters { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+.rock-filter { padding:9px 14px; border:1px solid #456152; border-radius:30px; background:#152921; color:#d6e4da; font-size:13px; box-shadow:none; }
+.rock-filter[aria-pressed="true"] { background:#c7ff6b; color:#17301e; border-color:#c7ff6b; }
+.rock-card { display:grid; grid-template-columns:minmax(0,190px) minmax(0,1fr); column-gap:28px; row-gap:10px; align-items:center; padding:22px; background:#142925; border:1px solid #3c584b; border-radius:18px; }
+.rock-art { width:100%; aspect-ratio:1; object-fit:cover; border-radius:12px; grid-row:1/4; }
+.rock-track-text { grid-column:2; min-width:0; }
+.rock-track-text h3 { color:#f4f6ef; margin:0 0 6px; font:700 clamp(24px,4vw,34px)/1.12 Syne,sans-serif; overflow-wrap:anywhere; }
+.rock-artist { color:#d8e8da; font-size:18px; margin:0 0 7px; }
+.rock-album { color:#9eb8ab; font-size:13px; margin:0; }
+.rock-controls { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:8px; grid-column:1/-1; margin-top:14px; }
+#rockPanel .rock-controls button { min-height:48px; border-radius:10px; border:1px solid #536d5c; padding:11px 7px; background:#20382d; color:#e3f3e4; font-size:13px; font-weight:700; box-shadow:none; }
+#rockPanel .rock-controls .rock-play { background:#c7ff6b; color:#15301f; border-color:transparent; }
+#rockPanel .rock-like[aria-pressed="true"] { background:#d6ead5; color:#173120; }
+.rock-playback-status,.rock-provider,.rock-note,.rock-progress { grid-column:1/-1; margin:0; }
+.rock-playback-status { color:#c6dbcf; font-size:13px; min-height:20px; }
+.rock-provider { color:#c7ff6b; display:inline-flex; align-items:center; font-size:14px; text-decoration:underline; width:fit-content; }
+.rock-note { font-size:12px; line-height:1.6; color:#9eb9ab; }
+.rock-saved { margin-top:28px; border-top:1px solid #344d40; padding-top:8px; }
+.rock-saved summary { cursor:pointer; padding:14px 0; min-height:44px; box-sizing:border-box; font-weight:600; color:#e2eddf; }
+.rock-saved-list { display:grid; gap:8px; margin-top:12px; }
+.rock-saved-track { text-align:left; background:#193027; color:#dcebdc; border:1px solid #3c5849; border-radius:10px; padding:12px; font-size:14px; box-shadow:none; }
+.rock-end { padding:26px; border:1px dashed #68826e; border-radius:16px; color:#d3e5d7; }
+.rock-end h3 { color:#e9f1df; font-family:Syne,sans-serif; }
+.rock-restart,.rock-retry { background:#c7ff6b; color:#183222; border:0; padding:12px 18px; border-radius:10px; box-shadow:none; }
+@media(min-width:1000px) { #rockTeaser {grid-column:2;} }
+@media(max-width:520px) { .rock-teaser-button { align-items:flex-start; flex-direction:column; gap:10px; } #rockPanel{border-radius:16px;padding:16px;} .rock-heading{margin-top:20px;} .rock-card{grid-template-columns:86px minmax(0,1fr);column-gap:15px;padding:14px;} .rock-art{grid-row:1;} .rock-track-text h3{font-size:22px;} .rock-artist{font-size:15px;} .rock-kicker{font-size:10px;letter-spacing:.08em;} .rock-controls{gap:6px;} #rockPanel .rock-controls button{font-size:12px;padding-inline:4px;} }
+
+.rock-preference { display:flex; align-items:center; gap:10px; min-height:44px; margin:-12px 0 20px; color:#bfd4c5; font-size:13px; cursor:pointer; }
+.rock-preference input { width:19px; height:19px; margin:0; accent-color:#c7ff6b; }
+.rock-preference input:focus-visible { outline:3px solid #c7ff6b; outline-offset:4px; }
+.rock-editorial { grid-column:1/-1; border-top:1px solid #385247; padding-top:16px; margin-top:8px; color:#d3e4d8; }
+.rock-editorial .rock-tier { color:#c7ff6b; font-size:11px; letter-spacing:.08em; text-transform:uppercase; margin:0 0 10px; }
+.rock-editorial strong { font-size:13px; }
+.rock-editorial p:last-child { font-size:14px; line-height:1.6; margin:5px 0 0; max-width:65ch; }
