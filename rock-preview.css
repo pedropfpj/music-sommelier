@@ -40,7 +40,6 @@
 .rock-end { padding:26px; border:1px dashed #68826e; border-radius:16px; color:#d3e5d7; }
 .rock-end h3 { color:#e9f1df; font-family:Syne,sans-serif; }
 .rock-restart,.rock-retry { background:#c7ff6b; color:#183222; border:0; padding:12px 18px; border-radius:10px; box-shadow:none; }
-@media(min-width:1000px) { #rockTeaser {grid-column:2;} }
 @media(max-width:520px) { .rock-teaser-button { align-items:flex-start; flex-direction:column; gap:10px; } #rockPanel{border-radius:16px;padding:16px;} .rock-heading{margin-top:20px;} .rock-card{grid-template-columns:86px minmax(0,1fr);column-gap:15px;padding:14px;} .rock-art{grid-row:1;} .rock-track-text h3{font-size:22px;} .rock-artist{font-size:15px;} .rock-kicker{font-size:10px;letter-spacing:.08em;} .rock-controls{gap:6px;} #rockPanel .rock-controls button{font-size:12px;padding-inline:4px;} }
 
 .rock-preference { display:flex; align-items:center; gap:10px; min-height:44px; margin:-12px 0 20px; color:#bfd4c5; font-size:13px; cursor:pointer; }

@@ -36,7 +36,7 @@ html.app-store-mode .web-app-invite, html.sonic-ios-app .web-app-invite, html[da
 .library-result-count { font-size:13px; color:#b2c7c5; margin:0 0 12px; }
 .liked-track-actions .library-play { min-height:44px; background:#baf3d8; color:#10231e; font-weight:700; border-color:transparent; }
 #profileLibraryTitle { scroll-margin-top:85px; }
-@media (min-width:1000px) { .web-app-invite { grid-column:2; } }
+@media (min-width:900px) { .web-app-invite { grid-column:3 / -1; order:10; width:100%; max-width:860px; min-width:0; box-sizing:border-box; justify-self:center; } }
 @media (max-width:600px) { .web-app-invite { align-items:flex-start; flex-direction:column; gap:12px; padding:16px; } .web-app-invite a { width:100%; text-align:center; } .library-tools { grid-template-columns:1fr; } #swipeStartPanel #previewPanel { padding:12px; } }
 @media (max-width:780px) {
   #topSwipeCard.swipe-hero-card:not(.is-empty) { display:grid; grid-template-rows:min(29svh,260px) auto; min-height:0; height:auto; }
