@@ -13,6 +13,13 @@ const [indexSource, appSource, stylesSource] = await Promise.all([
 ]);
 
 const primaryTargets = Array.from(indexSource.matchAll(/data-app-tab-target="([^"]+)"[^>]*data-primary-app-tab/g), (match) => match[1]);
+const safeTabSource = appSource.match(/function safeAppTabName\([\s\S]*?\n}/)?.[0];
+assert.ok(safeTabSource, "Route validation must be available");
+const safeTab = new Function("hasAdminAccess", `${safeTabSource}; return safeAppTabName;`)(() => false);
+assert.equal(safeTab("rock"), "discover", "Old Rock links must lead to electronic discovery");
+assert.equal(safeTab("recommends"), "recommends", "Weekly discovery must remain available");
+assert.equal(safeTab("profile"), "profile", "Saved tracks must remain available");
+assert.equal(safeTab("admin"), "discover", "Unauthorized admin links must remain blocked");
 assert.deepEqual(primaryTargets, ["discover", "djs", "news", "profile", "more"], "Primary navigation order must stay focused");
 assert.doesNotMatch(indexSource, /data-app-tab-target="filters"/, "Filters must not return to primary navigation");
 assert.match(indexSource, /id="discoverFiltersBtn"/, "Discover needs a contextual filters shortcut");

@@ -2,6 +2,12 @@
 
 Estado em 30/10/2026: implementação local validada; esta nota não confirma publicação nem envio à Apple.
 
+## Escopo final — foco em eletrônica
+
+A pedido do usuário, a seção de rock foi retirada da interface e da página do iPhone. Links antigos com `tab=rock` passam a abrir a descoberta de eletrônica. O módulo de rock não é mais carregado no site nem incluído no bundle nativo; a curadoria anterior permanece no histórico do projeto. Curtidas antigas continuam preservadas no armazenamento e no backup do perfil.
+
+A expansão de 69 faixas eletrônicas, a diversidade de artistas, a biblioteca e os ajustes de apresentação foram mantidos. As seções abaixo registram a evolução anterior, incluindo a prévia agora retirada. A atualização da App Store continua sendo uma entrega separada.
+
 ## Entrega
 
 - Preview junto da capa e das reações; detalhes e plataformas em áreas expansíveis.

@@ -4835,7 +4835,7 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20261030discovery4";
+const SONIC_APP_BUILD_ID = "20261030discovery5";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10894,7 +10894,6 @@ let dailyRadarController = null;
 let userProfileController = null;
 let privacyRequestsController = null;
 let weeklyRecommendsController = null;
-let rockPreviewController = null;
 let dailyDjReminderLaunchPending = false;
 let weeklyHighlightsReminderLaunchPending = false;
 const SPIRIT_COLLECTIBLE_STORAGE_KEY = "neonpulse:spiritCollectible:v72-sound-system";
@@ -31455,7 +31454,6 @@ function audioVolumePercent() {
 
 function syncPreviewAudioState() {
   const shouldMute = !audioEnabled || audioUnavailable || audioVolume <= 0.001;
-  rockPreviewController?.syncAudio({ muted: shouldMute, volume: audioVolume });
   if (!trackPreview) return;
   trackPreview.muted = shouldMute;
   if (!shouldMute) {
@@ -32802,8 +32800,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   hideQuizChallengeBubble({ clearPending: true });
   closeQuizOverlay({ skipSnooze: true });
   if (appContent) appContent.classList.remove("hidden");
-  const requestedTab = requestedAppTabFromUrl("discover");
-  const entryTab = requestedTab === "rock" ? "rock" : safeInitialTab || (shouldAutoRecommend ? "discover" : requestedTab);
+  const entryTab = safeInitialTab || (shouldAutoRecommend ? "discover" : requestedAppTabFromUrl("discover"));
   setActiveAppTab(entryTab);
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
@@ -34143,7 +34140,7 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends", "rock"].includes(requestedTab)
+  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -34158,7 +34155,6 @@ function primaryAppTabName(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
   if (safeTab === "filters") return "discover";
   if (safeTab === "recommends") return "discover";
-  if (safeTab === "rock") return "discover";
   if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return "more";
   return safeTab;
 }
@@ -34177,7 +34173,6 @@ function toggleAppMenu() {
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
   const secondaryLabels = {
-    rock: sonicTinyCopy("Rock · Prévia", "Rock · Preview", "Rock · Vista previa"),
     recommends: sonicTinyCopy("SonicSearch Recomenda", "SonicSearch Recommends", "SonicSearch Recomienda"),
     filters: t("tabFilters"),
     about: t("tabAbout"),
@@ -34339,7 +34334,6 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (safeTab === "recommends") {
     void weeklyRecommendsController?.open();
   }
-  if (safeTab === "rock") void rockPreviewController?.open();
   if (safeTab === "admin") {
     void loadAdminAnalytics();
     void loadAdminOperations();
@@ -34653,6 +34647,11 @@ function safeReadJsonStorage(key) {
   }
 }
 
+// Keep existing preview favorites recoverable after withdrawing the rock section.
+function legacyRockPreviewStorageKey(profileKey = sessionProfileKey()) {
+  return `sonic_search:rock_preview:v1:${String(profileKey || "local")}`;
+}
+
 function profileBackupLastExportKey() {
   return storageKeyForSession(PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY) || PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY;
 }
@@ -34660,7 +34659,7 @@ function profileBackupLastExportKey() {
 function profileBackupSignalCount() {
   return Math.max(0,
     totalLikedSongs() +
-    (window.SonicRockPreview?.readState(localStorage, sessionProfileKey())?.likes?.length || 0) +
+    (safeReadJsonStorage(legacyRockPreviewStorageKey())?.likes?.length || 0) +
     (Number(userStats.likedArtists) || 0) +
     (Number(userStats.likedDiscoveries) || 0) +
     (Number(userStats.alreadyKnew) || 0) +
@@ -34747,7 +34746,7 @@ function buildProfileBackupPayload() {
       artSeed: artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : "",
       initialTasteCalibration: safeReadJsonStorage(calibrationKey),
       djRecommendations: safeReadJsonStorage(djRecommendationsKey),
-      rockPreview: safeReadJsonStorage(window.SonicRockPreview?.storageKey(sessionProfileKey(session))),
+      rockPreview: safeReadJsonStorage(legacyRockPreviewStorageKey(sessionProfileKey(session))),
       usageGuideAcknowledged: true
     }
   };
@@ -34815,8 +34814,8 @@ function restoreProfileBackupPayload(payload) {
   if (djRecommendationsKey && data.djRecommendations && typeof data.djRecommendations === "object") {
     localStorage.setItem(djRecommendationsKey, JSON.stringify(data.djRecommendations));
   }
-  if (data.rockPreview && window.SonicRockPreview) {
-    window.SonicRockPreview.writeState(localStorage, sessionProfileKey(targetSession), data.rockPreview);
+  if (data.rockPreview && typeof data.rockPreview === "object") {
+    localStorage.setItem(legacyRockPreviewStorageKey(sessionProfileKey(targetSession)), JSON.stringify(data.rockPreview));
   }
   if (data.usageGuideAcknowledged) {
     localStorage.setItem(USAGE_GUIDE_ACK_STORAGE_KEY, "yes");
@@ -63095,7 +63094,7 @@ bind(audioToggleBtn, "click", () => {
   );
   if (recentlyUnlockedByGlobalTap) audioGlobalUnlockAt = 0;
   setAudioEnabled(needsActivation, { persist: true, fromUser: true });
-  if (needsActivation && audioEnabled && currentRecommendation && currentActiveAppTabName() !== "rock") {
+  if (needsActivation && audioEnabled && currentRecommendation) {
     resumeCurrentPreviewFromUserGesture();
   }
   setAudioVolumePanelOpen(true);
@@ -65214,18 +65213,6 @@ async function bootSonicSearch() {
       renderSocialUi({ preserveStatus: true });
     }
   });
-  rockPreviewController = window.SonicRockPreview?.mount(document.getElementById("rockPanel"), {
-    getProfileKey: () => sessionProfileKey(),
-    getLanguage: () => currentLanguage,
-    navigate: tab => setActiveAppTab(tab, { focusPanel: true }),
-    beforePlay: () => {
-      stopAllActivePlayback({ reason: "rock_preview" });
-      setAudioEnabled(true, { persist: false, fromUser: true });
-    },
-    getAudioState: () => ({ muted: !audioEnabled || audioUnavailable || audioVolume <= 0.001, volume: audioVolume }),
-    onChange: () => updateProfileBackupStatus()
-  });
-  if (currentActiveAppTabName() === "rock") void rockPreviewController?.open();
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
