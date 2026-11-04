@@ -1,10 +1,4 @@
 /* Listening desk: artwork and playback first; context stays a deliberate choice. */
-.web-app-invite { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:18px 22px; border:1px solid #3c645f; border-radius:16px; background:#102622; margin:12px 0; }
-.web-app-invite strong { display:block; color:#f2faf6; font-family:Syne,sans-serif; font-size:18px; }
-.web-app-invite p { margin:5px 0 0; color:#c0d4cf; font-size:14px; }
-.web-app-invite a { flex-shrink:0; background:#c7ff6b; color:#10231e; border-radius:10px; padding:13px 17px; font-weight:700; text-decoration:none; min-height:44px; box-sizing:border-box; }
-.web-app-invite .invite-learn { display:inline-block; min-height:44px; padding:10px 0 0; background:none; color:#c7ff6b; font-size:13px; text-decoration:underline; }
-html.app-store-mode .web-app-invite, html.sonic-ios-app .web-app-invite, html[data-sonic-native-app="true"] .web-app-invite { display:none !important; }
 #swipeStartPanel .swipe-start-stage { max-width:700px; margin-inline:auto; }
 #swipeStartPanel { scroll-margin-top:72px; }
 #topSwipeCard.is-empty ~ .listening-platforms { display:none; }
@@ -36,8 +30,7 @@ html.app-store-mode .web-app-invite, html.sonic-ios-app .web-app-invite, html[da
 .library-result-count { font-size:13px; color:#b2c7c5; margin:0 0 12px; }
 .liked-track-actions .library-play { min-height:44px; background:#baf3d8; color:#10231e; font-weight:700; border-color:transparent; }
 #profileLibraryTitle { scroll-margin-top:85px; }
-@media (min-width:900px) { .web-app-invite { grid-column:3 / -1; order:10; width:100%; max-width:860px; min-width:0; box-sizing:border-box; justify-self:center; } }
-@media (max-width:600px) { .web-app-invite { align-items:flex-start; flex-direction:column; gap:12px; padding:16px; } .web-app-invite a { width:100%; text-align:center; } .library-tools { grid-template-columns:1fr; } #swipeStartPanel #previewPanel { padding:12px; } }
+@media (max-width:600px) { .library-tools { grid-template-columns:1fr; } #swipeStartPanel #previewPanel { padding:12px; } }
 @media (max-width:780px) {
   #topSwipeCard.swipe-hero-card:not(.is-empty) { display:grid; grid-template-rows:min(29svh,260px) auto; min-height:0; height:auto; }
   #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art { position:relative; inset:auto; height:100%; min-height:0; }
@@ -49,7 +42,7 @@ html.app-store-mode .web-app-invite, html.sonic-ios-app .web-app-invite, html[da
   #swipeStartPanel .swipe-hero-actions button { font-size:14px; min-height:48px; padding:8px; }
   #swipeStartPanel #topSwipeCard.is-empty + .swipe-hero-actions { grid-template-areas:"surprise"; grid-template-columns:1fr; }
 }
-@media (prefers-reduced-motion:reduce) { .discovery-detail-drawer, .web-app-invite { scroll-behavior:auto; } }
+@media (prefers-reduced-motion:reduce) { .discovery-detail-drawer { scroll-behavior:auto; } }
 
 #summaryPanel .profile-library-section { order:-1; }
 #summaryPanel .liked-track-clear-btn { width:auto; min-width:60px; min-height:44px; border-radius:10px; justify-self:end; }

@@ -4835,7 +4835,9 @@ const POST_BOOT_OPTIONAL_API_DELAY_MS = 7600;
 const SURPRISE_FAST_STYLE_LIMIT = 8;
 const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
-const SONIC_APP_BUILD_ID = "20261030discovery5";
+const SURPRISE_SEARCH_BUDGET_MS = 8000;
+const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
+const SONIC_APP_BUILD_ID = "20261104iosreview1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -31461,6 +31463,14 @@ function syncPreviewAudioState() {
   }
 }
 
+function prepareExplicitPreviewAudio() {
+  if (audioUnavailable) return false;
+  if (!audioEnabled) setAudioEnabled(true, { persist: true, fromUser: true });
+  else primeAudioFromUserGesture();
+  syncPreviewAudioState();
+  return audioEnabled;
+}
+
 async function startTrackPreviewPlayback(audioEl = trackPreview, {
   userInitiated = false,
   automatic = false
@@ -31477,6 +31487,7 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
     ""
   ).trim();
   if (!previewSource) return { ok: false, reason: "missing_source" };
+  if (userInitiated) prepareExplicitPreviewAudio();
 
   const playbackTrackKey = recommendationTrackKey(currentRecommendation);
   const playbackRenderToken = recommendationPreviewRenderToken;
@@ -33306,6 +33317,7 @@ function finishSearchOverlay() {
   stopSearchAudioPulse();
   setSearchProgress(100);
   window.setTimeout(() => {
+    if (searchOverlayLocks > 0) return;
     if (searchOverlay) searchOverlay.classList.add("hidden");
     searchProgressValue = 0;
     if (searchProgressFill) searchProgressFill.style.width = "4%";
@@ -35869,7 +35881,25 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
   );
 }
 
-async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, reportProgress = null) {
+function createSurpriseSearchBudget() {
+  const deadline = Date.now() + SURPRISE_SEARCH_BUDGET_MS;
+  const sessionGeneration = recommendationSessionGeneration;
+  const remainingMs = () => recommendationSessionIsCurrent(sessionGeneration)
+    ? Math.max(0, deadline - Date.now())
+    : 0;
+  const wait = (worker, maxWaitMs = SURPRISE_PREVIEW_LOOKUP_MS) => {
+    const remaining = remainingMs();
+    if (!remaining) return Promise.resolve(null);
+    return waitForPromiseWithTimeout(
+      Promise.resolve().then(worker),
+      Math.min(remaining, maxWaitMs),
+      null
+    );
+  };
+  return { remainingMs, wait };
+}
+
+async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, reportProgress = null, budget = createSurpriseSearchBudget()) {
   const update = (percent, message = "") => {
     if (typeof reportProgress !== "function") return;
     reportProgress(percent, message);
@@ -35948,6 +35978,16 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     }
     if (instantPool.length >= SURPRISE_FAST_POOL_LIMIT) break;
   }
+  // The first few styles can be exhausted while other local tracks are ready.
+  // Check those before waiting on providers, keeping the same exclusion rules.
+  if (!instantPool.length) {
+    for (const track of catalog) {
+      if (!fastCandidateAllowed(track)) continue;
+      instantPool.push(track);
+      if (!baseFamily || familyOf(track.style) !== baseFamily) instantCrossFamilyPool.push(track);
+      if (instantPool.length >= SURPRISE_FAST_POOL_LIMIT) break;
+    }
+  }
   if (instantCrossFamilyPool.length || instantPool.length) {
     update(86, t("searchOverlayFinishing"));
     const readyPool = instantCrossFamilyPool.length ? instantCrossFamilyPool : instantPool;
@@ -35966,7 +36006,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     triedTrackKeys.add(key);
     if (!hasReliableBpmForTrack(track)) return null;
     if (surpriseTrackHasExactBpmAndPreview(track)) return track;
-    await resolvePreviewForTrack(track);
+    await budget.wait(() => resolvePreviewForTrack(track));
     if (surpriseTrackHasExactBpmAndPreview(track)) return track;
     if (!exactBpmFallbackTrack && track.existenceVerified !== false && hasReliableBpmForTrack(track)) {
       exactBpmFallbackTrack = track;
@@ -35976,7 +36016,7 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
 
   update(24, t("searchOverlayGenerating"));
   const fastAttempts = Math.min(28, Math.max(12, Math.floor(catalog.length * 0.12)));
-  for (let attempt = 0; attempt < fastAttempts; attempt += 1) {
+  for (let attempt = 0; attempt < fastAttempts && budget.remainingMs() > 0; attempt += 1) {
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
       triedTrackKeys,
       requireCrossGenre: true,
@@ -36007,10 +36047,10 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
     ...crossGenreStyles,
     ...selectableStyles.filter((style) => !crossGenreStyles.includes(style))
   ].slice(0, 3);
-  for (let index = 0; index < hydrationStyles.length; index += 1) {
+  for (let index = 0; index < hydrationStyles.length && budget.remainingMs() > 0; index += 1) {
     const style = hydrationStyles[index];
     update(60 + index * 6, t("searchOverlayCatalog"));
-    await ensureStyleCoverageFast(style, 1);
+    await budget.wait(() => ensureStyleCoverageFast(style, 1));
     const candidate = pickSurpriseTrackFromAnotherGenre(baseTrack, {
       triedTrackKeys,
       requireCrossGenre: true,
@@ -36060,14 +36100,14 @@ async function pickValidatedSurpriseTrack(baseTrack = currentRecommendation, rep
   }
 
   if (exactBpmFallbackTrack) {
-    await resolvePreviewForTrack(exactBpmFallbackTrack);
+    await budget.wait(() => resolvePreviewForTrack(exactBpmFallbackTrack));
     if (surpriseTrackHasExactBpmAndPreview(exactBpmFallbackTrack)) return exactBpmFallbackTrack;
   }
 
   return null;
 }
 
-async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, reportProgress = null) {
+async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, reportProgress = null, budget = createSurpriseSearchBudget()) {
   const update = (percent, message = "") => {
     if (typeof reportProgress !== "function") return;
     reportProgress(percent, message);
@@ -36092,7 +36132,8 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
 
   const validatePool = async (pool = [], maxAttempts = 32) => {
     if (!Array.isArray(pool) || !pool.length) return null;
-    const candidates = orderDiverseTracksForPool(pool, { style: "", context: "", energy: "", bpm: "", vocals: "" });
+    const candidates = orderDiverseTracksForPool(pool, { style: "", context: "", energy: "", bpm: "", vocals: "" })
+      .sort((a, b) => Number(surpriseTrackHasExactBpmAndPreview(b)) - Number(surpriseTrackHasExactBpmAndPreview(a)));
     let attempts = 0;
     while (candidates.length && attempts < maxAttempts) {
       const candidate = candidates.shift();
@@ -36108,7 +36149,8 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
       triedTrackKeys.add(key);
       if (!hasReliableBpmForTrack(candidate)) continue;
       if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
-      await resolvePreviewForTrack(candidate);
+      if (!budget.remainingMs()) return null;
+      await budget.wait(() => resolvePreviewForTrack(candidate));
       if (surpriseTrackHasExactBpmAndPreview(candidate)) return candidate;
       if (attempts % 8 === 0) await waitForMainThreadBreath();
     }
@@ -36156,10 +36198,10 @@ async function resolveEmergencySurpriseTrack(baseTrack = currentRecommendation, 
     })
     .slice(0, 4);
 
-  for (let index = 0; index < hydrationStyles.length; index += 1) {
+  for (let index = 0; index < hydrationStyles.length && budget.remainingMs() > 0; index += 1) {
     const style = hydrationStyles[index];
     update(Math.min(97, 94 + index), t("searchOverlayCatalog"));
-    await ensureStyleCoverageFast(style, 1);
+    await budget.wait(() => ensureStyleCoverageFast(style, 1));
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(style);
     const stylePool = catalogTracksForStyle(style).filter(
@@ -38498,7 +38540,7 @@ function startEmbeddedPreviewPlaybackFromUserGesture(track, preferredSource = ""
   const source = String(preferredSource || available.preferredSource || "").toLowerCase();
   if (!source) return false;
 
-  primeAudioForDiscoveryGesture();
+  prepareExplicitPreviewAudio();
   const generation = stopAllActivePlayback({ reason: `${source}_preview_start` });
   const type = source === "youtube" || source === "bandcamp" || source === "soundcloud"
     ? source
@@ -58236,7 +58278,7 @@ async function openSavedLibraryTrack(entry, button) {
   recommendationRunBusy = true;
   button.disabled = true;
   button.textContent = discoveryExperienceCopy().opening;
-  primeAudioForDiscoveryGesture();
+  prepareExplicitPreviewAudio();
   try {
     const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog]
       .find(candidate => candidate && recommendationTrackKey(candidate) === normalize(entry.key) && isTrackEligibleForRecommendation(candidate));
@@ -62772,14 +62814,15 @@ async function runSurpriseRecommendation({
 
     const previousTrack = surfaceSnapshot?.track || currentRecommendation;
     let surpriseTrack = null;
+    const searchBudget = createSurpriseSearchBudget();
     await withSearchOverlay(t("searchOverlayPreparing"), async (update) => {
       sonicPerfMark("pick-start", { hasPrevious: Boolean(previousTrack) });
-      surpriseTrack = await pickValidatedSurpriseTrack(previousTrack, update);
+      surpriseTrack = await pickValidatedSurpriseTrack(previousTrack, update, searchBudget);
       assertRecommendationSessionCurrent(sessionGeneration);
       sonicPerfMark("pick-validated", { found: Boolean(surpriseTrack) });
       if (!surpriseTrack) {
         if (typeof onFallback === "function") onFallback("emergency_catalog");
-        surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update, searchBudget);
         assertRecommendationSessionCurrent(sessionGeneration);
         sonicPerfMark("pick-emergency", { found: Boolean(surpriseTrack) });
       }
@@ -62788,7 +62831,7 @@ async function runSurpriseRecommendation({
         previousTrack &&
         normalize(surpriseTrack.style || "") === normalize(previousTrack.style || "")
       ) {
-        surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update);
+        surpriseTrack = await resolveEmergencySurpriseTrack(previousTrack, update, searchBudget);
         assertRecommendationSessionCurrent(sessionGeneration);
         sonicPerfMark("pick-emergency-same-style", { found: Boolean(surpriseTrack) });
       }
@@ -63644,6 +63687,9 @@ bind(trackPreview, "play", () => {
     ? activePlayback.generation
     : 0;
   if (!generation) {
+    // Programmatic starts already register their playback generation. A play
+    // directly on the native controls is an explicit request to hear the track.
+    prepareExplicitPreviewAudio();
     generation = stopAllActivePlayback({ reason: "native_preview_play", preserve: "preview" });
   }
   setActivePlayback({
@@ -65216,8 +65262,7 @@ async function bootSonicSearch() {
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
-    openLibrary: () => setActiveAppTab("profile", { focusPanel: true }),
-    trackDownload: () => trackBetaEvent("app_store_clicked", { placement: "discovery" }, { source: "web" })
+    openLibrary: () => setActiveAppTab("profile", { focusPanel: true })
   });
   if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
 }

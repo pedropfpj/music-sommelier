@@ -25,7 +25,7 @@ const makeContext = () => {
   const state = { recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
     currentRecommendation: null, currentLocale: () => "pt", currentLanguage: "pt", profile: "one",
     sessionProfileKey: () => state.profile, discoveryExperienceCopy: () => ({ opening: "Opening", play: "Play", unavailable: "Unavailable" }),
-    primeAudioForDiscoveryGesture() {}, normalize: value => value, CURATED_FRIENDLY_OPENING_TRACKS: [good],
+    prepareExplicitPreviewAudio() { state.audioPrepared = true; }, normalize: value => value, CURATED_FRIENDLY_OPENING_TRACKS: [good],
     catalog: [{ ...good, eligible: false }], recommendationTrackKey: track => track.key,
     isTrackEligibleForRecommendation: track => track.eligible, hydrateExternalDatasetPackInBackground: async () => {},
     stopAllActivePlayback() {}, restoreRecommendationSurfaceSnapshot: value => played.push(value.track),
@@ -35,6 +35,7 @@ const makeContext = () => {
 };
 let { state, played } = makeContext();
 await state.openSavedLibraryTrack({ key: "a" }, {});
+assert.equal(state.audioPrepared, true, "A library play request must prepare audible playback");
 assert.equal(played.length, 1, "Saved opening-deck tracks must replay even if missing or rejected in the main catalog");
 assert.equal(state.recommendationRunBusy, false);
 ({ state, played } = makeContext());

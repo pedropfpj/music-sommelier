@@ -303,7 +303,11 @@ function createPreviewHarness() {
     recommendationPreviewRenderToken: 1,
     recommendationTrackKey: () => "fixture::track",
     trackPreviewElementMatchesTrack: () => true,
-    syncPreviewAudioState() {},
+    audioEnabled: false,
+    audioUnavailable: false,
+    audioVolume: 0.35,
+    setAudioEnabled(enabled) { context.audioEnabled = enabled; },
+    primeAudioFromUserGesture() {},
     trackPreview: audio
   });
   vm.runInContext(`
@@ -314,6 +318,8 @@ function createPreviewHarness() {
     ${extractFunction("clearActivePlayback")}
     ${extractFunction("declaredMediaElementSource")}
     ${extractFunction("ownedTrackPreviewSource")}
+    ${extractFunction("syncPreviewAudioState")}
+    ${extractFunction("prepareExplicitPreviewAudio")}
     function stopAllActivePlayback() {
       playbackGeneration += 1;
       setActivePlayback({ type: "none", generation: playbackGeneration, state: "stopped" });
@@ -338,10 +344,15 @@ async function testAutomaticPlaybackAndRapidRequests() {
   harness.playResolvers[0].resolve();
   const automaticResult = await automatic;
   assert.equal(automaticResult.ok, true);
+  assert.equal(harness.context.audioEnabled, false, "Automatic playback must respect the global mute");
+  assert.equal(harness.audio.muted, true);
   assert.equal(activePlaybackCount(harness.context), 1);
 
   const first = harness.context.startTrackPreviewPlayback(harness.audio, { userInitiated: true });
   const second = harness.context.startTrackPreviewPlayback(harness.audio, { userInitiated: true });
+  assert.equal(harness.context.audioEnabled, true, "An explicit play must enable audio");
+  assert.equal(harness.audio.muted, false);
+  assert.equal(harness.audio.volume, 0.35, "Explicit play must retain the chosen volume");
   assert.equal(harness.audio.playCalls, 3);
   harness.playResolvers[1].resolve();
   harness.playResolvers[2].resolve();
@@ -351,6 +362,9 @@ async function testAutomaticPlaybackAndRapidRequests() {
   assert.equal(secondResult.ok, true);
   assert.equal(activePlaybackCount(harness.context), 1);
   assert.equal(harness.context.activePlayback.generation, 3);
+  harness.context.audioVolume = 0;
+  harness.context.prepareExplicitPreviewAudio();
+  assert.equal(harness.audio.muted, true, "Explicit play must not raise a deliberately zero volume");
 }
 
 function testStaleSoundCloudReadyCannotPlay() {

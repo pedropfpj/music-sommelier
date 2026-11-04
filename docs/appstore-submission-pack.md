@@ -1,14 +1,49 @@
 # Sonic Search App Store Submission Pack
 
-Date: 2026-09-02
+Date: 2026-11-04
 
 ## Submission Status
 
-- Version **1.1.0**, build **24**, uploaded successfully to App Store Connect on 2026-09-02 and awaiting Apple processing.
-- Apple App ID: `6786758494`.
-- Paid Applications Agreement: active.
-- Production backend: `https://sonicsearch.app`, deployment `dpl_DDFB4caZFKSChcgn51cZMrhxDu6o`, public smoke test passed.
-- Billing remains disabled until the subscription products and sandbox purchase flow pass verification.
+- Public App Store version checked in App Store Connect: **1.0.9**, build **23**.
+- Latest existing TestFlight build checked: **1.1.0 (24)**.
+- Updated candidate: **1.1.0 (25)**, archived locally and code-signature verified. Its bundled JavaScript matches the reviewed iOS bundle (`20261104iosreview1ios1`). It has **not** been uploaded or submitted for review.
+- Apple App ID: `6786758494`; bundle ID: `app.sonicsearch.ios`.
+- App Store Connect currently requires the Account Holder to review and accept an updated Apple Developer Program License Agreement before updates can be submitted. Do not represent this as completed or accept it without the user's explicit confirmation at that step.
+- All required and optional public smoke checks passed against `https://sonicsearch.app` using the native origin `capacitor://localhost`.
+- Billing configuration and subscription products were not changed in this revision.
+
+## November release candidate
+
+- Electronic-only interface, retaining the expansion of 69 electronic tracks and the saved-track library. The rock preview and install invitation are absent from the app interface.
+- Discovery prioritizes ready local tracks before provider lookups. Provider lookup waits share an eight-second budget across normal and emergency selection; individual waits are capped at 1.2 seconds. This budget applies to selection, not to all rendering or media loading.
+- Explicit playback through native controls, the app's play button, or the saved library enables audio without raising the chosen volume. Automatic playback still respects mute; a zero volume is preserved.
+- A completed search cannot hide the loading indicator of a newer search.
+- Fifty-five existing automated suites passed. The new bounded-search regression also passed, as did the affected playback, library, recommendation, profile-isolation and bundle checks after changes. Two browser suites could not run because their standalone Playwright dependency is absent; their core controls were checked manually through the controlled browser instead.
+- Browser review used the actual generated iOS web bundle at 390 and 320 px: no horizontal overflow, primary controls at least 44 px, saved likes preserved after reload, accent-insensitive search, library playback, native play/mute and the Premium collapse control verified. These are browser checks, not a claim of physical-device playback verification.
+- Xcode Release archive succeeded. Simulator compilation was also exercised, but the Simulator app could not be opened through the available UI controls. Live Apple/Google account sign-in and StoreKit purchases were not repeated.
+
+### What's New — Português (Brasil)
+
+Mais variedade na música eletrônica, com novos artistas e faixas nos subgêneros de nicho.
+Busca e organização das faixas salvas, com reprodução no app.
+Melhorias nos controles de áudio e no tempo de espera da descoberta.
+Ajustes de navegação e apresentação.
+
+### What's New — English (U.S.)
+
+More variety in electronic music, with new artists and tracks across niche styles.
+Search and organize saved tracks, and listen again in the app.
+Improved audio controls and bounded discovery waits.
+Navigation and presentation improvements.
+
+### What's New — Español
+
+Más variedad en música electrónica, con nuevos artistas y pistas en estilos de nicho.
+Busca y organiza tus pistas guardadas y vuelve a escucharlas en la app.
+Mejoras en los controles de audio y en los tiempos de espera al descubrir música.
+Ajustes de navegación y presentación.
+
+The historical listing drafts below still require reconciliation with the current public metadata before any store edits; in particular, do not advertise paid features while billing is disabled.
 
 ## App Store Connect Metadata
 
@@ -16,7 +51,7 @@ Date: 2026-09-02
 - Bundle ID: app.sonicsearch.ios
 - SKU: sonic-search-ios
 - Version: 1.1.0
-- Build: 24
+- Build: 25
 - Primary category: Music
 - Secondary category: Entertainment
 - Age rating suggestion: 12+
@@ -113,7 +148,7 @@ Verified on 2026-08-11:
 - Google OAuth through Supabase redirects correctly.
 - Sign in with Apple through Supabase redirects correctly.
 - The iOS callback uses the registered `sonicsearch://auth/callback` URL and PKCE.
-- Build 24 is the current release candidate for version 1.1.0. Version 1.0.9 is the previously approved release; 1.1.0 adds the expanded niche catalog, refreshed playback routes, resilient cover-art fallback, unlimited discovery, and the Sonic Premium foundation.
+- Build 25 is the current local release candidate for version 1.1.0; build 24 is the older TestFlight upload. Version 1.0.9 is the previously approved release; 1.1.0 adds the expanded niche catalog, refreshed playback routes, resilient cover-art fallback, unlimited discovery, and the Sonic Premium foundation.
 
 ## Review Notes
 
