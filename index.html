@@ -10,6 +10,7 @@
         window.SONIC_SEARCH_LOCAL_FILE_MODE = true;
       }
     </script>
+    <script src="release-flags.js?v=20261105web1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="Find an electronic track for the moment with swipe, preview, context, and fewer repeats." />
@@ -82,7 +83,7 @@
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
     <link rel="stylesheet" href="weekly-recommends.css?v=20260916weekly1" />
-    <link rel="stylesheet" href="discovery-experience.css?v=20261104iosreview1" />
+    <link rel="stylesheet" href="discovery-experience.css?v=20261105web1" />
     <script src="privacy-controls.js?v=20260922privacy1"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -1382,7 +1383,17 @@
             <a id="soundcloudLink" class="listen-btn soundcloud-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no SoundCloud</a>
             <a id="bandcampLink" class="listen-btn bandcamp-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Bandcamp</a>
           </div></details>
-          <button id="discoveryLibraryBtn" class="discovery-library-shortcut" type="button" data-experience-copy="library">Minhas faixas</button>
+          <div class="discovery-utilities">
+            <button id="discoveryLibraryBtn" class="discovery-library-shortcut" type="button" data-experience-copy="library">Minhas faixas</button>
+            <button id="shareTrackBtn" class="discovery-library-shortcut" type="button" disabled data-web-copy="share">Copiar link da faixa</button>
+          </div>
+          <p id="discoverySaveHint" class="discovery-save-hint" data-web-copy="saveHint">Curta para guardar. Suas faixas ficam neste navegador.</p>
+          <p id="sharedTrackStatus" class="shared-track-status" role="status" aria-live="polite" hidden></p>
+          <div id="shareLinkFallback" class="share-link-fallback" hidden>
+            <label for="shareLinkText" data-web-copy="copyManually">Copie este link para compartilhar</label>
+            <input id="shareLinkText" type="url" readonly />
+            <button id="shareLinkClose" type="button" data-web-copy="close">Fechar</button>
+          </div>
           <p id="topSwipeHint" class="muted swipe-hint">O fluxo principal fica leve; filtros e contexto estão nas outras abas.</p>
         </div>
       </section>
@@ -2597,6 +2608,43 @@
             <button id="summaryShareInstagramBtn" class="instagram-share-btn summary-share-story-btn" type="button">Compartilhar status nos Stories</button>
           </div>
         </div>
+        <section class="profile-library-section" aria-labelledby="profileLibraryTitle">
+          <div class="profile-library-head">
+            <div>
+              <p id="profileLibraryKicker" class="summary-kicker">Biblioteca do radar</p>
+              <h4 id="profileLibraryTitle">Faixas que ensinaram o radar</h4>
+              <p id="profileLibraryHint" class="muted">Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.</p>
+            </div>
+          </div>
+          <div class="library-tools">
+            <label><span data-experience-copy="search">Buscar nas suas faixas</span><input id="librarySearch" type="search" maxlength="120" placeholder="Faixa, artista ou estilo" autocomplete="off" /></label>
+            <label><span data-experience-copy="sort">Ordenar faixas</span><select id="libraryOrder"><option value="recent" data-experience-copy="recent">Mais recentes</option><option value="title" data-experience-copy="title">Nome da faixa</option><option value="artist" data-experience-copy="artist">Artista</option></select></label>
+          </div>
+          <div class="profile-library-grid">
+            <article class="profile-stat-card wide liked-track-history-card">
+              <div class="liked-track-history-head">
+                <div>
+                  <h4 id="summaryLikedTracksTitle">Faixas curtidas</h4>
+                  <p id="summaryLikedTracksHint" class="muted">Salvas para ouvir de novo.</p>
+                </div>
+                <button id="summaryLikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
+              </div>
+              <p id="libraryLikedCount" class="library-result-count" role="status" aria-live="polite"></p>
+              <div id="summaryLikedTracksList" class="liked-track-list"></div>
+            </article>
+            <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
+              <div class="liked-track-history-head">
+                <div>
+                  <h4 id="summaryDislikedTracksTitle">Faixas descartadas</h4>
+                  <p id="summaryDislikedTracksHint" class="muted">Descartes ajudam o radar a não insistir.</p>
+                </div>
+                <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
+              </div>
+              <p id="libraryDislikedCount" class="library-result-count" role="status" aria-live="polite"></p>
+              <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
+            </article>
+          </div>
+        </section>
         <button id="premiumPromoShowBtn" class="premium-visibility-btn premium-promo-show-btn hidden" type="button" aria-controls="membershipCard weeklyHighlightsCard" aria-expanded="false">Mostrar Premium</button>
         <article id="membershipCard" class="membership-card hidden" data-plan="free" aria-labelledby="membershipTitle">
           <div class="membership-card-signal" aria-hidden="true">
@@ -2722,43 +2770,6 @@
           </div>
           <p id="apiHealthStatus" class="muted api-health-status">Verificando integrações...</p>
           <div id="apiHealthGrid" class="api-health-grid"></div>
-        </section>
-        <section class="profile-library-section" aria-labelledby="profileLibraryTitle">
-          <div class="profile-library-head">
-            <div>
-              <p id="profileLibraryKicker" class="summary-kicker">Biblioteca do radar</p>
-              <h4 id="profileLibraryTitle">Faixas que ensinaram o radar</h4>
-              <p id="profileLibraryHint" class="muted">Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.</p>
-            </div>
-          </div>
-          <div class="library-tools">
-            <label><span data-experience-copy="search">Buscar nas suas faixas</span><input id="librarySearch" type="search" maxlength="120" placeholder="Faixa, artista ou estilo" autocomplete="off" /></label>
-            <label><span data-experience-copy="sort">Ordenar faixas</span><select id="libraryOrder"><option value="recent" data-experience-copy="recent">Mais recentes</option><option value="title" data-experience-copy="title">Nome da faixa</option><option value="artist" data-experience-copy="artist">Artista</option></select></label>
-          </div>
-          <div class="profile-library-grid">
-            <article class="profile-stat-card wide liked-track-history-card">
-              <div class="liked-track-history-head">
-                <div>
-                  <h4 id="summaryLikedTracksTitle">Faixas curtidas</h4>
-                  <p id="summaryLikedTracksHint" class="muted">Salvas para ouvir de novo.</p>
-                </div>
-                <button id="summaryLikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
-              </div>
-              <p id="libraryLikedCount" class="library-result-count" role="status" aria-live="polite"></p>
-              <div id="summaryLikedTracksList" class="liked-track-list"></div>
-            </article>
-            <article class="profile-stat-card wide liked-track-history-card disliked-track-history-card">
-              <div class="liked-track-history-head">
-                <div>
-                  <h4 id="summaryDislikedTracksTitle">Faixas descartadas</h4>
-                  <p id="summaryDislikedTracksHint" class="muted">Descartes ajudam o radar a não insistir.</p>
-                </div>
-                <button id="summaryDislikedTracksClearBtn" class="secondary liked-track-clear-btn" type="button">Limpar</button>
-              </div>
-              <p id="libraryDislikedCount" class="library-result-count" role="status" aria-live="polite"></p>
-              <div id="summaryDislikedTracksList" class="liked-track-list disliked-track-list"></div>
-            </article>
-          </div>
         </section>
         <article id="profileBackupCard" class="profile-backup-card">
           <div>
@@ -3386,7 +3397,7 @@
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
     <script defer src="weekly-recommends.js?v=20260916weekly1"></script>
-    <script defer src="discovery-experience.js?v=20261104iosreview1"></script>
-    <script defer src="app.min.js?v=20261105quality1"></script>
+    <script defer src="discovery-experience.js?v=20261105web1"></script>
+    <script defer src="app.min.js?v=20261105web1"></script>
   </body>
 </html>

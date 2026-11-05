@@ -1,7 +1,8 @@
 {
   "git": {
     "deploymentEnabled": {
-      "codex/discovery-quality-20261105": false
+      "codex/discovery-quality-20261105": false,
+      "codex/web-audience-20261105": false
     }
   },
   "functions": {
@@ -16,6 +17,14 @@
     }
   },
   "headers": [
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
+    },
+    {
+      "source": "/:page(index|iphone).html",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
+    },
     {
       "source": "/(.*)",
       "headers": [

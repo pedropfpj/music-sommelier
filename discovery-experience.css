@@ -44,5 +44,24 @@
 }
 @media (prefers-reduced-motion:reduce) { .discovery-detail-drawer { scroll-behavior:auto; } }
 
-#summaryPanel .profile-library-section { order:-1; }
+#summaryPanel .profile-library-section { order:1; }
 #summaryPanel .liked-track-clear-btn { width:auto; min-width:60px; min-height:44px; border-radius:10px; justify-self:end; }
+
+/* Audience release: discovery and saved music have priority over gated promotions. */
+html[data-web-audience="true"][data-premium-promotion="false"]:not(.app-store-mode) :is(#membershipCard,#weeklyHighlightsCard,#premiumPromoShowBtn,#spiritPremiumGate,#dailyRadarPanel) { display:none !important; }
+html[data-social-v2="false"] :is([data-open-discussion],.social-discussion-entry,#socialDiscussionDialog,#socialProfileCard) { display:none !important; }
+html[data-public-profiles="false"] #userProfileCard { display:none !important; }
+#swipeStartPanel .discovery-utilities { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:14px; }
+#swipeStartPanel .discovery-utilities button { margin:0; min-height:44px; padding:10px 16px; }
+.discovery-save-hint { color:#b2c7c5; font-size:13px; line-height:1.5; margin:12px 0 0; text-align:center; }
+.shared-track-status { margin:14px 0 0; padding:12px 16px; border-left:2px solid #baf3d8; background:#122724; color:#e4f1ed; line-height:1.5; }
+.share-link-fallback { margin:16px 0; padding:16px; border:1px solid #456369; border-radius:12px; background:#0b171b; }
+.share-link-fallback[hidden], .shared-track-status[hidden] { display:none; }
+.share-link-fallback label { display:block; margin-bottom:10px; }
+.share-link-fallback input { box-sizing:border-box; width:100%; min-width:0; padding:12px; background:#10231e; border:1px solid #537375; color:#e4f1ed; font:inherit; font-size:16px; }
+.share-link-fallback button { margin-top:10px; min-height:44px; }
+.discovery-utilities button:focus-visible, .share-link-fallback :is(input,button):focus-visible, .liked-track-actions :is(button,a):focus-visible { outline:2px solid #9effcc; outline-offset:3px; }
+.liked-track-actions button { min-height:44px; }
+@media (max-width:420px) { #swipeStartPanel .discovery-utilities button { flex:1 1 130px; } }
+
+#summaryPanel #profileBackupCard { order:2; }

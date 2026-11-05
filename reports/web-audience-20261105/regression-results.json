@@ -1,0 +1,135 @@
+{
+  "checkedAt": "2026-11-05T19:41:57.351997+00:00",
+  "outcomes": [
+    {
+      "suite": "web-audience",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "discovery-experience",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "auth-recommendation-isolation",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "smart-returning-entry",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "first-experience",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "friendly-first-impression",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "simplified-navigation",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "discovery-performance",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "first-recommendation-lock",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "preview-card-ownership",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "dj-player-swipe",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "recording-identity",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "filtered-search-budget",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "curated-discovery-runtime",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "niche-recommendation-runtime",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "beta-analytics-v2",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "admin-access",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "premium-promo-visibility",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "track-video-social",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "track-video-social-sql",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "user-profile",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "user-profile-sql",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "user-profile-privacy-surfaces",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "ugc-safety",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "compliance-controls",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "suite": "rock-preview",
+      "passed": true,
+      "code": 0
+    }
+  ]
+}

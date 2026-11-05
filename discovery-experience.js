@@ -8,6 +8,32 @@
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
   }
+  const webCopy = {
+    pt: { share: "Copiar link da faixa", saveHint: "Curta para guardar. Suas faixas ficam neste navegador.", copyManually: "Copie este link para compartilhar", close: "Fechar", shared: "Link da faixa pronto para compartilhar.", opening: "Abrindo a faixa compartilhada…", opened: "Uma descoberta chegou até você. Dê play para ouvir.", missing: "Esta faixa não está disponível no catálogo agora. Você pode ouvir uma nova descoberta.", libraryHint: "Salvas neste navegador. Use Salvar cópia do perfil para levar sua biblioteca a outro dispositivo." },
+    en: { share: "Copy track link", saveHint: "Like to save. Your tracks stay in this browser.", copyManually: "Copy this link to share", close: "Close", shared: "Track link ready to share.", opening: "Opening the shared track…", opened: "A discovery found its way to you. Press play to listen.", missing: "This track is not available in the catalog right now. You can listen to a new discovery.", libraryHint: "Saved in this browser. Use Save profile backup to take your library to another device." },
+    es: { share: "Copiar enlace de la pista", saveHint: "Dale me gusta para guardar. Tus pistas quedan en este navegador.", copyManually: "Copia este enlace para compartir", close: "Cerrar", shared: "Enlace de la pista listo para compartir.", opening: "Abriendo la pista compartida…", opened: "Una nueva música llegó hasta ti. Pulsa reproducir para escuchar.", missing: "Esta pista no está disponible en el catálogo ahora. Puedes escuchar un nuevo descubrimiento.", libraryHint: "Guardadas en este navegador. Usa Guardar copia del perfil para llevar tu biblioteca a otro dispositivo." }
+  };
+  function parseTrackLink(value) {
+    try {
+      const url = new URL(value);
+      if (!url.searchParams.has("track")) return null;
+      const key = url.searchParams.get("track") || "";
+      const style = url.searchParams.get("style") || "";
+      if (!key || key.length > 300 || !/^[a-z0-9_ ]+$/.test(key) || !/^[a-z][a-z0-9_]{0,79}$/.test(style)) return { invalid: true };
+      return { key, style };
+    } catch (_) { return null; }
+  }
+  function buildTrackLink({ key, style, language = "en", baseUrl = "https://sonicsearch.app/" }) {
+    // Share a catalog identity, never a user-supplied media URL or profile data.
+    const url = new URL("/", baseUrl);
+    if (!/^https?:$/.test(url.protocol)) throw new Error("Invalid share origin");
+    url.searchParams.set("track", key);
+    url.searchParams.set("style", style);
+    url.searchParams.set("lang", ["pt", "en", "es"].includes(language) ? language : "en");
+    const parsed = parseTrackLink(url.href);
+    if (!parsed || parsed.invalid) throw new Error("Invalid catalog identity");
+    return url.href;
+  }
   function selectTracks(entries, query = "", order = "recent", locale = "pt", labelStyle = value => value) {
     const terms = normalize(query).split(/\s+/).filter(Boolean);
     const matches = entries.filter(entry => {
@@ -25,6 +51,10 @@
     const c = () => copy[adapter.language()] || copy.pt;
     function render() {
       doc.querySelectorAll("[data-experience-copy]").forEach(el => { el.textContent = c()[el.dataset.experienceCopy] || ""; });
+      const web = webCopy[adapter.language()] || webCopy.en;
+      doc.querySelectorAll("[data-web-copy]").forEach(el => { el.textContent = web[el.dataset.webCopy] || ""; });
+      const hint = doc.getElementById("profileLibraryHint");
+      if (hint) hint.textContent = web.libraryHint;
       const search = doc.getElementById("librarySearch");
       if (search) search.placeholder = c().placeholder;
       adapter.renderLibrary();
@@ -41,7 +71,7 @@
     root.addEventListener("sonic:language-changed", render);
     render();
   }
-  const api = { copy, normalize, selectTracks, mount };
+  const api = { copy, webCopy, normalize, selectTracks, parseTrackLink, buildTrackLink, mount };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.SonicDiscoveryExperience = api;
 })(typeof window !== "undefined" ? window : globalThis);

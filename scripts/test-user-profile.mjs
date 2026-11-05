@@ -31,7 +31,7 @@ const metadata = await sharp(sanitized).metadata();
 assert.equal(metadata.width, 512); assert.equal(metadata.height, 512); assert.equal(metadata.format, 'jpeg'); assert.equal(metadata.exif, undefined);
 
 const previousEnv = { ...process.env }, originalFetch = global.fetch;
-Object.assign(process.env, { SONIC_SOCIAL_ENABLED: 'true', SUPABASE_URL: 'https://profile.test', SUPABASE_ANON_KEY: 'mock-anon', SUPABASE_SERVICE_ROLE_KEY: 'mock-service', SONIC_REQUIRE_DURABLE_RATE_LIMITS: 'false', SONIC_PROFILE_EDIT_DAILY_LIMIT: '40', NODE_ENV: 'test' });
+Object.assign(process.env, { SONIC_SOCIAL_ENABLED: 'true', SONIC_PUBLIC_PROFILES_ENABLED: 'true', SUPABASE_URL: 'https://profile.test', SUPABASE_ANON_KEY: 'mock-anon', SUPABASE_SERVICE_ROLE_KEY: 'mock-service', SONIC_REQUIRE_DURABLE_RATE_LIMITS: 'false', SONIC_PROFILE_EDIT_DAILY_LIMIT: '40', NODE_ENV: 'test' });
 const profiles = new Map(), photos = new Map(); let failSave = false, writes = 0;
 let blockViewer = false;
 let rpcBudget = null;

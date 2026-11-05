@@ -28,6 +28,7 @@ const makeContext = () => {
     prepareExplicitPreviewAudio() { state.audioPrepared = true; }, normalize: value => value, CURATED_FRIENDLY_OPENING_TRACKS: [good],
     catalog: [{ ...good, eligible: false }], recommendationTrackKey: track => track.key,
     isTrackEligibleForRecommendation: track => track.eligible, hydrateExternalDatasetPackInBackground: async () => {},
+    waitForPromiseWithTimeout: promise => promise, setActiveAppTab(tab) { state.activeTab = tab; },
     stopAllActivePlayback() {}, restoreRecommendationSurfaceSnapshot: value => played.push(value.track),
     trackRecommendationEvent() {}, lastPrefs: {}, showToast() {}, document: { getElementById: () => null } };
   vm.createContext(state); vm.runInContext(source.slice(start, end), state);
@@ -36,6 +37,7 @@ const makeContext = () => {
 let { state, played } = makeContext();
 await state.openSavedLibraryTrack({ key: "a" }, {});
 assert.equal(state.audioPrepared, true, "A library play request must prepare audible playback");
+assert.equal(state.activeTab, "discover", "Library replay must reveal the player in its own tab");
 assert.equal(played.length, 1, "Saved opening-deck tracks must replay even if missing or rejected in the main catalog");
 assert.equal(state.recommendationRunBusy, false);
 ({ state, played } = makeContext());

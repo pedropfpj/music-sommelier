@@ -11,7 +11,7 @@ for (const url of ['https://www.youtube.com/watch?v=abcdefghijk', 'https://youtu
 assert.equal(context.extractYouTubeVideoId('https://youtube.com.attacker.test/watch?v=abcdefghijk'), '');
 const a = '11111111-1111-4111-8111-111111111111';
 const b = '22222222-2222-4222-8222-222222222222';
-Object.assign(process.env, { SUPABASE_URL: 'https://social.test', SUPABASE_ANON_KEY: 'anon-test', SUPABASE_SERVICE_ROLE_KEY: 'service-test', SONIC_REQUIRE_DURABLE_RATE_LIMITS: 'false', SONIC_SOCIAL_COMMENTS_ENABLED: 'true', SONIC_SOCIAL_COMMENTS_DAILY_LIMIT: '10000', SONIC_COMMUNITY_EMAIL_ENABLED: 'false', NODE_ENV: 'test' });
+Object.assign(process.env, { SUPABASE_URL: 'https://social.test', SUPABASE_ANON_KEY: 'anon-test', SUPABASE_SERVICE_ROLE_KEY: 'service-test', SONIC_REQUIRE_DURABLE_RATE_LIMITS: 'false', SONIC_SOCIAL_COMMENTS_ENABLED: 'true', SONIC_TRACK_VIDEO_SOCIAL_V2_ENABLED: 'true', SONIC_SOCIAL_COMMENTS_DAILY_LIMIT: '10000', SONIC_COMMUNITY_EMAIL_ENABLED: 'false', NODE_ENV: 'test' });
 const originalFetch = global.fetch;
 const comments = new Map(); const likes = new Map();
 let schemaMissing = false; let blocked = false;

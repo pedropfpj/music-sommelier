@@ -562,6 +562,7 @@ function shouldHideSocialLoginForAppStore() {
 }
 
 function shouldDisableSocialCommentsForAppStore() {
+  if (window.SonicReleaseFlags?.socialV2 !== true) return true;
   return Boolean(isAppStoreRuntimeMode() && sonicIosConfig().disableSocialComments === true);
 }
 
@@ -574,6 +575,7 @@ function shouldShowAuthOnBootForAppStore() {
 }
 
 function supportPaymentsAllowed() {
+  if (!isAppStoreRuntimeMode() && window.SonicReleaseFlags?.premiumPromotion !== true) return false;
   return Boolean(
     SUPPORT_PAYMENT_CONFIG.paymentsEnabled !== false &&
     !(isAppStoreRuntimeMode() && sonicIosConfig().disableSupportPayments !== false)
@@ -4837,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261105quality1";
+const SONIC_APP_BUILD_ID = "20261105web1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -28826,6 +28828,7 @@ function recommendationBetaPayload(track = null, prefs = {}, extra = {}) {
 
 function trackRecommendationEvent(eventName = "", track = null, prefs = {}, extra = {}) {
   if (!track) return;
+  if (eventName === "preview_played") trackBetaEventOnce("first_preview_played", "first_preview_played", recommendationBetaPayload(track, prefs, extra), { source: "activation" });
   trackBetaEvent(eventName, recommendationBetaPayload(track, prefs, extra), {
     source: extra.source || "recommendation"
   });
@@ -32841,6 +32844,7 @@ function enterAppFromWelcome({ surprise = false, surprisePreset = null, autoReco
   syncFloatingSurpriseButton();
   updateSignatureBarForTab();
   window.requestAnimationFrame(() => {
+    if (window.SonicDiscoveryExperience?.parseTrackLink(currentAppUrl()?.href)) return;
     const shouldStartAtTop = urlRequestsScreenshotMode()
       || isNativeAppRuntime()
       || window.matchMedia?.("(max-width: 760px)")?.matches;
@@ -34116,7 +34120,6 @@ async function writeTextToClipboard(text = "") {
 function buildShareableAppUrl({ includeSpirit = true } = {}) {
   const baseUrl = currentAppUrl() || new URL("https://music-sommelier1.vercel.app/");
   const url = new URL(`${baseUrl.origin}${baseUrl.pathname || "/"}`);
-  url.searchParams.set("visitor", "1");
   url.searchParams.set("lang", currentLanguage || DEFAULT_LANGUAGE);
   url.searchParams.set("tab", includeSpirit && currentSpiritId ? "profile" : "discover");
 
@@ -44573,7 +44576,10 @@ function renderAdminFunnel(funnel = {}) {
     ["recommended", sonicTinyCopy("Recebeu recomendação", "Got a recommendation", "Recibió recomendación")],
     ["listened", sonicTinyCopy("Ouviu um preview", "Played a preview", "Escuchó un preview")],
     ["reacted", sonicTinyCopy("Reagiu à faixa", "Reacted to a track", "Reaccionó a la pista")],
-    ["valued", sonicTinyCopy("Salvou ou compartilhou", "Saved or shared", "Guardó o compartió")]
+    ["valued", sonicTinyCopy("Salvou ou compartilhou", "Saved or shared", "Guardó o compartió")],
+    ["replayed", sonicTinyCopy("Reabriu uma faixa salva", "Reopened a saved track", "Reabrió una pista guardada")],
+    ["copied", sonicTinyCopy("Copiou um link de faixa", "Copied a track link", "Copió un enlace de pista")],
+    ["sharedOpened", sonicTinyCopy("Abriu uma faixa por link", "Opened a track link", "Abrió un enlace de pista")]
   ];
   const fragment = document.createDocumentFragment();
   definitions.forEach(([key, label]) => {
@@ -51735,6 +51741,7 @@ function openPremiumFromDailyRadar() {
 }
 
 function ensureDailyRadarReady() {
+  if (!isAppStoreRuntimeMode() && window.SonicReleaseFlags?.premiumPromotion !== true) return;
   if (dailyRadarController) { dailyRadarController.refresh(); return; }
   dailyRadarController = window.SonicDailyRadarUi?.create({
     root: document.getElementById("dailyRadarPanel"),
@@ -54222,6 +54229,10 @@ function updateDiscoverySequenceBadges(track) {
 function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   resetSwipeCardPosition();
   const hasTrack = Boolean(track);
+  const shareButton = document.getElementById("shareTrackBtn");
+  if (shareButton) shareButton.disabled = !hasTrack;
+  const shareStatus = document.getElementById("sharedTrackStatus");
+  if (shareStatus) shareStatus.hidden = true;
   const unknownTrackText = currentLanguage === "en" ? "Untitled track" : currentLanguage === "es" ? "Pista sin titulo" : "Faixa sem titulo";
   const unknownArtistText = currentLanguage === "en" ? "Unknown artist" : currentLanguage === "es" ? "Artista desconocido" : "Artista desconhecido";
   if (swipeFeedbackDeck) swipeFeedbackDeck.classList.toggle("is-empty", !hasTrack);
@@ -56129,7 +56140,7 @@ async function renderPreview(track, options = {}) {
     recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
   const preferredImmediateEmbed = preferredEmbeddedAutoplaySource(track);
   const shouldStartImmediateEmbed = Boolean(
-    previewAutoplayRequested() &&
+    options.autoplay !== false && previewAutoplayRequested() &&
     preferredImmediateEmbed &&
     (
       preferredImmediateEmbed === "soundcloud" ||
@@ -56377,7 +56388,7 @@ async function renderPreview(track, options = {}) {
       }
     }
   }
-  if (isStillCurrentPreviewTrack() && previewAutoplayRequested()) {
+  if (isStillCurrentPreviewTrack() && options.autoplay !== false && previewAutoplayRequested()) {
     const autoplayStarted = await attemptRenderedPreviewAutoplay(track, {
       hasDirectPreview: Boolean(playablePreview)
     });
@@ -58330,6 +58341,86 @@ function discoveryExperienceCopy() {
   return window.SonicDiscoveryExperience.copy[currentLanguage] || window.SonicDiscoveryExperience.copy.pt;
 }
 
+function webDiscoveryCopy() {
+  return window.SonicDiscoveryExperience.webCopy[currentLanguage] || window.SonicDiscoveryExperience.webCopy.en;
+}
+
+async function shareCatalogTrack(track, button) {
+  if (!track?.artist || !track?.song || !track?.style) return;
+  if (button) button.disabled = true;
+  try {
+    const url = window.SonicDiscoveryExperience.buildTrackLink({
+      key: recommendationTrackKey(track), style: track.style, language: currentLanguage,
+      baseUrl: isAppStoreRuntimeMode() ? SONIC_PRODUCTION_ORIGIN : currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN
+    });
+    const method = "clipboard";
+    try {
+      // Clipboard permission may be denied; retain a selectable, visible link.
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(url);
+    } catch (_) {
+      const fallback = document.getElementById("shareLinkFallback");
+      const field = document.getElementById("shareLinkText");
+      if (fallback && field) {
+        setActiveAppTab("discover");
+        fallback.hidden = false;
+        field.value = url;
+        field.focus();
+        field.select();
+      }
+      return;
+    }
+    trackRecommendationEvent("track_link_copied", track, {}, { method, source: "share" });
+    showToast(webDiscoveryCopy().shared);
+  } catch (_) {
+    showToast(webDiscoveryCopy().missing);
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+async function openSharedCatalogTrack() {
+  const request = window.SonicDiscoveryExperience?.parseTrackLink(currentAppUrl()?.href);
+  if (!request) return;
+  const status = document.getElementById("sharedTrackStatus");
+  const showStatus = key => {
+    if (status) { status.textContent = webDiscoveryCopy()[key]; status.hidden = false; }
+  };
+  if (request.invalid || !Object.hasOwn(STYLE_BPM_RULES, request.style)) { showStatus("missing"); return; }
+  const profileKey = sessionProfileKey();
+  const previousTrack = currentRecommendation;
+  const previousTab = currentActiveAppTabName();
+  showStatus("opening");
+  try {
+    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(track =>
+      track && track.style === request.style && recommendationTrackKey(track) === request.key && isTrackEligibleForRecommendation(track));
+    let track = resolveTrack();
+    if (!track) {
+      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: request.style }), 8000, null);
+      track = resolveTrack();
+    }
+    // A late link must never replace a newer discovery, navigation or another profile.
+    if (profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation || previousTab !== currentActiveAppTabName() || recommendationRunBusy) {
+      if (status) status.hidden = true;
+      return;
+    }
+    if (!track) { showStatus("missing"); return; }
+    stopAllActivePlayback({ reason: "shared_catalog_track" });
+    setActiveAppTab("discover");
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
+    firstRecommendationCompleted = true;
+    markRecommendationPresented(track);
+    updateStats();
+    // Receiving a link is not a play gesture, even when autoplay is enabled.
+    void renderPreview(track, { fast: true, autoplay: false }).catch(() => null);
+    showStatus("opened");
+    document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
+    trackRecommendationEvent("shared_track_opened", track, {}, { source: "share" });
+  } catch (_) {
+    if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation) showStatus("missing");
+  }
+}
+
 function selectLibraryTracks(entries) {
   return window.SonicDiscoveryExperience.selectTracks(entries,
     document.getElementById("librarySearch")?.value || "",
@@ -58350,7 +58441,7 @@ async function openSavedLibraryTrack(entry, button) {
       .find(candidate => candidate && recommendationTrackKey(candidate) === normalize(entry.key) && isTrackEligibleForRecommendation(candidate));
     let track = resolveTrack();
     if (!track) {
-      await hydrateExternalDatasetPackInBackground({ style: entry.style || "" });
+      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: entry.style || "" }), 8000, null);
       track = resolveTrack();
     }
     if (profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation) return;
@@ -58359,6 +58450,7 @@ async function openSavedLibraryTrack(entry, button) {
       return;
     }
     stopAllActivePlayback({ reason: "saved_library_replay" });
+    setActiveAppTab("discover");
     restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null });
     trackRecommendationEvent("saved_track_replayed", track, lastPrefs || {}, { source: "library" });
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
@@ -58426,6 +58518,12 @@ function renderLikedTrackHistory() {
     play.setAttribute("aria-label", `${discoveryExperienceCopy().play}: ${entry.song}, ${entry.artist}`);
     play.addEventListener("click", () => void openSavedLibraryTrack(entry, play));
     actions.appendChild(play);
+    const share = document.createElement("button");
+    share.type = "button";
+    share.textContent = webDiscoveryCopy().share;
+    share.setAttribute("aria-label", `${webDiscoveryCopy().share}: ${entry.song}, ${entry.artist}`);
+    share.addEventListener("click", () => void shareCatalogTrack(entry, share));
+    actions.appendChild(share);
     [
       { label: t("summaryLikedTrackOpenSpotify"), url: entry.spotifyUrl },
       { label: t("summaryLikedTrackOpenYoutube"), url: entry.youtubeUrl },
@@ -60128,6 +60226,7 @@ function socialDiscussionCopy(kind) {
 }
 
 function openSocialDiscussion(kind = "track") {
+  if (shouldDisableSocialCommentsForAppStore()) return;
   socialCommentsState.videoSource = kind === "dj-video" ? "dj" : "track";
   const targetType = kind.includes("video") ? "video" : "track";
   if (!currentSocialCommentTarget(targetType)) {
@@ -63893,6 +63992,10 @@ bind(trackPreview, "play", () => {
   setPreviewPrimaryPlaybackState("playing");
   setTrackPreviewVisualState("playing");
   listeningPrompt?.classList.remove("hidden");
+});
+
+bind(trackPreview, "playing", () => {
+  if (!trackPreviewElementMatchesTrack(currentRecommendation)) return;
   try {
     trackRecommendationEvent("preview_played", currentRecommendation, lastPrefs || {}, {
       source: "audio_preview",
@@ -65408,6 +65511,7 @@ async function bootSonicSearch() {
     }
     else if (shouldAutoEnterDiscoveryForAppStore()) startLocalProfileFlow({ preferStored: true, showGuide: false });
     else if (qaPreviewMode) enterQaPreviewMode();
+    else if (!isAppStoreRuntimeMode() && !hasCompletedInitialEntry()) startLocalProfileFlow({ preferStored: true, showGuide: false });
     else if (hasCompletedInitialEntry()) await resumeReturningUserExperience();
     else if (shouldShowAuthOnBootForAppStore()) await showAuthScreen();
     else showIntroScreen();
@@ -65439,7 +65543,7 @@ async function bootSonicSearch() {
     language: () => currentLanguage,
     signIn: () => void showAuthScreen()
   });
-  userProfileController = window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
+  userProfileController = window.SonicReleaseFlags?.publicProfiles === true ? window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
     session: () => socialState.session,
     freshSession: async () => {
       await ensureFreshSocialSession({ clearOnFailure: true });
@@ -65461,13 +65565,19 @@ async function bootSonicSearch() {
       hydrateSocialProfileInputs(socialState.profile);
       renderSocialUi({ preserveStatus: true });
     }
-  });
+  }) : null;
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
-    openLibrary: () => setActiveAppTab("profile", { focusPanel: true })
+    openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("profile", { focusPanel: true }); }
+  });
+  bind(document.getElementById("shareTrackBtn"), "click", () => void shareCatalogTrack(currentRecommendation, document.getElementById("shareTrackBtn")));
+  bind(document.getElementById("shareLinkClose"), "click", () => {
+    document.getElementById("shareLinkFallback").hidden = true;
+    document.getElementById("shareTrackBtn")?.focus();
   });
   if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
+  if (!pendingSocialAuthRedirect && !shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) void openSharedCatalogTrack();
 }
 
 void bootSonicSearch();
