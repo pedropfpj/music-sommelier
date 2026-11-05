@@ -54,6 +54,13 @@
       errors: { login_required: 'Tu sesión caducó. Entra de nuevo para guardar.', profile_setup_required: 'El editor necesita actualizar la base de datos. Nada se publicó. Inténtalo después de la configuración.', music_api_disabled: 'El perfil online no está disponible en esta versión. Nada se guardó.', profile_storage_unavailable: 'No se pudo conectar. Tus cambios siguen en pantalla; intenta guardar de nuevo.', username_taken: 'Ese @usuario ya está en uso. Elige otro.', invalid_username: 'Usa de 3 a 30 letras sin acento, números o _.', invalid_display_name: 'Escribe un nombre de hasta 80 caracteres.', invalid_bio: 'La bio debe tener hasta 280 caracteres.', invalid_privacy: 'Revisa las opciones de visibilidad.', invalid_photo: 'No pude abrir esa foto. Elige un JPG, PNG o WebP válido.', photo_too_large: 'La foto debe tener hasta 8 MB.', profile_text_not_allowed: 'Revisa el nombre y la bio para mantener una comunidad respetuosa.', durable_rate_limit_required: 'La protección de ediciones aún no está configurada. Nada se guardó.', daily_music_api_limit_reached: 'Demasiadas ediciones hoy. Inténtalo más tarde.', photo_processing: 'Espera a que se prepare la foto antes de guardar.' }
     }
   };
+  const additions = {
+    pt: { shareLink: 'Permitir que qualquer pessoa com o link veja meu perfil, mesmo sem conta', linkBadge: 'Público por link', publicHint: 'Seu nome e @usuário aparecem na comunidade. O acesso pelo link segue a escolha abaixo.', preferences: 'Seu gosto musical', preferencesHint: 'Escolha até 12 estilos para orientar suas descobertas. Compartilhar essas escolhas é opcional.', findStyle: 'Buscar estilo', share: 'Compartilhar perfil', signout: 'Sair da conta', copied: 'Link do perfil copiado.', manualLink: 'Copie este link', sharePrivate: 'Ative a visibilidade e salve para compartilhar seu perfil.', publicTitle: 'Perfil da comunidade', close: 'Fechar perfil', publicLogin: 'Entre para ver este perfil', unavailable: 'Este perfil não está disponível.', noStyles: 'Nenhum estilo encontrado.', preferenceLimit: 'Você pode escolher até 12 estilos.', selected: 'selecionados', draftRestored: 'Recuperamos suas alterações. Revise antes de salvar.' },
+    en: { shareLink: 'Let anyone with the link view my profile, even without an account', linkBadge: 'Public by link', publicHint: 'Your name and @username appear in the community. Link access follows your choice below.', preferences: 'Your music taste', preferencesHint: 'Choose up to 12 styles to guide your discoveries. Sharing these choices is optional.', findStyle: 'Find a style', share: 'Share profile', signout: 'Sign out', copied: 'Profile link copied.', manualLink: 'Copy this link', sharePrivate: 'Enable visibility and save before sharing your profile.', publicTitle: 'Community profile', close: 'Close profile', publicLogin: 'Sign in to view this profile', unavailable: 'This profile is unavailable.', noStyles: 'No styles found.', preferenceLimit: 'You can choose up to 12 styles.', selected: 'selected', draftRestored: 'Your changes were recovered. Review them before saving.' },
+    es: { shareLink: 'Permitir que cualquiera con el enlace vea mi perfil, incluso sin cuenta', linkBadge: 'Público por enlace', publicHint: 'Tu nombre y @usuario aparecen en la comunidad. El acceso por enlace sigue tu elección de abajo.', preferences: 'Tu gusto musical', preferencesHint: 'Elige hasta 12 estilos para orientar tus descubrimientos. Compartir estas elecciones es opcional.', findStyle: 'Buscar estilo', share: 'Compartir perfil', signout: 'Cerrar sesión', copied: 'Enlace del perfil copiado.', manualLink: 'Copia este enlace', sharePrivate: 'Activa la visibilidad y guarda para compartir tu perfil.', publicTitle: 'Perfil de la comunidad', close: 'Cerrar perfil', publicLogin: 'Entra para ver este perfil', unavailable: 'Este perfil no está disponible.', noStyles: 'No se encontraron estilos.', preferenceLimit: 'Puedes elegir hasta 12 estilos.', selected: 'seleccionados', draftRestored: 'Recuperamos tus cambios. Revísalos antes de guardar.' }
+  };
+  for (const lang of Object.keys(copy)) { Object.assign(copy[lang], additions[lang]); copy[lang].errors.invalid_preferences = additions[lang].preferenceLimit; }
+  const normalizeSearch = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   function validate(draft) {
     if (!draft.displayName.trim() || [...draft.displayName.trim()].length > 80 || /[\u0000-\u001f\u007f]/.test(draft.displayName)) return 'invalid_display_name';
     if (!/^[a-z0-9][a-z0-9_]{2,29}$/.test(draft.username.trim().toLowerCase())) return 'invalid_username';
@@ -71,23 +78,28 @@
     root.dataset.profileMounted = 'true';
     const $ = selector => root.querySelector(selector);
     const form = $('form'), name = $('[name=displayName]'), handle = $('[name=username]'), bio = $('[name=bio]');
+    const styleSearch = $('[data-profile-style-search]'), styleOptions = $('[data-profile-style-options]');
+    let selectedStyles = new Set();
     const photoInput = $('[name=photo]'), status = $('[data-profile-status]');
     const save = $('[data-profile-save]'), edit = $('[data-profile-edit]');
-    const controls = { public: $('[name=public]'), photo: $('[name=sharePhoto]'), bio: $('[name=shareBio]'), styles: $('[name=shareStyles]') };
+    const controls = { link: $('[name=shareLink]'), public: $('[name=public]'), photo: $('[name=sharePhoto]'), bio: $('[name=shareBio]'), styles: $('[name=shareStyles]') };
     const local = /^(localhost|127\.0\.0\.1)$/.test(global.location.hostname);
     const query = new URLSearchParams(global.location.search);
     const previewMode = local && query.get('qa') === '1' && query.get('profilePreview') === '1';
     let userId = '', generation = 0, loaded = false, loading = false, attempted = false, busy = false, dirty = false, editing = false;
     let savedRow = null, avatarUrl = '', photoData = '', photoPreparing = false, photoGeneration = 0, removePhoto = false, timer = 0;
+    const loginRetry = document.createElement('button'); loginRetry.type = 'button'; loginRetry.hidden = true; status.after(loginRetry);
+    loginRetry.addEventListener('click', () => { persistDraft(); adapter.signIn(); });
     function c() { return copy[adapter.language()] || copy.pt; }
     function tell(key, error = false) {
       status.textContent = c().errors[key] || c()[key] || c().errors.profile_storage_unavailable;
       status.classList.toggle('error', error);
       status.setAttribute('role', error ? 'alert' : 'status');
+      loginRetry.hidden = key !== 'login_required';
     }
     function draft() {
       return { displayName: name.value, username: handle.value.toLowerCase(), bio: bio.value,
-        privacy: Object.fromEntries(Object.entries(controls).map(([key, el]) => [key, el.checked])) };
+        preferences: [...selectedStyles], privacy: Object.fromEntries(Object.entries(controls).map(([key, el]) => [key, el.checked])) };
     }
     function setAvatar(el, url, label) {
       el.replaceChildren();
@@ -98,13 +110,17 @@
       } else el.textContent = (label || 'S').slice(0, 1).toUpperCase();
     }
     function renderPreview() {
-      const value = draft(), view = project(value, savedRow?.favorite_styles || []);
+      const value = draft(), view = project(value, value.preferences);
       const photo = photoData ? `data:image/jpeg;base64,${photoData}` : removePhoto ? '' : avatarUrl;
       setAvatar($('[data-profile-avatar]'), photo, value.displayName);
       $('[data-profile-own-name]').textContent = savedRow?.display_name || value.displayName;
       $('[data-profile-own-handle]').textContent = savedRow?.username ? `@${savedRow.username}` : '';
       $('[data-profile-own-bio]').textContent = savedRow?.bio || '';
       $('[data-profile-own-bio]').hidden = !savedRow?.bio;
+      renderStyleChips($('[data-profile-own-styles]'), savedRow?.musical_preferences || []);
+      $('[data-profile-share]').hidden = editing || !savedRow?.profile_public;
+      $('[data-profile-signout]').disabled = busy;
+      $('[data-profile-style-count]').textContent = `${selectedStyles.size}/12 ${c().selected}`;
       $('[data-profile-private-preview]').hidden = Boolean(view);
       $('[data-profile-public-preview]').hidden = !view;
       if (view) {
@@ -114,22 +130,23 @@
         $('[data-profile-preview-bio]').textContent = view.bio;
         $('[data-profile-preview-bio]').hidden = !view.bio;
         const styles = $('[data-profile-preview-styles]'); styles.replaceChildren();
-        for (const style of view.styles.slice(0, 6)) {
+        for (const style of view.styles.slice(0, 12)) {
           const span = document.createElement('span'); span.textContent = adapter.styleLabel?.(style) || style; styles.append(span);
         }
       }
       $('[data-profile-bio-count]').textContent = `${[...bio.value].length}/280`;
-      $('[data-profile-badge]').textContent = savedRow?.profile_public === true ? c().publicBadge : c().privateBadge;
-      for (const key of ['photo', 'bio', 'styles']) controls[key].disabled = !value.privacy.public || busy;
+      $('[data-profile-badge]').textContent = savedRow?.profile_public === true ? (savedRow.profile_link_public ? c().linkBadge : c().publicBadge) : c().privateBadge;
+      for (const key of ['link', 'photo', 'bio', 'styles']) controls[key].disabled = !value.privacy.public || busy;
       $('[data-profile-remove]').disabled = busy || (!photoData && !avatarUrl);
     }
     function render() {
       root.querySelectorAll('[data-profile-copy]').forEach(el => { el.textContent = c()[el.dataset.profileCopy] || ''; });
+      loginRetry.textContent = c().login;
       $('[data-profile-demo]').hidden = !previewMode;
       $('[data-profile-login-panel]').hidden = Boolean(userId);
       $('[data-profile-content]').hidden = !userId || !loaded;
       $('[data-profile-retry]').hidden = !userId || loaded || loading;
-      form.hidden = !editing;
+      form.hidden = !editing; $('.user-profile-layout').hidden = !editing;
       edit.hidden = editing || !loaded;
       root.setAttribute('aria-busy', String(busy || loading));
       form.querySelectorAll('input,textarea,button').forEach(el => { el.disabled = busy; });
@@ -142,17 +159,20 @@
       name.value = row.display_name || adapter.suggestName() || '';
       handle.value = row.username || adapter.suggestUsername() || '';
       bio.value = row.bio || '';
+      selectedStyles = new Set(row.musical_preferences || []); styleSearch.value = ''; renderStyleOptions();
       controls.public.checked = row.profile_public === true;
+      controls.link.checked = row.profile_public === true ? row.profile_link_public === true : true;
       controls.photo.checked = row.show_avatar === true;
       controls.bio.checked = row.show_bio === true;
       controls.styles.checked = row.show_styles === true;
       photoData = ''; removePhoto = false; photoPreparing = false; photoGeneration++; photoInput.value = ''; dirty = false;
       render();
     }
-    async function call(body) {
+    async function call(body, username = '') {
+      const owner = userId, requestGeneration = generation;
       const session = await adapter.freshSession();
-      if (!session?.access_token || session.user?.id !== userId) throw new Error('login_required');
-      const response = await fetch(adapter.endpoint(), {
+      if (!session?.access_token || session.user?.id !== owner || owner !== userId || requestGeneration !== generation) throw new Error('login_required');
+      const response = await fetch(`${adapter.endpoint()}${username ? `?username=${encodeURIComponent(username)}` : ''}`, {
         method: body ? 'POST' : 'GET', cache: 'no-store', signal: AbortSignal.timeout(20000),
         headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
         body: body ? JSON.stringify(body) : undefined
@@ -165,11 +185,11 @@
       if (!userId || loading) return;
       const token = generation; loading = true; attempted = true; tell('loading'); render();
       try {
-        const result = previewMode ? { profile: { display_name: 'Sonic Listener', username: 'sonic_listener', bio: '', favorite_styles: ['indie', 'reggae', 'house'] } } : await call();
+        const result = previewMode ? { profile: { display_name: 'Sonic Listener', username: 'sonic_listener', bio: '', musical_preferences: ['organic_house', 'idm'] } } : await call();
         if (token !== generation) return;
         savedRow = result.profile; avatarUrl = result.avatarUrl || ''; loaded = true; editing = !savedRow;
         if (!previewMode) adapter.onLoaded?.(savedRow, avatarUrl);
-        resetDraft(); status.textContent = '';
+        resetDraft(); status.textContent = ''; restoreDraft();
       } catch (error) { if (token === generation) tell(error.message, true); }
       finally { if (token === generation) { loading = false; render(); } }
     }
@@ -177,7 +197,7 @@
       const id = previewMode ? 'local-profile-editor-preview' : adapter.session()?.user?.id || '';
       if (id !== userId) {
         generation++; userId = id; loaded = false; loading = false; attempted = false; busy = false; savedRow = null; avatarUrl = ''; editing = false;
-        status.textContent = ''; resetDraft();
+        status.textContent = ''; resetDraft(); if (publicDialog.open) void openPublicProfile(publicHandle);
       }
       render();
       if (userId && !loaded && !loading && !attempted) void load();
@@ -203,37 +223,135 @@
       finally { URL.revokeObjectURL(url); if (token === generation && selection === photoGeneration) { photoPreparing = false; render(); } }
     }
     edit.addEventListener('click', () => { editing = true; resetDraft(); status.textContent = ''; name.focus(); });
-    $('[data-profile-cancel]').addEventListener('click', () => { editing = false; resetDraft(); status.textContent = ''; edit.focus(); });
+    $('[data-profile-cancel]').addEventListener('click', () => { editing = false; clearStoredDraft(); resetDraft(); status.textContent = ''; edit.focus(); });
     $('[data-profile-photo]').addEventListener('click', () => photoInput.click());
     photoInput.addEventListener('change', () => void choosePhoto(photoInput.files?.[0]));
     $('[data-profile-remove]').addEventListener('click', () => { photoGeneration++; photoPreparing = false; photoData = ''; removePhoto = true; dirty = true; photoInput.value = ''; tell('unsaved'); render(); });
-    form.addEventListener('input', event => { if (event.target !== photoInput) { dirty = true; tell('unsaved'); render(); } });
-    $('[data-profile-login]').addEventListener('click', () => adapter.signIn());
+    form.addEventListener('input', event => { if (event.target !== photoInput && event.target !== styleSearch && !event.target.matches('[data-style]')) { dirty = true; tell('unsaved'); render(); } });
+    $('[data-profile-login]').addEventListener('click', () => { persistDraft(); adapter.signIn(); });
+    $('[data-profile-signout]').addEventListener('click', () => { clearStoredDraft(); adapter.signOut?.(); });
+    $('[data-profile-share]').addEventListener('click', () => void shareProfile(savedRow?.username));
+    styleSearch.addEventListener('input', renderStyleOptions);
+    styleOptions.addEventListener('change', event => {
+      const input = event.target;
+      if (!input.matches('input[data-style]')) return;
+      if (input.checked && selectedStyles.size >= 12) { input.checked = false; tell('preferenceLimit', true); return; }
+      if (input.checked) selectedStyles.add(input.dataset.style); else selectedStyles.delete(input.dataset.style);
+      dirty = true; tell('unsaved'); render();
+    });
     $('[data-profile-retry]').addEventListener('click', () => void load());
     form.addEventListener('submit', async event => {
       event.preventDefault();
       if (busy || !dirty) return;
       if (photoPreparing) { tell('photo_processing', true); return; }
       const body = draft(), invalid = validate(body);
-      if (invalid) { tell(invalid, true); ({ invalid_display_name: name, invalid_username: handle, invalid_bio: bio }[invalid]).focus(); return; }
+      [name, handle, bio].forEach(el => el.removeAttribute('aria-invalid'));
+      if (invalid) { tell(invalid, true); const field = ({ invalid_display_name: name, invalid_username: handle, invalid_bio: bio }[invalid]); field.setAttribute('aria-invalid', 'true'); field.focus(); return; }
       const token = generation; busy = true; tell('saving'); render();
       try {
         const result = previewMode ? {
           profile: { ...savedRow, display_name: body.displayName.trim(), username: body.username.trim(), bio: body.bio.trim(),
-            profile_public: body.privacy.public, show_avatar: body.privacy.photo, show_bio: body.privacy.bio, show_styles: body.privacy.styles },
+            musical_preferences: body.preferences, profile_public: body.privacy.public, profile_link_public: body.privacy.public && body.privacy.link, show_avatar: body.privacy.photo, show_bio: body.privacy.bio, show_styles: body.privacy.styles },
           avatarUrl: photoData ? `data:image/jpeg;base64,${photoData}` : removePhoto ? '' : avatarUrl
         } : await call({ ...body, ...(photoData ? { photo: photoData } : {}), removePhoto });
         if (token !== generation) return;
         savedRow = result.profile; avatarUrl = result.avatarUrl || ''; editing = false;
         if (!previewMode) adapter.onSaved(savedRow, avatarUrl);
-        resetDraft(); tell('saved'); edit.focus();
-      } catch (error) { if (token === generation) tell(error.message, true); }
-      finally { if (token === generation) { busy = false; render(); } }
+        clearStoredDraft(); resetDraft(); tell('saved'); edit.focus();
+      } catch (error) { if (token === generation) { tell(error.message, true); if (error.message === 'username_taken') { handle.setAttribute('aria-invalid', 'true'); handle.focus(); } if (error.message === 'login_required') persistDraft(); } }
+      finally { if (token === generation) { busy = false; render(); if (handle.getAttribute("aria-invalid") === "true") handle.focus(); } }
     });
+    function renderStyleChips(container, styles) {
+      container.replaceChildren();
+      for (const style of styles.slice(0, 12)) { const chip = document.createElement('span'); chip.textContent = adapter.styleLabel?.(style) || style; container.append(chip); }
+    }
+    function renderStyleOptions() {
+      const q = normalizeSearch(styleSearch.value);
+      const styles = (adapter.styles?.() || []).filter(style => normalizeSearch(adapter.styleLabel?.(style) || style).includes(q));
+      styleOptions.replaceChildren();
+      for (const style of styles) {
+        const label = document.createElement('label'); label.className = 'profile-choice';
+        const input = document.createElement('input'); input.type = 'checkbox'; input.dataset.style = style; input.checked = selectedStyles.has(style); input.disabled = busy;
+        const title = document.createElement('span'); title.textContent = adapter.styleLabel?.(style) || style;
+        label.append(input, title); styleOptions.append(label);
+      }
+      if (!styles.length) styleOptions.textContent = c().noStyles;
+    }
+    // Session storage is scoped to the account, short lived, and contains no photo.
+    // Returning through OAuth can recover text; a different account cannot inherit it.
+    function persistDraft() {
+      if (!userId || !dirty || previewMode) return;
+      try { sessionStorage.setItem('sonic.profile.pending', JSON.stringify({ owner: userId, expires: Date.now() + 30 * 60 * 1000, value: draft() })); } catch (_) {}
+    }
+    function clearStoredDraft() { try { sessionStorage.removeItem('sonic.profile.pending'); } catch (_) {} }
+    function restoreDraft() {
+      let pending; try { pending = JSON.parse(sessionStorage.getItem('sonic.profile.pending') || 'null'); } catch (_) {}
+      if (!pending) return;
+      clearStoredDraft();
+      if (pending.owner !== userId || pending.expires < Date.now()) return;
+      const value = pending.value;
+      if (!value || typeof value.displayName !== 'string' || !value.privacy) return;
+      name.value = value.displayName; handle.value = value.username || ''; bio.value = value.bio || '';
+      selectedStyles = new Set((value.preferences || []).filter(style => (adapter.styles?.() || []).includes(style)).slice(0, 12));
+      for (const [key, input] of Object.entries(controls)) input.checked = value.privacy[key] === true;
+      dirty = true; editing = true; renderStyleOptions(); render(); tell('draftRestored');
+    }
+    function profileLink(username) {
+      const url = new URL(global.location.pathname, global.location.origin);
+      url.searchParams.set('profile', username); url.searchParams.set('lang', adapter.language()); return url.href;
+    }
+    async function shareProfile(username, target = root) {
+      if (!username || (target === root && !savedRow?.profile_public)) { tell('sharePrivate'); return; }
+      const link = profileLink(username);
+      try { await navigator.clipboard.writeText(link); if (target === root) tell('copied'); else publicStatus.textContent = c().copied; }
+      catch (_) { const panel = target.querySelector('[data-profile-link-panel]'); panel.hidden = false; const input = target.querySelector('[data-profile-link]'); input.value = link; input.focus(); input.select(); }
+    }
+    const publicDialog = document.createElement('dialog'); publicDialog.className = 'user-profile-card user-public-profile';
+    publicDialog.setAttribute('aria-labelledby', 'publicProfileTitle');
+    publicDialog.innerHTML = '<header><h4 id="publicProfileTitle"></h4><button type="button" data-public-close></button></header><p data-public-status role="status"></p><button type="button" data-public-login hidden></button><button type="button" data-public-retry hidden></button><div data-public-body hidden><div class="user-profile-identity"><div class="user-profile-avatar" data-public-avatar aria-hidden="true"></div><div><strong data-public-name></strong><p data-public-handle></p></div></div><p data-public-bio></p><div class="user-profile-styles" data-public-styles></div><div class="user-profile-actions"><button type="button" data-public-share></button></div><label data-profile-link-panel hidden><span data-public-link-label></span><input data-profile-link readonly type="url" /></label></div>';
+    document.body.append(publicDialog);
+    const p$ = selector => publicDialog.querySelector(selector), publicStatus = p$('[data-public-status]');
+    let publicHandle = '', publicGeneration = 0;
+    p$('[data-public-close]').addEventListener('click', () => publicDialog.close());
+    publicDialog.addEventListener('close', () => { publicGeneration++; p$('[data-public-body]').hidden = true; p$('[data-public-avatar]').replaceChildren(); });
+    p$('[data-public-login]').addEventListener('click', () => { const url = new URL(global.location.href); url.searchParams.set('profile', publicHandle); history.replaceState(null, '', url); publicDialog.close(); adapter.signIn(); });
+    p$('[data-public-retry]').addEventListener('click', () => void openPublicProfile(publicHandle));
+    p$('[data-public-share]').addEventListener('click', () => void shareProfile(publicHandle, publicDialog));
+    async function openPublicProfile(username) {
+      if (!/^[a-z0-9][a-z0-9_]{2,29}$/.test(username || '')) return;
+      publicHandle = username; const token = ++publicGeneration, owner = userId;
+      p$('#publicProfileTitle').textContent = c().publicTitle;
+      p$('[data-public-close]').textContent = c().close; p$('[data-public-login]').textContent = c().publicLogin;
+      p$('[data-public-share]').textContent = c().share; p$('[data-public-retry]').textContent = c().retry; p$('[data-public-link-label]').textContent = c().manualLink;
+      p$('[data-public-body]').hidden = true; p$('[data-profile-link-panel]').hidden = true; p$('[data-public-retry]').hidden = true;
+      p$('[data-public-avatar]').replaceChildren(); p$('[data-public-login]').hidden = !!userId;
+      publicStatus.textContent = c().loading; p$('[data-public-login]').hidden = true;
+      if (!publicDialog.open) publicDialog.showModal();
+      try {
+        let result;
+        if (userId) result = await call(undefined, username);
+        else {
+          const response = await fetch(`${adapter.endpoint()}?username=${encodeURIComponent(username)}`, { cache: 'no-store', signal: AbortSignal.timeout(20000) });
+          result = await response.json();
+          if (!response.ok || !result.ok) throw new Error(result.error || 'profile_storage_unavailable');
+        }
+        if (token !== publicGeneration || owner !== userId || !publicDialog.open) return;
+        const profile = result.publicProfile;
+        p$('[data-public-name]').textContent = profile.displayName; p$('[data-public-handle]').textContent = `@${profile.username}`;
+        p$('[data-public-bio]').textContent = profile.bio; p$('[data-public-bio]').hidden = !profile.bio;
+        renderStyleChips(p$('[data-public-styles]'), profile.styles || []); setAvatar(p$('[data-public-avatar]'), profile.avatarUrl, profile.displayName);
+        p$('[data-public-body]').hidden = false; publicStatus.textContent = '';
+      } catch (error) {
+        if (token !== publicGeneration || owner !== userId) return;
+        publicStatus.textContent = error.message === 'profile_not_found' ? c().unavailable : error.message === 'login_required' ? c().publicLogin : (c().errors[error.message] || c().errors.profile_storage_unavailable);
+        p$('[data-public-login]').hidden = error.message !== 'login_required';
+        p$('[data-public-retry]').hidden = error.message === 'profile_not_found';
+      }
+    }
     global.addEventListener('beforeunload', event => { if (dirty && !previewMode) { event.preventDefault(); event.returnValue = ''; } });
     global.addEventListener('sonic:profile-changed', sync);
     global.addEventListener('sonic:online-session-changed', sync);
-    global.addEventListener('sonic:language-changed', render);
+    global.addEventListener('sonic:language-changed', () => { renderStyleOptions(); render(); });
     // Refresh owner photo capabilities only when this card is visible; never publish a URL.
     timer = global.setInterval(async () => {
       if (!userId || !loaded || busy || previewMode || !root.getBoundingClientRect().height || document.hidden) return;
@@ -250,7 +368,8 @@
       } catch (_) {}
     }, 45000);
     sync();
-    return { sync, destroy() { clearInterval(timer); } };
+    const incoming = query.get('profile'); if (incoming) void openPublicProfile(incoming.toLowerCase());
+    return { sync, openPublicProfile, destroy() { clearInterval(timer); publicDialog.remove(); } };
   }
   global.SonicUserProfile = { mount, validate, project };
   if (typeof module === 'object' && module.exports) module.exports = { validate, project };

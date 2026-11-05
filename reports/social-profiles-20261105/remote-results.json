@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "projectRef": "uauhiqrflfjhestbupjv",
+  "at": "2026-11-05T20:40:50.890Z",
+  "realServices": [
+    "Supabase Auth password and refresh",
+    "PostgREST",
+    "PostgreSQL RLS/RPC",
+    "Storage"
+  ],
+  "checks": [
+    "two real Supabase Auth identities, confirmed without email delivery",
+    "real private Storage upload, signed retrieval, 512px image and stripped metadata; durable profile budget",
+    "unique normalized handle; explicit public-link consent; anonymous projection; actual owner-only RLS",
+    "real comment creation/edit/delete/report/block, verified author, idempotent likes and retry, no resurrection",
+    "real token refresh; saved profile persists; invalid session rejected"
+  ],
+  "notTested": [
+    "Google/Apple OAuth provider callback",
+    "iOS native",
+    "public deployment"
+  ],
+  "productionModified": false,
+  "browserChecks": [
+    "Real password sign-in through local test portal",
+    "Edit name in app UI, save to staging and reload persists",
+    "Sign-out clears owner editor and identity",
+    "Share link copies clean URL without tokens",
+    "Signed-out visitor opens opt-in public profile; private bio omitted",
+    "Desktop and 360px viewport fit without horizontal overflow"
+  ]
+}

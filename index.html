@@ -10,7 +10,7 @@
         window.SONIC_SEARCH_LOCAL_FILE_MODE = true;
       }
     </script>
-    <script src="release-flags.js?v=20261105web1"></script>
+    <script src="release-flags.js?v=20261105profiles1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="Find an electronic track for the moment with swipe, preview, context, and fewer repeats." />
@@ -78,12 +78,12 @@
     </style>
     <link rel="stylesheet" href="styles.min.css?v=20261104social1" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
-    <link rel="stylesheet" href="user-profile.css?v=20260914profile1" />
+    <link rel="stylesheet" href="user-profile.css?v=20261105profiles1" />
     <link rel="stylesheet" href="universal-discovery.css?v=20261023recovery1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
     <link rel="stylesheet" href="weekly-recommends.css?v=20260916weekly1" />
-    <link rel="stylesheet" href="discovery-experience.css?v=20261105web1" />
+    <link rel="stylesheet" href="discovery-experience.css?v=20261105profiles1" />
     <script src="privacy-controls.js?v=20260922privacy1"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -2838,6 +2838,9 @@
               </div>
             </div>
             <p data-profile-own-bio hidden></p>
+            <div class="user-profile-styles" data-profile-own-styles></div>
+            <div class="user-profile-actions"><button type="button" data-profile-share data-profile-copy="share">Compartilhar perfil</button><button type="button" data-profile-signout data-profile-copy="signout">Sair da conta</button></div>
+            <label data-profile-link-panel hidden><span data-profile-copy="manualLink">Copie este link</span><input data-profile-link readonly type="url" /></label>
             <div class="user-profile-layout">
               <form novalidate hidden>
                 <div class="user-profile-actions"><button type="button" data-profile-photo data-profile-copy="photo">Escolher foto</button>
@@ -2855,9 +2858,16 @@
                     <small id="userProfileBioHint" data-profile-copy="bioHint">Conte um pouco sobre você e o som que te move.</small><small id="userProfileBioCount" data-profile-bio-count>0/280</small>
                   </label>
                 </div>
+                <fieldset class="profile-preferences"><legend data-profile-copy="preferences">Seu gosto musical</legend>
+                  <p data-profile-copy="preferencesHint">Escolha até 12 estilos para orientar suas descobertas. Isso não publica seu histórico.</p>
+                  <label class="user-profile-fields"><span data-profile-copy="findStyle">Buscar estilo</span><input type="search" data-profile-style-search autocomplete="off" /></label>
+                  <small data-profile-style-count role="status"></small>
+                  <div class="profile-style-options" data-profile-style-options></div>
+                </fieldset>
                 <fieldset><legend data-profile-copy="privacy">Quem pode ver seu perfil?</legend>
                   <label class="profile-choice"><input name="public" type="checkbox" aria-describedby="userProfileVisibilityHint" /><span data-profile-copy="public">Aparecer para outras pessoas no Sonic</span></label>
                   <small id="userProfileVisibilityHint" data-profile-copy="publicHint">Quem tem uma conta no Sonic poderá ver seu nome e @usuário.</small>
+                  <label class="profile-choice"><input name="shareLink" type="checkbox" /><span data-profile-copy="shareLink">Permitir que qualquer pessoa com o link veja meu perfil, mesmo sem conta</span></label>
                   <label class="profile-choice"><input name="sharePhoto" type="checkbox" /><span data-profile-copy="sharePhoto">Mostrar minha foto</span></label>
                   <label class="profile-choice"><input name="shareBio" type="checkbox" /><span data-profile-copy="shareBio">Mostrar minha bio</span></label>
                   <label class="profile-choice"><input name="shareStyles" type="checkbox" /><span data-profile-copy="shareStyles">Mostrar meus estilos favoritos</span></label>
@@ -3372,6 +3382,9 @@
           </div>
           <div class="social-discussion-reaction">
             <button id="socialTargetLikeBtn" type="button" class="secondary" aria-pressed="false">Curtir</button>
+            <button id="socialTargetShareBtn" type="button" class="secondary">Compartilhar</button>
+            <a id="socialVideoWatchLink" target="_blank" rel="noopener noreferrer" hidden>Ver no YouTube</a>
+            <input id="socialShareLink" readonly type="url" aria-label="Link para compartilhar" hidden />
             <span id="socialTargetLikeCount" class="muted" aria-live="polite"></span>
           </div>
           <div id="socialCommentsComposer" class="social-comments-composer hidden">
@@ -3389,7 +3402,7 @@
           <div id="socialCommentsList" class="social-comments-list"></div>
         </article>
     </dialog>
-    <script defer src="user-profile.js?v=20260914profile1"></script>
+    <script defer src="user-profile.js?v=20261105profiles1"></script>
     <script defer src="privacy-requests.js?v=20260922privacy1"></script>
     <script defer src="catalog-runtime.min.js?v=20261105catalog23"></script>
     <script defer src="daily-djs.js?v=20260911sonicstart1"></script>
@@ -3397,7 +3410,7 @@
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
     <script defer src="weekly-recommends.js?v=20260916weekly1"></script>
-    <script defer src="discovery-experience.js?v=20261105web1"></script>
-    <script defer src="app.min.js?v=20261105web1"></script>
+    <script defer src="discovery-experience.js?v=20261105profiles1"></script>
+    <script defer src="app.min.js?v=20261105profiles1"></script>
   </body>
 </html>

@@ -13,6 +13,11 @@
     en: { share: "Copy track link", saveHint: "Like to save. Your tracks stay in this browser.", copyManually: "Copy this link to share", close: "Close", shared: "Track link ready to share.", opening: "Opening the shared track…", opened: "A discovery found its way to you. Press play to listen.", missing: "This track is not available in the catalog right now. You can listen to a new discovery.", libraryHint: "Saved in this browser. Use Save profile backup to take your library to another device." },
     es: { share: "Copiar enlace de la pista", saveHint: "Dale me gusta para guardar. Tus pistas quedan en este navegador.", copyManually: "Copia este enlace para compartir", close: "Cerrar", shared: "Enlace de la pista listo para compartir.", opening: "Abriendo la pista compartida…", opened: "Una nueva música llegó hasta ti. Pulsa reproducir para escuchar.", missing: "Esta pista no está disponible en el catálogo ahora. Puedes escuchar un nuevo descubrimiento.", libraryHint: "Guardadas en este navegador. Usa Guardar copia del perfil para llevar tu biblioteca a otro dispositivo." }
   };
+  const accountCopy = {
+    pt: { saveHint: "Curta para guardar na sua biblioteca. Sua conta permite sincronizar entre aparelhos.", libraryHint: "Sua biblioteca é privada. Com a conta conectada, o Sonic sincroniza suas faixas entre aparelhos." },
+    en: { saveHint: "Like to save to your library. Your account lets you sync across devices.", libraryHint: "Your library is private. When signed in, Sonic syncs your tracks across devices." },
+    es: { saveHint: "Dale me gusta para guardar en tu biblioteca. Tu cuenta permite sincronizar entre dispositivos.", libraryHint: "Tu biblioteca es privada. Con la cuenta conectada, Sonic sincroniza tus pistas entre dispositivos." }
+  };
   function parseTrackLink(value) {
     try {
       const url = new URL(value);
@@ -51,7 +56,7 @@
     const c = () => copy[adapter.language()] || copy.pt;
     function render() {
       doc.querySelectorAll("[data-experience-copy]").forEach(el => { el.textContent = c()[el.dataset.experienceCopy] || ""; });
-      const web = webCopy[adapter.language()] || webCopy.en;
+      const web = { ...(webCopy[adapter.language()] || webCopy.en), ...(adapter.online?.() ? accountCopy[adapter.language()] || accountCopy.en : {}) };
       doc.querySelectorAll("[data-web-copy]").forEach(el => { el.textContent = web[el.dataset.webCopy] || ""; });
       const hint = doc.getElementById("profileLibraryHint");
       if (hint) hint.textContent = web.libraryHint;
@@ -69,6 +74,7 @@
       });
     });
     root.addEventListener("sonic:language-changed", render);
+    root.addEventListener("sonic:online-session-changed", render);
     render();
   }
   const api = { copy, webCopy, normalize, selectTracks, parseTrackLink, buildTrackLink, mount };

@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-11-05T20:42:45.394Z",
+  "readOnly": true,
+  "configured": true,
+  "checks": {
+    "profilePrivacy": {
+      "ok": false,
+      "status": 400,
+      "code": "42703"
+    },
+    "publicLinks": {
+      "ok": false,
+      "status": 400,
+      "code": "42703"
+    },
+    "explicitPreferences": {
+      "ok": false,
+      "status": 400,
+      "code": "42703"
+    },
+    "commentsV2": {
+      "ok": false,
+      "status": 400,
+      "code": "42703"
+    },
+    "commentRetries": {
+      "ok": false,
+      "status": 400,
+      "code": "42703"
+    },
+    "targetLikes": {
+      "ok": false,
+      "status": 404,
+      "code": "PGRST205"
+    },
+    "profileBudget": {
+      "ok": false,
+      "status": 404,
+      "code": "PGRST205"
+    },
+    "avatarBucket": {
+      "ok": false,
+      "status": 400,
+      "code": "NoSuchBucket"
+    },
+    "authSettings": {
+      "ok": true,
+      "status": 200,
+      "providers": [
+        "google",
+        "apple"
+      ]
+    }
+  }
+}

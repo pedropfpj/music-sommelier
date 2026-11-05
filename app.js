@@ -4839,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261105web1";
+const SONIC_APP_BUILD_ID = "20261105profiles1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10829,6 +10829,7 @@ let pendingSocialOAuthUrl = "";
 let pendingSocialOAuthProvider = "google";
 let pendingNativeSocialAuthCallbackUrl = "";
 let editingSocialCommentId = "";
+let editingSocialCommentDraft = null;
 let djPreviewFrameLoadTimer = 0;
 const authScriptPromises = new Map();
 let externalDatasetImportStarted = false;
@@ -10907,6 +10908,8 @@ let dailyLikeMemoryState = null;
 let dailyDjController = null;
 let dailyRadarController = null;
 let userProfileController = null;
+let pendingSocialCommentRequest = null;
+let sharedSocialVideoOpened = false;
 let privacyRequestsController = null;
 let weeklyRecommendsController = null;
 let dailyDjReminderLaunchPending = false;
@@ -12009,6 +12012,7 @@ function surpriseStyleHopScore(style = "", baseTrack = null) {
     maturityScore * 1.25 +
     styleDiscoveryReadinessScore(styleKey) * 0.36 +
     stylePreferenceSignal(styleKey) * 0.56 +
+    explicitProfilePreferenceScore({ style: styleKey }) +
     (crossFamily ? 3.6 : 0.7) +
     (!baseStyle || styleKey !== baseStyle ? 1.4 : -3.8) -
     Math.min(3.4, exposureCount * 0.82)
@@ -32727,7 +32731,7 @@ function continueFromAuthToDiscover({ showGuide = false, targetTab = "", autoRec
     showUsageGuideScreen({ returnTo: "discover" });
     return;
   }
-  const safeTargetTab = safeAppTabName(targetTab || "");
+  const safeTargetTab = safeAppTabName(targetTab || requestedAppTabFromUrl("discover"));
   enterAppFromWelcome({
     surprise: false,
     autoRecommendation,
@@ -35413,6 +35417,7 @@ function swipeCoverageStyleScore(style = "", sourceTrack = null) {
     Math.min(artists, 28) * 0.072 +
     familyPreferenceSignal(styleKey) * 0.62 +
     styleSignal.net * 0.48 +
+    explicitProfilePreferenceScore({ style: styleKey }) +
     hierarchicalStyleAffinityScore(styleKey, {}) * 1.12 +
     openingDiscoveryRampScore(styleKey) * 1.2 +
     recommendationMaturityScore(styleKey, {}, null) * 1.8;
@@ -35669,6 +35674,7 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
 
       const score =
         adaptiveSignal * 3.6 +
+        explicitProfilePreferenceScore({ style }) +
         rampScore * 1.05 +
         maturityScore * 1.35 +
         Math.min(availablePool.length, 22) * 0.26 +
@@ -50021,6 +50027,12 @@ function trackReleaseFreshnessScore(track) {
   return 0;
 }
 
+function explicitProfilePreferenceScore(track, prefs = {}) {
+  const profile = socialState.profile;
+  if (!socialState.session?.user?.id || profile?.id !== socialState.session.user.id || prefs.style) return 0;
+  return Array.isArray(profile.musical_preferences) && profile.musical_preferences.includes(track?.style) ? 2 : 0;
+}
+
 function personalTasteScore(track, prefs = {}) {
   if (!track) return 0;
   const trackKey = recommendationTrackKey(track);
@@ -50030,6 +50042,7 @@ function personalTasteScore(track, prefs = {}) {
   const trackSignal = Number(trackPreferenceSignals.get(trackKey) || 0);
   let score = 0;
 
+  score += explicitProfilePreferenceScore(track, prefs);
   const learning = adaptiveLearningMultiplier();
   score += trackSignal * 1.3 * learning;
   score += artistLike * 0.72 * learning;
@@ -58717,6 +58730,7 @@ function socialStoreSession(session = null) {
     socialCommentsState.submitting = false;
     socialCommentsState.liking = false;
     editingSocialCommentId = "";
+    editingSocialCommentDraft = null; pendingSocialCommentRequest = null;
     ugcBlockedUserIds = new Set();
     if (socialCommentsInput) socialCommentsInput.value = "";
   }
@@ -58842,6 +58856,10 @@ function socialAuthRedirectUrl() {
       if (isSupportedLanguage(lang)) url.searchParams.set("lang", lang);
       const tab = safeAppTabName(currentActiveAppTabName());
       if (tab && tab !== "discover") url.searchParams.set("tab", tab);
+      const incoming = new URLSearchParams(window.location.search || "");
+      for (const [key, pattern] of [["profile", /^[a-z0-9][a-z0-9_]{2,29}$/], ["video", /^[A-Za-z0-9_-]{11}$/], ["track", /^[a-z0-9_ ]{1,300}$/], ["style", /^[a-z0-9_]{1,80}$/]]) {
+        const value = incoming.get(key); if (value && pattern.test(value)) url.searchParams.set(key, value);
+      }
       return url.toString();
     }
   } catch (error) {
@@ -59445,6 +59463,35 @@ function setupNativeSocialAuthBridge() {
   }
 }
 
+function mountUserProfileIfEnabled() {
+  if (window.SonicReleaseFlags?.publicProfiles !== true || userProfileController) return;
+  userProfileController = window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
+    session: () => socialState.session,
+    freshSession: async () => {
+      await ensureFreshSocialSession({ clearOnFailure: false });
+      return authHasOnlineSession() ? socialState.session : null;
+    },
+    endpoint: () => resolveAppApiUrl("/api/user-profile"),
+    language: () => currentLanguage,
+    suggestName: () => socialSuggestedDisplayName(),
+    suggestUsername: () => socialCleanUsername(socialSuggestedUsername()).slice(0, 30),
+    styleLabel: styleLabelByValue,
+    styles: () => Object.keys(STYLE_BPM_RULES).sort((a, b) => styleLabelByValue(a).localeCompare(styleLabelByValue(b))),
+    signOut: () => void socialSignOut(),
+    signIn: () => void showAuthScreen(),
+    onLoaded: (profile, avatarUrl) => {
+      if (profile?.id === socialState.session?.user?.id) socialState.profile = { ...socialState.profile, ...profile };
+      socialState.profileAvatarUrl = avatarUrl;
+    },
+    onSaved: (profile, avatarUrl) => {
+      socialState.profile = { ...socialState.profile, ...profile };
+      socialState.profileAvatarUrl = avatarUrl;
+      hydrateSocialProfileInputs(socialState.profile);
+      renderSocialUi({ preserveStatus: true });
+    }
+  }) || null;
+}
+
 async function fetchSocialConfig() {
   if (shouldHideSocialLoginForAppStore()) {
     socialState.config = null;
@@ -59455,16 +59502,21 @@ async function fetchSocialConfig() {
   try {
     const endpoint = resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT);
     if (!endpoint) throw new Error("social_config_endpoint_unavailable");
-    const response = await fetch(endpoint, { cache: "no-store" });
+    const response = await fetch(endpoint, { cache: "no-store", signal: AbortSignal.timeout(10000) });
     const config = await response.json();
     socialState.config = config || null;
     socialState.enabled = Boolean(config?.enabled && config?.supabaseUrl && config?.supabaseAnonKey);
     socialState.ready = true;
+    window.SonicConfigureSocialRelease?.(socialState.enabled ? config.features || {} : {});
+    mountUserProfileIfEnabled();
+    renderSocialCommentsPanel();
+    openSharedSocialVideo();
     return config;
   } catch (error) {
     console.warn("Could not load social config", error);
     socialState.ready = true;
     socialState.enabled = false;
+    window.SonicConfigureSocialRelease?.({});
     return null;
   }
 }
@@ -60192,6 +60244,10 @@ function socialCommentsArtistTarget(track = currentRecommendation) {
 }
 
 function socialCommentsVideoTarget() {
+  if (socialCommentsState.videoSource === "shared" && /^[A-Za-z0-9_-]{11}$/.test(socialCommentsState.sharedVideoId || "")) {
+    const videoId = socialCommentsState.sharedVideoId;
+    return { targetType: "video", targetKey: `youtube:${videoId}`, label: `YouTube · ${videoId}`, metadata: { targetLabel: `YouTube · ${videoId}` } };
+  }
   const dj = socialCommentsState.videoSource === "dj";
   const track = dj ? currentDjRecommendation : currentRecommendation;
   const videoId = dj ? extractYouTubeVideoId(track?.setUrl || "")
@@ -60235,6 +60291,35 @@ function openSocialDiscussion(kind = "track") {
   }
   if (!socialDiscussionDialog.open) socialDiscussionDialog.showModal();
   void loadSocialComments({ targetType });
+}
+
+function socialTrackShareUrl(track) {
+  if (!track?.artist || !track?.song || !track?.style) return "";
+  return window.SonicDiscoveryExperience.buildTrackLink({ key: recommendationTrackKey(track), style: track.style, language: currentLanguage, baseUrl: currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN });
+}
+
+function socialVideoShareUrl(videoId) {
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId || "")) return "";
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.searchParams.set("video", videoId); url.searchParams.set("lang", currentLanguage); return url.href;
+}
+
+function openSharedSocialVideo() {
+  if (sharedSocialVideoOpened || shouldDisableSocialCommentsForAppStore()) return;
+  const videoId = new URLSearchParams(window.location.search).get("video");
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId || "")) return;
+  sharedSocialVideoOpened = true;
+  socialCommentsState.videoSource = "shared"; socialCommentsState.sharedVideoId = videoId;
+  if (!socialDiscussionDialog.open) socialDiscussionDialog.showModal();
+  void loadSocialComments({ targetType: "video" });
+}
+
+async function shareSocialTarget() {
+  const target = currentSocialCommentTarget();
+  const url = target?.targetType === "video" ? socialVideoShareUrl(target.targetKey.slice(8)) : socialTrackShareUrl(currentRecommendation);
+  if (!url) return;
+  try { await navigator.clipboard.writeText(url); showToast(sonicTinyCopy("Link copiado.", "Link copied.", "Enlace copiado.")); }
+  catch (_) { const input = document.getElementById("socialShareLink"); input.hidden = false; input.value = url; input.focus(); input.select(); }
 }
 
 async function likeSocialTarget() {
@@ -60429,11 +60514,20 @@ function renderSocialCommentItem(comment = {}) {
   const author = comment.author || {};
   const displayName = String(author.displayName || author.username || "Sonic listener").trim();
   avatar.textContent = displayName.slice(0, 1).toUpperCase() || "S";
+  if (/^https?:\/\//.test(author.avatarUrl || "")) {
+    const photo = document.createElement("img"); photo.src = author.avatarUrl; photo.alt = ""; photo.referrerPolicy = "no-referrer";
+    photo.addEventListener("error", () => { avatar.textContent = displayName.slice(0, 1).toUpperCase() || "S"; }); avatar.replaceChildren(photo);
+  }
   head.appendChild(avatar);
 
   const authorBlock = document.createElement("div");
   authorBlock.className = "social-comment-author";
-  const name = document.createElement("strong");
+  const hasPublicProfile = window.SonicReleaseFlags?.publicProfiles === true && /^[a-z0-9][a-z0-9_]{2,29}$/.test(author.username || "");
+  const name = document.createElement(hasPublicProfile ? "button" : "strong");
+  if (hasPublicProfile) {
+    name.type = "button"; name.className = "comment-profile-link";
+    name.addEventListener("click", () => { socialDiscussionDialog.close(); userProfileController?.openPublicProfile(author.username); });
+  }
   name.textContent = comment.mine ? `${displayName} (${t("socialCommentsMine")})` : displayName;
   authorBlock.appendChild(name);
   const meta = document.createElement("span");
@@ -60451,10 +60545,12 @@ function renderSocialCommentItem(comment = {}) {
     const editor = document.createElement("div");
     editor.className = "social-comment-edit";
     const textarea = document.createElement("textarea");
+    textarea.setAttribute("aria-label", t("socialCommentsSaveEdit"));
     textarea.maxLength = 800;
     textarea.rows = 3;
     textarea.dataset.commentEditInput = comment.id || "";
-    textarea.value = String(comment.body || "").trim();
+    textarea.value = editingSocialCommentDraft?.id === comment.id ? editingSocialCommentDraft.body : String(comment.body || "").trim();
+    textarea.addEventListener("input", () => { editingSocialCommentDraft = { id: comment.id, body: textarea.value }; });
     editor.appendChild(textarea);
     const editorActions = document.createElement("div");
     editorActions.className = "social-comment-edit-actions";
@@ -60603,7 +60699,7 @@ function renderSocialCommentsPanel() {
   ].forEach(([button, value]) => {
     if (!button) return;
     const active = targetType === value;
-    button.hidden = (socialCommentsState.videoSource === "dj" && value !== "video") || (value === "video" && !socialCommentsVideoTarget());
+    button.hidden = (["dj", "shared"].includes(socialCommentsState.videoSource) && value !== "video") || (value === "video" && !socialCommentsVideoTarget());
     button.textContent = value === "video" ? sonicTinyCopy("Vídeo", "Video", "Video") : value === "artist" ? t("socialCommentsTabArtist") : t("socialCommentsTabTrack");
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
@@ -60612,6 +60708,7 @@ function renderSocialCommentsPanel() {
     socialCommentsInput.placeholder = targetType === "video" ? socialDiscussionCopy("placeholder") : targetType === "artist"
       ? t("socialCommentsPlaceholderArtist")
       : t("socialCommentsPlaceholderTrack");
+    socialCommentsInput.setAttribute("aria-label", socialCommentsInput.placeholder);
   }
   if (socialCommentsComposerHint) socialCommentsComposerHint.textContent = t("socialCommentsComposerHint");
   if (socialCommentsSubmitBtn) {
@@ -60632,6 +60729,11 @@ function renderSocialCommentsPanel() {
   document.getElementById("socialDiscussionClose").textContent = socialDiscussionCopy("close");
   document.querySelectorAll("[data-open-discussion]").forEach(button => { button.textContent = socialDiscussionCopy(button.dataset.openDiscussion); });
   const reaction = socialCommentsState.targetReaction;
+  const shareButton = document.getElementById("socialTargetShareBtn");
+  shareButton.hidden = !["track", "video"].includes(targetType); shareButton.textContent = sonicTinyCopy("Compartilhar", "Share", "Compartir");
+  const watchLink = document.getElementById("socialVideoWatchLink");
+  watchLink.hidden = targetType !== "video"; watchLink.textContent = sonicTinyCopy("Ver no YouTube", "Watch on YouTube", "Ver en YouTube");
+  if (targetType === "video" && target?.targetKey) watchLink.href = `https://www.youtube.com/watch?v=${encodeURIComponent(target.targetKey.slice(8))}`;
   socialTargetLikeBtn.hidden = !["track", "video"].includes(targetType);
   socialTargetLikeBtn.disabled = socialCommentsState.loading || socialCommentsState.liking || (signed && (!socialCommentsState.enabled || !reaction));
   socialTargetLikeBtn.setAttribute("aria-pressed", reaction?.liked ? "true" : "false");
@@ -60642,7 +60744,7 @@ function renderSocialCommentsPanel() {
 
 async function loadSocialComments(options = {}) {
   if (!socialCommentsCard) return false;
-  if (options.silent && !socialDiscussionDialog?.open) return false;
+  if (options.silent && (!socialDiscussionDialog?.open || editingSocialCommentId)) return false;
   if (shouldDisableSocialCommentsForAppStore()) {
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
@@ -60668,7 +60770,7 @@ async function loadSocialComments(options = {}) {
   socialCommentsState.submitting = false;
   socialCommentsState.canModerate = false;
   editingSocialCommentId = "";
-  if (changed && socialCommentsInput) socialCommentsInput.value = "";
+  if (changed && socialCommentsInput) { socialCommentsInput.value = ""; document.getElementById("socialShareLink").hidden = true; }
   socialCommentsState.loading = false;
   if (!target || !socialCommentsSignedIn()) {
     socialCommentsState.enabled = true;
@@ -60728,6 +60830,9 @@ async function showSocialCommentsLogin({ startLogin = false } = {}) {
   const message = configured ? t("socialCommentsLoginRequired") : t("socialCommentsLoginUnavailable");
   setLoginMessage(message, configured);
   if (startLogin && configured) {
+    const target = currentSocialCommentTarget();
+    const url = target?.targetType === "video" ? socialVideoShareUrl(target.targetKey.slice(8)) : socialTrackShareUrl(currentRecommendation);
+    if (url) history.replaceState(null, "", url);
     socialDiscussionDialog?.close();
     await showAuthScreen();
   }
@@ -60751,6 +60856,9 @@ async function submitSocialComment() {
     return false;
   }
   const author = socialCommentAuthorMeta();
+  const requestSignature = JSON.stringify([socialState.session?.user?.id, target.targetType, target.targetKey, text]);
+  if (pendingSocialCommentRequest?.signature !== requestSignature) pendingSocialCommentRequest = { signature: requestSignature, id: crypto.randomUUID() };
+  const requestId = pendingSocialCommentRequest.id;
   socialCommentsState.submitting = true;
   socialCommentsState.error = "";
   if (socialCommentsSubmitBtn) socialCommentsSubmitBtn.disabled = true;
@@ -60761,6 +60869,7 @@ async function submitSocialComment() {
         targetType: target.targetType,
         targetKey: target.targetKey,
         body: text,
+        clientRequestId: requestId,
         metadata: {
           ...target.metadata,
           ...author
@@ -60774,6 +60883,7 @@ async function submitSocialComment() {
     }
     if (token !== socialCommentsState.loadToken) return false;
     socialCommentsInput.value = "";
+    pendingSocialCommentRequest = null;
     showToast(t("socialCommentsPosted"));
     await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
     return true;
@@ -60854,6 +60964,7 @@ function startEditingSocialComment(commentId = "") {
   const id = String(commentId || "").trim();
   if (!id) return false;
   editingSocialCommentId = id;
+  editingSocialCommentDraft = null;
   renderSocialCommentsPanel();
   window.requestAnimationFrame(() => {
     const input = Array.from(socialCommentsList?.querySelectorAll("[data-comment-edit-input]") || [])
@@ -60864,7 +60975,7 @@ function startEditingSocialComment(commentId = "") {
 }
 
 function cancelEditingSocialComment() {
-  editingSocialCommentId = "";
+  editingSocialCommentId = ""; editingSocialCommentDraft = null;
   renderSocialCommentsPanel();
 }
 
@@ -60897,7 +61008,7 @@ async function updateSocialComment(commentId = "") {
     });
     if (payload?.ok === false) throw new Error(payload?.detail || payload?.error || "comment_update_failed");
     if (requestToken !== socialCommentsState.loadToken) return false;
-    editingSocialCommentId = "";
+    editingSocialCommentId = ""; editingSocialCommentDraft = null;
     showToast(t("socialCommentsUpdated"));
     await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
     return true;
@@ -64917,6 +65028,7 @@ bind(document.getElementById("socialDiscussionProfile"), "click", () => {
   document.getElementById("userProfileCard")?.scrollIntoView({ block: "start" });
 });
 bind(socialTargetLikeBtn, "click", () => void likeSocialTarget());
+bind(document.getElementById("socialTargetShareBtn"), "click", () => void shareSocialTarget());
 bind(socialCommentsVideoTab, "click", () => void loadSocialComments({ targetType: "video" }));
 window.addEventListener("sonic:online-session-changed", () => {
   if (socialDiscussionDialog?.open) void loadSocialComments();
@@ -65543,31 +65655,10 @@ async function bootSonicSearch() {
     language: () => currentLanguage,
     signIn: () => void showAuthScreen()
   });
-  userProfileController = window.SonicReleaseFlags?.publicProfiles === true ? window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
-    session: () => socialState.session,
-    freshSession: async () => {
-      await ensureFreshSocialSession({ clearOnFailure: true });
-      return authHasOnlineSession() ? socialState.session : null;
-    },
-    endpoint: () => resolveAppApiUrl("/api/user-profile"),
-    language: () => currentLanguage,
-    suggestName: () => socialSuggestedDisplayName(),
-    suggestUsername: () => socialCleanUsername(socialSuggestedUsername()).slice(0, 30),
-    styleLabel: styleLabelByValue,
-    signIn: () => void showAuthScreen(),
-    onLoaded: (profile, avatarUrl) => {
-      if (profile?.id === socialState.session?.user?.id) socialState.profile = { ...socialState.profile, ...profile };
-      socialState.profileAvatarUrl = avatarUrl;
-    },
-    onSaved: (profile, avatarUrl) => {
-      socialState.profile = { ...socialState.profile, ...profile };
-      socialState.profileAvatarUrl = avatarUrl;
-      hydrateSocialProfileInputs(socialState.profile);
-      renderSocialUi({ preserveStatus: true });
-    }
-  }) : null;
+  mountUserProfileIfEnabled();
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
+    online: () => authHasOnlineSession(),
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
     openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("profile", { focusPanel: true }); }
   });

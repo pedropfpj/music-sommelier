@@ -1,0 +1,94 @@
+[
+  {
+    "suite": "test-user-profile",
+    "passed": true
+  },
+  {
+    "suite": "test-user-profile-sql",
+    "passed": true
+  },
+  {
+    "suite": "test-user-profile-privacy-surfaces",
+    "passed": true
+  },
+  {
+    "suite": "test-social-profile-discovery",
+    "passed": true
+  },
+  {
+    "suite": "test-social-profiles-integration",
+    "passed": true
+  },
+  {
+    "suite": "test-track-video-social",
+    "passed": true
+  },
+  {
+    "suite": "test-track-video-social-sql",
+    "passed": true
+  },
+  {
+    "suite": "test-ugc-safety",
+    "passed": true
+  },
+  {
+    "suite": "test-web-audience",
+    "passed": true
+  },
+  {
+    "suite": "test-auth-recommendation-isolation",
+    "passed": true
+  },
+  {
+    "suite": "test-recommendation-safety",
+    "passed": true
+  },
+  {
+    "suite": "test-discovery-performance",
+    "passed": true
+  },
+  {
+    "suite": "test-discovery-experience",
+    "passed": true
+  },
+  {
+    "suite": "test-friendly-first-impression",
+    "passed": true
+  },
+  {
+    "suite": "test-first-experience",
+    "passed": true
+  },
+  {
+    "suite": "test-simplified-navigation",
+    "passed": true
+  },
+  {
+    "suite": "test-initial-taste-calibration",
+    "passed": true
+  },
+  {
+    "suite": "test-premium-promo-visibility",
+    "passed": true
+  },
+  {
+    "suite": "test-weekly-recommends",
+    "passed": true
+  },
+  {
+    "suite": "test-privacy-requests-sql",
+    "passed": true
+  },
+  {
+    "suite": "test-social-request-budget",
+    "passed": true
+  },
+  {
+    "suite": "test-single-playback-policy",
+    "passed": true
+  },
+  {
+    "suite": "test-social-staging-bootstrap",
+    "passed": true
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "backend": "Real profile/comments handlers + persistent PGlite PostgreSQL + actual migrations",
+  "simulated": "Supabase Auth and Storage protocol, loopback only; no real OAuth or cloud writes",
+  "checks": [
+    "profile save/reopen/restart",
+    "private image processing/retrieval",
+    "username normalization/uniqueness",
+    "explicit preferences vs inferred history",
+    "visitor public links with explicit consent; private/legacy profiles protected",
+    "account ownership",
+    "privacy projection",
+    "idempotent target likes",
+    "idempotent comment retries",
+    "edit/delete/report/block",
+    "target isolation",
+    "failed save preserves prior data"
+  ]
+}

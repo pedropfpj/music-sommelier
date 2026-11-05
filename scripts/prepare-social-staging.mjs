@@ -1,0 +1,9 @@
+// Produces one transactional bootstrap for a NEW, EMPTY Supabase staging project.
+// Does not connect to a database or apply SQL.
+import fs from 'node:fs/promises';
+const names=['20260619010700_sonic_search_core.sql','20260914160000_community_profile_privacy.sql','20260914170000_profile_edit_budget.sql','20261104000100_track_video_social.sql','20261105000200_explicit_musical_preferences.sql','20261105000300_comment_request_idempotency.sql','20261105000400_public_profile_links.sql','20261105000500_social_request_budget.sql'];
+let sql=`-- Sonic social staging only. Refuses existing app data or Auth users.\nbegin;\ndo $$ begin\n  if to_regclass('public.profiles') is not null or exists(select 1 from auth.users) then\n    raise exception 'STAGING_NOT_EMPTY: use a new empty project; never run this on Sonic Search production';\n  end if;\nend $$;\n`;
+for(const name of names){const source=await fs.readFile(new URL('../supabase/migrations/'+name,import.meta.url),'utf8');sql+='\n-- '+name+'\n'+source.replace(/^(?:begin;|commit;|notify pgrst, 'reload schema';)\s*$/gmi,'')+'\n';}
+sql+=`\n-- The new project disables automatic grants. Grant only the existing private\n-- browser-sync tables; their owner-only RLS is installed by the core schema.\ngrant usage on schema public to anon, authenticated, service_role;\ngrant all on all tables in schema public to service_role;\ngrant select,insert,update,delete on public.track_feedback,public.feedback_events,public.taste_snapshots,public.spirit_profiles,public.spirit_cards to authenticated;\nnotify pgrst, 'reload schema';\ncommit;\n`;
+const out=new URL('../reports/social-profiles-20261105/staging-bootstrap.sql',import.meta.url);await fs.writeFile(out,sql);
+console.log('Prepared reports/social-profiles-20261105/staging-bootstrap.sql (no database connection).');

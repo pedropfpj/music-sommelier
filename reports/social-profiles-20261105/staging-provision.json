@@ -1,0 +1,11 @@
+{
+  "project": "sonic-social-staging",
+  "ref": "uauhiqrflfjhestbupjv",
+  "createdFor": "isolated social profile validation",
+  "productionModified": false,
+  "emptyProjectGuard": true,
+  "tlsVerified": true,
+  "tables": 16,
+  "appliedAt": "2026-11-05T20:36:27.111Z",
+  "additionalMigration": "20261105000500_social_request_budget.sql"
+}

@@ -2,7 +2,8 @@
   "git": {
     "deploymentEnabled": {
       "codex/discovery-quality-20261105": false,
-      "codex/web-audience-20261105": false
+      "codex/web-audience-20261105": false,
+      "codex/social-profiles-20261105": false
     }
   },
   "functions": {

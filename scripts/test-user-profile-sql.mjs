@@ -33,6 +33,11 @@ try {
     insert into storage.objects values (1,'sonic-profile-avatars','${a}/photo.jpg'),(2,'unrelated-assets','keep.jpg');`);
   await db.exec(sql); await db.exec(sql);
   await db.exec(budgetSql); await db.exec(budgetSql);
+  const preferencesSql = await fs.readFile(new URL('../supabase/migrations/20261105000200_explicit_musical_preferences.sql', import.meta.url), 'utf8');
+  await db.exec(preferencesSql); await db.exec(preferencesSql);
+  const linksSql=await fs.readFile(new URL('../supabase/migrations/20261105000400_public_profile_links.sql',import.meta.url),'utf8');
+  await db.exec(linksSql); await db.exec(linksSql);
+  assert.equal((await db.query('select profile_link_public from profiles limit 1')).rows[0].profile_link_public,false,'Existing users never become publicly accessible by default');
   // The new migration must not depend on legacy permissive owner policies.
   await db.exec('drop policy "Users manage own profile" on public.profiles; drop policy "Forgotten legacy public policy" on public.profiles; drop policy "Users manage own likes" on public.likes;');
   assert.equal((await db.query('select count(*)::int as n from public.profiles')).rows[0].n, 2, 'Migration preserves profiles');
@@ -75,5 +80,8 @@ try {
   await db.exec('reset role;');
   await db.query('update public.profiles set show_bio=true where id=$1', [a]);
   assert.equal((await db.query('select bio from public.community_public_profiles')).rows[0].bio, 'Updated private bio');
+  await db.query("update public.profiles set musical_preferences=array['idm'],favorite_styles=array['private_inferred_style'],show_styles=true where id=$1", [a]);
+  assert.deepEqual((await db.query('select favorite_styles from public.community_public_profiles')).rows[0].favorite_styles, ['idm']);
+  await assert.rejects(db.query("update profiles set musical_preferences=array_fill('idm'::text,array[13]) where id=$1", [a]), /profiles_preferences_limit/);
   console.log('Profile privacy migration passed in PostgreSQL: idempotency, preserved data, owner-only rows, cross-account denial, anonymous denial, safe public projection and private photo bucket.');
 } finally { await db.close(); }

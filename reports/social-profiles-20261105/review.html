@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sonic Search — revisão dos perfis</title>
+<style>body{margin:0;background:#091226;color:#eef5ff;font:17px/1.65 system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:48px 24px}h1,h2{line-height:1.2}h1{font-size:clamp(30px,5vw,48px);max-width:780px}h2{margin-top:40px;font-size:24px}p{max-width:850px}a{color:#8dffe0}small,.muted{color:#afbdd1}strong{color:#a0ffe6}.badge{display:inline-block;border:1px solid #36526b;padding:5px 12px;border-radius:99px;font-size:14px}.grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start}img{max-width:100%;border:1px solid #30425c;border-radius:16px}table{border-collapse:collapse;width:100%;font-size:15px}th,td{padding:12px;text-align:left;border-bottom:1px solid #30425c;vertical-align:top}code{overflow-wrap:anywhere}li{margin-bottom:9px}@media(max-width:700px){.grid{grid-template-columns:1fr}main{padding:28px 18px}table{font-size:13px}}</style>
+<main>
+<span class="badge">Revisão web · 5 de novembro de 2026</span>
+<h1>Perfis pessoais e interações ligados à conta</h1>
+<p>Foto, nome, @usuário exclusivo e até 12 preferências musicais explícitas. O perfil compartilhável mostra apenas os campos autorizados. Os estilos escolhidos orientam a descoberta sem substituir filtros, descartes ou o histórico privado.</p>
+<p><strong>Validado em um Supabase separado, com duas contas fictícias.</strong> A produção permanece com os recursos novos desativados. Nenhuma atualização foi enviada à Apple nesta etapa.</p>
+<p><a href="http://127.0.0.1:8802/__staging">Abrir prévia com serviços reais de teste</a> · <a href="https://github.com/pedropfpj/music-sommelier/tree/codex/social-profiles-20261105">Branch de revisão no GitHub</a></p>
+<h2>O que mudou</h2>
+<ul>
+<li>Editor com foto processada, prévia da aparência pública, busca de estilos, controles de privacidade e mensagens de erro que preservam o rascunho.</li>
+<li>Link de perfil acessível a visitantes somente quando o dono autoriza essa audiência. Perfis antigos mantêm sua privacidade anterior.</li>
+<li>Curtidas e comentários usam a identidade autenticada; o autor abre o perfil correspondente. Compartilhamento mantém o destino correto e não transporta credenciais.</li>
+<li>Trocar de conta limpa foto, preferências, comentários e rascunhos da conta anterior. Preferências inferidas, e-mail, histórico e Sonic DNA não entram na projeção pública.</li>
+</ul>
+<h2>Problemas corrigidos durante a revisão</h2>
+<ul>
+<li>Reenvio de comentário após perda da resposta podia criar duplicata: cada tentativa agora tem uma identificação estável.</li>
+<li>O painel de vídeo compartilhado podia reabrir depois de fechado quando a configuração terminava de carregar.</li>
+<li>O ambiente real ainda exigia um código antigo de beta para comentários. O acesso agora exige conta autenticada e a ativação explícita do recurso.</li>
+<li>Os limites dos comentários dependiam de Redis. Agora há um contador atômico por conta no próprio Supabase; falhas impedem a operação, sem remover o limite.</li>
+<li>Foram adicionados limites de tempo às consultas de autenticação, comentários e bloqueios para evitar esperas indefinidas.</li>
+</ul>
+<h2>Evidência da prévia</h2>
+<p class="muted">Conta fictícia de staging. A imagem verde foi enviada e recuperada do Storage privado. O visitante vê nome, foto e estilos autorizados; a bio privada não aparece.</p>
+<div class="grid"><figure><img src="remote-public-profile-desktop.png" alt="Perfil público no computador com nome, foto de teste e estilos autorizados"><figcaption>Computador, visitante sem login.</figcaption></figure><figure><img src="remote-public-profile-mobile.png" alt="Perfil público em tela estreita sem transbordamento horizontal"><figcaption>Tela estreita de 360 px úteis.</figcaption></figure></div>
+<h2>Validação e limites</h2>
+<table><thead><tr><th>Camada</th><th>Resultado</th></tr></thead><tbody>
+<tr><td>Testes locais</td><td><a href="suite-results.json">23 suítes passaram</a>, incluindo privacidade, SQL, descoberta, isolamento entre contas, áudio e limites. O teste local usa Auth e Storage simulados; essa limitação está registrada em <a href="integration-results.json">seu relatório</a>.</td></tr>
+<tr><td>Serviços reais</td><td><a href="remote-results.json">Auth, renovação de sessão, PostgREST, RLS, RPC e Storage passaram</a>. Foram testados nome único, publicação por escolha explícita, fotos sem metadados, curtidas, comentários, edição, denúncia, bloqueio e exclusão.</td></tr>
+<tr><td>Navegador conectado ao staging</td><td>Login com senha fictícia real, edição e salvamento, persistência após recarregar, saída da conta, cópia de link limpo e leitura anônima com campos privados ocultos.</td></tr>
+<tr><td>Ainda não validado</td><td>Retorno de OAuth Google/Apple no novo ambiente, aplicativo nativo do iPhone e implantação pública. O staging usa login por senha de teste, explicitamente identificado.</td></tr>
+</tbody></table>
+<h2>Ambiente e próxima liberação</h2>
+<p>Projeto separado <code>sonic-social-staging</code>, referência <code>uauhiqrflfjhestbupjv</code>, criado no plano Free existente. Nenhum repositório foi conectado ao projeto. Credenciais ficam em arquivo local ignorado pelo Git, com permissão 0600; não estão neste relatório nem na branch.</p>
+<p>A produção ainda não tem as novas colunas, tabelas e o bucket de fotos, conforme a <a href="environment-readiness.json">checagem somente de leitura</a>. Para ativar, será necessário revisar e aplicar as migrações incrementais em produção, conferir o login Google/Apple e ativar as flags específicas. O arquivo <code>staging-bootstrap.sql</code> recusa bancos com perfis ou contas e serve exclusivamente para um staging vazio; não deve ser usado em produção.</p>
+<p>A branch <code>codex/social-profiles-20261105</code> está configurada sem deploy automático. Depois da revisão web, a etapa do iPhone ainda requer gerar e testar o pacote nativo, revisar as informações da loja e enviar a versão à Apple.</p>
+<h2>Reproduzir os testes</h2>
+<p><code>npm run test:social-profiles</code> executa a validação local. <code>npm run test:social-profiles:remote</code> exige o arquivo privado do staging e recusa outra referência de projeto. <code>npm run preview:social-staging</code> abre o servidor local na porta 8802. As credenciais fictícias são criadas sem enviar e-mail e armazenadas apenas em <code>.vendor/social-staging-tools/test-identities.json</code>, também ignorado e protegido.</p>
+</main></html>
