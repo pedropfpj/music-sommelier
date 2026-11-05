@@ -1,0 +1,421 @@
+{
+  "checkedAt": "2026-11-05T23:38:59.073Z",
+  "styles": {
+    "forest_psy": {
+      "raw": 285,
+      "imported": 281,
+      "failing": {
+        "bpm": 2,
+        "confirmed": 277,
+        "eligible": 103,
+        "fineProof": 101
+      },
+      "examples": {
+        "bpm": [
+          {
+            "artist": "Atriohm",
+            "song": "The Forest Calls",
+            "playable": false
+          },
+          {
+            "artist": "Ajja",
+            "song": "Bebopper",
+            "playable": false
+          }
+        ],
+        "confirmed": [
+          {
+            "artist": "Atriohm",
+            "song": "The Forest Calls",
+            "playable": false
+          },
+          {
+            "artist": "Ajja",
+            "song": "Bebopper",
+            "playable": false
+          },
+          {
+            "artist": "Aardvarkk",
+            "song": "Bada Bing",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "forest psy",
+            "sourceUrl": "https://www.deezer.com/track/3116769201",
+            "playable": true
+          }
+        ],
+        "eligible": [
+          {
+            "artist": "Atriohm",
+            "song": "Train to Goa (110 Bpm)",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psytrance",
+            "sourceUrl": "https://forestdelic.bandcamp.com/music",
+            "playable": true
+          },
+          {
+            "artist": "Tengri",
+            "song": "Train to Goa (110 Bpm)",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psytrance",
+            "sourceUrl": "https://forestdelic.bandcamp.com/music",
+            "playable": true
+          },
+          {
+            "artist": "Aardvarkk",
+            "song": "Cosmic Radiation",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psy",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Aardvarkk%20Cosmic%20Radiation",
+            "playable": false
+          }
+        ],
+        "fineProof": [
+          {
+            "artist": "Aardvarkk",
+            "song": "Cosmic Radiation",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psy",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Aardvarkk%20Cosmic%20Radiation",
+            "playable": false
+          },
+          {
+            "artist": "Aardvarkk",
+            "song": "Daws of Perception",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psy",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Aardvarkk%20Daws%20of%20Perception",
+            "playable": false
+          },
+          {
+            "artist": "Aardvarkk",
+            "song": "Never Ending",
+            "source": "dynamic_dataset_local_runtime_forest_psy",
+            "artistGenre": "forest psy",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Aardvarkk%20Never%20Ending",
+            "playable": false
+          }
+        ]
+      }
+    },
+    "dark_progressive": {
+      "raw": 184,
+      "imported": 171,
+      "failing": {
+        "confirmed": 169,
+        "fineProof": 81,
+        "eligible": 81
+      },
+      "examples": {
+        "confirmed": [
+          {
+            "artist": "Vermont",
+            "song": "Rain",
+            "playable": false
+          },
+          {
+            "artist": "Hellquist",
+            "song": "Have You Not Heard?",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.deezer.com/track/1548152132",
+            "playable": true
+          },
+          {
+            "artist": "Kliment",
+            "song": "Fashion",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "Dark Progressive",
+            "sourceUrl": "https://www.deezer.com/track/358241331",
+            "playable": true
+          }
+        ],
+        "fineProof": [
+          {
+            "artist": "Ben Coda",
+            "song": "Gruber",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Gruber",
+            "playable": false
+          },
+          {
+            "artist": "Ben Coda",
+            "song": "Heatseeker",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Heatseeker",
+            "playable": false
+          },
+          {
+            "artist": "Ben Coda",
+            "song": "Inside The Machine",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Inside%20The%20Machine",
+            "playable": false
+          }
+        ],
+        "eligible": [
+          {
+            "artist": "Ben Coda",
+            "song": "Gruber",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Gruber",
+            "playable": false
+          },
+          {
+            "artist": "Ben Coda",
+            "song": "Heatseeker",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Heatseeker",
+            "playable": false
+          },
+          {
+            "artist": "Ben Coda",
+            "song": "Inside The Machine",
+            "source": "dynamic_dataset_local_runtime_dark_progressive",
+            "artistGenre": "dark progressive",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Ben%20Coda%20Inside%20The%20Machine",
+            "playable": false
+          }
+        ]
+      }
+    },
+    "industrial_techno": {
+      "raw": 63,
+      "imported": 60,
+      "failing": {
+        "confirmed": 54,
+        "fineProof": 51,
+        "eligible": 51
+      },
+      "examples": {
+        "confirmed": [
+          {
+            "artist": "Perc",
+            "song": "Look What Your Love Has Done To Me",
+            "playable": false
+          },
+          {
+            "artist": "Paula Temple",
+            "song": "Gegen",
+            "playable": false
+          },
+          {
+            "artist": "Blawan",
+            "song": "Thistle",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Blawan%20Thistle",
+            "playable": false
+          }
+        ],
+        "fineProof": [
+          {
+            "artist": "Blawan",
+            "song": "Thistle",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Blawan%20Thistle",
+            "playable": false
+          },
+          {
+            "artist": "Codex Empire",
+            "song": "Slate to Marble",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Codex%20Empire%20Slate%20to%20Marble",
+            "playable": false
+          },
+          {
+            "artist": "JK Flesh",
+            "song": "Crawler",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=JK%20Flesh%20Crawler",
+            "playable": false
+          }
+        ],
+        "eligible": [
+          {
+            "artist": "Blawan",
+            "song": "Thistle",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Blawan%20Thistle",
+            "playable": false
+          },
+          {
+            "artist": "Codex Empire",
+            "song": "Slate to Marble",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Codex%20Empire%20Slate%20to%20Marble",
+            "playable": false
+          },
+          {
+            "artist": "JK Flesh",
+            "song": "Crawler",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "industrial techno",
+            "sourceUrl": "https://www.youtube.com/results?search_query=JK%20Flesh%20Crawler",
+            "playable": false
+          }
+        ]
+      }
+    },
+    "full_on_night": {
+      "raw": 87,
+      "imported": 87,
+      "failing": {
+        "bpm": 1,
+        "confirmed": 86,
+        "fineProof": 14,
+        "identity": 2,
+        "eligible": 14
+      },
+      "examples": {
+        "bpm": [
+          {
+            "artist": "Dickster",
+            "song": "Dizzy Drops",
+            "playable": false
+          }
+        ],
+        "confirmed": [
+          {
+            "artist": "Dickster",
+            "song": "Dizzy Drops",
+            "playable": false
+          },
+          {
+            "artist": "Menog",
+            "song": "Halloween Candy",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "full-on night",
+            "sourceUrl": "https://www.deezer.com/track/568262102",
+            "playable": true
+          },
+          {
+            "artist": "Braincell",
+            "song": "Bubble Trouble",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "full-on night",
+            "sourceUrl": "https://nanorecords.bandcamp.com/music",
+            "playable": true
+          }
+        ],
+        "fineProof": [
+          {
+            "artist": "Avalon",
+            "song": "Horizen",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Horizen",
+            "playable": false
+          },
+          {
+            "artist": "Avalon",
+            "song": "Voodoo People Remix",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Voodoo%20People%20Remix",
+            "playable": false
+          },
+          {
+            "artist": "Djantrix",
+            "song": "Fullonera (Original Mix)",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Djantrix%20Fullonera%20(Original%20Mix)",
+            "playable": false
+          }
+        ],
+        "identity": [
+          {
+            "artist": "Avalon",
+            "song": "Horizen",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Horizen",
+            "playable": false
+          },
+          {
+            "artist": "Avalon",
+            "song": "Voodoo People Remix",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Voodoo%20People%20Remix",
+            "playable": false
+          }
+        ],
+        "eligible": [
+          {
+            "artist": "Avalon",
+            "song": "Horizen",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Horizen",
+            "playable": false
+          },
+          {
+            "artist": "Avalon",
+            "song": "Voodoo People Remix",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Avalon%20Voodoo%20People%20Remix",
+            "playable": false
+          },
+          {
+            "artist": "Djantrix",
+            "song": "Fullonera (Original Mix)",
+            "source": "dynamic_dataset_local_runtime_full_on_night",
+            "artistGenre": "full on night",
+            "sourceUrl": "https://www.youtube.com/results?search_query=Djantrix%20Fullonera%20(Original%20Mix)",
+            "playable": false
+          }
+        ]
+      }
+    },
+    "big_beat": {
+      "raw": 30,
+      "imported": 30,
+      "failing": {
+        "confirmed": 30
+      },
+      "examples": {
+        "confirmed": [
+          {
+            "artist": "Bentley Rhythm Ace",
+            "song": "Midlander (There Can Only Be One...)",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "Big Beat",
+            "sourceUrl": "https://music.apple.com/us/album/midlander-there-can-only-be-one/1397298807?i=1397300025&uo=4",
+            "genreUrl": "https://ninjatune.net/artist/coldcut",
+            "playable": true
+          },
+          {
+            "artist": "Fatboy Slim",
+            "song": "That Old Pair of Jeans",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "Big Beat",
+            "sourceUrl": "https://music.apple.com/us/album/that-old-pair-of-jeans/714052590?i=714052976&uo=4",
+            "genreUrl": "https://ninjatune.net/artist/coldcut",
+            "playable": true
+          },
+          {
+            "artist": "Lo Fidelity Allstars",
+            "song": "Bonus Beats",
+            "source": "dynamic_dataset_local_runtime_core",
+            "artistGenre": "Big Beat",
+            "sourceUrl": "https://music.apple.com/us/album/bonus-beats/1438879656?i=1438879659&uo=4",
+            "genreUrl": "https://ninjatune.net/artist/coldcut",
+            "playable": true
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,631 @@
+{
+  "checkedAt": "2026-11-05T23:33:40.385Z",
+  "remainingStyles": [
+    {
+      "id": "big_beat",
+      "label": "Big Beat",
+      "eligibleArtists": 0,
+      "needed": 10
+    },
+    {
+      "id": "full_on_night",
+      "label": "Full-On Night",
+      "eligibleArtists": 0,
+      "needed": 10
+    },
+    {
+      "id": "dark_experimental",
+      "label": "Dark Experimental",
+      "eligibleArtists": 1,
+      "needed": 9
+    },
+    {
+      "id": "full_on_morning",
+      "label": "Full-On Morning",
+      "eligibleArtists": 1,
+      "needed": 9
+    },
+    {
+      "id": "peak_time_techno",
+      "label": "Peak Time Techno",
+      "eligibleArtists": 1,
+      "needed": 9
+    },
+    {
+      "id": "industrial_techno",
+      "label": "Industrial Techno",
+      "eligibleArtists": 2,
+      "needed": 8
+    },
+    {
+      "id": "dark_progressive",
+      "label": "PROG DARK / Dark Progressive",
+      "eligibleArtists": 2,
+      "needed": 8
+    },
+    {
+      "id": "psybreaks",
+      "label": "Psybreaks",
+      "eligibleArtists": 2,
+      "needed": 8
+    },
+    {
+      "id": "twilight_psy",
+      "label": "Twilight Psy",
+      "eligibleArtists": 2,
+      "needed": 8
+    },
+    {
+      "id": "forest_psy",
+      "label": "Forest Psy",
+      "eligibleArtists": 3,
+      "needed": 7
+    },
+    {
+      "id": "full_on",
+      "label": "Full-On",
+      "eligibleArtists": 3,
+      "needed": 7
+    },
+    {
+      "id": "retrowave",
+      "label": "Retrowave",
+      "eligibleArtists": 3,
+      "needed": 7
+    },
+    {
+      "id": "hypnotic_techno",
+      "label": "Hypnotic Techno",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "neurofunk",
+      "label": "Neurofunk",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "progressive_trance",
+      "label": "Progressive Trance",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "rawstyle",
+      "label": "Rawstyle",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "speedcore",
+      "label": "Speedcore",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "uk_bass",
+      "label": "UK Bass",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "witch_house",
+      "label": "Witch House",
+      "eligibleArtists": 4,
+      "needed": 6
+    },
+    {
+      "id": "drumfunk",
+      "label": "Drumfunk",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "drumstep",
+      "label": "Drumstep",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "electroacoustic",
+      "label": "Electroacoustic",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "extratone",
+      "label": "Extratone",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "footwork_juke",
+      "label": "Footwork / Juke",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "funky_house",
+      "label": "Funky House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "future_bass",
+      "label": "Future Bass",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "glitch_hop",
+      "label": "Glitch Hop",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "hardstep",
+      "label": "Hardstep",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "hardwave",
+      "label": "Hardwave",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "hi_nrg",
+      "label": "Hi-NRG",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "industrial_dance",
+      "label": "Industrial Dance",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "jersey_club",
+      "label": "Jersey Club",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "kosmische_musik",
+      "label": "Kosmische Musik",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "kuduro_eletronico",
+      "label": "Kuduro Eletronico",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "liquid_dnb",
+      "label": "Liquid DnB",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "mainstage_techno",
+      "label": "Mainstage Techno",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "melodic_dubstep",
+      "label": "Melodic Dubstep",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "melodic_house",
+      "label": "Melodic House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "microsound",
+      "label": "Microsound",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "minimal_deep_tech",
+      "label": "Minimal / Deep Tech",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "nu_skool_breaks",
+      "label": "Nu Skool Breaks",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "outrun",
+      "label": "Outrun",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "piano_house",
+      "label": "Piano House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "post_dubstep",
+      "label": "Post-Dubstep",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "ragga_jungle",
+      "label": "Ragga Jungle",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "reverse_bass",
+      "label": "Reverse Bass",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "slap_house",
+      "label": "Slap House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "terrorcore",
+      "label": "Terrorcore",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "trap",
+      "label": "Trap",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "tribal_house",
+      "label": "Tribal House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "tropical_house",
+      "label": "Tropical House",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "uk_hardcore",
+      "label": "UK Hardcore",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "vocal_trance",
+      "label": "Vocal Trance",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "wonky",
+      "label": "Wonky",
+      "eligibleArtists": 5,
+      "needed": 5
+    },
+    {
+      "id": "coldwave",
+      "label": "Coldwave",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "electro_house",
+      "label": "Electro House",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "electronic_dance_pop",
+      "label": "Electronic Dance-Pop",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "hard_dance",
+      "label": "Hard Dance",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "hi_tech",
+      "label": "Hi-Tech",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "jackin_house",
+      "label": "Jackin House",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "jungle",
+      "label": "Jungle",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "lowercase",
+      "label": "Lowercase",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "musique_concrete",
+      "label": "Musique Concrete",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "shangaan_electro",
+      "label": "Shangaan Electro",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "soulful_house",
+      "label": "Soulful House",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "tech_trance",
+      "label": "Tech Trance",
+      "eligibleArtists": 6,
+      "needed": 4
+    },
+    {
+      "id": "balearic_trance",
+      "label": "Balearic Trance",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "baltimore_club",
+      "label": "Baltimore Club",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "batida",
+      "label": "Batida",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "crossbreed",
+      "label": "Crossbreed",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "dark_ambient",
+      "label": "Dark Ambient",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "detroit_techno",
+      "label": "Detroit Techno",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "dream_trance",
+      "label": "Dream Trance",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "florida_breaks",
+      "label": "Florida Breaks",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "french_house",
+      "label": "French House / Filter House",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "ghettotech",
+      "label": "Ghettotech",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "italo_disco",
+      "label": "Italo Disco",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "jump_up",
+      "label": "Jump Up",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "latin_house",
+      "label": "Latin House",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "makina",
+      "label": "Makina",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "microhouse",
+      "label": "Microhouse",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "minimal_wave",
+      "label": "Minimal Wave",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "neurohop",
+      "label": "Neurohop",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "sambass",
+      "label": "Sambass",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "singeli",
+      "label": "Singeli",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "space_ambient",
+      "label": "Space Ambient",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "techstep",
+      "label": "Techstep",
+      "eligibleArtists": 7,
+      "needed": 3
+    },
+    {
+      "id": "afro_house",
+      "label": "Afro House",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "bass_house",
+      "label": "Bass House",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "dark_psy",
+      "label": "Dark Psy",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "eurodance",
+      "label": "Eurodance",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "future_house",
+      "label": "Future House",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "garage_house",
+      "label": "Garage House",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "idm",
+      "label": "IDM",
+      "eligibleArtists": 8,
+      "needed": 2
+    },
+    {
+      "id": "disco_house",
+      "label": "Disco House",
+      "eligibleArtists": 9,
+      "needed": 1
+    },
+    {
+      "id": "ghetto_house",
+      "label": "Ghetto House",
+      "eligibleArtists": 9,
+      "needed": 1
+    },
+    {
+      "id": "organic_house",
+      "label": "Organic House",
+      "eligibleArtists": 9,
+      "needed": 1
+    },
+    {
+      "id": "progressive_house",
+      "label": "Progressive House",
+      "eligibleArtists": 9,
+      "needed": 1
+    },
+    {
+      "id": "tech_house",
+      "label": "Tech House",
+      "eligibleArtists": 9,
+      "needed": 1
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://www.beatport.com/track/full-on/19520006",
+      "status": 403,
+      "result": "Challenge page; no bypass attempted. Recording/audio not verified."
+    },
+    {
+      "url": "https://ektoplazm.com/style/forest",
+      "status": "timeout",
+      "result": "Web fetch also returned 403; no content imported."
+    },
+    {
+      "url": "https://parvati-records.com/karavel-inspiration-ep/",
+      "status": 200,
+      "result": "Explicit Forest classification and tracklist. Official Apple link 404; label-linked Bandcamp release accessible with track IDs and current public audio metadata. Requires probe and app-import audit before inclusion."
+    },
+    {
+      "url": "https://www.zenonrecords.com/artist/neurolabz",
+      "status": 200,
+      "result": "Explicit Dark Progressive biography; individual recording/player still needs verification."
+    },
+    {
+      "url": "https://www.zenonrecords.com/release/hybrid-abstractions",
+      "status": 200,
+      "result": "Search retrieved explicit Dark Progressive release description; recording/player pending direct validation."
+    }
+  ],
+  "newPublishedTracks": 0,
+  "newValidatedRecordings": 2,
+  "publicationStatus": "pending",
+  "eligibilityFinding": "Focused diagnostics of Forest Psy, Dark Progressive, Industrial Techno, Full-On Night and Big Beat found no fixed-artist-list rejection among imported tracks. Many legacy entries lack track-specific genre proof, actual playback links, or current preview verification. Big Beat rows reference an unrelated Coldcut biography; they were not globally unlocked.",
+  "diagnosticScope": "Core plus five target shards before final sanitizers; final counts use the separate full runtime audit."
+}

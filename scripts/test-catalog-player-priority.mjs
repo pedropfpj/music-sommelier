@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
 import {previewIsCurrent,playbackScore,selectCoreTracks} from './build-runtime-catalog.mjs';
 import {createAppRuntimeTestContext} from './app-runtime-test-harness.mjs';
 import {publisherEvidenceIssue} from './catalog-publisher-evidence.mjs';
@@ -46,3 +47,24 @@ assert.ok(loaded,'A publisher-verified recording must survive real browser hydra
 assert.equal(hydrated.isTrackEligibleForRecommendation(loaded),true);
 assert.equal(hydrated.trackMatchesRequestedSubgenreEvidence(loaded,{style:proof.style}),true);
 console.log('Actual browser hydration passed: local provenance and post-import sanitizers retain verified recordings.');
+
+const labelRecords=JSON.parse(await fs.readFile('reports/catalog-next-sources-20261105/label-v25-validation.json','utf8')).passed;
+hydrated.window.SonicCatalogRuntime.loadStyle=async style=>labelRecords.filter(row=>row.style===style);
+for(const row of labelRecords){
+  await hydrated.hydrateExternalDatasetPackInBackground({style:row.style});
+  const actual=hydrated.catalog.find(t=>t.artist===row.artist&&t.song===row.song);
+  assert.ok(actual,'Reviewed label recording must survive actual hydration');
+  assert.equal(hydrated.isTrackEligibleForRecommendation(actual),true);
+  assert.equal(hydrated.trackMatchesRequestedSubgenreEvidence(actual,{style:row.style}),true);
+  assert.equal(hydrated.trackMatchesRequestedSubgenreEvidence(actual,{style:row.style==='forest_psy'?'dark_progressive':'forest_psy'}),false);
+  assert.equal(actual.energy,'unknown');
+  const evidence=actual.catalogMetadata.genre_evidence_url;
+  actual.catalogMetadata.genre_evidence_url=new URL(evidence).origin+'/';
+  assert.equal(hydrated.isTrustedCuratedCatalogTrack(actual),false,'Label homepage alone cannot classify a recording');
+  actual.catalogMetadata.genre_evidence_url=evidence;
+  const recording=actual.bandcampTrackUrl;
+  actual.bandcampTrackUrl='https://unrelated.bandcamp.com/track/example';
+  assert.equal(hydrated.isTrustedCuratedCatalogTrack(actual),false,'Recording must be on the reviewed label account');
+  actual.bandcampTrackUrl=recording;
+}
+console.log('Label recording evidence passed: two publishers, exact subgenres, no homepage or foreign account shortcut.');

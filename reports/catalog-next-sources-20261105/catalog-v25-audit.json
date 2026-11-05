@@ -1,0 +1,2381 @@
+{
+  "checkedAt": "2026-11-05T23:43:38.862Z",
+  "mode": "built-runtime",
+  "method": "Actual app core then shard import and post-import guards; conservative overlapping artist credits; only source/audio checked recordings counted as verified. Existing provider refresh routes may still work but are not counted without verification.",
+  "styles": [
+    {
+      "style": "psytrance",
+      "tracks": 58,
+      "eligibleTracks": 58,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "forest_psy",
+      "tracks": 275,
+      "eligibleTracks": 5,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Karavel"
+      ],
+      "newTracks": 1,
+      "collectionComplete": false,
+      "immediateDistinctDiscoveries": 2
+    },
+    {
+      "style": "dark_psy",
+      "tracks": 206,
+      "eligibleTracks": 13,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "twilight_psy",
+      "tracks": 95,
+      "eligibleTracks": 2,
+      "eligibleArtists": 2,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dark_experimental",
+      "tracks": 57,
+      "eligibleTracks": 1,
+      "eligibleArtists": 1,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "psycore",
+      "tracks": 68,
+      "eligibleTracks": 68,
+      "eligibleArtists": 34,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "psybreaks",
+      "tracks": 47,
+      "eligibleTracks": 4,
+      "eligibleArtists": 2,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "psybient",
+      "tracks": 170,
+      "eligibleTracks": 170,
+      "eligibleArtists": 23,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "freeform",
+      "tracks": 68,
+      "eligibleTracks": 68,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "full_on",
+      "tracks": 422,
+      "eligibleTracks": 3,
+      "eligibleArtists": 3,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "full_on_night",
+      "tracks": 72,
+      "eligibleTracks": 0,
+      "eligibleArtists": 0,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "full_on_morning",
+      "tracks": 51,
+      "eligibleTracks": 1,
+      "eligibleArtists": 1,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "progressive_psy",
+      "tracks": 305,
+      "eligibleTracks": 305,
+      "eligibleArtists": 41,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hi_tech",
+      "tracks": 73,
+      "eligibleTracks": 7,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dark_progressive",
+      "tracks": 172,
+      "eligibleTracks": 3,
+      "eligibleArtists": 3,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Hybrid"
+      ],
+      "newTracks": 1,
+      "collectionComplete": false,
+      "immediateDistinctDiscoveries": 1
+    },
+    {
+      "style": "goa_trance",
+      "tracks": 158,
+      "eligibleTracks": 158,
+      "eligibleArtists": 22,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "psy_comercial",
+      "tracks": 69,
+      "eligibleTracks": 69,
+      "eligibleArtists": 18,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "progressive_trance",
+      "tracks": 20,
+      "eligibleTracks": 20,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "acid_trance",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Art of Trance",
+        "Hardfloor",
+        "Kai Tracid",
+        "Cacola",
+        "Gangnia",
+        "Joey Risdon",
+        "Morphic Resonance",
+        "SAMOH",
+        "Sync24",
+        "Traveler 505"
+      ],
+      "newTracks": 7,
+      "collectionComplete": true
+    },
+    {
+      "style": "balearic_trance",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Three Drives",
+        "Humate",
+        "Salt Tank"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dream_trance",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "DJ Dado",
+        "Zhi-Vago",
+        "Nylon Moon",
+        "Roland Brant"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "vocal_trance",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "trance_uplifting",
+      "tracks": 37,
+      "eligibleTracks": 37,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "AuralBalm",
+        "beansclub",
+        "Bernis",
+        "Cacola",
+        "Factor B",
+        "Grum",
+        "illi",
+        "MiYAjY",
+        "Moa",
+        "TURQUOISEDEATH"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "tech_trance",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Iain M",
+        "Ikorus",
+        "Mark Sherry",
+        "Project 8"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hard_trance",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "disfu",
+        "Florian Picasso",
+        "Funk Tribu",
+        "HiTMiLØW",
+        "IOSIO",
+        "ONE AGAIN",
+        "t e s t p r e s s",
+        "YOOF!",
+        "Cacola"
+      ],
+      "newTracks": 9,
+      "collectionComplete": false
+    },
+    {
+      "style": "techno",
+      "tracks": 138,
+      "eligibleTracks": 138,
+      "eligibleArtists": 21,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "acid_techno",
+      "tracks": 41,
+      "eligibleTracks": 41,
+      "eligibleArtists": 17,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Emmanuel Top",
+        "Hardfloor",
+        "Miss Djax & Junk Project",
+        "ACOR",
+        "Kassian",
+        "OverRider",
+        "Perc",
+        "Posthuman",
+        "Rolando Simmons"
+      ],
+      "newTracks": 6,
+      "collectionComplete": false
+    },
+    {
+      "style": "hard_techno",
+      "tracks": 36,
+      "eligibleTracks": 36,
+      "eligibleArtists": 16,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dub_techno",
+      "tracks": 89,
+      "eligibleTracks": 89,
+      "eligibleArtists": 23,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hypnotic_techno",
+      "tracks": 30,
+      "eligibleTracks": 4,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "raw_techno",
+      "tracks": 34,
+      "eligibleTracks": 15,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Backbone",
+        "Clemente Loffredo",
+        "Lezther",
+        "Mezer The Architect",
+        "Noah Tauber",
+        "Singular Anomalies",
+        "Tensal",
+        "TineX",
+        "Ignez",
+        "Klaps"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "detroit_techno",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "schranz",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Jeremias Clerici",
+        "KRENON",
+        "Leo Force",
+        "Lowerzone",
+        "Malke",
+        "MAZNOIZE",
+        "Molly Six",
+        "SOLYD",
+        "truthspeaker"
+      ],
+      "newTracks": 9,
+      "collectionComplete": false
+    },
+    {
+      "style": "ebm",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 17,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Ayria",
+        "Boy Harsher",
+        "C.ru.z",
+        "FIX8:SED8",
+        "IMPLANT",
+        "Italo Brutalo",
+        "Josh Ludlow",
+        "Parissior",
+        "STATIQBLOOM"
+      ],
+      "newTracks": 9,
+      "collectionComplete": false
+    },
+    {
+      "style": "minimal_techno",
+      "tracks": 49,
+      "eligibleTracks": 49,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "melodic_techno",
+      "tracks": 94,
+      "eligibleTracks": 94,
+      "eligibleArtists": 24,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "industrial_techno",
+      "tracks": 56,
+      "eligibleTracks": 6,
+      "eligibleArtists": 2,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "peak_time_techno",
+      "tracks": 23,
+      "eligibleTracks": 3,
+      "eligibleArtists": 1,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "deep_techno",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 24,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "ambient_techno",
+      "tracks": 34,
+      "eligibleTracks": 32,
+      "eligibleArtists": 32,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "bleep_techno",
+      "tracks": 41,
+      "eligibleTracks": 41,
+      "eligibleArtists": 41,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "tribal_techno",
+      "tracks": 28,
+      "eligibleTracks": 26,
+      "eligibleArtists": 25,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hardgroove_techno",
+      "tracks": 35,
+      "eligibleTracks": 31,
+      "eligibleArtists": 31,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "broken_techno",
+      "tracks": 35,
+      "eligibleTracks": 33,
+      "eligibleArtists": 32,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "house",
+      "tracks": 161,
+      "eligibleTracks": 161,
+      "eligibleArtists": 27,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "deep_house",
+      "tracks": 38,
+      "eligibleTracks": 37,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Casper Schulz",
+        "Darren Nye",
+        "ex_libris",
+        "Marsh",
+        "Menta Sauce",
+        "Pascal Moscheni",
+        "Psychemagik",
+        "Revivis",
+        "Running Hot",
+        "Sam Girling"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "tech_house",
+      "tracks": 220,
+      "eligibleTracks": 11,
+      "eligibleArtists": 9,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "progressive_house",
+      "tracks": 40,
+      "eligibleTracks": 39,
+      "eligibleArtists": 9,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Guy J",
+        "Guy Mantzur",
+        "Henry Saiz",
+        "Hernán Cattáneo & Audio Junkies",
+        "Nick Warren"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "afro_house",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "organic_house",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 9,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "bass_house",
+      "tracks": 39,
+      "eligibleTracks": 39,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 6,
+      "verifiedArtists": [
+        "Jauz",
+        "JOYRYDE",
+        "AC Slater",
+        "Habstrakt",
+        "Moksi",
+        "Taiki Nulight"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "electro_house",
+      "tracks": 37,
+      "eligibleTracks": 37,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Wolfgang Gartner",
+        "Dada Life",
+        "Feed Me",
+        "Mord Fustang"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "minimal_deep_tech",
+      "tracks": 33,
+      "eligibleTracks": 7,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Mihai Popoviciu",
+        "Toman",
+        "Traumer"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "jackin_house",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "soulful_house",
+      "tracks": 30,
+      "eligibleTracks": 30,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "disco_house",
+      "tracks": 39,
+      "eligibleTracks": 39,
+      "eligibleArtists": 9,
+      "verifiedPlayableArtists": 7,
+      "verifiedArtists": [
+        "Art of Tones",
+        "Cody Currie & Kapote",
+        "COEO",
+        "HOTMOOD",
+        "Ian Pooley",
+        "O’Flynn",
+        "Oliver Dollar"
+      ],
+      "newTracks": 4,
+      "collectionComplete": false
+    },
+    {
+      "style": "garage_house",
+      "tracks": 30,
+      "eligibleTracks": 30,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "edm",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Tiësto",
+        "Alohaii",
+        "BOJAQ",
+        "DROIDGLOW",
+        "Frost Children",
+        "Mystery Skulls",
+        "Ninajirachi",
+        "Starjunk95 スタージャンク95",
+        "Switch Angel",
+        "yax03"
+      ],
+      "newTracks": 9,
+      "collectionComplete": true
+    },
+    {
+      "style": "progressive_edm",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Almero",
+        "ASTOR",
+        "BlackCode & David Allen",
+        "Bukkoy & Otto Palmborg",
+        "Division One (KR)",
+        "Fedo",
+        "Kosling & NONIK",
+        "Manse",
+        "Roc Dubloc",
+        "Timmo Hendriks"
+      ],
+      "newTracks": 10,
+      "collectionComplete": false
+    },
+    {
+      "style": "big_room_house",
+      "tracks": 38,
+      "eligibleTracks": 38,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 12,
+      "verifiedArtists": [
+        "D3FAI & NGD Project",
+        "Jewelz & Sparks",
+        "KEVU",
+        "Maddix",
+        "Olly James",
+        "R3HAB",
+        "SaberZ",
+        "Sandro Silva, Max Adrian & Meikle",
+        "Sartek",
+        "Subliminals, New Blood & GAAZ",
+        "Tom & Jame",
+        "W&W"
+      ],
+      "newTracks": 10,
+      "collectionComplete": false
+    },
+    {
+      "style": "future_house",
+      "tracks": 29,
+      "eligibleTracks": 29,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Chunky B",
+        "Klangphonics",
+        "satella"
+      ],
+      "newTracks": 3,
+      "collectionComplete": false
+    },
+    {
+      "style": "slap_house",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "HVME",
+        "VIZE"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "tropical_house",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Thomas Jack"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "complextro",
+      "tracks": 36,
+      "eligibleTracks": 36,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Alex S.",
+        "clwdy",
+        "cYsmix",
+        "dilukha",
+        "Glitch Cat",
+        "Jayke1",
+        "Ninajirachi",
+        "Nitro Fun",
+        "Olmatri",
+        "reallerr"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "electronic_dance_pop",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "chicago_house",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Clovis Chilwell",
+        "DJ LIGMA",
+        "DJ Sabrina The Teenage DJ",
+        "DJ Split",
+        "George T",
+        "Hidden Spheres",
+        "Icaro Mana",
+        "Jacopo Latini",
+        "Social Lovers",
+        "Steffi"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "french_house",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Fred Falke",
+        "Modjo",
+        "Cassius"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "funky_house",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Seamus Haji",
+        "Dr Packer",
+        "Inland Knights"
+      ],
+      "newTracks": 1,
+      "collectionComplete": false
+    },
+    {
+      "style": "tribal_house",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "latin_house",
+      "tracks": 30,
+      "eligibleTracks": 30,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Andruss",
+        "Harry Romero",
+        "Sllash & Doppe"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "piano_house",
+      "tracks": 21,
+      "eligibleTracks": 21,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "MK"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "melodic_house",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Nora En Pure",
+        "Tinlicker"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "microhouse",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Jan Jelinek",
+        "Luomo",
+        "Ricardo Villalobos"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "eurodance",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Culture Beat",
+        "Bad Boombox",
+        "DJ HEARTSTRING",
+        "Marlon Hoffstadt"
+      ],
+      "newTracks": 3,
+      "collectionComplete": false
+    },
+    {
+      "style": "ghetto_house",
+      "tracks": 30,
+      "eligibleTracks": 30,
+      "eligibleArtists": 9,
+      "verifiedPlayableArtists": 6,
+      "verifiedArtists": [
+        "Jammin Gerald",
+        "Paul Johnson",
+        "C.ru.z",
+        "Dj.Mc",
+        "ri",
+        "YTP"
+      ],
+      "newTracks": 4,
+      "collectionComplete": false
+    },
+    {
+      "style": "big_room_techno",
+      "tracks": 32,
+      "eligibleTracks": 32,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Space 92",
+        "Will Sparks",
+        "BELLINI BEATS",
+        "FINGY",
+        "Jaymie SIlk",
+        "JOCK CLUB",
+        "KaZ",
+        "Klaps",
+        "RIOT CODE",
+        "Simon Carter"
+      ],
+      "newTracks": 8,
+      "collectionComplete": true
+    },
+    {
+      "style": "mainstage_techno",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Maddix"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "drum_and_bass",
+      "tracks": 38,
+      "eligibleTracks": 38,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Beta 2",
+        "Blu Mar Ten",
+        "Franz Jäger",
+        "Kolectiv",
+        "Nectax",
+        "Nero's Day At Disneyland",
+        "nthng",
+        "Raär",
+        "Tangerine",
+        "Vektah"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "liquid_dnb",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "neurofunk",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "jump_up",
+      "tracks": 32,
+      "eligibleTracks": 32,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Bou",
+        "Hedex",
+        "Macky Gee",
+        "Turno & Kanine"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "jungle",
+      "tracks": 29,
+      "eligibleTracks": 29,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "darkstep",
+      "tracks": 29,
+      "eligibleTracks": 29,
+      "eligibleArtists": 10,
+      "verifiedPlayableArtists": 7,
+      "verifiedArtists": [
+        "Katharsys",
+        "The Panacea",
+        "Donny",
+        "EriS",
+        "Hostage",
+        "Jane's Silver Star",
+        "Strawberry Hospital"
+      ],
+      "newTracks": 5,
+      "collectionComplete": false
+    },
+    {
+      "style": "techstep",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Bad Company UK",
+        "Konflict",
+        "Kemal & Rob Data"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hardstep",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "atmospheric_jungle",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Omni Trio",
+        "Source Direct",
+        "Seba",
+        "ASC",
+        "Aural Imbalance",
+        "IRIDEZENT",
+        "Sawteeth",
+        "Suzukie",
+        "Thing",
+        "TKDPLL"
+      ],
+      "newTracks": 7,
+      "collectionComplete": true
+    },
+    {
+      "style": "ragga_jungle",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "General Levy",
+        "Serial Killaz"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "sambass",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Drumagick",
+        "Fernanda Porto",
+        "Marcelinho da Lua",
+        "XRS"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "drumfunk",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Fanu",
+        "Fracture & Neptune",
+        "Macc"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "big_beat",
+      "tracks": 30,
+      "eligibleTracks": 0,
+      "eligibleArtists": 0,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "breakbeat",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Arthur Hnatek",
+        "Atrice",
+        "BLVCKCEILING",
+        "DJ Sprinter",
+        "Farsight",
+        "Jamie Paige",
+        "Mia Koden",
+        "Skee Mask",
+        "Swin"
+      ],
+      "newTracks": 9,
+      "collectionComplete": false
+    },
+    {
+      "style": "uk_garage",
+      "tracks": 36,
+      "eligibleTracks": 36,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "future_garage",
+      "tracks": 97,
+      "eligibleTracks": 97,
+      "eligibleArtists": 20,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dubstep",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "CESCO",
+        "DJ Sprinter",
+        "Djrum",
+        "Facta",
+        "Horsepower Productions",
+        "Jungle Rootz",
+        "Tenshu",
+        "Untold",
+        "Von D",
+        "WZ"
+      ],
+      "newTracks": 10,
+      "collectionComplete": false
+    },
+    {
+      "style": "halftime_bass",
+      "tracks": 38,
+      "eligibleTracks": 38,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Aawadh",
+        "Bemah",
+        "Caspian",
+        "comm",
+        "Doctor Jeep",
+        "Folding Waves",
+        "Helmahof",
+        "Kessler",
+        "veneko"
+      ],
+      "newTracks": 9,
+      "collectionComplete": false
+    },
+    {
+      "style": "footwork_juke",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "ri",
+        "Tactic"
+      ],
+      "newTracks": 2,
+      "collectionComplete": false
+    },
+    {
+      "style": "trap",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Hucci",
+        "sfam",
+        "UZ"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "future_bass",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Deon Custom",
+        "DROELOE",
+        "Duumu"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "riddim",
+      "tracks": 41,
+      "eligibleTracks": 41,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "ANKU",
+        "BONEY",
+        "DustMolecule",
+        "Izzy Vadim",
+        "Killrina",
+        "NT",
+        "OTIKA",
+        "QOOG",
+        "SATYRN",
+        "SYKO DUBZ"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "experimental_bass",
+      "tracks": 43,
+      "eligibleTracks": 43,
+      "eligibleArtists": 16,
+      "verifiedPlayableArtists": 12,
+      "verifiedArtists": [
+        "Abu AMA",
+        "Blurrd Vzn",
+        "DEADPAN",
+        "Emplexx",
+        "Fake Two Piece",
+        "FURTHA",
+        "Ippei Nakamura",
+        "kurt aka",
+        "Nyquist",
+        "OOGA",
+        "Phrva",
+        "Wiley"
+      ],
+      "newTracks": 12,
+      "collectionComplete": true
+    },
+    {
+      "style": "wave",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Argo",
+        "d:enigma",
+        "ESCPE",
+        "Fraunhofer Diffraction",
+        "Ikariya Eiichi",
+        "KTrek",
+        "MONOMORTE",
+        "rSUN",
+        "Skaen",
+        "Zerofuturism"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "breakcore",
+      "tracks": 92,
+      "eligibleTracks": 92,
+      "eligibleArtists": 19,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "brostep",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Flux Pavilion",
+        "DJ Daddy Nasty",
+        "fur:trash",
+        "Hypnoza",
+        "Kou!",
+        "Mockingbird",
+        "Nyanakaru",
+        "Patricia Taxxon",
+        "TheBeastlyPichu",
+        "WubDrift"
+      ],
+      "newTracks": 9,
+      "collectionComplete": true
+    },
+    {
+      "style": "melodic_dubstep",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Dabin"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "chillstep",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 11,
+      "verifiedArtists": [
+        "Synkro",
+        "MitiS",
+        "An-ten-nae",
+        "Cloo",
+        "Fort Road",
+        "Stefan Torto",
+        "Stumbleine",
+        "Tep No",
+        "tieff",
+        "Vacant",
+        "Walking Dog"
+      ],
+      "newTracks": 9,
+      "collectionComplete": true
+    },
+    {
+      "style": "post_dubstep",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Zomby"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "drumstep",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Zardonic"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "nu_skool_breaks",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Freestylers"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "florida_breaks",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Huda Hudia",
+        "Dynamix II",
+        "Friction & Spice",
+        "Jackal & Hyde",
+        "Sharaz"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "bassline",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "NOTION",
+        "Ben Gerrans",
+        "CHE MAC",
+        "Douvelle19",
+        "Fallow",
+        "Jenny Sparks",
+        "lukeattack",
+        "Renceau",
+        "SILVA BUMPA",
+        "Venjent"
+      ],
+      "newTracks": 9,
+      "collectionComplete": true
+    },
+    {
+      "style": "uk_bass",
+      "tracks": 19,
+      "eligibleTracks": 19,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Peverelist",
+        "Batu"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "wonky",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Dabrye",
+        "Flying Lotus",
+        "Harmonic 313"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "glitch_hop",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Gramatik",
+        "Haywyre"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "neurohop",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Mr. Bill",
+        "OPIUO",
+        "Vorso",
+        "Ekcle"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "edm_trap",
+      "tracks": 29,
+      "eligibleTracks": 29,
+      "eligibleArtists": 10,
+      "verifiedPlayableArtists": 7,
+      "verifiedArtists": [
+        "Flosstradamus",
+        "UZ",
+        "Daily Bread",
+        "if found",
+        "JETTY",
+        "SONIC BLOOD",
+        "WOLFDRONE"
+      ],
+      "newTracks": 5,
+      "collectionComplete": false
+    },
+    {
+      "style": "hardwave",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Barnacle Boi",
+        "Juche"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "jersey_club",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "DJ Jayhood",
+        "Nadus"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "baltimore_club",
+      "tracks": 23,
+      "eligibleTracks": 23,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Blaqstarr",
+        "DJ Technics",
+        "Say Wut",
+        "Scottie B"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "ballroom_vogue_beats",
+      "tracks": 37,
+      "eligibleTracks": 37,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Byrell The Great",
+        "Cash From Hash",
+        "DJ Dick Wolf",
+        "Esgrove",
+        "Half OFFF",
+        "MobeeThicc",
+        "NET GALA",
+        "Poor J'Darr",
+        "PUMPDABEAT",
+        "TRIICO"
+      ],
+      "newTracks": 9,
+      "collectionComplete": true
+    },
+    {
+      "style": "kuduro_eletronico",
+      "tracks": 26,
+      "eligibleTracks": 26,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "batida",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Nidia",
+        "DJ Firmeza",
+        "DJ Nervoso",
+        "Puto Tito"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "singeli",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "DJ Travella",
+        "Dogo Niga",
+        "Bamba Pana",
+        "Dogo Kibo",
+        "MC Pilato"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "shangaan_electro",
+      "tracks": 16,
+      "eligibleTracks": 16,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Foster Manganyi",
+        "Mancingelani",
+        "Nkata Mawewe",
+        "Tiyiselani Vomaseve",
+        "Zinja Hlungwani"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "ghettotech",
+      "tracks": 23,
+      "eligibleTracks": 23,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Disco D",
+        "Detroit's Filthiest",
+        "1905",
+        "DJ Pirna",
+        "RON MERCY"
+      ],
+      "newTracks": 3,
+      "collectionComplete": false
+    },
+    {
+      "style": "downtempo",
+      "tracks": 20,
+      "eligibleTracks": 20,
+      "eligibleArtists": 10,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "ambient",
+      "tracks": 129,
+      "eligibleTracks": 129,
+      "eligibleArtists": 41,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "chillout",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Zero 7",
+        "ANKH",
+        "ENGAI",
+        "Igaxx",
+        "Oblique Occasions",
+        "Robert Babicz",
+        "Shpongle",
+        "Slow Dancing Society",
+        "Sync24"
+      ],
+      "newTracks": 8,
+      "collectionComplete": false
+    },
+    {
+      "style": "trip_hop",
+      "tracks": 101,
+      "eligibleTracks": 101,
+      "eligibleArtists": 20,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "darkwave",
+      "tracks": 40,
+      "eligibleTracks": 40,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Filmmaker",
+        "Kontravoid",
+        "MAGNAVOLT",
+        "NNHMN",
+        "PERTURBATOR",
+        "R. Missing",
+        "Rituel Encens",
+        "Rue Oberkampf",
+        "The Black Queen",
+        "Vioflesh"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "coldwave",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "synthwave",
+      "tracks": 87,
+      "eligibleTracks": 87,
+      "eligibleArtists": 23,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "witch_house",
+      "tracks": 14,
+      "eligibleTracks": 14,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "slambient",
+      "tracks": 52,
+      "eligibleTracks": 52,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "idm",
+      "tracks": 41,
+      "eligibleTracks": 41,
+      "eligibleArtists": 8,
+      "verifiedPlayableArtists": 6,
+      "verifiedArtists": [
+        "Autechre",
+        "Aphex Twin",
+        "Boards of Canada",
+        "Clark",
+        "Plaid",
+        "Squarepusher"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "electro",
+      "tracks": 71,
+      "eligibleTracks": 71,
+      "eligibleArtists": 22,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "dark_ambient",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Atrium Carceri",
+        "Northaunt",
+        "Cities Last Broadcast",
+        "Desiderii Marginis",
+        "Kammarheit"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "space_ambient",
+      "tracks": 22,
+      "eligibleTracks": 22,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Carbon Based Lifeforms",
+        "Max Corbacho",
+        "Michael Stearns",
+        "Stellardrone"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "ambient_house",
+      "tracks": 29,
+      "eligibleTracks": 29,
+      "eligibleArtists": 12,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "808 State",
+        "The Future Sound of London",
+        "Global Communication",
+        "Darwin Chamber",
+        "Hame",
+        "nick barber",
+        "Orion",
+        "Sedibus",
+        "Tom Vernon",
+        "Tranquil Elephantizer"
+      ],
+      "newTracks": 7,
+      "collectionComplete": true
+    },
+    {
+      "style": "ambient_dub",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 9,
+      "verifiedArtists": [
+        "Banco de Gaia",
+        "GERVIS",
+        "OWA",
+        "Pitch Black",
+        "Sebby Kowal",
+        "Spirit Film",
+        "Submersion",
+        "Substak",
+        "TwichGarden"
+      ],
+      "newTracks": 8,
+      "collectionComplete": true
+    },
+    {
+      "style": "lowercase",
+      "tracks": 21,
+      "eligibleTracks": 21,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Richard Chartier",
+        "Sachiko M",
+        "Taku Sugimoto",
+        "Toshimaru Nakamura",
+        "Toshiya Tsunoda"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "microsound",
+      "tracks": 22,
+      "eligibleTracks": 22,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Oval",
+        "Pan Sonic"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "electroacoustic",
+      "tracks": 13,
+      "eligibleTracks": 13,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Beatriz Ferreyra",
+        "Iannis Xenakis"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "musique_concrete",
+      "tracks": 25,
+      "eligibleTracks": 25,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 4,
+      "verifiedArtists": [
+        "Bernard Parmegiani",
+        "Christian Zanesi",
+        "Francois Bayle",
+        "Michel Chion"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "berlin_school",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 15,
+      "verifiedPlayableArtists": 11,
+      "verifiedArtists": [
+        "Michael Hoenig",
+        "American Astro Monkey Project",
+        "Apoptygma Berzerk",
+        "DTime",
+        "Il settimo cane della bianca dama del castello",
+        "L.V. Morris",
+        "Mario Schönwälder",
+        "Mark Shreeve",
+        "Martin Stürtzer",
+        "Stellarium",
+        "Sylvain Carel"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "kosmische_musik",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "NEU!",
+        "Popol Vuh"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "italo_disco",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Gazebo",
+        "P. Lion",
+        "Ryan Paris"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hi_nrg",
+      "tracks": 24,
+      "eligibleTracks": 24,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Hazell Dean",
+        "Paul Parker"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "retrowave",
+      "tracks": 20,
+      "eligibleTracks": 20,
+      "eligibleArtists": 3,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "outrun",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Lazerhawk",
+        "Timecop1983"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "darksynth",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 13,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "Mega Drive",
+        "GosT",
+        "DEADLIFE",
+        "Destryur",
+        "Karl Casey",
+        "LukHash",
+        "Maestro Eternal",
+        "MAGNAVOLT",
+        "Occams Laser",
+        "THE RUNAWAY WILD"
+      ],
+      "newTracks": 8,
+      "collectionComplete": true
+    },
+    {
+      "style": "minimal_wave",
+      "tracks": 30,
+      "eligibleTracks": 30,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Das Ding",
+        "Martin Dupont",
+        "Solid Space",
+        "Oppenheimer Analysis",
+        "Turquoise Days"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "futurepop",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 8,
+      "verifiedArtists": [
+        "Assemblage 23",
+        "Icon of Coil",
+        "Beyond Border",
+        "Chrom",
+        "Destroy Me Again",
+        "Faderhead",
+        "GLIS",
+        "mind.in.a.box"
+      ],
+      "newTracks": 6,
+      "collectionComplete": false
+    },
+    {
+      "style": "industrial_dance",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Front Line Assembly",
+        "KMFDM",
+        "Ministry"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "deconstructed_club",
+      "tracks": 34,
+      "eligibleTracks": 34,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 8,
+      "verifiedArtists": [
+        "Amnesia Scanner",
+        "Eartheater",
+        "011668",
+        "Agazero",
+        "Eisebelle",
+        "Manuka Honey",
+        "RITCHRD",
+        "Sakr"
+      ],
+      "newTracks": 6,
+      "collectionComplete": false
+    },
+    {
+      "style": "brazilian_funk",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 10,
+      "verifiedArtists": [
+        "ABE",
+        "badsista",
+        "Bronka",
+        "CyberKills",
+        "dudda",
+        "Elado",
+        "Lorkestra",
+        "mercromina club",
+        "Peki Momés",
+        "Syredu"
+      ],
+      "newTracks": 10,
+      "collectionComplete": true
+    },
+    {
+      "style": "gabber",
+      "tracks": 38,
+      "eligibleTracks": 38,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hardstyle",
+      "tracks": 90,
+      "eligibleTracks": 90,
+      "eligibleArtists": 22,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hardcore",
+      "tracks": 35,
+      "eligibleTracks": 35,
+      "eligibleArtists": 14,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "frenchcore",
+      "tracks": 92,
+      "eligibleTracks": 92,
+      "eligibleArtists": 20,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "speedcore",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "rawstyle",
+      "tracks": 32,
+      "eligibleTracks": 32,
+      "eligibleArtists": 4,
+      "verifiedPlayableArtists": 0,
+      "verifiedArtists": [],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "crossbreed",
+      "tracks": 32,
+      "eligibleTracks": 32,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Cooh",
+        "DJ Hidden",
+        "Sinister Souls",
+        "Hallucinator",
+        "Switch Technique"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "euphoric_hardstyle",
+      "tracks": 33,
+      "eligibleTracks": 33,
+      "eligibleArtists": 11,
+      "verifiedPlayableArtists": 7,
+      "verifiedArtists": [
+        "Audiotricz",
+        "ACTI",
+        "Activator",
+        "Francesco Zeta",
+        "Fyuurie",
+        "Harkiadel",
+        "Keyvell."
+      ],
+      "newTracks": 6,
+      "collectionComplete": false
+    },
+    {
+      "style": "reverse_bass",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "Activator",
+        "Technoboy"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "hard_dance",
+      "tracks": 31,
+      "eligibleTracks": 31,
+      "eligibleArtists": 6,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "Lab4",
+        "Rob Tissera",
+        "DJ HÖRDE"
+      ],
+      "newTracks": 1,
+      "collectionComplete": false
+    },
+    {
+      "style": "uk_hardcore",
+      "tracks": 28,
+      "eligibleTracks": 28,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 1,
+      "verifiedArtists": [
+        "Scott Brown"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "terrorcore",
+      "tracks": 20,
+      "eligibleTracks": 20,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 2,
+      "verifiedArtists": [
+        "SRB",
+        "The Vizitor"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "extratone",
+      "tracks": 19,
+      "eligibleTracks": 19,
+      "eligibleArtists": 5,
+      "verifiedPlayableArtists": 5,
+      "verifiedArtists": [
+        "Aekhloria",
+        "Kobaryo",
+        "DJ Skull Vomit",
+        "Kurwastyle Project",
+        "Pressterror"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    },
+    {
+      "style": "makina",
+      "tracks": 27,
+      "eligibleTracks": 27,
+      "eligibleArtists": 7,
+      "verifiedPlayableArtists": 3,
+      "verifiedArtists": [
+        "DJ Skudero",
+        "DJ Nau",
+        "Ruboy"
+      ],
+      "newTracks": 0,
+      "collectionComplete": false
+    }
+  ],
+  "eligibleAtLeast10": 70,
+  "verifiedAtLeast10": 25,
+  "discoverableAtLeast10": 0,
+  "discoveriesChecked": 3,
+  "selectionFailures": [],
+  "rejectedAdditions": []
+}

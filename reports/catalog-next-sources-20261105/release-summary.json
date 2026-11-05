@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-05T23:43:50.111Z",
+  "beforeCommit": "aab4fbbafbeb77cc02062aefc50a02deee22defb",
+  "appVersion": "20261105labels25",
+  "totalTracks": 9605,
+  "styles": 169,
+  "atLeast10": 70,
+  "below10": 99,
+  "newRecordings": 2,
+  "totalNewRecordingsSinceOriginalRelease": 352,
+  "changed": [
+    {
+      "style": "forest_psy",
+      "before": 3,
+      "after": 4,
+      "verified": 1,
+      "immediate": 2
+    },
+    {
+      "style": "dark_progressive",
+      "before": 2,
+      "after": 3,
+      "verified": 1,
+      "immediate": 1
+    }
+  ],
+  "selectionScope": [
+    "forest_psy",
+    "dark_progressive"
+  ],
+  "discoveriesChecked": 3,
+  "selectionFailures": 0,
+  "rejectedAdditions": 0,
+  "passed": true
+}

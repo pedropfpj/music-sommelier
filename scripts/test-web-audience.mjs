@@ -55,15 +55,33 @@ for (const change of ['profile', 'currentRecommendation', 'tab', 'recommendation
 ctx.hydrateExternalDatasetPackInBackground = async () => { throw new Error('offline'); };
 await ctx.openSharedCatalogTrack();
 assert.equal(ctx.currentRecommendation, null);
+assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.loadingFailed);
+
+({ ctx, node } = context()); ctx.catalog = [];
+await ctx.openSharedCatalogTrack();
 assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.missing);
+
+// A slow first visit is still loading at the old eight-second deadline. Once
+// the actual catalog arrives, the exact shared recording opens without audio.
+({ ctx, node } = context()); ctx.catalog = [];
+let finishColdLoad;
+ctx.hydrateExternalDatasetPackInBackground = () => new Promise(resolve => { finishColdLoad = () => { ctx.catalog = [track]; resolve(); }; });
+ctx.window.setTimeout = (fn, ms) => ms <= 8000 ? setTimeout(fn, 0) : 0;
+const coldOpening = ctx.openSharedCatalogTrack();
+await new Promise(resolve => setTimeout(resolve, 10));
+assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.opening, 'A slow catalog is not a missing recording');
+finishColdLoad();
+await coldOpening;
+assert.equal(ctx.currentRecommendation, track);
+assert.equal(ctx.preview.options.autoplay, false);
 
 ({ ctx, node } = context()); ctx.catalog = [];
 ctx.hydrateExternalDatasetPackInBackground = () => new Promise(() => {});
 ctx.window.setTimeout = (fn, ms) => { ctx.waitBudget = ms; return setTimeout(fn, 0); };
 await ctx.openSharedCatalogTrack();
-assert.equal(ctx.waitBudget, 8000);
+assert.ok(ctx.waitBudget > 8000 && ctx.waitBudget <= 30000, 'Hung requests still have a bounded wait');
 assert.equal(ctx.currentRecommendation, null);
-assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.missing);
+assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.loadingFailed);
 
 ({ ctx, node } = context()); let copied;
 ctx.navigator.clipboard = { writeText: async text => { copied = text; } };

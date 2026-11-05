@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-11-05T23:03:16.746Z",
+  "origin": "https://sonicsearch.app",
+  "commit": "aab4fbbafbeb77cc02062aefc50a02deee22defb",
+  "appVersion": "20261105diversity24",
+  "indexVersionMatches": true,
+  "checks": [
+    {
+      "file": "app.min.js",
+      "status": 200,
+      "sha256": "6d1146ff84d7a8f60a4c4be6038a45217274a0aa00e5f05595c6d1aa99fc0a35",
+      "matchesLocal": true
+    },
+    {
+      "file": "catalog-runtime.min.js",
+      "status": 200,
+      "sha256": "6161f2c468864dc2c22708de53357572ad8d50f898f04d89271ba09ca20881d6",
+      "matchesLocal": true
+    },
+    {
+      "file": "data/runtime-catalog-v1/manifest.json",
+      "status": 200,
+      "sha256": "92e1e9d3d91512789adbf15f5417a3f9b1df860bcd6da3fbfe50554edff6a6f6",
+      "matchesLocal": true
+    },
+    {
+      "file": "data/runtime-catalog-v1/core.json",
+      "status": 200,
+      "sha256": "2680e5d8834be67550cb00b3638dd3a67d1beb4453f3e4255b27e76c21910646",
+      "matchesLocal": true
+    },
+    {
+      "file": "data/runtime-catalog-v1/styles/wave.json",
+      "status": 200,
+      "sha256": "9a48d4c54066146104cc560ac2fe45fba0a9e9e5424682c98bfa6d4729a10678",
+      "matchesLocal": true
+    },
+    {
+      "file": "data/runtime-catalog-v1/styles/progressive_edm.json",
+      "status": 200,
+      "sha256": "c9d0a6bd1f84671b2755e37d43c35ecb17487b3711fcd5e777856ca1b60c3496",
+      "matchesLocal": true
+    },
+    {
+      "file": "data/runtime-catalog-v1/styles/big_room_house.json",
+      "status": 200,
+      "sha256": "73b19dedad2449f8eb6f51ea9e2e100a0f52478654e657d11c96ee0cab320eae",
+      "matchesLocal": true
+    }
+  ],
+  "passed": true,
+  "productionDeployment": "EiUQPBuUi9N6DkcVue8qS6ScMuaA"
+}

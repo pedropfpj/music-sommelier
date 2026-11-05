@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-11-05T23:40:57.462Z",
+  "method": "Publisher names this release subgenre; its linked recording supplies exact title, artist and player ID. Audio checked by HTTP range response, not human audition.",
+  "passed": [
+    {
+      "style": "forest_psy",
+      "artist": "Karavel",
+      "song": "Artwing",
+      "label": "Parvati Records",
+      "bpm": 150,
+      "bandcamp_track_id": "4042758322",
+      "bandcamp_track_url": "https://beatspace-parvati.bandcamp.com/track/artwing",
+      "bandcamp_url": "https://beatspace-parvati.bandcamp.com/album/inspiration",
+      "duration_sec": 397,
+      "release_date": "2021-02-05",
+      "artist_genre": "forest psy",
+      "genre_evidence_url": "https://parvati-records.com/karavel-inspiration-ep/",
+      "source_url": "https://beatspace-parvati.bandcamp.com/album/inspiration",
+      "source_tags": "electronic_label_recordings_v25;publisher_genre_verified;recording_identity_verified;audio_http_checked",
+      "source": "electronic_label_recordings_v25_20261105",
+      "confidence": "high",
+      "status": "published",
+      "audioStatus": 206,
+      "audioType": "audio/mpeg",
+      "genreEvidence": "pure and deep Forest style"
+    },
+    {
+      "style": "dark_progressive",
+      "artist": "Hybrid",
+      "song": "Bottom Floor",
+      "label": "Zenon Records",
+      "bpm": "",
+      "bandcamp_track_id": "3776416485",
+      "bandcamp_track_url": "https://zenonrecords.bandcamp.com/track/bottom-floor",
+      "bandcamp_url": "https://zenonrecords.bandcamp.com/album/abstractions",
+      "duration_sec": 402,
+      "release_date": "2026-02-18",
+      "artist_genre": "dark progressive",
+      "genre_evidence_url": "https://www.zenonrecords.com/release/hybrid-abstractions",
+      "source_url": "https://zenonrecords.bandcamp.com/album/abstractions",
+      "source_tags": "electronic_label_recordings_v25;publisher_genre_verified;recording_identity_verified;audio_http_checked",
+      "source": "electronic_label_recordings_v25_20261105",
+      "confidence": "high",
+      "status": "published",
+      "audioStatus": 206,
+      "audioType": "audio/mpeg",
+      "genreEvidence": "signature dark progressive sound"
+    }
+  ],
+  "failed": []
+}

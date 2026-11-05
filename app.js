@@ -4799,7 +4799,7 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20261105-diversity-v24";
+const EXTERNAL_DATASET_CACHE_VERSION = "20261105-labels-v25";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
@@ -4839,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261105diversity24";
+const SONIC_APP_BUILD_ID = "20261105labels25";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -20330,6 +20330,24 @@ function isTrustedCuratedCatalogTrack(track) {
   // audio before publication. Genre evidence does not manufacture an exact BPM.
   const metadata = track.catalogMetadata || {};
   const tags = [...(track.sourceTags || []), ...(Array.isArray(metadata.source_tags) ? metadata.source_tags : [])];
+  if (tags.includes("electronic_label_recordings_v25") && tags.includes("publisher_genre_verified") && tags.includes("recording_identity_verified") && tags.includes("audio_http_checked")) {
+    // Only the reviewed publisher/recording pairs can establish these fine
+    // subgenres without a published tempo. A label homepage is not evidence.
+    const publishers = {
+      forest_psy: ["https://parvati-records.com", "https://beatspace-parvati.bandcamp.com"],
+      dark_progressive: ["https://www.zenonrecords.com", "https://zenonrecords.bandcamp.com"]
+    };
+    const publisher = publishers[track.style];
+    try {
+      const evidence = new URL(metadata.genre_evidence_url || "");
+      const release = new URL(metadata.source_url || "");
+      const recording = new URL(track.bandcampTrackUrl || "");
+      if (publisher && evidence.origin === publisher[0] && evidence.pathname !== "/" &&
+          release.origin === publisher[1] && release.pathname.startsWith("/album/") &&
+          recording.origin === release.origin && recording.pathname.startsWith("/track/") &&
+          /^\d+$/.test(String(track.bandcampTrackId || "")) && textHasSpecificStyleSignal(track.style, track.artistGenre)) return true;
+    } catch (_) {}
+  }
   if (track.style === "big_room_house" && tags.includes("electronic_label_v24") && tags.includes("publisher_genre_verified") && tags.includes("recording_identity_verified")) {
     try {
       const evidence = new URL(metadata.genre_evidence_url || "");
@@ -23160,7 +23178,7 @@ function addDynamicTrackToCatalog({
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
     : "06:00";
   const publisherCheckedRecording = sourceTags.some((tag) => [
-    "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24"
+    "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24", "electronic_label_recordings_v25"
   ].includes(tag));
 
   const hydratedTrack = {
@@ -58440,7 +58458,17 @@ async function openSharedCatalogTrack() {
       track && track.style === request.style && recommendationTrackKey(track) === request.key && isTrackEligibleForRecommendation(track));
     let track = resolveTrack();
     if (!track) {
-      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: request.style }), 8000, null);
+      // A cold catalog may take longer than discovery's short interaction budget.
+      // Keep the UI usable while loading, and distinguish a network failure from
+      // a completed lookup that really did not contain the requested recording.
+      const loaded = await waitForPromiseWithTimeout(
+        hydrateExternalDatasetPackInBackground({ style: request.style }).then(() => true), 30000, false
+      );
+      if (!loaded) {
+        if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && !recommendationRunBusy) showStatus("loadingFailed");
+        else if (status) status.hidden = true;
+        return;
+      }
       track = resolveTrack();
     }
     // A late link must never replace a newer discovery, navigation or another profile.
@@ -58461,7 +58489,7 @@ async function openSharedCatalogTrack() {
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
     trackRecommendationEvent("shared_track_opened", track, {}, { source: "share" });
   } catch (_) {
-    if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation) showStatus("missing");
+    if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && !recommendationRunBusy) showStatus("loadingFailed");
   }
 }
 
