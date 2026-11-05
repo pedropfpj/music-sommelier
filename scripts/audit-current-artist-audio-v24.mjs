@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+const root='data/runtime-catalog-v1/';
+const manifest=JSON.parse(await fs.readFile(root+'manifest.json','utf8'));
+const file='reports/public-release-20261105/catalog-before-audio.json';
+const report=await fs.readFile(file,'utf8').then(JSON.parse).catch(()=>({at:new Date().toISOString(),styles:{},method:'Current HTTP audio response from the exact preview URL shipped. External links without a current preview are not counted here.'}));
+const identity=s=>String(s||'').split(/\s+(?:feat\.?|ft\.?|featuring|vs\.?|x|presents|with)\s+|\s+&\s+|,\s*/i)[0].normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const probes=new Map();
+async function probe(url){if(probes.has(url))return probes.get(url);const promise=(async()=>{try{const r=await fetch(url,{headers:{Range:'bytes=0-1023'},signal:AbortSignal.timeout(7000)});const type=r.headers.get('content-type')||'';await r.body?.cancel();return {ok:r.ok&&/^(audio\/|video\/mp4|application\/octet-stream)/.test(type),status:r.status,type};}catch(e){return{ok:false,error:e.name};}})();probes.set(url,promise);return promise;}
+let saves=Promise.resolve();function save(){saves=saves.then(async()=>{await fs.writeFile(file+'.tmp',JSON.stringify(report,null,2));await fs.rename(file+'.tmp',file);});return saves;}
+const pending=Object.keys(manifest.styles).filter(s=>!report.styles[s]);
+await Promise.all(Array.from({length:6},async()=>{while(pending.length){const style=pending.shift();const rows=JSON.parse(await fs.readFile(root+manifest.styles[style],'utf8'));const byArtist=new Map();for(const row of rows){if(row.preview_url){const id=identity(row.artist);if(!byArtist.has(id))byArtist.set(id,[]);byArtist.get(id).push(row);}}const valid=[],failed=[];for(const [id,tracks]of byArtist){if(valid.length>=12)break;let passed=false;for(const t of tracks.slice(0,2)){const proof=await probe(t.preview_url);if(proof.ok){valid.push({identity:id,artist:t.artist,song:t.song,previewUrl:t.preview_url,...proof});passed=true;break;}}if(!passed)failed.push(id);}report.styles[style]={tracks:rows.length,creditedArtists:new Set(rows.map(r=>identity(r.artist))).size,verifiedArtists:valid.length,verified:valid,unverified:failed};await save();console.log(style,valid.length);}}));

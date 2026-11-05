@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {createAppRuntimeTestContext} from './app-runtime-test-harness.mjs';
+
+const ctx=createAppRuntimeTestContext();
+const calls=[];
+const node=()=>({textContent:'',dataset:{},classList:{add(){},remove(){},toggle(){}}});
+for(const name of ['previewPanel','previewStatus','trackPreview','listeningPrompt','previewPlayBtn'])ctx[name]=node();
+for(const name of ['bpmInfo','energyInfo','releaseInfo','durationInfo','catalogInfo','youtubeLink'])ctx[name]=null;
+for(const name of ['setPreviewPrimaryPlaybackState','setTrackPreviewVisualState','stopAllActivePlayback','syncYouTubePreviewAttemptForTrack','renderNowPlayingGenre','renderTrackCardSignals','renderRecommendationTrust'])ctx[name]=()=>{};
+ctx.previewAutoplayRequested=()=>true;
+ctx.getTrackMetadata=()=>({});
+ctx.resolveYouTubeVideoFromApi=async()=>false;
+ctx.youtubePreviewCanRetry=()=>false;
+ctx.showFixedPreviewPlayers=()=>({anyReady:false,availableSources:[]});
+ctx.renderedPreviewHasPlaybackRoute=()=>true;
+ctx.startPreferredEmbeddedPreviewAutoplay=()=>{calls.push('embed');return {opened:true,source:'soundcloud'};};
+ctx.commitTrackPreviewSource=(_track,url)=>{calls.push(['audio',url]);return true;};
+ctx.attemptRenderedPreviewAutoplay=async(_track,options)=>{calls.push(['play',options.hasDirectPreview]);return true;};
+const track={artist:'Ultramarine',song:'Stella',style:'ambient_techno',previewUrl:'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/test.m4a',previewChecked:true,previewMissing:false,soundcloudTrackUrl:'https://soundcloud.com/ultramarine-official/stella-2'};
+ctx.currentRecommendation=track;
+await ctx.renderPreview(track,{fast:true});
+assert.equal(calls.includes('embed'),false,'Reopening a saved track must not replace its usable direct audio with a later SoundCloud match');
+assert.ok(calls.some(x=>Array.isArray(x)&&x[0]==='audio'&&x[1]===track.previewUrl));
+assert.ok(calls.some(x=>Array.isArray(x)&&x[0]==='play'&&x[1]===true));
+calls.length=0;
+track.previewUrl='';track.previewCandidates=[];track.previewMissing=true;
+await ctx.renderPreview(track,{fast:true});
+assert.deepEqual(calls,['embed'],'A track without direct audio still opens its official embed');
+
+track.previewUrl='https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/test.m4a';
+ctx.ownedTrackPreviewSource=()=>track.previewUrl;
+calls.length=0;
+assert.equal(ctx.resumeCurrentPreviewFromUserGesture(),true);
+assert.deepEqual(calls,[['play',true]],'Turning sound back on resumes the available direct audio');
+console.log('Preview replay passed: valid direct audio retained, official fallback available, sound-toggle source consistent.');

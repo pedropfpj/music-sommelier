@@ -35,11 +35,11 @@ async function fetchOk(relativePath, expectedType) {
 
 const indexResponse = await fetchOk("index.html", /text\/html/i);
 const indexHtml = await indexResponse.text();
-assert.match(indexHtml, /catalog-runtime\.min\.js\?v=20261105catalog23/, "The served app does not reference the current catalog bundle");
+assert.match(indexHtml, /catalog-runtime\.min\.js\?v=20261105catalog24/, "The served app does not reference the current catalog bundle");
 assert.ok(indexHtml.includes(`app.min.js?v=${appBuildId}`), "The served app does not reference the current app bundle");
 const runtimeBundle = await (await fetchOk("catalog-runtime.min.js", /text\/javascript|application\/javascript/i)).text();
 const appBundle = await (await fetchOk("app.min.js", /text\/javascript|application\/javascript/i)).text();
-assert.match(runtimeBundle, /20261105-catalog-v23/, "The served catalog loader is stale");
+assert.match(runtimeBundle, /20261105-catalog-v24/, "The served catalog loader is stale");
 assert.ok(appBundle.includes(appBuildId), "The served app bundle is stale");
 
 const manifestResponse = await fetchOk("data/runtime-catalog-v1/manifest.json", /application\/json/i);

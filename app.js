@@ -4799,7 +4799,7 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20261105-diversity-v23";
+const EXTERNAL_DATASET_CACHE_VERSION = "20261105-diversity-v24";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
@@ -4839,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261105profiles1";
+const SONIC_APP_BUILD_ID = "20261105diversity24";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -18327,7 +18327,7 @@ async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
     if (externalDatasetStylePromises.has(cleanStyle)) return externalDatasetStylePromises.get(cleanStyle);
     const stylePromise = loadExternalDatasetRuntimeRows(cleanStyle)
       .then((rows) => {
-        const merged = mergeExternalDatasetRows(rows, `runtime_catalog_v1_${cleanStyle}`);
+        const merged = mergeExternalDatasetRows(rows, `dataset_local_runtime_${cleanStyle}`);
         externalDatasetImportedStyles.add(cleanStyle);
         return finalizeExternalDatasetRuntimeMerge(merged);
       })
@@ -18341,7 +18341,7 @@ async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
   externalDatasetImportStarted = true;
   externalDatasetImportPromise = loadExternalDatasetRuntimeRows()
     .then((rows) => finalizeExternalDatasetRuntimeMerge(
-      mergeExternalDatasetRows(rows, "runtime_catalog_v1_core")
+      mergeExternalDatasetRows(rows, "dataset_local_runtime_core")
     ))
     .finally(() => {
       externalDatasetImportDone = true;
@@ -20323,9 +20323,41 @@ function isTrustedCuratedCatalogTrack(track) {
   if (!track) return false;
   if (isTrustedSlambientCatalogTrack(track)) return true;
   const source = normalize(track.source || "");
-  const curatedLocalSeed = source.includes("datasetlocal") || source.includes("dataset local") || source.includes("dataset_local_seed_boost");
+  const curatedLocalSeed = source.replace(/[\s_]+/g, "").includes("datasetlocal");
   if (!curatedLocalSeed) return false;
   if (!artistAllowedForStyle(track.style, track.artist)) return false;
+  // These recordings are checked against their artist/label page and public
+  // audio before publication. Genre evidence does not manufacture an exact BPM.
+  const metadata = track.catalogMetadata || {};
+  const tags = [...(track.sourceTags || []), ...(Array.isArray(metadata.source_tags) ? metadata.source_tags : [])];
+  if (track.style === "big_room_house" && tags.includes("electronic_label_v24") && tags.includes("publisher_genre_verified") && tags.includes("recording_identity_verified")) {
+    try {
+      const evidence = new URL(metadata.genre_evidence_url || "");
+      const recording = new URL(metadata.source_url || "");
+      const audio = new URL(track.previewUrl || "");
+      if (evidence.origin === "https://www.revealedrecordings.com" && /^\/releases\//.test(evidence.pathname) &&
+          evidence.href === recording.href && audio.origin === "https://p.scdn.co" && audio.pathname.startsWith("/mp3-preview/")) return true;
+    } catch (_) {}
+  }
+  if (track.style === "progressive_edm" && tags.includes("electronic_editorial_v24") && tags.includes("apple_identity_verified") && tags.includes("editorial_subgenre")) {
+    try {
+      const evidence = new URL(metadata.genre_evidence_url || "");
+      const recording = new URL(metadata.source_url || "");
+      if (evidence.protocol === "https:" && ["protocol-recordings.com", "www.revealedrecordings.com"].includes(evidence.hostname) &&
+          recording.protocol === "https:" && recording.hostname === "music.apple.com" &&
+          /^\/[a-z]{2}\/song\//.test(recording.pathname) && trackHasReliableAudioPreview(track)) return true;
+    } catch (_) {}
+  }
+  if (tags.includes("electronic_artist_diversity_v24") && tags.includes("publisher_genre_verified") && tags.includes("recording_identity_verified")) {
+    try {
+      const evidence = new URL(metadata.genre_evidence_url || "");
+      const recording = new URL(track.bandcampTrackUrl || metadata.bandcamp_track_url || "");
+      if (evidence.protocol === "https:" && evidence.hostname.endsWith(".bandcamp.com") &&
+          evidence.origin === recording.origin && /^\/track\//.test(recording.pathname) &&
+          /^\d+$/.test(String(track.bandcampTrackId || metadata.bandcamp_track_id || "")) &&
+          textHasSpecificStyleSignal(track.style, track.artistGenre)) return true;
+    } catch (_) {}
+  }
   return ["freeform", "ambient", "downtempo", "chillout", "brazilian_funk", "psycore"].includes(track.style);
 }
 
@@ -23127,6 +23159,9 @@ function addDynamicTrackToCatalog({
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
     : "06:00";
+  const publisherCheckedRecording = sourceTags.some((tag) => [
+    "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24"
+  ].includes(tag));
 
   const hydratedTrack = {
     style,
@@ -23135,9 +23170,9 @@ function addDynamicTrackToCatalog({
     label: cleanLabel,
     bpm: mapBpmToRange(bpmNumber || fallbackBpm),
     bpmExact: bpmNumber || undefined,
-    energy: energyFromBpm(bpmNumber || fallbackBpm),
-    vocals: "instrumental",
-    context: ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
+    energy: publisherCheckedRecording ? "unknown" : energyFromBpm(bpmNumber || fallbackBpm),
+    vocals: publisherCheckedRecording ? "unknown" : "instrumental",
+    context: publisherCheckedRecording ? [] : ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
     vibe: `Garimpei esta faixa porque ela conversa bem com ${styleLabelByValue(style)} e pode abrir um caminho novo no seu gosto.`,
     spotifyUrl: safeSpotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
     spotifyTrackUrl: safeSpotifyTrackUrl,
@@ -23186,7 +23221,7 @@ function addDynamicTrackToCatalog({
   existingKeys.add(key);
   TRACK_METADATA[`${songName}|${artistName}`] = {
     releaseDate,
-    duration: durationText,
+    duration: publisherCheckedRecording && !duration ? "—" : durationText,
     musicalKey: "N/A",
     catalogRef: `${source.toUpperCase().slice(0, 4)}-${style.toUpperCase().slice(0, 5)}`
   };
@@ -27144,9 +27179,9 @@ function renderStyleInfoBubble(style, { reveal = false } = {}) {
 
 function energyLabelByValue(energyValue) {
   const labels = {
-    pt: { low: "baixa", mid: "média", high: "alta", extreme: "extrema" },
-    en: { low: "low", mid: "mid", high: "high", extreme: "extreme" },
-    es: { low: "baja", mid: "media", high: "alta", extreme: "extrema" }
+    pt: { low: "baixa", mid: "média", high: "alta", extreme: "extrema", unknown: "não verificada" },
+    en: { low: "low", mid: "mid", high: "high", extreme: "extreme", unknown: "unverified" },
+    es: { low: "baja", mid: "media", high: "alta", extreme: "extrema", unknown: "sin verificar" }
   };
   return (labels[currentLanguage] || labels.pt)[energyValue] || energyValue || t("freeEnergy");
 }
@@ -38602,15 +38637,13 @@ function startPreferredEmbeddedPreviewAutoplay(track) {
 function resumeCurrentPreviewFromUserGesture() {
   const track = currentRecommendation;
   if (!track || !previewAutoplayRequested()) return false;
-  const embedded = startPreferredEmbeddedPreviewAutoplay(track);
-  if (embedded.opened) return true;
   const previewSource = normalizePreviewUrl(
     ownedTrackPreviewSource(track, trackPreview) ||
     track?.previewUrl ||
     track?.artistPreviewFallback?.previewUrl ||
     ""
   );
-  if (!previewSource) return false;
+  if (!previewSource) return startPreferredEmbeddedPreviewAutoplay(track).opened;
   void attemptRenderedPreviewAutoplay(track, { hasDirectPreview: true });
   return true;
 }
@@ -49808,6 +49841,7 @@ function contextStyleBoost(track, prefs = {}) {
 }
 
 function energyDistance(a = "", b = "") {
+  if (a === "unknown" || b === "unknown") return 2;
   const order = { low: 0, mid: 1, high: 2, extreme: 3 };
   const left = order[String(a || "")];
   const right = order[String(b || "")];
@@ -56155,10 +56189,7 @@ async function renderPreview(track, options = {}) {
   const shouldStartImmediateEmbed = Boolean(
     options.autoplay !== false && previewAutoplayRequested() &&
     preferredImmediateEmbed &&
-    (
-      preferredImmediateEmbed === "soundcloud" ||
-      !trackHasReliableAudioPreview(track)
-    )
+    !trackHasReliableAudioPreview(track)
   );
   if (shouldStartImmediateEmbed) {
     const instantEmbed = startPreferredEmbeddedPreviewAutoplay(track);
@@ -61617,8 +61648,8 @@ function updateStats() {
   if (statsLine) {
     statsLine.textContent = t("stats", {
       likedSongs: totalLikedSongs(),
-      likedArtists: userStats.likedArtists,
-      likedDiscoveries: userStats.likedDiscoveries,
+      likedArtists: adaptiveModel.likedArtists.size,
+      likedDiscoveries: discoveredArtistsInApp.size,
       alreadyKnew: userStats.alreadyKnew,
       skipped: userStats.skipped,
       discoveredInApp: discoveredArtistsInApp.size,
@@ -65667,7 +65698,11 @@ async function bootSonicSearch() {
     document.getElementById("shareLinkFallback").hidden = true;
     document.getElementById("shareTrackBtn")?.focus();
   });
-  if (!urlRequestsScreenshotMode()) schedulePostBootHydration();
+  if (!urlRequestsScreenshotMode()) {
+    const incomingSocialLink = new URLSearchParams(window.location.search);
+    if (incomingSocialLink.has("profile") || incomingSocialLink.has("video")) void ensureSocialMvpReady();
+    schedulePostBootHydration();
+  }
   if (!pendingSocialAuthRedirect && !shouldShowBetaGateOnBoot({ qaPreviewMode, pendingSocialAuthRedirect })) void openSharedCatalogTrack();
 }
 

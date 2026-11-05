@@ -177,11 +177,21 @@ function compactRow(row, sourceFile) {
   return Object.fromEntries(Object.entries(output).filter(([, value]) => String(value || "").trim()));
 }
 
-function playbackScore(row) {
-  return Number(Boolean(row.preview_url)) * 10 +
-    Number(Boolean(row.bandcamp_track_id || row.bandcamp_track_url)) * 6 +
-    Number(Boolean(row.soundcloud_track_url)) * 5 +
-    Number(Boolean(row.youtube_track_url)) * 4 +
+export function previewIsCurrent(value, now = Date.now()) {
+  if (!value) return false;
+  try {
+    const url = new URL(value);
+    const token = [url.searchParams.get('hdnea'), url.searchParams.get('hdnts'), url.searchParams.get('token'), url.search].filter(Boolean).join('&');
+    const expiry = token.match(/(?:^|[~&?])exp=(\d{9,12})(?:$|[~&])/i)?.[1];
+    return !expiry || Number(expiry) > Math.floor(now / 1000) + 30;
+  } catch { return false; }
+}
+
+export function playbackScore(row) {
+  return Number(previewIsCurrent(row.preview_url)) * 10 +
+    Number(/^\d+$/.test(String(row.bandcamp_track_id || ""))) * 6 +
+    Number(/^https:\/\/(?:www\.)?soundcloud\.com\/(?!search(?:[/?]|$))[^/?#]+\/[^/?#]+/i.test(row.soundcloud_track_url || "")) * 5 +
+    Number(/^https:\/\/(?:(?:www\.)?youtube\.com\/watch\?[^#]*v=[\w-]{11}(?:[&#]|$)|youtu\.be\/[\w-]{11}(?:[?#]|$))/i.test(row.youtube_track_url || "")) * 4 +
     Number(Boolean(row.deezer_track_id)) * 3 +
     Number(Boolean(row.bpm)) * 2 +
     Number(Boolean(row.cover_art_url));

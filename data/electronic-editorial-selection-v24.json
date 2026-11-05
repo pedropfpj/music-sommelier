@@ -1,0 +1,104 @@
+{
+  "tracks": [
+    {
+      "style": "progressive_edm",
+      "artist": "Almero",
+      "song": "Almost Love",
+      "url": "https://music.apple.com/br/song/almost-love/6776303885",
+      "genreSource": "https://protocol-recordings.com/almero-unveils-next-progressive-house-masterpiece-almost-love/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Manse",
+      "song": "Hear Me Now",
+      "url": "https://music.apple.com/br/song/hear-me-now/1803586628",
+      "genreSource": "https://protocol-recordings.com/manse-releases-emotional-progressive-house-track-hear-me-now/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Kosling & NONIK",
+      "song": "You're Not Alone (feat. Ali Schwartz)",
+      "url": "https://music.apple.com/br/song/youre-not-alone-feat-ali-schwartz/1796219787",
+      "genreSource": "https://protocol-recordings.com/kosling-nonik-and-ali-schwartz-join-forces-on-a-new-progressive-house-single-youre-not-alone/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Fedo",
+      "song": "I Will Survive",
+      "url": "https://music.apple.com/br/song/i-will-survive/1835380243",
+      "genreSource": "https://protocol-recordings.com/fedo-delivers-powerful-new-single-i-will-survive/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Bukkoy & Otto Palmborg",
+      "song": "In Denial",
+      "url": "https://music.apple.com/br/song/in-denial/1837961270",
+      "genreSource": "https://protocol-recordings.com/bukkoy-and-otto-palmborg-deliver-captivating-progressive-house-anthem-in-denial/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "ASTOR",
+      "song": "Rise Up",
+      "url": "https://music.apple.com/br/song/rise-up/1876202520",
+      "genreSource": "https://protocol-recordings.com/astor-debuts-on-protocol-with-high-energy-progressive-anthem-rise-up/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Roc Dubloc",
+      "song": "Otherside",
+      "url": "https://music.apple.com/br/song/otherside/1700264579",
+      "genreSource": "https://protocol-recordings.com/release/roc-dubloc-otherside/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Timmo Hendriks",
+      "song": "Meant to Be",
+      "url": "https://music.apple.com/br/song/meant-to-be/1689207403",
+      "genreSource": "https://protocol-recordings.com/release/timmo-hendriks-meant-to-be/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "Division One (KR)",
+      "song": "Can't Find Us",
+      "url": "https://music.apple.com/br/song/cant-find-us/1839176375",
+      "genreSource": "https://protocol-recordings.com/release/division-one-kr-cant-find-us/",
+      "label": "Protocol Recordings",
+      "reason": "Festival-oriented progressive house; publisher classification checked against the exact release.",
+      "universe": "electronic"
+    },
+    {
+      "style": "progressive_edm",
+      "artist": "BlackCode & David Allen",
+      "song": "Falling",
+      "url": "https://music.apple.com/us/song/falling/1659081085",
+      "genreSource": "https://www.revealedrecordings.com/releases/blackcode-david-allen-falling",
+      "label": "Revealed Recordings",
+      "reason": "Exact publisher classification: Progressive House; release description identifies the big-room chorus, supporting festival-progressive placement.",
+      "universe": "electronic"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+import assert from 'node:assert/strict';
+import {previewIsCurrent,playbackScore,selectCoreTracks} from './build-runtime-catalog.mjs';
+import {createAppRuntimeTestContext} from './app-runtime-test-harness.mjs';
+import {publisherEvidenceIssue} from './catalog-publisher-evidence.mjs';
+const expired='https://cdnt-preview.dzcdn.net/api/sample.mp3?hdnea=exp=1700000000~acl=*';
+assert.equal(previewIsCurrent(expired),false);
+assert.equal(previewIsCurrent('https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/sample.m4a'),true);
+const old={artist:'Old artist',song:'Unavailable',preview_url:expired};
+const official={artist:'New artist',song:'Available',bandcamp_track_id:'123'};
+assert.ok(playbackScore(official)>playbackScore(old),'An expired preview must not displace an official player from the initial catalog');
+assert.ok(playbackScore(official)>playbackScore({...old,bandcamp_track_url:'https://bandcamp.com/search?q=old',soundcloud_track_url:'https://soundcloud.com/search?q=old',youtube_track_url:'https://www.youtube.com/results?search_query=old',deezer_track_id:'123',bpm:'128'}),'Search links must not be counted as ready players');
+assert.equal(selectCoreTracks([old,official].sort((a,b)=>playbackScore(b)-playbackScore(a)),1)[0],official);
+const ctx=createAppRuntimeTestContext();
+const proof={style:'raw_techno',artist:'Backbone',song:'Permanent Pressure',artist_genre:'raw techno',bandcamp_track_id:'123',bandcamp_track_url:'https://example-artist.bandcamp.com/track/permanent-pressure',genre_evidence_url:'https://example-artist.bandcamp.com/album/release',source_tags:'electronic_artist_diversity_v24;publisher_genre_verified;recording_identity_verified;audio_http_checked'};
+ctx.mergeExternalDatasetRows([proof],'dataset_local_runtime');
+const track=ctx.catalog.find(t=>t.artist===proof.artist&&t.song===proof.song);
+assert.ok(track);assert.equal(ctx.trackMatchesRequestedSubgenreEvidence(track,{style:'raw_techno'}),true);
+assert.equal(track.bpmExact,undefined,'Publisher genre tags do not invent an exact tempo');
+assert.equal(track.vocals,'unknown','Publisher genre tags do not establish absence of vocals');
+assert.equal(track.energy,'unknown','Genre alone does not establish listening energy');
+assert.equal(track.context.length,0,'Unreviewed contexts are not promised');
+assert.equal(ctx.getTrackMetadata(track).duration,'—','An unknown duration must not be displayed as six minutes');
+assert.ok(ctx.energyDistance(track.energy,'mid')>0,'Unknown energy is not an exact preference match');
+const saved=track.catalogMetadata.genre_evidence_url;
+track.catalogMetadata.genre_evidence_url='https://example.invalid/album/release';
+assert.equal(ctx.isTrustedCuratedCatalogTrack(track),false,'Arbitrary evidence URLs cannot activate publisher proof');
+track.catalogMetadata.genre_evidence_url=saved;track.sourceTags=[];track.catalogMetadata.source_tags=[];
+assert.equal(ctx.isTrustedCuratedCatalogTrack(track),false,'Ordinary dynamic matches do not inherit the curated batch proof');
+console.log('Catalog playback priority passed: expired audio, official players, provenance boundary and unknown BPM.');
+const styles=['drumstep','breakbeat','dubstep','ambient','ballroom_vogue_beats'];
+assert.ok(publisherEvidenceIssue({style:'dubstep',tags:['dubstep'],albumArtist:'Djrum',artist:'Chris Watson',title:'DJ-Kicks',styles}),'Compilation-wide tags cannot classify a field recording as dubstep');
+assert.ok(publisherEvidenceIssue({style:'drumstep',tags:['drumstep','samples'],albumArtist:'Focus Sounds',artist:'Focus Sounds',title:'Analogue Dialogue Lofi Vocal Sample Pack',styles}),'Sample-pack demos must not become recommended songs');
+assert.ok(publisherEvidenceIssue({style:'ballroom_vogue_beats',tags:['ballroom','ambient'],albumArtist:'The Caretaker',artist:'The Caretaker',title:'Album',styles}),'Historical ballroom music must not be mistaken for vogue beats');
+assert.equal(publisherEvidenceIssue({style:'raw_techno',tags:['electronic','raw techno'],albumArtist:'Backbone',artist:'Backbone',title:'Permanent Pressure',styles}), '');
+assert.ok(publisherEvidenceIssue({style:'berlin_school',tags:['berlin school'],albumArtist:'Cyclical Magazine',artist:'Cyclical Magazine',title:'Magazine',trackTitle:'Pabellon Sintetico - Raster',styles}),'A label account is not the track artist');
+assert.ok(publisherEvidenceIssue({style:'glitch_hop',tags:['glitch hop'],albumArtist:'Jade Cicada',artist:'Jade Cicada',title:'Loot Drop',trackTitle:'Loot Drop Vol. 1 Minimix',styles}),'A minimix is not an individual recording');
+console.log('Publisher evidence passed: mixed compilations, samples and ambiguous ballroom excluded.');
+
+// Exercise the browser's real hydration entry point, including its source name
+// and post-import sanitizers; a direct merge alone misses provenance bugs.
+const hydrated=createAppRuntimeTestContext();
+hydrated.window.SonicCatalogRuntime={loadCore:async()=>[],loadStyle:async()=>[proof]};
+await hydrated.hydrateExternalDatasetPackInBackground({style:proof.style});
+const loaded=hydrated.catalog.find(t=>t.artist===proof.artist&&t.song===proof.song);
+assert.ok(loaded,'A publisher-verified recording must survive real browser hydration');
+assert.equal(hydrated.isTrackEligibleForRecommendation(loaded),true);
+assert.equal(hydrated.trackMatchesRequestedSubgenreEvidence(loaded,{style:proof.style}),true);
+console.log('Actual browser hydration passed: local provenance and post-import sanitizers retain verified recordings.');
