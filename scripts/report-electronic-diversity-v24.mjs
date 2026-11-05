@@ -1,13 +1,13 @@
 import fs from 'node:fs/promises';
-import {createAppRuntimeTestContext} from './app-runtime-test-harness.mjs';
 const dir='reports/public-release-20261105/';
 const before=JSON.parse(await fs.readFile(dir+'catalog-v24-before-eligible.json','utf8'));
 const after=JSON.parse(await fs.readFile(dir+'catalog-v24-audit.json','utf8'));
 if(after.rejectedAdditions.length||after.selectionFailures.length)throw Error('Resolve catalog or selection failures before reporting this release');
-const ctx=createAppRuntimeTestContext();
+const html=await fs.readFile('index.html','utf8');
+const labels=new Map([...html.matchAll(/<option value="([^"]+)">([^<]+)<\/option>/g)].map(m=>[m[1],m[2].replaceAll('&amp;','&')]));
 const rows=after.styles.map(s=>{
  const old=before.styles.find(t=>t.style===s.style);
- return {subgenero:ctx.styleLabelByValue(s.style),id:s.style,artistas_elegiveis_antes:old.eligibleArtists,artistas_elegiveis_depois:s.eligibleArtists,variacao:s.eligibleArtists-old.eligibleArtists,faixas_adicionadas:s.newTracks,artistas_com_audio_verificado:s.verifiedPlayableArtists,descobertas_imediatas_testadas_ate_10:s.immediateDistinctDiscoveries,faltam_para_10:Math.max(0,10-s.eligibleArtists)};
+ return {subgenero:labels.get(s.style)||s.style,id:s.style,artistas_elegiveis_antes:old.eligibleArtists,artistas_elegiveis_depois:s.eligibleArtists,variacao:s.eligibleArtists-old.eligibleArtists,faixas_adicionadas:s.newTracks,artistas_com_audio_verificado:s.verifiedPlayableArtists,descobertas_imediatas_testadas_ate_10:s.immediateDistinctDiscoveries,faltam_para_10:Math.max(0,10-s.eligibleArtists)};
 }).sort((a,b)=>a.artistas_elegiveis_depois-b.artistas_elegiveis_depois||a.subgenero.localeCompare(b.subgenero));
 const headers=Object.keys(rows[0]);const quote=s=>'"'+String(s??'').replaceAll('"','""')+'"';
 await fs.writeFile(dir+'artistas-por-subgenero.csv','\uFEFF'+[headers,...rows.map(r=>headers.map(h=>r[h]))].map(r=>r.map(quote).join(',')).join('\n')+'\n');
