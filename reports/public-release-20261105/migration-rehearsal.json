@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-05T21:43:01.385Z",
+  "passed": true,
+  "counts": {
+    "profiles": 17,
+    "private_likes": 120,
+    "visible_comments": 4,
+    "deleted_comments": 1,
+    "reactions": 3,
+    "public_profiles": 0
+  }
+}

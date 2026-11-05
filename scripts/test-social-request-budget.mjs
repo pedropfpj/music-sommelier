@@ -30,6 +30,8 @@ const call=async(token=true)=>{const req={method:'POST',headers:{host:'localhost
 try{
   assert.equal((await call(false)).statusCode,401);assert.equal(budgetCalls,0);
   assert.equal((await call()).statusCode,429);
+  process.env.SONIC_REQUIRE_DURABLE_RATE_LIMITS='false';
+  assert.equal((await call()).statusCode,429,'Legacy global override cannot bypass durable social limits in production');
   mode='missing';assert.equal((await call()).statusCode,503);
   mode='broken';assert.equal((await call()).statusCode,503);
   console.log('Social limits passed: atomic cap, account isolation, private RPC, no beta-code dependency, and fail-closed errors.');

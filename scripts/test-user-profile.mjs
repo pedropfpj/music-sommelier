@@ -130,6 +130,12 @@ try {
   assert.equal(databaseBudget.statusCode, 200);
   assert.equal(databaseBudget.headers['X-Sonic-Usage-Store'], 'supabase');
   assert.equal(databaseBudget.headers['X-Sonic-Music-Durable-Remaining'], '39');
+  process.env.NODE_ENV = 'production'; process.env.SONIC_REQUIRE_DURABLE_RATE_LIMITS = 'false';
+  rpcBudget = { allowed: false, remaining: 0 };
+  const prodRequest = { method: 'POST', url:'/api/user-profile', headers:{host:'sonicsearch.app',origin:'https://sonicsearch.app',authorization:'Bearer valid-user'},body:draft };
+  const prodResponse = {setHeader(){},end(text){this.result=JSON.parse(text);}};
+  await handler(prodRequest,prodResponse);
+  assert.equal(prodResponse.statusCode,429,'Production profile limits survive legacy global override');
   const app = await fs.readFile(new URL('../app.js', import.meta.url), 'utf8');
   const sync = app.slice(app.indexOf('async function upsertSocialProfile()'), app.indexOf('async function insertSocialActivity('));
   assert.ok(sync.includes('resolution=ignore-duplicates'));
