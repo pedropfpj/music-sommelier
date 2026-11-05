@@ -1,4 +1,9 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "codex/discovery-quality-20261105": false
+    }
+  },
   "functions": {
     "api/spirit-image.js": {
       "maxDuration": 60

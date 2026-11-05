@@ -4797,7 +4797,7 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20261030-diversity-v22";
+const EXTERNAL_DATASET_CACHE_VERSION = "20261105-diversity-v23";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
@@ -4837,7 +4837,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261104social1";
+const SONIC_APP_BUILD_ID = "20261105quality1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10483,10 +10483,12 @@ let postBootHydrationScheduled = false;
 let socialMvpInitPromise = null;
 let knownArtistsMemory = new Set();
 let knownTrackTitlesMemory = new Set();
+let legacyKnownTrackTitlesMemory = new Set();
 let discoveredArtistsInApp = new Set();
 let seenArtistsMemory = new Set();
 let recentPresentedArtists = [];
 let seenTrackKeysMemory = new Set();
+let seenRecordingIdsMemory = new Set();
 let blockedArtistsMemory = new Set();
 let rejectedArtists = new Set();
 let dynamicCatalogByStyle = new Map();
@@ -11395,7 +11397,7 @@ const STYLE_BPM_RULES = {
   organic_house: { min: 112, max: 122 },
   bass_house: { min: 126, max: 132 },
   electro_house: { min: 126, max: 132 },
-  minimal_deep_tech: { min: 122, max: 128 },
+  minimal_deep_tech: { min: 122, max: 130 },
   jackin_house: { min: 122, max: 128 },
   soulful_house: { min: 118, max: 126 },
   disco_house: { min: 118, max: 126 },
@@ -18074,6 +18076,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
       soundcloud_track_url: soundcloudTrackUrl,
       youtube_track_url: youtubeTrackUrl,
       source_url: sourceUrl,
+      genre_evidence_url: pickDatasetValue(fields, ["genre_evidence_url"]),
       track_url: trackUrl,
       confidence: catalogConfidence,
       source_tags: sourceTags,
@@ -19962,7 +19965,7 @@ function hasUnrequestedAlternateVersion(baseTitle, candidateTitle) {
 }
 
 function canonicalArtistIdentity(nameLike = "") {
-  const raw = String(nameLike || "");
+  const raw = String(nameLike || "").replace(/&(?:amp|#0*38|#x0*26);/gi, "&").replace(/&/g, " and ");
   const noParentheses = raw.replace(/\([^)]*\)/g, " ");
   const noAliasTail = noParentheses.replace(/\baka\b.*$/i, " ");
   return normalize(noAliasTail).replace(/\s+/g, " ").trim();
@@ -19980,14 +19983,24 @@ function artistMatchKey(nameLike = "") {
 
 function artistCreditComponents(nameLike = "") {
   const raw = String(nameLike || "")
+    .replace(/&(?:amp|#0*38|#x0*26);/gi, "&")
     .replace(/\([^)]*\)/g, " ")
     .replace(/\s+/g, " ")
     .trim();
   if (!raw) return [];
-  return raw
-    .split(/\s+(?:feat(?:uring)?\.?|ft\.?|x|vs\.?|with)\s+|[,;/]+/i)
-    .map((part) => canonicalArtistIdentity(part))
-    .filter((part) => part && part.length > 1);
+  // These are established joint performer names, rather than incidental credits.
+  const jointName = /^(?:above and beyond|camo and krooked|dblock and stefan|dom and roland|dimitri vegas and like mike|chus and ceballos|rhythm and sound|jackal and hyde|jude and frank|klein and mbo|lucas and steve|nalin and kane|pastis and buenri|prok and fitch|shut up and dance|sidewalks and skeletons|sllash and doppe|sparrow and barbossa|w and w|xeno and oaklander)$/;
+  return raw.split(/\s+(?:feat(?:uring)?\.?|ft\.?|x|vs\.?|with)\s+|[,;/]+/i).flatMap(credit => {
+    const parts = credit.split(/\s*&\s*|\s+and\s+/i);
+    const result = [];
+    for (let index = 0; index < parts.length; index++) {
+      const joint = canonicalArtistIdentity(parts.slice(index, index + 2).join(" & "));
+      if (index + 1 < parts.length && jointName.test(joint)) {
+        result.push(joint); index++;
+      } else result.push(canonicalArtistIdentity(parts[index]));
+    }
+    return result;
+  }).filter(part => part && part.length > 1);
 }
 
 function artistMatchingKeys(nameLike = "") {
@@ -24876,7 +24889,7 @@ const I18N = {
     rerollNoOption: "Não há outra faixa no catálogo para esse estilo específico no momento.",
     rerollGenerated: "Nova sugestão gerada com rotação de artista e faixa no mesmo perfil.",
     clearFiltersFeedback: "Filtros limpos.",
-    noUnknownOption: "Não achei outra opção desconhecida com esse perfil no catálogo local agora.",
+    noUnknownOption: "Não encontrei outra faixa inédita com estes filtros. Ajuste o estilo ou os filtros para continuar descobrindo.",
     swappedUnknown: "Troquei por uma faixa próxima, mas fora dos nomes já marcados.",
     toastFoundNewArtist: "Novo artista na rota. Hora de testar no ouvido.",
     newArtistDetected: "Descoberta registrada. Esse nome saiu da zona conhecida.",
@@ -25788,7 +25801,7 @@ const I18N = {
     rerollNoOption: "No other track found for this exact style at the moment.",
     rerollGenerated: "New suggestion generated with artist/track rotation in the same profile.",
     clearFiltersFeedback: "Filters cleared.",
-    noUnknownOption: "I could not find another unknown option for this profile right now.",
+    noUnknownOption: "I could not find another unheard track with these filters. Adjust the style or filters to keep discovering.",
     swappedUnknown: "Swapped to a nearby track outside the names already marked.",
     toastFoundNewArtist: "New artist on the route. Time for an ear test.",
     newArtistDetected: "Discovery logged. This name was outside the known zone.",
@@ -26700,7 +26713,7 @@ const I18N = {
     rerollNoOption: "No hay otra pista en el catálogo para este estilo específico ahora.",
     rerollGenerated: "Nueva sugerencia generada con rotación de artista y pista en el mismo perfil.",
     clearFiltersFeedback: "Filtros limpiados.",
-    noUnknownOption: "No encontré otra opción desconocida para este perfil por ahora.",
+    noUnknownOption: "No encontré otra pista inédita con estos filtros. Ajusta el estilo o los filtros para seguir descubriendo.",
     swappedUnknown: "Cambié por una pista cercana, pero fuera de los nombres ya marcados.",
     toastFoundNewArtist: "Nuevo artista en la ruta. Hora de probar al oído.",
     newArtistDetected: "Descubrimiento registrado. Ese nombre salió de la zona conocida.",
@@ -30454,8 +30467,11 @@ function resetSessionStateInMemory() {
 
   knownArtistsMemory = new Set();
   knownTrackTitlesMemory = new Set();
+  legacyKnownTrackTitlesMemory = new Set();
   discoveredArtistsInApp = new Set();
   seenArtistsMemory = new Set();
+  seenTrackKeysMemory = new Set();
+  seenRecordingIdsMemory = new Set();
   recentPresentedArtists = [];
   blockedArtistsMemory = new Set();
   rejectedArtists = new Set();
@@ -34516,7 +34532,11 @@ function saveProgress() {
       seenArtistsMemory: setValuesForStorage(seenArtistsMemory),
       recentPresentedArtists: recentPresentedArtists.slice(-RECENT_PRESENTED_ARTIST_LIMIT),
       seenTrackKeysMemory: setValuesForStorage(seenTrackKeysMemory),
+      seenRecordingIdsMemory: setValuesForStorage(seenRecordingIdsMemory),
+      recordingIdentityVersion: 2,
       knownTrackTitlesMemory: setValuesForStorage(knownTrackTitlesMemory),
+      explicitKnownTrackTitles: setValuesForStorage(knownTrackTitlesMemory),
+      legacyKnownTrackTitles: setValuesForStorage(legacyKnownTrackTitlesMemory),
       trackRatings: mapEntriesForStorage(trackRatings),
       trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
       trackPreferenceSignals: mapEntriesForStorage(trackPreferenceSignals),
@@ -34563,7 +34583,9 @@ function loadProgress() {
   seenArtistsMemory = new Set();
   recentPresentedArtists = [];
   seenTrackKeysMemory = new Set();
+  seenRecordingIdsMemory = new Set();
   knownTrackTitlesMemory = new Set();
+  legacyKnownTrackTitlesMemory = new Set();
   trackRatings = new Map();
   trackRatingSignals = new Map();
   trackPreferenceSignals = new Map();
@@ -34612,7 +34634,9 @@ function loadProgress() {
         hydrateSetFromStorage(seenArtistsMemory, parsed?.seenArtistsMemory);
         recentPresentedArtists = sanitizeRecentPresentedArtists(parsed?.recentPresentedArtists);
         hydrateSetFromStorage(seenTrackKeysMemory, parsed?.seenTrackKeysMemory);
-        hydrateSetFromStorage(knownTrackTitlesMemory, parsed?.knownTrackTitlesMemory);
+        hydrateSetFromStorage(seenRecordingIdsMemory, parsed?.seenRecordingIdsMemory);
+        hydrateSetFromStorage(knownTrackTitlesMemory, migrateExplicitKnownTrackTitles(parsed));
+        hydrateSetFromStorage(legacyKnownTrackTitlesMemory, parsed?.legacyKnownTrackTitles || (Number(parsed?.recordingIdentityVersion) >= 2 ? [] : parsed?.knownTrackTitlesMemory));
         compactArtistIdentitySet(blockedArtistsMemory);
         compactArtistIdentitySet(discoveredArtistsInApp);
         compactArtistIdentitySet(seenArtistsMemory);
@@ -34646,9 +34670,8 @@ function loadProgress() {
   }
   [...likedTrackHistory, ...dislikedTrackHistory].forEach((entry) => {
     const trackKey = likedTrackKeyFromEntry(entry);
-    const trackTitle = normalizeTitle(entry?.song || "");
     if (trackKey) seenTrackKeysMemory.add(trackKey);
-    if (trackTitle) knownTrackTitlesMemory.add(trackTitle);
+    rememberRecordingIdentity(entry);
   });
   recalculateRatingStats();
   updateStats();
@@ -34999,8 +35022,10 @@ function clearFilters() {
 
   knownArtistsMemory = new Set();
   knownTrackTitlesMemory = new Set();
+  legacyKnownTrackTitlesMemory = new Set();
   rejectedArtists = new Set();
   seenTrackKeysMemory = new Set();
+  seenRecordingIdsMemory = new Set();
   recommendationMemory = new Set();
   recommendationMemoryQueue = [];
   recentTrackHistoryByStyle = new Map();
@@ -35596,8 +35621,7 @@ function rankAdaptiveSurpriseStyles(baseTrack = currentRecommendation) {
   const baseFamily = familyOf(baseStyle);
   const excludedArtists = buildGlobalArtistExclusionSet(baseTrack?.artist || "");
   const knownTrackSignals = buildGlobalTrackExclusionSet(
-    baseTrack ? [recommendationTrackKey(baseTrack)] : [],
-    baseTrack?.song ? [baseTrack.song] : []
+    baseTrack ? [recommendationTrackKey(baseTrack)] : []
   );
 
   return getAllSelectableStyles()
@@ -36247,7 +36271,7 @@ function parseKnownArtists(value) {
     .split(",")
     .map((name) => String(name || "").trim())
     .filter(Boolean)
-    .forEach((name) => addArtistIdentityToSet(known, name));
+    .forEach((name) => addArtistKeysToSet(known, name));
   return known;
 }
 
@@ -36306,11 +36330,49 @@ function buildGlobalTrackExclusionSet(extraTrackKeys = [], extraTrackTitles = []
     const key = normalize(trackKey || "");
     if (key) keySet.add(key);
   });
+  seenRecordingIdsMemory.forEach(key => keySet.add(key));
   (Array.isArray(extraTrackKeys) ? extraTrackKeys : [extraTrackKeys])
     .map((trackKey) => normalize(trackKey || ""))
     .filter(Boolean)
     .forEach((trackKey) => keySet.add(trackKey));
   return { titles: knownTitles, keys: keySet };
+}
+
+function recordingIdentityKeys(track = {}) {
+  // Only recording identifiers, never album IDs or stripped remix titles.
+  const keys = [];
+  const isrc = String(track.isrc || track.recordingIsrc || "").replace(/[-\s]/g, "");
+  if (/^[a-z]{2}[a-z0-9]{3}\d{7}$/i.test(isrc)) keys.push(normalize(`__recording_isrc__${isrc}`));
+  const mbid = String(track.recordingMusicBrainzId || "");
+  if (/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(mbid)) keys.push(normalize(`__recording_mbid__${mbid}`));
+  return keys;
+}
+
+function rememberRecordingIdentity(track) {
+  recordingIdentityKeys(track).forEach(key => seenRecordingIdsMemory.add(key));
+}
+
+function migrateExplicitKnownTrackTitles(progress = {}) {
+  if (Number(progress.recordingIdentityVersion) >= 2) {
+    return Array.isArray(progress.explicitKnownTrackTitles) ? progress.explicitKnownTrackTitles : [];
+  }
+  const legacy = new Set(Array.isArray(progress.knownTrackTitlesMemory) ? progress.knownTrackTitlesMemory : []);
+  const seen = new Set((Array.isArray(progress.seenTrackKeysMemory) ? progress.seenTrackKeysMemory : []).map(key => normalize(String(key))));
+  const history = [...(Array.isArray(progress.likedTrackHistory) ? progress.likedTrackHistory : []), ...(Array.isArray(progress.dislikedTrackHistory) ? progress.dislikedTrackHistory : [])];
+  const automaticTitles = new Set(history.map(track => normalizeTitle(track?.song || "")));
+  for (const track of [...catalog, ...CURATED_FRIENDLY_OPENING_TRACKS]) {
+    if (seen.has(recommendationTrackKey(track))) automaticTitles.add(normalizeTitle(track.song || ""));
+  }
+  // Old payloads lack provenance. Preserve all old values separately and keep
+  // unmatched titles as explicit exclusions; recorded songs use their own keys.
+  const legacySeenKeys = [...seen];
+  return [...legacy].filter(title => {
+    const normalizedTitle = normalizeTitle(String(title || ""));
+    if (!normalizedTitle || automaticTitles.has(normalizedTitle)) return false;
+    // Legacy keys concatenate artist + title. This also covers lazily loaded
+    // subgenres whose tracks are not present in the starter catalog yet.
+    return !legacySeenKeys.some(key => !key.startsWith("__recording_") && key.endsWith(normalizedTitle));
+  });
 }
 
 function trackBlockedByKnownSignals(track, excludedTrackKeys = new Set(), excludedTrackTitles = new Set()) {
@@ -36323,6 +36385,7 @@ function trackBlockedByKnownSignals(track, excludedTrackKeys = new Set(), exclud
   ) return true;
   if (trackKey && anonymousTrackWasRecentlyExposed(trackKey, 50)) return true;
   if (trackKey && seenTrackKeysMemory.has(trackKey)) return true;
+  if (recordingIdentityKeys(track).some(key => seenRecordingIdsMemory.has(key) || excludedTrackKeys.has(key))) return true;
   if (trackTitle && knownTrackTitlesMemory.has(trackTitle)) return true;
   if (trackKey && excludedTrackKeys.has(trackKey)) return true;
   return trackMatchesKnownTitle(track, excludedTrackTitles);
@@ -51653,8 +51716,8 @@ function recordDailyRadarFeedback(item = {}, action = "", previous = "") {
     registerTrackFeedback(track, true, { source: "daily_radar_like" });
     registerSpiritSignal(track.style, 1.2);
   } else if (action === "known") {
-    const title = normalizeTitle(track.song || "");
-    if (title) knownTrackTitlesMemory.add(title);
+    seenTrackKeysMemory.add(recommendationTrackKey(track));
+    rememberRecordingIdentity(track);
     markArtistKnownStatus(track.artist);
   } else if (action === "pass") {
     userStats.skipped += 1;
@@ -53425,9 +53488,8 @@ function markRecommendationPresented(track) {
   registerSeenArtist(track.artist);
   rememberRecentlyPresentedArtist(track.artist);
   const normalizedTrackKey = recommendationTrackKey(track);
-  const normalizedTrackTitle = normalizeTitle(track.song || "");
   if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
-  if (normalizedTrackTitle) knownTrackTitlesMemory.add(normalizedTrackTitle);
+  rememberRecordingIdentity(track);
   saveProgress();
 }
 
@@ -54459,10 +54521,8 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
   const plan = buildFastSwipeStylePlan({ sourceTrack, positive });
   const styles = instantSwipeStyleCandidates(sourceTrack, plan);
   const sourceKey = recommendationTrackKey(sourceTrack);
-  const sourceTitle = sourceTrack?.song || "";
   const exclusions = buildGlobalTrackExclusionSet(
-    [sourceKey, lastRejectedTrackKey].filter(Boolean),
-    sourceTitle ? [sourceTitle] : []
+    [sourceKey, lastRejectedTrackKey].filter(Boolean)
   );
   const blockedArtists = buildGlobalArtistExclusionSet(
     [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
@@ -54694,15 +54754,12 @@ function pickInstantOpeningTrack() {
 
 function pickInstantPrimaryNextTrack(
   sourceTrack = currentRecommendation,
-  requiredStyle = "",
-  { allowSeenTrack = false } = {}
+  requiredStyle = ""
 ) {
   const sourceKey = recommendationTrackKey(sourceTrack);
   const lockedStyle = selectableSwipeStyle(requiredStyle);
   const blockedArtists = buildGlobalArtistExclusionSet(sourceTrack?.artist || "");
-  const candidateAllowed = (track, {
-    allowSeenTrack: relaxSeenTrack = allowSeenTrack
-  } = {}) => {
+  const candidateAllowed = (track) => {
     if (!track || track === sourceTrack) return false;
     const trackKey = recommendationTrackKey(track);
     if (!trackKey || trackKey === sourceKey) return false;
@@ -54712,8 +54769,8 @@ function pickInstantPrimaryNextTrack(
     if (lockedStyle && !trackMatchesRequestedSubgenreEvidence(track, { style: lockedStyle })) return false;
     if (!trackHasInstantPlaybackRoute(track)) return false;
     if (anonymousTrackWasRecentlyExposed(trackKey, 50)) return false;
-    if (!relaxSeenTrack && trackBlockedByKnownSignals(track)) return false;
-    return relaxSeenTrack || anonymousExposurePenalty(track) < 70;
+    if (trackBlockedByKnownSignals(track)) return false;
+    return anonymousExposurePenalty(track) < 70;
   };
 
   const queued = suggestionQueueTracks
@@ -54757,11 +54814,7 @@ function tryRunInstantPrimaryRecommendation() {
   if (currentRecommendation && lastPrefs) {
     const anchoredStyle = explicitSwipeAnchorStyle();
     if (!anchoredStyle) swipeUserAnchoredStyle = "";
-    const nextTrack =
-      pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle) ||
-      (anchoredStyle
-        ? pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle, { allowSeenTrack: true })
-        : null);
+    const nextTrack = pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle);
     if (!nextTrack) return false;
     const nextPrefs = normalizeRecommendationPrefs({
       style: anchoredStyle || selectableSwipeStyle(nextTrack.style || ""),
@@ -55034,10 +55087,11 @@ async function runPrimaryRecommendationAction({ source = "manual", initialRunner
       currentRecommendation &&
       selectableSwipeStyle(currentRecommendation.style || "") !== manualPrefs.style
     );
-    if (!currentRecommendation || manualContextChanged || manualStyleMismatch) {
+    const hasExplicitFilters = Boolean(explicitSwipeAnchorStyle() ||
+      manualPrefs.context || manualPrefs.energy || manualPrefs.bpm || manualPrefs.vocals);
+    if (!currentRecommendation || manualContextChanged || manualStyleMismatch || hasExplicitFilters) {
       return runManualFilterSurprise();
     }
-    swipeUserAnchoredStyle = manualPrefs.style || "";
   }
   if (!firstRecommendationCompleted && !currentRecommendation) {
     if (tryRunInstantPrimaryRecommendation()) {
@@ -55118,8 +55172,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   const rejectedKey = recommendationTrackKey(rejectedTrack);
   const activeKey = recommendationTrackKey(currentRecommendation);
   const exclusions = buildGlobalTrackExclusionSet(
-    [rejectedKey, activeKey, lastRejectedTrackKey].filter(Boolean),
-    rejectedTrack?.song ? [rejectedTrack.song] : []
+    [rejectedKey, activeKey, lastRejectedTrackKey].filter(Boolean)
   );
   if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) return false;
 
@@ -55540,7 +55593,6 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
   if (!plan) return null;
 
   const avoidTrackKey = sourceTrack ? `${sourceTrack.artist}::${sourceTrack.song}` : "";
-  const avoidTrackTitles = sourceTrack?.song ? [sourceTrack.song] : [];
   const basePrefs = normalizeRecommendationPrefs(lastPrefs);
   const triedStyles = new Set();
   // Keep the synchronous fallback bounded on mobile. The prepared queue is the
@@ -55566,7 +55618,6 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
       {
         resetRejected: false,
         avoidTrackKey,
-        avoidTrackTitles,
         avoidArtistName,
         allowKnownFallback: false,
         failureSfx: false
@@ -58127,6 +58178,10 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
     bpm: normalizedTrack.bpm,
     energy: normalizedTrack.energy,
     label: normalizedTrack.label,
+    isrc: recordingIdentityKeys(base).some(key => key.startsWith("__recording_isrc__"))
+      ? String(base.isrc || base.recordingIsrc).replace(/[-\s]/g, "").toUpperCase() : "",
+    recordingMusicBrainzId: recordingIdentityKeys(base).some(key => key.startsWith("__recording_mbid__"))
+      ? String(base.recordingMusicBrainzId).toLowerCase() : "",
     spotifyUrl: firstSafeExternalUrl(base.spotifyTrackUrl, base.spotifyUrl) || buildSpotifyTrackLink(normalizedTrack),
     youtubeUrl: firstSafeExternalUrl(base.youtubeTrackUrl, base.youtubeUrl) || buildYouTubeTrackLink(normalizedTrack),
     soundcloudUrl: firstSafeExternalUrl(base.soundcloudTrackUrl, base.soundcloudUrl) || buildSoundCloudTrackLink(normalizedTrack),
@@ -58217,6 +58272,8 @@ function backfillDislikedTrackHistoryFromSignals(limit = LIKED_TRACK_HISTORY_LIM
 function rememberLikedTrack(track, source = "liked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  rememberRecordingIdentity(track);
+  if (entry.key) seenTrackKeysMemory.add(entry.key);
   removeDislikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
   likedTrackHistory = [
     entry,
@@ -58231,9 +58288,9 @@ function rememberLikedTrack(track, source = "liked") {
 function rememberDislikedTrack(track, source = "disliked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  rememberRecordingIdentity(track);
   if (entry.key) seenTrackKeysMemory.add(entry.key);
-  const normalizedTitle = normalizeTitle(entry.song || "");
-  if (normalizedTitle) knownTrackTitlesMemory.add(normalizedTitle);
+
   removeLikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
   dislikedTrackHistory = [
     entry,
@@ -59548,6 +59605,7 @@ function applyCloudLikedTrackSignals(entries = []) {
       registerTrackPreferenceSignal(entry, 0.95);
     }
     if (trackKey) seenTrackKeysMemory.add(trackKey);
+    rememberRecordingIdentity(entry);
     registerDiscoveredArtist(entry.artist);
   });
   if (likedTrackHistory.length) {
@@ -59560,7 +59618,6 @@ function applyCloudDislikedTrackSignals(entries = []) {
   entries.forEach((entry) => {
     if (!entry) return;
     const trackKey = likedTrackKeyFromEntry(entry);
-    const trackTitle = normalizeTitle(entry.song || "");
     ensureMapScoreAtLeast(adaptiveModel.dislikedStyles, entry.style, 1);
     ensureMapScoreAtLeast(adaptiveModel.dislikedArtists, entry.artist, 1);
     ensureMapScoreAtLeast(adaptiveModel.dislikedEnergies, entry.energy, 0.45);
@@ -59568,7 +59625,8 @@ function applyCloudDislikedTrackSignals(entries = []) {
       seenTrackKeysMemory.add(trackKey);
       trackPreferenceSignals.set(trackKey, Math.min(-0.95, Number(trackPreferenceSignals.get(trackKey)) || 0));
     }
-    if (trackTitle) knownTrackTitlesMemory.add(trackTitle);
+
+    rememberRecordingIdentity(entry);
     registerSeenArtist(entry.artist);
   });
   if (entries.length) {
@@ -61394,7 +61452,8 @@ async function pickPlayableReplacementForPrefs(
     excludedTrackTitles = new Set(),
     excludedArtists = new Set(),
     allowKnownFallback = false,
-    maxAttempts = 16
+    maxAttempts = 16,
+    searchBudget = createSurpriseSearchBudget()
   } = {}
 ) {
   prefs = normalizeRecommendationPrefs(prefs);
@@ -61444,7 +61503,8 @@ async function pickPlayableReplacementForPrefs(
     tried.add(key);
     attempts += 1;
     if (trackHasPlayablePreviewExperience(candidate)) return candidate;
-    await resolvePreviewForTrack(candidate, { forceLookup: attempts <= 3 });
+    if (!searchBudget.remainingMs()) break;
+    await searchBudget.wait(() => resolvePreviewForTrack(candidate, { forceLookup: attempts <= 3 }));
     if (trackHasPlayablePreviewExperience(candidate)) return candidate;
     candidate.previewChecked = true;
     candidate.previewMissing = true;
@@ -61460,7 +61520,8 @@ async function pickPlayableReplacementForPrefs(
       excludedTrackTitles,
       excludedArtists,
       allowKnownFallback: true,
-      maxAttempts: Math.max(8, Math.floor(maxAttempts / 2))
+      maxAttempts: Math.max(8, Math.floor(maxAttempts / 2)),
+      searchBudget
     });
   }
   return null;
@@ -61473,12 +61534,14 @@ async function ensureCurrentRecommendationPlayable(
     excludedTrackTitles = new Set(),
     excludedArtists = new Set(),
     allowKnownFallback = false,
-    sessionGeneration = recommendationSessionGeneration
+    sessionGeneration = recommendationSessionGeneration,
+    searchBudget = createSurpriseSearchBudget()
   } = {}
 ) {
   assertRecommendationSessionCurrent(sessionGeneration);
   if (!currentRecommendation) return false;
-  await resolvePreviewForTrack(currentRecommendation);
+  const previewCandidate = currentRecommendation;
+  await searchBudget.wait(() => resolvePreviewForTrack(previewCandidate));
   assertRecommendationSessionCurrent(sessionGeneration);
   if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
   if (trackHasPlayablePreviewExperience(currentRecommendation)) return true;
@@ -61496,7 +61559,8 @@ async function ensureCurrentRecommendationPlayable(
     excludedTrackKeys,
     excludedTrackTitles,
     excludedArtists,
-    allowKnownFallback
+    allowKnownFallback,
+    searchBudget
   });
   assertRecommendationSessionCurrent(sessionGeneration);
   if (!replacement) return false;
@@ -61515,7 +61579,8 @@ async function generateRecommendationFromPrefs(
     avoidDiscoveryName = "",
     avoidArtistName = "",
     allowKnownFallback = false,
-    sessionGeneration = recommendationSessionGeneration
+    sessionGeneration = recommendationSessionGeneration,
+    searchBudget = createSurpriseSearchBudget()
   } = {}
 ) {
   assertRecommendationSessionCurrent(sessionGeneration);
@@ -61531,7 +61596,7 @@ async function generateRecommendationFromPrefs(
   recommendationBpmFallbackInfo = false;
   let usedKnownFallback = false;
   if (resetRejected) rejectedArtists = new Set();
-  await prepareCatalogForFastRecommendation(prefs);
+  await searchBudget.wait(() => prepareCatalogForFastRecommendation(prefs));
   assertRecommendationSessionCurrent(sessionGeneration);
   if (prefs?.style === "slambient" || !prefs?.style) normalizeTrustedSlambientCatalog();
   sanitizeCatalogByStyleRules();
@@ -61654,7 +61719,7 @@ async function generateRecommendationFromPrefs(
     );
     if (freshCandidates.length) return;
 
-    await ensureStyleCoverageFast(prefs.style, 1);
+    await searchBudget.wait(() => ensureStyleCoverageFast(prefs.style, 1));
     assertRecommendationSessionCurrent(sessionGeneration);
     freshCandidates = unseenTrackCandidatesForStyle(
       prefs.style,
@@ -61674,7 +61739,7 @@ async function generateRecommendationFromPrefs(
     );
     if (!fallbackStyle) return;
     applyStyleSwitch(fallbackStyle);
-    await ensureStyleCoverageFast(fallbackStyle, 1);
+    await searchBudget.wait(() => ensureStyleCoverageFast(fallbackStyle, 1));
     assertRecommendationSessionCurrent(sessionGeneration);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
@@ -61694,7 +61759,7 @@ async function generateRecommendationFromPrefs(
     );
     if (!fallbackStyle) return false;
     if (!applyStyleSwitch(fallbackStyle)) return false;
-    await ensureStyleCoverageFast(fallbackStyle, 1);
+    await searchBudget.wait(() => ensureStyleCoverageFast(fallbackStyle, 1));
     assertRecommendationSessionCurrent(sessionGeneration);
     sanitizeCatalogByStyleRules();
     purgeDynamicMismatches(fallbackStyle);
@@ -61950,7 +62015,8 @@ async function generateRecommendationFromPrefs(
     let apiValidationAttempts = 0;
     while (currentRecommendation && apiValidationAttempts < 6) {
       if (artistSeedAnchoredForStyle("psycore", currentRecommendation.artist)) break;
-      const profile = await fetchArtistApiProfile(currentRecommendation.artist);
+      const profileArtist = currentRecommendation.artist;
+      const profile = await searchBudget.wait(() => fetchArtistApiProfile(profileArtist));
       assertRecommendationSessionCurrent(sessionGeneration);
       if (!shouldRejectPsycoreByApi(profile)) break;
       const rejectedTrackKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
@@ -61996,7 +62062,8 @@ async function generateRecommendationFromPrefs(
   let integrityAttempts = 0;
   const maxIntegrityAttempts = prefs.style ? 10 : 6;
   while (currentRecommendation && integrityAttempts < maxIntegrityAttempts) {
-    await resolvePreviewForTrack(currentRecommendation);
+    const previewCandidate = currentRecommendation;
+    await searchBudget.wait(() => resolvePreviewForTrack(previewCandidate));
     assertRecommendationSessionCurrent(sessionGeneration);
     if (isCatalogExtraTrack(currentRecommendation)) currentRecommendation.existenceVerified = true;
     const currentKey = normalize(`${currentRecommendation.artist}::${currentRecommendation.song}`);
@@ -62047,7 +62114,8 @@ async function generateRecommendationFromPrefs(
       excludedTrackKeys,
       excludedTrackTitles,
       excludedArtists: sessionExcludedArtists,
-      allowKnownFallback: usedKnownFallback
+      allowKnownFallback: usedKnownFallback,
+      searchBudget
     });
     assertRecommendationSessionCurrent(sessionGeneration);
     currentRecommendation = playableReplacement || null;
@@ -62097,7 +62165,8 @@ async function generateRecommendationFromPrefs(
     excludedTrackKeys,
     excludedTrackTitles,
     {
-      allowKnownFallback: usedKnownFallback
+      allowKnownFallback: usedKnownFallback,
+      searchBudget
     }
   );
 
@@ -62129,9 +62198,10 @@ async function generateRecommendationFromPrefs(
       catalogPlayableTrackDepthForArtist(currentRecommendation.artist, currentRecommendation.style, { eligibleOnly: false }) < MIN_TRACKS_PER_ARTIST
     )
   ) {
-    await expandCatalogForArtistDepth(currentRecommendation.artist, currentRecommendation.style, {
+    const depthCandidate = currentRecommendation;
+    await searchBudget.wait(() => expandCatalogForArtistDepth(depthCandidate.artist, depthCandidate.style, {
       target: ARTIST_CATALOG_DEPTH_TARGET
-    });
+    }));
     assertRecommendationSessionCurrent(sessionGeneration);
   }
 
@@ -62140,7 +62210,8 @@ async function generateRecommendationFromPrefs(
     excludedTrackTitles,
     excludedArtists: sessionExcludedArtists,
     allowKnownFallback: usedKnownFallback,
-    sessionGeneration
+    sessionGeneration,
+    searchBudget
   });
   assertRecommendationSessionCurrent(sessionGeneration);
   if (!currentRecommendationPlayable) {
@@ -62243,7 +62314,8 @@ async function generateRecommendationFromPrefs(
       excludedTrackKeys,
       excludedTrackTitles,
       excludedArtists: sessionExcludedArtists,
-      allowKnownFallback: usedKnownFallback
+      allowKnownFallback: usedKnownFallback,
+      searchBudget
     });
     assertRecommendationSessionCurrent(sessionGeneration);
     if (!playableReplacement) {
@@ -62858,7 +62930,6 @@ async function runManualFilterSurprise() {
     {
       resetRejected: false,
       avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
-      avoidTrackTitles: previousTrack?.song ? [previousTrack.song] : [],
       avoidArtistName: previousTrack?.artist || "",
       allowKnownFallback: false
     },
@@ -63139,7 +63210,6 @@ async function runAdaptiveSurpriseRecommendation() {
     {
       resetRejected: false,
       avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
-      avoidTrackTitles: previousTrack?.song ? [previousTrack.song] : [],
       avoidArtistName: previousTrack?.artist || "",
       allowKnownFallback: false
     },
@@ -64295,11 +64365,11 @@ async function handleKnownArtistYes() {
 
   const artistKey = artistMatchKey(currentRecommendation.artist);
   const trackKey = `${currentRecommendation.artist}::${currentRecommendation.song}`;
-  const knownTrackTitle = normalizeTitle(currentRecommendation.song);
   const alreadyMarkedKnown = artistSetHasMatch(knownArtistsMemory, currentRecommendation.artist);
   pendingQuickKnownAdvance = null;
   addArtistIdentityToSet(knownArtistsMemory, currentRecommendation.artist);
-  if (knownTrackTitle) knownTrackTitlesMemory.add(knownTrackTitle);
+  seenTrackKeysMemory.add(recommendationTrackKey(currentRecommendation));
+  rememberRecordingIdentity(currentRecommendation);
   addArtistIdentityToSet(rejectedArtists, currentRecommendation.artist);
   removeArtistIdentityFromSet(discoveredArtistsInApp, currentRecommendation.artist);
   if (!alreadyMarkedKnown) userStats.alreadyKnew += 1;
@@ -64317,7 +64387,6 @@ async function handleKnownArtistYes() {
   let generated = await generateRecommendationWithOverlay(lastPrefs, {
     resetRejected: false,
     avoidTrackKey: trackKey,
-    avoidTrackTitles: knownTrackTitle ? [knownTrackTitle] : [],
     avoidArtistName: currentRecommendation?.artist || "",
     allowKnownFallback: false
   });
@@ -64338,7 +64407,6 @@ async function handleKnownArtistYes() {
     generated = await generateRecommendationWithOverlay(lastPrefs, {
       resetRejected: false,
       avoidTrackKey: trackKey,
-      avoidTrackTitles: knownTrackTitle ? [knownTrackTitle] : [],
       avoidArtistName: currentRecommendation?.artist || "",
       allowKnownFallback: false
     });

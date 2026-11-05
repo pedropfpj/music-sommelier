@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-11-05T18:09:48.812341+00:00",
+  "version": "1.1.0",
+  "build": "26",
+  "codeSignatureVerified": true,
+  "hashes": {
+    "www/app.min.js": "7ab695ec3162fa568d1c600fc3f0594331a266e906a94931edcdbf1e5573a103",
+    "ios/App/App/public/app.min.js": "7ab695ec3162fa568d1c600fc3f0594331a266e906a94931edcdbf1e5573a103",
+    "reports/app-store-build/SonicSearch-AppStore-1.1.0-26.xcarchive/Products/Applications/App.app/public/app.min.js": "7ab695ec3162fa568d1c600fc3f0594331a266e906a94931edcdbf1e5573a103"
+  },
+  "uploaded": false
+}

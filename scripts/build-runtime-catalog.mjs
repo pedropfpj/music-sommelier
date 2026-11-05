@@ -158,6 +158,7 @@ const FIELD_ALIASES = {
   artist_genre: ["artist_genre", "genre_signal", "genre_tags", "tags"],
   artist_profile_hint: ["artist_profile_hint", "profile_hint", "description", "bio", "source_note"],
   confidence: ["confidence", "catalog_confidence", "verification_confidence"],
+  genre_evidence_url: ["genre_evidence_url"],
   source_url: ["source_url", "source_link", "reference_url", "track_url", "track_link"],
   source_tags: ["source_tags", "catalog_tags", "tags"],
   energy: ["energy_band", "energy_profile", "energy"],

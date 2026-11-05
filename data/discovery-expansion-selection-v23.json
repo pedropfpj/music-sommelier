@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "version": "20261105-diversity-v23",
+  "note": "Electronic-only reviewed selection. Identity/audio verified separately; subgenre is an editorial classification grounded in the cited label, artist or distributor source. BPM only for the five Minimal / Deep Tech recordings explicitly listed by the distributor; no inferred BPM. No rock changes.",
+  "tracks": [
+    {
+      "universe": "electronic",
+      "style": "disco_house",
+      "artist": "COEO",
+      "song": "Mydonna",
+      "url": "https://music.apple.com/us/album/mydonna/1463136372?i=1463136375",
+      "genreSource": "https://www.toytonics.de/2017/02/09/coeo-mydonna-toyt062/",
+      "label": "Toy Tonics",
+      "reason": "Seleção editorial de disco house: a gravadora descreve funk, recortes de samples e groove de house neste lançamento."
+    },
+    {
+      "universe": "electronic",
+      "style": "disco_house",
+      "artist": "Art of Tones",
+      "song": "Unstopped",
+      "url": "https://music.apple.com/us/album/unstopped/935803385?i=935803402",
+      "genreSource": "https://artoftones.bandcamp.com/album/unstopped",
+      "label": "Local Talk",
+      "reason": "Seleção editorial na interseção disco e house, apoiada nas categorias do lançamento no perfil oficial do artista."
+    },
+    {
+      "universe": "electronic",
+      "style": "disco_house",
+      "artist": "Cody Currie & Kapote",
+      "song": "Hard Work (Extended Version)",
+      "url": "https://music.apple.com/us/album/hard-work-extended-version/1803432015?i=1803432230",
+      "genreSource": "https://toytonics.bandcamp.com/album/hard-work-ep",
+      "label": "Toy Tonics",
+      "reason": "A gravadora descreve este EP como encontro de proto-disco, neo soul, Chicago house e jazz-funk; recorte editorial disco house."
+    },
+    {
+      "universe": "electronic",
+      "style": "disco_house",
+      "artist": "Cody Currie & Kapote",
+      "song": "Dance Dance Dance (Extended Version)",
+      "url": "https://music.apple.com/us/album/dance-dance-dance-extended-version/1803432015?i=1803432019",
+      "genreSource": "https://toytonics.bandcamp.com/album/hard-work-ep",
+      "label": "Toy Tonics",
+      "reason": "Recorte de disco house dentro do EP que a gravadora associa a proto-disco, Chicago house e jazz-funk."
+    },
+    {
+      "universe": "electronic",
+      "style": "future_bass",
+      "artist": "DROELOE",
+      "song": "Bon Voyage",
+      "url": "https://music.apple.com/us/album/bon-voyage/1170075475?i=1170076107",
+      "genreSource": "https://www.youtube.com/watch?v=k1JmWQMvEsQ",
+      "label": "Monstercat",
+      "reason": "Classificação Future Bass publicada pela Monstercat no vídeo oficial desta gravação."
+    },
+    {
+      "universe": "electronic",
+      "style": "future_bass",
+      "artist": "Duumu",
+      "song": "Illuminate (feat. Slyleaf)",
+      "url": "https://music.apple.com/us/album/illuminate-feat-slyleaf/1222216397?i=1222216401",
+      "genreSource": "https://www.monstercat.com/article/august-feature-duumu",
+      "label": "Monstercat",
+      "reason": "Seleção editorial de future bass melódico; perfil oficial da gravadora e lançamento Illuminate, sem estender a classificação ao catálogo inteiro do artista."
+    },
+    {
+      "universe": "electronic",
+      "style": "future_bass",
+      "artist": "Deon Custom",
+      "song": "Roses",
+      "url": "https://music.apple.com/us/album/roses/1028673917?i=1028674679",
+      "genreSource": "https://monstercatmedia.bandcamp.com/track/roses",
+      "label": "Monstercat",
+      "reason": "A página oficial da faixa inclui future bass entre suas categorias."
+    },
+    {
+      "universe": "electronic",
+      "style": "future_bass",
+      "artist": "Deon Custom",
+      "song": "Together",
+      "url": "https://music.apple.com/us/album/together/1032851414?i=1032851729",
+      "genreSource": "https://www.monstercat.com/artist/deoncustom",
+      "label": "Monstercat",
+      "reason": "Seleção editorial de future bass do ciclo Roses/Together; identidade da gravação conferida na Apple e discografia oficial."
+    },
+    {
+      "universe": "electronic",
+      "style": "minimal_deep_tech",
+      "artist": "Traumer",
+      "song": "Do Not Resist",
+      "url": "https://music.apple.com/us/album/do-not-resist/1875290298?i=1875290299",
+      "genreSource": "https://www.beatport.com/track/do-not-resist/23988445",
+      "label": "Berg Audio",
+      "reason": "A edição comercial desta faixa é classificada como Minimal / Deep Tech no Beatport.",
+      "bpm": 128,
+      "bpmSource": "https://www.beatport.com/track/do-not-resist/23988445"
+    },
+    {
+      "universe": "electronic",
+      "style": "minimal_deep_tech",
+      "artist": "Traumer",
+      "song": "Progression",
+      "url": "https://music.apple.com/us/album/progression/1875290298?i=1875290300",
+      "genreSource": "https://www.beatport.com/label/berg-audio/62496/tracks",
+      "label": "Berg Audio",
+      "reason": "Progression está classificada individualmente como Minimal / Deep Tech no catálogo da Berg Audio no Beatport.",
+      "bpm": 130,
+      "bpmSource": "https://www.beatport.com/label/berg-audio/62496/tracks"
+    },
+    {
+      "universe": "electronic",
+      "style": "minimal_deep_tech",
+      "artist": "Mihai Popoviciu",
+      "song": "To the People",
+      "url": "https://music.apple.com/us/album/to-the-people/1883741563?i=1883741566",
+      "genreSource": "https://www.beatport.com/artist/mihai-popoviciu/8119/tracks",
+      "label": "Variety Music",
+      "reason": "To The People está classificada individualmente como Minimal / Deep Tech; outros lançamentos deep house do artista não entram por associação.",
+      "bpm": 128,
+      "bpmSource": "https://www.beatport.com/artist/mihai-popoviciu/8119/tracks"
+    },
+    {
+      "universe": "electronic",
+      "style": "minimal_deep_tech",
+      "artist": "Toman",
+      "song": "De la Buena",
+      "url": "https://music.apple.com/us/album/de-la-buena/6775920482?i=6775920484",
+      "genreSource": "https://www.beatport.com/artist/toman/586621/tracks",
+      "label": "HIGH CEILINGS",
+      "reason": "De La Buena está classificada individualmente como Minimal / Deep Tech / Deep Tech.",
+      "bpm": 130,
+      "bpmSource": "https://www.beatport.com/artist/toman/586621/tracks"
+    },
+    {
+      "universe": "electronic",
+      "style": "minimal_deep_tech",
+      "artist": "Toman",
+      "song": "Worldwide",
+      "url": "https://music.apple.com/us/album/worldwide/1852853003?i=1852853005",
+      "genreSource": "https://www.beatport.com/artist/toman/586621/tracks?page=1&per_page=100&preorders=false",
+      "label": "HIGH CEILINGS",
+      "reason": "Worldwide está classificada individualmente como Minimal / Deep Tech / Deep Tech.",
+      "bpm": 127,
+      "bpmSource": "https://www.beatport.com/artist/toman/586621/tracks?page=1&per_page=100&preorders=false"
+    },
+    {
+      "universe": "electronic",
+      "style": "tech_trance",
+      "artist": "Ikorus",
+      "song": "Twitch",
+      "url": "https://music.apple.com/us/album/twitch/1145874575?i=1145875186",
+      "genreSource": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "label": "Outburst Records",
+      "reason": "Recorte editorial tech trance da seleção oficial Prism Volume 1, cuja gravadora declara foco no estilo."
+    },
+    {
+      "universe": "electronic",
+      "style": "tech_trance",
+      "artist": "Project 8",
+      "song": "Injector",
+      "url": "https://music.apple.com/us/album/injector/1115289358?i=1115289400",
+      "genreSource": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "label": "Outburst Records",
+      "reason": "Recorte editorial tech trance de Project 8, presente na seleção oficial Prism Volume 1."
+    },
+    {
+      "universe": "electronic",
+      "style": "tech_trance",
+      "artist": "Project 8",
+      "song": "Audiological Warfare",
+      "url": "https://music.apple.com/us/album/audiological-warfare/1115289358?i=1115289431",
+      "genreSource": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "label": "Outburst Records",
+      "reason": "Recorte editorial tech trance da seleção oficial Prism Volume 1, com identidade da faixa validada separadamente."
+    },
+    {
+      "universe": "electronic",
+      "style": "tech_trance",
+      "artist": "Iain M",
+      "song": "Endless Sky",
+      "url": "https://music.apple.com/us/album/endless-sky/1862417690?i=1862417691",
+      "genreSource": "https://www.beatport.com/label/outburstrecords/41368/tracks",
+      "label": "Outburst Records",
+      "reason": "Endless Sky está classificada como Trance (Main Floor) / Tech Trance no catálogo oficial da gravadora no Beatport."
+    },
+    {
+      "universe": "electronic",
+      "style": "tech_trance",
+      "artist": "Mark Sherry",
+      "song": "Genesis (Where It Begins)",
+      "url": "https://music.apple.com/us/album/genesis-where-it-begins/1872003348?i=1872003349",
+      "genreSource": "https://outburstrecords.com/products/mark-sherry-genesis-where-it-begins",
+      "label": "Outburst Records",
+      "reason": "A própria Outburst descreve esta faixa como tech trance em encontro com techno."
+    },
+    {
+      "universe": "electronic",
+      "style": "trap",
+      "artist": "UZ",
+      "song": "Trap Shit V10",
+      "url": "https://music.apple.com/us/album/trap-shit-v10/1721040031?i=1721040033",
+      "genreSource": "https://qualitygoodsrecords.bandcamp.com/?from=btl",
+      "label": "Quality Goods Records",
+      "reason": "Recorte editorial de trap instrumental da série Trap Shit, listada pela gravadora do artista."
+    },
+    {
+      "universe": "electronic",
+      "style": "trap",
+      "artist": "Hucci",
+      "song": "Hustle",
+      "url": "https://music.apple.com/us/album/hustle/1659323120?i=1659323127",
+      "genreSource": "https://hucci.bandcamp.com/track/hustle",
+      "label": "Hucci",
+      "reason": "A página oficial identifica esta gravação como trap/instrumental; não é uma inclusão genérica de rap."
+    },
+    {
+      "universe": "electronic",
+      "style": "trap",
+      "artist": "sfam",
+      "song": "Go",
+      "url": "https://music.apple.com/us/album/go/1720195586?i=1720195594",
+      "genreSource": "https://qualitygoodsrecords.bandcamp.com/track/go",
+      "label": "Quality Goods Records",
+      "reason": "A gravadora classifica esta faixa do Expand EP com trap, trap music e bass music."
+    }
+  ]
+}

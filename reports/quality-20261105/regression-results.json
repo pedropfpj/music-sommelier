@@ -1,0 +1,317 @@
+{
+  "checkedAt": "2026-11-05T18:07:52.421709+00:00",
+  "outcomes": [
+    {
+      "file": "test-admin-access.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-android-runtime.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-auth-recommendation-isolation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-beta-analytics-v2.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-billing-foundation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-community-email-notifications.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-compliance-controls.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-daily-djs.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-daily-like-limit.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-daily-radar.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-discovery-experience.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-discovery-exposure-api.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-dj-player-swipe.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-dj-taxonomy.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-first-experience.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-first-recommendation-lock.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-friendly-first-impression.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-hierarchical-discovery.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-initial-taste-calibration.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-low-coverage-subgenre-expansion-v21.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-membership-foundation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-network-resilience.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-newsroom-visuals.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-newsroom.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-niche-recommendation-runtime.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-opening-rotation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-opera-slambient-fast-path.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-premium-promo-visibility.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-preview-card-ownership.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-privacy-requests-sql.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-psytrance-integrity.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-recommendation-safety.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-recording-identity.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-request-security 2.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-request-security.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-rock-preview.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-simplified-navigation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-single-playback-policy.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-smart-returning-entry.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-sonic-start.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-sound-system-premium.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-surprise-search-budget.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-track-video-social-sql.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-track-video-social.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-ugc-safety.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-underrepresented-catalog-expansion.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-universal-catalog-pilot-sql.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-universal-catalog-pilot.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-universal-discovery.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-universal-listening.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-universal-music-foundation.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-user-profile-privacy-surfaces.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-user-profile-sql.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-user-profile.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-weekly-highlights.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-weekly-recommends.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-curated-diversity-v23.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-curated-discovery-runtime.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-filtered-search-budget.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-discovery-performance.mjs",
+      "passed": true,
+      "code": 0
+    },
+    {
+      "file": "test-ios-playback-bundle.mjs",
+      "passed": true,
+      "code": 0
+    }
+  ],
+  "skipped": [
+    "test-preview-server.mjs",
+    "test-niche-subgenre-stress.mjs",
+    "test-subgenre-stress.mjs",
+    "test-mobile-control-alignment.mjs",
+    "test-premium-control-icons.mjs"
+  ]
+}

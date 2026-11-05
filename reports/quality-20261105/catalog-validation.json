@@ -1,0 +1,237 @@
+{
+  "checkedAt": "2026-11-05T17:41:44.167Z",
+  "passed": [
+    {
+      "artist": "COEO",
+      "song": "Mydonna",
+      "style": "disco_house",
+      "sourceUrl": "https://music.apple.com/us/song/mydonna/1463136375",
+      "genreEvidenceUrl": "https://www.toytonics.de/2017/02/09/coeo-mydonna-toyt062/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/19/d4/67/19d467e6-1448-76c4-ec8c-ee801a7b033d/mzaf_6245148187412405413.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Art of Tones",
+      "song": "Unstopped",
+      "style": "disco_house",
+      "sourceUrl": "https://music.apple.com/us/song/unstopped/935803402",
+      "genreEvidenceUrl": "https://artoftones.bandcamp.com/album/unstopped",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/76/4d/4d/764d4d53-20d9-05d6-724a-ea503993d75d/mzaf_8513140014603465656.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Cody Currie & Kapote",
+      "song": "Hard Work (Extended Version)",
+      "style": "disco_house",
+      "sourceUrl": "https://music.apple.com/us/song/hard-work-extended-version/1803432230",
+      "genreEvidenceUrl": "https://toytonics.bandcamp.com/album/hard-work-ep",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e4/72/80/e47280a1-fe41-f0ef-7fea-34f3b23ffc7b/mzaf_6051463462159806540.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Cody Currie & Kapote",
+      "song": "Dance Dance Dance (Extended Version)",
+      "style": "disco_house",
+      "sourceUrl": "https://music.apple.com/us/song/dance-dance-dance-extended-version/1803432019",
+      "genreEvidenceUrl": "https://toytonics.bandcamp.com/album/hard-work-ep",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/86/1f/52/861f524a-1046-18e6-fb3b-a72401f9e97d/mzaf_18235300159669844400.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "DROELOE",
+      "song": "Bon Voyage",
+      "style": "future_bass",
+      "sourceUrl": "https://music.apple.com/us/song/bon-voyage/1170076107",
+      "genreEvidenceUrl": "https://www.youtube.com/watch?v=k1JmWQMvEsQ",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6c/9f/66/6c9f6662-216b-6eae-72f2-5710095c2cdf/mzaf_14050710763680129399.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Duumu",
+      "song": "Illuminate (feat. Slyleaf)",
+      "style": "future_bass",
+      "sourceUrl": "https://music.apple.com/us/song/illuminate-feat-slyleaf/1222216401",
+      "genreEvidenceUrl": "https://www.monstercat.com/article/august-feature-duumu",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/57/01/175701c1-5572-693d-9644-9e42335a5204/mzaf_5163275183032938958.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Deon Custom",
+      "song": "Roses",
+      "style": "future_bass",
+      "sourceUrl": "https://music.apple.com/us/song/roses/1028674679",
+      "genreEvidenceUrl": "https://monstercatmedia.bandcamp.com/track/roses",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/42/34/00/42340074-abc7-3d62-51b7-fc830ba77eda/mzaf_1481286824402031429.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Deon Custom",
+      "song": "Together",
+      "style": "future_bass",
+      "sourceUrl": "https://music.apple.com/us/song/together/1032851729",
+      "genreEvidenceUrl": "https://www.monstercat.com/artist/deoncustom",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7f/c6/e9/7fc6e945-b425-4a0e-1d3a-daccef50c8c7/mzaf_4632101394451008017.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Traumer",
+      "song": "Do Not Resist",
+      "style": "minimal_deep_tech",
+      "sourceUrl": "https://music.apple.com/us/song/do-not-resist/1875290299",
+      "genreEvidenceUrl": "https://www.beatport.com/track/do-not-resist/23988445",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/20/a6/c320a602-a72e-3ea9-2309-456495416365/mzaf_18376965923931297530.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Traumer",
+      "song": "Progression",
+      "style": "minimal_deep_tech",
+      "sourceUrl": "https://music.apple.com/us/song/progression/1875290300",
+      "genreEvidenceUrl": "https://www.beatport.com/label/berg-audio/62496/tracks",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/f8/12/bcf81235-3002-a940-9f87-3eff1fbb9caa/mzaf_18378081779597459397.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Mihai Popoviciu",
+      "song": "To the People",
+      "style": "minimal_deep_tech",
+      "sourceUrl": "https://music.apple.com/us/song/to-the-people/1883741566",
+      "genreEvidenceUrl": "https://www.beatport.com/artist/mihai-popoviciu/8119/tracks",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/22/da/c622da92-e880-3a99-edac-d93017948b5a/mzaf_14557974807329250992.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Toman",
+      "song": "De la Buena",
+      "style": "minimal_deep_tech",
+      "sourceUrl": "https://music.apple.com/us/song/de-la-buena/6775920484",
+      "genreEvidenceUrl": "https://www.beatport.com/artist/toman/586621/tracks",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/e0/ac/c3e0acdf-c65b-f192-c334-2bfa4687b368/mzaf_7531617350413029349.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Toman",
+      "song": "Worldwide",
+      "style": "minimal_deep_tech",
+      "sourceUrl": "https://music.apple.com/us/song/worldwide/1852853005",
+      "genreEvidenceUrl": "https://www.beatport.com/artist/toman/586621/tracks?page=1&per_page=100&preorders=false",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/21/5e/49/215e495d-1300-04af-221b-ab24b007a859/mzaf_6356837835201011829.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Ikorus",
+      "song": "Twitch",
+      "style": "tech_trance",
+      "sourceUrl": "https://music.apple.com/us/song/twitch/1145875186",
+      "genreEvidenceUrl": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f6/4f/0b/f64f0b06-0970-0a5d-6bf4-2b2b986b15f8/mzaf_3369151960437499378.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Project 8",
+      "song": "Injector",
+      "style": "tech_trance",
+      "sourceUrl": "https://music.apple.com/us/song/injector/1115289400",
+      "genreEvidenceUrl": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview60/v4/b2/f8/a6/b2f8a6ce-7f45-987e-29b7-7d268aacf1b8/mzaf_7125230802727798361.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4a",
+      "identityMatch": true
+    },
+    {
+      "artist": "Project 8",
+      "song": "Audiological Warfare",
+      "style": "tech_trance",
+      "sourceUrl": "https://music.apple.com/us/song/audiological-warfare/1115289431",
+      "genreEvidenceUrl": "https://outburstrecords.com/products/outburst-records-presents-prism-volume-1",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview30/v4/48/65/fd/4865fdef-ea1f-78f2-e7dd-e543dc9e9492/mzaf_561624618764088545.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4a",
+      "identityMatch": true
+    },
+    {
+      "artist": "Iain M",
+      "song": "Endless Sky",
+      "style": "tech_trance",
+      "sourceUrl": "https://music.apple.com/us/song/endless-sky/1862417691",
+      "genreEvidenceUrl": "https://www.beatport.com/label/outburstrecords/41368/tracks",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2d/d4/d6/2dd4d620-a3e4-9b38-b5b3-2219cd23d7c1/mzaf_5867609230303514983.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Mark Sherry",
+      "song": "Genesis (Where It Begins)",
+      "style": "tech_trance",
+      "sourceUrl": "https://music.apple.com/us/song/genesis-where-it-begins/1872003349",
+      "genreEvidenceUrl": "https://outburstrecords.com/products/mark-sherry-genesis-where-it-begins",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/80/f5/66/80f56679-c53c-d5c6-8a90-df9fc1cfb442/mzaf_8080313312587351149.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "UZ",
+      "song": "Trap Shit V10",
+      "style": "trap",
+      "sourceUrl": "https://music.apple.com/us/song/trap-shit-v10/1721040033",
+      "genreEvidenceUrl": "https://qualitygoodsrecords.bandcamp.com/?from=btl",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/93/6e/67/936e6763-4af7-0bd7-ff75-6214c724c2ab/mzaf_7926764937344408398.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Hucci",
+      "song": "Hustle",
+      "style": "trap",
+      "sourceUrl": "https://music.apple.com/us/song/hustle/1659323127",
+      "genreEvidenceUrl": "https://hucci.bandcamp.com/track/hustle",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ae/00/7a/ae007aa8-32e3-e233-5e3c-95e6bffc2a11/mzaf_10711666318602132235.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "sfam",
+      "song": "Go",
+      "style": "trap",
+      "sourceUrl": "https://music.apple.com/us/song/go/1720195594",
+      "genreEvidenceUrl": "https://qualitygoodsrecords.bandcamp.com/track/go",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/e8/a2/11/e8a21100-4d2e-751f-7d88-871fc2fe4d12/mzaf_12551713895065550522.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    }
+  ],
+  "failed": []
+}
