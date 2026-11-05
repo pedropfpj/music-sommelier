@@ -1,0 +1,5036 @@
+{
+  "at": "2026-11-05T21:53:40.479Z",
+  "styles": {
+    "acid_techno": {
+      "tracks": 35,
+      "creditedArtists": 10,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "emmanuel top",
+          "artist": "Emmanuel Top",
+          "song": "Acid Phase",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/94/80/4e/94804eb4-391e-4c69-85ca-3dc4dd16aa67/mzaf_3196181685111090502.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hardfloor",
+          "artist": "Hardfloor",
+          "song": "Acperience 1 (Original Version)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a2/37/10/a23710ba-0924-dfd2-0ebc-368c1f929f43/mzaf_4134334065568037101.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "miss djax",
+          "artist": "Miss Djax & Junk Project",
+          "song": "Acid Queen (Miss Djax vs. Junk Project)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a8/1e/cc/a81eccda-0a15-f50e-f5fe-307552201baf/mzaf_7513829577088687428.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "jeff mills",
+        "robert hood"
+      ]
+    },
+    "afro_house": {
+      "tracks": 44,
+      "creditedArtists": 7,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "da capo",
+        "aero manyelo",
+        "caiiro",
+        "enoo napa",
+        "hyenah",
+        "major league djz",
+        "sparrow"
+      ]
+    },
+    "ambient_techno": {
+      "tracks": 85,
+      "creditedArtists": 41,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "biosphere",
+        "speedy j",
+        "the future sound of london",
+        "ultramarine",
+        "autechre",
+        "b12",
+        "deepchord",
+        "gas",
+        "global communication",
+        "monolake",
+        "orbital",
+        "plaid",
+        "the black dog",
+        "the orb"
+      ]
+    },
+    "ambient": {
+      "tracks": 139,
+      "creditedArtists": 40,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "biosphere",
+        "brian eno",
+        "stars of the lid",
+        "tim hecker",
+        "aphex twin",
+        "loscil",
+        "a winged victory for the sullen",
+        "alva noto",
+        "ben frost",
+        "bvdub",
+        "carbon based lifeforms",
+        "celer",
+        "chihei hatakeyama",
+        "eluvium",
+        "fennesz",
+        "gas",
+        "grouper",
+        "hammock",
+        "hiroshi yoshimura",
+        "huerco s",
+        "jonn serrie",
+        "julianna barwick",
+        "kaitlyn aurelia smith",
+        "kmru",
+        "laraaji",
+        "lawrence english",
+        "max richter",
+        "michael stearns",
+        "nils frahm",
+        "oneohtrix point never",
+        "pan american",
+        "rafael anton irisarri",
+        "robert rich",
+        "ryuichi sakamoto",
+        "sarah davachi",
+        "steve roach",
+        "taylor deupree",
+        "the sight below",
+        "warmth",
+        "william basinski"
+      ]
+    },
+    "atmospheric_jungle": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "omni trio",
+          "artist": "Omni Trio",
+          "song": "Nu Birth of Cool",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/74/67/9c/74679c75-7c66-f728-0913-d4583ae7a59f/mzaf_13295200714067722555.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "source direct",
+          "artist": "Source Direct",
+          "song": "Approach and Identify",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/6a/5b/2c/6a5b2c69-879d-3106-122b-27443e9bb9c4/mzaf_13695383384132951540.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "seba",
+          "artist": "Seba",
+          "song": "Camouflage",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5b/e3/fe/5be3fed1-9370-12ff-af54-9f20c0fcc9b0/mzaf_11267935735232516388.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "ltj bukem",
+        "pfm"
+      ]
+    },
+    "ambient_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "808 state",
+          "artist": "808 State",
+          "song": "Lift",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1b/b0/ed/1bb0ed39-6d2a-638b-4759-ca23b6f4c001/mzaf_10038475800376886838.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "global communication",
+          "artist": "Global Communication",
+          "song": "4:14",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/84/59/16/84591649-4c1b-1926-4b4b-084b6bc5391d/mzaf_1739719883704854103.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "the future sound of london",
+          "artist": "The Future Sound of London",
+          "song": "Cascade",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1c/d9/4f/1cd94f03-c57d-84c8-aff9-d209285749c3/mzaf_7226048178049426624.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "the klf",
+        "the orb"
+      ]
+    },
+    "ballroom_vogue_beats": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "byrell the great",
+          "artist": "Byrell The Great",
+          "song": "Akasha's Tears",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ea/b5/fb/eab5fb6d-695b-19bb-a14a-03985658c595/mzaf_7205270099345464084.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "masters at work",
+        "mikeq",
+        "divoli s vere",
+        "vjuan allure"
+      ]
+    },
+    "ambient_dub": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "banco de gaia",
+          "artist": "Banco de Gaia",
+          "song": "Heliopolis",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3d/ba/d5/3dbad5ad-c01f-7ae5-c1d6-aa73db7aa248/mzaf_8398155717888417098.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "woob",
+          "artist": "Woob",
+          "song": "Odonna",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a3/45/ea/a345ea06-274c-ddf3-435f-6428f1c44388/mzaf_12035761906346013124.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dub trees",
+          "artist": "Dub Trees",
+          "song": "A Way Of Being Free 'Are You Sitting Comfortably Very Smooth, Very Peaceful Mix' (2024 Remaster)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/00/60/2c/00602c09-79f7-f8c1-1a70-f4c39b061244/mzaf_5798826898457722525.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "sounds from the ground",
+        "the orb"
+      ]
+    },
+    "bass_house": {
+      "tracks": 39,
+      "creditedArtists": 8,
+      "verifiedArtists": 6,
+      "verified": [
+        {
+          "identity": "ac slater",
+          "artist": "AC Slater",
+          "song": "Bass Inside",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8f/3b/e0/8f3be063-02dc-02d0-6f2b-7804736a1a7d/mzaf_696458111245000304.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "habstrakt",
+          "artist": "Habstrakt",
+          "song": "Show Me",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/79/08/1d/79081de4-38c3-4b1d-b33f-d490e3488813/mzaf_16975582600284417603.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "jauz",
+          "artist": "Jauz",
+          "song": "Feel the Volume",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/8e/e4/718ee471-27eb-eb49-4f8a-e2df40355409/mzaf_10024694306870919516.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "joyryde",
+          "artist": "JOYRYDE",
+          "song": "HOT DRUM",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/db/b4/f2/dbb4f238-d6f1-7f5e-8367-0f2c95c29d74/mzaf_8407054906278846749.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "moksi",
+          "artist": "Moksi",
+          "song": "Doorman (feat. Chace)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a2/e4/6b/a2e46b89-db53-e4d9-cabb-0cdbe6cf5e1e/mzaf_5372487877228968499.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "taiki nulight",
+          "artist": "Taiki Nulight",
+          "song": "Primal",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6b/b2/fd/6bb2fdfb-cfc5-9a4e-12bc-b34a4bc2965f/mzaf_18321017796537198094.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "curbi",
+        "knock2"
+      ]
+    },
+    "acid_trance": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "art of trance",
+          "artist": "Art of Trance",
+          "song": "Madagascar",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a2/26/74/a2267487-55ad-d868-b320-cfe1f2786abf/mzaf_13617839792342643044.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hardfloor",
+          "artist": "Hardfloor",
+          "song": "Lost In the Silverbox",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/fe/c9/3e/fec93e89-63e1-c5a8-582b-8c8dcd52ebcb/mzaf_7120007782972297517.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "kai tracid",
+          "artist": "Kai Tracid",
+          "song": "Drift Deep Into Your Own Thoughts",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/07/6c/32/076c3292-1903-654f-ddfc-c71aa1e6c152/mzaf_3957235524810260366.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "emmanuel top",
+        "union jack"
+      ]
+    },
+    "bassline": {
+      "tracks": 23,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "notion",
+          "artist": "NOTION",
+          "song": "Burning",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ad/2d/04/ad2d0439-bfc1-5e9a-620d-644326f13798/mzaf_17230474218689589891.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "t2",
+        "dj q"
+      ]
+    },
+    "berlin_school": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "michael hoenig",
+          "artist": "Michael Hoenig",
+          "song": "Bones On the Beach",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/09/fb/74/09fb74b7-0d30-1ce8-ca65-5412dc355194/mzaf_4551270185576070925.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "klaus schulze",
+        "tangerine dream",
+        "edgar froese",
+        "manuel gottsching"
+      ]
+    },
+    "big_room_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "r3hab",
+          "artist": "R3HAB",
+          "song": "Hallucinations (feat. R I T U A L)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/15/4c/7b/154c7b8b-9619-2886-18fd-3dcc21ceda54/mzaf_17160524734322596579.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "w w",
+          "artist": "W&W",
+          "song": "Bigfoot",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e6/db/1d/e6db1dc6-9db9-ad07-a039-006116890b96/mzaf_17373082921607155352.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dimitri vegas",
+        "hardwell",
+        "blasterjaxx"
+      ]
+    },
+    "bleep_techno": {
+      "tracks": 68,
+      "creditedArtists": 48,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ability ii",
+        "tricky disco",
+        "unique 3",
+        "808 state",
+        "a guy called gerald",
+        "lfo",
+        "nexus 21",
+        "nightmares on wax",
+        "sweet exorcist",
+        "the black dog"
+      ]
+    },
+    "brazilian_funk": {
+      "tracks": 31,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "omulu",
+        "tropkillaz",
+        "bonde do tigrao",
+        "mc kevin o chris"
+      ]
+    },
+    "breakbeat": {
+      "tracks": 25,
+      "creditedArtists": 3,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "bicep",
+        "sasha carassi"
+      ]
+    },
+    "big_room_techno": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "space 92",
+          "artist": "Space 92",
+          "song": "Dimension",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9e/4d/82/9e4d822a-530f-845b-6f4e-b4d9a9826c32/mzaf_434711839095098517.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "will sparks",
+          "artist": "Will Sparks",
+          "song": "Blow Your Mind",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/52/3a/ec/523aec98-bfbf-d491-271b-bb30a8e3a9f1/mzaf_8316208455368820182.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "hi lo",
+        "maddix",
+        "eli brown"
+      ]
+    },
+    "balearic_trance": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "nalin",
+          "artist": "Nalin & Kane",
+          "song": "Open Your Eyes (Mix Cut)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/67/93/6f/67936fec-739e-1cd9-10d9-ba0335da94bc/mzaf_8270198153176083167.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "three drives",
+          "artist": "Three Drives",
+          "song": "Feel the Rhythm (Ton Tb Dub Mix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/fa/e1/15/fae11541-6cbc-b5e7-c76e-e094809960ba/mzaf_11331160024781025086.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "humate",
+          "artist": "Humate",
+          "song": "Choose Life (Rob Rives Dub)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/bf/51/cd/bf51cdf6-0017-9055-29df-6cd786372036/mzaf_17133067682682890676.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "salt tank",
+          "artist": "Salt Tank",
+          "song": "Afterhours",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/bd/31/30/bd3130c7-2e30-9cd2-1357-c2471ab529ed/mzaf_13317129678047501416.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "chicane",
+        "energy 52",
+        "york"
+      ]
+    },
+    "broken_techno": {
+      "tracks": 76,
+      "creditedArtists": 41,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "objekt",
+        "tessela",
+        "batu",
+        "blawan",
+        "bruce",
+        "hodge",
+        "laksa",
+        "pangaea",
+        "pearson sound",
+        "randomer",
+        "skee mask"
+      ]
+    },
+    "breakcore": {
+      "tracks": 95,
+      "creditedArtists": 19,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "aaron spectre",
+        "alec empire",
+        "aphex twin",
+        "bong ra",
+        "christoph de babalon",
+        "doormouse",
+        "drumcorps",
+        "enduser",
+        "fff",
+        "goreshit",
+        "igorrr",
+        "machine girl",
+        "otto von schirach",
+        "ruby my dear",
+        "shitmat",
+        "squarepusher",
+        "the flashbulb",
+        "venetian snares",
+        "xanopticon"
+      ]
+    },
+    "chicago_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "frankie knuckles",
+        "marshall jefferson",
+        "farley jackmaster funk",
+        "larry heard",
+        "phuture"
+      ]
+    },
+    "brostep": {
+      "tracks": 25,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "flux pavilion",
+          "artist": "Flux Pavilion",
+          "song": "Bass Cannon (Flux's Version)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/28/5d/22/285d2265-9ac0-bbe2-b1f2-a415274fc201/mzaf_13570072694367418901.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "skrillex",
+        "zomboy",
+        "doctor p",
+        "excision"
+      ]
+    },
+    "chillout": {
+      "tracks": 21,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "zero 7",
+          "artist": "Zero 7",
+          "song": "In the Waiting Line",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/27/db/01/27db01db-25a9-d0c2-da1e-0422a59d0c56/mzaf_2152883201285186794.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "washed out",
+        "autechre",
+        "biosphere",
+        "boards of canada"
+      ]
+    },
+    "complextro": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "porter robinson",
+        "wolfgang gartner",
+        "feed me",
+        "mord fustang",
+        "savant"
+      ]
+    },
+    "coldwave": {
+      "tracks": 61,
+      "creditedArtists": 13,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "charles de goal",
+        "deux",
+        "keluar",
+        "led er est",
+        "little nemo",
+        "norma loy",
+        "opera multi steel",
+        "ruth",
+        "trisomie 21",
+        "xeno",
+        "absolute body control",
+        "actors",
+        "adult"
+      ]
+    },
+    "batida": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "nidia",
+          "artist": "Nidia",
+          "song": "Biotheke",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6d/53/29/6d5329d1-6889-6c93-4370-8fb05352e446/mzaf_6134048693940994570.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj firmeza",
+          "artist": "DJ Firmeza",
+          "song": "Alma do Meu Pai",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/35/6a/93/356a93a8-758f-4ca9-c240-eff62d87773e/mzaf_15861656960754078877.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj nervoso",
+          "artist": "DJ Nervoso",
+          "song": "27aca",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8f/be/f6/8fbef601-8c67-56c1-b367-62a48bc338ac/mzaf_9779244919282831929.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "puto tito",
+          "artist": "Puto Tito",
+          "song": "[P**o Tito]",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/75/9a/19759ae1-b498-bb92-b227-8533bbecd443/mzaf_14128630820906168936.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dj marfox",
+        "dj nigga fox",
+        "dj lycox"
+      ]
+    },
+    "dark_experimental": {
+      "tracks": 65,
+      "creditedArtists": 19,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "audiosyntax",
+        "indacoruna",
+        "sectio aurea",
+        "ankoudead",
+        "bardo",
+        "hyperekplexia",
+        "mirror me",
+        "nala",
+        "necropsycho",
+        "nyctophungi",
+        "ogoun",
+        "kasatka",
+        "umbra lumen",
+        "burn in noise",
+        "burn in noise and shekinah",
+        "illumination",
+        "karmn eugen",
+        "martian arts"
+      ]
+    },
+    "big_beat": {
+      "tracks": 30,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "bentley rhythm ace",
+          "artist": "Bentley Rhythm Ace",
+          "song": "Midlander (There Can Only Be One...)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2a/60/48/2a60487f-7cc8-4cfa-ea5e-d5dc115ac0c3/mzaf_5866151036494727222.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "lo fidelity allstars",
+          "artist": "Lo Fidelity Allstars",
+          "song": "Bonus Beats",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/71/07/cd/7107cd03-edf1-a1a8-a418-bd9da1e9ffc2/mzaf_16977734947527107267.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "propellerheads",
+          "artist": "Propellerheads",
+          "song": "Comingtogetcha",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ee/02/f5/ee02f581-df2c-d878-24c1-fb122b50b77c/mzaf_287525542412012091.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "the chemical brothers",
+          "artist": "The Chemical Brothers",
+          "song": "Block Rockin' Beats",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8b/d4/61/8bd46156-08d5-adb0-370d-6408cbaee1de/mzaf_15531948554362197854.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "the crystal method",
+          "artist": "The Crystal Method",
+          "song": "Comin' Back",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/07/8c/8c/078c8c35-1430-8a23-9fd1-cacb71f3d6d5/mzaf_1207455486168898559.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "fatboy slim",
+        "the prodigy"
+      ]
+    },
+    "baltimore_club": {
+      "tracks": 27,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "scottie b",
+          "artist": "Scottie B",
+          "song": "BlankenDip",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/d9/62/0fd96256-5ca7-96a6-87bd-d16747560c8e/mzaf_6741202082406512450.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "blaqstarr",
+          "artist": "Blaqstarr",
+          "song": "Get Yo Hands Up 2",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/35/c5/29/35c52931-f063-e6aa-cbde-44a5186b8262/mzaf_14162737261670051514.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj class",
+          "artist": "DJ Class",
+          "song": "Dance Like a Freak (Radio Mix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/65/64/81/65648175-a930-9ad2-fbbe-d12da37c9a6d/mzaf_2815321724703185174.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj technics",
+          "artist": "DJ Technics",
+          "song": "My Life Extra (Mixed)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c5/cd/73/c5cd7386-4893-4801-c58b-5c764750a3a2/mzaf_2887701810047561033.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "say wut",
+          "artist": "Say Wut",
+          "song": "Go Time Anthem",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1c/3f/67/1c3f6770-0e82-8f3a-8cf1-9871f4df15a6/mzaf_11042314657410794617.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "kw griff",
+        "rod lee"
+      ]
+    },
+    "chillstep": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "mitis",
+          "artist": "MitiS",
+          "song": "Life",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/be/11/cb/be11cb9c-4748-64be-eb0d-d3d5dfc12e77/mzaf_786372147790824602.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "synkro",
+          "artist": "Synkro",
+          "song": "Acceptance",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f9/69/3e/f9693e10-2d77-db88-b886-9c0880a329fe/mzaf_3907961717981273603.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "blackmill",
+        "cma",
+        "phaeleh"
+      ]
+    },
+    "dark_progressive": {
+      "tracks": 184,
+      "creditedArtists": 36,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "sensient",
+        "ambler",
+        "eartheogen",
+        "electrypnose",
+        "evil oil man",
+        "fractal joke",
+        "grouch",
+        "hypogeo",
+        "kromagon",
+        "merkaba",
+        "molecc",
+        "one tasty morsel",
+        "pspiralife",
+        "ryanosaurus",
+        "shadow fx",
+        "slip hypnotic",
+        "sumiruna",
+        "tetrameth",
+        "hellquist",
+        "kliment",
+        "minimal criminal",
+        "smilk",
+        "sourone",
+        "ben coda",
+        "ben rama",
+        "breger",
+        "fungus funk",
+        "grouch in dub",
+        "krumelur",
+        "occer",
+        "perfect stranger",
+        "quanta",
+        "reflection",
+        "terrafractyl",
+        "tijah",
+        "triforce"
+      ]
+    },
+    "darkwave": {
+      "tracks": 38,
+      "creditedArtists": 3,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "clan of xymox",
+        "drab majesty",
+        "the frozen autumn"
+      ]
+    },
+    "darksynth": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "mega drive",
+          "artist": "Mega Drive",
+          "song": "I Am the Program",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6d/7d/29/6d7d29fa-9375-0916-d491-2044c802335e/mzaf_7464455188157187765.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "gost",
+          "artist": "GosT",
+          "song": "Cursed",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/17/7f/95/177f9522-4fbc-7884-a14d-08ef5dc864ec/mzaf_7511635523102058228.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "carpenter brut",
+        "perturbator",
+        "dance"
+      ]
+    },
+    "dark_psy": {
+      "tracks": 238,
+      "creditedArtists": 59,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "zik",
+        "bodhisattva 13 20",
+        "cosmo",
+        "dark whisper",
+        "electrypnose",
+        "furious",
+        "highko",
+        "kashyyyk",
+        "kindzadza",
+        "mubali",
+        "orestis",
+        "parus",
+        "penta",
+        "psychoz",
+        "psykovsky",
+        "silent horror",
+        "bethad",
+        "karmn eugen",
+        "phagos sonus",
+        "tetraktyz",
+        "umber vamber",
+        "umber sonus",
+        "alcohbata",
+        "ipotocaticac",
+        "megalopsy",
+        "osom",
+        "primordial ooze",
+        "quasar",
+        "will o wisp",
+        "yaminahua",
+        "absurdus",
+        "abrahadabra",
+        "alien mental",
+        "arjuna",
+        "atriohm",
+        "baphomet engine",
+        "blisargon demogorgon",
+        "claw",
+        "derango",
+        "digital talk",
+        "dylalien",
+        "encephalopaticys",
+        "farebi jalebi",
+        "gidra",
+        "kerosene club",
+        "n o m",
+        "necropsycho",
+        "opus summum",
+        "para halu",
+        "polykaos",
+        "polyphonia",
+        "strangekaos",
+        "stranger"
+      ]
+    },
+    "dark_ambient": {
+      "tracks": 29,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "atrium carceri",
+          "artist": "Atrium Carceri",
+          "song": "Endless Halls",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/25/ae/8a/25ae8a22-8755-d20f-440e-d3e3ca89b337/mzaf_8188026761158309117.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "northaunt",
+          "artist": "Northaunt",
+          "song": "The Autumn Sky",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/45/bc/0a/45bc0a07-1497-2b78-1db3-9abe222ed69e/mzaf_3409536525195360182.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "cities last broadcast",
+          "artist": "Cities Last Broadcast",
+          "song": "Antenna",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6d/6a/ef/6d6aefd6-a6c0-e716-e926-a96685d39742/mzaf_3224820534109148218.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "desiderii marginis",
+          "artist": "Desiderii Marginis",
+          "song": "Adrift",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/bb/b4/b7/bbb4b78d-fd5d-9d61-fd53-7daa030ea5eb/mzaf_7001552411133634815.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "kammarheit",
+          "artist": "Kammarheit",
+          "song": "A Room Between the Rooms",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/76/b1/dc/76b1dcaa-9cc4-7d67-2a53-24dde62bccbe/mzaf_12985261372022407202.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "lustmord",
+        "raison d etre"
+      ]
+    },
+    "deep_house": {
+      "tracks": 27,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "bob moses",
+        "elderbrook",
+        "mindchatter",
+        "nora en pure"
+      ]
+    },
+    "deep_techno": {
+      "tracks": 70,
+      "creditedArtists": 39,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "abdulla rashim",
+        "acronym",
+        "claudio prc",
+        "deepbass",
+        "dino sabatini",
+        "donato dozzy",
+        "edit select",
+        "luigi tozzi",
+        "ness",
+        "reeko",
+        "shifted",
+        "voices from the lake"
+      ]
+    },
+    "disco_house": {
+      "tracks": 34,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "art of tones",
+          "artist": "Art of Tones",
+          "song": "Unstopped",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/76/4d/4d/764d4d53-20d9-05d6-724a-ea503993d75d/mzaf_8513140014603465656.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "cody currie",
+          "artist": "Cody Currie & Kapote",
+          "song": "Dance Dance Dance (Extended Version)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/86/1f/52/861f524a-1046-18e6-fb3b-a72401f9e97d/mzaf_18235300159669844400.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "coeo",
+          "artist": "COEO",
+          "song": "Mydonna",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/19/d4/67/19d467e6-1448-76c4-ec8c-ee801a7b033d/mzaf_6245148187412405413.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "folamour",
+        "purple disco machine"
+      ]
+    },
+    "downtempo": {
+      "tracks": 20,
+      "creditedArtists": 8,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "caribou",
+        "crooked colours",
+        "maribou state",
+        "mild minds",
+        "mindchatter",
+        "sg lewis",
+        "tourist",
+        "biosphere"
+      ]
+    },
+    "detroit_techno": {
+      "tracks": 81,
+      "creditedArtists": 18,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "octave one",
+        "carl craig",
+        "claude young",
+        "drexciya",
+        "jeff mills",
+        "juan atkins",
+        "kenny larkin",
+        "kevin saunderson",
+        "los hermanos",
+        "model 500",
+        "robert hood",
+        "stacey pullen",
+        "underground resistance",
+        "ancient methods",
+        "adam beyer",
+        "amelie lens"
+      ]
+    },
+    "drum_and_bass": {
+      "tracks": 40,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "camo",
+        "metrik",
+        "noisia",
+        "pendulum"
+      ]
+    },
+    "darkstep": {
+      "tracks": 25,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "katharsys",
+          "artist": "Katharsys",
+          "song": "Psychosis Vip",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/10/a7/72/10a772fb-49e0-9ae1-d9f5-88e3252b6e24/mzaf_4043556921966693007.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "the panacea",
+          "artist": "The Panacea",
+          "song": "Cryptonomicon",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d9/fe/6d/d9fe6d3d-03a6-3103-4bff-c722089e0823/mzaf_16774472712614043758.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "limewax",
+        "technical itch",
+        "current value"
+      ]
+    },
+    "drumstep": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "zardonic",
+          "artist": "Zardonic",
+          "song": "Bring It On (feat. Mikey Rukus)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/93/a5/b7/93a5b796-0366-b8d0-2170-7ed2ae0064d6/mzaf_10138265491224774244.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "knife party",
+        "pendulum",
+        "delta heavy",
+        "modestep"
+      ]
+    },
+    "dubstep": {
+      "tracks": 28,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "coki",
+        "mala",
+        "skrillex",
+        "saka"
+      ]
+    },
+    "deconstructed_club": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "amnesia scanner",
+          "artist": "Amnesia Scanner",
+          "song": "AS Chingy",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4a/6e/8c/4a6e8c5c-6505-5fa6-1f4c-2b6d5389923d/mzaf_15010638587686925462.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "eartheater",
+          "artist": "Eartheater",
+          "song": "Crown Jewel",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/09/bd/5a/09bd5a96-71c3-92ee-e76f-6c039be4b8a5/mzaf_4510312692627225594.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "lotic",
+        "rabit",
+        "arca"
+      ]
+    },
+    "ebm": {
+      "tracks": 32,
+      "creditedArtists": 12,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "adam x",
+        "snts",
+        "maceo plex",
+        "rebekah"
+      ]
+    },
+    "dub_techno": {
+      "tracks": 101,
+      "creditedArtists": 24,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "anna",
+        "robert hood",
+        "andy stott",
+        "basic channel",
+        "charlotte de witte",
+        "cv313",
+        "deadbeat",
+        "deepchord",
+        "echospace",
+        "enrico sangiuliano",
+        "fluxion",
+        "intrusion",
+        "maceo plex",
+        "maurizio",
+        "monolake",
+        "pole",
+        "porter ricks",
+        "quantec",
+        "rhythm",
+        "rod modell",
+        "stl",
+        "swayzak",
+        "vladislav delay",
+        "yagya"
+      ]
+    },
+    "edm": {
+      "tracks": 29,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "tiesto",
+          "artist": "Tiësto",
+          "song": "Adagio for Strings",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f4/1f/10/f41f101f-ac26-f118-58e3-ed7de160c940/mzaf_2804816464855919506.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "avicii",
+        "martin garrix",
+        "calvin harris",
+        "david guetta"
+      ]
+    },
+    "crossbreed": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "cooh",
+          "artist": "Cooh",
+          "song": "The Origin of All (feat. Angie)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e6/8a/7a/e68a7aeb-79a3-8378-af56-1a12de014f42/mzaf_12897545582528326799.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj hidden",
+          "artist": "DJ Hidden",
+          "song": "As She Laughed (Remastered Version)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/9d/5c/19/9d5c1942-7156-65eb-875f-379fc28d6297/mzaf_10079682562580641507.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "sinister souls",
+          "artist": "Sinister Souls",
+          "song": "Tuh Tuh Duh (feat. eRRe)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/29/e3/fa/29e3faab-8858-2cb7-895a-12ca438fa381/mzaf_4485242021025244819.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hallucinator",
+          "artist": "Hallucinator",
+          "song": "I Am the Devil",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8e/66/22/8e662205-c941-3287-6e80-988dbb33d7ae/mzaf_2677545495901231532.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "switch technique",
+          "artist": "Switch Technique",
+          "song": "Changes Everything",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d5/fb/a3/d5fba3fc-206e-1c13-5395-357e8a08c1f6/mzaf_5022689252012426493.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "counterstrike",
+        "the outside agency"
+      ]
+    },
+    "electro_house": {
+      "tracks": 36,
+      "creditedArtists": 6,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "dada life",
+          "artist": "Dada Life",
+          "song": "Feed the Dada",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/99/c7/f5/99c7f5e3-b8fb-b98e-ba32-3b1071601117/mzaf_3259843398966836807.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "feed me",
+          "artist": "Feed Me",
+          "song": "Death By Robot",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4c/4c/26/4c4c2629-2aeb-9397-7afe-76e66de3da6f/mzaf_1254170641518768948.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "mord fustang",
+          "artist": "Mord Fustang",
+          "song": "Lick the Rainbow",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/45/61/0e/45610e72-27a1-8a37-e0ef-fa60edc0d743/mzaf_17494308511756756921.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "wolfgang gartner",
+          "artist": "Wolfgang Gartner",
+          "song": "Illmerica",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/c4/e7/4bc4e7ec-af40-c580-cbda-54b46fbf1aa3/mzaf_2867047915394747541.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "zedd",
+        "felguk"
+      ]
+    },
+    "electro": {
+      "tracks": 70,
+      "creditedArtists": 21,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "helena hauff",
+        "umwelt",
+        "kraftwerk",
+        "the hacker",
+        "anthony rother",
+        "aux 88",
+        "carl finlow",
+        "cignol",
+        "cygnus",
+        "dj stingray",
+        "dmx krew",
+        "dopplereffekt",
+        "drexciya",
+        "e r p",
+        "exzakt",
+        "jensen interceptor",
+        "morphology",
+        "plant43",
+        "silicon scally",
+        "sync 24",
+        "versalife"
+      ]
+    },
+    "electronic_dance_pop": {
+      "tracks": 38,
+      "creditedArtists": 6,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "calvin harris",
+        "zedd",
+        "bunt",
+        "disco lines",
+        "david guetta",
+        "the chainsmokers"
+      ]
+    },
+    "edm_trap": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "flosstradamus",
+          "artist": "Flosstradamus",
+          "song": "How You Gon' Do That (feat. Cara)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cb/76/d6/cb76d612-5a1a-c435-beae-4c045b499c85/mzaf_3570317165316855441.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "uz",
+          "artist": "UZ",
+          "song": "Trap Shit V13",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/31/27/ae/3127ae68-b297-1745-a1f0-88baedb65cca/mzaf_6023304600573660316.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "baauer",
+        "rl grime",
+        "hucci"
+      ]
+    },
+    "dream_trance": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "dj dado",
+          "artist": "DJ Dado",
+          "song": "Dreaming",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0c/38/f3/0c38f3ed-19c1-816d-9a91-673046ef31f1/mzaf_7518679891222065213.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "roland brant",
+          "artist": "Roland Brant",
+          "song": "Hot Sunrise",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/91/ff/a9/91ffa942-4084-fdba-9e6d-d592ec83099d/mzaf_3314174558725158525.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "zhi vago",
+          "artist": "Zhi-Vago",
+          "song": "Celebrate the Love",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/20/49/442049fd-ab08-2b19-8f5d-3d98b93e1216/mzaf_763837693446476043.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "nylon moon",
+          "artist": "Nylon Moon",
+          "song": "800 (Original Version)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/90/d0/97/90d097ff-da9e-9213-8aee-7dc194a4c963/mzaf_16796124490195771010.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "bbe",
+        "robert miles",
+        "taucher"
+      ]
+    },
+    "eurodance": {
+      "tracks": 25,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "culture beat",
+          "artist": "Culture Beat",
+          "song": "Anything",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d3/48/e2/d348e202-67ef-eea3-645f-11cadd438f9e/mzaf_12760261886630394612.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "2 unlimited",
+        "snap",
+        "haddaway",
+        "la bouche"
+      ]
+    },
+    "euphoric_hardstyle": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "audiotricz",
+          "artist": "Audiotricz",
+          "song": "Party All the Time",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/74/e6/24/74e62476-0562-3325-940c-0ed85ae73e88/mzaf_6271670337138962097.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "headhunterz",
+        "wildstylez",
+        "brennan heart",
+        "code black"
+      ]
+    },
+    "experimental_bass": {
+      "tracks": 31,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "eprom",
+        "g jones",
+        "brothel",
+        "sibewest"
+      ]
+    },
+    "drumfunk": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "fanu",
+          "artist": "Fanu",
+          "song": "Five Ounces",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview128/v4/62/4f/c4/624fc456-afd4-4952-5553-e73bec72ecd4/mzaf_326981325623625259.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "fracture",
+          "artist": "Fracture & Neptune",
+          "song": "Bless Me",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/51/44/83/51448357-e787-f2e3-e1b1-b32eb5d66cdc/mzaf_13424605818289573670.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "macc",
+          "artist": "Macc",
+          "song": "Drumslut",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/eb/3a/e9/mzm.zniapnlo.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "paradox",
+        "equinox"
+      ]
+    },
+    "footwork_juke": {
+      "tracks": 42,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "dj nate",
+        "dj rashad",
+        "heavee",
+        "sherelle",
+        "dj spinn"
+      ]
+    },
+    "freeform": {
+      "tracks": 72,
+      "creditedArtists": 13,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "salakavala",
+        "haltya",
+        "kirna",
+        "kiwa",
+        "puoskari",
+        "tea chairs",
+        "texas faggott",
+        "at work",
+        "gaida",
+        "igor swamp",
+        "atwork",
+        "fractal cowboys",
+        "hongos longos"
+      ]
+    },
+    "frenchcore": {
+      "tracks": 132,
+      "creditedArtists": 20,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "adrenokrome",
+        "billx",
+        "dr peacock",
+        "floxytek",
+        "jkll",
+        "le bask",
+        "maissouille",
+        "psiko",
+        "radium",
+        "remzcore",
+        "rooler",
+        "sefa",
+        "the sickest squad",
+        "alryk",
+        "deathroar",
+        "harry potar",
+        "hyrule war",
+        "pattern j",
+        "the braindrillerz",
+        "the speed freak"
+      ]
+    },
+    "florida_breaks": {
+      "tracks": 29,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "huda hudia",
+          "artist": "Huda Hudia",
+          "song": "Clearly",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/09/63/b5/0963b5c8-03c1-3d35-21b3-cf8df126968a/mzaf_472408947315563942.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "jackal",
+          "artist": "Jackal & Hyde",
+          "song": "Anywhere in the Galaxy",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ae/2d/93/ae2d939d-a4cc-5b35-12e4-4d79811eabae/mzaf_3929929750255659728.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dynamix ii",
+          "artist": "Dynamix II",
+          "song": "Don't Touch That Dial",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1e/27/62/1e276249-3014-4072-36ae-4529e6b38187/mzaf_5369999112132792466.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "friction",
+          "artist": "Friction & Spice",
+          "song": "Groove Me (Mixed)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/53/e3/9b/53e39b8d-aa9d-42ac-bddf-4b7336e263cc/mzaf_334396566734614241.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "sharaz",
+          "artist": "Sharaz",
+          "song": "Always On Time",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/eb/86/4d/eb864d8d-973a-7360-8c07-87951314d968/mzaf_14618265789852729167.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "baby anne",
+        "dj icey"
+      ]
+    },
+    "french_house": {
+      "tracks": 35,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "cassius",
+          "artist": "Cassius",
+          "song": "Cassius 1999",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/fe/17/37/fe1737dc-4ec7-4041-cb50-df17fc6d120e/mzaf_6698404620327696527.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "etienne de crecy",
+          "artist": "Etienne de Crecy",
+          "song": "Fast Track Live vs. We Are Your Friends",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5c/fb/29/5cfb29c9-e229-e4bb-b6bd-ceddf73516e4/mzaf_7346466592005259039.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "fred falke",
+          "artist": "Fred Falke",
+          "song": "Crepuscule",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/fd/1e/1e/fd1e1e2c-b93d-712e-a2d0-2ab71a14e29a/mzaf_9551689421741875574.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "modjo",
+          "artist": "Modjo",
+          "song": "Chillin'",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/68/9c/3a/689c3a19-c8e5-a255-d14d-91d196eee1c7/mzaf_809362854539200338.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "stardust",
+        "daft punk",
+        "alan braxe"
+      ]
+    },
+    "forest_psy": {
+      "tracks": 285,
+      "creditedArtists": 47,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "arjuna",
+        "atriohm",
+        "confo",
+        "derango",
+        "drip drop",
+        "fantazma",
+        "farebi jalebi",
+        "hutti heita",
+        "jahbo",
+        "kabayun",
+        "kala",
+        "krapul",
+        "nobot",
+        "procs",
+        "shadow shaman",
+        "southwild",
+        "tengri",
+        "thelios",
+        "whrikk",
+        "yudhisthira",
+        "traxon",
+        "ipotocaticac",
+        "aardvarkk",
+        "ajja",
+        "archaic",
+        "dohm",
+        "dsompa",
+        "enichkin",
+        "flipknot",
+        "gaspard",
+        "jangaramongara",
+        "loke",
+        "maramba",
+        "mubali",
+        "nargun",
+        "once upon a time",
+        "pantomiman",
+        "trold",
+        "ulvae",
+        "drury nevil",
+        "dylalien",
+        "goch",
+        "ka sol",
+        "ocelot",
+        "onkel dunkel",
+        "yggdrasil"
+      ]
+    },
+    "electroacoustic": {
+      "tracks": 29,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "beatriz ferreyra",
+          "artist": "Beatriz Ferreyra",
+          "song": "Deux Dents Dehors",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/93/0b/a1/930ba111-03d8-ea12-9360-62454387d7b2/mzaf_1359143087730931797.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hildegard westerkamp",
+          "artist": "Hildegard Westerkamp",
+          "song": "Gently Penetrating",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/ef/9f/b5/ef9fb5bc-b9e0-4f63-462b-355046bd96f0/mzaf_6482529276339603895.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "iannis xenakis",
+          "artist": "Iannis Xenakis",
+          "song": "Persepolis #1",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8f/c7/27/8fc7277d-b3d5-04cc-8540-cd34ecc1b452/mzaf_17174051114557146748.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "luc ferrari",
+          "artist": "Luc Ferrari",
+          "song": "Didascalies",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/57/46/a2/5746a260-1950-9293-e9d7-8470b5395879/mzaf_14283162639256827985.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "trevor wishart",
+          "artist": "Trevor Wishart",
+          "song": "Arrival",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview118/v4/5e/ec/fd/5eecfdee-b639-7653-9b55-178eeb053fd7/mzaf_807569033334739455.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "bernard parmegiani",
+        "eliane radigue"
+      ]
+    },
+    "future_bass": {
+      "tracks": 34,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "deon custom",
+          "artist": "Deon Custom",
+          "song": "Roses",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/42/34/00/42340074-abc7-3d62-51b7-fc830ba77eda/mzaf_1481286824402031429.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "droeloe",
+          "artist": "DROELOE",
+          "song": "Bon Voyage",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6c/9f/66/6c9f6662-216b-6eae-72f2-5710095c2cdf/mzaf_14050710763680129399.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "duumu",
+          "artist": "Duumu",
+          "song": "Illuminate (feat. Slyleaf)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/57/01/175701c1-5572-693d-9644-9e42335a5204/mzaf_5163275183032938958.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "san holo",
+        "flume"
+      ]
+    },
+    "full_on_morning": {
+      "tracks": 79,
+      "creditedArtists": 20,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "a tech",
+        "avalon",
+        "digicult",
+        "djantrix",
+        "electric universe",
+        "inner state",
+        "mad maxx",
+        "melicia",
+        "outsiders",
+        "polaris",
+        "relativ",
+        "sesto sento",
+        "sinerider",
+        "sonic species",
+        "spirit architect",
+        "talamasca",
+        "tropical bleyage",
+        "u recken",
+        "tristan",
+        "vini vici"
+      ]
+    },
+    "full_on_night": {
+      "tracks": 87,
+      "creditedArtists": 21,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "braincell",
+        "burn in noise",
+        "circuit breakers",
+        "dickster",
+        "earthling",
+        "hypnocoustics",
+        "ingrained instincts",
+        "iridian",
+        "ital",
+        "mad tribe",
+        "materia",
+        "menog",
+        "module virus",
+        "nukleall",
+        "psymmetrix",
+        "regan",
+        "technology",
+        "virtual light",
+        "avalon",
+        "djantrix",
+        "imaginarium"
+      ]
+    },
+    "future_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "oliver heldens",
+        "tchami",
+        "don diablo",
+        "lucas",
+        "mike williams"
+      ]
+    },
+    "future_garage": {
+      "tracks": 97,
+      "creditedArtists": 20,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "kiasmos",
+        "bucky",
+        "burial",
+        "clubroot",
+        "direct",
+        "faltydl",
+        "jacques greene",
+        "joy orbison",
+        "koreless",
+        "mount kimbie",
+        "pangaea",
+        "phaeleh",
+        "scuba",
+        "sepalcure",
+        "sorrow",
+        "submerse",
+        "synkro",
+        "vacant",
+        "volor flex",
+        "zomby"
+      ]
+    },
+    "gabber": {
+      "tracks": 81,
+      "creditedArtists": 17,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "angerfist",
+        "art of fighters",
+        "dj paul elstak",
+        "drokz",
+        "endymion",
+        "evil activities",
+        "mad dog",
+        "miss k8",
+        "neophyte",
+        "nosferatu",
+        "ophidian",
+        "promo",
+        "rotterdam terror corps",
+        "tha playah",
+        "the prophet",
+        "dj mad dog",
+        "korsakoff"
+      ]
+    },
+    "garage_house": {
+      "tracks": 69,
+      "creditedArtists": 13,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "armand van helden",
+        "barbara tucker",
+        "blaze",
+        "dem 2",
+        "dennis ferrer",
+        "disclosure",
+        "grant nelson",
+        "kerri chandler",
+        "masters at work",
+        "mj cole",
+        "mk",
+        "todd edwards",
+        "tuff jam"
+      ]
+    },
+    "full_on": {
+      "tracks": 456,
+      "creditedArtists": 57,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ajja",
+        "altruism",
+        "avalon",
+        "burn in noise",
+        "champa",
+        "dickster",
+        "earthspace",
+        "faders",
+        "hypnocoustics",
+        "imagine mars",
+        "laughing buddha",
+        "mad maxx",
+        "magik",
+        "mandala",
+        "menog",
+        "outsiders",
+        "sonic species",
+        "tristan",
+        "volcano",
+        "1200 micrograms",
+        "astrix",
+        "audiotec",
+        "bizzare contact",
+        "braincell",
+        "cosmosis",
+        "deedrah",
+        "digicult",
+        "djantrix",
+        "electric universe",
+        "electro sun",
+        "gms",
+        "hypnoise",
+        "imaginarium",
+        "indra",
+        "killerwatts",
+        "mad tribe",
+        "materia",
+        "pixel",
+        "relativ",
+        "rinkadink",
+        "safi connection",
+        "sesto sento",
+        "skazi",
+        "space cat",
+        "stryker",
+        "talamasca",
+        "tropical bleyage",
+        "u recken",
+        "vertical mode",
+        "vibe tribe",
+        "waio",
+        "x noize",
+        "xerox",
+        "zyce",
+        "earthling",
+        "save the robot",
+        "symbolic"
+      ]
+    },
+    "extratone": {
+      "tracks": 27,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "aekhloria",
+          "artist": "Aekhloria",
+          "song": "Stars Can't Shine",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/07/99/8d/07998df6-efb1-9830-0e97-a06b859c89a5/mzaf_8244800106133097699.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "kobaryo",
+          "artist": "Kobaryo",
+          "song": "Bookmaker",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/92/1f/a2/921fa216-94c1-efdc-e633-c3b69628f249/mzaf_10165805722083679652.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj skull vomit",
+          "artist": "DJ Skull Vomit",
+          "song": "Antigoon (Stazma Illegaly Violent Remix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/d3/e6/cb/d3e6cbe7-9947-56c4-a7ba-afc5ec8c990b/mzaf_5751150974986461246.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "kurwastyle project",
+          "artist": "Kurwastyle Project",
+          "song": "Passenger Of Shit (feat. Passenger of Shit)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e0/3b/ca/e03bca06-327e-901f-f95e-bc4fbc326e9f/mzaf_11392155173066267599.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "pressterror",
+          "artist": "Pressterror",
+          "song": "Bitte Töte Mich",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/24/23/b3/2423b3f0-1cec-49cb-9ea1-3ed6613c51bb/mzaf_17614117932111432214.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": []
+    },
+    "futurepop": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "assemblage 23",
+          "artist": "Assemblage 23",
+          "song": "Damaged",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/76/e4/ed/76e4ed39-6000-989c-3e44-8f51722c8e45/mzaf_15636200942492366617.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "icon of coil",
+          "artist": "Icon of Coil",
+          "song": "Dead Enough for Life",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ff/66/35/ff6635ce-2f4b-3aeb-96c6-d3910d4b19ab/mzaf_11644677928085105676.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "apoptygma berzerk",
+        "vnv nation",
+        "covenant"
+      ]
+    },
+    "funky_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "seamus haji",
+          "artist": "Seamus Haji",
+          "song": "Boogie 2nite",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/12/8c/2a128c79-8df7-79cf-62f7-8f595f2c0b9a/mzaf_14304503201672178543.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dr packer",
+          "artist": "Dr Packer",
+          "song": "Ain't No Fool",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/cb/de/1e/cbde1eb8-0792-3485-1156-1ca8023e1ef5/mzaf_3970796809244053857.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "armand van helden",
+        "junior jack",
+        "full intention"
+      ]
+    },
+    "halftime_bass": {
+      "tracks": 35,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "chee",
+        "tsuruda",
+        "ivy lab",
+        "shades"
+      ]
+    },
+    "goa_trance": {
+      "tracks": 157,
+      "creditedArtists": 21,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "artifact303",
+        "astral projection",
+        "california sunshine",
+        "chi a d",
+        "crossing mind",
+        "dimension 5",
+        "e mantra",
+        "ephedra",
+        "filteria",
+        "juno reactor",
+        "khetzal",
+        "median project",
+        "mfg",
+        "mindsphere",
+        "pleiadians",
+        "prana",
+        "transwave",
+        "hallucinogen",
+        "goasia",
+        "man",
+        "ra"
+      ]
+    },
+    "hard_trance": {
+      "tracks": 30,
+      "creditedArtists": 2,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "kai tracid",
+        "scot project"
+      ]
+    },
+    "ghetto_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "dj slugo",
+          "artist": "DJ Slugo",
+          "song": "418 (Bounce Mix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/72/24/8c/72248cdc-20ce-2a6e-5b56-9aa30b6be806/mzaf_3620771949276908666.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "jammin gerald",
+          "artist": "Jammin Gerald",
+          "song": "Pump That Shit Up",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/87/02/58/87025806-4c59-e700-9d28-8cbe52ad7fe8/mzaf_3048094996574546417.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "paul johnson",
+          "artist": "Paul Johnson",
+          "song": "A Little Suntin Suntin",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/51/7b/13/517b1393-e447-dbb6-2953-57318d8a9f5f/mzaf_2887976817336582336.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dj deeon",
+        "dj funk"
+      ]
+    },
+    "hard_techno": {
+      "tracks": 83,
+      "creditedArtists": 21,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "999999999",
+        "airod",
+        "alignment",
+        "anetha",
+        "charlie sparks",
+        "dax j",
+        "i hate models",
+        "klangkuenstler",
+        "nico moreno",
+        "paula temple",
+        "perc",
+        "rebekah",
+        "regal",
+        "sara landry",
+        "shlomo",
+        "viper diva",
+        "blawan",
+        "robert hood",
+        "rrose"
+      ]
+    },
+    "hardcore": {
+      "tracks": 80,
+      "creditedArtists": 18,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "angerfist",
+        "anime",
+        "art of fighters",
+        "d fence",
+        "endymion",
+        "evil activities",
+        "korsakoff",
+        "mad dog",
+        "miss k8",
+        "neophyte",
+        "nosferatu",
+        "ophidian",
+        "promo",
+        "tha playah",
+        "dj maissouille",
+        "floxytek",
+        "le bask",
+        "maissouille"
+      ]
+    },
+    "hardstep": {
+      "tracks": 27,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "dillinja",
+        "dj hype",
+        "dieselboy",
+        "dom",
+        "technical itch"
+      ]
+    },
+    "hardgroove_techno": {
+      "tracks": 88,
+      "creditedArtists": 43,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ben sims",
+        "bryan zentz",
+        "cave",
+        "deetron",
+        "dj rush",
+        "dj shufflemaster",
+        "hertz",
+        "marco bailey",
+        "mark broom",
+        "oliver ho",
+        "paul mac",
+        "player",
+        "samuel l session",
+        "stanny franssen",
+        "the advent"
+      ]
+    },
+    "hard_dance": {
+      "tracks": 32,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "rob tissera",
+          "artist": "Rob Tissera",
+          "song": "Burning (feat. Guyver)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/4b/70/45/4b70450e-ac63-f34c-3051-a21aa42644b9/mzaf_7872027216254095353.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "lab4",
+          "artist": "Lab4",
+          "song": "Concept of Love (SQ's Electrik Shandy Remix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/50/24/8d/50248df1-aef9-9a07-95c4-0d473c568954/mzaf_6942120080468447244.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "bk",
+        "lisa lashes",
+        "andy farley"
+      ]
+    },
+    "hardstyle": {
+      "tracks": 96,
+      "creditedArtists": 22,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "coone",
+        "d block",
+        "dj isaac",
+        "delete",
+        "adaro",
+        "atmozfears",
+        "b front",
+        "brennan heart",
+        "d sturb",
+        "da tweekaz",
+        "frequencerz",
+        "frontliner",
+        "headhunterz",
+        "keltek",
+        "noisecontrollers",
+        "phuture noize",
+        "radical redemption",
+        "ran d",
+        "rebelion",
+        "sub zero project",
+        "warface",
+        "wildstylez"
+      ]
+    },
+    "glitch_hop": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "gramatik",
+          "artist": "Gramatik",
+          "song": "Hit That Jive",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/8c/d5/f4/8cd5f41b-2de2-bedf-cf0c-d03c3042c617/mzaf_18056479030468589928.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "haywyre",
+          "artist": "Haywyre",
+          "song": "Chromatically",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/03/b8/cf/03b8cfea-9f34-754d-8e4e-f226871b338d/mzaf_1016621761133262505.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "opiuo",
+        "the glitch mob",
+        "koan sound"
+      ]
+    },
+    "ghettotech": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "disco d",
+          "artist": "Disco D",
+          "song": "S.O.S.",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/14/91/1d/14911dd4-39cc-4f5c-2100-f7aa2017f86d/mzaf_11979807042336692040.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "detroit s filthiest",
+          "artist": "Detroit's Filthiest",
+          "song": "Dance With Me",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c4/aa/e1/c4aae1d6-713b-b851-1213-a6dc99786543/mzaf_7684101585882274750.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dj assault",
+        "dj godfather",
+        "mr de"
+      ]
+    },
+    "hi_tech": {
+      "tracks": 75,
+      "creditedArtists": 18,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "paralocks",
+        "mentalecho",
+        "oxidaksi",
+        "alien chaos",
+        "arcek",
+        "cosinus",
+        "crazy astronaut",
+        "fright rate",
+        "killatk",
+        "maramba",
+        "mimic vat",
+        "popek",
+        "selective mood",
+        "technical hitch",
+        "yatzee",
+        "alpscore"
+      ]
+    },
+    "hypnotic_techno": {
+      "tracks": 39,
+      "creditedArtists": 17,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "dvs1",
+        "adam x",
+        "anna",
+        "aux 88",
+        "dj adam x",
+        "kobosil",
+        "scalameriya"
+      ]
+    },
+    "idm": {
+      "tracks": 40,
+      "creditedArtists": 8,
+      "verifiedArtists": 6,
+      "verified": [
+        {
+          "identity": "aphex twin",
+          "artist": "Aphex Twin",
+          "song": "Alberto Balsalm (1994)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/b1/bf/4ab1bfdc-0127-5d09-cd67-9fbd7bae44c2/mzaf_1352686733056741678.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "autechre",
+          "artist": "Autechre",
+          "song": "Bike",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b9/56/54/b9565461-60c8-fb26-efa5-3adb3e7c1b07/mzaf_18426160834452851959.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "boards of canada",
+          "artist": "Boards of Canada",
+          "song": "Music Is Math",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a3/12/7c/a3127cb5-cab0-d201-4833-26c688687bf7/mzaf_7877861477750748861.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "clark",
+          "artist": "Clark",
+          "song": "Winter Linn",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/91/f0/1291f014-608a-1689-eb81-cdc7b130352a/mzaf_16486270726929304573.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "plaid",
+          "artist": "Plaid",
+          "song": "Clock",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b7/97/d6/b797d676-963a-4557-111a-f3ac768c65fb/mzaf_8218137098894132016.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "squarepusher",
+          "artist": "Squarepusher",
+          "song": "Beep Street",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/aa/28/3aaa28f7-8b1e-fc77-ef37-121e377e6616/mzaf_7309524183684410448.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "kettel",
+        "mike paradinas"
+      ]
+    },
+    "industrial_techno": {
+      "tracks": 63,
+      "creditedArtists": 19,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "i hate models",
+        "dax j",
+        "uvb",
+        "ansome",
+        "blawan",
+        "british murder boys",
+        "codex empire",
+        "drexciya",
+        "jk flesh",
+        "orphx",
+        "paula temple",
+        "perc",
+        "phase fatale",
+        "scalameriya",
+        "schwefelgelb",
+        "surgeon",
+        "tommy four seven",
+        "vatican shadow"
+      ]
+    },
+    "house": {
+      "tracks": 196,
+      "creditedArtists": 26,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "armand van helden",
+        "black box",
+        "blaze",
+        "bob sinclar",
+        "cajmere",
+        "cece rogers",
+        "chez damier",
+        "chris stussy",
+        "crystal waters",
+        "inner city",
+        "jimpster",
+        "kings of tomorrow",
+        "lil louis",
+        "louie vega",
+        "marshall jefferson",
+        "masters at work",
+        "moodymann",
+        "osunlade",
+        "pepe bradock",
+        "robin s",
+        "romanthony",
+        "ron trent",
+        "theo parrish",
+        "todd terry"
+      ]
+    },
+    "jackin_house": {
+      "tracks": 56,
+      "creditedArtists": 9,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "cajmere",
+        "derrick carter",
+        "dj sneak",
+        "green velvet",
+        "hector moralez",
+        "inland knights",
+        "phil weeks",
+        "riva starr",
+        "mark farina"
+      ]
+    },
+    "hardwave": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "barnacle boi",
+          "artist": "Barnacle Boi",
+          "song": "Anything for You.",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dd/ef/e0/ddefe083-911c-c2b9-ede5-f00402d3bd02/mzaf_13259357941116793374.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "juche",
+          "artist": "Juche",
+          "song": "Falling",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/58/0c/22/580c2257-b09b-ac93-5ec3-c70f7d8f7f15/mzaf_1234000452395789570.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "skeler",
+        "ytho",
+        "deadcrow"
+      ]
+    },
+    "jump_up": {
+      "tracks": 32,
+      "creditedArtists": 6,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "bou",
+          "artist": "Bou",
+          "song": "All U Gotta Do",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/24/e4/b9/24e4b951-141c-7494-6056-50697cf1fc60/mzaf_1358443982736371701.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hedex",
+          "artist": "Hedex",
+          "song": "MHITR (Semi-Automatic) [feat. Eksman]",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b2/19/30/b21930d8-6f55-7feb-1ca9-388790442373/mzaf_2432972340130846552.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "macky gee",
+          "artist": "Macky Gee",
+          "song": "Black Widow",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/bd/b8/3bbdb8f6-d2dc-697c-909b-e0bc11bb3353/mzaf_12304249837358703023.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "turno",
+          "artist": "Turno & Kanine",
+          "song": "Polarity",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/23/1f/36/231f360a-214f-f199-fbe4-668a49016675/mzaf_15827488930702569961.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "captain bass",
+        "sota"
+      ]
+    },
+    "industrial_dance": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "front line assembly",
+          "artist": "Front Line Assembly",
+          "song": "Killing Grounds",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9f/5b/2d/9f5b2d78-f9ce-fcae-464b-cccdf1c30426/mzaf_6220704698194882060.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "kmfdm",
+          "artist": "KMFDM",
+          "song": "I (Heart) You",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/82/0f/a1/820fa1a2-11b8-e346-e6e4-86c240ea045c/mzaf_8807188528742869935.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ministry",
+          "artist": "Ministry",
+          "song": "Just One Fix",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b3/92/d8/b392d8ab-96ca-804a-9d0e-3d51478114d8/mzaf_15645666998803330762.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "front 242",
+        "nitzer ebb"
+      ]
+    },
+    "jungle": {
+      "tracks": 44,
+      "creditedArtists": 7,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "aphrodite",
+        "ltj bukem",
+        "ray keith",
+        "remarc",
+        "shy fx",
+        "krust",
+        "dj zinc"
+      ]
+    },
+    "kuduro_eletronico": {
+      "tracks": 27,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "buraka som sistema",
+        "dj znobia",
+        "os lambas",
+        "pongo",
+        "titica"
+      ]
+    },
+    "liquid_dnb": {
+      "tracks": 44,
+      "creditedArtists": 7,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "calibre",
+        "logistics",
+        "lsb",
+        "nu tone",
+        "seba",
+        "spectrasoul",
+        "halogenix"
+      ]
+    },
+    "italo_disco": {
+      "tracks": 31,
+      "creditedArtists": 7,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "gazebo",
+          "artist": "Gazebo",
+          "song": "Coincidence",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/0b/04/e6/0b04e68f-e85a-a63f-ff6c-75ca26e7fe33/mzaf_2433486835717844342.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "p lion",
+          "artist": "P. Lion",
+          "song": "A Song For You",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/47/b1/7f/47b17f27-02be-0a19-340a-aec19296fb76/mzaf_9314382264938321356.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ryan paris",
+          "artist": "Ryan Paris",
+          "song": "Around My Dream Medley How Old Are You",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c0/0a/a1/c00aa112-ed5c-6a18-c6a8-0d9407106acf/mzaf_15746895578745658963.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "kano",
+        "klein",
+        "ken laszlo",
+        "valerie dore"
+      ]
+    },
+    "jersey_club": {
+      "tracks": 25,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "dj jayhood",
+          "artist": "DJ Jayhood",
+          "song": "Apologize",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/cd/fe/1e/cdfe1e66-c1de-0af2-111b-46de360ec26a/mzaf_11241144868931432197.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "nadus",
+          "artist": "Nadus",
+          "song": "Nxwxrk",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/eb/14/26/eb1426d7-2acd-a920-b92a-72546c6de31b/mzaf_5729880147626373592.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dj sliink",
+        "uniiqu3",
+        "r3ll"
+      ]
+    },
+    "hi_nrg": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "hazell dean",
+          "artist": "Hazell Dean",
+          "song": "Searching (I Got to Find a Man)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b5/06/a2/b506a2cc-e4e4-e1e9-f409-ad13884bc5ef/mzaf_11403378057283934772.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "miquel brown",
+          "artist": "Miquel Brown",
+          "song": "Megamix: He's a Saint, He's a Sinner / Manpower / So Many Men, So Little Time",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/26/6b/e0/266be022-2065-ccae-26b4-1cb5c6866342/mzaf_8126058104972838658.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "paul parker",
+          "artist": "Paul Parker",
+          "song": "Baby You Can Have My Lovin' Anytime",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/37/82/c1/3782c1f5-1633-8b32-c077-75eb4bc59b90/mzaf_1900039694744796686.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "patrick cowley",
+        "sylvester"
+      ]
+    },
+    "kosmische_musik": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "neu",
+          "artist": "NEU!",
+          "song": "E-Musik",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f1/38/a2/f138a2db-e1aa-c65e-0e48-d5a492848742/mzaf_7661983014759245199.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "popol vuh",
+          "artist": "Popol Vuh",
+          "song": "Abschied",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/d5/6b/ded56be1-4153-f965-3710-27b531cce2e6/mzaf_11278121471356181710.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "cluster",
+        "harmonia",
+        "ash ra tempel"
+      ]
+    },
+    "latin_house": {
+      "tracks": 30,
+      "creditedArtists": 7,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "andruss",
+          "artist": "Andruss",
+          "song": "Boa Abelinha",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/87/d0/da/87d0dadd-3e9a-31ce-37cf-fbc82a3ddb23/mzaf_18139010302002850788.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "harry romero",
+          "artist": "Harry Romero",
+          "song": "Mood Vision",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/95/36/90/95369091-1c7d-fc94-ae84-af5c45db4856/mzaf_17000736349775007304.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "sllash",
+          "artist": "Sllash & Doppe",
+          "song": "Bonita",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/41/7d/0c/417d0c9b-b35f-f629-821c-abc670af1499/mzaf_850437782018256480.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "afro medusa",
+        "mambana",
+        "hugel",
+        "jude"
+      ]
+    },
+    "mainstage_techno": {
+      "tracks": 29,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "maddix",
+          "artist": "Maddix",
+          "song": "Lethal Industry (feat. Tiësto) [Maddix Remix]",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/f0/d2/5df0d2ea-4d35-40cf-27e4-e70edb77ff77/mzaf_4945247842491354217.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "eli brown",
+        "space 92",
+        "hardwell",
+        "hi lo"
+      ]
+    },
+    "melodic_techno": {
+      "tracks": 99,
+      "creditedArtists": 23,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "colyn",
+        "paula temple",
+        "8kays",
+        "adriatique",
+        "agents of time",
+        "artbat",
+        "fideles",
+        "hunter game",
+        "innellea",
+        "joris voorn",
+        "kas st",
+        "kevin de vries",
+        "massano",
+        "mathame",
+        "mind against",
+        "moonclipse",
+        "patrice baumel",
+        "perc",
+        "recondite",
+        "rodriguez jr",
+        "stephan bodzin",
+        "tale of us",
+        "yotto"
+      ]
+    },
+    "melodic_dubstep": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "dabin",
+          "artist": "Dabin",
+          "song": "Hold (feat. Daniela Andrade)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/50/62/40/506240e2-8c59-528b-cebc-0b0f7e7ba9d6/mzaf_12022199087198039059.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "mitis",
+          "artist": "MitiS",
+          "song": "Life",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/be/11/cb/be11cb9c-4748-64be-eb0d-d3d5dfc12e77/mzaf_786372147790824602.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "illenium",
+        "seven lions",
+        "said the sky"
+      ]
+    },
+    "melodic_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "nora en pure",
+          "artist": "Nora En Pure",
+          "song": "In Your Eyes",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/99/1a/84/991a84f3-f3ad-0f80-166b-096d622f9a40/mzaf_17577018354309581160.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "tinlicker",
+          "artist": "Tinlicker",
+          "song": "Bird Feeder",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9f/ec/db/9fecdbae-6612-4444-c3be-9c2844c57e23/mzaf_4833500263077129811.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "ben bohmer",
+        "lane 8",
+        "yotto"
+      ]
+    },
+    "minimal_deep_tech": {
+      "tracks": 35,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "mihai popoviciu",
+          "artist": "Mihai Popoviciu",
+          "song": "To the People",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/22/da/c622da92-e880-3a99-edac-d93017948b5a/mzaf_14557974807329250992.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "toman",
+          "artist": "Toman",
+          "song": "De la Buena",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/e0/ac/c3e0acdf-c65b-f192-c334-2bfa4687b368/mzaf_7531617350413029349.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "traumer",
+          "artist": "Traumer",
+          "song": "Do Not Resist",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/20/a6/c320a602-a72e-3ea9-2309-456495416365/mzaf_18376965923931297530.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "chris stussy",
+        "east end dubs"
+      ]
+    },
+    "lowercase": {
+      "tracks": 28,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "richard chartier",
+          "artist": "Richard Chartier",
+          "song": "interreference.3",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/3d/e6/af/3de6afbc-c294-8735-4edc-4f35d8990ef9/mzaf_4730303359294068396.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "sachiko m",
+          "artist": "Sachiko M",
+          "song": "Don't Ask",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/5e/5c/cd/5e5ccded-0bf3-9784-01d9-f73df7e2f7ef/mzaf_5904486338096624887.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "taku sugimoto",
+          "artist": "Taku Sugimoto",
+          "song": "4, Version for Solo Guitar",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/00/d8/e4/00d8e43d-178a-ff5d-b942-648ff859ca81/mzaf_4600717378677767051.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "toshimaru nakamura",
+          "artist": "Toshimaru Nakamura",
+          "song": "Nimb #1",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fb/46/b3/fb46b38d-11e1-8404-f42d-8dfa85459720/mzaf_10861819604226721535.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "toshiya tsunoda",
+          "artist": "Toshiya Tsunoda",
+          "song": "I",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/26/35/e0/2635e003-f822-0ea3-1dc8-2263bb0bab1f/mzaf_16347613132884829973.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "steve roden"
+      ]
+    },
+    "minimal_techno": {
+      "tracks": 55,
+      "creditedArtists": 15,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "carl craig",
+        "baby ford",
+        "barac",
+        "cabanne",
+        "jan jelinek",
+        "mathew jonson",
+        "mike ink",
+        "petre inspirescu",
+        "plastikman",
+        "priku",
+        "rhadoo",
+        "ricardo villalobos",
+        "robert hood",
+        "steve bug",
+        "zip"
+      ]
+    },
+    "neurofunk": {
+      "tracks": 36,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "audio",
+        "optical",
+        "the upbeats",
+        "agressor bunx",
+        "neonlight"
+      ]
+    },
+    "microsound": {
+      "tracks": 24,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "oval",
+          "artist": "Oval",
+          "song": "Commerce Server",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/35/f1/8f/35f18f55-cd61-2017-1097-b2ac90f06921/mzaf_3495527310225567846.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "pan sonic",
+          "artist": "Pan Sonic",
+          "song": "Keskeisvoima",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/5e/b5/4b5eb5e1-2806-f8da-f445-b2316d68e6d5/mzaf_6120169357972173164.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "alva noto",
+        "ryoji ikeda",
+        "snd"
+      ]
+    },
+    "microhouse": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "jan jelinek",
+          "artist": "Jan Jelinek",
+          "song": "Rock In the Video Age",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d9/fa/13/d9fa13b6-9816-26d6-ba0d-056020167844/mzaf_13084597468580163267.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "luomo",
+          "artist": "Luomo",
+          "song": "Could Be Like This",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c0/04/95/c0049588-5528-ed17-2672-da549c5d44e1/mzaf_16189582652671793136.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ricardo villalobos",
+          "artist": "Ricardo Villalobos",
+          "song": "Arild",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/23/2a/f4/232af401-e257-9dcc-1554-1448fad625ad/mzaf_18065961445617004183.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "akufen",
+        "isolee",
+        "farben",
+        "herbert"
+      ]
+    },
+    "organic_house": {
+      "tracks": 51,
+      "creditedArtists": 11,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "satori",
+        "bedouin",
+        "jan blomqvist",
+        "kerala dust",
+        "monolink",
+        "nhii",
+        "oceanvs orientalis",
+        "viken arman",
+        "yokoo",
+        "pambouk",
+        "volen sentir"
+      ]
+    },
+    "nu_skool_breaks": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "freestylers",
+          "artist": "Freestylers",
+          "song": "Beat It Down",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/84/15/a4/8415a472-86bb-96da-3534-878136aa4f35/mzaf_8680118768190155302.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "plump djs",
+        "stanton warriors",
+        "aquasky",
+        "krafty kuts"
+      ]
+    },
+    "outrun": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "lazerhawk",
+          "artist": "Lazerhawk",
+          "song": "King of the Streets",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/24/1a/3d/241a3dc1-0800-e009-16be-4d3d537c933d/mzaf_15088134106674364136.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "timecop1983",
+          "artist": "Timecop1983",
+          "song": "Dreams (feat. Dana Jean Phoenix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b6/f1/0f/b6f10f45-c1b4-f3de-bcd4-9d24f6d0f59a/mzaf_9091100372209877445.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "miami nights 1984",
+        "mitch murder",
+        "fm 84"
+      ]
+    },
+    "peak_time_techno": {
+      "tracks": 76,
+      "creditedArtists": 19,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "adam beyer",
+        "amelie lens",
+        "anna",
+        "bart skils",
+        "charlotte de witte",
+        "drunken kong",
+        "enrico sangiuliano",
+        "joyhauser",
+        "layton giordani",
+        "maddix",
+        "space 92",
+        "spektre",
+        "umek",
+        "wehbba",
+        "surgeon",
+        "ben klock",
+        "perc",
+        "rrose"
+      ]
+    },
+    "minimal_wave": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "das ding",
+          "artist": "Das Ding",
+          "song": "Flood the Zone (Again)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/84/a9/67/84a96772-c96f-827a-9fce-b09bdcf2a320/mzaf_14638201513819205840.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "martin dupont",
+          "artist": "Martin Dupont",
+          "song": "Full Moons and Mouths",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0e/b4/fc/0eb4fc77-0422-bda9-c097-84e37aada22d/mzaf_8335491834864794656.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "solid space",
+          "artist": "Solid Space",
+          "song": "Afghan Dance",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e1/c1/9f/e1c19f63-b80b-8cf6-f4b4-00bf6ef29f2b/mzaf_12210170311430260298.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "oppenheimer analysis",
+          "artist": "Oppenheimer Analysis",
+          "song": "Cold War",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fc/c9/e9/fcc9e993-e0b6-412e-105e-5c23934644c6/mzaf_2466178925604241188.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "turquoise days",
+          "artist": "Turquoise Days",
+          "song": "Alternative Strategies",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a2/5b/50/a25b50ef-a937-d8bf-ef96-e2bbea133d03/mzaf_14284258928191037058.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "deux",
+        "linear movement"
+      ]
+    },
+    "progressive_edm": {
+      "tracks": 25,
+      "creditedArtists": 4,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "alesso",
+        "swedish house mafia",
+        "martin garrix",
+        "nicky romero"
+      ]
+    },
+    "makina": {
+      "tracks": 29,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "dj skudero",
+          "artist": "DJ Skudero",
+          "song": "Glycerin",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3f/80/94/3f8094b0-5865-2c63-3f80-259e88dcf79a/mzaf_1718065667113592916.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ruboy",
+          "artist": "Ruboy",
+          "song": "1000 Colours Remix (Short Edit)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a2/4e/52/a24e52b6-f942-e34d-9b03-00e282152291/mzaf_15769948066672099283.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dj nau",
+          "artist": "DJ Nau",
+          "song": "Hard Sequencer (Short Edit)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/f0/23/5f/f0235f6a-3fc5-3ea1-c231-da6e1f1e7d3c/mzaf_521154999094778058.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "sistema 3",
+          "artist": "Sistema 3",
+          "song": "Galguén (Radio Edit)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/e7/87/b0e78713-7500-92a7-25a9-5cbef01c0e7e/mzaf_14920264590177334361.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "xavi metralla",
+        "pastis",
+        "dj konik"
+      ]
+    },
+    "progressive_house": {
+      "tracks": 37,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "guy j",
+          "artist": "Guy J",
+          "song": "Airborne",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/a9/7e/10a97e13-2bb8-68f5-f5d0-fb6f53b2a823/mzaf_1985182027211522582.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "guy mantzur",
+          "artist": "Guy Mantzur",
+          "song": "Tremolo Man",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cd/e1/4e/cde14eb9-2bc9-e494-3371-431089cc6271/mzaf_15256308247743268314.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "henry saiz",
+          "artist": "Henry Saiz",
+          "song": "Lucero Del Alba",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d6/df/e0/d6dfe0a2-3c9a-b55f-e843-37f40ec6c7b9/mzaf_10130760679044558106.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "hernan cattaneo",
+          "artist": "Hernán Cattáneo & Audio Junkies",
+          "song": "A Major Minor",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6a/8a/60/6a8a60ce-fe9f-f7c1-c756-0614f8756a23/mzaf_16310951527143615337.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "nick warren",
+          "artist": "Nick Warren",
+          "song": "Buenos Aires",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ba/95/89/ba958988-9296-8f19-6891-4ddc07f15b26/mzaf_15913412211644290112.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "vintage culture",
+        "mochakk"
+      ]
+    },
+    "piano_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "mk",
+          "artist": "MK",
+          "song": "Body 2 Body (Extended Mix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/34/e1/2d/34e12d5e-3224-81ff-e4ef-5a8ad7bfdd90/mzaf_6266382105378450893.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "alison limerick",
+        "cece rogers",
+        "k klass",
+        "robin s"
+      ]
+    },
+    "progressive_trance": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "paul van dyk",
+        "sasha",
+        "bt",
+        "john 00 fleming",
+        "solarstone"
+      ]
+    },
+    "post_dubstep": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "pangaea",
+          "artist": "Pangaea",
+          "song": "Hex",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7a/01/8c/7a018cb9-e51a-9c98-f846-1d3835359be0/mzaf_8738298084194000980.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "zomby",
+          "artist": "Zomby",
+          "song": "Euphoria",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0d/03/ba/0d03ba08-9487-98af-126a-114629dd66d3/mzaf_3919178392678555492.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "james blake",
+        "mount kimbie",
+        "kode9"
+      ]
+    },
+    "musique_concrete": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "beatriz ferreyra",
+          "artist": "Beatriz Ferreyra",
+          "song": "Deux Dents Dehors",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/93/0b/a1/930ba111-03d8-ea12-9360-62454387d7b2/mzaf_1359143087730931797.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "bernard parmegiani",
+          "artist": "Bernard Parmegiani",
+          "song": "Abel-Abeth",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview118/v4/06/a0/2d/06a02de0-c0d8-4095-0ae6-daf79745d354/mzaf_2358152375826664526.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "christian zanesi",
+          "artist": "Christian Zanesi",
+          "song": "Blue Lights",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/b4/a5/5fb4a55b-78b5-e391-3394-f911b854e40e/mzaf_11545008300373382227.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "francois bayle",
+          "artist": "Francois Bayle",
+          "song": "Animé",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview71/v4/6b/58/2c/6b582c6d-e54b-9027-2a89-6965b81da282/mzaf_5811325147768565440.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "michel chion",
+          "artist": "Michel Chion",
+          "song": "Kyrie eleison",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/1f/78/2a/mzm.urrkepvp.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "pierre henry",
+        "pierre schaeffer"
+      ]
+    },
+    "psy_comercial": {
+      "tracks": 79,
+      "creditedArtists": 19,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "berg",
+        "blastoyz",
+        "ghost rider",
+        "interactive noise",
+        "mandragora",
+        "morten granau",
+        "mystical complex",
+        "neelix",
+        "omiki",
+        "phaxe",
+        "ranji",
+        "reality test",
+        "sajanka",
+        "skazi",
+        "upgrade",
+        "vegas",
+        "vini vici",
+        "claudinho brasil",
+        "perfectone"
+      ]
+    },
+    "psybreaks": {
+      "tracks": 52,
+      "creditedArtists": 9,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "bad tango",
+        "colombo",
+        "eurythmy",
+        "far too loud",
+        "kiwa",
+        "neurodriver",
+        "neuroplasm",
+        "specimen a",
+        "hedflux"
+      ]
+    },
+    "neurohop": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "mr bill",
+          "artist": "Mr. Bill",
+          "song": "Apophenia",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/52/03/6f/52036f75-5345-fc0d-1022-b2d38c757361/mzaf_15923558546398263418.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "opiuo",
+          "artist": "OPIUO",
+          "song": "Jelly (feat. Texture Like Sun)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0e/57/a3/0e57a3e7-2e6a-6d90-086b-5f5124563316/mzaf_10050790104641586611.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "vorso",
+          "artist": "Vorso",
+          "song": "Crisis",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/37/dd/e1/37dde16d-01a7-93be-6519-478c15b0ee31/mzaf_498255932975010305.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ekcle",
+          "artist": "Ekcle",
+          "song": "A Giant Carries the City",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/bb/a6/18/bba618d9-c8d1-0217-ab70-e2c471b63522/mzaf_2606756657820475556.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "koan sound",
+        "kursa",
+        "culprate"
+      ]
+    },
+    "psybient": {
+      "tracks": 182,
+      "creditedArtists": 23,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "aes dana",
+        "androcell",
+        "asura",
+        "bluetech",
+        "carbon based lifeforms",
+        "cell",
+        "desert dwellers",
+        "entheogenic",
+        "globular",
+        "h u v a network",
+        "kalya scintilla",
+        "kaya project",
+        "kuba",
+        "martin nonstatic",
+        "miktek",
+        "ott",
+        "shpongle",
+        "solar fields",
+        "suduaya",
+        "tripswitch",
+        "younger brother",
+        "e mantra",
+        "koan"
+      ]
+    },
+    "raw_techno": {
+      "tracks": 32,
+      "creditedArtists": 12,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "aux 88",
+        "cybotron",
+        "jensen interceptor",
+        "phase fatale"
+      ]
+    },
+    "retrowave": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "timecop1983",
+          "artist": "Timecop1983",
+          "song": "Dreams (feat. Dana Jean Phoenix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b6/f1/0f/b6f10f45-c1b4-f3de-bcd4-9d24f6d0f59a/mzaf_9091100372209877445.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "college",
+        "kavinsky",
+        "fm 84",
+        "the midnight"
+      ]
+    },
+    "progressive_psy": {
+      "tracks": 320,
+      "creditedArtists": 41,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ace ventura",
+        "animato",
+        "captain hook",
+        "e clip",
+        "egorythmia",
+        "flegma",
+        "gaudium",
+        "liquid soul",
+        "lyktum",
+        "morten granau",
+        "neelix",
+        "ovnimoon",
+        "phaxe",
+        "protonica",
+        "ritmo",
+        "sideform",
+        "static movement",
+        "symbolic",
+        "ticon",
+        "zyce",
+        "aerospace",
+        "atmos",
+        "audiomatic",
+        "berg",
+        "day din",
+        "fabio fusco",
+        "hi profile",
+        "ilai",
+        "klopfgeister",
+        "lyctum",
+        "maitika",
+        "motion drive",
+        "perfect stranger",
+        "querox",
+        "ranji",
+        "sonic entity",
+        "suntree",
+        "vertex",
+        "vibrasphere",
+        "interactive noise",
+        "symphonix"
+      ]
+    },
+    "rawstyle": {
+      "tracks": 79,
+      "creditedArtists": 13,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "act of rage",
+        "crypsis",
+        "d sturb",
+        "delete",
+        "e force",
+        "malice",
+        "mutilator",
+        "rebelion",
+        "regain",
+        "rejecta",
+        "rooler",
+        "warface",
+        "radical redemption"
+      ]
+    },
+    "psytrance": {
+      "tracks": 94,
+      "creditedArtists": 18,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "1200 micrograms",
+        "ace ventura",
+        "astrix",
+        "cosmosis",
+        "electric universe",
+        "gms",
+        "hilight tribe",
+        "infected mushroom",
+        "iridian",
+        "koxbox",
+        "loud",
+        "mad tribe",
+        "man",
+        "menog",
+        "outsiders",
+        "raja ram",
+        "space tribe",
+        "talamasca"
+      ]
+    },
+    "riddim": {
+      "tracks": 31,
+      "creditedArtists": 3,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "subtronics",
+        "infekt",
+        "subfiltronik"
+      ]
+    },
+    "schranz": {
+      "tracks": 35,
+      "creditedArtists": 8,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "helena hauff",
+        "drexciya",
+        "front 242",
+        "phase fatale"
+      ]
+    },
+    "psycore": {
+      "tracks": 96,
+      "creditedArtists": 30,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "depuratus",
+        "maramba",
+        "alien chaos",
+        "baphomet engine",
+        "dark whisper",
+        "highko",
+        "kashyyyk",
+        "necropsycho",
+        "oroboro",
+        "paralocks",
+        "plankton",
+        "popek",
+        "psykovsky",
+        "varazslo",
+        "indacoruna",
+        "radice",
+        "radiruna",
+        "calyptratus",
+        "polykaos"
+      ]
+    },
+    "slambient": {
+      "tracks": 13,
+      "creditedArtists": 8,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": []
+    },
+    "ragga_jungle": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "general levy",
+          "artist": "General Levy",
+          "song": "Champagne Body",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9b/72/ad/9b72ad6d-85b9-5321-a448-3ed6b64e042e/mzaf_15831600613344022103.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "serial killaz",
+          "artist": "Serial Killaz",
+          "song": "Lovely Woman",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2a/09/3d/2a093d0c-8c83-6078-7077-2dfdeed83c42/mzaf_6519619934215919807.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "congo natty",
+        "shy fx",
+        "ed solo"
+      ]
+    },
+    "soulful_house": {
+      "tracks": 59,
+      "creditedArtists": 9,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ananda project",
+        "blaze",
+        "dennis ferrer",
+        "kerri chandler",
+        "louie vega",
+        "monique bingham",
+        "sandy rivera",
+        "terry hunter",
+        "kenny dope"
+      ]
+    },
+    "slap_house": {
+      "tracks": 25,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "hvme",
+          "artist": "HVME",
+          "song": "Money On My Mind",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/28/d6/79/28d67915-7ce3-d71e-0fd6-d865e2be3a08/mzaf_9694983534197542909.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "vize",
+          "artist": "VIZE",
+          "song": "Dancing Alone",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/02/37/89/0237892d-b1eb-c475-dedb-434c3df97a94/mzaf_11452313511621483787.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "dynoro",
+        "alok",
+        "imanbek"
+      ]
+    },
+    "reverse_bass": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "activator",
+          "artist": "Activator",
+          "song": "Designed To Rock the Place",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a4/cc/da/a4ccda40-fe84-2bc6-ba98-13e2bb4061ac/mzaf_546300484275584366.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "technoboy",
+          "artist": "Technoboy",
+          "song": "Catfight",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/61/89/f7/6189f72f-2bbb-a34e-6528-e1d385bce7ee/mzaf_7774033436448842479.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "tnt",
+        "tuneboy",
+        "the prophet"
+      ]
+    },
+    "sambass": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "drumagick",
+          "artist": "Drumagick",
+          "song": "Bahia",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0a/8d/69/0a8d6989-680c-73d8-a296-1f46ad0b9593/mzaf_7386986459184483134.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "fernanda porto",
+          "artist": "Fernanda Porto",
+          "song": "Caionagandaia",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/73/f4/fc/73f4fc07-4771-19d0-cede-b9ad1db51ada/mzaf_11710058206784002913.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "marcelinho da lua",
+          "artist": "Marcelinho da Lua",
+          "song": "Black Belt (feat. Black Alien & Bi Ribeiro)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ed/c7/28/edc72866-a714-5c13-cd8d-ec2d1a5ee02f/mzaf_16190618125126727950.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "xrs",
+          "artist": "XRS",
+          "song": "A Mosca",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/17/b8/dc/17b8dc8e-939b-ef9a-aabf-03cdd01658bc/mzaf_7067167629640641894.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "dj marky",
+        "patife",
+        "bungle"
+      ]
+    },
+    "speedcore": {
+      "tracks": 48,
+      "creditedArtists": 8,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "dj skinhead",
+        "hellfish",
+        "kobaryo",
+        "komprex",
+        "m1dy",
+        "noisekick",
+        "passenger of shit",
+        "the destroyer"
+      ]
+    },
+    "tech_trance": {
+      "tracks": 35,
+      "creditedArtists": 6,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "iain m",
+          "artist": "Iain M",
+          "song": "Endless Sky",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2d/d4/d6/2dd4d620-a3e4-9b38-b5b3-2219cd23d7c1/mzaf_5867609230303514983.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "ikorus",
+          "artist": "Ikorus",
+          "song": "Twitch",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f6/4f/0b/f64f0b06-0970-0a5d-6bf4-2b2b986b15f8/mzaf_3369151960437499378.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "mark sherry",
+          "artist": "Mark Sherry",
+          "song": "Genesis (Where It Begins)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/80/f5/66/80f56679-c53c-d5c6-8a90-df9fc1cfb442/mzaf_8080313312587351149.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "project 8",
+          "artist": "Project 8",
+          "song": "Audiological Warfare",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview30/v4/48/65/fd/4865fdef-ea1f-78f2-e7dd-e543dc9e9492/mzaf_561624618764088545.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "bryan kearney",
+        "john askew"
+      ]
+    },
+    "tech_house": {
+      "tracks": 234,
+      "creditedArtists": 28,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "michael bibi",
+        "anotr",
+        "beltran",
+        "bontan",
+        "claude vonstroke",
+        "detlef",
+        "dom dolla",
+        "fisher",
+        "john summit",
+        "josh butler",
+        "latmun",
+        "max chapman",
+        "nic fanciulli",
+        "patrick topping",
+        "pawsa",
+        "prok and fitch",
+        "richy ahmed",
+        "shiba san",
+        "sosa uk",
+        "steve lawler",
+        "wade",
+        "waff"
+      ]
+    },
+    "synthwave": {
+      "tracks": 102,
+      "creditedArtists": 24,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "automelodi",
+        "asylum party",
+        "boy harsher",
+        "boytronic",
+        "carpenter brut",
+        "college",
+        "com truise",
+        "dance",
+        "droid bishop",
+        "electric youth",
+        "fm 84",
+        "gunship",
+        "kavinsky",
+        "lazerhawk",
+        "le matos",
+        "miami nights 1984",
+        "mitch murder",
+        "perturbator",
+        "power glove",
+        "robert parker",
+        "scandroid",
+        "the midnight",
+        "timecop1983",
+        "waveshaper"
+      ]
+    },
+    "techno": {
+      "tracks": 157,
+      "creditedArtists": 23,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ben klock",
+        "dave clarke",
+        "dax j",
+        "dvs1",
+        "eli brown",
+        "function",
+        "james ruskin",
+        "jeff mills",
+        "laurent garnier",
+        "len faki",
+        "luke slater",
+        "marcel dettmann",
+        "oscar mulero",
+        "paula temple",
+        "randomer",
+        "sam paganini",
+        "slam",
+        "umek"
+      ]
+    },
+    "trance_uplifting": {
+      "tracks": 25,
+      "creditedArtists": 3,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "armin van buuren",
+        "simon patterson",
+        "indecent noise"
+      ]
+    },
+    "trap": {
+      "tracks": 33,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "hucci",
+          "artist": "Hucci",
+          "song": "Hustle",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ae/00/7a/ae007aa8-32e3-e233-5e3c-95e6bffc2a11/mzaf_10711666318602132235.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "sfam",
+          "artist": "sfam",
+          "song": "Go",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/e8/a2/11/e8a21100-4d2e-751f-7d88-871fc2fe4d12/mzaf_12551713895065550522.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "uz",
+          "artist": "UZ",
+          "song": "Trap Shit V10",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/93/6e/67/936e6763-4af7-0bd7-ff75-6214c724c2ab/mzaf_7926764937344408398.plus.aac.ep.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "rl grime",
+        "baauer"
+      ]
+    },
+    "shangaan_electro": {
+      "tracks": 20,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "foster manganyi",
+          "artist": "Foster Manganyi",
+          "song": "Amen-Amen",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/37/e5/71/37e5717e-3aa6-10ec-374d-505a6f9c18d0/mzaf_15875555205582030990.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "mancingelani",
+          "artist": "Mancingelani",
+          "song": "Vana Vasesi",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/30/de/f2/30def222-58cc-cfcd-818a-c275d2113500/mzaf_14604911818180239725.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "nkata mawewe",
+          "artist": "Nkata Mawewe",
+          "song": "Khulumani",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/19/4e/21/194e2185-3f0d-c0c2-522d-255dbf3f609a/mzaf_12280339013316398201.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "tiyiselani vomaseve",
+          "artist": "Tiyiselani Vomaseve",
+          "song": "Naxaniseka",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/14/e2/18/14e218fa-be14-50bb-418a-234237ff19c1/mzaf_2665977032497741806.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "zinja hlungwani",
+          "artist": "Zinja Hlungwani",
+          "song": "N'Wagezani",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8c/2d/ad/8c2dad46-59cc-561c-7e24-a7f8ca5ad130/mzaf_11123177923214616282.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "nozinja",
+        "tshetsha boys"
+      ]
+    },
+    "singeli": {
+      "tracks": 27,
+      "creditedArtists": 7,
+      "verifiedArtists": 5,
+      "verified": [
+        {
+          "identity": "dj travella",
+          "artist": "DJ Travella",
+          "song": "Mchakamchaka",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/06/72/ab06724e-f908-cb0c-1572-84a2eafaed62/mzaf_864369678974933154.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "dogo niga",
+          "artist": "Dogo Niga",
+          "song": "Kimbau Mbau",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/52/b2/3c/52b23ceb-5d80-6e04-0980-862a1f7541f6/mzaf_8964993803386957195.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "bamba pana",
+          "artist": "Bamba Pana",
+          "song": "Baria",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview114/v4/a9/ad/47/a9ad47cf-97f5-de61-78ef-34566d2e5963/mzaf_18058350754451771125.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        },
+        {
+          "identity": "dogo kibo",
+          "artist": "Dogo Kibo",
+          "song": "Pigo La Moyo",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8b/4e/4a/8b4e4aa1-1fed-408b-4385-59321472b5d3/mzaf_7512964466988872704.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "mc pilato",
+          "artist": "MC Pilato",
+          "song": "Mama Ashura",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4c/61/df/4c61df44-827f-c6c3-d3ac-89214ece96d0/mzaf_8371853612268303634.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "jay mitta",
+        "sisso"
+      ]
+    },
+    "tribal_techno": {
+      "tracks": 70,
+      "creditedArtists": 45,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "ben sims",
+        "christian wunsch",
+        "exium",
+        "hertz",
+        "mark williams",
+        "oscar mulero",
+        "reeko",
+        "surgeon",
+        "the advent",
+        "umek"
+      ]
+    },
+    "terrorcore": {
+      "tracks": 27,
+      "creditedArtists": 5,
+      "verifiedArtists": 2,
+      "verified": [
+        {
+          "identity": "srb",
+          "artist": "SRB",
+          "song": "Blurry Murry",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/05/dc/9c/05dc9c29-3ba2-5291-dc01-c7a65b784d40/mzaf_6002173579818371410.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "the vizitor",
+          "artist": "The Vizitor",
+          "song": "Dj Cursus (Darkcontroller Remix)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f7/67/1a/f7671a28-6893-66fa-4883-15351372636f/mzaf_18346728642838659169.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "noisekick",
+        "drokz",
+        "tripped"
+      ]
+    },
+    "space_ambient": {
+      "tracks": 32,
+      "creditedArtists": 7,
+      "verifiedArtists": 4,
+      "verified": [
+        {
+          "identity": "carbon based lifeforms",
+          "artist": "Carbon Based Lifeforms",
+          "song": "Abiogenesis",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/79/5a/da/795ada11-4294-490f-0363-150b118f7d3f/mzaf_12453934042020769117.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "max corbacho",
+          "artist": "Max Corbacho",
+          "song": "Dark Sky Opening, Pt. 1",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/88/45/7e/88457ebc-79b4-7319-104f-2ddfed719d67/mzaf_2536839520564192493.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "michael stearns",
+          "artist": "Michael Stearns",
+          "song": "As the Earth Kissed the Moon (2022 Remaster)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/40/76/3e/40763e41-6180-a614-dd69-3b003eb6def4/mzaf_4791755879044401247.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "stellardrone",
+          "artist": "Stellardrone",
+          "song": "Airglow",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/84/3c/e4/843ce45a-e33e-6124-e591-5e64910c52e8/mzaf_7509815125461460040.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "jonn serrie",
+        "steve roach",
+        "robert rich"
+      ]
+    },
+    "trip_hop": {
+      "tracks": 102,
+      "creditedArtists": 20,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "massive attack",
+        "archive",
+        "blockhead",
+        "bonobo",
+        "chinese man",
+        "dj krush",
+        "dj shadow",
+        "emancipator",
+        "hooverphonic",
+        "lamb",
+        "morcheeba",
+        "nightmares on wax",
+        "portishead",
+        "quantic",
+        "rjd2",
+        "sneaker pimps",
+        "thievery corporation",
+        "tricky",
+        "unkle",
+        "wax tailor"
+      ]
+    },
+    "tropical_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "thomas jack",
+          "artist": "Thomas Jack",
+          "song": "Rivers",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/32/77/ea/3277ea20-d783-334e-df5a-e160128eb233/mzaf_14390254030713581020.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "klingande",
+        "kygo",
+        "matoma",
+        "sam feldt"
+      ]
+    },
+    "uk_garage": {
+      "tracks": 47,
+      "creditedArtists": 14,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "interplanetary criminal",
+        "sammy virji",
+        "y u qt",
+        "disclosure"
+      ]
+    },
+    "vocal_trance": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "above",
+        "oceanlab",
+        "emma hewitt",
+        "gareth emery",
+        "giuseppe ottaviani"
+      ]
+    },
+    "wave": {
+      "tracks": 30,
+      "creditedArtists": 2,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "skeler",
+        "barnacle boi"
+      ]
+    },
+    "twilight_psy": {
+      "tracks": 102,
+      "creditedArtists": 21,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "braincell",
+        "chromatone",
+        "daksinamurti",
+        "dust",
+        "earthling",
+        "endeavour",
+        "fungus funk",
+        "ingrained instincts",
+        "ital",
+        "kabayun",
+        "lemurians",
+        "module virus",
+        "nektarios",
+        "sequoya",
+        "southwild",
+        "synthetik chaos",
+        "virtual light",
+        "yebah",
+        "a mush",
+        "aardvarkk",
+        "aphid moon"
+      ]
+    },
+    "uk_hardcore": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "scott brown",
+          "artist": "Scott Brown",
+          "song": "Fly With You",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/27/95/da/2795daf4-19cc-549e-c91f-37407e700d19/mzaf_7784132731666385806.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "darren styles",
+        "hixxy",
+        "dougal",
+        "s3rl"
+      ]
+    },
+    "tribal_house": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 1,
+      "verified": [
+        {
+          "identity": "tom stephan",
+          "artist": "Tom Stephan",
+          "song": "Erupt (Radio Edit)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/f6/2e/ee/mzm.xaldhbku.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "chus",
+        "danny tenaglia",
+        "antoine clamaran",
+        "superchumbo"
+      ]
+    },
+    "uk_bass": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "pangaea",
+          "artist": "Pangaea",
+          "song": "Hex",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7a/01/8c/7a018cb9-e51a-9c98-f846-1d3835359be0/mzaf_8738298084194000980.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "peverelist",
+          "artist": "Peverelist",
+          "song": "Sun Dance",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0d/d8/0a/0dd80a02-97c4-b1c8-3242-65bc8e5a4c70/mzaf_7354285028039256877.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "batu",
+          "artist": "Batu",
+          "song": "Atavism",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/05/45/5a/05455a26-9160-f4d5-28b1-28d7d2247f0b/mzaf_4060887820906183486.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "joy orbison",
+        "pearson sound"
+      ]
+    },
+    "witch_house": {
+      "tracks": 70,
+      "creditedArtists": 17,
+      "verifiedArtists": 0,
+      "verified": [],
+      "unverified": [
+        "balam acab",
+        "clams casino",
+        "crim3s",
+        "crystal castles",
+        "fraunhofer diffraction",
+        "holy other",
+        "ooooo",
+        "pictureplane",
+        "ritualz",
+        "salem",
+        "sidewalks and skeletons",
+        "white ring",
+        "boytronic",
+        "carpenter brut",
+        "clan of xymox",
+        "cold cave",
+        "daf"
+      ]
+    },
+    "techstep": {
+      "tracks": 30,
+      "creditedArtists": 7,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "bad company uk",
+          "artist": "Bad Company UK",
+          "song": "Nitrous",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/82/a4/c2/82a4c28c-0fe2-5f9a-7f88-5346c5ebaaa1/mzaf_2220633794967225231.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "konflict",
+          "artist": "Konflict",
+          "song": "New World Order",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/62/59/be/6259bec9-bcfe-a0ca-046e-992ee4288fb0/mzaf_4222744285403040895.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "kemal",
+          "artist": "Kemal & Rob Data",
+          "song": "Hybrid",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/43/c9/4d/mzm.pnrestsc.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4a"
+        }
+      ],
+      "unverified": [
+        "ed rush",
+        "trace",
+        "dom",
+        "stakka"
+      ]
+    },
+    "wonky": {
+      "tracks": 28,
+      "creditedArtists": 5,
+      "verifiedArtists": 3,
+      "verified": [
+        {
+          "identity": "dabrye",
+          "artist": "Dabrye",
+          "song": "Air (feat. DOOM)",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/90/34/65/90346502-8046-5f6b-c162-e8fb0fddb021/mzaf_9666146567901652874.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "flying lotus",
+          "artist": "Flying Lotus",
+          "song": "Crust",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview114/v4/b5/0d/50/b50d504d-15d1-b46c-1a08-14516973e2e7/mzaf_8105455934336118828.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        },
+        {
+          "identity": "harmonic 313",
+          "artist": "Harmonic 313",
+          "song": "Cyclotron",
+          "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/53/4d/41534d2f-ae92-ef7a-27b9-78a584b0b046/mzaf_4008939482069576423.plus.aac.p.m4a",
+          "ok": true,
+          "status": 206,
+          "type": "audio/x-m4p"
+        }
+      ],
+      "unverified": [
+        "hudson mohawke",
+        "rustie"
+      ]
+    }
+  },
+  "method": "Current HTTP audio response from the exact preview URL shipped. External links without a current preview are not counted here."
+}

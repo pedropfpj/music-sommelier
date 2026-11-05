@@ -1,0 +1,116 @@
+{
+  "checkedAt": "2026-11-05T22:09:04.859Z",
+  "passed": [
+    {
+      "artist": "Almero",
+      "song": "Almost Love",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/almost-love/6776303885",
+      "genreEvidenceUrl": "https://protocol-recordings.com/almero-unveils-next-progressive-house-masterpiece-almost-love/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bb/9c/32/bb9c32d7-49cd-eb69-a31d-7fd4d42d903f/mzaf_4206176721437157614.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Manse",
+      "song": "Hear Me Now",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/hear-me-now/1803586628",
+      "genreEvidenceUrl": "https://protocol-recordings.com/manse-releases-emotional-progressive-house-track-hear-me-now/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/21/ec/fd21ec32-1969-5821-91d7-9283671a07b1/mzaf_11413195113081332214.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Kosling & NONIK",
+      "song": "You're Not Alone (feat. Ali Schwartz)",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/youre-not-alone-feat-ali-schwartz/1796219787",
+      "genreEvidenceUrl": "https://protocol-recordings.com/kosling-nonik-and-ali-schwartz-join-forces-on-a-new-progressive-house-single-youre-not-alone/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/38/73/2f/38732fc3-919f-6c8b-de68-fd89e53fb8dc/mzaf_11964936042063670125.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Fedo",
+      "song": "I Will Survive",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/i-will-survive/1835380243",
+      "genreEvidenceUrl": "https://protocol-recordings.com/fedo-delivers-powerful-new-single-i-will-survive/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cc/29/1c/cc291cf2-fdd1-7cea-8d4d-0ed8c9fec826/mzaf_531274673368740703.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Bukkoy & Otto Palmborg",
+      "song": "In Denial",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/in-denial/1837961270",
+      "genreEvidenceUrl": "https://protocol-recordings.com/bukkoy-and-otto-palmborg-deliver-captivating-progressive-house-anthem-in-denial/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e1/86/cc/e186cca1-09aa-44f8-9f3a-117c3f060738/mzaf_6728687260514748523.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "ASTOR",
+      "song": "Rise Up",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/rise-up/1876202520",
+      "genreEvidenceUrl": "https://protocol-recordings.com/astor-debuts-on-protocol-with-high-energy-progressive-anthem-rise-up/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/d2/9c/22d29ce8-e86a-3346-2fda-f33a2c5f784d/mzaf_8294350207628630647.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Roc Dubloc",
+      "song": "Otherside",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/otherside/1700264579",
+      "genreEvidenceUrl": "https://protocol-recordings.com/release/roc-dubloc-otherside/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/da/86/b7/da86b7ad-c1b9-f921-1c0f-08af1a62c5d5/mzaf_12725569610947443905.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Timmo Hendriks",
+      "song": "Meant to Be",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/meant-to-be/1689207403",
+      "genreEvidenceUrl": "https://protocol-recordings.com/release/timmo-hendriks-meant-to-be/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/a3/6a/2e/a36a2e02-e501-e0a9-fdd0-764a1e58805e/mzaf_12321843889730437265.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "Division One (KR)",
+      "song": "Can't Find Us",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/br/song/cant-find-us/1839176375",
+      "genreEvidenceUrl": "https://protocol-recordings.com/release/division-one-kr-cant-find-us/",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/72/7a/a9727ad9-056e-dd0e-4a83-bd8df5b0794f/mzaf_7317647170195053121.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    },
+    {
+      "artist": "BlackCode & David Allen",
+      "song": "Falling",
+      "style": "progressive_edm",
+      "sourceUrl": "https://music.apple.com/us/song/falling/1659081085",
+      "genreEvidenceUrl": "https://www.revealedrecordings.com/releases/blackcode-david-allen-falling",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/5d/aa/78/5daa78fb-8c9e-8dea-2950-0b1b6a9ab228/mzaf_15088180789368525568.plus.aac.ep.m4a",
+      "audioHttpStatus": 206,
+      "mediaType": "audio/x-m4p",
+      "identityMatch": true
+    }
+  ],
+  "failed": []
+}

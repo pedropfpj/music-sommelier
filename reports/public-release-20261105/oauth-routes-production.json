@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-05T22:12:06.763Z",
+  "completeOAuthCallbackTested": false,
+  "providers": [
+    {
+      "provider": "google",
+      "status": 200,
+      "ok": true,
+      "authorizationHost": "accounts.google.com",
+      "callback": "https://bskjwpomegvpiyyfbwex.supabase.co/auth/v1/callback",
+      "error": null
+    },
+    {
+      "provider": "apple",
+      "status": 200,
+      "ok": true,
+      "authorizationHost": "appleid.apple.com",
+      "callback": "https://bskjwpomegvpiyyfbwex.supabase.co/auth/v1/callback",
+      "error": null
+    }
+  ]
+}

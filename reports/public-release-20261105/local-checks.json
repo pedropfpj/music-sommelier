@@ -1,0 +1,81 @@
+{
+  "at": "2026-11-05T22:15:21.139Z",
+  "result": [
+    {
+      "name": "test-preview-replay-priority",
+      "code": 0
+    },
+    {
+      "name": "test-catalog-player-priority",
+      "code": 0
+    },
+    {
+      "name": "test-recording-identity",
+      "code": 0
+    },
+    {
+      "name": "test-web-audience",
+      "code": 0
+    },
+    {
+      "name": "test-filtered-search-budget",
+      "code": 0
+    },
+    {
+      "name": "test-surprise-search-budget",
+      "code": 0
+    },
+    {
+      "name": "test-subgenre-stress",
+      "code": 0
+    },
+    {
+      "name": "test-psytrance-integrity",
+      "code": 0
+    },
+    {
+      "name": "test-user-profile",
+      "code": 0
+    },
+    {
+      "name": "test-curated-discovery-runtime",
+      "code": 0
+    },
+    {
+      "name": "test-user-profile-privacy-surfaces",
+      "code": 0
+    },
+    {
+      "name": "test-social-profile-discovery",
+      "code": 0
+    },
+    {
+      "name": "test-user-profile-sql",
+      "code": 0
+    },
+    {
+      "name": "test-social-request-budget",
+      "code": 0
+    },
+    {
+      "name": "test-single-playback-policy",
+      "code": 0
+    },
+    {
+      "name": "test-preview-card-ownership",
+      "code": 0
+    },
+    {
+      "name": "test-discovery-experience",
+      "code": 0
+    },
+    {
+      "name": "test-recommendation-safety",
+      "code": 0
+    },
+    {
+      "name": "test-social-profiles-integration",
+      "code": 0
+    }
+  ]
+}

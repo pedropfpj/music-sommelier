@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-05T21:52:33.826Z",
+  "origin": "https://sonicsearch.app",
+  "passed": true,
+  "checks": [
+    "Real production Auth, private photo storage, EXIF removal, owner-only RLS, unique handle, explicit public link",
+    "Production comments, verified author, edit ownership, retry idempotency and like idempotency",
+    "Real refresh and persisted profile on public domain",
+    "Synthetic comment soft-deleted, target unliked and test profile private again"
+  ],
+  "notTested": [
+    "Google/Apple completed OAuth callback",
+    "native iOS"
+  ],
+  "existingListenerDataChanged": false
+}
