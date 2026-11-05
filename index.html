@@ -31,7 +31,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20260917mobilegrid2" as="style" />
+    <link rel="preload" href="styles.min.css?v=20261104social1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +75,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20260917mobilegrid2" />
+    <link rel="stylesheet" href="styles.min.css?v=20261104social1" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
     <link rel="stylesheet" href="user-profile.css?v=20260914profile1" />
     <link rel="stylesheet" href="universal-discovery.css?v=20261023recovery1" />
@@ -1317,6 +1317,9 @@
               <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
           </div>
+          <div class="social-discussion-entry">
+            <button type="button" data-open-discussion="track" class="secondary">Comentários e curtidas</button>
+          </div>
           <div id="previewPanel" class="preview-panel hidden">
             <p id="previewStatus" class="muted">Procurando um preview tocável...</p>
             <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
@@ -1352,6 +1355,7 @@
             </div>
             <div id="youtubePreviewActions" class="youtube-preview-actions preview-source-actions hidden">
               <button id="youtubePreviewToggleBtn" class="secondary" type="button">Abrir player no app</button>
+              <button type="button" data-open-discussion="video" class="secondary">Comentar vídeo</button>
               <button id="youtubePreviewRetryBtn" class="secondary hidden" type="button">Tentar outro vídeo</button>
               <button id="soundcloudPreviewToggleBtn" class="secondary soundcloud-inline-btn hidden" type="button">Tocar SoundCloud no app</button>
               <button id="bandcampPreviewToggleBtn" class="secondary bandcamp-inline-btn hidden" type="button">Tocar Bandcamp no app</button>
@@ -1517,6 +1521,7 @@
                   <small id="djPreviewRecoveryHint">Se este vídeo estiver bloqueado, outro set entra automaticamente.</small>
                 </div>
               </div>
+              <button type="button" data-open-discussion="dj-video" class="secondary">Comentários e curtidas do vídeo</button>
               <p id="djPreviewMeta" class="muted dj-preview-meta">O player aparece quando uma carta de DJ estiver ativa.</p>
             </section>
             <div class="dj-swipe-column">
@@ -2296,33 +2301,7 @@
         <details id="resultMoreDetails" class="result-more-details">
           <summary id="resultMoreSummary">Mais sobre esta faixa</summary>
 
-        <article id="socialCommentsCard" class="result-card social-comments-card hidden" aria-labelledby="socialCommentsTitle">
-          <div class="social-comments-head">
-            <div>
-              <p id="socialCommentsKicker" class="section-kicker">Conversa</p>
-              <h4 id="socialCommentsTitle">Discussão da faixa</h4>
-              <p id="socialCommentsSubtitle" class="muted">Comente o que a faixa entrega na pista.</p>
-            </div>
-            <span id="socialCommentsCount" class="social-comments-count">0</span>
-          </div>
-          <div class="social-comments-tabs" role="tablist" aria-label="Tipo de discussão">
-            <button id="socialCommentsTrackTab" class="social-comments-tab active" type="button" data-comments-target="track" aria-pressed="true">Faixa</button>
-            <button id="socialCommentsArtistTab" class="social-comments-tab" type="button" data-comments-target="artist" aria-pressed="false">Artista</button>
-          </div>
-          <div id="socialCommentsComposer" class="social-comments-composer hidden">
-            <textarea id="socialCommentsInput" maxlength="800" rows="3" placeholder="Escreva um comentário sobre essa faixa"></textarea>
-            <div class="social-comments-compose-actions">
-              <p id="socialCommentsComposerHint" class="muted">Seu comentário aparece para outros ouvintes logados.</p>
-              <button id="socialCommentsSubmitBtn" class="primary" type="button">Publicar comentário</button>
-            </div>
-          </div>
-          <div id="socialCommentsLoginPrompt" class="social-comments-login-prompt hidden">
-            <p id="socialCommentsLoginText" class="muted">Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.</p>
-            <button id="socialCommentsLoginBtn" class="primary" type="button">Entrar para participar</button>
-          </div>
-          <p id="socialCommentsStatus" class="muted social-comments-status" role="status" aria-live="polite"></p>
-          <div id="socialCommentsList" class="social-comments-list"></div>
-        </article>
+
 
         <article id="suggestionQueueCard" class="result-card suggestion-queue hidden">
           <div class="queue-head">
@@ -3361,6 +3340,44 @@
     <script defer src="universal-listening.js?v=20261023recovery1"></script>
     <script defer src="universal-discovery.js?v=20261023recovery1"></script>
     <script defer src="universal-discovery-ui.js?v=20261023recovery1"></script>
+    <dialog id="socialDiscussionDialog" class="social-discussion-dialog" aria-labelledby="socialCommentsTitle">
+        <article id="socialCommentsCard" class="result-card social-comments-card hidden" aria-labelledby="socialCommentsTitle">
+          <div class="social-discussion-toolbar">
+            <button id="socialDiscussionProfile" type="button" class="secondary">Meu perfil</button>
+            <button id="socialDiscussionClose" type="button" class="secondary">Fechar</button>
+          </div>
+          <div class="social-comments-head">
+            <div>
+              <p id="socialCommentsKicker" class="section-kicker">Conversa</p>
+              <h4 id="socialCommentsTitle">Discussão da faixa</h4>
+              <p id="socialCommentsSubtitle" class="muted">Comente o que a faixa entrega na pista.</p>
+            </div>
+            <span id="socialCommentsCount" class="social-comments-count">0</span>
+          </div>
+          <div class="social-comments-tabs" role="group" aria-label="Tipo de discussão">
+            <button id="socialCommentsTrackTab" class="social-comments-tab active" type="button" data-comments-target="track" aria-pressed="true">Faixa</button>
+            <button id="socialCommentsArtistTab" class="social-comments-tab" type="button" data-comments-target="artist" aria-pressed="false">Artista</button>
+            <button id="socialCommentsVideoTab" class="social-comments-tab" type="button" data-comments-target="video" aria-pressed="false">Vídeo</button>
+          </div>
+          <div class="social-discussion-reaction">
+            <button id="socialTargetLikeBtn" type="button" class="secondary" aria-pressed="false">Curtir</button>
+            <span id="socialTargetLikeCount" class="muted" aria-live="polite"></span>
+          </div>
+          <div id="socialCommentsComposer" class="social-comments-composer hidden">
+            <textarea aria-labelledby="socialCommentsTitle" id="socialCommentsInput" maxlength="800" rows="3" placeholder="Escreva um comentário sobre essa faixa"></textarea>
+            <div class="social-comments-compose-actions">
+              <p id="socialCommentsComposerHint" class="muted">Seu comentário aparece para outros ouvintes logados.</p>
+              <button id="socialCommentsSubmitBtn" class="primary" type="button">Publicar comentário</button>
+            </div>
+          </div>
+          <div id="socialCommentsLoginPrompt" class="social-comments-login-prompt hidden">
+            <p id="socialCommentsLoginText" class="muted">Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.</p>
+            <button id="socialCommentsLoginBtn" class="primary" type="button">Entrar para participar</button>
+          </div>
+          <p id="socialCommentsStatus" class="muted social-comments-status" role="status" aria-live="polite"></p>
+          <div id="socialCommentsList" class="social-comments-list"></div>
+        </article>
+    </dialog>
     <script defer src="user-profile.js?v=20260914profile1"></script>
     <script defer src="privacy-requests.js?v=20260922privacy1"></script>
     <script defer src="catalog-runtime.min.js?v=20261030catalog22"></script>
@@ -3370,6 +3387,6 @@
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
     <script defer src="weekly-recommends.js?v=20260916weekly1"></script>
     <script defer src="discovery-experience.js?v=20261104iosreview1"></script>
-    <script defer src="app.min.js?v=20261104iosreview1"></script>
+    <script defer src="app.min.js?v=20261104social1"></script>
   </body>
 </html>

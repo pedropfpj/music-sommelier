@@ -4837,7 +4837,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261104iosreview1";
+const SONIC_APP_BUILD_ID = "20261104social1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10095,6 +10095,10 @@ const socialCommentsKicker = document.getElementById("socialCommentsKicker");
 const socialCommentsTitle = document.getElementById("socialCommentsTitle");
 const socialCommentsSubtitle = document.getElementById("socialCommentsSubtitle");
 const socialCommentsCount = document.getElementById("socialCommentsCount");
+const socialDiscussionDialog = document.getElementById("socialDiscussionDialog");
+const socialCommentsVideoTab = document.getElementById("socialCommentsVideoTab");
+const socialTargetLikeBtn = document.getElementById("socialTargetLikeBtn");
+const socialTargetLikeCount = document.getElementById("socialTargetLikeCount");
 const socialCommentsTrackTab = document.getElementById("socialCommentsTrackTab");
 const socialCommentsArtistTab = document.getElementById("socialCommentsArtistTab");
 const socialCommentsComposer = document.getElementById("socialCommentsComposer");
@@ -10796,6 +10800,11 @@ let premiumBillingState = {
   checkoutReady: false
 };
 let socialCommentsState = {
+  videoSource: "track",
+  targetReaction: null,
+  liking: false,
+  submitting: false,
+  error: "",
   targetType: "track",
   targetKey: "",
   loading: false,
@@ -37643,12 +37652,12 @@ function extractYouTubeVideoId(url = "") {
   try {
     const normalized = /^https?:\/\//i.test(value) ? value : `https://${value}`;
     const parsed = new URL(normalized);
-    const host = normalize(parsed.hostname || "");
-    if (host.includes("youtu.be")) {
+    const host = parsed.hostname.toLowerCase();
+    if (host === "youtu.be" || host === "www.youtu.be") {
       const directId = String(parsed.pathname || "").replace(/^\/+/, "").split("/")[0] || "";
       return /^[\w-]{6,}$/.test(directId) ? directId : "";
     }
-    if (host.includes("youtube.com")) {
+    if (host === "youtube.com" || host.endsWith(".youtube.com") || host === "youtube-nocookie.com" || host.endsWith(".youtube-nocookie.com")) {
       const watchId = parsed.searchParams.get("v") || "";
       if (/^[\w-]{6,}$/.test(watchId)) return watchId;
       const pathParts = String(parsed.pathname || "")
@@ -58545,11 +58554,18 @@ function socialStoreSession(session = null) {
   if (socialState.session?.user?.id !== session?.user?.id) {
     socialState.profile = null;
     socialState.profileAvatarUrl = "";
+    socialCommentsState.loadToken += 1;
+    socialCommentsState.comments = [];
+    socialCommentsState.targetReaction = null;
+    socialCommentsState.error = "";
+    socialCommentsState.loading = false;
+    socialCommentsState.submitting = false;
+    socialCommentsState.liking = false;
+    editingSocialCommentId = "";
+    ugcBlockedUserIds = new Set();
+    if (socialCommentsInput) socialCommentsInput.value = "";
   }
   socialState.session = session || null;
-  if (typeof window.CustomEvent === "function") {
-    window.dispatchEvent(new window.CustomEvent("sonic:online-session-changed"));
-  }
   if (!session) resetAdminAccessState();
   try {
     if (session) localStorage.setItem(SOCIAL_SESSION_STORAGE_KEY, JSON.stringify(session));
@@ -58557,6 +58573,10 @@ function socialStoreSession(session = null) {
   } catch (error) {
     console.warn("Social session storage unavailable", error);
   }
+  if (typeof window.CustomEvent === "function") {
+    window.dispatchEvent(new window.CustomEvent("sonic:online-session-changed"));
+  }
+
 }
 
 function socialLoadStoredSession() {
@@ -60015,11 +60035,75 @@ function socialCommentsArtistTarget(track = currentRecommendation) {
   };
 }
 
+function socialCommentsVideoTarget() {
+  const dj = socialCommentsState.videoSource === "dj";
+  const track = dj ? currentDjRecommendation : currentRecommendation;
+  const videoId = dj ? extractYouTubeVideoId(track?.setUrl || "")
+    : youtubeVideoSelectionForTrack(track, youtubePreviewSearchAttempt)?.videoId;
+  if (!/^[A-Za-z0-9_-]{11}$/.test(String(videoId || ""))) return null;
+  const artist = dj ? track?.name : track?.artist;
+  const song = dj ? track?.setTitle : track?.song;
+  const label = [song, artist].filter(Boolean).join(" • ");
+  return { targetType: "video", targetKey: `youtube:${videoId}`, label,
+    metadata: { artist, song, style: track?.style || "", targetLabel: label } };
+}
+
 function currentSocialCommentTarget(targetType = socialCommentsState.targetType) {
-  const safeType = targetType === "artist" ? "artist" : "track";
-  return safeType === "artist"
-    ? socialCommentsArtistTarget(currentRecommendation)
-    : socialCommentsTrackTarget(currentRecommendation);
+  if (targetType === "video") return socialCommentsVideoTarget();
+  return targetType === "artist" ? socialCommentsArtistTarget(currentRecommendation) : socialCommentsTrackTarget(currentRecommendation);
+}
+
+function socialDiscussionCopy(kind) {
+  const labels = {
+    track: ["Comentários e curtidas", "Comments and likes", "Comentarios y me gusta"],
+    video: ["Comentar vídeo", "Discuss video", "Comentar video"],
+    "dj-video": ["Comentários e curtidas do vídeo", "Video comments and likes", "Comentarios y me gusta del video"],
+    title: ["Conversa sobre o vídeo", "Video discussion", "Conversación del video"],
+    empty: ["Seja a primeira pessoa a comentar este vídeo.", "Be the first to discuss this video.", "Sé la primera persona en comentar este video."],
+    placeholder: ["O que você achou deste vídeo?", "What did you think of this video?", "¿Qué te pareció este video?"],
+    profile: ["Meu perfil", "My profile", "Mi perfil"],
+    close: ["Fechar", "Close", "Cerrar"],
+    liked: ["Curtido", "Liked", "Me gusta"],
+    missing: ["Abra um vídeo do YouTube para participar.", "Open a YouTube video to join.", "Abre un video de YouTube para participar."]
+  };
+  return sonicTinyCopy(...(labels[kind] || labels.track));
+}
+
+function openSocialDiscussion(kind = "track") {
+  socialCommentsState.videoSource = kind === "dj-video" ? "dj" : "track";
+  const targetType = kind.includes("video") ? "video" : "track";
+  if (!currentSocialCommentTarget(targetType)) {
+    showToast(targetType === "video" ? socialDiscussionCopy("missing") : t("socialCommentsMissing"));
+    return;
+  }
+  if (!socialDiscussionDialog.open) socialDiscussionDialog.showModal();
+  void loadSocialComments({ targetType });
+}
+
+async function likeSocialTarget() {
+  if (socialCommentsState.liking) return false;
+  if (!socialCommentsSignedIn()) { await showSocialCommentsLogin({ startLogin: true }); return false; }
+  const target = currentSocialCommentTarget();
+  if (!target || !["track", "video"].includes(target.targetType)) return false;
+  const token = socialCommentsState.loadToken;
+  const sessionId = socialState.session?.user?.id;
+  socialCommentsState.liking = true;
+  socialCommentsState.error = "";
+  renderSocialCommentsPanel();
+  try {
+    const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
+      method: "POST", body: { action: "like-target", targetType: target.targetType,
+        targetKey: target.targetKey, liked: !socialCommentsState.targetReaction?.liked }
+    });
+    if (token !== socialCommentsState.loadToken || sessionId !== socialState.session?.user?.id) return false;
+    socialCommentsState.targetReaction = payload.targetReaction;
+    return true;
+  } catch (error) {
+    if (token === socialCommentsState.loadToken) socialCommentsState.error = t("socialCommentsReactionFailed");
+    return false;
+  } finally {
+    if (token === socialCommentsState.loadToken) { socialCommentsState.liking = false; renderSocialCommentsPanel(); }
+  }
 }
 
 function applySocialViewerContext(payload = {}) {
@@ -60125,7 +60209,9 @@ async function socialCommentsRequest(path = "", options = {}) {
     ...(options.headers || {})
   };
   if (options.body !== undefined) headers["Content-Type"] = "application/json";
+  const sessionId = socialState.session?.user?.id;
   const accessToken = await currentApiAccessToken();
+  if (sessionId !== socialState.session?.user?.id) throw new Error("session_changed");
   if (accessToken) {
     headers.Authorization = `Bearer ${accessToken}`;
     headers["X-Sonic-Auth-Token"] = accessToken;
@@ -60145,8 +60231,8 @@ async function socialCommentsRequest(path = "", options = {}) {
       payload = null;
     }
   }
-  if (!response.ok) {
-    const detail = payload?.detail || payload?.error || response.statusText;
+  if (!response.ok || payload?.ok === false || payload?.enabled === false) {
+    const detail = payload?.error || response.statusText;
     throw new Error(String(detail || "comments_request_failed"));
   }
   return payload || {};
@@ -60164,6 +60250,7 @@ function socialCommentDateLabel(value = "") {
 }
 
 function socialCommentsStatusText(targetType = socialCommentsState.targetType) {
+  if (socialCommentsState.error) return socialCommentsState.error;
   if (socialCommentsState.loading) return t("socialCommentsLoading");
   if (!socialCommentsState.enabled) return t("socialCommentsDisabled");
   if (socialCommentsState.setupNeeded || !socialCommentsState.reactionsEnabled) return t("socialCommentsSetupNeeded");
@@ -60305,7 +60392,7 @@ function renderSocialCommentItem(comment = {}) {
 function renderSocialCommentsList() {
   if (!socialCommentsList) return;
   socialCommentsList.innerHTML = "";
-  const targetType = socialCommentsState.targetType === "artist" ? "artist" : "track";
+  const targetType = socialCommentsState.targetType;
   if (socialCommentsState.loading) return;
   if (!socialCommentsState.enabled) {
     return;
@@ -60313,7 +60400,7 @@ function renderSocialCommentsList() {
   if (!socialCommentsState.comments.length) {
     const empty = document.createElement("p");
     empty.className = "social-comments-empty muted";
-    empty.textContent = targetType === "artist" ? t("socialCommentsEmptyArtist") : t("socialCommentsEmptyTrack");
+    empty.textContent = targetType === "video" ? socialDiscussionCopy("empty") : targetType === "artist" ? t("socialCommentsEmptyArtist") : t("socialCommentsEmptyTrack");
     socialCommentsList.appendChild(empty);
     return;
   }
@@ -60332,19 +60419,20 @@ function renderSocialCommentsPanel() {
   }
   socialCommentsCard.hidden = false;
   socialCommentsCard.setAttribute("aria-hidden", "false");
-  const targetType = socialCommentsState.targetType === "artist" ? "artist" : "track";
+  const targetType = socialCommentsState.targetType;
   const target = currentSocialCommentTarget(targetType);
   if (!target) {
     socialCommentsCard.classList.add("hidden");
+    socialDiscussionDialog?.close();
     return;
   }
   socialCommentsCard.classList.remove("hidden");
   if (socialCommentsKicker) socialCommentsKicker.textContent = t("socialCommentsKicker");
   if (socialCommentsTitle) {
-    socialCommentsTitle.textContent = targetType === "artist" ? t("socialCommentsTitleArtist") : t("socialCommentsTitleTrack");
+    socialCommentsTitle.textContent = targetType === "video" ? socialDiscussionCopy("title") : targetType === "artist" ? t("socialCommentsTitleArtist") : t("socialCommentsTitleTrack");
   }
   if (socialCommentsSubtitle) {
-    socialCommentsSubtitle.textContent = targetType === "artist" ? t("socialCommentsSubtitleArtist") : t("socialCommentsSubtitleTrack");
+    socialCommentsSubtitle.textContent = target.label;
   }
   if (socialCommentsCount) {
     socialCommentsCount.textContent = socialCommentsState.comments.length
@@ -60353,23 +60441,25 @@ function renderSocialCommentsPanel() {
   }
   [
     [socialCommentsTrackTab, "track"],
-    [socialCommentsArtistTab, "artist"]
+    [socialCommentsArtistTab, "artist"],
+    [socialCommentsVideoTab, "video"]
   ].forEach(([button, value]) => {
     if (!button) return;
     const active = targetType === value;
-    button.textContent = value === "artist" ? t("socialCommentsTabArtist") : t("socialCommentsTabTrack");
+    button.hidden = (socialCommentsState.videoSource === "dj" && value !== "video") || (value === "video" && !socialCommentsVideoTarget());
+    button.textContent = value === "video" ? sonicTinyCopy("Vídeo", "Video", "Video") : value === "artist" ? t("socialCommentsTabArtist") : t("socialCommentsTabTrack");
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
   });
   if (socialCommentsInput) {
-    socialCommentsInput.placeholder = targetType === "artist"
+    socialCommentsInput.placeholder = targetType === "video" ? socialDiscussionCopy("placeholder") : targetType === "artist"
       ? t("socialCommentsPlaceholderArtist")
       : t("socialCommentsPlaceholderTrack");
   }
   if (socialCommentsComposerHint) socialCommentsComposerHint.textContent = t("socialCommentsComposerHint");
   if (socialCommentsSubmitBtn) {
     socialCommentsSubmitBtn.textContent = t("socialCommentsSubmit");
-    socialCommentsSubmitBtn.disabled = socialCommentsState.loading || !socialCommentsState.enabled;
+    socialCommentsSubmitBtn.disabled = socialCommentsState.loading || socialCommentsState.submitting || !socialCommentsState.enabled;
   }
   const signed = socialCommentsSignedIn();
   if (socialCommentsLoginText) {
@@ -60381,11 +60471,21 @@ function renderSocialCommentsPanel() {
   if (socialCommentsComposer) socialCommentsComposer.classList.toggle("hidden", !signed || !socialCommentsState.enabled);
   if (socialCommentsLoginPrompt) socialCommentsLoginPrompt.classList.toggle("hidden", signed || !socialCommentsState.enabled);
   if (socialCommentsStatus) socialCommentsStatus.textContent = socialCommentsStatusText(targetType);
+  document.getElementById("socialDiscussionProfile").textContent = socialDiscussionCopy("profile");
+  document.getElementById("socialDiscussionClose").textContent = socialDiscussionCopy("close");
+  document.querySelectorAll("[data-open-discussion]").forEach(button => { button.textContent = socialDiscussionCopy(button.dataset.openDiscussion); });
+  const reaction = socialCommentsState.targetReaction;
+  socialTargetLikeBtn.hidden = !["track", "video"].includes(targetType);
+  socialTargetLikeBtn.disabled = socialCommentsState.loading || socialCommentsState.liking || (signed && (!socialCommentsState.enabled || !reaction));
+  socialTargetLikeBtn.setAttribute("aria-pressed", reaction?.liked ? "true" : "false");
+  socialTargetLikeBtn.textContent = `${reaction?.liked ? "♥" : "♡"} ${reaction?.liked ? socialDiscussionCopy("liked") : t("socialCommentsLike")}`;
+  socialTargetLikeCount.textContent = reaction ? sonicTinyCopy(`${reaction.likes} curtidas no Sonic`, `${reaction.likes} likes on Sonic`, `${reaction.likes} me gusta en Sonic`) : "";
   renderSocialCommentsList();
 }
 
 async function loadSocialComments(options = {}) {
   if (!socialCommentsCard) return false;
+  if (options.silent && !socialDiscussionDialog?.open) return false;
   if (shouldDisableSocialCommentsForAppStore()) {
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
@@ -60397,21 +60497,30 @@ async function loadSocialComments(options = {}) {
   if (options.silent && socialCommentsAccessBlockedUntil > Date.now()) {
     return false;
   }
-  const targetType = options.targetType === "artist" ? "artist" : socialCommentsState.targetType === "artist" ? "artist" : "track";
+  const requestedType = options.targetType || socialCommentsState.targetType;
+  const targetType = ["track", "artist", "video"].includes(requestedType) ? requestedType : "track";
   const target = currentSocialCommentTarget(targetType);
+  const changed = targetType !== socialCommentsState.targetType || target?.targetKey !== socialCommentsState.targetKey;
   socialCommentsState.targetType = targetType;
-  if (!target) {
-    socialCommentsState.targetKey = "";
-    socialCommentsState.comments = [];
+  const token = ++socialCommentsState.loadToken;
+  socialCommentsState.targetKey = target?.targetKey || "";
+  socialCommentsState.comments = [];
+  socialCommentsState.targetReaction = null;
+  socialCommentsState.error = "";
+  socialCommentsState.liking = false;
+  socialCommentsState.submitting = false;
+  socialCommentsState.canModerate = false;
+  editingSocialCommentId = "";
+  if (changed && socialCommentsInput) socialCommentsInput.value = "";
+  socialCommentsState.loading = false;
+  if (!target || !socialCommentsSignedIn()) {
+    socialCommentsState.enabled = true;
     renderSocialCommentsPanel();
     return false;
   }
-  socialCommentsState.targetKey = target.targetKey;
   socialCommentsState.loading = true;
   socialCommentsState.setupNeeded = false;
-  const token = socialCommentsState.loadToken + 1;
-  socialCommentsState.loadToken = token;
-  if (!options.silent) renderSocialCommentsPanel();
+  renderSocialCommentsPanel();
 
   const params = new URLSearchParams({
     targetType: target.targetType,
@@ -60425,6 +60534,7 @@ async function loadSocialComments(options = {}) {
     socialCommentsState.reactionsEnabled = payload.reactionsEnabled !== false && !payload.setupNeeded;
     applySocialViewerContext(payload);
     socialCommentsState.comments = Array.isArray(payload.comments) ? payload.comments : [];
+    socialCommentsState.targetReaction = payload.targetReaction || null;
     return true;
   } catch (error) {
     if (token !== socialCommentsState.loadToken) return false;
@@ -60436,6 +60546,7 @@ async function loadSocialComments(options = {}) {
     }
     socialCommentsState.enabled = false;
     socialCommentsState.comments = [];
+    socialCommentsState.error = t("socialCommentsUnavailable");
     socialCommentsState.canModerate = false;
     socialCommentsState.viewerRole = "anonymous";
     return false;
@@ -60460,11 +60571,14 @@ async function showSocialCommentsLogin({ startLogin = false } = {}) {
   const message = configured ? t("socialCommentsLoginRequired") : t("socialCommentsLoginUnavailable");
   setLoginMessage(message, configured);
   if (startLogin && configured) {
-    await socialSignInWithGoogle();
+    socialDiscussionDialog?.close();
+    await showAuthScreen();
   }
 }
 
 async function submitSocialComment() {
+  if (socialCommentsState.submitting) return false;
+  const token = socialCommentsState.loadToken;
   const target = currentSocialCommentTarget(socialCommentsState.targetType);
   if (!target || !socialCommentsInput) {
     if (socialCommentsStatus) socialCommentsStatus.textContent = t("socialCommentsMissing");
@@ -60480,7 +60594,8 @@ async function submitSocialComment() {
     return false;
   }
   const author = socialCommentAuthorMeta();
-  const previousDisabled = Boolean(socialCommentsSubmitBtn?.disabled);
+  socialCommentsState.submitting = true;
+  socialCommentsState.error = "";
   if (socialCommentsSubmitBtn) socialCommentsSubmitBtn.disabled = true;
   try {
     const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
@@ -60500,6 +60615,7 @@ async function submitSocialComment() {
       renderSocialCommentsPanel();
       return false;
     }
+    if (token !== socialCommentsState.loadToken) return false;
     socialCommentsInput.value = "";
     showToast(t("socialCommentsPosted"));
     await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
@@ -60509,15 +60625,14 @@ async function submitSocialComment() {
     const message = /content_not_allowed/i.test(String(error?.message || ""))
       ? t("socialCommentsContentNotAllowed")
       : t("socialCommentsPostFailed");
-    if (socialCommentsStatus) socialCommentsStatus.textContent = message;
+    if (token === socialCommentsState.loadToken) socialCommentsState.error = message;
     showToast(message);
-    window.setTimeout(() => {
-      void loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
-    }, 1600);
     return false;
   } finally {
-    if (socialCommentsSubmitBtn) socialCommentsSubmitBtn.disabled = previousDisabled;
-    renderSocialCommentsPanel();
+    if (token === socialCommentsState.loadToken) {
+      socialCommentsState.submitting = false;
+      renderSocialCommentsPanel();
+    }
   }
 }
 
@@ -60549,6 +60664,7 @@ async function reactSocialComment(commentId = "", desiredValue = 0) {
   if (!comment || !target) return false;
   const previous = Number(comment.reactions?.myReaction) || 0;
   const nextValue = previous === desiredValue ? 0 : desiredValue;
+  const requestToken = socialCommentsState.loadToken;
   try {
     const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
       method: "POST",
@@ -60566,6 +60682,7 @@ async function reactSocialComment(commentId = "", desiredValue = 0) {
       renderSocialCommentsPanel();
       return false;
     }
+    if (requestToken !== socialCommentsState.loadToken) return false;
     applyLocalCommentReaction(commentId, nextValue);
     renderSocialCommentsPanel();
     return true;
@@ -60610,6 +60727,7 @@ async function updateSocialComment(commentId = "") {
     input?.focus?.();
     return false;
   }
+  const requestToken = socialCommentsState.loadToken;
   try {
     const payload = await socialCommentsRequest(SOCIAL_COMMENTS_ENDPOINT, {
       method: "PATCH",
@@ -60621,6 +60739,7 @@ async function updateSocialComment(commentId = "") {
       }
     });
     if (payload?.ok === false) throw new Error(payload?.detail || payload?.error || "comment_update_failed");
+    if (requestToken !== socialCommentsState.loadToken) return false;
     editingSocialCommentId = "";
     showToast(t("socialCommentsUpdated"));
     await loadSocialComments({ targetType: socialCommentsState.targetType, silent: true });
@@ -60645,10 +60764,12 @@ async function deleteSocialComment(commentId = "") {
     targetType: target.targetType,
     targetKey: target.targetKey
   });
+  const requestToken = socialCommentsState.loadToken;
   try {
     await socialCommentsRequest(`${SOCIAL_COMMENTS_ENDPOINT}?${params.toString()}`, {
       method: "DELETE"
     });
+    if (requestToken !== socialCommentsState.loadToken) return false;
     socialCommentsState.comments = socialCommentsState.comments.filter((comment) => comment.id !== commentId);
     showToast(t("socialCommentsDeleted"));
     renderSocialCommentsPanel();
@@ -64615,6 +64736,20 @@ bind(swipeStyleRail, "click", async (event) => {
   await runSwipeStyleRecommendation(style);
 });
 
+document.querySelectorAll("[data-open-discussion]").forEach(button => {
+  bind(button, "click", () => openSocialDiscussion(button.dataset.openDiscussion));
+});
+bind(document.getElementById("socialDiscussionClose"), "click", () => socialDiscussionDialog.close());
+bind(document.getElementById("socialDiscussionProfile"), "click", () => {
+  socialDiscussionDialog.close();
+  setActiveAppTab("profile");
+  document.getElementById("userProfileCard")?.scrollIntoView({ block: "start" });
+});
+bind(socialTargetLikeBtn, "click", () => void likeSocialTarget());
+bind(socialCommentsVideoTab, "click", () => void loadSocialComments({ targetType: "video" }));
+window.addEventListener("sonic:online-session-changed", () => {
+  if (socialDiscussionDialog?.open) void loadSocialComments();
+});
 bind(socialCommentsTrackTab, "click", () => {
   void loadSocialComments({ targetType: "track" });
 });

@@ -75,7 +75,9 @@
     "test:weekly-recommends": "node scripts/test-weekly-recommends.mjs",
     "verify:weekly-recommends": "node scripts/verify-weekly-recommends-ui.mjs",
     "test:rock-preview": "node scripts/test-rock-preview.mjs",
-    "catalog:curated-diversity": "node scripts/curate-discovery-catalog.mjs"
+    "catalog:curated-diversity": "node scripts/curate-discovery-catalog.mjs",
+    "test:track-video-social": "node scripts/test-track-video-social.mjs && node scripts/test-track-video-social-sql.mjs",
+    "verify:track-video-social": "node scripts/verify-track-video-social-ui.mjs"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",

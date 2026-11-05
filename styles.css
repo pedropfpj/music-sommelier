@@ -15339,6 +15339,42 @@ body.is-recommending #topSwipeCard.swipe-hero-card.is-empty .swipe-preview-pulse
     linear-gradient(155deg, rgba(6, 14, 31, 0.96), rgba(8, 17, 38, 0.88));
 }
 
+.social-discussion-entry { margin: 0.6rem 0; }
+.social-discussion-dialog {
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid rgba(126, 232, 198, 0.4);
+  border-radius: 24px;
+  background: #081126;
+  color: #f2fbff;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.social-discussion-dialog::backdrop { background: rgba(0, 5, 14, 0.78); }
+.social-discussion-dialog .social-comments-card { margin: 0; border: 0; padding: 24px; }
+.social-discussion-toolbar, .social-discussion-reaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.social-discussion-dialog button, [data-open-discussion] { min-height: 44px; }
+.social-discussion-dialog .social-comments-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.social-discussion-dialog .social-comments-tabs:has(button[hidden]) { display: flex; }
+.social-discussion-dialog .social-comments-tab:not([hidden]) { flex: 1; }
+.social-discussion-dialog [hidden] { display: none !important; }
+.social-discussion-dialog textarea { width: 100%; box-sizing: border-box; font-size: 16px; }
+.social-discussion-dialog .social-comment-body,
+.social-discussion-dialog .social-comments-head { overflow-wrap: anywhere; min-width: 0; }
+#socialTargetLikeBtn[aria-pressed="true"] { color: #a4ffe8; border-color: #78ebc8; background: #10332f; }
+@media (max-width: 600px) {
+  .social-discussion-dialog { margin: auto auto 0; width: 100%; max-width: 100%; border-radius: 24px 24px 0 0; }
+  .social-discussion-dialog .social-comments-card { padding: 20px 16px max(20px, env(safe-area-inset-bottom)); }
+}
+
 .social-comments-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
