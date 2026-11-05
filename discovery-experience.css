@@ -65,3 +65,4 @@ html[data-public-profiles="false"] #userProfileCard { display:none !important; }
 @media (max-width:420px) { #swipeStartPanel .discovery-utilities button { flex:1 1 130px; } }
 
 #summaryPanel #profileBackupCard { order:2; }
+#summaryPanel #privacyRequestsCard { order:9; }
