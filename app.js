@@ -10417,6 +10417,10 @@ const spiritVitalNextLabel = document.getElementById("spiritVitalNextLabel");
 const spiritVitalNextValue = document.getElementById("spiritVitalNextValue");
 const spiritVitalNextDetail = document.getElementById("spiritVitalNextDetail");
 const spiritSignalList = document.getElementById("spiritSignalList");
+const soundSystemListenBtn = document.getElementById("soundSystemListenBtn");
+const soundSystemListenHint = document.getElementById("soundSystemListenHint");
+const soundSystemHistoryTitle = document.getElementById("soundSystemHistoryTitle");
+const soundSystemHistoryText = document.getElementById("soundSystemHistoryText");
 const spiritSpotlightPanel = document.getElementById("spiritSpotlightPanel");
 const spiritSpotlightTitle = document.getElementById("spiritSpotlightTitle");
 const spiritSpotlightHint = document.getElementById("spiritSpotlightHint");
@@ -10531,6 +10535,7 @@ let spiritStoryShareBusy = false;
 let currentSpiritId = "";
 let spiritLastReviewedSongLikes = 0;
 let spiritUnlocked = false;
+let soundSystemListeningBusy = false;
 let spiritSignalsByStyle = new Map();
 let spiritCollectibleBusy = false;
 let spiritPanelRefreshTimer = 0;
@@ -48784,6 +48789,107 @@ function spiritSignalStrengthLabel(index = 0) {
   return index === 0 ? "mais presente" : index === 1 ? "ganhando corpo" : "em teste";
 }
 
+function soundSystemListeningStyle(entries = spiritProfileStyleEntries()) {
+  for (const entry of entries) {
+    if (!(Number(entry?.score) > 0)) continue;
+    const style = selectableSwipeStyle(entry.style);
+    if (style) return style;
+  }
+  return "";
+}
+
+function soundSystemHistoryEvidence(history = likedTrackHistory) {
+  const batchSize = 10;
+  const dated = (Array.isArray(history) ? history : [])
+    .filter((entry) => entry?.style && entry?.likedAt && Number.isFinite(Date.parse(entry.likedAt)))
+    .slice()
+    .sort((a, b) => Date.parse(b.likedAt) - Date.parse(a.likedAt));
+  if (dated.length < batchSize * 2) return null;
+  const recent = dated.slice(0, batchSize);
+  const previous = dated.slice(batchSize, batchSize * 2);
+  const counts = new Map();
+  recent.forEach((entry) => counts.set(entry.style, (counts.get(entry.style) || 0) + 1));
+  const [style, recentCount] = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0];
+  return {
+    label: styleLabelByValue(style),
+    recentCount,
+    previousCount: previous.filter((entry) => entry.style === style).length,
+    batchSize
+  };
+}
+
+function soundSystemHistoryCopy(evidence = soundSystemHistoryEvidence()) {
+  if (!evidence) return sonicTinyCopy(
+    "Os estilos acima resumem os sinais disponíveis. A comparação aparece quando este perfil tiver 20 curtidas com data e estilo.",
+    "The styles above summarize the available signals. A comparison appears once this profile has 20 likes with dates and styles.",
+    "Los estilos de arriba resumen las señales disponibles. La comparación aparece cuando este perfil tenga 20 likes con fecha y estilo."
+  );
+  const { label, recentCount, previousCount, batchSize } = evidence;
+  return sonicTinyCopy(
+    `${label} está em ${recentCount} das suas ${batchSize} curtidas mais recentes com data e estilo, e em ${previousCount} das ${batchSize} anteriores. A comparação usa apenas o histórico salvo neste perfil.`,
+    `${label} appears in ${recentCount} of your ${batchSize} most recent likes with dates and styles, and ${previousCount} of the previous ${batchSize}. This comparison uses only the history saved in this profile.`,
+    `${label} aparece en ${recentCount} de tus ${batchSize} likes más recientes con fecha y estilo, y en ${previousCount} de los ${batchSize} anteriores. La comparación usa solo el historial guardado en este perfil.`
+  );
+}
+
+function renderSoundSystemListening() {
+  const style = soundSystemListeningStyle();
+  if (soundSystemListenBtn) {
+    soundSystemListenBtn.textContent = soundSystemListeningBusy
+      ? sonicTinyCopy("Buscando seu som…", "Finding your sound…", "Buscando tu sonido…")
+      : style
+        ? sonicTinyCopy("Ouvir meu Sound System", "Listen to my Sound System", "Escuchar mi Sound System")
+        : sonicTinyCopy("Começar a descobrir", "Start discovering", "Empezar a descubrir");
+    soundSystemListenBtn.disabled = soundSystemListeningBusy;
+    soundSystemListenBtn.setAttribute("aria-busy", String(soundSystemListeningBusy));
+  }
+  if (soundSystemListenHint) soundSystemListenHint.textContent = style
+    ? sonicTinyCopy(
+        `Comece uma nova descoberta em ${styleLabelByValue(style)}, o sinal mais forte disponível no seu perfil.`,
+        `Start a new discovery in ${styleLabelByValue(style)}, the strongest available signal in your profile.`,
+        `Empieza un nuevo descubrimiento en ${styleLabelByValue(style)}, la señal disponible más fuerte de tu perfil.`
+      )
+    : sonicTinyCopy(
+        "Curta faixas para seu Sound System ganhar uma direção de escuta.",
+        "Like tracks to give your Sound System a listening direction.",
+        "Dale like a pistas para darle una dirección de escucha a tu Sound System."
+      );
+  if (soundSystemHistoryTitle) soundSystemHistoryTitle.textContent = sonicTinyCopy("Seu histórico em contexto", "Your history in context", "Tu historial en contexto");
+  if (soundSystemHistoryText) soundSystemHistoryText.textContent = soundSystemHistoryCopy();
+}
+
+async function startSoundSystemListening() {
+  if (soundSystemListeningBusy || recommendationRunBusy) return false;
+  const style = soundSystemListeningStyle();
+  if (!style) {
+    setActiveAppTab("discover", { focusPanel: true });
+    swipeHeroSurpriseBtn?.focus({ preventScroll: true });
+    return false;
+  }
+  if (!canUseMusicDiscovery()) {
+    showPremiumDiscoveryLimit();
+    return false;
+  }
+  soundSystemListeningBusy = true;
+  try {
+    renderSoundSystemListening();
+    setActiveAppTab("discover");
+    primeAudioForDiscoveryGesture();
+    const generated = await runSwipeStyleRecommendation(style);
+    topSwipeCard?.focus({ preventScroll: true });
+    return generated;
+  } catch (_error) {
+    const message = t("feedbackError");
+    if (feedbackMessage) feedbackMessage.textContent = message;
+    showToast(message);
+    return false;
+  } finally {
+    soundSystemListeningBusy = false;
+    renderSoundSystemListening();
+  }
+}
+
 function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
   if (!spiritInsightPanel) return;
   const likedSongs = totalLikedSongs();
@@ -48820,6 +48926,7 @@ function renderSpiritInsight(spirit = null, { unlocked = false } = {}) {
       : t("spiritInsightLockedText", { remaining: progress.remaining });
   }
   renderSpiritVitals({ unlocked, likedSongs, progress, selectedSpirit, spiritText, signals, signalText });
+  renderSoundSystemListening();
   if (!spiritSignalList) return;
   spiritSignalList.innerHTML = "";
   const visibleSignals = likedSongs > 0
@@ -64118,6 +64225,7 @@ bind(spiritCollectibleDownload, "click", async (event) => {
     }
   }
 });
+bind(soundSystemListenBtn, "click", startSoundSystemListening);
 bind(spiritCollectibleRegenerateBtn, "click", async () => {
   const spirit = spiritById(currentSpiritId || "");
   if (!spirit) {

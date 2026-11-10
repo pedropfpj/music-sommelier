@@ -9031,6 +9031,68 @@ input[type="range"] {
     rgba(7, 15, 34, 0.72);
 }
 
+.spirit-listen-path {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(123, 221, 255, 0.2);
+}
+
+.sound-system-listen-btn {
+  flex: 0 0 auto;
+  min-height: 48px;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+.spirit-listen-path p,
+.sound-system-history p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.sound-system-listen-btn:focus-visible,
+.sound-system-history summary:focus-visible {
+  outline: 3px solid #6effdc;
+  outline-offset: 4px;
+}
+
+.sound-system-listen-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.sound-system-history {
+  border-top: 1px solid rgba(123, 221, 255, 0.2);
+}
+
+.sound-system-history summary {
+  min-height: 44px;
+  align-content: center;
+  padding: 0.65rem 0;
+  color: #c4e8ff;
+  cursor: pointer;
+}
+
+.sound-system-history p {
+  padding-bottom: 0.65rem;
+}
+
+@media (max-width: 680px) {
+  .spirit-listen-path {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .sound-system-listen-btn {
+    width: 100%;
+  }
+}
+
 .spirit-insight-head {
   display: flex;
   align-items: center;
