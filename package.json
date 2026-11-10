@@ -35,6 +35,7 @@
     "verify:compliance-ui": "node scripts/verify-compliance-ui.mjs",
     "test:billing": "node scripts/test-billing-foundation.mjs",
     "test:sound-system-premium": "node scripts/test-sound-system-premium.mjs",
+    "test:spirit-image": "node scripts/test-spirit-image.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
     "test:premium-visibility": "node scripts/test-premium-promo-visibility.mjs",
     "test:newsroom": "node scripts/test-newsroom.mjs",

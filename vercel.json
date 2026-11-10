@@ -8,7 +8,7 @@
   },
   "functions": {
     "api/spirit-image.js": {
-      "maxDuration": 60
+      "maxDuration": 120
     },
     "api/billing.js": {
       "includeFiles": "assets/apple-pki/**"

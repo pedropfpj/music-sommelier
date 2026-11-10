@@ -19,7 +19,6 @@ const { resolveAccessContext } = require("../lib/api/_access-control");
 
 const SPIRIT_IMAGE_PROMPT_VERSION = "personal-sound-system-v1";
 const SPIRIT_IMAGE_STORE_PREFIX = "sonic:sound-system-image:v1";
-const SPIRIT_IMAGE_MODEL = String(process.env.OPENAI_SPIRIT_IMAGE_MODEL || "gpt-image-1").trim();
 const SOUND_SYSTEM_FREE_UNLOCK_LIKES = 10;
 
 const SPIRIT_ENTITY_BRIEFS = {
@@ -329,8 +328,8 @@ module.exports = async function handler(req, res) {
     const result = await callOpenAiImage({
       prompt: safePrompt,
       size: "1024x1024",
-      quality: String(process.env.OPENAI_SPIRIT_IMAGE_QUALITY || "medium").trim() || "medium",
-      model: SPIRIT_IMAGE_MODEL
+      quality: String(process.env.OPENAI_SPIRIT_IMAGE_QUALITY || "").trim(),
+      model: String(process.env.OPENAI_SPIRIT_IMAGE_MODEL || "").trim()
     });
     if (!result.ok) {
       await deleteKey(lockKey);

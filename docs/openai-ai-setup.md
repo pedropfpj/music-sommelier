@@ -7,8 +7,9 @@ A chave fica somente no backend da Vercel, nas variáveis de ambiente do projeto
 
 - `OPENAI_API_KEY`: chave da OpenAI. Obrigatória para qualquer chamada real.
 - `OPENAI_TEXT_MODEL`: modelo de texto. Sugestão inicial: um modelo mini/barato.
-- `OPENAI_IMAGE_MODEL`: modelo de imagem. Use somente quando o premium estiver pronto.
+- `OPENAI_IMAGE_MODEL`: modelo de imagem; padrão `gpt-image-2.5-flare`.
 - `OPENAI_IMAGE_QUALITY`: qualidade da imagem. Para testes, use `medium`.
+- `OPENAI_SPIRIT_IMAGE_MODEL` e `OPENAI_SPIRIT_IMAGE_QUALITY`: overrides opcionais do Sound System; vazios herdam `OPENAI_IMAGE_MODEL` e `OPENAI_IMAGE_QUALITY`.
 - `SONIC_AI_TEXT_ENABLED`: `true` para liberar textos por IA.
 - `SONIC_AI_IMAGE_ENABLED`: `true` para liberar imagem por IA.
 - `SONIC_AI_TRACK_DAILY_LIMIT`: limite diário leve para `/api/track-insight`.
@@ -58,7 +59,7 @@ Antes de liberar para usuários reais, volte para `imageLimitPerProfile: 1` e `a
    - Defina `SONIC_AI_IMAGE_DAILY_LIMIT=5` durante beta fechado do dono, ou `1` para teste público.
    - Defina `SONIC_AI_IMAGE_MAX_PER_USER=5` durante beta fechado do dono, ou `1` em produção.
    - Defina `SONIC_AI_IMAGE_ALLOW_BETA_REGENERATION=true` somente durante beta fechado.
-   - Defina `OPENAI_IMAGE_MODEL=gpt-image-1-mini`.
+   - Defina `OPENAI_IMAGE_MODEL=gpt-image-2.5-flare`.
    - Defina `OPENAI_IMAGE_QUALITY=medium`.
    - Configure `KV_REST_API_URL` e `KV_REST_API_TOKEN` se quiser garantir a trava mesmo após redeploy.
    - Mantenha `imageLimitPerProfile: 1`.
@@ -83,3 +84,11 @@ Quando o usuario gera a primeira arte IA, o app salva um recibo dessa imagem. Na
 Para teste local ou preview, sem KV configurado, a trava fica em memoria e ajuda durante a mesma execucao da funcao. Para lancamento, use KV/Upstash ou um banco real, porque serverless pode reiniciar e perder memoria.
 
 Nunca coloque `OPENAI_API_KEY`, `KV_REST_API_TOKEN` ou qualquer segredo no `app.js`, `index.html` ou app mobile.
+
+## Diagnóstico e validação da geração
+
+`gpt-image-1` foi desativado em 23/10/2026. A [documentação oficial da OpenAI](https://developers.openai.com/api/reference/resources/images/methods/generate) recomenda `gpt-image-2.5-sunburst` ou `gpt-image-2.5-flare`. Remova overrides antigos ou atualize ambos os nomes de variável antes de publicar; um override do Sound System tem precedência sobre o modelo geral. A rota chama diretamente `https://api.openai.com/v1/images/generations`, usando `OPENAI_API_KEY` do servidor, sem proxy ou base URL configurável.
+
+Confirme o acesso ao modelo com a chave do mesmo projeto da produção e faça uma geração real em um perfil de teste. Não troque o modelo automaticamente após erros de credenciais, orçamento ou acesso. Falhas não salvam recibo de geração e liberam a trava do marco para uma nova tentativa. Imagens já criadas continuam sendo reutilizadas.
+
+A chamada de imagem tem prazo de 105 segundos, dentro dos 120 segundos da função Vercel e do navegador. Isso permite retornar um erro e liberar a trava antes do encerramento da função. Execute `npm run test:spirit-image` para verificar configuração, cache por marco, concorrência, erros e nova tentativa sem chamar a API real.

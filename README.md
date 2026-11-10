@@ -53,7 +53,8 @@ Configure as variaveis de ambiente:
 
 - `OPENAI_API_KEY`: chave da API no backend
 - `OPENAI_TEXT_MODEL`: modelo de texto opcional, padrao `gpt-5-mini`
-- `OPENAI_IMAGE_MODEL`: modelo de imagem opcional, padrao `gpt-image-1-mini`
+- `OPENAI_IMAGE_MODEL`: modelo de imagem opcional, padrao `gpt-image-2.5-flare`
+- `OPENAI_SPIRIT_IMAGE_MODEL`: override opcional do Sound System; vazio herda `OPENAI_IMAGE_MODEL`
 - `SONIC_AI_IMAGE_ENABLED`: libera a rota de imagem por IA
 - `SONIC_AI_IMAGE_REQUIRE_PREMIUM`: mantenha `true` para reservar a arte por IA do Sound System ao Premium. O perfil e a evolucao por curtidas continuam gratuitos.
 - `SONIC_SPIRIT_IMAGE_REQUIRE_TRUSTED_USER`: mantenha `true` para exigir acesso verificado em `/api/spirit-image`; nunca confie apenas no estado do navegador.
