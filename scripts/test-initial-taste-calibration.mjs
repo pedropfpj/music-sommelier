@@ -39,7 +39,7 @@ assert.match(appSource, /preferences: \{ \.\.\.existingPreferences, initialTaste
 assert.match(appSource, /initialTasteCalibration: safeReadJsonStorage\(calibrationKey\)/, "Portable profile backups must include calibration");
 assert.match(appSource, /cloudUpdatedAt >= localUpdatedAt/, "Cross-device restore must prefer the newest final state");
 assert.equal((appSource.match(/initialTasteCalibrationState = writeInitialTasteCalibrationLocal\(cloudValue\);/g) || []).length, 1, "Cloud calibration should only be persisted once");
-assert.match(appSource, /const calibrationShown = await maybeShowInitialTasteCalibration\(continuation\)/, "Online sign-in continuation must check the one-time calibration");
+assert.match(appSource, /const calibrationShown = discussionReturn \? false : await maybeShowInitialTasteCalibration\(continuation\)/, "Online sign-in must check calibration unless it is restoring the requested discussion");
 assert.match(appSource, /restoredOnline[\s\S]*?await maybeShowInitialTasteCalibration/, "Stored online sessions must check the one-time calibration");
 assert.match(appSource, /document\.body\?\.classList\.add\("taste-calibration-open"\)/, "Calibration must isolate the focused onboarding viewport");
 assert.match(appSource, /calibrationBody\.scrollTop = 0/, "Every calibration step must start at the top of its question");

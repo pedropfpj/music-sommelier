@@ -30155,22 +30155,36 @@ function continueAfterInitialTasteCalibration(value, { personalized = false } = 
     initialTab: personalized ? requestedTab : fallbackTab
   });
   if (!personalized) return;
+  const sessionGeneration = recommendationSessionGeneration;
   window.setTimeout(() => {
+    if (!recommendationSessionIsCurrent(sessionGeneration)) return;
+    const previousTrackKey = recommendationTrackKey(currentRecommendation);
     const announceReady = () => {
+      if (!recommendationSessionIsCurrent(sessionGeneration)) return;
       const copy = initialTasteCalibrationCopy();
       const message = copy.ready(copy.labels.goal[calibration.goal], copy.labels.mood[calibration.mood]);
       if (feedbackMessage) feedbackMessage.textContent = message;
       showToast(message);
     };
+    const announceFailure = () => {
+      if (!recommendationSessionIsCurrent(sessionGeneration)) return;
+      const message = recommendationFailureMessage();
+      if (feedbackMessage) feedbackMessage.textContent = message;
+      showToast(message);
+    };
     if (calibration.goal === "dj" || calibration.goal === "set") {
       void activateDjIntent(initialTasteCalibrationDjFilter(calibration), { source: "initial_calibration" }).then((ready) => {
-        if (ready !== false) announceReady();
-      });
+        if (!recommendationSessionIsCurrent(sessionGeneration)) return;
+        if (ready === true && currentDjRecommendation && djSeedHasPlayablePreview(currentDjRecommendation)) announceReady();
+        else if (ready) announceFailure();
+      }).catch(announceFailure);
       return;
     }
     void runPrimaryRecommendationAction({ source: "initial_calibration" }).then((ready) => {
-      if (ready) announceReady();
-    });
+      if (!recommendationSessionIsCurrent(sessionGeneration)) return;
+      if (ready === true && hasCommittedRecommendationSince(previousTrackKey, sessionGeneration)) announceReady();
+      else if (ready) announceFailure();
+    }).catch(announceFailure);
   }, 180);
 }
 
@@ -30180,6 +30194,7 @@ async function completeInitialTasteCalibration() {
     if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().required;
     return false;
   }
+  const sessionGeneration = recommendationSessionGeneration;
   initialTasteCalibrationBusy = true;
   if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = initialTasteCalibrationCopy().saving;
   renderInitialTasteCalibrationStep();
@@ -30207,6 +30222,7 @@ async function completeInitialTasteCalibration() {
     });
   }
   await new Promise((resolve) => window.setTimeout(resolve, 360));
+  if (!recommendationSessionIsCurrent(sessionGeneration) || initialTasteCalibrationState !== completed) return false;
   initialTasteCalibrationBusy = false;
   renderInitialTasteCalibrationProfileCard();
   continueAfterInitialTasteCalibration(completed, { personalized: true });
@@ -63675,11 +63691,31 @@ function prefsForSameTargetAction() {
   return lastPrefs ? normalizeRecommendationPrefs(lastPrefs) : null;
 }
 
+function hasCommittedRecommendationSince(previousTrackKey = "", sessionGeneration = recommendationSessionGeneration) {
+  const track = currentRecommendation;
+  return Boolean(
+    recommendationSessionIsCurrent(sessionGeneration) &&
+    track?.artist && track?.song &&
+    isTrackEligibleForRecommendation(track) &&
+    recommendationTrackKey(track) !== previousTrackKey
+  );
+}
+
 async function runManualFilterSurprise() {
   const prefs = prefsFromManualControls();
-  if (!manualPrefsAreActive(prefs)) return false;
+  if (!manualPrefsAreActive(prefs) || recommendationRunBusy) return false;
 
+  const sessionGeneration = recommendationSessionGeneration;
+  const requestContext = recommendationContextKey(prefs);
+  const requestIsCurrent = () => {
+    if (!recommendationSessionIsCurrent(sessionGeneration)) return false;
+    const currentPrefs = prefsFromManualControls();
+    // The instant presenter fills an unspecified style from the committed card.
+    if (!prefs.style && currentPrefs.style === currentRecommendation?.style) currentPrefs.style = "";
+    return recommendationContextKey(currentPrefs) === requestContext;
+  };
   const previousTrack = currentRecommendation;
+  const previousTrackKey = recommendationTrackKey(previousTrack);
   const interactionStartedAt = discoveryInteractionNow();
   if (tryPresentInteractionBudgetRecommendation({
     prefs,
@@ -63690,27 +63726,34 @@ async function runManualFilterSurprise() {
       : t("recommendationGenerated"),
     action: "filtered_surprise",
     startedAt: interactionStartedAt
-  })) {
+  }) && requestIsCurrent() && hasCommittedRecommendationSince(previousTrackKey, sessionGeneration)) {
     swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
     playUiSfx("search-done");
     return true;
   }
-  const generated = await generateRecommendationWithOverlay(
-    prefs,
-    {
-      resetRejected: false,
-      avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
-      avoidArtistName: previousTrack?.artist || "",
-      allowKnownFallback: false
-    },
-    "catalog"
-  );
+  if (!requestIsCurrent()) return false;
+  let generated = false;
+  try {
+    generated = await generateRecommendationWithOverlay(
+      prefs,
+      {
+        resetRejected: false,
+        avoidTrackKey: previousTrack ? `${previousTrack.artist}::${previousTrack.song}` : "",
+        avoidArtistName: previousTrack?.artist || "",
+        allowKnownFallback: false
+      },
+      "catalog"
+    );
+  } catch (_error) {
+    // The ordinary failure message remains retryable without exposing provider details.
+  }
+  if (!requestIsCurrent()) return false;
 
-  if (!generated) {
+  if (!generated || !hasCommittedRecommendationSince(previousTrackKey, sessionGeneration)) {
     const fallback = recommendationFailureMessage();
     if (feedbackMessage) feedbackMessage.textContent = fallback;
     showToast(fallback);
-    return true;
+    return false;
   }
 
   lastPrefs = prefs;
