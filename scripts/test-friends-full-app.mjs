@@ -18,6 +18,17 @@ const browser = await chromium.launch({ headless: true, executablePath: process.
 const output = fileURLToPath(new URL('../.vercel/friends-full-app/', import.meta.url));
 await fs.mkdir(output, { recursive: true });
 const errors = [], calls = [], pages = [];
+let selectedRecording = null, mediaMode = 'unavailable', mediaEvidence = null;
+const metadataLookups = [];
+// Real PCM bytes: browser probes and the main <audio> must decode this tone.
+// No application function, readiness property, or media event is replaced.
+const sampleRate = 8000, sampleCount = sampleRate * 8;
+const audioBytes = Buffer.alloc(44 + sampleCount * 2);
+audioBytes.write('RIFF'); audioBytes.writeUInt32LE(audioBytes.length - 8, 4); audioBytes.write('WAVEfmt ', 8);
+audioBytes.writeUInt32LE(16, 16); audioBytes.writeUInt16LE(1, 20); audioBytes.writeUInt16LE(1, 22);
+audioBytes.writeUInt32LE(sampleRate, 24); audioBytes.writeUInt32LE(sampleRate * 2, 28); audioBytes.writeUInt16LE(2, 32); audioBytes.writeUInt16LE(16, 34);
+audioBytes.write('data', 36); audioBytes.writeUInt32LE(sampleCount * 2, 40);
+for (let i = 0; i < sampleCount; i++) audioBytes.writeInt16LE(Math.round(Math.sin(i * Math.PI * 2 * 220 / sampleRate) * 500), 44 + i * 2);
 const action = (page, name) => page.locator(`#friendsPanel [data-friends-action="${name}"]`).first();
 const pane = async (page, name) => { const button = action(page, name); if (await button.isVisible()) await button.click(); };
 async function tab(page, name) {
@@ -34,6 +45,13 @@ async function newPage() {
   await page.addInitScript(() => localStorage.setItem('sonic_search:privacy:analytics:v1', 'no'));
   await page.route('**/*', async route => {
     const request = route.request(), url = new URL(request.url());
+    if (url.hostname === 'friends-audio.fixture.test') return route.fulfill({ contentType: 'audio/wav', body: url.pathname === '/ready.wav' ? audioBytes : Buffer.from('Unavailable fixture audio'), headers: { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' } });
+    if (url.pathname === '/api/track-metadata') {
+      const requested = request.postDataJSON();
+      const exact = selectedRecording && requested.artist === selectedRecording.artist && requested.song === selectedRecording.title;
+      if (exact) metadataLookups.push({ page: pages.indexOf(page), artist: requested.artist, title: requested.song, mode: mediaMode });
+      return route.fulfill({ json: { best: exact ? { artist: requested.artist, song: requested.song, previewUrl: `https://friends-audio.fixture.test/${mediaMode === 'ready' ? 'ready' : 'unavailable'}.wav` } : null } });
+    }
     const api = url.pathname.startsWith('/api/');
     const labProtocol = url.origin === lab.origin;
     if (api || labProtocol) {
@@ -107,6 +125,7 @@ try {
     setActiveAppTab('discover');
     return { artist: track.artist, title: track.song };
   });
+  selectedRecording = selected;
   await ana.locator('#shareTrackWithFriendsBtn').click();
   await ana.locator('#friendsNote').waitFor();
   const chosen = await ana.locator('.friends-chosen-track').innerText();
@@ -123,6 +142,32 @@ try {
   await bia.evaluate(() => friendsController.refresh()); await pane(bia, 'feed');
   await bia.locator('.friends-post-note').filter({ hasText: 'Só para o círculo' }).waitFor();
   assert.equal(await bia.locator('#friendsPanel img').count(), 0);
+  const beforeFailedListen = await bia.evaluate(() => ({ current: currentRecommendation && recommendationTrackKey(currentRecommendation), seen: [...seenTrackKeysMemory] }));
+  const originalSource = await bia.locator('.friends-source').getAttribute('href');
+  const initialPostReads = calls.filter(call => call.action === 'post' && call.account === 'bia').length;
+  await action(bia, 'play').click();
+  await bia.locator('#friendsPanel .friends-feedback').filter({ hasText: 'Não foi possível abrir esta gravação agora' }).waitFor({ timeout: 25000 });
+  assert.deepEqual(await bia.evaluate(() => ({ current: currentRecommendation && recommendationTrackKey(currentRecommendation), seen: [...seenTrackKeysMemory] })), beforeFailedListen, 'Unplayable bytes do not present or record a discovery');
+  assert.equal(await bia.evaluate(() => currentActiveAppTabName()), 'friends');
+  assert.equal(await bia.locator('.friends-source').getAttribute('href'), originalSource, 'The original recording source remains available after failure');
+  mediaMode = 'ready';
+  await action(bia, 'play').click();
+  await bia.waitForFunction(() => currentActiveAppTabName() === 'discover' && trackPreview.readyState >= 2 && trackPreview.duration > 0, null, { timeout: 25000 });
+  assert.equal(await bia.locator('#artistName').textContent(), selected.artist);
+  assert.equal(await bia.locator('#songTitle').textContent(), selected.title);
+  if (await bia.evaluate(() => trackPreview.paused)) await bia.locator('#previewPlayBtn').click();
+  await bia.waitForFunction(() => !trackPreview.paused && trackPreview.currentTime > 0.2, null, { timeout: 10000 });
+  mediaEvidence = await bia.evaluate(() => ({ readyState: trackPreview.readyState, duration: trackPreview.duration, currentTime: trackPreview.currentTime, source: trackPreview.currentSrc, seen: seenTrackKeysMemory.has(recommendationTrackKey(currentRecommendation)) }));
+  assert.ok(mediaEvidence.readyState >= 2 && mediaEvidence.duration > 0 && mediaEvidence.currentTime > 0.2 && mediaEvidence.seen);
+  assert.equal(mediaEvidence.source, 'https://friends-audio.fixture.test/ready.wav');
+  assert.equal(calls.filter(call => call.action === 'post' && call.account === 'bia').length, initialPostReads + 2, 'Each failed or successful Listen obtains fresh real-handler post authorization');
+  assert.ok(metadataLookups.some(lookup => lookup.page === pages.indexOf(bia) && lookup.mode === 'unavailable') && metadataLookups.some(lookup => lookup.page === pages.indexOf(bia) && lookup.mode === 'ready'), 'Actual preparation resolves matching recording metadata before decoding each provider fixture');
+  for (const selector of ['#previewPanel', '#swipeStartPanel', '#resultPanel', '#socialCommentsCard']) assert.ok(!(await bia.locator(selector).innerText()).includes('Só para o círculo'), 'The private post note never enters the player or general comments');
+  assert.equal(await bia.locator('#socialCommentsInput').inputValue(), '');
+  assert.equal(await bia.locator('#friendsPlaybackNotice').isVisible(), true, 'Discover explains the separate general-comment audience');
+  await bia.locator('#friendsPlaybackBackBtn').click();
+  await bia.locator('#friendsPanel .friends-feedback').filter({ hasText: 'Faixa aberta no player' }).waitFor();
+  console.log('CHECK fresh authorized Friends Listen → Discover, real decoded WAV readiness/progress and unplayable failure');
   const caio = await newPage(); await enter(caio); await login(caio, 'caio'); await setup(caio, 'Caio Reservado');
   assert.equal(await caio.locator('.friends-post').count(), 0);
   const denied = await caio.evaluate(async postId => { try { await requestFriendsApi({ action: 'post', postId }); return null; } catch (error) { return error.code; } }, stored.id);
@@ -169,9 +214,9 @@ try {
     await bia.screenshot({ path: path.join(output, `friends-${width}.png`), fullPage: true });
   }
   assert.deepEqual(errors, [], 'The complete minified application has no JavaScript errors');
-  const report = { passed: true, application: 'complete index + app.min.js + real Friends handler and PGlite', auth: 'local fixtures only', media: 'not exercised here; exact media is covered by the weekly/preflight suites', viewports: [375, 1440], checks: ['guest no Friends requests or writes', 'five primary tabs and More through Profile', 'explicit saved-profile alias without photos', 'request preview and mutual acceptance', 'chosen-recording draft survives navigation', 'friends-only post through root authenticated transport', 'third-account known-post denial', 'invitation capture, authentication return, same-document invitation, URL scrub and no automatic friendship'], requests: calls, errors };
+  const report = { passed: true, application: 'complete index + app.min.js + real Friends handler and PGlite', auth: 'local fixtures only', media: 'provider-boundary fixture WAV decoded by actual probes and main audio; no live provider claim', mediaEvidence, metadataLookups, viewports: [375, 1440], checks: ['guest no Friends requests or writes', 'five primary tabs and More through Profile', 'explicit saved-profile alias without photos', 'request preview and mutual acceptance', 'chosen-recording draft survives navigation', 'friends-only post through root authenticated transport', 'fresh authorized Listen → Discover and actual decoded audio progress', 'unplayable bytes do not present or record a discovery', 'private note absent from player and general comments', 'third-account known-post denial', 'invitation capture, authentication return, same-document invitation, URL scrub and no automatic friendship'], requests: calls, errors };
   await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
-  console.log('PASS full app Friends: guest/navigation, explicit identity/request/accept/share, draft continuity, private post denial, invitation login return and responsive screens. Real handler + PGlite; local auth fixtures; no production calls or writes.');
+  console.log('PASS full app Friends: guest/navigation, explicit identity/request/accept/share, draft continuity, exact Listen → Discover with decoded fixture WAV and safe unplayable failure, private post denial, invitation login return and responsive screens. Real handler + PGlite; local auth/media fixtures; no production calls or writes.');
 } catch (error) {
   const diagnostics = [];
   for (const [index, page] of pages.entries()) {
