@@ -14,7 +14,7 @@ export const users = {
   ana: { id: '11111111-1111-4111-8111-111111111111', email: 'ana@example.test', user_metadata: { display_name: 'Ana', username: 'ana_lab' } },
   bia: { id: '22222222-2222-4222-8222-222222222222', email: 'bia@example.test', user_metadata: { display_name: 'Bia', username: 'bia_lab' } }
 };
-export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpdir(), 'sonic-social-profile-lab') } = {}) {
+export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpdir(), 'sonic-social-profile-lab'), friends = false } = {}) {
   await fs.mkdir(dataDir, { recursive: true });
   const db = new PGlite(path.join(dataDir, 'postgres'));
   if (!(await db.query("select to_regclass('public.profiles') as table_name")).rows[0].table_name) {
@@ -35,6 +35,7 @@ export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpd
     await db.exec('create table lab_objects(path text primary key, bytes bytea, content_type text);');
   }
   await db.exec(await fs.readFile(path.join(root,'supabase/migrations/20261105000400_public_profile_links.sql'),'utf8'));
+  if (friends) await db.exec(await fs.readFile(path.join(root,'supabase/migrations/20261110000100_private_friendships.sql'),'utf8'));
   await db.exec('grant select,insert,update,delete on taste_snapshots,track_feedback,feedback_events,spirit_profiles,spirit_cards to authenticated;');
   const previousEnv = { ...process.env }, originalFetch = global.fetch;
   // Prevent inherited production settings from participating in the test process.
@@ -135,7 +136,7 @@ export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpd
       }
       if(route.startsWith('/api/')) {
         req.query=Object.fromEntries(url.searchParams); req.body=body;
-        const routes={'/api/user-profile':'lib/api/_user-profile.js','/api/comments':'lib/api/_comments.js','/api/social-config':'api/social-config.js'};
+        const routes={'/api/user-profile':'lib/api/_user-profile.js','/api/comments':'lib/api/_comments.js','/api/friends':'lib/api/_friends.js','/api/social-config':'api/social-config.js'};
         if(route==='/api/user-profile' && req.method==='POST' && failures.profileWrites>0){failures.profileWrites--;return json(res,503,{ok:false,error:'profile_storage_unavailable'});}
         if(route==='/api/access-context') return json(res,200,{ok:true,viewer:{authenticated:!!userFrom(req),role:'free',canModerate:false,owner:false,admin:false}});
         if(route==='/api/social-oauth-url') return json(res,200,{ok:true,url:origin+'/auth/v1/authorize?redirect_to='+encodeURIComponent(req.query.redirect_to || origin+'/')});
@@ -152,6 +153,7 @@ export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpd
   });
   await new Promise(resolve=>server.listen(port,'127.0.0.1',resolve)); origin=`http://127.0.0.1:${server.address().port}`;
   Object.assign(process.env,{ NODE_ENV:'test',SUPABASE_URL:origin,SUPABASE_AUTH_URL:origin+'/auth/v1',SUPABASE_ANON_KEY:'lab-anon',SUPABASE_SERVICE_ROLE_KEY:'lab-service',SONIC_SOCIAL_ENABLED:'true',SONIC_PUBLIC_PROFILES_ENABLED:'true',SONIC_TRACK_VIDEO_SOCIAL_V2_ENABLED:'true',SONIC_SOCIAL_COMMENTS_ENABLED:'true',SONIC_REQUIRE_DURABLE_RATE_LIMITS:'false',SONIC_SOCIAL_COMMENTS_DAILY_LIMIT:'10000',SONIC_PROFILE_EDIT_DAILY_LIMIT:'10000',SONIC_COMMUNITY_EMAIL_ENABLED:'false',SONIC_SOCIAL_VALIDATE_PROVIDERS:'false' });
+  process.env.SONIC_FRIENDS_ENABLED = friends ? 'true' : 'false';
   global.fetch=(url,options)=>{if(new URL(url).origin!==origin)throw new Error('External network disabled in local social lab');return originalFetch(url,options);};
   return { origin,db,requests,failures,session,async close(){await new Promise(resolve=>server.close(resolve));await db.close();global.fetch=originalFetch;for(const key of Object.keys(process.env))if(!(key in previousEnv))delete process.env[key];Object.assign(process.env,previousEnv);} };
 }
