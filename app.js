@@ -14267,6 +14267,65 @@ const VERIFIED_PSYTRANCE_HOMONYM_TRACKS = [
   }
 ];
 
+const REVIEWED_RECORDING_STYLE_PROOFS_V26 = [
+  {
+    "style": "big_beat",
+    "artist": "The Chemical Brothers",
+    "song": "Block Rockin' Beats",
+    "recordingUrl": "https://music.apple.com/us/song/block-rockin-beats/1635966361",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "1635966361"
+  },
+  {
+    "style": "big_beat",
+    "artist": "Fatboy Slim",
+    "song": "The Rockafeller Skank",
+    "recordingUrl": "https://music.apple.com/us/song/the-rockafeller-skank/714928145",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "714928145"
+  },
+  {
+    "style": "big_beat",
+    "artist": "The Prodigy",
+    "song": "Breathe",
+    "recordingUrl": "https://music.apple.com/us/song/breathe/574422934",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "574422934"
+  },
+  {
+    "style": "big_beat",
+    "artist": "The Crystal Method",
+    "song": "Busy Child",
+    "recordingUrl": "https://music.apple.com/us/song/busy-child/957908168",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "957908168"
+  },
+  {
+    "style": "big_beat",
+    "artist": "Propellerheads",
+    "song": "Take California",
+    "recordingUrl": "https://music.apple.com/us/song/take-california/1396678789",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "1396678789"
+  },
+  {
+    "style": "big_beat",
+    "artist": "The Wiseguys",
+    "song": "Ooh la La",
+    "recordingUrl": "https://music.apple.com/us/song/ooh-la-la/260027594",
+    "evidenceUrl": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "appleTrackId": "260027594"
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Virtual Light & Module Virus",
+    "song": "Extreme Transmission",
+    "recordingUrl": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
+    "evidenceUrl": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
+    "bandcampTrackId": "734106270"
+  }
+];
+
 const CURATED_FINE_STYLE_NO_BPM_ARTIST_PROOF = {
   "baphomet engine": ["dark_psy", "twilight_psy"],
   "lyktum": ["progressive_psy"],
@@ -18070,7 +18129,9 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const area = pickDatasetValue(fields, ["city", "origin_city", "state", "region", "area", "cidade"]);
     const bio = pickDatasetValue(fields, ["artist_bio", "bio", "description", "about", "resumo"]);
 
-    if (artist) {
+    const recordingScopedEvidence = parseDatasetListValue(pickDatasetValue(fields, ["source_tags", "catalog_tags", "tags"]))
+      .some(tag => tag === "reviewed_recording_style_v26" || tag === "full_on_night_recordings_v26");
+    if (artist && !recordingScopedEvidence) {
       const recentSignalDate = extractRecentReleaseDateFromDatasetRow(rawRow, fields);
       if (seedStyleArtistFromDataset(style, artist)) {
         seededArtistKeys.add(`${style}::${normalize(artist)}`);
@@ -18136,6 +18197,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const vocals = pickDatasetValue(fields, ["vocals", "vocal_profile"]);
     const context = pickDatasetValue(fields, ["context", "contexts", "listening_contexts"]);
     const catalogMetadata = Object.fromEntries(Object.entries({
+      recording_id: pickDatasetValue(fields, ["recording_id"]),
       deezer_track_id: deezerTrackId,
       deezer_track_url: deezerTrackUrl,
       cover_art_url: coverArtUrl,
@@ -20264,8 +20326,11 @@ function hasStrictWhitelist(style) {
   return Array.isArray(STYLE_STRICT_WHITELISTS[style]) && STYLE_STRICT_WHITELISTS[style].length > 0;
 }
 
-function artistAllowedForStyle(style, artistName) {
+function artistAllowedForStyle(style, artistName, recording = null) {
   if (isCuratorBlockedArtistName(artistName)) return false;
+  if (recording && normalizeDatasetStyle(recording.style || "") === style &&
+      canonicalArtistIdentity(recording.artist || "") === canonicalArtistIdentity(artistName || "") &&
+      reviewedRecordingStyleProof(recording)) return true;
   const strictWhitelist = STYLE_STRICT_WHITELISTS[style] || [];
   if (strictWhitelist.length && !strictWhitelist.some((seed) => isArtistMatch(artistName, seed))) {
     return false;
@@ -20401,13 +20466,38 @@ function isTrustedSlambientCatalogTrack(track) {
   return true;
 }
 
+function reviewedRecordingStyleProof(track) {
+  if (!track || !normalize(track.source || "").replace(/[\s_]+/g, "").includes("datasetlocal")) return null;
+  const metadata = catalogTrackMetadata(track);
+  const tags = new Set([...(Array.isArray(track.sourceTags) ? track.sourceTags : []), ...catalogTrackMetadataList(track, "source_tags")]);
+  if (!tags.has("recording_identity_verified")) return null;
+  const proof = REVIEWED_RECORDING_STYLE_PROOFS_V26.find(row => row.style === track.style &&
+    canonicalArtistIdentity(row.artist) === canonicalArtistIdentity(track.artist || "") &&
+    normalize(row.song) === normalize(track.song || track.title || ""));
+  if (!proof) return null;
+  try {
+    const recording = new URL(metadata.source_url || "");
+    const evidence = new URL(metadata.genre_evidence_url || "");
+    if (recording.href !== proof.recordingUrl || evidence.href !== proof.evidenceUrl) return null;
+    if (proof.appleTrackId && tags.has("reviewed_recording_style_v26") && tags.has("apple_editorial_recording") && tags.has("audio_browser_decoded") &&
+        metadata.recording_id === `apple_music:${proof.appleTrackId}` &&
+        recording.protocol === "https:" && recording.hostname === "music.apple.com" && recording.pathname.split("/").pop() === proof.appleTrackId) return proof;
+    if (proof.bandcampTrackId && tags.has("full_on_night_recordings_v26") && tags.has("artist_recording_genre_verified") && tags.has("audio_http_body_checked") &&
+        metadata.recording_id === `bandcamp:${proof.bandcampTrackId}` &&
+        String(track.bandcampTrackId || metadata.bandcamp_track_id || "") === proof.bandcampTrackId &&
+        track.bandcampTrackUrl === proof.recordingUrl) return proof;
+  } catch (_) {}
+  return null;
+}
+
 function isTrustedCuratedCatalogTrack(track) {
   if (!track) return false;
+  if (!isCuratorBlockedArtistName(track.artist || "") && reviewedRecordingStyleProof(track)) return true;
   if (isTrustedSlambientCatalogTrack(track)) return true;
   const source = normalize(track.source || "");
   const curatedLocalSeed = source.replace(/[\s_]+/g, "").includes("datasetlocal");
   if (!curatedLocalSeed) return false;
-  if (!artistAllowedForStyle(track.style, track.artist)) return false;
+  if (!artistAllowedForStyle(track.style, track.artist, track)) return false;
   // These recordings are checked against their artist/label page and public
   // audio before publication. Genre evidence does not manufacture an exact BPM.
   const metadata = track.catalogMetadata || {};
@@ -20493,7 +20583,7 @@ function purgeDynamicMismatches(style) {
     const track = catalog[i];
     const styleToCheck = style || track.style;
     if (style && track.style !== style) continue;
-    if (styleToCheck && track.style === styleToCheck && hasStrictWhitelist(styleToCheck) && !artistAllowedForStyle(styleToCheck, track.artist)) {
+    if (styleToCheck && track.style === styleToCheck && hasStrictWhitelist(styleToCheck) && !artistAllowedForStyle(styleToCheck, track.artist, track)) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
       continue;
@@ -20507,7 +20597,7 @@ function purgeDynamicMismatches(style) {
       label: track.label,
       durationSec: dynamicDurationSec
     });
-    const artistOk = artistAllowedForStyle(styleToCheck, track.artist);
+    const artistOk = artistAllowedForStyle(styleToCheck, track.artist, track);
     const anchoredArtistOk =
       !requiresSeedAnchorForDynamicStyle(styleToCheck) ||
       artistSeedAnchoredForStyle(styleToCheck, track.artist);
@@ -20551,7 +20641,7 @@ function sanitizeCatalogByStyleRules() {
       !bpmPresent;
     const styleSignalConflict = hasTrackStyleSignalConflict(track.style, track);
     const blockedTrack = trackBlockedForStyle(track.style, track);
-    if (!artistAllowedForStyle(track.style, track.artist) || !labelAllowedForStyle(track.style, track.label) || styleSignalConflict || blockedTrack) {
+    if (!artistAllowedForStyle(track.style, track.artist, track) || !labelAllowedForStyle(track.style, track.label) || styleSignalConflict || blockedTrack) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
       continue;
@@ -21575,7 +21665,7 @@ function buildCatalogGenreAudit({ sampleLimit = 80 } = {}) {
       return;
     }
 
-    if (!artistAllowedForStyle(style, track.artist)) {
+    if (!artistAllowedForStyle(style, track.artist, track)) {
       registerIssue(track, "artist_not_allowed_for_style", "Artist/override/whitelist rule rejected this style.");
     }
     if (!labelAllowedForStyle(style, track.label)) {
@@ -21677,7 +21767,7 @@ function isTrackEligibleForRecommendation(track) {
   if (isLikelyGeneratedTrackTitle(track.song)) return false;
   const trustedCurated = isTrustedCuratedCatalogTrack(track);
   if (track.existenceVerified === false && !trustedCurated) return false;
-  if (!artistAllowedForStyle(track.style, track.artist)) return false;
+  if (!artistAllowedForStyle(track.style, track.artist, track)) return false;
   if (!labelAllowedForStyle(track.style, track.label)) return false;
   if (trackBlockedForStyle(track.style, track)) return false;
   if (hasTrackStyleSignalConflict(track.style, track)) return false;
@@ -23226,7 +23316,7 @@ function addDynamicTrackToCatalog({
   })) return false;
   if (isLikelyChannelStyleArtistName(artistName)) return false;
   if (isLikelyGeneratedTrackTitle(songName)) return false;
-  if (!artistAllowedForStyle(style, artistName)) return false;
+  if (!artistAllowedForStyle(style, artistName, { style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId })) return false;
   if (isDynamicSource(source) && requiresSeedAnchorForDynamicStyle(style) && !artistSeedAnchoredForStyle(style, artistName)) return false;
 
   const rawLabel = String(label || "").trim();
@@ -23243,22 +23333,28 @@ function addDynamicTrackToCatalog({
   const fineStyleNeedsVerifiedTrack = dynamicFineStyleNeedsVerifiedTrack(style, source);
   if (fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
 
+  let reviewedReplacementIndex = -1;
   if (existingKeys.has(key)) {
-    const existing = catalog.find(track => recommendationTrackKey(track) === key && track.style === style);
-    const incoming = normalizeImportedListeningMetadata(vocals, context);
-    let updated = false;
-    if (existing?.listeningMetadataVersion === 1) {
-      if (existing.vocals === "unknown" && incoming.vocals !== "unknown") {
-        existing.vocals = incoming.vocals;
-        updated = true;
+    const exactIndex = catalog.findIndex(track => recommendationTrackKey(track) === key && canonicalArtistIdentity(track.artist) === canonicalArtistIdentity(artistName) && normalize(track.song) === normalize(songName));
+    const existing = catalog[exactIndex];
+    const incomingProof = reviewedRecordingStyleProof({ style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId });
+    if (exactIndex >= 0 && incomingProof && !reviewedRecordingStyleProof(existing)) reviewedReplacementIndex = exactIndex;
+    if (reviewedReplacementIndex < 0) {
+      const incoming = normalizeImportedListeningMetadata(vocals, context);
+      let updated = false;
+      if (existing?.listeningMetadataVersion === 1) {
+        if (existing.vocals === "unknown" && incoming.vocals !== "unknown") {
+          existing.vocals = incoming.vocals;
+          updated = true;
+        }
+        if (!existing.context?.length && incoming.context.length) {
+          existing.context = incoming.context;
+          updated = true;
+        }
       }
-      if (!existing.context?.length && incoming.context.length) {
-        existing.context = incoming.context;
-        updated = true;
-      }
+      if (updated) saveDynamicCatalogCache();
+      return false;
     }
-    if (updated) saveDynamicCatalogCache();
-    return false;
   }
 
   const fallbackBpm = Math.round((STYLE_BPM_RULES[style]?.min + STYLE_BPM_RULES[style]?.max || 130) / 2);
@@ -23292,7 +23388,7 @@ function addDynamicTrackToCatalog({
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
     : "06:00";
   const publisherCheckedRecording = sourceTags.some((tag) => [
-    "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24", "electronic_label_recordings_v25"
+    "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24", "electronic_label_recordings_v25", "reviewed_recording_style_v26", "full_on_night_recordings_v26"
   ].includes(tag));
 
   const hydratedTrack = {
@@ -23348,7 +23444,8 @@ function addDynamicTrackToCatalog({
     source
   };
 
-  catalog.push(hydratedTrack);
+  if (reviewedReplacementIndex >= 0) catalog.splice(reviewedReplacementIndex, 1, hydratedTrack);
+  else catalog.push(hydratedTrack);
   existingKeys.add(key);
   TRACK_METADATA[`${songName}|${artistName}`] = {
     releaseDate,
@@ -23357,7 +23454,8 @@ function addDynamicTrackToCatalog({
     catalogRef: `${source.toUpperCase().slice(0, 4)}-${style.toUpperCase().slice(0, 5)}`
   };
 
-  return true;
+  if (reviewedReplacementIndex >= 0) saveDynamicCatalogCache();
+  return reviewedReplacementIndex < 0;
 }
 
 function injectLocalTrackSeedBoost() {
@@ -35203,7 +35301,7 @@ function loadDynamicCatalogCache() {
         track.listeningMetadataVersion === 1 ? track.context : track.catalogMetadata?.context || track.catalogMetadata?.contexts
       ));
       restoreCatalogExtraTrackHints(track);
-      if (!artistAllowedForStyle(track.style, track.artist)) return;
+      if (!artistAllowedForStyle(track.style, track.artist, track)) return;
       if (!labelAllowedForStyle(track.style, track.label)) return;
       if (trackBlockedForStyle(track.style, track)) return;
       if (hasTrackStyleSignalConflict(track.style, track)) return;
@@ -49509,7 +49607,7 @@ function trackFineSubgenreHasRecommendationProof(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !FINE_SUBGENRE_EVIDENCE_STYLES.has(style)) return true;
   if (trackBlockedForStyle(style, track)) return false;
-  if (!artistAllowedForStyle(style, track.artist || "")) return false;
+  if (!artistAllowedForStyle(style, track.artist || "", track)) return false;
   if (hasTrackStyleSignalConflict(style, track)) return false;
   if (isTrustedCuratedCatalogTrack(track)) return true;
 
@@ -49573,7 +49671,7 @@ function trackStyleCertainty(track = null) {
   if (track && typeof track === "object") applyCuratedTrackMetadata(track);
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
-  if (!artistAllowedForStyle(style, track.artist || "")) return "unsafe";
+  if (!artistAllowedForStyle(style, track.artist || "", track)) return "unsafe";
   if (hasTrackStyleSignalConflict(style, track)) return "unsafe";
   if (!dynamicPsyHomonymHasStrongIdentityProof(track)) return "unsafe";
   if (isTrustedCuratedCatalogTrack(track)) return "confirmed";
@@ -51126,7 +51224,7 @@ function findPrecisionReplacement(
       const bpmOk = trackMatchesBpmPreference(track, prefs.bpm);
       if (!bpmOk) return false;
     }
-    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
     if (!allowKnownFallback && artistSetHasMatch(excludedArtists, track.artist)) return false;
     if (trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles)) return false;
@@ -51363,7 +51461,7 @@ function styleScopedEligibleTracks(prefs = {}) {
     if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
     const bpmValue = Number(track.bpmExact);
     if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
@@ -54939,7 +55037,7 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
     if (prefs.style && track.style !== prefs.style) return false;
     if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
     const bpmValue = Number(track.bpmExact);
     if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
@@ -55226,7 +55324,7 @@ function catalogHasMinimumRecommendationState() {
     .some((style) => catalogTracksForStyle(style).some((track) => (
       track &&
       isTrackEligibleForRecommendation(track) &&
-      artistAllowedForStyle(style, track.artist) &&
+      artistAllowedForStyle(style, track.artist, track) &&
       labelAllowedForStyle(style, track.label) &&
       trackHasReadyPlaybackRoute(track) &&
       anonymousExposurePenalty(track) < 70
@@ -55527,7 +55625,7 @@ function fastNegativeFeedbackTrackAllowed(track, prefs, rejectedTrack, { avoidAr
   if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
   if (!prefs.style && !trackAllowedByTasteMaturity(track, prefs)) return false;
   if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
   if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
   const bpmValue = Number(track.bpmExact);
   if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
@@ -55835,7 +55933,7 @@ function interactionFallbackTrackAllowed(
   if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
   if (!prefs.style && !allowMatureStyle && !trackAllowedByTasteMaturity(track, prefs)) return false;
   if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+  if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
   if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
   const bpmValue = Number(track.bpmExact);
   if (prefs.style && Number.isFinite(bpmValue) && bpmValue > 0 && !bpmFitsStyle(prefs.style, bpmValue)) return false;
@@ -62850,7 +62948,7 @@ async function pickPlayableReplacementForPrefs(
     if (!isTrackEligibleForRecommendation(track)) return false;
     if (!trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
     if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
-    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist)) return false;
+    if (prefs.style && !artistAllowedForStyle(prefs.style, track.artist, track)) return false;
     if (prefs.style && !labelAllowedForStyle(prefs.style, track.label)) return false;
     if (currentKey && recommendationTrackKey(track) === currentKey) return false;
     if (!trackAllowed(track)) return false;
@@ -63472,7 +63570,7 @@ async function generateRecommendationFromPrefs(
     prefs.style &&
     (
       currentRecommendation.style !== prefs.style ||
-      !artistAllowedForStyle(prefs.style, currentRecommendation.artist) ||
+      !artistAllowedForStyle(prefs.style, currentRecommendation.artist, currentRecommendation) ||
       !labelAllowedForStyle(prefs.style, currentRecommendation.label) ||
       (() => {
         const bpmValue = Number(currentRecommendation.bpmExact);
@@ -63607,7 +63705,7 @@ async function generateRecommendationFromPrefs(
     (
       recommendationSnapshot.style !== prefs.style ||
       !trackMatchesRequestedSubgenreEvidence(recommendationSnapshot, prefs) ||
-      !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist) ||
+      !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist, recommendationSnapshot) ||
       !labelAllowedForStyle(prefs.style, recommendationSnapshot.label) ||
       (() => {
         const bpmValue = Number(recommendationSnapshot.bpmExact);
@@ -63683,7 +63781,7 @@ async function generateRecommendationFromPrefs(
     (
       recommendationSnapshot.style !== prefs.style ||
       !trackMatchesRequestedSubgenreEvidence(recommendationSnapshot, prefs) ||
-      !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist)
+      !artistAllowedForStyle(prefs.style, recommendationSnapshot.artist, recommendationSnapshot)
     )
   ) {
     markRecommendationBlockedByKnown();

@@ -160,6 +160,7 @@ const FIELD_ALIASES = {
   confidence: ["confidence", "catalog_confidence", "verification_confidence"],
   genre_evidence_url: ["genre_evidence_url"],
   source_url: ["source_url", "source_link", "reference_url", "track_url", "track_link"],
+  recording_id: ["recording_id"],
   source_tags: ["source_tags", "catalog_tags", "tags"],
   energy: ["energy_band", "energy_profile", "energy"],
   vocals: ["vocals", "vocal_profile"],
@@ -199,7 +200,18 @@ export function playbackScore(row) {
     Number(Boolean(row.cover_art_url));
 }
 
-function mergeRows(current, candidate) {
+function reviewedRecordingRow(row) {
+  const source = String(row?.source || "");
+  const tags = String(row?.source_tags || "").split(/[;,|]/).map(value => value.trim());
+  return ["big_beat_editorial_v26_20261110", "full_on_night_recordings_v26_20261110"].includes(source) &&
+    tags.includes("recording_identity_verified") && /^(?:apple_music|bandcamp):\d+$/.test(row.recording_id || "");
+}
+
+export function mergeRows(current, candidate) {
+  // A reviewed recording is an atomic provider/version snapshot. Borrowing an
+  // older preview or provider ID could silently select a different master.
+  if (reviewedRecordingRow(candidate)) return { ...candidate };
+  if (reviewedRecordingRow(current)) return { ...current };
   const preferred = playbackScore(candidate) > playbackScore(current) ? candidate : current;
   const secondary = preferred === candidate ? current : candidate;
   return Object.fromEntries(
