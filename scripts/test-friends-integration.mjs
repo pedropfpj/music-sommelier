@@ -45,6 +45,9 @@ try {
   for (const [account, name, username] of [['ana', 'Alias A', 'ana_app'], ['bia', 'Alias B', 'bia_app'], ['caio', 'Alias C', 'caio_app']]) await ok(account, 'settings', { displayName: name, username });
   assert.equal((await get('ana', 'search', { q: 'caio' })).body.people.length, 0, 'Private people are not enumerable');
   assert.equal((await get('ana', 'search', { q: 'bia' })).body.people[0].displayName, 'Public App B', 'Search uses the explicitly public identity, not a private friends alias');
+  assert.equal((await get('ana', 'search', { q: ' @bia_app ' })).body.people[0].id, b, 'Public handles accept a leading @');
+  assert.deepEqual((await get('ana', 'search', { q: '@caio_app' })).body.people, [], 'Leading @ does not make a private profile searchable');
+  assert.deepEqual((await get('ana', 'search', { q: 'bia@app' })).body.people, [], 'Only leading @ is removed');
   assert.equal((await call('bia', 'request', { userId: a, clientRequestId: uuid() })).status, 404, 'Knowing a private UUID does not authorize a request');
   assert.equal((await call('bia', 'request', { userId: uuid(), clientRequestId: uuid() })).status, 404, 'Unknown UUID and unavailable private person use the same status');
 
