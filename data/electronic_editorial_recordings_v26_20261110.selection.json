@@ -1,0 +1,720 @@
+{
+  "schemaVersion": 1,
+  "version": "20261110-big-beat-editorial-v26",
+  "note": "Recording-scoped Apple Music editorial Big Beat selection. Playlist membership uses the exact Apple song ID, title/version and duration; lookup supplies that same recording identity and preview. Broad Apple primaryGenreName is retained as lookup metadata, not used as the Big Beat proof. No artist-wide classification, inferred BPM, vocal/context labels, legacy Deezer IDs or cross-master metadata. Coldcut is absent from this playlist and is not included.",
+  "genreEvidence": {
+    "kind": "apple_music_editorial_playlist_recording",
+    "url": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "author": "Apple Music",
+    "name": "Big Beat Essentials",
+    "playlistId": "pl.78e98b7f1ea842dc807bd646ab37083e",
+    "storefront": "us"
+  },
+  "tracks": [
+    {
+      "style": "big_beat",
+      "artist": "The Chemical Brothers",
+      "song": "Block Rockin' Beats",
+      "appleTrackId": "1635966361",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "1635966361",
+        "title": "Block Rockin' Beats",
+        "recordingUrl": "https://music.apple.com/us/song/block-rockin-beats/1635966361",
+        "durationIso": "PT5M13S",
+        "durationSeconds": 313,
+        "position": 1
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1635966361,
+        "artistId": 3726283,
+        "artistName": "The Chemical Brothers",
+        "trackName": "Block Rockin' Beats",
+        "trackViewUrl": "https://music.apple.com/us/album/block-rockin-beats/1635966134?i=1635966361&uo=4",
+        "collectionId": 1635966134,
+        "collectionName": "Dig Your Own Hole (25th Anniversary Edition)",
+        "trackTimeMillis": 313867,
+        "releaseDate": "1997-03-24T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/02/d3/27/02d3279f-b3c9-a98a-ef5c-fecd17e8c0ed/mzaf_15242707389416943357.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/4e/97/0b/4e970b4e-c167-66bf-8495-d8f2f7d3ecfd/14ULAIM00350.rgb.jpg/100x100bb.jpg",
+        "primaryGenreName": "Electronic",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:45.213Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=1635966361&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:07.308Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/02/d3/27/02d3279f-b3c9-a98a-ef5c-fecd17e8c0ed/mzaf_15242707389416943357.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 961627,
+        "sha256": "586b9733abb567ca8322945b3acbd8773569a8f4069d1a152259d67c9e724cea",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.000096,
+        "mediaDurationSeconds": 30.000998,
+        "currentTimeAfter": 0.311892,
+        "mediaError": null
+      }
+    },
+    {
+      "style": "big_beat",
+      "artist": "Fatboy Slim",
+      "song": "The Rockafeller Skank",
+      "appleTrackId": "714928145",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "714928145",
+        "title": "The Rockafeller Skank",
+        "recordingUrl": "https://music.apple.com/us/song/the-rockafeller-skank/714928145",
+        "durationIso": "PT6M53S",
+        "durationSeconds": 413,
+        "position": 2
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 714928145,
+        "artistId": 1093405,
+        "artistName": "Fatboy Slim",
+        "trackName": "The Rockafeller Skank",
+        "trackViewUrl": "https://music.apple.com/us/album/the-rockafeller-skank/714927896?i=714928145&uo=4",
+        "collectionId": 714927896,
+        "collectionName": "You've Come a Long Way Baby",
+        "trackTimeMillis": 413880,
+        "releaseDate": "1998-06-08T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0c/ef/6a/0cef6a5f-3295-1432-ee91-9762ed7eefb8/mzaf_11308969120491565742.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/45/1a/16/451a1673-1aa4-63e7-cfca-8a44ce9d0779/14ULAIM03599.rgb.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:45.419Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=714928145&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:07.740Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0c/ef/6a/0cef6a5f-3295-1432-ee91-9762ed7eefb8/mzaf_11308969120491565742.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 960693,
+        "sha256": "505ec66384c811d551d19c926215406df300fc2e3e1cff69368d8059c51239d4",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.00008,
+        "mediaDurationSeconds": 30.000998,
+        "currentTimeAfter": 0.313782,
+        "mediaError": null
+      }
+    },
+    {
+      "style": "big_beat",
+      "artist": "The Prodigy",
+      "song": "Breathe",
+      "appleTrackId": "574422934",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "574422934",
+        "title": "Breathe",
+        "recordingUrl": "https://music.apple.com/us/song/breathe/574422934",
+        "durationIso": "PT5M36S",
+        "durationSeconds": 336,
+        "position": 3
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 574422934,
+        "artistId": 1093102,
+        "artistName": "The Prodigy",
+        "trackName": "Breathe",
+        "trackViewUrl": "https://music.apple.com/us/album/breathe/574422728?i=574422934&uo=4",
+        "collectionId": 574422728,
+        "collectionName": "The Fat of the Land (Expanded Edition)",
+        "trackTimeMillis": 336280,
+        "releaseDate": "1996-11-11T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/29/09/25/29092511-2748-0739-1a5c-a8be17a763cb/mzaf_12279822455792701736.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/8e/37/6e/8e376ec9-d950-052a-54f5-e688785e4890/634904058661.png/100x100bb.jpg",
+        "primaryGenreName": "Electronic",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:45.641Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=574422934&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:08.489Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/29/09/25/29092511-2748-0739-1a5c-a8be17a763cb/mzaf_12279822455792701736.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1002021,
+        "sha256": "46359f6f087a9dc13eaeb4a71a9b615a44a7a0dfc25a2e6cca480d52d3aa9de9",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.000069,
+        "mediaDurationSeconds": 30,
+        "currentTimeAfter": 0.316689,
+        "mediaError": null
+      }
+    },
+    {
+      "style": "big_beat",
+      "artist": "The Crystal Method",
+      "song": "Busy Child",
+      "appleTrackId": "957908168",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "957908168",
+        "title": "Busy Child",
+        "recordingUrl": "https://music.apple.com/us/song/busy-child/957908168",
+        "durationIso": "PT7M26S",
+        "durationSeconds": 446,
+        "position": 19
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 957908168,
+        "artistId": 109716,
+        "artistName": "The Crystal Method",
+        "trackName": "Busy Child",
+        "trackViewUrl": "https://music.apple.com/us/album/busy-child/957908158?i=957908168&uo=4",
+        "collectionId": 957908158,
+        "collectionName": "Lost In Space (Original Motion Picture Soundtrack)",
+        "trackTimeMillis": 446773,
+        "releaseDate": "1997-07-17T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b1/83/07/b1830767-77a9-3346-3212-076ac2cb80f5/mzaf_16505843632098791092.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/87/55/ea/8755eaa6-c0af-907a-ffa7-973cb3d3e9bb/0016581818026.jpg/100x100bb.jpg",
+        "primaryGenreName": "Soundtrack",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:45.866Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=957908168&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:09.806Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b1/83/07/b1830767-77a9-3346-3212-076ac2cb80f5/mzaf_16505843632098791092.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1003717,
+        "sha256": "0f7db0728d8b0bbea510f5e6e5c2f1b8146fa5b2e53aada9e93480f6bb64c91d",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.000057,
+        "mediaDurationSeconds": 30,
+        "currentTimeAfter": 0.306926,
+        "mediaError": null
+      }
+    },
+    {
+      "style": "big_beat",
+      "artist": "Propellerheads",
+      "song": "Take California",
+      "appleTrackId": "1396678789",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "1396678789",
+        "title": "Take California",
+        "recordingUrl": "https://music.apple.com/us/song/take-california/1396678789",
+        "durationIso": "PT7M21S",
+        "durationSeconds": 441,
+        "position": 17
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1396678789,
+        "artistId": 3444766,
+        "artistName": "Propellerheads",
+        "trackName": "Take California",
+        "trackViewUrl": "https://music.apple.com/us/album/take-california/1396678787?i=1396678789&uo=4",
+        "collectionId": 1396678787,
+        "collectionName": "Decksandrumsandrockandroll 20th Anniversary",
+        "trackTimeMillis": 441760,
+        "releaseDate": "1998-01-01T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3f/11/ac/3f11ac5b-69ca-bbb8-18be-ddd0e3a2e8b7/mzaf_10860549742340277721.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2f/72/31/2f7231ae-1531-4bea-d025-22e13bb7f2ed/cover.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:46.163Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=1396678789&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:10.208Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3f/11/ac/3f11ac5b-69ca-bbb8-18be-ddd0e3a2e8b7/mzaf_10860549742340277721.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1164769,
+        "sha256": "64f1b1b95474d701ba8074eaef3ef3ffd756a87f7db86c80fd176efdc502fd5b",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.000055,
+        "mediaDurationSeconds": 30,
+        "currentTimeAfter": 0.307293,
+        "mediaError": null
+      }
+    },
+    {
+      "style": "big_beat",
+      "artist": "The Wiseguys",
+      "song": "Ooh la La",
+      "appleTrackId": "260027594",
+      "bpm": null,
+      "bpmSource": null,
+      "editorialMembership": {
+        "id": "260027594",
+        "title": "Ooh la La",
+        "recordingUrl": "https://music.apple.com/us/song/ooh-la-la/260027594",
+        "durationIso": "PT5M53S",
+        "durationSeconds": 353,
+        "position": 6
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 260027594,
+        "artistId": 27485953,
+        "artistName": "The Wiseguys",
+        "trackName": "Ooh la La",
+        "trackViewUrl": "https://music.apple.com/us/album/ooh-la-la/260027275?i=260027594&uo=4",
+        "collectionId": 260027275,
+        "collectionName": "The Antidote",
+        "trackTimeMillis": 353400,
+        "releaseDate": "1998-10-05T07:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d4/1c/00/d41c00f4-3b3b-1021-9f21-44330fe2347e/mzaf_5279067943163457354.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/86/26/a6/8626a6da-2442-7734-4c41-6b268363765a/mzi.yslwhqih.tif/100x100bb.jpg",
+        "primaryGenreName": "Hip-Hop/Rap",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T17:44:46.473Z"
+      },
+      "lookupUrl": "https://itunes.apple.com/lookup?id=260027594&entity=song&country=us",
+      "audioVerification": {
+        "observedAt": "2026-11-10T17:47:12.057Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d4/1c/00/d41c00f4-3b3b-1021-9f21-44330fe2347e/mzaf_5279067943163457354.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 996131,
+        "sha256": "6b19cf9849541fb659969e445c32afecd645f645ca1ad1621924cf737a499b28",
+        "decoder": "Chromium HTMLMediaElement, unmodified native AAC decode and playback",
+        "currentTimeBefore": 0.000056,
+        "mediaDurationSeconds": 30.000181,
+        "currentTimeAfter": 0.316174,
+        "mediaError": null
+      }
+    }
+  ],
+  "observedAt": "2026-11-10T17:47:12.058Z",
+  "playlistObservation": {
+    "name": "Big Beat Essentials",
+    "author": "Apple Music",
+    "url": "https://music.apple.com/us/playlist/big-beat-essentials/pl.78e98b7f1ea842dc807bd646ab37083e",
+    "numTracks": 49,
+    "tracks": [
+      {
+        "id": "1635966361",
+        "title": "Block Rockin' Beats",
+        "recordingUrl": "https://music.apple.com/us/song/block-rockin-beats/1635966361",
+        "durationIso": "PT5M13S",
+        "durationSeconds": 313,
+        "position": 1
+      },
+      {
+        "id": "714928145",
+        "title": "The Rockafeller Skank",
+        "recordingUrl": "https://music.apple.com/us/song/the-rockafeller-skank/714928145",
+        "durationIso": "PT6M53S",
+        "durationSeconds": 413,
+        "position": 2
+      },
+      {
+        "id": "574422934",
+        "title": "Breathe",
+        "recordingUrl": "https://music.apple.com/us/song/breathe/574422934",
+        "durationIso": "PT5M36S",
+        "durationSeconds": 336,
+        "position": 3
+      },
+      {
+        "id": "714052823",
+        "title": "Brimful of Asha (Norman Cook Remix)",
+        "recordingUrl": "https://music.apple.com/us/song/brimful-of-asha-norman-cook-remix/714052823",
+        "durationIso": "PT4M",
+        "durationSeconds": 240,
+        "position": 4
+      },
+      {
+        "id": "1396678797",
+        "title": "History Repeating (Knee Length Mix) [feat. Shirley Bassey]",
+        "recordingUrl": "https://music.apple.com/us/song/history-repeating-knee-length-mix-feat-shirley-bassey/1396678797",
+        "durationIso": "PT4M2S",
+        "durationSeconds": 242,
+        "position": 5
+      },
+      {
+        "id": "260027594",
+        "title": "Ooh la La",
+        "recordingUrl": "https://music.apple.com/us/song/ooh-la-la/260027594",
+        "durationIso": "PT5M53S",
+        "durationSeconds": 353,
+        "position": 6
+      },
+      {
+        "id": "691484985",
+        "title": "Bentley's Gonna Sort You Out",
+        "recordingUrl": "https://music.apple.com/us/song/bentleys-gonna-sort-you-out/691484985",
+        "durationIso": "PT4M55S",
+        "durationSeconds": 295,
+        "position": 7
+      },
+      {
+        "id": "1444046410",
+        "title": "My Mate Paul",
+        "recordingUrl": "https://music.apple.com/us/song/my-mate-paul/1444046410",
+        "durationIso": "PT5M13S",
+        "durationSeconds": 313,
+        "position": 8
+      },
+      {
+        "id": "1250521576",
+        "title": "Casual Sub (Burning Spear) [45 Radio Edit]",
+        "recordingUrl": "https://music.apple.com/us/song/casual-sub-burning-spear-45-radio-edit/1250521576",
+        "durationIso": "PT3M41S",
+        "durationSeconds": 221,
+        "position": 9
+      },
+      {
+        "id": "897730495",
+        "title": "Battle Flag (Lo Fidelity Allstars Remix)",
+        "recordingUrl": "https://music.apple.com/us/song/battle-flag-lo-fidelity-allstars-remix/897730495",
+        "durationIso": "PT5M40S",
+        "durationSeconds": 340,
+        "position": 10
+      },
+      {
+        "id": "304756748",
+        "title": "I See You Baby",
+        "recordingUrl": "https://music.apple.com/us/song/i-see-you-baby/304756748",
+        "durationIso": "PT4M41S",
+        "durationSeconds": 281,
+        "position": 11
+      },
+      {
+        "id": "714928246",
+        "title": "Praise You",
+        "recordingUrl": "https://music.apple.com/us/song/praise-you/714928246",
+        "durationIso": "PT5M23S",
+        "durationSeconds": 323,
+        "position": 12
+      },
+      {
+        "id": "1436260103",
+        "title": "Dog in the Piano (Dirty Edit)",
+        "recordingUrl": "https://music.apple.com/us/song/dog-in-the-piano-dirty-edit/1436260103",
+        "durationIso": "PT4M32S",
+        "durationSeconds": 272,
+        "position": 13
+      },
+      {
+        "id": "723671344",
+        "title": "Leave Home",
+        "recordingUrl": "https://music.apple.com/us/song/leave-home/723671344",
+        "durationIso": "PT5M32S",
+        "durationSeconds": 332,
+        "position": 14
+      },
+      {
+        "id": "259980820",
+        "title": "What's Going On? (feat. Roxanne Shanté)",
+        "recordingUrl": "https://music.apple.com/us/song/whats-going-on-feat-roxanne-shant%C3%A9/259980820",
+        "durationIso": "PT4M13S",
+        "durationSeconds": 253,
+        "position": 15
+      },
+      {
+        "id": "532846800",
+        "title": "Rude Boy Rock",
+        "recordingUrl": "https://music.apple.com/us/song/rude-boy-rock/532846800",
+        "durationIso": "PT4M48S",
+        "durationSeconds": 288,
+        "position": 16
+      },
+      {
+        "id": "1396678789",
+        "title": "Take California",
+        "recordingUrl": "https://music.apple.com/us/song/take-california/1396678789",
+        "durationIso": "PT7M21S",
+        "durationSeconds": 441,
+        "position": 17
+      },
+      {
+        "id": "574422933",
+        "title": "Smack My Bitch Up",
+        "recordingUrl": "https://music.apple.com/us/song/smack-my-bitch-up/574422933",
+        "durationIso": "PT5M43S",
+        "durationSeconds": 343,
+        "position": 18
+      },
+      {
+        "id": "957908168",
+        "title": "Busy Child",
+        "recordingUrl": "https://music.apple.com/us/song/busy-child/957908168",
+        "durationIso": "PT7M26S",
+        "durationSeconds": 446,
+        "position": 19
+      },
+      {
+        "id": "1435822766",
+        "title": "Devil in Sports Casual",
+        "recordingUrl": "https://music.apple.com/us/song/devil-in-sports-casual/1435822766",
+        "durationIso": "PT5M59S",
+        "durationSeconds": 359,
+        "position": 20
+      },
+      {
+        "id": "714769753",
+        "title": "We Have Explosive",
+        "recordingUrl": "https://music.apple.com/us/song/we-have-explosive/714769753",
+        "durationIso": "PT6M19S",
+        "durationSeconds": 379,
+        "position": 21
+      },
+      {
+        "id": "1090119373",
+        "title": "Sexiest Man in Jamaica",
+        "recordingUrl": "https://music.apple.com/us/song/sexiest-man-in-jamaica/1090119373",
+        "durationIso": "PT4M4S",
+        "durationSeconds": 244,
+        "position": 22
+      },
+      {
+        "id": "1225212642",
+        "title": "Inspection (Check One) [Remastered]",
+        "recordingUrl": "https://music.apple.com/us/song/inspection-check-one-remastered/1225212642",
+        "durationIso": "PT6M29S",
+        "durationSeconds": 389,
+        "position": 23
+      },
+      {
+        "id": "6808405179",
+        "title": "Everybody Needs A 303",
+        "recordingUrl": "https://music.apple.com/us/song/everybody-needs-a-303/6808405179",
+        "durationIso": "PT5M48S",
+        "durationSeconds": 348,
+        "position": 24
+      },
+      {
+        "id": "723671398",
+        "title": "Song to the Siren",
+        "recordingUrl": "https://music.apple.com/us/song/song-to-the-siren/723671398",
+        "durationIso": "PT3M16S",
+        "durationSeconds": 196,
+        "position": 25
+      },
+      {
+        "id": "1435629300",
+        "title": "Indian Ropeman",
+        "recordingUrl": "https://music.apple.com/us/song/indian-ropeman/1435629300",
+        "durationIso": "PT4M24S",
+        "durationSeconds": 264,
+        "position": 26
+      },
+      {
+        "id": "1741027509",
+        "title": "Poison (Remastered)",
+        "recordingUrl": "https://music.apple.com/us/song/poison-remastered/1741027509",
+        "durationIso": "PT6M42S",
+        "durationSeconds": 402,
+        "position": 27
+      },
+      {
+        "id": "214143643",
+        "title": "Trickshot",
+        "recordingUrl": "https://music.apple.com/us/song/trickshot/214143643",
+        "durationIso": "PT6M58S",
+        "durationSeconds": 418,
+        "position": 28
+      },
+      {
+        "id": "1174915174",
+        "title": "That Elvis Track (Radio Edit)",
+        "recordingUrl": "https://music.apple.com/us/song/that-elvis-track-radio-edit/1174915174",
+        "durationIso": "PT4M2S",
+        "durationSeconds": 242,
+        "position": 29
+      },
+      {
+        "id": "1752142787",
+        "title": "To Get Down",
+        "recordingUrl": "https://music.apple.com/us/song/to-get-down/1752142787",
+        "durationIso": "PT3M32S",
+        "durationSeconds": 212,
+        "position": 30
+      },
+      {
+        "id": "1396679402",
+        "title": "Spybreak!",
+        "recordingUrl": "https://music.apple.com/us/song/spybreak/1396679402",
+        "durationIso": "PT7M",
+        "durationSeconds": 420,
+        "position": 31
+      },
+      {
+        "id": "260030052",
+        "title": "Start the Commotion",
+        "recordingUrl": "https://music.apple.com/us/song/start-the-commotion/260030052",
+        "durationIso": "PT5M51S",
+        "durationSeconds": 351,
+        "position": 32
+      },
+      {
+        "id": "127293281",
+        "title": "Badder Badder Schwing",
+        "recordingUrl": "https://music.apple.com/us/song/badder-badder-schwing/127293281",
+        "durationIso": "PT3M26S",
+        "durationSeconds": 206,
+        "position": 33
+      },
+      {
+        "id": "424199783",
+        "title": "Ain't Talkin' 'Bout Dub",
+        "recordingUrl": "https://music.apple.com/us/song/aint-talkin-bout-dub/424199783",
+        "durationIso": "PT4M30S",
+        "durationSeconds": 270,
+        "position": 34
+      },
+      {
+        "id": "714366703",
+        "title": "Setting Sun",
+        "recordingUrl": "https://music.apple.com/us/song/setting-sun/714366703",
+        "durationIso": "PT5M28S",
+        "durationSeconds": 328,
+        "position": 35
+      },
+      {
+        "id": "1145415390",
+        "title": "B-Boy Stance",
+        "recordingUrl": "https://music.apple.com/us/song/b-boy-stance/1145415390",
+        "durationIso": "PT4M36S",
+        "durationSeconds": 276,
+        "position": 36
+      },
+      {
+        "id": "258318574",
+        "title": "Exploration",
+        "recordingUrl": "https://music.apple.com/us/song/exploration/258318574",
+        "durationIso": "PT5M35S",
+        "durationSeconds": 335,
+        "position": 37
+      },
+      {
+        "id": "1469551563",
+        "title": "Policeman Skank (The Story Of My Life)",
+        "recordingUrl": "https://music.apple.com/us/song/policeman-skank-the-story-of-my-life/1469551563",
+        "durationIso": "PT4M32S",
+        "durationSeconds": 272,
+        "position": 38
+      },
+      {
+        "id": "714928219",
+        "title": "Gangster Trippin'",
+        "recordingUrl": "https://music.apple.com/us/song/gangster-trippin/714928219",
+        "durationIso": "PT5M20S",
+        "durationSeconds": 320,
+        "position": 39
+      },
+      {
+        "id": "1383051608",
+        "title": "Seize the Time",
+        "recordingUrl": "https://music.apple.com/us/song/seize-the-time/1383051608",
+        "durationIso": "PT4M49S",
+        "durationSeconds": 289,
+        "position": 40
+      },
+      {
+        "id": "574422946",
+        "title": "Firestarter",
+        "recordingUrl": "https://music.apple.com/us/song/firestarter/574422946",
+        "durationIso": "PT4M39S",
+        "durationSeconds": 279,
+        "position": 41
+      },
+      {
+        "id": "299632120",
+        "title": "Psychopath",
+        "recordingUrl": "https://music.apple.com/us/song/psychopath/299632120",
+        "durationIso": "PT5M7S",
+        "durationSeconds": 307,
+        "position": 42
+      },
+      {
+        "id": "1477101639",
+        "title": "The Funk Phenomena (Radio Edit)",
+        "recordingUrl": "https://music.apple.com/us/song/the-funk-phenomena-radio-edit/1477101639",
+        "durationIso": "PT3M49S",
+        "durationSeconds": 229,
+        "position": 43
+      },
+      {
+        "id": "304756745",
+        "title": "If Everybody Looked the Same",
+        "recordingUrl": "https://music.apple.com/us/song/if-everybody-looked-the-same/304756745",
+        "durationIso": "PT3M38S",
+        "durationSeconds": 218,
+        "position": 44
+      },
+      {
+        "id": "1435654673",
+        "title": "Post Punk Progression",
+        "recordingUrl": "https://music.apple.com/us/song/post-punk-progression/1435654673",
+        "durationIso": "PT5M26S",
+        "durationSeconds": 326,
+        "position": 45
+      },
+      {
+        "id": "1443890277",
+        "title": "Psyché Rock (Fatboy Slim Malpaso Mix)",
+        "recordingUrl": "https://music.apple.com/us/song/psych%C3%A9-rock-fatboy-slim-malpaso-mix/1443890277",
+        "durationIso": "PT6M30S",
+        "durationSeconds": 390,
+        "position": 46
+      },
+      {
+        "id": "1436211729",
+        "title": "Kool Roc Bass",
+        "recordingUrl": "https://music.apple.com/us/song/kool-roc-bass/1436211729",
+        "durationIso": "PT7M40S",
+        "durationSeconds": 460,
+        "position": 47
+      },
+      {
+        "id": "714928131",
+        "title": "Right Here, Right Now",
+        "recordingUrl": "https://music.apple.com/us/song/right-here-right-now/714928131",
+        "durationIso": "PT6M27S",
+        "durationSeconds": 387,
+        "position": 48
+      },
+      {
+        "id": "714366739",
+        "title": "The Private Psychedelic Reel",
+        "recordingUrl": "https://music.apple.com/us/song/the-private-psychedelic-reel/714366739",
+        "durationIso": "PT9M21S",
+        "durationSeconds": 561,
+        "position": 49
+      }
+    ]
+  },
+  "playlistHtmlSha256": "b085c5e25b1c8dd38d92395a07744ad5f1ae9b7ddfede04c78419d886cf371e7",
+  "requestsThisRun": {
+    "provider": 0,
+    "audio": 6
+  },
+  "initialVerificationRequestAudit": {
+    "metadataRequests": 8,
+    "metadataBreakdown": {
+      "appleMusicPageReads": 2,
+      "exactAppleIdLookups": 6
+    },
+    "audioGets": 6,
+    "retries": 0,
+    "credentialsUsed": false,
+    "note": "The first playlist read used the web reader; the second captured its public HTML/JSON-LD. Exact-ID lookup responses were cached and reused by the audio verification script. requestsThisRun refers only to that final capture run."
+  }
+}
