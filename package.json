@@ -38,6 +38,7 @@
     "test:sound-system-listening": "node scripts/test-sound-system-listening.mjs",
     "test:spirit-image": "node scripts/test-spirit-image.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
+    "test:weekly-listening": "node scripts/test-weekly-listening.mjs",
     "test:premium-visibility": "node scripts/test-premium-promo-visibility.mjs",
     "test:newsroom": "node scripts/test-newsroom.mjs",
     "test:newsroom-visuals": "node scripts/test-newsroom-visuals.mjs",

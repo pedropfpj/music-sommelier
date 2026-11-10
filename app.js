@@ -56197,6 +56197,7 @@ function scheduleRecommendationDetailRender(track, prefs) {
 function renderRecommendation(track, prefs) {
   track = applyCuratedTrackMetadata(track);
   if (!track || !isTrackEligibleForRecommendation(track)) return false;
+  weeklyRecommendsController?.trackChanged?.(track);
   setActiveAppTab("discover");
   pendingQuickKnownAdvance = null;
   const meta = getTrackMetadata(track);
@@ -58615,6 +58616,44 @@ function selectLibraryTracks(entries) {
     document.getElementById("librarySearch")?.value || "",
     document.getElementById("libraryOrder")?.value || "recent",
     currentLocale(), styleLabelByValue);
+}
+
+async function openWeeklyEditionTrack(item = {}, context = {}) {
+  if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return { ok: false, reason: "busy" };
+  if (!item.artist || !item.title || !item.style) return { ok: false, reason: "unavailable" };
+  const profileKey = sessionProfileKey();
+  const previousTrack = currentRecommendation;
+  const previousTab = currentActiveAppTabName();
+  const stillCurrent = () => profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && context.isCurrent?.() !== false;
+  recommendationRunBusy = true;
+  prepareExplicitPreviewAudio();
+  try {
+    // Replay this edition's exact recording; never substitute a recommendation
+    // from the same artist or style when the archived recording is unavailable.
+    const requestedKey = recommendationTrackKey({ artist: item.artist, song: item.title });
+    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(candidate =>
+      candidate && candidate.style === item.style && recommendationTrackKey(candidate) === requestedKey && isTrackEligibleForRecommendation(candidate));
+    let track = resolveTrack();
+    if (!track) {
+      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: item.style }), 8000, null);
+      track = resolveTrack();
+    }
+    if (!stillCurrent()) return { ok: false, reason: "canceled" };
+    if (!track) return { ok: false, reason: "unavailable" };
+    stopAllActivePlayback({ reason: "weekly_edition_track" });
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
+    firstRecommendationCompleted = true;
+    markRecommendationPresented(track);
+    updateStats();
+    const playable = await renderPreview(track, { fast: true });
+    if (profileKey !== sessionProfileKey() || context.isCurrent?.() === false) return { ok: false, reason: "canceled" };
+    trackRecommendationEvent("weekly_track_opened", track, lastPrefs || {}, { source: "weekly_recommends", edition: context.edition || "", position: context.position || 0 });
+    return { ok: Boolean(playable), reason: playable ? "" : "unavailable" };
+  } catch (_) {
+    return { ok: false, reason: "unavailable" };
+  } finally {
+    recommendationRunBusy = false;
+  }
 }
 
 async function openSavedLibraryTrack(entry, button) {
@@ -65877,7 +65916,8 @@ async function bootSonicSearch() {
   weeklyRecommendsController = window.SonicWeeklyRecommends?.mount(document.getElementById("weeklyRecommendsPanel"), {
     getLanguage: () => currentLanguage,
     navigate: tab => setActiveAppTab(tab, { focusPanel: true }),
-    beforeListen: () => stopAllActivePlayback({ reason: "weekly_recommendation" })
+    beforeListen: () => stopAllActivePlayback({ reason: "weekly_recommendation" }),
+    listenToTrack: openWeeklyEditionTrack
   });
   if (currentActiveAppTabName() === "recommends") void weeklyRecommendsController?.open();
   window.SonicUniversalDiscoveryUi?.mount(document.getElementById("universalDiscoveryPanel"), {
