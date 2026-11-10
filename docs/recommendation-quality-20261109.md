@@ -12,9 +12,19 @@ Esta alteração reduz a repetição de artistas e gravações nos fluxos de des
 
 A opção interna explícita `allowKnownFallback` continua disponível: permite outra gravação de um artista conhecido, respeitando gravações já ouvidas, artistas recentes e bloqueios explícitos. Os caminhos normais de descoberta e recuperação de áudio não a habilitam automaticamente.
 
+## Primeira sugestão
+
+A rotação instantânea usa diretamente as gravações elegíveis com áudio pronto, sem cair sempre no primeiro item de uma lista fixa. No catálogo desta versão, esse conjunto contém 17 gravações em 16 estilos. Para um perfil com sinais de gosto, a rotação fica restrita a candidatos próximos em afinidade e qualidade; filtros manuais e calibração explícita mantêm prioridade. Sem esses sinais, trata-se de variedade de abertura, sem alegar personalização.
+
+O pedido do índice global começa depois da ativação da identidade. Um toque muito cedo continua iniciando o áudio de forma síncrona com o índice local; a resposta atrasada não altera o cartão nem o índice já usado. O caminho inicial assíncrono aguarda o pedido por um tempo limitado. O histórico alternativo em sessionStorage é lido com a mesma chave do perfil, sem misturar contas. No servidor, falhas do Redis permitem tentar o Supabase; respostas inválidas não são interpretadas como índice zero.
+
+A busca filtrada e a conclusão da calibração só anunciam sucesso após uma faixa elegível ser realmente apresentada. Respostas de um pedido anterior, após troca de perfil ou filtros, são descartadas.
+
 ## Validação
 
 `npm run test:recommendation-quality` executa regressões de ranking, gravação e recarga do histórico, recuperação de áudio, esgotamento e fila. Os testes exercitam as funções reais do aplicativo; provedores e efeitos de apresentação são isolados quando necessário.
+
+`npm run test:cold-start-opening`, `node scripts/test-opening-store-recovery.mjs` e `node scripts/test-calibration-result-contract.mjs` verificam a rotação sobre o catálogo real, o efeito de sinais opostos de gosto, o toque antecipado, os retornos atrasados, a recuperação entre armazenamentos e a confirmação de resultado. A rotação distribui um conjunto finito e não garante uma faixa inédita para cada pessoa.
 
 O benchmark usa gravações do catálogo em sete estilos: psycore, dark psy, hi-tech, slambient, techno, house e drum and bass. As três rotas de seleção compartilham o mesmo histórico e entregam 21 recomendações sem repetir artista, colaborador ou faixa. Depois de registrar as demais opções como apresentadas, as três rotas retornam ausência de candidato, sem limpar a memória para fabricar variedade.
 
