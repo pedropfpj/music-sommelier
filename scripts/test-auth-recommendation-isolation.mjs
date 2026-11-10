@@ -112,9 +112,11 @@ vm.runInContext(`
   var openingRotationSlot = 44;
   var openingRotationSlotPromise = Promise.resolve(44);
   var openingRotationSlotSource = "global_durable";
+  var openingRotationSlotFrozen = false;
   var openingRotationGeneration = 0;
   var openingRotationSessionIdentity = "";
   var runtimeSeedCounter = 0;
+  var prefetchedIdentities = [];
   const CURATION_SEED_STORAGE_KEY = "neonpulse:curationSeed:v1";
   const CURATION_VISIT_STORAGE_KEY = "neonpulse:curationVisitCounter:v1";
 
@@ -124,6 +126,10 @@ vm.runInContext(`
   function createRuntimeCurationSeed() {
     runtimeSeedCounter += 1;
     return "runtime-seed-" + runtimeSeedCounter;
+  }
+  async function ensureOpeningRotationSlot() {
+    prefetchedIdentities.push(activeRecommendationSessionIdentity);
+    return null;
   }
 
   ${extractFunction("normalizeAuthMode")}
@@ -195,6 +201,8 @@ assert.equal(context.activeRecommendationSessionIdentity, "google:user-b");
 assert.equal(context.openingRotationGeneration, firstOpeningGeneration + 1);
 assert.equal(context.openingRotationSlot, null, "Changing accounts must request a fresh opening slot");
 assert.equal(context.curationUserSeed, "", "Changing accounts must drop the previous seed cache");
+await Promise.resolve();
+assert.deepEqual(Array.from(context.prefetchedIdentities), ["google:user-b"], "Only the final active identity may start the deferred prefetch");
 
 context.currentAuthUser = context.normalizeUserSession(googleA);
 const seedA = context.currentCurationUserSeed();

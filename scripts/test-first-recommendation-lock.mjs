@@ -293,7 +293,18 @@ async function testConcurrentRequestsShareOneAttempt() {
 async function testHydratedCatalogUsesInstantLocalTrack() {
   const harness = createHarness({ instantAfterReady: true });
   const result = await harness.context.runInitialRecommendation({
-    source: "manual",
+    source: "manual"
+  });
+  assert.equal(result, true);
+  assert.equal(harness.context.firstRecommendationCompleted, true);
+  assert.equal(harness.state.runnerCount, 0);
+  await assertReleased(harness);
+}
+
+async function testExplicitInitialRunnerPrecedesGenericOpening() {
+  const harness = createHarness({ instantAfterReady: true });
+  const result = await harness.context.runInitialRecommendation({
+    source: "calibration",
     initialRunner: async () => {
       harness.state.runnerCount += 1;
       return true;
@@ -301,7 +312,7 @@ async function testHydratedCatalogUsesInstantLocalTrack() {
   });
   assert.equal(result, true);
   assert.equal(harness.context.firstRecommendationCompleted, true);
-  assert.equal(harness.state.runnerCount, 0);
+  assert.equal(harness.state.runnerCount, 1);
   await assertReleased(harness);
 }
 
@@ -345,6 +356,7 @@ const tests = [
   ["catalog timeout allows fallback and retry", testTimeoutAllowsFallbackAndRetry],
   ["concurrent requests share one attempt", testConcurrentRequestsShareOneAttempt],
   ["hydrated catalog uses instant local track", testHydratedCatalogUsesInstantLocalTrack],
+  ["explicit initial runner precedes generic opening", testExplicitInitialRunnerPrecedesGenericOpening],
   ["session switch discards pending attempt", testSessionSwitchDiscardsPendingAttempt]
 ];
 

@@ -61,6 +61,7 @@
     "test:low-coverage-expansion": "node scripts/test-low-coverage-subgenre-expansion-v21.mjs",
     "test:auth-recommendation-isolation": "node scripts/test-auth-recommendation-isolation.mjs",
     "test:opening-rotation": "node scripts/test-opening-rotation.mjs",
+    "test:cold-start-opening": "node scripts/test-cold-start-opening.mjs",
     "test:dj-player-swipe": "node scripts/test-dj-player-swipe.mjs",
     "test:daily-djs": "node scripts/test-daily-djs.mjs",
     "test:unlimited-likes": "node scripts/test-daily-like-limit.mjs",

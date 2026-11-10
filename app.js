@@ -10597,6 +10597,7 @@ const curationOpenSeed = createRuntimeCurationSeed();
 let openingRotationSlot = null;
 let openingRotationSlotPromise = null;
 let openingRotationSlotSource = "";
+let openingRotationSlotFrozen = false;
 let openingRotationGeneration = 0;
 let openingRotationSessionIdentity = "";
 let swipeStyleRailExpanded = false;
@@ -29526,17 +29527,26 @@ function normalizeAnonymousOpeningHistory(entries = []) {
 }
 
 function readAnonymousOpeningHistory() {
-  try {
-    const storageKey = openingHistoryStorageKey();
-    const current = storageKey ? localStorage.getItem(storageKey) : "";
-    if (current) return normalizeAnonymousOpeningHistory(JSON.parse(current));
-    const legacy = normalizeUserSession(currentAuthUser).mode === "guest"
-      ? sessionStorage.getItem(LEGACY_ANONYMOUS_OPENING_HISTORY_KEY)
-      : "";
-    return normalizeAnonymousOpeningHistory(JSON.parse(legacy || "[]"));
-  } catch (_err) {
-    return [];
+  const storageKey = openingHistoryStorageKey();
+  if (!storageKey) return [];
+  const snapshots = [];
+  // A failed persistent write uses this same identity's session key. Read it
+  // independently: a localStorage exception must not hide the fallback copy.
+  for (const read of [
+    () => sessionStorage.getItem(storageKey),
+    () => localStorage.getItem(storageKey),
+    () => normalizeUserSession(currentAuthUser).mode === "guest"
+      ? sessionStorage.getItem(LEGACY_ANONYMOUS_OPENING_HISTORY_KEY) : ""
+  ]) {
+    try { snapshots.push(...normalizeAnonymousOpeningHistory(JSON.parse(read() || "[]"))); }
+    catch (_err) { /* The other storage source can still contain valid history. */ }
   }
+  const merged = new Map();
+  for (const entry of snapshots) {
+    const key = entry.trackKey || `${entry.artistKey}::${entry.style}`;
+    if (!merged.has(key) || entry.at > merged.get(key).at) merged.set(key, entry);
+  }
+  return normalizeAnonymousOpeningHistory(Array.from(merged.values()).sort((a, b) => b.at - a.at));
 }
 
 function seedAnonymousOpeningExclusions() {
@@ -35969,7 +35979,30 @@ function pickSurpriseTrackFromAnotherGenre(
   );
 }
 
-function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set() } = {}) {
+function openingHasTasteSignals() {
+  const maps = [adaptiveModel.likedStyles, adaptiveModel.dislikedStyles, adaptiveModel.likedArtists, adaptiveModel.dislikedArtists, trackPreferenceSignals];
+  return maps.some(map => Array.from(map.values()).some(value => Number.isFinite(Number(value)) && Number(value) !== 0)) ||
+    Boolean(socialState.session?.user?.id && socialState.profile?.id === socialState.session.user.id && socialState.profile?.musical_preferences?.length);
+}
+
+function openingRotationCandidateCohort(styleEntries = [], personalized = false) {
+  let candidates = styleEntries.flatMap(entry => {
+    const styleAffinity = (Number(adaptiveModel.likedStyles.get(entry.style) || 0) - Number(adaptiveModel.dislikedStyles.get(entry.style) || 0)) * 0.9;
+    return entry.pool.map(track => ({ track, quality: entry.qualityScore, affinity: styleAffinity + personalTasteScore(track, {}) }));
+  });
+  if (personalized && candidates.length) {
+    // Rotation is a tie-break among comparable candidates, not a replacement
+    // for the listener's actual feedback. New listeners retain the full safe deck.
+    const bestAffinity = Math.max(...candidates.map(candidate => candidate.affinity));
+    const affinityBand = Math.max(1.25, Math.min(4, Math.abs(bestAffinity) * 0.18));
+    candidates = candidates.filter(candidate => candidate.affinity >= bestAffinity - affinityBand);
+    const bestQuality = Math.max(...candidates.map(candidate => candidate.quality));
+    candidates = candidates.filter(candidate => candidate.quality >= bestQuality - 11);
+  }
+  return Array.from(new Map(candidates.map(({ track }) => [recommendationTrackKey(track), track])).values());
+}
+
+function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys = new Set(), blockedTrackTitles = new Set(), requireInstantPlayback = false } = {}) {
   const openingHistory = readAnonymousOpeningHistory();
   const recentTrackKeys = new Set(openingHistory.map((entry) => entry.trackKey).filter(Boolean));
   const recentArtistKeys = new Set(openingHistory.slice(0, 10).map((entry) => entry.artistKey).filter(Boolean));
@@ -35981,6 +36014,7 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
   if (!styles.length) return null;
   const visitId = currentCurationVisitId();
   const userSeed = currentCurationUserSeed();
+  const personalized = openingHasTasteSignals();
   const styleEntries = styles
     .map((style) => {
       const available = catalogTracksForStyle(style).filter((track) => {
@@ -35989,6 +36023,7 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
         if (!isTrackEligibleForRecommendation(track)) return false;
         if (artistSetHasMatch(blockedArtists, track.artist)) return false;
         if (trackBlockedByKnownSignals(track, blockedTrackKeys, blockedTrackTitles)) return false;
+        if (requireInstantPlayback && !trackHasInstantPlaybackRoute(track)) return false;
         return surpriseTrackHasExactBpmAndPreview(track);
       });
       const curated = available.filter((track) => track.source === "friendly_opening_curated_v1");
@@ -36018,27 +36053,22 @@ function pickOpeningSurpriseTrack({ blockedArtists = new Set(), blockedTrackKeys
         recentRank === 1 ? 22 :
         recentRank < 5 ? 10 :
         recentRank < 10 ? 3.5 : 0;
-      const score =
-        seedNoise * 10.5 +
+      const qualityScore =
         rampScore * 1.25 +
         maturityScore * 0.65 +
         readiness * 1.25 +
-        adaptiveSignal * 0.9 +
         Math.min(pool.length, 28) * 0.11 +
         Math.min(uniqueArtists, 18) * 0.24 -
         exposureCount * 2.8 -
         recentStylePenalty;
-      return { style, pool, score };
+      const score = qualityScore + adaptiveSignal * 0.9 + (personalized ? 0 : seedNoise * 10.5);
+      return { style, pool, score, qualityScore };
     })
     .filter(Boolean)
     .sort((a, b) => b.score - a.score);
 
   if (!styleEntries.length) return null;
-  const rotationDeck = Array.from(new Map(
-    styleEntries
-      .flatMap((entry) => entry.pool)
-      .map((track) => [recommendationTrackKey(track), track])
-  ).values()).sort((a, b) => {
+  const rotationDeck = openingRotationCandidateCohort(styleEntries, personalized).sort((a, b) => {
     const aKey = recommendationTrackKey(a);
     const bKey = recommendationTrackKey(b);
     return (
@@ -50344,6 +50374,15 @@ function resetOpeningRotationForIdentity(identity = recommendationSessionIdentit
   openingRotationSlot = null;
   openingRotationSlotPromise = null;
   openingRotationSlotSource = "";
+  openingRotationSlotFrozen = false;
+  const generation = openingRotationGeneration;
+  // Boot begins before the account/local profile is activated. Start a fresh
+  // prefetch for the actual identity instead of leaving its first tap cold.
+  void Promise.resolve().then(() => {
+    if (generation === openingRotationGeneration && openingRotationSessionIdentity === activeRecommendationSessionIdentity) {
+      void ensureOpeningRotationSlot();
+    }
+  });
 }
 
 async function ensureOpeningRotationSlot({ timeoutMs = 950 } = {}) {
@@ -50361,6 +50400,7 @@ async function ensureOpeningRotationSlot({ timeoutMs = 950 } = {}) {
       requestIdentity !== openingRotationSessionIdentity ||
       requestIdentity !== activeRecommendationSessionIdentity
     ) return null;
+    if (openingRotationSlotFrozen) return openingRotationSlot;
     openingRotationSlot = slot;
     openingRotationSlotSource = source;
     return openingRotationSlot;
@@ -54953,7 +54993,8 @@ function pickInstantOpeningTrack() {
   const openingTrack = pickOpeningSurpriseTrack({
     blockedArtists: buildGlobalArtistExclusionSet(),
     blockedTrackKeys: knownTrackSignals.keys,
-    blockedTrackTitles: knownTrackSignals.titles
+    blockedTrackTitles: knownTrackSignals.titles,
+    requireInstantPlayback: true
   });
   if (openingTrack && trackHasInstantPlaybackRoute(openingTrack)) {
     return {
@@ -54966,56 +55007,6 @@ function pickInstantOpeningTrack() {
         vocals: ""
       })
     };
-  }
-  const curatedOpening = CURATED_FRIENDLY_OPENING_TRACKS.find((track) => (
-    track &&
-    isTrackEligibleForRecommendation(track) &&
-    trackAllowedForFriendlyFirstImpression(track) &&
-    trackHasInstantPlaybackRoute(track) &&
-    !trackBlockedByKnownSignals(track, knownTrackSignals.keys, knownTrackSignals.titles) &&
-    !recommendationArtistBlockedForPresentation(track, null)
-  ));
-  if (curatedOpening) {
-    return {
-      track: curatedOpening,
-      prefs: normalizeRecommendationPrefs({
-        style: curatedOpening.style,
-        context: "",
-        energy: "",
-        bpm: "",
-        vocals: ""
-      })
-    };
-  }
-  const rankedStyles = getAllSelectableStyles()
-    .filter((style) => style && FRIENDLY_FIRST_IMPRESSION_STYLE_SET.has(style))
-    .sort((a, b) => openingDiscoveryRampScore(b) - openingDiscoveryRampScore(a))
-    .slice(0, 6);
-
-  for (const requireDirectAudio of [true, false]) {
-    for (const style of rankedStyles) {
-      const prefs = normalizeRecommendationPrefs({
-        style,
-        context: "",
-        energy: "",
-        bpm: "",
-        vocals: ""
-      });
-      const pool = catalogTracksForStyle(style).filter((track) => {
-        if (!track || !isTrackEligibleForRecommendation(track)) return false;
-        if (!trackAllowedForFriendlyFirstImpression(track)) return false;
-        if (!artistAllowedForStyle(style, track.artist)) return false;
-        if (!labelAllowedForStyle(style, track.label)) return false;
-        if (!trackHasInstantPlaybackRoute(track)) return false;
-        if (requireDirectAudio && !trackHasReliableAudioPreview(track)) return false;
-        return anonymousExposurePenalty(track) < 70;
-      });
-      const candidate = pickBestRecommendationCandidate(pool, prefs, {
-        maxWindow: 16,
-        scoreBand: 9
-      });
-      if (candidate) return { track: candidate, prefs };
-    }
   }
   return null;
 }
@@ -55127,6 +55118,7 @@ function tryRunInstantPrimaryRecommendation() {
     interactionStartedAt
   });
   reportDiscoveryInteractionLatency("first_track", interactionStartedAt, presented);
+  if (presented) openingRotationSlotFrozen = true;
   if (presented) playUiSfx("search-done");
   return presented;
 }
@@ -55253,9 +55245,11 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       trackFirstRecommendationEvent("first_recommendation_requested", source, { retry: isRetry });
       if (isRetry) trackFirstRecommendationEvent("first_recommendation_retry", source);
 
-      // The curated opening deck is already part of the shipped bundle. Give
-      // it a second, immediate chance before any catalog or rotation wait.
-      if (tryRunInstantPrimaryRecommendation()) {
+      // Direct callers of this asynchronous path can wait for the bounded
+      // prefetch. The primary tap still has its synchronous audio path below.
+      await openingSlotRequest;
+      assertRecommendationSessionCurrent(sessionGeneration);
+      if (typeof initialRunner !== "function" && tryRunInstantPrimaryRecommendation()) {
         firstRecommendationCompleted = true;
         trackFirstRecommendationEvent("first_recommendation_ready", source, {
           catalogState: "instant_curated"
@@ -55269,7 +55263,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       // The first tap can arrive before the deferred local catalog hydration
       // finishes. Retry the zero-network path now that the local seeds are
       // ready, instead of entering the slower provider-validation pipeline.
-      if (tryRunInstantPrimaryRecommendation()) {
+      if (typeof initialRunner !== "function" && tryRunInstantPrimaryRecommendation()) {
         firstRecommendationCompleted = true;
         trackFirstRecommendationEvent("first_recommendation_ready", source, {
           catalogState: `${readiness.status}_instant_local`
@@ -55296,6 +55290,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
       const ready = await runner({ onFallback, readiness });
       assertRecommendationSessionCurrent(sessionGeneration);
       if (ready) {
+        openingRotationSlotFrozen = true;
         firstRecommendationCompleted = true;
         trackFirstRecommendationEvent("first_recommendation_ready", source, {
           catalogState: readiness.status
@@ -55362,7 +55357,10 @@ async function runPrimaryRecommendationAction({ source = "manual", initialRunner
     }
   }
   if (!firstRecommendationCompleted && !currentRecommendation) {
-    if (tryRunInstantPrimaryRecommendation()) {
+    // Prefetch normally resolves before this gesture. If the listener taps
+    // earlier, synchronous local playback wins and its slot is then frozen.
+    void ensureOpeningRotationSlot();
+    if (typeof initialRunner !== "function" && tryRunInstantPrimaryRecommendation()) {
       firstRecommendationCompleted = true;
       firstRecommendationRetryAvailable = false;
       trackFirstRecommendationEvent("first_recommendation_ready", source, {
