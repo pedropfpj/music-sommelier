@@ -86,7 +86,7 @@
     const local = /^(localhost|127\.0\.0\.1)$/.test(global.location.hostname);
     const query = new URLSearchParams(global.location.search);
     const previewMode = local && query.get('qa') === '1' && query.get('profilePreview') === '1';
-    let userId = '', generation = 0, loaded = false, loading = false, attempted = false, busy = false, dirty = false, editing = false;
+    let userId = '', generation = 0, saveRevision = 0, loaded = false, loading = false, attempted = false, busy = false, dirty = false, editing = false;
     let savedRow = null, avatarUrl = '', photoData = '', photoPreparing = false, photoGeneration = 0, removePhoto = false, timer = 0;
     const loginRetry = document.createElement('button'); loginRetry.type = 'button'; loginRetry.hidden = true; status.after(loginRetry);
     loginRetry.addEventListener('click', () => { persistDraft(); adapter.signIn(); });
@@ -247,7 +247,7 @@
       const body = draft(), invalid = validate(body);
       [name, handle, bio].forEach(el => el.removeAttribute('aria-invalid'));
       if (invalid) { tell(invalid, true); const field = ({ invalid_display_name: name, invalid_username: handle, invalid_bio: bio }[invalid]); field.setAttribute('aria-invalid', 'true'); field.focus(); return; }
-      const token = generation; busy = true; tell('saving'); render();
+      const token = generation; saveRevision++; busy = true; tell('saving'); render();
       try {
         const result = previewMode ? {
           profile: { ...savedRow, display_name: body.displayName.trim(), username: body.username.trim(), bio: body.bio.trim(),
@@ -355,10 +355,12 @@
     // Refresh owner photo capabilities only when this card is visible; never publish a URL.
     timer = global.setInterval(async () => {
       if (!userId || !loaded || busy || previewMode || !root.getBoundingClientRect().height || document.hidden) return;
-      const token = generation;
+      const token = generation, revision = saveRevision;
       try {
         const result = await call();
-        if (token !== generation || busy) return;
+        // A refresh started before an editor save cannot restore its older
+        // name, privacy choices or photo after that save has completed.
+        if (token !== generation || revision !== saveRevision || busy) return;
         if (!editing && !dirty) {
           savedRow = result.profile; avatarUrl = result.avatarUrl || ''; adapter.onLoaded?.(savedRow, avatarUrl); resetDraft();
         } else if (result.profile?.avatar_path === savedRow?.avatar_path) {
