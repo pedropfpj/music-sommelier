@@ -24754,7 +24754,7 @@ const I18N = {
     aboutFlowStepThree: "Use o Filtro manual quando quiser subgênero, BPM ou contexto específico.",
     aboutFlowStepFour: "Revise curtidas, descartes e seu Sound System no Perfil.",
     aboutTrustTitle: "Como ler a confiança",
-    aboutTrustText: "Confiança alta = fonte, player, BPM e perfil. Sem certeza, usamos o estilo amplo.",
+    aboutTrustText: "Afinidade com seu gosto e evidência musical aparecem separadas. Consulte os detalhes da faixa.",
     swipeStartButton: "Ouvir uma faixa",
     swipeStartBusy: "Preparando...",
     swipeNextButton: "Outra faixa",
@@ -24985,8 +24985,8 @@ const I18N = {
     recommendationWhyStrongFit: "Boa aposta: sinais alinhados",
     recommendationWhyTrustedSource: "Fonte/player mais confiável",
     recommendationWhyProfileSignal: "Conversa com seu perfil",
-    recommendationTrustLabel: "Confiança",
-    recommendationTrustChip: "Confiança {score}%",
+    recommendationTrustLabel: "Para você",
+    recommendationTrustChip: "Afinidade pessoal",
     recommendationTrustReasonHigh: "Alta: fonte, player, pulso e histórico contam a mesma história.",
     recommendationTrustReasonMedium: "Boa: há sinais consistentes, mas o perfil ainda está abrindo caminho.",
     recommendationTrustReasonLow: "Exploratória: vale ouvir como teste, não como certeza.",
@@ -25673,7 +25673,7 @@ const I18N = {
     aboutFlowStepThree: "Use Manual filter when you want a specific subgenre, BPM, or context.",
     aboutFlowStepFour: "Review likes, rejects, and your Sound System in Profile.",
     aboutTrustTitle: "How to read confidence",
-    aboutTrustText: "High confidence = source, player, BPM, and profile. If unsure, we use the broader style.",
+    aboutTrustText: "Personal taste matching and musical evidence are shown separately. Open the track details.",
     swipeStartButton: "Find a track",
     swipeStartBusy: "Preparing...",
     swipeNextButton: "Another track",
@@ -25904,8 +25904,8 @@ const I18N = {
     recommendationWhyStrongFit: "Good bet: aligned signals",
     recommendationWhyTrustedSource: "Stronger source/player signal",
     recommendationWhyProfileSignal: "Matches your profile",
-    recommendationTrustLabel: "Confidence",
-    recommendationTrustChip: "Confidence {score}%",
+    recommendationTrustLabel: "For you",
+    recommendationTrustChip: "Personal fit",
     recommendationTrustReasonHigh: "High: source, player, pulse, and history tell the same story.",
     recommendationTrustReasonMedium: "Good: signals are consistent, but the profile is still opening up.",
     recommendationTrustReasonLow: "Exploratory: worth hearing as a test, not a certainty.",
@@ -26592,7 +26592,7 @@ const I18N = {
     aboutFlowStepThree: "Usa el Filtro manual cuando quieras subgénero, BPM o contexto específico.",
     aboutFlowStepFour: "Revisa likes, descartes y tu Sound System en Perfil.",
     aboutTrustTitle: "Cómo leer la confianza",
-    aboutTrustText: "Alta confianza = fuente, player, BPM y perfil. Sin certeza, usamos el estilo amplio.",
+    aboutTrustText: "La afinidad personal y la evidencia musical se muestran por separado. Consulta los detalles de la pista.",
     swipeStartButton: "Encontrar pista",
     swipeStartBusy: "Preparando...",
     swipeNextButton: "Otra pista",
@@ -26823,8 +26823,8 @@ const I18N = {
     recommendationWhyStrongFit: "Buena apuesta: señales alineadas",
     recommendationWhyTrustedSource: "Fuente/player más confiable",
     recommendationWhyProfileSignal: "Conecta con tu perfil",
-    recommendationTrustLabel: "Confianza",
-    recommendationTrustChip: "Confianza {score}%",
+    recommendationTrustLabel: "Para ti",
+    recommendationTrustChip: "Afinidad personal",
     recommendationTrustReasonHigh: "Alta: fuente, player, pulso e historial cuentan la misma historia.",
     recommendationTrustReasonMedium: "Buena: hay señales consistentes, pero el perfil aún se está abriendo.",
     recommendationTrustReasonLow: "Exploratoria: vale escucharla como prueba, no como certeza.",
@@ -51886,54 +51886,149 @@ function recommendationHasStrongFit(track) {
   );
 }
 
+function recommendationFitPresentation(track, prefs = lastPrefs, signals = {}) {
+  prefs = normalizeRecommendationPrefs(prefs);
+  const profileSignal = signals.profileSignal ?? (personalTasteScore(track, prefs) + getAdaptiveScore(track));
+  const learningSignals = signals.learningSignals ?? swipeTrainingSignalCount();
+  if (learningSignals > 0 && profileSignal >= 1.2) return {
+    mode: "profile",
+    label: sonicTinyCopy("Perto do seu gosto", "Close to your taste", "Cerca de tu gusto"),
+    shortReason: sonicTinyCopy("Seu perfil orienta esta escolha.", "Your profile guides this pick.", "Tu perfil orienta esta elección."),
+    reason: sonicTinyCopy("Seus sinais recentes sugerem afinidade com esta direção. Ouça para decidir se combina com seu momento.", "Your recent signals suggest a taste match in this direction. Listen and decide if it suits your moment.", "Tus señales recientes sugieren afinidad con esta dirección. Escucha y decide si encaja con tu momento.")
+  };
+  const filterMatch = (prefs.style && track?.style === prefs.style) ||
+    (prefs.bpm && trackMatchesBpmPreference(track, prefs.bpm)) ||
+    (prefs.context && Array.isArray(track?.context) && track.context.includes(prefs.context)) ||
+    (prefs.energy && track?.energy === prefs.energy) || (prefs.vocals && track?.vocals === prefs.vocals);
+  if (filterMatch) return {
+    mode: "filters",
+    label: sonicTinyCopy("Guiada pelos filtros", "Guided by your filters", "Guiada por tus filtros"),
+    shortReason: sonicTinyCopy("Suas escolhas orientam a seleção.", "Your choices guide the selection.", "Tus elecciones orientan la selección."),
+    reason: prefs.style && track?.style === prefs.style
+      ? sonicTinyCopy(`Você escolheu ${styleLabelByValue(prefs.style)}; essa direção orientou a seleção. Ouça para descobrir se combina com você.`, `You chose ${styleLabelByValue(prefs.style)}; that direction guided this pick. Listen to discover whether it suits you.`, `Elegiste ${styleLabelByValue(prefs.style)}; esa dirección orientó la selección. Escucha para descubrir si encaja contigo.`)
+      : sonicTinyCopy("Seus filtros ajudaram a orientar esta escolha. Ouça para descobrir se ela combina com você.", "Your filters helped guide this pick. Listen to discover whether it suits you.", "Tus filtros ayudaron a orientar esta elección. Escucha para descubrir si encaja contigo.")
+  };
+  return {
+    mode: "explore",
+    label: sonicTinyCopy("Para explorar", "Worth exploring", "Para explorar"),
+    shortReason: sonicTinyCopy("Uma direção para experimentar.", "A direction to try.", "Una dirección para probar."),
+    reason: sonicTinyCopy("Uma direção para experimentar; ainda não há afinidade clara com seus sinais pessoais.", "A direction to try; a clear match with your personal signals is still unknown.", "Una dirección para probar; todavía no hay una afinidad clara con tus señales personales.")
+  };
+}
+
 function recommendationHumanReason(track, prefs = lastPrefs) {
-  const bpmData = resolveBpmDisplay(track);
-  const bpm = bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel");
-  const style = track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "");
-  const exactStyle = track?.style ? styleLabelByValue(track.style) : style;
-  const certainty = trackStyleCertainty(track);
-  const energy = energyLabelByValue(track?.energy || prefs?.energy || "");
-  const context = prefs?.context ? contextLabelByValue(prefs.context) : "";
-  const knownUnion = buildGlobalArtistExclusionSet();
-  const isKnown = artistSetHasMatch(knownUnion, track?.artist);
-  const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
-  const sourceTrust = trackSourceTrustScore(track);
-  const strongFit = recommendationHasStrongFit(track);
-  const familyLabel = track?.style ? styleFamilyLabel(track.style) : style;
-  const novelty = isKnown
-    ? sonicTinyCopy("artista que ja estava no seu radar", "an artist already in your radar", "artista que ya estaba en tu radar")
-    : sonicTinyCopy("artista novo para testar sem cair no obvio", "a fresh artist to test beyond the obvious", "artista nuevo para probar fuera de lo obvio");
-  const profileSentence = profileSignal >= 1.2
-    ? sonicTinyCopy("Seu historico recente reforca essa direcao.", "Your recent history reinforces this direction.", "Tu historial reciente refuerza esta direccion.")
-    : sourceTrust >= 2
-      ? sonicTinyCopy("A fonte e mais segura que uma busca solta.", "The source is safer than a loose search.", "La fuente es mas segura que una busqueda suelta.")
-      : "";
-  const contextSentence = context
-    ? sonicTinyCopy(`Pelo contexto ${context}, priorizei encaixe de momento antes de fama.`, `For ${context}, I prioritized moment fit over popularity.`, `Para ${context}, priorice encaje de momento antes que fama.`)
-    : "";
+  return recommendationFitPresentation(track, prefs).reason;
+}
 
-  let reason = "";
-  if (certainty === "confirmed" || strongFit) {
-    reason = sonicTinyCopy(
-      `Recomendei por sinais fortes: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} e ${novelty}.`,
-      `Recommended from strong signals: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} and ${novelty}.`,
-      `La elegi por senales fuertes: ${exactStyle}, ${bpm}, ${energy.toLowerCase()} y ${novelty}.`
-    );
-  } else if (certainty === "probable") {
-    reason = sonicTinyCopy(
-      `Coloquei na rota ${familyLabel} com boa evidencia, mas ainda trato ${exactStyle} como provavel: preciso do seu swipe para confirmar.`,
-      `Placed it in the ${familyLabel} lane with good evidence, but I still treat ${exactStyle} as probable: your swipe confirms it.`,
-      `La puse en la ruta ${familyLabel} con buena evidencia, pero aun trato ${exactStyle} como probable: tu swipe confirma.`
-    );
-  } else {
-    reason = sonicTinyCopy(
-      `Leitura cautelosa: ha sinal de ${familyLabel}, mas o app evita cravar ${exactStyle} sem fonte, artista e pulso suficientes.`,
-      `Careful read: there is a ${familyLabel} signal, but the app avoids claiming ${exactStyle} without enough source, artist and pulse evidence.`,
-      `Lectura cautelosa: hay senal de ${familyLabel}, pero la app evita afirmar ${exactStyle} sin suficiente fuente, artista y pulso.`
-    );
-  }
+function recommendationEvidenceSource(track) {
+  const reviewed = reviewedRecordingStyleProof(track);
+  if (reviewed) return {
+    url: reviewed.evidenceUrl,
+    label: reviewed.appleTrackId
+      ? (reviewed.evidenceUrl.endsWith("/pl.78e98b7f1ea842dc807bd646ab37083e") ? "Apple Music · Big Beat Essentials" : "Apple Music")
+      : sonicTinyCopy("Bandcamp · página da faixa", "Bandcamp · track page", "Bandcamp · página de la pista")
+  };
+  if (!isTrustedCuratedCatalogTrack(track)) return null;
+  const metadata = catalogTrackMetadata(track);
+  const tags = new Set([...(track.sourceTags || []), ...catalogTrackMetadataList(track, "source_tags")]);
+  try {
+    const evidence = new URL(metadata.genre_evidence_url || "");
+    const release = new URL(metadata.source_url || "");
+    const recording = new URL(track.bandcampTrackUrl || metadata.bandcamp_track_url || metadata.source_url || "");
+    if (evidence.protocol !== "https:" || evidence.username || evidence.password || evidence.port || evidence.pathname === "/") return null;
+    let primary = false;
+    if (tags.has("electronic_label_recordings_v25") && tags.has("publisher_genre_verified") && tags.has("recording_identity_verified") && tags.has("audio_http_checked")) {
+      const publishers = { forest_psy: ["https://parvati-records.com", "https://beatspace-parvati.bandcamp.com"], dark_progressive: ["https://www.zenonrecords.com", "https://zenonrecords.bandcamp.com"] };
+      const pair = publishers[track.style];
+      primary = Boolean(pair && evidence.origin === pair[0] && release.origin === pair[1] && release.pathname.startsWith("/album/") && recording.origin === release.origin && recording.pathname.startsWith("/track/") && /^\d+$/.test(String(track.bandcampTrackId || "")));
+    }
+    if (tags.has("electronic_artist_diversity_v24") && tags.has("publisher_genre_verified") && tags.has("recording_identity_verified")) {
+      primary ||= evidence.hostname.endsWith(".bandcamp.com") && evidence.origin === recording.origin && recording.pathname.startsWith("/track/") && /^\d+$/.test(String(track.bandcampTrackId || metadata.bandcamp_track_id || "")) && textHasSpecificStyleSignal(track.style, track.artistGenre);
+    }
+    if (track.style === "big_room_house" && tags.has("electronic_label_v24") && tags.has("publisher_genre_verified") && tags.has("recording_identity_verified")) {
+      primary ||= evidence.origin === "https://www.revealedrecordings.com" && evidence.pathname.startsWith("/releases/") && evidence.href === release.href;
+    }
+    if (track.style === "progressive_edm" && tags.has("electronic_editorial_v24") && tags.has("apple_identity_verified") && tags.has("editorial_subgenre")) {
+      primary ||= ["protocol-recordings.com", "www.revealedrecordings.com"].includes(evidence.hostname) && release.protocol === "https:" && release.hostname === "music.apple.com" && /^\/[a-z]{2}\/song\//.test(release.pathname);
+    }
+    const publishers = { "parvati-records.com": "Parvati Records", "www.zenonrecords.com": "Zenon Records", "www.revealedrecordings.com": "Revealed Recordings", "protocol-recordings.com": "Protocol Recordings" };
+    const publisher = publishers[evidence.hostname] || "Bandcamp";
+    return primary ? { url: evidence.href, label: sonicTinyCopy(`Subgênero · ${publisher}`, `Subgenre · ${publisher}`, `Subgénero · ${publisher}`) } : null;
+  } catch (_) { return null; }
+}
 
-  return [reason, contextSentence, profileSentence].filter(Boolean).join(" ");
+let recommendationEvidenceView = null;
+let recommendationEvidenceObserverBound = false;
+
+function observeRecommendationEvidencePlayback() {
+  if (recommendationEvidenceObserverBound || typeof document.addEventListener !== "function") return;
+  recommendationEvidenceObserverBound = true;
+  const updateAudio = event => {
+    const view = recommendationEvidenceView;
+    if (event.target !== trackPreview || !view || !view.audioChip.isConnected || view.track !== currentRecommendation ||
+        view.trackKey !== recommendationTrackKey(view.track) || view.recordingId !== catalogTrackMetadataText(view.track, "recording_id") ||
+        view.profileKey !== sessionProfileKey() || !recommendationSessionIsCurrent(view.generation)) return;
+    if (event.type === "error") view.failed = true;
+    if (event.type === "loadeddata") view.failed = false;
+    // Update just the status: source links, disclosure state and keyboard focus
+    // stay in place when media finishes loading or fails after the card paints.
+    view.audioChip.textContent = view.failed && !trackHasExternalPlayableFallback(view.track)
+      ? sonicTinyCopy("Áudio não disponível", "Audio unavailable", "Audio no disponible")
+      : recommendationEvidencePresentation(view.track).audio;
+  };
+  ["loadeddata", "error", "emptied"].forEach(type => document.addEventListener(type, updateAudio, true));
+}
+
+function recommendationEvidencePresentation(track) {
+  const source = recommendationEvidenceSource(track);
+  const style = recommendationStyleDisplayLabel(track);
+  const genre = source
+    ? sonicTinyCopy(`Subgênero com fonte: ${style}`, `Sourced subgenre: ${style}`, `Subgénero con fuente: ${style}`)
+    : trackStyleCertainty(track) === "confirmed"
+      ? sonicTinyCopy(`Estilo do catálogo: ${style}`, `Catalog style: ${style}`, `Estilo del catálogo: ${style}`)
+      : sonicTinyCopy(`Estilo estimado: ${style}`, `Estimated style: ${style}`, `Estilo estimado: ${style}`);
+  const bpm = resolveBpmDisplay(track);
+  const tempo = !bpm.exact
+    ? sonicTinyCopy("BPM não verificado", "BPM unverified", "BPM sin verificar")
+    : bpm.ambiguous
+      ? sonicTinyCopy(`${bpm.exact} BPM · pulso ambíguo`, `${bpm.exact} BPM · ambiguous pulse`, `${bpm.exact} BPM · pulso ambiguo`)
+      : sonicTinyCopy(`BPM informado: ${bpm.exact}`, `Reported BPM: ${bpm.exact}`, `BPM informado: ${bpm.exact}`);
+  const loaded = trackPreview && trackPreviewElementMatchesTrack(track) && trackPreview.readyState >= 2 && !trackPreview.error;
+  const failed = trackPreview && trackPreviewElementMatchesTrack(track) && Boolean(trackPreview.error);
+  const audio = loaded
+    ? sonicTinyCopy("Áudio carregado", "Audio loaded", "Audio cargado")
+    : normalizePreviewUrl(track.previewUrl) && !failed && !(track.previewChecked && track.previewMissing)
+        ? sonicTinyCopy("Prévia para testar", "Preview to try", "Previa para probar")
+        : trackHasExternalPlayableFallback(track)
+          ? sonicTinyCopy("Player externo", "External player", "Reproductor externo")
+          : failed || (track.previewChecked && track.previewMissing)
+            ? sonicTinyCopy("Áudio não disponível", "Audio unavailable", "Audio no disponible")
+            : sonicTinyCopy("Áudio não verificado", "Audio unverified", "Audio sin verificar");
+  return { source, genre, tempo, audio };
+}
+
+function renderRecommendationEvidenceDetails(track, evidence) {
+  const details = document.getElementById("recommendationEvidenceDetails");
+  if (!details) return;
+  const body = document.getElementById("recommendationEvidenceBody");
+  const summary = document.getElementById("recommendationEvidenceSummary");
+  if (summary) summary.textContent = sonicTinyCopy("Fontes e detalhes", "Sources and details", "Fuentes y detalles");
+  if (!body) return;
+  body.replaceChildren();
+  if (!track) { details.open = false; return; }
+  const key = recommendationTrackKey(track);
+  if (details.dataset.trackKey !== key) details.open = false;
+  details.dataset.trackKey = key;
+  const note = document.createElement("p");
+  note.textContent = sonicTinyCopy("Seu feedback orienta a afinidade pessoal. A classificação musical depende das fontes.", "Your feedback guides personal taste matching. Musical classification depends on sources.", "Tu feedback orienta la afinidad personal. La clasificación musical depende de las fuentes.");
+  const sourceLine = document.createElement("p");
+  if (evidence.source) {
+    const link = document.createElement("a");
+    link.href = evidence.source.url; link.target = "_blank"; link.rel = "noopener noreferrer";
+    link.textContent = evidence.source.label;
+    sourceLine.append(link);
+  } else sourceLine.textContent = sonicTinyCopy("Fonte específica do subgênero ainda não disponível.", "A specific subgenre source is not available yet.", "Aún no hay una fuente específica del subgénero.");
+  body.append(sourceLine, note);
 }
 
 function recommendationTrustAnalysis(track, prefs = lastPrefs) {
@@ -51984,19 +52079,15 @@ function recommendationTrustAnalysis(track, prefs = lastPrefs) {
   const cappedScore = ambiguousBpm ? Math.min(score, 74) : score;
   const rounded = Math.round(Math.max(24, Math.min(98, cappedScore)));
   const level = rounded >= 82 ? "high" : rounded >= 64 ? "medium" : "low";
-  const reasonKey = ambiguousBpm
-    ? "recommendationTrustReasonTempoAmbiguous"
-    : level === "high"
-    ? "recommendationTrustReasonHigh"
-    : level === "medium"
-      ? "recommendationTrustReasonMedium"
-      : "recommendationTrustReasonLow";
+  const fit = recommendationFitPresentation(track, prefs, { profileSignal, learningSignals });
 
   return {
     score: rounded,
     level,
-    reason: t(reasonKey, { count: learningSignals }),
-    chip: t("recommendationTrustChip", { score: rounded })
+    reason: fit.reason,
+    chip: fit.label,
+    fitMode: fit.mode,
+    shortReason: fit.shortReason
   };
 }
 
@@ -52019,7 +52110,7 @@ function renderRecommendationTrust(track, prefs = lastPrefs) {
   if (!track) {
     targets.forEach(({ panel, value, reason }) => {
       panel.classList.add("hidden");
-      if (value) value.textContent = "--%";
+      if (value) value.textContent = "—";
       if (reason) reason.textContent = "";
     });
     return;
@@ -52027,20 +52118,24 @@ function renderRecommendationTrust(track, prefs = lastPrefs) {
   const trust = recommendationTrustAnalysis(track, prefs);
   targets.forEach(({ panel, label, value, reason }) => {
     panel.classList.remove("hidden");
-    panel.dataset.level = trust.level;
+    delete panel.dataset.level;
+    panel.dataset.fit = trust.fitMode;
+    panel.setAttribute("aria-label", t("recommendationTrustLabel"));
     if (label) label.textContent = t("recommendationTrustLabel");
-    if (value) value.textContent = `${trust.score}%`;
-    if (reason) reason.textContent = trust.reason;
+    if (value) value.textContent = trust.chip;
+    if (reason) reason.textContent = trust.shortReason;
   });
 }
 
 function renderRecommendationWhy(track, prefs = lastPrefs) {
   if (!recommendationWhyPanel || !recommendationWhyList) return;
   if (!track) {
+    recommendationEvidenceView = null;
     recommendationWhyPanel.classList.add("hidden");
     renderRecommendationTrust(null, prefs);
     if (recommendationWhyText) recommendationWhyText.textContent = "";
     recommendationWhyList.innerHTML = "";
+    renderRecommendationEvidenceDetails(null, null);
     return;
   }
   recommendationWhyPanel.classList.remove("hidden");
@@ -52049,33 +52144,16 @@ function renderRecommendationWhy(track, prefs = lastPrefs) {
   if (recommendationWhyText) recommendationWhyText.textContent = recommendationHumanReason(track, prefs);
   recommendationWhyList.innerHTML = "";
 
-  const bpmData = resolveBpmDisplay(track);
-  const origin = artistOriginSignalForTrack(track);
-  const originLabel = formatArtistOriginLabel(origin);
-  const knownUnion = buildGlobalArtistExclusionSet();
-  const hasStrongFit = recommendationHasStrongFit(track);
-  const sourceTrust = trackSourceTrustScore(track);
-  const profileSignal = personalTasteScore(track, prefs) + getAdaptiveScore(track);
-  const chips = [
-    t("recommendationWhyStyle", { style: track?.style ? recommendationStyleDisplayLabel(track) : styleLabelByValue(prefs?.style || "") }),
-    t("recommendationWhyBpm", { bpm: bpmData.reasonText || bpmData.lineText || t("bpmUnverifiedLabel") }),
-    t("recommendationWhyNovelty", {
-      status: artistSetHasMatch(knownUnion, track.artist) ? t("recommendationWhyKnown") : t("recommendationWhyNew")
-    })
-  ];
-  if (originLabel) chips.push(t("recommendationWhyOrigin", { origin: originLabel }));
-  if (hasStrongFit) chips.push(t("recommendationWhyStrongFit"));
-  if (sourceTrust >= 2 && !bpmData.ambiguous) chips.push(t("recommendationWhyTrustedSource"));
-  if (profileSignal >= 1.2) chips.push(t("recommendationWhyProfileSignal"));
-  chips.push({ text: recommendationTrustAnalysis(track, prefs).chip, className: "confidence" });
-
-  chips.forEach((item) => {
+  const evidence = recommendationEvidencePresentation(track);
+  [evidence.genre, evidence.tempo, evidence.audio].forEach((text, index) => {
     const chip = document.createElement("span");
-    const text = typeof item === "string" ? item : item?.text || "";
-    chip.className = `recommendation-why-chip ${typeof item === "string" ? "" : item?.className || ""}`.trim();
+    chip.className = "recommendation-why-chip";
     chip.textContent = text;
     recommendationWhyList.appendChild(chip);
+    if (index === 2) recommendationEvidenceView = { track, prefs, audioChip: chip, trackKey: recommendationTrackKey(track), recordingId: catalogTrackMetadataText(track, "recording_id"), profileKey: sessionProfileKey(), generation: recommendationSessionGeneration };
   });
+  observeRecommendationEvidencePlayback();
+  renderRecommendationEvidenceDetails(track, evidence);
 }
 
 function renderSonicBadgeList(container, badges = []) {
