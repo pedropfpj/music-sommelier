@@ -59928,6 +59928,15 @@ function setupNativeSocialAuthBridge() {
   }
 }
 
+function socialProfileResponseCanApply(profile) {
+  const userId = socialState.session?.user?.id;
+  if (!profile?.id || profile.id !== userId || !librarySessionMatchesOnlineAccount()) return false;
+  const current = socialState.profile?.id === userId ? socialState.profile : null;
+  const currentStamp = Date.parse(current?.updated_at || "");
+  const incomingStamp = Date.parse(profile.updated_at || "");
+  return !Number.isFinite(currentStamp) || (Number.isFinite(incomingStamp) && incomingStamp >= currentStamp);
+}
+
 function mountUserProfileIfEnabled() {
   if (window.SonicReleaseFlags?.publicProfiles !== true || userProfileController) return;
   userProfileController = window.SonicUserProfile?.mount(document.getElementById("userProfileCard"), {
@@ -59949,13 +59958,13 @@ function mountUserProfileIfEnabled() {
     signOut: () => void socialSignOut(),
     signIn: () => void showAuthScreen(),
     onLoaded: (profile, avatarUrl) => {
-      if (!profile?.id || profile.id !== socialState.session?.user?.id || !librarySessionMatchesOnlineAccount()) return;
+      if (!socialProfileResponseCanApply(profile)) return;
       socialState.profile = { ...socialState.profile, ...profile };
       socialState.profileAvatarUrl = avatarUrl;
       renderSocialCommentsPanel();
     },
     onSaved: (profile, avatarUrl) => {
-      if (!profile?.id || profile.id !== socialState.session?.user?.id || !librarySessionMatchesOnlineAccount()) return;
+      if (!socialProfileResponseCanApply(profile)) return;
       socialState.profile = { ...socialState.profile, ...profile };
       socialState.profileAvatarUrl = avatarUrl;
       hydrateSocialProfileInputs(socialState.profile);
@@ -60633,7 +60642,7 @@ async function hydrateSocialProfileIdentity() {
       const payload = await response.json();
       if (!stillCurrent() || !response.ok || payload?.ok !== true || payload.profile?.id !== userId) return null;
       const current = socialState.profile?.id === userId ? socialState.profile : null;
-      if (current && Date.parse(current.updated_at || "") > Date.parse(payload.profile.updated_at || "")) return current;
+      if (!socialProfileResponseCanApply(payload.profile)) return current;
       socialState.profile = { ...current, ...payload.profile };
       socialState.profileAvatarUrl = socialSafeAvatarUrl(payload.avatarUrl);
       operation.complete = true;
@@ -60665,13 +60674,14 @@ async function loadSocialProfile(options = {}) {
     const rows = await socialRequest(`/rest/v1/profiles?${params.toString()}`);
     if (identity !== librarySessionIdentity()) throw new Error("session_changed");
     const profile = Array.isArray(rows) ? rows[0] : null;
-    if (profile) {
+    const appliedProfile = socialProfileResponseCanApply(profile) ? profile : socialState.profile?.id === userId ? socialState.profile : null;
+    if (appliedProfile === profile && profile) {
       socialState.profile = profile;
       hydrateSocialProfileInputs(profile);
     }
     const hydrated = await hydrateSocialProfileIdentity();
     if (identity !== librarySessionIdentity()) throw new Error("session_changed");
-    return hydrated || profile;
+    return hydrated || appliedProfile;
   } catch (error) {
     console.warn("Could not load social profile", error);
     if (!options.silent) {
