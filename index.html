@@ -1318,8 +1318,9 @@
               <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
           </div>
-          <div class="social-discussion-entry">
-            <button type="button" data-open-discussion="track" class="secondary">Comentários e curtidas</button>
+          <div id="trackDiscussionEntry" class="social-discussion-entry hidden" hidden>
+            <p id="trackDiscussionContext" class="muted"></p>
+            <button type="button" data-open-discussion="track" class="secondary" aria-haspopup="dialog" aria-controls="socialDiscussionDialog" aria-describedby="trackDiscussionContext">Comentários e curtidas</button>
           </div>
           <div id="previewPanel" class="preview-panel hidden">
             <p id="previewStatus" class="muted">Procurando um preview tocável...</p>
@@ -3395,7 +3396,7 @@
             </div>
           </div>
           <div id="socialCommentsLoginPrompt" class="social-comments-login-prompt hidden">
-            <p id="socialCommentsLoginText" class="muted">Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.</p>
+            <p id="socialCommentsLoginText" class="muted">Entre com Google ou Apple para identificar sua participação e editar seus comentários. Depois do login, você volta à conversa desta faixa. Ouvir continua disponível sem conta.</p>
             <button id="socialCommentsLoginBtn" class="primary" type="button">Entrar para participar</button>
           </div>
           <p id="socialCommentsStatus" class="muted social-comments-status" role="status" aria-live="polite"></p>

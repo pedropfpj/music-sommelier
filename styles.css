@@ -15340,6 +15340,9 @@ body.is-recommending #topSwipeCard.swipe-hero-card.is-empty .swipe-preview-pulse
 }
 
 .social-discussion-entry { margin: 0.6rem 0; }
+.social-discussion-entry[hidden] { display: none !important; }
+.social-discussion-entry p { margin: 0 0 .5rem; overflow-wrap: anywhere; }
+.social-discussion-entry button { min-height: 44px; }
 .social-discussion-dialog {
   width: min(640px, calc(100vw - 24px));
   max-height: calc(100dvh - 32px);

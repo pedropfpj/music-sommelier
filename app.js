@@ -10909,6 +10909,7 @@ let dailyDjController = null;
 let dailyRadarController = null;
 let userProfileController = null;
 let pendingSocialCommentRequest = null;
+let pendingSocialDiscussionReturn = null;
 let sharedSocialVideoOpened = false;
 let privacyRequestsController = null;
 let weeklyRecommendsController = null;
@@ -24832,7 +24833,7 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escreva um comentário sobre essa faixa",
     socialCommentsPlaceholderArtist: "Escreva um comentário sobre esse artista",
     socialCommentsComposerHint: "Seu comentário aparece para outros ouvintes logados.",
-    socialCommentsLoginText: "Faça login para comentar ou curtir esta conversa. Sem login, você ainda pode ouvir e salvar no perfil local.",
+    socialCommentsLoginText: "Entre com Google ou Apple para identificar sua participação e editar seus comentários. Depois do login, você volta à conversa desta faixa. Ouvir continua disponível sem conta.",
     socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentário",
     socialCommentsLoading: "Carregando comentários...",
@@ -24841,7 +24842,7 @@ const I18N = {
     socialCommentsDisabled: "Comentários ficam disponíveis quando a camada social estiver ativa.",
     socialCommentsSetupNeeded: "Falta ativar comentários e reações no Supabase.",
     socialCommentsMissing: "Abra uma faixa para comentar.",
-    socialCommentsLoginRequired: "Faça login para comentar, curtir ou publicar.",
+    socialCommentsLoginRequired: "Entre para participar da conversa. Vamos manter esta faixa aberta para sua volta.",
     socialCommentsLoginUnavailable: "Login social indisponível neste ambiente. Você ainda pode ouvir e salvar no perfil local.",
     socialCommentsPosted: "Comentário publicado.",
     socialCommentsPostFailed: "Não consegui publicar agora.",
@@ -25744,7 +25745,7 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Write a comment about this track",
     socialCommentsPlaceholderArtist: "Write a comment about this artist",
     socialCommentsComposerHint: "Your comment appears to other signed-in listeners.",
-    socialCommentsLoginText: "Sign in to comment or like this conversation. Without login, you can still listen and save locally.",
+    socialCommentsLoginText: "Sign in with Google or Apple to identify your participation and edit your comments. After sign-in, you return to this track's discussion. Listening remains available without an account.",
     socialCommentsLoginBtn: "Sign in to join",
     socialCommentsSubmit: "Post comment",
     socialCommentsLoading: "Loading comments...",
@@ -25753,7 +25754,7 @@ const I18N = {
     socialCommentsDisabled: "Comments become available when the social layer is active.",
     socialCommentsSetupNeeded: "Comments and reactions still need Supabase activation.",
     socialCommentsMissing: "Open a track before commenting.",
-    socialCommentsLoginRequired: "Sign in to comment, like, or post.",
+    socialCommentsLoginRequired: "Sign in to join the discussion. We will keep this track open for your return.",
     socialCommentsLoginUnavailable: "Social login is unavailable in this environment. You can still listen and save to your local profile.",
     socialCommentsPosted: "Comment posted.",
     socialCommentsPostFailed: "I could not post that right now.",
@@ -26656,7 +26657,7 @@ const I18N = {
     socialCommentsPlaceholderTrack: "Escribe un comentario sobre esta pista",
     socialCommentsPlaceholderArtist: "Escribe un comentario sobre este artista",
     socialCommentsComposerHint: "Tu comentario aparece para otros oyentes conectados.",
-    socialCommentsLoginText: "Entra para comentar o dar like en esta conversación. Sin login, puedes seguir escuchando y guardar localmente.",
+    socialCommentsLoginText: "Entra con Google o Apple para identificar tu participación y editar tus comentarios. Después vuelves a la conversación de esta pista. Puedes seguir escuchando sin cuenta.",
     socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentario",
     socialCommentsLoading: "Cargando comentarios...",
@@ -26665,7 +26666,7 @@ const I18N = {
     socialCommentsDisabled: "Los comentarios estarán disponibles cuando la capa social esté activa.",
     socialCommentsSetupNeeded: "Falta activar comentarios y reacciones en Supabase.",
     socialCommentsMissing: "Abre una pista para comentar.",
-    socialCommentsLoginRequired: "Entra para comentar, dar like o publicar.",
+    socialCommentsLoginRequired: "Entra para participar en la conversación. Mantendremos esta pista abierta para tu regreso.",
     socialCommentsLoginUnavailable: "El login social no está disponible en este entorno. Puedes seguir escuchando y guardando en tu perfil local.",
     socialCommentsPosted: "Comentario publicado.",
     socialCommentsPostFailed: "No pude publicar ahora.",
@@ -31283,8 +31284,10 @@ async function continueWithOnlineSocialSession(options = {}) {
     showGuide: options.showGuide ?? !hasUsageGuideAcknowledged(),
     targetTab: options.targetTab || (urlRequestsAdminAnalytics() ? "admin" : "")
   };
-  const calibrationShown = await maybeShowInitialTasteCalibration(continuation);
+  const discussionReturn = readSocialDiscussionReturn();
+  const calibrationShown = discussionReturn ? false : await maybeShowInitialTasteCalibration(continuation);
   if (!calibrationShown) continueFromAuthToDiscover(continuation);
+  if (discussionReturn) await resumeSocialDiscussionAfterLogin();
   if (options.sync !== false) void syncSocialLikedTracks({ force: true, silent: true, activity: false });
   return true;
 }
@@ -54293,6 +54296,7 @@ function updateDiscoverySequenceBadges(track) {
 
 function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   resetSwipeCardPosition();
+  renderSocialDiscussionEntry(track);
   const hasTrack = Boolean(track);
   const shareButton = document.getElementById("shareTrackBtn");
   if (shareButton) shareButton.disabled = !hasTrack;
@@ -60340,6 +60344,68 @@ function socialDiscussionCopy(kind) {
   return sonicTinyCopy(...(labels[kind] || labels.track));
 }
 
+function renderSocialDiscussionEntry(track = currentRecommendation) {
+  const entry = document.getElementById("trackDiscussionEntry");
+  const available = Boolean(socialCommentsTrackTarget(track)) && !shouldDisableSocialCommentsForAppStore();
+  if (entry) {
+    entry.hidden = !available;
+    entry.classList.toggle("hidden", !available);
+  }
+  const context = document.getElementById("trackDiscussionContext");
+  if (context) context.textContent = available ? sonicTinyCopy(
+    `Conversa sobre ${track.song} • ${track.artist}`,
+    `Discussion of ${track.song} • ${track.artist}`,
+    `Conversación sobre ${track.song} • ${track.artist}`
+  ) : "";
+  entry?.querySelector("[data-open-discussion]")?.replaceChildren(document.createTextNode(socialDiscussionCopy("track")));
+}
+
+function readSocialDiscussionReturn() {
+  let value = pendingSocialDiscussionReturn;
+  try { value ||= JSON.parse(sessionStorage.getItem("sonic:discussion-return:v1") || "null"); } catch (_) { /* Storage may be unavailable. */ }
+  if (!value || !["track", "artist", "video"].includes(value.targetType) || !Number.isFinite(value.createdAt) || Date.now() - value.createdAt > 30 * 60 * 1000) return null;
+  return value;
+}
+
+function rememberSocialDiscussionReturn() {
+  const target = currentSocialCommentTarget();
+  if (!target) return;
+  // Public track metadata only; no account credentials or comment drafts.
+  const value = {
+    createdAt: Date.now(), targetType: target.targetType,
+    track: target.targetType === "video" ? null : currentRecommendation,
+    videoId: target.targetType === "video" ? target.targetKey.slice(8) : ""
+  };
+  pendingSocialDiscussionReturn = value;
+  try { sessionStorage.setItem("sonic:discussion-return:v1", JSON.stringify(value)); } catch (_) { /* In-page login can still return. */ }
+}
+
+async function resumeSocialDiscussionAfterLogin() {
+  const context = readSocialDiscussionReturn();
+  if (!context || !authHasOnlineSession()) return false;
+  if (context.targetType === "video") {
+    if (!/^[A-Za-z0-9_-]{11}$/.test(context.videoId || "")) return false;
+    socialCommentsState.videoSource = "shared";
+    socialCommentsState.sharedVideoId = context.videoId;
+  } else {
+    const saved = context.track;
+    if (!saved?.artist || !saved?.song || !Object.hasOwn(STYLE_BPM_RULES, saved.style)) return false;
+    const key = recommendationTrackKey(saved);
+    const track = [currentRecommendation, ...catalog].find(item => item && item.style === saved.style && recommendationTrackKey(item) === key) || saved;
+    if (!isTrackEligibleForRecommendation(track)) return false;
+    stopAllActivePlayback({ reason: "discussion_login_return" });
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
+    socialCommentsState.videoSource = "track";
+    void renderPreview(track, { fast: true, autoplay: false }).catch(() => null);
+  }
+  setActiveAppTab("discover", { focusPanel: true });
+  pendingSocialDiscussionReturn = null;
+  try { sessionStorage.removeItem("sonic:discussion-return:v1"); } catch (_) { /* No persistent storage. */ }
+  if (!socialDiscussionDialog.open) socialDiscussionDialog.showModal();
+  await loadSocialComments({ targetType: context.targetType });
+  return true;
+}
+
 function openSocialDiscussion(kind = "track") {
   if (shouldDisableSocialCommentsForAppStore()) return;
   socialCommentsState.videoSource = kind === "dj-video" ? "dj" : "track";
@@ -60722,6 +60788,7 @@ function renderSocialCommentsList() {
 }
 
 function renderSocialCommentsPanel() {
+  renderSocialDiscussionEntry();
   if (!socialCommentsCard) return;
   if (shouldDisableSocialCommentsForAppStore()) {
     socialCommentsCard.classList.add("hidden");
@@ -60776,9 +60843,7 @@ function renderSocialCommentsPanel() {
   }
   const signed = socialCommentsSignedIn();
   if (socialCommentsLoginText) {
-    socialCommentsLoginText.textContent = signed
-      ? t("socialCommentsLoginText")
-      : socialSessionUiCopy({ configured: socialConfigReady(), signed }).hint;
+    socialCommentsLoginText.textContent = t("socialCommentsLoginText");
   }
   if (socialCommentsLoginBtn) socialCommentsLoginBtn.textContent = t("socialCommentsLoginBtn");
   if (socialCommentsComposer) socialCommentsComposer.classList.toggle("hidden", !signed || !socialCommentsState.enabled);
@@ -60889,11 +60954,13 @@ async function showSocialCommentsLogin({ startLogin = false } = {}) {
   const message = configured ? t("socialCommentsLoginRequired") : t("socialCommentsLoginUnavailable");
   setLoginMessage(message, configured);
   if (startLogin && configured) {
+    rememberSocialDiscussionReturn();
     const target = currentSocialCommentTarget();
     const url = target?.targetType === "video" ? socialVideoShareUrl(target.targetKey.slice(8)) : socialTrackShareUrl(currentRecommendation);
     if (url) history.replaceState(null, "", url);
     socialDiscussionDialog?.close();
     await showAuthScreen();
+    setAuthFeedback(t("socialCommentsLoginRequired"));
   }
 }
 
