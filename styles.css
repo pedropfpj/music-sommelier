@@ -22984,3 +22984,7 @@ body.sonic-first-value-window #dailyRadarPanel {
 .library-sync-status[data-state="synced"] { border-color:rgba(130,230,180,.5); }
 .library-sync-status[data-state="error"] { border-color:rgba(255,180,140,.55); }
 @media(max-width:600px) { .library-sync-status { align-items:stretch; flex-direction:column; } .library-sync-status button { align-self:flex-start; } }
+
+.library-transfer-prompt { margin:1rem 0; padding:1rem; border:1px solid rgba(255,201,127,.4); border-radius:14px; }
+.library-transfer-prompt p { margin:0 0 .75rem; line-height:1.5; }
+.library-transfer-prompt button { min-height:44px; max-width:100%; white-space:normal; }

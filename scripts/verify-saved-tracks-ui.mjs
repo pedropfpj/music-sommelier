@@ -66,6 +66,33 @@ try {
   });
   assert.equal(restored.likes,1);assert.equal(restored.rejects,1);assert.ok(restored.localKey.endsWith('guest:default'));
   assert.deepEqual(restored.restoredLikes,['Guest Saved Track']);assert.deepEqual(restored.restoredRejects,['Guest Rejected Track']);
+  // The central login transition preserves anonymous tracks without silently adopting them.
+  const beforeConsent=await page.evaluate(()=>{
+    socialStoreSession(null);ephemeralProfileMode=true;currentAuthUser=normalizeUserSession({mode:'visitor'});
+    likedTrackHistory=[likedTrackHistoryEntry({artist:'Session Artist',song:'Before Login',style:'house'},'liked','2026-11-09T12:00:00.000Z')];
+    dislikedTrackHistory=[likedTrackHistoryEntry({artist:'Session Artist',song:'Rejected Before Login',style:'house'},'disliked','2026-11-09T12:00:00.000Z')];
+    socialStoreSession({access_token:'local-test-only',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'11111111-1111-4111-8111-111111111111',app_metadata:{provider:'google'}}});
+    activateUserSession(onlineSocialUserSession());renderSocialUi({preserveStatus:true});
+    return {pending:readPendingLocalLibraryTransfer()?.liked.length,adopted:likedTrackHistory.some(item=>item.song==='Before Login')};
+  });
+  assert.equal(beforeConsent.pending,1);assert.equal(beforeConsent.adopted,false);
+  const transfer=page.locator('#libraryTransferPrompt');assert.equal(await transfer.isVisible(),true);
+  await page.setViewportSize({width:375,height:812});await transfer.scrollIntoViewIfNeeded();
+  assert.ok(await transfer.evaluate(el=>el.scrollWidth<=Math.ceil(el.getBoundingClientRect().width)+1));
+  assert.ok(await page.locator('#libraryTransferBtn').evaluate(el=>el.getBoundingClientRect().height>=44));
+  await transfer.screenshot({path:fileURLToPath(new URL('../reports/ui-saved-tracks-transfer-375-latest.png',import.meta.url))});
+  await page.locator('#libraryTransferBtn').click();
+  const adopted=await page.evaluate(()=>({pending:readPendingLocalLibraryTransfer(),liked:likedTrackHistory.some(item=>item.song==='Before Login'),rejected:dislikedTrackHistory.some(item=>item.song==='Rejected Before Login')}));
+  assert.equal(adopted.pending,null);assert.equal(adopted.liked,true);assert.equal(adopted.rejected,true);assert.equal(await transfer.isVisible(),false);
+  // A backup's identity must never borrow the token from the previously connected account.
+  const mismatched=await page.evaluate(async()=>{
+    const backup=buildProfileBackupPayload();backup.session={mode:'google',providerId:'22222222-2222-4222-8222-222222222222',email:'b@example.test'};
+    restoreProfileBackupPayload(backup);
+    const disconnected=!socialState.session?.access_token;
+    const syncAllowed=await syncSocialLikedTracks({activity:false});
+    return {disconnected,syncAllowed};
+  });
+  assert.equal(mismatched.disconnected,true);assert.equal(mismatched.syncAllowed,false);
   assert.deepEqual(errors,[]);
   console.log('Saved-track UI passed: pending/success/offline/error/retry, local track preservation, 375/852/1440 layouts, 44px action, large text, reduced motion, EN/ES and logout. Account/cloud API mocked; no production writes.');
 } finally {await browser.close();await preview.stop();}

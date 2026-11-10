@@ -60,8 +60,10 @@ function functionSource(name) {
 }
 
 
-const functions = ["buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
+const functions = ["validProfileBackupPayload", "restoreProfileBackupPayload", "librarySessionMatchesOnlineAccount", "readPendingLocalLibraryTransfer", "storePendingLocalLibraryTransfer", "capturePendingLocalLibraryTransfer", "bindPendingLibraryTransferToAccount", "renderPendingLibraryTransfer", "importPendingLocalLibraryTransfer", "buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
 const values = new Map();
+const sessionValues = new Map();
+const readGates = new Map();
 const cloud = { likes: [], track_feedback: [] };
 const requests = [];
 let failRead = "";
@@ -70,7 +72,8 @@ let mutateDuringRead = null;
 let refreshResponse = null;
 const ctx = vm.createContext({
   console: { warn() {} }, Date, JSON, Number, String, Boolean, Math, Set, Map, URLSearchParams, Error, AbortSignal,
-  setTimeout: () => 1, clearTimeout() {},
+  setTimeout: () => 1, clearTimeout() {}, AbortController,
+  sessionStorage: {getItem:k=>sessionValues.get(k)||null,setItem:(k,v)=>sessionValues.set(k,v),removeItem:k=>sessionValues.delete(k)},
   localStorage: { setItem(k,v) { if (ctx.storageFailure) throw new Error("quota"); values.set(k,v); }, getItem:k => values.get(k) || null },
   fetch: async (url, options = {}) => {
     const parsed = new URL(url);
@@ -91,6 +94,7 @@ const ctx = vm.createContext({
     }
     if (failRead === table) return new Response('{"message":"read unavailable"}', { status:503 });
     const userId = parsed.searchParams.get("user_id")?.slice(3);
+    if (readGates.has(userId)) await readGates.get(userId).promise;
     const offset = Number(parsed.searchParams.get("offset") || 0);
     const limit = Number(parsed.searchParams.get("limit") || 200);
     const result = cloud[table].filter(row => row.user_id === userId).slice(offset, offset + limit);
@@ -106,6 +110,9 @@ vm.runInContext(`
   var storageFailure = false;
   var likedTrackHistory = [], dislikedTrackHistory = [], libraryRemovedTrackHistory = [];
   var progressStorageReady = true;
+  var pendingLocalLibraryTransfer=null,ephemeralProfileMode=false;
+  const PENDING_LIBRARY_TRANSFER_STORAGE_KEY="pending-transfer";
+  var libraryTransferPrompt=null,libraryTransferHint=null,libraryTransferBtn=null;
   var userStats = {};
   var adaptiveModel = {likedStyles:new Map(),dislikedStyles:new Map(),likedArtists:new Map(),dislikedArtists:new Map(),likedEnergies:new Map(),dislikedEnergies:new Map()};
   var spiritSignalsByStyle = new Map(), currentSpiritId = "", spiritLastReviewedSongLikes = 0, spiritUnlocked = false;
@@ -114,7 +121,7 @@ vm.runInContext(`
   var quizAttemptsByStyle = new Map(),quizBestScoreByStyle = new Map(),quizNextOfferCountByStyle = new Map();
   var styleEl={value:"house"},contextEl=null,energyEl=null,bpmEl=null,vocalsEl=null,discoveryModeEl=null,knownArtistsEl=null;
   var currentRecommendation = null;
-  const STORAGE_KEY="preferences",SPIRIT_COLLECTIBLE_STORAGE_KEY="collectible",SPIRIT_ART_SEED_STORAGE_KEY="seed",INITIAL_TASTE_CALIBRATION_STORAGE_KEY="calibration",PROFILE_BACKUP_APP_ID="sonic-search",PROFILE_BACKUP_VERSION=1;
+  const STORAGE_KEY="preferences",SPIRIT_COLLECTIBLE_STORAGE_KEY="collectible",SPIRIT_ART_SEED_STORAGE_KEY="seed",INITIAL_TASTE_CALIBRATION_STORAGE_KEY="calibration",PROFILE_BACKUP_APP_ID="sonic-search",PROFILE_BACKUP_VERSION=1,PROFILE_BACKUP_LAST_EXPORT_STORAGE_KEY="last-export",USAGE_GUIDE_ACK_STORAGE_KEY="guide";
   function getWeights(){return {style:1};}
   function djRecommendationStorageKey(){return "djs";}
   function legacyRockPreviewStorageKey(){return "rock";}
@@ -126,6 +133,12 @@ vm.runInContext(`
   function socialApiUrl(path) { return "https://cloud.test"+path; }
   function sessionProfileKey(user=currentAuthUser) { return user?.id || "guest"; }
   function normalizeUserSession(user) { return user || {}; }
+  function isOnlineSocialMode(mode){return ["google","apple"].includes(mode);}
+  function onlineSocialUserSession(){return {id:socialState.session?.user?.id,mode:"google"};}
+  function persistUserSession(){}
+  function activateUserSession(session){currentAuthUser=session;resetLibrarySyncState();loadProgress();bindPendingLibraryTransferToAccount();}
+  function normalizeInitialTasteCalibration(value){return value;}
+  function updateProfileBackupStatus(){}
   function isEphemeralSession(user) { return user.mode === "visitor"; }
   function likedTrackKeyFromEntry(entry) { return entry?.key || ""; }
   function likedTrackHistoryEntry(track,source,likedAt) { return track?.artist && track?.song ? {...track,key:track.key || track.artist+"-"+track.song,source,likedAt} : null; }
@@ -148,7 +161,7 @@ vm.runInContext(`
   function loadSocialFeed() { return Promise.resolve(); }
   function recalculateRatingStats() {}
   function totalLikedSongs() { return likedTrackHistory.length; }
-  function storageKeyForSession(base) { return currentAuthUser.mode === "visitor" ? "" : base+":"+currentAuthUser.id; }
+  function storageKeyForSession(base,session=currentAuthUser) { return session.mode === "visitor" ? "" : base+":"+session.id; }
   function storageFallbackKeys(base) { return [storageKeyForSession(base)]; }
   function readFirstStoredJson(keys) { return {payload:JSON.parse(localStorage.getItem(keys[0]) || "null")}; }
   function mapEntriesForStorage(map) { return Array.from(map); }
@@ -166,7 +179,7 @@ vm.runInContext(`
   function updateSwipeFeedbackCard() {}
   function renderTrackRating() {}
   function renderMusicalSpirit() { return Promise.resolve(); }
-  function socialStoreSession(session) { socialState.session=session; }
+  function socialStoreSession(session) { if(socialState.session?.user?.id!==session?.user?.id) resetLibrarySyncState(); socialState.session=session; }
   function decodeJwtPayload() { return {}; }
   function socialFetchAuthUser() { return Promise.resolve({id:"a"}); }
   ${functions.map(functionSource).join("\n")}
@@ -176,8 +189,8 @@ const phase = () => run("librarySyncCopy().phase");
 const track = (key, day=9) => ({key,artist:"Artist",song:key,style:"house",likedAt:`2026-11-${String(day).padStart(2,"0")}T12:00:00.000Z`});
 const row = (entry, sentiment="liked") => ({user_id:"a",target_key:entry.key,artist:entry.artist,song:entry.song,style:entry.style,source:entry.source || sentiment, sentiment, created_at:entry.likedAt, updated_at:entry.likedAt, metadata:sentiment === "liked" ? {likedAt:entry.likedAt} : {dislikedAt:entry.likedAt}});
 function reset() {
-  cloud.likes=[]; cloud.track_feedback=[]; requests.length=0; failRead=""; failWrite="";
-  run('likedTrackHistory=[];dislikedTrackHistory=[];libraryRemovedTrackHistory=[];currentAuthUser={id:"a",mode:"google"};socialState.session={access_token:"token-a",refresh_token:"refresh-a",expires_at:4102444800,user:{id:"a"}};configured=true;navigator.onLine=true;storageFailure=false;resetLibrarySyncState();socialState.localSaveState="saved"');
+  cloud.likes=[]; cloud.track_feedback=[]; requests.length=0; failRead=""; failWrite=""; sessionValues.clear(); readGates.clear();
+  run('likedTrackHistory=[];dislikedTrackHistory=[];libraryRemovedTrackHistory=[];currentAuthUser={id:"a",mode:"google"};socialState.session={access_token:"token-a",refresh_token:"refresh-a",expires_at:4102444800,user:{id:"a"}};configured=true;navigator.onLine=true;storageFailure=false;pendingLocalLibraryTransfer=null;ephemeralProfileMode=false;resetLibrarySyncState();socialState.localSaveState="saved"');
 }
 // Being signed in is not proof of a completed read/write round trip.
 assert.equal(phase(),"pending");
@@ -224,6 +237,46 @@ assert.ok(requests.filter(r=>r.path.endsWith("/likes") && r.method==="GET").leng
 reset(); cloud.likes=[row(track("private-a"))];
 mutateDuringRead=()=>run('currentAuthUser={id:"b",mode:"google"};socialState.session={access_token:"b",user:{id:"b"}};likedTrackHistory=[];dislikedTrackHistory=[];libraryRemovedTrackHistory=[];resetLibrarySyncState()');
 assert.equal(await ctx.syncSocialLikedTracks({activity:false}),false); assert.equal(run('likedTrackHistory.length'),0); assert.equal(requests.some(r=>r.method==="POST"),false);
+// A profile mismatch is never sufficient authorization for cloud reads, queued sync or row building.
+reset(); run('currentAuthUser={id:"b",mode:"google"}');
+assert.equal(await ctx.syncSocialLikedTracks(),false);await ctx.restoreSocialLikedTracksFromCloud();await ctx.restoreSocialDislikedTracksFromCloud();ctx.queueSocialSync();
+assert.equal(requests.length,0);assert.equal(run('socialTrackRowsForSync().length'),0);
+// Importing B's portable backup while signed in as A disconnects A; matching B can sync afterward.
+reset();
+const otherBackup={app:"sonic-search",version:1,session:{id:"b",mode:"google"},data:{progress:{likedTrackHistory:[track("private-b")],dislikedTrackHistory:[]}}};
+assert.equal(ctx.restoreProfileBackupPayload(otherBackup),true);assert.equal(run('socialState.session'),null);
+assert.equal(await ctx.syncSocialLikedTracks({activity:false}),false);assert.equal(requests.length,0);
+run('socialStoreSession({access_token:"b",expires_at:4102444800,user:{id:"b"}})');
+assert.equal(await ctx.syncSocialLikedTracks({activity:false}),true);assert.equal(cloud.likes[0].user_id,"b");
+// An abandoned A response cannot release B's newer pending sync/busy flags.
+reset();
+function gate(){let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};}
+const gateA=gate(),gateB=gate();readGates.set("a",gateA);readGates.set("b",gateB);
+const syncA=ctx.syncSocialLikedTracks({activity:false});
+while(!requests.length) await new Promise(setImmediate);
+run('socialStoreSession({access_token:"b",expires_at:4102444800,user:{id:"b"}});currentAuthUser={id:"b",mode:"google"};likedTrackHistory=[];dislikedTrackHistory=[];libraryRemovedTrackHistory=[]');
+const syncB=ctx.syncSocialLikedTracks({activity:false});
+while(requests.length<2) await new Promise(setImmediate);
+const ownerB=ctx.socialState.librarySyncOperation;gateA.resolve();assert.equal(await syncA,false);
+assert.equal(ctx.socialState.librarySyncOperation,ownerB);assert.equal(ctx.socialState.librarySyncInProgress,true);assert.equal(ctx.socialState.busy,true);assert.equal(ctx.socialState.librarySyncPhase,"syncing");
+readGates.delete("b");gateB.resolve();assert.equal(await syncB,true);assert.equal(ctx.socialState.librarySyncInProgress,false);assert.equal(ctx.socialState.busy,false);
+// Guest snapshots survive the OAuth-style reload and require explicit matched-account consent.
+reset();run('currentAuthUser={id:"guest",mode:"visitor"}');ctx.likedTrackHistory=[track("guest-like",9),track("conflict",9)];ctx.dislikedTrackHistory=[track("guest-reject",8)];
+ctx.capturePendingLocalLibraryTransfer();const serialized=sessionValues.get("pending-transfer");assert.ok(serialized);assert.doesNotMatch(serialized,/access_token|refresh_token|token-a/);
+run('pendingLocalLibraryTransfer=null;socialStoreSession({access_token:"a",expires_at:4102444800,user:{id:"a"}});currentAuthUser={id:"a",mode:"google"};likedTrackHistory=[];dislikedTrackHistory=[];libraryRemovedTrackHistory=[]');ctx.bindPendingLibraryTransferToAccount();
+assert.equal(run('likedTrackHistory.length'),0,"Login alone cannot import anonymous tracks");assert.equal(requests.length,0);
+ctx.likedTrackHistory=[track("guest-like",9)];ctx.dislikedTrackHistory=[track("conflict",5)];
+assert.equal(ctx.importPendingLocalLibraryTransfer(),true);assert.equal(run('likedTrackHistory.filter(t=>t.key==="guest-like").length'),1);assert.equal(run('dislikedTrackHistory.some(t=>t.key==="conflict")'),false);assert.equal(run('dislikedTrackHistory.some(t=>t.key==="guest-reject")'),true);assert.equal(sessionValues.has("pending-transfer"),false);
+// Snapshot bound to A stays private to A when B signs in, and quota errors keep it recoverable.
+reset();run('currentAuthUser={id:"guest",mode:"guest"}');ctx.likedTrackHistory=[track("for-a")];ctx.capturePendingLocalLibraryTransfer();run('currentAuthUser={id:"a",mode:"google"};likedTrackHistory=[]');ctx.bindPendingLibraryTransferToAccount();
+run('socialStoreSession({access_token:"b",user:{id:"b"}});currentAuthUser={id:"b",mode:"google"}');assert.equal(ctx.importPendingLocalLibraryTransfer(),false);assert.ok(sessionValues.get("pending-transfer"));
+run('socialStoreSession({access_token:"a",user:{id:"a"}});currentAuthUser={id:"a",mode:"google"};storageFailure=true');assert.equal(ctx.importPendingLocalLibraryTransfer(),false);assert.ok(sessionValues.get("pending-transfer"));
+// An unaccepted snapshot for A is not overwritten by a later guest session bound to B.
+reset();run('currentAuthUser={id:"guest",mode:"guest"}');ctx.likedTrackHistory=[track("pending-a")];ctx.capturePendingLocalLibraryTransfer();run('currentAuthUser={id:"a",mode:"google"};likedTrackHistory=[]');ctx.bindPendingLibraryTransferToAccount();
+run('currentAuthUser={id:"new-guest",mode:"visitor"}');ctx.likedTrackHistory=[track("pending-b")];ctx.capturePendingLocalLibraryTransfer();run('socialStoreSession({access_token:"b",user:{id:"b"}});currentAuthUser={id:"b",mode:"google"};likedTrackHistory=[]');ctx.bindPendingLibraryTransferToAccount();assert.equal(ctx.importPendingLocalLibraryTransfer(),true);assert.equal(run('likedTrackHistory[0].key'),"pending-b");
+run('socialStoreSession({access_token:"a",user:{id:"a"}});currentAuthUser={id:"a",mode:"google"};likedTrackHistory=[]');assert.equal(ctx.importPendingLocalLibraryTransfer(),true);assert.equal(run('likedTrackHistory[0].key'),"pending-a");
+// Older supported WebKit without AbortSignal.timeout still reaches the cloud through an AbortController.
+reset();ctx.AbortSignal={};assert.equal(await ctx.syncSocialLikedTracks({activity:false}),true);ctx.AbortSignal=AbortSignal;
 // Refresh: temporary network/server outages keep the account for retry; revoked sessions clear it.
 reset(); refreshResponse=new Error("offline"); assert.equal(await ctx.socialRefreshSession({clearOnFailure:true}),false); assert.ok(run('socialState.session?.access_token'));
 refreshResponse={status:503,body:{message:"temporary"}}; assert.equal(await ctx.socialRefreshSession({clearOnFailure:true}),false); assert.ok(run('socialState.session?.access_token'));
