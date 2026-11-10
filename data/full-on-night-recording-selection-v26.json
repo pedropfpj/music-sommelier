@@ -1,0 +1,122 @@
+{
+  "version": "full_on_night_recordings_v26_20261110",
+  "checkedAt": "2026-11-10T17:44:18.755Z",
+  "scope": "Exact public artist-published recordings only; no artist-wide genre permission and no signed media URL shipped.",
+  "tracks": [
+    {
+      "style": "full_on_night",
+      "artist": "Virtual Light & Module Virus",
+      "song": "Extreme Transmission",
+      "label": "",
+      "bpm": "",
+      "recording_id": "bandcamp:734106270",
+      "bandcamp_track_id": "734106270",
+      "bandcamp_track_url": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
+      "bandcamp_url": "https://virtuallight.bandcamp.com/album/virtual-light-module-virus-light-module",
+      "duration_sec": "480",
+      "release_date": "2019-02-05",
+      "artist_genre": "full on night",
+      "genre_evidence_url": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
+      "source_url": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
+      "source_tags": "full_on_night_recordings_v26;artist_recording_genre_verified;recording_identity_verified;audio_http_body_checked;bpm_unknown",
+      "source": "full_on_night_recordings_v26_20261110",
+      "confidence": "high",
+      "status": "published",
+      "album": "Virtual Light & Module Virus - Light Module",
+      "classification": "Artist self-published exact track page explicitly tags full on night. Other tags are retained as evidence rather than treated as exclusive classification.",
+      "sourceAuthority": "official_artist_recording_page",
+      "bpmStatus": "unknown",
+      "releaseDateBasis": "Official collection release and current track publication on 2019-02-05; not a claim of first release.",
+      "versionNote": "This is Bandcamp recording 734106270 published 2019-02-05. It is not asserted to be the same recording/master as existing Module Virus / Deezer 1988845157 dated 2022-10-27, even though both have duration 480 seconds. No metadata or BPM transferred from that entry.",
+      "evidence": {
+        "exactPublishedTitle": "Virtual Light & Module Virus - Extreme Transmission",
+        "fullCredits": "Virtual Light & Module Virus",
+        "pageArtist": "Virtual Light",
+        "exactGenreTag": "full on night",
+        "allOfficialTags": [
+          "electronic",
+          "full on night",
+          "goa trance",
+          "psytrance",
+          "twilight psytrance",
+          "zero1 music",
+          "dark psy",
+          "dark psychedelic trance",
+          "dark psytrance",
+          "forest",
+          "forest psychedelic",
+          "forest psytrance",
+          "goa",
+          "goatrance",
+          "psychedelic trance",
+          "trance",
+          "Montreal"
+        ],
+        "embed": {
+          "url": "https://bandcamp.com/EmbeddedPlayer/track=734106270/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/",
+          "status": 200,
+          "contentType": "text/html; charset=UTF-8",
+          "containsExactTitle": true,
+          "containsTrackId": true
+        },
+        "publicStream": {
+          "streaming": 1,
+          "isPrivateStream": false,
+          "subscriberOnly": false,
+          "preorder": false,
+          "isDraft": false,
+          "unreleased": false
+        },
+        "audio": {
+          "status": 206,
+          "contentType": "audio/mpeg",
+          "contentRange": "bytes 0-4095/7680834",
+          "sampleBytes": 4096,
+          "firstMpegFrameOffset": 0,
+          "sampleSha256": "4754fe6fb0e63f2c3f5cd65fbd7bfb9606971d106d65750be260abbea22a9f2e",
+          "bodyIsHtml": false,
+          "provider": "t4.bcbits.com",
+          "checkedBy": "Bounded HTTP range read of official public mp3-128 body; no audio URL or media file retained."
+        }
+      },
+      "verificationSteps": [
+        {
+          "step": 1,
+          "check": "Official artist source",
+          "passed": true,
+          "evidence": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission"
+        },
+        {
+          "step": 2,
+          "check": "Exact recording title and complete public credits",
+          "passed": true,
+          "evidence": "Public page current.title and trackinfo.title both Virtual Light & Module Virus - Extreme Transmission."
+        },
+        {
+          "step": 3,
+          "check": "Exact duration and edition date",
+          "passed": true,
+          "evidence": "trackinfo.duration 480; album_release_date 05 Feb 2019; current.publish_date 05 Feb 2019. Old 2022 entry kept separate."
+        },
+        {
+          "step": 4,
+          "check": "Recording-scoped niche evidence",
+          "passed": true,
+          "evidence": "Exact official track URL explicitly tagged full on night; no artist-wide inference."
+        },
+        {
+          "step": 5,
+          "check": "Public streaming identity and actual embed",
+          "passed": true,
+          "evidence": "Bandcamp track734106270 streaming 1 / not private / not draft; HTTP 200 embed contains ID and exact title."
+        },
+        {
+          "step": 6,
+          "check": "Real audio response body",
+          "passed": true,
+          "evidence": "HTTP 206 audio/mpeg, 4096 sample bytes, MPEG frame offset 0; no signed URL/audio file shipped. BPM remains unknown."
+        }
+      ]
+    }
+  ]
+}
