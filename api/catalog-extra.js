@@ -192,7 +192,8 @@ async function fetchCatalogTable(config, table, params) {
     const detail = payload?.message || payload?.error || response.statusText;
     throw new Error(detail || `Could not fetch ${table}`);
   }
-  return Array.isArray(payload) ? payload : [];
+  if (!Array.isArray(payload)) throw new Error("invalid_catalog_response");
+  return payload;
 }
 
 function baseParams({ limit, style, offset = 0 }) {
@@ -227,11 +228,14 @@ async function fetchTracks(config, { style, q, limit, offset }) {
     params.set("or", `(artist.ilike.*${clean}*,song.ilike.*${clean}*)`);
   }
   const rows = await fetchCatalogTable(config, "catalog_tracks", params);
-  return rows.filter((row) => (
-    catalogTrackPassesPsytranceIntegrity(row) &&
-    catalogTrackPassesTechnoIdentity(row) &&
-    catalogTrackPassesStyleBpm(row)
-  ));
+  return {
+    scanned: rows.length,
+    tracks: rows.filter((row) => (
+      catalogTrackPassesPsytranceIntegrity(row) &&
+      catalogTrackPassesTechnoIdentity(row) &&
+      catalogTrackPassesStyleBpm(row)
+    ))
+  };
 }
 
 module.exports = async function handler(req, res) {
@@ -274,10 +278,11 @@ module.exports = async function handler(req, res) {
   try {
     const includeArtists = !type || type === "artists" || type === "all";
     const includeTracks = !type || type === "tracks" || type === "all";
-    const [artists, tracks] = await Promise.all([
+    const [artists, trackPage] = await Promise.all([
       includeArtists ? fetchArtists(config, { style, q, limit, offset }) : Promise.resolve([]),
-      includeTracks ? fetchTracks(config, { style, q, limit, offset }) : Promise.resolve([])
+      includeTracks ? fetchTracks(config, { style, q, limit, offset }) : Promise.resolve({ tracks: [], scanned: 0 })
     ]);
+    const tracks = trackPage.tracks;
     sendJson(req, res, 200, {
       ok: true,
       enabled: true,
@@ -287,6 +292,10 @@ module.exports = async function handler(req, res) {
       count: {
         artists: artists.length,
         tracks: tracks.length
+      },
+      pagination: {
+        scanned: { artists: artists.length, tracks: trackPage.scanned },
+        hasMore: artists.length >= limit || trackPage.scanned >= limit
       },
       artists,
       tracks

@@ -4811,6 +4811,7 @@ const CATALOG_EXTRA_IMPORT_PAGE_SIZE = 200;
 const CATALOG_EXTRA_IMPORT_MAX_PAGES = 90;
 const CATALOG_EXTRA_IMPORT_LIMIT = CATALOG_EXTRA_IMPORT_PAGE_SIZE;
 const CATALOG_EXTRA_STYLE_PAGE_LIMIT = 4;
+const CATALOG_EXTRA_IMPORT_MAX_OFFSET = 20000;
 const FAST_DATASET_WAIT_MS = 120;
 const FAST_SUPABASE_WAIT_MS = 360;
 const FAST_COVERAGE_WAIT_MS = 420;
@@ -10860,6 +10861,7 @@ let externalDatasetImportedStyles = new Set();
 let externalDatasetStylePromises = new Map();
 let catalogExtraImportDoneAll = false;
 let catalogExtraImportPromises = new Map();
+let catalogExtraImportOffsets = new Map();
 let catalogExtraImportedStyles = new Set();
 let catalogExtraImportNotified = false;
 let introQuoteTimer = 0;
@@ -17922,12 +17924,14 @@ async function fetchCatalogExtraPage(style = "", offset = 0) {
   }
 }
 
-async function fetchCatalogExtraPayload(style = "") {
+async function fetchCatalogExtraPayload(style = "", { offset: startOffset = 0 } = {}) {
   const combined = {
     ok: true,
     enabled: true,
     style,
     count: { artists: 0, tracks: 0 },
+    complete: false,
+    nextOffset: startOffset,
     artists: [],
     tracks: []
   };
@@ -17939,9 +17943,13 @@ async function fetchCatalogExtraPayload(style = "") {
     ? Math.min(CATALOG_EXTRA_IMPORT_MAX_PAGES, CATALOG_EXTRA_STYLE_PAGE_LIMIT)
     : CATALOG_EXTRA_IMPORT_MAX_PAGES;
   for (let page = 0; page < maxPages; page += 1) {
-    const offset = page * CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+    const offset = startOffset + page * CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+    if (offset > CATALOG_EXTRA_IMPORT_MAX_OFFSET) break;
     const payload = await fetchCatalogExtraPage(style, offset);
-    if (!payload) return loadedAnyPage ? combined : null;
+    if (!payload) {
+      if (!loadedAnyPage) return null;
+      break;
+    }
 
     loadedAnyPage = true;
     const artists = Array.isArray(payload.artists) ? payload.artists : [];
@@ -17961,7 +17969,11 @@ async function fetchCatalogExtraPayload(style = "") {
       combined.tracks.push(track);
     });
 
-    if (artists.length < CATALOG_EXTRA_IMPORT_PAGE_SIZE && tracks.length < CATALOG_EXTRA_IMPORT_PAGE_SIZE) break;
+    combined.nextOffset = offset + CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+    const hasMore = typeof payload.pagination?.hasMore === "boolean"
+      ? payload.pagination.hasMore
+      : artists.length >= CATALOG_EXTRA_IMPORT_PAGE_SIZE || tracks.length >= CATALOG_EXTRA_IMPORT_PAGE_SIZE;
+    if (!hasMore) { combined.complete = true; break; }
   }
 
   combined.count = {
@@ -17982,15 +17994,18 @@ async function hydrateCatalogExtraFromSupabase(style = "") {
   if (catalogExtraImportPromises.has(key)) return catalogExtraImportPromises.get(key);
 
   const promise = (async () => {
-    const payload = await fetchCatalogExtraPayload(cleanStyle);
+    const payload = await fetchCatalogExtraPayload(cleanStyle, { offset: catalogExtraImportOffsets.get(key) || 0 });
     if (!payload) {
-      if (cleanStyle) catalogExtraImportedStyles.add(cleanStyle);
       return { tracksImported: 0, artistsImported: 0, artistSeedsAdded: 0 };
     }
 
     const merged = mergeCatalogExtraPayload(payload);
-    if (cleanStyle) catalogExtraImportedStyles.add(cleanStyle);
-    else catalogExtraImportDoneAll = true;
+    catalogExtraImportOffsets.set(key, payload.nextOffset);
+    if (payload.complete) {
+      if (cleanStyle) catalogExtraImportedStyles.add(cleanStyle);
+      else catalogExtraImportDoneAll = true;
+      catalogExtraImportOffsets.delete(key);
+    }
 
     if (merged.tracksImported > 0 || merged.artistsImported > 0 || merged.artistSeedsAdded > 0) {
       dedupeCatalogByTrackKey();
@@ -18013,7 +18028,9 @@ async function hydrateCatalogExtraFromSupabase(style = "") {
     }
 
     return merged;
-  })();
+  })().finally(() => {
+    if (catalogExtraImportPromises.get(key) === promise) catalogExtraImportPromises.delete(key);
+  });
 
   catalogExtraImportPromises.set(key, promise);
   return promise;
