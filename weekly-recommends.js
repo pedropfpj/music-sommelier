@@ -11,6 +11,15 @@
     { artist: "Tengri", title: "Ritual of Dust", style: "forest_psy", tag: "Forest", url: "https://beatspace-parvati.bandcamp.com/track/ritual-of-dust", note: text("A abertura de Gipsy Bag leva ao universo orgânico e atmosférico de Tengri, pela Parvati.", "Gipsy Bag’s opening track introduces Tengri’s organic, atmospheric world on Parvati.", "La apertura de Gipsy Bag presenta el universo orgánico y atmosférico de Tengri en Parvati."), releaseDate: "2026-03-13" },
     { artist: "Dylalien", title: "Portal Party Mix 5000", style: "forest_psy", tag: "Westpsy / Forest", url: "https://moonkoradjirecords.bandcamp.com/track/dylalien-portal-party-mix-5000", note: text("Uma entrada no psytrance pouco convencional de B. Whalian, do integrante do Fractal Cowboys.", "A doorway into the unconventional psytrance of B. Whalian, by the Fractal Cowboys member.", "Una entrada al psytrance poco convencional de B. Whalian, del integrante de Fractal Cowboys."), releaseDate: "2026-06-04" }
   ].map((track, i) => ({ ...track, id: `psy-radar-1:${i}` }));
+  // Verified on the label's exact artist/title page on 2026-11-09. This adds a
+  // source link without changing the immutable v1 selection or playback status.
+  const verifiedEditionSources = Object.freeze({
+    "ambient_techno:convextion|miranda": { artist: "Convextion", title: "Miranda", style: "ambient_techno", label: "Mojuba", url: "https://mojubarecords.bandcamp.com/track/miranda" }
+  });
+  function verifiedEditionSource(item) {
+    const source = verifiedEditionSources[item?.id];
+    return source && source.artist === item.artist && source.title === item.title && source.style === item.style ? source : null;
+  }
 
   function weekIndex(now = new Date()) {
     const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now);
@@ -72,19 +81,70 @@
   Object.assign(copy.pt, { sessionTitle: "Escuta da edição", sessionIntro: "Uma sequência de até três faixas desta seleção, com o contexto e as fontes originais. Você escolhe quando seguir.", sessionStart: "Ouvir {count} faixas da edição", sessionResume: "Retomar a escuta", sessionPosition: "Faixa {position} de {count}", sessionOpening: "Abrindo a faixa da edição…", sessionReady: "A faixa está no player abaixo. Use os controles para ouvir e siga quando quiser.", sessionUnavailable: "Esta faixa não está disponível no player agora. Ouça na fonte original ou siga para a próxima da edição.", sessionBusy: "O player está preparando outra faixa. Tente abrir esta faixa novamente.", sessionRetry: "Abrir esta faixa novamente", sessionPrevious: "Faixa anterior", sessionNext: "Próxima da edição", sessionFinish: "Concluir escuta", sessionBack: "Voltar à edição", sessionEnd: "Encerrar escuta", sessionSource: "Fonte original", sessionSearch: "Buscar esta faixa no YouTube" });
   Object.assign(copy.en, { sessionTitle: "Edition listening session", sessionIntro: "A sequence of up to three tracks from this selection, with context and original sources. You choose when to move on.", sessionStart: "Listen to {count} edition tracks", sessionResume: "Resume listening", sessionPosition: "Track {position} of {count}", sessionOpening: "Opening this edition’s track…", sessionReady: "The track is in the player below. Use its controls to listen and continue when you are ready.", sessionUnavailable: "This track is not available in the player right now. Use the original source or continue to the next edition track.", sessionBusy: "The player is preparing another track. Try opening this track again.", sessionRetry: "Open this track again", sessionPrevious: "Previous track", sessionNext: "Next edition track", sessionFinish: "Finish listening", sessionBack: "Back to the edition", sessionEnd: "End session", sessionSource: "Original source", sessionSearch: "Search for this track on YouTube" });
   Object.assign(copy.es, { sessionTitle: "Escucha de la edición", sessionIntro: "Una secuencia de hasta tres temas de esta selección, con contexto y fuentes originales. Tú eliges cuándo seguir.", sessionStart: "Escuchar {count} temas de la edición", sessionResume: "Retomar la escucha", sessionPosition: "Tema {position} de {count}", sessionOpening: "Abriendo el tema de la edición…", sessionReady: "El tema está en el reproductor de abajo. Usa sus controles y sigue cuando quieras.", sessionUnavailable: "Este tema no está disponible en el reproductor ahora. Usa la fuente original o sigue al próximo tema de la edición.", sessionBusy: "El reproductor está preparando otro tema. Intenta abrir este tema de nuevo.", sessionRetry: "Abrir este tema de nuevo", sessionPrevious: "Tema anterior", sessionNext: "Próximo de la edición", sessionFinish: "Terminar escucha", sessionBack: "Volver a la edición", sessionEnd: "Cerrar escucha", sessionSource: "Fuente original", sessionSearch: "Buscar este tema en YouTube" });
+  Object.assign(copy.pt, { sessionTitle: "Prévias da edição", sessionIntro: "Confira quais faixas desta edição têm prévia no app. A escuta reúne até três prévias confirmadas; todas as fontes continuam abaixo.", sessionCheck: "Conferir prévias da edição", sessionChecking: "Conferindo prévias da edição…", sessionRecheck: "Conferir novamente", sessionStartOne: "Ouvir 1 prévia da edição", sessionStart: "Ouvir {count} prévias da edição", sessionNone: "Nenhuma prévia foi confirmada no app agora. Explore a seleção nas fontes abaixo ou confira novamente.", sessionSummary: "{available} de {total} faixas com prévia no app. Nesta escuta: {count}.", sessionUnconfirmed: "{count} ainda sem confirmação.", previewUnchecked: "Prévia ainda não conferida", previewChecking: "Conferindo prévia…", previewPlayable: "Prévia disponível no app", previewUnavailable: "Sem prévia no app agora", previewUnconfirmed: "Prévia não confirmada agora", sessionPosition: "Prévia {position} de {count}", sessionFailedPosition: "Esta prévia não abriu", sessionReady: "A prévia está pronta no player abaixo. Se o som não começar, use o botão de reprodução.", sessionUnavailable: "A prévia não abriu agora. A fonte original continua disponível; siga para a próxima prévia confirmada ou volte à edição.", sessionNext: "Próxima prévia", sessionRetry: "Reabrir prévia" });
+  Object.assign(copy.en, { sessionTitle: "Edition previews", sessionIntro: "Check which tracks in this edition have an in-app preview. Listen to up to three confirmed previews; every source remains below.", sessionCheck: "Check edition previews", sessionChecking: "Checking edition previews…", sessionRecheck: "Check again", sessionStartOne: "Listen to 1 edition preview", sessionStart: "Listen to {count} edition previews", sessionNone: "No in-app preview was confirmed right now. Explore the edition at its sources below or check again.", sessionSummary: "{available} of {total} tracks have an in-app preview. This session: {count}.", sessionUnconfirmed: "{count} still unconfirmed.", previewUnchecked: "Preview not checked yet", previewChecking: "Checking preview…", previewPlayable: "In-app preview available", previewUnavailable: "No in-app preview right now", previewUnconfirmed: "Preview not confirmed right now", sessionPosition: "Preview {position} of {count}", sessionFailedPosition: "This preview did not open", sessionReady: "The preview is ready in the player below. If audio does not start, use the playback button.", sessionUnavailable: "The preview did not open right now. The original source remains available; continue to the next confirmed preview or return to the edition.", sessionNext: "Next preview", sessionRetry: "Open preview again" });
+  Object.assign(copy.es, { sessionTitle: "Previas de la edición", sessionIntro: "Comprueba qué temas de esta edición tienen previa en la app. Escucha hasta tres previas confirmadas; todas las fuentes siguen abajo.", sessionCheck: "Comprobar previas de la edición", sessionChecking: "Comprobando previas de la edición…", sessionRecheck: "Comprobar de nuevo", sessionStartOne: "Escuchar 1 previa de la edición", sessionStart: "Escuchar {count} previas de la edición", sessionNone: "No se confirmó ninguna previa en la app ahora. Explora la edición en sus fuentes abajo o comprueba de nuevo.", sessionSummary: "{available} de {total} temas con previa en la app. En esta escucha: {count}.", sessionUnconfirmed: "{count} todavía sin confirmar.", previewUnchecked: "Previa todavía no comprobada", previewChecking: "Comprobando previa…", previewPlayable: "Previa disponible en la app", previewUnavailable: "Sin previa en la app ahora", previewUnconfirmed: "Previa no confirmada ahora", sessionPosition: "Previa {position} de {count}", sessionFailedPosition: "Esta previa no abrió", sessionReady: "La previa está lista en el reproductor de abajo. Si el audio no empieza, usa el botón de reproducción.", sessionUnavailable: "La previa no abrió ahora. La fuente original sigue disponible; continúa a la próxima previa confirmada o vuelve a la edición.", sessionNext: "Próxima previa", sessionRetry: "Abrir previa de nuevo" });
   const trackIdentity = track => `${track?.artist || ""}|${track?.title || track?.song || ""}`.toLowerCase().normalize("NFD").replace(/[^\w\s|]/g, "").trim();
+  copy.pt.labelSource = "Fonte da gravadora: {label}";
+  copy.en.labelSource = "Label source: {label}";
+  copy.es.labelSource = "Fuente del sello: {label}";
 
-  function mount(root, { getLanguage = () => "pt", navigate = () => {}, beforeListen = () => {}, listenToTrack = null } = {}) {
+  function mount(root, { getLanguage = () => "pt", navigate = () => {}, beforeListen = () => {}, listenToTrack = null, prepareEditionTracks = null } = {}) {
     if (!root) return null;
     let data = null, pending = null, failed = false, current = weekIndex();
     const params = new URLSearchParams(scope.location.search);
     let index = parseEdition(params.get("edition"), current), filter = params.get("weeklyStyle") || "all";
     let pinned = params.has("edition"), lastSignature = "";
     let session = null, sessionRoot = null, sessionGeneration = 0;
+    let preparation = null, preparationGeneration = 0;
     const lang = () => copy[getLanguage()] ? getLanguage() : "pt";
     const c = () => copy[lang()];
     const dateLabel = date => new Intl.DateTimeFormat({ pt: "pt-BR", en: "en-GB", es: "es-ES" }[lang()], { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
     const sessionMatchesEdition = () => session && session.index === index && session.filter === filter;
+    const editionKey = () => `${filter === "psy-radar" ? START : weekDate(index)}|${filter}`;
+    const itemSnapshot = item => JSON.stringify([item.id, item.artist, item.title, item.style, item.url]);
+    const preparationMatchesEdition = () => preparation && preparation.editionKey === editionKey();
+    const availableItems = () => preparationMatchesEdition() && !preparation.busy ? preparation.items.filter(item => preparation.statuses.get(item) === "playable") : [];
+    const sessionCanResume = () => sessionMatchesEdition() && preparationMatchesEdition() && preparation.statuses.get(session.items[session.position]) === "playable";
+    function invalidatePreparation() {
+      preparationGeneration++;
+      preparation = null;
+    }
+    async function checkEditionPreviews() {
+      if (!data || typeof prepareEditionTracks !== "function" || preparation?.busy) return;
+      const items = selection(data, index, filter);
+      if (!items.length) return;
+      const generation = ++preparationGeneration;
+      const active = { editionKey: editionKey(), items, snapshots: items.map(itemSnapshot), statuses: new Map(), busy: true, checked: false };
+      preparation = active;
+      render();
+      const isCurrent = () => preparation === active && active.busy && generation === preparationGeneration && active.editionKey === editionKey() && active.items.every((item, i) => itemSnapshot(item) === active.snapshots[i]);
+      let timer;
+      try {
+        const result = await Promise.race([
+          Promise.resolve().then(() => prepareEditionTracks(items, { editionKey: active.editionKey, isCurrent })),
+          new Promise(resolve => { timer = scope.setTimeout(() => resolve(null), 30000); })
+        ]);
+        if (!isCurrent()) return;
+        const rows = result?.ok === true && Array.isArray(result.results) ? result.results : [];
+        for (const item of items) {
+          const matching = rows.filter(row => row?.item === item);
+          const status = matching.length === 1 && ["playable", "unavailable", "unconfirmed"].includes(matching[0].status) ? matching[0].status : "unconfirmed";
+          active.statuses.set(item, status);
+        }
+      } catch (_) {
+        if (!isCurrent()) return;
+        items.forEach(item => active.statuses.set(item, "unconfirmed"));
+      } finally {
+        scope.clearTimeout(timer);
+        if (preparation === active && generation === preparationGeneration && active.editionKey === editionKey()) {
+          active.busy = false;
+          active.checked = true;
+          render();
+          root.querySelector("#weeklySessionStart:not(:disabled), #weeklySessionRecheck")?.focus({ preventScroll: true });
+        }
+      }
+    }
     function renderSession() {
       if (!sessionRoot) {
         const playerPanel = document.getElementById("swipeStartPanel");
@@ -111,17 +171,18 @@
       if (!session) { sessionRoot.innerHTML = ""; return; }
       const t = c(), track = session.items[session.position];
       const direct = safeLink(track.url);
+      const labelSource = verifiedEditionSource(track);
       const source = direct || `https://www.youtube.com/results?search_query=${encodeURIComponent(`${track.artist} ${track.title}`)}`;
       const style = data?.styles.find(s => s.id === track.style)?.label || track.style;
       const reason = track.note?.[lang()] || `${t.why} ${style}.`;
       const state = session.busy ? t.sessionOpening : session.result === "opened" ? t.sessionReady : session.result === "busy" ? t.sessionBusy : t.sessionUnavailable;
       sessionRoot.setAttribute("aria-busy", String(session.busy));
       sessionRoot.innerHTML = `<div class="weekly-listening-head"><div><p class="weekly-kicker">${t.title} · ${dateLabel(session.date)}</p><h4 id="weeklyListeningTitle">${t.sessionTitle}</h4></div><button id="weeklyListeningEnd" class="weekly-share" type="button">${t.sessionEnd}</button></div>
-        <p class="weekly-listening-position">${t.sessionPosition.replace("{position}", session.position + 1).replace("{count}", session.items.length)}</p>
+        <p class="weekly-listening-position">${session.result === "unavailable" ? t.sessionFailedPosition : t.sessionPosition.replace("{position}", session.position + 1).replace("{count}", session.items.length)}</p>
         <p class="weekly-listening-track">${escape(track.artist)} — ${escape(track.title)}</p><p class="weekly-reason">${escape(reason)}</p>
         <p id="weeklyListeningStatus" class="weekly-status" role="status" aria-live="polite" aria-atomic="true">${state}</p>
         <div class="weekly-listening-actions"><button id="weeklyListeningPrevious" class="weekly-share" type="button" ${session.busy || session.position === 0 ? "disabled" : ""}>${t.sessionPrevious}</button><button id="weeklyListeningNext" class="weekly-session-start" type="button" ${session.busy ? "disabled" : ""}>${session.position + 1 < session.items.length ? t.sessionNext : t.sessionFinish}</button>${!session.busy && session.result !== "opened" ? `<button id="weeklyListeningRetry" class="weekly-share" type="button">${t.sessionRetry}</button>` : ""}</div>
-        <div class="weekly-listening-links"><button id="weeklyListeningBack" class="weekly-back" type="button">${t.sessionBack}</button><a href="${escape(source)}" target="_blank" rel="noopener noreferrer">${direct ? t.sessionSource : t.sessionSearch} ↗</a></div>`;
+        <div class="weekly-listening-links"><button id="weeklyListeningBack" class="weekly-back" type="button">${t.sessionBack}</button><a href="${escape(source)}" target="_blank" rel="noopener noreferrer">${direct ? t.sessionSource : t.sessionSearch} ↗</a>${labelSource ? `<a class="weekly-label-source" href="${escape(labelSource.url)}" target="_blank" rel="noopener noreferrer">${escape(t.labelSource.replace("{label}", labelSource.label))} ↗</a>` : ""}</div>`;
     }
     function endSession() {
       sessionGeneration++;
@@ -130,7 +191,7 @@
       renderSession();
       navigate("recommends");
       render();
-      root.querySelector("#weeklySessionStart")?.focus();
+      root.querySelector("#weeklySessionStart, #weeklySessionRecheck")?.focus();
     }
     async function openSessionTrack(position) {
       if (!session || typeof listenToTrack !== "function") return;
@@ -147,6 +208,9 @@
       } catch (_) { if (isCurrent()) active.result = "unavailable"; }
       finally {
         if (isCurrent()) {
+          if (["unavailable", "opened"].includes(active.result) && preparation?.items.includes(active.items[position])) {
+            preparation.statuses.set(active.items[position], active.result === "opened" ? "playable" : "unavailable");
+          }
           active.busy = false; renderSession();
           sessionRoot?.querySelector("#weeklyListeningNext")?.focus({ preventScroll: true });
         }
@@ -154,8 +218,8 @@
     }
     function startSession() {
       if (!data || typeof listenToTrack !== "function") return;
-      if (!sessionMatchesEdition()) {
-        const items = selection(data, index, filter).slice(0, 3);
+      if (!sessionCanResume()) {
+        const items = availableItems().slice(0, 3);
         if (!items.length) return;
         session = { index, filter, date: filter === "psy-radar" ? START : weekDate(index), items, position: 0, busy: false, result: "" };
       }
@@ -170,6 +234,13 @@
       const focused = root.contains(document.activeElement) ? document.activeElement.id : "";
       const t = c(), isSpecial = filter === "psy-radar", date = isSpecial ? START : weekDate(index);
       const items = data ? selection(data, index, filter) : [];
+      const availability = preparationMatchesEdition() ? preparation : null;
+      const playable = availableItems();
+      const queueCount = Math.min(3, playable.length);
+      const unconfirmed = availability?.checked ? items.filter(item => availability.statuses.get(item) !== "playable" && availability.statuses.get(item) !== "unavailable").length : 0;
+      const summary = availability?.busy ? t.sessionChecking : availability?.checked ?
+        `${playable.length ? t.sessionSummary.replace("{available}", playable.length).replace("{total}", items.length).replace("{count}", queueCount) : t.sessionNone}${unconfirmed ? ` ${t.sessionUnconfirmed.replace("{count}", unconfirmed)}` : ""}` : t.sessionIntro;
+      const startLabel = sessionCanResume() ? t.sessionResume : availability?.busy ? t.sessionChecking : availability?.checked ? (queueCount === 1 ? t.sessionStartOne : t.sessionStart.replace("{count}", queueCount)) : t.sessionCheck;
       const groups = data ? [...new Set(data.styles.map(s => s.group))] : [];
       const options = `<option value="all">${t.all}</option><option value="psy-radar">${t.special}</option>` + groups.map(group => `<optgroup label="${escape(group)}">${data.styles.filter(s => s.group === group).map(s => `<option value="${escape(s.id)}">${escape(s.label)}</option>`).join("")}</optgroup>`).join("");
       root.innerHTML = `
@@ -181,7 +252,7 @@
         </header>
         <div class="weekly-toolbar"><div><label for="weeklyStyleSelect">${t.style}</label><select id="weeklyStyleSelect">${options}</select></div><button id="weeklyShare" class="weekly-share" type="button" ${!items.length ? "disabled" : ""}>${t.share} ↗</button></div>
         <div class="weekly-edition"><div><p>${isSpecial ? "PSYTRANCE RADAR #1" : `${t.edition} ${String(index + 1).padStart(3, "0")}`}</p><h4>${dateLabel(date)}</h4></div><span>${data ? items.length : "—"} ${t.count}</span><div class="weekly-edition-nav"><button id="weeklyPrev" type="button" aria-label="${t.prev}" ${index === 0 || isSpecial ? "disabled" : ""}>←</button><button id="weeklyNext" type="button" aria-label="${t.next}" ${index >= current || isSpecial ? "disabled" : ""}>→</button></div></div>
-        ${items.length ? `<section class="weekly-session-entry" aria-labelledby="weeklySessionEntryTitle"><div><h5 id="weeklySessionEntryTitle">${t.sessionTitle}</h5><p>${t.sessionIntro}</p></div><button id="weeklySessionStart" class="weekly-session-start" type="button" ${typeof listenToTrack !== "function" ? "disabled" : ""}>${sessionMatchesEdition() ? t.sessionResume : t.sessionStart.replace("{count}", Math.min(3, items.length))}</button></section>` : ""}
+        ${items.length ? `<section class="weekly-session-entry" aria-labelledby="weeklySessionEntryTitle" aria-busy="${Boolean(availability?.busy)}"><div><h5 id="weeklySessionEntryTitle">${t.sessionTitle}</h5><p id="weeklyPreviewSummary" role="status" aria-live="polite" aria-atomic="true">${summary}</p></div><div class="weekly-session-buttons">${!availability?.checked || queueCount ? `<button id="weeklySessionStart" class="weekly-session-start" type="button" aria-describedby="weeklyPreviewSummary" ${availability?.busy || typeof listenToTrack !== "function" || typeof prepareEditionTracks !== "function" ? "disabled" : ""}>${startLabel}</button>` : ""}${availability?.checked ? `<button id="weeklySessionRecheck" class="weekly-share" type="button">${t.sessionRecheck}</button>` : ""}</div></section>` : ""}
         <p id="weeklyStatus" class="weekly-status" role="status">${!data ? failed ? t.error : t.loading : items.length === 0 ? t.empty : (items.length < 6 || (filter !== "all" && !isSpecial && data.tracks.filter(track => track.style === filter).length <= 6)) ? t.small : ""}</p>
         ${failed ? `<button id="weeklyRetry" class="weekly-share" type="button">${t.retry}</button>` : ""}
         <ol class="weekly-track-list">${items.map((track, i) => {
@@ -191,7 +262,10 @@
           const provider = direct.includes("bandcamp.com") ? "Bandcamp" : direct.includes("deezer.com") ? "Deezer" : direct.includes("spotify.com") ? "Spotify" : "YouTube";
           const listen = direct ? `${t.listen} ${provider}` : t.search;
           const reason = track.note?.[lang()] || `${t.why} ${style}.`;
-          return `<li class="weekly-track" data-weekly-track="${escape(track.id)}" style="--weekly-track-hue:${[160, 204, 38, 294, 8, 74][i]}"><span class="weekly-track-number" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="weekly-track-copy"><div class="weekly-track-meta"><span>${escape(track.tag || style)}</span>${track.releaseDate ? `<small>${t.launch} · ${dateLabel(track.releaseDate)}</small>` : ""}</div><p class="weekly-artist">${escape(track.artist)}</p><h5>${escape(track.title)}</h5><p class="weekly-reason">${escape(reason)}</p></div><a class="weekly-listen" href="${escape(url)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(`${listen}: ${track.artist} — ${track.title}`)}">${listen}<span aria-hidden="true">↗</span></a></li>`;
+          const labelSource = verifiedEditionSource(track);
+          const previewStatus = availability?.busy ? "checking" : availability?.checked ? availability.statuses.get(track) || "unconfirmed" : "unchecked";
+          const previewLabel = t[{ checking: "previewChecking", playable: "previewPlayable", unavailable: "previewUnavailable", unconfirmed: "previewUnconfirmed", unchecked: "previewUnchecked" }[previewStatus]];
+          return `<li class="weekly-track" data-weekly-track="${escape(track.id)}" style="--weekly-track-hue:${[160, 204, 38, 294, 8, 74][i]}"><span class="weekly-track-number" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span><div class="weekly-track-copy"><div class="weekly-track-meta"><span>${escape(track.tag || style)}</span>${track.releaseDate ? `<small>${t.launch} · ${dateLabel(track.releaseDate)}</small>` : ""}</div><p class="weekly-artist">${escape(track.artist)}</p><h5>${escape(track.title)}</h5><p class="weekly-reason">${escape(reason)}</p><p class="weekly-preview-status" data-weekly-preview="${previewStatus}">${previewLabel}</p></div><div class="weekly-source-links"><a class="weekly-listen" href="${escape(url)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(`${listen}: ${track.artist} — ${track.title}`)}">${listen}<span aria-hidden="true">↗</span></a>${labelSource ? `<a class="weekly-label-source" href="${escape(labelSource.url)}" target="_blank" rel="noopener noreferrer">${escape(t.labelSource.replace("{label}", labelSource.label))} ↗</a>` : ""}</div></li>`;
         }).join("")}</ol>
         <div id="weeklyCopyFallback" hidden><label for="weeklyCopyText">${t.manualCopy}</label><textarea id="weeklyCopyText" readonly rows="8"></textarea></div>
         <footer class="weekly-footer"><p>${isSpecial ? t.specialNote : t.note}</p><div><span>${t.upcoming}</span><strong>${dateLabel(weekDate(current + 1))}</strong></div></footer>`;
@@ -239,25 +313,32 @@
     }
     function refresh() {
       const next = weekIndex();
-      if (next !== current) { current = next; if (!pinned) index = next; }
+      if (next !== current) { current = next; if (!pinned) { index = next; invalidatePreparation(); } }
       refreshEntry();
       const signature = [lang(), current, index, filter, sessionGeneration].join("|");
       if (signature !== lastSignature) { lastSignature = signature; render(); }
     }
     root.addEventListener("click", event => {
-      const link = event.target.closest(".weekly-listen"); if (link) beforeListen();
+      const link = event.target.closest(".weekly-listen, .weekly-label-source"); if (link) beforeListen();
       const id = event.target.closest("button")?.id;
       if (id === "weeklyBack") navigate("discover");
       if (id === "weeklyRetry") void load();
       if (id === "weeklyShare") void share();
-      if (id === "weeklySessionStart") startSession();
-      if (id === "weeklyPrev" && index > 0) { index--; pinned = true; render(); }
-      if (id === "weeklyNext" && index < current) { index++; pinned = index !== current; render(); }
+      if (id === "weeklySessionStart") {
+        if (sessionCanResume() || preparationMatchesEdition() && preparation.checked) startSession();
+        else void checkEditionPreviews();
+      }
+      if (id === "weeklySessionRecheck") { invalidatePreparation(); void checkEditionPreviews(); }
+      if (id === "weeklyPrev" && index > 0) { index--; pinned = true; invalidatePreparation(); render(); }
+      if (id === "weeklyNext" && index < current) { index++; pinned = index !== current; invalidatePreparation(); render(); }
     });
-    root.addEventListener("change", event => { if (event.target.id === "weeklyStyleSelect") { filter = event.target.value; render(); } });
+    root.addEventListener("change", event => { if (event.target.id === "weeklyStyleSelect") { filter = event.target.value; invalidatePreparation(); render(); } });
     document.getElementById("weeklyTeaserButton")?.addEventListener("click", () => navigate("recommends"));
     document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
     scope.addEventListener("focus", refresh);
+    scope.addEventListener("sonic:profile-changed", () => {
+      invalidatePreparation(); sessionGeneration++; session = null; render();
+    });
     // Also updates a page left open across midnight on Wednesday.
     scope.setInterval(() => { if (!document.hidden && weekIndex() !== current) refresh(); }, 60000);
     refresh();
@@ -267,6 +348,7 @@
       },
       playbackUnavailable(track) {
         if (session && trackIdentity(track) === trackIdentity(session.items[session.position])) {
+          if (preparation?.items.includes(session.items[session.position])) preparation.statuses.set(session.items[session.position], "unavailable");
           session.result = "unavailable"; session.busy = false; renderSession();
         }
       },

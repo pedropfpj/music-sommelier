@@ -42,6 +42,12 @@
 .weekly-session-entry { display: flex; align-items: center; gap: 1.25rem; justify-content: space-between; }
 .weekly-session-entry h5, .weekly-listening-head h4 { font: 700 1rem/1.4 "Syne", sans-serif; color: #e4fff1; margin: 0; }
 .weekly-session-entry p { color: #b9d6cb; font-size: .85rem; line-height: 1.55; margin: .35rem 0 0; max-width: 62ch; }
+.weekly-session-buttons { display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; flex-shrink: 0; }
+.weekly-session-buttons button:disabled { opacity: .6; cursor: wait; }
+.weekly-preview-status { display: inline-flex; align-items: center; gap: .4rem; margin: .75rem 0 0; padding: .25rem .5rem; border: 1px solid #41515d; border-radius: 4px; color: #b6c8d3; font-size: .75rem; line-height: 1.5; }
+.weekly-preview-status[data-weekly-preview="playable"] { color: #baf4d8; background: #15372e; border-color: #487c67; }
+.weekly-preview-status[data-weekly-preview="unavailable"] { color: #e4c7a8; border-color: #76634e; }
+.weekly-preview-status[data-weekly-preview="checking"] { color: #d5e6f0; border-color: #627c8c; }
 .weekly-session-start { flex-shrink: 0; min-height: 48px; padding: .7rem 1rem; border: 1px solid #9df3ce; border-radius: 6px; background: #a6f4d1; color: #102a23; font: 700 .85rem/1.4 "Chakra Petch", sans-serif; cursor: pointer; }
 .weekly-session-start:hover { background: #c5ffe4; }
 .weekly-listening-session[hidden] { display: none !important; }
@@ -67,6 +73,8 @@
 .weekly-reason { margin: .55rem 0 0; max-width: 68ch; font-size: .85rem; line-height: 1.55; color: #a8bdce; }
 .weekly-listen { display: inline-flex; align-items: center; justify-content: space-between; gap: .8rem; min-height: 44px; min-width: 158px; padding: .6rem .8rem; border: 1px solid #3e655c; border-radius: 6px; color: #aeefd4; background: #132b29; text-decoration: none; font-size: .75rem; }
 .weekly-listen:hover, .weekly-share:hover { background: #1a3935; border-color: #84c7ac; }
+.weekly-source-links { display: flex; flex-direction: column; align-items: start; gap: .3rem; }
+.weekly-label-source { display: inline-flex; align-items: center; min-height: 44px; color: #b5d6cc; font-size: .75rem; line-height: 1.5; text-underline-offset: 3px; }
 .weekly-footer { display: flex; justify-content: space-between; align-items: start; gap: 2rem; padding: 1.2rem 0 0; border-top: 1px solid #354e53; }
 .weekly-footer > p { color: #9eafbf; font-size: .73rem; line-height: 1.6; max-width: 70ch; margin: 0; }
 .weekly-footer > div { display: grid; flex-shrink: 0; gap: .3rem; color: #dcf4e8; }
@@ -77,6 +85,8 @@
 .weekly-teaser-button:focus-visible, #weeklyRecommendsPanel :is(button, a, select, textarea):focus-visible { outline: 2px solid #a6fddd; outline-offset: 4px; }
 @media (max-width: 680px) {
   .weekly-session-entry { flex-direction: column; align-items: stretch; gap: .85rem; }
+  .weekly-session-buttons { align-items: stretch; }
+  .weekly-session-buttons .weekly-share { align-self: start; }
   .weekly-listening-head { flex-wrap: wrap; gap: .75rem; }
   .weekly-listening-actions > button { flex: 1 1 130px; }
   .weekly-hero { grid-template-columns: 1fr 90px; gap: .75rem; padding-top: 1.4rem; }
@@ -92,6 +102,7 @@
   .weekly-track { grid-template-columns: 30px minmax(0, 1fr); gap: .75rem; padding: 1.2rem 0; }
   .weekly-track-number { font-size: 1.4rem; }
   .weekly-listen { grid-column: 2; justify-self: start; }
+  .weekly-source-links { grid-column: 2; }
   .weekly-track-meta { gap: .35rem .6rem; }
   .weekly-footer { flex-direction: column; gap: 1rem; }
   .weekly-teaser-button { padding: .9rem; gap: .7rem; flex-wrap: wrap; }
