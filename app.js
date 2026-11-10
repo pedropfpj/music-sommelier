@@ -56546,7 +56546,7 @@ async function renderPreview(track, options = {}) {
     if (!isStillCurrentPreviewTrack()) return false;
     if (artistPreviewFallback?.previewUrl) playablePreview = artistPreviewFallback.previewUrl;
   }
-  if (!playablePreview && !hasExternalPlaybackRoute && fastMode) {
+  if (!playablePreview && !hasExternalPlaybackRoute && fastMode && options.deferRetry !== false) {
     window.setTimeout(() => {
       if (!isStillCurrentPreviewTrack()) return;
       void renderPreview(track, { ...options, fast: false, exactRecordingOnly }).catch(() => {});
@@ -58696,6 +58696,126 @@ function selectLibraryTracks(entries) {
     currentLocale(), styleLabelByValue);
 }
 
+const weeklyEditionPreviewCache = new Map();
+
+function weeklyEditionItemKey(item = {}) {
+  return JSON.stringify([item.id || "", item.artist || "", item.title || "", item.style || "", item.url || ""]);
+}
+
+function weeklyExactMetadataMatch(track, match) {
+  if (!match || !match.artist || !(match.song || match.title)) return false;
+  // Retain version words: an edit, remix or live recording is another item.
+  if (normalize(match.song || match.title) !== normalize(track.song)) return false;
+  return normalize(match.artist) === normalize(track.artist);
+}
+
+async function resolveWeeklyEditionCatalogTrack(item, isCurrent) {
+  const requestedKey = recommendationTrackKey({ artist: item.artist, song: item.title });
+  const sourceId = String(item.url || "").match(/^https:\/\/www\.deezer\.com\/track\/(\d+)$/)?.[1] || "";
+  const resolve = () => [...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(candidate => {
+    if (!candidate || candidate.style !== item.style || recommendationTrackKey(candidate) !== requestedKey) return false;
+    const candidateId = String(candidate.deezerTrackId || catalogTrackMetadataText(candidate, "deezer_track_id") || "");
+    return !sourceId || !candidateId || sourceId === candidateId;
+  });
+  let original = resolve();
+  if (!original) {
+    await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: item.style }), 6000, null);
+    if (!isCurrent()) return null;
+    original = resolve();
+  }
+  if (!original || !isCurrent()) return null;
+  const track = { ...original, previewCandidates: [...(original.previewCandidates || [])], artistPreviewFallback: null };
+  if (sourceId) track.deezerTrackId = sourceId;
+  return isTrackEligibleForRecommendation(track) ? track : null;
+}
+
+async function prepareWeeklyEditionTracks(items = [], context = {}) {
+  const generation = recommendationSessionGeneration;
+  const profileKey = sessionProfileKey();
+  const isCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && context.isCurrent?.() !== false;
+  const inputs = (Array.isArray(items) ? items : []).slice(0, 6);
+  const results = new Array(inputs.length);
+  let cursor = 0;
+  const prepare = async item => {
+    if (!isCurrent()) return { item, status: "unconfirmed" };
+    const key = weeklyEditionItemKey(item);
+    const cached = weeklyEditionPreviewCache.get(key);
+    if (cached && cached.expiresAt > Date.now() && normalizePreviewUrl(cached.track.previewUrl)) {
+      return { item, status: "playable" };
+    }
+    weeklyEditionPreviewCache.delete(key);
+    if (!item.artist || !item.title || !item.style) return { item, status: "unavailable" };
+    try {
+      const track = await resolveWeeklyEditionCatalogTrack(item, isCurrent);
+      if (!track || !isCurrent()) return { item, status: "unconfirmed" };
+      let candidates = previewCandidatesForTrack(track);
+      let resolved = null;
+      // Refresh expired links through the exact metadata lookup. Neither search
+      // links nor an embed URL count as a loaded audio preview for this queue.
+      if (!candidates.length) {
+        resolved = await fetchTrackMetadataFromApi(track, { forceLookup: true, timeoutMs: 6500 });
+        if (!isCurrent()) return { item, status: "unconfirmed" };
+        if (weeklyExactMetadataMatch(track, resolved) && normalizePreviewUrl(resolved.previewUrl)) {
+          promotePreviewCandidate(track, resolved.previewUrl);
+          candidates = previewCandidatesForTrack(track);
+        }
+      }
+      const probe = createTrackPreviewProbeElement();
+      let playable = "";
+      try {
+        playable = await pickPlayablePreviewSource(probe, candidates, { timeoutMs: 2200, maxCandidates: 2 });
+        // A dead, otherwise unexpired cached URL gets one fresh exact lookup.
+        if (!playable && candidates.length && !resolved && isCurrent()) {
+          resolved = await fetchTrackMetadataFromApi(track, { forceLookup: true, timeoutMs: 6500 });
+          if (weeklyExactMetadataMatch(track, resolved) && normalizePreviewUrl(resolved.previewUrl) && isCurrent()) {
+            playable = await pickPlayablePreviewSource(probe, [resolved.previewUrl], { timeoutMs: 2200, maxCandidates: 1 });
+          }
+        }
+      } finally { resetTrackPreviewElement(probe); }
+      if (!isCurrent()) return { item, status: "unconfirmed" };
+      if (!playable) return { item, status: "unconfirmed" };
+      track.previewUrl = playable;
+      track.previewCandidates = [playable];
+      track.previewChecked = true;
+      track.previewMissing = false;
+      track.weeklyVerifiedAudio = true;
+      weeklyEditionPreviewCache.set(key, { track, expiresAt: Date.now() + 120000 });
+      return { item, status: "playable" };
+    } catch (_) { return { item, status: "unconfirmed" }; }
+  };
+  // Two workers cap provider/media traffic; the six original rows keep their order.
+  const worker = async () => {
+    while (cursor < inputs.length && isCurrent()) {
+      const position = cursor++;
+      results[position] = await prepare(inputs[position]);
+    }
+  };
+  await Promise.all([worker(), worker()]);
+  if (!isCurrent()) return { ok: false, reason: "canceled", results: [] };
+  return { ok: true, results: inputs.map((item, position) => results[position] || { item, status: "unconfirmed" }) };
+}
+
+function waitForWeeklyPreviewMedia(track, isCurrent, timeoutMs = 5000) {
+  return new Promise(resolve => {
+    let settled = false;
+    const events = ["loadeddata", "canplay", "error", "abort", "emptied"];
+    const finish = ready => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      for (const event of events) trackPreview?.removeEventListener(event, check);
+      resolve(ready);
+    };
+    const check = () => {
+      if (!isCurrent() || !trackPreviewElementMatchesTrack(track) || trackPreview?.error) return finish(false);
+      if (Number(trackPreview.readyState) >= 2 && Number(trackPreview.duration) > 0) finish(true);
+    };
+    const timer = window.setTimeout(() => finish(false), timeoutMs);
+    for (const event of events) trackPreview?.addEventListener(event, check);
+    check();
+  });
+}
+
 async function openWeeklyEditionTrack(item = {}, context = {}) {
   if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return { ok: false, reason: "busy" };
   if (!item.artist || !item.title || !item.style) return { ok: false, reason: "unavailable" };
@@ -58707,25 +58827,26 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
   recommendationRunBusy = true;
   prepareExplicitPreviewAudio();
   try {
-    // Replay this edition's exact recording; never substitute a recommendation
-    // from the same artist or style when the archived recording is unavailable.
-    const requestedKey = recommendationTrackKey({ artist: item.artist, song: item.title });
-    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(candidate =>
-      candidate && candidate.style === item.style && recommendationTrackKey(candidate) === requestedKey && isTrackEligibleForRecommendation(candidate));
-    let track = resolveTrack();
-    if (!track) {
-      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: item.style }), 8000, null);
-      track = resolveTrack();
-    }
+    // Complete exact resolution before presenting anything. A detached fast-mode
+    // retry cannot determine whether this edition's listening session succeeded.
+    const prepared = await prepareWeeklyEditionTracks([item], { isCurrent: stillCurrent });
     if (!stillCurrent()) return { ok: false, reason: "canceled" };
+    const key = weeklyEditionItemKey(item);
+    const track = prepared.results?.[0]?.status === "playable" ? weeklyEditionPreviewCache.get(key)?.track : null;
     if (!track) return { ok: false, reason: "unavailable" };
     stopAllActivePlayback({ reason: "weekly_edition_track" });
     restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
+    const playerIsCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && currentRecommendation === track && context.isCurrent?.() !== false;
+    const rendered = await renderPreview(track, { fast: true, exactRecordingOnly: true, deferRetry: false });
+    const playable = rendered && await waitForWeeklyPreviewMedia(track, playerIsCurrent);
+    if (!playerIsCurrent()) return { ok: false, reason: "canceled" };
+    if (!playable) {
+      weeklyEditionPreviewCache.delete(key);
+      return { ok: false, reason: "unavailable" };
+    }
     firstRecommendationCompleted = true;
     markRecommendationPresented(track);
     updateStats();
-    const playable = await renderPreview(track, { fast: true, exactRecordingOnly: true });
-    if (!recommendationSessionIsCurrent(generation) || profileKey !== sessionProfileKey() || context.isCurrent?.() === false) return { ok: false, reason: "canceled" };
     trackRecommendationEvent("weekly_track_opened", track, lastPrefs || {}, { source: "weekly_recommends", edition: context.edition || "", position: context.position || 0 });
     return { ok: Boolean(playable), reason: playable ? "" : "unavailable" };
   } catch (_) {
@@ -66246,7 +66367,8 @@ async function bootSonicSearch() {
     getLanguage: () => currentLanguage,
     navigate: tab => setActiveAppTab(tab, { focusPanel: true }),
     beforeListen: () => stopAllActivePlayback({ reason: "weekly_recommendation" }),
-    listenToTrack: openWeeklyEditionTrack
+    listenToTrack: openWeeklyEditionTrack,
+    prepareEditionTracks: prepareWeeklyEditionTracks
   });
   if (currentActiveAppTabName() === "recommends") void weeklyRecommendsController?.open();
   window.SonicUniversalDiscoveryUi?.mount(document.getElementById("universalDiscoveryPanel"), {
