@@ -10929,6 +10929,7 @@ let dailyLikeMemoryState = null;
 let dailyDjController = null;
 let dailyRadarController = null;
 let userProfileController = null;
+let socialProfileIdentityHydration = null;
 let pendingSocialCommentRequest = null;
 let pendingSocialDiscussionReturn = null;
 let socialDiscussionReadinessRequested = false;
@@ -59162,6 +59163,7 @@ function socialSetStatus(message = "", tone = "") {
 function socialStoreSession(session = null) {
   if (socialState.session?.user?.id !== session?.user?.id) {
     resetLibrarySyncState();
+    socialProfileIdentityHydration = null;
     socialState.profile = null;
     socialState.profileAvatarUrl = "";
     socialCommentsState.loadToken += 1;
@@ -59719,6 +59721,9 @@ async function socialExchangeAuthCodeForSession(authCode = "") {
 function socialParamsIncludeAuthSignal(params) {
   return Boolean(
     params?.has("access_token") ||
+      params?.has("refresh_token") ||
+      params?.has("provider_token") ||
+      params?.has("provider_refresh_token") ||
       params?.has("error") ||
       params?.has("error_code") ||
       params?.has("error_description") ||
@@ -59740,7 +59745,7 @@ function socialAuthParamsFromUrlString(value = "") {
       if (socialParamsIncludeAuthSignal(searchParams)) return searchParams;
     }
   } catch (error) {
-    console.warn("Could not parse social auth URL", error);
+    console.warn("Could not parse social auth URL");
   }
   return null;
 }
@@ -59761,7 +59766,7 @@ function socialAuthHashParams() {
     }
     return null;
   } catch (error) {
-    console.warn("Could not parse social auth redirect", error);
+    console.warn("Could not parse social auth redirect");
     return null;
   }
 }
@@ -59773,13 +59778,20 @@ function hasPendingSocialAuthRedirect() {
 function socialClearAuthHash() {
   try {
     if (window.history?.replaceState) {
-      const params = new URLSearchParams(window.location.search || "");
-      ["access_token", "refresh_token", "expires_in", "token_type", "type", "provider_token", "provider_refresh_token", "error", "error_code", "error_description", "code", "state"].forEach((key) => params.delete(key));
-      const search = params.toString();
-      window.history.replaceState(null, document.title, `${window.location.pathname}${search ? `?${search}` : ""}`);
+      const url = new URL(window.location.href);
+      const authKeys = ["access_token", "refresh_token", "expires_in", "expires_at", "token_type", "type", "provider_token", "provider_refresh_token", "error", "error_code", "error_description", "code", "state"];
+      authKeys.forEach(key => url.searchParams.delete(key));
+      if (url.hash.length > 1) {
+        const hashParams = new URLSearchParams(url.hash.slice(1));
+        if (socialParamsIncludeAuthSignal(hashParams)) {
+          authKeys.forEach(key => hashParams.delete(key));
+          url.hash = hashParams.toString();
+        }
+      }
+      window.history.replaceState(window.history.state, document.title, `${url.pathname}${url.search}${url.hash}`);
     }
   } catch (error) {
-    console.warn("Could not clear social auth hash", error);
+    console.warn("Could not clear social auth hash");
   }
 }
 
@@ -59787,6 +59799,9 @@ async function socialHandleAuthRedirect() {
   const params = socialAuthHashParams();
   if (!params || !socialConfigReady()) return false;
   const returnTab = requestedAppTabFromUrl("discover");
+  // Keep the consumed values in this local snapshot while optional profile and
+  // library requests run. They no longer belong in the address bar/history.
+  socialClearAuthHash();
   const redirectError = [params.get("error_code"), params.get("error_description") || params.get("error")]
     .filter(Boolean)
     .join(" ");
@@ -59811,7 +59826,7 @@ async function socialHandleAuthRedirect() {
       socialSetStatus(sonicTinyCopy("Perfil conectado.", "Profile connected.", "Perfil conectado."), "ok");
       await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
     } catch (error) {
-      console.warn("Could not exchange social auth code", error);
+      console.warn("Could not exchange social auth code");
       const message = sonicTinyCopy(
         `Recebi o login, mas não consegui criar a sessão: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`,
         `I received the sign-in, but could not create the session: ${socialFriendlyAuthError(error.message)} Try signing in again.`,
@@ -59857,7 +59872,7 @@ async function socialHandleAuthRedirect() {
     socialSetStatus(sonicTinyCopy("Perfil conectado.", "Profile connected.", "Perfil conectado."), "ok");
     await continueWithOnlineSocialSession({ sync: false, showGuide: false, targetTab: returnTab });
   } catch (error) {
-    console.warn("Could not finish social auth redirect", error);
+    console.warn("Could not finish social auth redirect");
     const message = sonicTinyCopy(
       `Recebi o login, mas não consegui conectar automaticamente: ${socialFriendlyAuthError(error.message)} Tente entrar de novo.`,
       `I received the sign-in, but could not connect automatically: ${socialFriendlyAuthError(error.message)} Try signing in again.`,
@@ -59919,6 +59934,10 @@ function mountUserProfileIfEnabled() {
     session: () => socialState.session,
     freshSession: async () => {
       await ensureFreshSocialSession({ clearOnFailure: false });
+      if (authHasOnlineSession()) {
+        ensureOnlineSocialUserSession();
+        await hydrateSocialProfileIdentity();
+      }
       return authHasOnlineSession() ? socialState.session : null;
     },
     endpoint: () => resolveAppApiUrl("/api/user-profile"),
@@ -59930,10 +59949,13 @@ function mountUserProfileIfEnabled() {
     signOut: () => void socialSignOut(),
     signIn: () => void showAuthScreen(),
     onLoaded: (profile, avatarUrl) => {
-      if (profile?.id === socialState.session?.user?.id) socialState.profile = { ...socialState.profile, ...profile };
+      if (!profile?.id || profile.id !== socialState.session?.user?.id || !librarySessionMatchesOnlineAccount()) return;
+      socialState.profile = { ...socialState.profile, ...profile };
       socialState.profileAvatarUrl = avatarUrl;
+      renderSocialCommentsPanel();
     },
     onSaved: (profile, avatarUrl) => {
+      if (!profile?.id || profile.id !== socialState.session?.user?.id || !librarySessionMatchesOnlineAccount()) return;
       socialState.profile = { ...socialState.profile, ...profile };
       socialState.profileAvatarUrl = avatarUrl;
       hydrateSocialProfileInputs(socialState.profile);
@@ -59995,32 +60017,53 @@ function socialSessionEmail() {
   ).trim();
 }
 
+function socialPublicIdentityText(value = "") {
+  const text = String(value || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 80);
+  return text.includes("@") || /^https?:\/\//i.test(text) ? "" : text;
+}
+
+function socialDefaultIdentityName(value = "") {
+  return !value || /^(sonic[ _]listener|sonic[ _]user|google user|apple user)$/i.test(String(value).trim());
+}
+
+function socialSafeAvatarUrl(value = "") {
+  try {
+    const url = new URL(String(value || ""));
+    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password ? url.href : "";
+  } catch (_) { return ""; }
+}
+
 function socialSuggestedUsername() {
-  const session = normalizeUserSession(currentAuthUser);
   const metadata = socialSessionMetadata();
-  const emailPrefix = socialSessionEmail().split("@")[0] || "";
-  return socialCleanUsername(
-    metadata.username ||
-      metadata.display_name ||
-      metadata.name ||
-      session.username ||
-      emailPrefix ||
-      "sonic_user"
-  ) || "sonic_user";
+  const name = [metadata.username, metadata.display_name, metadata.full_name, metadata.name]
+    .map(socialPublicIdentityText).find(value => value && !socialDefaultIdentityName(value));
+  return socialCleanUsername(name || "sonic_user") || "sonic_user";
 }
 
 function socialSuggestedDisplayName() {
-  const session = normalizeUserSession(currentAuthUser);
   const metadata = socialSessionMetadata();
-  const emailPrefix = socialSessionEmail().split("@")[0] || "";
-  return String(
-    metadata.display_name ||
-      metadata.full_name ||
-      metadata.name ||
-      session.username ||
-      emailPrefix ||
-      "Sonic listener"
-  ).trim();
+  return [metadata.display_name, metadata.full_name, metadata.name]
+    .map(socialPublicIdentityText).find(value => value && !socialDefaultIdentityName(value)) || "Sonic listener";
+}
+
+function socialCurrentPublicIdentity() {
+  const userId = socialState.session?.user?.id;
+  if (!userId || !librarySessionMatchesOnlineAccount()) return { username: "", displayName: "Sonic listener", avatarUrl: "" };
+  const profile = socialState.profile?.id === userId ? socialState.profile : null;
+  const profileName = socialPublicIdentityText(profile?.display_name || profile?.displayName);
+  const profileUsername = socialPublicIdentityText(profile?.username);
+  const preserveName = profileName && (profile?.profile_public === true || !socialDefaultIdentityName(profileName));
+  const preserveUsername = profileUsername && (profile?.profile_public === true || profileUsername !== "sonic_user");
+  const metadata = socialSessionMetadata();
+  const avatarUrl = profile?.avatar_customized || profile?.avatar_path
+    ? (profile.avatar_path ? socialSafeAvatarUrl(socialState.profileAvatarUrl) : "")
+    : socialSafeAvatarUrl(profile?.avatar_url || profile?.avatarUrl || (profile ? socialState.profileAvatarUrl : "")) || socialSafeAvatarUrl(metadata.avatar_url || metadata.picture);
+  const suggestedName = socialSuggestedDisplayName();
+  return {
+    username: socialCleanUsername(preserveUsername ? profileUsername : socialSuggestedUsername()),
+    displayName: preserveName ? profileName : socialDefaultIdentityName(suggestedName) ? sonicTinyCopy("Você", "You", "Tú") : suggestedName,
+    avatarUrl
+  };
 }
 
 function socialTopStyleValues(limit = 5) {
@@ -60040,22 +60083,10 @@ function socialCurrentProfilePayload() {
   const session = socialState.session;
   const userId = session?.user?.id;
   if (!userId) return null;
-  const suggestedUsername = socialSuggestedUsername();
-  const suggestedDisplayName = socialSuggestedDisplayName();
-  const profileUsername = socialCleanUsername(socialState.profile?.username || "");
-  const inputUsername = socialCleanUsername(socialUsernameInput?.value || "");
-  const profileDisplayName = String(socialState.profile?.display_name || "").trim();
-  const inputDisplayName = String(socialDisplayNameInput?.value || "").trim();
-  const profileUsesDefaultName = !profileDisplayName || profileDisplayName === "Sonic listener";
-  const profileUsesDefaultUsername = !profileUsername || profileUsername === "sonic_user";
-  const inputUsesDefaultName = !inputDisplayName || inputDisplayName === "Sonic listener";
-  const inputUsesDefaultUsername = !inputUsername || inputUsername === "sonic_user";
-  const username = profileUsesDefaultUsername
-    ? (!inputUsesDefaultUsername ? inputUsername : (suggestedUsername || profileUsername || "sonic_user"))
-    : profileUsername;
-  const displayName = profileUsesDefaultName
-    ? (!inputUsesDefaultName ? inputDisplayName : (suggestedDisplayName || profileDisplayName || username))
-    : profileDisplayName;
+  const profile = socialState.profile?.id === userId ? socialState.profile : null;
+  const { username } = socialCurrentPublicIdentity();
+  const profileName = socialPublicIdentityText(profile?.display_name);
+  const displayName = profileName && (profile?.profile_public === true || !socialDefaultIdentityName(profileName)) ? profileName : socialSuggestedDisplayName();
   const favoriteStyles = socialTopStyleValues(6);
   const universeWeights = musicUniverseWeightsFromHistory(likedTrackHistory);
   const primaryUniverse = Object.entries(universeWeights)
@@ -60065,10 +60096,10 @@ function socialCurrentProfilePayload() {
     username,
     display_name: displayName,
     // A custom photo/removal is deliberate; OAuth sync must never overwrite it.
-    avatar_url: socialState.profile?.avatar_customized
+    avatar_url: profile?.avatar_customized
       ? null
-      : socialState.profile?.avatar_url || normalizeUserSession(currentAuthUser).avatar || null,
-    bio: socialState.profile?.bio || "",
+      : profile?.avatar_url || null,
+    bio: profile?.bio || "",
     favorite_styles: favoriteStyles,
     liked_track_count: likedTrackHistory.length,
     sonic_dna: {
@@ -60574,6 +60605,52 @@ function hydrateSocialProfileInputs(profile = socialState.profile) {
   if (socialDisplayNameInput && profile.display_name) socialDisplayNameInput.value = profile.display_name;
 }
 
+async function hydrateSocialProfileIdentity() {
+  if (window.SonicReleaseFlags?.publicProfiles !== true || !librarySessionMatchesOnlineAccount()) return null;
+  const userId = socialState.session?.user?.id;
+  const identity = librarySessionIdentity();
+  const key = JSON.stringify([userId, identity, socialSuggestedDisplayName(), socialSuggestedUsername(), socialSafeAvatarUrl(socialSessionMetadata().avatar_url || socialSessionMetadata().picture)]);
+  if (socialProfileIdentityHydration?.key === key) {
+    if (socialProfileIdentityHydration.promise) return socialProfileIdentityHydration.promise;
+    if (socialProfileIdentityHydration.complete) return socialState.profile;
+  }
+  const operation = { key, promise: null, complete: false };
+  socialProfileIdentityHydration = operation;
+  const stillCurrent = () => operation === socialProfileIdentityHydration && userId === socialState.session?.user?.id && identity === librarySessionIdentity() && librarySessionMatchesOnlineAccount();
+  operation.promise = (async () => {
+    try {
+      const accessToken = await currentApiAccessToken();
+      if (!accessToken || !stillCurrent()) return null;
+      const endpoint = resolveAppApiUrl("/api/user-profile");
+      if (!endpoint) return null;
+      const response = await fetchWithTimeout(endpoint, {
+        method: "POST", cache: "no-store",
+        headers: { Accept: "application/json", "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        // The server derives defaults only from verified Auth metadata. No
+        // local draft, email, photo or visibility choice is sent as identity.
+        body: JSON.stringify({ action: "hydrate-identity" })
+      }, 10000);
+      const payload = await response.json();
+      if (!stillCurrent() || !response.ok || payload?.ok !== true || payload.profile?.id !== userId) return null;
+      const current = socialState.profile?.id === userId ? socialState.profile : null;
+      if (current && Date.parse(current.updated_at || "") > Date.parse(payload.profile.updated_at || "")) return current;
+      socialState.profile = { ...current, ...payload.profile };
+      socialState.profileAvatarUrl = socialSafeAvatarUrl(payload.avatarUrl);
+      operation.complete = true;
+      hydrateSocialProfileInputs(socialState.profile);
+      renderSocialCommentsPanel();
+      return socialState.profile;
+    } catch (_) {
+      // Identity hydration is retryable. A network failure must not replace an
+      // existing custom profile or leak credentials into diagnostic output.
+      return null;
+    } finally {
+      operation.promise = null;
+    }
+  })();
+  return operation.promise;
+}
+
 async function loadSocialProfile(options = {}) {
   if (!librarySessionMatchesOnlineAccount()) return null;
   const identity = librarySessionIdentity();
@@ -60592,7 +60669,9 @@ async function loadSocialProfile(options = {}) {
       socialState.profile = profile;
       hydrateSocialProfileInputs(profile);
     }
-    return profile;
+    const hydrated = await hydrateSocialProfileIdentity();
+    if (identity !== librarySessionIdentity()) throw new Error("session_changed");
+    return hydrated || profile;
   } catch (error) {
     console.warn("Could not load social profile", error);
     if (!options.silent) {
@@ -60630,7 +60709,7 @@ async function upsertSocialProfile() {
   if (identity !== librarySessionIdentity()) throw new Error("session_changed");
   socialState.profile = profile || payload;
   hydrateSocialProfileInputs(socialState.profile);
-  return socialState.profile;
+  return await hydrateSocialProfileIdentity() || socialState.profile;
 }
 
 async function insertSocialActivity(action = "liked_track", track = null) {
@@ -60872,14 +60951,28 @@ function socialCommentsSignedIn() {
 }
 
 function socialCommentAuthorMeta() {
-  const profile = socialState.profile || socialCurrentProfilePayload();
-  const username = socialCleanUsername(profile?.username || socialSuggestedUsername() || "");
-  const displayName = String(profile?.display_name || profile?.displayName || socialSuggestedDisplayName() || username || "").trim();
-  return {
-    username,
-    displayName,
-    avatarUrl: String(profile?.avatar_url || profile?.avatarUrl || "").trim()
-  };
+  return socialCurrentPublicIdentity();
+}
+
+function socialCommentAuthorForDisplay(comment = {}) {
+  const author = comment.author || {};
+  const userId = socialState.session?.user?.id;
+  const authorId = String(author.id || comment.userId || comment.user_id || "");
+  if (comment.mine === true && userId && authorId === userId && librarySessionMatchesOnlineAccount()) {
+    const identity = socialCurrentPublicIdentity();
+    const profile = socialState.profile?.id === userId ? socialState.profile : null;
+    const freshAvatar = socialSafeAvatarUrl(author.avatarUrl);
+    const removedPhoto = profile?.avatar_customized && !profile.avatar_path;
+    if (freshAvatar && !removedPhoto) {
+      // Comment reads renew the owner's short-lived photo capability even when
+      // the profile card is hidden. Never revive a removed or replaced photo.
+      try {
+        if (!profile?.avatar_path || decodeURIComponent(new URL(freshAvatar).pathname).endsWith(`/${profile.avatar_path}`)) identity.avatarUrl = freshAvatar;
+      } catch (_) {}
+    }
+    return { ...author, ...identity };
+  }
+  return author;
 }
 
 function socialCommentsTrackTarget(track = currentRecommendation) {
@@ -61255,8 +61348,8 @@ function renderSocialCommentItem(comment = {}) {
 
   const avatar = document.createElement("span");
   avatar.className = "social-comment-avatar";
-  const author = comment.author || {};
-  const displayName = String(author.displayName || author.username || "Sonic listener").trim();
+  const author = socialCommentAuthorForDisplay(comment);
+  const displayName = socialPublicIdentityText(author.displayName) || socialPublicIdentityText(author.username) || "Sonic listener";
   avatar.textContent = displayName.slice(0, 1).toUpperCase() || "S";
   if (/^https?:\/\//.test(author.avatarUrl || "")) {
     const photo = document.createElement("img"); photo.src = author.avatarUrl; photo.alt = ""; photo.referrerPolicy = "no-referrer";
@@ -61267,12 +61360,23 @@ function renderSocialCommentItem(comment = {}) {
   const authorBlock = document.createElement("div");
   authorBlock.className = "social-comment-author";
   const hasPublicProfile = window.SonicReleaseFlags?.publicProfiles === true && /^[a-z0-9][a-z0-9_]{2,29}$/.test(author.username || "");
-  const name = document.createElement(hasPublicProfile ? "button" : "strong");
-  if (hasPublicProfile) {
+  const canEditOwnProfile = window.SonicReleaseFlags?.publicProfiles === true && comment.mine === true && socialState.session?.user?.id && ugcAuthorId(comment) === socialState.session.user.id && librarySessionMatchesOnlineAccount();
+  const name = document.createElement(canEditOwnProfile || hasPublicProfile ? "button" : "strong");
+  if (canEditOwnProfile) {
+    name.type = "button"; name.className = "comment-profile-link";
+    name.setAttribute("aria-label", sonicTinyCopy("Editar meu perfil", "Edit my profile", "Editar mi perfil"));
+    name.addEventListener("click", () => {
+      socialDiscussionDialog?.close();
+      setActiveAppTab("profile", { focusPanel: true });
+      const card = document.getElementById("userProfileCard");
+      card?.scrollIntoView({ block: "start" });
+      card?.querySelector("[data-profile-edit]")?.focus({ preventScroll: true });
+    });
+  } else if (hasPublicProfile) {
     name.type = "button"; name.className = "comment-profile-link";
     name.addEventListener("click", () => { socialDiscussionDialog.close(); userProfileController?.openPublicProfile(author.username); });
   }
-  name.textContent = comment.mine ? `${displayName} (${t("socialCommentsMine")})` : displayName;
+  name.textContent = comment.mine && displayName !== sonicTinyCopy("Você", "You", "Tú") ? `${displayName} (${t("socialCommentsMine")})` : displayName;
   authorBlock.appendChild(name);
   const meta = document.createElement("span");
   const handle = author.username ? `@${author.username}` : "";
@@ -61951,14 +62055,12 @@ function renderSocialUi(options = {}) {
   }
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
 
-  const profile = socialState.profile || socialCurrentProfilePayload();
-  const displayName = profile?.display_name || socialSuggestedDisplayName();
-  const username = profile?.username || socialSuggestedUsername();
+  const { displayName, username, avatarUrl } = socialCurrentPublicIdentity();
   if (socialAvatar) {
     socialAvatar.textContent = (displayName || username || "S").slice(0, 1).toUpperCase();
-    if (signed && socialState.profileAvatarUrl && profile?.avatar_path) {
+    if (signed && avatarUrl) {
       const photo = document.createElement("img");
-      photo.src = socialState.profileAvatarUrl; photo.alt = ""; photo.referrerPolicy = "no-referrer";
+      photo.src = avatarUrl; photo.alt = ""; photo.referrerPolicy = "no-referrer";
       photo.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:inherit";
       photo.onerror = () => { socialAvatar.textContent = (displayName || "S").slice(0, 1).toUpperCase(); };
       socialAvatar.replaceChildren(photo);
