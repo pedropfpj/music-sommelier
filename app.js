@@ -4839,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261109weekly2";
+const SONIC_APP_BUILD_ID = "20261109weekly3";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -54604,7 +54604,7 @@ function captureRecommendationSurfaceSnapshot() {
   };
 }
 
-function restoreRecommendationSurfaceSnapshot(snapshot, { restartPreview = true } = {}) {
+function restoreRecommendationSurfaceSnapshot(snapshot, { restartPreview = true, exactEdition = false } = {}) {
   if (!snapshot?.track) return false;
   const restoredPrefs = normalizeRecommendationPrefs(snapshot.prefs || {
     style: selectableSwipeStyle(snapshot.track.style || ""),
@@ -54616,7 +54616,7 @@ function restoreRecommendationSurfaceSnapshot(snapshot, { restartPreview = true 
   currentRecommendation = snapshot.track;
   currentDiscovery = snapshot.discovery || null;
   lastPrefs = restoredPrefs;
-  renderRecommendation(snapshot.track, restoredPrefs);
+  renderRecommendation(snapshot.track, restoredPrefs, { exactEdition });
   renderDiscovery(currentDiscovery);
   if (resultPanel) resultPanel.classList.remove("hidden");
   if (detailsPanel) detailsPanel.classList.add("hidden");
@@ -56268,9 +56268,10 @@ function scheduleRecommendationDetailRender(track, prefs) {
   });
 }
 
-function renderRecommendation(track, prefs) {
-  track = applyCuratedTrackMetadata(track);
-  if (!track || !isTrackEligibleForRecommendation(track)) return false;
+function renderRecommendation(track, prefs, { exactEdition = false } = {}) {
+  const preparedEdition = exactEdition && weeklyEditionTrackIsPrepared(track);
+  track = preparedEdition ? track : applyCuratedTrackMetadata(track);
+  if (!track || (!preparedEdition && !isTrackEligibleForRecommendation(track))) return false;
   weeklyRecommendsController?.trackChanged?.(track);
   setActiveAppTab("discover");
   pendingQuickKnownAdvance = null;
@@ -58716,6 +58717,12 @@ function selectLibraryTracks(entries) {
 
 const weeklyEditionPreviewCache = new Map();
 
+function weeklyEditionTrackIsPrepared(track) {
+  return Boolean(track?.weeklyVerifiedAudio === true && Object.hasOwn(STYLE_BPM_RULES, track.style) &&
+    weeklyRecommendsController?.requiresExactRecording?.(track) === true &&
+    Array.from(weeklyEditionPreviewCache.values()).some(entry => entry.track === track && normalizePreviewUrl(track.previewUrl)));
+}
+
 function weeklyEditionItemKey(item = {}) {
   return JSON.stringify([item.id || "", item.artist || "", item.title || "", item.style || "", item.url || ""]);
 }
@@ -58741,10 +58748,15 @@ async function resolveWeeklyEditionCatalogTrack(item, isCurrent) {
     if (!isCurrent()) return null;
     original = resolve();
   }
-  if (!original || !isCurrent()) return null;
-  const track = { ...original, previewCandidates: [...(original.previewCandidates || [])], artistPreviewFallback: null };
+  if (!isCurrent()) return null;
+  // An immutable archived edition may contain a real recording that today's
+  // recommendation-import filters omit. Explicit playback verifies the exact
+  // artist/title and decoded audio, rather than borrowing discovery eligibility.
+  const track = original
+    ? { ...original, previewCandidates: [...(original.previewCandidates || [])], artistPreviewFallback: null }
+    : { artist: item.artist, song: item.title, style: item.style, label: "", bpm: "", energy: "unknown", vocals: "unknown", context: [], vibe: "", source: "weekly_archive_exact_v1", previewCandidates: [], artistPreviewFallback: null };
   if (sourceId) track.deezerTrackId = sourceId;
-  return isTrackEligibleForRecommendation(track) ? track : null;
+  return track;
 }
 
 async function prepareWeeklyEditionTracks(items = [], context = {}) {
@@ -58855,7 +58867,7 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
     const track = prepared.results?.[0]?.status === "playable" ? weeklyEditionPreviewCache.get(key)?.track : null;
     if (!track) return { ok: false, reason: "unavailable" };
     stopAllActivePlayback({ reason: "weekly_edition_track" });
-    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false, exactEdition: true });
     const playerIsCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && currentRecommendation === track && context.isCurrent?.() !== false;
     const rendered = await renderPreview(track, { fast: true, exactRecordingOnly: true, deferRetry: false });
     const playable = rendered && await waitForWeeklyPreviewMedia(track, playerIsCurrent);

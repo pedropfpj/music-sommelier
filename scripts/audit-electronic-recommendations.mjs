@@ -162,8 +162,14 @@ djFixtures.forEach(({ expected, name, seed }) => {
 assert(appSource.includes("source_type: sourceType"), "External source_type is not preserved in catalog metadata");
 assert(appSource.includes("sourceType: String(sourceType || safeCatalogMetadata.source_type"), "Hydrated tracks lose source_type");
 assert(
-  /function renderRecommendation\(track, prefs\)[\s\S]{0,180}!isTrackEligibleForRecommendation\(track\)/.test(appSource),
+  /function renderRecommendation\(track, prefs(?:, [^\n]+)?\)[\s\S]{0,300}!isTrackEligibleForRecommendation\(track\)/.test(appSource),
   "The final recommendation renderer has no electronic-integrity gate"
+);
+assert(
+  appSource.includes('exactEdition && weeklyEditionTrackIsPrepared(track)') &&
+  appSource.includes('track?.weeklyVerifiedAudio === true') &&
+  appSource.includes('entry.track === track && normalizePreviewUrl(track.previewUrl)'),
+  "Explicit archived playback must require a prepared exact recording, not relax discovery eligibility"
 );
 assert(
   /function presentInstantSwipeRecommendation[\s\S]{0,220}!isTrackEligibleForRecommendation\(track\)/.test(appSource),

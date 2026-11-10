@@ -125,6 +125,20 @@ try {
   assert.deepEqual(result, ["unconfirmed", "playable"], "Transient failures remain retryable");
   await media.close();
 
+  const archived = await fixture();
+  result = await archived.evaluate(async () => {
+    const item = { id: "archived:exact", artist: "Edition Artist", title: "Archived exact recording", style: "house", url: "https://www.deezer.com/track/123456" };
+    // The immutable edition remains explicit intent even when the live
+    // recommendation catalog no longer imports this row.
+    catalog = [];
+    isTrackEligibleForRecommendation = () => false;
+    const response = await prepareWeeklyEditionTracks([item]);
+    const cached = weeklyEditionPreviewCache.get(weeklyEditionItemKey(item));
+    return { status: response.results[0].status, sameItem: response.results[0].item === item, source: cached?.track.source, artist: cached?.track.artist, song: cached?.track.song, id: cached?.track.deezerTrackId, presented: trace.presented };
+  });
+  assert.deepEqual(result, { status: "playable", sameItem: true, source: "weekly_archive_exact_v1", artist: "Edition Artist", song: "Archived exact recording", id: "123456", presented: 0 }, "Archived playback must verify its exact audio independently of recommendation-import eligibility");
+  await archived.close();
+
   const bounded = await fixture();
   result = await bounded.evaluate(async () => {
     const items = Array.from({ length: 8 }, (_, i) => addItem(`Worker exact recording ${i}`));

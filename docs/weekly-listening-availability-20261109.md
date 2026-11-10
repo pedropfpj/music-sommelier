@@ -8,6 +8,7 @@ A sessão anterior escolhia as três primeiras linhas da edição e anunciava es
 - O cache do cliente preservava respostas nulas de metadados, inclusive após falhas transitórias. Uma nova tentativa não necessariamente consultava o provedor. Links assinados expirados também precisavam ser renovados.
 - Havia URLs Deezer vencidas desde junho no catálogo. A fotografia editorial v1 continua imutável; a resolução de reprodução precisa obter URLs atuais.
 - A sessão registrava a apresentação antes de confirmar que a mídia carregara.
+- Duas faixas reais da edição eram descartadas durante a importação para o catálogo ativo, antes da busca de áudio. A reprodução explícita do arquivo agora resolve a identidade publicada e verifica a mídia independentemente desses filtros. Os critérios das recomendações comuns continuam separados.
 
 ## Comportamento corrigido
 

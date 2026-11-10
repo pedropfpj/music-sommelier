@@ -106,15 +106,11 @@ try {
   await integration.route("**/data/weekly-catalog-v1.json*", route => route.fulfill({ json: integrationData }));
   await integration.goto(`${preview.baseUrl}/?qa=1&lang=pt&screenshot=1&recommendation=0`, { waitUntil: "domcontentloaded" });
   await integration.waitForFunction(() => typeof weeklyRecommendsController !== "undefined" && weeklyRecommendsController);
-  integrationData = await integration.evaluate(() => {
-    const tracks = CURATED_FRIENDLY_OPENING_TRACKS.filter(track => isTrackEligibleForRecommendation(track)).slice(0, 3);
-    const keys = new Set(tracks.map(recommendationTrackKey));
-    [...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].filter(track => keys.has(recommendationTrackKey(track))).forEach(track => {
-      track.previewUrl = ""; track.previewCandidates = []; track.previewChecked = false; track.previewMissing = false;
-    });
-    return { version: 1, styles: [...new Set(tracks.map(track => track.style))].map(style => ({ id: style, label: style, group: style })), tracks: tracks.map((track, i) => ({ id: `integration:${i}`, artist: track.artist, title: track.song, style: track.style })) };
+  integrationData = { version: 1, styles: [{ id: "psycore", label: "Psycore", group: "Psytrance" }], tracks: [{ id: "psycore:dark whisper|rhythm of the infinite", artist: "Dark Whisper", title: "Rhythm of The Infinite", style: "psycore", url: "https://www.deezer.com/track/740834142" }] };
+  await integration.evaluate(() => {
+    const ordinaryEligibility = isTrackEligibleForRecommendation;
+    isTrackEligibleForRecommendation = track => track?.artist === "Dark Whisper" ? false : ordinaryEligibility(track);
   });
-  assert.ok(integrationData.tracks.length > 0, "Integration fixture needs actual eligible catalog recordings");
   const essential = integration.getByRole("button", { name: "Só essenciais", exact: true });
   if (await essential.isVisible()) await essential.click();
   await integration.locator("#weeklyTeaserButton").click();
@@ -129,6 +125,7 @@ try {
   const selectedIdentity = await integration.locator(".weekly-listening-track").textContent();
   assert.equal(await integration.evaluate(() => `${currentRecommendation.artist} — ${currentRecommendation.song}`), selectedIdentity);
   assert.equal(await integration.evaluate(() => currentActiveAppTabName()), "discover");
+  assert.equal(await integration.locator("#songTitle").textContent(), "Rhythm of The Infinite", "The archived item needs the full real card renderer as well as decoded media");
   assert.deepEqual(integrationErrors, []);
   await integration.close();
   const page = await browser.newPage({ viewport: { width: 393, height: 852 }, reducedMotion: "reduce" });
