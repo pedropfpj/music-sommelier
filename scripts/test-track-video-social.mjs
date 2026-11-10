@@ -62,12 +62,15 @@ try {
   assert.equal((await call('POST', { ...target, body: 'Hi', userId: b }, 'forged')).statusCode, 401);
   const created = await call('POST', { ...target, body: 'Great set!', userId: b, metadata: { displayName: 'Forged owner', username: 'admin', avatarUrl: 'https://evil.test/pic' } });
   assert.equal(created.result.ok, true); assert.equal(comments.get('1').user_id, a);
-  assert.equal(created.result.comment.author.displayName, 'Sonic listener');
-  assert.equal(created.result.comment.author.username, '');
+  assert.equal(created.result.comment.author.displayName, 'Private', 'A verified author sees their current private app identity');
+  assert.equal(created.result.comment.author.username, 'private_name');
   assert.equal(created.result.comment.author.avatarUrl, '');
   assert.equal((await call('POST', { ...target, body: 'Second listener' }, 'user-b')).result.comment.author.displayName, 'Public');
   let list = await call('GET', undefined, 'user-a', target);
   assert.equal(list.result.comments.length, 2);
+  const otherView = await call('GET', undefined, 'user-b', target);
+  assert.equal(otherView.result.comments.find(comment => comment.id === '1').author.displayName, 'Sonic listener');
+  assert.equal(otherView.result.comments.find(comment => comment.id === '1').author.username, '');
   assert.equal(list.headers['Cache-Control'], 'private, no-store, max-age=0');
   assert.deepEqual(list.result.targetReaction, { likes: 0, liked: false });
   for (let n = 0; n < 2; n++) assert.deepEqual((await call('POST', { ...target, action: 'like-target', liked: true, userId: b })).result.targetReaction, { likes: 1, liked: true });

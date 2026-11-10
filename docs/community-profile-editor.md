@@ -13,6 +13,16 @@ Implementado localmente em 14/09/2026. Não publicado, não aplicado ao Supabase
 - Trocar de conta ou sair limpa imediatamente o rascunho, a foto e os dados de outra sessão.
 - A sincronização automática atualiza somente os sinais musicais; não reverte foto, bio, nome ou @usuário editados.
 
+## Identidade em comentários — correção de 09/11/2026
+
+Comentários consultam o perfil atual pelo autor verificado, inclusive os antigos. O proprietário vê a própria identidade; outras pessoas continuam vendo apenas o perfil público e a foto com consentimento separado. Se a consulta falhar ou o perfil não existir, o backend usa uma identidade genérica e não reaproveita nomes/fotos de snapshots do comentário. Emails nunca são usados como nome público, inclusive quando um perfil antigo os armazenava; o dado salvo é preservado para correção pelo proprietário.
+
+O cliente pode pedir `POST /api/user-profile` com `{ "action": "hydrate-identity" }` depois do login. A rota usa somente nome, @usuário e foto pública da sessão Auth verificada no servidor; campos de identidade enviados no corpo são ignorados. Repara apenas os textos padrão de perfis privados, sem mudar preferências de visibilidade. Perfis já públicos e campos personalizados prevalecem; a escrita condicional pela versão do perfil preserva uma edição simultânea. Nomes históricos deliberadamente iguais ao padrão não têm um marcador próprio no esquema antigo e não podem ser distinguidos dos padrões automáticos.
+
+A foto OAuth é uma alternativa apenas para o proprietário quando não há foto personalizada nem remoção explícita. Ela não é copiada para a projeção pública ou para o armazenamento de fotos. Retratos públicos continuam exigindo a foto processada/assinada existente e `profile_public` + `show_avatar`.
+
+Regressão local: `node scripts/test-comment-author-identity.mjs` usa os handlers reais, PostgreSQL PGlite e migrações do projeto com Auth/Storage simulados em loopback. Não acessa contas nem comentários reais.
+
 ## Segurança
 
 `/api/user-profile` é roteado pelo agregador de API existente, sem nova função Vercel.
