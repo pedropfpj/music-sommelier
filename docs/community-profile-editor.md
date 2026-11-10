@@ -85,6 +85,8 @@ Mostra aviso explícito de prévia local, sem autenticação real, envio de foto
 
 ## Verificação local
 
+Atualização web de 09/11/2026: `npm run test:social-identity` verifica a identidade própria dos comentários e o retorno OAuth. O cliente remove os parâmetros de autenticação assim que captura o callback, antes de esperar perfil/biblioteca, mantendo faixa, idioma, aba e contexto da discussão. Nomes e fotos não são derivados de email nem de outra conta. Comentários próprios antigos usam o perfil canônico atual; fotos removidas não voltam e URLs assinadas podem ser renovadas pela leitura dos comentários. Sem nome disponível, aparece “Você”, com acesso ao editor. A visibilidade para outras pessoas continua obedecendo às opções do perfil. Os testes não publicam comentários ou fotos na conta real.
+
 - API: sessão inválida, identidade forjada no corpo, perfil privado, campos públicos, imagem inválida/SVG, EXIF removido, falha de gravação com limpeza do novo arquivo, remoção, limite por conta e configuração durável obrigatória.
 - PostgreSQL em memória: migração aplicada duas vezes; dados preservados; anonimato bloqueado; conta vê apenas suas linhas; outra conta não pode alterar/criar perfil; projeção pública limitada; bucket privado prevalece sobre política antiga permissiva.
 - Navegador: estados visitante/conta, prévia opt-in sem afirmar publicação antes de salvar, bio tratada como texto, validação, falha sem perder rascunho, descarte, preparação/remoção de foto, três idiomas, 375 px/paisagem/desktop e texto ampliado; limpar imediatamente na troca/saída da conta. Autenticação e API desse teste são simuladas, não equivalem a teste real em staging.
