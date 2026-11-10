@@ -53,6 +53,12 @@ function harness() {
     styleLabelByValue: style => style,
     playUiSfx: name => state.calls.push({ kind: "sfx", name }),
     recommendationFailureMessage: () => "No verified track; try again.",
+    presentRecommendationFailure: ({ generation }) => {
+      if (generation !== context.recommendationSessionGeneration) return false;
+      context.feedbackMessage.textContent = context.recommendationFailureMessage();
+      context.showToast(context.feedbackMessage.textContent);
+      return false;
+    },
     feedbackMessage: { textContent: "" },
     showToast: text => state.calls.push({ kind: "toast", text }),
     rerollBtn: { disabled: true },

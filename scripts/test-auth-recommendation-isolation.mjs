@@ -87,7 +87,8 @@ const context = vm.createContext({
   Number,
   String,
   Math,
-  localStorage: storageFixture()
+  localStorage: storageFixture(),
+  clearRecommendationRecovery() {}
 });
 
 vm.runInContext(`

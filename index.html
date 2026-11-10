@@ -1288,6 +1288,20 @@
             <span aria-hidden="true">→</span>
           </button>
         </div>
+        <aside id="recommendationRecovery" class="recommendation-recovery" aria-labelledby="recommendationRecoveryTitle" hidden>
+          <span class="recommendation-recovery-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v5h5" /></svg>
+          </span>
+          <div class="recommendation-recovery-copy" role="status" aria-live="polite" aria-atomic="true">
+            <h4 id="recommendationRecoveryTitle">Nenhuma nova faixa por enquanto</h4>
+            <p id="recommendationRecoveryText"></p>
+            <p id="recommendationRecoveryStyle" class="recommendation-recovery-style" hidden></p>
+          </div>
+          <div class="recommendation-recovery-actions">
+            <button id="recommendationRecoveryRetry" class="primary" type="button">Tentar novamente</button>
+            <button id="recommendationRecoveryFilters" class="secondary" type="button">Ajustar filtros</button>
+          </div>
+        </aside>
         <div class="swipe-start-stage">
           <article id="topSwipeCard" class="swipe-track-card swipe-hero-card is-empty" role="group" aria-label="Arraste para direita para curtir ou esquerda para não curtir" aria-keyshortcuts="ArrowLeft ArrowRight Escape" tabindex="0">
             <span class="swipe-stamp swipe-stamp-like">Curti</span>

@@ -27367,6 +27367,92 @@ function recommendationFailureMessage() {
   return noVerifiedTrackMessage();
 }
 
+let recommendationRecoveryState = null;
+let recommendationRecoveryRetryBusy = false;
+let recommendationRecoveryRetryToken = 0;
+
+function recommendationRecoveryCopy() {
+  const copy = {
+    pt: { title: "Nenhuma nova faixa por enquanto", exhausted: "Nenhuma outra faixa inédita agora", empty: "Não encontrei uma faixa disponível para esta busca agora. Você pode tentar novamente ou ajustar os filtros.", kept: "A faixa atual continua aqui. Você pode tentar novamente ou ajustar os filtros para buscar outro caminho.", exhaustedHint: "Não encontrei outra faixa inédita nesta busca. Você pode tentar novamente ou escolher outros filtros.", style: "Estilo desta busca", retry: "Tentar novamente", trying: "Tentando novamente…", filters: "Ajustar filtros" },
+    en: { title: "No new track right now", exhausted: "No other unheard track right now", empty: "I could not find an available track for this search right now. You can retry or adjust the filters.", kept: "Your current track is still here. You can retry or adjust the filters to try another direction.", exhaustedHint: "I could not find another unheard track for this search. You can retry or choose different filters.", style: "Style for this search", retry: "Try again", trying: "Trying again…", filters: "Adjust filters" },
+    es: { title: "Ninguna pista nueva por ahora", exhausted: "Ninguna otra pista inédita ahora", empty: "No encontré una pista disponible para esta búsqueda ahora. Puedes reintentar o ajustar los filtros.", kept: "La pista actual sigue aquí. Puedes reintentar o ajustar los filtros para buscar otro camino.", exhaustedHint: "No encontré otra pista inédita para esta búsqueda. Puedes reintentar o elegir otros filtros.", style: "Estilo de esta búsqueda", retry: "Intentar de nuevo", trying: "Intentando de nuevo…", filters: "Ajustar filtros" }
+  };
+  return copy[currentLanguage] || copy.pt;
+}
+
+function clearRecommendationRecovery() {
+  recommendationRecoveryState = null;
+  recommendationRecoveryRetryBusy = false;
+  recommendationRecoveryRetryToken++;
+  const panel = document.getElementById("recommendationRecovery");
+  if (panel) panel.hidden = true;
+}
+
+function renderRecommendationRecovery() {
+  const panel = document.getElementById("recommendationRecovery");
+  if (!panel) return;
+  const state = recommendationRecoveryState;
+  if (!state || !recommendationSessionIsCurrent(state.generation) || state.profileKey !== sessionProfileKey()) {
+    panel.hidden = true;
+    return;
+  }
+  const copy = recommendationRecoveryCopy();
+  const busy = recommendationRecoveryRetryBusy || recommendationRunBusy || firstRecommendationBusy || swipeFeedbackBusy;
+  panel.hidden = false;
+  panel.setAttribute("aria-busy", String(busy));
+  document.getElementById("recommendationRecoveryTitle").textContent = state.exhausted ? copy.exhausted : copy.title;
+  document.getElementById("recommendationRecoveryText").textContent = state.exhausted ? copy.exhaustedHint : currentRecommendation ? copy.kept : copy.empty;
+  const style = document.getElementById("recommendationRecoveryStyle");
+  style.hidden = !state.style;
+  style.textContent = state.style ? `${copy.style}: ${styleLabelByValue(state.style)}` : "";
+  const retry = document.getElementById("recommendationRecoveryRetry");
+  retry.textContent = busy ? copy.trying : copy.retry;
+  retry.disabled = Boolean(busy);
+  const filters = document.getElementById("recommendationRecoveryFilters");
+  filters.textContent = copy.filters;
+  filters.disabled = Boolean(busy);
+}
+
+function presentRecommendationFailure({ message = recommendationFailureMessage(), generation = recommendationSessionGeneration, announce = true } = {}) {
+  if (!recommendationSessionIsCurrent(generation)) return false;
+  if (announce) {
+    if (feedbackMessage) feedbackMessage.textContent = message;
+    showToast(message);
+  }
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode()) return false;
+  recommendationRecoveryState = { generation, profileKey: sessionProfileKey(), style: styleEl?.value || "", exhausted: Boolean(recommendationBlockedByKnown && firstRecommendationCompleted) };
+  renderRecommendationRecovery();
+  setActiveAppTab("discover");
+  window.requestAnimationFrame(() => {
+    if (recommendationRecoveryState?.generation !== generation || !recommendationSessionIsCurrent(generation) || currentActiveAppTabName() !== "discover") return;
+    document.getElementById("recommendationRecovery")?.scrollIntoView({ block: "nearest", behavior: "auto" });
+  });
+  return false;
+}
+
+async function retryRecommendationRecovery() {
+  const state = recommendationRecoveryState;
+  if (!state || !recommendationSessionIsCurrent(state.generation) || state.profileKey !== sessionProfileKey() || recommendationRecoveryRetryBusy || recommendationRunBusy || firstRecommendationBusy || swipeFeedbackBusy) return false;
+  const token = ++recommendationRecoveryRetryToken;
+  recommendationRecoveryRetryBusy = true;
+  renderRecommendationRecovery();
+  try {
+    const ready = await runPrimaryRecommendationAction({ source: "recovery_retry" });
+    if (token !== recommendationRecoveryRetryToken || !recommendationSessionIsCurrent(state.generation) || state.profileKey !== sessionProfileKey()) return false;
+    if (ready === true) clearRecommendationRecovery();
+    else presentRecommendationFailure({ generation: state.generation });
+    return ready === true;
+  } catch (_) {
+    if (token === recommendationRecoveryRetryToken && recommendationSessionIsCurrent(state.generation) && state.profileKey === sessionProfileKey()) presentRecommendationFailure({ generation: state.generation });
+    return false;
+  } finally {
+    if (token === recommendationRecoveryRetryToken) {
+      recommendationRecoveryRetryBusy = false;
+      renderRecommendationRecovery();
+    }
+  }
+}
+
 function styleLabel() {
   if (!styleEl) return t("freeStyle");
   return styleEl.options[styleEl.selectedIndex]?.text || t("freeStyle");
@@ -28562,6 +28648,7 @@ function applyLanguage() {
     appTabBar?.querySelector("[data-app-tab-target].active, [data-app-tab-target][aria-pressed='true']"),
     currentActiveAppTabName()
   );
+  renderRecommendationRecovery();
 }
 
 function normalizeLanguageCode(lang = "") {
@@ -29853,6 +29940,7 @@ function beginRecommendationSession(session) {
   const identityChanged = nextIdentity !== activeRecommendationSessionIdentity;
   activeRecommendationSessionIdentity = nextIdentity;
   recommendationSessionGeneration += 1;
+  clearRecommendationRecovery();
 
   firstRecommendationPromise = null;
   firstRecommendationCompleted = false;
@@ -33762,6 +33850,7 @@ function primaryRecommendationActionLabel({ hasTrack = Boolean(currentRecommenda
 
 function setInitialRecommendationBusy(isBusy) {
   firstRecommendationBusy = Boolean(isBusy);
+  renderRecommendationRecovery();
   const actionLabel = primaryRecommendationActionLabel({ isBusy });
   [topSwipeSurpriseBtn, swipeHeroSurpriseBtn].forEach((button) => {
     if (!button) return;
@@ -33772,6 +33861,7 @@ function setInitialRecommendationBusy(isBusy) {
 }
 
 function setRecommendationRunBusy(isBusy) {
+  renderRecommendationRecovery();
   document.body.classList.toggle("is-recommending", Boolean(isBusy));
   if (appContent) appContent.setAttribute("aria-busy", isBusy ? "true" : "false");
   const hasTrack = Boolean(currentRecommendation);
@@ -53978,6 +54068,7 @@ function scheduleSuggestionQueueRefresh(prefs = lastPrefs, anchorTrack = current
 
 function markRecommendationPresented(track) {
   if (!track) return;
+  clearRecommendationRecovery();
   registerSeenArtist(track.artist);
   rememberRecentlyPresentedArtist(track.artist);
   const normalizedTrackKey = recommendationTrackKey(track);
@@ -55371,7 +55462,8 @@ function safeFirstRecommendationWarning(message = "", details = {}) {
   }
 }
 
-function showFirstRecommendationFailureSafely() {
+function showFirstRecommendationFailureSafely(generation = recommendationSessionGeneration) {
+  if (!recommendationSessionIsCurrent(generation)) return;
   let failureMessage = "";
   try {
     failureMessage = recommendationFailureMessage();
@@ -55388,6 +55480,7 @@ function showFirstRecommendationFailureSafely() {
   } catch (_error) {
     // Toast failures must not hold the recommendation lock.
   }
+  try { presentRecommendationFailure({ message: failureMessage, generation, announce: false }); } catch (_) { /* Existing retry controls remain available. */ }
 }
 
 function restoreInitialRecommendationUiSafely() {
@@ -55493,6 +55586,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
         return true;
       }
       firstRecommendationRetryAvailable = true;
+      showFirstRecommendationFailureSafely(sessionGeneration);
       safeFirstRecommendationWarning("[first-recommendation] no playable route", {
         catalogState: readiness.status,
         reason: "no_playable_route"
@@ -55509,7 +55603,7 @@ function runInitialRecommendation({ source = "manual", initialRunner = null } = 
         catalogState: readiness.status,
         reason: String(error?.message || "unexpected_error").slice(0, 160)
       });
-      showFirstRecommendationFailureSafely();
+      showFirstRecommendationFailureSafely(sessionGeneration);
       trackFirstRecommendationEvent("first_recommendation_failed", source, {
         catalogState: readiness.status,
         reason: "unexpected_error"
@@ -56122,6 +56216,7 @@ async function generateAdaptiveSwipeNext({ sourceTrack = null, positive = true, 
 }
 
 async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", message = "", positive = true } = {}) {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!lastPrefs) {
     if (feedbackMessage && message) feedbackMessage.textContent = message;
     return false;
@@ -56218,8 +56313,7 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     avoidArtistName
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return false;
   }
   if (feedbackMessage && message) feedbackMessage.textContent = message;
@@ -63862,6 +63956,7 @@ async function generateRecommendationWithOverlay(prefs, options = {}, mode = "de
 }
 
 async function activateSuggestionQueueIndex(index) {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (recommendationRunBusy || !lastPrefs) return false;
   if (!canUseMusicDiscovery()) {
     playUiSfx("error");
@@ -63922,8 +64017,7 @@ async function activateSuggestionQueueIndex(index) {
       });
       if (!playableReplacement) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
-        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-        showToast(recommendationFailureMessage());
+        presentRecommendationFailure({ generation: recoveryGeneration });
         return false;
       }
       activatedTrack = playableReplacement;
@@ -63936,8 +64030,7 @@ async function activateSuggestionQueueIndex(index) {
       previewReady = await renderPreview(playableReplacement);
       if (!previewReady) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
-        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-        showToast(recommendationFailureMessage());
+        presentRecommendationFailure({ generation: recoveryGeneration });
         return false;
       }
     }
@@ -64092,6 +64185,7 @@ async function runTasteTune(mode = "") {
 }
 
 async function runSwipeStyleRecommendation(style = "") {
+  const recoveryGeneration = recommendationSessionGeneration;
   const safeStyle = String(style || "").trim();
   if (!safeStyle || !STYLE_BPM_RULES[safeStyle] || recommendationRunBusy) return false;
 
@@ -64146,9 +64240,7 @@ async function runSwipeStyleRecommendation(style = "") {
   );
 
   if (!generated) {
-    const fallback = recommendationFailureMessage();
-    if (feedbackMessage) feedbackMessage.textContent = fallback;
-    showToast(fallback);
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return false;
   }
 
@@ -64175,6 +64267,7 @@ async function runSwipeStyleRecommendation(style = "") {
 }
 
 async function runRecommendation() {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (recommendationRunBusy) return;
   const interactionStartedAt = discoveryInteractionNow();
   if (!canUseMusicDiscovery()) {
@@ -64274,12 +64367,12 @@ async function runRecommendation() {
         renderSuggestionQueue(prefs);
         renderTrackInsightPanel(null);
       }
+      presentRecommendationFailure({ generation: recoveryGeneration });
       return;
     }
     if (!recommendationGenerated) {
       playUiSfx("notice");
-      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-      showToast(recommendationFailureMessage());
+      presentRecommendationFailure({ generation: recoveryGeneration });
       if (surfaceSnapshot?.track) {
         restoreRecommendationSurfaceSnapshot(surfaceSnapshot);
       } else {
@@ -64361,6 +64454,7 @@ function hasCommittedRecommendationSince(previousTrackKey = "", sessionGeneratio
 }
 
 async function runManualFilterSurprise() {
+  const recoveryGeneration = recommendationSessionGeneration;
   const prefs = prefsFromManualControls();
   if (!manualPrefsAreActive(prefs) || recommendationRunBusy) return false;
 
@@ -64409,9 +64503,7 @@ async function runManualFilterSurprise() {
   if (!requestIsCurrent()) return false;
 
   if (!generated || !hasCommittedRecommendationSince(previousTrackKey, sessionGeneration)) {
-    const fallback = recommendationFailureMessage();
-    if (feedbackMessage) feedbackMessage.textContent = fallback;
-    showToast(fallback);
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return false;
   }
 
@@ -64446,6 +64538,7 @@ async function runSurpriseRecommendation({
   skipInitialGuard = false,
   source = "surprise"
 } = {}) {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!skipInitialGuard) {
     if (firstRecommendationPromise) return firstRecommendationPromise;
     if (!firstRecommendationCompleted && !currentRecommendation) {
@@ -64505,15 +64598,13 @@ async function runSurpriseRecommendation({
     sonicPerfMark("overlay-done", { found: Boolean(surpriseTrack) });
     if (!surpriseTrack) {
       playUiSfx("notice");
-      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-      showToast(recommendationFailureMessage());
+      presentRecommendationFailure({ generation: recoveryGeneration });
       if (surfaceSnapshot?.track) restoreRecommendationSurfaceSnapshot(surfaceSnapshot);
       return false;
     }
     if (recommendationArtistBlockedForPresentation(surpriseTrack, previousTrack)) {
       playUiSfx("notice");
-      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-      showToast(recommendationFailureMessage());
+      presentRecommendationFailure({ generation: recoveryGeneration });
       if (surfaceSnapshot?.track) restoreRecommendationSurfaceSnapshot(surfaceSnapshot);
       return false;
     }
@@ -64570,8 +64661,7 @@ async function runSurpriseRecommendation({
       if (!playableReplacement) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
         playUiSfx("notice");
-        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-        showToast(recommendationFailureMessage());
+        presentRecommendationFailure({ generation: recoveryGeneration });
         return false;
       }
       surpriseTrack = playableReplacement;
@@ -64587,8 +64677,7 @@ async function runSurpriseRecommendation({
       if (!previewReady) {
         clearFailedRecommendationSurface({ fallbackSnapshot: surfaceSnapshot });
         playUiSfx("notice");
-        if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-        showToast(recommendationFailureMessage());
+        presentRecommendationFailure({ generation: recoveryGeneration });
         return false;
       }
     }
@@ -65686,6 +65775,7 @@ bind(djPreviewNativeBtn, "click", async () => {
 bind(recommendBtn, "click", runRecommendation);
 
 bind(rerollBtn, "click", async () => {
+  const recoveryGeneration = recommendationSessionGeneration;
   const interactionStartedAt = discoveryInteractionNow();
   const targetPrefs = prefsForSameTargetAction();
   if (!targetPrefs) return;
@@ -65729,8 +65819,7 @@ bind(rerollBtn, "click", async () => {
     avoidArtistName: currentRecommendation?.artist || ""
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
 
@@ -65843,6 +65932,8 @@ function handleCurrentArtistKnownFallback() {
 }
 
 async function handleKnownArtistYes() {
+  const recoveryGeneration = recommendationSessionGeneration;
+  const recoverySurface = captureRecommendationSurfaceSnapshot();
   if (!currentRecommendation || !lastPrefs) return;
 
   const artistKey = artistMatchKey(currentRecommendation.artist);
@@ -65873,14 +65964,9 @@ async function handleKnownArtistYes() {
     allowKnownFallback: false
   });
   if (!generated) {
-    currentRecommendation = null;
-    currentDiscovery = null;
-    if (resultPanel) resultPanel.classList.add("hidden");
-    if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
-    if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-    syncQuickKnownDecision(null);
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    if (!recommendationSessionIsCurrent(recoveryGeneration)) return;
+    if (recoverySurface?.track) restoreRecommendationSurfaceSnapshot(recoverySurface);
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
 
@@ -65893,28 +65979,17 @@ async function handleKnownArtistYes() {
       allowKnownFallback: false
     });
     if (!generated) {
-      currentRecommendation = null;
-      currentDiscovery = null;
-      if (resultPanel) resultPanel.classList.add("hidden");
-      if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
-      if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-      syncQuickKnownDecision(null);
-      if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-      showToast(recommendationFailureMessage());
+      if (!recommendationSessionIsCurrent(recoveryGeneration)) return;
+      if (recoverySurface?.track) restoreRecommendationSurfaceSnapshot(recoverySurface);
+      presentRecommendationFailure({ generation: recoveryGeneration });
       return;
     }
   }
 
   if (artistMatchKey(currentRecommendation.artist) === artistKey) {
-    currentRecommendation = null;
-    currentDiscovery = null;
-    if (resultPanel) resultPanel.classList.add("hidden");
-    if (knownArtistPrompt) knownArtistPrompt.classList.add("hidden");
-    if (noveltyEnjoyPrompt) noveltyEnjoyPrompt.classList.add("hidden");
-    syncQuickKnownDecision(null);
-    if (feedbackMessage) {
-      feedbackMessage.textContent = t("noUnknownOption");
-    }
+    if (!recommendationSessionIsCurrent(recoveryGeneration)) return;
+    if (recoverySurface?.track) restoreRecommendationSurfaceSnapshot(recoverySurface);
+    presentRecommendationFailure({ generation: recoveryGeneration });
     playUiSfx("notice");
     return;
   }
@@ -66056,6 +66131,7 @@ function feedbackMessageForRecommendationIssue(reason = "") {
 }
 
 async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
   stopPlaybackForFeedbackTransition(source || "preview_dislike");
@@ -66104,8 +66180,7 @@ async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike
     avoidArtistName: isPreviewIssue || isRecommendationIssue ? "" : rejectedTrack?.artist || ""
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
   const previewDislikeFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
@@ -66209,6 +66284,7 @@ bind(noveltyLikedBtn, "click", async () => {
 });
 
 bind(noveltyNotYetBtn, "click", async () => {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
   stopPlaybackForFeedbackTransition("novelty_not_yet");
@@ -66235,8 +66311,7 @@ bind(noveltyNotYetBtn, "click", async () => {
     avoidArtistName: rejectedTrack?.artist || ""
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
   const noveltyNotYetFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
@@ -66471,6 +66546,7 @@ bind(likeArtistBtn, "click", async () => {
 });
 
 bind(blockArtistBtn, "click", async () => {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!currentRecommendation) return;
   const blockedArtistName = String(currentRecommendation.artist || "").trim();
   const blockedArtistKey = artistMatchKey(blockedArtistName);
@@ -66503,8 +66579,7 @@ bind(blockArtistBtn, "click", async () => {
     avoidArtistName: blockedArtistName
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
   const blockArtistFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
@@ -66557,6 +66632,7 @@ bind(newDiscoveryBtn, "click", () => {
 });
 
 bind(skipBtn, "click", async () => {
+  const recoveryGeneration = recommendationSessionGeneration;
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
   stopPlaybackForFeedbackTransition("skip");
@@ -66585,8 +66661,7 @@ bind(skipBtn, "click", async () => {
     avoidArtistName: rejectedTrack?.artist || ""
   });
   if (!generated) {
-    if (feedbackMessage) feedbackMessage.textContent = recommendationFailureMessage();
-    showToast(recommendationFailureMessage());
+    presentRecommendationFailure({ generation: recoveryGeneration });
     return;
   }
   const skipFallback = applyStyleFallbackMessage({ setFeedback: false }) || applyBpmFallbackMessage({ setFeedback: false });
@@ -66717,6 +66792,11 @@ bind(appTabBar, "click", (event) => {
   const nextTab = String(target.getAttribute("data-app-tab-target") || "discover");
   setAppMenuOpen(false);
   setActiveAppTab(nextTab, { focusPanel: true });
+});
+bind(document.getElementById("recommendationRecoveryRetry"), "click", () => void retryRecommendationRecovery());
+bind(document.getElementById("recommendationRecoveryFilters"), "click", () => {
+  if (!recommendationRecoveryState || recommendationRecoveryRetryBusy || recommendationRunBusy || firstRecommendationBusy || swipeFeedbackBusy) return;
+  setActiveAppTab("filters", { focusPanel: true });
 });
 bind(discoverFiltersBtn, "click", () => {
   setActiveAppTab("filters", { focusPanel: true });

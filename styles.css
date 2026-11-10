@@ -23004,3 +23004,43 @@ body.sonic-first-value-window #dailyRadarPanel {
 .library-transfer-prompt button { min-height:44px; max-width:100%; white-space:normal; }
 
 .library-transfer-prompt button + button { margin-top:.5rem; }
+/* Discovery recovery stays beside the current recording and preserves the search. */
+.recommendation-recovery {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: .8rem 1rem;
+  align-items: start;
+  margin: 1rem 0 1.3rem;
+  padding: 1.15rem;
+  border: 1px solid rgba(240, 198, 122, .5);
+  border-left: 3px solid #efcd91;
+  border-radius: 8px;
+  background: linear-gradient(120deg, rgba(240, 198, 122, .07), transparent 75%), #0c2028;
+  color: #e9f5f0;
+  scroll-margin-top: 5.5rem;
+}
+.recommendation-recovery[hidden] { display: none !important; }
+.recommendation-recovery-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(239, 205, 145, .32);
+  border-radius: 50%;
+  color: #efcd91;
+}
+.recommendation-recovery-mark svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.recommendation-recovery-copy { min-width: 0; }
+.recommendation-recovery h4 { margin: .1rem 0 .55rem; color: #f4e2bd; font: 700 1.2rem/1.35 "Syne", sans-serif; }
+.recommendation-recovery p { margin: 0; max-width: 62ch; font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+.recommendation-recovery .recommendation-recovery-style { margin-top: .6rem; color: #9fe4dd; font-size: .88rem; }
+.recommendation-recovery-actions { display: flex; flex-wrap: wrap; gap: .6rem; grid-column: 2; }
+.recommendation-recovery-actions button { min-height: 46px; padding: .7rem 1rem; white-space: normal; touch-action: manipulation; }
+.recommendation-recovery-actions .secondary { color: #cfe2e1; background: transparent; border: 1px solid #52706e; }
+.recommendation-recovery-actions button:disabled { opacity: .5; cursor: default; }
+.recommendation-recovery-actions button:focus-visible { outline: 2px solid #9fe4dd; outline-offset: 4px; }
+@media (max-width: 540px) {
+  .recommendation-recovery { grid-template-columns: 32px minmax(0, 1fr); gap: .7rem; padding: 1rem; }
+  .recommendation-recovery-mark { width: 32px; height: 32px; }
+  .recommendation-recovery-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr); }
+}
