@@ -19,6 +19,7 @@ ios/App/App/capacitor.config *.json
 reports/profile-walkthrough-*.png
 reports/user-profile-readiness-latest.json
 reports/ui-*.png
+reports/ux-five-points/
 reports/*-latest.json
 reports/*-inventory-latest.*
 reports/hive_festival_2026_musicbrainz_cache.json

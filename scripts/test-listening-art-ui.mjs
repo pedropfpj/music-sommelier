@@ -3,9 +3,11 @@ import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { startTestPreviewServer } from "./test-preview-server.mjs";
 
-const { chromium } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
-const preview = await startTestPreviewServer();
-const browser = await chromium.launch({ headless: true, executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" });
+const { chromium, webkit } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
+const iosBundle = process.argv.includes("--ios");
+const engine = process.env.SONIC_UI_ENGINE === "webkit" ? webkit : chromium;
+const preview = await startTestPreviewServer({ staticRoot: iosBundle ? "www" : "" });
+const browser = await engine.launch({ headless: true, ...(engine === chromium ? { executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" } : {}) });
 const appPath = fileURLToPath(new URL("../app.js", import.meta.url));
 const cssPath = fileURLToPath(new URL("../styles.css", import.meta.url));
 const tinyPng = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nLkAAAAASUVORK5CYII=";
@@ -20,8 +22,8 @@ try {
     let imageOutcome = "error";
     await page.route("**/*", async route => {
       const url = new URL(route.request().url());
-      if (url.pathname.endsWith("/app.min.js")) return route.fulfill({ path: appPath, contentType: "application/javascript" });
-      if (url.pathname.endsWith("/styles.min.css")) return route.fulfill({ path: cssPath, contentType: "text/css" });
+      if (!iosBundle && url.pathname.endsWith("/app.min.js")) return route.fulfill({ path: appPath, contentType: "application/javascript" });
+      if (!iosBundle && url.pathname.endsWith("/styles.min.css")) return route.fulfill({ path: cssPath, contentType: "text/css" });
       if (url.pathname === "/api/spirit-image") {
         imageCalls++;
         if (imageCalls === 1) await new Promise(resolve => { finishImage = resolve; });
@@ -141,6 +143,6 @@ try {
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true);
     assert.deepEqual(errors, []);
     await page.close();
-    console.log(`${width}px: first listen, contextual comments, honest wait, safe error, retry, success and cache passed.`);
+    console.log(`${engine.name()} ${iosBundle ? "iOS bundle " : "web "}${width}px: first listen, contextual comments, honest wait, safe error, retry, success, cache and profile isolation passed.`);
   }
 } finally { await browser.close(); await preview.stop(); }
