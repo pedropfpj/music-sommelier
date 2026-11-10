@@ -10436,8 +10436,6 @@ const spiritPremiumBenefitList = document.getElementById("spiritPremiumBenefitLi
 const spiritPremiumCta = document.getElementById("spiritPremiumCta");
 const spiritCollectibleGenerationPanel = document.getElementById("spiritCollectibleGenerationPanel");
 const spiritCollectibleGenerationLabel = document.getElementById("spiritCollectibleGenerationLabel");
-const spiritCollectibleGenerationPercent = document.getElementById("spiritCollectibleGenerationPercent");
-const spiritCollectibleGenerationFill = document.getElementById("spiritCollectibleGenerationFill");
 const spiritCollectiblePlaceholderKicker = document.getElementById("spiritCollectiblePlaceholderKicker");
 const spiritCollectiblePlaceholderTitle = document.getElementById("spiritCollectiblePlaceholderTitle");
 const spiritCollectiblePlaceholderText = document.getElementById("spiritCollectiblePlaceholderText");
@@ -10536,10 +10534,10 @@ let spiritUnlocked = false;
 let spiritSignalsByStyle = new Map();
 let spiritCollectibleBusy = false;
 let spiritPanelRefreshTimer = 0;
-let spiritCollectibleProgressTimer = 0;
-let spiritCollectibleProgressValue = 0;
 let spiritCollectibleProgressSettling = false;
 let spiritCollectibleLastApiError = "";
+let spiritCollectibleAttemptFailure = null;
+let spiritCollectibleGenerationToken = 0;
 let trackRatings = new Map();
 let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
@@ -25049,7 +25047,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Toque em Gerar imagem. O app escolhe o visual automaticamente pelo seu gosto.",
     spiritCollectibleHintLocal: "A imagem aparece aqui quando estiver pronta.",
     spiritCollectibleHintLocalReady: "Imagem pronta. Compartilhe ou baixe.",
-    spiritCollectibleHintApi: "Visual escolhido automaticamente pelo seu gosto.",
+    spiritCollectibleHintApi: "Arte pronta, criada a partir do seu gosto. Você pode baixar a imagem.",
     spiritCollectiblePremiumLocked: "Seu perfil musical está ativo. A arte exclusiva por IA faz parte do Sonic Premium.",
     spiritPremiumGateKicker: "EXCLUSIVO PREMIUM",
     spiritPremiumGateTitle: "Transforme seu gosto em uma arte única.",
@@ -25070,6 +25068,10 @@ const I18N = {
     spiritCollectibleMaxRank: "Nível máximo atual: {rank} com {likes} faixas curtidas.",
     spiritCollectibleAlt: "Sound System de {spirit} no marco de {milestone} faixas curtidas",
     spiritCollectibleRegenerate: "Gerar imagem",
+    spiritCollectibleGeneratingWait: "Criando a arte do seu Sound System. Pode levar até 2 minutos. Você pode continuar usando o app.",
+    spiritCollectibleRetry: "Tentar novamente",
+    spiritCollectibleErrorPending: "Sua arte já está sendo criada. Aguarde um pouco e tente novamente.",
+    spiritCollectibleErrorConnection: "Não foi possível conectar. Verifique sua conexão e tente novamente.",
     spiritCollectibleRegenerateAgain: "Gerar nova",
     spiritCollectibleAiLimitUsed: "Imagem IA já criada",
     spiritCollectibleDownload: "Baixar",
@@ -25091,22 +25093,22 @@ const I18N = {
     spiritCollectibleGeneratingPortrait: "Definindo caixas, racks, luz e subgênero...",
     spiritCollectibleGeneratingAi: "Renderizando Sound System em alta qualidade...",
     spiritCollectibleGeneratingCard: "Montando card compartilhável...",
-    spiritCollectibleGeneratingDone: "Arte criada. Finalizando prévia...",
+    spiritCollectibleGeneratingDone: "Sua arte está pronta para baixar.",
     spiritCollectibleGeneratingFailed: "A arte IA não ficou pronta agora. Tente gerar novamente.",
     spiritCollectiblePlaceholderKicker: "Arte em preparação",
     spiritCollectiblePlaceholderTitle: "Sound System em evolução",
     spiritCollectiblePlaceholderText: "A arte final entra aqui quando a IA terminar.",
     spiritCollectibleGeneratedLocal: "A arte IA ainda não ficou pronta. Tente gerar novamente.",
     spiritCollectibleGeneratedApi: "Imagem criada pelo seu gosto.",
-    spiritCollectibleAiKeptPrevious: "A nova tentativa de IA não veio boa agora. Mantive sua melhor arte anterior.",
-    spiritCollectibleError: "Não consegui montar a arte IA agora. Tente gerar novamente.",
+    spiritCollectibleAiKeptPrevious: "Não foi possível criar uma nova versão agora. Sua arte anterior continua disponível para baixar.",
+    spiritCollectibleError: "Não foi possível criar a arte agora. Tente novamente.",
     spiritCollectibleErrorUnavailable: "A geração IA não está disponível para este perfil agora.",
-    spiritCollectibleErrorTimeout: "A imagem demorou demais para voltar. Tente gerar novamente; a API pode levar mais em horários de pico.",
-    spiritCollectibleErrorNoImage: "A API respondeu, mas não devolveu uma imagem válida.",
-    spiritCollectibleErrorPremiumRequired: "A API pediu acesso premium para gerar esta arte.",
-    spiritCollectibleErrorLoginRequired: "Entre com o Google autorizado ou assine premium para gerar esta arte.",
+    spiritCollectibleErrorTimeout: "A criação demorou mais que o esperado. Tente novamente em instantes.",
+    spiritCollectibleErrorNoImage: "A arte não ficou pronta. Tente novamente.",
+    spiritCollectibleErrorPremiumRequired: "Esta arte exige acesso Premium. Conheça as opções para continuar.",
+    spiritCollectibleErrorLoginRequired: "Entre com sua conta para confirmar o acesso e gerar esta arte.",
     spiritCollectibleErrorLimit: "O limite de geração desta arte foi atingido para este perfil. Use um novo marco ou tente mais tarde.",
-    spiritCollectibleErrorDailyLimit: "O limite diário da API de imagem foi atingido. Tente novamente mais tarde.",
+    spiritCollectibleErrorDailyLimit: "O limite diário de criação foi atingido. Tente novamente amanhã.",
     spiritCollectibleErrorMissingKey: "A API está sem chave OpenAI configurada no servidor.",
     spiritCollectibleErrorServiceBusy: "A geração demorou ou o servidor de imagem ficou ocupado. Tente novamente em instantes.",
     spiritCollectibleErrorApiPrefix: "Falha da API de imagem:",
@@ -25961,7 +25963,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Tap Generate image. The app picks the look automatically from your taste.",
     spiritCollectibleHintLocal: "The image appears here when it is ready.",
     spiritCollectibleHintLocalReady: "Image ready. Share or download it.",
-    spiritCollectibleHintApi: "Look picked automatically from your taste.",
+    spiritCollectibleHintApi: "Artwork ready, created from your taste. You can download the image.",
     spiritCollectiblePremiumLocked: "Your music profile is active. Exclusive AI artwork is part of Sonic Premium.",
     spiritPremiumGateKicker: "EXCLUSIVE TO PREMIUM",
     spiritPremiumGateTitle: "Turn your taste into one-of-a-kind artwork.",
@@ -25982,6 +25984,10 @@ const I18N = {
     spiritCollectibleMaxRank: "Current max rank: {rank} with {likes} liked tracks.",
     spiritCollectibleAlt: "{spirit} Sound System at {milestone} liked tracks",
     spiritCollectibleRegenerate: "Generate image",
+    spiritCollectibleGeneratingWait: "Creating your Sound System artwork. This can take up to 2 minutes. You can keep using the app.",
+    spiritCollectibleRetry: "Try again",
+    spiritCollectibleErrorPending: "Your artwork is already being created. Wait a little and try again.",
+    spiritCollectibleErrorConnection: "Could not connect. Check your connection and try again.",
     spiritCollectibleRegenerateAgain: "Generate new",
     spiritCollectibleAiLimitUsed: "AI image already created",
     spiritCollectibleDownload: "Download",
@@ -26003,22 +26009,22 @@ const I18N = {
     spiritCollectibleGeneratingPortrait: "Defining speakers, racks, light, and subgenre...",
     spiritCollectibleGeneratingAi: "Rendering a high-quality Sound System...",
     spiritCollectibleGeneratingCard: "Building the shareable card...",
-    spiritCollectibleGeneratingDone: "Artwork created. Finalizing preview...",
+    spiritCollectibleGeneratingDone: "Your artwork is ready to download.",
     spiritCollectibleGeneratingFailed: "AI artwork was not ready now. Try generating again.",
     spiritCollectiblePlaceholderKicker: "Artwork preparing",
     spiritCollectiblePlaceholderTitle: "Evolving Sound System",
     spiritCollectiblePlaceholderText: "The final artwork appears here when AI finishes.",
     spiritCollectibleGeneratedLocal: "AI artwork is not ready yet. Try generating again.",
     spiritCollectibleGeneratedApi: "Image created from your taste.",
-    spiritCollectibleAiKeptPrevious: "The new AI attempt was not good enough right now. I kept your best previous artwork.",
-    spiritCollectibleError: "I could not assemble the AI artwork right now. Try generating again.",
+    spiritCollectibleAiKeptPrevious: "Could not create a new version right now. Your previous artwork is still available to download.",
+    spiritCollectibleError: "Could not create the artwork right now. Try again.",
     spiritCollectibleErrorUnavailable: "AI generation is not available for this profile right now.",
-    spiritCollectibleErrorTimeout: "The image took too long to return. Try generating again; the API can take longer at busy times.",
-    spiritCollectibleErrorNoImage: "The API responded, but did not return a valid image.",
-    spiritCollectibleErrorPremiumRequired: "The API requested premium access to generate this artwork.",
-    spiritCollectibleErrorLoginRequired: "Sign in with the authorized Google account or subscribe to premium to generate this artwork.",
+    spiritCollectibleErrorTimeout: "Creation took longer than expected. Try again in a moment.",
+    spiritCollectibleErrorNoImage: "The artwork was not completed. Try again.",
+    spiritCollectibleErrorPremiumRequired: "This artwork requires Premium access. View the options to continue.",
+    spiritCollectibleErrorLoginRequired: "Sign in to confirm access and create this artwork.",
     spiritCollectibleErrorLimit: "The generation limit for this artwork was reached for this profile. Use a new milestone or try later.",
-    spiritCollectibleErrorDailyLimit: "The daily image API limit was reached. Try again later.",
+    spiritCollectibleErrorDailyLimit: "The daily creation limit was reached. Try again tomorrow.",
     spiritCollectibleErrorMissingKey: "The server is missing the OpenAI API key.",
     spiritCollectibleErrorServiceBusy: "Image generation took too long or the image server was busy. Try again in a moment.",
     spiritCollectibleErrorApiPrefix: "Image API failure:",
@@ -26873,7 +26879,7 @@ const I18N = {
     spiritCollectibleReadyToGenerate: "Toca Generar imagen. La app elige el visual automáticamente por tu gusto.",
     spiritCollectibleHintLocal: "La imagen aparece aquí cuando esté lista.",
     spiritCollectibleHintLocalReady: "Imagen lista. Compártela o descárgala.",
-    spiritCollectibleHintApi: "Visual elegido automáticamente por tu gusto.",
+    spiritCollectibleHintApi: "Arte listo, creado a partir de tu gusto. Puedes descargar la imagen.",
     spiritCollectiblePremiumLocked: "Tu perfil musical está activo. El arte exclusivo por IA forma parte de Sonic Premium.",
     spiritPremiumGateKicker: "EXCLUSIVO PREMIUM",
     spiritPremiumGateTitle: "Convierte tu gusto en una obra única.",
@@ -26894,6 +26900,10 @@ const I18N = {
     spiritCollectibleMaxRank: "Rango máximo actual: {rank} con {likes} pistas con like.",
     spiritCollectibleAlt: "Sound System de {spirit} en el hito de {milestone} pistas con like",
     spiritCollectibleRegenerate: "Generar imagen",
+    spiritCollectibleGeneratingWait: "Creando el arte de tu Sound System. Puede tardar hasta 2 minutos. Puedes seguir usando la app.",
+    spiritCollectibleRetry: "Intentar de nuevo",
+    spiritCollectibleErrorPending: "Tu arte ya se está creando. Espera un poco e intenta de nuevo.",
+    spiritCollectibleErrorConnection: "No se pudo conectar. Revisa tu conexión e intenta de nuevo.",
     spiritCollectibleRegenerateAgain: "Generar nueva",
     spiritCollectibleAiLimitUsed: "Imagen IA ya creada",
     spiritCollectibleDownload: "Descargar",
@@ -26915,22 +26925,22 @@ const I18N = {
     spiritCollectibleGeneratingPortrait: "Definiendo cajas, racks, luz y subgénero...",
     spiritCollectibleGeneratingAi: "Renderizando Sound System en alta calidad...",
     spiritCollectibleGeneratingCard: "Montando card para compartir...",
-    spiritCollectibleGeneratingDone: "Arte creada. Finalizando vista previa...",
+    spiritCollectibleGeneratingDone: "Tu arte está listo para descargar.",
     spiritCollectibleGeneratingFailed: "El arte IA no quedó lista ahora. Intenta generar de nuevo.",
     spiritCollectiblePlaceholderKicker: "Arte en preparación",
     spiritCollectiblePlaceholderTitle: "Sound System en evolución",
     spiritCollectiblePlaceholderText: "El arte final aparece aquí cuando la IA termine.",
     spiritCollectibleGeneratedLocal: "El arte IA aún no está lista. Intenta generar de nuevo.",
     spiritCollectibleGeneratedApi: "Imagen creada por tu gusto.",
-    spiritCollectibleAiKeptPrevious: "El nuevo intento de IA no salió bien ahora. Mantuve tu mejor arte anterior.",
-    spiritCollectibleError: "No pude montar el arte IA ahora. Intenta generar de nuevo.",
+    spiritCollectibleAiKeptPrevious: "No se pudo crear una nueva versión ahora. Tu arte anterior sigue disponible para descargar.",
+    spiritCollectibleError: "No se pudo crear el arte ahora. Intenta de nuevo.",
     spiritCollectibleErrorUnavailable: "La generación IA no está disponible para este perfil ahora.",
-    spiritCollectibleErrorTimeout: "La imagen tardó demasiado en volver. Intenta generar de nuevo; la API puede demorar más en horarios de alta demanda.",
-    spiritCollectibleErrorNoImage: "La API respondió, pero no devolvió una imagen válida.",
-    spiritCollectibleErrorPremiumRequired: "La API pidió acceso premium para generar este arte.",
-    spiritCollectibleErrorLoginRequired: "Entra con el Google autorizado o suscríbete a premium para generar este arte.",
+    spiritCollectibleErrorTimeout: "La creación tardó más de lo esperado. Intenta de nuevo en un momento.",
+    spiritCollectibleErrorNoImage: "El arte no se completó. Intenta de nuevo.",
+    spiritCollectibleErrorPremiumRequired: "Este arte requiere acceso Premium. Consulta las opciones para continuar.",
+    spiritCollectibleErrorLoginRequired: "Entra con tu cuenta para confirmar el acceso y crear este arte.",
     spiritCollectibleErrorLimit: "Se alcanzó el límite de generación de este arte para este perfil. Usa un nuevo hito o intenta más tarde.",
-    spiritCollectibleErrorDailyLimit: "Se alcanzó el límite diario de la API de imagen. Intenta de nuevo más tarde.",
+    spiritCollectibleErrorDailyLimit: "Se alcanzó el límite diario de creación. Intenta de nuevo mañana.",
     spiritCollectibleErrorMissingKey: "El servidor no tiene configurada la clave de OpenAI.",
     spiritCollectibleErrorServiceBusy: "La generación demoró demasiado o el servidor de imagen estaba ocupado. Inténtalo de nuevo en un momento.",
     spiritCollectibleErrorApiPrefix: "Fallo de la API de imagen:",
@@ -30561,6 +30571,9 @@ function resetSessionStateInMemory() {
   currentSpiritId = "";
   spiritLastReviewedSongLikes = 0;
   spiritCollectibleBusy = false;
+  spiritCollectibleGenerationToken += 1;
+  spiritCollectibleAttemptFailure = null;
+  spiritCollectibleLastApiError = "";
   spiritStoryPreparedAsset = null;
   spiritStoryPreparedKey = "";
   spiritStoryPreparePromise = null;
@@ -42558,8 +42571,7 @@ function spiritCollectibleProfileSignature(spirit, milestoneLikes = 0) {
   return hashString(raw).toString(36);
 }
 
-function readSpiritCollectibleStore() {
-  const key = spiritCollectibleStoreKey();
+function readSpiritCollectibleStore(key = spiritCollectibleStoreKey()) {
   if (!key) return {};
   try {
     const raw = localStorage.getItem(key);
@@ -42571,8 +42583,7 @@ function readSpiritCollectibleStore() {
   }
 }
 
-function saveSpiritCollectibleStore(store) {
-  const key = spiritCollectibleStoreKey();
+function saveSpiritCollectibleStore(store, key = spiritCollectibleStoreKey()) {
   if (!key) return;
   try {
     localStorage.setItem(key, JSON.stringify(store || {}));
@@ -47701,23 +47712,17 @@ function collectibleVariationToken({ forceNewCharacter = false, spiritId = "", m
 
 function spiritCollectibleApiFailureText(code = "", detail = "", status = 0) {
   const normalizedCode = String(code || "").trim();
-  const normalizedDetail = String(detail || "").trim();
-
   if (normalizedCode === "premium_required") return t("spiritCollectibleErrorPremiumRequired");
-  if (normalizedCode === "login_required" || normalizedCode === "owner_required") return t("spiritCollectibleErrorLoginRequired");
+  if (["login_required", "owner_required", "beta_access_required"].includes(normalizedCode) || Number(status) === 401) return t("spiritCollectibleErrorLoginRequired");
   if (normalizedCode === "image_generation_limit_reached") return t("spiritCollectibleErrorLimit");
   if (normalizedCode === "daily_ai_limit_reached") return t("spiritCollectibleErrorDailyLimit");
-  if (normalizedCode === "missing_openai_api_key") return t("spiritCollectibleErrorMissingKey");
+  if (Number(status) === 429) return t("spiritCollectibleErrorServiceBusy");
+  if (["ai_feature_disabled", "missing_openai_api_key", "origin_not_allowed"].includes(normalizedCode)) return t("spiritCollectibleErrorUnavailable");
   if (normalizedCode === "missing_image_output") return t("spiritCollectibleErrorNoImage");
-  if (normalizedCode === "image_generation_pending") return t("spiritCollectibleGenerating");
-  if (["openai_image_failed", "durable_rate_limit_required", "durable_store_required"].includes(normalizedCode)) {
-    return normalizedDetail
-      ? `${t("spiritCollectibleErrorApiPrefix")} ${normalizedDetail}`
-      : t("spiritCollectibleErrorServiceBusy");
-  }
+  if (normalizedCode === "image_generation_pending") return t("spiritCollectibleErrorPending");
+  if (normalizedCode === "openai_image_timeout" || Number(status) === 504) return t("spiritCollectibleErrorTimeout");
   if ([502, 503, 504].includes(Number(status) || 0)) return t("spiritCollectibleErrorServiceBusy");
-  if (normalizedDetail) return `${t("spiritCollectibleErrorApiPrefix")} ${normalizedDetail}`;
-  if (status) return t("spiritCollectibleErrorApiStatus", { status });
+  if (!status && !normalizedCode) return t("spiritCollectibleErrorConnection");
   return t("spiritCollectibleError");
 }
 
@@ -47733,21 +47738,26 @@ async function currentApiAccessToken() {
 
 async function requestSpiritCollectibleFromApi(payload) {
   const endpoint = resolveAiEndpoint("NEONPULSE_IMAGE_API_URL", "/api/spirit-image");
-  spiritCollectibleLastApiError = "";
+  const requestGeneration = spiritCollectibleGenerationToken;
+  const requestProfileKey = spiritCollectibleStoreKey();
+  const requestStillCurrent = () => requestGeneration === spiritCollectibleGenerationToken && requestProfileKey === spiritCollectibleStoreKey();
+  const setRequestError = message => { if (requestStillCurrent()) spiritCollectibleLastApiError = message; };
+  setRequestError("");
   if (!endpoint || !aiImageEnabled()) {
-    spiritCollectibleLastApiError = t("spiritCollectibleErrorUnavailable");
+    setRequestError(t("spiritCollectibleErrorUnavailable"));
     return "";
   }
   if (!aiImageAccessUnlockedForRequest() || aiImageLimitReachedForProfile()) {
-    spiritCollectibleLastApiError = aiImagePremiumRequiredForCurrentUser()
+    setRequestError(aiImagePremiumRequiredForCurrentUser()
       ? t("spiritCollectibleErrorPremiumRequired")
       : aiImageLimitReachedForProfile()
       ? premiumAvatarLimitMessage()
-      : t("spiritCollectibleErrorLoginRequired");
+      : t("spiritCollectibleErrorLoginRequired"));
     return "";
   }
   const token = String(window?.NEONPULSE_IMAGE_API_TOKEN || "").trim();
   const accessToken = await currentApiAccessToken();
+  if (!requestStillCurrent()) return "";
 
   const headers = {
     "Content-Type": "application/json",
@@ -47777,11 +47787,11 @@ async function requestSpiritCollectibleFromApi(payload) {
 
     const body = await response.json().catch(() => ({}));
     if (!response.ok) {
-      spiritCollectibleLastApiError = spiritCollectibleApiFailureText(
+      setRequestError(spiritCollectibleApiFailureText(
         body?.error,
         body?.detail || body?.message,
         response.status
-      );
+      ));
       console.warn("Spirit image API failed.", {
         status: response.status,
         error: body?.error || "",
@@ -47792,23 +47802,23 @@ async function requestSpiritCollectibleFromApi(payload) {
 
     const directUrl = String(body?.imageUrl || body?.url || body?.data?.[0]?.url || "").trim();
     if (directUrl) {
-      recordAiImageCall();
-      spiritCollectibleLastApiError = "";
+      if (requestStillCurrent()) recordAiImageCall();
+      setRequestError("");
       return directUrl;
     }
 
     const b64 = String(body?.b64_json || body?.imageBase64 || body?.data?.[0]?.b64_json || "").trim();
     if (b64) {
-      recordAiImageCall();
-      spiritCollectibleLastApiError = "";
+      if (requestStillCurrent()) recordAiImageCall();
+      setRequestError("");
       return `data:image/png;base64,${b64}`;
     }
-    spiritCollectibleLastApiError = t("spiritCollectibleErrorNoImage");
+    setRequestError(t("spiritCollectibleErrorNoImage"));
     return "";
   } catch (err) {
-    spiritCollectibleLastApiError = err?.name === "AbortError"
+    setRequestError(err?.name === "AbortError"
       ? t("spiritCollectibleErrorTimeout")
-      : spiritCollectibleApiFailureText("", err?.message || "", 0);
+      : spiritCollectibleApiFailureText("", err?.message || "", 0));
     console.warn("Spirit image request failed.", err);
     return "";
   } finally {
@@ -48183,53 +48193,28 @@ function buildLocalSpiritCollectibleImage(
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-function spiritGenerationStageKey(percent = 0) {
-  const value = Math.max(0, Math.min(100, Number(percent) || 0));
-  if (value >= 96) return "spiritCollectibleGeneratingDone";
-  if (value >= 74) return "spiritCollectibleGeneratingCard";
-  if (value >= 38) return "spiritCollectibleGeneratingAi";
-  if (value >= 18) return "spiritCollectibleGeneratingPortrait";
-  return "spiritCollectibleGeneratingBrief";
-}
-
-function clearSpiritCollectibleGenerationProgressTimer() {
-  if (!spiritCollectibleProgressTimer) return;
-  window.clearInterval(spiritCollectibleProgressTimer);
-  spiritCollectibleProgressTimer = 0;
-}
-
-function updateSpiritCollectibleGenerationProgress({ active = spiritCollectibleBusy, percent = spiritCollectibleProgressValue, labelKey = "" } = {}) {
-  const safePercent = Math.max(0, Math.min(100, Math.round(Number(percent) || 0)));
-  spiritCollectibleProgressValue = safePercent;
-  if (spiritCollectibleGenerationPanel) spiritCollectibleGenerationPanel.classList.toggle("hidden", !active);
-  if (spiritCollectibleGenerationLabel) spiritCollectibleGenerationLabel.textContent = t(labelKey || spiritGenerationStageKey(safePercent));
-  if (spiritCollectibleGenerationPercent) spiritCollectibleGenerationPercent.textContent = `${safePercent}%`;
-  if (spiritCollectibleGenerationFill) spiritCollectibleGenerationFill.style.width = `${safePercent}%`;
+function updateSpiritCollectibleGenerationProgress({ active = spiritCollectibleBusy, labelKey = "" } = {}) {
+  if (spiritCollectibleGenerationPanel) {
+    spiritCollectibleGenerationPanel.classList.toggle("hidden", !active);
+    spiritCollectibleGenerationPanel.dataset.state = spiritCollectibleBusy ? "loading" : "settled";
+  }
+  if (spiritCollectibleGenerationLabel) spiritCollectibleGenerationLabel.textContent = t(labelKey || "spiritCollectibleGeneratingWait");
 }
 
 function startSpiritCollectibleGenerationProgress() {
-  clearSpiritCollectibleGenerationProgressTimer();
-  spiritCollectibleProgressValue = 7;
-  updateSpiritCollectibleGenerationProgress({ active: true, percent: spiritCollectibleProgressValue, labelKey: "spiritCollectibleGeneratingBrief" });
-  spiritCollectibleProgressTimer = window.setInterval(() => {
-    const current = Math.max(0, Number(spiritCollectibleProgressValue) || 0);
-    const step = current < 28 ? 7 : current < 62 ? 4 : current < 84 ? 2 : 1;
-    const next = Math.min(94, current + step);
-    updateSpiritCollectibleGenerationProgress({ active: true, percent: next });
-  }, 850);
+  spiritCollectibleProgressSettling = false;
+  updateSpiritCollectibleGenerationProgress({ active: true });
 }
 
 function finishSpiritCollectibleGenerationProgress(success = false) {
-  clearSpiritCollectibleGenerationProgressTimer();
   spiritCollectibleProgressSettling = true;
   updateSpiritCollectibleGenerationProgress({
     active: true,
-    percent: 100,
     labelKey: success ? "spiritCollectibleGeneratingDone" : "spiritCollectibleGeneratingFailed"
   });
   window.setTimeout(() => {
     spiritCollectibleProgressSettling = false;
-    if (!spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: false, percent: success ? 100 : 0 });
+    if (!spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: false });
   }, success ? 1000 : 1800);
 }
 
@@ -48339,6 +48324,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
   const userSignature = spiritCollectibleUserSignature();
   const artSignature = spiritCollectibleArtParamsSignature();
   const slotKey = `${spirit.id}::${milestone.likes}::${userSignature}::${artSignature}`;
+  const collectibleStorageKey = spiritCollectibleStoreKey();
   const store = readSpiritCollectibleStore();
   let collectible = store[slotKey] || null;
   if (collectible?.source === "local") {
@@ -48359,6 +48345,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     spiritCollectiblePanel.classList.toggle("awaiting-image", !hasImage);
     spiritCollectiblePanel.classList.toggle("is-generating", spiritCollectibleBusy);
     spiritCollectiblePanel.classList.toggle("is-premium-locked", premiumLocked);
+    spiritCollectiblePanel.setAttribute("aria-busy", String(spiritCollectibleBusy));
     if (spiritPremiumGate) {
       spiritPremiumGate.classList.toggle("hidden", !premiumLocked);
       spiritPremiumGate.setAttribute("aria-hidden", premiumLocked ? "false" : "true");
@@ -48377,13 +48364,15 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       spiritCollectiblePlaceholderText.textContent = t(premiumLocked ? "spiritPremiumPlaceholderText" : "spiritCollectiblePlaceholderText");
     }
     if (spiritCollectibleBusy) updateSpiritCollectibleGenerationProgress({ active: true });
-    else if (!spiritCollectibleProgressTimer && !spiritCollectibleProgressSettling) updateSpiritCollectibleGenerationProgress({ active: false, percent: spiritCollectibleProgressValue });
+    else if (!spiritCollectibleProgressSettling) updateSpiritCollectibleGenerationProgress({ active: false });
     if (spiritCollectibleTitle) spiritCollectibleTitle.textContent = t("spiritCollectibleTitle");
     if (spiritCollectibleHint) {
       if (spiritCollectibleBusy) {
         spiritCollectibleHint.textContent = t("spiritCollectibleGenerating");
+      } else if (spiritCollectibleAttemptFailure?.slotKey === slotKey) {
+        spiritCollectibleHint.textContent = spiritCollectibleAttemptFailure.message;
       } else if (!hasImage && asset?.error) {
-        spiritCollectibleHint.textContent = asset.error;
+        spiritCollectibleHint.textContent = t("spiritCollectibleError");
       } else if (premiumLocked && hasImage) {
         spiritCollectibleHint.textContent = t("spiritPremiumExistingHint");
       } else if (premiumLocked) {
@@ -48466,11 +48455,14 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
     if (spiritCollectibleRegenerateBtn) {
       spiritCollectibleRegenerateBtn.textContent = spiritCollectibleBusy
         ? t("spiritCollectibleGenerating")
+        : spiritCollectibleAttemptFailure?.slotKey === slotKey
+        ? t("spiritCollectibleRetry")
         : hasImage
         ? t("spiritCollectibleRegenerateAgain")
         : t("spiritCollectibleRegenerate");
       spiritCollectibleRegenerateBtn.disabled = spiritCollectibleBusy || (!hasImage && !requestAvailable);
       spiritCollectibleRegenerateBtn.classList.toggle("hidden", premiumLocked);
+      if (hasImage && !aiConfigFlag("allowImageRegeneration", false)) spiritCollectibleRegenerateBtn.classList.add("hidden");
       if (spiritCollectibleBusy) spiritCollectibleRegenerateBtn.setAttribute("aria-busy", "true");
       else spiritCollectibleRegenerateBtn.removeAttribute("aria-busy");
     }
@@ -48506,6 +48498,8 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       canUseAiForThisAttempt = false;
     }
     spiritCollectibleBusy = true;
+    const generationToken = ++spiritCollectibleGenerationToken;
+    spiritCollectibleAttemptFailure = null;
     startSpiritCollectibleGenerationProgress();
     showToast(t("spiritCollectibleGeneratingStart"));
     const variation = forceRegenerate
@@ -48539,9 +48533,7 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
       }
     } catch (error) {
       console.warn("Spirit collectible generation failed.", error);
-      if (collectible?.imageUrl) {
-        keptPreviousCollectible = false;
-      } else if (previousCollectible?.imageUrl) {
+      if (previousCollectible?.imageUrl) {
         collectible = previousCollectible;
         keptPreviousCollectible = true;
       } else {
@@ -48553,17 +48545,31 @@ async function ensureSpiritCollectible(spirit, spiritText, { forceRegenerate = f
           prompt: buildSpiritCollectiblePrompt(spirit, spiritText, likes, milestone.likes, userSignature, profileSignature),
           userSignature,
           profileSignature,
-          error: spiritCollectibleLastApiError || error?.message || t("spiritCollectibleError")
+          error: spiritCollectibleLastApiError || t("spiritCollectibleError")
         };
       }
     } finally {
-      spiritCollectibleBusy = false;
+      if (generationToken === spiritCollectibleGenerationToken && collectibleStorageKey === spiritCollectibleStoreKey()) spiritCollectibleBusy = false;
     }
-    finishSpiritCollectibleGenerationProgress(Boolean(collectible?.imageUrl));
-    if (collectible?.imageUrl && !keptPreviousCollectible) {
-      store[slotKey] = collectible;
-      saveSpiritCollectibleStore(store);
+    const generatedNewImage = Boolean(collectible?.imageUrl) && !keptPreviousCollectible;
+    if (generatedNewImage) {
+      // The user may change account while waiting. Save only to the captured
+      // profile and merge the latest cache rather than overwriting another card.
+      const latestStore = readSpiritCollectibleStore(collectibleStorageKey);
+      latestStore[slotKey] = collectible;
+      saveSpiritCollectibleStore(latestStore, collectibleStorageKey);
     }
+    if (generationToken !== spiritCollectibleGenerationToken || collectibleStorageKey !== spiritCollectibleStoreKey()) return generatedNewImage ? collectible : null;
+    if (currentSpiritId && currentSpiritId !== spirit.id) {
+      const selectedSpirit = spiritById(currentSpiritId);
+      if (selectedSpirit) void ensureSpiritCollectible(selectedSpirit, localizedSpiritCopy(selectedSpirit), { autoGenerate: false });
+      return generatedNewImage ? collectible : null;
+    }
+    if (!generatedNewImage) spiritCollectibleAttemptFailure = {
+      slotKey,
+      message: keptPreviousCollectible ? t("spiritCollectibleAiKeptPrevious") : spiritCollectibleLastApiError || t("spiritCollectibleError")
+    };
+    finishSpiritCollectibleGenerationProgress(generatedNewImage);
     if (forceRegenerate && collectible?.imageUrl) {
       if (keptPreviousCollectible) {
         showToast(t("spiritCollectibleAiKeptPrevious"));
