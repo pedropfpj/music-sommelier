@@ -22,6 +22,11 @@ const context = vm.createContext({
   document: { getElementById: id => id === "trackDiscussionEntry" ? entry : label, createTextNode: value => value },
   sessionStorage: storage,
   pendingSocialDiscussionReturn: null,
+  socialDiscussionReadinessRequested: false,
+  socialState: { ready: false },
+  shouldHideSocialLoginForAppStore: () => false,
+  ensureSocialMvpReady: async () => { context.socialState.ready = true; context.readinessCalls++; },
+  readinessCalls: 0,
   currentRecommendation: null,
   catalog: [track], STYLE_BPM_RULES: { house: {} },
   socialCommentsState: { targetType: "track" },
@@ -49,6 +54,8 @@ assert.equal(entry.hidden, true, "No comments dead end before the first track");
 context.currentRecommendation = track;
 context.renderSocialDiscussionEntry();
 assert.equal(entry.hidden, false);
+await Promise.resolve(); await Promise.resolve();
+assert.equal(context.readinessCalls, 1, "A shown track requests the existing configuration promptly and only once");
 assert.ok(label.textContent.includes(track.song));
 context.disabled = true;
 context.renderSocialDiscussionEntry();

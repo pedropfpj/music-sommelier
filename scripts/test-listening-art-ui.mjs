@@ -24,6 +24,7 @@ try {
       const url = new URL(route.request().url());
       if (!iosBundle && url.pathname.endsWith("/app.min.js")) return route.fulfill({ path: appPath, contentType: "application/javascript" });
       if (!iosBundle && url.pathname.endsWith("/styles.min.css")) return route.fulfill({ path: cssPath, contentType: "text/css" });
+      if (url.pathname === "/api/social-config") return route.fulfill({ json: { ok: true, enabled: true, supabaseUrl: "https://auth.example.test", supabaseAnonKey: "public-test-config", providers: ["google", "apple"], features: { socialV2: true, publicProfiles: false } } });
       if (url.pathname === "/api/spirit-image") {
         imageCalls++;
         if (imageCalls === 1) await new Promise(resolve => { finishImage = resolve; });
@@ -58,12 +59,11 @@ try {
     assert.equal(await page.locator("#topSwipeSurpriseBtn").isVisible(), true);
     await page.locator("#swipeStartPanel").screenshot({ path: fileURLToPath(new URL(`../reports/ux-five-points/first-listen-${width}.png`, import.meta.url)) });
     await page.evaluate(() => {
-      window.SonicConfigureSocialRelease({ socialV2: true });
       const track = CURATED_FRIENDLY_OPENING_TRACKS[0];
       restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
       renderSocialDiscussionEntry(track);
     });
-    assert.equal(await page.locator("#trackDiscussionEntry").isVisible(), true);
+    await page.locator("#trackDiscussionEntry").waitFor({ state: "visible", timeout: 3000 });
     await page.locator('#trackDiscussionEntry [data-open-discussion="track"]').click();
     await page.waitForFunction(() => document.getElementById("socialDiscussionDialog").open);
     assert.match(await page.locator("#socialCommentsLoginText").textContent(), /Depois do login.*conversa desta faixa/);

@@ -10930,6 +10930,7 @@ let dailyRadarController = null;
 let userProfileController = null;
 let pendingSocialCommentRequest = null;
 let pendingSocialDiscussionReturn = null;
+let socialDiscussionReadinessRequested = false;
 let sharedSocialVideoOpened = false;
 let privacyRequestsController = null;
 let weeklyRecommendsController = null;
@@ -59799,7 +59800,7 @@ async function fetchSocialConfig() {
   try {
     const endpoint = resolveAppApiEndpoint(SOCIAL_CONFIG_ENDPOINT);
     if (!endpoint) throw new Error("social_config_endpoint_unavailable");
-    const response = await fetch(endpoint, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const response = await fetchWithTimeout(endpoint, { cache: "no-store" }, 10000);
     const config = await response.json();
     socialState.config = config || null;
     socialState.enabled = Boolean(config?.enabled && config?.supabaseUrl && config?.supabaseAnonKey);
@@ -60805,7 +60806,14 @@ function socialDiscussionCopy(kind) {
 
 function renderSocialDiscussionEntry(track = currentRecommendation) {
   const entry = document.getElementById("trackDiscussionEntry");
-  const available = Boolean(socialCommentsTrackTarget(track)) && !shouldDisableSocialCommentsForAppStore();
+  const hasTarget = Boolean(socialCommentsTrackTarget(track));
+  if (hasTarget && !socialState.ready && !socialDiscussionReadinessRequested && !shouldHideSocialLoginForAppStore()) {
+    socialDiscussionReadinessRequested = true;
+    // Start the existing configuration flow as soon as a track is shown,
+    // without awaiting it in the tap that starts audio or overriding its flags.
+    Promise.resolve().then(() => ensureSocialMvpReady()).finally(() => renderSocialDiscussionEntry(currentRecommendation));
+  }
+  const available = hasTarget && !shouldDisableSocialCommentsForAppStore();
   if (entry) {
     entry.hidden = !available;
     entry.classList.toggle("hidden", !available);
