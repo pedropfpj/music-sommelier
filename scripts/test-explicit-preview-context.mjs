@@ -97,6 +97,7 @@ async function fixture({ exact = false } = {}) {
       t: key => key,
       captureRecommendationSurfaceSnapshot: () => ({ track, prefs: { style: "house" } }),
       ownedTrackPreviewSource: () => "https://fixture.invalid/failed-preview.mp3",
+      weeklyEditionPreviewCache: new Map(),
       trackStillActive: item => item === window.currentRecommendation,
       removePreviewCandidate: noop,
       removeArtistPreviewOption: noop,
@@ -144,10 +145,12 @@ try {
   const recovery = await fixture({ exact: true });
   await recovery.evaluate(() => recoverCurrentPreviewAfterPlaybackIssue("error"));
   calls = await recovery.evaluate(() => window.previewCalls);
-  assert.equal(calls.renders[0].exactRecordingOnly, true);
+  assert.equal(calls.renders.length, 0, "A late weekly media error must require explicit exact preflight, not automatic fuzzy resolution");
   assert.equal(calls.artistFallbacks, 0);
   assert.equal(calls.replacements, 0, "A weekly playback failure must not silently replace the edition recording");
   assert.equal(calls.unavailable, 1, "The edition queue must receive an explicit unavailable result");
+  await recovery.evaluate(() => { previewRecoveryBusy = true; return recoverCurrentPreviewAfterPlaybackIssue("error"); });
+  assert.equal(await recovery.evaluate(() => previewCalls.unavailable), 2, "Late weekly errors cannot be hidden by another recovery's busy flag");
   await recovery.close();
 
   const ordinaryRecovery = await fixture();

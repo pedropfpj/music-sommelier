@@ -43,6 +43,7 @@
     "verify:saved-tracks": "node scripts/verify-saved-tracks-ui.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
     "test:weekly-listening": "node scripts/test-weekly-listening.mjs",
+    "test:weekly-previews": "node scripts/test-track-metadata-retry.mjs && node scripts/test-weekly-preview-preparation.mjs && node scripts/test-weekly-preview-session.mjs",
     "test:premium-visibility": "node scripts/test-premium-promo-visibility.mjs",
     "test:newsroom": "node scripts/test-newsroom.mjs",
     "test:newsroom-visuals": "node scripts/test-newsroom-visuals.mjs",

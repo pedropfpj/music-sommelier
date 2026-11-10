@@ -56703,12 +56703,29 @@ function removePreviewCandidate(track, previewUrl = "") {
 }
 
 async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
-  if (!currentRecommendation || !trackPreview || previewRecoveryBusy) return;
+  if (!currentRecommendation || !trackPreview) return;
   if (trackPreview.dataset.previewProbing === "true") return;
   const track = currentRecommendation;
   const surfaceSnapshot = captureRecommendationSurfaceSnapshot();
   const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true;
   const trackKey = recommendationTrackKey(track);
+  if (exactRecordingOnly) {
+    // An error after preparation invalidates that evidence. An explicit retry
+    // must re-run the exact audio check, rather than enter fuzzy discovery recovery.
+    stopAllActivePlayback({ reason: `weekly_preview_${reason}` });
+    for (const [key, cached] of weeklyEditionPreviewCache) {
+      if (recommendationTrackKey(cached.track) === trackKey) weeklyEditionPreviewCache.delete(key);
+    }
+    track.previewChecked = false;
+    track.previewMissing = true;
+    weeklyRecommendsController?.playbackUnavailable?.(track);
+    if (previewStatus) previewStatus.textContent = t("previewUnavailable");
+    setPreviewPrimaryPlaybackState("ready");
+    if (previewPlayBtn) previewPlayBtn.disabled = true;
+    setTrackPreviewVisualState("external");
+    return;
+  }
+  if (previewRecoveryBusy) return;
   const failedPreview = normalizePreviewUrl(ownedTrackPreviewSource(track, trackPreview) || track.previewUrl);
   if (!failedPreview && !trackKey) return;
   stopAllActivePlayback({ reason: `preview_recovery_${reason}` });
