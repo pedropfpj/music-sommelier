@@ -13,6 +13,7 @@ const handlers = {
   "deezer-preview": require("../lib/api/_deezer-preview"),
   "discovery-exposure": require("../lib/api/_discovery-exposure"),
   "event-radar": require("../lib/api/_event-radar"),
+  friends: require("../lib/api/_friends"),
   "lastfm-artist": require("../lib/api/_lastfm-artist"),
   "music-universes": require("../lib/api/_music-universes"),
   "news-editor": require("../lib/api/_news-editor"),

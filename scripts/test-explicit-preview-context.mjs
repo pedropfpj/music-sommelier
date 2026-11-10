@@ -50,6 +50,8 @@ async function fixture({ exact = false } = {}) {
         requiresExactRecording: () => exact,
         playbackUnavailable: () => { window.previewCalls.unavailable++; }
       },
+      friendsPlaybackMatches: () => false,
+      friendsRequiresExactRecording: () => false,
       recommendationTrackKey: item => `${item.artist}::${item.song}`,
       setPreviewPrimaryPlaybackState: noop,
       setTrackPreviewVisualState: noop,
@@ -152,6 +154,17 @@ try {
   await recovery.evaluate(() => { previewRecoveryBusy = true; return recoverCurrentPreviewAfterPlaybackIssue("error"); });
   assert.equal(await recovery.evaluate(() => previewCalls.unavailable), 2, "Late weekly errors cannot be hidden by another recovery's busy flag");
   await recovery.close();
+
+  const friendRecovery = await fixture();
+  await friendRecovery.evaluate(() => { friendsRequiresExactRecording = () => true; });
+  await friendRecovery.evaluate(() => recoverCurrentPreviewAfterPlaybackIssue("error"));
+  calls = await friendRecovery.evaluate(() => window.previewCalls);
+  assert.equal(calls.replacements, 0, "An explicitly chosen friend recording remains exact after its private context is revoked");
+  assert.equal(calls.artistFallbacks, 0);
+  await friendRecovery.evaluate(() => renderPreview(currentRecommendation, { fast: true, autoplay: false, deferRetry: false }));
+  calls = await friendRecovery.evaluate(() => window.previewCalls);
+  assert.equal(calls.artistFallbacks, 0, "The renderer must preserve the exact friend recording too");
+  await friendRecovery.close();
 
   const ordinaryRecovery = await fixture();
   await ordinaryRecovery.evaluate(() => recoverCurrentPreviewAfterPlaybackIssue("error"));

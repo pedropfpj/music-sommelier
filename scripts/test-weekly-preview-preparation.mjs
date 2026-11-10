@@ -87,6 +87,15 @@ async function fixture() {
 }
 
 try {
+  const collision = await fixture();
+  const exactIdentity = await collision.evaluate(async () => {
+    catalog.push({ artist: "AB", song: "C", style: "house", previewUrl: "https://weekly-media.fixture.test/ready.wav" });
+    const track = await resolveWeeklyEditionCatalogTrack({ artist: "A", title: "BC", style: "house" }, () => true);
+    return { artist: track.artist, song: track.song, borrowedAudio: Boolean(track.previewUrl) };
+  });
+  assert.deepEqual(exactIdentity, { artist: "A", song: "BC", borrowedAudio: false }, "An ambiguous concatenated key cannot substitute a different artist/title pair");
+  await collision.close();
+
   const media = await fixture();
   let result = await media.evaluate(async () => {
     const ready = addItem("Ready exact audio", { previewUrl: "https://weekly-media.fixture.test/ready.wav" });
@@ -222,7 +231,7 @@ try {
       FAST_PREVIEW_PROBE_TIMEOUT_MS: 120, PREVIEW_PROBE_TIMEOUT_MS: 120, FAST_PREVIEW_PROBE_LIMIT: 1,
       FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS: 120, FAST_OPTIONAL_API_TIMEOUT_MS: 120,
       currentRecommendation: { artist: "Edition Artist", song: "Unavailable exact recording", style: "house" },
-      weeklyRecommendsController: null, prewarmedSwipeTrackKeys: new Set(), activePlayback: { type: "none" },
+      weeklyRecommendsController: null, friendsPlaybackMatches: () => false, friendsRequiresExactRecording: () => false, prewarmedSwipeTrackKeys: new Set(), activePlayback: { type: "none" },
       bpmInfo: null, energyInfo: null, releaseInfo: null, durationInfo: null, catalogInfo: null, youtubeLink: null,
       youtubePreviewSearchAttempt: 0, setPreviewPrimaryPlaybackState: noop, setTrackPreviewVisualState: noop,
       syncYouTubePreviewAttemptForTrack: noop, preferredEmbeddedAutoplaySource: () => "", previewAutoplayRequested: () => true,

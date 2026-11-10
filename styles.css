@@ -22889,6 +22889,20 @@ body.sonic-first-value-window #dailyRadarPanel {
   grid-column: auto;
 }
 
+.profile-social-shortcuts {
+  display: none;
+  gap: .75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.profile-social-shortcuts.active { display: flex; }
+.profile-social-shortcuts button { flex: 1 1 180px; min-height: 48px; }
+.friends-track-share { width: 100%; margin-top: .65rem; min-height: 48px; }
+.friends-track-share[hidden], .friends-playback-notice[hidden] { display: none !important; }
+.friends-playback-notice { margin-top: .85rem; padding: .85rem; border: 1px solid rgba(126,255,231,.28); border-radius: 10px; background: rgba(10,35,40,.6); }
+.friends-playback-notice p { margin: 0 0 .7rem; color: var(--text); line-height: 1.5; }
+.friends-playback-notice button { min-height: 44px; }
+
 /* Mobile control alignment: paired hero actions keep the same visual weight. */
 @media (max-width: 780px) {
   .hero-actions {

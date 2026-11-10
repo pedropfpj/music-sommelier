@@ -4839,7 +4839,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261109weekly3";
+const SONIC_APP_BUILD_ID = "20261110friends1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10929,6 +10929,12 @@ let dailyLikeMemoryState = null;
 let dailyDjController = null;
 let dailyRadarController = null;
 let userProfileController = null;
+let friendsController = null;
+let friendsObservedSessionKey = "";
+let friendsPlaybackContext = null;
+const friendsExplicitTracks = new WeakSet();
+let pendingFriendsEntry = null;
+let friendsEntryOperation = 0;
 let socialProfileIdentityHydration = null;
 let pendingSocialCommentRequest = null;
 let pendingSocialDiscussionReturn = null;
@@ -24411,6 +24417,7 @@ const I18N = {
     tabDjs: "DJs",
     tabFilters: "Filtros",
     tabNews: "Jornal",
+    tabFriends: "Amigos",
     tabProfile: "Perfil",
     tabMore: "Mais",
     tabAdmin: "Painel administrativo",
@@ -24420,7 +24427,7 @@ const I18N = {
     socialCommentsReport: "Denunciar",
     socialCommentsBlockUser: "Bloquear usuário",
     socialCommentsReportConfirm: "Denunciar este comentário para a moderação do Sonic Search?",
-    socialCommentsBlockConfirm: "Bloquear este usuário? Os comentários dele deixarão de aparecer para você.",
+    socialCommentsBlockConfirm: "Bloquear este usuário? A amizade será removida, as descobertas entre vocês ficarão indisponíveis e os comentários dele serão ocultados.",
     socialCommentsReported: "Denúncia enviada à moderação.",
     socialCommentsBlocked: "Usuário bloqueado. Os comentários dele foram ocultados.",
     socialCommentsReportFailed: "Não foi possível enviar a denúncia agora.",
@@ -24856,7 +24863,7 @@ const I18N = {
     socialCommentsTabArtist: "Artista",
     socialCommentsPlaceholderTrack: "Escreva um comentário sobre essa faixa",
     socialCommentsPlaceholderArtist: "Escreva um comentário sobre esse artista",
-    socialCommentsComposerHint: "Seu comentário aparece para outros ouvintes logados.",
+    socialCommentsComposerHint: "Comentário geral: visível a outros ouvintes logados. Para compartilhar só com amigos aceitos, use Amigos.",
     socialCommentsLoginText: "Entre com Google ou Apple para identificar sua participação e editar seus comentários. Depois do login, você volta à conversa desta faixa. Ouvir continua disponível sem conta.",
     socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentário",
@@ -25327,6 +25334,7 @@ const I18N = {
     tabDjs: "DJs",
     tabFilters: "Filters",
     tabNews: "Journal",
+    tabFriends: "Friends",
     tabProfile: "Profile",
     tabMore: "More",
     tabAdmin: "Admin dashboard",
@@ -25336,7 +25344,7 @@ const I18N = {
     socialCommentsReport: "Report",
     socialCommentsBlockUser: "Block user",
     socialCommentsReportConfirm: "Report this comment to Sonic Search moderation?",
-    socialCommentsBlockConfirm: "Block this user? Their comments will no longer appear for you.",
+    socialCommentsBlockConfirm: "Block this user? This removes the friendship, revokes shared discoveries between you and hides their comments.",
     socialCommentsReported: "Report sent to moderation.",
     socialCommentsBlocked: "User blocked. Their comments are now hidden.",
     socialCommentsReportFailed: "The report could not be sent right now.",
@@ -25772,7 +25780,7 @@ const I18N = {
     socialCommentsTabArtist: "Artist",
     socialCommentsPlaceholderTrack: "Write a comment about this track",
     socialCommentsPlaceholderArtist: "Write a comment about this artist",
-    socialCommentsComposerHint: "Your comment appears to other signed-in listeners.",
+    socialCommentsComposerHint: "General comment: visible to other signed-in listeners. To share only with accepted friends, use Friends.",
     socialCommentsLoginText: "Sign in with Google or Apple to identify your participation and edit your comments. After sign-in, you return to this track's discussion. Listening remains available without an account.",
     socialCommentsLoginBtn: "Sign in to join",
     socialCommentsSubmit: "Post comment",
@@ -26243,6 +26251,7 @@ const I18N = {
     tabDjs: "DJs",
     tabFilters: "Filtros",
     tabNews: "Periódico",
+    tabFriends: "Amigos",
     tabProfile: "Perfil",
     tabMore: "Más",
     tabAdmin: "Panel administrativo",
@@ -26252,7 +26261,7 @@ const I18N = {
     socialCommentsReport: "Denunciar",
     socialCommentsBlockUser: "Bloquear usuario",
     socialCommentsReportConfirm: "¿Denunciar este comentario a la moderación de Sonic Search?",
-    socialCommentsBlockConfirm: "¿Bloquear a este usuario? Sus comentarios dejarán de aparecer para ti.",
+    socialCommentsBlockConfirm: "¿Bloquear a este usuario? Se eliminará la amistad, se revocarán los descubrimientos entre ustedes y se ocultarán sus comentarios.",
     socialCommentsReported: "Denuncia enviada a moderación.",
     socialCommentsBlocked: "Usuario bloqueado. Sus comentarios quedaron ocultos.",
     socialCommentsReportFailed: "No fue posible enviar la denuncia ahora.",
@@ -26688,7 +26697,7 @@ const I18N = {
     socialCommentsTabArtist: "Artista",
     socialCommentsPlaceholderTrack: "Escribe un comentario sobre esta pista",
     socialCommentsPlaceholderArtist: "Escribe un comentario sobre este artista",
-    socialCommentsComposerHint: "Tu comentario aparece para otros oyentes conectados.",
+    socialCommentsComposerHint: "Comentario general: visible para otros oyentes conectados. Para compartir solo con amigos aceptados, usa Amigos.",
     socialCommentsLoginText: "Entra con Google o Apple para identificar tu participación y editar tus comentarios. Después vuelves a la conversación de esta pista. Puedes seguir escuchando sin cuenta.",
     socialCommentsLoginBtn: "Entrar para participar",
     socialCommentsSubmit: "Publicar comentario",
@@ -27892,6 +27901,12 @@ function applyLanguage() {
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
   setText("[data-app-tab-target='djs']", t("tabDjs"));
   setText("[data-app-tab-target='news']", t("tabNews"));
+  setText("[data-app-tab-target='friends']", t("tabFriends"));
+  setText("#profileFriendsBtn", sonicTinyCopy("Amigos e descobertas", "Friends and discoveries", "Amigos y descubrimientos"));
+  setText("#profileMoreBtn", sonicTinyCopy("Mais opções", "More options", "Más opciones"));
+  setText("#shareTrackWithFriendsBtn", sonicTinyCopy("Compartilhar com amigos", "Share with friends", "Compartir con amigos"));
+  setText("#friendsPlaybackBackBtn", sonicTinyCopy("Voltar aos Amigos", "Back to Friends", "Volver a Amigos"));
+  friendsController?.refresh?.();
   setText("[data-app-tab-target='profile']", t("tabProfile"));
   setText("[data-app-tab-target='more']", t("tabMore"));
   setText("#moreKicker", sonicTinyCopy("Sonic Search", "Sonic Search", "Sonic Search"));
@@ -34317,7 +34332,8 @@ function panelMatchesAppTab(panel, tabName = "discover") {
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
-  return ["discover", "djs", "filters", "news", "profile", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
+  if (requestedTab === "friends" && (isNativeAppRuntime() || isAppStoreRuntimeMode())) return "profile";
+  return ["discover", "djs", "filters", "news", "profile", "friends", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -34332,7 +34348,7 @@ function primaryAppTabName(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
   if (safeTab === "filters") return "discover";
   if (safeTab === "recommends") return "discover";
-  if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return "more";
+  if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return isNativeAppRuntime() || isAppStoreRuntimeMode() ? "more" : "profile";
   return safeTab;
 }
 
@@ -34350,6 +34366,7 @@ function toggleAppMenu() {
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
   const secondaryLabels = {
+    more: t("tabMore"),
     recommends: sonicTinyCopy("SonicSearch Recomenda", "SonicSearch Recommends", "SonicSearch Recomienda"),
     filters: t("tabFilters"),
     about: t("tabAbout"),
@@ -34465,7 +34482,8 @@ function setActiveAppTab(tabName = "discover", options = {}) {
     appTabBar.querySelectorAll("[data-app-tab-target]").forEach((button) => {
       const targetTab = button.getAttribute("data-app-tab-target") || "";
       const privateForAdmin = targetTab === "admin" && !hasAdminAccess();
-      const disabled = privateForAdmin;
+      const native = isNativeAppRuntime() || isAppStoreRuntimeMode();
+      const disabled = privateForAdmin || (targetTab === "friends" && native) || (targetTab === "more" && !native);
       button.hidden = disabled;
       button.classList.toggle("hidden", disabled);
       button.setAttribute("aria-hidden", disabled ? "true" : "false");
@@ -34479,7 +34497,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   }
   appTabPanels.forEach((panel) => {
     const privateForAdmin = panelMatchesAppTab(panel, "admin") && !hasAdminAccess();
-    const disabled = privateForAdmin;
+    const disabled = privateForAdmin || ((isNativeAppRuntime() || isAppStoreRuntimeMode()) && ["friendsPanel", "profileSocialShortcuts"].includes(panel.id));
     const isActive = !disabled && panelMatchesAppTab(panel, safeTab);
     panel.hidden = disabled;
     panel.setAttribute("aria-hidden", isActive ? "false" : "true");
@@ -34511,6 +34529,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   if (safeTab === "recommends") {
     void weeklyRecommendsController?.open();
   }
+  if (safeTab === "friends") void ensureFriendsReady();
   if (safeTab === "admin") {
     void loadAdminAnalytics();
     void loadAdminOperations();
@@ -54529,6 +54548,11 @@ function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
   const hasTrack = Boolean(track);
   const shareButton = document.getElementById("shareTrackBtn");
   if (shareButton) shareButton.disabled = !hasTrack;
+  const friendsShare = document.getElementById("shareTrackWithFriendsBtn");
+  if (friendsShare) {
+    friendsShare.disabled = !hasTrack;
+    friendsShare.hidden = !hasTrack || isNativeAppRuntime() || isAppStoreRuntimeMode();
+  }
   const shareStatus = document.getElementById("sharedTrackStatus");
   if (shareStatus) shareStatus.hidden = true;
   const unknownTrackText = currentLanguage === "en" ? "Untitled track" : currentLanguage === "es" ? "Pista sin titulo" : "Faixa sem titulo";
@@ -56272,6 +56296,8 @@ function renderRecommendation(track, prefs, { exactEdition = false } = {}) {
   const preparedEdition = exactEdition && weeklyEditionTrackIsPrepared(track);
   track = preparedEdition ? track : applyCuratedTrackMetadata(track);
   if (!track || (!preparedEdition && !isTrackEligibleForRecommendation(track))) return false;
+  if (friendsPlaybackContext && !friendsPlaybackMatches(track)) friendsPlaybackContext = null;
+  renderFriendsPlaybackNotice();
   weeklyRecommendsController?.trackChanged?.(track);
   setActiveAppTab("discover");
   pendingQuickKnownAdvance = null;
@@ -56368,7 +56394,7 @@ async function renderPreview(track, options = {}) {
   if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return false;
   const renderToken = ++recommendationPreviewRenderToken;
   const fastMode = Boolean(options.fast);
-  const exactRecordingOnly = options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true;
+  const exactRecordingOnly = options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
   const probeTimeoutMs = Math.max(
     120,
     Number(options.probeTimeoutMs) || (fastMode ? FAST_PREVIEW_PROBE_TIMEOUT_MS : PREVIEW_PROBE_TIMEOUT_MS)
@@ -56709,7 +56735,7 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
   if (trackPreview.dataset.previewProbing === "true") return;
   const track = currentRecommendation;
   const surfaceSnapshot = captureRecommendationSurfaceSnapshot();
-  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true;
+  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
   const trackKey = recommendationTrackKey(track);
   if (exactRecordingOnly) {
     // An error after preparation invalidates that evidence. An explicit retry
@@ -56721,6 +56747,11 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
     track.previewChecked = false;
     track.previewMissing = true;
     weeklyRecommendsController?.playbackUnavailable?.(track);
+    if (friendsPlaybackMatches(track)) {
+      friendsPlaybackContext.failed = true;
+      friendsController?.playbackUnavailable?.(friendsPlaybackContext.postId);
+      renderFriendsPlaybackNotice();
+    }
     if (previewStatus) previewStatus.textContent = t("previewUnavailable");
     setPreviewPrimaryPlaybackState("ready");
     if (previewPlayBtn) previewPlayBtn.disabled = true;
@@ -58708,6 +58739,199 @@ async function openSharedCatalogTrack() {
   }
 }
 
+function friendsSessionKey() {
+  const id = socialState.session?.user?.id;
+  return id && librarySessionMatchesOnlineAccount() ? JSON.stringify([id, sessionProfileKey(), recommendationSessionGeneration]) : "";
+}
+
+function friendsPlaybackMatches(track) {
+  return Boolean(friendsPlaybackContext && friendsPlaybackContext.track === track && friendsPlaybackContext.sessionKey === friendsSessionKey());
+}
+
+function friendsRequiresExactRecording(track) {
+  return Boolean(track && friendsExplicitTracks.has(track));
+}
+
+function renderFriendsPlaybackNotice() {
+  const notice = document.getElementById("friendsPlaybackNotice");
+  if (!notice) return;
+  const active = friendsPlaybackMatches(currentRecommendation);
+  notice.hidden = !active;
+  if (!active) return;
+  const text = friendsPlaybackContext.failed
+    ? sonicTinyCopy("Esta prévia não abriu. Volte aos Amigos para tentar novamente ou use a fonte original.", "This preview did not open. Return to Friends to retry or use the original source.", "Esta previa no se abrió. Vuelve a Amigos para reintentar o usa la fuente original.")
+    : sonicTinyCopy("Você abriu uma descoberta de Amigos. A mensagem fica só em Amigos; os comentários desta faixa são gerais e visíveis a outros ouvintes logados.", "You opened a discovery from Friends. Its message stays in Friends; this track’s general comments are visible to other signed-in listeners.", "Abriste un descubrimiento de Amigos. Su mensaje queda en Amigos; los comentarios generales de esta pista son visibles para otros oyentes conectados.");
+  const target = document.getElementById("friendsPlaybackNoticeText");
+  if (target) target.textContent = text;
+}
+
+function friendsTrackSnapshot(track = currentRecommendation) {
+  if (!track?.artist || !track?.song || !Object.hasOwn(STYLE_BPM_RULES, track.style)) return null;
+  const sourceCandidates = [track.bandcampTrackUrl, track.spotifyTrackUrl, track.youtubeTrackUrl, track.soundcloudTrackUrl];
+  if (/^\d+$/.test(String(track.deezerTrackId || ""))) sourceCandidates.unshift(`https://www.deezer.com/track/${track.deezerTrackId}`);
+  const stableSource = sourceCandidates.find(value => {
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" || url.username || url.password) return false;
+      return (url.hostname.endsWith(".bandcamp.com") && /^\/track\/[^/]+\/?$/.test(url.pathname)) ||
+        (url.hostname === "www.deezer.com" && /^\/track\/\d+$/.test(url.pathname)) ||
+        (url.hostname === "open.spotify.com" && /^\/track\/[a-zA-Z0-9]+$/.test(url.pathname)) ||
+        (["www.youtube.com", "youtube.com"].includes(url.hostname) && url.pathname === "/watch" && /^[a-zA-Z0-9_-]{11}$/.test(url.searchParams.get("v") || "")) ||
+        (["soundcloud.com", "www.soundcloud.com"].includes(url.hostname) && /^\/[^/]+\/[^/]+\/?$/.test(url.pathname) && !url.pathname.startsWith("/search"));
+    } catch (_) { return false; }
+  });
+  const key = recommendationTrackKey(track);
+  let url = "";
+  if (stableSource) {
+    const source = new URL(stableSource);
+    if (source.hostname.endsWith(".bandcamp.com") || ["soundcloud.com", "www.soundcloud.com"].includes(source.hostname)) source.pathname = source.pathname.replace(/\/$/, "");
+    const videoId = source.searchParams.get("v");
+    source.search = ["youtube.com", "www.youtube.com"].includes(source.hostname) ? new URLSearchParams({ v: videoId }).toString() : "";
+    source.hash = ""; url = source.href;
+  } else if (key.length <= 300) {
+    try { url = window.SonicDiscoveryExperience?.buildTrackLink({ key, style: track.style, language: currentLanguage }) || ""; } catch (_) {}
+  }
+  return { artist: String(track.artist).slice(0, 160), title: String(track.song).slice(0, 220), style: track.style, catalogId: key, ...(url ? { url } : {}) };
+}
+
+function saveFriendsEntry(entry) {
+  pendingFriendsEntry = entry ? { ...entry, createdAt: Date.now() } : null;
+  try {
+    if (pendingFriendsEntry) sessionStorage.setItem("sonic:friends-entry:v1", JSON.stringify(pendingFriendsEntry));
+    else sessionStorage.removeItem("sonic:friends-entry:v1");
+  } catch (_) { /* The in-page return remains available without storage. */ }
+}
+
+function readFriendsEntry() {
+  let entry = pendingFriendsEntry;
+  try { entry ||= JSON.parse(sessionStorage.getItem("sonic:friends-entry:v1") || "null"); } catch (_) {}
+  if (!entry || !Number.isFinite(entry.createdAt) || Date.now() - entry.createdAt > 30 * 60000) return null;
+  pendingFriendsEntry = entry;
+  return entry;
+}
+
+function captureFriendsInviteFromUrl() {
+  try {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.hash.slice(1));
+    const token = params.get("friendInvite");
+    if (!token) return false;
+    const valid = /^[A-Za-z0-9_-]{32,128}$/.test(token);
+    if (valid) saveFriendsEntry({ inviteToken: token });
+    params.delete("friendInvite");
+    url.hash = params.toString();
+    window.history.replaceState(window.history.state, document.title, `${url.pathname}${url.search}${url.hash}`);
+    return valid;
+  } catch (_) { /* Never log invite capabilities or authentication URLs. */ }
+  return false;
+}
+
+function makeFriendsInviteUrl(token) {
+  if (!/^[A-Za-z0-9_-]{32,128}$/.test(String(token || ""))) throw new Error("invalid_invite");
+  const url = new URL("/", window.location.origin);
+  url.searchParams.set("tab", "friends"); url.searchParams.set("lang", currentLanguage);
+  url.hash = new URLSearchParams({ friendInvite: token }).toString();
+  return url.href;
+}
+
+async function requestFriendsApi({ action, method = "GET", ...data } = {}) {
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode() || window.SonicReleaseFlags?.friends !== true) throw Object.assign(new Error("friends_unavailable"), { code: "friends_unavailable" });
+  const identity = friendsSessionKey();
+  if (!identity) throw Object.assign(new Error("login_required"), { code: "login_required" });
+  await ensureFreshSocialSession({ clearOnFailure: false });
+  if (identity !== friendsSessionKey()) throw Object.assign(new Error("session_changed"), { code: "session_changed" });
+  const token = await currentApiAccessToken();
+  if (!token || identity !== friendsSessionKey()) throw Object.assign(new Error("login_required"), { code: "login_required" });
+  const endpoint = resolveAppApiUrl("/api/friends");
+  if (!endpoint) throw Object.assign(new Error("friends_unavailable"), { code: "friends_unavailable" });
+  const url = new URL(endpoint, window.location.href);
+  const request = { method, cache: "no-store", headers: { Accept: "application/json", Authorization: `Bearer ${token}` } };
+  if (method === "GET") {
+    url.searchParams.set("action", action || "overview");
+    ["q", "postId", "cursor"].forEach(key => { if (data[key] !== undefined) url.searchParams.set(key, String(data[key])); });
+  } else {
+    request.headers["Content-Type"] = "application/json";
+    request.body = JSON.stringify({ ...data, action });
+  }
+  const response = await fetchWithTimeout(url.href, request, 15000);
+  const payload = await response.json().catch(() => null);
+  if (identity !== friendsSessionKey()) throw Object.assign(new Error("session_changed"), { code: "session_changed" });
+  if (!response.ok || payload?.ok !== true) {
+    const code = String(payload?.error || "friends_request_failed");
+    throw Object.assign(new Error(code), { code, status: response.status });
+  }
+  return payload;
+}
+
+async function ensureFriendsReady() {
+  if (!friendsController || isNativeAppRuntime() || isAppStoreRuntimeMode()) return;
+  const operation = ++friendsEntryOperation;
+  await ensureSocialMvpReady();
+  if (operation !== friendsEntryOperation || currentActiveAppTabName() !== "friends") return;
+  if (authHasOnlineSession()) ensureOnlineSocialUserSession();
+  const entry = readFriendsEntry();
+  const userId = socialState.session?.user?.id || "";
+  const allowedEntry = entry && (!entry.accountId || entry.accountId === userId);
+  if (entry?.accountId && userId && !allowedEntry) saveFriendsEntry(null);
+  const options = allowedEntry ? { inviteToken: entry.inviteToken, composeTrack: entry.composeTrack } : {};
+  const identity = friendsSessionKey();
+  await friendsController.open(options);
+  if (identity && identity === friendsSessionKey() && operation === friendsEntryOperation && pendingFriendsEntry === entry && allowedEntry && !entry.inviteToken) saveFriendsEntry(null);
+}
+
+function startFriendsSignIn() {
+  const url = currentAppUrl();
+  if (url) { url.searchParams.set("tab", "friends"); window.history.replaceState(window.history.state, document.title, `${url.pathname}${url.search}${url.hash}`); }
+  void showAuthScreen();
+}
+
+async function shareCurrentTrackWithFriends() {
+  const track = friendsTrackSnapshot();
+  if (!track) return;
+  saveFriendsEntry({ composeTrack: track, accountId: socialState.session?.user?.id || "" });
+  setActiveAppTab("friends", { focusPanel: true });
+}
+
+async function openFriendsDiscovery(_track, post = {}) {
+  if (!post.id || recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return { ok: false, reason: "busy" };
+  const identity = friendsSessionKey(), generation = recommendationSessionGeneration;
+  const previous = currentRecommendation;
+  const previousTab = currentActiveAppTabName();
+  const stillCurrent = () => identity && identity === friendsSessionKey() && recommendationSessionIsCurrent(generation) && currentRecommendation === previous && currentActiveAppTabName() === previousTab;
+  recommendationRunBusy = true;
+  prepareExplicitPreviewAudio();
+  try {
+    // Re-authorize the post at the moment of opening, after any friendship/block change.
+    const result = await requestFriendsApi({ action: "post", postId: post.id });
+    if (!stillCurrent()) return { ok: false, reason: "canceled" };
+    const item = { ...result.post?.track, id: `friends:${post.id}` };
+    const prepared = await prepareWeeklyEditionTracks([item], { isCurrent: stillCurrent });
+    const track = prepared.results?.[0]?.status === "playable" ? weeklyEditionPreviewCache.get(weeklyEditionItemKey(item))?.track : null;
+    if (!stillCurrent()) return { ok: false, reason: "canceled" };
+    if (!track) return { ok: false, reason: "unavailable" };
+    friendsExplicitTracks.add(track);
+    friendsPlaybackContext = { track, postId: post.id, sessionKey: identity, failed: false };
+    stopAllActivePlayback({ reason: "friends_exact_recording" });
+    setActiveAppTab("discover");
+    restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false, exactEdition: true });
+    const playerIsCurrent = () => friendsPlaybackMatches(track) && currentRecommendation === track && currentActiveAppTabName() === "discover";
+    const rendered = await renderPreview(track, { fast: true, exactRecordingOnly: true, deferRetry: false });
+    const ready = rendered && await waitForWeeklyPreviewMedia(track, playerIsCurrent);
+    if (!playerIsCurrent()) return { ok: false, reason: "canceled" };
+    if (!ready) {
+      weeklyEditionPreviewCache.delete(weeklyEditionItemKey(item));
+      track.previewChecked = false; track.previewMissing = true;
+      friendsPlaybackContext.failed = true; renderFriendsPlaybackNotice();
+      return { ok: false, reason: "unavailable" };
+    }
+    firstRecommendationCompleted = true;
+    markRecommendationPresented(track); updateStats(); renderFriendsPlaybackNotice();
+    document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
+    return { ok: true };
+  } catch (_) { return { ok: false, reason: "unavailable" }; }
+  finally { if (recommendationSessionIsCurrent(generation)) recommendationRunBusy = false; }
+}
+
 function selectLibraryTracks(entries) {
   return window.SonicDiscoveryExperience.selectTracks(entries,
     document.getElementById("librarySearch")?.value || "",
@@ -58719,7 +58943,7 @@ const weeklyEditionPreviewCache = new Map();
 
 function weeklyEditionTrackIsPrepared(track) {
   return Boolean(track?.weeklyVerifiedAudio === true && Object.hasOwn(STYLE_BPM_RULES, track.style) &&
-    weeklyRecommendsController?.requiresExactRecording?.(track) === true &&
+    (weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsPlaybackMatches(track)) &&
     Array.from(weeklyEditionPreviewCache.values()).some(entry => entry.track === track && normalizePreviewUrl(track.previewUrl)));
 }
 
@@ -58738,7 +58962,8 @@ async function resolveWeeklyEditionCatalogTrack(item, isCurrent) {
   const requestedKey = recommendationTrackKey({ artist: item.artist, song: item.title });
   const sourceId = String(item.url || "").match(/^https:\/\/www\.deezer\.com\/track\/(\d+)$/)?.[1] || "";
   const resolve = () => [...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(candidate => {
-    if (!candidate || candidate.style !== item.style || recommendationTrackKey(candidate) !== requestedKey) return false;
+    if (!candidate || candidate.style !== item.style || recommendationTrackKey(candidate) !== requestedKey ||
+      normalize(candidate.artist) !== normalize(item.artist) || normalize(candidate.song) !== normalize(item.title)) return false;
     const candidateId = String(candidate.deezerTrackId || catalogTrackMetadataText(candidate, "deezer_track_id") || "");
     return !sourceId || !candidateId || sourceId === candidateId;
   });
@@ -61324,6 +61549,7 @@ async function socialCommentsRequest(path = "", options = {}) {
     cache: "no-store"
   }, SOCIAL_COMMENTS_API_TIMEOUT_MS);
   const text = await response.text();
+  if (sessionId !== socialState.session?.user?.id) throw new Error("session_changed");
   let payload = null;
   if (text) {
     try {
@@ -66514,6 +66740,54 @@ async function bootSonicSearch() {
     prepareEditionTracks: prepareWeeklyEditionTracks
   });
   if (currentActiveAppTabName() === "recommends") void weeklyRecommendsController?.open();
+  if (!isNativeAppRuntime() && !isAppStoreRuntimeMode()) {
+    captureFriendsInviteFromUrl();
+    friendsController = window.SonicFriends?.mount(document.getElementById("friendsPanel"), {
+      getLanguage: () => currentLanguage,
+      getSessionKey: friendsSessionKey,
+      request: requestFriendsApi,
+      signIn: startFriendsSignIn,
+      makeInviteUrl: makeFriendsInviteUrl,
+      chooseTrack: () => {
+        const track = friendsTrackSnapshot();
+        if (!track) {
+          setActiveAppTab("discover", { focusPanel: true });
+          showToast(sonicTinyCopy("Abra uma faixa em Descobrir e escolha Compartilhar com amigos.", "Open a track in Discover, then choose Share with friends.", "Abre una pista en Descubrir y elige Compartir con amigos."));
+        }
+        return track;
+      },
+      openTrack: openFriendsDiscovery,
+      onBlock: async person => {
+        const blocked = await blockUgcAuthor(person?.id || person);
+        if (blocked) { friendsPlaybackContext = null; renderFriendsPlaybackNotice(); }
+        return blocked;
+      },
+      onReport: async ({ post } = {}) => {
+        if (!post?.id) return false;
+        if (!window.confirm(sonicTinyCopy("Denunciar esta descoberta aos moderadores?", "Report this discovery to moderators?", "¿Denunciar este descubrimiento a los moderadores?"))) return false;
+        await requestFriendsApi({ action: "report", method: "POST", postId: post.id, reason: "inappropriate_content" });
+        return true;
+      }
+    });
+    friendsObservedSessionKey = friendsSessionKey();
+    const syncFriendsAccount = () => {
+      const key = friendsSessionKey();
+      if (key !== friendsObservedSessionKey) {
+        friendsObservedSessionKey = key;
+        friendsEntryOperation++;
+        friendsPlaybackContext = null;
+        friendsController?.sessionChanged();
+        renderFriendsPlaybackNotice();
+        if (currentActiveAppTabName() === "friends") void ensureFriendsReady();
+      }
+    };
+    window.addEventListener("sonic:online-session-changed", syncFriendsAccount);
+    window.addEventListener("sonic:profile-changed", syncFriendsAccount);
+    window.addEventListener("hashchange", () => {
+      if (captureFriendsInviteFromUrl()) setActiveAppTab("friends", { focusPanel: true });
+    });
+    if (currentActiveAppTabName() === "friends") void ensureFriendsReady();
+  }
   window.SonicUniversalDiscoveryUi?.mount(document.getElementById("universalDiscoveryPanel"), {
     getProfileKey: () => sessionProfileKey(),
     getLanguage: () => currentLanguage,
@@ -66538,6 +66812,10 @@ async function bootSonicSearch() {
     openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("profile", { focusPanel: true }); }
   });
   bind(document.getElementById("shareTrackBtn"), "click", () => void shareCatalogTrack(currentRecommendation, document.getElementById("shareTrackBtn")));
+  bind(document.getElementById("shareTrackWithFriendsBtn"), "click", () => void shareCurrentTrackWithFriends());
+  bind(document.getElementById("profileFriendsBtn"), "click", () => setActiveAppTab("friends", { focusPanel: true }));
+  bind(document.getElementById("profileMoreBtn"), "click", () => setActiveAppTab("more", { focusPanel: true }));
+  bind(document.getElementById("friendsPlaybackBackBtn"), "click", () => setActiveAppTab("friends", { focusPanel: true }));
   bind(document.getElementById("shareLinkClose"), "click", () => {
     document.getElementById("shareLinkFallback").hidden = true;
     document.getElementById("shareTrackBtn")?.focus();

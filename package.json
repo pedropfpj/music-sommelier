@@ -92,7 +92,8 @@
     "test:social-profiles": "node scripts/test-user-profile.mjs && node scripts/test-user-profile-sql.mjs && node scripts/test-user-profile-privacy-surfaces.mjs && node scripts/test-social-profile-discovery.mjs && node scripts/test-social-profiles-integration.mjs && node scripts/test-social-request-budget.mjs",
     "preview:social-profiles": "node scripts/social-profile-lab.mjs",
     "test:social-profiles:remote": "node scripts/test-social-profiles-remote.mjs",
-    "preview:social-staging": "node scripts/social-staging-runtime.mjs"
+    "preview:social-staging": "node scripts/social-staging-runtime.mjs",
+    "test:friends": "node scripts/test-friends-integration.mjs && node scripts/test-private-friendship-security.mjs && node scripts/test-friends-budget-isolation.mjs && node scripts/test-friends-app-bridge.mjs && node scripts/test-friends-ui.mjs && node scripts/test-friends-full-app.mjs"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",

@@ -131,6 +131,7 @@ module.exports = async function handler(req, res) {
     enabled,
     features: {
       publicProfiles: enabled && envFlag('SONIC_PUBLIC_PROFILES_ENABLED', false),
+      friends: enabled && envFlag('SONIC_FRIENDS_ENABLED', false),
       socialV2: enabled && envFlag('SONIC_SOCIAL_COMMENTS_ENABLED', false) && envFlag('SONIC_TRACK_VIDEO_SOCIAL_V2_ENABLED', false)
     },
     provider: "supabase",

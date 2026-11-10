@@ -10,7 +10,7 @@
         window.SONIC_SEARCH_LOCAL_FILE_MODE = true;
       }
     </script>
-    <script src="release-flags.js?v=20261105profiles1"></script>
+    <script src="release-flags.js?v=20261110friends1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="Find an electronic track for the moment with swipe, preview, context, and fewer repeats." />
@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20261109weekly3" as="style" />
+    <link rel="preload" href="styles.min.css?v=20261110friends1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,9 +76,10 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20261109weekly3" />
+    <link rel="stylesheet" href="styles.min.css?v=20261110friends1" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
     <link rel="stylesheet" href="user-profile.css?v=20261105profiles1" />
+    <link rel="stylesheet" href="friends.css?v=20261110friends1" />
     <link rel="stylesheet" href="universal-discovery.css?v=20261023recovery1" />
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
@@ -728,10 +729,16 @@
         <button class="app-tab-btn active" type="button" data-app-tab-target="discover" data-primary-app-tab aria-pressed="true" aria-current="page">Descobrir</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="djs" data-primary-app-tab aria-pressed="false">DJs</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="news" data-primary-app-tab aria-pressed="false">Jornal</button>
+        <button class="app-tab-btn hidden" type="button" data-app-tab-target="friends" data-primary-app-tab aria-pressed="false" hidden>Amigos</button>
         <button class="app-tab-btn" type="button" data-app-tab-target="profile" data-primary-app-tab aria-pressed="false">Perfil</button>
-        <button class="app-tab-btn" type="button" data-app-tab-target="more" data-primary-app-tab aria-pressed="false">Mais</button>
+        <button class="app-tab-btn hidden" type="button" data-app-tab-target="more" data-native-primary-app-tab aria-pressed="false" hidden>Mais</button>
       </nav>
 
+      <section id="profileSocialShortcuts" class="panel profile-social-shortcuts app-tab-panel" data-app-tab="profile" aria-label="Amigos e opções" aria-hidden="true" hidden>
+        <button id="profileFriendsBtn" class="secondary" type="button">Amigos e descobertas</button>
+        <button id="profileMoreBtn" class="secondary" type="button">Mais opções</button>
+      </section>
+      <section id="friendsPanel" class="panel app-tab-panel" data-app-tab="friends" aria-label="Amigos e descobertas compartilhadas" aria-hidden="true" hidden></section>
       <section id="morePanel" class="panel more-panel app-tab-panel" data-app-tab="more" aria-labelledby="moreTitle" aria-hidden="true" hidden>
         <header class="more-panel-head">
           <div>
@@ -1388,6 +1395,11 @@
             <button id="discoveryLibraryBtn" class="discovery-library-shortcut" type="button" data-experience-copy="library">Minhas faixas</button>
             <button id="shareTrackBtn" class="discovery-library-shortcut" type="button" disabled data-web-copy="share">Copiar link da faixa</button>
           </div>
+          <button id="shareTrackWithFriendsBtn" class="discovery-library-shortcut friends-track-share" type="button" disabled hidden>Compartilhar com amigos</button>
+          <aside id="friendsPlaybackNotice" class="friends-playback-notice" role="status" hidden>
+            <p id="friendsPlaybackNoticeText"></p>
+            <button id="friendsPlaybackBackBtn" class="secondary" type="button">Voltar aos Amigos</button>
+          </aside>
           <p id="discoverySaveHint" class="discovery-save-hint" data-web-copy="saveHint">Curta para guardar. Suas faixas ficam neste navegador.</p>
           <p id="sharedTrackStatus" class="shared-track-status" role="status" aria-live="polite" hidden></p>
           <div id="shareLinkFallback" class="share-link-fallback" hidden>
@@ -3410,7 +3422,7 @@
           <div id="socialCommentsComposer" class="social-comments-composer hidden">
             <textarea aria-labelledby="socialCommentsTitle" id="socialCommentsInput" maxlength="800" rows="3" placeholder="Escreva um comentário sobre essa faixa"></textarea>
             <div class="social-comments-compose-actions">
-              <p id="socialCommentsComposerHint" class="muted">Seu comentário aparece para outros ouvintes logados.</p>
+              <p id="socialCommentsComposerHint" class="muted">Comentário geral: visível a outros ouvintes logados. Para compartilhar só com amigos aceitos, use Amigos.</p>
               <button id="socialCommentsSubmitBtn" class="primary" type="button">Publicar comentário</button>
             </div>
           </div>
@@ -3429,8 +3441,9 @@
     <script defer src="daily-djs-ui.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
+    <script defer src="friends.js?v=20261110friends1"></script>
     <script defer src="weekly-recommends.js?v=20261109weekly3"></script>
     <script defer src="discovery-experience.js?v=20261109weekly3"></script>
-    <script defer src="app.min.js?v=20261109weekly3"></script>
+    <script defer src="app.min.js?v=20261110friends1"></script>
   </body>
 </html>
