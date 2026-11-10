@@ -17839,6 +17839,8 @@ function mergeCatalogExtraPayload(payload = {}, sourceTag = "supabase_catalog_ex
           `Entrada curada no Supabase para ${styleLabelByValue(style)}.`,
         artistBio: catalogExtraRowText(row, "artist_bio"),
         catalogMetadata: metadata,
+        vocals: row.vocals || metadata.vocals || metadata.vocal_profile,
+        context: row.context || row.contexts || metadata.context || metadata.contexts,
         deezerTrackId: catalogExtraMetadataText(metadata, "deezer_track_id") || catalogExtraMetadataText(metadata, "deezerTrackId"),
         sourceTags: catalogExtraMetadataList(metadata, "source_tags"),
         albumKeywords: catalogExtraMetadataList(metadata, "album_keywords"),
@@ -18121,6 +18123,8 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     );
     const artistGenre = pickDatasetValue(fields, ["artist_genre", "genre_signal", "genre_tags", "tags"]);
     const artistProfileHint = pickDatasetValue(fields, ["artist_profile_hint", "profile_hint", "source_note"]);
+    const vocals = pickDatasetValue(fields, ["vocals", "vocal_profile"]);
+    const context = pickDatasetValue(fields, ["context", "contexts", "listening_contexts"]);
     const catalogMetadata = Object.fromEntries(Object.entries({
       deezer_track_id: deezerTrackId,
       deezer_track_url: deezerTrackUrl,
@@ -18167,6 +18171,8 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         artistCountry: country,
         artistGenre,
         artistProfileHint,
+        vocals,
+        context,
         spotifyUrl,
         spotifyTrackUrl,
         youtubeUrl,
@@ -23108,6 +23114,20 @@ async function fetchSoundCloudTracksByStyle(style, artist = "", options = {}) {
   return tracks;
 }
 
+function normalizeImportedListeningMetadata(vocals = "", context = []) {
+  const normalizedVocals = normalizeRecommendationPrefs({ vocals: typeof vocals === "string" ? vocals : "" }).vocals;
+  let contexts = context;
+  if (typeof contexts === "string") {
+    try { contexts = JSON.parse(contexts); } catch { contexts = contexts.split(/[;,|]/); }
+  }
+  if (!Array.isArray(contexts)) contexts = [];
+  return {
+    vocals: normalizedVocals || "unknown",
+    context: Array.from(new Set(contexts.filter(value => typeof value === "string").map(value => normalizeRecommendationPrefs({ context: value }).context).filter(Boolean))),
+    listeningMetadataVersion: 1
+  };
+}
+
 function addDynamicTrackToCatalog({
   style,
   song,
@@ -23121,6 +23141,8 @@ function addDynamicTrackToCatalog({
   artistCountry = "",
   artistGenre = "",
   artistProfileHint = "",
+  vocals = "",
+  context = [],
   artistBio = "",
   labelBio = "",
   bandcampUrl = "",
@@ -23187,13 +23209,29 @@ function addDynamicTrackToCatalog({
   if (!labelAllowedForStyle(style, cleanLabel)) return false;
 
   const key = normalize(`${artistName}::${songName}`);
-  if (existingKeys.has(key)) return false;
-
   const bpmNumber = Number(bpmExact) || 0;
   if (requiresExactBpmForDynamic(style, source) && !bpmNumber) return false;
   if (bpmNumber && !bpmFitsStyle(style, bpmNumber)) return false;
   const fineStyleNeedsVerifiedTrack = dynamicFineStyleNeedsVerifiedTrack(style, source);
   if (fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
+
+  if (existingKeys.has(key)) {
+    const existing = catalog.find(track => recommendationTrackKey(track) === key && track.style === style);
+    const incoming = normalizeImportedListeningMetadata(vocals, context);
+    let updated = false;
+    if (existing?.listeningMetadataVersion === 1) {
+      if (existing.vocals === "unknown" && incoming.vocals !== "unknown") {
+        existing.vocals = incoming.vocals;
+        updated = true;
+      }
+      if (!existing.context?.length && incoming.context.length) {
+        existing.context = incoming.context;
+        updated = true;
+      }
+    }
+    if (updated) saveDynamicCatalogCache();
+    return false;
+  }
 
   const fallbackBpm = Math.round((STYLE_BPM_RULES[style]?.min + STYLE_BPM_RULES[style]?.max || 130) / 2);
   const duration = Number(durationSec) || 0;
@@ -23237,8 +23275,7 @@ function addDynamicTrackToCatalog({
     bpm: mapBpmToRange(bpmNumber || fallbackBpm),
     bpmExact: bpmNumber || undefined,
     energy: publisherCheckedRecording ? "unknown" : energyFromBpm(bpmNumber || fallbackBpm),
-    vocals: publisherCheckedRecording ? "unknown" : "instrumental",
-    context: publisherCheckedRecording ? [] : ["peak", "treino", "estrada", "after", "foco", "trabalho", "warmup"],
+    ...normalizeImportedListeningMetadata(vocals, context),
     vibe: `Garimpei esta faixa porque ela conversa bem com ${styleLabelByValue(style)} e pode abrir um caminho novo no seu gosto.`,
     spotifyUrl: safeSpotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
     spotifyTrackUrl: safeSpotifyTrackUrl,
@@ -24673,7 +24710,7 @@ const I18N = {
     durationPrefix: "Duração",
     keyPrefix: "Key",
     catalogPrefix: "Catálogo",
-    labelPrefix: "Gravadora",
+    labelPrefix: "Referência",
     trackDataPrefix: "Dados",
     suggestedSubgenre: "Subgênero sugerido",
     styleInfoTitle: "Leitura rápida do subgênero",
@@ -24752,7 +24789,7 @@ const I18N = {
     discogsArtistOpen: "Abrir perfil no Discogs",
     artistBioAiSource: "Bio refinada com apoio de IA e fontes: {sources}.",
     artistBioAiFallbackSource: "catálogo e fontes abertas",
-    artistBioLocalSource: "Bio local resumida: origem, identidade, catálogo e cena quando houver dados confiáveis.",
+    artistBioLocalSource: "Biografia editorial ou contexto musical do catálogo, conforme os dados disponíveis.",
     trackAiTitle: "Leitura da faixa",
     trackAiRefreshBtn: "Atualizar leitura",
     trackAiRefreshBusy: "Atualizando...",
@@ -25590,7 +25627,7 @@ const I18N = {
     durationPrefix: "Duration",
     keyPrefix: "Key",
     catalogPrefix: "Catalog",
-    labelPrefix: "Label",
+    labelPrefix: "Reference",
     trackDataPrefix: "Data",
     suggestedSubgenre: "Suggested subgenre",
     styleInfoTitle: "Subgenre quick guide",
@@ -25669,7 +25706,7 @@ const I18N = {
     discogsArtistOpen: "Open Discogs profile",
     artistBioAiSource: "Bio refined with AI support and sources: {sources}.",
     artistBioAiFallbackSource: "catalog and open sources",
-    artistBioLocalSource: "Local short bio: origin, identity, catalog, and scene when reliable data is available.",
+    artistBioLocalSource: "Editorial biography or catalog musical context, based on available data.",
     trackAiTitle: "Track read",
     trackAiRefreshBtn: "Refresh insight",
     trackAiRefreshBusy: "Refreshing...",
@@ -26507,7 +26544,7 @@ const I18N = {
     durationPrefix: "Duración",
     keyPrefix: "Key",
     catalogPrefix: "Catálogo",
-    labelPrefix: "Sello",
+    labelPrefix: "Referencia",
     trackDataPrefix: "Datos",
     suggestedSubgenre: "Subgénero sugerido",
     styleInfoTitle: "Guía rápida del subgénero",
@@ -26586,7 +26623,7 @@ const I18N = {
     discogsArtistOpen: "Abrir perfil en Discogs",
     artistBioAiSource: "Bio refinada con apoyo de IA y fuentes: {sources}.",
     artistBioAiFallbackSource: "catálogo y fuentes abiertas",
-    artistBioLocalSource: "Bio local resumida: origen, identidad, catálogo y escena cuando hay datos fiables.",
+    artistBioLocalSource: "Biografía editorial o contexto musical del catálogo, según los datos disponibles.",
     trackAiTitle: "Lectura de la pista",
     trackAiRefreshBtn: "Actualizar lectura",
     trackAiRefreshBusy: "Actualizando...",
@@ -27662,7 +27699,7 @@ function applyLanguage() {
       feedbackTitle: "Ensine o radar",
       detailsTitle: "Continue pelo artista",
       artistTitle: "Artista",
-      labelTitle: "Gravadora",
+      labelTitle: "Referência do lançamento",
       eventsTitle: "Agenda do artista",
       summaryTitle: "Resumo do perfil",
       defaultStats: "Comece com uma faixa: seus sinais aparecem aqui.",
@@ -27707,7 +27744,7 @@ function applyLanguage() {
       feedbackTitle: "Teach the radar",
       detailsTitle: "Continue with the artist",
       artistTitle: "Artist",
-      labelTitle: "Label",
+      labelTitle: "Release reference",
       eventsTitle: "Artist agenda",
       summaryTitle: "Profile summary",
       defaultStats: "Start with one track: your signals will show up here.",
@@ -27752,7 +27789,7 @@ function applyLanguage() {
       feedbackTitle: "Enséñale al radar",
       detailsTitle: "Continúa por el artista",
       artistTitle: "Artista",
-      labelTitle: "Sello",
+      labelTitle: "Referencia del lanzamiento",
       eventsTitle: "Agenda del artista",
       summaryTitle: "Resumen del perfil",
       defaultStats: "Empieza con una pista: tus señales aparecerán aquí.",
@@ -35131,6 +35168,12 @@ function loadDynamicCatalogCache() {
     parsed.forEach((track) => {
       if (!track || !track.style || !track.artist || !track.song) return;
       if (!STYLE_BPM_RULES[track.style]) return;
+      // Older dynamic rows used instrumental/all-context defaults without
+      // evidence. Keep recordings and playback, but do not restore those claims.
+      Object.assign(track, normalizeImportedListeningMetadata(
+        track.listeningMetadataVersion === 1 ? track.vocals : track.catalogMetadata?.vocals || track.catalogMetadata?.vocal_profile,
+        track.listeningMetadataVersion === 1 ? track.context : track.catalogMetadata?.context || track.catalogMetadata?.contexts
+      ));
       restoreCatalogExtraTrackHints(track);
       if (!artistAllowedForStyle(track.style, track.artist)) return;
       if (!labelAllowedForStyle(track.style, track.label)) return;
@@ -39100,7 +39143,18 @@ function isGenericArtistBioText(rawText = "") {
     "garimpei esta faixa",
     "faixa localizada via",
     "catálogo dinâmico",
-    "catalogo dinamico"
+    "catalogo dinamico",
+    "top track deezer",
+    "preview oficial",
+    "official preview",
+    "foi curado para ampliar",
+    "curated to expand",
+    "priorizar quando",
+    "melhora busca",
+    "seed local",
+    "seed curado",
+    "entrada curada",
+    "for discovery and adjacent"
   ].some((signal) => text.includes(normalize(signal)));
 }
 
@@ -39112,52 +39166,22 @@ function meaningfulArtistBioText(rawText = "", minLength = 36) {
 }
 
 function localizedArtistNarrativeFallback(track) {
-  const safeTrack = {
-    song: track?.song || "Track",
-    artist: track?.artist || "Artist",
-    label: track?.label || "Catalogo",
-    style: track?.style || "house"
-  };
-  const style = styleLabelByValue(safeTrack.style);
-  const label = sanitizeLabel(safeTrack.label, safeTrack.artist, safeTrack.song);
-  const origin = artistOriginSignalForTrack(track);
-  const originLabel = formatArtistOriginLabel(origin);
-  const canonical = canonicalOriginForArtist(safeTrack.artist);
-  const genre = String(track?.artistGenre || localizedArtistGenreHint(safeTrack.artist, safeTrack.style) || "").trim();
-  const hint = String(track?.artistProfileHint || "").trim();
-  const styleSummary = styleInfoSummaryByLanguage(safeTrack.style);
-  const identity = meaningfulArtistBioText(canonical?.disambiguation || "", 20) ||
-    meaningfulArtistBioText(hint, 36) ||
-    meaningfulArtistBioText(track?.artistBio || "", 45);
-  const knownLabel = isUnknownLabel(label);
-  const genreOrStyle = genre || style;
-  const artistName = safeTrack.artist;
-  const songLine = safeTrack.song ? `"${safeTrack.song}"` : "";
+  const style = recommendationStyleDisplayLabel(track);
+  const styleSummary = trackStyleCertainty(track) === "confirmed"
+    ? styleInfoSummaryByLanguage(track?.style || "")
+    : "";
+  const label = sanitizeLabel(track?.label || "", track?.artist || "", track?.song || "");
+  const entry = [track?.artist, track?.song].filter(Boolean).join(" — ");
   if (currentLanguage === "en") {
-    const identityLine = identity || `${artistName} is connected to ${genreOrStyle}.`;
-    const originLine = originLabel ? `Origin: ${originLabel}.` : "Origin: not confirmed in the local catalog yet.";
-    const catalogLine = knownLabel
-      ? "Albums, formation year, and festival history still need a reliable source before the app states them as facts."
-      : `Catalog trail: start with ${label}, then check Discogs or the artist links for albums, aliases, and live history.`;
-    const entryLine = songLine ? `Track entry here: ${songLine}.` : "";
-    return `${identityLine} ${originLine} Sound lane: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
+    const reference = isUnknownLabel(label) ? "" : ` Catalog reference: ${label}.`;
+    return `General musical context for ${entry}: ${style}. ${styleSummary} A verified artist biography is not available yet.${reference}`.replace(/\s+/g, " ").trim();
   }
   if (currentLanguage === "es") {
-    const identityLine = identity || `${artistName} está conectado con ${genreOrStyle}.`;
-    const originLine = originLabel ? `Origen: ${originLabel}.` : "Origen: aún no confirmado en el catálogo local.";
-    const catalogLine = knownLabel
-      ? "Álbumes, año de formación e historial de festivales todavía necesitan una fuente fiable antes de aparecer como hechos."
-      : `Ruta de catálogo: empieza por ${label} y sigue en Discogs o en los enlaces del artista para álbumes, alias e historial en vivo.`;
-    const entryLine = songLine ? `Pista de entrada aquí: ${songLine}.` : "";
-    return `${identityLine} ${originLine} Línea sonora: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
+    const reference = isUnknownLabel(label) ? "" : ` Referencia de catálogo: ${label}.`;
+    return `Contexto musical de ${entry}: ${style}. ${styleSummary} Es una descripción general del estilo; faltan datos biográficos verificados del artista.${reference}`.replace(/\s+/g, " ").trim();
   }
-  const identityLine = identity || `${artistName} e um nome/projeto ligado a ${genreOrStyle}.`;
-  const originLine = originLabel ? `Origem: ${originLabel}.` : "Origem: ainda nao confirmada no catalogo local.";
-  const catalogLine = knownLabel
-    ? "Albuns, ano de formacao e historico de festivais ainda precisam de fonte confiavel antes de aparecerem como fato."
-    : `Trilha de catalogo: comece pela gravadora ${label} e siga no Discogs ou nos links do artista para ver albuns, aliases e historico ao vivo.`;
-  const entryLine = songLine ? `Faixa de entrada aqui: ${songLine}.` : "";
-  return `${identityLine} ${originLine} Linha sonora: ${genreOrStyle}; ${styleSummary} ${entryLine} ${catalogLine}`.trim();
+  const reference = isUnknownLabel(label) ? "" : ` Referência de catálogo: ${label}.`;
+  return `Contexto musical de ${entry}: ${style}. ${styleSummary} Esta é uma descrição geral do estilo; faltam dados biográficos verificados do artista.${reference}`.replace(/\s+/g, " ").trim();
 }
 
 function detailedArtistBio(track) {
@@ -39169,8 +39193,10 @@ function detailedArtistBio(track) {
 
   const sourceBio = String(track?.artistBio || "").trim();
   const isGenericDynamicBio = isGenericArtistBioText(sourceBio);
-  if (sourceBio && sourceBio.length > 80 && !isGenericDynamicBio) {
-    return `${humanizeStructuredBioText(sourceBio, track)} ${localizedArtistNarrativeFallback(track)}`.trim();
+  // Imported descriptions can be upload notes, album names or curation hints.
+  // Referenced API biographies are rendered by their separate attribution flow.
+  if (sourceBio && sourceBio.length > 80 && !isGenericDynamicBio && !isDynamicSource(track?.source || "")) {
+    return humanizeStructuredBioText(sourceBio, track);
   }
   return localizedArtistNarrativeFallback(track);
 }
@@ -42075,6 +42101,7 @@ function isLegacyGenericLabelBio(text) {
   const normalizedText = normalize(text || "");
   if (!normalizedText) return false;
   return normalizedText.includes("faixa puxada por pesquisa automatica") ||
+    normalizedText.includes("use a gravadora como uma trilha") ||
     normalizedText.includes("track pulled by automatic search") ||
     normalizedText.includes("track extraido por busqueda automatica");
 }
@@ -42085,7 +42112,7 @@ function buildDynamicLabelSummary(styleValue, labelName) {
   if (isUnknownLabel(cleanLabel)) {
     return `Ainda não tenho uma gravadora confiável para esta faixa, mas o som encaixa bem em ${style}. Se você gostar, o melhor caminho é abrir Discogs, SoundCloud ou Bandcamp do artista e seguir os rastros da cena.`;
   }
-  return `${cleanLabel} ajuda a dar contexto para essa faixa em ${style}. Se a música bater, use a gravadora como uma trilha para achar artistas próximos, releases parecidos e um pouco da cena em volta.`;
+  return `${cleanLabel} é a referência de catálogo associada a esta faixa em ${style}. Pode ser um álbum ou selo; confira a fonte do lançamento antes de atribuir uma gravadora.`;
 }
 
 function localizedLabelNarrativeFallback(track) {
@@ -42096,18 +42123,18 @@ function localizedLabelNarrativeFallback(track) {
     if (isUnknownLabel(rawLabel)) {
       return `I do not have a trusted label for this track yet, but the sound fits ${style}. If it clicks, open the artist on Discogs, SoundCloud, or Bandcamp and follow the scene trail from there.`;
     }
-    return `${label} helps place this ${style} track in a scene. If the sound clicks, use the label as a path to nearby artists, releases, and better references.`;
+    return `${label} is the catalog reference associated with this track. It may be an album or label; check the release source before identifying a record label.`;
   }
   if (currentLanguage === "es") {
     if (isUnknownLabel(rawLabel)) {
       return `Todavía no tengo un sello confiable para este track, pero el sonido encaja con ${style}. Si te conecta, abre Discogs, SoundCloud o Bandcamp del artista y sigue el rastro de la escena.`;
     }
-    return `${label} ayuda a ubicar esta pista de ${style} dentro de una escena. Si el sonido te conecta, úsalo como camino para encontrar artistas y releases cercanos.`;
+    return `${label} es la referencia de catálogo asociada a esta pista. Puede ser un álbum o un sello; consulta la fuente del lanzamiento antes de atribuir un sello.`;
   }
   if (isUnknownLabel(rawLabel)) {
     return `Ainda não tenho uma gravadora confiável para esta faixa, mas o som combina com ${style}. Se bater, abre o artista no Discogs, SoundCloud ou Bandcamp e segue os rastros da cena.`;
   }
-  return `${label} ajuda a colocar essa faixa de ${style} dentro de uma cena. Se o som bater, use a gravadora como caminho para achar artistas próximos, releases e referências melhores.`;
+  return `${label} é a referência de catálogo associada a esta faixa. Pode ser um álbum ou selo; confira a fonte do lançamento antes de atribuir uma gravadora.`;
 }
 
 function detailedLabelBio(track) {
@@ -42117,7 +42144,7 @@ function detailedLabelBio(track) {
   if (profile) return profile[currentLanguage] || profile.pt || localizedLabelNarrativeFallback(track);
 
   const sourceBio = String(track?.labelBio || "").trim();
-  if (sourceBio && sourceBio.length >= 110 && !isLegacyGenericLabelBio(sourceBio) && currentLanguage === "pt") {
+  if (sourceBio && sourceBio.length >= 110 && !isLegacyGenericLabelBio(sourceBio) && !isDynamicSource(track?.source || "") && currentLanguage === "pt") {
     return sourceBio;
   }
   return localizedLabelNarrativeFallback(track);

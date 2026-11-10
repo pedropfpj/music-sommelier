@@ -162,10 +162,12 @@ const FIELD_ALIASES = {
   source_url: ["source_url", "source_link", "reference_url", "track_url", "track_link"],
   source_tags: ["source_tags", "catalog_tags", "tags"],
   energy: ["energy_band", "energy_profile", "energy"],
+  vocals: ["vocals", "vocal_profile"],
+  context: ["context", "contexts", "listening_contexts"],
   source: ["source", "source_name", "catalog_source"]
 };
 
-function compactRow(row, sourceFile) {
+export function compactRow(row, sourceFile) {
   const fields = rowFields(row);
   const output = Object.fromEntries(Object.entries(FIELD_ALIASES).map(([key, aliases]) => [key, valueFrom(fields, aliases)]));
   output.universe = token(output.universe);
