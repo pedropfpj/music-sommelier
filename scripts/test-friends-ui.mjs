@@ -58,7 +58,7 @@ try {
       },
       signIn: context => fixture.callbacks.push({ action: "signIn", context }),
       chooseTrack: async () => track,
-      openTrack: async (selected, post) => { fixture.callbacks.push({ action: "play", selected, post }); return { ok: fixture.playReady !== false }; },
+      openTrack: async (selected, post) => { fixture.callbacks.push({ action: "play", selected, post }); if (fixture.holdPlay) await new Promise(resolve => { fixture.releasePlay = resolve; }); return { ok: fixture.playReady !== false }; },
       onReport: async value => { fixture.callbacks.push({ action: "report", postId: value.post.id, userId: value.person.id }); return { ok: true }; },
       onBlock: async person => { fixture.callbacks.push({ action: "block", userId: person.id }); fixture.blocked.add(`${fixture.account}:${person.id}`); fixture.relationships = fixture.relationships.filter(row => ![row.sender, row.receiver].includes(fixture.account) || ![row.sender, row.receiver].includes(person.id)); return { ok: true }; },
       makeInviteUrl: token => `https://sonicsearch.app/?tab=friends#friendInvite=${encodeURIComponent(token)}`
@@ -131,6 +131,18 @@ try {
   await page.evaluate(() => { fixture.playReady = true; });
   await action("play").click(); await page.getByText("Faixa aberta no player.", { exact: true }).waitFor();
   assert.deepEqual(await page.evaluate(() => fixture.callbacks.filter(call => call.action === "play").at(-1).post), { id: "post-3" });
+  await page.evaluate(() => controller.playbackUnavailable("unrelated-post"));
+  assert.equal(await page.getByText("Faixa aberta no player.", { exact: true }).count(), 1, "An unrelated stale player failure cannot erase the current acknowledgement");
+  await page.evaluate(() => controller.playbackUnavailable("post-3"));
+  await page.getByText("Não foi possível abrir esta gravação agora. O link de origem continua disponível.", { exact: true }).waitFor();
+  assert.equal(await page.getByText("Faixa aberta no player.", { exact: true }).count(), 0, "A late media error invalidates the successful acknowledgement");
+  assert.equal(await page.locator(".friends-source").first().getAttribute("href"), track.url);
+  await page.evaluate(() => { fixture.holdPlay = true; });
+  await action("play").click();
+  await page.waitForFunction(() => typeof fixture.releasePlay === "function");
+  await page.evaluate(() => { controller.playbackUnavailable("post-3"); fixture.holdPlay = false; fixture.releasePlay(); });
+  await page.getByText("Não foi possível abrir esta gravação agora. O link de origem continua disponível.", { exact: true }).waitFor();
+  assert.equal(await page.getByText("Faixa aberta no player.", { exact: true }).count(), 0, "A delayed ready response cannot override a reported audio failure");
   await action("report").click();
   assert.equal(await page.evaluate(() => fixture.callbacks.at(-1).action), "report");
   for (const viewport of [{ width: 375, height: 812 }, { width: 852, height: 393 }, { width: 1440, height: 1000 }]) {

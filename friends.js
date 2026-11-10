@@ -53,7 +53,7 @@
     const language = () => copy[adapter.getLanguage?.()] ? adapter.getLanguage() : "pt";
     const t = () => copy[language()];
     const freshState = account => ({ account, active: false, view: "feed", overview: null, overviewBusy: false, overviewError: "", feed: [], feedLoaded: false, feedBusy: false, feedError: "", searchQuery: "", searched: "", people: [], searchBusy: false, searchError: "", mutation: "", status: "", error: "", identityEditing: false, identityDraft: "", identityDirty: false, intent: null, invite: null, latestInvite: null, inviteRequestId: "", composer: { track: null, text: "", requestId: "" }, opening: "" });
-    let state = freshState(accountKey());
+    let state = freshState(accountKey()), playbackSequence = 0, openedPostId = "";
     const me = () => state.overview?.me || {};
     const enabled = () => me().enabled === true;
     const ownIdentity = () => me().identity || {};
@@ -80,7 +80,7 @@
     function sessionChanged(reload = true) {
       const next = accountKey();
       if (state.account === next) return false;
-      const active = state.active; epoch++; focusMemory = null; state = freshState(next); state.active = active; render();
+      const active = state.active; epoch++; playbackSequence++; openedPostId = ""; focusMemory = null; state = freshState(next); state.active = active; render();
       if (reload && active && next) void refresh();
       return true;
     }
@@ -317,10 +317,10 @@
       const post = state.feed.find(row => row.id === target.dataset.postId); if (!post) return;
       if (action === "delete-post" && post.mine === true && post.author?.id === ownIdentity().id) { showIntent({ kind: "delete", post }, target); return; }
       if (action === "play" && !state.opening) {
-        const account = state.account, generation = epoch; state.opening = post.id; state.error = ""; render();
-        try { const ready = await adapter.openTrack?.(post.track, { id: post.id }); if (current(account, generation)) { if (ready === true || ready?.ok === true) state.status = t().opened; else state.error = t().trackUnavailable; } }
-        catch (_) { if (current(account, generation)) state.error = t().trackUnavailable; }
-        finally { if (current(account, generation)) { state.opening = ""; render(); } else sessionChanged(); }
+        const account = state.account, generation = epoch, playback = ++playbackSequence; openedPostId = ""; state.opening = post.id; state.status = ""; state.error = ""; render();
+        try { const ready = await adapter.openTrack?.(post.track, { id: post.id }); if (current(account, generation) && playback === playbackSequence) { if (ready === true || ready?.ok === true) { openedPostId = post.id; state.status = t().opened; } else state.error = t().trackUnavailable; } }
+        catch (_) { if (current(account, generation) && playback === playbackSequence) state.error = t().trackUnavailable; }
+        finally { if (current(account, generation) && playback === playbackSequence) { state.opening = ""; render(); } else sessionChanged(); }
       }
       if (["block", "report"].includes(action) && post.author?.id !== ownIdentity().id) {
         const account = state.account, generation = epoch;
@@ -360,6 +360,10 @@
     return {
       async open(options = {}) { sessionChanged(false); state.active = true; if (options.composeTrack) compose(options.composeTrack); if (options.inviteToken) { state.invite = { token: String(options.inviteToken).slice(0, 512), busy: false }; state.view = "people"; } render(); await refresh(); if (state.account && state.invite?.token) await previewInvite(state.invite.token); },
       compose, refresh, sessionChanged,
+      playbackUnavailable(postId) {
+        if (sessionChanged() || !postId || (openedPostId !== postId && state.opening !== postId)) return;
+        playbackSequence++; openedPostId = ""; state.opening = ""; state.status = ""; state.error = t().trackUnavailable; render();
+      },
       destroy() { destroyed = true; epoch++; root.removeEventListener("click", onClick); root.removeEventListener("input", onInput); root.removeEventListener("submit", onSubmit); root.removeEventListener("keydown", onKeydown); scope.removeEventListener("sonic:profile-changed", onSession); scope.removeEventListener("sonic:online-session-changed", onSession); scope.removeEventListener("sonic:language-changed", onLanguage); root.replaceChildren(); delete root.dataset.friendsMounted; }
     };
   }
