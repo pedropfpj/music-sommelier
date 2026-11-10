@@ -39,7 +39,7 @@
     "test:sound-system-listening": "node scripts/test-sound-system-listening.mjs",
     "test:spirit-image": "node scripts/test-spirit-image.mjs",
     "test:first-listen-comments": "node scripts/test-first-listen-comments.mjs",
-    "test:social-identity": "node scripts/test-comment-author-identity.mjs && node scripts/test-social-identity-session.mjs",
+    "test:social-identity": "node scripts/test-comment-author-identity.mjs && node scripts/test-social-identity-session.mjs && node scripts/test-profile-refresh-save-race.mjs",
     "verify:listening-art": "node scripts/test-listening-art-ui.mjs",
     "verify:saved-tracks": "node scripts/verify-saved-tracks-ui.mjs",
     "test:weekly-highlights": "node scripts/test-weekly-highlights.mjs",
