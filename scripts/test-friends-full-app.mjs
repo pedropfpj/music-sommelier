@@ -131,6 +131,12 @@ try {
   const chosen = await ana.locator('.friends-chosen-track').innerText();
   assert.ok(chosen.includes(selected.artist) && chosen.includes(selected.title));
   await ana.locator('#friendsNote').fill('Só para o círculo: uma gravação escolhida explicitamente.');
+  await action(ana, 'choose-track').click();
+  await ana.waitForFunction(() => currentActiveAppTabName() === 'discover');
+  assert.equal(await ana.locator('#artistName').textContent(), selected.artist, 'Browsing another recording does not silently replace the current selection');
+  await tab(ana, 'friends');
+  assert.equal(await ana.locator('#friendsNote').inputValue(), 'Só para o círculo: uma gravação escolhida explicitamente.', 'Choose another track and return keeps the draft until a new explicit selection');
+  assert.ok((await ana.locator('.friends-chosen-track').innerText()).includes(selected.title));
   await tab(ana, 'profile');
   await ana.locator('#profileFriendsBtn').click();
   assert.equal(await ana.locator('#friendsNote').inputValue(), 'Só para o círculo: uma gravação escolhida explicitamente.', 'A normal tab round trip retains the chosen-recording draft');

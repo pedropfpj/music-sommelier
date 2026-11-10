@@ -7,7 +7,71 @@ const output = fileURLToPath(new URL("../.vercel/friends-ui/", import.meta.url))
 await fs.mkdir(output, { recursive: true });
 const A = "11111111-1111-4111-8111-111111111111", B = "22222222-2222-4222-8222-222222222222", C = "33333333-3333-4333-8333-333333333333";
 const track = { artist: "Fixture Artist", title: "An exact chosen recording (Edit)", style: "house", url: "https://label.bandcamp.com/track/exact-chosen-recording", catalogId: "fixture-recording" };
+async function checkRefinement(kind) {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 960 } });
+  page.setDefaultTimeout(5000);
+  try {
+    await page.setContent('<!doctype html><html><body><section id="friendsPanel"></section></body></html>');
+    await page.addStyleTag({ path: fileURLToPath(new URL("../friends.css", import.meta.url)) });
+    await page.addScriptTag({ path: fileURLToPath(new URL("../friends.js", import.meta.url)) });
+    await page.evaluate(async track => {
+      window.refinement = { choose: [], navigation: [], release: null, settled: false };
+      window.controller = SonicFriends.mount(document.getElementById("friendsPanel"), {
+        getSessionKey: () => "fixture-account", getLanguage: () => "pt",
+        chooseTrack: async context => { refinement.choose.push(context); if (context?.replace) { refinement.navigation.push("discover"); return null; } return track; },
+        request: async input => {
+          if (input.action === "overview") return { ok: true, me: { enabled: true, identity: { id: "self", displayName: "Fixture listener" } }, friends: [], incoming: [], outgoing: [], invites: [] };
+          if (input.action === "feed") return { ok: true, posts: [] };
+          if (input.action === "search") {
+            if (input.q === "bia") await new Promise(resolve => { refinement.release = resolve; });
+            const name = { ana: "Ana Sonora", bia: "Bia Radar", carla: "Carla Solar" }[input.q];
+            return { ok: true, people: [{ id: input.q, displayName: name, relationship: "none" }] };
+          }
+          return { ok: false };
+        }
+      });
+      await controller.open({ composeTrack: track });
+    }, track);
+    if (kind === "replace") {
+      await page.locator("#friendsNote").fill("Keep this draft while browsing.");
+      await page.locator('[data-friends-action="choose-track"]').click();
+      assert.deepEqual(await page.evaluate(() => refinement.navigation), ["discover"], "Replace must ask the bridge to open Discover instead of selecting the current track again");
+      assert.deepEqual(await page.evaluate(() => refinement.choose[0]), { replace: true, currentTrack: track });
+      await page.evaluate(() => controller.open());
+      assert.equal(await page.locator("#friendsNote").inputValue(), "Keep this draft while browsing.");
+      assert.ok((await page.locator(".friends-chosen-track").textContent()).includes(track.title));
+      await page.evaluate(track => controller.compose({ ...track, title: "Another explicitly chosen recording" }), track);
+      assert.ok((await page.locator(".friends-chosen-track").textContent()).includes("Another explicitly chosen recording"));
+      assert.equal(await page.locator("#friendsNote").inputValue(), "", "The draft changes only when a different recording is explicitly selected");
+    } else {
+      const submit = page.locator('[data-friends-form="search"] button');
+      const results = page.locator('.friends-section:has([data-friends-form="search"])');
+      await page.locator("#friendsSearch").fill("ana"); await submit.click(); await results.getByText("Ana Sonora", { exact: true }).waitFor();
+      await page.locator("#friendsSearch").fill("bia"); await submit.click(); await page.waitForFunction(() => typeof refinement.release === "function");
+      await page.locator("#friendsSearch").fill("carla"); await page.evaluate(() => refinement.release());
+      await page.waitForFunction(() => !document.querySelector('[data-friends-form="search"] button').disabled);
+      const obsolete = await results.innerText();
+      assert.ok(!obsolete.includes("Ana Sonora") && !obsolete.includes("Resultados para “bia”"), "Editing a pending search must not relabel old people with the pending query");
+      await page.locator("#friendsSearch").fill("bia"); await submit.click();
+      await page.waitForFunction(() => document.querySelector('[data-friends-form="search"] button').disabled);
+      await page.locator("#friendsSearch").fill("carla");
+      assert.equal(await submit.isEnabled(), true, "A new query can be submitted before the obsolete response finishes");
+      await submit.click(); await results.getByText("Carla Solar", { exact: true }).waitFor();
+      await page.evaluate(() => refinement.release());
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
+      assert.ok((await results.innerText()).includes("Resultados para “carla”"));
+      assert.equal(await results.getByText("Bia Radar", { exact: true }).count(), 0, "A late obsolete response cannot replace the newer completed search");
+      await page.locator("#friendsSearch").evaluate(input => { input.focus(); input.setSelectionRange(2, 2); });
+      await page.keyboard.type("x");
+      assert.deepEqual(await page.locator("#friendsSearch").evaluate(input => [input.value, input.selectionStart, document.activeElement === input]), ["caxrla", 3, true], "Clearing results must preserve the editing caret and focus");
+    }
+  } finally { await page.close(); }
+}
 try {
+  const refinements = await Promise.allSettled([checkRefinement("search"), checkRefinement("replace")]);
+  for (let index = 0; index < refinements.length; index++) if (refinements[index].status === "rejected") console.error(["search coherence", "replace draft continuity"][index] + ": " + refinements[index].reason.message);
+  assert.ok(refinements.every(result => result.status === "fulfilled"), "Both Friends refinements must pass");
+  console.log("PASS search editing/late response coherence and explicit replacement navigation with draft continuity");
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, reducedMotion: "reduce" });
   const errors = []; page.on("pageerror", error => errors.push(error.message));
   await page.setContent('<!doctype html><html lang="pt"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#07121b;color:#eaf8f2;padding:16px}main{max-width:1200px;margin:auto}button,input,textarea{font:inherit}#publicComments{display:none}</style><main><section id="friendsPanel"></section><section id="publicComments">Public comments unchanged</section></main></html>');
@@ -57,7 +121,7 @@ try {
         return result;
       },
       signIn: context => fixture.callbacks.push({ action: "signIn", context }),
-      chooseTrack: async () => track,
+      chooseTrack: async context => { fixture.callbacks.push({ action: "choose", context }); if (context?.replace) { fixture.callbacks.push({ action: "navigate", tab: "discover" }); return null; } return track; },
       openTrack: async (selected, post) => { fixture.callbacks.push({ action: "play", selected, post }); if (fixture.holdPlay) await new Promise(resolve => { fixture.releasePlay = resolve; }); return { ok: fixture.playReady !== false }; },
       onReport: async value => { fixture.callbacks.push({ action: "report", postId: value.post.id, userId: value.person.id }); return { ok: true }; },
       onBlock: async person => { fixture.callbacks.push({ action: "block", userId: person.id }); fixture.blocked.add(`${fixture.account}:${person.id}`); fixture.relationships = fixture.relationships.filter(row => ![row.sender, row.receiver].includes(fixture.account) || ![row.sender, row.receiver].includes(person.id)); return { ok: true }; },
@@ -116,6 +180,9 @@ try {
   await page.getByRole("button", { name: "Compartilhar com amigos", exact: true }).click();
   await page.locator(".friends-feedback[role=alert]").waitFor();
   assert.equal(await page.locator("#friendsNote").inputValue(), "Só o meu círculo pode ver esta descoberta.");
+  await action("choose-track").click();
+  await page.evaluate(() => controller.open());
+  assert.equal(await page.locator("#friendsNote").inputValue(), "Só o meu círculo pode ver esta descoberta.", "Browsing and returning preserves an ambiguous-post draft for safe retry");
   assert.ok(!(await page.locator("#friendsPanel").textContent()).includes("secret-canary"));
   await page.getByRole("button", { name: "Compartilhar com amigos", exact: true }).click();
   await page.getByText("Descoberta compartilhada com seus amigos.", { exact: true }).waitFor();

@@ -115,11 +115,12 @@
       if (query.length < 2) { state.searchError = t().searchMin; render(); return; }
       const account = state.account, generation = epoch, sequence = ++searchSequence;
       focusMemory = { id: "friendsSearch" };
-      state.searchBusy = true; state.searchError = ""; state.searched = query; render();
+      state.searchBusy = true; state.searchError = ""; state.people = []; render();
       try {
         const response = await api("search", { q: query });
         if (!current(account, generation) || sequence !== searchSequence || query !== state.searchQuery.trim()) return;
         state.people = (Array.isArray(response.people) ? response.people : []).filter(person => person.id && person.id !== ownIdentity().id);
+        state.searched = query;
       } catch (error) { if (current(account, generation) && sequence === searchSequence) state.searchError = errorText(error); }
       finally { if (current(account, generation) && sequence === searchSequence) { state.searchBusy = false; render(); } else sessionChanged(); }
     }
@@ -216,7 +217,7 @@
       const preview = invite ? `<section class="friends-section friends-received-invite"><h4>${t().inviteTitle}</h4>${invite.busy ? `<p role="status">${t().invitePreview}</p>` : invite.person ? `<p class="friends-muted">${t().inviteOpened}</p><ul class="friends-people-list">${personCard({ ...invite.person, relationship: invite.relationship, relationshipId: invite.relationshipId }, relationFor({ ...invite.person, relationship: invite.relationship }).status, invite.relationshipId, invite.token)}</ul>` : `<p role="alert">${escape(invite.error || t().inviteUnavailable)}</p>${button("retry-invite", t().previewAgain)}`}</section>` : "";
       const searchResults = state.searchBusy ? `<p role="status">${t().searching}</p>` : state.searchError ? `<p role="alert">${escape(state.searchError)}</p>` : state.searched ? `<p class="friends-help">${t().results} “${escape(state.searched)}”</p>${state.people.length ? `<ul class="friends-people-list">${state.people.map(person => { const relation = relationFor(person); return personCard(person, relation.status, relation.id); }).join("")}</ul>` : `<p class="friends-muted">${t().noResults}</p>`}` : "";
       const latest = state.latestInvite;
-      return `${preview}${groups}<section class="friends-section"><h4>${t().find}</h4><form class="friends-search" data-friends-form="search"><label for="friendsSearch">${t().searchLabel}</label><div><input id="friendsSearch" type="search" value="${escape(state.searchQuery)}" minlength="2" maxlength="80" aria-describedby="friendsSearchHint"><button class="friends-button" type="submit" ${state.searchBusy ? "disabled" : ""}>${t().search}</button></div><p id="friendsSearchHint" class="friends-help">${t().searchHint}</p></form>${searchResults}</section><section class="friends-section friends-invites"><h4>${t().inviteTitle}</h4><p class="friends-muted">${t().inviteHint}</p>${enabled() ? button("create-invite", t().createInvite) : `<p class="friends-help">${t().identityNeeded}</p>`}${latest ? `<div class="friends-invite-link"><label for="friendsInviteLink">${t().inviteLink}</label><input id="friendsInviteLink" type="url" readonly value="${escape(latest.url)}"><p class="friends-help">${t().expires} ${escape(date(latest.expiresAt))}</p>${button("copy-invite", t().copy)}</div>` : ""}<ul class="friends-invite-list">${overview.invites.map(invite => `<li><span>${t().activeInvite}<small>${t().expires} ${escape(date(invite.expiresAt))}</small></span>${button("revoke-invite", t().revoke, `data-invite-id="${escape(invite.id)}"`, "quiet")}</li>`).join("")}</ul></section>`;
+      return `${preview}${groups}<section class="friends-section"><h4>${t().find}</h4><form class="friends-search" data-friends-form="search"><label for="friendsSearch">${t().searchLabel}</label><div><input id="friendsSearch" type="search" value="${escape(state.searchQuery)}" minlength="2" maxlength="80" aria-describedby="friendsSearchHint"><button class="friends-button" type="submit" ${state.searchBusy ? "disabled" : ""}>${t().search}</button></div><p id="friendsSearchHint" class="friends-help">${t().searchHint}</p></form><div id="friendsSearchResults">${searchResults}</div></section><section class="friends-section friends-invites"><h4>${t().inviteTitle}</h4><p class="friends-muted">${t().inviteHint}</p>${enabled() ? button("create-invite", t().createInvite) : `<p class="friends-help">${t().identityNeeded}</p>`}${latest ? `<div class="friends-invite-link"><label for="friendsInviteLink">${t().inviteLink}</label><input id="friendsInviteLink" type="url" readonly value="${escape(latest.url)}"><p class="friends-help">${t().expires} ${escape(date(latest.expiresAt))}</p>${button("copy-invite", t().copy)}</div>` : ""}<ul class="friends-invite-list">${overview.invites.map(invite => `<li><span>${t().activeInvite}<small>${t().expires} ${escape(date(invite.expiresAt))}</small></span>${button("revoke-invite", t().revoke, `data-invite-id="${escape(invite.id)}"`, "quiet")}</li>`).join("")}</ul></section>`;
     }
     function renderComposer() {
       const track = state.composer.track;
@@ -277,7 +278,7 @@
       if (action === "retry-invite") { await previewInvite(state.invite?.token); return; }
       if (action === "choose-track") {
         const account = state.account, generation = epoch;
-        try { const track = await adapter.chooseTrack?.(); if (track && current(account, generation)) compose(track); }
+        try { const track = await adapter.chooseTrack?.({ replace: Boolean(state.composer.track), currentTrack: cleanTrack(state.composer.track) }); if (track && current(account, generation)) compose(track); }
         catch (_) { if (current(account, generation)) { state.error = t().error; render(); } }
         return;
       }
@@ -329,7 +330,18 @@
       }
     }
     function onInput(event) {
-      if (event.target.id === "friendsSearch") state.searchQuery = event.target.value;
+      if (event.target.id === "friendsSearch") {
+        const query = event.target.value, changed = query.trim() !== state.searchQuery.trim();
+        state.searchQuery = query;
+        if (changed) {
+          searchSequence++; state.searchBusy = false; state.searchError = ""; state.searched = ""; state.people = [];
+          // Update only the results and submit control: replacing the input on
+          // each keystroke would move its caret and interrupt ongoing editing.
+          root.querySelector("#friendsSearchResults")?.replaceChildren();
+          const submit = root.querySelector('[data-friends-form="search"] button');
+          if (submit) submit.disabled = false;
+        }
+      }
       if (event.target.id === "friendsName") { state.identityDraft = event.target.value; state.identityDirty = true; const preview = root.querySelector("#friendsIdentityPreview"); if (preview) preview.textContent = safeName(state.identityDraft) || t().name; }
       if (event.target.id === "friendsNote") { state.composer.text = event.target.value; state.composer.requestId = ""; const count = root.querySelector("#friendsNoteCount"); if (count) count.textContent = [...state.composer.text].length; }
     }
