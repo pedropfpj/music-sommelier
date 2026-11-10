@@ -66765,7 +66765,12 @@ async function bootSonicSearch() {
       request: requestFriendsApi,
       signIn: startFriendsSignIn,
       makeInviteUrl: makeFriendsInviteUrl,
-      chooseTrack: () => {
+      chooseTrack: ({ replace = false } = {}) => {
+        if (replace) {
+          setActiveAppTab("discover", { focusPanel: true });
+          showToast(sonicTinyCopy("Escolha outra gravação em Descobrir e clique Compartilhar com amigos. Seu rascunho continua guardado enquanto você procura.", "Choose another recording in Discover, then click Share with friends. Your draft is kept while you browse.", "Elige otra grabación en Descubrir y pulsa Compartir con amigos. Tu borrador se conserva mientras buscas."));
+          return null;
+        }
         const track = friendsTrackSnapshot();
         if (!track) {
           setActiveAppTab("discover", { focusPanel: true });
