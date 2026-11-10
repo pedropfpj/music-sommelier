@@ -210,6 +210,14 @@ O registro de decisoes por provedor fica em `docs/api-approvals.md`.
 
 ## Qualidade do catalogo
 
+Para validar variedade, histórico e proteção contra repetições nas recomendações:
+
+```bash
+npm run test:recommendation-quality
+```
+
+Detalhes e limites: [qualidade das recomendações](docs/recommendation-quality-20261109.md).
+
 Antes de publicar qualquer mudanca de produto/copy/UI, rode:
 
 ```bash

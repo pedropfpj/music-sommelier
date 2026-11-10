@@ -70,6 +70,7 @@
     "test:subgenre-stress": "node scripts/test-subgenre-stress.mjs",
     "test:niche-stress": "node scripts/test-niche-subgenre-stress.mjs",
     "audit:low-coverage": "node scripts/audit-low-coverage-subgenres-v21.mjs",
+    "test:recommendation-quality": "node scripts/test-discovery-ranking-quality.mjs && node scripts/test-recommendation-history.mjs && node scripts/test-recommendation-no-repeat-fallback.mjs && node scripts/test-suggestion-queue-no-repeat.mjs && node scripts/test-recommendation-variety.mjs",
     "test:recommendation-safety": "node scripts/test-recommendation-safety.mjs",
     "test:universal-music": "node scripts/test-universal-music-foundation.mjs",
     "test:universal-pilot": "node scripts/test-universal-catalog-pilot.mjs",
