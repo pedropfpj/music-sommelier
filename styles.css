@@ -23066,3 +23066,15 @@ body.sonic-first-value-window #dailyRadarPanel {
 .track-data-review-status:empty { display: none; }
 .track-data-review > summary:focus-visible, .track-data-review-actions button:focus-visible { outline: 2px solid var(--accent-a); outline-offset: 3px; }
 @media (max-width: 540px) { .track-data-review-actions { grid-template-columns: minmax(0, 1fr); } }
+.style-selection-coverage-hint {
+  margin: .7rem 0 0;
+  padding: .8rem .9rem;
+  border-left: 2px solid #d9bf87;
+  border-radius: 0 6px 6px 0;
+  background: rgba(217, 191, 135, .06);
+  color: #d2dfdd;
+  font-size: .9rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.style-selection-coverage-hint[hidden] { display: none !important; }

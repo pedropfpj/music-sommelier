@@ -23943,6 +23943,7 @@ function swipeDiscoveryRailStyles({ expanded = swipeStyleRailExpanded } = {}) {
 }
 
 function renderSwipeStyleRail() {
+  renderStyleSelectionCoverage(styleEl?.value || "");
   if (!swipeStyleRail) return;
   const styles = swipeDiscoveryRailStyles();
   const allStyles = swipeDiscoveryRailStyles({ expanded: true });
@@ -27589,7 +27590,70 @@ function styleBpmInfoText(style) {
   return `${t("styleInfoBpmLabel")}: ${bpm.min}-${bpm.max} BPM`;
 }
 
+let styleSelectionCoverageRequest = 0;
+
+function styleSelectionCoverageSnapshot(style = "") {
+  if (!style || typeof window.SonicCatalogRuntime?.loadStyle !== "function" || !externalDatasetImportedStyles.has(style)) return { status: "unloaded" };
+  const artists = new Set();
+  for (const track of catalogTracksForStyle(style)) {
+    if (track?.style !== style || trackStyleCertainty(track) !== "confirmed" || !isTrackEligibleForRecommendation(track)) continue;
+    const artist = artistMatchKey(track.artist || "");
+    if (artist) artists.add(artist);
+  }
+  return { status: "loaded", artists: artists.size };
+}
+
+function styleSelectionCoverageCopy(count = 0) {
+  if (currentLanguage === "en") return count === 0
+    ? "This selection has no recordings with a confirmed style classification yet. Other options may exist in the catalog."
+    : `Short selection: ${count} ${count === 1 ? "artist has a recording" : "artists have recordings"} with a confirmed style classification in this selection. Other filters may narrow it further; preview availability varies by provider.`;
+  if (currentLanguage === "es") return count === 0
+    ? "Este recorte aún no tiene grabaciones con el estilo confirmado. Puede haber otras opciones en el catálogo."
+    : `Selección corta: ${count} ${count === 1 ? "artista con una grabación de estilo confirmado" : "artistas con grabaciones de estilo confirmado"} en este recorte. Otros filtros pueden reducir las opciones; las previas dependen del proveedor.`;
+  return count === 0
+    ? "Este recorte ainda não tem gravações com o estilo confirmado. Outras opções podem existir no catálogo."
+    : `Seleção curta: ${count} ${count === 1 ? "artista com gravação de estilo confirmado" : "artistas com gravações de estilo confirmado"} neste recorte. Outros filtros podem reduzir as opções; as prévias dependem do fornecedor.`;
+}
+
+function renderStyleSelectionCoverage(style = "") {
+  if (!styleEl) return;
+  let hint = document.getElementById("styleSelectionCoverageHint");
+  if (!hint) {
+    hint = document.createElement("p");
+    hint.id = "styleSelectionCoverageHint";
+    hint.className = "style-selection-coverage-hint";
+    hint.setAttribute("role", "status");
+    hint.setAttribute("aria-live", "polite");
+    hint.setAttribute("aria-atomic", "true");
+    styleEl.insertAdjacentElement("afterend", hint);
+    const descriptions = new Set((styleEl.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+    descriptions.add(hint.id);
+    styleEl.setAttribute("aria-describedby", [...descriptions].join(" "));
+  }
+  const request = ++styleSelectionCoverageRequest;
+  const generation = recommendationSessionGeneration;
+  const isCurrent = () => request === styleSelectionCoverageRequest && styleEl.value === style && recommendationSessionIsCurrent(generation);
+  const update = () => {
+    if (!isCurrent()) return;
+    const coverage = styleSelectionCoverageSnapshot(style);
+    const visible = coverage.status === "loaded" && coverage.artists < 6;
+    hint.hidden = !visible;
+    const text = visible ? styleSelectionCoverageCopy(coverage.artists) : "";
+    if (hint.textContent !== text) hint.textContent = text;
+  };
+  if (!style || styleEl.value !== style || !Object.hasOwn(STYLE_BPM_RULES, style) || typeof window.SonicCatalogRuntime?.loadStyle !== "function") {
+    hint.hidden = true; hint.textContent = ""; return;
+  }
+  if (externalDatasetImportedStyles.has(style)) { update(); return; }
+  hint.hidden = true;
+  hint.textContent = "";
+  // Load the selected style's own shard before describing its reviewed recut;
+  // a core sample or a failed request must never be presented as zero coverage.
+  void hydrateExternalDatasetPackInBackground({ style }).then(update).catch(() => {});
+}
+
 function renderStyleInfoBubble(style, { reveal = false } = {}) {
+  renderStyleSelectionCoverage(styleEl?.value || "");
   if (!styleInfoBubble || !styleInfoTitle || !styleInfoBpm || !styleInfoSummary || !styleInfoTip) return;
 
   if (!style || !STYLE_BPM_RULES[style]) {
