@@ -262,6 +262,14 @@
     scope.setInterval(() => { if (!document.hidden && weekIndex() !== current) refresh(); }, 60000);
     refresh();
     return { open() { refresh(); return load(); }, refresh,
+      requiresExactRecording(track) {
+        return Boolean(session && trackIdentity(track) === trackIdentity(session.items[session.position]));
+      },
+      playbackUnavailable(track) {
+        if (session && trackIdentity(track) === trackIdentity(session.items[session.position])) {
+          session.result = "unavailable"; session.busy = false; renderSession();
+        }
+      },
       trackChanged(track) {
         if (session && trackIdentity(track) !== trackIdentity(session.items[session.position])) {
           sessionGeneration++; session = null; renderSession();

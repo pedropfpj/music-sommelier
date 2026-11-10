@@ -56293,6 +56293,7 @@ async function renderPreview(track, options = {}) {
   if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return false;
   const renderToken = ++recommendationPreviewRenderToken;
   const fastMode = Boolean(options.fast);
+  const exactRecordingOnly = options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true;
   const probeTimeoutMs = Math.max(
     120,
     Number(options.probeTimeoutMs) || (fastMode ? FAST_PREVIEW_PROBE_TIMEOUT_MS : PREVIEW_PROBE_TIMEOUT_MS)
@@ -56462,7 +56463,7 @@ async function renderPreview(track, options = {}) {
     canRetryYoutube = youtubePreviewCanRetry(track);
     youtubeAttempt = hasDirectYoutube ? 0 : youtubePreviewSearchAttempt;
   }
-  if (!playablePreview && !hasExternalPlaybackRoute && !fastMode) {
+  if (!playablePreview && !hasExternalPlaybackRoute && !fastMode && !exactRecordingOnly) {
     const artistPreviewProbe = createTrackPreviewProbeElement();
     try {
       artistPreviewFallback = await pickPlayableArtistPreviewFallback(artistPreviewProbe, track, { forceLookup: true });
@@ -56475,7 +56476,7 @@ async function renderPreview(track, options = {}) {
   if (!playablePreview && !hasExternalPlaybackRoute && fastMode) {
     window.setTimeout(() => {
       if (!isStillCurrentPreviewTrack()) return;
-      void renderPreview(track).catch(() => {});
+      void renderPreview(track, { ...options, fast: false, exactRecordingOnly }).catch(() => {});
     }, 520);
   }
 
@@ -56633,6 +56634,7 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
   if (trackPreview.dataset.previewProbing === "true") return;
   const track = currentRecommendation;
   const surfaceSnapshot = captureRecommendationSurfaceSnapshot();
+  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true;
   const trackKey = recommendationTrackKey(track);
   const failedPreview = normalizePreviewUrl(ownedTrackPreviewSource(track, trackPreview) || track.previewUrl);
   if (!failedPreview && !trackKey) return;
@@ -56652,9 +56654,10 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
     adjustPreviewReliabilitySignal(track.style, -0.28);
     if (previewStatus) previewStatus.textContent = t("previewSearching");
     setTrackPreviewVisualState("searching");
-    const recovered = await renderPreview(track);
+    const recovered = await renderPreview(track, { exactRecordingOnly });
     if (token !== previewRecoveryToken || !trackStillActive(track)) return;
-    if (!recovered && lastPrefs) {
+    if (!recovered && exactRecordingOnly) weeklyRecommendsController?.playbackUnavailable?.(track);
+    if (!recovered && lastPrefs && !exactRecordingOnly) {
       const replacement = await pickPlayableReplacementForPrefs(lastPrefs, {
         currentTrack: track,
         excludedTrackKeys: new Set(trackKey ? [trackKey] : []),
@@ -58622,9 +58625,10 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
   if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return { ok: false, reason: "busy" };
   if (!item.artist || !item.title || !item.style) return { ok: false, reason: "unavailable" };
   const profileKey = sessionProfileKey();
+  const generation = recommendationSessionGeneration;
   const previousTrack = currentRecommendation;
   const previousTab = currentActiveAppTabName();
-  const stillCurrent = () => profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && context.isCurrent?.() !== false;
+  const stillCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && context.isCurrent?.() !== false;
   recommendationRunBusy = true;
   prepareExplicitPreviewAudio();
   try {
@@ -58645,14 +58649,14 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
     firstRecommendationCompleted = true;
     markRecommendationPresented(track);
     updateStats();
-    const playable = await renderPreview(track, { fast: true });
-    if (profileKey !== sessionProfileKey() || context.isCurrent?.() === false) return { ok: false, reason: "canceled" };
+    const playable = await renderPreview(track, { fast: true, exactRecordingOnly: true });
+    if (!recommendationSessionIsCurrent(generation) || profileKey !== sessionProfileKey() || context.isCurrent?.() === false) return { ok: false, reason: "canceled" };
     trackRecommendationEvent("weekly_track_opened", track, lastPrefs || {}, { source: "weekly_recommends", edition: context.edition || "", position: context.position || 0 });
     return { ok: Boolean(playable), reason: playable ? "" : "unavailable" };
   } catch (_) {
     return { ok: false, reason: "unavailable" };
   } finally {
-    recommendationRunBusy = false;
+    if (recommendationSessionIsCurrent(generation)) recommendationRunBusy = false;
   }
 }
 

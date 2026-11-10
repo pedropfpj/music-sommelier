@@ -14,6 +14,8 @@ const sibling = { ...track, song: "Another recording" };
 const calls = [];
 const context = vm.createContext({
   recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
+  recommendationSessionGeneration: 1,
+  recommendationSessionIsCurrent: generation => generation === context.recommendationSessionGeneration,
   firstRecommendationCompleted: false, currentRecommendation: null, catalog: [sibling, track],
   CURATED_FRIENDLY_OPENING_TRACKS: [], lastPrefs: null,
   sessionProfileKey: () => "profile-a", prepareExplicitPreviewAudio() {},
@@ -25,7 +27,7 @@ const context = vm.createContext({
   stopAllActivePlayback: () => calls.push("stop"),
   restoreRecommendationSurfaceSnapshot: ({ track: selected }) => { context.currentRecommendation = selected; calls.push(selected.song); },
   markRecommendationPresented: selected => calls.push(`presented:${selected.song}`), updateStats() {},
-  renderPreview: async () => true,
+  renderPreview: async (_, options) => { assert.equal(options.exactRecordingOnly, true); return true; },
   trackRecommendationEvent: (...args) => calls.push(args[0])
 });
 vm.runInContext(`${bridgeSource}\nthis.openTrack = openWeeklyEditionTrack;`, context);
@@ -46,6 +48,19 @@ result = await context.openTrack({ artist: track.artist, title: track.song, styl
 assert.equal(result.reason, "canceled");
 assert.equal(context.currentRecommendation, null, "A canceled session must not reopen its track later");
 assert.equal(context.recommendationRunBusy, false);
+
+context.currentRecommendation = null;
+let finishHydration;
+context.hydrateExternalDatasetPackInBackground = () => new Promise(resolve => { finishHydration = resolve; });
+const oldSession = context.openTrack({ artist: track.artist, title: "Old profile pending recording", style: track.style });
+await Promise.resolve();
+context.recommendationSessionGeneration++;
+context.recommendationRunBusy = true;
+finishHydration();
+assert.equal((await oldSession).reason, "canceled");
+assert.equal(context.recommendationRunBusy, true, "A late weekly lookup must not release another profile's discovery lock");
+context.recommendationRunBusy = false;
+context.hydrateExternalDatasetPackInBackground = async () => {};
 context.renderPreview = async () => false;
 result = await context.openTrack({ artist: track.artist, title: track.song, style: track.style });
 assert.equal(result.ok, false);

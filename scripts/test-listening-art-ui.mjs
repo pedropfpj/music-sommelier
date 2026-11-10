@@ -35,6 +35,14 @@ try {
     });
     await page.goto(`${preview.baseUrl}/?qa=1&lang=pt&recommendation=0`, { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => typeof updateSwipeFeedbackCard === "function");
+    const safeErrors = await page.evaluate(() => ({
+      unknown: spiritCollectibleApiFailureText("openai_image_failed", "INTERNAL_PROVIDER_PAYLOAD", 404),
+      providerLimit: spiritCollectibleApiFailureText("openai_image_failed", "INTERNAL_PROVIDER_PAYLOAD", 429),
+      dailyLimit: spiritCollectibleApiFailureText("daily_ai_limit_reached", "INTERNAL_PROVIDER_PAYLOAD", 429),
+      timeout: spiritCollectibleApiFailureText("openai_image_timeout", "INTERNAL_PROVIDER_PAYLOAD", 504)
+    }));
+    assert.doesNotMatch(Object.values(safeErrors).join(" "), /INTERNAL|OpenAI|HTTP|API/);
+    assert.notEqual(safeErrors.providerLimit, safeErrors.dailyLimit, "Provider throttling must not promise a daily reset");
     const privacy = page.getByRole("button", { name: "Só essenciais", exact: true });
     if (await privacy.isVisible()) await privacy.click();
     await page.evaluate(() => {
