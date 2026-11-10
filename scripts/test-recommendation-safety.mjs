@@ -258,7 +258,7 @@ assert.match(
 const cloudDislikeRestore = functionSource("restoreSocialDislikedTracksFromCloud");
 assert.match(
   cloudDislikeRestore,
-  /cloudDislikedKeys[\s\S]*likedTrackHistory = likedTrackHistory\.filter/,
+  /mergeCloudLibraryEntries/,
   "A cloud rejection must override a stale local like for the same track"
 );
 

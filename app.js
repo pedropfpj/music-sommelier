@@ -10367,6 +10367,10 @@ const profileArtistRecommendationsStatus = document.getElementById("profileArtis
 const profileLibraryKicker = document.getElementById("profileLibraryKicker");
 const profileLibraryTitle = document.getElementById("profileLibraryTitle");
 const profileLibraryHint = document.getElementById("profileLibraryHint");
+const librarySyncStatus = document.getElementById("librarySyncStatus");
+const librarySyncTitle = document.getElementById("librarySyncTitle");
+const librarySyncHint = document.getElementById("librarySyncHint");
+const librarySyncRetryBtn = document.getElementById("librarySyncRetryBtn");
 const summaryLikedTracksTitle = document.getElementById("summaryLikedTracksTitle");
 const summaryLikedTracksHint = document.getElementById("summaryLikedTracksHint");
 const summaryLikedTracksList = document.getElementById("summaryLikedTracksList");
@@ -10550,6 +10554,7 @@ let trackPreviewIssueSignals = new Map();
 let trackRecommendationIssueSignals = new Map();
 let likedTrackHistory = [];
 let dislikedTrackHistory = [];
+let libraryRemovedTrackHistory = [];
 let swipeFeedbackBusy = false;
 let swipeDragState = null;
 let currentDjRecommendation = null;
@@ -10744,7 +10749,12 @@ let socialState = {
   feed: [],
   busy: false,
   syncTimer: null,
-  lastSyncAt: 0
+  lastSyncAt: 0,
+  librarySyncPhase: "idle",
+  librarySyncedSignature: "",
+  librarySyncInProgress: false,
+  librarySyncRequested: false,
+  localSaveState: "unknown"
 };
 let weeklyHighlightsCloudSyncTimer = 0;
 let weeklyHighlightsReminderState = {
@@ -24263,7 +24273,7 @@ const I18N = {
     authGoogleBtn: "Entrar com Google",
     authContinueOnlineBtn: "Continuar com Google",
     authAppleBtn: "Continuar com Apple",
-    authProviderHint: "Com uma conta, suas descobertas aprendem com você e continuam em todos os aparelhos.",
+    authProviderHint: "Use a mesma conta e confirme a sincronização no Perfil para recuperar suas faixas em outro aparelho.",
     authProviderConfigMissing: "{provider} ainda não está disponível. Confira a configuração no Supabase.",
     authStandbyFeedback: "Login online indisponível agora. Você ainda pode continuar sem login.",
     authProviderLoading: "Abrindo {provider}...",
@@ -24764,7 +24774,7 @@ const I18N = {
     apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Biblioteca do radar",
     profileLibraryTitle: "Faixas que ensinaram o radar",
-    profileLibraryHint: "Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.",
+    profileLibraryHint: "Revise suas últimas 80 curtidas e 80 descartes. O estado abaixo confirma onde estas faixas estão salvas.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Leve seu mapa musical com você",
     profileBackupHint: "Baixe uma cópia para usar em outro navegador.",
@@ -25179,7 +25189,7 @@ const I18N = {
     authGoogleBtn: "Sign in with Google",
     authContinueOnlineBtn: "Continue with Google",
     authAppleBtn: "Continue with Apple",
-    authProviderHint: "With an account, your discoveries learn from you and continue across devices.",
+    authProviderHint: "Use the same account and confirm sync in Profile to restore your tracks on another device.",
     authProviderConfigMissing: "{provider} is not available yet. Check the Supabase setup.",
     authStandbyFeedback: "Online login is unavailable right now. You can still continue without login.",
     authProviderLoading: "Opening {provider}...",
@@ -25680,7 +25690,7 @@ const I18N = {
     apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Radar library",
     profileLibraryTitle: "Tracks that taught the radar",
-    profileLibraryHint: "Likes and rejects stay here so you can review them and the app can avoid repeats.",
+    profileLibraryHint: "Review your latest 80 likes and 80 rejected tracks. The status below confirms where these tracks are saved.",
     profileBackupKicker: "Portable local profile",
     profileBackupTitle: "Carry your music map with you",
     profileBackupHint: "Download a copy to use in another browser.",
@@ -26095,7 +26105,7 @@ const I18N = {
     authGoogleBtn: "Entrar con Google",
     authContinueOnlineBtn: "Continuar con Google",
     authAppleBtn: "Continuar con Apple",
-    authProviderHint: "Con una cuenta, tus descubrimientos aprenden de ti y continúan entre dispositivos.",
+    authProviderHint: "Usa la misma cuenta y confirma la sincronización en Perfil para recuperar tus pistas en otro dispositivo.",
     authProviderConfigMissing: "{provider} todavía no está disponible. Revisa la configuración en Supabase.",
     authStandbyFeedback: "El login online no está disponible ahora. Puedes continuar sin login.",
     authProviderLoading: "Abriendo {provider}...",
@@ -26596,7 +26606,7 @@ const I18N = {
     apiHealthBackendOnly: "backend-only",
     profileLibraryKicker: "Biblioteca del radar",
     profileLibraryTitle: "Pistas que enseñaron al radar",
-    profileLibraryHint: "Likes y descartes quedan aquí para revisar y evitar repetición.",
+    profileLibraryHint: "Revisa tus últimos 80 likes y 80 descartes. El estado de abajo confirma dónde están guardadas estas pistas.",
     profileBackupKicker: "Perfil local portátil",
     profileBackupTitle: "Lleva tu mapa musical contigo",
     profileBackupHint: "Descarga una copia para usarla en otro navegador.",
@@ -30591,6 +30601,7 @@ function resetSessionStateInMemory() {
   trackRecommendationIssueSignals = new Map();
   likedTrackHistory = [];
   dislikedTrackHistory = [];
+  libraryRemovedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   youtubePreviewSearchAttempt = 0;
@@ -30730,6 +30741,8 @@ function resetSessionUiState() {
 
 function activateUserSession(session) {
   const normalizedSession = normalizeUserSession(session);
+  socialState.localSaveState = "unknown";
+  if (sessionProfileKey(normalizedSession) !== sessionProfileKey(currentAuthUser)) resetLibrarySyncState();
   if (weeklyHighlightsCloudSyncTimer) window.clearTimeout(weeklyHighlightsCloudSyncTimer);
   weeklyHighlightsCloudSyncTimer = 0;
   beginRecommendationSession(normalizedSession);
@@ -33320,9 +33333,9 @@ function networkStatusCopy(online = false) {
   return {
     title: sonicTinyCopy("Sem internet", "You're offline", "Sin conexión"),
     text: sonicTinyCopy(
-      "Curtidas e seu perfil continuam salvos neste aparelho. Áudio e recursos online voltam ao reconectar.",
-      "Likes and your profile stay saved on this device. Audio and online features return when you reconnect.",
-      "Tus Me gusta y tu perfil siguen guardados en este dispositivo. El audio y las funciones online vuelven al reconectarte."
+      "Você pode revisar as faixas carregadas. Confira no Perfil se estão salvas neste aparelho ou apenas nesta sessão. Áudio e sincronização precisam de conexão.",
+      "You can review loaded tracks. Check Profile to see whether they are saved on this device or only in this session. Audio and sync need a connection.",
+      "Puedes revisar las pistas cargadas. Comprueba en Perfil si están guardadas en este dispositivo o solo en esta sesión. El audio y la sincronización necesitan conexión."
     )
   };
 }
@@ -33356,8 +33369,12 @@ function renderNetworkStatus({ recovered = false } = {}) {
 function setupNetworkStatusAwareness() {
   if (networkStatusListenersReady) return;
   networkStatusListenersReady = true;
-  window.addEventListener("offline", () => renderNetworkStatus());
-  window.addEventListener("online", () => renderNetworkStatus({ recovered: true }));
+  window.addEventListener("offline", () => { renderNetworkStatus(); renderSocialUi({ preserveStatus: true }); });
+  window.addEventListener("online", () => {
+    renderNetworkStatus({ recovered: true });
+    renderSocialUi({ preserveStatus: true });
+    if (socialState.session?.access_token) queueSocialSync("reconnect");
+  });
   renderNetworkStatus();
 }
 
@@ -34577,65 +34594,76 @@ function registerSeenArtist(artistName) {
   addArtistKeysToSet(seenArtistsMemory, artistName);
 }
 
+function buildProgressSnapshot() {
+  recalculateRatingStats();
+  return {
+    stats: {
+      likedSongs: totalLikedSongs(),
+      likedArtists: Number(userStats.likedArtists) || 0,
+      likedDiscoveries: Number(userStats.likedDiscoveries) || 0,
+      alreadyKnew: Number(userStats.alreadyKnew) || 0,
+      skipped: Number(userStats.skipped) || 0,
+      ratingCount: Number(userStats.ratingCount) || 0,
+      ratingSum: Number(userStats.ratingSum) || 0,
+      swipeTrainingSignals: Number(userStats.swipeTrainingSignals) || 0,
+      lastSwipeLearningMilestone: Number(userStats.lastSwipeLearningMilestone) || 0
+    },
+    adaptiveModel: {
+      likedStyles: mapEntriesForStorage(adaptiveModel.likedStyles),
+      dislikedStyles: mapEntriesForStorage(adaptiveModel.dislikedStyles),
+      likedArtists: mapEntriesForStorage(adaptiveModel.likedArtists),
+      dislikedArtists: mapEntriesForStorage(adaptiveModel.dislikedArtists),
+      likedEnergies: mapEntriesForStorage(adaptiveModel.likedEnergies),
+      dislikedEnergies: mapEntriesForStorage(adaptiveModel.dislikedEnergies)
+    },
+    spiritSignals: mapEntriesForStorage(spiritSignalsByStyle),
+    spiritState: {
+      currentSpiritId: typeof currentSpiritId === "string" ? currentSpiritId : "",
+      lastReviewedSongLikes: Math.max(0, Number(spiritLastReviewedSongLikes) || 0)
+    },
+    blockedArtists: setValuesForStorage(blockedArtistsMemory),
+    discoveredArtistsInApp: setValuesForStorage(discoveredArtistsInApp),
+    seenArtistsMemory: setValuesForStorage(seenArtistsMemory),
+    recentPresentedArtists: recentPresentedArtists.slice(-RECENT_PRESENTED_ARTIST_LIMIT),
+    seenTrackKeysMemory: setValuesForStorage(seenTrackKeysMemory),
+    seenRecordingIdsMemory: setValuesForStorage(seenRecordingIdsMemory),
+    recordingIdentityVersion: 2,
+    knownTrackTitlesMemory: setValuesForStorage(knownTrackTitlesMemory),
+    explicitKnownTrackTitles: setValuesForStorage(knownTrackTitlesMemory),
+    legacyKnownTrackTitles: setValuesForStorage(legacyKnownTrackTitlesMemory),
+    trackRatings: mapEntriesForStorage(trackRatings),
+    trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
+    trackPreferenceSignals: mapEntriesForStorage(trackPreferenceSignals),
+    likedTrackHistory: sanitizeLikedTrackHistory(likedTrackHistory),
+    dislikedTrackHistory: sanitizeLikedTrackHistory(dislikedTrackHistory),
+    libraryRemovedTrackHistory,
+    trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
+    trackRecommendationIssueSignals: mapEntriesForStorage(trackRecommendationIssueSignals),
+    previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
+    quiz: {
+      attemptsByStyle: mapEntriesForStorage(quizAttemptsByStyle, 120),
+      bestScoreByStyle: mapEntriesForStorage(quizBestScoreByStyle, 120),
+      nextOfferCountByStyle: mapEntriesForStorage(quizNextOfferCountByStyle, 120)
+    }
+  };
+}
+
 function saveProgress() {
   if (!progressStorageReady) return;
   const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
-  if (!progressKey) return;
-  try {
-    recalculateRatingStats();
-    const payload = {
-      stats: {
-        likedSongs: totalLikedSongs(),
-        likedArtists: Number(userStats.likedArtists) || 0,
-        likedDiscoveries: Number(userStats.likedDiscoveries) || 0,
-        alreadyKnew: Number(userStats.alreadyKnew) || 0,
-        skipped: Number(userStats.skipped) || 0,
-        ratingCount: Number(userStats.ratingCount) || 0,
-        ratingSum: Number(userStats.ratingSum) || 0,
-        swipeTrainingSignals: Number(userStats.swipeTrainingSignals) || 0,
-        lastSwipeLearningMilestone: Number(userStats.lastSwipeLearningMilestone) || 0
-      },
-      adaptiveModel: {
-        likedStyles: mapEntriesForStorage(adaptiveModel.likedStyles),
-        dislikedStyles: mapEntriesForStorage(adaptiveModel.dislikedStyles),
-        likedArtists: mapEntriesForStorage(adaptiveModel.likedArtists),
-        dislikedArtists: mapEntriesForStorage(adaptiveModel.dislikedArtists),
-        likedEnergies: mapEntriesForStorage(adaptiveModel.likedEnergies),
-        dislikedEnergies: mapEntriesForStorage(adaptiveModel.dislikedEnergies)
-      },
-      spiritSignals: mapEntriesForStorage(spiritSignalsByStyle),
-      spiritState: {
-        currentSpiritId: typeof currentSpiritId === "string" ? currentSpiritId : "",
-        lastReviewedSongLikes: Math.max(0, Number(spiritLastReviewedSongLikes) || 0)
-      },
-      blockedArtists: setValuesForStorage(blockedArtistsMemory),
-      discoveredArtistsInApp: setValuesForStorage(discoveredArtistsInApp),
-      seenArtistsMemory: setValuesForStorage(seenArtistsMemory),
-      recentPresentedArtists: recentPresentedArtists.slice(-RECENT_PRESENTED_ARTIST_LIMIT),
-      seenTrackKeysMemory: setValuesForStorage(seenTrackKeysMemory),
-      seenRecordingIdsMemory: setValuesForStorage(seenRecordingIdsMemory),
-      recordingIdentityVersion: 2,
-      knownTrackTitlesMemory: setValuesForStorage(knownTrackTitlesMemory),
-      explicitKnownTrackTitles: setValuesForStorage(knownTrackTitlesMemory),
-      legacyKnownTrackTitles: setValuesForStorage(legacyKnownTrackTitlesMemory),
-      trackRatings: mapEntriesForStorage(trackRatings),
-      trackRatingSignals: mapEntriesForStorage(trackRatingSignals),
-      trackPreferenceSignals: mapEntriesForStorage(trackPreferenceSignals),
-      likedTrackHistory: sanitizeLikedTrackHistory(likedTrackHistory),
-      dislikedTrackHistory: sanitizeLikedTrackHistory(dislikedTrackHistory),
-      trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
-      trackRecommendationIssueSignals: mapEntriesForStorage(trackRecommendationIssueSignals),
-      previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
-      quiz: {
-        attemptsByStyle: mapEntriesForStorage(quizAttemptsByStyle, 120),
-        bestScoreByStyle: mapEntriesForStorage(quizBestScoreByStyle, 120),
-        nextOfferCountByStyle: mapEntriesForStorage(quizNextOfferCountByStyle, 120)
-      }
-    };
-    localStorage.setItem(progressKey, JSON.stringify(payload));
-  } catch (_e) {
-    // ignore storage failures
+  if (!progressKey) {
+    socialState.localSaveState = "session";
+    renderLibrarySyncStatus();
+    return;
   }
+  try {
+    const payload = buildProgressSnapshot();
+    localStorage.setItem(progressKey, JSON.stringify(payload));
+    socialState.localSaveState = "saved";
+  } catch (_e) {
+    socialState.localSaveState = "unavailable";
+  }
+  renderLibrarySyncStatus();
 }
 
 function loadProgress() {
@@ -34674,6 +34702,7 @@ function loadProgress() {
   trackRecommendationIssueSignals = new Map();
   likedTrackHistory = [];
   dislikedTrackHistory = [];
+  libraryRemovedTrackHistory = [];
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
 
@@ -34728,6 +34757,8 @@ function loadProgress() {
         hydrateMapFromStorage(trackPreferenceSignals, parsed?.trackPreferenceSignals);
         likedTrackHistory = sanitizeLikedTrackHistory(parsed?.likedTrackHistory);
         dislikedTrackHistory = sanitizeLikedTrackHistory(parsed?.dislikedTrackHistory);
+        libraryRemovedTrackHistory = Array.isArray(parsed?.libraryRemovedTrackHistory)
+          ? parsed.libraryRemovedTrackHistory.map(entry => likedTrackHistoryEntry(entry, "library_removed", entry?.likedAt || "")).filter(Boolean) : [];
         hydrateMapFromStorage(trackPreviewIssueSignals, parsed?.trackPreviewIssueSignals);
         hydrateMapFromStorage(trackRecommendationIssueSignals, parsed?.trackRecommendationIssueSignals);
         hydrateMapFromStorage(previewReliabilityByStyle, parsed?.previewReliabilityByStyle);
@@ -34749,6 +34780,9 @@ function loadProgress() {
   if (!dislikedTrackHistory.length) {
     dislikedTrackHistory = backfillDislikedTrackHistoryFromSignals();
   }
+  const removedLibraryKeys = new Set(libraryRemovedTrackHistory.map(likedTrackKeyFromEntry));
+  likedTrackHistory = likedTrackHistory.filter(entry => !removedLibraryKeys.has(likedTrackKeyFromEntry(entry)));
+  dislikedTrackHistory = dislikedTrackHistory.filter(entry => !removedLibraryKeys.has(likedTrackKeyFromEntry(entry)));
   [...likedTrackHistory, ...dislikedTrackHistory].forEach((entry) => {
     const trackKey = likedTrackKeyFromEntry(entry);
     if (trackKey) seenTrackKeysMemory.add(trackKey);
@@ -34846,8 +34880,6 @@ function buildProfileBackupPayload() {
   savePreferences();
   saveProgress();
   const session = normalizeUserSession(currentAuthUser);
-  const preferencesKey = storageKeyForSession(STORAGE_KEY);
-  const progressKey = storageKeyForSession(PROGRESS_STORAGE_KEY);
   const collectibleKey = storageKeyForSession(SPIRIT_COLLECTIBLE_STORAGE_KEY);
   const artSeedKey = storageKeyForSession(SPIRIT_ART_SEED_STORAGE_KEY);
   const calibrationKey = storageKeyForSession(INITIAL_TASTE_CALIBRATION_STORAGE_KEY);
@@ -34859,16 +34891,17 @@ function buildProfileBackupPayload() {
     exportedAt,
     profileKey: sessionProfileKey(session),
     session: {
-      mode: session.mode,
+      mode: isEphemeralSession(session) ? "guest" : session.mode,
       username: session.username,
       email: session.email,
-      provider: session.provider
+      provider: session.provider,
+      providerId: session.providerId
     },
     data: {
-      preferences: safeReadJsonStorage(preferencesKey),
-      progress: safeReadJsonStorage(progressKey),
+      preferences: buildPreferencesSnapshot(),
+      progress: buildProgressSnapshot(),
       collectible: safeReadJsonStorage(collectibleKey),
-      artSeed: artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : "",
+      artSeed: (() => { try { return artSeedKey ? String(localStorage.getItem(artSeedKey) || "") : ""; } catch { return ""; } })(),
       initialTasteCalibration: safeReadJsonStorage(calibrationKey),
       djRecommendations: safeReadJsonStorage(djRecommendationsKey),
       rockPreview: safeReadJsonStorage(legacyRockPreviewStorageKey(sessionProfileKey(session))),
@@ -34890,7 +34923,7 @@ function exportProfileBackup() {
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt);
+    try { localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt); } catch { /* The downloaded backup remains usable without local storage. */ }
     updateProfileBackupStatus();
     showToast(t("profileBackupExported"));
   } catch (_err) {
@@ -34911,6 +34944,8 @@ function validProfileBackupPayload(payload) {
 function restoreProfileBackupPayload(payload) {
   if (!validProfileBackupPayload(payload)) return false;
   let targetSession = normalizeUserSession(payload.session || currentAuthUser || { mode: "guest", username: "" });
+  if (targetSession.mode === "visitor") targetSession = normalizeUserSession({ mode: "guest", username: "" });
+  ephemeralProfileMode = false;
   if (!sessionProfileKey(targetSession)) {
     targetSession = normalizeUserSession(currentAuthUser || { mode: "guest", username: "" });
   }
@@ -35034,20 +35069,24 @@ function loadDynamicCatalogCache() {
   }
 }
 
+function buildPreferencesSnapshot() {
+  return {
+    style: styleEl?.value || "",
+    context: contextEl?.value || "",
+    energy: energyEl?.value || "",
+    bpm: bpmEl?.value || "",
+    vocals: vocalsEl?.value || "",
+    discoveryMode: Boolean(discoveryModeEl?.checked),
+    knownArtists: knownArtistsEl?.value || "",
+    weights: getWeights()
+  };
+}
+
 function savePreferences() {
   const preferencesKey = storageKeyForSession(STORAGE_KEY);
   if (!preferencesKey) return;
   try {
-    const payload = {
-      style: styleEl?.value || "",
-      context: contextEl?.value || "",
-      energy: energyEl?.value || "",
-      bpm: bpmEl?.value || "",
-      vocals: vocalsEl?.value || "",
-      discoveryMode: Boolean(discoveryModeEl?.checked),
-      knownArtists: knownArtistsEl?.value || "",
-      weights: getWeights()
-    };
+    const payload = buildPreferencesSnapshot();
     localStorage.setItem(preferencesKey, JSON.stringify(payload));
   } catch (_e) {
     // ignore storage failures
@@ -58466,6 +58505,7 @@ function backfillDislikedTrackHistoryFromSignals(limit = LIKED_TRACK_HISTORY_LIM
 function rememberLikedTrack(track, source = "liked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  libraryRemovedTrackHistory = libraryRemovedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== entry.key);
   rememberRecordingIdentity(track);
   if (entry.key) seenTrackKeysMemory.add(entry.key);
   removeDislikedTrackFromHistory(entry.key, { render: false, save: false, silent: true });
@@ -58482,6 +58522,7 @@ function rememberLikedTrack(track, source = "liked") {
 function rememberDislikedTrack(track, source = "disliked") {
   const entry = likedTrackHistoryEntry(track, source, new Date().toISOString());
   if (!entry) return;
+  libraryRemovedTrackHistory = libraryRemovedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== entry.key);
   rememberRecordingIdentity(track);
   if (entry.key) seenTrackKeysMemory.add(entry.key);
 
@@ -58792,9 +58833,11 @@ function renderLikedTrackHistory() {
 function removeLikedTrackFromHistory(trackKey = "", options = {}) {
   const normalizedKey = normalize(trackKey || "");
   if (!normalizedKey) return false;
+  const removed = likedTrackHistory.find(entry => likedTrackKeyFromEntry(entry) === normalizedKey);
   const before = likedTrackHistory.length;
   likedTrackHistory = likedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (likedTrackHistory.length === before) return false;
+  if (options.save !== false) rememberLibraryRemoval(removed);
   if (options.render !== false) renderLikedTrackHistory();
   if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
@@ -58804,6 +58847,7 @@ function removeLikedTrackFromHistory(trackKey = "", options = {}) {
 
 function clearLikedTrackHistory() {
   if (!likedTrackHistory.length) return;
+  likedTrackHistory.forEach(rememberLibraryRemoval);
   likedTrackHistory = [];
   renderLikedTrackHistory();
   renderWeeklyHighlights();
@@ -58906,9 +58950,11 @@ function renderDislikedTrackHistory() {
 function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
   const normalizedKey = normalize(trackKey || "");
   if (!normalizedKey) return false;
+  const removed = dislikedTrackHistory.find(entry => likedTrackKeyFromEntry(entry) === normalizedKey);
   const before = dislikedTrackHistory.length;
   dislikedTrackHistory = dislikedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (dislikedTrackHistory.length === before) return false;
+  if (options.save !== false) rememberLibraryRemoval(removed);
   if (options.render !== false) renderDislikedTrackHistory();
   if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
@@ -58918,6 +58964,7 @@ function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
 
 function clearDislikedTrackHistory() {
   if (!dislikedTrackHistory.length) return;
+  dislikedTrackHistory.forEach(rememberLibraryRemoval);
   dislikedTrackHistory = [];
   renderDislikedTrackHistory();
   renderWeeklyHighlights();
@@ -58939,6 +58986,7 @@ function socialSetStatus(message = "", tone = "") {
 
 function socialStoreSession(session = null) {
   if (socialState.session?.user?.id !== session?.user?.id) {
+    resetLibrarySyncState();
     socialState.profile = null;
     socialState.profileAvatarUrl = "";
     socialCommentsState.loadToken += 1;
@@ -58999,6 +59047,9 @@ function socialStoredRefreshToken(session = socialState.session) {
 }
 
 async function socialRefreshSession(options = {}) {
+  let invalidSession = false;
+  const originalUserId = socialState.session?.user?.id;
+  const originalAccessToken = socialState.session?.access_token;
   if (!socialConfigReady()) return false;
   const refreshToken = socialStoredRefreshToken();
   if (!refreshToken) {
@@ -59011,6 +59062,7 @@ async function socialRefreshSession(options = {}) {
       headers: socialHeaders({ auth: false }),
       body: JSON.stringify({ refresh_token: refreshToken })
     });
+    if (originalUserId !== socialState.session?.user?.id || originalAccessToken !== socialState.session?.access_token) return false;
     const text = await response.text();
     let payload = null;
     if (text) {
@@ -59021,6 +59073,7 @@ async function socialRefreshSession(options = {}) {
       }
     }
     if (!response.ok) {
+      invalidSession = [400, 401, 403].includes(response.status);
       const detail = payload?.msg || payload?.message || payload?.error_description || payload?.error || response.statusText;
       throw new Error(String(detail || sonicTinyCopy(
         "Não consegui renovar a sessão.",
@@ -59044,11 +59097,12 @@ async function socialRefreshSession(options = {}) {
     if (!nextSession.access_token || !nextSession.user?.id) {
       throw new Error("Sessão Supabase incompleta.");
     }
+    if (originalUserId !== socialState.session?.user?.id || originalAccessToken !== socialState.session?.access_token) return false;
     socialStoreSession(nextSession);
     return true;
   } catch (error) {
     console.warn("Could not refresh social session", error);
-    if (options.clearOnFailure) socialStoreSession(null);
+    if (options.clearOnFailure && invalidSession && originalUserId === socialState.session?.user?.id && originalAccessToken === socialState.session?.access_token) socialStoreSession(null);
     return false;
   }
 }
@@ -59371,9 +59425,12 @@ function socialHeaders({ auth = true, prefer = "" } = {}) {
 async function socialRequest(path, options = {}) {
   if (!socialConfigReady()) throw new Error("Supabase social ainda não está configurado.");
   if (options.auth !== false && socialState.session?.access_token) {
-    await ensureFreshSocialSession({ clearOnFailure: true });
+    const userId = socialState.session.user?.id;
+    const fresh = await ensureFreshSocialSession({ clearOnFailure: true });
+    if (!fresh || userId !== socialState.session?.user?.id) throw new Error("session_changed_or_expired");
   }
   const response = await fetch(socialApiUrl(path), {
+    signal: AbortSignal.timeout(15000),
     method: options.method || "GET",
     headers: {
       ...socialHeaders({ auth: options.auth !== false, prefer: options.prefer || "" }),
@@ -59856,7 +59913,7 @@ function socialCurrentProfilePayload() {
 function socialTrackRowsForSync() {
   const userId = socialState.session?.user?.id;
   if (!userId) return [];
-  return likedTrackHistory.slice(0, SOCIAL_SYNC_LIMIT).map((entry) => ({
+  return likedTrackHistory.map((entry) => ({
     user_id: userId,
     target_type: "track",
     target_key: likedTrackKeyFromEntry(entry),
@@ -59872,6 +59929,8 @@ function socialTrackRowsForSync() {
       spotifyUrl: entry.spotifyUrl || "",
       youtubeUrl: entry.youtubeUrl || "",
       soundcloudUrl: entry.soundcloudUrl || "",
+      isrc: entry.isrc || "",
+      recordingMusicBrainzId: entry.recordingMusicBrainzId || "",
       likedAt: entry.likedAt || ""
     },
     created_at: entry.likedAt || new Date().toISOString()
@@ -59881,7 +59940,7 @@ function socialTrackRowsForSync() {
 function socialDislikedTrackRowsForSync() {
   const userId = socialState.session?.user?.id;
   if (!userId) return [];
-  return dislikedTrackHistory.slice(0, SOCIAL_SYNC_LIMIT).map((entry) => ({
+  return dislikedTrackHistory.map((entry) => ({
     user_id: userId,
     target_key: likedTrackKeyFromEntry(entry),
     sentiment: "disliked",
@@ -59898,6 +59957,8 @@ function socialDislikedTrackRowsForSync() {
       spotifyUrl: entry.spotifyUrl || "",
       youtubeUrl: entry.youtubeUrl || "",
       soundcloudUrl: entry.soundcloudUrl || "",
+      isrc: entry.isrc || "",
+      recordingMusicBrainzId: entry.recordingMusicBrainzId || "",
       dislikedAt: entry.likedAt || ""
     },
     first_seen_at: entry.likedAt || new Date().toISOString(),
@@ -59929,9 +59990,11 @@ function socialLikedTrackFromRow(row = {}) {
     label: metadata.label || "",
     spotifyUrl: metadata.spotifyUrl || "",
     youtubeUrl: metadata.youtubeUrl || "",
-    soundcloudUrl: metadata.soundcloudUrl || ""
+    soundcloudUrl: metadata.soundcloudUrl || "",
+    isrc: metadata.isrc || "",
+    recordingMusicBrainzId: metadata.recordingMusicBrainzId || ""
   };
-  return likedTrackHistoryEntry(track, row.source || "cloud_like", metadata.likedAt || row.created_at || "");
+  return likedTrackHistoryEntry(track, row.source || "cloud_like", metadata.likedAt || row.created_at || row.first_seen_at || "");
 }
 
 function socialDislikedTrackFromRow(row = {}) {
@@ -59947,12 +60010,14 @@ function socialDislikedTrackFromRow(row = {}) {
     label: metadata.label || "",
     spotifyUrl: metadata.spotifyUrl || "",
     youtubeUrl: metadata.youtubeUrl || "",
-    soundcloudUrl: metadata.soundcloudUrl || ""
+    soundcloudUrl: metadata.soundcloudUrl || "",
+    isrc: metadata.isrc || "",
+    recordingMusicBrainzId: metadata.recordingMusicBrainzId || ""
   };
   return likedTrackHistoryEntry(
     track,
     row.source || row.reason || "cloud_dislike",
-    metadata.dislikedAt || row.updated_at || row.first_seen_at || ""
+    metadata.removedAt || metadata.dislikedAt || row.updated_at || row.first_seen_at || ""
   );
 }
 
@@ -60018,124 +60083,184 @@ function ensureOnlineSocialUserSession() {
   return true;
 }
 
+function resetLibrarySyncState() {
+  socialState.lastSyncAt = 0;
+  socialState.librarySyncPhase = "idle";
+  socialState.librarySyncedSignature = "";
+  socialState.librarySyncRequested = false;
+  if (socialState.syncTimer) clearTimeout(socialState.syncTimer);
+  socialState.syncTimer = null;
+}
+
+function libraryHistorySignature() {
+  return JSON.stringify([likedTrackHistory, dislikedTrackHistory, libraryRemovedTrackHistory].map(entries =>
+    entries.map(entry => [likedTrackKeyFromEntry(entry), entry.likedAt || ""]).sort((a, b) => a[0].localeCompare(b[0]))
+  ));
+}
+
+function librarySessionIdentity() {
+  return `${socialState.session?.user?.id || ""}:${sessionProfileKey(currentAuthUser)}`;
+}
+
+function rememberLibraryRemoval(entry) {
+  if (!entry) return;
+  const removal = { ...entry, source: "library_removed", likedAt: new Date().toISOString() };
+  libraryRemovedTrackHistory = [removal, ...libraryRemovedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== likedTrackKeyFromEntry(entry))];
+  queueSocialSync("library_removed");
+}
+
+// Merge by the original action time, not the time an old device reconnects.
+function mergeCloudLibraryEntries(entries = [], sentiment = "liked") {
+  const imported = [];
+  const date = entry => Date.parse(entry?.likedAt || "") || 0;
+  const priority = { liked: 1, disliked: 2, removed: 3 };
+  for (const entry of entries) {
+    const key = likedTrackKeyFromEntry(entry);
+    if (!entry || !key) continue;
+    const histories = [["liked", likedTrackHistory], ["disliked", dislikedTrackHistory], ["removed", libraryRemovedTrackHistory]];
+    const existing = histories.flatMap(([type, items]) => items.filter(item => likedTrackKeyFromEntry(item) === key).map(item => ({ type, item })));
+    if (existing.some(({ type, item }) => date(item) > date(entry) || (date(item) === date(entry) && priority[type] >= priority[sentiment]))) continue;
+    likedTrackHistory = likedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
+    dislikedTrackHistory = dislikedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
+    libraryRemovedTrackHistory = libraryRemovedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
+    if (sentiment === "liked") likedTrackHistory.push(entry);
+    else if (sentiment === "disliked") dislikedTrackHistory.push(entry);
+    else libraryRemovedTrackHistory.push(entry);
+    imported.push(entry);
+  }
+  likedTrackHistory = sanitizeLikedTrackHistory(likedTrackHistory.sort((a, b) => date(b) - date(a)));
+  dislikedTrackHistory = sanitizeLikedTrackHistory(dislikedTrackHistory.sort((a, b) => date(b) - date(a)));
+  return imported;
+}
+
+function socialLibraryFeedbackRowsForSync() {
+  const likedRows = socialTrackRowsForSync().map(({ target_type, created_at, ...row }) => ({
+    ...row, sentiment: "liked", first_seen_at: created_at, updated_at: created_at
+  }));
+  const removals = libraryRemovedTrackHistory.map(entry => ({
+    user_id: socialState.session?.user?.id, target_key: likedTrackKeyFromEntry(entry),
+    sentiment: "skipped", artist: entry.artist, song: entry.song, style: entry.style,
+    source: "library_removed", metadata: { removedAt: entry.likedAt }, updated_at: entry.likedAt
+  }));
+  return [...likedRows, ...socialDislikedTrackRowsForSync(), ...removals];
+}
+
+function librarySyncCopy() {
+  const copy = (pt, en, es) => sonicTinyCopy(pt, en, es);
+  const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+  const signed = Boolean(socialState.session?.access_token);
+  if (socialState.localSaveState === "unavailable") return { phase: "error", title: copy("Ainda sem cópia neste aparelho", "No saved copy on this device yet", "Aún sin copia en este dispositivo"), hint: copy("O armazenamento está indisponível. Exporte um backup antes de sair.", "Storage is unavailable. Export a backup before leaving.", "El almacenamiento no está disponible. Exporta una copia antes de salir.") };
+  if (isEphemeralSession(normalizeUserSession(currentAuthUser))) return { phase: "local", title: copy("Nesta sessão", "This session", "En esta sesión"), hint: copy("Sem login, este teste começa do zero a cada entrada. Exporte um backup para guardar as faixas.", "Without sign-in, this trial starts fresh each time. Export a backup to keep your tracks.", "Sin login, esta prueba empieza de cero al entrar. Exporta una copia para guardar tus pistas.") };
+  const local = socialState.localSaveState === "saved"
+    ? copy("Salvas neste aparelho", "Saved on this device", "Guardadas en este dispositivo")
+    : copy("Faixas nesta sessão", "Tracks in this session", "Pistas en esta sesión");
+  if (offline) return { phase: "offline", title: local, hint: signed ? copy("Sem internet. A sincronização será tentada ao reconectar.", "Offline. Sync will retry when you reconnect.", "Sin conexión. Se reintentará la sincronización al volver.") : copy("Sem internet. Use a mesma conta online para sincronizar quando a conexão voltar.", "Offline. Use the same online account to sync when connected.", "Sin conexión. Usa la misma cuenta online para sincronizar al volver.") };
+  if (!socialConfigReady()) return { phase: "local", title: local, hint: copy("A sincronização online está indisponível. Você pode exportar um backup do perfil.", "Online sync is unavailable. You can export a profile backup.", "La sincronización online no está disponible. Puedes exportar una copia del perfil.") };
+  if (!signed) return { phase: "local", title: local, hint: copy("Entre com a mesma conta para sincronizar entre aparelhos. Login e sincronização são etapas separadas.", "Sign in to the same account to sync across devices. Sign-in and sync are separate steps.", "Entra con la misma cuenta para sincronizar entre dispositivos. Login y sincronización son pasos separados.") };
+  if (socialSessionExpiresSoon(socialState.session, 0)) return { phase: "pending", title: local, hint: copy("A sessão precisa ser renovada. Tente sincronizar ou entre novamente.", "Your session needs renewal. Retry sync or sign in again.", "Tu sesión necesita renovarse. Reintenta sincronizar o entra de nuevo.") };
+  if (socialState.librarySyncPhase === "syncing") return { phase: "syncing", title: copy("Sincronizando faixas…", "Syncing tracks…", "Sincronizando pistas…"), hint: copy("Conferindo curtidas e descartes da sua conta. A cópia local continua disponível.", "Checking your account's likes and rejected tracks. Your local copy remains available.", "Comprobando los likes y descartes de tu cuenta. Tu copia local sigue disponible.") };
+  if (socialState.librarySyncPhase === "error") return { phase: "error", title: local, hint: copy("Não foi possível confirmar a sincronização. Suas faixas locais continuam aqui; tente novamente.", "Sync could not be confirmed. Your local tracks remain here; try again.", "No se pudo confirmar la sincronización. Tus pistas locales siguen aquí; reinténtalo.") };
+  if (socialState.lastSyncAt && socialState.librarySyncedSignature === libraryHistorySignature()) return { phase: "synced", title: copy("Curtidas e descartes sincronizados", "Likes and rejected tracks synced", "Likes y descartes sincronizados"), hint: copy("Confirmado nesta sessão. Use a mesma conta no outro aparelho e sincronize para recuperar estas faixas.", "Confirmed this session. Use the same account on another device and sync to restore these tracks.", "Confirmado en esta sesión. Usa la misma cuenta en otro dispositivo y sincroniza para recuperar estas pistas.") };
+  return { phase: "pending", title: local, hint: copy("Há uma sincronização a confirmar. A conta conectada, sozinha, não confirma o envio das faixas.", "Sync is awaiting confirmation. Being signed in alone does not confirm your tracks were uploaded.", "Hay una sincronización por confirmar. Tener la cuenta conectada no confirma el envío de las pistas.") };
+}
+
+function libraryStorageUiCopy() {
+  const state = librarySyncCopy();
+  let saveHint;
+  if (isEphemeralSession(normalizeUserSession(currentAuthUser))) {
+    saveHint = sonicTinyCopy("Curta para guardar nesta sessão. Exporte um backup no Perfil para manter estas faixas depois de sair.", "Like to save in this session. Export a backup in Profile to keep these tracks after leaving.", "Dale me gusta para guardar en esta sesión. Exporta una copia en Perfil para conservar estas pistas al salir.");
+  } else if (state.phase === "synced") {
+    saveHint = sonicTinyCopy("Curta para guardar. A última sincronização da biblioteca foi confirmada.", "Like to save. The last library sync was confirmed.", "Dale me gusta para guardar. Se confirmó la última sincronización de la biblioteca.");
+  } else if (state.phase === "syncing") {
+    saveHint = sonicTinyCopy("Curta para guardar. Sincronizando sua biblioteca…", "Like to save. Syncing your library…", "Dale me gusta para guardar. Sincronizando tu biblioteca…");
+  } else if (socialState.localSaveState === "unavailable") {
+    saveHint = sonicTinyCopy("Confira no Perfil: ainda não foi possível guardar uma cópia neste aparelho.", "Check Profile: a copy could not be saved on this device yet.", "Comprueba Perfil: aún no se pudo guardar una copia en este dispositivo.");
+  } else {
+    saveHint = sonicTinyCopy("Curta para guardar neste aparelho. Confira a sincronização no Perfil.", "Like to save on this device. Check sync status in Profile.", "Dale me gusta para guardar en este dispositivo. Comprueba la sincronización en Perfil.");
+  }
+  return { saveHint, libraryHint: t("profileLibraryHint") };
+}
+
+function renderLibrarySyncStatus() {
+  const copy = librarySyncCopy();
+  const storageCopy = libraryStorageUiCopy();
+  if (typeof document !== "undefined" && document.querySelectorAll) {
+    document.querySelectorAll('[data-web-copy="saveHint"]').forEach(element => { element.textContent = storageCopy.saveHint; });
+  }
+  if (typeof profileLibraryHint !== "undefined" && profileLibraryHint) profileLibraryHint.textContent = storageCopy.libraryHint;
+  if (librarySyncStatus) librarySyncStatus.dataset.state = copy.phase;
+  if (librarySyncTitle) librarySyncTitle.textContent = copy.title;
+  if (librarySyncHint) librarySyncHint.textContent = copy.hint;
+  if (librarySyncRetryBtn) {
+    librarySyncRetryBtn.hidden = !socialState.session?.access_token || !socialConfigReady();
+    librarySyncRetryBtn.disabled = copy.phase === "syncing" || (typeof navigator !== "undefined" && navigator.onLine === false);
+    librarySyncRetryBtn.textContent = sonicTinyCopy("Sincronizar agora", "Sync now", "Sincronizar ahora");
+  }
+  return copy;
+}
+
+async function socialLibraryRowsFromCloud(path, params, identity) {
+  const all = [];
+  for (let offset = 0; offset < 10000; offset += SOCIAL_CLOUD_RESTORE_LIMIT) {
+    params.set("offset", String(offset));
+    const rows = await socialRequest(`${path}?${params.toString()}`);
+    if (identity !== librarySessionIdentity()) throw new Error("session_changed");
+    if (!Array.isArray(rows)) throw new Error("invalid_library_response");
+    all.push(...rows);
+    if (rows.length < SOCIAL_CLOUD_RESTORE_LIMIT) return all;
+  }
+  throw new Error("library_restore_incomplete");
+}
+
 async function restoreSocialLikedTracksFromCloud(options = {}) {
   const userId = socialState.session?.user?.id;
+  const identity = librarySessionIdentity();
   if (!userId || !socialConfigReady()) return 0;
   try {
-    const params = new URLSearchParams({
-      user_id: `eq.${userId}`,
-      target_type: "eq.track",
-      select: "target_key,artist,song,style,source,metadata,created_at",
-      order: "created_at.desc",
-      limit: String(SOCIAL_CLOUD_RESTORE_LIMIT)
-    });
-    const rows = await socialRequest(`/rest/v1/likes?${params.toString()}`);
-    const existing = new Set(likedTrackHistory.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean));
-    const imported = [];
-    (Array.isArray(rows) ? rows : []).forEach((row) => {
-      const entry = socialLikedTrackFromRow(row);
-      const key = likedTrackKeyFromEntry(entry);
-      if (!entry || !key || existing.has(key)) return;
-      existing.add(key);
-      imported.push(entry);
-    });
-    if (!imported.length) {
-      applyCloudLikedTrackSignals([]);
-      updateDiscoverySequenceBadges(currentRecommendation);
-      if (options.render !== false) updateStats();
-      else saveProgress();
-      return 0;
-    }
-    likedTrackHistory = sanitizeLikedTrackHistory([...imported, ...likedTrackHistory]);
-    applyCloudLikedTrackSignals(imported);
-    updateDiscoverySequenceBadges(currentRecommendation);
-    if (options.render !== false) {
-      updateStats();
-      renderLikedTrackHistory();
-    } else {
-      saveProgress();
-    }
-    if (!options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        `Restaurei ${imported.length} curtidas da nuvem.`,
-        `Restored ${imported.length} likes from the cloud.`,
-        `Restauré ${imported.length} likes de la nube.`
-      ), "ok");
-    }
+    const params = new URLSearchParams({ user_id: `eq.${userId}`, target_type: "eq.track",
+      select: "target_key,artist,song,style,source,metadata,created_at", order: "created_at.desc", limit: String(SOCIAL_CLOUD_RESTORE_LIMIT) });
+    const rows = await socialLibraryRowsFromCloud("/rest/v1/likes", params, identity);
+    const imported = mergeCloudLibraryEntries(rows.map(socialLikedTrackFromRow).filter(Boolean), "liked");
+    if (imported.length) applyCloudLikedTrackSignals(imported);
+    else applyCloudLikedTrackSignals([]);
+    saveProgress();
+    if (options.render !== false) { updateStats(); renderLikedTrackHistory(); renderDislikedTrackHistory(); }
     return imported.length;
   } catch (error) {
     console.warn("Could not restore social liked tracks", error);
-    if (!options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        `Não consegui baixar curtidas da nuvem: ${error.message}`,
-        `I could not download cloud likes: ${error.message}`,
-        `No pude descargar likes de la nube: ${error.message}`
-      ), "error");
-    }
+    if (options.strict) throw error;
+    socialState.librarySyncPhase = "error";
+    renderLibrarySyncStatus();
     return 0;
   }
 }
 
 async function restoreSocialDislikedTracksFromCloud(options = {}) {
   const userId = socialState.session?.user?.id;
+  const identity = librarySessionIdentity();
   if (!userId || !socialConfigReady()) return 0;
   try {
-    const params = new URLSearchParams({
-      user_id: `eq.${userId}`,
-      sentiment: "eq.disliked",
-      select: "target_key,artist,song,style,reason,source,metadata,first_seen_at,updated_at",
-      order: "updated_at.desc",
-      limit: String(SOCIAL_CLOUD_RESTORE_LIMIT)
-    });
-    const rows = await socialRequest(`/rest/v1/track_feedback?${params.toString()}`);
-    const existing = new Set(dislikedTrackHistory.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean));
-    const imported = [];
-    const allCloudEntries = [];
-    (Array.isArray(rows) ? rows : []).forEach((row) => {
-      const entry = socialDislikedTrackFromRow(row);
-      const key = likedTrackKeyFromEntry(entry);
-      if (!entry || !key) return;
-      allCloudEntries.push(entry);
-      if (existing.has(key)) return;
-      existing.add(key);
-      imported.push(entry);
-    });
-    const cloudDislikedKeys = new Set(
-      allCloudEntries.map((entry) => likedTrackKeyFromEntry(entry)).filter(Boolean)
-    );
-    if (cloudDislikedKeys.size) {
-      likedTrackHistory = likedTrackHistory.filter(
-        (entry) => !cloudDislikedKeys.has(likedTrackKeyFromEntry(entry))
-      );
+    const params = new URLSearchParams({ user_id: `eq.${userId}`, sentiment: "in.(liked,disliked,skipped)",
+      select: "target_key,sentiment,artist,song,style,reason,source,metadata,first_seen_at,updated_at", order: "updated_at.desc", limit: String(SOCIAL_CLOUD_RESTORE_LIMIT) });
+    const rows = await socialLibraryRowsFromCloud("/rest/v1/track_feedback", params, identity);
+    let imported = 0;
+    for (const row of rows) {
+      const sentiment = row.sentiment === "skipped" && row.source === "library_removed" ? "removed" : row.sentiment;
+      if (!["liked", "disliked", "removed"].includes(sentiment)) continue;
+      const entry = sentiment === "liked" ? socialLikedTrackFromRow(row) : socialDislikedTrackFromRow(row);
+      const accepted = mergeCloudLibraryEntries(entry ? [entry] : [], sentiment);
+      imported += accepted.length;
+      if (sentiment === "disliked") applyCloudDislikedTrackSignals(accepted);
+      else if (sentiment === "liked" && accepted.length) applyCloudLikedTrackSignals(accepted);
     }
-    if (imported.length) {
-      dislikedTrackHistory = sanitizeLikedTrackHistory([...imported, ...dislikedTrackHistory]);
-    }
-    applyCloudDislikedTrackSignals(allCloudEntries);
-    if (options.render !== false) {
-      updateStats();
-      renderLikedTrackHistory();
-      renderDislikedTrackHistory();
-    } else {
-      saveProgress();
-    }
-    if (imported.length && !options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        `Restaurei ${imported.length} descartes da nuvem.`,
-        `Restored ${imported.length} rejected tracks from the cloud.`,
-        `Restauré ${imported.length} pistas descartadas de la nube.`
-      ), "ok");
-    }
-    return imported.length;
+    saveProgress();
+    if (options.render !== false) { updateStats(); renderLikedTrackHistory(); renderDislikedTrackHistory(); }
+    return imported;
   } catch (error) {
     console.warn("Could not restore disliked tracks", error);
-    if (!options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        `Não consegui baixar os descartes da nuvem: ${error.message}`,
-        `I could not download rejected tracks from the cloud: ${error.message}`,
-        `No pude descargar las pistas descartadas de la nube: ${error.message}`
-      ), "error");
-    }
+    if (options.strict) throw error;
+    socialState.librarySyncPhase = "error";
+    renderLibrarySyncStatus();
     return 0;
   }
 }
@@ -60147,6 +60272,7 @@ function hydrateSocialProfileInputs(profile = socialState.profile) {
 }
 
 async function loadSocialProfile(options = {}) {
+  const identity = librarySessionIdentity();
   const userId = socialState.session?.user?.id;
   if (!userId || !socialConfigReady()) return null;
   try {
@@ -60156,6 +60282,7 @@ async function loadSocialProfile(options = {}) {
       limit: "1"
     });
     const rows = await socialRequest(`/rest/v1/profiles?${params.toString()}`);
+    if (identity !== librarySessionIdentity()) throw new Error("session_changed");
     const profile = Array.isArray(rows) ? rows[0] : null;
     if (profile) {
       socialState.profile = profile;
@@ -60176,6 +60303,7 @@ async function loadSocialProfile(options = {}) {
 }
 
 async function upsertSocialProfile() {
+  const identity = librarySessionIdentity();
   const payload = socialCurrentProfilePayload();
   if (!payload) return null;
   let profile;
@@ -60190,9 +60318,11 @@ async function upsertSocialProfile() {
     await socialRequest("/rest/v1/profiles?on_conflict=id", {
       method: "POST", prefer: "resolution=ignore-duplicates,return=minimal", body: [payload]
     });
+    if (identity !== librarySessionIdentity()) throw new Error("session_changed");
     // A simultaneous editor save wins; never merge defaults over its identity.
     profile = await loadSocialProfile({ silent: true });
   }
+  if (identity !== librarySessionIdentity()) throw new Error("session_changed");
   socialState.profile = profile || payload;
   hydrateSocialProfileInputs(socialState.profile);
   return socialState.profile;
@@ -60227,70 +60357,82 @@ async function insertSocialActivity(action = "liked_track", track = null) {
 }
 
 async function syncSocialLikedTracks(options = {}) {
-  if (AUTH_LOGIN_STANDBY) {
-    if (!options.silent) socialSetStatus(socialStandbyMessage(), "ok");
-    renderSocialUi({ preserveStatus: true });
+  if (AUTH_LOGIN_STANDBY || !socialConfigReady() || !socialState.session?.access_token) {
+    renderLibrarySyncStatus();
     return false;
   }
-  if (!socialConfigReady() || !socialState.session?.access_token) return false;
-  if (socialState.busy && !options.force) return false;
+  if (socialState.librarySyncInProgress) {
+    socialState.librarySyncRequested = true;
+    return false;
+  }
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    socialState.librarySyncPhase = "pending";
+    renderLibrarySyncStatus();
+    return false;
+  }
+  const identity = librarySessionIdentity();
+  const assertIdentity = () => { if (identity !== librarySessionIdentity()) throw new Error("session_changed"); };
+  socialState.librarySyncInProgress = true;
+  socialState.librarySyncPhase = "syncing";
   socialState.busy = true;
   renderSocialUi({ preserveStatus: true });
   try {
-    if (options.restore !== false) {
-      await restoreSocialLikedTracksFromCloud({ silent: true, render: false });
-    }
-    await restoreSocialDislikedTracksFromCloud({ silent: true, render: false });
+    // Both reads must succeed before upload, including restored-session paths.
+    await restoreSocialDislikedTracksFromCloud({ strict: true, render: false });
+    assertIdentity();
+    await restoreSocialLikedTracksFromCloud({ strict: true, render: false });
+    assertIdentity();
     await loadSocialProfile({ silent: true });
+    assertIdentity();
     await upsertSocialProfile();
+    assertIdentity();
+    const signature = libraryHistorySignature();
     const rows = socialTrackRowsForSync();
-    if (rows.length) {
+    const feedbackRows = socialLibraryFeedbackRowsForSync();
+    for (let offset = 0; offset < rows.length; offset += SOCIAL_SYNC_LIMIT) {
+      assertIdentity();
       await socialRequest("/rest/v1/likes?on_conflict=user_id,target_type,target_key", {
-        method: "POST",
-        prefer: "resolution=merge-duplicates,return=minimal",
-        body: rows
+        method: "POST", prefer: "resolution=merge-duplicates,return=minimal", body: rows.slice(offset, offset + SOCIAL_SYNC_LIMIT)
       });
-      if (options.activity !== false) await insertSocialActivity("liked_track", rows[0]);
     }
-    const dislikedRows = socialDislikedTrackRowsForSync();
-    if (dislikedRows.length) {
+    for (let offset = 0; offset < feedbackRows.length; offset += SOCIAL_SYNC_LIMIT) {
+      assertIdentity();
       await socialRequest("/rest/v1/track_feedback?on_conflict=user_id,target_key", {
-        method: "POST",
-        prefer: "resolution=merge-duplicates,return=minimal",
-        body: dislikedRows
+        method: "POST", prefer: "resolution=merge-duplicates,return=minimal", body: feedbackRows.slice(offset, offset + SOCIAL_SYNC_LIMIT)
       });
     }
+    assertIdentity();
     socialState.lastSyncAt = Date.now();
-    if (!options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        "Perfil e curtidas sincronizados.",
-        "Profile and likes synced.",
-        "Perfil y likes sincronizados."
-      ), "ok");
-    }
-    await loadSocialFeed({ silent: true });
-    applyCloudLikedTrackSignals([]);
+    socialState.librarySyncedSignature = signature;
+    socialState.librarySyncPhase = signature === libraryHistorySignature() ? "synced" : "pending";
+    socialSetStatus(librarySyncCopy().title, socialState.librarySyncPhase === "synced" ? "ok" : "");
     updateStats();
+    // Activity/feed availability does not determine whether private tracks were saved.
+    if (options.activity !== false && rows[0]) void insertSocialActivity("liked_track", rows[0]).catch(error => console.warn("Activity feed unavailable", error));
+    void loadSocialFeed({ silent: true });
     return true;
   } catch (error) {
     console.warn("Social sync failed", error);
-    if (!options.silent) {
-      socialSetStatus(sonicTinyCopy(
-        `Não consegui sincronizar: ${error.message}`,
-        `I could not sync: ${error.message}`,
-        `No pude sincronizar: ${error.message}`
-      ), "error");
+    if (identity === librarySessionIdentity()) {
+      socialState.librarySyncPhase = "error";
+      socialSetStatus(librarySyncCopy().hint, "error");
     }
     return false;
   } finally {
+    socialState.librarySyncInProgress = false;
     socialState.busy = false;
     renderSocialUi({ preserveStatus: true });
+    if (socialState.librarySyncRequested) {
+      socialState.librarySyncRequested = false;
+      queueSocialSync("profile");
+    }
   }
 }
 
 function queueSocialSync(reason = "profile") {
-  if (AUTH_LOGIN_STANDBY) return;
-  if (!socialConfigReady() || !socialState.session?.access_token) return;
+  renderLibrarySyncStatus();
+  if (AUTH_LOGIN_STANDBY || !socialConfigReady() || !socialState.session?.access_token) return;
+  if (socialState.librarySyncInProgress) { socialState.librarySyncRequested = true; return; }
   if (socialState.syncTimer) clearTimeout(socialState.syncTimer);
   socialState.syncTimer = setTimeout(() => {
     socialState.syncTimer = null;
@@ -61392,26 +61534,18 @@ function updateSocialReadiness({ configured = socialConfigReady(), signed = Bool
     socialReadinessLocal,
     socialReadinessLocalValue,
     socialReadinessLocalHint,
-    "ready",
-    sonicTinyCopy("Pronto", "Ready", "Listo"),
-    sonicTinyCopy("Salvo neste aparelho", "Saved on this device", "Guardado en este dispositivo")
+    socialState.localSaveState === "saved" ? "ready" : "waiting",
+    socialState.localSaveState === "saved" ? sonicTinyCopy("Salvo", "Saved", "Guardado") : sonicTinyCopy("Nesta sessão", "This session", "En esta sesión"),
+    socialState.localSaveState === "saved" ? sonicTinyCopy("Salvo neste aparelho", "Saved on this device", "Guardado en este dispositivo")
+      : socialState.localSaveState === "unavailable" ? sonicTinyCopy("Exporte um backup antes de sair", "Export a backup before leaving", "Exporta una copia antes de salir")
+      : sonicTinyCopy("Sem cópia persistida confirmada", "No saved copy confirmed", "Sin copia guardada confirmada")
   );
-  setSocialReadinessItem(
-    socialReadinessCloud,
-    socialReadinessCloudValue,
-    socialReadinessCloudHint,
-    signed ? "ready" : configured ? "waiting" : "locked",
-    signed
-      ? sonicTinyCopy("Ativa", "Active", "Activa")
-      : configured
-        ? sonicTinyCopy("Disponível", "Available", "Disponible")
-        : sonicTinyCopy("Pausada", "Paused", "Pausada"),
-    signed
-      ? sonicTinyCopy("Curtidas prontas para sincronizar", "Likes ready to sync", "Likes listos para sincronizar")
-      : configured
-        ? sonicTinyCopy("Entre para sincronizar", "Sign in to sync", "Entra para sincronizar")
-        : sonicTinyCopy("Configuração ausente", "Configuration missing", "Configuración ausente")
-  );
+  const libraryCopy = librarySyncCopy();
+  setSocialReadinessItem(socialReadinessCloud, socialReadinessCloudValue, socialReadinessCloudHint,
+    libraryCopy.phase === "synced" ? "ready" : configured ? "waiting" : "locked",
+    libraryCopy.phase === "synced" ? sonicTinyCopy("Confirmada", "Confirmed", "Confirmada")
+      : libraryCopy.phase === "syncing" ? sonicTinyCopy("Sincronizando", "Syncing", "Sincronizando")
+      : sonicTinyCopy("Não confirmada", "Unconfirmed", "Sin confirmar"), libraryCopy.hint);
   setSocialReadinessItem(
     socialReadinessInteractions,
     socialReadinessInteractionsValue,
@@ -61439,6 +61573,7 @@ function renderSocialSessionState({ configured = socialConfigReady(), signed = B
 }
 
 function renderSocialUi(options = {}) {
+  renderLibrarySyncStatus();
   syncAdminAnalyticsAccess();
   if (authHasOnlineSession()) void refreshAdminAccess();
   renderMembershipUi();
@@ -61489,7 +61624,10 @@ function renderSocialUi(options = {}) {
   if (socialGoogleBtn) socialGoogleBtn.disabled = signed || socialState.busy || !googleProviderAvailable;
   if (socialAppleBtn) socialAppleBtn.disabled = signed || socialState.busy || !appleProviderAvailable;
   if (socialSignOutBtn) socialSignOutBtn.disabled = !signed || socialState.busy;
-  if (socialSyncBtn) socialSyncBtn.disabled = !signed || socialState.busy;
+  if (socialSyncBtn) {
+    socialSyncBtn.disabled = !signed || socialState.busy || (typeof navigator !== "undefined" && navigator.onLine === false);
+    socialSyncBtn.textContent = sonicTinyCopy("Sincronizar faixas", "Sync tracks", "Sincronizar pistas");
+  }
   if (socialRefreshFeedBtn) socialRefreshFeedBtn.disabled = !signed || socialState.busy;
 
   const profile = socialState.profile || socialCurrentProfilePayload();
@@ -61508,6 +61646,8 @@ function renderSocialUi(options = {}) {
   if (socialDisplayName) socialDisplayName.textContent = displayName;
   if (socialHandle) socialHandle.textContent = username ? `@${username}` : "@sonic";
   if (socialCloudLikesCount) socialCloudLikesCount.textContent = String(likedTrackHistory.length);
+  const localLikesMetricLabel = document.getElementById("socialLocalLikesLabel");
+  if (localLikesMetricLabel) localLikesMetricLabel.textContent = sonicTinyCopy("Curtidas neste aparelho", "Likes on this device", "Likes en este dispositivo");
   if (socialTopStyle) socialTopStyle.textContent = resolveFavoriteStyleLabel();
   if (socialMatchHint) {
     const styles = socialTopStyleValues(3).map((style) => styleLabelByValue(style)).filter(Boolean);
@@ -61518,7 +61658,7 @@ function renderSocialUi(options = {}) {
   if (!options.preserveStatus) {
     if (!configured) socialSetStatus(t("socialStatusOfflineLocal"), "error");
     else if (!signed) socialSetStatus(sessionCopy.hint);
-    else socialSetStatus(t("socialStatusConnected"), "ok");
+    else socialSetStatus(librarySyncCopy().hint, socialState.librarySyncPhase === "synced" ? "ok" : "");
   }
 }
 
@@ -64176,6 +64316,9 @@ bind(socialResendConfirmBtn, "click", () => {
 bind(socialSignOutBtn, "click", () => {
   void socialSignOut();
 });
+bind(librarySyncRetryBtn, "click", () => {
+  void syncSocialLikedTracks({ force: true, activity: false });
+});
 bind(socialSyncBtn, "click", () => {
   void syncSocialLikedTracks({ force: true });
 });
@@ -65943,6 +66086,7 @@ async function bootSonicSearch() {
   window.SonicDiscoveryExperience?.mount({
     language: () => currentLanguage,
     online: () => authHasOnlineSession(),
+    storageState: () => libraryStorageUiCopy(),
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
     openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("profile", { focusPanel: true }); }
   });

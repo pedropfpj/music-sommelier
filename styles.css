@@ -22975,3 +22975,12 @@ body.sonic-first-value-window #dailyRadarPanel {
     justify-self: stretch;
   }
 }
+
+/* Track storage feedback belongs beside the library it describes. */
+.library-sync-status { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem; margin:1rem 0; border:1px solid rgba(161,206,223,.24); border-radius:14px; background:rgba(16,31,42,.6); }
+.library-sync-status strong { display:block; color:#e8f5ff; font-size:.95rem; }
+.library-sync-status p { margin:.35rem 0 0; max-width:64ch; line-height:1.5; }
+.library-sync-status button { min-height:44px; flex-shrink:0; }
+.library-sync-status[data-state="synced"] { border-color:rgba(130,230,180,.5); }
+.library-sync-status[data-state="error"] { border-color:rgba(255,180,140,.55); }
+@media(max-width:600px) { .library-sync-status { align-items:stretch; flex-direction:column; } .library-sync-status button { align-self:flex-start; } }

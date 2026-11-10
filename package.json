@@ -34,6 +34,7 @@
     "test:compliance": "node scripts/test-compliance-controls.mjs && node scripts/test-privacy-requests-sql.mjs",
     "verify:compliance-ui": "node scripts/verify-compliance-ui.mjs",
     "test:billing": "node scripts/test-billing-foundation.mjs",
+    "test:saved-tracks-sync": "node scripts/test-saved-tracks-sync.mjs",
     "test:sound-system-premium": "node scripts/test-sound-system-premium.mjs",
     "test:sound-system-listening": "node scripts/test-sound-system-listening.mjs",
     "test:spirit-image": "node scripts/test-spirit-image.mjs",

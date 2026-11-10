@@ -1,0 +1,21 @@
+# Saved tracks and sync
+
+The library displays the latest 80 liked tracks and 80 rejected tracks. The Sound System's cumulative reaction count can be larger. This change preserves the existing retention and ranking rules.
+
+The library and the discovery footer distinguish this-session storage, a confirmed local write, pending sync, syncing, successful sync, offline and failed sync. A connected account alone is never presented as proof that tracks reached the server. The displayed count is labelled as tracks on this device.
+
+For an authenticated account, a complete sync reads account feedback and likes, merges them with that account's local library by the original action date, and uploads the retained lists in batches of 50. All required reads and writes must succeed before the status confirms sync. Reads paginate. An interrupted or failed sync retains the local copy and offers retry; reconnection queues another attempt. A transient refresh failure keeps the session available for retry; an explicitly invalid/revoked refresh response clears it.
+
+Explicit library removals are persisted locally and represented as `sentiment=skipped`, `source=library_removed`, `metadata.removedAt` in the existing `track_feedback` table. This prevents an older cloud like or signal backfill from resurrecting a removed entry. It does not delete cloud records, change taste scoring, or alter the catalog. Newer likes can supersede an older removal or rejection. Signed-in accounts keep their separate storage keys; anonymous trial tracks are never silently uploaded to another account. The trial is intentionally ephemeral. Export serializes its current in-memory tracks and preferences, including when local writes fail; an explicit import restores those tracks to a persistent local profile.
+
+## External requirements
+
+Existing Supabase configuration and migrations are required: `SONIC_SOCIAL_ENABLED`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, a valid account session, and the existing `profiles`, `likes` and `track_feedback` tables with their authenticated user RLS/grants. No new secret, production dependency or migration is introduced. Missing configuration, unavailable tables or denied writes cannot produce a successful sync state. Profile image/community release flags remain unchanged.
+
+This is a private-library sync, not a full transfer of every adaptive-model statistic or every historical reaction. Multiple simultaneous devices still use the existing PostgREST upsert contract; the client merges by action timestamps but the server does not provide a transactional compare-and-set across devices. The local copies remain recoverable, and normal retry re-merges them.
+
+## Validation and native delivery
+
+- `node scripts/test-saved-tracks-sync.mjs` exercises the real app sync/persistence functions against mocked Supabase reads/writes: all retained tracks, failures, offline/retry, pagination, latest-action conflicts, removals/reload/second device, late account responses, refresh and storage failures.
+- `node scripts/verify-saved-tracks-ui.mjs` runs the real browser app against a mocked account/cloud in phone, landscape and desktop layouts, including retry, translations, large text and local preservation. It makes no production writes.
+- The iOS build takes the same `app.js`, `discovery-experience.js` and styles into a local `www` bundle. Android derives its bundle from that pipeline. A website deployment does not update an installed native binary; the changed source needs a new native build/distribution. The iOS build ID is bumped to prevent reusing prior WebKit asset URLs.

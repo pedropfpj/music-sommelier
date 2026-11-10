@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20261104social1" as="style" />
+    <link rel="preload" href="styles.min.css?v=20261109librarysync1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,7 +76,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20261104social1" />
+    <link rel="stylesheet" href="styles.min.css?v=20261109librarysync1" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
     <link rel="stylesheet" href="user-profile.css?v=20261105profiles1" />
     <link rel="stylesheet" href="universal-discovery.css?v=20261023recovery1" />
@@ -2624,6 +2624,13 @@
               <p id="profileLibraryHint" class="muted">Curtidas e descartes ficam aqui para você revisar e o app evitar repetição.</p>
             </div>
           </div>
+          <div id="librarySyncStatus" class="library-sync-status" data-state="local">
+            <div role="status" aria-live="polite" aria-atomic="true">
+              <strong id="librarySyncTitle">Verificando suas faixas</strong>
+              <p id="librarySyncHint" class="muted">Conferindo a cópia deste aparelho e a conexão com sua conta.</p>
+            </div>
+            <button id="librarySyncRetryBtn" class="secondary" type="button" hidden>Sincronizar agora</button>
+          </div>
           <div class="library-tools">
             <label><span data-experience-copy="search">Buscar nas suas faixas</span><input id="librarySearch" type="search" maxlength="120" placeholder="Faixa, artista ou estilo" autocomplete="off" /></label>
             <label><span data-experience-copy="sort">Ordenar faixas</span><select id="libraryOrder"><option value="recent" data-experience-copy="recent">Mais recentes</option><option value="title" data-experience-copy="title">Nome da faixa</option><option value="artist" data-experience-copy="artist">Artista</option></select></label>
@@ -2965,7 +2972,7 @@
             <div class="social-metrics-grid">
               <div>
                 <span id="socialCloudLikesCount">0</span>
-                <p>curtidas na nuvem</p>
+                <p id="socialLocalLikesLabel">Curtidas neste aparelho</p>
               </div>
               <div>
                 <span id="socialTopStyle">Sem leitura ainda</span>
@@ -3418,7 +3425,7 @@
     <script defer src="daily-radar.js?v=20260911sonicstart1"></script>
     <script defer src="daily-radar-ui.js?v=20260917radaricons1"></script>
     <script defer src="weekly-recommends.js?v=20261109session1"></script>
-    <script defer src="discovery-experience.js?v=20261105labels25"></script>
-    <script defer src="app.min.js?v=20261105labels25"></script>
+    <script defer src="discovery-experience.js?v=20261109librarysync1"></script>
+    <script defer src="app.min.js?v=20261109librarysync1"></script>
   </body>
 </html>
