@@ -1,6 +1,6 @@
 # Amigos e faixas compartilhadas
 
-Implementação separada de seguidores públicos, comentários, curtidas e histórico. A rota fica desativada por padrão (`SONIC_FRIENDS_ENABLED=false`) até aplicar e revisar a migração aditiva `20261110000100_private_friendships.sql` em staging. A configuração não publica perfis nem fotos.
+Implementação separada de seguidores públicos, comentários, curtidas e histórico. A rota fica desativada por padrão (`SONIC_FRIENDS_ENABLED=false`) até aplicar e revisar a migração aditiva `20261110040007_private_friendships.sql` em staging. A configuração não publica perfis nem fotos.
 
 ## Identidade e acesso
 
@@ -57,3 +57,17 @@ Os relatos de publicações vão apenas ao bucket privado de moderação, com ID
 `node scripts/test-friends-integration.mjs` usa handlers reais, PGlite persistente, migrações reais e Auth/Storage simulados em loopback. Cobre perfis privados, consentimento, convites/expiração/revogação, requests concorrentes, cancelamento/aceitação, retries, relações e posts após reinício, seguidores sem acesso, leitura direta por terceiro negada, remoção/bloqueio nos dois sentidos, falha de armazenamento, exclusão, relatos e RLS/RPCs restritos. Não usa contas, publicações ou provedores reais.
 
 Antes da ativação, testar o SQL duas vezes em staging e revisar grants/políticas. Aplicar a migração pelo fluxo administrativo existente somente após revisão; depois publicar a rota/config/interface em conjunto e habilitar a flag. O teste local não substitui uma verificação com contas de staging. A chave de serviço continua exclusivamente no backend.
+
+## Interface web e gravação escolhida
+
+A navegação web usa Descobrir, DJs, Jornal, Amigos e Perfil. Ajuda, contato e informações legais continuam em **Perfil → Mais opções**. O fluxo nativo existente não ativa Amigos nesta versão.
+
+**Compartilhar com amigos** em Descobrir apenas prepara um rascunho. O envio exige a confirmação no formulário de Amigos, que mostra o nome escolhido e o público de amigos aceitos. O rascunho não usa a biblioteca ou o histórico como conteúdo automático. Um rascunho de uma conta não passa para outra; convites retornam do login por armazenamento da mesma aba, têm validade local de 30 minutos e saem da URL assim que são reconhecidos. O link usa fragmento para não enviar a capacidade na URL da requisição HTTP.
+
+**Ouvir esta faixa** revalida o ID da publicação no backend antes de resolver o áudio. A preparação verifica artista, título, versão e áudio decodificável; o player só confirma abertura depois de carregar mídia. Uma falha não escolhe outra faixa. O link original continua disponível no feed. O texto da publicação nunca é copiado para o player ou o formulário de comentários gerais. O player e o compositor de comentários informam a diferença de público.
+
+Verificações adicionais: `node scripts/test-friends-app-bridge.mjs` cobre transporte autenticado, convites no corpo/fragmento, troca de conta durante respostas e abertura, rascunhos concorrentes, permissão atual do post e confirmação fiel de mídia. `node scripts/test-friends-ui.mjs` cobre a interface, ações explícitas, retries, limpeza após remoção/bloqueio/exclusão, teclado, PT/EN/ES e larguras 375/852/1440. `node scripts/test-private-friendship-security.mjs` faz uma revisão independente dos grants, RLS e revogação com três contas PostgreSQL locais. Os fixtures locais não enviam mensagens ou publicações reais.
+
+O teste `node scripts/test-friends-full-app.mjs` carrega o index e o app.min completos, usa handlers reais e PostgreSQL local, e verifica menu móvel, transporte relativo, pedido/aceite, card → rascunho → publicação, leitura por amigos, recusa de um terceiro pelo ID conhecido e volta de convite após autenticação. OAuth/provedores são fixtures locais, sem contas reais.
+
+A revisão remota de 10/11/2026 aplicou o mesmo SQL duas vezes no projeto de staging e verificou Auth, PostgREST/RPC, PostgreSQL e Storage com três contas descartáveis, todas removidas. A aplicação em produção usou o Management API de migrações: nome `20261110000100_private_friendships`, versão administrativa atribuída `20261110040007`, SHA-256 `152deebdd468e5d384d0a961b7b3f5d8e60910c483befc26cd552159ab7e1cc3`. Essa aplicação alterou apenas o schema; a verificação de produção consultou somente metadados. O arquivo canônico `20261110040007_private_friendships.sql` conserva o SQL exato revisado e acompanha o timestamp real de produção; o [CLI compara os timestamps locais e remotos](https://supabase.com/docs/reference/cli/supabase-migration-list). Não há uma segunda cópia com o timestamp inicialmente proposto. As duas aplicações de staging têm histórico administrativo próprio e não autorizam um push amplo daquele ambiente. O histórico remoto foi aplicado pelo fluxo administrativo existente, sem executar um `db push` amplo que poderia reaplicar migrações anteriores.

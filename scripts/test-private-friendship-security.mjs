@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 
-const sql = await readFile(process.env.SONIC_FRIENDSHIP_MIGRATION || new URL('../supabase/migrations/20261110000100_private_friendships.sql', import.meta.url), 'utf8');
+const sql = await readFile(process.env.SONIC_FRIENDSHIP_MIGRATION || new URL('../supabase/migrations/20261110040007_private_friendships.sql', import.meta.url), 'utf8');
 const db = new PGlite();
 const a = '11111111-1111-4111-8111-111111111111', b = '22222222-2222-4222-8222-222222222222', c = '33333333-3333-4333-8333-333333333333';
 async function asRole(role, query, values = []) {

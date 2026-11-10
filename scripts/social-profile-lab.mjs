@@ -35,7 +35,7 @@ export async function createSocialLab({ port = 8801, dataDir = path.join(os.tmpd
     await db.exec('create table lab_objects(path text primary key, bytes bytea, content_type text);');
   }
   await db.exec(await fs.readFile(path.join(root,'supabase/migrations/20261105000400_public_profile_links.sql'),'utf8'));
-  if (friends) await db.exec(await fs.readFile(path.join(root,'supabase/migrations/20261110000100_private_friendships.sql'),'utf8'));
+  if (friends) await db.exec(await fs.readFile(path.join(root,'supabase/migrations/20261110040007_private_friendships.sql'),'utf8'));
   await db.exec('grant select,insert,update,delete on taste_snapshots,track_feedback,feedback_events,spirit_profiles,spirit_cards to authenticated;');
   const previousEnv = { ...process.env }, originalFetch = global.fetch;
   // Prevent inherited production settings from participating in the test process.
