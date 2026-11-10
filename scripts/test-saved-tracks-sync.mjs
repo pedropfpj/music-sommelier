@@ -60,7 +60,7 @@ function functionSource(name) {
 }
 
 
-const functions = ["recommendationHistoryValues", "validProfileBackupPayload", "restoreProfileBackupPayload", "librarySessionMatchesOnlineAccount", "readPendingLocalLibraryTransfer", "storePendingLocalLibraryTransfer", "capturePendingLocalLibraryTransfer", "bindPendingLibraryTransferToAccount", "renderPendingLibraryTransfer", "importPendingLocalLibraryTransfer", "buildPendingLibraryTransferBackup", "buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
+const functions = ["sanitizedTrackDataIssueReports", "recommendationHistoryValues", "validProfileBackupPayload", "restoreProfileBackupPayload", "librarySessionMatchesOnlineAccount", "readPendingLocalLibraryTransfer", "storePendingLocalLibraryTransfer", "capturePendingLocalLibraryTransfer", "bindPendingLibraryTransferToAccount", "renderPendingLibraryTransfer", "importPendingLocalLibraryTransfer", "buildPendingLibraryTransferBackup", "buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
 const values = new Map();
 const sessionValues = new Map();
 const readGates = new Map();
@@ -110,6 +110,9 @@ vm.runInContext(`
   var storageFailure = false;
   var likedTrackHistory = [], dislikedTrackHistory = [], libraryRemovedTrackHistory = [];
   var progressStorageReady = true;
+  var trackDataIssueReports = new Map(), trackDataIssueSaveState = "session";
+  ${appSource.match(/const RECOMMENDATION_ISSUE_REASONS = [^;]+;/)[0]}
+  ${appSource.match(/const TRACK_DATA_ISSUE_REPORT_LIMIT = [^;]+;/)[0]}
   var pendingLocalLibraryTransfer=null,ephemeralProfileMode=false;
   const PENDING_LIBRARY_TRANSFER_STORAGE_KEY="pending-transfer";
   var libraryTransferPrompt=null,libraryTransferHint=null,libraryTransferBtn=null,libraryTransferExportBtn=null;

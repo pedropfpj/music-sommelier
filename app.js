@@ -10073,6 +10073,9 @@ const previewDislikeBtn = document.getElementById("previewDislikeBtn");
 const styleIssueBtn = document.getElementById("styleIssueBtn");
 const bpmIssueBtn = document.getElementById("bpmIssueBtn");
 const imageIssueBtn = document.getElementById("imageIssueBtn");
+const recordingIssueBtn = document.getElementById("recordingIssueBtn");
+const trackDataReview = document.getElementById("trackDataReview");
+const trackDataReviewStatus = document.getElementById("trackDataReviewStatus");
 const radioBrowserPanel = document.getElementById("radioBrowserPanel");
 const radioBrowserKicker = document.getElementById("radioBrowserKicker");
 const radioBrowserTitle = document.getElementById("radioBrowserTitle");
@@ -10557,6 +10560,8 @@ let trackRatingSignals = new Map();
 let trackPreferenceSignals = new Map();
 let trackPreviewIssueSignals = new Map();
 let trackRecommendationIssueSignals = new Map();
+let trackDataIssueReports = new Map();
+let trackDataIssueSaveState = "session";
 let likedTrackHistory = [];
 let dislikedTrackHistory = [];
 let libraryRemovedTrackHistory = [];
@@ -20853,7 +20858,88 @@ function adjustTrackPreviewIssueSignal(track, delta = 0) {
   trackPreviewIssueSignals.set(trackKey, Math.max(0.05, Math.min(8, next)));
 }
 
-const RECOMMENDATION_ISSUE_REASONS = new Set(["style_issue", "bpm_issue", "image_issue"]);
+const RECOMMENDATION_ISSUE_REASONS = new Set(["style_issue", "bpm_issue", "image_issue", "recording_issue"]);
+const TRACK_DATA_ISSUE_REPORT_LIMIT = 240;
+
+function trackDataIssueIdentity(track = {}) {
+  const provider = trackAppleRecordingId(track) ? `apple:${trackAppleRecordingId(track)}` :
+    String(track.deezerTrackId || catalogTrackMetadataText(track, "deezer_track_id") || "") ? `deezer:${track.deezerTrackId || catalogTrackMetadataText(track, "deezer_track_id")}` :
+      String(track.bandcampTrackId || catalogTrackMetadataText(track, "bandcamp_track_id") || "") ? `bandcamp:${track.bandcampTrackId || catalogTrackMetadataText(track, "bandcamp_track_id")}` : "";
+  return `${recommendationTrackKey(track)}${provider ? `::${provider}` : ""}`;
+}
+
+function sanitizedTrackDataIssueReports(entries = []) {
+  const reports = new Map();
+  if (!Array.isArray(entries)) return reports;
+  entries.slice(-TRACK_DATA_ISSUE_REPORT_LIMIT).forEach(entry => {
+    if (!Array.isArray(entry) || !entry[1] || typeof entry[1] !== "object") return;
+    const report = entry[1];
+    if (!RECOMMENDATION_ISSUE_REASONS.has(report.reason) || typeof report.recordingKey !== "string" || !report.recordingKey.trim()) return;
+    const clean = {
+      recordingKey: report.recordingKey.slice(0, 600), reason: report.reason,
+      artist: String(report.artist || "").slice(0, 140), song: String(report.song || "").slice(0, 180),
+      style: String(report.style || "").slice(0, 80),
+      createdAt: Number.isFinite(Date.parse(report.createdAt)) ? new Date(report.createdAt).toISOString() : ""
+    };
+    reports.set(`${clean.recordingKey}::${clean.reason}`, clean);
+  });
+  return reports;
+}
+
+function trackDataReviewCopy() {
+  return currentLanguage === "en" ? {
+    title: "Review track data", hint: "Mark a problem with this track’s data. You can keep listening.",
+    style_issue: "Wrong subgenre", bpm_issue: "BPM seems wrong", image_issue: "Wrong image", recording_issue: "Wrong track or version",
+    marked: "Marked", saved: "Saved for this profile on this device.", session: "Marked for this session.", unavailable: "Marked for this session. This device could not save the correction."
+  } : currentLanguage === "es" ? {
+    title: "Revisar datos", hint: "Marca un problema en los datos de esta pista. Puedes seguir escuchando.",
+    style_issue: "Subgénero incorrecto", bpm_issue: "BPM incorrecto", image_issue: "Imagen incorrecta", recording_issue: "Pista o versión incorrecta",
+    marked: "Marcado", saved: "Guardado para este perfil en este dispositivo.", session: "Marcado para esta sesión.", unavailable: "Marcado para esta sesión. No se pudo guardar la corrección en este dispositivo."
+  } : {
+    title: "Revisar dados", hint: "Marque um problema nos dados desta faixa. Você pode continuar ouvindo.",
+    style_issue: "Subgênero errado", bpm_issue: "BPM estranho", image_issue: "Imagem errada", recording_issue: "Faixa ou versão errada",
+    marked: "Marcado", saved: "Salvo para este perfil neste dispositivo.", session: "Marcado nesta sessão.", unavailable: "Marcado nesta sessão. Não foi possível salvar a correção neste dispositivo."
+  };
+}
+
+function renderTrackDataReview(track = currentRecommendation) {
+  if (!trackDataReview) return;
+  const copy = trackDataReviewCopy();
+  const identity = track ? trackDataIssueIdentity(track) : "";
+  if (trackDataReview.dataset.recordingKey !== identity) trackDataReview.open = false;
+  trackDataReview.dataset.recordingKey = identity;
+  trackDataReview.hidden = !track;
+  const summary = document.getElementById("trackDataReviewSummary");
+  const hint = document.getElementById("trackDataReviewHint");
+  if (summary) summary.textContent = copy.title;
+  if (hint) hint.textContent = copy.hint;
+  const marked = [];
+  [[styleIssueBtn, "style_issue"], [bpmIssueBtn, "bpm_issue"], [imageIssueBtn, "image_issue"], [recordingIssueBtn, "recording_issue"]].forEach(([button, reason]) => {
+    const reported = Boolean(identity && trackDataIssueReports.has(`${identity}::${reason}`));
+    if (reported) marked.push(copy[reason]);
+    if (button) {
+      button.disabled = !track || reported;
+      button.textContent = `${copy[reason]}${reported ? ` · ${copy.marked}` : ""}`;
+    }
+  });
+  if (trackDataReviewStatus) trackDataReviewStatus.textContent = marked.length
+    ? `${marked.join(" · ")}. ${copy[trackDataIssueSaveState] || copy.session}` : "";
+}
+
+function recordTrackDataIssue(track, reason) {
+  if (!track || !RECOMMENDATION_ISSUE_REASONS.has(reason)) return false;
+  const recordingKey = trackDataIssueIdentity(track);
+  const key = `${recordingKey}::${reason}`;
+  if (trackDataIssueReports.has(key)) return false;
+  trackDataIssueReports.set(key, { recordingKey, reason, artist: track.artist || "", song: track.song || track.title || "", style: track.style || "", createdAt: new Date().toISOString() });
+  trackDataIssueReports = sanitizedTrackDataIssueReports([...trackDataIssueReports]);
+  const issueWeight = reason === "style_issue" || reason === "recording_issue" ? 1.6 : reason === "bpm_issue" ? 1.35 : 1.1;
+  adjustTrackRecommendationIssueSignal(track, issueWeight);
+  saveProgress();
+  trackDataIssueSaveState = ["saved", "session", "unavailable"].includes(socialState.localSaveState) ? socialState.localSaveState : "session";
+  renderTrackDataReview(currentRecommendation);
+  return true;
+}
 
 function adjustTrackRecommendationIssueSignal(track, delta = 0) {
   if (!track || !Number.isFinite(delta) || delta === 0) return;
@@ -20987,6 +21073,11 @@ function previewPenaltyForTrack(track) {
 
 function registerTrackFeedback(track, liked, options = {}) {
   if (!track) return;
+  const reason = liked ? "" : options?.reason || inferNegativeFeedbackReason(track, { source: options?.source || "skip" });
+  if (RECOMMENDATION_ISSUE_REASONS.has(reason)) {
+    recordTrackDataIssue(track, reason);
+    return reason;
+  }
   hierarchicalStyleScoreCache.clear();
   recordSwipeTrainingSignal(options);
   const delta = liked ? 1 : 1.2;
@@ -21009,7 +21100,6 @@ function registerTrackFeedback(track, liked, options = {}) {
     saveProgress();
     return "liked";
   }
-  const reason = options?.reason || inferNegativeFeedbackReason(track, { source: options?.source || "skip" });
   rememberDislikedTrack(track, options?.source || reason || "disliked");
   if (reason === "preview_issue") {
     // Quando falha no preview, aprendemos a priorizar faixas com player melhor sem punir forte o gosto musical.
@@ -21022,26 +21112,6 @@ function registerTrackFeedback(track, liked, options = {}) {
     }
     adjustTrackPreviewIssueSignal(track, 1);
     adjustPreviewReliabilitySignal(track.style, -0.65);
-    trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
-      source: options?.source || reason || "disliked",
-      reason
-    });
-    trackBetaReactionMilestone("track_disliked", track, {
-      source: options?.source || reason || "disliked",
-      reason
-    });
-    saveProgress();
-    return reason;
-  }
-
-  if (RECOMMENDATION_ISSUE_REASONS.has(reason)) {
-    // Erro de classificacao/tempo/imagem reduz confianca sem confundir com gosto musical do usuario.
-    const issueWeight = reason === "style_issue" ? 1.6 : reason === "bpm_issue" ? 1.35 : 1.1;
-    if (reason === "style_issue") boost(adaptiveModel.dislikedStyles, track.style, 0.22);
-    if (reason === "image_issue") boost(adaptiveModel.dislikedArtists, track.artist, 0.12);
-    registerTrackPreferenceSignal(track, -0.56 * issueWeight);
-    adjustTrackRecommendationIssueSignal(track, issueWeight);
-    adjustPreviewReliabilitySignal(track.style, reason === "image_issue" ? -0.08 : -0.18);
     trackRecommendationEvent("track_disliked", track, lastPrefs || {}, {
       source: options?.source || reason || "disliked",
       reason
@@ -28636,6 +28706,7 @@ function applyLanguage() {
   setText("#styleIssueBtn", labels.btnStyleIssue || "");
   setText("#bpmIssueBtn", labels.btnBpmIssue || "");
   setText("#imageIssueBtn", labels.btnImageIssue || "");
+  renderTrackDataReview(currentRecommendation);
   setText("#likeSongBtn", labels.btnLikeSong || "");
   setText("#likeArtistBtn", labels.btnLikeArtist || "");
   setText("#blockArtistBtn", labels.btnBlockArtist || "");
@@ -30953,6 +31024,8 @@ function resetSessionStateInMemory() {
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
   trackRecommendationIssueSignals = new Map();
+  trackDataIssueReports = new Map();
+  trackDataIssueSaveState = "session";
   likedTrackHistory = [];
   dislikedTrackHistory = [];
   libraryRemovedTrackHistory = [];
@@ -33867,7 +33940,7 @@ function scrollResultPanelIntoView({ force = false } = {}) {
 }
 
 function recommendationTriggerButtons() {
-  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, styleIssueBtn, bpmIssueBtn, imageIssueBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
+  return [recommendBtn, rerollBtn, surpriseBtn, floatingSurpriseBtn, adaptiveSurpriseBtn, knownYesBtn, knownNoBtn, knewDiscoveryBtn, newDiscoveryBtn, previewIssueBtn, previewDislikeBtn, noveltyNotYetBtn, blockArtistBtn, skipBtn, swipeHeroSurpriseBtn, topSwipeSurpriseBtn, topSwipeLikeBtn, topSwipePassBtn];
 }
 
 function firstRecommendationRetryLabel() {
@@ -35012,6 +35085,7 @@ function buildProgressSnapshot() {
     libraryRemovedTrackHistory,
     trackPreviewIssueSignals: mapEntriesForStorage(trackPreviewIssueSignals),
     trackRecommendationIssueSignals: mapEntriesForStorage(trackRecommendationIssueSignals),
+    trackDataIssueReports: [...sanitizedTrackDataIssueReports([...trackDataIssueReports])],
     previewReliabilityByStyle: mapEntriesForStorage(previewReliabilityByStyle),
     quiz: {
       attemptsByStyle: mapEntriesForStorage(quizAttemptsByStyle, 120),
@@ -35073,6 +35147,8 @@ function loadProgress() {
   trackPreferenceSignals = new Map();
   trackPreviewIssueSignals = new Map();
   trackRecommendationIssueSignals = new Map();
+  trackDataIssueReports = new Map();
+  trackDataIssueSaveState = "session";
   likedTrackHistory = [];
   dislikedTrackHistory = [];
   libraryRemovedTrackHistory = [];
@@ -35134,6 +35210,8 @@ function loadProgress() {
           ? parsed.libraryRemovedTrackHistory.map(entry => likedTrackHistoryEntry(entry, "library_removed", entry?.likedAt || "")).filter(Boolean) : [];
         hydrateMapFromStorage(trackPreviewIssueSignals, parsed?.trackPreviewIssueSignals);
         hydrateMapFromStorage(trackRecommendationIssueSignals, parsed?.trackRecommendationIssueSignals);
+        trackDataIssueReports = sanitizedTrackDataIssueReports(parsed?.trackDataIssueReports);
+        if (trackDataIssueReports.size) trackDataIssueSaveState = "saved";
         hydrateMapFromStorage(previewReliabilityByStyle, parsed?.previewReliabilityByStyle);
         const quizProgress = parsed?.quiz || {};
         hydrateMapFromStorage(quizAttemptsByStyle, quizProgress.attemptsByStyle, 120);
@@ -35549,6 +35627,8 @@ function clearFilters() {
   currentTrackInsightTrackKey = "";
   trackPreviewIssueSignals = new Map();
   trackRecommendationIssueSignals = new Map();
+  trackDataIssueReports = new Map();
+  trackDataIssueSaveState = "session";
   previewReliabilityByStyle = new Map();
   listeningNarrativeToken = 0;
   styleInfoDismissed = false;
@@ -54839,6 +54919,7 @@ function updateDiscoverySequenceBadges(track) {
 }
 
 function updateSwipeFeedbackCard(track, prefs = lastPrefs) {
+  renderTrackDataReview(track);
   resetSwipeCardPosition();
   renderSocialDiscussionEntry(track);
   const hasTrack = Boolean(track);
@@ -66166,6 +66247,10 @@ function feedbackMessageForRecommendationIssue(reason = "") {
 }
 
 async function swapAfterPreviewFeedback({ reason = "", source = "preview_dislike", triggerEl = previewDislikeBtn } = {}) {
+  if (RECOMMENDATION_ISSUE_REASONS.has(reason)) {
+    markCurrentTrackDataIssue(reason);
+    return;
+  }
   const recoveryGeneration = recommendationSessionGeneration;
   if (!currentRecommendation || !lastPrefs) return;
   const rejectedTrack = currentRecommendation;
@@ -66268,29 +66353,16 @@ bind(previewDislikeBtn, "click", async () => {
   });
 });
 
-bind(styleIssueBtn, "click", async () => {
-  await swapAfterPreviewFeedback({
-    reason: "style_issue",
-    source: "style_issue_button",
-    triggerEl: styleIssueBtn
-  });
-});
+function markCurrentTrackDataIssue(reason) {
+  if (!currentRecommendation) return;
+  registerTrackFeedback(currentRecommendation, false, { reason, source: "track_data_review" });
+  renderTrackDataReview(currentRecommendation);
+}
 
-bind(bpmIssueBtn, "click", async () => {
-  await swapAfterPreviewFeedback({
-    reason: "bpm_issue",
-    source: "bpm_issue_button",
-    triggerEl: bpmIssueBtn
-  });
-});
-
-bind(imageIssueBtn, "click", async () => {
-  await swapAfterPreviewFeedback({
-    reason: "image_issue",
-    source: "image_issue_button",
-    triggerEl: imageIssueBtn
-  });
-});
+bind(styleIssueBtn, "click", () => markCurrentTrackDataIssue("style_issue"));
+bind(bpmIssueBtn, "click", () => markCurrentTrackDataIssue("bpm_issue"));
+bind(imageIssueBtn, "click", () => markCurrentTrackDataIssue("image_issue"));
+bind(recordingIssueBtn, "click", () => markCurrentTrackDataIssue("recording_issue"));
 
 bind(noveltyLikedBtn, "click", async () => {
   if (!currentRecommendation) return;

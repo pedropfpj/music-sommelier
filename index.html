@@ -1390,13 +1390,21 @@
                 <button id="previewIssueBtn" class="secondary">Não tocou</button>
                 <button id="previewDislikeBtn" class="secondary">Não conectou, troca</button>
               </div>
-              <div class="feedback-buttons recommendation-issue-buttons hidden" aria-label="Corrigir recomendação" aria-hidden="true">
+            </div>
+          </div>
+          <details id="trackDataReview" class="track-data-review" hidden>
+            <summary id="trackDataReviewSummary">Revisar dados</summary>
+            <div class="track-data-review-body">
+              <p id="trackDataReviewHint">Marque um problema nos dados desta faixa. Você pode continuar ouvindo.</p>
+              <div class="track-data-review-actions" role="group" aria-labelledby="trackDataReviewSummary">
                 <button id="styleIssueBtn" class="secondary" type="button">Subgênero errado</button>
                 <button id="bpmIssueBtn" class="secondary" type="button">BPM estranho</button>
                 <button id="imageIssueBtn" class="secondary" type="button">Imagem errada</button>
+                <button id="recordingIssueBtn" class="secondary" type="button">Faixa ou versão errada</button>
               </div>
+              <p id="trackDataReviewStatus" class="track-data-review-status" role="status" aria-live="polite" aria-atomic="true"></p>
             </div>
-          </div>
+          </details>
           <details class="listening-platforms"><summary data-experience-copy="outside">Ouvir nas plataformas</summary><div class="listen-links">
             <a id="spotifyLink" class="listen-btn spotify-btn" href="#" target="_blank" rel="noopener noreferrer">Ouvir no Spotify</a>
             <a id="spotifyArtistLink" class="listen-btn spotify-artist-btn" href="#" target="_blank" rel="noopener noreferrer">Abrir artista</a>

@@ -23044,3 +23044,25 @@ body.sonic-first-value-window #dailyRadarPanel {
   .recommendation-recovery-mark { width: 32px; height: 32px; }
   .recommendation-recovery-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr); }
 }
+
+/* A quiet, recording-scoped correction flow beside the player. */
+.track-data-review { margin: .9rem 0; border-block: 1px solid var(--line); }
+.track-data-review[hidden] { display: none !important; }
+.track-data-review > summary {
+  min-height: 46px; display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; padding: .7rem .2rem; color: var(--text); font-weight: 600;
+  list-style: none; cursor: pointer; touch-action: manipulation;
+}
+.track-data-review > summary::-webkit-details-marker { display: none; }
+.track-data-review > summary::after { content: "+"; color: var(--accent-a); font-size: 1.3rem; }
+.track-data-review[open] > summary::after { content: "−"; }
+.track-data-review-body { padding: .25rem 0 1rem; }
+.track-data-review-body > p { margin: 0 0 .85rem; color: var(--muted); font-size: .94rem; line-height: 1.55; }
+.track-data-review-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.track-data-review-actions button { min-width: 0; min-height: 46px; padding: .7rem .8rem; border: 1px solid var(--line); background: rgba(158, 176, 214, .06); color: var(--text); box-shadow: none; white-space: normal; text-align: left; touch-action: manipulation; }
+.track-data-review-actions button:hover:not(:disabled) { border-color: var(--accent-a); }
+.track-data-review-actions button:disabled { opacity: 1; color: var(--muted); background: transparent; cursor: default; }
+.track-data-review-body > .track-data-review-status { margin: .85rem 0 0; color: var(--text); }
+.track-data-review-status:empty { display: none; }
+.track-data-review > summary:focus-visible, .track-data-review-actions button:focus-visible { outline: 2px solid var(--accent-a); outline-offset: 3px; }
+@media (max-width: 540px) { .track-data-review-actions { grid-template-columns: minmax(0, 1fr); } }
