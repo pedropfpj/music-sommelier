@@ -106,6 +106,8 @@ try {
   const overflowFile=JSON.parse(await fs.readFile(await download.path(),'utf8'));
   assert.equal(overflowFile.data.progress.likedTrackHistory[0].song,'Keep This Older Track');
   assert.ok(await page.evaluate(()=>Boolean(readPendingLocalLibraryTransfer())),'Export does not consume the recovery copy');
+  const importedOverflow=await page.evaluate(payload=>{const ok=restoreProfileBackupPayload(payload);return {ok,songs:likedTrackHistory.map(item=>item.song),count:totalLikedSongs(),connected:Boolean(socialState.session?.access_token)};},overflowFile);
+  assert.equal(importedOverflow.ok,true);assert.deepEqual(importedOverflow.songs,['Keep This Older Track']);assert.equal(importedOverflow.count,1);assert.equal(importedOverflow.connected,false);
   assert.deepEqual(errors,[]);
   console.log('Saved-track UI passed: pending/success/offline/error/retry, local track preservation, 375/852/1440 layouts, 44px action, large text, reduced motion, EN/ES and logout. Account/cloud API mocked; no production writes.');
 } finally {await browser.close();await preview.stop();}
