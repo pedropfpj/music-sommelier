@@ -29,7 +29,7 @@ function fixture(outcomes = []) {
       return { ok: outcome?.status ? outcome.status < 400 : true, json: async () => ({ best: outcome?.best ?? null }) };
     }
   });
-  vm.runInContext(["previewUrlExpiryEpoch", "previewUrlIsExpired", "normalizePreviewUrl", "fetchTrackMetadataFromApi"].map(functionSource).join("\n"), context);
+  vm.runInContext(["previewUrlExpiryEpoch", "previewUrlIsExpired", "normalizePreviewUrl", "trackAppleRecordingId", "fetchTrackMetadataFromApi"].map(functionSource).join("\n"), context);
   return { context, calls, outcomes, advance: ms => { now += ms; } };
 }
 
@@ -76,7 +76,7 @@ for (const unavailable of [new Error("transient timeout"), { status: 503 }, { be
     itunesJsonp: async () => ({ results: [] }), refreshSoundCloudPreviewForTrack: async () => false,
     previewCandidatesForTrack: () => [], trackHasExternalPlayableFallback: () => false
   });
-  vm.runInContext(functionSource("resolvePreviewForTrack"), context);
+  vm.runInContext(["trackAppleRecordingId", "resolvePreviewForTrack"].map(functionSource).join("\n"), context);
   await context.resolvePreviewForTrack({ ...track }, { forceLookup: true });
   assert.equal(requests[0]?.forceLookup, true, "Full preview recovery must forward its forced lookup to the metadata cache");
 }

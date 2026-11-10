@@ -37,6 +37,8 @@ for (const track of tracks) {
   for (const change of [
     { song: track.song + ' (Radio Mix)' },
     { artist: 'Unreviewed Artist' },
+    { artist: track.artist + ' (Tribute)' },
+    { artist: track.artist + ' aka Totally Different Artist' },
     { style: 'techno' },
     { catalogMetadata: { ...track.catalogMetadata, recording_id: 'apple_music:999999' } },
     { catalogMetadata: { ...track.catalogMetadata, source_url: 'https://music.apple.com/us/song/another-master/999999' } },
@@ -96,6 +98,11 @@ assert.equal(oldCard.deezerTrackId, '123456');
 assert.equal(duplicate.catalog[0].deezerTrackId, '');
 assert.ok(duplicate.reviewedRecordingStyleProof(duplicate.catalog[0]));
 assert.equal(JSON.stringify(duplicate.seenTrackKeysMemory), historyBefore);
+duplicate.catalog.push({ ...oldCard, previewUrl: 'https://old.fixture.test/other-master.mp3', existenceVerified: true, spotifyVerified: true, youtubeVerified: true });
+duplicate.dedupeCatalogByTrackKey();
+assert.equal(duplicate.catalog.length, 1);
+assert.ok(duplicate.reviewedRecordingStyleProof(duplicate.catalog[0]), 'Dedupe must choose reviewed identity over a higher-scoring legacy master');
+assert.ok(!Array.from(duplicate.previewCandidatesForTrack(duplicate.catalog[0])).includes('https://old.fixture.test/other-master.mp3'), 'A legacy duplicate must not inject another recording audio into the reviewed snapshot');
 
 // Evidence and exact IDs survive the normal dynamic cache path.
 ctx.saveDynamicCatalogCache(); ctx.catalog.length = 0; ctx.loadDynamicCatalogCache();
@@ -105,5 +112,28 @@ for (const original of tracks) {
   assert.equal(restored.catalogMetadata.recording_id, original.catalogMetadata.recording_id);
 }
 assert.equal(ctx.artistAllowedForStyle('big_beat', 'The Wiseguys'), false);
-assert.ok(artistOverridesBefore !== undefined);
+
+// The app refreshes the same Apple ID and cannot fall through to a text search.
+const apple = { ...tracks[0], previewUrl: '', previewCandidates: [] };
+const calls = [];
+let best = null;
+ctx.resolveMusicApiEndpoint = () => '/api/track-metadata';
+ctx.fetchWithTimeout = async (_url, options) => {
+  calls.push(JSON.parse(options.body));
+  return { ok: true, json: async () => ({ best }) };
+};
+ctx.COMPLIANCE_CONFIG.clientDeezerEnabled = true;
+ctx.itunesJsonp = ctx.deezerJsonp = ctx.fetchDeezerTrackDetails = ctx.refreshSoundCloudPreviewForTrack = () => { throw Error('An exact recording must not use fallback search'); };
+assert.equal(ctx.trackAppleRecordingId(apple), row.recording_id.split(':')[1]);
+assert.equal(ctx.trackHasRefreshablePreview(apple), true);
+await ctx.resolvePreviewForTrack(apple, { forceLookup: true });
+assert.equal(apple.previewMissing, true);
+assert.equal(calls[0].itunesTrackId, ctx.trackAppleRecordingId(apple));
+assert.equal(calls[0].album, ''); assert.equal(calls[0].deezerTrackId, '');
+best = { source: 'itunes', id: '999999', artist: apple.artist, song: apple.song, previewUrl: 'https://audio.fixture.test/wrong-master.m4a', confidenceScore: 1 };
+assert.equal(await ctx.fetchTrackMetadataFromApi(apple, { forceLookup: true }), null, 'Reject wrong recording IDs at the client boundary too');
+best = { ...best, id: ctx.trackAppleRecordingId(apple), previewUrl: 'https://audio.fixture.test/correct-master.m4a' };
+await ctx.resolvePreviewForTrack(apple, { forceLookup: true });
+assert.equal(apple.previewUrl, best.previewUrl); assert.equal(apple.previewMissing, false);
+assert.notEqual(ctx.trackMetadataApiCacheKey(apple), ctx.trackMetadataApiCacheKey({ ...apple, catalogMetadata: { ...apple.catalogMetadata, recording_id: 'apple_music:999999' } }));
 console.log('Reviewed recording catalog passed: actual cold core/shards, seven exact recordings, six Big Beat artists, strict genre/BPM/history gates, atomic master replacement and cache reload without artist-wide permission.');

@@ -4799,7 +4799,7 @@ const VIBE_THEME_CONFIG = {
   hard: { density: 28, minSize: 1.04, maxSize: 1.84, minDuration: 7.8, maxDuration: 14.2 }
 };
 
-const EXTERNAL_DATASET_CACHE_VERSION = "20261105-labels-v25";
+const EXTERNAL_DATASET_CACHE_VERSION = "20261110-reviewed-v26";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
@@ -4840,7 +4840,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261110friends1";
+const SONIC_APP_BUILD_ID = "20261110trust1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -20471,9 +20471,10 @@ function reviewedRecordingStyleProof(track) {
   const metadata = catalogTrackMetadata(track);
   const tags = new Set([...(Array.isArray(track.sourceTags) ? track.sourceTags : []), ...catalogTrackMetadataList(track, "source_tags")]);
   if (!tags.has("recording_identity_verified")) return null;
+  const identityText = value => String(value || "").normalize("NFKC").replace(/[’‘]/g, "'").replace(/&amp;/gi, "&").toLowerCase().replace(/\s+/g, " ").trim();
   const proof = REVIEWED_RECORDING_STYLE_PROOFS_V26.find(row => row.style === track.style &&
-    canonicalArtistIdentity(row.artist) === canonicalArtistIdentity(track.artist || "") &&
-    normalize(row.song) === normalize(track.song || track.title || ""));
+    identityText(row.artist) === identityText(track.artist) &&
+    identityText(row.song) === identityText(track.song || track.title));
   if (!proof) return null;
   try {
     const recording = new URL(metadata.source_url || "");
@@ -20668,6 +20669,7 @@ function dedupeCatalogByTrackKey() {
 
   const mergeTrackPlayableCandidates = (target, source) => {
     if (!target || !source || target === source) return;
+    if (reviewedRecordingStyleProof(target)) return;
     previewCandidatesForTrack(source).forEach((url) => registerPreviewCandidate(target, url));
     const mergedYoutube = youtubeVideoCandidatesForTrack(target);
     youtubeVideoCandidatesForTrack(source).forEach((candidate) => {
@@ -20690,7 +20692,9 @@ function dedupeCatalogByTrackKey() {
     grouped.push(track);
     tracksByKey.set(key, grouped);
     const currentBest = bestByKey.get(key);
-    if (!currentBest || scoreTrack(track) > scoreTrack(currentBest)) {
+    const reviewed = Boolean(reviewedRecordingStyleProof(track));
+    const currentReviewed = Boolean(reviewedRecordingStyleProof(currentBest));
+    if (!currentBest || (reviewed && !currentReviewed) || (reviewed === currentReviewed && scoreTrack(track) > scoreTrack(currentBest))) {
       bestByKey.set(key, track);
     }
   });
@@ -20893,6 +20897,7 @@ function trackHasExternalPlayableFallback(track) {
 
 function trackHasRefreshablePreview(track) {
   return Boolean(
+    trackAppleRecordingId(track) ||
     track?.deezerTrackId ||
     catalogTrackMetadataText(track, "deezer_track_id") ||
     catalogTrackMetadataText(track, "deezerTrackId")
@@ -22577,6 +22582,11 @@ async function loadApiHealthPanel({ force = false } = {}) {
   }
 }
 
+function trackAppleRecordingId(track = {}) {
+  const recordingId = catalogTrackMetadataText(track, "recording_id");
+  return recordingId.match(/^apple_music:([1-9]\d{0,19})$/)?.[1] || "";
+}
+
 function trackMetadataApiCacheKey(track = {}) {
   const baseKey = recommendationTrackKey(track) || normalize(`${track?.artist || ""}::${track?.song || track?.title || ""}`);
   const deezerId = String(
@@ -22585,6 +22595,8 @@ function trackMetadataApiCacheKey(track = {}) {
     catalogTrackMetadataText(track, "deezerTrackId") ||
     ""
   ).trim();
+  const appleId = trackAppleRecordingId(track);
+  if (appleId) return `${baseKey}::apple:${appleId}::duration:${trackDurationSecondsForApi(track)}`;
   return deezerId ? `${baseKey}::dz:${normalize(deezerId)}` : baseKey;
 }
 
@@ -22631,9 +22643,10 @@ async function fetchTrackMetadataFromApi(track, { forceLookup = false, timeoutMs
         artist: track.artist || "",
         song: track.song || track.title || "",
         style: track.style || "",
-        album: coverArtReleaseName(track),
+        album: trackAppleRecordingId(track) ? "" : coverArtReleaseName(track),
         durationSec: trackDurationSecondsForApi(track),
         releaseYear: trackReleaseYearForApi(track),
+        itunesTrackId: trackAppleRecordingId(track),
         deezerTrackId:
           track.deezerTrackId ||
           catalogTrackMetadataText(track, "deezer_track_id") ||
@@ -22646,6 +22659,8 @@ async function fetchTrackMetadataFromApi(track, { forceLookup = false, timeoutMs
     }
     const payload = await response.json();
     const result = payload?.best || null;
+    const appleId = trackAppleRecordingId(track);
+    if (appleId && result && (result.source !== "itunes" || String(result.id) !== appleId)) return null;
     if (cacheKey && result && normalizePreviewUrl(result.previewUrl)) trackMetadataApiCache.set(cacheKey, result);
     return result;
   } catch (_err) {
@@ -23381,7 +23396,7 @@ function addDynamicTrackToCatalog({
   const hasDirectYoutube = isDirectYouTubeUrl(safeYoutubeTrackUrl) || isDirectYouTubeUrl(safeYoutubeUrl);
   const hasDirectSoundcloud = isDirectSoundCloudTrackUrl(safeSoundcloudTrackUrl) || isDirectSoundCloudTrackUrl(safeSoundcloudUrl);
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
-  const hasRefreshablePreview = Boolean(safeDeezerTrackId);
+  const hasRefreshablePreview = Boolean(safeDeezerTrackId || trackAppleRecordingId({ catalogMetadata: safeCatalogMetadata }));
   const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
   if (isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
   const durationText = duration > 0
@@ -24116,7 +24131,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   let foundEvidence = Boolean(currentPreview);
   const strictStyle = hasStrictWhitelist(track.style) || STRICT_ARTIST_MATCH_STYLES.has(track.style);
   const minConfidence = track.style === "slambient" ? 0.97 : strictStyle ? 0.94 : 0.9;
-  const deezerLookupAllowed = COMPLIANCE_CONFIG.clientDeezerEnabled === true;
+  const deezerLookupAllowed = !trackAppleRecordingId(track) && COMPLIANCE_CONFIG.clientDeezerEnabled === true;
   const ensureTrackMetadata = (releaseDate = "", durationSec = 0, catalogRef = "", sourceInfo = {}) => {
     const current = TRACK_METADATA[`${track.song}|${track.artist}`] || {};
     const duration =
@@ -24265,6 +24280,17 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     applyTrackMetadataApiMatch(await fetchTrackMetadataFromApi(track, { forceLookup }));
   } catch (_err) {
     // Optional server-side metadata enrichment; local catalog still works without it.
+  }
+
+  if (trackAppleRecordingId(track)) {
+    // This recording was verified by its provider ID. Text searches must not
+    // silently replace it with another release or remix when refresh fails.
+    const candidates = previewCandidatesForTrack(track);
+    track.previewUrl = candidates[0] || "";
+    track.previewChecked = true;
+    track.previewMissing = candidates.length === 0;
+    track.previewLookupAttempted = true;
+    return;
   }
 
   if (deezerLookupAllowed) {
