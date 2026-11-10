@@ -22463,12 +22463,14 @@ function trackReleaseYearForApi(track = {}) {
   return match ? Number(match[0]) : 0;
 }
 
-async function fetchTrackMetadataFromApi(track) {
+async function fetchTrackMetadataFromApi(track, { forceLookup = false, timeoutMs = FAST_OPTIONAL_API_TIMEOUT_MS } = {}) {
   if (!track?.artist || !track?.song) return null;
   const endpoint = resolveMusicApiEndpoint("SONIC_TRACK_METADATA_API_URL", "/api/track-metadata");
   if (!endpoint) return null;
   const cacheKey = trackMetadataApiCacheKey(track);
-  if (cacheKey && trackMetadataApiCache.has(cacheKey)) return trackMetadataApiCache.get(cacheKey);
+  const cached = cacheKey ? trackMetadataApiCache.get(cacheKey) : null;
+  if (!forceLookup && cached && normalizePreviewUrl(cached.previewUrl)) return cached;
+  if (cacheKey) trackMetadataApiCache.delete(cacheKey);
 
   try {
     const response = await fetchWithTimeout(endpoint, {
@@ -22490,17 +22492,15 @@ async function fetchTrackMetadataFromApi(track) {
           catalogTrackMetadataText(track, "deezerTrackId") ||
           ""
       })
-    }, FAST_OPTIONAL_API_TIMEOUT_MS);
+    }, Math.max(120, Number(timeoutMs) || FAST_OPTIONAL_API_TIMEOUT_MS));
     if (!response.ok) {
-      if (cacheKey) trackMetadataApiCache.set(cacheKey, null);
       return null;
     }
     const payload = await response.json();
     const result = payload?.best || null;
-    if (cacheKey) trackMetadataApiCache.set(cacheKey, result);
+    if (cacheKey && result && normalizePreviewUrl(result.previewUrl)) trackMetadataApiCache.set(cacheKey, result);
     return result;
   } catch (_err) {
-    if (cacheKey) trackMetadataApiCache.set(cacheKey, null);
     return null;
   }
 }
@@ -24075,7 +24075,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   }
 
   try {
-    applyTrackMetadataApiMatch(await fetchTrackMetadataFromApi(track));
+    applyTrackMetadataApiMatch(await fetchTrackMetadataFromApi(track, { forceLookup }));
   } catch (_err) {
     // Optional server-side metadata enrichment; local catalog still works without it.
   }
