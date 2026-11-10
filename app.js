@@ -4840,7 +4840,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261110trust1";
+const SONIC_APP_BUILD_ID = "20261110trust2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
