@@ -1,6 +1,12 @@
 {
   "version": 1,
   "core": "core.json",
+  "catalogSummary": {
+    "titleCount": 9147,
+    "styleCount": 169,
+    "countingMethod": "distinct_artist_and_title_including_named_versions",
+    "scope": "bundled_catalog_metadata_not_audio_availability"
+  },
   "styles": {
     "acid_techno": "styles/acid_techno.json",
     "acid_trance": "styles/acid_trance.json",

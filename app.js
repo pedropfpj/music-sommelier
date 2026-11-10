@@ -24547,6 +24547,8 @@ const I18N = {
     betaGateDescTwo: "Ouça, reaja e fuja do algoritmo óbvio.",
     betaGateDescThree: "DJs, selectors e fãs intensos têm prioridade.",
     betaGateMetricsAria: "Sinais atuais do produto",
+    betaMetricCatalogTitles: "faixas catalogadas",
+    betaCatalogScope: "Catálogo desta versão. A confirmação de estilo e áudio varia por faixa.",
     betaMetricSearchable: "músicas buscáveis",
     betaMetricAudited: "faixas auditadas",
     betaMetricArtists: "artistas indexados",
@@ -25464,6 +25466,8 @@ const I18N = {
     betaGateDescTwo: "Listen, react, and escape the obvious algorithm.",
     betaGateDescThree: "DJs, selectors, and intense listeners get priority.",
     betaGateMetricsAria: "Current product signals",
+    betaMetricCatalogTitles: "cataloged tracks",
+    betaCatalogScope: "Catalog for this version. Style and audio confirmation vary by track.",
     betaMetricSearchable: "searchable tracks",
     betaMetricAudited: "audited tracks",
     betaMetricArtists: "indexed artists",
@@ -26380,6 +26384,8 @@ const I18N = {
     betaGateDescTwo: "Escucha, reacciona y escapa del algoritmo obvio.",
     betaGateDescThree: "DJs, selectors y oyentes intensos tienen prioridad.",
     betaGateMetricsAria: "Señales actuales del producto",
+    betaMetricCatalogTitles: "pistas catalogadas",
+    betaCatalogScope: "Catálogo de esta versión. La confirmación de estilo y audio varía según la pista.",
     betaMetricSearchable: "pistas buscables",
     betaMetricAudited: "pistas auditadas",
     betaMetricArtists: "artistas indexados",
@@ -28128,9 +28134,12 @@ function applyLanguage() {
   setText("#betaGateDescTwo", t("betaGateDescTwo"));
   setText("#betaGateDescThree", t("betaGateDescThree"));
   if (document.getElementById("betaGateMetrics")) document.getElementById("betaGateMetrics").setAttribute("aria-label", t("betaGateMetricsAria"));
-  setText("#betaMetricSearchable", t("betaMetricSearchable"));
-  setText("#betaMetricAudited", t("betaMetricAudited"));
-  setText("#betaMetricArtists", t("betaMetricArtists"));
+  setText("#betaMetricCatalogTitles", t("betaMetricCatalogTitles"));
+  setText("#betaCatalogScope", t("betaCatalogScope"));
+  document.querySelectorAll("#betaGateMetrics [data-catalog-count]").forEach(node => {
+    const count = Number(node.dataset.catalogCount);
+    if (Number.isSafeInteger(count) && count >= 0) node.textContent = count.toLocaleString(currentLanguage === "en" ? "en-US" : currentLanguage === "es" ? "es-ES" : "pt-BR");
+  });
   setText("#betaMetricStyles", t("betaMetricStyles"));
   if (document.getElementById("betaProofGrid")) document.getElementById("betaProofGrid").setAttribute("aria-label", t("betaProofAria"));
   setText("#betaProofOneTitle", t("betaProofOneTitle"));

@@ -271,8 +271,16 @@ export async function buildRuntimeCatalog() {
     rows.sort((a, b) => playbackScore(b) - playbackScore(a) || a.artist.localeCompare(b.artist) || a.song.localeCompare(b.song));
   }
 
+  const titleKeys = new Set(Array.from(deduped.values(), row => `${token(row.artist)}::${token(row.song)}`));
+  const catalogSummary = {
+    titleCount: titleKeys.size,
+    styleCount: byStyle.size,
+    countingMethod: "distinct_artist_and_title_including_named_versions",
+    scope: "bundled_catalog_metadata_not_audio_availability"
+  };
+
   await mkdir(path.join(outputDir, "styles"), { recursive: true });
-  const manifest = { version: 1, core: "core.json", styles: {}, counts: {} };
+  const manifest = { version: 1, core: "core.json", catalogSummary, styles: {}, counts: {} };
   const core = [];
   let runtimeBytes = 0;
   for (const [style, rows] of Array.from(byStyle.entries()).sort(([a], [b]) => a.localeCompare(b))) {
@@ -288,6 +296,14 @@ export async function buildRuntimeCatalog() {
   await writeFile(path.join(outputDir, "core.json"), corePayload);
   runtimeBytes += Buffer.byteLength(corePayload);
   await writeFile(path.join(outputDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+  const indexPath = path.join(rootDir, "index.html");
+  let index = await readFile(indexPath, "utf8");
+  for (const [id, count] of [["betaCatalogTitlesCount", catalogSummary.titleCount], ["betaCatalogStylesCount", catalogSummary.styleCount]]) {
+    const expression = new RegExp(`(<strong id="${id}" data-catalog-count=")[^"]*(">)[^<]*(</strong>)`);
+    if (!expression.test(index)) throw new Error(`Missing published catalog count: ${id}`);
+    index = index.replace(expression, (_match, prefix, middle, suffix) => `${prefix}${count}${middle}${count.toLocaleString("pt-BR")}${suffix}`);
+  }
+  await writeFile(indexPath, index);
 
   const summary = {
     sourcesRead,
