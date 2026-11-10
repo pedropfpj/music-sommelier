@@ -58738,6 +58738,7 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
 async function openSavedLibraryTrack(entry, button) {
   if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return;
   const profileKey = sessionProfileKey();
+  const sessionGeneration = recommendationSessionGeneration;
   const previousTrack = currentRecommendation;
   recommendationRunBusy = true;
   button.disabled = true;
@@ -58751,7 +58752,7 @@ async function openSavedLibraryTrack(entry, button) {
       await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: entry.style || "" }), 8000, null);
       track = resolveTrack();
     }
-    if (profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation) return;
+    if (!recommendationSessionIsCurrent(sessionGeneration) || profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation) return;
     if (!track || !isTrackEligibleForRecommendation(track)) {
       showToast(discoveryExperienceCopy().unavailable);
       return;
@@ -58762,9 +58763,9 @@ async function openSavedLibraryTrack(entry, button) {
     trackRecommendationEvent("saved_track_replayed", track, lastPrefs || {}, { source: "library" });
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
   } catch (_) {
-    if (profileKey === sessionProfileKey()) showToast(discoveryExperienceCopy().unavailable);
+    if (recommendationSessionIsCurrent(sessionGeneration) && profileKey === sessionProfileKey()) showToast(discoveryExperienceCopy().unavailable);
   } finally {
-    recommendationRunBusy = false;
+    if (recommendationSessionIsCurrent(sessionGeneration)) recommendationRunBusy = false;
     button.disabled = false;
     button.textContent = discoveryExperienceCopy().play;
   }
