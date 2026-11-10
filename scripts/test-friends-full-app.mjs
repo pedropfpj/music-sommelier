@@ -148,6 +148,19 @@ try {
   await guest.locator('.friends-received-invite').getByText('Ana Sonora', { exact: true }).waitFor();
   assert.equal(new URL(guest.url()).hash, '', 'Authentication credentials are removed after the callback');
   assert.equal((await lab.db.query('select count(*)::int n from friend_edges')).rows[0].n, 1, 'Login and invite preview do not create a friendship');
+  await pane(bia, 'people'); await action(bia, 'create-invite').click();
+  await bia.locator('#friendsInviteLink').waitFor();
+  const secondInvite = new URL(await bia.locator('#friendsInviteLink').inputValue());
+  const sameDocument = new URL(guest.url()); sameDocument.hash = secondInvite.hash;
+  const previousRequestCount = calls.filter(call => call.action === 'request').length;
+  await guest.goto(sameDocument.href, { waitUntil: 'domcontentloaded' });
+  await guest.locator('.friends-received-invite').getByText('Bia Radar', { exact: true }).waitFor();
+  assert.equal(new URL(guest.url()).hash, '', 'A same-document invitation is captured and scrubbed');
+  assert.equal(await guest.evaluate(() => JSON.parse(sessionStorage.getItem('sonic:friends-entry:v1')).inviteToken), new URLSearchParams(secondInvite.hash.slice(1)).get('friendInvite'));
+  assert.equal(calls.filter(call => call.action === 'request').length, previousRequestCount, 'A same-document invite only previews; it cannot send or accept a request');
+  assert.equal((await lab.db.query('select count(*)::int n from friend_edges')).rows[0].n, 1);
+  console.log('CHECK new-document OAuth and same-document invitation return');
+  await pane(bia, 'feed');
   for (const width of [375, 1440]) {
     await bia.setViewportSize({ width, height: width === 375 ? 812 : 960 });
     await bia.locator('#friendsPanel').scrollIntoViewIfNeeded();
@@ -156,7 +169,7 @@ try {
     await bia.screenshot({ path: path.join(output, `friends-${width}.png`), fullPage: true });
   }
   assert.deepEqual(errors, [], 'The complete minified application has no JavaScript errors');
-  const report = { passed: true, application: 'complete index + app.min.js + real Friends handler and PGlite', auth: 'local fixtures only', media: 'not exercised here; exact media is covered by the weekly/preflight suites', viewports: [375, 1440], checks: ['guest no Friends requests or writes', 'five primary tabs and More through Profile', 'explicit saved-profile alias without photos', 'request preview and mutual acceptance', 'chosen-recording draft survives navigation', 'friends-only post through root authenticated transport', 'third-account known-post denial', 'invitation capture, authentication return, URL scrub and no automatic friendship'], requests: calls, errors };
+  const report = { passed: true, application: 'complete index + app.min.js + real Friends handler and PGlite', auth: 'local fixtures only', media: 'not exercised here; exact media is covered by the weekly/preflight suites', viewports: [375, 1440], checks: ['guest no Friends requests or writes', 'five primary tabs and More through Profile', 'explicit saved-profile alias without photos', 'request preview and mutual acceptance', 'chosen-recording draft survives navigation', 'friends-only post through root authenticated transport', 'third-account known-post denial', 'invitation capture, authentication return, same-document invitation, URL scrub and no automatic friendship'], requests: calls, errors };
   await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   console.log('PASS full app Friends: guest/navigation, explicit identity/request/accept/share, draft continuity, private post denial, invitation login return and responsive screens. Real handler + PGlite; local auth fixtures; no production calls or writes.');
 } catch (error) {
