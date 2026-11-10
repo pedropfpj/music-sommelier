@@ -14,7 +14,11 @@ const PSYTRANCE_CATALOG_STYLES = new Set([
   "full_on_morning", "progressive_psy", "hi_tech", "dark_progressive", "goa_trance",
   "psy_comercial", "slambient"
 ]);
+const PROVIDER_BOUND_PSYTRANCE_TRACK_KEYS = new Set([
+  "braincell::hanging out under the trees"
+]);
 const BLOCKED_PSYTRANCE_TRACK_KEYS = new Set([
+  ...PROVIDER_BOUND_PSYTRANCE_TRACK_KEYS,
   "furious::don't change your style",
   "furious::hang your head",
   "furious::punk bashin' boogie",
@@ -141,10 +145,21 @@ function catalogMetadata(row = {}) {
 function catalogTrackPassesPsytranceIntegrity(row = {}) {
   const style = String(row.style || "").trim().toLowerCase();
   if (!PSYTRANCE_CATALOG_STYLES.has(style)) return true;
-  const trackKey = `${normalizedCatalogText(row.artist)}::${normalizedCatalogText(row.song)}`;
-  if (BLOCKED_PSYTRANCE_TRACK_KEYS.has(trackKey)) return false;
-
   const metadata = catalogMetadata(row);
+  const deezerId = String(row.deezerTrackId || row.deezer_track_id || metadata.deezer_track_id || "");
+  const itunesId = String(row.itunesTrackId || row.itunes_track_id || metadata.itunes_track_id || "");
+  const hasProviderId = /^\d+$/.test(deezerId) || /^\d+$/.test(itunesId);
+  if (deezerId === "3603698542" || itunesId === "1846331779") return false;
+  const trackKey = `${normalizedCatalogText(row.artist)}::${normalizedCatalogText(row.song)}`;
+  if (BLOCKED_PSYTRANCE_TRACK_KEYS.has(trackKey) && (!PROVIDER_BOUND_PSYTRANCE_TRACK_KEYS.has(trackKey) || !hasProviderId)) return false;
+  if (!hasProviderId && ["hanging out under the trees", "hanging out under the trees (original mix)"].includes(normalizedCatalogText(row.song))) {
+    const credits = String(row.artist || "").replace(/\([^)]*\)/g, " ")
+      .split(/\s*(?:&|,|;)\s*|\s+(?:and|feat\.?|ft\.?|featuring|x|with)\s+/i)
+      .map(normalizedCatalogIdentity).filter(Boolean);
+    if (credits.length && credits.every(credit => ["braincell", "mandala", "undercover babas"].includes(credit)) &&
+      credits.some(credit => ["braincell", "undercover babas"].includes(credit))) return false;
+  }
+
   const releaseGenres = normalizedCatalogText(metadata.album_genres || metadata.release_genres || "");
   if (!releaseGenres) return true;
   const hardWrongGenre = /\b(?:alternative|alternativo|rock|rockabilly|reggae|hip\s*hop|rap|r\s*and\s*b|rhythm\s+and\s+blues|country|folk|sertanejo|gospel|classical|classico|orchestral)\b/;

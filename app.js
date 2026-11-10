@@ -14398,6 +14398,16 @@ const STYLE_ARTIST_BLOCKLIST = {
   ]
 };
 
+// Recording-level correction, not an artist ban. The exact Nano track page tags
+// this 2025 recording ambient/chill; see docs/recording-quarantine-20261110.md.
+const PSYTRANCE_RECORDING_QUARANTINE = [{
+  titles: ["Hanging Out Under The Trees", "Hanging Out Under The Trees (Original Mix)"],
+  deezerTrackIds: ["3603698542"],
+  itunesTrackIds: ["1846331779"],
+  creditComponents: ["braincell", "mandala", "undercover babas"],
+  identifyingCredits: ["braincell", "undercover babas"]
+}];
+
 const TRACK_STYLE_BLOCKLIST = [
   {
     family: "psytrance",
@@ -20273,9 +20283,27 @@ function artistAllowedForStyle(style, artistName) {
   return seeds.some((seed) => isArtistMatch(artistName, seed));
 }
 
+function psytranceRecordingIsQuarantined(style, trackLike = {}) {
+  if (familyOf(normalizeDatasetStyle(style || trackLike.style || "")) !== "psytrance") return false;
+  const deezerId = String(trackLike.deezerTrackId || trackLike.deezer_track_id || catalogTrackMetadataText(trackLike, "deezer_track_id") || "");
+  const itunesId = String(trackLike.itunesTrackId || trackLike.itunes_track_id || catalogTrackMetadataText(trackLike, "itunes_track_id") || "");
+  const hasProviderId = /^\d+$/.test(deezerId) || /^\d+$/.test(itunesId);
+  return PSYTRANCE_RECORDING_QUARANTINE.some(recording => {
+    if (recording.deezerTrackIds.includes(deezerId) || recording.itunesTrackIds.includes(itunesId)) return true;
+    // An unrecognized ID may identify a different recording; do not infer an
+    // alias or remix from a familiar artist name/title alone in that case.
+    if (hasProviderId) return false;
+    if (!recording.titles.some(title => normalize(title) === normalize(trackLike.song || trackLike.title || ""))) return false;
+    const credits = artistCreditComponents(trackLike.artist || "");
+    return credits.length > 0 && credits.every(credit => recording.creditComponents.includes(credit)) &&
+      credits.some(credit => recording.identifyingCredits.includes(credit));
+  });
+}
+
 function trackBlockedForStyle(style, trackLike = {}) {
   const cleanStyle = normalizeDatasetStyle(style || trackLike?.style || "");
   if (!cleanStyle || !trackLike) return false;
+  if (psytranceRecordingIsQuarantined(cleanStyle, trackLike)) return true;
   const trackArtist = String(trackLike.artist || "").trim();
   const trackSong = String(trackLike.song || trackLike.title || "").trim();
   if (trackArtist && isCuratorBlockedArtistName(trackArtist)) return true;
