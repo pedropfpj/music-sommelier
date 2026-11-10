@@ -93,6 +93,19 @@ try {
     return {disconnected,syncAllowed};
   });
   assert.equal(mismatched.disconnected,true);assert.equal(mismatched.syncAllowed,false);
+  // Older overflow remains available and downloadable when the account already has 80 newer likes.
+  await page.evaluate(()=>{
+    socialStoreSession(null);ephemeralProfileMode=true;currentAuthUser=normalizeUserSession({mode:'visitor'});
+    likedTrackHistory=[likedTrackHistoryEntry({artist:'Overflow Artist',song:'Keep This Older Track',style:'house'},'liked','2026-11-05T12:00:00.000Z')];dislikedTrackHistory=[];libraryRemovedTrackHistory=[];capturePendingLocalLibraryTransfer();
+    socialStoreSession({access_token:'local-test-only',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'11111111-1111-4111-8111-111111111111',app_metadata:{provider:'google'}}});activateUserSession(onlineSocialUserSession());
+    likedTrackHistory=Array.from({length:80},(_,i)=>likedTrackHistoryEntry({artist:'Account Artist',song:'Newer Track '+i,style:'house'},'liked','2026-11-09T12:00:00.000Z'));dislikedTrackHistory=[];libraryRemovedTrackHistory=[];resetLibrarySyncState();saveProgress();renderSocialUi({preserveStatus:true});
+  });
+  await page.locator('#libraryTransferBtn').click();assert.equal(await page.locator('#libraryTransferBtn').isDisabled(),true);
+  assert.match(await page.locator('#libraryTransferHint').textContent(),/80/);
+  const downloadPromise=page.waitForEvent('download');await page.locator('#libraryTransferExportBtn').click();const download=await downloadPromise;
+  const overflowFile=JSON.parse(await fs.readFile(await download.path(),'utf8'));
+  assert.equal(overflowFile.data.progress.likedTrackHistory[0].song,'Keep This Older Track');
+  assert.ok(await page.evaluate(()=>Boolean(readPendingLocalLibraryTransfer())),'Export does not consume the recovery copy');
   assert.deepEqual(errors,[]);
   console.log('Saved-track UI passed: pending/success/offline/error/retry, local track preservation, 375/852/1440 layouts, 44px action, large text, reduced motion, EN/ES and logout. Account/cloud API mocked; no production writes.');
 } finally {await browser.close();await preview.stop();}

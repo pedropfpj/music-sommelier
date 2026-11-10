@@ -22988,3 +22988,5 @@ body.sonic-first-value-window #dailyRadarPanel {
 .library-transfer-prompt { margin:1rem 0; padding:1rem; border:1px solid rgba(255,201,127,.4); border-radius:14px; }
 .library-transfer-prompt p { margin:0 0 .75rem; line-height:1.5; }
 .library-transfer-prompt button { min-height:44px; max-width:100%; white-space:normal; }
+
+.library-transfer-prompt button + button { margin-top:.5rem; }

@@ -10374,6 +10374,7 @@ const librarySyncRetryBtn = document.getElementById("librarySyncRetryBtn");
 const libraryTransferPrompt = document.getElementById("libraryTransferPrompt");
 const libraryTransferHint = document.getElementById("libraryTransferHint");
 const libraryTransferBtn = document.getElementById("libraryTransferBtn");
+const libraryTransferExportBtn = document.getElementById("libraryTransferExportBtn");
 const summaryLikedTracksTitle = document.getElementById("summaryLikedTracksTitle");
 const summaryLikedTracksHint = document.getElementById("summaryLikedTracksHint");
 const summaryLikedTracksList = document.getElementById("summaryLikedTracksList");
@@ -34922,19 +34923,23 @@ function buildProfileBackupPayload() {
   };
 }
 
+function downloadProfileBackupPayload(payload, filename) {
+  const json = JSON.stringify(payload, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function exportProfileBackup() {
   try {
     const payload = buildProfileBackupPayload();
-    const json = JSON.stringify(payload, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = profileBackupFilename();
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadProfileBackupPayload(payload, profileBackupFilename());
     try { localStorage.setItem(profileBackupLastExportKey(), payload.exportedAt); } catch { /* The downloaded backup remains usable without local storage. */ }
     updateProfileBackupStatus();
     showToast(t("profileBackupExported"));
@@ -60150,7 +60155,7 @@ function storePendingLocalLibraryTransfer(value) {
 
 function capturePendingLocalLibraryTransfer() {
   const source = normalizeUserSession(currentAuthUser);
-  if (!["guest", "visitor"].includes(source.mode) || (!likedTrackHistory.length && !dislikedTrackHistory.length)) return;
+  if (!["guest", "visitor"].includes(source.mode) || (!likedTrackHistory.length && !dislikedTrackHistory.length && !libraryRemovedTrackHistory.length)) return;
   const previous = readPendingLocalLibraryTransfer();
   const unbound = previous?.targetProfileKey ? null : previous;
   const queued = previous?.targetProfileKey ? [{ ...previous, queued: undefined }, ...(previous.queued || [])] : previous?.queued || [];
@@ -60183,9 +60188,18 @@ function renderPendingLibraryTransfer() {
     `${pending.liked.length} likes and ${pending.disliked.length} rejected tracks from your previous session are kept. You choose whether to add them to this account.`,
     `${pending.liked.length} likes y ${pending.disliked.length} descartes de la sesión anterior están guardados. Tú eliges si añadirlos a esta cuenta.`
   );
+  if (libraryTransferHint && available && pending.partialSignature) libraryTransferHint.textContent += sonicTinyCopy(
+    " A biblioteca mantém até 80 curtidas e 80 descartes. Estas faixas restantes continuam nesta cópia da sessão; salve o arquivo para guardá-las.",
+    " The library keeps up to 80 likes and 80 rejected tracks. These remaining tracks stay in this session copy; save the file to keep them.",
+    " La biblioteca conserva hasta 80 likes y 80 descartes. Estas pistas restantes siguen en esta copia de la sesión; guarda el archivo para conservarlas."
+  );
+  if (libraryTransferExportBtn) {
+    libraryTransferExportBtn.textContent = sonicTinyCopy("Salvar cópia das faixas desta sessão", "Save a copy of this session's tracks", "Guardar copia de las pistas de esta sesión");
+    libraryTransferExportBtn.disabled = !available;
+  }
   if (libraryTransferBtn) {
     libraryTransferBtn.textContent = sonicTinyCopy("Trazer faixas desta sessão para esta conta", "Add session tracks to this account", "Traer pistas de esta sesión a esta cuenta");
-    libraryTransferBtn.disabled = !available || socialState.librarySyncInProgress;
+    libraryTransferBtn.disabled = !available || socialState.librarySyncInProgress || pending.partialSignature === libraryHistorySignature();
   }
 }
 
@@ -60202,11 +60216,36 @@ function importPendingLocalLibraryTransfer() {
   saveProgress();
   renderLikedTrackHistory(); renderDislikedTrackHistory(); updateStats();
   if (socialState.localSaveState !== "saved") return false;
+  const retained = [...likedTrackHistory, ...dislikedTrackHistory, ...libraryRemovedTrackHistory];
+  const represented = entry => retained.some(item => likedTrackKeyFromEntry(item) === likedTrackKeyFromEntry(entry) && (Date.parse(item.likedAt) || 0) >= (Date.parse(entry.likedAt) || 0));
+  const residual = { ...pending, liked: pending.liked.filter(entry => !represented(entry)), disliked: pending.disliked.filter(entry => !represented(entry)), removed: pending.removed.filter(entry => !represented(entry)), partialSignature: libraryHistorySignature() };
+  const hasRemaining = residual.liked.length || residual.disliked.length || residual.removed.length;
   const remaining = [root, ...(root.queued || [])].filter(item => item.id !== pending.id).map(({ queued, ...item }) => item);
+  if (hasRemaining) remaining.unshift(residual);
   storePendingLocalLibraryTransfer(remaining.length ? { ...remaining[0], queued: remaining.slice(1) } : null);
   renderPendingLibraryTransfer();
   queueSocialSync("profile");
-  return true;
+  return !hasRemaining;
+}
+
+function buildPendingLibraryTransferBackup() {
+  if (!librarySessionMatchesOnlineAccount()) return null;
+  const root = readPendingLocalLibraryTransfer();
+  const pending = root ? [root, ...(root.queued || [])].find(item => item.targetProfileKey === sessionProfileKey(currentAuthUser)) : null;
+  if (!pending) return null;
+  return { app: PROFILE_BACKUP_APP_ID, version: PROFILE_BACKUP_VERSION, exportedAt: new Date().toISOString(),
+    session: { mode: "guest", username: "" }, data: { progress: {
+      likedTrackHistory: pending.liked, dislikedTrackHistory: pending.disliked, libraryRemovedTrackHistory: pending.removed
+    } } };
+}
+
+function exportPendingLocalLibraryTransfer() {
+  const payload = buildPendingLibraryTransferBackup();
+  if (!payload) return false;
+  try {
+    downloadProfileBackupPayload(payload, `sonic-search-session-tracks-${new Date().toISOString().slice(0, 10)}.json`);
+    return true;
+  } catch { showToast(t("toastError")); return false; }
 }
 
 function rememberLibraryRemoval(entry) {
@@ -64439,6 +64478,7 @@ bind(socialSignOutBtn, "click", () => {
   void socialSignOut();
 });
 bind(libraryTransferBtn, "click", () => { importPendingLocalLibraryTransfer(); });
+bind(libraryTransferExportBtn, "click", () => { exportPendingLocalLibraryTransfer(); });
 bind(librarySyncRetryBtn, "click", () => {
   void syncSocialLikedTracks({ force: true, activity: false });
 });
