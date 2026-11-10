@@ -339,7 +339,7 @@
           // each keystroke would move its caret and interrupt ongoing editing.
           root.querySelector("#friendsSearchResults")?.replaceChildren();
           const submit = root.querySelector('[data-friends-form="search"] button');
-          if (submit) submit.disabled = false;
+          if (submit) submit.disabled = Boolean(state.mutation);
         }
       }
       if (event.target.id === "friendsName") { state.identityDraft = event.target.value; state.identityDirty = true; const preview = root.querySelector("#friendsIdentityPreview"); if (preview) preview.textContent = safeName(state.identityDraft) || t().name; }
