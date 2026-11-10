@@ -6,6 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const cordovaConfig = await readFile(path.join(rootDir, "ios/App/App/config.xml"), "utf8");
+assert.match(cordovaConfig, /<widget[\s>]/, "A clean native copy must include the config.xml resource referenced by Xcode");
 
 async function read(relativePath) {
   return readFile(path.join(rootDir, relativePath), "utf8");
