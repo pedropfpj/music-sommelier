@@ -268,12 +268,7 @@ function buildIosAppJs(js) {
     ],
     [
       "Você chegou ao limite gratuito de {limit} músicas descobertas. Assine premium para continuar descobrindo.",
-      "Você chegou ao limite diário de {limit} descobertas neste aparelho. Volte mais tarde ou apague o perfil local se quiser recomeçar."
-    ],
-    ["A API pediu acesso premium para gerar esta arte.", "A geração online dessa arte está indisponível agora."],
-    [
-      "Entre com o Google autorizado ou assine premium para gerar esta arte.",
-      "A geração online dessa arte precisa de uma conta autorizada. A versão local continua disponível."
+      "Você chegou ao limite diário de {limit} descobertas neste aparelho. Volte mais tarde; suas faixas salvas continuam disponíveis."
     ],
     ["Contact and support", "Contact"],
     [
@@ -302,12 +297,7 @@ function buildIosAppJs(js) {
     ],
     [
       "You reached the free limit of {limit} discovered tracks. Subscribe to premium to keep discovering.",
-      "You reached the daily limit of {limit} discoveries on this device. Come back later or erase the local profile to start over."
-    ],
-    ["The API requested premium access to generate this artwork.", "Online artwork generation is unavailable right now."],
-    [
-      "Sign in with the authorized Google account or subscribe to premium to generate this artwork.",
-      "Online artwork generation requires an authorized account. The local version remains available."
+      "You reached the daily limit of {limit} discoveries on this device. Come back later; your saved tracks remain available."
     ],
     ["Contacto y apoyo", "Contacto"],
     [
@@ -336,12 +326,7 @@ function buildIosAppJs(js) {
     ],
     [
       "Llegaste al límite gratuito de {limit} canciones descubiertas. Suscríbete a premium para seguir descubriendo.",
-      "Llegaste al límite diario de {limit} descubrimientos en este dispositivo. Vuelve más tarde o borra el perfil local para empezar de nuevo."
-    ],
-    ["La API pidió acceso premium para generar este arte.", "La generación online de este arte no está disponible ahora."],
-    [
-      "Entra con el Google autorizado o suscríbete a premium para generar este arte.",
-      "La generación online de este arte requiere una cuenta autorizada. La versión local sigue disponible."
+      "Llegaste al límite diario de {limit} descubrimientos en este dispositivo. Vuelve más tarde; tus pistas guardadas siguen disponibles."
     ],
   ], "app.js");
 
