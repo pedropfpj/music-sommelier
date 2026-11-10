@@ -11,9 +11,11 @@ function source(name) {
   return app.slice(start, end + 2);
 }
 const identityNames = ["socialCleanUsername", "socialSessionMetadata", "socialPublicIdentityText", "socialDefaultIdentityName", "socialSafeAvatarUrl", "socialSuggestedUsername", "socialSuggestedDisplayName", "socialCurrentPublicIdentity", "socialCurrentProfilePayload", "socialCommentAuthorMeta", "socialCommentAuthorForDisplay", "hydrateSocialProfileIdentity"];
+if (app.includes("function socialProfileResponseCanApply(")) identityNames.push("socialProfileResponseCanApply");
 const a = "11111111-1111-4111-8111-111111111111", b = "22222222-2222-4222-8222-222222222222";
 const generic = { id: a, username: "sonic_user", display_name: "Sonic listener", profile_public: false };
 const canonical = { ...generic, username: "ana_sonic", display_name: "Ana Frequência", updated_at: "2026-11-09T12:00:00Z" };
+const newerCustom = { ...canonical, display_name: "Nome salvo depois", avatar_customized: true, avatar_path: null, updated_at: "2026-11-09T15:00:00Z" };
 function fixture() {
   const calls = [], logs = [];
   const ctx = vm.createContext({
@@ -131,6 +133,45 @@ function fixture() {
   adapter.onLoaded(canonical, "https://identity.fixture.test/ana.jpg");
   assert.equal(ctx.socialState.profile.display_name, canonical.display_name);
   assert.equal(ctx.socialState.profileAvatarUrl, "https://identity.fixture.test/ana.jpg");
+  adapter.onSaved(newerCustom, "");
+  for (const stamp of [canonical.updated_at, "not-a-timestamp", undefined]) {
+    const stale = { ...canonical, avatar_customized: true, avatar_path: `${a}/old-photo.jpg`, updated_at: stamp };
+    adapter.onLoaded(stale, "https://identity.fixture.test/old-photo.jpg");
+    assert.equal(JSON.stringify(ctx.socialState.profile), JSON.stringify(newerCustom), "An older or unversioned same-account load cannot revert the new custom name/photo removal");
+    assert.equal(ctx.socialState.profileAvatarUrl, "");
+    adapter.onSaved(stale, "https://identity.fixture.test/old-photo.jpg");
+    assert.equal(JSON.stringify(ctx.socialState.profile), JSON.stringify(newerCustom), "An older or invalid save callback cannot replace a newer confirmed profile snapshot");
+    assert.equal(ctx.socialState.profileAvatarUrl, "");
+  }
+  const renewed = { ...newerCustom, updated_at: "2026-11-09T16:00:00Z" };
+  adapter.onLoaded(renewed, "");
+  assert.equal(ctx.socialState.profile.updated_at, renewed.updated_at, "A current same-account response remains applicable");
+}
+
+for (const stamp of [canonical.updated_at, "not-a-timestamp", undefined]) {
+  const { ctx } = fixture(); let finish;
+  ctx.fetchWithTimeout = () => new Promise(resolve => { finish = resolve; });
+  const pending = ctx.hydrateSocialProfileIdentity();
+  await new Promise(resolve => setTimeout(resolve, 0));
+  ctx.socialState.profile = { ...newerCustom }; ctx.socialState.profileAvatarUrl = "";
+  finish({ ok: true, json: async () => ({ ok: true, profile: { ...canonical, updated_at: stamp, avatar_customized: true, avatar_path: `${a}/old-photo.jpg` }, avatarUrl: "https://identity.fixture.test/old-photo.jpg" }) });
+  await pending;
+  assert.equal(JSON.stringify(ctx.socialState.profile), JSON.stringify(newerCustom), "A delayed identity hydration response must not undo a later custom save, even without a valid response timestamp");
+  assert.equal(ctx.socialState.profileAvatarUrl, "");
+  assert.equal(ctx.socialCommentAuthorForDisplay({ mine: true, author: { id: a, displayName: generic.display_name } }).displayName, newerCustom.display_name, "Historical own comments retain the newer saved identity after a stale callback");
+}
+
+{
+  const { ctx } = fixture(); let finish;
+  ctx.socialConfigReady = () => true;
+  ctx.socialRequest = () => new Promise(resolve => { finish = resolve; });
+  vm.runInContext(source("loadSocialProfile"), ctx);
+  const pending = ctx.loadSocialProfile({ silent: true });
+  ctx.socialState.profile = { ...newerCustom }; ctx.socialState.profileAvatarUrl = "";
+  finish([{ ...canonical }]);
+  await pending;
+  assert.equal(JSON.stringify(ctx.socialState.profile), JSON.stringify(newerCustom), "A delayed direct profile GET cannot overwrite a save completed while it was in flight");
+  assert.equal(ctx.socialState.profileAvatarUrl, "");
 }
 
 function oauthFixture(url) {
