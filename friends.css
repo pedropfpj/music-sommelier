@@ -1,0 +1,123 @@
+.sonic-friends {
+  --friends-bg: #0b1821;
+  --friends-surface: #10242d;
+  --friends-line: #314c55;
+  --friends-text: #ecf8f2;
+  --friends-muted: #b2c7cc;
+  --friends-mint: #9af0ce;
+  --friends-cyan: #8dd9e5;
+  color: var(--friends-text);
+  font: 400 1rem/1.55 "Chakra Petch", sans-serif;
+  min-width: 0;
+}
+.sonic-friends *, .sonic-friends *::before, .sonic-friends *::after { box-sizing: border-box; }
+.sonic-friends h3, .sonic-friends h4, .sonic-friends h5 { font-family: "Syne", sans-serif; color: var(--friends-text); }
+.sonic-friends h4 { font-size: 1.15rem; line-height: 1.35; margin: 0 0 .75rem; }
+.sonic-friends p { overflow-wrap: anywhere; }
+.friends-header { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1rem 0 1.4rem; border-bottom: 1px solid var(--friends-line); }
+.friends-header > div { min-width: 0; }
+.friends-header h3 { font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -.035em; line-height: 1; margin: .6rem 0 1rem; }
+.friends-header p:last-child { max-width: 38ch; margin: 0; color: var(--friends-muted); font-size: 1.05rem; }
+.friends-header svg { flex-shrink: 0; width: 112px; height: 84px; stroke: var(--friends-mint); stroke-width: 1.5; }
+.friends-header svg path { stroke: #426b70; }
+.friends-eyebrow { margin: 0 0 .4rem; color: var(--friends-mint); font-size: .72rem; font-weight: 700; letter-spacing: .1em; }
+.friends-privacy { margin: 1rem 0; color: var(--friends-muted); font-size: .85rem; max-width: 90ch; }
+.friends-feedback { min-height: 1.6em; margin: 0 0 .8rem; color: var(--friends-mint); font-size: .9rem; overflow-wrap: anywhere; }
+.friends-feedback[role="alert"] { color: #ffd2b1; }
+.friends-setup { display: grid; grid-template-columns: minmax(200px, .9fr) minmax(260px, 1fr); gap: 2rem; padding: 1.5rem; border: 1px solid #477362; background: #0f2a26; border-radius: 8px; margin-bottom: 1.5rem; }
+.friends-setup form { min-width: 0; }
+.friends-setup .friends-muted { max-width: 42ch; }
+.friends-own-identity { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--friends-line); margin-bottom: 1.4rem; }
+.friends-own-identity > div:last-child { display: flex; flex-direction: column; align-items: flex-end; gap: .3rem; }
+.friends-identity-preview, .friends-actor-preview { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; border-top: 1px solid #42655a; padding-top: 1rem; margin: 1rem 0; overflow-wrap: anywhere; }
+.friends-identity-preview > span:first-child { flex: 1; min-width: 10ch; color: var(--friends-text); font-weight: 700; }
+.friends-actor-preview { flex-direction: column; align-items: flex-start; color: var(--friends-muted); font-size: .9rem; }
+.friends-actor-preview strong { color: var(--friends-text); }
+.friends-audience { display: inline-flex; align-items: center; margin: 0; color: var(--friends-mint); font: 600 .75rem/1.4 "Chakra Petch", sans-serif; letter-spacing: .025em; }
+.friends-audience::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: .45rem; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; }
+.friends-columns { display: grid; grid-template-columns: minmax(270px, .8fr) minmax(0, 1.45fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.friends-people-pane, .friends-feed-pane { min-width: 0; }
+.friends-section { padding: 1.25rem 0; border-bottom: 1px solid var(--friends-line); }
+.friends-section:first-child { padding-top: 0; }
+.friends-section-heading { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; justify-content: space-between; margin-bottom: .8rem; }
+.friends-section-heading h4 { margin: 0; }
+.friends-count { min-width: 1.8rem; text-align: center; border: 1px solid var(--friends-line); border-radius: 20px; color: var(--friends-cyan); font-size: .8rem; padding: .1rem .4rem; }
+.friends-muted { color: var(--friends-muted); margin: .5rem 0 1rem; font-size: .9rem; line-height: 1.65; }
+.friends-help { color: var(--friends-muted); font-size: .8rem; line-height: 1.6; margin: .45rem 0 .9rem; }
+.friends-people-list, .friends-invite-list, .friends-feed { list-style: none; margin: 0; padding: 0; }
+.friends-person { padding: .85rem 0; border-top: 1px solid #243d47; }
+.friends-person:first-child { border-top: 0; }
+.friends-person-identity { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.friends-avatar { display: inline-flex; width: 42px; height: 42px; flex-shrink: 0; border: 1px solid #537e78; border-radius: 50%; align-items: center; justify-content: center; background: #15342f; color: #bcffe3; font: 700 1.15rem/1 "Syne", sans-serif; }
+.friends-person-name { min-width: 0; overflow-wrap: anywhere; }
+.friends-person-name strong { display: block; font-size: .95rem; font-weight: 600; }
+.friends-person-name small { display: block; color: var(--friends-muted); font-size: .8rem; }
+.friends-person-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .7rem; }
+.friends-button, .friends-views button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; max-width: 100%; padding: .65rem .9rem; border: 1px solid #45646b; border-radius: 6px; background: #112a32; color: #d8eeeb; font: 600 .9rem/1.4 "Chakra Petch", sans-serif; cursor: pointer; text-align: center; overflow-wrap: anywhere; touch-action: manipulation; transition: background-color 160ms ease, border-color 160ms ease; }
+.friends-button:hover { background: #1a3b40; border-color: #86b8ac; }
+.friends-button.primary { background: var(--friends-mint); border-color: var(--friends-mint); color: #102b24; }
+.friends-button.primary:hover { background: #baffdf; border-color: #baffdf; }
+.friends-button.quiet { color: var(--friends-muted); border-color: transparent; background: transparent; padding-left: .25rem; padding-right: .25rem; }
+.friends-button.quiet:hover { color: var(--friends-text); text-decoration: underline; text-underline-offset: 4px; }
+.friends-button.danger { color: #ffd5d8; background: #36232c; border-color: #855462; }
+.friends-button:disabled, .friends-views button:disabled { cursor: default; opacity: .45; }
+.friends-actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+.sonic-friends label { display: block; margin: .8rem 0 .4rem; font-size: .9rem; font-weight: 500; color: #e2f0ee; }
+.sonic-friends input, .sonic-friends textarea { width: 100%; min-width: 0; min-height: 46px; border: 1px solid #537079; border-radius: 5px; background: #091b24; color: var(--friends-text); padding: .75rem; font: 400 1rem/1.5 "Chakra Petch", sans-serif; }
+.sonic-friends input[readonly] { color: #c0d2d6; background: #10232b; }
+.sonic-friends textarea { resize: vertical; }
+.sonic-friends :is(button,input,textarea,a):focus-visible { outline: 2px solid var(--friends-cyan); outline-offset: 4px; }
+.friends-search > div { display: flex; gap: .5rem; align-items: stretch; }
+.friends-search input { flex: 1; width: 0; }
+.friends-search button { flex-shrink: 0; }
+.friends-invite-link { padding: .5rem 0 1rem; }
+.friends-invite-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; border-top: 1px solid var(--friends-line); margin-top: .8rem; padding-top: .5rem; }
+.friends-invite-list small { display: block; color: var(--friends-muted); font-size: .8rem; }
+.friends-received-invite { border: 1px solid #567e71; border-radius: 8px; padding: 1rem !important; margin-bottom: 1rem; background: #102c29; }
+.friends-confirm { margin: 1rem 0 1.5rem; padding: 1.25rem; border: 1px solid #8c7956; border-radius: 8px; background: #262822; }
+.friends-confirm > p { font-size: .95rem; max-width: 70ch; color: #e8dfcb; }
+.friends-composer { background: var(--friends-surface); border: 1px solid #466b71; border-radius: 8px; padding: 1.35rem; margin-bottom: 2rem; }
+.friends-chosen-track { border-left: 3px solid var(--friends-mint); padding: .3rem 0 .3rem 1rem; margin: 1rem 0 .4rem; }
+.friends-chosen-track p, .friends-post-track p { color: #c8dcdf; margin: 0 0 .2rem; font-size: .9rem; }
+.friends-chosen-track h5 { font-size: 1.3rem; line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
+.friends-chosen-track > span, .friends-post-track > span { display: block; color: var(--friends-cyan); font-size: .75rem; margin-top: .45rem; overflow-wrap: anywhere; }
+.friends-note-count { text-align: right; margin: .2rem 0 .5rem; }
+.friends-feed { display: grid; gap: 1.25rem; }
+.friends-post { padding: 1.3rem; border: 1px solid var(--friends-line); border-radius: 8px; background: var(--friends-bg); }
+.friends-post-author { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; margin-bottom: .65rem; }
+.friends-post-author time { color: var(--friends-muted); font-size: .75rem; padding-top: .3rem; }
+.friends-post-track { margin-top: 1.15rem; }
+.friends-post-track h4 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
+.friends-post-note { white-space: pre-wrap; margin: 1rem 0; line-height: 1.65; color: #e0ebea; font-size: .95rem; }
+.friends-post-listen { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin-top: 1rem; }
+.friends-source { display: inline-flex; align-items: center; min-height: 44px; color: var(--friends-cyan); font-size: .85rem; text-underline-offset: 4px; }
+.friends-post-tools { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-top: .7rem; border-top: 1px solid #203840; padding-top: .35rem; }
+.friends-empty { padding: 1.5rem; margin-bottom: 1rem; border: 1px dashed #42676b; border-radius: 8px; background: #0c2028; }
+.friends-empty h4 { font-size: 1.3rem; max-width: 30ch; }
+.friends-empty p { color: var(--friends-muted); max-width: 60ch; font-size: .95rem; line-height: 1.65; }
+.friends-empty-mark { display: block; color: var(--friends-mint); font-size: 2.5rem; line-height: 1; margin-bottom: 1rem; }
+.friends-views { display: none; }
+@media (max-width: 980px) {
+  .friends-columns { display: block; }
+  .friends-views { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: .5rem; margin-bottom: 1.5rem; }
+  .friends-views button { background: transparent; border-color: var(--friends-line); }
+  .friends-views button[aria-pressed="true"] { color: #102b24; background: var(--friends-mint); border-color: var(--friends-mint); }
+  .friends-views button span { margin-left: .4rem; }
+  .sonic-friends[data-friends-view="feed"] [data-friends-pane="people"], .sonic-friends[data-friends-view="people"] [data-friends-pane="feed"] { display: none; }
+}
+@media (max-width: 680px) {
+  .friends-header { gap: 1rem; align-items: flex-start; }
+  .friends-header h3 { font-size: 2.7rem; }
+  .friends-header svg { width: 68px; height: 64px; margin-top: 1.1rem; }
+  .friends-header p:last-child { font-size: .95rem; }
+  .friends-eyebrow { font-size: .65rem; }
+  .friends-setup { display: block; padding: 1.1rem; }
+  .friends-setup > div { margin-bottom: 1rem; }
+  .friends-own-identity > div:last-child { align-items: flex-start; }
+  .friends-own-identity { padding: .75rem 0; }
+  .friends-composer, .friends-post, .friends-empty, .friends-confirm { padding: 1.1rem; }
+  .friends-person-actions .friends-button { flex: 0 1 auto; }
+  .friends-person-actions { gap: .5rem; }
+  .friends-actions > .friends-button { flex: 1 1 130px; }
+}
+@media (prefers-reduced-motion: reduce) { .sonic-friends * { transition: none !important; scroll-behavior: auto !important; } }
