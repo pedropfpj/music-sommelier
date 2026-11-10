@@ -23,11 +23,19 @@ const context = vm.createContext({
   recommendationTrackKey: item => `${item.artist}::${item.song}`,
   isTrackEligibleForRecommendation: item => item.eligible !== false,
   hydrateExternalDatasetPackInBackground: async () => {},
+  weeklyEditionPreviewCache: new Map(),
+  weeklyEditionItemKey: item => `${item.artist}::${item.title}::${item.style}`,
+  prepareWeeklyEditionTracks: async items => ({ ok: true, results: items.map(item => {
+    const selected = context.catalog.find(candidate => candidate.artist === item.artist && candidate.song === item.title && candidate.style === item.style);
+    if (selected) context.weeklyEditionPreviewCache.set(context.weeklyEditionItemKey(item), { track: selected });
+    return { item, status: selected ? "playable" : "unconfirmed" };
+  }) }),
+  waitForWeeklyPreviewMedia: async () => true,
   waitForPromiseWithTimeout: promise => promise,
   stopAllActivePlayback: () => calls.push("stop"),
   restoreRecommendationSurfaceSnapshot: ({ track: selected }) => { context.currentRecommendation = selected; calls.push(selected.song); },
   markRecommendationPresented: selected => calls.push(`presented:${selected.song}`), updateStats() {},
-  renderPreview: async (_, options) => { assert.equal(options.exactRecordingOnly, true); return true; },
+  renderPreview: async (_, options) => { assert.equal(options.exactRecordingOnly, true); assert.equal(options.deferRetry, false); return true; },
   trackRecommendationEvent: (...args) => calls.push(args[0])
 });
 vm.runInContext(`${bridgeSource}\nthis.openTrack = openWeeklyEditionTrack;`, context);
@@ -50,22 +58,25 @@ assert.equal(context.currentRecommendation, null, "A canceled session must not r
 assert.equal(context.recommendationRunBusy, false);
 
 context.currentRecommendation = null;
-let finishHydration;
-context.hydrateExternalDatasetPackInBackground = () => new Promise(resolve => { finishHydration = resolve; });
+let finishPreparation;
+const originalPrepare = context.prepareWeeklyEditionTracks;
+context.prepareWeeklyEditionTracks = () => new Promise(resolve => { finishPreparation = resolve; });
 const oldSession = context.openTrack({ artist: track.artist, title: "Old profile pending recording", style: track.style });
 await Promise.resolve();
 context.recommendationSessionGeneration++;
 context.recommendationRunBusy = true;
-finishHydration();
+finishPreparation({ ok: false, results: [] });
 assert.equal((await oldSession).reason, "canceled");
 assert.equal(context.recommendationRunBusy, true, "A late weekly lookup must not release another profile's discovery lock");
 context.recommendationRunBusy = false;
-context.hydrateExternalDatasetPackInBackground = async () => {};
+context.prepareWeeklyEditionTracks = originalPrepare;
 context.renderPreview = async () => false;
+const presentationsBeforeFailure = calls.filter(call => call.startsWith("presented:")).length;
 result = await context.openTrack({ artist: track.artist, title: track.song, style: track.style });
 assert.equal(result.ok, false);
 assert.equal(result.reason, "unavailable");
 assert.equal(context.recommendationRunBusy, false);
+assert.equal(calls.filter(call => call.startsWith("presented:")).length, presentationsBeforeFailure, "A failed preview must not count as a delivered weekly recording");
 
 const { chromium } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
 const preview = await startTestPreviewServer();

@@ -58732,7 +58732,9 @@ async function resolveWeeklyEditionCatalogTrack(item, isCurrent) {
 async function prepareWeeklyEditionTracks(items = [], context = {}) {
   const generation = recommendationSessionGeneration;
   const profileKey = sessionProfileKey();
-  const isCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && context.isCurrent?.() !== false;
+  const sessionIsCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() && context.isCurrent?.() !== false;
+  const deadline = Date.now() + 18000;
+  const isCurrent = () => sessionIsCurrent() && Date.now() < deadline;
   const inputs = (Array.isArray(items) ? items : []).slice(0, 6);
   const results = new Array(inputs.length);
   let cursor = 0;
@@ -58790,8 +58792,8 @@ async function prepareWeeklyEditionTracks(items = [], context = {}) {
       results[position] = await prepare(inputs[position]);
     }
   };
-  await Promise.all([worker(), worker()]);
-  if (!isCurrent()) return { ok: false, reason: "canceled", results: [] };
+  await waitForPromiseWithTimeout(Promise.all([worker(), worker()]), 18000, null);
+  if (!sessionIsCurrent()) return { ok: false, reason: "canceled", results: [] };
   return { ok: true, results: inputs.map((item, position) => results[position] || { item, status: "unconfirmed" }) };
 }
 
