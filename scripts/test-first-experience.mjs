@@ -45,7 +45,7 @@ const hydrationSource = appSource.slice(
   appSource.indexOf("function scheduleExternalDatasetWarmup")
 );
 assert.doesNotMatch(hydrationSource, /EXTERNAL_DATASET_FILES|for \(let index = 0;/, "Runtime hydration must not scan the raw source pack");
-assert.match(hydrationSource, /loadExternalDatasetRuntimeRows\(cleanStyle\)/, "Manual styles must load only their runtime shard");
+assert.match(hydrationSource, /loadExternalDatasetRuntimeRows\(cleanStyle(?:,\s*fetchTimeoutMs)?\)/, "Manual styles must load only their runtime shard");
 
 const firstRecommendationSource = appSource.slice(
   appSource.indexOf("function runInitialRecommendation"),

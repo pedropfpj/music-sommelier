@@ -146,13 +146,11 @@ async function identifyPlayback(page, { auto = true } = {}) {
     } else if (await page.locator('#trackPreview').evaluate(media => media.paused)) {
       const audio = page.locator('#trackPreview');
       // With direct audio the Web app presents the browser's built-in controls.
-      // The leading play button is inside its closed user-agent shadow tree.
-      const { width, height } = await audio.boundingBox();
-      for (const x of [19, Math.max(19, Math.round((width - 300) / 2) + 19), Math.round(width / 2)]) {
-        if (!await audio.evaluate(media => media.paused)) break;
-        await audio.click({ position: { x, y: Math.round(height / 2) } });
-      }
-      if (await audio.evaluate(media => media.paused)) await audio.press('Space');
+      // Desktop WebKit puts a skip-back button before Play. Both are in a
+      // closed user-agent shadow tree, so click the native Play position.
+      const { height } = await audio.boundingBox();
+      const playX = engine === 'webkit' && viewport === 'desktop' ? 52 : 19;
+      await audio.click({ position: { x: playX, y: Math.round(height / 2) } });
     }
   }
   try {
