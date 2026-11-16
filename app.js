@@ -4802,6 +4802,9 @@ const VIBE_THEME_CONFIG = {
 const EXTERNAL_DATASET_CACHE_VERSION = "20261110-reviewed-v26";
 const EXTERNAL_DATASET_RUNTIME_CORE_PATH = "data/runtime-catalog-v1/core.json";
 const EXTERNAL_DATASET_RUNTIME_STYLE_PATH = "data/runtime-catalog-v1/styles";
+const REVIEWED_BATIDA_PATH = "data/batida-reviewed-recordings.json";
+const REVIEWED_BATIDA_SOURCE = "dynamic_dataset_local_reviewed_batida";
+let reviewedBatidaCatalog = null;
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
@@ -4840,7 +4843,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261110trust2";
+const SONIC_APP_BUILD_ID = "20261115batida101";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -18112,6 +18115,139 @@ async function hydrateCatalogExtraFromSupabase(style = "") {
   return promise;
 }
 
+function reviewedBatidaIdentity(value) {
+  return typeof value === "string" ? value.normalize("NFKC").trim().toLowerCase().replace(/\s+/g, " ") : "";
+}
+
+function reviewedBatidaHttpsUrl(value) {
+  try {
+    const url = new URL(value);
+    if (url.protocol === "https:" && !url.username && !url.password && !url.port) return url;
+  } catch (_err) {}
+  return null;
+}
+
+function reviewedBatidaRowMatches(row, proof) {
+  if (row?.style !== "batida" || proof?.style !== "batida" ||
+      !reviewedBatidaIdentity(row.artist) || !reviewedBatidaIdentity(row.song) ||
+      reviewedBatidaIdentity(row.artist) !== reviewedBatidaIdentity(proof.artist) ||
+      reviewedBatidaIdentity(row.song) !== reviewedBatidaIdentity(proof.song) ||
+      row.recording_id !== proof.recordingId || row.source_url !== proof.recordingUrl ||
+      row.genre_evidence_url !== proof.evidenceUrl ||
+      (Number(row.bpm) || 0) !== (Number(proof.bpmExact) || 0)) return false;
+  const tags = new Set(Array.isArray(row.source_tags) ? row.source_tags : String(row.source_tags || "").split(";"));
+  if (!tags.has("recording_identity_verified") || !tags.has("audio_browser_verified") ||
+      !Array.isArray(proof.requiredTags) || !proof.requiredTags.length ||
+      !proof.requiredTags.every(tag => tags.has(tag))) return false;
+  const recording = reviewedBatidaHttpsUrl(proof.recordingUrl);
+  if (!recording || !reviewedBatidaHttpsUrl(proof.evidenceUrl)) return false;
+  if (proof.provider === "soundcloud") {
+    const id = proof.soundcloudTrackId;
+    return /^[1-9]\d*$/.test(id) && row.recording_id === `soundcloud:${id}` && row.soundcloud_track_id === id &&
+      row.soundcloud_track_url === proof.recordingUrl && recording.origin === "https://soundcloud.com" &&
+      /^\/[a-z0-9_-]+\/[a-z0-9_-]+$/i.test(recording.pathname) && !recording.search && !recording.hash;
+  }
+  if (proof.provider === "bandcamp") {
+    const id = proof.bandcampTrackId;
+    return /^[1-9]\d*$/.test(id) && row.recording_id === `bandcamp:${id}` && row.bandcamp_track_id === id &&
+      row.bandcamp_track_url === proof.recordingUrl && recording.hostname.endsWith(".bandcamp.com") &&
+      /^\/track\/[^/]+$/.test(recording.pathname) && !recording.search && !recording.hash;
+  }
+  if (proof.provider === "apple_music") {
+    const id = proof.appleTrackId;
+    const preview = reviewedBatidaHttpsUrl(proof.previewUrl);
+    return /^[1-9]\d*$/.test(id) && row.recording_id === `apple_music:${id}` &&
+      recording.origin === "https://music.apple.com" &&
+      (recording.pathname.split("/").at(-1) === id || recording.searchParams.get("i") === id) &&
+      row.preview_url === proof.previewUrl && preview?.origin === "https://audio-ssl.itunes.apple.com" &&
+      preview.pathname.startsWith("/itunes-assets/AudioPreview");
+  }
+  return false;
+}
+
+function registerReviewedBatidaCatalog(payload) {
+  if (payload?.version !== 1 || payload.style !== "batida" ||
+      !Array.isArray(payload.records) || !payload.records.length ||
+      !Array.isArray(payload.identityAliases) || !Array.isArray(payload.performerMemberships) ||
+      !Array.isArray(payload.recordingParticipants)) throw new Error("invalid_reviewed_batida_catalog");
+
+  const records = new Map();
+  for (const { row, proof } of payload.records) {
+    if (!reviewedBatidaRowMatches(row, proof) || records.has(proof.recordingId)) {
+      throw new Error("unbound_reviewed_batida_recording");
+    }
+    records.set(proof.recordingId, Object.freeze({ ...proof, requiredTags: Object.freeze([...proof.requiredTags]) }));
+  }
+
+  const aliases = new Map();
+  const members = new Map();
+  function addIdentity(map, artist, related) {
+    const key = artistMatchKey(artist);
+    if (!key || !reviewedBatidaIdentity(related)) throw new Error("invalid_reviewed_batida_artist");
+    if (!map.has(key)) map.set(key, new Set());
+    map.get(key).add(related);
+  }
+  for (const { artist, canonicalArtist } of payload.identityAliases) {
+    addIdentity(aliases, artist, canonicalArtist);
+    addIdentity(aliases, canonicalArtist, artist);
+  }
+  for (const { artist, member } of payload.performerMemberships) addIdentity(members, artist, member);
+
+  const participants = new Map();
+  for (const { artist, song, recordingId, participants: names } of payload.recordingParticipants) {
+    const proof = records.get(recordingId);
+    if (!proof || reviewedBatidaIdentity(artist) !== reviewedBatidaIdentity(proof.artist) ||
+        reviewedBatidaIdentity(song) !== reviewedBatidaIdentity(proof.song) ||
+        !Array.isArray(names) || !names.length || !names.every(reviewedBatidaIdentity)) {
+      throw new Error("unbound_reviewed_batida_participants");
+    }
+    if (!participants.has(recordingId)) participants.set(recordingId, new Set());
+    for (const name of names) participants.get(recordingId).add(name);
+  }
+
+  const rows = payload.records.map(({ row }) => Object.freeze({ ...row }));
+  reviewedBatidaCatalog = { records, aliases, members, participants, rows };
+  return rows;
+}
+
+function reviewedBatidaRecording(track) {
+  if (track?.style !== "batida" || track.source !== REVIEWED_BATIDA_SOURCE) return null;
+  const metadata = catalogTrackMetadata(track);
+  const proof = reviewedBatidaCatalog?.records.get(metadata.recording_id);
+  if (!proof) return null;
+  return reviewedBatidaRowMatches({
+    ...metadata,
+    artist: track.artist,
+    song: track.song,
+    style: track.style,
+    bpm: track.bpmExact,
+    bandcamp_track_id: track.bandcampTrackId ?? metadata.bandcamp_track_id,
+    bandcamp_track_url: track.bandcampTrackUrl ?? metadata.bandcamp_track_url,
+    soundcloud_track_url: track.soundcloudTrackUrl ?? metadata.soundcloud_track_url,
+    soundcloud_track_id: track.soundcloudTrackId ?? metadata.soundcloud_track_id
+  }, proof) ? proof : null;
+}
+
+function reviewedBatidaArtistKeys(track) {
+  const keys = artistMatchingKeys(track?.artist);
+  const proof = reviewedBatidaRecording(track);
+  if (!proof) return keys;
+  const participantNames = reviewedBatidaCatalog.participants.get(proof.recordingId) || [];
+  const featured = [...String(track.song || "").matchAll(/(?:[\(\[]\s*(?:feat(?:uring)?|ft)\.?\s+|\s+(?:feat\.?|ft\.|featuring)\s+)([^\)\]]+)/gi)]
+    .map(match => match[1]);
+  const names = [track.artist, ...track.artist.split(/\s+&\s+/), ...participantNames, ...featured];
+  const expanded = new Set();
+  for (const name of names) {
+    const key = artistMatchKey(name);
+    if (!key || expanded.has(key)) continue;
+    expanded.add(key);
+    for (const artistKey of artistMatchingKeys(name)) keys.add(artistKey);
+    for (const alias of reviewedBatidaCatalog.aliases.get(key) || []) names.push(alias);
+    for (const member of reviewedBatidaCatalog.members.get(key) || []) names.push(member);
+  }
+  return keys;
+}
+
 function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
   const existingKeys = new Set(catalog.map((track) => normalize(`${track.artist}::${track.song}`)));
   const seededArtistKeys = new Set();
@@ -18129,6 +18265,9 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const artist = pickDatasetValue(fields, ["artist", "artist_name", "name", "project", "dj", "act"]);
     const song = pickDatasetValue(fields, ["song", "track", "track_name", "title", "faixa", "music"]);
     const resolvedSong = song || deriveDatasetSongCandidate(rawRow, fields, artist);
+    const reviewedProof = style === "batida" && sourceTag === "dataset_local_runtime_batida"
+      ? reviewedBatidaCatalog?.records.get(rawRow.recording_id) : null;
+    const reviewed = reviewedProof && reviewedBatidaRowMatches(rawRow, reviewedProof);
     const label = pickDatasetValue(fields, ["label", "record_label", "release_label", "album", "imprint"]);
     const country = pickDatasetValue(fields, ["country", "origin_country", "artist_country", "pais", "nacionalidade"]);
     const area = pickDatasetValue(fields, ["city", "origin_city", "state", "region", "area", "cidade"]);
@@ -18136,7 +18275,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
 
     const recordingScopedEvidence = parseDatasetListValue(pickDatasetValue(fields, ["source_tags", "catalog_tags", "tags"]))
       .some(tag => tag === "reviewed_recording_style_v26" || tag === "full_on_night_recordings_v26");
-    if (artist && !recordingScopedEvidence) {
+    if (artist && !recordingScopedEvidence && !reviewed) {
       const recentSignalDate = extractRecentReleaseDateFromDatasetRow(rawRow, fields);
       if (seedStyleArtistFromDataset(style, artist)) {
         seededArtistKeys.add(`${style}::${normalize(artist)}`);
@@ -18203,6 +18342,10 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const context = pickDatasetValue(fields, ["context", "contexts", "listening_contexts"]);
     const catalogMetadata = Object.fromEntries(Object.entries({
       recording_id: pickDatasetValue(fields, ["recording_id"]),
+      ...(reviewed ? {
+        soundcloud_track_id: rawRow.soundcloud_track_id,
+        preview_url: rawRow.preview_url
+      } : {}),
       deezer_track_id: deezerTrackId,
       deezer_track_url: deezerTrackUrl,
       cover_art_url: coverArtUrl,
@@ -18244,7 +18387,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
         previewUrl,
         releaseDate,
         durationSec,
-        source: sourceTag.includes("dynamic") ? sourceTag : `dynamic_${sourceTag}`,
+        source: reviewed ? REVIEWED_BATIDA_SOURCE : (sourceTag.includes("dynamic") ? sourceTag : `dynamic_${sourceTag}`),
         artistCountry: country,
         artistGenre,
         artistProfileHint,
@@ -18442,13 +18585,24 @@ function finalizeExternalDatasetRuntimeMerge(merged = {}) {
 async function loadExternalDatasetRuntimeRows(style = "") {
   const runtime = typeof window !== "undefined" ? window.SonicCatalogRuntime : null;
   const cleanStyle = normalizeDatasetStyle(style || "");
-  if (runtime && typeof runtime.loadCore === "function" && typeof runtime.loadStyle === "function") {
-    return cleanStyle ? runtime.loadStyle(cleanStyle) : runtime.loadCore();
-  }
   const path = cleanStyle
     ? `${EXTERNAL_DATASET_RUNTIME_STYLE_PATH}/${encodeURIComponent(cleanStyle)}.json`
     : EXTERNAL_DATASET_RUNTIME_CORE_PATH;
-  return readExternalDatasetRowsFromPath(path);
+  const rows = runtime && typeof runtime.loadCore === "function" && typeof runtime.loadStyle === "function"
+    ? (cleanStyle ? runtime.loadStyle(cleanStyle) : runtime.loadCore())
+    : readExternalDatasetRowsFromPath(path);
+  if (cleanStyle !== "batida") return rows;
+
+  const reviewedRequest = reviewedBatidaCatalog?.rows ?? fetchWithTimeout(
+    `${REVIEWED_BATIDA_PATH}?v=${SONIC_APP_BUILD_ID}`,
+    { cache: "no-cache" }, EXTERNAL_DATASET_FETCH_TIMEOUT_MS
+  ).then(async response => {
+    if (!response.ok) throw new Error("reviewed_batida_catalog_unavailable");
+    return response.json();
+  });
+  const [legacyRows, payload] = await Promise.all([rows, reviewedRequest]);
+  const reviewedRows = reviewedBatidaCatalog?.rows ?? registerReviewedBatidaCatalog(payload);
+  return [...reviewedRows, ...legacyRows];
 }
 
 async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
@@ -19132,6 +19286,10 @@ function promotePreviewCandidate(track, previewUrl = "") {
 
 function previewCandidatesForTrack(track) {
   if (!track) return [];
+  if (track.source === REVIEWED_BATIDA_SOURCE) {
+    const preview = normalizePreviewUrl(reviewedBatidaRecording(track)?.previewUrl);
+    return preview ? [preview] : [];
+  }
   const ordered = [];
   const seen = new Set();
   const add = (value = "") => {
@@ -19396,6 +19554,7 @@ async function collectArtistPreviewOptions(track, { forceLookup = false } = {}) 
 }
 
 async function pickPlayableArtistPreviewFallback(audioEl, track, { forceLookup = false } = {}) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return null;
   if (!audioEl || !track) return null;
   const options = await collectArtistPreviewOptions(track, { forceLookup });
   for (const option of options) {
@@ -19442,6 +19601,7 @@ function createTrackPreviewProbeElement() {
 
 function commitTrackPreviewSource(track, previewUrl = "", renderToken = 0) {
   if (!trackPreview || !track || !previewUrl) return false;
+  if (track.source === REVIEWED_BATIDA_SOURCE && !previewCandidatesForTrack(track).includes(normalizePreviewUrl(previewUrl))) return false;
   const trackKey = recommendationTrackKey(track);
   if (
     !trackKey ||
@@ -20225,6 +20385,11 @@ function artistWasRecentlyPresented(artistName = "", windowSize = RECENT_PRESENT
 function recommendationArtistBlockedForPresentation(track, currentTrack = currentRecommendation) {
   const candidateArtist = String(track?.artist || "").trim();
   if (!candidateArtist) return true;
+  if (track.style === "batida" && reviewedBatidaRecording(track)) {
+    const blocked = buildGlobalArtistExclusionSet(currentTrack?.artist || "");
+    for (const key of reviewedBatidaArtistKeys(currentTrack)) blocked.add(key);
+    if ([...reviewedBatidaArtistKeys(track)].some(key => blocked.has(key))) return true;
+  }
   if (currentTrack?.artist && artistsShareIdentity(currentTrack.artist, candidateArtist)) return true;
   if (anonymousArtistWasRecentlyExposed(candidateArtist, 8)) return true;
   return artistWasRecentlyPresented(candidateArtist);
@@ -20499,6 +20664,7 @@ function reviewedRecordingStyleProof(track) {
 function isTrustedCuratedCatalogTrack(track) {
   if (!track) return false;
   if (!isCuratorBlockedArtistName(track.artist || "") && reviewedRecordingStyleProof(track)) return true;
+  if (track.source === REVIEWED_BATIDA_SOURCE) return Boolean(reviewedBatidaRecording(track));
   if (isTrustedSlambientCatalogTrack(track)) return true;
   const source = normalize(track.source || "");
   const curatedLocalSeed = source.replace(/[\s_]+/g, "").includes("datasetlocal");
@@ -20589,6 +20755,7 @@ function purgeDynamicMismatches(style) {
     const track = catalog[i];
     const styleToCheck = style || track.style;
     if (style && track.style !== style) continue;
+    if (reviewedBatidaRecording(track) && !trackBlockedForStyle(styleToCheck, track)) continue;
     if (styleToCheck && track.style === styleToCheck && hasStrictWhitelist(styleToCheck) && !artistAllowedForStyle(styleToCheck, track.artist, track)) {
       catalog.splice(i, 1);
       delete TRACK_METADATA[`${track.song}|${track.artist}`];
@@ -20628,6 +20795,7 @@ function purgeDynamicMismatches(style) {
 function sanitizeCatalogByStyleRules() {
   for (let i = catalog.length - 1; i >= 0; i -= 1) {
     const track = catalog[i];
+    if (reviewedBatidaRecording(track) && !trackBlockedForStyle(track.style, track)) continue;
     const meta = TRACK_METADATA[`${track.song}|${track.artist}`] || {};
     const durationSec = parseDurationTextToSeconds(meta.duration);
     const invalidDynamic = isDynamicSource(track.source) && isLikelyCompilationEntry({
@@ -20661,6 +20829,7 @@ function sanitizeCatalogByStyleRules() {
 
 function dedupeCatalogByTrackKey() {
   const scoreTrack = (track) => {
+    if (reviewedBatidaRecording(track)) return Infinity;
     let score = 0;
     if (trackHasReliableAudioPreview(track)) score += 4;
     if (track?.existenceVerified === true) score += 3;
@@ -20675,6 +20844,7 @@ function dedupeCatalogByTrackKey() {
   const mergeTrackPlayableCandidates = (target, source) => {
     if (!target || !source || target === source) return;
     if (reviewedRecordingStyleProof(target)) return;
+    if (reviewedBatidaRecording(target) || reviewedBatidaRecording(source)) return;
     previewCandidatesForTrack(source).forEach((url) => registerPreviewCandidate(target, url));
     const mergedYoutube = youtubeVideoCandidatesForTrack(target);
     youtubeVideoCandidatesForTrack(source).forEach((candidate) => {
@@ -20697,8 +20867,8 @@ function dedupeCatalogByTrackKey() {
     grouped.push(track);
     tracksByKey.set(key, grouped);
     const currentBest = bestByKey.get(key);
-    const reviewed = Boolean(reviewedRecordingStyleProof(track));
-    const currentReviewed = Boolean(reviewedRecordingStyleProof(currentBest));
+    const reviewed = Boolean(reviewedRecordingStyleProof(track) || reviewedBatidaRecording(track));
+    const currentReviewed = Boolean(reviewedRecordingStyleProof(currentBest) || reviewedBatidaRecording(currentBest));
     if (!currentBest || (reviewed && !currentReviewed) || (reviewed === currentReviewed && scoreTrack(track) > scoreTrack(currentBest))) {
       bestByKey.set(key, track);
     }
@@ -20962,6 +21132,7 @@ function recommendationIssuePenaltyForTrack(track) {
 
 function trackHasReliableAudioPreview(track) {
   if (!track) return false;
+  if (track.source === REVIEWED_BATIDA_SOURCE) return previewCandidatesForTrack(track).length > 0;
   if (normalizePreviewUrl(track.previewUrl)) return true;
   if (normalizePreviewUrl(track.artistPreviewFallback?.previewUrl || "")) return true;
   return previewCandidatesForTrack(track).some((candidate) => Boolean(normalizePreviewUrl(candidate)));
@@ -20969,6 +21140,7 @@ function trackHasReliableAudioPreview(track) {
 
 function trackHasConfirmedAudioPreview(track) {
   if (!track || !normalizePreviewUrl(track.previewUrl)) return false;
+  if (track.source === REVIEWED_BATIDA_SOURCE && !previewCandidatesForTrack(track).includes(normalizePreviewUrl(track.previewUrl))) return false;
   if (track.previewChecked && track.previewMissing) return false;
   return true;
 }
@@ -20982,6 +21154,7 @@ function trackHasExternalPlayableFallback(track) {
 }
 
 function trackHasRefreshablePreview(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return false;
   return Boolean(
     trackAppleRecordingId(track) ||
     track?.deezerTrackId ||
@@ -21009,7 +21182,8 @@ function trackHasVerifiedImmediateAudioPreview(track) {
   return Boolean(
     track?.previewChecked &&
     !track?.previewMissing &&
-    normalizePreviewUrl(track?.previewUrl || "")
+    normalizePreviewUrl(track?.previewUrl || "") &&
+    (track.source !== REVIEWED_BATIDA_SOURCE || trackHasConfirmedAudioPreview(track))
   );
 }
 
@@ -21836,6 +22010,10 @@ function resolveTrackDurationSeconds(track) {
 
 function isTrackEligibleForRecommendation(track) {
   if (!track) return false;
+  if (track.source === REVIEWED_BATIDA_SOURCE) {
+    return Boolean(reviewedBatidaRecording(track)) && !trackBlockedForStyle(track.style, track) &&
+      bpmFitsStyle(track.style, Number(track.bpmExact)) && trackHasPlayablePreviewExperience(track);
+  }
   applyCuratedTrackMetadata(track);
   if (!track.style || !track.artist || !track.song) return false;
   if (isLikelyChannelStyleArtistName(track.artist)) return false;
@@ -23373,6 +23551,11 @@ function addDynamicTrackToCatalog({
   const artistName = (artist || "").trim();
   const songName = (song || "").trim();
   if (!artistName || !songName) return false;
+  const reviewed = reviewedBatidaRecording({
+    style, artist: artistName, song: songName, source, bpmExact, catalogMetadata,
+    bandcampTrackId, bandcampTrackUrl, soundcloudTrackUrl
+  });
+  if (source === REVIEWED_BATIDA_SOURCE && !reviewed) return false;
   const curatedInput = applyCuratedTrackMetadata({
     artist: artistName,
     song: songName,
@@ -23384,7 +23567,7 @@ function addDynamicTrackToCatalog({
   artistGenre = curatedInput.artistGenre || artistGenre;
   artistProfileHint = curatedInput.artistProfileHint || artistProfileHint;
   if (trackBlockedForStyle(style, { artist: artistName, song: songName })) return false;
-  if (hasTrackStyleSignalConflict(style, {
+  if (!reviewed && hasTrackStyleSignalConflict(style, {
     artist: artistName,
     song: songName,
     label,
@@ -23399,17 +23582,17 @@ function addDynamicTrackToCatalog({
     bpmExact,
     style
   })) return false;
-  if (isLikelyChannelStyleArtistName(artistName)) return false;
-  if (isLikelyGeneratedTrackTitle(songName)) return false;
-  if (!artistAllowedForStyle(style, artistName, { style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId })) return false;
-  if (isDynamicSource(source) && requiresSeedAnchorForDynamicStyle(style) && !artistSeedAnchoredForStyle(style, artistName)) return false;
+  if (!reviewed && isLikelyChannelStyleArtistName(artistName)) return false;
+  if (!reviewed && isLikelyGeneratedTrackTitle(songName)) return false;
+  if (!reviewed && !artistAllowedForStyle(style, artistName, { style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId })) return false;
+  if (!reviewed && isDynamicSource(source) && requiresSeedAnchorForDynamicStyle(style) && !artistSeedAnchoredForStyle(style, artistName)) return false;
 
   const rawLabel = String(label || "").trim();
   const labelLooksGenreDescriptor = isLikelyGenreDescriptorEntity(rawLabel);
   if (isDynamicSource(source) && familyOf(style) === "psytrance" && labelLooksGenreDescriptor) return false;
 
   const cleanLabel = sanitizeLabel(rawLabel, artistName, songName);
-  if (!labelAllowedForStyle(style, cleanLabel)) return false;
+  if (!reviewed && !labelAllowedForStyle(style, cleanLabel)) return false;
 
   const key = normalize(`${artistName}::${songName}`);
   const bpmNumber = Number(bpmExact) || 0;
@@ -23423,7 +23606,9 @@ function addDynamicTrackToCatalog({
     const exactIndex = catalog.findIndex(track => recommendationTrackKey(track) === key && canonicalArtistIdentity(track.artist) === canonicalArtistIdentity(artistName) && normalize(track.song) === normalize(songName));
     const existing = catalog[exactIndex];
     const incomingProof = reviewedRecordingStyleProof({ style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId });
-    if (exactIndex >= 0 && incomingProof && !reviewedRecordingStyleProof(existing)) reviewedReplacementIndex = exactIndex;
+    if (exactIndex >= 0 && (reviewed || incomingProof) && !reviewedRecordingStyleProof(existing) && !reviewedBatidaRecording(existing)) {
+      reviewedReplacementIndex = exactIndex;
+    }
     if (reviewedReplacementIndex < 0) {
       const incoming = normalizeImportedListeningMetadata(vocals, context);
       let updated = false;
@@ -23468,7 +23653,7 @@ function addDynamicTrackToCatalog({
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
   const hasRefreshablePreview = Boolean(safeDeezerTrackId || trackAppleRecordingId({ catalogMetadata: safeCatalogMetadata }));
   const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
-  if (isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
+  if (!reviewed && isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
     : "06:00";
@@ -23483,7 +23668,7 @@ function addDynamicTrackToCatalog({
     label: cleanLabel,
     bpm: mapBpmToRange(bpmNumber || fallbackBpm),
     bpmExact: bpmNumber || undefined,
-    energy: publisherCheckedRecording ? "unknown" : energyFromBpm(bpmNumber || fallbackBpm),
+    energy: reviewed || publisherCheckedRecording ? "unknown" : energyFromBpm(bpmNumber || fallbackBpm),
     ...normalizeImportedListeningMetadata(vocals, context),
     vibe: `Garimpei esta faixa porque ela conversa bem com ${styleLabelByValue(style)} e pode abrir um caminho novo no seu gosto.`,
     spotifyUrl: safeSpotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(`track:"${songName}" artist:"${artistName}"`)}`,
@@ -24126,6 +24311,7 @@ function isTrustedSoundCloudMatch(candidate) {
 }
 
 function applySoundCloudMatchToTrack(track, candidate, { requirePreview = false, requireDirect = false } = {}) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return false;
   if (!track || !isTrustedSoundCloudMatch(candidate)) return false;
   if (requirePreview && !candidate.previewUrl) return false;
   if (requireDirect && !candidate.directUrl) return false;
@@ -24161,6 +24347,7 @@ async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
 }
 
 async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return Boolean(reviewedBatidaRecording(track)?.soundcloudTrackId);
   if (!track?.style || !track?.artist || !track?.song) return false;
   if (trackHasDirectSoundCloudTrack(track)) {
     track.soundcloudVerified = true;
@@ -24178,6 +24365,14 @@ async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
 
 async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
   if (!track) return;
+  if (track.source === REVIEWED_BATIDA_SOURCE) {
+    const reviewed = reviewedBatidaRecording(track);
+    track.existenceVerified = Boolean(reviewed);
+    track.previewChecked = true;
+    track.previewUrl = normalizePreviewUrl(reviewed?.previewUrl);
+    track.previewMissing = !track.previewUrl;
+    return;
+  }
   const trustedSlambient = isTrustedSlambientCatalogTrack(track);
   const trustedCurated = isTrustedCuratedCatalogTrack(track);
   if (trustedCurated && track.existenceVerified === false && hasReliableBpmForTrack(track)) {
@@ -35541,7 +35736,7 @@ async function importProfileBackupFile(file) {
 function saveDynamicCatalogCache() {
   try {
     const dynamicTracks = catalog
-      .filter((track) => isDynamicSource(track.source) || isCatalogExtraTrack(track))
+      .filter((track) => track.source !== REVIEWED_BATIDA_SOURCE && (isDynamicSource(track.source) || isCatalogExtraTrack(track)))
       .slice(-2400);
     localStorage.setItem(DYNAMIC_CATALOG_CACHE_KEY, JSON.stringify(dynamicTracks));
   } catch (_err) {
@@ -35560,6 +35755,7 @@ function loadDynamicCatalogCache() {
     const existingKeys = new Set(catalog.map((track) => normalize(`${track.artist}::${track.song}`)));
     parsed.forEach((track) => {
       if (!track || !track.style || !track.artist || !track.song) return;
+      if (track.source === REVIEWED_BATIDA_SOURCE) return;
       if (!STYLE_BPM_RULES[track.style]) return;
       // Older dynamic rows used instrumental/all-context defaults without
       // evidence. Keep recordings and playback, but do not restore those claims.
@@ -37858,6 +38054,7 @@ function setYouTubeVideoCandidates(track, videos = []) {
 }
 
 function youtubeVideoCandidatesForTrack(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return [];
   if (!track) return [];
   const candidates = [];
   const seen = new Set();
@@ -37877,6 +38074,7 @@ function youtubeVideoCandidatesForTrack(track) {
 }
 
 async function resolveYouTubeVideoFromApi(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return null;
   if (!track || trackHasDirectYouTubeVideo(track) || !youtubeApiAvailable) return false;
   const endpoint = resolveMusicApiEndpoint("SONIC_YOUTUBE_SEARCH_API_URL", "/api/youtube-search");
   if (!endpoint) return false;
@@ -38415,7 +38613,7 @@ function extractYouTubeVideoId(url = "") {
 }
 
 function trackHasDirectYouTubeVideo(track) {
-  if (!track) return false;
+  if (!track || track.source === REVIEWED_BATIDA_SOURCE) return false;
   if (youtubeVideoCandidatesForTrack(track).length > 0) return true;
   return Boolean(
     extractYouTubeVideoId(track.youtubeTrackUrl) ||
@@ -38446,6 +38644,10 @@ function isDirectSoundCloudTrackUrl(value = "") {
 }
 
 function directSoundCloudTrackUrl(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) {
+    const reviewed = reviewedBatidaRecording(track);
+    return reviewed?.soundcloudTrackId ? reviewed.recordingUrl : "";
+  }
   const candidates = [track?.soundcloudTrackUrl, track?.soundcloudUrl]
     .map((url) => String(url || "").trim())
     .filter(Boolean);
@@ -38461,6 +38663,7 @@ function trackHasDirectBandcampTrack(track) {
 }
 
 function bandcampTrackIdForEmbed(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return reviewedBatidaRecording(track)?.bandcampTrackId || "";
   return String(track?.bandcampTrackId || "")
     .replace(/[^\d]/g, "")
     .trim();
@@ -38511,6 +38714,7 @@ function syncYouTubePreviewAttemptForTrack(track) {
 }
 
 function youtubePreviewCanRetry(track) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return false;
   return youtubeVideoCandidatesForTrack(track).length > 1;
 }
 
@@ -38849,7 +39053,10 @@ function resetYouTubePreviewEmbed() {
 }
 
 function buildSoundCloudEmbedUrl(track, { autoplay = false } = {}) {
-  const directUrl = directSoundCloudTrackUrl(track);
+  const reviewed = reviewedBatidaRecording(track);
+  const directUrl = reviewed?.soundcloudTrackId
+    ? `https://api.soundcloud.com/tracks/${reviewed.soundcloudTrackId}`
+    : directSoundCloudTrackUrl(track);
   if (!directUrl) return "";
   const params = new URLSearchParams({
     url: directUrl,
@@ -49874,6 +50081,7 @@ function hasFineSubgenreEvidence(style = "", track = null, signals = {}) {
 
 function trackFineSubgenreHasRecommendationProof(track = null) {
   const style = normalizeDatasetStyle(track?.style || "");
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return Boolean(reviewedBatidaRecording(track));
   if (!track || !style || !FINE_SUBGENRE_EVIDENCE_STYLES.has(style)) return true;
   if (trackBlockedForStyle(style, track)) return false;
   if (!artistAllowedForStyle(style, track.artist || "", track)) return false;
@@ -49937,6 +50145,7 @@ function dynamicPsyHomonymHasStrongIdentityProof(track = null) {
 }
 
 function trackStyleCertainty(track = null) {
+  if (track?.source === REVIEWED_BATIDA_SOURCE) return reviewedBatidaRecording(track) ? "confirmed" : "unsafe";
   if (track && typeof track === "object") applyCuratedTrackMetadata(track);
   const style = normalizeDatasetStyle(track?.style || "");
   if (!track || !style || !STYLE_BPM_RULES[style]) return "unknown";
@@ -50007,6 +50216,7 @@ function trackMatchesRequestedSubgenreEvidence(track = null, prefs = {}) {
   if (!requestedStyle) return true;
   const trackStyle = normalizeDatasetStyle(track.style || "");
   if (trackStyle !== requestedStyle) return false;
+  if (requestedStyle === "batida" && reviewedBatidaCatalog) return Boolean(reviewedBatidaRecording(track));
   if (!FINE_SUBGENRE_EVIDENCE_STYLES.has(requestedStyle)) return true;
   return trackStyleCertainty(track) === "confirmed";
 }
@@ -54327,6 +54537,9 @@ function markRecommendationPresented(track) {
   if (!track) return;
   clearRecommendationRecovery();
   registerSeenArtist(track.artist);
+  if (reviewedBatidaRecording(track)) {
+    for (const key of reviewedBatidaArtistKeys(track)) seenArtistsMemory.add(key);
+  }
   rememberRecentlyPresentedArtist(track.artist);
   const normalizedTrackKey = recommendationTrackKey(track);
   if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
@@ -54589,6 +54802,28 @@ function renderTrackInsightPanel(track = currentRecommendation, prefs = lastPref
   void hydrateTrackInsightForCurrent(track, prefs, { force });
 }
 
+function pickReviewedBatidaRecommendation(prefs, {
+  sourceTrack = currentRecommendation,
+  avoidArtistName = "",
+  additionalArtistExclusions = [],
+  excludedTrackKeys = new Set(),
+  excludedTrackTitles = new Set()
+} = {}) {
+  const blocked = buildGlobalArtistExclusionSet([sourceTrack?.artist, avoidArtistName, ...additionalArtistExclusions]);
+  for (const key of reviewedBatidaArtistKeys(sourceTrack)) blocked.add(key);
+  const sourceKey = recommendationTrackKey(sourceTrack);
+  const candidates = catalogTracksForStyle("batida").filter(track =>
+    reviewedBatidaRecording(track) &&
+    isTrackEligibleForRecommendation(track) &&
+    trackMatchesBpmPreference(track, prefs.bpm) &&
+    trackHasReadyPlaybackRoute(track) &&
+    recommendationTrackKey(track) !== sourceKey &&
+    !trackBlockedByKnownSignals(track, excludedTrackKeys, excludedTrackTitles) &&
+    ![...reviewedBatidaArtistKeys(track)].some(key => blocked.has(key))
+  );
+  return pickBestRecommendationCandidate(candidates, prefs, { maxWindow: 14, scoreBand: 8.5 });
+}
+
 function pickRecommendation(
   prefs,
   knownArtists,
@@ -54596,6 +54831,11 @@ function pickRecommendation(
   excludedTrackKeys = new Set(),
   excludedTrackTitles = new Set()
 ) {
+  if (prefs.style === "batida") {
+    return pickReviewedBatidaRecommendation(prefs, {
+      additionalArtistExclusions: [...knownArtists, ...excludedArtists], excludedTrackKeys, excludedTrackTitles
+    });
+  }
   const baseCatalog = prefs.style ? catalogTracksForStyle(prefs.style) : catalog;
   let eligibleCatalog = baseCatalog.filter((track) => {
     if (!isTrackEligibleForRecommendation(track)) return false;
@@ -55370,6 +55610,10 @@ function instantSwipeStyleCandidates(sourceTrack, plan) {
 function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtistName = "" } = {}) {
   if (!lastPrefs) return null;
   const basePrefs = normalizeRecommendationPrefs(lastPrefs);
+  if (basePrefs.style === "batida" && explicitSwipeAnchorStyle() === "batida") {
+    const track = pickReviewedBatidaRecommendation(basePrefs, { sourceTrack, avoidArtistName });
+    return track ? { track, prefs: basePrefs, plan: null } : null;
+  }
   const plan = buildFastSwipeStylePlan({ sourceTrack, positive });
   const styles = instantSwipeStyleCandidates(sourceTrack, plan);
   const sourceKey = recommendationTrackKey(sourceTrack);
@@ -55449,6 +55693,7 @@ function presentInstantSwipeRecommendation({
 } = {}) {
   if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return false;
   const requestedPrefs = normalizeRecommendationPrefs(prefs);
+  if (requestedPrefs.style === "batida" && !trackMatchesBpmPreference(track, requestedPrefs.bpm)) return false;
   if (requestedPrefs.style && selectableSwipeStyle(track.style || "") !== requestedPrefs.style) {
     return false;
   }
@@ -55561,6 +55806,9 @@ function pickInstantPrimaryNextTrack(
 ) {
   const sourceKey = recommendationTrackKey(sourceTrack);
   const lockedStyle = selectableSwipeStyle(requiredStyle);
+  if (lockedStyle === "batida") {
+    return pickReviewedBatidaRecommendation(normalizeRecommendationPrefs({ ...lastPrefs, style: lockedStyle }), { sourceTrack });
+  }
   const blockedArtists = buildGlobalArtistExclusionSet(sourceTrack?.artist || "");
   const candidateAllowed = (track) => {
     if (!track || track === sourceTrack) return false;
@@ -55619,13 +55867,15 @@ function tryRunInstantPrimaryRecommendation() {
     if (!anchoredStyle) swipeUserAnchoredStyle = "";
     const nextTrack = pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle);
     if (!nextTrack) return false;
-    const nextPrefs = normalizeRecommendationPrefs({
-      style: anchoredStyle || selectableSwipeStyle(nextTrack.style || ""),
-      context: "",
-      energy: "",
-      bpm: "",
-      vocals: ""
-    });
+    const nextPrefs = anchoredStyle === "batida"
+      ? normalizeRecommendationPrefs({ ...lastPrefs, style: anchoredStyle })
+      : normalizeRecommendationPrefs({
+        style: anchoredStyle || selectableSwipeStyle(nextTrack.style || ""),
+        context: "",
+        energy: "",
+        bpm: "",
+        vocals: ""
+      });
     playUiSfx("search-start");
     const presented = presentInstantSwipeRecommendation({
       track: nextTrack,
@@ -55919,6 +56169,7 @@ async function runPrimaryRecommendationAction({ source = "manual", initialRunner
     return runInitialRecommendation({ source: requestSource, initialRunner });
   }
   if (tryRunInstantPrimaryRecommendation()) return true;
+  if (explicitSwipeAnchorStyle() === "batida") return runManualFilterSurprise();
   return runSurpriseRecommendation();
 }
 
@@ -56062,6 +56313,10 @@ function fastNegativeFeedbackScore(track, prefs, rejectedTrack) {
 function pickFastNegativeFeedbackTrack({ rejectedTrack = currentRecommendation, prefs = lastPrefs, avoidArtistName = "" } = {}) {
   const basePrefs = negativeFeedbackBasePrefs(prefs);
   if (!rejectedTrack || !basePrefs) return null;
+  if (basePrefs.style === "batida") {
+    const track = pickReviewedBatidaRecommendation(basePrefs, { sourceTrack: rejectedTrack, avoidArtistName });
+    return track ? { track, prefs: basePrefs } : null;
+  }
   const previousArtistKey = artistMatchKey(avoidArtistName || rejectedTrack?.artist || "");
 
   // Never fill the swipe deck with metadata-only tracks. Cover art, BPM and a
@@ -56297,6 +56552,9 @@ function interactionFallbackTrackAllowed(
 
 function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRecommendation, avoidArtistName = "" } = {}) {
   const normalizedPrefs = normalizeRecommendationPrefs(prefs || {});
+  if (normalizedPrefs.style === "batida") {
+    return pickReviewedBatidaRecommendation(normalizedPrefs, { sourceTrack, avoidArtistName });
+  }
   const blockedArtists = buildGlobalArtistExclusionSet(
     [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
   );
@@ -63282,6 +63540,14 @@ async function pickPlayableReplacementForPrefs(
   } = {}
 ) {
   prefs = normalizeRecommendationPrefs(prefs);
+  if (prefs.style === "batida") {
+    return pickReviewedBatidaRecommendation(prefs, {
+      sourceTrack: currentTrack,
+      additionalArtistExclusions: excludedArtists,
+      excludedTrackKeys,
+      excludedTrackTitles
+    });
+  }
   const currentKey = recommendationTrackKey(currentTrack);
   const knownArtists = buildGlobalArtistExclusionSet([...excludedArtists]);
   const hardRecentArtists = buildRecentArtistExclusionSet(currentTrack?.artist || "");
@@ -63410,7 +63676,26 @@ async function generateRecommendationFromPrefs(
   let recommendationCommitted = false;
   try {
     prefs = normalizeRecommendationPrefs(prefs);
-  if (resetRejected) rejectedArtists = new Set();
+    if (resetRejected) rejectedArtists = new Set();
+    if (prefs.style === "batida") {
+      recommendationBlockedByKnown = false;
+      try {
+        await hydrateExternalDatasetPackInBackground({ style: "batida" });
+      } catch (_error) {
+        return false;
+      }
+      assertRecommendationSessionCurrent(sessionGeneration);
+      const excludedTrackKeys = new Set([avoidTrackKey, ...(Array.isArray(avoidTrackKeys) ? avoidTrackKeys : [])]
+        .map(key => normalize(key || "")).filter(Boolean));
+      const excludedTrackTitles = new Set(parseKnownTrackTitles([
+        knownTracksText || quickSurpriseKnownTracksEl?.value || "",
+        ...(Array.isArray(avoidTrackTitles) ? avoidTrackTitles : [])
+      ].join(",")));
+      const track = pickReviewedBatidaRecommendation(prefs, { avoidArtistName, excludedTrackKeys, excludedTrackTitles });
+      if (!track) return false;
+      recommendationCommitted = presentInstantSwipeRecommendation({ track, prefs });
+      return recommendationCommitted;
+    }
   const hardRecentArtistExclusions = buildRecentArtistExclusionSet(
     currentRecommendation?.artist || ""
   );
@@ -64564,7 +64849,7 @@ async function runRecommendation() {
     let recommendationGenerated = false;
     await withSearchOverlay(t("searchOverlayPreparing"), async (update) => {
       update(14, t("searchOverlayPreparing"));
-      if (prefs.style) {
+      if (prefs.style && prefs.style !== "batida") {
         update(32, t("searchOverlayCatalog"));
         const coverage = await ensureStyleCoverageFast(prefs.style, 1);
         const stats = coverage.stats || styleCoverageStats(prefs.style);
