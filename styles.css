@@ -15955,6 +15955,90 @@ body.is-recommending #topSwipeCard.swipe-hero-card.is-empty .swipe-preview-pulse
   margin-inline: auto;
 }
 
+.swipe-style-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.swipe-style-search-field {
+  flex: 1 1 15rem;
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.swipe-style-search-field label {
+  font-size: 0.82rem;
+}
+
+.swipe-style-search-field input {
+  width: 100%;
+  min-height: 44px;
+  font-size: 1rem;
+}
+
+.swipe-style-search button,
+.swipe-style-selection button {
+  min-height: 44px;
+  padding: 0.42rem 0.72rem;
+}
+
+.swipe-style-selection:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.65rem;
+  color: #a4f0d6;
+  font-size: 0.88rem;
+}
+
+.swipe-style-search-status {
+  margin: 0;
+  color: #bbcae1;
+  font-size: 0.84rem;
+}
+
+.swipe-style-search-status:empty {
+  position: absolute;
+  clip-path: inset(50%);
+}
+
+.swipe-style-rail[hidden] {
+  display: none;
+}
+
+.swipe-style-rail.is-browsing:not([hidden]) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+  align-content: start;
+  max-height: min(45vh, 21rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: none;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  padding: 0.15rem;
+}
+
+.swipe-style-rail.is-browsing::-webkit-scrollbar {
+  display: initial;
+}
+
+.swipe-style-rail.is-browsing .swipe-style-pill span {
+  overflow-wrap: anywhere;
+}
+
+.swipe-style-search :focus-visible,
+.swipe-style-selection :focus-visible,
+.swipe-style-rail :focus-visible {
+  outline: 2px solid #9af3cf;
+  outline-offset: -2px;
+}
+
 .preference-panel[data-app-tab="filters"] .context-moment-panel,
 .preference-panel[data-app-tab="filters"] .precision-filters,
 .preference-panel[data-app-tab="filters"] .recommendation-actions,

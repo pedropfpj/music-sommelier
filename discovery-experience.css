@@ -42,6 +42,205 @@
   #swipeStartPanel .swipe-hero-actions button { font-size:14px; min-height:48px; padding:8px; }
   #swipeStartPanel #topSwipeCard.is-empty + .swipe-hero-actions { grid-template-areas:"surprise"; grid-template-columns:1fr; }
 }
+/* Web discovery pairs the artwork and recording identity above the transport. */
+html[data-web-audience="true"] #swipeStartPanel > .swipe-start-stage {
+  width: min(100%, 700px);
+  gap: clamp(8px, 1.5vw, 13px);
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card.is-empty {
+  min-height: clamp(200px, 36svh, 300px);
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) {
+  --discover-art-size: clamp(88px, 26vw, 152px);
+  display: grid;
+  grid-template: "art title" auto / var(--discover-art-size) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(11px, 2.8vw, 24px);
+  min-height: 0;
+  height: auto;
+  padding: clamp(9px, 2vw, 17px);
+  border: 1px solid #344b50;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 0 0, #183438, transparent 74%), #0b181c;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-art {
+  position: relative;
+  inset: auto;
+  grid-area: art;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1;
+  border: 1px solid #456369;
+  border-radius: 10px;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-image {
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  transform: none;
+  filter: none;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-fallback {
+  border-radius: inherit;
+  font-size: clamp(2.4rem, 11vw, 4rem);
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy {
+  position: relative;
+  inset: auto;
+  grid-area: title;
+  align-self: center;
+  align-content: center;
+  gap: clamp(5px, 1.5vw, 10px);
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.24rem, 5.5vw, 2.35rem);
+  line-height: 1.08;
+  text-shadow: none;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy .muted {
+  display: block;
+  color: #c5d8d9;
+  font-size: clamp(0.8rem, 3.2vw, 1rem);
+  line-height: 1.25;
+  text-shadow: none;
+}
+
+html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-track-signals {
+  display: flex !important;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+}
+
+html[data-web-audience="true"] #topSwipeCard .swipe-track-signals span {
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 3px 6px;
+  font-size: clamp(0.7rem, 2.8vw, 0.82rem);
+  line-height: 1.25;
+  white-space: normal;
+}
+
+html[data-web-audience="true"] #topSwipeCard #topSwipeBpmChip {
+  border: 0;
+  background: transparent;
+  color: #b2c7c5;
+  font-size: 0.74rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+html[data-web-audience="true"] #topSwipeCard #topSwipeEnergyChip,
+html[data-web-audience="true"] #topSwipeCard > #topSwipeCount {
+  display: none !important;
+}
+
+html[data-web-audience="true"] #swipeStartPanel .swipe-hero-actions {
+  width: 100%;
+  grid-template-areas: "pass surprise like";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+html[data-web-audience="true"] #swipeStartPanel .swipe-like-count-wrap {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+html[data-web-audience="true"] #topSwipeCard.is-empty + .swipe-hero-actions {
+  grid-template-areas: "surprise";
+  grid-template-columns: minmax(0, 1fr);
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewPanel {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 7px 11px 11px;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewStatus {
+  grid-row: 1;
+  grid-column: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewStatus::before {
+  display: inline-block;
+  width: 0.48em;
+  height: 0.48em;
+  margin: 0 0.45em 0.1em 0;
+  border-radius: 50%;
+  background: #9cafb1;
+  content: "";
+}
+
+html[data-web-audience="true"] #topSwipeCard.is-preview-playing ~ #previewPanel #previewStatus::before {
+  background: #9effcc;
+  box-shadow: 0 0 8px #9effcc88;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewPanel > :not(#previewStatus, #listeningPrompt) {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewPanel:has(> :is(.youtube-preview, .soundcloud-preview, .bandcamp-preview):not(.hidden)) #previewPlayBtn {
+  display: none;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #listeningPrompt {
+  grid-row: 1;
+  grid-column: 2;
+  margin: 0;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #listeningPrompt > .feedback-buttons {
+  display: flex;
+}
+
+html[data-web-audience="true"] #swipeStartPanel #previewIssueBtn {
+  min-height: 44px;
+  padding: 6px 10px;
+}
+
+html[data-web-audience="true"] #swipeStartPanel :is(#trackPreview, #previewIssueBtn, #previewPlayBtn, .swipe-hero-actions button):focus-visible {
+  outline: 2px solid #9effcc;
+  outline-offset: 2px;
+}
+
+@media (max-width: 360px) {
+  html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) {
+    --discover-art-size: 76px;
+    gap: 9px;
+  }
+
+  html[data-web-audience="true"] #topSwipeCard.swipe-hero-card:not(.is-empty) .swipe-hero-copy h4 {
+    font-size: 1.1rem;
+  }
+}
+
 @media (prefers-reduced-motion:reduce) { .discovery-detail-drawer { scroll-behavior:auto; } }
 
 #summaryPanel .profile-library-section { order:1; }
@@ -66,3 +265,15 @@ html[data-public-profiles="false"] #userProfileCard { display:none !important; }
 
 #summaryPanel #profileBackupCard { order:2; }
 #summaryPanel #privacyRequestsCard { order:9; }
+
+html:not([data-web-audience="true"]) #swipeStartPanel .swipe-start-stage:has(> #trackDiscussionEntry:not([hidden])) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+html:not([data-web-audience="true"]) #swipeStartPanel .swipe-start-stage:has(> #trackDiscussionEntry:not([hidden])) > :nth-child(n+3) {
+  order: 2;
+}
+
+html:not([data-web-audience="true"]) #swipeStartPanel .swipe-start-stage > #trackDiscussionEntry {
+  order: 1;
+}

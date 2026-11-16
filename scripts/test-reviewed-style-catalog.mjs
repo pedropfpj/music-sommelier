@@ -235,6 +235,9 @@ async function verifyReviewedStyle(style, { providers, artistsWithDepth }) {
     assert.ok(candidate, `${name} ended the verified sequence after ${index} tracks`);
     const proof = app.reviewedCatalogRecording(candidate);
     assert.ok(proof, `${name} returned an unreviewed recording`);
+    if (artistsWithDepth && index < 5) {
+      assert.equal(proof.provider, "apple_music", `${name} should choose a direct preview when a fresh artist has one`);
+    }
     assert.equal(delivered.has(proof.recordingId), false, `${name} repeated ${proof.recordingId}`);
     delivered.add(proof.recordingId);
     const identity = app.artistMatchKey(candidate.artist);

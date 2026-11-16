@@ -24,6 +24,8 @@ const makeContext = () => {
   const good = { key: "a", artist: "Zélia", song: "Água", style: "house", eligible: true };
   const state = { recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
     currentRecommendation: null, currentLocale: () => "pt", currentLanguage: "pt", profile: "one",
+    recommendationSessionGeneration: 1,
+    recommendationSessionIsCurrent: generation => state.recommendationSessionGeneration === generation,
     sessionProfileKey: () => state.profile, discoveryExperienceCopy: () => ({ opening: "Opening", play: "Play", unavailable: "Unavailable" }),
     prepareExplicitPreviewAudio() { state.audioPrepared = true; }, normalize: value => value, CURATED_FRIENDLY_OPENING_TRACKS: [good],
     catalog: [{ ...good, eligible: false }], recommendationTrackKey: track => track.key,

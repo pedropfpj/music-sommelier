@@ -32,7 +32,7 @@
     <link rel="apple-touch-icon" href="assets/image-bank/png/logos/sonic-search-logo-square-updated.png?v=20260609logo1" />
     <link rel="privacy-policy" href="privacy.html" />
     <link rel="terms-of-service" href="terms.html" />
-    <link rel="preload" href="styles.min.css?v=20261110trust2" as="style" />
+    <link rel="preload" href="styles.min.css?v=20261116discovery1" as="style" />
     <link rel="preload" href="assets/image-bank/png/logos/sonic-search-logo-horizontal-updated.png?v=20260713fluid1" as="image" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,7 +76,7 @@
         display: none !important;
       }
     </style>
-    <link rel="stylesheet" href="styles.min.css?v=20261110trust2" />
+    <link rel="stylesheet" href="styles.min.css?v=20261116discovery1" />
     <link rel="stylesheet" href="privacy-requests.css?v=20260922privacy1" />
     <link rel="stylesheet" href="user-profile.css?v=20261105profiles1" />
     <link rel="stylesheet" href="friends.css?v=20261110trust2" />
@@ -84,7 +84,7 @@
     <link rel="stylesheet" href="daily-djs.css?v=20260902radarcommerce1" />
     <link rel="stylesheet" href="daily-radar.css?v=20260917radaricons1" />
     <link rel="stylesheet" href="weekly-recommends.css?v=20261109weekly3" />
-    <link rel="stylesheet" href="discovery-experience.css?v=20261105profiles1" />
+    <link rel="stylesheet" href="discovery-experience.css?v=20261116listening" />
     <script src="privacy-controls.js?v=20260922privacy1"></script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -1338,13 +1338,9 @@
               <button id="topSwipeLikeBtn" class="swipe-action-btn like" type="button" disabled>Curti</button>
             </div>
           </div>
-          <div id="trackDiscussionEntry" class="social-discussion-entry hidden" hidden>
-            <p id="trackDiscussionContext" class="muted"></p>
-            <button type="button" data-open-discussion="track" class="secondary" aria-haspopup="dialog" aria-controls="socialDiscussionDialog" aria-describedby="trackDiscussionContext">Comentários e curtidas</button>
-          </div>
           <div id="previewPanel" class="preview-panel hidden">
-            <p id="previewStatus" class="muted">Procurando um preview tocável...</p>
-            <audio id="trackPreview" class="auto-audio" controls preload="none"></audio>
+            <p id="previewStatus" class="muted" role="status" aria-live="polite" aria-atomic="true">Procurando um preview tocável...</p>
+            <audio id="trackPreview" class="auto-audio" controls preload="none" aria-label="Prévia da faixa"></audio>
             <button id="previewPlayBtn" class="preview-play-btn" type="button">Tocar preview</button>
             <div id="soundcloudPreviewWrap" class="soundcloud-preview hidden">
               <iframe
@@ -1384,13 +1380,17 @@
               <a id="soundcloudPreviewSearchLink" class="secondary soundcloud-search-link hidden" href="#" target="_blank" rel="noopener noreferrer">Buscar no SoundCloud</a>
             </div>
             <div id="listeningPrompt" class="known-prompt hidden">
-            <p>O som conectou?</p>
+              <p>O som conectou?</p>
               <div class="feedback-buttons">
                 <button id="previewLikeBtn">Conectou</button>
-                <button id="previewIssueBtn" class="secondary">Não tocou</button>
+                <button id="previewIssueBtn" class="secondary" type="button">Não tocou</button>
                 <button id="previewDislikeBtn" class="secondary">Não conectou, troca</button>
               </div>
             </div>
+          </div>
+          <div id="trackDiscussionEntry" class="social-discussion-entry hidden" hidden>
+            <p id="trackDiscussionContext" class="muted"></p>
+            <button type="button" data-open-discussion="track" class="secondary" aria-haspopup="dialog" aria-controls="socialDiscussionDialog" aria-describedby="trackDiscussionContext">Comentários e curtidas</button>
           </div>
           <details id="trackDataReview" class="track-data-review" hidden>
             <summary id="trackDataReviewSummary">Revisar dados</summary>
@@ -1899,6 +1899,18 @@
             <h4 id="swipeDeckTitle">Escolha uma direção sonora</h4>
             <p id="swipeDeckHint" class="muted">Use um subgênero para abrir uma sequência mais coerente.</p>
           </div>
+          <div class="swipe-style-search">
+            <div class="swipe-style-search-field">
+              <label id="swipeStyleSearchLabel" for="swipeStyleSearch">Buscar subgênero</label>
+              <input id="swipeStyleSearch" type="search" placeholder="Digite o nome do subgênero" autocomplete="off" aria-controls="swipeStyleRail" />
+            </div>
+            <button id="swipeStyleToggle" class="secondary swipe-style-browse" type="button" aria-controls="swipeStyleRail" aria-expanded="false">Ver todos os 169 estilos</button>
+          </div>
+          <div id="swipeStyleSelection" class="swipe-style-selection" hidden>
+            <span id="swipeStyleSelectedLabel"></span>
+            <button id="swipeStyleClear" class="secondary" type="button">Remover filtro</button>
+          </div>
+          <p id="swipeStyleSearchStatus" class="swipe-style-search-status" role="status" aria-atomic="true"></p>
           <div id="swipeStyleRail" class="swipe-style-rail" aria-label="Rotas rápidas de descoberta"></div>
         </div>
 
@@ -3469,6 +3481,6 @@
     <script defer src="friends.js?v=20261110trust2"></script>
     <script defer src="weekly-recommends.js?v=20261109weekly3"></script>
     <script defer src="discovery-experience.js?v=20261109weekly3"></script>
-    <script defer src="app.min.js?v=20261116houseopening"></script>
+    <script defer src="app.min.js?v=20261116discovery1"></script>
   </body>
 </html>

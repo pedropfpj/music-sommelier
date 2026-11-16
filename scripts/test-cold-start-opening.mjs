@@ -81,7 +81,6 @@ function sequenceVisitor(identity, { local = storageFixture(), session = storage
     assert.ok(ctx.trackHasInstantPlaybackRoute(track), "An instant card needs an existing playback route");
     ctx.currentRecommendation = track;
     ctx.lastPrefs = ctx.normalizeRecommendationPrefs({ ...prefs, style: prefs.style || track.style });
-    ctx.styleEl.value = ctx.lastPrefs.style;
     ctx.deliveries.push(track);
     ctx.markRecommendationPresented(track);
     ctx.rememberAnonymousExposure(track);
@@ -379,10 +378,12 @@ await check("the same Groovado calibration gives fresh web visitors different fi
     ctx.updateBpmOptionsForSelectedStyle = () => {};
     ctx.renderStyleInfoBubble = () => {};
     ctx.applyGenreVibeTheme = () => {};
-    ctx.applyInitialTasteCalibrationPreferences({ experience: "beginner", goal: "track", mood: "groovy" });
+    ctx.initialTasteCalibrationState = { status: "completed", experience: "beginner", goal: "track", mood: "groovy" };
+    ctx.applyInitialTasteCalibrationPreferences();
 
     assert.equal(await ctx.runPrimaryRecommendationAction({ source: "initial_calibration" }), true);
     assert.equal(ctx.explicitSwipeAnchorStyle(), "house");
+    assert.equal(ctx.styleEl.value, "", "The Groovado seed is not an explicit subgenre selection");
     for (const action of ["other", "like", "pass", "other"]) {
       if (index % 2 === 0) queueNextCards(ctx);
       if (action === "other") {
@@ -442,15 +443,18 @@ await check("a reload keeps a manually selected style and ignores the style prin
   const ctx = fresh("reload-preferences", 0);
   const track = ctx.pickInstantOpeningTrack().track;
   ctx.currentRecommendation = track;
-  ctx.styleEl.value = track.style;
+  ctx.syncInferredStyleControl(track.style);
   const key = ctx.storageKeyForSession(ctx.STORAGE_KEY);
 
   ctx.savePreferences();
   assert.equal(JSON.parse(ctx.localStorage.getItem(key)).style, "");
 
-  ctx.swipeUserAnchoredStyle = track.style;
+  ctx.styleEl.value = track.style;
   ctx.savePreferences();
   assert.equal(JSON.parse(ctx.localStorage.getItem(key)).style, track.style);
+  ctx.loadPreferences();
+  assert.equal(ctx.styleEl.value, track.style);
+  assert.equal(ctx.explicitSwipeAnchorStyle(), track.style);
 });
 
 await check("anchored feedback preserves an explicit BPM choice when the ready pool is exhausted", async () => {

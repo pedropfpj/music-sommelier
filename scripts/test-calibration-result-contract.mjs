@@ -36,6 +36,8 @@ function harness() {
     normalizeRecommendationPrefs: prefs => ({ ...prefs }),
     selectedPreferenceCount: prefs => Object.values(prefs).filter(Boolean).length,
     discoveryModeEl: { checked: true },
+    isNativeAppRuntime: () => false,
+    isAppStoreRuntimeMode: () => false,
     styleEl: { value: filters.style }, contextEl: { value: filters.context }, energyEl: { value: filters.energy },
     bpmEl: { value: filters.bpm }, vocalsEl: { value: filters.vocals },
     lastPrefs: null,
@@ -140,6 +142,7 @@ for (const mode of ["false", "missing", "same", "invalid", "throw"]) {
 {
   const { context: c, state } = harness();
   c.styleEl.value = "";
+  c.isNativeAppRuntime = () => true;
   state.fast = () => { c.currentRecommendation = nextTrack; c.styleEl.value = nextTrack.style; return true; };
   assert.equal(await c.runManualFilterSurprise(), true, "Filling an unspecified style from a committed instant card is not a user filter change");
   assert.equal(state.calls.filter(call => call.kind === "generate").length, 0);
@@ -216,7 +219,8 @@ for (const change of ["profile", "new-calibration", "none"]) {
   const h = harness(), { context: c, state } = h;
   const pending = c.completeInitialTasteCalibration();
   assert.equal(c.initialTasteCalibrationState.status, "completed", "Preferences may be saved even when music delivery later fails");
-  assert.equal(c.styleEl.value, "tech_house");
+  assert.equal(c.styleEl.value, "", "Web calibration should leave the explicit subgenre control free");
+  assert.equal(c.calibratedStyleForManualPrefs(c.prefsFromManualControls()), "tech_house");
   assert.equal(c.contextEl.value, "social");
   if (change === "profile") c.recommendationSessionGeneration++;
   if (change === "new-calibration") c.initialTasteCalibrationState = { ...calibration, mood: "intense" };
