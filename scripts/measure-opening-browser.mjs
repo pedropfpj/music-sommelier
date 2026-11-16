@@ -1,6 +1,6 @@
 import { performance } from 'node:perf_hooks';
-// Use a disposable Playwright context for each visit. Output contains only
-// playback timings, recording titles and aggregate state. No network tracing.
+// Use disposable Playwright contexts. Reentry deliberately keeps one context
+// across new pages. Output contains public recordings, timings and totals.
 const playwright = await import(process.env.SONIC_PLAYWRIGHT_MODULE || 'playwright');
 const [engine = 'chromium', baseUrl = 'https://sonicsearch.app/', scenarios = 'guest:6,full_on_night:1,reload:1'] = process.argv.slice(2);
 const url = new URL(baseUrl);
@@ -9,12 +9,21 @@ const compareControlled = process.env.SONIC_BROWSER_CONTROLLED !== '0';
 const audioLimit = Number(process.env.SONIC_BROWSER_AUDIO_LIMIT || 4500);
 const searchLimit = Number(process.env.SONIC_BROWSER_SEARCH_LIMIT || 14000);
 const systemChrome = process.env.SONIC_CHROMIUM_EXECUTABLE;
+const desktop = process.env.SONIC_BROWSER_VIEWPORT === 'desktop';
+const sequenceLength = Number(process.env.SONIC_BROWSER_SEQUENCE_LENGTH || 5);
+const reentryVisits = Number(process.env.SONIC_BROWSER_REENTRY_VISITS || 3);
+const filteredFeedback = process.env.SONIC_BROWSER_FILTERED_FEEDBACK === '1';
+const requireNoRepeat = process.env.SONIC_BROWSER_REQUIRE_NO_REPEAT === '1';
+const reportFreshOverlap = process.env.SONIC_BROWSER_FRESH_OVERLAP === '1';
+if (!Number.isInteger(sequenceLength) || sequenceLength < 1 || sequenceLength > 30) throw new Error('Sequence length must be 1–30');
+if (!Number.isInteger(reentryVisits) || reentryVisits < 2 || reentryVisits > 10) throw new Error('Reentry visits must be 2–10');
 const browser = await playwright[engine].launch({
   headless: true,
   ...(engine === 'chromium' && systemChrome ? { executablePath: systemChrome } : {})
 });
 const feedbackButtons = ['#topSwipeSurpriseBtn', '#topSwipeSurpriseBtn', '#topSwipeLikeBtn', '#topSwipePassBtn', '#topSwipeSurpriseBtn'];
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const activate = (locator, options) => desktop ? locator.click(options) : locator.tap(options);
 function parseScenarios() {
   return scenarios.split(',').flatMap(item => {
     const [name, count] = item.split(':');
@@ -24,6 +33,62 @@ function parseScenarios() {
 
 function isCalibratedScenario(scenario) {
   return scenario === 'calibrated' || scenario === 'calibrated-reload';
+}
+
+function isReentryScenario(scenario) {
+  return scenario === 'guest-reentry' || scenario === 'visitor-reentry';
+}
+
+function hasPriorRecording(recording, priorKeys, priorIds) {
+  return priorKeys.has(recording.key) || recording.recordingIds.some(identity => priorIds.has(identity));
+}
+
+function summarizeSequence(sequence) {
+  const actions = sequence.filter(entry => entry.action);
+  const cards = actions.filter(entry => entry.key);
+  const seenKeys = new Set();
+  const seenIds = new Set();
+  let repeatedRecordings = 0;
+  for (const card of cards) {
+    if (hasPriorRecording(card, seenKeys, seenIds)) repeatedRecordings++;
+    seenKeys.add(card.key);
+    for (const identity of card.recordingIds) seenIds.add(identity);
+  }
+  return {
+    attempts: actions.length,
+    cards: cards.length,
+    distinctArtists: new Set(cards.map(card => card.artistKey).filter(Boolean)).size,
+    distinctStyles: new Set(cards.map(card => card.style).filter(Boolean)).size,
+    distinctFamilies: new Set(cards.map(card => card.family).filter(Boolean)).size,
+    distinctLabels: new Set(cards.map(card => card.label).filter(Boolean)).size,
+    repeatedRecordings,
+    directAudio: cards.filter(card => card.audioEvidence === 'direct-progress').length,
+    widgetAudio: cards.filter(card => /^(bandcamp|soundcloud|youtube)-progress$/.test(card.audioEvidence)).length,
+    widgetLoadedOnly: cards.filter(card => !card.audioEvidence && /-frame-load$/.test(card.playerEvidence)).length,
+    endedWithRecovery: Boolean(actions.at(-1)?.recovered && !actions.at(-1)?.key)
+  };
+}
+
+function summarizeFreshOverlap(runs) {
+  const freshVisits = runs.filter(run => run?.scenario === 'guest')
+    .map(run => run.sequence.filter(entry => entry.key));
+  const overlap = [];
+  for (let index = 0; index < freshVisits.length; index++) {
+    const cards = freshVisits[index];
+    const keys = new Set(cards.map(card => card.key));
+    const ids = new Set(cards.flatMap(card => card.recordingIds));
+    for (const other of freshVisits.slice(index + 1)) {
+      overlap.push(other.filter(card => hasPriorRecording(card, keys, ids)).length);
+    }
+  }
+  return {
+    cleanBrowsers: freshVisits.length,
+    firstCardKeys: new Set(freshVisits.map(cards => cards[0]?.key).filter(Boolean)).size,
+    cardsPerVisit: freshVisits.map(cards => cards.length),
+    comparedPairs: overlap.length,
+    meanSharedRecordings: overlap.length ? Number((overlap.reduce((sum, value) => sum + value, 0) / overlap.length).toFixed(2)) : null,
+    maximumSharedRecordings: overlap.length ? Math.max(...overlap) : null
+  };
 }
 
 function snapshot() {
@@ -36,15 +101,17 @@ function snapshot() {
   const key = rec ? recommendationTrackKey(rec) : '';
   const style = styleEl.value;
   const recordingIds = rec ? recordingIdentityKeys(rec) : [];
-  const appleId = rec ? trackAppleRecordingId(rec) : '';
-  if (appleId) recordingIds.push(`apple_music:${appleId}`);
+  if (rec && typeof catalogTrackRecordingIds === 'function') recordingIds.push(...catalogTrackRecordingIds(rec));
+  else if (rec && trackAppleRecordingId(rec)) recordingIds.push(`apple_music:${trackAppleRecordingId(rec)}`);
   return {
     t: Math.round(performance.now()),
     gesture: window.sonicOpeningProbeGesture || null,
     build: SONIC_APP_BUILD_ID,
     key,
-    recordingIds,
+    recordingIds: [...new Set(recordingIds)],
     artist: rec?.artist || '', artistKey: rec ? artistMatchKey(rec.artist || '') : '', song: rec?.song || '', style: rec?.style || '',
+    family: rec?.style && typeof familyOf === 'function' ? familyOf(rec.style) : '',
+    label: rec?.label || '',
     preferredStyle: style, context: contextEl.value, energy: energyEl.value,
     bpm: bpmEl.value, trackBpm: rec?.bpmExact || null,
     trackContexts: Array.isArray(rec?.context) ? rec.context : [], trackEnergy: rec?.energy || '',
@@ -110,19 +177,24 @@ async function boot(context, scenario, targetUrl) {
     if (!['127.0.0.1', 'localhost'].includes(goalUrl.hostname)) throw new Error('Initial taste calibration QA is localhost-only');
     goalUrl.searchParams.set('tasteCalibrationQa','1');
   }
-  if (scenario === 'visitor') goalUrl.searchParams.set('visitor','1');
+  if (scenario === 'visitor' || scenario === 'visitor-reentry') goalUrl.searchParams.set('visitor','1');
   await page.goto(goalUrl.href, { waitUntil: 'domcontentloaded' });
+  await waitForEntry(page, scenario);
+  return page;
+}
+
+async function waitForEntry(page, scenario) {
+  const calibrated = isCalibratedScenario(scenario);
   await page.waitForFunction(() => typeof runPrimaryRecommendationAction === 'function');
-  if (await page.locator('#privacyEssentialBtn').isVisible()) await page.locator('#privacyEssentialBtn').tap();
-  if (await page.locator('#languageScreen').isVisible()) await page.locator('[data-lang="pt"]').tap();
-  if (await page.locator('#authScreen').isVisible()) await page.locator('#authGuestBtn').tap();
-  if (await page.locator('#usageGuideScreen').isVisible()) await page.locator('#usageGuideContinueBtn').tap();
+  if (await page.locator('#privacyEssentialBtn').isVisible()) await activate(page.locator('#privacyEssentialBtn'));
+  if (await page.locator('#languageScreen').isVisible()) await activate(page.locator('[data-lang="pt"]'));
+  if (await page.locator('#authScreen').isVisible()) await activate(page.locator('#authGuestBtn'));
+  if (await page.locator('#usageGuideScreen').isVisible()) await activate(page.locator('#usageGuideContinueBtn'));
   if (calibrated) {
-    await page.locator('[data-taste-field="experience"][data-taste-value="beginner"]').tap();
-    await page.locator('[data-taste-field="goal"][data-taste-value="track"]').tap();
+    await activate(page.locator('[data-taste-field="experience"][data-taste-value="beginner"]'));
+    await activate(page.locator('[data-taste-field="goal"][data-taste-value="track"]'));
   }
   await page.locator(calibrated ? '#tasteCalibrationScreen' : scenario === 'skip-calibration' ? '#tasteCalibrationSkipBtn' : '#topSwipeSurpriseBtn').waitFor({ state:'visible' });
-  return page;
 }
 async function getEmbedPlayback(page, state) {
   if (!state.media.embed) return null;
@@ -139,7 +211,7 @@ async function getEmbedPlayback(page, state) {
 async function runAction(page, selector, before = null) {
   const previous = before || await page.evaluate(snapshot);
   const tapStart = performance.now();
-  await page.locator(selector).tap({ timeout: 15000 });
+  await activate(page.locator(selector), { timeout: 15000 });
   const deadline = performance.now() + searchLimit;
   let cardAt = null, configuredAt = null, loadedAt = null, heardAt = null;
   let loadedVia = '', heardVia = '', report = previous;
@@ -182,6 +254,7 @@ async function runAction(page, selector, before = null) {
     key: shown ? report.key : '', artist: shown ? report.artist : '', artistKey: shown ? report.artistKey : '',
     recordingIds: shown ? report.recordingIds : [],
     song: shown ? report.song : '', style: shown ? report.style : '', filter: report.preferredStyle,
+    family: shown ? report.family : '', label: shown ? report.label : '',
     context: report.context, energy: report.energy, styleAffinity: report.styleAffinity,
     trackContexts: shown ? report.trackContexts : [], trackEnergy: shown ? report.trackEnergy : '',
     observedMs: Math.round(performance.now() - tapStart), history: report.history,
@@ -189,25 +262,80 @@ async function runAction(page, selector, before = null) {
   };
 }
 async function selectStyle(page, style, bpm) {
-  await page.locator('#discoverFiltersBtn').tap();
-  await page.locator('#precisionFiltersSummary').tap();
+  await activate(page.locator('#discoverFiltersBtn'));
+  await activate(page.locator('#precisionFiltersSummary'));
   await page.locator('#style').selectOption(style);
   if (bpm) await page.locator('#bpm').selectOption(bpm);
 }
+
+async function returnToDiscover(page) {
+  const menu = page.locator('#appMenuBtn');
+  if (await menu.isVisible() && await menu.getAttribute('aria-expanded') !== 'true') await activate(menu);
+  await activate(page.locator('[data-app-tab-target="discover"]'));
+}
 async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
-  const context = await browser.newContext({ ...(engine === 'webkit' ? playwright.devices['iPhone 13'] : playwright.devices['Pixel 7']), locale:'pt-BR', timezoneId:'America/Sao_Paulo', reducedMotion:'reduce' });
+  const device = desktop ? { viewport: { width: 1440, height: 960 } } :
+    (engine === 'webkit' ? playwright.devices['iPhone 13'] : playwright.devices['Pixel 7']);
+  const context = await browser.newContext({ ...device, locale:'pt-BR', timezoneId:'America/Sao_Paulo', reducedMotion:'reduce' });
   try {
+    if (isReentryScenario(scenario)) {
+      const visits = [];
+      const priorKeys = new Set();
+      const priorIds = new Set();
+      let page;
+      for (let visit = 0; visit < reentryVisits; visit++) {
+        const entry = visit === 0 ? 'first-open' : visit === 1 ? 'reload' : 'new-page-same-browser';
+        if (entry === 'reload') {
+          await page.reload({ waitUntil: 'domcontentloaded' });
+          await waitForEntry(page, scenario);
+        } else {
+          if (page) await page.close();
+          page = await boot(context, scenario, targetUrl);
+        }
+        const sequence = [];
+        const before = await page.evaluate(snapshot);
+        if (before.key) {
+          sequence.push({ ...before, action: 'automatic-opening', audioEvidence: '',
+            playerEvidence: '', recovered: false });
+        }
+        for (let index = sequence.length; index < sequenceLength; index++) {
+          const action = await runAction(page, '#topSwipeSurpriseBtn');
+          sequence.push(action);
+          if (!action.key) break;
+        }
+        const repeatsFromEarlierVisits = sequence.filter(card => card.key && hasPriorRecording(card, priorKeys, priorIds)).length;
+        const summary = summarizeSequence(sequence);
+        for (const card of sequence.filter(card => card.key)) {
+          priorKeys.add(card.key);
+          for (const identity of card.recordingIds) priorIds.add(identity);
+        }
+        visits.push({ entry, before: entryState(before), summary, repeatsFromEarlierVisits, sequence });
+        if (requireNoRepeat && (summary.cards !== sequenceLength || repeatsFromEarlierVisits || summary.repeatedRecordings)) process.exitCode = 1;
+      }
+      const result = { engine, viewport: desktop ? 'desktop' : 'mobile', scenario, visitor, ...(variant ? { variant } : {}), visits };
+      console.log(JSON.stringify(result));
+      return result;
+    }
     const page = await boot(context, scenario, targetUrl);
-    if (scenario === 'skip-calibration') await page.locator('#tasteCalibrationSkipBtn').tap();
+    if (scenario === 'skip-calibration') await activate(page.locator('#tasteCalibrationSkipBtn'));
     const exhaust = scenario === 'full_on_night_exhaust';
     const fullOnBpm = exhaust || scenario === 'full_on_night_bpm' || scenario === 'full_on_night_reload';
+    const bpmOnly = scenario === 'bpm_only' || scenario === 'bpm_only_reload';
     const focusStyle = fullOnBpm ? 'full_on_night' : scenario;
-    const focused = ['full_on_night', 'batida', 'french_house', 'bleep_techno'].includes(focusStyle);
+    const focused = ['full_on_night', 'batida', 'french_house', 'bleep_techno', 'house', 'tech_house'].includes(focusStyle);
     if (focused) await selectStyle(page, focusStyle, fullOnBpm ? '145-155' : '');
+    if (bpmOnly) {
+      await selectStyle(page, '', '145-155');
+      await returnToDiscover(page);
+    }
     const before = await page.evaluate(snapshot);
-    const buttons = scenario === 'first' ? feedbackButtons.slice(0, 1) : [...feedbackButtons];
+    const buttons = Array.from({ length: scenario === 'first' ? 1 : sequenceLength }, (_, index) => feedbackButtons[index % feedbackButtons.length]);
     if (isCalibratedScenario(scenario)) buttons[0] = '[data-taste-field="mood"][data-taste-value="groovy"]';
-    if (focused) buttons.fill('#recommendBtn');
+    if (focused) {
+      for (const [index, button] of buttons.entries()) {
+        if (!filteredFeedback || button === '#topSwipeSurpriseBtn') buttons[index] = '#recommendBtn';
+      }
+    }
     if (exhaust) buttons.push('#topSwipeSurpriseBtn');
     const sequence = [];
     for (let index = 0; index < buttons.length; index++) {
@@ -216,8 +344,10 @@ async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
         button = '#topSwipeSurpriseBtn';
       }
       if ((button === '#topSwipeLikeBtn' || button === '#topSwipePassBtn') && await page.locator(button).isDisabled()) button = '#topSwipeSurpriseBtn';
-      sequence.push(await runAction(page, button, index === 0 ? before : null));
-      if (index === 3 && ['reload', 'full_on_night_reload', 'calibrated-reload'].includes(scenario)) {
+      const action = await runAction(page, button, index === 0 ? before : null);
+      sequence.push(action);
+      if (sequenceLength > 5 && !action.key && action.recovered) break;
+      if (index === 3 && ['reload', 'full_on_night_reload', 'calibrated-reload', 'bpm_only_reload'].includes(scenario)) {
         if (scenario === 'calibrated-reload') {
           await page.evaluate(() => {
             // The QA entry creates a new synthetic profile on every visit.
@@ -238,7 +368,13 @@ async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
         });
       }
     }
-    const result = { engine, scenario, visitor, ...(variant ? { variant } : {}), before: entryState(before), sequence };
+    const summary = summarizeSequence(sequence);
+    const wrongFilter = sequence.some(card => card.key && (
+      (focused && card.style !== focusStyle) ||
+      ((fullOnBpm || bpmOnly) && !(Number(card.trackBpm) >= 145 && Number(card.trackBpm) <= 155))
+    ));
+    if (requireNoRepeat && (summary.repeatedRecordings || wrongFilter)) process.exitCode = 1;
+    const result = { engine, viewport: desktop ? 'desktop' : 'mobile', scenario, visitor, ...(variant ? { variant } : {}), before: entryState(before), summary, wrongFilter, sequence };
     console.log(JSON.stringify(result));
     return result;
   } catch (error) {
@@ -249,17 +385,25 @@ async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
 }
 try {
   const all = parseScenarios();
+  const results = [];
   if (compareUrl) {
-    if (!all.every(([scenario]) => isCalibratedScenario(scenario))) throw new Error('Paired runs require calibrated scenarios');
     const variants = [[url, 'base'], [compareUrl, 'comparison']];
     for (const visit of all) {
-      for (const [targetUrl, variant] of variants) await runScenario(visit, targetUrl, variant);
+      for (const [targetUrl, variant] of variants) results.push(await runScenario(visit, targetUrl, variant));
       variants.reverse();
     }
   } else {
     const concurrency = Number(process.env.SONIC_BROWSER_VISITORS_AT_ONCE || 1);
     for (let index = 0; index < all.length; index += concurrency) {
-      await Promise.all(all.slice(index, index + concurrency).map(visit => runScenario(visit)));
+      results.push(...await Promise.all(all.slice(index, index + concurrency).map(visit => runScenario(visit))));
+    }
+  }
+  if (reportFreshOverlap) {
+    for (const variant of compareUrl ? ['base', 'comparison'] : ['']) {
+      console.log(JSON.stringify({
+        engine, type: 'fresh-visit-overlap', ...(variant ? { variant } : {}),
+        ...summarizeFreshOverlap(results.filter(result => (result?.variant || '') === variant))
+      }));
     }
   }
 } finally { await browser.close(); }

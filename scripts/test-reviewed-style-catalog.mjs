@@ -227,6 +227,9 @@ async function verifyReviewedStyle(style, { providers, artistsWithDepth }) {
   selectWithPrefs(app);
   const delivered = new Set();
   const deliveredArtists = new Set();
+  const directArtists = new Set(reviewedTracks
+    .filter(track => app.trackHasVerifiedImmediateAudioPreview(track))
+    .map(track => app.artistMatchKey(track.artist)));
   const routes = Object.keys(selectors);
   let previous = null;
   for (let index = 0; index < expectedCount; index += 1) {
@@ -235,7 +238,7 @@ async function verifyReviewedStyle(style, { providers, artistsWithDepth }) {
     assert.ok(candidate, `${name} ended the verified sequence after ${index} tracks`);
     const proof = app.reviewedCatalogRecording(candidate);
     assert.ok(proof, `${name} returned an unreviewed recording`);
-    if (artistsWithDepth && index < 5) {
+    if (artistsWithDepth && index < directArtists.size) {
       assert.equal(proof.provider, "apple_music", `${name} should choose a direct preview when a fresh artist has one`);
     }
     assert.equal(delivered.has(proof.recordingId), false, `${name} repeated ${proof.recordingId}`);
@@ -258,6 +261,14 @@ async function verifyReviewedStyle(style, { providers, artistsWithDepth }) {
   }
   assert.equal(app.pickInstantPrimaryNextTrack(previous, style, { allowSeenTrack: true }), null);
   assert.equal(app.pickRecommendation(app.lastPrefs, new Set()), null);
+
+  assert.equal(await app.generateRecommendationFromPrefs(app.lastPrefs), false);
+  assert.equal(app.recommendationBlockedByKnown, true, "A loaded reviewed style with nothing unheard reports exhaustion");
+  assert.equal(app.currentRecommendation, previous, "Exhaustion keeps the last recommendation");
+  selectWithPrefs(app, "155-175");
+  assert.equal(await app.generateRecommendationFromPrefs(app.lastPrefs), false);
+  assert.equal(app.recommendationBlockedByKnown, false, "An unsupported BPM range isn't reported as history exhaustion");
+  assert.equal(app.currentRecommendation, previous, "An empty BPM range can't silently choose another filter");
 
   console.log(`PASS ${style}: ${expectedCount} exact playable recordings and ${expectedArtists} distinct performer identities through next/like/pass. BPM and history respected and failed or stale evidence rejected.`);
 }

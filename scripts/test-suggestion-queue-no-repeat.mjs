@@ -125,5 +125,40 @@ await check("A fresh eligible queue card still activates normally", async () => 
   assert.equal(renders[0], first);
 });
 
+for (const boundary of ["initial preview", "replacement search", "replacement preview"]) {
+  await check(`A late ${boundary} cannot commit or restore the old profile's queue`, async () => {
+    const { ctx, first, second } = fixture();
+    const { deliveries, renders } = activationFixture(first, ctx, second);
+    const alternate = { ...first, song: "Replacement for old profile" };
+    const newProfileTrack = { ...second, song: "New profile selection" };
+    let resolveStage;
+    let announceStage;
+    const stageReached = new Promise(resolve => { announceStage = resolve; });
+    const hold = value => new Promise(resolve => {
+      resolveStage = () => resolve(value);
+      announceStage();
+    });
+    ctx.restoreRecommendationSurfaceSnapshot = () => assert.fail("A stale request restored the old profile");
+    ctx.pickPlayableReplacementForPrefs = () => boundary === "replacement search" ? hold(alternate) : Promise.resolve(alternate);
+    ctx.renderPreview = track => {
+      if (boundary === "initial preview") return hold(true);
+      if (track === first) return Promise.resolve(false);
+      return hold(true);
+    };
+    const pending = ctx.activateSuggestionQueueIndex(0);
+    await stageReached;
+    const renderedBeforeSwitch = renders.length;
+    ctx.recommendationSessionGeneration += 1;
+    ctx.currentRecommendation = newProfileTrack;
+    ctx.recommendationRunBusy = true; // A different search now owns this lock.
+    resolveStage();
+    assert.equal(await pending, false);
+    assert.equal(ctx.currentRecommendation, newProfileTrack);
+    assert.equal(ctx.recommendationRunBusy, true);
+    assert.equal(deliveries.length, 0);
+    assert.equal(renders.length, renderedBeforeSwitch);
+  });
+}
+
 assert.equal(failures.length, 0, failures.join("\n"));
 console.log("Suggestion queue passed: no automatic track/artist recycling, collaborator and recording deduplication, stale-card safety, fresh activation.");

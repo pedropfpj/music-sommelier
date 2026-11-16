@@ -4,12 +4,16 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { startTestPreviewServer } from './test-preview-server.mjs';
-const { chromium } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || 'playwright');
+const playwright = await import(process.env.SONIC_PLAYWRIGHT_MODULE || 'playwright');
+const engine = process.env.SONIC_TRACK_REVIEW_ENGINE || 'chromium';
+assert.ok(['chromium', 'webkit'].includes(engine), 'Use chromium or webkit');
 const app = await fs.readFile(new URL('../app.js', import.meta.url), 'utf8');
 const css = await fs.readFile(new URL('../styles.css', import.meta.url), 'utf8');
 const preview = await startTestPreviewServer();
-const browser = await chromium.launch({ headless: true, executablePath: process.env.SONIC_CHROMIUM_EXECUTABLE || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', args: ['--autoplay-policy=no-user-gesture-required'] });
-const output = fileURLToPath(new URL('../.vercel/track-data-review/', import.meta.url));
+const browser = await playwright[engine].launch(engine === 'chromium'
+  ? { headless: true, executablePath: process.env.SONIC_CHROMIUM_EXECUTABLE || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', args: ['--autoplay-policy=no-user-gesture-required'] }
+  : { headless: true });
+const output = fileURLToPath(new URL(`../.vercel/track-data-review/${engine}/`, import.meta.url));
 await fs.mkdir(output, { recursive: true });
 const sampleRate = 8000, samples = sampleRate * 20, wav = Buffer.alloc(44 + samples * 2);
 wav.write('RIFF'); wav.writeUInt32LE(wav.length - 8, 4); wav.write('WAVEfmt ', 8); wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22); wav.writeUInt32LE(sampleRate, 24); wav.writeUInt32LE(sampleRate * 2, 28); wav.writeUInt16LE(2, 32); wav.writeUInt16LE(16, 34); wav.write('data', 36); wav.writeUInt32LE(samples * 2, 40);
@@ -73,9 +77,18 @@ try {
     await page.evaluate(async base => {
       if (!commitTrackPreviewSource(currentRecommendation, base + '/review-tone.wav', recommendationPreviewRenderToken)) throw Error('Fixture audio ownership failed');
       trackPreview.loop = true;
+      setActivePlayback({ type: 'preview', trackKey: recommendationTrackKey(currentRecommendation), generation: playbackGeneration, player: trackPreview, state: 'loading' });
+      trackPreview.muted = true;
       await trackPreview.play();
     }, preview.baseUrl);
-    await page.waitForFunction(() => !trackPreview.paused && trackPreview.currentTime > .1 && trackPreview.readyState >= 2);
+    await page.waitForFunction(() => trackPreview.muted && !trackPreview.paused && trackPreview.currentTime > .65 && trackPreview.readyState >= 2);
+    assert.equal(await page.evaluate(() => inferNegativeFeedbackReason(currentRecommendation)), 'unheard_pass', 'Muted progress does not establish listening');
+    await page.evaluate(() => { trackPreview.volume = 0; trackPreview.muted = false; });
+    await page.waitForFunction(() => !trackPreview.muted && trackPreview.volume === 0 && trackPreview.currentTime > 1.25);
+    assert.equal(await page.evaluate(() => inferNegativeFeedbackReason(currentRecommendation)), 'unheard_pass', 'Zero volume does not establish listening');
+    await page.evaluate(() => { trackPreview.volume = 1; });
+    await page.waitForFunction(() => hasConfirmedRecommendationListening(currentRecommendation));
+    assert.equal(await page.evaluate(() => inferNegativeFeedbackReason(currentRecommendation)), 'taste_mismatch', 'Audible progress on the owned recording confirms listening');
     const audioBefore = await page.evaluate(() => ({ src: trackPreview.currentSrc, time: trackPreview.currentTime }));
     const before = await tasteSnapshot(page);
     const callCount = apiCalls.length;
@@ -158,13 +171,13 @@ try {
       registerTrackFeedback(dislike, false, { reason: 'taste_mismatch', source: 'preview_dislike' });
       return { preview, dislike: { style: adaptiveModel.dislikedStyles.get('house'), preference: trackPreferenceSignals.get(recommendationTrackKey(dislike)), rejected: rejectedArtists.has(artistMatchKey(dislike.artist)), history: dislikedTrackHistory.length }, correctionCount: trackDataIssueReports.size };
     });
-    assert.deepEqual(legacy.preview, { style: .18, artist: .38, preference: -.38, issues: 1, history: 1 }, 'Existing no-playback feedback behavior is preserved');
-    assert.equal(legacy.dislike.preference, -1.02); assert.ok(legacy.dislike.style > legacy.preview.style); assert.equal(legacy.dislike.history, 2); assert.equal(legacy.dislike.rejected, true);
+    assert.deepEqual(legacy.preview, { style: undefined, artist: undefined, preference: undefined, issues: 1, history: 0 }, 'An audio report affects playback reliability only');
+    assert.deepEqual(legacy.dislike, { style: 1.35, preference: -1.02, history: 1, rejected: true });
     assert.equal(legacy.correctionCount, 1, 'Listening feedback is not converted into a data correction');
     assert.deepEqual(errors, []);
     results.push({ width, preservedTasteCardAudio: true, corrections: 4, duplicateAndReload: true, profileIsolation: true, sessionAndStorageFailureCopy: true, keyboard: true, layout });
     await context.close();
   }
   await fs.writeFile(output + 'report.json', JSON.stringify(results, null, 2) + '\n');
-  console.log('Track data review passed: real clicks/keyboard at375/1440, decoded audio/card/taste unchanged, duplicate/reload/account isolation, PT/EN/ES and truthful storage receipts.');
+  console.log(`Track data review passed in ${engine}: real clicks/keyboard at375/1440, audible vs muted/zero-volume progress, duplicate/reload/account isolation, PT/EN/ES and truthful storage receipts.`);
 } finally { await browser.close(); await preview.stop(); }

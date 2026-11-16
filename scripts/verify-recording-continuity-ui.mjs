@@ -110,6 +110,15 @@ function libraryItem(page) {
   return page.locator('.liked-track-item').filter({ hasText: title });
 }
 
+async function assertAppleDestination(page, expectedTrackId) {
+  if (process.env.SONIC_CONTINUITY_BASELINE) return;
+  const link = page.locator('#appleMusicLink');
+  assert.equal(await link.getAttribute('hidden'), null);
+  const url = new URL(await link.getAttribute('href'));
+  assert.equal(url.origin, 'https://music.apple.com');
+  assert.equal(url.searchParams.get('i') || url.pathname.split('/').at(-1), expectedTrackId);
+}
+
 async function openLibrary(page, { warmCore = false } = {}) {
   if (warmCore) {
     // Model a fresh device on which idle core loading has finished and the user
@@ -179,6 +188,7 @@ try {
   await connectFixture(p);
   await presentReviewedCatalogTrack(p);
   report.discovery = await identifyPlayback(p, { auto: false });
+  await assertAppleDestination(p, '1348713422');
   await p.locator('#shareTrackBtn').click();
   const share = await p.locator('#shareLinkText').inputValue();
   assert.ok(new URL(share).searchParams.has('track'));
@@ -214,6 +224,7 @@ try {
   await linkDevice.page.locator('#sharedTrackStatus').waitFor({ state: 'visible' });
   try {
     report.shared = await identifyPlayback(linkDevice.page, { auto: false });
+    await assertAppleDestination(linkDevice.page, '1348713422');
   } catch (error) {
     if (!process.env.SONIC_CONTINUITY_BASELINE) throw error;
     report.shared = error.message;
@@ -239,6 +250,7 @@ try {
       await openLibrary(device.page, { warmCore: true });
       await libraryItem(device.page).locator('.library-play').click();
       report[name] = await identifyPlayback(device.page);
+      await assertAppleDestination(device.page, name === 'legacyEarlier' ? '1596163657' : '1348713422');
       expected[name] = version;
       await device.context.close();
     }

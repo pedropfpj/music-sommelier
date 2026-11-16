@@ -33,17 +33,22 @@ assert.match(
 );
 assert.match(
   appSource,
-  /async function likeCurrentTrackFromSwipe[\s\S]*?await advanceAfterSwipeFeedback[\s\S]*?schedulePostBootIdleTask[\s\S]*?registerTrackFeedback/,
-  "like must present the next track before profile persistence and enrichment"
+  /async function likeCurrentTrackFromSwipe[\s\S]*?registerTrackFeedback\(likedTrack, true, \{[^}]*deferEffects: true[^}]*\}\)[\s\S]*?await advanceAfterSwipeFeedback/,
+  "like must update taste before selecting the next track and defer expensive effects"
 );
 assert.match(
   appSource,
-  /async function passCurrentTrackFromSwipe[\s\S]*?await advanceAfterSwipeFeedback[\s\S]*?schedulePostBootIdleTask[\s\S]*?registerTrackFeedback/,
-  "dislike must present the next track before profile persistence and enrichment"
+  /async function passCurrentTrackFromSwipe[\s\S]*?registerTrackFeedback\(rejectedTrack, false, \{[^}]*deferEffects: true[^}]*\}\)[\s\S]*?await advanceAfterSwipeFeedback/,
+  "pass must update feedback before selecting the next track and defer expensive effects"
 );
 assert.match(
   appSource,
-  /function pickInteractionBudgetTrack[\s\S]*?const relaxedPrefs[\s\S]*?for \(const track of catalog\)/,
+  /function registerTrackFeedback[\s\S]*?const finishFeedback = \(\) => \{[\s\S]*?saveProgress\(\);[\s\S]*?if \(deferEffects\) schedulePostBootIdleTask\(finishFeedback/,
+  "swipe must keep profile persistence out of the gesture's recommendation path"
+);
+assert.match(
+  appSource,
+  /function pickInteractionBudgetTrack[\s\S]*?for \(const track of catalog\)[\s\S]*?allowMatureStyle: true/,
   "interaction fallback must widen to the trusted local catalog before a provider lookup"
 );
 assert.match(
@@ -141,8 +146,8 @@ assert.match(
 );
 assert.match(
   appSource,
-  /function trackBlockedByKnownSignals[\s\S]*?anonymousTrackWasRecentlyExposed\(trackKey, 50\)/,
-  "anonymous visitors must not receive an exact track from their last 50 exposures"
+  /function trackBlockedByKnownSignals[\s\S]*?anonymousTrackWasRecentlyExposed\(track\)/,
+  "anonymous visitors must not receive an already exposed recording under a different provider title"
 );
 assert.match(
   appSource,

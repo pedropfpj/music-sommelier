@@ -143,15 +143,19 @@ await check("ready recordings form the rotation deck before slot selection", () 
   assert.equal(cohort.personalized, false);
   assert.ok(cohort.tracks.every(track => ctx.trackHasInstantPlaybackRoute(track)));
   const selected = new Set();
+  const selectedFamilies = [];
   const selectedBySlot = new Map();
   for (let slot = 0; slot < expected.size; slot += 1) {
     ctx.openingRotationSlot = slot;
     const result = ctx.pickInstantOpeningTrack();
     assert.ok(result?.track);
     selected.add(ctx.recommendationTrackKey(result.track));
+    selectedFamilies.push(ctx.familyOf(result.track.style) || result.track.style);
     selectedBySlot.set(slot, recording(result.track));
   }
   assert.deepEqual(selected, expected, "Each eligible ready recording gets a slot without an ordered .find fallback");
+  const independentVisitors = Math.min(5, new Set(selectedFamilies).size);
+  assert.equal(new Set(selectedFamilies.slice(0, independentVisitors)).size, independentVisitors, "Consecutive clean slots open on different musical families when there are enough");
   assert.notEqual(selectedBySlot.get(8), selectedBySlot.get(11), "The reported bad slots must not collapse to the same fallback");
   console.log(JSON.stringify({ readyRecordings: expected.size, styles: new Set(cohort.tracks.map(track => track.style)).size,
     slot8: selectedBySlot.get(8), slot11: selectedBySlot.get(11) }));
@@ -382,7 +386,7 @@ await check("the same Groovado calibration gives fresh web visitors different fi
     ctx.applyInitialTasteCalibrationPreferences();
 
     assert.equal(await ctx.runPrimaryRecommendationAction({ source: "initial_calibration" }), true);
-    assert.equal(ctx.explicitSwipeAnchorStyle(), "house");
+    assert.equal(ctx.explicitSwipeAnchorStyle(), "", "Calibration guides the opening without setting an explicit anchor");
     assert.equal(ctx.styleEl.value, "", "The Groovado seed is not an explicit subgenre selection");
     for (const action of ["other", "like", "pass", "other"]) {
       if (index % 2 === 0) queueNextCards(ctx);
@@ -484,6 +488,68 @@ await check("anchored feedback preserves an explicit BPM choice when the ready p
   assert.equal(await ctx.advanceAfterSwipeFeedback({ likedTrack: eligible, positive: false }), false);
   assert.equal(ctx.currentRecommendation, eligible);
   assert.equal(ctx.deliveries.length, 1);
+});
+
+await check("the primary action keeps a BPM-only filter through widening and exhaustion", async () => {
+  const ctx = sequenceVisitor("bpm-only");
+  const bpm = "110-124";
+  const ready = ctx.catalogTracksForStyle("house").filter(track =>
+    ctx.isTrackEligibleForRecommendation(track) && ctx.trackHasVerifiedImmediateAudioPreview(track)
+  );
+  const wrong = ready.find(track => Number(track.bpmExact) > 124);
+  const correct = ready.find(track => ctx.trackMatchesBpmPreference(track, bpm));
+  assert.ok(wrong && correct, "The shipped deck contains ready previews on both sides of the BPM boundary");
+  ctx.bpmEl = { value: bpm };
+  ctx.pickWebOpeningSequenceTrack = () => null; // Focus the shared fallback independently of the opening deck.
+  ctx.catalog.splice(0, ctx.catalog.length, wrong);
+  ctx.suggestionQueueTracks = [wrong];
+  ctx.generateRecommendationWithOverlay = async fallbackPrefs => {
+    assert.equal(fallbackPrefs.style, "");
+    assert.equal(fallbackPrefs.bpm, bpm);
+    return false;
+  };
+  let recoveries = 0;
+  ctx.presentRecommendationFailure = () => { recoveries += 1; };
+
+  assert.equal(ctx.pickInteractionBudgetTrack({ prefs: { bpm } }), null);
+  assert.equal(await ctx.runPrimaryRecommendationAction(), false);
+  assert.equal(ctx.deliveries.length, 0);
+  assert.equal(recoveries, 1);
+  assert.equal(ctx.bpmEl.value, bpm);
+  assert.equal(ctx.styleEl.value, "");
+
+  ctx.catalog.push(correct);
+  assert.equal(await ctx.runPrimaryRecommendationAction(), true);
+  assert.equal(ctx.currentRecommendation, correct);
+  assert.equal(ctx.lastPrefs.bpm, bpm);
+  assert.equal(ctx.explicitSwipeAnchorStyle(), "");
+});
+
+await check("selecting BPM without a subgenre starts the local catalog before the recommendation gesture", () => {
+  const ctx = sequenceVisitor("bpm-core-prefetch");
+  ctx.bpmEl = { value: "" };
+  const changes = new Map();
+  ctx.bind = (control, event, callback) => {
+    if (control && event === "change") changes.set(control, callback);
+  };
+  ctx.updateWeightLabels = ctx.savePreferences = ctx.renderSuggestionQueue = () => {};
+  ctx.updateBpmOptionsForSelectedStyle = () => false;
+  ctx.renderStyleInfoBubble = ctx.applyGenreVibeTheme = ctx.renderSwipeStyleRail = () => {};
+  let coreRequests = 0;
+  ctx.hydrateExternalDatasetPackInBackground = async () => { coreRequests += 1; };
+  ctx.bindPreferenceAutosave();
+  changes.get(ctx.bpmEl)();
+  assert.equal(coreRequests, 0, "An unrestricted opening continues to rely on idle warmup");
+  ctx.bpmEl.value = "145-155";
+  ctx.styleEl.value = "full_on_night";
+  changes.get(ctx.bpmEl)();
+  assert.equal(coreRequests, 0, "A subgenre selection keeps its style-scoped loader");
+  ctx.styleEl.value = "";
+  changes.get(ctx.styleEl)();
+  assert.equal(coreRequests, 1, "Removing the style while BPM is set warms the cross-style catalog");
+  ctx.bpmEl.value = "124-132";
+  changes.get(ctx.bpmEl)();
+  assert.equal(coreRequests, 2, "Selecting a tempo also warms the catalog before a swipe");
 });
 
 await check("explicit manual filters and calibration runners precede generic opening rotation", async () => {

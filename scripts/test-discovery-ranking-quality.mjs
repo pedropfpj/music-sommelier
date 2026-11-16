@@ -110,5 +110,19 @@ check("Early scoring fallback stays finite without reviving explicit rejections"
   }
 });
 
+check("An unresolved Deezer redirect is not ready audio for Web discovery", () => {
+  const track = {
+    artist: "Proxy-only artist", song: "Proxy-only recording", style: "techno",
+    previewUrl: "https://sonicsearch.app/api/deezer-preview?id=1234",
+    previewChecked: true, previewMissing: false, deezerTrackId: "1234"
+  };
+  assert.equal(ctx.trackHasPlayablePreviewExperience(track), true, "An exact provider lookup remains possible");
+  assert.equal(ctx.trackHasVerifiedImmediateAudioPreview(track), false, "A checked URL is not a decoded response");
+  assert.equal(ctx.trackHasReadyPlaybackRoute(track), false);
+  assert.equal(ctx.trackHasInstantPlaybackRoute(track), false);
+  assert.equal(ctx.trackHasReadyPlaybackRoute({ ...track, previewUrl: seed.previewUrl }), true,
+    "A direct preview is still identified separately");
+});
+
 assert.equal(failures.length, 0, failures.join("\n"));
 console.log("Discovery ranking quality passed: hard constraints, full quality scores, learned preferences and finite early fallback.");

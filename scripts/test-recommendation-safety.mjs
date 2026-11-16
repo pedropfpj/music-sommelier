@@ -109,8 +109,8 @@ assert.doesNotMatch(
 );
 assert.match(
   interactionPicker,
-  /if \(!normalizedPrefs\.style\) \{[\s\S]*const relaxedPrefs[\s\S]*for \(const track of catalog\)/,
-  "Global catalog widening must be limited to sessions without an explicit subgenre"
+  /if \(!normalizedPrefs\.style\) \{[\s\S]*for \(const track of catalog\)[\s\S]*interactionFallbackTrackAllowed\(track, normalizedPrefs,[\s\S]*allowMatureStyle: true/,
+  "Global catalog widening must keep the user's filters and be limited to sessions without an explicit subgenre"
 );
 assert.match(
   functionSource("interactionFallbackTrackAllowed"),
@@ -239,8 +239,18 @@ assert.match(
 );
 assert.match(
   dislikeMemory,
-  /queueSocialSync\("disliked_track"\)/,
-  "A disliked track must be queued for account sync"
+  /finishTrackLibraryFeedback\("disliked_track"\)/,
+  "Immediate dislikes must finalize the Library update"
+);
+assert.match(
+  functionSource("registerTrackFeedback"),
+  /libraryChange = "disliked_track";[\s\S]*if \(deferEffects && libraryChange\) finishTrackLibraryFeedback\(libraryChange\)/,
+  "Deferred swipe dislikes must also finalize the Library update"
+);
+assert.match(
+  functionSource("finishTrackLibraryFeedback"),
+  /queueSocialSync\(action\)/,
+  "An explicit discard must remain queued for account sync"
 );
 
 const socialSync = functionSource("syncSocialLikedTracks");
