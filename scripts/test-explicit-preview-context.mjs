@@ -52,6 +52,7 @@ async function fixture({ exact = false } = {}) {
       },
       friendsPlaybackMatches: () => false,
       friendsRequiresExactRecording: () => false,
+      reviewedExactAppleProof: () => null,
       recommendationTrackKey: item => `${item.artist}::${item.song}`,
       setPreviewPrimaryPlaybackState: noop,
       setTrackPreviewVisualState: noop,
