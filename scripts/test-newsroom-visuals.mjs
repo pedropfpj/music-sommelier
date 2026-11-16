@@ -74,6 +74,9 @@ vm.runInContext(`
   ${extractFunction("sonicLocalizedText")}
   ${extractFunction("mergeSonicLocalizedEntries")}
   ${extractFunction("localizeSonicArticle")}
+  ${extractFunction("sonicArticleDateValue")}
+  ${extractFunction("sonicArticleEventDates")}
+  ${extractFunction("localDateTimeInputValue")}
   ${extractFunction("sonicArticleVisualCandidates")}
   ${extractFunction("pickSonicArticleVisual")}
 `, context);
@@ -114,6 +117,21 @@ assert.equal(localizedArticle.serviceInfo.media[0].url, "https://images.example/
 assert.equal(localizedArticle.serviceInfo.media[0].caption, "English caption");
 assert.equal(localizedArticle.serviceInfo.relatedLinks[0].url, "https://example.com");
 assert.equal(localizedArticle.serviceInfo.relatedLinks[0].label, "Official source");
+
+for (const invalidStart of [null, undefined, "", " ", 0, false, "12", "2026-11-12", "2026-02-30T18:00:00Z"]) {
+  assert.equal(context.sonicArticleEventDates({
+    eventStartsAt: invalidStart,
+    eventEndsAt: "2026-11-12T22:00:00Z"
+  }).startsAt, null, String(invalidStart));
+}
+assert.equal(context.localDateTimeInputValue(null), "");
+
+const startsAt = "2026-11-12T18:00:00.123456-03:00";
+for (const invalidEnd of [null, "invalid", "2026-11-12T17:00:00-03:00"]) {
+  const dates = context.sonicArticleEventDates({ eventStartsAt: startsAt, eventEndsAt: invalidEnd });
+  assert.equal(dates.startsAt.toISOString(), "2026-11-12T21:00:00.123Z");
+  assert.equal(dates.endsAt, null);
+}
 
 const usedImageKeys = new Set();
 const sharedCover = "https://images.example/cosmic.jpg?v=1";
