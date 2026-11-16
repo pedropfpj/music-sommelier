@@ -51,6 +51,8 @@
     { "source": "/api/access-context", "destination": "/api/music?route=access-context" },
     { "source": "/api/admin-analytics", "destination": "/api/music?route=admin-analytics" },
     { "source": "/api/artist-profile", "destination": "/api/music?route=artist-profile" },
+    { "source": "/api/authorized-audio", "destination": "/api/music?route=authorized-audio" },
+    { "source": "/api/authorized-catalog", "destination": "/api/music?route=authorized-catalog" },
     { "source": "/api/beta-access", "destination": "/api/music?route=beta-access" },
     { "source": "/api/beta-events", "destination": "/api/music?route=beta-events" },
     { "source": "/api/billing/checkout", "destination": "/api/billing?route=checkout" },

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
-import catalogApi from "../api/authorized-catalog.js";
-import audioApi from "../api/authorized-audio.js";
+import catalogApi from "../lib/api/_authorized-catalog.js";
+import audioApi from "../lib/api/_authorized-audio.js";
 import { startTestPreviewServer } from "./test-preview-server.mjs";
 
 const engine = process.argv[2] || "chromium";

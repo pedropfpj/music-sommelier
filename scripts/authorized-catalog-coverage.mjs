@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
-import authorizedMedia from "../api/_authorized-media.js";
+import authorizedMedia from "../lib/api/_authorized-media.js";
 
 const settings = [
   { style: "full_on_night", bpm: [145, 155], observedCards: 5, chromiumDirect: 5, webkitDirect: 5 },

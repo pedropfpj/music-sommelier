@@ -3,8 +3,8 @@ import { createHash } from "node:crypto";
 import { once } from "node:events";
 import { createServer } from "node:http";
 import { test } from "node:test";
-import catalogApi from "../api/authorized-catalog.js";
-import audioApi from "../api/authorized-audio.js";
+import catalogApi from "../lib/api/_authorized-catalog.js";
+import audioApi from "../lib/api/_authorized-audio.js";
 
 const now = Date.parse("2026-11-16T12:00:00.000Z");
 const env = {

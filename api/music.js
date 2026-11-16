@@ -4,6 +4,8 @@ const handlers = {
   "access-context": require("../lib/api/_access-context"),
   "admin-analytics": require("../lib/api/_admin-analytics"),
   "artist-profile": require("../lib/api/_artist-profile"),
+  "authorized-audio": require("../lib/api/_authorized-audio"),
+  "authorized-catalog": require("../lib/api/_authorized-catalog"),
   "beta-access": require("../lib/api/_beta-access"),
   "beta-events": require("../lib/api/_beta-events"),
   comments: require("../lib/api/_comments"),

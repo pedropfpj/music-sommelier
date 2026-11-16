@@ -71,3 +71,9 @@ node scripts/test-authorized-catalog-browser.mjs webkit
 ```
 
 Os ensaios de navegador geram áudio em memória, usam as rotas reais com um substituto local para o Storage e observam o avanço do áudio da faixa ativa. O ensaio valida o caminho de ponta a ponta sem usar uma conta real nem gravar arquivos de áudio no catálogo. A validação do Storage de prévia com um lote musical depende da entrega dos primeiros trechos autorizados.
+
+### Resultados no pacote Web
+
+- Chromium e WebKit tocaram 20 trechos de 20 gravações e 20 artistas em Full-On Night, entre 145 e 155 BPM. Os percursos incluíram busca, Outra faixa, curtida, descarte e uma reabertura no mesmo navegador sem conta. A edição reapresentada no catálogo com outro título e outro crédito continuou fora da fila. A faixa curtida manteve o identificador na Biblioteca. A ausência do arquivo desabilitou o player e não gerou descarte.
+- O percurso comum, aberto sem ativar o piloto, entregou cinco gravações em três visitas no mesmo contexto de cada navegador, sem repetição entre visitas. Passaram também os testes focados de classificação, fila, Biblioteca e isolamento de perfil.
+- Uma checagem de comentários falha no teste isolado porque o ambiente de teste não fornece o normalizador de gravações. Uma checagem da escuta universal exige o diretório de assets gerado do iOS. As duas falhas também ocorreram no commit usado como base. O ensaio do piloto cobre a Web em navegadores automatizados.
