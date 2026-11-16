@@ -316,6 +316,1686 @@
         "readyState": 4,
         "pausedAfter": false
       }
+    },
+    {
+      "artist": "Kotiēr",
+      "song": "Whisper In My Ear",
+      "appleTrackId": "6820899726",
+      "recordingUrl": "https://music.apple.com/us/song/whisper-in-my-ear/6820899726",
+      "editorialMembership": {
+        "id": "6820899726",
+        "title": "Whisper In My Ear",
+        "recordingUrl": "https://music.apple.com/us/song/whisper-in-my-ear/6820899726",
+        "durationIso": "PT4M23S",
+        "durationSeconds": 263,
+        "durationMillis": 263468,
+        "artist": "Kotiēr",
+        "artists": [
+          {
+            "name": "Kotiēr",
+            "id": "1522546066",
+            "url": "https://music.apple.com/us/artist/koti%C4%93r/1522546066"
+          }
+        ],
+        "position": 7,
+        "collectionId": "6820899722",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6d/43/15/6d43158e-6d4f-22f1-75c3-718c43eaad1b/823375528135_Cover.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6820899726,
+        "artistId": 1522546066,
+        "artistName": "Kotiēr",
+        "trackName": "Whisper In My Ear",
+        "trackViewUrl": "https://music.apple.com/us/album/whisper-in-my-ear/6820899722?i=6820899726&uo=4",
+        "collectionId": 6820899722,
+        "collectionName": "Whisper In My Ear - Single",
+        "trackTimeMillis": 263468,
+        "releaseDate": "2026-11-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cc/1b/57/cc1b5781-59ef-a5e3-4c6a-e798df03c2ee/mzaf_2197775745717909013.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6d/43/15/6d43158e-6d4f-22f1-75c3-718c43eaad1b/823375528135_Cover.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:13:59.484Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cc/1b/57/cc1b5781-59ef-a5e3-4c6a-e798df03c2ee/mzaf_2197775745717909013.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1027099,
+        "sha256": "767591b4fd1221d9fe27997ffb37f7f559f6069c4d3d048f0173a2111f77faa3",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.302623,
+        "mediaDurationSeconds": 30.01,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Clementine Douglas",
+      "song": "Trust",
+      "appleTrackId": "6795199532",
+      "recordingUrl": "https://music.apple.com/us/song/trust/6795199532",
+      "editorialMembership": {
+        "id": "6795199532",
+        "title": "Trust",
+        "recordingUrl": "https://music.apple.com/us/song/trust/6795199532",
+        "durationIso": "PT3M17S",
+        "durationSeconds": 197,
+        "durationMillis": 197229,
+        "artist": "Clementine Douglas",
+        "artists": [
+          {
+            "name": "Clementine Douglas",
+            "id": "638770668",
+            "url": "https://music.apple.com/us/artist/clementine-douglas/638770668"
+          }
+        ],
+        "position": 17,
+        "collectionId": "6795199531",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3e/6c/0a/3e6c0a42-aa96-42b7-0463-ca60ac8f1643/1200214603076.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6795199532,
+        "artistId": 638770668,
+        "artistName": "Clementine Douglas",
+        "trackName": "Trust",
+        "trackViewUrl": "https://music.apple.com/us/album/trust/6795199531?i=6795199532&uo=4",
+        "collectionId": 6795199531,
+        "collectionName": "Trust - Single",
+        "trackTimeMillis": 197229,
+        "releaseDate": "2026-08-07T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/28/84/6f288457-a2c4-c719-2927-2a189981fdc4/mzaf_5349733957234920638.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3e/6c/0a/3e6c0a42-aa96-42b7-0463-ca60ac8f1643/1200214603076.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:04.295Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/28/84/6f288457-a2c4-c719-2927-2a189981fdc4/mzaf_5349733957234920638.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1001954,
+        "sha256": "9d8a712cacf1abcc9ed05faf470dbd633c2797a12a248101a9665fc4cdaf99c2",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.326391,
+        "mediaDurationSeconds": 30.01,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Lewis Taylor",
+      "song": "Reasons",
+      "appleTrackId": "1809186843",
+      "recordingUrl": "https://music.apple.com/us/song/reasons/1809186843",
+      "editorialMembership": {
+        "id": "1809186843",
+        "title": "Reasons",
+        "recordingUrl": "https://music.apple.com/us/song/reasons/1809186843",
+        "durationIso": "PT2M26S",
+        "durationSeconds": 146,
+        "durationMillis": 146629,
+        "artist": "Lewis Taylor",
+        "artists": [
+          {
+            "name": "Lewis Taylor",
+            "id": "1546681218",
+            "url": "https://music.apple.com/us/artist/lewis-taylor/1546681218"
+          }
+        ],
+        "position": 25,
+        "collectionId": "1809186842",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d7/58/ca/d758ca4c-7c46-a790-1e3c-344adc6c6e93/5055199577630.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1809186843,
+        "artistId": 1546681218,
+        "artistName": "Lewis Taylor",
+        "trackName": "Reasons",
+        "trackViewUrl": "https://music.apple.com/us/album/reasons/1809186842?i=1809186843&uo=4",
+        "collectionId": 1809186842,
+        "collectionName": "Reasons & Serenity Ep - Single",
+        "trackTimeMillis": 146629,
+        "releaseDate": "2025-05-09T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/2b/07/f32b074a-f7f8-3777-4ec6-bc519dd1798e/mzaf_7032243827546978650.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d7/58/ca/d758ca4c-7c46-a790-1e3c-344adc6c6e93/5055199577630.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:07.046Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/2b/07/f32b074a-f7f8-3777-4ec6-bc519dd1798e/mzaf_7032243827546978650.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1011621,
+        "sha256": "873c36ef04b99035640fce13fa06324ff961e812cef0804e7bac19d46cbd3b54",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327179,
+        "mediaDurationSeconds": 30.005011,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Luke DuBose",
+      "song": "Found You",
+      "appleTrackId": "6822554168",
+      "recordingUrl": "https://music.apple.com/us/song/found-you/6822554168",
+      "editorialMembership": {
+        "id": "6822554168",
+        "title": "Found You",
+        "recordingUrl": "https://music.apple.com/us/song/found-you/6822554168",
+        "durationIso": "PT2M48S",
+        "durationSeconds": 168,
+        "durationMillis": 168873,
+        "artist": "Luke DuBose",
+        "artists": [
+          {
+            "name": "Luke DuBose",
+            "id": "6782855373",
+            "url": "https://music.apple.com/us/artist/luke-dubose/6782855373"
+          }
+        ],
+        "position": 33,
+        "collectionId": "6822554161",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/59/63/87/59638780-bf68-363f-a466-2649db98cbd3/18120.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6822554168,
+        "artistId": 6782855373,
+        "artistName": "Luke DuBose",
+        "trackName": "Found You",
+        "trackViewUrl": "https://music.apple.com/us/album/found-you/6822554161?i=6822554168&uo=4",
+        "collectionId": 6822554161,
+        "collectionName": "Found You - Single",
+        "trackTimeMillis": 168873,
+        "releaseDate": "2026-10-30T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/68/36/7768361d-9bf1-0503-84dc-a56f89bad196/mzaf_10883946816303282993.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/59/63/87/59638780-bf68-363f-a466-2649db98cbd3/18120.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:13.587Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/68/36/7768361d-9bf1-0503-84dc-a56f89bad196/mzaf_10883946816303282993.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1001825,
+        "sha256": "9a3e3903a3f4542d393ec77b4746b0d8f32ab47df1c3167a2cccc5e087445e2c",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.329827,
+        "mediaDurationSeconds": 30.000181,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Dusky",
+      "song": "Elm (Lost A Shoe in 92 Mix)",
+      "appleTrackId": "6818559198",
+      "recordingUrl": "https://music.apple.com/us/song/elm-lost-a-shoe-in-92-mix/6818559198",
+      "editorialMembership": {
+        "id": "6818559198",
+        "title": "Elm (Lost A Shoe in 92 Mix)",
+        "recordingUrl": "https://music.apple.com/us/song/elm-lost-a-shoe-in-92-mix/6818559198",
+        "durationIso": "PT3M3S",
+        "durationSeconds": 183,
+        "durationMillis": 183503,
+        "artist": "Dusky",
+        "artists": [
+          {
+            "name": "Dusky",
+            "id": "454183812",
+            "url": "https://music.apple.com/us/artist/dusky/454183812"
+          }
+        ],
+        "position": 35,
+        "collectionId": "6818559195",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/39/2d/27/392d27bf-646e-6efd-8bc9-fcab06072c34/5039061288091.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6818559198,
+        "artistId": 454183812,
+        "artistName": "Dusky",
+        "trackName": "Elm (Lost A Shoe in 92 Mix)",
+        "trackViewUrl": "https://music.apple.com/us/album/elm-lost-a-shoe-in-92-mix/6818559195?i=6818559198&uo=4",
+        "collectionId": 6818559195,
+        "collectionName": "Elm (Lost A Shoe in 92 Mix)",
+        "trackTimeMillis": 183503,
+        "releaseDate": "2026-11-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/bc/d4/debcd417-dba0-94be-7ca7-f3bb6bef3515/mzaf_18071237930291992593.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/39/2d/27/392d27bf-646e-6efd-8bc9-fcab06072c34/5039061288091.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:15.436Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/bc/d4/debcd417-dba0-94be-7ca7-f3bb6bef3515/mzaf_18071237930291992593.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1019517,
+        "sha256": "1b41f14b2e79f70ad3ee72ff7e7509707a370ea590b86f52dba7d40f5cec6ab0",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.328413,
+        "mediaDurationSeconds": 30.01,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Messy",
+      "song": "Sleep Better (With You)",
+      "appleTrackId": "1790567246",
+      "recordingUrl": "https://music.apple.com/us/song/sleep-better-with-you/1790567246",
+      "editorialMembership": {
+        "id": "1790567246",
+        "title": "Sleep Better (With You)",
+        "recordingUrl": "https://music.apple.com/us/song/sleep-better-with-you/1790567246",
+        "durationIso": "PT2M40S",
+        "durationSeconds": 160,
+        "durationMillis": 160798,
+        "artist": "Messy",
+        "artists": [
+          {
+            "name": "Messy",
+            "id": "1791114521",
+            "url": "https://music.apple.com/us/artist/messy/1791114521"
+          }
+        ],
+        "position": 40,
+        "collectionId": "1790567243",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/87/79/88877902-d77c-34b4-f97d-03b1e97119c1/575617.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1790567246,
+        "artistId": 1791114521,
+        "artistName": "Messy",
+        "trackName": "Sleep Better (With You)",
+        "trackViewUrl": "https://music.apple.com/us/album/sleep-better-with-you/1790567243?i=1790567246&uo=4",
+        "collectionId": 1790567243,
+        "collectionName": "Sleep Better (With You) - Single",
+        "trackTimeMillis": 160798,
+        "releaseDate": "2025-02-14T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/0e/23/e70e2390-8ce8-4b65-8144-36661106b9c4/mzaf_309639007456687046.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/88/87/79/88877902-d77c-34b4-f97d-03b1e97119c1/575617.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:18.997Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/0e/23/e70e2390-8ce8-4b65-8144-36661106b9c4/mzaf_309639007456687046.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1046277,
+        "sha256": "3157cee8524eb77516458e4d94d942747a23a6570bf9652fa72174ba4a0edb28",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327428,
+        "mediaDurationSeconds": 30.011995,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Prospa",
+      "song": "Let The Music",
+      "appleTrackId": "1884731022",
+      "recordingUrl": "https://music.apple.com/us/song/let-the-music/1884731022",
+      "editorialMembership": {
+        "id": "1884731022",
+        "title": "Let The Music",
+        "recordingUrl": "https://music.apple.com/us/song/let-the-music/1884731022",
+        "durationIso": "PT3M52S",
+        "durationSeconds": 232,
+        "durationMillis": 232769,
+        "artist": "Prospa",
+        "artists": [
+          {
+            "name": "Prospa",
+            "id": "962366708",
+            "url": "https://music.apple.com/us/artist/prospa/962366708"
+          }
+        ],
+        "position": 42,
+        "collectionId": "1884730177",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/03/50/1e03508a-6c55-9da3-fd4c-2d181919d760/820200597014.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1884731022,
+        "artistId": 962366708,
+        "artistName": "Prospa",
+        "trackName": "Let The Music",
+        "trackViewUrl": "https://music.apple.com/us/album/let-the-music/1884730177?i=1884731022&uo=4",
+        "collectionId": 1884730177,
+        "collectionName": "Free Your Mind",
+        "trackTimeMillis": 232769,
+        "releaseDate": "2026-06-05T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7c/b6/e6/7cb6e694-20d5-6723-8986-5956e4f3fc53/mzaf_16840572637898852862.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/03/50/1e03508a-6c55-9da3-fd4c-2d181919d760/820200597014.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:19.828Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7c/b6/e6/7cb6e694-20d5-6723-8986-5956e4f3fc53/mzaf_16840572637898852862.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1008219,
+        "sha256": "8a91d7daac9584f844349e4426d05de56ecbb132da7dc9daa1f0d4510f5a0da6",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.324983,
+        "mediaDurationSeconds": 30.003991,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Steve Lawler",
+      "song": "Higher",
+      "appleTrackId": "6813232490",
+      "recordingUrl": "https://music.apple.com/us/song/higher/6813232490",
+      "editorialMembership": {
+        "id": "6813232490",
+        "title": "Higher",
+        "recordingUrl": "https://music.apple.com/us/song/higher/6813232490",
+        "durationIso": "PT3M13S",
+        "durationSeconds": 193,
+        "durationMillis": 193456,
+        "artist": "Steve Lawler",
+        "artists": [
+          {
+            "name": "Steve Lawler",
+            "id": "78997973",
+            "url": "https://music.apple.com/us/artist/steve-lawler/78997973"
+          }
+        ],
+        "position": 43,
+        "collectionId": "6813232339",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/28/d5/9f28d55a-e97b-6fc7-a026-e5ad34a83f33/885288606041.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6813232490,
+        "artistId": 78997973,
+        "artistName": "Steve Lawler",
+        "trackName": "Higher",
+        "trackViewUrl": "https://music.apple.com/us/album/higher/6813232339?i=6813232490&uo=4",
+        "collectionId": 6813232339,
+        "collectionName": "Higher - Single",
+        "trackTimeMillis": 193456,
+        "releaseDate": "2026-10-16T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1e/3d/82/1e3d8238-ab97-0be7-8b02-bef222b0e1ac/mzaf_14466817361535318761.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/28/d5/9f28d55a-e97b-6fc7-a026-e5ad34a83f33/885288606041.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:20.589Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1e/3d/82/1e3d8238-ab97-0be7-8b02-bef222b0e1ac/mzaf_14466817361535318761.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1049751,
+        "sha256": "24a30d4844f5cdf4099b8595e3d86185a79a2ad520b1b3b0e98b9f1d940981a3",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.329547,
+        "mediaDurationSeconds": 30,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Gorgon City",
+      "song": "Loveless",
+      "appleTrackId": "1822817768",
+      "recordingUrl": "https://music.apple.com/us/song/loveless/1822817768",
+      "editorialMembership": {
+        "id": "1822817768",
+        "title": "Loveless",
+        "recordingUrl": "https://music.apple.com/us/song/loveless/1822817768",
+        "durationIso": "PT3M12S",
+        "durationSeconds": 192,
+        "durationMillis": 192657,
+        "artist": "Gorgon City",
+        "artists": [
+          {
+            "name": "Gorgon City",
+            "id": "504531222",
+            "url": "https://music.apple.com/us/artist/gorgon-city/504531222"
+          }
+        ],
+        "position": 44,
+        "collectionId": "1822817767",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4b/06/25/4b062554-b4b9-5c4e-db5c-701b6ae2317e/5034644794143.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1822817768,
+        "artistId": 504531222,
+        "artistName": "Gorgon City",
+        "trackName": "Loveless",
+        "trackViewUrl": "https://music.apple.com/us/album/loveless/1822817767?i=1822817768&uo=4",
+        "collectionId": 1822817767,
+        "collectionName": "Loveless - Single",
+        "trackTimeMillis": 192657,
+        "releaseDate": "2025-07-18T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/20/14/71/2014710f-afb3-e11d-8d93-7ff20b451162/mzaf_1409183542869723473.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4b/06/25/4b062554-b4b9-5c4e-db5c-701b6ae2317e/5034644794143.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:22.743Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/20/14/71/2014710f-afb3-e11d-8d93-7ff20b451162/mzaf_1409183542869723473.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 987848,
+        "sha256": "259177d65fcede6524f73c605dfc77cca4f5d557e47ea4ffc008a7ff331bb3e5",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.304373,
+        "mediaDurationSeconds": 30.002993,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Emily Nash",
+      "song": "Fall In Love",
+      "appleTrackId": "6820923996",
+      "recordingUrl": "https://music.apple.com/us/song/fall-in-love/6820923996",
+      "editorialMembership": {
+        "id": "6820923996",
+        "title": "Fall In Love",
+        "recordingUrl": "https://music.apple.com/us/song/fall-in-love/6820923996",
+        "durationIso": "PT3M30S",
+        "durationSeconds": 210,
+        "durationMillis": 210692,
+        "artist": "Emily Nash",
+        "artists": [
+          {
+            "name": "Emily Nash",
+            "id": "422601121",
+            "url": "https://music.apple.com/us/artist/emily-nash/422601121"
+          }
+        ],
+        "position": 55,
+        "collectionId": "6820923994",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/63/a1/41/63a141a1-1f98-4558-a804-211c0335ed9b/609137087504_Cover.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6820923996,
+        "artistId": 422601121,
+        "artistName": "Emily Nash",
+        "trackName": "Fall In Love",
+        "trackViewUrl": "https://music.apple.com/us/album/fall-in-love/6820923994?i=6820923996&uo=4",
+        "collectionId": 6820923994,
+        "collectionName": "Fall In Love - Single",
+        "trackTimeMillis": 210692,
+        "releaseDate": "2026-11-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/90/64/21906451-e7f6-0856-27f4-a77e321ea65a/mzaf_9382151117577588682.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/63/a1/41/63a141a1-1f98-4558-a804-211c0335ed9b/609137087504_Cover.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:30.154Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/90/64/21906451-e7f6-0856-27f4-a77e321ea65a/mzaf_9382151117577588682.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1016610,
+        "sha256": "bd38c23eaca04d262e08de6f3232b227d1597569d828f530f71ced16299a0c9e",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.325485,
+        "mediaDurationSeconds": 30.012993,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "TwoSlice",
+      "song": "Sweat It Out",
+      "appleTrackId": "6822410156",
+      "recordingUrl": "https://music.apple.com/us/song/sweat-it-out/6822410156",
+      "editorialMembership": {
+        "id": "6822410156",
+        "title": "Sweat It Out",
+        "recordingUrl": "https://music.apple.com/us/song/sweat-it-out/6822410156",
+        "durationIso": "PT3M2S",
+        "durationSeconds": 182,
+        "durationMillis": 182884,
+        "artist": "TwoSlice",
+        "artists": [
+          {
+            "name": "TwoSlice",
+            "id": "1256889888",
+            "url": "https://music.apple.com/us/artist/twoslice/1256889888"
+          }
+        ],
+        "position": 57,
+        "collectionId": "6822410155",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/0e/65/9f0e65ae-2335-9d25-6cc2-8259c48ac958/5052075521329.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6822410156,
+        "artistId": 1256889888,
+        "artistName": "TwoSlice",
+        "trackName": "Sweat It Out",
+        "trackViewUrl": "https://music.apple.com/us/album/sweat-it-out/6822410155?i=6822410156&uo=4",
+        "collectionId": 6822410155,
+        "collectionName": "Sweat It out - EP",
+        "trackTimeMillis": 182884,
+        "releaseDate": "2026-11-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/5a/78/865a78ed-dd99-5326-be97-9f7cb037254f/mzaf_9674961293664669848.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9f/0e/65/9f0e65ae-2335-9d25-6cc2-8259c48ac958/5052075521329.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:30.910Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/5a/78/865a78ed-dd99-5326-be97-9f7cb037254f/mzaf_9674961293664669848.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 997081,
+        "sha256": "bf3fb6f31bfe5b0696d44fdfcb439e3c6f807c011673af6b9080b26a7f660333",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.325859,
+        "mediaDurationSeconds": 30.010998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Edd",
+      "song": "TO THE RESCUE",
+      "appleTrackId": "6764511217",
+      "recordingUrl": "https://music.apple.com/us/song/to-the-rescue/6764511217",
+      "editorialMembership": {
+        "id": "6764511217",
+        "title": "TO THE RESCUE",
+        "recordingUrl": "https://music.apple.com/us/song/to-the-rescue/6764511217",
+        "durationIso": "PT3M27S",
+        "durationSeconds": 207,
+        "durationMillis": 207347,
+        "artist": "Edd",
+        "artists": [
+          {
+            "name": "Edd",
+            "id": "1514044097",
+            "url": "https://music.apple.com/us/artist/edd/1514044097"
+          }
+        ],
+        "position": 58,
+        "collectionId": "1895812938",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/59/dd/dc/59dddc6e-3902-b9ad-266c-824bec7bded1/8721466744995.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6764511217,
+        "artistId": 1514044097,
+        "artistName": "Edd",
+        "trackName": "TO THE RESCUE",
+        "trackViewUrl": "https://music.apple.com/us/album/to-the-rescue/1895812938?i=6764511217&uo=4",
+        "collectionId": 1895812938,
+        "collectionName": "To The Rescue - Single",
+        "trackTimeMillis": 207347,
+        "releaseDate": "2026-05-15T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c4/ec/cd/c4eccd9a-b107-16d7-6049-54b2c43578cb/mzaf_7997527614329132257.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/59/dd/dc/59dddc6e-3902-b9ad-266c-824bec7bded1/8721466744995.png/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:31.687Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c4/ec/cd/c4eccd9a-b107-16d7-6049-54b2c43578cb/mzaf_7997527614329132257.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1006730,
+        "sha256": "4a75104f3d15ceed78ef8d28d0b026e0e8ce39b6a8d4575b4675ca8b7ac36572",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.31883,
+        "mediaDurationSeconds": 30,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Franky Rizardo",
+      "song": "Feel",
+      "appleTrackId": "6778099499",
+      "recordingUrl": "https://music.apple.com/us/song/feel/6778099499",
+      "editorialMembership": {
+        "id": "6778099499",
+        "title": "Feel",
+        "recordingUrl": "https://music.apple.com/us/song/feel/6778099499",
+        "durationIso": "PT2M38S",
+        "durationSeconds": 158,
+        "durationMillis": 158769,
+        "artist": "Franky Rizardo",
+        "artists": [
+          {
+            "name": "Franky Rizardo",
+            "id": "212264439",
+            "url": "https://music.apple.com/us/artist/franky-rizardo/212264439"
+          }
+        ],
+        "position": 68,
+        "collectionId": "6778099498",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c8/4d/83/c84d8326-5fd0-b17a-09a1-37e2cd02139f/8718274972177.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6778099499,
+        "artistId": 212264439,
+        "artistName": "Franky Rizardo",
+        "trackName": "Feel",
+        "trackViewUrl": "https://music.apple.com/us/album/feel/6778099498?i=6778099499&uo=4",
+        "collectionId": 6778099498,
+        "collectionName": "Feel - Single",
+        "trackTimeMillis": 158769,
+        "releaseDate": "2026-06-19T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cd/3b/f7/cd3bf743-9463-5b73-c2d1-9ee0d725f8ee/mzaf_9691149334579024978.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c8/4d/83/c84d8326-5fd0-b17a-09a1-37e2cd02139f/8718274972177.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:32.202Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cd/3b/f7/cd3bf743-9463-5b73-c2d1-9ee0d725f8ee/mzaf_9691149334579024978.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 974426,
+        "sha256": "115b6cdfa5df2370797da69d8fe783d998c1feecd6cc35ebe0afe0b2176115a0",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.323663,
+        "mediaDurationSeconds": 30.007007,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Danny Howard",
+      "song": "After Five",
+      "appleTrackId": "1880208363",
+      "recordingUrl": "https://music.apple.com/us/song/after-five/1880208363",
+      "editorialMembership": {
+        "id": "1880208363",
+        "title": "After Five",
+        "recordingUrl": "https://music.apple.com/us/song/after-five/1880208363",
+        "durationIso": "PT3M13S",
+        "durationSeconds": 193,
+        "durationMillis": 193125,
+        "artist": "Danny Howard",
+        "artists": [
+          {
+            "name": "Danny Howard",
+            "id": "472233829",
+            "url": "https://music.apple.com/us/artist/danny-howard/472233829"
+          }
+        ],
+        "position": 87,
+        "collectionId": "1880208362",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3f/d6/e5/3fd6e58a-deae-90c1-0850-283a6c34cb5f/5052075519357.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1880208363,
+        "artistId": 472233829,
+        "artistName": "Danny Howard",
+        "trackName": "After Five",
+        "trackViewUrl": "https://music.apple.com/us/album/after-five/1880208362?i=1880208363&uo=4",
+        "collectionId": 1880208362,
+        "collectionName": "After Five - Single",
+        "trackTimeMillis": 193125,
+        "releaseDate": "2026-03-20T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a1/8c/94/a18c9463-533a-9590-1090-78d68bb623ee/mzaf_17227915153292583156.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3f/d6/e5/3fd6e58a-deae-90c1-0850-283a6c34cb5f/5052075519357.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:33.462Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a1/8c/94/a18c9463-533a-9590-1090-78d68bb623ee/mzaf_17227915153292583156.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 984141,
+        "sha256": "ae8e0a7d57a07b6055119273075a218195a764da6eacf036575ad86fe8bdac69",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.320019,
+        "mediaDurationSeconds": 30.007007,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Goosey",
+      "song": "Wrapped Up In Your Love",
+      "appleTrackId": "1886222209",
+      "recordingUrl": "https://music.apple.com/us/song/wrapped-up-in-your-love/1886222209",
+      "editorialMembership": {
+        "id": "1886222209",
+        "title": "Wrapped Up In Your Love",
+        "recordingUrl": "https://music.apple.com/us/song/wrapped-up-in-your-love/1886222209",
+        "durationIso": "PT3M46S",
+        "durationSeconds": 226,
+        "durationMillis": 226977,
+        "artist": "Goosey",
+        "artists": [
+          {
+            "name": "Goosey",
+            "id": "1618275840",
+            "url": "https://music.apple.com/us/artist/goosey/1618275840"
+          }
+        ],
+        "position": 99,
+        "collectionId": "1886222208",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/35/0f/ef/350fefdb-9b13-6722-128f-ff446b388518/820200670229.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1886222209,
+        "artistId": 1618275840,
+        "artistName": "Goosey",
+        "trackName": "Wrapped Up In Your Love",
+        "trackViewUrl": "https://music.apple.com/us/album/wrapped-up-in-your-love/1886222208?i=1886222209&uo=4",
+        "collectionId": 1886222208,
+        "collectionName": "Wrapped Up In Your Love",
+        "trackTimeMillis": 226977,
+        "releaseDate": "2026-04-10T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/0a/72/5a0a7252-34ae-46d5-ea73-095b74c69348/mzaf_2279748393052469997.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/35/0f/ef/350fefdb-9b13-6722-128f-ff446b388518/820200670229.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:34.784Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/0a/72/5a0a7252-34ae-46d5-ea73-095b74c69348/mzaf_2279748393052469997.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1039005,
+        "sha256": "f60d0106e8313fa9cdd96ae996317e13523202f2961f38ee0ae183759fd7fed2",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.32806,
+        "mediaDurationSeconds": 30.001995,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "D.O.D",
+      "song": "Be Free",
+      "appleTrackId": "6796741610",
+      "recordingUrl": "https://music.apple.com/us/song/be-free/6796741610",
+      "editorialMembership": {
+        "id": "6796741610",
+        "title": "Be Free",
+        "recordingUrl": "https://music.apple.com/us/song/be-free/6796741610",
+        "durationIso": "PT2M40S",
+        "durationSeconds": 160,
+        "durationMillis": 160013,
+        "artist": "D.O.D",
+        "artists": [
+          {
+            "name": "D.O.D",
+            "id": "444171843",
+            "url": "https://music.apple.com/us/artist/d-o-d/444171843"
+          }
+        ],
+        "position": 107,
+        "collectionId": "6796741297",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/98/bf/3c/98bf3c9e-1cfc-ce60-a912-035a5a9aacab/8718522605260.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6796741610,
+        "artistId": 444171843,
+        "artistName": "D.O.D",
+        "trackName": "Be Free",
+        "trackViewUrl": "https://music.apple.com/us/album/be-free/6796741297?i=6796741610&uo=4",
+        "collectionId": 6796741297,
+        "collectionName": "Everything, Briefly",
+        "trackTimeMillis": 160013,
+        "releaseDate": "2026-10-16T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/83/75/48/83754814-4550-711d-dced-4dbe5519ce35/mzaf_7476628940872706264.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/98/bf/3c/98bf3c9e-1cfc-ce60-a912-035a5a9aacab/8718522605260.png/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:36.302Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/83/75/48/83754814-4550-711d-dced-4dbe5519ce35/mzaf_7476628940872706264.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 984558,
+        "sha256": "0482eedbdb43e5cb5c699f4b98e2753d98fd6e37377e66b4270d6d239ffe9891",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327387,
+        "mediaDurationSeconds": 30.000181,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Patrick Topping",
+      "song": "Ocean",
+      "appleTrackId": "1817175108",
+      "recordingUrl": "https://music.apple.com/us/song/ocean/1817175108",
+      "editorialMembership": {
+        "id": "1817175108",
+        "title": "Ocean",
+        "recordingUrl": "https://music.apple.com/us/song/ocean/1817175108",
+        "durationIso": "PT3M30S",
+        "durationSeconds": 210,
+        "durationMillis": 210867,
+        "artist": "Patrick Topping",
+        "artists": [
+          {
+            "name": "Patrick Topping",
+            "id": "640499342",
+            "url": "https://music.apple.com/us/artist/patrick-topping/640499342"
+          }
+        ],
+        "position": 108,
+        "collectionId": "1817175100",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/a0/c9/1ea0c9d5-c818-b303-bbe5-a457dbb69473/953.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1817175108,
+        "artistId": 640499342,
+        "artistName": "Patrick Topping",
+        "trackName": "Ocean",
+        "trackViewUrl": "https://music.apple.com/us/album/ocean/1817175100?i=1817175108&uo=4",
+        "collectionId": 1817175100,
+        "collectionName": "Ocean - Single",
+        "trackTimeMillis": 210867,
+        "releaseDate": "2025-06-20T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/70/23/d3/7023d3cb-1c30-7b89-f29c-4f999448c12a/mzaf_8388933229457451675.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1e/a0/c9/1ea0c9d5-c818-b303-bbe5-a457dbb69473/953.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:39.218Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/70/23/d3/7023d3cb-1c30-7b89-f29c-4f999448c12a/mzaf_8388933229457451675.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1018196,
+        "sha256": "d2d1935d12508334ba9e01c77700b40eccd65619b7c0627e13ee3cf3fb9a616d",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.324689,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Duke Dumont",
+      "song": "Ain't No Game",
+      "appleTrackId": "6779231662",
+      "recordingUrl": "https://music.apple.com/us/song/aint-no-game/6779231662",
+      "editorialMembership": {
+        "id": "6779231662",
+        "title": "Ain't No Game",
+        "recordingUrl": "https://music.apple.com/us/song/aint-no-game/6779231662",
+        "durationIso": "PT2M41S",
+        "durationSeconds": 161,
+        "durationMillis": 161983,
+        "artist": "Duke Dumont",
+        "artists": [
+          {
+            "name": "Duke Dumont",
+            "id": "257148267",
+            "url": "https://music.apple.com/us/artist/duke-dumont/257148267"
+          }
+        ],
+        "position": 110,
+        "collectionId": "6779231658",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3a/eb/12/3aeb1288-a3b7-6976-458e-a789f6f03406/14462.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6779231662,
+        "artistId": 257148267,
+        "artistName": "Duke Dumont",
+        "trackName": "Ain't No Game",
+        "trackViewUrl": "https://music.apple.com/us/album/aint-no-game/6779231658?i=6779231662&uo=4",
+        "collectionId": 6779231658,
+        "collectionName": "Ain't No Game - Single",
+        "trackTimeMillis": 161983,
+        "releaseDate": "2026-08-21T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/6b/93/176b9388-540e-9838-d33e-f356e886f2a1/mzaf_15926481486578027010.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3a/eb/12/3aeb1288-a3b7-6976-458e-a789f6f03406/14462.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:39.836Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/6b/93/176b9388-540e-9838-d33e-f356e886f2a1/mzaf_15926481486578027010.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 976131,
+        "sha256": "9909626eef1871549ebff9e367a325ecec33ff4e240d74b8ee3b857a77f2f603",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.328506,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Caleb Jackson",
+      "song": "Foreva",
+      "appleTrackId": "1875671903",
+      "recordingUrl": "https://music.apple.com/us/song/foreva/1875671903",
+      "editorialMembership": {
+        "id": "1875671903",
+        "title": "Foreva",
+        "recordingUrl": "https://music.apple.com/us/song/foreva/1875671903",
+        "durationIso": "PT3M40S",
+        "durationSeconds": 220,
+        "durationMillis": 220059,
+        "artist": "Caleb Jackson",
+        "artists": [
+          {
+            "name": "Caleb Jackson",
+            "id": "825145156",
+            "url": "https://music.apple.com/us/artist/caleb-jackson/825145156"
+          }
+        ],
+        "position": 121,
+        "collectionId": "1875671900",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5f/1b/e5/5f1be50d-1484-9456-9a6d-687362f06a24/6349.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1875671903,
+        "artistId": 825145156,
+        "artistName": "Caleb Jackson",
+        "trackName": "Foreva",
+        "trackViewUrl": "https://music.apple.com/us/album/foreva/1875671900?i=1875671903&uo=4",
+        "collectionId": 1875671900,
+        "collectionName": "Foreva - Single",
+        "trackTimeMillis": 220059,
+        "releaseDate": "2026-03-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/37/08/5f/37085f93-ec75-ad26-e7d3-a18ddca916ca/mzaf_5777886027025628350.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5f/1b/e5/5f1be50d-1484-9456-9a6d-687362f06a24/6349.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:42.490Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/37/08/5f/37085f93-ec75-ad26-e7d3-a18ddca916ca/mzaf_5777886027025628350.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1017542,
+        "sha256": "276feb4b00ccf8a5cb070f77b4fbf55d40f5227a77ff33fe3265778784c93a7f",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.325636,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Karretero",
+      "song": "Holaláa",
+      "appleTrackId": "6796744667",
+      "recordingUrl": "https://music.apple.com/us/song/holal%C3%A1a/6796744667",
+      "editorialMembership": {
+        "id": "6796744667",
+        "title": "Holaláa",
+        "recordingUrl": "https://music.apple.com/us/song/holal%C3%A1a/6796744667",
+        "durationIso": "PT3M15S",
+        "durationSeconds": 195,
+        "durationMillis": 195035,
+        "artist": "Karretero",
+        "artists": [
+          {
+            "name": "Karretero",
+            "id": "799511961",
+            "url": "https://music.apple.com/us/artist/karretero/799511961"
+          }
+        ],
+        "position": 136,
+        "collectionId": "6796744666",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d2/bc/24/d2bc2496-c47a-6946-822a-8caa9ac9f394/8721628610656.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6796744667,
+        "artistId": 799511961,
+        "artistName": "Karretero",
+        "trackName": "Holaláa",
+        "trackViewUrl": "https://music.apple.com/us/album/holal%C3%A1a/6796744666?i=6796744667&uo=4",
+        "collectionId": 6796744666,
+        "collectionName": "Holaláa - Single",
+        "trackTimeMillis": 195035,
+        "releaseDate": "2026-08-14T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/83/e4/ad/83e4ad02-66d9-8f75-28e5-70bf067f5462/mzaf_16039849167519287545.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d2/bc/24/d2bc2496-c47a-6946-822a-8caa9ac9f394/8721628610656.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:44.694Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/83/e4/ad/83e4ad02-66d9-8f75-28e5-70bf067f5462/mzaf_16039849167519287545.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1071830,
+        "sha256": "fb68b4390a45c26b3ff35d0f29f3c4403c306eaca230a7996fba9aa9fd691968",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.328557,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Josh Baker",
+      "song": "Breaking Point",
+      "appleTrackId": "6803211275",
+      "recordingUrl": "https://music.apple.com/us/song/breaking-point/6803211275",
+      "editorialMembership": {
+        "id": "6803211275",
+        "title": "Breaking Point",
+        "recordingUrl": "https://music.apple.com/us/song/breaking-point/6803211275",
+        "durationIso": "PT2M48S",
+        "durationSeconds": 168,
+        "durationMillis": 168335,
+        "artist": "Josh Baker",
+        "artists": [
+          {
+            "name": "Josh Baker",
+            "id": "150294413",
+            "url": "https://music.apple.com/us/artist/josh-baker/150294413"
+          }
+        ],
+        "position": 138,
+        "collectionId": "6803211274",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cc/58/58/cc5858b4-c96d-8868-caa9-24363b06f894/1200214894368.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6803211275,
+        "artistId": 150294413,
+        "artistName": "Josh Baker",
+        "trackName": "Breaking Point",
+        "trackViewUrl": "https://music.apple.com/us/album/breaking-point/6803211274?i=6803211275&uo=4",
+        "collectionId": 6803211274,
+        "collectionName": "Breaking Point EP - EP",
+        "trackTimeMillis": 168335,
+        "releaseDate": "2026-08-28T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/af/3c/46/af3c46c4-99fa-07ae-841b-6ca90cb88f1e/mzaf_5900892430963550329.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cc/58/58/cc5858b4-c96d-8868-caa9-24363b06f894/1200214894368.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:45.199Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/af/3c/46/af3c46c4-99fa-07ae-841b-6ca90cb88f1e/mzaf_5900892430963550329.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 986075,
+        "sha256": "b51593290ef405bc60407e6162fe71198358948a812e2d98fdb2b4346887bd5e",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327868,
+        "mediaDurationSeconds": 30.007007,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Kyle Walker",
+      "song": "The Montana Girl",
+      "appleTrackId": "6788048898",
+      "recordingUrl": "https://music.apple.com/us/song/the-montana-girl/6788048898",
+      "editorialMembership": {
+        "id": "6788048898",
+        "title": "The Montana Girl",
+        "recordingUrl": "https://music.apple.com/us/song/the-montana-girl/6788048898",
+        "durationIso": "PT3M41S",
+        "durationSeconds": 221,
+        "durationMillis": 221538,
+        "artist": "Kyle Walker",
+        "artists": [
+          {
+            "name": "Kyle Walker",
+            "id": "339612682",
+            "url": "https://music.apple.com/us/artist/kyle-walker/339612682"
+          }
+        ],
+        "position": 159,
+        "collectionId": "6788048890",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/34/5b/63/345b63b1-7f19-6d07-ceac-f67253f9beb7/1200214494087.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6788048898,
+        "artistId": 339612682,
+        "artistName": "Kyle Walker",
+        "trackName": "The Montana Girl",
+        "trackViewUrl": "https://music.apple.com/us/album/the-montana-girl/6788048890?i=6788048898&uo=4",
+        "collectionId": 6788048890,
+        "collectionName": "The Montana Girl - Single",
+        "trackTimeMillis": 221538,
+        "releaseDate": "2026-08-14T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/e1/71/51e17169-ed65-19a1-e002-cbfa03166f9e/mzaf_8931837741477924710.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/34/5b/63/345b63b1-7f19-6d07-ceac-f67253f9beb7/1200214494087.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:47.642Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/e1/71/51e17169-ed65-19a1-e002-cbfa03166f9e/mzaf_8931837741477924710.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1026401,
+        "sha256": "7e81fc8d80c1730164e52bed68be21265cc90cc34b9e62a94d291d029a1b363a",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.325635,
+        "mediaDurationSeconds": 30.003991,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Chloé Caillet",
+      "song": "After Dark",
+      "appleTrackId": "6786260857",
+      "recordingUrl": "https://music.apple.com/us/song/after-dark/6786260857",
+      "editorialMembership": {
+        "id": "6786260857",
+        "title": "After Dark",
+        "recordingUrl": "https://music.apple.com/us/song/after-dark/6786260857",
+        "durationIso": "PT3M28S",
+        "durationSeconds": 208,
+        "durationMillis": 208024,
+        "artist": "Chloé Caillet",
+        "artists": [
+          {
+            "name": "Chloé Caillet",
+            "id": "1256658136",
+            "url": "https://music.apple.com/us/artist/chlo%C3%A9-caillet/1256658136"
+          }
+        ],
+        "position": 177,
+        "collectionId": "6786260849",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d6/f5/2a/d6f52a82-e384-1508-5684-8ea1a1258bbc/5054429213171.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6786260857,
+        "artistId": 1256658136,
+        "artistName": "Chloé Caillet",
+        "trackName": "After Dark",
+        "trackViewUrl": "https://music.apple.com/us/album/after-dark/6786260849?i=6786260857&uo=4",
+        "collectionId": 6786260849,
+        "collectionName": "Dance Again",
+        "trackTimeMillis": 208024,
+        "releaseDate": "2026-09-25T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/16/a0/f416a036-0a7d-689d-80e6-aa9daa99b4ef/mzaf_16519994346922527717.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d6/f5/2a/d6f52a82-e384-1508-5684-8ea1a1258bbc/5054429213171.png/100x100bb.jpg",
+        "primaryGenreName": "Electronic",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:52.690Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/16/a0/f416a036-0a7d-689d-80e6-aa9daa99b4ef/mzaf_16519994346922527717.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1011057,
+        "sha256": "2bb3c129fdf6768001f66f279fa587e4f6ee999da01b308ce74f4e152b3373f6",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327354,
+        "mediaDurationSeconds": 30.000181,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Luuk Van Dijk",
+      "song": "Big Things Coming",
+      "appleTrackId": "6780949927",
+      "recordingUrl": "https://music.apple.com/us/song/big-things-coming/6780949927",
+      "editorialMembership": {
+        "id": "6780949927",
+        "title": "Big Things Coming",
+        "recordingUrl": "https://music.apple.com/us/song/big-things-coming/6780949927",
+        "durationIso": "PT6M26S",
+        "durationSeconds": 386,
+        "durationMillis": 386133,
+        "artist": "Luuk Van Dijk",
+        "artists": [
+          {
+            "name": "Luuk Van Dijk",
+            "id": "1029171131",
+            "url": "https://music.apple.com/us/artist/luuk-van-dijk/1029171131"
+          }
+        ],
+        "position": 181,
+        "collectionId": "6780949926",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7f/ba/76/7fba766e-9514-4629-468c-9c9827d37cca/cover.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6780949927,
+        "artistId": 1029171131,
+        "artistName": "Luuk Van Dijk",
+        "trackName": "Big Things Coming",
+        "trackViewUrl": "https://music.apple.com/us/album/big-things-coming/6780949926?i=6780949927&uo=4",
+        "collectionId": 6780949926,
+        "collectionName": "Best of Relax, Vol. 1 (Club Hits) - EP",
+        "trackTimeMillis": 386133,
+        "releaseDate": "2026-07-17T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/7d/54/717d54b5-f1c7-53f1-bda9-4cb6f162f025/mzaf_14528268295506626962.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7f/ba/76/7fba766e-9514-4629-468c-9c9827d37cca/cover.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:55.912Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/71/7d/54/717d54b5-f1c7-53f1-bda9-4cb6f162f025/mzaf_14528268295506626962.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 999552,
+        "sha256": "6f30e0ac118f80372219b9b78ff193466fae07b459d532578aa5fe449e362142",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.330468,
+        "mediaDurationSeconds": 30.003991,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Jayda G",
+      "song": "Forever Now",
+      "appleTrackId": "6798234780",
+      "recordingUrl": "https://music.apple.com/us/song/forever-now/6798234780",
+      "editorialMembership": {
+        "id": "6798234780",
+        "title": "Forever Now",
+        "recordingUrl": "https://music.apple.com/us/song/forever-now/6798234780",
+        "durationIso": "PT2M56S",
+        "durationSeconds": 176,
+        "durationMillis": 176698,
+        "artist": "Jayda G",
+        "artists": [
+          {
+            "name": "Jayda G",
+            "id": "422676247",
+            "url": "https://music.apple.com/us/artist/jayda-g/422676247"
+          }
+        ],
+        "position": 186,
+        "collectionId": "6798234776",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/77/c6/c0/77c6c02e-7707-1664-8661-a46d568aaaeb/196874653869.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6798234780,
+        "artistId": 422676247,
+        "artistName": "Jayda G",
+        "trackName": "Forever Now",
+        "trackViewUrl": "https://music.apple.com/us/album/forever-now/6798234776?i=6798234780&uo=4",
+        "collectionId": 6798234776,
+        "collectionName": "Forever Now - Single",
+        "trackTimeMillis": 176698,
+        "releaseDate": "2026-09-04T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/14/10/d7/1410d72f-1055-4097-b6e1-06650d3222f0/mzaf_16261400476924494764.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/77/c6/c0/77c6c02e-7707-1664-8661-a46d568aaaeb/196874653869.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:59.453Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/14/10/d7/1410d72f-1055-4097-b6e1-06650d3222f0/mzaf_16261400476924494764.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 981218,
+        "sha256": "c0f43d2109f19ed6cedef0383e6961a0f49cbee9ed26ef13aa045edc5a059bca",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327531,
+        "mediaDurationSeconds": 30.019002,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Rayzir",
+      "song": "Places",
+      "appleTrackId": "1887685297",
+      "recordingUrl": "https://music.apple.com/us/song/places/1887685297",
+      "editorialMembership": {
+        "id": "1887685297",
+        "title": "Places",
+        "recordingUrl": "https://music.apple.com/us/song/places/1887685297",
+        "durationIso": "PT3M8S",
+        "durationSeconds": 188,
+        "durationMillis": 188308,
+        "artist": "Rayzir",
+        "artists": [
+          {
+            "name": "Rayzir",
+            "id": "969510462",
+            "url": "https://music.apple.com/us/artist/rayzir/969510462"
+          }
+        ],
+        "position": 187,
+        "collectionId": "1887685294",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7a/18/0e/7a180eea-0efc-8f67-0fcc-3423605d1fca/1025635.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1887685297,
+        "artistId": 969510462,
+        "artistName": "Rayzir",
+        "trackName": "Places",
+        "trackViewUrl": "https://music.apple.com/us/album/places/1887685294?i=1887685297&uo=4",
+        "collectionId": 1887685294,
+        "collectionName": "Places - Single",
+        "trackTimeMillis": 188308,
+        "releaseDate": "2026-04-30T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d4/f9/5f/d4f95f21-4b11-68b6-1ef7-916773ff7e78/mzaf_17791803386539736763.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7a/18/0e/7a180eea-0efc-8f67-0fcc-3423605d1fca/1025635.jpg/100x100bb.jpg",
+        "primaryGenreName": "Electronic",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:15:00.332Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d4/f9/5f/d4f95f21-4b11-68b6-1ef7-916773ff7e78/mzaf_17791803386539736763.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 992078,
+        "sha256": "16f11f1bcc4f68ddf5bc880140ac3e67628bf033845ee53f8b3eb8b5a5621868",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.329813,
+        "mediaDurationSeconds": 30.001995,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "CASSIMM",
+      "song": "Anything and Everything",
+      "appleTrackId": "1886079484",
+      "recordingUrl": "https://music.apple.com/us/song/anything-and-everything/1886079484",
+      "editorialMembership": {
+        "id": "1886079484",
+        "title": "Anything and Everything",
+        "recordingUrl": "https://music.apple.com/us/song/anything-and-everything/1886079484",
+        "durationIso": "PT2M11S",
+        "durationSeconds": 131,
+        "durationMillis": 131133,
+        "artist": "CASSIMM",
+        "artists": [
+          {
+            "name": "CASSIMM",
+            "id": "637023672",
+            "url": "https://music.apple.com/us/artist/cassimm/637023672"
+          }
+        ],
+        "position": 189,
+        "collectionId": "1886079483",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/96/41/39/964139f4-b997-1c23-a0be-eee0fd3ea58f/5052075035871.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1886079484,
+        "artistId": 637023672,
+        "artistName": "CASSIMM",
+        "trackName": "Anything and Everything",
+        "trackViewUrl": "https://music.apple.com/us/album/anything-and-everything/1886079483?i=1886079484&uo=4",
+        "collectionId": 1886079483,
+        "collectionName": "Anything and Everything - Single",
+        "trackTimeMillis": 131133,
+        "releaseDate": "2026-04-10T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/3f/91/a93f91b8-ac0c-80d0-e5b9-689c74c3094f/mzaf_12105142297198583920.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/96/41/39/964139f4-b997-1c23-a0be-eee0fd3ea58f/5052075035871.png/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:15:05.109Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/3f/91/a93f91b8-ac0c-80d0-e5b9-689c74c3094f/mzaf_12105142297198583920.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1031860,
+        "sha256": "1b3d75b6633926af36c7188658558e638077f319ba50ca1eb7869e98bda754e5",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.327148,
+        "mediaDurationSeconds": 30.005011,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Sonny Kane",
+      "song": "Never Leave U",
+      "appleTrackId": "6783303219",
+      "recordingUrl": "https://music.apple.com/us/song/never-leave-u/6783303219",
+      "editorialMembership": {
+        "id": "6783303219",
+        "title": "Never Leave U",
+        "recordingUrl": "https://music.apple.com/us/song/never-leave-u/6783303219",
+        "durationIso": "PT3M41S",
+        "durationSeconds": 221,
+        "durationMillis": 221787,
+        "artist": "Sonny Kane",
+        "artists": [
+          {
+            "name": "Sonny Kane",
+            "id": "776045950",
+            "url": "https://music.apple.com/us/artist/sonny-kane/776045950"
+          }
+        ],
+        "position": 194,
+        "collectionId": "6783303215",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2a/3c/be/2a3cbef1-9c89-6440-a801-308f1b2e103b/12416.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6783303219,
+        "artistId": 776045950,
+        "artistName": "Sonny Kane",
+        "trackName": "Never Leave U",
+        "trackViewUrl": "https://music.apple.com/us/album/never-leave-u/6783303215?i=6783303219&uo=4",
+        "collectionId": 6783303215,
+        "collectionName": "Never Leave U - Single",
+        "trackTimeMillis": 221787,
+        "releaseDate": "2025-11-14T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/c7/4d/85c74d7a-3bdd-fd11-5730-859318c5bc04/mzaf_5091100495308568284.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2a/3c/be/2a3cbef1-9c89-6440-a801-308f1b2e103b/12416.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-next-50",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:13:04.364Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:15:09.969Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/c7/4d/85c74d7a-3bdd-fd11-5730-859318c5bc04/mzaf_5091100495308568284.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 954892,
+        "sha256": "6253d9004defe74ac9c8474d805751d14748ef9caaa640563caf74c1b7c19b3f",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.322488,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
     }
   ]
 }

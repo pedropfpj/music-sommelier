@@ -360,6 +360,68 @@ await check("fresh web visitors with the same opening slot diversify cards two t
   console.log(JSON.stringify({ sameOpeningSlot: 0, visitors: sequences.length, uniqueTracks, uniqueArtists, trackOverlap, artistOverlap }));
 });
 
+await check("the same Groovado calibration gives fresh web visitors different five-track House sequences", async () => {
+  const houseRows = JSON.parse(await readFile(new URL("../data/runtime-catalog-v1/styles/house.json", import.meta.url), "utf8"));
+  const sequences = [];
+  const visitors = ["cedar", "ash-grove", "small-river", "reeds", "bamboo-garden", "fern", "maple-lane", "stone-bridge"];
+  let reference;
+  const recordingKey = track => track.catalogMetadata?.recording_id || reference.recommendationTrackKey(track);
+  const artistKey = track => reference.artistMatchKey(track.artist);
+  for (const [index, identity] of visitors.entries()) {
+    const ctx = sequenceVisitor(identity);
+    reference ??= ctx;
+    ctx.mergeExternalDatasetRows(houseRows, "dataset_local_runtime_house");
+    ctx.contextEl = { value: "" };
+    ctx.energyEl = { value: "" };
+    ctx.bpmEl = { value: "" };
+    ctx.vocalsEl = { value: "" };
+    ctx.updateControlValue = (control, value) => { control.value = value; };
+    ctx.updateBpmOptionsForSelectedStyle = () => {};
+    ctx.renderStyleInfoBubble = () => {};
+    ctx.applyGenreVibeTheme = () => {};
+    ctx.applyInitialTasteCalibrationPreferences({ experience: "beginner", goal: "track", mood: "groovy" });
+
+    assert.equal(await ctx.runPrimaryRecommendationAction({ source: "initial_calibration" }), true);
+    assert.equal(ctx.explicitSwipeAnchorStyle(), "house");
+    for (const action of ["other", "like", "pass", "other"]) {
+      if (index % 2 === 0) queueNextCards(ctx);
+      if (action === "other") {
+        assert.equal(await ctx.runPrimaryRecommendationAction(), true);
+      } else {
+        const sourceTrack = ctx.currentRecommendation;
+        const positive = action === "like";
+        if (!positive) ctx.lastRejectedTrackKey = ctx.recommendationTrackKey(sourceTrack);
+        assert.equal(await ctx.advanceAfterSwipeFeedback({
+          likedTrack: sourceTrack,
+          positive,
+          avoidArtistName: positive ? "" : sourceTrack.artist
+        }), true);
+      }
+      assert.equal(ctx.lastPrefs.style, "house");
+      assert.equal(ctx.lastPrefs.context, "social");
+      assert.equal(ctx.lastPrefs.energy, "mid");
+    }
+
+    assert.equal(ctx.deliveries.length, 5);
+    assert.equal(new Set(ctx.deliveries.map(recordingKey)).size, 5);
+    ctx.deliveries.forEach((track, i) => {
+      assert.equal(track.style, "house");
+      assert.ok(ctx.trackHasVerifiedImmediateAudioPreview(track));
+      assert.ok(ctx.deliveries.slice(i + 1).every(next => !ctx.artistsShareIdentity(track.artist, next.artist)));
+    });
+    sequences.push(ctx.deliveries);
+  }
+
+  const uniqueFirst = new Set(sequences.map(sequence => artistKey(sequence[0]))).size;
+  const uniqueSecond = new Set(sequences.map(sequence => artistKey(sequence[1]))).size;
+  const trackOverlap = meanSequenceOverlap(sequences, recordingKey);
+  const artistOverlap = meanSequenceOverlap(sequences, artistKey);
+  console.log(JSON.stringify({ calibratedVisitors: visitors.length, uniqueFirst, uniqueSecond, trackOverlap, artistOverlap }));
+  assert.ok(uniqueFirst >= 3 && uniqueSecond >= 3, `Distinct House artists in slots 1 and 2: ${uniqueFirst}, ${uniqueSecond}`);
+  assert.ok(trackOverlap < 2.5, `Mean calibrated House recording overlap: ${trackOverlap}`);
+  assert.ok(artistOverlap < 2.5, `Mean calibrated House artist overlap: ${artistOverlap}`);
+});
+
 await check("a returning anonymous web visitor's opening and next card exclude the prior session", async () => {
   const local = storageFixture();
   const session = storageFixture();

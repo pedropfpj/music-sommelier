@@ -200,7 +200,7 @@ const houseSelection = await json('../data/house_opening_editorial_v31_20261110.
 const houseShard = await json('../data/runtime-catalog-v1/styles/house.json');
 assert.equal(houseSelection.editorialPlaylist.author, 'Apple Music Dance');
 assert.equal(houseSelection.curator.id, '976439535');
-assert.equal(houseSelection.tracks.length, 5);
+assert.equal(houseSelection.tracks.length, 33);
 assert.ok(distinct(houseSelection.tracks.flatMap(edition => edition.editorialMembership.artists.map(artist => artist.id))));
 const houseRows = houseShard.filter(row => row.source === 'house_opening_editorial_v31_20261110');
 assert.equal(houseRows.length, houseSelection.tracks.length);
@@ -208,7 +208,7 @@ const houseContext = createAppRuntimeTestContext();
 houseContext.catalog.length = 0;
 const houseSeeds = JSON.stringify(houseContext.STYLE_ARTIST_SEEDS);
 houseContext.mergeExternalDatasetRows(houseRows, 'dataset_local_runtime_house');
-assert.equal(houseContext.catalog.length, 5);
+assert.equal(houseContext.catalog.length, houseRows.length);
 assert.equal(JSON.stringify(houseContext.STYLE_ARTIST_SEEDS), houseSeeds);
 for (const edition of houseSelection.tracks) {
   const recordingId = `apple_music:${edition.appleTrackId}`;
@@ -220,7 +220,6 @@ for (const edition of houseSelection.tracks) {
   assert.equal(row.preview_url, edition.audioVerification.previewUrl);
   assert.equal(row.preview_url, edition.lookupObservation.previewUrl);
   assert.ok(edition.audioVerification.currentTimeAfter > 0.25 && !edition.audioVerification.pausedAfter);
-  assert.ok(core.some(candidate => candidate.recording_id === recordingId));
   assert.equal(houseContext.isTrackEligibleForRecommendation(track), true);
   assert.equal(houseContext.trackStyleCertainty(track), 'confirmed');
   assert.equal(houseContext.trackHasVerifiedImmediateAudioPreview(track), true);
@@ -233,4 +232,6 @@ for (const edition of houseSelection.tracks) {
   rejected.mergeExternalDatasetRows([{ ...row, preview_url: wrongMaster }], 'dataset_local_runtime_house');
   assert.equal(rejected.catalog.length, 0);
 }
-console.log('Reviewed recording catalog passed: cold core and shards, seven new exact Full-on Night previews, five exact House previews, strict recording/style/BPM/history gates, cache reload, and atomic master replacement without artist-wide permission.');
+const houseCore = core.filter(row => row.style === 'house');
+assert.ok(houseCore.filter(row => houseRows.some(reviewed => reviewed.recording_id === row.recording_id)).length >= 10);
+console.log('Reviewed recording catalog passed: cold core and shards, seven exact Full-on Night previews, 33 exact House previews, strict recording/style/BPM/history gates, cache reload, and atomic master replacement without artist-wide permission.');

@@ -2,7 +2,7 @@
   "use strict";
 
   const BASE_PATH = "data/runtime-catalog-v1";
-  const VERSION = "20261110-catalog-v26";
+  const VERSION = "20261116-house-opening";
   let manifestPromise = null;
   let corePromise = null;
   const stylePromises = new Map();

@@ -2,7 +2,7 @@
   "version": 1,
   "core": "core.json",
   "catalogSummary": {
-    "titleCount": 9159,
+    "titleCount": 9187,
     "styleCount": 169,
     "countingMethod": "distinct_artist_and_title_including_named_versions",
     "scope": "bundled_catalog_metadata_not_audio_availability"
@@ -270,7 +270,7 @@
     "hardwave": 28,
     "hi_nrg": 28,
     "hi_tech": 75,
-    "house": 201,
+    "house": 229,
     "hypnotic_techno": 39,
     "idm": 40,
     "industrial_dance": 28,

@@ -4843,7 +4843,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261115opening1";
+const SONIC_APP_BUILD_ID = "20261116houseopening";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -14459,6 +14459,286 @@ const REVIEWED_RECORDING_STYLE_PROOFS_V26 = [
     evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
     appleTrackId: "6820558050",
     applePreviewAsset: "/itunes-assets/AudioPreview211/v4/ff/3d/0d/ff3d0dba-abd0-c1f7-297d-0c5f4906612e/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Kotiēr",
+    song: "Whisper In My Ear",
+    recordingUrl: "https://music.apple.com/us/song/whisper-in-my-ear/6820899726",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6820899726",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/cc/1b/57/cc1b5781-59ef-a5e3-4c6a-e798df03c2ee/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Clementine Douglas",
+    song: "Trust",
+    recordingUrl: "https://music.apple.com/us/song/trust/6795199532",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6795199532",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/6f/28/84/6f288457-a2c4-c719-2927-2a189981fdc4/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Lewis Taylor",
+    song: "Reasons",
+    recordingUrl: "https://music.apple.com/us/song/reasons/1809186843",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1809186843",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/f3/2b/07/f32b074a-f7f8-3777-4ec6-bc519dd1798e/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Luke DuBose",
+    song: "Found You",
+    recordingUrl: "https://music.apple.com/us/song/found-you/6822554168",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6822554168",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/77/68/36/7768361d-9bf1-0503-84dc-a56f89bad196/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Dusky",
+    song: "Elm (Lost A Shoe in 92 Mix)",
+    recordingUrl: "https://music.apple.com/us/song/elm-lost-a-shoe-in-92-mix/6818559198",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6818559198",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/de/bc/d4/debcd417-dba0-94be-7ca7-f3bb6bef3515/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Messy",
+    song: "Sleep Better (With You)",
+    recordingUrl: "https://music.apple.com/us/song/sleep-better-with-you/1790567246",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1790567246",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/e7/0e/23/e70e2390-8ce8-4b65-8144-36661106b9c4/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Prospa",
+    song: "Let The Music",
+    recordingUrl: "https://music.apple.com/us/song/let-the-music/1884731022",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1884731022",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/7c/b6/e6/7cb6e694-20d5-6723-8986-5956e4f3fc53/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Steve Lawler",
+    song: "Higher",
+    recordingUrl: "https://music.apple.com/us/song/higher/6813232490",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6813232490",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/1e/3d/82/1e3d8238-ab97-0be7-8b02-bef222b0e1ac/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Gorgon City",
+    song: "Loveless",
+    recordingUrl: "https://music.apple.com/us/song/loveless/1822817768",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1822817768",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/20/14/71/2014710f-afb3-e11d-8d93-7ff20b451162/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Emily Nash",
+    song: "Fall In Love",
+    recordingUrl: "https://music.apple.com/us/song/fall-in-love/6820923996",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6820923996",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/21/90/64/21906451-e7f6-0856-27f4-a77e321ea65a/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "TwoSlice",
+    song: "Sweat It Out",
+    recordingUrl: "https://music.apple.com/us/song/sweat-it-out/6822410156",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6822410156",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/86/5a/78/865a78ed-dd99-5326-be97-9f7cb037254f/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Edd",
+    song: "TO THE RESCUE",
+    recordingUrl: "https://music.apple.com/us/song/to-the-rescue/6764511217",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6764511217",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/c4/ec/cd/c4eccd9a-b107-16d7-6049-54b2c43578cb/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Franky Rizardo",
+    song: "Feel",
+    recordingUrl: "https://music.apple.com/us/song/feel/6778099499",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6778099499",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/cd/3b/f7/cd3bf743-9463-5b73-c2d1-9ee0d725f8ee/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Danny Howard",
+    song: "After Five",
+    recordingUrl: "https://music.apple.com/us/song/after-five/1880208363",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1880208363",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/a1/8c/94/a18c9463-533a-9590-1090-78d68bb623ee/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Goosey",
+    song: "Wrapped Up In Your Love",
+    recordingUrl: "https://music.apple.com/us/song/wrapped-up-in-your-love/1886222209",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1886222209",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/5a/0a/72/5a0a7252-34ae-46d5-ea73-095b74c69348/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "D.O.D",
+    song: "Be Free",
+    recordingUrl: "https://music.apple.com/us/song/be-free/6796741610",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6796741610",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/83/75/48/83754814-4550-711d-dced-4dbe5519ce35/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Patrick Topping",
+    song: "Ocean",
+    recordingUrl: "https://music.apple.com/us/song/ocean/1817175108",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1817175108",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/70/23/d3/7023d3cb-1c30-7b89-f29c-4f999448c12a/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Duke Dumont",
+    song: "Ain't No Game",
+    recordingUrl: "https://music.apple.com/us/song/aint-no-game/6779231662",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6779231662",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/17/6b/93/176b9388-540e-9838-d33e-f356e886f2a1/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Caleb Jackson",
+    song: "Foreva",
+    recordingUrl: "https://music.apple.com/us/song/foreva/1875671903",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1875671903",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/37/08/5f/37085f93-ec75-ad26-e7d3-a18ddca916ca/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Karretero",
+    song: "Holaláa",
+    recordingUrl: "https://music.apple.com/us/song/holal%C3%A1a/6796744667",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6796744667",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/83/e4/ad/83e4ad02-66d9-8f75-28e5-70bf067f5462/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Josh Baker",
+    song: "Breaking Point",
+    recordingUrl: "https://music.apple.com/us/song/breaking-point/6803211275",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6803211275",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/af/3c/46/af3c46c4-99fa-07ae-841b-6ca90cb88f1e/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Kyle Walker",
+    song: "The Montana Girl",
+    recordingUrl: "https://music.apple.com/us/song/the-montana-girl/6788048898",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6788048898",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/51/e1/71/51e17169-ed65-19a1-e002-cbfa03166f9e/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Chloé Caillet",
+    song: "After Dark",
+    recordingUrl: "https://music.apple.com/us/song/after-dark/6786260857",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6786260857",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/f4/16/a0/f416a036-0a7d-689d-80e6-aa9daa99b4ef/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Luuk Van Dijk",
+    song: "Big Things Coming",
+    recordingUrl: "https://music.apple.com/us/song/big-things-coming/6780949927",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6780949927",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/71/7d/54/717d54b5-f1c7-53f1-bda9-4cb6f162f025/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Jayda G",
+    song: "Forever Now",
+    recordingUrl: "https://music.apple.com/us/song/forever-now/6798234780",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6798234780",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/14/10/d7/1410d72f-1055-4097-b6e1-06650d3222f0/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Rayzir",
+    song: "Places",
+    recordingUrl: "https://music.apple.com/us/song/places/1887685297",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1887685297",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/d4/f9/5f/d4f95f21-4b11-68b6-1ef7-916773ff7e78/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "CASSIMM",
+    song: "Anything and Everything",
+    recordingUrl: "https://music.apple.com/us/song/anything-and-everything/1886079484",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1886079484",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/a9/3f/91/a93f91b8-ac0c-80d0-e5b9-689c74c3094f/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Sonny Kane",
+    song: "Never Leave U",
+    recordingUrl: "https://music.apple.com/us/song/never-leave-u/6783303219",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6783303219",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/85/c7/4d/85c74d7a-3bdd-fd11-5730-859318c5bc04/",
     bpmExact: null
   }
 ];
@@ -56007,9 +56287,14 @@ function pickWebOpeningSequenceTrack(prefs = {}, sourceTrack = null, { reaction 
     const sameFamily = sourceFamily && familyOf(track.style) === sourceFamily;
     const reactionFit = reaction === "like" ? (sameStyle ? 8 : sameFamily ? 4 : 0)
       : reaction === "pass" && sameStyle ? -4 : 0;
-    const filterFit =
+    // Within an already selected style, mood is advisory. Missing energy is
+    // neutral so reviewed recordings can compete with fully tagged starters.
+    const hasEnergy = track.energy && track.energy !== "unknown";
+    const moodFit =
       (prefs.context ? contextAffinityScore(track, prefs) * 2 : 0) +
-      (prefs.energy ? 3 - energyDistance(track.energy, prefs.energy) * 3 : 0) +
+      (prefs.energy && (hasEnergy || !prefs.style) ? 3 - energyDistance(track.energy, prefs.energy) * 3 : 0);
+    const filterFit =
+      moodFit * (prefs.style ? 0.2 : 1) +
       (prefs.vocals && track.vocals === prefs.vocals ? 6 : 0);
     const score =
       styleFit + personalTasteScore(track, prefs) + reactionFit + filterFit +
@@ -65928,6 +66213,11 @@ tasteCalibrationOptionButtons.forEach((button) => {
       status: "pending",
       updatedAt: new Date().toISOString()
     });
+    if (field === "mood" && initialTasteCalibrationState.goal === "track" &&
+        !isNativeAppRuntime() && !isAppStoreRuntimeMode()) {
+      const { style } = initialTasteCalibrationPreferences(initialTasteCalibrationState);
+      if (style) void hydrateExternalDatasetPackInBackground({ style }).catch(() => {});
+    }
     if (tasteCalibrationStatus) tasteCalibrationStatus.textContent = "";
     renderInitialTasteCalibrationStep();
     playUiSfx("confirm");
