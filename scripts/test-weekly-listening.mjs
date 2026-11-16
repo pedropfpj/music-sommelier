@@ -78,9 +78,10 @@ assert.equal(result.reason, "unavailable");
 assert.equal(context.recommendationRunBusy, false);
 assert.equal(calls.filter(call => call.startsWith("presented:")).length, presentationsBeforeFailure, "A failed preview must not count as a delivered weekly recording");
 
-const { chromium } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
+const engines = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
+const engine = process.env.SONIC_BROWSER_ENGINE || "chromium";
 const preview = await startTestPreviewServer();
-const browser = await chromium.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true });
+const browser = await engines[engine].launch({ headless: true, ...(engine === "chromium" && process.env.SONIC_CHROMIUM_EXECUTABLE ? { executablePath: process.env.SONIC_CHROMIUM_EXECUTABLE } : {}) });
 const styles = [
   { id: "dark_psy", label: "Dark Psy", group: "Dark Psy" },
   { id: "hi_tech", label: "Hi-Tech", group: "Hi-Tech" },

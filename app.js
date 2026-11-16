@@ -4809,6 +4809,8 @@ const REVIEWED_STYLE_CATALOG_PATHS = {
 };
 const REVIEWED_CATALOG_SOURCE_PREFIX = "dynamic_dataset_local_reviewed_";
 const reviewedStyleCatalogs = new Map();
+const alternateCatalogRecordings = new Map();
+const catalogRecordingPlayback = new WeakMap();
 const INDEXED_DATASET_ARTIST_COUNT = 5179;
 const MIN_SEARCHABLE_TRACKS_PER_INDEXED_ARTIST = 19;
 const CATALOG_EXTRA_ENDPOINT = "/api/catalog-extra";
@@ -4847,7 +4849,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261116discovery1";
+const SONIC_APP_BUILD_ID = "20261116continuity2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -18768,10 +18770,8 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const context = pickDatasetValue(fields, ["context", "contexts", "listening_contexts"]);
     const catalogMetadata = Object.fromEntries(Object.entries({
       recording_id: pickDatasetValue(fields, ["recording_id"]),
-      ...(reviewed ? {
-        soundcloud_track_id: rawRow.soundcloud_track_id,
-        preview_url: rawRow.preview_url
-      } : {}),
+      preview_url: reviewed ? rawRow.preview_url : normalizePreviewUrl(previewUrl),
+      ...(reviewed ? { soundcloud_track_id: rawRow.soundcloud_track_id } : {}),
       deezer_track_id: deezerTrackId,
       deezer_track_url: deezerTrackUrl,
       cover_art_url: coverArtUrl,
@@ -18865,10 +18865,10 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
   };
 }
 
-async function readExternalDatasetRowsFromPath(path) {
+async function readExternalDatasetRowsFromPath(path, timeoutMs = EXTERNAL_DATASET_FETCH_TIMEOUT_MS) {
   try {
     const separator = String(path || "").includes("?") ? "&" : "?";
-    const response = await fetchWithTimeout(`${path}${separator}v=${EXTERNAL_DATASET_CACHE_VERSION}`, { cache: "force-cache" }, EXTERNAL_DATASET_FETCH_TIMEOUT_MS);
+    const response = await fetchWithTimeout(`${path}${separator}v=${EXTERNAL_DATASET_CACHE_VERSION}`, { cache: "force-cache" }, timeoutMs);
     if (!response.ok) return [];
     const lowerPath = String(path || "").toLowerCase();
     if (lowerPath.endsWith(".json")) {
@@ -19008,7 +19008,7 @@ function finalizeExternalDatasetRuntimeMerge(merged = {}) {
   return merged;
 }
 
-async function loadExternalDatasetRuntimeRows(style = "") {
+async function loadExternalDatasetRuntimeRows(style = "", fetchTimeoutMs = EXTERNAL_DATASET_FETCH_TIMEOUT_MS) {
   const runtime = typeof window !== "undefined" ? window.SonicCatalogRuntime : null;
   const cleanStyle = normalizeDatasetStyle(style || "");
   const path = cleanStyle
@@ -19016,12 +19016,12 @@ async function loadExternalDatasetRuntimeRows(style = "") {
     : EXTERNAL_DATASET_RUNTIME_CORE_PATH;
   const rows = runtime && typeof runtime.loadCore === "function" && typeof runtime.loadStyle === "function"
     ? (cleanStyle ? runtime.loadStyle(cleanStyle) : runtime.loadCore())
-    : readExternalDatasetRowsFromPath(path);
+    : readExternalDatasetRowsFromPath(path, fetchTimeoutMs);
   if (!hasReviewedStyleCatalog(cleanStyle)) return rows;
 
   const reviewedRequest = reviewedStyleCatalogs.get(cleanStyle)?.rows ?? fetchWithTimeout(
     `${REVIEWED_STYLE_CATALOG_PATHS[cleanStyle]}?v=${SONIC_APP_BUILD_ID}`,
-    { cache: "no-cache" }, EXTERNAL_DATASET_FETCH_TIMEOUT_MS
+    { cache: "no-cache" }, fetchTimeoutMs
   ).then(async response => {
     if (!response.ok) throw new Error("reviewed_style_catalog_unavailable");
     return response.json();
@@ -19031,12 +19031,12 @@ async function loadExternalDatasetRuntimeRows(style = "") {
   return [...reviewedRows, ...legacyRows];
 }
 
-async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
+async function hydrateExternalDatasetPackInBackground({ style = "", fetchTimeoutMs = EXTERNAL_DATASET_FETCH_TIMEOUT_MS } = {}) {
   const cleanStyle = normalizeDatasetStyle(style || "");
   if (cleanStyle) {
     if (externalDatasetImportedStyles.has(cleanStyle)) return null;
     if (externalDatasetStylePromises.has(cleanStyle)) return externalDatasetStylePromises.get(cleanStyle);
-    const stylePromise = loadExternalDatasetRuntimeRows(cleanStyle)
+    const stylePromise = loadExternalDatasetRuntimeRows(cleanStyle, fetchTimeoutMs)
       .then((rows) => {
         const merged = mergeExternalDatasetRows(rows, `dataset_local_runtime_${cleanStyle}`);
         externalDatasetImportedStyles.add(cleanStyle);
@@ -19050,7 +19050,7 @@ async function hydrateExternalDatasetPackInBackground({ style = "" } = {}) {
   if (externalDatasetImportDone) return null;
   if (externalDatasetImportPromise) return externalDatasetImportPromise;
   externalDatasetImportStarted = true;
-  externalDatasetImportPromise = loadExternalDatasetRuntimeRows()
+  externalDatasetImportPromise = loadExternalDatasetRuntimeRows("", fetchTimeoutMs)
     .then((rows) => finalizeExternalDatasetRuntimeMerge(
       mergeExternalDatasetRows(rows, "dataset_local_runtime_core")
     ))
@@ -24062,13 +24062,18 @@ function addDynamicTrackToCatalog({
   if (fineStyleNeedsVerifiedTrack && !bpmNumber) return false;
 
   let reviewedReplacementIndex = -1;
+  let preferredCatalogTrack = null;
   if (existingKeys.has(key)) {
     const exactIndex = catalog.findIndex(track => recommendationTrackKey(track) === key && canonicalArtistIdentity(track.artist) === canonicalArtistIdentity(artistName) && normalize(track.song) === normalize(songName));
     const existing = catalog[exactIndex];
     if (exactIndex >= 0 && (reviewed || incomingProof) && !reviewedRecordingStyleProof(existing) && !reviewedCatalogRecording(existing)) {
       reviewedReplacementIndex = exactIndex;
+    } else if (existing?.style === style && (reviewed || source.startsWith("dynamic_dataset_local_runtime_"))) {
+      const currentIds = catalogTrackRecordingIds(existing);
+      const incomingId = catalogTrackRecordingIds(recordingIdentity)[0];
+      if (currentIds.length && incomingId && !currentIds.includes(incomingId)) preferredCatalogTrack = existing;
     }
-    if (reviewedReplacementIndex < 0) {
+    if (reviewedReplacementIndex < 0 && !preferredCatalogTrack) {
       const incoming = normalizeImportedListeningMetadata(vocals, context);
       let updated = false;
       if (existing?.listeningMetadataVersion === 1) {
@@ -24173,8 +24178,15 @@ function addDynamicTrackToCatalog({
     source
   };
 
-  if (reviewedReplacementIndex >= 0) catalog.splice(reviewedReplacementIndex, 1, hydratedTrack);
-  else catalog.push(hydratedTrack);
+  if (preferredCatalogTrack) {
+    // Keep exact replay of a second edition independent of discovery's deduped pool.
+    retainAlternateCatalogRecording(hydratedTrack, preferredCatalogTrack);
+    return false;
+  }
+  if (reviewedReplacementIndex >= 0) {
+    retainAlternateCatalogRecording(catalog[reviewedReplacementIndex], hydratedTrack);
+    catalog.splice(reviewedReplacementIndex, 1, hydratedTrack);
+  } else catalog.push(hydratedTrack);
   existingKeys.add(key);
   TRACK_METADATA[`${songName}|${artistName}`] = {
     releaseDate,
@@ -24833,6 +24845,7 @@ async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
 
 async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
   if (isReviewedCatalogSource(track?.source)) return Boolean(reviewedCatalogRecording(track)?.soundcloudTrackId);
+  if (catalogRecordingPlayback.has(track)) return trackHasDirectSoundCloudTrack(track);
   if (reviewedExactAppleProof(track)) return false;
   if (!track?.style || !track?.artist || !track?.song) return false;
   if (trackHasDirectSoundCloudTrack(track)) {
@@ -24857,6 +24870,19 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     track.previewChecked = true;
     track.previewUrl = normalizePreviewUrl(reviewed?.previewUrl);
     track.previewMissing = !track.previewUrl;
+    return;
+  }
+  const replayId = catalogRecordingPlayback.get(track);
+  if (replayId) {
+    const [provider, id] = replayId.split(":");
+    const apiSource = ({ apple_music: "itunes", deezer: "deezer" })[provider];
+    if (apiSource && (forceLookup || !previewCandidatesForTrack(track).length)) {
+      const match = await fetchTrackMetadataFromApi(track, { forceLookup });
+      if (match?.source === apiSource && String(match.id) === id) promotePreviewCandidate(track, match.previewUrl);
+    }
+    track.previewUrl = previewCandidatesForTrack(track)[0] || "";
+    track.previewChecked = true;
+    track.previewMissing = !track.previewUrl && !trackHasExternalPlayableFallback(track);
     return;
   }
   const trustedSlambient = isTrustedSlambientCatalogTrack(track);
@@ -30843,6 +30869,7 @@ function beginRecommendationSession(session) {
   fastFeedbackSwapToken += 1;
   fastSuggestionQueueRefreshToken += 1;
   previewRecoveryToken += 1;
+  previewRecoveryBusy = false;
   recommendationDetailRenderToken += 1;
   recommendationPreviewRenderToken += 1;
 
@@ -35649,7 +35676,11 @@ function setActiveAppTab(tabName = "discover", options = {}) {
       reason: `tab_change_${previousTab}_to_${safeTab}`,
       preserve: keepSource ? "preview" : ""
     });
-    if (hasWebPreview && previousTab === "discover") restoreStoppedDiscoveryPreview(track, { paused: wasPlaying });
+    if (hasWebPreview && previousTab === "discover") {
+      previewRecoveryToken += 1;
+      previewRecoveryBusy = false;
+      restoreStoppedDiscoveryPreview(track, { paused: wasPlaying });
+    }
     if (hasWebPreview && safeTab === "discover" && !keepSource) {
       const renderToken = recommendationPreviewRenderToken;
       queueMicrotask(() => {
@@ -38621,7 +38652,7 @@ function youtubeVideoCandidatesForTrack(track) {
 }
 
 async function resolveYouTubeVideoFromApi(track) {
-  if (isReviewedCatalogSource(track?.source) || reviewedExactAppleProof(track)) return null;
+  if (isReviewedCatalogSource(track?.source) || reviewedExactAppleProof(track) || catalogRecordingPlayback.has(track)) return null;
   if (!track || trackHasDirectYouTubeVideo(track) || !youtubeApiAvailable) return false;
   const endpoint = resolveMusicApiEndpoint("SONIC_YOUTUBE_SEARCH_API_URL", "/api/youtube-search");
   if (!endpoint) return false;
@@ -39562,6 +39593,7 @@ function stopPlaybackForFeedbackTransition(reason = "feedback_transition") {
   // swap and start that old track again.
   recommendationPreviewRenderToken += 1;
   previewRecoveryToken += 1;
+  previewRecoveryBusy = false;
   return stopAllActivePlayback({ reason });
 }
 
@@ -39850,6 +39882,7 @@ function previewAutoplayRequested() {
     audioEnabled &&
     !audioUnavailable &&
     audioVolume > 0.001 &&
+    (isNativeAppRuntime() || isAppStoreRuntimeMode() || currentActiveAppTabName() === "discover") &&
     (typeof document === "undefined" || document.visibilityState !== "hidden")
   );
 }
@@ -40166,8 +40199,10 @@ function startEmbeddedPreviewPlaybackFromUserGesture(track, preferredSource = ""
 async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false } = {}) {
   if (!track || !previewAutoplayRequested()) return false;
   const trackKey = recommendationTrackKey(track);
+  const renderToken = recommendationPreviewRenderToken;
   const isStillCurrentTrack = () =>
-    Boolean(trackKey) && recommendationTrackKey(currentRecommendation) === trackKey;
+    Boolean(trackKey) && recommendationTrackKey(currentRecommendation) === trackKey &&
+    renderToken === recommendationPreviewRenderToken;
   if (!isStillCurrentTrack()) return false;
 
   if (!hasDirectPreview) {
@@ -40183,16 +40218,19 @@ async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false 
     });
   } catch (_err) {}
 
+  const playbackAttempt = startTrackPreviewPlayback(trackPreview, { automatic: true });
+  const attemptGeneration = playbackGeneration;
+  const isStillCurrentAttempt = () => isStillCurrentTrack() && attemptGeneration === playbackGeneration;
   try {
-    const playback = await startTrackPreviewPlayback(trackPreview, { automatic: true });
-    if (!isStillCurrentTrack()) return false;
+    const playback = await playbackAttempt;
+    if (!isStillCurrentAttempt()) return false;
     if (!playback?.ok) {
       if (playback?.reason === "stale_playback") return false;
       return startPreferredEmbeddedPreviewAutoplay(track).opened;
     }
     return true;
   } catch (error) {
-    if (!isStillCurrentTrack()) return false;
+    if (!isStillCurrentAttempt()) return false;
     trackPlaybackLifecycleEvent("preview_play_failed", "audio_preview_autoplay", {
       previewKind: "direct_audio",
       automatic: true,
@@ -40369,6 +40407,7 @@ function activeRecommendationKey() {
 }
 
 function trackStillActive(track) {
+  if (catalogRecordingPlayback.has(track) || catalogRecordingPlayback.has(currentRecommendation)) return currentRecommendation === track;
   const activeKey = activeRecommendationKey();
   const trackKey = recommendationTrackKey(track);
   return Boolean(activeKey && trackKey && activeKey === trackKey);
@@ -50939,6 +50978,18 @@ function applyGenreVibeTheme(styleHint = "", { force = false } = {}) {
 }
 
 function getTrackMetadata(track) {
+  if (catalogRecordingPlayback.has(track)) {
+    const duration = trackDurationSecondsForApi(track);
+    return {
+      releaseDate: track.releaseDate || "Catálogo local",
+      duration: duration ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}` : "—",
+      musicalKey: track.musicalKey || "N/A",
+      catalogRef: `${String(track.label || "").toUpperCase().slice(0, 6)}-${track.style.toUpperCase().slice(0, 4)}`,
+      sourceLabel: trackMetadataSourceLabelFromDetails(track.trackMetadataSourceDetails),
+      sourceDetails: track.trackMetadataSourceDetails || [],
+      attribution: track.trackMetadataAttribution || null
+    };
+  }
   const lookupKey = `${track.song}|${track.artist}`;
   const details = TRACK_METADATA[lookupKey] || {};
 
@@ -57840,7 +57891,9 @@ async function renderPreview(track, options = {}) {
   const renderToken = ++recommendationPreviewRenderToken;
   const fastMode = Boolean(options.fast);
   const exactPublisherRecording = Boolean(reviewedExactAppleProof(track));
-  const exactRecordingOnly = exactPublisherRecording || options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
+  const exactCatalogReplay = catalogRecordingPlayback.has(track);
+  const exactRecordingOnly = exactPublisherRecording || exactCatalogReplay || options.exactRecordingOnly === true ||
+    weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
   const probeTimeoutMs = Math.max(
     120,
     Number(options.probeTimeoutMs) || (fastMode ? FAST_PREVIEW_PROBE_TIMEOUT_MS : PREVIEW_PROBE_TIMEOUT_MS)
@@ -57863,15 +57916,18 @@ async function renderPreview(track, options = {}) {
   setPreviewPrimaryPlaybackState("loading");
   setTrackPreviewVisualState("searching");
   stopAllActivePlayback({ reason: "render_preview" });
+  const renderPlaybackGeneration = playbackGeneration;
+  const autoplayStillRequested = () => options.autoplay !== false &&
+    playbackGeneration === renderPlaybackGeneration && previewAutoplayRequested();
   track.artistPreviewFallback = null;
   syncYouTubePreviewAttemptForTrack(track);
   const renderPreviewTrackKey = recommendationTrackKey(track);
   const isStillCurrentPreviewTrack = () =>
     renderToken === recommendationPreviewRenderToken &&
-    recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey;
+    (exactCatalogReplay ? currentRecommendation === track : recommendationTrackKey(currentRecommendation) === renderPreviewTrackKey);
   const preferredImmediateEmbed = preferredEmbeddedAutoplaySource(track);
   const shouldStartImmediateEmbed = Boolean(
-    options.autoplay !== false && previewAutoplayRequested() &&
+    autoplayStillRequested() &&
     preferredImmediateEmbed &&
     !trackHasReliableAudioPreview(track)
   );
@@ -57958,7 +58014,7 @@ async function renderPreview(track, options = {}) {
     })
     .catch(() => null);
   const needsSoundCloudEmbedLookup =
-    !exactPublisherRecording && !trackHasDirectSoundCloudTrack(track) &&
+    !exactPublisherRecording && !exactCatalogReplay && !trackHasDirectSoundCloudTrack(track) &&
     Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
     const soundCloudLookup = waitForPromiseWithTimeout(
@@ -58022,7 +58078,7 @@ async function renderPreview(track, options = {}) {
   }
   if (!playablePreview && !hasExternalPlaybackRoute && fastMode && options.deferRetry !== false) {
     window.setTimeout(() => {
-      if (!isStillCurrentPreviewTrack()) return;
+      if (!isStillCurrentPreviewTrack() || playbackGeneration !== renderPlaybackGeneration) return;
       void renderPreview(track, { ...options, fast: false, exactRecordingOnly }).catch(() => {});
     }, 520);
   }
@@ -58104,7 +58160,7 @@ async function renderPreview(track, options = {}) {
     }
   }
   listeningPrompt.classList.remove("hidden");
-  if (isStillCurrentPreviewTrack() && options.autoplay !== false && previewAutoplayRequested()) {
+  if (isStillCurrentPreviewTrack() && autoplayStillRequested()) {
     const autoplayStarted = await attemptRenderedPreviewAutoplay(track, {
       hasDirectPreview: Boolean(playablePreview)
     });
@@ -58169,9 +58225,10 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
   if (trackPreview.dataset.previewProbing === "true") return;
   const track = currentRecommendation;
   const surfaceSnapshot = captureRecommendationSurfaceSnapshot();
-  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
+  const archivedRecording = weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
+  const exactCatalogReplay = catalogRecordingPlayback.has(track);
   const trackKey = recommendationTrackKey(track);
-  if (exactRecordingOnly) {
+  if (archivedRecording) {
     // An error after preparation invalidates that evidence. An explicit retry
     // must re-run the exact audio check, rather than enter fuzzy discovery recovery.
     stopAllActivePlayback({ reason: `weekly_preview_${reason}` });
@@ -58200,6 +58257,13 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
   const failedPreview = normalizePreviewUrl(ownedTrackPreviewSource(track, trackPreview) || track.previewUrl);
   if (!failedPreview && !trackKey) return;
   stopAllActivePlayback({ reason: `preview_recovery_${reason}` });
+  if (exactCatalogReplay && reason !== "reported" && track.catalogReplayRetried) {
+    resetTrackPreviewElement(trackPreview);
+    trackPreview.classList.add("hidden");
+    restoreStoppedDiscoveryPreview(track);
+    return;
+  }
+  if (exactCatalogReplay) track.catalogReplayRetried = true;
 
   previewRecoveryBusy = true;
   previewRecoveryToken += 1;
@@ -58215,10 +58279,9 @@ async function recoverCurrentPreviewAfterPlaybackIssue(reason = "error") {
     adjustPreviewReliabilitySignal(track.style, -0.28);
     if (previewStatus) previewStatus.textContent = t("previewSearching");
     setTrackPreviewVisualState("searching");
-    const recovered = await renderPreview(track, { exactRecordingOnly });
+    const recovered = await renderPreview(track, { exactRecordingOnly: exactCatalogReplay });
     if (token !== previewRecoveryToken || !trackStillActive(track)) return;
-    if (!recovered && exactRecordingOnly) weeklyRecommendsController?.playbackUnavailable?.(track);
-    if (!recovered && lastPrefs && !exactRecordingOnly) {
+    if (!recovered && lastPrefs && !exactCatalogReplay) {
       const replacement = await pickPlayableReplacementForPrefs(lastPrefs, {
         currentTrack: track,
         excludedTrackKeys: new Set(trackKey ? [trackKey] : []),
@@ -59908,7 +59971,7 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
   if (!track) return null;
   const key = likedTrackKeyFromEntry(track);
   if (!key) return null;
-  const catalogTrack = trackFromRecommendationKey(key);
+  const catalogTrack = !track.artist || !track.song ? trackFromRecommendationKey(key) : null;
   const base = { ...(catalogTrack || {}), ...(track || {}) };
   const artist = normalizeInlineText(base.artist || "");
   const song = normalizeInlineText(base.song || "");
@@ -59933,10 +59996,12 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
     bpm: normalizedTrack.bpm,
     energy: normalizedTrack.energy,
     label: normalizedTrack.label,
-    isrc: recordingIdentityKeys(base).some(key => key.startsWith("__recording_isrc__"))
-      ? String(base.isrc || base.recordingIsrc).replace(/[-\s]/g, "").toUpperCase() : "",
-    recordingMusicBrainzId: recordingIdentityKeys(base).some(key => key.startsWith("__recording_mbid__"))
-      ? String(base.recordingMusicBrainzId).toLowerCase() : "",
+    recordingId: catalogRecordingPlayback.get(track) || portableCatalogRecordingId(track.recordingId) ||
+      (!track.key ? catalogTrackRecordingIds(track)[0] || "" : ""),
+    isrc: recordingIdentityKeys(track).some(key => key.startsWith("__recording_isrc__"))
+      ? String(track.isrc || track.recordingIsrc).replace(/[-\s]/g, "").toUpperCase() : "",
+    recordingMusicBrainzId: recordingIdentityKeys(track).some(key => key.startsWith("__recording_mbid__"))
+      ? String(track.recordingMusicBrainzId).toLowerCase() : "",
     spotifyUrl: firstSafeExternalUrl(base.spotifyTrackUrl, base.spotifyUrl) || buildSpotifyTrackLink(normalizedTrack),
     youtubeUrl: firstSafeExternalUrl(base.youtubeTrackUrl, base.youtubeUrl) || buildYouTubeTrackLink(normalizedTrack),
     soundcloudUrl: firstSafeExternalUrl(base.soundcloudTrackUrl, base.soundcloudUrl) || buildSoundCloudTrackLink(normalizedTrack),
@@ -60091,14 +60156,117 @@ function webDiscoveryCopy() {
   return window.SonicDiscoveryExperience.webCopy[currentLanguage] || window.SonicDiscoveryExperience.webCopy.en;
 }
 
+function portableCatalogRecordingId(value) {
+  return typeof window !== "undefined" ? window.SonicDiscoveryExperience?.normalizeRecordingId?.(value) || "" : "";
+}
+
+function catalogTrackRecordingIds(track = {}) {
+  const metadata = catalogTrackMetadata(track);
+  const source = reviewedCatalogHttpsUrl(metadata.source_url || track.sourceUrl);
+  const appleId = source?.hostname === "music.apple.com"
+    ? source.searchParams.get("i") || (/^\/[a-z]{2}\/song\//i.test(source.pathname) ? source.pathname.split("/").at(-1) : "") : "";
+  const spotify = reviewedCatalogHttpsUrl(track.spotifyTrackUrl || track.spotifyUrl);
+  const spotifyId = spotify?.hostname === "open.spotify.com" ? spotify.pathname.match(/^\/track\/([A-Za-z0-9]{22})$/)?.[1] : "";
+  return [...new Set([
+    metadata.recording_id,
+    `apple_music:${appleId || ""}`,
+    `deezer:${track.deezerTrackId || metadata.deezer_track_id || ""}`,
+    `bandcamp:${track.bandcampTrackId || metadata.bandcamp_track_id || ""}`,
+    `soundcloud:${track.soundcloudTrackId || metadata.soundcloud_track_id || ""}`,
+    `isrc:${String(track.isrc || track.recordingIsrc || "").replace(/[-\s]/g, "").toUpperCase()}`,
+    `mbid:${String(track.recordingMusicBrainzId || "").toLowerCase()}`,
+    `spotify:${spotifyId || ""}`,
+    `youtube:${extractYouTubeVideoId(track.youtubeTrackUrl || track.youtubeUrl) || ""}`
+  ].map(portableCatalogRecordingId).filter(Boolean))];
+}
+
+function retainAlternateCatalogRecording(track, preferred) {
+  const recordingId = catalogTrackRecordingIds(track)[0];
+  if (!recordingId || catalogTrackRecordingIds(preferred).includes(recordingId)) return;
+  const key = recommendationTrackKey(track);
+  const alternatives = alternateCatalogRecordings.get(key) || new Map();
+  alternatives.set(`${track.style}:${recordingId}`, track);
+  alternateCatalogRecordings.set(key, alternatives);
+}
+
+function findCatalogReplayTrack(entry) {
+  const key = normalize(entry.key);
+  const explicitId = portableCatalogRecordingId(entry.recordingId);
+  const candidates = [currentRecommendation, ...catalog, ...CURATED_FRIENDLY_OPENING_TRACKS, ...(alternateCatalogRecordings.get(key)?.values() || [])]
+    .filter(track => track && (!entry.style || track.style === entry.style) && recommendationTrackKey(track) === key && isTrackEligibleForRecommendation(track));
+  const matchesId = (track, id) => catalogTrackRecordingIds(track).includes(id);
+  if (explicitId) return candidates.find(track => matchesId(track, explicitId)) || null;
+
+  // Older history may still have an exact platform link, recording ID or release label.
+  for (const legacyId of catalogTrackRecordingIds(entry)) {
+    const exact = candidates.find(track => matchesId(track, legacyId));
+    if (exact) return exact;
+  }
+  const label = normalize(entry.label || "");
+  const sameRelease = label ? candidates.filter(track => normalize(track.label || "") === label) : [];
+  const pool = sameRelease.length ? sameRelease : candidates;
+  return pool.find(track => reviewedCatalogRecording(track) || reviewedRecordingStyleProof(track)) || pool[0] || null;
+}
+
+async function resolveCatalogReplayTrack(entry, timeoutMs = 8000) {
+  const candidate = findCatalogReplayTrack(entry);
+  const needsReviewedStyle = hasReviewedStyleCatalog(entry.style) && !reviewedStyleCatalogs.has(entry.style);
+  if (candidate && !needsReviewedStyle) return candidate;
+  // A legacy core row can exist before its reviewed, same-title style row arrives.
+  const style = entry.style || "";
+  const joiningStyleLoad = externalDatasetStylePromises.has(style);
+  const deadline = Date.now() + timeoutMs;
+  const loadCatalog = () => hydrateExternalDatasetPackInBackground({ style, fetchTimeoutMs: deadline - Date.now() });
+  const hydration = loadCatalog().catch(error => {
+    // An explicit open can join a short background fetch. If that fetch timed
+    // out, retry with the time left in the explicit request's own budget.
+    if (joiningStyleLoad && error?.name === "AbortError" && Date.now() < deadline) return loadCatalog();
+    throw error;
+  });
+  const loaded = await waitForPromiseWithTimeout(hydration.then(() => true), timeoutMs, false);
+  if (!loaded) throw new Error("catalog_replay_load_timeout");
+  return findCatalogReplayTrack(entry);
+}
+
+function prepareCatalogReplayTrack(track, recordingId = "") {
+  const id = portableCatalogRecordingId(recordingId) || catalogTrackRecordingIds(track)[0];
+  if (!id) return track;
+  const metadata = catalogTrackMetadata(track);
+  // Use the published asset instead of alternates cached by the discovery player.
+  const previewUrl = normalizePreviewUrl(metadata.preview_url || track.previewUrl);
+  const prepared = { ...track, recordingId: id, previewUrl, previewCandidates: previewUrl ? [previewUrl] : [], artistPreviewFallback: null };
+  const youtubeId = id.startsWith("youtube:") ? id.split(":")[1] : extractYouTubeVideoId(metadata.youtube_track_url);
+  prepared.youtubeTrackUrl = prepared.youtubeUrl = youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : "";
+  prepared.youtubeVideoCandidates = [];
+  const soundcloudUrl = metadata.soundcloud_track_url || (id.startsWith("soundcloud:") ? directSoundCloudTrackUrl(track) : "");
+  prepared.soundcloudTrackUrl = prepared.soundcloudUrl = soundcloudUrl;
+  if (id.startsWith("apple_music:")) prepared.catalogMetadata = { ...metadata, recording_id: id };
+  if (id.startsWith("deezer:")) prepared.deezerTrackId = id.split(":")[1];
+  catalogRecordingPlayback.set(prepared, id);
+  return prepared;
+}
+
+function catalogTrackShareLink(track, recordingId = "", baseUrl = SONIC_PRODUCTION_ORIGIN) {
+  return window.SonicDiscoveryExperience.buildTrackLink({
+    key: recommendationTrackKey(track), style: track.style, language: currentLanguage, baseUrl,
+    recordingId: recordingId || catalogRecordingPlayback.get(track) || (!track.key ? catalogTrackRecordingIds(track)[0] : "")
+  });
+}
+
 async function shareCatalogTrack(track, button) {
   if (!track?.artist || !track?.song || !track?.style) return;
   if (button) button.disabled = true;
   try {
-    const url = window.SonicDiscoveryExperience.buildTrackLink({
-      key: recommendationTrackKey(track), style: track.style, language: currentLanguage,
-      baseUrl: isAppStoreRuntimeMode() ? SONIC_PRODUCTION_ORIGIN : currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN
-    });
+    const profile = sessionProfileKey();
+    const tab = currentActiveAppTabName();
+    let recordingId = portableCatalogRecordingId(track.recordingId);
+    if (track.key && !recordingId) {
+      const match = await resolveCatalogReplayTrack(track);
+      if (profile !== sessionProfileKey() || tab !== currentActiveAppTabName()) return;
+      if (match) recordingId = catalogTrackRecordingIds(match)[0];
+    }
+    const url = catalogTrackShareLink(track, recordingId,
+      isAppStoreRuntimeMode() ? SONIC_PRODUCTION_ORIGIN : currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN);
     const method = "clipboard";
     try {
       // Clipboard permission may be denied; retain a selectable, visible link.
@@ -60134,33 +60302,20 @@ async function openSharedCatalogTrack() {
   };
   if (request.invalid || !Object.hasOwn(STYLE_BPM_RULES, request.style)) { showStatus("missing"); return; }
   const profileKey = sessionProfileKey();
+  const generation = recommendationSessionGeneration;
   const previousTrack = currentRecommendation;
   const previousTab = currentActiveAppTabName();
+  const isCurrent = () => recommendationSessionIsCurrent(generation) && profileKey === sessionProfileKey() &&
+    previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && !recommendationRunBusy;
   showStatus("opening");
   try {
-    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog].find(track =>
-      track && track.style === request.style && recommendationTrackKey(track) === request.key && isTrackEligibleForRecommendation(track));
-    let track = resolveTrack();
-    if (!track) {
-      // A cold catalog may take longer than discovery's short interaction budget.
-      // Keep the UI usable while loading, and distinguish a network failure from
-      // a completed lookup that really did not contain the requested recording.
-      const loaded = await waitForPromiseWithTimeout(
-        hydrateExternalDatasetPackInBackground({ style: request.style }).then(() => true), 30000, false
-      );
-      if (!loaded) {
-        if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && !recommendationRunBusy) showStatus("loadingFailed");
-        else if (status) status.hidden = true;
-        return;
-      }
-      track = resolveTrack();
-    }
-    // A late link must never replace a newer discovery, navigation or another profile.
-    if (profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation || previousTab !== currentActiveAppTabName() || recommendationRunBusy) {
+    const found = await resolveCatalogReplayTrack(request, 30000);
+    if (!isCurrent()) {
       if (status) status.hidden = true;
       return;
     }
-    if (!track) { showStatus("missing"); return; }
+    if (!found) { showStatus("missing"); return; }
+    const track = prepareCatalogReplayTrack(found, request.recordingId);
     stopAllActivePlayback({ reason: "shared_catalog_track" });
     setActiveAppTab("discover");
     restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
@@ -60173,7 +60328,8 @@ async function openSharedCatalogTrack() {
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
     trackRecommendationEvent("shared_track_opened", track, {}, { source: "share" });
   } catch (_) {
-    if (profileKey === sessionProfileKey() && previousTrack === currentRecommendation && previousTab === currentActiveAppTabName() && !recommendationRunBusy) showStatus("loadingFailed");
+    if (isCurrent()) showStatus("loadingFailed");
+    else if (status) status.hidden = true;
   }
 }
 
@@ -60556,22 +60712,27 @@ async function openSavedLibraryTrack(entry, button) {
   const profileKey = sessionProfileKey();
   const sessionGeneration = recommendationSessionGeneration;
   const previousTrack = currentRecommendation;
+  const previousTab = currentActiveAppTabName();
+  const isCurrent = () => recommendationSessionIsCurrent(sessionGeneration) && profileKey === sessionProfileKey() &&
+    previousTrack === currentRecommendation && previousTab === currentActiveAppTabName();
   recommendationRunBusy = true;
   button.disabled = true;
   button.textContent = discoveryExperienceCopy().opening;
   prepareExplicitPreviewAudio();
   try {
-    const resolveTrack = () => [currentRecommendation, ...CURATED_FRIENDLY_OPENING_TRACKS, ...catalog]
-      .find(candidate => candidate && recommendationTrackKey(candidate) === normalize(entry.key) && isTrackEligibleForRecommendation(candidate));
-    let track = resolveTrack();
-    if (!track) {
-      await waitForPromiseWithTimeout(hydrateExternalDatasetPackInBackground({ style: entry.style || "" }), 8000, null);
-      track = resolveTrack();
-    }
-    if (!recommendationSessionIsCurrent(sessionGeneration) || profileKey !== sessionProfileKey() || previousTrack !== currentRecommendation) return;
-    if (!track || !isTrackEligibleForRecommendation(track)) {
+    const found = await resolveCatalogReplayTrack(entry);
+    if (!isCurrent()) return;
+    if (!found) {
       showToast(discoveryExperienceCopy().unavailable);
       return;
+    }
+    const track = prepareCatalogReplayTrack(found, entry.recordingId);
+    const recordingId = catalogRecordingPlayback.get(track);
+    const savedIndex = likedTrackHistory.indexOf(entry);
+    if (savedIndex >= 0 && recordingId && !entry.recordingId) {
+      likedTrackHistory[savedIndex] = { ...entry, recordingId };
+      saveProgress();
+      queueSocialSync("saved_recording_identity");
     }
     stopAllActivePlayback({ reason: "saved_library_replay" });
     setActiveAppTab("discover");
@@ -60579,7 +60740,7 @@ async function openSavedLibraryTrack(entry, button) {
     trackRecommendationEvent("saved_track_replayed", track, lastPrefs || {}, { source: "library" });
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
   } catch (_) {
-    if (recommendationSessionIsCurrent(sessionGeneration) && profileKey === sessionProfileKey()) showToast(discoveryExperienceCopy().unavailable);
+    if (isCurrent()) showToast(discoveryExperienceCopy().unavailable);
   } finally {
     if (recommendationSessionIsCurrent(sessionGeneration)) recommendationRunBusy = false;
     button.disabled = false;
@@ -61820,6 +61981,7 @@ function socialTrackRowsForSync() {
       spotifyUrl: entry.spotifyUrl || "",
       youtubeUrl: entry.youtubeUrl || "",
       soundcloudUrl: entry.soundcloudUrl || "",
+      recordingId: entry.recordingId || "",
       isrc: entry.isrc || "",
       recordingMusicBrainzId: entry.recordingMusicBrainzId || "",
       likedAt: entry.likedAt || ""
@@ -61849,6 +62011,7 @@ function socialDislikedTrackRowsForSync() {
       spotifyUrl: entry.spotifyUrl || "",
       youtubeUrl: entry.youtubeUrl || "",
       soundcloudUrl: entry.soundcloudUrl || "",
+      recordingId: entry.recordingId || "",
       isrc: entry.isrc || "",
       recordingMusicBrainzId: entry.recordingMusicBrainzId || "",
       dislikedAt: entry.likedAt || ""
@@ -61883,6 +62046,7 @@ function socialLikedTrackFromRow(row = {}) {
     spotifyUrl: metadata.spotifyUrl || "",
     youtubeUrl: metadata.youtubeUrl || "",
     soundcloudUrl: metadata.soundcloudUrl || "",
+    recordingId: metadata.recordingId || "",
     isrc: metadata.isrc || "",
     recordingMusicBrainzId: metadata.recordingMusicBrainzId || ""
   };
@@ -61903,6 +62067,7 @@ function socialDislikedTrackFromRow(row = {}) {
     spotifyUrl: metadata.spotifyUrl || "",
     youtubeUrl: metadata.youtubeUrl || "",
     soundcloudUrl: metadata.soundcloudUrl || "",
+    recordingId: metadata.recordingId || "",
     isrc: metadata.isrc || "",
     recordingMusicBrainzId: metadata.recordingMusicBrainzId || ""
   };
@@ -61989,7 +62154,7 @@ function resetLibrarySyncState() {
 
 function libraryHistorySignature() {
   return JSON.stringify([likedTrackHistory, dislikedTrackHistory, libraryRemovedTrackHistory].map(entries =>
-    entries.map(entry => [likedTrackKeyFromEntry(entry), entry.likedAt || ""]).sort((a, b) => a[0].localeCompare(b[0]))
+    entries.map(entry => [likedTrackKeyFromEntry(entry), entry.likedAt || "", entry.recordingId || ""]).sort((a, b) => a[0].localeCompare(b[0]))
   ));
 }
 
@@ -62133,7 +62298,8 @@ function mergeCloudLibraryEntries(entries = [], sentiment = "liked") {
     if (!entry || !key) continue;
     const histories = [["liked", likedTrackHistory], ["disliked", dislikedTrackHistory], ["removed", libraryRemovedTrackHistory]];
     const existing = histories.flatMap(([type, items]) => items.filter(item => likedTrackKeyFromEntry(item) === key).map(item => ({ type, item })));
-    if (existing.some(({ type, item }) => date(item) > date(entry) || (date(item) === date(entry) && priority[type] >= priority[sentiment]))) continue;
+    if (existing.some(({ type, item }) => date(item) > date(entry) || (date(item) === date(entry) &&
+      (priority[type] > priority[sentiment] || (type === sentiment && (item.recordingId || !entry.recordingId)))))) continue;
     likedTrackHistory = likedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
     dislikedTrackHistory = dislikedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
     libraryRemovedTrackHistory = libraryRemovedTrackHistory.filter(item => likedTrackKeyFromEntry(item) !== key);
@@ -62787,9 +62953,10 @@ async function resumeSocialDiscussionAfterLogin() {
   } else {
     const saved = context.track;
     if (!saved?.artist || !saved?.song || !Object.hasOwn(STYLE_BPM_RULES, saved.style)) return false;
-    const key = recommendationTrackKey(saved);
-    const track = [currentRecommendation, ...catalog].find(item => item && item.style === saved.style && recommendationTrackKey(item) === key) || saved;
-    if (!isTrackEligibleForRecommendation(track)) return false;
+    const recordingId = portableCatalogRecordingId(saved.recordingId) || catalogTrackRecordingIds(saved)[0];
+    const found = findCatalogReplayTrack({ key: recommendationTrackKey(saved), style: saved.style, recordingId }) || saved;
+    if (!isTrackEligibleForRecommendation(found)) return false;
+    const track = prepareCatalogReplayTrack(found, recordingId);
     stopAllActivePlayback({ reason: "discussion_login_return" });
     restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null }, { restartPreview: false });
     socialCommentsState.videoSource = "track";
@@ -62817,7 +62984,7 @@ function openSocialDiscussion(kind = "track") {
 
 function socialTrackShareUrl(track) {
   if (!track?.artist || !track?.song || !track?.style) return "";
-  return window.SonicDiscoveryExperience.buildTrackLink({ key: recommendationTrackKey(track), style: track.style, language: currentLanguage, baseUrl: currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN });
+  return catalogTrackShareLink(track, "", currentAppUrl()?.href || SONIC_PRODUCTION_ORIGIN);
 }
 
 function socialVideoShareUrl(videoId) {
@@ -67464,7 +67631,8 @@ bind(previewIssueBtn, "click", async () => {
   if (!track) return;
   const soundcloudWasOpen = soundcloudPreviewWrap && !soundcloudPreviewWrap.classList.contains("hidden");
   const generation = stopAllActivePlayback({ reason: "preview_issue" });
-  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
+  const exactRecordingOnly = weeklyRecommendsController?.requiresExactRecording?.(track) === true ||
+    friendsRequiresExactRecording(track) || catalogRecordingPlayback.has(track);
   if (exactRecordingOnly) {
     await recoverCurrentPreviewAfterPlaybackIssue("reported");
     return;

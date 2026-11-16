@@ -104,6 +104,7 @@ vm.runInContext(`
   var fastFeedbackSwapToken = 0;
   var fastSuggestionQueueRefreshToken = 0;
   var previewRecoveryToken = 0;
+  var previewRecoveryBusy = false;
   var recommendationDetailRenderToken = 0;
   var recommendationPreviewRenderToken = 0;
   var curationUserSeed = "shared-seed";
@@ -197,8 +198,10 @@ assert.equal(context.recommendationSessionGeneration, firstGeneration + 1, "Reac
 assert.equal(context.openingRotationGeneration, firstOpeningGeneration, "The same identity may keep its rotation slot");
 assert.equal(context.openingRotationSlot, 91);
 
+context.previewRecoveryBusy = true;
 context.beginRecommendationSession(googleB);
 assert.equal(context.activeRecommendationSessionIdentity, "google:user-b");
+assert.equal(context.previewRecoveryBusy, false, "Changing accounts must release the previous preview recovery");
 assert.equal(context.openingRotationGeneration, firstOpeningGeneration + 1);
 assert.equal(context.openingRotationSlot, null, "Changing accounts must request a fresh opening slot");
 assert.equal(context.curationUserSeed, "", "Changing accounts must drop the previous seed cache");

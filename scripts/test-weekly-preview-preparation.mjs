@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const { chromium } = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
+const engines = await import(process.env.SONIC_PLAYWRIGHT_MODULE || "playwright");
+const engine = process.env.SONIC_BROWSER_ENGINE || "chromium";
 const app = await readFile(process.env.SONIC_WEEKLY_PREPARATION_APP_PATH || new URL("../app.js", import.meta.url), "utf8");
 function functionSource(name) {
   const start = app.search(new RegExp(`(?:^|\\n)(?:async )?function ${name}\\(`));
@@ -25,14 +26,19 @@ header.writeUInt32LE(16, 16); header.writeUInt16LE(1, 20); header.writeUInt16LE(
 header.writeUInt32LE(8000, 24); header.writeUInt32LE(16000, 28); header.writeUInt16LE(2, 32); header.writeUInt16LE(16, 34);
 header.write("data", 36); header.writeUInt32LE(pcm.length, 40);
 const wav = Buffer.concat([header, pcm]);
-const browser = await chromium.launch({ headless: true, ...(process.env.SONIC_CHROMIUM_EXECUTABLE ? { executablePath: process.env.SONIC_CHROMIUM_EXECUTABLE } : {}) });
+const browser = await engines[engine].launch({ headless: true, ...(engine === "chromium" && process.env.SONIC_CHROMIUM_EXECUTABLE ? { executablePath: process.env.SONIC_CHROMIUM_EXECUTABLE } : {}) });
 
 async function fixture() {
   const page = await browser.newPage();
-  await page.route("https://weekly-media.fixture.test/**", route => route.request().url().includes("dead")
-    ? route.fulfill({ status: 404, body: "Unavailable recording" })
-    : route.fulfill({ contentType: "audio/wav", body: wav, headers: { "Access-Control-Allow-Origin": "*" } }));
-  await page.setContent('<audio id="trackPreview"></audio><button id="playFixture" onclick="trackPreview.play()">Play exact recording</button>');
+  await page.route("https://weekly-media.fixture.test/**", route => {
+    const { pathname } = new URL(route.request().url());
+    if (pathname === "/") {
+      return route.fulfill({ contentType: "text/html", body: '<audio id="trackPreview"></audio><button id="playFixture" onclick="trackPreview.play()">Play exact recording</button>' });
+    }
+    if (pathname === "/ready.wav") return route.fulfill({ contentType: "audio/wav", body: wav });
+    return route.fulfill({ status: 404, body: "Unavailable recording" });
+  });
+  await page.goto("https://weekly-media.fixture.test/");
   await page.evaluate(() => {
     window.trace = { metadata: [], presented: 0, stats: 0, events: [], restores: 0, plays: 0, renderOptions: [], activeLookups: 0, peakLookups: 0 };
     window.mode = {};
@@ -43,6 +49,8 @@ async function fixture() {
     HTMLMediaElement.prototype.play = function () { trace.plays++; return originalPlay.call(this); };
     Object.assign(window, {
       catalog: [], CURATED_FRIENDLY_OPENING_TRACKS: [], trackPreview: document.getElementById("trackPreview"),
+      // Synthetic edition rows have no proof in the reviewed provider catalogs.
+      isReviewedCatalogSource: () => false, reviewedExactAppleProof: () => null,
       currentRecommendation: { artist: "Previous Artist", song: "Previous Recording", style: "house" },
       recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
       recommendationSessionGeneration: 1, firstRecommendationCompleted: false, lastPrefs: null,
@@ -227,7 +235,8 @@ try {
     Object.assign(window, {
       previewPanel: document.getElementById("previewPanel"), previewStatus: document.getElementById("previewStatus"),
       trackPreview: document.getElementById("trackPreview"), listeningPrompt: document.getElementById("listeningPrompt"),
-      previewPlayBtn: document.getElementById("previewPlayBtn"), recommendationPreviewRenderToken: 0,
+      previewPlayBtn: document.getElementById("previewPlayBtn"), recommendationPreviewRenderToken: 0, playbackGeneration: 0,
+      catalogRecordingPlayback: new WeakMap(),
       FAST_PREVIEW_PROBE_TIMEOUT_MS: 120, PREVIEW_PROBE_TIMEOUT_MS: 120, FAST_PREVIEW_PROBE_LIMIT: 1,
       FAST_RECOMMENDATION_PREVIEW_TIMEOUT_MS: 120, FAST_OPTIONAL_API_TIMEOUT_MS: 120,
       currentRecommendation: { artist: "Edition Artist", song: "Unavailable exact recording", style: "house" },

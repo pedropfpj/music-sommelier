@@ -1,19 +1,16 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import vm from "node:vm";
+import { createAppRuntimeTestContext } from "./app-runtime-test-harness.mjs";
 
 const source = await readFile(process.env.SONIC_SAVED_PLAYBACK_APP_PATH || new URL("../app.js", import.meta.url), "utf8");
-const from = source.indexOf("async function openSavedLibraryTrack(");
-const to = source.indexOf("function renderLikedTrackHistory(", from);
-assert.ok(from >= 0 && to > from);
-const runtime = source.slice(from, to);
 const target = { artist: "Saved artist", song: "Saved recording", style: "house" };
 const key = track => track ? `${track.artist}::${track.song}`.toLowerCase() : "";
 
 function harness({ available = false } = {}) {
   const state = { profile: "profile-a", calls: [], release: null, reject: null };
   const button = { disabled: false, textContent: "Listen here" };
-  const context = vm.createContext({
+  const context = createAppRuntimeTestContext(source);
+  Object.assign(context, {
     recommendationRunBusy: false,
     swipeFeedbackBusy: false,
     firstRecommendationBusy: false,
@@ -21,6 +18,7 @@ function harness({ available = false } = {}) {
     recommendationSessionIsCurrent: generation => generation === context.recommendationSessionGeneration,
     sessionProfileKey: () => state.profile,
     currentRecommendation: null,
+    currentActiveAppTabName: () => "profile",
     catalog: available ? [target] : [],
     CURATED_FRIENDLY_OPENING_TRACKS: [],
     lastPrefs: null,
@@ -38,7 +36,6 @@ function harness({ available = false } = {}) {
     discoveryExperienceCopy: () => ({ opening: "Opening…", play: "Listen here", unavailable: "Saved recording unavailable" }),
     showToast: message => state.calls.push(message)
   });
-  vm.runInContext(runtime, context);
   return { context, state, button, open: () => context.openSavedLibraryTrack({ key: key(target), style: target.style }, button) };
 }
 

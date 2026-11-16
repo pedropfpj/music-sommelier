@@ -265,6 +265,7 @@ function testNegativeFeedbackInvalidatesRejectedPreviewWork() {
   const context = vm.createContext({
     recommendationPreviewRenderToken: 4,
     previewRecoveryToken: 7,
+    previewRecoveryBusy: true,
     stopAllActivePlayback({ reason }) {
       stoppedReasons.push(reason);
       return 12;
@@ -275,6 +276,7 @@ function testNegativeFeedbackInvalidatesRejectedPreviewWork() {
   const generation = context.stopPlaybackForFeedbackTransition("swipe_pass");
   assert.equal(context.recommendationPreviewRenderToken, 5);
   assert.equal(context.previewRecoveryToken, 8);
+  assert.equal(context.previewRecoveryBusy, false);
   assert.deepEqual(stoppedReasons, ["swipe_pass"]);
   assert.equal(generation, 12);
 }

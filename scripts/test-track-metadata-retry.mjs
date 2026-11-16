@@ -68,6 +68,8 @@ for (const unavailable of [new Error("transient timeout"), { status: 503 }, { be
 {
   const requests = [];
   const context = vm.createContext({
+    // This track is a Deezer row without a reviewed provider recording.
+    isReviewedCatalogSource: () => false, reviewedExactAppleProof: () => null, catalogRecordingPlayback: new WeakMap(),
     isTrustedSlambientCatalogTrack: () => false, isTrustedCuratedCatalogTrack: () => false,
     hasReliableBpmForTrack: () => false, normalizePreviewUrl: () => "", previewUrlIsExpired: () => false,
     registerPreviewCandidate() {}, hasStrictWhitelist: () => false, STRICT_ARTIST_MATCH_STYLES: new Set(),

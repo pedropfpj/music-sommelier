@@ -2,11 +2,13 @@
 
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const require = createRequire(import.meta.url);
 const appSource = await readFile(path.join(rootDir, "app.js"), "utf8");
 
 function functionSource(name) {
@@ -66,15 +68,18 @@ function functionSource(name) {
 }
 
 const ctx = {
+  window: { SonicDiscoveryExperience: require("../discovery-experience.js") }, URL, catalogRecordingPlayback: new WeakMap(),
   seenTrackKeysMemory: new Set(), seenRecordingIdsMemory: new Set(), knownTrackTitlesMemory: new Set(), dislikedTrackHistory: [],
   catalog: [], CURATED_FRIENDLY_OPENING_TRACKS: [],
-  registerSeenArtist() {}, rememberRecentlyPresentedArtist() {}, saveProgress() {},
+  registerSeenArtist() {}, rememberRecentlyPresentedArtist() {}, saveProgress() {}, clearRecommendationRecovery() {},
+  reviewedCatalogRecording: () => null,
   anonymousTrackWasRecentlyExposed: () => false,
   trackFromRecommendationKey: () => null, normalizeInlineText: value => String(value || '').trim(),
   musicUniverseOfTrack: () => 'electronic', firstSafeExternalUrl: () => '',
   buildSpotifyTrackLink: () => '', buildYouTubeTrackLink: () => '', buildSoundCloudTrackLink: () => ''
 };
 const names = ['normalize', 'normalizeTitle', 'strictTitleMatch', 'recommendationTrackKey',
+  'portableCatalogRecordingId', 'catalogTrackRecordingIds', 'catalogTrackMetadata', 'reviewedCatalogHttpsUrl', 'extractYouTubeVideoId',
   'recordingIdentityKeys', 'rememberRecordingIdentity', 'migrateExplicitKnownTrackTitles',
   'trackMatchesKnownTitle', 'trackBlockedByKnownSignals', 'markRecommendationPresented',
   'likedTrackKeyFromEntry', 'likedTrackHistoryEntry', 'canonicalArtistIdentity', 'artistMatchKey',
@@ -112,6 +117,7 @@ assert.equal(ctx.seenTrackKeysMemory.size, 2, "Supplemental recording IDs must n
 assert.equal(ctx.trackBlockedByKnownSignals({...original, artist: 'Alternate Credit', song: 'Reissued name'}), true, 'Recording identity survives JSON persistence');
 assert.equal(ctx.recordingIdentityKeys({isrc: '12345', musicBrainzId: 'album-id'}).length, 0, 'Album and invalid identifiers must not suppress tracks');
 assert.equal(ctx.likedTrackHistoryEntry(original).isrc, 'GBABC2400001', 'Saved-track normalization preserves valid recording IDs');
+assert.equal(ctx.likedTrackHistoryEntry(original).recordingId, 'isrc:GBABC2400001', 'Saved entries retain a portable exact identity');
 ctx.seenTrackKeysMemory = new Set();
 ctx.seenRecordingIdsMemory = new Set();
 assert.equal(ctx.trackBlockedByKnownSignals(original), false, 'A separate profile has separate history');
@@ -142,6 +148,7 @@ const route = {firstRecommendationPromise: null, firstRecommendationCompleted: t
   currentRecommendation: {style: 'minimal_deep_tech'}, lastPrefs: {style: 'minimal_deep_tech'},
   prefsFromManualControls: () => route.lastPrefs, manualPrefsAreActive: () => true,
   normalizeRecommendationPrefs: p => p, recommendationContextKey: p => JSON.stringify(p),
+  hasReviewedStyleCatalog: () => false,
   selectableSwipeStyle: s => s, explicitSwipeAnchorStyle: () => route.anchor,
   anchor: 'minimal_deep_tech', filtered: 0, surprise: 0,
   tryRunInstantPrimaryRecommendation: () => false,

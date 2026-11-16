@@ -34,6 +34,8 @@ async function fixture({ exact = false } = {}) {
       lastPrefs: { style: "house" },
       currentDiscovery: null,
       recommendationPreviewRenderToken: 0,
+      playbackGeneration: 0,
+      catalogRecordingPlayback: new WeakMap(),
       previewRecoveryBusy: false,
       previewRecoveryToken: 0,
       FAST_PREVIEW_PROBE_TIMEOUT_MS: 120,

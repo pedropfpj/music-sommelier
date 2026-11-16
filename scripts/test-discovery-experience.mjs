@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { readFile } from "node:fs/promises";
-import vm from "node:vm";
+import { createAppRuntimeTestContext } from "./app-runtime-test-harness.mjs";
 const require = createRequire(import.meta.url);
 const { selectTracks } = require("../discovery-experience.js");
 const rows = [
@@ -16,13 +15,12 @@ assert.equal(selectTracks(rows)[0].key, "b");
 assert.equal(selectTracks(rows, "", "title")[0].key, "a");
 assert.equal(selectTracks(rows, "", "artist")[0].key, "b");
 assert.equal(JSON.stringify(rows), before, "Search and sort must not mutate saved history");
-const source = await readFile(new URL("../app.js", import.meta.url), "utf8");
-const start = source.indexOf("async function openSavedLibraryTrack(");
-const end = source.indexOf("\nfunction renderLikedTrackHistory", start);
 const makeContext = () => {
   const played = [];
   const good = { key: "a", artist: "Zélia", song: "Água", style: "house", eligible: true };
-  const state = { recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
+  const state = createAppRuntimeTestContext();
+  Object.assign(state, {
+    recommendationRunBusy: false, swipeFeedbackBusy: false, firstRecommendationBusy: false,
     currentRecommendation: null, currentLocale: () => "pt", currentLanguage: "pt", profile: "one",
     recommendationSessionGeneration: 1,
     recommendationSessionIsCurrent: generation => state.recommendationSessionGeneration === generation,
@@ -30,10 +28,11 @@ const makeContext = () => {
     prepareExplicitPreviewAudio() { state.audioPrepared = true; }, normalize: value => value, CURATED_FRIENDLY_OPENING_TRACKS: [good],
     catalog: [{ ...good, eligible: false }], recommendationTrackKey: track => track.key,
     isTrackEligibleForRecommendation: track => track.eligible, hydrateExternalDatasetPackInBackground: async () => {},
+    activeTab: "profile", currentActiveAppTabName: () => state.activeTab,
     waitForPromiseWithTimeout: promise => promise, setActiveAppTab(tab) { state.activeTab = tab; },
     stopAllActivePlayback() {}, restoreRecommendationSurfaceSnapshot: value => played.push(value.track),
-    trackRecommendationEvent() {}, lastPrefs: {}, showToast() {}, document: { getElementById: () => null } };
-  vm.createContext(state); vm.runInContext(source.slice(start, end), state);
+    trackRecommendationEvent() {}, likedTrackHistory: [], lastPrefs: {}, showToast() {}, document: { getElementById: () => null }
+  });
   return { state, played };
 };
 let { state, played } = makeContext();
@@ -49,4 +48,10 @@ state.hydrateExternalDatasetPackInBackground = async () => { state.profile = "tw
 await state.openSavedLibraryTrack({ key: "a" }, {});
 assert.equal(played.length, 0, "A delayed library lookup must not cross signed-in profiles");
 assert.equal(state.recommendationRunBusy, false);
-console.log("Discovery experience passed: accented search, multi-term match, localized style search, stable saved data, replay and profile isolation.");
+state.CURATED_FRIENDLY_OPENING_TRACKS = [];
+state.catalog = [];
+state.hydrateExternalDatasetPackInBackground = async () => { state.activeTab = "recommends"; state.catalog.push({ key: "a", eligible: true }); };
+await state.openSavedLibraryTrack({ key: "a" }, {});
+assert.equal(played.length, 0, "A delayed library lookup must leave the newer tab open");
+assert.equal(state.activeTab, "recommends");
+console.log("Discovery experience passed: accented search, multi-term match, localized style search, stable saved data, replay, profile isolation and tab isolation.");

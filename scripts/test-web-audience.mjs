@@ -16,6 +16,13 @@ assert.equal(new URL(link).hash, '');
 for (const invalid of ['https://site.test/?track=https://evil.test/audio.mp3&style=house', 'https://site.test/?track=ok&style=../house', 'https://site.test/?track=&style=house']) assert.equal(experience.parseTrackLink(invalid).invalid, true);
 assert.equal(experience.parseTrackLink('https://site.test/'), null);
 assert.throws(() => experience.buildTrackLink({ key, style: 'house', baseUrl: 'javascript:alert(1)' }));
+const variantId = 'apple_music:1348713422';
+const exactLink = experience.buildTrackLink({ key, style: 'house', language: 'pt', recordingId: variantId });
+assert.deepEqual(experience.parseTrackLink(exactLink), { key, style: 'house', recordingId: variantId });
+for (const suffix of ['&recording=apple_music:0', '&recording=https://wrong.test/preview.m4a']) {
+  assert.equal(experience.parseTrackLink(`${link}${suffix}`).invalid, true);
+}
+assert.equal(experience.parseTrackLink(`${exactLink}&recording=apple_music%3A1596163657`).invalid, true);
 
 function context(url = link) {
   const ctx = createAppRuntimeTestContext(), nodes = new Map();
@@ -82,6 +89,36 @@ await ctx.openSharedCatalogTrack();
 assert.ok(ctx.waitBudget > 8000 && ctx.waitBudget <= 30000, 'Hung requests still have a bounded wait');
 assert.equal(ctx.currentRecommendation, null);
 assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.loadingFailed);
+
+({ ctx, node } = context(exactLink));
+const olderEdition = { ...track, catalogMetadata: { recording_id: 'apple_music:1596163657' } };
+const selectedEdition = { ...track, catalogMetadata: { recording_id: variantId } };
+ctx.catalog = [olderEdition];
+ctx.hydrateExternalDatasetPackInBackground = async () => { ctx.catalog.push(selectedEdition); };
+await ctx.openSharedCatalogTrack();
+assert.equal(ctx.currentRecommendation.recordingId, variantId);
+assert.equal(ctx.preview.options.autoplay, false);
+assert.equal(experience.parseTrackLink(ctx.socialTrackShareUrl(ctx.currentRecommendation)).recordingId, variantId);
+
+({ ctx, node } = context(exactLink));
+ctx.catalog = [olderEdition];
+ctx.externalDatasetStylePromises = new Map([['house', Promise.resolve()]]);
+const fetchBudgets = [];
+ctx.hydrateExternalDatasetPackInBackground = async ({ fetchTimeoutMs }) => {
+  fetchBudgets.push(fetchTimeoutMs);
+  if (fetchBudgets.length === 1) throw new DOMException('Short discovery request expired', 'AbortError');
+  ctx.catalog.push(selectedEdition);
+};
+await ctx.openSharedCatalogTrack();
+assert.equal(ctx.currentRecommendation.recordingId, variantId, 'A linked recording survives an already-running discovery fetch timing out');
+assert.equal(fetchBudgets.length, 2);
+assert.ok(fetchBudgets.every(ms => ms > 2200 && ms <= 30000));
+
+({ ctx, node } = context(exactLink));
+ctx.catalog = [olderEdition];
+await ctx.openSharedCatalogTrack();
+assert.equal(ctx.currentRecommendation, null, 'An unavailable explicit edition never uses the same-title edition');
+assert.equal(node('sharedTrackStatus').textContent, experience.webCopy.pt.missing);
 
 ({ ctx, node } = context()); let copied;
 ctx.navigator.clipboard = { writeText: async text => { copied = text; } };

@@ -19,8 +19,10 @@ const [indexSource, stylesSource, appSource, runtimeSource, manifestSource, core
 assert.match(indexSource, /<a class="skip-link" href="#appContent">/, "App needs a keyboard skip link");
 assert.match(indexSource, /<main id="appContent"[^>]*tabindex="-1"/, "Main content must be a focus target");
 assert.match(indexSource, /<h1 id="heroTitle">/, "Visible app hero must be the main heading");
-assert.equal((indexSource.match(/data-primary-app-tab/g) || []).length, 5, "Primary navigation must expose exactly five destinations");
-assert.match(indexSource, /data-app-tab-target="more"[^>]*data-primary-app-tab/, "Primary navigation must include More");
+const webPrimaryTabs = [...indexSource.matchAll(/<button[^>]*data-app-tab-target="([^"]+)"[^>]*data-primary-app-tab\b/g)].map(([, name]) => name);
+assert.deepEqual(webPrimaryTabs, ["discover", "djs", "news", "friends", "profile"], "Web navigation must keep its five primary destinations");
+assert.match(indexSource, /<section[^>]*id="profileSocialShortcuts"[^>]*data-app-tab="profile"[^>]*>[\s\S]*?<button id="profileMoreBtn"[^>]*>[\s\S]*?<\/section>/, "More must be reachable from the Web Profile");
+assert.match(appSource, /bind\(document\.getElementById\("profileMoreBtn"\), "click", \(\) => setActiveAppTab\("more"/, "The Profile shortcut must open More");
 assert.match(indexSource, /id="morePanel"[\s\S]*?data-more-tab-target="about"[\s\S]*?data-more-tab-target="support"[\s\S]*?data-more-tab-target="legal"/, "Institutional areas must live inside More");
 assert.match(indexSource, /id="swipeStartPanel"[\s\S]*?id="discoverFiltersBtn"/, "Manual filters must be reachable from Discover");
 assert.match(indexSource, /<details id="resultMoreDetails"[\s\S]*?<summary id="resultMoreSummary">/, "Secondary track tools must use progressive disclosure");
@@ -49,9 +51,9 @@ const firstRecommendationSource = appSource.slice(
   appSource.indexOf("function runInitialRecommendation"),
   appSource.indexOf("async function runPrimaryRecommendationAction")
 );
+const instantDeckAttempt = firstRecommendationSource.indexOf("tryRunInstantPrimaryRecommendation()");
 assert.ok(
-  firstRecommendationSource.indexOf("tryRunInstantPrimaryRecommendation()") <
-    firstRecommendationSource.indexOf("await waitForMinimumCatalogReady()"),
+  instantDeckAttempt >= 0 && instantDeckAttempt < firstRecommendationSource.indexOf("await waitForMinimumCatalogReady()"),
   "First recommendation must try the shipped curated deck before waiting for catalog readiness"
 );
 

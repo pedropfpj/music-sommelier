@@ -267,3 +267,52 @@ for (const style of requestedStyles.length ? requestedStyles : styles.keys()) {
   assert.ok(styles.has(style), `Unknown reviewed style: ${style}`);
   await verifyReviewedStyle(style, styles.get(style));
 }
+
+if (!requestedStyles.length || requestedStyles.includes("batida")) {
+  const reviewedPath = "data/batida-reviewed-recordings.json";
+  const bundled = JSON.parse(await read(reviewedPath));
+  const { app } = makeApp({ reviewedPath, bundled });
+  app.window.SonicDiscoveryExperience = require("../discovery-experience.js");
+  const row = JSON.parse(await read(`${runtimePath}/styles/batida.json`))
+    .find(row => row.artist === "DJ Firmeza" && row.song === "Alma do Meu Pai");
+  app.mergeExternalDatasetRows([row], "dataset_local_runtime_core");
+  const key = app.recommendationTrackKey(row);
+  const olderId = "apple_music:1596163657";
+  const reviewedId = "apple_music:1348713422";
+  const reviewedUrl = bundled.records.find(({ proof }) => proof.recordingId === reviewedId).proof.previewUrl;
+  const legacy = { key, artist: row.artist, song: row.song, style: row.style, likedAt: "2026-11-16T12:00:00.000Z" };
+  assert.equal(app.catalogTrackRecordingIds(app.findCatalogReplayTrack(legacy))[0], olderId, "Cold core contains the older edition");
+
+  const reviewed = await app.resolveCatalogReplayTrack(legacy);
+  assert.equal(app.catalogTrackRecordingIds(reviewed)[0], reviewedId, "A title-only legacy entry waits for the reviewed style");
+  assert.equal(app.catalogTrackRecordingIds(app.findCatalogReplayTrack({ ...legacy, label: row.label }))[0], olderId, "An older entry with a specific release retains that edition");
+  const oldEdition = app.findCatalogReplayTrack({ ...legacy, recordingId: olderId });
+  assert.ok(oldEdition && oldEdition !== reviewed);
+  assert.equal(app.catalog.filter(track => app.recommendationTrackKey(track) === key).length, 1, "Replay alternatives do not enter discovery");
+
+  const exact = app.prepareCatalogReplayTrack(reviewed, reviewedId);
+  assert.equal(exact.previewUrl, reviewedUrl);
+  assert.equal(app.trackDurationSecondsForApi(exact), 390);
+  oldEdition.previewUrl = reviewedUrl;
+  oldEdition.previewCandidates = [reviewedUrl];
+  const older = app.prepareCatalogReplayTrack(oldEdition, olderId);
+  assert.equal(older.previewUrl, row.preview_url, "An exact replay prefers the published asset to cached discovery alternatives");
+  assert.equal(older.previewCandidates.length, 1);
+  app.currentRecommendation = exact;
+  assert.equal(app.trackStillActive(older), false, "A callback from a different edition can't update the current player");
+
+  app.socialState = { session: { user: { id: "recording-fixture" } } };
+  app.librarySessionMatchesOnlineAccount = () => true;
+  app.likedTrackHistory = [app.likedTrackHistoryEntry(reviewed, "liked", legacy.likedAt)];
+  const [cloud] = JSON.parse(JSON.stringify(app.socialTrackRowsForSync()));
+  assert.equal(cloud.metadata.recordingId, reviewedId);
+  const restored = app.socialLikedTrackFromRow(cloud);
+  assert.equal(restored.recordingId, reviewedId);
+  assert.equal(app.sanitizeLikedTrackHistory([restored])[0].recordingId, reviewedId);
+  app.likedTrackHistory = [legacy];
+  app.mergeCloudLibraryEntries([restored]);
+  assert.equal(app.likedTrackHistory[0].recordingId, reviewedId, "Same-time sync enriches a legacy row with its exact identity");
+  app.mergeCloudLibraryEntries([legacy, { ...legacy, likedAt: "2026-11-15T12:00:00.000Z" }]);
+  assert.equal(app.likedTrackHistory[0].recordingId, reviewedId, "Old clients cannot erase exact identity with an older or same-time row");
+  console.log("PASS saved Batida editions: cold catalog, reviewed/legacy resolution, exact assets, stale playback isolation and cloud round trip.");
+}

@@ -13,22 +13,29 @@
     en: { share: "Copy track link", saveHint: "Like to save. Check your tracks’ save status in Profile.", copyManually: "Copy this link to share", close: "Close", shared: "Track link ready to share.", opening: "Opening the shared track…", opened: "A discovery found its way to you. Press play to listen.", loadingFailed: "The track could not load. Check your connection and open the link again.", missing: "This track is not available in the catalog right now. You can listen to a new discovery.", libraryHint: "Review your latest 80 likes and 80 rejected tracks. The status below confirms where these tracks are saved." },
     es: { share: "Copiar enlace de la pista", saveHint: "Dale me gusta para guardar. Comprueba el estado de tus pistas en Perfil.", copyManually: "Copia este enlace para compartir", close: "Cerrar", shared: "Enlace de la pista listo para compartir.", opening: "Abriendo la pista compartida…", opened: "Una nueva música llegó hasta ti. Pulsa reproducir para escuchar.", loadingFailed: "No se pudo cargar la pista. Comprueba la conexión y abre el enlace de nuevo.", missing: "Esta pista no está disponible en el catálogo ahora. Puedes escuchar un nuevo descubrimiento.", libraryHint: "Revisa tus últimos 80 likes y 80 descartes. El estado de abajo confirma dónde están guardadas estas pistas." }
   };
+  function normalizeRecordingId(value) {
+    if (typeof value !== "string") return "";
+    return /^(?:(?:apple_music|bandcamp|soundcloud|deezer):[1-9]\d{0,19}|spotify:[A-Za-z0-9]{22}|youtube:[A-Za-z0-9_-]{11}|isrc:[A-Z]{2}[A-Z0-9]{3}\d{7}|mbid:[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})$/.test(value) ? value : "";
+  }
   function parseTrackLink(value) {
     try {
       const url = new URL(value);
       if (!url.searchParams.has("track")) return null;
       const key = url.searchParams.get("track") || "";
       const style = url.searchParams.get("style") || "";
+      const recordingId = normalizeRecordingId(url.searchParams.get("recording"));
       if (!key || key.length > 300 || !/^[a-z0-9_ ]+$/.test(key) || !/^[a-z][a-z0-9_]{0,79}$/.test(style)) return { invalid: true };
-      return { key, style };
+      if (url.searchParams.has("recording") && (!recordingId || url.searchParams.getAll("recording").length !== 1)) return { invalid: true };
+      return recordingId ? { key, style, recordingId } : { key, style };
     } catch (_) { return null; }
   }
-  function buildTrackLink({ key, style, language = "en", baseUrl = "https://sonicsearch.app/" }) {
+  function buildTrackLink({ key, style, recordingId = "", language = "en", baseUrl = "https://sonicsearch.app/" }) {
     // Share a catalog identity, never a user-supplied media URL or profile data.
     const url = new URL("/", baseUrl);
     if (!/^https?:$/.test(url.protocol)) throw new Error("Invalid share origin");
     url.searchParams.set("track", key);
     url.searchParams.set("style", style);
+    if (recordingId) url.searchParams.set("recording", recordingId);
     url.searchParams.set("lang", ["pt", "en", "es"].includes(language) ? language : "en");
     const parsed = parseTrackLink(url.href);
     if (!parsed || parsed.invalid) throw new Error("Invalid catalog identity");
@@ -72,7 +79,7 @@
     root.addEventListener("sonic:online-session-changed", render);
     render();
   }
-  const api = { copy, webCopy, normalize, selectTracks, parseTrackLink, buildTrackLink, mount };
+  const api = { copy, webCopy, normalize, normalizeRecordingId, selectTracks, parseTrackLink, buildTrackLink, mount };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.SonicDiscoveryExperience = api;
 })(typeof window !== "undefined" ? window : globalThis);
