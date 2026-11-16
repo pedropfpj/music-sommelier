@@ -243,7 +243,6 @@ const SONIC_NEWS_I18N = {
     event: "EVENTO",
     when: "Quando",
     where: "Onde",
-    noEventDate: "Sem data de evento",
     noLocation: "Local não informado",
     news: "Notícia",
     upcoming: "Próximo evento",
@@ -325,7 +324,6 @@ const SONIC_NEWS_I18N = {
     event: "EVENT",
     when: "When",
     where: "Where",
-    noEventDate: "No event date",
     noLocation: "Location not provided",
     news: "News",
     upcoming: "Upcoming event",
@@ -407,7 +405,6 @@ const SONIC_NEWS_I18N = {
     event: "EVENTO",
     when: "Cuándo",
     where: "Dónde",
-    noEventDate: "Sin fecha del evento",
     noLocation: "Lugar no informado",
     news: "Noticia",
     upcoming: "Próximo evento",
@@ -4849,7 +4846,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261116discoveryNext3";
+const SONIC_APP_BUILD_ID = "20261117unified1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -41900,8 +41897,8 @@ function sonicNewsLocale() {
 }
 
 function sonicNewsDate(value = "", options = {}) {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "";
+  const date = value instanceof Date ? value : sonicArticleDateValue(value);
+  if (!date) return "";
   try {
     return new Intl.DateTimeFormat(sonicNewsLocale(), options).format(date);
   } catch (_error) {
@@ -41913,9 +41910,14 @@ function sonicArticleLocation(article = {}) {
   return [article.venueName, article.city, article.state].map((value) => String(value || "").trim()).filter(Boolean).join(" · ");
 }
 
-function sonicArticleDateValue(value = "") {
-  const date = new Date(value);
-  return Number.isFinite(date.getTime()) ? date : null;
+function sonicArticleDateValue(value) {
+  if (typeof value !== "string") return null;
+  const timestamp = value.trim();
+  if (!/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/i.test(timestamp)) return null;
+  const date = new Date(timestamp);
+  // Date can roll an out-of-range day into the next month.
+  const calendarDay = new Date(timestamp.slice(0, 10));
+  return Number.isFinite(date.getTime()) && calendarDay.getUTCDate() === Number(timestamp.slice(8, 10)) ? date : null;
 }
 
 function sonicSameCalendarDay(firstDate, secondDate) {
@@ -41953,9 +41955,13 @@ function sonicArticlePublishedLabel(article = {}) {
   }) || sonicNewsCopy("dateMissing");
 }
 
-function sonicArticleEventDate(article = {}, { includeTime = false } = {}) {
+function sonicArticleEventDates(article = {}) {
   const startsAt = sonicArticleDateValue(article.eventStartsAt);
   const endsAt = sonicArticleDateValue(article.eventEndsAt);
+  return { startsAt, endsAt: startsAt && endsAt && endsAt >= startsAt ? endsAt : null };
+}
+
+function sonicArticleEventDate({ startsAt, endsAt }, { includeTime = false } = {}) {
   if (!startsAt) return "";
   if (includeTime && endsAt && sonicSameCalendarDay(startsAt, endsAt)) {
     const date = sonicNewsDate(startsAt, { dateStyle: "long" });
@@ -41971,11 +41977,9 @@ function sonicArticleEventDate(article = {}, { includeTime = false } = {}) {
   return endLabel && endLabel !== startLabel ? `${startLabel} — ${endLabel}` : startLabel;
 }
 
-function sonicArticleEventStatus(article = {}) {
-  const startsAt = sonicArticleDateValue(article.eventStartsAt);
-  const endsAt = sonicArticleDateValue(article.eventEndsAt);
-  const now = Date.now();
+function sonicArticleEventStatus({ startsAt, endsAt }) {
   if (!startsAt) return { key: "news", label: sonicNewsCopy("news") };
+  const now = Date.now();
   if (startsAt.getTime() > now) return { key: "upcoming", label: sonicNewsCopy("upcoming") };
   if (endsAt && endsAt.getTime() >= now) return { key: "ongoing", label: sonicNewsCopy("ongoing") };
   return { key: "ended", label: sonicNewsCopy("ended") };
@@ -42035,7 +42039,7 @@ function pickSonicArticleVisual(article = {}, usedImageKeys = new Set()) {
 
 function sonicArticleMeta(article = {}) {
   const location = sonicArticleLocation(article);
-  const date = sonicArticleEventDate(article) || sonicArticlePublishedLabel(article);
+  const date = sonicArticleEventDate(sonicArticleEventDates(article)) || sonicArticlePublishedLabel(article);
   return [location, date].filter(Boolean).join(" · ") || sonicNewsCopy("headingTitle");
 }
 
@@ -42051,7 +42055,8 @@ function appendSonicEditorialFact(list, label, value) {
 }
 
 function createSonicEditorialCard(article = {}, articleIndex = 0, { usedImageKeys = new Set() } = {}) {
-  const eventStatus = sonicArticleEventStatus(article);
+  const eventDates = sonicArticleEventDates(article);
+  const eventStatus = sonicArticleEventStatus(eventDates);
   const visual = pickSonicArticleVisual(article, usedImageKeys);
   const card = document.createElement("button");
   card.type = "button";
@@ -42127,22 +42132,24 @@ function createSonicEditorialCard(article = {}, articleIndex = 0, { usedImageKey
   publicationDate.textContent = sonicNewsCopy("publishedOn", { date: sonicArticlePublishedLabel(article) });
   publication.append(publicationLabel, publicationDate);
 
-  const event = document.createElement("section");
-  event.className = "sonic-editorial-event";
-  const eventHead = document.createElement("div");
-  const eventLabel = document.createElement("span");
-  eventLabel.textContent = sonicNewsCopy("event");
-  const eventState = document.createElement("strong");
-  eventState.textContent = eventStatus.label;
-  eventHead.append(eventLabel, eventState);
-  const eventName = document.createElement("h6");
-  eventName.textContent = sonicArticleEventName(article);
-  const eventFacts = document.createElement("dl");
-  appendSonicEditorialFact(eventFacts, sonicNewsCopy("when"), sonicArticleEventDate(article) || sonicNewsCopy("noEventDate"));
-  appendSonicEditorialFact(eventFacts, sonicNewsCopy("where"), sonicArticleLocation(article) || sonicNewsCopy("noLocation"));
-  event.append(eventHead, eventName, eventFacts);
-
-  copy.append(kicker, title, excerpt, publication, event);
+  copy.append(kicker, title, excerpt, publication);
+  if (eventDates.startsAt) {
+    const event = document.createElement("section");
+    event.className = "sonic-editorial-event";
+    const eventHead = document.createElement("div");
+    const eventLabel = document.createElement("span");
+    eventLabel.textContent = sonicNewsCopy("event");
+    const eventState = document.createElement("strong");
+    eventState.textContent = eventStatus.label;
+    eventHead.append(eventLabel, eventState);
+    const eventName = document.createElement("h6");
+    eventName.textContent = sonicArticleEventName(article);
+    const eventFacts = document.createElement("dl");
+    appendSonicEditorialFact(eventFacts, sonicNewsCopy("when"), sonicArticleEventDate(eventDates));
+    appendSonicEditorialFact(eventFacts, sonicNewsCopy("where"), sonicArticleLocation(article) || sonicNewsCopy("noLocation"));
+    event.append(eventHead, eventName, eventFacts);
+    copy.appendChild(event);
+  }
   card.append(imageWrap, copy);
   return card;
 }
@@ -42156,7 +42163,7 @@ function normalizeSonicEditorialSearchValue(value = "") {
     .trim();
 }
 
-function sonicEditorialArchiveSearchValue(article = {}) {
+function sonicEditorialArchiveSearchValue(article, statusLabel) {
   return normalizeSonicEditorialSearchValue([
     article.title,
     article.excerpt,
@@ -42165,7 +42172,7 @@ function sonicEditorialArchiveSearchValue(article = {}) {
     article.venueName,
     article.city,
     article.state,
-    sonicArticleEventStatus(article).label,
+    statusLabel,
     sonicArticlePublishedLabel(article)
   ].filter(Boolean).join(" "));
 }
@@ -42183,14 +42190,14 @@ function sonicPublicationMonthLabel(value = "") {
 }
 
 function createSonicEditorialArchiveCard(article = {}, articleIndex = 1, { usedImageKeys = new Set() } = {}) {
-  const eventStatus = sonicArticleEventStatus(article);
+  const eventStatus = sonicArticleEventStatus(sonicArticleEventDates(article));
   const visual = pickSonicArticleVisual(article, usedImageKeys);
   const card = document.createElement("button");
   card.type = "button";
   card.className = "sonic-editorial-archive-card";
   card.dataset.sonicArticleId = String(article.id || "");
   card.dataset.eventState = eventStatus.key;
-  card.dataset.archiveSearch = sonicEditorialArchiveSearchValue(article);
+  card.dataset.archiveSearch = sonicEditorialArchiveSearchValue(article, eventStatus.label);
   card.style.setProperty("--news-index", String(Math.min(articleIndex, 10)));
   card.setAttribute("aria-label", sonicNewsCopy("readArticle", {
     title: article.title || sonicNewsCopy("articleTitleFallback")
@@ -42516,6 +42523,10 @@ function createSonicNewsMediaFigure(media = {}) {
 function openSonicNewsReader(article = {}) {
   if (!sonicNewsReader || !article?.id) return;
   sonicEditorialState.activeArticleId = String(article.id || "");
+  const eventDates = sonicArticleEventDates(article);
+  const eventStatus = sonicArticleEventStatus(eventDates);
+  const eventDateLabel = sonicArticleEventDate(eventDates, { includeTime: true });
+  const location = sonicArticleLocation(article);
   const imageUrl = safeExternalUrl(article.coverImageUrl || "");
   const hero = document.getElementById("sonicNewsReaderHero");
   const image = document.getElementById("sonicNewsReaderImage");
@@ -42539,11 +42550,11 @@ function openSonicNewsReader(article = {}) {
   const facts = document.getElementById("sonicNewsReaderFacts");
   if (facts) {
     facts.innerHTML = "";
-    [
-      [sonicNewsCopy("factPublished"), sonicNewsDate(article.publishedAt, { dateStyle: "long", timeStyle: "short" }) || sonicNewsCopy("dateMissing")],
-      [sonicNewsCopy("factEvent"), sonicArticleEventDate(article, { includeTime: true }) || sonicNewsCopy("noEventDate")],
-      [sonicNewsCopy("factLocation"), sonicArticleLocation(article) || sonicNewsCopy("noLocation")]
-    ].forEach(([label, value]) => {
+    const published = sonicNewsDate(article.publishedAt, { dateStyle: "long", timeStyle: "short" }) || sonicNewsCopy("dateMissing");
+    const entries = [[sonicNewsCopy("factPublished"), published]];
+    if (eventDateLabel) entries.push([sonicNewsCopy("factEvent"), eventDateLabel]);
+    if (location || eventDates.startsAt) entries.push([sonicNewsCopy("factLocation"), location || sonicNewsCopy("noLocation")]);
+    entries.forEach(([label, value]) => {
       const item = document.createElement("div");
       const itemLabel = document.createElement("span");
       const itemValue = document.createElement("strong");
@@ -42609,7 +42620,6 @@ function openSonicNewsReader(article = {}) {
   const serviceSection = document.getElementById("sonicNewsReaderService");
   const serviceList = document.getElementById("sonicNewsReaderServiceList");
   const serviceTitle = document.getElementById("sonicNewsReaderServiceTitle");
-  const eventStatus = sonicArticleEventStatus(article);
   if (serviceTitle) {
     serviceTitle.textContent = eventStatus.key === "ended"
       ? sonicNewsCopy("serviceEnded")
@@ -42621,9 +42631,9 @@ function openSonicNewsReader(article = {}) {
   }
   if (serviceList) {
     serviceList.innerHTML = "";
-    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("when"), sonicArticleEventDate(article, { includeTime: true }));
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("when"), eventDateLabel);
     appendNewsReaderServiceItem(serviceList, sonicNewsCopy("hours"), article.serviceInfo?.doorsTime);
-    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("where"), sonicArticleLocation(article));
+    appendNewsReaderServiceItem(serviceList, sonicNewsCopy("where"), location);
     appendNewsReaderServiceItem(serviceList, sonicNewsCopy("address"), article.serviceInfo?.address);
     appendNewsReaderServiceItem(serviceList, sonicNewsCopy("tickets"), article.serviceInfo?.price);
     appendNewsReaderServiceItem(serviceList, sonicNewsCopy("ageRating"), article.serviceInfo?.ageRating);
@@ -42677,8 +42687,8 @@ function setNewsFormValue(id, value = "") {
 }
 
 function localDateTimeInputValue(value = "") {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "";
+  const date = sonicArticleDateValue(value);
+  if (!date) return "";
   const pad = (number) => String(number).padStart(2, "0");
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
