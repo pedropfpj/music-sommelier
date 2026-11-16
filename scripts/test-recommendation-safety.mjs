@@ -90,7 +90,7 @@ assert.match(
 );
 assert.match(
   instantPresenter,
-  /recommendationArtistBlockedForPresentation\(track\)[\s\S]*return false/,
+  /recommendationArtistBlockedForPresentation\(track,\s*currentRecommendation,\s*\{\s*allowPreviouslyPresented:\s*reviewedStyleAllowsTrackDepth\(requestedPrefs\.style\)\s*\}\)[\s\S]*return false/,
   "The final instant-card gate must reject a recently presented artist"
 );
 
