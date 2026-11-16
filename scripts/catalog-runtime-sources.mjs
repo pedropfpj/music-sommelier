@@ -1,6 +1,14 @@
+export const FULL_ON_NIGHT_PUBLISHER_SOURCES = [
+  "full_on_night_nightfusion_v70_20261111",
+  "full_on_night_sectar_v73_20261111"
+];
+export const HOUSE_OPENING_SOURCE = "house_opening_editorial_v31_20261110";
+
 export const CATALOG_RUNTIME_SOURCE_FILES = Array.from(new Set([
   "data/electronic_editorial_recordings_v26_20261110.csv",
   "data/full_on_night_recordings_v26_20261110.csv",
+  ...FULL_ON_NIGHT_PUBLISHER_SOURCES.map(source => `data/${source}.csv`),
+  `data/${HOUSE_OPENING_SOURCE}.csv`,
   "data/electronic_label_recordings_v25_20261105.csv",
   "data/electronic_artist_diversity_v24_20261105.csv",
   "data/electronic_editorial_v24_20261105.csv",

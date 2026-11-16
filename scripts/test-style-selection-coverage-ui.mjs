@@ -54,15 +54,15 @@ try {
   assert.equal(await hint.isVisible(), false, 'A partial core or pending shard is not zero reviewed coverage');
   assert.equal(await hint.textContent(), '');
   await style.focus(); holds.get('full_on_night').release();
-  await hint.waitFor({ state: 'visible' });
+  await page.waitForFunction(() => styleSelectionCoverageSnapshot('full_on_night').status === 'loaded');
   const fullNight = await page.evaluate(() => styleSelectionCoverageSnapshot('full_on_night'));
-  assert.deepEqual(fullNight, { status: 'loaded', artists: 1 }, 'The actual Full-on Night shard has one distinct strictly confirmed eligible artist credit');
-  assert.ok((await hint.innerText()).includes('Seleção curta: 1 artista'));
+  assert.deepEqual(fullNight, { status: 'loaded', artists: 8 }, 'The actual Full-on Night shard has eight distinct confirmed eligible artist credits');
+  assert.equal(await hint.isVisible(), false, 'Eight confirmed artist credits do not receive the short-selection warning');
   assert.equal(await style.inputValue(), 'full_on_night');
   assert.equal(await page.evaluate(() => document.activeElement === document.getElementById('style')), true, 'An asynchronous count update preserves keyboard focus');
   assert.ok((await style.getAttribute('aria-describedby')).split(/\s+/).includes('styleSelectionCoverageHint'));
   assert.equal(await hint.getAttribute('role'), 'status');
-  console.log('CHECK cold Full-on Night shard pending/loaded with one confirmed artist');
+  console.log('CHECK cold Full-on Night shard pending/loaded with eight confirmed artist credits');
   await style.selectOption('big_beat');
   await page.waitForFunction(() => styleSelectionCoverageSnapshot('big_beat').status === 'loaded');
   const bigBeat = await page.evaluate(() => styleSelectionCoverageSnapshot('big_beat'));
@@ -85,6 +85,13 @@ try {
   await page.waitForFunction(() => externalDatasetImportedStyles.has('freeform'));
   assert.equal(await style.inputValue(), 'big_beat');
   assert.equal(await hint.isVisible(), false, 'An older style response cannot overwrite the newly selected style with its empty/short warning');
+  await page.evaluate(() => {
+    // Exercise the localized short-selection help with the single older Bandcamp recording.
+    for (let i = catalog.length - 1; i >= 0; i--) {
+      if (catalog[i].style === 'full_on_night' && reviewedRecordingStyleProof(catalog[i])?.applePreviewAsset) catalog.splice(i, 1);
+    }
+    rebuildCatalogStyleIndex();
+  });
   await style.selectOption('full_on_night'); await hint.waitFor({ state: 'visible' });
   await page.locator('#styleInfoCloseBtn').click();
   assert.equal(await hint.isVisible(), true, 'Coverage is persistent field help, not a dismissible tooltip');
@@ -107,5 +114,5 @@ try {
   assert.equal(requests.filter(style => style === 'full_on_night').length, 1, 'Input/change and language updates share one existing shard request');
   assert.deepEqual(errors, []);
   await fs.writeFile(`${output}/report.json`, JSON.stringify({ passed: true, network: 'providers and optional APIs offline; actual local runtime shards plus bounded empty/error fixtures', fullNight, bigBeat, threshold: '<6 distinct artists with confirmed and eligible recordings', viewports: [375, 1440], languages: ['pt', 'en', 'es'], lateStyleIsolation: true, unhydratedNeverZero: true, noAudioAvailabilityClaim: true, requests, errors }, null, 2) + '\n');
-  console.log('PASS actual cold Full-on Night1/Big Beat6, post-hydration update, no premature/error zero, empty recut, late style cancellation, keyboard help, PT/EN/ES,375/1440 and unchanged history. Providers offline.');
+  console.log('PASS actual cold Full-on Night8/Big Beat6, post-hydration update, no premature/error zero, empty recut, late style cancellation, keyboard help, PT/EN/ES,375/1440 and unchanged history. Providers offline.');
 } finally { for (const hold of holds.values()) hold.release(); await browser.close(); await preview.stop(); }

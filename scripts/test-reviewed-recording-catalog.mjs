@@ -136,4 +136,101 @@ best = { ...best, id: ctx.trackAppleRecordingId(apple), previewUrl: 'https://aud
 await ctx.resolvePreviewForTrack(apple, { forceLookup: true });
 assert.equal(apple.previewUrl, best.previewUrl); assert.equal(apple.previewMissing, false);
 assert.notEqual(ctx.trackMetadataApiCacheKey(apple), ctx.trackMetadataApiCacheKey({ ...apple, catalogMetadata: { ...apple.catalogMetadata, recording_id: 'apple_music:999999' } }));
-console.log('Reviewed recording catalog passed: actual cold core/shards, seven exact recordings, six Big Beat artists, strict genre/BPM/history gates, atomic master replacement and cache reload without artist-wide permission.');
+
+// The publisher proofs cover the exact Apple editions and independently credited acts.
+const fullNightSelections = await Promise.all([
+  json('../data/full_on_night_nightfusion_v70_20261111.selection.json'),
+  json('../data/full_on_night_sectar_v73_20261111.selection.json')
+]);
+const published = fullNightSelections.flatMap(selection => selection.tracks);
+assert.equal(published.length, 7);
+const distinct = values => new Set(values).size === values.length;
+assert.ok(distinct(published.flatMap(row => row.independentArtistGroup.componentKeys)));
+assert.ok(distinct(published.flatMap(row => row.independentArtistGroup.appleArtistIds)));
+assert.ok(distinct(published.map(row => row.audioVerification.sha256)));
+const fullNightRows = fullNight.filter(row => published.some(edition => edition.recordingId === row.recording_id));
+assert.equal(fullNightRows.length, 7);
+const fullNightContext = createAppRuntimeTestContext();
+fullNightContext.catalog.length = 0;
+const nightSeeds = JSON.stringify(fullNightContext.STYLE_ARTIST_SEEDS);
+const nightOverrides = JSON.stringify(fullNightContext.ARTIST_STYLE_OVERRIDES);
+fullNightContext.mergeExternalDatasetRows(fullNightRows, 'dataset_local_runtime_full_on_night');
+assert.equal(JSON.stringify(fullNightContext.STYLE_ARTIST_SEEDS), nightSeeds);
+assert.equal(JSON.stringify(fullNightContext.ARTIST_STYLE_OVERRIDES), nightOverrides);
+fullNightContext.finalizeExternalDatasetRuntimeMerge({ tracksImported: 7 });
+assert.equal(fullNightContext.catalog.length, 7);
+const rejected = createAppRuntimeTestContext();
+rejected.catalog.length = 0;
+const wrongMaster = 'https://audio-ssl.itunes.apple.com/itunes-assets/other/mzaf_99.plus.aac.p.m4a';
+fullNightContext.trackPreview = { dataset: {}, load() {} };
+fullNightContext.resetTrackPreviewElement = () => {};
+
+for (const edition of published) {
+  const row = fullNightRows.find(candidate => candidate.recording_id === edition.recordingId);
+  const track = fullNightContext.catalog.find(candidate => candidate.catalogMetadata.recording_id === edition.recordingId);
+  const proof = fullNightContext.reviewedRecordingStyleProof(track);
+  assert.ok(proof?.applePreviewAsset, edition.song);
+  assert.equal(proof.recordingUrl, edition.sourceUrl);
+  assert.equal(row.preview_url, edition.audioVerification.previewUrl);
+  assert.equal(row.preview_url, edition.lookupObservation.previewUrl);
+  assert.ok(edition.audioVerification.currentTimeAfter > 0 && !edition.audioVerification.pausedAfter);
+  assert.ok(core.some(candidate => candidate.recording_id === edition.recordingId), 'Ready Apple routes ship in the core before remote enrichment');
+  assert.equal(fullNightContext.isTrackEligibleForRecommendation(track), true);
+  assert.equal(fullNightContext.trackStyleCertainty(track), 'confirmed');
+  assert.equal(fullNightContext.trackMatchesRequestedSubgenreEvidence(track, { style: 'full_on_night' }), true);
+  assert.equal(fullNightContext.trackMatchesRequestedSubgenreEvidence(track, { style: 'full_on' }), false);
+  assert.equal(fullNightContext.trackMatchesBpmPreference(track, '146-154'), Boolean(edition.bpm));
+  assert.equal(fullNightContext.trackMatchesBpmPreference(track, '155-160'), false);
+  assert.equal(track.bpmExact ?? null, edition.bpm);
+  assert.equal(track.energy, 'unknown');
+  assert.equal(fullNightContext.trackHasInstantPlaybackRoute(track), true);
+  assert.equal(fullNightContext.recommendationEvidenceSource(track).label, row.label === 'Sectar Records' ? 'Sectar Records' : 'Arrábida Records Psytrance');
+  assert.equal(fullNightContext.reviewedRecordingStyleProof({ ...track, song: track.song + ' (Radio Edit)' }), null);
+  assert.equal(fullNightContext.reviewedRecordingStyleProof({ ...track, bpmExact: 149 }), null);
+  track.previewCandidates.push(wrongMaster);
+  assert.deepEqual(Array.from(fullNightContext.previewCandidatesForTrack(track)), [row.preview_url]);
+  fullNightContext.currentRecommendation = track;
+  assert.equal(fullNightContext.commitTrackPreviewSource(track, wrongMaster, fullNightContext.recommendationPreviewRenderToken), false);
+  assert.equal(fullNightContext.commitTrackPreviewSource(track, row.preview_url, fullNightContext.recommendationPreviewRenderToken), true);
+  const replaced = { ...row, preview_url: wrongMaster };
+  rejected.mergeExternalDatasetRows([replaced], 'dataset_local_runtime_full_on_night');
+  assert.equal(rejected.catalog.length, 0, 'Never import another preview asset under a reviewed Apple ID');
+}
+const houseSelection = await json('../data/house_opening_editorial_v31_20261110.selection.json');
+const houseShard = await json('../data/runtime-catalog-v1/styles/house.json');
+assert.equal(houseSelection.editorialPlaylist.author, 'Apple Music Dance');
+assert.equal(houseSelection.curator.id, '976439535');
+assert.equal(houseSelection.tracks.length, 5);
+assert.ok(distinct(houseSelection.tracks.flatMap(edition => edition.editorialMembership.artists.map(artist => artist.id))));
+const houseRows = houseShard.filter(row => row.source === 'house_opening_editorial_v31_20261110');
+assert.equal(houseRows.length, houseSelection.tracks.length);
+const houseContext = createAppRuntimeTestContext();
+houseContext.catalog.length = 0;
+const houseSeeds = JSON.stringify(houseContext.STYLE_ARTIST_SEEDS);
+houseContext.mergeExternalDatasetRows(houseRows, 'dataset_local_runtime_house');
+assert.equal(houseContext.catalog.length, 5);
+assert.equal(JSON.stringify(houseContext.STYLE_ARTIST_SEEDS), houseSeeds);
+for (const edition of houseSelection.tracks) {
+  const recordingId = `apple_music:${edition.appleTrackId}`;
+  const row = houseRows.find(candidate => candidate.recording_id === recordingId);
+  const track = houseContext.catalog.find(candidate => candidate.catalogMetadata.recording_id === recordingId);
+  const proof = houseContext.reviewedExactAppleProof(track);
+  assert.equal(proof?.recordingUrl, edition.recordingUrl);
+  assert.equal(proof?.evidenceUrl, houseSelection.editorialPlaylist.url);
+  assert.equal(row.preview_url, edition.audioVerification.previewUrl);
+  assert.equal(row.preview_url, edition.lookupObservation.previewUrl);
+  assert.ok(edition.audioVerification.currentTimeAfter > 0.25 && !edition.audioVerification.pausedAfter);
+  assert.ok(core.some(candidate => candidate.recording_id === recordingId));
+  assert.equal(houseContext.isTrackEligibleForRecommendation(track), true);
+  assert.equal(houseContext.trackStyleCertainty(track), 'confirmed');
+  assert.equal(houseContext.trackHasVerifiedImmediateAudioPreview(track), true);
+  assert.equal(houseContext.trackMatchesRequestedSubgenreEvidence(track, { style: 'house' }), true);
+  assert.equal(houseContext.trackMatchesRequestedSubgenreEvidence(track, { style: 'deep_house' }), false);
+  assert.equal(houseContext.trackMatchesBpmPreference(track, '110-132'), false);
+  assert.equal(houseContext.reviewedExactAppleProof({ ...track, song: track.song + ' (Edit)' }), null);
+  assert.deepEqual(Array.from(houseContext.previewCandidatesForTrack({ ...track, previewCandidates: [wrongMaster] })), [row.preview_url]);
+  assert.deepEqual(mergeRows(row, legacy), row);
+  rejected.mergeExternalDatasetRows([{ ...row, preview_url: wrongMaster }], 'dataset_local_runtime_house');
+  assert.equal(rejected.catalog.length, 0);
+}
+console.log('Reviewed recording catalog passed: cold core and shards, seven new exact Full-on Night previews, five exact House previews, strict recording/style/BPM/history gates, cache reload, and atomic master replacement without artist-wide permission.');

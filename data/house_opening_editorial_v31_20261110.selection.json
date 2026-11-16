@@ -1,0 +1,321 @@
+{
+  "source": "house_apple_editorial_v31_20261110",
+  "editorialPlaylist": {
+    "name": "House Nation",
+    "url": "https://music.apple.com/us/playlist/house-nation/pl.75f03abb293e4430a5f550d058c6f6a0",
+    "author": "Apple Music Dance",
+    "playlistId": "pl.75f03abb293e4430a5f550d058c6f6a0",
+    "classificationExcerpt": "House is more than a feeling"
+  },
+  "curator": {
+    "id": "976439535",
+    "canonical": "https://music.apple.com/us/curator/apple-music-dance/976439535"
+  },
+  "tracks": [
+    {
+      "artist": "David Penn",
+      "song": "Satisfy My Soul",
+      "appleTrackId": "6776095342",
+      "recordingUrl": "https://music.apple.com/us/song/satisfy-my-soul/6776095342",
+      "corroboratingReleaseUrl": "https://magneticmag.com/2026/06/david-penn-satisfy-my-soul/",
+      "editorialMembership": {
+        "id": "6776095342",
+        "title": "Satisfy My Soul",
+        "recordingUrl": "https://music.apple.com/us/song/satisfy-my-soul/6776095342",
+        "durationIso": "PT2M3S",
+        "durationSeconds": 123,
+        "durationMillis": 123100,
+        "artist": "David Penn",
+        "artists": [
+          {
+            "name": "David Penn",
+            "id": "5388609",
+            "url": "https://music.apple.com/us/artist/david-penn/5388609"
+          }
+        ],
+        "position": 8,
+        "collectionId": "6776095341",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/71/45/40/7145400c-e9f6-14e4-4411-171956f25889/URBANA142.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6776095342,
+        "artistId": 5388609,
+        "artistName": "David Penn",
+        "trackName": "Satisfy My Soul",
+        "trackViewUrl": "https://music.apple.com/us/album/satisfy-my-soul/6776095341?i=6776095342&uo=4",
+        "collectionId": 6776095341,
+        "collectionName": "Satisfy My Soul - Single",
+        "trackTimeMillis": 123100,
+        "releaseDate": "2026-06-26T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1c/78/98/1c7898e2-0f8c-409c-492c-0bda675bfe97/mzaf_16856451604546919597.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/71/45/40/7145400c-e9f6-14e4-4411-171956f25889/URBANA142.jpg/100x100bb.jpg",
+        "primaryGenreName": "House",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:01.692Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1c/78/98/1c7898e2-0f8c-409c-492c-0bda675bfe97/mzaf_16856451604546919597.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 999791,
+        "sha256": "cb89a2acf5ee037c00cf7a518bfd549b7897a5bb0a2e2011cfd24212c864f2db",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.329035,
+        "mediaDurationSeconds": 30.018005,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Sam Divine",
+      "song": "Paradise",
+      "appleTrackId": "6812867623",
+      "recordingUrl": "https://music.apple.com/us/song/paradise/6812867623",
+      "corroboratingReleaseUrl": "https://defected.com/music/releases/sam-divine-paradise/",
+      "editorialMembership": {
+        "id": "6812867623",
+        "title": "Paradise",
+        "recordingUrl": "https://music.apple.com/us/song/paradise/6812867623",
+        "durationIso": "PT2M33S",
+        "durationSeconds": 153,
+        "durationMillis": 153923,
+        "artist": "Sam Divine",
+        "artists": [
+          {
+            "name": "Sam Divine",
+            "id": "447714486",
+            "url": "https://music.apple.com/us/artist/sam-divine/447714486"
+          }
+        ],
+        "position": 20,
+        "collectionId": "6812867622",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/a2/aa/05a2aad6-59ad-dc79-70a4-955521578866/826194722890.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6812867623,
+        "artistId": 447714486,
+        "artistName": "Sam Divine",
+        "trackName": "Paradise",
+        "trackViewUrl": "https://music.apple.com/us/album/paradise/6812867622?i=6812867623&uo=4",
+        "collectionId": 6812867622,
+        "collectionName": "Paradise - Single",
+        "trackTimeMillis": 153923,
+        "releaseDate": "2026-10-09T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/94/3a/fd943a2e-9f22-00fd-3dbe-f344fb1e0802/mzaf_9155008829740618483.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/a2/aa/05a2aad6-59ad-dc79-70a4-955521578866/826194722890.png/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:06.190Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fd/94/3a/fd943a2e-9f22-00fd-3dbe-f344fb1e0802/mzaf_9155008829740618483.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1011894,
+        "sha256": "7f41a113067b64e841271f044fe69798d5ae5ffd45d9ef50df83859c233a8a81",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.32776,
+        "mediaDurationSeconds": 30.003991,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Ferreck Dawn",
+      "song": "Say What You Mean",
+      "appleTrackId": "1891791608",
+      "recordingUrl": "https://music.apple.com/us/song/say-what-you-mean/1891791608",
+      "corroboratingReleaseUrl": "https://defected.com/music/releases/ferreck-dawn-say-what-you-mean",
+      "editorialMembership": {
+        "id": "1891791608",
+        "title": "Say What You Mean",
+        "recordingUrl": "https://music.apple.com/us/song/say-what-you-mean/1891791608",
+        "durationIso": "PT2M32S",
+        "durationSeconds": 152,
+        "durationMillis": 152842,
+        "artist": "Ferreck Dawn",
+        "artists": [
+          {
+            "name": "Ferreck Dawn",
+            "id": "281700178",
+            "url": "https://music.apple.com/us/artist/ferreck-dawn/281700178"
+          }
+        ],
+        "position": 28,
+        "collectionId": "1891791605",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/42/8c/16428cb7-63b5-a1ea-5f35-f019e7677424/826194714291.png",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 1891791608,
+        "artistId": 281700178,
+        "artistName": "Ferreck Dawn",
+        "trackName": "Say What You Mean",
+        "trackViewUrl": "https://music.apple.com/us/album/say-what-you-mean/1891791605?i=1891791608&uo=4",
+        "collectionId": 1891791605,
+        "collectionName": "Say What You Mean - Single",
+        "trackTimeMillis": 152842,
+        "releaseDate": "2026-05-08T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/48/a3/0148a331-4d74-935b-72c3-5c06ff18d521/mzaf_4234774014627349554.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/16/42/8c/16428cb7-63b5-a1ea-5f35-f019e7677424/826194714291.png/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:08.976Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/48/a3/0148a331-4d74-935b-72c3-5c06ff18d521/mzaf_4234774014627349554.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 972941,
+        "sha256": "ab48aa48f99895b79459a3ebe3b3d9d084905f1aef3c0a6d743150d509e22f22",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.328411,
+        "mediaDurationSeconds": 30.008005,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Adelphi Music Factory",
+      "song": "You & Me",
+      "appleTrackId": "6778058030",
+      "recordingUrl": "https://music.apple.com/us/song/you-me/6778058030",
+      "corroboratingReleaseUrl": "https://www.beatport.com/track/you-me/29470410",
+      "editorialMembership": {
+        "id": "6778058030",
+        "title": "You & Me",
+        "recordingUrl": "https://music.apple.com/us/song/you-me/6778058030",
+        "durationIso": "PT2M48S",
+        "durationSeconds": 168,
+        "durationMillis": 168589,
+        "artist": "Adelphi Music Factory",
+        "artists": [
+          {
+            "name": "Adelphi Music Factory",
+            "id": "1441329468",
+            "url": "https://music.apple.com/us/artist/adelphi-music-factory/1441329468"
+          }
+        ],
+        "position": 47,
+        "collectionId": "6778058023",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2e/a3/a6/2ea3a64e-abf9-2420-c645-02f9ac798f4f/4070209013374_3000.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6778058030,
+        "artistId": 1441329468,
+        "artistName": "Adelphi Music Factory",
+        "trackName": "You & Me",
+        "trackViewUrl": "https://music.apple.com/us/album/you-me/6778058023?i=6778058030&uo=4",
+        "collectionId": 6778058023,
+        "collectionName": "Sneaking Out The Back EP - EP",
+        "trackTimeMillis": 168589,
+        "releaseDate": "2026-07-17T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/8c/5c/5f8c5cb8-9f99-d4d0-c5e1-6c7109f1c7c7/mzaf_17505556361909669037.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2e/a3/a6/2ea3a64e-abf9-2420-c645-02f9ac798f4f/4070209013374_3000.jpg/100x100bb.jpg",
+        "primaryGenreName": "Electronic",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:24.322Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/8c/5c/5f8c5cb8-9f99-d4d0-c5e1-6c7109f1c7c7/mzaf_17505556361909669037.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 969679,
+        "sha256": "a4260a070e67eae961c6fae062962ef86fbb83ed1ac61ad20fc3ea59c8259be6",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.323227,
+        "mediaDurationSeconds": 30.008005,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    },
+    {
+      "artist": "Eden Prince",
+      "song": "Surprised",
+      "appleTrackId": "6820558050",
+      "recordingUrl": "https://music.apple.com/us/song/surprised/6820558050",
+      "corroboratingReleaseUrl": "https://futuredisco.bandcamp.com/album/surprised",
+      "editorialMembership": {
+        "id": "6820558050",
+        "title": "Surprised",
+        "recordingUrl": "https://music.apple.com/us/song/surprised/6820558050",
+        "durationIso": "PT3M18S",
+        "durationSeconds": 198,
+        "durationMillis": 198864,
+        "artist": "Eden Prince",
+        "artists": [
+          {
+            "name": "Eden Prince",
+            "id": "1029684473",
+            "url": "https://music.apple.com/us/artist/eden-prince/1029684473"
+          }
+        ],
+        "position": 54,
+        "collectionId": "6820558049",
+        "artworkBaseUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/75/96/02/759602bb-7b82-1c84-7dc5-21909d047ac6/1200220269440.jpg",
+        "availableInSourceStorefront": true
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "trackId": 6820558050,
+        "artistId": 1029684473,
+        "artistName": "Eden Prince",
+        "trackName": "Surprised",
+        "trackViewUrl": "https://music.apple.com/us/album/surprised/6820558049?i=6820558050&uo=4",
+        "collectionId": 6820558049,
+        "collectionName": "Surprised - Single",
+        "trackTimeMillis": 198864,
+        "releaseDate": "2026-11-06T12:00:00Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ff/3d/0d/ff3d0dba-abd0-c1f7-297d-0c5f4906612e/mzaf_4648422437582654874.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/75/96/02/759602bb-7b82-1c84-7dc5-21909d047ac6/1200220269440.jpg/100x100bb.jpg",
+        "primaryGenreName": "Dance",
+        "metadataBatchKey": "lookup-first-30",
+        "country": "us",
+        "httpStatus": 200,
+        "observedAt": "2026-11-10T21:08:38.122Z"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-10T21:14:28.297Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ff/3d/0d/ff3d0dba-abd0-c1f7-297d-0c5f4906612e/mzaf_4648422437582654874.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1023760,
+        "sha256": "fa2d5fe58f8f330d6d4d1de7e71f0576c2d1cccd21ff8cf950ec53e0b8524036",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.3244,
+        "mediaDurationSeconds": 30.003991,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false
+      }
+    }
+  ]
+}

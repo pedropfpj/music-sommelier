@@ -64,6 +64,56 @@ function observeCohort(ctx) {
   return state;
 }
 
+function sequenceVisitor(identity, { local = storageFixture(), session = storageFixture(), slot = 0 } = {}) {
+  const ctx = fresh(identity, slot);
+  ctx.localStorage = local;
+  ctx.sessionStorage = session;
+  ctx.currentAuthUser = { mode: "visitor", username: "Visitante", providerId: identity };
+  ctx.activeRecommendationSessionIdentity = ctx.recommendationSessionIdentityKey();
+  ctx.openingRotationSessionIdentity = ctx.activeRecommendationSessionIdentity;
+  ctx.discoveryModeEl = { checked: true };
+  ctx.injectSoundCloudSupplementalSeeds();
+  ctx.seedAnonymousOpeningExclusions();
+  ctx.runSurpriseRecommendation = async () => false;
+  ctx.presentInstantSwipeRecommendation = ctx.presentFastNegativeFeedbackRecommendation = ({ track, prefs }) => {
+    assert.equal(ctx.trackBlockedByKnownSignals(track), false, "A delivered recording cannot already be known");
+    assert.equal(ctx.recommendationArtistBlockedForPresentation(track), false, "A delivery cannot repeat a recent artist");
+    assert.ok(ctx.trackHasInstantPlaybackRoute(track), "An instant card needs an existing playback route");
+    ctx.currentRecommendation = track;
+    ctx.lastPrefs = ctx.normalizeRecommendationPrefs({ ...prefs, style: prefs.style || track.style });
+    ctx.styleEl.value = ctx.lastPrefs.style;
+    ctx.deliveries.push(track);
+    ctx.markRecommendationPresented(track);
+    ctx.rememberAnonymousExposure(track);
+    ctx.rememberAnonymousOpeningTrack(track);
+    ctx.registerSwipeStyleExposure(track.style);
+    ctx.suggestionQueueTracks = ctx.suggestionQueueTracks.filter(candidate => candidate !== track);
+    return true;
+  };
+  return ctx;
+}
+
+function queueNextCards(ctx) {
+  ctx.suggestionQueueTracks = ctx.buildSuggestionQueueFromPrefs(ctx.lastPrefs, ctx.currentRecommendation);
+  ctx.suggestionQueueContextKey = ctx.recommendationContextKey(ctx.lastPrefs);
+  for (const track of ctx.suggestionQueueTracks.filter(ctx.trackHasVerifiedImmediateAudioPreview)) {
+    ctx.prewarmedSwipeTrackKeys.add(ctx.recommendationTrackKey(track));
+  }
+}
+
+function meanSequenceOverlap(sequences, keyFor) {
+  const sets = sequences.map(sequence => new Set(sequence.map(keyFor)));
+  let shared = 0;
+  let pairs = 0;
+  for (const [index, entries] of sets.entries()) {
+    for (const other of sets.slice(index + 1)) {
+      shared += [...entries].filter(key => other.has(key)).length;
+      pairs += 1;
+    }
+  }
+  return Number((shared / pairs).toFixed(2));
+}
+
 function deferredNetwork(ctx) {
   const requests = [];
   ctx.resolveAppApiEndpoint = () => "/mock-opening-slot";
@@ -264,6 +314,110 @@ await check("a profile switch cancels an asynchronous initial delivery", async (
   requests[1].resolve(serverResponse(11));
   await ctx.openingRotationSlotPromise;
   assert.equal(ctx.firstRecommendationCompleted, false);
+});
+
+await check("fresh web visitors with the same opening slot diversify cards two through five", async () => {
+  const sequences = [];
+  let reference;
+  for (let index = 0; index < 8; index += 1) {
+    const ctx = sequenceVisitor(`cohort-${index}`);
+    reference = ctx;
+    for (const action of ["open", "other", "like", "pass", "other"]) {
+      const sourceTrack = ctx.currentRecommendation;
+      if (action === "like" || action === "pass") {
+        const positive = action === "like";
+        if (!positive) ctx.lastRejectedTrackKey = ctx.recommendationTrackKey(sourceTrack);
+        assert.equal(await ctx.advanceAfterSwipeFeedback({
+          likedTrack: sourceTrack,
+          positive,
+          avoidArtistName: positive ? "" : sourceTrack.artist
+        }), true);
+      } else {
+        assert.equal(await ctx.runPrimaryRecommendationAction(), true);
+      }
+      if (index % 2 === 0) queueNextCards(ctx);
+    }
+    assert.equal(ctx.deliveries.length, 5);
+    assert.equal(new Set(ctx.deliveries.map(ctx.recommendationTrackKey)).size, 5);
+    ctx.deliveries.forEach((track, i) => {
+      assert.ok(ctx.deliveries.slice(i + 1).every(next => !ctx.artistsShareIdentity(track.artist, next.artist)));
+    });
+    sequences.push(ctx.deliveries);
+  }
+
+  const trackKey = reference.recommendationTrackKey;
+  const artistKey = track => reference.artistMatchKey(track.artist);
+  assert.equal(new Set(sequences.map(sequence => trackKey(sequence[0]))).size, 1, "Hold opening rotation constant");
+  const slots = [1, 2, 3, 4];
+  const uniqueTracks = slots.map(slot => new Set(sequences.map(sequence => trackKey(sequence[slot]))).size);
+  const uniqueArtists = slots.map(slot => new Set(sequences.map(sequence => artistKey(sequence[slot]))).size);
+  assert.ok(uniqueTracks.every(count => count >= 3), `Distinct recordings in slots 2–5: ${uniqueTracks}`);
+  assert.ok(uniqueArtists.every(count => count >= 3), `Distinct artists in slots 2–5: ${uniqueArtists}`);
+  const trackOverlap = meanSequenceOverlap(sequences, trackKey);
+  const artistOverlap = meanSequenceOverlap(sequences, artistKey);
+  assert.ok(trackOverlap <= 3, `Mean five-card recording overlap: ${trackOverlap}`);
+  assert.ok(artistOverlap <= 3, `Mean five-card artist overlap: ${artistOverlap}`);
+  console.log(JSON.stringify({ sameOpeningSlot: 0, visitors: sequences.length, uniqueTracks, uniqueArtists, trackOverlap, artistOverlap }));
+});
+
+await check("a returning anonymous web visitor's opening and next card exclude the prior session", async () => {
+  const local = storageFixture();
+  const session = storageFixture();
+  const first = sequenceVisitor("before-reload", { local, session });
+  assert.equal(await first.runPrimaryRecommendationAction(), true);
+  assert.equal(await first.runPrimaryRecommendationAction(), true);
+  const reloaded = sequenceVisitor("after-reload", { local, session });
+  assert.equal(reloaded.readAnonymousOpeningHistory().length, 2);
+  assert.ok(first.deliveries.every(reloaded.trackBlockedByKnownSignals));
+  assert.equal(await reloaded.runPrimaryRecommendationAction(), true);
+  assert.equal(await reloaded.runPrimaryRecommendationAction(), true);
+  assert.ok(reloaded.deliveries.every(track => first.deliveries.every(
+    previous => !reloaded.artistsShareIdentity(track.artist, previous.artist)
+  )));
+});
+
+await check("a reload keeps a manually selected style and ignores the style printed by open discovery", () => {
+  const ctx = fresh("reload-preferences", 0);
+  const track = ctx.pickInstantOpeningTrack().track;
+  ctx.currentRecommendation = track;
+  ctx.styleEl.value = track.style;
+  const key = ctx.storageKeyForSession(ctx.STORAGE_KEY);
+
+  ctx.savePreferences();
+  assert.equal(JSON.parse(ctx.localStorage.getItem(key)).style, "");
+
+  ctx.swipeUserAnchoredStyle = track.style;
+  ctx.savePreferences();
+  assert.equal(JSON.parse(ctx.localStorage.getItem(key)).style, track.style);
+});
+
+await check("anchored feedback preserves an explicit BPM choice when the ready pool is exhausted", async () => {
+  const ctx = sequenceVisitor("anchored-filter");
+  const prefs = { style: "house", bpm: "110-124" };
+  const eligible = ctx.pickWebOpeningSequenceTrack(prefs);
+  assert.ok(eligible);
+  assert.equal(eligible.style, prefs.style);
+  assert.equal(ctx.trackMatchesBpmPreference(eligible, prefs.bpm), true);
+  assert.equal(ctx.presentInstantSwipeRecommendation({ track: eligible, prefs }), true);
+  ctx.swipeUserAnchoredStyle = prefs.style;
+  // A warmed recording in the correct style is available outside the chosen range.
+  const wrongBpm = ctx.catalogTracksForStyle(prefs.style).find(track =>
+    ctx.trackHasVerifiedImmediateAudioPreview(track) && !ctx.trackMatchesBpmPreference(track, prefs.bpm)
+  );
+  assert.ok(wrongBpm);
+  ctx.suggestionQueueTracks = [wrongBpm];
+  ctx.prewarmedSwipeTrackKeys.add(ctx.recommendationTrackKey(wrongBpm));
+  ctx.generateRecommendationWithOverlay = async fallbackPrefs => {
+    assert.equal(fallbackPrefs.style, prefs.style);
+    assert.equal(fallbackPrefs.bpm, prefs.bpm);
+    return false;
+  };
+  ctx.presentRecommendationFailure = () => {};
+  assert.equal(ctx.pickInstantPrimaryNextTrack(eligible, prefs.style), null);
+  assert.equal(await ctx.advanceAfterSwipeFeedback({ likedTrack: eligible, positive: true }), false);
+  assert.equal(await ctx.advanceAfterSwipeFeedback({ likedTrack: eligible, positive: false }), false);
+  assert.equal(ctx.currentRecommendation, eligible);
+  assert.equal(ctx.deliveries.length, 1);
 });
 
 await check("explicit manual filters and calibration runners precede generic opening rotation", async () => {

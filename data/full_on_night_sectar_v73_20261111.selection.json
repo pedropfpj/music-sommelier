@@ -1,0 +1,450 @@
+{
+  "schemaVersion": 1,
+  "version": "full_on_night_sectar_v73_20261111",
+  "goal": {
+    "targetIndependentArtists": 101,
+    "verifiedNewArtistGroups": 3,
+    "complete101ArtistGoal": false
+  },
+  "publisherObservation": {
+    "url": "https://sectarrecords.com.br/releases-1",
+    "httpStatus": 200,
+    "serverDate": "Thu, 12 Nov 2026 00:17:34 GMT",
+    "observedAt": "2026-11-12T00:17:34.244Z",
+    "retryAfter": null,
+    "sha256": "cc85176e554787e48d26ae1d476248535b0fa762e531f59db112e000135004d2",
+    "bytes": 221961,
+    "author": "Sectar Records",
+    "cards": [
+      {
+        "title": "Raulzito",
+        "format": "Single",
+        "artist": "MidSider",
+        "genre": "Full-On Night",
+        "durationSeconds": 476,
+        "evidenceScope": "exact_release_card"
+      },
+      {
+        "title": "Mr. Groove Man",
+        "format": "Single",
+        "artist": "Antica",
+        "genre": "Full-On Night",
+        "durationSeconds": 436,
+        "evidenceScope": "exact_release_card"
+      },
+      {
+        "title": "Nocturnal Animals",
+        "format": "EP",
+        "artist": "Zeetlam",
+        "genre": "Full-On Night",
+        "durationSeconds": 1370,
+        "evidenceScope": "exact_release_card"
+      }
+    ]
+  },
+  "nativeEditions": [
+    {
+      "url": "https://music.apple.com/us/album/raulzito-single/1759620123",
+      "httpStatus": 200,
+      "serverDate": "Thu, 12 Nov 2026 00:17:35 GMT",
+      "observedAt": "2026-11-12T00:17:35.686Z",
+      "retryAfter": null,
+      "sha256": "ded127246e5fc67bc863b013ec36e76ec9f13a7b26be47b5cd121a01ab974d89",
+      "bytes": 169035,
+      "title": "Raulzito - Single",
+      "releaseDate": "2024-07-26",
+      "trackCount": 1,
+      "collectionId": "1759620123",
+      "copyright": "℗ 2024 Sectar Records",
+      "member": {
+        "artist": "MidSider",
+        "song": "Raulzito",
+        "id": "1759620124",
+        "artistId": "1539118863",
+        "artistUrl": "https://music.apple.com/us/artist/midsider/1539118863",
+        "url": "https://music.apple.com/us/album/raulzito/1759620123?i=1759620124",
+        "position": 1,
+        "durationMillis": 476800,
+        "uploadDate": "2024-07-26",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/6e/11/ea6e11a3-c327-e2e7-8269-315f43ab905b/mzaf_4814426836970089756.plus.aac.ep.m4a"
+      },
+      "siblings": []
+    },
+    {
+      "url": "https://music.apple.com/us/album/mr-groove-man-single/1744038130",
+      "httpStatus": 200,
+      "serverDate": "Thu, 12 Nov 2026 00:17:36 GMT",
+      "observedAt": "2026-11-12T00:17:36.247Z",
+      "retryAfter": null,
+      "sha256": "256b4be2dc2e939a54c764b00ac1baa4dbf88a899abc2203f6e10787f1e2c163",
+      "bytes": 109216,
+      "title": "Mr Groove Man - Single",
+      "releaseDate": "2024-05-03",
+      "trackCount": 1,
+      "collectionId": "1744038130",
+      "copyright": "℗ 2024 Sectar Records",
+      "member": {
+        "artist": "Antica",
+        "song": "Mr Groove Man",
+        "id": "1744038131",
+        "artistId": "1557808867",
+        "artistUrl": "https://music.apple.com/us/artist/antica/1557808867",
+        "url": "https://music.apple.com/us/album/mr-groove-man/1744038130?i=1744038131",
+        "position": 1,
+        "durationMillis": 436000,
+        "uploadDate": "2024-05-03",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/ae/8b/19ae8b02-e894-0c11-25ef-e25b1312ceb9/mzaf_14164907411523469004.plus.aac.ep.m4a"
+      },
+      "siblings": []
+    },
+    {
+      "url": "https://music.apple.com/us/album/nocturnal-animals-single/1765892864",
+      "httpStatus": 200,
+      "serverDate": "Thu, 12 Nov 2026 00:17:37 GMT",
+      "observedAt": "2026-11-12T00:17:37.175Z",
+      "retryAfter": null,
+      "sha256": "528d414a47480f046af6801a193cbec9664aa6b28d43b00ac845e5fc34266a9b",
+      "bytes": 145658,
+      "title": "Nocturnal Animals - Single",
+      "releaseDate": "2024-09-06",
+      "trackCount": 3,
+      "collectionId": "1765892864",
+      "copyright": "℗ 2024 Sectar Records",
+      "member": {
+        "artist": "Zeetlam",
+        "song": "Price of Life",
+        "id": "1765892867",
+        "artistId": "1647589593",
+        "artistUrl": "https://music.apple.com/us/artist/zeetlam/1647589593",
+        "url": "https://music.apple.com/us/album/price-of-life/1765892864?i=1765892867",
+        "position": 3,
+        "durationMillis": 418406,
+        "uploadDate": "2024-09-06",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e1/67/58/e1675831-18ea-c535-88e5-f8864af7242e/mzaf_3370762978366217463.plus.aac.ep.m4a"
+      },
+      "siblings": [
+        {
+          "artist": "Zeetlam & Freak Freqz",
+          "song": "Nocturnal Animals",
+          "position": 1,
+          "appleTrackId": "1765892865"
+        },
+        {
+          "artist": "Zeetlam & Daimon Live",
+          "song": "Cosmic Spirit",
+          "position": 2,
+          "appleTrackId": "1765892866"
+        }
+      ]
+    }
+  ],
+  "lookupRequest": {
+    "url": "https://itunes.apple.com/lookup?id=1759620124,1744038131,1765892867&entity=song&country=us",
+    "httpStatus": 200,
+    "serverDate": "Thu, 12 Nov 2026 00:19:44 GMT",
+    "observedAt": "2026-11-12T00:19:44.782Z",
+    "retryAfter": null,
+    "sha256": "008f56199486c4f5bda0ead6a0d039c10bd55421665cb09d7fa6e7bf9f98210d",
+    "bytes": 4464,
+    "requestedIds": [
+      "1759620124",
+      "1744038131",
+      "1765892867"
+    ],
+    "country": "us",
+    "resultCount": 3
+  },
+  "identityReview": {
+    "aliases": [],
+    "performerMemberships": [],
+    "recordingParticipantNotes": []
+  },
+  "heldRecordings": [
+    {
+      "artist": "Zeetlam & Freak Freqz",
+      "song": "Nocturnal Animals",
+      "position": 1,
+      "appleTrackId": "1765892865",
+      "bpm": 114,
+      "bpmSource": "https://www.beatport.com/artist/freak-freqz/1062390/tracks",
+      "reason": "exact_licensed_bpm_outside_range_and_freak_freqz_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "artist": "Zeetlam & Daimon Live",
+      "song": "Cosmic Spirit",
+      "position": 2,
+      "appleTrackId": "1765892866",
+      "bpm": 75,
+      "bpmSource": "https://www.beatport.com/artist/daimon-live/1248122/tracks",
+      "reason": "licensed_bpm_value_outside_range_and_daimon_live_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "artist": "MidSider",
+      "song": "Cenas Ridículas",
+      "reason": "same_performer_as_selected_single",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "artist": "Whiteloop & Paramad",
+      "song": "Feels Funky",
+      "reason": "performer_paramad_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    }
+  ],
+  "freshAudioRequests": [
+    {
+      "appleTrackId": "1759620124",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/6e/11/ea6e11a3-c327-e2e7-8269-315f43ab905b/mzaf_18099197520553082598.plus.aac.p.m4a",
+      "observedAt": "2026-11-12T00:23:26.034Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Thu, 12 Nov 2026 00:23:26 GMT",
+      "sha256": "740ca3969882f8d624f8e01766b9689cb25f1a3030867dbcce197ea7bd9a679e",
+      "bytes": 1028062
+    },
+    {
+      "appleTrackId": "1744038131",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/ae/8b/19ae8b02-e894-0c11-25ef-e25b1312ceb9/mzaf_399860002705875292.plus.aac.p.m4a",
+      "observedAt": "2026-11-12T00:23:29.397Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Thu, 12 Nov 2026 00:23:29 GMT",
+      "sha256": "ac7aaf8f20dfaac69b3040b3dcb63782cb0a1fc7b22fa156583f0a241c407a88",
+      "bytes": 954480
+    },
+    {
+      "appleTrackId": "1765892867",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e1/67/58/e1675831-18ea-c535-88e5-f8864af7242e/mzaf_2062118218575286887.plus.aac.p.m4a",
+      "observedAt": "2026-11-12T00:23:30.814Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Thu, 12 Nov 2026 00:23:31 GMT",
+      "sha256": "3384e44a5245756f4edc15840be15d52141e83dcc4418f98120c41cfbb885059",
+      "bytes": 974552
+    }
+  ],
+  "tracks": [
+    {
+      "style": "full_on_night",
+      "artist": "MidSider",
+      "song": "Raulzito",
+      "label": "Sectar Records",
+      "bpm": 150,
+      "bpmSource": "https://www.beatport.com/track/raulzito/20209391",
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "durationEvidence": {
+        "url": "https://open.spotify.com/album/26ZQrqVZrdfAhWhTCulDn0",
+        "artist": "MidSider",
+        "song": "Raulzito",
+        "durationSeconds": 476,
+        "position": 1
+      },
+      "appleTrackId": "1759620124",
+      "recordingId": "apple_music:1759620124",
+      "sourceUrl": "https://music.apple.com/us/album/raulzito/1759620123?i=1759620124",
+      "genreSourceKey": "sectar_1759620124",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "midsider"
+        ],
+        "appleArtistIds": [
+          "1539118863"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1539118863,
+        "collectionId": 1759620123,
+        "trackId": 1759620124,
+        "artistName": "MidSider",
+        "collectionName": "Raulzito - Single",
+        "trackName": "Raulzito",
+        "trackViewUrl": "https://music.apple.com/us/album/raulzito/1759620123?i=1759620124&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/6e/11/ea6e11a3-c327-e2e7-8269-315f43ab905b/mzaf_18099197520553082598.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/09/78/67/09786777-b8d1-4367-6de0-54f4557e6790/0.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 1,
+        "trackNumber": 1,
+        "trackTimeMillis": 476800,
+        "releaseDate": "2024-07-26T12:00:00Z",
+        "isStreamable": true,
+        "lookupMetadataSha256": "008f56199486c4f5bda0ead6a0d039c10bd55421665cb09d7fa6e7bf9f98210d"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-12T00:23:26.034Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/6e/11/ea6e11a3-c327-e2e7-8269-315f43ab905b/mzaf_18099197520553082598.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1028062,
+        "sha256": "740ca3969882f8d624f8e01766b9689cb25f1a3030867dbcce197ea7bd9a679e",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.30273,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1759620124",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Thu, 12 Nov 2026 00:23:26 GMT"
+      }
+    },
+    {
+      "style": "full_on_night",
+      "artist": "Antica",
+      "song": "Mr Groove Man",
+      "label": "Sectar Records",
+      "bpm": null,
+      "bpmSource": null,
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "durationEvidence": {
+        "url": "https://music.amazon.in/albums/B0D326L4JL",
+        "artist": "Antica",
+        "song": "Mr Groove Man",
+        "durationSeconds": 436,
+        "position": 1
+      },
+      "appleTrackId": "1744038131",
+      "recordingId": "apple_music:1744038131",
+      "sourceUrl": "https://music.apple.com/us/album/mr-groove-man/1744038130?i=1744038131",
+      "genreSourceKey": "sectar_1744038131",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "antica"
+        ],
+        "appleArtistIds": [
+          "1557808867"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1557808867,
+        "collectionId": 1744038130,
+        "trackId": 1744038131,
+        "artistName": "Antica",
+        "collectionName": "Mr Groove Man - Single",
+        "trackName": "Mr Groove Man",
+        "trackViewUrl": "https://music.apple.com/us/album/mr-groove-man/1744038130?i=1744038131&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/ae/8b/19ae8b02-e894-0c11-25ef-e25b1312ceb9/mzaf_399860002705875292.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4c/15/c9/4c15c97c-2b61-9b53-3145-2be7a9c96189/0.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 1,
+        "trackNumber": 1,
+        "trackTimeMillis": 436000,
+        "releaseDate": "2024-05-03T12:00:00Z",
+        "isStreamable": true,
+        "lookupMetadataSha256": "008f56199486c4f5bda0ead6a0d039c10bd55421665cb09d7fa6e7bf9f98210d"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-12T00:23:29.397Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/ae/8b/19ae8b02-e894-0c11-25ef-e25b1312ceb9/mzaf_399860002705875292.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 954480,
+        "sha256": "ac7aaf8f20dfaac69b3040b3dcb63782cb0a1fc7b22fa156583f0a241c407a88",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.333161,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1744038131",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Thu, 12 Nov 2026 00:23:29 GMT"
+      }
+    },
+    {
+      "style": "full_on_night",
+      "artist": "Zeetlam",
+      "song": "Price of Life",
+      "label": "Sectar Records",
+      "bpm": null,
+      "bpmSource": null,
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "durationEvidence": {
+        "url": "https://sectarrecords.bandcamp.com/album/nocturnal-animals",
+        "artist": "Zeetlam",
+        "song": "Price of Life",
+        "durationSeconds": 418,
+        "position": 3
+      },
+      "appleTrackId": "1765892867",
+      "recordingId": "apple_music:1765892867",
+      "sourceUrl": "https://music.apple.com/us/album/price-of-life/1765892864?i=1765892867",
+      "genreSourceKey": "sectar_1765892867",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "zeetlam"
+        ],
+        "appleArtistIds": [
+          "1647589593"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1647589593,
+        "collectionId": 1765892864,
+        "trackId": 1765892867,
+        "artistName": "Zeetlam",
+        "collectionName": "Nocturnal Animals - Single",
+        "trackName": "Price of Life",
+        "trackViewUrl": "https://music.apple.com/us/album/price-of-life/1765892864?i=1765892867&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e1/67/58/e1675831-18ea-c535-88e5-f8864af7242e/mzaf_2062118218575286887.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b1/58/25/b1582540-60a1-ff79-5ae7-c53025dbde5f/0.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 3,
+        "trackNumber": 3,
+        "trackTimeMillis": 418406,
+        "releaseDate": "2024-09-06T12:00:00Z",
+        "isStreamable": true,
+        "lookupMetadataSha256": "008f56199486c4f5bda0ead6a0d039c10bd55421665cb09d7fa6e7bf9f98210d"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-12T00:23:30.814Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e1/67/58/e1675831-18ea-c535-88e5-f8864af7242e/mzaf_2062118218575286887.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 974552,
+        "sha256": "3384e44a5245756f4edc15840be15d52141e83dcc4418f98120c41cfbb885059",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.333041,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1765892867",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Thu, 12 Nov 2026 00:23:31 GMT"
+      }
+    }
+  ]
+}

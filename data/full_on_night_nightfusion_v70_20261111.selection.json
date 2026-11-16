@@ -1,0 +1,823 @@
+{
+  "schemaVersion": 1,
+  "version": "full_on_night_nightfusion_v70_20261111",
+  "goal": {
+    "targetIndependentArtists": 101,
+    "verifiedNewArtistGroups": 4,
+    "complete101ArtistGoal": false
+  },
+  "publisherObservation": {
+    "url": "https://arrabida.bandcamp.com/album/nightfusion-vol-02",
+    "author": "Arrábida Records Psytrance",
+    "captureKind": "indexed_public_publisher_excerpt",
+    "title": "Nightfusion,Vol.02",
+    "releaseDate": "2024-09-12",
+    "compiler": "Humberto Meratti",
+    "trackCount": 12,
+    "genrePhrase": "A collection of 12 powerful tracks carefully selected by Humberto Meratti, that dive deep into the realms of Fullon Night Psytrance",
+    "scope": "all_twelve_members_of_this_exact_volume"
+  },
+  "retailerEdition": {
+    "url": "https://volumo.com/album/5063544104493-nightfusion-vol-2",
+    "httpStatus": 200,
+    "serverDate": "Wed, 11 Nov 2026 23:13:54 GMT",
+    "observedAt": "2026-11-11T23:13:54.600Z",
+    "retryAfter": null,
+    "sha256": "fc0e4a13e467423a9b616b0947ed6e6c47cd40ed1d6e1ea72e70f2c13f18f887",
+    "bytes": 180453,
+    "retailerId": 390752,
+    "icpn": "5063544104493",
+    "title": "Nightfusion, Vol. 2",
+    "releaseDate": "2024-09-12",
+    "supplierReleaseStartAt": "2024-09-11T21:00:00Z",
+    "trackCount": 12,
+    "members": [
+      {
+        "id": 1872589,
+        "position": 1,
+        "isrc": "UKU932401340",
+        "icpn": "5063544104493",
+        "song": "Amigos",
+        "durationMillis": 457808.26,
+        "bpm": 146,
+        "version": null,
+        "artists": [
+          "Alienn"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872590,
+        "position": 2,
+        "isrc": "UKU932401341",
+        "icpn": "5063544104493",
+        "song": "Freaks on the Horizon",
+        "durationMillis": 470270.30000000005,
+        "bpm": 148,
+        "version": null,
+        "artists": [
+          "Overhead (PSY)"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872591,
+        "position": 3,
+        "isrc": "UKU932401342",
+        "icpn": "5063544104493",
+        "song": "Screaming Trees",
+        "durationMillis": 486000,
+        "bpm": 160,
+        "version": null,
+        "artists": [
+          "Fungosodia"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872592,
+        "position": 4,
+        "isrc": "UKU932401343",
+        "icpn": "5063544104493",
+        "song": "Quantum Quandary",
+        "durationMillis": 476000,
+        "bpm": 152,
+        "version": null,
+        "artists": [
+          "Space Pirate"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872593,
+        "position": 5,
+        "isrc": "UKU932401344",
+        "icpn": "5063544104493",
+        "song": "Renegados",
+        "durationMillis": 381989.07,
+        "bpm": 148,
+        "version": null,
+        "artists": [
+          "BRW",
+          "Natsu"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872594,
+        "position": 6,
+        "isrc": "UKU932401345",
+        "icpn": "5063544104493",
+        "song": "Galaxy",
+        "durationMillis": 477996.55,
+        "bpm": 148,
+        "version": null,
+        "artists": [
+          "Freak Freqz"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872595,
+        "position": 7,
+        "isrc": "UKU932401346",
+        "icpn": "5063544104493",
+        "song": "Strange Party",
+        "durationMillis": 415061.86000000004,
+        "bpm": 155,
+        "version": null,
+        "artists": [
+          "Paramad"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872596,
+        "position": 8,
+        "isrc": "UKU932401347",
+        "icpn": "5063544104493",
+        "song": "Touch of Darkness",
+        "durationMillis": 476984.86000000004,
+        "bpm": 150,
+        "version": null,
+        "artists": [
+          "Frenetik Control"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872597,
+        "position": 9,
+        "isrc": "UKU932401348",
+        "icpn": "5063544104493",
+        "song": "Fm Smiling",
+        "durationMillis": 506600,
+        "bpm": 150,
+        "version": null,
+        "artists": [
+          "Daimon Live"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872598,
+        "position": 10,
+        "isrc": "UKU932401349",
+        "icpn": "5063544104493",
+        "song": "Dark Orchestra",
+        "durationMillis": 508540.2,
+        "bpm": 145,
+        "version": null,
+        "artists": [
+          "Nivs"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872599,
+        "position": 11,
+        "isrc": "UKU932401350",
+        "icpn": "5063544104493",
+        "song": "Ataris War",
+        "durationMillis": 423724.18,
+        "bpm": 145,
+        "version": null,
+        "artists": [
+          "Modulator (BR)"
+        ],
+        "remixers": []
+      },
+      {
+        "id": 1872600,
+        "position": 12,
+        "isrc": "UKU932401351",
+        "icpn": "5063544104493",
+        "song": "Reggaesy",
+        "durationMillis": 406600,
+        "bpm": 150,
+        "version": null,
+        "artists": [
+          "Axiomod",
+          "Amonati"
+        ],
+        "remixers": []
+      }
+    ]
+  },
+  "lookupRequest": {
+    "url": "https://itunes.apple.com/lookup?upc=5063544104493&entity=song&country=us",
+    "httpStatus": 200,
+    "serverDate": "Wed, 11 Nov 2026 23:15:30 GMT",
+    "observedAt": "2026-11-11T23:15:29.732Z",
+    "retryAfter": null,
+    "sha256": "8ff84bb7a13280d0d88b4e11fe8d3a0c63ab6512d326f7d4e871765e272be89e",
+    "bytes": 20086,
+    "upc": "5063544104493",
+    "country": "us",
+    "resultCount": 13,
+    "collection": {
+      "id": "1765195429",
+      "title": "Nightfusion, Vol. 2",
+      "releaseDate": "2024-09-12",
+      "trackCount": 12,
+      "copyright": "℗ 2024 Arrabida Records"
+    }
+  },
+  "nativeEdition": {
+    "url": "https://music.apple.com/us/album/nightfusion-vol-2/1765195429",
+    "httpStatus": 200,
+    "serverDate": "Wed, 11 Nov 2026 23:16:18 GMT",
+    "observedAt": "2026-11-11T23:16:18.461Z",
+    "retryAfter": null,
+    "sha256": "9dce471e3d2d05cf065dd0f0b52549bd0553f63efac86cd4e2f3596703df9df6",
+    "bytes": 225826,
+    "title": "Nightfusion, Vol. 2",
+    "releaseDate": "2024-09-12",
+    "trackCount": 12,
+    "collectionId": "1765195429",
+    "copyright": "℗ 2024 Arrabida Records",
+    "members": [
+      {
+        "id": "1765195433",
+        "position": 1,
+        "disc": 1,
+        "artist": "Alienn",
+        "song": "Amigos",
+        "durationMillis": 457808,
+        "url": "https://music.apple.com/us/album/amigos/1765195429?i=1765195433",
+        "artists": [
+          [
+            "Alienn",
+            "314346637"
+          ]
+        ]
+      },
+      {
+        "id": "1765195434",
+        "position": 2,
+        "disc": 1,
+        "artist": "Overhead (PSY)",
+        "song": "Freaks on the Horizon",
+        "durationMillis": 470270,
+        "url": "https://music.apple.com/us/album/freaks-on-the-horizon/1765195429?i=1765195434",
+        "artists": [
+          [
+            "Overhead (PSY)",
+            "1681109322"
+          ]
+        ],
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/10/0a/58100a08-18dd-06af-cf87-8685fa4c8c4e/mzaf_4408480606417424465.plus.aac.ep.m4a"
+      },
+      {
+        "id": "1765195436",
+        "position": 3,
+        "disc": 1,
+        "artist": "Fungosodia",
+        "song": "Screaming Trees",
+        "durationMillis": 486000,
+        "url": "https://music.apple.com/us/album/screaming-trees/1765195429?i=1765195436",
+        "artists": [
+          [
+            "Fungosodia",
+            "1589353987"
+          ]
+        ]
+      },
+      {
+        "id": "1765195437",
+        "position": 4,
+        "disc": 1,
+        "artist": "Space Pirate",
+        "song": "Quantum Quandary",
+        "durationMillis": 476000,
+        "url": "https://music.apple.com/us/album/quantum-quandary/1765195429?i=1765195437",
+        "artists": [
+          [
+            "Space Pirate",
+            "884006501"
+          ]
+        ]
+      },
+      {
+        "id": "1765195438",
+        "position": 5,
+        "disc": 1,
+        "artist": "BRW & Natsu",
+        "song": "Renegados",
+        "durationMillis": 381989,
+        "url": "https://music.apple.com/us/album/renegados/1765195429?i=1765195438",
+        "artists": [
+          [
+            "BRW",
+            "1615510062"
+          ],
+          [
+            "Natsu",
+            "1456062805"
+          ]
+        ],
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/9b/98/a29b98aa-ab4a-fea3-39fa-a4e03f52ab06/mzaf_16893195670456910357.plus.aac.ep.m4a"
+      },
+      {
+        "id": "1765195439",
+        "position": 6,
+        "disc": 1,
+        "artist": "Freak Freqz",
+        "song": "Galaxy",
+        "durationMillis": 477997,
+        "url": "https://music.apple.com/us/album/galaxy/1765195429?i=1765195439",
+        "artists": [
+          [
+            "Freak Freqz",
+            "1627974294"
+          ]
+        ]
+      },
+      {
+        "id": "1765195440",
+        "position": 7,
+        "disc": 1,
+        "artist": "Paramad",
+        "song": "Strange Party",
+        "durationMillis": 415062,
+        "url": "https://music.apple.com/us/album/strange-party/1765195429?i=1765195440",
+        "artists": [
+          [
+            "Paramad",
+            "1613803052"
+          ]
+        ]
+      },
+      {
+        "id": "1765195441",
+        "position": 8,
+        "disc": 1,
+        "artist": "Frenetik Control",
+        "song": "Touch of Darkness",
+        "durationMillis": 476985,
+        "url": "https://music.apple.com/us/album/touch-of-darkness/1765195429?i=1765195441",
+        "artists": [
+          [
+            "Frenetik Control",
+            "382259807"
+          ]
+        ],
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/71/91/b271917c-5628-f3dd-b0a5-af79ba42ec3e/mzaf_12612993334629097911.plus.aac.ep.m4a"
+      },
+      {
+        "id": "1765195443",
+        "position": 9,
+        "disc": 1,
+        "artist": "Daimon Live",
+        "song": "Fm Smiling",
+        "durationMillis": 506600,
+        "url": "https://music.apple.com/us/album/fm-smiling/1765195429?i=1765195443",
+        "artists": [
+          [
+            "Daimon Live",
+            "1717666676"
+          ]
+        ],
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/50/01/9550016f-3568-a323-e787-f56bcdbd2155/mzaf_16461455723441901469.plus.aac.ep.m4a"
+      },
+      {
+        "id": "1765195444",
+        "position": 10,
+        "disc": 1,
+        "artist": "NIVS",
+        "song": "Dark Orchestra",
+        "durationMillis": 508540,
+        "url": "https://music.apple.com/us/album/dark-orchestra/1765195429?i=1765195444",
+        "artists": [
+          [
+            "NIVS",
+            "1257649212"
+          ]
+        ]
+      },
+      {
+        "id": "1765195445",
+        "position": 11,
+        "disc": 1,
+        "artist": "Modulator (BR)",
+        "song": "Ataris War",
+        "durationMillis": 423724,
+        "url": "https://music.apple.com/us/album/ataris-war/1765195429?i=1765195445",
+        "artists": [
+          [
+            "Modulator (BR)",
+            "1756819266"
+          ]
+        ]
+      },
+      {
+        "id": "1765195446",
+        "position": 12,
+        "disc": 1,
+        "artist": "Axiomod & Amonati",
+        "song": "Reggaesy",
+        "durationMillis": 406600,
+        "url": "https://music.apple.com/us/album/reggaesy/1765195429?i=1765195446",
+        "artists": [
+          [
+            "Axiomod",
+            "1555054671"
+          ],
+          [
+            "Amonati",
+            "1324449564"
+          ]
+        ]
+      }
+    ]
+  },
+  "identityReview": {
+    "aliases": [],
+    "performerMemberships": [],
+    "recordingParticipantNotes": []
+  },
+  "heldRecordings": [
+    {
+      "position": 1,
+      "artist": "Alienn",
+      "song": "Amigos",
+      "appleTrackId": "1765195433",
+      "bpm": 146,
+      "reason": "existing_style_performer_gate",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 3,
+      "artist": "Fungosodia",
+      "song": "Screaming Trees",
+      "appleTrackId": "1765195436",
+      "bpm": 160,
+      "reason": "outside_146_154_bpm",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 4,
+      "artist": "Space Pirate",
+      "song": "Quantum Quandary",
+      "appleTrackId": "1765195437",
+      "bpm": 152,
+      "reason": "performer_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 6,
+      "artist": "Freak Freqz",
+      "song": "Galaxy",
+      "appleTrackId": "1765195439",
+      "bpm": 148,
+      "reason": "performer_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 7,
+      "artist": "Paramad",
+      "song": "Strange Party",
+      "appleTrackId": "1765195440",
+      "bpm": 155,
+      "reason": "performer_already_represented_and_outside_bpm_range",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 10,
+      "artist": "NIVS",
+      "song": "Dark Orchestra",
+      "appleTrackId": "1765195444",
+      "bpm": 145,
+      "reason": "outside_146_154_bpm",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 11,
+      "artist": "Modulator (BR)",
+      "song": "Ataris War",
+      "appleTrackId": "1765195445",
+      "bpm": 145,
+      "reason": "outside_146_154_bpm",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    },
+    {
+      "position": 12,
+      "artist": "Axiomod & Amonati",
+      "song": "Reggaesy",
+      "appleTrackId": "1765195446",
+      "bpm": 150,
+      "reason": "both_performers_already_represented",
+      "audioVerification": null,
+      "countTowardEligibleArtistGoal": false
+    }
+  ],
+  "freshAudioRequests": [
+    {
+      "appleTrackId": "1765195434",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/10/0a/58100a08-18dd-06af-cf87-8685fa4c8c4e/mzaf_11171388189256874203.plus.aac.p.m4a",
+      "observedAt": "2026-11-11T23:17:28.782Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Wed, 11 Nov 2026 23:17:29 GMT",
+      "sha256": "c079680760e10418fa6430d6d35d47efa26a5d8bf4a5b927623c83b4991361c0",
+      "bytes": 1050641
+    },
+    {
+      "appleTrackId": "1765195438",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/9b/98/a29b98aa-ab4a-fea3-39fa-a4e03f52ab06/mzaf_12229459087254075729.plus.aac.p.m4a",
+      "observedAt": "2026-11-11T23:17:31.163Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Wed, 11 Nov 2026 23:17:32 GMT",
+      "sha256": "3681500cda8a354de7b101e356e28215a5955a57ab3dfe3d0ef5d42d500ff174",
+      "bytes": 990926
+    },
+    {
+      "appleTrackId": "1765195441",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/71/91/b271917c-5628-f3dd-b0a5-af79ba42ec3e/mzaf_2169034963460328521.plus.aac.p.m4a",
+      "observedAt": "2026-11-11T23:17:32.971Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Wed, 11 Nov 2026 23:17:34 GMT",
+      "sha256": "aa6a6a63e3a50dad6719b800dc6ff352cc50b1e1f113459f4cb7137e9cf17075",
+      "bytes": 1049876
+    },
+    {
+      "appleTrackId": "1765195443",
+      "country": "us",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/50/01/9550016f-3568-a323-e787-f56bcdbd2155/mzaf_9404372321060991853.plus.aac.p.m4a",
+      "observedAt": "2026-11-11T23:17:35.573Z",
+      "httpStatus": 200,
+      "retryAfter": null,
+      "contentType": "audio/x-m4p",
+      "serverDate": "Wed, 11 Nov 2026 23:17:36 GMT",
+      "sha256": "273005aa212f036b1d4156241d0bfc962385ecc8c393edabc8f64da371a5b57f",
+      "bytes": 973337
+    }
+  ],
+  "tracks": [
+    {
+      "style": "full_on_night",
+      "artist": "Overhead (PSY)",
+      "song": "Freaks on the Horizon",
+      "label": "Arrabida Records",
+      "bpm": 148,
+      "bpmSource": "https://volumo.com/track/1872590-freaks-on-the-horizon",
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "appleTrackId": "1765195434",
+      "recordingId": "apple_music:1765195434",
+      "sourceUrl": "https://music.apple.com/us/album/freaks-on-the-horizon/1765195429?i=1765195434",
+      "genreSourceKey": "nightfusion_1765195434",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "overheadpsy"
+        ],
+        "appleArtistIds": [
+          "1681109322"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1681109322,
+        "collectionId": 1765195429,
+        "trackId": 1765195434,
+        "artistName": "Overhead (PSY)",
+        "collectionName": "Nightfusion, Vol. 2",
+        "trackName": "Freaks on the Horizon",
+        "trackViewUrl": "https://music.apple.com/us/album/freaks-on-the-horizon/1765195429?i=1765195434&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/10/0a/58100a08-18dd-06af-cf87-8685fa4c8c4e/mzaf_11171388189256874203.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/7f/20/477f2005-b4eb-4bc6-1126-63997c52c710/5063544104493_cover.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 12,
+        "trackNumber": 2,
+        "trackTimeMillis": 470270,
+        "releaseDate": "2024-09-12T12:00:00Z",
+        "lookupMetadataSha256": "8ff84bb7a13280d0d88b4e11fe8d3a0c63ab6512d326f7d4e871765e272be89e"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-11T23:17:28.782Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/10/0a/58100a08-18dd-06af-cf87-8685fa4c8c4e/mzaf_11171388189256874203.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1050641,
+        "sha256": "c079680760e10418fa6430d6d35d47efa26a5d8bf4a5b927623c83b4991361c0",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.32672,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1765195434",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Wed, 11 Nov 2026 23:17:29 GMT"
+      }
+    },
+    {
+      "style": "full_on_night",
+      "artist": "BRW & Natsu",
+      "song": "Renegados",
+      "label": "Arrabida Records",
+      "bpm": 148,
+      "bpmSource": "https://volumo.com/track/1872593-renegados",
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "appleTrackId": "1765195438",
+      "recordingId": "apple_music:1765195438",
+      "sourceUrl": "https://music.apple.com/us/album/renegados/1765195429?i=1765195438",
+      "genreSourceKey": "nightfusion_1765195438",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "brw",
+          "natsu"
+        ],
+        "appleArtistIds": [
+          "1615510062",
+          "1456062805"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1615510062,
+        "collectionId": 1765195429,
+        "trackId": 1765195438,
+        "artistName": "BRW & Natsu",
+        "collectionName": "Nightfusion, Vol. 2",
+        "trackName": "Renegados",
+        "trackViewUrl": "https://music.apple.com/us/album/renegados/1765195429?i=1765195438&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/9b/98/a29b98aa-ab4a-fea3-39fa-a4e03f52ab06/mzaf_12229459087254075729.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/7f/20/477f2005-b4eb-4bc6-1126-63997c52c710/5063544104493_cover.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 12,
+        "trackNumber": 5,
+        "trackTimeMillis": 381989,
+        "releaseDate": "2024-09-12T12:00:00Z",
+        "lookupMetadataSha256": "8ff84bb7a13280d0d88b4e11fe8d3a0c63ab6512d326f7d4e871765e272be89e"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-11T23:17:31.163Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a2/9b/98/a29b98aa-ab4a-fea3-39fa-a4e03f52ab06/mzaf_12229459087254075729.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 990926,
+        "sha256": "3681500cda8a354de7b101e356e28215a5955a57ab3dfe3d0ef5d42d500ff174",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.329416,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1765195438",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Wed, 11 Nov 2026 23:17:32 GMT"
+      }
+    },
+    {
+      "style": "full_on_night",
+      "artist": "Frenetik Control",
+      "song": "Touch of Darkness",
+      "label": "Arrabida Records",
+      "bpm": 150,
+      "bpmSource": "https://volumo.com/track/1872596-touch-of-darkness",
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "appleTrackId": "1765195441",
+      "recordingId": "apple_music:1765195441",
+      "sourceUrl": "https://music.apple.com/us/album/touch-of-darkness/1765195429?i=1765195441",
+      "genreSourceKey": "nightfusion_1765195441",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "frenetikcontrol"
+        ],
+        "appleArtistIds": [
+          "382259807"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 382259807,
+        "collectionId": 1765195429,
+        "trackId": 1765195441,
+        "artistName": "Frenetik Control",
+        "collectionName": "Nightfusion, Vol. 2",
+        "trackName": "Touch of Darkness",
+        "trackViewUrl": "https://music.apple.com/us/album/touch-of-darkness/1765195429?i=1765195441&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/71/91/b271917c-5628-f3dd-b0a5-af79ba42ec3e/mzaf_2169034963460328521.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/7f/20/477f2005-b4eb-4bc6-1126-63997c52c710/5063544104493_cover.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 12,
+        "trackNumber": 8,
+        "trackTimeMillis": 476985,
+        "releaseDate": "2024-09-12T12:00:00Z",
+        "lookupMetadataSha256": "8ff84bb7a13280d0d88b4e11fe8d3a0c63ab6512d326f7d4e871765e272be89e"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-11T23:17:32.971Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b2/71/91/b271917c-5628-f3dd-b0a5-af79ba42ec3e/mzaf_2169034963460328521.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 1049876,
+        "sha256": "aa6a6a63e3a50dad6719b800dc6ff352cc50b1e1f113459f4cb7137e9cf17075",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.31223,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1765195441",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Wed, 11 Nov 2026 23:17:34 GMT"
+      }
+    },
+    {
+      "style": "full_on_night",
+      "artist": "Daimon Live",
+      "song": "Fm Smiling",
+      "label": "Arrabida Records",
+      "bpm": 150,
+      "bpmSource": "https://volumo.com/track/1872597-fm-smiling",
+      "vocals": null,
+      "energy": null,
+      "context": [],
+      "appleTrackId": "1765195443",
+      "recordingId": "apple_music:1765195443",
+      "sourceUrl": "https://music.apple.com/us/album/fm-smiling/1765195429?i=1765195443",
+      "genreSourceKey": "nightfusion_1765195443",
+      "independentArtistGroup": {
+        "componentKeys": [
+          "daimonlive"
+        ],
+        "appleArtistIds": [
+          "1717666676"
+        ]
+      },
+      "lookupObservation": {
+        "wrapperType": "track",
+        "kind": "song",
+        "country": "USA",
+        "artistId": 1717666676,
+        "collectionId": 1765195429,
+        "trackId": 1765195443,
+        "artistName": "Daimon Live",
+        "collectionName": "Nightfusion, Vol. 2",
+        "trackName": "Fm Smiling",
+        "trackViewUrl": "https://music.apple.com/us/album/fm-smiling/1765195429?i=1765195443&uo=4",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/50/01/9550016f-3568-a323-e787-f56bcdbd2155/mzaf_9404372321060991853.plus.aac.p.m4a",
+        "artworkUrl100": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/7f/20/477f2005-b4eb-4bc6-1126-63997c52c710/5063544104493_cover.jpg/100x100bb.jpg",
+        "discCount": 1,
+        "discNumber": 1,
+        "trackCount": 12,
+        "trackNumber": 9,
+        "trackTimeMillis": 506600,
+        "releaseDate": "2024-09-12T12:00:00Z",
+        "lookupMetadataSha256": "8ff84bb7a13280d0d88b4e11fe8d3a0c63ab6512d326f7d4e871765e272be89e"
+      },
+      "audioVerification": {
+        "observedAt": "2026-11-11T23:17:35.573Z",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/50/01/9550016f-3568-a323-e787-f56bcdbd2155/mzaf_9404372321060991853.plus.aac.p.m4a",
+        "httpStatus": 200,
+        "contentType": "audio/x-m4p",
+        "bytes": 973337,
+        "sha256": "273005aa212f036b1d4156241d0bfc962385ecc8c393edabc8f64da371a5b57f",
+        "method": "Chromium native HTMLMediaElement playback of exact unsigned Apple promotional preview",
+        "currentTimeAfter": 0.320156,
+        "mediaDurationSeconds": 30.000998,
+        "mediaError": null,
+        "readyState": 4,
+        "pausedAfter": false,
+        "appleTrackId": "1765195443",
+        "country": "us",
+        "retryAfter": null,
+        "serverDate": "Wed, 11 Nov 2026 23:17:36 GMT"
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "version": 1,
   "core": "core.json",
   "catalogSummary": {
-    "titleCount": 9147,
+    "titleCount": 9159,
     "styleCount": 169,
     "countingMethod": "distinct_artist_and_title_including_named_versions",
     "scope": "bundled_catalog_metadata_not_audio_availability"
@@ -247,7 +247,7 @@
     "frenchcore": 132,
     "full_on": 456,
     "full_on_morning": 79,
-    "full_on_night": 88,
+    "full_on_night": 95,
     "funky_house": 29,
     "future_bass": 34,
     "future_garage": 97,
@@ -270,7 +270,7 @@
     "hardwave": 28,
     "hi_nrg": 28,
     "hi_tech": 75,
-    "house": 196,
+    "house": 201,
     "hypnotic_techno": 39,
     "idm": 40,
     "industrial_dance": 28,

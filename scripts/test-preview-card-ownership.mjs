@@ -91,6 +91,8 @@ const trackA = { artist: "Artist A", song: "Track A" };
 const trackB = { artist: "Artist B", song: "Track B" };
 const player = fakeAudio();
 const context = {
+  REVIEWED_BATIDA_SOURCE: "dynamic_dataset_local_reviewed_batida",
+  reviewedExactAppleProof: () => null,
   trackPreview: player,
   currentRecommendation: trackB,
   recommendationPreviewRenderToken: 2

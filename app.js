@@ -4843,7 +4843,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261115batida101";
+const SONIC_APP_BUILD_ID = "20261115opening1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -14275,6 +14275,8 @@ const VERIFIED_PSYTRANCE_HOMONYM_TRACKS = [
   }
 ];
 
+const REVIEWED_EXACT_APPLE_STYLES = new Set(["house", "full_on_night"]);
+const HOUSE_OPENING_EDITORIAL_URL = "https://music.apple.com/us/playlist/house-nation/pl.75f03abb293e4430a5f550d058c6f6a0";
 const REVIEWED_RECORDING_STYLE_PROOFS_V26 = [
   {
     "style": "big_beat",
@@ -14331,6 +14333,133 @@ const REVIEWED_RECORDING_STYLE_PROOFS_V26 = [
     "recordingUrl": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
     "evidenceUrl": "https://virtuallight.bandcamp.com/track/virtual-light-module-virus-extreme-transmission",
     "bandcampTrackId": "734106270"
+  },
+  {
+    style: "full_on_night",
+    artist: "Overhead (PSY)",
+    song: "Freaks on the Horizon",
+    recordingUrl: "https://music.apple.com/us/album/freaks-on-the-horizon/1765195429?i=1765195434",
+    evidenceUrl: "https://arrabida.bandcamp.com/album/nightfusion-vol-02",
+    publisherLabel: "Arrábida Records Psytrance",
+    appleTrackId: "1765195434",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/58/10/0a/58100a08-18dd-06af-cf87-8685fa4c8c4e/",
+    bpmExact: 148
+  },
+  {
+    style: "full_on_night",
+    artist: "BRW & Natsu",
+    song: "Renegados",
+    recordingUrl: "https://music.apple.com/us/album/renegados/1765195429?i=1765195438",
+    evidenceUrl: "https://arrabida.bandcamp.com/album/nightfusion-vol-02",
+    publisherLabel: "Arrábida Records Psytrance",
+    appleTrackId: "1765195438",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/a2/9b/98/a29b98aa-ab4a-fea3-39fa-a4e03f52ab06/",
+    bpmExact: 148
+  },
+  {
+    style: "full_on_night",
+    artist: "Frenetik Control",
+    song: "Touch of Darkness",
+    recordingUrl: "https://music.apple.com/us/album/touch-of-darkness/1765195429?i=1765195441",
+    evidenceUrl: "https://arrabida.bandcamp.com/album/nightfusion-vol-02",
+    publisherLabel: "Arrábida Records Psytrance",
+    appleTrackId: "1765195441",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/b2/71/91/b271917c-5628-f3dd-b0a5-af79ba42ec3e/",
+    bpmExact: 150
+  },
+  {
+    style: "full_on_night",
+    artist: "Daimon Live",
+    song: "Fm Smiling",
+    recordingUrl: "https://music.apple.com/us/album/fm-smiling/1765195429?i=1765195443",
+    evidenceUrl: "https://arrabida.bandcamp.com/album/nightfusion-vol-02",
+    publisherLabel: "Arrábida Records Psytrance",
+    appleTrackId: "1765195443",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/95/50/01/9550016f-3568-a323-e787-f56bcdbd2155/",
+    bpmExact: 150
+  },
+  {
+    style: "full_on_night",
+    artist: "MidSider",
+    song: "Raulzito",
+    recordingUrl: "https://music.apple.com/us/album/raulzito/1759620123?i=1759620124",
+    evidenceUrl: "https://sectarrecords.com.br/releases-1",
+    publisherLabel: "Sectar Records",
+    appleTrackId: "1759620124",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/ea/6e/11/ea6e11a3-c327-e2e7-8269-315f43ab905b/",
+    bpmExact: 150
+  },
+  {
+    style: "full_on_night",
+    artist: "Antica",
+    song: "Mr Groove Man",
+    recordingUrl: "https://music.apple.com/us/album/mr-groove-man/1744038130?i=1744038131",
+    evidenceUrl: "https://sectarrecords.com.br/releases-1",
+    publisherLabel: "Sectar Records",
+    appleTrackId: "1744038131",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/19/ae/8b/19ae8b02-e894-0c11-25ef-e25b1312ceb9/",
+    bpmExact: null
+  },
+  {
+    style: "full_on_night",
+    artist: "Zeetlam",
+    song: "Price of Life",
+    recordingUrl: "https://music.apple.com/us/album/price-of-life/1765892864?i=1765892867",
+    evidenceUrl: "https://sectarrecords.com.br/releases-1",
+    publisherLabel: "Sectar Records",
+    appleTrackId: "1765892867",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/e1/67/58/e1675831-18ea-c535-88e5-f8864af7242e/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "David Penn",
+    song: "Satisfy My Soul",
+    recordingUrl: "https://music.apple.com/us/song/satisfy-my-soul/6776095342",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6776095342",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/1c/78/98/1c7898e2-0f8c-409c-492c-0bda675bfe97/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Sam Divine",
+    song: "Paradise",
+    recordingUrl: "https://music.apple.com/us/song/paradise/6812867623",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6812867623",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/fd/94/3a/fd943a2e-9f22-00fd-3dbe-f344fb1e0802/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Ferreck Dawn",
+    song: "Say What You Mean",
+    recordingUrl: "https://music.apple.com/us/song/say-what-you-mean/1891791608",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "1891791608",
+    applePreviewAsset: "/itunes-assets/AudioPreview221/v4/01/48/a3/0148a331-4d74-935b-72c3-5c06ff18d521/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Adelphi Music Factory",
+    song: "You & Me",
+    recordingUrl: "https://music.apple.com/us/song/you-me/6778058030",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6778058030",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/5f/8c/5c/5f8c5cb8-9f99-d4d0-c5e1-6c7109f1c7c7/",
+    bpmExact: null
+  },
+  {
+    style: "house",
+    artist: "Eden Prince",
+    song: "Surprised",
+    recordingUrl: "https://music.apple.com/us/song/surprised/6820558050",
+    evidenceUrl: HOUSE_OPENING_EDITORIAL_URL,
+    appleTrackId: "6820558050",
+    applePreviewAsset: "/itunes-assets/AudioPreview211/v4/ff/3d/0d/ff3d0dba-abd0-c1f7-297d-0c5f4906612e/",
+    bpmExact: null
   }
 ];
 
@@ -18274,7 +18403,7 @@ function mergeExternalDatasetRows(rows = [], sourceTag = "dataset_external") {
     const bio = pickDatasetValue(fields, ["artist_bio", "bio", "description", "about", "resumo"]);
 
     const recordingScopedEvidence = parseDatasetListValue(pickDatasetValue(fields, ["source_tags", "catalog_tags", "tags"]))
-      .some(tag => tag === "reviewed_recording_style_v26" || tag === "full_on_night_recordings_v26");
+      .some(tag => tag === "reviewed_recording_style_v26" || tag === "reviewed_recording_style_v27" || tag === "full_on_night_recordings_v26");
     if (artist && !recordingScopedEvidence && !reviewed) {
       const recentSignalDate = extractRecentReleaseDateFromDatasetRow(rawRow, fields);
       if (seedStyleArtistFromDataset(style, artist)) {
@@ -19292,9 +19421,11 @@ function previewCandidatesForTrack(track) {
   }
   const ordered = [];
   const seen = new Set();
+  const publisherProof = reviewedExactAppleProof(track);
   const add = (value = "") => {
     const url = normalizePreviewUrl(value);
     if (!url || seen.has(url)) return;
+    if (publisherProof?.applePreviewAsset && !reviewedPublisherApplePreviewMatches(publisherProof, url)) return;
     seen.add(url);
     ordered.push(url);
   };
@@ -19602,6 +19733,8 @@ function createTrackPreviewProbeElement() {
 function commitTrackPreviewSource(track, previewUrl = "", renderToken = 0) {
   if (!trackPreview || !track || !previewUrl) return false;
   if (track.source === REVIEWED_BATIDA_SOURCE && !previewCandidatesForTrack(track).includes(normalizePreviewUrl(previewUrl))) return false;
+  const publisherProof = reviewedExactAppleProof(track);
+  if (publisherProof?.applePreviewAsset && !reviewedPublisherApplePreviewMatches(publisherProof, previewUrl)) return false;
   const trackKey = recommendationTrackKey(track);
   if (
     !trackKey ||
@@ -19725,7 +19858,9 @@ async function pickPlayablePreviewSource(audioEl, candidates = [], options = {})
   return "";
 }
 
-function isLikelyCompilationEntry({ song = "", artist = "", label = "", durationSec = 0 } = {}) {
+function isLikelyCompilationEntry({ song = "", artist = "", label = "", durationSec = 0 } = {}, recording = null) {
+  // A pinned original can have "Live" in its credited performer name.
+  if (reviewedExactAppleProof(recording)) return false;
   const songRaw = String(song || "").trim();
   const artistRaw = String(artist || "").trim();
   const labelRaw = String(label || "").trim();
@@ -20650,15 +20785,38 @@ function reviewedRecordingStyleProof(track) {
     const recording = new URL(metadata.source_url || "");
     const evidence = new URL(metadata.genre_evidence_url || "");
     if (recording.href !== proof.recordingUrl || evidence.href !== proof.evidenceUrl) return null;
-    if (proof.appleTrackId && tags.has("reviewed_recording_style_v26") && tags.has("apple_editorial_recording") && tags.has("audio_browser_decoded") &&
+    if (proof.appleTrackId &&
         metadata.recording_id === `apple_music:${proof.appleTrackId}` &&
-        recording.protocol === "https:" && recording.hostname === "music.apple.com" && recording.pathname.split("/").pop() === proof.appleTrackId) return proof;
+        recording.origin === "https://music.apple.com") {
+      if (proof.applePreviewAsset && tags.has("reviewed_recording_style_v27") && tags.has("audio_browser_verified") &&
+          (recording.searchParams.get("i") || recording.pathname.split("/").pop()) === proof.appleTrackId &&
+          Number(track.bpmExact || 0) === Number(proof.bpmExact)) return proof;
+      if (!proof.applePreviewAsset && tags.has("reviewed_recording_style_v26") && tags.has("apple_editorial_recording") &&
+          tags.has("audio_browser_decoded") && recording.pathname.split("/").pop() === proof.appleTrackId) return proof;
+    }
     if (proof.bandcampTrackId && tags.has("full_on_night_recordings_v26") && tags.has("artist_recording_genre_verified") && tags.has("audio_http_body_checked") &&
         metadata.recording_id === `bandcamp:${proof.bandcampTrackId}` &&
         String(track.bandcampTrackId || metadata.bandcamp_track_id || "") === proof.bandcampTrackId &&
         track.bandcampTrackUrl === proof.recordingUrl) return proof;
   } catch (_) {}
   return null;
+}
+
+function reviewedExactAppleProof(track) {
+  if (!REVIEWED_EXACT_APPLE_STYLES.has(track?.style)) return null;
+  const proof = reviewedRecordingStyleProof(track);
+  return proof?.applePreviewAsset ? proof : null;
+}
+
+function reviewedPublisherApplePreviewMatches(proof, url) {
+  try {
+    const preview = new URL(url);
+    return preview.origin === "https://audio-ssl.itunes.apple.com" && !preview.search && !preview.hash &&
+      preview.pathname.startsWith(proof.applePreviewAsset) &&
+      /^mzaf_\d+\.plus\.aac\.p\.m4a$/.test(preview.pathname.slice(proof.applePreviewAsset.length));
+  } catch (_) {
+    return false;
+  }
 }
 
 function isTrustedCuratedCatalogTrack(track) {
@@ -20769,7 +20927,7 @@ function purgeDynamicMismatches(style) {
       artist: track.artist,
       label: track.label,
       durationSec: dynamicDurationSec
-    });
+    }, track);
     const artistOk = artistAllowedForStyle(styleToCheck, track.artist, track);
     const anchoredArtistOk =
       !requiresSeedAnchorForDynamicStyle(styleToCheck) ||
@@ -20803,7 +20961,7 @@ function sanitizeCatalogByStyleRules() {
       artist: track.artist,
       label: track.label,
       durationSec
-    });
+    }, track);
     const generatedDynamic =
       isDynamicSource(track.source) &&
       (isLikelyGeneratedTrackTitle(track.song) || isLikelyChannelStyleArtistName(track.artist));
@@ -22045,7 +22203,7 @@ function isTrackEligibleForRecommendation(track) {
       artist: track.artist,
       label: track.label,
       durationSec: resolveTrackDurationSeconds(track)
-    });
+    }, track);
     if (invalidDynamic) return false;
   }
   return true;
@@ -23556,6 +23714,10 @@ function addDynamicTrackToCatalog({
     bandcampTrackId, bandcampTrackUrl, soundcloudTrackUrl
   });
   if (source === REVIEWED_BATIDA_SOURCE && !reviewed) return false;
+  const recordingIdentity = { style, artist: artistName, song: songName, source, bpmExact, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId };
+  const incomingProof = reviewedRecordingStyleProof(recordingIdentity);
+  if (REVIEWED_EXACT_APPLE_STYLES.has(style) && sourceTags.includes("reviewed_recording_style_v27") &&
+      (!incomingProof?.applePreviewAsset || !reviewedPublisherApplePreviewMatches(incomingProof, previewUrl))) return false;
   const curatedInput = applyCuratedTrackMetadata({
     artist: artistName,
     song: songName,
@@ -23584,7 +23746,7 @@ function addDynamicTrackToCatalog({
   })) return false;
   if (!reviewed && isLikelyChannelStyleArtistName(artistName)) return false;
   if (!reviewed && isLikelyGeneratedTrackTitle(songName)) return false;
-  if (!reviewed && !artistAllowedForStyle(style, artistName, { style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId })) return false;
+  if (!reviewed && !artistAllowedForStyle(style, artistName, recordingIdentity)) return false;
   if (!reviewed && isDynamicSource(source) && requiresSeedAnchorForDynamicStyle(style) && !artistSeedAnchoredForStyle(style, artistName)) return false;
 
   const rawLabel = String(label || "").trim();
@@ -23605,7 +23767,6 @@ function addDynamicTrackToCatalog({
   if (existingKeys.has(key)) {
     const exactIndex = catalog.findIndex(track => recommendationTrackKey(track) === key && canonicalArtistIdentity(track.artist) === canonicalArtistIdentity(artistName) && normalize(track.song) === normalize(songName));
     const existing = catalog[exactIndex];
-    const incomingProof = reviewedRecordingStyleProof({ style, artist: artistName, song: songName, source, catalogMetadata, sourceTags, bandcampTrackUrl, bandcampTrackId });
     if (exactIndex >= 0 && (reviewed || incomingProof) && !reviewedRecordingStyleProof(existing) && !reviewedBatidaRecording(existing)) {
       reviewedReplacementIndex = exactIndex;
     }
@@ -23653,11 +23814,11 @@ function addDynamicTrackToCatalog({
   const hasBandcampPreview = Boolean(safeBandcampTrackId || safeBandcampTrackUrl || safeBandcampUrl);
   const hasRefreshablePreview = Boolean(safeDeezerTrackId || trackAppleRecordingId({ catalogMetadata: safeCatalogMetadata }));
   const hasPlayableFallback = Boolean(hasDirectYoutube || hasDirectSoundcloud || hasBandcampPreview);
-  if (!reviewed && isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration })) return false;
+  if (!reviewed && isLikelyCompilationEntry({ song: songName, artist: artistName, label: cleanLabel, durationSec: duration }, recordingIdentity)) return false;
   const durationText = duration > 0
     ? `${String(Math.floor(duration / 60)).padStart(2, "0")}:${String(duration % 60).padStart(2, "0")}`
     : "06:00";
-  const publisherCheckedRecording = sourceTags.some((tag) => [
+  const publisherCheckedRecording = Boolean(incomingProof) || sourceTags.some((tag) => [
     "electronic_artist_diversity_v24", "electronic_editorial_v24", "electronic_label_v24", "electronic_label_recordings_v25", "reviewed_recording_style_v26", "full_on_night_recordings_v26"
   ].includes(tag));
 
@@ -24348,6 +24509,7 @@ async function refreshSoundCloudPreviewForTrack(track, { force = false } = {}) {
 
 async function resolveSoundCloudEmbedForTrack(track, { force = false } = {}) {
   if (track?.source === REVIEWED_BATIDA_SOURCE) return Boolean(reviewedBatidaRecording(track)?.soundcloudTrackId);
+  if (reviewedExactAppleProof(track)) return false;
   if (!track?.style || !track?.artist || !track?.song) return false;
   if (trackHasDirectSoundCloudTrack(track)) {
     track.soundcloudVerified = true;
@@ -24379,9 +24541,10 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
     track.existenceVerified = true;
   }
   if (trustedSlambient) normalizeTrustedSlambientCatalog();
+  const publisherProof = reviewedExactAppleProof(track);
   const rawPreviewUrl = String(track.previewUrl || "").trim();
   const previewExpired = Boolean(rawPreviewUrl && previewUrlIsExpired(rawPreviewUrl, 0));
-  const currentPreview = normalizePreviewUrl(rawPreviewUrl);
+  const currentPreview = publisherProof?.applePreviewAsset ? previewCandidatesForTrack(track)[0] || "" : normalizePreviewUrl(rawPreviewUrl);
   if (currentPreview) {
     track.previewUrl = currentPreview;
     registerPreviewCandidate(track, currentPreview);
@@ -24425,6 +24588,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
 
   const applyTrackMetadataApiMatch = (match = null) => {
     if (!match) return false;
+    if (publisherProof?.applePreviewAsset && !reviewedPublisherApplePreviewMatches(publisherProof, match.previewUrl)) return false;
     const candidateTitle = match.song || match.title || "";
     const confidence = Number(match.confidenceScore) || titleConfidence(track.song, candidateTitle);
     if (!candidateTitle || confidence < minConfidence || !strictTitleMatch(track.song, candidateTitle)) return false;
@@ -24454,7 +24618,7 @@ async function resolvePreviewForTrack(track, { forceLookup = false } = {}) {
       track.coverArtSource = trackMetadataSourceLabel(match) || (match.source === "deezer" ? "Deezer" : "iTunes");
       if (currentRecommendation === track) renderTopSwipeArtwork(track);
     }
-    if (bpmExact) {
+    if (bpmExact && !publisherProof?.applePreviewAsset) {
       track.bpmExact = bpmExact;
       track.bpm = mapBpmToRange(track.bpmExact);
       if (!track.energy) track.energy = energyFromBpm(track.bpmExact);
@@ -35776,7 +35940,7 @@ function loadDynamicCatalogCache() {
           artist: track.artist,
           label: track.label,
           durationSec
-        })
+        }, track)
       ) return;
       if (isLikelyGeneratedTrackTitle(track.song)) return;
       if (isLikelyChannelStyleArtistName(track.artist)) return;
@@ -35813,6 +35977,13 @@ function savePreferences() {
   if (!preferencesKey) return;
   try {
     const payload = buildPreferencesSnapshot();
+    // The style displayed for an open-discovery card is not a selection to
+    // restore as a filter the next time the browser opens.
+    if (!isNativeAppRuntime() && !isAppStoreRuntimeMode() &&
+        !swipeUserAnchoredStyle && currentRecommendation?.style === payload.style &&
+        !payload.context && !payload.energy && !payload.bpm && !payload.vocals) {
+      payload.style = "";
+    }
     localStorage.setItem(preferencesKey, JSON.stringify(payload));
   } catch (_e) {
     // ignore storage failures
@@ -38075,6 +38246,7 @@ function youtubeVideoCandidatesForTrack(track) {
 
 async function resolveYouTubeVideoFromApi(track) {
   if (track?.source === REVIEWED_BATIDA_SOURCE) return null;
+  if (reviewedExactAppleProof(track)) return null;
   if (!track || trackHasDirectYouTubeVideo(track) || !youtubeApiAvailable) return false;
   const endpoint = resolveMusicApiEndpoint("SONIC_YOUTUBE_SEARCH_API_URL", "/api/youtube-search");
   if (!endpoint) return false;
@@ -52134,9 +52306,9 @@ function recommendationEvidenceSource(track) {
   const reviewed = reviewedRecordingStyleProof(track);
   if (reviewed) return {
     url: reviewed.evidenceUrl,
-    label: reviewed.appleTrackId
+    label: reviewed.publisherLabel || (reviewed.appleTrackId
       ? (reviewed.evidenceUrl.endsWith("/pl.78e98b7f1ea842dc807bd646ab37083e") ? "Apple Music · Big Beat Essentials" : "Apple Music")
-      : sonicTinyCopy("Bandcamp · página da faixa", "Bandcamp · track page", "Bandcamp · página de la pista")
+      : sonicTinyCopy("Bandcamp · página da faixa", "Bandcamp · track page", "Bandcamp · página de la pista"))
   };
   if (!isTrustedCuratedCatalogTrack(track)) return null;
   const metadata = catalogTrackMetadata(track);
@@ -55693,7 +55865,8 @@ function presentInstantSwipeRecommendation({
 } = {}) {
   if (!track || !prefs || !isTrackEligibleForRecommendation(track)) return false;
   const requestedPrefs = normalizeRecommendationPrefs(prefs);
-  if (requestedPrefs.style === "batida" && !trackMatchesBpmPreference(track, requestedPrefs.bpm)) return false;
+  const strictBpm = requestedPrefs.style === "batida" || (!isNativeAppRuntime() && !isAppStoreRuntimeMode());
+  if (strictBpm && !trackMatchesBpmPreference(track, requestedPrefs.bpm)) return false;
   if (requestedPrefs.style && selectableSwipeStyle(track.style || "") !== requestedPrefs.style) {
     return false;
   }
@@ -55800,6 +55973,59 @@ function pickInstantOpeningTrack() {
   return null;
 }
 
+function pickWebOpeningSequenceTrack(prefs = {}, sourceTrack = null, { reaction = "", avoidArtistName = "" } = {}) {
+  if (isNativeAppRuntime() || isAppStoreRuntimeMode() || seenTrackKeysMemory.size >= 5) return null;
+  prefs = normalizeRecommendationPrefs(prefs);
+  if (prefs.style === "batida") return null;
+  const styles = new Set(prefs.style ? [prefs.style] : getAllSelectableStyles());
+  const blockedArtists = buildGlobalArtistExclusionSet([sourceTrack?.artist || "", avoidArtistName]);
+  const exclusions = buildGlobalTrackExclusionSet();
+  const sourceStyle = sourceTrack?.style || "";
+  const sourceFamily = familyOf(sourceStyle);
+  const seed = [
+    currentCurationUserSeed(),
+    currentCurationVisitId(),
+    curationOpenSeed,
+    recommendationTrackKey(sourceTrack),
+    seenTrackKeysMemory.size,
+    curationContextSignature(prefs)
+  ].join("::");
+  let bestTrack = null;
+  let bestScore = -Infinity;
+
+  // Use routes already resolved in this browser. In particular, loading or
+  // reshuffling a provider-backed suggestion queue must not pick the next card.
+  for (const track of catalogTracksForStyle(prefs.style)) {
+    if (!styles.has(track.style) || !trackHasVerifiedImmediateAudioPreview(track)) continue;
+    // A redirect to the Deezer API still needs a provider request and can fail
+    // before any media bytes arrive, even when catalog metadata marks it checked.
+    if (new URL(track.previewUrl).pathname === "/api/deezer-preview") continue;
+    if (!interactionFallbackTrackAllowed(track, prefs, sourceTrack, avoidArtistName, { allowSeen: true, blockedArtists })) continue;
+    if (trackBlockedByKnownSignals(track, exclusions.keys, exclusions.titles)) continue;
+    const styleFit = hierarchicalStyleAffinityScore(track.style, prefs);
+    const sameStyle = track.style === sourceStyle;
+    const sameFamily = sourceFamily && familyOf(track.style) === sourceFamily;
+    const reactionFit = reaction === "like" ? (sameStyle ? 8 : sameFamily ? 4 : 0)
+      : reaction === "pass" && sameStyle ? -4 : 0;
+    const filterFit =
+      (prefs.context ? contextAffinityScore(track, prefs) * 2 : 0) +
+      (prefs.energy ? 3 - energyDistance(track.energy, prefs.energy) * 3 : 0) +
+      (prefs.vocals && track.vocals === prefs.vocals ? 6 : 0);
+    const score =
+      styleFit + personalTasteScore(track, prefs) + reactionFit + filterFit +
+      trackStyleConfidenceValue(track) * 2 +
+      (hasReliableBpmForTrack(track) ? 0.35 : 0) -
+      previewPenaltyForTrack(track) -
+      Math.min(3, globalExposurePenalty(track) / 15) +
+      hashUnit(`${seed}::${recommendationTrackKey(track)}`) * 9;
+    if (score > bestScore) {
+      bestTrack = track;
+      bestScore = score;
+    }
+  }
+  return bestTrack;
+}
+
 function pickInstantPrimaryNextTrack(
   sourceTrack = currentRecommendation,
   requiredStyle = ""
@@ -55809,6 +56035,13 @@ function pickInstantPrimaryNextTrack(
   if (lockedStyle === "batida") {
     return pickReviewedBatidaRecommendation(normalizeRecommendationPrefs({ ...lastPrefs, style: lockedStyle }), { sourceTrack });
   }
+  const webContinuation = !isNativeAppRuntime() && !isAppStoreRuntimeMode();
+  const prefs = normalizeRecommendationPrefs(lockedStyle && webContinuation
+    ? { ...lastPrefs, style: lockedStyle }
+    : { style: lockedStyle });
+  const earlyTrack = pickWebOpeningSequenceTrack(prefs, sourceTrack);
+  if (earlyTrack) return earlyTrack;
+
   const blockedArtists = buildGlobalArtistExclusionSet(sourceTrack?.artist || "");
   const candidateAllowed = (track) => {
     if (!track || track === sourceTrack) return false;
@@ -55817,7 +56050,8 @@ function pickInstantPrimaryNextTrack(
     if (artistSetHasMatch(blockedArtists, track.artist)) return false;
     if (lockedStyle && selectableSwipeStyle(track.style || "") !== lockedStyle) return false;
     if (!isTrackEligibleForRecommendation(track)) return false;
-    if (lockedStyle && !trackMatchesRequestedSubgenreEvidence(track, { style: lockedStyle })) return false;
+    if (lockedStyle && !trackMatchesRequestedSubgenreEvidence(track, prefs)) return false;
+    if (prefs.bpm && !trackMatchesBpmPreference(track, prefs.bpm)) return false;
     if (!trackHasInstantPlaybackRoute(track)) return false;
     if (anonymousTrackWasRecentlyExposed(trackKey, 50)) return false;
     if (trackBlockedByKnownSignals(track)) return false;
@@ -55867,7 +56101,10 @@ function tryRunInstantPrimaryRecommendation() {
     if (!anchoredStyle) swipeUserAnchoredStyle = "";
     const nextTrack = pickInstantPrimaryNextTrack(currentRecommendation, anchoredStyle);
     if (!nextTrack) return false;
-    const nextPrefs = anchoredStyle === "batida"
+    const keepFilters = anchoredStyle && (
+      anchoredStyle === "batida" || (!isNativeAppRuntime() && !isAppStoreRuntimeMode())
+    );
+    const nextPrefs = keepFilters
       ? normalizeRecommendationPrefs({ ...lastPrefs, style: anchoredStyle })
       : normalizeRecommendationPrefs({
         style: anchoredStyle || selectableSwipeStyle(nextTrack.style || ""),
@@ -56555,6 +56792,10 @@ function pickInteractionBudgetTrack({ prefs = lastPrefs, sourceTrack = currentRe
   if (normalizedPrefs.style === "batida") {
     return pickReviewedBatidaRecommendation(normalizedPrefs, { sourceTrack, avoidArtistName });
   }
+  if (selectedPreferenceCount(normalizedPrefs)) {
+    const earlyTrack = pickWebOpeningSequenceTrack(normalizedPrefs, sourceTrack, { avoidArtistName });
+    if (earlyTrack) return earlyTrack;
+  }
   const blockedArtists = buildGlobalArtistExclusionSet(
     [sourceTrack?.artist || "", avoidArtistName].filter(Boolean)
   );
@@ -56743,6 +56984,14 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
     return false;
   }
   const anchoredStyle = explicitSwipeAnchorStyle();
+  const earlyPrefs = normalizeRecommendationPrefs({ ...lastPrefs, style: anchoredStyle });
+  const earlyTrack = pickWebOpeningSequenceTrack(earlyPrefs, likedTrack, {
+    reaction: positive ? "like" : "pass",
+    avoidArtistName
+  });
+  if (earlyTrack && presentInstantSwipeRecommendation({ track: earlyTrack, prefs: earlyPrefs, message })) {
+    return true;
+  }
   if (anchoredStyle) {
     const anchoredTrack = pickInstantPrimaryNextTrack(likedTrack, anchoredStyle);
     if (anchoredTrack) {
@@ -56839,6 +57088,7 @@ async function advanceAfterSwipeFeedback({ likedTrack, avoidArtistName = "", mes
 async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
   if (!currentRecommendation) return false;
   const likedTrack = currentRecommendation;
+  const feedbackGeneration = recommendationSessionGeneration;
   // Stop the liked card before selecting its replacement. Besides silencing
   // the current player immediately, this invalidates late preview/recovery
   // callbacks that could otherwise restart the previous track over the new
@@ -56864,6 +57114,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
     positive: true
   });
   schedulePostBootIdleTask(() => {
+    if (!recommendationSessionIsCurrent(feedbackGeneration)) return;
     registerTrackFeedback(likedTrack, true, { source: "swipe_like" });
     updateStats();
     void runPositiveFeedbackFollowups(triggerEl || swipeTrackCard, followupOptions).catch(() => {});
@@ -56874,6 +57125,7 @@ async function likeCurrentTrackFromSwipe(triggerEl = swipeLikeBtn) {
 async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   if (!currentRecommendation || !lastPrefs) return false;
   const rejectedTrack = currentRecommendation;
+  const feedbackGeneration = recommendationSessionGeneration;
   stopPlaybackForFeedbackTransition("swipe_pass");
   const feedbackReason = inferNegativeFeedbackReason(rejectedTrack, { source: "swipe_pass" });
   lastRejectedTrackKey = `${rejectedTrack.artist}::${rejectedTrack.song}`;
@@ -56891,6 +57143,7 @@ async function passCurrentTrackFromSwipe(triggerEl = swipePassBtn) {
   playUiSfx("dislike");
   if (generated) showToast(t("toastSwapped"));
   schedulePostBootIdleTask(() => {
+    if (!recommendationSessionIsCurrent(feedbackGeneration)) return;
     userStats.skipped += 1;
     registerTrackFeedback(rejectedTrack, false, {
       source: "swipe_pass",
@@ -57174,7 +57427,8 @@ async function renderPreview(track, options = {}) {
   if (!previewPanel || !previewStatus || !trackPreview || !listeningPrompt) return false;
   const renderToken = ++recommendationPreviewRenderToken;
   const fastMode = Boolean(options.fast);
-  const exactRecordingOnly = options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
+  const exactPublisherRecording = Boolean(reviewedExactAppleProof(track));
+  const exactRecordingOnly = exactPublisherRecording || options.exactRecordingOnly === true || weeklyRecommendsController?.requiresExactRecording?.(track) === true || friendsRequiresExactRecording(track);
   const probeTimeoutMs = Math.max(
     120,
     Number(options.probeTimeoutMs) || (fastMode ? FAST_PREVIEW_PROBE_TIMEOUT_MS : PREVIEW_PROBE_TIMEOUT_MS)
@@ -57292,7 +57546,7 @@ async function renderPreview(track, options = {}) {
     })
     .catch(() => null);
   const needsSoundCloudEmbedLookup =
-    !trackHasDirectSoundCloudTrack(track) &&
+    !exactPublisherRecording && !trackHasDirectSoundCloudTrack(track) &&
     Boolean(track.style && track.artist && track.song);
   if (needsSoundCloudEmbedLookup) {
     const soundCloudLookup = waitForPromiseWithTimeout(
@@ -57323,7 +57577,7 @@ async function renderPreview(track, options = {}) {
     ? directPreviewCandidates[0] || ""
     : "";
   const trustedImmediatePreview = prewarmedPreview ||
-    (trackHasVerifiedImmediateAudioPreview(track) ? normalizePreviewUrl(track.previewUrl) : "");
+    (trackHasVerifiedImmediateAudioPreview(track) ? directPreviewCandidates[0] || "" : "");
   // Do not cross an async boundary before creating a verified external player.
   // Safari preserves autoplay permission only within the initiating tap.
   let playablePreview = "";
@@ -65024,6 +65278,7 @@ async function runManualFilterSurprise() {
     startedAt: interactionStartedAt
   }) && requestIsCurrent() && hasCommittedRecommendationSince(previousTrackKey, sessionGeneration)) {
     swipeUserAnchoredStyle = currentRecommendation?.style || prefs.style || "";
+    savePreferences();
     playUiSfx("search-done");
     return true;
   }
@@ -65381,6 +65636,7 @@ function bindPreferenceAutosave() {
 
   controls.forEach((control) => {
     bind(control, "change", () => {
+      if (control === styleEl) swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
       updateWeightLabels();
       savePreferences();
       suggestionQueueTracks = [];
@@ -65389,7 +65645,6 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
-        swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
         const bpmWasReset = updateBpmOptionsForSelectedStyle();
         if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;
@@ -65399,6 +65654,7 @@ function bindPreferenceAutosave() {
       }
     });
     bind(control, "input", () => {
+      if (control === styleEl) swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
       updateWeightLabels();
       savePreferences();
       suggestionQueueTracks = [];
@@ -65407,7 +65663,6 @@ function bindPreferenceAutosave() {
       if (control === knownArtistsEl) updateStats();
       if ([styleEl, contextEl, energyEl, bpmEl, vocalsEl].includes(control)) setActiveSmartPreset("");
       if (control === styleEl) {
-        swipeUserAnchoredStyle = selectableSwipeStyle(styleEl?.value || "");
         const bpmWasReset = updateBpmOptionsForSelectedStyle();
         if (bpmWasReset) savePreferences();
         styleInfoDismissed = false;

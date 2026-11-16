@@ -1,7 +1,7 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATALOG_RUNTIME_SOURCE_FILES } from "./catalog-runtime-sources.mjs";
+import { CATALOG_RUNTIME_SOURCE_FILES, FULL_ON_NIGHT_PUBLISHER_SOURCES, HOUSE_OPENING_SOURCE } from "./catalog-runtime-sources.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -203,7 +203,7 @@ export function playbackScore(row) {
 function reviewedRecordingRow(row) {
   const source = String(row?.source || "");
   const tags = String(row?.source_tags || "").split(/[;,|]/).map(value => value.trim());
-  return ["big_beat_editorial_v26_20261110", "full_on_night_recordings_v26_20261110"].includes(source) &&
+  return ["big_beat_editorial_v26_20261110", "full_on_night_recordings_v26_20261110", HOUSE_OPENING_SOURCE, ...FULL_ON_NIGHT_PUBLISHER_SOURCES].includes(source) &&
     tags.includes("recording_identity_verified") && /^(?:apple_music|bandcamp):\d+$/.test(row.recording_id || "");
 }
 
